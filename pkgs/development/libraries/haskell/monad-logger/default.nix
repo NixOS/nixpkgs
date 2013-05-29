@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "A class of monads which can log messages";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

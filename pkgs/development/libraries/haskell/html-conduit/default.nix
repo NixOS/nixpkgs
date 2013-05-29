@@ -17,6 +17,5 @@ cabal.mkDerivation (self: {
     description = "Parse HTML documents using xml-conduit datatypes";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

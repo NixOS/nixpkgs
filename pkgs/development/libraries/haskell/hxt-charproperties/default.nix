@@ -9,9 +9,6 @@ cabal.mkDerivation (self: {
     description = "Character properties and classes for XML and Unicode";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

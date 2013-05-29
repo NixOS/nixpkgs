@@ -14,6 +14,5 @@ cabal.mkDerivation (self: {
     description = "Abstractions for animation";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

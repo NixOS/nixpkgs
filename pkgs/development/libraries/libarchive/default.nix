@@ -9,10 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "76e8d7c7b100ec4071e48c1b7d3f3ea1d22b39db3e45b7189f75b5ff4df90fac";
   };
 
-  propagatedBuildInputs = [ libxml2 zlib bzip2 openssl xz ] ++
+  buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz ] ++
     stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ];
-
-  buildInputs = [ sharutils ];
 
   meta = {
     description = "Multi-format archive and compression library";

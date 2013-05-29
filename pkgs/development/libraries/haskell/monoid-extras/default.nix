@@ -9,6 +9,5 @@ cabal.mkDerivation (self: {
     description = "Various extra monoid-related definitions and utilities";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

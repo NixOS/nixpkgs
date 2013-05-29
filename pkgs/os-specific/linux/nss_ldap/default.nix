@@ -1,12 +1,23 @@
-{stdenv, fetchurl, openldap}:
+{stdenv, fetchurl, openldap, perl}:
    
 stdenv.mkDerivation {
-  name = "nss_ldap-260";
+  name = "nss_ldap-265";
    
   src = fetchurl {
-    url = http://www.padl.com/download/nss_ldap-260.tar.gz;
-    sha256 = "0kn022js39mqmy7g5ba911q46223vk7vcf51x28rbl86lp32zv4v";
+    url = http://www.padl.com/download/nss_ldap-265.tar.gz;
+    sha256 = "1a16q9p97d2blrj0h6vl1xr7dg7i4s8x8namipr79mshby84vdbp";
   };
+
+  preConfigure = ''
+    patchShebangs ./vers_string
+    sed -i s,vers_string,./vers_string, Makefile*
+  '';
+
+  patches = [ ./crashes.patch ];
+
+  postPatch = ''
+    patch -p0 < ${./nss_ldap-265-glibc-2.16.patch}
+  '';
 
   preInstall = ''
     installFlagsArray=(INST_UID=$(id -u) INST_GID=$(id -g) LIBC_VERS=2.5 NSS_VERS=2 NSS_LDAP_PATH_CONF=$out/etc/ldap.conf)
@@ -16,5 +27,5 @@ stdenv.mkDerivation {
     mkdir -p $out/etc
   '';
 
-  buildInputs = [openldap];
+  buildInputs = [ openldap perl ];
 }

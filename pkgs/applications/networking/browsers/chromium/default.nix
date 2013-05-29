@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, which
+{ stdenv, fetchurl, makeWrapper, ninja, which
 
 # default dependencies
 , bzip2, flac, speex
@@ -12,11 +12,8 @@
 , utillinux, alsaLib
 , gcc, bison, gperf
 , glib, gtk, dbus_glib
-, libXScrnSaver, libXcursor, mesa
+, libXScrnSaver, libXcursor, libXtst, mesa
 , protobuf, speechd, libXdamage
-
-# dependencies for >= v27
-, libXtst
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -81,14 +78,15 @@ let
     libusb1 libexif
   ];
 
-  pre27 = versionOlder sourceInfo.version "27.0.0.0";
-  pre28 = versionOlder sourceInfo.version "28.0.0.0";
-  post26 = !pre27;
-  post27 = !pre28;
+  # build paths and release info
+  packageName = "chromium";
+  buildType = "Release";
+  buildPath = "out/${buildType}";
+  libExecPath = "$out/libexec/${packageName}";
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
-  packageName = "chromium";
+  inherit packageName;
 
   version = sourceInfo.version;
 
@@ -106,22 +104,20 @@ in stdenv.mkDerivation rec {
     gcc bison gperf
     krb5
     glib gtk dbus_glib
-    libXScrnSaver libXcursor mesa
+    libXScrnSaver libXcursor libXtst mesa
     pciutils protobuf speechd libXdamage
   ] ++ optional gnomeKeyringSupport libgnome_keyring
     ++ optionals gnomeSupport [ gconf libgcrypt ]
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
-    ++ optional pulseSupport pulseaudio
-    ++ optional post26 libXtst;
+    ++ optional pulseSupport pulseaudio;
 
   opensslPatches = optional useOpenSSL openssl.patches;
 
   prePatch = "patchShebangs .";
 
-  patches = optional cupsSupport ./cups_allow_deprecated.patch
-         ++ optional (pulseSupport && pre27) ./pulseaudio_array_bounds.patch
-         ++ optional pre27 ./glibc-2.16-use-siginfo_t.patch;
+  patches = [ ./sandbox_userns.patch ]
+         ++ optional cupsSupport ./cups_allow_deprecated.patch;
 
   postPatch = ''
     sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
@@ -129,8 +125,8 @@ in stdenv.mkDerivation rec {
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
   '' + ''
     sed -i -e 's|/usr/bin/gcc|gcc|' \
-      third_party/WebKit/Source/${if post27
-                                  then "core/core.gyp/core.gyp"
+      third_party/WebKit/Source/${if !versionOlder sourceInfo.version "28.0.0.0"
+                                  then "core/core.gypi"
                                   else "WebCore/WebCore.gyp/WebCore.gyp"}
   '';
 
@@ -146,6 +142,8 @@ in stdenv.mkDerivation rec {
     use_openssl = useOpenSSL;
     selinux = enableSELinux;
     use_cups = cupsSupport;
+    linux_sandbox_path="${libExecPath}/${packageName}_sandbox";
+    linux_sandbox_chrome_path="${libExecPath}/${packageName}";
   } // optionalAttrs proprietaryCodecs {
     # enable support for the H.264 codec
     proprietary_codecs = true;
@@ -156,49 +154,43 @@ in stdenv.mkDerivation rec {
     target_arch = "ia32";
   });
 
-  buildType = "Release";
-
-  enableParallelBuilding = true;
-
   configurePhase = ''
-    python build/gyp_chromium --depth "$(pwd)" ${gypFlags}
+    GYP_GENERATORS=ninja python build/gyp_chromium --depth "$(pwd)" ${gypFlags}
   '';
 
-  makeFlags = let
+  buildPhase = let
     CC = "${gcc}/bin/gcc";
     CXX = "${gcc}/bin/g++";
-  in [
-    "CC=${CC}"
-    "CXX=${CXX}"
-    "CC.host=${CC}"
-    "CXX.host=${CXX}"
-    "LINK.host=${CXX}"
-  ];
-
-  buildFlags = [
-    "BUILDTYPE=${buildType}"
-    "library=shared_library"
-    "chrome"
-  ];
+  in ''
+    CC="${CC}" CC_host="${CC}"     \
+    CXX="${CXX}" CXX_host="${CXX}" \
+    LINK_host="${CXX}"             \
+      "${ninja}/bin/ninja" -C "out/${buildType}" \
+        -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES    \
+        chrome ${optionalString (!enableSELinux) "chrome_sandbox"}
+  '';
 
   installPhase = ''
-    mkdir -vp "$out/libexec/${packageName}"
-    cp -v "out/${buildType}/"*.pak "$out/libexec/${packageName}/"
-    cp -vR "out/${buildType}/locales" "out/${buildType}/resources" "$out/libexec/${packageName}/"
-    cp -v out/${buildType}/libffmpegsumo.so "$out/libexec/${packageName}/"
+    mkdir -vp "${libExecPath}"
+    cp -v "${buildPath}/"*.pak "${libExecPath}/"
+    cp -vR "${buildPath}/locales" "${buildPath}/resources" "${libExecPath}/"
+    cp -v ${buildPath}/libffmpegsumo.so "${libExecPath}/"
 
-    cp -v "out/${buildType}/chrome" "$out/libexec/${packageName}/${packageName}"
+    cp -v "${buildPath}/chrome" "${libExecPath}/${packageName}"
 
     mkdir -vp "$out/bin"
-    makeWrapper "$out/libexec/${packageName}/${packageName}" "$out/bin/${packageName}"
+    makeWrapper "${libExecPath}/${packageName}" "$out/bin/${packageName}"
+    cp -v "${buildPath}/chrome_sandbox" "${libExecPath}/${packageName}_sandbox"
 
     mkdir -vp "$out/share/man/man1"
-    cp -v "out/${buildType}/chrome.1" "$out/share/man/man1/${packageName}.1"
+    cp -v "${buildPath}/chrome.1" "$out/share/man/man1/${packageName}.1"
 
     for icon_file in chrome/app/theme/chromium/product_logo_*[0-9].png; do
       num_and_suffix="''${icon_file##*logo_}"
       icon_size="''${num_and_suffix%.*}"
-      logo_output_path="$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps"
+      expr "$icon_size" : "^[0-9][0-9]*$" || continue
+      logo_output_prefix="$out/share/icons/hicolor"
+      logo_output_path="$logo_output_prefix/''${icon_size}x''${icon_size}/apps"
       mkdir -vp "$logo_output_path"
       cp -v "$icon_file" "$logo_output_path/${packageName}.png"
     done

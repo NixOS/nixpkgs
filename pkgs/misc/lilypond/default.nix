@@ -1,10 +1,10 @@
 { stdenv, fetchurl, ghostscript, texinfo, imagemagick, texi2html, guile
 , python, gettext, flex, perl, bison, pkgconfig, texLive, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff 
-, fetchsvn }:
+, fetchsvn, makeWrapper }:
 
 stdenv.mkDerivation rec{
-  majorVersion="2.14";
+  majorVersion="2.16";
   minorVersion="2";
   version="${majorVersion}.${minorVersion}";
   name = "lilypond-${version}";
@@ -16,13 +16,15 @@ stdenv.mkDerivation rec{
 
   src = fetchurl {
     url = "http://download.linuxaudio.org/lilypond/sources/v${majorVersion}/lilypond-${version}.tar.gz";
-    # 2.15.42
-    # sha256 = "0cm2fq1cr9d24w5xkz6ik6qnby516dfahz4cw47xx8mb5qsa4drd";
-    sha256 = "15i6k3fjc29wvchayn31khxhpppzd4g6ivbk7l43fakj8lw6nfi4";
+    sha256 = "1jx11bk3rk3w7bnh0829yy280627ywsvwg6fhdm0fqwkiz7jchqz";
   };
 
   preConfigure=''
     sed -e "s@mem=mf2pt1@mem=$PWD/mf/mf2pt1@" -i scripts/build/mf2pt1.pl
+  '';
+
+  postInstall = ''
+     for f in $out/bin/*; do wrapProgram $f --set GUILE_AUTO_COMPILE 0; done
   '';
 
   configureFlags = [ "--disable-documentation" "--with-ncsb-dir=${urwfonts}"];
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec{
   buildInputs =
     [ ghostscript texinfo imagemagick texi2html guile dblatex zip netpbm
       python gettext flex perl bison pkgconfig texLive fontconfig freetype pango
-      fontforge help2man groff
+      fontforge help2man groff makeWrapper
     ];
 
   meta = { 

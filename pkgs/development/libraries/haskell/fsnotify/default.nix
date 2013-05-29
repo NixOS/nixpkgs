@@ -16,6 +16,5 @@ cabal.mkDerivation (self: {
     description = "Cross platform library for file change notification";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

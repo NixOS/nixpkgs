@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-oss";
 
+  passthru = {
+    gtkModule = "/lib/gtk-2.0/";
+  };
+
   meta = {
     description = "An implementation of the XDG Sound Theme and Name Specifications";
 

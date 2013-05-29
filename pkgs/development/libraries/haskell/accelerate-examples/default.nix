@@ -1,31 +1,29 @@
-{ cabal, accelerate, accelerateCuda, accelerateIo, attoparsec, bmp
-, bytestringLexing, cmdargs, criterion, cuda, deepseq, fclabels
-, filepath, gloss, hashtables, mtl, mwcRandom, pgm, QuickCheck
-, random, testFramework, testFrameworkQuickcheck2, vector
-, vectorAlgorithms
+{ cabal, accelerate, accelerateCuda, accelerateFft, accelerateIo
+, attoparsec, bmp, bytestringLexing, cereal, cmdargs, criterion
+, cuda, deepseq, fclabels, filepath, gloss, hashtables, mtl
+, mwcRandom, pgm, QuickCheck, random, repa, repaIo, testFramework
+, testFrameworkQuickcheck2, vector, vectorAlgorithms
 }:
 
 cabal.mkDerivation (self: {
   pname = "accelerate-examples";
-  version = "0.12.1.0";
-  sha256 = "0vlax90yy9h4ljm87ffmnqv881nr4ssbc968mbbwi2704hn4chhb";
+  version = "0.13.0.0";
+  sha256 = "18f8p47sf10zn678540qzzf5pl18w9f068s83lpz4lk0r5gf4lzx";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    accelerate accelerateCuda accelerateIo attoparsec bmp
-    bytestringLexing cmdargs criterion cuda deepseq fclabels filepath
-    gloss hashtables mtl mwcRandom pgm QuickCheck random testFramework
-    testFrameworkQuickcheck2 vector vectorAlgorithms
+    accelerate accelerateCuda accelerateFft accelerateIo attoparsec bmp
+    bytestringLexing cereal cmdargs criterion cuda deepseq fclabels
+    filepath gloss hashtables mtl mwcRandom pgm QuickCheck random repa
+    repaIo testFramework testFrameworkQuickcheck2 vector
+    vectorAlgorithms
   ];
   configureFlags = "-f-opencl";
   meta = {
-    homepage = "http://www.cse.unsw.edu.au/~chak/project/accelerate/";
+    homepage = "https://github.com/AccelerateHS/accelerate-examples";
     description = "Examples using the Accelerate library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.stdenv.lib.platforms.none;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

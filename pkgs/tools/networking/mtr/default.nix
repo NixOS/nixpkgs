@@ -1,4 +1,4 @@
-x@{builderDefsPackage
+x@{builderDefsPackage, ncurses
   , ...}:
 builderDefsPackage
 (a :  

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "numeric-prelude";
-  version = "0.3.0.2";
-  sha256 = "0ihk8r06n2s72b4k67x8msn6gmn2cmxyswzk1j1r4jbhnk83b6wr";
+  version = "0.4.0.1";
+  sha256 = "1j361gj7cw31x31vnjhxmy7a62ldvyyqfm7irhff7sf5gv4kr5wh";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -17,9 +17,6 @@ cabal.mkDerivation (self: {
     description = "An experimental alternative hierarchy of numeric type classes";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

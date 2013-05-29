@@ -92,7 +92,6 @@ let
       doxygen = linux;
       dpkg = linux;
       drgeo = linux;
-      e2fsprogs = linux;
       ejabberd = linux;
       elinks = linux;
       emacs23 = gtkSupported;
@@ -198,8 +197,8 @@ let
       mcabber = linux;
       mcron = linux;
       mdadm = linux;
-      mercurial = allBut "i686-cygwin";
-      mercurialFull = allBut "i686-cygwin";
+      mercurial = unix;
+      mercurialFull = linux;
       mesa = mesaPlatforms;
       midori = linux;
       mingetty = linux;

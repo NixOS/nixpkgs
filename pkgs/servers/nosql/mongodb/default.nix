@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, scons, which, v8}:
+{ stdenv, fetchurl, scons, boost, v8, gperftools, pcre, snappy }:
 
 with stdenv.lib;
 
@@ -9,33 +9,31 @@ let installerPatch = fetchurl {
 
 in
 stdenv.mkDerivation rec {
-  name = "mongodb-2.4.0";
+  name = "mongodb-2.4.3";
 
   src = fetchurl {
-    url = http://downloads.mongodb.org/src/mongodb-src-r2.4.0.tar.gz;
-    sha256 = "115wrw23naxpaiwh8ar6g40f2nsdbz1hdpkp88wbi5yc9m6drg41";
+    url = http://downloads.mongodb.org/src/mongodb-src-r2.4.3.tar.gz;
+    sha256 = "1k653xmwphdk88z2byz5fglr8xcsm8nw13prls1rx16qnc6h1pb1";
   };
 
-  nativeBuildInputs = [ scons which ];
+  nativeBuildInputs = [ scons boost v8 gperftools pcre snappy ];
 
   patches = [ installerPatch ];
 
-  enableParallelBuilding = true;
-
   postPatch = ''
-    substituteInPlace SConstruct --replace "Environment( BUILD_DIR" "Environment( ENV = os.environ, BUILD_DIR"
-    substituteInPlace SConstruct --replace "#/../v8" "${v8}" \
-                                 --replace "[\"${v8}/\"]" "[\"${v8}/lib\"]"
+    substituteInPlace SConstruct \
+        --replace "Environment( BUILD_DIR" "Environment( ENV = os.environ, BUILD_DIR" \
+        --replace 'CCFLAGS=["-Werror", "-pipe"]' 'CCFLAGS=["-pipe"]'
   '';
 
   buildPhase = ''
-    echo $PATH
-    scons all --cc=`which gcc` --cxx=`which g++`
+    export SCONSFLAGS="-j$NIX_BUILD_CORES"
+    scons all --use-system-all
   '';
 
   installPhase = ''
-    scons install --cc=`which gcc` --cxx=`which g++` --full --prefix=$out
-    rm -rf $out/lib64 # exact same files as installed in $out/lib
+    mkdir -p $out/lib
+    scons install --use-system-all --full --prefix=$out
   '';
 
   meta = {

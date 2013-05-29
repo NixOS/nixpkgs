@@ -19,6 +19,5 @@ cabal.mkDerivation (self: {
     description = "Test interactive Haskell examples";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

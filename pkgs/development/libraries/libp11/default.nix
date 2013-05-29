@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   name = "libp11-0.2.7";
   
   src = fetchurl {
-    url = "http://www.opensc-project.org/files/libp11/${name}.tar.gz";
+    urls = [
+      "http://www.opensc-project.org/files/libp11/${name}.tar.gz"
+      "http://www.openadk.org/distfiles/${name}.tar.gz"
+    ];
     sha256 = "0kaz5qafaxm0ycywmajl166c29fh9cz89b8i043jqsbxlpzf4hdp";
   };
   

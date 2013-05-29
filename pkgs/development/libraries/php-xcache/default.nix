@@ -1,11 +1,11 @@
 {stdenv, fetchurl, php, autoconf, automake, libtool, m4 }:
 
 stdenv.mkDerivation rec {
-  name = "php-xcache-1.3.1";
+  name = "php-xcache-3.0.1";
   
   src = fetchurl {
-    url = http://xcache.lighttpd.net/pub/Releases/1.3.1/xcache-1.3.1.tar.bz2;
-    sha256 = "16qj6hns7frs655k2vg9dabnk28085hf6qxhr9dybw6ja5aj24g3";
+    url = http://xcache.lighttpd.net/pub/Releases/3.0.1/xcache-3.0.1.tar.bz2;
+    md5 = "45086010bc4f82f506c08be1c556941b";
   };
 
   preConfigure = ''

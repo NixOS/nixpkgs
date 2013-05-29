@@ -16,7 +16,7 @@ let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
   major = "3";
   minor = "6";
-  patch = "2";
+  patch = "6";
   tweak = "2";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
@@ -36,17 +36,17 @@ let
       }) ] ++ (map fetchThirdParty (import ./libreoffice-srcs.nix));
     translations = fetchSrc {
       name = "translations";
-      sha256 = "a6ef65d5acfe9be19a3d4d743cd23a1017733f651ffc57f5773a24704a282c33";
+      sha256 = "1n3yk2077adyxrhs0jpkbm8dg3lxpn3sy63f0dl87ifv7ha1rfpn";
     };
 
     help = fetchSrc {
       name = "help";
-      sha256 = "55ec6ef5eef4bbf2298c3b864f67c8424ebb5ccbe7bcd6ca59abba2867989e31";
+      sha256 = "12rb5mw6sbi41w1zaxrj4qffiis9qcx8ibp5cpmwsz07nsdv5sxk";
     };
 
     core = fetchSrc {
       name = "core";
-      sha256 = "5ec07ffacec09c4dcee9246cb132f7a59a618b395835e781735fd61bf47e8d37";
+      sha256 = "0xw36sa73cgk3k3fv1spv5pavm95bc02lszn8415ay36lcc098pn";
     };
   };
 in

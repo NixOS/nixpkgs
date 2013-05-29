@@ -6,26 +6,25 @@
 { stdenv, fetchurl, buildEnv, dpkg }:
 
 let
-  version = "0.36";
-
+  version = "0.38";
 
   packages = [
-    { name = "linux-nonfree"; sha256 = "668d262dfcf18ffef2fe2a0b853b81bf5855f49fd2133203cbda097b1507c953"; }
-    { name = "atheros"; sha256 = "27cbd2099ce28c742f42833b09a61bdc7fb5b2ebcf5b35a52e750160ea1001b6"; }
-    { name = "bnx2"; sha256 = "32730fdeb0fb15a36e0ca046bde69e1a6fece8561af57afc7d9f1cf978fd25ab"; }
-    { name = "bnx2x"; sha256 = "22f23f4abb4aa2dac22718f12cf3bbd3fd2d63870b13e81c8401e6f841a719e8"; }
-    { name = "brcm80211"; sha256 = "17055c4199cc7e2aaa7d1d76dd5e718d24dbebb84020bb2d95ffab03bcfc7e8a"; }
-    { name = "intelwimax"; sha256 = "cc1b894990d3074e93b3f79b2b617614aab554b5e832d34993b5a16f64bdb84a"; }
-    { name = "ipw2x00"; sha256 = "2ef0810e2e037f7d536b24cc35527c456ff13b7aa5fd2df607b7035227553c9d"; }
-    { name = "ivtv"; sha256 = "7bf30e142679d53ad376002f29026bbe28de51e1cb71bcc3ec5c5f5f119a7118"; }
-    { name = "iwlwifi"; sha256 = "46ce0915583674ec10bfde3840b66ff450237edf604804ff51b9872fe767c1bb"; }
-    { name = "libertas"; sha256 = "c5d370d244f1c3a42f0a0280ed0cab067dbf36fa2926d387c9d10cf4ccd1b000"; }
-    { name = "linux"; sha256 = "e19bedc2cacf2cd7a1fc38e25820effe9e58fdc56608e9f7c320c85b80cba6ea"; }
-    { name = "myricom"; sha256 = "038bd618c00e852206a8a1443ba47ea644c04052bd8f10af9392c716ebf16b3c"; }
-    { name = "netxen"; sha256 = "29e3c1707dab6439f391318a223e5d4b6508d493c8d8bad799aef4f35b4704e7"; }
-    { name = "qlogic"; sha256 = "cc43c6016f2b7661d39e1d678ac0e8ca70081be8a0c76c2ec4d2e71493afa7d8"; }
-    { name = "ralink"; sha256 = "4db8dc6b98821c59f008c8bf7464317443b031cebf6d7e56c06f0824e69e3922"; }
-    { name = "realtek"; sha256 = "c39e65e5a589325ceb365d11b9ea10b0244134b7e5b3b05fd91fe6ad66b2f093"; }
+    { name = "ipw2x00"; sha256 = "1bdial90l1928sfw3j1fz5cbsav8lz9riv38d02bawq9rzvb5dx0"; }
+    { name = "bnx2x"; sha256 = "1a8jwwa6yldj2pgnsghhdkb8c0s64wzg0vx8y3cj11lhbh2ag2i7"; }
+    { name = "linux-nonfree"; sha256 = "0dr91sswvkh0lk80d6byxjavkqcsickqf8xqhdd82j9mm7bjg7ld"; }
+    { name = "intelwimax"; sha256 = "1156c7a301lk2a4d699dmvwzh4k3rfbxl4fx4raafy8a15lbw8mn"; }
+    { name = "iwlwifi"; sha256 = "1q6gl2x4lj83hn8acamlj7s4j8vjd02798a6i52f4r7x0042f58a"; }
+    { name = "bnx2"; sha256 = "0rpsrmywh97azqmsx4qgxyqcvdn5414m9cg92pd7h9xfmm38nscd"; }
+    { name = "qlogic"; sha256 = "02438jzzybicg0bvl2jc3qnn0r4f1pfpyxbf70cmas9sfxb7s3az"; }
+    { name = "libertas"; sha256 = "0b8n1igx6hpxlav73xs8r6qs2v95r9hx4lqqzy0h5iy7md9xs9y4"; }
+    { name = "ivtv"; sha256 = "1vb1jbxdggy2vj1xlncfzyynpra1y62bb3n30ybafjnx88p6f2hi"; }
+    { name = "linux"; sha256 = "0ijd49rf7cg0lniqm9sqz2g4i9jmc9vyz6wv9jlwrvnbl8hhy5vy"; }
+    { name = "netxen"; sha256 = "19d5d3ibhb22p4mh22lnl441v8xyb1pyfi5h36vsjpccivzkgd2f"; }
+    { name = "myricom"; sha256 = "0vq2rvc71j96q684r1bh0528xnrxa1xzh2sdhqfrgip9ihdsp3ml"; }
+    { name = "atheros"; sha256 = "04zy5j48b83garmnfxiqgmm3yv1pfpbldxp69zm24pfxcwyvx3hm"; }
+    { name = "brcm80211"; sha256 = "0kgw6q18i46npmjxv4ymww8dr7nn140xrrqjrbnfhzgha3y2yylg"; }
+    { name = "ralink"; sha256 = "0kbzbc4vpn6mvvkm4q7mfqg0bsj6akfpypxk98s7kbidmyj577q2"; }
+    { name = "realtek"; sha256 = "1ac9vlrzprp0j2mdmp1zi47wg2i76vmi288sm3vwlvp4s6ymm077"; }
   ];
 
   fetchPackage =
@@ -61,7 +60,8 @@ in stdenv.mkDerivation {
   meta = {
     description = "Binary firmware collection packaged by Debian";
     homepage = "http://packages.debian.org/sid/firmware-linux-nonfree";
-    license = "unfree-redistributable-firmware";
+    license = stdenv.lib.licenses.unfreeRedistributable;
+    platforms = stdenv.lib.platforms.linux;
     priority = 10; # low priority so that other packages can override this big package
   };
 }

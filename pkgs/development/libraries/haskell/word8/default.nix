@@ -9,6 +9,5 @@ cabal.mkDerivation (self: {
     description = "Word8 library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
