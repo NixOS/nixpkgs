@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     HUnit mtl QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/jaspervdj/digestive-functors";
     description = "A practical formlet library";
