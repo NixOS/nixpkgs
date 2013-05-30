@@ -1,15 +1,14 @@
-{ fetchgit, stdenv, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts,
+{ fetchurl, stdenv, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts,
 boost, zlib,
 python, swig, gfortran, soqt, libf2c, pyqt4, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "freecad-${version}";
-  version = "git-20121213";
+  version = "0.13.1830";
 
-  src = fetchgit {
-    url = git://free-cad.git.sourceforge.net/gitroot/free-cad/free-cad;
-    rev = "d3949cedc7e3c924d426660515e06eaf55d1a67f";
-    sha256 = "0a07ih0z5d8m69zasmvi7z4lgq0pa67k2g7r1l6nz2d0b30py61w";
+  src = fetchurl {
+    url = "mirror://sourceforge/free-cad/${name}.tar.gz";
+    sha256 = "04rgww5y32asn4sx5j4wh79ggvb479pq56xfcfj6gkg44mid23jm";
   };
 
   buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost

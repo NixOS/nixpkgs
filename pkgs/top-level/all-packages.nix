@@ -7216,8 +7216,7 @@ let
     # !!! Fix the dependency on two different builds of nss.
   };
 
-  freecad = callPackage ../applications/graphics/freecad {
-  };
+  freecad = callPackage ../applications/graphics/freecad { };
 
   freemind = callPackage ../applications/misc/freemind {
     jdk = jdk;
