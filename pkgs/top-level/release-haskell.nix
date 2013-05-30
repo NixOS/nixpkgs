@@ -183,7 +183,6 @@ mapHaskellTestOn {
   hamlet = default;
   happstackHamlet = default;
   happstackServer = default;
-  happstackUtil = default;
   happy = all;
   hashable = default;
   hashedStorage = default;
