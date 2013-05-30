@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "digikam-3.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/digikam/${name}.tar.bz2";
+    url = "http://download.kde.org/stable/digikam/${name}.tar.bz2";
     sha256 = "06j858d2nvbqh0bw6m60rh1bsws06fm5vfjpwwi3zxsf5ka08wmx";
   };
 
