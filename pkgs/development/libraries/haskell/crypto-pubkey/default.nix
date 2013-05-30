@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "crypto-pubkey";
-  version = "0.1.3";
-  sha256 = "154bclz7mg2v7q72y6y0ylw0b28527nsmc8f6zf6ja5l9c9skw0g";
+  version = "0.1.4";
+  sha256 = "13ah3ip6gdv7b1zz5qwi7515a3k8pp3l0jr1kq4q2a0vqy24gkn1";
   buildDepends = [
     cryptohash cryptoNumbers cryptoPubkeyTypes cryptoRandomApi
   ];
