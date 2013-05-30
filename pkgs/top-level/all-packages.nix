@@ -6905,9 +6905,9 @@ let
     # A variant of the Darcs derivation that containts only the executable and
     # thus has no dependencies on other Haskell packages.
     cabal = { mkDerivation = x: rec { final = haskellPackages.cabal.mkDerivation (self: (x final) // {
-	      isLibrary = false;
-	      configureFlags = "-f-library"; }); }.final;
-	    };
+              isLibrary = false;
+              configureFlags = "-f-library"; }); }.final;
+            };
   };
 
   darktable = callPackage ../applications/graphics/darktable {
