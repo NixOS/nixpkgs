@@ -4,11 +4,11 @@ liblqr1, lensfun, pkgconfig, qjson, libkdcraw, opencv, libkexiv2, libkipi, boost
 shared_desktop_ontologies, marble, mysql }:
 
 stdenv.mkDerivation rec {
-  name = "digikam-3.2.0";
+  name = "digikam-2.9.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/digikam/${name}.tar.bz2";
-    sha256 = "06j858d2nvbqh0bw6m60rh1bsws06fm5vfjpwwi3zxsf5ka08wmx";
+    sha256 = "181vf065j1zz26zahkb7hy3fk4837nvwm61cnykvni7w40w0zpbk";
   };
 
   nativeBuildInputs = [ cmake automoc4 pkgconfig ];
