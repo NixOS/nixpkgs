@@ -495,6 +495,8 @@ let
 
   bootchart = callPackage ../tools/system/bootchart { };
 
+  bro = callPackage ../applications/networking/ids/bro { };
+
   bsod = callPackage ../misc/emulators/bsod { };
 
   btrfsProgs = callPackage ../tools/filesystems/btrfsprogs { };
