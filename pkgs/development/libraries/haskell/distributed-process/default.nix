@@ -20,6 +20,7 @@ cabal.mkDerivation (self: {
     testFrameworkHunit
   ];
   noHaddock = true;
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "http://github.com/haskell-distributed/distributed-process";
