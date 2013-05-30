@@ -589,8 +589,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
-  binary_hackage = callPackage ../development/libraries/haskell/binary {};
-  binary = self.binary_hackage; # core package since ghc-7.2.1
+  binary = callPackage ../development/libraries/haskell/binary {};
 
   binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
 
