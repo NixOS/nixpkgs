@@ -34,4 +34,5 @@
 , "npm2nix"
 , "ansi-remover"
 , "mkdirp"
+, "jshint"
 ]
