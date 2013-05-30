@@ -4820,6 +4820,8 @@ let
 
   opencascade = callPackage ../development/libraries/opencascade { };
 
+  opencascade_6_5 = callPackage ../development/libraries/opencascade/6.5.nix { };
+
   opencascade_oce = callPackage ../development/libraries/opencascade/oce.nix { };
 
   opencsg = callPackage ../development/libraries/opencsg { };
@@ -7221,7 +7223,9 @@ let
     # !!! Fix the dependency on two different builds of nss.
   };
 
-  freecad = callPackage ../applications/graphics/freecad { };
+  freecad = callPackage ../applications/graphics/freecad {
+    opencascade = opencascade_6_5;
+  };
 
   freemind = callPackage ../applications/misc/freemind {
     jdk = jdk;
