@@ -1067,6 +1067,16 @@
   {
     baseName = "mkdirp";
     version = "0.3.5";
+    fullName = "mkdirp-*";
+    hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
+    patchLatest = false;
+    topLevel = true;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "mkdirp";
+    version = "0.3.5";
     fullName = "mkdirp-0";
     hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
     patchLatest = false;
@@ -1322,9 +1332,9 @@
   }
   {
     baseName = "optimist";
-    version = "0.5.0";
+    version = "0.5.1";
     fullName = "optimist-*";
-    hash = "b0c4b65a456618f179946e0b0641643b9d70ea5d884afa5bbf94419f740b1ccf";
+    hash = "89307bc0c5f010a0ad3f53aaf5ed3a63bd0763c2239e5e26fafb60a2eb0df195";
     patchLatest = false;
     topLevel = true;
     dependencies = [
