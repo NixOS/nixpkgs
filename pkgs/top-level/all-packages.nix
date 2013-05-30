@@ -2501,9 +2501,9 @@ let
   # particularly in connection with Hydra builds for all these packages.
   # So we enable it for selected versions only.
 
-  # Current default version: 7.4.2.
-  haskellPackages = haskellPackages_ghc742;
-  # Current Haskell Platform: 2012.4.0.0
+  # Current default version: 7.6.3.
+  haskellPackages = haskellPackages_ghc763;
+  # Current Haskell Platform: 2013.2.0.0
   haskellPlatform = haskellPackages.haskellPlatform;
 
   haskellPackages_ghc6104             =                   haskell.packages_ghc6104;
@@ -2516,17 +2516,17 @@ let
   haskellPackages_ghc704              =                   haskell.packages_ghc704;
   haskellPackages_ghc721              =                   haskell.packages_ghc721;
   haskellPackages_ghc722              =                   haskell.packages_ghc722;
+  haskellPackages_ghc741              =                   haskell.packages_ghc741;
+  haskellPackages_ghc742              =                   haskell.packages_ghc742;
+  haskellPackages_ghc761              =                   haskell.packages_ghc761;
+  haskellPackages_ghc762              =                   haskell.packages_ghc762;
   # For the default version, we build profiling versions of the libraries, too.
   # The following three lines achieve that: the first two make Hydra build explicit
   # profiling and non-profiling versions; the final respects the user-configured
   # default setting.
-  haskellPackages_ghc741              =                   haskell.packages_ghc741;
-  haskellPackages_ghc742_no_profiling = recurseIntoAttrs (haskell.packages_ghc742.noProfiling);
-  haskellPackages_ghc742_profiling    = recurseIntoAttrs (haskell.packages_ghc742.profiling);
-  haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742.highPrio);
-  haskellPackages_ghc761              =                   haskell.packages_ghc761;
-  haskellPackages_ghc762              =                   haskell.packages_ghc762;
-  haskellPackages_ghc763              = recurseIntoAttrs  haskell.packages_ghc763;
+  haskellPackages_ghc763_no_profiling = recurseIntoAttrs (haskell.packages_ghc763.noProfiling);
+  haskellPackages_ghc763_profiling    = recurseIntoAttrs (haskell.packages_ghc763.profiling);
+  haskellPackages_ghc763              = recurseIntoAttrs (haskell.packages_ghc763.highPrio);
   # Reasonably current HEAD snapshot.
   haskellPackages_ghcHEAD             =                   haskell.packages_ghcHEAD;
 
