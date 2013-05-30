@@ -1,19 +1,13 @@
-{ postscriptSupport ? true
-, pdfSupport ? true
-, pngSupport ? true
-, xcbSupport ? true # no longer experimental since 1.12
-, glSupport ? false
+{ stdenv, fetchurl, pkgconfig, libiconvOrEmpty, libintlOrEmpty
+, expat, zlib, libpng, pixman, fontconfig, freetype, xlibs
 , gobjectSupport ? true, glib
-, stdenv, fetchurl, pkgconfig, x11, fontconfig, freetype, xlibs
-, expat
-, zlib, libpng, pixman, libxcb ? null, xcbutil ? null, mesa ? null
-, libiconvOrEmpty, libintlOrEmpty
+, xcbSupport ? true # no longer experimental since 1.12
+, glSupport ? true, mesa_noglu ? null # mesa is no longer a big dependency
 }:
 
-assert postscriptSupport -> zlib != null;
-assert pngSupport -> libpng != null;
-assert xcbSupport -> libxcb != null && xcbutil != null;
-assert glSupport -> mesa != null;
+assert glSupport -> mesa_noglu != null;
+
+with { inherit (stdenv.lib) optional optionals; };
 
 stdenv.mkDerivation rec {
   name = "cairo-1.12.14";
@@ -23,25 +17,20 @@ stdenv.mkDerivation rec {
     sha256 = "04xcykglff58ygs0dkrmmnqljmpjwp2qgwcz8sijqkdpz7ix3l4n";
   };
 
-  buildInputs = with xlibs;
-    [ pkgconfig x11 fontconfig expat ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) libXrender
-    ++ stdenv.lib.optionals xcbSupport [ libxcb xcbutil ]
-    ++ stdenv.lib.optionals glSupport [ mesa ]
-    ++ libintlOrEmpty
-    ++ libiconvOrEmpty;
+  nativeBuildInputs = [ pkgconfig ] ++ libintlOrEmpty ++ libiconvOrEmpty;
 
   propagatedBuildInputs =
-    [ freetype pixman ] ++
-    stdenv.lib.optional gobjectSupport glib ++
-    stdenv.lib.optional postscriptSupport zlib ++
-    stdenv.lib.optional pngSupport libpng;
+    with xlibs; [ xlibs.xlibs fontconfig expat freetype pixman zlib libpng ]
+    ++ optional (!stdenv.isDarwin) libXrender
+    ++ optionals xcbSupport [ libxcb xcbutil ]
+    ++ optional gobjectSupport glib
+    ++ optionals glSupport [ mesa_noglu ]
+    ;
 
-  configureFlags =
-    [ "--enable-tee" ]
-    ++ stdenv.lib.optional xcbSupport "--enable-xcb"
-    ++ stdenv.lib.optional glSupport "--enable-gl"
-    ++ stdenv.lib.optional pdfSupport "--enable-pdf";
+  configureFlags = [ "--enable-tee" ]
+    ++ optional xcbSupport "--enable-xcb"
+    ++ optional glSupport "--enable-gl"
+    ;
 
   preConfigure =
   # On FreeBSD, `-ldl' doesn't exist.
