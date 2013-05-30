@@ -4816,10 +4816,7 @@ let
 
   openbabel = callPackage ../development/libraries/openbabel { };
 
-  opencascade = callPackage ../development/libraries/opencascade {
-    automake = automake111x;
-    ftgl = ftgl212;
-  };
+  opencascade = callPackage ../development/libraries/opencascade { };
 
   opencascade_oce = callPackage ../development/libraries/opencascade/oce.nix { };
 
