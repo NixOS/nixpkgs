@@ -1,16 +1,16 @@
-{ cabal, deepseq, erf, HUnit, ieee754, mathFunctions, monadPar
-, mwcRandom, primitive, QuickCheck, testFramework
+{ cabal, binary, deepseq, erf, HUnit, ieee754, mathFunctions
+, monadPar, mwcRandom, primitive, QuickCheck, testFramework
 , testFrameworkHunit, testFrameworkQuickcheck2, vector
-, vectorAlgorithms
+, vectorAlgorithms, vectorBinaryInstances
 }:
 
 cabal.mkDerivation (self: {
   pname = "statistics";
-  version = "0.10.3.1";
-  sha256 = "12abfqxsriqlncr60wwcsm0q41hmqc6vp9p1hmnv2l3qqcisk60s";
+  version = "0.10.4.1";
+  sha256 = "0kd3zn8ckz3h9dnighmfviacw5cy6czsj90ryn8c0h6yb2s3gqi1";
   buildDepends = [
-    deepseq erf mathFunctions monadPar mwcRandom primitive vector
-    vectorAlgorithms
+    binary deepseq erf mathFunctions monadPar mwcRandom primitive
+    vector vectorAlgorithms vectorBinaryInstances
   ];
   testDepends = [
     erf HUnit ieee754 mathFunctions mwcRandom primitive QuickCheck
