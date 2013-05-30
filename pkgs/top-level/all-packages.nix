@@ -652,6 +652,8 @@ let
 
   dadadodo = builderDefsPackage (import ../tools/text/dadadodo) { };
 
+  daq = callPackage ../applications/networking/ids/daq { };
+
   dar = callPackage ../tools/archivers/dar { };
 
   davfs2 = callPackage ../tools/filesystems/davfs2 { };
@@ -1633,6 +1635,8 @@ let
   };
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
+
+  snort = callPackage ../applications/networking/ids/snort { };
 
   snx = callPackage_i686 ../tools/networking/snx {
     inherit (pkgsi686Linux) pam gcc33;
