@@ -10,14 +10,14 @@
 }:
 
 let
-  version = "4.20130501";
+  version = "4.20130521";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
     url = "https://github.com/joeyh/git-annex/tarball/${version}";
-    sha256 = "1280sdj3d3s3k5a1znzl7xzzyncv9kz522bprhwb9if03v6xh2kl";
+    sha256 = "0wa3sgw0xbqykl5r6ba0gannwj61y0h024glm0xjj97fy06b77i0";
     name = "git-annex-${version}.tar.gz";
   };
 
