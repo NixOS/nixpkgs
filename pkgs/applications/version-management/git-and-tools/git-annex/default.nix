@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     makeFlagsArray=( PREFIX=$out CABAL=./Setup )
     patchShebangs .
     ghc -O2 --make Setup
-    ./Setup configure -ftestsuite -f-android -fproduction -fdns -fxmpp -fpairing -fwebapp -fassistant -fdbus -finotify -fwebdav -fs3
+    ./Setup configure -ftestsuite -f-android -fproduction -fdns -fxmpp -fpairing -f-webapp -fassistant -fdbus -finotify -fwebdav -fs3
   '';
 
   doCheck = true;
