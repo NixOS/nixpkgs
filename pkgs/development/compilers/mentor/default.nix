@@ -37,6 +37,11 @@ let
               *gdb) patchelf --set-rpath "${ncurses}/lib" "$file";;
             esac
         done
+
+        # Manpages
+        mkdir -p "$out/share/man"
+        ln -s "$out"/share/doc/*/man/man1 "$out/share/man/man1"
+        ln -s "$out"/share/doc/*/man/man7 "$out/share/man/man7"
       '';
 
       meta = with stdenv.lib; {
