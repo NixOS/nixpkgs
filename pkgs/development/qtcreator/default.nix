@@ -1,15 +1,20 @@
-{ stdenv, fetchurl, qt4_for_qtcreator }:
+{ stdenv, fetchurl, qt48 }:
 
 let
-  version = "2.6.0";
+  baseVersion = "2.7";
+  revision = "1";
+  version = "${baseVersion}.${revision}";
+  qt4_for_qtcreator = qt48.override {
+    developerBuild = true;
+  };
 in
 
 stdenv.mkDerivation rec {
   name = "qtcreator-${version}";
 
   src = fetchurl {
-    url = "http://origin.releases.qt-project.org/qtcreator/${version}/qt-creator-${version}-src.tar.gz";
-    md5 = "9bf01098f84a0fe930b2718d11124204";
+    url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-${version}-src.tar.gz";
+    sha256 = "04vn7y3dkk9vi1rsmsxby57mvc2h9n5q842hayq2mdlsax4qnhjv";
   };
 
   buildInputs = [ qt4_for_qtcreator ];
