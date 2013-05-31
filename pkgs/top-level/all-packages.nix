@@ -7955,6 +7955,11 @@ let
     perlSupport = false;
   };
 
+  # = urxvt
+  rxvt_unicode_with_perl = callPackage ../applications/misc/rxvt_unicode {
+    perlSupport = true;
+  };
+
   sakura = callPackage ../applications/misc/sakura {
     inherit (gnome) vte;
   };
