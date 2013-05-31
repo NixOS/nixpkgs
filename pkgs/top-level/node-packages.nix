@@ -12,7 +12,7 @@ let
         };
         full = [ {
           name = pkg.fullName;
-          value = buildNodePackage rec {
+          value = pkgs.lib.makeOverridable buildNodePackage rec {
             name = "${pkg.baseName}-${pkg.version}";
             src = (if pkg.patchLatest then patchLatest else fetchurl) {
               url = "http://registry.npmjs.org/${pkg.baseName}/-/${name}.tgz";
