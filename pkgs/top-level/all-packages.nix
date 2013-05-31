@@ -4964,8 +4964,12 @@ let
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
   };
 
-  qt4_for_qtcreator = qt48.override {
-    developerBuild = true;
+  qt48Full = callPackage ../development/libraries/qt-4.x/4.8 {
+    # GNOME dependencies are not used unless gtkStyle == true
+    inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
+    docs = true;
+    demos = true;
+    examples = true;
   };
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
