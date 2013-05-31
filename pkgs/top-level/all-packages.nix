@@ -4820,7 +4820,10 @@ let
 
   opencascade = callPackage ../development/libraries/opencascade { };
 
-  opencascade_6_5 = callPackage ../development/libraries/opencascade/6.5.nix { };
+  opencascade_6_5 = callPackage ../development/libraries/opencascade/6.5.nix {
+    automake = automake111x;
+    ftgl = ftgl212;
+  };
 
   opencascade_oce = callPackage ../development/libraries/opencascade/oce.nix { };
 
