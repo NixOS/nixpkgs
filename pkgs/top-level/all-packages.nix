@@ -4107,13 +4107,17 @@ let
   gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
 
   # TODO : Add MIT Kerberos and let admin choose.
-  kerberos = heimdal;
+  kerberos = heimdal_1_5_2;
+
+  heimdal = heimdal_1_5_2;
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
 
   hawknl = callPackage ../development/libraries/hawknl { };
 
-  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
+  heimdal_1_3_3 = callPackage ../development/libraries/kerberos/heimdal.nix { };
+
+  heimdal_1_5_2 = callPackage ../development/libraries/kerberos/heimdal-1.5.2.nix { };
 
   herqq = callPackage ../development/libraries/herqq { };
 
