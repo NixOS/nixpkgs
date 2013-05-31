@@ -7213,12 +7213,12 @@ let
 
   firefox19Wrapper = lowPrio (wrapFirefox { browser = firefox19Pkgs.firefox; });
 
-  firefox21Pkgs = callPackage ../applications/networking/browsers/firefox/21.0.nix {
+  firefox20Pkgs = callPackage ../applications/networking/browsers/firefox/20.0.nix {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
   };
 
-  firefox21Wrapper = lowPrio (wrapFirefox { browser = firefox21Pkgs.firefox; });
+  firefox20Wrapper = lowPrio (wrapFirefox { browser = firefox20Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
 
