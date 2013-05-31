@@ -189,6 +189,7 @@
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/default.nix
+  ./services/web-servers/lighttpd/cgit.nix
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/nginx/default.nix
   ./services/web-servers/tomcat.nix
