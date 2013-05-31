@@ -3,22 +3,27 @@
 let
   inherit (self) buildNodePackage patchLatest;
 
-  importGeneratedPackages = generated: nativeDeps: self: builtins.listToAttrs (pkgs.lib.fold (pkg: pairs:
-    (pkgs.lib.optional pkg.topLevel { name = pkg.baseName; value = builtins.getAttr pkg.fullName self; }) ++ [
-      {
-        name = pkg.fullName;
-        value = buildNodePackage rec {
-          name = "${pkg.baseName}-${pkg.version}";
-          src = (if pkg.patchLatest then patchLatest else fetchurl) {
-            url = "http://registry.npmjs.org/${pkg.baseName}/-/${name}.tgz";
-            sha256 = pkg.hash;
-          };
-          deps = map (dep: builtins.getAttr "${dep.name}-${dep.range}" self) pkg.dependencies;
-          buildInputs = if builtins.hasAttr name nativeDeps then builtins.getAttr name nativeDeps else [];
+  importGeneratedPackages = generated: nativeDeps: self:
+    let
+      all = pkgs.lib.fold (pkg: { top-level, full }: {
+        top-level = top-level ++ pkgs.lib.optional pkg.topLevel {
+          name = pkg.baseName;
+          value = builtins.getAttr pkg.fullName self.full;
         };
-      }
-    ] ++ pairs
-  ) [] generated);
+        full = [ {
+          name = pkg.fullName;
+          value = buildNodePackage rec {
+            name = "${pkg.baseName}-${pkg.version}";
+            src = (if pkg.patchLatest then patchLatest else fetchurl) {
+              url = "http://registry.npmjs.org/${pkg.baseName}/-/${name}.tgz";
+              sha256 = pkg.hash;
+            };
+            deps = map (dep: builtins.getAttr "${dep.name}-${dep.range}" self.full) pkg.dependencies;
+            buildInputs = if builtins.hasAttr name nativeDeps then builtins.getAttr name nativeDeps else [];
+          };
+        } ] ++ full;
+      } ) { top-level = []; full = []; } generated;
+    in builtins.listToAttrs all.top-level // { full = builtins.listToAttrs all.full; };
 
   self = {
     inherit importGeneratedPackages;
