@@ -1101,6 +1101,7 @@ let
   nodePackages = recurseIntoAttrs (import ./node-packages.nix {
     inherit pkgs stdenv nodejs fetchurl;
     neededNatives = [python] ++ lib.optional (lib.elem system lib.platforms.linux) utillinux;
+    self = pkgs.nodePackages;
   });
 
   ldns = callPackage ../development/libraries/ldns { };
