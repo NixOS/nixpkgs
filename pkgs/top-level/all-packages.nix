@@ -7755,6 +7755,10 @@ let
 
   msmtp = callPackage ../applications/networking/msmtp { };
 
+  imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix { 
+    lua = lua5;
+ };
+
   mupdf = callPackage ../applications/misc/mupdf { };
 
   mypaint = callPackage ../applications/graphics/mypaint { };
