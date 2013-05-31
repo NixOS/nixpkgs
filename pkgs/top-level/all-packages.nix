@@ -1789,6 +1789,8 @@ let
 
   vpnc = callPackage ../tools/networking/vpnc { };
 
+  openconnect = callPackage ../tools/networking/openconnect.nix { };
+
   vtun = callPackage ../tools/networking/vtun { };
 
   wbox = callPackage ../tools/networking/wbox {};
