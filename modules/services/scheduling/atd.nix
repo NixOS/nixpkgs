@@ -17,7 +17,7 @@ in
   options = {
 
     services.atd.enable = mkOption {
-      default = true;
+      default = false;
       description = ''
         Whether to enable the `at' daemon, a command scheduler.
       '';
