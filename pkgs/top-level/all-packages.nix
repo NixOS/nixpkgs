@@ -8138,6 +8138,8 @@ let
     gtk = gtk3;
   };
 
+  vanitygen = callPackage ../applications/misc/vanitygen { };
+
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
