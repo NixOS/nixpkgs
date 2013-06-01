@@ -13,10 +13,10 @@ else
 
 /** Packaging design:
   - The basic mesa ($out) contains headers and libraries (GLU is in mesa_glu now).
-    This or the mesa attribute (which also contains GLU) are small (~ 2.5 MB, mostly headers)
+    This or the mesa attribute (which also contains GLU) are small (~ 2.2 MB, mostly headers)
     and are designed to be the buildInput of other packages.
   - DRI and EGL drivers are compiled into $drivers output,
-    which is bigger (~13 MB) and depends on LLVM (~80 MB).
+    which is bigger (~13 MB) and depends on LLVM (~40 MB).
     These should be searched at runtime in /run/current-system/sw/lib/*
     and so are kind-of impure (given by NixOS).
     (I suppose on non-NixOS one would create the appropriate symlinks from there.)
