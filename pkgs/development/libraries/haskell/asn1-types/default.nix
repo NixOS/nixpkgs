@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "asn1-types";
-  version = "0.1.3";
-  sha256 = "1d55vhax71d29c2b6238pz1hqp4jnyvvfhs8f05qpcv754b4s4jg";
+  version = "0.2.0";
+  sha256 = "0350g5p3zbvm29nnjd554i6fyc47vmzpb42w6q46v3i9fiy23kvd";
   buildDepends = [ time ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-asn1-types";

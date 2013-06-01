@@ -18,35 +18,30 @@
   ghcHEADPrefs =
     self : self.haskellPlatformArgs_future self // {
       haskellPlatform = null;
-      binary = null; # now a core package
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
     };
 
   ghc763Prefs =
     self : self.haskellPlatformArgs_2013_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2013_2_0_0;
-      binary = null; # now a core package
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
     };
 
   ghc742Prefs =
     self : self.haskellPlatformArgs_2012_4_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_4_0_0;
-      binary = null; # now a core package
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
     };
 
   ghc741Prefs =
     self : self.haskellPlatformArgs_2012_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
-      binary = null; # now a core package
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
     };
 
   ghc722Prefs =
     self : self.haskellPlatformArgs_2012_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
-      binary = null; # a core package
       deepseq = self.deepseq_1_3_0_1;
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
     };

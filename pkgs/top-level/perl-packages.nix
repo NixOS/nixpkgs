@@ -694,6 +694,26 @@ rec {
       [ CatalystRuntime MooseXTraitsPluggable namespaceautoclean ListMoreUtils ];
   };
 
+  CatalystXRoleApplicator = buildPerlPackage rec {
+    name = "CatalystX-RoleApplicator-0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HD/HDP/${name}.tar.gz";
+      sha256 = "0vwaapxn8g5hs2xp63c4dwv9jmapmji4272fakssvgc9frklg3p2";
+    };
+    buildInputs = [ ];
+    propagatedBuildInputs = [ MooseXRelatedClassRoles CatalystRuntime ];
+  };
+
+  CatalystTraitForRequestProxyBase = buildPerlPackage rec {
+    name = "Catalyst-TraitFor-Request-ProxyBase-0.000005";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
+      sha256 = "02kir63d5cs2ipj3fn1qlmmx3gqi1xqzrxfr4pv5vjhjgsm0zgx7";
+    };
+    buildInputs = [ CatalystRuntime ];
+    propagatedBuildInputs = [ Moose URI CatalystXRoleApplicator ];
+  };
+
   CatalystXScriptServerStarman = buildPerlPackage {
     name = "CatalystX-Script-Server-Starman-0.02";
     src = fetchurl {
@@ -1232,11 +1252,11 @@ rec {
     };
   };
 
-  CryptRandPasswd = buildPerlPackage rec {
-    name = "Crypt-RandPasswd-0.02";
+  CryptRandPasswd = buildPerlPackage {
+    name = "Crypt-RandPasswd-0.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JD/JDPORTER/${name}.tar.gz";
-      sha256 = "0r5w5i81s02x756alad9psxmpqmcxahzjpqxsb3kacsqj8s5br9b";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Crypt-RandPasswd-0.03.tar.gz;
+      sha256 = "0sz2b4gj2mcwj0nqvxw3gs5m49jzfbi0vla51hj957dvfk00plhf";
     };
   };
 
@@ -3025,10 +3045,10 @@ rec {
   };
 
   LWP = buildPerlPackage {
-    name = "libwww-perl-6.04";
+    name = "libwww-perl-6.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/libwww-perl-6.04.tar.gz;
-      sha256 = "0z92fpwk6lh2gghv050r0qb216jmjl2m0c6zby935q8lv0q5wwgr";
+      url = mirror://cpan/authors/id/G/GA/GAAS/libwww-perl-6.05.tar.gz;
+      sha256 = "08wgwyz7748pv5cyngxia0xl6nragfnhrp4p9s78xhgfyygpj9bv";
     };
     propagatedBuildInputs = [ EncodeLocale FileListing HTMLParser HTTPCookies HTTPDaemon HTTPDate HTTPNegotiate HTTPMessage LWPMediaTypes NetHTTP URI WWWRobotRules ];
     doCheck = false; # tries to start a daemon
@@ -3051,14 +3071,18 @@ rec {
   };
 
   LWPProtocolHttps = buildPerlPackage rec {
-    name = "LWP-Protocol-https-6.02";
+    name = "LWP-Protocol-https-6.04";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/LWP/${name}.tar.gz";
-      sha256 = "0y2an4v7g4jm8fsszk2489m179i28kx79ywwiywkwk1aw3yqh0y5";
+      url = mirror://cpan/authors/id/G/GA/GAAS/LWP-Protocol-https-6.04.tar.gz;
+      sha256 = "0agnga5dg94222h6rlzqxa0dri2sh3gayncvfb7jad9nxr87gxhy";
     };
     patches = [ ../development/perl-modules/lwp-protocol-https-cert-file.patch ];
     propagatedBuildInputs = [ LWP IOSocketSSL ];
     doCheck = false; # tries to connect to https://www.apache.org/.
+    meta = {
+      description = "Provide https support for LWP::UserAgent";
+      license = "perl5";
+    };
   };
 
   LWPUserAgent = buildPerlPackage {
@@ -3458,14 +3482,14 @@ rec {
     };
   };
 
-  MooseXSetOnce = buildPerlPackage rec {
-    name = "MooseX-SetOnce-0.200001";
+  MooseXRelatedClassRoles = buildPerlPackage rec {
+    name = "MooseX-RelatedClassRoles-0.004";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
-      sha256 = "0qa2i45g2zn4r0wg7hba9va68nin5l63gr9l8b5q3hr4cjn97ll6";
+      sha256 = "17vynkf6m5d039qkr4in1c9lflr8hnwp1fgzdwhj4q6jglipmnrh";
     };
-    buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ Moose ];
+    buildInputs = [ ];
+    propagatedBuildInputs = [ MooseXRoleParameterized ];
   };
 
   MooseXParamsValidate = buildPerlPackage {
@@ -3518,6 +3542,16 @@ rec {
       url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
       sha256 = "1724cxvgy1wh1kfawcj2sanlm90zarfh7k186pgyx1lk8fhnlj4m";
     };
+    propagatedBuildInputs = [ Moose ];
+  };
+
+  MooseXSetOnce = buildPerlPackage rec {
+    name = "MooseX-SetOnce-0.200001";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
+      sha256 = "0qa2i45g2zn4r0wg7hba9va68nin5l63gr9l8b5q3hr4cjn97ll6";
+    };
+    buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ Moose ];
   };
 

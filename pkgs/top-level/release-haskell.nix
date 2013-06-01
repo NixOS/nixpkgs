@@ -11,8 +11,8 @@ let
   ghc704  = "ghc704";
   ghc742  = "ghc742";
   ghc763  = "ghc763";
-  default = [ ghc742 ];
-  latest  = [ ghc763 ];
+  default = [ ghc763 ];
+  latest  = [ ];
   all     = [ ghc6104 ghc6123 ghc704 ghc742 ghc763 ];
 
   allBut = platform: pkgs.lib.filter (x: platform != x) all;
@@ -183,7 +183,6 @@ mapHaskellTestOn {
   hamlet = default;
   happstackHamlet = default;
   happstackServer = default;
-  happstackUtil = default;
   happy = all;
   hashable = default;
   hashedStorage = default;
@@ -387,7 +386,7 @@ mapHaskellTestOn {
   transformersBase = default;
   transformersCompat = default;
   tuple = default;
-  typeLlevelNaturalNumber = default;
+  typeLevelNaturalNumber = default;
   uniplate = default;
   uniqueid = default;
   unixCompat = default;

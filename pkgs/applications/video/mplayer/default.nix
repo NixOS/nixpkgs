@@ -16,6 +16,7 @@
 , x264Support ? false, x264 ? null
 , jackaudioSupport ? false, jackaudio ? null
 , pulseSupport ? false, pulseaudio ? null
+, bs2bSupport ? false, libbs2b ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
 , useUnfreeCodecs ? false
@@ -38,6 +39,7 @@ assert theoraSupport -> libtheora != null;
 assert x264Support -> x264 != null;
 assert jackaudioSupport -> jackaudio != null;
 assert pulseSupport -> pulseaudio != null;
+assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
 
 let
@@ -112,6 +114,7 @@ stdenv.mkDerivation rec {
     ++ optional vdpauSupport libvdpau
     ++ optional speexSupport speex
     ++ optional libpngSupport libpng
+    ++ optional bs2bSupport libbs2b
     ;
 
   nativeBuildInputs = [ yasm ];

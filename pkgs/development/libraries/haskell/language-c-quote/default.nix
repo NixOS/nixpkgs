@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "language-c-quote";
-  version = "0.7.1";
-  sha256 = "14gh944wpwg4csxwswr9jlll4p5wc3x1fhbqsfh9lqf98ys7ij3z";
+  version = "0.7.2";
+  sha256 = "01ki78qh39gbd9md3pq783vx2p86gyzhclci7pcppz2rd3man51m";
   buildDepends = [
     exceptionMtl exceptionTransformers filepath haskellSrcMeta
     mainlandPretty mtl srcloc syb symbol
@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     HUnit srcloc symbol testFramework testFrameworkHunit
   ];
   buildTools = [ alex happy ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.eecs.harvard.edu/~mainland/";
     description = "C/CUDA/OpenCL/Objective-C quasiquoting library";

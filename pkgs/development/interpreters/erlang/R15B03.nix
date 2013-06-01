@@ -3,14 +3,14 @@
 
 assert wxSupport -> mesa != null && wxGTK != null && xlibs != null;
 
-let version = "15B02"; in
+let version = "15B03"; in
 
 stdenv.mkDerivation {
   name = "erlang-" + version;
 
   src = fetchurl {
-    url = "http://www.erlang.org/download/otp_src_R${version}.tar.gz";
-    sha256 = "03eb0bd640916666ff83df1330912225fbf555e0c8cf58bb35d8307a314f1158";
+    url = "http://www.erlang.org/download/otp_src_R15B03-1.tar.gz";
+    sha256 = "4bccac86dd76aec050252e44276a0283a0df9218e6470cf042a9b9f9dfc9476c";
   };
 
   buildInputs =

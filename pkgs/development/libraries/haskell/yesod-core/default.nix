@@ -1,29 +1,30 @@
-{ cabal, aeson, blazeBuilder, blazeHtml, blazeMarkup
-, caseInsensitive, cereal, clientsession, conduit, cookie, failure
-, fastLogger, hamlet, hspec, httpTypes, HUnit, liftedBase
-, monadControl, monadLogger, parsec, pathPieces, QuickCheck, random
-, resourcet, shakespeare, shakespeareCss, shakespeareI18n
-, shakespeareJs, text, time, transformers, transformersBase, vector
-, wai, waiExtra, waiTest, yesodRoutes
+{ cabal, aeson, attoparsecConduit, blazeBuilder, blazeHtml
+, blazeMarkup, caseInsensitive, cereal, clientsession, conduit
+, cookie, dataDefault, failure, fastLogger, hamlet, hspec
+, httpTypes, HUnit, liftedBase, monadControl, monadLogger, parsec
+, pathPieces, QuickCheck, random, resourcet, safe, shakespeare
+, shakespeareCss, shakespeareI18n, shakespeareJs, text, time
+, transformers, transformersBase, vector, wai, waiExtra, waiTest
+, warp, yesodRoutes
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-core";
-  version = "1.1.8.3";
-  sha256 = "116vglpqh2561g0gzhm4ijwx829c50ai1hh715vwi5j5i01y2rkr";
+  version = "1.2.1";
+  sha256 = "1p9xaw0d9dx68q7i99kjcqy1lhmd164drbcw3489560wa71mwamk";
   buildDepends = [
-    aeson blazeBuilder blazeHtml blazeMarkup caseInsensitive cereal
-    clientsession conduit cookie failure fastLogger hamlet httpTypes
-    liftedBase monadControl monadLogger parsec pathPieces random
-    resourcet shakespeare shakespeareCss shakespeareI18n shakespeareJs
-    text time transformers transformersBase vector wai waiExtra
-    yesodRoutes
+    aeson attoparsecConduit blazeBuilder blazeHtml blazeMarkup
+    caseInsensitive cereal clientsession conduit cookie dataDefault
+    failure fastLogger hamlet httpTypes liftedBase monadControl
+    monadLogger parsec pathPieces random resourcet safe shakespeare
+    shakespeareCss shakespeareI18n shakespeareJs text time transformers
+    transformersBase vector wai waiExtra warp yesodRoutes
   ];
   testDepends = [
-    blazeBuilder conduit hamlet hspec httpTypes HUnit QuickCheck random
-    shakespeareCss shakespeareJs text transformers wai waiTest
+    blazeBuilder conduit hamlet hspec httpTypes HUnit liftedBase
+    QuickCheck random resourcet shakespeareCss shakespeareJs text
+    transformers wai waiTest
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Creation of type-safe, RESTful web applications";

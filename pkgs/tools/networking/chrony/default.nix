@@ -1,4 +1,6 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, libcap, readline }:
+
+assert stdenv.isLinux -> libcap != null;
 
 stdenv.mkDerivation rec {
   name = "chrony-1.27";
@@ -8,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "17dfhcm5mrkg8ids0ajwscryr7fm7664kz10ygsa1ac047p3aj6l";
   };
   
+  buildInputs = [ readline ] ++ stdenv.lib.optional stdenv.isLinux libcap;
+
   meta = with stdenv.lib; {
     description = "A pair of programs which are used to maintain the accuracy of the system clock on a computer.";
     homepage = "http://chrony.tuxfamily.org/";

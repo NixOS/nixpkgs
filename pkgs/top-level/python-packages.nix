@@ -1415,11 +1415,11 @@ pythonPackages = python.modules // rec {
 
 
   django_1_3 = buildPythonPackage rec {
-    name = "Django-1.3.3";
+    name = "Django-1.3.7";
 
     src = fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.3/${name}.tar.gz";
-      sha256 = "0snlrcvk92qj1v0n9dpycn6sw56w4zns4mpc30837q6yi7ylrx4f";
+      sha256 = "12pv8y2x3fhrcrjayfm6z40r57iwchfi5r19ajs8q8z78i3z8l7f";
     };
 
     # error: invalid command 'test'
@@ -1433,11 +1433,11 @@ pythonPackages = python.modules // rec {
 
 
   django_evolution = buildPythonPackage rec {
-    name = "django_evolution-0.6.7";
+    name = "django_evolution-0.6.9";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/django_evolution/${name}.tar.gz";
-      md5 = "24b8373916f53f74d701b99a6cf41409";
+      md5 = "c0d7d10bc41898c88b14d434c48766ff";
     };
 
     propagatedBuildInputs = [ django_1_3 ];
@@ -1450,14 +1450,14 @@ pythonPackages = python.modules // rec {
 
 
   djblets = buildPythonPackage rec {
-    name = "Djblets-0.6.23";
+    name = "Djblets-0.6.28";
 
     src = fetchurl {
       url = "http://downloads.reviewboard.org/releases/Djblets/0.6/${name}.tar.gz";
-      sha256 = "1d8vg5a9q2ldnbxqap1893lqb66jwcsli2brbjx7mcnqrzcz449x";
+      sha256 = "11fsi911cqkjgv9j7646ljc2fgxsdfyq44kzmv01xhysm50fn6xx";
     };
 
-    propagatedBuildInputs = [ pil django_1_3 ];
+    propagatedBuildInputs = [ pil django_1_3 feedparser ];
 
     meta = {
       description = "A collection of useful extensions for Django";
@@ -1887,14 +1887,16 @@ pythonPackages = python.modules // rec {
 
 
   gyp = buildPythonPackage rec {
-    rev = "1435";
+    rev = "1635";
     name = "gyp-r${rev}";
 
     src = fetchsvn {
       url = "http://gyp.googlecode.com/svn/trunk";
       inherit rev;
-      sha256 = "1wmd1svx5344alb8ff9vzdam1ccqdl0h7shp1xnsk843hqwc0fz0";
+      sha256 = "1hn5gxgj2z399f71kz11m61ifds7mx4zkymnd1c87k1wyp7bs5k5";
     };
+
+   patches = if pkgs.stdenv.isDarwin then [ ../development/python-modules/gyp/no-xcode.patch ../development/python-modules/gyp/no-darwin-cflags.patch ] else null;
 
     # error: invalid command 'test'
     doCheck = false;
@@ -2671,6 +2673,18 @@ pythonPackages = python.modules // rec {
       url = http://www.galago-project.org/files/releases/source/notify-python/notify-python-0.1.1.tar.bz2;
       sha256 = "1kh4spwgqxm534qlzzf2ijchckvs0pwjxl1irhicjmlg7mybnfvx";
     };
+
+    patches = pkgs.lib.singleton (fetchurl {
+      name = "libnotify07.patch";
+      url = "http://pkgs.fedoraproject.org/cgit/notify-python.git/plain/"
+          + "libnotify07.patch?id2=289573d50ae4838a1658d573d2c9f4c75e86db0c";
+      sha256 = "1lqdli13mfb59xxbq4rbq1f0znh6xr17ljjhwmzqb79jl3dig12z";
+    });
+
+    postPatch = ''
+      sed -i -e '/^PYGTK_CODEGEN/s|=.*|="${pygtk}/bin/pygtk-codegen-2.0"|' \
+        configure
+    '';
 
     buildInputs = [ python pkgs.pkgconfig pkgs.libnotify pygobject pygtk pkgs.glib pkgs.gtk pkgs.dbus_glib ];
 
@@ -3932,15 +3946,15 @@ pythonPackages = python.modules // rec {
 
 
   reviewboard = buildPythonPackage rec {
-    name = "ReviewBoard-1.6.13";
+    name = "ReviewBoard-1.6.16";
 
     src = fetchurl {
       url = "http://downloads.reviewboard.org/releases/ReviewBoard/1.6/${name}.tar.gz";
-      sha256 = "06q9vgvmmwiyqj6spw6sbhrcxwds02pvqir50psbpps74nxn2mph";
+      sha256 = "0vg3ypm57m43bscv8vswjdllv3d2j8lxqwwvpd65cl7jd1in0yr1";
     };
 
     propagatedBuildInputs =
-      [ recaptcha_client pytz memcached dateutil paramiko flup pygments
+      [ recaptcha_client pytz memcached dateutil_1_5 paramiko flup pygments
         djblets django_1_3 django_evolution pycrypto python.modules.sqlite3
         pysvn pil psycopg2
       ];
@@ -4688,11 +4702,11 @@ pythonPackages = python.modules // rec {
   };
 
   waitress = buildPythonPackage rec {
-    name = "waitress-0.8.1";
+    name = "waitress-0.8.5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/w/waitress/${name}.tar.gz";
-      md5 = "aadfc692b780fc42eb05ac819102d336";
+      md5 = "7a3094d812c0dffb948d1334ef5fd56f";
     };
 
     meta = {

@@ -383,7 +383,7 @@ let
         ghc = ghcSupported;
       };
 
-      haskellPackages_ghc762 = {
+      haskellPackages_ghc763 = {
         ghc = ghcSupported;
       };
 

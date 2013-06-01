@@ -7,6 +7,9 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ parsec strict time ];
+  patchPhase = ''
+    sed -i -e 's|containers >=.*|containers|' wxdirect.cabal
+  '';
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "helper tool for building wxHaskell";

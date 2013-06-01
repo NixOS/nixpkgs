@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, qt4, shared_mime_info, libxslt, boost, automoc4, soprano, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "akonadi-1.9.1";
+  name = "akonadi-1.9.2";
   
   src = fetchurl {
     url = "mirror://kde/stable/akonadi/src/${name}.tar.bz2";
-    sha256 = "1w10kb4m8ri6yi1mii2j0sckj3vq11y6qkzijm3lbh4w0fi4kbjk";
+    sha256 = "1ndzc7a1q1hqy4pn9xnihq6ni02zsqfdyy6z6lwn27bkb7pg64p7";
   };
 
   buildInputs = [ qt4 soprano libxslt boost sqlite ];

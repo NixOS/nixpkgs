@@ -3,54 +3,31 @@
 , openexr, avahi, kerberos, attr, shared_desktop_ontologies, libXScrnSaver
 , automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt, grantlee
 , docbook_xml_dtd_42, docbook_xsl, polkit_qt_1
-, getopt, udev, herqq, phonon, libjpeg, xz
+, getopt, udev, herqq, phonon, libjpeg, xz, ilmbase
 , pkgconfig
 }:
 
 kde {
   buildInputs =
-    [ pkgconfig
-# attr
- attica #todo: update to 4.1
- avahi
- bzip2
- enchant
- fam
-# getopt
- giflib
- grantlee # todo: update to 0.3
- herqq
- jasper
-      libdbusmenu_qt #todo: update to 0.9.2
- libXScrnSaver
- libxslt
-# pcre
- polkit_qt_1 qca2
-      shared_desktop_ontologies xz udev
-# libxml2
- libjpeg
- kerberos
-
-#openexr # todo: update openexr to 1.7.1. make it compile maybe need ilmbase although it's supposedly propagated
+    [ pkgconfig attica avahi bzip2 enchant fam giflib grantlee herqq jasper
+      libdbusmenu_qt libXScrnSaver libxslt polkit_qt_1 qca2
+      shared_desktop_ontologies xz udev libjpeg kerberos openexr
     ];
 
-  propagatedBuildInputs = [ qt4 soprano
- strigi # todo: update to 0.7.8
- phonon ];
+  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
 
-  propagatedNativeBuildInputs = [ automoc4 cmake perl
- shared_mime_info #todo: update to 1.1
- ];
+  propagatedBuildInputs = [ qt4 soprano strigi phonon ];
+
+  propagatedNativeBuildInputs = [ automoc4 cmake perl shared_mime_info ];
 
   # TODO: make sonnet plugins (dictionaries) really work.
   # There are a few hardcoded paths.
-  # Let kdelibs find openexr
   # Split plugins from libs?
 
   patches = [ ../files/polkit-install.patch ];
 
   # cmake fails to find acl.h because of C++-style comment
-  # TODO: OpenEXR
+
   cmakeFlags = [
     "-DDOCBOOKXML_CURRENTDTD_DIR=${docbook_xml_dtd_42}/xml/dtd/docbook"
     "-DDOCBOOKXSL_DIR=${docbook_xsl}/xml/xsl/docbook"

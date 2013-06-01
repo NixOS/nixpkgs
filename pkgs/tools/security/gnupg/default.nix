@@ -13,11 +13,11 @@ assert useUsb -> (libusb != null);
 assert useCurl -> (curl != null);
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.0.19";
+  name = "gnupg-2.0.20";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "08n636sfffs5qvg9ppiprvsh00q0dmdw425psg3m3nssja53m8pg";
+    sha256 = "16mp0j5inrcqcb3fxbn0b3aamascy3n923wiy0y8marc0rzrp53f";
   };
 
   buildInputs = [ readline zlib libgpgerror libgcrypt libassuan libksba pth ]
@@ -35,7 +35,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
+    homepage = "http://gnupg.org/";
     description = "GNU Privacy Guard (GnuPG), GNU Project's implementation of the OpenPGP standard";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     longDescription = ''
       GnuPG is the GNU project's complete and free implementation of
@@ -49,12 +51,7 @@ stdenv.mkDerivation rec {
       S/MIME.
     '';
 
-    homepage = http://gnupg.org/;
-
-    license = "GPLv3+";
-
     maintainers = with stdenv.lib.maintainers; [ ludo urkud ];
-
     platforms = stdenv.lib.platforms.all;
   };
 }

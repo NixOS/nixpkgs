@@ -1,0 +1,53 @@
+Index: gyp/pylib/gyp/xcode_emulation.py
+===================================================================
+--- gyp/pylib/gyp/xcode_emulation.py	(revision 1635)
++++ gyp/pylib/gyp/xcode_emulation.py	(working copy)
+@@ -280,9 +280,6 @@
+     if self._Test('GCC_CHAR_IS_UNSIGNED_CHAR', 'YES', default='NO'):
+       cflags.append('-funsigned-char')
+ 
+-    if self._Test('GCC_CW_ASM_SYNTAX', 'YES', default='YES'):
+-      cflags.append('-fasm-blocks')
+-
+     if 'GCC_DYNAMIC_NO_PIC' in self._Settings():
+       if self._Settings()['GCC_DYNAMIC_NO_PIC'] == 'YES':
+         cflags.append('-mdynamic-no-pic')
+@@ -292,9 +289,6 @@
+       # mdynamic-no-pic by default for executable and possibly static lib
+       # according to mento
+ 
+-    if self._Test('GCC_ENABLE_PASCAL_STRINGS', 'YES', default='YES'):
+-      cflags.append('-mpascal-strings')
+-
+     self._Appendf(cflags, 'GCC_OPTIMIZATION_LEVEL', '-O%s', default='s')
+ 
+     if self._Test('GCC_GENERATE_DEBUGGING_SYMBOLS', 'YES', default='YES'):
+@@ -311,12 +305,6 @@
+     if self._Test('GCC_SYMBOLS_PRIVATE_EXTERN', 'YES', default='NO'):
+       cflags.append('-fvisibility=hidden')
+ 
+-    if self._Test('GCC_TREAT_WARNINGS_AS_ERRORS', 'YES', default='NO'):
+-      cflags.append('-Werror')
+-
+-    if self._Test('GCC_WARN_ABOUT_MISSING_NEWLINE', 'YES', default='NO'):
+-      cflags.append('-Wnewline-eof')
+-
+     self._AppendPlatformVersionMinFlags(cflags)
+ 
+     # TODO:
+@@ -334,7 +322,6 @@
+       # TODO: Supporting fat binaries will be annoying.
+       self._WarnUnimplemented('ARCHS')
+       archs = ['i386']
+-    cflags.append('-arch ' + archs[0])
+ 
+     if archs[0] in ('i386', 'x86_64'):
+       if self._Test('GCC_ENABLE_SSE3_EXTENSIONS', 'YES', default='NO'):
+@@ -570,7 +557,6 @@
+       # TODO: Supporting fat binaries will be annoying.
+       self._WarnUnimplemented('ARCHS')
+       archs = ['i386']
+-    ldflags.append('-arch ' + archs[0])
+ 
+     # Xcode adds the product directory by default.
+     ldflags.append('-L' + product_dir)
