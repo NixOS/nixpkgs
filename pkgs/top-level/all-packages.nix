@@ -1314,6 +1314,8 @@ let
 
   ntp = callPackage ../tools/networking/ntp { };
 
+  numdiff = callPackage ../tools/text/numdiff { };
+
   nssmdns = callPackage ../tools/networking/nss-mdns { };
 
   nylon = callPackage ../tools/networking/nylon { };
