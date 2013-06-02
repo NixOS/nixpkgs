@@ -6855,6 +6855,8 @@ let
 
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
 
+  cgit = callPackage ../applications/version-management/git-and-tools/cgit { };
+
   chatzilla = callPackage ../applications/networking/irc/chatzilla {
     xulrunner = firefox36Pkgs.xulrunner;
   };
