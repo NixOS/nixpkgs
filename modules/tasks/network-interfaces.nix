@@ -244,6 +244,7 @@ in
         pkgs.iputils
         pkgs.nettools
         pkgs.wirelesstools
+        pkgs.iw
         pkgs.rfkill
         pkgs.openresolv
       ]
