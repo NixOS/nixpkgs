@@ -1951,7 +1951,7 @@ pythonPackages = python.modules // rec {
     };
 
     meta = {
-      homepage = "http://code.google.com/p/httplib2";
+      homepage = http://code.google.com/p/httplib2;
       description = "A comprehensive HTTP client library";
       license = pkgs.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
