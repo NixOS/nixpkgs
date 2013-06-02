@@ -1319,6 +1319,8 @@ let
 
   networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
 
+  newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
+
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
@@ -4982,7 +4984,14 @@ let
 
   mythes = callPackage ../development/libraries/mythes { };
 
-  ncurses = makeOverridable (import ../development/libraries/ncurses) {
+  ncurses_5_4 = makeOverridable (import ../development/libraries/ncurses/5_4.nix) {
+    inherit fetchurl;
+    unicode = system != "i686-cygwin";
+    stdenv = if stdenv.isDarwin
+      then allStdenvs.stdenvNative
+      else stdenv;
+  };
+  ncurses_5_9 = makeOverridable (import ../development/libraries/ncurses) {
     inherit fetchurl;
     unicode = system != "i686-cygwin";
     stdenv =
@@ -4993,6 +5002,7 @@ let
       then allStdenvs.stdenvNative
       else stdenv;
   };
+  ncurses = ncurses_5_9;
 
   neon = callPackage ../development/libraries/neon {
     compressionSupport = true;
@@ -5338,6 +5348,12 @@ let
   sqliteFull = lowPrio (callPackage ../development/libraries/sqlite/3.7.9-full.nix {
     inherit readline ncurses;
   });
+
+  stfl = callPackage ../development/libraries/stfl {
+    stdenv = if stdenv.isDarwin
+      then overrideGCC stdenv gccApple
+      else stdenv;
+  };
 
   stlink = callPackage ../development/tools/misc/stlink { };
 
