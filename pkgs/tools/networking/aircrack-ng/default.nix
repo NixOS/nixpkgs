@@ -1,15 +1,11 @@
-{stdenv, fetchsvn, libpcap, openssl, zlib, wirelesstools}:
+{stdenv, fetchurl, libpcap, openssl, zlib, wirelesstools}:
 
-let
-  rev = "2268";
-in
 stdenv.mkDerivation rec {
-  name = "aircrack-ng-1.1-${rev}";
+  name = "aircrack-ng-1.2-beta1";
 
-  src = fetchsvn {
-    url = "http://trac.aircrack-ng.org/svn/trunk";
-    inherit rev;
-    sha256 = "0zjkk3s65v9w92fhzhyknhjcsx6whcm0an0qcawn2ggs0n0ss9ij";
+  src = fetchurl {
+    url = "http://download.aircrack-ng.org/${name}.tar.gz";
+    sha256 = "19cfib7sqp2rdm3lc84jrzsa6r8443gkm1ifbmhygsqn6fnkj8zi";
   };
 
   buildInputs = [libpcap openssl zlib];
