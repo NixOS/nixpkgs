@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.aircrack-ng.org/;
     license = "GPL2+";
     maintainers = [ maintainers.iElectric maintainers.viric maintainers.garbas maintainers.chaoflow ];
-    platform = platforms.linux;
+    platforms = platforms.linux;
   };
 }
