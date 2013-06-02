@@ -45,6 +45,7 @@ let
       apacheHttpd = linux;
       aspell = all;
       at = linux;
+      atlas = linux;
       audacious = linux;
       autoconf = all;
       automake110x = all;
