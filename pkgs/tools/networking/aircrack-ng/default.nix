@@ -15,9 +15,11 @@ stdenv.mkDerivation rec {
     sed -e 's@/usr/local/bin@'${wirelesstools}@ -i src/osdep/linux.c
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Wireless encryption crackign tools";
     homepage = http://www.aircrack-ng.org/;
     license = "GPL2+";
+    maintainers = [ maintainers.iElectric maintainers.viric maintainers.garbas maintainers.chaoflow ];
+    platform = platforms.linux;
   };
 }
