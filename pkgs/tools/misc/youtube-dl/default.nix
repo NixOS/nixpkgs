@@ -12,7 +12,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ python ];
-  nativeBuildInputs = [ pandoc zip ];
+  nativeBuildInputs = [ zip ] ++
+      stdenv.lib.optional (stdenv.isi686 || stdenv.isx86_64) pandoc;
 
   patchPhase = ''
     rm youtube-dl
