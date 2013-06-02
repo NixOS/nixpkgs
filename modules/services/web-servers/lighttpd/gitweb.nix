@@ -7,7 +7,9 @@ let
   gitwebConfigFile = pkgs.writeText "gitweb.conf" ''
     # path to git projects (<project>.git)
     $projectroot = "${cfg.projectroot}";
+    ${cfg.extraConfig}
   '';
+
 in
 {
 
@@ -27,6 +29,14 @@ in
       description = ''
         Path to git projects (bare repositories) that should be served by
         gitweb. Must not end with a slash.
+      '';
+    };
+
+    extraConfig = mkOption {
+      default = "";
+      type = types.uniq types.string;
+      description = ''
+        Verbatim configuration text appended to the generated gitweb.conf file.
       '';
     };
 
