@@ -6753,6 +6753,8 @@ let
 
   aewan = callPackage ../applications/editors/aewan { };
 
+  alchemy = callPackage ../applications/graphics/alchemy { };
+
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
   antiword = callPackage ../applications/office/antiword {};
