@@ -1,6 +1,6 @@
 { cabal, alex, binary, deepseq, filepath, geniplate, happy
 , hashable, hashtables, haskeline, haskellSrcExts, mtl, parallel
-, QuickCheck, text, unorderedContainers, xhtml, zlib
+, QuickCheck, text, time, unorderedContainers, xhtml, zlib
 }:
 
 cabal.mkDerivation (self: {
@@ -11,8 +11,8 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [
     binary deepseq filepath geniplate hashable hashtables haskeline
-    haskellSrcExts mtl parallel QuickCheck text unorderedContainers
-    xhtml zlib
+    haskellSrcExts mtl parallel QuickCheck text time
+    unorderedContainers xhtml zlib
   ];
   buildTools = [ alex happy ];
   jailbreak = true;
