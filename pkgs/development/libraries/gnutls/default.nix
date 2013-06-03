@@ -1,15 +1,15 @@
-{ fetchurl, stdenv, zlib, lzo, libtasn1, nettle
+{ fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig
 , guileBindings, guile, perl, gmp }:
 
 assert guileBindings -> guile != null;
 
 stdenv.mkDerivation (rec {
 
-  name = "gnutls-3.1.10";
+  name = "gnutls-3.2.1";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnutls/v3.1/${name}.tar.xz";
-    sha256 = "0in6wxlvpv48maawmbg3jysq2rhjqxypgi6kkr173hc8kksp6lsk";
+    url = "mirror://gnupg/gnutls/v3.2/${name}.tar.xz";
+    sha256 = "1zi2kq3vcbqdy9khl7r6pgk4hgwibniasm9k6siasdvqjijq3ymb";
   };
 
   # Note: GMP is a dependency of Nettle, whose public headers include
@@ -34,7 +34,7 @@ stdenv.mkDerivation (rec {
   buildInputs = [ zlib lzo ]
     ++ stdenv.lib.optional guileBindings guile;
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl pkgconfig ];
 
   propagatedBuildInputs = [ nettle libtasn1 ];
 
