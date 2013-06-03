@@ -2258,6 +2258,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix {};
   cabalInstall = self.cabalInstall_1_16_0_2;
 
+  gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {};
+
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
 
   jailbreakCabal = callPackage ../development/tools/haskell/jailbreak-cabal {};
