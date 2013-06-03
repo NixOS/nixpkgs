@@ -5,11 +5,11 @@ assert guileBindings -> guile != null;
 
 stdenv.mkDerivation (rec {
 
-  name = "gnutls-3.2.1";
+  name = "gnutls-3.1.12";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v3.2/${name}.tar.xz";
-    sha256 = "1zi2kq3vcbqdy9khl7r6pgk4hgwibniasm9k6siasdvqjijq3ymb";
+    sha256 = "025k37wsl21ncwrg489ysbjqsz8iralvgv98adj960sl03787lyc";
   };
 
   # Note: GMP is a dependency of Nettle, whose public headers include
