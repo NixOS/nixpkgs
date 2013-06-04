@@ -89,6 +89,11 @@ in
         description = "TCP port number to run the RPC/web interface.";
       };
 
+      apparmor = mkOption {
+        type = types.uniq types.bool;
+        default = true;
+        description = "Generate apparmor profile for transmission-daemon.";
+      };
     };
 
   };
@@ -99,13 +104,15 @@ in
 
     systemd.services.transmission = {
       description = "Transmission BitTorrent Daemon";
-      after = [ "network.target" ];
+      after = [ "network.target" ] ++ optional (config.security.apparmor.enable && cfg.apparmor) "apparmor.service";
+      requires = mkIf (config.security.apparmor.enable && cfg.apparmor) [ "apparmor.service" ];
       wantedBy = [ "multi-user.target" ];
+
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
       serviceConfig.ExecStartPre =
-        if config.services.transmission.settings != {} then ''
-          ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir} && mkdir -p ${settingsDir} && ${pkgs.transmission}/bin/transmission-daemon -d |& sed ${attrsToSedArgs config.services.transmission.settings} > ${settingsFile}.tmp && mv ${settingsFile}.tmp ${settingsFile}"
+        if cfg.settings != {} then ''
+          ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir} && mkdir -p ${settingsDir} && ${pkgs.transmission}/bin/transmission-daemon -d |& sed ${attrsToSedArgs cfg.settings} > ${settingsFile}.tmp && mv ${settingsFile}.tmp ${settingsFile}"
         ''
         else ''
           ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir}"
@@ -129,6 +136,37 @@ in
 
     users.extraGroups.transmission = {};
 
+    # AppArmor profile
+    security.apparmor.profiles = mkIf (config.security.apparmor.enable && cfg.apparmor) [
+      (pkgs.writeText "apparmor-transmission-daemon" ''
+        #include <tunables/global>
+
+        ${pkgs.transmission}/bin/transmission-daemon {
+          #include <abstractions/base>
+          #include <abstractions/nameservice>
+
+          ${pkgs.glibc}/lib/*.so             mr,
+          ${pkgs.libevent}/lib/libevent*.so* mr,
+          ${pkgs.curl}/lib/libcurl*.so*      mr,
+          ${pkgs.openssl}/lib/libssl*.so*    mr,
+          ${pkgs.openssl}/lib/libcrypto*.so* mr,
+          ${pkgs.zlib}/lib/libz*.so*         mr,
+          ${pkgs.libssh2}/lib/libssh2*.so*   mr,
+
+          @{PROC}/sys/kernel/random/uuid   r,
+          @{PROC}/sys/vm/overcommit_memory r,
+
+          ${pkgs.transmission}/share/transmission/** r,
+
+          owner ${settingsDir}/** rw,
+
+          ${cfg.settings.download-dir}/** rw,
+          ${optionalString cfg.settings.incomplete-dir-enabled ''
+            ${cfg.settings.incomplete-dir}/** rw,
+          ''}
+        }
+      '')
+    ];
   };
 
 }
