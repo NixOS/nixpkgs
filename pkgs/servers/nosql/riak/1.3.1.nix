@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
     maintainers = stdenv.lib.maintainers.orbitz;
     description = "Dynamo inspired NoSQL DB by Basho";
     longDescription = ''
-      This reworks how the riak and riak-admin scripts work.  Rather
-      than the scripts using their own location to determine where the
-      data, log, and etc directories should live, the scripts expect
+      This patches the riak and riak-admin scripts to work better in Nix.
+      Rather than the scripts using their own location to determine where
+      the data, log, and etc directories should live, the scripts expect
       RIAK_DATA_DIR, RIAK_LOG_DIR, and RIAK_ETC_DIR to be defined
       and use those.
     ''
