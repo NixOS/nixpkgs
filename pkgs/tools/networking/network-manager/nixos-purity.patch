@@ -1,19 +1,3 @@
-diff --git a/src/backends/NetworkManagerExherbo.c b/src/backends/NetworkManagerExherbo.c
-index d027789..ef6b646 100644
---- a/src/backends/NetworkManagerExherbo.c
-+++ b/src/backends/NetworkManagerExherbo.c
-@@ -41,9 +41,9 @@ void nm_backend_update_dns (void)
- 	/* Make glibc/nscd aware of any changes to the resolv.conf file by
- 	 * restarting nscd. Only restart if already running.
- 	 */
--	if (g_file_test ("/usr/sbin/nscd", G_FILE_TEST_IS_EXECUTABLE)) {
-+	if (g_file_test ("@glibc@/sbin/nscd", G_FILE_TEST_IS_EXECUTABLE)) {
- 		nm_log_info (LOGD_DNS, "Clearing nscd hosts cache.");
--		nm_spawn_process ("/usr/sbin/nscd -i hosts");
-+		nm_spawn_process ("@glibc@/sbin/nscd -i hosts");
- 	}
- }
- 
 diff --git a/src/dhcp-manager/nm-dhcp-dhclient.c b/src/dhcp-manager/nm-dhcp-dhclient.c
 index 0932139..5b5aee8 100644
 --- a/src/dhcp-manager/nm-dhcp-dhclient.c
@@ -44,21 +28,6 @@ index 237661f..48bc33f 100644
  		NULL
  	};
  	const char **path = dhcpcd_paths;
-diff --git a/src/dns-manager/nm-dns-bind.c b/src/dns-manager/nm-dns-bind.c
-index 1a3243b..a47dccd 100644
---- a/src/dns-manager/nm-dns-bind.c
-+++ b/src/dns-manager/nm-dns-bind.c
-@@ -51,9 +51,7 @@ static inline const char *
- find_bind (void)
- {
- 	static const char *paths[] = {
--		"/usr/local/sbin/named",
--		"/usr/sbin/named",
--		"/sbin/named",
-+		"@bind@/sbin/named",
- 		NULL
- 	};
- 	const char **binary = paths;
 diff --git a/src/dns-manager/nm-dns-dnsmasq.c b/src/dns-manager/nm-dns-dnsmasq.c
 index 8e216f4..6e00210 100644
 --- a/src/dns-manager/nm-dns-dnsmasq.c
