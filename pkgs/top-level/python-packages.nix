@@ -2376,6 +2376,35 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  mitmproxy = buildPythonPackage rec {
+    baseName = "mitmproxy";
+    name = "${baseName}-${meta.version}";
+
+    src = fetchurl {
+      url = "${meta.homepage}/download/${name}.tar.gz";
+      sha256 = "1ddqni6d4kc8ypl6yig4nc00izvbk359sz6hykb9g0lfcpfqlngj";
+    };
+    
+    buildInputs = [
+      pkgs.pyopenssl pyasn1 urwid pil lxml flask protobuf netlib
+    ];
+
+    doCheck = false;
+
+    postInstall = ''
+      for prog in $out/bin/*; do
+        wrapProgram "$prog" \
+          --prefix PYTHONPATH : "$PYTHONPATH"
+      done
+    '';
+
+    meta = {
+      version = "0.9";
+      description = ''Man-in-the-middle proxy'';
+      homepage = "http://mitmproxy.org/";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
 
   mock = buildPythonPackage (rec {
     name = "mock-1.0.1";
@@ -2581,6 +2610,29 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  netlib = buildPythonPackage rec {
+    baseName = "netlib";
+    name = "${baseName}-${meta.version}";
+
+    src = fetchurl {
+      url = "https://github.com/cortesi/netlib/archive/v${meta.version}.tar.gz";
+      name = "${name}.tar.gz";
+      sha256 = "1y8lx2j1jrr93mqfb06zg1x5jm9lllw744sb61ib8dagw43nnq3v";
+    };
+    
+    buildInputs = [
+      pkgs.pyopenssl pyasn1
+    ];
+
+    doCheck = false;
+
+    meta = {
+      version = "0.9";
+      description = ''Man-in-the-middle proxy'';
+      homepage = "https://github.com/cortesi/netlib";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
 
   nevow = buildPythonPackage (rec {
     name = "nevow-${version}";
@@ -3204,11 +3256,11 @@ pythonPackages = python.modules // rec {
 
 
   pyasn1 = buildPythonPackage ({
-    name = "pyasn1-0.0.11a";
+    name = "pyasn1-0.1.7";
 
     src = fetchurl {
-      url = "mirror://sourceforge/pyasn1/pyasn1-devel/0.0.11a/pyasn1-0.0.11a.tar.gz";
-      sha256 = "0b7q67ygdk48zn07pyhyg7r0b74gds50652ndpzfw4vs8l3vjg0b";
+      url = "mirror://sourceforge/pyasn1/0.1.7/pyasn1-0.1.7.tar.gz";
+      sha256 = "1aqy21fb564gmnkw2fbkn55c40diyx3z0ixh4savvxikqm9ivy74";
     };
 
     meta = {
