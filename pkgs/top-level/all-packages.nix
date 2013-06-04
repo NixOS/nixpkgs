@@ -7999,6 +7999,8 @@ let
 
   sox = callPackage ../applications/misc/audio/sox { };
 
+  soxr = callPackage ../applications/misc/audio/soxr { };
+
   spotify = callPackage ../applications/audio/spotify {
     inherit (gnome) GConf;
   };
