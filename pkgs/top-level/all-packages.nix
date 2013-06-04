@@ -2699,11 +2699,21 @@ let
     camomile_0_8_2 = callPackage ../development/ocaml-modules/camomile/0.8.2.nix { };
     camomile = callPackage ../development/ocaml-modules/camomile { };
 
+    camlimages = callPackage ../development/ocaml-modules/camlimages { };
+
+    ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
+
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
+    dypgen = callPackage ../development/ocaml-modules/dypgen { };
+
+    patoline = callPackage ../tools/typesetting/patoline { };
+
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
+
+    lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
     lablgtk = callPackage ../development/ocaml-modules/lablgtk {
       inherit (gnome) libgnomecanvas libglade gtksourceview;
