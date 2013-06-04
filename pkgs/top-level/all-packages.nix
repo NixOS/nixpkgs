@@ -7924,11 +7924,6 @@ let
 
   # = urxvt
   rxvt_unicode = callPackage ../applications/misc/rxvt_unicode {
-    perlSupport = false;
-  };
-
-  # = urxvt
-  rxvt_unicode_with_perl = callPackage ../applications/misc/rxvt_unicode {
     perlSupport = true;
   };
 
