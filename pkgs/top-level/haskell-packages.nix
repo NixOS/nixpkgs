@@ -1307,6 +1307,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   lenses = callPackage ../development/libraries/haskell/lenses {};
 
+  libffi = callPackage ../development/libraries/haskell/libffi {
+    libffi = pkgs.libffi;
+  };
+
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
