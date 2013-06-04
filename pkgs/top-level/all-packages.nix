@@ -2004,6 +2004,8 @@ let
 
   dash = callPackage ../shells/dash { };
 
+  fish = callPackage ../shells/fish { };
+
   tcsh = callPackage ../shells/tcsh { };
 
   rush = callPackage ../shells/rush { };
