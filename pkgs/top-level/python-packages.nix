@@ -2768,6 +2768,21 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  obfsproxy = buildPythonPackage ( rec {
+    name = "obfsproxy-0.2.2";
+    src = fetchgit {
+      url = https://git.torproject.org/pluggable-transports/obfsproxy.git;
+      rev = "3c4e843a30c430aec1de03e0e09ef654072efc03";
+    };
+
+    propagatedBuildInputs = [ pyptlib argparse twisted pycrypto ];
+
+    meta = {
+      description = "a pluggable transport proxy";
+      homepage = https://www.torproject.org/projects/obfsproxy;
+    };
+  });
+
   # optfunc = buildPythonPackage ( rec {
   #   name = "optfunc-git";
   #
@@ -3486,6 +3501,19 @@ pythonPackages = python.modules // rec {
       description = "The pyparsing module is an alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions.";
     };
   };
+
+  pyptlib = buildPythonPackage (rec {
+    name = "pyptlib-${version}";
+    version = "0.0.3";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyptlib/pyptlib-${version}.tar.gz";
+      sha256 = "0mklak456jqifx57j9jmpb69h3ybxc880qk86pg4g8jk0i14pxh3";
+    };
+    meta = {
+      description = "A python implementation of the Pluggable Transports for Circumvention specification for Tor";
+      license = stdenv.lib.licenses.bsd2;
+    };
+  });
 
   pyrss2gen = buildPythonPackage (rec {
     name = "PyRSS2Gen-1.0.0";
