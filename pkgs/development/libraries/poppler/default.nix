@@ -1,12 +1,11 @@
-{ stdenv, fetchurl, fetchgit, cairo, freetype, fontconfig, zlib
-, libjpeg, curl, libpthreadstubs, xorg, openjpeg
-, libxml2, pkgconfig, cmake, lcms2
+{ stdenv, fetchurl, fetchgit, pkgconfig, cmake
+, zlib, curl, cairo, freetype, fontconfig, lcms2, libjpeg, openjpeg
 , qt4Support ? false, qt4 ? null
 }:
 
 let
-  version = "0.23.1";
-  sha256 = "1yh9zh17adqlcx2bvcyf1dj65m1hl39mmvraf8h0k3llg38b3g1a";
+  version = "0.22.4"; # even major numbers are stable
+  sha256 = "0fz1vk0rbxvnv7ssj8l910k1rx0gjhzl5wr7hkdf4r9jwqs8yhsg";
 
   qtcairo_patches =
     let qtcairo = fetchgit { # the version for poppler-0.22
@@ -23,16 +22,11 @@ let
     name = "poppler-${nameSuff}-${version}";
 
     src = fetchurl {
-      url = "${meta.homepage}/poppler-${version}.tar.xz";
+      url = "${meta.homepage}/poppler-${version}.tar.gz";
       inherit sha256;
     };
 
-    propagatedBuildInputs = with xorg;
-      [ zlib cairo freetype fontconfig libjpeg lcms2 curl
-        libpthreadstubs libxml2
-        libXau libXdmcp libxcb libXrender libXext
-        openjpeg
-      ];
+    propagatedBuildInputs = [ zlib cairo freetype fontconfig libjpeg lcms2 curl openjpeg ];
 
     nativeBuildInputs = [ pkgconfig cmake ];
 
