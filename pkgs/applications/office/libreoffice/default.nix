@@ -7,7 +7,9 @@
 , librsvg, gnome_vfs, gstreamer, gst_plugins_base, mesa
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus_glib, qt4, kde4, clucene_core_2, libcdr, lcms2, vigra
-, libiodbc, mdds, saneBackends, mythes, libexttextcat, libvisio
+, libiodbc, mdds, saneBackends, mythes, libexttextcat, libvisio, libdrm
+, libXdamage, damageproto, fixesproto, libXfixes, libxcb
+, libXxf86vm, xf86vidmodeproto
 , fontsConf
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" ]
 }:
@@ -163,13 +165,18 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ ant ArchiveZip autoconf automake bison boost cairo clucene_core_2
-      CompressZlib cppunit cups curl db4 dbus_glib expat file flex fontconfig
+      CompressZlib cppunit cups curl damageproto
+      db4 dbus_glib expat file fixesproto flex fontconfig
       freetype GConf getopt gnome_vfs gperf gst_plugins_base gstreamer gtk
-      hunspell icu jdk kde4.kdelibs lcms2 libcdr libexttextcat libiodbc libjpeg
+      hunspell icu jdk kde4.kdelibs lcms2 libcdr libdrm 
+      libexttextcat libiodbc libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
-      libXaw libXext libXi libXinerama libxml2 libxslt libXtst mdds mesa mythes
+      libXaw libxcb libXdamage 
+      libXext libXfixes libXi libXinerama 
+      libxml2 libxslt libXtst libXxf86vm mdds mesa mythes
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
-      python sablotron saneBackends tcsh unzip vigra which zip zlib
+      python sablotron saneBackends tcsh unzip vigra xf86vidmodeproto
+      which zip zlib
     ];
 
   meta = {

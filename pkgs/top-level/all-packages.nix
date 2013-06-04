@@ -7553,7 +7553,8 @@ let
 
   libreoffice = callPackage ../applications/office/libreoffice {
     inherit (perlPackages) ArchiveZip CompressZlib;
-    inherit (gnome) GConf ORBit2 gnome_vfs;
+    inherit (gnome2) GConf ORBit2 gnome_vfs;
+    gtk = gtk2;
     zip = zip.override { enableNLS = false; };
     boost = boost149;
     jdk = openjdk;
