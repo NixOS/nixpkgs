@@ -1787,6 +1787,8 @@ let
 
   vpnc = callPackage ../tools/networking/vpnc { };
 
+  openconnect = callPackage ../tools/networking/openconnect.nix { };
+
   vtun = callPackage ../tools/networking/vtun { };
 
   wbox = callPackage ../tools/networking/wbox {};
@@ -4090,13 +4092,17 @@ let
   gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
 
   # TODO : Add MIT Kerberos and let admin choose.
-  kerberos = heimdal;
+  kerberos = heimdal_1_5_2;
+
+  heimdal = heimdal_1_5_2;
+
+  heimdal_1_3_3 = callPackage ../development/libraries/kerberos/heimdal.nix { };
+
+  heimdal_1_5_2 = callPackage ../development/libraries/kerberos/heimdal-1.5.2.nix { };
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
 
   hawknl = callPackage ../development/libraries/hawknl { };
-
-  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
   herqq = callPackage ../development/libraries/herqq { };
 
@@ -7740,6 +7746,10 @@ let
 
   msmtp = callPackage ../applications/networking/msmtp { };
 
+  imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix { 
+    lua = lua5;
+ };
+
   mupdf = callPackage ../applications/misc/mupdf { };
 
   mypaint = callPackage ../applications/graphics/mypaint { };
@@ -7927,7 +7937,7 @@ let
 
   # = urxvt
   rxvt_unicode = callPackage ../applications/misc/rxvt_unicode {
-    perlSupport = false;
+    perlSupport = true;
   };
 
   sakura = callPackage ../applications/misc/sakura {
