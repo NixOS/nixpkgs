@@ -1951,7 +1951,7 @@ pythonPackages = python.modules // rec {
     };
 
     meta = {
-      homepage = "http://code.google.com/p/httplib2";
+      homepage = http://code.google.com/p/httplib2;
       description = "A comprehensive HTTP client library";
       license = pkgs.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
@@ -2820,6 +2820,21 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  obfsproxy = buildPythonPackage ( rec {
+    name = "obfsproxy-0.2.2";
+    src = fetchgit {
+      url = https://git.torproject.org/pluggable-transports/obfsproxy.git;
+      rev = "3c4e843a30c430aec1de03e0e09ef654072efc03";
+    };
+
+    propagatedBuildInputs = [ pyptlib argparse twisted pycrypto ];
+
+    meta = {
+      description = "a pluggable transport proxy";
+      homepage = https://www.torproject.org/projects/obfsproxy;
+    };
+  });
+
   # optfunc = buildPythonPackage ( rec {
   #   name = "optfunc-git";
   #
@@ -3538,6 +3553,19 @@ pythonPackages = python.modules // rec {
       description = "The pyparsing module is an alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions.";
     };
   };
+
+  pyptlib = buildPythonPackage (rec {
+    name = "pyptlib-${version}";
+    version = "0.0.3";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyptlib/pyptlib-${version}.tar.gz";
+      sha256 = "0mklak456jqifx57j9jmpb69h3ybxc880qk86pg4g8jk0i14pxh3";
+    };
+    meta = {
+      description = "A python implementation of the Pluggable Transports for Circumvention specification for Tor";
+      license = stdenv.lib.licenses.bsd2;
+    };
+  });
 
   pyrss2gen = buildPythonPackage (rec {
     name = "PyRSS2Gen-1.0.0";
@@ -5872,5 +5900,58 @@ pythonPackages = python.modules // rec {
       maintainers = [ stdenv.lib.maintainers.rickynils ];
     };
   };
+
+  gdata = buildPythonPackage rec {
+    name = "gdata-${version}";
+    version = "2.0.17";
+
+    src = fetchurl {
+      url = "https://gdata-python-client.googlecode.com/files/${name}.tar.gz";
+      # sha1 = "d2d9f60699611f95dd8c328691a2555e76191c0c";
+      sha256 = "0bdaqmicpbj9v3p0swvyrqs7m35bzwdw1gy56d3k09np692jfwmd";
+    };
+
+    # Fails with "error: invalid command 'test'"
+    doCheck = false;
+
+    meta = {
+      homepage = https://code.google.com/p/gdata-python-client/;
+      description = "Python client library for Google data APIs";
+      license = pkgs.lib.licenses.asl20;
+    };
+  };
+
+  IMAPClient = buildPythonPackage rec {
+    name = "IMAPClient-${version}";
+    version = "0.9.2";
+
+    src = fetchurl {
+      url = "http://freshfoo.com/projects/IMAPClient/${name}.tar.gz";
+      sha256 = "10alpj7074djs048xjc4j7ggd1nrqdqpy0fzl7fj9hddp0rbchs9";
+    };
+
+    meta = {
+      homepage = http://imapclient.freshfoo.com/;
+      description = "Easy-to-use, Pythonic and complete IMAP client library";
+      license = pkgs.lib.licenses.bsd3;
+    };
+  };
+
+  Logbook = buildPythonPackage rec {
+    name = "Logbook-${version}";
+    version = "0.4.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/L/Logbook/${name}.tar.gz";
+      # md5 = "143cb15af4c4a784ca785a1546ad1b93";
+      sha256 = "0iim9pcyl57c6z9i1kfw5nz92qrnpz2l0bz4lir2xrqi8m03q3d7";
+    };
+
+    meta = {
+      homepage = http://pythonhosted.org/Logbook/;
+      description = "A logging replacement for Python";
+      license = pkgs.lib.licenses.bsd3;
+    };
+ };
 
 }; in pythonPackages

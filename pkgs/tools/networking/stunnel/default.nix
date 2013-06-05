@@ -9,6 +9,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [openssl];
+
+  configureFlags = [
+    "--with-ssl=${openssl}"
+  ];
   
   meta = {
     description = "Stunnel - Universal SSL wrapper";

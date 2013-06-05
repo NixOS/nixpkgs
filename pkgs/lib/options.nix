@@ -90,10 +90,17 @@ rec {
             # Evaluate sub-modules.
             subModuleMerge = path: vals:
               lib.fix (args:
-                let result = recurseInto path (optionConfig vals args); in {
-                  inherit (result) config options;
+                let
+                  result = recurseInto path (optionConfig vals args);
                   name = lib.removePrefix (opt.name + ".") path;
-                }
+                  extraArgs = opt.extraArgs or {};
+                  individualExtraArgs = opt.individualExtraArgs or {};
+                in {
+                  inherit (result) config options;
+                  inherit name;
+                } //
+                  (opt.extraArgs or {}) //
+                  (if hasAttr name individualExtraArgs then getAttr name individualExtraArgs else {})
               );
 
             # Add _options in sub-modules to make it viewable from other

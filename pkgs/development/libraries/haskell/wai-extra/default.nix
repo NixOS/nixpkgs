@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-extra";
-  version = "1.3.4";
-  sha256 = "1ay82q58pizc48rh4d8z7ybf2jjvzxqylj6mx34nvrxxlmxf5gfx";
+  version = "1.3.4.2";
+  sha256 = "14mrvh3av6dn4jx5q06b4lyjw8sr1ynygbncf5fbp3nzn8nmh17s";
   buildDepends = [
     ansiTerminal base64Bytestring blazeBuilder blazeBuilderConduit
     caseInsensitive conduit dataDefault dateCache fastLogger httpTypes

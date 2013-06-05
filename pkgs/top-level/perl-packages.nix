@@ -3292,16 +3292,20 @@ rec {
     propagatedBuildInputs = [ version ];
   };
 
-  ModulePluggable = buildPerlPackage rec {
-    name = "Module-Pluggable-3.9";
+  ModulePluggable = buildPerlPackage {
+    name = "Module-Pluggable-4.8";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SI/SIMONW/${name}.tar.gz";
-      sha256 = "0psryh1dz828zly92db9zcv905n82in2awixzqngqhzg4y7fg4wc";
+      url = mirror://cpan/authors/id/S/SI/SIMONW/Module-Pluggable-4.8.tar.gz;
+      sha256 = "0gc2sanga3207l3dnmb05isc7m87l1j94v9ll3z4sbb3vs49gdd2";
     };
     patches = [
       # !!! merge this patch into Perl itself (which contains Module::Pluggable as well)
       ../development/perl-modules/module-pluggable.patch
     ];
+    meta = {
+      description = "Automatically give your module the ability to have plugins";
+      license = "perl5";
+    };
   };
 
   ModulePluggableFast = buildPerlPackage {

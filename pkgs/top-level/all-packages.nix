@@ -495,6 +495,8 @@ let
 
   bootchart = callPackage ../tools/system/bootchart { };
 
+  bro = callPackage ../applications/networking/ids/bro { };
+
   bsod = callPackage ../misc/emulators/bsod { };
 
   btrfsProgs = callPackage ../tools/filesystems/btrfsprogs { };
@@ -651,6 +653,8 @@ let
   curlftpfs = callPackage ../tools/filesystems/curlftpfs { };
 
   dadadodo = builderDefsPackage (import ../tools/text/dadadodo) { };
+
+  daq = callPackage ../applications/networking/ids/daq { };
 
   dar = callPackage ../tools/archivers/dar { };
 
@@ -860,6 +864,8 @@ let
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
   glxinfo = callPackage ../tools/graphics/glxinfo { };
+
+  gmvault = callPackage ../tools/networking/gmvault { };
 
   gnokii = builderDefsPackage (import ../tools/misc/gnokii) {
     inherit intltool perl gettext libusb pkgconfig bluez readline pcsclite
@@ -1097,6 +1103,7 @@ let
   nodePackages = recurseIntoAttrs (import ./node-packages.nix {
     inherit pkgs stdenv nodejs fetchurl;
     neededNatives = [python] ++ lib.optional (lib.elem system lib.platforms.linux) utillinux;
+    self = pkgs.nodePackages;
   });
 
   ldns = callPackage ../development/libraries/ldns { };
@@ -1308,6 +1315,8 @@ let
   ntop = callPackage ../tools/networking/ntop { };
 
   ntp = callPackage ../tools/networking/ntp { };
+
+  numdiff = callPackage ../tools/text/numdiff { };
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
 
@@ -1633,6 +1642,8 @@ let
   };
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
+
+  snort = callPackage ../applications/networking/ids/snort { };
 
   snx = callPackage_i686 ../tools/networking/snx {
     inherit (pkgsi686Linux) pam gcc33;
@@ -1998,6 +2009,8 @@ let
   bashCompletion = callPackage ../shells/bash-completion { };
 
   dash = callPackage ../shells/dash { };
+
+  fish = callPackage ../shells/fish { };
 
   tcsh = callPackage ../shells/tcsh { };
 
@@ -2505,9 +2518,9 @@ let
   # particularly in connection with Hydra builds for all these packages.
   # So we enable it for selected versions only.
 
-  # Current default version: 7.4.2.
-  haskellPackages = haskellPackages_ghc742;
-  # Current Haskell Platform: 2012.4.0.0
+  # Current default version: 7.6.3.
+  haskellPackages = haskellPackages_ghc763;
+  # Current Haskell Platform: 2013.2.0.0
   haskellPlatform = haskellPackages.haskellPlatform;
 
   haskellPackages_ghc6104             =                   haskell.packages_ghc6104;
@@ -2520,17 +2533,17 @@ let
   haskellPackages_ghc704              =                   haskell.packages_ghc704;
   haskellPackages_ghc721              =                   haskell.packages_ghc721;
   haskellPackages_ghc722              =                   haskell.packages_ghc722;
+  haskellPackages_ghc741              =                   haskell.packages_ghc741;
+  haskellPackages_ghc742              =                   haskell.packages_ghc742;
+  haskellPackages_ghc761              =                   haskell.packages_ghc761;
+  haskellPackages_ghc762              =                   haskell.packages_ghc762;
   # For the default version, we build profiling versions of the libraries, too.
   # The following three lines achieve that: the first two make Hydra build explicit
   # profiling and non-profiling versions; the final respects the user-configured
   # default setting.
-  haskellPackages_ghc741              =                   haskell.packages_ghc741;
-  haskellPackages_ghc742_no_profiling = recurseIntoAttrs (haskell.packages_ghc742.noProfiling);
-  haskellPackages_ghc742_profiling    = recurseIntoAttrs (haskell.packages_ghc742.profiling);
-  haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742.highPrio);
-  haskellPackages_ghc761              =                   haskell.packages_ghc761;
-  haskellPackages_ghc762              =                   haskell.packages_ghc762;
-  haskellPackages_ghc763              = recurseIntoAttrs  haskell.packages_ghc763;
+  haskellPackages_ghc763_no_profiling = recurseIntoAttrs (haskell.packages_ghc763.noProfiling);
+  haskellPackages_ghc763_profiling    = recurseIntoAttrs (haskell.packages_ghc763.profiling);
+  haskellPackages_ghc763              = recurseIntoAttrs (haskell.packages_ghc763.highPrio);
   # Reasonably current HEAD snapshot.
   haskellPackages_ghcHEAD             =                   haskell.packages_ghcHEAD;
 
@@ -3420,6 +3433,8 @@ let
   seleniumRCBin = callPackage ../development/tools/selenium/remote-control {
     jre = jdk;
   };
+
+  sbt = callPackage ../development/tools/build-managers/sbt { };
 
   scons = callPackage ../development/tools/build-managers/scons { };
 
@@ -4821,7 +4836,9 @@ let
 
   openbabel = callPackage ../development/libraries/openbabel { };
 
-  opencascade = callPackage ../development/libraries/opencascade {
+  opencascade = callPackage ../development/libraries/opencascade { };
+
+  opencascade_6_5 = callPackage ../development/libraries/opencascade/6.5.nix {
     automake = automake111x;
     ftgl = ftgl212;
   };
@@ -4962,8 +4979,12 @@ let
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
   };
 
-  qt4_for_qtcreator = qt48.override {
-    developerBuild = true;
+  qt48Full = callPackage ../development/libraries/qt-4.x/4.8 {
+    # GNOME dependencies are not used unless gtkStyle == true
+    inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
+    docs = true;
+    demos = true;
+    examples = true;
   };
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
@@ -6751,6 +6772,8 @@ let
 
   aewan = callPackage ../applications/editors/aewan { };
 
+  alchemy = callPackage ../applications/graphics/alchemy { };
+
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
   antiword = callPackage ../applications/office/antiword {};
@@ -6853,6 +6876,8 @@ let
 
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
 
+  cgit = callPackage ../applications/version-management/git-and-tools/cgit { };
+
   chatzilla = callPackage ../applications/networking/irc/chatzilla {
     xulrunner = firefox36Pkgs.xulrunner;
   };
@@ -6917,9 +6942,9 @@ let
     # A variant of the Darcs derivation that containts only the executable and
     # thus has no dependencies on other Haskell packages.
     cabal = { mkDerivation = x: rec { final = haskellPackages.cabal.mkDerivation (self: (x final) // {
-	      isLibrary = false;
-	      configureFlags = "-f-library"; }); }.final;
-	    };
+              isLibrary = false;
+              configureFlags = "-f-library"; }); }.final;
+            };
   };
 
   darktable = callPackage ../applications/graphics/darktable {
@@ -7189,7 +7214,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox21Pkgs;
+  firefoxPkgs = pkgs.firefox20Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gnome) libIDL;
@@ -7210,12 +7235,12 @@ let
 
   firefox19Wrapper = lowPrio (wrapFirefox { browser = firefox19Pkgs.firefox; });
 
-  firefox21Pkgs = callPackage ../applications/networking/browsers/firefox/21.0.nix {
+  firefox20Pkgs = callPackage ../applications/networking/browsers/firefox/20.0.nix {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
   };
 
-  firefox21Wrapper = lowPrio (wrapFirefox { browser = firefox21Pkgs.firefox; });
+  firefox20Wrapper = lowPrio (wrapFirefox { browser = firefox20Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -7225,6 +7250,7 @@ let
   };
 
   freecad = callPackage ../applications/graphics/freecad {
+    opencascade = opencascade_6_5;
   };
 
   freemind = callPackage ../applications/misc/freemind {
@@ -7987,6 +8013,8 @@ let
 
   sox = callPackage ../applications/misc/audio/sox { };
 
+  soxr = callPackage ../applications/misc/audio/soxr { };
+
   spotify = callPackage ../applications/audio/spotify {
     inherit (gnome) GConf;
   };
@@ -8133,6 +8161,8 @@ let
     inherit (gnome) libsoup;
     gtk = gtk3;
   };
+
+  vanitygen = callPackage ../applications/misc/vanitygen { };
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
@@ -8744,7 +8774,10 @@ let
 
       calligra = callPackage ../applications/office/calligra { };
 
-      digikam = callPackage ../applications/graphics/digikam { };
+      digikam = if builtins.compareVersions "4.9" kde4.release == 1 then
+          callPackage ../applications/graphics/digikam/2.nix { }
+        else
+          callPackage ../applications/graphics/digikam { };
 
       k3b = callPackage ../applications/misc/k3b { };
 

@@ -5,13 +5,15 @@
 
 cabal.mkDerivation (self: {
   pname = "postgresql-simple";
-  version = "0.2.4.1";
-  sha256 = "09yszkiahfyidaq9yfk4mda5sf1m8bcqqag51vasybln9k9hhws3";
+  version = "0.3.3.0";
+  sha256 = "0srkalfg41gdnzwwa2bmwwrcdqnw13f7b94wv4d5a6sg6yf1ry1l";
   buildDepends = [
     attoparsec blazeBuilder blazeTextual postgresqlLibpq text time
     transformers vector
   ];
-  testDepends = [ base16Bytestring cryptohash HUnit text time ];
+  testDepends = [
+    base16Bytestring cryptohash HUnit text time vector
+  ];
   doCheck = false;
   meta = {
     description = "Mid-Level PostgreSQL client library";

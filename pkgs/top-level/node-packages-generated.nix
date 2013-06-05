@@ -233,6 +233,17 @@
     ];
   }
   {
+    baseName = "cli";
+    version = "0.4.4-2";
+    fullName = "cli-0.4.x";
+    hash = "27a0db02501285da601c47495d0cd837ddeb4577bfd507c5503d2ee8cd0caffb";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "glob"; range = ">= 3.1.4"; }
+    ];
+  }
+  {
     baseName = "clone";
     version = "0.1.5";
     fullName = "clone-0.1.5";
@@ -331,6 +342,16 @@
       { name = "fresh"; range = "0.1.0"; }
       { name = "pause"; range = "0.0.1"; }
       { name = "debug"; range = "*"; }
+    ];
+  }
+  {
+    baseName = "console-browserify";
+    version = "0.1.6";
+    fullName = "console-browserify-0.1.x";
+    hash = "e774c881920562b0893e50844332f79fc5a08752d28791d942c35fcc3ef2d75d";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
     ];
   }
   {
@@ -677,6 +698,19 @@
     ];
   }
   {
+    baseName = "glob";
+    version = "3.2.1";
+    fullName = "glob->= 3.1.4";
+    hash = "a457c2115213ce2cb59582ddc3a25eb3ae7490af687e412111c0032f72966f51";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "minimatch"; range = "~0.2.11"; }
+      { name = "graceful-fs"; range = "~1.2.0"; }
+      { name = "inherits"; range = "1"; }
+    ];
+  }
+  {
     baseName = "graceful-fs";
     version = "1.2.1";
     fullName = "graceful-fs-1";
@@ -874,6 +908,21 @@
     ];
   }
   {
+    baseName = "jshint";
+    version = "2.1.2";
+    fullName = "jshint-*";
+    hash = "dcf2c9df4de942240c99c5ed2e1c44b55966a1c0d85fb6fcbdde583ea6ace5a4";
+    patchLatest = false;
+    topLevel = true;
+    dependencies = [
+      { name = "shelljs"; range = "0.1.x"; }
+      { name = "underscore"; range = "1.4.x"; }
+      { name = "cli"; range = "0.4.x"; }
+      { name = "minimatch"; range = "0.x.x"; }
+      { name = "console-browserify"; range = "0.1.x"; }
+    ];
+  }
+  {
     baseName = "json-schema";
     version = "0.2.2";
     fullName = "json-schema-0.2.2";
@@ -1055,6 +1104,18 @@
   {
     baseName = "minimatch";
     version = "0.2.12";
+    fullName = "minimatch-0.x.x";
+    hash = "205cff8b4ba926e86ff0e6f7f566553906113892028083ea221989a42500c246";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "lru-cache"; range = "2"; }
+      { name = "sigmund"; range = "~1.0.0"; }
+    ];
+  }
+  {
+    baseName = "minimatch";
+    version = "0.2.12";
     fullName = "minimatch-~0.2.11";
     hash = "205cff8b4ba926e86ff0e6f7f566553906113892028083ea221989a42500c246";
     patchLatest = false;
@@ -1062,6 +1123,16 @@
     dependencies = [
       { name = "lru-cache"; range = "2"; }
       { name = "sigmund"; range = "~1.0.0"; }
+    ];
+  }
+  {
+    baseName = "mkdirp";
+    version = "0.3.5";
+    fullName = "mkdirp-*";
+    hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
+    patchLatest = false;
+    topLevel = true;
+    dependencies = [
     ];
   }
   {
@@ -1322,9 +1393,9 @@
   }
   {
     baseName = "optimist";
-    version = "0.5.0";
+    version = "0.5.1";
     fullName = "optimist-*";
-    hash = "b0c4b65a456618f179946e0b0641643b9d70ea5d884afa5bbf94419f740b1ccf";
+    hash = "89307bc0c5f010a0ad3f53aaf5ed3a63bd0763c2239e5e26fafb60a2eb0df195";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -1591,6 +1662,16 @@
     ];
   }
   {
+    baseName = "shelljs";
+    version = "0.1.4";
+    fullName = "shelljs-0.1.x";
+    hash = "21a6f3dc5eaeb1c10efbe62e31aeb6762241f707fb1fdcda4766c8bccde3eaf0";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
     baseName = "sigmund";
     version = "1.0.0";
     fullName = "sigmund-~1.0.0";
@@ -1750,6 +1831,16 @@
     hash = "a848a28193850d58d7b98249d70844bc7f35a7d8b6b5ed75e08e829aa6e763d3";
     patchLatest = false;
     topLevel = true;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "underscore";
+    version = "1.4.4";
+    fullName = "underscore-1.4.x";
+    hash = "a848a28193850d58d7b98249d70844bc7f35a7d8b6b5ed75e08e829aa6e763d3";
+    patchLatest = false;
+    topLevel = false;
     dependencies = [
     ];
   }

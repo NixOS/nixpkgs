@@ -135,7 +135,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # GHC version, change the "preferences function" for that GHC version
   # in haskell-defaults.nix.
 
-  # NOTE: 2012.4.0.0 is the current default.
+  # NOTE: 2013.2.0.0 is the current default.
 
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
@@ -589,8 +589,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
-  binary_hackage = callPackage ../development/libraries/haskell/binary {};
-  binary = self.binary_hackage; # core package since ghc-7.2.1
+  binary = callPackage ../development/libraries/haskell/binary {};
 
   binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
 
@@ -620,7 +619,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bmp_1_2_2_1 = callPackage ../development/libraries/haskell/bmp/1.2.2.1.nix {};
   bmp_1_2_4_1 = callPackage ../development/libraries/haskell/bmp/1.2.4.1.nix {};
-  bmp = self.bmp_1_2_2_1;       # later versions work only with ghc 7.6 and beyond
+  bmp_1_2_5_1 = callPackage ../development/libraries/haskell/bmp/1.2.5.1.nix {};
+  bmp = self.bmp_1_2_5_1;
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
@@ -1072,8 +1072,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
 
-  happstackUtil = callPackage ../development/libraries/haskell/happstack/happstack-util.nix {};
-
   happstackServer = callPackage ../development/libraries/haskell/happstack/happstack-server.nix {};
 
   happstackHamlet = callPackage ../development/libraries/haskell/happstack/happstack-hamlet.nix {};
@@ -1146,7 +1144,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   heist = callPackage ../development/libraries/haskell/heist {};
 
-  HFuse = callPackage ../development/libraries/haskell/hfuse {};
+  HFuse = callPackage ../development/libraries/haskell/HFuse {};
 
   highlightingKate = callPackage ../development/libraries/haskell/highlighting-kate {};
 
@@ -1290,6 +1288,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   languageCQuote = callPackage ../development/libraries/haskell/language-c-quote {};
 
+  languageJava = callPackage ../development/libraries/haskell/language-java {};
+
   languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
@@ -1309,6 +1309,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   lens = callPackage ../development/libraries/haskell/lens {};
 
   lenses = callPackage ../development/libraries/haskell/lenses {};
+
+  libffi = callPackage ../development/libraries/haskell/libffi {
+    libffi = pkgs.libffi;
+  };
 
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
@@ -1377,8 +1381,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   monadLogger = callPackage ../development/libraries/haskell/monad-logger {};
 
   monadPar_0_1_0_3 = callPackage ../development/libraries/haskell/monad-par/0.1.0.3.nix {};
-  monadPar_0_3_4_1 = callPackage ../development/libraries/haskell/monad-par/0.3.4.1.nix {};
-  monadPar = self.monadPar_0_3_4_1;
+  monadPar_0_3_4_2 = callPackage ../development/libraries/haskell/monad-par/0.3.4.2.nix {};
+  monadPar = self.monadPar_0_3_4_2;
 
   monadParExtras = callPackage ../development/libraries/haskell/monad-par-extras {};
 
@@ -1553,6 +1557,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
 
   pgm = callPackage ../development/libraries/haskell/pgm {};
+
+  pipes = callPackage ../development/libraries/haskell/pipes {};
+
+  pipes-concurrency = callPackage ../development/libraries/haskell/pipes-concurrency {};
+
+  pipes-parse = callPackage ../development/libraries/haskell/pipes-parse {};
+
+  pipes-safe = callPackage ../development/libraries/haskell/pipes-safe {};
 
   polyparse = callPackage ../development/libraries/haskell/polyparse {};
 
@@ -1930,7 +1942,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   typeEquality = callPackage ../development/libraries/haskell/type-equality {};
 
-  typeLlevelNaturalNumber = callPackage ../development/libraries/haskell/type-level-natural-number {};
+  typeLevelNaturalNumber = callPackage ../development/libraries/haskell/type-level-natural-number {};
 
   unbound = callPackage ../development/libraries/haskell/unbound {};
 
@@ -2104,6 +2116,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
 
+  yesodPlatform = callPackage ../development/libraries/haskell/yesod-platform {};
+
   yesodRoutes = callPackage ../development/libraries/haskell/yesod-routes {};
 
   yesodStatic = callPackage ../development/libraries/haskell/yesod-static {};
@@ -2229,6 +2243,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   darcs = callPackage ../applications/version-management/darcs {};
 
+  idris = callPackage ../development/compilers/idris {};
+
   leksah = callPackage ../applications/editors/leksah {
     QuickCheck = self.QuickCheck2;
   };
@@ -2258,6 +2274,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix {};
   cabalInstall = self.cabalInstall_1_16_0_2;
+
+  gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {};
 
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
 

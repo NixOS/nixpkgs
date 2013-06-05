@@ -45,6 +45,7 @@ let
       apacheHttpd = linux;
       aspell = all;
       at = linux;
+      atlas = linux;
       audacious = linux;
       autoconf = all;
       automake110x = all;
@@ -383,7 +384,7 @@ let
         ghc = ghcSupported;
       };
 
-      haskellPackages_ghc762 = {
+      haskellPackages_ghc763 = {
         ghc = ghcSupported;
       };
 

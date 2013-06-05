@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     Cabal cmdargs stylishHaskell systemFileio systemFilepath text
     unorderedContainers yaml
   ];
+  jailbreak = true;
   meta = {
     description = "A tool to generate .ghci file from .cabal";
     license = self.stdenv.lib.licenses.bsd3;

@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     HUnit srcloc symbol testFramework testFrameworkHunit
   ];
   buildTools = [ alex happy ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.eecs.harvard.edu/~mainland/";
     description = "C/CUDA/OpenCL/Objective-C quasiquoting library";

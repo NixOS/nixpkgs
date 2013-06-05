@@ -19,6 +19,7 @@ with (import ./release-lib.nix);
 
   aspell = all;
   at = linux;
+  atlas = linux;
   aterm25 = all;
   aterm28 = all;
   autoconf = all;

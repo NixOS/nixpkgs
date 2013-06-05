@@ -18,37 +18,35 @@
   ghcHEADPrefs =
     self : self.haskellPlatformArgs_future self // {
       haskellPlatform = null;
-      binary = null; # now a core package
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
     };
 
   ghc763Prefs =
     self : self.haskellPlatformArgs_2013_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2013_2_0_0;
-      binary = null; # now a core package
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
     };
 
   ghc742Prefs =
     self : self.haskellPlatformArgs_2012_4_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_4_0_0;
-      binary = null; # now a core package
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
+      bmp = self.bmp_1_2_2_1;
     };
 
   ghc741Prefs =
     self : self.haskellPlatformArgs_2012_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
-      binary = null; # now a core package
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
+      bmp = self.bmp_1_2_2_1;
     };
 
   ghc722Prefs =
     self : self.haskellPlatformArgs_2012_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
-      binary = null; # a core package
       deepseq = self.deepseq_1_3_0_1;
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
+      bmp = self.bmp_1_2_2_1;
     };
 
   ghc721Prefs = ghc722Prefs;
@@ -61,6 +59,7 @@
       monadPar = self.monadPar_0_1_0_3;
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       prettyShow = self.prettyShow_1_2;
+      bmp = self.bmp_1_2_2_1;
     };
 
   ghc703Prefs =
@@ -71,6 +70,7 @@
       monadPar = self.monadPar_0_1_0_3;
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       prettyShow = self.prettyShow_1_2;
+      bmp = self.bmp_1_2_2_1;
     };
 
   ghc702Prefs = ghc701Prefs;
@@ -83,6 +83,7 @@
       monadPar = self.monadPar_0_1_0_3;
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       prettyShow = self.prettyShow_1_2;
+      bmp = self.bmp_1_2_2_1;
     };
 
   ghc6123Prefs = ghc6122Prefs;
@@ -96,6 +97,7 @@
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      bmp = self.bmp_1_2_2_1;
     };
 
   ghc6121Prefs =
@@ -108,6 +110,7 @@
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      bmp = self.bmp_1_2_2_1;
     };
 
   ghc6104Prefs =
@@ -121,6 +124,7 @@
       monadPar = self.monadPar_0_1_0_3;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      bmp = self.bmp_1_2_2_1;
     };
 
   # Abstraction for Haskell packages collections
