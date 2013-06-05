@@ -1,15 +1,18 @@
 { stdenv, runCommand, nodejs, neededNatives}:
 
-args @ { src, deps ? [], flags ? [], ... }:
+args @ { name, src, deps ? [], flags ? [], ... }:
 
 with stdenv.lib;
 
-let npmFlags = concatStringsSep " " (map (v: "--${v}") flags);
-    sources = runCommand "node-sources" {} ''
-      tar xf ${nodejs.src}
-      mv *node* $out
-    '';
+let
+  npmFlags = concatStringsSep " " (map (v: "--${v}") flags);
 
+  sources = runCommand "node-sources" {} ''
+    tar xf ${nodejs.src}
+    mv *node* $out
+  '';
+
+  requireName = (builtins.parseDrvName name).name;
 in
 stdenv.mkDerivation ({
   unpackPhase = "true";
@@ -34,8 +37,10 @@ stdenv.mkDerivation ({
 
   installPhase = ''
     runHook preInstall
-    mkdir $out
-    mv node_modules $out
+    mkdir -p $out/node_modules
+    mv node_modules/${requireName} $out/node_modules
+    mv node_modules/.bin $out/node_modules 2>/dev/null || true
+    mv node_modules $out/node_modules/${requireName}
     if [ -d "$out/node_modules/.bin" ]; then
       ln -sv node_modules/.bin $out/bin
       find -L $out/node_modules/.bin/* -type f -print0 | \
