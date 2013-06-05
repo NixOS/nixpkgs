@@ -135,7 +135,9 @@ in
 
             A bridge relay can't be an exit relay.
 
-            You need to set enableRelay to true for this option to take effect.
+            You need to set relay.enable to true for this option to take effect.
+
+            The bridge is set up with an obfuscated transport proxy.
 
             See https://www.torproject.org/bridges.html.en for more info.
           '';
@@ -278,7 +280,10 @@ in
         ${optint "RelayBandwidthRate" cfg.relay.bandwidthRate}
         ${optint "RelayBandwidthBurst" cfg.relay.bandwidthBurst}
         ${if cfg.relay.isExit then opt "ExitPolicy" cfg.relay.exitPolicy else "ExitPolicy reject *:*"}
-        ${if cfg.relay.isBridge then "BridgeRelay 1" else ""}
+        ${if cfg.relay.isBridge then ''
+          BridgeRelay 1
+          ServerTransportPlugin obfs2,obfs3 exec ${pkgs.pythonPackages.obfsproxy}/bin/obfsproxy managed
+        '' else ""}
       '';
 
       services.tor.client.privoxy.config = ''

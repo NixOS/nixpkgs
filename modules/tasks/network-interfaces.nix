@@ -244,6 +244,7 @@ in
         pkgs.iputils
         pkgs.nettools
         pkgs.wirelesstools
+        pkgs.iw
         pkgs.rfkill
         pkgs.openresolv
       ]
@@ -424,12 +425,16 @@ in
          // mapAttrs createBridgeDevice cfg.bridges
          // { "network-setup" = networkSetup; };
 
-    # Set the host name in the activation script.  Don't clear it if
-    # it's not configured in the NixOS configuration, since it may
-    # have been set by dhclient in the meantime.
+    # Set the host and domain names in the activation script.  Don't
+    # clear it if it's not configured in the NixOS configuration,
+    # since it may have been set by dhclient in the meantime.
     system.activationScripts.hostname =
       optionalString (config.networking.hostName != "") ''
         hostname "${config.networking.hostName}"
+      '';
+    system.activationScripts.domain =
+      optionalString (config.networking.domain != "") ''
+        domainname "${config.networking.domain}"
       '';
 
     services.udev.extraRules =

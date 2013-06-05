@@ -119,12 +119,13 @@ in
     jobs = {
       disnix =
         { description = "Disnix server";
-
-          startOn = "started dbus"
-          + optionalString config.services.httpd.enable " and started httpd"
-          + optionalString config.services.mysql.enable " and started mysql"
-          + optionalString config.services.tomcat.enable " and started tomcat"
-          + optionalString config.services.svnserve.enable " and started svnserve";
+        
+          wantedBy = [ "multi-user.target" ];
+          after = [ "dbus.service" ]
+          ++ optional config.services.httpd.enable "httpd.service"
+          ++ optional config.services.mysql.enable "mysql.service"
+          ++ optional config.services.tomcat.enable "tomcat.service"
+          ++ optional config.services.svnserve.enable "svnserve.service";
 
           restartIfChanged = false;
         

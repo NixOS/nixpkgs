@@ -6,7 +6,14 @@ let
 
   cfg = config.boot.loader.grub;
 
-  grub = if cfg.version == 1 then pkgs.grub else pkgs.grub2;
+  realGrub = if cfg.version == 1 then pkgs.grub else pkgs.grub2;
+
+  grub =
+    # Don't include GRUB if we're only generating a GRUB menu (e.g.,
+    # in EC2 instances).
+    if cfg.devices == ["nodev"]
+    then null
+    else realGrub;
 
   f = x: if x == null then "" else "" + x;
 
@@ -14,8 +21,8 @@ let
     { splashImage = f config.boot.loader.grub.splashImage;
       grub = f grub;
       shell = "${pkgs.stdenv.shell}";
-      fullVersion = (builtins.parseDrvName config.system.build.grub.name).version;
-      inherit (config.boot.loader.grub)
+      fullVersion = (builtins.parseDrvName realGrub.name).version;
+      inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
         default devices;
@@ -141,7 +148,7 @@ in
 
       splashImage = mkOption {
         default =
-          if config.boot.loader.grub.version == 1
+          if cfg.version == 1
           then pkgs.fetchurl {
             url = http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz;
             sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
@@ -196,7 +203,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.boot.loader.grub.enable {
+  config = mkIf cfg.enable {
 
     boot.loader.grub.devices = optional (cfg.device != "") cfg.device;
 
@@ -212,7 +219,7 @@ in
     # set at once.
     system.boot.loader.id = "grub";
 
-    environment.systemPackages = mkIf config.boot.loader.grub.enable [ grub ];
+    environment.systemPackages = [ grub ];
 
   };
 
