@@ -865,6 +865,8 @@ let
 
   glxinfo = callPackage ../tools/graphics/glxinfo { };
 
+  gmvault = callPackage ../tools/networking/gmvault { };
+
   gnokii = builderDefsPackage (import ../tools/misc/gnokii) {
     inherit intltool perl gettext libusb pkgconfig bluez readline pcsclite
       libical gtk glib;

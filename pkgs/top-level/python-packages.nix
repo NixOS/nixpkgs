@@ -5901,4 +5901,57 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  gdata = buildPythonPackage rec {
+    name = "gdata-${version}";
+    version = "2.0.17";
+
+    src = fetchurl {
+      url = "https://gdata-python-client.googlecode.com/files/${name}.tar.gz";
+      # sha1 = "d2d9f60699611f95dd8c328691a2555e76191c0c";
+      sha256 = "0bdaqmicpbj9v3p0swvyrqs7m35bzwdw1gy56d3k09np692jfwmd";
+    };
+
+    # Fails with "error: invalid command 'test'"
+    doCheck = false;
+
+    meta = {
+      homepage = https://code.google.com/p/gdata-python-client/;
+      description = "Python client library for Google data APIs";
+      license = pkgs.lib.licenses.asl20;
+    };
+  };
+
+  IMAPClient = buildPythonPackage rec {
+    name = "IMAPClient-${version}";
+    version = "0.9.2";
+
+    src = fetchurl {
+      url = "http://freshfoo.com/projects/IMAPClient/${name}.tar.gz";
+      sha256 = "10alpj7074djs048xjc4j7ggd1nrqdqpy0fzl7fj9hddp0rbchs9";
+    };
+
+    meta = {
+      homepage = http://imapclient.freshfoo.com/;
+      description = "Easy-to-use, Pythonic and complete IMAP client library";
+      license = pkgs.lib.licenses.bsd3;
+    };
+  };
+
+  Logbook = buildPythonPackage rec {
+    name = "Logbook-${version}";
+    version = "0.4.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/L/Logbook/${name}.tar.gz";
+      # md5 = "143cb15af4c4a784ca785a1546ad1b93";
+      sha256 = "0iim9pcyl57c6z9i1kfw5nz92qrnpz2l0bz4lir2xrqi8m03q3d7";
+    };
+
+    meta = {
+      homepage = http://pythonhosted.org/Logbook/;
+      description = "A logging replacement for Python";
+      license = pkgs.lib.licenses.bsd3;
+    };
+ };
+
 }; in pythonPackages
