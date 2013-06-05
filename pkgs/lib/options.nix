@@ -165,6 +165,14 @@ rec {
         // optionalAttrs (opt1 ? extraConfigs || opt2 ? extraConfigs) {
             extraConfigs = opt1.extraConfigs or [] ++ opt2.extraConfigs or [];
           }
+        // optionalAttrs (opt1 ? extraArgs || opt2 ? extraArgs) {
+            extraArgs = opt1.extraArgs or {} // opt2.extraArgs or {};
+          }
+        // optionalAttrs (opt1 ? individualExtraArgs || opt2 ? individualExtraArgs) {
+            individualExtraArgs = zipAttrsWith (name: values:
+              if length values == 1 then head values else (head values // (head (tail values)))
+            ) [ (opt1.individualExtraArgs or {}) (opt2.individualExtraArgs or {}) ];
+          }
       )) {} opts;
 
   
