@@ -199,6 +199,8 @@
 
   unfreeRedistributable = "unfree-redistributable";
 
+  unfreeRedistributableFirmware = "unfree-redistributable-firmware";
+
   zlib = {
     shortName = "zlib";
     fullName = "zlib license";
