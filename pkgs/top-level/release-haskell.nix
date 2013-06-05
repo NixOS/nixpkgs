@@ -227,6 +227,7 @@ mapHaskellTestOn {
   httpTypes = default;
   HUnit = all;
   hxt = default;
+  idris = default;
   IfElse = default;
   irc = default;
   iteratee = default;
