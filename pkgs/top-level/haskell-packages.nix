@@ -619,7 +619,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bmp_1_2_2_1 = callPackage ../development/libraries/haskell/bmp/1.2.2.1.nix {};
   bmp_1_2_4_1 = callPackage ../development/libraries/haskell/bmp/1.2.4.1.nix {};
-  bmp = self.bmp_1_2_2_1;       # later versions work only with ghc 7.6 and beyond
+  bmp_1_2_5_1 = callPackage ../development/libraries/haskell/bmp/1.2.5.1.nix {};
+  bmp = self.bmp_1_2_5_1;
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
