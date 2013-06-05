@@ -2243,7 +2243,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   darcs = callPackage ../applications/version-management/darcs {};
 
-  idris = callPackage ../development/compilers/idris {};
+  idris_plain = callPackage ../development/compilers/idris {};
+
+  idris = callPackage ../development/compilers/idris/wrapper.nix {};
 
   leksah = callPackage ../applications/editors/leksah {
     QuickCheck = self.QuickCheck2;
