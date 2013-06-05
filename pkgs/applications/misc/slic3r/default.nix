@@ -21,8 +21,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "git://github.com/alexrj/Slic3r";
-    rev = "855ba9033262416de2ae9e27f55a21738ef5d70f";
-    sha256 = "ebef71283189df82ca0acc69a42ec7b3d54703e900f25366196b81df2d2fe718";
+    rev = "b3f1795cb4ad82fbf2168dd8faf6c00bd09d414e";
+    sha256 = "b7cdc4210657831cf199d16b90d8696ccbcfb50d874bf051c9f2caeceee6066a";
   };
 
   buildInputs = [
