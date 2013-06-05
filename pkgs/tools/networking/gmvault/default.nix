@@ -19,6 +19,13 @@ buildPythonPackage rec {
     pythonPackages.argparse
   ];
 
+  startScript = ./gmvault.py;
+
+  patchPhase = ''
+    cat ${startScript} > etc/scripts/gmvault
+    chmod +x etc/scripts/gmvault
+  '';
+
   meta = {
     description = "Gmvault Gmail Backup - Backup and restore your gmail account at will.";
     homepage = "http://gmvault.org";
