@@ -5,6 +5,18 @@ let
         configureFlags="$configureFlags --enable-malloc0returnsnull";
       fi
     '';
+
+  gitRelease = { libName, version, rev, sha256 } : attrs : attrs // {
+    name = libName + "-" + version;
+    src = args.fetchgit {
+      url = git://anongit.freedesktop.org/xorg/lib/ + libName;
+      inherit rev sha256;
+    };
+    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros  ];
+    preConfigure = (attrs.preConfigure or "") + "\n./autogen.sh";
+  };
+
+  compose = f: g: x: f (g x);
 in
 {
   encodings = attrs: attrs // {
@@ -35,17 +47,10 @@ in
   };
 
   libxcb = attrs : attrs // {
-    # I only remove python from the original, and add xproto. I don't know how
-    # to achieve that referring to attrs.buildInputs.
-    # I should use: builtins.unsafeDiscardStringContext
-    buildInputs = [args.pkgconfig args.libxslt xorg.libpthreadstubs /*xorg.python*/
-        xorg.libXau xorg.xcbproto xorg.libXdmcp ] ++ [ xorg.xproto ];
     nativeBuildInputs = [ args.python ];
   };
 
   xcbproto = attrs : attrs // {
-    # I only remove python from the original.
-    buildInputs = [args.pkgconfig  /*xorg.python*/ ];
     nativeBuildInputs = [ args.python ];
   };
 
@@ -62,16 +67,13 @@ in
       '';
   };
 
-  libXrender = attrs: attrs // {
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
-  };
-
   libXxf86vm = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
   libXrandr = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    propagatedBuildInputs = [xorg.libXrender];
   };
 
   # Propagate some build inputs because of header file dependencies.
@@ -95,17 +97,38 @@ in
   };
 
   libXft = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++
-      [ xorg.xproto xorg.libX11 xorg.renderproto ];
     propagatedBuildInputs = [ xorg.libXrender args.freetype args.fontconfig ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 
   libXext = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [xorg.libXau];
-    propagatedBuildInputs = [ xorg.xproto ];
+    propagatedBuildInputs = [ xorg.xproto xorg.libXau ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
+
+  libSM = attrs: attrs
+    // { propagatedBuildInputs = [ xorg.libICE ]; };
+
+  libXi = gitRelease {
+    libName = "libXi";
+    version = "1.7.1.91";
+    rev = "661c45ca17c434dbd342a46fd3fb813852ae0ca9";
+    sha256 = "01wx8fgjjfqm0sm9anj6rmz72yvjyb4y3ifjk2q4ixd7pdp63bx6";
+  };
+
+  libXrender = compose (gitRelease {
+    libName = "libXrender";
+    version = "0.9.7.91";
+    rev = "786f78fd8df6d165ccbc81f306fd9f22b5c1551c";
+    sha256 = "157ljyhkxqk2xgizrq8pmpl75szb5j89gvvhkxsi0lys1wnbrxi4";
+  }) (attrs: attrs // { preConfigure = setMalloc0ReturnsNullCrossCompiling; });
+
+  libXvMC = compose (gitRelease {
+    libName = "libXvMC";
+    version = "1.0.7.91";
+    rev = "8c164524d229adb6141fdac8336b3823e7fe1a5d";
+    sha256 = "157ljyhkxqk2xgizrq8pmpl75szb5j89gvvhkxsi0lys1wnbrxi4";
+  }) (attrs: attrs // { buildInputs = attrs.buildInputs ++ [xorg.renderproto]; });
 
   libXpm = attrs: attrs // {
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
@@ -119,13 +142,12 @@ in
       '';
   };
 
-  x11perf = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${args.freetype}/include/freetype2";
-    buildInputs = attrs.buildInputs ++ [ args.freetype args.fontconfig ];
+  utilmacros = attrs: attrs // { # not needed for releases, we propagate the needed tools
+    propagatedBuildInputs = with args; [ automake autoconf libtool ];
   };
 
-  xev = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [ xorg.libXrender ];
+  x11perf = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ args.freetype args.fontconfig ];
   };
 
   xf86inputevdev = attrs: attrs // {
@@ -196,8 +218,6 @@ in
       '';
   };
 
-  libSM = attrs: attrs
-    // { propagatedBuildInputs = [ xorg.libICE ]; };
 
   lndir = attrs: attrs // {
     preConfigure = ''
@@ -210,17 +230,13 @@ in
     nativeBuildInputs = [args.bison args.flex];
   };
 
-  xbacklight = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [xorg.libXrender];
-  };
-
   xcursorthemes = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.xcursorgen];
     configureFlags = "--with-cursordir=$(out)/share/icons";
   };
 
   xinput = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [xorg.libXrender];
+    propagatedBuildInputs = [xorg.libXfixes];
   };
 
   xinit = attrs: attrs // {
@@ -229,6 +245,10 @@ in
     prePatch = ''
       sed -i 's|^defaultserverargs="|&-logfile \"$HOME/.xorg.log\"|p' startx.cpp
     '';
+  };
+
+  xf86videointel = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [xorg.libXfixes];
   };
 
   xwd = attrs: attrs // {
