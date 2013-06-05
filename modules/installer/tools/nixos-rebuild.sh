@@ -141,7 +141,7 @@ fi
 if nixos=$(nix-instantiate --find-file nixos "${extraBuildFlags[@]}"); then
     suffix=$(@shell@ $nixos/modules/installer/tools/get-version-suffix "${extraBuildFlags[@]}")
     if [ -n "$suffix" ]; then
-        echo -n "$suffix" > "$nixos/.version-suffix"
+        echo -n "$suffix" > "$nixos/.version-suffix" || true
     fi
 fi
 
