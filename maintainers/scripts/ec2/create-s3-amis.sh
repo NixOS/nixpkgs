@@ -1,7 +1,7 @@
 #! /bin/sh -e
 
 nixos=$(nix-instantiate --find-file nixos)
-export NIXOS_CONFIG=$nixos/modules/virtualisation/amazon-config.nix
+export NIXOS_CONFIG=$(dirname $(readlink -f $0))/amazon-base-config.nix
 
 version=$(nix-instantiate --eval-only '<nixos>' -A config.system.nixosVersion | sed s/'"'//g)
 echo "NixOS version is $version"
