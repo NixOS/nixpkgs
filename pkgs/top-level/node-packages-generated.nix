@@ -114,9 +114,9 @@
   }
   {
     baseName = "aws-sdk";
-    version = "0.9.7-pre.8";
-    fullName = "aws-sdk-0.9.7-pre.8";
-    hash = "d3854275981fff76153f79c62745d8d6c59018861729766908c920fff95ea422";
+    version = "1.2.0";
+    fullName = "aws-sdk->=1.2.0 <2";
+    hash = "e2d4b32fba387b8f099c4180579b67554f875895a69e4c1ddb0a28546db9ba4c";
     patchLatest = true;
     topLevel = false;
     dependencies = [
@@ -265,9 +265,9 @@
   }
   {
     baseName = "coffee-script";
-    version = "1.6.2";
+    version = "1.6.3";
     fullName = "coffee-script-*";
-    hash = "92785ad77e5d689fc7bfc62f3b519e65b77509457dda7a332ee1efd6cf9f08d6";
+    hash = "642d226d4fab1a8464e54347cec919b1c8771da55d88e3ceb15d826fcee84525";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -306,9 +306,9 @@
   }
   {
     baseName = "connect";
-    version = "2.7.10";
-    fullName = "connect-2.7.10";
-    hash = "b1d9cf6b2932578618537a95471f9c0ae451e2ed8033647e420b4c67b1d28b3d";
+    version = "2.7.11";
+    fullName = "connect-2.7.11";
+    hash = "8c9aaabcb7e6f0d733f82b876db59a37a6d711aab7ea2dead9f624d9282b1245";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -317,7 +317,7 @@
       { name = "cookie-signature"; range = "1.0.1"; }
       { name = "buffer-crc32"; range = "0.2.1"; }
       { name = "cookie"; range = "0.0.5"; }
-      { name = "send"; range = "0.1.0"; }
+      { name = "send"; range = "0.1.1"; }
       { name = "bytes"; range = "0.2.0"; }
       { name = "fresh"; range = "0.1.0"; }
       { name = "pause"; range = "0.0.1"; }
@@ -326,9 +326,9 @@
   }
   {
     baseName = "connect";
-    version = "2.7.10";
+    version = "2.7.11";
     fullName = "connect-~2";
-    hash = "b1d9cf6b2932578618537a95471f9c0ae451e2ed8033647e420b4c67b1d28b3d";
+    hash = "8c9aaabcb7e6f0d733f82b876db59a37a6d711aab7ea2dead9f624d9282b1245";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -337,7 +337,7 @@
       { name = "cookie-signature"; range = "1.0.1"; }
       { name = "buffer-crc32"; range = "0.2.1"; }
       { name = "cookie"; range = "0.0.5"; }
-      { name = "send"; range = "0.1.0"; }
+      { name = "send"; range = "0.1.1"; }
       { name = "bytes"; range = "0.2.0"; }
       { name = "fresh"; range = "0.1.0"; }
       { name = "pause"; range = "0.0.1"; }
@@ -487,9 +487,9 @@
   }
   {
     baseName = "escape-html";
-    version = "0.0.1";
+    version = "1.0.0";
     fullName = "escape-html-*";
-    hash = "03c24a492f80659c25f788809ae64277408a4c12594cff62f89db4b3259c6b58";
+    hash = "c763095c6b27fddf666f34d48a4f09f95009a76a6d16d1799175ecd0c1912456";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -507,13 +507,13 @@
   }
   {
     baseName = "express";
-    version = "3.2.5";
+    version = "3.2.6";
     fullName = "express-*";
-    hash = "f09dce2d0610795af88fe903242557526be269f27912b63309e3b3329218e20b";
+    hash = "a0c9ee92fe1366daf166f30ae77f824aa65c2f5e121596fa2c4f439b518cde99";
     patchLatest = false;
     topLevel = true;
     dependencies = [
-      { name = "connect"; range = "2.7.10"; }
+      { name = "connect"; range = "2.7.11"; }
       { name = "commander"; range = "0.6.1"; }
       { name = "range-parser"; range = "0.0.4"; }
       { name = "mkdirp"; range = "0.3.4"; }
@@ -909,9 +909,9 @@
   }
   {
     baseName = "jshint";
-    version = "2.1.2";
+    version = "2.1.3";
     fullName = "jshint-*";
-    hash = "dcf2c9df4de942240c99c5ed2e1c44b55966a1c0d85fb6fcbdde583ea6ace5a4";
+    hash = "aaad18f3e6ec6e118d2990d8e627f62125c34ed28f864c9f3b6c46d4cf5d3288";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -1393,9 +1393,9 @@
   }
   {
     baseName = "optimist";
-    version = "0.5.1";
+    version = "0.5.2";
     fullName = "optimist-*";
-    hash = "89307bc0c5f010a0ad3f53aaf5ed3a63bd0763c2239e5e26fafb60a2eb0df195";
+    hash = "838ad97b81beedb85fd0f0c4cd4740a940ddefb9a3db8e261f5fed7528693d3d";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -1586,13 +1586,13 @@
   }
   {
     baseName = "s3http";
-    version = "0.0.1";
+    version = "0.0.2";
     fullName = "s3http-*";
-    hash = "7140a0ee6df9fb90fd74aa0b68b73f899c6d8e2eaa2de89fde3f634e9bf10dba";
+    hash = "03cbaa20c8920371c94333d6424c3d3b09824d1c6e30a9e1567805f53d1cd16d";
     patchLatest = false;
     topLevel = true;
     dependencies = [
-      { name = "aws-sdk"; range = "0.9.7-pre.8"; }
+      { name = "aws-sdk"; range = ">=1.2.0 <2"; }
       { name = "commander"; range = "0.5.1"; }
       { name = "http-auth"; range = "1.2.7"; }
     ];
@@ -1662,6 +1662,20 @@
     ];
   }
   {
+    baseName = "send";
+    version = "0.1.1";
+    fullName = "send-0.1.1";
+    hash = "4d237af8bc86148952d0577bed44bd41928a4422c9a6e25e45fc35103aa6e872";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "debug"; range = "*"; }
+      { name = "mime"; range = "~1.2.9"; }
+      { name = "fresh"; range = "0.1.0"; }
+      { name = "range-parser"; range = "0.0.4"; }
+    ];
+  }
+  {
     baseName = "shelljs";
     version = "0.1.4";
     fullName = "shelljs-0.1.x";
@@ -1683,9 +1697,9 @@
   }
   {
     baseName = "smartdc";
-    version = "7.0.0-rc2";
+    version = "7.0.0";
     fullName = "smartdc-*";
-    hash = "239433d13dbbfd6461cf34743d628bdb39d061ca562e15901528acc52dda8d46";
+    hash = "add769b05ecef4ea657d7bc473d96ee3e67b8ad8bc77077120bd5ae1efe94911";
     patchLatest = false;
     topLevel = true;
     dependencies = [
