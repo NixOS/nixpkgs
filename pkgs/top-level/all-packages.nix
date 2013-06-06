@@ -7757,7 +7757,7 @@ let
 
   msmtp = callPackage ../applications/networking/msmtp { };
 
-  imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix { 
+  imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
     lua = lua5;
  };
 
