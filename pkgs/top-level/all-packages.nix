@@ -9411,6 +9411,8 @@ let
     inherit (stdenv) mkDerivation;
   };
 
+  znc = callPackage ../applications/networking/znc { };
+
   zsnes = callPackage_i686 ../misc/emulators/zsnes {
     libpng = libpng12;
   };
