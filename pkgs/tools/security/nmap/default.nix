@@ -2,7 +2,7 @@
 , openssl, python, pygtk, makeWrapper, pygobject
 , pycairo, pysqlite
 }:
-  
+
 stdenv.mkDerivation rec {
   name = "nmap-5.50";
 
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     url = "http://nmap.org/dist/${name}.tar.bz2";
     sha256 = "aa044113caa47e172c154daed73afc70ffa18d359eb47c22a9ea85ffcb14ffb8";
   };
+
+  patches = [ ./zenmap.patch ];
 
   postInstall =
     ''
