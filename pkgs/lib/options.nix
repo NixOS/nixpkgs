@@ -82,16 +82,11 @@ rec {
       handleOptionSets = opt:
         if opt ? type && opt.type.hasOptions then
           let
-            
-            optionConfig = vals: args:
-              map (f: lib.applyIfFunction f args)
-                (opt.options ++ toList vals);
-
             # Evaluate sub-modules.
             subModuleMerge = path: vals:
               lib.fix (args:
                 let
-                  result = recurseInto path (optionConfig vals args);
+                  result = recurseInto path (opt.options ++ toList vals) args;
                   name = lib.removePrefix (opt.name + ".") path;
                   extraArgs = opt.extraArgs or {};
                   individualExtraArgs = opt.individualExtraArgs or {};

@@ -197,9 +197,9 @@ rec {
       recurseInto = name:
         moduleMerge (addName name) (modulesOf name);
 
-      recurseForOption = name: modules:
+      recurseForOption = name: modules: args:
         moduleMerge name (
-          map unifyModuleSyntax modules
+          moduleClosure modules args
         );
 
       errorSource = modules:
