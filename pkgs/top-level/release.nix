@@ -360,7 +360,7 @@ let
       };
 
       firefox36Pkgs.firefox = linux;
-      firefox20Pkgs.firefox = linux;
+      firefox21Pkgs.firefox = linux;
 
       gnome = {
         gnome_panel = linux;
