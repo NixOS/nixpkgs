@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bmp";
-  version = "1.2.5.1";
-  sha256 = "1q1g5p7kan9hqb4s50fz989c4p8vmfrs7qvwiqx9bcic8k7jqld4";
+  version = "1.2.5.2";
+  sha256 = "0f88f2ynm1fpzbjijy5fa8blfrdv42h5h28hfjlpd4fp0h96in5x";
   buildDepends = [ binary ];
   jailbreak = true;
   meta = {
