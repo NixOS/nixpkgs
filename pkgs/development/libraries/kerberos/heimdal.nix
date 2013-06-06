@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
   # dont succeed with --libexec=$out/sbin, so
   postInstall = ''
-    mv $out/libexec/* $out/sbin/
+    mv "$out/libexec/"* $out/sbin/
     rmdir $out/libexec
   '';
 
