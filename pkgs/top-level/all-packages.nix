@@ -1739,6 +1739,8 @@ let
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
+  txt2man = callPackage ../tools/misc/txt2man { };
+
   ucl = callPackage ../development/libraries/ucl { };
 
   udftools = callPackage ../tools/filesystems/udftools {};
@@ -9217,6 +9219,10 @@ let
   */
 
   nut = callPackage ../applications/misc/nut { };
+
+  solfege = callPackage ../misc/solfege {
+      pysqlite = pkgs.pythonPackages.sqlite3;
+  };
 
   disnix = callPackage ../tools/package-management/disnix { };
 
