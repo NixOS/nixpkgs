@@ -3426,6 +3426,8 @@ let
 
   remake = callPackage ../development/tools/build-managers/remake { };
 
+  saleaeLogic = callPackage ../development/tools/misc/saleae-logic { };
+
   # couldn't find the source yet
   seleniumRCBin = callPackage ../development/tools/selenium/remote-control {
     jre = jdk;
