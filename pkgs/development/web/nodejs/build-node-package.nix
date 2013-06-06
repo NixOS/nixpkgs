@@ -33,8 +33,6 @@ stdenv.mkDerivation ({
     runHook postBuild
   '';
 
-  nativeBuildInputs = neededNatives;
-
   installPhase = ''
     runHook preInstall
     mkdir -p $out/node_modules
@@ -57,5 +55,5 @@ stdenv.mkDerivation ({
   propagatedNativeBuildInputs = (args.propagatedNativeBuildInputs or []) ++ [ nodejs ];
 
   # Make buildNodePackage useful with --run-env
-  nativeBuildInputs = (args.nativeBuildInputs or []) ++ deps;
+  nativeBuildInputs = (args.nativeBuildInputs or []) ++ deps ++ neededNatives;
 } )
