@@ -5930,6 +5930,10 @@ pythonPackages = python.modules // rec {
       sha256 = "10alpj7074djs048xjc4j7ggd1nrqdqpy0fzl7fj9hddp0rbchs9";
     };
 
+    preConfigure = ''
+      sed -i '/distribute_setup/d' setup.py
+    '';
+
     meta = {
       homepage = http://imapclient.freshfoo.com/;
       description = "Easy-to-use, Pythonic and complete IMAP client library";
