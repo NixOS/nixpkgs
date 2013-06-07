@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "csound5.18.02";
+  name = "csound-5.18.02";
 
   enableParallelBuilding = true;
 

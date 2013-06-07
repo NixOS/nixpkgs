@@ -8,7 +8,7 @@ assert buildllvmsparse -> llvm != null;
 assert buildc2xml -> libxml2 != null;
 
 stdenv.mkDerivation {
-  name = "smatch";
+  name = "smatch-20120924";
 
   src = fetchgit {
     url = git://repo.or.cz/smatch.git;
