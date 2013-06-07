@@ -75,12 +75,19 @@ rec {
         );
 
 
-  unifyOptionModule = {key ? "<unknown location>"}: m: (args:
-    let module = lib.applyIfFunction m args; in
-    if lib.isModule module then
-      { inherit key; } // module
+  unifyOptionModule = {key ? "<unknown location>"}: name: index: m: (args:
+    let
+      module = lib.applyIfFunction m args;
+      key_ = rec {
+        file = key;
+        option = name;
+        number = index;
+        outPath = "file ${toString file} option ${option} options number ${toString number}";
+      };
+    in if lib.isModule module then
+      { key = key_; } // module
     else
-      { inherit key; options = module; }
+      { key = key_; options = module; }
   );
 
 
@@ -240,7 +247,7 @@ rec {
           decls = # add location to sub-module options.
             map (m:
               mapSubOptions
-                (unifyOptionModule {inherit (m) key;})
+                (unifyOptionModule {inherit (m) key;} name)
                 m.options
             ) declarations;
 

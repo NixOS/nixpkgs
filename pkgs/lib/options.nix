@@ -31,7 +31,7 @@ rec {
   mapSubOptions = f: opt:
     if opt ? options then
       opt // {
-        options = map f (toList opt.options);
+        options = imap f (toList opt.options);
       }
     else
       opt;
@@ -86,7 +86,14 @@ rec {
             subModuleMerge = path: vals:
               lib.fix (args:
                 let
-                  result = recurseInto path (opt.options ++ toList vals) args;
+                  result = recurseInto path (opt.options ++ imap (index: v: args: {
+                    key = rec {
+                      #!!! Would be nice if we had the file the val was from
+                      option = path;
+                      number = index;
+                      outPath = "option ${option} config number ${toString number}";
+                    };
+                  } // (lib.applyIfFunction v args)) (toList vals)) args;
                   name = lib.removePrefix (opt.name + ".") path;
                   extraArgs = opt.extraArgs or {};
                   individualExtraArgs = opt.individualExtraArgs or {};
