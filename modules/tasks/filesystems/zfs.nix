@@ -69,6 +69,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        restartIfChanged = false;
         ExecStart = "${kernel.zfs}/sbin/zpool import -f -a -d /dev";
       };
     };
@@ -84,8 +85,8 @@ in
         ExecStop = "${kernel.zfs}/sbin/zfs umount -a";
       };
     };
- 
-    system.fsPackages = [ kernel.zfs ];                  # XXX: needed? zfs doesn't have a fsck
+
+    system.fsPackages = [ kernel.zfs ];                  # XXX: needed? zfs doesn't have (need) a fsck
     environment.systemPackages = [ kernel.zfs ];
     services.udev.packages = [ kernel.zfs ];             # to hook zvol naming, etc. 
   };
