@@ -312,7 +312,7 @@ in
         description = "Redis database user";
       };
 
-    environment.systemPackages = [ pkgs.redis ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.redis_init =
       { description = "Redis server initialisation";
@@ -336,7 +336,7 @@ in
         after = [ "network.target" ];
 
         serviceConfig = {
-          ExecStart = "${pkgs.redis}/bin/redis-server ${redisConfig}";
+          ExecStart = "${cfg.package}/bin/redis-server ${redisConfig}";
           User = cfg.user;
         };
       };
