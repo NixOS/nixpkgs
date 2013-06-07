@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.gnu.org/software/groff/";
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
     license = "GPLv3+";
+    platforms = stdenv.lib.platforms.all;
 
     longDescription = ''
       groff is the GNU implementation of troff, a document formatting
