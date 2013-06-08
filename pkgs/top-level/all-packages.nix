@@ -7059,7 +7059,7 @@ let
 
     cua = callPackage ../applications/editors/emacs-modes/cua { };
 
-    ecb = callPackage ../applications/editors/emacs-modes/ecb { };
+    # ecb = callPackage ../applications/editors/emacs-modes/ecb { };
 
     jabber = callPackage ../applications/editors/emacs-modes/jabber { };
 
@@ -7092,6 +7092,8 @@ let
     haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
 
     ocamlMode = callPackage ../applications/editors/emacs-modes/ocaml { };
+
+    tuaregMode = callPackage ../applications/editors/emacs-modes/tuareg { };
 
     hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
 
