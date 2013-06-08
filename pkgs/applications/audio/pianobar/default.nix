@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
     pkgconfig libao faad2 libmad json_c libgcrypt gnutls
   ];
 
-  preBuild = "
-    makeFlags=\"PREFIX=$out\"
-  ";
+  makeFlags="PREFIX=$(out)";
 
   CC = "gcc";
   CFLAGS = "-std=c99";
@@ -23,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "A console front-end for Pandora.com";
     homepage = "http://6xq.net/projects/pianobar/";
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.unfree;
   };
 }
