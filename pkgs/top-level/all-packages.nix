@@ -7853,6 +7853,8 @@ let
 
   pdftk = callPackage ../tools/typesetting/pdftk { };
 
+  pianobar = callPackage ../applications/audio/pianobar { };
+
   pianobooster = callPackage ../applications/audio/pianobooster { };
 
   picard = callPackage ../applications/audio/picard { };
