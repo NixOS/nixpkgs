@@ -33,7 +33,7 @@ rec {
     chmod a+rx  $out/bin/pyMAILt $out/share/${name}/mail.py
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
       
-  name = "pyMAILt";
+  name = "pyMAILt-20090101";
   meta = {
     description = "Email transport module for XMPP";
   };

@@ -1739,6 +1739,8 @@ let
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
+  txt2man = callPackage ../tools/misc/txt2man { };
+
   ucl = callPackage ../development/libraries/ucl { };
 
   udftools = callPackage ../tools/filesystems/udftools {};
@@ -1788,6 +1790,8 @@ let
   vorbisgain = callPackage ../tools/misc/vorbisgain { };
 
   vpnc = callPackage ../tools/networking/vpnc { };
+
+  openconnect = callPackage ../tools/networking/openconnect.nix { };
 
   vtun = callPackage ../tools/networking/vtun { };
 
@@ -3433,6 +3437,8 @@ let
 
   remake = callPackage ../development/tools/build-managers/remake { };
 
+  saleaeLogic = callPackage ../development/tools/misc/saleae-logic { };
+
   # couldn't find the source yet
   seleniumRCBin = callPackage ../development/tools/selenium/remote-control {
     jre = jdk;
@@ -3865,6 +3871,19 @@ let
     gccCross = null;
   }) // (if crossSystem != null then { crossDrv = glibc213Cross; } else {});
 
+  glibc213Cross = forceNativeDrv (makeOverridable (import ../development/libraries/glibc/2.13)
+    (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
+     in {
+       inherit stdenv fetchurl;
+       gccCross = gccCrossStageStatic;
+       kernelHeaders = if crossGNU then gnu.hurdHeaders else linuxHeadersCross;
+       installLocales = config.glibc.locales or false;
+     }
+     // lib.optionalAttrs crossGNU {
+        inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
+        inherit fetchgit;
+      }));
+
   glibc217 = callPackage ../development/libraries/glibc/2.17 {
     kernelHeaders = linuxHeaders;
     installLocales = config.glibc.locales or false;
@@ -4101,11 +4120,11 @@ let
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
 
+  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
+
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
 
   hawknl = callPackage ../development/libraries/hawknl { };
-
-  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
   herqq = callPackage ../development/libraries/herqq { };
 
@@ -7232,19 +7251,19 @@ let
 
   firefox13Wrapper = lowPrio (wrapFirefox { browser = firefox13Pkgs.firefox; });
 
-  firefox19Pkgs = callPackage ../applications/networking/browsers/firefox/19.0.nix {
-    inherit (gnome) libIDL;
-    inherit (pythonPackages) pysqlite;
-  };
-
-  firefox19Wrapper = lowPrio (wrapFirefox { browser = firefox19Pkgs.firefox; });
-
   firefox20Pkgs = callPackage ../applications/networking/browsers/firefox/20.0.nix {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
   };
 
   firefox20Wrapper = lowPrio (wrapFirefox { browser = firefox20Pkgs.firefox; });
+
+  firefox21Pkgs = callPackage ../applications/networking/browsers/firefox/21.0.nix {
+    inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+  };
+
+  firefox21Wrapper = lowPrio (wrapFirefox { browser = firefox21Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -7755,6 +7774,10 @@ let
 
   msmtp = callPackage ../applications/networking/msmtp { };
 
+  imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
+    lua = lua5;
+ };
+
   mupdf = callPackage ../applications/misc/mupdf { };
 
   mypaint = callPackage ../applications/graphics/mypaint { };
@@ -7942,7 +7965,7 @@ let
 
   # = urxvt
   rxvt_unicode = callPackage ../applications/misc/rxvt_unicode {
-    perlSupport = false;
+    perlSupport = true;
   };
 
   sakura = callPackage ../applications/misc/sakura {
@@ -9223,6 +9246,10 @@ let
 
   nut = callPackage ../applications/misc/nut { };
 
+  solfege = callPackage ../misc/solfege {
+      pysqlite = pkgs.pythonPackages.sqlite3;
+  };
+
   disnix = callPackage ../tools/package-management/disnix { };
 
   disnix_activation_scripts = callPackage ../tools/package-management/disnix/activation-scripts {
@@ -9415,6 +9442,8 @@ let
     inherit substituteAll pkgs;
     inherit (stdenv) mkDerivation;
   };
+
+  znc = callPackage ../applications/networking/znc { };
 
   zsnes = callPackage_i686 ../misc/emulators/zsnes {
     libpng = libpng12;

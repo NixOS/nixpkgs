@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "prover9";
+  name = "prover9-2009-11a";
 
   src = fetchurl {
     url = http://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz;

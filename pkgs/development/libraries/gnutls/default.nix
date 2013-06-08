@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig
+{ fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
 , guileBindings, guile, perl, gmp }:
 
 assert guileBindings -> guile != null;
@@ -8,8 +8,8 @@ stdenv.mkDerivation (rec {
   name = "gnutls-3.1.12";
 
   src = fetchurl {
-    url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/${name}.tar.xz";
-    sha256 = "025k37wsl21ncwrg489ysbjqsz8iralvgv98adj960sl03787lyc";
+    url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/${name}.tar.lz";
+    sha256 = "1h8j3xi2jad2dclybgqffb5264hdqrxpsx99irs03yy9np6iw5l8";
   };
 
   # Note: GMP is a dependency of Nettle, whose public headers include
@@ -31,7 +31,7 @@ stdenv.mkDerivation (rec {
   # for the actual fix.
   enableParallelBuilding = false;
 
-  buildInputs = [ zlib lzo ]
+  buildInputs = [ zlib lzo lzip ]
     ++ stdenv.lib.optional guileBindings guile;
 
   nativeBuildInputs = [ perl pkgconfig ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation (rec {
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "The GNU Transport Layer Security Library";
 
     longDescription = ''
@@ -61,8 +61,7 @@ stdenv.mkDerivation (rec {
 
     homepage = http://www.gnu.org/software/gnutls/;
     license = "LGPLv2.1+";
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ maintainers.ludo ];
   };
 }
 

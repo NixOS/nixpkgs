@@ -1,7 +1,7 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "libf2c";
+  name = "libf2c-20100903";
   
   src = fetchurl {
     url = http://www.netlib.org/f2c/libf2c.zip;

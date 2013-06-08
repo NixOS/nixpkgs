@@ -1,6 +1,6 @@
 args: with args;
 stdenv.mkDerivation {
-  name = "libixp_for_wmii";
+  name = "libixp_for_wmii-0.4";
   phases = "unpackPhase installPhase";
   installPhase = "
      export LDFLAGS\=$(echo \$NIX_LDFLAGS | sed -e 's/-rpath/-L/g')

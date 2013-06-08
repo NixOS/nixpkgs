@@ -15,9 +15,9 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "19.0.2";
+  firefoxVersion = "21.0";
 
-  xulVersion = "19.0.2"; # this attribute is used by other packages
+  xulVersion = "21.0"; # this attribute is used by other packages
 
 
   src = fetchurl {
@@ -27,7 +27,7 @@ rec {
         # Fall back to this url for versions not available at releases.mozilla.org.
         "ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
     ];
-    sha1 = "d108d356225379a86d69a4906c706289135f6342";
+    sha1 = "e63b5488eaec1956947f59609d5839332ba7ffe1";
   };
 
   commonConfigureFlags =
@@ -160,6 +160,10 @@ rec {
         rm firefox
         echo -e '#!${stdenv.shell}\nexec ${xulrunner}/bin/xulrunner "'"$PWD"'/application.ini" "$@"' > firefox
         chmod a+x firefox
+
+        # Put chrome.manifest etc. in the right place.
+        mv browser/* .
+        rmdir browser
       ''; # */
 
     meta = {

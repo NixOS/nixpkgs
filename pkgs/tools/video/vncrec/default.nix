@@ -30,9 +30,10 @@ rec {
     xmkmf
   '') ["doUnpack" "minInit" "addInputs"];
       
-  name = "vncrec";
+  name = "vncrec-0.2"; # version taken from Arch AUR
   meta = {
     description = "VNC recorder";
+    homepage = http://ronja.twibright.com/utils/vncrec/;
     maintainers = [
     ];
   };
