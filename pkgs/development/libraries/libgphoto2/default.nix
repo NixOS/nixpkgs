@@ -1,11 +1,11 @@
 {stdenv, fetchurl, pkgconfig, libusb, libtool, libexif, libjpeg, gettext}:
 
 stdenv.mkDerivation rec {
-  name = "libgphoto2-2.4.14";
+  name = "libgphoto2-2.5.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/gphoto/${name}.tar.bz2";
-    sha256 = "14h20s0kwqr1nsj90dgjwzs0r3h7z1cpmnivrikd0rrg4m2jvcsr";
+    sha256 = "0f1818l1vs5fbmrihzyv3qasddbqi3r01jik5crrxddwalsi2bd3";
   };
   
   nativeBuildInputs = [ pkgconfig gettext ];
