@@ -27,9 +27,6 @@
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
 
-, # Whether to build a User-Mode Linux kernel.
-  userModeLinux ? false
-
 , # Allows you to set your own kernel version suffix (e.g.,
   # "-my-kernel").
   localVersion ? ""
@@ -42,6 +39,8 @@
 , # After the builder did a 'make all' (kernel + modules)
   # we force building the target asked: bzImage/zImage/uImage/...
   postBuild ? "make $makeFlags $kernelTarget; make $makeFlags -C scripts unifdef"
+
+, extraNativeBuildInputs ? []
 , ...
 }:
 
@@ -63,7 +62,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = if userModeLinux then "user-mode-linux-${version}" else "linux-${version}";
+  name = "linux-${version}";
 
   enableParallelBuilding = true;
 
@@ -84,9 +83,10 @@ stdenv.mkDerivation {
   kernelConfig = kernelConfigFun config;
 
   # For UML and non-PC, just ignore all options that don't apply (We are lazy).
-  ignoreConfigErrors = (userModeLinux || stdenv.platform.name != "pc");
+  ignoreConfigErrors = stdenv.platform.name != "pc";
 
-  buildNativeInputs = [ perl mktemp ];
+  nativeBuildInputs = [ perl mktemp ] ++ extraNativeBuildInputs;
+
   buildInputs = lib.optional (stdenv.platform.uboot != null)
     (ubootChooser stdenv.platform.uboot);
 
@@ -98,7 +98,6 @@ stdenv.mkDerivation {
   # Should we trust platform.kernelArch? We can only do
   # that once we differentiate i686/x86_64 in platforms.
   arch =
-    if userModeLinux then "um" else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
     if stdenv.isArm then "arm" else
@@ -123,20 +122,18 @@ stdenv.mkDerivation {
 
       # The substitution of crossAttrs happens *after* the stdenv cross adapter sets
       # the parameters for the usual stdenv. Thus, we need to specify
-      # the ".hostDrv" in the buildInputs here.
-      buildInputs = lib.optional (cp.uboot != null) (ubootChooser cp.uboot).hostDrv;
+      # the ".crossDrv" in the buildInputs here.
+      buildInputs = lib.optional (cp.uboot != null) (ubootChooser cp.uboot).crossDrv;
     };
 
   meta = {
     description =
-      (if userModeLinux then
-        "User-Mode Linux"
-       else
-        "The Linux kernel") +
+      "The Linux kernel" +
       (if kernelPatches == [] then "" else
         " (with patches: "
         + lib.concatStrings (lib.intersperse ", " (map (x: x.name) kernelPatches))
         + ")");
+    inherit version;
     license = "GPLv2";
     homepage = http://www.kernel.org/;
     maintainers = [

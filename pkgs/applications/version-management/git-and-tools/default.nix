@@ -10,7 +10,7 @@ rec {
   git = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
       asciidoc texinfo xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
-      cpio tcl tk makeWrapper subversionClient;
+      cpio tcl tk makeWrapper subversionClient gzip;
     svnSupport = false;		# for git-svn support
     guiSupport = false;		# requires tcl/tk
     sendEmailSupport = false;	# requires plenty of perl libraries
@@ -42,12 +42,7 @@ rec {
     sendEmailSupport = !stdenv.isDarwin;
   });
 
-  gitAnnex = lib.makeOverridable (import ./git-annex) {
-    inherit stdenv fetchurl libuuid rsync findutils curl perl git ikiwiki which coreutils openssh;
-    inherit (haskellPackages) ghc MissingH utf8String pcreLight SHA dataenc
-      HTTP testpack hS3 mtl network hslogger hxt json liftedBase monadControl IfElse
-      QuickCheck bloomfilter editDistance stm hinotify;
-  };
+  gitAnnex = pkgs.haskellPackages.gitAnnex;
 
   qgit = import ./qgit {
     inherit fetchurl stdenv;
@@ -66,11 +61,16 @@ rec {
   };
 
   topGit = lib.makeOverridable (import ./topgit) {
-    inherit stdenv fetchurl unzip;
+    inherit stdenv fetchurl;
   };
 
   tig = import ./tig {
     inherit stdenv fetchurl ncurses asciidoc xmlto docbook_xsl;
+  };
+
+  hub = import ./hub {
+    inherit (rubyLibs) rake;
+    inherit stdenv fetchgit groff makeWrapper;
   };
 
   gitFastExport = import ./fast-export {
@@ -91,4 +91,6 @@ rec {
   gitSubtree = import ./git-subtree {
     inherit stdenv fetchurl git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt;
   };
+
+  darcsToGit = callPackage ./darcs-to-git { };
 }

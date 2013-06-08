@@ -4,10 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "iteratee";
-  version = "0.8.9.1";
-  sha256 = "1yk7jvabmabf0qjcd00imbg7vx84yjf71h7x3zbv4a51ykfy5hax";
-  isLibrary = true;
-  isExecutable = true;
+  version = "0.8.9.4";
+  sha256 = "0j8q5i3kf1ld7630z65hj55p2jlhl23f6qjag4zwrhrh38bfr531";
   buildDepends = [
     ListLike MonadCatchIOTransformers monadControl parallel
     transformers transformersBase

@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "acpid-1.0.10";
-  
+  name = "acpid-2.0.17";
+
   src = fetchurl {
-    url = "mirror://sourceforge/acpid/${name}.tar.gz";
-    sha256 = "0q27adx0c0bzvy9f9zfny69iaay3b4b79b693fhaq1bkvph3qw12";
+    url = "http://tedfelix.com/linux/${name}.tar.xz";
+    sha256 = "0gksl6z3sb6yyk7bdmldxsrncvprd3rny0i8ggl4m95nvv3x5drn";
   };
 
   preBuild = ''
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://acpid.sourceforge.net/;
+    homepage = http://tedfelix.com/linux/acpid-netlink.html;
     description = "A daemon for delivering ACPI events to userspace programs";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

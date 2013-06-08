@@ -12,7 +12,7 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{stdenv, perl, cpio, contents, ubootChooser}:
+{stdenv, perl, cpio, contents, ubootChooser, compressor}:
 
 let
   inputsFun = ubootName : [perl cpio]
@@ -22,7 +22,7 @@ in
 stdenv.mkDerivation {
   name = "initrd";
   builder = ./make-initrd.sh;
-  buildNativeInputs = inputsFun stdenv.platform.uboot;
+  nativeBuildInputs = inputsFun stdenv.platform.uboot;
 
   makeUInitrd = makeUInitrdFun stdenv.platform.uboot;
 
@@ -37,7 +37,8 @@ stdenv.mkDerivation {
   pathsFromGraph = ./paths-from-graph.pl;
 
   crossAttrs = {
-    buildNativeInputs = inputsFun stdenv.cross.platform.uboot;
+    nativeBuildInputs = inputsFun stdenv.cross.platform.uboot;
     makeUInitrd = makeUInitrdFun stdenv.cross.platform.uboot;
   };
+  inherit compressor;
 }

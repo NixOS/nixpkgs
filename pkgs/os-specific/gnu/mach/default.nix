@@ -23,7 +23,7 @@ stdenv.mkDerivation ({
     # <http://lists.gnu.org/archive/html/bug-hurd/2010-05/msg00137.html>.
     ++ [ "--enable-dependency-tracking" ];
 
-  buildNativeInputs = [ autoconf automake texinfo ]
+  nativeBuildInputs = [ autoconf automake texinfo ]
     ++ stdenv.lib.optional (mig != null) mig;
 
   preConfigure = "autoreconf -vfi";

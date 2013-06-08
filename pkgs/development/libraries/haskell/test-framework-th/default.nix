@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "test-framework-th";
-  version = "0.2.2";
-  sha256 = "0nzfvxr5bnxinx41a5w5mwhyxzz2936dl0xhd80cv9plx19ylh0w";
+  version = "0.2.4";
+  sha256 = "12lw7yj02jb9s0i7rb98jjam43j2h0gzmnbj9zi933fx7sg0sy4b";
   buildDepends = [
     haskellSrcExts languageHaskellExtract regexPosix testFramework
   ];

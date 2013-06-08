@@ -2,11 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "vector-space";
-  version = "0.8.2";
-  sha256 = "09gndxxscyc9w85fih370gag8yd1xbfg94nxkwdvhzvbkns9k2ad";
+  version = "0.8.6";
+  sha256 = "03kz2qhnynbgs4vk7348zjkkakzzwvxhbasl0lcazj1cx1ay7c4l";
   buildDepends = [ Boolean MemoTrie NumInstances ];
   meta = {
-    homepage = "http://haskell.org/haskellwiki/vector-space";
     description = "Vector & affine spaces, linear maps, and derivatives";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

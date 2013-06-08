@@ -16,5 +16,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "An interpreter to help writing C extensions for Python";
+    platforms = stdenv.lib.platforms.all;
   };
 }

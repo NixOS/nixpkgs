@@ -140,6 +140,10 @@ installPhase() {
         (cd arch/$archDir/include && cp -a asm/* $includeDir/asm/ || true)
         (cd arch/$archDir/include && cp -a generated/asm/* $includeDir/asm/ || true)
         (cd arch/$archDir/include/asm/mach-generic && cp -a * $includeDir/ || true)
+            # include files for special arm architectures 
+            if [ "$archDir" == "arm" ]; then
+                cp -a --parents arch/arm/mach-*/include $out/lib/modules/$version/build
+            fi
         fi
     fi
 

@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, eina, eet, evas, ecore, edje, efreet, e_dbus, embryo }:
+{ stdenv, fetchurl, pkgconfig, eina, eet, evas, ecore, edje, efreet, e_dbus
+, embryo, eio, xcbutilkeysyms, libjpeg }:
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.16.999.65643";
+  version = "0.17.1";
   src = fetchurl {
-    url = "http://download.enlightenment.org/snapshots/2011-11-28/${name}.tar.gz";
-    sha256 = "1bb577gbccb1wrifrhv9pzm451zhig2p29mwz55b187ls31p36kz";
+    url = "http://download.enlightenment.org/releases/${name}.tar.bz2";
+    sha256 = "1z2vx9r7yc55rs673jg7d685slgdv9dss45asg50wh5wxp2mfi3y";
   };
-  buildInputs = [ pkgconfig eina eet ecore evas edje efreet e_dbus embryo ];
+  buildInputs = [ pkgconfig eina eet ecore evas edje efreet e_dbus embryo
+                  eio xcbutilkeysyms libjpeg ];
   configureFlags = ''
     --with-profile=FAST_PC
     --disable-illume

@@ -1,0 +1,950 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2010 The Android Open Source Project
+ *
+ * Licensed under the Apache License, version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<sdk:sdk-addon xmlns:sdk="http://schemas.android.com/sdk/android/addon/5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <sdk:license id="android-sdk-license" type="text">Terms and Conditions
+
+This is the Android Software Development Kit License Agreement.
+
+
+1. Introduction
+
+
+1.1 The Android Software Development Kit (referred to in this License Agreement as the &quot;SDK&quot; and specifically including the Android system files, packaged APIs, and Google APIs add-ons) is licensed to you subject to the terms of this License Agreement. This License Agreement forms a legally binding contract between you and Google in relation to your use of the SDK.
+
+1.2 &quot;Android&quot; means the Android software stack for devices, as made available under the Android Open Source Project, which is located at the following URL: http://source.android.com/, as updated from time to time.
+
+1.3 &quot;Google&quot; means Google Inc., a Delaware corporation with principal place of business at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.
+
+
+2. Accepting this License Agreement
+
+
+2.1 In order to use the SDK, you must first agree to this License Agreement. You may not use the SDK if you do not accept this License Agreement.
+
+2.2 By clicking to accept, you hereby agree to the terms of this License Agreement.
+
+2.3 You may not use the SDK and may not accept the License Agreement if you are a person barred from receiving the SDK under the laws of the United States or other countries including the country in which you are resident or from which you use the SDK.
+
+2.4 If you are agreeing to be bound by this License Agreement on behalf of your employer or other entity, you represent and warrant that you have full legal authority to bind your employer or such entity to this License Agreement. If you do not have the requisite authority, you may not accept the License Agreement or use the SDK on behalf of your employer or other entity.
+
+
+3. SDK License from Google
+
+
+3.1 Subject to the terms of this License Agreement, Google grants you a limited, worldwide, royalty-free, non-assignable and non-exclusive license to use the SDK solely to develop applications to run on the Android platform.
+
+3.2 You agree that Google or third parties own all legal right, title and interest in and to the SDK, including any Intellectual Property Rights that subsist in the SDK. &quot;Intellectual Property Rights&quot; means any and all rights under patent law, copyright law, trade secret law, trademark law, and any and all other proprietary rights. Google reserves all rights not expressly granted to you.
+
+3.3 You may not use the SDK for any purpose not expressly permitted by this License Agreement.  Except to the extent required by applicable third party licenses, you may not: (a) copy (except for backup purposes), modify, adapt, redistribute, decompile, reverse engineer, disassemble, or create derivative works of the SDK or any part of the SDK; or (b) load any part of the SDK onto a mobile handset or any other hardware device except a personal computer, combine any part of the SDK with other software, or distribute any software or device incorporating a part of the SDK.
+
+3.4 You agree that you will not take any actions that may cause or result in the fragmentation of Android, including but not limited to distributing, participating in the creation of, or promoting in any way a software development kit derived from the SDK.
+
+3.5 Use, reproduction and distribution of components of the SDK licensed under an open source software license are governed solely by the terms of that open source software license and not this License Agreement.
+
+3.6 You agree that the form and nature of the SDK that Google provides may change without prior notice to you and that future versions of the SDK may be incompatible with applications developed on previous versions of the SDK. You agree that Google may stop (permanently or temporarily) providing the SDK (or any features within the SDK) to you or to users generally at Google's sole discretion, without prior notice to you.
+
+3.7 Nothing in this License Agreement gives you a right to use any of Google's trade names, trademarks, service marks, logos, domain names, or other distinctive brand features.
+
+3.8 You agree that you will not remove, obscure, or alter any proprietary rights notices (including copyright and trademark notices) that may be affixed to or contained within the SDK.
+
+
+4. Use of the SDK by You
+
+
+4.1 Google agrees that it obtains no right, title or interest from you (or your licensors) under this License Agreement in or to any software applications that you develop using the SDK, including any intellectual property rights that subsist in those applications.
+
+4.2 You agree to use the SDK and write applications only for purposes that are permitted by (a) this License Agreement and (b) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions (including any laws regarding the export of data or software to and from the United States or other relevant countries).
+
+4.3 You agree that if you use the SDK to develop applications for general public users, you will protect the privacy and legal rights of those users. If the users provide you with user names, passwords, or other login information or personal information, you must make the users aware that the information will be available to your application, and you must provide legally adequate privacy notice and protection for those users. If your application stores personal or sensitive information provided by users, it must do so securely. If the user provides your application with Google Account information, your application may only use that information to access the user's Google Account when, and for the limited purposes for which, the user has given you permission to do so.
+
+4.4 You agree that you will not engage in any activity with the SDK, including the development or distribution of an application, that interferes with, disrupts, damages, or accesses in an unauthorized manner the servers, networks, or other properties or services of any third party including, but not limited to, Google or any mobile communications carrier.
+
+4.5 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any data, content, or resources that you create, transmit or display through Android and/or applications for Android, and for the consequences of your actions (including any loss or damage which Google may suffer) by doing so.
+
+4.6 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any breach of your obligations under this License Agreement, any applicable third party contract or Terms of Service, or any applicable law or regulation, and for the consequences (including any loss or damage which Google or any third party may suffer) of any such breach.
+
+
+5. Your Developer Credentials
+
+
+5.1 You agree that you are responsible for maintaining the confidentiality of any developer credentials that may be issued to you by Google or which you may choose yourself and that you will be solely responsible for all applications that are developed under your developer credentials.
+
+
+6. Privacy and Information
+
+
+6.1 In order to continually innovate and improve the SDK, Google may collect certain usage statistics from the software including but not limited to a unique identifier, associated IP address, version number of the software, and information on which tools and/or services in the SDK are being used and how they are being used. Before any of this information is collected, the SDK will notify you and seek your consent. If you withhold consent, the information will not be collected.
+
+6.2 The data collected is examined in the aggregate to improve the SDK and is maintained in accordance with Google's Privacy Policy.
+
+
+7. Third Party Applications
+
+
+7.1 If you use the SDK to run applications developed by a third party or that access data, content or resources provided by a third party, you agree that Google is not responsible for those applications, data, content, or resources. You understand that all data, content or resources which you may access through such third party applications are the sole responsibility of the person from which they originated and that Google is not liable for any loss or damage that you may experience as a result of the use or access of any of those third party applications, data, content, or resources.
+
+7.2 You should be aware the data, content, and resources presented to you through such a third party application may be protected by intellectual property rights which are owned by the providers (or by other persons or companies on their behalf). You may not modify, rent, lease, loan, sell, distribute or create derivative works based on these data, content, or resources (either in whole or in part) unless you have been specifically given permission to do so by the relevant owners.
+
+7.3 You acknowledge that your use of such third party applications, data, content, or resources may be subject to separate terms between you and the relevant third party. In that case, this License Agreement does not affect your legal relationship with these third parties.
+
+
+8. Using Android APIs
+
+
+8.1 Google Data APIs
+
+8.1.1 If you use any API to retrieve data from Google, you acknowledge that the data may be protected by intellectual property rights which are owned by Google or those parties that provide the data (or by other persons or companies on their behalf). Your use of any such API may be subject to additional Terms of Service. You may not modify, rent, lease, loan, sell, distribute or create derivative works based on this data (either in whole or in part) unless allowed by the relevant Terms of Service.
+
+8.1.2 If you use any API to retrieve a user's data from Google, you acknowledge and agree that you shall retrieve data only with the user's explicit consent and only when, and for the limited purposes for which, the user has given you permission to do so.
+
+
+9. Terminating this License Agreement
+
+
+9.1 This License Agreement will continue to apply until terminated by either you or Google as set out below.
+
+9.2 If you want to terminate this License Agreement, you may do so by ceasing your use of the SDK and any relevant developer credentials.
+
+9.3 Google may at any time, terminate this License Agreement with you if:
+(A) you have breached any provision of this License Agreement; or
+(B) Google is required to do so by law; or
+(C) the partner with whom Google offered certain parts of SDK (such as APIs) to you has terminated its relationship with Google or ceased to offer certain parts of the SDK to you; or
+(D) Google decides to no longer provide the SDK or certain parts of the SDK to users in the country in which you are resident or from which you use the service, or the provision of the SDK or certain SDK services to you by Google is, in Google's sole discretion, no longer commercially viable.
+
+9.4 When this License Agreement comes to an end, all of the legal rights, obligations and liabilities that you and Google have benefited from, been subject to (or which have accrued over time whilst this License Agreement has been in force) or which are expressed to continue indefinitely, shall be unaffected by this cessation, and the provisions of paragraph 14.7 shall continue to apply to such rights, obligations and liabilities indefinitely.
+
+
+10. DISCLAIMER OF WARRANTIES
+
+
+10.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT YOUR USE OF THE SDK IS AT YOUR SOLE RISK AND THAT THE SDK IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTY OF ANY KIND FROM GOOGLE.
+
+10.2 YOUR USE OF THE SDK AND ANY MATERIAL DOWNLOADED OR OTHERWISE OBTAINED THROUGH THE USE OF THE SDK IS AT YOUR OWN DISCRETION AND RISK AND YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR OTHER DEVICE OR LOSS OF DATA THAT RESULTS FROM SUCH USE.
+
+10.3 GOOGLE FURTHER EXPRESSLY DISCLAIMS ALL WARRANTIES AND CONDITIONS OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+
+
+11. LIMITATION OF LIABILITY
+
+
+11.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT GOOGLE, ITS SUBSIDIARIES AND AFFILIATES, AND ITS LICENSORS SHALL NOT BE LIABLE TO YOU UNDER ANY THEORY OF LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR EXEMPLARY DAMAGES THAT MAY BE INCURRED BY YOU, INCLUDING ANY LOSS OF DATA, WHETHER OR NOT GOOGLE OR ITS REPRESENTATIVES HAVE BEEN ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF ANY SUCH LOSSES ARISING.
+
+
+12. Indemnification
+
+
+12.1 To the maximum extent permitted by law, you agree to defend, indemnify and hold harmless Google, its affiliates and their respective directors, officers, employees and agents from and against any and all claims, actions, suits or proceedings, as well as any and all losses, liabilities, damages, costs and expenses (including reasonable attorneys fees) arising out of or accruing from (a) your use of the SDK, (b) any application you develop on the SDK that infringes any copyright, trademark, trade secret, trade dress, patent or other intellectual property right of any person or defames any person or violates their rights of publicity or privacy, and (c) any non-compliance by you with this License Agreement.
+
+
+13. Changes to the License Agreement
+
+
+13.1 Google may make changes to the License Agreement as it distributes new versions of the SDK. When these changes are made, Google will make a new version of the License Agreement available on the website where the SDK is made available.
+
+
+14. General Legal Terms
+
+
+14.1 This License Agreement constitutes the whole legal agreement between you and Google and governs your use of the SDK (excluding any services which Google may provide to you under a separate written agreement), and completely replaces any prior agreements between you and Google in relation to the SDK.
+
+14.2 You agree that if Google does not exercise or enforce any legal right or remedy which is contained in this License Agreement (or which Google has the benefit of under any applicable law), this will not be taken to be a formal waiver of Google's rights and that those rights or remedies will still be available to Google.
+
+14.3 If any court of law, having the jurisdiction to decide on this matter, rules that any provision of this License Agreement is invalid, then that provision will be removed from this License Agreement without affecting the rest of this License Agreement. The remaining provisions of this License Agreement will continue to be valid and enforceable.
+
+14.4 You acknowledge and agree that each member of the group of companies of which Google is the parent shall be third party beneficiaries to this License Agreement and that such other companies shall be entitled to directly enforce, and rely upon, any provision of this License Agreement that confers a benefit on (or rights in favor of) them. Other than this, no other person or company shall be third party beneficiaries to this License Agreement.
+
+14.5 EXPORT RESTRICTIONS. THE SDK IS SUBJECT TO UNITED STATES EXPORT LAWS AND REGULATIONS. YOU MUST COMPLY WITH ALL DOMESTIC AND INTERNATIONAL EXPORT LAWS AND REGULATIONS THAT APPLY TO THE SDK. THESE LAWS INCLUDE RESTRICTIONS ON DESTINATIONS, END USERS AND END USE.
+
+14.6 The rights granted in this License Agreement may not be assigned or transferred by either you or Google without the prior written approval of the other party. Neither you nor Google shall be permitted to delegate their responsibilities or obligations under this License Agreement without the prior written approval of the other party.
+
+14.7 This License Agreement, and your relationship with Google under this License Agreement, shall be governed by the laws of the State of California without regard to its conflict of laws provisions. You and Google agree to submit to the exclusive jurisdiction of the courts located within the county of Santa Clara, California to resolve any legal matter arising from this License Agreement. Notwithstanding this, you agree that Google shall still be allowed to apply for injunctive remedies (or an equivalent type of urgent legal relief) in any jurisdiction.
+
+November 13, 2012
+    </sdk:license>
+
+    <sdk:license id="android-googletv-license" type="text">Terms and Conditions
+
+This is the Google TV Add-on for the Android Software Development Kit License Agreement.
+
+1. Introduction
+
+1.1 The Google TV Add-on for the Android Software Development Kit (referred to in this License Agreement as the &quot;Google TV Add-on&quot; and specifically including the Android system files, packaged APIs, and Google APIs add-ons) is licensed to you subject to the terms of this License Agreement. This License Agreement forms a legally binding contract between you and Google in relation to your use of the Google TV Add-on.
+
+1.2 &quot;Google&quot; means Google Inc., a Delaware corporation with principal place of business at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.
+
+2. Accepting this License Agreement
+
+2.1 In order to use the Google TV Add-on, you must first agree to this License Agreement. You may not use the Google TV Add-on if you do not accept this License Agreement.
+
+2.2 You can accept this License Agreement by:
+
+(A) clicking to accept or agree to this License Agreement, where this option is made available to you; or
+
+(B) by actually using the Google TV Add-on.  In this case, you agree that use of the Google TV Add-on constitutes acceptance of the License Agreement from that point onwards.
+
+2.3 You may not use the Google TV Add-on and may not accept the Licensing Agreement if you are a person barred from receiving the Google TV Add-on under the laws of the United States or other countries including the country in which you are resident or from which you use the Google TV Add-on.
+
+2.4 If you are agreeing to be bound by this License Agreement on behalf of your employer or other entity, you represent and warrant that you have full legal authority to bind your employer or such entity to this License Agreement. If you do not have the requisite authority, you may not accept the Licensing Agreement or use the Google TV Add-on on behalf of your employer or other entity.
+
+3. Google TV Add-on License from Google
+
+3.1 Subject to the terms of this License Agreement, Google grants you a limited, worldwide, royalty-free, non- assignable and non-exclusive license to use the Google TV Add-on solely to develop applications to run on the Google TV platform.
+
+3.2 You agree that Google or third parties own all legal right, title and interest in and to the Google TV Add-on, including any Intellectual Property Rights that subsist in the Google TV Add-on. &quot;Intellectual Property Rights&quot; means any and all rights under patent law, copyright law, trade secret law, trademark law, and any and all other proprietary rights. Google reserves all rights not expressly granted to you.
+
+3.3 Except to the extent required by applicable third party licenses, you may not copy (except for backup purposes), modify, adapt, redistribute, decompile, reverse engineer, disassemble, or create derivative works of the Google TV Add-on or any part of the Google TV Add-on. Except to the extent required by applicable third party licenses, you may not load any part of the Google TV Add-on onto a mobile handset, television, or any other hardware device except a personal computer, combine any part of the Google TV Add-on with other software, or distribute any software or device incorporating a part of the Google TV Add-on.
+
+3.4 Use, reproduction and distribution of components of the Google TV Add-on licensed under an open source software license are governed solely by the terms of that open source software license and not this License Agreement.
+
+3.5 You agree that the form and nature of the Google TV Add-on that Google provides may change without prior notice to you and that future versions of the Google TV Add-on may be incompatible with applications developed on previous versions of the Google TV Add-on. You agree that Google may stop (permanently or temporarily) providing the Google TV Add-on (or any features within the Google TV Add-on) to you or to users generally at Google's sole discretion, without prior notice to you.
+
+3.6 Nothing in this License Agreement gives you a right to use any of Google's or it’s licensors’ trade names, trademarks, service marks, logos, domain names, or other distinctive brand features.
+
+3.7 You agree that you will not remove, obscure, or alter any proprietary rights notices (including copyright and trademark notices) that may be affixed to or contained within the Google TV Add-on.
+
+4. Use of the Google TV Add-on by You
+
+4.1 Google agrees that it obtains no right, title or interest from you (or your licensors) under this License Agreement in or to any software applications that you develop using the Google TV Add-on, including any intellectual property rights that subsist in those applications.
+
+4.2 You agree to use the Google TV Add-on and write applications only for purposes that are permitted by (a) this License Agreement and (b) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions (including any laws regarding the export of data or software to and from the United States or other relevant countries).
+
+4.3 You agree that if you use the Google TV Add-on to develop applications for general public users, you will protect the privacy and legal rights of those users. If the users provide you with user names, passwords, or other login information or personal information, your must make the users aware that the information will be available to your application, and you must provide legally adequate privacy notice and protection for those users. If your application stores personal or sensitive information provided by users, it must do so securely. If the user provides your application with Google Account information, your application may only use that information to access the user's Google Account when, and for the limited purposes for which, the user has given you explicit permission to do so.
+
+4.4 You agree that you will not engage in any activity with the Google TV Add-on, including the development or distribution of an application, that interferes with, disrupts, damages, or accesses in an unauthorized manner the servers, networks, or other properties or services of any third party including, but not limited to, Google, Multichannel Video Program Distributors or any mobile communications carrier.
+
+4.5 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any data, content, or resources that you create, transmit or display through the Google TV platform and/or applications for the Google TV platform, and for the consequences of your actions (including any loss or damage which Google may suffer) by doing so.
+
+4.6 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any breach of your obligations under this License Agreement, any applicable third party contract or Terms of Service, or any applicable law or regulation, and for the consequences (including any loss or damage which Google or any third party may suffer) of any such breach.
+
+5. Your Developer Credentials
+
+5.1 You agree that you are responsible for maintaining the confidentiality of any developer credentials that may be issued to you by Google or which you may choose yourself and that you will be solely responsible for all applications that are developed under your developer credentials.
+
+6. Privacy and Information
+
+6.1 In order to continually innovate and improve the Google TV Add-on, Google may collect certain usage statistics from the software including but not limited to a unique identifier, associated IP address, version number of the software, and information on which tools and/or services in the Google TV Add-on are being used and how they are being used. Before any of this information is collected, the Google TV Add-on will notify you and seek your consent. If you withhold consent, the information will not be collected.
+
+6.2 The data collected is examined in the aggregate to improve the Google TV Add-on and is maintained in accordance with Google's Privacy Policy.
+
+7. Third Party Applications for the Google TV Platform
+
+7.1 If you use the Google TV Add-on to run applications developed by a third party or that access data, content or resources provided by a third party, you agree that Google is not responsible for those applications, data, content, or resources. You understand that all data, content or resources which you may access through such third party applications are the sole responsibility of the person from which they originated and that Google is not liable for any loss or damage that you may experience as a result of the use or access of any of those third party applications, data, content, or resources.
+
+7.2 You should be aware the data, content, and resources presented to you through such a third party application may be protected by intellectual property rights which are owned by the providers (or by other persons or companies on their behalf). You may not modify, rent, lease, loan, sell, distribute or create derivative works based on these data, content, or resources (either in whole or in part) unless you have been specifically given permission to do so by the relevant owners.
+
+7.3 You acknowledge that your use of such third party applications, data, content, or resources may be subject to separate terms between you and the relevant third party. In that case, this License Agreement does not affect your legal relationship with these third parties.
+
+8. Using Google TV APIs
+
+8.1 If you use any Google TV API to retrieve data from Google, you acknowledge that the data (“Google TV API Content”) may be protected by intellectual property rights which are owned by Google or those parties that provide the data (or by other persons or companies on their behalf). Your use of any such API may be subject to additional Terms of Service. You may not modify, rent, lease, loan, sell, distribute or create derivative works based on this data (either in whole or in part) unless allowed by the relevant Terms of Service.  Some portions of the Google TV API Content are licensed to Google by third parties, including but not limited to Tribune Media Services
+
+8.2 If you use any API to retrieve a user's data from Google, you acknowledge and agree that you shall retrieve data only with the user's explicit consent and only when, and for the limited purposes for which, the user has given you permission to do so.
+
+8.3 Except as explicitly permitted in Section 3 (Google TV Add-on License from Google), you must:
+
+(a) not modify nor format the Google TV API Content except to the extent reasonably and technically necessary to optimize the display such Google TV API Content in your application;
+
+(b) not edit the Google TV API Content in a manner that renders the Google TV API Content inaccurate of alters its inherent meaning (provided that displaying excerpts will not violate the foregoing); or
+
+(c)  not create any commercial audience measurement tool or service using the Google TV API Content
+
+9. Terminating this License Agreement
+
+9.1 This License Agreement will continue to apply until terminated by either you or Google as set out below.
+
+9.2 If you want to terminate this License Agreement, you may do so by ceasing your use of the Google TV Add-on and any relevant developer credentials.
+
+9.3 Google may at any time, terminate this License Agreement with you if:
+
+(A) you have breached any provision of this License Agreement; or
+
+(B) Google is required to do so by law; or
+
+(C) the partner with whom Google offered certain parts of Google TV Add-on (such as APIs) to you has terminated its relationship with Google or ceased to offer certain parts of the Google TV Add-on to you; or
+
+(D) Google decides to no longer providing the Google TV Add-on or certain parts of the Google TV Add-on to users in the country in which you are resident or from which you use the service, or the provision of the Google TV Add-on or certain Google TV Add-on services to you by Google is, in Google's sole discretion, no longer commercially viable.
+
+9.4 When this License Agreement comes to an end, all of the legal rights, obligations and liabilities that you and Google have benefited from, been subject to (or which have accrued over time whilst this License Agreement has been in force) or which are expressed to continue indefinitely, shall be unaffected by this cessation, and the provisions of paragraph 14.7 shall continue to apply to such rights, obligations and liabilities indefinitely.
+
+10. DISCLAIMER OF WARRANTIES
+
+10.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT YOUR USE OF THE GOOGLE TV ADD-ON IS AT YOUR SOLE RISK AND THAT THE GOOGLE TV ADD-ON IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTY OF ANY KIND FROM GOOGLE.
+
+10.2 YOUR USE OF THE GOOGLE TV ADD-ON AND ANY MATERIAL DOWNLOADED OR OTHERWISE OBTAINED THROUGH THE USE OF THE GOOGLE TV ADD-ON IS AT YOUR OWN DISCRETION AND RISK AND YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR OTHER DEVICE OR LOSS OF DATA THAT RESULTS FROM SUCH USE.
+
+10.3 GOOGLE FURTHER EXPRESSLY DISCLAIMS ALL WARRANTIES AND CONDITIONS OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+
+11. LIMITATION OF LIABILITY
+
+11.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT GOOGLE, ITS SUBSIDIARIES AND AFFILIATES, AND ITS LICENSORS SHALL NOT BE LIABLE TO YOU UNDER ANY THEORY OF LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL CONSEQUENTIAL OR EXEMPLARY DAMAGES THAT MAY BE INCURRED BY YOU, INCLUDING ANY LOSS OF DATA, WHETHER OR NOT GOOGLE OR ITS REPRESENTATIVES HAVE BEEN ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF ANY SUCH LOSSES ARISING.
+
+12. Indemnification
+
+12.1 To the maximum extent permitted by law, you agree to defend, indemnify and hold harmless Google, its affiliates and their respective directors, officers, employees and agents from and against any and all claims, actions, suits or proceedings, as well as any and all losses, liabilities, damages, costs and expenses (including reasonable attorneys fees) arising out of or accruing from (a) your use of the Google TV Add-on, (b) any application you develop on the Google TV Add-on that infringes any copyright, trademark, trade secret, trade dress, patent or other intellectual property right of any person or defames any person or violates their rights of publicity or privacy, and (c) any non-compliance by you with this License Agreement.
+
+13. Changes to the License Agreement
+
+13.1 Google may make changes to the License Agreement as it distributes new versions of the Google TV Add-on.
+
+14. General Legal Terms
+
+14.1 This License Agreement constitute the whole legal agreement between you and Google and govern your use of the Google TV Add-on (excluding any services which Google may provide to you under a separate written agreement), and completely replace any prior agreements between you and Google in relation to the Google TV Add-on.
+
+14.2 You agree that if Google does not exercise or enforce any legal right or remedy which is contained in this License Agreement (or which Google has the benefit of under any applicable law), this will not be taken to be a formal waiver of Google's rights and that those rights or remedies will still be available to Google.
+
+14.3 If any court of law, having the jurisdiction to decide on this matter, rules that any provision of this License Agreement is invalid, then that provision will be removed from this License Agreement without affecting the rest of this License Agreement. The remaining provisions of this License Agreement will continue to be valid and enforceable.
+
+14.4 You acknowledge and agree that Google’s API data licensors and each member of the group of companies of which Google is the parent shall be third party beneficiaries to this License Agreement and that such other companies shall be entitled to directly enforce, and rely upon, any provision of this License Agreement that confers a benefit on (or rights in favor of) them. Other than this, no other person or company shall be third party beneficiaries to this License Agreement.
+
+14.5 EXPORT RESTRICTIONS. THE GOOGLE TV ADD-ON IS SUBJECT TO UNITED STATES EXPORT LAWS AND REGULATIONS. YOU MUST COMPLY WITH ALL DOMESTIC AND INTERNATIONAL EXPORT LAWS AND REGULATIONS THAT APPLY TO THE GOOGLE TV ADD-ON. THESE LAWS INCLUDE RESTRICTIONS ON DESTINATIONS, END USERS AND END USE.
+
+14.6 The rights granted in this License Agreement may not be assigned or transferred by either you or Google without the prior written approval of the other party. Neither you nor Google shall be permitted to delegate their responsibilities or obligations under this License Agreement without the prior written approval of the other party.
+
+14.7 This License Agreement, and your relationship with Google under this License Agreement, shall be governed by the laws of the State of California without regard to its conflict of laws provisions. You and Google agree to submit to the exclusive jurisdiction of the courts located within the county of Santa Clara, California to resolve any legal matter arising from this License Agreement. Notwithstanding this, you agree that Google shall still be allowed to apply for injunctive remedies (or an equivalent type of urgent legal relief) in any jurisdiction.
+
+
+August 15, 2011
+   </sdk:license>
+
+    <!-- ADD-ONS ....................... -->
+
+    <sdk:add-on>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:api-level>3</sdk:api-level>
+        <sdk:revision>03</sdk:revision>
+        <sdk:description>Android + Google APIs</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>34908058</sdk:size>
+                <sdk:checksum type="sha1">1f92abf3a76be66ae8032257fc7620acbd2b2e3a</sdk:checksum>
+                <sdk:url>google_apis-3-r03.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+                <sdk:description>API for Google Maps.</sdk:description>
+            </sdk:lib>
+        </sdk:libs>
+    </sdk:add-on>
+
+    <!-- Generated on Tue Nov 24 16:38:28 PST 2009 using donut 20842: Platform. Addon. -->
+
+    <sdk:add-on>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:api-level>4</sdk:api-level>
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>Android + Google APIs, revision 2</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>42435735</sdk:size>
+                <sdk:checksum type="sha1">9b6e86d8568558de4d606a7debc4f6049608dbd0</sdk:checksum>
+                <sdk:url>google_apis-4_r02.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+                <sdk:description>API for Google Maps.</sdk:description>
+            </sdk:lib>
+        </sdk:libs>
+    </sdk:add-on>
+
+    <!-- Generated on Thu Oct 22 10:16:34 PDT 2009 using eclair-sdk 17704: Platform. Addon. Tools. Doc. -->
+
+    <sdk:add-on>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:api-level>5</sdk:api-level>
+        <sdk:revision>01</sdk:revision>
+        <sdk:description>Android + Google APIs, revision 1</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:obsolete/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>49123776</sdk:size>
+                <sdk:checksum type="sha1">46eaeb56b645ee7ffa24ede8fa17f3df70db0503</sdk:checksum>
+                <sdk:url>google_apis-5_r01.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+                <sdk:description>API for Google Maps.</sdk:description>
+            </sdk:lib>
+        </sdk:libs>
+    </sdk:add-on>
+
+    <!-- Generated on Mon Nov 23 14:08:02 PST 2009 using eclair-release 20723: Platform. Addon. -->
+
+    <sdk:add-on>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:api-level>6</sdk:api-level>
+        <sdk:revision>1</sdk:revision>
+        <sdk:description>Android + Google APIs, revision 1</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:obsolete/>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>53382941</sdk:size>
+                <sdk:checksum type="sha1">5ff545d96e031e09580a6cf55713015c7d4936b2</sdk:checksum>
+                <sdk:url>google_apis-6_r01.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+                <sdk:description>API for Google Maps.</sdk:description>
+            </sdk:lib>
+        </sdk:libs>
+    </sdk:add-on>
+
+    <!-- Generated on Mon Dec 21 14:36:17 PST 2009 using eclair-release 22607: Platform. Addon. -->
+
+    <sdk:add-on>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:api-level>7</sdk:api-level>
+        <sdk:revision>1</sdk:revision>
+        <sdk:description>Android + Google APIs, revision 1</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>53691339</sdk:size>
+                <sdk:checksum type="sha1">2e7f91e0fe34fef7f58aeced973c6ae52361b5ac</sdk:checksum>
+                <sdk:url>google_apis-7_r01.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+                <sdk:description>API for Google Maps.</sdk:description>
+            </sdk:lib>
+        </sdk:libs>
+    </sdk:add-on>
+
+    <!-- Generated on Wed Jun 30 16:13:06 PDT 2010 using froyo-release 43546: Platform. Addon. -->
+
+    <sdk:add-on>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:api-level>8</sdk:api-level>
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>Android + Google APIs, API 8, revision 2</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>59505020</sdk:size>
+                <sdk:checksum type="sha1">3079958e7ec87222cac1e6b27bc471b27bf2c352</sdk:checksum>
+                <sdk:url>google_apis-8_r02.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+                <sdk:description>API for Google Maps.</sdk:description>
+            </sdk:lib>
+        </sdk:libs>
+    </sdk:add-on>
+
+    <!-- Generated on Thu Jan 20 13:47:16 PST 2011 using gingerbread-sdk-release 93351: Addon. -->
+
+    <sdk:add-on>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:api-level>9</sdk:api-level>
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>Android + Google APIs, API 9, revision 2</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>63401546</sdk:size>
+                <sdk:checksum type="sha1">78664645a1e9accea4430814f8694291a7f1ea5d</sdk:checksum>
+                <sdk:url>google_apis-9_r02.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+                <sdk:description>API for Google Maps.</sdk:description>
+            </sdk:lib>
+        </sdk:libs>
+        <sdk:obsolete/>
+    </sdk:add-on>
+
+    <!-- Generated on Thu May  5 15:52:16 PDT 2011 using gingerbread 123630: Addon. -->
+
+    <sdk:add-on>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:api-level>10</sdk:api-level>
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>Android + Google APIs, API 10, revision 2</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>65781578</sdk:size>
+                <sdk:checksum type="sha1">cc0711857c881fa7534f90cf8cc09b8fe985484d</sdk:checksum>
+                <sdk:url>google_apis-10_r02.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+                <sdk:description>API for Google Maps.</sdk:description>
+            </sdk:lib>
+        </sdk:libs>
+    </sdk:add-on>
+
+    <!-- Generated on Thu Feb 17 08:43:44 PST 2011 using honeycomb 104254: Addon. -->
+
+    <sdk:add-on>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:api-level>11</sdk:api-level>
+        <sdk:revision>1</sdk:revision>
+        <sdk:description>Android + Google APIs, API 11, revision 1</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>83477179</sdk:size>
+                <sdk:checksum type="sha1">5eab5e81addee9f3576d456d205208314b5146a5</sdk:checksum>
+                <sdk:url>google_apis-11_r01.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+                <sdk:description>API for Google Maps.</sdk:description>
+            </sdk:lib>
+        </sdk:libs>
+    </sdk:add-on>
+
+    <!-- Generated on Wed May  4 19:44:46 PDT 2011 using honeycomb-mr1 123685: Addon. -->
+
+    <sdk:add-on>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:api-level>12</sdk:api-level>
+        <sdk:revision>1</sdk:revision>
+        <sdk:description>Android + Google APIs, API 12, revision 1</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>86099835</sdk:size>
+                <sdk:checksum type="sha1">e9999f4fa978812174dfeceec0721c793a636e5d</sdk:checksum>
+                <sdk:url>google_apis-12_r01.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+                <sdk:description>API for Google Maps.</sdk:description>
+            </sdk:lib>
+        </sdk:libs>
+    </sdk:add-on>
+
+    <!-- Generated on Fri Jul 15 11:51:11 PDT 2011 using honeycomb-mr2 142871: Addon. -->
+
+    <sdk:add-on>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:api-level>13</sdk:api-level>
+        <sdk:revision>1</sdk:revision>
+        <sdk:description>Android + Google APIs, API 13, revision 1</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>88615525</sdk:size>
+                <sdk:checksum type="sha1">3b153edd211c27dc736c893c658418a4f9041417</sdk:checksum>
+                <sdk:url>google_apis-13_r01.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+                <sdk:description>API for Google Maps.</sdk:description>
+            </sdk:lib>
+        </sdk:libs>
+    </sdk:add-on>
+
+    <sdk:add-on>
+        <!-- Generated at Wed Dec  7 13:47:50 2011 from git_ics-mr0 @ 229537 -->
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:description>Android + Google APIs</sdk:description>
+        <sdk:api-level>14</sdk:api-level>
+        <sdk:revision>2</sdk:revision>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.android.future.usb.accessory</sdk:name>
+            </sdk:lib>
+        </sdk:libs>
+        <sdk:archives>
+            <sdk:archive arch="any" os="any">
+                <sdk:size>106533714</sdk:size>
+                <sdk:checksum type="sha1">f8eb4d96ad0492b4c0db2d7e4f1a1a3836664d39</sdk:checksum>
+                <sdk:url>google_apis-14_r02.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+    </sdk:add-on>
+
+    <sdk:add-on>
+        <!-- Generated at Fri Mar 30 10:45:40 2012 from ics-mr1 @ 302030 -->
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:description>Android + Google APIs</sdk:description>
+        <sdk:api-level>15</sdk:api-level>
+        <sdk:revision>2</sdk:revision>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.android.future.usb.accessory</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.google.android.media.effects</sdk:name>
+            </sdk:lib>
+        </sdk:libs>
+        <sdk:archives>
+            <sdk:archive arch="any" os="any">
+                <sdk:size>106612472</sdk:size>
+                <sdk:checksum type="sha1">6757c12788da0ea00c2ab58e54cb438b9f2bcf66</sdk:checksum>
+                <sdk:url>google_apis-15_r02.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:add-on>
+
+    <sdk:add-on>
+        <!-- Generated at Tue Oct  9 14:06:38 2012 from git_jb-dev @ 495790 -->
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:description>Android + Google APIs</sdk:description>
+        <sdk:api-level>16</sdk:api-level>
+        <sdk:revision>3</sdk:revision>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.android.future.usb.accessory</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.google.android.media.effects</sdk:name>
+            </sdk:lib>
+        </sdk:libs>
+        <sdk:archives>
+            <sdk:archive arch="any" os="any">
+                <sdk:size>127278413</sdk:size>
+                <sdk:checksum type="sha1">63467dd32f471e3e81e33e9772c22f33235aa3b3</sdk:checksum>
+                <sdk:url>google_apis-16_r03.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:add-on>
+
+    <!-- GOOGLE TV ADDONS ............. -->
+
+    <sdk:add-on>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_tv_addon</sdk:name-id>
+        <sdk:name-display>Google TV Addon</sdk:name-display>
+        <sdk:api-level>12</sdk:api-level>
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>Android + Google TV, API 12, preview release</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:uses-license ref="android-googletv-license"/>
+        <sdk:archives>
+            <sdk:archive os="linux">
+                <sdk:size>78266751</sdk:size>
+                <sdk:checksum type="sha1">92128a12e7e8b0fb5bac59153d7779b717e7b840</sdk:checksum>
+                <sdk:url>google_tv-12_r02.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:libs/>
+    </sdk:add-on>
+
+    <sdk:add-on>
+        <!-- Generated at Mon Nov 12 17:15:51 2012 from git_jb-mr1-dev @ 526865 -->
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:description>Android + Google APIs</sdk:description>
+        <sdk:api-level>17</sdk:api-level>
+        <sdk:revision>1</sdk:revision>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.android.future.usb.accessory</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.google.android.media.effects</sdk:name>
+            </sdk:lib>
+        </sdk:libs>
+        <sdk:archives>
+            <sdk:archive arch="any" os="any">
+                <sdk:size>132568033</sdk:size>
+                <sdk:checksum type="sha1">62cb086f11e15713878c8834d58ef1a2454c19a4</sdk:checksum>
+                <sdk:url>google_apis-17_r01.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:add-on>
+
+    <!-- EXTRAS VENDOR=ANDROID ........................ -->
+
+    <sdk:extra>
+        <!-- Generated at Mon Nov 12 17:16:25 2012 from git_jb-mr1-dev @ 526865 -->
+        <sdk:revision>11</sdk:revision>
+        <sdk:vendor-display>Android</sdk:vendor-display>
+        <sdk:vendor-id>android</sdk:vendor-id>
+        <sdk:name-display>Android Support Library</sdk:name-display>
+        <sdk:path>support</sdk:path>
+        <sdk:old-paths>compatibility</sdk:old-paths>
+        <sdk:archives>
+            <sdk:archive arch="any" os="any">
+                <sdk:size>1264808</sdk:size>
+                <sdk:checksum type="sha1">d30d182d8e4c86bb4464c03a83ccffce7bc84ecd</sdk:checksum>
+                <sdk:url>support_r11.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:extra>
+
+    <!-- EXTRAS VENDOR=GOOGLE ....................... -->
+
+    <sdk:extra>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-display>Google Play Licensing Library</sdk:name-display>
+        <sdk:path>play_licensing</sdk:path>
+        <sdk:old-paths>market_licensing</sdk:old-paths>
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>Google Play Licensing client library</sdk:description>
+        <sdk:desc-url>http://developer.android.com/guide/publishing/licensing.html</sdk:desc-url>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>75109</sdk:size>
+                <sdk:checksum type="sha1">355e8dc304a92a5616db235af8ee7bd554356254</sdk:checksum>
+                <sdk:url>market_licensing-r02.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:extra>
+
+    <sdk:extra>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-display>Google Play APK Expansion Library</sdk:name-display>
+        <sdk:path>play_apk_expansion</sdk:path>
+        <sdk:old-paths>market_apk_expansion</sdk:old-paths>
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>Google Play APK Expansion library</sdk:description>
+        <sdk:desc-url>http://developer.android.com/guide/market/expansion-files.html</sdk:desc-url>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>111636</sdk:size>
+                <sdk:checksum type="sha1">47fa8c691fcc8cf815e7ebbf140f12e94495f73b</sdk:checksum>
+                <sdk:url>market_apk_expansion-r02.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:extra>
+
+    <sdk:extra>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-display>Google Play services</sdk:name-display>
+        <sdk:path>google_play_services</sdk:path>
+        <sdk:revision>4</sdk:revision>
+        <sdk:description>Google Play Services client library and sample code</sdk:description>
+        <sdk:desc-url>https://developers.google.com/android/google-play-services/index</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>3732458</sdk:size>
+                <sdk:checksum type="sha1">bbb3d11225fcf60a0bae75afa2c4737010468bf6</sdk:checksum>
+                <sdk:url>google_play_services_2012110_r04.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+    </sdk:extra>
+
+    <sdk:extra>
+        <!-- Generated at Tue Aug 28 11:07:05 2012 from git_master @ 449897 -->
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-display>Google USB Driver</sdk:name-display>
+        <sdk:path>usb_driver</sdk:path>
+        <sdk:revision>7</sdk:revision>
+        <sdk:description>USB Driver for Windows, revision 7</sdk:description>
+        <sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="windows">
+                <sdk:size>8681704</sdk:size>
+                <sdk:checksum type="sha1">147c339fde22f98ae41b15349a8303d39a2cf6e5</sdk:checksum>
+                <sdk:url>usb_driver_r07-windows.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+    </sdk:extra>
+
+    <sdk:extra>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-display>Google Play Billing Library</sdk:name-display>
+        <sdk:path>play_billing</sdk:path>
+        <sdk:old-paths>market_billing</sdk:old-paths>
+        <sdk:revision>3</sdk:revision>
+        <sdk:description>Google Play Billing files and sample code</sdk:description>
+        <sdk:desc-url>http://developer.android.com/google/play/billing/index.html</sdk:desc-url>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>435718</sdk:size>
+                <sdk:checksum type="sha1">a133d454c992ef2a18e62fa810e8185f1be4b054</sdk:checksum>
+                <sdk:url>play_billing_r03.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:extra>
+
+    <sdk:extra>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-display>Google AdMob Ads SDK</sdk:name-display>
+        <sdk:path>admob_ads_sdk</sdk:path>
+        <sdk:revision>8</sdk:revision>
+        <sdk:description>AdMob Ads SDK</sdk:description>
+        <sdk:desc-url>https://developers.google.com/mobile-ads-sdk/docs/</sdk:desc-url>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>545547</sdk:size>
+                <sdk:checksum type="sha1">031476aa5a491239d2624e8de8c9e46e40d93e3f</sdk:checksum>
+                <sdk:url>https://dl-ssl.google.com/googleadmobadssdk/googleadmobadssdkandroid-6.2.1.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:extra>
+
+    <sdk:extra>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-display>Google Analytics SDK</sdk:name-display>
+        <sdk:path>analytics_sdk</sdk:path>
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>Analytics SDK</sdk:description>
+        <sdk:desc-url>http://code.google.com/mobile/analytics/</sdk:desc-url>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>53055</sdk:size>
+                <sdk:checksum type="sha1">328bcdc6c241879ebb04d6edc6fec1052a171004</sdk:checksum>
+                <sdk:url>https://dl.google.com/gaformobileapps/GoogleAnalyticsAndroid_1.4.2.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:extra>
+
+    <sdk:extra>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-display>Google Web Driver</sdk:name-display>
+        <sdk:path>webdriver</sdk:path>
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>WebDriver</sdk:description>
+        <sdk:desc-url>http://selenium.googlecode.com</sdk:desc-url>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>4055193</sdk:size>
+                <sdk:checksum type="sha1">13f3a3b2670a5fc04a7342861644be9a01b07e38</sdk:checksum>
+                <sdk:url>webdriver_r02.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:extra>
+
+    <sdk:extra>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-display>Google Cloud Messaging for Android Library</sdk:name-display>
+        <sdk:path>gcm</sdk:path>
+        <sdk:revision>3</sdk:revision>
+        <sdk:description>Google Cloud Messaging for Android library and sample code</sdk:description>
+        <sdk:desc-url>https://developers.google.com/android/gcm/index</sdk:desc-url>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>5901400</sdk:size>
+                <sdk:checksum type="sha1">ad066fd0dc7fc99d8aadac09c65a3c2519fbc7bf</sdk:checksum>
+                <sdk:url>gcm_r03.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:extra>
+</sdk:sdk-addon>

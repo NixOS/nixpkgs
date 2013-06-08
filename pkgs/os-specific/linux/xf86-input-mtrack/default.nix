@@ -10,10 +10,11 @@
 , xorgserver
 , xproto
 , inputproto
+, pixman
 }:
 
 stdenv.mkDerivation {
-  name = "xf86-input-mtrack-0.2.0";
+  name = "xf86-input-mtrack-0.3.0";
 
   preConfigure = "autoreconf -vfi";
 
@@ -27,12 +28,15 @@ stdenv.mkDerivation {
     xorgserver
     xproto
     inputproto
+    pixman
   ];
+
+  CFLAGS = "-I${pixman}/include/pixman-1";
 
   src = fetchurl {
     name = "xf86-input-mtrack.tar.gz";
-    url = "https://github.com/BlueDragonX/xf86-input-mtrack/tarball/v0.2.0";
-    sha256 = "1zvd68dxpjn44ys7ysi3yc95xdjw1rz0s3xwlh3fzpw1ib3wrr3x";
+    url = "https://github.com/BlueDragonX/xf86-input-mtrack/tarball/v0.3.0";
+    sha256 = "174rdw7gv0wsnjgmwpx4pgjn1zfbylflda4k2dzff6phzxj9yl6v";
   };
 
   meta = {
@@ -45,3 +49,4 @@ stdenv.mkDerivation {
     maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }
+

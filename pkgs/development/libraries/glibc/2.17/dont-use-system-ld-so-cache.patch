@@ -1,0 +1,45 @@
+diff -ru glibc-2.16.0-orig/elf/ldconfig.c glibc-2.16.0/elf/ldconfig.c
+--- glibc-2.16.0-orig/elf/ldconfig.c	2012-06-30 15:12:34.000000000 -0400
++++ glibc-2.16.0/elf/ldconfig.c	2012-09-18 11:59:27.463284814 -0400
+@@ -50,7 +50,7 @@
+ #endif
+ 
+ #ifndef LD_SO_CONF
+-# define LD_SO_CONF SYSCONFDIR "/ld.so.conf"
++# define LD_SO_CONF PREFIX "/etc/ld.so.conf"
+ #endif
+ 
+ /* Get libc version number.  */
+diff -ru glibc-2.16.0-orig/elf/Makefile glibc-2.16.0/elf/Makefile
+--- glibc-2.16.0-orig/elf/Makefile	2012-06-30 15:12:34.000000000 -0400
++++ glibc-2.16.0/elf/Makefile	2012-09-18 12:03:30.031955196 -0400
+@@ -415,12 +415,12 @@
+ 
+ $(objpfx)pldd: $(pldd-modules:%=$(objpfx)%.o)
+ 
+-SYSCONF-FLAGS := -D'SYSCONFDIR="$(sysconfdir)"'
+-CFLAGS-ldconfig.c = $(SYSCONF-FLAGS) -D'LIBDIR="$(libdir)"' \
++PREFIX-FLAGS := -D'PREFIX="$(prefix)"'
++CFLAGS-ldconfig.c = $(PREFIX-FLAGS) -D'LIBDIR="$(libdir)"' \
+ 		    -D'SLIBDIR="$(slibdir)"' -DIS_IN_ldconfig=1
+-CFLAGS-dl-cache.c = $(SYSCONF-FLAGS)
+-CFLAGS-cache.c = $(SYSCONF-FLAGS)
+-CFLAGS-rtld.c = $(SYSCONF-FLAGS)
++CFLAGS-dl-cache.c = $(PREFIX-FLAGS)
++CFLAGS-cache.c = $(PREFIX-FLAGS)
++CFLAGS-rtld.c = $(PREFIX-FLAGS)
+ 
+ CPPFLAGS-.os += $(if $(filter $(@F),$(patsubst %,%.os,$(all-rtld-routines))),\
+ 		     -DNOT_IN_libc=1 -DIS_IN_rtld=1 -DIN_LIB=rtld)
+diff -ru glibc-2.16.0-orig/sysdeps/generic/dl-cache.h glibc-2.16.0/sysdeps/generic/dl-cache.h
+--- glibc-2.16.0-orig/sysdeps/generic/dl-cache.h	2012-06-30 15:12:34.000000000 -0400
++++ glibc-2.16.0/sysdeps/generic/dl-cache.h	2012-09-18 11:59:27.465284809 -0400
+@@ -28,7 +28,7 @@
+ #endif
+ 
+ #ifndef LD_SO_CACHE
+-# define LD_SO_CACHE SYSCONFDIR "/ld.so.cache"
++# define LD_SO_CACHE PREFIX "/etc/ld.so.cache"
+ #endif
+ 
+ #ifndef add_system_dir

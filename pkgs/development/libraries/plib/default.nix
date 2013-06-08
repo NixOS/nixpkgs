@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cha71mflpa10vh2l7ipyqk67dq2y0k5xbafwdks03fwdyzj4ns8";
   };
 
-  NIX_CFLAGS_COMPILE = if (enablePIC) then "-fPIC" else "";
+  NIX_CFLAGS_COMPILE = if enablePIC then "-fPIC" else "";
 
   propagatedBuildInputs = [
     mesa freeglut SDL

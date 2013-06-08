@@ -1,0 +1,32 @@
+* Remove /usr/*/zoneinfo from the default search path
+* Respect $TZDIR
+diff --git a/src/libical/icaltz-util.c b/src/libical/icaltz-util.c
+index adf7598..d2fd5c8 100644
+--- a/src/libical/icaltz-util.c
++++ b/src/libical/icaltz-util.c
+@@ -108,7 +108,7 @@ typedef struct
+ 
+ static int r_pos [] = {1, 2, 3, -2, -1};
+ 
+-static char *search_paths [] = {"/usr/share/zoneinfo","/usr/lib/zoneinfo","/etc/zoneinfo","/usr/share/lib/zoneinfo"};
++static char *search_paths [] = {"/etc/zoneinfo"};
+ static char *zdir = NULL;
+ 
+ #define NUM_SEARCH_PATHS (sizeof (search_paths)/ sizeof (search_paths [0]))
+@@ -195,6 +195,16 @@ set_zonedir (void)
+ 	const char *fname = ZONES_TAB_SYSTEM_FILENAME;
+ 	int i;	
+ 
++	const char *env_tzdir = strdup (getenv ("TZDIR"));
++	if (env_tzdir) {
++		sprintf (file_path, "%s/%s", env_tzdir, fname);
++		if (!access (file_path, F_OK|R_OK)) {
++			zdir = env_tzdir;
++			return;
++		}
++		free (env_tzdir);
++	}
++
+ 	for (i = 0;i < NUM_SEARCH_PATHS; i++) {
+ 		sprintf (file_path, "%s/%s", search_paths [i], fname);
+ 		if (!access (file_path, F_OK|R_OK)) {

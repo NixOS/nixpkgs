@@ -1,11 +1,14 @@
 { stdenv, fetchurl, lib, pkgconfig, alsaLib, pulseaudio ? null, jackaudio ? null }:
 
 stdenv.mkDerivation rec {
-  name = "alsa-plugins-1.0.25";
+  name = "alsa-plugins-1.0.26";
 
   src = fetchurl {
-    url = "ftp://ftp.alsa-project.org/pub/plugins/${name}.tar.bz2";
-    sha256 = "1assar5k8zb2srqdcph6a54daqfymlyygdm5fcs6isaydpyp9qx0";
+    urls = [
+      "ftp://ftp.alsa-project.org/pub/plugins/${name}.tar.bz2"
+      "http://alsa.cybermirror.org/plugins/${name}.tar.bz2"
+    ];
+    sha256 = "07wz3kl6isabk15ddpzz820pqlgvw6q0m7knnbgv9780s8s52l83";
   };
 
   buildInputs =

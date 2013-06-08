@@ -36,6 +36,10 @@ in stdenv.mkDerivation {
     }
   ];
 
+  postPatch = ''
+    patch -p1 < ${./bip-0.8.8-yyparse.patch}
+  '';
+
   configureFlags = [ "--disable-pie" ];
 
   buildInputs = [ bison flex autoconf automake openssl ];

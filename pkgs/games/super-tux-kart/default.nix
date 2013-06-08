@@ -1,24 +1,27 @@
-{ fetchurl, stdenv, plib, SDL, openal, freealut, mesa
-, libvorbis, libogg, gettext, irrlicht3843, libXxf86vm, curl, pkgconfig
-, fribidi }:
+{ fetchurl, cmake, stdenv, plib, SDL, openal, freealut, mesa
+, libvorbis, libogg, gettext, libXxf86vm, curl, pkgconfig
+, fribidi, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "supertuxkart-0.7.3";
+  name = "supertuxkart-0.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/supertuxkart/${name}-src.tar.bz2";
-    sha256 = "0njrs2qyhbiqdbsqk9jx0sl8nhdwmipf1i91k23rv1biwrim9yq7";
+    sha256 = "12sbml4wxg2x2wgnnkxfisj96a9gcsaj3fj27kdk8yj524ikv7xr";
   };
 
   buildInputs = [
-    plib SDL openal freealut mesa libvorbis libogg gettext irrlicht3843
-    libXxf86vm curl pkgconfig fribidi
+    plib SDL openal freealut mesa libvorbis libogg gettext
+    libXxf86vm curl pkgconfig fribidi autoconf automake libtool cmake
   ];
 
-  configureFlags = [ "--with-irrlicht=${irrlicht3843}" ];
+  enableParallelBuilding = true;
 
-  postInstall = ''
-    mv $out/games $out/bin
+  preConfigure = ''
+    echo Building internal Irrlicht
+    cd lib/irrlicht/source/Irrlicht/
+    NDEBUG=1 make ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
+    cd -
   '';
 
   meta = {

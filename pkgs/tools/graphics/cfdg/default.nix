@@ -1,8 +1,8 @@
-a @ {libpng, bison, flex, fullDepEntry, ...} :  
+a @ {libpng, bison, flex, ffmpeg, fullDepEntry, ...} :  
 let 
   s = import ./src-for-default.nix;
   buildInputs = with a; [
-    libpng bison flex
+    libpng bison flex ffmpeg
   ];
 in
 rec {
@@ -13,8 +13,12 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doMake" "copyFiles"];
-
+  phaseNames = ["doFixInc" "doMake" "copyFiles"];
+ 
+  doFixInc = a.fullDepEntry ''
+    sed -e "/YY_NO_UNISTD/a#include <stdio.h>" -i src-common/cfdg.l
+  '' ["doUnpack" "minInit"];
+ 
   copyFiles = a.fullDepEntry ''
     mkdir -p $out/bin
     cp cfdg $out/bin/

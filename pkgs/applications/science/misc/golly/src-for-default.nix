@@ -1,9 +1,9 @@
 rec {
-   version="2.3-src";
-   name="golly-2.3-src";
-   hash="12r1lrrn4c1kafzvz5mmfq3750smqv5dwl1xpj3753h0rl9a9gx1";
-   url="http://downloads.sourceforge.net/project/golly/golly/golly-2.3/golly-2.3-src.tar.gz";
-   advertisedUrl="http://downloads.sourceforge.net/project/golly/golly/golly-2.3/golly-2.3-src.tar.gz";
+   version="2.4-src";
+   name="golly-2.4-src";
+   hash="06vajm019q4q4wfy6pc1669fbjqdb4jaxcc419bk0vzky40anl9w";
+   url="http://downloads.sourceforge.net/project/golly/golly/golly-2.4/golly-2.4-src.tar.gz";
+   advertisedUrl="http://downloads.sourceforge.net/project/golly/golly/golly-2.4/golly-2.4-src.tar.gz";
   
   
 }

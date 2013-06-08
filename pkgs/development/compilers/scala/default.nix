@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
-    rm "bin/"*.bat
+    rm bin/*.bat
+    rm lib/scalacheck.jar
     mv * $out
   '';
 
@@ -28,5 +29,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.scala-lang.org/;
     license = "BSD";
+    platforms = stdenv.lib.platforms.all;
   };
 }

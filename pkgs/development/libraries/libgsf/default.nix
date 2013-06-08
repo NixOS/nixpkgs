@@ -7,14 +7,14 @@ assert gnomeSupport -> gdk_pixbuf != null && gnome_vfs != null && libbonobo != n
   && glib != null;
 
 stdenv.mkDerivation rec {
-  name = "libgsf-1.14.22";
+  name = "libgsf-1.14.25";
 
   src = fetchurl {
-    url = mirror://gnome/sources/libgsf/1.14/libgsf-1.14.22.tar.xz;
-    sha256 = "0gvq1gbbcl078s3kgdc508jp7p3a3ps34fj4pf8vsamprbikpwm5";
+    url = "mirror://gnome/sources/libgsf/1.14/${name}.tar.xz";
+    sha256 = "127548f07e07951984fb139c3f89d65b9e471aefe6555387de03e1113944d1a2";
   };
 
-  buildNativeInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig ];
   buildInputs =
     [ perl perlXMLParser gettext bzip2 python ]
     ++ stdenv.lib.optionals gnomeSupport [ gnome_vfs gdk_pixbuf ];

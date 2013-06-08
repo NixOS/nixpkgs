@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-oss --disable-schemas-install";
 
+  passthru = {
+    gtkModule = "/lib/gtk-2.0/";
+  };
+
   meta = {
     description = "libcanberra, an implementation of the XDG Sound Theme and Name Specifications";
 

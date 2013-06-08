@@ -2,15 +2,14 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "3.1";
 in
 
 stdenv.mkDerivation {
-  name = "ocamlnet-${version}";
+  name = "ocamlnet-3.6";
 
   src = fetchurl {
-    url = "http://download.camlcity.org/download/ocamlnet-${version}.tar.gz";
-    sha256 = "0kdc2540ad84j6haj9jxlwryz9cb8q8kjdr48f2wgvcaii38v9f5";
+    url = http://download.camlcity.org/download/ocamlnet-3.6.tar.gz;
+    sha256 = "306c20aee6512be3564c0f39872b70f929c06e1e893cfcf528ac47ae35cf7a69";
   };
 
   buildInputs = [ncurses ocaml findlib ocaml_pcre camlzip openssl ocaml_ssl];

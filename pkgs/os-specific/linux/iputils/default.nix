@@ -1,26 +1,45 @@
-{ stdenv, fetchurl, libsysfs, openssl }:
+{ stdenv, fetchurl, libsysfs, gnutls, openssl, libcap, sp, docbook_sgml_dtd_31
+, SGMLSpm }:
 
 assert stdenv ? glibc;
 
-stdenv.mkDerivation {
-  name = "iputils-20101006";
-  
+let
+  time = "20121221";
+in
+stdenv.mkDerivation rec {
+  name = "iputils-${time}";
+
   src = fetchurl {
-    url = http://www.skbuff.net/iputils/iputils-s20101006.tar.bz2;
-    sha256 = "1rvfvdnmzlmgy9a6xv5v4n785zmn10v2l7yaq83rdfgbh1ng8fpx";
+    url = "http://www.skbuff.net/iputils/iputils-s${time}.tar.bz2";
+    sha256 = "17riqp8dh8dvx32zv3hyrghpxz6xnxa6vai9b4yc485nqngm83s5";
   };
 
-  buildInputs = [ libsysfs openssl ];
+  prePatch = ''
+    sed -i s/sgmlspl/sgmlspl.pl/ doc/Makefile
+  '';
 
-  # Urgh, it uses Make's `-l' dependency "feature". 
-  makeFlags = "VPATH=${libsysfs}/lib:${stdenv.glibc}/lib:${openssl}/lib";
+  makeFlags = "USE_GNUTLS=no";
+
+  buildInputs = [ libsysfs openssl libcap sp docbook_sgml_dtd_31 SGMLSpm ];
+
+  buildFlags = "man all ninfod";
+
+  # Stdenv doesn't handle symlinks well for that
+  dontGzipMan = true;
 
   installPhase =
     ''
-      mkdir -p $out/sbin
-      cp -p arping ping ping6 rdisc tracepath tracepath6 traceroute6 $out/sbin/
+      mkdir -p $out/sbin $out/bin
+      cp -p ping ping6 tracepath tracepath6 traceroute6 $out/bin/
+      cp -p clockdiff arping rdisc ninfod/ninfod $out/sbin/
+
+      mkdir -p $out/share/man/man8
+      cp -p doc/clockdiff.8 doc/arping.8 doc/ping.8 doc/rdisc.8 \
+        doc/tracepath.8 doc/ninfod.8 $out/share/man/man8
+      ln -s $out/share/man/man8/{ping,ping6}.8
+      ln -s $out/share/man/man8/{tracepath,tracepath6}.8
     '';
-    
+
   meta = {
     homepage = http://www.skbuff.net/iputils/;
     description = "A set of small useful utilities for Linux networking";

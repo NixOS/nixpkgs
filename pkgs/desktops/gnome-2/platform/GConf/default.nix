@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [ ORBit2 dbus_libs dbus_glib libxml2 polkit gtk ];
   propagatedBuildInputs = [ glib ];
 
-  buildNativeInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool ];
 
   configureFlags = "--with-gtk=2.0";
 }

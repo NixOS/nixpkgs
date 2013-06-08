@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
         --replace '"/bin/su"' '"/var/setuid-wrappers/su"' \
         --replace '"/bin/true"' '"${coreutils}/bin/true"'
         
-    substituteInPlace x11vnc/ssltools.h \
-        --replace xdpyinfo ${xorg.xdpyinfo}/bin/xdpyinfo
+    sed -i -e '/#!\/bin\/sh/a"PATH=${xorg.xdpyinfo}\/bin:$PATH\\n"' -e 's|/bin/su|/var/setuid-wrappers/su|g' x11vnc/ssltools.h
   '';
 
   meta = {

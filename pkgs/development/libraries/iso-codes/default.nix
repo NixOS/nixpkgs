@@ -1,10 +1,10 @@
-{stdenv, fetchurl, gettext, python}:
+{stdenv, fetchurl, gettext, python, xz}:
 
 stdenv.mkDerivation rec {
-  name = "iso-codes-3.23";
+  name = "iso-codes-3.40";
   src = fetchurl {
-    url = "ftp://pkg-isocodes.alioth.debian.org/pub/pkg-isocodes/${name}.tar.bz2";
-    sha256 = "0lf9phrdr10biihqswq1qmwk5cz954nwavgbnpm7a5r6vzfzkfbq";
+    url = "http://pkg-isocodes.alioth.debian.org/downloads/${name}.tar.xz";
+    sha256 = "0iph96n8vh4khidxg2zzhmcqnphfzg50agn0lv9cjhmnx0i712pr";
   };
   patchPhase = ''
     for i in `find . -name \*.py`
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     done
   '';
   buildInputs = [ gettext ];
+  nativeBuildInputs = [ xz ];
 
   meta = {
     homepage = http://pkg-isocodes.alioth.debian.org/;

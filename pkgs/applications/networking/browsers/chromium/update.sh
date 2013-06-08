@@ -1,6 +1,6 @@
 #!/bin/sh
 
-channels_url="http://omahaproxy.appspot.com/";
+channels_url="http://omahaproxy.appspot.com/all?csv=1";
 bucket_url="http://commondatastorage.googleapis.com/chromium-browser-official/";
 output_file="$(cd "$(dirname "$0")" && pwd)/sources.nix";
 
@@ -62,7 +62,7 @@ then
             sha256="$(nix_getattr "$output_file" "$channel.sha256")";
         fi;
 
-        sha_insert "$version" "$sha256"
+        sha_insert "$version" "$sha256";
         echo "$sha256";
     }
 else
@@ -78,14 +78,20 @@ get_channel_exprs()
     do
         channel="${chline%%,*}";
         version="${chline##*,}";
-        url="${bucket_url%/}/chromium-$version.tar.bz2";
+
+        # XXX: Remove case after version 26 is stable:
+        if [ "${version%%.*}" -ge 26 ]; then
+            url="${bucket_url%/}/chromium-$version.tar.xz";
+        else
+            url="${bucket_url%/}/chromium-$version.tar.bz2";
+        fi;
 
         echo -n "Checking if sha256 of version $version is cached..." >&2;
         if sha256="$(sha_lookup "$version")";
         then
-            echo "yes: $sha256" >&2;
+            echo " yes: $sha256" >&2;
         else
-            echo "no." >&2;
+            echo " no." >&2;
             sha256="$(get_sha256 "$channel" "$version" "$url")";
         fi;
 

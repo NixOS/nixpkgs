@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dstring";
-  version = "0.4.0.3";
-  sha256 = "0wzj1wzls7w79ac84sc5msblh2dmfmcxm77drpdqdirl1pwdlq9c";
+  version = "0.4.0.4";
+  sha256 = "15zy1dhfs87hxq1qm54ym0pdhvg7l76m7vy5y06dnksb1sblhaqm";
   buildDepends = [ baseUnicodeSymbols dlist ];
   meta = {
     homepage = "https://github.com/basvandijk/dstring";

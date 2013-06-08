@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, popt }:
+{ stdenv, fetchurl, popt, libiconv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "libnatspec-0.2.6";
 
   src = fetchurl {
@@ -16,4 +16,8 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };
-}
+} // stdenv.lib.optionalAttrs (!stdenv.isLinux) {
+  NIX_CFLAGS_COMPILE = "-I${libiconv}/include";
+
+  NIX_CFLAGS_LINK = "-L${libiconv}/lib -liconv";
+})

@@ -10,11 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "0ynwn7ih5l2b1kpzpibns9bb9wzfjak7mgrb1ji0dkn2q5pv6lr0";
   };
 
+  enableParallelBuilding = true;
+
   buildInputs = [ SDL autoconf automake libtool gtk m4 pkgconfig mesa ];
 
   preConfigure = ''
     touch NEWS AUTHORS ChangeLog
-    autoreconf -fvi -I acinclude
+    sh autogen.sh
   '';
 
   postInstall = ''

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "bin" "doc" ];
 
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   configureFlags = "MAKE=make MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ECHO=echo SED=sed AWK=gawk";
 

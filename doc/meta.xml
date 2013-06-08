@@ -103,7 +103,7 @@ interpretation:</para>
     &lt;alice@example.org>" "Bob &lt;bob@example.com>"]</literal>.  If
     you are the maintainer of multiple packages, you may want to add
     yourself to <link
-    xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/lib/maintainers.nix"><filename>pkgs/lib/maintainers.nix</filename></link>
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/maintainers.nix"><filename>pkgs/lib/maintainers.nix</filename></link>
     and write something like <literal>[stdenv.lib.maintainers.alice
     stdenv.lib.maintainers.bob]</literal>.</para></listitem>
   </varlistentry>
@@ -174,6 +174,12 @@ following:
     includes the <link
     xlink:href="http://www.gnu.org/licenses/license-list.html#X11License">X11
     (“MIT”) License</link>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>perl5</varname></term>
+    <listitem><para>The Perl 5 license (Artistic License, version 1
+    and GPL, version 1 or later).</para></listitem>
   </varlistentry>
 
   <varlistentry>

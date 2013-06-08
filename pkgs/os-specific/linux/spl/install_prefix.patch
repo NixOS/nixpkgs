@@ -1,0 +1,274 @@
+diff -rc spl-0.6.1.orig/include/fs/Makefile.am spl-0.6.1/include/fs/Makefile.am
+*** spl-0.6.1.orig/include/fs/Makefile.am	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/include/fs/Makefile.am	2013-04-05 22:10:41.436764000 -0700
+***************
+*** 8,13 ****
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = /usr/src/spl-$(VERSION)/include/fs
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+--- 8,13 ----
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = @prefix@/libexec/spl/include/fs
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+diff -rc spl-0.6.1.orig/include/linux/Makefile.am spl-0.6.1/include/linux/Makefile.am
+*** spl-0.6.1.orig/include/linux/Makefile.am	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/include/linux/Makefile.am	2013-04-05 22:10:27.789139000 -0700
+***************
+*** 23,28 ****
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = /usr/src/spl-$(VERSION)/include/linux
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+--- 23,28 ----
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = @prefix@/libexec/spl/include/linux
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+diff -rc spl-0.6.1.orig/include/Makefile.am spl-0.6.1/include/Makefile.am
+*** spl-0.6.1.orig/include/Makefile.am	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/include/Makefile.am	2013-04-05 22:10:45.108623000 -0700
+***************
+*** 16,21 ****
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = /usr/src/spl-$(VERSION)/include
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+--- 16,21 ----
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = @prefix@/libexec/spl/include
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+diff -rc spl-0.6.1.orig/include/rpc/Makefile.am spl-0.6.1/include/rpc/Makefile.am
+*** spl-0.6.1.orig/include/rpc/Makefile.am	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/include/rpc/Makefile.am	2013-04-05 22:11:08.724410000 -0700
+***************
+*** 9,14 ****
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = /usr/src/spl-$(VERSION)/include/rpc
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+--- 9,14 ----
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = @prefix@/libexec/spl/include/rpc
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+diff -rc spl-0.6.1.orig/include/sharefs/Makefile.am spl-0.6.1/include/sharefs/Makefile.am
+*** spl-0.6.1.orig/include/sharefs/Makefile.am	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/include/sharefs/Makefile.am	2013-04-05 22:10:38.852722000 -0700
+***************
+*** 8,13 ****
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = /usr/src/spl-$(VERSION)/include/sharefs
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+--- 8,13 ----
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = @prefix@/libexec/spl/include/sharefs
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+diff -rc spl-0.6.1.orig/include/sys/fm/Makefile.am spl-0.6.1/include/sys/fm/Makefile.am
+*** spl-0.6.1.orig/include/sys/fm/Makefile.am	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/include/sys/fm/Makefile.am	2013-04-05 22:10:59.964334000 -0700
+***************
+*** 9,14 ****
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = /usr/src/spl-$(VERSION)/include/sys/fm
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+--- 9,14 ----
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = @prefix@/libexec/spl/include/sys/fm
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+diff -rc spl-0.6.1.orig/include/sys/fs/Makefile.am spl-0.6.1/include/sys/fs/Makefile.am
+*** spl-0.6.1.orig/include/sys/fs/Makefile.am	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/include/sys/fs/Makefile.am	2013-04-05 22:10:57.860366000 -0700
+***************
+*** 8,13 ****
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = /usr/src/spl-$(VERSION)/include/sys/fs
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+--- 8,13 ----
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = @prefix@/libexec/spl/include/sys/fs
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+diff -rc spl-0.6.1.orig/include/sys/Makefile.am spl-0.6.1/include/sys/Makefile.am
+*** spl-0.6.1.orig/include/sys/Makefile.am	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/include/sys/Makefile.am	2013-04-05 22:11:05.788303000 -0700
+***************
+*** 104,110 ****
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = /usr/src/spl-$(VERSION)/include/sys
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+  
+--- 104,110 ----
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = @prefix@/libexec/spl/include/sys
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+  
+diff -rc spl-0.6.1.orig/include/sys/sysevent/Makefile.am spl-0.6.1/include/sys/sysevent/Makefile.am
+*** spl-0.6.1.orig/include/sys/sysevent/Makefile.am	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/include/sys/sysevent/Makefile.am	2013-04-05 22:10:54.364458000 -0700
+***************
+*** 8,13 ****
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = /usr/src/spl-$(VERSION)/include/sys/sysevent
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+--- 8,13 ----
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = @prefix@/libexec/spl/include/sys/sysevent
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+diff -rc spl-0.6.1.orig/include/util/Makefile.am spl-0.6.1/include/util/Makefile.am
+*** spl-0.6.1.orig/include/util/Makefile.am	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/include/util/Makefile.am	2013-04-05 22:10:49.452569000 -0700
+***************
+*** 9,14 ****
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = /usr/src/spl-$(VERSION)/include/util
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+--- 9,14 ----
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = @prefix@/libexec/spl/include/util
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+diff -rc spl-0.6.1.orig/include/vm/Makefile.am spl-0.6.1/include/vm/Makefile.am
+*** spl-0.6.1.orig/include/vm/Makefile.am	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/include/vm/Makefile.am	2013-04-05 22:10:47.444535000 -0700
+***************
+*** 10,15 ****
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = /usr/src/spl-$(VERSION)/include/vm
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+--- 10,15 ----
+  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
+  
+  if CONFIG_KERNEL
+! kerneldir = @prefix@/libexec/spl/include/vm
+  kernel_HEADERS = $(KERNEL_H)
+  endif
+diff -rc spl-0.6.1.orig/Makefile.am spl-0.6.1/Makefile.am
+*** spl-0.6.1.orig/Makefile.am	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/Makefile.am	2013-04-05 22:09:52.429676000 -0700
+***************
+*** 9,18 ****
+  if CONFIG_KERNEL
+  SUBDIRS += module
+  
+! extradir = /usr/src/spl-$(VERSION)
+  extra_HEADERS = spl.release.in spl_config.h.in
+  
+! kerneldir = /usr/src/spl-$(VERSION)/$(LINUX_VERSION)
+  nodist_kernel_HEADERS = spl.release spl_config.h module/$(LINUX_SYMBOLS)
+  endif
+  
+--- 9,18 ----
+  if CONFIG_KERNEL
+  SUBDIRS += module
+  
+! extradir = @prefix@/libexec/spl
+  extra_HEADERS = spl.release.in spl_config.h.in
+  
+! kerneldir = @prefix@/libexec/spl/$(LINUX_VERSION)
+  nodist_kernel_HEADERS = spl.release spl_config.h module/$(LINUX_SYMBOLS)
+  endif
+  
+diff -rc spl-0.6.1.orig/module/Makefile.in spl-0.6.1/module/Makefile.in
+*** spl-0.6.1.orig/module/Makefile.in	2013-03-26 09:37:39.000000000 -0700
+--- spl-0.6.1/module/Makefile.in	2013-03-28 10:21:59.093481000 -0700
+***************
+*** 21,41 ****
+  modules_install:
+  	@# Install the kernel modules
+  	$(MAKE) -C @LINUX_OBJ@ SUBDIRS=`pwd` $@ \
+! 		INSTALL_MOD_PATH=$(DESTDIR)$(INSTALL_MOD_PATH) \
+  		INSTALL_MOD_DIR=$(INSTALL_MOD_DIR)
+  	@# Remove extraneous build products when packaging
+! 	kmoddir=$(DESTDIR)$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@; \
+  	if [ -n $$kmoddir ]; then \
+  		find $$kmoddir -name 'modules.*' | xargs $(RM); \
+  	fi
+! 	sysmap=$(DESTDIR)$(INSTALL_MOD_PATH)/boot/System.map-@LINUX_VERSION@; \
+  	if [ -f $$sysmap ]; then \
+  		depmod -ae -F $$sysmap @LINUX_VERSION@; \
+  	fi
+  
+  modules_uninstall:
+  	@# Uninstall the kernel modules
+! 	kmoddir=$(DESTDIR)$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@
+  	list='$(subdir-m)'; for subdir in $$list; do \
+  		$(RM) -R $$kmoddir/$(INSTALL_MOD_DIR)/$$subdir; \
+  	done
+--- 21,41 ----
+  modules_install:
+  	@# Install the kernel modules
+  	$(MAKE) -C @LINUX_OBJ@ SUBDIRS=`pwd` $@ \
+! 		INSTALL_MOD_PATH=@prefix@/$(INSTALL_MOD_PATH) \
+  		INSTALL_MOD_DIR=$(INSTALL_MOD_DIR)
+  	@# Remove extraneous build products when packaging
+! 	kmoddir=@prefix@/$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@; \
+  	if [ -n $$kmoddir ]; then \
+  		find $$kmoddir -name 'modules.*' | xargs $(RM); \
+  	fi
+! 	sysmap=@prefix@/$(INSTALL_MOD_PATH)/boot/System.map-@LINUX_VERSION@; \
+  	if [ -f $$sysmap ]; then \
+  		depmod -ae -F $$sysmap @LINUX_VERSION@; \
+  	fi
+  
+  modules_uninstall:
+  	@# Uninstall the kernel modules
+! 	kmoddir=@prefix@/$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@
+  	list='$(subdir-m)'; for subdir in $$list; do \
+  		$(RM) -R $$kmoddir/$(INSTALL_MOD_DIR)/$$subdir; \
+  	done

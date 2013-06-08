@@ -1,13 +1,13 @@
 { stdenv, fetchurl, unzip, ruby, openssl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "ec2-ami-tools-1.4.0.7";
-  
+  name = "ec2-ami-tools-1.4.0.9";
+
   buildInputs = [ unzip makeWrapper ];
-  
+
   src = fetchurl {
     url = "http://nixos.org/tarballs/${name}.zip";
-    sha256 = "0l8c623i1w30bh9k622cdjj5f57rlfc1zs0i01ya016ijyr08qip";
+    sha256 = "0icpjr2ipch3f6cf4rg9x5z2y9k6a4rd85npsmw3a1ambs3dwxlq";
   };
 
   # Amazon EC2 requires that disk images are writable.  If they're
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
             --set EC2_HOME $out \
             --prefix PATH : ${ruby}/bin:${openssl}/bin
       done
-      
+
       sed -i 's|/bin/bash|${stdenv.shell}|' $out/lib/ec2/platform/base/pipeline.rb
     '';  # */
 

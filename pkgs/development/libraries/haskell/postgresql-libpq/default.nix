@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "postgresql-libpq";
-  version = "0.8.2.1";
-  sha256 = "0fjy451gc9lg3kcglq4s5s3hja8ni3adh4jmxd01kfyvyhwggv4d";
+  version = "0.8.2.2";
+  sha256 = "1mmsfgia318p34l8jx8hihb160sx2wpg2h5r741akcs50v6p5878";
   extraLibraries = [ postgresql ];
   meta = {
     homepage = "http://github.com/lpsmith/postgresql-libpq";

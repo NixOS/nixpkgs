@@ -4,8 +4,9 @@ stdenv.mkDerivation rec {
   name = "iwlwifi-5000-ucode-8.83.5.1-1";
   
   src = fetchurl {
-    url = "http://www.intellinuxwireless.org/iwlwifi/downloads/${name}.tar.gz";
-    sha256 = "0n4f6wsppspvvdpcab52n2piczhgfq7a4y7gazxzzlj5halchnx3";
+    url = "http://wireless.kernel.org/en/users/Drivers/iwlwifi?action=AttachFile&do=get&target=iwlwifi-5000-ucode-8.83.5.1-1.tgz";
+    name = "iwlwifi-5000-ucode-8.83.5.1-1.tgz";
+    sha256 = "0pkzr4gflp3j0jm4rw66jypk3xn4bvpgdsnxjqwanyd64aj6naxg";
   };
   
   buildPhase = "true";

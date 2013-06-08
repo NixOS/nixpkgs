@@ -4,27 +4,19 @@ let
   start_script = ''
     #!/bin/sh
     cd "$out/lib/hol_light"
-    exec ${ocaml}/bin/ocaml -I "$(ocamlfind query camlp5)" -init make.ml
+    exec ${ocaml}/bin/ocaml -I "camlp5 -where" -init make.ml
   '';
 in
 
 stdenv.mkDerivation {
-  name = "hol_light-20120529";
+  name = "hol_light-20130324";
   src = fetchsvn {
     url = http://hol-light.googlecode.com/svn/trunk;
-    rev = "141";
-    sha256 = "a11d7e5db7c6035a2debcf9e73f43c6322389aeac5bc4d123ebf58918052a57f";
+    rev = "157";
+    sha256 = "0d0pbnkw2gb11dn30ggfl91lhdxv86kd1fyiqn170w08n0gi805f";
   };
 
   buildInputs = [ ocaml findlib camlp5 ];
-
-  buildPhase = ''
-    make pa_j.ml
-    ocamlc -c \
-      -pp "camlp5r pa_lexer.cmo pa_extend.cmo q_MLast.cmo" \
-      -I "$(ocamlfind query camlp5)" \
-      pa_j.ml
-  '';
 
   installPhase = ''
     mkdir -p "$out/lib/hol_light" "$out/bin"
@@ -45,6 +37,6 @@ can extend it with new theorems and inference rules without compromising its
 soundness.
     '';
     homepage = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd2;
   };
 }

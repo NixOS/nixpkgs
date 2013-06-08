@@ -1,15 +1,17 @@
-{stdenv, fetchurl, qt4, gstreamer, gst_plugins_base, liboil, speex, which
-, glib, pkgconfig}:
+{ stdenv, fetchurl, qt4, gstreamer, gst_plugins_base, liboil, speex, which
+, glib, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "psimedia";
+  name = "psimedia-1.0.3";
 
   src = fetchurl {
-    url = "http://delta.affinix.com/download/psimedia/psimedia-1.0.3.tar.bz2";
+    url = "http://delta.affinix.com/download/psimedia/${name}.tar.bz2";
     sha256 = "0fxjdz8afh75gfx2msysb1gss6zx578l3224jvc9jhm99w1ii781";
   };
 
-  buildInputs = [qt4 gstreamer gst_plugins_base liboil speex which glib pkgconfig];
+  patches = [ ./glib-2.32.patch ./linux-headers.patch ];
+
+  buildInputs = [ qt4 gstreamer gst_plugins_base liboil speex which glib pkgconfig ];
 
   configurePhase = ''./configure'';
 

@@ -25,7 +25,7 @@ rec {
   # contains a _type attribute and a list of functions which are used to
   # evaluate this property.  The content attribute is used to stack properties
   # on top of each other.
-  # 
+  #
   # The optional functions which may be contained in the property attribute
   # are:
   #  - onDelay: run on a copied property.
@@ -41,7 +41,7 @@ rec {
   # property and call the function `nul' on the final value which is not a
   # property.  The stack is traversed in reversed order.  The `op' function
   # should expect a property with a content which have been modified.
-  # 
+  #
   # Warning: The `op' function expects only one argument in order to avoid
   # calls to mkProperties as the argument is already a valid property which
   # contains the result of the folding inside the content attribute.
@@ -100,12 +100,10 @@ rec {
   triggerPropertiesDelay = name: attrs:
     let
       callOnDelay = p@{property, ...}:
-        lib.addErrorContext "while calling an `onDelay' function:" (
-          if property ? onDelay then
-            property.onDelay name p
-          else
-            p
-        );
+        if property ? onDelay then
+          property.onDelay name p
+        else
+          p;
     in
       foldProperty callOnDelay id attrs;
 
@@ -123,9 +121,7 @@ rec {
       };
 
       callOnGlobalDelay = property: content:
-        lib.addErrorContext "while calling an `onGlobalDelay' function:" (
-          property.onGlobalDelay name content
-        );
+        property.onGlobalDelay name content;
     in
       fold callOnGlobalDelay attrs globalDelayFuns;
 
@@ -136,28 +132,25 @@ rec {
   evalProperties = valList:
     if valList != [] then
       filter (x: !isNotdef x) (
-        lib.addErrorContext "while evaluating properties:" (
-          triggerPropertiesGlobalEval (
-            evalLocalProperties valList
-      )))
+        triggerPropertiesGlobalEval (
+          evalLocalProperties valList
+        )
+      )
     else
       valList;
 
   evalLocalProperties = valList:
     filter (x: !isNotdef x) (
-      lib.addErrorContext "while evaluating local properties:" (
-        map triggerPropertiesEval valList
-    ));
+      map triggerPropertiesEval valList
+    );
 
   # Call onEval function
   triggerPropertiesEval = val:
     foldProperty (p@{property, ...}:
-      lib.addErrorContext "while calling an `onEval' function:" (
-        if property ? onEval then
-          property.onEval p
-        else
-          p
-      )
+      if property ? onEval then
+        property.onEval p
+      else
+        p
     ) id val;
 
   # Call onGlobalEval function
@@ -176,10 +169,7 @@ rec {
           ) [] valList;
       };
 
-      callOnGlobalEval = property: valList:
-        lib.addErrorContext "while calling an `onGlobalEval' function:" (
-          property.onGlobalEval valList
-        );
+      callOnGlobalEval = property: valList: property.onGlobalEval valList;
     in
       fold callOnGlobalEval valList globalEvalFuns;
 
@@ -225,44 +215,10 @@ rec {
     inherit content;
   };
 
-  # Create a "ThenElse" property which contains choices being chosen by
-  # the evaluation of an "If" statement.
-  isThenElse = attrs: (typeOf attrs) == "then-else";
-  mkThenElse = attrs:
-    assert attrs ? thenPart && attrs ? elsePart;
-    __trace "Obsolete usage of mkThenElse, replace it by mkMerge."
-    mkProperty {
-      property = {
-        _type = "then-else";
-        onEval = val: throw "Missing mkIf statement.";
-        inherit (attrs) thenPart elsePart;
-      };
-      content = mkNotdef;
-    };
-
-  # Create an "Always" property removing/ ignoring all "If" statement.
-  isAlways = attrs: (typeOf attrs) == "always";
-  mkAlways = value:
-    mkProperty {
-      property = {
-        _type = "always";
-        onEval = p@{content, ...}: content;
-        inherit value;
-      };
-      content = mkNotdef;
-    };
-
   mkAssert = assertion: message: content:
     mkIf
       (if assertion then true else throw "\nFailed assertion: ${message}")
       content;
-
-  # Remove all "If" statement defined on a value.
-  rmIf = foldProperty (
-      foldFilter isIf
-        ({content, ...}: content)
-        id
-    ) id;
 
   # Evaluate the "If" statements when either "ThenElse" or "Always"
   # statement is encountered.  Otherwise it removes multiple If statements and
@@ -274,8 +230,8 @@ rec {
       # in the attribute list and attrs.
       ifProps =
         foldProperty
-          (foldFilter (p: isIf p || isThenElse p || isAlways p)
-            # then, push the codition inside the list list
+          (foldFilter (p: isIf p)
+            # then, push the condition inside the list list
             (p@{property, content, ...}:
               { inherit (content) attrs;
                 list = [property] ++ content.list;
@@ -297,19 +253,7 @@ rec {
           mkIf condition content
         else
           let p = head list; in
-
-          # evaluate the condition.
-          if isThenElse p then
-            if condition then
-              copyProperties content p.thenPart
-            else
-              copyProperties content p.elsePart
-          # ignore the condition.
-          else if isAlways p then
-            copyProperties content p.value
-          # otherwise (isIf)
-          else
-            evalIf content (condition && p.condition) (tail list);
+          evalIf content (condition && p.condition) (tail list);
     in
       evalIf ifProps.attrs true ifProps.list;
 

@@ -1,0 +1,114 @@
+diff -ru glibc-2.16.0-orig/locale/loadarchive.c glibc-2.16.0/locale/loadarchive.c
+--- glibc-2.16.0-orig/locale/loadarchive.c	2012-06-30 15:12:34.000000000 -0400
++++ glibc-2.16.0/locale/loadarchive.c	2012-09-18 11:57:57.277515212 -0400
+@@ -123,6 +123,25 @@
+ }
+ 
+ 
++static int
++open_locale_archive ()
++{
++  int fd = -1;
++  char *path = getenv ("LOCALE_ARCHIVE_2_11");
++  char *path2 = getenv ("LOCALE_ARCHIVE");
++  const char *usualpath = "/usr/lib/locale/locale-archive";
++  if (path)
++    fd = open_not_cancel_2 (path, O_RDONLY|O_LARGEFILE|O_CLOEXEC);
++  if (path2 && fd < 0)
++    fd = open_not_cancel_2 (path2, O_RDONLY|O_LARGEFILE|O_CLOEXEC);
++  if (fd < 0)
++    fd = open_not_cancel_2 (archfname, O_RDONLY|O_LARGEFILE|O_CLOEXEC);
++  if (fd < 0)
++    fd = open_not_cancel_2 (usualpath, O_RDONLY|O_LARGEFILE|O_CLOEXEC);
++  return fd;
++}
++
++
+ /* Find the locale *NAMEP in the locale archive, and return the
+    internalized data structure for its CATEGORY data.  If this locale has
+    already been loaded from the archive, just returns the existing data
+@@ -202,7 +221,7 @@
+       archmapped = &headmap;
+ 
+       /* The archive has never been opened.  */
+-      fd = open_not_cancel_2 (archfname, O_RDONLY|O_LARGEFILE|O_CLOEXEC);
++      fd = open_locale_archive ();
+       if (fd < 0)
+ 	/* Cannot open the archive, for whatever reason.  */
+ 	return NULL;
+@@ -393,8 +412,7 @@
+ 	  if (fd == -1)
+ 	    {
+ 	      struct stat64 st;
+-	      fd = open_not_cancel_2 (archfname,
+-				      O_RDONLY|O_LARGEFILE|O_CLOEXEC);
++	      fd = open_locale_archive ();
+ 	      if (fd == -1)
+ 		/* Cannot open the archive, for whatever reason.  */
+ 		return NULL;
+diff -ru glibc-2.16.0-orig/locale/programs/locale.c glibc-2.16.0/locale/programs/locale.c
+--- glibc-2.16.0-orig/locale/programs/locale.c	2012-06-30 15:12:34.000000000 -0400
++++ glibc-2.16.0/locale/programs/locale.c	2012-09-18 11:53:03.719920947 -0400
+@@ -628,6 +628,20 @@
+ 		  ((const struct nameent *) b)->name);
+ }
+ 
++static int
++open_nix_locale_archive (const char * fname, int access)
++{
++  int fd = -1;
++  char *path = getenv ("LOCALE_ARCHIVE_2_11");
++  char *path2 = getenv ("LOCALE_ARCHIVE");
++  if (path)
++    fd = open64 (path, access);
++  if (path2 && fd < 0)
++    fd = open64 (path2, access);
++  if (fd < 0)
++    fd = open64 (fname, access);
++  return fd;
++}
+ 
+ static int
+ write_archive_locales (void **all_datap, char *linebuf)
+@@ -641,7 +655,7 @@
+   int fd, ret = 0;
+   uint32_t cnt;
+ 
+-  fd = open64 (ARCHIVE_NAME, O_RDONLY);
++  fd = open_nix_locale_archive (ARCHIVE_NAME, O_RDONLY);
+   if (fd < 0)
+     return 0;
+ 
+diff -ru glibc-2.16.0-orig/locale/programs/locarchive.c glibc-2.16.0/locale/programs/locarchive.c
+--- glibc-2.16.0-orig/locale/programs/locarchive.c	2012-06-30 15:12:34.000000000 -0400
++++ glibc-2.16.0/locale/programs/locarchive.c	2012-09-18 11:53:03.720920942 -0400
+@@ -509,6 +509,20 @@
+   *ah = new_ah;
+ }
+ 
++static int
++open_nix_locale_archive (const char * fname, int access)
++{
++  int fd = -1;
++  char *path = getenv ("LOCALE_ARCHIVE_2_11");
++  char *path2 = getenv ("LOCALE_ARCHIVE");
++  if (path)
++    fd = open64 (path, access);
++  if (path2 && fd < 0)
++    fd = open64 (path2, access);
++  if (fd < 0)
++    fd = open64 (fname, access);
++  return fd;
++}
+ 
+ void
+ open_archive (struct locarhandle *ah, bool readonly)
+@@ -528,7 +542,7 @@
+   while (1)
+     {
+       /* Open the archive.  We must have exclusive write access.  */
+-      fd = open64 (archivefname, readonly ? O_RDONLY : O_RDWR);
++      fd = open_nix_locale_archive (archivefname, readonly ? O_RDONLY : O_RDWR);
+       if (fd == -1)
+ 	{
+ 	  /* Maybe the file does not yet exist.  */

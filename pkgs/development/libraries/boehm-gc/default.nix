@@ -1,14 +1,19 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation (rec {
-  name = "boehm-gc-7.2alpha6";
+stdenv.mkDerivation rec {
+  name = "boehm-gc-7.2d";
 
   src = fetchurl {
-    url = "http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-7.2alpha6.tar.gz";
-    sha256 = "05jwadjbrv8pr7z9cb4miskicxqpxm0pca4h2rg5cgbpajr2bx7b";
+    url = http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-7.2d.tar.gz;
+    sha256 = "0phwa5driahnpn79zqff14w9yc8sn3599cxz91m78hqdcpl0mznr";
   };
 
+  configureFlags = "--enable-cplusplus";
+
   doCheck = true;
+
+  # Don't run the native `strip' when cross-compiling.
+  dontStrip = stdenv ? cross;
 
   meta = {
     description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
@@ -39,10 +44,3 @@ stdenv.mkDerivation (rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
-
-//
-
-# Don't run the native `strip' when cross-compiling.
-(if (stdenv ? cross)
- then { dontStrip = true; }
- else { }))

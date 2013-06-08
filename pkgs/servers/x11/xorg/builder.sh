@@ -26,7 +26,7 @@ postInstall() {
             for p in $nativePkgs; do
                 if test -e $p/lib/pkgconfig/$r.pc; then
                     echo "  found requisite $r in $p"
-                    propagatedBuildNativeInputs="$propagatedBuildNativeInputs $p"
+                    propagatedNativeBuildInputs="$propagatedNativeBuildInputs $p"
                 fi
             done
         fi

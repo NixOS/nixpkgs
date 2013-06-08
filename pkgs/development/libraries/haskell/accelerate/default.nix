@@ -1,9 +1,11 @@
-{ cabal }:
+{ cabal, fclabels, hashable, hashtables }:
 
 cabal.mkDerivation (self: {
   pname = "accelerate";
-  version = "0.12.1.0";
-  sha256 = "1zvrb36xvvzfdl0k7a25329mdplwa76k9wk0yf3za3j0kb20d4f4";
+  version = "0.13.0.1";
+  sha256 = "01vkvvvzlj023cwxz90clrcgz4xyz0nb8idm1zad21gzrij14915";
+  buildDepends = [ fclabels hashable hashtables ];
+  noHaddock = true;
   meta = {
     homepage = "https://github.com/AccelerateHS/accelerate/";
     description = "An embedded language for accelerated array processing";

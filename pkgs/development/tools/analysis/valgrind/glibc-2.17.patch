@@ -1,0 +1,78 @@
+commit 3781ac11ff374b3517011c1710ec517d52f25cd2
+Author: tom <tom@a5019735-40e9-0310-863c-91ae7b9d1cf9>
+Date:   Mon Jan 14 09:48:49 2013 +0000
+
+    Accept glibc 2.17 as valid.
+    
+    
+    git-svn-id: svn://svn.valgrind.org/valgrind/trunk@13228 a5019735-40e9-0310-863c-91ae7b9d1cf9
+
+diff --git a/configure.in b/configure.in
+index e0fb12d..0f3b3df 100644
+--- a/configure.in
++++ b/configure.in
+@@ -906,6 +906,13 @@ case "${GLIBC_VERSION}" in
+ 	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
+ 	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
+ 	;;
++     2.17)
++	AC_MSG_RESULT(2.17 family)
++	AC_DEFINE([GLIBC_2_17], 1, [Define to 1 if you're using glibc 2.17.x])
++	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
++	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
++	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
++	;;
+      darwin)
+ 	AC_MSG_RESULT(Darwin)
+ 	AC_DEFINE([DARWIN_LIBC], 1, [Define to 1 if you're using Darwin])
+@@ -919,7 +926,7 @@ case "${GLIBC_VERSION}" in
+ 
+      *)
+ 	AC_MSG_RESULT([unsupported version ${GLIBC_VERSION}])
+-	AC_MSG_ERROR([Valgrind requires glibc version 2.2 - 2.16])
++	AC_MSG_ERROR([Valgrind requires glibc version 2.2 - 2.17])
+ 	AC_MSG_ERROR([or Darwin libc])
+ 	;;
+ esac
+diff -ur valgrind-3.8.1/config.h.in valgrind-3.8.1/config.h.in
+--- valgrind-3.8.1/config.h.in	2013-01-16 17:15:33.531018561 +0100
++++ valgrind-3.8.1/config.h.in	2013-01-16 17:19:21.000000000 +0100
+@@ -48,6 +48,9 @@
+ /* Define to 1 if you're using glibc 2.16.x */
+ #undef GLIBC_2_16
+ 
++/* Define to 1 if you're using glibc 2.17.x */
++#undef GLIBC_2_17
++
+ /* Define to 1 if you're using glibc 2.2.x */
+ #undef GLIBC_2_2
+ 
+diff -ur valgrind-3.8.1/configure valgrind-3.8.1/configure
+--- valgrind-3.8.1/configure	2013-01-16 17:15:33.563018480 +0100
++++ valgrind-3.8.1/configure	2013-01-16 17:19:21.373643238 +0100
+@@ -6610,6 +6610,16 @@
+ 	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
+ 	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
+ 	;;
++     2.17)
++	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: 2.17 family" >&5
++$as_echo "2.17 family" >&6; }
++
++$as_echo "#define GLIBC_2_17 1" >>confdefs.h
++
++	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
++	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
++	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
++	;;
+      darwin)
+ 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Darwin" >&5
+ $as_echo "Darwin" >&6; }
+@@ -6630,7 +6640,7 @@
+      *)
+ 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: unsupported version ${GLIBC_VERSION}" >&5
+ $as_echo "unsupported version ${GLIBC_VERSION}" >&6; }
+-	as_fn_error "Valgrind requires glibc version 2.2 - 2.16" "$LINENO" 5
++	as_fn_error "Valgrind requires glibc version 2.2 - 2.17" "$LINENO" 5
+ 	as_fn_error "or Darwin libc" "$LINENO" 5
+ 	;;
+ esac

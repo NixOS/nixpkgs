@@ -2,11 +2,17 @@
 , withGpg ? true, gpgme ? null}:
 
 stdenv.mkDerivation rec {
-  name = "centerim-4.22.10";
+  version = "4.22.10";
+  debPatch = "2";
+  name = "centerim-${version}";
 
   src = fetchurl {
     url = "http://centerim.org/download/releases/${name}.tar.gz";
     sha256 = "0viz86jflp684vfginhl6aaw4gh2qvalc25anlwljjl3kkmibklk";
+  };
+  patches = fetchurl {
+    url = "mirror://debian/pool/main/c/centerim/centerim_${version}-${debPatch}.diff.gz";
+    sha256 = "18iz3hkvr31jsyznryvyldxm9ckyrpy9sczxikrnw2i2r1xyfj8m";
   };
 
   buildInputs = [ openssl curl ncurses libjpeg ]

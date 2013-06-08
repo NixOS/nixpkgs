@@ -1,9 +1,9 @@
-{ stdenv, fetchgit, kernel, aufs }:
+{ stdenv, fetchgit, kernelDev, aufs }:
 
 assert aufs != null;
 
 stdenv.mkDerivation {
-  name = "aufs3-util-${aufs.patch.version}-${kernel.version}";
+  name = "aufs3-util-${aufs.patch.version}-${kernelDev.version}";
 
   src = fetchgit {
     url = git://aufs.git.sourceforge.net/gitroot/aufs/aufs-util.git;
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ aufs ];
 
   makeFlags =
-    [ "KDIR=${kernel}/lib/modules/${kernel.modDirVersion}/build"
+    [ "KDIR=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build"
       "Install=install"
       "DESTDIR=$(out)"
     ];
@@ -34,8 +34,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Utilities for AUFS3";
     homepage = http://aufs.sourceforge.net/;
-    maintainers = [ stdenv.lib.maintainers.eelco 
-                    stdenv.lib.maintainers.shlevy ];
+    maintainers = [ stdenv.lib.maintainers.eelco  ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

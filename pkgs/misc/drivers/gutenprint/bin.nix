@@ -56,6 +56,9 @@ stdenv.mkDerivation {
       patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
           --set-rpath $libPath $p
     done
+    
+    mkdir $out/lib
+    ln -s $out/cups/lib $out/lib/cups
   '';
 
   meta = {

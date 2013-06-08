@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, zlib, ctl, ilmbase }:
 
 stdenv.mkDerivation rec {
-  name = "openexr-1.6.1";
+  name = "openexr-1.7.1";
   
   src = fetchurl {
     url = "http://download.savannah.nongnu.org/releases/openexr/${name}.tar.gz";

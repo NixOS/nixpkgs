@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, boost }:
+{ stdenv, fetchurl, boostHeaders }:
 
-stdenv.mkDerivation {
-  name = "mini-httpd-1.1";
+stdenv.mkDerivation rec {
+  name = "mini-httpd-1.4";
 
   src = fetchurl {
-    url = "mirror://savannah/mini-httpd/mini-httpd-1.1.tar.gz";
-    sha256 = "12hqvh67hgxmc9b3fhb8gb5ash7j6f7d0mxv47zkmjl7k3vw3ny7";
+    url = "mirror://savannah/mini-httpd/${name}.tar.gz";
+    sha256 = "1i46klkx2ca1cgmlilajkx8gf7b7d7c2sj58llxfllh184pb6cpd";
   };
 
-  buildInputs = [ boost ];
+  buildInputs = [ boostHeaders ];
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = "http://mini-httpd.nongnu.org/";

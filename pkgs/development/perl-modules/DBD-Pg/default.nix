@@ -1,11 +1,11 @@
 { stdenv, fetchurl, buildPerlPackage, DBI, postgresql }:
 
 buildPerlPackage rec {
-  name = "DBD-Pg-2.19.2";
+  name = "DBD-Pg-2.19.3";
 
   src = fetchurl {
     url = "mirror://cpan/modules/by-module/DBD/${name}.tar.gz";
-    sha256 = "0scnhbp0lfclbppbsfzmcyw32z8jhb9calvbg9q3gk4kli1119j9";
+    sha256 = "0ai6p2094hrh6kjlwfjvpw2z8wqa3scr4ba3p6rqza3z9c9hsd9p";
   };
 
   buildInputs = [ postgresql ];
@@ -13,5 +13,10 @@ buildPerlPackage rec {
 
   makeMakerFlags = "POSTGRES_HOME=${postgresql}";
 
-  meta.platforms = stdenv.lib.platforms.linux;
+  meta = {
+    homepage = http://search.cpan.org/dist/DBD-Pg/;
+    description = "DBI PostgreSQL interface";
+    license = "perl";
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

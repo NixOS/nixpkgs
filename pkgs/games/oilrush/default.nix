@@ -1,11 +1,12 @@
-{ stdenv, getConfig, fetchurl, libX11, libXext, libXinerama, libXrandr
+{ stdenv, config, fetchurl, libX11, libXext, libXinerama, libXrandr
 , libXrender, fontconfig, freetype, openal }:
+
 stdenv.mkDerivation {
   name = "oilrush";
   src = 
   let
-    url = getConfig [ "oilrush" "url" ] null;
-    sha256 = getConfig [ "oilrush" "sha256" ] null;
+    url = config.oilrush.url or null;
+    sha256 = config.oilrush.sha256 or null;
   in
     assert url != null && sha256 != null;
     fetchurl { inherit url sha256; };
@@ -66,7 +67,7 @@ stdenv.mkDerivation {
       of Tower Defense. 
     '';
     homepage = http://oilrush-game.com/;
-    license = [ "proprietary" ];
+    license = "unfree";
     #maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     #platforms = with stdenv.lib.platforms; linux;
   };

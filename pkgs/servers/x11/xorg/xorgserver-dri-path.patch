@@ -1,52 +1,19 @@
-diff --git a/glx/glxdri.c b/glx/glxdri.c
-index 6122653..3f5fc2b 100644
---- a/glx/glxdri.c
-+++ b/glx/glxdri.c
-@@ -1042,8 +1042,11 @@ __glXDRIscreenProbe(ScreenPtr pScreen)
- 	goto handle_error;
-     }
+diff -Naur xorg-server-1.12.2-orig/glx/glxdricommon.c xorg-server-1.12.2/glx/glxdricommon.c
+--- xorg-server-1.12.2-orig/glx/glxdricommon.c	2012-05-17 13:09:02.000000000 -0400
++++ xorg-server-1.12.2/glx/glxdricommon.c	2012-07-14 14:57:37.972791909 -0400
+@@ -219,10 +219,14 @@
+     int i;
+     void *driver;
+     char filename[PATH_MAX];
++    char *real_dri_driver_path;
+     const __DRIextension **extensions;
  
-+    char *real_dri_driver_path = getenv("XORG_DRI_DRIVER_PATH");
++    real_dri_driver_path = getenv("XORG_DRI_DRIVER_PATH");
 +    if (!real_dri_driver_path) real_dri_driver_path = dri_driver_path;
 +
      snprintf(filename, sizeof filename, "%s/%s_dri.so",
 -             dri_driver_path, driverName);
 +             real_dri_driver_path, driverName);
  
-     screen->driver = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
-     if (screen->driver == NULL) {
-diff --git a/glx/glxdri2.c b/glx/glxdri2.c
-index ed7fb4c..135b1c8 100644
---- a/glx/glxdri2.c
-+++ b/glx/glxdri2.c
-@@ -617,8 +617,11 @@ __glXDRIscreenProbe(ScreenPtr pScreen)
- 
-     __glXInitExtensionEnableBits(screen->glx_enable_bits);
- 
--    snprintf(filename, sizeof filename,
--	     "%s/%s_dri.so", dri_driver_path, driverName);
-+     char *real_dri_driver_path = getenv("XORG_DRI_DRIVER_PATH");
-+     if (!real_dri_driver_path) real_dri_driver_path = dri_driver_path;
-+ 
-+     snprintf(filename, sizeof filename, "%s/%s_dri.so",
-+              real_dri_driver_path, driverName);
- 
-     screen->driver = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
-     if (screen->driver == NULL) {
-diff --git a/glx/glxdriswrast.c b/glx/glxdriswrast.c
-index 44f658f..8922414 100644
---- a/glx/glxdriswrast.c
-+++ b/glx/glxdriswrast.c
-@@ -458,8 +458,11 @@ __glXDRIscreenProbe(ScreenPtr pScreen)
-     screen->base.swapInterval   = NULL;
-     screen->base.pScreen       = pScreen;
- 
-+    char *real_dri_driver_path = getenv("XORG_DRI_DRIVER_PATH");
-+    if (!real_dri_driver_path) real_dri_driver_path = dri_driver_path;
-+
-     snprintf(filename, sizeof filename,
--	     "%s/%s_dri.so", dri_driver_path, driverName);
-+	     "%s/%s_dri.so", real_dri_driver_path, driverName);
- 
-     screen->driver = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
-     if (screen->driver == NULL) {
+     driver = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
+     if (driver == NULL) {

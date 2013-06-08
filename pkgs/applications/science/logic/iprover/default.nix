@@ -13,7 +13,7 @@ let
     baseName="iprover";
     version="0.8.1";
     name="${baseName}_v${version}";
-    url="${baseName}.googlecode.com/files/${name}.tar.gz";
+    url="http://${baseName}.googlecode.com/files/${name}.tar.gz";
     hash="15qn523w4l296np5rnkwi50a5x2xqz0kaza7bsh9bkazph7jma7w";
   };
 in
@@ -23,7 +23,7 @@ rec {
     sha256 = sourceInfo.hash;
   };
 
-  inherit (sourceInfo) name version;
+  name = "${sourceInfo.baseName}-${sourceInfo.version}";
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */

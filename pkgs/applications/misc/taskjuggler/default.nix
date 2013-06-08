@@ -1,7 +1,6 @@
 {stdenv, fetchurl,
 zlib, libpng, libjpeg, perl, expat, qt3,
 libX11, libXext, libSM, libICE,
-withKde, kdelibs, kdebase
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +12,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [zlib libpng libX11 libXext libSM libICE perl expat libjpeg]
-    ++ (if withKde then [kdelibs] else [])
     ;
 
   patches = [ ./timezone-glibc.patch ];
@@ -51,7 +49,6 @@ stdenv.mkDerivation rec {
     --x-includes=${libX11}/include
     --x-libraries=${libX11}/lib
     --with-qt-dir=${qt3}
-    --with-kde-support=${if withKde then "yes" else "no"} --with-ical-support=${if withKde then "yes" else "no"}
   ";
 
   preInstall = ''
@@ -61,7 +58,7 @@ stdenv.mkDerivation rec {
 
   installFlags =
     # kde_locale is not defined when installing without kde.
-    if withKde then "" else "kde_locale=\${out}/share/locale";
+    "kde_locale=\${out}/share/locale";
 
   meta = {
     homepage = "http://www.taskjuggler.org";

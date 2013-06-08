@@ -2,10 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "Boolean";
-  version = "0.0.1";
-  sha256 = "dafcfb2e9d7f7aa24a3d3ceb385424176297cdf6f6044028d42d0fea1cae7765";
+  version = "0.2";
+  sha256 = "1r8qvsfbfjfp453pdy9ci9w584ad9bm4xv0ynx4b1yny34ag3zr3";
   meta = {
-    description = "Generalized booleans";
+    description = "Generalized booleans and numbers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];

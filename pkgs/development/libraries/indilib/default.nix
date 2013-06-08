@@ -1,12 +1,14 @@
 { stdenv, fetchurl, cmake, cfitsio, libusb, zlib, boost }:
 
 stdenv.mkDerivation {
-  name = "indilib-0.8";
+  name = "indilib-0.9.6";
 
   src = fetchurl {
-    url = mirror://sf/indi/libindi_0.8.tar.gz;
-    sha256 = "d5ed14a5de6fd6e5db15463ada96c2b15b53e84a1ffe199b76f70128493f2a65";
+    url = mirror://sourceforge/indi/libindi_0.9.6.tar.gz;
+    sha256 = "1cyhsrsl68iczc4gcdnrrdh0r1dxjac6prxjfkw15wz97ya0mvs4";
   };
+
+  patches = [ ./link-zlib.patch ./udev-dir.patch ];
 
   propagatedBuildInputs = [ cmake cfitsio libusb zlib boost ];
 

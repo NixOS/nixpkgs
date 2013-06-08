@@ -48,13 +48,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Opa is a concise and elegant language for writing distributed web applications. Both client and server sides.";
+    description = "A concise and elegant language for writing distributed web applications";
     longDescription = ''
-    Opa is a new generation of web development platform that lets you write distributed
-    web applications using a single technology. Among the the many features of Opa are these:
-    Opa is concise, simple, concurrent, dynamically distributed, and secure.
+      Opa is a new generation of web development platform that lets you write distributed
+      web applications using a single technology. Among the the many features of Opa are these:
+      Opa is concise, simple, concurrent, dynamically distributed, and secure.
     '';
-
     homepage = http://opalang.org/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.kkallio ];

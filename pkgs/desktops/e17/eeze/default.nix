@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, eina, ecore, udev }:
 stdenv.mkDerivation rec {
   name = "eeze-${version}";
-  version = "1.2.0-alpha";
+  version = "1.7.5";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.bz2";
-    sha256 = "1v0n6bn3g04bjq0cxp6ixw7hb4kjbqpvywpvgik960xkn4pva76p";
+    sha256 = "0274fs4cxgw6420yyz9frrc8zhj0qqyvwczzslq3kih3sx1nikxr";
   };
   buildInputs = [ pkgconfig eina ecore ];
   propagatedBuildInputs = [ udev ];

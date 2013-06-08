@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   name = "iwlwifi-5150-ucode-8.24.2.2";
   
   src = fetchurl {
-    url = "http://intellinuxwireless.org/iwlwifi/downloads/iwlwifi-5150-ucode-8.24.2.2.tgz";
+    url = "http://wireless.kernel.org/en/users/Drivers/iwlwifi?action=AttachFile&do=get&target=${name}.tgz";
+    name = "${name}.tgz";
     sha256 = "d253e6ff6624639aded67c82df98b2bc4a66eb66400848d5614921d513540cf9";
   };
   
@@ -24,6 +25,6 @@ stdenv.mkDerivation rec {
       firmware.  It contains the `iwlwifi-5150-2.ucode' file.
     '';
 
-    homepage = http://intellinuxwireless.org/;
+    homepage = http://wireless.kernel.org/en/users/Drivers/iwlwifi;
   };
 }

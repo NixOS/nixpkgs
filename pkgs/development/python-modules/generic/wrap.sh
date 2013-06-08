@@ -37,11 +37,27 @@ _addToPythonPath() {
     pythonPathsSeen[$dir]=1
     addToSearchPath program_PYTHONPATH $dir/lib/@libPrefix@/site-packages
     addToSearchPath program_PATH $dir/bin
-    local prop="$dir/nix-support/propagated-build-native-inputs"
+    local prop="$dir/nix-support/propagated-native-build-inputs"
     if [ -e $prop ]; then
         local i
         for i in $(cat $prop); do
             _addToPythonPath $i
+        done
+    fi
+}
+
+createBuildInputsPth() {
+    local category="$1"
+    local inputs="$2"
+    if [ foo"$inputs" != foo ]; then
+        for x in $inputs; do
+            if $(echo -n $x |grep -q python-recursive-pth-loader); then
+                continue
+            fi
+            if test -d "$x"/lib/@libPrefix@/site-packages; then
+                echo $x/lib/@libPrefix@/site-packages \
+                    >> "$out"/lib/@libPrefix@/site-packages/${name}-nix-python-$category.pth
+            fi
         done
     fi
 }

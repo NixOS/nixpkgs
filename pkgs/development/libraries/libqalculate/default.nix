@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libqalculate-0.9.7";
 
   src = fetchurl {
-    url = "mirror://sf/qalculate/${name}.tar.gz";
+    url = "mirror://sourceforge/qalculate/${name}.tar.gz";
     sha256 = "0mbrc021dk0ayyglk4qyf9328cayrlz2q94lh8sh9l9r6g79fvcs";
   };
 

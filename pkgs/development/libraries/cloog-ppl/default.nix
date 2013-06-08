@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-ppl=${ppl}";
 
   crossAttrs = {
-    configureFlags = "--with-ppl=${ppl.hostDrv}";
+    configureFlags = "--with-ppl=${ppl.crossDrv}";
   };
 
   doCheck = true;

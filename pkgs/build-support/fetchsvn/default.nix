@@ -1,5 +1,5 @@
-{stdenv, subversion, sshSupport ? false, openssh ? null}: 
-{url, rev ? "HEAD", md5 ? "", sha256 ? ""}:
+{stdenv, subversion, sshSupport ? false, openssh ? null}:
+{url, rev ? "HEAD", md5 ? "", sha256 ? "", ignoreExternals ? false, name ? null}:
 
 let
   repoName = with stdenv.lib;
@@ -18,10 +18,12 @@ let
       else if snd path == "tags" then     "${trd path}-${fst path}"
       # ../repo (no trunk) -> repo
       else fst path;
+
+  name_ = if name == null then "${repoName}-r${toString rev}" else name;
 in
 
 stdenv.mkDerivation {
-  name = "${repoName}-r${toString rev}";
+  name = name_;
   builder = ./builder.sh;
   buildInputs = [subversion];
 
@@ -29,7 +31,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if sha256 == "" then md5 else sha256;
   
-  inherit url rev sshSupport openssh;
+  inherit url rev sshSupport openssh ignoreExternals;
 
   impureEnvVars = [
     # We borrow these environment variables from the caller to allow

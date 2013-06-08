@@ -5,21 +5,21 @@
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
-  name = "skype-4.0.0.7";
+  name = "skype-4.1.0.20";
 
   src = fetchurl {
     url = "http://download.skype.com/linux/${name}.tar.bz2";
-    sha256 = "0mrswawqsv53mfghqlj1bzq0jfswha6b0c06px7snd85pd4gn5fn";
+    sha256 = "1qhcxkfmlpblpy9rqimzdl79rm781swbldkzi6nyw56bbp6lf7n3";
   };
 
-  buildInputs = 
+  buildInputs =
     lib.optional usePulseAudio pulseaudio ++ [
     alsaLib
-    stdenv.glibc 
+    stdenv.glibc
     stdenv.gcc.gcc
     libXv
-    libXext 
-    libX11 
+    libXext
+    libX11
     qt4
     libXScrnSaver
     libSM
@@ -36,38 +36,36 @@ stdenv.mkDerivation rec {
   phases = "unpackPhase installPhase";
 
   installPhase = ''
-    mkdir -p $out/{opt/skype/,bin}
-    cp -r * $out/opt/skype/
+    mkdir -p $out/{libexec/skype/,bin}
+    cp -r * $out/libexec/skype/
 
     fullPath=
-    for i in $buildNativeInputs; do
+    for i in $nativeBuildInputs; do
       fullPath=$fullPath''${fullPath:+:}$i/lib
     done
 
     dynlinker="$(cat $NIX_GCC/nix-support/dynamic-linker)"
-          
+
     cat > $out/bin/skype << EOF
     #!${stdenv.shell}
     export LD_LIBRARY_PATH=$fullPath:$LD_LIBRARY_PATH
-    $dynlinker $out/opt/skype/skype --resources=$out/opt/skype "\$@"
+    $dynlinker $out/libexec/skype/skype --resources=$out/libexec/skype "\$@"
     EOF
 
     chmod +x $out/bin/skype
 
-    # Desktop icon for Skype
-    patch skype.desktop << EOF
-    5c5
-    < Icon=skype.png
-    ---
-    > Icon=$out/opt/skype/icons/SkypeBlue_48x48.png
-    EOF
+    # Fixup desktop file
+    substituteInPlace skype.desktop --replace \
+      "Icon=skype.png" "Icon=$out/libexec/skype/icons/SkypeBlue_48x48.png"
+    substituteInPlace skype.desktop --replace \
+      "Terminal=0" "Terminal=false"
     mkdir -p $out/share/applications
     mv skype.desktop $out/share/applications
   '';
 
   meta = {
-      description = "A P2P-VoiceIP client";
-      homepage = http://www.skype.com;
-      license = "skype-eula";
+    description = "A proprietary voice-over-IP (VoIP) client";
+    homepage = http://www.skype.com/;
+    license = "unfree";
   };
 }

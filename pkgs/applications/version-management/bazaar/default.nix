@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  version = "2.3";
+  version = "2.5";
   release = ".1";
   name = "bazaar-${version}${release}";
 
   src = fetchurl {
     url = "http://launchpad.net/bzr/${version}/${version}${release}/+download/bzr-${version}${release}.tar.gz";
-    sha256 = "07kx41w4gqv68bcykdflsg68wvpmcyqknzyb4vr1zqlf27hahp53";
+    sha256 = "10krjbzia2avn09p0cdlbx2wya0r5v11w5ymvyl72af5dkx4cwwn";
   };
 
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython ];

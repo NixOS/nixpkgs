@@ -1,11 +1,11 @@
 {stdenv, fetchurl, bash, yasm, which, perl}:
 
 stdenv.mkDerivation rec {
-  name = "libvpx-1.0.0";
+  name = "libvpx-1.1.0";
   
   src = fetchurl {
-    url = http://webm.googlecode.com/files/libvpx-v1.0.0.tar.bz2;
-    sha256 = "08gyx90ndv0v8dhbhp3jdh6g37pmcjlfwljzsy0nskm4345dpkh7";
+    url = http://webm.googlecode.com/files/libvpx-v1.1.0.tar.bz2;
+    sha256 = "1ibjxcdsazqfbbjhb8w56vy3n9qwny2m9q4kzx4rmk9v9g7p9q4w";
   };
 
   patchPhase = ''

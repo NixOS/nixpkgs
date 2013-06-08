@@ -15,9 +15,7 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = [ "doPatch" "doConfigure" "doMakeInstall"];
-
-  patches = [ ./r3402.patch ];
+  phaseNames = [ "doConfigure" "doMakeInstall"];
 
   meta = {
     description = "X-Moto - obstacled race game";

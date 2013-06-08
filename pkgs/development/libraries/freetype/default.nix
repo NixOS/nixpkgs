@@ -6,19 +6,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "freetype-2.4.4";
+  name = "freetype-2.4.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/freetype/${name}.tar.bz2";
-    sha256 = "1vqg93473j6jma1bxms7mczk32j8is0g9inkcmmmqdsdvk3q30jb";
+    sha256 = "0bwrkqpygayfc1rf6rr1nb8l3svgn1fmjz8davg2hnf46cn293hc";
   };
 
   outputs = [ "dev" "out" ];
 
   configureFlags = "--disable-static --bindir=$(dev)/bin";
-
-  # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
-  buildInputs = stdenv.lib.optional (stdenv.system == "i686-freebsd") gnumake;
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString useEncumberedCode
     "-DFT_CONFIG_OPTION_SUBPIXEL_RENDERING=1";
@@ -26,11 +23,24 @@ stdenv.mkDerivation rec {
   # The asm for armel is written with the 'asm' keyword.
   CFLAGS = stdenv.lib.optionalString stdenv.isArm "-std=gnu99";
 
+  # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
+  buildInputs = stdenv.lib.optional (!stdenv.isLinux) gnumake;
+
+  enableParallelBuilding = true;
+
   postInstall =
     ''
       mkdir $dev/lib
       mv $out/lib/pkgconfig $dev/lib/
+      ln -s freetype2/freetype $dev/include/freetype
     '';
+
+  crossAttrs = {
+    # Somehow it calls the unwrapped gcc, "i686-pc-linux-gnu-gcc", instead
+    # of gcc. I think it's due to the unwrapped gcc being in the PATH. I don't
+    # know why it's on the PATH.
+    configureFlags = "--disable-static CC_BUILD=gcc";
+  };
 
   meta = {
     description = "A font rendering engine";

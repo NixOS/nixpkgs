@@ -10,7 +10,7 @@ kde {
 
 #NIX_CFLAGS_COMPILE = "-I${phonon}/include/phonon";
 
-  patches = [ ./pykde-purity.patch ];
+  patches = [ ./pykde-purity.patch ./pykde4-new-sip.patch ];
 
   cmakeFlags = "-DHARDCODE_LIB_PYTHON_PATH=ON";
 

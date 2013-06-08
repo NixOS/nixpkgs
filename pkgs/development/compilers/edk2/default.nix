@@ -10,12 +10,12 @@ else
   throw "Unsupported architecture";
 
 edk2 = stdenv.mkDerivation {
-  name = "edk2-2012-03-13";
+  name = "edk2-2013-03-19";
   
   src = fetchsvn {
     url = https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2;
-    rev = "13094";
-    sha256 = "1qfpal0y4sas204ydg3pg3634dm25q1vr94mpgmbdh6yqcviah3h";
+    rev = "14211";
+    sha256 = "1rhrv7cyazb1d4gw3s8fv0c245iankvb9pqx6nngbkkxkcswvnw7";
   };
 
   buildInputs = [ libuuid pythonFull ];

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "hadoop-2.0.1-alpha";
+  name = "hadoop-2.0.2-alpha";
 
   src = fetchurl {
     url = "mirror://apache/hadoop/common/${name}/${name}.tar.gz";
-    sha256 = "4e5f4fa1574ee58fd6d59a220b66578fc2cf62c229120eeed07f2880c86f0e59";
+    sha256 = "1r7ailmqhny3pl5nb8bcblnhckszy6hb9n58kwa3s4b8qfk87gkb";
   };
 
   buildInputs = [ makeWrapper ];

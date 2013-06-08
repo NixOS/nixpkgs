@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "RSA";
-  version = "1.2.1.0";
-  sha256 = "14x53xjy4rqdgin6kyrm2b16hb0k599gfiwiwrsyri9mx3f3s1ca";
+  version = "1.2.2.0";
+  sha256 = "0x4an1060slppyccf18isqrdl548ll33xzzqch3qxg285a0mm12m";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

@@ -1,10 +1,10 @@
-{ cabal, QuickCheck }:
+{ cabal, QuickCheck, time }:
 
 cabal.mkDerivation (self: {
   pname = "pathtype";
-  version = "0.5.2";
-  sha256 = "0rbmq6kzz2l07q9a5k888scpn62hnw2hmzz4ysprhfgdnn5b2cvi";
-  buildDepends = [ QuickCheck ];
+  version = "0.5.3";
+  sha256 = "11plb7xw4j8vjziw1q0ymx33p6185cxd2hqrxw2hgsfzf2b9dvqg";
+  buildDepends = [ QuickCheck time ];
   meta = {
     homepage = "http://code.haskell.org/pathtype";
     description = "Type-safe replacement for System.FilePath etc";

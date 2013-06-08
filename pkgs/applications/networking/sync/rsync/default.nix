@@ -22,11 +22,12 @@ stdenv.mkDerivation rec {
   patches = [] ++ stdenv.lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";
 
   buildInputs = stdenv.lib.optional enableACLs acl;
-  buildNativeInputs = [perl];
+  nativeBuildInputs = [perl];
 
   meta = {
     homepage = http://samba.anu.edu.au/rsync/;
     description = "A fast incremental file transfer utility";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.simons ];

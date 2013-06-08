@@ -1,0 +1,13 @@
+diff --git a/goffice/utils/regutf8.c b/goffice/utils/regutf8.c
+index bc4aae4..3adb696 100644
+--- a/goffice/utils/regutf8.c
++++ b/goffice/utils/regutf8.c
+@@ -155,7 +155,7 @@ go_regcomp (GORegexp *gor, const char *pat, int cflags)
+ 		default: return GO_REG_BADPAT;
+ 		}
+ 	} else {
+-		gor->re_nsub = pcre_info (r, NULL, NULL);
++		gor->re_nsub = pcre_fullinfo (r, NULL, NULL, NULL);
+ 		gor->nosub = (cflags & GO_REG_NOSUB) != 0;
+ 		return 0;
+ 	}

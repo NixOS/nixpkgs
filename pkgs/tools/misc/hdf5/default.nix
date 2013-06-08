@@ -3,10 +3,10 @@
 , fetchurl
 }:
 stdenv.mkDerivation {
-  name = "hdf5";
+  name = "hdf5-1.8.10";
   src = fetchurl {
-    url = http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.5-patch1.tar.gz ;
-    sha256 = "919bb52a08fc5560c49fdc5ebd693b10b1e03eebbf44ad2e142c2e6cfd81f2b0";  			
+    url = http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.10-patch1.tar.gz;
+    sha256 = "08ad32fhnci6rdfn6mn3w9v1wcaxdcd326n3ljwkcq4dzhkh28qz";  			
   };
   buildInputs = [] ;
   

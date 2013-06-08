@@ -1,0 +1,35 @@
+diff --git a/gtk/main.c b/gtk/main.c
+index 7079bc8..f076127 100644
+--- a/gtk/main.c
++++ b/gtk/main.c
+@@ -1643,7 +1643,7 @@ int main(int argc, char *argv[]){
+ 	GdkPixbuf *pbuf;
+ 	const char *app_name="Linphone";
+ 
+-	g_thread_init(NULL);
++	g_type_init();
+ 	gdk_threads_init();
+ 	
+ 	progpath = strdup(argv[0]);
+diff --git a/gtk/setupwizard.c b/gtk/setupwizard.c
+index 1c54fca..45c9091 100644
+--- a/gtk/setupwizard.c
++++ b/gtk/setupwizard.c
+@@ -270,7 +270,7 @@ static void account_username_changed(GtkEntry *entry, GtkWidget *w) {
+ 	linphone_account_creator_set_username(creator, gtk_entry_get_text(username));
+ 
+ 	if (g_regex_match_simple("^[a-zA-Z]+[a-zA-Z0-9.\\-_]{3,}$", gtk_entry_get_text(username), 0, 0)) {
+-		g_thread_create(check_username_availability, (void*)w, FALSE, NULL);
++		g_thread_new (NULL, check_username_availability, (void*)w);
+ 	}
+ 	else {
+ 		if (gtk_entry_get_text_length(username) < LOGIN_MIN_SIZE) {
+@@ -534,7 +534,7 @@ GtkWidget * linphone_gtk_create_assistant(void){
+ 	ok = create_pixbuf(linphone_gtk_get_ui_config("ok","ok.png"));
+ 	notok = create_pixbuf(linphone_gtk_get_ui_config("notok","notok.png"));
+ 
+-	g_thread_init (NULL);
++	g_type_init ();
+ 	gdk_threads_init ();
+ 
+ 	GtkWidget *p1=create_intro();

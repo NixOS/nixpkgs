@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "p7zip-9.13";
+  name = "p7zip-9.20.1";
   
   src = fetchurl {
-    url = mirror://sourceforge/p7zip/p7zip_9.13_src_all.tar.bz2;
-    sha256 = "08yr0cfbjx60r1ia7vhphzvc3gax62xhgsn3vdm7sdmxxai0z77w";
+    url = mirror://sourceforge/p7zip/p7zip_9.20.1_src_all.tar.bz2;
+    sha256 = "10j7rc1nzdp7vvcpc3340yi3qw7abby4szv8zkwh10d0zizpwma9";
   };
 
   preConfigure =
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
       makeFlagsArray=(DEST_HOME=$out)
       buildFlags=all3
     '';
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://p7zip.sourceforge.net/;

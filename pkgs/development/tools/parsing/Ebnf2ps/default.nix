@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Ebnf2ps";
-  version = "1.0.10";
-  sha256 = "0xim32bnfapfs53lvmdz2af08rqd15lp5b0rh6yjqm7n1g2061zs";
+  version = "1.0.11";
+  sha256 = "0n0maihalnrks3l7ay1i16p6i7f69xv33jxhlsyshzck0v64qivb";
   isLibrary = false;
   isExecutable = true;
   buildTools = [ happy ];
@@ -12,9 +12,6 @@ cabal.mkDerivation (self: {
     description = "Peter's Syntax Diagram Drawing Tool";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

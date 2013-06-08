@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vacuum";
-  version = "2.0.0.0";
-  sha256 = "0a810ql4lp1pyvys9a5aw28gxn7h2p4hkc0by4pmpw5d7kdhn9y3";
+  version = "2.1.0.1";
+  sha256 = "0gzh5v9mr0mgz9hxjnm8n3jcl2702wad7qaqaar1zc95lkabpf65";
   extraLibraries = [ ghcPaths ];
   meta = {
     homepage = "http://thoughtpolice.github.com/vacuum";

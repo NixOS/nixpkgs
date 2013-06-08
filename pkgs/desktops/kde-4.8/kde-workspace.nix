@@ -1,6 +1,6 @@
 { kde, kdelibs, qimageblitz, libdbusmenu_qt, xorg, shared_desktop_ontologies,
   lm_sensors, pciutils, libraw1394, libusb, libxklavier, python, libqalculate,
-  consolekit, xkeyboard_config, kdepimlibs, pam, boost, gpsd, prison, akonadi,
+  xkeyboard_config, kdepimlibs, pam, boost, gpsd, prison, akonadi,
   pykde4, libjpeg, pkgconfig, libXft, libXxf86misc, kactivities
 }:
 
@@ -12,11 +12,11 @@ kde {
       xorg.libXcomposite xorg.libXdamage xorg.libXau xorg.libXdmcp
       xorg.libpthreadstubs
       boost gpsd shared_desktop_ontologies lm_sensors pciutils libraw1394
-      libusb python libqalculate consolekit kdepimlibs pam prison akonadi
+      libusb python libqalculate kdepimlibs pam prison akonadi
       kactivities
     ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   preConfigure =
    ''
@@ -27,6 +27,8 @@ kde {
      substituteInPlace kcontrol/keyboard/xkb_rules.cpp \
        --replace /usr/share/X11 ${xkeyboard_config}/etc/X11
    '';
+
+  enableParallelBuilding = false; # frequent problems on Hydra
 
   meta = {
     description = "KDE workspace components such as Plasma, Kwin and System Settings";

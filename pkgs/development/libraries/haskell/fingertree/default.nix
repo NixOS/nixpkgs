@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "fingertree";
-  version = "0.0.1.0";
-  sha256 = "e80bf256506290c8f4fb44222920ae7d8405fd22e453c7a08dba49297d49328b";
+  version = "0.0.1.1";
+  sha256 = "00llr24b2r539250fangl0jj39gf26gjwvhjpy5qg8l920hrjn78";
   meta = {
     description = "Generic finger-tree structure, with example instances";
     license = self.stdenv.lib.licenses.bsd3;

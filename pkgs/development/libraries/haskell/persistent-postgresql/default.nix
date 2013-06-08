@@ -1,13 +1,13 @@
-{ cabal, aeson, conduit, monadControl, persistent, postgresqlLibpq
-, postgresqlSimple, text, time, transformers
+{ cabal, aeson, blazeBuilder, conduit, monadControl, persistent
+, postgresqlLibpq, postgresqlSimple, text, time, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "persistent-postgresql";
-  version = "1.0.0";
-  sha256 = "149vv6wd0a85gphwrqcyd66ivdzyy7yc37c99ngq7377fdnszzhn";
+  version = "1.2.0";
+  sha256 = "0i5ha1vs91makwrw4qqwdzp92i24ynmmsmjyqpik6q80fxxiwps6";
   buildDepends = [
-    aeson conduit monadControl persistent postgresqlLibpq
+    aeson blazeBuilder conduit monadControl persistent postgresqlLibpq
     postgresqlSimple text time transformers
   ];
   meta = {

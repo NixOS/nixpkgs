@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "exception-mtl";
-  version = "0.3.0.2";
-  sha256 = "1mhk1z7hz50h8ssr4s7dzdxzn02rr0njxijdddfjjw71fln3nl5h";
+  version = "0.3.0.3";
+  sha256 = "1mmkp16c5ixknhm69a2zjrs9q0dd5ragmljnjjd6lxpakdlw64ww";
   buildDepends = [ exceptionTransformers mtl transformers ];
   meta = {
     homepage = "http://www.eecs.harvard.edu/~mainland/";

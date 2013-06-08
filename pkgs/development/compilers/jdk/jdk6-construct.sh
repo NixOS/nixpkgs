@@ -1,9 +1,9 @@
 #!/bin/bash
 # construct.sh
 # example construction of JRE and JDK directories from the DLJ bundles
-# 
+#
 # Copyright © 2006 Sun Microsystems, Inc.
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
 # "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
 # distribute, sublicense, and/or sell copies of the Software, and to
 # permit persons to whom the Software is furnished to do so, subject to
 # the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be
 # included in all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -22,7 +22,7 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-# 
+#
 # Sun, Sun Microsystems, the Sun logo and Java, Java HotSpot,
 # and JVM  trademarks or registered trademarks of Sun Microsystems,
 # Inc. in the U.S. and other countries.
@@ -43,13 +43,13 @@ getargs() {
     exit 2
   fi
   # make sure javahome is the JDK
-  javahome=`echo $undir/*/demo`
+  javahome=`echo $undir/*/db/demo`
   if [ ! -d $javahome ]; then
     echo "${program}: unbundle directory incorrect: $undir"
     echo "  expecting $undir/jdk1.5.0_xx"
     exit 2
   else
-    javahome=`dirname $javahome`
+    javahome=$(dirname $(dirname $javahome))
   fi
   # verify JDK dir
   jdkdirp=`dirname $jdkdir`
@@ -106,7 +106,7 @@ linkrel() {
   if [ $m -lt $c ]; then
     (( c = m ))
   fi
-  for (( i = 0 ; i < c ; i++ )); do 
+  for (( i = 0 ; i < c ; i++ )); do
     if [ ${targetb[$i]} != ${linkb[$i]} ]; then
       # echo components differ, stopping
       break

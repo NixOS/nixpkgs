@@ -1,4 +1,4 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
+args @ { stdenv, fetchurl, extraConfig ? ""
 , perl, mktemp, module_init_tools
 , ... }:
 
@@ -146,8 +146,10 @@ let
       NFSD_V3 y
       NFSD_V3_ACL y
       NFSD_V4 y
+      NFS_FSCACHE y
       CIFS_XATTR y
       CIFS_POSIX y
+      CIFS_FSCACHE y
 
       # Security related features.
       STRICT_DEVMEM y # Filter access to /dev/mem
@@ -174,6 +176,7 @@ let
       CRASH_DUMP n
       DMAR? n # experimental
       DVB_DYNAMIC_MINORS y # we use udev
+      FHANDLE y # used by systemd
       FUSION y # Fusion MPT device support
       IDE_GD_ATAPI y # ATAPI floppy support
       IRDA_ULTRA y # Ultra (connectionless) protocol
@@ -237,8 +240,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.2.28";
-    testing = false;
+    version = "3.2.46";
 
     modDirVersion = version;
 
@@ -247,8 +249,8 @@ import ./generic.nix (
     '';
 
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v3.0/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "0v4mbqf0mgnshhkq3symlliaz1jwa7vx7195r3qls390plc9g0nl";
+      url = "mirror://kernel/linux/kernel/v3.0/linux-${version}.tar.xz";
+      sha256 = "1yxkkiay2a84113zjxyf680fz5l0ihvjq3fcik8hfibrb5x2rhgr";
     };
 
     config = configWithPlatform stdenv.platform;

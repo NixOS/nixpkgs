@@ -22,6 +22,7 @@ fi;
 # server's certificate.  This is perfectly safe: we don't care
 # whether the server is being spoofed --- only the cryptographic
 # hash of the output matters.
-echo 'p' | svn export -r "$rev" "$url" $out
+echo 'p' | svn export ${ignoreExternals:+--ignore-externals} \
+    -r "$rev" "$url" "$out"
 
 stopNest

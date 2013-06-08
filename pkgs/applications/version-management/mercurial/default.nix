@@ -2,22 +2,21 @@
 , guiSupport ? false, tk ? null, curses }:
 
 let
-  name = "mercurial-2.2.3";
+  name = "mercurial-2.6.1";
 in
+
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "http://mercurial.selenic.com/release/${name}.tar.gz";
-    sha256 = "0yv7kn96270fixigry910c1i3zzivimh1xjxywqjn9dshn2y6qbw";
+    sha256 = "0r4fg269xnqgacc82ppm3wxl9wwvvgwz8z6zi1iai4gx76iklhdn";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
   pythonPackages = [ curses ];
 
   buildInputs = [ python makeWrapper docutils unzip ];
-
-  PYTHONPATH = "${python}/lib/python2.6/site-packages:${python}/lib/python2.7/site-packages:${docutils}/lib/python2.5/site-packages:${docutils}/lib/python2.6/site-packages:${docutils}/lib/python2.7/site-packages";
 
   makeFlags = "PREFIX=$(out)";
 
@@ -41,17 +40,22 @@ stdenv.mkDerivation {
           $WRAP_TK
       done
 
+      mkdir -p $out/etc/mercurial
+      cat >> $out/etc/mercurial/hgrc << EOF
+      [web]
+      cacerts = /etc/ssl/certs/ca-bundle.crt
+      EOF
+
       # copy hgweb.cgi to allow use in apache
       mkdir -p $out/share/cgi-bin
       cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin
       chmod u+x $out/share/cgi-bin/hgweb.cgi
     '';
 
-  doCheck = false;  # The test suite fails, unfortunately. Not sure why.
-
   meta = {
     description = "A fast, lightweight SCM system for very large distributed projects";
     homepage = "http://www.selenic.com/mercurial/";
     license = "GPLv2";
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

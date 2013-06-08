@@ -1,11 +1,13 @@
-{ cabal, HUnit, IORefCAS }:
+{ cabal, HUnit, random, testFramework, testFrameworkHunit }:
 
 cabal.mkDerivation (self: {
   pname = "abstract-deque";
-  version = "0.1.5";
-  sha256 = "1zp19kq3m72nx7rr00yyq8iwia4abg4x9kw4d5s5k0srp5f9fn3q";
-  buildDepends = [ HUnit IORefCAS ];
+  version = "0.2";
+  sha256 = "0cq1k74b854flfvh7qhfnpngn4vyzp1az1rkaara23wlylydgs89";
+  buildDepends = [ HUnit random ];
+  testDepends = [ HUnit random testFramework testFrameworkHunit ];
   meta = {
+    homepage = "https://github.com/rrnewton/haskell-lockfree-queue/wiki";
     description = "Abstract, parameterized interface to mutable Deques";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

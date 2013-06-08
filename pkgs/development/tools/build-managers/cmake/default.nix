@@ -7,7 +7,7 @@ with stdenv.lib;
 let
   os = stdenv.lib.optionalString;
   majorVersion = "2.8";
-  minorVersion = "7";
+  minorVersion = "9";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "17zmxh0gyis6w05d2km0swlvy94h3w10jgra0fpa5qcg7l2j628k";
+    sha256 = "1yg68ng732cfm5c0h91chqwhg06zdh45bybm353kd1myk5rwqgfw";
   };
 
   patches =

@@ -1,11 +1,19 @@
-{ cabal, persistent, persistentTemplate, transformers, yesodCore }:
+{ cabal, blazeBuilder, conduit, hspec, liftedBase, persistent
+, persistentSqlite, persistentTemplate, poolConduit, resourcet
+, text, transformers, waiTest, yesodCore
+}:
 
 cabal.mkDerivation (self: {
   pname = "yesod-persistent";
-  version = "1.1.0";
-  sha256 = "0c8cvc2gy9ixa0h79ycnyi86indny2i86g5xcg30a2rvc4mjbaaj";
+  version = "1.2.0";
+  sha256 = "1gzzs62mnx2q15sm3hvlk18qjgk3bi828klgl2ckc0462f7z8d0k";
   buildDepends = [
-    persistent persistentTemplate transformers yesodCore
+    blazeBuilder conduit liftedBase persistent persistentTemplate
+    poolConduit resourcet transformers yesodCore
+  ];
+  testDepends = [
+    blazeBuilder conduit hspec persistent persistentSqlite text waiTest
+    yesodCore
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";

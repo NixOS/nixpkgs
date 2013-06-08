@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       distutils_extra simplejson readline glance cheetah lockfile httplib2
       # !!! should libvirt be a build-time dependency?  Note that
       # libxml2Python is a dependency of libvirt.py. 
-      libvirt libxml2Python
+      libvirt libxml2Python urlgrabber
     ];
 
   buildInputs =
@@ -31,8 +31,9 @@ stdenv.mkDerivation rec {
   buildPhase = "python setup.py build";
 
   installPhase =
-    ''    
+    ''
        python setup.py install --prefix="$out";
+       wrapPythonPrograms
     '';
 
   meta = {

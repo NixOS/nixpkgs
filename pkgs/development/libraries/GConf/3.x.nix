@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ glib dbus_glib ];
   buildInputs = [ polkit gtk3 libxml2 ];
-  buildNativeInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool ];
 
   configureFlags = "--disable-orbit";
 

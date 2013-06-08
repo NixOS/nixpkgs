@@ -1,21 +1,21 @@
 { stdenv, fetchurl, cairo, file, pango, glib, gtk
 , which, libtool, makeWrapper, libjpeg, libpng
-, fontconfig, liberation_ttf } :
+, fontconfig, liberation_ttf, sqlite } :
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "5.2.1";
+  version = "5.3.4";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://download.racket-lang.org/installers/${version}/${pname}/${name}-src-unix.tgz";
-    sha256 = "1v5kvp7vfi4a4bn08jlaga441amlfxpjw9dm6vc1fazwzd72m539";
+    sha256 = "0yrdmpdvzf092869y6zjjjxl6j2kypgiv7qrfkv7lj8w01pbh7sd";
   };
 
   # Various racket executables do run-time searches for these.
-  ffiSharedLibs = "${glib}/lib:${cairo}/lib:${pango}/lib:${gtk}/lib:${libjpeg}/lib:${libpng}/lib";
+  ffiSharedLibs = "${glib}/lib:${cairo}/lib:${pango}/lib:${gtk}/lib:${libjpeg}/lib:${libpng}/lib:${sqlite}/lib";
 
-  buildInputs = [ file libtool which makeWrapper fontconfig liberation_ttf ];
+  buildInputs = [ file libtool which makeWrapper fontconfig liberation_ttf sqlite ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH=${ffiSharedLibs}:$LD_LIBRARY_PATH
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Racket (formerly called PLT Scheme) is a programming language derived from Scheme.";
+    description = "A programming language derived from Scheme (formerly called PLT Scheme).";
     longDescription = ''
       Racket (formerly called PLT Scheme) is a programming language derived
       from Scheme. The Racket project has four primary components: the
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://racket-lang.org/;
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = stdenv.lib.licenses.lgpl2Plus; # and licenses of contained libraries
     maintainers = [ stdenv.lib.maintainers.kkallio ];
     platforms = stdenv.lib.platforms.linux;
   };

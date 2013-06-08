@@ -1,29 +1,23 @@
-{ stdenv, fetchurl, cmake, lua5 }:
+{stdenv, fetchurl, cmake}:
 
-stdenv.mkDerivation {
-  name = "task-warrior-2.0.0";
-
-  src = fetchurl {
-    url = http://www.taskwarrior.org/download/task-2.0.0.tar.gz;
-    sha256 = "1gbmcynj2n2c9dcykxn27ffk034mvm0zri5hqhfdx593dhv1x5vq";
-  };
-
-  NIX_LDFLAGS = "-ldl";
-
-  buildNativeInputs = [ cmake ];
-  buildInputs = [ lua5 ];
-
-  crossAttrs = {
-    preConfigure = ''
-      export NIX_CROSS_LDFLAGS="$NIX_CROSS_LDFLAGS -ldl"
-    '';
-  };
+stdenv.mkDerivation rec {
+  name = "taskwarrior-${version}";
+  version = "2.2.0";
 
   enableParallelBuilding = true;
 
+  src = fetchurl {
+    url = "http://www.taskwarrior.org/download/task-${version}.tar.gz";
+    sha256 = "057fh50qp9bd5s08rw51iybpamn55v5nhn3s6ds89g76hp95vqir";
+  };
+
+  nativeBuildInputs = [ cmake ];
+
   meta = {
-    description = "Command-line todo list manager";
-    homepage = http://taskwarrior.org/;
-    license = "GPLv2+";
+    description = "GTD (getting things done) implementation";
+    homepage = http://taskwarrior.org;
+    license = stdenv.lib.licenses.mit;
+    maintainers = [stdenv.lib.maintainers.marcweber];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

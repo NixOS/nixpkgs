@@ -2,13 +2,14 @@
 # TODO gentoo removes some tools because there are xorg sources (?)
 
 source $stdenv/setup
+set -x
 
 die(){ echo $@; exit 1; }
 
-
 # custom unpack:
-cp $src archive
-sh archive --extract .
+unzip $src
+run_file=$(echo amd-driver-installer-*)
+sh $run_file --extract .
 
 
 kernelVersion=$(cd ${kernel}/lib/modules && ls)
@@ -68,7 +69,7 @@ setModVersions(){
 # On kernels with the fix, use arch_compat_alloc_user_space instead
 # of compat_alloc_user_space since the latter is GPL-only
 
-COMPAT_ALLOC_USER_SPACE=compat_alloc_user_space
+COMPAT_ALLOC_USER_SPACE=arch_compat_alloc_user_space
 
 for src_file in \
     $kernelBuild/arch/x86/include/asm/compat.h \
@@ -123,6 +124,8 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   echo .lib${MODULE}_ip.a.GCC${GCC_MAJOR}.cmd
   echo 'This is a dummy file created to suppress this warning: could not find /lib/modules/fglrx/build_mod/2.6.x/.libfglrx_ip.a.GCC4.cmd for /lib/modules/fglrx/build_mod/2.6.x/libfglrx_ip.a.GCC4' > lib${MODULE}_ip.a.GCC${GCC_MAJOR}.cmd
 
+  sed -i -e "s@COMPAT_ALLOC_USER_SPACE@$COMPAT_ALLOC_USER_SPACE@" ../kcl_ioctl.c
+
   make CC=${CC} \
       LIBIP_PREFIX=$(echo "$LIBIP_PREFIX" | sed -e 's|^\([^/]\)|../\1|') \
       MODFLAGS="-DMODULE -DATI -DFGL -DPAGE_ATTR_FIX=$PAGE_ATTR_FIX -DCOMPAT_ALLOC_USER_SPACE=$COMPAT_ALLOC_USER_SPACE $def_smp $def_modversions" \
@@ -143,12 +146,12 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   cp -r common/usr/share $out
   cp -r common/usr/X11R6 $out
 
-  cp -r arch/$arch/lib $out/lib
+  # cp -r arch/$arch/lib $out/lib
 
   # what are those files used for?
   cp -r common/etc $out
 
-  DIR_DEPENDING_ON_XORG_VERSION=x750_64a
+  DIR_DEPENDING_ON_XORG_VERSION=xpic_64a
   cp -r $DIR_DEPENDING_ON_XORG_VERSION/usr/X11R6/$lib_arch/* $out/lib/xorg
 
   t=$out/lib/modules/${kernelVersion}/kernel/drivers/misc
@@ -164,12 +167,18 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/modules/dri $out/lib
   cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/modules/dri/* $out/lib
   cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/*.so.* $out/lib
+  cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/fglrx/fglrx-libGL.so.1.2 $out/lib/fglrx-libGL.so.1.2
+
   cp -r $TMP/arch/$arch/usr/$lib_arch/* $out/lib
 
   # cp -r $TMP/arch/$arch/usr/$lib_arch/* $out/lib
   ln -s libatiuki.so.1.0 $out/lib/libatiuki.so.1
-  ln -s libGL.so.1.2 $out/lib/libGL.so.1
+  ln -s fglrx-libGL.so.1.2 $out/lib/libGL.so.1
+  ln -s fglrx-libGL.so.1.2 $out/lib/libGL.so
+
   ln -s libfglrx_gamma.so.1.0 $out/lib/libfglrx_gamma.so.1
+  # make xorg use the ati version
+  ln -s $out/lib/xorg/modules/extensions/{fglrx/fglrx-libglx.so,libglx.so}
 
 }
 

@@ -1,23 +1,16 @@
 { fetchurl, stdenv, unzip, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "crypto++-5.6.1";
+  name = "crypto++-5.6.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cryptopp/cryptopp561.zip";
-    sha256 = "0s7jhvnfihikqp1iwpdz03fad62xkjxci6jiahrh6f3sn664vrwq";
+    url = "mirror://sourceforge/cryptopp/cryptopp562.zip";
+    sha256 = "0x1mqpz1v071cfrw4grbw7z734cxnpry1qh2b6rsmcx6nkyd5gsw";
   };
 
-  patches = [
-    ./pic.patch
-    ./salsa-gcc4.6.patch
-  ] ++ stdenv.lib.optional (stdenv.system != "i686-cygwin") ./dll.patch;
+  patches = stdenv.lib.optional (stdenv.system != "i686-cygwin") ./dll.patch;
 
-
-  buildInputs = [ unzip ]
-
-    # For some reason the makefile sets "AR = libtool" on Darwin.
-    ++ stdenv.lib.optional (stdenv.system == "i686-darwin") libtool;
+  buildInputs = [ unzip libtool ];
 
   # Unpack the thing in a subdirectory.
   unpackPhase = ''
@@ -56,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Crypto++, a free C++ class library of cryptographic schemes";
     homepage = http://cryptopp.com/;
-    license = "Public Domain";
+    license = "Boost 1.0";
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }

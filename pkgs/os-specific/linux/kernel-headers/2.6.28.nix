@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0hifjh75sinifr5138v22zwbpqln6lhn65k8b57a1dyzlqca7cl9";
   };
 
-  targetConfig = if (cross != null) then cross.config else null;
+  targetConfig = if cross != null then cross.config else null;
 
   platform =
     if cross != null then cross.arch else

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libraw1394-2.0.8";
+  name = "libraw1394-2.1.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/ieee1394/${name}.tar.gz";
-    sha256 = "0cwd8xn7wsm7nddbz7xgynxcjb1m4v2vjw1ky4dd6r5cv454hslk";
+    sha256 = "0w5sw06p51wfq2ahgql93ljkkp3hqprifzcxq8dq71c8zcbgyg58";
   };
 
   meta = { 

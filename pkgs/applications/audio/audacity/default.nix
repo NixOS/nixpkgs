@@ -1,20 +1,32 @@
 { stdenv, fetchurl, wxGTK, pkgconfig, gettext, gtk, glib, zlib, perl, intltool,
-  libogg, libvorbis, libmad, alsaLib, libsndfile, libsamplerate, flac, lame,
-  expat, id3lib, ffmpeg, portaudio
+  libogg, libvorbis, libmad, alsaLib, libsndfile, soxr, flac, lame,
+  expat, libid3tag, ffmpeg /*, portaudio - given up fighting their portaudio.patch */
   }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.0";
+  version = "2.0.3";
   name = "audacity-${version}";
 
   src = fetchurl {
-    url = "http://audacity.googlecode.com/files/audacity-minsrc-${version}.tar.bz2";
-    sha256 = "0spbib3f86b4qri0g13idyxvysg28hkpsglmjza681zrln62hjfq";
+    url = "http://audacity.googlecode.com/files/audacity-minsrc-${version}.tar.xz";
+    sha256 = "1k4bbxhpfl80vm3gm3jxqly0syqjij5kwziy4xyq2c8aj2miwj1f";
   };
-  buildInputs = [ pkgconfig wxGTK libsndfile expat alsaLib libsamplerate
-                  libvorbis libmad flac id3lib ffmpeg gettext ];
+
+  preConfigure = /* we prefer system-wide libs */ ''
+    mv lib-src lib-src-rm
+    mkdir lib-src
+    mv lib-src-rm/{Makefile*,lib-widget-extra,portaudio-v19,portmixer,portsmf,FileDialog,sbsms} lib-src/
+    rm -r lib-src-rm/
+  '';
+
+  buildInputs = [
+    pkgconfig gettext wxGTK gtk expat alsaLib
+    libsndfile soxr libid3tag
+    ffmpeg libmad lame libvorbis flac
+  ]; #ToDo: soundtouch, detach sbsms
 
   dontDisableStatic = true;
+  doCheck = true;
 
   meta = {
     description = "Sound editor with graphical UI";

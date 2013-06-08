@@ -1,16 +1,18 @@
 { stdenv, fetchurl, erlang, python, libxml2, libxslt, xmlto
-, docbook_xml_dtd_45, docbook_xsl }:
+, docbook_xml_dtd_45, docbook_xsl, zip, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "rabbitmq-server-2.4.0";
+  name = "rabbitmq-server-${version}";
+
+  version = "3.0.3";
 
   src = fetchurl {
-    url = "http://www.rabbitmq.com/releases/rabbitmq-server/v2.4.0/${name}.tar.gz";
-    sha256 = "0zvyyqw9kpzi791hvv8qj1aw0fpx5m5cgqfvffxfrdz8daxx3nma";
+    url = "http://www.rabbitmq.com/releases/rabbitmq-server/v${version}/${name}.tar.gz";
+    sha256 = "07mp57xvszdrlgw8rgn9r9dpa6vdqdjk7f1dyh6a9sdg8s9fby38";
   };
 
   buildInputs =
-    [ erlang python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl ];
+    [ erlang python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip ];
 
   preBuild =
     ''
@@ -19,6 +21,14 @@ stdenv.mkDerivation rec {
     '';
 
   installFlags = "TARGET_DIR=$(out)/libexec/rabbitmq SBIN_DIR=$(out)/sbin MAN_DIR=$(out)/share/man";
+
+  preInstall =
+    ''
+      sed -i \
+        -e 's|SYS_PREFIX=|SYS_PREFIX=''${SYS_PREFIX-''${HOME}/.rabbitmq/${version}}|' \
+        -e 's|CONF_ENV_FILE=''${SYS_PREFIX}\(.*\)|CONF_ENV_FILE=\1|' \
+        scripts/rabbitmq-defaults
+    '';
 
   postInstall =
     ''

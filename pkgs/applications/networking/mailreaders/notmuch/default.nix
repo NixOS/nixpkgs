@@ -1,16 +1,16 @@
-{ fetchurl, stdenv, bash, emacs, gdb, glib, gmime, gnupg1,
+{ fetchurl, stdenv, bash, emacs, gdb, glib, gmime, gnupg,
   pkgconfig, talloc, xapian
 }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.13.2";
+  name = "notmuch-0.15.2";
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "75ec5f5d04bb7e3a8cc6224859b691f704a2a35f2f6027ffb674e829268f1d68";
+    sha256 = "03cwylm0y9xld0hn753v0hn62f96nagdmzxv8jlz8vdbh9iszs56";
   };
 
-  buildInputs = [ bash emacs gdb glib gmime gnupg1 pkgconfig talloc xapian ];
+  buildInputs = [ bash emacs gdb glib gmime gnupg pkgconfig talloc xapian ];
 
   patchPhase = ''
     (cd test && for prg in \
@@ -55,6 +55,14 @@ stdenv.mkDerivation rec {
       substituteInPlace "$prg" \
         --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
     done)
+
+    for src in \
+      crypto.c \
+      emacs/notmuch-crypto.el
+    do
+      substituteInPlace "$src" \
+        --replace \"gpg\" \"${gnupg}/bin/gpg2\"
+    done
   '';
 
   # XXX: emacs tests broken
@@ -65,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "Notmuch -- The mail indexer";
     longDescription = "";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
+    maintainers = with stdenv.lib.maintainers; [ chaoflow garbas ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }

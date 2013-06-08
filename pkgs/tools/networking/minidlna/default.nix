@@ -1,28 +1,32 @@
-{stdenv, fetchurl, libav, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite }:
+{ stdenv, fetchurl, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite }:
+
+let version = "1.0.25"; in
+
 stdenv.mkDerivation rec {
-  name = "minidlna-1.0.24";
+  name = "minidlna-${version}";
+
   src = fetchurl {
-    url = mirror://sourceforge/project/minidlna/minidlna/1.0.24/minidlna_1.0.24_src.tar.gz;
-    sha256 = "0hmrrrq7d8940rckwj93bcdpdxxy3qfkjl17j5k31mi37hqc42l4";
+    url = "mirror://sourceforge/project/minidlna/minidlna/${version}/minidlna_${version}_src.tar.gz";
+    sha256 = "0l987x3bx2apnlihnjbhywgk5b2g9ysiapwclz5vphj2w3xn018p";
   };
 
+  patches = [ ./config.patch ];
+
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libav}/include/libavutil -I${libav}/include/libavcodec -I${libav}/include/libavformat"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${ffmpeg}/include/libavutil -I${ffmpeg}/include/libavcodec -I${ffmpeg}/include/libavformat"
     export makeFlags="INSTALLPREFIX=$out"
   '';
 
-  buildInputs = [ libav flac libvorbis libogg libid3tag libexif libjpeg sqlite ];
-  patches = [ ./config.patch ];
+  buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite ];
 
   meta = {
     description = "MiniDLNA Media Server";
     longDescription = ''
-      MiniDLNA (aka ReadyDLNA) is server software with the aim of being fully 
-      compliant with DLNA/UPnP-AV clients. 
+      MiniDLNA (aka ReadyDLNA) is server software with the aim of being fully
+      compliant with DLNA/UPnP-AV clients.
     '';
     homepage = http://sourceforge.net/projects/minidlna/;
     license = stdenv.lib.licenses.gpl2;
-
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

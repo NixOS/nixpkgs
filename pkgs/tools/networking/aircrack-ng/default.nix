@@ -1,15 +1,11 @@
-{stdenv, fetchsvn, libpcap, openssl, zlib, wirelesstools}:
+{stdenv, fetchurl, libpcap, openssl, zlib, wirelesstools}:
 
-let
-  rev = "2178";
-in
 stdenv.mkDerivation rec {
-  name = "aircrack-ng-1.1-${rev}";
+  name = "aircrack-ng-1.2-beta1";
 
-  src = fetchsvn {
-    url = "http://trac.aircrack-ng.org/svn/trunk";
-    inherit rev;
-    sha256 = "0rwj2nk4nyy0l9dg6rpg2h5gpvcygs5irj4i6fdcsr8xf0blq7yw";
+  src = fetchurl {
+    url = "http://download.aircrack-ng.org/${name}.tar.gz";
+    sha256 = "19cfib7sqp2rdm3lc84jrzsa6r8443gkm1ifbmhygsqn6fnkj8zi";
   };
 
   buildInputs = [libpcap openssl zlib];
@@ -19,9 +15,11 @@ stdenv.mkDerivation rec {
     sed -e 's@/usr/local/bin@'${wirelesstools}@ -i src/osdep/linux.c
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Wireless encryption crackign tools";
     homepage = http://www.aircrack-ng.org/;
     license = "GPL2+";
+    maintainers = [ maintainers.iElectric maintainers.viric maintainers.garbas maintainers.chaoflow ];
+    platforms = platforms.linux;
   };
 }

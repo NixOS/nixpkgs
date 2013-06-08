@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr mesa libX11 ];
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = [ "--enable-ILU" "--enable-ILUT" ];
 

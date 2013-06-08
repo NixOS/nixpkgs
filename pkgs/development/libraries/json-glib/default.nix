@@ -5,12 +5,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl_gnome {
     project = "json-glib";
-    major = "0"; minor = "14"; patchlevel = "0"; extension = "xz";
-    sha256 = "0mpw996cyidspjwns281l5haj9i8azpkfpl4jf98lh3kcqcr07l2";
+    major = "0"; minor = "14"; patchlevel = "2"; extension = "xz";
+    sha256 = "19wlpsbdnm3mq2a6yjpzj0cwrmlkarp2m5x6g63b0r2n7vxaa5mq";
   };
 
   propagatedBuildInputs = [ glib ];
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://live.gnome.org/JsonGlib;

@@ -54,3 +54,25 @@
      if test -z `$APXS -q SYSCONFDIR`; then
        APACHE_HOOKS_INSTALL="\$(mkinstalldirs) '$APXS_LIBEXECDIR' && \
                         $APXS -S LIBEXECDIR='$APXS_LIBEXECDIR' \
+diff -rc php-5.3.18/configure php-5.3.18-new/configure
+*** php-5.3.18/configure	2012-10-17 18:29:10.000000000 +0200
+--- php-5.3.18-new/configure	2012-11-13 05:36:24.730136551 +0100
+***************
+*** 45113,45121 ****
+  
+  
+  if test "$PHP_GETTEXT" != "no"; then
+!   for i in $PHP_GETTEXT /usr/local /usr; do
+!     test -r $i/include/libintl.h && GETTEXT_DIR=$i && break
+!   done
+  
+    if test -z "$GETTEXT_DIR"; then
+      { echo "configure: error: Cannot locate header file libintl.h" 1>&2; exit 1; }
+--- 45113,45119 ----
+  
+  
+  if test "$PHP_GETTEXT" != "no"; then
+!   GETTEXT_DIR=$PHP_GETTEXT
+  
+    if test -z "$GETTEXT_DIR"; then
+      { echo "configure: error: Cannot locate header file libintl.h" 1>&2; exit 1; }

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libtool, gcc, patches ? []}:
+{ stdenv, fetchurl, libtool, gcc, patches ? []}:
 
 stdenv.mkDerivation {
   name = "opencxx-2.8";

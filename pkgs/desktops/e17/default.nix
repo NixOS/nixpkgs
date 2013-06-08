@@ -10,6 +10,8 @@ rec {
 
   ecore = callPackage ./ecore { };
 
+  eio = callPackage ./eio { };
+
   embryo = callPackage ./embryo { };
 
   edje = callPackage ./edje { lua = pkgs.lua5; };
@@ -20,6 +22,12 @@ rec {
 
   eeze = callPackage ./eeze { };
 
+  emotion = callPackage ./emotion { };
+
+  ethumb = callPackage ./ethumb { };
+
+  elementary = callPackage ./elementary { };
+
 
   #### WINDOW MANAGER
 
@@ -28,6 +36,7 @@ rec {
 
   #### APPLICATIONS
 
+  terminology = callPackage ./terminology { };
 
 
 

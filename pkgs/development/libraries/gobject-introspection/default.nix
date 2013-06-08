@@ -1,12 +1,7 @@
 { stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python }:
 
-let
-  baseName = "gobject-introspection";
-  v = "0.10.8";
-in
-
 stdenv.mkDerivation rec {
-  name = "${baseName}-${v}";
+  name = "gobject-introspection-1.34.0";
 
   buildInputs = [ flex bison glib pkgconfig python ];
   propagatedBuildInputs = [ libffi ];
@@ -16,8 +11,8 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-tests";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${baseName}/0.10/${name}.tar.bz2";
-    sha256 = "5b1387ff37f03db880a2b1cbd6c6b6dfb923a29468d4d8367c458abf7704c61e";
+    url = "mirror://gnome/sources/gobject-introspection/1.34/${name}.tar.xz";
+    sha256 = "80e211ea95404fc7c5fa3b04ba69ee0b29af70847af315155ab06b8cff832c85";
   };
 
   postInstall = "rm -rf $out/share/gtk-doc";

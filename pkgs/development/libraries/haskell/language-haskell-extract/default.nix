@@ -1,10 +1,10 @@
-{ cabal, haskellSrcExts, regexPosix }:
+{ cabal, regexPosix }:
 
 cabal.mkDerivation (self: {
   pname = "language-haskell-extract";
-  version = "0.2.1";
-  sha256 = "0lmg16g3z8cx0vb037bk4j2nr3qvybfcqfsr8l6jk57b2nz3yhbf";
-  buildDepends = [ haskellSrcExts regexPosix ];
+  version = "0.2.4";
+  sha256 = "1nxcs7g8a1sp91bzpy4cj6s31k5pvc3gvig04cbrggv5cvjidnhl";
+  buildDepends = [ regexPosix ];
   meta = {
     homepage = "http://github.com/finnsson/template-helper";
     description = "Module to automatically extract functions from the local code";

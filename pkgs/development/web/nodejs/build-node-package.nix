@@ -1,7 +1,19 @@
-{ stdenv, nodejs }:
+{ stdenv, runCommand, nodejs, neededNatives}:
 
-args @ { src, deps, ... }:
+args @ { name, src, deps ? [], flags ? [], ... }:
 
+with stdenv.lib;
+
+let
+  npmFlags = concatStringsSep " " (map (v: "--${v}") flags);
+
+  sources = runCommand "node-sources" {} ''
+    tar xf ${nodejs.src}
+    mv *node* $out
+  '';
+
+  requireName = (builtins.parseDrvName name).name;
+in
 stdenv.mkDerivation ({
   unpackPhase = "true";
 
@@ -17,14 +29,16 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    ${nodejs}/bin/npm --registry http://www.example.com install ${src}    
+    npm --registry http://www.example.com --nodedir=${sources} install ${src} ${npmFlags}
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    mkdir $out
-    mv node_modules $out
+    mkdir -p $out/node_modules
+    mv node_modules/${requireName} $out/node_modules
+    mv node_modules/.bin $out/node_modules 2>/dev/null || true
+    mv node_modules $out/node_modules/${requireName}
     if [ -d "$out/node_modules/.bin" ]; then
       ln -sv node_modules/.bin $out/bin
       find -L $out/node_modules/.bin/* -type f -print0 | \
@@ -36,4 +50,10 @@ stdenv.mkDerivation ({
   preFixup = ''
     find $out -type f -print0 | xargs -0 sed -i 's|${src}|${src.name}|g'
   '';
-} // args)
+} // args // {
+  # Run the node setup hook when this package is a build input
+  propagatedNativeBuildInputs = (args.propagatedNativeBuildInputs or []) ++ [ nodejs ];
+
+  # Make buildNodePackage useful with --run-env
+  nativeBuildInputs = (args.nativeBuildInputs or []) ++ deps ++ neededNatives;
+} )

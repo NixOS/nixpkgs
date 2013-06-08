@@ -1,5 +1,5 @@
-{stdenv, fetchurl, cups, zlib, libjpeg, libusb, python, saneBackends, dbus
-, pkgconfig, polkit, qtSupport ? true, qt4
+{stdenv, fetchurl, cups, zlib, libjpeg, libusb, pythonPackages, saneBackends, dbus
+, pkgconfig, polkit, qtSupport ? true, qt4, pythonDBus, pyqt4, net_snmp
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i s,/etc/sane.d,$out/etc/sane.d/, Makefile.in
+    sed -i s,/etc/hp/,$out/etc/hp/, base/g.py
   '';
 
   # --disable-network-build Until we have snmp
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
       --with-systraydir=$out/xdg/autostart
       --with-mimedir=$out/etc/cups
       --enable-policykit
-      --disable-network-build"
+    "
 
     export makeFlags="
       halpredir=$out/share/hal/fdi/preprobe/10osvendor
@@ -41,8 +42,27 @@ stdenv.mkDerivation rec {
     ";
   '';
 
-  buildInputs = [libjpeg cups libusb python saneBackends dbus pkgconfig] ++
-    stdenv.lib.optional qtSupport qt4;
+  postInstall = ''
+    wrapPythonPrograms
+    '';
+
+  buildInputs = [
+      libjpeg
+      cups
+      libusb
+      pythonPackages.python
+      pythonPackages.wrapPython
+      saneBackends
+      dbus
+      pkgconfig
+      net_snmp
+    ] ++ stdenv.lib.optional qtSupport qt4;
+
+  pythonPath = with pythonPackages; [
+      pythonDBus
+      pygobject
+      recursivePthLoader
+    ] ++ stdenv.lib.optional qtSupport pyqt4;
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";

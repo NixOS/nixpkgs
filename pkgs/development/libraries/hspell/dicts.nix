@@ -2,7 +2,7 @@
 
 let
   dict = a: stdenv.mkDerivation ({
-    inherit (hspell) src patchPhase buildNativeInputs;
+    inherit (hspell) src patchPhase nativeBuildInputs;
     meta = hspell.meta // {
       description = "${a.buildFlags} Hebrew dictionary";
     } // (if a ? meta then a.meta else {});

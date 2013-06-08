@@ -1,19 +1,19 @@
 { stdenv, fetchurl, libextractor, libmicrohttpd, libgcrypt
 , zlib, gmp, curl, libtool, adns, sqlite, pkgconfig
-, libxml2, ncurses, gettext, libunistring
+, libxml2, ncurses, gettext, libunistring, libidn
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "gnunet-0.9.3";
+  name = "gnunet-0.9.5a";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${name}.tar.gz";
-    sha256 = "0ppirvwjb7w7270g0w83z6wyk984cnxv2ydxj7qr0j1cz2j6nn2h";
+    sha256 = "1mxy1ikv44fia3cybpmiw298x5371a2qh8hr7pi55yg1xqbhfq0x";
   };
 
   buildInputs = [
     libextractor libmicrohttpd libgcrypt gmp curl libtool
-    zlib adns sqlite libxml2 ncurses
+    zlib adns sqlite libxml2 ncurses libidn
     pkgconfig gettext libunistring makeWrapper
   ];
 
@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
       echo "$i: replacing references to \`/tmp' by \`$TMPDIR'..."
       substituteInPlace "$i" --replace "/tmp" "$TMPDIR"
     done
+
+    # Ensure NSS installation works fine
+    configureFlags="$configureFlags --with-nssdir=$out/lib"
+    patchShebangs src/gns/nss/install-nss-plugin.sh
   '';
 
   doCheck = false;
@@ -72,7 +76,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv2+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = with stdenv.lib.maintainers; [ ludo viric ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }

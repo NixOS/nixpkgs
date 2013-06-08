@@ -1,22 +1,31 @@
 { stdenv, fetchurl, emacs, texinfo }:
 
 let
-  version = "1.1.1";
+  version = "1.2.0";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "magit-${version}";
 
   src = fetchurl {
-    url = "http://github.com/downloads/magit/magit/magit-${version}.tar.gz";
-    sha256 = "0zp5qxippmalin2fr73w2alf2w7ilcahmybzdvgn4ch2s3dgvzcz";
+    url = "https://github.com/downloads/magit/magit/${name}.tar.gz";
+    sha256 = "1a8vvilhd5y5vmlpsh194qpl4qlg0a1brylfscxcacpfp0cmhlzg";
   };
 
-  buildInputs = [emacs texinfo];
+  buildInputs = [ emacs texinfo ];
 
   configurePhase = "makeFlagsArray=( PREFIX=$out SYSCONFDIR=$out/etc )";
 
+  # Add (require 'magit-site-init) to your ~/.emacs file to set-up magit mode.
+  postInstall = ''
+    mv $out/etc/emacs/site-start.d/50magit.el $out/share/emacs/site-lisp/magit-site-init.el
+    sed -i -e 's|50magit|magit-site-init|' $out/share/emacs/site-lisp/magit-site-init.el
+    rmdir $out/etc/emacs/site-start.d $out/etc/emacs $out/etc
+  '';
+
   meta = {
+    homepage = "https://github.com/magit/magit";
     description = "Magit, an Emacs interface to Git";
+    license = "GPLv3+";
 
     longDescription = ''
       With Magit, you can inspect and modify your Git repositories with
@@ -30,8 +39,6 @@ stdenv.mkDerivation {
       save you from learning Git itself.
     '';
 
-    license = "GPLv3+";
-    homepage = "https://github.com/magit/magit";
     platforms = stdenv.lib.platforms.all;
     maintainers = with stdenv.lib.maintainers; [ simons ludo ];
   };

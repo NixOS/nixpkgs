@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gdal qt4 flex bison proj geos x11 sqlite gsl pyqt4 qwt
     fcgi ];
 
-  buildNativeInputs = [ cmake python];
+  nativeBuildInputs = [ cmake python];
 
   patches = [ ./r14988.diff ];
 

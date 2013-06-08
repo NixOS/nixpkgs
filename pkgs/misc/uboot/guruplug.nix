@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     fi
   '';
 
-  buildNativeInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   dontStrip = true;
 

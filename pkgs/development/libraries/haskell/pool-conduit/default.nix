@@ -1,10 +1,12 @@
-{ cabal, resourcePool, resourcet, transformers }:
+{ cabal, monadControl, resourcePool, resourcet, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "pool-conduit";
-  version = "0.1.0.2";
-  sha256 = "1fs2kskvsvck9n011f2pv0s3mxd2hh71p61dxrskz79mfvks5yky";
-  buildDepends = [ resourcePool resourcet transformers ];
+  version = "0.1.2";
+  sha256 = "10lvq18pk9d4la5irr1qv1c9y4qbwlglmzgs7bz1d0g5232w3rv8";
+  buildDepends = [
+    monadControl resourcePool resourcet transformers
+  ];
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";
     description = "Resource pool allocations via ResourceT";

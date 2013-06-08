@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libnih, dbus, udev, autoconf, automake, libtool, gettext }:
+{ stdenv, fetchurl, pkgconfig, libnih, dbus, udev, gettext, autoreconfHook }:
 
 stdenv.mkDerivation {
   name = "mountall-2.35";
@@ -10,9 +10,7 @@ stdenv.mkDerivation {
 
   patches = [ ./no-plymouth.patch ./fix-usr1-race.patch ];
 
-  preConfigure = "rm -R aclocal.m4; gettextize -f; autoreconf -vfi";
-
-  buildInputs = [ pkgconfig libnih dbus.libs udev autoconf automake libtool gettext ];
+  buildInputs = [ pkgconfig libnih dbus.libs udev gettext autoreconfHook ];
 
   makeFlags = "initramfshookdir=$(out)/share/initramfs-tools/hooks upstart_jobs_initramfs_configdir=$(out)/share/initramfs-tools/event-driven/upstart-jobs";
 

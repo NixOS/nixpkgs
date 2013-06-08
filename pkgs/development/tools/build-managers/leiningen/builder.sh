@@ -10,7 +10,7 @@ out_bin=$out/bin/lein
 
 cp -v $src $out_bin
 cp -v $jarsrc $out/lib
-cp -v $clojuresrc $out/lib
+cp -v $clojure/lib/java/* $out/lib
 
 for p in $patches;
 do

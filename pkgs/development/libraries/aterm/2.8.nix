@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 
-let 
+let
   isMingw = stdenv ? cross && stdenv.cross.config == "i686-pc-mingw32" ;
 in
 stdenv.mkDerivation ( {
@@ -15,7 +15,12 @@ stdenv.mkDerivation ( {
     # Fix for http://bugzilla.sen.cwi.nl:8080/show_bug.cgi?id=841
     ./max-long.patch
   ] ++ ( if isMingw then [./aterm-mingw-asm.patch] else [] );
-  
+
+  # The test programs stress, randgen, fib, and testsafio all fail with
+  # segmentation faults when compiled with GCC 4.8.x, and the code itself many
+  # warnings, complaining "cast from pointer to integer of different size".
+  # This looks really bad. I leave the test suite enabled, because those issue
+  # feel too serious to just ignore.
   doCheck = true;
 
   meta = {
@@ -23,4 +28,4 @@ stdenv.mkDerivation ( {
     license = "LGPL";
     description = "Library for manipulation of term data structures in C";
   };
-} // ( if isMingw then { dontStrip = true; } else {}) ) 
+} // ( if isMingw then { dontStrip = true; } else {}) )

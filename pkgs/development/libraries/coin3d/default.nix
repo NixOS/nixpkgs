@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.1.3";
 
   src = fetchurl {
-    url = "http://ftp.coin3d.org/coin/src/all/Coin-${version}.tar.gz";
+    url = "https://bitbucket.org/Coin3D/coin/downloads/Coin-${version}.tar.gz";
     sha256 = "05ylhrcglm81dajbk132l1w892634z2i97x10fm64y1ih72phd2q";
   };
 

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, lib, tcpWrapper
+{ fetchurl, stdenv, lib, tcp_wrappers
 , daemonUser ? false, daemonUID ? false, daemonGID ? false }:
 
 assert daemonUser -> (!daemonUID && !daemonGID);
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (daemonUID != false) "DAEMON_UID=${toString daemonUID}"
     ++ lib.optional (daemonGID != false) "DAEMON_GID=${toString daemonGID}";
 
-  buildInputs = [ tcpWrapper ];
+  buildInputs = [ tcp_wrappers ];
 
   installPhase = ''
     mkdir -p "$out/sbin" "$out/man/man8"

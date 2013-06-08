@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation rec {
-  name = "vnstat-1.9";
-  
+  name = "vnstat-1.11";
+
   src = fetchurl {
-    url = http://humdi.net/vnstat/vnstat-1.9.tar.gz;
-    sha256 = "1migym0wig1s3b7d22ipxkd1p78sqc89dwx82qbf5hsb5q2fk4q1";
+    url = "http://humdi.net/vnstat/${name}.tar.gz";
+    sha256 = "09p0mlf49zzmh6jzwyvzd9k3jv7bl8i6w8xl65ns3dmv2zc7c65p";
   };
 
   installPhase = ''

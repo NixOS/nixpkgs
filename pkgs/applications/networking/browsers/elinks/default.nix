@@ -1,5 +1,8 @@
 { stdenv, fetchurl, python, perl, ncurses, x11, bzip2, zlib, openssl
-, spidermonkey, guile, gpm }:
+, spidermonkey, gpm
+, enableGuile ? true, guile ? null }:
+
+assert enableGuile -> guile != null;
 
 stdenv.mkDerivation rec {
   name = "elinks-0.12pre5";
@@ -11,22 +14,23 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gc-init.patch ];
 
-  buildInputs = [ python perl ncurses x11 bzip2 zlib openssl spidermonkey guile gpm ];
+  buildInputs = [ python perl ncurses x11 bzip2 zlib openssl spidermonkey gpm ]
+    ++ stdenv.lib.optional enableGuile guile;
 
   configureFlags =
     ''
-      --enable-finger --enable-html-highlight --with-guile
+      --enable-finger --enable-html-highlight
       --with-perl --with-python --enable-gopher --enable-cgi --enable-bittorrent
       --enable-nntp --with-openssl=${openssl}
-    '';
+    '' + stdenv.lib.optionalString enableGuile " --with-guile";
 
   crossAttrs = {
-    propagatedBuildInputs = [ ncurses.hostDrv zlib.hostDrv openssl.hostDrv ];
+    propagatedBuildInputs = [ ncurses.crossDrv zlib.crossDrv openssl.crossDrv ];
     configureFlags = ''
       --enable-finger --enable-html-highlight
       --enable-gopher --enable-cgi --enable-bittorrent --enable-nntp
-      --with-openssl=${openssl.hostDrv}
-      --with-bzip2=${bzip2.hostDrv}
+      --with-openssl=${openssl.crossDrv}
+      --with-bzip2=${bzip2.crossDrv}
     '';
   };
 

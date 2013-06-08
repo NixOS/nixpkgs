@@ -12,6 +12,7 @@ let
   sourceInfo = rec {
     url="http://www.i18nguy.com/unicode/andagii.zip";
     name="andagii";
+    version="1.0.2";
     hash="0cknb8vin15akz4ahpyayrpqyaygp9dgrx6qw7zs7d6iv9v59ds1";
   };
 in
@@ -21,7 +22,7 @@ rec {
     sha256 = sourceInfo.hash;
   };
 
-  inherit (sourceInfo) name version;
+  name = "${sourceInfo.name}-${sourceInfo.version}";
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */

@@ -1,0 +1,75 @@
+diff -Naur xchat-2.8.8-orig/src/common/dbus/dbus-plugin.c xchat-2.8.8/src/common/dbus/dbus-plugin.c
+--- xchat-2.8.8-orig/src/common/dbus/dbus-plugin.c	2009-08-16 05:40:15.000000000 -0400
++++ xchat-2.8.8/src/common/dbus/dbus-plugin.c	2012-07-15 23:07:33.678948703 -0400
+@@ -24,7 +24,7 @@
+ #include <config.h>
+ #include <dbus/dbus-glib.h>
+ #include <dbus/dbus-glib-lowlevel.h>
+-#include <glib/gi18n.h>
++#include <glib.h>
+ #include "../xchat-plugin.h"
+ 
+ #define PNAME _("remote access")
+diff -Naur xchat-2.8.8-orig/src/common/modes.c xchat-2.8.8/src/common/modes.c
+--- xchat-2.8.8-orig/src/common/modes.c	2010-05-29 21:52:18.000000000 -0400
++++ xchat-2.8.8/src/common/modes.c	2012-07-15 23:07:33.654948723 -0400
+@@ -20,7 +20,7 @@
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <glib.h>
+-#include <glib/gprintf.h>
++#include <glib.h>
+ 
+ #include "xchat.h"
+ #include "xchatc.h"
+diff -Naur xchat-2.8.8-orig/src/common/servlist.c xchat-2.8.8/src/common/servlist.c
+--- xchat-2.8.8-orig/src/common/servlist.c	2010-05-16 03:24:26.000000000 -0400
++++ xchat-2.8.8/src/common/servlist.c	2012-07-15 23:07:33.643948732 -0400
+@@ -24,7 +24,7 @@
+ #include <unistd.h>
+ 
+ #include "xchat.h"
+-#include <glib/ghash.h>
++#include <glib.h>
+ 
+ #include "cfgfiles.h"
+ #include "fe.h"
+diff -Naur xchat-2.8.8-orig/src/common/text.c xchat-2.8.8/src/common/text.c
+--- xchat-2.8.8-orig/src/common/text.c	2010-05-29 22:14:41.000000000 -0400
++++ xchat-2.8.8/src/common/text.c	2012-07-15 23:07:33.671948706 -0400
+@@ -28,7 +28,7 @@
+ #include <sys/mman.h>
+ 
+ #include "xchat.h"
+-#include <glib/ghash.h>
++#include <glib.h>
+ #include "cfgfiles.h"
+ #include "chanopt.h"
+ #include "plugin.h"
+diff -Naur xchat-2.8.8-orig/src/common/util.c xchat-2.8.8/src/common/util.c
+--- xchat-2.8.8-orig/src/common/util.c	2009-08-16 05:40:16.000000000 -0400
++++ xchat-2.8.8/src/common/util.c	2012-07-15 23:07:33.649948724 -0400
+@@ -39,7 +39,7 @@
+ #include <errno.h>
+ #include "xchat.h"
+ #include "xchatc.h"
+-#include <glib/gmarkup.h>
++#include <glib.h>
+ #include <ctype.h>
+ #include "util.h"
+ #include "../../config.h"
+diff -Naur xchat-2.8.8-orig/src/common/xchat.h xchat-2.8.8/src/common/xchat.h
+--- xchat-2.8.8-orig/src/common/xchat.h	2009-08-16 05:40:16.000000000 -0400
++++ xchat-2.8.8/src/common/xchat.h	2012-07-15 23:08:20.855910521 -0400
+@@ -1,10 +1,6 @@
+ #include "../../config.h"
+ 
+-#include <glib/gslist.h>
+-#include <glib/glist.h>
+-#include <glib/gutils.h>
+-#include <glib/giochannel.h>
+-#include <glib/gstrfuncs.h>
++#include <glib.h>
+ #include <time.h>			/* need time_t */
+ 
+ #ifndef XCHAT_H

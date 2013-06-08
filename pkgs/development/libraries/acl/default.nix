@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "bin" "doc" ];
 
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
   buildInputs = [ attr ];
 
   # Upstream use C++-style comments in C code. Remove them.

@@ -8,11 +8,11 @@
 , nvidia_cg_toolkit }:
 
 stdenv.mkDerivation {
-  name = "ogre-1.7.2";
+  name = "ogre-1.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ogre/1.7/ogre_src_v1-7-2.tar.bz2";
-    sha256 = "10q8jx842s4aws9py6q67rb4dh5vli5vvg54jl8manjb4f388jh5";
+    url = "mirror://sourceforge/ogre/1.8.1/ogre_src_v1-8-1.tar.bz2";
+    sha256 = "1avadx87sdfdk8165wlffnd5dzks694dcdnkg3ijap966k4qm46s";
   };
 
   cmakeFlags = [ "-DOGRE_INSTALL_SAMPLES=yes" ]

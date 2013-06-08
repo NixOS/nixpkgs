@@ -9,7 +9,7 @@ diff -rc xorg-server-X11R7.2-1.2.0-orig/xkb/xkbInit.c xorg-server-X11R7.2-1.2.0/
       }
 +     char *xkbBinDir = getenv("XKB_BINDIR");
 +     if (xkbBinDir)
-+         XkbBinDirectory = _XkbDupString(xkbBinDir);
++         XkbBinDirectory = Xstrdup(xkbBinDir);
       return 0;
   }
   

@@ -11,11 +11,11 @@ let
 
 in with stdenv; mkDerivation rec {
 
-  name = "quassel-0.7.1";
+  name = "quassel-0.7.4";
 
   src = fetchurl {
     url = "http://quassel-irc.org/pub/${name}.tar.bz2";
-    sha256 = "1kby1yikiv5bpzkdri5dq39pxnsj9gjrcv1gigvy2jzy3g99qjli";
+    sha256 = "08f4m35bkmp9p1n560a3fg711s9izb25ddx2az03xzf1jl8qdrg7";
   };
 
   buildInputs = [ cmake qt4 ]

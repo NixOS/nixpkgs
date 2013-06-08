@@ -1,0 +1,45 @@
+https://bugs.launchpad.net/qemu/+bug/1033727
+
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 12 Sep 2012 13:08:40 +0000 (+0200)
+Subject: uhci: Don't queue up packets after one with the SPD flag set
+X-Git-Tag: v1.3.0-rc0~483^2
+X-Git-Url: http://git.qemu.org/?p=qemu.git;a=commitdiff_plain;h=72a04d0c178f01908d74539230d9de64ffc6da19
+Bug-Debian: http://bugs.debian.org/683983
+
+uhci: Don't queue up packets after one with the SPD flag set
+
+Don't queue up packets after a packet with the SPD (short packet detect)
+flag set. Since we won't know if the packet will actually be short until it
+has completed, and if it is short we should stop the queue.
+
+This fixes a miniature photoframe emulating a USB cdrom with the windows
+software for it not working.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
+---
+
+diff --git a/hw/usb/hcd-uhci.c b/hw/usb/hcd-uhci.c
+index c7c8786..cdc8bc3 100644
+--- a/hw/usb/hcd-uhci.c
++++ b/hw/usb/hcd-uhci.c
+@@ -1000,6 +1000,9 @@ static void uhci_fill_queue(UHCIState *s, UHCI_TD *td)
+         }
+         assert(ret == TD_RESULT_ASYNC_START);
+         assert(int_mask == 0);
++        if (ptd.ctrl & TD_CTRL_SPD) {
++            break;
++        }
+         plink = ptd.link;
+     }
+ }
+@@ -1097,7 +1100,7 @@ static void uhci_process_frame(UHCIState *s)
+ 
+         case TD_RESULT_ASYNC_START:
+             trace_usb_uhci_td_async(curr_qh & ~0xf, link & ~0xf);
+-            if (is_valid(td.link)) {
++            if (is_valid(td.link) && !(td.ctrl & TD_CTRL_SPD)) {
+                 uhci_fill_queue(s, &td);
+             }
+             link = curr_qh ? qh.link : td.link;

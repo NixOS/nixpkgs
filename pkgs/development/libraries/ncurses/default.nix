@@ -23,7 +23,7 @@ stdenv.mkDerivation (rec {
     ${if unicode then "--enable-widec" else ""}${if cxx then "" else "--without-cxx-binding"}
   '';
 
-  selfBuildNativeInput = true;
+  selfNativeBuildInput = true;
 
   enableParallelBuilding = true;
 

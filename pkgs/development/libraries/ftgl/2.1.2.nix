@@ -13,6 +13,8 @@ stdenv.mkDerivation {
 
   buildInputs = [freetype mesa];
 
+  NIX_LDFLAGS = "-lGLU -lGL";
+
   patches = [ ./gcc.patch ];
 
   configureFlags = "--enable-shared";

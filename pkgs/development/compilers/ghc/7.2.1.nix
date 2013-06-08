@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       stdenv.lib.maintainers.andres
       stdenv.lib.maintainers.simons
     ];
-    platforms = ghc.meta.platforms;
+    inherit (ghc.meta) license platforms;
   };
 
 }

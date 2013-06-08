@@ -1,0 +1,25 @@
+diff --git a/config.mk b/config.mk.new
+index c3a7b37..0cbce67 100644
+--- a/config.mk
++++ b/config.mk
+@@ -10,6 +10,9 @@ ZATHURA_VERSION_CHECK ?= $(shell pkg-config --atleast-version=$(ZATHURA_MIN_VERS
+ PREFIX ?= /usr
+ 
+ # libs
++GTK_INC ?= $(shell pkg-config --cflags gtk+-2.0)
++GTK_LIB ?= $(shell pkg-config --libs gtk+-2.0)
++
+ CAIRO_INC ?= $(shell pkg-config --cflags cairo)
+ CAIRO_LIB ?= $(shell pkg-config --libs cairo)
+ 
+@@ -26,8 +29,8 @@ ZATHURA_INC ?= $(shell pkg-config --cflags zathura)
+ PLUGINDIR ?= $(shell pkg-config --variable=plugindir zathura)
+ PLUGINDIR ?= ${PREFIX}/lib/zathura
+ 
+-INCS = ${GLIB_INC} ${SPECTRE_INC} ${GIRARA_INC} ${ZATHURA_INC}
+-LIBS = ${GLIB_LIB} ${SPECTRE_LIB} ${GIRARA_LIB}
++INCS = ${GLIB_INC} ${SPECTRE_INC} ${GIRARA_INC} ${ZATHURA_INC} ${GTK_INC}
++LIBS = ${GLIB_LIB} ${SPECTRE_LIB} ${GIRARA_LIB} ${GTK_LIB}
+ 
+ # flags
+ CFLAGS += -std=c99 -fPIC -pedantic -Wall -Wno-format-zero-length $(INCS)

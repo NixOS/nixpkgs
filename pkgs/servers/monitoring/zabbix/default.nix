@@ -2,11 +2,11 @@
 
 let
 
-  version = "1.8.10";
-  
+  version = "1.8.15";
+
   src = fetchurl {
     url = "mirror://sourceforge/zabbix/zabbix-${version}.tar.gz";
-    sha256 = "0jx5i1ps1zr908g8gh1zisajiblg40x8cchmgbpdviz85hzx4rfr";
+    sha256 = "0358syx6vck6l8j9wwlsb78faivh4qxrgy3jlkmjqr99xi6h3r3f";
   };
 
   preConfigure =
@@ -49,7 +49,7 @@ in
       platforms = stdenv.lib.platforms.linux;
     };
   };
-  
+
   agent = stdenv.mkDerivation {
     name = "zabbix-agent-${version}";
 
@@ -65,5 +65,5 @@ in
       platforms = stdenv.lib.platforms.all;
     };
   };
-  
+
 }

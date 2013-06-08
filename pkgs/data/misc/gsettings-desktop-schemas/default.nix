@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ glib ];
-  buildNativeInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool ];
 
   meta = {
     inherit (glib.meta) maintainers platforms;

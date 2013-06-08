@@ -1,11 +1,11 @@
 { stdenv, fetchurl, getopt, which, pkgconfig, gtk } :
 
 stdenv.mkDerivation (rec {
-  name = "pqiv-0.8";
+  name = "pqiv-0.12";
 
   src = fetchurl {
-    url = "http://www.pberndt.com/raw/Programme/Linux/pqiv/_download/${name}.tbz";
-    sha256 = "365332bab4b13ca56da6935e7155af20658e67d323808942dce23e880466f66d";
+    url = "https://github.com/downloads/phillipberndt/pqiv/${name}.tbz";
+    sha256 = "646c69f2f4e7289913f6b8e8ae984befba9debf0d2b4cc8af9955504a1fccf1e";
   };
 
   buildInputs = [ getopt which pkgconfig gtk ];

@@ -9,5 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "11052fgfmv9vyswzjjgfvh3pi0k3fnfnl9ri6nl4vc6f6z5ry56x";
   };
 
-  buildInputs = [tcl];
+  passthru = {
+    libPrefix = "tcllib${version}";
+  };
+
+  buildInputs = [ tcl ];
+
+  meta = {
+    homepage = "http://tcl.activestate.com/software/tcllib/";
+    description = "Tcl-only library of standard routines for Tcl";
+    license = stdenv.lib.licenses.tcltk;
+  };
 }

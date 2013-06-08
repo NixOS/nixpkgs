@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, udev, utillinux, coreutils }:
 
 let
-  v = "2.02.97";
+  v = "2.02.98";
 in
 
 stdenv.mkDerivation {
@@ -9,8 +9,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/old/LVM2.${v}.tgz";
-    sha256 = "0azwa555dgvixbdw055yj8cj1q6kd0a36nms005iz7la5q0q5npd";
+    sha256 = "0r6q6z8ip6q5qgkzng0saljassp4912k6i21ra10vq7pzrc0l0vi";
   };
+
+  patches = [ ./assume-uevent-generated.patch ];
 
   configureFlags =
     "--disable-readline --enable-udev_rules --enable-udev_sync --enable-pkgconfig --enable-applib";

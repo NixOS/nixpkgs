@@ -1,10 +1,11 @@
-{ cabal, parsec, shakespeare, text }:
+{ cabal, hspec, parsec, shakespeare, text }:
 
 cabal.mkDerivation (self: {
   pname = "shakespeare-i18n";
-  version = "1.0.0.2";
-  sha256 = "11ydkl6v31v79q8a8fqf4p99p7dv9dlimr3rhi9cs5lrxz9gmf5z";
+  version = "1.0.0.3";
+  sha256 = "0k5daz6ayc4d6zxsq7p27bp5fq4qr31qxw9z9mwb5xcz2404d00r";
   buildDepends = [ parsec shakespeare text ];
+  testDepends = [ hspec text ];
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "A type-based approach to internationalization";

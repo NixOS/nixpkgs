@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, browser, x11
-, GConf, gnome_mplayer, MPlayer, gmtk
+, GConf, gnome_mplayer, mplayer, gmtk
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # browser's $PATH.
   postInstall =
     ''
-      echo "${gnome_mplayer}/bin:${MPlayer}/bin" > $out/${passthru.mozillaPlugin}/extra-bin-path
+      echo "${gnome_mplayer}/bin:${mplayer}/bin" > $out/${passthru.mozillaPlugin}/extra-bin-path
     '';
 
   passthru.mozillaPlugin = "/lib/mozilla/plugins";

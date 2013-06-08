@@ -1,0 +1,12 @@
+diff -Naur libindi-0.9.6-upstream/CMakeLists.txt libindi-0.9.6/CMakeLists.txt
+--- libindi-0.9.6-upstream/CMakeLists.txt	2012-11-19 16:09:14.000000000 -0430
++++ libindi-0.9.6/CMakeLists.txt	2013-05-02 17:02:55.455944987 -0430
+@@ -13,7 +13,7 @@
+ set(DATA_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/share/indi/")
+ set(BIN_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/bin")
+ set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include")
+-set(UDEVRULES_INSTALL_DIR "/etc/udev/rules.d")
++set(UDEVRULES_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/etc/udev/rules.d")
+ 
+ IF(APPLE)
+ set(CMAKE_SHARED_LINKER_FLAGS "-undefined dynamic_lookup")

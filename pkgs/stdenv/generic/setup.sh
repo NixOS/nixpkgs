@@ -1,7 +1,7 @@
 # Run the named hook, either by calling the function with that name or
 # by evaluating the variable with that name.  This allows convenient
 # setting of hooks both from Nix expressions (as attributes /
-# environment variables) and from shell scripts (as functions). 
+# environment variables) and from shell scripts (as functions).
 runHook() {
     local hookName="$1"
     case "$(type -t $hookName)" in
@@ -29,10 +29,10 @@ exitHandler() {
         # - system time for all child processes
         echo "build time elapsed: " ${times[*]}
     fi
-    
+
     if [ $exitCode != 0 ]; then
         runHook failureHook
-    
+
         # If the builder had a non-zero exit code and
         # $succeedOnFailure is set, create the file
         # `$out/nix-support/failed' to signal failure, and exit
@@ -43,11 +43,11 @@ exitHandler() {
             echo -n $exitCode > "$out/nix-support/failed"
             exit 0
         fi
-        
+
     else
         runHook exitHook
     fi
-    
+
     exit $exitCode
 }
 
@@ -169,8 +169,8 @@ for i in $buildInputs $propagatedBuildInputs; do
 done
 
 nativePkgs=""
-for i in $buildNativeInputs $propagatedBuildNativeInputs; do
-    findInputs $i nativePkgs propagated-build-native-inputs
+for i in $nativeBuildInputs $propagatedNativeBuildInputs; do
+    findInputs $i nativePkgs propagated-native-build-inputs
 done
 
 
@@ -197,7 +197,7 @@ addToCrossEnv() {
     local pkg=$1
 
     # Some programs put important build scripts (freetype-config and similar)
-    # into their hostDrv bin path. Intentionally these should go after
+    # into their crossDrv bin path. Intentionally these should go after
     # the nativePkgs in PATH.
     if [ -d $1/bin ]; then
         addToSearchPath _PATH $1/bin
@@ -445,7 +445,7 @@ unpackFile() {
         *)
             if [ -d "$curSrc" ]; then
                 stripHash $curSrc
-                cp -prvd $curSrc $strippedName
+                cp -prd --no-preserve=timestamps $curSrc $strippedName
             else
                 if [ -z "$unpackCmd" ]; then
                     echo "source archive $curSrc has unknown type"
@@ -462,7 +462,7 @@ unpackFile() {
 
 unpackPhase() {
     runHook preUnpack
-    
+
     if [ -z "$srcs" ]; then
         if [ -z "$src" ]; then
             echo 'variable $src or $srcs should point to the source'
@@ -529,9 +529,7 @@ unpackPhase() {
 
 patchPhase() {
     runHook prePatch
-    
-    if [ -z "$patchPhase" -a -z "$patches" ]; then return; fi
-    
+
     for i in $patches; do
         header "applying patch $i" 3
         local uncompress=cat
@@ -627,7 +625,7 @@ checkPhase() {
     make ${makefile:+-f $makefile} \
         ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}} \
         $makeFlags "${makeFlagsArray[@]}" \
-        $checkFlags "${checkFlagsArray[@]}" ${checkTarget:-check}
+        ${checkFlags:-VERBOSE=y} "${checkFlagsArray[@]}" ${checkTarget:-check}
 
     runHook postCheck
 }
@@ -724,11 +722,11 @@ fixupPhase() {
 
     # TODO: strip _only_ ELF executables, and return || fail here...
     if [ -z "$dontStrip" ]; then
-        stripDebugList=${stripDebugList:-lib lib64 libexec bin sbin}
+        stripDebugList=${stripDebugList:-lib lib32 lib64 libexec bin sbin}
         if [ -n "$stripDebugList" ]; then
             stripDirs "$stripDebugList" "${stripDebugFlags:--S}"
         fi
-        
+
         stripAllList=${stripAllList:-}
         if [ -n "$stripAllList" ]; then
             stripDirs "$stripAllList" "${stripAllFlags:--s}"
@@ -748,9 +746,9 @@ fixupPhase() {
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
-    if [ -n "$propagatedBuildNativeInputs" ]; then
+    if [ -n "$propagatedNativeBuildInputs" ]; then
         mkdir -p "$out/nix-support"
-        echo "$propagatedBuildNativeInputs" > "$out/nix-support/propagated-build-native-inputs"
+        echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
     fi
 
     if [ -n "$propagatedUserEnvPkgs" ]; then
@@ -844,7 +842,7 @@ genericBuild() {
 
         showPhaseHeader "$curPhase"
         dumpVars
-        
+
         # Evaluate the variable named $curPhase if it exists, otherwise the
         # function named $curPhase.
         eval "${!curPhase:-$curPhase}"
@@ -852,7 +850,7 @@ genericBuild() {
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
         fi
-        
+
         if [ -n "$tracePhases" ]; then
             echo
             echo "@ phase-succeeded $out $curPhase"
@@ -867,6 +865,12 @@ genericBuild() {
 
 # Execute the post-hook.
 runHook postHook
+
+
+# Execute the global user hook (defined through the Nixpkgs
+# configuration option ‘stdenv.userHook’).  This can be used to set
+# global compiler optimisation flags, for instance.
+runHook userHook
 
 
 dumpVars

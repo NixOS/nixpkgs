@@ -1,10 +1,10 @@
-{ cabal, srcloc, symbol }:
+{ cabal, srcloc, text }:
 
 cabal.mkDerivation (self: {
   pname = "mainland-pretty";
-  version = "0.1.3.0";
-  sha256 = "1grfsn066z11737dxdk1bdhyvz9vjxxn6krfgx9bc8jin6n9h6aq";
-  buildDepends = [ srcloc symbol ];
+  version = "0.2.6";
+  sha256 = "1mjw79jg0vq8qvgvjdinidw1pvfj3mych3z0f6g031vmqz7fqvzy";
+  buildDepends = [ srcloc text ];
   meta = {
     homepage = "http://www.eecs.harvard.edu/~mainland/";
     description = "Pretty printing designed for printing source code";

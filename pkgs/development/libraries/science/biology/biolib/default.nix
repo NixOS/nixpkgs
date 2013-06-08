@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, rLang, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "biolib";
+  name = "biolib-${version}";
   
   version = "0.0.1";
   

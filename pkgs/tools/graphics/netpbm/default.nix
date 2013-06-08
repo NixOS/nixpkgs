@@ -1,17 +1,18 @@
-{stdenv, fetchsvn, libjpeg, libpng, flex, zlib, perl, libxml2, makeWrapper }:
+{stdenv, fetchsvn, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2, makeWrapper, libX11 }:
 
+let rev = 1742; in
 stdenv.mkDerivation {
-  name = "netpbm-advanced-1177";
+  name = "netpbm-advanced-${toString rev}";
 
   src = fetchsvn {
     url = https://netpbm.svn.sourceforge.net/svnroot/netpbm/advanced;
-    rev = 1656;
-    sha256 = "0mbrvd8nc52yrg8wgxcvxsajxc9qrnjqhlcks6dpdzq7qmwjy6g9";
+    inherit rev;
+    sha256 = "0csx6g0ci66nx1a6z0a9dkpfp66mdvcpp5r7g6zrx4jp18r9hzb2";
   };
 
-  NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
+  NIX_CFLAGS_COMPILE = "-fPIC"; # Gentoo adds this on every platform
 
-  buildInputs = [ flex zlib perl libpng libjpeg libxml2 makeWrapper ];
+  buildInputs = [ pkgconfig flex zlib perl libpng libjpeg libxml2 makeWrapper libX11 ];
 
   configurePhase = "cp config.mk.in config.mk";
 

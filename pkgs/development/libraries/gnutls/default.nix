@@ -1,39 +1,48 @@
-{ fetchurl, stdenv, zlib, lzo, libtasn1, nettle
-, guileBindings, guile, perl }:
+{ fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+, guileBindings, guile, perl, gmp }:
 
 assert guileBindings -> guile != null;
 
 stdenv.mkDerivation (rec {
 
-  name = "gnutls-3.0.22";
+  name = "gnutls-3.1.12";
 
   src = fetchurl {
-    url = "mirror://gnu/gnutls/${name}.tar.xz";
-    sha256 = "1pp90fm27qi5cd0pq18xcmnl79xcbfwxc54bg1xi1wv0vryqdpcr";
+    url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/${name}.tar.lz";
+    sha256 = "1h8j3xi2jad2dclybgqffb5264hdqrxpsx99irs03yy9np6iw5l8";
   };
 
+  # Note: GMP is a dependency of Nettle, whose public headers include
+  # GMP headers, hence the hack.
   configurePhase = ''
     ./configure --prefix="$out"                                 \
       --disable-dependency-tracking --enable-fast-install       \
       --without-p11-kit                                         \
-      --with-lzo --with-libtasn1-prefix="${libtasn1}"		\
+      --with-lzo --with-libtasn1-prefix="${libtasn1}"           \
+      --with-libnettle-prefix="${nettle}"                       \
+      CPPFLAGS="-I${gmp}/include"                               \
       ${if guileBindings
         then "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""
         else ""}
   '';
 
-  buildInputs = [ zlib lzo ]
+  # Build of the Guile bindings is not parallel-safe.  See
+  # <http://git.savannah.gnu.org/cgit/gnutls.git/commit/?id=330995a920037b6030ec0282b51dde3f8b493cad>
+  # for the actual fix.
+  enableParallelBuilding = false;
+
+  buildInputs = [ zlib lzo lzip ]
     ++ stdenv.lib.optional guileBindings guile;
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl pkgconfig ];
 
   propagatedBuildInputs = [ nettle libtasn1 ];
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
-  doCheck = (!stdenv.isFreeBSD);
+  doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "The GNU Transport Layer Security Library";
 
     longDescription = ''
@@ -52,8 +61,7 @@ stdenv.mkDerivation (rec {
 
     homepage = http://www.gnu.org/software/gnutls/;
     license = "LGPLv2.1+";
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ maintainers.ludo ];
   };
 }
 

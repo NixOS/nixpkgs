@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ Agda ];
+  jailbreak = true;
   meta = {
     homepage = "http://wiki.portal.chalmers.se/agda/";
     description = "Command-line program for type-checking and compiling Agda programs";

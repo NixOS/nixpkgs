@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hslogger-template";
-  version = "2.0.1";
-  sha256 = "1m8h4i8cxxw83vhbw61njvv86qdcff6zi3bf0nyhc4cq7pfrzqvj";
+  version = "2.0.2";
+  sha256 = "0qkyclj9fajvzbfcs0ik8ncy66x916r40jd85r4wi5nh482i7sp3";
   buildDepends = [ hslogger mtl ];
   meta = {
     description = "Automatic generation of hslogger functions";

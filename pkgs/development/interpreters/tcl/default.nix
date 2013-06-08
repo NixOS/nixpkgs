@@ -18,6 +18,7 @@ stdenv.mkDerivation {
   meta = {
     description = "The Tcl scription language";
     homepage = http://www.tcl.tk/;
+    license = stdenv.lib.licenses.tcltk;
   };
   
   passthru = {

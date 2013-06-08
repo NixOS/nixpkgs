@@ -1,14 +1,17 @@
-{stdenv, fetchurl, unzip, cmake}:
+{ stdenv, fetchurl, cmake, mesa, freeglut }:
 
-stdenv.mkDerivation {
-  name = "bullet-2.78";
+stdenv.mkDerivation rec {
+  name = "bullet-2.80"; # vdrift 2012-07-22 doesn't build with 2.81
+  rev = "2531";
   src = fetchurl {
-    url = "http://bullet.googlecode.com/files/bullet-2.78.zip";
-    sha256 = "10l2dclvv0di9mi9qp6xfy9vybx182xp2dyygabacrpr3p75s77k";
+    url = "http://bullet.googlecode.com/files/${name}-rev${rev}.tgz";
+    sha256 = "0dig6k88jz5y0cz6dn186vc4l96l4v56zvwpsp5bv9f5wdwjskj6";
   };
-  buildInputs = [ unzip cmake ];
+
+  buildInputs = [ cmake mesa freeglut ];
   configurePhase = ''
-    cmake -DBUILD_SHARED_LIBS=ON -DBUILD_EXTRAS=OFF -DBUILD_DEMOS=OFF .
+    cmake -DBUILD_SHARED_LIBS=ON -DBUILD_EXTRAS=OFF -DBUILD_DEMOS=OFF \
+      -DCMAKE_INSTALL_PREFIX=$out .
   '';
 
   meta = {
@@ -19,6 +22,6 @@ stdenv.mkDerivation {
     '';
     homepage = http://code.google.com/p/bullet/;
     license = stdenv.lib.licenses.zlib;
-    maintainers = [ "Alexander Foremny <alexanderforemny@googlemail.com>" ];
+    maintainers = with stdenv.lib.maintainers; [ aforemny ];
   };
 }

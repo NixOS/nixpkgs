@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [aterm toolbuslib];
-  buildNativeInputs = [pkgconfig];
+  nativeBuildInputs = [pkgconfig];
 
   dontStrip = isMingw;
 } 

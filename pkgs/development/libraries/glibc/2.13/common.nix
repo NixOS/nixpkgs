@@ -39,7 +39,7 @@ stdenv.mkDerivation ({
   inherit kernelHeaders installLocales;
 
   # The host/target system.
-  crossConfig = if (cross != null) then cross.config else null;
+  crossConfig = if cross != null then cross.config else null;
 
   inherit (stdenv) is64bit;
 
@@ -102,14 +102,16 @@ stdenv.mkDerivation ({
     "-C"
     "--enable-add-ons"
     "--sysconfdir=/etc"
-    "--localedir=/var/run/current-system/sw/lib/locale" ] ++
-    (stdenv.lib.optional (stdenv.name == "stdenv") "libc_cv_ssp=no") ++ [
+    "--localedir=/var/run/current-system/sw/lib/locale"
+    "libc_cv_ssp=no"
     (if kernelHeaders != null
      then "--with-headers=${kernelHeaders}/include"
      else "--without-headers")
     (if profilingLibraries
      then "--enable-profile"
      else "--disable-profile")
+  ] ++ stdenv.lib.optionals (cross == null && kernelHeaders != null) [
+    "--enable-kernel=2.6.35"
   ] ++ stdenv.lib.optionals (cross != null) [
     (if cross.withTLS then "--with-tls" else "--without-tls")
     (if cross.float == "soft" then "--without-fp" else "--with-fp")
@@ -118,10 +120,19 @@ stdenv.mkDerivation ({
         && cross.platform.kernelMajor == "2.6") [
     "--enable-kernel=2.6.0"
     "--with-__thread"
-  ] ++ stdenv.lib.optionals stdenv.isArm [
+  ] ++ stdenv.lib.optionals (cross == null &&
+       (stdenv.system == "armv5tel-linux")) [
     "--host=arm-linux-gnueabi"
     "--build=arm-linux-gnueabi"
     "--without-fp"
+
+    # To avoid linking with -lgcc_s (dynamic link)
+    # so the glibc does not depend on its compiler store path
+    "libc_cv_as_needed=no"
+  ] ++ stdenv.lib.optionals (cross == null && stdenv.platform.name == "raspberrypi") [
+    "--host=arm-linux-gnueabi"
+    "--build=arm-linux-gnueabi"
+    "--with-fp"
 
     # To avoid linking with -lgcc_s (dynamic link)
     # so the glibc does not depend on its compiler store path

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "digest";
-  version = "0.0.1.1";
-  sha256 = "1m04szf9yabmm6mkjq2x7a57bjdf2i611wm2k99wdcygb5cvif3v";
+  version = "0.0.1.2";
+  sha256 = "04gy2zp8yzvv7j9bdfvmfzcz3sqyqa6rwslqcn4vyair2vmif5v4";
   extraLibraries = [ zlib ];
   meta = {
     description = "Various cryptographic hashes for bytestrings; CRC32 and Adler32 for now";

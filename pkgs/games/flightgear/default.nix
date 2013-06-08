@@ -1,23 +1,23 @@
 x@{builderDefsPackage
   , freeglut, freealut, mesa, libICE, libjpeg, openal, openscenegraph, plib
   , libSM, libunwind, libX11, xproto, libXext, xextproto, libXi, inputproto
-  , libXmu, libXt, simgear, zlib, boost
+  , libXmu, libXt, simgear, zlib, boost, cmake, libpng
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
-    baseName="FlightGear";
-    version="2.0.0";
+    baseName="flightgear";
+    version="2.10.0";
     name="${baseName}-${version}";
-    extension="tar.gz";
+    extension="tar.bz2";
     url="http://ftp.linux.kiev.ua/pub/fgfs/Source/${name}.${extension}";
-    hash="17h7ns955xkd0cakfk22aym0id65rd8kylcamkmycbgnnhs4b1wg";
+    hash="0pq5nwyxwp8ar5rr0jh8p04bv0i9i841m374jwd748csnsn28zh6";
   };
 in
 rec {
@@ -35,14 +35,14 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall" "deployData"];
+  phaseNames = ["doCmake" "doMakeInstall" "deployData"];
 
   deployData = a.fullDepEntry ''
     mkdir -p "$out/share/FlightGear"
     cd "$out/share/FlightGear"
     tar xvf ${datasrc}
   '' ["minInit" "defEnsureDir"];
-      
+
   meta = {
     description = "A flight simulator";
     maintainers = with a.lib.maintainers;

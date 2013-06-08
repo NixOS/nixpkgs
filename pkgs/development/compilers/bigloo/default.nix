@@ -1,10 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "bigloo3.7a";
+  name = "bigloo-${version}";
+  version = "3.7a";
 
   src = fetchurl {
-    url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/${name}.tar.gz";
+    url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo${version}.tar.gz";
     sha256 = "0y8i87c2bpqzap8rhzgpyfgdzq21py5xq6mgp0w6xv4rjcj9d0v1";
   };
 

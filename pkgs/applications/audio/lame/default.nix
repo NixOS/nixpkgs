@@ -1,10 +1,10 @@
 {stdenv, fetchurl, nasm}:
 
 stdenv.mkDerivation rec {
-  name = "lame-3.98.4";
+  name = "lame-3.99.5";
   src = fetchurl {
     url = "mirror://sourceforge/lame/${name}.tar.gz";
-    sha256 = "1j3jywv6ic2cy0x0q1a1h6rcl6xmcs5f58xawjdkl8hpcv3l8cdc";
+    sha256 = "1zr3kadv35ii6liia0bpfgxpag27xcivp571ybckpbz4b10nnd14";
   };
 
   buildInputs = [ nasm ];

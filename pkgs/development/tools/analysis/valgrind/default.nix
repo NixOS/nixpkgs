@@ -1,16 +1,18 @@
 { stdenv, fetchurl, perl, gdb }:
 
 stdenv.mkDerivation (rec {
-  name = "valgrind-3.7.0";
+  name = "valgrind-3.8.1";
 
   src = fetchurl {
     url = "http://valgrind.org/downloads/${name}.tar.bz2";
-    sha256 = "1xnb4jiimscwriw3jd1lkk0m9x4glqpijj9jb4ngx08l1wrw0qjx";
+    sha256 = "1nsqk70ry3221sd62s4f0njcrncppszs4xxjcak13lxyfq2y0fs7";
   };
+
+  patches = [ ./glibc-2.17.patch ];
 
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin) gdb;
 
   configureFlags =

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   configureFlags = configureFlagsFun { inherit alsaLib; };
 
   crossAttrs = {
-      configureFlags = configureFlagsFun { alsaLib = alsaLib.hostDrv; };
+      configureFlags = configureFlagsFun { alsaLib = alsaLib.crossDrv; };
   };
 
   passthru = {inherit openglSupport;};

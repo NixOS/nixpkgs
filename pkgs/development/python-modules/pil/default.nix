@@ -1,9 +1,9 @@
-{ fetchurl, stdenv, python, libjpeg, zlib, freetype }:
+{ fetchurl, stdenv, python, buildPythonPackage, libjpeg, zlib, freetype }:
 
 let version = "1.1.7"; in
 
-stdenv.mkDerivation {
-  name = "python-imaging-${version}";
+buildPythonPackage {
+  name = "imaging-${version}";
   
   src = fetchurl {
     url = "http://effbot.org/downloads/Imaging-${version}.tar.gz";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   buildPhase   = "python setup.py build_ext -i";
   checkPhase   = "python selftest.py";
-  installPhase = "python setup.py install --prefix=$out";
+  #installPhase = "python setup.py install --prefix=$out";
 
   meta = {
     homepage = http://www.pythonware.com/products/pil/;

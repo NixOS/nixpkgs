@@ -1,13 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, eina, evas, libX11, libXext }:
+{ stdenv, fetchurl, pkgconfig, eina, evas, libX11, libXext, libXrender
+, libXcomposite, libXfixes, libXdamage }:
 stdenv.mkDerivation rec {
   name = "ecore-${version}";
-  version = "1.2.0-alpha";
+  version = "1.7.5";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.bz2";
-    sha256 = "1fq3prr2i9n14jppfpns3dg1mkk3iy0ijv2d47pm4krymd7l4hs4";
+    sha256 = "08ljda6p0zj1h5sq3l0js6mihw8cr6ydynn42dnka36vachvmfjb";
   };
   buildInputs = [ pkgconfig eina evas ];
-  propagatedBuildInputs = [ libX11 libXext ];
+  propagatedBuildInputs = [ libX11 libXext libXcomposite libXrender libXfixes
+                            libXdamage
+                          ];
   meta = {
     description = "Enlightenment's core mainloop, display abstraction and utility library";
     longDescription = ''

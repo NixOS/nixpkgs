@@ -1,11 +1,11 @@
 { stdenv, fetchurl, buildPerlPackage, DBI, sqlite }:
 
 buildPerlPackage rec {
-  name = "DBD-SQLite-1.35";
+  name = "DBD-SQLite-1.37";
 
   src = fetchurl {
     url = "mirror://cpan/authors/id/A/AD/ADAMK/${name}.tar.gz";
-    sha256 = "0zdwnj0jmkaqb2grkh451g1jc8nsdy4sf6lhn8xd0my0a3pd227z";
+    sha256 = "0197kvlziaj2wfdbzlhdlqmzvb29fmfyy6y2isbbwlg0b0f7ccd1";
   };
 
   propagatedBuildInputs = [ DBI ];
@@ -16,6 +16,11 @@ buildPerlPackage rec {
     # Support building against our own sqlite.
     ./external-sqlite.patch
   ];
+
+  preBuild =
+    ''
+      substituteInPlace Makefile --replace -L/usr/lib ""
+    '';
 
   postInstall =
     ''

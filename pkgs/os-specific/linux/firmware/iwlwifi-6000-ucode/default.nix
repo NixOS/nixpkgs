@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   name = "iwlwifi-6000-ucode-9.221.4.1";
 
   src = fetchurl {
-    url = "http://intellinuxwireless.org/iwlwifi/downloads/${name}.tgz";
+    url = "http://wireless.kernel.org/en/users/Drivers/iwlwifi?action=AttachFile&do=get&target=${name}.tgz";
+    name = "${name}.tgz";
     sha256 = "7f04623231663dc4ee63df32fd890bfa9514dce1fab9dc7a25fda90350da836b";
   };
 
@@ -24,6 +25,6 @@ stdenv.mkDerivation rec {
       firmware. It contains the `iwlwifi-6000-4.ucode' file.
     '';
 
-    homepage = http://intellinuxwireless.org/;
+    homepage = http://wireless.kernel.org/en/users/Drivers/iwlwifi;
   };
 }

@@ -21,14 +21,16 @@ stdenv.mkDerivation rec {
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
-  buildNativeInputs = [m4 bison flex gettext bzip2];
+  nativeBuildInputs = [m4 bison flex gettext bzip2];
   buildInputs = [zlib bzip2];
+
+  configureFlags = "--disable-werror";
 
   crossAttrs = {
 
-    /* Having bzip2 will harm, because anything using elfutils 
+    /* Having bzip2 will harm, because anything using elfutils
        as buildInput cross-building, will not be able to run 'bzip2' */
-    propagatedBuildInputs = [ zlib.hostDrv ];
+    propagatedBuildInputs = [ zlib.crossDrv ];
 
     # This program does not cross-build fine. So I only cross-build some parts
     # I need for the linux perf tool.
@@ -64,7 +66,7 @@ stdenv.mkDerivation rec {
       cp version.h $out/include
     '';
   };
-  
+
   dontAddDisableDepTrack = true;
 
   meta = {

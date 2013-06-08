@@ -5,15 +5,15 @@ let
     "-e 's/CCLIENT_SSL_ENABLE.*= false/CCLIENT_SSL_ENABLE=true/'";
 in
 stdenv.mkDerivation rec {
-  name = "prayer-1.3.4";
+  name = "prayer-1.3.5";
   
   src = fetchurl {
     url = "ftp://ftp.csx.cam.ac.uk/pub/software/email/prayer/${name}.tar.gz";
-    sha256 = "0a2nmrlwdq4n5019j3mw2xbbc61s7sssjih5ql6r5rvyrrr48szc";
+    sha256 = "135fjbxjn385b6cjys6qhbwfw61mdcl2akkll4jfpdzfvhbxlyda";
   };
 
   buildInputs = [ openssl db4 zlib uwimap htmlTidy pam ];
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   NIX_LDFLAGS = "-lpam";
 

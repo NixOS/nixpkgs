@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   name = "iwlwifi-6000g2b-ucode-17.168.5.2";
 
   src = fetchurl {
-    url = "http://intellinuxwireless.org/iwlwifi/downloads/${name}.tgz";
+    url = "http://wireless.kernel.org/en/users/Drivers/iwlwifi?action=AttachFile&do=get&target=${name}.tgz";
+    name = "${name}.tgz";
     sha256 = "5e4afdf070bfef549e50e62187f22dc2e40f5d9fe8b9a77561f8f3efb0d1d052";
   };
 
@@ -24,6 +25,6 @@ stdenv.mkDerivation rec {
       firmware. It contains the `iwlwifi-6000g2b-4.ucode' file.
     '';
 
-    homepage = http://intellinuxwireless.org/;
+    homepage = http://wireless.kernel.org/en/users/Drivers/iwlwifi;
   };
 }

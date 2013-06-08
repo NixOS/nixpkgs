@@ -1,0 +1,64 @@
+{ stdenv, requireFile, writeText, fetchgit, haskellPackages }:
+
+with stdenv.lib;
+
+let
+  makeSpin = num: let
+    padded = (optionalString (lessThan num 10) "0") + toString num;
+  in "slides.spins.${padded} = 3DOVID:" +
+     "addons/3dovideo/spins/ship${padded}.duk:" +
+     "addons/3dovideo/spins/spin.aif:" +
+     "addons/3dovideo/spins/ship${padded}.aif:89";
+
+  videoRMP = writeText "3dovideo.rmp" (''
+    slides.ending = 3DOVID:addons/3dovideo/ending/victory.duk
+    slides.intro = 3DOVID:addons/3dovideo/intro/intro.duk
+  '' + concatMapStrings makeSpin (range 0 24));
+
+  helper = with haskellPackages; cabal.mkDerivation (self: {
+    pname = "uqm3donix";
+    version = "0.1.0.0";
+
+    src = fetchgit {
+      url = "git://github.com/aszlig/uqm3donix.git";
+      rev = "97fc4fd736dcf9fe03e6e5a2c347c5bdc71c8366";
+      sha256 = "09ws6j21mxkcjx444fxkf8a3q17jj6i7h2i9pf5ky52f6xds1h0j";
+    };
+
+    isLibrary = false;
+    isExecutable = true;
+
+    buildDepends = [ binary filepath tar ];
+
+    meta = {
+      description = "Extract video files from a Star Control II 3DO image";
+      license = self.stdenv.lib.licenses.bsd3;
+      platforms = self.ghc.meta.platforms;
+    };
+  });
+
+in stdenv.mkDerivation {
+  name = "uqm-3dovideo";
+
+  src = requireFile rec {
+    name = "videos.tar";
+    sha256 = "044h0cl69r0kc43vk4n0akk0prwzb7inq324h5yfqb38sd4zkds1";
+    message = ''
+      In order to get the intro and ending sequences from the 3DO version, you
+      need to have the original 3DO Star Control II CD. Create an image from the
+      CD and use uqm3donix* to extract a tarball with the videos from it. The
+      reason for this is because the 3DO uses its own proprietary disk format.
+
+      Save the file as videos.tar and use "nix-prefetch-url file://${name}" to
+      add it to the Nix store.
+
+      [*] ${helper}/bin/uqm3donix CDIMAGE ${name}
+    '';
+  };
+
+  buildCommand = ''
+    mkdir -vp "$out"
+    tar xf "$src" -C "$out" --strip-components=3
+    cp "${videoRMP}" "$out/3dovideo.rmp"
+  '';
+}

@@ -1,8 +1,9 @@
 { stdenv, fetchurl }:
 
+# http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
 let
   src = fetchurl {
-    url = "http://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git;a=blob_plain;f=rtl_nic/rtl8168e-2.fw";
+    url = "http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git;a=blob_plain;f=rtl_nic/rtl8168e-2.fw";
     sha256 = "11lkwc6r6f5pi8clxajp43j6dzapydgxaxaschribpvhn8lrjj0a";
     name = "rtl8168e-2.fw";
   };

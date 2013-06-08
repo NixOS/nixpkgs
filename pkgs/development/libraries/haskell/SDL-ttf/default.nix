@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "SDL-ttf";
-  version = "0.6.1";
-  sha256 = "0n6vbigkjfvvk98bp7ys14snpd1zmbz69ndhhpnrn02h363vwkal";
+  version = "0.6.2";
+  sha256 = "0jajnbqnhdd4i8pj8j27m53zwgfs1v06kiwy0s0zml02fdkq8j4a";
   buildDepends = [ SDL ];
   extraLibraries = [ SDL_ttf ];
   meta = {

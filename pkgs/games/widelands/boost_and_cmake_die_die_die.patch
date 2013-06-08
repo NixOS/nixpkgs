@@ -1,0 +1,11 @@
+--- widelands-build17-src.old/CMakeLists.txt	2012-04-23 02:46:49.000000000 -0700
++++ widelands-build17-src/CMakeLists.txt	2012-07-14 19:49:14.000000000 -0700
+@@ -140,8 +140,6 @@
+ else (WL_UNIT_TESTS)
+   message(STATUS "Disabled Unit Tests")
+   set (Boost_FIND_COMPONENTS signals)
+-  set (Boost_USE_STATIC_LIBS   ON)
+-  set (Boost_USE_MULTITHREADED ON)
+   set (Boost_DETAILED_FAILURE_MSG ON)
+   find_package(Boost 1.35.0 COMPONENTS signals REQUIRED)
+ endif (WL_UNIT_TESTS)

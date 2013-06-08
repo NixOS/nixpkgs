@@ -1,22 +1,19 @@
-{ cabal, accelerate, binary, blazeBuilder, cryptohash, cuda
-, fclabels, filepath, hashable, hashtables, languageCQuote
-, mainlandPretty, mtl, srcloc, transformers, unorderedContainers
+{ cabal, accelerate, binary, cryptohash, cuda, fclabels, filepath
+, hashable, hashtables, languageCQuote, mainlandPretty, mtl
+, SafeSemaphore, srcloc, text, transformers, unorderedContainers
 }:
 
 cabal.mkDerivation (self: {
   pname = "accelerate-cuda";
-  version = "0.12.1.1";
-  sha256 = "1kj9i6djjb46ad3dnzk72mf33r8h1mjxljs7x5rf2d658hqk5yfv";
+  version = "0.13.0.1";
+  sha256 = "0nswa73ajvmh1s6n2nks4zm3ybfm8v46wd789cs09f5s90ingpsj";
   buildDepends = [
-    accelerate binary blazeBuilder cryptohash cuda fclabels filepath
-    hashable hashtables languageCQuote mainlandPretty mtl srcloc
-    transformers unorderedContainers
+    accelerate binary cryptohash cuda fclabels filepath hashable
+    hashtables languageCQuote mainlandPretty mtl SafeSemaphore srcloc
+    text transformers unorderedContainers
   ];
-  patchPhase = ''
-    sed -i -e 's|\<defaultMain\>|defaultMainWithHooks autoconfUserHooks|' Setup.hs
-  '';
   meta = {
-    homepage = "http://www.cse.unsw.edu.au/~chak/project/accelerate/";
+    homepage = "https://github.com/AccelerateHS/accelerate-cuda/";
     description = "Accelerate backend for NVIDIA GPUs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.stdenv.lib.platforms.none;

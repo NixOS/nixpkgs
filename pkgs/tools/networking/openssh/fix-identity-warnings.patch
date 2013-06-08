@@ -1,0 +1,251 @@
+https://bugzilla.mindrot.org/show_bug.cgi?id=2084
+
+@@ -, +, @@ 
+   - dtucker@cvs.openbsd.org 2013/02/17 23:16:57
+     [readconf.c ssh.c readconf.h sshconnect2.c]
+     Keep track of which IndentityFile options were manually supplied and which
+     were default options, and don't warn if the latter are missing.
+     ok markus@
+   - dtucker@cvs.openbsd.org 2013/02/22 04:45:09
+     [ssh.c readconf.c readconf.h]
+     Don't complain if IdentityFiles specified in system-wide configs are
+     missing.  ok djm, deraadt.
+Index: readconf.c
+===================================================================
+RCS file: /home/dtucker/openssh/cvs/openssh/readconf.c,v
+--- a/readconf.c	2 Oct 2011 07:59:03 -0000	1.174
++++ b/readconf.c	5 Apr 2013 02:36:11 -0000
+@@ -1,4 +1,4 @@ 
+-/* $OpenBSD: readconf.c,v 1.194 2011/09/23 07:45:05 markus Exp $ */
++/* $OpenBSD: readconf.c,v 1.196 2013/02/22 04:45:08 dtucker Exp $ */
+ /*
+  * Author: Tatu Ylonen <ylo@cs.hut.fi>
+  * Copyright (c) 1995 Tatu Ylonen <ylo@cs.hut.fi>, Espoo, Finland
+@@ -326,6 +326,26 @@ clear_forwardings(Options *options)
+ 	options->tun_open = SSH_TUNMODE_NO;
+ }
+ 
++void
++add_identity_file(Options *options, const char *dir, const char *filename,
++    int userprovided)
++{
++	char *path;
++
++	if (options->num_identity_files >= SSH_MAX_IDENTITY_FILES)
++		fatal("Too many identity files specified (max %d)",
++		    SSH_MAX_IDENTITY_FILES);
++
++	if (dir == NULL) /* no dir, filename is absolute */
++		path = xstrdup(filename);
++	else
++		(void)xasprintf(&path, "%.100s%.100s", dir, filename);
++
++	options->identity_file_userprovided[options->num_identity_files] =
++	    userprovided;
++	options->identity_files[options->num_identity_files++] = path;
++}
++
+ /*
+  * Returns the number of the token pointed to by cp or oBadOption.
+  */
+@@ -353,7 +373,7 @@ parse_token(const char *cp, const char *
+ int
+ process_config_line(Options *options, const char *host,
+ 		    char *line, const char *filename, int linenum,
+-		    int *activep)
++		    int *activep, int userconfig)
+ {
+ 	char *s, **charptr, *endofnumber, *keyword, *arg, *arg2;
+ 	char **cpptr, fwdarg[256];
+@@ -586,9 +606,7 @@ parse_yesnoask:
+ 			if (*intptr >= SSH_MAX_IDENTITY_FILES)
+ 				fatal("%.200s line %d: Too many identity files specified (max %d).",
+ 				    filename, linenum, SSH_MAX_IDENTITY_FILES);
+-			charptr = &options->identity_files[*intptr];
+-			*charptr = xstrdup(arg);
+-			*intptr = *intptr + 1;
++			add_identity_file(options, NULL, arg, userconfig);
+ 		}
+ 		break;
+ 
+@@ -1075,7 +1093,7 @@ parse_int:
+ 
+ int
+ read_config_file(const char *filename, const char *host, Options *options,
+-    int checkperm)
++    int flags)
+ {
+ 	FILE *f;
+ 	char line[1024];
+@@ -1085,7 +1103,7 @@ read_config_file(const char *filename, c
+ 	if ((f = fopen(filename, "r")) == NULL)
+ 		return 0;
+ 
+-	if (checkperm) {
++	if (flags & SSHCONF_CHECKPERM) {
+ 		struct stat sb;
+ 
+ 		if (fstat(fileno(f), &sb) == -1)
+@@ -1106,7 +1124,8 @@ read_config_file(const char *filename, c
+ 	while (fgets(line, sizeof(line), f)) {
+ 		/* Update line number counter. */
+ 		linenum++;
+-		if (process_config_line(options, host, line, filename, linenum, &active) != 0)
++		if (process_config_line(options, host, line, filename, linenum,
++		    &active, flags & SSHCONF_USERCONF) != 0)
+ 			bad_options++;
+ 	}
+ 	fclose(f);
+@@ -1280,30 +1299,17 @@ fill_default_options(Options * options)
+ 		options->protocol = SSH_PROTO_2;
+ 	if (options->num_identity_files == 0) {
+ 		if (options->protocol & SSH_PROTO_1) {
+-			len = 2 + strlen(_PATH_SSH_CLIENT_IDENTITY) + 1;
+-			options->identity_files[options->num_identity_files] =
+-			    xmalloc(len);
+-			snprintf(options->identity_files[options->num_identity_files++],
+-			    len, "~/%.100s", _PATH_SSH_CLIENT_IDENTITY);
++			add_identity_file(options, "~/",
++			    _PATH_SSH_CLIENT_IDENTITY, 0);
+ 		}
+ 		if (options->protocol & SSH_PROTO_2) {
+-			len = 2 + strlen(_PATH_SSH_CLIENT_ID_RSA) + 1;
+-			options->identity_files[options->num_identity_files] =
+-			    xmalloc(len);
+-			snprintf(options->identity_files[options->num_identity_files++],
+-			    len, "~/%.100s", _PATH_SSH_CLIENT_ID_RSA);
+-
+-			len = 2 + strlen(_PATH_SSH_CLIENT_ID_DSA) + 1;
+-			options->identity_files[options->num_identity_files] =
+-			    xmalloc(len);
+-			snprintf(options->identity_files[options->num_identity_files++],
+-			    len, "~/%.100s", _PATH_SSH_CLIENT_ID_DSA);
++			add_identity_file(options, "~/",
++			    _PATH_SSH_CLIENT_ID_RSA, 0);
++			add_identity_file(options, "~/",
++			    _PATH_SSH_CLIENT_ID_DSA, 0);
+ #ifdef OPENSSL_HAS_ECC
+-			len = 2 + strlen(_PATH_SSH_CLIENT_ID_ECDSA) + 1;
+-			options->identity_files[options->num_identity_files] =
+-			    xmalloc(len);
+-			snprintf(options->identity_files[options->num_identity_files++],
+-			    len, "~/%.100s", _PATH_SSH_CLIENT_ID_ECDSA);
++			add_identity_file(options, "~/",
++			    _PATH_SSH_CLIENT_ID_ECDSA, 0);
+ #endif
+ 		}
+ 	}
+Index: readconf.h
+===================================================================
+RCS file: /home/dtucker/openssh/cvs/openssh/readconf.h,v
+--- a/readconf.h	2 Oct 2011 07:59:03 -0000	1.83
++++ b/readconf.h	5 Apr 2013 02:36:11 -0000
+@@ -1,4 +1,4 @@ 
+-/* $OpenBSD: readconf.h,v 1.91 2011/09/23 07:45:05 markus Exp $ */
++/* $OpenBSD: readconf.h,v 1.93 2013/02/22 04:45:09 dtucker Exp $ */
+ 
+ /*
+  * Author: Tatu Ylonen <ylo@cs.hut.fi>
+@@ -96,6 +96,7 @@ typedef struct {
+ 
+ 	int     num_identity_files;	/* Number of files for RSA/DSA identities. */
+ 	char   *identity_files[SSH_MAX_IDENTITY_FILES];
++	int    identity_file_userprovided[SSH_MAX_IDENTITY_FILES];
+ 	Key    *identity_keys[SSH_MAX_IDENTITY_FILES];
+ 
+ 	/* Local TCP/IP forward requests. */
+@@ -148,15 +149,20 @@ typedef struct {
+ #define REQUEST_TTY_YES		2
+ #define REQUEST_TTY_FORCE	3
+ 
++#define SSHCONF_CHECKPERM	1  /* check permissions on config file */
++#define SSHCONF_USERCONF	2  /* user provided config file not system */
++
+ void     initialize_options(Options *);
+ void     fill_default_options(Options *);
+ int	 read_config_file(const char *, const char *, Options *, int);
+ int	 parse_forward(Forward *, const char *, int, int);
+ 
+ int
+-process_config_line(Options *, const char *, char *, const char *, int, int *);
++process_config_line(Options *, const char *, char *, const char *, int, int *,
++    int);
+ 
+ void	 add_local_forward(Options *, const Forward *);
+ void	 add_remote_forward(Options *, const Forward *);
++void	 add_identity_file(Options *, const char *, const char *, int);
+ 
+ #endif				/* READCONF_H */
+Index: ssh.c
+===================================================================
+RCS file: /home/dtucker/openssh/cvs/openssh/ssh.c,v
+--- a/ssh.c	6 Jul 2012 03:45:01 -0000	1.366
++++ b/ssh.c	5 Apr 2013 02:36:11 -0000
+@@ -1,4 +1,4 @@ 
+-/* $OpenBSD: ssh.c,v 1.370 2012/07/06 01:47:38 djm Exp $ */
++/* $OpenBSD: ssh.c,v 1.372 2013/02/22 04:45:09 dtucker Exp $ */
+ /*
+  * Author: Tatu Ylonen <ylo@cs.hut.fi>
+  * Copyright (c) 1995 Tatu Ylonen <ylo@cs.hut.fi>, Espoo, Finland
+@@ -405,12 +405,7 @@ main(int ac, char **av)
+ 				    strerror(errno));
+ 				break;
+ 			}
+-			if (options.num_identity_files >=
+-			    SSH_MAX_IDENTITY_FILES)
+-				fatal("Too many identity files specified "
+-				    "(max %d)", SSH_MAX_IDENTITY_FILES);
+-			options.identity_files[options.num_identity_files++] =
+-			    xstrdup(optarg);
++			add_identity_file(&options, NULL, optarg, 1);
+ 			break;
+ 		case 'I':
+ #ifdef ENABLE_PKCS11
+@@ -584,7 +579,8 @@ main(int ac, char **av)
+ 			dummy = 1;
+ 			line = xstrdup(optarg);
+ 			if (process_config_line(&options, host ? host : "",
+-			    line, "command-line", 0, &dummy) != 0)
++			    line, "command-line", 0, &dummy, SSHCONF_USERCONF)
++			    != 0)
+ 				exit(255);
+ 			xfree(line);
+ 			break;
+@@ -678,14 +674,15 @@ main(int ac, char **av)
+ 	 * file if the user specifies a config file on the command line.
+ 	 */
+ 	if (config != NULL) {
+-		if (!read_config_file(config, host, &options, 0))
++		if (!read_config_file(config, host, &options, SSHCONF_USERCONF))
+ 			fatal("Can't open user config file %.100s: "
+ 			    "%.100s", config, strerror(errno));
+ 	} else {
+ 		r = snprintf(buf, sizeof buf, "%s/%s", pw->pw_dir,
+ 		    _PATH_SSH_USER_CONFFILE);
+ 		if (r > 0 && (size_t)r < sizeof(buf))
+-			(void)read_config_file(buf, host, &options, 1);
++			(void)read_config_file(buf, host, &options,
++			     SSHCONF_CHECKPERM|SSHCONF_USERCONF);
+ 
+ 		/* Read systemwide configuration file after user config. */
+ 		(void)read_config_file(_PATH_HOST_CONFIG_FILE, host,
+Index: sshconnect2.c
+===================================================================
+RCS file: /home/dtucker/openssh/cvs/openssh/sshconnect2.c,v
+--- a/sshconnect2.c	20 Mar 2013 01:55:15 -0000	1.184
++++ b/sshconnect2.c	5 Apr 2013 02:36:07 -0000
+@@ -1,4 +1,4 @@ 
+-/* $OpenBSD: sshconnect2.c,v 1.191 2013/02/15 00:21:01 dtucker Exp $ */
++/* $OpenBSD: sshconnect2.c,v 1.192 2013/02/17 23:16:57 dtucker Exp $ */
+ /*
+  * Copyright (c) 2000 Markus Friedl.  All rights reserved.
+  * Copyright (c) 2008 Damien Miller.  All rights reserved.
+@@ -1384,7 +1384,7 @@ pubkey_prepare(Authctxt *authctxt)
+ 		id = xcalloc(1, sizeof(*id));
+ 		id->key = key;
+ 		id->filename = xstrdup(options.identity_files[i]);
+-		id->userprovided = 1;
++		id->userprovided = options.identity_file_userprovided[i];
+ 		TAILQ_INSERT_TAIL(&files, id, next);
+ 	}
+ 	/* Prefer PKCS11 keys that are explicitly listed */

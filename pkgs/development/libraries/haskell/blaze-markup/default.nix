@@ -1,10 +1,16 @@
-{ cabal, blazeBuilder, text }:
+{ cabal, blazeBuilder, HUnit, QuickCheck, testFramework
+, testFrameworkHunit, testFrameworkQuickcheck2, text
+}:
 
 cabal.mkDerivation (self: {
   pname = "blaze-markup";
-  version = "0.5.1.0";
-  sha256 = "0vq0xzwa13sjybg6zdi3ynsn6yxyl1q6rbalvb9r6f3plrmik37a";
+  version = "0.5.1.5";
+  sha256 = "0g3smm1ym7h45bkzx94b77ssyg0z0gqfwbnap3ywa2381rb39l74";
   buildDepends = [ blazeBuilder text ];
+  testDepends = [
+    blazeBuilder HUnit QuickCheck testFramework testFrameworkHunit
+    testFrameworkQuickcheck2 text
+  ];
   meta = {
     homepage = "http://jaspervdj.be/blaze";
     description = "A blazingly fast markup combinator library for Haskell";

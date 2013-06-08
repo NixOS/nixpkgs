@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
 
   name = "spring-${version}";
-  version = "0.88.0";
+  version = "94.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/springrts/spring_88.0_src.tar.lzma";
-    sha256 = "f203114b849a83795fe2d413d01c843b6f5b50df0832ce570bc476502f89e6fa";
+    url = "mirror://sourceforge/springrts/spring_${version}_src.tar.lzma";
+    sha256 = "19myqwpz4mi4zdlcv8318dps0ymmw7qpawhq1rgk73ycmaiyaaka";
   };
 
   buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL

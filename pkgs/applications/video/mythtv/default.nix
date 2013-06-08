@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     libX11 libXv libXrandr libXvMC libXmu libXinerama libXxf86vm libXmu
   ];
 
-  buildNativeInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkgconfig which ];
 
   patches = [ ./settings.patch ];
 }

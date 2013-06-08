@@ -44,6 +44,8 @@ let
 
     propagatedUserEnvPkgs = requiredGems;
 
+    passthru.isRubyGem = true;
+
   };
   mb = stdenv.lib.maybeAttr;
   patchedGem = a: stdenv.mkDerivation (removeAttrs (stdenv.lib.mergeAttrsByFuncDefaults

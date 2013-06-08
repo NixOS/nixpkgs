@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "test-framework-hunit";
-  version = "0.2.7";
-  sha256 = "1c7424i5vnggzncwiwqqwq7ir7kaijif2waqmss5pn6db3gj33fc";
+  version = "0.3.0";
+  sha256 = "1jwbpbf9q3g936gk71632h830l2wsiic8h6ms1jlmw209mpm7c84";
   buildDepends = [ extensibleExceptions HUnit testFramework ];
   meta = {
     homepage = "http://batterseapower.github.com/test-framework/";

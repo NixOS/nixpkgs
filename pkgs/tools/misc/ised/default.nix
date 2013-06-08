@@ -12,7 +12,7 @@ let
     baseName="ised";
     version="2.2.2";
     name="${baseName}-${version}";
-    url="mirror://sf/project/ised/${name}.tar.bz2";
+    url="mirror://sourceforge/project/ised/${name}.tar.bz2";
     hash="1nb1cnsbs2k3j9cy2kc2kg01rd7wf3jwxm62rwn1rjlc46nwdlmn";
   };
 in

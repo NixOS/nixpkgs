@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HDBC";
-  version = "2.3.1.1";
-  sha256 = "1gqihvsf5w7j8xbn1xy93mdrsh77qwxbhfmyjivbm6i95w1i0kb7";
+  version = "2.3.1.2";
+  sha256 = "1rjamh8xscb9jhxgxcrs2qnvs2ipv9dqgnn0bpv5vwclmzmn5j87";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ convertible mtl text time utf8String ];

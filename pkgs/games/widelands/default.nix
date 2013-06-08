@@ -13,11 +13,11 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="widelands";
-    version="build16";
+    version="build17";
     name="${baseName}-${version}";
     project="${baseName}";
-    url="http://launchpad.net/${project}/${version}/${version}/+download/${name}-src.tar.bz2";
-    hash="0pb2d73c6hynhp1x54rcfbibrrri7lyxjybd1hicn503qcakrnyq";
+    url="https://launchpadlibrarian.net/102893896/widelands-build17-src.tar.bz2";
+    hash="be48b3b8f342a537b39a3aec2f7702250a6a47e427188ba3bece67d7d90f3cc5";
   };
 in
 rec {
@@ -30,7 +30,9 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["killBuildDir" "doCmake" "doMakeInstall" "createScript"];
+  phaseNames = ["killBuildDir" "doPatch"  "doCmake" "doMakeInstall" "createScript"];
+
+  patches = [ ./boost_and_cmake_die_die_die.patch ]; 
       
   killBuildDir = a.fullDepEntry ''
     rm -r build
@@ -38,6 +40,7 @@ rec {
 
   cmakeFlags = [
     "-DLUA_LIBRARIES=-llua"
+    "-DWL_PORTABLE=true"
   ];
 
   createScript = a.fullDepEntry ''
@@ -50,12 +53,18 @@ rec {
 
   meta = {
     description = "Widelands RTS with multiple-goods economy";
+    longDescription = ''
+      Widelands is a real time strategy game based on "The Settlers" and "The
+      Settlers II". It has a single player campaign mode, as well as a networked
+      multiplayer mode. 
+    '';
+
     maintainers = with a.lib.maintainers;
     [
       raskin
+      jcumming
     ];
-    platforms = with a.lib.platforms;
-      linux;
+    #platforms = a.lib.platforms.linux;
     license = a.lib.licenses.gpl2Plus;
   };
   passthru = {

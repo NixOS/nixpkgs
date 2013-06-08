@@ -2,9 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "repa-io";
-  version = "3.2.1.1";
-  sha256 = "156amnlqsxhwalnc4nypcd66znv2f8c71d5xi8ja5g8d9f1yg02g";
+  version = "3.2.3.2";
+  sha256 = "116qxq0jsq3hbj0hxjxfr9sl29vzj1rpfbzfxgc243v1hh4rdjfr";
   buildDepends = [ binary bmp repa vector ];
+  jailbreak = true;
   meta = {
     homepage = "http://repa.ouroborus.net";
     description = "Read and write Repa arrays in various formats";

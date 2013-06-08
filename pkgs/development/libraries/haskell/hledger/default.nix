@@ -1,26 +1,32 @@
-{ cabal, cabalFileTh, cmdargs, filepath, haskeline, hledgerLib
-, HUnit, mtl, parsec, regexpr, safe, shakespeareText, split, text
-, time, utf8String
+{ cabal, cmdargs, csv, filepath, haskeline, hledgerLib, HUnit, mtl
+, parsec, prettyShow, regexCompat, regexpr, safe, shakespeareText
+, split, testFramework, testFrameworkHunit, text, time
+, transformers, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "hledger";
-  version = "0.18.2";
-  sha256 = "1i0rix3h5vrq9j01fzgwyhs2n8nfzhidi4rjlvn402ps0w6j15ld";
+  version = "0.21.2";
+  sha256 = "04n9bm97zqh8am83fr2aflw3gv5nwm9jm7bp9vzd4986f1c43ig3";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    cabalFileTh cmdargs filepath haskeline hledgerLib HUnit mtl parsec
-    regexpr safe shakespeareText split text time utf8String
+    cmdargs filepath haskeline hledgerLib HUnit mtl parsec regexpr safe
+    shakespeareText split text time utf8String
   ];
-  patchPhase = ''
-    sed -i -e 's|,split.*|,split|' hledger.cabal
-  '';
+  testDepends = [
+    cmdargs csv filepath haskeline hledgerLib HUnit mtl parsec
+    prettyShow regexCompat regexpr safe shakespeareText split
+    testFramework testFrameworkHunit text time transformers
+  ];
   meta = {
     homepage = "http://hledger.org";
     description = "The main command-line interface for the hledger accounting tool";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

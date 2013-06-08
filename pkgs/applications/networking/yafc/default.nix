@@ -1,10 +1,10 @@
 {stdenv, fetchurl, readline, libssh, intltool}:
 
 stdenv.mkDerivation rec {
-  name = "yafc-1.2.0";
+  name = "yafc-1.2.3";
   src = fetchurl {
     url = "https://github.com/downloads/sebastinas/yafc/${name}.tar.xz";
-    sha256 = "0h5cbvvfkigvzfqqzvgqpn8m0ilyng3rgyh85c0mi48klzv8kb58";
+    sha256 = "11h5r9ragfpil338kq981wxnifacflqfwgydhmy00b3fbdlnxzsi";
   };
 
   buildInputs = [ readline libssh intltool ];

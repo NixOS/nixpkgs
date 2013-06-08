@@ -2,13 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "hinotify";
-  version = "0.3.2";
-  sha256 = "0gr9rv1af6w7g2hbjhz1livi5zfhzdswjyapvjz3d7cga906bj48";
+  version = "0.3.5";
+  sha256 = "00pzvqw2w3gbz8j4hiz8zxm7rki07g1iamjlbazz3kmpwcgjxi0l";
   meta = {
-    homepage = "http://code.haskell.org/hinotify/README.html";
-    description = "Haskell binding to INotify";
+    homepage = "https://github.com/kolmodin/hinotify.git";
+    description = "Haskell binding to inotify";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

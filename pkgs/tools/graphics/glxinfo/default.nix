@@ -1,13 +1,13 @@
 {stdenv, fetchurl, x11, mesa}:
 
-let version = "8.0.1"; in
+let version = "8.1.0"; in
 
 stdenv.mkDerivation {
   name = "glxinfo-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/demos/${version}/mesa-demos-${version}.tar.bz2";
-    sha256 = "1lbp1llpx0hl5k79xb653yvjvk9mlikj73r8xjzyxqqp1nrg5isb";
+    sha256 = "0a58hw5850731p4smz4zqsbvyxvgjf7n5xdbs9l1wamk8q3gl0wp";
   };
 
   buildInputs = [x11 mesa];

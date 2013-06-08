@@ -1,44 +1,24 @@
-{ fetchurl, stdenv, kernel, binutils
+{ fetchurl, stdenv, binutils
 , pkgconfig, gtk, glib, pango, libglade }:
 
 stdenv.mkDerivation rec {
-  name = "sysprof-1.0.12-${kernel.version}";
+  name = "sysprof-1.2.0";
 
   src = fetchurl {
-    url = "http://www.daimi.au.dk/~sandmann/sysprof/sysprof-1.0.12.tar.gz";
-    sha256 = "0f0z1dh97swlrkw3cbv5k2jhy5rk7wxv55hp7yhysw3idgp8wbmz";
+    url = "http://www.sysprof.com/sysprof-1.2.0.tar.gz";
+    sha256 = "1wb4d844rsy8qjg3z5m6rnfm72da4xwzrrkkb1q5r10sq1pkrw5s";
   };
 
   buildInputs = [ binutils pkgconfig gtk glib pango libglade ];
 
-  patches = [ ./configure.patch ];
-
-  preConfigure = ''
-    kernelVersion=$(cd "${kernel}/lib/modules" && echo *)
-    echo "assuming Linux kernel version \`$kernelVersion'"
-
-    sed -i "module/Makefile" \
-        -e"s|^[[:blank:]]*KDIR[[:blank:]]*:=.*$|KDIR := ${kernel}/lib/modules/$kernelVersion/build|g ;
-	   s|\$(KMAKE) modules_install|install sysprof-module.ko $out/share/sysprof/module|g ;
-	   s|\\[ -e /sbin/depmod.*$|true|g"
-
-    # XXX: We won't run `depmod' after installing the module.
-  '';
-
-  configureFlags = "--enable-kernel-module";
-
-  preInstall = ''
-    mkdir -p "$out/share/sysprof/module"
-  '';
-
   meta = {
-    homepage = http://www.daimi.au.dk/~sandmann/sysprof/;
+    homepage = http://sysprof.com/;
     description = "Sysprof, a system-wide profiler for Linux";
     license = "GPLv2+";
 
     longDescription = ''
-      Sysprof is a sampling CPU profiler for Linux that uses a kernel
-      module to profile the entire system, not just a single
+      Sysprof is a sampling CPU profiler for Linux that uses the perf_event_open
+      system call to profile the entire system, not just a single
       application.  Sysprof handles shared libraries and applications
       do not need to be recompiled.  In fact they don't even have to
       be restarted.

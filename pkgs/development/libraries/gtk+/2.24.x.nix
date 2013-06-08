@@ -7,25 +7,19 @@
 assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
-stdenv.mkDerivation {
-  name = "gtk+-2.24.10";
+stdenv.mkDerivation rec {
+  name = "gtk+-2.24.14";
 
   src = fetchurl {
-    url = mirror://gnome/sources/gtk+/2.24/gtk+-2.24.10.tar.xz;
-    sha256 = "128fb8vmsqmfmpf1r8na65281jwkqix4q7wix399xqfnp4dy6mpa";
+    url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.xz";
+    sha256 = "8bd1b8b511a3004e8972badf467ce829e6855cdff15540b9344dc934c68008ac";
   };
-
-  patches =
-    [ # Fix broken icons such as the back/forward buttons in Firefox.
-      # http://bugs.gentoo.org/339319
-      ./old-icons.patch
-    ];
 
   outputs = [ "dev" "out" "bin" "doc" ];
 
   enableParallelBuilding = true;
 
-  buildNativeInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkgconfig ];
 
   propagatedBuildInputs =
     [ xlibs.xlibs glib atk pango gdk_pixbuf cairo

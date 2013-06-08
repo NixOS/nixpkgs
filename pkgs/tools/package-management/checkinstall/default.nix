@@ -29,7 +29,12 @@ stdenv.mkDerivation {
 
     # Fix a `conflicting types for 'scandir'' error on Glibc 2.11.
     ./scandir.patch
-  ];
+  ]
+
+  ++ stdenv.lib.optional (stdenv.system == "x86_64-linux") 
+    # Force use of old memcpy so that installwatch works on Glibc <
+    # 2.14.
+    ./use-old-memcpy.patch;
 
   buildInputs = [gettext];
 
@@ -55,6 +60,6 @@ stdenv.mkDerivation {
     homepage = http://checkinstall.izto.org/;
     description = "A tool for automatically generating Slackware, RPM or Debian packages when doing `make install'";
     maintainers = [ stdenv.lib.maintainers.eelco ];
-    platform = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

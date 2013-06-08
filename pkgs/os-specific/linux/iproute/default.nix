@@ -1,34 +1,39 @@
-{fetchurl, stdenv, flex, bison, db4, iptables}:
+{ fetchurl, stdenv, flex, bison, db4, iptables, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-2.6.35";
+  name = "iproute2-3.8.0";
 
   src = fetchurl {
-    url = "http://pkgs.fedoraproject.org/repo/pkgs/iproute/iproute2-2.6.35.tar.bz2/b0f281b3124bf04669e18f5fe16d4934/iproute2-2.6.35.tar.bz2";
-    sha256 = "18why1wy0v859axgrlfxn80zmskss0410hh9rf5gn9cr29zg9cla";
+    url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
+    sha256 = "0kqy30wz2krbg4y7750hjq5218hgy2vj9pm5qzkn1bqskxs4b4ap";
   };
 
-  patches = [ ./vpnc.patch ];
+  patches = [ ./vpnc.patch ./no-werror.patch ];
 
   preConfigure =
     ''
       patchShebangs ./configure
       sed -e '/ARPDDIR/d' -i Makefile
     '';
+
   postConfigure = "cat Config";
 
   makeFlags = "DESTDIR= LIBDIR=$(out)/lib SBINDIR=$(out)/sbin"
-   + " CONFDIR=$(out)/etc DOCDIR=$(out)/share/doc/${name}"
-  + " MANDIR=$(out)/share/man";
+    + " CONFDIR=$(out)/etc DOCDIR=$(out)/share/doc/${name}"
+    + " MANDIR=$(out)/share/man";
 
-  buildInputs = [db4 iptables];
-  buildNativeInputs = [bison flex db4];
+  buildInputs = [ db4 iptables ];
+  nativeBuildInputs = [ bison flex pkgconfig ];
+
+  enableParallelBuilding = true;
+
+  # Get rid of useless TeX/SGML docs.
+  postInstall = "rm -rf $out/share/doc";
 
   meta = {
-    homepage =
-      http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2;
-    description = "A collection of utilities for controlling TCP / IP"
-      + " networking and traffic control in Linux";
+    homepage = http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2;
+    description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

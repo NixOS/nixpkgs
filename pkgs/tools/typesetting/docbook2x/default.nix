@@ -1,6 +1,6 @@
 { fetchurl, stdenv, texinfo, perl
 , XMLSAX, XMLParser, XMLNamespaceSupport
-, groff, libxml2, libxslt, gnused, libiconv, opensp
+, groff, libxml2, libxslt, gnused, libiconvOrEmpty, opensp
 , docbook_xml_dtd_43
 , makeWrapper }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl texinfo groff libxml2 libxslt makeWrapper
                   XMLSAX XMLParser XMLNamespaceSupport opensp
-  	        ] ++ (if libiconv != null then [libiconv] else []);
+                ] ++ libiconvOrEmpty;
 
   postConfigure = ''
     # Broken substitution is used for `perl/config.pl', which leaves literal

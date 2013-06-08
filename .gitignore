@@ -1,2 +1,7 @@
 *~
 ,*
+.*.swp
+.*.swo
+cpan-info
+cpan_tmp/
+result

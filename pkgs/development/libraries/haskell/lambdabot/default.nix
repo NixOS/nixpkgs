@@ -1,21 +1,27 @@
-{ cabal, arrows, binary, brainfuck, dataMemocombinators, filepath
-, haskellSrc, haskellSrcExts, HTTP, IOSpec, lambdabotUtils, logict
-, MonadRandom, mtl, network, numbers, oeis, parsec, random
-, readline, regexCompat, show, syb, tagsoup, unlambda, utf8String
-, vectorSpace
+{ cabal, arrows, binary, brainfuck, dataMemocombinators
+, dependentMap, dependentSum, dependentSumTemplate, dice
+, editDistance, filepath, haskeline, haskellSrcExts, hoogle
+, hslogger, hstatsd, HTTP, IOSpec, liftedBase, logict, misfortune
+, monadControl, MonadRandom, mtl, mueval, network, numbers, oeis
+, parsec, QuickCheck, random, randomFu, randomSource, regexTdfa
+, SafeSemaphore, show, split, syb, tagsoup, time, transformers
+, transformersBase, unlambda, utf8String, vectorSpace, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "lambdabot";
-  version = "4.2.3.3";
-  sha256 = "1fxxmrm390pnqpf7v4kap2asaqh02sphl8r6inq4sdy1zs2rxrvk";
+  version = "4.3";
+  sha256 = "0pjwxlq4rbmg9wj44vrillly967y35b4i995mz5167hpji05clvy";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    arrows binary brainfuck dataMemocombinators filepath haskellSrc
-    haskellSrcExts HTTP IOSpec lambdabotUtils logict MonadRandom mtl
-    network numbers oeis parsec random readline regexCompat show syb
-    tagsoup unlambda utf8String vectorSpace
+    arrows binary brainfuck dataMemocombinators dependentMap
+    dependentSum dependentSumTemplate dice editDistance filepath
+    haskeline haskellSrcExts hoogle hslogger hstatsd HTTP IOSpec
+    liftedBase logict misfortune monadControl MonadRandom mtl mueval
+    network numbers oeis parsec QuickCheck random randomFu randomSource
+    regexTdfa SafeSemaphore show split syb tagsoup time transformers
+    transformersBase unlambda utf8String vectorSpace zlib
   ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/Lambdabot";

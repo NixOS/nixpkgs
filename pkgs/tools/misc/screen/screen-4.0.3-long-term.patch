@@ -1,0 +1,29 @@
+# Source:
+# https://projects.archlinux.org/svntogit/packages.git/plain/screen/trunk/screen-4.0.3-long-term.patch
+
+# This fixes long terminal names handling, e.g. TERM=rxvt-unicode-256colors works
+# as expected.
+diff -Naur screen-4.0.3-orig//display.h screen-4.0.3/display.h
+--- screen-4.0.3-orig//display.h	2003-07-02 00:01:42.000000000 +1000
++++ screen-4.0.3/display.h	2010-12-03 20:19:23.826671689 +1000
+@@ -85,7 +85,7 @@
+   struct win *d_other;		/* pointer to other window */
+   int   d_nonblock;		/* -1 don't block if obufmax reached */
+ 				/* >0: block after nonblock secs */
+-  char  d_termname[20 + 1];	/* $TERM */
++  char  d_termname[40 + 1];	/* $TERM */
+   char	*d_tentry;		/* buffer for tgetstr */
+   char	d_tcinited;		/* termcap inited flag */
+   int	d_width, d_height;	/* width/height of the screen */
+diff -Naur screen-4.0.3-orig//screen.h screen-4.0.3/screen.h
+--- screen-4.0.3-orig//screen.h	2003-08-22 22:28:43.000000000 +1000
++++ screen-4.0.3/screen.h	2010-12-03 20:19:43.163338333 +1000
+@@ -202,7 +202,7 @@
+ 	  char preselect[20];
+ 	  int esc;		/* his new escape character unless -1 */
+ 	  int meta_esc;		/* his new meta esc character unless -1 */
+-	  char envterm[20 + 1];	/* terminal type */
++	  char envterm[40 + 1];	/* terminal type */
+ 	  int encoding;		/* encoding of display */
+ 	}
+       attach;

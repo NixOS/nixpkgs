@@ -1,8 +1,9 @@
 rec {
-  advertisedUrl="http://mmonit.com/monit/download/../dist/monit-5.0.3.tar.gz";
-  version = "5.0.3";
-  url="http://mmonit.com/monit/download/../dist/monit-5.0.3.tar.gz";
-  hash = "1lw7qp5906cb9jg8ifhfy9cvv4gbd28mkapgfpx0klb17jdm7ljx";
-  name = "monit-5.0.3";
+   version="5.5";
+   name="monit-5.5";
+   hash="0lvw9llsnaj72dp6di74sc4sxpa4q3g23m28jwy4brphndhb0xl2";
+   url="http://mmonit.com/monit/download/../dist/monit-${version}.tar.gz";
+   advertisedUrl="http://mmonit.com/monit/download/../dist/monit-5.5.tar.gz";
+  
   
 }

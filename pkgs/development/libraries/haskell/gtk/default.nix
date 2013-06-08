@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gtk";
-  version = "0.12.3.1";
-  sha256 = "0v9sh07lpvih2gk4ivy0jx2slw7rpvbf75xp20plzgzmay1y978s";
+  version = "0.12.4";
+  sha256 = "0w6ffi9fdz44kb6g1kipk5780r2wc2l3f5cgxjx5nd60qz1xh7p2";
   buildDepends = [ cairo glib mtl pango ];
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ libc pkgconfig ];

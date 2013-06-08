@@ -1,4 +1,4 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
+args @ { stdenv, fetchurl, extraConfig ? ""
 , perl, mktemp, module_init_tools
 , ... }:
 
@@ -173,6 +173,7 @@ let
       CRASH_DUMP n
       DMAR? n # experimental
       DVB_DYNAMIC_MINORS y # we use udev
+      FHANDLE y # used by systemd
       FUSION y # Fusion MPT device support
       IDE_GD_ATAPI y # ATAPI floppy support
       IRDA_ULTRA y # Ultra (connectionless) protocol
@@ -230,15 +231,15 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.0.31";
-  
+    version = "3.0.80";
+
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
     '';
 
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.bz2";
-      sha256 = "1b5ix1fc55m6vsr28dh5xi89fphl3m3kmvaniq9div5rj8f6kv0f";
+      url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
+      sha256 = "0f3md117bh8n5izkhjd2jp096jqmwz6wpxn7rf8x2x9cz4jz0cqx";
     };
 
     config = configWithPlatform stdenv.platform;

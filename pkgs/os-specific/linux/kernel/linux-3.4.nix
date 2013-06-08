@@ -1,4 +1,4 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
+args @ { stdenv, fetchurl, extraConfig ? ""
 , perl, mktemp, module_init_tools
 , ... }:
 
@@ -148,8 +148,10 @@ let
       NFSD_V3 y
       NFSD_V3_ACL y
       NFSD_V4 y
+      NFS_FSCACHE y
       CIFS_XATTR y
       CIFS_POSIX y
+      CIFS_FSCACHE y
 
       # Security related features.
       STRICT_DEVMEM y # Filter access to /dev/mem
@@ -161,6 +163,7 @@ let
       AIC79XX_DEBUG_ENABLE n
       AIC7XXX_DEBUG_ENABLE n
       AIC94XX_DEBUG n
+      AUDIT_LOGINUID_IMMUTABLE y
       B43_PCMCIA y
       BLK_DEV_CMD640_ENHANCED y # CMD640 enhanced support
       BLK_DEV_IDEACPI y # IDE ACPI support
@@ -175,6 +178,7 @@ let
       DMAR? n # experimental
       DVB_DYNAMIC_MINORS y # we use udev
       EFI_STUB y # EFI bootloader in the bzImage itself
+      FHANDLE y # used by systemd
       FUSION y # Fusion MPT device support
       IDE_GD_ATAPI y # ATAPI floppy support
       IRDA_ULTRA y # Ultra (connectionless) protocol
@@ -231,6 +235,9 @@ let
       # Devtmpfs support.
       DEVTMPFS y
 
+      # Easier debug of NFS issues
+      SUNRPC_DEBUG y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -239,7 +246,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.4.9";
+    version = "3.4.47";
     testing = false;
 
     preConfigure = ''
@@ -248,7 +255,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "02rnzpnfs7hfsglrgwr1450ssj47da1w079rmvzh1k0apy7qdpzm";
+      sha256 = "0hdrwzhfnm3c26i2iaw2rfhi7rl89n7dpvbznn29k27p3ifi3rp6";
     };
 
     config = configWithPlatform stdenv.platform;
@@ -256,6 +263,8 @@ import ./generic.nix (
 
     features.iwlwifi = true;
     features.efiBootStub = true;
+    features.needsCifsUtils = true;
+    features.netfilterRPFilter = true;
   }
 
   // removeAttrs args ["extraConfig"]

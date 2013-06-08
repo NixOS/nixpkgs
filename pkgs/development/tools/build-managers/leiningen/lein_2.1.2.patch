@@ -1,0 +1,4 @@
+46c47
+< LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar
+---
+> LEIN_JAR=$(find $(dirname $0)/../lib -name *-standalone.jar | head -n 1)

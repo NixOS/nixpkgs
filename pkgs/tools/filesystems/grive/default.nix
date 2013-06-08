@@ -1,7 +1,8 @@
 { stdenv, fetchgit, cmake, libgcrypt, json_c, curl, expat, boost, binutils }:
 
 stdenv.mkDerivation rec {
-  name = "grive-0.3.0";
+  version = "0.3.0";
+  name = "grive-${version}";
 
   src = fetchgit {
     url = "https://github.com/Grive/grive.git";
@@ -10,6 +11,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [cmake libgcrypt json_c curl expat stdenv binutils boost];
+
+  # work around new binutils headers, see
+  # http://stackoverflow.com/questions/11748035/binutils-bfd-h-wants-config-h-now
+  prePatch = ''
+    sed -i '1i#define PACKAGE "grive"\n#define PACKAGE_VERSION "${version}"' \
+      libgrive/src/bfd/SymbolInfo.cc
+  '';
 
   meta = {
     description = "an open source (experimental) Linux client for Google Drive";

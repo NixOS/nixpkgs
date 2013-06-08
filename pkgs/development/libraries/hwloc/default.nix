@@ -2,15 +2,15 @@
 , pciutils, numactl }:
 
 stdenv.mkDerivation rec {
-  name = "hwloc-1.4.2";
+  name = "hwloc-1.6";
 
   src = fetchurl {
-    url = "http://www.open-mpi.org/software/hwloc/v1.4/downloads/${name}.tar.bz2";
-    sha256 = "0xamcnbkrf18v1rj4h6ddx6cn4gffx6zgzjaym8c3k5mlpgigfdw";
+    url = "http://www.open-mpi.org/software/hwloc/v1.6/downloads/${name}.tar.bz2";
+    sha256 = "0y561bryiqp1f5af5lm432dcw93xwp1jw55si7wa6skxnd6ch25w";
   };
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   # Filter out `null' inputs.  This allows users to `.override' the
   # derivation and set optional dependencies to `null'.
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs =
     # Since `libpci' appears in `hwloc.pc', it must be propagated.
     stdenv.lib.optional stdenv.isLinux pciutils;
+
+  enableParallelBuilding = true;
 
   postInstall =
     stdenv.lib.optionalString (stdenv.isLinux && numactl != null)

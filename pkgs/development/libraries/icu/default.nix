@@ -2,24 +2,25 @@
 
 let
   pname = "icu4c";
-  version = "4.8.1";
+  version = "51.1";
 in
 
 stdenv.mkDerivation {
   name = pname + "-" + version;
-  
+
   src = fetchurl {
-    url = "http://download.icu-project.org/files/${pname}/${version}/${pname}-"
-      + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
-    sha256 = "13zq190gl54zr84f0k48w9knarjsb966jkailyy06yhqjipcv90r";
+    url = http://download.icu-project.org/files/icu4c/51.1/icu4c-51_1-src.tgz;
+    sha256 = "0sv6hgkm92pm27zgjxgk284lcxxbsl0syi40ckw2b7yj7d8sxrc7";
   };
 
-  postUnpack = "
-    sourceRoot=\${sourceRoot}/source
-    echo Source root reset to \${sourceRoot}
-  ";
-  
+  postUnpack = ''
+    sourceRoot=''${sourceRoot}/source
+    echo Source root reset to ''${sourceRoot}
+  '';
+
   configureFlags = "--disable-debug";
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Unicode and globalization support library";

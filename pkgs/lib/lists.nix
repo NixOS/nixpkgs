@@ -1,4 +1,7 @@
 # General list operations.
+with {
+  inherit (import ./trivial.nix) deepSeq;
+};
 
 rec {
   inherit (builtins) head tail length isList add sub lessThan;
@@ -89,10 +92,6 @@ rec {
   remove = e: filter (x: x != e);
 
   
-  # Given two lists, removes all elements of the first list from the second list
-  removeList = l: filter (x: elem x l);
-
-
   # Return true if `list' has an element `x'.
   elem =
     builtins.elem or
@@ -190,7 +189,7 @@ rec {
         else let
           part = partition (strictLess (head l)) (tail l);
         in
-          qs part.wrong ([(head l)] ++ qs part.right []);
+          qs part.wrong ([(head l)] ++ qs part.right concat);
     in
       qs list [];
 
@@ -220,4 +219,5 @@ rec {
       ++ zipTwoLists (tail xs) (tail ys)
     else [];
 
+  deepSeqList = xs: y: if any (x: deepSeq x false) xs then y else y;
 }

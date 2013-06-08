@@ -7,6 +7,11 @@ let
     then glibcCross
     else assert stdenv ? glibc; stdenv.glibc;
 
+  dots_in_usernames = fetchurl {
+    url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-apps/shadow/files/shadow-4.1.3-dots-in-usernames.patch;
+    sha256 = "1fj3rg6x3jppm5jvi9y7fhd2djbi4nc5pgwisw00xlh4qapgz692";
+  };
+
 in
 
 stdenv.mkDerivation rec {
@@ -19,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
 
-  patches = [ ./keep-path.patch ];
+  patches = [ ./keep-path.patch dots_in_usernames ];
 
   # Assume System V `setpgrp (void)', which is the default on GNU variants
   # (`AC_FUNC_SETPGRP' is not cross-compilation capable.)

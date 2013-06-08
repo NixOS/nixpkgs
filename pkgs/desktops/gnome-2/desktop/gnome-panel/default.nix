@@ -18,7 +18,7 @@ stdenv.mkDerivation {
       libtasn1 libtool libcanberra
     ];
 
-  buildNativeInputs = [ pkgconfig intltool which ];
+  nativeBuildInputs = [ pkgconfig intltool which ];
   configureFlags = "--disable-scrollkeeper";
 
   NIX_CFLAGS_COMPILE="-I${GConf}/include/gconf/2";

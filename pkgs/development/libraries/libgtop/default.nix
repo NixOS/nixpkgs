@@ -8,5 +8,5 @@ stdenv.mkDerivation {
   };
 
   propagatedBuildInputs = [ glib ];
-  buildNativeInputs = [ pkgconfig perl intltool ];
+  nativeBuildInputs = [ pkgconfig perl intltool ];
 }

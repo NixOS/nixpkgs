@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./polkit-install.patch ];
 
-  buildNativeInputs = [ cmake automoc4 ];
+  nativeBuildInputs = [ cmake automoc4 ];
 
   propagatedBuildInputs = [ polkit glib qt4 ];
 

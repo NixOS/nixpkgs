@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0yw813d8amrl0n1fvdiyznxah92wcylj9kj1qhjc6h73d827h6na";
   };
 
+  patches = [ ./deprecated.patch ];
+
   NIX_LDFLAGS = "-lfontconfig";
 
   # The fuloong2f is not supported by 1.3.6 still

@@ -1,14 +1,14 @@
-{ cabal, blazeBuilder, byteorder, caseInsensitive, fastLogger
-, httpTypes, network, wai
+{ cabal, blazeBuilder, byteorder, caseInsensitive, dateCache
+, fastLogger, httpTypes, network, wai
 }:
 
 cabal.mkDerivation (self: {
   pname = "wai-logger";
-  version = "0.2.0";
-  sha256 = "1p89k71y0y5kpvy9iniqfyz3wmaw1q75s2324df1m1w1hcc0lgb6";
+  version = "0.3.1";
+  sha256 = "0x1d67fcfpjrgyjr7hipifqrzk13x8z8xmlj7h999r8mswijhgii";
   buildDepends = [
-    blazeBuilder byteorder caseInsensitive fastLogger httpTypes network
-    wai
+    blazeBuilder byteorder caseInsensitive dateCache fastLogger
+    httpTypes network wai
   ];
   meta = {
     description = "A logging system for WAI";

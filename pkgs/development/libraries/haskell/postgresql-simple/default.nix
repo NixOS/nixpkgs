@@ -1,15 +1,20 @@
-{ cabal, attoparsec, blazeBuilder, blazeTextual, postgresqlLibpq
-, text, time, transformers, vector
+{ cabal, attoparsec, base16Bytestring, blazeBuilder, blazeTextual
+, cryptohash, HUnit, postgresqlLibpq, text, time, transformers
+, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "postgresql-simple";
-  version = "0.2.4.0";
-  sha256 = "1n1s650j4z82cz34rq9qgj805yc9x852snnqjaa1iwrg9i3r150f";
+  version = "0.3.3.0";
+  sha256 = "0srkalfg41gdnzwwa2bmwwrcdqnw13f7b94wv4d5a6sg6yf1ry1l";
   buildDepends = [
     attoparsec blazeBuilder blazeTextual postgresqlLibpq text time
     transformers vector
   ];
+  testDepends = [
+    base16Bytestring cryptohash HUnit text time vector
+  ];
+  doCheck = false;
   meta = {
     description = "Mid-Level PostgreSQL client library";
     license = self.stdenv.lib.licenses.bsd3;

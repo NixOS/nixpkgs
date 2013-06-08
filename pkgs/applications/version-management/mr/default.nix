@@ -1,13 +1,13 @@
-{ stdenv, fetchgit, fetchgitrevision, perl }:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
 
-  version = "1.12";
+  version = "1.13";
   name = "mr-" + version;
 
-  src = fetchgit {
-    url = "git://git.kitenet.net/mr.git";
-    rev = "353f63c968368edea9b14261f510c34ce4e0c97f";
+  src = fetchurl {
+    url = "http://ftp.de.debian.org/debian/pool/main/m/mr/mr_${version}.tar.gz";
+    sha256 = "1q3qxk8dwbv30v2xxh852wnwl1msgkvk5cgxyicpqj8kh5b96zlz";
   };
 
   buildInputs = [perl];
@@ -17,12 +17,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
-    ensureDir $out/share/man/man1
-    cp mr $out/bin
-    cp webcheckout $out/bin
-    cp mr.1 $out/share/man/man1
-    cp webcheckout.1 $out/share/man/man1
+    mkdir -pv $out/bin $out/share/man/man1
+    cp -v mr $out/bin
+    cp -v webcheckout $out/bin
+    cp -v mr.1 $out/share/man/man1
+    cp -v webcheckout.1 $out/share/man/man1
   '';
       
   meta = {

@@ -1,39 +1,39 @@
-{ stdenv, fetchurl, scons, which, boost, gnutar, v8 ? null, useV8 ? false}:
-
-assert useV8 -> v8 != null;
+{ stdenv, fetchurl, scons, boost, v8, gperftools, pcre, snappy }:
 
 with stdenv.lib;
 
+let installerPatch = fetchurl {
+      url = "https://jira.mongodb.org/secure/attachment/18160/SConscript.client.patch";
+      sha256 = "0n60fh2r8i7m6g113k0iw4adc8jv2by4ahrd780kxg47kzfgw06a";
+    };
+
+in
 stdenv.mkDerivation rec {
-  name = "mongodb-2.0.6";
+  name = "mongodb-2.4.3";
 
   src = fetchurl {
-    url = "http://downloads.mongodb.org/src/mongodb-src-r2.0.6.tar.gz";
-    sha256 = "0kiiz8crx318sdn0wd9d88pzx9s1c6ak2dhd0zw7kl63gmd74wm9";
+    url = http://downloads.mongodb.org/src/mongodb-src-r2.4.3.tar.gz;
+    sha256 = "1k653xmwphdk88z2byz5fglr8xcsm8nw13prls1rx16qnc6h1pb1";
   };
 
-  buildInputs = [scons which boost] ++ stdenv.lib.optional useV8 v8;
+  nativeBuildInputs = [ scons boost v8 gperftools pcre snappy ];
 
-  enableParallelBuilding = true;
+  patches = [ installerPatch ];
 
-  patchPhase = ''
-    substituteInPlace SConstruct --replace "Environment( MSVS_ARCH=msarch , tools = [\"default\", \"gch\"], toolpath = '.' )" "Environment( MSVS_ARCH=msarch , tools = [\"default\", \"gch\"], toolpath = '.', ENV = os.environ )"
-    substituteInPlace SConstruct --replace "../v8" "${v8}"
-    substituteInPlace SConstruct --replace "LIBPATH=[\"${v8}/\"]" "LIBPATH=[\"${v8}/lib\"]"
+  postPatch = ''
+    substituteInPlace SConstruct \
+        --replace "Environment( BUILD_DIR" "Environment( ENV = os.environ, BUILD_DIR" \
+        --replace 'CCFLAGS=["-Werror", "-pipe"]' 'CCFLAGS=["-pipe"]'
   '';
 
   buildPhase = ''
-    export TERM=""
-    scons all --cc=`which gcc` --cxx=`which g++` --libpath=${boost}/lib --cpppath=${boost}/include \
-              ${optionalString useV8 "--usev8"}
+    export SCONSFLAGS="-j$NIX_BUILD_CORES"
+    scons all --use-system-all
   '';
 
   installPhase = ''
-    scons install --cc=`which gcc` --cxx=`which g++` --libpath=${boost}/lib --cpppath=${boost}/include \
-                  ${optionalString useV8 "--usev8"} --full --prefix=$out
-    if [ -d $out/lib64 ]; then
-      mv $out/lib64 $out/lib
-    fi
+    mkdir -p $out/lib
+    scons install --use-system-all --full --prefix=$out
   '';
 
   meta = {
@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
     license = "AGPLv3";
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
-

@@ -1,10 +1,10 @@
-{ cabal, transformers }:
+{ cabal, tagged, transformers, transformersCompat }:
 
 cabal.mkDerivation (self: {
   pname = "contravariant";
-  version = "0.2.0.2";
-  sha256 = "0142s1c914zbfnvysvcc9s3bv8qs6wimnqcmxca1gxaxqvyfkf3p";
-  buildDepends = [ transformers ];
+  version = "0.4";
+  sha256 = "1nqslc9vcx6v6c33fn7mvb1xhr33yl3ja92p788zx8z1drx9cqc3";
+  buildDepends = [ tagged transformers transformersCompat ];
   meta = {
     homepage = "http://github.com/ekmett/contravariant/";
     description = "Haskell 98 contravariant functors";

@@ -46,10 +46,10 @@ stdenv.mkDerivation (args // {
           echo "$propagatedBuildInputs" > "$dev/nix-support/propagated-build-inputs"
           propagatedBuildInputs=
         fi
-        echo "$out $lib $bin $propagatedBuildNativeInputs" > "$dev/nix-support/propagated-build-native-inputs"
-        propagatedBuildNativeInputs=
+        echo "$out $lib $bin $propagatedNativeBuildInputs" > "$dev/nix-support/propagated-native-build-inputs"
+        propagatedNativeBuildInputs=
       elif [ -n "$out" ]; then
-        propagatedBuildNativeInputs="$lib $propagatedBuildNativeInputs"
+        propagatedNativeBuildInputs="$lib $propagatedNativeBuildsInputs"
       fi
 
       for i in $bin $lib; do

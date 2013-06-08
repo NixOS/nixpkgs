@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bytestring-lexing";
-  version = "0.4.0";
-  sha256 = "1lww38rab9k8drndqkg306kiq6663i89sq6l1bvjv6cs13acc8wr";
+  version = "0.4.3";
+  sha256 = "0dynfrf8ym01v2dl57422h8r75kdlqh2qzqi9yc0f1bmbfqxap6r";
   buildTools = [ alex ];
   meta = {
     homepage = "http://code.haskell.org/~wren/";

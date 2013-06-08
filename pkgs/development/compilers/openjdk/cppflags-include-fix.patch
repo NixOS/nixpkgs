@@ -1,9 +1,9 @@
 diff -Naur openjdk-orig/jdk/make/sun/awt/mawt.gmk openjdk/jdk/make/sun/awt/mawt.gmk
---- openjdk-orig/jdk/make/sun/awt/mawt.gmk	2011-06-27 13:19:26.000000000 -0400
-+++ openjdk/jdk/make/sun/awt/mawt.gmk	2011-07-31 17:42:11.370026854 -0400
-@@ -223,12 +223,6 @@
-         -I$(PLATFORM_SRC)/native/$(PKGDIR) \
-         $(EVENT_MODEL)
+--- openjdk-orig/jdk/make/sun/awt/mawt.gmk	2012-08-28 19:13:16.000000000 -0400
++++ openjdk/jdk/make/sun/awt/mawt.gmk	2013-01-22 11:56:22.315418708 -0500
+@@ -234,12 +234,6 @@
+ endif # !HEADLESS
+ endif # PLATFORM
  
 -ifeq ($(PLATFORM), linux)
 -  # Checking for the X11/extensions headers at the additional location
@@ -11,6 +11,6 @@ diff -Naur openjdk-orig/jdk/make/sun/awt/mawt.gmk openjdk/jdk/make/sun/awt/mawt.
 -                        $(wildcard /usr/include/X11/extensions))
 -endif
 -
- ifeq ($(PLATFORM), solaris)
-   CPPFLAGS += -I$(OPENWIN_HOME)/include/X11/extensions
- endif
+ ifeq ($(PLATFORM), macosx))
+   CPPFLAGS += -I$(OPENWIN_HOME)/include/X11/extensions \
+               -I$(OPENWIN_HOME)/include 

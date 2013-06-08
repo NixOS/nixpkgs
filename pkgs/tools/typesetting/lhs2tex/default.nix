@@ -2,9 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "lhs2tex";
-  version = "1.17";
+  version = "1.18.1";
   name = self.fname;
-  sha256 = "1x49316m5xm4f6hw5q7kia9rpfpygxhk5gnifd54ai0zjmdlkxrc";
+  sha256 = "0j4n7vkabsggn94gbwixy1vmckdck2nggdiqvk6n9nx164if5jnw";
   extraBuildInputs = [regexCompat texLive];
 
   postInstall = ''

@@ -1,4 +1,5 @@
 { stdenv, fetchurl }:
+
 stdenv.mkDerivation rec {
 
   name = "f-prot-${version}";
@@ -33,8 +34,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.f-prot.com;
-    description = "a popular proprietary antivirus, Linux workstation edition.";
-    license = licenses.proprietary;
+    description = "A popular proprietary antivirus program";
+    license = licenses.unfree;
     maintainers = [ maintainers.phreedom ];
     platforms = platforms.linux;
   };

@@ -1,14 +1,12 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation (rec {
-  name = "gzip-1.4";
+stdenv.mkDerivation rec {
+  name = "gzip-1.5";
 
   src = fetchurl {
-    url = "mirror://gnu/gzip/${name}.tar.gz";
-    sha256 = "1vhiyzls60fws48scw48wvwn8mpv1f4yhcsnafys239qvb9wyrni";
+    url = "mirror://gnu/gzip/${name}.tar.xz";
+    sha256 = "0wx1nqk709kx75cwp2axachnbxryp4gyl06qxn5nl95184w0mhls";
   };
-
-  doCheck = true;
 
   meta = {
     homepage = http://www.gnu.org/software/gzip/;
@@ -31,13 +29,3 @@ stdenv.mkDerivation (rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
-
-//
-
-{
-  crossAttrs =
-    # XXX: Temporary workaround to allow GNU/Hurd builds with newer libcs.
-    (stdenv.lib.optionalAttrs (stdenv.cross.config == "i586-pc-gnu") {
-      patches = [ ./gets-undeclared.patch ];
-    });
-})

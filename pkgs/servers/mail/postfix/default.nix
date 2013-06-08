@@ -4,31 +4,22 @@
 
 assert stdenv.isLinux;
 
-stdenv.mkDerivation {
-  name = "postfix-2.8.6";
-  
+stdenv.mkDerivation rec {
+  name = "postfix-2.8.12";
+
   src = fetchurl {
-    url = ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/postfix-2.8.6.tar.gz;
-    sha256 = "1rfsfhna5hy5lc6hkg1zc2862pdc5c1y9z6aiy8rinlmzrfplhlb";
+    url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
+    sha256 = "11z07mjy53l1fnl7k4101yk4ilibgqr1164628mqcbmmr8bh2szl";
   };
 
-  installTargets = ["non-interactive-package"];
-  
-  installFlags = [" install_root=$out "];
-  
-  preInstall = ''
-    sed -e '/^PATH=/d' -i postfix-install
-  '';
-  
-  postInstall = ''
-    mkdir -p $out
-    mv ut/$out/* $out/
+  buildInputs = [db4 openssl cyrus_sasl bison perl];
 
-    mkdir $out/share/postfix/conf
-    cp conf/* $out/share/postfix/conf
-    sed -e 's@PATH=.*@PATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:'$out'/sbin@' -i $out/share/postfix/conf/post-install $out/libexec/postfix/post-install
-    sed -e '2aPATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:'$out'/sbin' -i $out/share/postfix/conf/postfix-script $out/libexec/postfix/postfix-script
-    chmod a+x $out/share/postfix/conf/{postfix-script,post-install}
+  patches = [ ./postfix-2.2.9-db.patch  ./postfix-2.2.9-lib.patch ./db-linux3.patch ];
+
+  postPatch = ''
+    sed -i -e s,/usr/bin,/var/run/current-system/sw/bin, \
+      -e s,/usr/sbin,/var/run/current-system/sw/sbin, \
+      -e s,:/sbin,, src/util/sys_defs.h
   '';
 
   preBuild = ''
@@ -46,15 +37,29 @@ stdenv.mkDerivation {
     make makefiles CCARGS='-DUSE_TLS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I${cyrus_sasl}/include/sasl' AUXLIBS='-lssl -lcrypto -lsasl2 -ldb -lnsl'
   '';
 
-  buildInputs = [db4 openssl cyrus_sasl bison perl];
-  
-  patches = [ ./postfix-2.2.9-db.patch  ./postfix-2.2.9-lib.patch ./db-linux3.patch ];
+  installPhase = ''
+    sed -e '/^PATH=/d' -i postfix-install
+    $SHELL postfix-install install_root=out -non-interactive -package
 
-  postPatch = ''
-    sed -i -e s,/usr/bin,/var/run/current-system/sw/bin, \
-      -e s,/usr/sbin,/var/run/current-system/sw/sbin, \
-      -e s,:/sbin,, src/util/sys_defs.h
+    mkdir -p $out
+    mv -v "out$out/"* $out/
+
+    mkdir -p $out/share/postfix
+    mv conf $out/share/postfix/
+    mv LICENSE TLS_LICENSE $out/share/postfix/
+
+    sed -e 's@^PATH=.*@PATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:'$out'/sbin@' -i $out/share/postfix/conf/post-install $out/libexec/postfix/post-install
+    sed -e '2aPATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:'$out'/sbin' -i $out/share/postfix/conf/postfix-script $out/libexec/postfix/postfix-script
+    chmod a+x $out/share/postfix/conf/{postfix-script,post-install}
   '';
-  
+
   inherit glibc;
+
+  meta = {
+    homepage = "http://www.postfix.org/";
+    description = "a fast, easy to administer, and secure mail server";
+    license = stdenv.lib.licenses.bsdOriginal;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.simons ];
+  };
 }

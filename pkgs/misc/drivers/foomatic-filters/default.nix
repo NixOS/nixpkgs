@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, perl, cups, coreutils, gnused }:
+{ stdenv, fetchurl, pkgconfig, perl, cups, dbus }:
 
 stdenv.mkDerivation rec {
-  name = "foomatic-filters-4.0.6";
+  name = "foomatic-filters-4.0.12";
 
   src = fetchurl {
     url = "http://www.openprinting.org/download/foomatic/${name}.tar.gz";
-    sha256 = "0wa9hlq7s99sh50kl6bj8j0vxrz7pcbwdnqs1yfjjhqshfh7hsav";
+    sha256 = "17w26r15094j4fqifa7f7i7jad4gsy9zdlq69kffrykcw31qx3q8";
   };
 
-  buildInputs = [ perl cups ];
+  buildInputs = [ pkgconfig perl cups dbus ];
 
   preConfigure =
     ''

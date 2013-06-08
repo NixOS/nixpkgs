@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     description = "An ncurses disk usage analyzer.";
     homepage = http://dev.yorhel.nl/ncdu;
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.all;
   };
 }

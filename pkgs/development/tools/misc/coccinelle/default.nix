@@ -1,9 +1,9 @@
-{ fetchurl, stdenv, python, ncurses, ocamlPackages, makeWrapper }:
+{ fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig, makeWrapper }:
 
 let
 
-  name = "coccinelle-1.0.0-rc12";
-  sha256 = "03b8930a53623ec79dc2486e9b6a569e373958cf46074c5f1d0028c70708498d";
+  name = "coccinelle-1.0.0-rc15";
+  sha256 = "07fab4e17512925b958890bb13c0809797074f2e44a1107b0074bdcc156b9596";
 
 in stdenv.mkDerivation {
   inherit name;
@@ -15,12 +15,15 @@ in stdenv.mkDerivation {
 
   buildInputs = with ocamlPackages; [
     ocaml findlib menhir
-    ocaml_pcre ocaml_sexplib pycaml
-    python ncurses makeWrapper
+    ocaml_pcre pycaml
+    python ncurses pkgconfig
+    makeWrapper
   ];
 
-  configureFlagsArray = [ "--enable-release" ];
-
+  # TODO: is the generation of this wrapper truly/still needed?
+  # I don't have a non-NixOS system, so I cannot verify this, but shouldn't
+  # libpython know where to find its modules? (the path is for example in
+  # its Sys-module).
   postInstall =
     # On non-NixOS systems, Coccinelle would end up looking up Python modules
     # in the wrong directory.
@@ -30,6 +33,8 @@ in stdenv.mkDerivation {
            --prefix "PYTHONPATH" ":" "${python}/lib/python${python.majorVersion}"
        done
     '';
+
+  configureFlags = "--enable-release";
 
   meta = {
     description = "Coccinelle, a program to apply C code semantic patches";

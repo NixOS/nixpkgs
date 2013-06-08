@@ -1,16 +1,16 @@
 { stdenv, fetchurl, buildPerlPackage, perl, HTMLParser, NetDNS, NetAddrIP, DBFile
-, HTTPDate, MailDKIM, makeWrapper
+, HTTPDate, MailDKIM, LWP, IOSocketSSL, makeWrapper, gnupg1
 }:
 
-# TODO:
+# TODO: Add the Perl modules ...
 #
-#  - Mail::SPF
-#  - IP::Country
-#  - Razor2
-#  - Net::Ident
-#  - DBI
-#  - LWP::UserAgent
-#  - Encode::Detect
+#   DBI
+#   Encode::Detect
+#   IP::Country::Fast
+#   Mail::SPF
+#   Net::Ident
+#   Razor2::Client::Agent
+#
 
 buildPerlPackage rec {
   name = "SpamAssassin-3.3.2";
@@ -20,18 +20,22 @@ buildPerlPackage rec {
     sha256 = "01d2jcpy423zfnhg123wlhzysih1hmb93nxfspiaajzh9r5rn8y7";
   };
 
-  buildInputs = [ makeWrapper HTMLParser NetDNS NetAddrIP DBFile HTTPDate
-    MailDKIM ];
+  buildInputs = [ makeWrapper HTMLParser NetDNS NetAddrIP DBFile HTTPDate MailDKIM
+    LWP IOSocketSSL ];
 
   # Enabling 'taint' mode is desirable, but that flag disables support
   # for the PERL5LIB environment variable. Needs further investigation.
   makeFlags = "PERL_BIN=${perl}/bin/perl PERL_TAINT=no";
 
+  makeMakerFlags = "CONFDIR=/etc/spamassassin LOCALSTATEDIR=/var/lib/spamassassin";
+
   doCheck = false;
 
   postInstall = ''
+    mv "rules/"* $out/share/spamassassin/
+
     for n in "$out/bin/"*; do
-      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB"
+      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB" --prefix PATH : "${gnupg1}/bin"
     done
   '';
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation rec {
-  name = "flymake-cursor-0.1.4";
+  name = "flymake-cursor-0.1.5";
 
   src = fetchurl {
     url = "http://www.emacswiki.org/emacs/download/flymake-cursor.el";
-    sha256 = "1wxqqmn2fk2b778nksvgn1mi7ajarcpc5lla90xx9jwz47d9hx02";
+    sha256 = "1qqppd1786w8pl1avjb01n23lwihb7m0hr23abjklsxz03gmp4qz";
   };
 
   phases = [ "buildPhase" "installPhase"];

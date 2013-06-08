@@ -4,7 +4,6 @@
 , libvorbis
 , file
 , boost
-, lzo
 , xdg_utils
 , expat
 , wxGTK
@@ -16,14 +15,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mkvtoolnix-5.6.0";
+  name = "mkvtoolnix-6.2.0";
 
   src = fetchurl {
-    url = "http://www.bunkus.org/videotools/mkvtoolnix/sources/${name}.tar.bz2";
-    sha256 = "1hzwf4zaamny3qzmd6hyhy4hy9l67s3fjvznbi0avw0ad7g05i89";
+    url = "http://www.bunkus.org/videotools/mkvtoolnix/sources/${name}.tar.xz";
+    sha256 = "0864vmdcnfwk5cb2fv1y60yvp9kqcyaqxwbvy4nsj7bzwv1iqysn";
   };
 
-  buildInputs = [ libmatroska flac libvorbis file boost lzo xdg_utils expat wxGTK zlib ruby gettext pkgconfig curl ];
+  buildInputs = [ libmatroska flac libvorbis file boost xdg_utils expat wxGTK zlib ruby gettext pkgconfig curl ];
 
   configureFlags = "--with-boost-libdir=${boost}/lib";
   buildPhase = ''
@@ -39,4 +38,3 @@ stdenv.mkDerivation rec {
     homepage = http://www.bunkus.org/videotools/mkvtoolnix/;
   };
 }
-

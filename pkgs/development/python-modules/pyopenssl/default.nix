@@ -2,15 +2,15 @@ a :
 let
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "0.10" a;
+  version = a.lib.attrByPath ["version"] "0.13" a;
   propagatedBuildInputs = with a; [
     openssl python
   ];
 in
 rec {
   src = fetchurl {
-    url = "http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-0.10.tar.gz";
-    sha256 = "4514f8960389042ca2587f9cb801a13f7990387753fc678680b0c084719b5b60";
+    url = "http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
+    sha256 = "21e12b03abaa0e04ecc8cd9c251598f71bae11c9f385304234e4ea5618c6163b";
   };
 
   inherit propagatedBuildInputs;

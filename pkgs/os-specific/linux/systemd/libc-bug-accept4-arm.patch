@@ -1,0 +1,81 @@
+Based on a patch for udev in
+nixpkgs(upstart)/pkgs/os-specific/linux/udev/pre-accept4-kernel.patch
+
+It was taken from:
+https://github.com/archlinuxarm/PKGBUILDs/blob/master/core/udev-oxnas/pre-accept4-kernel.patch
+
+Basically, ARM implemented accept4() only in 2.6.36. Nixpkgs now uses
+linux headers from 2.6.35. And the particular nixpkgs glibc version had a bug,
+not checking about 2.6.36 for accept4 on arm.
+
+diff --git a/src/journal/journald-stream.c b/src/journal/journald-stream.c
+index 7b88f74..a9f7b62 100644
+--- a/src/journal/journald-stream.c
++++ b/src/journal/journald-stream.c
+@@ -347,10 +347,12 @@ int stdout_stream_new(Server *s) {
+         int fd, r;
+         socklen_t len;
+         struct epoll_event ev;
++        int flgs;
+ 
+         assert(s);
+ 
+-        fd = accept4(s->stdout_fd, NULL, NULL, SOCK_NONBLOCK|SOCK_CLOEXEC);
++        //fd = accept4(s->stdout_fd, NULL, NULL, SOCK_NONBLOCK|SOCK_CLOEXEC);
++        fd = accept(s->stdout_fd, NULL, NULL);
+         if (fd < 0) {
+                 if (errno == EAGAIN)
+                         return 0;
+@@ -359,6 +361,11 @@ int stdout_stream_new(Server *s) {
+                 return -errno;
+         }
+ 
++        // Since we don't have accept4
++        flgs = fcntl(fd, F_GETFL, NULL);
++        if(flgs >= 0) fcntl(fd, F_SETFL, flgs | O_NONBLOCK);
++        fcntl(fd, F_SETFD, FD_CLOEXEC);
++
+         if (s->n_stdout_streams >= STDOUT_STREAMS_MAX) {
+                 log_warning("Too many stdout streams, refusing connection.");
+                 close_nointr_nofail(fd);
+diff --git a/src/udev/udev-ctrl.c b/src/udev/udev-ctrl.c
+index a235912..c05e4b4 100644
+--- a/src/udev/udev-ctrl.c
++++ b/src/udev/udev-ctrl.c
+@@ -15,6 +15,7 @@
+ #include <stddef.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <fcntl.h>
+ #include <sys/types.h>
+ #include <sys/poll.h>
+ #include <sys/socket.h>
+@@ -181,6 +182,7 @@ struct udev_ctrl_connection *udev_ctrl_get_connection(struct udev_ctrl *uctrl)
+         struct ucred ucred;
+         socklen_t slen;
+         const int on = 1;
++        int flgs;
+ 
+         conn = calloc(1, sizeof(struct udev_ctrl_connection));
+         if (conn == NULL)
+@@ -188,13 +190,19 @@ struct udev_ctrl_connection *udev_ctrl_get_connection(struct udev_ctrl *uctrl)
+         conn->refcount = 1;
+         conn->uctrl = uctrl;
+ 
+-        conn->sock = accept4(uctrl->sock, NULL, NULL, SOCK_CLOEXEC|SOCK_NONBLOCK);
++        //conn->sock = accept4(uctrl->sock, NULL, NULL, SOCK_CLOEXEC|SOCK_NONBLOCK);
++        conn->sock = accept(uctrl->sock, NULL, NULL);
+         if (conn->sock < 0) {
+                 if (errno != EINTR)
+                         log_error("unable to receive ctrl connection: %m\n");
+                 goto err;
+         }
+ 
++        // Since we don't have accept4
++        flgs = fcntl(conn->sock, F_GETFL, NULL);
++        if(flgs >= 0) fcntl(conn->sock, F_SETFL, flgs | O_NONBLOCK);
++        fcntl(conn->sock, F_SETFD, FD_CLOEXEC);
++
+         /* check peer credential of connection */
+         slen = sizeof(ucred);
+         if (getsockopt(conn->sock, SOL_SOCKET, SO_PEERCRED, &ucred, &slen) < 0) {

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "random-source";
-  version = "0.3.0.2";
-  sha256 = "0sp39bj7rqg4w4rc4d4zgj0f77c23z4xc47p55chy12znc4frlp2";
+  version = "0.3.0.4";
+  sha256 = "1gvx9r6vy36lx7fy537zdbnbhpmfxz88a7gh0aiyd2vi7bvnndxy";
   buildDepends = [
     flexibleDefaults mersenneRandomPure64 mtl mwcRandom random stateref
     syb thExtras

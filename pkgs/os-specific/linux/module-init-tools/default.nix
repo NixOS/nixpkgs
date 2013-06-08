@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = [
     (fetchurl {
-      url = mirror://kernel/linux/utils/kernel/module-init-tools/module-init-tools-3.16.tar.bz2;
+      url = http://ftp.be.debian.org/pub/linux/utils/kernel/module-init-tools/module-init-tools-3.16.tar.bz2;
       sha256 = "0jxnz9ahfic79rp93l5wxcbgh4pkv85mwnjlbv1gz3jawv5cvwp1";
     })
 

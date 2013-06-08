@@ -1,4 +1,4 @@
-{getConfig, ...}@a:
+{ config, ... }@a:
 
 # You can set gui by exporting GRASS_GUI=..
 # see http://grass.itc.it/gdp/html_grass64/g.gui.html
@@ -36,31 +36,31 @@ a.composableDerivation.composableDerivation {} (fix: {
   ];
 
   cfg = {
-    _64bitSupport = getConfig ["grass" "64bitSupport"] true;
-    cursesSupport = getConfig ["grass" "curses"] true;
-    gdalSupport = getConfig ["grass" "gdal"] true;
-    pythonSupport = getConfig ["grass" "python"] true;
-    wxwidgetsSupport = getConfig ["grass" "wxwidgets"] true;
-    readlineSupport = getConfig ["grass" "readline"] true;
-    jpegSupport = getConfig ["grass" "jpeg"] true;
-    tiffSupport = getConfig ["grass" "tiff"] true;
-    pngSupport = getConfig ["grass" "png"] true;
-    tcltkSupport = getConfig ["grass" "tcltk"] true;
-    postgresSupport = getConfig ["grass" "postgres"] true;
-    mysqlSupport = getConfig ["grass" "mysql"] true;
-    sqliteSupport = getConfig ["grass" "sqlite"] true;
-    ffmpegSupport = getConfig ["grass" "ffmpeg"] true;
-    openglSupport = getConfig ["grass" "opengl"] true;
-    odbcSupport = getConfig ["grass" "odbc"] false; # fails to find libodbc - why ?
-    fftwSupport = getConfig ["grass" "fftw"] true;
-    blasSupport = getConfig ["grass" "blas"] true;
-    lapackSupport = getConfig ["grass" "lapack"] true;
-    cairoSupport = getConfig ["grass" "cairo"] true;
-    motifSupport = getConfig ["grass" "motif"] true;
-    freetypeSupport = getConfig ["grass" "freetype"] true;
-    projSupport = getConfig ["grass" "proj"] true;
-    opendwgSupport = getConfig ["grass" "dwg"] false;
-    largefileSupport = getConfig ["grass" "largefile"] true;
+    _64bitSupport = config.grass."64bitSupport" or true;
+    cursesSupport = config.grass.curses or true;
+    gdalSupport = config.grass.gdal or true;
+    pythonSupport = config.grass.python or true;
+    wxwidgetsSupport = config.grass.wxwidgets or true;
+    readlineSupport = config.grass.readline or true;
+    jpegSupport = config.grass.jpeg or true;
+    tiffSupport = config.grass.tiff or true;
+    pngSupport = config.grass.png or true;
+    tcltkSupport = config.grass.tcltk or true;
+    postgresSupport = config.grass.postgres or true;
+    mysqlSupport = config.grass.mysql or true;
+    sqliteSupport = config.grass.sqlite or true;
+    ffmpegSupport = config.grass.ffmpeg or true;
+    openglSupport = config.grass.opengl or true;
+    odbcSupport = config.grass.odbc or false; # fails to find libodbc - why ?
+    fftwSupport = config.grass.fftw or true;
+    blasSupport = config.grass.blas or true;
+    lapackSupport = config.grass.lapack or true;
+    cairoSupport = config.grass.cairo or true;
+    motifSupport = config.grass.motif or true;
+    freetypeSupport = config.grass.freetype or true;
+    projSupport = config.grass.proj or true;
+    opendwgSupport = config.grass.dwg or false;
+    largefileSupport = config.grass.largefile or true;
   };
 
   # ?? NLS support:                no

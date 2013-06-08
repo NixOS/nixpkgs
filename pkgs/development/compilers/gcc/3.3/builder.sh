@@ -35,7 +35,7 @@ EOF
     cd ../build
 
     configureScript=../$sourceRoot/configure
-    configureFlags="--enable-languages=$langs"
+    configureFlags="--enable-languages=$langs --disable-multilib"
 }
 
 

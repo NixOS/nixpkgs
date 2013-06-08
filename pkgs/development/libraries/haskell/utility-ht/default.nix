@@ -1,9 +1,10 @@
-{ cabal }:
+{ cabal, QuickCheck }:
 
 cabal.mkDerivation (self: {
   pname = "utility-ht";
-  version = "0.0.8";
-  sha256 = "02sm1xj5xa65hpkvl2yk89d9dlg3c2ap8qcviq9zj10asmsbzyd8";
+  version = "0.0.9";
+  sha256 = "1m5mjxwf51jd00swp1f4cimaqaral6827y1sidbq61qkw7l6ss8r";
+  testDepends = [ QuickCheck ];
   meta = {
     description = "Various small helper functions for Lists, Maybes, Tuples, Functions";
     license = self.stdenv.lib.licenses.bsd3;

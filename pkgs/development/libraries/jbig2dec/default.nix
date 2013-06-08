@@ -1,13 +1,13 @@
-{ stdenv, fetchurl }: 
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "jbig2dec-0.11";
-  
+
   src = fetchurl {
-    url = http://ghostscript.com/~giles/jbig2/jbig2dec/jbig2dec-0.11.tar.gz;
-    sha256 = "1ffhgmf2fqzk0h4k736pp06z7q5y4x41fg844bd6a9vgncq86bby";
+    url = "mirror://sourceforge/jbig2dec/${name}.tar.xz";
+    sha256 = "1xddc30garsg5j8p348cz5l8vn8j7723c0sykv0kc1w5ihaghsq1";
   };
-  
+
   meta = {
     homepage = http://jbig2dec.sourceforge.net/;
     description = "Decoder implementation of the JBIG2 image compression format";

@@ -5,11 +5,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ounit-1.1.0";
+  name = "ounit-1.1.2";
 
   src = fetchurl {
-    url = http://forge.ocamlcore.org/frs/download.php/495/ounit-1.1.0.tar.gz;
-    sha256 = "12vybg9xlw5c8ip23p8cljfzhkdsm25482sf1yh46fcqq8p2jmqx";
+    url = http://forge.ocamlcore.org/frs/download.php/886/ounit-1.1.2.tar.gz;
+    sha256 = "e6bc1b0cdbb5b5552d85bee653e23aafe20bb97fd7cd229c867d01ff999888e3";
   };
 
   buildInputs = [ocaml findlib];
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.xs4all.nl/~mmzeeman/ocaml/;
     description = "Unit test framework for OCaml";
-    license = "MIT/X11";
+    license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms;
     maintainers = [
       stdenv.lib.maintainers.z77z

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "glpk-hs";
-  version = "0.3.3";
-  sha256 = "1pnq0v5va7f40ky9xb8c4z9wcmmnny2vk4afasz5pwivbxh42mfl";
+  version = "0.3.4";
+  sha256 = "0wyasd0dqi5nnh52lx980vnyhm0rwib0sd7qnpj4s9hq8rn994cm";
   buildDepends = [ deepseq mtl ];
   extraLibraries = [ glpk ];
   meta = {

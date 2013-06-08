@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "strigi-${version}";
-  version = "0.7.5";
+  version = "0.7.8";
 
   src = fetchurl {
     url = "http://www.vandenoever.info/software/strigi/${name}.tar.bz2";
-    sha256 = "16qqnlh0dy3r92shzm2q36h5qi3m06pihr4h5cq944hpvqz5w7qi";
+    sha256 = "12grxzqwnvbyqw7q1gnz42lypadxmq89vk2qpxczmpmc4nk63r23";
   };
   
   includeAllQtDirs = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ zlib bzip2 stdenv.gcc.libc libxml2 qt4 exiv2 clucene_core fam dbus_tools ];
 
-  buildNativeInputs = [ cmake pkgconfig perl ];
+  nativeBuildInputs = [ cmake pkgconfig perl ];
 
   enableParallelBuilding = true;
 

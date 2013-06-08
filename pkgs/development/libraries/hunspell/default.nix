@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "hunspell-1.3.2";
 
   src = fetchurl {
-    url = "mirror://sf/hunspell/${name}.tar.gz";
+    url = "mirror://sourceforge/hunspell/${name}.tar.gz";
     sha256 = "1gfxdajnqk2civkshkfjx5ldg7kjdgj76m5khpsbjk4lxsjd9vdl";
   };
 

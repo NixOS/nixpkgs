@@ -1,30 +1,24 @@
-{ fetchurl, stdenv, emacs, texinfo, which }:
+{ fetchurl, stdenv, emacs, texinfo, which, texLive }:
 
 stdenv.mkDerivation rec {
-  name = "org-7.8.03";
+  name = "org-7.9.1";
 
   src = fetchurl {
     url = "http://orgmode.org/${name}.tar.gz";
-    sha256 = "49357cca7d892e70cd2dfcc0b5d96d9fd164ef5a1f251ace3865ecb27dc1e958";
+    sha256 = "0kz1dnzfpmmslwal150z9rxrnddjpaw2glx26qihpxzs0zzpw201";
   };
 
-  buildInputs = [ emacs texinfo ];
-
-  patchPhase =
-    '' sed -i "lisp/org-clock.el" -e's|"which"|"${which}/bin/which"|g'
-    '';
+  buildInputs = [ emacs ];
+  nativeBuildInputs = [ texinfo texLive ];
 
   configurePhase =
-    '' sed -i Makefile \
-           -e "s|^prefix=.*$|prefix=$out|g"
+    '' sed -i mk/default.mk \
+           -e "s|^prefix\t=.*$|prefix=$out|g"
     '';
 
-  #XXX: fails because of missing UTILITIES/manfull.pl, currently not
-  # included in the release tarball, but git.
-
-  #postBuild =
-  #  '' make doc
-  #  '';
+  postBuild =
+    '' make doc
+    '';
 
   installPhase =
     '' make install install-info

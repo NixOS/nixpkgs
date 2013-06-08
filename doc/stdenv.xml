@@ -569,6 +569,11 @@ nothing.</para>
   <title>Variables controlling the build phase</title>
 
   <varlistentry>
+    <term><varname>dontBuild</varname></term>
+    <listitem><para>Set to true to skip the build phase.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>makefile</varname></term>
     <listitem><para>The file name of the Makefile.</para></listitem>
   </varlistentry>

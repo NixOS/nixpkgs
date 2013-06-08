@@ -1,17 +1,17 @@
 { fetchurl, stdenv, libtool, gettext, zlib, bzip2, flac, libvorbis
 , exiv2, libgsf, rpm, pkgconfig
-, gtkSupport ? true, glib ? null, gtk ? null
+, gtkSupport ? true, glib ? null, gtk3 ? null
 , videoSupport ? true, ffmpeg ? null, libmpeg2 ? null}:
 
-assert gtkSupport -> glib != null && gtk != null;
+assert gtkSupport -> glib != null && gtk3 != null;
 assert videoSupport -> ffmpeg != null && libmpeg2 != null;
 
 stdenv.mkDerivation rec {
-  name = "libextractor-0.6.2";
+  name = "libextractor-1.0.1";
 
   src = fetchurl {
     url = "mirror://gnu/libextractor/${name}.tar.gz";
-    sha256 = "1pyh599717vjblyjch95r76afdxfhrzqr7nx1pz1davy5fpsw5aw";
+    sha256 = "1khy9s86vq6667h02zp2fvb16sqm27xlmr0xchgfxvsd6ascnl9j";
   };
 
   preConfigure =
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
    [ libtool gettext zlib bzip2 flac libvorbis exiv2
      libgsf rpm
      pkgconfig
-   ] ++ stdenv.lib.optionals gtkSupport [ glib gtk ]
+   ] ++ stdenv.lib.optionals gtkSupport [ glib gtk3 ]
      ++ stdenv.lib.optionals videoSupport [ ffmpeg libmpeg2 ];
 
   configureFlags = "--disable-ltdl-install "

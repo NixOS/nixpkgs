@@ -1,44 +1,40 @@
-{ stdenv, fetchurl, pkgconfig, python, cython
-, pygtk, pygobject, pycairo, notify, xlibs, gtk
-, ffmpeg, x264, libvpx, makeWrapper}:
+{ stdenv, fetchurl, buildPythonPackage
+, python, cython, pkgconfig
+, xorg, gtk, glib, pango, cairo, gdk_pixbuf, pygtk, atk, pygobject, pycairo
+, ffmpeg_1, x264, libvpx, pil, libwebp }:
 
-stdenv.mkDerivation rec {
-  name = "xpra-0.3.2";
+buildPythonPackage rec {
+  name = "xpra-0.8.8";
   
   src = fetchurl {
-    url = http://xpra.org/src/xpra-0.3.2.tar.bz2;
-    sha256 = "1s1z6r0r78qvf59ci3vxammjz7lj5m64jyk0bfn7yxd5jl3sy41y";
+    url = "http://xpra.org/src/${name}.tar.bz2";
+    sha256 = "248bac50c78eccfbc7f728667f9d0ef26b101b288193fa286881cda452e63683";
   };
 
-  buildNativeInputs = [ cython ];
+  buildInputs = [ 
+    python cython pkgconfig 
 
-  buildInputs = [
-    pkgconfig python pygtk gtk ffmpeg x264 libvpx makeWrapper
-    xlibs.inputproto xlibs.libXcomposite xlibs.libXdamage xlibs.libXtst
+    xorg.libX11 xorg.renderproto xorg.libXrender xorg.libXi xorg.inputproto xorg.kbproto
+    xorg.randrproto xorg.damageproto xorg.compositeproto xorg.xextproto xorg.recordproto
+    xorg.xproto xorg.fixesproto xorg.libXtst xorg.libXfixes xorg.libXcomposite xorg.libXdamage
+    xorg.libXrandr
+
+    pango cairo gdk_pixbuf atk gtk glib
+
+    ffmpeg_1 libvpx x264 libwebp
   ];
+
+  propagatedBuildInputs = [ 
+    pil pygtk pygobject
+  ];
+
+  # Even after i tried monkey patching, their tests just fail, looks like
+  # they don't have automated testing out of the box? http://xpra.org/trac/ticket/177
+  doCheck = false;
 
   buildPhase = ''
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0) $(pkg-config --cflags pygtk-2.0)"
-    NIX_LDFLAGS="$NIX_LDFLAGS -lXcomposite -lXdamage"
-    ./do-build
-  '';
-
-  pythonPaths = [
-    "$out/lib/python"
-    "$(toPythonPath ${pygtk})/gtk-2.0"
-  ] ++ map (i: "$(toPythonPath ${i})") [
-    pygobject pycairo notify
-  ];
-
-  installPhase = ''
-    mkdir -p $out
-    cp -r install/* $out
-
-    for i in $(cd $out/bin && ls); do
-        wrapProgram $out/bin/$i \
-            --set PYTHONPATH "${stdenv.lib.concatStringsSep ":" pythonPaths}" \
-            --prefix PATH : "${xlibs.xauth}/bin:${xlibs.xorgserver}/bin:${xlibs.xmodmap}/bin"
-    done
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0) $(pkg-config --cflags pygtk-2.0) $(pkg-config --cflags xtst)"
+    python ./setup.py build --enable-Xdummy
   '';
   
   meta = {

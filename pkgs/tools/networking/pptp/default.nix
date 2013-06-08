@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, ppp }:
+{ stdenv, fetchurl, perl, ppp, iproute }:
 
 stdenv.mkDerivation rec {
   name = "pptp-1.7.2";
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   patchPhase =
     ''
       sed -e 's/install -o root/install/' -i Makefile
+      sed -e 's,/bin/ip,${iproute}/sbin/ip,' -i routing.c
     '';
   preConfigure =
     ''
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
           MANDIR=$out/share/man/man8 PPPDIR=$out/etc/ppp )
     '';
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   meta = {
     description = "PPTP client for Linux";

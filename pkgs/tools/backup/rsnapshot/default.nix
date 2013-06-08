@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "rsnapshot-1.3.0";
   src = fetchurl {
-    url = "mirrors://sourceforge/rsnapshot/${name}.tar.gz";
+    url = "mirror://sourceforge/rsnapshot/${name}.tar.gz";
     sha256 = "19p35ycm73a8vd4ccjpah18h5jagvcr11rqca6ya87sg8k0a5h9z";
   };
 

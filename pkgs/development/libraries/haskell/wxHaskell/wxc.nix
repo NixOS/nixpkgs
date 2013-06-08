@@ -10,7 +10,7 @@ cabal.mkDerivation (self: {
   postInstall = ''
     cp -v dist/build/libwxc.so.${self.version} $out/lib/libwxc.so
   '';
-
+  patches = [ ./fix-bogus-pointer-assignment.patch ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell C++ wrapper";

@@ -14,26 +14,26 @@ stdenv.mkDerivation {
 
   buildInputs = [x11 libXpm libXmu libXi libXp Xaw3d libpng libjpeg];
 
-  buildNativeInputs = [ imake makeWrapper ];
+  nativeBuildInputs = [ imake makeWrapper ];
 
   NIX_CFLAGS_COMPILE = "-I${libXpm}/include/X11";
 
   patches =
     let
-      debPrefix = "http://patch-tracker.debian.org/patch/series/dl/xfig/1:3.2.5.b-2";
+      debPrefix = "http://patch-tracker.debian.org/patch/series/dl/xfig/1:3.2.5.b-3";
     in
     [
       (fetchurl {
-        url = "${debPrefix}/35_CVE-2010-4262.dpatch";
-        sha256 = "18741b3dbipgr55fyp5x0296za3336ylln639jw8yjcyd1call22";
+        url = "${debPrefix}/35_CVE-2010-4262.patch";
+        sha256 = "1pj669sz49wzjvvm96gwbnani7wqi0ijh21imqdzqw47qxdv7zp5";
       })
       (fetchurl {
-        url = "${debPrefix}/13_remove_extra_libs.dpatch";
-        sha256 = "0v3k30ib7xq5wfhd3yacnal4gbih7nqw0z0aycvc0hafffl97i46";
+        url = "${debPrefix}/13_remove_extra_libs.patch";
+        sha256 = "1qb14ay0c8xrjzhi21jl7sl8mdzxardldzpnflkzml774bbpn8av";
       })
       (fetchurl {
-        url = "${debPrefix}/36_libpng15.dpatch";
-        sha256 = "0ssmvlcpjn3iqj3l38db8j8qpqbzixlwpczq01m49r5w9l3viy8k";
+        url = "${debPrefix}/36_libpng15.patch";
+        sha256 = "0jd5bqj7sj9bbnxg2d0y6zmv4ka4qif2x4zc84ngdqga5433anvn";
       })
     ];
 

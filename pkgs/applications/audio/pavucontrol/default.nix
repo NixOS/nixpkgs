@@ -2,17 +2,17 @@
 , libglademm, libcanberra, intltool, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "pavucontrol-0.9.10";
+  name = "pavucontrol-1.0";
 
   src = fetchurl {
-    url = "http://0pointer.de/lennart/projects/pavucontrol/${name}.tar.gz";
-    sha256 = "0g2sd9smwwpnyq8yc65dl9z0iafj2rrimi8v58wkxx98vhnnvsby";
+    url = "http://freedesktop.org/software/pulseaudio/pavucontrol/${name}.tar.xz";
+    sha256 = "1plcyrc7p6gqxjhxx2xh6162bkb29wixjrqrjnl9b8g3nrjjigix";
   };
 
   buildInputs = [ pkgconfig pulseaudio gtkmm libsigcxx libglademm libcanberra
     intltool gettext ];
 
-  configureFlags = "--disable-lynx";
+  configureFlags = "--disable-lynx --disable-gtk3";
 
   meta = {
     description = "PulseAudio Volume Control";

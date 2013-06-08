@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kdelibs polkit_qt_1 ];
 
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   patchPhase = "sed -e s/KDE4_AUTOSTART/AUTOSTART/ -i CMakeLists.txt";
 

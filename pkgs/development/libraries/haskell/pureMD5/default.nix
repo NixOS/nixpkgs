@@ -2,10 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pureMD5";
-  version = "2.1.0.3";
-  sha256 = "0whlsb6zq4zcp3wq0bd6pgcsl0namr8b2s6i4l5aykq8v7fx40ii";
-  isLibrary = true;
-  isExecutable = true;
+  version = "2.1.2.1";
+  sha256 = "1zsn949qk95bwx1fbyv84q0lhb4k18bgixl7nivfzsnmhr31fs37";
   buildDepends = [ binary cereal cryptoApi tagged ];
   meta = {
     description = "A Haskell-only implementation of the MD5 digest (hash) algorithm";

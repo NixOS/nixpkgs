@@ -1,55 +1,65 @@
-{ stdenv, fetchurl, dpkg, gettext, gawk, perl, wget }:
+{ stdenv, fetchurl, dpkg, gettext, gawk, perl, wget, coreutils, fakeroot }:
 
 let
 
-  devices = fetchurl {
-    url = mirror://gentoo/distfiles/devices.tar.gz;
-    sha256 = "0j4yhajmlgvbksr2ij0dm7jy3q52j3wzhx2fs5lh05i1icygk4qd";
+# USAGE like this: debootstrap sid /tmp/target-chroot-directory
+
+# There is also cdebootstrap now. Is that easier to maintain?
+
+  makedev = stdenv.mkDerivation {
+    name = "makedev-for-debootstrap";
+    src = fetchurl {
+            url = mirror://debian/pool/main/m/makedev/makedev_2.3.1.orig.tar.gz;
+            sha256 = "1yhxlj2mhn1nqkx1f0sn0bl898nf28arxxa4lgp7hdrb5cpp36c5";
+    };
+    patches = [
+      (fetchurl {
+       url = "http://ftp.de.debian.org/debian/pool/main/m/makedev/makedev_2.3.1-89.diff.gz";
+       sha256 = "1zbifw2jkq6471fb67y893nq4lq009xbfbi57jbjwxnhqmrppcy9";
+       })
+    ];
+    # TODO install man
+    installPhase = ''
+      ensureDir $out/sbin
+      ls -l
+      t=$out/sbin/MAKEDEV
+      cp MAKEDEV $t
+      chmod +x $t
+    '';
   };
   
 in
 
 stdenv.mkDerivation {
-  name = "debootstrap-1.0.10lenny";
+
+  name = "debootstrap-1.0.42";
 
   src = fetchurl {
-    # I'd like to use the source. However it's lacking the lanny script ?
-    url = mirror://debian/pool/main/d/debootstrap/debootstrap_1.0.10lenny1_all.deb;
-    sha256 = "a70af8e3369408ce9d6314fb5219de73f9523b347b75a3b07ee17ea92c445051";
+    # git clone git://git.debian.org/d-i/debootstrap.git
+    # I'd like to use the source. However it's lacking the lanny script ? (still true?)
+    url = http://ftp.de.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.42.tar.gz;
+    sha256 = "0a5azl22wz1q92b2c91zlpz6krd7wqyi63yk87vyczp363ml0nz0";
   };
-  
+
   buildInputs = [ dpkg gettext gawk perl ];
 
-  unpackPhase = ''
-    dpkg-deb --extract "$src" .
-  '';
-  
   buildPhase = ":";
 
-  patches = [
-    # replace /usr/* and /sbin/* executables by @executable@ so that they can be replaced by substitute
-    # Be careful not to replace code being run in the debian chroot !
-    ./subst.patch
-  ];
-
-  # from deb 
+  # If you have to update the patch for functions a vim regex like this
+  # can help you identify which lines are used to write scripts on TARGET and
+  # which should /bin/ paths should be replaced:
+  # \<echo\>\|\/bin\/\|^\s*\<cat\>\|EOF\|END
   installPhase = ''
-    cp -r . $out; cd $out
-    t=bin/debootstrap
-    mkdir -p bin man/man8
-    cat >> $t << EOF
-    #!/bin/sh
-    export DEBOOTSTRAP_DIR=$out/usr/share/debootstrap
-    # mount and other tools must be found in chroot. So add default debain paths!
-    # TODO only add paths which are required by the scripts!
-    export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-    $out/usr/sbin/debootstrap "\$@"
-    EOF
-    chmod +x $t
-    mv usr/share/man/man8/debootstrap.8.gz man/man8
 
-    set -x
-    for file in usr/share/debootstrap/functions usr/sbin/debootstrap; do
+    sed -i \
+      -e 's@/usr/bin/id@id@' \
+      -e 's@/usr/bin/dpkg@${dpkg}/bin/dpkg@' \
+      -e 's@/usr/bin/sha@${coreutils}/bin/sha@' \
+      -e 's@/bin/sha@${coreutils}/bin/sha@' \
+      debootstrap
+
+
+    for file in functions debootstrap; do
       substituteInPlace "$file" \
         --subst-var-by gunzip "$(type -p gunzip)" \
         --subst-var-by bunzip "$(type -p bunzip)" \
@@ -61,28 +71,36 @@ stdenv.mkDerivation {
         --subst-var-by uname "$(type -p uname)" \
         --subst-var-by wget "${wget}/bin/wget"
     done
+
+
+    sed -i  \
+      -e 's@\<wget\>@${wget}/bin/wget@' \
+      functions
+
+    d=$out/share/debootstrap
+    ensureDir $out/{share/debootstrap,bin}
+
+    ${fakeroot}/bin/fakeroot -- make devices.tar.gz MAKEDEV=${makedev}/sbin/MAKEDEV
+
+    cp -r . $d
+
+    cat >> $out/bin/debootstrap << EOF
+    #!/bin/sh
+    export DEBOOTSTRAP_DIR="''${DEBOOTSTRAP_DIR:-$d}"
+    # mount and other tools must be found in chroot. So add default debain paths!
+    # TODO only add paths which are required by the scripts!
+    export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    exec $d/debootstrap "\$@"
+    EOF
+    chmod +x $out/bin/debootstrap
+
+    ensureDir $out/man/man8
+    mv debootstrap.8 $out/man/man8
   '';
 
-  /* build from source:
-  installPhase = ''
-    cp ${devices} devices.tar.gz
-    mkdir -p $out/{bin,man/man8};
-    cp debootstrap.8 $out/man/man8
-    sed -i  \
-      -e 's@-o root@@'   \
-      -e 's@-g root@@'   \
-      -e 's@chown@true@' \
-      Makefile
-    make pkgdetails debootstrap-arch
-    make DESTDIR="''\${out}" install-arch
-    t=$out/bin/debootstrap
-    cat >> $t << EOF
-    #!/bin/sh
-    DEBOOTSTRAP_DIR=$out/usr/share/debootstrap $out/usr/sbin/debootstrap "\$@"
-    EOF
-    chmod +x $t
-  '';
-  */
+  passthru = {
+    inherit makedev;
+  };
 
   meta = { 
     description = "Tool to create a Debian system in a chroot";

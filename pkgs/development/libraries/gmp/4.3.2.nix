@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0x8prpqi9amfcmi7r4zrza609ai9529pjaq0h4aw51i867064qck";
   };
 
-  buildNativeInputs = [ m4 ];
+  nativeBuildInputs = [ m4 ];
 
   # Prevent the build system from using sub-architecture-specific
   # instructions (e.g., SSE2 on i686).

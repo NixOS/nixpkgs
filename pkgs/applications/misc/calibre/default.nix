@@ -16,13 +16,13 @@ stdenv.mkDerivation rec {
 
   inherit python;
 
-  buildNativeInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   buildInputs =
     [ python pyqt4 sip popplerQt4 libpng imagemagick libjpeg
       fontconfig podofo qt4 pil chmlib icu
       pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
-      pythonPackages.cssutils pythonPackages.beautifulsoap
+      pythonPackages.cssutils pythonPackages.beautifulsoup
       pythonPackages.sqlite3 sqlite
     ];
 

@@ -18,10 +18,10 @@ such as Perl or Haskell.  These are described in this chapter.</para>
 <para>Nixpkgs provides a function <varname>buildPerlPackage</varname>,
 a generic package builder function for any Perl package that has a
 standard <varname>Makefile.PL</varname>.  It’s implemented in <link
-xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/development/perl-modules/generic"><filename>pkgs/development/perl-modules/generic</filename></link>.</para>
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/perl-modules/generic"><filename>pkgs/development/perl-modules/generic</filename></link>.</para>
 
 <para>Perl packages from CPAN are defined in <link
-xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/top-level/perl-packages.nix"><filename>pkgs/perl-packages.nix</filename></link>,
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/perl-packages.nix"><filename>pkgs/perl-packages.nix</filename></link>,
 rather than <filename>pkgs/all-packages.nix</filename>.  Most Perl
 packages are so straight-forward to build that they are defined here
 directly, rather than having a separate function for each package
@@ -162,7 +162,7 @@ ClassC3Componentised = buildPerlPackage rec {
   which many Python packages do nowadays, can be built very simply using
   the <varname>buildPythonPackage</varname> function.  This function is
   implemented
-  in <link xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/development/python-modules/generic/default.nix"><filename>pkgs/development/python-modules/generic/default.nix</filename></link>
+  in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/generic/default.nix"><filename>pkgs/development/python-modules/generic/default.nix</filename></link>
   and works similarly to <varname>buildPerlPackage</varname>. (See
   <xref linkend="ssec-language-perl"/> for details.)
 </para>
@@ -170,7 +170,7 @@ ClassC3Componentised = buildPerlPackage rec {
 <para>
   Python packages that use <varname>buildPythonPackage</varname> are
   defined
-  in <link xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/top-level/python-packages.nix"><filename>pkgs/top-level/python-packages.nix</filename></link>.
+  in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/python-packages.nix"><filename>pkgs/top-level/python-packages.nix</filename></link>.
   Most of them are simple.  For example:
 
   <programlisting>
@@ -196,17 +196,18 @@ twisted = buildPythonPackage {
 </section>
 
 
-<!--
-<section><title>Haskell</title>
+<section><title>Java</title>
 
-<para>TODO</para>
+<para>Java packages should install JAR files in
+<filename>$out/lib/java</filename>.</para>
 
 </section>
 
 
-<section><title>Java</title>
+<!--
+<section><title>Haskell</title>
 
-<para>TODO; Java support needs lots of improvement</para>
+<para>TODO</para>
 
 </section>
 

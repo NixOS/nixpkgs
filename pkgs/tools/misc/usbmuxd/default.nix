@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "09swwr6x46qxmwylrylnyqh4pznr0swla9gijggwxxw8dw82r840";
   };
 
-  buildNativeInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
   propagatedBuildInputs = [ libusb1 libplist ];
 
   patchPhase =

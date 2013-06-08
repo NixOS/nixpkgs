@@ -1,0 +1,20 @@
+diff -rc elasticsearch-0.20.5/bin/elasticsearch elasticsearch-0.20.5-new/bin/elasticsearch
+*** elasticsearch-0.20.5/bin/elasticsearch	2013-03-07 12:16:31.152494626 +0100
+--- elasticsearch-0.20.5-new/bin/elasticsearch	2013-03-07 12:24:41.076081272 +0100
+***************
+*** 62,68 ****
+  done
+  
+  # determine elasticsearch home
+! ES_HOME=`dirname "$SCRIPT"`/..
+  
+  # make ELASTICSEARCH_HOME absolute
+  ES_HOME=`cd "$ES_HOME"; pwd`
+--- 62,68 ----
+  done
+  
+  # determine elasticsearch home
+! ES_HOME=${ES_HOME:=`dirname "$SCRIPT"`/..}
+  
+  # make ELASTICSEARCH_HOME absolute
+  ES_HOME=`cd "$ES_HOME"; pwd`

@@ -9,6 +9,8 @@ stdenv.mkDerivation {
   buildInputs = [pkgconfig tcl gtk];
   configureFlags = "--disable-nls";
 
+  patches = [ ./glib-top-level-header.patch ];
+
   meta = {
     description = "IRC client using GTK";
     homepage = http://www.xchat.org;

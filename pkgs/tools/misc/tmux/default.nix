@@ -1,22 +1,16 @@
-{stdenv, fetchurl, ncurses, libevent}:
+{stdenv, fetchurl, ncurses, libevent, pkgconfig}:
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "1.5";
+  version = "1.8";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "eb8215b57c05b765d2446d9acb2bc5edcdb3eb4ea31af89ee127a27e90056306";
+    sha256 = "f265401ca890f8223e09149fcea5abcd6dfe75d597ab106e172b01e9d0c9cd44";
   };
 
-  makeFlags = "PREFIX=\${out}";
-
-  crossAttrs = {
-    preBuild = ''
-      makeFlags=" $makeFlags CC=${stdenv.cross.config}-gcc "
-    '';
-  };
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ ncurses libevent ];
 
@@ -41,6 +35,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thammers ];
+    maintainers = with stdenv.lib.maintainers; [ shlevy thammers ];
   };
 }

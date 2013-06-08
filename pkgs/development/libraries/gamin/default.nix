@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "18cr51y5qacvs2fc2p1bqv32rs8bzgs6l67zhasyl45yx055y218";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ python glib ];
 
@@ -16,5 +16,5 @@ stdenv.mkDerivation rec {
   # <sys/socket.h> with Glibc 2.9.
   configureFlags = "--disable-debug --with-python=${python} CPPFLAGS=-D_GNU_SOURCE";
 
-  patches = map fetchurl (import ./debian-patches.nix);
+  patches = [ ./deadlock.patch ] ++ map fetchurl (import ./debian-patches.nix);
 }

@@ -1,0 +1,12 @@
+diff --git a/src/conky.c b/src/conky.c
+index 5848b61..69a3d45 100644
+--- a/src/conky.c
++++ b/src/conky.c
+@@ -34,6 +34,7 @@
+ #include "common.h"
+ #include "timed_thread.h"
+ #include <stdarg.h>
++#include <stdbool.h>
+ #include <math.h>
+ #include <time.h>
+ #include <locale.h>

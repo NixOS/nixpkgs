@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ panotools wxGTK libtiff libpng openexr boost tclap
     exiv2 gettext ilmbase mesa freeglut glew libXmu libXi ];
 
-  buildNativeInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   propagatedUserEnvPackages = [ enblendenfuse autopanosiftc ];
 

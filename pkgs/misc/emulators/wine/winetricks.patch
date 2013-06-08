@@ -1,0 +1,21 @@
+--- upstream-winetricks 2013-01-12 13:26:12.333076904 -0800
++++ winetricks 2013-01-12 14:37:39.675092352 -0800
+@@ -3398,7 +3398,7 @@
+     WINETRICKS_OPT_SHAREDPREFIX=${WINETRICKS_OPT_SHAREDPREFIX:-0}
+ 
+     # Mac folks tend to not have sha1sum, but we can make do with openssl
+-    if [ -x "`which sha1sum 2>/dev/null`" ]
++    if [ -e "`which sha1sum 2>/dev/null`" ]
+     then
+         WINETRICKS_SHA1SUM="sha1sum"
+     elif [ -x "`which openssl 2>/dev/null`" ]
+@@ -3628,7 +3628,7 @@
+ if ! test "$WINETRICKS_LIB"
+ then
+     WINETRICKS_SRCDIR=`dirname "$0"`
+-    WINETRICKS_SRCDIR=`cd "$WINETRICKS_SRCDIR"; /bin/pwd`
++    WINETRICKS_SRCDIR=`cd "$WINETRICKS_SRCDIR"; pwd`
+ 
+     # Which GUI helper to use (none/zenity/kdialog).  See winetricks_detect_gui.
+     WINETRICKS_GUI=none
+

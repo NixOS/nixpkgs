@@ -2,11 +2,11 @@
 , intltool, gettext, libchamplain_0_6, fbida }:
 
 stdenv.mkDerivation rec {
-  name = "geeqie-1.0";
+  name = "geeqie-1.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/geeqie/${name}.tar.gz";
-    sha256 = "1p8z47cqdqqkn8b0fr5bqsfinz4dgqk4353s8f8d9ha6cik69bfi";
+    sha256 = "1kzy39z9505xkayyx7rjj2wda76xy3ch1s5z35zn8yli54ffhi2m";
   };
 
   preConfigure =

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monad-peel";
-  version = "0.1";
-  sha256 = "0q56hdjgbj7ykpjx5z8qlqqkngmgm5wzm9vwcd7v675k2ywcl3ys";
+  version = "0.1.1";
+  sha256 = "0n3cxa94wd3hjvy9jgf3d8p7qfb9jaaf29simjya7rlcb673pg3l";
   buildDepends = [ extensibleExceptions transformers ];
   meta = {
     homepage = "http://andersk.mit.edu/haskell/monad-peel/";
