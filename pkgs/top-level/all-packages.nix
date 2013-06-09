@@ -5581,9 +5581,7 @@ let
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
-  bind = callPackage ../servers/dns/bind {
-    inherit openssl libtool perl;
-  };
+  bind = callPackage ../servers/dns/bind { };
 
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_185;
