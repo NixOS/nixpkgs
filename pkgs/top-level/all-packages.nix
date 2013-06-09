@@ -3026,7 +3026,7 @@ let
 
   regina = callPackage ../development/interpreters/regina {};
 
-  renpy = callPackage ../development/intepreters/renpy {
+  renpy = callPackage ../development/interpreters/renpy {
     ffmpeg = ffmpeg_1;
     wrapPython = pythonPackages.wrapPython;
   };
