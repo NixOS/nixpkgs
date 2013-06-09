@@ -1192,6 +1192,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   HsOpenSSL = callPackage ../development/libraries/haskell/HsOpenSSL {};
 
+  hsshellscript = callPackage ../development/libraries/haskell/hsshellscript {};
+
   HStringTemplate = callPackage ../development/libraries/haskell/HStringTemplate {};
 
   hspread = callPackage ../development/libraries/haskell/hspread {};
