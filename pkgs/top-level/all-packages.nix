@@ -1559,6 +1559,8 @@ let
 
   ripmime = callPackage ../tools/networking/ripmime {};
 
+  rmlint = callPackage ../tools/misc/rmlint {};
+
   rng_tools = callPackage ../tools/security/rng-tools { };
 
   rsnapshot = callPackage ../tools/backup/rsnapshot {
