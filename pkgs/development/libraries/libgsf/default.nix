@@ -1,21 +1,21 @@
 { fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
-, python, libiconvOrEmpty
+, python, gdk_pixbuf, libiconvOrEmpty
 }:
 
 with { inherit (stdenv.lib) optionals; };
 
 stdenv.mkDerivation rec {
-  name = "libgsf-1.14.25";
+  name = "libgsf-1.14.26";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libgsf/1.14/${name}.tar.xz";
-    sha256 = "18ni8hwi3q83vs3m6mg6xwd4g7jvss4kz70kzf21k587gvq4hx8j";
+    sha256 = "1md67l60li7rkma9m6mwchqz6b6q4xsfr38c6n056y6xm8jyf6c9";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [ gettext bzip2 zlib python ];
 
-  propagatedBuildInputs = [ libxml2 glib ] ++ libiconvOrEmpty;
+  propagatedBuildInputs = [ libxml2 glib gdk_pixbuf ] ++ libiconvOrEmpty;
 
   doCheck = true;
 
