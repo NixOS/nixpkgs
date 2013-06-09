@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "snapshot-20130424-2245-stable";
-  name = "x264-${version}";
+  name = "x264-20130424_2245";
 
   src = fetchurl {
     url = "ftp://ftp.videolan.org/pub/videolan/x264/snapshots/x264-${version}.tar.bz2";
