@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, glibc }:
+{ fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "rmlint-1.0.8";
