@@ -3026,6 +3026,11 @@ let
 
   regina = callPackage ../development/interpreters/regina {};
 
+  renpy = callPackage ../development/intepreters/renpy {
+    ffmpeg = ffmpeg_1;
+    wrapPython = pythonPackages.wrapPython;
+  };
+
   ruby18 = callPackage ../development/interpreters/ruby/ruby-18.nix { };
   ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
   ruby2 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.0.nix { });
