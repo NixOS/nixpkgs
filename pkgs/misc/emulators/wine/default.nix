@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xlibs, flex, bison, mesa, alsaLib
 , ncurses, libpng, libjpeg, lcms, freetype, fontconfig, fontforge
-, libxml2, libxslt, openssl, gnutls, cups
+, libxml2, libxslt, openssl, gnutls, cups, makeWrapper
 }:
 
 assert stdenv.isLinux;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
     xlibs.libXrender xlibs.libXxf86vm xlibs.libXcomposite
     alsaLib ncurses libpng libjpeg lcms fontforge
-    libxml2 libxslt openssl gnutls cups
+    libxml2 libxslt openssl gnutls cups makeWrapper
   ];
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
@@ -42,7 +42,10 @@ stdenv.mkDerivation rec {
   # elements specified above.
   dontPatchELF = true;
 
-  postInstall = "install -D ${gecko} $out/share/wine/gecko/${gecko.name}";
+  postInstall = ''
+    install -D ${gecko} $out/share/wine/gecko/${gecko.name}
+    wrapProgram $out/bin/wine --prefix LD_LIBRARY_PATH : ${stdenv.gcc.gcc}/lib
+  '';
 
   enableParallelBuilding = true;
 
