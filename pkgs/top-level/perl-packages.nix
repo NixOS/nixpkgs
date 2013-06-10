@@ -1333,6 +1333,21 @@ rec {
     };
   };
 
+  CryptRandomSource = buildPerlPackage {
+    name = "Crypt-Random-Source-0.07";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NU/NUFFIN/Crypt-Random-Source-0.07.tar.gz;
+      sha256 = "0kxcqcpknh9hhfnpiymxrjg74yj7nfr7k4fgrfmd9s2cw9p9mqdv";
+    };
+    buildInputs = [ TestUseOk TestException ];
+    propagatedBuildInputs = [ AnyMoose CaptureTiny ModuleFind namespaceclean SubExporter ];
+    meta = {
+      homepage = http://search.cpan.org/dist/Crypt-Random-Source;
+      description = "Get weak or strong random data from pluggable sources";
+      license = "perl5";
+    };
+  };
+
   CryptRC4 = buildPerlPackage rec {
     name = "Crypt-RC4-2.02";
     src = fetchurl {
@@ -3354,6 +3369,20 @@ rec {
     propagatedBuildInputs = [ MathLibm constant-defer ];
   };
 
+  MathRandomISAAC = buildPerlPackage {
+    name = "Math-Random-ISAAC-1.004";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JA/JAWNSY/Math-Random-ISAAC-1.004.tar.gz;
+      sha256 = "0z1b3xbb3xz71h25fg6jgsccra7migq7s0vawx2rfzi0pwpz0wr7";
+    };
+    buildInputs = [ TestNoWarnings ];
+    meta = {
+      homepage = http://search.cpan.org/dist/Math-Random-ISAAC;
+      description = "Perl interface to the ISAAC PRNG algorithm";
+      license = "unrestricted";
+    };
+  };
+
   MathRandomMTAuto = buildPerlPackage {
     name = "Math-Random-MT-Auto-6.22";
     src = fetchurl {
@@ -3364,6 +3393,20 @@ rec {
     meta = {
       description = "Auto-seeded Mersenne Twister PRNGs";
       license = "unrestricted";
+    };
+  };
+
+  MathRandomSecure = buildPerlPackage {
+    name = "Math-Random-Secure-0.06";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MK/MKANAT/Math-Random-Secure-0.06.tar.gz;
+      sha256 = "0392h78l3shkba9l2c43rgz6sm5qv7pzdylgb7gp9milprn77crc";
+    };
+    buildInputs = [ ListMoreUtils TestWarn ];
+    propagatedBuildInputs = [ AnyMoose CryptRandomSource MathRandomISAAC ];
+    meta = {
+      description = "Cryptographically-secure, cross-platform replacement for rand()";
+      license = "artistic_2";
     };
   };
 
