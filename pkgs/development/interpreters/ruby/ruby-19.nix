@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ++ (op gdbmSupport gdbm)
     ++ (op yamlSupport libyaml);
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
     
   configureFlags = ["--enable-shared" "--enable-pthread"];
 
