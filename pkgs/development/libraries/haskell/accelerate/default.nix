@@ -2,10 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "accelerate";
-  version = "0.13.0.2";
-  sha256 = "1xcgcr3wrvvckjhxbr80567gmg6rx9ks7rl4jcr6c6mdv6svx4jb";
+  version = "0.13.0.4";
+  sha256 = "1rhbvzgafw3cx2wi4zfil4nxcziqpbh20q3nafck30q2xvrwkmwm";
   buildDepends = [ fclabels hashable hashtables ];
-  noHaddock = true;
   meta = {
     homepage = "https://github.com/AccelerateHS/accelerate/";
     description = "An embedded language for accelerated array processing";
