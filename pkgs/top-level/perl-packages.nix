@@ -5306,6 +5306,14 @@ rec {
     };
   };
 
+  StringShellQuote = buildPerlPackage {
+    name = "String-ShellQuote-1.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RO/ROSCH/String-ShellQuote-1.04.tar.gz;
+      sha256 = "0dfxhr6hxc2majkkrm0qbx3qcbykzpphbj2ms93dc86f7183c1p6";
+    };
+  };
+
   StringToIdentifierEN = buildPerlPackage rec {
     name = "String-ToIdentifier-EN-0.06";
     src = fetchurl {
