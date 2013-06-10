@@ -5490,12 +5490,12 @@ let
 
   plone41Packages = recurseIntoAttrs (import ../development/web/plone/4.1.6.nix {
     inherit pkgs;
-    pythonPackages = python27Packages;
+    pythonPackages = python26Packages;
   });
 
   plone42Packages = recurseIntoAttrs (import ../development/web/plone/4.2.5.nix {
     inherit pkgs;
-    pythonPackages = python27Packages;
+    pythonPackages = python26Packages;
   });
 
   plone43Packages = recurseIntoAttrs (import ../development/web/plone/4.3.0.nix {
