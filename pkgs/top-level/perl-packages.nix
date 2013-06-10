@@ -1527,6 +1527,21 @@ rec {
     };
   };
 
+  DataUUIDMT = buildPerlPackage {
+    name = "Data-UUID-MT-1.000";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Data-UUID-MT-1.000.tar.gz;
+      sha256 = "1bwrxv8fp4arwrmslsb7jlnafs8cww1p5f409d1l5kpyfj2vpsyp";
+    };
+    buildInputs = [ ListAllUtils ];
+    propagatedBuildInputs = [ MathRandomMTAuto ];
+    meta = {
+      homepage = https://metacpan.org/release/Data-UUID-MT;
+      description = "Fast random UUID generator using the Mersenne Twister algorithm";
+      license = "apache_2_0";
+    };
+  };
+
   DataVisitor = buildPerlPackage rec {
     name = "Data-Visitor-0.28";
     src = fetchurl {
@@ -3096,6 +3111,19 @@ rec {
     propagatedBuildInputs = [ CommonSense ];
   };
 
+  ListAllUtils = buildPerlPackage {
+    name = "List-AllUtils-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/List-AllUtils-0.03.tar.gz;
+      sha256 = "05d1q88pr4wgsqcla0g4kd45mxg7h9v3z3f4pv830xaviiqwq1j8";
+    };
+    propagatedBuildInputs = [ ListMoreUtils ];
+    meta = {
+      description = "Combines List::Util and List::MoreUtils in one bite-sized package";
+      license = "perl5";
+    };
+  };
+
   ListMoreUtils = buildPerlPackage {
     name = "List-MoreUtils-0.33";
     src = fetchurl {
@@ -3324,6 +3352,19 @@ rec {
       sha256 = "0g24zhgyxs56zv966xb487vvmhqqxvvsbbz4mck8n4l31rabk8jj";
     };
     propagatedBuildInputs = [ MathLibm constant-defer ];
+  };
+
+  MathRandomMTAuto = buildPerlPackage {
+    name = "Math-Random-MT-Auto-6.22";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/Math-Random-MT-Auto-6.22.tar.gz;
+      sha256 = "07zha5zjxyvqwnycb1vzk4hk2m46n9yc5lrbvhkc22595dsyjahz";
+    };
+    propagatedBuildInputs = [ ExceptionClass ObjectInsideOut ];
+    meta = {
+      description = "Auto-seeded Mersenne Twister PRNGs";
+      license = "unrestricted";
+    };
   };
 
   MathRound = buildPerlPackage rec {
@@ -4061,6 +4102,19 @@ rec {
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Number/${name}.tar.gz";
       sha256 = "0v74hscnc807kf65x0am0rddk74nz7nfk3gf16yr5ar1xwibg8l4";
+    };
+  };
+
+  ObjectInsideOut = buildPerlPackage {
+    name = "Object-InsideOut-3.97";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/Object-InsideOut-3.97.tar.gz;
+      sha256 = "19yr15w361lxxx2djy0ciwjpyd5bcs0skm3yw97w3xidw6r0wf0v";
+    };
+    propagatedBuildInputs = [ ExceptionClass ];
+    meta = {
+      description = "Comprehensive inside-out object support module";
+      license = "perl5";
     };
   };
 
