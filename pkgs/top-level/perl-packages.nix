@@ -4449,6 +4449,21 @@ rec {
     };
   };
 
+  Redis = buildPerlPackage {
+    name = "Redis-1.961";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/ME/MELO/Redis-1.961.tar.gz;
+      sha256 = "029g4s1ima354yv1j26nlq4f0yahkllkibicml6p3mj5gg2ywbbq";
+    };
+    buildInputs = [ IOString TestDeep TestFatal ];
+    propagatedBuildInputs = [ TryTiny ];
+    meta = {
+      homepage = http://metacpan.org/release/Redis/;
+      description = "Perl binding for Redis database";
+      license = "artistic_2";
+    };
+  };
+
   RegexpAssemble = buildPerlPackage rec {
     name = "Regexp-Assemble-0.35";
     src = fetchurl {
