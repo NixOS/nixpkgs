@@ -1559,11 +1559,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pipes = callPackage ../development/libraries/haskell/pipes {};
 
-  pipes-concurrency = callPackage ../development/libraries/haskell/pipes-concurrency {};
+  pipesConcurrency = callPackage ../development/libraries/haskell/pipes-concurrency {};
 
-  pipes-parse = callPackage ../development/libraries/haskell/pipes-parse {};
+  pipesParse = callPackage ../development/libraries/haskell/pipes-parse {};
 
-  pipes-safe = callPackage ../development/libraries/haskell/pipes-safe {};
+  pipesSafe = callPackage ../development/libraries/haskell/pipes-safe {};
 
   polyparse = callPackage ../development/libraries/haskell/polyparse {};
 
