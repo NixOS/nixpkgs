@@ -4130,6 +4130,18 @@ rec {
     };
   };
 
+  NetAmazonAWSSign = buildPerlPackage {
+    name = "Net-Amazon-AWSSign-0.12";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NA/NATON/Net-Amazon-AWSSign-0.12.tar.gz;
+      sha256 = "0gpdjz5095hd3y1xhnbv45m6q2shw0c9r7spj1jvb8hy7dmhq10x";
+    };
+    propagatedBuildInputs = [ URI ];
+    meta = {
+      description = "Perl extension to create signatures for AWS requests";
+    };
+  };
+
   NetAmazonEC2 = buildPerlPackage rec {
     name = "Net-Amazon-EC2-0.14-stanaka-bc66577e13";
     src = fetchurl {
