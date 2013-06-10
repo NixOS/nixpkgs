@@ -5678,6 +5678,15 @@ rec {
     };
   };
 
+  TemplatePluginClass = buildPerlPackage {
+    name = "Template-Plugin-Class-0.14";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RC/RCLAMP/Template-Plugin-Class-0.14.tar.gz;
+      sha256 = "1hq7jy6zg1iaslsyi05afz0i944y9jnv3nb4krkxjfmzwy5gw106";
+    };
+    propagatedBuildInputs = [ TemplateToolkit ];
+  };
+
   TemplatePluginJavaScript = buildPerlPackage {
     name = "Template-Plugin-JavaScript-0.02";
     src = fetchurl {
