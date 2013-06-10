@@ -3013,6 +3013,14 @@ rec {
     };
   };
 
+  ListUtilsBy = buildPerlPackage rec {
+    name = "List-UtilsBy-0.09";
+    src = fetchurl {
+        url = http://cpan.metacpan.org/authors/id/P/PE/PEVANS/List-UtilsBy-0.09.tar.gz;
+        sha256 = "1xcsgz8898h670zmwqd8azfn3a2y9nq7z8cva9dsyhzkk8ajmra1";
+    };
+  };
+
   LocaleGettext = buildPerlPackage {
     name = "LocaleGettext-1.05";
     src = fetchurl {
