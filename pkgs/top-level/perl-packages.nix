@@ -615,13 +615,18 @@ rec {
     propagatedBuildInputs = [CatalystRuntime DataVisitor ConfigAny MROCompat];
   };
 
-  CatalystPluginUnicodeEncoding = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Unicode-Encoding-1.2";
+  CatalystPluginUnicodeEncoding = buildPerlPackage {
+    name = "Catalyst-Plugin-Unicode-Encoding-1.9";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
-      sha256 = "0bz33xnh0wa6py6jz31wr38krad9hcv4gxdsy0lyhqn0k4v6b6dx";
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Unicode-Encoding-1.9.tar.gz;
+      sha256 = "1glxkh79zz71bmgk44hnhsi37z2mgxcwf7bkmwlnwv3jh1iaz0ah";
     };
-    propagatedBuildInputs = [ CatalystRuntime LWP ];
+    buildInputs = [ HTTPMessage IOStringy ];
+    propagatedBuildInputs = [ CatalystRuntime ClassDataInheritable LWP TryTiny URI ];
+    meta = {
+      description = "Unicode aware Catalyst";
+      license = "perl";
+    };
   };
 
   CatalystPluginHTMLWidget = buildPerlPackage {
