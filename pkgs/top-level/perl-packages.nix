@@ -238,6 +238,19 @@ rec {
     };
   };
 
+  BHooksOPCheck = buildPerlPackage {
+    name = "B-Hooks-OP-Check-0.19";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/Z/ZE/ZEFRAM/B-Hooks-OP-Check-0.19.tar.gz;
+      sha256 = "0pp1piv74pv9irqlvl5xcs2dvzbb74niwjhnj6dsckxf1j34mzrg";
+    };
+    buildInputs = [ ExtUtilsDepends ];
+    meta = {
+      description = "Wrap OP check callbacks";
+      license = "perl";
+    };
+  };
+
   BitVector = buildPerlPackage {
     name = "Bit-Vector-7.3";
     src = fetchurl {
@@ -1908,6 +1921,20 @@ rec {
     };
   };
 
+  DevelDeclare = buildPerlPackage {
+    name = "Devel-Declare-0.006011";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/Z/ZE/ZEFRAM/Devel-Declare-0.006011.tar.gz;
+      sha256 = "0wqa9n4mdlsld4cmhy2mg8ncqr5gsra1913x0kypisgdqvviin2k";
+    };
+    buildInputs = [ BHooksOPCheck ExtUtilsDepends ];
+    propagatedBuildInputs = [ BHooksEndOfScope BHooksOPCheck SubName ];
+    meta = {
+      description = "Adding keywords to perl, in perl";
+      license = "perl";
+    };
+  };
+
   DevelGlobalDestruction = buildPerlPackage {
     name = "Devel-GlobalDestruction-0.09";
     src = fetchurl {
@@ -2287,6 +2314,17 @@ rec {
       sha256 = "1a77hxf2pa8ia9na72rijv1yhpn2bjrdsybwk2dj2l938pl3xn0w";
     };
     propagatedBuildInputs = [ CaptureTiny ];
+  };
+
+  ExtUtilsDepends = buildPerlPackage {
+    name = "ExtUtils-Depends-0.304";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FL/FLORA/ExtUtils-Depends-0.304.tar.gz;
+      sha256 = "0fjlkcz1i1j02hhwi1wjgd79qlppjkbasrj44h5ry1f238g6a1q3";
+    };
+    meta = {
+      license = "perl";
+    };
   };
 
   ExtUtilsLibBuilder = buildPerlModule {
@@ -3699,6 +3737,19 @@ rec {
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
       sha256 = "194dvggf1cmzc701j4wma38jgrcv2pwwzk69rnysjjdcjdv6y255";
+    };
+  };
+
+  MethodSignaturesSimple = buildPerlPackage {
+    name = "Method-Signatures-Simple-1.07";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RH/RHESA/Method-Signatures-Simple-1.07.tar.gz;
+      sha256 = "1p6sf6iyyn73pc89mfr65bzxvbw1ibcsp4j10iv8ik3p353pvkf8";
+    };
+    propagatedBuildInputs = [ DevelDeclare ];
+    meta = {
+      description = "Basic method declarations with signatures, without source filters";
+      license = "perl";
     };
   };
 
