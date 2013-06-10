@@ -81,6 +81,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        restartIfChanged = false;
         ExecStart = "${kernel.zfs}/sbin/zfs mount -a";
         ExecStop = "${kernel.zfs}/sbin/zfs umount -a";
       };
