@@ -18,7 +18,12 @@ stdenv.mkDerivation rec {
       ./nonpriv.patch
     ];
 
-  postPatch = "rm -v include/linux/if_pppol2tp.h";
+  postPatch = ''
+    # enable ipv6
+    substituteInPlace pppd/Makefile.linux \
+      --replace "#HAVE_INET6=y" "HAVE_INET6=y"
+    rm -v include/linux/if_pppol2tp.h
+  '';
 
   buildInputs = [ libpcap ];
 
