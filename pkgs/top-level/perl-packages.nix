@@ -5475,6 +5475,18 @@ rec {
     };
   };
 
+  TextTrim = buildPerlPackage {
+    name = "Text-Trim-1.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MATTLAW/Text-Trim-1.02.tar.gz;
+      sha256 = "1bnwjl5n04w8nnrzrm75ljn4pijqbijr9csfkjcs79h4gwn9lwqw";
+    };
+    meta = {
+      description = "Remove leading and/or trailing whitespace from strings";
+      license = "perl";
+    };
+  };
+
   TextUnaccent = buildPerlPackage {
     name = "Text-Unaccent-1.08";
     src = fetchurl {
