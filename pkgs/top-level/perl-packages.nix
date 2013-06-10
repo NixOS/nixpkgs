@@ -3578,6 +3578,15 @@ rec {
     propagatedBuildInputs = [ Moose ];
   };
 
+  MooseXSingleton = buildPerlPackage rec {
+    name = "MooseX-Singleton-0.29";
+    src = fetchurl {
+        url = http://cpan.metacpan.org/authors/id/K/KA/KAARE/MooseX-Singleton-0.29.tar.gz;
+        sha256 = "0103f0hi7fp3mc0y0ydnz4ghcnag5gwgn2160y2zp6rnydx2p2sc";
+    };
+    buildInputs = [ Moose TestFatal TestRequires ];
+  };
+
   MooseXTraits = buildPerlPackage rec {
     name = "MooseX-Traits-0.11";
     src = fetchurl {
