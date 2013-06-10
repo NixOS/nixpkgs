@@ -1859,6 +1859,15 @@ rec {
     };
   };
 
+  DevelPartialDump = buildPerlPackage {
+    name = "Devel-PartialDump-0.15";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FL/FLORA/Devel-PartialDump-0.15.tar.gz;
+      sha256 = "0xm42030qlbimay5x72sjj0na43ciniai2xdcdx8zf191jw5dz7n";
+    };
+    propagatedBuildInputs = [ Moose namespaceclean SubExporter TestUseOk TestWarn ];
+  };
+
   DevelStackTrace = buildPerlPackage {
     name = "Devel-StackTrace-1.30";
     src = fetchurl {
@@ -3862,6 +3871,15 @@ rec {
     propagatedBuildInputs = [ Moose MooseXTypes ];
   };
 
+  MooseXTypesDateTime = buildPerlPackage {
+    name = "MooseX-Types-DateTime-0.08";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/I/IL/ILMARI/MooseX-Types-DateTime-0.08.tar.gz;
+      sha256 = "0q0d1dd8737rc3k3jb22wvybf03hg3lp1iyda0ivkd8020cib996";
+    };
+    propagatedBuildInputs = [ DateTime DateTimeLocale DateTimeTimeZone Moose MooseXTypes namespaceclean TestException TestUseOk ];
+  };
+
   MooseXTypesLoadableClass = buildPerlPackage rec {
     name = "MooseX-Types-LoadableClass-0.008";
     src = fetchurl {
@@ -3881,6 +3899,21 @@ rec {
     meta = {
       description = "A Path::Class type library for Moose";
       license = "perl";
+    };
+  };
+
+  MooseXTypesStructured = buildPerlPackage {
+    name = "MooseX-Types-Structured-0.28";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/MooseX-Types-Structured-0.28.tar.gz;
+      sha256 = "12snpf65bh3jyx9w1h1sark83l0w51s3jdcr4ygw57cxvq39yl43";
+    };
+    buildInputs = [ DateTime MooseXTypesDateTime TestFatal ];
+    propagatedBuildInputs = [ DevelPartialDump Moose MooseXTypes SubExporter ];
+    meta = {
+      homepage = http://metacpan.org/release/MooseX-Types-Structured;
+      description = "MooseX::Types::Structured - Structured Type Constraints for Moose";
+      license = "perl5";
     };
   };
 
