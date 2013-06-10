@@ -4075,6 +4075,16 @@ rec {
     };
   };
 
+  MooseXRunnable = buildPerlPackage {
+    name = "MooseX-Runnable-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JR/JROCKWAY/MooseX-Runnable-0.03.tar.gz;
+      sha256 = "1hl3pnldjlbyj6gm3bzwj827qp54di14hp4zhypmrmbg1lscfdwc";
+    };
+    buildInputs = [ TestUseOk TestTableDriven ];
+    propagatedBuildInputs = [ ListMoreUtils Moose MooseXGetopt MooseXTypes MooseXTypesPathClass namespaceautoclean ParamsUtil ];
+  };
+
   MooseXSemiAffordanceAccessor = buildPerlPackage rec {
     name = "MooseX-SemiAffordanceAccessor-0.09";
     src = fetchurl {
