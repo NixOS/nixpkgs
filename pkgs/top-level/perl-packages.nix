@@ -2941,6 +2941,20 @@ rec {
     };
   };
 
+  IOAll = buildPerlPackage {
+    name = "IO-All-0.46";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/I/IN/INGY/IO-All-0.46.tar.gz;
+      sha256 = "0rqv270gi7x4sjicfwf1hiqvicwlj3s0zyi2cxqwrc8q9hs2pdya";
+    };
+    propagatedBuildInputs = [ IOString ];
+    meta = {
+      homepage = https://github.com/ingydotnet/io-all-pm/tree;
+      description = "IO::All of it to Graham and Damian!";
+      license = "perl";
+    };
+  };
+
   IOCaptureOutput = buildPerlPackage rec {
     name = "IO-CaptureOutput-1.1102";
     src = fetchurl {
