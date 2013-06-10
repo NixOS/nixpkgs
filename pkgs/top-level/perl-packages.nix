@@ -6651,6 +6651,15 @@ rec {
     propagatedBuildInputs = [XMLNamespaceSupport];
   };
 
+  XMLSemanticDiff = buildPerlPackage {
+    name = "XML-SemanticDiff-1.0000";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/XML-SemanticDiff-1.0000.tar.gz;
+      sha256 = "05rzm433vvndh49k8p4gqnyw4x4lxa4zr6qdlrlgplqkxvhvk6jk";
+    };
+    propagatedBuildInputs = [ XMLParser ];
+  };
+
   XMLSimple = buildPerlPackage {
     name = "XML-Simple-2.18";
     src = fetchurl {
