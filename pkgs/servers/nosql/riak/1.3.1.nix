@@ -8,7 +8,7 @@ let
     };
      leveldb = fetchurl {
       url = "https://github.com/basho/leveldb/zipball/1.3.1";
-      sha256 = "0d60b84e5ea05238ba79b08b4176fc66bf28768c8e6ffcea53092e28eaea091f";
+      sha256 = "10glzfsxs1167n7hmzl106xkfmn1qdjcqvillga2r5dsmn6vvi8a";
     };
   };
 in
