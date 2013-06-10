@@ -5262,6 +5262,20 @@ rec {
       [ LinguaENInflectPhrase TextUnidecode namespaceclean ];
   };
 
+  StringTT = buildPerlPackage {
+    name = "String-TT-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/String-TT-0.03.tar.gz;
+      sha256 = "1asjr79wqcl9wk96afxrm1yhpj8lk9bk8kyz78yi5ypr0h55yq7p";
+    };
+    buildInputs = [ TestUseOk TestException TestTableDriven ];
+    propagatedBuildInputs = [ PadWalker SubExporter TemplateToolkit ];
+    meta = {
+      description = "Use TT to interpolate lexical variables";
+      license = "perl";
+    };
+  };
+
   StringUtil = buildPerlPackage {
     name = "String-Util-1.21";
     src = fetchurl {
@@ -5770,6 +5784,18 @@ rec {
       sha256 = "a334b0457da338d79be2dbb62d403701fc90f7607df840115ff45ee1e2bd6e70";
     };
     propagatedBuildInputs = [ HookLexWrap ];
+  };
+
+  TestTableDriven = buildPerlPackage {
+    name = "Test-TableDriven-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JR/JROCKWAY/Test-TableDriven-0.02.tar.gz;
+      sha256 = "16l5n6sx3yqdir1rqq21d41znpwzbs8v34gqr93y051arypphn22";
+    };
+    meta = {
+      description = "Write tests, not scripts that run them";
+      license = "perl";
+    };
   };
 
   TestTCP = buildPerlPackage {
