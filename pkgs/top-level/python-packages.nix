@@ -3040,6 +3040,22 @@ pythonPackages = python.modules // rec {
     buildInputs = [ nose ];
   };
 
+  nose-cprof = buildPythonPackage rec {
+    name = "nose-cprof-0.1-0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/n/nose-cprof/${name}.tar.gz";
+      md5 = "5db27c3b8f01915335ae6fc5fd3afd44";
+    };
+
+    meta = {
+      description = "A python nose plugin to profile using cProfile rather than the default Hotshot profiler.";
+    };
+
+    buildInputs = [ nose ];
+  };
+
+
   notify = pkgs.stdenv.mkDerivation (rec {
     name = "python-notify-0.1.1";
 
