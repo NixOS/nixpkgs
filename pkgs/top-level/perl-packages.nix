@@ -1550,6 +1550,19 @@ rec {
     ];
   };
 
+  DateTimeFormatPg = buildPerlPackage {
+    name = "DateTime-Format-Pg-0.16008";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DM/DMAKI/DateTime-Format-Pg-0.16008.tar.gz;
+      sha256 = "0mvh4wp54vh7mnhfd2lndzjfikjify98vaav6vwbraxlhjvwyn3x";
+    };
+    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder DateTimeTimeZone ];
+    meta = {
+      description = "Parse and format PostgreSQL dates and times";
+      license = "perl";
+    };
+  };
+
   DateTimeFormatStrptime = buildPerlPackage rec {
     name = "DateTime-Format-Strptime-1.5000";
     src = fetchurl {
