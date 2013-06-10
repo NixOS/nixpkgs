@@ -4624,6 +4624,14 @@ rec {
       };
   };
 
+  StringEscape = buildPerlPackage rec {
+    name = "String-Escape-2010.002";
+    src = fetchurl {
+        url = mirror://cpan/authors/id/E/EV/EVO/String-Escape-2010.002.tar.gz;
+        sha256 = "12ls7f7847i4qcikkp3skwraqvjphjiv2zxfhl5d49326f5myr7x";
+    };
+  };
+
   StringFormat = buildPerlPackage rec {
     name = "String-Format-1.16";
     src = fetchurl {
