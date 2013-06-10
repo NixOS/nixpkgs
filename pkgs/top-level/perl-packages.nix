@@ -391,6 +391,20 @@ rec {
     };
   };
 
+  CatalystAuthenticationCredentialHTTP = buildPerlPackage {
+    name = "Catalyst-Authentication-Credential-HTTP-1.015";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Authentication-Credential-HTTP-1.015.tar.gz;
+      sha256 = "02gyq0vkhj2psd7hvw4b095mvsz7vbq8kv4k8lq748jnx5kmnfrq";
+    };
+    buildInputs = [ TestException TestMockObject ];
+    propagatedBuildInputs = [ CatalystPluginAuthentication CatalystRuntime ClassAccessorFast DataUUID StringEscape URI ];
+    meta = {
+      description = "HTTP Basic and Digest authentication";
+      license = "perl";
+    };
+  };
+
   CatalystAuthenticationStoreHtpasswd = buildPerlPackage rec {
     name = "Catalyst-Authentication-Store-Htpasswd-1.003";
     src = fetchurl {
@@ -804,6 +818,17 @@ rec {
       sha256 = "1lilrjy1s0q5hyr0888kf0ifxjyl2iyk4vxil4jsv0sgh39lkgx5";
     };
     propagatedBuildInputs = [ClassAccessor];
+  };
+
+  ClassAccessorFast = buildPerlPackage {
+    name = "Class-Accessor-Fast-0.34";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/K/KA/KASEI/Class-Accessor-0.34.tar.gz;
+      sha256 = "1z6fqg0yz8gay15r1iasslv8f1n1mzjkrhs47fvbj3rqz36y1cfd";
+    };
+    meta = {
+      license = "perl";
+    };
   };
 
   ClassAccessorGrouped = buildPerlPackage {
