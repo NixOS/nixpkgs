@@ -2551,6 +2551,15 @@ rec {
     };
   };
 
+  HashUtilFieldHashCompat = buildPerlPackage {
+    name = "Hash-Util-FieldHash-Compat-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NU/NUFFIN/Hash-Util-FieldHash-Compat-0.03.tar.gz;
+      sha256 = "0pmai98a89j82fjksfax87brmpimjn74kr7bl874lc1k40dfhx47";
+    };
+    propagatedBuildInputs = [ TestUseOk ];
+  };  
+
   HookLexWrap = buildPerlPackage rec {
     name = "Hook-LexWrap-0.22";
     src = fetchurl {
@@ -3704,6 +3713,15 @@ rec {
       sha256 = "101kwjzidppcsnyvp9x1vw8vpvkp1cc1csqmzbashwvqy8d0g4af";
     };
     propagatedBuildInputs = [ Moose TryTiny ];
+  };
+
+  MooseXClone = buildPerlPackage {
+    name = "MooseX-Clone-0.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NU/NUFFIN/MooseX-Clone-0.05.tar.gz;
+      sha256 = "11pbw3zdbcn54hrj6z74qisnmj9k4qliy6yjj9d71qndq3xg3x0f";
+    };
+    propagatedBuildInputs = [ DataVisitor HashUtilFieldHashCompat Moose namespaceclean TestUseOk ];
   };
 
   MooseXDaemonize = buildPerlPackage {
