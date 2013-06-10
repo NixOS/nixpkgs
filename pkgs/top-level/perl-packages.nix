@@ -5756,6 +5756,15 @@ rec {
     };
   };
 
+  TestJSON = buildPerlPackage {
+    name = "Test-JSON-0.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/O/OV/OVID/Test-JSON-0.11.tar.gz;
+      sha256 = "1cyp46w3q7dg89qkw31ik2h2a6mdx6pzdz2lmp8m0a61zjr8mh07";
+    };
+    propagatedBuildInputs = [ JSONAny TestDifferences TestTester ];
+  };
+
   TestLongString = buildPerlPackage rec {
     name = "Test-LongString-0.15";
     src = fetchurl {
