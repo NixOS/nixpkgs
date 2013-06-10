@@ -3709,6 +3709,21 @@ rec {
     propagatedBuildInputs = [Moose TestException Autobox Perl6Junction];
   };
 
+  MooseXABC = buildPerlPackage {
+    name = "MooseX-ABC-0.06";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DO/DOY/MooseX-ABC-0.06.tar.gz;
+      sha256 = "1sky0dpi22wrymmkjmqba4k966zn7vrbpx918wn2nmg48swyrgjf";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ Moose ];
+    meta = {
+      homepage = http://metacpan.org/release/MooseX-ABC;
+      description = "Abstract base classes for Moose";
+      license = "perl5";
+    };
+  };
+
   MooseXAliases = buildPerlPackage rec {
     name = "MooseX-Aliases-0.10";
     src = fetchurl {
