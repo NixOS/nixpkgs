@@ -5608,6 +5608,15 @@ rec {
     };
   };
 
+  TemplatePluginJavaScript = buildPerlPackage {
+    name = "Template-Plugin-JavaScript-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Template-Plugin-JavaScript-0.02.tar.gz;
+      sha256 = "1mqqqs0dhfr6bp1305j9ns05q4pq1n3f561l6p8848k5ml3dh87a";
+    };
+    propagatedBuildInputs = [ TemplateToolkit ];
+  };
+
   TemplateTimer = buildPerlPackage {
     name = "Template-Timer-1.00";
     src = fetchurl {
