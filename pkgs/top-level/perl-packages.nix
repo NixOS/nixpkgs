@@ -1226,6 +1226,15 @@ rec {
     };
   };
 
+  constantboolean = buildPerlPackage {
+    name = "constant-boolean-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DE/DEXTER/constant-boolean-0.02.tar.gz;
+      sha256 = "1s8gxfg4xqp543aqanv5lbp64vqqyw6ic4x3fm4imkk1h3amjb6d";
+    };
+    propagatedBuildInputs = [ SymbolUtil ];
+  };
+
   constant-defer = buildPerlPackage rec {
     name = "constant-defer-5";
     src = fetchurl {
@@ -2217,6 +2226,15 @@ rec {
     };
   };
 
+  ExceptionBase = buildPerlPackage {
+    name = "Exception-Base-0.25";
+    src = fetchurl {
+      url = http://cpan.metacpan.org/authors/id/D/DE/DEXTER/Exception-Base-0.25.tar.gz;
+      sha256 = "1s2is862xba2yy633wn2nklrya36yrlwxlbpqjrv8m31xj2c8khw";
+    };
+    buildInputs = [ TestUnitLite ];
+  };
+
   ExceptionClass = buildPerlPackage rec {
     name = "Exception-Class-1.30";
     src = fetchurl {
@@ -2226,6 +2244,26 @@ rec {
     propagatedBuildInputs = [ ClassDataInheritable DevelStackTrace ];
   };
 
+  ExceptionDied = buildPerlPackage {
+    name = "Exception-Died-0.06";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DE/DEXTER/Exception-Died-0.06.tar.gz;
+      sha256 = "1dcajw2m3x5m76fpi3fvy9fjkmfrd171pnx087i5fkgx5ay41i1m";
+    };
+    buildInputs = [ TestAssert TestUnitLite ];
+    propagatedBuildInputs = [ constantboolean ExceptionBase ];
+  };
+
+  ExceptionWarning = buildPerlPackage {
+    name = "Exception-Warning-0.0401";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DE/DEXTER/Exception-Warning-0.0401.tar.gz;
+      sha256 = "1a6k3sbhkxmz00wrmhv70f9kxjf7fklp1y6mnprfvcdmrsk9qdkv";
+    };
+    buildInputs = [ TestAssert TestUnitLite ];
+    propagatedBuildInputs = [ ExceptionBase ];
+  };
+
   ExtUtilsCBuilder = buildPerlPackage rec {
     name = "ExtUtils-CBuilder-0.280202";
     src = fetchurl {
@@ -2233,7 +2271,6 @@ rec {
       sha256 = "13qjdz1kmrp5mp404by94cdsyydjadg974ykinqga450djjaqpbq";
     };
   };
-
 
   ExtUtilsCppGuess = buildPerlModule rec {
     name = "ExtUtils-CppGuess-0.07";
@@ -2299,6 +2336,16 @@ rec {
       sha256 = "1msp79bdjzi59vignfz1cxwk5a2cjiahblvi0ka60pi8nnn0alrm";
     };
     buildInputs = [ Spiffy TestBase TestDifferences ];
+  };
+
+  FatalException = buildPerlPackage {
+    name = "Fatal-Exception-0.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DE/DEXTER/Fatal-Exception-0.05.tar.gz;
+      sha256 = "0kzfwc44vpxla3j637kfmnwmv57g6x4899ijqb4ljamk7whms298";
+    };
+    buildInputs = [ ExceptionWarning TestAssert TestUnitLite ];
+    propagatedBuildInputs = [ ExceptionBase ExceptionDied ];
   };
 
   FCGI = buildPerlPackage rec {
@@ -5492,6 +5539,14 @@ rec {
     doCheck = false;                             # FIXME: 2/293 test failures
   };
 
+  SymbolUtil = buildPerlPackage {
+    name = "Symbol-Util-0.0203";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DE/DEXTER/Symbol-Util-0.0203.tar.gz;
+      sha256 = "0cnwwrd5d6i80f33s7n2ak90rh4s53ss7q57wndrpkpr4bfn3djm";
+    };
+  };
+
   SysHostnameLong = buildPerlPackage rec {
     name = "Sys-Hostname-Long-1.4";
     src = fetchurl {
@@ -5603,6 +5658,16 @@ rec {
     doCheck = false;
   };
 
+  TestAssert = buildPerlPackage {
+    name = "Test-Assert-0.0504";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DE/DEXTER/Test-Assert-0.0504.tar.gz;
+      sha256 = "194bzflmzc0cw5727kznbj1zwzj7gnj7nx1643zk2hshdjlnv8yg";
+    };
+    buildInputs = [ ClassInspector TestUnitLite ];
+    propagatedBuildInputs = [ constantboolean ExceptionBase SymbolUtil ];
+  };
+
   TestAssertions = buildPerlPackage rec {
     name = "Test-Assertions-1.054";
     src = fetchurl {
@@ -5708,6 +5773,20 @@ rec {
     propagatedBuildInputs = [ DevelCycle PadWalker ];
     meta = {
       description = "Verifies code hasn't left circular references";
+    };
+  };
+
+  TestMockClass = buildPerlPackage {
+    name = "Test-Mock-Class-0.0303";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DE/DEXTER/Test-Mock-Class-0.0303.tar.gz;
+      sha256 = "00pkfqcz7b34q1mvx15k46sbxs22zcrvrbv15rnbn2na57z54bnd";
+    };
+    buildInputs = [ ClassInspector TestUnitLite ];
+    propagatedBuildInputs = [ ExceptionBase FatalException Moose namespaceclean TestAssert ];
+    meta = {
+      description = "Simulating other classes";
+      license = "lgpl";
     };
   };
 
@@ -5901,6 +5980,18 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/F/FD/FDALY/Test-Tester-0.108.tar.gz;
       sha256 = "1pby9w41b7z0cgnxpgkh397x7z68855sjg5yda48r6lck3lga62h";
+    };
+  };
+
+  TestUnitLite = buildPerlPackage {
+    name = "Test-Unit-Lite-0.1202";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DE/DEXTER/Test-Unit-Lite-0.1202.tar.gz;
+      sha256 = "1a5jym9hjcpdf0rwyn7gwrzsx4xqzwgzx59rgspqlqiif7p2a79m";
+    };
+    meta = {
+      description = "Unit testing without external dependencies";
+      license = "perl5";
     };
   };
 
