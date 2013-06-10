@@ -289,6 +289,16 @@ rec {
     };
   };
 
+  CacheMemcached = buildPerlPackage rec {
+    name = "Cache-Memcached-1.30";
+    src = fetchurl {
+      url =
+      mirror://cpan/authors/id/D/DO/DORMANDO/Cache-Memcached-1.30.tar.gz;
+      sha256 = "1aa2mjn5767b13063nnsrwcikrnbspby7j1c5q007bzaq0gcbcri";
+    };
+    propagatedBuildInputs = [ StringCRC32 ];
+  };
+
   cam_pdf = buildPerlPackage rec {
     name = "CAM-PDF-1.52";
     src = fetchurl {
@@ -4604,6 +4614,14 @@ rec {
       url = "mirror://cpan/modules/by-module/String/${name}.tar.gz";
       sha256 = "17kh8nap2z5g5rqcvw0m7mvbai7wr7h0al39w8l827zhqad8ss42";
     };
+  };
+
+  StringCRC32 = buildPerlPackage rec {
+      name = "String-CRC32-1.4";
+      src = fetchurl {
+        url = mirror://cpan/authors/id/S/SO/SOENKE/String-CRC32-1.4.tar.gz;
+        sha256 = "0lc3d4szxagwzcw6pxq3mmkvdlrz2zkw4i13crf42nvivv7gda8l";
+      };
   };
 
   StringFormat = buildPerlPackage rec {
