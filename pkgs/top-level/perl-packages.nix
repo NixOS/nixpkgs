@@ -4605,6 +4605,18 @@ rec {
     };
   };
 
+  StatisticsBasic = buildPerlPackage {
+    name = "Statistics-Basic-1.6607";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JE/JETTERO/Statistics-Basic-1.6607.tar.gz;
+      sha256 = "105agxl2581iqmwj1crgz33l5r19snf47h91hnjgm1nf555z79r7";
+    };
+    propagatedBuildInputs = [ NumberFormat ];
+    meta = {
+      license = "open_source";
+    };
+  };
+
   StatisticsDescriptive = buildPerlPackage rec {
     name = "Statistics-Descriptive-3.0202";
     src = fetchurl {
