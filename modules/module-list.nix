@@ -69,6 +69,7 @@
   ./services/backup/sitecopy-backup.nix
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
+  ./services/databases/memcached.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
   ./services/databases/mysql55.nix
