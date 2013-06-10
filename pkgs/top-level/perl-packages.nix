@@ -1816,6 +1816,18 @@ rec {
     };
   };
 
+  DigestHMAC_SHA1 = buildPerlPackage {
+    name = "Digest-HMAC_SHA1-1.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GA/GAAS/Digest-HMAC-1.03.tar.gz;
+      sha256 = "0naavabbm1c9zgn325ndy66da4insdw9l3mrxwxdfi7i7xnjrirv";
+    };
+    meta = {
+      description = "Keyed-Hashing for Message Authentication";
+      license = "perl";
+    };
+  };
+
   DigestMD4 = buildPerlPackage rec {
     name = "Digest-MD4-1.5";
     src = fetchurl {
