@@ -580,6 +580,20 @@ rec {
     };
   };
 
+  CatalystPluginCache = buildPerlPackage {
+    name = "Catalyst-Plugin-Cache-0.12";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Cache-0.12.tar.gz;
+      sha256 = "1q23aipvrl888h06ldr4mmjbykz0j4rqwipxg1jv094kki2fspr9";
+    };
+    buildInputs = [ TestDeep TestException ];
+    propagatedBuildInputs = [ CatalystRuntime MROCompat TaskWeaken ];
+    meta = {
+      description = "Flexible caching support for Catalyst.";
+      license = "perl";
+    };
+  };
+
   CatalystPluginCacheHTTP = buildPerlPackage {
     name = "Catalyst-Plugin-Cache-HTTP-0.001000";
     src = fetchurl {
