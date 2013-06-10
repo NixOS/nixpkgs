@@ -580,6 +580,20 @@ rec {
     };
   };
 
+  CatalystPluginCacheHTTP = buildPerlPackage {
+    name = "Catalyst-Plugin-Cache-HTTP-0.001000";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GR/GRAF/Catalyst-Plugin-Cache-HTTP-0.001000.tar.gz;
+      sha256 = "0v5iphbq4csc4r6wkvxnqlh97p8g0yhjky9qqmsdyqczn87agbba";
+    };
+    buildInputs = [ CatalystRuntime TestUseOk TestWWWMechanizeCatalyst ];
+    propagatedBuildInputs = [ ClassAccessorFast HTTPMessage MROCompat ];
+    meta = {
+      description = "HTTP/1.1 cache validators for Catalyst";
+      license = "perl";
+    };
+  };
+
   CatalystPluginCaptcha = buildPerlPackage {
     name = "Catalyst-Plugin-Captcha-0.04";
     src = fetchurl {
