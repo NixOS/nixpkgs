@@ -299,6 +299,18 @@ rec {
     propagatedBuildInputs = [ StringCRC32 ];
   };
 
+  CacheMemcachedFast = buildPerlPackage {
+    name = "Cache-Memcached-Fast-0.21";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/K/KR/KROKI/Cache-Memcached-Fast-0.21.tar.gz;
+      sha256 = "0lvwkkyazbb7i6c5ga5ms3gsvy721njpcbc2icxcsvc8bz32nz5i";
+    };
+    meta = {
+      description = "Perl client for B<memcached>, in C language";
+      license = "unknown";
+    };
+  };
+
   cam_pdf = buildPerlPackage rec {
     name = "CAM-PDF-1.52";
     src = fetchurl {
