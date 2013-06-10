@@ -1991,6 +1991,18 @@ rec {
     };
   };
 
+  DigestMD5File = buildPerlPackage {
+    name = "Digest-MD5-File-0.08";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DM/DMUEY/Digest-MD5-File-0.08.tar.gz;
+      sha256 = "060jzf45dlwysw5wsm7av1wvpl06xgk415kwwpvv89r6wda3md5d";
+    };
+    propagatedBuildInputs = [ LWP ];
+    meta = {
+      description = "Perl extension for getting MD5 sums for files and urls.";
+    };
+  };
+
   DigestSHA = null;
 
   DigestSHA1 = buildPerlPackage {
