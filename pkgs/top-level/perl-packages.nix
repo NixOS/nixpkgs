@@ -4176,6 +4176,19 @@ rec {
     buildInputs = [ DBI DBDSQLite ];
   };
 
+  NetAmazonS3Policy = buildPerlPackage {
+    name = "Net-Amazon-S3-Policy-0.001002";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PO/POLETTIX/Net-Amazon-S3-Policy-0.1.2.tar.gz;
+      sha256 = "1kkzimvxwxx0mypf75dalksxmvwsb8b575yx2nzmvjkvjg3j9na0";
+    };
+    propagatedBuildInputs = [ JSON ];
+    meta = {
+      description = "Manage Amazon S3 policies for HTTP POST forms";
+      license = "perl";
+    };
+  };
+
   NetDBus = buildPerlPackage rec {
     name = "Net-DBus-1.0.0";
     src = fetchurl {
