@@ -1873,6 +1873,21 @@ rec {
     };
   };
 
+  DBIxConnector = buildPerlModule {
+    name = "DBIx-Connector-0.53";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DW/DWHEELER/DBIx-Connector-0.53.tar.gz;
+      sha256 = "198qbi97rnq6zbh5vgy437vlca8hns1b995fm4w896m0v7zgjjiw";
+    };
+    buildInputs = [ TestMockModule ];
+    propagatedBuildInputs = [ DBI ];
+    meta = {
+      homepage = http://search.cpan.org/dist/DBIx-Connector/;
+      description = "Fast, safe DBI connection and transaction management";
+      license = "perl5";
+    };
+  };
+
   DevelCycle = buildPerlPackage {
     name = "Devel-Cycle-1.11";
     src = fetchurl {
@@ -5685,6 +5700,14 @@ rec {
     propagatedBuildInputs = [ DevelCycle PadWalker ];
     meta = {
       description = "Verifies code hasn't left circular references";
+    };
+  };
+
+  TestMockModule = buildPerlPackage {
+    name = "Test-MockModule-0.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SI/SIMONFLK/Test-MockModule-0.05.tar.gz;
+      sha256 = "01vf75higpap5mwm5fyas08b3qcmy5bfq1c3wl4h0y3nihjibib7";
     };
   };
 
