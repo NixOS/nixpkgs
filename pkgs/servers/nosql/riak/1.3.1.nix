@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       the data, log, and etc directories should live, the scripts expect
       RIAK_DATA_DIR, RIAK_LOG_DIR, and RIAK_ETC_DIR to be defined
       and use those.
-    ''
+    '';
     platforms   = stdenv.lib.platforms.all;
   };
 }
