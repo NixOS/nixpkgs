@@ -3616,6 +3616,15 @@ rec {
     propagatedBuildInputs = [ LWP NetDNS ];
   };
 
+  LWPUserAgentMockable = buildPerlPackage {
+    name = "LWP-UserAgent-Mockable-1.10";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MM/MMORGAN/LWP-UserAgent-Mockable-1.10.tgz;
+      sha256 = "1z89jszgifvjb8irzd8wrzim7l5m4hypdl9mj4dpkb4jm4189kmn";
+    };
+    propagatedBuildInputs = [ LWP HookLexWrap ];
+  };
+
   maatkit = import ../development/perl-modules/maatkit {
     inherit fetchurl buildPerlPackage stdenv DBDmysql;
   };
