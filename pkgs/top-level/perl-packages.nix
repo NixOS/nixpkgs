@@ -3063,6 +3063,19 @@ rec {
     };
   };
 
+  LogDispatch = buildPerlPackage {
+    name = "Log-Dispatch-2.39";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/Log-Dispatch-2.39.tar.gz;
+      sha256 = "1bi2nza0nc66i0ls2zkxi6bbwkh456pl0q8h57mq6skbhbmcwbb8";
+    };
+    propagatedBuildInputs = [ ClassLoad ParamsValidate ];
+    meta = {
+      description = "Dispatches messages to one or more outputs";
+      license = "artistic_2";
+    };
+  };
+
   LogTrace = buildPerlPackage rec {
     name = "Log-Trace-1.070";
     src = fetchurl {
