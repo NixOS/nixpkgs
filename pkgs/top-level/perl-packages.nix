@@ -3377,6 +3377,15 @@ rec {
     };
   };
 
+  ModuleVersions = buildPerlPackage {
+    name = "Module-Versions-0.02";
+    src = fetchurl {
+      url = http://cpan.metacpan.org/authors/id/T/TH/THW/Module-Versions-0.02.zip;
+      sha256 = "0g7qs6vqg91xpwg1cdy91m3kh9m1zbkzyz1qsy453b572xdscf0d";
+    };
+    buildInputs = [ pkgs.unzip ];
+  };
+
   Moo = buildPerlPackage {
     name = "Moo-1.000007";
     src = fetchurl {
@@ -4207,6 +4216,20 @@ rec {
     meta = {
       homepage = http://plackperl.org;
       description = "Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)";
+      license = "perl";
+    };
+  };
+
+  PlackMiddlewareDebug = buildPerlPackage {
+    name = "Plack-Middleware-Debug-0.14";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Debug-0.14.tar.gz;
+      sha256 = "0349563ic6fw4kwx3k3l4v9gq59b5cpymmn1k8bkxsw9n7s10rb9";
+    };
+    buildInputs = [ TestRequires ];
+    propagatedBuildInputs = [ ClassMethodModifiers DataDump FileShareDir ModuleVersions Plack TextMicroTemplate ];
+    meta = {
+      description = "Display information about the current request/response";
       license = "perl";
     };
   };
@@ -5340,6 +5363,18 @@ rec {
     };
     buildInputs = [ FileSlurp ListMoreUtils Encode
       ExtUtilsMakeMaker TestException ];
+  };
+
+  TextMicroTemplate = buildPerlPackage {
+    name = "Text-MicroTemplate-0.19";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/K/KA/KAZUHO/Text-MicroTemplate-0.19.tar.gz;
+      sha256 = "0hli95kn67slr6ixffcx6qvv36hlr03hij28029k3f8d7b7f32za";
+    };
+    meta = {
+      description = "Micro template engine with Perl5 language";
+      license = "perl";
+    };
   };
 
   TextPDF = buildPerlPackage rec {
