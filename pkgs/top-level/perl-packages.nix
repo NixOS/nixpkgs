@@ -2922,6 +2922,14 @@ rec {
     };
   };
 
+  libintl_perl = buildPerlPackage rec {
+    name = "libintl-perl-1.23";
+    src = fetchurl {
+        url = http://cpan.metacpan.org/authors/id/G/GU/GUIDO/libintl-perl-1.23.tar.gz;
+        sha256 = "1ylz6yhjifblhmnva0k05ch12a4cdii5v0icah69ma1gdhsidnk0";
+    };
+  };
+
   libxml_perl = buildPerlPackage rec {
     name = "libxml-perl-0.08";
     src = fetchurl {
