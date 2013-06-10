@@ -5964,6 +5964,19 @@ rec {
     };
   };
 
+  UnicodeICUCollator = buildPerlPackage {
+    name = "Unicode-ICU-Collator-0.002";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TO/TONYC/Unicode-ICU-Collator-0.002.tar.gz;
+      sha256 = "0gimwydam0mdgm6qjzzxny4gw8zda9kc2843kcl2xrpq7z7ww3f9";
+    };
+    meta = {
+      description = "Wrapper around ICU collation services";
+      license = "perl";
+    };
+    buildInputs = [ pkgs.icu ];
+  };
+
   URI = buildPerlPackage {
     name = "URI-1.60";
     src = fetchurl {
