@@ -2203,6 +2203,14 @@ rec {
     };
   };
 
+  EnvPath = buildPerlPackage {
+    name = "Env-Path-0.19";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DS/DSB/Env-Path-0.19.tar.gz;
+      sha256 = "1qhmj15a66h90pjl2dgnxsb9jj3b1r5mpvnr87cafcl8g69z0jr4";
+    };
+  };
+
   Error = buildPerlPackage rec {
     name = "Error-0.17019";
     src = fetchurl {
