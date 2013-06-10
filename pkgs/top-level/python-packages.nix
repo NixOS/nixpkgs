@@ -975,6 +975,25 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  fabric = buildPythonPackage rec {
+    name = "fabric-1.6.1";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/F/Fabric/Fabric-1.6.1.tar.gz;
+      sha256 = "058psbhqbfm3n214wkyfpgm069yqmdqw1hql9bac1yv9pza3bzx1";
+    };
+    propagatedBuildInputs = [ paramiko pycrypto ];
+    buildInputs = [ fudge nose ];
+  }; 
+
+  fudge = buildPythonPackage rec {
+    name = "fudge-0.9.4";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/f/fudge/fudge-0.9.4.tar.gz;
+      sha256 = "03sj2x6mpzm48swpa4hnn1gi6yilgniyjfg1ylz95wm1ijggi33w";
+    };
+    buildInputs = [ nose nosejs ];
+    propagatedBuildInputs = [ sphinx ];
+  };
 
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.1";
@@ -2718,6 +2737,15 @@ pythonPackages = python.modules // rec {
     propagatedBuildInputs = [ covCore nose2 ];
   });
 
+  nosejs = buildPythonPackage {
+    name = "nosejs-0.9.4";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/N/NoseJS/NoseJS-0.9.4.tar.gz;
+      sha256 = "0qrhkd3sga56qf6k0sqyhwfcladwi05gl6aqmr0xriiq1sgva5dy";
+    };
+    buildInputs = [ nose ];
+  };
+
   notify = pkgs.stdenv.mkDerivation (rec {
     name = "python-notify-0.1.1";
 
@@ -2901,11 +2929,11 @@ pythonPackages = python.modules // rec {
 
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.7.7.1";
+    name = "paramiko-1.10";
 
     src = fetchurl {
-      url = "http://www.lag.net/paramiko/download/${name}.tar.gz";
-      sha256 = "1bjy4jn51c50mpq51jbwk0glzd8bxz83gxdfkr9p95dmrd17c7hh";
+      url = https://pypi.python.org/packages/source/p/paramiko/paramiko-1.10.1.tar.gz;
+      sha256 = "1g5sbzfxdhps61z3vm30wa87m5xq1j9ar3qvgr5bz63l7nxhvb2z";
     };
 
     buildInputs = [ pycrypto ];
