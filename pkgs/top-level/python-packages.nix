@@ -2167,6 +2167,26 @@ pythonPackages = python.modules // rec {
     propagatedBuildInputs = [ unittest2 ];
   };
 
+  "lxml-2.3.6" = buildPythonPackage rec {
+    name = "lxml-2.3.6";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/l/lxml/lxml-2.3.6.tar.gz";
+      md5 = "d5d886088e78b1bdbfd66d328fc2d0bc";
+    };
+    buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
+    propagatedBuildInputs = [  ];
+    doCheck = false;
+    installCommand = ''
+      easy_install --always-unzip --no-deps --prefix="$out" .
+    '';
+
+    meta = {
+      description = "Pythonic binding for the libxml2 and libxslt libraries";
+      homepage = http://codespeak.net/lxml/index.html;
+      license = "BSD";
+    };
+  };
+
   lxml = buildPythonPackage ( rec {
     name = "lxml-3.0.2";
 
