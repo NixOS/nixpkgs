@@ -4719,6 +4719,21 @@ rec {
     };
   };
 
+  RESTUtils = buildPerlPackage {
+    name = "REST-Utils-0.6";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JA/JALDHAR/REST-Utils-0.6.tar.gz;
+      sha256 = "1zdrf3315rp2b8r9dwwj5h93xky7i33iawf4hzszwcddhzflmsfl";
+    };
+    buildInputs = [ TestWWWMechanizeCGI ];
+    meta = {
+      homepage = http://jaldhar.github.com/REST-Utils;
+      description = "Utility functions for REST applications";
+      license = "perl5";
+    };
+  };
+
+
   RpcXML = buildPerlPackage {
     name = "RPC-XML-0.73";
     src = fetchurl {
@@ -5639,6 +5654,15 @@ rec {
     };
   };
 
+  TestWWWMechanizeCGI = buildPerlPackage {
+    name = "Test-WWW-Mechanize-CGI-0.1";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MR/MRAMBERG/Test-WWW-Mechanize-CGI-0.1.tar.gz;
+      sha256 = "0bwwdk0iai5dlvvfpja971qpgvmf6yq67iag4z4szl9v5sra0xm5";
+    };
+    propagatedBuildInputs = [ TestWWWMechanize WWWMechanizeCGI ];
+  };
+
   TestWWWMechanizePSGI = buildPerlPackage {
     name = "Test-WWW-Mechanize-PSGI-0.35";
     src = fetchurl {
@@ -6091,6 +6115,16 @@ rec {
       description = "Handy web browsing in a Perl object";
       license = "perl5";
     };
+  };
+
+  WWWMechanizeCGI = buildPerlPackage {
+    name = "WWW-Mechanize-CGI-0.3";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MR/MRAMBERG/WWW-Mechanize-CGI-0.3.tar.gz;
+      sha256 = "046jm18liq7rwkdawdh9520cnalkfrk26yqryp7xgw71y65lvq61";
+    };
+    propagatedBuildInputs = [ HTTPRequestAsCGI WWWMechanize ];
+    preConfigure = "sed -i 's|#!/usr/bin/perl|#!${perl}/bin/perl|' t/cgi-bin/script.cgi";
   };
 
   WWWRobotRules = buildPerlPackage {
