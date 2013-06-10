@@ -2057,6 +2057,54 @@ rec {
     };
   };
 
+  EmailMessageID = buildPerlPackage {
+    name = "Email-MessageID-1.402";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-MessageID-1.402.tar.gz;
+      sha256 = "1zzbxdygh992dn9k9jlxjzcmaniy83dqlc8lkas9w9wlhngvwni1";
+    };
+    propagatedBuildInputs = [ EmailAddress ];
+    meta = {
+      description = "Generate world unique message-ids";
+      license = "perl";
+    };
+  };
+
+  EmailMIME = buildPerlPackage {
+    name = "Email-MIME-1.911";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-1.911.tar.gz;
+      sha256 = "0nkvps2k1gkr5vh12qbl0djdnjxnp7jdi52zgda6k67wrghm5ryd";
+    };
+    propagatedBuildInputs = [ EmailMessageID EmailMIMEContentType EmailMIMEEncodings EmailSimple MIMETypes ];
+    meta = {
+      license = "perl5";
+    };
+  };
+
+  EmailMIMEContentType = buildPerlPackage {
+    name = "Email-MIME-ContentType-1.015";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-ContentType-1.015.tar.gz;
+      sha256 = "1rlk3rxlw8ri4b7c68nhg6b3ykgc97rdaqb1dyam8f8k1z8cik0g";
+    };
+    meta = {
+      description = "Parse a MIME Content-Type Header";
+      license = "perl";
+    };
+  };
+
+  EmailMIMEEncodings = buildPerlPackage {
+    name = "Email-MIME-Encodings-1.313";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-Encodings-1.313.tar.gz;
+      sha256 = "0fac34g44sn0l59wim68zrhih1mvlh1rxvyn3gc5pviaiz028lyy";
+    };
+    meta = {
+      license = "perl";
+    };
+  };
+
   EmailSend = buildPerlPackage rec {
     name = "Email-Send-2.198";
     src = fetchurl {
