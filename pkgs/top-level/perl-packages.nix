@@ -815,6 +815,18 @@ rec {
     };
   };
 
+  CGIExpand = buildPerlPackage {
+    name = "CGI-Expand-2.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BO/BOWMANBS/CGI-Expand-2.03.tar.gz;
+      sha256 = "0p59is2mynybii8r1cpci2i17xzwhrrs4741hndhkcp4spggr0z1";
+    };
+    propagatedBuildInputs = [ TestException ];
+    meta = {
+      description = "Convert flat hash to nested data using TT2's dot convention";
+    };
+  };
+
   CGIFormBuilder = buildPerlPackage rec {
     name = "CGI-FormBuilder-3.0501";
     src = fetchurl {
