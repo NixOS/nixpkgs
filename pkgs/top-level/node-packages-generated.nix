@@ -1235,9 +1235,9 @@
   }
   {
     baseName = "nijs";
-    version = "0.0.6";
+    version = "0.0.7";
     fullName = "nijs-*";
-    hash = "0f255almpp181sqfk02jz89845rs4n3znfi6rk61rgb4f8d3a7kq";
+    hash = "0dc6rybg6fhjlaxd2h0zk2qakxh9d6ipcxpjmc68g3v13ivnbad4";
     patchLatest = false;
     topLevel = true;
     dependencies = [
