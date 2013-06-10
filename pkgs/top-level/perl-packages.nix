@@ -5828,6 +5828,21 @@ rec {
     };
   };
 
+  TestRoutine = buildPerlPackage {
+    name = "Test-Routine-0.015";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Routine-0.015.tar.gz;
+      sha256 = "04hm18sx90k38vxk70g8zj9wp0i7h4436cxflbc6pspvphv2fjg3";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ Moose namespaceautoclean namespaceclean ParamsUtil SubExporter ];
+    meta = {
+      homepage = https://github.com/rjbs/Test-Routine;
+      description = "Composable units of assertion";
+      license = "perl5";
+    };
+  };
+
   TestScript = buildPerlPackage rec {
     name = "Test-Script-1.07";
     src = fetchurl {
