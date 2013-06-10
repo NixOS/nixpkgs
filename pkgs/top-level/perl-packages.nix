@@ -2784,6 +2784,19 @@ rec {
     };
   };
 
+  HTMLTreeBuilderXPath = buildPerlPackage {
+    name = "HTML-TreeBuilder-XPath-0.14";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIROD/HTML-TreeBuilder-XPath-0.14.tar.gz;
+      sha256 = "1wx4i1scng20n405fp3a4vrwvvq9bvbmg977wnd5j2ja8jrbvsr5";
+    };
+    propagatedBuildInputs = [ HTMLTree XMLXPathEngine ];
+    meta = {
+      description = "Add XPath support to HTML::TreeBuilder";
+      license = "perl5";
+    };
+  };
+
   HTMLWidget = buildPerlPackage {
     name = "HTML-Widget-1.11";
     src = fetchurl {
@@ -6471,6 +6484,17 @@ rec {
       sha256 = "0xjmfwda7m3apj7yrjzmkm4sjwnz4bqyaynzgcwqhx806kgw4j9a";
     };
     propagatedBuildInputs = [XMLParser];
+  };
+
+  XMLXPathEngine = buildPerlPackage {
+    name = "XML-XPathEngine-0.14";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIROD/XML-XPathEngine-0.14.tar.gz;
+      sha256 = "0r72na14bmsxfd16s9nlza155amqww0k8wsa9x2a3sqbpp5ppznj";
+    };
+    meta = {
+      description = "A re-usable XPath engine for DOM-like trees";
+    };
   };
 
   XMLRegExp = buildPerlPackage {
