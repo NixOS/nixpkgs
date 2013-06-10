@@ -5475,6 +5475,14 @@ rec {
     };
   };
 
+  TextUnaccent = buildPerlPackage {
+    name = "Text-Unaccent-1.08";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/L/LD/LDACHARY/Text-Unaccent-1.08.tar.gz;
+      sha256 = "0avk50kia78kxryh2whmaj5l18q2wvmkdyqyjsf6kwr4kgy6x3i7";
+    };
+  };
+
   TextUnidecode = buildPerlPackage rec {
     name = "Text-Unidecode-0.04";
     src = fetchurl {
