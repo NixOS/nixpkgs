@@ -3985,6 +3985,15 @@ rec {
     };
   };
 
+  MooseXTypesURI = buildPerlPackage {
+    name = "MooseX-Types-URI-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FL/FLORA/MooseX-Types-URI-0.03.tar.gz;
+      sha256 = "056v08kzcd93h8l69iqdxbr05h85bgz6jvp6iwc0vv68dacr299s";
+    };
+    propagatedBuildInputs = [ Moose MooseXTypes MooseXTypesPathClass namespaceclean TestUseOk URI URIFromHash ];
+  };
+
   Mouse = buildPerlPackage rec {
     name = "Mouse-0.26";
     src = fetchurl {
@@ -6042,6 +6051,19 @@ rec {
       homepage = http://search.cpan.org/dist/URI-Find;
       description = "Find URIs in arbitrary text";
       license = "perl5";
+    };
+  };
+
+  URIFromHash = buildPerlPackage {
+    name = "URI-FromHash-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/URI-FromHash-0.03.tar.gz;
+      sha256 = "0yzk69mdf8rmkx1wxm5mn1a1zzd0zq4x1w83vyj9ja40v73q0k4i";
+    };
+    propagatedBuildInputs = [ ParamsValidate URI ];
+    meta = {
+      description = "Build a URI from a set of named parameters";
+      license = "perl";
     };
   };
 
