@@ -2796,6 +2796,15 @@ rec {
     };
   };
 
+  HTMLSelectorXPath = buildPerlPackage {
+    name = "HTML-Selector-XPath-0.15";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CO/CORION/HTML-Selector-XPath-0.15.tar.gz;
+      sha256 = "0wnb561yp1r3mqw2hmd16zm45lqqm2mp823s1rx2k4qw141rmkpv";
+    };
+    buildInputs = [ TestBase ];
+  };
+
   HTMLScrubber = buildPerlPackage {
     name = "HTML-Scrubber-0.08";
     src = fetchurl {
@@ -5710,7 +5719,7 @@ rec {
       url = "mirror://cpan/modules/by-module/Test/${name}.tar.gz";
       sha256 = "0yf030nay85xzas1qxn1nw6lhfsrcbgh3nq7bxbb11nxhvdaj2bx";
     };
-    buildInputs = [ Spiffy ];
+    propagatedBuildInputs = [ Spiffy ];
   };
 
   TestCheckDeps = buildPerlPackage {
