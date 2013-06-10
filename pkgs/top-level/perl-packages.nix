@@ -4709,6 +4709,17 @@ rec {
     };
   };
 
+  SetScalar = buildPerlPackage {
+    name = "Set-Scalar-1.25";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JH/JHI/Set-Scalar-1.25.tar.gz;
+      sha256 = "1kbfy97j4cg0pprk8sgsh1fd505mdffn1jr9qbdmwqma8x4qvv7m";
+    };
+    meta = {
+      license = "perl";
+    };
+  };
+
   SGMLSpm = buildPerlPackage {
     name = "SGMLSpm-1.1";
     src = fetchurl {
