@@ -5503,6 +5503,19 @@ rec {
     };
   };
 
+  TextWikiFormat = buildPerlPackage {
+    name = "Text-WikiFormat-0.80";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CY/CYCLES/Text-WikiFormat-0.80.tar.gz;
+      sha256 = "0i1mg3ivxhx09x0w06k15izc92bknwqwh0ghpmhlq9s9iw12mmry";
+    };
+    propagatedBuildInputs = [ URI ];
+    meta = {
+      description = "Unknown";
+      license = "unknown";
+    };
+  };
+
   Throwable = buildPerlPackage rec {
     name = "Throwable-0.102080";
     src = fetchurl {
