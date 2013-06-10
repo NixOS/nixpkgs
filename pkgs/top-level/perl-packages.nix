@@ -6103,6 +6103,15 @@ rec {
     };
   };
 
+  TestXPath = buildPerlModule {
+    name = "Test-XPath-0.16";
+    src = fetchurl {
+      url = http://cpan.metacpan.org/authors/id/D/DW/DWHEELER/Test-XPath-0.16.tar.gz;
+      sha256 = "09s47d5jcrx35dz623gjiqn0qmjrv0wb54czr7h01wffw1w8akxi";
+    };
+    propagatedBuildInputs = [ XMLLibXML ];
+  };
+
   TextAligner = buildPerlPackage {
     name = "Text-Aligner-0.07";
     src = fetchurl {
