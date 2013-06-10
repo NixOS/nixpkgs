@@ -6253,6 +6253,19 @@ rec {
       ExtUtilsMakeMaker TestException ];
   };
 
+  TestMagpie = buildPerlPackage {
+    name = "Test-Magpie-0.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CY/CYCLES/Test-Magpie-0.05.tar.gz;
+      sha256 = "0a0c6vcj92spy6ngfdqn9yfym37jwxlds7hlw6xphkdmcklynh0b";
+    };
+    propagatedBuildInputs = [ aliased DevelPartialDump ListAllUtils Moose MooseXParamsValidate MooseXTypes MooseXTypesStructured namespaceautoclean SetObject SubExporter TestFatal ];
+    meta = {
+      description = "Spy on objects to achieve test doubles (mock testing)";
+      license = "perl5";
+    };
+  };
+
   TextMicroTemplate = buildPerlPackage {
     name = "Text-MicroTemplate-0.19";
     src = fetchurl {
