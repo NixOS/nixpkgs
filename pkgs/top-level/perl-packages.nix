@@ -311,6 +311,15 @@ rec {
     };
   };
 
+  CacheMemory = buildPerlPackage {
+    name = "Cache-Memory-2.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CL/CLEISHMAN/Cache-2.04.tar.gz;
+      sha256 = "1zykapgl9lxnlx79xfghzb26qimhry94xfxfyswwfhra1ywd9yyg";
+    };
+    propagatedBuildInputs = [ TimeDate DBFile DigestSHA1 FileNFSLock HeapFibonacci IOString ];
+  };
+
   cam_pdf = buildPerlPackage rec {
     name = "CAM-PDF-1.52";
     src = fetchurl {
@@ -2316,6 +2325,14 @@ rec {
     };
   };
 
+  FileNFSLock = buildPerlPackage {
+    name = "File-NFSLock-1.21";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BB/BBB/File-NFSLock-1.21.tar.gz;
+      sha256 = "1kclhmyha2xijq49darlz82f3bn7gq3saycxpfiz3dndqhr5i9iz";
+    };
+  };
+
   FileRemove = buildPerlPackage rec {
     name = "File-Remove-1.42";
     src = fetchurl {
@@ -2572,6 +2589,14 @@ rec {
     };
     propagatedBuildInputs = [ TestUseOk ];
   };  
+
+  HeapFibonacci = buildPerlPackage {
+    name = "Heap-Fibonacci-0.80";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JM/JMM/Heap-0.80.tar.gz;
+      sha256 = "1plv2djbyhvkdcw2ic54rdqb745cwksxckgzvw7ssxiir7rjknnc";
+    };
+  };
 
   HookLexWrap = buildPerlPackage rec {
     name = "Hook-LexWrap-0.22";
