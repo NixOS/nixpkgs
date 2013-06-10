@@ -1439,6 +1439,19 @@ rec {
     makeMakerFlags = "--lib=${pkgs.openssl}/lib";
   };
 
+  DataClone = buildPerlPackage {
+    name = "Data-Clone-0.003";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GF/GFUJI/Data-Clone-0.003.tar.gz;
+      sha256 = "16ldkjfag4dc3gssj051j212rzr2mawy7d001jflcab9g8hg3f1g";
+    };
+    buildInputs = [ TestRequires ];
+    meta = {
+      description = "Polymorphic data cloning";
+      license = "perl";
+    };
+  };
+
   DataCompare = buildPerlPackage rec {
     name = "Data-Compare-1.22";
     src = fetchurl {
@@ -1835,6 +1848,17 @@ rec {
     meta = {
       description = "Create a DBIx::Class::Schema based on a database";
       license = "perl";
+    };
+  };
+
+  DevelCycle = buildPerlPackage {
+    name = "Devel-Cycle-1.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/L/LD/LDS/Devel-Cycle-1.11.tar.gz;
+      sha256 = "17c73yx9r32xvrsh8y7q24y0m3b98yihjyf3q4y68j869nh2b4rs";
+    };
+    meta = {
+      description = "Find memory cycles in objects";
     };
   };
 
@@ -2300,6 +2324,18 @@ rec {
     };
   };
 
+  FileShareDirInstall = buildPerlPackage {
+    name = "File-ShareDir-Install-0.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GW/GWYN/File-ShareDir-Install-0.04.tar.gz;
+      sha256 = "14gyl1l1crnsb7ihz6czaw7k0v2dnan0380pbxz8kmk66nnhaxzc";
+    };
+    meta = {
+      description = "Install shared files";
+      license = "perl";
+    };
+  };
+
   FilesysNotifySimple = buildPerlPackage {
     name = "Filesys-Notify-Simple-0.08";
     src = fetchurl {
@@ -2554,6 +2590,20 @@ rec {
         TemplateToolkit CryptCBC CryptDES PathClass
         MooseXAttributeChained MooseXAliases MooseXSetOnce
       ];
+  };
+
+  HTMLFormHandler = buildPerlPackage {
+    name = "HTML-FormHandler-0.40025";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GS/GSHANK/HTML-FormHandler-0.40025.tar.gz;
+      sha256 = "0fp8qcbkr19qn1859rpn3ca3b7w1jjyprwlj82dnvfi3b5jf8507";
+    };
+    buildInputs = [ FileShareDirInstall PadWalker TestDifferences TestException TestMemoryCycle ];
+    propagatedBuildInputs = [ aliased ClassLoad DataClone DateTime DateTimeFormatStrptime EmailValid FileShareDir JSON HTMLTree Moose MooseXGetopt MooseXTypes MooseXTypesCommon MooseXTypesLoadableClass namespaceautoclean SubExporter SubName TryTiny ];
+    meta = {
+      description = "HTML forms using Moose";
+      license = "perl5";
+    };
   };
 
   HTMLParser = buildPerlPackage {
@@ -5366,6 +5416,18 @@ rec {
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Test/${name}.tar.gz";
       sha256 = "0r2i3a35l116ccwx88jwiii2fq4b8wm16sl1lkxm2kh44s4z7s5s";
+    };
+  };
+
+  TestMemoryCycle = buildPerlPackage {
+    name = "Test-Memory-Cycle-1.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PETDANCE/Test-Memory-Cycle-1.04.tar.gz;
+      sha256 = "09qj48gmj25xgm0k12n1xx7chdk9gdy3sck4pabvzs0v00nmv9p5";
+    };
+    propagatedBuildInputs = [ DevelCycle PadWalker ];
+    meta = {
+      description = "Verifies code hasn't left circular references";
     };
   };
 
