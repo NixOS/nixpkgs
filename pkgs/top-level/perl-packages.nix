@@ -4813,7 +4813,6 @@ rec {
     };
   };
 
-
   RpcXML = buildPerlPackage {
     name = "RPC-XML-0.73";
     src = fetchurl {
@@ -4843,6 +4842,15 @@ rec {
       description = "Roles, like a nouvelle cuisine portion size slice of Moose";
       license = "perl5";
     };
+  };
+
+  RSSParserLite = buildPerlPackage {
+    name = "RSS-Parser-Lite-0.10";
+    src = fetchurl {
+      url = http://cpan.metacpan.org/authors/id/E/EB/EBOSRUP/RSS-Parser-Lite-0.10.tar.gz;
+      sha256 = "1spvi0z62saz2cam8kwk2k561aavw2w42g3ykj38w1kmydvsk8z6";
+    };
+    propagatedBuildInputs = [ SOAPLite ];
   };
 
   SafeIsa = buildPerlPackage {
@@ -4915,6 +4923,19 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RA/RAAB/SGMLSpm-1.1.tar.gz;
       sha256 = "1gdjf3mcz2bxir0l9iljxiz6qqqg3a9gg23y5wjg538w552r432m";
+    };
+  };
+
+  SOAPLite = buildPerlPackage {
+    name = "SOAP-Lite-0.716";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PH/PHRED/SOAP-Lite-0.716.tar.gz;
+      sha256 = "0vhnv5bdhy3gzwiaw1ly69r7lxvahz796v210x5nyij7a04ndwbz";
+    };
+    propagatedBuildInputs = [ ClassInspector HTTPDaemon LWP TaskWeaken URI XMLParser ];
+    meta = {
+      description = "Perl's Web Services Toolkit";
+      license = "perl5";
     };
   };
 
