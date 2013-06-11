@@ -14,7 +14,7 @@ stdenv.mkDerivation (args // {
         configureFlags="--mandir=$man/share/man $configureFlags"
       '' +
       optionalString (elem "bin" outputs) ''
-        configureFlags="--bindir=$bin/bin --mandir=$bin/share/man $configureFlags"
+        configureFlags="--bindir=$bin/bin --sbindir=$bin/sbin --mandir=$bin/share/man $configureFlags"
       '' +
       optionalString (elem "lib" outputs) ''
         configureFlags="--libdir=$lib/lib $configureFlags"
@@ -52,10 +52,31 @@ stdenv.mkDerivation (args // {
         propagatedNativeBuildInputs="$lib $propagatedNativeBuildsInputs"
       fi
 
-      for i in $bin $lib; do
-        prefix="$i" stripDirs "lib lib64 libexec bin sbin" "''${stripDebugFlags:--S}"
-        prefix="$i" patchELF
-        patchShebangs "$i"
+      for i in $bin $lib $man $static; do
+        if [ -z "$dontStrip" ]; then
+          prefix="$i" stripDirs "lib lib64 libexec bin sbin" "''${stripDebugFlags:--S}"
+        fi
+        if [ "$havePatchELF" = 1 -a -z "$dontPatchELF" ]; then
+          prefix="$i" patchELF
+        fi
+        if [ -z "$dontPatchShebangs" ]; then
+          patchShebangs "$i"
+        fi
+
+        # Cut&paste...
+        if [ -z "$dontGzipMan" ]; then
+            GLOBIGNORE=.:..:*.gz:*.bz2
+            for f in $i/share/man/*/* $i/share/man/*/*/*; do
+                if [ -f $f ]; then
+                    if gzip -c $f > $f.gz; then
+                        rm $f
+                    else
+                        rm $f.gz
+                    fi
+                fi
+            done
+            unset GLOBIGNORE
+        fi
       done
 
       runHook postFixupOutputs

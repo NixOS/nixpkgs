@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "03nh8bqnjsdd5izjv3n2yfcxw4ck0llwww36jpbjbjgixwpqpy4f";
   };
 
+  outputs = [ "out" "man" ];
+
+  setOutputConfigureFlags = false;
+
   patches =
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch
@@ -44,7 +48,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
+      configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$man/share/man/man1 -Dman3dir=$man/share/man/man3"
 
       ${stdenv.lib.optionalString stdenv.isArm ''
         configureFlagsArray=(-Dldflags="-lm -lrt")

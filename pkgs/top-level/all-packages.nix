@@ -2969,6 +2969,7 @@ let
   perl514 = callPackage ../development/interpreters/perl/5.14 { };
 
   perl516 = callPackage ../development/interpreters/perl/5.16 {
+    stdenv = stdenvMulti;
     fetchurl = fetchurlBoot;
   };
 
