@@ -50,6 +50,7 @@ rec {
       "--enable-system-hunspell"
       "--enable-system-pixman"
       "--enable-system-sqlite"
+      "--with-system-libvpx"
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
