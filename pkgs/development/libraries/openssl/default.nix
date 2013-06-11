@@ -58,6 +58,9 @@ stdenv.mkDerivation {
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib)" ]; then
           rm $out/lib/*.a
       fi
+
+      # remove dependency on Perl at runtime
+      rm -rf $out/etc/ssl/misc
     ''; # */
 
   crossAttrs = {
