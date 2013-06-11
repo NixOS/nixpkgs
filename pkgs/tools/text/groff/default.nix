@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ ghostscript ];
   nativeBuildInputs = [ perl ];
 
+  # Builds running without a chroot environment may detect the presence
+  # of /usr/X11 in the host system, leading to an impure build of the
+  # package. To avoid this issue, X11 support is explicitly disabled.
+  # Note: If we ever want to *enable* X11 support, then we'll probably
+  # have to pass "--with-appresdir", too.
+  configureFlags = "--without-x";
+
   doCheck = true;
 
   crossAttrs = {
