@@ -9185,7 +9185,9 @@ let
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
-  cups = callPackage ../misc/cups { };
+  cups = callPackage ../misc/cups {
+    stdenv = stdenvMulti;
+  };
 
   cups_pdf_filter = callPackage ../misc/cups/pdf-filter.nix { };
 
