@@ -769,6 +769,8 @@ let
 
   expect = callPackage ../tools/misc/expect { };
 
+  fabric = pythonPackages.fabric;
+
   fail2ban = callPackage ../tools/security/fail2ban { };
 
   fakeroot = callPackage ../tools/system/fakeroot { };
@@ -2627,6 +2629,7 @@ let
 
   julia = callPackage ../development/compilers/julia {
     liblapack = liblapack.override {shared = true;};
+    mpfr = mpfr_3_1_2;
     fftw = fftw.override {pthreads = true;};
     fftwSinglePrec = fftwSinglePrec.override {pthreads = true;};
   };
@@ -3992,6 +3995,7 @@ let
 
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr { };
+  mpfr_3_1_2 = callPackage ../development/libraries/mpfr/3.1.2.nix { };
 
   gst_all = {
     inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
@@ -5501,12 +5505,12 @@ let
 
   plone41Packages = recurseIntoAttrs (import ../development/web/plone/4.1.6.nix {
     inherit pkgs;
-    pythonPackages = python27Packages;
+    pythonPackages = python26Packages;
   });
 
   plone42Packages = recurseIntoAttrs (import ../development/web/plone/4.2.5.nix {
     inherit pkgs;
-    pythonPackages = python27Packages;
+    pythonPackages = python26Packages;
   });
 
   plone43Packages = recurseIntoAttrs (import ../development/web/plone/4.3.0.nix {
@@ -5592,9 +5596,7 @@ let
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
-  bind = callPackage ../servers/dns/bind {
-    inherit openssl libtool perl;
-  };
+  bind = callPackage ../servers/dns/bind { };
 
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_185;
@@ -7248,7 +7250,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox20Pkgs;
+  firefoxPkgs = pkgs.firefox21Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gnome) libIDL;
@@ -8220,7 +8222,7 @@ let
 
   vimHugeX = vim_configurable;
 
-  vim_configurable = import ../applications/editors/vim/configurable.nix {
+  vim_configurable = callPackage (import ../applications/editors/vim/configurable.nix) {
     inherit (pkgs) fetchurl stdenv ncurses pkgconfig gettext composableDerivation lib config;
     inherit (pkgs.xlibs) libX11 libXext libSM libXpm libXt libXaw libXau libXmu libICE;
     inherit (pkgs) glib gtk;
@@ -8233,6 +8235,8 @@ let
     # optional features by flags
     flags = [ "python" "X11" ]; # only flag "X11" by now
   };
+  vimLatest = vim_configurable.override { source = "latest"; };
+  vimNox = vim_configurable.override { source = "vim-nox"; };
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
   virtmanager = callPackage ../applications/virtualization/virt-manager {
@@ -9249,13 +9253,10 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
-  nixUnstable = nixStable;
-  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
-  */
 
   nut = callPackage ../applications/misc/nut { };
 
@@ -9417,6 +9418,8 @@ let
   vice = callPackage ../misc/emulators/vice { };
 
   viewnior = callPackage ../applications/graphics/viewnior { };
+
+  vimPlugins = callPackage ../misc/vim-plugins { };
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
     inherit (gnome) libsoup;

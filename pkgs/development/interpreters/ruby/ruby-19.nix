@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   
   src = fetchurl {
     url = "ftp://ftp.ruby-lang.org/pub/ruby/1.9/${name}.tar.bz2";
-    sha256 = "1ymq5lhp3fz0j3cs65521aihcnivbfrn76in900ccxd0msgfmld9";
+    sha256 = "0w1avj8qfskvkgvrjxxc1cxjm14bf1v60ipvcl5q3zpn9k14k2cx";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
     ++ (op yamlSupport libyaml);
 
   enableParallelBuilding = true;
-    
+  patches = [ ./ruby19-parallel-install.patch ];
+
   configureFlags = ["--enable-shared" "--enable-pthread"];
 
   installFlags = stdenv.lib.optionalString docSupport "install-doc";
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
   passthru = rec {
     majorVersion = "1.9";
     minorVersion = "3";
-    patchLevel = "194";
+    patchLevel = "429";
     libPath = "lib/ruby/${majorVersion}";
     gemPath = "lib/ruby/gems/${majorVersion}";
   };

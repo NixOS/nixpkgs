@@ -1,21 +1,21 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
  , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
- , tcl, tk, xproto, libX11, git
+ , tcl, tk, xproto, libX11, git, mpfr
  } :
 let
   realGcc = stdenv.gcc.gcc;
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20130205";
+  date = "20130611";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1.1";
   dsfmt_ver = "2.2";
   openblas_ver = "v0.2.2";
   lapack_ver = "3.4.1";
-  arpack_ver = "3.1.2";
+  arpack_ver = "3.1.3";
   clp_ver = "1.14.5";
   lighttpd_ver = "1.4.29";
   patchelf_ver = "0.6";
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
     sha256 = "19ffec70f9678f5c159feadc036ca47720681b782910fbaa95aa3867e7e86d8e";
   };
   arpack_src = fetchurl {
-    url = "http://forge.scilab.org/index.php/p/arpack-ng/downloads/497/get/";
-    name = "arpack-ng_${arpack_ver}.tar.gz";
-    sha256 = "1wk06bdjgap4hshx0lswzi7vxy2lrdx353y1k7yvm97mpsjvsf4k";
+    url = "http://forge.scilab.org/index.php/p/arpack-ng/downloads/607/get/";
+    name = "arpack-ng-${arpack_ver}.tar.gz";
+    sha256 = "039w7j3dr1xy35a3hp92zg2g92gmjq6xsv0g4awlb4cffy09nr2d";
   };
   lapack_src = fetchurl {
     url = "http://www.netlib.org/lapack/lapack-${lapack_ver}.tgz";
@@ -65,17 +65,17 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "efc696bf74eec7605b4da19f6f1605ba99959ed3";
-    sha256 = "19if7aj3mrp84dg9g2d3zbhasrq0nz28djl9a01m0y4y9bfymp7s";
+    rev = "60cc4e44bf415dcda90f2bbe22300f842fe44098";
+    sha256 = "018s0zyvdkxjldbvcdv40q3v2gcjznyyql5pv3zhhy1iq11jddfz";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
     fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
-    openblas liblapack tcl tk xproto libX11 git
+    openblas liblapack tcl tk xproto libX11 git mpfr
     ];
 
   configurePhase = ''
-    for i in GMP LLVM PCRE LAPACK OPENBLAS BLAS READLINE FFTW LIBUNWIND SUITESPARSE GLPK LIGHTTPD ZLIB; 
+    for i in GMP LLVM PCRE LAPACK OPENBLAS BLAS READLINE FFTW LIBUNWIND SUITESPARSE GLPK LIGHTTPD ZLIB MPFR; 
     do 
       makeFlags="$makeFlags USE_SYSTEM_$i=1 "
     done
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     copy_kill_hash "${dsfmt_src}" deps/random
 
     ${if realGcc ==null then "" else 
-    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring -lz "''}
+    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring -lz -lgmp -lmpfr"''}
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC "
 
     export LDFLAGS="-L${suitesparse}/lib -L$out/lib/julia -Wl,-rpath,$out/lib/julia"
@@ -110,6 +110,21 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     mkdir -p usr/lib
+    
+    echo "$out"
+    mkdir -p "$out/lib"
+    (
+    cd "$(mktemp -d)"
+    for i in "${suitesparse}"/lib/lib*.a; do
+      ar -x $i
+    done
+    gcc *.o --shared -o "$out/lib/libsuitesparse.so"
+    )
+    cp "$out/lib/libsuitesparse.so" usr/lib
+    for i in umfpack cholmod amd camd colamd spqr; do
+      ln -s libsuitesparse.so "$out"/lib/lib$i.so;
+      ln -s libsuitesparse.so "usr"/lib/lib$i.so;
+    done
   '';
 
   preInstall = ''

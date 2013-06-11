@@ -353,7 +353,6 @@ let
       emacs23Packages = {
         bbdb = linux;
         cedet = linux;
-        ecb = linux;
         emacsw3m = linux;
         emms = linux;
         jdee = linux;

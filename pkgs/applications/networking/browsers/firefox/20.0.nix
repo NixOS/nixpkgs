@@ -135,7 +135,6 @@ rec {
       [ "--enable-application=browser"
         "--with-libxul-sdk=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"
         "--enable-chrome-format=jar"
-        "--disable-elf-hack"
       ]
       ++ commonConfigureFlags
       ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";

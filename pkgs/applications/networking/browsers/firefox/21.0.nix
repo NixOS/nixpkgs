@@ -41,7 +41,7 @@ rec {
       "--with-system-nspr"
       "--with-system-nss"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
-      # "--enable-system-cairo" # <-- doesn't build
+      "--enable-system-cairo"
       "--enable-system-sqlite"
       "--disable-crashreporter"
       "--disable-tests"
@@ -71,6 +71,10 @@ rec {
       ] ++ commonConfigureFlags;
 
     enableParallelBuilding = true;
+
+    patches = [
+      ./system-cairo.patch # accepted upstream, probably in 22
+    ];
 
     preConfigure =
       ''
@@ -129,13 +133,16 @@ rec {
         xlibs.pixman yasm mesa sqlite file unzip pysqlite
       ];
 
+    patches = [
+      ./disable-reporter.patch # fixes "search box not working when built on xulrunner"
+    ];
+
     propagatedBuildInputs = [xulrunner];
 
     configureFlags =
       [ "--enable-application=browser"
         "--with-libxul-sdk=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"
         "--enable-chrome-format=jar"
-        "--disable-elf-hack"
       ]
       ++ commonConfigureFlags
       ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";

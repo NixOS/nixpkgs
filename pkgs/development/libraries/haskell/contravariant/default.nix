@@ -2,12 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "contravariant";
-  version = "0.4";
-  sha256 = "1nqslc9vcx6v6c33fn7mvb1xhr33yl3ja92p788zx8z1drx9cqc3";
+  version = "0.4.1";
+  sha256 = "0alzl47lqzw9fqjqxdfy40f1aynd8mc00b2h7fj2ch0zq82hm85q";
   buildDepends = [ tagged transformers transformersCompat ];
   meta = {
     homepage = "http://github.com/ekmett/contravariant/";
-    description = "Haskell 98 contravariant functors";
+    description = "Contravariant functors";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
