@@ -2,28 +2,28 @@
 
 with stdenv.lib;
 
-{ outputs ? [ "out" ], ... } @ args:
+{ outputs ? [ "out" ], setOutputConfigureFlags ? true, ... } @ args:
 
 stdenv.mkDerivation (args // {
 
   #postPhases = [ "fixupOutputsPhase" ] ++ args.postPhases or [];
 
   preHook =
-    optionalString (elem "man" outputs) ''
-      configureFlags="--mandir=$man/share/man $configureFlags"
-    '' +
-    ''
-      ${optionalString (elem "bin" outputs) ''
+    if setOutputConfigureFlags then
+      optionalString (elem "man" outputs) ''
+        configureFlags="--mandir=$man/share/man $configureFlags"
+      '' +
+      optionalString (elem "bin" outputs) ''
         configureFlags="--bindir=$bin/bin --mandir=$bin/share/man $configureFlags"
-      ''}
-      ${optionalString (elem "lib" outputs) ''
+      '' +
+      optionalString (elem "lib" outputs) ''
         configureFlags="--libdir=$lib/lib $configureFlags"
-      ''}
-      ${optionalString (elem "dev" outputs) ''
+      '' +
+      optionalString (elem "dev" outputs) ''
         configureFlags="--includedir=$dev/include $configureFlags"
         installFlags="pkgconfigdir=$dev/lib/pkgconfig m4datadir=$dev/share/aclocal aclocaldir=$dev/share/aclocal $installFlags"
-      ''}
-    '';
+      ''
+    else null;
 
   preFixup =
     ''
