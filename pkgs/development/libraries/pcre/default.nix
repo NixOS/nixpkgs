@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "5778a02535473c7ee7838ea598c19f451e63cf5eec0bf0307a688301c9078c3c";
   };
 
+  outputs = [ "dev" "out" "bin" "doc" "man" ];
+
   # The compiler on Darwin crashes with an internal error while building the
   # C++ interface. Disabling optimizations on that platform remedies the
   # problem. In case we ever update the Darwin GCC version, the exception for
@@ -18,6 +20,12 @@ stdenv.mkDerivation rec {
   '' + stdenv.lib.optionalString stdenv.isDarwin "CXXFLAGS=-O0";
 
   doCheck = !stdenv.isCygwin;                   # XXX: test failure on Cygwin
+
+  postInstall =
+    ''
+      mkdir $dev/bin
+      mv $bin/bin/pcre-config $dev/bin/
+    '';
 
   meta = {
     homepage = "http://www.pcre.org/";

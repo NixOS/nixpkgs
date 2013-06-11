@@ -4960,6 +4960,7 @@ let
   };
 
   pcre = callPackage ../development/libraries/pcre {
+    stdenv = stdenvMulti;
     unicodeSupport = config.pcre.unicode or true;
   };
 
