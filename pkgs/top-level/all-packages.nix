@@ -4217,7 +4217,9 @@ let
     inherit mesa SDL SDL_image SDL_mixer;
   };
 
-  jasper = callPackage ../development/libraries/jasper { };
+  jasper = callPackage ../development/libraries/jasper {
+    stdenv = stdenvMulti;
+  };
 
   jama = callPackage ../development/libraries/jama { };
 
@@ -4513,7 +4515,9 @@ let
 
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
-  libjpeg = callPackage ../development/libraries/libjpeg { };
+  libjpeg = callPackage ../development/libraries/libjpeg {
+    stdenv = stdenvMulti;
+  };
 
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
 
