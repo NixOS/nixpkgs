@@ -23,6 +23,8 @@ in
 
     builder = ./builder.sh;
 
+    outputs = [ "out" "dev" "bin" "static" ];
+
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new
     # store path than that determined when built (as a source for the
@@ -93,7 +95,7 @@ in
 
       # To avoid a dependency on the build system 'bash'.
       preFixup = ''
-        rm $out/bin/{ldd,tzselect,catchsegv,xtrace}
+        rm $bin/bin/{ldd,tzselect,catchsegv,xtrace}
       '';
     }
    else {}))

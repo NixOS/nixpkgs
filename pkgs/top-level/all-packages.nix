@@ -3902,6 +3902,7 @@ let
       }));
 
   glibc217 = callPackage ../development/libraries/glibc/2.17 {
+    stdenv = stdenvMulti;
     kernelHeaders = linuxHeaders;
     installLocales = config.glibc.locales or false;
     machHeaders = null;
