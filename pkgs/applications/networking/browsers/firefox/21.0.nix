@@ -133,6 +133,10 @@ rec {
         xlibs.pixman yasm mesa sqlite file unzip pysqlite
       ];
 
+    patches = [
+      ./disable-reporter.patch # fixes "search box not working when built on xulrunner"
+    ];
+
     propagatedBuildInputs = [xulrunner];
 
     configureFlags =
