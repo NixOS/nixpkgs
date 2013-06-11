@@ -2,6 +2,7 @@
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
+, hunspell, libevent, libstartup_notification, libvpx
 
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
@@ -40,8 +41,14 @@ rec {
       "--with-system-bz2"
       "--with-system-nspr"
       "--with-system-nss"
+      "--with-system-libevent"
+      "--with-system-libvpx"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
+      "--enable-startup-notification"
       "--enable-system-cairo"
+      "--enable-system-ffi"
+      "--enable-system-hunspell"
+      "--enable-system-pixman"
       "--enable-system-sqlite"
       "--disable-crashreporter"
       "--disable-tests"
@@ -63,6 +70,7 @@ rec {
         alsaLib nspr nss libnotify xlibs.pixman yasm mesa
         xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
         xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
+        hunspell libevent libstartup_notification libvpx
       ];
 
     configureFlags =
@@ -131,6 +139,7 @@ rec {
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr nss libnotify
         xlibs.pixman yasm mesa sqlite file unzip pysqlite
+        hunspell libevent libstartup_notification libvpx
       ];
 
     patches = [
