@@ -4636,7 +4636,11 @@ let
 
   libunique = callPackage ../development/libraries/libunique/default.nix { };
 
-  libusb = callPackage ../development/libraries/libusb { };
+  libusb = callPackage ../development/libraries/libusb {
+    stdenv = if stdenv.isDarwin
+      then overrideGCC stdenv gccApple
+      else stdenv;
+  };
 
   libusb1 = callPackage ../development/libraries/libusb1 { };
 
