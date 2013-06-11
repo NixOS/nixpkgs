@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mesa x11 libXmu libXi ];
 
+  patchPhase = ''
+    sed -i 's|lib64|lib|' config/Makefile.linux
+  '';
+
   installPhase = ''
     GLEW_DEST=$out make install
     mkdir -pv $out/share/doc/glew

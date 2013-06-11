@@ -2,21 +2,22 @@
 # nettools needed for hostname
 
 let
-  name = "Isabelle2012";
+  dirname = "Isabelle2013";
   theories = ["HOL" "FOL" "ZF"];
 in
 
 stdenv.mkDerivation {
-  inherit name theories;
+  name = "isabelle-2013";
+  inherit dirname theories;
 
   src = fetchurl {
-    url = http://www.cl.cam.ac.uk/research/hvg/isabelle/dist/Isabelle2012.tar.gz;
-    sha256 = "1w2k5cg0d9hyigax0hwp6d84jnylb13ysk4x5kwl2412xryravxq";
+    url = http://isabelle.in.tum.de/dist/Isabelle2013_linux.tar.gz;
+    sha256 = "0l17s41hwzma0q2glpxrzic8i6mqd9b7awlpwhz0jkli7fj6ny7b";
   };
 
   buildInputs = [ perl polyml nettools ];
 
-  sourceRoot = name;
+  sourceRoot = dirname;
 
   patches = [ ./settings.patch ];
 
@@ -40,8 +41,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    mv $TMP/$name $out
-    cd $out/$name
+    mv $TMP/$dirname $out
+    cd $out/$dirname
     bin/isabelle install -p $out/bin
   '';
 

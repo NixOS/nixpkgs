@@ -8,7 +8,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "iputils-${time}";
-  
+
   src = fetchurl {
     url = "http://www.skbuff.net/iputils/iputils-s${time}.tar.bz2";
     sha256 = "17riqp8dh8dvx32zv3hyrghpxz6xnxa6vai9b4yc485nqngm83s5";
@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
     sed -i s/sgmlspl/sgmlspl.pl/ doc/Makefile
   '';
 
-  buildInputs = [ libsysfs gnutls openssl libcap sp docbook_sgml_dtd_31 SGMLSpm ];
+  makeFlags = "USE_GNUTLS=no";
+
+  buildInputs = [ libsysfs openssl libcap sp docbook_sgml_dtd_31 SGMLSpm ];
 
   buildFlags = "man all ninfod";
 
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
       ln -s $out/share/man/man8/{ping,ping6}.8
       ln -s $out/share/man/man8/{tracepath,tracepath6}.8
     '';
-    
+
   meta = {
     homepage = http://www.skbuff.net/iputils/;
     description = "A set of small useful utilities for Linux networking";

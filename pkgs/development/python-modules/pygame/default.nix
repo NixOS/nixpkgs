@@ -1,46 +1,37 @@
-{ fetchurl, stdenv, python, pkgconfig, SDL, SDL_image, SDL_mixer, SDL_ttf
-, numeric }:
+{ stdenv, fetchurl, python, pkgconfig
+, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg
+}:
 
 stdenv.mkDerivation {
-  name = "pygame-1.7";
+  name = "pygame-1.9.1";
 
   src = fetchurl {
-    url = http://www.pygame.org/ftp/pygame-1.7.1release.tar.gz ;
-    sha256 = "0hl0rmgjcqj217fibwyilz7w9jpg0kh7hsa7vyzd4cgqyliskpqi";
+    url = "http://www.pygame.org/ftp/pygame-1.9.1release.tar.gz";
+    sha256 = "0cyl0ww4fjlf289pjxa53q4klyn55ajvkgymw0qrdgp4593raq52";
   };
 
-  buildInputs = [python pkgconfig SDL SDL_image SDL_ttf numeric];
- 
+  buildInputs = [
+    python pkgconfig SDL SDL_image SDL_mixer SDL_ttf libpng libjpeg
+  ];
+
+  patches = [ ./pygame-v4l.patch ];
+
   configurePhase = ''
-    export LOCALBASE=///
-    sed -e "/origincdirs =/a'${SDL_image}/include/SDL','${SDL_image}/include'," -i config_unix.py
-    sed -e "/origlibdirs =/aoriglibdirs += '${SDL_image}/lib'," -i config_unix.py
-    sed -e "/origincdirs =/a'${SDL_mixer}/include/SDL','${SDL_mixer}/include'," -i config_unix.py
-    sed -e "/origlibdirs =/aoriglibdirs += '${SDL_mixer}/lib'," -i config_unix.py
-    sed -e "/origincdirs =/a'${SDL_ttf}/include/SDL','${SDL_ttf}/include'," -i config_unix.py
-    sed -e "/origlibdirs =/aoriglibdirs += '${SDL_ttf}/lib'," -i config_unix.py
-    sed -e "/origincdirs =/a'${numeric}/include/python2.5'," -i config_unix.py
+    for i in ${SDL_image} ${SDL_mixer} ${SDL_ttf} ${libpng} ${libjpeg}; do
+      sed -e "/origincdirs =/a'$i/include'," -i config_unix.py
+      sed -e "/origlibdirs =/aoriglibdirs += '$i/lib'," -i config_unix.py
+    done
 
-    sed -e "s|get_python_inc(0)|\"${numeric}/include/python2.5\"|g" -i config_unix.py
-
-    # XXX: `Numeric.pth' should be found by Python but it's not, hence the
-    # $PYTHONPATH setting below.  Gobolinux has the same problem:
-    # http://bugs.python.org/issue1431 .
-    yes Y | \
-      PYTHONPATH="${numeric}/lib/python2.5/site-packages/Numeric:$PYTHONPATH" \
-      python config.py
-
-    # That `config.py' is really deeply broken.
-    sed -i Setup \
-        -e "s|^NUMERIC *=.*$|NUMERIC = -I${numeric}/include/python2.5|g ;
-            s|^MIXER *=.*$|MIXER = -I${SDL_mixer}/include -L${SDL_mixer}/lib -lSDL_mixer|g"
+    yes Y | LOCALBASE=/ python config.py
   '';
 
-  buildPhase = "yes Y | python setup.py build";	
+  buildPhase = "python setup.py build"; 
 
-  installPhase = "yes Y | python setup.py install --prefix=\${out} ";
+  installPhase = "python setup.py install --prefix=$out";
 
   meta = {
     description = "Python library for games";
+    homepage = "http://www.pygame.org/";
+    licences = "LGPLv2.1+";
   };
 }

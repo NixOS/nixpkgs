@@ -3,10 +3,11 @@
   randrproto, xcbutil, xf86vidmodeproto }:
 
 stdenv.mkDerivation rec {
-  name = "redshift";
+  pname = "redshift";
   version = "1.6";
+  name = "${pname}-${version}";
   src = fetchurl {
-    url = "http://launchpad.net/${name}/trunk/${version}/+download/${name}-${version}.tar.bz2";
+    url = "http://launchpad.net/${pname}/trunk/${version}/+download/${pname}-${version}.tar.bz2";
     sha256 = "0g46zhqnx3y2fssmyjgaardzhjw1j29l1dbc2kmccw9wxqfla1wi";
   };
 

@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "stm-conduit";
-  version = "2.0.0";
-  sha256 = "015gz4fqijgcs6dls5l8ry47q4a33a6ik0hsj5mw48iw44af39jr";
+  version = "2.1.0";
+  sha256 = "0rxnw7kpxvhwmpbn2v9ps0b2hw9321817nyywjjq3x8fadg8w99l";
   buildDepends = [ conduit resourcet stm stmChans transformers ];
   testDepends = [
     conduit HUnit QuickCheck stm stmChans testFramework

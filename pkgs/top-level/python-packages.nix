@@ -975,6 +975,25 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  fabric = buildPythonPackage rec {
+    name = "fabric-1.6.1";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/F/Fabric/Fabric-1.6.1.tar.gz;
+      sha256 = "058psbhqbfm3n214wkyfpgm069yqmdqw1hql9bac1yv9pza3bzx1";
+    };
+    propagatedBuildInputs = [ paramiko pycrypto ];
+    buildInputs = [ fudge nose ];
+  }; 
+
+  fudge = buildPythonPackage rec {
+    name = "fudge-0.9.4";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/f/fudge/fudge-0.9.4.tar.gz;
+      sha256 = "03sj2x6mpzm48swpa4hnn1gi6yilgniyjfg1ylz95wm1ijggi33w";
+    };
+    buildInputs = [ nose nosejs ];
+    propagatedBuildInputs = [ sphinx ];
+  };
 
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.1";
@@ -1951,7 +1970,7 @@ pythonPackages = python.modules // rec {
     };
 
     meta = {
-      homepage = "http://code.google.com/p/httplib2";
+      homepage = http://code.google.com/p/httplib2;
       description = "A comprehensive HTTP client library";
       license = pkgs.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
@@ -2167,6 +2186,26 @@ pythonPackages = python.modules // rec {
     propagatedBuildInputs = [ unittest2 ];
   };
 
+  "lxml-2.3.6" = buildPythonPackage rec {
+    name = "lxml-2.3.6";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/l/lxml/lxml-2.3.6.tar.gz";
+      md5 = "d5d886088e78b1bdbfd66d328fc2d0bc";
+    };
+    buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
+    propagatedBuildInputs = [  ];
+    doCheck = false;
+    installCommand = ''
+      easy_install --always-unzip --no-deps --prefix="$out" .
+    '';
+
+    meta = {
+      description = "Pythonic binding for the libxml2 and libxslt libraries";
+      homepage = http://codespeak.net/lxml/index.html;
+      license = "BSD";
+    };
+  };
+
   lxml = buildPythonPackage ( rec {
     name = "lxml-3.0.2";
 
@@ -2376,6 +2415,35 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  mitmproxy = buildPythonPackage rec {
+    baseName = "mitmproxy";
+    name = "${baseName}-${meta.version}";
+
+    src = fetchurl {
+      url = "${meta.homepage}/download/${name}.tar.gz";
+      sha256 = "1ddqni6d4kc8ypl6yig4nc00izvbk359sz6hykb9g0lfcpfqlngj";
+    };
+    
+    buildInputs = [
+      pkgs.pyopenssl pyasn1 urwid pil lxml flask protobuf netlib
+    ];
+
+    doCheck = false;
+
+    postInstall = ''
+      for prog in $out/bin/*; do
+        wrapProgram "$prog" \
+          --prefix PYTHONPATH : "$PYTHONPATH"
+      done
+    '';
+
+    meta = {
+      version = "0.9";
+      description = ''Man-in-the-middle proxy'';
+      homepage = "http://mitmproxy.org/";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
 
   mock = buildPythonPackage (rec {
     name = "mock-1.0.1";
@@ -2581,6 +2649,29 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  netlib = buildPythonPackage rec {
+    baseName = "netlib";
+    name = "${baseName}-${meta.version}";
+
+    src = fetchurl {
+      url = "https://github.com/cortesi/netlib/archive/v${meta.version}.tar.gz";
+      name = "${name}.tar.gz";
+      sha256 = "1y8lx2j1jrr93mqfb06zg1x5jm9lllw744sb61ib8dagw43nnq3v";
+    };
+    
+    buildInputs = [
+      pkgs.pyopenssl pyasn1
+    ];
+
+    doCheck = false;
+
+    meta = {
+      version = "0.9";
+      description = ''Man-in-the-middle proxy'';
+      homepage = "https://github.com/cortesi/netlib";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
 
   nevow = buildPythonPackage (rec {
     name = "nevow-${version}";
@@ -2665,6 +2756,15 @@ pythonPackages = python.modules // rec {
     };
     propagatedBuildInputs = [ covCore nose2 ];
   });
+
+  nosejs = buildPythonPackage {
+    name = "nosejs-0.9.4";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/N/NoseJS/NoseJS-0.9.4.tar.gz;
+      sha256 = "0qrhkd3sga56qf6k0sqyhwfcladwi05gl6aqmr0xriiq1sgva5dy";
+    };
+    buildInputs = [ nose ];
+  };
 
   notify = pkgs.stdenv.mkDerivation (rec {
     name = "python-notify-0.1.1";
@@ -2768,6 +2868,21 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  obfsproxy = buildPythonPackage ( rec {
+    name = "obfsproxy-0.2.2";
+    src = fetchgit {
+      url = https://git.torproject.org/pluggable-transports/obfsproxy.git;
+      rev = "3c4e843a30c430aec1de03e0e09ef654072efc03";
+    };
+
+    propagatedBuildInputs = [ pyptlib argparse twisted pycrypto ];
+
+    meta = {
+      description = "a pluggable transport proxy";
+      homepage = https://www.torproject.org/projects/obfsproxy;
+    };
+  });
+
   # optfunc = buildPythonPackage ( rec {
   #   name = "optfunc-git";
   #
@@ -2834,11 +2949,11 @@ pythonPackages = python.modules // rec {
 
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.7.7.1";
+    name = "paramiko-1.10";
 
     src = fetchurl {
-      url = "http://www.lag.net/paramiko/download/${name}.tar.gz";
-      sha256 = "1bjy4jn51c50mpq51jbwk0glzd8bxz83gxdfkr9p95dmrd17c7hh";
+      url = https://pypi.python.org/packages/source/p/paramiko/paramiko-1.10.1.tar.gz;
+      sha256 = "1g5sbzfxdhps61z3vm30wa87m5xq1j9ar3qvgr5bz63l7nxhvb2z";
     };
 
     buildInputs = [ pycrypto ];
@@ -3204,11 +3319,11 @@ pythonPackages = python.modules // rec {
 
 
   pyasn1 = buildPythonPackage ({
-    name = "pyasn1-0.0.11a";
+    name = "pyasn1-0.1.7";
 
     src = fetchurl {
-      url = "mirror://sourceforge/pyasn1/pyasn1-devel/0.0.11a/pyasn1-0.0.11a.tar.gz";
-      sha256 = "0b7q67ygdk48zn07pyhyg7r0b74gds50652ndpzfw4vs8l3vjg0b";
+      url = "mirror://sourceforge/pyasn1/0.1.7/pyasn1-0.1.7.tar.gz";
+      sha256 = "1aqy21fb564gmnkw2fbkn55c40diyx3z0ixh4savvxikqm9ivy74";
     };
 
     meta = {
@@ -3486,6 +3601,19 @@ pythonPackages = python.modules // rec {
       description = "The pyparsing module is an alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions.";
     };
   };
+
+  pyptlib = buildPythonPackage (rec {
+    name = "pyptlib-${version}";
+    version = "0.0.3";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyptlib/pyptlib-${version}.tar.gz";
+      sha256 = "0mklak456jqifx57j9jmpb69h3ybxc880qk86pg4g8jk0i14pxh3";
+    };
+    meta = {
+      description = "A python implementation of the Pluggable Transports for Circumvention specification for Tor";
+      license = stdenv.lib.licenses.bsd2;
+    };
+  });
 
   pyrss2gen = buildPythonPackage (rec {
     name = "PyRSS2Gen-1.0.0";
@@ -5820,5 +5948,62 @@ pythonPackages = python.modules // rec {
       maintainers = [ stdenv.lib.maintainers.rickynils ];
     };
   };
+
+  gdata = buildPythonPackage rec {
+    name = "gdata-${version}";
+    version = "2.0.17";
+
+    src = fetchurl {
+      url = "https://gdata-python-client.googlecode.com/files/${name}.tar.gz";
+      # sha1 = "d2d9f60699611f95dd8c328691a2555e76191c0c";
+      sha256 = "0bdaqmicpbj9v3p0swvyrqs7m35bzwdw1gy56d3k09np692jfwmd";
+    };
+
+    # Fails with "error: invalid command 'test'"
+    doCheck = false;
+
+    meta = {
+      homepage = https://code.google.com/p/gdata-python-client/;
+      description = "Python client library for Google data APIs";
+      license = pkgs.lib.licenses.asl20;
+    };
+  };
+
+  IMAPClient = buildPythonPackage rec {
+    name = "IMAPClient-${version}";
+    version = "0.9.2";
+
+    src = fetchurl {
+      url = "http://freshfoo.com/projects/IMAPClient/${name}.tar.gz";
+      sha256 = "10alpj7074djs048xjc4j7ggd1nrqdqpy0fzl7fj9hddp0rbchs9";
+    };
+
+    preConfigure = ''
+      sed -i '/distribute_setup/d' setup.py
+    '';
+
+    meta = {
+      homepage = http://imapclient.freshfoo.com/;
+      description = "Easy-to-use, Pythonic and complete IMAP client library";
+      license = pkgs.lib.licenses.bsd3;
+    };
+  };
+
+  Logbook = buildPythonPackage rec {
+    name = "Logbook-${version}";
+    version = "0.4.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/L/Logbook/${name}.tar.gz";
+      # md5 = "143cb15af4c4a784ca785a1546ad1b93";
+      sha256 = "0iim9pcyl57c6z9i1kfw5nz92qrnpz2l0bz4lir2xrqi8m03q3d7";
+    };
+
+    meta = {
+      homepage = http://pythonhosted.org/Logbook/;
+      description = "A logging replacement for Python";
+      license = pkgs.lib.licenses.bsd3;
+    };
+ };
 
 }; in pythonPackages

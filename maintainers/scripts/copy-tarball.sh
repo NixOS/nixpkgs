@@ -1,6 +1,6 @@
 #! /bin/sh -e
 
-distDir=/data/webserver/tarballs
+distDir=${NIX_TARBALLS_CACHE:-/tarballs}
 
 url="$1"
 file="$2"

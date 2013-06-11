@@ -1,15 +1,15 @@
-{ cabal, filepath, libXrandr, mtl, parsec, stm, time, utf8String
-, wirelesstools, X11, X11Xft
+{ cabal, filepath, libXrandr, mtl, parsec, regexCompat, stm, time
+, utf8String, wirelesstools, X11, X11Xft
 }:
 
 cabal.mkDerivation (self: {
   pname = "xmobar";
-  version = "0.17";
-  sha256 = "0ahb3xqxcfvpgxyb901bpl4i56mnslzwplcqxrr13glngcl7d25s";
+  version = "0.18";
+  sha256 = "08kk0yjx51vjrvvvd34hv8v80dsh8kjv150qf413ikaff0i28v7w";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    filepath mtl parsec stm time utf8String X11 X11Xft
+    filepath mtl parsec regexCompat stm time utf8String X11 X11Xft
   ];
   extraLibraries = [ libXrandr wirelesstools ];
   configureFlags = "-fwith_xft -fwith_iwlib";

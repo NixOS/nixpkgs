@@ -608,8 +608,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
 
   bmp_1_2_2_1 = callPackage ../development/libraries/haskell/bmp/1.2.2.1.nix {};
-  bmp_1_2_4_1 = callPackage ../development/libraries/haskell/bmp/1.2.4.1.nix {};
-  bmp = self.bmp_1_2_2_1;       # later versions work only with ghc 7.6 and beyond
+  bmp_1_2_5_2 = callPackage ../development/libraries/haskell/bmp/1.2.5.2.nix {};
+  bmp = self.bmp_1_2_5_2;
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
@@ -1182,6 +1182,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   HsOpenSSL = callPackage ../development/libraries/haskell/HsOpenSSL {};
 
+  hsshellscript = callPackage ../development/libraries/haskell/hsshellscript {};
+
   HStringTemplate = callPackage ../development/libraries/haskell/HStringTemplate {};
 
   hspread = callPackage ../development/libraries/haskell/hspread {};
@@ -1277,6 +1279,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   languageCQuote = callPackage ../development/libraries/haskell/language-c-quote {};
 
+  languageJava = callPackage ../development/libraries/haskell/language-java {};
+
   languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
@@ -1296,6 +1300,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   lens = callPackage ../development/libraries/haskell/lens {};
 
   lenses = callPackage ../development/libraries/haskell/lenses {};
+
+  libffi = callPackage ../development/libraries/haskell/libffi {
+    libffi = pkgs.libffi;
+  };
 
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
@@ -1540,6 +1548,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
 
   pgm = callPackage ../development/libraries/haskell/pgm {};
+
+  pipes = callPackage ../development/libraries/haskell/pipes {};
+
+  pipesConcurrency = callPackage ../development/libraries/haskell/pipes-concurrency {};
+
+  pipesParse = callPackage ../development/libraries/haskell/pipes-parse {};
+
+  pipesSafe = callPackage ../development/libraries/haskell/pipes-safe {};
 
   polyparse = callPackage ../development/libraries/haskell/polyparse {};
 
@@ -2091,6 +2107,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
 
+  yesodPlatform = callPackage ../development/libraries/haskell/yesod-platform {};
+
   yesodRoutes = callPackage ../development/libraries/haskell/yesod-routes {};
 
   yesodStatic = callPackage ../development/libraries/haskell/yesod-static {};
@@ -2216,6 +2234,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   darcs = callPackage ../applications/version-management/darcs {};
 
+  idris_plain = callPackage ../development/compilers/idris {};
+
+  idris = callPackage ../development/compilers/idris/wrapper.nix {};
+
   leksah = callPackage ../applications/editors/leksah {
     QuickCheck = self.QuickCheck2;
   };
@@ -2245,6 +2267,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix {};
   cabalInstall = self.cabalInstall_1_16_0_2;
+
+  gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {};
 
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
 

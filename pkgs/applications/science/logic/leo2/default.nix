@@ -23,7 +23,7 @@ rec {
     sha256 = sourceInfo.hash;
   };
 
-  inherit (sourceInfo) name version;
+  name = "${sourceInfo.baseName}-${sourceInfo.version}";
   inherit buildInputs;
 
   phaseNames = ["makeInstallationDir" "doUnpack" "doMake" "doFinalize"];

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version="0.8.7";
-  name = "gsmartcontrol";
+  name = "gsmartcontrol-${version}";
 
   src = fetchurl {
     url = "http://artificialtime.com/gsmartcontrol/gsmartcontrol-${version}.tar.bz2";

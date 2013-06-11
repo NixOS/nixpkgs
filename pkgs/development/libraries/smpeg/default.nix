@@ -1,7 +1,7 @@
 { stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk, m4, pkgconfig, mesa }:
 
 stdenv.mkDerivation rec {
-  name = "smpeg-svn-${version}";
+  name = "smpeg-svn${version}";
   version = "390";
 
   src = fetchsvn {

@@ -1,7 +1,7 @@
 { fetchgit, stdenv, perl }:
 
 stdenv.mkDerivation {
-  name = "git2cl";
+  name = "git2cl-20080827";
 
   src = fetchgit {
     url = "git://repo.or.cz/git2cl.git";

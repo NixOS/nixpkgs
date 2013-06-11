@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lifted-base";
-  version = "0.2.0.5";
-  sha256 = "1an7wlz31szccbypbrh59i3py210mh7jbfi0zaizd32q0im1573r";
+  version = "0.2.1.0";
+  sha256 = "0c4vzyfyjvqv5q8mprgxf9ckibpp5k1zh9k5slmdsd9m1l3pwwqy";
   buildDepends = [
     baseUnicodeSymbols monadControl transformersBase
   ];
