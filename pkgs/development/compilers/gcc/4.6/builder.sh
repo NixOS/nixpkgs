@@ -224,7 +224,7 @@ postInstall() {
     done
 
     # Get rid of some "fixed" header files
-    rm -rf $out/lib/gcc/*/*/include/root
+    rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux}
 
     # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
     for i in $out/bin/*-gcc*; do
