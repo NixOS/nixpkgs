@@ -2625,6 +2625,7 @@ let
 
   julia = callPackage ../development/compilers/julia {
     liblapack = liblapack.override {shared = true;};
+    mpfr = mpfr_3_1_2;
     fftw = fftw.override {pthreads = true;};
     fftwSinglePrec = fftwSinglePrec.override {pthreads = true;};
   };
@@ -3998,6 +3999,7 @@ let
 
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr { };
+  mpfr_3_1_2 = callPackage ../development/libraries/mpfr/3.1.2.nix { };
 
   gst_all = {
     inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
