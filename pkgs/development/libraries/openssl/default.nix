@@ -46,8 +46,9 @@ stdenv.mkDerivation {
 
   patches = patchesCross false;
 
-  # TODO: separate lib.
-  outputs = [ "out" "man" "bin" ];
+  outputs = [ "dev" "out" "man" "bin" ];
+
+  setOutputConfigureFlags = false;
 
   buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
 
@@ -78,6 +79,9 @@ stdenv.mkDerivation {
       mv $out/bin $bin/
 
       rm -rf $out/etc/ssl/misc
+
+      mkdir $dev
+      mv $out/include $dev/
     ''; # */
 
   crossAttrs = {

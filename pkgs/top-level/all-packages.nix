@@ -4941,6 +4941,7 @@ let
   openscenegraph = callPackage ../development/libraries/openscenegraph {};
 
   openssl = callPackage ../development/libraries/openssl {
+    stdenv = stdenvMulti;
     fetchurl = fetchurlBoot;
     cryptodevHeaders = linuxPackages.cryptodev.override {
       fetchurl = fetchurlBoot;
