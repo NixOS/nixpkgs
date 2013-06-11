@@ -41,7 +41,7 @@ rec {
       "--with-system-nspr"
       "--with-system-nss"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
-      # "--enable-system-cairo" # <-- doesn't build
+      "--enable-system-cairo"
       "--enable-system-sqlite"
       "--disable-crashreporter"
       "--disable-tests"
@@ -71,6 +71,10 @@ rec {
       ] ++ commonConfigureFlags;
 
     enableParallelBuilding = true;
+
+    patches = [
+      ./system-cairo.patch # accepted upstream, probably in 22
+    ];
 
     preConfigure =
       ''
