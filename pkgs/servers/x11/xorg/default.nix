@@ -905,7 +905,7 @@ let
       url = mirror://xorg/individual/xcb/libxcb-1.9.tar.bz2;
       sha256 = "15icn78x610dvvgnji6b3pyn8nd88lz68hq0w73pcadf78mycmw8";
     };
-    outputs = [ "dev" "out" "doc" ];
+    outputs = [ "dev" "out" "doc" "man" ];
     buildInputs = [pkgconfig libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
   })) // {inherit libxslt libpthreadstubs python libXau xcbproto libXdmcp ;};
     
