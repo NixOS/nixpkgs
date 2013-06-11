@@ -8,9 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "1hlz2kqvbjisvwyicdincq7nz897b9rrafyzccwzqiqg53b8gf5s";
   };
 
+  outputs = [ "out" "doc" "man" "modules" ];
+
   nativeBuildInputs = [ flex ];
 
   buildInputs = [ cracklib ];
+
+  enableParallelBuilding = true;
 
   crossAttrs = {
     propagatedBuildInputs = [ flex.crossDrv cracklib.crossDrv ];
@@ -30,6 +34,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mv -v $out/sbin/unix_chkpwd{,.orig}
     ln -sv /var/setuid-wrappers/unix_chkpwd $out/sbin/unix_chkpwd
+
+    rm -rf $out/etc
+
+    mkdir -p $modules/lib
+    mv $out/lib/security $modules/lib/
   '';
 
   preConfigure = ''
