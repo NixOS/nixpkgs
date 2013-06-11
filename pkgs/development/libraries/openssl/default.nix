@@ -77,7 +77,7 @@ stdenv.mkDerivation {
       mkdir -p $bin
       mv $out/bin $bin/
 
-      rm -rf $out/ssl/misc
+      rm -rf $out/etc/ssl/misc
     ''; # */
 
   crossAttrs = {
