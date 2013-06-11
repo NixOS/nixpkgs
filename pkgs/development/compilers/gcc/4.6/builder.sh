@@ -29,7 +29,7 @@ if test "$noSysDirs" = "1"; then
         # Use *real* header files, otherwise a limits.h is generated
         # that does not include Glibc's limits.h (notably missing
         # SSIZE_MAX, which breaks the build).
-        export NIX_FIXINC_DUMMY=$(cat $NIX_GCC/nix-support/orig-libc)/include
+        export NIX_FIXINC_DUMMY=$libc_dev/include
 
         # The path to the Glibc binaries such as `crti.o'.
         glibc_libdir="$(cat $NIX_GCC/nix-support/orig-libc)/lib"
@@ -170,9 +170,8 @@ preConfigure() {
         # Patch the configure script so it finds glibc headers.  It's
         # important for example in order not to get libssp built,
         # because its functionality is in glibc already.
-        glibc_headers="$(cat $NIX_GCC/nix-support/orig-libc)/include"
         sed -i \
-            -e "s,glibc_header_dir=/usr/include,glibc_header_dir=$glibc_headers", \
+            -e "s,glibc_header_dir=/usr/include,glibc_header_dir=$libc_dev/include", \
             gcc/configure
     fi
 
