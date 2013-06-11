@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, ruby, rake, rubygems, makeWrapper }:
+{ stdenv, fetchurl, ncurses, ruby, rake, rubygems, makeWrapper, gpgme }:
 
 stdenv.mkDerivation {
   name = "sup-d21f027afcd6a4031de9619acd8dacbd2f2f4fd4";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   configurePhase = "";
 
-  buildInputs = [ ncurses ruby rake rubygems makeWrapper ];
+  buildInputs = [ ncurses ruby rake rubygems makeWrapper gpgme ];
 
   buildPhase = "rake gem";
 

@@ -2,9 +2,9 @@
 # 'echo "pinentry-program `which pinentry-gtk-2`" >> ~/.gnupg/gpg-agent.conf'.
 
 { fetchurl, stdenv, readline, zlib, libgpgerror, pth, libgcrypt, libassuan
-, libksba, coreutils, useLdap ? true, openldap ? null
-, useBzip2 ? true, bzip2 ? null, useUsb ? true, libusb ? null
-, useCurl ? true, curl ? null
+, libksba, coreutils, libiconv
+, useLdap ? true, openldap ? null, useBzip2 ? true, bzip2 ? null
+, useUsb ? true, libusb ? null, useCurl ? true, curl ? null
 }:
 
 assert useLdap -> (openldap != null);
@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "16mp0j5inrcqcb3fxbn0b3aamascy3n923wiy0y8marc0rzrp53f";
   };
 
-  buildInputs = [ readline zlib libgpgerror libgcrypt libassuan libksba pth ]
+  buildInputs
+    = [ readline zlib libgpgerror libgcrypt libassuan libksba pth libiconv ]
     ++ stdenv.lib.optional useLdap openldap
     ++ stdenv.lib.optional useBzip2 bzip2
     ++ stdenv.lib.optional useUsb libusb
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     find tests -type f | xargs sed -e 's@/bin/pwd@${coreutils}&@g' -i
+    find . -name pcsc-wrapper.c | xargs sed -i 's/typedef unsinged int pcsc_dword_t/typedef unsigned int pcsc_dword_t/'
   '';
 
   checkPhase="GNUPGHOME=`pwd` ./agent/gpg-agent --daemon make check";
