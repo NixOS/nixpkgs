@@ -1,9 +1,9 @@
-{ kde, kdelibs, libxml2, libxslt, kdepimlibs, nepomuk_core, htmlTidy, boost }:
+{ kde, kdelibs, libxml2, libxslt, kdepimlibs, htmlTidy, boost }:
 
 kde {
 #todo: ruby is not found. needed for some example scripts
   buildInputs =
-    [ kdelibs kdepimlibs htmlTidy nepomuk_core boost ];
+    [ kdelibs kdepimlibs htmlTidy boost ];
 
   meta = {
     description = "A KDE link checker";

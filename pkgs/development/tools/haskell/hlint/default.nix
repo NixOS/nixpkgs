@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hlint";
-  version = "1.8.44";
-  sha256 = "075m8q933yqzq85m07j9m22f1gh38vjnr04wvpw4h4dl552ivzp6";
+  version = "1.8.46";
+  sha256 = "0mq25xv0lmxfp9099pj7akmmw5pi0adq2w286wb4lpli82v8nfzf";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -16,9 +16,6 @@ cabal.mkDerivation (self: {
     description = "Source code suggestions";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

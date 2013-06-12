@@ -130,7 +130,7 @@ rec {
 
 
   /* Common platform groups on which to test packages. */
-  inherit (pkgs.lib.platforms) linux darwin cygwin allBut all mesaPlatforms;
+  inherit (pkgs.lib.platforms) unix linux darwin cygwin allBut all mesaPlatforms;
 
   /* Platform groups for specific kinds of applications. */
   x11Supported = linux;

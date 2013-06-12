@@ -13,6 +13,7 @@
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
   bbenoist = "Baptist BENOIST <return_0@live.com>";
   bjg = "Brian Gough <bjg@gnu.org>";
+  bjornfor = "Bjørn Forsman <bjorn.forsman@gmail.com>";
   bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
@@ -26,8 +27,8 @@
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
-  the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
   neznalek = "Vladimír Čunát <vcunat@gmail.com>";
+  offline = "Jaka Hudoklin <jakahudoklin@gmail.com>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   page = "Carles Pagès <page@cubata.homelinux.net>";
   phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";
@@ -43,6 +44,7 @@
   simons = "Peter Simons <simons@cryp.to>";
   smironov = "Sergey Mironov <ierton@gmail.com>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
+  the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";

@@ -11,7 +11,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ardour3";
+  name = "ardour-3.0";
 
   src = fetchgit {
     url = git://git.ardour.org/ardour/ardour.git;

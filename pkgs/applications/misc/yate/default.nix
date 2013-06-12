@@ -3,7 +3,7 @@
 let inherit (composableDerivation) edf wwf; in
 
 composableDerivation.composableDerivation {} ( fixed : {
-  name = "yate2";
+  name = "yate-2.2.0_1";
 
   src = fetchurl {
     url = http://yate.null.ro/tarballs/yate2/yate2.tar.gz;

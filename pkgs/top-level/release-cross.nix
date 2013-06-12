@@ -334,4 +334,49 @@ in {
     mpg123.crossDrv = nativePlatforms;
     yacas.crossDrv = nativePlatforms;
   };
+}) // (
+
+
+/* Linux on Raspberrypi */
+let
+  crossSystem = {
+    config = "armv6l-unknown-linux-gnueabi";
+    bigEndian = false;
+    arch = "arm";
+    float = "hard";
+    fpu = "vfp";
+    withTLS = true;
+    libc = "glibc";
+    platform = pkgs.platforms.raspberrypi;
+    openssl.system = "linux-generic32";
+    gcc = {
+      arch = "armv6";
+      fpu = "vfp";
+      float = "softfp";
+      abi = "aapcs-linux";
+    };
+  };
+in {
+  rpi = mapTestOnCross crossSystem {
+    coreutils.crossDrv = nativePlatforms;
+    ed.crossDrv = nativePlatforms;
+    inetutils.crossDrv = nativePlatforms;
+    nixUnstable.crossDrv = nativePlatforms;
+    patch.crossDrv = nativePlatforms;
+    vim.crossDrv = nativePlatforms;
+    tmux.crossDrv = nativePlatforms;
+    screen.crossDrv = nativePlatforms;
+    unrar.crossDrv = nativePlatforms;
+    unzip.crossDrv = nativePlatforms;
+    hdparm.crossDrv = nativePlatforms;
+    ddrescue.crossDrv = nativePlatforms;
+    git.crossDrv = nativePlatforms;
+    lynx.crossDrv = nativePlatforms;
+    patchelf.crossDrv = nativePlatforms;
+    nix.crossDrv = nativePlatforms;
+    fossil.crossDrv = nativePlatforms;
+    binutils.crossDrv = nativePlatforms;
+    mpg123.crossDrv = nativePlatforms;
+    yacas.crossDrv = nativePlatforms;
+  };
 })

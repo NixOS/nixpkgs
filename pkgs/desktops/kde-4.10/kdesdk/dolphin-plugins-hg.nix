@@ -1,11 +1,15 @@
 { kde, kdelibs, kde_baseapps }:
 
 kde {
-#todo: doesn't build
+
   # Needs kdebase for libkonq
   buildInputs = [ kdelibs kde_baseapps ];
 
+  patchPhase = ''
+    sed -i 's@macro_optional_add_subdirectory(hg)@add_subdirectory(hg)@' dolphin-plugins/CMakeLists.txt
+  '';
+
   meta = {
-    description = "Svn plugin for dolphin";
+    description = "Mercurial plugin for dolphin";
   };
 }

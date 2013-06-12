@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "A client library for the D-Bus IPC system";
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

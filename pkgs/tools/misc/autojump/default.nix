@@ -12,7 +12,7 @@ in
       sha256 = "07jf5pa9xwmbswsc0h6law9f5qwczsj25w7h034s379imid5h62f";
     };
 
-    buildInputs = [ python ];
+    buildInputs = [ python bash ];
     dontBuild = true;
 
     installPhase = ''
@@ -49,7 +49,7 @@ in
         Autojump supports tab-completion.
       '';
       homepage = http://wiki.github.com/joelthelion/autojump;
-      license = stdenv.lib.license.gpl3;
+      license = stdenv.lib.licenses.gpl3;
       platforms = stdenv.lib.platforms.all;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };

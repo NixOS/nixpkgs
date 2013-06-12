@@ -10,14 +10,12 @@ cabal.mkDerivation (self: {
     ListLike MonadCatchIOTransformers monadControl parallel
     transformers transformersBase
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.tiresiaspress.us/haskell/iteratee";
     description = "Iteratee-based I/O";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

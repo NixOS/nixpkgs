@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "hddtemp-0.3-beta15";
+  name = "hddtemp-0.3_beta15";
 
   db = fetchurl{
     url = http://download.savannah.nongnu.org/releases/hddtemp/hddtemp.db;

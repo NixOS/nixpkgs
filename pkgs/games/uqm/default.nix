@@ -1,9 +1,18 @@
-{stdenv, fetchurl 
+{ stdenv, fetchurl
 , pkgconfig, mesa
 , SDL, SDL_image, libpng, zlib, libvorbis, libogg, libmikmod, unzip
+, use3DOVideos ? false, requireFile ? null, writeText ? null
+, fetchgit ? null, haskellPackages ? null
 }:
 
-stdenv.mkDerivation rec {
+assert use3DOVideos -> requireFile != null && writeText != null
+                    && fetchgit != null && haskellPackages != null;
+
+let
+  videos = import ./3dovideo.nix {
+    inherit stdenv requireFile writeText fetchgit haskellPackages;
+  };
+in stdenv.mkDerivation rec {
   name = "uqm-${version}";
   version = "0.7.0";
 
@@ -41,7 +50,9 @@ stdenv.mkDerivation rec {
     cp $content uqm-${version}/content/packages/uqm-0.7.0-content.uqm
     cp $music uqm-${version}/content/addons/uqm-0.7.0-3domusic.uqm
     cp $voice uqm-${version}/content/addons/uqm-0.7.0-voice.uqm
-    '';
+  '' + stdenv.lib.optionalString use3DOVideos ''
+    ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"
+  '';
 
   /* uqm has a 'unique' build system with a root script incidentally called
  * 'build.sh'. */
@@ -52,16 +63,16 @@ stdenv.mkDerivation rec {
     echo "INPUT_install_libdir_VALUE='$out/lib'" >> config.state
     echo "INPUT_install_sharedir_VALUE='$out/share'" >> config.state
     PREFIX=$out ./build.sh uqm config
-    ''; 
+  '';
 
   buildPhase = ''
     ./build.sh uqm
-    '';
+  '';
 
   installPhase = ''
     ./build.sh uqm install
     sed -i $out/bin/uqm -e "s%/usr/local/games/%$out%g"
-    '';
+  '';
 
   meta = {
     description = "Remake of Star Control II";

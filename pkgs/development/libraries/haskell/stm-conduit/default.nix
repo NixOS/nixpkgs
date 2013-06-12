@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "stm-conduit";
-  version = "1.1.0";
-  sha256 = "1b5v3vf9izzpw3vaslskhdxqnc1zmag1f3x50dh8r1nl318ndkf7";
+  version = "2.1.0";
+  sha256 = "0rxnw7kpxvhwmpbn2v9ps0b2hw9321817nyywjjq3x8fadg8w99l";
   buildDepends = [ conduit resourcet stm stmChans transformers ];
   testDepends = [
     conduit HUnit QuickCheck stm stmChans testFramework
@@ -17,6 +17,5 @@ cabal.mkDerivation (self: {
     description = "Introduces conduits to channels, and promotes using conduits concurrently";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

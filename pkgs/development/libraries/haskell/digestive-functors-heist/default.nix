@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "digestive-functors-heist";
-  version = "0.6.2.0";
-  sha256 = "03wxdmgwc6qialwhp5zdj3s3a8a8yz6vswfgryjx4izaaq7pdhl1";
+  version = "0.7.0.0";
+  sha256 = "0ljsr4yy3pb4cjg9dcgfcs9rn1ihg3xi9ak5p3h3kw3w19d1hsaq";
   buildDepends = [
     blazeBuilder digestiveFunctors heist mtl text xmlhtml
   ];
@@ -13,6 +13,5 @@ cabal.mkDerivation (self: {
     description = "Heist frontend for the digestive-functors library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

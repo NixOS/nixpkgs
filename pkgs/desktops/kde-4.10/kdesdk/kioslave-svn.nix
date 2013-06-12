@@ -1,10 +1,8 @@
 { kde, kdelibs, subversionClient, apr, aprutil }:
 
 kde {
-#todo: doesn't build
-  buildInputs = [ kdelibs subversionClient apr aprutil ];
 
-  patches = [ ./find-svn.patch ];
+  buildInputs = [ kdelibs subversionClient apr aprutil ];
 
   meta = {
     description = "Subversion kioslave";

@@ -1,12 +1,12 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation {
-  name = "gnulib-0.0-7901-g076ac82";
+  name = "gnulib-0.0-7952-g439b0e9";
 
   src = fetchgit {
     url = "http://git.savannah.gnu.org/r/gnulib.git";
-    rev = "076ac82d1d7f4df54630f1b4917b3c14f227f032";
-    sha256 = "023q3gqjrs8zdk31d81d3bcv9n5770nns0h5vq31saa5391qbpvn";
+    rev = "439b0e925f9ffb6fe58481717def708af96a9321";
+    sha256 = "0xvnqn3323w0wnd1p7dhkcd4mihfh2dby88kv2dsclszppd9g4dc";
   };
 
   buildPhase = ":";

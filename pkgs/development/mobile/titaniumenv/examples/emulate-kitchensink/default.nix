@@ -1,7 +1,7 @@
 {androidenv, kitchensink}:
 
 androidenv.emulateApp {
-  name = "kitchensink";
+  name = "emulate-${kitchensink.name}";
   app = kitchensink;
   platformVersion = "16";
   useGoogleAPIs = true;

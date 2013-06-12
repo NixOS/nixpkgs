@@ -336,8 +336,8 @@
   md5 = "d197bd6211669a2fa4ca648faf04bcb1";
 }
 {
-  name = "mdds_0.5.3.tar.bz2";
-  md5 = "0ff7d225d087793c8c2c680d77aac3e7";
+  name = "mdds_0.6.1.tar.bz2";
+  md5 = "9f9e15966b5624834157fe3d748312bc";
 }
 {
   name = "boost_1_44_0.tar.bz2";
@@ -352,8 +352,8 @@
   md5 = "3bf481ca95109b14435125c0dd1f2217";
 }
 {
-  name = "libvisio-0.0.18.tar.bz2";
-  md5 = "a9a1db27688bad49418667b434d29c1f";
+  name = "libvisio-0.0.19.tar.bz2";
+  md5 = "94e7f271e38c976462558b4278590178";
 }
 {
   name = "LinLibertineG-20120116.zip";
@@ -364,15 +364,11 @@
   md5 = "0d2dcdfbf28d6208751b33057f5361f0";
 }
 {
-  name = "libcdr-0.0.8.tar.bz2";
-  md5 = "ce5a1def34578b75959ac31210f031f6";
+  name = "libcdr-0.0.9.tar.bz2";
+  md5 = "3c0037fb07dea2f0bbae8386fa7c6a9a";
 }
 {
   name = "lcms2-2.3.tar.gz";
   md5 = "327348d67c979c88c2dec59a23a17d85";
-}
-{
-  name = "libvisio-0.0.19.tar.bz2";
-  md5 = "94e7f271e38c976462558b4278590178";
 }
 ]

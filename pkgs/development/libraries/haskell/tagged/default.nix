@@ -9,9 +9,6 @@ cabal.mkDerivation (self: {
     description = "Haskell 98 phantom types to avoid unsafely passing dummy arguments";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

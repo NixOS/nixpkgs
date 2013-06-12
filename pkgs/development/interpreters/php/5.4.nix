@@ -9,7 +9,7 @@ in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.4.14";
+  version = "5.4.15";
 
   name = "php-${version}";
 
@@ -90,7 +90,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
       gd = {
         # FIXME: Our own gd package doesn't work, see https://bugs.php.net/bug.php?id=60108.
-        configureFlags = ["--with-gd=shared --with-freetype-dir=${freetype} --with-png-dir=${libpng}"];
+        configureFlags = ["--with-gd --with-freetype-dir=${freetype} --with-png-dir=${libpng}"];
         buildInputs = [ libpng libjpeg freetype ];
       };
 
@@ -144,6 +144,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         configureFlags = ["--enable-zip"];
       };
 
+      ftp = {
+        configureFlags = ["--enable-ftp"];
+      };
+
       /*
          php is build within this derivation in order to add the xdebug lines to the php.ini.
          So both Apache and command line php both use xdebug without having to configure anything.
@@ -181,13 +185,22 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     mcryptSupport = config.php.mcrypt or false;
     bz2Support = config.php.bz2 or false;
     zipSupport = config.php.zip or true;
+    ftpSupport = config.php.ftp or true;
   };
 
   configurePhase = ''
+    # Don't record the configure flags since this causes unnecessary
+    # runtime dependencies.
+    for i in main/build-defs.h.in scripts/php-config.in; do
+      substituteInPlace $i \
+        --replace '@CONFIGURE_COMMAND@' '(omitted)' \
+        --replace '@CONFIGURE_OPTIONS@' "" \
+        --replace '@PHP_LDFLAGS@' ""
+    done
+
     iniFile=$out/etc/php-recommended.ini
     [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
     ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out $configureFlags
-    echo configurePhase end
   '';
 
   installPhase = ''
@@ -197,7 +210,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   src = fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
-    sha256 = "02p23g4gjijazq16r5kwbkval2lkw76g0086n0zynlf67f2g6l2l";
+    sha256 = "0dh159svdrakvm9nsyg3yyln7cqqzpxgs2163cqxplnc93d8a8id";
     name = "php-${version}.tar.bz2";
   };
 

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "reactive-banana";
-  version = "0.7.1.1";
-  sha256 = "0d4dqpzglzkygy2hhn1j1c7vk2782mk66f8aqaadkyhijn7kc6i5";
+  version = "0.7.1.2";
+  sha256 = "1x4ln3dr937va0ii7lr86d6wsrh2qd1sxany4y9dkpcrsvb3db0l";
   buildDepends = [ hashable transformers unorderedContainers vault ];
   testDepends = [
     hashable HUnit testFramework testFrameworkHunit transformers
@@ -19,7 +19,6 @@ cabal.mkDerivation (self: {
     maintainers = [
       self.stdenv.lib.maintainers.andres
       self.stdenv.lib.maintainers.bluescreen303
-      self.stdenv.lib.maintainers.simons
     ];
   };
 })

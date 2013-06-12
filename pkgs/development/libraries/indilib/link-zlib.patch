@@ -1,0 +1,12 @@
+diff -Naur libindi-0.9.6-upstream/CMakeLists.txt libindi-0.9.6/CMakeLists.txt
+--- libindi-0.9.6-upstream/CMakeLists.txt	2012-11-19 16:09:14.000000000 -0430
++++ libindi-0.9.6/CMakeLists.txt	2013-05-02 16:50:25.666624174 -0430
+@@ -169,7 +169,7 @@
+ # To link with main() and indibase classes  ######
+ ##################################################
+ add_library(indidriver SHARED ${libindicom_SRCS} ${liblilxml_SRCS} ${indimain_SRCS} ${indidriver_SRCS})
+-target_link_libraries(indidriver ${LIBUSB_LIBRARIES})
++target_link_libraries(indidriver z ${LIBUSB_LIBRARIES})
+ if (NOVA_FOUND)
+ target_link_libraries(indidriver ${NOVA_LIBRARIES})
+ endif(NOVA_FOUND)

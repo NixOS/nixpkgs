@@ -8,6 +8,5 @@ cabal.mkDerivation (self: {
     description = "Simple, Haskell 2010-compatible type level natural numbers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

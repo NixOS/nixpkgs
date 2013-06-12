@@ -10,9 +10,6 @@ cabal.mkDerivation (self: {
     description = "A small, efficient and portable regex library for Perl 5 compatible regular expressions";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

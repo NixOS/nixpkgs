@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "libyaml";
+  name = "libyaml-0.1.3";
 
   src = fetchurl {
     url = http://pyyaml.org/download/libyaml/yaml-0.1.3.tar.gz;

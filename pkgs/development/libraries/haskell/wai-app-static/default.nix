@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-app-static";
-  version = "1.3.1.2";
-  sha256 = "1i0j3n0cp1zq43g06nb3cxajd4k9isg4chdwzzlyimm078a9w54x";
+  version = "1.3.1.3";
+  sha256 = "0h6m1an3srkvyaz50w16v2mhjyfdqbqq2d7ng3yhrrmb1fyvhas1";
   buildDepends = [
     base64Bytestring blazeBuilder blazeHtml blazeMarkup cereal
     cryptoConduit cryptohash fileEmbed httpDate httpTypes mimeTypes
@@ -22,9 +22,6 @@ cabal.mkDerivation (self: {
     description = "WAI application for static serving";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

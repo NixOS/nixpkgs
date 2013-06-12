@@ -10,6 +10,9 @@
 , flashplayerFix ? false, gdk_pixbuf
 , gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
 , developerBuild ? false
+, docs ? false
+, examples ? false
+, demos ? false
 }:
 
 with stdenv.lib;
@@ -72,7 +75,9 @@ stdenv.mkDerivation rec {
       -exceptions -xmlpatterns
 
       -make libs -make tools -make translations
-      -nomake demos -nomake examples -nomake docs
+      -${if demos then "" else "no"}make demos
+      -${if examples then "" else "no"}make examples
+      -${if docs then "" else "no"}make docs
 
       -no-phonon ${if buildWebkit then "" else "-no"}-webkit ${if buildMultimedia then "" else "-no"}-multimedia -audio-backend
       ${if developerBuild then "-developer-build" else ""}
@@ -143,7 +148,7 @@ stdenv.mkDerivation rec {
     homepage = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";
-    maintainers = with maintainers; [ urkud sander ];
+    maintainers = with maintainers; [ urkud sander phreedom ];
     platforms = platforms.linux;
   };
 }

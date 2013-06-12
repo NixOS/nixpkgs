@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   name = "engine_pkcs11-0.1.8";
   
   src = fetchurl {
-    url = "http://www.opensc-project.org/files/engine_pkcs11/${name}.tar.gz";
+    urls = [
+      "http://www.opensc-project.org/files/engine_pkcs11/${name}.tar.gz"
+      "http://www.openadk.org/distfiles/${name}.tar.gz"
+    ];
     sha256 = "1rd20rxy12rfx3kwwvk5sqvc1ll87z60rqak1ksfwbf4wx0pwzfy";
   };
   

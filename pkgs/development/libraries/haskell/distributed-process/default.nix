@@ -20,15 +20,13 @@ cabal.mkDerivation (self: {
     testFrameworkHunit
   ];
   noHaddock = true;
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "http://github.com/haskell-distributed/distributed-process";
     description = "Cloud Haskell: Erlang-style concurrency in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

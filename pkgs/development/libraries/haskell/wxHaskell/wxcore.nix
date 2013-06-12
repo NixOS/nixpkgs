@@ -8,14 +8,14 @@ cabal.mkDerivation (self: {
   sha256 = "0d79hr6cz9zj3w57h6630nfnsmfq1w73gz04jjmlhwh8ih557imw";
   buildDepends = [ filepath parsec stm time wxc wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
+  patchPhase = ''
+    sed -i -e 's|containers >=.*|containers|' wxcore.cabal
+  '';
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell core";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

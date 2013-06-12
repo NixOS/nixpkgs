@@ -22,9 +22,11 @@ stdenv.mkDerivation {
     install -Dm755 bin/release/premake4 $out/bin/premake4
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://industriousone.com/premake;
     description = "A simple build configuration and project generation tool using lua";
     license = stdenv.lib.licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = [maintainers.bjornfor];
   };
 }

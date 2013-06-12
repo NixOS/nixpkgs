@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lifted-base";
-  version = "0.2.0.4";
-  sha256 = "0ljqa56gd4760x7x32v75n6a4h8f03p2g4xajaj3917w4w2rf5rp";
+  version = "0.2.1.0";
+  sha256 = "0c4vzyfyjvqv5q8mprgxf9ckibpp5k1zh9k5slmdsd9m1l3pwwqy";
   buildDepends = [
     baseUnicodeSymbols monadControl transformersBase
   ];
@@ -18,9 +18,6 @@ cabal.mkDerivation (self: {
     description = "lifted IO operations from the base library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

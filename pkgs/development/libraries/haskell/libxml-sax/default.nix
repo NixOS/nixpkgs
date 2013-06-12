@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Bindings for the libXML2 SAX interface";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

@@ -1,5 +1,5 @@
-{ kde, kdelibs, kdepimlibs, nepomuk_core }:
+{ kde, kdelibs, kdepimlibs }:
 
 kde {
-  buildInputs = [ kdelibs kdepimlibs nepomuk_core];
+  buildInputs = [ kdelibs kdepimlibs ];
 }

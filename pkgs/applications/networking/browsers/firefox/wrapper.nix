@@ -1,4 +1,4 @@
-{ stdenv, browser, makeDesktopItem, makeWrapper, plugins, libs
+{ stdenv, browser, makeDesktopItem, makeWrapper, plugins, libs, gtk_modules
 , browserName, desktopName, nameSuffix, icon
 }:
 
@@ -28,6 +28,7 @@ stdenv.mkDerivation {
         "$out/bin/${browserName}${nameSuffix}" \
         --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
         --suffix-each LD_LIBRARY_PATH ':' "$libs" \
+        --suffix-each GTK_PATH ':' "$gtk_modules" \
         --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
         --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))"
 
@@ -43,6 +44,7 @@ stdenv.mkDerivation {
   # where to find the plugin in its tree.
   plugins = map (x: x + x.mozillaPlugin) plugins;
   libs = map (x: x + "/lib") libs ++ map (x: x + "/lib64") libs;
+  gtk_modules = map (x: x + x.gtkModule) gtk_modules;
 
   meta = {
     description =

@@ -1,33 +1,26 @@
 { stdenv, fetchsvn, ocaml, zlib, neko }:
 
 stdenv.mkDerivation {
-  name = "haxe-2.10";
+  name = "haxe-3.00";
 
   buildInputs = [ocaml zlib neko];
 
-  srcs = fetchsvn {
-    url = "http://haxe.googlecode.com/svn/tags/v2-10";
-    sha256 = "0vwdlj0vmmf97bg6cish7yah36aca2q599vwzbr1m0jpjbvindkh";
-    ignoreExternals = true;
-  };
-
-  ocamllibs = fetchsvn {
-    url = "http://ocamllibs.googlecode.com/svn/trunk";
-    sha256 = "143s320xn2xalm0lnw46h1fvy48qg7my3j8cf66f0wwzv2fisr1q";
-    rev = 256;
-    ignoreExternals = true;
+  src = fetchsvn {
+    url = "http://haxe.googlecode.com/svn/trunk";
+    sha256 = "0hg8qailhgrcdk7r4k9kmwfl9d9ds0vy0l7wbv5wdrrc34qzifm4";
+    rev = 6706;
   };
 
   prePatch = ''
-    cp -r "$ocamllibs" libs
-    chmod -R u+w libs
     sed -i -e 's|com.class_path <- \[|&"'"$out/lib/haxe/std/"'";|' main.ml
   '';
 
   postBuild = ''
     find std/tools -name '*.n' -delete
-    rm std/tools/haxedoc/haxedoc std/tools/haxelib/haxelib
+    rm -f std/tools/haxedoc/haxedoc std/tools/haxelib/haxelib
   '';
+
+  buildFlags = [ "all" "tools" ];
 
   installPhase = ''
     install -vd "$out/bin" "$out/lib/haxe/std"

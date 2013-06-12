@@ -9,6 +9,5 @@ cabal.mkDerivation (self: {
     description = "Use HUnit assertions as QuickCheck properties";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

@@ -164,6 +164,7 @@ let
       AIC79XX_DEBUG_ENABLE n
       AIC7XXX_DEBUG_ENABLE n
       AIC94XX_DEBUG n
+      AUDIT_LOGINUID_IMMUTABLE y
       B43_PCMCIA y
       BLK_DEV_CMD640_ENHANCED y # CMD640 enhanced support
       BLK_DEV_IDEACPI y # IDE ACPI support
@@ -214,8 +215,8 @@ let
       # Linux Containers
       RT_GROUP_SCHED? y
       CGROUP_DEVICE? y
-      CGROUP_MEM_RES_CTLR? y
-      CGROUP_MEM_RES_CTLR_SWAP? y
+      MEMCG? y
+      MEMCG_SWAP? y
       DEVPTS_MULTIPLE_INSTANCES? y
 
       # Enable staging drivers.  These are somewhat experimental, but
@@ -237,6 +238,9 @@ let
       DEVTMPFS y
 
       # Media support
+      MEDIA_SUPPORT y
+      MEDIA_DIGITAL_TV_SUPPORT y
+
       MEDIA_CAMERA_SUPPORT? y
       MEDIA_RC_SUPPORT? y
       MEDIA_USB_SUPPORT y
@@ -252,7 +256,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.8.10";
+    version = "3.8.13";
     testing = false;
 
     preConfigure = ''
@@ -261,7 +265,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "0nhjprr1yvkb9fvyjxxdds0j71vidpbqqnmrf0cym3a4l3fxqj5p";
+      sha256 = "0pznsj89020fjl8dhcyf7r5bh95b27727gs0ri9has4i2z63blbw";
     };
 
     config = configWithPlatform stdenv.platform;

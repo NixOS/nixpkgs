@@ -1,12 +1,12 @@
-{ stdenv, fetchgit, emacs }:
+{ stdenv, fetchurl, emacs }:
 
-stdenv.mkDerivation {
-  name = "haskell-mode-2.8.0.29-gae3e4499d2";
+stdenv.mkDerivation rec {
+  name = "haskell-mode-2.9.1-102-g8d4b965";
 
-  src = fetchgit {
-    url = "http://github.com/haskell/haskell-mode.git";
-    rev = "ae3e4499d27a1468bdf88ffe0ce15cd7e4bb9f2a";
-    sha256 = "29a1725da620c13ff2b3b56906e76dd9f19317eee92bd5750b3aa9a4264effae";
+  src = fetchurl {
+    url = "https://github.com/haskell/haskell-mode/tarball/8d4b9651a69b62fcbedbac63de29a1e87ff0e97f";
+    sha256 = "02sil43885xjbfqakrxkm7bjnjd930lx6845fc2rxmkq5plkq85a";
+    name = "${name}.tar.gz";
   };
 
   buildInputs = [emacs];

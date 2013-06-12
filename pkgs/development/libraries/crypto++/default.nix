@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   # I add what 'enableParallelBuilding' would add to the make call,
   # if we were using the generic build phase.
   buildPhase = ''
-    make PREFIX="$out" all -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
+    make PREFIX="$out" all libcryptopp.so -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
   '';
 
   # TODO: Installing cryptotest.exe doesn't seem to be necessary. We run

@@ -5,11 +5,11 @@
 stdenv.mkDerivation rec {
   p_name  = "xfce4-terminal";
   ver_maj = "0.6";
-  ver_min = "1";
+  ver_min = "2";
 
   src = fetchurl {
     url = "mirror://xfce/src/apps/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "1j6lpkq952mrl5p24y88f89wn9g0namvywhma639xxsswlkn8d31";
+    sha256 = "0d9vbkvbxxhv022mwyihrabmj8y9097bp57n1a412qyji0i454ix";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 

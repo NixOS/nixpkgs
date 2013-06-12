@@ -36,6 +36,8 @@ import ./generic.nix (
     #features.needsCifsUtils = true;
     #features.canDisableNetfilterConntrackHelpers = true;
     #features.netfilterRPFilter = true;
+
+    extraMeta.platforms = [];
   }
 
   // removeAttrs args ["extraConfig"]

@@ -1,6 +1,6 @@
 { swingSupport ? true
 , stdenv
-, fetchurl
+, requireFile
 , unzip
 , makeWrapper
 , xlibs ? null
@@ -32,13 +32,15 @@ stdenv.mkDerivation {
 
   src =
     if stdenv.system == "i686-linux" then
-      fetchurl {
-        url = http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jdk-6u45-linux-i586.bin;
+      requireFile {
+        name = "jdk-6u45-linux-i586.bin";
+        url = http://www.oracle.com/technetwork/java/javase/downloads/jdk6downloads-1902814.html;
         sha256 = "0mx3d2qlal5zyz1a7ld1yk2rs8pf9sjxs2jzasais3nq30jmlfym";
       }
     else if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        url = http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jdk-6u45-linux-x64.bin;
+      requireFile {
+        name = "jdk-6u45-linux-x64.bin";
+        url = http://www.oracle.com/technetwork/java/javase/downloads/jdk6downloads-1902814.html;
         sha256 = "1s0j1pdr6y8c816d9i86rx4zp12nbhmas1rxksp0r53cn7m3ljbb";
       }
     else

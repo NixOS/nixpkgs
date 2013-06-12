@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "zsync-0.6.1";
+  name = "zsync-0.6.2";
 
   src = fetchurl {
     url = "http://zsync.moria.org.uk/download/${name}.tar.bz2";
-    sha256 = "13rbq2m2d4c4qqzadr1cfzrryqxvjgafr8cmask9w2acc0zpv7v1";
+    sha1 = "5e69f084c8adaad6a677b68f7388ae0f9507617a";
   };
 
   meta = {

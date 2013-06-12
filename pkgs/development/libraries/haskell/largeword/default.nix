@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "largeword";
-  version = "1.0.4";
-  sha256 = "19nrzbbbmsvxdhfhh6wc53lbk0xyjvbcwvjw0snym666j1w2b2l5";
+  version = "1.0.5";
+  sha256 = "0icwqwpn59xd0qfpaihvwz1waax617qqcl05jv9f26sjdr8688dl";
   testDepends = [
     HUnit QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2
@@ -15,9 +15,6 @@ cabal.mkDerivation (self: {
     description = "Provides Word128, Word192 and Word256 and a way of producing other large words if required";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

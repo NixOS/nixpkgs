@@ -17,6 +17,5 @@ cabal.mkDerivation (self: {
     description = "Use system-filepath data types with conduits";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

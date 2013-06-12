@@ -1,7 +1,8 @@
 {titaniumenv, fetchgit, target, androidPlatformVersions ? [ "11" ]}:
 
 titaniumenv.buildApp {
-  name = "KitchenSink";
+  name = "KitchenSink-${target}";
+  appName = "KitchenSink";
   appId = "com.appcelerator.kitchensink";
   src = fetchgit {
     url = https://github.com/appcelerator/KitchenSink.git;

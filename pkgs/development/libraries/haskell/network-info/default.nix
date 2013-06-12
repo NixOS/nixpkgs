@@ -9,6 +9,5 @@ cabal.mkDerivation (self: {
     description = "Access the local computer's basic network configuration";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

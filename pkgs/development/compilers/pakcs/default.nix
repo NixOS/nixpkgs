@@ -1,62 +1,101 @@
-{ stdenv, fetchurl, ghc, swiProlog, syb, mtl, makeWrapper, rlwrap, tk }:
+{ stdenv, fetchurl, cabal, swiProlog, mtl, syb, makeWrapper, rlwrap, tk }:
 
-stdenv.mkDerivation {
-  name = "pakcs-1.10.0";
+let
+  fname = "pakcs-1.11.2";
 
-  src = fetchurl {
-    url = "http://www.informatik.uni-kiel.de/~pakcs/download/pakcs_src.tar.gz";
-    sha256 = "6a4a45c9f3d0b61cfec8414943c2a852bec3665a7e2638b039193dd43e9802c4";
+  fsrc = fetchurl {
+    url = "http://www.informatik.uni-kiel.de/~pakcs/download/${fname}-src.tar.gz";
+    sha256 = "1x23kn91v44my4rd8j3247pj8i2myz82rzgbq07asi1x21bpvvmy";
   };
 
-  buildInputs = [ ghc swiProlog syb mtl makeWrapper rlwrap tk ];
+in
+stdenv.mkDerivation rec {
 
-  prePatch = ''
-    # Remove copying pakcsrc into $HOME.
-    sed -i '/update-pakcsrc/d' Makefile
+  name = fname;
 
-    # Remove copying pakcsinitrc into $HOME
-    sed -i '68d' configure-pakcs
+  curryBase = cabal.mkDerivation(self: {
+    pname = "curryBase";
+    version = "local";
+    src = fsrc;
+    sourceRoot = "${name}/frontend/curry-base";
+    isLibrary = true;
+    buildDepends = [ mtl syb ];
+  });
+
+  curryFront = cabal.mkDerivation(self: {
+    pname = "curryFront";
+    version = "local";
+    src = fsrc;
+    sourceRoot = "${name}/frontend/curry-frontend";
+    isLibrary = true;
+    isExecutable = true;
+    buildDepends = [ mtl syb curryBase ];
+  });
+
+  src = fsrc;
+
+  buildInputs = [ swiProlog makeWrapper rlwrap tk ];
+
+  patches = [ ./adjust-buildsystem.patch ];
+
+  configurePhase = ''
+    # Phony HOME.
+    mkdir phony-home
+    export HOME=$(pwd)/phony-home
+
+    # SWI Prolog
+    sed -i 's@SWIPROLOG=@SWIPROLOG='${swiProlog}/bin/swipl'@' pakcsinitrc
   '';
 
-  patches = [ ./pakcs-ghc741.patch ];
-
-  preConfigure = ''
-    # Path to GHC and SWI Prolog
-    sed -i 's@GHC=@GHC=${ghc}/bin/ghc@' bin/.pakcs_variables
-    sed -i 's@SWIPROLOG=@SWIPROLOG=${swiProlog}/bin/swipl@' bin/.pakcs_variables
+  preBuild = ''
+    # Set up link to cymake, which has been built already.
+    ensureDir bin/.local
+    ln -s ${curryFront}/bin/cymake bin/.local/
   '';
 
-  postInstall = ''
-    cp pakcsrc $out/
-    cp update-pakcsrc $out/
-    cp -r bin/ $out/
-    cp -r cpns/ $out/
-    cp -r curry2prolog/ $out/
-    cp -r docs/ $out/
-    cp -r examples/ $out/
-    cp -r include/ $out/
-    cp -r lib/ $out/
-    cp -r mccparser/ $out/
-    cp -r tools/ $out/
-    cp -r www/ $out/
+  installPhase = ''
+    # Prepare PAKCSHOME directory.
+    ensureDir $out/pakcs
+    for d in bin curry2prolog currytools lib tools cpns include www examples docs ; do
+      cp -r $d $out/pakcs ;
+    done
+    cp pakcsrc.default $out/pakcs
+    cp pakcsinitrc $out/pakcs
 
-    # The Prolog sources must be built in their final directory.
-    (cd $out/curry2prolog/ ; make)
+    # Fixing PAKCSHOME and related paths.
+    sed -i 's@PAKCSHOME=/tmp/.*@PAKCSHOME='$out/pakcs'@' $out/pakcs/bin/{pakcs,makecurrycgi,parsecurry,.makesavedstate}
 
-    mkdir -p $out/share/emacs/site-lisp/curry-pakcs
-    for e in "$out/tools/emacs/"*.el ; do
-      ln -s $e $out/share/emacs/site-lisp/curry-pakcs/;
+    # Fix symbolic links into the tmp build dir.
+    ln -s ../currytools/CASS/cass $out/pakcs/bin/cass
+    ln -s ../currytools/currydoc/CurryDoc $out/pakcs/bin/currydoc
+
+    # The Prolog sources must be rebuilt in their final directory,
+    # to switch the embedded references to the tmp build directory.
+    export TEMP=/tmp
+    (cd $out/pakcs/curry2prolog/ ; rm c2p.state ; make)
+    cp Makefile $out/pakcs
+    (cd $out/pakcs ; make tools)
+    (cd $out/pakcs/cpns ; make)
+    (cd $out/pakcs/www ; make)
+
+    # Install bin.
+    ensureDir $out/bin
+    for b in makecurrycgi .makesavedstate pakcs parsecurry cleancurry \
+             addtypes cass currybrowse currycreatemake currydoc currytest \
+             dataToXml erd2curry ; do
+      ln -s $out/pakcs/bin/$b $out/bin/ ;
     done
 
-    sed -i 's@which@type -P@' $out/bin/.pakcs_wrapper
+    # Place emacs lisp files in expected locations.
+    ensureDir $out/share/emacs/site-lisp/curry-pakcs
+    for e in "tools/emacs/"*.el ; do
+      cp $e $out/share/emacs/site-lisp/curry-pakcs/ ;
+    done
 
-    # Get the program name from the environment instead of the calling wrapper (for rlwrap).
-    sed -i 's@progname=`basename "$0"`@progname=$PAKCS_PROGNAME@' $out/bin/.pakcs_wrapper
-
-    wrapProgram $out/bin/.pakcs_wrapper \
+    # Wrap for rlwrap and tk support.
+    wrapProgram $out/pakcs/bin/pakcs \
       --prefix PATH ":" "${rlwrap}/bin" \
       --prefix PATH ":" "${tk}/bin" \
-      --run 'export PAKCS_PROGNAME=`basename "$0"`'
   '';
 
   meta = {
@@ -77,6 +116,6 @@ stdenv.mkDerivation {
     '';
 
     maintainers = [ stdenv.lib.maintainers.kkallio ];
-    #platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
