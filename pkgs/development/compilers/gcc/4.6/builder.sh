@@ -208,7 +208,11 @@ preInstall() {
 postInstall() {
     # Move runtime libraries to $lib.
     mkdir -p $lib/lib
-    mv -v $out/lib/lib*.so $out/lib/lib*.so.*[0-9] $lib/lib/
+    ln -s lib $lib/lib64
+    mv -v $out/lib/lib*.so $out/lib/lib*.so.*[0-9] $out/lib/*.la $lib/lib/
+    for i in $lib/lib/*.la; do
+        substituteInPlace $i --replace $out $lib
+    done
 
     # Remove precompiled headers for now.  They are very big and
     # probably not very useful yet.
