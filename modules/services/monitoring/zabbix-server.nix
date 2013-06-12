@@ -100,6 +100,7 @@ in
         serviceConfig.Type = "forking";
         serviceConfig.Restart = "always";
         serviceConfig.RestartSec = 2;
+        serviceConfig.PIDFile = pidFile;
       };
 
   };
