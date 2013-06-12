@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "fc7e7fa95f282fc37a591a802629e0e1ed07bc2a8bf162228d9a69dd76127c01";
   };
 
+  doCheck = true;
+
   meta = {
     homepage = http://nixos.org/patchelf.html;
     license = "GPL";
