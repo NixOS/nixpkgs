@@ -1,6 +1,6 @@
 { stdenv, runCommand, emacs, gnutar}:
 
-args @ { name, src, deps ? [], flags ? [], ... }:
+args @ { name, src, deps ? [], ... }:
 
 with stdenv.lib;
 
