@@ -42,9 +42,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://www.linux-france.org/prj/imapsync/";
-    description = "Mail folder synchronizer between IMAP servers";
-    license = "GPLv2+";
+    homepage = "http://slic3r.org";
+    description = "G-code generator for 3D printers";
+    license = "AGPLv3";
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }
