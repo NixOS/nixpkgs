@@ -82,6 +82,10 @@ stdenv.mkDerivation {
 
       mkdir $dev
       mv $out/include $dev/
+
+      # OpenSSL installs readonly files, which otherwise we can't strip.
+      # FIXME: Can remove this after the next stdenv merge.
+      chmod -R +w $out
     ''; # */
 
   crossAttrs = {
@@ -92,14 +96,6 @@ stdenv.mkDerivation {
       export configureFlags="--libdir=lib --cross-compile-prefix=${stdenv.cross.config}- shared ${opensslCrossSystem}"
     '';
 
-    postInstall = ''
-      # Openssl installs readonly files, which otherwise we can't strip.
-      # This could at some stdenv hash change be put out of crossAttrs, too
-      chmod -R +w $out
-
-      # Remove references to perl, to avoid depending on it at runtime
-      rm $out/bin/c_rehash $out/ssl/misc/CA.pl $out/ssl/misc/tsget
-    '';
     configureScript = "./Configure";
   };
 
