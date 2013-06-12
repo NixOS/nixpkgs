@@ -1,4 +1,4 @@
-{ stdenv, buildPerlPackage, fetchgit, perl, perlPackages, makeWrapper }:
+{ stdenv, fetchgit, perl, perlPackages, makeWrapper }:
 
 let
   perlInputs = with perlPackages; [
@@ -8,7 +8,6 @@ let
     IOStringy
     MathClipper
     MathConvexHullMonotoneChain
-    MathGeometryVoronoi
     MathGeometryVoronoi
     MathPlanePath
     Moo
@@ -35,10 +34,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    mkdir -vp $out/share/slic3r/
+    cp -r * $out/share/slic3r/
+    wrapProgram $out/share/slic3r/slic3r.pl --prefix PERL5LIB : $PERL5LIB
     mkdir -vp $out/bin
-    cp -r * $out/
-    wrapProgram $out/slic3r.pl --prefix PERL5LIB : $PERL5LIB
-    ln -s $out/slic3r.pl $out/bin/slic3r.pl
+    ln -s $out/share/slic3r/slic3r.pl $out/bin/slic3r.pl
   '';
 
   meta = {
