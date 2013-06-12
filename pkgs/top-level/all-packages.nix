@@ -6238,6 +6238,8 @@ let
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
+    psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
+
     spl = callPackage ../os-specific/linux/spl/default.nix { };
 
     sysprof = callPackage ../development/tools/profiling/sysprof {
