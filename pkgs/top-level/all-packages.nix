@@ -7776,9 +7776,19 @@ let
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
 
+  ruby_gpgme = callPackage ../development/libraries/ruby_gpgme {
+    ruby = ruby19;
+    hoe = rubyLibs.hoe;
+  };
+
+  ruby_ncursesw_sup = callPackage ../development/libraries/ruby_ncursesw_sup { };
+
   sup = callPackage ../applications/networking/mailreaders/sup {
     rake = rubyLibs.rake_10_0_4;
     ruby = ruby19;
+    xapian_full_alaveteli = rubyLibs.xapian_full_alaveteli_1_2_9_5;
+    gpgme = ruby_gpgme;
+    ncursesw_sup = ruby_ncursesw_sup;
   };
 
   msmtp = callPackage ../applications/networking/msmtp { };
