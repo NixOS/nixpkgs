@@ -32,15 +32,33 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (stdenv ? glibc)
          [ "--with-crt-dir=${stdenv.glibc}/lib" ];
 
+  # Note: the usual backtick-apostrophe notation for elisp variables
+  # and functions in comments is broken in Nix expressions.
   postInstall = ''
     cat >$out/share/emacs/site-lisp/site-start.el <<EOF
-;; nixos specific load-path
-(when (getenv "NIX_PROFILES") (setq load-path
-                      (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
-                                               (split-string (getenv "NIX_PROFILES"))))
-                       load-path)))
+;; NixOS specific load-path and package-directory-list
+(when (getenv "NIX_PROFILES")
+    ;; Add profile directories load-path
+    (setq load-path
+          (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
+                                   nix-profiles))
+                  load-path))
+    ;; Add profile directories to package-directory-list for package.el
+    (eval-after-load 'package
+      '(setq package-directory-list
+             (append (mapcar (lambda (x) (concat x "/share/emacs/elpa/"))
+                             (split-string (getenv "NIX_PROFILES")))
+                     package-directory-list))))
+
+;;; Add package-directories added via Emacs' setupHook to package-directory-list
+(eval-after-load 'package
+  '(setq package-directory-list
+         (append (split-string (or (getenv "EMACS_PACKAGE_EL_PACKAGES") "") ":")
+                 package-directory-list)))
 EOF
   '';
+
+  setupHook = ./setup-hook.sh;
 
   doCheck = true;
 
