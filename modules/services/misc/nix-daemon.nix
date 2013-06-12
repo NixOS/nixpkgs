@@ -220,7 +220,7 @@ in
       };
 
       binaryCaches = mkOption {
-        default = [ http://nixos.org/binary-cache ];
+        default = [ http://cache.nixos.org/ ];
         type = types.listOf types.string;
         description = ''
           List of binary cache URLs used to obtain pre-built binaries
