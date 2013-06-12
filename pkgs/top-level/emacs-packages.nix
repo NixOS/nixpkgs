@@ -8,8 +8,6 @@ rec {
   buildEmacsPackage = import ../applications/editors/emacs-modes/package-el {
     inherit stdenv;
     inherit emacs;
-    inherit (pkgs) runCommand;
-    inherit (pkgs) gnutar;
   };
 
   # inherit (pkgs) callPackage;

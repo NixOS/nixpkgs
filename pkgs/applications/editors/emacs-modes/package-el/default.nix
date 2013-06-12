@@ -1,4 +1,4 @@
-{ stdenv, runCommand, emacs, gnutar}:
+{ stdenv, emacs }:
 
 args @ { name, src, deps ? [], ... }:
 
