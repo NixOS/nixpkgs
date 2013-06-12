@@ -11,10 +11,10 @@ stdenv.mkDerivation (args // {
   preHook =
     if setOutputConfigureFlags then
       optionalString (elem "man" outputs) ''
-        configureFlags="--mandir=$man/share/man $configureFlags"
+        configureFlags="--mandir=$man/share/man --infodir=$man/share/info $configureFlags"
       '' +
       optionalString (elem "bin" outputs) ''
-        configureFlags="--bindir=$bin/bin --sbindir=$bin/sbin --mandir=$bin/share/man $configureFlags"
+        configureFlags="--bindir=$bin/bin --sbindir=$bin/sbin --mandir=$bin/share/man --infodir=$man/share/info $configureFlags"
       '' +
       optionalString (elem "lib" outputs) ''
         configureFlags="--libdir=$lib/lib $configureFlags"
