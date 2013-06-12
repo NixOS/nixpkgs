@@ -5,13 +5,17 @@ args @ { name, src, deps ? [], flags ? [], ... }:
 with stdenv.lib;
 
 let
-  requireName = (builtins.parseDrvName name).name;
-  packageFile = concatStringsSep "." [name (last (splitString "." src.name))];
+  packageElSupported = if (versionOlder emacs.version "24")
+    then throw "Building package.el packages is only supported on Emacs >= 24"
+    else true;
+  packageFile = if packageElSupported
+    then concatStringsSep "." [name (last (splitString "." src.name))]
+    else "";
 in
 stdenv.mkDerivation ({
-
   unpackPhase = ''
-    # This is actually a hack. `
+    # This is actually a hack. package.el needs the correct filename,
+    # not a nix-store filename.
     cp -v ${src} ${packageFile};
   '';
 

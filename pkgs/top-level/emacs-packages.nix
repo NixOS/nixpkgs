@@ -4,6 +4,7 @@ let
   fetchurl = pkgs.fetchurl;
 in
 rec {
+  # Function to build package.el packages.
   buildEmacsPackage = import ../applications/editors/emacs-modes/package-el {
     inherit stdenv;
     inherit emacs;

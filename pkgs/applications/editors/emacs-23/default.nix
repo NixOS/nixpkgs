@@ -8,7 +8,8 @@ assert (libXft != null) -> libpng != null;	# probably a bug
 assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
 
 stdenv.mkDerivation rec {
-  name = "emacs-23.4";
+  version = "23.4";
+  name = "emacs-${version}";
 
   builder = ./builder.sh;
 
