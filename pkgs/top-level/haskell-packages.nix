@@ -716,6 +716,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
 
+  concatenative = callPackage ../development/libraries/haskell/concatenative {};
+
   conduit = callPackage ../development/libraries/haskell/conduit {};
 
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
@@ -892,6 +894,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   editline = self.editline_0_2_1_1;
 
   elerea = callPackage ../development/libraries/haskell/elerea {};
+
+  Elm = callPackage ../development/compilers/elm/elm.nix {};
+
+  elmServer = callPackage ../development/compilers/elm/elm-server.nix {};
 
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
 
@@ -1245,6 +1251,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   IfElse = callPackage ../development/libraries/haskell/IfElse {};
 
   ieee754 = callPackage ../development/libraries/haskell/ieee754 {};
+
+  indents = callPackage ../development/libraries/haskell/indents {};
 
   instantGenerics = callPackage ../development/libraries/haskell/instant-generics {};
 
