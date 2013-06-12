@@ -192,6 +192,10 @@ stdenv.mkDerivation ({
     inherit langC langCC langFortran langJava langAda langGo;
   };
 
+  outputs = [ "out" "lib" ];
+
+  setOutputConfigureFlags = false;
+
   inherit patches enableMultilib;
 
   libc_dev = stdenv.gcc.libc_dev;

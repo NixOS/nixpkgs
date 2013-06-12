@@ -193,9 +193,9 @@ rec {
   stdenvLinuxGlibc = stdenvLinuxBoot2Pkgs.glibc;
 
 
-  # 6) Construct a third stdenv identical to the 2nd, except that
-  #    this one uses the Glibc built in step 3.  It still uses
-  #    the recent binutils and rest of the bootstrap tools, including GCC.
+  # 6) Construct a third stdenv identical to the 2nd, except that this
+  #    one uses the Glibc built in step 3.  It still uses the recent
+  #    binutils and the rest of the bootstrap tools, including GCC.
   stdenvLinuxBoot3 = stdenvBootFun {
     gcc = wrapGCC {
       binutils = stdenvLinuxBoot1Pkgs.binutils;

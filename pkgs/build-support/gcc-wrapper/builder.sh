@@ -39,9 +39,9 @@ if test -n "$nativeTools"; then
     ldPath="$nativePrefix/bin"
 else
     if test -e "$gcc/lib64"; then
-        gccLDFlags="$gccLDFlags -L$gcc/lib64"
+        gccLDFlags="$gccLDFlags -L$gcc_lib/lib64"
     fi
-    gccLDFlags="$gccLDFlags -L$gcc/lib"
+    gccLDFlags="$gccLDFlags -L$gcc_lib/lib"
     if [ -n "$langVhdl" ]; then
         gccLDFlags="$gccLDFlags -L$zlib/lib"
     fi

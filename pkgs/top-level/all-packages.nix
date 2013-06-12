@@ -2254,6 +2254,7 @@ let
   }));
 
   gcc46_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
+    stdenv = stdenvMulti;
     inherit noSysDirs;
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:

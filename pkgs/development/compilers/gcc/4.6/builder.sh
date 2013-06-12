@@ -8,8 +8,9 @@ mkdir $NIX_FIXINC_DUMMY
 if test "$staticCompiler" = "1"; then
     EXTRA_LDFLAGS="-static"
 else
-    EXTRA_LDFLAGS=""
+    EXTRA_LDFLAGS="-Wl,-rpath,$lib/lib"
 fi
+
 
 # GCC interprets empty paths as ".", which we don't want.
 if test -z "$CPATH"; then unset CPATH; fi
@@ -33,7 +34,7 @@ if test "$noSysDirs" = "1"; then
 
         # The path to the Glibc binaries such as `crti.o'.
         glibc_libdir="$(cat $NIX_GCC/nix-support/orig-libc)/lib"
-        
+
     else
         # Hack: support impure environments.
         extraFlags="-isystem /usr/include"
@@ -50,10 +51,10 @@ if test "$noSysDirs" = "1"; then
     # bootstrap compiler are optimized and (optionally) contain
     # debugging information (info "(gccinstall) Building").
     if test -n "$dontStrip"; then
-	extraFlags="-O2 -g $extraFlags"
+        extraFlags="-O2 -g $extraFlags"
     else
-	# Don't pass `-g' at all; this saves space while building.
-	extraFlags="-O2 $extraFlags"
+        # Don't pass `-g' at all; this saves space while building.
+        extraFlags="-O2 $extraFlags"
     fi
 
     EXTRA_FLAGS="$extraFlags"
@@ -205,6 +206,10 @@ preInstall() {
 
 
 postInstall() {
+    # Move runtime libraries to $lib.
+    mkdir -p $lib/lib
+    mv -v $out/lib/lib*.so $out/lib/lib*.so.*[0-9] $lib/lib/
+
     # Remove precompiled headers for now.  They are very big and
     # probably not very useful yet.
     find $out/include -name "*.gch" -exec rm -rf {} \; -prune
@@ -213,9 +218,10 @@ postInstall() {
     # previous gcc.
     rm -rf $out/libexec/gcc/*/*/install-tools
     rm -rf $out/lib/gcc/*/*/install-tools
-    
+
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
+
     # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
     for i in $out/libexec/gcc/*/*/*; do
         if PREV_RPATH=`patchelf --print-rpath $i`; then
