@@ -4091,7 +4091,7 @@ let
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix { };
-  gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3-default.nix {
+  gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.x.nix {
     inherit (gnome3) at_spi2_atk;
   });
   gtk = pkgs.gtk2;
