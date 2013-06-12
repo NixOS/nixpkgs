@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     ${if ncurses == null then "--without-ncurses" else ""}
   '';
 
+  makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
+
   buildInputs =
     [ zlib pam ]
     ++ stdenv.lib.optional (ncurses != null) ncurses
