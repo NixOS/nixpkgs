@@ -18,7 +18,7 @@ rec {
     buildPerlPackage (args // {
       buildInputs = buildInputs ++ [ ModuleBuild ];
       preConfigure = "touch Makefile.PL";
-      buildPhase = "perl Build.PL --prefix=$out";
+      buildPhase = "perl Build.PL --prefix=$out; ./Build build";
       installPhase = "./Build install";
       checkPhase = "./Build test";
     });
