@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
 
   # fix underspecified dependency in a generated makefile
   postConfigure = ''
-    substituteInPlace tools/designer/src/lib/Makefile --replace \
-      "moc_qtgradientviewdialog.cpp:" "moc_qtgradientviewdialog.cpp: .uic/release-shared/ui_qtgradientview.h"
+    sed "1iqtgradientview.h: .uic/release-shared/ui_qtgradientview.h" \
+      -i tools/designer/src/lib/Makefile
   '';
 
   propagatedBuildInputs =
