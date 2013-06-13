@@ -107,6 +107,20 @@ rec {
     propagatedBuildInputs = [Mouse];
   };
 
+  ApacheLogFormatCompiler = buildPerlModule {
+    name = "Apache-LogFormat-Compiler-0.13";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/K/KA/KAZEBURO/Apache-LogFormat-Compiler-0.13.tar.gz;
+      sha256 = "b4185125501e288efbc664da8b723ff86f0b69eb57d3c7c69c7d2069aab0efb0";
+    };
+    buildInputs = [ HTTPMessage TestRequires TryTiny URI ];
+    meta = {
+      homepage = https://github.com/kazeburo/Apache-LogFormat-Compiler;
+      description = "Compile a log format string to perl-code";
+      license = "perl";
+    };
+  };
+
   AppCLI = buildPerlPackage {
     name = "App-CLI-0.07";
     src = fetchurl {
@@ -503,6 +517,19 @@ rec {
     };
   };
 
+  CatalystDispatchTypeRegex = buildPerlModule {
+    name = "Catalyst-DispatchType-Regex-5.90032";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MG/MGRIMES/Catalyst-DispatchType-Regex-5.90032.tar.gz;
+      sha256 = "003e31fe0c1d6dfc6be4d9cd47cb058a9b53a73bb6a9f74a132a43dbfbbb5e3c";
+    };
+    propagatedBuildInputs = [ Moose TextSimpleTable ];
+    meta = {
+      description = "Regex DispatchType";
+      license = "perl";
+    };
+  };
+
   CatalystEngineHTTPPrefork = buildPerlPackage rec {
     name = "Catalyst-Engine-HTTP-Prefork-0.51";
     src = fetchurl {
@@ -549,13 +576,13 @@ rec {
   };
 
   CatalystRuntime = buildPerlPackage {
-    name = "Catalyst-Runtime-5.90019";
+    name = "Catalyst-Runtime-5.90030";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Runtime-5.90019.tar.gz;
-      sha256 = "0madnqyzhcvbv6iql6b10dzfqvajj0fyp1sla83csakkbff38mqp";
+      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90030.tar.gz;
+      sha256 = "c27357f744fa0d2f9b2682c5f86723d90de43f30cd50089306dd13eb8849eb0c";
     };
     buildInputs = [ ClassDataInheritable DataDump HTTPMessage TestException ];
-    propagatedBuildInputs = [ CGISimple ClassC3AdoptNEXT ClassLoad ClassMOP DataDump DataOptList HTMLParser HTTPBody HTTPMessage HTTPRequestAsCGI ListMoreUtils LWPUserAgent Moose MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading MROCompat namespaceautoclean namespaceclean PathClass Plack PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StringRewritePrefix SubExporter TaskWeaken TextSimpleTable TreeSimple TreeSimpleVisitorFactory TryTiny URI ];
+    propagatedBuildInputs = [ CGISimple CatalystDispatchTypeRegex ClassC3AdoptNEXT ClassLoad DataDump DataOptList HTMLParser HTTPBody HTTPMessage HTTPRequestAsCGI LWP ListMoreUtils MROCompat Moose MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass Plack PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StringRewritePrefix SubExporter TaskWeaken TextSimpleTable TreeSimple TreeSimpleVisitorFactory TryTiny URI namespaceautoclean namespaceclean ];
     meta = {
       homepage = http://dev.catalyst.perl.org/;
       description = "The Catalyst Framework Runtime";
@@ -2307,6 +2334,18 @@ rec {
     };
   };
 
+  ExtUtilsConfig = buildPerlPackage {
+    name = "ExtUtils-Config-0.007";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Config-0.007.tar.gz;
+      sha256 = "2c1465078b876fd16a90507092805265528c2532d4937b03547a6dbdb8ac0eef";
+    };
+    meta = {
+      description = "A wrapper for perl's configuration";
+      license = "perl";
+    };
+  };
+
   ExtUtilsCppGuess = buildPerlModule rec {
     name = "ExtUtils-CppGuess-0.07";
     src = fetchurl {
@@ -2323,6 +2362,31 @@ rec {
       sha256 = "0fjlkcz1i1j02hhwi1wjgd79qlppjkbasrj44h5ry1f238g6a1q3";
     };
     meta = {
+      license = "perl";
+    };
+  };
+
+  ExtUtilsHelpers = buildPerlPackage {
+    name = "ExtUtils-Helpers-0.021";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Helpers-0.021.tar.gz;
+      sha256 = "26b85077f4197b30e62ffec87d3f78111522619d62858d2ab45a64687351892a";
+    };
+    meta = {
+      description = "Various portability utilities for module builders";
+      license = "perl";
+    };
+  };
+
+  ExtUtilsInstallPaths = buildPerlPackage {
+    name = "ExtUtils-InstallPaths-0.009";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-InstallPaths-0.009.tar.gz;
+      sha256 = "1b0827a4acf40d38552c4348767000f7e2d8cf5fd0d19436bf8747d2a72d77bc";
+    };
+    propagatedBuildInputs = [ ExtUtilsConfig ];
+    meta = {
+      description = "Build.PL install path logic made easy";
       license = "perl";
     };
   };
@@ -3792,15 +3856,28 @@ rec {
   };
 
   ModuleBuild = buildPerlPackage {
-    name = "Module-Build-0.4003";
+    name = "Module-Build-0.4005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4003.tar.gz;
-      sha256 = "1izx26gfnjffnj0j601hkc008b31y9f25hms1nzidfkb6r3110s2";
+      url = mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4005.tar.gz;
+      sha256 = "eb2522507251550f459c11223ea6d86b34f1dee9b3e3928d0d6a0497505cb7ef";
     };
     meta = {
-      homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "Build and install Perl modules";
-      license = "perl5";
+      license = "perl";
+    };
+  };
+
+  ModuleBuildTiny = buildPerlModule {
+    name = "Module-Build-Tiny-0.023";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/L/LE/LEONT/Module-Build-Tiny-0.023.tar.gz;
+      sha256 = "eba7fbfea2dd84310ab00f22fd29bbf774b10a465df3f6133ca7da88c0bd6ac4";
+    };
+    buildInputs = [ ExtUtilsConfig ExtUtilsHelpers ExtUtilsInstallPaths JSONPP perl ];
+    propagatedBuildInputs = [ ExtUtilsConfig ExtUtilsHelpers ExtUtilsInstallPaths JSONPP ];
+    meta = {
+      description = "A tiny replacement for Module::Build";
+      license = "perl";
     };
   };
 
@@ -4862,15 +4939,15 @@ rec {
   };
 
   Plack = buildPerlPackage {
-    name = "Plack-1.0015";
+    name = "Plack-1.0024";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0015.tar.gz;
-      sha256 = "1zg30bb55ws8fka5iawmfqnc3wg6ggigl0wljgvw0mk466sr3lxf";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0024.tar.gz;
+      sha256 = "485f69275d73401739a829cfee3bbc9bfa20a0843470791066365ac07fac04a1";
     };
-    buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ DevelStackTrace DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HashMultiValue HTTPBody HTTPMessage LWPUserAgent StreamBuffered TestTCP TryTiny URI ];
+    buildInputs = [ FileShareDirInstall TestRequires ];
+    propagatedBuildInputs = [ ApacheLogFormatCompiler DevelStackTrace DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPBody HTTPMessage HashMultiValue LWP StreamBuffered TestTCP TryTiny URI ];
     meta = {
-      homepage = http://plackperl.org;
+      homepage = https://github.com/plack/Plack;
       description = "Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)";
       license = "perl";
     };
@@ -5308,16 +5385,17 @@ rec {
     ];
   };
 
-  Starman = buildPerlPackage {
-    name = "Starman-0.3006";
+  Starman = buildPerlModule {
+    name = "Starman-0.3011";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.3006.tar.gz;
-      sha256 = "0dlwrrq570v5mbpzsi4pmj6n2sjm3xpcilhh6dvpq8qbp550wixy";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.3011.tar.gz;
+      sha256 = "f700e1e9fa8a56609db1b75878ccfbbccfda32454c32e3c33912a1776f583cf2";
     };
-    buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ DataDump HTTPDate HTTPParserXS HTTPMessage NetServer Plack TestTCP ];
-    doCheck = false; # binds to various TCP ports1
+    buildInputs = [ ModuleBuildTiny TestRequires ];
+    propagatedBuildInputs = [ DataDump HTTPDate HTTPMessage HTTPParserXS NetServer Plack TestTCP ];
+    doCheck = false; # binds to various TCP ports
     meta = {
+      homepage = https://github.com/miyagawa/Starman;
       description = "High-performance preforking PSGI/Plack web server";
       license = "perl";
     };
