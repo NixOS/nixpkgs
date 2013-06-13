@@ -91,6 +91,10 @@ in
     gemFlags = "--no-rdoc --no-ri";
   };
 
+  xapian_full_alaveteli = {
+    buildInputs = [ zlib libuuid ];
+  };
+
   rjb = {
     buildInputs = [ jdk ];
     JAVA_HOME = jdk;
