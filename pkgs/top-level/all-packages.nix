@@ -202,6 +202,11 @@ let
   stringsWithDeps = lib.stringsWithDeps;
 
 
+  ### Nixpkgs maintainer tools
+
+  nix-generate-from-cpan = callPackage ../../maintainers/scripts/nix-generate-from-cpan.nix { };
+
+
   ### STANDARD ENVIRONMENT
 
 
