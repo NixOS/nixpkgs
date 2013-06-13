@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gpgme, ruby, rubygems, hoe }:
 
-stdenv.mkDerivation rec {
-  name = "gpgme-1.0.8";
+stdenv.mkDerivation {
+  name = "ruby-gpgme-1.0.8";
 
   src = fetchurl {
     url = "https://github.com/ueno/ruby-gpgme/archive/1.0.8.tar.gz";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     end
     EOF
 
-    cd "$out/${ruby.gemPath}/gems/${name}"
+    cd "$out/${ruby.gemPath}/gems/gpgme-1.0.8"
     mkdir src
     mv lib src
     sed -i "s/srcdir = ./srcdir = src/" Makefile
