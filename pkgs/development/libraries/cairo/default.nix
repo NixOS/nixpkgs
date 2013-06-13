@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional postscriptSupport zlib ++
     stdenv.lib.optional pngSupport libpng;
 
+  NIX_CFLAGS_COMPILE = "-I${pixman}/include/pixman-1";
+
   configureFlags =
     [ "--enable-tee" ]
     ++ stdenv.lib.optional xcbSupport "--enable-xcb"
