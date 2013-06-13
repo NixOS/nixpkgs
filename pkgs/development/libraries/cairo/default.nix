@@ -3,6 +3,7 @@
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
 , glSupport ? true, mesa_noglu ? null # mesa is no longer a big dependency
+, pdfSupport ? true
 }:
 
 assert glSupport -> mesa_noglu != null;
