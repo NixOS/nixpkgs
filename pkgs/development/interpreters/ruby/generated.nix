@@ -97,6 +97,7 @@ g: # Get dependencies from patched gems
     uuid = g.uuid_2_3_7;
     uuidtools = g.uuidtools_2_1_3;
     websocket = g.websocket_1_0_7;
+    xapian_full_alaveteli = g.xapian_full_alaveteli_1_2_9_5;
     xml_simple = g.xml_simple_1_1_1;
     yajl_ruby = g.yajl_ruby_1_1_0;
   };
@@ -1466,6 +1467,16 @@ interpreters.'';
       name = ''websocket-1.0.7'';
       requiredGems = [  ];
       sha256 = ''1jrfz4295qbnjaxv37fw9jzxyxz61izp7c0683mnscacpx262zw0'';
+    };
+    xapian_full_alaveteli_1_2_9_5 = {
+      basename = ''xapian_full_alaveteli'';
+      meta = {
+        description = ''xapian-core + Ruby xapian-bindings'';
+        longDescription = ''Xapian bindings for Ruby without dependency on system Xapian library'';
+      };
+      name = ''xapian-full-alaveteli-1.2.9.5'';
+      requiredGems = [  ];
+      sha256 = ''0qg1jkx5lr4a5v7l3f9gq7f07al6qaxxzma230zrzs48bz3qnhxm'';
     };
     xml_simple_1_1_1 = {
       basename = ''xml_simple'';
