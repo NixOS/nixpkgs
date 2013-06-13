@@ -5621,6 +5621,7 @@ let
   apacheHttpd = pkgs.apacheHttpd_2_2;
 
   apacheHttpd_2_2 = callPackage ../servers/http/apache-httpd/2.2.nix {
+    stdenv = stdenvMulti;
     sslSupport = true;
   };
 
