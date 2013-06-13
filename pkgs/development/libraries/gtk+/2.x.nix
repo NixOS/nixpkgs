@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xlibs
-, gdk_pixbuf
+, gdk_pixbuf, xz, libintlOrEmpty
 , xineramaSupport ? true
 , cupsSupport ? true, cups ? null
 }:
@@ -17,12 +17,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo";
+
   nativeBuildInputs = [ perl pkgconfig gettext ];
 
   propagatedBuildInputs = with xlibs;
     [ glib cairo pango gdk_pixbuf atk
       libXrandr libXrender libXcomposite libXi libXcursor
     ]
+    ++ libintlOrEmpty
     ++ stdenv.lib.optional xineramaSupport libXinerama
     ++ stdenv.lib.optionals cupsSupport [ cups ];
 

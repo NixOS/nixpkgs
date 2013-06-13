@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-tee" ]
     ++ optional xcbSupport "--enable-xcb"
     ++ optional glSupport "--enable-gl"
+    ++ optional pdfSupport "--enable-pdf"
     ;
+
+  NIX_CFLAGS_COMPILE = "-I${pixman}/include/pixman-1";
 
   preConfigure =
   # On FreeBSD, `-ldl' doesn't exist.
@@ -40,7 +43,14 @@ stdenv.mkDerivation rec {
             cat "$i" | sed -es/-ldl//g > t
             mv t "$i"
           done
-       '');
+       '') 
+       +
+    ''
+    # Work around broken `Requires.private' that prevents Freetype
+    # `-I' flags to be propagated.
+    sed -i "src/cairo.pc.in" \
+        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
+    '';
 
   enableParallelBuilding = true;
 

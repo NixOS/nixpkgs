@@ -1,18 +1,19 @@
-{stdenv, fetchurl, sqlite, ocaml, findlib}:
+{stdenv, fetchurl, sqlite, ocaml, findlib, pkgconfig}:
 
 stdenv.mkDerivation {
-  name = "ocaml-sqlite3-1.6.3";
+  name = "ocaml-sqlite3-2.0.4";
 
   src = fetchurl {
-    url = https://bitbucket.org/mmottl/sqlite3-ocaml/downloads/sqlite3-ocaml-1.6.3.tar.gz;
-    sha256 = "004wysf80bmb8r4yaa648v0bqrh2ry3kzy763gdksw4n15blghv5";
+    url = https://bitbucket.org/mmottl/sqlite3-ocaml/downloads/sqlite3-ocaml-2.0.4.tar.gz;
+    sha256 = "51ccb4c7a240eb40652c59e1770cfe1827dfa1eb926c969d19ff414aef4e80a1";
   };
 
-  buildInputs = [ocaml findlib];
+  buildInputs = [ocaml findlib pkgconfig ];
 
-  configureFlags = "--with-sqlite3=${sqlite}";
+  #configureFlags = "--with-sqlite3=${sqlite}";
 
   preConfigure = ''
+    export PKG_CONFIG_PATH=${sqlite}/lib/pkgconfig/
     export OCAMLPATH=$OCAMLPATH:$OCAMLFIND_DESTDIR
     mkdir -p $out/bin
   '';
