@@ -1143,6 +1143,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   heist = callPackage ../development/libraries/haskell/heist {};
 
+  hflags = callPackage ../development/libraries/haskell/hflags {};
+
   HFuse = callPackage ../development/libraries/haskell/HFuse {};
 
   highlightingKate = callPackage ../development/libraries/haskell/highlighting-kate {};
@@ -2204,7 +2206,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haddock_2_11_0 = callPackage ../development/tools/documentation/haddock/2.11.0.nix {};
   haddock_2_12_0 = callPackage ../development/tools/documentation/haddock/2.12.0.nix {};
   haddock_2_13_2 = callPackage ../development/tools/documentation/haddock/2.13.2.nix {};
-  haddock = self.haddock_2_13_2;
+  haddock_2_13_2_1 = callPackage ../development/tools/documentation/haddock/2.13.2.1.nix {};
+  haddock = self.haddock_2_13_2_1;
 
   happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
   happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};

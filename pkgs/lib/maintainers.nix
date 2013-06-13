@@ -8,6 +8,7 @@
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
   amiddelk = "Arie Middelkoop <amiddelk@gmail.com>";
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
+  amorsillo = "Andrew Morsillo <andrew.morsillo@gmail.com>";
   antono = "Antono Vasiljev <self@antono.info>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
@@ -22,6 +23,7 @@
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   guibert = "David Guibert <david.guibert@gmail.com>";
   iElectric = "Domen Kozar <domen@dev.si>";
+  lovek323 = "Jason O'Conal <jason@oconal.id.au>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";

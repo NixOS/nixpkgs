@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libjpeg, libpng, libtiff, zlib, pkgconfig, fontconfig, openssl
-, lcms2, freetype, libpaper, jbig2dec, expat
+, lcms2, freetype, libpaper, jbig2dec, expat, libiconvOrEmpty
 , x11Support, x11 ? null
 , cupsSupport ? false, cups ? null
 , gnuFork ? true
@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     libpaper jbig2dec expat
   ] ++ stdenv.lib.optionals x11Support [x11 freetype]
     ++ stdenv.lib.optional cupsSupport cups
+    ++ libiconvOrEmpty
     # [] # maybe sometimes jpeg2000 support
     ;
 

@@ -1,16 +1,16 @@
 { stdenv, fetchurl, libotr, automake, autoconf, libtool, glib, pkgconfig, irssi }:
 
 let
-  rev = "59ddcbe66a";
+  rev = "cab3fc915c";
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "irssi-otr-20130315-${rev}";
+  name = "irssi-otr-20130601-${rev}";
   
   src = fetchurl {
     url = "https://github.com/cryptodotis/irssi-otr/tarball/${rev}";
     name = "${name}.tar.gz";
-    sha256 = "095dak0d10j6cpkwlqmk967p1wypwzvqr4wdqvb30w14dbn8dy0d";
+    sha256 = "0kn9c562zfh36gpcrbpslwjjr78baagdwphczz2d608ndczm1vrk";
   };
 
   patchPhase = ''
