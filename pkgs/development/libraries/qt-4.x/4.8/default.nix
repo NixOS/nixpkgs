@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     '';
 
   # fix underspecified dependency in a generated makefile
-  postConfigure = ''
+  postConfigure = stdenv.lib.optional developerBuild ''
     sed "1iqtgradientview.h: .uic/release-shared/ui_qtgradientview.h" \
       -i tools/designer/src/lib/Makefile
   '';
