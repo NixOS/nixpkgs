@@ -7,8 +7,8 @@ let
       sha256 = "a69093fc5df1b79f58645048b9571c755e00c3ca14dfd27f9f1cae2c6e628f01";
     };
      leveldb = fetchurl {
-      url = "https://github.com/basho/leveldb/zipball/1.3.1";
-      sha256 = "10glzfsxs1167n7hmzl106xkfmn1qdjcqvillga2r5dsmn6vvi8a";
+      url = "https://github.com/basho/leveldb/archive/1.3.1.zip";
+      sha256 = "dc48ba2b44fca11888ea90695d385c494e1a3abd84a6b266b07fdc160ab2ef64";
     };
   };
 in
@@ -25,13 +25,14 @@ stdenv.mkDerivation rec {
     ln -sv ${srcs.leveldb} $sourceRoot/deps/eleveldb/c_src/leveldb.zip
     pushd $sourceRoot/deps/eleveldb/c_src/
     unzip leveldb.zip
-    mv basho-leveldb-* leveldb
+    mv leveldb-* leveldb
     cd ../../
     mkdir riaknostic/deps
     cp -R lager riaknostic/deps
     cp -R getopt riaknostic/deps
     cp -R meck riaknostic/deps
     popd
+    patchShebangs .
   '';
 
   buildPhase = ''
