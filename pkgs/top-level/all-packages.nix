@@ -4089,7 +4089,9 @@ let
 
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.26.x.nix { };
 
-  gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
+  gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix {
+    cupsSupport = config.gtk2.cups or true;
+  };
   gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
   gtk = pkgs.gtk2;
 
