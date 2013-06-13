@@ -34,6 +34,8 @@ let
       ''}
     '';
 
+  useLocalPostgres = cfg.dbServer == "localhost" || cfg.dbServer == "";
+
 in
 
 {
@@ -51,7 +53,10 @@ in
 
     services.zabbixServer.dbServer = mkOption {
       default = "localhost";
-      description = "Hostname or IP address of the database server.";
+      description = ''
+        Hostname or IP address of the database server.
+        Use an empty string ("") to use peer authentication.
+      '';
     };
 
     services.zabbixServer.dbPassword = mkOption {
@@ -65,7 +70,7 @@ in
 
   config = mkIf cfg.enable {
 
-    services.postgresql.enable = cfg.dbServer == "localhost";
+    services.postgresql.enable = useLocalPostgres;
 
     users.extraUsers = singleton
       { name = "zabbix";
@@ -77,7 +82,7 @@ in
       { description = "Zabbix Server";
 
         wantedBy = [ "multi-user.target" ];
-        after = optional (cfg.dbServer == "localhost") "postgresql.service";
+        after = optional useLocalPostgres "postgresql.service";
 
         preStart =
           ''
