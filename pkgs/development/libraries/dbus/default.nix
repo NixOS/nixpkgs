@@ -3,8 +3,8 @@
 , libX11, libICE, libSM, useX11 ? true }:
 
 let
-  version = "1.6.10"; # 1.7.* isn't recommended, even for gnome 3.8
-  sha256 = "11jyj6aw8yf75hqv7v0601n2xms08k0mys6dyql164m7ad56yg8z";
+  version = "1.6.12"; # 1.7.* isn't recommended, even for gnome 3.8
+  sha256 = "14pfh2ksn4srfry752kf1jy3c61hklcs9fx2xglw2ifhsszplypn";
 
   inherit (stdenv) lib;
 
