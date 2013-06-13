@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ruby, rake, rubygems, makeWrapper, ncursesw_sup
-, xapian_full_alaveteli, gpgme, libiconv }:
+, xapian_full_alaveteli, gpgme, libiconvOrEmpty }:
 
 stdenv.mkDerivation {
   name = "sup-d21f027afcd6a4031de9619acd8dacbd2f2f4fd4";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ ruby rake rubygems makeWrapper gpgme ncursesw_sup xapian_full_alaveteli
-      libiconv ];
+      libiconvOrEmpty ];
 
   buildPhase = "rake gem";
 
