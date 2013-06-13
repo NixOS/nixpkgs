@@ -4089,7 +4089,9 @@ let
 
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.26.x.nix { };
 
-  gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
+  gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix {
+    cupsSupport = config.gtk2.cups or true;
+  };
   gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
   gtk = pkgs.gtk2;
 
@@ -8234,18 +8236,20 @@ let
 
   vimHugeX = vim_configurable;
 
-  vim_configurable = callPackage (import ../applications/editors/vim/configurable.nix) {
-    inherit (pkgs) fetchurl stdenv ncurses pkgconfig gettext composableDerivation lib config;
-    inherit (pkgs.xlibs) libX11 libXext libSM libXpm libXt libXaw libXau libXmu libICE;
-    inherit (pkgs) glib gtk;
+  vim_configurable = callPackage ../applications/editors/vim/configurable.nix {
+    inherit (pkgs) fetchurl stdenv ncurses pkgconfig gettext
+      composableDerivation lib config glib gtk python perl tcl ruby;
+    inherit (pkgs.xlibs) libX11 libXext libSM libXpm libXt libXaw libXau libXmu
+      libICE;
+
     features = "huge"; # one of  tiny, small, normal, big or huge
-    # optional features by passing
-    # python
-    # TODO mzschemeinterp perlinterp
-    inherit (pkgs) python perl tcl ruby /*x11*/;
     lua = pkgs.lua5;
+
     # optional features by flags
     flags = [ "python" "X11" ]; # only flag "X11" by now
+
+    # so that we can use gccApple if we're building on darwin
+    inherit stdenvAdapters gccApple;
   };
   vimLatest = vim_configurable.override { source = "latest"; };
   vimNox = vim_configurable.override { source = "vim-nox"; };
