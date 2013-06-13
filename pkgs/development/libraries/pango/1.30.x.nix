@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "3a8c061e143c272ddcd5467b3567e970cfbb64d1d1600a8f8e62435556220cbe";
   };
 
+  NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo";
+
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ gettext fontconfig ];
 
   nativeBuildInputs = [ pkgconfig ];
