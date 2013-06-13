@@ -2,7 +2,7 @@
 # 'echo "pinentry-program `which pinentry-gtk-2`" >> ~/.gnupg/gpg-agent.conf'.
 
 { fetchurl, stdenv, readline, zlib, libgpgerror, pth, libgcrypt, libassuan
-, libksba, coreutils, libiconv
+, libksba, coreutils, libiconvOrEmpty
 , useLdap ? true, openldap ? null, useBzip2 ? true, bzip2 ? null
 , useUsb ? true, libusb ? null, useCurl ? true, curl ? null
 }:
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs
-    = [ readline zlib libgpgerror libgcrypt libassuan libksba pth libiconv ]
+    = [ readline zlib libgpgerror libgcrypt libassuan libksba pth ]
+    ++ libiconvOrEmpty
     ++ stdenv.lib.optional useLdap openldap
     ++ stdenv.lib.optional useBzip2 bzip2
     ++ stdenv.lib.optional useUsb libusb
