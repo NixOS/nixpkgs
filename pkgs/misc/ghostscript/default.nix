@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, libjpeg, libpng, libtiff, zlib, pkgconfig, fontconfig, openssl, lcms, freetype
+{ stdenv, fetchurl, libjpeg, libpng, libtiff, zlib, pkgconfig, fontconfig
+, openssl, lcms, freetype, libiconvOrEmpty
 , x11Support, x11 ? null
 , cupsSupport ? false, cups ? null
 , gnuFork ? true
@@ -74,7 +75,9 @@ stdenv.mkDerivation rec {
     # ... add other fonts here
   ];
 
-  buildInputs = [libjpeg libpng libtiff zlib pkgconfig fontconfig openssl lcms]
+  buildInputs
+    = [ libjpeg libpng libtiff zlib pkgconfig fontconfig openssl lcms ]
+    ++ libiconvOrEmpty
     ++ stdenv.lib.optionals x11Support [x11 freetype]
     ++ stdenv.lib.optional cupsSupport cups;
 
