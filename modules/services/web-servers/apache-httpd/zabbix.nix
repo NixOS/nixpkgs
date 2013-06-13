@@ -28,6 +28,7 @@ in
     ''
       post_max_size = 32M
       max_execution_time = 300
+      max_input_time = 300
     '';
 
   extraConfig = ''
