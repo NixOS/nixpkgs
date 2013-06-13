@@ -3544,7 +3544,9 @@ let
 
   amrwb = callPackage ../development/libraries/amrwb { };
 
-  apr = callPackage ../development/libraries/apr { };
+  apr = callPackage ../development/libraries/apr {
+    stdenv = stdenvMulti;
+  };
 
   aprutil = callPackage ../development/libraries/apr-util {
     bdbSupport = true;
