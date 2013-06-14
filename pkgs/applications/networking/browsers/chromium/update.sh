@@ -79,12 +79,7 @@ get_channel_exprs()
         channel="${chline%%,*}";
         version="${chline##*,}";
 
-        # XXX: Remove case after version 26 is stable:
-        if [ "${version%%.*}" -ge 26 ]; then
-            url="${bucket_url%/}/chromium-$version.tar.xz";
-        else
-            url="${bucket_url%/}/chromium-$version.tar.bz2";
-        fi;
+        url="${bucket_url%/}/chromium-$version.tar.xz";
 
         echo -n "Checking if sha256 of version $version is cached..." >&2;
         if sha256="$(sha_lookup "$version")";
