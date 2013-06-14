@@ -93,7 +93,7 @@ with pkgs.lib;
         [Service]
         Environment=TERM=linux
         Environment=LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive
-        ExecStart=@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login %I 115200,38400,9600
+        ExecStart=@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login %I 115200,57600,38400,9600
         Type=idle
         Restart=always
         RestartSec=0
