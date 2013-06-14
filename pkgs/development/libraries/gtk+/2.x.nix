@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xlibs
-, gdk_pixbuf, xz, libintlOrEmpty
+, gdk_pixbuf, libintlOrEmpty
 , xineramaSupport ? true
 , cupsSupport ? true, cups ? null
 }:
