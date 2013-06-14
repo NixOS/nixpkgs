@@ -4091,6 +4091,7 @@ let
 
   cairo = callPackage ../development/libraries/cairo {
     pixman = pixman_cairo; # it's recommended to be in sync
+    glSupport = lib.elem system lib.platforms.mesaPlatforms;
   };
   pixman_cairo = callPackage ../development/libraries/pixman { };
   cairomm = callPackage ../development/libraries/cairomm { };
