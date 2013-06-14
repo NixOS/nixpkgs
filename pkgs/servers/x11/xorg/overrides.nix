@@ -1,10 +1,11 @@
-{args, xorg}:
+{ args, xorg }:
+
 let
-   setMalloc0ReturnsNullCrossCompiling = ''
-      if test -n "$crossConfig"; then
-        configureFlags="$configureFlags --enable-malloc0returnsnull";
-      fi
-    '';
+  setMalloc0ReturnsNullCrossCompiling = ''
+    if test -n "$crossConfig"; then
+      configureFlags="$configureFlags --enable-malloc0returnsnull";
+    fi
+  '';
 
   gitRelease = { libName, version, rev, sha256 } : attrs : attrs // {
     name = libName + "-" + version;
@@ -116,19 +117,11 @@ in
     sha256 = "01wx8fgjjfqm0sm9anj6rmz72yvjyb4y3ifjk2q4ixd7pdp63bx6";
   };
 
-  libXrender = compose (gitRelease {
-    libName = "libXrender";
-    version = "0.9.7.91";
-    rev = "786f78fd8df6d165ccbc81f306fd9f22b5c1551c";
-    sha256 = "157ljyhkxqk2xgizrq8pmpl75szb5j89gvvhkxsi0lys1wnbrxi4";
-  }) (attrs: attrs // { preConfigure = setMalloc0ReturnsNullCrossCompiling; });
+  libXrender = attrs: attrs
+    // { preConfigure = setMalloc0ReturnsNullCrossCompiling; };
 
-  libXvMC = compose (gitRelease {
-    libName = "libXvMC";
-    version = "1.0.7.91";
-    rev = "8c164524d229adb6141fdac8336b3823e7fe1a5d";
-    sha256 = "157ljyhkxqk2xgizrq8pmpl75szb5j89gvvhkxsi0lys1wnbrxi4";
-  }) (attrs: attrs // { buildInputs = attrs.buildInputs ++ [xorg.renderproto]; });
+  libXvMC = attrs: attrs
+    // { buildInputs = attrs.buildInputs ++ [xorg.renderproto]; };
 
   libXpm = attrs: attrs // {
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";

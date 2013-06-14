@@ -4090,11 +4090,13 @@ let
   atkmm = callPackage ../development/libraries/atkmm { };
 
   cairo = callPackage ../development/libraries/cairo {
-    pixman = pixman_cairo; # it's recommended to be in sync
     glSupport = lib.elem system lib.platforms.mesaPlatforms;
   };
-  pixman_cairo = callPackage ../development/libraries/pixman { };
+
+  pixman = callPackage ../development/libraries/pixman { };
+
   cairomm = callPackage ../development/libraries/cairomm { };
+
   cairo_1_12_2 = callPackage ../development/libraries/cairo/1.12.2.nix { };
 
   pango = callPackage ../development/libraries/pango { };
@@ -4104,12 +4106,14 @@ let
 
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
-  gtk2 = callPackage ../development/libraries/gtk+/2.x.nix { 
+  gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
     cupsSupport = config.gtk2.cups or true;
   };
+
   gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.x.nix {
     inherit (gnome3) at_spi2_atk;
   });
+
   gtk = pkgs.gtk2;
 
   gtkmm = callPackage ../development/libraries/gtkmm/2.x.nix { };
@@ -5851,9 +5855,8 @@ let
     inherit fetchurl fetchgit stdenv pkgconfig intltool freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa_drivers
       xkeyboard_config dbus libuuid openssl gperf m4
-      autoconf libtool xmlto asciidoc udev flex bison python mtdev;
+      autoconf libtool xmlto asciidoc udev flex bison python mtdev pixman;
     automake = automake110x;
-    pixman = pixman_cairo;
     mesa = mesa_noglu;
   });
 
