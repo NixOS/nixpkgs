@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-iquote ${apr}/include/apr-1";
 
   # Required for ‘pthread_cancel’.
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = (if stdenv.isDarwin then "" else "-lgcc_s");
 
   configureFlags = ''
     --with-z=${zlib}
