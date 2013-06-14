@@ -682,6 +682,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Chart = callPackage ../development/libraries/haskell/Chart {};
 
+  ChartGtk = callPackage ../development/libraries/haskell/Chart-gtk {};
+
   ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
 
   checkers = callPackage ../development/libraries/haskell/checkers {};
