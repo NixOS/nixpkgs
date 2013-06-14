@@ -42,6 +42,17 @@ sha_insert()
     ver_sha_table="$ver_sha_table $version:$sha256";
 }
 
+get_newest_ver()
+{
+    versions="$(for v in $@; do echo "$v"; done)";
+    if oldest="$(echo "$versions" | sort -V 2> /dev/null | tail -n1)";
+    then
+        echo "$oldest";
+    else
+        echo "$versions" | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | tail -n1;
+    fi;
+}
+
 if [ -e "$output_file" ];
 then
     get_sha256()
@@ -54,7 +65,7 @@ then
 
         echo -n "Checking if $oldver ($channel) is up to date..." >&2;
 
-        if [ "x$version" != "x$oldver" ];
+        if [ "x$(get_newest_ver "$version" "$oldver")" != "x$oldver" ];
         then
             echo " no, getting sha256 for new version $version:" >&2;
             sha256="$(nix-prefetch-url "$url")" || return 1;
