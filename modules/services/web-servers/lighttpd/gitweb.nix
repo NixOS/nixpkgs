@@ -45,12 +45,6 @@ in
   config = mkIf cfg.enable {
 
     services.lighttpd.extraConfig = ''
-      server.modules += (
-        "mod_alias",
-        "mod_cgi",
-        "mod_redirect",
-        "mod_setenv"
-      )
       $HTTP["url"] =~ "^/gitweb" {
           cgi.assign = (
               ".cgi" => "${pkgs.perl}/bin/perl"

@@ -45,12 +45,6 @@ in
     environment.systemPackages = [ pkgs.cgit ];
 
     services.lighttpd.extraConfig = ''
-      server.modules += (
-        "mod_cgi",
-        "mod_alias",
-        "mod_setenv"
-      )
-
       $HTTP["url"] =~ "^/cgit" {
           cgi.assign = (
               "cgit.cgi" => "${pkgs.cgit}/cgit/cgit.cgi"
