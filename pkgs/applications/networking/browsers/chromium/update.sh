@@ -56,30 +56,36 @@ then
         if [ "x$version" != "x$oldver" ];
         then
             echo " no, getting sha256 for new version $version:" >&2;
-            sha256="$(nix-prefetch-url "$url")";
+            sha256="$(nix-prefetch-url "$url")" || return 1;
         else
             echo " yes, keeping old sha256." >&2;
-            sha256="$(nix_getattr "$output_file" "$channel.sha256")";
+            sha256="$(nix_getattr "$output_file" "$channel.sha256")" \
+                || return 1;
         fi;
 
         sha_insert "$version" "$sha256";
         echo "$sha256";
+        return 0;
     }
 else
     get_sha256()
     {
-        nix-prefetch-url "$url";
+        nix-prefetch-url "$3";
     }
 fi;
 
 get_channel_exprs()
 {
-    for chline in $(echo "$1" | cut -d, -f-2);
+    for chline in $1;
     do
         channel="${chline%%,*}";
-        version="${chline##*,}";
+
+        versions="${chline#*,}";
+        version="${versions%%,*}";
+        previous="${versions##*,}";
 
         url="${bucket_url%/}/chromium-$version.tar.xz";
+        prevurl="${bucket_url%/}/chromium-$previous.tar.xz";
 
         echo -n "Checking if sha256 of version $version is cached..." >&2;
         if sha256="$(sha_lookup "$version")";
@@ -88,6 +94,12 @@ get_channel_exprs()
         else
             echo " no." >&2;
             sha256="$(get_sha256 "$channel" "$version" "$url")";
+            if [ $? -ne 0 ];
+            then
+                echo "Whoops, failed to fetch $version, trying previous" \
+                     "version $previous:" >&2;
+                sha256="$(get_sha256 "$channel" "$previous" "$prevurl")";
+            fi;
         fi;
 
         sha_insert "$version" "$sha256";
@@ -103,7 +115,7 @@ get_channel_exprs()
 cd "$(dirname "$0")";
 
 omaha="$(curl -s "$channels_url")";
-versions="$(echo "$omaha" | sed -n -e 's/^linux,\(\([^,]\+,\)\{2\}\).*$/\1/p')";
+versions="$(echo "$omaha" | sed -nr -e 's/^linux,(([^,]+,){2}[^,]+).*$/\1/p')";
 channel_exprs="$(get_channel_exprs "$versions")";
 
 cat > "$output_file" <<-EOF
