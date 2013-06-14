@@ -7814,6 +7814,13 @@ let
     xapian_full_alaveteli = rubyLibs.xapian_full_alaveteli_1_2_9_5;
     gpgme = ruby_gpgme;
     ncursesw_sup = ruby_ncursesw_sup;
+    rmail = rubyLibs.rmail;
+    mime_types = rubyLibs.mime_types;
+    chronic = rubyLibs.chronic;
+    trollop = rubyLibs.trollop;
+    lockfile = rubyLibs.lockfile;
+    gettext = rubyLibs.gettext;
+    iconv = rubyLibs.iconv;
   };
 
   msmtp = callPackage ../applications/networking/msmtp { };
