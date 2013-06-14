@@ -1,6 +1,7 @@
 #!/bin/sh
 
 channels_url="http://omahaproxy.appspot.com/all?csv=1";
+history_url="http://omahaproxy.appspot.com/history";
 bucket_url="http://commondatastorage.googleapis.com/chromium-browser-official/";
 output_file="$(cd "$(dirname "$0")" && pwd)/sources.nix";
 
@@ -74,18 +75,34 @@ else
     }
 fi;
 
+fetch_filtered_history()
+{
+    curl -s "$history_url" | sed -nr 's/^'"linux,$1"',([^,]+).*$/\1/p';
+}
+
+get_prev_sha256()
+{
+    channel="$1";
+    current_version="$2";
+
+    for version in $(fetch_filtered_history "$channel");
+    do
+        [ "x$version" = "x$current_version" ] && continue;
+        url="${bucket_url%/}/chromium-$version.tar.xz";
+        sha256="$(get_sha256 "$channel" "$version" "$url")" || continue;
+        echo "$sha256:$version:$url";
+        return 0;
+    done;
+}
+
 get_channel_exprs()
 {
     for chline in $1;
     do
         channel="${chline%%,*}";
-
-        versions="${chline#*,}";
-        version="${versions%%,*}";
-        previous="${versions##*,}";
+        version="${chline##*,}";
 
         url="${bucket_url%/}/chromium-$version.tar.xz";
-        prevurl="${bucket_url%/}/chromium-$previous.tar.xz";
 
         echo -n "Checking if sha256 of version $version is cached..." >&2;
         if sha256="$(sha_lookup "$version")";
@@ -97,8 +114,13 @@ get_channel_exprs()
             if [ $? -ne 0 ];
             then
                 echo "Whoops, failed to fetch $version, trying previous" \
-                     "version $previous:" >&2;
-                sha256="$(get_sha256 "$channel" "$previous" "$prevurl")";
+                     "versions:" >&2;
+
+                sha_ver_url="$(get_prev_sha256 "$channel" "$version")";
+                sha256="${sha_ver_url%%:*}";
+                ver_url="${sha_ver_url#*:}";
+                version="${ver_url%%:*}";
+                url="${ver_url#*:}";
             fi;
         fi;
 
@@ -115,7 +137,7 @@ get_channel_exprs()
 cd "$(dirname "$0")";
 
 omaha="$(curl -s "$channels_url")";
-versions="$(echo "$omaha" | sed -nr -e 's/^linux,(([^,]+,){2}[^,]+).*$/\1/p')";
+versions="$(echo "$omaha" | sed -nr -e 's/^linux,([^,]+,[^,]+).*$/\1/p')";
 channel_exprs="$(get_channel_exprs "$versions")";
 
 cat > "$output_file" <<-EOF
