@@ -1,4 +1,4 @@
-{ cabal, X11, libXtst }:
+{ cabal, libXtst, X11 }:
 
 cabal.mkDerivation (self: {
   pname = "xtest";
