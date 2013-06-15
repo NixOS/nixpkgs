@@ -8261,6 +8261,7 @@ let
 
     features = "huge"; # one of  tiny, small, normal, big or huge
     lua = pkgs.lua5;
+    gui = config.vim.gui or "auto";
 
     # optional features by flags
     flags = [ "python" "X11" ]; # only flag "X11" by now

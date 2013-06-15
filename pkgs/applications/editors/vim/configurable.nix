@@ -40,7 +40,8 @@ composableDerivation {
       }.src;
     };
 
-    configureFlags = ["--enable-gui=auto" "--with-features=${args.features}"];
+    configureFlags
+      = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
 
     nativeBuildInputs
       = [ ncurses pkgconfig gtk libX11 libXext libSM libXpm libXt libXaw libXau
@@ -76,6 +77,7 @@ composableDerivation {
 
   cfg = {
     pythonSupport    = config.vim.python or true;
+    rubySupport      = config.vim.ruby or true;
     nlsSupport       = config.vim.nls or false;
     tclSupport       = config.vim.tcl or false;
     multibyteSupport = config.vim.multibyte or false;
