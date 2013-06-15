@@ -7105,6 +7105,8 @@ let
 
     emms = callPackage ../applications/editors/emacs-modes/emms { };
 
+    ess = callPackage ../applications/editors/emacs-modes/ess { };
+
     flymakeCursor = callPackage ../applications/editors/emacs-modes/flymake-cursor { };
 
     gh = callPackage ../applications/editors/emacs-modes/gh { };
