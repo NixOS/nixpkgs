@@ -6,7 +6,7 @@ rec {
 
   src = fetchurl {
     url = "mirror://debian/pool/main/p/pgf/pgf_2.10.orig.tar.gz";
-    sha256 = "087i0fya6z42wmw7xlj3kyi3bwjg0avpxb01v4xy7ycxnkk94834";
+    sha256 = "642092e6b49df9e33bd901ac7eb7024ff235a29f43d27e78e5827ca3bc03f120";
   };
 
   propagatedBuildInputs = [texLiveLatexXColor texLive];
