@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = http://podgorny.cz/moin/UnionFsFuse;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.shlevy ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
