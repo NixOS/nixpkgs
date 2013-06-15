@@ -35,16 +35,20 @@ g: # Get dependencies from patched gems
     ffi = g.ffi_1_6_0;
     file_tail = g.file_tail_1_0_12;
     foreman = g.foreman_0_62_0;
+    gettext = g.gettext_2_3_9;
     highline = g.highline_1_6_16;
     hike = g.hike_1_2_1;
     hoe = g.hoe_3_1_0;
     i18n = g.i18n_0_6_4;
+    iconv = g.iconv_1_0_3;
     journey = g.journey_1_0_4;
     jruby_pageant = g.jruby_pageant_1_1_1;
     jsduck = g.jsduck_4_7_1;
     json = g.json_1_7_7;
     json_pure = g.json_pure_1_7_7;
     libv8 = g.libv8_3_3_10_4;
+    locale = g.locale_2_0_8;
+    lockfile = g.lockfile_2_1_0;
     macaddr = g.macaddr_1_6_1;
     mail = g.mail_2_5_3;
     mime_types = g.mime_types_1_21;
@@ -74,6 +78,7 @@ g: # Get dependencies from patched gems
     right_aws = g.right_aws_3_0_5;
     right_http_connection = g.right_http_connection_1_3_0;
     rjb = g.rjb_1_4_6;
+    rmail = g.rmail_1_0_0;
     rspec = g.rspec_2_11_0;
     rspec_core = g.rspec_core_2_11_1;
     rspec_expectations = g.rspec_expectations_2_11_3;
@@ -87,12 +92,14 @@ g: # Get dependencies from patched gems
     sprockets = g.sprockets_2_2_2;
     syslog_protocol = g.syslog_protocol_0_9_2;
     systemu = g.systemu_2_5_2;
+    text = g.text_1_2_1;
     therubyracer = g.therubyracer_0_10_2;
     thin = g.thin_1_5_1;
     thor = g.thor_0_18_0;
     tilt = g.tilt_1_3_6;
     tins = g.tins_0_7_2;
     treetop = g.treetop_1_4_12;
+    trollop = g.trollop_2_0;
     tzinfo = g.tzinfo_0_3_37;
     uuid = g.uuid_2_3_7;
     uuidtools = g.uuidtools_2_1_3;
@@ -571,6 +578,20 @@ using TCP/IP, especially if custom protocols are required.'';
       requiredGems = [ g.thor_0_18_0 ];
       sha256 = ''08i34rgs3bydk52zwpps4p0y2fvcnibp9lvfdhr75ppin7wv7lmr'';
     };
+    gettext_2_3_9 = {
+      basename = ''gettext'';
+      meta = {
+        description = ''Gettext is a pure Ruby libary and tools to localize messages.'';
+        homepage = ''http://ruby-gettext.github.com/'';
+        longDescription = ''Gettext is a GNU gettext-like program for Ruby.
+The catalog file(po-file) is same format with GNU gettext.
+So you can use GNU gettext tools for maintaining.
+'';
+      };
+      name = ''gettext-2.3.9'';
+      requiredGems = [ g.locale_2_0_8 g.text_1_2_1 ];
+      sha256 = ''1i4kzkan7mnyr1ihphx0sqs3k4qj9i1ldg4a1cwf5h2fz657wvjj'';
+    };
     highline_1_6_16 = {
       basename = ''highline'';
       meta = {
@@ -654,6 +675,17 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [  ];
       sha256 = ''0wz1rnrs4n21j1rw9a120j2pfdkbikp1yvxaqi3mk30iw6mx4p0f'';
     };
+    iconv_1_0_3 = {
+      basename = ''iconv'';
+      meta = {
+        description = ''iconv wrapper library'';
+        homepage = ''https://github.com/nurse/iconv'';
+        longDescription = ''iconv wrapper library'';
+      };
+      name = ''iconv-1.0.3'';
+      requiredGems = [  ];
+      sha256 = ''1nhjn07h2fqivdj6xqzi2x2kzh28vigx8z3q5fv2cqn9aqmbdacl'';
+    };
     journey_1_0_4 = {
       basename = ''journey'';
       meta = {
@@ -730,6 +762,29 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       name = ''libv8-3.3.10.4'';
       requiredGems = [  ];
       sha256 = ''0zy585rs1ihm8nsw525wgmbkcq7aqy1k9dbkk8s6953adl0bpz42'';
+    };
+    locale_2_0_8 = {
+      basename = ''locale'';
+      meta = {
+        description = ''Ruby-Locale is the pure ruby library which provides basic APIs for localization.'';
+        homepage = ''https://github.com/ruby-gettext/locale'';
+        longDescription = ''Ruby-Locale is the pure ruby library which provides basic APIs for localization.
+'';
+      };
+      name = ''locale-2.0.8'';
+      requiredGems = [  ];
+      sha256 = ''1hmixxg4aigl3h1qmz4fdsrv81p0bblcjbks32nrcvcpwmlylf12'';
+    };
+    lockfile_2_1_0 = {
+      basename = ''lockfile'';
+      meta = {
+        description = ''lockfile'';
+        homepage = ''https://github.com/ahoward/lockfile'';
+        longDescription = ''description: lockfile kicks the ass'';
+      };
+      name = ''lockfile-2.1.0'';
+      requiredGems = [  ];
+      sha256 = ''1yfpz9k0crb7q7y5bcaavf2jzbc170dj84hqz13qp75rj7bl3qhf'';
     };
     macaddr_1_6_1 = {
       basename = ''macaddr'';
@@ -1200,6 +1255,17 @@ algorithm for low-level network errors.
       requiredGems = [  ];
       sha256 = ''0q2czc3ghk32hnxf76xsf0jqcfrnx60aqarvdjhgsfdc9a5pmk20'';
     };
+    rmail_1_0_0 = {
+      basename = ''rmail'';
+      meta = {
+        description = ''A MIME mail parsing and generation library.'';
+        homepage = ''http://www.rfc20.org/rubymail'';
+        longDescription = ''RMail is a lightweight mail library containing various utility classes and modules that allow ruby scripts to parse, modify, and generate MIME mail messages.'';
+      };
+      name = ''rmail-1.0.0'';
+      requiredGems = [  ];
+      sha256 = ''0nsg7yda1gdwa96j4hlrp2s0m06vrhcc4zy5mbq7gxmlmwf9yixp'';
+    };
     rspec_2_11_0 = {
       basename = ''rspec'';
       meta = {
@@ -1356,6 +1422,17 @@ interpreters.'';
       requiredGems = [  ];
       sha256 = ''0h834ajdg9w4xrijp31fn98pjfj08gi08xjvp5xh3i6hz9a25fhr'';
     };
+    text_1_2_1 = {
+      basename = ''text'';
+      meta = {
+        description = ''A collection of text algorithms'';
+        homepage = ''http://github.com/threedaymonk/text'';
+        longDescription = ''A collection of text algorithms: Levenshtein, Soundex, Metaphone, Double Metaphone, Porter Stemming'';
+      };
+      name = ''text-1.2.1'';
+      requiredGems = [  ];
+      sha256 = ''0s186kh125imdr7dahr10payc1gmxgk6wjy1v3agdyvl53yn5z3z'';
+    };
     therubyracer_0_10_2 = {
       basename = ''therubyracer'';
       meta = {
@@ -1420,6 +1497,21 @@ interpreters.'';
       name = ''treetop-1.4.12'';
       requiredGems = [ g.polyglot_0_3_3 g.polyglot_0_3_3 ];
       sha256 = ''1jlfjq67n933sm0px0s2j965v1kl1rj8fbx6xk8y4yppkv6ygxc8'';
+    };
+    trollop_2_0 = {
+      basename = ''trollop'';
+      meta = {
+        description = ''Trollop is a commandline option parser for Ruby that just gets out of your way.'';
+        homepage = ''http://trollop.rubyforge.org'';
+        longDescription = ''Trollop is a commandline option parser for Ruby that just
+gets out of your way. One line of code per option is all you need to write.
+For that, you get a nice automatically-generated help page, robust option
+parsing, command subcompletion, and sensible defaults for everything you don't
+specify.'';
+      };
+      name = ''trollop-2.0'';
+      requiredGems = [  ];
+      sha256 = ''0iz5k7ax7a5jm9x6p81k6f4mgp48wxxb0j55ypnwxnznih8fsghz'';
     };
     tzinfo_0_3_37 = {
       basename = ''tzinfo'';
