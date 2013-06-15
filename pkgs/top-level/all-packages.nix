@@ -1366,11 +1366,19 @@ let
 
   opensc_dnie_wrapper = callPackage ../tools/security/opensc-dnie-wrapper { };
 
-  openssh = callPackage ../tools/networking/openssh {
-    hpnSupport = false;
-    etcDir = "/etc/ssh";
-    pam = if stdenv.isLinux then pam else null;
-  };
+  # an argument is necessary for 
+  # nix-env --arg withKerberos true -iA openssh
+  # to work
+  mkOpenssh = {withKerberos ? false }:
+    callPackage ../tools/networking/openssh {
+      hpnSupport = false;
+      etcDir = "/etc/ssh";
+      pam = if stdenv.isLinux then pam else null;
+      inherit withKerberos;
+    };
+
+  openssh = mkOpenssh { };
+  opensshKrb5 = mkOpenssh { withKerberos = true; };
 
   opensp = callPackage ../tools/text/sgml/opensp { };
 
