@@ -2105,6 +2105,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
 
+  xtest = callPackage ../development/libraries/haskell/xtest {};
+
   xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
 
   yaml = callPackage ../development/libraries/haskell/yaml {};
