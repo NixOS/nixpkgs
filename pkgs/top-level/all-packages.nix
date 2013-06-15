@@ -183,7 +183,6 @@ let
 
   ### Helper functions.
 
-
   inherit lib config stdenvAdapters;
 
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
@@ -201,6 +200,11 @@ let
   builderDefsPackage = builderDefs.builderDefsPackage builderDefs;
 
   stringsWithDeps = lib.stringsWithDeps;
+
+
+  ### Nixpkgs maintainer tools
+
+  nix-generate-from-cpan = callPackage ../../maintainers/scripts/nix-generate-from-cpan.nix { };
 
 
   ### STANDARD ENVIRONMENT
@@ -2005,7 +2009,6 @@ let
 
   ### SHELLS
 
-
   bash = lowPrio (callPackage ../shells/bash {
     texinfo = null;
   });
@@ -2028,7 +2031,6 @@ let
 
 
   ### DEVELOPMENT / COMPILERS
-
 
   abc =
     abcPatchable [];
@@ -2654,8 +2656,8 @@ let
 
   mlton = callPackage ../development/compilers/mlton { };
 
-  mono = callPackage ../development/compilers/mono { 
-    inherit (xlibs) libX11;    
+  mono = callPackage ../development/compilers/mono {
+    inherit (xlibs) libX11;
   };
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
@@ -2903,6 +2905,7 @@ let
 
   yasm = callPackage ../development/compilers/yasm { };
 
+
   ### DEVELOPMENT / INTERPRETERS
 
   acl2 = builderDefsPackage ../development/interpreters/acl2 {
@@ -3128,7 +3131,6 @@ let
 
 
   ### DEVELOPMENT / TOOLS
-
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
@@ -3537,7 +3539,6 @@ let
 
 
   ### DEVELOPMENT / LIBRARIES
-
 
   a52dec = callPackage ../development/libraries/a52dec { };
 
@@ -6657,6 +6658,7 @@ let
 
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
 
+
   ### DATA
 
   andagii = callPackage ../data/fonts/andagii {};
@@ -7819,11 +7821,21 @@ let
   ruby_ncursesw_sup = callPackage ../development/libraries/ruby_ncursesw_sup { };
 
   sup = callPackage ../applications/networking/mailreaders/sup {
-    rake = rubyLibs.rake_10_0_4;
     ruby = ruby19;
-    xapian_full_alaveteli = rubyLibs.xapian_full_alaveteli_1_2_9_5;
+
+    chronic = rubyLibs.chronic;
+    gettext = rubyLibs.gettext;
     gpgme = ruby_gpgme;
+    iconv = rubyLibs.iconv;
+    locale = rubyLibs.locale;
+    lockfile = rubyLibs.lockfile;
+    mime_types = rubyLibs.mime_types;
     ncursesw_sup = ruby_ncursesw_sup;
+    rake = rubyLibs.rake_10_0_4;
+    rmail = rubyLibs.rmail;
+    text = rubyLibs.text;
+    trollop = rubyLibs.trollop;
+    xapian_full_alaveteli = rubyLibs.xapian_full_alaveteli_1_2_9_5;
   };
 
   msmtp = callPackage ../applications/networking/msmtp { };
@@ -8494,6 +8506,7 @@ let
 
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
 
+
   ### GAMES
 
   alienarena = callPackage ../games/alienarena { };
@@ -8789,7 +8802,6 @@ let
 
   ### DESKTOP ENVIRONMENTS
 
-
   enlightenment = callPackage ../desktops/enlightenment { };
 
   e17 = recurseIntoAttrs (
@@ -8962,6 +8974,7 @@ let
   xfce = xfce4_10;
   xfce4_10 = recurseIntoAttrs (import ../desktops/xfce { inherit pkgs newScope; });
 
+
   ### SCIENCE
 
   celestia = callPackage ../applications/science/astronomy/celestia {
@@ -8980,6 +8993,7 @@ let
   };
 
   stellarium = callPackage ../applications/science/astronomy/stellarium { };
+
 
   ### SCIENCE/GEOMETRY
 
@@ -9063,6 +9077,7 @@ let
     cmake = cmakeCurses;
   });
 
+
   ### SCIENCE/LOGIC
 
   coq = callPackage ../applications/science/logic/coq {
@@ -9139,6 +9154,7 @@ let
 
   tptp = callPackage ../applications/science/logic/tptp {};
 
+
   ### SCIENCE / ELECTRONICS
 
   eagle = callPackage_i686 ../applications/science/electronics/eagle { };
@@ -9191,6 +9207,7 @@ let
 
   yacas = callPackage ../applications/science/math/yacas { };
 
+
   ### SCIENCE / MISC
 
   boinc = callPackage ../applications/science/misc/boinc { };
@@ -9202,6 +9219,7 @@ let
   tulip = callPackage ../applications/science/misc/tulip { };
 
   vite = callPackage ../applications/science/misc/vite { };
+
 
   ### MISC
 
@@ -9408,7 +9426,8 @@ let
 
   texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
     paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
-              texLivePGF texLiveBeamer texLiveModerncv tipa tex4ht texinfo5 ];
+              texLivePGF texLiveBeamer texLiveModerncv tipa tex4ht texinfo5
+              texLiveModerntimeline ];
   });
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions
@@ -9453,6 +9472,10 @@ let
   };
 
   texLiveModerncv = builderDefsPackage (import ../tools/typesetting/tex/texlive/moderncv.nix) {
+    inherit texLive unzip;
+  };
+
+  texLiveModerntimeline = builderDefsPackage (import ../tools/typesetting/tex/texlive/moderntimeline.nix) {
     inherit texLive unzip;
   };
 
@@ -9508,14 +9531,14 @@ let
   PatolineEnv = pack: myEnvFun {
       name = "patoline";
       buildInputs = [ stdenv ncurses mesa freeglut libzip gcc
-                                   pack.ocaml pack.findlib pack.camomile 
-	                           pack.dypgen pack.ocaml_sqlite3 pack.camlzip 
+                                   pack.ocaml pack.findlib pack.camomile
+	                           pack.dypgen pack.ocaml_sqlite3 pack.camlzip
 				   pack.lablgtk pack.camlimages pack.ocaml_cairo
 				   pack.lablgl pack.ocamlnet pack.cryptokit
 				   pack.ocaml_pcre pack.patoline
 				   ];
     # this is to circumvent the bug with libgcc_s.so.1 which is
-    # not found when using thread				   
+    # not found when using thread
     extraCmds = ''
        LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${gcc.gcc}/lib
        export LD_LIBRARY_PATH

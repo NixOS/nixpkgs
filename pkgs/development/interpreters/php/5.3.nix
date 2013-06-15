@@ -89,7 +89,12 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       gd = {
-        configureFlags = ["--with-gd=${gd} --with-freetype-dir=${freetype}"];
+        configureFlags = [
+          "--with-gd"
+          "--with-freetype-dir=${freetype}"
+          "--with-png-dir=${libpng}"
+          "--with-jpeg-dir=${libjpeg}"
+        ];
         buildInputs = [gd libpng libjpeg freetype];
       };
 

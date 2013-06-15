@@ -1,5 +1,9 @@
 { stdenv, fetchurl, kernelDev, zlib }:
 
+/* Only useful for kernels 3.2 to 3.5.
+   Fails to build in 3.8.
+   3.9 upstream already includes a proper alps driver for this */
+
 let
   ver = "1.3";
   bname = "psmouse-alps-${ver}";
