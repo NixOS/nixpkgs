@@ -9,11 +9,11 @@
  */
 
 stdenv.mkDerivation rec {
-  name = "gnucash-2.4.11";
+  name = "gnucash-2.4.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "0qbpgd6spclkmwryi66cih0igi5a6pmsnk41mmnscpfpz1mddhwk";
+    sha256 = "0j4m00a3r1hcrhkfjkx3sgi2r4id4wrc639i4s00j35rx80540pn";
   };
 
   buildInputs = [
