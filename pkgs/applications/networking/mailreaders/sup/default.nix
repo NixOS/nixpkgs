@@ -1,5 +1,6 @@
 { stdenv, fetchurl, ruby, rake, rubygems, makeWrapper, ncursesw_sup
-, xapian_full_alaveteli, gpgme, libiconvOrEmpty }:
+, xapian_full_alaveteli, gpgme, libiconvOrEmpty, rmail, mime_types, chronic
+, trollop, lockfile, gettext, iconv }:
 
 stdenv.mkDerivation {
   name = "sup-d21f027afcd6a4031de9619acd8dacbd2f2f4fd4";
@@ -34,29 +35,19 @@ stdenv.mkDerivation {
     GEM_PATH="$GEM_PATH:${ncursesw_sup}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${xapian_full_alaveteli}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${gpgme}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${rmail}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${mime_types}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${chronic}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${trollop}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${lockfile}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${gettext}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${iconv}/${ruby.gemPath}"
 
     # Don't install some dependencies -- we have already installed
-    # ncursesw-sup, xapian-full-alaveteli and gpgme, but gem doesn't acknowledge
-    # this
+    # the dependencies but gem doesn't acknowledge this
     gem install --no-verbose --install-dir "$out/${ruby.gemPath}" \
         --bindir "$out/bin" --no-rdoc --no-ri pkg/sup-999.gem \
         --ignore-dependencies
-
-    # Now install the dependencies that will work out of the box
-    gem install --no-verbose --install-dir "$out/${ruby.gemPath}" \
-        --bindir "$out/bin" --no-rdoc --no-ri rmail
-    gem install --no-verbose --install-dir "$out/${ruby.gemPath}" \
-        --bindir "$out/bin" --no-rdoc --no-ri trollop
-    gem install --no-verbose --install-dir "$out/${ruby.gemPath}" \
-        --bindir "$out/bin" --no-rdoc --no-ri lockfile
-    gem install --no-verbose --install-dir "$out/${ruby.gemPath}" \
-        --bindir "$out/bin" --no-rdoc --no-ri mime-types
-    gem install --no-verbose --install-dir "$out/${ruby.gemPath}" \
-        --bindir "$out/bin" --no-rdoc --no-ri gettext
-    gem install --no-verbose --install-dir "$out/${ruby.gemPath}" \
-        --bindir "$out/bin" --no-rdoc --no-ri chronic
-    gem install --no-verbose --install-dir "$out/${ruby.gemPath}" \
-        --bindir "$out/bin" --no-rdoc --no-ri iconv
 
     for prog in $out/bin/*; do
       wrapProgram "$prog" --prefix GEM_PATH : "$GEM_PATH"
