@@ -4,14 +4,16 @@ import os
 import sys
 import time
 import argparse
-import charon.util
-from charon import deployment
+import nixops.util
+from nixops import deployment
 from boto.ec2.blockdevicemapping import BlockDeviceMapping, BlockDeviceType
+import boto.ec2
 
 parser = argparse.ArgumentParser(description='Create an EBS-backed NixOS AMI')
-parser.add_argument('--region', dest='region', required=True, help='EC2 region')
-parser.add_argument('--keep', dest='keep', action='store_true', help='Keep Charon machine after use')
+parser.add_argument('--region', dest='region', required=True, help='EC2 region to create the image in')
+parser.add_argument('--keep', dest='keep', action='store_true', help='Keep NixOps machine after use')
 parser.add_argument('--hvm', dest='hvm', action='store_true', help='Create HVM image')
+parser.add_argument('--key', dest='key_name', action='store_true', help='Keypair used for HVM instance creation', default="rob")
 args = parser.parse_args()
 
 instance_type = "cc1.4xlarge" if args.hvm else "m1.small"
@@ -67,7 +69,7 @@ m.run_command("nix-channel --update")
 m.run_command("nixos-rebuild switch")
 version = m.run_command("nixos-version", capture_stdout=True).replace('"', '').rstrip()
 print >> sys.stderr, "NixOS version is {0}".format(version)
-m.run_command("cp -f $(nix-instantiate --find-file nixos/modules/virtualisation/amazon-config.nix) /mnt/etc/nixos/configuration.nix")
+m.upload_file("./amazon-base-config.nix", "/mnt/etc/nixos/configuration.nix")
 m.run_command("nixos-install")
 if args.hvm:
     m.run_command('cp /mnt/nix/store/*-grub-0.97*/lib/grub/i386-pc/* /mnt/boot/grub')
@@ -98,24 +100,24 @@ volume = m._conn.get_all_volumes([], filters={'attachment.instance-id': m.resour
 if args.hvm:
     instance = m._conn.run_instances( image_id="ami-6a9e4503"
                                     , instance_type=instance_type
-                                    , key_name=key_name
+                                    , key_name=args.key_name
                                     , placement=m.zone
                                     , security_groups=["eelco-test"]).instances[0]
-    charon.util.check_wait(lambda: instance.update() == 'running', max_tries=120)
+    nixops.util.check_wait(lambda: instance.update() == 'running', max_tries=120)
     instance.stop()
-    charon.util.check_wait(lambda: instance.update() == 'stopped', max_tries=120)
+    nixops.util.check_wait(lambda: instance.update() == 'stopped', max_tries=120)
     old_root_volume = m._conn.get_all_volumes([], filters={'attachment.instance-id': instance.id, 'attachment.device': "/dev/sda1"})[0]
     old_root_volume.detach()
     volume.detach()
-    charon.util.check_wait(lambda: volume.update() == 'available', max_tries=120)
-    charon.util.check_wait(lambda: old_root_volume.update() == 'available', max_tries=120)
+    nixops.util.check_wait(lambda: volume.update() == 'available', max_tries=120)
+    nixops.util.check_wait(lambda: old_root_volume.update() == 'available', max_tries=120)
     volume.attach(instance.id, '/dev/sda1')
-    charon.util.check_wait(lambda: volume.update() == 'in-use', max_tries=120)
+    nixops.util.check_wait(lambda: volume.update() == 'in-use', max_tries=120)
 
     ami_id = m._conn.create_image(instance.id, ami_name, description)
     time.sleep(5)
     image = m._conn.get_all_images([ami_id])[0]
-    charon.util.check_wait(lambda: image.update() == 'available', max_tries=120)
+    nixops.util.check_wait(lambda: image.update() == 'available', max_tries=120)
     instance.terminate()
 
 else:
@@ -123,7 +125,7 @@ else:
     snapshot = volume.create_snapshot(description=description)
     print >> sys.stderr, "created snapshot {0}".format(snapshot.id)
 
-    charon.util.check_wait(check, max_tries=120)
+    nixops.util.check_wait(check, max_tries=120)
 
     m._conn.create_tags([snapshot.id], {'Name': ami_name})
 
@@ -160,7 +162,6 @@ print >> sys.stderr, "making image public..."
 image = m._conn.get_all_images(image_ids=[ami_id])[0]
 image.set_launch_permissions(user_ids=[], group_names=["all"])
 
-
 # Do a test deployment to make sure that the AMI works.
 f = open("ebs-test.nix", "w")
 f.write(
@@ -190,11 +191,30 @@ test_depl.name = "ebs-creator-test"
 test_depl.nix_exprs = [os.path.abspath("./ebs-test.nix")]
 test_depl.deploy(create_only=True)
 test_depl.machines['machine'].run_command("nixos-version")
+
+if args.hvm:
+    image_type = 'hvm'
+else:
+    image_type = 'ebs'
+
+# Log the AMI ID.
+f = open("{0}.{1}.ami-id".format(args.region, image_type), "w")
+f.write("{0}".format(ami_id))
+f.close()
+
+for dest in [ 'us-east-1', 'us-west-1', 'us-west-2', 'eu-west-1']:
+    if args.region != dest:
+        print >> sys.stderr, "copying image from region {0} to {1}".format(args.region, dest)
+        conn = boto.ec2.connect_to_region(dest)
+        copy_image = conn.copy_image(args.region, ami_id, ami_name, description=None, client_token=None)
+
+        # Log the AMI ID.
+        f = open("{0}.{1}.ami-id".format(dest, image_type), "w")
+        f.write("{0}".format(copy_image.image_id))
+        f.close()
+
+
 if not args.keep:
     test_depl.destroy_resources()
     test_depl.delete()
 
-# Log the AMI ID.
-f = open("{0}.ebs.ami-id".format(args.region), "w")
-f.write("{0}".format(ami_id))
-f.close()

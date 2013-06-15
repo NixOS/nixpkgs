@@ -52,6 +52,8 @@ in
             mkdir -m 0755 -p /var/db/nscd
           '';
 
+        restartTriggers = [ config.environment.etc.hosts.source ];
+
         serviceConfig =
           { ExecStart = "@${pkgs.glibc}/sbin/nscd nscd -f ${./nscd.conf}";
             Type = "forking";

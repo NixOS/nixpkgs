@@ -54,7 +54,7 @@ in
   options = {
 
     environment.nix = mkOption {
-      default = pkgs.nixUnstable;
+      default = pkgs.nix;
       merge = mergeOneOption;
       description = ''
         This option specifies the Nix package instance to use throughout the system.
@@ -220,7 +220,7 @@ in
       };
 
       binaryCaches = mkOption {
-        default = [ http://nixos.org/binary-cache ];
+        default = [ http://cache.nixos.org/ ];
         type = types.listOf types.string;
         description = ''
           List of binary cache URLs used to obtain pre-built binaries

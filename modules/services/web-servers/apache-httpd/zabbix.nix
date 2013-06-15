@@ -11,10 +11,11 @@ let
   # we could generate zabbix.conf.php declaratively.
   zabbixPHP = pkgs.runCommand "${pkgs.zabbix.server.name}-php" {}
     ''
-      cp -rs ${pkgs.zabbix.server}/share/zabbix/php $out
+      cp -rs ${pkgs.zabbix.server}/share/zabbix/php "$out"
       chmod -R u+w $out
-      #rm -rf $out/conf
-      ln -s ${config.stateDir}/zabbix.conf.php $out/conf/zabbix.conf.php
+      ln -s "${if config.configFile == null
+               then "${config.stateDir}/zabbix.conf.php"
+               else config.configFile}" "$out/conf/zabbix.conf.php"
     '';
 
 in
@@ -27,6 +28,7 @@ in
     ''
       post_max_size = 32M
       max_execution_time = 300
+      max_input_time = 300
     '';
 
   extraConfig = ''
@@ -55,6 +57,16 @@ in
         The URL prefix under which the Zabbix service appears.
         Use the empty string to have it appear in the server root.
       ";
+    };
+
+    configFile = pkgs.lib.mkOption {
+      default = null;
+      type = with pkgs.lib.types; nullOr path;
+      description = ''
+        The configuration file (zabbix.conf.php) which contains the database
+        connection settings. If not set, the configuration settings will created
+        by the web installer.
+      '';
     };
 
     stateDir = pkgs.lib.mkOption {

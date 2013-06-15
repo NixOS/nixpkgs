@@ -75,7 +75,7 @@ let
     { services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
       services.httpd.servedDirs = singleton
-        { urlPath = "/binary-cache";
+        { urlPath = "/";
           dir = "/tmp/channel";
         };
 
@@ -123,7 +123,7 @@ let
         # Allow the machine to talk to the fake nixos.org.
         $machine->succeed(
             "rm /etc/hosts",
-            "echo 192.168.1.1 nixos.org > /etc/hosts",
+            "echo 192.168.1.1 nixos.org cache.nixos.org > /etc/hosts",
             "ifconfig eth1 up 192.168.1.2",
         );
 

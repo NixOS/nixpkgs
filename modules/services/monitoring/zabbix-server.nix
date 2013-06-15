@@ -34,6 +34,8 @@ let
       ''}
     '';
 
+  useLocalPostgres = cfg.dbServer == "localhost" || cfg.dbServer == "";
+
 in
 
 {
@@ -51,7 +53,10 @@ in
 
     services.zabbixServer.dbServer = mkOption {
       default = "localhost";
-      description = "Hostname or IP address of the database server.";
+      description = ''
+        Hostname or IP address of the database server.
+        Use an empty string ("") to use peer authentication.
+      '';
     };
 
     services.zabbixServer.dbPassword = mkOption {
@@ -65,7 +70,7 @@ in
 
   config = mkIf cfg.enable {
 
-    services.postgresql.enable = cfg.dbServer == "localhost";
+    services.postgresql.enable = useLocalPostgres;
 
     users.extraUsers = singleton
       { name = "zabbix";
@@ -77,7 +82,7 @@ in
       { description = "Zabbix Server";
 
         wantedBy = [ "multi-user.target" ];
-        after = optional (cfg.dbServer == "localhost") "postgresql.service";
+        after = optional useLocalPostgres "postgresql.service";
 
         preStart =
           ''
@@ -88,8 +93,8 @@ in
                 ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole zabbix || true
                 ${pkgs.postgresql}/bin/createdb --owner zabbix zabbix || true
                 cat ${pkgs.zabbix.server}/share/zabbix/db/schema/postgresql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
-                cat ${pkgs.zabbix.server}/share/zabbix/db/data/data.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
                 cat ${pkgs.zabbix.server}/share/zabbix/db/data/images_pgsql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
+                cat ${pkgs.zabbix.server}/share/zabbix/db/data/data.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
                 touch "${libDir}/db-created"
             fi
           '';
@@ -100,6 +105,7 @@ in
         serviceConfig.Type = "forking";
         serviceConfig.Restart = "always";
         serviceConfig.RestartSec = 2;
+        serviceConfig.PIDFile = pidFile;
       };
 
   };
