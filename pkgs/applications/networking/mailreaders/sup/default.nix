@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ruby, rake, rubygems, makeWrapper, ncursesw_sup
 , xapian_full_alaveteli, gpgme, libiconvOrEmpty, rmail, mime_types, chronic
-, trollop, lockfile, gettext, iconv }:
+, trollop, lockfile, gettext, iconv, locale, text }:
 
 stdenv.mkDerivation {
   name = "sup-d21f027afcd6a4031de9619acd8dacbd2f2f4fd4";
@@ -32,16 +32,18 @@ stdenv.mkDerivation {
     export HOME=$TMP/home; mkdir -pv "$HOME"
 
     GEM_PATH="$GEM_PATH:$out/${ruby.gemPath}"
-    GEM_PATH="$GEM_PATH:${ncursesw_sup}/${ruby.gemPath}"
-    GEM_PATH="$GEM_PATH:${xapian_full_alaveteli}/${ruby.gemPath}"
-    GEM_PATH="$GEM_PATH:${gpgme}/${ruby.gemPath}"
-    GEM_PATH="$GEM_PATH:${rmail}/${ruby.gemPath}"
-    GEM_PATH="$GEM_PATH:${mime_types}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${chronic}/${ruby.gemPath}"
-    GEM_PATH="$GEM_PATH:${trollop}/${ruby.gemPath}"
-    GEM_PATH="$GEM_PATH:${lockfile}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${gettext}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${gpgme}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${iconv}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${locale}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${lockfile}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${mime_types}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${ncursesw_sup}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${rmail}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${text}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${trollop}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${xapian_full_alaveteli}/${ruby.gemPath}"
 
     # Don't install some dependencies -- we have already installed
     # the dependencies but gem doesn't acknowledge this
