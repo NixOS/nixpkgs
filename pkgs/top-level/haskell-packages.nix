@@ -2012,6 +2012,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   vectorSpacePoints = callPackage ../development/libraries/haskell/vector-space-points {};
 
+  vectorThUnbox = callPackage ../development/libraries/haskell/vector-th-unbox {};
+
   void = callPackage ../development/libraries/haskell/void {};
 
   vty = callPackage ../development/libraries/haskell/vty {};
