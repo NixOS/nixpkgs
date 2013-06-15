@@ -9509,11 +9509,11 @@ let
       name = "patoline";
       buildInputs = [ stdenv ncurses mesa freeglut libzip gcc
                                    pack.ocaml pack.findlib pack.camomile
-	                           pack.dypgen pack.ocaml_sqlite3 pack.camlzip
-				   pack.lablgtk pack.camlimages pack.ocaml_cairo
-				   pack.lablgl pack.ocamlnet pack.cryptokit
-				   pack.ocaml_pcre pack.patoline
-				   ];
+                                   pack.dypgen pack.ocaml_sqlite3 pack.camlzip
+                                   pack.lablgtk pack.camlimages pack.ocaml_cairo
+                                   pack.lablgl pack.ocamlnet pack.cryptokit
+                                   pack.ocaml_pcre pack.patoline
+                                   ];
     # this is to circumvent the bug with libgcc_s.so.1 which is
     # not found when using thread
     extraCmds = ''
