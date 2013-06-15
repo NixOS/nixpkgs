@@ -7809,18 +7809,21 @@ let
   ruby_ncursesw_sup = callPackage ../development/libraries/ruby_ncursesw_sup { };
 
   sup = callPackage ../applications/networking/mailreaders/sup {
-    rake = rubyLibs.rake_10_0_4;
     ruby = ruby19;
-    xapian_full_alaveteli = rubyLibs.xapian_full_alaveteli_1_2_9_5;
-    gpgme = ruby_gpgme;
-    ncursesw_sup = ruby_ncursesw_sup;
-    rmail = rubyLibs.rmail;
-    mime_types = rubyLibs.mime_types;
+
     chronic = rubyLibs.chronic;
-    trollop = rubyLibs.trollop;
-    lockfile = rubyLibs.lockfile;
     gettext = rubyLibs.gettext;
+    gpgme = ruby_gpgme;
     iconv = rubyLibs.iconv;
+    locale = rubyLibs.locale;
+    lockfile = rubyLibs.lockfile;
+    mime_types = rubyLibs.mime_types;
+    ncursesw_sup = ruby_ncursesw_sup;
+    rake = rubyLibs.rake_10_0_4;
+    rmail = rubyLibs.rmail;
+    text = rubyLibs.text;
+    trollop = rubyLibs.trollop;
+    xapian_full_alaveteli = rubyLibs.xapian_full_alaveteli_1_2_9_5;
   };
 
   msmtp = callPackage ../applications/networking/msmtp { };
