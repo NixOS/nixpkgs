@@ -126,4 +126,23 @@ in
     };
   };
 
+  syntastic = stdenv.mkDerivation {
+    name = "vim-syntastic-3.0.0";
+   
+    src = fetchurl {
+      url = "https://github.com/scrooloose/syntastic/archive/3.0.0.tar.gz";
+      sha256 = "0nf69wpa8qa7xcfvywy2khmazs4dn1i2nal9qwjh2bzrbwbbkdyl";
+    };
+
+    buildPhase = "";
+
+    installPhase = ''
+      mkdir -p "$out/vim-plugins"
+      cp -R autoload "$out/vim-plugins"
+      cp -R doc "$out/vim-plugins"
+      cp -R plugin "$out/vim-plugins"
+      cp -R syntax_checkers "$out/vim-plugins"
+    '';
+  };
 }
+
