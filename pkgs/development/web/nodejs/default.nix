@@ -42,9 +42,9 @@ in stdenv.mkDerivation {
     (cd tools/gyp; patch -Np1 -i ${../../python-modules/gyp/no-darwin-cflags.patch})
   '' else null;
 
-  buildInputs = [ python ]
+  buildInputs = [ python openssl ]
     ++ (optional stdenv.isLinux utillinux)
-    ++ optionals stdenv.isDarwin [ pkgconfig openssl dtrace ];
+    ++ optionals stdenv.isDarwin [ pkgconfig dtrace ];
   setupHook = ./setup-hook.sh;
 
   meta = {
