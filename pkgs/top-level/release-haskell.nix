@@ -81,10 +81,12 @@ mapHaskellTestOn {
   bytestringMmap = default;
   bytestringNums = default;
   bytestringTrie = default;
+  Cabal_1_16_0_3 = all;
   cabal2Ghci = default;
   cabal2nix = allBut ghc6104;
   cabalDev = default ++ latest;
   cabalGhci = default ++ latest;
+  cabalInstall_1_16_0_2 = all;
   cabalInstall = all;
   cairo = default;
   caseInsensitive = default;
