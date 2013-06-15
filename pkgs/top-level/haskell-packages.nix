@@ -585,7 +585,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
-  binary = callPackage ../development/libraries/haskell/binary {};
+  binary_0_6_0_0 = callPackage ../development/libraries/haskell/binary/0.6.0.0.nix {};
+  binary_0_7_1_0 = callPackage ../development/libraries/haskell/binary/0.7.1.0.nix {};
+  binary = self.binary_0_7_1_0;
 
   binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
 
