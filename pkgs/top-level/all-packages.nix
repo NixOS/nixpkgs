@@ -2652,8 +2652,8 @@ let
 
   mlton = callPackage ../development/compilers/mlton { };
 
-  mono = callPackage ../development/compilers/mono { 
-    inherit (xlibs) libX11;    
+  mono = callPackage ../development/compilers/mono {
+    inherit (xlibs) libX11;
   };
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
@@ -9398,7 +9398,8 @@ let
 
   texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
     paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
-              texLivePGF texLiveBeamer texLiveModerncv tipa tex4ht texinfo5 ];
+              texLivePGF texLiveBeamer texLiveModerncv tipa tex4ht texinfo5
+              texLiveModerntimeline ];
   });
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions
@@ -9443,6 +9444,10 @@ let
   };
 
   texLiveModerncv = builderDefsPackage (import ../tools/typesetting/tex/texlive/moderncv.nix) {
+    inherit texLive unzip;
+  };
+
+  texLiveModerntimeline = builderDefsPackage (import ../tools/typesetting/tex/texlive/moderntimeline.nix) {
     inherit texLive unzip;
   };
 
@@ -9498,14 +9503,14 @@ let
   PatolineEnv = pack: myEnvFun {
       name = "patoline";
       buildInputs = [ stdenv ncurses mesa freeglut libzip gcc
-                                   pack.ocaml pack.findlib pack.camomile 
-	                           pack.dypgen pack.ocaml_sqlite3 pack.camlzip 
+                                   pack.ocaml pack.findlib pack.camomile
+	                           pack.dypgen pack.ocaml_sqlite3 pack.camlzip
 				   pack.lablgtk pack.camlimages pack.ocaml_cairo
 				   pack.lablgl pack.ocamlnet pack.cryptokit
 				   pack.ocaml_pcre pack.patoline
 				   ];
     # this is to circumvent the bug with libgcc_s.so.1 which is
-    # not found when using thread				   
+    # not found when using thread
     extraCmds = ''
        LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${gcc.gcc}/lib
        export LD_LIBRARY_PATH
