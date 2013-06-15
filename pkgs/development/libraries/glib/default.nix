@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sha256 = "090bw5par3dfy5m6dhq393pmy92zpw3d7rgbzqjc14jfg637bqvx";
   };
 
-  outputs = [ "dev" "out" "bin" "doc" ];
+  outputs = [ "dev" "out" "bin" ];
 
   # configure script looks for d-bus but it is only needed for tests
   buildInputs = [ libelf ] ++ libintlOrEmpty;
