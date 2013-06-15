@@ -629,6 +629,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   boomerang = callPackage ../development/libraries/haskell/boomerang {};
 
+  bytedump = callPackage ../development/libraries/haskell/bytedump {};
+
   byteorder = callPackage ../development/libraries/haskell/byteorder {};
 
   bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
@@ -1154,6 +1156,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   hint = callPackage ../development/libraries/haskell/hint {};
 
   Hipmunk = callPackage ../development/libraries/haskell/Hipmunk {};
+
+  hit = callPackage ../development/libraries/haskell/hit {};
 
   hjsmin = callPackage ../development/libraries/haskell/hjsmin {};
 
