@@ -139,42 +139,42 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
-    async        = self.async_2_0_1_4;          # 7.6 ok
-    attoparsec   = self.attoparsec_0_10_4_0;    # 7.6 ok
+    async        = self.async_2_0_1_4;
+    attoparsec   = self.attoparsec_0_10_4_0;
     caseInsensitive = self.caseInsensitive_1_0_0_1;
-    cgi          = self.cgi_3001_1_7_5;         # 7.6 ok
-    fgl          = self.fgl_5_4_2_4;            # 7.6 ok
-    GLUT         = self.GLUT_2_4_0_0;           # 7.6 ok
-    GLURaw       = self.GLURaw_1_3_0_0;         # 7.6 ok
-    haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 ok
-    hashable     = self.hashable_1_1_2_5;       # 7.6 ok
-    html         = self.html_1_0_1_2;           # 7.6 ok
-    HTTP         = self.HTTP_4000_2_8;          # 7.6 ok
-    HUnit        = self.HUnit_1_2_5_2;          # 7.6 ok
-    mtl          = self.mtl_2_1_2;              # 7.6 ok
-    network      = self.network_2_4_1_2;        # 7.6 ok
-    OpenGL       = self.OpenGL_2_8_0_0;         # 7.6 ok
-    OpenGLRaw    = self.OpenGLRaw_1_3_0_0;      # 7.6 ok
-    parallel     = self.parallel_3_2_0_3;       # 7.6 ok
-    parsec       = self.parsec_3_1_3;           # 7.6 ok
-    QuickCheck   = self.QuickCheck_2_6;         # 7.6 ok
-    random       = self.random_1_0_1_1;         # 7.6 ok
-    regexBase    = self.regexBase_0_93_2;       # 7.6 ok
-    regexCompat  = self.regexCompat_0_95_1;     # 7.6 ok
-    regexPosix   = self.regexPosix_0_95_2;      # 7.6 ok
-    split        = self.split_0_2_2;            # 7.6 ok
-    stm          = self.stm_2_4_2;              # 7.6 ok
-    syb          = self.syb_0_4_0;              # 7.6 ok
-    text         = self.text_0_11_3_1;          # 7.6 ok
-    transformers = self.transformers_0_3_0_0;   # 7.6 ok
+    cgi          = self.cgi_3001_1_7_5;
+    fgl          = self.fgl_5_4_2_4;
+    GLUT         = self.GLUT_2_4_0_0;
+    GLURaw       = self.GLURaw_1_3_0_0;
+    haskellSrc   = self.haskellSrc_1_0_1_5;
+    hashable     = self.hashable_1_2_0_10;
+    html         = self.html_1_0_1_2;
+    HTTP         = self.HTTP_4000_2_8;
+    HUnit        = self.HUnit_1_2_5_2;
+    mtl          = self.mtl_2_1_2;
+    network      = self.network_2_4_1_2;
+    OpenGL       = self.OpenGL_2_8_0_0;
+    OpenGLRaw    = self.OpenGLRaw_1_3_0_0;
+    parallel     = self.parallel_3_2_0_3;
+    parsec       = self.parsec_3_1_3;
+    QuickCheck   = self.QuickCheck_2_6;
+    random       = self.random_1_0_1_1;
+    regexBase    = self.regexBase_0_93_2;
+    regexCompat  = self.regexCompat_0_95_1;
+    regexPosix   = self.regexPosix_0_95_2;
+    split        = self.split_0_2_2;
+    stm          = self.stm_2_4_2;
+    syb          = self.syb_0_4_0;
+    text         = self.text_0_11_3_1;
+    transformers = self.transformers_0_3_0_0;
     unorderedContainers = self.unorderedContainers_0_2_3_0;
-    vector       = self.vector_0_10_0_1;        # 7.6 ok
-    xhtml        = self.xhtml_3000_2_1;         # 7.6 ok
-    zlib         = self.zlib_0_5_4_1;           # 7.6 ok
-    cabalInstall = self.cabalInstall_1_16_0_2;  # 7.6 ok
-    alex         = self.alex_3_0_5;             # 7.6 ok
-    haddock      = self.haddock_2_13_2;         # 7.6 ok
-    happy        = self.happy_1_18_10;          # 7.6 ok
+    vector       = self.vector_0_10_0_1;
+    xhtml        = self.xhtml_3000_2_1;
+    zlib         = self.zlib_0_5_4_1;
+    cabalInstall = self.cabalInstall_1_16_0_2;
+    alex         = self.alex_3_0_5;
+    haddock      = self.haddock_2_13_2;
+    happy        = self.happy_1_18_10;
     primitive    = self.primitive_0_5_0_1;      # semi-official, but specified
   };
 
@@ -1078,8 +1078,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happstackHamlet = callPackage ../development/libraries/haskell/happstack/happstack-hamlet.nix {};
 
   hashable_1_1_2_5 = callPackage ../development/libraries/haskell/hashable/1.1.2.5.nix {};
-  hashable_1_2_0_7 = callPackage ../development/libraries/haskell/hashable/1.2.0.7.nix {};
-  hashable = self.hashable_1_2_0_7;
+  hashable_1_2_0_10 = callPackage ../development/libraries/haskell/hashable/1.2.0.10.nix {};
+  hashable = self.hashable_1_2_0_10;
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
 
