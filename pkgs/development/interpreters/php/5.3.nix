@@ -1,7 +1,7 @@
 { stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , apacheHttpd, mysql, libxml2, readline, zlib, curl, gd, postgresql, gettext
-, openssl, pkgconfig, sqlite, config, libiconv, libjpeg, libpng, freetype
-, libxslt, libmcrypt, bzip2, icu }:
+, openssl, pkgconfig, sqlite, config, libjpeg, libpng, freetype, libxslt
+, libmcrypt, bzip2, icu, libssh2, makeWrapper, libiconvOrEmpty, libiconv }:
 
 let
   libmcryptOverride = libmcrypt.override { disablePosixThreads = true; };
@@ -15,7 +15,15 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   enableParallelBuilding = true;
 
-  buildInputs = ["flex" "bison" "pkgconfig"];
+  buildInputs
+    = [ flex bison pkgconfig ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libssh2 makeWrapper ];
+
+  # need to include the C++ standard library when compiling on darwin
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lstdc++";
+
+  # need to specify where the dylib for icu is stored
+  DYLD_LIBRARY_PATH = stdenv.lib.optionalString stdenv.isDarwin "${icu}/lib";
 
   flags = {
 
@@ -41,11 +49,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       libxml2 = {
-        configureFlags = [
-          "--with-libxml-dir=${libxml2}"
-          #"--with-iconv-dir=${libiconv}"
-          ];
-        buildInputs = [ libxml2 ];
+        configureFlags
+          = [ "--with-libxml-dir=${libxml2}" ]
+            ++ stdenv.lib.optional (libiconvOrEmpty != [])
+              [ "--with-iconv=${libiconv}" ];
+        buildInputs = [ libxml2 ] ++ libiconvOrEmpty;
       };
 
       readline = {
@@ -89,7 +97,12 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       gd = {
-        configureFlags = ["--with-gd=${gd} --with-freetype-dir=${freetype}"];
+        configureFlags = [
+          "--with-gd"
+          "--with-freetype-dir=${freetype}"
+          "--with-png-dir=${libpng}"
+          "--with-jpeg-dir=${libjpeg}"
+        ];
         buildInputs = [gd libpng libjpeg freetype];
       };
 
@@ -197,7 +210,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
   installPhase = ''
     unset installPhase; installPhase;
     cp php.ini-production $iniFile
-  '';
+  '' + ( stdenv.lib.optionalString stdenv.isDarwin ''
+    for prog in $out/bin/*; do
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "$DYLD_LIBRARY_PATH"
+    done
+  '' );
 
   src = fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
@@ -207,8 +224,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   meta = {
     description = "The PHP language runtime engine";
-    homepage = http://www.php.net/;
-    license = "PHP-3";
+    homepage    = http://www.php.net/;
+    license     = "PHP-3";
+    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
+    platforms   = stdenv.lib.platforms.unix;
   };
 
   patches = [./fix.patch];
