@@ -32,10 +32,10 @@ rec {
   };
 
   s = buildEmacsPackage {
-    name = "s-1.3.1";
+    name = "s-1.6.0";
     src = fetchurl {
-      url = "http://marmalade-repo.org/packages/s-1.3.1.el";
-      sha256 = "0n0xvdaldx1w2b2xs9ap1l0aslaj74bypphjfpc31hdfwpz8kjbi";
+      url = "http://marmalade-repo.org/packages/s-1.6.0.el";
+      sha256 = "1bda0yh8qbn13bmnvzxv6w4rk1gyn6sqnrfx7lyamw56vl2zxdqw";
     };
   };
 
