@@ -6941,6 +6941,10 @@ let
 
   cgit = callPackage ../applications/version-management/git-and-tools/cgit { };
 
+  cgminer = callPackage ../applications/misc/cgminer {
+    amdappsdk = amdappsdk28;
+  };
+
   chatzilla = callPackage ../applications/networking/irc/chatzilla {
     xulrunner = firefox36Pkgs.xulrunner;
   };
