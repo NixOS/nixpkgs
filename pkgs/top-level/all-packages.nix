@@ -7123,6 +7123,8 @@ let
 
     emms = callPackage ../applications/editors/emacs-modes/emms { };
 
+    ess = callPackage ../applications/editors/emacs-modes/ess { };
+
     flymakeCursor = callPackage ../applications/editors/emacs-modes/flymake-cursor { };
 
     gh = callPackage ../applications/editors/emacs-modes/gh { };
@@ -8283,6 +8285,7 @@ let
 
     features = "huge"; # one of  tiny, small, normal, big or huge
     lua = pkgs.lua5;
+    gui = config.vim.gui or "auto";
 
     # optional features by flags
     flags = [ "python" "X11" ]; # only flag "X11" by now
@@ -9532,11 +9535,11 @@ let
       name = "patoline";
       buildInputs = [ stdenv ncurses mesa freeglut libzip gcc
                                    pack.ocaml pack.findlib pack.camomile
-	                           pack.dypgen pack.ocaml_sqlite3 pack.camlzip
-				   pack.lablgtk pack.camlimages pack.ocaml_cairo
-				   pack.lablgl pack.ocamlnet pack.cryptokit
-				   pack.ocaml_pcre pack.patoline
-				   ];
+                                   pack.dypgen pack.ocaml_sqlite3 pack.camlzip
+                                   pack.lablgtk pack.camlimages pack.ocaml_cairo
+                                   pack.lablgl pack.ocamlnet pack.cryptokit
+                                   pack.ocaml_pcre pack.patoline
+                                   ];
     # this is to circumvent the bug with libgcc_s.so.1 which is
     # not found when using thread
     extraCmds = ''
