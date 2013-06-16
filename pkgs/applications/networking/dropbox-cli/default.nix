@@ -31,6 +31,7 @@ stdenv.mkDerivation {
     homepage = http://dropbox.com;
     description = "Command line client for the dropbox daemon.";
     license = stdenv.lib.licenses.gpl3;
+    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
     # NOTE: Dropbox itself only works on linux, so this is ok.
     platforms = stdenv.lib.platforms.linux;
   };
