@@ -3094,6 +3094,8 @@ let
 
   ### DEVELOPMENT / MISC
 
+  amdadlsdk = callPackage ../development/misc/amdadl-sdk { };
+
   amdappsdk26 = callPackage ../development/misc/amdapp-sdk {
     version = "2.6";
   };
