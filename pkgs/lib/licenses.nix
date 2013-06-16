@@ -16,6 +16,18 @@
     url = https://www.gnu.org/licenses/agpl.html;
   };
 
+  amd = {
+    shortName = "amd";
+    fullName = "AMD License Agreement";
+    url = "http://developer.amd.com/amd-license-agreement/";
+  };
+
+  amdadl = {
+    shortName = "amd-adl";
+    fullName = "amd-adl license";
+    url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/licenses/AMD-ADL?revision=1.1";
+  };
+
   asl20 = {
     shortName = "ASL2.0";
     fullName = "Apache Software License 2.0";
