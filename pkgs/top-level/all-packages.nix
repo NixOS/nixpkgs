@@ -3124,6 +3124,14 @@ let
       inherit fetchurl stdenv cabextract;
     });
 
+  amdappsdk26 = callPackage ../development/misc/amdapp-sdk/2.6.nix { };
+  amdappsdk27 = callPackage ../development/misc/amdapp-sdk/2.7.nix { };
+  amdappsdk28 = callPackage ../development/misc/amdapp-sdk/2.8.nix { };
+
+  amdappsdk = amdappsdk28;
+
+  amdadlsdk = callPackage ../development/misc/amdadl-sdk { };
+
 
   ### DEVELOPMENT / TOOLS
 
@@ -6873,6 +6881,14 @@ let
 
   bitcoin = callPackage ../applications/misc/bitcoin {
     db4 = db48;
+  };
+
+  cgminer = callPackage ../applications/misc/cgminer { 
+    amdappsdk = amdappsdk28;
+  };
+
+  reaper = callPackage ../applications/misc/reaper {
+    amdappsdk = amdappsdk26;
   };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
