@@ -30,7 +30,12 @@ stdenv.mkDerivation rec {
     ++ (op zlibSupport zlib)
     ++ (op opensslSupport openssl)
     ++ (op gdbmSupport gdbm)
-    ++ (op yamlSupport libyaml);
+    ++ (op yamlSupport libyaml)
+    # Looks like ruby fails to build on darwin without readline even if curses
+    # support is not enabled, so add readline to the build inputs if curses
+    # support is disabled (if it's enabled, we already have it) and we're
+    # running on darwin
+    ++ (op (!cursesSupport && stdenv.isDarwin) readline);
 
   enableParallelBuilding = true;
   patches = [ ./ruby19-parallel-install.patch ];
@@ -42,10 +47,11 @@ stdenv.mkDerivation rec {
   postInstall = "mkdir -pv $out/${passthru.gemPath}";
 
   meta = {
-    license = "Ruby";
-    homepage = "http://www.ruby-lang.org/en/";
+    license     = "Ruby";
+    homepage    = "http://www.ruby-lang.org/en/";
     description = "The Ruby language";
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
+    platforms   = stdenv.lib.platforms.all;
   };
 
   passthru = rec {
