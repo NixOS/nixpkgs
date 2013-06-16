@@ -16,6 +16,12 @@
     url = https://www.gnu.org/licenses/agpl.html;
   };
 
+  amd = {
+    shortName = "amd";
+    fullName = "AMD License Agreement";
+    url = "http://developer.amd.com/amd-license-agreement/";
+  };
+
   asl20 = {
     shortName = "ASL2.0";
     fullName = "Apache Software License 2.0";

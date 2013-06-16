@@ -3094,6 +3094,25 @@ let
 
   ### DEVELOPMENT / MISC
 
+  amdappsdk26 = callPackage ../development/misc/amdapp-sdk {
+    version = "2.6";
+  };
+
+  amdappsdk27 = callPackage ../development/misc/amdapp-sdk {
+    version = "2.7";
+  };
+
+  amdappsdk28 = callPackage ../development/misc/amdapp-sdk {
+    version = "2.8";
+  };
+
+  amdappsdk = amdappsdk28;
+
+  amdappsdkFull = callPackage ../development/misc/amdapp-sdk {
+    version = "2.8";
+    samples = true;
+  };
+
   avrgcclibc = callPackage ../development/misc/avr-gcc-with-avr-libc {};
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
