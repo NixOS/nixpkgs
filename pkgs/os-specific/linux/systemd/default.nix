@@ -3,6 +3,8 @@
 , glib, kbd, libxslt, coreutils, libgcrypt, sysvtools, docbook_xsl
 }:
 
+assert stdenv.isLinux;
+
 stdenv.mkDerivation rec {
   version = "203";
   name = "systemd-${version}";
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
       ./0009-Start-ctrl-alt-del.target-irreversibly.patch
     ] ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
-  buildInputs = assert stdenv.gcc.libc or null != null; # assertion here, so it doesn't trigger on passthru.headers
+  buildInputs =
     [ pkgconfig intltool gperf libcap dbus.libs kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt docbook_xsl
     ];

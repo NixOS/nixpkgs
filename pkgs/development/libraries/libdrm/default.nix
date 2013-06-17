@@ -9,14 +9,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libpthreadstubs libpciaccess udev ];
+  buildInputs = [ libpthreadstubs libpciaccess ]
+    ++ stdenv.lib.optional stdenv.isLinux udev;
 
   patches = stdenv.lib.optional stdenv.isDarwin ./libdrm-apple.patch;
 
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
-  configureFlags = [ "--enable-udev" ]
+  configureFlags = stdenv.lib.optional stdenv.isLinux "--enable-udev"
     ++ stdenv.lib.optional stdenv.isDarwin "-C";
 
   crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];
