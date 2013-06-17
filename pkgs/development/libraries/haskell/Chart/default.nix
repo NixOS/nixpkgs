@@ -10,7 +10,7 @@ cabal.mkDerivation (self: {
     cairo colour dataAccessor dataAccessorTemplate mtl time
   ];
   meta = {
-    homepage = "http://www.dockerz.net/software/chart.html";
+    homepage = "https://github.com/timbod7/haskell-chart/wiki";
     description = "A library for generating 2D Charts and Plots";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
