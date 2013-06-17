@@ -72,9 +72,6 @@ in
     inherit (config.tarball) contents storeContents;
   };
 
-  # Otherwise it will collide with the 'ip=dhcp' kernel autoconfig.
-  networking.useDHCP = false;
-
   boot.postBootCommands =
     ''
       # After booting, register the contents of the Nix store on the
