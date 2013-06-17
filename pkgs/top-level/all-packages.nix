@@ -1617,6 +1617,8 @@ let
 
   scrot = callPackage ../tools/graphics/scrot { };
 
+  sdcv = callPackage ../applications/misc/sdcv { };
+
   seccure = callPackage ../tools/security/seccure/0.4.nix { };
 
   setserial = builderDefsPackage (import ../tools/system/setserial) {
