@@ -862,10 +862,6 @@ genericBuild() {
     stopNest
 }
 
-for i in "${postHooks[@]}"; do
-    $i
-done
-
 
 # Execute the post-hook.
 runHook postHook

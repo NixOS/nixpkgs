@@ -1,43 +1,41 @@
-diff --git a/Modules/Platform/Linux.cmake b/Modules/Platform/Linux.cmake
-index fe8e003..378512c 100644
---- a/Modules/Platform/Linux.cmake
-+++ b/Modules/Platform/Linux.cmake
-@@ -36,13 +36,13 @@ else()
+diff -ru -x '*~' cmake-2.8.5-orig/Modules/Platform/Linux.cmake cmake-2.8.5/Modules/Platform/Linux.cmake
+--- cmake-2.8.5-orig/Modules/Platform/Linux.cmake	2011-07-08 14:21:44.000000000 +0200
++++ cmake-2.8.5/Modules/Platform/Linux.cmake	2011-07-21 19:45:00.000000000 +0200
+@@ -36,13 +36,13 @@
    # checking the platform every time.  This option is advanced enough
    # that only package maintainers should need to adjust it.  They are
    # capable of providing a setting on the command line.
--  if(EXISTS "/etc/debian_version")
--    set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
+-  IF(EXISTS "/etc/debian_version")
+-    SET(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
 -      "Install .so files without execute permission.")
--  else()
-+  # if(EXISTS "/etc/debian_version")
-+  #   set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
-+  #     "Install .so files without execute permission.")
-+  # else()
-     set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
+-  ELSE(EXISTS "/etc/debian_version")
++  #IF(EXISTS "/etc/debian_version")
++  #  SET(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
++  #    "Install .so files without execute permission.")
++  #ELSE(EXISTS "/etc/debian_version")
+     SET(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
        "Install .so files without execute permission.")
--  endif()
-+  # endif()
- endif()
+-  ENDIF(EXISTS "/etc/debian_version")
++  #ENDIF(EXISTS "/etc/debian_version")
+ ENDIF(DEFINED CMAKE_INSTALL_SO_NO_EXE)
  
  # Match multiarch library directory names.
-@@ -52,6 +52,6 @@ include(Platform/UnixPaths)
+@@ -52,6 +52,6 @@
  
  # Debian has lib64 paths only for compatibility so they should not be
  # searched.
--if(EXISTS "/etc/debian_version")
--  set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
--endif()
-+# if(EXISTS "/etc/debian_version")
-+#  set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
-+#endif()
-diff --git a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
-index ccb2663..39834e6 100644
---- a/Modules/Platform/UnixPaths.cmake
-+++ b/Modules/Platform/UnixPaths.cmake
-@@ -33,55 +33,18 @@ get_filename_component(_CMAKE_INSTALL_DIR "${_CMAKE_INSTALL_DIR}" PATH)
+-IF(EXISTS "/etc/debian_version")
+-  SET_PROPERTY(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
+-ENDIF(EXISTS "/etc/debian_version")
++#IF(EXISTS "/etc/debian_version")
++#  SET_PROPERTY(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
++#ENDIF(EXISTS "/etc/debian_version")
+diff -ru -x '*~' cmake-2.8.5-orig/Modules/Platform/UnixPaths.cmake cmake-2.8.5/Modules/Platform/UnixPaths.cmake
+--- cmake-2.8.5-orig/Modules/Platform/UnixPaths.cmake	2011-07-08 14:21:44.000000000 +0200
++++ cmake-2.8.5/Modules/Platform/UnixPaths.cmake	2011-07-21 19:50:52.000000000 +0200
+@@ -33,55 +33,18 @@
  # search types.
- list(APPEND CMAKE_SYSTEM_PREFIX_PATH
+ LIST(APPEND CMAKE_SYSTEM_PREFIX_PATH
    # Standard
 -  /usr/local /usr /
 -
@@ -49,7 +47,7 @@ index ccb2663..39834e6 100644
 -  )
 -
 -# List common include file locations not under the common prefixes.
--list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
+-LIST(APPEND CMAKE_SYSTEM_INCLUDE_PATH
 -  # Windows API on Cygwin
 -  /usr/include/w32api
 -
@@ -58,11 +56,11 @@ index ccb2663..39834e6 100644
 -
 -  # Other
 -  /usr/pkg/include
--  /opt/csw/include /opt/include
+-  /opt/csw/include /opt/include  
 -  /usr/openwin/include
 -  )
 -
--list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
+-LIST(APPEND CMAKE_SYSTEM_LIBRARY_PATH
 -  # Windows API on Cygwin
 -  /usr/lib/w32api
 -
@@ -71,25 +69,25 @@ index ccb2663..39834e6 100644
 -
 -  # Other
 -  /usr/pkg/lib
--  /opt/csw/lib /opt/lib
+-  /opt/csw/lib /opt/lib 
 -  /usr/openwin/lib
 -  )
 -
--list(APPEND CMAKE_SYSTEM_PROGRAM_PATH
+-LIST(APPEND CMAKE_SYSTEM_PROGRAM_PATH
 -  /usr/pkg/bin
 +  "@glibc@"
    )
  
- list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
+ LIST(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
 -  /lib /usr/lib /usr/lib32 /usr/lib64
 +  "@glibc@/lib"
    )
  
- list(APPEND CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
+ LIST(APPEND CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
 -  /usr/include
 +  "@glibc@/include"
    )
- list(APPEND CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
+ LIST(APPEND CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
 -  /usr/include
 +  "@glibc@/include"
    )
