@@ -2717,6 +2717,8 @@ let
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
+    deriving = callPackage ../development/tools/ocaml/deriving { };
+
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
     dypgen = callPackage ../development/ocaml-modules/dypgen { };
