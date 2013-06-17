@@ -1,12 +1,19 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv
+, withOctave ? true, octave ? null}:
 
 stdenv.mkDerivation rec {
-  name = "nlopt-2.2.1";
+  name = "nlopt-2.3";
 
   src = fetchurl {
     url = "http://ab-initio.mit.edu/nlopt/${name}.tar.gz";
-    sha256 = "0p7ri7dcp6vga7jwng7wj9bf2ixk6p5ldxp76r93xkrdixqfngaq";
+    sha256 = "1iw2cjgypyqz779f47fz0nmifbrvk4zs4rxi1ibk36f4ly3wg6p6";
   };
 
-  configureFlags = "--with-cxx --with-pic --without-guile --without-python --without-octave --without-matlab";
+  buildInputs = stdenv.lib.optional withOctave octave;
+
+  configureFlags = "--with-cxx --enable-shared --with-pic --without-guile --without-python
+  --without-matlab " +
+    stdenv.lib.optionalString withOctave ("--with-octave " +
+        "M_INSTALL_DIR=$(out)/${octave.sitePath}/m " +
+        "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct ");
 }
