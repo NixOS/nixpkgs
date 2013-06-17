@@ -82,7 +82,7 @@ rec {
         file = key;
         option = name;
         number = index;
-        outPath = "file ${toString file} option ${option} options number ${toString number}";
+        outPath = key;
       };
     in if lib.isModule module then
       { key = key_; } // module
