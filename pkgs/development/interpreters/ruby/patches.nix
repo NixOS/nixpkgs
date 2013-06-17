@@ -1,5 +1,5 @@
 { fetchurl, writeScript, ruby, ncurses, sqlite, libxml2, libxslt, libffi
-, zlib, libuuid, gems, jdk, python, stdenv }:
+, zlib, libuuid, gems, jdk, python, stdenv, libiconvOrEmpty }:
 
 let
 
@@ -13,7 +13,7 @@ let
 in
 
 {
-  sup = { buildInputs = [ gems.ncursesw ]; };
+  iconv = { buildInputs = [ libiconvOrEmpty ]; };
 
   libv8 = {
     # This fix is needed to fool scons, which clears the environment by default.
@@ -89,6 +89,10 @@ in
   xapian_full = {
     buildInputs = [ gems.rake zlib libuuid ];
     gemFlags = "--no-rdoc --no-ri";
+  };
+
+  xapian_full_alaveteli = {
+    buildInputs = [ zlib libuuid ];
   };
 
   rjb = {

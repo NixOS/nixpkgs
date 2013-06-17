@@ -2,6 +2,8 @@
 ,*
 .*.swp
 .*.swo
-cpan-info
-cpan_tmp/
 result
+doc/NEWS.html
+doc/NEWS.txt
+doc/manual.html
+doc/manual.pdf

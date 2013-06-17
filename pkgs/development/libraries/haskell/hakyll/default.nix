@@ -1,34 +1,31 @@
 { cabal, binary, blazeHtml, blazeMarkup, citeprocHs, cmdargs
-, cryptohash, dataDefault, deepseq, filepath, httpConduit
+, cryptohash, dataDefault, deepseq, filepath, fsnotify, httpConduit
 , httpTypes, HUnit, lrucache, mtl, pandoc, parsec, QuickCheck
-, random, regexBase, regexTdfa, snapCore, snapServer, tagsoup
-, testFramework, testFrameworkHunit, testFrameworkQuickcheck2, text
-, time
+, random, regexBase, regexTdfa, snapCore, snapServer
+, systemFilepath, tagsoup, testFramework, testFrameworkHunit
+, testFrameworkQuickcheck2, text, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "4.2.2.0";
-  sha256 = "0kz8v2ip0hmvqnrxgv44g2863z1dql88razl7aa3fw01q56ihz0y";
+  version = "4.3.0.0";
+  sha256 = "188j3spdi2mivx5a10whpb09fm8yhg54ddfwc6x0k040c7q3aq0q";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     binary blazeHtml blazeMarkup citeprocHs cmdargs cryptohash
-    dataDefault deepseq filepath httpConduit httpTypes lrucache mtl
-    pandoc parsec random regexBase regexTdfa snapCore snapServer
-    tagsoup text time
+    dataDefault deepseq filepath fsnotify httpConduit httpTypes
+    lrucache mtl pandoc parsec random regexBase regexTdfa snapCore
+    snapServer systemFilepath tagsoup text time
   ];
   testDepends = [
     binary blazeHtml blazeMarkup citeprocHs cmdargs cryptohash
-    dataDefault deepseq filepath httpConduit httpTypes HUnit lrucache
-    mtl pandoc parsec QuickCheck random regexBase regexTdfa snapCore
-    snapServer tagsoup testFramework testFrameworkHunit
-    testFrameworkQuickcheck2 text time
+    dataDefault deepseq filepath fsnotify httpConduit httpTypes HUnit
+    lrucache mtl pandoc parsec QuickCheck random regexBase regexTdfa
+    snapCore snapServer systemFilepath tagsoup testFramework
+    testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
   doCheck = false;
-  patchPhase = ''
-    sed -i -e 's|cryptohash .*,|cryptohash,|' hakyll.cabal
-  '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";

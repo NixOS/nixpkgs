@@ -1,10 +1,10 @@
 args: with args;
 rec {
-  version = "1.3.0";
+  version = "1.5.1";
   name = "moderncv-${version}";
   src = fetchurl {
     url = "https://launchpad.net/moderncv/trunk/${version}/+download/moderncv-${version}.zip";
-    sha256 = "0wdj90shi04v97b2d6chhvm9qrp0bcvsm46441730ils1y74wisq";
+    sha256 = "0k26s0z8hmw3h09vnpndim7gigwh8q6n9nbbihb5qbrw5qg2yqck";
   };
 
   buildInputs = [texLive unzip];

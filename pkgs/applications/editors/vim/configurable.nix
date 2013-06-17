@@ -4,7 +4,12 @@ args@{source ? "latest", ...}: with args;
 
 
 let inherit (args.composableDerivation) composableDerivation edf; in
-composableDerivation {} (fix: {
+composableDerivation {
+  # use gccApple to compile on darwin
+  mkDerivation = ( if stdenv.isDarwin
+                   then stdenvAdapters.overrideGCC stdenv gccApple
+                   else stdenv ).mkDerivation;
+} (fix: {
 
     name = "vim_configurable-7.3";
 
@@ -35,11 +40,12 @@ composableDerivation {} (fix: {
       }.src;
     };
 
-    configureFlags = ["--enable-gui=auto" "--with-features=${args.features}"];
+    configureFlags
+      = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
 
-    nativeBuildInputs = [ncurses pkgconfig]
-      ++ [ gtk libX11 libXext libSM libXpm libXt libXaw libXau libXmu glib 
-           libICE ];
+    nativeBuildInputs
+      = [ ncurses pkgconfig gtk libX11 libXext libSM libXpm libXt libXaw libXau
+          libXmu glib libICE ];
 
     # most interpreters aren't tested yet.. (see python for example how to do it)
     flags = {
@@ -71,14 +77,19 @@ composableDerivation {} (fix: {
 
   cfg = {
     pythonSupport    = config.vim.python or true;
-    darwinSupport    = config.vim.darwin or false;
+    rubySupport      = config.vim.ruby or true;
     nlsSupport       = config.vim.nls or false;
     tclSupport       = config.vim.tcl or false;
     multibyteSupport = config.vim.multibyte or false;
     cscopeSupport    = config.vim.cscope or false;
+    netbeansSupport  = config.netbeans or true; # eg envim is using it
+
+    # by default, compile with darwin support if we're compiling on darwin, but
+    # allow this to be disabled by setting config.vim.darwin to false
+    darwinSupport    = stdenv.isDarwin && (config.vim.darwin or true);
+
     # add .nix filetype detection and minimal syntax highlighting support
     ftNixSupport     = config.vim.ftNix or true;
-    netbeansSupport = config.netbeans or true; # eg envim is using it
   };
 
   #--enable-gui=OPTS     X11 GUI default=auto OPTS=auto/no/gtk/gtk2/gnome/gnome2/motif/athena/neXtaw/photon/carbon
@@ -93,22 +104,23 @@ composableDerivation {} (fix: {
       // edf "gtktest" "gtktest" { } #Do not try to compile and run a test GTK program
     */
 
-  postInstall = "
-    rpath=`patchelf --print-rpath \$out/bin/vim`;
-    for i in \$nativeBuildInputs; do
-      echo adding \$i/lib
-      rpath=\$rpath:\$i/lib
+  postInstall = if stdenv.isLinux then ''
+    rpath=`patchelf --print-rpath $out/bin/vim`;
+    for i in $nativeBuildInputs; do
+      echo adding $i/lib
+      rpath=$rpath:$i/lib
     done
-    echo \$nativeBuildInputs
-    echo \$rpath
-    patchelf --set-rpath \$rpath \$out/bin/{vim,gvim}
-  ";
-  dontStrip =1;
+    echo $nativeBuildInputs
+    echo $rpath
+    patchelf --set-rpath $rpath $out/bin/{vim,gvim}
+  '' else "";
+
+  dontStrip = 1;
 
   meta = {
     description = "The most popular clone of the VI editor";
-    homepage = "www.vim.org";
+    homepage    = "www.vim.org";
+    platforms   = lib.platforms.unix;
   };
-
 })
 
