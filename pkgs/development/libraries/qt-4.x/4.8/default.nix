@@ -90,12 +90,6 @@ stdenv.mkDerivation rec {
       ${if developerBuild then "-developer-build" else ""}
     '';
 
-  # fix underspecified dependency in a generated makefile
-  postConfigure = stdenv.lib.optional developerBuild ''
-    sed "1iqtgradientview.h: .uic/release-shared/ui_qtgradientview.h" \
-      -i tools/designer/src/lib/Makefile
-  '';
-
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes
       libXv libXi libSM
@@ -113,7 +107,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkgconfig which ];
 
-  enableParallelBuilding = true;
+  # occasional build problems if one has too many cores (like on Hydra)
+  # @vcunat has been unable to find a *reliable* fix
+  enableParallelBuilding = false;
 
   crossAttrs = let
     isMingw = stdenv.cross.config == "i686-pc-mingw32" ||
