@@ -315,6 +315,8 @@ rec {
       )
     ];
   mergeAttrsByFuncDefaults = foldl mergeAttrByFunc { inherit mergeAttrBy; };
+  mergeAttrsByFuncDefaultsClean = list: removeAttrs (mergeAttrsByFuncDefaults list) ["mergeAttrBy"];
+
   # merge attrs based on version key into mkDerivation args, see mergeAttrBy to learn about smart merge defaults
   #
   # This function is best explained by an example:
