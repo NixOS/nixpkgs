@@ -2,7 +2,7 @@
 
 use strict;
 use CPANPLUS::Backend;
-use YAML;
+use YAML::XS;
 use JSON;
 
 my $module_name = $ARGV[0];
@@ -50,7 +50,13 @@ print STDERR "unpacked to: $pkg_path\n";
 
 my $meta;
 if (-e "$pkg_path/META.yml") {
-    $meta = YAML::LoadFile("$pkg_path/META.yml");
+    eval {
+	$meta = YAML::XS::LoadFile("$pkg_path/META.yml");
+    };
+    if ($@) {
+	system("iconv -f windows-1252 -t utf-8 '$pkg_path/META.yml' > '$pkg_path/META.yml.tmp'");
+	$meta = YAML::XS::LoadFile("$pkg_path/META.yml.tmp");
+    }
 }
 
 print STDERR "metadata: ", encode_json($meta), "\n";

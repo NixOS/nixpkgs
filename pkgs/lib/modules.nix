@@ -75,12 +75,19 @@ rec {
         );
 
 
-  unifyOptionModule = {key ? "<unknown location>"}: m: (args:
-    let module = lib.applyIfFunction m args; in
-    if lib.isModule module then
-      { inherit key; } // module
+  unifyOptionModule = {key ? "<unknown location>"}: name: index: m: (args:
+    let
+      module = lib.applyIfFunction m args;
+      key_ = rec {
+        file = key;
+        option = name;
+        number = index;
+        outPath = key;
+      };
+    in if lib.isModule module then
+      { key = key_; } // module
     else
-      { inherit key; options = module; }
+      { key = key_; options = module; }
   );
 
 
@@ -197,9 +204,9 @@ rec {
       recurseInto = name:
         moduleMerge (addName name) (modulesOf name);
 
-      recurseForOption = name: modules:
+      recurseForOption = name: modules: args:
         moduleMerge name (
-          map unifyModuleSyntax modules
+          moduleClosure modules args
         );
 
       errorSource = modules:
@@ -240,7 +247,7 @@ rec {
           decls = # add location to sub-module options.
             map (m:
               mapSubOptions
-                (unifyOptionModule {inherit (m) key;})
+                (unifyOptionModule {inherit (m) key;} name)
                 m.options
             ) declarations;
 

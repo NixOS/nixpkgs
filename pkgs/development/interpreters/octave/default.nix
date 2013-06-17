@@ -2,8 +2,11 @@
 libX11, graphicsmagick, pcre, liblapack, texLive, pkgconfig, mesa, fltk,
 fftw, fftwSinglePrec, zlib, curl, qrupdate }:
 
+let
+  version = "3.6.4";
+in
 stdenv.mkDerivation rec {
-  name = "octave-3.6.4";
+  name = "octave-${version}";
   src = fetchurl {
     url = "mirror://gnu/octave/${name}.tar.bz2";
     sha256 = "0qn9s7jrjmrn6w3rvp8d7vfnymyv0spnxzrp9l7p8p8zb7wms67s";
@@ -26,6 +29,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cp test/fntests.log $out/share/octave/${name}-fntests.log
   '';
+
+  passthru = {
+    inherit version;
+    sitePath = "share/octave/${version}/site";
+  };
 
   meta = {
     homepage = http://octave.org/;

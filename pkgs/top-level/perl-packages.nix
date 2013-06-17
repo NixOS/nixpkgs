@@ -282,11 +282,16 @@ rec {
     };
   };
 
-  Boolean = buildPerlPackage rec {
-    name = "boolean-0.20";
+  boolean = buildPerlPackage {
+    name = "boolean-0.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
-      sha256 = "1xqhzy3m2r08my13alff9bzl8b6xgd68312834x0hf33yir3l1yn";
+      url = mirror://cpan/authors/id/I/IN/INGY/boolean-0.30.tar.gz;
+      sha256 = "f46e7a6121d5728ef2ce285a82d1dde94f6dfa0b846a612db75b1dcd37b9fc7f";
+    };
+    meta = {
+      homepage = https://github.com/ingydotnet/boolean-pm/tree;
+      description = "Boolean support for Perl";
+      license = "perl";
     };
   };
 
@@ -1060,6 +1065,19 @@ rec {
     };
   };
 
+  ClassMethodMaker = buildPerlPackage {
+    name = "Class-MethodMaker-2.18";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SC/SCHWIGON/Class-MethodMaker-2.18.tar.gz;
+      sha256 = "223b7a79025e9bff984d755f9744182505e110680b13eedbac2831d45ddbeeba";
+    };
+    preConfigure = "patchShebangs .";
+    meta = {
+      description = "A module for creating generic methods";
+      license = "perl";
+    };
+  };
+
   ClassMethodModifiers = buildPerlPackage {
     name = "Class-Method-Modifiers-2.00";
     src = fetchurl {
@@ -1608,6 +1626,21 @@ rec {
     };
   };
 
+  DataStreamBulk = buildPerlPackage {
+    name = "Data-Stream-Bulk-0.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DO/DOY/Data-Stream-Bulk-0.11.tar.gz;
+      sha256 = "06e08432a6b97705606c925709b99129ad926516e477d58e4461e4b3d9f30917";
+    };
+    buildInputs = [ TestRequires ];
+    propagatedBuildInputs = [ Moose PathClass SubExporter namespaceclean ];
+    meta = {
+      homepage = http://metacpan.org/release/Data-Stream-Bulk;
+      description = "N at a time iteration API";
+      license = "perl";
+    };
+  };
+
   DataTaxi = buildPerlPackage {
     name = "Data-Taxi-0.96";
     propagatedBuildInputs = [DebugShowStuff];
@@ -1669,31 +1702,91 @@ rec {
   };
 
   DateTime = buildPerlModule {
-    name = "DateTime-0.78";
+    name = "DateTime-1.03";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-0.78.tar.gz;
-      sha256 = "0gicc3ib42jba989lxwy5i5sp4w3bmakdimgfxqbb57mbdarpxc5";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.03.tar.gz;
+      sha256 = "384f97c73da02492d771d6b5c3b37f6b18c2e12f4db3246b1d61ff19c6d6ad6d";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ParamsValidate ];
+    propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ParamsValidate TryTiny ];
     meta = {
-      homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "A date and time object";
       license = "artistic_2";
     };
   };
 
-  DateTimeFormatBuilder = buildPerlPackage rec {
-    name = "DateTime-Format-Builder-0.7901";
+  DateTimeEventICal = buildPerlPackage {
+    name = "DateTime-Event-ICal-0.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "08zl89gh5lkff8736fkdnrf6dgppsjbmymnysbc06s7igd4ig8zf";
+      url = mirror://cpan/authors/id/F/FG/FGLOCK/DateTime-Event-ICal-0.11.tar.gz;
+      sha256 = "6c3ca03c1810c996fa66943138f1f891bbc4baeb41ae2108a5f821040d78dd4c";
     };
-    propagatedBuildInputs = [
-      DateTime ParamsValidate TaskWeaken DateTimeFormatStrptime
-      ClassFactoryUtil
-    ];
-    buildInputs = [TestPod];
+    propagatedBuildInputs = [ DateTime DateTimeEventRecurrence ];
+    meta = {
+      description = "DateTime rfc2445 recurrences";
+      license = "unknown";
+    };
+  };
+
+  DateTimeEventRecurrence = buildPerlPackage {
+    name = "DateTime-Event-Recurrence-0.16";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FG/FGLOCK/DateTime-Event-Recurrence-0.16.tar.gz;
+      sha256 = "3872e0126cd9527a918d3e537f85342d1fbb1e6a9ae5833262201b31879f8609";
+    };
+    propagatedBuildInputs = [ DateTime DateTimeSet ];
+  };
+
+  DateTimeFormatBuilder = buildPerlPackage {
+    name = "DateTime-Format-Builder-0.81";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Builder-0.81.tar.gz;
+      sha256 = "7cd58a8cb53bf698407cc992f89e4d49bf3dc55baf4f3f00f1def63a0fff33ef";
+    };
+    propagatedBuildInputs = [ ClassFactoryUtil DateTime DateTimeFormatStrptime ParamsValidate ];
+    meta = {
+      description = "Create DateTime parser classes and objects";
+      license = "artistic_2";
+    };
+  };
+
+  DateTimeFormatFlexible = buildPerlPackage {
+    name = "DateTime-Format-Flexible-0.25";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TH/THINC/DateTime-Format-Flexible-0.25.tar.gz;
+      sha256 = "cd3267e68736ece386d677289b334d4ef1f33ff2524b17b9c9deb53d20420090";
+    };
+    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder DateTimeTimeZone ListMoreUtils TestMockTime ];
+    meta = {
+      description = "DateTime::Format::Flexible - Flexibly parse strings and turn them into DateTime objects";
+      license = "perl";
+    };
+  };
+
+  DateTimeFormatHTTP = buildPerlPackage {
+    name = "DateTime-Format-HTTP-0.40";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CK/CKRAS/DateTime-Format-HTTP-0.40.tar.gz;
+      sha256 = "214e9e2e364090ebc5bc682b29709828944ae67f0bb4a989dd1e6d010845213f";
+    };
+    propagatedBuildInputs = [ DateTime HTTPDate ];
+    meta = {
+      description = "Date conversion routines";
+      license = "perl";
+    };
+  };
+
+  DateTimeFormatICal = buildPerlPackage {
+    name = "DateTime-Format-ICal-0.09";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-ICal-0.09.tar.gz;
+      sha256 = "8b09f6539f5e9c0df0e6135031699ed4ef9eef8165fc80aefeecc817ef997c33";
+    };
+    propagatedBuildInputs = [ DateTime DateTimeEventICal DateTimeSet DateTimeTimeZone ParamsValidate ];
+    meta = {
+      description = "Parse and format iCal datetime and duration strings";
+      license = "perl";
+    };
   };
 
   DateTimeFormatISO8601 = buildPerlPackage {
@@ -1709,16 +1802,18 @@ rec {
     };
   };
 
-  DateTimeFormatNatural = buildPerlPackage rec {
-    name = "DateTime-Format-Natural-0.74";
+  DateTimeFormatNatural = buildPerlPackage {
+    name = "DateTime-Format-Natural-1.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SC/SCHUBIGER/${name}.tar.gz";
-      sha256 = "0hq33s5frfa8cpj2al7qi0sbmimm5sdlxf0h3b57fjm9x5arlkcn";
+      url = mirror://cpan/authors/id/S/SC/SCHUBIGER/DateTime-Format-Natural-1.02.tar.gz;
+      sha256 = "5479c48ade5eca9712784afee18c58308d56742a204d5ea9040d011f705303e3";
     };
-    propagatedBuildInputs = [
-      DateTime ListMoreUtils ParamsValidate DateCalc
-      TestMockTime Boolean
-    ];
+    buildInputs = [ ModuleUtil TestMockTime ];
+    propagatedBuildInputs = [ Clone DateTime DateTimeTimeZone ListMoreUtils ParamsValidate boolean ];
+    meta = {
+      description = "Create machine readable date/time with natural parsing logic";
+      license = "perl";
+    };
   };
 
   DateTimeFormatPg = buildPerlPackage {
@@ -1734,33 +1829,72 @@ rec {
     };
   };
 
-  DateTimeFormatStrptime = buildPerlPackage rec {
-    name = "DateTime-Format-Strptime-1.5000";
+  DateTimeFormatStrptime = buildPerlPackage {
+    name = "DateTime-Format-Strptime-1.54";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "0m55rqbixrsfa6g6mqs8aa0rhcxh6aj2g3n8fgl63wyz9an93w8y";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Strptime-1.54.tar.gz;
+      sha256 = "00bb61b12472fb1a637ec55bbd8878db05b3aac89a67b7991b281e32896db9de";
     };
-    propagatedBuildInputs =
-      [ DateTime DateTimeLocale DateTimeTimeZone ParamsValidate ];
+    propagatedBuildInputs = [ DateTime DateTimeLocale DateTimeTimeZone ParamsValidate ];
+    meta = {
+      description = "Parse and format strp and strf time patterns";
+      license = "artistic_2";
+    };
   };
 
-  DateTimeLocale = buildPerlPackage rec {
+  DateTimeLocale = buildPerlPackage {
     name = "DateTime-Locale-0.45";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "175grkrxiv012n6ch3z1sip4zprcili6m5zqi3njdk5c1gdvi8ca";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Locale-0.45.tar.gz;
+      sha256 = "8aa1b8db0baccc26ed88f8976a228d2cdf4f6ed4e10fc88c1501ecd8f3ccaf9c";
     };
-    propagatedBuildInputs = [ListMoreUtils ParamsValidate];
+    propagatedBuildInputs = [ ListMoreUtils ParamsValidate ];
+    meta = {
+      homepage = http://datetime.perl.org/;
+      description = "Localization support for DateTime.pm";
+      license = "perl";
+    };
   };
 
-  DateTimeTimeZone = buildPerlPackage rec {
-    name = "DateTime-TimeZone-1.45";
+  DateTimeSet = buildPerlPackage {
+    name = "DateTime-Set-0.31";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "0wnjg6mcpcy7hg79jdsg3vi8ad89rghkcgqjmqiq6pqc0k9sbq2q";
+      url = mirror://cpan/authors/id/F/FG/FGLOCK/DateTime-Set-0.31.tar.gz;
+      sha256 = "499b59e42a1129bf10fd269eb7542d337a29fbbcbf08ef8313fd465d3ae5df02";
+    };
+    propagatedBuildInputs = [ DateTime SetInfinite ];
+    meta = {
+      description = "DateTime set objects";
+      license = "unknown";
+    };
+  };
+
+  DateTimeTimeZone = buildPerlPackage {
+    name = "DateTime-TimeZone-1.59";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-1.59.tar.gz;
+      sha256 = "b1d50f6abde68671da1db883168ef8d6793a11ba75de02174f42e1dfd16b2522";
     };
     buildInputs = [ TestOutput ];
-    propagatedBuildInputs = [ ClassLoad ClassSingleton ParamsValidate TryTiny ];
+    propagatedBuildInputs = [ ClassLoad ClassSingleton ParamsValidate ];
+    meta = {
+      description = "Time zone object base class and factory";
+      license = "perl";
+    };
+  };
+
+  DateTimeXEasy = buildPerlPackage {
+    name = "DateTimeX-Easy-0.089";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RO/ROKR/DateTimeX-Easy-0.089.tar.gz;
+      sha256 = "17e6d202e7ac6049523048e97bb8f195e3c79208570da1504f4313584e487a79";
+    };
+    buildInputs = [ TestMost ];
+    propagatedBuildInputs = [ DateTime DateTimeFormatFlexible DateTimeFormatICal DateTimeFormatNatural TimeDate ];
+    meta = {
+      description = "Parse a date/time string using the best method available";
+      license = "perl";
+    };
   };
 
   DebugShowStuff = buildPerlPackage {
@@ -2326,6 +2460,17 @@ rec {
     propagatedBuildInputs = [ ExceptionBase ];
   };
 
+  ExporterLite = buildPerlPackage {
+    name = "Exporter-Lite-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MS/MSCHWERN/Exporter-Lite-0.02.tar.gz;
+      sha256 = "20c1e9b7ddc017b788feb34c032fc585e2c5b46a484e93f519373fd18830ce0e";
+    };
+    meta = {
+      license = "perl";
+    };
+  };
+
   ExtUtilsCBuilder = buildPerlPackage rec {
     name = "ExtUtils-CBuilder-0.280202";
     src = fetchurl {
@@ -2646,6 +2791,18 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MH/MHOSKEN/Font-TTF-0.43.tar.gz;
       sha256 = "0782mj5n5a2qbghvvr20x51llizly6q5smak98kzhgq9a7q3fg89";
+    };
+  };
+
+  ForksSuper = buildPerlPackage {
+    name = "Forks-Super-0.67";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MO/MOB/Forks-Super-0.67.tar.gz;
+      sha256 = "8831cd70e1eb3d4ab7d9a8c3692caa7b7220dc888cd1a8dc5640fb2a08379141";
+    };
+    meta = {
+      description = "Extensions and convenience methods to manage background processes";
+      license = "perl";
     };
   };
 
@@ -3194,6 +3351,18 @@ rec {
     };
   };
 
+  IOInteractive = buildPerlPackage {
+    name = "IO-Interactive-0.0.6";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BD/BDFOY/IO-Interactive-0.0.6.tar.gz;
+      sha256 = "9cc016cbd94b500027e137cb5070d19487e4431bf822f0cb534c38b6b2c1038c";
+    };
+    meta = {
+      description = "Utilities for interactive I/O";
+      license = "perl";
+    };
+  };
+
   IOLockedFile = buildPerlPackage rec {
     name = "IO-LockedFile-0.23";
     src = fetchurl {
@@ -3670,14 +3839,17 @@ rec {
     };
   };
 
-  LWPxParanoidAgent = buildPerlPackage rec {
-    name = "LWPx-ParanoidAgent-1.07";
+  LWPUserAgentDetermined = buildPerlPackage {
+    name = "LWP-UserAgent-Determined-1.06";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BR/BRADFITZ/${name}.tar.gz";
-      sha256 = "bd7ccbe6ed6b64195a967e9b2b04c185b7b97e8ec5a8835bb45dbcd42a18e76a";
+      url = mirror://cpan/authors/id/J/JE/JESSE/LWP-UserAgent-Determined-1.06.tar.gz;
+      sha256 = "c31d8e16dc92e2113c81cdbfb11149cfd19039e789f77cd34333ac9184346fc5";
     };
-    doCheck = false; # 3 tests fail, probably because they try to connect to the network
-    propagatedBuildInputs = [ LWP NetDNS ];
+    propagatedBuildInputs = [ LWP ];
+    meta = {
+      description = "A virtual browser that retries errors";
+      license = "unknown";
+    };
   };
 
   LWPUserAgentMockable = buildPerlPackage {
@@ -3687,6 +3859,16 @@ rec {
       sha256 = "1z89jszgifvjb8irzd8wrzim7l5m4hypdl9mj4dpkb4jm4189kmn";
     };
     propagatedBuildInputs = [ LWP HookLexWrap ];
+  };
+
+  LWPxParanoidAgent = buildPerlPackage rec {
+    name = "LWPx-ParanoidAgent-1.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BR/BRADFITZ/${name}.tar.gz";
+      sha256 = "bd7ccbe6ed6b64195a967e9b2b04c185b7b97e8ec5a8835bb45dbcd42a18e76a";
+    };
+    doCheck = false; # 3 tests fail, probably because they try to connect to the network
+    propagatedBuildInputs = [ LWP NetDNS ];
   };
 
   maatkit = import ../development/perl-modules/maatkit {
@@ -3990,6 +4172,19 @@ rec {
     };
   };
 
+  ModuleUtil = buildPerlPackage {
+    name = "Module-Util-1.09";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MATTLAW/Module-Util-1.09.tar.gz;
+      sha256 = "6cfbcb6a45064446ec8aa0ee1a7dddc420b54469303344187aef84d2c7f3e2c6";
+    };
+    buildInputs = [ ModuleBuild ];
+    meta = {
+      description = "Module name tools and transformations";
+      license = "perl";
+    };
+  };
+
   ModuleVersions = buildPerlPackage {
     name = "Module-Versions-0.02";
     src = fetchurl {
@@ -4259,6 +4454,20 @@ rec {
     buildInputs = [ Moose TestFatal TestRequires ];
   };
 
+  MooseXStrictConstructor = buildPerlPackage {
+    name = "MooseX-StrictConstructor-0.19";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-StrictConstructor-0.19.tar.gz;
+      sha256 = "486573c16901e83c081da3d90a544281af1baa40bbf036337d6fa91994e48a31";
+    };
+    buildInputs = [ Moose TestFatal ];
+    propagatedBuildInputs = [ Moose namespaceautoclean ];
+    meta = {
+      description = "Make your object constructors blow up on unknown attributes";
+      license = "artistic_2";
+    };
+  };
+
   MooseXTraits = buildPerlPackage rec {
     name = "MooseX-Traits-0.11";
     src = fetchurl {
@@ -4312,6 +4521,20 @@ rec {
       sha256 = "0q0d1dd8737rc3k3jb22wvybf03hg3lp1iyda0ivkd8020cib996";
     };
     propagatedBuildInputs = [ DateTime DateTimeLocale DateTimeTimeZone Moose MooseXTypes namespaceclean TestException TestUseOk ];
+  };
+
+  MooseXTypesDateTimeMoreCoercions = buildPerlPackage {
+    name = "MooseX-Types-DateTime-MoreCoercions-0.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/I/IL/ILMARI/MooseX-Types-DateTime-MoreCoercions-0.11.tar.gz;
+      sha256 = "c746a9284b7db49ce9acb2fbce26629fa816e6636e883d2ed6c62e336cfc52cb";
+    };
+    buildInputs = [ TestException TestUseOk ];
+    propagatedBuildInputs = [ DateTime DateTimeXEasy Moose MooseXTypes MooseXTypesDateTime TimeDurationParse namespaceclean ];
+    meta = {
+      description = "Extensions to MooseX::Types::DateTime";
+      license = "perl";
+    };
   };
 
   MooseXTypesLoadableClass = buildPerlPackage rec {
@@ -4487,6 +4710,20 @@ rec {
     propagatedBuildInputs =
       [ DigestHMAC LWP LWPProtocolHttps URI XMLParser IOString ];
     buildInputs = [ DBI DBDSQLite ];
+  };
+
+  NetAmazonS3 = buildPerlPackage {
+    name = "Net-Amazon-S3-0.59";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PF/PFIG/Net-Amazon-S3-0.59.tar.gz;
+      sha256 = "94f2bd6b317a9142e400d7d17bd573dc9d22284c3ceaa4864474ba674e0e2e9f";
+    };
+    buildInputs = [ LWP TestException ];
+    propagatedBuildInputs = [ DataStreamBulk DateTimeFormatHTTP DigestHMAC DigestMD5File FileFindRule HTTPDate HTTPMessage LWPUserAgentDetermined MIMETypes Moose MooseXStrictConstructor MooseXTypesDateTimeMoreCoercions PathClass RegexpCommon TermEncoding TermProgressBarSimple URI XMLLibXML ];
+    meta = {
+      description = "Use the Amazon S3 - Simple Storage Service";
+      license = "perl";
+    };
   };
 
   NetAmazonS3Policy = buildPerlPackage {
@@ -5252,6 +5489,17 @@ rec {
     };
   };
 
+  SetInfinite = buildPerlPackage {
+    name = "Set-Infinite-0.65";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FG/FGLOCK/Set-Infinite-0.65.tar.gz;
+      sha256 = "07bc880734492de40b4a3a8b5a331762f64e69b4629029fd9a9d357b25b87e1f";
+    };
+    meta = {
+      description = "Infinite Sets math";
+    };
+  };
+
   SetObject = buildPerlPackage {
     name = "Set-Object-1.26";
     src = fetchurl {
@@ -5809,6 +6057,54 @@ rec {
     };
   };
 
+  TermEncoding = buildPerlPackage {
+    name = "Term-Encoding-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Term-Encoding-0.02.tar.gz;
+      sha256 = "f274e72346a0c0cfacfb53030ac1e38b57425512fc5bdc5cd9ef75ab0f26cfcc";
+    };
+    meta = {
+      description = "Detect encoding of the current terminal";
+      license = "perl";
+    };
+  };
+
+  TermProgressBar = buildPerlPackage {
+    name = "Term-ProgressBar-2.13";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SZ/SZABGAB/Term-ProgressBar-2.13.tar.gz;
+      sha256 = "95a56e1529928b7a0d7adf5bc2f54b9b9ae9da58c43b519af74a1e6596209b3c";
+    };
+    buildInputs = [ CaptureTiny TestException ];
+    propagatedBuildInputs = [ ClassMethodMaker TermReadKey ];
+    meta = {
+      description = "Provide a progress meter on a standard terminal";
+      license = "perl";
+    };
+  };
+
+  TermProgressBarQuiet = buildPerlPackage {
+    name = "Term-ProgressBar-Quiet-0.31";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/L/LB/LBROCARD/Term-ProgressBar-Quiet-0.31.tar.gz;
+      sha256 = "25675292f588bc29d32e710cf3667da9a2a1751e139801770a9fdb18cd2184a6";
+    };
+    propagatedBuildInputs = [ IOInteractive TermProgressBar TestMockObject ];
+    meta = {
+      description = "";
+      license = "perl";
+    };
+  };
+
+  TermProgressBarSimple = buildPerlPackage {
+    name = "Term-ProgressBar-Simple-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/E/EV/EVDB/Term-ProgressBar-Simple-0.03.tar.gz;
+      sha256 = "a20db3c67d5bdfd0c1fab392c6d1c26880a7ee843af602af4f9b53a7043579a6";
+    };
+    propagatedBuildInputs = [ TermProgressBarQuiet ];
+  };
+
   TermReadKey = buildPerlPackage {
     name = "TermReadKey-2.30";
     src = fetchurl {
@@ -6024,6 +6320,19 @@ rec {
 
   TestMore = TestSimple;
 
+  TestMost = buildPerlPackage {
+    name = "Test-Most-0.31";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/O/OV/OVID/Test-Most-0.31.tar.gz;
+      sha256 = "0ddc6034dc7cde3631dde41ecb558ed823fc07804bfd051b8ec9a70131862ab7";
+    };
+    propagatedBuildInputs = [ ExceptionClass TestDeep TestDifferences TestException TestWarn ];
+    meta = {
+      description = "Most commonly needed test functions and features";
+      license = "perl";
+    };
+  };
+
   TestNoWarnings = buildPerlPackage {
     name = "Test-NoWarnings-1.04";
     src = fetchurl {
@@ -6187,11 +6496,16 @@ rec {
     };
   };
 
-  TestUseOk = buildPerlPackage rec {
-    name = "Test-use-ok-0.02";
+  TestUseOk = buildPerlPackage {
+    name = "Test-use-ok-0.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AU/AUDREYT/${name}.tar.gz";
-      sha256 = "11inaxiavb35k8zwxwbfbp9wcffvfqas7k9idy822grn2sz5gyig";
+      url = mirror://cpan/authors/id/A/AU/AUDREYT/Test-use-ok-0.11.tar.gz;
+      sha256 = "8410438a2acf127bffcf1ab92205b747a615b487e80a48e8c3d0bb9fa0dbb2a8";
+    };
+    meta = {
+      homepage = http://github.com/audreyt/Test-use-ok/tree;
+      description = "Alternative to Test::More::use_ok";
+      license = "unrestricted";
     };
   };
 
@@ -6505,6 +6819,33 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GB/GBARR/TimeDate-1.16.tar.gz;
       sha256 = "1cvcpaghn7dc14m9871sfw103g3m3a00m2mrl5iqb0mmh40yyhkr";
+    };
+  };
+
+  TimeDuration = buildPerlPackage {
+    name = "Time-Duration-1.1";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AV/AVIF/Time-Duration-1.1.tar.gz;
+      sha256 = "a69c419c4892f21eba10002e2ab8c55b657b6691cf6873544ef99ef5fd188f4e";
+    };
+    buildInputs = [ TestPod TestPodCoverage ];
+    meta = {
+      description = "Rounded or exact English expression of durations";
+      license = "perl";
+    };
+  };
+
+  TimeDurationParse = buildPerlPackage {
+    name = "Time-Duration-Parse-0.06";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Time-Duration-Parse-0.06.tar.gz;
+      sha256 = "e88f0e1c322b477ec98fb295324bc78657ce25aa53cb353656f01241ea7fe4db";
+    };
+    buildInputs = [ TimeDuration ];
+    propagatedBuildInputs = [ ExporterLite ];
+    meta = {
+      description = "Parse string that represents time duration";
+      license = "perl";
     };
   };
 

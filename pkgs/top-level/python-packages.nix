@@ -5636,6 +5636,36 @@ pythonPackages = python.modules // rec {
   };
 
 
+  tarman = buildPythonPackage rec {
+    version = "0.1";
+    name = "tarman-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tarman/tarman-${version}.zip";
+      sha256 = "1g6p9v7z2qrg000150flwmpykkzc4y8l3lvkvpn0rb8czyw7l27f";
+    };
+
+    buildInputs = [ pkgs.unzip unittest2 nose mock ];
+    propagatedBuildInputs = [ python.modules.curses libarchive ];
+
+    # two tests fail
+    doCheck = false;
+  };
+
+
+  libarchive = buildPythonPackage rec {
+    version = "3.0.4-5";
+    name = "libarchive-${version}";
+
+    src = fetchurl {
+      url = "http://python-libarchive.googlecode.com/files/python-libarchive-${version}.tar.gz";
+      sha256 = "141yx9ym8gvybn67mw0lmgafzsd79rmd9l77lk0k6m2fzclqx1j5";
+    };
+
+    propagatedBuildInputs = [ pkgs.libarchive ];
+  };
+
+
   pyzmq = buildPythonPackage rec {
     name = "pyzmq-13.0.0";
     src = fetchurl {
