@@ -1,5 +1,6 @@
 { stdenv, fetchurl, freeglut, gtk2, gtkglext, libjpeg_turbo, libtheora, libXmu
-, lua, mesa, pkgconfig, perl, automake, autoconf, libtool, gettext
+, lua, mesa, pkgconfig, perl, automake, autoconf, libtool, gettext, glib, cairo
+, pango, gdk_pixbuf, atk
 }:
 
 let
@@ -44,7 +45,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ freeglut gtk2 gtkglext libjpeg_turbo libtheora libXmu mesa pkgconfig lua
-    perl automake autoconf libtool gettext  ];
+    perl automake autoconf libtool gettext ];
 
   patchPhase = ''
     patch -Np0 -i "${gcc46Patch}"
@@ -53,7 +54,13 @@ stdenv.mkDerivation {
     patch -Np1 -i "${linkingPatch}"
     patch -Np1 -i "${gcc47Patch}"
     autoreconf
-    configureFlagsArray=( --with-gtk --with-lua=${lua} CFLAGS="-O2 -fsigned-char" CXXFLAGS="-O2 -fsigned-char" )
+    configureFlagsArray=(
+      --with-gtk
+      --with-lua=${lua}
+      CPPFLAGS="-I${gtk2}/include/gtk-2.0 -I${gtk2}/lib/gtk-2.0/include -I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include -I${cairo}/include/cairo -I${pango}/include/pango-1.0 -I${gdk_pixbuf}/include/gdk-pixbuf-2.0 -I${atk}/include/atk-1.0 -I${gtkglext}/include/gtkglext-1.0 -I${gtkglext}/lib/gtkglext-1.0/include"
+      CFLAGS="-O2 -fsigned-char"
+      CXXFLAGS="-O2 -fsigned-char"
+    )
   '';
 
   enableParallelBuilding = true;
