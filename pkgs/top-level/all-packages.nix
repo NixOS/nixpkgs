@@ -8259,7 +8259,13 @@ let
 
   trayer = callPackage ../applications/window-managers/trayer { };
 
-  tree = callPackage ../tools/system/tree { };
+  tree = callPackage ../tools/system/tree {
+    # use gccApple to compile on darwin as the configure script adds a
+    # -no-cpp-precomp flag, which is not compatible with the default gcc
+    stdenv = if stdenv.isDarwin
+      then stdenvAdapters.overrideGCC stdenv gccApple
+      else stdenv;
+  };
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
