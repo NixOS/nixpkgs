@@ -40,6 +40,7 @@ in
       export AR=$(type -p ar)
     '';
     buildInputs = [ python ];
+    NIX_POST_EXTRACT_FILES_HOOK = patchUsrBinEnv;
   };
   
   sqlite3 = { propagatedBuildInputs = [ sqlite ]; };
