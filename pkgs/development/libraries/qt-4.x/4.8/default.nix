@@ -5,8 +5,8 @@
 , libtiff, glib, icu
 , mysql, postgresql, sqlite
 , perl, coreutils, libXi
-, buildMultimedia ? true, alsaLib, gstreamer, gst_plugins_base
-, buildWebkit ? true
+, buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst_plugins_base
+, buildWebkit ? stdenv.isLinux
 , flashplayerFix ? false, gdk_pixbuf
 , gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
 , developerBuild ? false

@@ -5069,6 +5069,7 @@ let
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
+    cups = if stdenv.isLinux then cups else null;
   };
 
   qt48Full = callPackage ../development/libraries/qt-4.x/4.8 {
