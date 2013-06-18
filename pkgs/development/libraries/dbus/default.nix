@@ -13,7 +13,7 @@ let
   # also other parts than "libs" need this statically linked lib
   makeInternalLib = "(cd dbus && make libdbus-internal.la)";
 
-  systemdOrEmpty = stdenv.lib.optional stdenv.isLinux systemd;
+  systemdOrEmpty = lib.optional stdenv.isLinux systemd;
 
   # A generic builder for individual parts (subdirs) of D-Bus
   dbus_drv = name: subdirs: merge: stdenv.mkDerivation (lib.mergeAttrsByFuncDefaultsClean [{
@@ -42,10 +42,9 @@ let
 
     doCheck = true;
 
-    patches = [
-      ./ignore-missing-includedirs.patch ./implement-getgrouplist.patch
-      ./ucred-dirty-hack.patch ./no-create-dirs.patch
-    ];
+    patches = [ ./ignore-missing-includedirs.patch ]
+      ++ lib.optional (stdenv.isSunOS || stdenv.isLinux/*avoid rebuilds*/) ./implement-getgrouplist.patch
+      ++ [ ./ucred-dirty-hack.patch ./no-create-dirs.patch ];
 
     nativeBuildInputs = [ pkgconfig ];
     propagatedBuildInputs = [ expat ];
@@ -85,6 +84,8 @@ in rec {
     configureFlags = [ "--with-dbus-daemondir=${daemon}/bin" ];
     buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs daemon dbus_glib ];
     NIX_CFLAGS_LINK = "-Wl,--as-needed -ldbus-1";
+
+    meta.platforms = stdenv.lib.platforms.all;
   };
 
   daemon = dbus_drv "daemon" "bus" {
