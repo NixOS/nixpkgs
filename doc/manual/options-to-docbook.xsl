@@ -12,7 +12,7 @@
 
   <xsl:param name="revision" />
 
-  
+
   <xsl:template match="/expr/list">
 
       <variablelist>
@@ -24,7 +24,7 @@
                <option>
                  <xsl:for-each select="attr[@name = 'name']/string">
                    <xsl:value-of select="@value" />
-		   <xsl:if test="position() != last()">.</xsl:if>
+                   <xsl:if test="position() != last()">.</xsl:if>
                  </xsl:for-each>
                </option>
              </term>
@@ -52,7 +52,7 @@
                </para>
 
                <xsl:if test="attr[@name = 'example']">
-                 
+
                  <para>
                    <emphasis>Example:</emphasis>
                    <xsl:text> </xsl:text>
@@ -82,7 +82,7 @@
                  </para>
                  <xsl:apply-templates select="attr[@name = 'definitions']" />
                </xsl:if>
-               
+
              </listitem>
 
           </varlistentry>
@@ -98,23 +98,23 @@
     <!-- !!! escaping -->
     <xsl:text>"</xsl:text><xsl:value-of select="str:replace(str:replace(str:replace(@value, '\', '\\'), '&quot;', '\&quot;'), '&#010;', '\n')" /><xsl:text>"</xsl:text>
   </xsl:template>
-  
-  
+
+
   <xsl:template match="int">
     <xsl:value-of select="@value" />
   </xsl:template>
-  
-  
+
+
   <xsl:template match="bool[@value = 'true']">
     <xsl:text>true</xsl:text>
   </xsl:template>
-  
-  
+
+
   <xsl:template match="bool[@value = 'false']">
     <xsl:text>false</xsl:text>
   </xsl:template>
-  
-  
+
+
   <xsl:template match="list">
     [
     <xsl:for-each select="*">
@@ -123,8 +123,8 @@
     </xsl:for-each>
     ]
   </xsl:template>
-  
-  
+
+
   <xsl:template match="attrs">
     {
     <xsl:for-each select="attr">
@@ -134,8 +134,8 @@
     </xsl:for-each>
     }
   </xsl:template>
-  
-  
+
+
   <xsl:template match="derivation">
     <xsl:choose>
       <xsl:when test="attr[@name = 'url']/string/@value">
@@ -158,8 +158,8 @@
             <xsl:when test="$revision != 'local' and contains(@value, '/modules/')">
               <xsl:attribute name="xlink:href">https://github.com/NixOS/nixos/blob/<xsl:value-of select="$revision"/>/modules/<xsl:value-of select="substring-after(@value, '/modules/')"/></xsl:attribute>
             </xsl:when>
-            <xsl:when test="$revision != 'local' and contains(@value, 'charon') and contains(@value, '/nix/')">
-              <xsl:attribute name="xlink:href">https://github.com/NixOS/charon/blob/<xsl:value-of select="$revision"/>/nix/<xsl:value-of select="substring-after(@value, '/nix/')"/></xsl:attribute>
+            <xsl:when test="$revision != 'local' and contains(@value, 'nixops') and contains(@value, '/nix/')">
+              <xsl:attribute name="xlink:href">https://github.com/NixOS/nixops/blob/<xsl:value-of select="$revision"/>/nix/<xsl:value-of select="substring-after(@value, '/nix/')"/></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
               <xsl:attribute name="xlink:href">file://<xsl:value-of select="@value"/></xsl:attribute>
@@ -172,8 +172,8 @@
             <xsl:when test="contains(@value, '/modules/')">
               &lt;nixos/modules/<xsl:value-of select="substring-after(@value, '/modules/')"/>&gt;
             </xsl:when>
-            <xsl:when test="contains(@value, 'charon') and contains(@value, '/nix/')">
-              &lt;charon/<xsl:value-of select="substring-after(@value, '/nix/')"/>&gt;
+            <xsl:when test="contains(@value, 'nixops') and contains(@value, '/nix/')">
+              &lt;nixops/<xsl:value-of select="substring-after(@value, '/nix/')"/>&gt;
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="@value" />
@@ -182,6 +182,6 @@
         </filename></member>
       </xsl:for-each>
     </simplelist>
-  </xsl:template>  
-  
+  </xsl:template>
+
 </xsl:stylesheet>
