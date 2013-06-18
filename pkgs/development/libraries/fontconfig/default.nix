@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig freetype expat ];
 
-  #propagatedBuildInputs = [ expat ]; # !!! shouldn't be necessary, but otherwise pango breaks
-
   configureFlags = "--sysconfdir=/etc --with-cache-dir=/var/cache/fontconfig --disable-docs --with-default-fonts=";
 
   # We should find a better way to access the arch reliably.
@@ -36,7 +34,7 @@ stdenv.mkDerivation rec {
   # Don't try to write to /etc/fonts or /var/cache/fontconfig at install time.
   installFlags = "sysconfdir=$(out)/etc RUN_FC_CACHE_TEST=false fc_cachedir=$(TMPDIR)/dummy";
 
-  postInstall = if !freetype.infinality.useInfinality then "" else ''
+  postInstall = stdenv.lib.optionalString freetype.infinality.useInfinality ''
     cd "$out/etc/fonts" && tar xvf ${infinality_patch}
   '';
 
@@ -44,5 +42,6 @@ stdenv.mkDerivation rec {
     description = "A library for font customization and configuration";
     homepage = http://fontconfig.org/;
     license = "bsd";
+    platforms = stdenv.lib.platforms.all;
   };
 }

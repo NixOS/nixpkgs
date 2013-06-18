@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.freetype.org/;
     license = if useEncumberedCode then "unfree"
       else "GPLv2+"; # or the FreeType License (BSD + advertising clause)
+    platforms = stdenv.lib.platforms.all;
   };
 }

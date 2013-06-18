@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "The official reference implementation for the PNG file format";
     homepage = http://www.libpng.org/pub/png/libpng.html;
     license = "free-non-copyleft"; # http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
+    platforms = stdenv.lib.platforms.all;
   };
 }

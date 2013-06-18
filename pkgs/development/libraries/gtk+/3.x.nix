@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     license = "LGPLv2+";
 
     maintainers = with stdenv.lib.maintainers; [urkud raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.all;
   };
 }

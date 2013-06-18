@@ -50,6 +50,7 @@ let
       '';
 
       license = "GPLv2";
+      platforms = stdenv.lib.platforms.all;
     };
   } merge ]); # poppler_drv
 
