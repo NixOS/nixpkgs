@@ -2947,6 +2947,28 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  pandas = buildPythonPackage rec {
+    name = "pandas-0.11.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
+      sha256 = "1mwh783hcch6lywgjayj8aqmbfv6n8fd2qbf1xlwqk2913ad8x2d";
+    };
+
+    buildInputs = [ nose ];
+    propagatedBuildInputs = [ dateutil numpy pytz python.modules.sqlite3 ];
+
+    # Tests require networking to pass
+    doCheck = false;
+
+    meta = {
+      homepage = "http://pandas.pydata.org/";
+      description = "Python Data Analysis Library";
+      license = stdenv.lib.licenses.bsd3;
+      maintainers = [ stdenv.lib.maintainers.raskin ];
+      platforms = stdenv.lib.platforms.linux;
+    };
+  };
 
   paramiko = buildPythonPackage rec {
     name = "paramiko-1.10";
