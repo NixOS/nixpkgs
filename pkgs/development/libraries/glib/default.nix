@@ -41,7 +41,10 @@ stdenv.mkDerivation (rec {
 
   configureFlags = "--with-pcre=system --disable-fam";
 
-  postConfigure = "sed '/SANE_MALLOC_PROTOS/s,^,//,' -i config.h"; # https://bugzilla.gnome.org/show_bug.cgi?id=698716 :-)
+  postConfigure = "sed '/SANE_MALLOC_PROTOS/s,^,//,' -i config.h" # https://bugzilla.gnome.org/show_bug.cgi?id=698716 :-)
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+      sed '24 i #include <Foundation/Foundation.h>'
+    '';
 
   enableParallelBuilding = true;
 
@@ -54,6 +57,10 @@ stdenv.mkDerivation (rec {
 
   meta = {
     description = "GLib, a C library of programming buildings blocks";
+    homepage    = http://www.gtk.org/;
+    license     = "LGPLv2+";
+    maintainers = with stdenv.lib.maintainers; [ raskin urkud lovek323 ];
+    platforms   = stdenv.lib.platforms.unix;
 
     longDescription = ''
       GLib provides the core application building blocks for libraries
@@ -61,13 +68,6 @@ stdenv.mkDerivation (rec {
       system used in GNOME, the main loop implementation, and a large
       set of utility functions for strings and common data structures.
     '';
-
-    homepage = http://www.gtk.org/;
-
-    license = "LGPLv2+";
-
-    maintainers = with stdenv.lib.maintainers; [raskin urkud];
-    platforms = stdenv.lib.platforms.linux;
   };
 }
 
