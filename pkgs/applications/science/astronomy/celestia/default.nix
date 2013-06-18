@@ -57,9 +57,11 @@ stdenv.mkDerivation {
     configureFlagsArray=(
       --with-gtk
       --with-lua=${lua}
-      CPPFLAGS="-I${gtk2}/include/gtk-2.0 -I${gtk2}/lib/gtk-2.0/include -I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include -I${cairo}/include/cairo -I${pango}/include/pango-1.0 -I${gdk_pixbuf}/include/gdk-pixbuf-2.0 -I${atk}/include/atk-1.0 -I${gtkglext}/include/gtkglext-1.0 -I${gtkglext}/lib/gtkglext-1.0/include"
+      CPPFLAGS="-DNDEBUG"
       CFLAGS="-O2 -fsigned-char"
       CXXFLAGS="-O2 -fsigned-char"
+      GTK_CFLAGS="-I${gtk2}/include/gtk-2.0 -I${gtk2}/lib/gtk-2.0/include -I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include -I${cairo}/include/cairo -I${pango}/include/pango-1.0 -I${gdk_pixbuf}/include/gdk-pixbuf-2.0 -I${atk}/include/atk-1.0 -I${gtkglext}/include/gtkglext-1.0 -I${gtkglext}/lib/gtkglext-1.0/include"
+      GTK_LIBS="-lgtk-x11-2.0 -lgtkglext-x11-1.0 -lcairo -lgdk_pixbuf-2.0 -lpango-1.0 -lgobject-2.0"
     )
   '';
 
