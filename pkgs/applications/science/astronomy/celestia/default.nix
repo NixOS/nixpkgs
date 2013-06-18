@@ -17,6 +17,12 @@ let
     name = "celestia-1.6.1-libpng15.patch";
   };
 
+  libpng16Patch = fetchurl {
+    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/celestia-1.6.1-libpng16.patch?h=packages/celestia";
+    sha256 = "1q85prw4ci6d50lri8w1jm19pghxw96qizf5dl4g0j86rlhlkc8f";
+    name = "celestia-1.6.1-libpng16.patch";
+  };
+
   linkingPatch = fetchurl {
     url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/celestia-1.6.1-linking.patch?h=packages/celestia";
     sha256 = "1m8xyq26nm352828bp12c3b8f6m9bys9fwfxbfzqppllk7il2f24";
@@ -43,6 +49,7 @@ stdenv.mkDerivation {
   patchPhase = ''
     patch -Np0 -i "${gcc46Patch}"
     patch -Np0 -i "${libpng15Patch}"
+    patch -Np2 -i "${libpng16Patch}"
     patch -Np1 -i "${linkingPatch}"
     patch -Np1 -i "${gcc47Patch}"
     autoreconf
