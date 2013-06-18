@@ -4118,7 +4118,9 @@ let
   atkmm = callPackage ../development/libraries/atkmm { };
 
   cairo = callPackage ../development/libraries/cairo {
-    glSupport = lib.elem system lib.platforms.mesaPlatforms;
+    glSupport
+      = (config.cairo.gl or true)
+        && lib.elem system lib.platforms.mesaPlatforms;
   };
 
   pixman = callPackage ../development/libraries/pixman { };
