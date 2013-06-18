@@ -17,12 +17,10 @@ let
 in
 
 stdenv.mkDerivation rec {
-  basename = "openssh-6.2p1";
-  # make the option visible
-  name = basename + (if withKerberos then "-krb5" else "");
+  name = "openssh-6.2p1";
 
   src = fetchurl {
-    url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/portable/${basename}.tar.gz";
+    url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/portable/${name}.tar.gz";
     sha1 = "8824708c617cc781b2bb29fa20bd905fd3d2a43d";
   };
 
