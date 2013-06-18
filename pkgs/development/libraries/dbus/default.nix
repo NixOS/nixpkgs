@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, autoconf, automake, libtool
 , expat, systemd, glib, dbus_glib, python
-, libX11, libICE, libSM, useX11 ? true }:
+, libX11, libICE, libSM, useX11 ? stdenv.isLinux }:
 
 let
   version = "1.6.12"; # 1.7.* isn't recommended, even for gnome 3.8

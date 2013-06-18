@@ -33,11 +33,11 @@ stdenv.mkDerivation (rec {
   };
 
   # configure script looks for d-bus but it is only needed for tests
-  buildInputs = [ libelf ] ++ libiconvOrEmpty;
+  buildInputs = [ libelf ];
 
   nativeBuildInputs = [ perl pkgconfig gettext python ];
 
-  propagatedBuildInputs = [ pcre zlib libffi ];
+  propagatedBuildInputs = [ pcre zlib libffi ] ++ libiconvOrEmpty;
 
   configureFlags = "--with-pcre=system --disable-fam";
 

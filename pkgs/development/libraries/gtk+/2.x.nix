@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xlibs
-, gdk_pixbuf, libintlOrEmpty
-, xineramaSupport ? true
+, gdk_pixbuf, libintlOrEmpty, x11
+, xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
 }:
 
@@ -21,13 +21,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkgconfig gettext ];
 
-  propagatedBuildInputs = with xlibs;
-    [ glib cairo pango gdk_pixbuf atk
-      libXrandr libXrender libXcomposite libXi libXcursor
-    ]
+  propagatedBuildInputs = with xlibs; with stdenv.lib;
+    [ glib cairo pango gdk_pixbuf atk ]
+    ++ optionals stdenv.isLinux
+      [ libXrandr libXrender libXcomposite libXi libXcursor ]
+    ++ optional stdenv.isDarwin x11
     ++ libintlOrEmpty
-    ++ stdenv.lib.optional xineramaSupport libXinerama
-    ++ stdenv.lib.optionals cupsSupport [ cups ];
+    ++ optional xineramaSupport libXinerama
+    ++ optionals cupsSupport [ cups ];
 
   configureFlags = "--with-xinput=yes";
 

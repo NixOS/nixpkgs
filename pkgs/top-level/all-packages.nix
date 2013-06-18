@@ -4114,15 +4114,13 @@ let
   atk = callPackage ../development/libraries/atk { };
   atkmm = callPackage ../development/libraries/atkmm { };
 
+  pixman = callPackage ../development/libraries/pixman { };
+
   cairo = callPackage ../development/libraries/cairo {
     glSupport = lib.elem system lib.platforms.mesaPlatforms;
   };
-
-  pixman = callPackage ../development/libraries/pixman { };
-
-  cairomm = callPackage ../development/libraries/cairomm { };
-
   cairo_1_12_2 = callPackage ../development/libraries/cairo/1.12.2.nix { };
+  cairomm = callPackage ../development/libraries/cairomm { };
 
   pango = callPackage ../development/libraries/pango { };
   pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
@@ -4132,7 +4130,7 @@ let
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
-    cupsSupport = config.gtk2.cups or true;
+    cupsSupport = config.gtk2.cups or stdenv.isLinux;
   };
 
   gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.x.nix {

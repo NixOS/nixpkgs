@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gettext
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, xlibs
-, xineramaSupport ? true
-, cupsSupport ? true, cups ? null
+, xineramaSupport ? stdenv.isLinux
+, cupsSupport ? stdenv.isLinux, cups ? null
 }:
 
 assert xineramaSupport -> xlibs.libXinerama != null;
