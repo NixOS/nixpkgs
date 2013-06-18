@@ -1,7 +1,7 @@
 {stdenv, fetchurl, pkgconfig, libusb, libtool, libexif, libjpeg, gettext}:
 
 stdenv.mkDerivation rec {
-  name = "libgphoto2-2.5.2";
+  name = "libgphoto2-${meta.version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/gphoto/${name}.tar.bz2";
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
       MTP, and other vendor specific protocols for controlling and transferring data
       from digital cameras. 
     '';
+    version = "2.5.2";
     # XXX: the homepage claims LGPL, but several src files are lgpl21Plus
     license = stdenv.lib.licenses.lgpl21Plus; 
     platforms = with stdenv.lib.platforms; unix;

@@ -4,13 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "Chart";
-  version = "0.16";
-  sha256 = "1mb8hgxj0i5s7l061pfn49m5f6qdwvmgy6ni7jmg85vpy6b7jra3";
+  version = "0.17";
+  sha256 = "1ip1a61ryypwfzj6dc6n6pl92rflf7lqf1760ppjyg05q5pn6qxg";
   buildDepends = [
     cairo colour dataAccessor dataAccessorTemplate mtl time
   ];
   meta = {
-    homepage = "http://www.dockerz.net/software/chart.html";
+    homepage = "https://github.com/timbod7/haskell-chart/wiki";
     description = "A library for generating 2D Charts and Plots";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

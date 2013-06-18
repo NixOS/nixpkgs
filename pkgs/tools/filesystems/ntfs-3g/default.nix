@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.tuxera.com/community/;
     description = "FUSE-base NTFS driver with full write support";
     maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

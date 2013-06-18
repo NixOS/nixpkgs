@@ -1,6 +1,7 @@
 #!/bin/sh
 
 channels_url="http://omahaproxy.appspot.com/all?csv=1";
+history_url="http://omahaproxy.appspot.com/history";
 bucket_url="http://commondatastorage.googleapis.com/chromium-browser-official/";
 output_file="$(cd "$(dirname "$0")" && pwd)/sources.nix";
 
@@ -41,6 +42,17 @@ sha_insert()
     ver_sha_table="$ver_sha_table $version:$sha256";
 }
 
+get_newest_ver()
+{
+    versions="$(for v in $@; do echo "$v"; done)";
+    if oldest="$(echo "$versions" | sort -V 2> /dev/null | tail -n1)";
+    then
+        echo "$oldest";
+    else
+        echo "$versions" | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | tail -n1;
+    fi;
+}
+
 if [ -e "$output_file" ];
 then
     get_sha256()
@@ -53,38 +65,55 @@ then
 
         echo -n "Checking if $oldver ($channel) is up to date..." >&2;
 
-        if [ "x$version" != "x$oldver" ];
+        if [ "x$(get_newest_ver "$version" "$oldver")" != "x$oldver" ];
         then
             echo " no, getting sha256 for new version $version:" >&2;
-            sha256="$(nix-prefetch-url "$url")";
+            sha256="$(nix-prefetch-url "$url")" || return 1;
         else
             echo " yes, keeping old sha256." >&2;
-            sha256="$(nix_getattr "$output_file" "$channel.sha256")";
+            sha256="$(nix_getattr "$output_file" "$channel.sha256")" \
+                || return 1;
         fi;
 
         sha_insert "$version" "$sha256";
         echo "$sha256";
+        return 0;
     }
 else
     get_sha256()
     {
-        nix-prefetch-url "$url";
+        nix-prefetch-url "$3";
     }
 fi;
 
+fetch_filtered_history()
+{
+    curl -s "$history_url" | sed -nr 's/^'"linux,$1"',([^,]+).*$/\1/p';
+}
+
+get_prev_sha256()
+{
+    channel="$1";
+    current_version="$2";
+
+    for version in $(fetch_filtered_history "$channel");
+    do
+        [ "x$version" = "x$current_version" ] && continue;
+        url="${bucket_url%/}/chromium-$version.tar.xz";
+        sha256="$(get_sha256 "$channel" "$version" "$url")" || continue;
+        echo "$sha256:$version:$url";
+        return 0;
+    done;
+}
+
 get_channel_exprs()
 {
-    for chline in $(echo "$1" | cut -d, -f-2);
+    for chline in $1;
     do
         channel="${chline%%,*}";
         version="${chline##*,}";
 
-        # XXX: Remove case after version 26 is stable:
-        if [ "${version%%.*}" -ge 26 ]; then
-            url="${bucket_url%/}/chromium-$version.tar.xz";
-        else
-            url="${bucket_url%/}/chromium-$version.tar.bz2";
-        fi;
+        url="${bucket_url%/}/chromium-$version.tar.xz";
 
         echo -n "Checking if sha256 of version $version is cached..." >&2;
         if sha256="$(sha_lookup "$version")";
@@ -93,6 +122,17 @@ get_channel_exprs()
         else
             echo " no." >&2;
             sha256="$(get_sha256 "$channel" "$version" "$url")";
+            if [ $? -ne 0 ];
+            then
+                echo "Whoops, failed to fetch $version, trying previous" \
+                     "versions:" >&2;
+
+                sha_ver_url="$(get_prev_sha256 "$channel" "$version")";
+                sha256="${sha_ver_url%%:*}";
+                ver_url="${sha_ver_url#*:}";
+                version="${ver_url%%:*}";
+                url="${ver_url#*:}";
+            fi;
         fi;
 
         sha_insert "$version" "$sha256";
@@ -108,7 +148,7 @@ get_channel_exprs()
 cd "$(dirname "$0")";
 
 omaha="$(curl -s "$channels_url")";
-versions="$(echo "$omaha" | sed -n -e 's/^linux,\(\([^,]\+,\)\{2\}\).*$/\1/p')";
+versions="$(echo "$omaha" | sed -nr -e 's/^linux,([^,]+,[^,]+).*$/\1/p')";
 channel_exprs="$(get_channel_exprs "$versions")";
 
 cat > "$output_file" <<-EOF

@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
-    libPrefix = "python${majorVersion}";
+    libPrefix = "python${majorVersion}m";
   };
 
   enableParallelBuilding = true;

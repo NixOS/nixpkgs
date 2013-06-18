@@ -98,6 +98,11 @@
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       bmp = self.bmp_1_2_2_1;
+      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override {
+        Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3;
+        mtl = self.mtl_2_1_2;
+        HTTP = self.HTTP_4000_1_1.override { mtl = self.mtl_2_1_2; };
+      };
     };
 
   ghc6121Prefs =
@@ -111,6 +116,12 @@
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       bmp = self.bmp_1_2_2_1;
+      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override {
+        Cabal = self.Cabal_1_16_0_3;
+        zlib = self.zlib_0_5_3_3;
+        mtl = self.mtl_2_1_2;
+        HTTP = self.HTTP_4000_1_1.override { mtl = self.mtl_2_1_2; };
+      };
     };
 
   ghc6104Prefs =
@@ -125,6 +136,13 @@
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       bmp = self.bmp_1_2_2_1;
+      binary = self.binary_0_6_0_0;
+      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override {
+        Cabal = self.Cabal_1_16_0_3;
+        zlib = self.zlib_0_5_3_3;
+        mtl = self.mtl_2_1_2;
+        HTTP = self.HTTP_4000_1_1.override { mtl = self.mtl_2_1_2; };
+      };
     };
 
   # Abstraction for Haskell packages collections

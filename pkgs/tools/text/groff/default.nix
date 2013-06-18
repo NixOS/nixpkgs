@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ ghostscript ];
   nativeBuildInputs = [ perl ];
 
+  # Builds running without a chroot environment may detect the presence
+  # of /usr/X11 in the host system, leading to an impure build of the
+  # package. To avoid this issue, X11 support is explicitly disabled.
+  # Note: If we ever want to *enable* X11 support, then we'll probably
+  # have to pass "--with-appresdir", too.
+  configureFlags = "--without-x";
+
   doCheck = true;
 
   crossAttrs = {
@@ -25,6 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.gnu.org/software/groff/";
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
     license = "GPLv3+";
+    platforms = stdenv.lib.platforms.all;
 
     longDescription = ''
       groff is the GNU implementation of troff, a document formatting

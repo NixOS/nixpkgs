@@ -9,11 +9,11 @@ with stdenv.lib;
 let
 
   majorVersion = "2.7";
-  version = "${majorVersion}.3";
+  version = "${majorVersion}.5";
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    sha256 = "0g3672il41rcfjk7sphfqdsa6qf53y8g3ai8yk1sslxi3khmfr3j";
+    sha256 = "0nc091f19sllibvxm6n3qw5pflcphkwwxmz43q26lqafhra7airv";
   };
 
   patches =

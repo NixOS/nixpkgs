@@ -1,6 +1,7 @@
 { fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk, libgnomeui, libofx
 , libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant, gettext, libbonoboui
-, intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper
+, intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper, libglade
+, libgsf, libart_lgpl
 }:
 
 /* If you experience GConf errors when running GnuCash on NixOS, see
@@ -9,17 +10,17 @@
  */
 
 stdenv.mkDerivation rec {
-  name = "gnucash-2.4.11";
+  name = "gnucash-2.4.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "0qbpgd6spclkmwryi66cih0igi5a6pmsnk41mmnscpfpz1mddhwk";
+    sha256 = "0j4m00a3r1hcrhkfjkx3sgi2r4id4wrc639i4s00j35rx80540pn";
   };
 
   buildInputs = [
     pkgconfig libxml2 gconf glib gtk libgnomeui libgtkhtml gtkhtml
     libgnomeprint goffice enchant gettext intltool perl guile slibGuile
-    swig isocodes bzip2 makeWrapper libofx
+    swig isocodes bzip2 makeWrapper libofx libglade libgsf libart_lgpl
   ];
 
   configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx";
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnucash.org/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons stdenv.lib.maintainers.iElectric ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }

@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Agda";
-  version = "2.3.2";
-  sha256 = "1xp0qvag6wx6zjwhmb7nm13hp63vlh8h4a2rkc85rsh610m0nynl";
+  version = "2.3.2.1";
+  sha256 = "1dlf0cs913ma8wjvra8x6p0lwi1pk7ynbdq4lxgbdfgqkbnh43kr";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

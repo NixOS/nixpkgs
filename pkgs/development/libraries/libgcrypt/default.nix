@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libgpgerror }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "libgcrypt-1.5.2";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha1 = "c9998383532ba3e8bcaf690f2f0d65e814b48d2f";
+    sha256 = "0gwnzqd64cpwdmk93nll54nidsr74jpimxzj4p4z7502ylwl66p4";
   };
 
   propagatedBuildInputs = [ libgpgerror ];
@@ -34,4 +34,8 @@ stdenv.mkDerivation rec {
     homepage = http://gnupg.org/;
     platforms = stdenv.lib.platforms.all;
   };
-}
+} # old "as" problem, see #616 and http://gnupg.10057.n7.nabble.com/Fail-to-build-on-freebsd-7-3-td30245.html
+  // stdenv.lib.optionalAttrs (stdenv.isFreeBSD && stdenv.isi686)
+    { configureFlags = [ "--disable-aesni-support" ]; }
+)
+

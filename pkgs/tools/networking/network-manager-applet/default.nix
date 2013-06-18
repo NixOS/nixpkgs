@@ -1,12 +1,12 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, networkmanager, GConf
 , libnotify, libgnome_keyring, dbus_glib, polkit, isocodes
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
-, makeWrapper, networkmanager_openvpn }:
+, makeWrapper, networkmanager_openvpn, udev }:
 
 let
   pn = "network-manager-applet";
   major = "0.9";
-  version = "${major}.6.4";
+  version = "${major}.8.0";
 in
 
 stdenv.mkDerivation rec {
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pn}/${major}/${name}.tar.xz";
-    sha256 = "0ha16wvp2jcl96849qahaagidhiyalbjzi3nxi235y7hcnqnfmmf";
+    sha256 = "141m0n4fhsv1k82jm4531f12mq29d3213lph5c9rbfkhd1rnxyqs";
   };
 
   buildInputs = [
     gtk libglade networkmanager GConf libnotify libgnome_keyring dbus_glib
-    polkit isocodes makeWrapper
+    polkit isocodes makeWrapper udev
   ];
 
   nativeBuildInputs = [ intltool pkgconfig ];

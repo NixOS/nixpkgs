@@ -1,13 +1,13 @@
 { fetchurl, stdenv, libxml2, freetype, mesa, glew, qt4
 , cmake, makeWrapper, libjpeg }:
 
-let version = "3.7.0"; in
+let version = "4.1.0"; in
 stdenv.mkDerivation rec {
   name = "tulip-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/auber/tulip/tulip-3.7.0/${name}-src.tar.gz";
-    sha256 = "150fj9pdxblvl5sby61cb2kq98r6h8yljk3vq5xizn198d3fz4jq";
+    url = "mirror://sourceforge/auber/${name}_src.tar.gz";
+    sha256 = "1js1f8xdm9g2m66xbhfxa8ixzw6h4gjynxsm83p54l3i0hs3biig";
   };
 
   buildInputs = [ libxml2 freetype glew mesa qt4 libjpeg ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    description = "Tulip, a visualization framework for the analysis and visualization of relational data";
+    description = "A visualization framework for the analysis and visualization of relational data";
 
     longDescription =
       '' Tulip is an information visualization framework dedicated to the

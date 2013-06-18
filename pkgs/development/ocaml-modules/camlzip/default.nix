@@ -2,16 +2,16 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "1.04";
+  version = "1.05";
 in
 
 stdenv.mkDerivation {
   name = "camlzip-${version}";
 
   src = fetchurl {
-    url = "http://forge.ocamlcore.org/frs/download.php/328/" +
+    url = "http://forge.ocamlcore.org/frs/download.php/1037/" +
           "camlzip-${version}.tar.gz";
-    sha256 = "1zpchmp199x7f4mzmapvfywgy7f6wy9yynd9nd8yh8l78s5gixbn";
+    sha256 = "930b70c736ab5a7ed1b05220102310a0a2241564786657abe418e834a538d06b";
   };
 
   buildInputs = [zlib ocaml findlib];
