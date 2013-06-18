@@ -5775,10 +5775,10 @@ rec {
   };
 
   StringToIdentifierEN = buildPerlPackage rec {
-    name = "String-ToIdentifier-EN-0.06";
+    name = "String-ToIdentifier-EN-0.10";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/String/${name}.tar.gz";
-      sha256 = "1rmldr7jf4jvkhzlv8hgp48lrmybvinmhv8kcnrpa8las0ijm4vm";
+      sha256 = "1xm0v1cq9hdgx4mswa9wdr2lqk7z9kh1bwjkx4wb5xljd0lxhas6";
     };
     propagatedBuildInputs =
       [ LinguaENInflectPhrase TextUnidecode namespaceclean ];
