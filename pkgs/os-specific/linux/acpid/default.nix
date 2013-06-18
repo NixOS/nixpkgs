@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://tedfelix.com/linux/acpid-netlink.html;
     description = "A daemon for delivering ACPI events to userspace programs";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
