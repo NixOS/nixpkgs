@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, freetype }:
+{ stdenv, fetchurl, pkgconfig, glib, freetype, gettext }:
 
 stdenv.mkDerivation rec {
   name = "harfbuzz-0.9.12";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "19cx5y2m20rp7z5j7mwqfb4ph2g8lrri69zim44x362y4w5gfly6";
   };
 
-  buildInputs = [ pkgconfig glib freetype ];
+  buildInputs = [ pkgconfig glib freetype ] ++ stdenv.lib.optional (!stdenv.isLinux) gettext;
 
   meta = {
     description = "An OpenType text shaping engine";
