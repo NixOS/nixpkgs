@@ -23,9 +23,6 @@ stdenv.mkDerivation rec {
     swig isocodes bzip2 makeWrapper libofx libglade libgsf libart_lgpl
   ];
 
-  # fix a problem with new intltool versions, taken from Gentoo
-  patchPhase = "patch -p3 < ${./potfiles-skip.patch}";
-
   configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx";
 
   postInstall = ''
