@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, pkgconfig, cmake
+{ stdenv, fetchurl, fetchgit, pkgconfig, cmake, libiconvOrEmpty
 , zlib, curl, cairo, freetype, fontconfig, lcms2, libjpeg, openjpeg
 , qt4Support ? false, qt4 ? null
 }:
@@ -28,7 +28,7 @@ let
 
     propagatedBuildInputs = [ zlib cairo freetype fontconfig libjpeg lcms2 curl openjpeg ];
 
-    nativeBuildInputs = [ pkgconfig cmake ];
+    nativeBuildInputs = [ pkgconfig cmake ] ++ libiconvOrEmpty;
 
     cmakeFlags = "-DENABLE_XPDF_HEADERS=ON -DENABLE_LIBCURL=ON -DENABLE_ZLIB=ON";
 

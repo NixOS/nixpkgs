@@ -1,6 +1,6 @@
 { fetchurl, stdenv, cairo, freetype, fontconfig, zlib
 , libjpeg, curl, libpthreadstubs, xorg, openjpeg
-, libxml2, pkgconfig, cmake, lcms2
+, libxml2, pkgconfig, cmake, lcms2, libiconvOrEmpty
 , glibSupport ? false, glib, gtk3Support ? false, gtk3 # gtk2 no longer accepted
 , qt4Support ? false, qt4 ? null
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional gtk3Support gtk3
     ++ stdenv.lib.optional qt4Support qt4;
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkgconfig cmake ] ++ libiconvOrEmpty;
 
   cmakeFlags = "-DENABLE_XPDF_HEADERS=ON -DENABLE_LIBCURL=ON -DENABLE_ZLIB=ON";
 
