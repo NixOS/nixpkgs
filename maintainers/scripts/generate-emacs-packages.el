@@ -5,8 +5,7 @@
   "Packages which are included in Emacs and shouldn't be listed
   in the deps argument.")
 
-(defconst nix-emacs-disabled-packages '(emms-mark-ext ;emms is not packaged
-                                        ))
+(defconst nix-emacs-disabled-packages '())
 
 (defun nix-make-package-url (base-url name package-spec)
   (concat base-url
@@ -71,7 +70,7 @@
       url = \"%s\";
       sha256 = \"%s\";
     };
-  
+
     deps = %s;
   };
 "
@@ -114,17 +113,19 @@
 
   (let ((out-buffer (get-buffer-create "generated-emacs-packages.nix")))
     (with-current-buffer out-buffer
-      (insert "{ buildEmacsPackage, fetchurl }:\nrec {")
+      (insert "{ buildEmacsPackage, fetchurl, otherPackages }:\n")
+      (insert "with otherPackages; rec {")
       ;; Add all packages to a list
       (let ((packages
-             (nix-remove-duplicate-packages
-              (apply 'append
-                     (mapcar (lambda (archive)
-                               (package--with-work-buffer
-                                (cdr archive) "archive-contents"
-                                (mapcar (lambda (p) (cons (car p) (vconcat (cdr p) (list (cdr archive)))))
-                                        (cdr (read (current-buffer))))))
-                             package-archives)))))
+             (sort (nix-remove-duplicate-packages
+                    (apply 'append
+                           (mapcar (lambda (archive)
+                                     (package--with-work-buffer
+                                      (cdr archive) "archive-contents"
+                                      (mapcar (lambda (p) (cons (car p) (vconcat (cdr p) (list (cdr archive)))))
+                                              (cdr (read (current-buffer))))))
+                                   package-archives)))
+                   (lambda (a b) (string< (symbol-name (car a)) (symbol-name (car b)))))))
 
         (cl-dolist (p packages)
           (nix-prefetch-packages (aref (cdr p) 4)
@@ -136,4 +137,4 @@
                      (aref (cdr p) 4)))))
         (insert "}")
         (let ((coding-system-for-write 'utf-8-emacs))
-         (write-file "../../pkgs/top-level/emacs-packages-generated.nix"))))))
+          (write-file "../../pkgs/top-level/emacs-packages-generated.nix"))))))
