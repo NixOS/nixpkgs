@@ -3369,6 +3369,10 @@ pythonPackages = python.modules // rec {
       md5 = "8d27f84509a96d6791a6c393ae67d7c8";
     };
 
+    preConfigure = ( if stdenv.isDarwin then ''
+      export DYLD_LIBRARY_PATH="${pkgs.libgit2}/lib"
+    '' else "" );
+
     propagatedBuildInputs = [ pkgs.libgit2 ];
 
     meta = {
