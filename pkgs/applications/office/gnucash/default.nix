@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnucash.org/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons stdenv.lib.maintainers.iElectric ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }
