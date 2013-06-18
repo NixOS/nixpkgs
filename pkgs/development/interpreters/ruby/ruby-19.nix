@@ -40,7 +40,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   patches = [ ./ruby19-parallel-install.patch ];
 
-  configureFlags = ["--enable-shared" "--enable-pthread"];
+  configureFlags = [ "--enable-shared" "--enable-pthread" ]
+    # on darwin, we have /usr/include/tk.h -- so the configure script detects
+    # that tk is installed
+    ++ ( if stdenv.isDarwin then [ "--with-out-ext=tk " ] else [ ]);
 
   installFlags = stdenv.lib.optionalString docSupport "install-doc";
   # Bundler tries to create this directory
