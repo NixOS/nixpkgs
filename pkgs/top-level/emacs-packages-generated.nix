@@ -5,9 +5,9 @@ with otherPackages; rec {
     name = "abl-mode-0.9.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/abl-mode-0.9.0.el";
-      sha256 = "1s3370nc0ipjcaw1ncdd4qra8a0i259pi60j173x9q1xlxcvq1ij";
+      sha256 = "1dsrj89pl1waqxgq12adpv6iwndc10aggwgbhajr1wja1g29qdm2";
     };
-  
+
     deps = [  ];
   };
 
@@ -16,9 +16,9 @@ with otherPackages; rec {
     name = "ac-ja-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ac-ja-0.0.1.el";
-      sha256 = "1na219925hmxqsmxs18dlj33fvkmki7c9mnmhhk914qxwmayhsff";
+      sha256 = "13vkkd66d780q46fj1hsll2xmnsqw0d25ph5xyp69rqxzndmcg07";
     };
-  
+
     deps = [  ];
   };
 
@@ -27,9 +27,9 @@ with otherPackages; rec {
     name = "ac-nrepl-0.18";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ac-nrepl-0.18.el";
-      sha256 = "1ln127mjcskdajnrb91c7pwk1rc8zzydx6lxliphfh37rgp1bqzk";
+      sha256 = "1rwczfafsgvavc6rkrg443xjbcnxskxs7pij8rp8k1ai9dmrxdxr";
     };
-  
+
     deps = [ nrepl auto-complete ];
   };
 
@@ -38,9 +38,9 @@ with otherPackages; rec {
     name = "ac-slime-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ac-slime-0.3.el";
-      sha256 = "1ij163c6f5vaz0jrlshiwpzlnlfbrf3jgnafk0mdrqmym3nq0naf";
+      sha256 = "0pgh1xr62d9m45cdhq3jxf35av30zicl4l8qgpjbbcmci8dd5c8v";
     };
-  
+
     deps = [  ];
   };
 
@@ -49,9 +49,9 @@ with otherPackages; rec {
     name = "ace-jump-mode-2.0.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ace-jump-mode-2.0.0.0.el";
-      sha256 = "1spm6axg6ar5ql4hzh5kfij07i41fq91nnna0kqqhl1fn708h61l";
+      sha256 = "071cy56ijdnhnj84417rgl3dp07fap1c991m83m8z984095myf34";
     };
-  
+
     deps = [  ];
   };
 
@@ -62,7 +62,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/ack-1.2.tar";
       sha256 = "0nnbghypyn8r8als4lsvmnl9n4rf9pq6ljvamv4n17pk9xc1g2l3";
     };
-  
+
     deps = [  ];
   };
 
@@ -71,9 +71,9 @@ with otherPackages; rec {
     name = "ack-and-a-half-1.1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ack-and-a-half-1.1.3.el";
-      sha256 = "0cvg3zx6a8w5dw6ia2sllrkiwihc23c39df7w0gy1640wg0w5xl7";
+      sha256 = "1jqi0bcldziqvv1flh79mxfr37hw87bzs17w4z2ha9hlv5w0jm7s";
     };
-  
+
     deps = [  ];
   };
 
@@ -84,7 +84,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/adaptive-wrap-0.2.el";
       sha256 = "12ff0r4ihmgs02p9ys7j87667pbw6mifs0zz5vnnv3ycbw4l30dy";
     };
-  
+
     deps = [  ];
   };
 
@@ -93,9 +93,9 @@ with otherPackages; rec {
     name = "adoc-mode-0.6.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/adoc-mode-0.6.2.el";
-      sha256 = "1a5l3rg43sx4yqkn94x9mczf0iyymzagfxh0g141arj5pfxmilgg";
+      sha256 = "1p2s4b0sjpviq7jvlxvkmidj7crzslnbac58m3gpvscgdnj3s5i7";
     };
-  
+
     deps = [ markup-faces ];
   };
 
@@ -104,9 +104,9 @@ with otherPackages; rec {
     name = "aes-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/aes-0.5.el";
-      sha256 = "0grzikw48zfsfzp3rvzjfvw9w47b1f52z0m64miha0gl6jxwcryn";
+      sha256 = "04ypnzqlrz00avrv90zbzzqr3wxj0kkcf0zs1n0rn48s1yfi59c5";
     };
-  
+
     deps = [  ];
   };
 
@@ -115,9 +115,9 @@ with otherPackages; rec {
     name = "ag-0.20";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ag-0.20.el";
-      sha256 = "1w8psdmhqhpngv2mawjf0hjjrs4k5m3d1s1i000rir70byr49ny6";
+      sha256 = "07lag2835w6ya6p4y2injwn8gx03vllzhzf74vk32vqx6w4xjckm";
     };
-  
+
     deps = [  ];
   };
 
@@ -126,9 +126,9 @@ with otherPackages; rec {
     name = "ahg-0.99";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ahg-0.99.el";
-      sha256 = "14zjyw2bspkdfxw66pyr8b64ipwb27sw853ah295d4l4aq2q3v7c";
+      sha256 = "08022nk0c4i57awch76hnkn66ldpngai6cdj9x4680rgirdwj8jf";
     };
-  
+
     deps = [  ];
   };
 
@@ -137,9 +137,9 @@ with otherPackages; rec {
     name = "align-cljlet-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/align-cljlet-0.3.el";
-      sha256 = "0dqc796n36s72n6gxsrsr7cnxwcb81hkgflnbvvp11igr1xb82pi";
+      sha256 = "025ia1227ar3lfc79x6nsjsabj0rzf7snia2z1ydqhv3whzlvswh";
     };
-  
+
     deps = [ clojure-mode ];
   };
 
@@ -150,7 +150,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/all-1.0.el";
       sha256 = "17h4cp0xnh08szh3snbmn1mqq2smgqkn45bq7v0cpsxq1i301hi3";
     };
-  
+
     deps = [  ];
   };
 
@@ -159,9 +159,9 @@ with otherPackages; rec {
     name = "alpha-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/alpha-1.0.el";
-      sha256 = "0z9h5hc01qjp3ifai0xwqvxiqw1i561mhgdy5j1c4g0rrkhg2waz";
+      sha256 = "0dyhw24nihl8bd7kynrafpliqmqc7kyck1hv8zvxx3x95f6z4y52";
     };
-  
+
     deps = [  ];
   };
 
@@ -170,9 +170,9 @@ with otherPackages; rec {
     name = "anaphora-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anaphora-0.1.0.el";
-      sha256 = "026k0z5g30q2sfyb52pxflx76jnr9g63387bj4ivnl2nyla6zyiq";
+      sha256 = "0zwinycw2j65kcb3xjkn210jpqvglg237jjlznydcvjxfjzx31ws";
     };
-  
+
     deps = [  ];
   };
 
@@ -181,9 +181,9 @@ with otherPackages; rec {
     name = "android-mode-0.2.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/android-mode-0.2.1.el";
-      sha256 = "1lm0fd790w6flqy5kjq9xqniv2ks9sm7nkkkb8yllk6gcz5fim38";
+      sha256 = "1k3mymr4yx09mnags6n8gvximc2sjzwq83grsbq6b49zlz8xrmv9";
     };
-  
+
     deps = [  ];
   };
 
@@ -192,9 +192,9 @@ with otherPackages; rec {
     name = "angular-snippets-0.2.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/angular-snippets-0.2.3.tar";
-      sha256 = "0i68g58040c5gzxgzij9ixqmrhbp3f93vv0f8bqhf27pciq6gqlr";
+      sha256 = "0ikpkml6h9735bv77xgfaa56kjxnzcg6aa1mwrqfgbj2j5j6k2l7";
     };
-  
+
     deps = [ s dash ];
   };
 
@@ -203,9 +203,9 @@ with otherPackages; rec {
     name = "anything-1.287";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-1.287.el";
-      sha256 = "0nc6129qmknavp1sfl3whg6slwvc79zgvxjmvcs7yabqjpinkrxf";
+      sha256 = "0hn10yvfnwsa0hgkxq5w0i17v93hiwg1b0v879skpyb7pkwanpl3";
     };
-  
+
     deps = [  ];
   };
 
@@ -214,9 +214,9 @@ with otherPackages; rec {
     name = "anything-R-0.1.2010";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-R-0.1.2010.el";
-      sha256 = "1wfv7fmgnv1hvxsh16b1ijy4dw6jkiji9rx8j2w20vm8nxhj816g";
+      sha256 = "12r2vrflskpifd77ayri5hks2q1yifyb0n0d6813p6spi3pkbcsn";
     };
-  
+
     deps = [  ];
   };
 
@@ -225,9 +225,9 @@ with otherPackages; rec {
     name = "anything-complete-1.86";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-complete-1.86.el";
-      sha256 = "0g0ph7f89ql07d7z25n0c2dx6j4gbjy9imzdf5wnchfdl8p0n1bb";
+      sha256 = "05zl6lmadhv4v3k2d38ydwjn89slqav40mgr8jxbd1yvqw46kwh0";
     };
-  
+
     deps = [  ];
   };
 
@@ -236,9 +236,9 @@ with otherPackages; rec {
     name = "anything-config-0.4.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-config-0.4.1.el";
-      sha256 = "1ncxpmks60yqfc2g42fmnr0qgn6l4g4klsgwyxxj0igrw4ma20hs";
+      sha256 = "1hyiy5p3vcg1hh1ly6ly8khhwrfa139lb8jlp0pahys17jxbnjcb";
     };
-  
+
     deps = [  ];
   };
 
@@ -247,9 +247,9 @@ with otherPackages; rec {
     name = "anything-el-swank-fuzzy-0.1.2009";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-el-swank-fuzzy-0.1.2009.el";
-      sha256 = "0dnbxm99sx2rv71s90sybrzww4w4qjx4iav91v2a8r5ir1yj41ci";
+      sha256 = "19gj5jbwqv5nms3286lsqnlgbdgcjc141vl1hxlbg412fsp0ik67";
     };
-  
+
     deps = [  ];
   };
 
@@ -258,9 +258,9 @@ with otherPackages; rec {
     name = "anything-extension-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-extension-0.2.el";
-      sha256 = "12gmim9nq838hsw09kl6nq7v6k3a3ssvlkc8gydyxga77qj8fvin";
+      sha256 = "1avnw8irqdssi5j0hw9aj8hgi7b7cqcvr3iwr95znsynxghndrqx";
     };
-  
+
     deps = [  ];
   };
 
@@ -269,9 +269,9 @@ with otherPackages; rec {
     name = "anything-exuberant-ctags-0.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-exuberant-ctags-0.1.2.el";
-      sha256 = "0z8iz1953j183m2vb7pf5zll5ylb4dajjn5khxp29lg1ysy1az2s";
+      sha256 = "1jqv2mmsq9xs8rx39q1zizcz9k868753537z25cjg6pc8ch9wdkb";
     };
-  
+
     deps = [  ];
   };
 
@@ -280,9 +280,9 @@ with otherPackages; rec {
     name = "anything-git-1.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-git-1.1.1.el";
-      sha256 = "0z5nz45mnwy2wgs1863rx016i1n4yy01bjhmqkhs3lqrxpr4p0gj";
+      sha256 = "1an2v0asalcq2y8fdisypyk4m1c6pxj7qvnca9h0znanvpajxcfa";
     };
-  
+
     deps = [  ];
   };
 
@@ -291,9 +291,9 @@ with otherPackages; rec {
     name = "anything-git-goto-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-git-goto-0.1.0.el";
-      sha256 = "03nckrpbnqzh79rn5k08nz844k0hmf9yqqb9rb1fjx0w73478c91";
+      sha256 = "0a747cq200956msr647dkd0bqpjabaza16972kfk24xrsgvx6jm3";
     };
-  
+
     deps = [  ];
   };
 
@@ -302,9 +302,9 @@ with otherPackages; rec {
     name = "anything-ipython-0.1.2009";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-ipython-0.1.2009.el";
-      sha256 = "0jk5ivb0cimqhbvfx1j4gj9galc9r4ki6984qrhcp9kfpbvgypaz";
+      sha256 = "0x5jpffffr2rsrr3zngx3qjl3mdpk4j1scqd4j8skbhv78w6kh3y";
     };
-  
+
     deps = [  ];
   };
 
@@ -313,9 +313,9 @@ with otherPackages; rec {
     name = "anything-match-plugin-1.27";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-match-plugin-1.27.el";
-      sha256 = "0wg5pprwk8c8ai3vj5zpcvrhkq0c3dxmzmh1nb5pvbclkibd400n";
+      sha256 = "00j0lwbl0dfdw0g58i18a12p71zl6qlblcwwbb9df55n5pwl4y7z";
     };
-  
+
     deps = [  ];
   };
 
@@ -324,9 +324,9 @@ with otherPackages; rec {
     name = "anything-obsolete-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-obsolete-0.1.el";
-      sha256 = "1s7g9ll1ib5n7s4vbdkpwykk00nhp3d6ycrq9r2faqbczrzj1yy7";
+      sha256 = "0jjrmgsykfixwpgayn83w5h4ry58zcf5m2jsad9q39kk6zvlng7w";
     };
-  
+
     deps = [  ];
   };
 
@@ -335,9 +335,9 @@ with otherPackages; rec {
     name = "anything-show-completion-20091119";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/anything-show-completion-20091119.el";
-      sha256 = "1z8ncdhnjx2s7mp6h8ichg87qpqdc2rv4aakg60k0hhzlaiqj6yj";
+      sha256 = "17mhjjlxhpm1r0b9jshxp5nxgzvg701s85285984v71gsrkjyyp7";
     };
-  
+
     deps = [  ];
   };
 
@@ -346,9 +346,9 @@ with otherPackages; rec {
     name = "apache-mode-2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/apache-mode-2.0.el";
-      sha256 = "0c252y95n24048hzp31dlq5py3s7ak32z9sxibkr18gr7sbsi03i";
+      sha256 = "1gw6y151djf52lgkjgssyg6b2dj1ilvjm7wc39lk9zrmksk849qm";
     };
-  
+
     deps = [  ];
   };
 
@@ -357,9 +357,9 @@ with otherPackages; rec {
     name = "applescript-mode-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/applescript-mode-1.1.el";
-      sha256 = "1y0v5nr9f9wfiijchmwsin7ifshzs14ybd0ps83023n9cq776kjr";
+      sha256 = "1qcafs2vwhrnyjn8c6fjm7wlf4sjkb77jdlhqc0fc04kvbwak9cs";
     };
-  
+
     deps = [  ];
   };
 
@@ -368,9 +368,9 @@ with otherPackages; rec {
     name = "apt-utils-1.212";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/apt-utils-1.212.el";
-      sha256 = "19lylar8mfrmv9y1pgqd9i81m1qdwgvnwn3m3ibsb8a7bvsmpf33";
+      sha256 = "0cksv2ij93ms3aw84mz7zm4sy20ixnz4kjv6zia87w6jx2v73p4c";
     };
-  
+
     deps = [  ];
   };
 
@@ -379,9 +379,9 @@ with otherPackages; rec {
     name = "apt-utils-ido-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/apt-utils-ido-0.2.el";
-      sha256 = "1r230yrkg234qcahzr91m0mka5dq3ml44qmzjbgb7p5pski89h44";
+      sha256 = "1lvx8c2817sxbd1vpvvxqgh0ngq6550j0bplgrqakfsraa99whll";
     };
-  
+
     deps = [ apt-utils ];
   };
 
@@ -390,9 +390,9 @@ with otherPackages; rec {
     name = "ascii-3.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ascii-3.1.el";
-      sha256 = "0dc6nmlsfnc9p24lq0ynlnzs6ccx8i2my39b45akpq587q2nwkqq";
+      sha256 = "05fjsj5nmc05cmsi0qj914dqdwk8rll1d4dwhn0crw36p2ivql75";
     };
-  
+
     deps = [  ];
   };
 
@@ -403,7 +403,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/auctex-11.86.tar";
       sha256 = "07042990pgms02aq3fpymh23bdi7pjp1mkqv1b52hw5z9vjnbj60";
     };
-  
+
     deps = [  ];
   };
 
@@ -412,9 +412,9 @@ with otherPackages; rec {
     name = "auto-complete-1.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/auto-complete-1.4.tar";
-      sha256 = "0xx1dm4wxvcmyibjlc7lshmqgnic8j57kyfgswm54ssnjj6h8khk";
+      sha256 = "0xzwbqqv73l6arafm7vhdylizh75avbfcqi4jmi8jv324zzvrvzp";
     };
-  
+
     deps = [ popup ];
   };
 
@@ -423,9 +423,9 @@ with otherPackages; rec {
     name = "auto-highlight-symbol-1.55";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/auto-highlight-symbol-1.55.el";
-      sha256 = "1dacp9ylj7rjczcn6rfzp419rc3a1pi35y7mkjdkz12hv107vln9";
+      sha256 = "17yflkz0k62yk68skf3wq4b4kjpzrjbwqqvsfl613fc2ynr66k91";
     };
-  
+
     deps = [  ];
   };
 
@@ -434,9 +434,9 @@ with otherPackages; rec {
     name = "auto-indent-mode-0.99";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/auto-indent-mode-0.99.el";
-      sha256 = "0wcr4h6k90hfy96pdvsvqs1s9z1n6nacik7vd2mpnr06lyvzlfb1";
+      sha256 = "1y7ql3ys9m8qp2zzhv0rnrhnwq7dj5k4zprrgwc219px2alxr256";
     };
-  
+
     deps = [  ];
   };
 
@@ -445,9 +445,9 @@ with otherPackages; rec {
     name = "autopair-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/autopair-0.3.el";
-      sha256 = "1wspnf8win5pl1wa5jcxwi7w65cw6727c54gip518153mfb8cgdv";
+      sha256 = "0jihbg9l447laampiy85bixx9g4753rsvxhi7blcy9j5z3cmgr9i";
     };
-  
+
     deps = [  ];
   };
 
@@ -456,9 +456,9 @@ with otherPackages; rec {
     name = "awk-it-0.76";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/awk-it-0.76.el";
-      sha256 = "1vps0xk5pjc3z9sb75ajmz26163wjj2ccglg48g1mv8al79kn6kp";
+      sha256 = "024pi3dg0a0d144hiygw96407xndpgx7zvw6a78l2sycbc6d0xzp";
     };
-  
+
     deps = [  ];
   };
 
@@ -467,9 +467,9 @@ with otherPackages; rec {
     name = "babcore-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/babcore-0.0.2.el";
-      sha256 = "0phi0i828900rmv7hcarzyw67farrcrrv5r9bggag35s9jv8nxjy";
+      sha256 = "1m636fghqq09fc0bv2haiimwajfvy5jmqb8kr3399rzancpx334y";
     };
-  
+
     deps = [  ];
   };
 
@@ -478,9 +478,9 @@ with otherPackages; rec {
     name = "back-button-0.6.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/back-button-0.6.4.el";
-      sha256 = "06pvb88jx1vz8fa24nx3aagphy0yylsj937h5gbzh0sda7jx2ahn";
+      sha256 = "09qnxb524f2qzi2ya75shmk5acxiv72wca8lmv8qg6m744a0mc63";
     };
-  
+
     deps = [ nav-flash smartrep ucs-utils persistent-soft pcache ];
   };
 
@@ -489,9 +489,9 @@ with otherPackages; rec {
     name = "backtrace-mode-0.0.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/backtrace-mode-0.0.10.el";
-      sha256 = "0160gphyla1dsqb385avijwnqraj9z8a9b25jas3kwyzpdhrn08q";
+      sha256 = "1g45zngyhq1049xwcf081lridrigfalkh9548gm113qikw4bsfsm";
     };
-  
+
     deps = [  ];
   };
 
@@ -500,9 +500,9 @@ with otherPackages; rec {
     name = "bang-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/bang-0.1.0.el";
-      sha256 = "1hbabgp2mni2bhpxf51cm26b8xsnmckvif9g0ya17ilzh53av550";
+      sha256 = "1szfrj4fs9zzq37jhb0pqkrnychd73c48i1n199rc68mbh0cmrp7";
     };
-  
+
     deps = [  ];
   };
 
@@ -511,9 +511,9 @@ with otherPackages; rec {
     name = "bar-cursor-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/bar-cursor-1.1.el";
-      sha256 = "18qq3df9d3m8zxpgyavrxg4rc3hw1064hyfshfw924slxpikjsq4";
+      sha256 = "0vsdsgxfv4svkk5hnik6ccv0nwyxfz1rvzn09ixdzs39bg30005c";
     };
-  
+
     deps = [  ];
   };
 
@@ -522,9 +522,9 @@ with otherPackages; rec {
     name = "batch-mode-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/batch-mode-1.0.el";
-      sha256 = "04rqysads3b974wdb3qjrn56wmlv69qdwzx8w9r9lhqvgymkb16m";
+      sha256 = "0pnw4mz4vjgxmpkkql8zaxdnblksghyddxx72nnr679vy0325di6";
     };
-  
+
     deps = [  ];
   };
 
@@ -533,9 +533,9 @@ with otherPackages; rec {
     name = "bbcode-mode-1.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/bbcode-mode-1.1.0.el";
-      sha256 = "0svsrw4v3q30llvryzkf0ir7q6zv244l2d633wgnbnfh8cvgyamw";
+      sha256 = "1jl7lwd7pil3877zd1b8mfj53666x3z9dh326534367l3x6894lw";
     };
-  
+
     deps = [  ];
   };
 
@@ -544,9 +544,9 @@ with otherPackages; rec {
     name = "bbdb-ext-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/bbdb-ext-0.1.el";
-      sha256 = "09gz07snyxka90myhif2j03za8g0fk1wg30b92shpgwx7sidkkx6";
+      sha256 = "0qplrwlcg2758868j8bn083n4rvxhy3ppkpi1fbv5annhl1xygs2";
     };
-  
+
     deps = [ bbdb ];
   };
 
@@ -555,9 +555,9 @@ with otherPackages; rec {
     name = "better-defaults-0.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/better-defaults-0.1.2.el";
-      sha256 = "18zql45jrwsq4dvqwdracgi5zvm21pvff1w4lh0ng4xhmq9njyl7";
+      sha256 = "0iwx5br276bqx9vw3zfzyw7x36zih0swyi93cnald0gzax30yvb8";
     };
-  
+
     deps = [  ];
   };
 
@@ -566,9 +566,9 @@ with otherPackages; rec {
     name = "bigint-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/bigint-1.0.0.el";
-      sha256 = "1wzbnkvw7fcaqnafpsbb3r2rj4v1vrq3b9cpc59cddplplig6cac";
+      sha256 = "0qsz591p459yjckiivh4ik46g2p5n92kyyd1sx0fvqq26jw8fhg4";
     };
-  
+
     deps = [  ];
   };
 
@@ -577,9 +577,9 @@ with otherPackages; rec {
     name = "bitlbee-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/bitlbee-1.0.el";
-      sha256 = "0lmix9clcwwcnaf21m9flkiminc81kgnd9cf8vj07gwxbj6s9an2";
+      sha256 = "1mhr3v0jlvrwd84cxnpsk4r370smj237pv44zrbncyd0shqijvvm";
     };
-  
+
     deps = [  ];
   };
 
@@ -588,9 +588,9 @@ with otherPackages; rec {
     name = "bitly-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/bitly-1.0.el";
-      sha256 = "077lhyy2pyvqkz6jd3fb15x5d3rirz9ac9p9ibjnxgi3fq4l795y";
+      sha256 = "0ffjy7y19zqyqnqarzw7n645n41j3d546l24dannb9b1703jjjcn";
     };
-  
+
     deps = [  ];
   };
 
@@ -599,9 +599,9 @@ with otherPackages; rec {
     name = "bm-1.53";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/bm-1.53.el";
-      sha256 = "1kcnf24zc3whnplghsv8d2aag0i30ymxgsy1hcva6zryypqvsj0l";
+      sha256 = "132q2bxb8rmcyqy0i2drzxf4vmrmf687l4xsyfj5bi72bcl3kk0m";
     };
-  
+
     deps = [  ];
   };
 
@@ -610,9 +610,9 @@ with otherPackages; rec {
     name = "bookmark-plus-20111214";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/bookmark+-20111214.tar";
-      sha256 = "1r2ag8b74a8szd7q7rzylvy6xhff5abc6nrpz1nljs96i0sczi5p";
+      sha256 = "1zyf5kys0rj07c4pd8xv79fl3x8r2jgi97ch7chs2x6hj3m5didz";
     };
-  
+
     deps = [  ];
   };
 
@@ -621,9 +621,9 @@ with otherPackages; rec {
     name = "boxquote-1.23";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/boxquote-1.23.el";
-      sha256 = "08pd4sim2k3n0vdsd3nv8gyamiwpnijia7ldk3113g6jdlm6jvs9";
+      sha256 = "1bbr1rzq8rk7aax7wiyb8wbhlya4iri0ai5p54w5pn0zygdmbxd8";
     };
-  
+
     deps = [  ];
   };
 
@@ -632,9 +632,9 @@ with otherPackages; rec {
     name = "browse-kill-ring-1.3.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/browse-kill-ring-1.3.1.el";
-      sha256 = "0j9ddhm436cpd1dbwmpsqr6l7pj6nxp2vp6x569kz04v8h8kcn9g";
+      sha256 = "122gfh4pyv4a59q69ykf88m0ap7bqzxq018yyrzyp1903l9w54hd";
     };
-  
+
     deps = [  ];
   };
 
@@ -643,9 +643,9 @@ with otherPackages; rec {
     name = "browse-url-dwim-0.6.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/browse-url-dwim-0.6.4.el";
-      sha256 = "11976fa5sakr07cj9ks5y5ma44qvy0ym1kb44fsdid1gx8ag22i9";
+      sha256 = "1liy7z14yp79fm69df1hf23d92a7kd3dlh1fxhyqgym8xngxnp7q";
     };
-  
+
     deps = [ string-utils ];
   };
 
@@ -654,9 +654,9 @@ with otherPackages; rec {
     name = "bs-ext-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/bs-ext-0.2.el";
-      sha256 = "15j74bki5ycgwqm995rnpc3h5c18l60c4isbkdhzs3ywipkdlzc9";
+      sha256 = "126b33rna0gg6b1fsghskivp4nbviiz0jgbr0p2l6n52751s9h97";
     };
-  
+
     deps = [  ];
   };
 
@@ -665,9 +665,9 @@ with otherPackages; rec {
     name = "buffer-move-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/buffer-move-0.4.el";
-      sha256 = "102v18zbr9l2zdj4wijjan0dnnla5zbm0pscj54zd6vkhddxdckp";
+      sha256 = "0pym9ij7bnnjmsjzdjmva2iral8qcn53mflfh0jr59yy25rkd23d";
     };
-  
+
     deps = [  ];
   };
 
@@ -676,9 +676,9 @@ with otherPackages; rec {
     name = "buffer-stack-1.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/buffer-stack-1.5.el";
-      sha256 = "0ziv3ahzi5z1124hcbk4rxdma68k99ixrzxs18nyzsffnl1sg441";
+      sha256 = "1mx3y1jd93fa6aa0p78zaqgf1ijmvh1pm2kjw37knlbfymw8967f";
     };
-  
+
     deps = [  ];
   };
 
@@ -687,9 +687,9 @@ with otherPackages; rec {
     name = "buffer-utils-0.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/buffer-utils-0.0.3.el";
-      sha256 = "12c9ckz44hbg587rwakrndfjsa9rayax6n3wmy21p94ap5q95zfd";
+      sha256 = "0i06r2szgmp9l7hncif4hf1d8qdpakhi21nzapwqmwzxkzaq6yq9";
     };
-  
+
     deps = [  ];
   };
 
@@ -698,9 +698,9 @@ with otherPackages; rec {
     name = "bufshow-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/bufshow-0.1.0.tar";
-      sha256 = "0ycb2hnnjiv60gpvpl383pdipai0f1wx5cgp9kkp9dwqgf3nyyi8";
+      sha256 = "0s13xdn5m16cb6i5m7zi8y05dp28pjr13b5hss6aclnb3s33vxyw";
     };
-  
+
     deps = [  ];
   };
 
@@ -709,9 +709,9 @@ with otherPackages; rec {
     name = "bug-reference-github-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/bug-reference-github-0.1.0.el";
-      sha256 = "05x4kix4sajhsjbf7g6s9y1mp3rj0kpqfvv2ibgkf5zbvmm1dhxb";
+      sha256 = "0dp2b3fn9w7ac902z5dwaijk4qaa2vjbnc8rlmxddia3q1zj26fn";
     };
-  
+
     deps = [  ];
   };
 
@@ -720,9 +720,9 @@ with otherPackages; rec {
     name = "butler-0.1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/butler-0.1.3.el";
-      sha256 = "062vp30kw04yd48n6z216r413x97111v998l13gh4wh5lda9ncig";
+      sha256 = "0ncyws5c9k9w9p1pzfb93cg0z0z6cri9qfh4xfxpa5ii7sskk65g";
     };
-  
+
     deps = [ web ];
   };
 
@@ -731,9 +731,9 @@ with otherPackages; rec {
     name = "button-lock-0.9.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/button-lock-0.9.10.el";
-      sha256 = "0wpr5zvc74qwcky2mrz26g3y3ll7z92j5zmiz1mqysdk7vg18lhg";
+      sha256 = "0bp5vhjgwwh50jw0zhg44rw8vp4qkygsm8ginffzcm7wyinaapl0";
     };
-  
+
     deps = [  ];
   };
 
@@ -742,9 +742,9 @@ with otherPackages; rec {
     name = "c-eldoc-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/c-eldoc-0.5.el";
-      sha256 = "0jn2y2afg0l8vyd01jwm3q2wpwzhm2k19bk3c5r21k9nzl0gvpkk";
+      sha256 = "1bxrq1a5lnbhlxs0zzm0nn9c5pgg3xlrhjfcispy15a41ci8c3a6";
     };
-  
+
     deps = [  ];
   };
 
@@ -753,9 +753,9 @@ with otherPackages; rec {
     name = "cache-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cache-0.1.el";
-      sha256 = "1icdaxa3r6d156fbn3ay9sbkr5syxsddpbjx40v1qf1f6syplyf6";
+      sha256 = "1c80l73lcq0w5l0n1my3flr01q82ik39sclrj0h2b4kgzb8rk0c4";
     };
-  
+
     deps = [  ];
   };
 
@@ -764,9 +764,9 @@ with otherPackages; rec {
     name = "cacoo-2.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cacoo-2.1.2.tar";
-      sha256 = "170d0zgjk2f0idajgpyyz2g2m2pkn4cwdfxkfw5jpbmrf6w11n0n";
+      sha256 = "0h8wylsk1p2m8p8916fsjgrw31zl3lpqp41yhy9hyhh7ap98xrb9";
     };
-  
+
     deps = [ concurrent ];
   };
 
@@ -775,9 +775,9 @@ with otherPackages; rec {
     name = "calfw-gcal-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/calfw-gcal-0.0.1.el";
-      sha256 = "00539a506ysq6k886h28wawpq3ylgn7b9gqsnrcia7s5pkjawnsn";
+      sha256 = "1rbbcqcxq7c2m5z6k1b109jp04zvvnjssfll07a9mz2kqn49ncpi";
     };
-  
+
     deps = [  ];
   };
 
@@ -786,9 +786,9 @@ with otherPackages; rec {
     name = "caml-3.12.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/caml-3.12.0.1.tar";
-      sha256 = "0n491hcv7vagym6z7azn4rzvrbrmd3mdhqi9sgkkchgclm989p36";
+      sha256 = "117cqg6s3i5g87dk5dpsvm2awil3yjs1n7kd7kqh8i5m6ijffnvs";
     };
-  
+
     deps = [  ];
   };
 
@@ -797,9 +797,9 @@ with otherPackages; rec {
     name = "cdlatex-4.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cdlatex-4.0.el";
-      sha256 = "01123yi1zi60yzhj7vlsg4q7ynshfklhm5q53y5gzyx1nz65pm4r";
+      sha256 = "11dy29667mlr20751sgv648pjdbcbilq4lvpfjdhfq4kkhsjn8h5";
     };
-  
+
     deps = [  ];
   };
 
@@ -808,9 +808,9 @@ with otherPackages; rec {
     name = "center-text-0.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/center-text-0.8.el";
-      sha256 = "101x842z9cnyzzvs1yjian53ywgfv3nhx9b930knqkacah9rfpb8";
+      sha256 = "0q7mqk5v25h1zs7y4hxc4c1mlniahr0xbg5942p15lljlypzl42x";
     };
-  
+
     deps = [  ];
   };
 
@@ -819,9 +819,9 @@ with otherPackages; rec {
     name = "centered-cursor-mode-0.5.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/centered-cursor-mode-0.5.1.el";
-      sha256 = "1xmps537lmkxncwzv4c4flkxj8aabrk898mmvx29mqkaq3wcg5yy";
+      sha256 = "0rhv7mz9s6wrj1x223cgyx1vc95yabccpqk6mgmnsz2sayxma4iy";
     };
-  
+
     deps = [  ];
   };
 
@@ -830,9 +830,9 @@ with otherPackages; rec {
     name = "charmap-0.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/charmap-0.0.0.el";
-      sha256 = "0v2qfqkbkgz7gks9wnd17i15i5rl3prrljhrb8pbwgslhy68p7v5";
+      sha256 = "17r5j3lg7spmgxkinxfkwp746hib2mlvnbkz2pysagy81jhv62v4";
     };
-  
+
     deps = [  ];
   };
 
@@ -841,9 +841,9 @@ with otherPackages; rec {
     name = "chicken-scheme-1.0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/chicken-scheme-1.0.6.el";
-      sha256 = "1ja6z0mzjggfdh3jxyn6yd0r8f458xwv2iv122x8j15a3ah4a5gq";
+      sha256 = "1gdzn2fsbx1sw28aadks4m0c946nk01lq45xa1i7jxw4vfzmbpjn";
     };
-  
+
     deps = [  ];
   };
 
@@ -852,9 +852,9 @@ with otherPackages; rec {
     name = "circe-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/circe-1.2.tar";
-      sha256 = "1a7yr1jjp2syk1xqxzakj68wr6h68n7a9jxcv81f2cv26yznf7pb";
+      sha256 = "039ywhp9pg4bkn8y36mx4rh0vy1i0fpmsjqzlnvm5nh2awpsiims";
     };
-  
+
     deps = [ lui lcs ];
   };
 
@@ -863,9 +863,9 @@ with otherPackages; rec {
     name = "citrus-mode-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/citrus-mode-0.0.2.el";
-      sha256 = "1yhw1dfmb9089pw78r398y3b5wq0bpvpvv1ys00nrv0bq2fsqpf2";
+      sha256 = "16q7dl0lipr2cgias6ygn142yvnk93ndg5jgbk046ys232vxf4mw";
     };
-  
+
     deps = [  ];
   };
 
@@ -874,9 +874,9 @@ with otherPackages; rec {
     name = "cl-format-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cl-format-1.1.tar";
-      sha256 = "06llzymdppy0s53cvrkz6sc0n3768h97rsspqdj8zy0khyxgqyrw";
+      sha256 = "0dqlizva7b1v6354r33lpzxl8ifvb7afaqm6ivrqpmi540i5525a";
     };
-  
+
     deps = [  ];
   };
 
@@ -887,7 +887,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/cl-lib-0.3.el";
       sha256 = "1k7wkm7xf918ivgvf0mk8m18y66z07xjg8lhrh43v3byibhc75kd";
     };
-  
+
     deps = [  ];
   };
 
@@ -896,9 +896,9 @@ with otherPackages; rec {
     name = "clippy-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/clippy-1.0.el";
-      sha256 = "02xryf3gvm3rkfy29d5hrm486dby0z3c9jcqnlp96mkqswy5zzya";
+      sha256 = "1kwf5ndp27023x4ywjybahlrjnxnjwfsd70ywpvmanbggah5qlk2";
     };
-  
+
     deps = [ pos-tip ];
   };
 
@@ -907,9 +907,9 @@ with otherPackages; rec {
     name = "clips-mode-0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/clips-mode-0.6.tar";
-      sha256 = "05fjqj992c7hkhbn469i60cfxadwdfs9ayz1skf92nakzp6l43jg";
+      sha256 = "1x0jlbwa26pb68k42zg1xf0iygws18f2zlcg64vbxsg408rdfd4a";
     };
-  
+
     deps = [  ];
   };
 
@@ -918,9 +918,9 @@ with otherPackages; rec {
     name = "clj-mode-0.9";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/clj-mode-0.9.el";
-      sha256 = "0cgkdsw26nnjxbd77a69f8sp94qjp53q00zannagjvlwdck39yn5";
+      sha256 = "0vdrfqw372qwzrjf7rfzi87nskv0z6axpg2y7fijxr3acg2jyhb2";
     };
-  
+
     deps = [  ];
   };
 
@@ -929,9 +929,9 @@ with otherPackages; rec {
     name = "clj-refactor-0.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/clj-refactor-0.2.0.el";
-      sha256 = "0r2256pjw0pxv3273a04fcdjfpid9i13rdh0p0c8kqvdwvd5prj4";
+      sha256 = "02k7p67j3qw4cm13b4z2vbyjkksjp7bb8y7g3d4gmbf9wfxiqnlc";
     };
-  
+
     deps = [ s dash yasnippet ];
   };
 
@@ -940,9 +940,9 @@ with otherPackages; rec {
     name = "cljdoc-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cljdoc-0.1.0.el";
-      sha256 = "1kaq15z98mrd3lvs454w7spv9yi4mis5kpql9apx7z5hx38yxc25";
+      sha256 = "08bjm7mwkin84q5c5sbz4rbn5rjmd6slb0p6s9jqh0zwac0ll5p4";
     };
-  
+
     deps = [  ];
   };
 
@@ -951,9 +951,9 @@ with otherPackages; rec {
     name = "cljsbuild-mode-0.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cljsbuild-mode-0.2.0.el";
-      sha256 = "07wlhilnlw6invk79f1xi3sl3dgqvnnr7ylbi1gccqvnhcygsd5n";
+      sha256 = "0abq5i1cqpfh043ag5b599qh38hs2dja3bwkyhwmk21hvdvz6r7k";
     };
-  
+
     deps = [  ];
   };
 
@@ -962,9 +962,9 @@ with otherPackages; rec {
     name = "clojure-mode-2.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/clojure-mode-2.1.0.el";
-      sha256 = "03s0xzvz2hkaa8ay330hhd69awi5vgzdk3abjz48qa6sy62fsgn4";
+      sha256 = "0n486ibpimy1y703m4llc04sj48hswpv4c9xdgippikvikq9sddq";
     };
-  
+
     deps = [  ];
   };
 
@@ -973,9 +973,9 @@ with otherPackages; rec {
     name = "clojure-project-mode-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/clojure-project-mode-1.0.el";
-      sha256 = "1siwq3l2ppd0kr5dcipj1p63h0ylgrcrjgary070z8rghwxhvc0f";
+      sha256 = "183xfqr1v84gdc3msr6ixs53pnv4qpxqjphgka6clkvx01hjrg5h";
     };
-  
+
     deps = [ project-mode ];
   };
 
@@ -984,9 +984,9 @@ with otherPackages; rec {
     name = "clojure-test-mode-2.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/clojure-test-mode-2.1.0.el";
-      sha256 = "0xwikwsri6c0yrrvms7rlaalw6rlcdf9yqk6h5aina9sadc2ifwz";
+      sha256 = "04c96n3lg0nkyymna0dd78q7g3vfz9d099a0bvygprvg0dwrqbzv";
     };
-  
+
     deps = [ clojure-mode nrepl ];
   };
 
@@ -995,9 +995,9 @@ with otherPackages; rec {
     name = "clojurescript-mode-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/clojurescript-mode-0.5.el";
-      sha256 = "076xfphcdkv9wyznwb4jmagdvw3hjnb1smfadsfbmjhwvbz0r30s";
+      sha256 = "00gccjzfz1fq47f1418pz5g4ml4k3kjqfg8w470nv0m4ar1jv7v4";
     };
-  
+
     deps = [  ];
   };
 
@@ -1006,9 +1006,9 @@ with otherPackages; rec {
     name = "closure-lint-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/closure-lint-mode-0.1.el";
-      sha256 = "1nbbxgd2lgy91iv3b9rphr0x6dwm3cml1vscs1apkgk2fxb1jw76";
+      sha256 = "1k3iqghz3296ggl5ilg9px9p0ffwr4b7xqba27i0zrjb59ah5l3h";
     };
-  
+
     deps = [  ];
   };
 
@@ -1017,9 +1017,9 @@ with otherPackages; rec {
     name = "closure-template-html-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/closure-template-html-mode-0.1.el";
-      sha256 = "1v7av18m9nrl5jx8ypn304wmz2y5byd0m24d620v65849438nz2i";
+      sha256 = "1r9l6ijcf4bgx4y0vdpd813flfx8vs1c1wcba033zi2rr3z21jx3";
     };
-  
+
     deps = [  ];
   };
 
@@ -1028,9 +1028,9 @@ with otherPackages; rec {
     name = "cm-mode-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cm-mode-0.1.0.el";
-      sha256 = "0f6b7mdjwig4zw1yijbz6dcfs94w5gs3x5ijsiv2ibxdyzp19aix";
+      sha256 = "1hyxy55acjp87awpbcx6pm53jkjf299jb9bkpk7mkyssnaimsv1q";
     };
-  
+
     deps = [  ];
   };
 
@@ -1039,9 +1039,9 @@ with otherPackages; rec {
     name = "cmake-mode-20110824";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cmake-mode-20110824.el";
-      sha256 = "10l38aidic740rbbkh5lilazjlnxi0k97wa9ihm37p74qgksdipq";
+      sha256 = "05jhacx7qyhms7wjcsy4g3qlcr14irwhgkyd3b4gn3fnx4q1kysx";
     };
-  
+
     deps = [  ];
   };
 
@@ -1050,9 +1050,9 @@ with otherPackages; rec {
     name = "cmake-project-0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cmake-project-0.6.el";
-      sha256 = "0pd7pcbgy6rp4k9w3xk6gf12rfsjzs91d1ymsnig440s8zynlf2m";
+      sha256 = "074b2cl6r2sggz4pd750rnlcwcjwwqfppan7kka8nyfkg1g6fgm9";
     };
-  
+
     deps = [  ];
   };
 
@@ -1061,9 +1061,9 @@ with otherPackages; rec {
     name = "code-headers-0.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/code-headers-0.7.el";
-      sha256 = "1w6s18aw9fc0jin785pndnzmkz5iij1f9h1gqjdq1gny6insvc0y";
+      sha256 = "0kq1p5x0b7j25fwc1s80zki159v3hnxiaf54v4csnpvz9agzg8fn";
     };
-  
+
     deps = [  ];
   };
 
@@ -1074,7 +1074,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/coffee-mode-0.4.1.tar";
       sha256 = "08dgmkq45h1h5xf1jhk6ry89r443nb64c4x2i8ggz6pr5fsxrpbf";
     };
-  
+
     deps = [  ];
   };
 
@@ -1083,9 +1083,9 @@ with otherPackages; rec {
     name = "col-highlight-22.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/col-highlight-22.0.el";
-      sha256 = "0kvgfpl5jwjal4ldn4i9p77xg43rqjv3ll0mhcd9rxmkg417c5zh";
+      sha256 = "1jz4b89fq6h4avnpy9hj38xz8ymbrvzi2gy56ky5vmkxqz6fkpb1";
     };
-  
+
     deps = [ vline ];
   };
 
@@ -1094,9 +1094,9 @@ with otherPackages; rec {
     name = "color-file-completion-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-file-completion-1.0.1.el";
-      sha256 = "0wsbj19x10qvlkc2dgjnm615aa6nhnyzjyw2p7xb743zf21xay9g";
+      sha256 = "035r5ykhxn1h65nmzlnxw34aj2sj30i7hbl1ypmz8mswxlxzlxxw";
     };
-  
+
     deps = [  ];
   };
 
@@ -1105,9 +1105,9 @@ with otherPackages; rec {
     name = "color-theme-6.5.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-6.5.5.el";
-      sha256 = "118rszcambbkgn38lmrz6k2wrwx5mb5ljyyxkpnxpkrbxdb6b7jx";
+      sha256 = "1rzdh1mbcwx5mn41z0n7qfg26q0lavxgcp9p75m1h20y9fqdp8d4";
     };
-  
+
     deps = [  ];
   };
 
@@ -1116,9 +1116,9 @@ with otherPackages; rec {
     name = "color-theme-active-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-active-0.0.1.el";
-      sha256 = "0lvx9378jvmqp1qx631ms1hi1wxgm0n1jhpcl8ivv0qb719r8ipv";
+      sha256 = "1i4qmnxyzr038wzc6khf4dm5h9hjdvswspjb25f45rhfyyh28k44";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1127,9 +1127,9 @@ with otherPackages; rec {
     name = "color-theme-actress-0.2.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-actress-0.2.2.el";
-      sha256 = "17y0cc8d52nd639f8b4a32gwwmk7sv6ay1y514c6r0s11x8hajn7";
+      sha256 = "05kaskx08im5hgidr1q684jvn2fi699g7nq092gc4xndsf0qc583";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1138,9 +1138,9 @@ with otherPackages; rec {
     name = "color-theme-blackboard-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-blackboard-0.0.2.el";
-      sha256 = "0asglmxdxfrcnk80742vmwid2q589g7my4mv1h673jrk2xsmskc7";
+      sha256 = "0zq8h9k8ir00ql360iy7siy3hv98savj1wrv0lcz3lllknyx8j4c";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1149,9 +1149,9 @@ with otherPackages; rec {
     name = "color-theme-buffer-local-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-buffer-local-0.0.2.el";
-      sha256 = "145acyl251a21z8p9s9iq74lk7qsqfwdz1hsgd7cy46817by6ryk";
+      sha256 = "1jv2zpd0qzss37yjs5236sfvgwd07jicndi3h03qfvrf432s4i53";
     };
-  
+
     deps = [  ];
   };
 
@@ -1160,9 +1160,9 @@ with otherPackages; rec {
     name = "color-theme-cobalt-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-cobalt-0.0.2.el";
-      sha256 = "1lgh8hknaqbhq7xc7lasws78ymyhbcl7qiij0c791z85miclkp6m";
+      sha256 = "0hf0qnna77vi49wv9h67jwj3z2ljv86xlpxmlm6vwj6dmxcg5wrx";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1171,9 +1171,9 @@ with otherPackages; rec {
     name = "color-theme-colorful-obsolescence-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-colorful-obsolescence-0.0.1.el";
-      sha256 = "16gybafk3wf6r125n1rg9yycl0zjhv8qsprk6as35i1cyv96kahs";
+      sha256 = "0zjv741mz8y1xns5szyi3r1bkqyy3fkwjblx8z7gb9d9ivliqgi6";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1182,9 +1182,9 @@ with otherPackages; rec {
     name = "color-theme-complexity-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-complexity-0.1.0.el";
-      sha256 = "07s9j48iw4310xk1k5qnbjg4jzl7z20djxqv2pivkwn1dnb2kckp";
+      sha256 = "1w1yn1mz90kwv57lzd1j3gkwrkgnaa60xg6xahhd7jzb7fgwacxn";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1193,9 +1193,9 @@ with otherPackages; rec {
     name = "color-theme-dawn-night-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-dawn-night-1.0.el";
-      sha256 = "14r386b9a9r900pfcrlswa4q0vwmbwwz2kkp9byj453675ig3r2v";
+      sha256 = "1ixhx3y4yzxqcbkh3rdsrs50xf1r456fy4n2iz8ch810awzpdbd5";
     };
-  
+
     deps = [  ];
   };
 
@@ -1204,9 +1204,9 @@ with otherPackages; rec {
     name = "color-theme-dg-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-dg-0.1.0.el";
-      sha256 = "13mhdv0qqg125yr03akv10a3933v0v51s3r12fk8d49wycnp4yld";
+      sha256 = "1fxipi4c0b93vb5yhzj9hcrxmyg3lj0x6nhi8676x5kw39n7yzbx";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1215,9 +1215,9 @@ with otherPackages; rec {
     name = "color-theme-dpaste-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-dpaste-0.0.1.el";
-      sha256 = "0l3j6nnlszf5abrldslcydggckqdq7pi2zvcan58hk50a5d98ajq";
+      sha256 = "1l2mcqidnywv1gmbxragg99xlsk9m437yd5p3pr0s9l4a7ysix37";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1226,9 +1226,9 @@ with otherPackages; rec {
     name = "color-theme-eclipse-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-eclipse-0.0.2.el";
-      sha256 = "19rzcccqz5bc1adfaa8l4pgzrl706ws0zqxmdhx0y8wqrrffy2gj";
+      sha256 = "1xjl2kmkpljnry550ibgp6risgkq36p9dz7qcy3sd300nrfndbmp";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1237,9 +1237,9 @@ with otherPackages; rec {
     name = "color-theme-emacs-revert-theme-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-emacs-revert-theme-0.1.el";
-      sha256 = "153728k12ccdlapik8iws5jd2i20lw19wmvmcqp1s0l3ds2fdq36";
+      sha256 = "05s6qbmm6y5riy8fazza0idnmr9hyzjbg8aarsw7albw3gn11w02";
     };
-  
+
     deps = [  ];
   };
 
@@ -1248,9 +1248,9 @@ with otherPackages; rec {
     name = "color-theme-github-0.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-github-0.0.3.el";
-      sha256 = "1mj5zyk76ydmg4dkmki9q9ii3l64l0rr4pcpnb9hd8m49zvwp146";
+      sha256 = "1i4spw4vz0m2l95rl3d33h1j69227fb7qjbvp8l6y5c6d8miw193";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1259,9 +1259,9 @@ with otherPackages; rec {
     name = "color-theme-gruber-darker-1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-gruber-darker-1.el";
-      sha256 = "1fd83fyfrd8sbayrhbwfbsnxkbfhbx2alladz426q5pl4mzz16d8";
+      sha256 = "0yd5q6yj8wqn0icjk49nmyyaabh46cjgvyxsxw5sgnmilzx30kjw";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1270,9 +1270,9 @@ with otherPackages; rec {
     name = "color-theme-heroku-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-heroku-1.0.0.el";
-      sha256 = "0hcpfbnmvn7y78s7qx1wqan1h5a3kzw0pkvakrljkya2xkbxc4kf";
+      sha256 = "0npabw1xmbi9kkar00d1p9brm4f2i2pvv0n529w0f109c5ybmw13";
     };
-  
+
     deps = [  ];
   };
 
@@ -1281,9 +1281,9 @@ with otherPackages; rec {
     name = "color-theme-ir-black-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-ir-black-1.0.1.el";
-      sha256 = "183k5ww6rx9vp5xl0rfzpv9gihg0qk70gx831wi836x97p7m5dsc";
+      sha256 = "11sfmkxwzqwzwyz3c5fg0g17084xhg5gw89ig7dvmkwkzsdggj3h";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1292,9 +1292,9 @@ with otherPackages; rec {
     name = "color-theme-library-0.0.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-library-0.0.10.el";
-      sha256 = "09w1d8fcm53mp7q6a9wmqbp9m0x8zx41rs5r2c9vhq5zkypagjsf";
+      sha256 = "1070sd3sy1id916b8nnx61v5lvmax4v8bigd6a1nszv5wc0fr677";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1303,9 +1303,9 @@ with otherPackages; rec {
     name = "color-theme-molokai-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-molokai-0.1.el";
-      sha256 = "1qj0y8p3jydg2zxmnws4xxslw1hn21n5s42i7skz2nby6ik751s8";
+      sha256 = "1nsy727x56j0qh8r9vphsr7vnb2knswjijizqm9d9302bxhd6nsl";
     };
-  
+
     deps = [  ];
   };
 
@@ -1314,9 +1314,9 @@ with otherPackages; rec {
     name = "color-theme-monokai-0.0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-monokai-0.0.5.el";
-      sha256 = "0apx17vysv0ixiymn3kg4bmpx9psj2s0rvmda5mivf3zjr0z9h99";
+      sha256 = "0asqm6m0hkmxafawmmqhznip0ys25ikxbgnqpjkgsn74jdg6a90p";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1325,9 +1325,9 @@ with otherPackages; rec {
     name = "color-theme-railscasts-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-railscasts-0.0.2.el";
-      sha256 = "0x665mq5bbf57sfz0ifldyp06pjxwgkbvk8ckgqqa6i7k0gqbs37";
+      sha256 = "1s1hmqkhypl8gl3i5nkbas3znpzlqpcllmi9dhm4x83rsgawhnxs";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1336,9 +1336,9 @@ with otherPackages; rec {
     name = "color-theme-sanityinc-solarized-2.25";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-sanityinc-solarized-2.25.tar";
-      sha256 = "1q6bjk5a7alwcmlcpng6n8lvsjzzwmqzc0m1sw2srp0cgw47s1xw";
+      sha256 = "08b2mw1vij055d3kypqvi79dksir0z64c5mzzv89bx4mrgkmliid";
     };
-  
+
     deps = [  ];
   };
 
@@ -1347,9 +1347,9 @@ with otherPackages; rec {
     name = "color-theme-sanityinc-tomorrow-1.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-sanityinc-tomorrow-1.10.tar";
-      sha256 = "0kb6s3jnpmhy0sz84sx0d7blpsqs7n0vb0zszn70xsl68ipjg0sr";
+      sha256 = "0jvr8a68vk5zfyhrbwrnrq34nlnhi2z4sgnzhpxv9dr02jlsik8w";
     };
-  
+
     deps = [  ];
   };
 
@@ -1358,9 +1358,9 @@ with otherPackages; rec {
     name = "color-theme-solarized-20120301";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-solarized-20120301.tar";
-      sha256 = "136nvqalhic32552cr8fgls32d6z8ci1324mm35zpsan1sggy8lw";
+      sha256 = "1k1yyjw1x92agssxa891njjbm810i03wvvxy0wa1kh2jp3mrygk4";
     };
-  
+
     deps = [  ];
   };
 
@@ -1369,9 +1369,9 @@ with otherPackages; rec {
     name = "color-theme-tango-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-tango-0.0.2.el";
-      sha256 = "1i2yw1d9dzmbh48r13n2b93n6bk8nwr1r0is1mxf34j3ykgpw10r";
+      sha256 = "0gzshmqrg16m5gprp0ycq0hjwadxmy1q6bsdwd245l9qn2ffl17c";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1380,9 +1380,9 @@ with otherPackages; rec {
     name = "color-theme-tangotango-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-tangotango-0.0.2.el";
-      sha256 = "1lwzx6sshv065cyqn9x9m70irwihzc1qjria9c7pkj5j0vmldmll";
+      sha256 = "1br0gf8lyqg47dacvmc18ygmqj92x4cijpvl9hhqyqkz4z640v5n";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1391,9 +1391,9 @@ with otherPackages; rec {
     name = "color-theme-twilight-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-twilight-0.1.el";
-      sha256 = "0vs9kl78y1dv7lr8bjz22lj6nby6ykpgiai2d4rp063c77fkimw7";
+      sha256 = "0w4zs7f2xkgyzqidxpbghnm1kgng7yqryl5wzlzxkpaljf76qja0";
     };
-  
+
     deps = [  ];
   };
 
@@ -1402,9 +1402,9 @@ with otherPackages; rec {
     name = "color-theme-vim-insert-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-vim-insert-mode-0.1.el";
-      sha256 = "186la7hygn1c2x1g79ylz5827wsf74gy61qcn2v6333kf86588zm";
+      sha256 = "1qf67a41xgwr6zkrcfsbw0547h1japvw7ciwbiv3szk0qvq6ggp0";
     };
-  
+
     deps = [  ];
   };
 
@@ -1413,9 +1413,9 @@ with otherPackages; rec {
     name = "color-theme-wombat-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-wombat-0.0.1.el";
-      sha256 = "091y9qvgxdajlh6d0n8vm2cj9hajlnvrz208441zyl3xdf0893mz";
+      sha256 = "0zj8pwygl0ch155a5blph4qkf8jh00wpmvs7ng4dkcjcl7922jyg";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1424,9 +1424,9 @@ with otherPackages; rec {
     name = "color-theme-wombat-plus-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-wombat+-0.0.2.el";
-      sha256 = "1kxzsw4qphmz2mk4syyfdih2mka34xrply0mv36xirdg5ndzmrnx";
+      sha256 = "1d2gr2ymk5abqb16h6zs5lypsj8qhxsbjdrpxdgdg46vkgi7lzl7";
     };
-  
+
     deps = [ color-theme ];
   };
 
@@ -1435,9 +1435,9 @@ with otherPackages; rec {
     name = "color-theme-x-1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/color-theme-x-1.3.el";
-      sha256 = "1nqzv40jmhfcrprhn249yp7isdl6djzs9pjfp7mv522qwji6pqyc";
+      sha256 = "174yfga0w4hnb3ap1bwrk9p6alrgxlwmdafyiw46pzng9by7m6nz";
     };
-  
+
     deps = [  ];
   };
 
@@ -1446,9 +1446,9 @@ with otherPackages; rec {
     name = "colour-region-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/colour-region-0.4.el";
-      sha256 = "033qmmxj04bx9a2k3f7l15ynr062lfzcys2jak0r9b9ygsg8awbx";
+      sha256 = "0bfby1j7vk2dpic0x0r01siz6ci304zgqcm6rgqy8a7x1bhncxpn";
     };
-  
+
     deps = [  ];
   };
 
@@ -1457,9 +1457,9 @@ with otherPackages; rec {
     name = "combinators-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/combinators-0.0.1.el";
-      sha256 = "137v6v3vrb8rz5479mm94wf3dzw5nh95m6f3savd7pypidxg09jk";
+      sha256 = "1zg6khcnf46w1zg0h4g3qg93jh9fa2184b3kag324039hvrb9sl4";
     };
-  
+
     deps = [  ];
   };
 
@@ -1468,9 +1468,9 @@ with otherPackages; rec {
     name = "command-frequency-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/command-frequency-1.1.el";
-      sha256 = "05n3gm660lf2bjmhfg7xmca4f7i3hw1r2gj5n2l5ndghn7fzaxxj";
+      sha256 = "0j4f1fyl5q8li3dhpxn177w9sfdlh6dxgmcjpqdzzf6wm1nh1qad";
     };
-  
+
     deps = [  ];
   };
 
@@ -1479,9 +1479,9 @@ with otherPackages; rec {
     name = "command-stats-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/command-stats-0.1.el";
-      sha256 = "0r4injna20irjci9awgnakx08jgihhfaslm0phhkb94pyqksnnff";
+      sha256 = "1cnk9r1g23dw13yn7bc2nqq6qzv4na5lz81jrcyw5bhisgrk4h1m";
     };
-  
+
     deps = [  ];
   };
 
@@ -1492,7 +1492,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/company-0.6.10.tar";
       sha256 = "1n7rk33l5z1jdfli79ll36k50klqj487yw7i5c2n01prvh41m5r3";
     };
-  
+
     deps = [  ];
   };
 
@@ -1501,9 +1501,9 @@ with otherPackages; rec {
     name = "company-cmake-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/company-cmake-0.1.el";
-      sha256 = "0gpqamzq27rfqd4mdb0dr6sb864psxd913nzrm988m0pxcsjmvms";
+      sha256 = "1m9xqqnk18fsq5b9wiq3p9bpb1wy6qhx14i2f5n3vjx9nawmg7zq";
     };
-  
+
     deps = [ company ];
   };
 
@@ -1512,9 +1512,9 @@ with otherPackages; rec {
     name = "concurrent-0.3.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/concurrent-0.3.1.el";
-      sha256 = "1bf5c7jr3f41b30l8qp92yjxbb6ffna6zh2m8gd4jk78pvnmp2vp";
+      sha256 = "19sci2xrq8csm1xxjyhds8chh8vm9j87ynxdcix578lqpcyrhq09";
     };
-  
+
     deps = [ deferred ];
   };
 
@@ -1523,9 +1523,9 @@ with otherPackages; rec {
     name = "config-block-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/config-block-0.0.1.el";
-      sha256 = "16ibxj71gw44yvp567y476250zcpg1dsppgb5jwjn8vnl80bbwl6";
+      sha256 = "1v098n2jvcvf85yj7kpzkzqja35fw6dpxnzwz39vi4y0bcj51r2x";
     };
-  
+
     deps = [  ];
   };
 
@@ -1534,9 +1534,9 @@ with otherPackages; rec {
     name = "confluence-1.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/confluence-1.6.tar";
-      sha256 = "0z787kia5xpfbdm4aw6d5xl5rnmw5a27fsqkdjvmjxfafl33iqry";
+      sha256 = "1cia4x3zpl9lk4qq0pilbcfa662fcixabaznv7rnxqqb0ahd1vaq";
     };
-  
+
     deps = [ xml-rpc ];
   };
 
@@ -1545,9 +1545,9 @@ with otherPackages; rec {
     name = "control-lock-1.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/control-lock-1.1.2.el";
-      sha256 = "0rnvbfkxri54sr0qnqdf3fvav48qrj0r3xcsh49hm9zkxv7vrpps";
+      sha256 = "08c5l4dppnh1j2zl7303w99cj4xid4g519g7ipv5yzym4hsifabv";
     };
-  
+
     deps = [  ];
   };
 
@@ -1556,9 +1556,9 @@ with otherPackages; rec {
     name = "cppcheck-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cppcheck-1.0.el";
-      sha256 = "0sx38v7x62nkyxvvxp7yfmkmafzl3yp3041pcmp74v4vqgzfhr90";
+      sha256 = "115sykycywdw4mpd8qr0vpzzr3q5xqrdjbxqrp2i0im5b44fxpik";
     };
-  
+
     deps = [  ];
   };
 
@@ -1567,9 +1567,9 @@ with otherPackages; rec {
     name = "cpputils-cmake-0.3.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cpputils-cmake-0.3.0.tar";
-      sha256 = "1xfjf74fqykjll82sym9vkfzc9mfp12v9ixyx7lzj4c1ks9s78kv";
+      sha256 = "1n6hp2qb4grb36g1hab04hs3mj86bgwh0b6r3k6fjyjlx6g1wbsa";
     };
-  
+
     deps = [  ];
   };
 
@@ -1578,9 +1578,9 @@ with otherPackages; rec {
     name = "creole-0.9.20130602";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/creole-0.9.20130602.el";
-      sha256 = "1r8vc908bhxhgb7p0s7g0lh4ckia8mzdr95r44mi3cad89fwvi9g";
+      sha256 = "06al235z8037630djjkpgh0rl3w5zbyww76a5mjvzd424g4cnd5w";
     };
-  
+
     deps = [ noflet ];
   };
 
@@ -1589,9 +1589,9 @@ with otherPackages; rec {
     name = "creole-mode-0.0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/creole-mode-0.0.5.el";
-      sha256 = "150xzq5fd23z336zzkk1zk5f2ayf6w7g2yl4m8cdn3kq4zpxg3kz";
+      sha256 = "0qhs6hm76sylxlxrvzzrpklaz6hq66g7zwr82ry84i7h2w2h9ipx";
     };
-  
+
     deps = [  ];
   };
 
@@ -1600,9 +1600,9 @@ with otherPackages; rec {
     name = "crontab-mode-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/crontab-mode-1.2.el";
-      sha256 = "0nyr51yvncsp3c9rhv3hnpahpna69cfrx8ygah0hififr1nwbc1j";
+      sha256 = "1rda8jn8vnbga5mwirra3l04zwnm4ai3hirsb2r1x4cd4bxc21hw";
     };
-  
+
     deps = [  ];
   };
 
@@ -1611,9 +1611,9 @@ with otherPackages; rec {
     name = "crosshairs-22.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/crosshairs-22.0.el";
-      sha256 = "1jr8k76pp50pi8ni2xg2mh4agbzvd11fawsz8f63s1kjm2vancfx";
+      sha256 = "0ca445iri5nmj78n6bap88m5gnhzcgnfnpz3hiyvrva9qlbbmpsi";
     };
-  
+
     deps = [  ];
   };
 
@@ -1622,9 +1622,9 @@ with otherPackages; rec {
     name = "cryptol-mode-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cryptol-mode-0.0.2.el";
-      sha256 = "049z06nayvzmnzim79jqwlj1j5z2yfi4mivp19scpdlzdg9cjgkb";
+      sha256 = "0lmvd2fsyhpzmingdjrwp8kpdpwryw9ri46kwn6wqh2xx7iqxc8f";
     };
-  
+
     deps = [  ];
   };
 
@@ -1633,9 +1633,9 @@ with otherPackages; rec {
     name = "csharp-mode-0.8.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/csharp-mode-0.8.6.el";
-      sha256 = "0gvpv8gpmkcz1061gsykbjnhvawx240kiczfy5zcviqhmh23wk7x";
+      sha256 = "0f0hsak758pxsq3y3bpyzb3w8sz20fbgz0xs12y82fy3rinf63y7";
     };
-  
+
     deps = [  ];
   };
 
@@ -1644,9 +1644,9 @@ with otherPackages; rec {
     name = "csv-mode-1.50";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/csv-mode-1.50.el";
-      sha256 = "11gy3m1chf1ywaq53gqrf546017pwqnk1l0d59s9jmyb70slacrm";
+      sha256 = "07s3yf3vfl3750026km4xnkm0y6d8cmxs70k63xx34kwanyxjjqa";
     };
-  
+
     deps = [  ];
   };
 
@@ -1655,9 +1655,9 @@ with otherPackages; rec {
     name = "ctable-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ctable-0.1.1.el";
-      sha256 = "114w4f0i91yax0s6ij97czplar70if0l642ylnagzcilj5h7l746";
+      sha256 = "0bgk5sab43lslsysykvb74phm42swq9vz4hg2d2ljdzrdaj43rw4";
     };
-  
+
     deps = [  ];
   };
 
@@ -1666,9 +1666,9 @@ with otherPackages; rec {
     name = "ctags-update-0.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ctags-update-0.1.2.el";
-      sha256 = "0nhr7mkza76cjpkk689w2vbmx1illpv0w2fh9kd8w9j56b8v7c0n";
+      sha256 = "15hivip6p9mvw5zqfj14d0ffffvv7av2n38d9il1jsq8ywhyphxd";
     };
-  
+
     deps = [  ];
   };
 
@@ -1677,9 +1677,9 @@ with otherPackages; rec {
     name = "ctypes-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ctypes-1.2.el";
-      sha256 = "1n5vb333rzlwc3slb5z9yfa62a7i9vm8qf95lkh467i9v6hbkqgc";
+      sha256 = "0ghmgc7bkadfw1g5r6pxzi7ssmd51nqm5bnjcbjxwg3wqq98b1vf";
     };
-  
+
     deps = [  ];
   };
 
@@ -1688,9 +1688,9 @@ with otherPackages; rec {
     name = "cups-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cups-0.1.el";
-      sha256 = "1cp7f8c5gy63qww17zi8cq7j3y91vw4zksmg968ibn2ybwrhlhq5";
+      sha256 = "0h3k6gxfdfxv855bsksyd8d7v81b4j10d4xgrd9136a4ld32gxm9";
     };
-  
+
     deps = [  ];
   };
 
@@ -1699,9 +1699,9 @@ with otherPackages; rec {
     name = "current-story-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/current-story-0.1.0.el";
-      sha256 = "1n090wxcd6xpncsha7h0wpfvys8ykxz1r7q162jqhwxqxk3zqj90";
+      sha256 = "0mlqn4qsc4gpfywaiqihjc4y1d2c57z4z69z64dlgv396l7nfwkh";
     };
-  
+
     deps = [  ];
   };
 
@@ -1710,9 +1710,9 @@ with otherPackages; rec {
     name = "cursor-chg-20.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cursor-chg-20.1.el";
-      sha256 = "1c1z3xr0bbrq1qs4qhq7lab0w1ispcpikbjs0b2inhccq6kijpqf";
+      sha256 = "0prarya1509424j6ab0a0xr7d9g23l20q7q3yrvi2qzsaa65m31j";
     };
-  
+
     deps = [  ];
   };
 
@@ -1721,9 +1721,9 @@ with otherPackages; rec {
     name = "cycbuf-0.5.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cycbuf-0.5.0.el";
-      sha256 = "1xcwpwrz056685f6wfvcy5r75pa4hw6khg1jm2qzm6vyl8zikakf";
+      sha256 = "1fs3l3r2lr1z2jy3mpi9vm2231jkhnp6jz71l3rfqbanqs0bglpk";
     };
-  
+
     deps = [  ];
   };
 
@@ -1732,9 +1732,9 @@ with otherPackages; rec {
     name = "cygwin-mount-2001";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/cygwin-mount-2001.el";
-      sha256 = "0mngncmgjiqxkkp6ddy21y0djzvjsgiwbv9r3ndmjpq4frv8dwqr";
+      sha256 = "1jw8n51ld2176lgckv9jkcx264qc163lx5ngkn2xj39lfw0qn77b";
     };
-  
+
     deps = [  ];
   };
 
@@ -1743,9 +1743,9 @@ with otherPackages; rec {
     name = "d-mode-2.0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/d-mode-2.0.4.tar";
-      sha256 = "1v4ki9xl9bglqmmrm8ksy47j6qzad5j8k8pr4sdgsdyiz6540blx";
+      sha256 = "1wvxg2ndlwf1v4m2safz33byf1vjl7qr070skhxijln4h395szz7";
     };
-  
+
     deps = [  ];
   };
 
@@ -1754,9 +1754,9 @@ with otherPackages; rec {
     name = "dart-mode-0.9";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dart-mode-0.9.el";
-      sha256 = "0s769gsnpfiywha3jaihm430r1ivjzx9lij7c41w9qv5wiya6krl";
+      sha256 = "1id727qv43wcg52lmv844bg7kkfn7120il8b8w83rvdsvl8b11cj";
     };
-  
+
     deps = [  ];
   };
 
@@ -1765,9 +1765,9 @@ with otherPackages; rec {
     name = "dash-1.4.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dash-1.4.0.el";
-      sha256 = "0hysj8y4nz72yxxfqbaajbvchh0xjc7maz5x6k9spx4c9zvjdbx5";
+      sha256 = "02aldr1qyz0yp94abqgpba5rarqcf7x5apmby2crifj4gk5lnjzm";
     };
-  
+
     deps = [  ];
   };
 
@@ -1776,9 +1776,9 @@ with otherPackages; rec {
     name = "db-0.0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/db-0.0.6.el";
-      sha256 = "1n01kmszi8bpn5lihr20h0dx41mfanimh4y2hdl2x6q1cbz0r6my";
+      sha256 = "0bc1w1q9jh2icm7in7hrn6n0cnwiwnqmgdd0vnlj51kvcqlyvqsx";
     };
-  
+
     deps = [ kv ];
   };
 
@@ -1787,9 +1787,9 @@ with otherPackages; rec {
     name = "db-pg-0.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/db-pg-0.0.3.el";
-      sha256 = "0xzl6p7949inm5a21msqli8602jkbx7sb9q44144dda8cqn2grhs";
+      sha256 = "0d0azjf3lhc0sjqg5lpbpv5wmjfmvdpa1q5w0w0x33q1yax7wrlc";
     };
-  
+
     deps = [ pg db ];
   };
 
@@ -1800,7 +1800,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/debbugs-0.4.tar";
       sha256 = "1gk19nxx6i0rqnl8gdb1hfr411anvagngbylpn090s01b8z8whh5";
     };
-  
+
     deps = [  ];
   };
 
@@ -1809,9 +1809,9 @@ with otherPackages; rec {
     name = "dedicated-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dedicated-1.0.0.el";
-      sha256 = "0lgm1cazhcr06qyi6z599dgcvhw06hahzrlmrxpy89glq6r2dwvw";
+      sha256 = "019jn2lrf6zkvf19x11zln1n3dqgkg9g2bmnr6xkhmivxj2z375p";
     };
-  
+
     deps = [  ];
   };
 
@@ -1820,9 +1820,9 @@ with otherPackages; rec {
     name = "deep-thought-theme-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/deep-thought-theme-0.1.1.el";
-      sha256 = "142wafq7ybsbakc0xjk2kwxm014csx5xk4cbaddyfn9yd4w7xl15";
+      sha256 = "0qz1070x2kvxc25cnypzn0qq2ksxh2cylxqq0zbjfb33kgqm2si4";
     };
-  
+
     deps = [  ];
   };
 
@@ -1831,9 +1831,9 @@ with otherPackages; rec {
     name = "defaultcontent-1.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/defaultcontent-1.4.el";
-      sha256 = "01fp5xd75ll66780ar87aiflc309gl4ncklgdc3s4gc6mv8fwv72";
+      sha256 = "0x29hf1sjlpdc1c8za8x2ckbzj065i7zalha3936b2kxxk6a5p44";
     };
-  
+
     deps = [  ];
   };
 
@@ -1842,9 +1842,9 @@ with otherPackages; rec {
     name = "deferred-0.3.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/deferred-0.3.1.el";
-      sha256 = "1g288by4cjyz7yvyxxdhxmimnbhca7v44wlgklkpn1xh6idql8li";
+      sha256 = "0b33cng43iiln8kn7pjz65a34ddrj05v7fmjywwk2k79gzf94xrb";
     };
-  
+
     deps = [  ];
   };
 
@@ -1853,9 +1853,9 @@ with otherPackages; rec {
     name = "deft-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/deft-0.3.el";
-      sha256 = "1w8vcigncy1mcbwafpvi07k57prpx12zk2lgx8c0ls800fzl18pi";
+      sha256 = "1rksykpqykab4ll7var72z3kpfxk0c3ngq8f4cmmd6a7f8f6xmxj";
     };
-  
+
     deps = [  ];
   };
 
@@ -1864,9 +1864,9 @@ with otherPackages; rec {
     name = "descbinds-anything-1.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/descbinds-anything-1.5.el";
-      sha256 = "049xdx3xwahki4r8nqqvn46r2k42a0zkb8i5a5lj5987kh9zbp71";
+      sha256 = "0v12jpy5n5zszil9wlnk650jbk4ipfxhc7v6rcrrg6iplplbab91";
     };
-  
+
     deps = [ anything ];
   };
 
@@ -1875,9 +1875,9 @@ with otherPackages; rec {
     name = "desktop-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/desktop-0.1.el";
-      sha256 = "0yiqna5lgdy10kdpkzgg91c9s3c3bp7z8fz4ppl911b81wz0kj59";
+      sha256 = "0zcsyhwyir2c7ybgcmbdr6qrsh5j65wmdz8sf5kqscka3ghqf9za";
     };
-  
+
     deps = [  ];
   };
 
@@ -1886,9 +1886,9 @@ with otherPackages; rec {
     name = "desktop-registry-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/desktop-registry-1.0.0.el";
-      sha256 = "1qpz38yxzmxxkfpfpgkm219j04xyy206ra6qlgss0l4w3p2m7sck";
+      sha256 = "0p55g8adc24m3bk4272wb1g219dw6zsvpv7dlpfmsx9gj2sdx0sk";
     };
-  
+
     deps = [  ];
   };
 
@@ -1897,9 +1897,9 @@ with otherPackages; rec {
     name = "diatheke-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/diatheke-1.0.el";
-      sha256 = "1bbxfnr6gv51yx4hxigb8hjzbbwlgqz691xqqkis73dmxzxs599b";
+      sha256 = "0y32nkyq1a90gaa7rmjpb6h12bi3pxs4rc9rfaw9kfrxjyrqbwmh";
     };
-  
+
     deps = [  ];
   };
 
@@ -1910,7 +1910,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/dict-tree-0.12.8.el";
       sha256 = "08jaifqaq9cfz1z4fr4ib9l6lbx4x60q7d6gajx1cdhh18x6nys5";
     };
-  
+
     deps = [ trie tNFA heap ];
   };
 
@@ -1919,9 +1919,9 @@ with otherPackages; rec {
     name = "diff-hl-1.4.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/diff-hl-1.4.6.el";
-      sha256 = "1lrvrq7jmr2al9584d5kaggdbp2fh4pd176g5dhjq4dx4qr3cxyi";
+      sha256 = "1r7hb28pdxbirbyvwxyavcjy8iwg4qmph0qh99npc3rdy5jzw2l3";
     };
-  
+
     deps = [ cl-lib ];
   };
 
@@ -1930,9 +1930,9 @@ with otherPackages; rec {
     name = "diminish-0.44";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/diminish-0.44.el";
-      sha256 = "1616nd202q82ci76mca46n8pi8l4navv6yrrfvmkyzj7mvyp49gn";
+      sha256 = "1d5y2x34j33b29jmlpsgfki36vvjya3rs8w9kbphpbr5yij0q3g1";
     };
-  
+
     deps = [  ];
   };
 
@@ -1941,9 +1941,9 @@ with otherPackages; rec {
     name = "dircmp-1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dircmp-1.el";
-      sha256 = "13gf50dib44y045yvyk994f54rc1wl512hcpsrnhmmzbzq2lvq7j";
+      sha256 = "113msb0zgv4wv1m8pm3r97pkkjrj14r2d95syhlv7xy639kdgwn4";
     };
-  
+
     deps = [  ];
   };
 
@@ -1952,9 +1952,9 @@ with otherPackages; rec {
     name = "dired-plus-21.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dired+-21.2.el";
-      sha256 = "0vwignbgy6hra428y6zr5syld7xasm05cvjzxw9g7qr0akwfd1rh";
+      sha256 = "0kdg6565yjqrggc7adhgkwrkfl504il9qnjaad0741q8qwlri4xh";
     };
-  
+
     deps = [  ];
   };
 
@@ -1963,9 +1963,9 @@ with otherPackages; rec {
     name = "dired-details-1.3.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dired-details-1.3.1.el";
-      sha256 = "0mwnh6vxwjrckvhkid7zvrbp9hcjnjxszhic79wkqcij3p3ayzx3";
+      sha256 = "0s58mki2axbh06dmyjkrpxk2d7v33djmgkwappqy2smwgp3qh8xx";
     };
-  
+
     deps = [  ];
   };
 
@@ -1974,9 +1974,9 @@ with otherPackages; rec {
     name = "dired-details-plus-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dired-details+-1.0.el";
-      sha256 = "1f05pribj7ili17zryimgk4ngksy2ybdap8mkg9ihsh5cvcwkzll";
+      sha256 = "0kffkvpny49yjjn7dawbkmmvfa1c24w0369j4zrkzawag925zg7h";
     };
-  
+
     deps = [  ];
   };
 
@@ -1985,9 +1985,9 @@ with otherPackages; rec {
     name = "dired-dups-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dired-dups-0.3.el";
-      sha256 = "05ndlgq6fkl47xriwazavq0njkipxdfxkyz14h11gj0wp5qg9vgi";
+      sha256 = "0bc3b3z0hrpk4fhh1mbdlb0a00gy8qiapcrrl9ms4qdkr4ggc18g";
     };
-  
+
     deps = [  ];
   };
 
@@ -1996,9 +1996,9 @@ with otherPackages; rec {
     name = "dired-efap-0.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dired-efap-0.8.el";
-      sha256 = "0jzl4i9fdl7rmgrjk8kvagksv9ixkg3dpia1mh58zzrp2151kyh1";
+      sha256 = "1s8r1s8gj0g8b4n1nsrs04p1dx6srcxyj6hh2ywp6z9wr6smzghz";
     };
-  
+
     deps = [  ];
   };
 
@@ -2007,9 +2007,9 @@ with otherPackages; rec {
     name = "dired-single-1.7.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dired-single-1.7.0.el";
-      sha256 = "03msif37vpb8jj53cpvnl6fw6zyqp0p7y1ib442w5pa3wwymz2mm";
+      sha256 = "0fdjpr94lnj3whyir5aci67z7jwka1cylryb4vnipmbnk0dq3ba8";
     };
-  
+
     deps = [  ];
   };
 
@@ -2018,9 +2018,9 @@ with otherPackages; rec {
     name = "dispass-1.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dispass-1.1.2.el";
-      sha256 = "1a9a2zb6hqb5p5wzjlxbb3cii3q8w9mz7s562xlf4xlds0293hbd";
+      sha256 = "0ramph900g3276ii00hjpnszy3z5cg1rnydq5z1pklx40p4qcgiz";
     };
-  
+
     deps = [  ];
   };
 
@@ -2029,9 +2029,9 @@ with otherPackages; rec {
     name = "dix-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dix-0.1.0.el";
-      sha256 = "12vzcl52alppnhv63pmcfzmxcqd82qljddfzm66w44mi9j4xvbgw";
+      sha256 = "10qr2njp9nvsk8slnscw10012b7jcxnb3rccwcc9w3bv0a68dydv";
     };
-  
+
     deps = [  ];
   };
 
@@ -2040,9 +2040,9 @@ with otherPackages; rec {
     name = "dizzee-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dizzee-0.1.1.tar";
-      sha256 = "0c053cqa3lrhv73hy6nv5l58mplsxwsg8kb8gr0qk4qim5n204a6";
+      sha256 = "0mj4ibzpyg5wjiq91r3s574rkfvrmigmj2nbvhkhwx24n6pi96rw";
     };
-  
+
     deps = [  ];
   };
 
@@ -2051,9 +2051,9 @@ with otherPackages; rec {
     name = "django-theme-1.3.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/django-theme-1.3.0.el";
-      sha256 = "0206g6jf98wzzkkd3ywvzzpqg2694hdibd2jscjjjibrhjbqm28p";
+      sha256 = "0j6mi1y4hzka5n15vvphk0ynn5xrq03fzjll43bhv6g099s77l9x";
     };
-  
+
     deps = [  ];
   };
 
@@ -2064,7 +2064,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/djvu-0.5.el";
       sha256 = "1wpyv4ismfsz5hfaj75j3h3nni1mnk33czhw3rd45cf32a2zkqsj";
     };
-  
+
     deps = [  ];
   };
 
@@ -2073,9 +2073,9 @@ with otherPackages; rec {
     name = "dna-mode-1.44";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dna-mode-1.44.el";
-      sha256 = "1bxjj8439a8c5d3vqkqg6361sqs4148i741n9ld0isnr92d2jsvl";
+      sha256 = "1vnps4b7y2x94qp12h2nrgx35aliwvhb8rqlk243wv3b3pgk02vi";
     };
-  
+
     deps = [  ];
   };
 
@@ -2084,9 +2084,9 @@ with otherPackages; rec {
     name = "doc-mode-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/doc-mode-0.2.el";
-      sha256 = "19limsk59g152yl93n6zqsxcdvlp2216fpkz135xb37jnsqj9n72";
+      sha256 = "11fqkqnqr1xr9l90vs4mb15wd1sxck4bk1sb6bwisdkc18xz5lww";
     };
-  
+
     deps = [  ];
   };
 
@@ -2097,7 +2097,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/docbook-0.1.el";
       sha256 = "01x0g8dhw65mzp9mk6qhx9p2bsvkw96hz1awrrf2ji17sp8hd1v6";
     };
-  
+
     deps = [  ];
   };
 
@@ -2106,9 +2106,9 @@ with otherPackages; rec {
     name = "doctags-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/doctags-0.1.el";
-      sha256 = "1515s7v83d13gfsy8j332l66mmalmsdygrmbmcglf3cvv3b44851";
+      sha256 = "0si42yb93ij2r3cwh9r3ixvfiyxsmsz64a13gi7yybh4qmkfrxw2";
     };
-  
+
     deps = [  ];
   };
 
@@ -2117,9 +2117,9 @@ with otherPackages; rec {
     name = "dot-mode-1.12";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dot-mode-1.12.el";
-      sha256 = "0dmid407jl3wxmfjfhrwz9hxk9yv5670ykrxz4zck4n86r4mj9jv";
+      sha256 = "06g0kvric8s6s6w306zhpp9c1l7h1l2bgipmz58a1ijljwrqynyj";
     };
-  
+
     deps = [  ];
   };
 
@@ -2128,9 +2128,9 @@ with otherPackages; rec {
     name = "dotassoc-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dotassoc-0.0.1.el";
-      sha256 = "1x6advyrc6z4crpg2axazr16fvhisdxlmrmawm75n2nslxsd97fw";
+      sha256 = "0g4rwp51kb802vf5facqf7zxn89yiklbsc9xkypq59z7c10la7b6";
     };
-  
+
     deps = [  ];
   };
 
@@ -2139,9 +2139,9 @@ with otherPackages; rec {
     name = "dpaste-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dpaste-0.2.el";
-      sha256 = "0mggja92psbzkcp5jsl3pc0xpqg8zyhdcg3gcb776zzdpa2gsr2s";
+      sha256 = "0di8rcjvnarqlk22kbhw1d29k017krk0qc1whi7rhaxxnkjvxc5q";
     };
-  
+
     deps = [  ];
   };
 
@@ -2150,9 +2150,9 @@ with otherPackages; rec {
     name = "dpaste_de-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dpaste_de-0.1.el";
-      sha256 = "04qb0f9c2qznxh3k9qc9yca0yjr8mrlfv62ni8k3q7ixr7yf3s95";
+      sha256 = "0s1pngbxh0gryyk6i1fz15fgc8p74021qjhjj2y8imiiarcx1nqm";
     };
-  
+
     deps = [ web ];
   };
 
@@ -2161,9 +2161,9 @@ with otherPackages; rec {
     name = "drag-stuff-0.0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/drag-stuff-0.0.4.el";
-      sha256 = "1gwjinrg528hv49lwh4i03z4adln3ibg166j1rxbv189zsvm7sxj";
+      sha256 = "0xsb36f22zhpy7n5jwqj1ndlhixy0ziwldfn6dyq02m7mnx8kgh1";
     };
-  
+
     deps = [  ];
   };
 
@@ -2172,9 +2172,9 @@ with otherPackages; rec {
     name = "dropbox-0.9.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dropbox-0.9.1.el";
-      sha256 = "0z1klqxa79hcag214bli4966g74qwsv7za4achs7kcxz9xkh51ji";
+      sha256 = "0aik3hxqcwc7g58yw9ghnix8n5w8bdynpr5jvbpwq77y4sk2wvhr";
     };
-  
+
     deps = [ json oauth ];
   };
 
@@ -2183,9 +2183,9 @@ with otherPackages; rec {
     name = "dropdown-list-1.45";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dropdown-list-1.45.el";
-      sha256 = "1q1kbsyq7ar1qhy5bxwzvl34v60rbfhhv876l76vfia0riax147n";
+      sha256 = "1m2p0qmh20izbr3nz67bpv5a49cxjnjrl39lw4bh30zvwv4xx1gg";
     };
-  
+
     deps = [  ];
   };
 
@@ -2194,9 +2194,9 @@ with otherPackages; rec {
     name = "drupal-mode-0.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/drupal-mode-0.2.0.tar";
-      sha256 = "1zdxrb9k42s0pijwmlf351idhwf38kkj59w975wl5j48sjd4a0i3";
+      sha256 = "1rg2dqahqijipwkr1x2hr4b3yhyhg7fmdn0b6ssa3xg40wx3anxc";
     };
-  
+
     deps = [ php-mode ];
   };
 
@@ -2205,9 +2205,9 @@ with otherPackages; rec {
     name = "drupal-spell-0.2.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/drupal-spell-0.2.2.tar";
-      sha256 = "1zg0ab5hq6k4x2lzyvs9ampipfjh6xp7ld97n5qjmgdy3kpjkamy";
+      sha256 = "1hbb07379fbmjyh3li19bzyzdbsh8c58q88xm8pvjbajm5aba7b7";
     };
-  
+
     deps = [  ];
   };
 
@@ -2216,9 +2216,9 @@ with otherPackages; rec {
     name = "dsvn-922257";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dsvn-922257.el";
-      sha256 = "1cmvnx5fhz1qbl0nyz1z7jp3xzaiyi7rdc228za36y7if03k2340";
+      sha256 = "1l10z60jzg2z6m454yq891rbsc8411crbi6fp9k82rdr8wbyz3jz";
     };
-  
+
     deps = [  ];
   };
 
@@ -2227,9 +2227,9 @@ with otherPackages; rec {
     name = "dtrt-indent-0.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dtrt-indent-0.2.0.el";
-      sha256 = "18wyr0qwdhv6piq6pwn3a2nbvxacjhjixs9pjyhsq419mlmh3z5k";
+      sha256 = "15lmqax2sh71gasd464pf3mxzw7q67glz43yr6ixrj6xrn5634l8";
     };
-  
+
     deps = [  ];
   };
 
@@ -2238,9 +2238,9 @@ with otherPackages; rec {
     name = "durendal-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/durendal-0.2.el";
-      sha256 = "0l5lrga89c3yvk51rxxqj2rs7700dz9nvzjvj98rc0jizdrpx5ap";
+      sha256 = "0v2g6pm6388qdfwilvpyl6fmfgvvzg9wh08nm4llnfqpc79i4ndi";
     };
-  
+
     deps = [ clojure-mode slime paredit ];
   };
 
@@ -2249,9 +2249,9 @@ with otherPackages; rec {
     name = "dynamic-fonts-0.6.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/dynamic-fonts-0.6.2.el";
-      sha256 = "0vls4yn6y8qvifcr6f34ij4hj5paz8wa48fb3mrrcyb7fg27n2zl";
+      sha256 = "1qp5sa152gqlvicj1l5hgy4hqbdgjsqc634xc0dd8xb3dyzwnzi9";
     };
-  
+
     deps = [ font-utils persistent-soft pcache ];
   };
 
@@ -2260,9 +2260,9 @@ with otherPackages; rec {
     name = "ecb-2.40";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ecb-2.40.tar";
-      sha256 = "17mq8313j4bxiffwv7443g2yazc2yn1nvs83a1qlfcxa58ly6lsc";
+      sha256 = "03ig6xs1abvfmniag0a7mq3fccdx2p7bxz7a35a92zr1gl9yi7w2";
     };
-  
+
     deps = [  ];
   };
 
@@ -2271,9 +2271,9 @@ with otherPackages; rec {
     name = "ecb-snapshot-20120830";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ecb-snapshot-20120830.tar";
-      sha256 = "0hsm4k2n5qg8dqr7r6d2brzdr7s654i47flsydd6w35imjvy1hnp";
+      sha256 = "000af77l9ihmgidal3jlaybmf8zzhhf2x90d6gyxvms9az223b7v";
     };
-  
+
     deps = [  ];
   };
 
@@ -2282,9 +2282,9 @@ with otherPackages; rec {
     name = "edbi-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/edbi-0.1.1.tar";
-      sha256 = "1cmdy8n3kj92xdjrb6s95ych7b950i6bzg438w6rry1hnqv1yvwj";
+      sha256 = "1jmial260pf55l8a0c6b2k7bhdkpwdm84mq9a2d1bhipvnrrx70k";
     };
-  
+
     deps = [ concurrent ctable epc ];
   };
 
@@ -2293,9 +2293,9 @@ with otherPackages; rec {
     name = "edebug-x-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/edebug-x-1.2.el";
-      sha256 = "1cs2nxipzh6k7mw5j4damc5snkdfxw8l3w541x2yxv8x437x7mkm";
+      sha256 = "1i9f9cxjhpgx6l2d2r683dcsfh29947fba6q8kyjz8h6b8ypyd5c";
     };
-  
+
     deps = [ dash ];
   };
 
@@ -2306,7 +2306,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/ediprolog-1.0.el";
       sha256 = "03rb0gcciyib50nmb6kldmakgj2wx5spypbxys0l3vhp1zwkm66w";
     };
-  
+
     deps = [  ];
   };
 
@@ -2315,9 +2315,9 @@ with otherPackages; rec {
     name = "edit-list-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/edit-list-0.4.el";
-      sha256 = "04h69n4x85rzxl743zdrj9gmphz7xr8s7aad3p58l3i78b9w6dq3";
+      sha256 = "1l3rmr9ki5pyz4h4kf3dm3wsix6b6y4ms561qlvj5wswspi15jkk";
     };
-  
+
     deps = [  ];
   };
 
@@ -2326,9 +2326,9 @@ with otherPackages; rec {
     name = "editorconfig-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/editorconfig-0.2.el";
-      sha256 = "0wj9vz666cmfwmnl9b7lidsic73vzyri10abkwzv2n6dwjnk1pfj";
+      sha256 = "00cpc9ary8xqbxl91r43r8z0p8a8pmvacxqf217i58bhpcbk2v8n";
     };
-  
+
     deps = [  ];
   };
 
@@ -2337,9 +2337,9 @@ with otherPackages; rec {
     name = "egison-mode-0.1.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/egison-mode-0.1.4.el";
-      sha256 = "10rc977v036p6m34h5ds7k12sin2py1a7pg6q9rkasyxccq4ahw2";
+      sha256 = "0wcv7my78l81d8lsfk4vgfwhr6kb23ws9vcm60iqvzjxlxnfb0yk";
     };
-  
+
     deps = [  ];
   };
 
@@ -2348,9 +2348,9 @@ with otherPackages; rec {
     name = "eh-basic-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/eh-basic-0.0.2.tar";
-      sha256 = "0ygll13yx8ibr2rh9kzv30mrpklsl5qg4zpc06fiw5a2kylhnf7x";
+      sha256 = "16vy3h7r4vb222gzyrk9dlpq0376c9k1828nm8mhzdwdqxxiwx9i";
     };
-  
+
     deps = [ starter-kit browse-kill-ring ];
   };
 
@@ -2359,9 +2359,9 @@ with otherPackages; rec {
     name = "eh-functions-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/eh-functions-0.0.1.tar";
-      sha256 = "062bwn55jfhf14kcfjkpfacwfqjfjamy6ql3s60i93wdm7hcw61y";
+      sha256 = "101pyrj1slvf5d5glwn41q54w4ws3a30vwv62m71k9a8dz0p54ii";
     };
-  
+
     deps = [ starter-kit ];
   };
 
@@ -2370,9 +2370,9 @@ with otherPackages; rec {
     name = "eh-gnus-0.0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/eh-gnus-0.0.6.tar";
-      sha256 = "0bsxr9lyqj8ify88r0nkrmalvm4lqjpd7w3p71wsiv2dzw0hiark";
+      sha256 = "0b35livj7jlpnji58hdzqnirn9chrpar2r88a494alpvzgj2340r";
     };
-  
+
     deps = [  ];
   };
 
@@ -2381,9 +2381,9 @@ with otherPackages; rec {
     name = "eh-keybindings-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/eh-keybindings-0.0.1.tar";
-      sha256 = "1ppfrsrx4z6s4rih2q9phibfnvsk6nkxgpi0hirzwqrg1k12wcnp";
+      sha256 = "1yrm1mgqw2qkhbvasmgq175ycm0wkyifddlri19jm4gkswpk5bv3";
     };
-  
+
     deps = [ eh-functions starter-kit-bindings ];
   };
 
@@ -2392,9 +2392,9 @@ with otherPackages; rec {
     name = "eieio-1.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/eieio-1.4.tar";
-      sha256 = "0flrmqg60lfh59q9rmwzka5x1ss3kqw1bralf31hywg535pnj56g";
+      sha256 = "0xylpqs1llh9636m5l09qn1pxmz9lwcz5b9h06dn1l186iy382in";
     };
-  
+
     deps = [  ];
   };
 
@@ -2403,9 +2403,9 @@ with otherPackages; rec {
     name = "eimp-1.4.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/eimp-1.4.0.el";
-      sha256 = "0bzi9afbppnjhkaqbpx9v38c4kcy5bkm2j0d3nzh7bby13j1kxls";
+      sha256 = "0kfvdk06glmrvwcvz8vnp13lnhrjfks2l8qkfhldcc5ad3b7w1s0";
     };
-  
+
     deps = [  ];
   };
 
@@ -2414,9 +2414,9 @@ with otherPackages; rec {
     name = "el-autoyas-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/el-autoyas-0.5.el";
-      sha256 = "01id7dk098jm5rn38a5frzzfg49r82n2n0380vc8fiq8crpbb1fm";
+      sha256 = "0jcl6gzhdgxlgd9i0cwb77rgx24cd4c1xdym5dyk8fc5k2aybj5s";
     };
-  
+
     deps = [  ];
   };
 
@@ -2425,9 +2425,9 @@ with otherPackages; rec {
     name = "el-spec-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/el-spec-0.2.el";
-      sha256 = "0gzbnbvdw60563dysplpz2ckcva3dwfcka8a3wqg5ssnax3vy2q7";
+      sha256 = "1wgcwlsixhyb1c52cfrv9myky4nqls273wv0ni1yyf48cyyz75nv";
     };
-  
+
     deps = [  ];
   };
 
@@ -2436,9 +2436,9 @@ with otherPackages; rec {
     name = "el-swank-fuzzy-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/el-swank-fuzzy-0.1.el";
-      sha256 = "175g5h7w430m06sghcgmzshr736v29ksdmjrbpg51zq8mjrxrbds";
+      sha256 = "085kw3b5b7j7w2y42zc3byl8fcpbhbwc175s0zkjx93i2l00asl6";
     };
-  
+
     deps = [  ];
   };
 
@@ -2447,9 +2447,9 @@ with otherPackages; rec {
     name = "el-x-0.2.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/el-x-0.2.2.tar";
-      sha256 = "07yk714nz2by6vaqi5457y5k32dan2mwz4wgfwi9829l0mnyx7p5";
+      sha256 = "0s4anlcf4g8217hj7kf5zmvsvfyky7qsmgiyvhbky331kz77h0bp";
     };
-  
+
     deps = [ cl-lib ];
   };
 
@@ -2460,7 +2460,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/eldoc-eval-0.1.el";
       sha256 = "1mnhxdsn9h43iq941yqmg92v3hbzwyg7acqfnz14q5g52bnagg19";
     };
-  
+
     deps = [  ];
   };
 
@@ -2469,9 +2469,9 @@ with otherPackages; rec {
     name = "elein-0.2.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/elein-0.2.2.el";
-      sha256 = "1b84rick9n11vrl969yn5d7wk3yqf8x3w1x4845brz6v9xwsap17";
+      sha256 = "0di6vp4azaqa7d4m9q7wpxsrzarxm9qaljm7g1s6vib0lizr47i3";
     };
-  
+
     deps = [  ];
   };
 
@@ -2480,9 +2480,9 @@ with otherPackages; rec {
     name = "elisp-cache-1.15";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/elisp-cache-1.15.el";
-      sha256 = "0bxphrjzyhgdbkj27w8l1b5k84jqxwx95kjmr0x0ifal2d0hmqr1";
+      sha256 = "05dhqqchm7kmixi7czgn0nf23lyvcw46dmf8ls7ck10lgr1im5mk";
     };
-  
+
     deps = [  ];
   };
 
@@ -2491,9 +2491,9 @@ with otherPackages; rec {
     name = "elisp-depend-1.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/elisp-depend-1.0.2.el";
-      sha256 = "14b97dnq35zwbivr2jsx4g26apql69j3mj9vw9vkigqh6nab48qw";
+      sha256 = "0khc3gacw27aw9pkfrnla9844lqbspgm0hrz7q0h5nr73d9pnc02";
     };
-  
+
     deps = [  ];
   };
 
@@ -2502,9 +2502,9 @@ with otherPackages; rec {
     name = "elisp-slime-nav-0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/elisp-slime-nav-0.6.el";
-      sha256 = "032w5xnmylyswysg40yyzh60ma8ljhh77fcxi2knh7fnma2v18in";
+      sha256 = "1ha3aprcp6chxphkh2na2j7jwsjzdkpzdv9pjhq2iga8amnfcbgs";
     };
-  
+
     deps = [ cl-lib ];
   };
 
@@ -2513,9 +2513,9 @@ with otherPackages; rec {
     name = "elixir-mix-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/elixir-mix-0.0.2.el";
-      sha256 = "011z6x2c36b46xcycsq72h3diqzicn84v498y25h5frjiddnizpj";
+      sha256 = "1gc6bgb7r7hnrj82hd96ipdqy3iwrvav0ynmqr72xvci8xzqy1w8";
     };
-  
+
     deps = [  ];
   };
 
@@ -2524,9 +2524,9 @@ with otherPackages; rec {
     name = "elixir-mode-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/elixir-mode-1.0.0.el";
-      sha256 = "0hq7mckhk1lw4qmw103cwxz36m7j3dmsf1qwx8raj2a7glqyslia";
+      sha256 = "0gjxlavps5hpigr7mh80hhg72qx0pliwk7qnaxrlcx856yr8w3sv";
     };
-  
+
     deps = [  ];
   };
 
@@ -2535,9 +2535,9 @@ with otherPackages; rec {
     name = "elnode-0.9.9.7.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/elnode-0.9.9.7.2.tar";
-      sha256 = "16ahz3sbbh6mm0l9yn4wkpypxhwxm6ghpjsynjvx7hcq3ijlrspd";
+      sha256 = "10jnywxbjnr1gchx6ackknca3gnjh9pn72sqjln05nl5zjzqpgwc";
     };
-  
+
     deps = [ web dash s creole fakir db kv ];
   };
 
@@ -2546,9 +2546,9 @@ with otherPackages; rec {
     name = "elpa-audit-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/elpa-audit-0.4.el";
-      sha256 = "0irql4kfs1jp3x5fwpmsbj62aaijpkrvi1f1xnvhlcpqxbi97wdd";
+      sha256 = "0c3063aaiyx9svdb5izvwbyk7r55vh3rad7siqz2szkmfasn1pjl";
     };
-  
+
     deps = [  ];
   };
 
@@ -2557,9 +2557,9 @@ with otherPackages; rec {
     name = "elpakit-1.0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/elpakit-1.0.6.el";
-      sha256 = "0s4ak89jw4h8iicb57vzk1l4s1i46560m18cjwblgjsnzrvm1jv1";
+      sha256 = "1m4wmj0wlvf76w3w248aqv4y4vs67vcrwly8q20cq0780yq6gb2g";
     };
-  
+
     deps = [ anaphora dash ];
   };
 
@@ -2568,9 +2568,9 @@ with otherPackages; rec {
     name = "elpy-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/elpy-1.0.tar";
-      sha256 = "09slhbmhf2lag99511nqgl5y8bzy7vgv5qi9q88pc2gd0z703djy";
+      sha256 = "1qaxb0ksfawwfqh4mflyj9wr3miwmqq0iay27vv12ixbq0y7nhfs";
     };
-  
+
     deps = [ auto-complete fuzzy yasnippet virtualenv highlight-indentation find-file-in-project idomenu nose iedit ];
   };
 
@@ -2579,9 +2579,9 @@ with otherPackages; rec {
     name = "emacs-droid-0.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/emacs-droid-0.0.0.el";
-      sha256 = "1wf6cv7x5sk669qhjgllbki5jy1vizmkjniymch835l60swq9zl5";
+      sha256 = "1ifvn95i173vhs4jzabx1nr3znxnfjx5dricx1g67nyd72yrf0gb";
     };
-  
+
     deps = [  ];
   };
 
@@ -2590,9 +2590,9 @@ with otherPackages; rec {
     name = "emacsd-tile-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/emacsd-tile-0.1.el";
-      sha256 = "1g8xzffj5awpy54gdk83q9qmbvf1f572bajl8y5vx23xcvqjhbmb";
+      sha256 = "0xcmrb6wfnx69jwwvd3hknkd0n2ka8an971z7nzmkyn1jg5j49cr";
     };
-  
+
     deps = [  ];
   };
 
@@ -2601,9 +2601,9 @@ with otherPackages; rec {
     name = "emamux-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/emamux-0.1.el";
-      sha256 = "00dih4y2kd65fh8kcmsr8gsfp7b7xn6zy85bwjrks1vml94wdy2y";
+      sha256 = "01vd5gm6ygsifryqh32m5psi68ad55ph4y1hab2mx7lcdf9gjzl3";
     };
-  
+
     deps = [  ];
   };
 
@@ -2612,9 +2612,9 @@ with otherPackages; rec {
     name = "emms-mark-ext-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/emms-mark-ext-0.3.el";
-      sha256 = "02nzfmp1bdv179bmc5gh41s4ng8rvrfwlypxcqrm4r89m7p44xrv";
+      sha256 = "0lhzrf43rrl2dfqi4a57fsmjbn718mzj40966raz7rzhrqnax1aa";
     };
-  
+
     deps = [ emms ];
   };
 
@@ -2623,9 +2623,9 @@ with otherPackages; rec {
     name = "emstar-1.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/emstar-1.4.tar";
-      sha256 = "0vwfycawmd0qxr97bxwx6b6i3nghhjrnfar653f1bw5p3z7vg6d6";
+      sha256 = "07xpz4njk2qfj9aymgp1g2cf9zxpcbm96zxnnk5jsyvgcrrnbjwb";
     };
-  
+
     deps = [  ];
   };
 
@@ -2634,9 +2634,9 @@ with otherPackages; rec {
     name = "enclose-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/enclose-0.0.2.el";
-      sha256 = "07iigiry8h23sgpvydyrg06c4ainmd1zdpa84hk0f11c7n4fgp8g";
+      sha256 = "1fm1v9phcbhk56bcvrqfy7wh5l98l9ws3b4ds259rmy98gxgszay";
     };
-  
+
     deps = [  ];
   };
 
@@ -2647,7 +2647,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/enwc-1.0.tar";
       sha256 = "19mjkcgnacygzwm5dsayrwpbzfxadp9kdmmghrk1vir2hwixgv8y";
     };
-  
+
     deps = [  ];
   };
 
@@ -2656,9 +2656,9 @@ with otherPackages; rec {
     name = "epc-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/epc-0.1.1.el";
-      sha256 = "099vqzdckxfqi2m89cx8ywj16sq7rxyz53fmgqv4z171xg43az9z";
+      sha256 = "0kwf3kywmgvipbk990y0z0gsdlhww9gqlrk45379k0krzd4zabgp";
     };
-  
+
     deps = [ concurrent ctable ];
   };
 
@@ -2669,7 +2669,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/epoch-view-0.0.1.el";
       sha256 = "1wy25ryyg9f4v83qjym2pwip6g9mszhqkf5a080z0yl47p71avfx";
     };
-  
+
     deps = [  ];
   };
 
@@ -2678,9 +2678,9 @@ with otherPackages; rec {
     name = "erc-hl-nicks-1.3.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/erc-hl-nicks-1.3.1.el";
-      sha256 = "0pg6zmyrpvd4bfb8724bffmnsgb1r2r66krcsqxzcnzzrqczn9nk";
+      sha256 = "1pvca1d3y2mqjd0g1mdb9mczmj6h46d4x2xzblaqzdsrqqr49v32";
     };
-  
+
     deps = [  ];
   };
 
@@ -2689,9 +2689,9 @@ with otherPackages; rec {
     name = "ercn-1.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ercn-1.0.2.el";
-      sha256 = "1z18h8iajbfpakw5xi9kqk9cy2mppbslw1bp6i4p9c7wywazcdxp";
+      sha256 = "1jwmi5p6h90v8qcyl9dni759h7ck8ibj3h3914471zd6cw6f0f4n";
     };
-  
+
     deps = [  ];
   };
 
@@ -2700,9 +2700,9 @@ with otherPackages; rec {
     name = "eredis-0.5.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/eredis-0.5.0.el";
-      sha256 = "0m4cm6vp6yr8pfvmxrzh4q7qfbxh0ximi2rb2avkrvnjk054bg1k";
+      sha256 = "05ymr7idn6gzwryk1wzi46bsc7jxjqppcjscv54kppq73n62p3gs";
     };
-  
+
     deps = [  ];
   };
 
@@ -2711,9 +2711,9 @@ with otherPackages; rec {
     name = "erefactor-0.6.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/erefactor-0.6.10.el";
-      sha256 = "10w5x8ssk99969qkyr3dlllldbxcar01sf79p2b8xsm43c30l093";
+      sha256 = "1zvk5lcz8172j110dv5nwzclsdzlbwhh5pvicv7fcvfia6fm377q";
     };
-  
+
     deps = [  ];
   };
 
@@ -2722,9 +2722,9 @@ with otherPackages; rec {
     name = "erlang-2.4.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/erlang-2.4.1.el";
-      sha256 = "03csz8nii9yzzr50w17y1qhmbc50xcp3pbrspkxnyrl6siqrx85j";
+      sha256 = "125k1v223z1dcx26q8lva84p5vc1w31hxhqh19wv4hddf2g1nm1q";
     };
-  
+
     deps = [  ];
   };
 
@@ -2733,9 +2733,9 @@ with otherPackages; rec {
     name = "ert-0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ert-0.el";
-      sha256 = "01j5ps26ff90aw16vxjmb6jhaj7fv3sfal7311ydny37z0jmbl3a";
+      sha256 = "15qk8kr17p13bgimckswjlicz6aggq1di43rhhdlarw4s8q8sx45";
     };
-  
+
     deps = [  ];
   };
 
@@ -2744,9 +2744,9 @@ with otherPackages; rec {
     name = "ert-x-0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ert-x-0.el";
-      sha256 = "1ci5s2fmi401i2hh62xnjcvgp9719wr5rgs481lfkxhl4yml5n1m";
+      sha256 = "1aj9k26cxa073cav1xr5qqhxg2vgrbn4hsqpf8xj752cdw89gz1k";
     };
-  
+
     deps = [ ert ];
   };
 
@@ -2755,9 +2755,9 @@ with otherPackages; rec {
     name = "eshell-manual-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/eshell-manual-0.0.2.tar";
-      sha256 = "0zwgpr5lfhlkzvibv491c482q56ib9q15fp91p4v95hrzbp1wfqn";
+      sha256 = "1kbxgjkc1fvqb7wb5j4c6mdff5pz4pyr3yfs3zk9p8szlw2s5gkz";
     };
-  
+
     deps = [  ];
   };
 
@@ -2766,9 +2766,9 @@ with otherPackages; rec {
     name = "esk-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/esk-0.1.tar";
-      sha256 = "0q0bcr14bi4zy3z03akhm6wpizl9kpavaigjd8hx6ddfiqm63jvh";
+      sha256 = "1f554wl7730sdpbics33mbahh0r6fa2cjrzvnzb4xa235dcvsmvw";
     };
-  
+
     deps = [  ];
   };
 
@@ -2777,9 +2777,9 @@ with otherPackages; rec {
     name = "ess-5.14";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ess-5.14.tar";
-      sha256 = "0ampfq8dqi3ygkgbsx2zksx4pf89037bl06iqpk0bpr4gyz1i34p";
+      sha256 = "1k34dgvjyflf2dxr8g1s15lfpm0p4vvij85qrx803zpncm3vcc2g";
     };
-  
+
     deps = [  ];
   };
 
@@ -2788,9 +2788,9 @@ with otherPackages; rec {
     name = "ess-smart-underscore-0.79";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ess-smart-underscore-0.79.el";
-      sha256 = "054md2bqjn285iiq5h0hll4afbdlkdk1qllz6bv0yh46axcjn526";
+      sha256 = "0pg66b1i0lyvaiwh512g8jmjbjn4a9w59652dsb1siaz8cn355z4";
     };
-  
+
     deps = [  ];
   };
 
@@ -2799,9 +2799,9 @@ with otherPackages; rec {
     name = "esup-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/esup-0.3.el";
-      sha256 = "1l6064dwrgy8vyf3vv8wws0vj28vpa5czkw1ymbl7adacmmgc24n";
+      sha256 = "0gj2bmifxgqah4hjsa89f1dbqj32ywq72pxqxhh3phj7yvdwwp28";
     };
-  
+
     deps = [  ];
   };
 
@@ -2810,9 +2810,9 @@ with otherPackages; rec {
     name = "esxml-0.3.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/esxml-0.3.0.tar";
-      sha256 = "0b4dyb1385m2fh59jisssj1zc30i129ikjyvnnh4h26fgsadzrpy";
+      sha256 = "0cb8k3bxn3whi5k2ixf6gd7vmj3i136kif6s65288ln8kc0shyj8";
     };
-  
+
     deps = [ db ];
   };
 
@@ -2821,9 +2821,9 @@ with otherPackages; rec {
     name = "etags-select-1.13";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/etags-select-1.13.el";
-      sha256 = "0kvjpx0w2miwlz8jgcgb1n44s0zvlmbxykhjfpkl03lvv36d79wl";
+      sha256 = "0gmlmxlwfsfk5axn3x5cfvqy9bx26ynpbg50mdxiljk7wzqs5dyb";
     };
-  
+
     deps = [  ];
   };
 
@@ -2832,9 +2832,9 @@ with otherPackages; rec {
     name = "etags-table-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/etags-table-1.1.el";
-      sha256 = "0w0ffh9rxfysla49cyjbllarnrw1vp4kc83qnw2bx77cb31i7slm";
+      sha256 = "0apm8as606bbkpa7i1hkwcbajzsmsyxn6cwfk9dkkll5bh4vglqf";
     };
-  
+
     deps = [  ];
   };
 
@@ -2843,9 +2843,9 @@ with otherPackages; rec {
     name = "evernote-mode-0.41";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/evernote-mode-0.41.tar";
-      sha256 = "0kbzhmf9d7160qw8kbzl2kjm80b1rhgnmhdlj91b5a11iv2a2gll";
+      sha256 = "19aclr618bhdf9ysn93pf7wf27fm2f49282ywng41wn95yi8v4q6";
     };
-  
+
     deps = [  ];
   };
 
@@ -2854,9 +2854,9 @@ with otherPackages; rec {
     name = "everything-0.1.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/everything-0.1.5.el";
-      sha256 = "00c86ibm4v5nd5nc9b8r10hhskkh786wlffr86xx5c7jaxksnll6";
+      sha256 = "1wl1hsjy7a452hf3sayh9z6l7ki2va07nn8ay66saalnmx5jlwa9";
     };
-  
+
     deps = [  ];
   };
 
@@ -2865,9 +2865,9 @@ with otherPackages; rec {
     name = "eviews-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/eviews-0.1.el";
-      sha256 = "1ymvlk1hg8f4xbpi4ffg5y3v7n4rzkp8i7cklmpv85fi200fkj6i";
+      sha256 = "1d97p28kyxzk3dvgwm7mrrm3b10df05fhj32w4q7azwa3a191da9";
     };
-  
+
     deps = [  ];
   };
 
@@ -2876,9 +2876,9 @@ with otherPackages; rec {
     name = "evil-1.0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/evil-1.0.5.tar";
-      sha256 = "13w0fikkql479xndy39hi199my4qm5l34y0dyx4p9p4wma0a7qi5";
+      sha256 = "0ypwq8hwg5b5nl5602j90xkya2zz5vd5xwcsy6yy6190ppmrdk9h";
     };
-  
+
     deps = [ undo-tree ];
   };
 
@@ -2887,9 +2887,9 @@ with otherPackages; rec {
     name = "evil-leader-0.3.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/evil-leader-0.3.3.el";
-      sha256 = "1x1i26ywzzcjbambd9hxydhbjdr58d4hydxfgx7miiici63bakwa";
+      sha256 = "11cppi0psg6cak46ly2bv8pmkg76644zvgq28ac1y8k9nzm6hz6k";
     };
-  
+
     deps = [ evil ];
   };
 
@@ -2898,9 +2898,9 @@ with otherPackages; rec {
     name = "evil-nerd-commenter-0.0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/evil-nerd-commenter-0.0.5.tar";
-      sha256 = "04s5bj1vjj4fycl19q1hgbslgzzs0fbjvdg7hml2ljkp229r42jn";
+      sha256 = "1parwsgpg4mrrizrkyd1yalxvs0akxsm89hjwv001mqavdwcdmbk";
     };
-  
+
     deps = [  ];
   };
 
@@ -2909,9 +2909,9 @@ with otherPackages; rec {
     name = "evil-numbers-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/evil-numbers-0.3.el";
-      sha256 = "1rlhp38bnw5y2xnw8csrb0qvbjwc05brgg4f968a3r1vjnrllc44";
+      sha256 = "1m7rc1xvhhdani6sp13scmrmgjsf6hkmg6vqp553v6i2d4ajmdy0";
     };
-  
+
     deps = [  ];
   };
 
@@ -2920,9 +2920,9 @@ with otherPackages; rec {
     name = "evil-paredit-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/evil-paredit-0.0.1.el";
-      sha256 = "1d0wzyc5x2kib8n1sva06saa9hy37hmls3xcxgqg9c0b3gn8vmnp";
+      sha256 = "1fsi8dzxxa68hkixwf9xn87xbkzcrgm6mvm1y7j6mfcpp277pckk";
     };
-  
+
     deps = [ evil paredit ];
   };
 
@@ -2931,9 +2931,9 @@ with otherPackages; rec {
     name = "exec-path-from-shell-1.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/exec-path-from-shell-1.5.el";
-      sha256 = "0gpbf4cqj17gsa5bf3f53zx1jn9yfa3yq510d9l6wp5f3aknin8a";
+      sha256 = "0rlw49iyfmw7mcx84p2kba0bqxslqvlb72zjdkc11p5082l2diwr";
     };
-  
+
     deps = [  ];
   };
 
@@ -2942,9 +2942,9 @@ with otherPackages; rec {
     name = "expand-region-0.8.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/expand-region-0.8.0.tar";
-      sha256 = "1y06vq0dic3gc7rm9f7w6gqsplldjchfj71b32ih38baqayixz35";
+      sha256 = "0gfa77a1cbnwnljv185lyk48rsyipma6fzj9mm42zbpc3q6majkd";
     };
-  
+
     deps = [  ];
   };
 
@@ -2953,9 +2953,9 @@ with otherPackages; rec {
     name = "expectations-mode-0.0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/expectations-mode-0.0.4.el";
-      sha256 = "1adg7p05ncg34i906fmkypjyymgggrx5f0yi8h8lhsaj9nyp7aq0";
+      sha256 = "06i3mpyqh2hljdy7fjwzd4l5b41y8ylxxpqyb4slzr4qhdmcwwrw";
     };
-  
+
     deps = [ nrepl clojure-mode ];
   };
 
@@ -2964,9 +2964,9 @@ with otherPackages; rec {
     name = "express-0.5.12";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/express-0.5.12.el";
-      sha256 = "088qp05bxid2ws4pwbl0kgddzinsm6zl23q1vr7l4l2xnrg34ch3";
+      sha256 = "0r3scx9qkjyg4vfaz827fsa1g8njddfzkafa73qalr8p9bpl2ya1";
     };
-  
+
     deps = [ string-utils ];
   };
 
@@ -2975,9 +2975,9 @@ with otherPackages; rec {
     name = "extend-dnd-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/extend-dnd-0.5.el";
-      sha256 = "0l81piwlg6n69n5xna2k24xi6wnm0vpzs0q5ckchhh7hzhhw39f0";
+      sha256 = "108cj0629h32qczzskl4ycahkwq5526575zgakpyd436bn57xbdk";
     };
-  
+
     deps = [  ];
   };
 
@@ -2988,7 +2988,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/f90-interface-browser-1.1.el";
       sha256 = "0mf32w2bgc6b43k0r4a11bywprj7y3rvl21i0ry74v425r6hc3is";
     };
-  
+
     deps = [  ];
   };
 
@@ -2997,9 +2997,9 @@ with otherPackages; rec {
     name = "fakir-0.1.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fakir-0.1.6.el";
-      sha256 = "150p5sflndg7x7vx0jpk9wr065lh05clbvpv21qxgj30q0d5mbqv";
+      sha256 = "048k7fh8ld5s4xbg5115wdzpm227igz829xdff0ds95hqzas8jn3";
     };
-  
+
     deps = [ noflet dash ];
   };
 
@@ -3008,9 +3008,9 @@ with otherPackages; rec {
     name = "fancy-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fancy-mode-0.1.el";
-      sha256 = "0h5b16xjcpf7rsprh6qjd4as4w2l7i4ss30v4vzxxf5fz12rf93n";
+      sha256 = "0q5b3ybpxcwy9is6xb841kjks8cdiqsz8cq1sfr0lagqy2ph83n2";
     };
-  
+
     deps = [  ];
   };
 
@@ -3019,9 +3019,9 @@ with otherPackages; rec {
     name = "fastnav-1.0.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fastnav-1.0.7.el";
-      sha256 = "1x12phkp2n039lq5rc14cvamhn69xxmhkwfw3kki96dp2lhp4kxr";
+      sha256 = "13j36qagcznrvm94413n6fspn8dfsv3a2dri6sj2z0wga0rmd2p2";
     };
-  
+
     deps = [  ];
   };
 
@@ -3030,9 +3030,9 @@ with otherPackages; rec {
     name = "feature-mode-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/feature-mode-0.4.tar";
-      sha256 = "1gk7x4h9lp35na3slc5p132m6skz1r1jz7f9627fw6c31qcrqzzj";
+      sha256 = "1k9l5w07ixrps3vnijqzyj2h0w7ibvbn0r71jsckic9g9h06ckn0";
     };
-  
+
     deps = [  ];
   };
 
@@ -3041,9 +3041,9 @@ with otherPackages; rec {
     name = "fetchmacs-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fetchmacs-1.0.1.el";
-      sha256 = "01yy6x6h27xfsxyw3zpc1kx9av3s3jplcbfgq4yd40mqpk0dnrcm";
+      sha256 = "15c2ydhny59msprchy90dphm4nyr6l8yfny0i00q6i3cks6k541c";
     };
-  
+
     deps = [  ];
   };
 
@@ -3052,9 +3052,9 @@ with otherPackages; rec {
     name = "fic-ext-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fic-ext-mode-0.1.el";
-      sha256 = "145yvlqgs5gzl6qix8xkr7d0xi4db2p49fjs2miwhdqqgvw2dqhl";
+      sha256 = "0ml2f92xs0f1xdd5nncs0ckwrj7jkzn1rg7lw9qzapan98al16bz";
     };
-  
+
     deps = [  ];
   };
 
@@ -3063,9 +3063,9 @@ with otherPackages; rec {
     name = "fill-column-indicator-1.83";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fill-column-indicator-1.83.el";
-      sha256 = "14hm2rsr1iqcd5vn7cw6lscisfz83s5ks08lsdsnrpfd2lywvx02";
+      sha256 = "07ppxsrn7s0v6arjknnl2lcv5h6fknniav81bfk114qiz663vs1l";
     };
-  
+
     deps = [  ];
   };
 
@@ -3074,9 +3074,9 @@ with otherPackages; rec {
     name = "find-file-in-git-repo-0.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/find-file-in-git-repo-0.1.2.el";
-      sha256 = "1s0yv7b7nrc25rh0nzw4m458b75frbi9rlhnb7x21hgyy77cbn6a";
+      sha256 = "071m4kndha8i0gzp3iqwv8r66i92b0yrfc5wr3b468hbq3p4di3b";
     };
-  
+
     deps = [  ];
   };
 
@@ -3085,9 +3085,9 @@ with otherPackages; rec {
     name = "find-file-in-project-3.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/find-file-in-project-3.2.el";
-      sha256 = "010s49n6mm82nwz9i4aq4x5w8d8in83sfhjwypq62b527i0dvq9a";
+      sha256 = "1w6sx1zy3s3jaha04r0fhbrdmwmi4zhzyk96x8ws2f9wk4s1a1vg";
     };
-  
+
     deps = [  ];
   };
 
@@ -3096,9 +3096,9 @@ with otherPackages; rec {
     name = "find-file-in-repository-1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/find-file-in-repository-1.3.el";
-      sha256 = "0wnadrl61wxrmw7zkbg0qkr05gyf8cs9xpmmc1qr70rgm5d9p0ib";
+      sha256 = "16a1gpsryahp646yg1mc4g7rqzf19yxhfcyb01bvgya4r2k2q0nn";
     };
-  
+
     deps = [  ];
   };
 
@@ -3107,9 +3107,9 @@ with otherPackages; rec {
     name = "find-things-fast-20111123";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/find-things-fast-20111123.tar";
-      sha256 = "1z5ql1llvgp97bpzrrm4ns5irdlskc8paq9r2xpk237bh4ya3x82";
+      sha256 = "127znd71dgpvgps187sj9fkasxkcbzjn6wd78w473kllcs0ipkap";
     };
-  
+
     deps = [  ];
   };
 
@@ -3118,9 +3118,9 @@ with otherPackages; rec {
     name = "findr-0.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/findr-0.7.el";
-      sha256 = "18s55vqqsi58332aa5rvyzvn5zxsnyra6923wx2wxjq2vghxflsd";
+      sha256 = "02bccv4mgz34jn42psn3mlsavd62ld25hpd8cqg5kxnjibprasc4";
     };
-  
+
     deps = [  ];
   };
 
@@ -3129,9 +3129,9 @@ with otherPackages; rec {
     name = "fiplr-0.1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fiplr-0.1.3.el";
-      sha256 = "1imvlas2yc7yxwz2vbj6mvfpzf4nw3p4218pjrvzhpapx3ag2sgf";
+      sha256 = "1s2cmhi6zsl07d8qi0whm6lg1lsg7wl8gvhv1hjpvqxjl6xmacjn";
     };
-  
+
     deps = [  ];
   };
 
@@ -3140,9 +3140,9 @@ with otherPackages; rec {
     name = "fixmee-0.8.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fixmee-0.8.2.el";
-      sha256 = "1c1cc1y17044qqk16dqbiq42fryp000ih2jpipix58p1w34b6p2s";
+      sha256 = "0hhln1a7xww9b0lsi6ji5zn9cvi2dmjbyc2ysbdqb9ik6szcyqhm";
     };
-  
+
     deps = [ button-lock nav-flash back-button smartrep string-utils tabulated-list ];
   };
 
@@ -3151,9 +3151,9 @@ with otherPackages; rec {
     name = "flex-autopair-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flex-autopair-0.3.el";
-      sha256 = "1h1irmfrn87rx5f3z6kfmn6ns0312klv7xan4nskdvg409kd91ip";
+      sha256 = "1pjlx38mvxgzh5jzdl608b33msx50jsai81a4bk5rrfc4d385cfg";
     };
-  
+
     deps = [  ];
   };
 
@@ -3162,9 +3162,9 @@ with otherPackages; rec {
     name = "fly-jshint-wsh-2.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fly-jshint-wsh-2.0.3.el";
-      sha256 = "174p4cskdb6zfdil8zjkjywj0fk33wiyncbrz36yh0v82a3ima6p";
+      sha256 = "1xfr5gzkfmsk539naxc99l9xkaxcpa544sbfwscyfpjacpfqdd1q";
     };
-  
+
     deps = [ flymake ];
   };
 
@@ -3173,9 +3173,9 @@ with otherPackages; rec {
     name = "flycheck-0.12";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flycheck-0.12.tar";
-      sha256 = "0n4plynhm8qm5xlsdbikmqhk9jqmqx8vjn8d6pvr8jcw5vkxan05";
+      sha256 = "0brp01vhxd71y6bw3dipsk6vs57857dyydz2bibqdiz7shaqdvy8";
     };
-  
+
     deps = [ s dash cl-lib  ];
   };
 
@@ -3184,9 +3184,9 @@ with otherPackages; rec {
     name = "flycheck-color-mode-line-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flycheck-color-mode-line-0.2.el";
-      sha256 = "117r5h5ykmkb7jnv6i4blry7qqrpd72yw9x55p9pd4p77mg785gw";
+      sha256 = "0b6c1s7r09rjb6vr06za3zmk8hcdqq7p4wbikig65s2g8m2w18gd";
     };
-  
+
     deps = [ flycheck dash  ];
   };
 
@@ -3195,9 +3195,9 @@ with otherPackages; rec {
     name = "flymake-0.4.16";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-0.4.16.el";
-      sha256 = "06l7vq68qzwnki6v7lzvn06m7m3irm81isgjplxw9crhq2wv3y69";
+      sha256 = "1j390n98lzrzl93sqs4x87fkxqq1dxzk987wlyfwxgx5im71mk5m";
     };
-  
+
     deps = [  ];
   };
 
@@ -3206,9 +3206,9 @@ with otherPackages; rec {
     name = "flymake-checkers-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-checkers-0.3.el";
-      sha256 = "1sjgizb3lnx6s6bskb7ip2vv14hmgmcl13glyzzjp49yqshby7iv";
+      sha256 = "0aw7isv6r4i729vj3lprilb3p7mf2bbb51z5c2sdi8dkgcc4dvk0";
     };
-  
+
     deps = [  ];
   };
 
@@ -3217,9 +3217,9 @@ with otherPackages; rec {
     name = "flymake-coffee-0.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-coffee-0.10.el";
-      sha256 = "0s64hfgsdabwdah6ba1c7101nsh5p2vw3zbx00gz1ypfxx2v6x4k";
+      sha256 = "11h4v32yyf9wz5bycah7drkxhr4ssza7dj038z236bpzzd7c4kaw";
     };
-  
+
     deps = [ flymake-easy ];
   };
 
@@ -3228,9 +3228,9 @@ with otherPackages; rec {
     name = "flymake-css-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-css-0.3.el";
-      sha256 = "1lgr7gdkhjy6jq1ybjminb8dc3d95q72hna51crjygyba6ycxavr";
+      sha256 = "1ck5dql3hcbq7dwnmmk2vpqkzsikw0lf8a2agk36fsb83bpfcnj7";
     };
-  
+
     deps = [ flymake-easy ];
   };
 
@@ -3239,9 +3239,9 @@ with otherPackages; rec {
     name = "flymake-csslint-1.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-csslint-1.1.0.tar";
-      sha256 = "0km64dkfnvrpfal9s6vccpk021brhgai6yz709r4bf5slcxqixqb";
+      sha256 = "1xjwjnpll640ll8n0is47pwjmpzninlfjwi153dy9ni2jr02w962";
     };
-  
+
     deps = [ flymake ];
   };
 
@@ -3250,9 +3250,9 @@ with otherPackages; rec {
     name = "flymake-cursor-1.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-cursor-1.0.2.tar";
-      sha256 = "1s4wpndm8i4lq5m89gjmrl3371l0a69y7n6hfcs2khcb0w2fl5dh";
+      sha256 = "1islig3mfmly82jkc5lrcdixdav0pkj3llypjp45aahrwmdmajdq";
     };
-  
+
     deps = [ flymake ];
   };
 
@@ -3261,9 +3261,9 @@ with otherPackages; rec {
     name = "flymake-d-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-d-0.1.el";
-      sha256 = "01fmf16lmbghpm1kpykfw5h7nrbhgk0mz9r91bhkwc1q8s4hpiwj";
+      sha256 = "11wb5wrlhm4fx6yn6axwcmzm2j8fwb73fhj0allyx0ak0z0di01s";
     };
-  
+
     deps = [  ];
   };
 
@@ -3272,9 +3272,9 @@ with otherPackages; rec {
     name = "flymake-easy-0.9";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-easy-0.9.el";
-      sha256 = "1xdg2g9yf2agbpcnmishvzg078lk1330i37ks36k74yr7m0ivzmc";
+      sha256 = "0zkmzi9g8vvv1l6m09rd9c9mcfq4c44zvw5bl0i23a39csxa85fv";
     };
-  
+
     deps = [  ];
   };
 
@@ -3283,9 +3283,9 @@ with otherPackages; rec {
     name = "flymake-elixir-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-elixir-0.4.el";
-      sha256 = "1552k68l5cbldvfkl2569ziarf5b3vi3cxa27jp0lm2pq4d5bl03";
+      sha256 = "0nixhm5w21rafvg458yzav143m1f02zqddlrbpcyvw8yml41yxpz";
     };
-  
+
     deps = [  ];
   };
 
@@ -3294,9 +3294,9 @@ with otherPackages; rec {
     name = "flymake-for-jslint-for-wsh-1.3.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-for-jslint-for-wsh-1.3.0.el";
-      sha256 = "0hjvwjwlsn51dwl7d896fidyxdi998030di8rwnr9665d656kf75";
+      sha256 = "0b04zh0gcdlnjifz2wfjap433684wrbiidzr2v62hnvwbhsggqc0";
     };
-  
+
     deps = [ flymake ];
   };
 
@@ -3305,9 +3305,9 @@ with otherPackages; rec {
     name = "flymake-go-2013.3.14";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-go-2013.3.14.el";
-      sha256 = "05v8ibm4y7192r0c5cw6y2y3zs02rh5ff74kq89f87bi2nl5rsk5";
+      sha256 = "02c7pbb5gariwiw2yipxy8xshbsz80zhq478qzkkw6lp1rl62mhz";
     };
-  
+
     deps = [ flymake ];
   };
 
@@ -3316,9 +3316,9 @@ with otherPackages; rec {
     name = "flymake-haml-0.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-haml-0.7.el";
-      sha256 = "0islbq47dw56sjg6y2a4lcazs0khmz8nj0f0789dvssk5fp5wz4i";
+      sha256 = "1gzkdhzpi7z3qr8acdh1pvrphlb2zbxvgi4rcadqsl5bai3n9hp7";
     };
-  
+
     deps = [ flymake-easy ];
   };
 
@@ -3327,9 +3327,9 @@ with otherPackages; rec {
     name = "flymake-haskell-multi-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-haskell-multi-0.3.tar";
-      sha256 = "0ac7dk7r7b1cz1yh27d5f3a4fny4vszb0di14g3k55iaxrwlxjy2";
+      sha256 = "0sh3qpchr21n6rh7hr26diab7z2zl9s0xyvs0jhp8kngsqxlaqjd";
     };
-  
+
     deps = [ flymake-easy ];
   };
 
@@ -3338,9 +3338,9 @@ with otherPackages; rec {
     name = "flymake-hlint-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-hlint-0.2.el";
-      sha256 = "0vwfxrq00risjzpzs9hxxc8rj50bzgy5q0al7a3ly7lljgsjfmrr";
+      sha256 = "0i7cy00d53p4ycj3nwricdgclygsa5wl1mczjj01pn037mr8sw5d";
     };
-  
+
     deps = [ flymake-easy ];
   };
 
@@ -3349,9 +3349,9 @@ with otherPackages; rec {
     name = "flymake-jshint-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-jshint-1.0.el";
-      sha256 = "0p7dlcdx2064whz947kh6mlpx61605kxyzrjsn4rn9a86vah88pb";
+      sha256 = "08i2x8ld7vwklki721j7cilsyj1lba5yyccpfnb8d3l0w3rrz093";
     };
-  
+
     deps = [  ];
   };
 
@@ -3360,9 +3360,9 @@ with otherPackages; rec {
     name = "flymake-jslint-0.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-jslint-0.10.el";
-      sha256 = "0y0sdnryvlb2w98xy85bwlq45li8cv7b2l4x7jpxhfn2dzcsfyfk";
+      sha256 = "0ihql6p7v3z774q21n707rhxxgkizac8cqrxymffai2ax7vnj2xi";
     };
-  
+
     deps = [ flymake-easy ];
   };
 
@@ -3371,9 +3371,9 @@ with otherPackages; rec {
     name = "flymake-json-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-json-0.1.el";
-      sha256 = "1gd8p4dsy9k8srvk83p0lrms45fzdx8dzd5j4pmwjv6dhhsa7x1b";
+      sha256 = "0qi308b5ld50fbb41aq3m4nb11dxsca7zd54ajdhb5l78wcbran9";
     };
-  
+
     deps = [ flymake-easy ];
   };
 
@@ -3382,9 +3382,9 @@ with otherPackages; rec {
     name = "flymake-less-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-less-0.2.el";
-      sha256 = "1ry0pg4ssxq83bsffsrlzwgs472ybxbdxksmwdx73w079vapp7f1";
+      sha256 = "0h3kh0p50i5127r4p2ppymy0whyxqpr2b1jnj6sq4iybnjrp498k";
     };
-  
+
     deps = [ less-css-mode ];
   };
 
@@ -3393,9 +3393,9 @@ with otherPackages; rec {
     name = "flymake-lua-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-lua-1.0.el";
-      sha256 = "133nqy7hsw9g5wydnbqmn7d4xyfw9l9q1brz3frfcd1b8j072pgm";
+      sha256 = "0b1mbmnabrg27qnxq1qncapdvxwnw1wsm4if2w6p51fmgfi9b8rj";
     };
-  
+
     deps = [  ];
   };
 
@@ -3404,9 +3404,9 @@ with otherPackages; rec {
     name = "flymake-perlcritic-1.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-perlcritic-1.0.3.tar";
-      sha256 = "1mlw3drzkbg9n1rd85kqd39qz89p7ipd7266dnq2130v0xkd62gg";
+      sha256 = "1hba2sjplskb80l3x67g95rz135v47m35gbkk37rszhxsz2zibf0";
     };
-  
+
     deps = [ flymake ];
   };
 
@@ -3415,9 +3415,9 @@ with otherPackages; rec {
     name = "flymake-php-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-php-0.5.el";
-      sha256 = "0azrjn23wcyp095scwnw0rxhixkillg13c148p231ds12rfnrd6n";
+      sha256 = "0gd2l2nl35m82mm7h0bcxxdayvdm1hn01pm44aszijqxyv255ghi";
     };
-  
+
     deps = [ flymake-easy ];
   };
 
@@ -3426,9 +3426,9 @@ with otherPackages; rec {
     name = "flymake-phpcs-1.0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-phpcs-1.0.5.tar";
-      sha256 = "0hsx8qfypgssmixxwl2lxwyczl401i93laindbnsa0sbki4q050f";
+      sha256 = "130whbijrg58l9nifrjamnjrhpr2y8973dd6dyj9zlkp96946xmv";
     };
-  
+
     deps = [ flymake ];
   };
 
@@ -3437,9 +3437,9 @@ with otherPackages; rec {
     name = "flymake-python-pyflakes-0.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-python-pyflakes-0.8.el";
-      sha256 = "1l3pvly4znl3k0jc6k2xpf5nzdc72vvl6gfl73x5lykp73qmflnp";
+      sha256 = "1v1ganqmb5liq361p145lhaqxiyc2nlg7qx5f53f0f69ka3xjz4n";
     };
-  
+
     deps = [ flymake-easy ];
   };
 
@@ -3448,9 +3448,9 @@ with otherPackages; rec {
     name = "flymake-ruby-0.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-ruby-0.8.el";
-      sha256 = "1m8qaq8h7a3pq2x0cjqi3yi25b9iqcvphxgzfhgx4ahx4c2lm2lb";
+      sha256 = "0r8k6mxv6n1y5wg0ygbwm3gkbxrd3n59r76n0nwq6a7zwxa3vwh9";
     };
-  
+
     deps = [ flymake-easy ];
   };
 
@@ -3459,9 +3459,9 @@ with otherPackages; rec {
     name = "flymake-sass-0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-sass-0.6.el";
-      sha256 = "0541dxmmxi17fbbnzgfrsziggnf5zi3lf39llldx6a9jz9y4y1ml";
+      sha256 = "1fjf9yxkx96k8nwdzm5zagf1ygi3j0xk7fflyqxnh185vqwk5vz0";
     };
-  
+
     deps = [ flymake-easy ];
   };
 
@@ -3470,9 +3470,9 @@ with otherPackages; rec {
     name = "flymake-shell-0.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-shell-0.8.el";
-      sha256 = "14a258nwa7z22wh78n1yavx9sxllf7qx8alm7drysi4dzcrjm77a";
+      sha256 = "132874p8x56kh938yg5jrzx5qmybwn8bx4mrxa2a4drkg8x72xk9";
     };
-  
+
     deps = [ flymake-easy ];
   };
 
@@ -3481,9 +3481,9 @@ with otherPackages; rec {
     name = "flymake-tuareg-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flymake-tuareg-0.1.tar";
-      sha256 = "0ry1x433hk0awdwzkjp803hvvybjjndxbyc1db9kkyf3ll4lpi4j";
+      sha256 = "0ry1lmr0pvj539c6my686c2w70q903msrgxbfziv315nsk9gvizk";
     };
-  
+
     deps = [  ];
   };
 
@@ -3492,9 +3492,9 @@ with otherPackages; rec {
     name = "flyphpcs-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flyphpcs-1.0.1.el";
-      sha256 = "19h5iwj5r50axa7yzwg624631zdq5v049an8s9y9058v1rd8p9n4";
+      sha256 = "0wqdgk9xx1w8cqbp818skrb9bhaf0396q98vz6nivvhxjjzzkavg";
     };
-  
+
     deps = [  ];
   };
 
@@ -3503,9 +3503,9 @@ with otherPackages; rec {
     name = "flyspell-lazy-0.6.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/flyspell-lazy-0.6.4.el";
-      sha256 = "187yw1ynn31yd28rnzcxh03nsk1jgn4hjp6jz7drqbkfjir13n4s";
+      sha256 = "1rd0dy16g0q07nc828virir7mdlp7i1mbmy8c17vh8az3sn80gmz";
     };
-  
+
     deps = [  ];
   };
 
@@ -3514,9 +3514,9 @@ with otherPackages; rec {
     name = "fm-20130612.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fm-20130612.1.el";
-      sha256 = "0jml2yakxnd981080zig177gxgzjjksf2191byn6im2wik0i3a3y";
+      sha256 = "0mg94gqwkvcrfvjrlllrvmhjn927gg05c9vcgrxsh76jgh1a7396";
     };
-  
+
     deps = [  ];
   };
 
@@ -3525,9 +3525,9 @@ with otherPackages; rec {
     name = "fold-dwim-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fold-dwim-1.2.el";
-      sha256 = "14az8h2j1pj428v0c5byim6v37hhlcs217ifhkyqff7r97v9f0pk";
+      sha256 = "07dpl63d2r88g0ka02ma5xzamsl9s3v5vy197dr526dlq2yj7vvk";
     };
-  
+
     deps = [  ];
   };
 
@@ -3536,9 +3536,9 @@ with otherPackages; rec {
     name = "fold-dwim-org-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fold-dwim-org-0.2.el";
-      sha256 = "1kym4f00084jkn7njwrydsf7ihsp8c4r12556i96i81555783gc4";
+      sha256 = "01bqrpc5a4zvkfdl5gy99n5ahc6ml23kla03jnmr719ckpcvkk64";
     };
-  
+
     deps = [ fold-dwim ];
   };
 
@@ -3547,9 +3547,9 @@ with otherPackages; rec {
     name = "fold-this-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fold-this-0.1.0.el";
-      sha256 = "0nl98p4pqvjl1042pilcr3rs0a1ciyy1ax5m1pslcvnnmdib9m8b";
+      sha256 = "0h01hinh9gp863pibfgddn9ff6md902zqf6s3465c6kgrq8ly1h4";
     };
-  
+
     deps = [  ];
   };
 
@@ -3558,9 +3558,9 @@ with otherPackages; rec {
     name = "font-utils-0.6.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/font-utils-0.6.8.el";
-      sha256 = "0gqhmmvdy70hakrlwvgcinxxx5ac9k5zcf63h19c6s8jjmiir7h9";
+      sha256 = "1fxs24drpjah0r1h63cpqq2rv9qj2z9a5l2lryd7js3zyy9b5snp";
     };
-  
+
     deps = [ persistent-soft pcache ];
   };
 
@@ -3569,9 +3569,9 @@ with otherPackages; rec {
     name = "frame-tag-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/frame-tag-0.1.0.el";
-      sha256 = "0d06j13c54xf9wxxdfabnxwsyivfx4axc1r213mvd8i8ngxmzs90";
+      sha256 = "0xxj7ms686g4rii3ighdha46viqzvjiq0layfhsnknrjrpgb9206";
     };
-  
+
     deps = [  ];
   };
 
@@ -3580,9 +3580,9 @@ with otherPackages; rec {
     name = "framesize-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/framesize-0.0.1.el";
-      sha256 = "0w8z0lc90yq7s2ywcny4737kpqz9xkkg1vvl934imf8nl7pmfl8k";
+      sha256 = "00rxqs0qblm2wkzs12p5xjj8jrjsxg86k3pn6dl2mc1h7sj64paz";
     };
-  
+
     deps = [ key-chord ];
   };
 
@@ -3591,9 +3591,9 @@ with otherPackages; rec {
     name = "fsvn-0.9.13";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fsvn-0.9.13.tar";
-      sha256 = "0b2nfa6l1zf83yx9gk9ww5nqjll10jzlh7b1rdnbb7v272nlina8";
+      sha256 = "1wwljdxnlilgl7hln1xxap343p8679d65df7f8y84hijdcin539y";
     };
-  
+
     deps = [  ];
   };
 
@@ -3602,9 +3602,9 @@ with otherPackages; rec {
     name = "full-ack-0.2.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/full-ack-0.2.3.el";
-      sha256 = "1m6wz2n6y9s0v66n3r2i991a97xl28ixayrb413zkyxv7fmar6jy";
+      sha256 = "111vzghdsn4l6iipyfw8zn68zr5ijvzzq6gsvn290wgciggqcc8z";
     };
-  
+
     deps = [  ];
   };
 
@@ -3613,9 +3613,9 @@ with otherPackages; rec {
     name = "fullscreen-mode-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fullscreen-mode-0.0.1.el";
-      sha256 = "0bql0dbqxvijsmg1nr6zmrqsq7fc2zzr32y9kyr70kvkmb6s8wra";
+      sha256 = "1s0n5nnf9i33z9ckxkklnkgh2da8bb70d6v6hfzfm7ff8lx8hvly";
     };
-  
+
     deps = [  ];
   };
 
@@ -3624,9 +3624,9 @@ with otherPackages; rec {
     name = "furl-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/furl-0.0.2.el";
-      sha256 = "1g9j3sdcll1nliahsz5im46ln71s42ybam1mfs7a3kj8c7z69swf";
+      sha256 = "0l8vc3zhn2z6rzxzic2s06ld04wisy6bzyc4xxwx9h0vw7jj1v5r";
     };
-  
+
     deps = [  ];
   };
 
@@ -3635,9 +3635,9 @@ with otherPackages; rec {
     name = "fuzzy-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fuzzy-0.1.el";
-      sha256 = "0y12i73ldj4brg1p41xrpf8gz3jmp2qv02889sjp04851kb57r17";
+      sha256 = "0r7hlfx7n0av7abbrs51ks077adn0vl334gn77dnkinpmlmbgdn6";
     };
-  
+
     deps = [  ];
   };
 
@@ -3646,9 +3646,9 @@ with otherPackages; rec {
     name = "fuzzy-format-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fuzzy-format-0.1.1.el";
-      sha256 = "1v0qxa5bjygmb5alpd44vigsbqc0npi9rli5r251bdrphlvyz3db";
+      sha256 = "1iv0x1cb12kknnxyq2gca7m3c3rg9s4cxz397sazkh1csrn0b2i7";
     };
-  
+
     deps = [  ];
   };
 
@@ -3657,9 +3657,9 @@ with otherPackages; rec {
     name = "fuzzy-match-1.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/fuzzy-match-1.4.el";
-      sha256 = "08al5ljj0cj1cnmczd1pvgqvd84ipmp92gr3rnjjw9ih73qi4yax";
+      sha256 = "1xglaka0wh8xbs207p5l8dglk5p5xsly6qhm9xf9s5dp7w0ibwg9";
     };
-  
+
     deps = [  ];
   };
 
@@ -3668,9 +3668,9 @@ with otherPackages; rec {
     name = "gather-1.0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gather-1.0.4.el";
-      sha256 = "0fwm07n55v95ynjsmv19j201f5nzsbkcnbinapx5fm5mp7y3c2lx";
+      sha256 = "14p475zyk9v7g10z7y8lva62aanf4s6vsjbngbf713w8l1dpw3z8";
     };
-  
+
     deps = [  ];
   };
 
@@ -3679,9 +3679,9 @@ with otherPackages; rec {
     name = "gccsense-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gccsense-0.2.el";
-      sha256 = "0zbd9zm4yh6bgw0har222vrss88pp50bzz26fkmp7s2g15v9wbbh";
+      sha256 = "108gw7waw9givd8vkr41bq3za9j1frimgb1lk1xzla17v1fj3lwq";
     };
-  
+
     deps = [  ];
   };
 
@@ -3690,9 +3690,9 @@ with otherPackages; rec {
     name = "geben-0.26";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/geben-0.26.tar";
-      sha256 = "066rfbcw6k5kbzz9k7m81lzbp8wpbgsbbl3j25c1wgr4m1z6n1xn";
+      sha256 = "1096axvabi4v12vryxaj0x42sr53dli3l6fgmfx1v8hak2343fsh";
     };
-  
+
     deps = [  ];
   };
 
@@ -3701,9 +3701,9 @@ with otherPackages; rec {
     name = "geiser-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/geiser-0.4.tar";
-      sha256 = "1my1xgrjk0q0m8bdr4ik09za6kc3fff56gylkiinh0favclhkd34";
+      sha256 = "10w3shnj1whwz8fr3gd28np7n1jk00n3nrhphqinykzm3lk23drg";
     };
-  
+
     deps = [  ];
   };
 
@@ -3712,9 +3712,9 @@ with otherPackages; rec {
     name = "generate-autoloads-0.0.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/generate-autoloads-0.0.10.el";
-      sha256 = "1c5jvl7m4xj8wfyd1xnqcyb2qxcp8wcp36a3nbbr0n03bwqgi5wi";
+      sha256 = "03vdff068vsfxjds9k7355axhbbz71c1nbx91aba37zbxfwvf4jn";
     };
-  
+
     deps = [  ];
   };
 
@@ -3725,7 +3725,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/ggtags-0.6.6.el";
       sha256 = "1b2gc3lrkx6lc6g6601fv9cr0qw9mx7l2q0pvl9sqsa184kfs1c7";
     };
-  
+
     deps = [  ];
   };
 
@@ -3734,9 +3734,9 @@ with otherPackages; rec {
     name = "gh-0.7.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gh-0.7.2.tar";
-      sha256 = "15b0vppw9mqaniab1jilfnrw2mj2sw7d8d8nhq2a3fk1y842rw86";
+      sha256 = "1ka0zqdw5zky8swsjyrd8q86ycaw50wkpj3kswsqb4l6d5v79x6j";
     };
-  
+
     deps = [ eieio pcache logito ];
   };
 
@@ -3745,9 +3745,9 @@ with otherPackages; rec {
     name = "ghc-1.10.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ghc-1.10.2.tar";
-      sha256 = "1rid3z3d6736if52bvh1cfbymrnmsjd47dpsm91x4zwhpgz61813";
+      sha256 = "03cyglnybazq45kzqdr1qcibvzmik7j457yfa8q25byhc90rkd90";
     };
-  
+
     deps = [ haskell-mode ];
   };
 
@@ -3756,9 +3756,9 @@ with otherPackages; rec {
     name = "ghci-completion-0.1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ghci-completion-0.1.3.el";
-      sha256 = "08b0kvf23l89hsf3czc4hb30h1rilx52v0k1vxw1sjaj9180a1kh";
+      sha256 = "042dnnafmc726j90ps243bx8m98caxf29ysdw1wifzzqvv3kkd10";
     };
-  
+
     deps = [  ];
   };
 
@@ -3767,9 +3767,9 @@ with otherPackages; rec {
     name = "gimme-2.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gimme-2.1.tar";
-      sha256 = "092x8fwaniv2wy7z01qx0dzifcpg79wyg2f0b16whn4s8448pbn0";
+      sha256 = "18jsp4783sl9i16946m4dq95f9kbbk2kd0vv6pkzhqn74irsfqf5";
     };
-  
+
     deps = [  ];
   };
 
@@ -3778,9 +3778,9 @@ with otherPackages; rec {
     name = "gist-1.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gist-1.1.1.el";
-      sha256 = "1zdkxynxyl2b1zmg30h4cznd0l2fgv7ql82l6jha7nkl19lmdfc5";
+      sha256 = "1a27r4lpxhbsrxagg6nwjj87ml0xb37wkdnswxl745lh8m93bd5d";
     };
-  
+
     deps = [ eieio gh tabulated-list ];
   };
 
@@ -3789,9 +3789,9 @@ with otherPackages; rec {
     name = "git-auto-commit-mode-4.2.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/git-auto-commit-mode-4.2.1.el";
-      sha256 = "06qcwdv35nr5ghyq36vk4c9nh333cam4qvg9v7f6xrk4mbfjryqx";
+      sha256 = "1n3kcvffafwigcrpglp1644xs50h88r731af1a9glbr3k1i9kkrs";
     };
-  
+
     deps = [  ];
   };
 
@@ -3800,9 +3800,9 @@ with otherPackages; rec {
     name = "git-commit-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/git-commit-0.1.el";
-      sha256 = "1ai18fsdkagfbfpcc9fgm6y8va121naq594zgarlv6ll9wlx5qx6";
+      sha256 = "1f03dfvlcc27rvyww1wcjjs49ppd6jjb1z4i3ih0w3b4hyqdvdws";
     };
-  
+
     deps = [  ];
   };
 
@@ -3811,9 +3811,9 @@ with otherPackages; rec {
     name = "git-commit-mode-0.12";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/git-commit-mode-0.12.el";
-      sha256 = "0m0p3jg69nskk3hpk22qixm0axxa3dn32yj7dhdgq799g9wpg7pm";
+      sha256 = "0yw6hk3ww9sjwh3xaxfa2987xnb4nf4zwihdsa8zbcsmlcj30123";
     };
-  
+
     deps = [  ];
   };
 
@@ -3822,9 +3822,9 @@ with otherPackages; rec {
     name = "git-gutter-0.42";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/git-gutter-0.42.el";
-      sha256 = "0b52mv5yj5fp4nwijl7id0l3y43q63xys3bgmrl8mvqz55qdhhqq";
+      sha256 = "0xa70xl9d1nq5k5nainn0gw4k4fw15g0wv9fll9v81kjhlzydldj";
     };
-  
+
     deps = [  ];
   };
 
@@ -3833,9 +3833,9 @@ with otherPackages; rec {
     name = "git-gutter-fringe-0.12";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/git-gutter-fringe-0.12.el";
-      sha256 = "0xramcvibkq6wm539dy8bs6k4h81qn6nlhpc4pcdkib95kms3s8g";
+      sha256 = "1l9mikb0m0b5abhsf0pxpimc7s4zmi8934q4j46nwqm5907mfcjk";
     };
-  
+
     deps = [ git-gutter fringe-helper ];
   };
 
@@ -3844,9 +3844,9 @@ with otherPackages; rec {
     name = "gitconfig-mode-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gitconfig-mode-0.3.el";
-      sha256 = "1vd4q07fq31dshra3qd8cbm1sdi66p2hr8rlpaj14r7lkqki73yf";
+      sha256 = "0xq6wqqyajf5nxbpwqwjkhalrlwbc9qj34sd5ysyw24n635sqvxi";
     };
-  
+
     deps = [  ];
   };
 
@@ -3855,9 +3855,9 @@ with otherPackages; rec {
     name = "github-browse-file-0.2.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/github-browse-file-0.2.1.el";
-      sha256 = "0xls3kn4ygk3lr2ll398ha0c9l2p1gfdgysv7w7drwnrnsbcncyn";
+      sha256 = "0p7mlvj24jyjsjk3c3dgx1lqs5p1qp37j112lp8yr6x9w8cggafk";
     };
-  
+
     deps = [  ];
   };
 
@@ -3866,9 +3866,9 @@ with otherPackages; rec {
     name = "github-theme-0.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/github-theme-0.0.3.el";
-      sha256 = "0dlay1h73mjz8klbvf7apfvnj9hasm0zlw0g2x0h39slb2d782iq";
+      sha256 = "151ii63yasmxqiyqacv2gqd35ybcb6v7xfl7gxkw1p84k7cw30n5";
     };
-  
+
     deps = [  ];
   };
 
@@ -3877,9 +3877,9 @@ with otherPackages; rec {
     name = "gitignore-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gitignore-mode-0.1.el";
-      sha256 = "1zqmsfkcnnfm2hb2js7k8wpvndhj19498p3fmgapqndazxdc3qnn";
+      sha256 = "1gvn7dcnqml43c0r7qzpcs3icn2dlvjph3n5qq4mznparrskgi4j";
     };
-  
+
     deps = [  ];
   };
 
@@ -3888,9 +3888,9 @@ with otherPackages; rec {
     name = "gitty-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gitty-1.0.el";
-      sha256 = "0pqagkwm7wnwvl0pfyg19fy7b7cgca3jhs4sxyv6h0s5ki36w5aq";
+      sha256 = "1ks0pq8hyjs415znx9rs0yy7rymfhs9g1r4a41wngsdv9rzqk2fr";
     };
-  
+
     deps = [  ];
   };
 
@@ -3899,9 +3899,9 @@ with otherPackages; rec {
     name = "gnomenm-0.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gnomenm-0.0.3.el";
-      sha256 = "0k543484zjyv6gq9v1dakb89l231bxkh0pay2ky2f4npa8idgv9h";
+      sha256 = "05p7171vv3mv97vdxgh471w4x7lbx6n3wis0qapbcqg8lrbzwppy";
     };
-  
+
     deps = [  ];
   };
 
@@ -3910,9 +3910,9 @@ with otherPackages; rec {
     name = "gnugo-2.2.12";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gnugo-2.2.12.el";
-      sha256 = "09cm8l78f291ybqr6qvvjwr39rr7qkl7jgcmqcma3c333b8ximmh";
+      sha256 = "0a32m9x6i7sch8b0w8gzjlg07732ws32csz8i1gl3jb3vva4n4zw";
     };
-  
+
     deps = [  ];
   };
 
@@ -3921,9 +3921,9 @@ with otherPackages; rec {
     name = "gnuplot-0.6.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gnuplot-0.6.0.el";
-      sha256 = "0f7v057vc0walhsn9nga9ibpp7ag5hjk00sa94lsk1kl7cx4k409";
+      sha256 = "0b1shyfih0qrqda8gdadm2lc3yjk7lb2gkqly843lzjd9hlsfhvw";
     };
-  
+
     deps = [  ];
   };
 
@@ -3932,9 +3932,9 @@ with otherPackages; rec {
     name = "gnusnotes-0.9.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gnusnotes-0.9.2.el";
-      sha256 = "1q1m28d986p8sjgqy349ny721kixjg4p05ngw065xsbib7dafzk3";
+      sha256 = "1dmr5hbg68b2wz2m696nymn8b0fkkpm76d8hrv83wzfvh7r9fsjc";
     };
-  
+
     deps = [  ];
   };
 
@@ -3943,9 +3943,9 @@ with otherPackages; rec {
     name = "go-mode-12869";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/go-mode-12869.tar";
-      sha256 = "1pczils2ki0ffx1r7ckfmzvvrxf6bg684lqc4alz7a8f8h3nqdwm";
+      sha256 = "0s0xkw0j4z4707qhd05cmhb5p0sh5dbiymchdx04jhybbk21ai1k";
     };
-  
+
     deps = [  ];
   };
 
@@ -3954,9 +3954,9 @@ with otherPackages; rec {
     name = "go-play-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/go-play-0.0.1.el";
-      sha256 = "072dx755vyl3x71nd45pbliwyzvmdygj2sk8wxbd4jy6g6n0bmx1";
+      sha256 = "0fy44msxm3z8r09gawnsxfwyn3ilbvrmgbq0yyfk82gi5xj89lw4";
     };
-  
+
     deps = [  ];
   };
 
@@ -3965,9 +3965,9 @@ with otherPackages; rec {
     name = "google-translate-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/google-translate-0.4.el";
-      sha256 = "1aqbrkazh0k3s7dxb0bwanj15ifxrdv8v4qndqiv2p1j7xll7ff4";
+      sha256 = "0cg9qrral0hy1nnn5ns8dyyakxx7xfh6x5fg801r4dcddww382qc";
     };
-  
+
     deps = [  ];
   };
 
@@ -3976,9 +3976,9 @@ with otherPackages; rec {
     name = "gopher-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gopher-0.0.2.el";
-      sha256 = "1i70h8mkskxxpm9mq263lhmscpzq5q01rlrc015z292l670azp6h";
+      sha256 = "0jsjfxrzkclbwj0pj8n5fy9vllyypp27pp2kki87r4fxp2gkw3dj";
     };
-  
+
     deps = [  ];
   };
 
@@ -3987,9 +3987,9 @@ with otherPackages; rec {
     name = "goto-last-change-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/goto-last-change-1.2.el";
-      sha256 = "1sfb2vd1k71v0qbfdp0f0m1crmd5fh4n1dp1jdz42vzb8z1d1l49";
+      sha256 = "171i6rqg0607a02drs421ww0y83ppqc5pd1vfi0kjp6f5yblf7ak";
     };
-  
+
     deps = [  ];
   };
 
@@ -3998,9 +3998,9 @@ with otherPackages; rec {
     name = "gplusify-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gplusify-1.0.el";
-      sha256 = "06aqk6isk0vv5vvccygmdcsw9w5dpn4x02gxz6sq569vdm7p01zs";
+      sha256 = "1cgi38ywh7nr9rk2rd8xzw19fa766hff7g1vpjck78am3qpk3963";
     };
-  
+
     deps = [  ];
   };
 
@@ -4009,9 +4009,9 @@ with otherPackages; rec {
     name = "grails-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/grails-mode-0.1.el";
-      sha256 = "0bma414vrrir3wq78iypc8vdl0xmbzwm5jzfvv2qx2jz89c39wnx";
+      sha256 = "0bqaqzsn5h4bm195rscvg7pm1cyy52z8jgqcdbk7wp97lnrskm0h";
     };
-  
+
     deps = [  ];
   };
 
@@ -4020,9 +4020,9 @@ with otherPackages; rec {
     name = "graphviz-dot-mode-0.3.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/graphviz-dot-mode-0.3.7.el";
-      sha256 = "1c7299xyp4q3g9ain4idlygbh73vfvkdh7cbwfs495y424rccmvx";
+      sha256 = "04cd6v63c3xsng1724dip0vc809n77p84226jv630gm0dpl1azjz";
     };
-  
+
     deps = [  ];
   };
 
@@ -4031,9 +4031,9 @@ with otherPackages; rec {
     name = "grapnel-0.5.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/grapnel-0.5.1.el";
-      sha256 = "0bjdyj8sx4mnqza1snzmwidj0jh81w11vd1gjrxp7fqyfnyc4vl7";
+      sha256 = "18br9qfcgkjbwi41lx04ci46qzkm8d41bbvvxkr3jv0cls82704r";
     };
-  
+
     deps = [  ];
   };
 
@@ -4042,9 +4042,9 @@ with otherPackages; rec {
     name = "grep-a-lot-1.0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/grep-a-lot-1.0.6.el";
-      sha256 = "0kb7bgxgw47mlkayyxhxl49nb36xvmq3q1lvi2ldzxlmjjmmvqfx";
+      sha256 = "1qzglvwklwxirw30qmbsaxg7cfzbjfnzv5ivgaz5q98f0f540r50";
     };
-  
+
     deps = [  ];
   };
 
@@ -4053,9 +4053,9 @@ with otherPackages; rec {
     name = "grep-o-matic-1.0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/grep-o-matic-1.0.4.el";
-      sha256 = "0isnmphsq9li6nx7n84c9pkmpiqs9jzs80vsxsydxwjlkxlr0gdb";
+      sha256 = "19988d8nsdng8fxs7lpmg2vgh51kr4ibfhjg50akngbgsrr1jhbw";
     };
-  
+
     deps = [  ];
   };
 
@@ -4064,9 +4064,9 @@ with otherPackages; rec {
     name = "grin-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/grin-1.0.el";
-      sha256 = "10c7gwm06whnkfrgwddl05hcc40kj6yi2dck0nvax115d2hsbpgd";
+      sha256 = "0r6wmzd776kp4fw6yl4ch3ic8p99j4w2p3mpik4jjf44idbp24vx";
     };
-  
+
     deps = [  ];
   };
 
@@ -4075,9 +4075,9 @@ with otherPackages; rec {
     name = "groovy-mode-201203310931";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/groovy-mode-201203310931.el";
-      sha256 = "14jcpjnd121kb652vayfycy3gpar35m0rpp1d6flc18jhdpnyamb";
+      sha256 = "13hcgmyff06khcfldrdrqrcfvyn4gi2fp3ipd5nb5c6jx3mkvgp9";
     };
-  
+
     deps = [  ];
   };
 
@@ -4086,9 +4086,9 @@ with otherPackages; rec {
     name = "grr-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/grr-1.0.0.el";
-      sha256 = "19ybfh4n1s97667zqly04v1hsrqqlgqcr4fv39xzdz5rxqjx854x";
+      sha256 = "0vqv83mazf060q710dazgvmylhhw8bvw23643rzd47rhc3wqxsv2";
     };
-  
+
     deps = [  ];
   };
 
@@ -4097,9 +4097,9 @@ with otherPackages; rec {
     name = "gruber-darker-theme-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gruber-darker-theme-0.4.el";
-      sha256 = "1d5bvvryqa9windkjqcf9dmpph8mm346gp658mqg1qqjzs2zwxcy";
+      sha256 = "051bf4l8das9xx5dh74y7jfxdk8pn7ikhsh8h20hd08w1zvbjlr1";
     };
-  
+
     deps = [  ];
   };
 
@@ -4108,9 +4108,9 @@ with otherPackages; rec {
     name = "gtags-3.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/gtags-3.3.el";
-      sha256 = "0jk93qls5q9w76ifwaj5dzs2nqkj16a6x1mwsmjy7nvfmkllcknf";
+      sha256 = "0sv04hxgnk1lng9lsrk3j1llvxqsb4ap4a1z1r5kckjjpvpxk12v";
     };
-  
+
     deps = [  ];
   };
 
@@ -4119,9 +4119,9 @@ with otherPackages; rec {
     name = "guess-offset-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/guess-offset-0.1.1.el";
-      sha256 = "0971c3y2gk6gwbzadsxwkqw1l8x6hgqvkkds0l5rs9jj5lryd4kq";
+      sha256 = "00yf1nlqpg3d2d19h32d181sn8fl9dv8523apa2d5bczmaxclifi";
     };
-  
+
     deps = [  ];
   };
 
@@ -4130,9 +4130,9 @@ with otherPackages; rec {
     name = "guile-scheme-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/guile-scheme-0.1.el";
-      sha256 = "0bk43fbj8cl78kswxypbw4kz89x7iczgrmkyxiv18ksyp9mlxh5i";
+      sha256 = "0vbi21r8cdc1285cajpswqhb93j0x2k74r5y4djgh126aphixvbh";
     };
-  
+
     deps = [  ];
   };
 
@@ -4141,9 +4141,9 @@ with otherPackages; rec {
     name = "guru-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/guru-mode-0.1.el";
-      sha256 = "0w3s1fvhkw0s25ms706d3vy4nfchmf1krc8vmrzj5h7x4c18w466";
+      sha256 = "1wnlq5kp1pil9gynp8lr5cvy09b0jbx433vrgz2bcbmvzk0mh9xv";
     };
-  
+
     deps = [  ];
   };
 
@@ -4152,9 +4152,9 @@ with otherPackages; rec {
     name = "hackernews-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hackernews-0.1.tar";
-      sha256 = "03133l0vm2y5442i4il7b8jzfim89093mpv76svy6370s0ddjddk";
+      sha256 = "18ms9jd8blb418glz4ahlchdq62y198cdwv6d5z4fdh1dm8xpvq4";
     };
-  
+
     deps = [ json ];
   };
 
@@ -4163,9 +4163,9 @@ with otherPackages; rec {
     name = "haml-mode-3.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/haml-mode-3.1.0.el";
-      sha256 = "11nirgldvg36wmfyb4h0bpgzj7kaaif75w5zzsixvn9a1di76wr2";
+      sha256 = "0ncmwkw3a06n4fx7y8wcwg1gx48xprzxi6acd5sx060v0x1j45px";
     };
-  
+
     deps = [ ruby-mode ];
   };
 
@@ -4174,9 +4174,9 @@ with otherPackages; rec {
     name = "handlebars-mode-1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/handlebars-mode-1.3.el";
-      sha256 = "0bcb83p3ms56bh8aajiicfslisz132w57pishk648asrbyf45n6h";
+      sha256 = "1p5ps07qnfkcbdprjsr8zhwvwwz5avbkp2lv2l0grpd0zjm9byif";
     };
-  
+
     deps = [  ];
   };
 
@@ -4185,9 +4185,9 @@ with otherPackages; rec {
     name = "handlebars-sgml-mode-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/handlebars-sgml-mode-0.1.0.el";
-      sha256 = "1i1lvc8djfv4pzysbjlf1lf4sg4xkim2s9d41a6hsavqcaff2w8q";
+      sha256 = "1ibb25lb1y1069vfrchn9gbw3hncplhsdvzbsyrmrwdyvl8yfxmq";
     };
-  
+
     deps = [  ];
   };
 
@@ -4196,9 +4196,9 @@ with otherPackages; rec {
     name = "hardcore-mode-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hardcore-mode-1.0.0.el";
-      sha256 = "1qs4i3wjd6jsr24fj8d6d4d07yazjcfpxwaqlbikkkg2cbj159a7";
+      sha256 = "1cglwgqri2fs3vhi2rckv6s5f1kx4gk8zgjigz07dvx0iyfvh4a4";
     };
-  
+
     deps = [  ];
   };
 
@@ -4207,9 +4207,9 @@ with otherPackages; rec {
     name = "hardhat-0.3.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hardhat-0.3.6.el";
-      sha256 = "1afms6cvi1f5yp792w96xy5x8bhg1lxmvni1r4sjk73fdjb0pg6p";
+      sha256 = "0r51zbc1vnqwm4jfzgix07k6cahvk8dprdmpixi8ws8v6f0f30si";
     };
-  
+
     deps = [ ignoramus ];
   };
 
@@ -4218,9 +4218,9 @@ with otherPackages; rec {
     name = "haskell-mode-13.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/haskell-mode-13.6.tar";
-      sha256 = "0673yx3bd1yz71ih1fhwbgmx5a6zr8f376ck518gw0jx7g2hympj";
+      sha256 = "1wc1dn67cl7mna4nxzp6rbp99kbqil93k6zflc84bdz68wbiyii2";
     };
-  
+
     deps = [  ];
   };
 
@@ -4229,9 +4229,9 @@ with otherPackages; rec {
     name = "haste-1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/haste-1.el";
-      sha256 = "1cydbcwrfhbmd33qky55xsp0248d3cwp6cvkm6v2jsx1wpicapbz";
+      sha256 = "11b6v4301w7yasz42a3sv2wk2h10bdflm4h69c2a1rp4j6sj9j8w";
     };
-  
+
     deps = [ json ];
   };
 
@@ -4240,9 +4240,9 @@ with otherPackages; rec {
     name = "haxe-mode-0.3.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/haxe-mode-0.3.1.el";
-      sha256 = "1vn0nrrglzqd5dqgdsfs3f90xgwbasgb7v68qp6bqh92ran8gils";
+      sha256 = "0as1n6c6py29f68i7a9482pw3iapmmm63b811qd2yspfrb65rwrc";
     };
-  
+
     deps = [  ];
   };
 
@@ -4251,9 +4251,9 @@ with otherPackages; rec {
     name = "header2-21.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/header2-21.0.el";
-      sha256 = "0lvcgbwqndbfayndcvw431m0nhpdg8fk34hjp4mzkbfqf4kdjn27";
+      sha256 = "0rb4ihgyck1im07plaqn66n2qiq6agwqpc1jda2l8dphk9d6ca1b";
     };
-  
+
     deps = [  ];
   };
 
@@ -4264,7 +4264,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/heap-0.3.el";
       sha256 = "1347s06nv88zyhmbimvn13f13d1r147kn6kric1ki6n382zbw6k6";
     };
-  
+
     deps = [  ];
   };
 
@@ -4273,9 +4273,9 @@ with otherPackages; rec {
     name = "helm-ag-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/helm-ag-0.4.el";
-      sha256 = "0bnrrx55n28kfpxlk95r51wqhjxgzx6hv0mpjxw20431c31zzivd";
+      sha256 = "0zy0jsrifj20r1ahzrkwlg62jzd92v9frs9mxy6c0w49w8q4gqxb";
     };
-  
+
     deps = [ helm ];
   };
 
@@ -4284,9 +4284,9 @@ with otherPackages; rec {
     name = "helm-gtags-0.9.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/helm-gtags-0.9.2.el";
-      sha256 = "1chb5cci2i5ygrj39jnsb3cfwnikf9rsipkmgvjiwgmgpd1qaavi";
+      sha256 = "1hlwjgbf47461d7njya1blc7vn3pivsck25v7lsrjn0fv766mf4f";
     };
-  
+
     deps = [ helm ];
   };
 
@@ -4295,9 +4295,9 @@ with otherPackages; rec {
     name = "helm-projectile-0.9.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/helm-projectile-0.9.1.el";
-      sha256 = "0lh11a9vqpa983wwggm28f9gwd0z15bqzzjx22dqcg159vr4nmfh";
+      sha256 = "12hy04s0m4c1195vfp2yr7257s391csbx1ssjcpmmyaxypzv9qwp";
     };
-  
+
     deps = [ helm projectile ];
   };
 
@@ -4306,9 +4306,9 @@ with otherPackages; rec {
     name = "heroku-1.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/heroku-1.1.0.el";
-      sha256 = "0byndz2glaww18my2bf7qqznzcziik3sf4a0m4gq5wjnpg9r59km";
+      sha256 = "0jb5p85mq7jj1xci0zz60h24z7jbbq7imfjp8bjspzafsq175yc6";
     };
-  
+
     deps = [  ];
   };
 
@@ -4317,9 +4317,9 @@ with otherPackages; rec {
     name = "hexrgb-21.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hexrgb-21.0.el";
-      sha256 = "0ff87h8j4iwfk47791ffh5cm2j2iysiqbw19dbn7advqbhnv70xa";
+      sha256 = "1x7pxmigmj9gdlvdx9djkagxk2khmfcryi87fwp7chc0q1xns8ad";
     };
-  
+
     deps = [  ];
   };
 
@@ -4328,9 +4328,9 @@ with otherPackages; rec {
     name = "hide-comnt-40";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hide-comnt-40.tar";
-      sha256 = "0l98vcfw3pbvqjjj7s5p5mgmzfc1fgn57vmharrn8brfaklw3s7z";
+      sha256 = "0smcmvif4fjk6mq16mzn3gpkimsml5b7i3bi0sygx60sbhy65iq4";
     };
-  
+
     deps = [  ];
   };
 
@@ -4339,9 +4339,9 @@ with otherPackages; rec {
     name = "hideshowvis-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hideshowvis-0.5.el";
-      sha256 = "0xmh1k4a3klz18rjvmfqyn858mhnxqqwxs4z8jnvpy044xs9mh74";
+      sha256 = "15ax1j3j7kylyc8a91ja825sp4mhbdgx0j4i5kqxwhvmwvpmyrv6";
     };
-  
+
     deps = [  ];
   };
 
@@ -4350,9 +4350,9 @@ with otherPackages; rec {
     name = "highlight-21.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/highlight-21.0.el";
-      sha256 = "0cryvy3qqjfq2zfl4fwbjjnr9gpxxrswpgslpsm9pxvip7wcwn6s";
+      sha256 = "0i08v6s9npzxz82d5qbhp3sz27wbarr51x2rzp0m3x0sw55mnydg";
     };
-  
+
     deps = [  ];
   };
 
@@ -4361,9 +4361,9 @@ with otherPackages; rec {
     name = "highlight-80-plus-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/highlight-80+-1.0.el";
-      sha256 = "0qk8wa7lpcr77jdvngc5ffbim629qqips0d2qcgf7al89qgchkxr";
+      sha256 = "0d9lna4mgq8a20j4pfzpysfw3p3jrdszxihhagjsvzkn4cvxdgpw";
     };
-  
+
     deps = [  ];
   };
 
@@ -4372,9 +4372,9 @@ with otherPackages; rec {
     name = "highlight-escape-sequences-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/highlight-escape-sequences-0.1.el";
-      sha256 = "0k6yc510g8bcqjxzkm9ig768xjbr03pz68i46cgva1gggcy3hq6k";
+      sha256 = "12lmz0f6pnyp1gx3jbxhx9kgai8hxm8a6xgnxrpqjhpl0nrxicqz";
     };
-  
+
     deps = [  ];
   };
 
@@ -4383,9 +4383,9 @@ with otherPackages; rec {
     name = "highlight-indentation-0.5.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/highlight-indentation-0.5.0.el";
-      sha256 = "0izdpfgy6rx05s7s4ayxz01pa5rmiyz0wfxwf8gcqd3dirg3jsmr";
+      sha256 = "0h4hzavfdyx9v5ld3b3np7p6ydmd0kln0nv960xawr064hdc6f84";
     };
-  
+
     deps = [  ];
   };
 
@@ -4394,9 +4394,9 @@ with otherPackages; rec {
     name = "highlight-parentheses-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/highlight-parentheses-1.0.1.el";
-      sha256 = "1ma7ndv8vhfcly06jrm1xgbz3j748m96aspsmkgyh6vk03k8ykw5";
+      sha256 = "1500k71qd2y6dz3sp758s0zvnqyb3z4ywf299cjkkhr1dnzj0d04";
     };
-  
+
     deps = [  ];
   };
 
@@ -4405,9 +4405,9 @@ with otherPackages; rec {
     name = "highlight-symbol-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/highlight-symbol-1.1.el";
-      sha256 = "1xww0q6p199nxws5mqdi1s18m3wbsvs3zzgxhnxjqb3iiymxicsc";
+      sha256 = "1q2z4jh0c4az6sj7sp2923yb7xhk3fsc9f7nxfai712yllaak3kb";
     };
-  
+
     deps = [  ];
   };
 
@@ -4416,9 +4416,9 @@ with otherPackages; rec {
     name = "highline-7.2.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/highline-7.2.2.el";
-      sha256 = "05xrsy4z8nffv7fz5gbxyzsybqs28da5zq8m2nby640ywg6459gw";
+      sha256 = "05hkjjbw8hdxhja2qlkj9sjnri7kihakgn2vnyaqs9ha631v987n";
     };
-  
+
     deps = [  ];
   };
 
@@ -4427,9 +4427,9 @@ with otherPackages; rec {
     name = "hippie-expand-haskell-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hippie-expand-haskell-0.0.1.el";
-      sha256 = "16lcc5zp5wywpywmrnlx7xwc6yaknj7639d4wgmm3j88q07ykj3g";
+      sha256 = "1jin06djdaln8inff11hif7irkg5ivdc4dxnmqcfrl9ayqc7bc9l";
     };
-  
+
     deps = [  ];
   };
 
@@ -4438,9 +4438,9 @@ with otherPackages; rec {
     name = "hippie-expand-slime-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hippie-expand-slime-0.1.el";
-      sha256 = "1pp8y0ik4xmhw3p583yzb80c7kp1h0xyrbwl96nizk649xj15h1a";
+      sha256 = "0s427vwfpbi955rl04jkplgxxqd8901rkrp3jl74q034khwp10fg";
     };
-  
+
     deps = [  ];
   };
 
@@ -4449,9 +4449,9 @@ with otherPackages; rec {
     name = "hippie-namespace-0.5.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hippie-namespace-0.5.6.el";
-      sha256 = "0b81pn0n98gjskg66mh24k07hd4n6lp45jpybafxk2vhgdd89dms";
+      sha256 = "1rnvzsd6x2idks3fy1yc1h5kkf8d67fizsdbkmmpz81k92nj49sd";
     };
-  
+
     deps = [  ];
   };
 
@@ -4460,9 +4460,9 @@ with otherPackages; rec {
     name = "hive-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hive-0.1.1.el";
-      sha256 = "0622sfka2yf0ipc2gx3fg36kmgl253fc92fkndavrwbnd23pv4gs";
+      sha256 = "0as1a4djfpzmf7hs4za4pfisys576rrihn83clyxvjw09kqq7vrs";
     };
-  
+
     deps = [ sql ];
   };
 
@@ -4471,9 +4471,9 @@ with otherPackages; rec {
     name = "hjkl-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hjkl-mode-0.1.tar";
-      sha256 = "0f9prakr7s22m9ar0sd7j1m5fprff0d6vlr2hkrh8miipd9d9ans";
+      sha256 = "0n1f029114fwkm4sj55sjm59ywf6smqn9xky2pvcjagl8gi0pjln";
     };
-  
+
     deps = [ key-chord ];
   };
 
@@ -4482,9 +4482,9 @@ with otherPackages; rec {
     name = "hl-line-plus-22.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hl-line+-22.0.el";
-      sha256 = "1n0cxvclz1h1ziykcvdmli8si70jqv5sl65ap35lk77isbpjpid1";
+      sha256 = "1zcknhrsb3n0cd85n3qxvaq7mjh3xfy6jy9h09g9dbs7rw05cibh";
     };
-  
+
     deps = [  ];
   };
 
@@ -4493,9 +4493,9 @@ with otherPackages; rec {
     name = "hl-sentence-2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hl-sentence-2.el";
-      sha256 = "1z3apya76yi5rh1xsn5a8smxcf2z1x94li0zi13mhxpn03bn8mkb";
+      sha256 = "08ipmkp63vs6zzn3l8dk1388nin5p2sp3vayzm0ynl7rg8z69har";
     };
-  
+
     deps = [  ];
   };
 
@@ -4504,9 +4504,9 @@ with otherPackages; rec {
     name = "hl-sexp-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hl-sexp-1.0.0.el";
-      sha256 = "1i8wkvi1k8pkp6h4lvva9msdrbpxxjcf92hs4iglgd9p9cw12mnd";
+      sha256 = "1mggfnsjjapg3rnf5jkrmls9vjk8333312dfcxdjlqgmvh3m20ck";
     };
-  
+
     deps = [  ];
   };
 
@@ -4515,9 +4515,9 @@ with otherPackages; rec {
     name = "hlinum-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hlinum-1.0.el";
-      sha256 = "0lixb84lv92jhgr1r2d378k5i1kv53shwfg4pn2f1z7609iwavj9";
+      sha256 = "0bzrfypa8c795pnlcm34dd8pn5ldkhzvvfgdcp5c8nrf36j0sb9n";
     };
-  
+
     deps = [  ];
   };
 
@@ -4526,9 +4526,9 @@ with otherPackages; rec {
     name = "ht-0.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ht-0.8.el";
-      sha256 = "0746i6vm27mr7yhx1mw1vdi727ygrbqqf9dk64arnzdx2wy646vg";
+      sha256 = "12c6nlg6jf0p6iqh51mvjvcsl2zmwga6aq7hgkfqgy3fjgbmya9c";
     };
-  
+
     deps = [  ];
   };
 
@@ -4537,9 +4537,9 @@ with otherPackages; rec {
     name = "html-script-src-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/html-script-src-0.0.2.el";
-      sha256 = "03zqcv7b57gn17ixvr8cqbdq7hdgcgd3gdx8b8p3j8inhjdmvaki";
+      sha256 = "1vz9cgfxz32p9mam5v62vv64j88670cnbrzyjf9d94l71i7rfim6";
     };
-  
+
     deps = [  ];
   };
 
@@ -4548,9 +4548,9 @@ with otherPackages; rec {
     name = "htmlfontify-0.21";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/htmlfontify-0.21.el";
-      sha256 = "036c1acdfsg1ykixpwgqlg409gnr6mmlkhld9w8jn3d14y8ai5z0";
+      sha256 = "0mg21qmcfmq25hkck9j66w7s5ni5jspnr1q59agj1ganxrz2dl7b";
     };
-  
+
     deps = [  ];
   };
 
@@ -4559,9 +4559,9 @@ with otherPackages; rec {
     name = "htmlize-1.39";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/htmlize-1.39.el";
-      sha256 = "0qvgwi2dxb96m9b88l9ny3cfli9vc19p63bc04kgsfkpx0jl5asi";
+      sha256 = "0mg7yddlb19ilssigj6szprjxkvfgcf2xcxif2rvs9i2xjcm785w";
     };
-  
+
     deps = [  ];
   };
 
@@ -4570,9 +4570,9 @@ with otherPackages; rec {
     name = "http-twiddle-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/http-twiddle-1.0.el";
-      sha256 = "0lbzfy3j9m67k15pqpqdkj3mvk1r2ijzwq95a9ms08agv3wwmifm";
+      sha256 = "1ba51hp980vi3xlnz3gccar2chrjs5wigm901c68zhiwj2035kck";
     };
-  
+
     deps = [  ];
   };
 
@@ -4581,9 +4581,9 @@ with otherPackages; rec {
     name = "httpcode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/httpcode-0.1.el";
-      sha256 = "0m2yqr11gmp8jj2v6aw2jjb202ywdvlzckhpn5ix5vjy8ifa6an7";
+      sha256 = "17nnhxww8jif2m9m922a9sy6lxbhja18bwq617sw4f3rw9cy6z1a";
     };
-  
+
     deps = [  ];
   };
 
@@ -4592,9 +4592,9 @@ with otherPackages; rec {
     name = "httpd-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/httpd-1.0.1.el";
-      sha256 = "0579vfyarnjqchg5mglwqzfp5fa7g5g377c0wlgjps0acjdjnvis";
+      sha256 = "0l2l0dxqi4cxy6kf3qc0d9va3d3bwk7sazyk4i2wvpvbj3f5dbas";
     };
-  
+
     deps = [  ];
   };
 
@@ -4603,9 +4603,9 @@ with otherPackages; rec {
     name = "hungry-delete-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hungry-delete-1.0.el";
-      sha256 = "03wwc78ffqp8m0l14s3sz76k9v5qcq9ksl9sskdlvilyqnvrwm4h";
+      sha256 = "1pjsdiqin59nfx87xbjjvn52rbr747k4gpr8zhzs1xygsmzrhh6m";
     };
-  
+
     deps = [  ];
   };
 
@@ -4614,9 +4614,9 @@ with otherPackages; rec {
     name = "huskie-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/huskie-0.0.2.el";
-      sha256 = "0fgmdpj08bb03fr3g8a0ggaklw37c0lql39i5cbir690dz2qb7fh";
+      sha256 = "1bx1r6hxj84rzbhn77w2nhpl2v0ah4sh6k8mx002x6hk92df36p0";
     };
-  
+
     deps = [ anaphora ];
   };
 
@@ -4625,9 +4625,9 @@ with otherPackages; rec {
     name = "ibuffer-vc-0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ibuffer-vc-0.6.el";
-      sha256 = "17lbrqnh8zb5yk7wpn7ma6cask046rljg89n8p2nwrc90rbdxx43";
+      sha256 = "18c59jjpkb7sxnzaqq2z5vpxy5i1803skppvnlhvlizyr96sqyzr";
     };
-  
+
     deps = [ cl-lib ];
   };
 
@@ -4636,9 +4636,9 @@ with otherPackages; rec {
     name = "icomplete-plus-21.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/icomplete+-21.0.el";
-      sha256 = "1m4c49wwl2nx4967rf4zhk2dc5sxpri3jz47h86pr30k6sc5hr81";
+      sha256 = "0kjki0f43wbj1spqdp1sxi03bq21jajdscnmjdc6lpdx7f5w4ri1";
     };
-  
+
     deps = [  ];
   };
 
@@ -4647,9 +4647,9 @@ with otherPackages; rec {
     name = "idle-highlight-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/idle-highlight-1.0.el";
-      sha256 = "1ca7ypwl75w6204azz0lf2lj8pw6fq75083q84cv4zjan3sygn4z";
+      sha256 = "049pbcpif07hcqsb6psvqjibbc3mr0xqx28ysci98hljmmkfmrc0";
     };
-  
+
     deps = [  ];
   };
 
@@ -4658,9 +4658,9 @@ with otherPackages; rec {
     name = "idle-highlight-mode-1.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/idle-highlight-mode-1.1.2.el";
-      sha256 = "14a3j55lrdiigq8c1kh7a4kywyk40yrqyz1z5rrv41m8dvj4hxyh";
+      sha256 = "1i0v3inyzrljclllf85m1irh1qhcf0f1vlwdi0x1wirrcf3yrh83";
     };
-  
+
     deps = [  ];
   };
 
@@ -4669,9 +4669,9 @@ with otherPackages; rec {
     name = "idle-require-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/idle-require-1.0.el";
-      sha256 = "0x32jymqafx13idknzlcsf12882hrsnkn7a1cbgdpg6dwb8d7kvr";
+      sha256 = "0fjrsck7ara4xf7i49vr1ji2xa0jvbnc7sbx4984af47pmsiy2wa";
     };
-  
+
     deps = [  ];
   };
 
@@ -4680,9 +4680,9 @@ with otherPackages; rec {
     name = "ido-better-flex-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ido-better-flex-0.0.2.el";
-      sha256 = "00h45i46qqsqj5cgavgsbmkdzcckfygm2kn1pbz5qpn59bimxgx3";
+      sha256 = "0kgdfflvw6z34dydjcqnjzq2rids59rg2xvp6sr8c1drc09g4vfc";
     };
-  
+
     deps = [  ];
   };
 
@@ -4691,9 +4691,9 @@ with otherPackages; rec {
     name = "ido-load-library-0.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ido-load-library-0.1.2.el";
-      sha256 = "1im1g53jibgbib7ci5hpx04jafv7bf5brx9367lcxavb2m1k8v9a";
+      sha256 = "1a96wvh67gcp1qg4416qmglj8rr9pgbag1ag5bgg3d7iwivfbbmg";
     };
-  
+
     deps = [ persistent-soft pcache ];
   };
 
@@ -4702,9 +4702,9 @@ with otherPackages; rec {
     name = "ido-ubiquitous-1.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ido-ubiquitous-1.6.el";
-      sha256 = "04fa9bhm7mjx94fnhwc4yjsj2wnj4jp5jsrh7f5mkx3p24fds9rr";
+      sha256 = "0zfbfbi8frbgymsjw00hayijajb7i6dbs0qpvpd1mkhi6y6n4a9w";
     };
-  
+
     deps = [  ];
   };
 
@@ -4713,9 +4713,9 @@ with otherPackages; rec {
     name = "ido-yes-or-no-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ido-yes-or-no-1.1.el";
-      sha256 = "0h6fwiqc14bfx91ndhi49kriayqgaqm656mfpj0hdx6mhncbds6z";
+      sha256 = "112pqbxwbbj1v5xqggww99kd95crxcpi0ax87kkql7cv5r9l96zx";
     };
-  
+
     deps = [ ido ];
   };
 
@@ -4724,9 +4724,9 @@ with otherPackages; rec {
     name = "idomenu-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/idomenu-0.1.el";
-      sha256 = "0hlsm1z15rrckgzdy4v0xvas1whns2q6bbak95mimr6f05mznmr2";
+      sha256 = "0isjvfvfq3j5przv9f7x0w8a6n7wgwv6s3j0qjyvrqxv8aan4cdk";
     };
-  
+
     deps = [  ];
   };
 
@@ -4735,9 +4735,9 @@ with otherPackages; rec {
     name = "iedit-0.97";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/iedit-0.97.tar";
-      sha256 = "02jyn1n31xprsskqv7q5kcgxcsrl3f0b5x0mij0nsmlcld377c9d";
+      sha256 = "0f4plpfkq9jd60jd628q6h620wjdgcfmhy033bdpqjagnsd1wk8v";
     };
-  
+
     deps = [  ];
   };
 
@@ -4746,9 +4746,9 @@ with otherPackages; rec {
     name = "ignoramus-0.6.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ignoramus-0.6.4.el";
-      sha256 = "1w3pn19kxzyrjfc10dg0mdsy3gxh9majxk1801drd9g6zf5yi3mz";
+      sha256 = "1l0s3nfvx56viir98vq7v22b2l1nngsdxm2n488y5wn6rln9a358";
     };
-  
+
     deps = [  ];
   };
 
@@ -4757,9 +4757,9 @@ with otherPackages; rec {
     name = "igrep-2.113";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/igrep-2.113.el";
-      sha256 = "0xwqzfz882rv7rbiq9rmkmga21gfk26vz087xh2wcbq163191z9l";
+      sha256 = "0xaj2iczr55i29vxrhfsc7vf9zshr6f7lk4arsj27l298xwy7c67";
     };
-  
+
     deps = [  ];
   };
 
@@ -4768,9 +4768,9 @@ with otherPackages; rec {
     name = "image-dired-plus-0.6.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/image-dired+-0.6.0.el";
-      sha256 = "12cjwqmqb0lld8v4ycksdzr7fx4mb5ia4lwgrirnf7a5bvd51d0m";
+      sha256 = "1zmvrnzccv6w00yxssfgi7m7zb5gc3sabzgmyq4wxqbg81b7ymks";
     };
-  
+
     deps = [  ];
   };
 
@@ -4779,9 +4779,9 @@ with otherPackages; rec {
     name = "imgur-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/imgur-0.1.el";
-      sha256 = "03i10dbp1nhwxayi4digpb0k13ij9r78pkph3jb43mrwayx3828g";
+      sha256 = "15w7mxvp2bhgqkar6jwhdgaa89fh1y9wnfqh93cn76nadf9nkqal";
     };
-  
+
     deps = [ anything ];
   };
 
@@ -4790,9 +4790,9 @@ with otherPackages; rec {
     name = "indent-guide-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/indent-guide-1.0.1.el";
-      sha256 = "0z77q63c7jnlzykgsiywc0wgpwmxcljyy3bdxdf0jm4qs8nf0lkx";
+      sha256 = "1ia120fbc35zbmvllyyvjhyvs1wibq3brbwri0ik0wyzc3yb9j85";
     };
-  
+
     deps = [  ];
   };
 
@@ -4801,9 +4801,9 @@ with otherPackages; rec {
     name = "inf-groovy-2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/inf-groovy-2.0.el";
-      sha256 = "0912w52q1m8f2c1w527n8mir0mq1rh8sfyk9f77blp4zc3f71gz4";
+      sha256 = "11n9izg1m6xllgc85w8ghj4g7yycn7i2vi5f0phgzqq4m7wqmxkx";
     };
-  
+
     deps = [  ];
   };
 
@@ -4812,9 +4812,9 @@ with otherPackages; rec {
     name = "inf-ruby-2.2.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/inf-ruby-2.2.5.el";
-      sha256 = "172dnyk9fi8nj0v21f1xsrblzapg298rzhv3nsxysqw6n94zigzc";
+      sha256 = "0pp8y1xvs6rhgj5av6j52yirf8w7ivxjz9xa4sibhblb5va3zjbb";
     };
-  
+
     deps = [  ];
   };
 
@@ -4823,9 +4823,9 @@ with otherPackages; rec {
     name = "inflections-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/inflections-1.1.el";
-      sha256 = "0r5z7w70bi8fw130skyn02fmciaia31q2317c7n9dx2v1zyj5c4r";
+      sha256 = "1c9rh14syc78pjspl762mwa7c24hyf1csajw0zr3v97rvq3f80xc";
     };
-  
+
     deps = [  ];
   };
 
@@ -4834,9 +4834,9 @@ with otherPackages; rec {
     name = "inform-mode-1.6.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/inform-mode-1.6.1.el";
-      sha256 = "0n7bccrv81prxcq8x8wx629sgpmk0p1kwp1j66c5m3rqdilwhwl6";
+      sha256 = "1nyi37sbkrxh5336lq1rfbhjnbgkbmic1dfmlswk8k7knv17wzvs";
     };
-  
+
     deps = [  ];
   };
 
@@ -4845,9 +4845,9 @@ with otherPackages; rec {
     name = "inline-crypt-0.1.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/inline-crypt-0.1.4.tar";
-      sha256 = "16vwkwdi6yldyyn1f924zayn2hscm3hhqlzjvmikpn8cq2j9bw2h";
+      sha256 = "081wzzzlbhpcyncbvq55w5svrdsxn2cqw5a9hp1b6zm0ps9fnqbm";
     };
-  
+
     deps = [  ];
   };
 
@@ -4858,7 +4858,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/ioccur-2.4.el";
       sha256 = "1isid3kgsi5qkz27ipvmp9v5knx0qigmv7lz12mqdkwv8alns1p9";
     };
-  
+
     deps = [  ];
   };
 
@@ -4867,9 +4867,9 @@ with otherPackages; rec {
     name = "ipython-2927";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ipython-2927.el";
-      sha256 = "1a4gwvd42fl1jrgndgmr9d5drww7jsda15i2z85h7c9ip6zxmd90";
+      sha256 = "1j64jw2lrjdqdbzlfwr9b8a9bpxrdy54a9y8s63sgbvc7b0bfhp2";
     };
-  
+
     deps = [  ];
   };
 
@@ -4878,9 +4878,9 @@ with otherPackages; rec {
     name = "irfc-0.5.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/irfc-0.5.6.el";
-      sha256 = "05a7ahqfghq2pn5p767ccky93rl2ykhh3m8g31s8v0x816nszwq5";
+      sha256 = "0ia0vz23f12hlp9c0zq9sg6xdm1xrwzg8m3kkap4l8ds07i5rq2c";
     };
-  
+
     deps = [  ];
   };
 
@@ -4889,9 +4889,9 @@ with otherPackages; rec {
     name = "isea-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/isea-0.0.2.el";
-      sha256 = "0g68idpjx5k7266qml5kahngpzr4rp43ba7plli3hrffc445g9mz";
+      sha256 = "1riaf1c7d7lf4lwxfh59312y5jhrzvbnha4cwwc8gb626yz1lxn2";
     };
-  
+
     deps = [ elpakit ];
   };
 
@@ -4900,9 +4900,9 @@ with otherPackages; rec {
     name = "isearch-plus-21.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/isearch+-21.0.el";
-      sha256 = "05mwrrfklm2a0sppl0646rvnf91psrxa6gnivjz2djyb0lk0jgg2";
+      sha256 = "003mlpyk53rl8m2dbm3m79dzibkwghkx259nhca759fgi1h7inhr";
     };
-  
+
     deps = [  ];
   };
 
@@ -4911,9 +4911,9 @@ with otherPackages; rec {
     name = "iy-go-to-char-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/iy-go-to-char-1.0.el";
-      sha256 = "0z830ccb3pbhir97nim5jdhsfg7ab8y93q0wmgxwi0jlr4qkhirl";
+      sha256 = "0xg0ryy8rdas72ln8mm2drkyhrxsbvr5003n7bvrlim5fplf16kr";
     };
-  
+
     deps = [  ];
   };
 
@@ -4922,9 +4922,9 @@ with otherPackages; rec {
     name = "j-mode-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/j-mode-0.3.el";
-      sha256 = "059g28gkr026xxnjy9470ja38kkp47x4y698m0vsipa2g2bp544c";
+      sha256 = "1wqqwfrzy88s43486y5kap3napp2a9njnqn9p45j0jfx7rrnsgq3";
     };
-  
+
     deps = [  ];
   };
 
@@ -4933,9 +4933,9 @@ with otherPackages; rec {
     name = "jabber-0.8.90";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jabber-0.8.90.tar";
-      sha256 = "1rx2h4mgaqkg9ghmrzyaswvxg6ynvybr4fwknnkg95cna9yhmawz";
+      sha256 = "1mb5ddwh5mb8hl32pqikxwhkjiw7531iyl13b418b6f0vmkpgfy0";
     };
-  
+
     deps = [  ];
   };
 
@@ -4944,9 +4944,9 @@ with otherPackages; rec {
     name = "jade-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jade-mode-0.1.el";
-      sha256 = "06b8pzc4vdzqyf86g954w50y0kpb9jmw6wyffyq7s6n1bh98lka2";
+      sha256 = "0wi5riy52a68jqcd0ifvbs6j59x3harg4iqvqi891mpmbri8l98k";
     };
-  
+
     deps = [  ];
   };
 
@@ -4955,9 +4955,9 @@ with otherPackages; rec {
     name = "jaunte-0.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jaunte-0.0.0.el";
-      sha256 = "0zv2dl7v7qbw1pd5psia66xx4fwkzdg2cshj4swd2ihm4pybqv05";
+      sha256 = "15syqfxlyni5qqb1zr4px33rzgrra7lxslj0pv00mczkdw8w1zsm";
     };
-  
+
     deps = [  ];
   };
 
@@ -4966,9 +4966,9 @@ with otherPackages; rec {
     name = "javadoc-help-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/javadoc-help-1.0.el";
-      sha256 = "0iiy8hsidbbmzrp5qhqga2ynp3h2zi35ca0b4p234krbir3maq0i";
+      sha256 = "12kg3mlgycn3biwmc2jk90yxwd3j3d2ycjjg913i140mjnwpyswk";
     };
-  
+
     deps = [  ];
   };
 
@@ -4977,9 +4977,9 @@ with otherPackages; rec {
     name = "javap-8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/javap-8.el";
-      sha256 = "1vp7b852hy437q8yfn17x860dn7sixzfbq6k5wkj7b6fhp6001wp";
+      sha256 = "0k6w8m2350hnkcbfwjnv310jqx64y86h0zdsliacbaf21bpgg4g2";
     };
-  
+
     deps = [  ];
   };
 
@@ -4988,9 +4988,9 @@ with otherPackages; rec {
     name = "javap-mode-9";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/javap-mode-9.el";
-      sha256 = "062barxdmsvlpxgp5gpwlfacl3cmbqx3ic8jj7iq7if76l9rp819";
+      sha256 = "16xc74map66gcahlp8bfbz8jycbzhm3f9zf00jfpkn7457fpaf41";
     };
-  
+
     deps = [  ];
   };
 
@@ -4999,9 +4999,9 @@ with otherPackages; rec {
     name = "javarun-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/javarun-0.1.1.el";
-      sha256 = "02fw3crjw8sy8x3d1hif654i3xsm3j1wgaihdp9fwpmg6m95rwy7";
+      sha256 = "0im12wlmr9rn6z9nvqhk400lv5r9qkv7ba3dw0l9zaz2z6mg2iba";
     };
-  
+
     deps = [  ];
   };
 
@@ -5010,9 +5010,9 @@ with otherPackages; rec {
     name = "jedi-0.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jedi-0.1.2.tar";
-      sha256 = "1rh3wzqf7szbx2d4pb2wgbndi46lgnsysp4akhb4s4zq1snap9m8";
+      sha256 = "0gwbwq2nm6c2d55pv9nrs6kyai8664c063psbjbk4njmm96l0xki";
     };
-  
+
     deps = [ epc auto-complete ];
   };
 
@@ -5021,9 +5021,9 @@ with otherPackages; rec {
     name = "jenkins-watch-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jenkins-watch-1.2.el";
-      sha256 = "1r1bvf25p5hgdgmzf5cgl1b0pvxd9hnp2s1fj8x4imk6h5fws3qi";
+      sha256 = "124g06s5832g07x2mnrz4zahkac8ybf2anqsy2hplnx053j3sn0y";
     };
-  
+
     deps = [  ];
   };
 
@@ -5034,7 +5034,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/jgraph-mode-1.0.el";
       sha256 = "1zhgdgymr6q3hv1l0l5asssdgyw7kmg6ncd6dwvz63837kzl7bcp";
     };
-  
+
     deps = [  ];
   };
 
@@ -5043,9 +5043,9 @@ with otherPackages; rec {
     name = "jinja2-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jinja2-mode-0.1.el";
-      sha256 = "1dmwlpmqsmm338axh7mjgmlc5hfcq317g809k1yk0zqr5v123vvd";
+      sha256 = "12cmmcanjzmqffcbazqywsjzs3n6fcld6fp69nrqsq38d4zadmr4";
     };
-  
+
     deps = [  ];
   };
 
@@ -5054,9 +5054,9 @@ with otherPackages; rec {
     name = "jira-0.3.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jira-0.3.3.el";
-      sha256 = "1w2hwv37h0xddj3ki87rsj5fh90dkxmaxk9qbm66ij87xlh0xac6";
+      sha256 = "1ckbsw483sxjkcnrcjcwdqr9rby487131say17s8wd5jrdz0gbl8";
     };
-  
+
     deps = [  ];
   };
 
@@ -5065,9 +5065,9 @@ with otherPackages; rec {
     name = "js-comint-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/js-comint-0.0.1.el";
-      sha256 = "1pgx7hxkv25fhw49wbgybgzabgwqkw475vzdzi4785c7504lf7ip";
+      sha256 = "0gqgrzd9kdqwa2vww2dvnw1w2zq68v6chyfma23k70s6iya0w9zn";
     };
-  
+
     deps = [  ];
   };
 
@@ -5078,7 +5078,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/js2-mode-20130608.el";
       sha256 = "1s9q2bx870rbbk4jixji4pbchvpgf7k29z4vianxh3qr8zyp528c";
     };
-  
+
     deps = [  ];
   };
 
@@ -5087,9 +5087,9 @@ with otherPackages; rec {
     name = "json-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/json-1.2.el";
-      sha256 = "1nsawlyv0q6v5z1f8fznfwb074lnbahx720di8441sq6xiynlbkq";
+      sha256 = "1yj1h1j5nz9kfzjd8r4pz9k1w3g554v78gbphkdvklkc2w5wkdbx";
     };
-  
+
     deps = [  ];
   };
 
@@ -5098,9 +5098,9 @@ with otherPackages; rec {
     name = "json-mode-0.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/json-mode-0.1.2.el";
-      sha256 = "0mmvdrn8fz1rzip5g14266hl7vy50v6y6h0kkjd108cck14kdnwg";
+      sha256 = "1g3s8p5xw7rbxrq1mwdms938dhdh4pwmzz8i2c9mdkwrr78wyl1v";
     };
-  
+
     deps = [  ];
   };
 
@@ -5109,9 +5109,9 @@ with otherPackages; rec {
     name = "jsshell-2012.4.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jsshell-2012.4.7.el";
-      sha256 = "1qxfl5hz0q1f1n0sbf2nh5zb5nygzfi1ad6pjhw74ncvpziymwqm";
+      sha256 = "10y6ypbap4j64c810sss74y9sigmp1i6ybmiy9ylxw90harlf1ci";
     };
-  
+
     deps = [  ];
   };
 
@@ -5120,9 +5120,9 @@ with otherPackages; rec {
     name = "jsshell-bundle-2012.4.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jsshell-bundle-2012.4.7.el";
-      sha256 = "0di0vjwly72y2zsvrmq6bjwsj50a0cm0722kkz9540fd6sr112d8";
+      sha256 = "1q96fv4gbj9cav8f7p700ss71s17sxjm2hh2figwl2spvwxr8dd6";
     };
-  
+
     deps = [  ];
   };
 
@@ -5131,9 +5131,9 @@ with otherPackages; rec {
     name = "jtags-0.97";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jtags-0.97.el";
-      sha256 = "11n8d3xncdcl41p71qs464nsq77swd3g7k95s2iv92hck50pnd3n";
+      sha256 = "0bzp2s749gd5jyxhxwk0szcns9agdrqfh30dinhgll26f10aigc9";
     };
-  
+
     deps = [  ];
   };
 
@@ -5142,9 +5142,9 @@ with otherPackages; rec {
     name = "jtags-extras-0.3.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jtags-extras-0.3.0.el";
-      sha256 = "0xadychsz85n1qxr9v8y5qqbg5wd0nfb6xapyfw2rrvx02a8larf";
+      sha256 = "0dmc70lxylwc8ckd4j2nb5izn0pbd45qhdjds1k0h8zfnmffq00h";
     };
-  
+
     deps = [  ];
   };
 
@@ -5153,9 +5153,9 @@ with otherPackages; rec {
     name = "jump-2.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jump-2.2.el";
-      sha256 = "1pn34jbs5nxw0vwajzm1z8j6llwykscyvnvwdijwma6jf7g449dp";
+      sha256 = "102ah8hdbhzlml1rla9f78nqb2k0qydhpcbc9ars2pjfrv9jzry9";
     };
-  
+
     deps = [ findr inflections ];
   };
 
@@ -5164,9 +5164,9 @@ with otherPackages; rec {
     name = "jump-char-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/jump-char-0.1.el";
-      sha256 = "0l8cq5fvmlpxfvm1a999flb9i92am0qg17sb9iwmmxiypphmd44g";
+      sha256 = "1jc792kvsxixd21xmi4jrsh7ha6sz0802sawa6f949p8ld4f3y21";
     };
-  
+
     deps = [  ];
   };
 
@@ -5177,7 +5177,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/jumpc-2.0.el";
       sha256 = "0r3r7wyp6qfd4av61q1h4j2fwhay1d7zlg57dpfq95xi25jq4d0y";
     };
-  
+
     deps = [  ];
   };
 
@@ -5186,9 +5186,9 @@ with otherPackages; rec {
     name = "kanban-0.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/kanban-0.1.2.el";
-      sha256 = "10jgdda87yj4dm7k35ji8q9fz4srjf1qipgr7r0z5y3kf455gxqd";
+      sha256 = "1fd9pdg7jixi488h1yjszzlh53gab595pra6d0qcv1dgxha26dc2";
     };
-  
+
     deps = [  ];
   };
 
@@ -5197,9 +5197,9 @@ with otherPackages; rec {
     name = "key-choices-0.201";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/key-choices-0.201.el";
-      sha256 = "0zjvpmvj88d0iygpd2b2w556h42igw061iq2dy42vk79wmr74qy1";
+      sha256 = "0r5jdwn2ibzhrzdczcfldd4yldmm8kyhyfw6swgicr9dbhlpj1w4";
     };
-  
+
     deps = [ color-theme-vim-insert-mode color-theme-emacs-revert-theme ];
   };
 
@@ -5208,9 +5208,9 @@ with otherPackages; rec {
     name = "key-chord-0.5.20080915";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/key-chord-0.5.20080915.el";
-      sha256 = "1n036831a7fqjsj24pjjy6qjbr7x73cv7x3jrj9q0n4nn2j0awx5";
+      sha256 = "07758mhxvpc5iy8fdaszldn3glch2pic4b1aibib1fsfyzzbd738";
     };
-  
+
     deps = [  ];
   };
 
@@ -5219,9 +5219,9 @@ with otherPackages; rec {
     name = "key-combo-1.5.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/key-combo-1.5.1.el";
-      sha256 = "05xi8lcdh7m3ffs4ry8haa7y7s7icg9sbh1qvsxj2nhg00civ1wn";
+      sha256 = "1f2079fprr0dn2f0rh7bfs93kxzwzrap9nyqwp6d86fcmy9rcw1m";
     };
-  
+
     deps = [  ];
   };
 
@@ -5230,9 +5230,9 @@ with otherPackages; rec {
     name = "keyfreq-0.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/keyfreq-0.0.3.el";
-      sha256 = "13asld32nzvgdjyh56nfwkw7c0zjia4cszdv4l0ph3gyp605p5f5";
+      sha256 = "01qwjk6rvgc32vhyp3mvs8s233g7kmlvpb9kwc1n8f9g12xy9mgy";
     };
-  
+
     deps = [ json ];
   };
 
@@ -5241,9 +5241,9 @@ with otherPackages; rec {
     name = "keywiz-1.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/keywiz-1.4.el";
-      sha256 = "0mwcyc9jfjdlzjpd8dmy5wf7w3m8ws48nngr8ymbf5dmy04059xz";
+      sha256 = "04g8r5sjni26sngpi1sg6khqdd4aymlr29p0nar8dq85kqzxwfxh";
     };
-  
+
     deps = [  ];
   };
 
@@ -5252,9 +5252,9 @@ with otherPackages; rec {
     name = "kmacro-decision-0.9";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/kmacro-decision-0.9.el";
-      sha256 = "0skq17fpdjpm9gyxdgcdgkwcy8za43a61mh5ksf0dvdrv9wq2cw2";
+      sha256 = "1ybp8m7z913bm0n779852x380x4nd2byapykr1j6bayi207qgz72";
     };
-  
+
     deps = [ el-x ];
   };
 
@@ -5263,9 +5263,9 @@ with otherPackages; rec {
     name = "kpm-list-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/kpm-list-1.0.el";
-      sha256 = "07m2n4piq71sb1ha6y1iwm1ijhzaslkwxdfhh7p703g0747casll";
+      sha256 = "13w6ps7k4j58d3adr56bfd4drv5n4k9gscl6bfxncs0am8l3mdky";
     };
-  
+
     deps = [  ];
   };
 
@@ -5274,9 +5274,9 @@ with otherPackages; rec {
     name = "kv-0.0.17";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/kv-0.0.17.el";
-      sha256 = "0czprrrb2ppvph2d39msxi1gd5n4ldfamc635wdsn37dcgq1rd7c";
+      sha256 = "0296y48pbxc8vfw7i0rblhw12v2f04vyxndz4jn2jayym6lngdbv";
     };
-  
+
     deps = [  ];
   };
 
@@ -5285,9 +5285,9 @@ with otherPackages; rec {
     name = "kwin-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/kwin-0.1.el";
-      sha256 = "118q5cb9a49rnm7hk4f71gwx9r26d67v5lpf1k5md2hligprsd25";
+      sha256 = "11cx8nny0bqvlmlky2g9xyb8xdpj4p8jpi2a2pygbswdjnd7j3mx";
     };
-  
+
     deps = [  ];
   };
 
@@ -5296,9 +5296,9 @@ with otherPackages; rec {
     name = "lacarte-22.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/lacarte-22.0.el";
-      sha256 = "11bvqq51mvlfi4q96zy73lb951mny2h74imxlv85lvy5bwphddwj";
+      sha256 = "169wm8d8zmsz228sgncamy9zrhxpafkvgdbm2ic1dck9np4l8x16";
     };
-  
+
     deps = [  ];
   };
 
@@ -5307,9 +5307,9 @@ with otherPackages; rec {
     name = "langtool-1.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/langtool-1.2.0.el";
-      sha256 = "0xas12wy5q2fd9m9vhkpdilzrha95jj3p5sjwsb49qm0j6xddiy8";
+      sha256 = "0naakbdzzikq1i0ninccm33v09rxyszr4zcis8bg7dfs6xgxl2pg";
     };
-  
+
     deps = [  ];
   };
 
@@ -5318,9 +5318,9 @@ with otherPackages; rec {
     name = "late-night-theme-0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/late-night-theme-0.0.el";
-      sha256 = "1pmdrzqlpba72xff0i8c6s011px8vfgkc61281v7m06x9l0aff6k";
+      sha256 = "0azqv7hpsqpslm7w32algdw27h8ymvxgknzdnmxi7pk8y7n30qzy";
     };
-  
+
     deps = [  ];
   };
 
@@ -5329,9 +5329,9 @@ with otherPackages; rec {
     name = "latest-clojars-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/latest-clojars-0.3.el";
-      sha256 = "0iyaqv5jr2zkg7byrsdjjq9f53zy9hivpa8sc9lcc0spj1sgf40w";
+      sha256 = "1r81xynwbq9n6mw25nqi3rikpjmrjv8ccb4ywl9j4ap5vxmzcgyn";
     };
-  
+
     deps = [  ];
   };
 
@@ -5340,9 +5340,9 @@ with otherPackages; rec {
     name = "lcs-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/lcs-1.1.el";
-      sha256 = "158x8vjfdfxlwin0x5ab1p48mx8ajgx6y1ag02ac8w5znyk2izni";
+      sha256 = "17m762535ra8pnzsd6w7f4v34q74f801i3cfgw4qiyqrcy674mm9";
     };
-  
+
     deps = [  ];
   };
 
@@ -5351,9 +5351,9 @@ with otherPackages; rec {
     name = "legalese-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/legalese-1.0.el";
-      sha256 = "193lisc3g5nh1pzz3ssq2il0590i9z9wigvi2lmjrp17rfjxhj4a";
+      sha256 = "0k4p4vla6r5c5gfwyzvs6cj2a0c1w23h8h5kdvb00dvh9c0rsvxp";
     };
-  
+
     deps = [  ];
   };
 
@@ -5362,9 +5362,9 @@ with otherPackages; rec {
     name = "less-css-mode-0.15";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/less-css-mode-0.15.el";
-      sha256 = "0b2qy3anf1lh7db6p73ai40alqnzp4w2z35hll5jsfhc0lkq5fc8";
+      sha256 = "0lxj5xjrbdc57yg4y07c5a598dzyl19fygpj3nm683hx1lhpcc4s";
     };
-  
+
     deps = [  ];
   };
 
@@ -5373,9 +5373,9 @@ with otherPackages; rec {
     name = "let-recur-0.0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/let-recur-0.0.5.el";
-      sha256 = "0jjjy46jl3h4xwgdn39gjl0a5x6dnp59zgmjl98dqavnpdxinv8a";
+      sha256 = "0amzl9msd0zbskxalbj7lwm2qwwym57r6a6zbx9aycs99h9q89kf";
     };
-  
+
     deps = [  ];
   };
 
@@ -5384,9 +5384,9 @@ with otherPackages; rec {
     name = "letcheck-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/letcheck-0.2.el";
-      sha256 = "00d7l6z71a4fyw0wxhdywjwlghjnfx1wp37xqwmv4gfm2igaglrx";
+      sha256 = "13llgvijx9v9a88k721kcvmxbxr3sfcc7s6lh0xl74w73yr5m18f";
     };
-  
+
     deps = [  ];
   };
 
@@ -5395,9 +5395,9 @@ with otherPackages; rec {
     name = "levenshtein-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/levenshtein-1.0.el";
-      sha256 = "0s1v3gqlfrqs1pq054mrp8qr42cdmis4bilkgw6m0k8hsqvxxann";
+      sha256 = "1ln0z2hrrivf44ql7b6m450zn0hc1dzfmzsxj2byyj8yp8x81l1q";
     };
-  
+
     deps = [  ];
   };
 
@@ -5408,7 +5408,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/lex-1.1.tar";
       sha256 = "1i6ri3k2b2nginhnmwy67mdpv5p75jkxjfwbf42wymza8fxzwbb7";
     };
-  
+
     deps = [  ];
   };
 
@@ -5417,9 +5417,9 @@ with otherPackages; rec {
     name = "lexbind-mode-0.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/lexbind-mode-0.8.el";
-      sha256 = "1dilpjjasdz97qwhgp6xybx87aprna6r3l4qgnqizyajpzjmxlmk";
+      sha256 = "0jh99c2dxsfgf81nlqdkkxs19xajh7fg8alwb68m0hl0bc0iqyaq";
     };
-  
+
     deps = [  ];
   };
 
@@ -5428,9 +5428,9 @@ with otherPackages; rec {
     name = "lib-requires-21.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/lib-requires-21.0.el";
-      sha256 = "1xymk0c7qr7c34mirkpzmqxnjl2141vsjxqiyxj6nxkk4ads5s9x";
+      sha256 = "0fb4l6jp7qwpq8qk5ja3gwazh9yi1m2xmrilpx6zjmd83l7bm7bc";
     };
-  
+
     deps = [  ];
   };
 
@@ -5439,9 +5439,9 @@ with otherPackages; rec {
     name = "lineno-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/lineno-0.1.el";
-      sha256 = "1jvbh1dzkddhn8s3rhka64vvs0sl5491lzx1hqwvzk0fzxy9dyvl";
+      sha256 = "08xx743hq7v33gykzzghw4r75agg260b7gq5mn8a8r13x9iib9wn";
     };
-  
+
     deps = [  ];
   };
 
@@ -5450,9 +5450,9 @@ with otherPackages; rec {
     name = "linum-off-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/linum-off-0.1.el";
-      sha256 = "0mpfimb5vf1i3qssgg4p7cawk5ybaic1gmlks1chlqy3bz0a9fal";
+      sha256 = "0fynbll6i6bhp1klxb3zabizrsy64svp0y9ik7wwja90xjhvd7r5";
     };
-  
+
     deps = [  ];
   };
 
@@ -5461,9 +5461,9 @@ with otherPackages; rec {
     name = "lisp-editing-0.0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/lisp-editing-0.0.5.el";
-      sha256 = "1h1dpfs20ach9y3vbfham189qhxj25fm4ibvy8b8asgak7s71i3l";
+      sha256 = "1v3jg3zw8agqc3wsc5hknz5gm7v118zs7yvq646gdzmbcnpwcrnl";
     };
-  
+
     deps = [  ];
   };
 
@@ -5472,9 +5472,9 @@ with otherPackages; rec {
     name = "lisp-infection-0.0.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/lisp-infection-0.0.10.el";
-      sha256 = "0hxpi5s1kxrphshyib8b6xpkg7zys69c37magfvylfy99q4k115r";
+      sha256 = "0mli2lj0wl0c9xc8wq890289dkych6g62005vrw2ccjd1j88clk1";
     };
-  
+
     deps = [  ];
   };
 
@@ -5483,9 +5483,9 @@ with otherPackages; rec {
     name = "lispyscript-mode-0.3.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/lispyscript-mode-0.3.1.el";
-      sha256 = "1djhs2zipvh00xj3vpah1brjv5csxnhaph29zikc0pmc5g97jk2y";
+      sha256 = "0z0wr4ppj5z3jxl8fjajlwfiqbxfy5kgmd1x9482g7hk14r98wka";
     };
-  
+
     deps = [  ];
   };
 
@@ -5494,9 +5494,9 @@ with otherPackages; rec {
     name = "list-utils-0.3.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/list-utils-0.3.0.el";
-      sha256 = "0pjisslnmyclwdkw8q4669fmrimafi4l5s4siix9cl9myi5m4bcl";
+      sha256 = "0qkg8w0ak3gmvjfxlaq439qjwd1sns5lrjvnwvn7v99nfxc30p4q";
     };
-  
+
     deps = [  ];
   };
 
@@ -5505,9 +5505,9 @@ with otherPackages; rec {
     name = "livescript-mode-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/livescript-mode-0.0.1.el";
-      sha256 = "1v08mqhnjbnw79wlrdkg638jjrhm13kqnnzaj3cs1kzhdkrqdib0";
+      sha256 = "0yvqlxkxn6w2yilirjdy88zxzai730882baikzkfv9bx1j0086y6";
     };
-  
+
     deps = [  ];
   };
 
@@ -5518,7 +5518,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/lmc-1.2.el";
       sha256 = "1jk6gscxi88r1w4swxkb6nwb0j4kwg0zv3j44zxkas37swjps6vb";
     };
-  
+
     deps = [  ];
   };
 
@@ -5529,7 +5529,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/load-dir-0.0.3.el";
       sha256 = "0w5rdc6gr7nm7r0d258mp5sc06n09mmz7kjg8bd3sqnki8iz7s32";
     };
-  
+
     deps = [  ];
   };
 
@@ -5538,9 +5538,9 @@ with otherPackages; rec {
     name = "load-theme-buffer-local-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/load-theme-buffer-local-0.0.2.el";
-      sha256 = "1jin9n5b88czhlgfl4j1ndgcbr7njh6whmd9i6w7rqpw0kn5wmmi";
+      sha256 = "1gg99cwm221q6n0xpaiyyyyda6pqgd8xvk8cnl5bykr44g26gjn0";
     };
-  
+
     deps = [  ];
   };
 
@@ -5549,9 +5549,9 @@ with otherPackages; rec {
     name = "loccur-1.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/loccur-1.1.1.el";
-      sha256 = "12n09zg9vlnfsj30fp41y2y5nhnj69b6gzzdxngba0h7az74k60z";
+      sha256 = "19r37m6q8jjp86s1y6ay4k8idar858gxkp9xvnapfm6hqpbc669q";
     };
-  
+
     deps = [  ];
   };
 
@@ -5560,9 +5560,9 @@ with otherPackages; rec {
     name = "logito-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/logito-0.1.el";
-      sha256 = "06bm6c1w7qymbn5wvj40sgrmk828s324x254kq9cswdpb71zimw7";
+      sha256 = "0cqmw3qsfr2m598h1sivgnny8whqfa9c6jxwjrmy9pf91q9dr1gq";
     };
-  
+
     deps = [ eieio ];
   };
 
@@ -5571,9 +5571,9 @@ with otherPackages; rec {
     name = "lolcode-mode-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/lolcode-mode-0.2.el";
-      sha256 = "01j1yy0fw2x08lwdfzk7c4zf36kzzyyfd5pmcj174373nz3xzl2x";
+      sha256 = "11pf5a4m17rxh0mdbv3ihgnwbd3qip3mfqqc88dj9jvblzg9avhh";
     };
-  
+
     deps = [  ];
   };
 
@@ -5582,9 +5582,9 @@ with otherPackages; rec {
     name = "look-dired-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/look-dired-0.1.el";
-      sha256 = "05lqwkzkw5szgf2g0r06j8kk10qkg7qkjzinh9kfsd4zz011qs0f";
+      sha256 = "0xmsxydlgshih19501grix0arc8vqfxh1wckqi096ja8lgyyl71i";
     };
-  
+
     deps = [ look-mode ];
   };
 
@@ -5593,9 +5593,9 @@ with otherPackages; rec {
     name = "look-mode-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/look-mode-1.0.el";
-      sha256 = "0aqxc22yjsab1il7fg9lwba798bla16vx28rk37q0wid3zmj32wb";
+      sha256 = "0271q5rg1s4g1i8piz44fzp2wjd339hk3fvw34krgcf279c30r96";
     };
-  
+
     deps = [  ];
   };
 
@@ -5604,9 +5604,9 @@ with otherPackages; rec {
     name = "loop-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/loop-1.1.el";
-      sha256 = "15sy2ys01khl10hia82y9yy1i3nc1yc8ddv536az7f4lfal37kks";
+      sha256 = "14jnzppg4bdpcikjyppa7fy9mnhy63dcnwn7dn4k2zv5i9kvng02";
     };
-  
+
     deps = [  ];
   };
 
@@ -5615,9 +5615,9 @@ with otherPackages; rec {
     name = "lorem-ipsum-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/lorem-ipsum-0.1.el";
-      sha256 = "00dz6bhgiwjsypj4yav3jvjdiy0z4c5krpzgcw144qqn18miqmfy";
+      sha256 = "0m8fgb5c2gbjdjkh2r0rw79p3jy94nb9sq5cyv3v0i4j4199n8b1";
     };
-  
+
     deps = [  ];
   };
 
@@ -5626,9 +5626,9 @@ with otherPackages; rec {
     name = "lua-mode-20110428";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/lua-mode-20110428.el";
-      sha256 = "01xa1bl6w7xjdn7shc066njd6qgdv4y9jwpmyjnmky0zdq99xgb6";
+      sha256 = "144py59iyk7yavq8lcdzsl6x2mq4gy0yxrq65ijv083y8x4ajpvr";
     };
-  
+
     deps = [  ];
   };
 
@@ -5637,9 +5637,9 @@ with otherPackages; rec {
     name = "lui-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/lui-1.2.tar";
-      sha256 = "1bmnigjhgsl3yxc7jmy0zrb38d4xmh666f2z3i689djd071kvfi3";
+      sha256 = "1i542zjrs343bdgzsws4p1m5b10d1fjizjcmp4v5y2ahva8ql7gg";
     };
-  
+
     deps = [ tracking ];
   };
 
@@ -5648,9 +5648,9 @@ with otherPackages; rec {
     name = "mac-key-mode-2010.1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mac-key-mode-2010.1.3.el";
-      sha256 = "0s92hp3n3bd7cqy60syfg08xg63ll5rbyvj18npslpl41zlgd8q3";
+      sha256 = "0z1n6zzf1dys9klmv9yc8giyv48ydpfyijlxj4cmndqja3aflgk1";
     };
-  
+
     deps = [  ];
   };
 
@@ -5659,9 +5659,9 @@ with otherPackages; rec {
     name = "macro-math-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/macro-math-1.0.el";
-      sha256 = "085xcb75n092lr0xcjbwb6gdaxissbmly3wcd4x5blfc7f4dwsd2";
+      sha256 = "0m1rv31cpb0w9xxz7k5867li3gl7193gv2v2llgfkl1iv22sf15y";
     };
-  
+
     deps = [  ];
   };
 
@@ -5670,9 +5670,9 @@ with otherPackages; rec {
     name = "macro-utils-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/macro-utils-1.0.el";
-      sha256 = "1hd8m81fbsibx64apl5k4whavpgfm2m8v6lb2c6q3890ix5f5cp4";
+      sha256 = "0pnp6vnsfcjr0zd77kaf7bfq94xirlwr8pg5q0ic1jwb0s1jg1wd";
     };
-  
+
     deps = [  ];
   };
 
@@ -5681,9 +5681,9 @@ with otherPackages; rec {
     name = "macrostep-0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/macrostep-0.6.el";
-      sha256 = "06g78hxgya11l1hpn813jq4kskil4zmb4g6mk1ia3s9vxadhxvjs";
+      sha256 = "133rvxfqnp9xx9cpg9sv91dyhbqaqysd1sg7fb7ac88zdrp7ybfw";
     };
-  
+
     deps = [  ];
   };
 
@@ -5692,9 +5692,9 @@ with otherPackages; rec {
     name = "mactag-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mactag-0.0.1.el";
-      sha256 = "0ninzlqcjfp5dh1f14h23shdj0gbyzc4gpmyds924g4yqqjskr4x";
+      sha256 = "18ni467bkz6sdwg51gm98k5kd894jscj8kl3gwxxav3k8a3bzmvj";
     };
-  
+
     deps = [  ];
   };
 
@@ -5703,9 +5703,9 @@ with otherPackages; rec {
     name = "magit-1.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/magit-1.2.0.tar";
-      sha256 = "1zfn5z7mpnrjh4ssg7nq9c7n355s09m2c229dmrxji4yr2zkgf06";
+      sha256 = "0s4pzlbf6ry8ps68hdlqgywi9l9q8m07scwyrd79ii6qdgpb5vrc";
     };
-  
+
     deps = [  ];
   };
 
@@ -5714,9 +5714,9 @@ with otherPackages; rec {
     name = "magit-gh-pulls-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/magit-gh-pulls-0.3.el";
-      sha256 = "1mlrzfknr40lyyagrs87aqhf61lgnvbwcpk915b3yqjfv8nfzs0s";
+      sha256 = "1n4kf9kmq2jgdpq5yzwpz3iswpam0js2rpdpfqqkqlwc46qxrplb";
     };
-  
+
     deps = [ gh magit ];
   };
 
@@ -5725,9 +5725,9 @@ with otherPackages; rec {
     name = "magit-simple-keys-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/magit-simple-keys-1.0.0.el";
-      sha256 = "1c8k3m7clfff8aggp8h9z5lb3qiylrj3i6sbfj936a9aqkhy3m76";
+      sha256 = "1bk8h4j04fpk3fhz0yvwvd5ncpa4q8jsmz2rn8iwx9bdcmc243is";
     };
-  
+
     deps = [ magit ];
   };
 
@@ -5736,9 +5736,9 @@ with otherPackages; rec {
     name = "magithub-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/magithub-0.2.el";
-      sha256 = "0880nnsqhw8svkfj8mgfnibvvrf3jidib1ngcykahzlq1fnkac6a";
+      sha256 = "0i6bsjh248slwrsvfl4b4yq9dy9brnm9ibwd248wnj4wbdj9k1v5";
     };
-  
+
     deps = [ magit json ];
   };
 
@@ -5747,9 +5747,9 @@ with otherPackages; rec {
     name = "maildir-0.0.18";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/maildir-0.0.18.tar";
-      sha256 = "0llmb9pgkwyhccv5zwddxlhxsvf7yx1ikaxfk18bmcr39r94wplk";
+      sha256 = "08xzfn512fbmzhsdchyp7i793bimjk3p7hfjmfs3dg6xwdqfszyn";
     };
-  
+
     deps = [  ];
   };
 
@@ -5758,9 +5758,9 @@ with otherPackages; rec {
     name = "main-line-1.2.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/main-line-1.2.8.el";
-      sha256 = "16jx95xsq2rl4f382d75zkpmym1zcx2bph2jz7brbn855s1jlhgs";
+      sha256 = "0z9d8p5a2x60x31a9095f1lhzhdgjlh5dh30dk4liln5gp57qjk9";
     };
-  
+
     deps = [  ];
   };
 
@@ -5769,9 +5769,9 @@ with otherPackages; rec {
     name = "makefile-runner-1.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/makefile-runner-1.1.2.el";
-      sha256 = "1n4llpchf49d5dzxfpqnk11qmfwmgkyykcl11bddi7s2365bv2pc";
+      sha256 = "04jgw48vsd25kyl3hlqw42anj2j0ihah9pxcb26xkdhdlrzbhv3v";
     };
-  
+
     deps = [  ];
   };
 
@@ -5780,9 +5780,9 @@ with otherPackages; rec {
     name = "margo-2012.9.18";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/margo-2012.9.18.el";
-      sha256 = "0a4bz3yd8pkpwvdl9xllxcl2ls8z11frmbbj50mvw9nxflpdz2b8";
+      sha256 = "1vwcwl53s66029whwlqfx51n6x18p29jfcq44nw64q0r1w7raqr0";
     };
-  
+
     deps = [ web json ];
   };
 
@@ -5791,9 +5791,9 @@ with otherPackages; rec {
     name = "mark-more-like-this-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mark-more-like-this-1.0.el";
-      sha256 = "1s6clcxq2k8mvxy0yaw3mqgl7wfgpy1h4g240pnz5fnx27p8ixjw";
+      sha256 = "1a6v54p11yal0w9c56ghi4kslwjmchlg0r8zwiv99j931d5kwgjm";
     };
-  
+
     deps = [  ];
   };
 
@@ -5802,9 +5802,9 @@ with otherPackages; rec {
     name = "mark-multiple-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mark-multiple-1.0.el";
-      sha256 = "0fxsjpf16fzgrjj5l9v3mmlnxbg50xqzb2hj3lqf481g5baw3jcb";
+      sha256 = "17wxsphkf1xhi9vbadhjrm9rcn8dk0xczkiqjba1kadhl9jg3vj5";
     };
-  
+
     deps = [  ];
   };
 
@@ -5813,9 +5813,9 @@ with otherPackages; rec {
     name = "mark-tools-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mark-tools-0.3.el";
-      sha256 = "1y6n53c6xigkmfpvrwhgla1gvrzq1s49aw0rwkbdkd2cx9mdkpx4";
+      sha256 = "16fwz1njl9yjn02nyfy2607diadvbxmdp5nlkgm1f4h2sjh2n6rv";
     };
-  
+
     deps = [  ];
   };
 
@@ -5826,7 +5826,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/markchars-0.2.0.el";
       sha256 = "1wn9v9jzcyq5wxhw5839jsggfy97955ngspn2gn6jmvz6zdgy4hv";
     };
-  
+
     deps = [  ];
   };
 
@@ -5835,9 +5835,9 @@ with otherPackages; rec {
     name = "markdown-mode-1.9";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/markdown-mode-1.9.el";
-      sha256 = "0crzzi1vpdh3sdkd8bc6pdh500vx5wipqphgbq1y9v3r7bycay87";
+      sha256 = "082iaknlm2d41qg63rqqspf8d2rdkscr7dm33gbzz0bdlymsv62j";
     };
-  
+
     deps = [  ];
   };
 
@@ -5846,9 +5846,9 @@ with otherPackages; rec {
     name = "markup-faces-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/markup-faces-1.0.0.el";
-      sha256 = "0x1xx9rskz02j7daxbg6br4m54qrsbnjbf6h1641khiiyrd17ssx";
+      sha256 = "04pd9fj555v18qn10awcg6qik38v2a8vcgw19z6n0zdvp0i2nlf8";
     };
-  
+
     deps = [  ];
   };
 
@@ -5857,9 +5857,9 @@ with otherPackages; rec {
     name = "marmalade-0.0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/marmalade-0.0.4.el";
-      sha256 = "18zlr8gpwdjr8fx941ar9ch920kc3rlkkhjb2ncacnxzrnjm1wdl";
+      sha256 = "01r5jvdj7kfwxd89cf093kgvn5gsg66qpkqp2pyr8fafp69dp00b";
     };
-  
+
     deps = [ furl ];
   };
 
@@ -5868,9 +5868,9 @@ with otherPackages; rec {
     name = "marmalade-service-2.0.9";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/marmalade-service-2.0.9.tar";
-      sha256 = "1ba21vvd1fc51r3ls6f0zgr9x5hma9hdwq18xbkasnzalh29ssf7";
+      sha256 = "1ql4gzc61vfjq610rqw3nmflbkz3r3jpn2v166bz2wkhidqikwj4";
     };
-  
+
     deps = [ dash s elnode ];
   };
 
@@ -5879,9 +5879,9 @@ with otherPackages; rec {
     name = "marmalade-test-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/marmalade-test-0.0.1.tar";
-      sha256 = "00pa9kyybv4zshnp8b836vqg2nr2v8avhbf8zv7rglv65f5j43q6";
+      sha256 = "1r8mx0p6y53f863g0yydh8c1v5p8saf05mr7qzq6jxlp1jfpv503";
     };
-  
+
     deps = [  ];
   };
 
@@ -5890,9 +5890,9 @@ with otherPackages; rec {
     name = "maxframe-0.5.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/maxframe-0.5.1.el";
-      sha256 = "0byib2wbhadqz9sq102da5k0nyfj382d7s9byfx3rd61a8cb5787";
+      sha256 = "08mjcg28qv4928ka6bj52xlb0r8cidhkjaadygb90s1r4s00mqz0";
     };
-  
+
     deps = [  ];
   };
 
@@ -5901,9 +5901,9 @@ with otherPackages; rec {
     name = "mediawiki-2.2.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mediawiki-2.2.3.el";
-      sha256 = "0s29ir8ill602lc0ywwkn1b5syn2chh5zv93ylf7dvzmmhayl2z9";
+      sha256 = "0gpmagm8xszpnzbc6gilyvc96002m16gkvz6y3pbxlnw385mdqbb";
     };
-  
+
     deps = [  ];
   };
 
@@ -5912,9 +5912,9 @@ with otherPackages; rec {
     name = "member-function-0.3.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/member-function-0.3.1.el";
-      sha256 = "0p4zzv7wlrz1h9xmwk4fgjk27fbnzgqd1948c2cg7v9m25a4ri7w";
+      sha256 = "08vi7dn1wjz00yjg95ap4by5ykgqlxmw21y2cx76h55ksx2grvx9";
     };
-  
+
     deps = [  ];
   };
 
@@ -5925,7 +5925,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/memory-usage-0.2.el";
       sha256 = "03qwb7sprdh1avxv3g7hhnhl41pwvnpxcpnqrikl7picy78h1gwj";
     };
-  
+
     deps = [  ];
   };
 
@@ -5934,9 +5934,9 @@ with otherPackages; rec {
     name = "mic-paren-3.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mic-paren-3.8.el";
-      sha256 = "0nmi89gahkxkhflc9hgmvmhffq4hzwfxi2yjwp0sf739yv06zfzd";
+      sha256 = "19mnjl8pm5isr335wzfkgg2nx31972a3nljzz92glni3jdjwslpa";
     };
-  
+
     deps = [  ];
   };
 
@@ -5945,9 +5945,9 @@ with otherPackages; rec {
     name = "midje-mode-0.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/midje-mode-0.1.2.tar";
-      sha256 = "0kq9pzfy8jg1nn3w4sn57kba1pbjg011q4b8kn0f7fzrnsi8i3gb";
+      sha256 = "06ys81m01n81lfj0n1s4nhhqmx4v50psx2nxgw7yf332f5sh8rzr";
     };
-  
+
     deps = [ slime clojure-mode ];
   };
 
@@ -5956,9 +5956,9 @@ with otherPackages; rec {
     name = "minimal-session-saver-0.6.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/minimal-session-saver-0.6.0.el";
-      sha256 = "0i1y134h8hqbca74j4h801b8ls96q8lg34wls8qhd1snxxb56f4z";
+      sha256 = "16cd8l5q73i43drmv6l1n3nrpixka2ylxqrm9s5l5y1r7vkjry7w";
     };
-  
+
     deps = [  ];
   };
 
@@ -5969,7 +5969,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/minimap-1.0.el";
       sha256 = "1zlhny08bm2kv5qwvv5bh28mdjibz1djs5pqk8xv84jalzsig8n4";
     };
-  
+
     deps = [  ];
   };
 
@@ -5978,9 +5978,9 @@ with otherPackages; rec {
     name = "mldonkey-0.0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mldonkey-0.0.4.tar";
-      sha256 = "1wg9gl4i1ghn5jqzga9i0ks2lr3af9s4nvrcczwb26a04hpckz0n";
+      sha256 = "0z9ggswlnrrr4cf7rn7wpkq2679psr18qmhvk2a0rdp172l69m4s";
     };
-  
+
     deps = [  ];
   };
 
@@ -5989,9 +5989,9 @@ with otherPackages; rec {
     name = "mo-git-blame-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mo-git-blame-0.1.0.el";
-      sha256 = "1qxfmj0hvdi4j3xdf9rkb0nlxn6f1as8fm0znabfl5qz5g7dqjss";
+      sha256 = "02fhwfdfvlzq0nkgm1aznxwgwkhqd988xg6h1f0vrmm9c6g9s006";
     };
-  
+
     deps = [  ];
   };
 
@@ -6000,9 +6000,9 @@ with otherPackages; rec {
     name = "mocker-0.2.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mocker-0.2.6.el";
-      sha256 = "0rmfdl8rxxqyl44w97g163vs6lzzcq0k6gvnbq5995xglfcp10vv";
+      sha256 = "1kj9dnn9xaabfi38fy0b0qp3g9f9yf6k73s5byrg7kx7ml1mhxy2";
     };
-  
+
     deps = [ eieio el-x ];
   };
 
@@ -6011,9 +6011,9 @@ with otherPackages; rec {
     name = "mode-compile-2.29";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mode-compile-2.29.el";
-      sha256 = "1vdqd2325vhnrx873n1rxplq31h1ljkv2f8pjqv3fvs7p6lmf3ky";
+      sha256 = "03hb8xqkslrgf3h1g3fgxqf0nhpmgljn52h0asj0vk2hbh1wlhd2";
     };
-  
+
     deps = [  ];
   };
 
@@ -6022,9 +6022,9 @@ with otherPackages; rec {
     name = "mode-icons-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mode-icons-0.1.0.tar";
-      sha256 = "0gydkam4fvnngcnl3qk8jrrkd9hawmbf6490342ih33jjs2kq31p";
+      sha256 = "0pkd39ncbc8fl4irw7n0r82f71vcm5mzvc2pswmpjpmr25576j2z";
     };
-  
+
     deps = [  ];
   };
 
@@ -6033,9 +6033,9 @@ with otherPackages; rec {
     name = "modeline-posn-22.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/modeline-posn-22.0.el";
-      sha256 = "01a6pyb97w0amd1f5kr36sl3ra9ai6wg76j60zbhxla5wd715d7c";
+      sha256 = "0zzgakwsvxdf95n5xa9v18qijqq6iq5hq74267nx2h3nn2lv3krj";
     };
-  
+
     deps = [  ];
   };
 
@@ -6044,9 +6044,9 @@ with otherPackages; rec {
     name = "moinmoin-mode-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/moinmoin-mode-1.0.el";
-      sha256 = "1vipjxdlqrm328gdbsl6a05ms3d3z5hy5sv115zbqhr1k7fchsgn";
+      sha256 = "1kv5mps53px8fdp9xzvnb69ld75fi7i9y8zysbbx73fjxkg6l40w";
     };
-  
+
     deps = [ screen-lines ];
   };
 
@@ -6055,9 +6055,9 @@ with otherPackages; rec {
     name = "mongo-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mongo-0.5.tar";
-      sha256 = "0933kddyi9kxmbw95g1dh3pm6ma4d8m6f6xy5wz8lp9x5m4q9q6n";
+      sha256 = "064qlbgxylp5vdnv8qcr9dr81vp10kpiifg9dajladdlnz8i6kbf";
     };
-  
+
     deps = [  ];
   };
 
@@ -6066,9 +6066,9 @@ with otherPackages; rec {
     name = "mongo-elnode-0.5.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mongo-elnode-0.5.0.el";
-      sha256 = "05276ahk48ahy419kwrwcb9q0qi1vw51bjl1m9lv2vmmvd30sr9b";
+      sha256 = "10zw1yb3s68ybhcr3dqmr7if8hf3xxyi7f9ynjr5mlfjdz7b9254";
     };
-  
+
     deps = [ mongo elnode ];
   };
 
@@ -6077,9 +6077,9 @@ with otherPackages; rec {
     name = "monokai-theme-0.0.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/monokai-theme-0.0.10.el";
-      sha256 = "0kkwjcrw2zrygldaw37jzrgwc7rgsm8qrar6ajwipm99by38cg5z";
+      sha256 = "133l2088nhr1dr23jacp0yp1s05jz127b5iiar0hx03x15wr2xk8";
     };
-  
+
     deps = [  ];
   };
 
@@ -6088,9 +6088,9 @@ with otherPackages; rec {
     name = "mote-mode-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mote-mode-1.0.0.el";
-      sha256 = "0pxwrdh0kk368k6jv20i2wc2i8jrl3ghianyam95w6xaq0hdhy4r";
+      sha256 = "0bwy7mxjg7lbp1vswvysbhgv4bbijzw4ba3r1i9alyh3wgip2rg7";
     };
-  
+
     deps = [ ruby-mode ];
   };
 
@@ -6099,9 +6099,9 @@ with otherPackages; rec {
     name = "mouse-plus-21.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mouse+-21.0.el";
-      sha256 = "1xwi5w7d14k8mb772v2kqvci16hwiy4qwwnd0ksln8hlks7smcws";
+      sha256 = "1y2jk0mn5n78mljjxh4grwhk64g8a8517rjpl8m6b8nsrsizpzk8";
     };
-  
+
     deps = [  ];
   };
 
@@ -6110,9 +6110,9 @@ with otherPackages; rec {
     name = "move-text-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/move-text-1.0.el";
-      sha256 = "14ikrpy8r8gv69m5r1iq7pb5asz4xg3qw2cj83ry64b8sxq7m09j";
+      sha256 = "1091wmapjbmaf90vrmw3r69i0xx4y959jvjrfs3yfxaj066wgzg9";
     };
-  
+
     deps = [  ];
   };
 
@@ -6121,9 +6121,9 @@ with otherPackages; rec {
     name = "multi-eshell-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/multi-eshell-0.0.1.el";
-      sha256 = "0a4cnwn1q27hvmsxbqvnijgwawxhy4qch6p5b2dhbf4r1jac54l7";
+      sha256 = "1gzygn97qfwrap8lqdsk413h4xa4arnz3pmak6zfmb6lv268wz5i";
     };
-  
+
     deps = [  ];
   };
 
@@ -6132,9 +6132,9 @@ with otherPackages; rec {
     name = "multi-project-0.0.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/multi-project-0.0.8.el";
-      sha256 = "0lxyknz4wvz4dzd86yyagvm2nk6y2wq22fpn9145ly5ix1q3asr4";
+      sha256 = "1brwyr1h5gxid5yv1zsa3wn9s52f4llpjb7j1y8yzndcfdlkcgbk";
     };
-  
+
     deps = [  ];
   };
 
@@ -6143,9 +6143,9 @@ with otherPackages; rec {
     name = "multi-term-0.8.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/multi-term-0.8.8.el";
-      sha256 = "1zdv3gcshqg3i6zjj9nhzv4dvalb2gwfa3pxls3apypm47rwhkwv";
+      sha256 = "0q3xhyxlzd3r7zw25diyjj4v3kj5yj8siw77c9wz8g4zvciw1bf2";
     };
-  
+
     deps = [  ];
   };
 
@@ -6154,9 +6154,9 @@ with otherPackages; rec {
     name = "multi-web-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/multi-web-mode-0.1.el";
-      sha256 = "07ab60qawxwvzk5cmmx9bmc1lbhz11kl61dnmzgqxm0la3jz35nn";
+      sha256 = "048g8fy1z5k4bmrczbrby8p7z4ic3wgqjjw587c8gkqmhlfab42k";
     };
-  
+
     deps = [  ];
   };
 
@@ -6165,9 +6165,9 @@ with otherPackages; rec {
     name = "multiple-cursors-1.2.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/multiple-cursors-1.2.1.tar";
-      sha256 = "1mwj0nzrj1v1n984yxyb29j3ln31scmrgw848sajqhxxxf5xi6rs";
+      sha256 = "156zpp0f4y2ni05nw66n1j63r04pdh1c0p8m6ys9i4j6anvv42cq";
     };
-  
+
     deps = [  ];
   };
 
@@ -6178,7 +6178,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/muse-3.20.tar";
       sha256 = "0i5gfhgxdm1ripw7j3ixqlfkinx3fxjj2gk5md99h70iigrhcnm9";
     };
-  
+
     deps = [  ];
   };
 
@@ -6187,9 +6187,9 @@ with otherPackages; rec {
     name = "mustache-0.20";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mustache-0.20.tar";
-      sha256 = "1i3ks139li2wqvr7qg94l8f1zvvkpqnrplj6vpc27y54m04bn3ry";
+      sha256 = "00dpfv5d25i1gyd3nir5r9h2jm6953lh4n5dnxfpp9zxyl9zpcp0";
     };
-  
+
     deps = [ ht s dash ];
   };
 
@@ -6198,9 +6198,9 @@ with otherPackages; rec {
     name = "mustache-mode-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mustache-mode-1.2.el";
-      sha256 = "08zypqfz0mapk40jm9fxvq294qin9zw4l8nvf0rl4897xfpzilfv";
+      sha256 = "1pbskiydmhlk9rynsxsb339z5xfx05wb6ipv88bhnyg9d7dndq4d";
     };
-  
+
     deps = [  ];
   };
 
@@ -6209,9 +6209,9 @@ with otherPackages; rec {
     name = "mwe-log-commands-20041106";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/mwe-log-commands-20041106.el";
-      sha256 = "1kwc6f28mm53jk4y2msrylgxkb8ahsxigp3sb2mc7psb7qk83r19";
+      sha256 = "13hza3sim5gaj1nfrb8invq2sqw53p87lvcpsb8182wczqq9881j";
     };
-  
+
     deps = [  ];
   };
 
@@ -6220,9 +6220,9 @@ with otherPackages; rec {
     name = "my-packages-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/my-packages-0.1.0.el";
-      sha256 = "1yacscnbfgl0mrcdma4v0jh4csq9f65i4q2dc3azisiwrpig44wa";
+      sha256 = "1snlvhkms86j6nqv89vik984m11grn937pdy2vh1lhkliwcb6akl";
     };
-  
+
     deps = [  ];
   };
 
@@ -6231,9 +6231,9 @@ with otherPackages; rec {
     name = "n3-mode-20071215";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/n3-mode-20071215.el";
-      sha256 = "12m2qjcyhlap7kjbc1lcn98hibjamiqakjjvljwywz1wvq17v3xg";
+      sha256 = "0zrzzc4syyhcyd61mag15z38kyzrzyvyvbzdlrpzg77n298g6bb5";
     };
-  
+
     deps = [  ];
   };
 
@@ -6242,9 +6242,9 @@ with otherPackages; rec {
     name = "namakemono-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/namakemono-0.0.1.el";
-      sha256 = "1kxzg9sahqzna91hj4ds0g30a4wpdzk4a0wqiqf92clb30sj3vkk";
+      sha256 = "1fp5wnl7c3mdxmbf3gabmyvvpwhj45hrzv4fvnxh33xjmv7ay9va";
     };
-  
+
     deps = [  ];
   };
 
@@ -6253,9 +6253,9 @@ with otherPackages; rec {
     name = "nav-flash-1.0.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nav-flash-1.0.8.el";
-      sha256 = "1xphm9h9qcqp0axgg9a83awbbfq4wlwl7pksi5nvfir1sz7fakbg";
+      sha256 = "1k7w9psbq6i0va1x5x0d984glq6kaq8p2lcm2q4psa8ip4lf8md8";
     };
-  
+
     deps = [  ];
   };
 
@@ -6264,9 +6264,9 @@ with otherPackages; rec {
     name = "nemerle-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nemerle-0.2.el";
-      sha256 = "0dlv2xq8pa6i7gbvzlnn3wykyfc40gf40akhazy314v0gbb6q07n";
+      sha256 = "0zrfh0dfiqfcc1hb3ps9q2427sxd9gri38f48xy48bk5p2in2nvi";
     };
-  
+
     deps = [  ];
   };
 
@@ -6275,9 +6275,9 @@ with otherPackages; rec {
     name = "nginx-mode-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nginx-mode-1.1.el";
-      sha256 = "0n450zpihska9d6ll703ja3307wpnxi0azqw8p6p947rgd6pry2r";
+      sha256 = "1wppwbvv7jbhqdlr2shvh3gb72k1n3idi5nlsiwajgvaam78x33s";
     };
-  
+
     deps = [  ];
   };
 
@@ -6288,7 +6288,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/nhexl-mode-0.1.el";
       sha256 = "1vpigrh2q96lc57vv0yw77ajz5sak3pna13rpr277n1bbxs2fg7k";
     };
-  
+
     deps = [  ];
   };
 
@@ -6297,9 +6297,9 @@ with otherPackages; rec {
     name = "nimrod-mode-0.1.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nimrod-mode-0.1.5.el";
-      sha256 = "19w5dqb0zsz7c47cli11jnwvavks68qlnn88m9q3klk1vzrizsrp";
+      sha256 = "0jzfv22sxzcq7dwsv7kr1dvxlg5zwda79hjnsw2lwdcr3ifqygh7";
     };
-  
+
     deps = [ auto-complete ];
   };
 
@@ -6308,9 +6308,9 @@ with otherPackages; rec {
     name = "nlet-1.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nlet-1.10.el";
-      sha256 = "00k58wk9nlhn2q2xxhgw8681xrll72dl3k6bdya7jirpf1qvf47a";
+      sha256 = "1pykln48q3dfyk80zwjp4zdxk1bcmwicz8cavycz5sf8n9vd3s3g";
     };
-  
+
     deps = [  ];
   };
 
@@ -6321,7 +6321,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/nlinum-1.1.el";
       sha256 = "113ia89b5zxmv7s6k6aqppy3vb4x7nvkagch5177zngld8ng6wyg";
     };
-  
+
     deps = [  ];
   };
 
@@ -6330,9 +6330,9 @@ with otherPackages; rec {
     name = "no-easy-keys-1.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/no-easy-keys-1.0.2.el";
-      sha256 = "1p5xy6rcyznhk17cngz3qwkfy5gyvkc65riw4ljn5bl87yi3my6r";
+      sha256 = "0q5lg6lxf8j7hx49qc001wq7fnmcry7ral3nn7pby6vf8jh1q0js";
     };
-  
+
     deps = [  ];
   };
 
@@ -6341,9 +6341,9 @@ with otherPackages; rec {
     name = "nodejs-repl-0.0.2.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nodejs-repl-0.0.2.1.el";
-      sha256 = "19rl2g9wad1lcj30mms68h72m4zl8bkc2dmiijr9lvl6xgasijgi";
+      sha256 = "0y5p7lxaxwsfgxd6vl2f24v5mwqrvsld4kw0yvxkq4j99fg4vans";
     };
-  
+
     deps = [  ];
   };
 
@@ -6352,9 +6352,9 @@ with otherPackages; rec {
     name = "noflet-0.0.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/noflet-0.0.7.el";
-      sha256 = "13j6j875lxs6h4sg59gg76981fym6cpa2y6qim5g9y344hynnisc";
+      sha256 = "028y82gdyzxmccpdnr90ajn8ivd4qs7k240ik3jypfa8fhx1fs3c";
     };
-  
+
     deps = [  ];
   };
 
@@ -6363,9 +6363,9 @@ with otherPackages; rec {
     name = "nose-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nose-0.1.1.el";
-      sha256 = "0bljkblp3ajxllly7mpxb8b25y7xrm7f606s1fbf8yq2kbyq2bd9";
+      sha256 = "11nldsq5pa0l30si3sj4pxcdny1g3nvxa2ln56x6afpk3pgxpclk";
     };
-  
+
     deps = [  ];
   };
 
@@ -6376,7 +6376,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/notes-mode-1.30.tar";
       sha256 = "1aqivlfa0nk0y27gdv68k5rg3m5wschh8cw196a13qb7kaghk9r6";
     };
-  
+
     deps = [  ];
   };
 
@@ -6385,9 +6385,9 @@ with otherPackages; rec {
     name = "notify-2010.8.20";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/notify-2010.8.20.el";
-      sha256 = "02wygw3glsn5k1sf6zmsdabfs1p789l78fsf8ml82lrz6mk1nhd7";
+      sha256 = "1r3d7brw25haj55wvxwhjsy8nzfaxw3az1bcg0hcwiqn5654vh74";
     };
-  
+
     deps = [  ];
   };
 
@@ -6396,9 +6396,9 @@ with otherPackages; rec {
     name = "notmuch-labeler-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/notmuch-labeler-0.1.tar";
-      sha256 = "0yv647y6i67nsw67cldp5nrpjdy4adh20qhiydxsnly2x72rh0rq";
+      sha256 = "0grsi97jh1ws418dgxzm7l2b2b4vhpk15l34jb47x4kqdvk918q7";
     };
-  
+
     deps = [  ];
   };
 
@@ -6407,9 +6407,9 @@ with otherPackages; rec {
     name = "nrepl-0.1.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nrepl-0.1.7.el";
-      sha256 = "1xx8g4sd0gs4hzkwpfy17bba421b8zh9x9x3ij42llgk4z7xpphw";
+      sha256 = "0d4xg88rkr134l094zgg2wljyz2dwiwvsr8g93jij46lglsh7xan";
     };
-  
+
     deps = [ clojure-mode ];
   };
 
@@ -6418,9 +6418,9 @@ with otherPackages; rec {
     name = "nrepl-ritz-0.6.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nrepl-ritz-0.6.0.el";
-      sha256 = "1m0hqwaqxdrgbp01z1fx1nci26jfd8mrinazvm0rbrr1cniwwvv3";
+      sha256 = "06y83s8v40k7a8ifhbr43452nqba0a579nikrbj69l9x2gf7czg7";
     };
-  
+
     deps = [ nrepl ];
   };
 
@@ -6429,9 +6429,9 @@ with otherPackages; rec {
     name = "nsis-mode-0.44";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nsis-mode-0.44.el";
-      sha256 = "0f3pxp7qdnvxb5iw9qz1dx2m02znf4k0i9y2m42kig634kbi8m0q";
+      sha256 = "0j3fw80qhkf48xd030ds5pkzd2a2y58gdx5v513j60yn2y05wwqi";
     };
-  
+
     deps = [  ];
   };
 
@@ -6440,9 +6440,9 @@ with otherPackages; rec {
     name = "ntcmd-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ntcmd-1.0.el";
-      sha256 = "1k3h3p7syjrfmfxbzxwgccpgr0f7592f404y15ygrzfjhvx4lzmh";
+      sha256 = "0fgig41zksw7kjd88giz8c6yzkj6vxcs6apml0ikp3d3pdlv2qkd";
     };
-  
+
     deps = [  ];
   };
 
@@ -6453,7 +6453,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/num3-mode-1.1.el";
       sha256 = "15jf1hf1izz0s82fplkp8lg9p9mwq82cvm01szmkxql6rhbn5gga";
     };
-  
+
     deps = [  ];
   };
 
@@ -6462,9 +6462,9 @@ with otherPackages; rec {
     name = "nurumacs-3.4.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nurumacs-3.4.1.el";
-      sha256 = "0j7lqk3ly1fn5vmdn5cl91llj5v4vm8bn264ss27h49v61x7chf5";
+      sha256 = "10kzgkpbpkvlggjfjq0xhfms4ysf6b99d14s3sxhg7waw0ikszmh";
     };
-  
+
     deps = [  ];
   };
 
@@ -6473,9 +6473,9 @@ with otherPackages; rec {
     name = "nyan-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nyan-mode-0.1.el";
-      sha256 = "1vypm958p13gagbmqdjgdpscmn3s69pqn2xxasnk2bgsgxahxcm5";
+      sha256 = "0a77an6r4qn5crxrxsyl0444szr6k0aa1034pyqcza3g75rdngi4";
     };
-  
+
     deps = [  ];
   };
 
@@ -6484,9 +6484,9 @@ with otherPackages; rec {
     name = "nzenburn-theme-20130513";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/nzenburn-theme-20130513.el";
-      sha256 = "06kwq11g6lhbfng62plkscanln6y08saxfz7qlm89058la8cjc2s";
+      sha256 = "1i2w871fg2y3pwrhnr5ngjq53hbqjhfz907fi3m3s2isn96sk6sc";
     };
-  
+
     deps = [  ];
   };
 
@@ -6495,9 +6495,9 @@ with otherPackages; rec {
     name = "oauth-1.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/oauth-1.0.3.tar";
-      sha256 = "1f2kj61vxjkx9clhf5akc6di4a83hmrjiggydl7yj86hgfqb0nvm";
+      sha256 = "0z3nfirb8pp7g17lybip18h2ckmxpgh5pz4y0wlm4d1bnpax27hh";
     };
-  
+
     deps = [  ];
   };
 
@@ -6508,7 +6508,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/oauth2-0.8.el";
       sha256 = "1gljz2c4d5zxf1a95f6mfff4f3m3prlih89nfg3sqjg7lzqh3gdl";
     };
-  
+
     deps = [  ];
   };
 
@@ -6517,9 +6517,9 @@ with otherPackages; rec {
     name = "ob-sml-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ob-sml-0.2.el";
-      sha256 = "1fidgz179jfinszmpx5y27i1z69i6r5iwyjfs0zg59v958kbgg1v";
+      sha256 = "1364xgrpsa4sqy016i2l6qygcx38dwgx4cggk4cz1xypdl5bga2v";
     };
-  
+
     deps = [ sml-mode ];
   };
 
@@ -6528,9 +6528,9 @@ with otherPackages; rec {
     name = "occur-x-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/occur-x-0.1.1.el";
-      sha256 = "1l3jgrwwzymwpckr4vkidq7vcmv8bpiym3z1hl7i7w19v2qv2nsh";
+      sha256 = "01m95q2vall3hcr4vp996dsazz64ym665p0amcaxn849ax6lkf6p";
     };
-  
+
     deps = [  ];
   };
 
@@ -6539,9 +6539,9 @@ with otherPackages; rec {
     name = "octomacs-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/octomacs-0.0.1.el";
-      sha256 = "1fxz3bqq43rgb7yqvpgnk4g2pij0gcd6l300xhlsy11kahmiq7wr";
+      sha256 = "009145xdv06637andrm00qxi7f324qixsmafd36idr2161f82pc2";
     };
-  
+
     deps = [  ];
   };
 
@@ -6550,9 +6550,9 @@ with otherPackages; rec {
     name = "oddmuse-20090222";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/oddmuse-20090222.el";
-      sha256 = "0y9606cpi7bw4iqpma5mj8kxa3kl53xsccfx5jsqr06hcxihqavs";
+      sha256 = "00gypfnb289d3qkz9lyj0m6bpv0l3y16lf6h363fhkpg4nmjsbyz";
     };
-  
+
     deps = [  ];
   };
 
@@ -6561,9 +6561,9 @@ with otherPackages; rec {
     name = "offlineimap-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/offlineimap-0.1.el";
-      sha256 = "0aqwm43y8xr2j9236rhifzmaaq508cgz32j99cbqsz23qlbhl0y2";
+      sha256 = "1lyfnl4ciqk3mw2xjc7bafmwf0a3mwqfd54vjpbnhg1vldhyp04z";
     };
-  
+
     deps = [  ];
   };
 
@@ -6574,7 +6574,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/omn-mode-1.0.el";
       sha256 = "04kac2imxdf4qbd97sjsfaj3l6pfsa29mghpyv43rigxdwz2klb5";
     };
-  
+
     deps = [  ];
   };
 
@@ -6583,9 +6583,9 @@ with otherPackages; rec {
     name = "openwith-20120531";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/openwith-20120531.el";
-      sha256 = "1ckhjkp5fnsdxwxax9krmlw0zqrsjdfmvp05m7j96sncnr2ybnxf";
+      sha256 = "17dfblmigz3aa1j33a1g2imqihfl1rsqf254lk68khc2qldspl86";
     };
-  
+
     deps = [  ];
   };
 
@@ -6596,7 +6596,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/org-20130617.tar";
       sha256 = "1izgcmskvgzv89wkm48r7rxhavmibsnh4yhv33asy9vp5xd7nkch";
     };
-  
+
     deps = [  ];
   };
 
@@ -6605,9 +6605,9 @@ with otherPackages; rec {
     name = "org-blog-1.18.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org-blog-1.18.1.1.el";
-      sha256 = "1h75h72h1andczsbahw5f0pdm6lzkym1iyj14avqz5b77ll6535k";
+      sha256 = "126hv5zgwpm36b992sb4zwnk1bz8wh7nnlfpv6876vg6pcgrw8lx";
     };
-  
+
     deps = [  ];
   };
 
@@ -6616,9 +6616,9 @@ with otherPackages; rec {
     name = "org-cua-dwim-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org-cua-dwim-0.5.el";
-      sha256 = "05qcmkm9crb0vy6fl97w8q3n9d7y3fnfswclx57k1vqlm3i5zjhd";
+      sha256 = "1as688j6jq2dfql6cgp4p1bdx7vih6nzy3qi12rh85pipa4dzjps";
     };
-  
+
     deps = [  ];
   };
 
@@ -6627,9 +6627,9 @@ with otherPackages; rec {
     name = "org-dotemacs-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org-dotemacs-0.2.el";
-      sha256 = "03dixcwbc7ay5fyj1wci19s9r0znfhynxh778afbff75cvapvfad";
+      sha256 = "1ypmzhsr1v19kib4cvk4fv72k6jjkhw0lfwgy1cy3jqikimahyxj";
     };
-  
+
     deps = [ org cl-lib ];
   };
 
@@ -6638,9 +6638,9 @@ with otherPackages; rec {
     name = "org-ehtml-0.20120928";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org-ehtml-0.20120928.tar";
-      sha256 = "1x1d9xd73qmd3wlskrlpqhz0c8lq6jcpm2j8q5xznlzbnr6z9lxd";
+      sha256 = "1ns223rx43wdcw6bm3rmlqldy6cy29izb5a7k4i04wmph6w0frcw";
     };
-  
+
     deps = [ elnode org-plus-contrib ];
   };
 
@@ -6649,9 +6649,9 @@ with otherPackages; rec {
     name = "org-email-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org-email-0.1.0.el";
-      sha256 = "1p25014f2gssbc4gl19s5hhfncvw4g85q39nih9mph5bbfzy3isl";
+      sha256 = "0a70l2hwqgd27d1fqj7cl53vxaajmxijad2zm6yvmv1agl69pxla";
     };
-  
+
     deps = [  ];
   };
 
@@ -6660,9 +6660,9 @@ with otherPackages; rec {
     name = "org-journal-1.3.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org-journal-1.3.4.el";
-      sha256 = "1wfailzmncj0nd7mip54nmmfiq4bkyhma2yp4h64jzpak9xmdjvv";
+      sha256 = "0dpxjxvgvdis20xwhwwsmrnh18apjwbqy499sipfxpmqqwman2fr";
     };
-  
+
     deps = [  ];
   };
 
@@ -6671,9 +6671,9 @@ with otherPackages; rec {
     name = "org-magit-0.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org-magit-0.2.0.el";
-      sha256 = "1yxzjgzqaij38hwl4yfddp42k189yjadw8a6v5ipq56m0rb8p1mb";
+      sha256 = "19k1bqjrh5d6xmcdkyzxhdm5w3zzw271209jllm68hqxivz0a50f";
     };
-  
+
     deps = [ magit org ];
   };
 
@@ -6682,9 +6682,9 @@ with otherPackages; rec {
     name = "org-mime-20120112";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org-mime-20120112.el";
-      sha256 = "084zqvizwyl8hviwvv3bi70mgpdj6hm8qr7j136ldliysi709qkv";
+      sha256 = "1ssfv9hyrai3hmbj569sib2biqkzz26mbf2xd2qjvypabbmxx3p7";
     };
-  
+
     deps = [  ];
   };
 
@@ -6693,9 +6693,9 @@ with otherPackages; rec {
     name = "org-outlook-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org-outlook-0.3.el";
-      sha256 = "16pc920f5177kbba1kfy56nblaccsr75ynjzjpj7jyc5nhg8my5q";
+      sha256 = "0rqf38v7q6rvsv7inlh4z62r5py0g6g3m752ix6kps54cy6lh8x5";
     };
-  
+
     deps = [  ];
   };
 
@@ -6704,9 +6704,9 @@ with otherPackages; rec {
     name = "org-presie-0.0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org-presie-0.0.5.el";
-      sha256 = "1zv37faw5nrifx5f6zqz5ycxmybh26ivfpcxw2f4hrh6adc8n4mz";
+      sha256 = "14zjzm4rfj7cndbvpk3zv8wj1wqdh59g77zwjqz31kq8af89pk1h";
     };
-  
+
     deps = [ framesize eimp org ];
   };
 
@@ -6715,9 +6715,9 @@ with otherPackages; rec {
     name = "org-readme-20130322.926";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org-readme-20130322.926.el";
-      sha256 = "1yfi23cl7knjwiis650nhy8q80ac2fa07kdaplfd9s3bzlwxdm3k";
+      sha256 = "06qnsqrxa7k9rjk85szwgx0gd7w27l33wvx867w86i57h1cwfig5";
     };
-  
+
     deps = [ http-post-simple yaoddmuse header2 lib-requires ];
   };
 
@@ -6726,9 +6726,9 @@ with otherPackages; rec {
     name = "org-table-comment-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org-table-comment-0.2.el";
-      sha256 = "0c57ygx06xa5xnr5swf1ln881kmgjs8km39xv0l8qccl60zw5cy4";
+      sha256 = "09gs93zyb9xzy3bvbszcj9qmkjkkk8s3klqjivilyimpr2qxpxib";
     };
-  
+
     deps = [  ];
   };
 
@@ -6737,9 +6737,9 @@ with otherPackages; rec {
     name = "org2blog-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/org2blog-0.5.tar";
-      sha256 = "0152phldh3mry6pcgxir8xxz9pazkzkrx5744rq3jmssabd0zvcc";
+      sha256 = "10kddz67f8v6y14nx1xdwbkmp7c6nyhl815vpp1rcjsy7haw45ph";
     };
-  
+
     deps = [ org xml-rpc ];
   };
 
@@ -6748,9 +6748,9 @@ with otherPackages; rec {
     name = "osx-browse-0.8.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/osx-browse-0.8.6.el";
-      sha256 = "1c1jm15jhnz4milgrml7s9j71vvrzjj0l5ysd49wr2dyn3hbivw7";
+      sha256 = "0x2ys8050z4d8m7mhqqnfz36kdfrmgxj5cksg2iam8hg7sa8n36r";
     };
-  
+
     deps = [ browse-url-dwim ];
   };
 
@@ -6759,9 +6759,9 @@ with otherPackages; rec {
     name = "osx-location-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/osx-location-0.2.tar";
-      sha256 = "1c59ddq1qi4s1yyzcwnmqx02b2k1qkj8g6ny5gjlhg4fb0sbbavb";
+      sha256 = "0c5w9453ryih8xx61z6fd8dk1qnsbm4ap5v218xl5iynn5jhxadg";
     };
-  
+
     deps = [  ];
   };
 
@@ -6770,9 +6770,9 @@ with otherPackages; rec {
     name = "otp-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/otp-1.0.el";
-      sha256 = "1dfgqlqdf86vzkvpchv0x7cksr3laad9wrx3ac78xcwwp7hsql39";
+      sha256 = "1dsz95mmxh5d5x5hcn488yikf17g73pa65sj4msw44dm9his0kv0";
     };
-  
+
     deps = [  ];
   };
 
@@ -6781,9 +6781,9 @@ with otherPackages; rec {
     name = "otter-mode-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/otter-mode-1.2.el";
-      sha256 = "15awdwy1wp3m7rnhp5mpjllv687z9gzy91mb44q78p070406c3w7";
+      sha256 = "1809bn8fba8d2gxbf3cfrnmcr6923n3xhjkinxkrc92zi99rsd7m";
     };
-  
+
     deps = [  ];
   };
 
@@ -6792,9 +6792,9 @@ with otherPackages; rec {
     name = "oz-16513";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/oz-16513.tar";
-      sha256 = "1zhbplpgfnfjkpxh6lg8xndgdyxn1nw95chmsa1bkqz9diwq9xwn";
+      sha256 = "15dcm4n1n52vn2kmhmjc5rw09b8yf52nngddpylz2d2201xfiyj6";
     };
-  
+
     deps = [  ];
   };
 
@@ -6803,9 +6803,9 @@ with otherPackages; rec {
     name = "p4-11.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/p4-11.0.el";
-      sha256 = "0128b9ia49i5cw8nv8hl2iapdyig2s7m66hmk94h6xacs73w26wi";
+      sha256 = "0gph0b8jqrc7kys9g1spfksabsvy9wyl9m0349j0j54whddh1waw";
     };
-  
+
     deps = [  ];
   };
 
@@ -6814,9 +6814,9 @@ with otherPackages; rec {
     name = "pabbrev-3.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pabbrev-3.1.el";
-      sha256 = "0xal6cw9pgf968wly5v8mnz3aqrqf1sh6339n7ncbnfx7rsqr1dq";
+      sha256 = "0lll2fh28pif83pn95zh18vjflrz31yzbgkl1s6xljr0iq9g3b89";
     };
-  
+
     deps = [  ];
   };
 
@@ -6825,9 +6825,9 @@ with otherPackages; rec {
     name = "package-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/package-1.0.el";
-      sha256 = "0kc7gzm152nx3n0hhihgjkbv1rlfl6bj8mp21by07xjg699ijkxs";
+      sha256 = "0glsa2hz44pinnzm22ysblkimhq70q1jqibyybni2m396dac2c4j";
     };
-  
+
     deps = [ tabulated-list ];
   };
 
@@ -6836,9 +6836,9 @@ with otherPackages; rec {
     name = "package-store-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/package-store-0.3.el";
-      sha256 = "1yqkmffrxqk8qpnlf4whnzhg92xk0i3ddiii7vkv6jq9z6lpghl9";
+      sha256 = "1b9g259fjnmh67i8lrl5x8cbywkww3mkbq77ikdmz396ag364bms";
     };
-  
+
     deps = [  ];
   };
 
@@ -6847,9 +6847,9 @@ with otherPackages; rec {
     name = "page-break-lines-0.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/page-break-lines-0.7.el";
-      sha256 = "0ipjzkpcv8pm1w7nxayxrglivydws2nrs3d3flhnfwx20fxckcng";
+      sha256 = "0458l7nxmg9zfy6nd8bfr2lgxzm7cazam8aa8fdzx7lgp5pv55py";
     };
-  
+
     deps = [  ];
   };
 
@@ -6858,9 +6858,9 @@ with otherPackages; rec {
     name = "pager-2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pager-2.0.el";
-      sha256 = "0wnwdwbmhcdlrxs79127295kk10g45d1q5nzkzfbvl7grm7wgg8x";
+      sha256 = "1mkkspigyana7lh22ffpkgapfn6xi4v407yqwqpkjch2mnavv4lj";
     };
-  
+
     deps = [  ];
   };
 
@@ -6869,9 +6869,9 @@ with otherPackages; rec {
     name = "paredit-22";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/paredit-22.el";
-      sha256 = "19fqx7f2vg7g5wzdp70z613xlvm8nhy1h20d003awbv1pxa4lkvk";
+      sha256 = "193pw6bmbjq18ilvzg08njcidpw6dmv288rr4wcr36iq9c5jv8xz";
     };
-  
+
     deps = [  ];
   };
 
@@ -6880,9 +6880,9 @@ with otherPackages; rec {
     name = "paredit-everywhere-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/paredit-everywhere-0.2.el";
-      sha256 = "0q71vdcq3vqka7zf8k9m5skjvms3dvnyvz06ppgbvcbh5pna7zaw";
+      sha256 = "0arbsai7sr6cy8pb80xfy13jixd8kzlich5arv8908z133drwhdy";
     };
-  
+
     deps = [ paredit ];
   };
 
@@ -6891,9 +6891,9 @@ with otherPackages; rec {
     name = "paredit-menu-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/paredit-menu-1.0.el";
-      sha256 = "0dg5fnnqx8qvmh6cncn7gdrzyzqz0c64gry8dglw5q4kba0cqhql";
+      sha256 = "1dw4kcj9j4lgwmrmxfnxh09n5v624m7zqsfrdsm458jn6lcgwyjz";
     };
-  
+
     deps = [  ];
   };
 
@@ -6902,9 +6902,9 @@ with otherPackages; rec {
     name = "parenface-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/parenface-1.1.el";
-      sha256 = "1rbb10r7d3b5dpln6z21ma9f8mc4mazyi1x274jbkfffllxfbism";
+      sha256 = "0i160b5zwiv7m98qvsr98j4bss98kb9ypkffg4v7j2h78vprzn7y";
     };
-  
+
     deps = [  ];
   };
 
@@ -6913,9 +6913,9 @@ with otherPackages; rec {
     name = "parenface-plus-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/parenface-plus-1.1.tar";
-      sha256 = "0l37gi1hzc0ksv259y45baxbhafb5ybp5yvf88qqiw4s7z5fvfy5";
+      sha256 = "17z4ib4706nds1r8017xqnj62wjcapp3z9rb6gimp07d5akiakhn";
     };
-  
+
     deps = [  ];
   };
 
@@ -6924,9 +6924,9 @@ with otherPackages; rec {
     name = "paste-kde-0.2.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/paste-kde-0.2.1.el";
-      sha256 = "07glja73jsm3688bw30z7zk3llip4xqfwy31apkhzkls0w6mvjx0";
+      sha256 = "0qqjhwk0jd274zd8pgw9g20rfgi90zd61r7cb2d6q5gnvkc63vjj";
     };
-  
+
     deps = [ web ];
   };
 
@@ -6935,9 +6935,9 @@ with otherPackages; rec {
     name = "pastebin-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pastebin-0.1.el";
-      sha256 = "165lq4ah2k940b8gbbk96parks5v9jr91lrx85my0yvn4mx7z5jy";
+      sha256 = "15wbanlbvcqgp6azgf9gzknw81lgsv9phrn96sgjsc3fhzk0mqnd";
     };
-  
+
     deps = [  ];
   };
 
@@ -6946,9 +6946,9 @@ with otherPackages; rec {
     name = "pastels-on-dark-theme-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pastels-on-dark-theme-0.3.el";
-      sha256 = "10kfrkxkib7srmcdjbsc0cigw8x8ms7y06b4zjyws6gz8skjii76";
+      sha256 = "06fcp92pqhpdfb4ka3ssqhcn310bq5xxdf71qgbqnwkc31r7xzih";
     };
-  
+
     deps = [  ];
   };
 
@@ -6957,9 +6957,9 @@ with otherPackages; rec {
     name = "pc-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pc-mode-0.1.el";
-      sha256 = "1q7h62rh2cdfh2lph8gnxzmlgw8a1c4phn4a5pnjl6ivk8a475vg";
+      sha256 = "1z27m5ig4ss2bbnm2bnjz6g2rszwh31gwsi27fa82d16hd50f8qf";
     };
-  
+
     deps = [  ];
   };
 
@@ -6968,9 +6968,9 @@ with otherPackages; rec {
     name = "pcache-0.2.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pcache-0.2.3.el";
-      sha256 = "01z2nmz05hq887gn2fjca3y45klfnxni8pmd2l5fqdrglbzhacpz";
+      sha256 = "1drasyy0mprqwrsajc4gh8j8z3mgbvkflm0rm9l4l3gbnjpg31xw";
     };
-  
+
     deps = [ eieio ];
   };
 
@@ -6979,9 +6979,9 @@ with otherPackages; rec {
     name = "pcmpl-args-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pcmpl-args-0.1.1.el";
-      sha256 = "05cr8ir21ipyb05f6z24v3fxjbdc4qy0kzwd309gngfn8h70k5r8";
+      sha256 = "1s0qy3l76dfw8a4fl77vxdzw3ciy2dyfyli3y3d6ak42rzq66pla";
     };
-  
+
     deps = [  ];
   };
 
@@ -6990,9 +6990,9 @@ with otherPackages; rec {
     name = "pcre2el-1.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pcre2el-1.5.el";
-      sha256 = "0ghcal4nyfj34wl2xsvn1d6blpgsy59n8j3xplwhllk4ig9ghicn";
+      sha256 = "0ccfmk128b97qvg831cqfgs7jf65jcmx0r44i936bb4il8kbwaym";
     };
-  
+
     deps = [ cl-lib ];
   };
 
@@ -7001,9 +7001,9 @@ with otherPackages; rec {
     name = "pcsv-1.3.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pcsv-1.3.2.el";
-      sha256 = "1ff5rlmazxdhfkh3w2azsgr68vd74rc9swxivpqvzl2smvj20rp1";
+      sha256 = "0k65rfpsg7pyp2na5kjqcwj771s7ld0hlj1d1hk9q9rf5py3pwmn";
     };
-  
+
     deps = [  ];
   };
 
@@ -7012,9 +7012,9 @@ with otherPackages; rec {
     name = "pde-0.2.16";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pde-0.2.16.tar";
-      sha256 = "0cmbakny08cwwyg0lfmc51wjhy3cmihy1l1r97cr7phqsm8wijaf";
+      sha256 = "10xwfcm2yzxy8v49833kj1avp88zpllsabd03vgfhl9gpr89hf37";
     };
-  
+
     deps = [  ];
   };
 
@@ -7023,9 +7023,9 @@ with otherPackages; rec {
     name = "peep-open-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/peep-open-0.0.2.el";
-      sha256 = "1wrpkmhbm0xhpd3gm9qil6ih6ngxq4zv4szm5fifw7lxpkv0qv61";
+      sha256 = "0bsxfcq5gv4rwlcsi6j5y2l9mzg86sci8azjk2p8m8rr9hsq6qmd";
     };
-  
+
     deps = [  ];
   };
 
@@ -7034,9 +7034,9 @@ with otherPackages; rec {
     name = "peepopen-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/peepopen-0.1.0.el";
-      sha256 = "0vgrzznkq8bs7q7q7pyy31cx6nv2qbq7crq853xq6v5qx6ikhycq";
+      sha256 = "06snqfxpiw7xb50ppd1lxpqvas83ngpfmd4aapqcah2mshc7mqh0";
     };
-  
+
     deps = [  ];
   };
 
@@ -7045,9 +7045,9 @@ with otherPackages; rec {
     name = "pep8-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pep8-1.2.el";
-      sha256 = "14435ikx3pivanr6f513gy0fjxv1aiy2zgj4v77z4dbk00sn6l1v";
+      sha256 = "0r3gykjbpmys166z7gwc55pa94r2009xfa7fgzbz22dmka2b67wf";
     };
-  
+
     deps = [  ];
   };
 
@@ -7056,9 +7056,9 @@ with otherPackages; rec {
     name = "perl-myvar-1.25";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/perl-myvar-1.25.el";
-      sha256 = "133q88zg88w0x5fx51zdj10mrljzwswfniyd8qs5gqgiai8pd6cw";
+      sha256 = "0xl5pyb2dirp854kdd8izky1rs9z70dvq6g974lgkny97fbrhhdi";
     };
-  
+
     deps = [  ];
   };
 
@@ -7067,9 +7067,9 @@ with otherPackages; rec {
     name = "perlbrew-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/perlbrew-0.1.el";
-      sha256 = "0lg3h7cwqdk35cdh2hcs15mjc6fx3kxg0sagmvsqc6qk7pmdsqgv";
+      sha256 = "0qqcdgw9fl7c6qw6jvbvlbirvnwfyf5cya34hm0f4bhnm3i1gmg5";
     };
-  
+
     deps = [  ];
   };
 
@@ -7078,9 +7078,9 @@ with otherPackages; rec {
     name = "perlcritic-1.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/perlcritic-1.10.el";
-      sha256 = "1ls21wccaxc3kznczaikjb075awk3vkaraaagnlqws5kmx0279v2";
+      sha256 = "09rcjqr8y9nqgl24yvdkj52x4502fjs5jcvg5yjjyllsz7g7x0yj";
     };
-  
+
     deps = [  ];
   };
 
@@ -7089,9 +7089,9 @@ with otherPackages; rec {
     name = "persistent-soft-0.8.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/persistent-soft-0.8.6.el";
-      sha256 = "03gxz7ankcivrhzy6ywwnvpa4nnpqv73pni8prphj2k19ad94q2f";
+      sha256 = "14x6655ilkkbdsfxmaf0npsdawpqywg1nwywc69ywlzwhji5q8r2";
     };
-  
+
     deps = [ pcache list-utils ];
   };
 
@@ -7100,9 +7100,9 @@ with otherPackages; rec {
     name = "perspective-1.9";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/perspective-1.9.el";
-      sha256 = "0lk3bjz10s8w7p7sgf2b2x4j0prrkjp34zzdh9h1560v23jp0b5i";
+      sha256 = "1d6g0yrbq5r4grjcjmlazcwh6sbfzydxdcdn69hcil15j183sydy";
     };
-  
+
     deps = [  ];
   };
 
@@ -7111,9 +7111,9 @@ with otherPackages; rec {
     name = "pg-0.12";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pg-0.12.el";
-      sha256 = "1dx60g9d1jcqbf4a5pkm7z4pcjb34rz0qdxkrghaq05n84p89m7n";
+      sha256 = "1ymc4jd0liyfdc96xfdwn0c7dkrwhjc0gyl5xw90m4xkb4dhp6r0";
     };
-  
+
     deps = [  ];
   };
 
@@ -7122,9 +7122,9 @@ with otherPackages; rec {
     name = "phantomjs-0.0.11";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/phantomjs-0.0.11.tar";
-      sha256 = "0jhi4pv1fvn3s2ypvl3n1m4ikl7axbic2wfkb4m9n72wg6sd9rsc";
+      sha256 = "1s2a04sr6blfn8vi86j8vj1s5sw9xyszvdwxcq81r3h3j6067xhq";
     };
-  
+
     deps = [  ];
   };
 
@@ -7133,9 +7133,9 @@ with otherPackages; rec {
     name = "php-extras-0.4.4.20130612";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/php-extras-0.4.4.20130612.tar";
-      sha256 = "0jhnnssvlx8cqx9fbhikz6jr6b399g2z7ixxzgxa3lj31bnbzwif";
+      sha256 = "1f7v7zacd9ii3ql9vvf5yixm0avi12a4iyqjcw2rzyllsm6li5z0";
     };
-  
+
     deps = [ php-mode ];
   };
 
@@ -7144,9 +7144,9 @@ with otherPackages; rec {
     name = "php-mode-1.5.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/php-mode-1.5.0.el";
-      sha256 = "0853wzrnssckr5g7fhz9vzrrdyk2dm5p2ivbybgczl26541hfblm";
+      sha256 = "18h3vch389nx543vixc5kgql1zihcka2nxdv2rynr3hsqj4aa61m";
     };
-  
+
     deps = [  ];
   };
 
@@ -7155,9 +7155,9 @@ with otherPackages; rec {
     name = "pinboard-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pinboard-0.0.1.el";
-      sha256 = "1nyyyhnqlipq69hxs33pmpcsgijl6r04m3d1yr3jak2zhrfripz6";
+      sha256 = "0p3w2v6jag87d1mvrzg3p5mg5a2kd46x3c48zqc57axfnk8r8qd4";
     };
-  
+
     deps = [  ];
   };
 
@@ -7166,9 +7166,9 @@ with otherPackages; rec {
     name = "pivotal-tracker-1.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pivotal-tracker-1.2.0.el";
-      sha256 = "075wsf5ak3n3hj9pcqv8vgldidl4wn7axk43w84vq97bpyn43lk7";
+      sha256 = "0289ndryays5izm6zp98n7w7lkmwvs6cx1i5hz35zih52897hqh7";
     };
-  
+
     deps = [  ];
   };
 
@@ -7177,9 +7177,9 @@ with otherPackages; rec {
     name = "plantuml-mode-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/plantuml-mode-0.2.el";
-      sha256 = "0crvy92n0cx67d9mv5a1wyx8xnc4by4z8l5z3r263yclx9ndaj8v";
+      sha256 = "1876z100pa5w6m7x70vs0whcirphxwhc3si6yzw15aassamfbgi5";
     };
-  
+
     deps = [  ];
   };
 
@@ -7188,9 +7188,9 @@ with otherPackages; rec {
     name = "po-elscreen-1.4.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/po-elscreen-1.4.6.el";
-      sha256 = "1p7k7lx44m7gpmppjdn87y7fss6p9czpdcaq67iz7dl4kmqvssxa";
+      sha256 = "0nyvzbgzkzh6l1czj4i5rsipcyrybzl3cz611qmb11452srik79z";
     };
-  
+
     deps = [  ];
   };
 
@@ -7199,9 +7199,9 @@ with otherPackages; rec {
     name = "po.elscreen-1.4.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/po.elscreen-1.4.6.el";
-      sha256 = "13ql8apprffacivzlww1rq0gbxjcnz01s8r58csgdrrvszxa0mk3";
+      sha256 = "0inzwn79ypk17dwva9h7hvn2pqhj5hvd08l5imwalra7kkivfx3g";
     };
-  
+
     deps = [  ];
   };
 
@@ -7210,9 +7210,9 @@ with otherPackages; rec {
     name = "po.foo-3.0.20";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/po.foo-3.0.20.el";
-      sha256 = "10341wmkbgzk2c0rmyy7brs01sqxv8prvxkxx5053ml3fxfym1cp";
+      sha256 = "15bcsd462sd8xkhv6nniwrmzkdkj5z8az5ql293y0c2k32ln5gz5";
     };
-  
+
     deps = [ haml-mode ];
   };
 
@@ -7221,9 +7221,9 @@ with otherPackages; rec {
     name = "pod-mode-20121117.2120";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pod-mode-20121117.2120.tar";
-      sha256 = "010klgbpwy42sa5r9dmh3yh40fp46nfd5hswqpk2yvm3l8wa2jgm";
+      sha256 = "08m6v9j67807dbvivr8xjnkaams52s794ig279vf28zkz4impzgj";
     };
-  
+
     deps = [  ];
   };
 
@@ -7232,9 +7232,9 @@ with otherPackages; rec {
     name = "pointback-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pointback-0.2.el";
-      sha256 = "0bfnn7zw746clz0130sj35qw88k837538i79rclxp0vmczwqpj24";
+      sha256 = "1z8pw4k3k2kgxljcsail6llhpzl97d63cfqsyl8p6ikr9hcf3jww";
     };
-  
+
     deps = [  ];
   };
 
@@ -7243,9 +7243,9 @@ with otherPackages; rec {
     name = "pony-mode-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pony-mode-0.2.tar";
-      sha256 = "0r8l5lxhyj7sbl01ncc1ahgdw6szpvnldm3m9hc3gv85crjaixpj";
+      sha256 = "05z94ihym1x2nwchnyiv3z8g3sxnri4812r3bgk4g4d2383ar5zh";
     };
-  
+
     deps = [  ];
   };
 
@@ -7254,9 +7254,9 @@ with otherPackages; rec {
     name = "popup-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/popup-0.5.el";
-      sha256 = "10pn9nn9iagcwnzixvq0bsw3i1plfi29yn496m3ykdzfwfh1z71i";
+      sha256 = "130hb5f6w5qi4apdx5x9bwqzb5r0azdl0dx83knmndyfrpm4xdp0";
     };
-  
+
     deps = [  ];
   };
 
@@ -7265,9 +7265,9 @@ with otherPackages; rec {
     name = "popwin-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/popwin-0.4.el";
-      sha256 = "1fkhlmsaf7ixw65gnc7q00cj7c25ifxjznj7ffbsq37d0mbk3c4h";
+      sha256 = "0k39a1jhn84g5i5b6nim18bbaa5z01q6xwymg2prj3rzhgm8xp12";
     };
-  
+
     deps = [  ];
   };
 
@@ -7276,9 +7276,9 @@ with otherPackages; rec {
     name = "pos-tip-0.4.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pos-tip-0.4.5.el";
-      sha256 = "055gixdp20gahdv2l6cr2q754akrx1fg3fagfw5w32akcm1drskp";
+      sha256 = "048i538wqqyw1ixvwzffb9rfjmhmj4nljy3avfmgfs7113fq4dgy";
     };
-  
+
     deps = [  ];
   };
 
@@ -7287,9 +7287,9 @@ with otherPackages; rec {
     name = "pov-mode-3.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pov-mode-3.3.tar";
-      sha256 = "07fp08c3jb85hz8rq7gc5bb6wm1i3q7zpggcl5hyzz6xi593pfw8";
+      sha256 = "1ljg1244d9ka2fkhmwp5vzf9iq8hd758v2kd6a519q6q9xwcrzzv";
     };
-  
+
     deps = [  ];
   };
 
@@ -7298,9 +7298,9 @@ with otherPackages; rec {
     name = "powershell-0.2.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/powershell-0.2.1.el";
-      sha256 = "189ksi48dam2xvd1nj2a6p18pcaly72wp6phr5r3ypcp6dhvd717";
+      sha256 = "05kh0a1la3gxb775qafjrq321x19b7dk5b1yfbww3gin1i0kyj38";
     };
-  
+
     deps = [  ];
   };
 
@@ -7309,9 +7309,9 @@ with otherPackages; rec {
     name = "pp-c-l-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pp-c-l-1.0.el";
-      sha256 = "0vpqiai6qmkh666avy4l777ynf6r56gw8ak7nhm9nw87qfirl4x0";
+      sha256 = "0i5dcldh9d5bcm0g87mj8w6gq1lpinlx26d1b468s3h16p75wczd";
     };
-  
+
     deps = [  ];
   };
 
@@ -7320,9 +7320,9 @@ with otherPackages; rec {
     name = "predictive-0.19.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/predictive-0.19.5.tar";
-      sha256 = "0hfcg3y7hfi7qq0mjsk27z9vlzyz76syd6yq8mflvsc87js46znh";
+      sha256 = "0fpc6wscyiwjzpyw8a0nnnxy5bsqcslxcx6v56s8ghmis4cdlsgk";
     };
-  
+
     deps = [  ];
   };
 
@@ -7331,9 +7331,9 @@ with otherPackages; rec {
     name = "pretty-lambdada-22.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pretty-lambdada-22.0.el";
-      sha256 = "1b72axiw196dydxdgs4p1z9yaj5abhpd8yyb4zp2gqry2mbnvx61";
+      sha256 = "1dvb906bxr6i89vp766y37874s97dik532w9i9k74bnbdpbfnbqb";
     };
-  
+
     deps = [  ];
   };
 
@@ -7342,9 +7342,9 @@ with otherPackages; rec {
     name = "pretty-mode-plus-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pretty-mode-plus-1.1.tar";
-      sha256 = "0xg3hji862v8s21371hkcc4f7b09x93xqshqvh0x5iinlikm51ml";
+      sha256 = "013ckj4f5fsrw3zfiwghq99f8hm806jqrl2r4zxs3ikx888gw7s5";
     };
-  
+
     deps = [  ];
   };
 
@@ -7353,9 +7353,9 @@ with otherPackages; rec {
     name = "proc-net-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/proc-net-0.0.1.el";
-      sha256 = "1f0xx8hb9sl0s0rwab4kwc90nzi87nblf6mxd8qkkd938v4s1ayh";
+      sha256 = "11sdgd0diqwfsr10mx98sb5x1rkyircghvsjimlfc83pq3q1jjpc";
     };
-  
+
     deps = [  ];
   };
 
@@ -7364,9 +7364,9 @@ with otherPackages; rec {
     name = "project-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/project-1.0.el";
-      sha256 = "0smabwgv68ib76206pgqv02kk0k1wdjphrl3rh4q18a38wd7sdf1";
+      sha256 = "02cnw0vdz4yfjk1ibmb338dx3mx2d6fkmyb8bbhmfb20d72y52m3";
     };
-  
+
     deps = [  ];
   };
 
@@ -7375,9 +7375,9 @@ with otherPackages; rec {
     name = "project-mode-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/project-mode-1.0.el";
-      sha256 = "0an8s4lq4zlzw5jnqb7w6skc1g3rjr18ivaq15dhc49gjp503rzm";
+      sha256 = "14lds69v565mrk1rpd0ifmq07g4fwsscmbjm7jwq8i9p1qr4kdls";
     };
-  
+
     deps = [ levenshtein ];
   };
 
@@ -7386,9 +7386,9 @@ with otherPackages; rec {
     name = "projectile-0.9.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/projectile-0.9.1.el";
-      sha256 = "1k325ij9l4ydl1iqrnda66fphhk6fi3v3m2gyrx1ggq3nb7inq4l";
+      sha256 = "1vqrr2wwmhblj6ymw6p77hk4pj3n28wkk5mw97k6wa6n5ks5c37x";
     };
-  
+
     deps = [ s dash ];
   };
 
@@ -7397,9 +7397,9 @@ with otherPackages; rec {
     name = "prolog-1.22";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/prolog-1.22.el";
-      sha256 = "1pv64lp4jvnl55mysxgqbsk3mzfpp0v1sk9w85ilsibg73g2j2zr";
+      sha256 = "0ic5gcbkapba2b394afyfv2hdpzx5spwsb47m7pzi12nari36dnr";
     };
-  
+
     deps = [  ];
   };
 
@@ -7408,9 +7408,9 @@ with otherPackages; rec {
     name = "protobuf-mode-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/protobuf-mode-0.3.el";
-      sha256 = "0d6wyfcqz4226sc1a6hmm36ybildnavynvlljklxvbihcrzfd27b";
+      sha256 = "0pwv7q0gxbrwzb7m1azbajbpljpmxfm21jf665riyk0sbl3ifwkj";
     };
-  
+
     deps = [  ];
   };
 
@@ -7419,9 +7419,9 @@ with otherPackages; rec {
     name = "psgml-1.4.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/psgml-1.4.0.tar";
-      sha256 = "0dslg0xrbanar0cnkn70rv3y3m7j2g4h2mqwq424q1kmdlbrf7ba";
+      sha256 = "01j8fa1vi4igisk59xwxhcsb6z1qab7jvgab7s1i0pkxbg3gvwjb";
     };
-  
+
     deps = [  ];
   };
 
@@ -7430,9 +7430,9 @@ with otherPackages; rec {
     name = "psvn-1.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/psvn-1.1.1.el";
-      sha256 = "0ns98cd2g5whscdyswvhcck8xnvwg4158yda8i9z4x59ax6mkfph";
+      sha256 = "17nxpm1f0wl0wgpgwh96a4nsn0djbiv29mxwr5qjsay43a0pw4y1";
     };
-  
+
     deps = [  ];
   };
 
@@ -7441,9 +7441,9 @@ with otherPackages; rec {
     name = "puppet-mode-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/puppet-mode-0.2.el";
-      sha256 = "1v2x32bclnfpws7mchzi9v3kscy1af7j4i7clgmsypmhb77243p4";
+      sha256 = "0czwp6wazdk0gl2bxh1dj4rqykghwjx2pr81dvan34xcvcakhzvc";
     };
-  
+
     deps = [  ];
   };
 
@@ -7452,9 +7452,9 @@ with otherPackages; rec {
     name = "purple-haze-theme-0.0.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/purple-haze-theme-0.0.7.el";
-      sha256 = "1i7ivz6bj510r5kb5g0szpi0nhpd3ijk7fd2sxq428qpnqaq6yr9";
+      sha256 = "07nicrg2333v3pm9jb3qapkv34c1dkcjwsnpm18z4cw34fn5qvlk";
     };
-  
+
     deps = [  ];
   };
 
@@ -7463,9 +7463,9 @@ with otherPackages; rec {
     name = "pycomplete-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pycomplete-1.0.el";
-      sha256 = "0f49kryxa0j9hyyvyxidsb1d506jhs8gch10j3km683bgz64c9dz";
+      sha256 = "041zjdaxsvnyddcgpnivjvlqh6137ir0swqsa45y943g07b8xlhn";
     };
-  
+
     deps = [  ];
   };
 
@@ -7474,9 +7474,9 @@ with otherPackages; rec {
     name = "pyde-0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pyde-0.6.el";
-      sha256 = "09m5bkmrk29r225c2ykfkd63ff716fhjjwb094hr24p2jy55cgql";
+      sha256 = "1fdn010smj9njjmcpqj09jbdfdc3473z0bjj7xdyqz1i46mqvrn5";
     };
-  
+
     deps = [ pymacs auto-complete yasnippet fuzzy pyvirtualenv ];
   };
 
@@ -7485,9 +7485,9 @@ with otherPackages; rec {
     name = "pyflakes-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pyflakes-1.0.el";
-      sha256 = "1xdj4w501kcvzrkkz5fv9dmp4s991h0c3f6n44dbz7zrxlb7d4ic";
+      sha256 = "1cbwxnal4hyja04292l539l64fqzlj6ifnhic31iz2bzqlx0vk17";
     };
-  
+
     deps = [  ];
   };
 
@@ -7496,9 +7496,9 @@ with otherPackages; rec {
     name = "pylint-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pylint-1.0.el";
-      sha256 = "0jyql9hc6cib4n4sslvxnsyfwh03gdb22lwash2c3q3n410kf1a8";
+      sha256 = "098h97qppakjw4p5rzi6hv65ydvlagkgqdsm2s9xr2q1j4s9hxbj";
     };
-  
+
     deps = [  ];
   };
 
@@ -7507,9 +7507,9 @@ with otherPackages; rec {
     name = "pymacs-0.25";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pymacs-0.25.el";
-      sha256 = "0vwp72a99907xp4hlb52n5xqdmf0dxhsrjvwmsdz01amia4bvyhc";
+      sha256 = "1gvg8z3szd5zfw08l52zrb1cnc3pmmn73spg74cs6a1zdnfwww80";
     };
-  
+
     deps = [  ];
   };
 
@@ -7518,9 +7518,9 @@ with otherPackages; rec {
     name = "pysmell-0.7.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pysmell-0.7.2.el";
-      sha256 = "157byaazjrayskl6k7dl6gab4mzzd6mzdjqaf5m871x5rgz89h5l";
+      sha256 = "1wm42k91mxv8yanf76gamxdvfrz5skla1j9a4ys9j3b3rxdfw568";
     };
-  
+
     deps = [  ];
   };
 
@@ -7529,9 +7529,9 @@ with otherPackages; rec {
     name = "pytest-0.2.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pytest-0.2.1.el";
-      sha256 = "1r43ac32p9nx5w14l4clbvjjczicam47ky5n5pi7p30bz88f9nrp";
+      sha256 = "1gdq08irkd1d16ryzajqpxabav61wcqshy6p54arx16vgzcalikx";
     };
-  
+
     deps = [  ];
   };
 
@@ -7540,9 +7540,9 @@ with otherPackages; rec {
     name = "python-20120402";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/python-20120402.el";
-      sha256 = "16lkgl0fq5g89hzmjbsy51drs96hdpqxp93i0zv2z3gs2zx4mvir";
+      sha256 = "0vqmk35v63zf4p6fl5syhmlbc1x5szbj9lx492s6blqm2q9d2f0h";
     };
-  
+
     deps = [  ];
   };
 
@@ -7551,9 +7551,9 @@ with otherPackages; rec {
     name = "python-django-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/python-django-0.1.el";
-      sha256 = "055ssgmgc4bddwbkvh75idd4lm62jlh67fgykb852vsz8a3x92lf";
+      sha256 = "0xq5whdf2m0zdkyvbryz8z12lqmsh7c9ybicl9x8f02f756giviq";
     };
-  
+
     deps = [  ];
   };
 
@@ -7562,9 +7562,9 @@ with otherPackages; rec {
     name = "python-mode-6.0.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/python-mode-6.0.10.tar";
-      sha256 = "178r4gxsss479wwq9pm85811d9klacdc8zxp8ayhnfm7lgjny1kr";
+      sha256 = "084frrak2vdjpak65dr80j5s6449sr2w186rp6fdqx0x4vww0xxi";
     };
-  
+
     deps = [  ];
   };
 
@@ -7573,9 +7573,9 @@ with otherPackages; rec {
     name = "python-pep8-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/python-pep8-1.1.el";
-      sha256 = "1zzacm36igmiqy76v1sb2g4ms5lsgh9s34kz7r3bf6w765saal82";
+      sha256 = "0sch9ak8lk2mls0nnwapwd06i08ffjlbpdz13p3kzlz4mbzpdi2g";
     };
-  
+
     deps = [  ];
   };
 
@@ -7584,9 +7584,9 @@ with otherPackages; rec {
     name = "python-pylint-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/python-pylint-1.1.el";
-      sha256 = "0x3hj32ibskgzp1nppm9cy8zgm9nb281g41sh8cycxysicnss2xa";
+      sha256 = "15nyrn1r8x264p6qwjq3y888r7jsrdsp8ixdifl3rqz4vfx25glj";
     };
-  
+
     deps = [  ];
   };
 
@@ -7595,9 +7595,9 @@ with otherPackages; rec {
     name = "pyvirtualenv-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pyvirtualenv-1.1.el";
-      sha256 = "0778mdn4j094g2wc92r9qz1p2hd6rnrsn3mjk0aj8k75gfrg4z71";
+      sha256 = "0i3ivymw2p7gwrh2ksbishqj6ib7rg970l17jqq7k755w6x59iia";
     };
-  
+
     deps = [  ];
   };
 
@@ -7606,9 +7606,9 @@ with otherPackages; rec {
     name = "qsimpleq-theme-0.1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/qsimpleq-theme-0.1.3.el";
-      sha256 = "1mszap3zsrbw4pwrwqzf0d7g9y4n9kswrmbqwxcsnml1n7rqg7ys";
+      sha256 = "0q4lz2a348kj2cws5h32c1468s59bdfgcwi5xpc1h061xhfl0nq8";
     };
-  
+
     deps = [  ];
   };
 
@@ -7617,9 +7617,9 @@ with otherPackages; rec {
     name = "quack-0.42";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/quack-0.42.el";
-      sha256 = "006dkn2rz5lp0i19ybpfgi779wsv2bvlchmxz12jxjzy7gxy98nx";
+      sha256 = "1qy2vi4gjdjj067rk8a591fnx2qj0zx2427d35zh9sbrjb077bs2";
     };
-  
+
     deps = [  ];
   };
 
@@ -7630,7 +7630,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/quarter-plane-0.1.el";
       sha256 = "0hj3asdzf05h8j1fsxx9y71arnprg2xwk2dcb81zj04hzggzpwmm";
     };
-  
+
     deps = [  ];
   };
 
@@ -7641,7 +7641,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/queue-0.1.el";
       sha256 = "1qdbyjzyf2zv311ak4g67c6xax8ngr27miidgdr1zwzyxxb6jqik";
     };
-  
+
     deps = [  ];
   };
 
@@ -7650,9 +7650,9 @@ with otherPackages; rec {
     name = "quickrun-1.8.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/quickrun-1.8.4.el";
-      sha256 = "1zifzss1axq8dsw6bjiaabn6a9krd1w93s8ff62y1h821rqj7ari";
+      sha256 = "11km8zmrnf04xrdnyw58kc18idgj4brspvfg9njxzn0b0cbv17wh";
     };
-  
+
     deps = [  ];
   };
 
@@ -7661,9 +7661,9 @@ with otherPackages; rec {
     name = "r-autoyas-0.28";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/r-autoyas-0.28.el";
-      sha256 = "1fmyz37gfymwhkxzsmp8x680wyc9l98brhm8b1wsw9crps71k5zs";
+      sha256 = "1w5989wdd264jvgjmw5k4v0fqck6s60r6xixwgxhc52yl71lyg0b";
     };
-  
+
     deps = [  ];
   };
 
@@ -7672,9 +7672,9 @@ with otherPackages; rec {
     name = "r5rs-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/r5rs-1.0.el";
-      sha256 = "171gqjpb4hgdzx146c57g1c3qy77lm5g8q7sdx40riqnw1pmdcc7";
+      sha256 = "0r2wqrs1jkrqgbgizcr8a0s66k1bfdr47459gk236pj847izk22m";
     };
-  
+
     deps = [  ];
   };
 
@@ -7683,9 +7683,9 @@ with otherPackages; rec {
     name = "rainbow-delimiters-1.3.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rainbow-delimiters-1.3.4.el";
-      sha256 = "0y4912f1hagnphilp7drprm4yq6v3cr3vj1i1dqnfgv6rzv56f3g";
+      sha256 = "0h6vnfy90nqdi1qz44aqa4ivajfvs6ccynksgc5nw81x8ba7x8nn";
     };
-  
+
     deps = [  ];
   };
 
@@ -7696,7 +7696,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/rainbow-mode-0.8.el";
       sha256 = "0hnqchhzd8ds97nyfa1cqglmi8qg705i7hfw9zhxxmrhyinsaxbf";
     };
-  
+
     deps = [  ];
   };
 
@@ -7705,9 +7705,9 @@ with otherPackages; rec {
     name = "rbenv-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rbenv-0.0.2.el";
-      sha256 = "10f80vhil3rwbyzp4hpjnadw6bczssb7d0rnyc2pyh09ma67vfk3";
+      sha256 = "1xzgb0impwvdyg1azcgrj50a59rwf06lk442gdk4s95qg3y6j609";
     };
-  
+
     deps = [  ];
   };
 
@@ -7716,9 +7716,9 @@ with otherPackages; rec {
     name = "rcirc-color-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rcirc-color-0.2.el";
-      sha256 = "1ia6ky16nny704nvms7yq5sz74v0324xr26wpkhpl20h1sf5ywh1";
+      sha256 = "01pzdn4zhasqvp1j9y5fr3x0qjib24w2dmmzn7ariak94y177c9c";
     };
-  
+
     deps = [  ];
   };
 
@@ -7727,9 +7727,9 @@ with otherPackages; rec {
     name = "rcirc-notify-0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rcirc-notify-0.6.el";
-      sha256 = "0v44n3mh31b7x3344xkcpw64ln25yryv43vvnj9gi58lvzib33mk";
+      sha256 = "02j0m88bsg88afxsmz9sp4j86vii62jx1kq6h8nr1hjvy0mlx5mp";
     };
-  
+
     deps = [  ];
   };
 
@@ -7738,9 +7738,9 @@ with otherPackages; rec {
     name = "rcirc-robots-0.0.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rcirc-robots-0.0.7.el";
-      sha256 = "11pqrypia2ygsl47flsr34l008sgscid3mry03cigav3vsqdwf3c";
+      sha256 = "075yak6dg09f84g2wy7cj8dqyyaizf4yi02q7min0w9kwq0vv8mf";
     };
-  
+
     deps = [ kv anaphora ];
   };
 
@@ -7749,9 +7749,9 @@ with otherPackages; rec {
     name = "rcirc-ssh-0.0.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rcirc-ssh-0.0.7.el";
-      sha256 = "1qacvnkipmlhdkd2285akm5m9smcbr94a74spgw3nbwqbcydkcpm";
+      sha256 = "1sjfxvqqx9hchr2wygdc5dcbsb2pl7i86axdw567azhg3ywzb11a";
     };
-  
+
     deps = [ kv ];
   };
 
@@ -7760,9 +7760,9 @@ with otherPackages; rec {
     name = "rcirc-ucomplete-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rcirc-ucomplete-1.0.1.el";
-      sha256 = "1561hvxnl8zs1dmprpbn83k7nbjgwnq8c3j7fm4vzz4kslnmfy09";
+      sha256 = "163kd9bj9s6zvpy51pv65nzg3sfs9rm9ywlydmzgxqr30pyhbrhd";
     };
-  
+
     deps = [  ];
   };
 
@@ -7771,9 +7771,9 @@ with otherPackages; rec {
     name = "real-auto-save-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/real-auto-save-0.3.el";
-      sha256 = "1ni85jyl3g6qqz0qab4ss7rkr6r4mp6jxzvqkij89iw3xigzdi3i";
+      sha256 = "0h4gz1y6r3b1w2mm4xryv0rkzmql78g0hc79c05d9mz9x1rf6ld5";
     };
-  
+
     deps = [  ];
   };
 
@@ -7782,9 +7782,9 @@ with otherPackages; rec {
     name = "rect-mark-1.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rect-mark-1.4.el";
-      sha256 = "16gzx55y38h45gn7nwqd0ia2kpv3qgzvwjhzq4kc3k77d6pd2s2q";
+      sha256 = "0pyyg53z9irh5jdfvh2qp4pm8qrml9r7lh42wfmdw6c7f56qryh8";
     };
-  
+
     deps = [  ];
   };
 
@@ -7793,9 +7793,9 @@ with otherPackages; rec {
     name = "recursive-narrow-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/recursive-narrow-1.0.el";
-      sha256 = "1j6xfshv2770sv1mmig3268xx0hqjw25vjilpm9njikb5vijqc8d";
+      sha256 = "1613w2b745vc38diz6davqvdjn8wxljk9s76yf0c5cd73b7mr7i5";
     };
-  
+
     deps = [  ];
   };
 
@@ -7804,9 +7804,9 @@ with otherPackages; rec {
     name = "redo-plus-1.15";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/redo+-1.15.el";
-      sha256 = "0sv36mlnhb300hfvwv0v4dgapinwklnszbg71s76p318ql7v9mf2";
+      sha256 = "1m7ivaazfnbll68k8h9hq3fqjrpcjx0gw8wjnbpghl0744csxlbq";
     };
-  
+
     deps = [  ];
   };
 
@@ -7815,9 +7815,9 @@ with otherPackages; rec {
     name = "refheap-0.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/refheap-0.0.3.el";
-      sha256 = "1lgb24g4zavdshjnc6v2zx1rfcr1zmrrqp16nzhzkdvf3gdsxzp9";
+      sha256 = "0qc45w93pmsi04rk12r2df5rbhv5791dji9cgr1krmwh43jnb3fr";
     };
-  
+
     deps = [  ];
   };
 
@@ -7826,9 +7826,9 @@ with otherPackages; rec {
     name = "regex-tool-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/regex-tool-1.2.el";
-      sha256 = "0sm53b6a5sm9806m0jnqc9d1bbi6qm0h0vaw8bd10s12ghsp0gd1";
+      sha256 = "14hiqvyjnjqqvgx6645vgz6ccx6r99ia874w6zj5hy6sghjxzm3m";
     };
-  
+
     deps = [  ];
   };
 
@@ -7837,9 +7837,9 @@ with otherPackages; rec {
     name = "region-bindings-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/region-bindings-mode-0.1.el";
-      sha256 = "1yf9hrfvjnx1754f67cj0i57k93sir62rhjjrkcsib53y7ag80i2";
+      sha256 = "0ghl6l4fif85xlyb6hic9xs6xq26pvhji0f6bhlf2k0ff93nikhb";
     };
-  
+
     deps = [  ];
   };
 
@@ -7848,9 +7848,9 @@ with otherPackages; rec {
     name = "region-list-edit-20100530.808";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/region-list-edit-20100530.808.el";
-      sha256 = "1hcsr4s6pym4mz0p40vah3gjjf7xv56dppp9dw47w780n21dnghs";
+      sha256 = "0rfai864ddd0xc2gkc9lw4kch67zpbmdksyzvm3j5fa0mrbysgmy";
     };
-  
+
     deps = [  ];
   };
 
@@ -7861,7 +7861,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/register-list-0.1.el";
       sha256 = "1azgfm4yvhp2bqqplmfbz1fij8gda527lks82bslnpnabd8m6sjh";
     };
-  
+
     deps = [  ];
   };
 
@@ -7870,9 +7870,9 @@ with otherPackages; rec {
     name = "repository-root-1.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/repository-root-1.0.3.el";
-      sha256 = "1mys4rk7kr0cyngmzn2aqd7idmfl1dj0gkl9yrqwn7wm401lxl7y";
+      sha256 = "1h0kn04hnikdfqcix7py8j3p14sy1k9mrd3v0pcpg7cdg57qd102";
     };
-  
+
     deps = [  ];
   };
 
@@ -7881,9 +7881,9 @@ with otherPackages; rec {
     name = "request-0.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/request-0.2.0.el";
-      sha256 = "04r4dmi5hg1svnm1bkql1ahy61d92axp6bvmf0ryras32y3jhzb9";
+      sha256 = "0hswihwb7wfn3xp9mzdajx053cjnllk7rc0zjx78hgvi2i0ysq3m";
     };
-  
+
     deps = [  ];
   };
 
@@ -7892,9 +7892,9 @@ with otherPackages; rec {
     name = "request-deferred-0.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/request-deferred-0.2.0.el";
-      sha256 = "0cmf68lyddraxgmn87r7hb17pz99yhjqmy64iq2yla79r9jncqqw";
+      sha256 = "16sy7ry1lyidd7nxkg3wvzdymcglmxs4d6lcj2ap7kbs4qc5r7v2";
     };
-  
+
     deps = [ deferred request ];
   };
 
@@ -7903,9 +7903,9 @@ with otherPackages; rec {
     name = "requirejs-mode-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/requirejs-mode-1.1.el";
-      sha256 = "0ncbyly8mkxm04lra9k6kfwdcibihy7fqp4m00jw3q71libd99s1";
+      sha256 = "1pan2yml72hrlb1ir7g0rdrbbrql59rk9h67vsld6qj5angjw598";
     };
-  
+
     deps = [  ];
   };
 
@@ -7914,9 +7914,9 @@ with otherPackages; rec {
     name = "rfringe-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rfringe-1.0.1.el";
-      sha256 = "1h2wj93fsf5n5plysqamidvr2jdv4q8f6xn33b9jnmlzn0grs2ys";
+      sha256 = "1vn5x789z5wd67p0pw64z9vvqnypv2cf5iy1khav7hpd68lb3g5f";
     };
-  
+
     deps = [  ];
   };
 
@@ -7925,9 +7925,9 @@ with otherPackages; rec {
     name = "rinari-2.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rinari-2.10.el";
-      sha256 = "0z3n0c260yk5paskiyy8fhck3bxhjpq48mszn3psd45dyiv25411";
+      sha256 = "1azvd6nyv9dmkmf9s05a6z9kga8v5ia0izanydzyx06n8cmfai4l";
     };
-  
+
     deps = [ ruby-mode inf-ruby ruby-compilation jump ];
   };
 
@@ -7936,9 +7936,9 @@ with otherPackages; rec {
     name = "robe-0.7.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/robe-0.7.4.tar";
-      sha256 = "1nccrjganbgs618amf6v0n8fbq2dq6fykvw11p1ksf71mm7659ba";
+      sha256 = "162cf5k437z4w6s92pw9gnif0fc7mpdy9bzsis1lvnv93gjsaz9g";
     };
-  
+
     deps = [ inf-ruby ];
   };
 
@@ -7947,9 +7947,9 @@ with otherPackages; rec {
     name = "roy-mode-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/roy-mode-0.1.0.el";
-      sha256 = "1gg69bv46w3mc2g7kwg1lybhp63vskrchy9ambpv02in4wbl94af";
+      sha256 = "1n04w8gj1wmx1g68drrf3zj62vackapcs2jcl1bkw2wqahvnqx3q";
     };
-  
+
     deps = [  ];
   };
 
@@ -7958,9 +7958,9 @@ with otherPackages; rec {
     name = "rspec-mode-1.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rspec-mode-1.7.el";
-      sha256 = "1jn1nvf0mf1kwh1pbxrhl8miyysf6lqj6jsdqsx8d3gwv97kg19r";
+      sha256 = "1qvcdad9h3qwcbx07anpkbn4d3kgz7xv34cnwprlil1klpfihbnj";
     };
-  
+
     deps = [ ruby-mode ];
   };
 
@@ -7969,9 +7969,9 @@ with otherPackages; rec {
     name = "rubocop-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rubocop-0.1.el";
-      sha256 = "0ljkqj90asy35n698kjk3m9dh7m1wxps4xjw1n6pnycxzvannbn1";
+      sha256 = "06mpkswlw2yxsqkn22xhlz9yn2fmwqvll53z3h3ip6kk0q644cgb";
     };
-  
+
     deps = [ dash ];
   };
 
@@ -7980,9 +7980,9 @@ with otherPackages; rec {
     name = "ruby-block-0.0.11";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ruby-block-0.0.11.el";
-      sha256 = "1ynvm0cq13jb2b52qa2i4vv20qh0r33as51d4l2257qzvwpsr8b4";
+      sha256 = "1af68igrkmksvnk5bg3ymxf13mmkch7knbkbyrcdy332a6vn7v8f";
     };
-  
+
     deps = [  ];
   };
 
@@ -7991,9 +7991,9 @@ with otherPackages; rec {
     name = "ruby-compilation-0.17";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ruby-compilation-0.17.el";
-      sha256 = "03dk67ka73rq999fi6nhl8fwqsbnljc168jqxjsccdv19ppap8xv";
+      sha256 = "1qcn2p3idlhm2kjcgkdcjhh8lf8plhcwi8j96447i7plb4ppzp5j";
     };
-  
+
     deps = [ inf-ruby ];
   };
 
@@ -8002,9 +8002,9 @@ with otherPackages; rec {
     name = "ruby-end-0.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ruby-end-0.2.0.el";
-      sha256 = "16wn564iz88m86ni0l4bvy2sjwc8xhfcjndkmdmh9q1ylncc52pg";
+      sha256 = "0bw20j75axif0zds1dzqg4ala9ziyabhj02m9hpjaxxfh1slziqh";
     };
-  
+
     deps = [  ];
   };
 
@@ -8013,9 +8013,9 @@ with otherPackages; rec {
     name = "ruby-hash-syntax-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ruby-hash-syntax-0.1.el";
-      sha256 = "1fhfwla7y4w064zh7cmap1s7bhc94nigq4r3d3wn003vqhv8y62m";
+      sha256 = "0ly2ckcsmpp705l5rimp09h7rfp20iwald4gwh8aaq9w9sq62hx8";
     };
-  
+
     deps = [  ];
   };
 
@@ -8024,9 +8024,9 @@ with otherPackages; rec {
     name = "ruby-mode-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ruby-mode-1.1.tar";
-      sha256 = "0vfbydfd439jl4byzwirfa6ad54i9rq2lzqs2amcl0i6ikjc26pd";
+      sha256 = "04nmxgrakfvxrkzk1b7cny1bv5d45gb8phdqi462xkgkr4ja6a4p";
     };
-  
+
     deps = [  ];
   };
 
@@ -8035,9 +8035,9 @@ with otherPackages; rec {
     name = "ruby-test-mode-1.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ruby-test-mode-1.5.el";
-      sha256 = "0pcm8dg4nhl1frgp0rcsg8zgzcfaf8nlyyzfadvlsbjl38f1kcci";
+      sha256 = "13l8jg9ncf899n2hcld52bggig335gxsrr2wpci3nhhwpxf08b7q";
     };
-  
+
     deps = [ ruby-mode ];
   };
 
@@ -8046,9 +8046,9 @@ with otherPackages; rec {
     name = "ruby-tools-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ruby-tools-0.1.0.el";
-      sha256 = "0h9y1g4igvzn9q9bgjjf8sb4chrm5hjsf5zv8zsc9hzn6pvy2n7p";
+      sha256 = "0wqnj8rsg47lbja1n55a8pn08b9dbcrwdwicazg527hmbyi2vhcr";
     };
-  
+
     deps = [  ];
   };
 
@@ -8057,9 +8057,9 @@ with otherPackages; rec {
     name = "rubyinterpol-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rubyinterpol-0.1.el";
-      sha256 = "1gc096xh2z3xlf0jd0nv7q0kanx1mg6hvp9w7a24yc33jj8spki0";
+      sha256 = "0sddvm0w7d23vnp4kmjcnd4bvdmj0g1q6hk0bkhj297s4zld5jnd";
     };
-  
+
     deps = [  ];
   };
 
@@ -8068,9 +8068,9 @@ with otherPackages; rec {
     name = "rudel-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rudel-0.3.tar";
-      sha256 = "1fw1fh2mqxml317712p28xj171cpbmpv5c46hjdfn09fypshn93n";
+      sha256 = "09r6csvk3jckgz3c4adf08mzghsdaxn5bqyyh5lw9a76y4543fi9";
     };
-  
+
     deps = [ eieio ];
   };
 
@@ -8079,9 +8079,9 @@ with otherPackages; rec {
     name = "rust-mode-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rust-mode-0.1.0.el";
-      sha256 = "0hig35kw5wplqdlliv5w0yy3md40lji4gwdai0irrc8g2dyrhr0x";
+      sha256 = "1zv12n1077vfyh6aj6xp1fx4rz3y6hfk075k47bfwxbszhzrn7jg";
     };
-  
+
     deps = [ cm-mode ];
   };
 
@@ -8090,9 +8090,9 @@ with otherPackages; rec {
     name = "rvm-1.3.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rvm-1.3.0.el";
-      sha256 = "1mzsdsnmxmvli67f9fywv51lvz1hgm6vxiyrmpgld56fbglzlvfb";
+      sha256 = "1bp12mvkldc1hds8csbsxbi8a5jnnij65i6j8l6ilmz7s6c0gaz5";
     };
-  
+
     deps = [  ];
   };
 
@@ -8101,9 +8101,9 @@ with otherPackages; rec {
     name = "rw-hunspell-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rw-hunspell-0.2.el";
-      sha256 = "0siz76syxbmw264xpx1wgyx54y32x4qsp0lr8g92qcnd2qkv5qrj";
+      sha256 = "02qdrg06hqvd0jhh1yijicjbzpp56k4qyy1mk7ri1i9ndgfy10p4";
     };
-  
+
     deps = [  ];
   };
 
@@ -8112,9 +8112,9 @@ with otherPackages; rec {
     name = "rw-ispell-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rw-ispell-0.1.el";
-      sha256 = "1420yw8xj15c38jacwsy7ih998pp25sp0fq41l4fgymld543gmag";
+      sha256 = "1fdir455kjay9hdmn5rbjidqg8fd7as5kg3xkk5djj5kxzfib2k7";
     };
-  
+
     deps = [  ];
   };
 
@@ -8123,9 +8123,9 @@ with otherPackages; rec {
     name = "rw-language-and-country-codes-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/rw-language-and-country-codes-0.1.el";
-      sha256 = "1hcq0vjrn062yfwrvdp69wcj0b87f4w0rg15hf605ywihxym7jc6";
+      sha256 = "1fiinq72x6fdxr6xqjkmzh7i92z63h66hpjxbdjnhma9mdfgnmn3";
     };
-  
+
     deps = [  ];
   };
 
@@ -8134,9 +8134,9 @@ with otherPackages; rec {
     name = "s-1.6.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/s-1.6.1.el";
-      sha256 = "0h6ysq2hrrf6y908px2nh7qbwybc8sg9ss8fhllxp1vanlfl2jkw";
+      sha256 = "0drhgcmp7mdsgfln4w1bsil1j0n9jpal2hncl816f3s2fwx4bcrg";
     };
-  
+
     deps = [  ];
   };
 
@@ -8145,9 +8145,9 @@ with otherPackages; rec {
     name = "s-buffer-0.0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/s-buffer-0.0.4.el";
-      sha256 = "1lhrgsw5fjs18qcibix4fwgc5sha9f62a83h3ivcw443g0pvlnm5";
+      sha256 = "0yvdymr0fsdf68dwssamvwvw43bf3v9j4chshh0dvfmm6h18q2yr";
     };
-  
+
     deps = [ s noflet ];
   };
 
@@ -8156,9 +8156,9 @@ with otherPackages; rec {
     name = "sackspace-0.8.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sackspace-0.8.1.el";
-      sha256 = "1inh02lddjzyr9933n0y5m1gb122vik05dhl2j3f2gznnl3ispz0";
+      sha256 = "1hzwc61ackmw9vjkrdvs6sxsgxpm91rm2x7jv4m9crlgxwlnz843";
     };
-  
+
     deps = [  ];
   };
 
@@ -8167,9 +8167,9 @@ with otherPackages; rec {
     name = "sass-mode-3.0.14";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sass-mode-3.0.14.el";
-      sha256 = "03s84z7jmzr9ilfhq2skqi9i7gsvq1n6yqr95izsj9ab73n7fmih";
+      sha256 = "08brg38gdximmjcj558q4fb23g9w5051swkm1v97gg22khh3lhlw";
     };
-  
+
     deps = [ haml-mode ];
   };
 
@@ -8178,9 +8178,9 @@ with otherPackages; rec {
     name = "sauron-0.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sauron-0.8.tar";
-      sha256 = "08m83nz885cibkf71xx2y1xczihs3p1kxbad24f79lrvqg27d77a";
+      sha256 = "0b1bp9xi3wsv42hnqp5m01lbsjf1diw9nz3gh2dda0wl3k26s9vq";
     };
-  
+
     deps = [  ];
   };
 
@@ -8189,9 +8189,9 @@ with otherPackages; rec {
     name = "save-packages-0.20121012";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/save-packages-0.20121012.el";
-      sha256 = "0ldsk9sgmnq2ppgrv3hqw733sha5wa7kgq6kdp4h00x72ilrmg0c";
+      sha256 = "0z0xr3nlpkynl1747kqvprin7dhgfr6cmxvscc4vb4sn1kanp4xh";
     };
-  
+
     deps = [  ];
   };
 
@@ -8200,9 +8200,9 @@ with otherPackages; rec {
     name = "save-visited-files-1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/save-visited-files-1.3.el";
-      sha256 = "10kx85crpw87zfpjvrqzahds3p0dxgikvllygl5szsyr70v51144";
+      sha256 = "1l4rdvshvglnsf63vk5zxc3kyk40zkn42m2962hvbqx6xrx9d3w5";
     };
-  
+
     deps = [  ];
   };
 
@@ -8211,9 +8211,9 @@ with otherPackages; rec {
     name = "sawfish-1.32";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sawfish-1.32.el";
-      sha256 = "02b0ldn9hcqmqh28w0d3y2pszx9nign5a2j0mpgdadfjr6s1ydnf";
+      sha256 = "0afywrfbw15ii30grlyhnn30w19cjni3ranr711xn5ibd9p4gh70";
     };
-  
+
     deps = [  ];
   };
 
@@ -8222,9 +8222,9 @@ with otherPackages; rec {
     name = "scad-mode-90.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/scad-mode-90.0.el";
-      sha256 = "05ixngxgv1x4a9lvdcy4xiw2rsmvrzm1l76qx46kf199bqwpps53";
+      sha256 = "0j4nzwblsrcm10rkwl892kin6zhmw27r243d48v2xyxd1kbgrrbq";
     };
-  
+
     deps = [  ];
   };
 
@@ -8233,9 +8233,9 @@ with otherPackages; rec {
     name = "scala-mode-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/scala-mode-0.0.2.tar";
-      sha256 = "14k0r218axzsbry7481g8dqpj3f1pn4kw874gpi8ns5br9b0f9ig";
+      sha256 = "19pg3d3hksf94qi31008acw1f22399j2ngivvxdsj1gbqmhn26gy";
     };
-  
+
     deps = [  ];
   };
 
@@ -8244,9 +8244,9 @@ with otherPackages; rec {
     name = "scheme-complete-0.8.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/scheme-complete-0.8.2.el";
-      sha256 = "0lxahfn2jfrcg483dhakwpk9dyng2zaknad8q7zzx4k11x0znw6m";
+      sha256 = "0hvj7aniif92bxqp90hvnhdkqgz3jini7i8114na6z4yzfh1l1iw";
     };
-  
+
     deps = [  ];
   };
 
@@ -8255,9 +8255,9 @@ with otherPackages; rec {
     name = "scpaste-0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/scpaste-0.6.el";
-      sha256 = "1cjcgbdm95wmnhx14rizkz2qs2x4bs2vlmcya6v96k2n6a7mm778";
+      sha256 = "1grqr3bzl4bq5gjj6c53sxiifa00i3dq16bq865fwnq8fbp0p3mx";
     };
-  
+
     deps = [ htmlize ];
   };
 
@@ -8266,9 +8266,9 @@ with otherPackages; rec {
     name = "scratch-20110708";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/scratch-20110708.el";
-      sha256 = "0bqmc3dx40nxyhlakizhd0w0px1b068769rv8rsy4hcmgn6ji47a";
+      sha256 = "0148zr8c00ffbqb7jhz4b9hgacra9fh3bjlawkascm80c0arm7sk";
     };
-  
+
     deps = [  ];
   };
 
@@ -8277,9 +8277,9 @@ with otherPackages; rec {
     name = "screen-lines-0.55";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/screen-lines-0.55.el";
-      sha256 = "0ilm3x2chns7m9qlcid9hddnm4jgmqp2hj2xwbpl1mql6p0gqbzi";
+      sha256 = "05nx40isivqszcvviskibixzp80by9bslqdlicp3yznig2ygany8";
     };
-  
+
     deps = [  ];
   };
 
@@ -8288,9 +8288,9 @@ with otherPackages; rec {
     name = "scrolloff-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/scrolloff-1.0.el";
-      sha256 = "0ap96fqah7a347k9af80v3gqmm2a24gbi34nb53iavi7p10pxndh";
+      sha256 = "0wplgs1ci2la6yplhryp4ifpx5pcx9fqpskxsywd0620ci3bq8my";
     };
-  
+
     deps = [  ];
   };
 
@@ -8299,9 +8299,9 @@ with otherPackages; rec {
     name = "scss-mode-0.5.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/scss-mode-0.5.0.el";
-      sha256 = "0d1skwz0drq6xgjwxh8s9xyf023k8v3s5f0qm0hp1a2sm6rv1793";
+      sha256 = "0kyzd5rb15pr99gjk4ycmkwxsyyks01af9h30xkdbi0ymn3fkjfa";
     };
-  
+
     deps = [  ];
   };
 
@@ -8310,9 +8310,9 @@ with otherPackages; rec {
     name = "sea-before-storm-theme-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sea-before-storm-theme-0.3.el";
-      sha256 = "19kil669j1qc7kbv7vvnim0dnb1q0p77fwwrhchj0c13fnk1fj70";
+      sha256 = "1dr34zwvca4kxa4l7spn0qk7cr6mcdjzcf5n3vflhdyiphzhh8fr";
     };
-  
+
     deps = [  ];
   };
 
@@ -8321,9 +8321,9 @@ with otherPackages; rec {
     name = "seclusion-mode-1.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/seclusion-mode-1.1.1.el";
-      sha256 = "1zhb825najfh97wzi3fpny0g3lp57nx4whcx2zq4pzw4zdnmaicf";
+      sha256 = "0w6nmjc7ygmhx3b4n11y8f5h1szgsxhnrbp91p5zlvzabsga6cpy";
     };
-  
+
     deps = [  ];
   };
 
@@ -8332,9 +8332,9 @@ with otherPackages; rec {
     name = "sentence-highlight-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sentence-highlight-0.1.el";
-      sha256 = "11fyj61l926xpishdx2pp36dwpij9ijgwkyhhszrg31vh256p8m0";
+      sha256 = "1zdkagx2bzp6g1g0ja29q6nwbk3ww87snafnjnqmhykl3hnlqs48";
     };
-  
+
     deps = [  ];
   };
 
@@ -8343,9 +8343,9 @@ with otherPackages; rec {
     name = "sequence-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sequence-0.0.1.el";
-      sha256 = "1nrd4xz9hic18w8ajwxvlzavsdrwwk5a8z7ga3qv3r0m993ry7g9";
+      sha256 = "1mcybkx92prd93q81kjhdkhh83qcl6y5ri3vykmdwcwap3kmc2b7";
     };
-  
+
     deps = [  ];
   };
 
@@ -8354,9 +8354,9 @@ with otherPackages; rec {
     name = "session-2.2.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/session-2.2.1.el";
-      sha256 = "01a7dzzlpzzr795hgic1rlg4ghc8pap4j8zxrcgzwkvvgjhqb7qk";
+      sha256 = "0yl1wkjvzx2yhrc1si2pdahllyaljq53g173j2fzzva05nzs4l3q";
     };
-  
+
     deps = [  ];
   };
 
@@ -8365,9 +8365,9 @@ with otherPackages; rec {
     name = "session-manager-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/session-manager-0.5.el";
-      sha256 = "0qg3nvw0p01rrx8jw72pp97xcnclp9qii5xlhgqc4dj1pa3sfphm";
+      sha256 = "13hxqqfavr9a9ix1fndwi09yjfikrsfblmyzvnwr433caxa4y5zy";
     };
-  
+
     deps = [  ];
   };
 
@@ -8376,9 +8376,9 @@ with otherPackages; rec {
     name = "shadchen-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/shadchen-1.0.el";
-      sha256 = "1bh0jngaaapck0pymh0gchinj743z1ng25vc0hcdwij4p211kknw";
+      sha256 = "02da4pky3xb18w1rvc7iasvf2i4m4qmk3xh91sn7avr22f81bqq5";
     };
-  
+
     deps = [  ];
   };
 
@@ -8387,9 +8387,9 @@ with otherPackages; rec {
     name = "shell-here-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/shell-here-1.1.el";
-      sha256 = "1wzz6s47y7dcvmrd5kqhnbmb9fpjy03lzkr65dq673g8lrpnzql2";
+      sha256 = "0grfcxx1ksrcyb9ib2bqgaw5a9i4k9mjwgxai9xmqrnn4183gjsr";
     };
-  
+
     deps = [  ];
   };
 
@@ -8398,9 +8398,9 @@ with otherPackages; rec {
     name = "shell-switcher-0.1.5.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/shell-switcher-0.1.5.1.tar";
-      sha256 = "0ng2yh0v0slyxl4z9qc4my9xkgjzwxy15vw3kd80dbxsfjd2wnj9";
+      sha256 = "1adzc9p7qblrqfx6sc2rrxk6hcrdjky74f500lf8vddmiw6r50pw";
     };
-  
+
     deps = [  ];
   };
 
@@ -8411,7 +8411,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/shen-mode-0.1.tar";
       sha256 = "1dr24kkah4hr6vrfxwhl9vzjnwn4n773bw23c3j9bkmlgnbvn0kz";
     };
-  
+
     deps = [  ];
   };
 
@@ -8420,9 +8420,9 @@ with otherPackages; rec {
     name = "shoes-off-0.1.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/shoes-off-0.1.8.el";
-      sha256 = "16h44bmpyhzf6q92g2x49v2jjl9l44djmia7fsvxrg3zamzwhyx3";
+      sha256 = "0lp4990fiz06c9hpk81pxzl1rkh0rbi43f61kld2va3v7ywq65zj";
     };
-  
+
     deps = [ kv anaphora ];
   };
 
@@ -8431,9 +8431,9 @@ with otherPackages; rec {
     name = "shorten-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/shorten-0.2.el";
-      sha256 = "0j3qzmy4vclhvb6j75j4as3slww19m012bc4j70f5kwswngps6y1";
+      sha256 = "0xw8s091vfw353wj07vfcwkwxsp7awh2c8nb6r4n15rc9biqh91g";
     };
-  
+
     deps = [  ];
   };
 
@@ -8442,9 +8442,9 @@ with otherPackages; rec {
     name = "show-css-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/show-css-1.1.el";
-      sha256 = "0vrsq2ijnmgz5zzn84z5j21zbdbm7wnnqn6cf0aja67jhqv0swcw";
+      sha256 = "0cdxkb2ryz0352q4sxrgylww5gqwqlqbxn3h5cr0bpgwzfhjg0z9";
     };
-  
+
     deps = [  ];
   };
 
@@ -8453,9 +8453,9 @@ with otherPackages; rec {
     name = "show-marks-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/show-marks-0.3.el";
-      sha256 = "1jqy1mm6c2crv80h3b28dlss504wqa49almnfyza47xly80z6lcv";
+      sha256 = "0gypffq6rz9sqb0xx8ifv3bs4wv9r5mn5sibl946j3lpf4ybfqbr";
     };
-  
+
     deps = [ fm ];
   };
 
@@ -8464,9 +8464,9 @@ with otherPackages; rec {
     name = "simp-0.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/simp-0.2.0.tar";
-      sha256 = "1k3pypsl9b52z0svnaxh8fmyzgwsffjgq14lbmcnn7w7pvwszbyh";
+      sha256 = "0484bwjiiq2qiln7xrv6i7q8glcb7pi9d99swyyhgy0b9xams1j1";
     };
-  
+
     deps = [  ];
   };
 
@@ -8475,9 +8475,9 @@ with otherPackages; rec {
     name = "simple-call-tree-plus-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/simple-call-tree+-1.0.0.el";
-      sha256 = "00p8lir3kn1ipk3g6mgnq0qzz0rq7552jcq5xkvpbsa43i6syz29";
+      sha256 = "07nrw24hh1vln6jiamnvzcdspqkygcai0cflk86zhi6rh7qhklfy";
     };
-  
+
     deps = [  ];
   };
 
@@ -8486,9 +8486,9 @@ with otherPackages; rec {
     name = "simple-mode-line-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/simple-mode-line-0.3.el";
-      sha256 = "0gymkz4qj4llxx9wsph28x0x63331zs8v3sc9yp2mf23r37pmvd3";
+      sha256 = "1vz603f014a157qd3mla7pz71nr9q0f1yymqncawwbk7l952gsdn";
     };
-  
+
     deps = [  ];
   };
 
@@ -8497,9 +8497,9 @@ with otherPackages; rec {
     name = "simpleclip-0.2.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/simpleclip-0.2.2.el";
-      sha256 = "07bvaapxg1kc6s40p3adj46xkk3m7qwyhmx9171lmwrgihb83hwg";
+      sha256 = "0i28mzw8sz80g2czza1wd9y7n93isvww2x0rnw0xw2i70l3qmsam";
     };
-  
+
     deps = [  ];
   };
 
@@ -8508,9 +8508,9 @@ with otherPackages; rec {
     name = "simplezen-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/simplezen-0.1.1.el";
-      sha256 = "1gd9r51bpyvpmc18na6ghd4rx6bxcvw7bb0g6ci7znjmybr48v29";
+      sha256 = "0vjhcl7ni7ibxrb0z4niqv7mpv1djq6zlslc5wq3bnb3mkjsh7jl";
     };
-  
+
     deps = [  ];
   };
 
@@ -8521,7 +8521,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/sisu-mode-3.0.3.el";
       sha256 = "0ay9hfix3x53f39my02071dzxrw69d4zx5zirxwmmmyxmkaays3r";
     };
-  
+
     deps = [  ];
   };
 
@@ -8530,9 +8530,9 @@ with otherPackages; rec {
     name = "skinny-0.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/skinny-0.0.3.el";
-      sha256 = "0rpsalccd4gangpw9hf75nrxgz05nkl87xb6iqdv5pblphm8sbm2";
+      sha256 = "13gm39g9h2dj5sac65hrgc754lprbwrag56gp1s4i06prqg11l9l";
     };
-  
+
     deps = [ elnode creole ];
   };
 
@@ -8541,9 +8541,9 @@ with otherPackages; rec {
     name = "slamhound-2.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/slamhound-2.0.0.el";
-      sha256 = "0mskza5m74n6ii3wq3g0ign72ajnsyl54avcci7w3nfk5vjglg2q";
+      sha256 = "0y0gxrlqvfydj9c3dnjczkz3sn9wji5hyxppbmrgmly6dr1fdhai";
     };
-  
+
     deps = [  ];
   };
 
@@ -8552,9 +8552,9 @@ with otherPackages; rec {
     name = "slim-mode-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/slim-mode-1.1.el";
-      sha256 = "134yyap66camcwwb8fazvg10khvfymbghnr9lpnniqbqdx9814ww";
+      sha256 = "016bvv85v2sw9cm1kk5h1qjbspbpshr0xzs4yhhsx57wcrgiwmsy";
     };
-  
+
     deps = [  ];
   };
 
@@ -8563,9 +8563,9 @@ with otherPackages; rec {
     name = "slime-20100404.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/slime-20100404.1.el";
-      sha256 = "0x3bcy0a452qi0xcffkln53kqvb410spr1si7c61sjvsnxz54c73";
+      sha256 = "0mlqk48j2n9x783vx97vlawxz6hrvxh28jkr5408qjhx6gkyf52v";
     };
-  
+
     deps = [  ];
   };
 
@@ -8574,9 +8574,9 @@ with otherPackages; rec {
     name = "slime-clj-0.1.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/slime-clj-0.1.5.el";
-      sha256 = "0dkk2xmnks8y3vkf91jmbrlnb7415mbk4nnscvwsmvh3m321md2m";
+      sha256 = "10nrya2q41qdrncb59bqljfbsvx7xs8z77699bh34gdjwyj3jnfh";
     };
-  
+
     deps = [  ];
   };
 
@@ -8585,9 +8585,9 @@ with otherPackages; rec {
     name = "slime-fuzzy-20100404";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/slime-fuzzy-20100404.el";
-      sha256 = "0mlda0rp24p7b123q88ndkz09ing940lq6yi0vbi643rpxfx5x9z";
+      sha256 = "1aayf2ripq72n3jz5ad7j9gz939sxigh05sbn6panbnqvynxbv43";
     };
-  
+
     deps = [ slime ];
   };
 
@@ -8596,9 +8596,9 @@ with otherPackages; rec {
     name = "slime-js-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/slime-js-0.0.1.el";
-      sha256 = "1z7il36m3p3z1nx5610ph2zra0kw7kbxx299w8sfw18n64b1q6la";
+      sha256 = "0z25x282k43gn9ragvjpwnxfcgad76ks2q85gr6zszzccvixqzvi";
     };
-  
+
     deps = [ slime-repl slime ];
   };
 
@@ -8607,9 +8607,9 @@ with otherPackages; rec {
     name = "slime-repl-20100404";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/slime-repl-20100404.el";
-      sha256 = "1j3s2abpjw80hp51cxhs5g6d8rq7syaqi2cpn2kv9lhkrb5iwbkx";
+      sha256 = "1nk7gdcybqwl98xm9n12v98iyg44fmy1nh81afhpj16cij8gj4p9";
     };
-  
+
     deps = [ slime ];
   };
 
@@ -8618,9 +8618,9 @@ with otherPackages; rec {
     name = "slime-ritz-0.6.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/slime-ritz-0.6.0.el";
-      sha256 = "0kf8113m7rvhpa4q9iil66y2pmayymg2kvxd82b784rjmk6dvpps";
+      sha256 = "1nkr49cblmhdmiphli25fqdma0fccf5c68ajw2igjdd8hi54imnf";
     };
-  
+
     deps = [  ];
   };
 
@@ -8629,9 +8629,9 @@ with otherPackages; rec {
     name = "slough-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/slough-0.1.el";
-      sha256 = "1vj632pip29xbqrmwqr0mq83d8k404rpm1hh27w30k1w3byqh4bc";
+      sha256 = "0kp9hz2ihv3pcb6drwvrz34xig4nis7wv27ca27im1hywmpx44s4";
     };
-  
+
     deps = [ nrepl smartparens ];
   };
 
@@ -8640,9 +8640,9 @@ with otherPackages; rec {
     name = "smart-forward-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/smart-forward-1.0.0.el";
-      sha256 = "15sz6p26qjlh60wlvd2bqp6sxfq7cw7y1hsa7qr5d519m64h6pz6";
+      sha256 = "0rw53zwmyasmwd9ghb1f5p8slvaskbixmzhqvny2c81288n12249";
     };
-  
+
     deps = [ expand-region ];
   };
 
@@ -8651,9 +8651,9 @@ with otherPackages; rec {
     name = "smart-mode-line-1.7.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/smart-mode-line-1.7.1.el";
-      sha256 = "0i7yafcmjqj7hr6ass07h7fmpl0xjfi5qqlzhdj9ymfmq6rsi4xz";
+      sha256 = "10w313g001hlws2hqixzmwbw1dkj0mgadcp3ik1hlij8f269q18g";
     };
-  
+
     deps = [  ];
   };
 
@@ -8664,7 +8664,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/smart-operator-4.0.el";
       sha256 = "193hcs9gqmkspvf52q4z9x571cf8cirdkj0g2si6pwy84dmdrh6a";
     };
-  
+
     deps = [  ];
   };
 
@@ -8673,9 +8673,9 @@ with otherPackages; rec {
     name = "smart-tab-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/smart-tab-0.3.el";
-      sha256 = "02n35v6z3jily4j0110xj2pk7nmjfcr3p9ccyzzl88dmgk1qvcp3";
+      sha256 = "0xqyif8r84840wy8lzswm6lcrxr96khgv63rnjnl3n3vb6fnvych";
     };
-  
+
     deps = [  ];
   };
 
@@ -8684,9 +8684,9 @@ with otherPackages; rec {
     name = "smart-window-0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/smart-window-0.6.el";
-      sha256 = "0sb6a3lgfkkqn6affvrpznll5df86x2i89zy0xrva1375zjxwjy0";
+      sha256 = "0f77416ixyqmzpbik30rvkxp7gm0123l7zri7z43ay2sg6nbk7nk";
     };
-  
+
     deps = [  ];
   };
 
@@ -8695,9 +8695,9 @@ with otherPackages; rec {
     name = "smarter-compile-2012.4.9";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/smarter-compile-2012.4.9.el";
-      sha256 = "1wak4sbgbq5la956c5z5a9n2l4i2k7y6dzcm0p28misnv6f968pp";
+      sha256 = "069ivbxcjqb5gs2p3c01n4qi8vl4wcdzbp3g18zcmh3ly8n7j2mq";
     };
-  
+
     deps = [  ];
   };
 
@@ -8706,9 +8706,9 @@ with otherPackages; rec {
     name = "smartparens-1.4.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/smartparens-1.4.4.tar";
-      sha256 = "0d2qij50a7pdpz5mcl51bg92hwkkszr7a12ws1b4355nw2dq103s";
+      sha256 = "07prx0s4jslvc95ya0fwr6b58p4qqvqp4d8wqik2vpys0w2bdgy3";
     };
-  
+
     deps = [ dash ];
   };
 
@@ -8717,9 +8717,9 @@ with otherPackages; rec {
     name = "smartrep-0.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/smartrep-0.0.3.el";
-      sha256 = "0f1cg407sd7263ck41w0hc80jvb2rjvskpgj8cgscmy0nwg2dv78";
+      sha256 = "1lgmzgl1i6abyiq4g1zcaixm9fyh0qa16s0b35bfx057f2babi8m";
     };
-  
+
     deps = [  ];
   };
 
@@ -8728,9 +8728,9 @@ with otherPackages; rec {
     name = "smex-2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/smex-2.0.el";
-      sha256 = "0kzcayrr5ms360n5why8lys23d67vp0rqkdk5ms9pgp75321sxda";
+      sha256 = "024bm7xsc1gzhg0zvzac5y1pkk1sxwbh0wgyi0w0bmglwnnmn3kh";
     };
-  
+
     deps = [  ];
   };
 
@@ -8741,7 +8741,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/sml-mode-6.4.el";
       sha256 = "1yhwk1lq3zhh5bjx8ky7zvm3h9a6l1yzy5wsa7s86dn5a8ksqkl6";
     };
-  
+
     deps = [  ];
   };
 
@@ -8750,9 +8750,9 @@ with otherPackages; rec {
     name = "sml-modeline-0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sml-modeline-0.5.el";
-      sha256 = "188djcjc90yrl36bj8fzpdjlkpn8a1yb1jb259mkgx8pcn928nfr";
+      sha256 = "05d4f1fn64sgrd66zwacxfg7lbm5cpm9g6by70p9ddim823g7jvd";
     };
-  
+
     deps = [  ];
   };
 
@@ -8761,9 +8761,9 @@ with otherPackages; rec {
     name = "smooth-scroll-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/smooth-scroll-1.2.el";
-      sha256 = "0mzm8bkspzdj54vh13fr7ky3i3j68kkbvc24v3kc4n2aqb3da1n0";
+      sha256 = "149zzvqh3d3p3k3p38vjicgccml16j4hwvg4cidgh7npr7d45ksz";
     };
-  
+
     deps = [  ];
   };
 
@@ -8772,9 +8772,9 @@ with otherPackages; rec {
     name = "smooth-scrolling-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/smooth-scrolling-1.0.1.el";
-      sha256 = "01nx9mgb9im7y5v771qk86nn36ynclq636zfdr9qdpqgy0qhgd1d";
+      sha256 = "1n0b8axrgw5ard2qw71g6p8w6vmb3vahwh71vnzfnlw07r0fqppy";
     };
-  
+
     deps = [  ];
   };
 
@@ -8783,9 +8783,9 @@ with otherPackages; rec {
     name = "sokoban-1.23";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sokoban-1.23.el";
-      sha256 = "0f72bfqwjwfhg1d4ri8cigm2hacmmdb7r4ll2fyspx450596y1ds";
+      sha256 = "1cn4i3ixnhh9rprhgispdxqwxry3h9qmpwdzxnnp6himdjp76dsy";
     };
-  
+
     deps = [  ];
   };
 
@@ -8794,9 +8794,9 @@ with otherPackages; rec {
     name = "solarized-theme-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/solarized-theme-1.0.0.tar";
-      sha256 = "1ssqpfvm9c6qikhczphcafq7qqlml9dwh7pmbcbdc2daiqy6ksp3";
+      sha256 = "1cmd44fpm0pbazshcicak9d4xxp0azc1drwd68dpg06m8xilvqwn";
     };
-  
+
     deps = [  ];
   };
 
@@ -8805,9 +8805,9 @@ with otherPackages; rec {
     name = "soothe-theme-0.3.16";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/soothe-theme-0.3.16.el";
-      sha256 = "07q60qlmqpzdp5q9152g6rss01wyfzz9nqmqlyb2hwxjvr084sd5";
+      sha256 = "1w2kyz3h8g32id5xkz9dsdgik6l464w5rdigxn8375bixgi78xbq";
     };
-  
+
     deps = [  ];
   };
 
@@ -8816,9 +8816,9 @@ with otherPackages; rec {
     name = "sparql-mode-0.6.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sparql-mode-0.6.1.el";
-      sha256 = "085dhk00kp4ng561qhq6m5g0q85h83jw472fn3qgl64ic3nc64kw";
+      sha256 = "0hk9sjz1nb50w71i5phq5z0725bcadmljjnmzwgksrj4fxn38c1w";
     };
-  
+
     deps = [  ];
   };
 
@@ -8827,9 +8827,9 @@ with otherPackages; rec {
     name = "speck-2010.5.25";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/speck-2010.5.25.el";
-      sha256 = "19i7bk19vvqkfsn7h8scng2wpmvll5vavh701d2azazfhkwxdv8g";
+      sha256 = "18xqpkybysvm0avi44bzhqm5khc6954n6dr3kc6i38zajfhic6l9";
     };
-  
+
     deps = [  ];
   };
 
@@ -8838,9 +8838,9 @@ with otherPackages; rec {
     name = "spotify-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/spotify-0.2.el";
-      sha256 = "1hhypwi8a2s1p97k3bk9vgj52ng03xsx7zi4agll7clvhklxk7sd";
+      sha256 = "0n10sc0j62kldvmhvlcf63azy1s2j4j6lb86x2cf65v15lpb7jn2";
     };
-  
+
     deps = [  ];
   };
 
@@ -8849,9 +8849,9 @@ with otherPackages; rec {
     name = "sprintly-mode-0.0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sprintly-mode-0.0.4.el";
-      sha256 = "19h6vx7gmv49z5sxp79q2w65lvsc40l1kk09l1w8r1x9zpcc0231";
+      sha256 = "18z9cka2f19hamsd1jj6b9f58j27n44j02k00hxpslqba78h8cds";
     };
-  
+
     deps = [ furl ];
   };
 
@@ -8860,9 +8860,9 @@ with otherPackages; rec {
     name = "sql-indent-1.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sql-indent-1.10.el";
-      sha256 = "061hfybg3ybm7svsg21bdlgz9r9j90rfqj804b42hwjyqbf731n9";
+      sha256 = "1n3x6ng9y8dmdkngpma2dpkvcb2j4ywd43if5541mgwjmzp0jv2w";
     };
-  
+
     deps = [  ];
   };
 
@@ -8871,9 +8871,9 @@ with otherPackages; rec {
     name = "sr-speedbar-0.1.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sr-speedbar-0.1.8.el";
-      sha256 = "0fy5rv416glkfdydir39fqspvbwmi0gcxdfiap67l16437ccl3ca";
+      sha256 = "1pspalql3jda9w24pgnjav2jvbw5vxnycsd18qxfpsxfka5pgzm4";
     };
-  
+
     deps = [  ];
   };
 
@@ -8882,9 +8882,9 @@ with otherPackages; rec {
     name = "ssh-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ssh-1.2.el";
-      sha256 = "1i9ccgk7k13rbz8rvwj1spz9qhpycmcnrj4p7h8xajx54rqjhgn7";
+      sha256 = "1jx4xw59mfmzwa3bvx6rzqb4nmxy0cajy37sigaldqzb17jgr9q8";
     };
-  
+
     deps = [  ];
   };
 
@@ -8893,9 +8893,9 @@ with otherPackages; rec {
     name = "ssh-config-mode-1.13";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ssh-config-mode-1.13.el";
-      sha256 = "172k36nwk5w0c0zj2g6xwgfw8h4vzg6czainndw5m52i28yx8dqs";
+      sha256 = "0w6sgb8q5faxqqqrwl4jbd1yccc1g5j4m4f6zy1x51i11hfk22wm";
     };
-  
+
     deps = [  ];
   };
 
@@ -8904,9 +8904,9 @@ with otherPackages; rec {
     name = "starter-kit-2.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/starter-kit-2.0.3.tar";
-      sha256 = "0dhnc57519n02zg91675d8pdfcah09cv90lbf4np7bzwzr8gb6ll";
+      sha256 = "1zrakibwpyxqhckygcqdyb0c69wavdxwf1ma4yj0n22mibpabpsr";
     };
-  
+
     deps = [ paredit idle-highlight-mode find-file-in-project smex ido-ubiquitous magit ];
   };
 
@@ -8915,9 +8915,9 @@ with otherPackages; rec {
     name = "starter-kit-bindings-2.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/starter-kit-bindings-2.0.2.el";
-      sha256 = "16asvmv4886pb6489ij9z5sfivi6q1906bp6fyl7k8zhink9v35i";
+      sha256 = "0r30nm335xls2f8wg6l0266dwawqxa68sw6k783apx59wn7ppmnq";
     };
-  
+
     deps = [ starter-kit ];
   };
 
@@ -8926,9 +8926,9 @@ with otherPackages; rec {
     name = "starter-kit-eshell-2.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/starter-kit-eshell-2.0.3.el";
-      sha256 = "09cbyc7il2h6a9kwjbny5k36awcm7pzjjm2flhxvl1limyvzi8rm";
+      sha256 = "01yir6miajapzaw5qx1wp0vl68rhx36d4ls5kz9ghnmirsqhhk25";
     };
-  
+
     deps = [  ];
   };
 
@@ -8937,9 +8937,9 @@ with otherPackages; rec {
     name = "starter-kit-js-2.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/starter-kit-js-2.0.1.el";
-      sha256 = "0i82s0pdjp47s5a26yvyl88pjwmm39v71rxc6bgzwkyqvg9nx3qz";
+      sha256 = "0gvb62f0riv8l0xfp9n4g5z1m7r1s8zcfx92clgc2q3y3kbbncgp";
     };
-  
+
     deps = [ starter-kit ];
   };
 
@@ -8948,9 +8948,9 @@ with otherPackages; rec {
     name = "starter-kit-lisp-2.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/starter-kit-lisp-2.0.3.el";
-      sha256 = "0gws8b5yla1s6k5p9m8ms8y12r14z1gnvdzwgss0c6nb2q8iijhg";
+      sha256 = "1c203pyrc97n68bw5428mspq6idhndsr3pdc0983s49fq282j0wq";
     };
-  
+
     deps = [ starter-kit elisp-slime-nav ];
   };
 
@@ -8959,9 +8959,9 @@ with otherPackages; rec {
     name = "starter-kit-ruby-2.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/starter-kit-ruby-2.0.3.el";
-      sha256 = "0xn5k81chm61jjzvdj5irf4yypkaws08yijs90pxws7n3kz5zvij";
+      sha256 = "0d5j7sasswj1b881dlcw07pa1v5w4zg7w31zd9s1x9w3vh821x7b";
     };
-  
+
     deps = [ inf-ruby starter-kit ];
   };
 
@@ -8970,9 +8970,9 @@ with otherPackages; rec {
     name = "string-edit-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/string-edit-0.1.0.el";
-      sha256 = "1a4ffcy9lg88qk2irfrzxmrjgcx3rpvwmvgln293gdmx03fpsavr";
+      sha256 = "0splbgvla0andlgd22ijax1b5fyk4zmjk3mpcbanyaz53dm49x2a";
     };
-  
+
     deps = [ dash ];
   };
 
@@ -8981,9 +8981,9 @@ with otherPackages; rec {
     name = "string-utils-0.2.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/string-utils-0.2.8.el";
-      sha256 = "17pbbgajcai62y6w61faz6vaygh60y8spk0k6f8k2g2vlzync2l2";
+      sha256 = "0f0a98y7vaakm8lmpn26iirn2zpgrbrzmvrxzcs36pfhlqihb6qi";
     };
-  
+
     deps = [ list-utils ];
   };
 
@@ -8992,9 +8992,9 @@ with otherPackages; rec {
     name = "stripe-buffer-0.2.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/stripe-buffer-0.2.2.el";
-      sha256 = "1br66sd6hbxysqha22bwby4jz4v6gs6ky3ygi0bj3f9vlm83hvg3";
+      sha256 = "016r46pwcwcp3hr09cid83qbl1d7p8kf3nwk38ajcrj5i4vafbg4";
     };
-  
+
     deps = [ cl-lib ];
   };
 
@@ -9003,9 +9003,9 @@ with otherPackages; rec {
     name = "stylus-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/stylus-mode-0.1.el";
-      sha256 = "0gx5ilx22xp6lkgx0yridyc5xxd02z693birrxk7b7psqwxpyq6a";
+      sha256 = "106p3i9p6rfqmnc3v34d9il21sy4vdxinzw8q6x9m9wqjvdpg97z";
     };
-  
+
     deps = [  ];
   };
 
@@ -9014,9 +9014,9 @@ with otherPackages; rec {
     name = "subatomic-enhanced-theme-20130226.2229";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/subatomic-enhanced-theme-20130226.2229.el";
-      sha256 = "0wi4dzbchysf151wd8qab42yirm3r4ybz9878cqw91h509hnfj75";
+      sha256 = "17cz6s4092z5w72xvxjl4rbixvhpd3wsvn05q83ihyfkkd6nkzsv";
     };
-  
+
     deps = [  ];
   };
 
@@ -9025,9 +9025,9 @@ with otherPackages; rec {
     name = "sublime-0.0.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sublime-0.0.7.tar";
-      sha256 = "089sfcrv2fxygm3sj2qzv1pf7m83sckn18llxn3ad0mlgbqj1ccs";
+      sha256 = "0kw623z3wymi09bcdms42m17dg58zl771hi5223m1lc1hvlvk5my";
     };
-  
+
     deps = [ coffee-mode find-file-in-project haml-mode ido-ubiquitous less-css-mode magit markdown-mode monokai-theme paredit sass-mode smex yaml-mode yasnippet ];
   };
 
@@ -9036,9 +9036,9 @@ with otherPackages; rec {
     name = "subshell-proc-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/subshell-proc-0.2.el";
-      sha256 = "1j9w4bil93bb3rjj8s90zsaw64mf61l1f30jipd7yfcyfw4mr45s";
+      sha256 = "0sc7gb4gnqjbk4yva9g337q86pw7dp58nq9j7njh45xdwhw5rv1h";
     };
-  
+
     deps = [  ];
   };
 
@@ -9047,9 +9047,9 @@ with otherPackages; rec {
     name = "sudden-death-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sudden-death-0.2.el";
-      sha256 = "1nqfdfj004yl92ivbf9mcyvqccn4prlqhcg31w5spr9zpj16cv02";
+      sha256 = "1qi00vpci3ncyxvvwn6r8mm6fd64zl85dcgzyqyipdly5pf2hbm2";
     };
-  
+
     deps = [  ];
   };
 
@@ -9058,9 +9058,9 @@ with otherPackages; rec {
     name = "sumatra-forward-2008.10.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sumatra-forward-2008.10.8.el";
-      sha256 = "1hxlb5q7vyshl5c59lfsw0nvq0x1yiaq8xzd2hhnlag4yxijvs0p";
+      sha256 = "090l3rd7f30w5cql2pc8npd4n4i9nl52cr0ympv10xgyi7n4zi6r";
     };
-  
+
     deps = [  ];
   };
 
@@ -9069,9 +9069,9 @@ with otherPackages; rec {
     name = "suomalainen-kalenteri-2013.4.18";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/suomalainen-kalenteri-2013.4.18.tar";
-      sha256 = "14d2xifhpngj7k7y5vl13xq6jrjc1lm320c6galiafrs031zc86k";
+      sha256 = "1cs69vrhpkc4n4ip024v6rrrlmxh1dwh9wkrxila98c9qyy7qw1k";
     };
-  
+
     deps = [  ];
   };
 
@@ -9080,9 +9080,9 @@ with otherPackages; rec {
     name = "supergenpass-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/supergenpass-0.1.el";
-      sha256 = "0qvhryj93jrzdlqkx55i17sj9yl66fqr1msvbcp1ncdcrc777ifa";
+      sha256 = "11hb2bmx9dlvhrdf5y3xsf81d5w0fylszn364fdb1g5bx96pi0qd";
     };
-  
+
     deps = [  ];
   };
 
@@ -9091,9 +9091,9 @@ with otherPackages; rec {
     name = "surround-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/surround-0.1.el";
-      sha256 = "0iwnkhyiw2pqggi5j975lsxy52kica5n6k43dgh82y95lv9yr644";
+      sha256 = "0qb0x7il628igrswd1v92w639xqa40j3gx5inz3ac2cvjxa1n21z";
     };
-  
+
     deps = [  ];
   };
 
@@ -9104,7 +9104,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/svg-clock-0.4.el";
       sha256 = "1b25b68idiw30xcbqpnk2az6n8mc19hw8pjh4ga684wiz50340xq";
     };
-  
+
     deps = [  ];
   };
 
@@ -9113,9 +9113,9 @@ with otherPackages; rec {
     name = "swank-cdt-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/swank-cdt-1.0.1.el";
-      sha256 = "01s47jzx7mqyqxzsn57hn6msc66vhrkz1i9vcysbh3aw6g1dpy5g";
+      sha256 = "1a94jwk9rhizakriq3yq0hjw3pyb1arbn9pnzk4kc7a6dfcyq32d";
     };
-  
+
     deps = [  ];
   };
 
@@ -9124,9 +9124,9 @@ with otherPackages; rec {
     name = "swarmhacker-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/swarmhacker-0.0.1.el";
-      sha256 = "17wgz932yb84mby62c5ks896h87k7sn03qyicizrh1gz85mmy7q3";
+      sha256 = "1yy31j2l98k8awfmhn0bqz7yqgy34bmmijpd2mzasq9cm81jazzc";
     };
-  
+
     deps = [  ];
   };
 
@@ -9135,9 +9135,9 @@ with otherPackages; rec {
     name = "switch-window-0.9";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/switch-window-0.9.el";
-      sha256 = "0j8n2ic98mysh3avcr4bb6hnckb7j6ggi0w3s620rwwxrjrjrcqr";
+      sha256 = "0rq1qprs2vwjbl3r4xxhs8ndf4xb13svhrzqyhb1a8vvngy39pkr";
     };
-  
+
     deps = [  ];
   };
 
@@ -9146,9 +9146,9 @@ with otherPackages; rec {
     name = "sws-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/sws-mode-0.1.el";
-      sha256 = "1hfjcgkzznkwf6vir34lrnq0fx37dipw9i54k4djcddxcl07p3ll";
+      sha256 = "1s33m5ydq53n6wv0g2m7g1d1frdlaw6vvmvdbn08g9sknf4ijs5y";
     };
-  
+
     deps = [  ];
   };
 
@@ -9157,9 +9157,9 @@ with otherPackages; rec {
     name = "symbols-mode-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/symbols-mode-0.3.el";
-      sha256 = "1xpcsdkjjrz82hk8yx5k97lwaxfrk6z120jji533y08sd3s09iwk";
+      sha256 = "1hj9s4igyghvp1rj0ih9vy3y9zzkzsfkphfgy29i8hg3hsp5j54s";
     };
-  
+
     deps = [  ];
   };
 
@@ -9168,9 +9168,9 @@ with otherPackages; rec {
     name = "synonyms-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/synonyms-1.0.el";
-      sha256 = "1zfygb585vzrqk8bcdzdr4d839yj5qqyry0f3rs2r3m996yv019g";
+      sha256 = "13l3wqvmpa8xh01i59l6fwajddimnv7wdz6xrhlwrs2zwh7ivh62";
     };
-  
+
     deps = [  ];
   };
 
@@ -9179,9 +9179,9 @@ with otherPackages; rec {
     name = "syntactic-sugar-0.9.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/syntactic-sugar-0.9.2.el";
-      sha256 = "0r5mpq9agpbmy8ic0jp7xbmc1bzlkyiy0nwgikncmsb93am3656j";
+      sha256 = "15r448697jzpmdxjnwfj3z14bmk9sjfx6hs9qqcqvgrd9s8viqn5";
     };
-  
+
     deps = [  ];
   };
 
@@ -9190,9 +9190,9 @@ with otherPackages; rec {
     name = "systemtap-mode-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/systemtap-mode-0.2.el";
-      sha256 = "1spng8kfawzbjvmlvrlsi3xfx4nyknn3ipfbk3qlj3qqwkh77lbf";
+      sha256 = "0s2dxapal1shxd6rvg2q7408914cpxhzdjyqjxyazd31lix406p6";
     };
-  
+
     deps = [  ];
   };
 
@@ -9203,7 +9203,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/tNFA-0.1.1.el";
       sha256 = "01n4p8lg8f2k55l2z77razb2sl202qisjqm5lff96a2kxnxinsds";
     };
-  
+
     deps = [ queue ];
   };
 
@@ -9212,9 +9212,9 @@ with otherPackages; rec {
     name = "tabbar-2.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tabbar-2.0.1.el";
-      sha256 = "09dzk2xx45jzvk1bkvcwbijv1yhypch85h9ndvsx1jinghd0ln1w";
+      sha256 = "05rbgzdp3rr52padaw7kfsfnx1jjqy81qhmm0kjk4l7fpb98fgb6";
     };
-  
+
     deps = [  ];
   };
 
@@ -9223,9 +9223,9 @@ with otherPackages; rec {
     name = "tabbar-ruler-0.36";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tabbar-ruler-0.36.el";
-      sha256 = "1mxygx246r14v3v95iy09j7w9vypiv3a3ifhh22g8m2n8k1s9r2l";
+      sha256 = "16q7603fb4g7r4an9gzsmn2pgfm8sw9x8jl06iy8y08a1f5aijgc";
     };
-  
+
     deps = [ tabbar ];
   };
 
@@ -9234,9 +9234,9 @@ with otherPackages; rec {
     name = "tabkey2-1.40";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tabkey2-1.40.el";
-      sha256 = "0bbr09hhaj8vznwmg4ap7d7in3gf527hghgrilxcjgaqw3ydbn62";
+      sha256 = "1w7z15z0ci2084b7kmcy7wazvcqf1mzisjbydhf01pc69ij01g8h";
     };
-  
+
     deps = [  ];
   };
 
@@ -9245,9 +9245,9 @@ with otherPackages; rec {
     name = "tabula-rasa-mode-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tabula-rasa-mode-0.1.0.el";
-      sha256 = "1aqmwwn2ssjpvlfv3sff0ldx0xb3rnlqmwr6wxaky4bn2x615bj9";
+      sha256 = "03c4s1cvzs5i0zhjbqhnz10yc169kj437zn57x91zqb9j9sqpzsw";
     };
-  
+
     deps = [  ];
   };
 
@@ -9256,9 +9256,9 @@ with otherPackages; rec {
     name = "tabulated-list-0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tabulated-list-0.el";
-      sha256 = "1yh322wsskz95lybrq21gc4qryqb98dcxgdq1slm9w4dm4d978g8";
+      sha256 = "1c6hcrbw1xd75dnhl3qwsrwfkgj18rzy4vlnxd6csr8x4z0cbxhn";
     };
-  
+
     deps = [  ];
   };
 
@@ -9267,9 +9267,9 @@ with otherPackages; rec {
     name = "tagedit-1.4.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tagedit-1.4.0.el";
-      sha256 = "1586fij14rkyr2mqh9yiazsrgz1a8756n0kasrnabfifmd7bhrvj";
+      sha256 = "05r2xpbwyp2hvvd6klnd43dpnpcb3067khmg4bclw1d34ssyvc9g";
     };
-  
+
     deps = [ s dash ];
   };
 
@@ -9278,9 +9278,9 @@ with otherPackages; rec {
     name = "tango-2-theme-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tango-2-theme-1.0.0.el";
-      sha256 = "1vxbvi05w4amax3a6jjqfm5g82lv9xnkhjbzv3scpyixwap7fgdd";
+      sha256 = "0gw5mp2y09jhvsp1bcjicag20hzjygkw6qngrdwwzlyraq12in91";
     };
-  
+
     deps = [  ];
   };
 
@@ -9289,9 +9289,9 @@ with otherPackages; rec {
     name = "test-case-mode-0.1.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/test-case-mode-0.1.8.el";
-      sha256 = "0567lkyb6ss1dkdf3mgj4d2h13mcv6yx1lb2dnnc9hgsz48zkmf9";
+      sha256 = "0824c2b4myqqzpxwj1h4nwibg87jdaqn26kn00ma3rc6cn9jg78v";
     };
-  
+
     deps = [  ];
   };
 
@@ -9300,9 +9300,9 @@ with otherPackages; rec {
     name = "tex-smart-umlauts-1.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tex-smart-umlauts-1.1.0.el";
-      sha256 = "0lngq7vqrpqrzyfbk04hi496zps8gikx7zw8dlxijkb29jnjwl28";
+      sha256 = "1a2969k5b6wm1wmrhpj2mpr61719x3gzp3z74f6yc36qrw7flkc8";
     };
-  
+
     deps = [  ];
   };
 
@@ -9311,9 +9311,9 @@ with otherPackages; rec {
     name = "text-language-0.20121008";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/text-language-0.20121008.el";
-      sha256 = "0r6scnza8z9822lss06nhq9yb3sf38vrcm0rkqbr7x7wv5vsjim2";
+      sha256 = "096j5h5d0wrzvmf4vszgi4n7w9hb0qb51h3dyfs7x4dxx96dxbjr";
     };
-  
+
     deps = [  ];
   };
 
@@ -9322,9 +9322,9 @@ with otherPackages; rec {
     name = "textmate-5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/textmate-5.el";
-      sha256 = "1ll80y1j33n5ymp83vbzgcq4rvr0jlzqcdrjw4wym8zzq0llfgg8";
+      sha256 = "0mw1njkx5ppk9hgkd43x293a2yfrs51w2y1fgg29ksssq6q3cbfv";
     };
-  
+
     deps = [  ];
   };
 
@@ -9333,9 +9333,9 @@ with otherPackages; rec {
     name = "textmate-to-yas-0.21";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/textmate-to-yas-0.21.el";
-      sha256 = "0241ydn4scals8wy566bhx3fxn4yvh3z0vp3g0vwmwxznhxmcz5q";
+      sha256 = "0901qyq00kxgggl4bdbgvnldhpfia8ax26wv62741qsjqqnsd4f9";
     };
-  
+
     deps = [  ];
   };
 
@@ -9344,9 +9344,9 @@ with otherPackages; rec {
     name = "tfs-0.2.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tfs-0.2.7.el";
-      sha256 = "1yi1sz02i126hylwmz5i778maf65j12vnvql0lx6mxwmwzmd26c8";
+      sha256 = "0qd7afcn2sbpndgcqqp0d639b5xmb67bj9cisxg9vw5z5nr6yrd9";
     };
-  
+
     deps = [  ];
   };
 
@@ -9355,9 +9355,9 @@ with otherPackages; rec {
     name = "theme-changer-2.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/theme-changer-2.0.0.el";
-      sha256 = "0n93ms885c44jjyg26gm0b5if6955474wv7rymf5cnsrbffvhp4s";
+      sha256 = "1nsmbxn1srl0zbf3qy0wqm7d4hpdxvhwgdzxf69qn830rdpd43h9";
     };
-  
+
     deps = [  ];
   };
 
@@ -9366,9 +9366,9 @@ with otherPackages; rec {
     name = "theme-park-mode-0.1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/theme-park-mode-0.1.2.el";
-      sha256 = "1mg3a4dn8ynxycd0jvv5kj7kkhj61xlcc2malm0hg6hd4g4sy71g";
+      sha256 = "09cpsackpg6vl23cml0i81z9ryk8zzr1fmxkbyrsh5psd6x0snja";
     };
-  
+
     deps = [  ];
   };
 
@@ -9377,9 +9377,9 @@ with otherPackages; rec {
     name = "thesaurus-2012.4.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/thesaurus-2012.4.7.el";
-      sha256 = "1v5jlvhpjycz33vkz5xnc6b4riamw3s5kqjmxlzf48ipz27sry2s";
+      sha256 = "15dy4081igr1lkqn80awpgz4bl9n91yy90xywjz4h0kxlfw98yrq";
     };
-  
+
     deps = [  ];
   };
 
@@ -9388,9 +9388,9 @@ with otherPackages; rec {
     name = "thread-dump-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/thread-dump-1.0.el";
-      sha256 = "1hz0flyg9d3ckxbjpbd56ag405rf2ajwa3k9cnx96hyhq9jy90nk";
+      sha256 = "16r09m6i02m8sg5k22rh85lb18smq203c3mj9kgh38nrgqyyw4ax";
     };
-  
+
     deps = [  ];
   };
 
@@ -9399,9 +9399,9 @@ with otherPackages; rec {
     name = "thumb-through-0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/thumb-through-0.3.el";
-      sha256 = "0vx8nm8xpxrb3inbky1gvcb0avw0ckwfpdm8i214vpih66mvawbv";
+      sha256 = "1s8ic6vjrk3ri8a6i2pbgbgl5801xr6x27vk8lqs4fkhpiagjhxi";
     };
-  
+
     deps = [  ];
   };
 
@@ -9410,9 +9410,9 @@ with otherPackages; rec {
     name = "tidy-2.12";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tidy-2.12.el";
-      sha256 = "1kqhfq8r0ak0rqhm06f5059c9jrf069j0n9zppzcmz1scixljnn6";
+      sha256 = "1fgmn4i45czgg3x45a7dg6pncb76amgs1r0l2ym3xcbfslarjifi";
     };
-  
+
     deps = [  ];
   };
 
@@ -9421,9 +9421,9 @@ with otherPackages; rec {
     name = "tintin-mode-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tintin-mode-1.0.0.el";
-      sha256 = "0vhnc7snzpvyw2crm97yzwsswl8ay4drz4hgylm46b9w7lsflgdm";
+      sha256 = "09k344fd4y0f3qlqprgfnhicw3xqrqx02ivh40bxxijdq2bqwnf4";
     };
-  
+
     deps = [  ];
   };
 
@@ -9432,9 +9432,9 @@ with otherPackages; rec {
     name = "todotxt-0.2.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/todotxt-0.2.3.el";
-      sha256 = "00ir4r3v07qp1ask6hg4llf7kk8dmyfg17hyknyk4clarmasa7x2";
+      sha256 = "0pjlj8fc33s5ix883faa02h3c2kfkd978kp6qprfbmnqh10lgxkr";
     };
-  
+
     deps = [  ];
   };
 
@@ -9443,9 +9443,9 @@ with otherPackages; rec {
     name = "toml-mode-0.1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/toml-mode-0.1.3.el";
-      sha256 = "0rk1wijk16f7aa46q8m7723x1v37ki740r4wy8imidih1w56kmxq";
+      sha256 = "0v14r37lm91hs087h3pvjajcs0kfd5nc68acin1nvmqnj6wflz8f";
     };
-  
+
     deps = [  ];
   };
 
@@ -9454,9 +9454,9 @@ with otherPackages; rec {
     name = "toxi-theme-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/toxi-theme-0.1.0.el";
-      sha256 = "16iks5vs65khkqa27f9iwh395ndgqf0v7jrj48gl7xn6jkyb01nf";
+      sha256 = "0hdkljvn7b8kp0marwajh9wkp5n84cg7mnp3jwfxf640iiq17xl9";
     };
-  
+
     deps = [  ];
   };
 
@@ -9465,9 +9465,9 @@ with otherPackages; rec {
     name = "track-closed-files-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/track-closed-files-0.1.el";
-      sha256 = "0hfw3i9ik7pdm7wc4k4hp9nnc1ndbs3mzb7w5zhw8qq70xkzv2p1";
+      sha256 = "1fb20dcj7lx0r4ydqdxc2i5dh5cqh7lw2nr9p31dn6k02wp3m7fy";
     };
-  
+
     deps = [  ];
   };
 
@@ -9476,9 +9476,9 @@ with otherPackages; rec {
     name = "tracking-1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tracking-1.3.el";
-      sha256 = "00sj6r4xl586lcbxpkkz6q973xj499zkrc4mlzxd4l0gmvxmyhar";
+      sha256 = "1qksbm42kwcdg6hpi6gdvi7axwr6443gh92879al30j66zp4chl4";
     };
-  
+
     deps = [ shorten ];
   };
 
@@ -9489,7 +9489,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/trie-0.2.6.el";
       sha256 = "1q3i1dhq55c3b1hqpvmh924vzvhrgyp76hr1ci7bhjqvjmjx24ii";
     };
-  
+
     deps = [ tNFA heap ];
   };
 
@@ -9498,9 +9498,9 @@ with otherPackages; rec {
     name = "tron-theme-12";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tron-theme-12.el";
-      sha256 = "1df1vslxyrpwksy82c8iwr5y5pp87kgqv7g7v32634ysscy20l5z";
+      sha256 = "0nx2avsvhjmh6aamv8mal1i3d6ayjdia4kvcjld7nwikl54da496";
     };
-  
+
     deps = [  ];
   };
 
@@ -9509,9 +9509,9 @@ with otherPackages; rec {
     name = "truthy-0.2.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/truthy-0.2.6.el";
-      sha256 = "14m7sgm7vnpdvq0b041z84r3ygjnyvsmpk20y3zb9bl2dh4a4w1l";
+      sha256 = "17dlcaywq4na2w4ansp71mp7f0absa05jzvcvqqg3hyc4jm80vfz";
     };
-  
+
     deps = [ list-utils ];
   };
 
@@ -9520,9 +9520,9 @@ with otherPackages; rec {
     name = "tt-mode-20121117.2045";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tt-mode-20121117.2045.tar";
-      sha256 = "1ckimnrnyji31cp8djqmb8xq7p0nx8r3hgqab8hmdvjsdihrz9qz";
+      sha256 = "188y7630rygdpv7yps7h1yx2jg8dw24xsqr809nkpbjkmhi8w78n";
     };
-  
+
     deps = [  ];
   };
 
@@ -9531,9 +9531,9 @@ with otherPackages; rec {
     name = "ttl-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ttl-mode-0.1.el";
-      sha256 = "0vzzphkirhb7zvv1mg0vks8q77b6xpkqqxzqjflg5q0d5xhky539";
+      sha256 = "1nm97hclb2hhzl2i064dl37w1raz06l5wha09395nzdpixh926r1";
     };
-  
+
     deps = [  ];
   };
 
@@ -9542,9 +9542,9 @@ with otherPackages; rec {
     name = "ttrss-1.7.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ttrss-1.7.5.el";
-      sha256 = "0n2pg3giakalkc6d75rarfvyblpykn2an6mkn69fvgx3i157v67j";
+      sha256 = "1dv77344bzd2d5dsm5n63fpnh5w74jhblakpz07j9vaghdfxdr9x";
     };
-  
+
     deps = [  ];
   };
 
@@ -9553,9 +9553,9 @@ with otherPackages; rec {
     name = "tuareg-2.0.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tuareg-2.0.5.tar";
-      sha256 = "0mhxqmmilhlxbjzn5san0fcbl6xv1az80zl795p291j8nknvh2sb";
+      sha256 = "0ml89wl9qjb6mqmv32hikdbd2nnsx3fy58s5r2vann5skmcp3hwi";
     };
-  
+
     deps = [ caml ];
   };
 
@@ -9564,9 +9564,9 @@ with otherPackages; rec {
     name = "tumble-1.5";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tumble-1.5.el";
-      sha256 = "0v3jcp4wk3dycpdz51aj4saz89fqcjpcjb59q8mc652gj3pzbakd";
+      sha256 = "1yfyd3q99ii0v6fjdq2vr9ak8p31b4cjsqppmrpby1n113dacm72";
     };
-  
+
     deps = [  ];
   };
 
@@ -9575,9 +9575,9 @@ with otherPackages; rec {
     name = "tumblesocks-0.0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tumblesocks-0.0.6.tar";
-      sha256 = "0dkbxbxl6z84y5wbhjm8khjfffrz6b886nx1phw09lfldi2y413a";
+      sha256 = "1wfl9hwrpwpa7xm25cggk0f4nkywmr0fh7a9v8av6z28k8q953w2";
     };
-  
+
     deps = [ htmlize oauth markdown-mode ];
   };
 
@@ -9586,9 +9586,9 @@ with otherPackages; rec {
     name = "tup-mode-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/tup-mode-1.2.el";
-      sha256 = "0jxm35la40d080yi9mph4c3cp18xzgvw3q3gmgpqiqssf1dm5lzh";
+      sha256 = "1jfv1r5k4g0rkpf0cnrriif4w8b2fg8sdljhh5jzvv01m01gxi2a";
     };
-  
+
     deps = [  ];
   };
 
@@ -9597,9 +9597,9 @@ with otherPackages; rec {
     name = "twilight-theme-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/twilight-theme-1.0.0.el";
-      sha256 = "1wk2lvdzjn4l5kmaprg21qm4mbhkqb6zn3iy95qgxr0yp9i70c57";
+      sha256 = "0pa9yw7ahb9rgysc3nr3i7nrb7fgaw8is4iy7xr54ywch4pmpzkc";
     };
-  
+
     deps = [  ];
   };
 
@@ -9608,9 +9608,9 @@ with otherPackages; rec {
     name = "twittering-mode-2.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/twittering-mode-2.0.0.el";
-      sha256 = "02b66i53b24i8gfpk6c5k6ifw41gifbzsj3932g3day108mdq151";
+      sha256 = "1jk9dm7dxg3z79r17663brmaj70827jv00y8x0wd8f97qwdnln1r";
     };
-  
+
     deps = [  ];
   };
 
@@ -9619,9 +9619,9 @@ with otherPackages; rec {
     name = "typing-1.1.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/typing-1.1.4.el";
-      sha256 = "1yr0kc9jg96g82bdlnsdlsg4ymf6q3nklchgbg7asmdbhnwhzng4";
+      sha256 = "1k531jidn5si1pzg5zdj1xl1lh7sifrkrkg7bk52w7a3w4albd38";
     };
-  
+
     deps = [  ];
   };
 
@@ -9630,9 +9630,9 @@ with otherPackages; rec {
     name = "typing-practice-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/typing-practice-0.1.el";
-      sha256 = "0kff8g8ds7hy6hxygn3vnjhg88l08894h57lxpms2sjzg118wp8g";
+      sha256 = "0qg7bgi5nd6d0h4l9sqaghkhkq6snqcz941qq36mpvs5775llvb9";
     };
-  
+
     deps = [  ];
   };
 
@@ -9641,9 +9641,9 @@ with otherPackages; rec {
     name = "typo-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/typo-1.1.el";
-      sha256 = "0s9k8cb3vgbd7670kzkr0bn30skk2sdl3rdz2wsshfvrgmdn6214";
+      sha256 = "0srm9k8ywjzylxndy5bah8aj6nij2v2jr6zjxw7a73jwxd7p9kns";
     };
-  
+
     deps = [  ];
   };
 
@@ -9652,9 +9652,9 @@ with otherPackages; rec {
     name = "typopunct-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/typopunct-1.0.el";
-      sha256 = "0gr67g1isyw4cp0j0srir26chgaqn5w1v2pry3ig06x5h2z0f74x";
+      sha256 = "1ccx2n64xdgc2jd6dqsvy3jrzyb4crxaabwab6hr7w94sc01a3hd";
     };
-  
+
     deps = [  ];
   };
 
@@ -9663,9 +9663,9 @@ with otherPackages; rec {
     name = "uci-mode-1.0.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/uci-mode-1.0.0.el";
-      sha256 = "1c2hn56nrfcwiwv4v9km9gadx3praz204vr9njswwqr69kq07wp5";
+      sha256 = "1q8lb5c3fgd36hslpvbls4nbqjl9qipfjbp617anlxxr1vkxz0qr";
     };
-  
+
     deps = [  ];
   };
 
@@ -9674,9 +9674,9 @@ with otherPackages; rec {
     name = "ucs-utils-0.7.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ucs-utils-0.7.2.el";
-      sha256 = "06prg7i2h9pw3vvbnmga8qy875rbjy77ycim86yfsj8m1h34d6hg";
+      sha256 = "0psd3rzl5knmjmnmhfjp24b0w8d008ksm37z8qnn0qqrvg6ja8j7";
     };
-  
+
     deps = [ persistent-soft pcache ];
   };
 
@@ -9685,9 +9685,9 @@ with otherPackages; rec {
     name = "ujelly-theme-1.0.20";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ujelly-theme-1.0.20.el";
-      sha256 = "0yz7v1gjkz4j5fbk29fqv6mx1wcaw2dscd8yr3abi88a3jk4qpv6";
+      sha256 = "1v16f8s0wdqw89i7qsmgswzkzffs7xc31hhvk581kl55vsrf6l5x";
     };
-  
+
     deps = [  ];
   };
 
@@ -9696,9 +9696,9 @@ with otherPackages; rec {
     name = "unbound-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/unbound-0.1.el";
-      sha256 = "0x0dhlqjw8bkz364rmmk9ls9and3gam6n4fn84yj8ql4i4y6afan";
+      sha256 = "1ijjxkimyh94y5qmyzslrrkf4cy7hpykw64fwiyy4ij17iqy3ni5";
     };
-  
+
     deps = [  ];
   };
 
@@ -9709,7 +9709,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/undo-tree-0.6.3.el";
       sha256 = "0wddqdxym5kzrrkvbrg851ibp5bx183ll9vvxn1i0zbbihji7pai";
     };
-  
+
     deps = [  ];
   };
 
@@ -9718,9 +9718,9 @@ with otherPackages; rec {
     name = "unfill-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/unfill-0.1.el";
-      sha256 = "1yq44462pm7abrm8hs6ybpwmlh1xx0qa71zmvav97xz7jj036xc5";
+      sha256 = "18jx0cgq0lhc3kmpb3rf01azhdcamhlf6x9ddhzfp1b86j3a5ydn";
     };
-  
+
     deps = [  ];
   };
 
@@ -9731,7 +9731,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/uni-confusables-0.1.tar";
       sha256 = "0s3scvzhd4bggk0qafcspf97cmcvdw3w8bbf5ark4p22knvg80zp";
     };
-  
+
     deps = [  ];
   };
 
@@ -9740,9 +9740,9 @@ with otherPackages; rec {
     name = "unicode-enbox-0.1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/unicode-enbox-0.1.3.el";
-      sha256 = "1lkvqx1l65xybv3lgyhcvf55wjd5680fyqxshwxswp9wx9bv63qk";
+      sha256 = "0dfhlljr5zqgivbbgk9cjdgm06gdwh4s623c7mlb61q3hnaxrh3i";
     };
-  
+
     deps = [ string-utils ucs-utils persistent-soft pcache ];
   };
 
@@ -9751,9 +9751,9 @@ with otherPackages; rec {
     name = "unicode-fonts-0.3.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/unicode-fonts-0.3.4.el";
-      sha256 = "17wahph0y621qs859x8k9j9ni2lx2j6q0lzhk8jb05ki4716vhnm";
+      sha256 = "0x0x7i0v84gg4d8d3arcfxm21gmvylrd8xz6a3piq2w9zmdkip7x";
     };
-  
+
     deps = [ font-utils ucs-utils persistent-soft pcache ];
   };
 
@@ -9762,9 +9762,9 @@ with otherPackages; rec {
     name = "unicode-progress-reporter-0.5.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/unicode-progress-reporter-0.5.3.el";
-      sha256 = "036ks5j25i5d7xp1phh3nvrwacxxzknhixg3jwrsw68fryvng949";
+      sha256 = "0xf5nlrb1wrrb25l90ngb3bbdx8p90w78yvcavh1272lp9s24a5v";
     };
-  
+
     deps = [  ucs-utils persistent-soft pcache ];
   };
 
@@ -9773,9 +9773,9 @@ with otherPackages; rec {
     name = "unicode-whitespace-0.2.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/unicode-whitespace-0.2.3.el";
-      sha256 = "0ki1k86ypwxfsgidp87ymnxg07mfvmvdv80jbz7mj1pr0jslg0z5";
+      sha256 = "1c7146sbyzmi24xx6w7xz7jfw1nvjfw53b96lfhi2qhmw4si465k";
     };
-  
+
     deps = [ ucs-utils persistent-soft pcache ];
   };
 
@@ -9784,9 +9784,9 @@ with otherPackages; rec {
     name = "uuid-0.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/uuid-0.0.3.el";
-      sha256 = "0k2d5rjvvzji121cb88vqq76qzgzdd4yhv7c9y6cigdws24m5525";
+      sha256 = "0zpwkn3pa2zwy01qxwxd0238gls5iffwrlqgxc8x19vvr8a58ysn";
     };
-  
+
     deps = [  ];
   };
 
@@ -9795,9 +9795,9 @@ with otherPackages; rec {
     name = "vala-mode-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/vala-mode-0.1.el";
-      sha256 = "162psmlidvf3nlk7i6im4gx3ra8vwnnxcvpa2rl81bv9yvz67272";
+      sha256 = "0afvq8y95rxan27p8rnx6mx55i3x8lz7jvb6qlpmwkfvhhls62hj";
     };
-  
+
     deps = [  ];
   };
 
@@ -9806,9 +9806,9 @@ with otherPackages; rec {
     name = "vc-darcs-1.12";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/vc-darcs-1.12.el";
-      sha256 = "1nwi17x6a7wag77m9r7cy5n6h9bbc1fczlxlq9ljnmh94slhpz6f";
+      sha256 = "0hamwik5zd45wnzcdljcnrfy72nh9lanf20wy3r13ljmw7in9xgb";
     };
-  
+
     deps = [  ];
   };
 
@@ -9817,9 +9817,9 @@ with otherPackages; rec {
     name = "vcard-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/vcard-0.1.el";
-      sha256 = "1igm8al1p4f82dq3fbr42ny6f970yv5ma2ma6qf46p8mnk1br475";
+      sha256 = "17jnamjsn2zynrmn3j4qa6zai0i8cvzqjx94h88qcg3z0b9sfrjl";
     };
-  
+
     deps = [  ];
   };
 
@@ -9828,9 +9828,9 @@ with otherPackages; rec {
     name = "vector-utils-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/vector-utils-0.1.0.el";
-      sha256 = "0rfm4sxd0m5r3z44kswkjq6y6m4kyjynisamhgh5gqqbkdj6h3ag";
+      sha256 = "11nw68wakpkrhdwiy97hd8rc9mvv799mqcjd5r5x84y9m0qklmsz";
     };
-  
+
     deps = [  ];
   };
 
@@ -9839,9 +9839,9 @@ with otherPackages; rec {
     name = "vertica-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/vertica-0.1.0.el";
-      sha256 = "1clm122gjbwn75fgmqd44fcr6q5mcazr70znfsffjzmbjzb1kjx0";
+      sha256 = "0hvcy24zklx4ydbldrrpl9v1v08ddlmah4cvpbi6jr1wsi00lnpp";
     };
-  
+
     deps = [ sql ];
   };
 
@@ -9850,9 +9850,9 @@ with otherPackages; rec {
     name = "vimgolf-0.9.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/vimgolf-0.9.2.el";
-      sha256 = "1nwjhw8m7jh265bb9xvmpdn0pjkk5ppw4pkc6ci59zf231qbrapf";
+      sha256 = "1wnz53kkiqr9708nnl3sak4q3wnmsyj77jmh50n0x92ifb4vdgvw";
     };
-  
+
     deps = [  ];
   };
 
@@ -9861,9 +9861,9 @@ with otherPackages; rec {
     name = "vimrc-mode-0.3.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/vimrc-mode-0.3.1.el";
-      sha256 = "1fs8r3nhq3vhd3xfkc3h2bmh6i50jdzvnxq5d92iaiwcpr83qxld";
+      sha256 = "0pl3mwzkjlgblg3p1z6wr51ka3d7sj5xhsnifa1ndnii3my326wp";
     };
-  
+
     deps = [  ];
   };
 
@@ -9872,9 +9872,9 @@ with otherPackages; rec {
     name = "virtualenv-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/virtualenv-1.2.el";
-      sha256 = "0ahz99q1qhzvxk44pj2i5rbd16bxqad0s1wffn942x65ajp57lcx";
+      sha256 = "093i3l5b99al6v10949wh4naa3z024kq68f2w69yw6r0qnvicw8n";
     };
-  
+
     deps = [  ];
   };
 
@@ -9883,9 +9883,9 @@ with otherPackages; rec {
     name = "visible-color-code-0.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/visible-color-code-0.0.1.el";
-      sha256 = "1gdp7l4x38gb4354bj1f3xl9qd21xkljh2571gljx566ynk2alca";
+      sha256 = "0x7i377p4w942v5pb1vd8j501p4cx09zhlq767w7gs792mc1q87s";
     };
-  
+
     deps = [  ];
   };
 
@@ -9896,7 +9896,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/vlf-0.2.el";
       sha256 = "0drfsqbs74amzfyv4ygbfmf9s0dsmbhjhbmjmlc665l0a7dm1zhl";
     };
-  
+
     deps = [  ];
   };
 
@@ -9905,9 +9905,9 @@ with otherPackages; rec {
     name = "vline-1.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/vline-1.10.el";
-      sha256 = "0znyhrbrsdvcil5g8v1fsk2v5rlgnlirrn2pj1pw4f18yzy8grfl";
+      sha256 = "1lwxlf8cb4nqz71sr5k107f6w005wilyf8gm2ix9jzr4x28mrfvv";
     };
-  
+
     deps = [  ];
   };
 
@@ -9916,9 +9916,9 @@ with otherPackages; rec {
     name = "volatile-highlights-1.10";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/volatile-highlights-1.10.el";
-      sha256 = "1hdn6l36c1mg352d798y2982m37k4xg0q1ifdfzz6r9jn2r7n404";
+      sha256 = "10c30w8gbj696d86fpc5j75sbqds0qi6ksgf76xxj2n9c7zp8s9w";
     };
-  
+
     deps = [  ];
   };
 
@@ -9927,9 +9927,9 @@ with otherPackages; rec {
     name = "w32-browser-21.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/w32-browser-21.0.el";
-      sha256 = "1204rqrxlykpi6y6gyvdwf5ycv419i03716hys6r1jac9qi6kz4l";
+      sha256 = "0vrqn73lacnl7nr3y4zk1bfnzgswzyb8wamn9avqp9gvybm9qm21";
     };
-  
+
     deps = [  ];
   };
 
@@ -9938,9 +9938,9 @@ with otherPackages; rec {
     name = "w32-registry-2012.4.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/w32-registry-2012.4.6.el";
-      sha256 = "167j975a4smhppgvniqa54s9d3hgfv2rg2xj504zj2b574g2fcph";
+      sha256 = "0k75kvapl6bdnizihdinnlm5mimf81bvbri7w5c1rjdvwrq9c1f0";
     };
-  
+
     deps = [  ];
   };
 
@@ -9949,9 +9949,9 @@ with otherPackages; rec {
     name = "wacspace-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/wacspace-0.4.el";
-      sha256 = "19bp167x7cwpfyq089h7srb46sd55lxc0arjg782a8i4l74f2vyk";
+      sha256 = "01fzbkvvhwraq2rm2vmmm638r46ly4v8lp6bg7kmjvkjz875i0ia";
     };
-  
+
     deps = [ dash cl-lib ];
   };
 
@@ -9960,9 +9960,9 @@ with otherPackages; rec {
     name = "watch-buffer-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/watch-buffer-1.0.1.el";
-      sha256 = "1j5wsbhqp2k3nq9nwv58p5zbgvbhswxsls18c0jlqfhyliv3pmr7";
+      sha256 = "009w7cl30pdb6rpfqvl25j651842dnrid13q5cgnzpxl4ypn4whw";
     };
-  
+
     deps = [  ];
   };
 
@@ -9971,9 +9971,9 @@ with otherPackages; rec {
     name = "wc-mode-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/wc-mode-1.1.el";
-      sha256 = "0h7lipcnx3xnwpq4885cy7l288gncz22j1xd19qkabdgay8abk6j";
+      sha256 = "054803i5h3amn1ww7p46fi76hgxl91f9xdj5yffdin7rjcyj53bh";
     };
-  
+
     deps = [  ];
   };
 
@@ -9982,9 +9982,9 @@ with otherPackages; rec {
     name = "wcheck-mode-2013.6.13";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/wcheck-mode-2013.6.13.tar";
-      sha256 = "1q13gxc6c10vgl30021w97na1lg5b6d2spx89m58dnmdxx8mbrzd";
+      sha256 = "0bwg07yk8dm2nhvqwyygw1c7yqxh3dg86y5a3m29ih3j39zq4h5k";
     };
-  
+
     deps = [  ];
   };
 
@@ -9993,9 +9993,9 @@ with otherPackages; rec {
     name = "weather-2012.3.27.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/weather-2012.3.27.2.el";
-      sha256 = "035w2pmnq4z9l4n0mmnys5qx8c9yai6yv2mj3wxdsqgspzxibyff";
+      sha256 = "0gv8m3d0w4k4pwfxamrc7pxdvk7mm9cbpmj49vl7z44b5iqqm0r1";
     };
-  
+
     deps = [  ];
   };
 
@@ -10004,9 +10004,9 @@ with otherPackages; rec {
     name = "weather-metno-20121023";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/weather-metno-20121023.tar";
-      sha256 = "1fi3w1np5rss7pqbdn7bvgr1f96384i2pcv6gaqn2dx5wqcx0wsm";
+      sha256 = "0iv87k30asp74lqgmyg8zddx20cza5l9zf1q06xmb1ir52fmzlvy";
     };
-  
+
     deps = [  ];
   };
 
@@ -10015,9 +10015,9 @@ with otherPackages; rec {
     name = "web-0.3.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/web-0.3.7.el";
-      sha256 = "04q8gz2l2f1ydy5swinr2g5a39fs14ffbmkk9aazrvckzbbp5s84";
+      sha256 = "07ip6f58q7i8s1iyllwk0ih1mkx3wwixg75q5iq07ghlyan8j0ib";
     };
-  
+
     deps = [  ];
   };
 
@@ -10026,9 +10026,9 @@ with otherPackages; rec {
     name = "websocket-1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/websocket-1.0.el";
-      sha256 = "1apjiaxf9007aarbcdz31b4vwl21rsacqc462cr4q6f09849b090";
+      sha256 = "0g4yl7fivlvri2xhvl5s54bi4932g3p4bvcy90fjjg23kgczh8m8";
     };
-  
+
     deps = [  ];
   };
 
@@ -10037,9 +10037,9 @@ with otherPackages; rec {
     name = "weechat-0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/weechat-0.2.tar";
-      sha256 = "1lg31mx6yqrkn2qinp2n36bs6bkb9jq49fvpj7d8zapvw6ar99i8";
+      sha256 = "09sgihahc427w72wpmdac3zl024cpgv24r8mhkj8fsv3k1b0b51j";
     };
-  
+
     deps = [ s cl-lib  tracking ];
   };
 
@@ -10048,9 +10048,9 @@ with otherPackages; rec {
     name = "wget-1.94";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/wget-1.94.tar";
-      sha256 = "1hq318bpxkklr5s1vyly4f7rmfgv9yq6kvsgy1nwyws0pw7r8bar";
+      sha256 = "09f9rhyfbi2d8n2j8j0gsk2qg5bl0mqa2b8vzlhx6f55x12nmm3i";
     };
-  
+
     deps = [  ];
   };
 
@@ -10059,9 +10059,9 @@ with otherPackages; rec {
     name = "wgrep-2.1.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/wgrep-2.1.3.el";
-      sha256 = "10pk7r6bjifz4gjf2zm16i46451rg9c3sf4bdi4c75jxq42qrlmh";
+      sha256 = "1q6sg64nzhnd3ls0hdfdpxf2n9flq211lrgnyva9f4c86nz5c6gj";
     };
-  
+
     deps = [  ];
   };
 
@@ -10070,9 +10070,9 @@ with otherPackages; rec {
     name = "wgrep-ack-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/wgrep-ack-0.1.1.el";
-      sha256 = "1h5w52hhd6z91lg25zvwry23nn7knc8jxiv267l9a3nmgw8gdajq";
+      sha256 = "0mmcgcpwnbs9h8x5xi0sj2kap4mx0sgh4z33jks924bply1f7wxi";
     };
-  
+
     deps = [ wgrep ];
   };
 
@@ -10081,9 +10081,9 @@ with otherPackages; rec {
     name = "wgrep-helm-0.1.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/wgrep-helm-0.1.0.el";
-      sha256 = "1kxv99cvdlxvyyc287f6cvb9rwx2qwbbbxd8rb6gkhjgq9jdqrav";
+      sha256 = "1d81c5h9ic8ydh57wpqwl75gk4m7lnn5d37z22a34qz09x6h8b17";
     };
-  
+
     deps = [ wgrep ];
   };
 
@@ -10092,9 +10092,9 @@ with otherPackages; rec {
     name = "whole-line-or-region-1.3.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/whole-line-or-region-1.3.1.el";
-      sha256 = "0354p1ckxgdapiwn9bd5pp5bzwrlqba8zca1k5vnsb94ayhk6q2f";
+      sha256 = "128dyx97f5cyp3n8ri6kampzd9k40jr9xhp3qbl58k2aw9ijpjld";
     };
-  
+
     deps = [  ];
   };
 
@@ -10103,9 +10103,9 @@ with otherPackages; rec {
     name = "wiki-nav-0.6.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/wiki-nav-0.6.4.el";
-      sha256 = "18mgz6l3p1naijixpjfzxzhch23fxnxb9xfwf5ixzw5x0rm4yqkl";
+      sha256 = "1g78pjqpbrbl5hmwbd93id7acjwp9ga3n6apvxrb4kdici210lpp";
     };
-  
+
     deps = [ button-lock nav-flash ];
   };
 
@@ -10114,9 +10114,9 @@ with otherPackages; rec {
     name = "wikidoc-0.8.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/wikidoc-0.8.1.el";
-      sha256 = "1fbkcq6wlz086ngkraq3ak17kr9wd4y3nbqf9m1vhz30d0wvn239";
+      sha256 = "1icad5r4wnhdlbcc1nzddg21b7asiiw905nyrv0h0v6ry5gl0fr9";
     };
-  
+
     deps = [  ];
   };
 
@@ -10125,9 +10125,9 @@ with otherPackages; rec {
     name = "win-switch-1.0.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/win-switch-1.0.8.el";
-      sha256 = "1jn9pd46fhlicnrw85wg2qiyp9iybf50x45q9xdwvad3p3x1ngxn";
+      sha256 = "1ww0s5lbpz1xc0l14v50zwvmnrm8pqjivd6ym9zpjqdiq7anf5mq";
     };
-  
+
     deps = [  ];
   };
 
@@ -10136,9 +10136,9 @@ with otherPackages; rec {
     name = "window-end-visible-0.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/window-end-visible-0.0.3.el";
-      sha256 = "08w9kc9293j3r0splk7683cv1s9fd1afxfadhgv70fsczmcv6p73";
+      sha256 = "10zyk3iix11vihk0gfbcppygxyj5wk9fps3mw1ggl6yqmi4j77pa";
     };
-  
+
     deps = [  ];
   };
 
@@ -10147,9 +10147,9 @@ with otherPackages; rec {
     name = "window-number-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/window-number-1.0.1.el";
-      sha256 = "18xibzn6cg1m2ii21a31xxwvh8h2051vvnrnvmqf643scc65mq86";
+      sha256 = "0p6sm8xv161m9kds8inhqnfbr5cpnjjvhzw2724kg5ilnnskn3sm";
     };
-  
+
     deps = [  ];
   };
 
@@ -10160,7 +10160,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/windresize-0.1.el";
       sha256 = "0b5bfs686nkp7s05zgfqvr1mpagmkd74j1grq8kp2w9arj0qfi3x";
     };
-  
+
     deps = [  ];
   };
 
@@ -10169,9 +10169,9 @@ with otherPackages; rec {
     name = "windsize-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/windsize-0.1.el";
-      sha256 = "1gbws13cc78hz34gbh8x0q2lpn3h1n61xnkysq06cxrcwaym68sv";
+      sha256 = "0ald2hq4kn1zr0gvs5m5xkzw66fzn1ci1mlkklf4k429pf6f44id";
     };
-  
+
     deps = [  ];
   };
 
@@ -10180,9 +10180,9 @@ with otherPackages; rec {
     name = "winpoint-1.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/winpoint-1.4.el";
-      sha256 = "018ja6kp5lghq1qflw7d70nqn56hy3k4rb155nmy4v2qfwrcjhij";
+      sha256 = "0l06g0iwspfxn9hb5087dcglnv2g6vivanwdzr09zbj1n1q1642q";
     };
-  
+
     deps = [  ];
   };
 
@@ -10191,9 +10191,9 @@ with otherPackages; rec {
     name = "with-namespace-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/with-namespace-1.1.el";
-      sha256 = "0h510c64fw22c5bannspk98l43m6g5kb0y3qxmb8mh4s3h7f9lz6";
+      sha256 = "0b3ba98jx41saqsdyl4giksh8k7g09did3xd6rhjlyi5c6kw4crg";
     };
-  
+
     deps = [  ];
   };
 
@@ -10202,9 +10202,9 @@ with otherPackages; rec {
     name = "workgroups-0.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/workgroups-0.2.0.el";
-      sha256 = "1ayc5ysl9v52hshvqwpsqm1g1r9z23vyizbqm76qpb38czjlb6gd";
+      sha256 = "1j0yjr69ha718wlkvg8l7y2p9ilic3ngk4md5dqx7wxis9dzgd4z";
     };
-  
+
     deps = [  ];
   };
 
@@ -10213,9 +10213,9 @@ with otherPackages; rec {
     name = "workspaces-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/workspaces-0.1.el";
-      sha256 = "19gw1xc66hp5aqk934rkxs43w04h6js9iaj411870138n00z0mbs";
+      sha256 = "1agpswx2dinjs7lazv91zfspab5ws7i6w7ymjswf957jwrhphlr1";
     };
-  
+
     deps = [  ];
   };
 
@@ -10224,9 +10224,9 @@ with otherPackages; rec {
     name = "world-time-mode-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/world-time-mode-0.0.2.el";
-      sha256 = "1dz7fyf4kdjgcswxq6bwnqw04240jdr5p6hmyhm2zf6wma53kaj5";
+      sha256 = "04jbgacmfkw5d67a4wgpnjmiwwdf1wppp81x73a612vkh87sh7xr";
     };
-  
+
     deps = [  ];
   };
 
@@ -10235,9 +10235,9 @@ with otherPackages; rec {
     name = "wrap-region-0.7.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/wrap-region-0.7.1.el";
-      sha256 = "0yyvgshpnpzqw95cg5c1laa9fx860bm88lkqgl9ikaczvf80b9ay";
+      sha256 = "19ll49h5cyikb63dyjwn6rp9vf07d1diymcsfx8xwd1p7vf21g8n";
     };
-  
+
     deps = [  ];
   };
 
@@ -10246,9 +10246,9 @@ with otherPackages; rec {
     name = "writegood-mode-1.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/writegood-mode-1.2.el";
-      sha256 = "0vw2f90wffklygkhihvangr7i96m8mbjs96xikll1ffmv1xi8qx7";
+      sha256 = "100xfaqab3j58hmk0fd26jpcm2q91c44q891p6p054l6q09if3ph";
     };
-  
+
     deps = [  ];
   };
 
@@ -10257,9 +10257,9 @@ with otherPackages; rec {
     name = "ws-trim-1.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/ws-trim-1.4.el";
-      sha256 = "0zskvyx1cq51syplajk7mvwkg2b76zsxdzm75m5js15px3wairh2";
+      sha256 = "1q0xrl9mhbsnh5yb0naqnyh2mppydbz61v4im8z3znzjgml7lpf5";
     };
-  
+
     deps = [  ];
   };
 
@@ -10268,9 +10268,9 @@ with otherPackages; rec {
     name = "wxwidgets-help-0.0.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/wxwidgets-help-0.0.3.tar";
-      sha256 = "06bd9k2cn7shdwg228qqf1604nanp116h1wai3k4agmwmm695pl0";
+      sha256 = "0b3sg4ih5x7aq67ikk8i0jq1shb206nfvdfm463k81hmypkk2l08";
     };
-  
+
     deps = [  ];
   };
 
@@ -10281,7 +10281,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/xclip-1.0.el";
       sha256 = "0isgcmm9iwi734v869nnv0l9ysn1l81yn9jbbknf2jabjn3y5ww2";
     };
-  
+
     deps = [  ];
   };
 
@@ -10290,9 +10290,9 @@ with otherPackages; rec {
     name = "xlicense-1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/xlicense-1.1.tar";
-      sha256 = "1hqi3b90nx22w0p73c0gl26f4x1fh9hsa30h92fsvlmfmzw9hpr0";
+      sha256 = "0kh1cdbkgyk9ppd3ql9lmb748wxwzlzkcnn8kni232mjx4dzlg6c";
     };
-  
+
     deps = [  ];
   };
 
@@ -10301,9 +10301,9 @@ with otherPackages; rec {
     name = "xml-gen-0.4";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/xml-gen-0.4.el";
-      sha256 = "07c7jcdq9a6ciak1ycxygf48f984vd0xdb8lxwdv783g1pwb8i0l";
+      sha256 = "18fz1qc25w665ifls1byq500mdmb4rd6dzgcph4krnf4kirn8jj0";
     };
-  
+
     deps = [  ];
   };
 
@@ -10312,9 +10312,9 @@ with otherPackages; rec {
     name = "xml-rpc-1.6.8";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/xml-rpc-1.6.8.el";
-      sha256 = "0lyl82gmhijaary67qwx975818c3l1qc139l8ln21r8nfzh79g0i";
+      sha256 = "0i8hf90yhrjwqrv7q1f2g1cff6ld8apqkka42fh01wkdys1fbm7b";
     };
-  
+
     deps = [  ];
   };
 
@@ -10323,9 +10323,9 @@ with otherPackages; rec {
     name = "yagist-0.8.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/yagist-0.8.3.el";
-      sha256 = "1axy07lrmldprbbvmw734ihvhb9dj3m80w68dkmh0gl6jmlhxsd2";
+      sha256 = "1qki213iddniz2cjjd124adg42mzm0s5v2xvwhbcl292p3lqk12p";
     };
-  
+
     deps = [ json ];
   };
 
@@ -10334,9 +10334,9 @@ with otherPackages; rec {
     name = "yaml-mode-0.0.7";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/yaml-mode-0.0.7.el";
-      sha256 = "0wkmqkf1rmizgg4vf1b6rbjhxs1p0613c20rmj5zqdpykd374knq";
+      sha256 = "1ixkxply2p1bjd1hvgr5w3j58imb0mvikx1v5pwvbdl6w7mcj7j7";
     };
-  
+
     deps = [  ];
   };
 
@@ -10345,9 +10345,9 @@ with otherPackages; rec {
     name = "yaoddmuse-0.1.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/yaoddmuse-0.1.1.el";
-      sha256 = "0xnzkvlsw9bm70lkimz0dhx0055s7bsggjnfkrwmb631cbv3wc4z";
+      sha256 = "1fyw90j0wcbv3v08zny9mdyx8rldizcmi22g7xnv5qkfsdxkrfq2";
     };
-  
+
     deps = [  ];
   };
 
@@ -10356,9 +10356,9 @@ with otherPackages; rec {
     name = "yari-0.6";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/yari-0.6.el";
-      sha256 = "18s677k2dd5m8nba10vnr9ppvd9lr9vhspklds53fd9l94zdm4cw";
+      sha256 = "1zc0djsgc85vncn19m2ijaby5idsmd4jrb1pcvcgd78x8a6wkd2p";
     };
-  
+
     deps = [  ];
   };
 
@@ -10367,9 +10367,9 @@ with otherPackages; rec {
     name = "yas-jit-0.8.3";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/yas-jit-0.8.3.el";
-      sha256 = "17y0zpci2yjvj7qzbrln11y5bs4gybkxf89xs5aihgi9jhy8dj6q";
+      sha256 = "0bp8q7lqrvhfzflwhhwjr0ay3y7lnjfyag0rq7mjqxsydzww47av";
     };
-  
+
     deps = [  ];
   };
 
@@ -10378,9 +10378,9 @@ with otherPackages; rec {
     name = "yascroll-0.2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/yascroll-0.2.0.el";
-      sha256 = "0ma31xjydb21f3m949l8my70lwjhiwsjgpc7g2m8hzm99cinlicv";
+      sha256 = "0xf5iwmd7hcknnwd2ranjbacy7y5a134zvab8q3akjf7y5ipyk05";
     };
-  
+
     deps = [  ];
   };
 
@@ -10391,7 +10391,7 @@ with otherPackages; rec {
       url = "http://elpa.gnu.org/packages/yasnippet-0.8.0.tar";
       sha256 = "1syb9sc6xbw4vjhaix8b41lbm5zq6myrljl4r72yi6ndj5z9bmpr";
     };
-  
+
     deps = [  ];
   };
 
@@ -10400,9 +10400,9 @@ with otherPackages; rec {
     name = "yasnippet-bundle-0.6.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/yasnippet-bundle-0.6.1.el";
-      sha256 = "1rp0pfbf870jd2san1j3fkzri65sbgkjqkj7lfi654ji5xf647qk";
+      sha256 = "0b7hbc6sl5zaiflzva1jykvf3bbqpm0l65zxv2d1xpbzd64f9087";
     };
-  
+
     deps = [  ];
   };
 
@@ -10411,9 +10411,9 @@ with otherPackages; rec {
     name = "zeitgeist-0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/zeitgeist-0.1.el";
-      sha256 = "1y9zripg0i10my3dvvap019yhz8bskh8yjf365q525gq0chv3d08";
+      sha256 = "1v4hy313r8l73wk9q9snpjbmzd0ap7n92a8qrvmrvhjxa8cdlbs9";
     };
-  
+
     deps = [  ];
   };
 
@@ -10422,9 +10422,9 @@ with otherPackages; rec {
     name = "zen-and-art-theme-1.0.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/zen-and-art-theme-1.0.1.el";
-      sha256 = "18hj9y07zvnq1zqmihjcizn6gk7m6nir1dk04wwl3brkb5i674vg";
+      sha256 = "1yp2snvy10r5w37kd1dd9hnaffcmr20mwd5aahh5lhx2nrj1a7ay";
     };
-  
+
     deps = [  ];
   };
 
@@ -10433,9 +10433,9 @@ with otherPackages; rec {
     name = "zen-mode-20120627";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/zen-mode-20120627.tar";
-      sha256 = "0c9001m77dhc3inpn83c9vg4x8km9wj1c92csg5ib2lv3nlg1wrk";
+      sha256 = "0197vsfm66w7nq1nlcpvkzacsdlzq0lgmn0jfd9151plvcqg2a20";
     };
-  
+
     deps = [  ];
   };
 
@@ -10444,9 +10444,9 @@ with otherPackages; rec {
     name = "zenburn-theme-2.0";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/zenburn-theme-2.0.el";
-      sha256 = "1mj9c88wlhm6h9spyrkb5pab9r16hbzdgw33dsj0wq8kv5q8z547";
+      sha256 = "0010i5r7ism326xfmxg014dvvm29fcj15jfjs8s2lhdkvqrkhi4z";
     };
-  
+
     deps = [  ];
   };
 
@@ -10455,9 +10455,9 @@ with otherPackages; rec {
     name = "zencoding-mode-0.5.1";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/zencoding-mode-0.5.1.el";
-      sha256 = "18451wggly25j64b3m5m1may91sa4b7mp95xp6ayfffn8hdiiwg1";
+      sha256 = "09dv41vh6x7560iyf0aqawxx4i33y6n61xpqrxl1y36d9ad39lxr";
     };
-  
+
     deps = [  ];
   };
 
@@ -10466,9 +10466,9 @@ with otherPackages; rec {
     name = "zjl-hl-20121028.1901";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/zjl-hl-20121028.1901.el";
-      sha256 = "0d2x1pmyl5ccwss14bb29m8857n0q5sw1yag5bzyfwm7r8b9bzpg";
+      sha256 = "18aqkmrh18fgk2x7skvyf7r4nbqw3055v2vlfdmn9bycinddbvk3";
     };
-  
+
     deps = [ highlight region-list-edit ];
   };
 
@@ -10477,9 +10477,9 @@ with otherPackages; rec {
     name = "znc-0.0.2";
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/znc-0.0.2.el";
-      sha256 = "119fkl9xm9fm2h89qrbaxic2qrai39c1l13vps098cfhg1nn3rp6";
+      sha256 = "1d8lqvybgyazin5z0g1c4l3rg1vzrrvf0saqs53jr1zcdg0lianh";
     };
-  
+
     deps = [   ];
   };
 }

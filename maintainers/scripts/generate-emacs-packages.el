@@ -32,11 +32,12 @@
     (ignore-errors (mkdir tmpdir))
     (list tmpdir
           (mapcar (lambda (filename)
-                    (let ((out (concat tmpdir filename)))
+                    (let ((out (concat tmpdir filename))
+                          (location (concat base-url filename)))
                       (if (file-regular-p out)
                           out
-                        (when (url-copy-file (concat base-url "/" filename) out)
-                          (message "Prefetching package %s" filename)
+                        (when (url-copy-file location out)
+                          (message "Prefetching package from %s" location)
                           filename))))
                   filenames))))
 
