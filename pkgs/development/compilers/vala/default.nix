@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, yacc, flex, pkgconfig, glib, dbus, dbus_tools, libiconvOrEmpty }:
+{ stdenv, fetchurl, yacc, flex, pkgconfig, glib, dbus, dbus_tools
+, libiconvOrEmpty, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
   p_name  = "vala";
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ yacc flex pkgconfig ];
 
-  buildInputs = [ glib ] ++ libiconvOrEmpty
+  buildInputs = [ glib ] ++ libiconvOrEmpty ++ libintlOrEmpty
     ++ stdenv.lib.optional doCheck [ dbus dbus_tools ];
 
   doCheck = false; # problems when launching dbus tests
