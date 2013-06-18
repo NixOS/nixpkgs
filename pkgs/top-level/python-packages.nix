@@ -2873,6 +2873,7 @@ pythonPackages = python.modules // rec {
     src = fetchgit {
       url = https://git.torproject.org/pluggable-transports/obfsproxy.git;
       rev = "3c4e843a30c430aec1de03e0e09ef654072efc03";
+      sha256 = "8fd1e63a37bc42add7609d97d50ecd81da81881bcf7015a9e2958531dbf39018";
     };
 
     propagatedBuildInputs = [ pyptlib argparse twisted pycrypto ];
