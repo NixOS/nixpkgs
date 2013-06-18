@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./glib-2.32.patch
+      ./CVE-2013-0254.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         inherit cups icu libXfixes;
@@ -150,6 +151,6 @@ stdenv.mkDerivation rec {
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";
     maintainers = with maintainers; [ urkud sander phreedom ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
