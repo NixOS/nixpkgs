@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "19cx5y2m20rp7z5j7mwqfb4ph2g8lrri69zim44x362y4w5gfly6";
   };
 
-  buildInputs = [ pkgconfig glib freetype libintlOrEmpty ];
+  buildInputs = [ pkgconfig glib freetype ] ++ libintlOrEmpty;
 
   meta = {
     description = "An OpenType text shaping engine";
