@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
       libXv libXi libSM
     ]
     ++ optional (stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms) mesa
-    ++ optional (buildWebkit || buildMultimedia) alsaLib
+    ++ optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
     ++ [ zlib libpng openssl dbus.libs freetype fontconfig glib ]
     ++ optionals (buildWebkit || buildMultimedia) [ gstreamer gst_plugins_base ];
 
