@@ -725,10 +725,7 @@ let
 
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
-  dropbear = callPackage ../tools/networking/dropbear {
-    enableStatic = true;
-    zlib = zlibStatic;
-  };
+  dropbear = callPackage ../tools/networking/dropbear { };
 
   dtach = callPackage ../tools/misc/dtach { };
 
