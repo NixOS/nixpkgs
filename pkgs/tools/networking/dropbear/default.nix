@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     # Allow sessions to inherit the PATH from the parent dropbear.
     # Otherwise they only get the usual /bin:/usr/bin kind of PATH
     ./pass-path.patch
+
+    # Bugfix
+    # http://article.gmane.org/gmane.network.ssh.dropbear/1361
+    ./proxycrash.patch
   ];
 
   buildInputs = [ zlib ];
