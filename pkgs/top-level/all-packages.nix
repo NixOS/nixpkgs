@@ -2741,6 +2741,8 @@ let
 
     mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
 
+    mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
+
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries {
       camomile = camomile_0_8_2;
     };
@@ -3994,6 +3996,10 @@ let
       ;
 
   glpk = callPackage ../development/libraries/glpk { };
+
+  glsurf = callPackage ../applications/science/math/glsurf { 
+    inherit (ocamlPackages) lablgl findlib camlimages ocaml_mysql mlgmp;
+  };
 
   gmime = callPackage ../development/libraries/gmime { };
 
