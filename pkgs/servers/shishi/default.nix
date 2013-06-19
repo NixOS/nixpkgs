@@ -12,10 +12,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libtasn1 libgcrypt gnutls ] ;
 
+  NIX_CFLAGS_COMPILE
+    = stdenv.lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT";
+
   doCheck = true;
 
   meta = {
     description = "GNU Shishi, free implementation of the Kerberos 5 network security system";
+    homepage    = http://www.gnu.org/software/shishi/;
+    license     = stdenv.lib.licenses.gpl3Plus;
+    maintainers = with stdenv.lib.maintainers; [ bjg lovek323 ];
+    platforms   = stdenv.lib.platforms.all;
 
     longDescription =
       '' GNU Shishi is an implementation of the Kerberos 5 network
@@ -28,11 +35,5 @@ stdenv.mkDerivation rec {
          users to acquire and manage tickets (and more).  The server
          side, a Key Distribution Center, is implemented by `shishid'.
       '';
-
-    homepage = http://www.gnu.org/software/shishi/;
-    license = "GPLv3+";
-
-    maintainers = [ stdenv.lib.maintainers.bjg ];
-    platforms = stdenv.lib.platforms.all;
   };
 }
