@@ -9255,6 +9255,8 @@ let
 
   msieve = callPackage ../applications/science/math/msieve { };
 
+  weka = callPackage ../applications/science/math/weka { };
+
   yacas = callPackage ../applications/science/math/yacas { };
 
 
