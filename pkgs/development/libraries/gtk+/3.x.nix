@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext
-, expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, xlibs
+, expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, xlibs, x11
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 }:
@@ -18,10 +18,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig gettext ];
-  propagatedBuildInputs = with xlibs; [
-    expat glib cairo pango gdk_pixbuf atk at_spi2_atk
-    libXrandr libXrender libXcomposite libXi libXcursor
-  ] ++ stdenv.lib.optional xineramaSupport libXinerama
+  propagatedBuildInputs = with xlibs; with stdenv.lib;
+    [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk ]
+    ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor ]
+    ++ optional stdenv.isDarwin x11
+    ++ stdenv.lib.optional xineramaSupport libXinerama
     ++ stdenv.lib.optionals cupsSupport [ cups ];
 
   postInstall = "rm -rf $out/share/gtk-doc";
