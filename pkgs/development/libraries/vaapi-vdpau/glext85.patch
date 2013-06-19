@@ -1,3 +1,5 @@
+http://www.mail-archive.com/libva@lists.freedesktop.org/msg01457.html
+
 diff --git a/src/utils_glx.h b/src/utils_glx.h
 index 19d03e4..f270fba 100644
 --- a/src/utils_glx.h
