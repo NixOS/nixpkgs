@@ -65,9 +65,7 @@ export ASPELL_CONF="dict-dir $HOME/.nix-profile/lib/aspell"
 export PATH=@wrapperDir@:$PATH
 
 # ~/bin if it exists overrides other bin directories.
-if [ -d $HOME/bin ]; then
-    export PATH=$HOME/bin:$PATH
-fi
+export PATH=$HOME/bin:$PATH
 
 # Set up the per-user profile.
 mkdir -m 0755 -p $NIX_USER_PROFILE_DIR
