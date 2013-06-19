@@ -1593,6 +1593,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
+  primitive_0_4_1 = callPackage ../development/libraries/haskell/primitive/0.4.1.nix   {};
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
   primitive = self.primitive_0_5_0_1;
 
@@ -2005,7 +2006,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   vect = callPackage ../development/libraries/haskell/vect {};
 
-  vector_0_9_1 = callPackage ../development/libraries/haskell/vector/0.9.1.nix {};
+  vector_0_9_1 = callPackage ../development/libraries/haskell/vector/0.9.1.nix {
+    primitive = self.primitive_0_4_1;  
+  };
   vector_0_10 = callPackage ../development/libraries/haskell/vector/0.10.nix  {};
   vector_0_10_0_1  = callPackage ../development/libraries/haskell/vector/0.10.0.1.nix  {};
   vector = self.vector_0_10_0_1;
