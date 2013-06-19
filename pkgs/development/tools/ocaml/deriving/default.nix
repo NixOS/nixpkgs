@@ -32,7 +32,7 @@ versionedDerivation "ocaml-deriving" version {
   };
 
   "for-3.12.1" = {
-    name = "deriving-more-recent";
+    name = "deriving-git20100903";
 
     # https://github.com/jaked/deriving
     src = fetchurl {
