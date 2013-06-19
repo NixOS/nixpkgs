@@ -40,6 +40,15 @@ composableDerivation {
       }.src;
     };
 
+    # if darwin support is enabled, we want to make sure we're not building with
+    # OS-installed python framework
+    preConfigure
+      = stdenv.lib.optionalString
+        (stdenv.isDarwin && (config.vim.darwin or true)) ''
+          sed -i "5387,5390d" src/auto/configure
+          sed -i "5394d" src/auto/configure
+        '';
+
     configureFlags
       = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
 
@@ -58,7 +67,19 @@ composableDerivation {
       // edf { name = "xsmp_interact"; } #Disable XSMP interaction
       // edf { name = "mzscheme"; } #Include MzScheme interpreter.
       // edf { name = "perl"; feat = "perlinterp"; enable = { nativeBuildInputs = [perl]; };} #Include Perl interpreter.
-      // edf { name = "python"; feat = "pythoninterp"; enable = { nativeBuildInputs = [python]; }; } #Include Python interpreter.
+
+      // edf {
+        name = "python";
+        feat = "pythoninterp";
+        enable = {
+          nativeBuildInputs = [ python ];
+        } // lib.optionalAttrs stdenv.isDarwin {
+          configureFlags
+            = [ "--enable-pythoninterp=yes"
+                "--with-python-config-dir=${python}/lib" ];
+        };
+      }
+
       // edf { name = "tcl"; enable = { nativeBuildInputs = [tcl]; }; } #Include Tcl interpreter.
       // edf { name = "ruby"; feat = "rubyinterp"; enable = { nativeBuildInputs = [ruby]; };} #Include Ruby interpreter.
       // edf { name = "lua" ; feat = "luainterp"; enable = { nativeBuildInputs = [lua]; configureFlags = ["--with-lua-prefix=${args.lua}"];};}
@@ -104,7 +125,7 @@ composableDerivation {
       // edf "gtktest" "gtktest" { } #Do not try to compile and run a test GTK program
     */
 
-  postInstall = if stdenv.isLinux then ''
+  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
     rpath=`patchelf --print-rpath $out/bin/vim`;
     for i in $nativeBuildInputs; do
       echo adding $i/lib
@@ -113,7 +134,7 @@ composableDerivation {
     echo $nativeBuildInputs
     echo $rpath
     patchelf --set-rpath $rpath $out/bin/{vim,gvim}
-  '' else "";
+  '';
 
   dontStrip = 1;
 
