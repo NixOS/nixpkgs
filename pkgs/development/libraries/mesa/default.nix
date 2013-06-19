@@ -104,7 +104,6 @@ stdenv.mkDerivation {
       `#$out/lib/libXvMC*` \
       $out/lib/vdpau \
       $out/lib/libOSMesa* \
-      $out/lib/gbm $out/lib/libgbm* \
       $out/lib/gallium-pipe \
   '' + ''
       $out/lib/libdricore* \

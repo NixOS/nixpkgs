@@ -4820,6 +4820,7 @@ let
       name = "mesa-${mesa_noglu.version}";
       paths = [ mesa_glu mesa_noglu ];
     };
+  mesa_full = pkgs.appendToName "full" (mesa_noglu.override { enableExtraFeatures = true; });
   darwinX11AndOpenGL = callPackage ../os-specific/darwin/native-x11-and-opengl { };
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
