@@ -159,7 +159,7 @@ in {
         };
   };
 
-  eclipse_cpp_421 = buildEclipse {
+  eclipse_cpp_42 = buildEclipse {
     name = "eclipse-cpp-4.2";
     description = "Eclipse IDE for C/C++ Developers";
     src =
