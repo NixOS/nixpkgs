@@ -3252,7 +3252,7 @@ let
 
   cgdb = callPackage ../development/tools/misc/cgdb { };
 
-  chromedriver = callPackage ../development/tools/selenium/chromedriver { };
+  chromedriver = callPackage ../development/tools/selenium/chromedriver { gconf = gnome.GConf; };
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
