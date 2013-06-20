@@ -99,6 +99,7 @@
   ./services/mail/postfix.nix
   ./services/mail/spamassassin.nix
   ./services/misc/autofs.nix
+  ./services/misc/cgminer.nix
   ./services/misc/disnix.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
