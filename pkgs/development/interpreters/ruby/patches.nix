@@ -101,6 +101,10 @@ in
     buildInputs = [ zlib libuuid ];
   };
 
+  xapian_ruby = {
+    buildInputs = [ zlib libuuid ];
+  };
+
   rjb = {
     buildInputs = [ jdk ];
     JAVA_HOME = jdk;

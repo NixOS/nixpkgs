@@ -7874,6 +7874,7 @@ let
     chronic = rubyLibs.chronic;
     gettext = rubyLibs.gettext;
     gpgme = ruby_gpgme;
+    highline = rubyLibs.highline;
     iconv = rubyLibs.iconv;
     locale = rubyLibs.locale;
     lockfile = rubyLibs.lockfile;
@@ -7883,7 +7884,7 @@ let
     rmail = rubyLibs.rmail;
     text = rubyLibs.text;
     trollop = rubyLibs.trollop;
-    xapian_full_alaveteli = rubyLibs.xapian_full_alaveteli_1_2_9_5;
+    xapian_ruby = rubyLibs.xapian_ruby;
   };
 
   msmtp = callPackage ../applications/networking/msmtp { };
