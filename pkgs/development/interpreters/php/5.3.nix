@@ -102,7 +102,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
       gd = {
         configureFlags = [
-          "--with-gd"
+          "--with-gd=${gd}"
           "--with-freetype-dir=${freetype}"
           "--with-png-dir=${libpng}"
           "--with-jpeg-dir=${libjpeg}"
