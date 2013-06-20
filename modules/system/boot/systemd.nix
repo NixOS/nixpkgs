@@ -11,7 +11,7 @@ let
   systemd = cfg.package;
 
   makeUnit = name: unit:
-    pkgs.runCommand "unit" { inherit (unit) text; }
+    pkgs.runCommand "unit" { inherit (unit) text; preferLocalBuild = true; }
       (if unit.enable then  ''
         mkdir -p $out
         echo -n "$text" > $out/${name}
