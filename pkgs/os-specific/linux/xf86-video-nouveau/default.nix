@@ -1,5 +1,5 @@
 { stdenv
-, fetchgit
+, fetchurl
 , autoconf
 , automake
 , libtool
@@ -8,28 +8,22 @@
 , libdrm
 , pkgconfig }:
 
-stdenv.mkDerivation {
-  name = "xf86-video-nouveau-2012-03-05";
+stdenv.mkDerivation rec {
+  name = "xf86-video-nouveau-1.0.7";
 
-  src = fetchgit {
-    url = git://anongit.freedesktop.org/nouveau/xf86-video-nouveau;
-    rev = "f5d1cd2cb6808838ae1a188cef888eaa9582c76d";
-    sha256 = "8c20e9ce7897fbd4c5097e4738e80ecca30e6326b758a13fc97f96ccc12fd7d9"; 
+  src = fetchurl {
+    url = "mirror://xorg/individual/driver/${name}.tar.bz2";
+    sha256 = "0cg1q9dz9ksfp593x707gr10s8p7z00zdws1r4lshg42w5ccd1yi";
   };
 
+
   buildInputs = [
-    autoconf
-    automake
-    libtool
     xorgserver xproto fontsproto xf86driproto renderproto videoproto pixman
     utilmacros
     libdrm
     pkgconfig
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${pixman}/include/pixman-1";
-
-  preConfigure = "autoreconf -vfi";
 
   meta = {
     homepage = http://nouveau.freedesktop.org/wiki/;

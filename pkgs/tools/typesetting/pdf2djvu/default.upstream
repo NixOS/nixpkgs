@@ -1,0 +1,10 @@
+url http://code.google.com/p/pdf2djvu/downloads/list
+version_link '[.]tar[.][a-z0-9]+$'
+process 'code[.]google[.]com//' ''
+version '.*_([0-9.]+[0-9]).*' '\1'
+
+do_overwrite () {
+  ensure_hash
+  set_var_value version "$CURRENT_VERSION"
+  set_var_value sha256 "$CURRENT_HASH"
+}

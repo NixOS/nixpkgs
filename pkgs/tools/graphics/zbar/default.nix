@@ -1,6 +1,6 @@
 x@{builderDefsPackage
   , imagemagickBig, pkgconfig, python, pygtk, perl, libX11, libv4l
-  , qt4, lzma
+  , qt4, lzma, gtk2
   , ...}:
 builderDefsPackage
 (a :  

@@ -200,6 +200,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
 
   dbus_all = {
     libs = linux;
+    daemon = linux;
     tools = linux;
   };
 

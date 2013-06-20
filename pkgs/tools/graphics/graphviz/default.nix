@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libpng, libjpeg, expat, libXaw
-, yacc, libtool, fontconfig, pango, gd, xlibs, gts, gettext
+, yacc, libtool, fontconfig, pango, gd, xlibs, gts, gettext, cairo
 }:
 
 stdenv.mkDerivation rec {
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") gettext;
 
   patches = [ ./fix-broken-memcp-signature.patch ];
+
+  CPPFLAGS = stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") "-I${cairo}/include/cairo";
 
   configureFlags =
     [ "--with-pngincludedir=${libpng}/include"

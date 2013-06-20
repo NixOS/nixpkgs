@@ -1,9 +1,9 @@
 { stdenv, fetchurl, ruby, rake, rubygems, makeWrapper, ncursesw_sup
-, xapian_full_alaveteli, gpgme, libiconvOrEmpty, rmail, mime_types, chronic
-, trollop, lockfile, gettext, iconv, locale, text }:
+, xapian_ruby, gpgme, libiconvOrEmpty, rmail, mime_types, chronic, trollop
+, lockfile, gettext, iconv, locale, text, highline }:
 
 stdenv.mkDerivation {
-  name = "sup-d21f027afcd6a4031de9619acd8dacbd2f2f4fd4";
+  name = "sup-896ab66c0263e5ce0fa45857fb08e0fb78fcb6bd";
   
   meta = {
     homepage = http://supmua.org;
@@ -16,12 +16,12 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   src = fetchurl {
-    url = "https://github.com/sup-heliotrope/sup/archive/d21f027afcd6a4031de9619acd8dacbd2f2f4fd4.tar.gz";
-    sha256 = "0syifva6pqrg3nyy7xx7nan9zswb4ls6bkk96vi9ki2ly1ymwcdp";
+    url = "https://github.com/sup-heliotrope/sup/archive/896ab66c0263e5ce0fa45857fb08e0fb78fcb6bd.tar.gz";
+    sha256 = "0sknf4ha13m2478fa27qnm43bcn59g6qbd8f2nmv64k2zs7xnwmk";
   };
 
   buildInputs =
-    [ ruby rake rubygems makeWrapper gpgme ncursesw_sup xapian_full_alaveteli
+    [ ruby rake rubygems makeWrapper gpgme ncursesw_sup xapian_ruby
       libiconvOrEmpty ];
 
   buildPhase = "rake gem";
@@ -43,7 +43,8 @@ stdenv.mkDerivation {
     GEM_PATH="$GEM_PATH:${rmail}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${text}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${trollop}/${ruby.gemPath}"
-    GEM_PATH="$GEM_PATH:${xapian_full_alaveteli}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${xapian_ruby}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${highline}/${ruby.gemPath}"
 
     # Don't install some dependencies -- we have already installed
     # the dependencies but gem doesn't acknowledge this

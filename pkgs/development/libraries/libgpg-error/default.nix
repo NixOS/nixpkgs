@@ -5,7 +5,7 @@ stdenv.mkDerivation (rec {
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha1 = "be209b013652add5c7e2c473ea114f58203cc6cd";
+    sha256 = "1h0ql8j65ns2rmhj9wnc9035026crzkg226xg8614fq71947ccxf";
   };
 
   doCheck = true;

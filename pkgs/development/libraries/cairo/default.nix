@@ -1,60 +1,57 @@
-{ postscriptSupport ? true
-, pdfSupport ? true
-, pngSupport ? true
-, xcbSupport ? false
+{ stdenv, fetchurl, pkgconfig, libiconvOrEmpty, libintlOrEmpty
+, expat, zlib, libpng, pixman, fontconfig, freetype, xlibs
 , gobjectSupport ? true, glib
-, stdenv, fetchurl, pkgconfig, x11, fontconfig, freetype, xlibs
-, zlib, libpng, pixman, libxcb ? null, xcbutil ? null
-, libiconvOrEmpty, libintlOrEmpty
+, xcbSupport ? true # no longer experimental since 1.12
+, glSupport ? true, mesa_noglu ? null # mesa is no longer a big dependency
+, pdfSupport ? true
 }:
 
-assert postscriptSupport -> zlib != null;
-assert pngSupport -> libpng != null;
-assert xcbSupport -> libxcb != null && xcbutil != null;
+assert glSupport -> mesa_noglu != null;
+
+with { inherit (stdenv.lib) optional optionals; };
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.12.4";
+  name = "cairo-1.12.14";
 
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha1 = "f4158981ed01e73c94fb8072074b17feee61a68b";
+    sha256 = "04xcykglff58ygs0dkrmmnqljmpjwp2qgwcz8sijqkdpz7ix3l4n";
   };
 
-  buildInputs =
-    [ pkgconfig x11 fontconfig ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) xlibs.libXrender
-    ++ stdenv.lib.optionals xcbSupport [ libxcb xcbutil ]
-    ++ libintlOrEmpty
-    ++ libiconvOrEmpty;
+  nativeBuildInputs = [ pkgconfig ] ++ libintlOrEmpty ++ libiconvOrEmpty;
 
   propagatedBuildInputs =
-    [ freetype pixman ] ++
-    stdenv.lib.optional gobjectSupport glib ++
-    stdenv.lib.optional postscriptSupport zlib ++
-    stdenv.lib.optional pngSupport libpng;
+    with xlibs; [ xlibs.xlibs fontconfig expat freetype pixman zlib libpng ]
+    ++ optional (!stdenv.isDarwin) libXrender
+    ++ optionals xcbSupport [ libxcb xcbutil ]
+    ++ optional gobjectSupport glib
+    ++ optionals glSupport [ mesa_noglu ]
+    ;
+
+  configureFlags = [ "--enable-tee" ]
+    ++ optional xcbSupport "--enable-xcb"
+    ++ optional glSupport "--enable-gl"
+    ++ optional pdfSupport "--enable-pdf"
+    ;
 
   NIX_CFLAGS_COMPILE = "-I${pixman}/include/pixman-1";
 
-  configureFlags =
-    [ "--enable-tee" ]
-    ++ stdenv.lib.optional xcbSupport "--enable-xcb"
-    ++ stdenv.lib.optional pdfSupport "--enable-pdf";
-
-  preConfigure = ''
-    # Work around broken `Requires.private' that prevents Freetype
-    # `-I' flags to be propagated.
-    sed -i "src/cairo.pc.in" \
-        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
-  ''
-
+  preConfigure =
   # On FreeBSD, `-ldl' doesn't exist.
-  + (stdenv.lib.optionalString stdenv.isFreeBSD
+    (stdenv.lib.optionalString stdenv.isFreeBSD
        '' for i in "util/"*"/Makefile.in" boilerplate/Makefile.in
           do
             cat "$i" | sed -es/-ldl//g > t
             mv t "$i"
           done
-       '');
+       '') 
+       +
+    ''
+    # Work around broken `Requires.private' that prevents Freetype
+    # `-I' flags to be propagated.
+    sed -i "src/cairo.pc.in" \
+        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
+    '';
 
   enableParallelBuilding = true;
 

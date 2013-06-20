@@ -1,26 +1,21 @@
-{ fetchurl, stdenv, perl, perlXMLParser, pkgconfig, libxml2
-, gettext, intltool, bzip2, glib, python
-, gnomeSupport ? true,  gdk_pixbuf ? null
-, gnome_vfs ? null, libbonobo ? null }:
+{ fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
+, python, gdk_pixbuf, libiconvOrEmpty
+}:
 
-assert gnomeSupport -> gdk_pixbuf != null && gnome_vfs != null && libbonobo != null
-  && glib != null;
+with { inherit (stdenv.lib) optionals; };
 
 stdenv.mkDerivation rec {
-  name = "libgsf-1.14.25";
+  name = "libgsf-1.14.26";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libgsf/1.14/${name}.tar.xz";
-    sha256 = "127548f07e07951984fb139c3f89d65b9e471aefe6555387de03e1113944d1a2";
+    sha256 = "1md67l60li7rkma9m6mwchqz6b6q4xsfr38c6n056y6xm8jyf6c9";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig ];
-  buildInputs =
-    [ perl perlXMLParser gettext bzip2 python ]
-    ++ stdenv.lib.optionals gnomeSupport [ gnome_vfs gdk_pixbuf ];
+  nativeBuildInputs = [ pkgconfig intltool ];
+  buildInputs = [ gettext bzip2 zlib python ];
 
-  propagatedBuildInputs = [ libxml2 glib ]
-    ++ stdenv.lib.optionals gnomeSupport [ libbonobo ];
+  propagatedBuildInputs = [ libxml2 glib gdk_pixbuf ] ++ libiconvOrEmpty;
 
   doCheck = true;
 

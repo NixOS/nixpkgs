@@ -3,10 +3,11 @@
 , glib, kbd, libxslt, coreutils, libgcrypt, sysvtools, docbook_xsl
 }:
 
-assert stdenv.gcc.libc or null != null;
+assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "systemd-203";
+  version = "203";
+  name = "systemd-${version}";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     ] ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =
-    [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
+    [ pkgconfig intltool gperf libcap dbus.libs kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt docbook_xsl
     ];
 
@@ -124,6 +125,19 @@ stdenv.mkDerivation rec {
   # systemd builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
+
+  passthru.headers = stdenv.mkDerivation {
+    name = "systemd-headers-${version}";
+    inherit src;
+
+    phases = [ "unpackPhase" "installPhase" ];
+
+    # some are needed by dbus.libs, which is needed for systemd :-)
+    installPhase = ''
+      mkdir -p "$out/include/systemd"
+      mv src/systemd/*.h "$out/include/systemd"
+    '';
+  };
 
   meta = {
     homepage = "http://www.freedesktop.org/wiki/Software/systemd";
