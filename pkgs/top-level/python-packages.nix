@@ -5664,12 +5664,12 @@ pythonPackages = python.modules // rec {
 
 
   tarman = buildPythonPackage rec {
-    version = "0.1";
+    version = "0.1.1";
     name = "tarman-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/t/tarman/tarman-${version}.zip";
-      sha256 = "1g6p9v7z2qrg000150flwmpykkzc4y8l3lvkvpn0rb8czyw7l27f";
+      sha256 = "0ppd2365hf841b58fss5pgaja0y0mwx5n0gk1p3rxx9y3r0kyfas";
     };
 
     buildInputs = [ pkgs.unzip unittest2 nose mock ];
