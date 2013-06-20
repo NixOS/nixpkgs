@@ -43,6 +43,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         buildInputs = [curl openssl];
       };
 
+      pcntl = {
+        configureFlags = [ "--enable-pcntl" ];
+      };
+
       zlib = {
         configureFlags = ["--with-zlib=${zlib}"];
         buildInputs = [zlib];
@@ -174,30 +178,31 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     };
 
   cfg = {
-    mysqlSupport = config.php.mysql or true;
-    mysqliSupport = config.php.mysqli or true;
-    pdo_mysqlSupport = config.php.pdo_mysql or true;
-    libxml2Support = config.php.libxml2 or true;
     apxs2Support = config.php.apxs2 or true;
     bcmathSupport = config.php.bcmath or true;
-    socketsSupport = config.php.sockets or true;
+    bz2Support = config.php.bz2 or false;
     curlSupport = config.php.curl or true;
+    exifSupport = config.php.exif or true;
+    ftpSupport = config.php.ftp or true;
+    gdSupport = config.php.gd or true;
     gettextSupport = config.php.gettext or true;
+    intlSupport = config.php.intl or true;
+    libxml2Support = config.php.libxml2 or true;
+    mbstringSupport = config.php.mbstring or true;
+    mcryptSupport = config.php.mcrypt or false;
+    mysqlSupport = config.php.mysql or true;
+    mysqliSupport = config.php.mysqli or true;
+    opensslSupport = config.php.openssl or true;
+    pcntlSupport = config.php.pcntl or true;
+    pdo_mysqlSupport = config.php.pdo_mysql or true;
     postgresqlSupport = config.php.postgresql or true;
     readlineSupport = config.php.readline or true;
-    sqliteSupport = config.php.sqlite or true;
     soapSupport = config.php.soap or true;
-    zlibSupport = config.php.zlib or true;
-    opensslSupport = config.php.openssl or true;
-    mbstringSupport = config.php.mbstring or true;
-    gdSupport = config.php.gd or true;
-    intlSupport = config.php.intl or true;
-    exifSupport = config.php.exif or true;
+    socketsSupport = config.php.sockets or true;
+    sqliteSupport = config.php.sqlite or true;
     xslSupport = config.php.xsl or false;
-    mcryptSupport = config.php.mcrypt or false;
-    bz2Support = config.php.bz2 or false;
     zipSupport = config.php.zip or true;
-    ftpSupport = config.php.ftp or true;
+    zlibSupport = config.php.zlib or true;
   };
 
   configurePhase = ''
