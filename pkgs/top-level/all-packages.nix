@@ -593,6 +593,8 @@ let
 
   chrony = callPackage ../tools/networking/chrony { };
 
+  cjdns = callPackage ../tools/networking/cjdns { };
+
   cksfv = callPackage ../tools/networking/cksfv { };
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
