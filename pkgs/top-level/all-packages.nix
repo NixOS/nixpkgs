@@ -7612,7 +7612,12 @@ let
 
   iptraf = callPackage ../applications/networking/iptraf { };
 
-  irssi = callPackage ../applications/networking/irc/irssi { };
+  irssi = callPackage ../applications/networking/irc/irssi {
+    # compile with gccApple on darwin to support the -no-cpp-precompile flag
+    stdenv = if stdenv.isDarwin
+      then stdenvAdapters.overrideGCC stdenv gccApple
+      else stdenv;
+  };
 
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
 
