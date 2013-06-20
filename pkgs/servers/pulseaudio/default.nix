@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, avahi
 , gconf, gtk, intltool, gettext
-, alsaLib, libsamplerate, libsndfile, speex, bluez, udev
+, alsaLib, libsamplerate, libsndfile, speex, bluez, sbc, udev, libcap
 , jackaudioSupport ? false, jackaudio ? null
 , x11Support ? false, xlibs
 , json_c
@@ -10,11 +10,11 @@
 assert jackaudioSupport -> jackaudio != null;
 
 stdenv.mkDerivation rec {
-  name = "pulseaudio-2.1";
+  name = "pulseaudio-4.0";
 
   src = fetchurl {
-    url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-2.1.tar.xz";
-    sha256 = "0zyal2mix7lzhxmr3pxlmss5kjca061iapvrh20bkgvsyixk8szg";
+    url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-4.0.tar.xz";
+    sha256 = "1bndz4l8jxyq3zq128gzp3gryxl6yjs66j2y1d7yabw2n5mv7kim";
   };
 
   # Since `libpulse*.la' contain `-lgdbm', it must be propagated.
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig gnum4 libtool intltool glib dbus avahi
-      libsamplerate libsndfile speex alsaLib bluez udev
-      json_c
+      libsamplerate libsndfile speex alsaLib bluez sbc udev
+      json_c libcap
       #gtk gconf 
     ]
     ++ stdenv.lib.optional jackaudioSupport jackaudio
