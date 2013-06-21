@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
     cp ../bin/synergyd $out/bin
   '';
 
+  doCheck = true;
+  checkPhase = "../bin/unittests";
+
   meta = {
     description = "Tool to share the mouse keyboard and the clipboard between computers";
     homepage = http://synergy-foss.org;
