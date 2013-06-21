@@ -4420,6 +4420,8 @@ let
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
   libgnome_keyring3 = gnome3.libgnome_keyring;
 
+  libsecret = callPackage ../development/libraries/libsecret { };
+
   libgtop = callPackage ../development/libraries/libgtop {};
 
   liblo = callPackage ../development/libraries/liblo { };
