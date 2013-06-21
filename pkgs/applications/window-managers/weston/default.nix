@@ -25,10 +25,11 @@ stdenv.mkDerivation rec {
     export LIBUNWIND_CFLAGS='-I${libunwind}/include'
     export LIBUNWIND_LIBS='-L${libunwind}/lib -lunwind'
     export COMPOSITOR_CFLAGS='-I${wayland}/include'
-    export COMPOSITOR_LIBS='-L${wayland}/lib -lwayland-server -lwayland-cursor' 
+    export COMPOSITOR_LIBS='-L${wayland}/lib -lwayland-server -lwayland-cursor'
     export SIMPLE_EGL_CLIENT_CFLAGS='-I${wayland}/include'
     export SIMPLE_EGL_CLIENT_LIBS='-L${wayland}/lib -lwayland-client -lwayland-cursor'
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lGL -lEGL -lwayland-egl -lGLESv2 -lpixman-1 -lxkbcommon"
+#    export PIXMAN_LIBS='-lpixman-1'
+    export LIBS="$LIBS -lGL -lEGL -lwayland-egl -lGLESv2 -lxkbcommon -lpixman-1"
     export C_INCLUDE_PATH='${libdrm}/include/libdrm:${libdrm}/include/libkms'
     autoreconf -vfi
   '';
