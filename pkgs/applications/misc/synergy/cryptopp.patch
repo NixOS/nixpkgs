@@ -1,0 +1,54 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3b61fc0..2206646 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -133,6 +133,9 @@ if (UNIX)
+ 	check_type_size(long SIZEOF_LONG)
+ 	check_type_size(short SIZEOF_SHORT)
+ 
++    # let's just assume cryptopp exists (provided by the Nix expression)
++    list(APPEND libs cryptopp)
++
+ 	# pthread is used on both Linux and Mac
+ 	check_library_exists("pthread" pthread_create "" HAVE_PTHREAD)
+ 	if (HAVE_PTHREAD)
+@@ -303,7 +306,6 @@ if (VNC_SUPPORT)
+ endif()
+ 
+ add_subdirectory(src)
+-add_subdirectory(tools)
+ 
+ if (WIN32)
+ 	# add /analyze in order to unconver potential bugs in the source code
+diff --git a/src/lib/synergy/CCryptoMode.h b/src/lib/synergy/CCryptoMode.h
+index 9b7e8ad..0d659ac 100644
+--- a/src/lib/synergy/CCryptoMode.h
++++ b/src/lib/synergy/CCryptoMode.h
+@@ -17,9 +17,9 @@
+ 
+ #pragma once
+ 
+-#include <cryptopp562/gcm.h>
+-#include <cryptopp562/modes.h>
+-#include <cryptopp562/aes.h>
++#include <cryptopp/gcm.h>
++#include <cryptopp/modes.h>
++#include <cryptopp/aes.h>
+ #include "ECryptoMode.h"
+ #include "CString.h"
+ 
+diff --git a/src/lib/synergy/CCryptoStream.h b/src/lib/synergy/CCryptoStream.h
+index 104b1f6..09c4dc4 100644
+--- a/src/lib/synergy/CCryptoStream.h
++++ b/src/lib/synergy/CCryptoStream.h
+@@ -20,8 +20,8 @@
+ #include "BasicTypes.h"
+ #include "CStreamFilter.h"
+ #include "CCryptoMode.h"
+-#include <cryptopp562/osrng.h>
+-#include <cryptopp562/sha.h>
++#include <cryptopp/osrng.h>
++#include <cryptopp/sha.h>
+ 
+ class CCryptoOptions;
+ 
