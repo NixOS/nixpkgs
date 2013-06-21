@@ -1,5 +1,9 @@
 { stdenv, fetchurl, cmake, x11, libX11, libXi, libXtst, libXrandr, xinput
-, cryptopp }:
+, cryptopp, unzip ? null }:
+
+assert !stdenv.isLinux -> unzip != null;
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "synergy-1.4.12";
@@ -9,11 +13,13 @@ stdenv.mkDerivation rec {
   	sha256 = "0j884skwqy8r8ckj9a4rlwsbjwb1yrj9wqma1nwhr2inff6hrdim";
   };
 
-  patches = [ ./cryptopp.patch ];
+  patches = optional stdenv.isLinux ./cryptopp.patch;
 
-  postPatch = ''
+  postPatch = if stdenv.isLinux then ''
     sed -i -e '/HAVE_X11_EXTENSIONS_XRANDR_H/c \
       set(HAVE_X11_EXTENSIONS_XRANDR_H true)' CMakeLists.txt
+  '' else ''
+    ${unzip}/bin/unzip -d tools/cryptopp562 tools/cryptopp562.zip
   '';
 
   buildInputs = [ cmake x11 libX11 libXi libXtst libXrandr xinput cryptopp ];
@@ -34,8 +40,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tool to share the mouse keyboard and the clipboard between computers";
     homepage = http://synergy-foss.org;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.aszlig ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.aszlig ];
+    platforms = platforms.all;
   };
 }
