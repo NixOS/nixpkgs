@@ -4811,16 +4811,22 @@ let
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
   mesa_original = callPackage ../development/libraries/mesa { };
-  mesa_noglu = if stdenv.isDarwin then darwinX11AndOpenGL
-    else mesa_original;
-  mesa_drivers = mesa_original.drivers;
+  mesa_original_full = lowPrio (pkgs.appendToName "full" (mesa_original.override { enableExtraFeatures = true; }));
+  mesa_noglu = if stdenv.isDarwin then darwinX11AndOpenGL else mesa_original;
+  mesa_noglu_full = if stdenv.isDarwin then darwinX11AndOpenGL else mesa_original_full;
+  mesa_drivers = mesa_original;
+  mesa_drivers_full = mesa_original_full;
   mesa_glu = callPackage ../development/libraries/mesa-glu { };
   mesa = if stdenv.isDarwin then darwinX11AndOpenGL
     else buildEnv {
       name = "mesa-${mesa_noglu.version}";
       paths = [ mesa_glu mesa_noglu ];
     };
-  mesa_full = pkgs.appendToName "full" (mesa_noglu.override { enableExtraFeatures = true; });
+  mesa_full = if stdenv.isDarwin then darwinX11AndOpenGL
+    else buildEnv {
+      name = "mesa-${mesa_noglu_full.version}";
+      paths = [ mesa_glu mesa_noglu_full ];
+    };
   darwinX11AndOpenGL = callPackage ../os-specific/darwin/native-x11-and-opengl { };
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {

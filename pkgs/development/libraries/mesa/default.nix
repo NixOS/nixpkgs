@@ -48,13 +48,9 @@ stdenv.mkDerivation {
       -i src/egl/main/Makefile.am
   '';
 
-  outputs = ["out" "drivers"];
-
   preConfigure = "./autogen.sh";
 
   configureFlags = with stdenv.lib; [
-    "--with-dri-driverdir=$(drivers)/lib/dri"
-    "--with-egl-driver-dir=$(drivers)/lib/egl"
     "--with-dri-searchpath=${driverLink}/lib/dri"
 
     "--enable-dri"
@@ -95,46 +91,6 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
   doCheck = true;
-
-  # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
-  # ToDo: probably not all .la files are completely fixed, but it shouldn't matter
-  postInstall = with stdenv.lib; ''
-    mv -t "$drivers/lib/" \
-  '' + optionalString enableExtraFeatures ''
-      `#$out/lib/libXvMC*` \
-      $out/lib/vdpau \
-      $out/lib/libOSMesa* \
-      $out/lib/gallium-pipe \
-  '' + ''
-      $out/lib/libdricore* \
-      $out/lib/libgallium* \
-      $out/lib/libxatracker*
-
-  '' + /* now fix references in .la files */ ''
-    sed "/^libdir=/s,$out,$drivers," -i \
-  '' + optionalString enableExtraFeatures ''
-      `#$drivers/lib/libXvMC*.la` \
-      $drivers/lib/vdpau/*.la \
-      $drivers/lib/libOSMesa*.la \
-      $drivers/lib/gallium-pipe/*.la \
-  '' + ''
-      $drivers/lib/libgallium.la \
-      $drivers/lib/libdricore*.la
-
-    sed "s,$out\(/lib/\(libdricore[0-9\.]*\|libgallium\).la\),$drivers\1,g" \
-      -i $drivers/lib/*.la $drivers/lib/*/*.la
-
-  '' + /* work around bug #529, but maybe $drivers should also be patchelf-ed */ ''
-    find $drivers/ -type f -executable -print0 | xargs -0 strip -S || true
-
-  '' + /* add RPATH so the drivers can find the moved libgallium and libdricore9 */ ''
-    for lib in $drivers/lib/*.so* $drivers/lib/*/*.so*; do
-      if [[ ! -L "$lib" ]]; then
-        patchelf --set-rpath "$(patchelf --print-rpath $lib):$drivers/lib" "$lib"
-      fi
-    done
-  '';
-  #ToDo: @vcunat isn't sure if drirc will be found when in $out/etc/, but it doesn't seem important ATM
 
   passthru = { inherit libdrm; inherit version; };
 
