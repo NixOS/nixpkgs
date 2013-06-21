@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, x11, libX11, libXi, libXtst, cryptopp }:
+{ stdenv, fetchurl, cmake, x11, libX11, libXi, libXtst, libXrandr, cryptopp }:
 
 stdenv.mkDerivation rec {
   name = "synergy-1.4.12";
@@ -10,7 +10,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cryptopp.patch ];
 
-  buildInputs = [ cmake x11 libX11 libXi libXtst cryptopp ];
+  postPatch = ''
+    sed -i -e '/HAVE_X11_EXTENSIONS_XRANDR_H/c \
+      set(HAVE_X11_EXTENSIONS_XRANDR_H true)' CMakeLists.txt
+  '';
+
+  buildInputs = [ cmake x11 libX11 libXi libXtst libXrandr cryptopp ];
 
   # At this moment make install doesn't work for synergy
   # http://synergy-foss.org/spit/issues/details/3317/
