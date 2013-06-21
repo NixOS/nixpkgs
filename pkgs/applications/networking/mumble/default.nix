@@ -6,16 +6,14 @@ jackaudio ? null }:
 
 stdenv.mkDerivation rec {
   name = "mumble-" + version;
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/mumble/${name}.tar.gz";
-    sha256 = "0p4as6bcmbzkiff1gvc0f277dzbz2sfys97gcbxw7gjamqi53285";
+    sha256 = "16wwj6gwcnyjlnzh7wk0l255ldxmbwx0wi652sdp20lsv61q7kx1";
   };
 
   patchPhase = ''
-    sed -e s/qt_ja_JP.qm// -i src/mumble/mumble.pro src/mumble11x/mumble11x.pro
-    sed -e /qt_ja_JP.qm/d -i src/mumble/mumble_qt.qrc src/mumble11x/mumble_qt.qrc
     patch -p1 < ${ ./mumble-jack-support.patch }
   '';
 
