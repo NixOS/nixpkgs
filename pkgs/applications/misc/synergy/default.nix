@@ -1,6 +1,7 @@
 { stdenv, fetchurl, cmake, x11, libX11, libXi, libXtst, libXrandr, xinput
-, cryptopp, unzip ? null }:
+, cryptopp ? null, unzip ? null }:
 
+assert stdenv.isLinux -> cryptopp != null;
 assert !stdenv.isLinux -> unzip != null;
 
 with stdenv.lib;
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
     ${unzip}/bin/unzip -d tools/cryptopp562 tools/cryptopp562.zip
   '';
 
-  buildInputs = [ cmake x11 libX11 libXi libXtst libXrandr xinput cryptopp ];
+  buildInputs = [ cmake x11 libX11 libXi libXtst libXrandr xinput ]
+             ++ optional stdenv.isLinux cryptopp;
 
   # At this moment make install doesn't work for synergy
   # http://synergy-foss.org/spit/issues/details/3317/
