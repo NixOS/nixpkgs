@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     description = "Tool to share the mouse keyboard and the clipboard between computers";
     homepage = http://synergy-foss.org;
     license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.aszlig ];
     platforms = stdenv.lib.platforms.all;
   };
 }
