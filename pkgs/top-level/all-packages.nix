@@ -2813,6 +2813,8 @@ let
     ocaml = ocaml_3_08_0;
   };
 
+  repeatableStdenv  = lowPrio (stdenvAdapters.overrideSetup stdenv ../stdenv/generic/setup-repeatable.sh );
+
   roadsend = callPackage ../development/compilers/roadsend { };
 
   # TODO: the corresponding nix file is missing
