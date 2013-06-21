@@ -8395,7 +8395,9 @@ let
       glSupport = true;
     };
   };
-    
+
+  winswitch = callPackage ../tools/X11/winswitch { };
+
   wings = callPackage ../applications/graphics/wings {
     erlang = erlangR14B04;
     esdl = esdl.override { erlang = erlangR14B04; };
