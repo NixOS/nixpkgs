@@ -4220,6 +4220,8 @@ let
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
+  iksemel = callPackage ../development/libraries/iksemel { };
+
   ilbc = callPackage ../development/libraries/ilbc { };
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
