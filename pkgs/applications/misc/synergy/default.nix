@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, cmake, x11, libX11, libXi, libXtst, libXrandr, cryptopp }:
+{ stdenv, fetchurl, cmake, x11, libX11, libXi, libXtst, libXrandr, xinput
+, cryptopp }:
 
 stdenv.mkDerivation rec {
   name = "synergy-1.4.12";
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
       set(HAVE_X11_EXTENSIONS_XRANDR_H true)' CMakeLists.txt
   '';
 
-  buildInputs = [ cmake x11 libX11 libXi libXtst libXrandr cryptopp ];
+  buildInputs = [ cmake x11 libX11 libXi libXtst libXrandr xinput cryptopp ];
 
   # At this moment make install doesn't work for synergy
   # http://synergy-foss.org/spit/issues/details/3317/
