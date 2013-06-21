@@ -6992,11 +6992,11 @@ let
     pulseSupport = config.pulseaudio or false;
   });
 
-  chromiumBeta = chromium.override { channel = "beta"; };
-  chromiumBetaWrapper = wrapChromium chromiumBeta;
+  chromiumBeta = lowPrio (chromium.override { channel = "beta"; });
+  chromiumBetaWrapper = lowPrio (wrapChromium chromiumBeta);
 
-  chromiumDev = chromium.override { channel = "dev"; };
-  chromiumDevWrapper = wrapChromium chromiumDev;
+  chromiumDev = lowPrio (chromium.override { channel = "dev"; });
+  chromiumDevWrapper = lowPrio (wrapChromium chromiumDev);
 
   chromiumWrapper = wrapChromium chromium;
 
