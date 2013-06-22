@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
     sha256 = "1bndz4l8jxyq3zq128gzp3gryxl6yjs66j2y1d7yabw2n5mv7kim";
   };
 
-  # Since `libpulse*.la' contain `-lgdbm', it must be propagated.
-  propagatedBuildInputs = [ gdbm ];
+  # Since `libpulse*.la' contain `-lgdbm' and `-lcap', it must be propagated.
+  propagatedBuildInputs = [ gdbm libcap ];
 
   buildInputs =
     [ pkgconfig gnum4 libtool intltool glib dbus avahi
       libsamplerate libsndfile speex alsaLib bluez sbc udev
-      json_c libcap
+      json_c
       #gtk gconf 
     ]
     ++ stdenv.lib.optional jackaudioSupport jackaudio
