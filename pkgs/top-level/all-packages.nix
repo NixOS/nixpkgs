@@ -3589,6 +3589,8 @@ let
 
   splint = callPackage ../development/tools/analysis/splint { };
 
+  stm32flash = callPackage ../development/tools/misc/stm32flash { };
+
   strace = callPackage ../development/tools/misc/strace { };
 
   swig = callPackage ../development/tools/misc/swig { };
