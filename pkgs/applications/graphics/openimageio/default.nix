@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "oiio-${version}";
-  version = "1.1.8";
+  version = "1.1.12";
 
   src = fetchurl {
     url = "https://github.com/OpenImageIO/oiio/archive/Release-${version}.zip";
-    sha256 = "08a6qhplzs8kianqb1gjgrndg81h3il5531jn9g6i4940b1xispg";
+    sha256 = "196iq15waa2yyryiwhf6ynlpqnpknm4cc4azakg01xs70yiphsfl";
   };
 
   buildInputs = [ 
