@@ -25,6 +25,10 @@ let
       # doesn't work in Nix because Nix changes the mtime of files in
       # the Nix store to 1.  So treat that as a special case.
       ./nix-store-mtime.patch
+
+      # patch python to put zero timestamp into pyc
+      # if DETERMINISTIC_BUILD env var is set
+      ./deterministic-build.patch
     ];
 
   postPatch = stdenv.lib.optionalString (stdenv.gcc.libc != null) ''
