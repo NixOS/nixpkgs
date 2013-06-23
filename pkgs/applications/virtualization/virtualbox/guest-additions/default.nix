@@ -104,7 +104,7 @@ stdenv.mkDerivation {
 
     # Install Xorg drivers
     mkdir -p $out/lib/xorg/modules/{drivers,input}
-    install -m 644 lib/VBoxGuestAdditions/vboxvideo_drv_112.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
+    install -m 644 lib/VBoxGuestAdditions/vboxvideo_drv_113.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
 
     # Install kernel modules
     cd src
