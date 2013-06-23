@@ -1,17 +1,23 @@
-{stdenv, fetchurl, lib, cmake, qt4, perl, gettext, pango, gtk, dbus_glib, kdelibs, automoc4, phonon}:
+{ stdenv, fetchurl, cmake, pkgconfig, gettext
+, kdelibs, gtk
+}:
 
 stdenv.mkDerivation {
-  name = "kmplayer-0.11.2c";
+  name = "kmplayer-0.11.3d";
+
   src = fetchurl {
-    url = http://kmplayer.kde.org/pkgs/kmplayer-0.11.2c.tar.bz2;
-    sha256 = "1qhafq865bzpz6m9k7cjdv4884qfpn481ak77ly0nidpq2ab0l9m";
+    url = http://kmplayer.kde.org/pkgs/kmplayer-0.11.3d.tar.bz2;
+    sha256 = "1yvbkb1hh5y7fqfvixjf2rryzm0fm0fpkx4lmvhi7k7d0v4wpgky";
   };
-  builder = ./builder.sh;
-  buildInputs = [ cmake qt4 perl gettext stdenv.gcc.libc pango gtk dbus_glib kdelibs automoc4 phonon ];
+
+  buildInputs = [
+    cmake gettext pkgconfig kdelibs gtk
+  ];
+
   meta = {
     description = "MPlayer front-end for KDE";
     license = "GPL";
     homepage = http://kmplayer.kde.org;
-    maintainers = [ lib.maintainers.sander ];
+    maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }
