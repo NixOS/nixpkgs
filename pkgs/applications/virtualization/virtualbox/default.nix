@@ -11,8 +11,7 @@ with stdenv.lib;
 
 let
 
-  version = "4.2.12";
-  extpackRevision = "84980";
+  version = "4.2.14"; # changes ./guest-additions as well
 
   forEachModule = action: ''
     for mod in \
@@ -31,12 +30,10 @@ let
     done
   '';
 
-  extensionPack = requireFile {
-    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}"
-         + ".vbox-extpack";
+  extensionPack = fetchurl {
+    url = "http://download.virtualbox.org/virtualbox/${version}/Oracle_VM_VirtualBox_Extension_Pack-${version}.vbox-extpack";
     # Has to be base16 because it's used as an input to VBoxExtPackHelperApp!
-    sha256 = "ad15a92e49095c2115bd1793b3b957d3eaf44af0f5d24bb53d6b4fc81c3e2fc4";
-    url = "https://www.virtualbox.org/wiki/Downloads";
+    sha256 = "5813cae72790de4893cadb839ffbd148290a44ec6913d901d84c9b3740ab1b1e";
   };
 
 in stdenv.mkDerivation {
@@ -44,7 +41,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "eb65ecac94f63d6292a967d39cb5e28326404c10d0e8c2c50399eedb59c17ee6";
+    sha256 = "038k65cdvr80da5nfan5r3rjrnxqab2fbf2pr2jq8g1gc4cxrxpq";
   };
 
   buildInputs =
@@ -136,6 +133,8 @@ in stdenv.mkDerivation {
       ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
     done
   '';
+
+  passthru = { inherit version; /* for guest additions */ };
 
   meta = {
     description = "PC emulator";
