@@ -30,10 +30,23 @@ let
     done
   '';
 
-  extensionPack = fetchurl {
-    url = "http://download.virtualbox.org/virtualbox/${version}/Oracle_VM_VirtualBox_Extension_Pack-${version}.vbox-extpack";
+  # See https://github.com/NixOS/nixpkgs/issues/672 for details
+  extpackRevision = "86644";
+  extensionPack = requireFile rec {
+    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
     # Has to be base16 because it's used as an input to VBoxExtPackHelperApp!
     sha256 = "5813cae72790de4893cadb839ffbd148290a44ec6913d901d84c9b3740ab1b1e";
+    message = ''
+      In order to use the extension pack, you need to comply with the VirtualBox Personal Use
+      and Evaluation License (PUEL) by downloading the related binaries from:
+
+      https://www.virtualbox.org/wiki/Downloads
+
+      Once you have downloaded the file, please use the following command and re-run the
+      installation:
+
+      nix-prefetch-url file://${name}
+    '';
   };
 
 in stdenv.mkDerivation {
