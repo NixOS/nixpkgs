@@ -8,6 +8,13 @@ let
 
   cfg = config.services.lighttpd;
 
+  needModRedirect = cfg.gitweb.enable;
+  needModAlias = cfg.cgit.enable or cfg.gitweb.enable;
+  needModSetenv = cfg.cgit.enable or cfg.gitweb.enable;
+  needModCgi = cfg.cgit.enable or cfg.gitweb.enable;
+  needModStatus = cfg.mod_status;
+  needModUserdir = cfg.mod_userdir;
+
   configFile = if cfg.configText != "" then
     pkgs.writeText "lighttpd.conf" ''
       ${cfg.configText}
@@ -19,8 +26,28 @@ let
       server.username = "lighttpd"
       server.groupname = "lighttpd"
 
+      # As for why all modules are loaded here, instead of having small
+      # server.modules += () entries in each sub-service extraConfig snippet,
+      # read this:
+      #
+      #   http://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
+      #   http://redmine.lighttpd.net/issues/2337
+      #
+      # Basically, lighttpd doesn't want to load (or even silently ignore) a
+      # module for a second time, and there is no way to check if a module has
+      # been loaded already. So if two services were to put the same module in
+      # server.modules += (), that would break the lighttpd configuration.
+      server.modules = (
+          ${optionalString needModRedirect ''"mod_redirect",''}
+          ${optionalString needModAlias ''"mod_alias",''}
+          ${optionalString needModSetenv ''"mod_setenv",''}
+          ${optionalString needModCgi ''"mod_cgi",''}
+          ${optionalString needModStatus ''"mod_status",''}
+          ${optionalString needModUserdir ''"mod_userdir",''}
+          "mod_accesslog"
+      )
+
       # Logging (logs end up in systemd journal)
-      server.modules += ("mod_accesslog")
       accesslog.use-syslog = "enable"
       server.errorlog-use-syslog = "enable"
 
@@ -37,12 +64,10 @@ let
       index-file.names = ( "index.html" )
 
       ${if cfg.mod_userdir then ''
-        server.modules += ("mod_userdir")
         userdir.path = "public_html"
       '' else ""}
 
       ${if cfg.mod_status then ''
-        server.modules += ("mod_status")
         status.status-url = "/server-status"
         status.statistics-url = "/server-statistics"
         status.config-url = "/server-config"
