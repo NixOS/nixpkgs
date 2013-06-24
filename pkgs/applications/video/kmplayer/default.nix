@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gettext
-, kdelibs, gtk
+{ stdenv, fetchurl, cmake, pkgconfig, gettext, makeWrapper
+, kdelibs, cairo, dbus_glib, mplayer
 }:
 
 stdenv.mkDerivation {
@@ -11,8 +11,13 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    cmake gettext pkgconfig kdelibs gtk
+    cmake gettext pkgconfig makeWrapper
+    kdelibs cairo dbus_glib
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/kmplayer --suffix PATH : ${mplayer}/bin
+  '';
 
   meta = {
     description = "MPlayer front-end for KDE";
