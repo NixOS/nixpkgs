@@ -3445,6 +3445,35 @@ pythonPackages = python.modules // rec {
   });
 
 
+  pyblock = stdenv.mkDerivation rec {
+    name = "python-pyblock-${version}";
+    version = "0.52-1";
+
+    src = fetchurl {
+      url = "https://git.fedorahosted.org/cgit/pyblock.git/snapshot/"
+          + "pyblock-${version}.tar.bz2";
+      sha256 = "1jj5hd1dcr8xx00rg3jynsf4ak88wwr5id3fmb0qf6zvim1whj7l";
+    };
+
+    postPatch = ''
+      sed -i -e 's|/usr/include/python|${python}/include/python|' \
+             -e 's/-Werror *//' -e 's|/usr/|'"$out"'/|' Makefile
+    '';
+
+    buildInputs = [ python pkgs.lvm2 pkgs.dmraid ];
+
+    makeFlags = [
+      "USESELINUX=0"
+      "SITELIB=$(out)/lib/${python.libPrefix}/site-packages"
+    ];
+
+    meta = {
+      description = "Interface for working with block devices";
+      license = stdenv.lib.licenses.gpl2Plus;
+    };
+  };
+
+
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.5.29";
 
