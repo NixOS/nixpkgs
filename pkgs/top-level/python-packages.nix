@@ -451,6 +451,44 @@ pythonPackages = python.modules // rec {
   };
 
 
+  blivet = buildPythonPackage rec {
+    name = "blivet-${version}";
+    version = "0.16-1";
+
+    src = fetchurl {
+      url = "https://git.fedorahosted.org/cgit/blivet.git/snapshot/"
+          + "${name}.tar.bz2";
+      sha256 = "0gfxf86sc0mkpqjcainch6gqh3r7brgma85pbl4nfpzmylhzj5sg";
+    };
+
+    postPatch = ''
+      sed -i -e '/find_library/,/find_library/ {
+        c libudev = "${pkgs.udev}/lib/libudev.so.1"
+      }' blivet/pyudev.py
+      sed -i -e 's|"multipath"|"${pkgs.multipath_tools}/sbin/multipath"|' \
+        blivet/devicelibs/mpath.py blivet/devices.py
+    '';
+
+    propagatedBuildInputs = let
+      pyenable = { enablePython = true; };
+      selinuxWithPython = pkgs.libselinux.override pyenable;
+      cryptsetupWithPython = pkgs.cryptsetup.override pyenable;
+    in [
+      pykickstart pyparted pkgs.udev pyblock
+      selinuxWithPython cryptsetupWithPython
+    ];
+
+    # tests are currently _heavily_ broken upstream
+    doCheck = false;
+
+    meta = {
+      homepage = "https://fedoraproject.org/wiki/Blivet";
+      description = "Module for management of a system's storage configuration";
+      license = [ "GPLv2+" "LGPLv2.1+" ];
+    };
+  };
+
+
   # euca2ools (and maybe Nova) needs boto 1.9, 2.0 doesn't work.
   boto_1_9 = buildPythonPackage (rec {
     name = "boto-1.9b";
