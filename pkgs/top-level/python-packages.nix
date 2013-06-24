@@ -3630,6 +3630,30 @@ pythonPackages = python.modules // rec {
   };
 
 
+  pykickstart = buildPythonPackage rec {
+    name = "pykickstart-${version}";
+    version = "1.99.32-1";
+
+    src = fetchurl {
+      url = "https://git.fedorahosted.org/cgit/pykickstart.git/snapshot/"
+          + "r${version}.tar.bz2";
+      sha256 = "1sq68jvc39k9wrkcc4xlabhwi8gdz019yh2k5nrl7ya35b8daqw0";
+    };
+
+    propagatedBuildInputs = [ urlgrabber ];
+
+    checkPhase = ''
+      python tests/baseclass.py -vv
+    '';
+
+    meta = {
+      homepage = "http://fedoraproject.org/wiki/Pykickstart";
+      description = "Read and write Fedora kickstart files";
+      license = pkgs.lib.licenses.gpl2Plus;
+    };
+  };
+
+
   pyparsing = buildPythonPackage rec {
     name = "pyparsing-1.5.6";
 
