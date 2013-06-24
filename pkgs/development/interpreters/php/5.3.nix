@@ -1,7 +1,8 @@
 { stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , apacheHttpd, mysql, libxml2, readline, zlib, curl, gd, postgresql, gettext
 , openssl, pkgconfig, sqlite, config, libjpeg, libpng, freetype, libxslt
-, libmcrypt, bzip2, icu, libssh2, makeWrapper, libiconvOrEmpty, libiconv }:
+, libmcrypt, bzip2, icu, libssh2, makeWrapper, libiconvOrEmpty, libiconv, uwimap
+, pam }:
 
 let
   libmcryptOverride = libmcrypt.override { disablePosixThreads = true; };
@@ -132,6 +133,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         buildInputs = [gettext];
       };
 
+      imap = {
+        configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ];
+        buildInputs = [ uwimap openssl pam ];
+      };
+
       intl = {
         configureFlags = ["--enable-intl"];
         buildInputs = [icu];
@@ -163,18 +169,6 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       ftp = {
         configureFlags = ["--enable-ftp"];
       };
-
-      /*
-         php is build within this derivation in order to add the xdebug lines to the php.ini.
-         So both Apache and command line php both use xdebug without having to configure anything.
-         Xdebug could be put in its own derivation.
-      * /
-        meta = {
-                description = "debugging support for PHP";
-                homepage = http://xdebug.org;
-                license = "based on the PHP license - as is";
-                };
-      */
     };
 
   cfg = {
@@ -186,6 +180,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     ftpSupport = config.php.ftp or true;
     gdSupport = config.php.gd or true;
     gettextSupport = config.php.gettext or true;
+    imapSupport = config.php.imap or false;
     intlSupport = config.php.intl or true;
     libxml2Support = config.php.libxml2 or true;
     mbstringSupport = config.php.mbstring or true;
