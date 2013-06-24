@@ -7594,6 +7594,8 @@ let
     inherit (gnome) libgnome libgnomeui vte;
   };
 
+  gtimelog = pythonPackages.gtimelog;
+
   guitarix = callPackage ../applications/audio/guitarix {
     fftw = fftwSinglePrec;
   };

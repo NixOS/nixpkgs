@@ -1259,7 +1259,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     propagatedBuildInputs = [ sphinx ];
   };
 
-
   googlecl = buildPythonPackage rec {
     version = "0.9.14";
     name    = "googlecl-${version}";
@@ -1280,6 +1279,21 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     propagatedBuildInputs = [ gdata ];
   };
 
+  gtimelog = buildPythonPackage rec {
+    name = "gtimelog-0.8.1";
+    src = fetchurl {
+      url = https://launchpad.net/gtimelog/devel/0.8.1/+download/gtimelog-0.8.1.tar.gz;
+      sha256 = "010sbw4rmslf5ifg9bgicn0f6mgsy76v8218xi0jndi9z6pva7y6";
+    };
+    propagatedBuildInputs = [ pygtk ];
+    meta = with stdenv.lib; {
+      description = "A small Gtk+ app for keeping track of your time. It's main goal is to be as unintrusive as possible.";
+      homepage = http://mg.pov.lt/gtimelog/;
+      license = licenses.gpl2Plus;
+      maintainers = [ maintainers.ocharles ];
+      platforms = platforms.unix;
+    };
+  };
 
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.1";
