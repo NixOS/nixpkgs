@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "f457b1d7f6b8bfa727593c3696d2b405da66b4a8d34cd7d3362ebda1221f0661";
   };
 
-  configureFlags = "--disable-introspection";
+  configureFlags = "--enable-introspection";
 
   buildInputs = [ python pkgconfig glib gobjectIntrospection pycairo cairo ];
 

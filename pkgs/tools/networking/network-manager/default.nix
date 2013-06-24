@@ -1,6 +1,6 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
 , udev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
-, libgcrypt, dnsmasq, avahi, bind, perl, substituteAll }:
+, libgcrypt, dnsmasq, avahi, bind, perl, substituteAll, gobjectIntrospection}:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
@@ -32,9 +32,10 @@ stdenv.mkDerivation rec {
     "--with-crypto=gnutls" "--disable-more-warnings"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-kernel-firmware-dir=/run/current-system/firmware"
-    "--with-session-tracking=systemd" ];
+    "--with-session-tracking=systemd"
+    "--enable-introspection" ];
 
-  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz ];
+  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz gobjectIntrospection ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 
@@ -60,6 +61,11 @@ stdenv.mkDerivation rec {
       # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
       substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
     '';
+
+  passthru = {
+    gir_path = "/share/gir-1.0";
+    gi_typelib_path = "/lib/girepository-1.0";
+  };
 
   meta = with stdenv.lib; {
     homepage = http://projects.gnome.org/NetworkManager/;

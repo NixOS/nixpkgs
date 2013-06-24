@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "gobject-introspection-1.34.2";
 
-  buildInputs = [ flex bison glib pkgconfig python gdk_pixbuf ];
+  buildInputs = [ flex bison glib pkgconfig python ];
   propagatedBuildInputs = [ libffi ];
 
   # Tests depend on cairo, which is undesirable (it pulls in lots of
