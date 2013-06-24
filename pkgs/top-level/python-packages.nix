@@ -3707,6 +3707,11 @@ pythonPackages = python.modules // rec {
       sha256 = "1sq68jvc39k9wrkcc4xlabhwi8gdz019yh2k5nrl7ya35b8daqw0";
     };
 
+    postPatch = ''
+      sed -i -e "s/for tst in tstList/for tst in sorted(tstList, \
+                 key=lambda m: m.__name__)/" tests/baseclass.py
+    '';
+
     propagatedBuildInputs = [ urlgrabber ];
 
     checkPhase = ''
