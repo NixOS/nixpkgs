@@ -1,4 +1,4 @@
-{ composableDerivation, fetchurl, yacc, flex, texLive }:
+{ composableDerivation, fetchurl, yacc, flex, texLive, libusb }:
 
 let edf = composableDerivation.edf; in
 
@@ -12,7 +12,7 @@ composableDerivation.composableDerivation {} rec {
 
   configureFlags = [ "--disable-dependency-tracking" ];
 
-  buildInputs = [ yacc flex ];
+  buildInputs = [ yacc flex libusb ];
 
   flags =
        edf { name = "doc"; enable = { buildInputs = texLive; configureFlags = ["--enable-doc"]; }; }
