@@ -4042,7 +4042,7 @@ let
 
   glpk = callPackage ../development/libraries/glpk { };
 
-  glsurf = callPackage ../applications/science/math/glsurf { 
+  glsurf = callPackage ../applications/science/math/glsurf {
     inherit (ocamlPackages) lablgl findlib camlimages ocaml_mysql mlgmp;
   };
 

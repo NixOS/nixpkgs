@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   name = "leptonica-1.68";
-  
+
   src = fetchurl {
     url = http://www.leptonica.org/source/leptonica-1.68.tar.gz;
     sha256 = "13qzm24zy46bj9b476jxzbw9qh7p96jikfzxg88kz4dj1p2vdvxc";

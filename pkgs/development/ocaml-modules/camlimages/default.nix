@@ -9,7 +9,7 @@ in
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
-  src = fetchurl { 
+  src = fetchurl {
     url = "https://bitbucket.org/camlspotter/camlimages/get/v4.0.1.tar.gz";
     sha256 = "b40237c1505487049799a7af296eb3996b3fa08eab94415546f46d61355747c4";
   };

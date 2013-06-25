@@ -30,12 +30,12 @@ assert playSupport -> SDL != null;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-1.2";
-  
+
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
     sha256 = "1bssxbn4p813xlgb8whg4b60j90yzfy92x70b4q8j35fgp0gnfcs";
   };
-  
+
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
   # the resulting library is GPL'ed, so it can only be used in GPL'ed
   # applications.
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional playSupport SDL;
 
   enableParallelBuilding = true;
-    
+
   crossAttrs = {
     dontSetConfigureCross = true;
     configureFlags = configureFlags ++ [

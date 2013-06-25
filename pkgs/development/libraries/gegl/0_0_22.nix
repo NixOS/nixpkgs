@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, babl_0_0_22, libpng12, cairo, libjpeg
 , librsvg, pango, gtk }:
-        
+
 stdenv.mkDerivation {
   name = "gegl-0.0.22";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ pkgconfig glib babl_0_0_22 libpng12 cairo libjpeg librsvg pango gtk ];
 
-  meta = { 
+  meta = {
     description = "Graph-based image processing framework";
     homepage = http://www.gegl.org;
     license = "GPL3";

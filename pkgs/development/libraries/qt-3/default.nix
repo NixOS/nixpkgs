@@ -59,10 +59,10 @@ stdenv.mkDerivation {
   patches = [
     # Don't strip everything so we can get useful backtraces.
     ./strip.patch
-    
+
     # Build on NixOS.
     ./qt-pwd.patch
-    
+
     # randr.h and Xrandr.h need not be in the same prefix.
     ./xrandr.patch
 

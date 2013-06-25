@@ -15,23 +15,23 @@ let
   };
 in stdenv.mkDerivation {
   name = "minetest-${version}";
-  
+
   src = sources.src;
-  
+
   cmakeFlags = [
     "-DIRRLICHT_INCLUDE_DIR=${irrlicht3843}/include/irrlicht"
   ];
-  
+
   buildInputs = [
     cmake irrlicht3843 libpng12 bzip2 libjpeg
     libXxf86vm mesa openal libvorbis x11
   ];
-  
+
   postInstall = ''
     mkdir -pv $out/share/minetest/games/minetest_game/
     cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
   '';
-  
+
   meta = {
     homepage = "http://minetest.net/";
     description = "Minetest is an infinite-world block sandbox game.";
