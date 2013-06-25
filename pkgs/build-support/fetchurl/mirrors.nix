@@ -2,7 +2,7 @@ rec {
 
   # Content-addressable Nix mirrors.
   hashedMirrors = [
-    http://nixos.org/tarballs
+    http://tarballs.nixos.org
   ];
 
   # Mirrors for mirror://site/filename URIs, where "site" is

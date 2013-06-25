@@ -1,11 +1,13 @@
 {stdenv, fetchurl, bash, yasm, which, perl}:
 
+let version = "1.2.0";
+in
 stdenv.mkDerivation rec {
-  name = "libvpx-1.1.0";
-  
-  src = fetchurl {
-    url = http://webm.googlecode.com/files/libvpx-v1.1.0.tar.bz2;
-    sha256 = "1ibjxcdsazqfbbjhb8w56vy3n9qwny2m9q4kzx4rmk9v9g7p9q4w";
+  name = "libvpx-" + version;
+
+  src = fetchurl { # sadly, there's no official tarball for this release
+    url = "ftp://ftp.archlinux.org/other/libvpx/libvpx-${version}.tar.xz";
+    sha256 = "02k9ylswgr2hvjqmg422fa9ggym0g94gzwb14nnckly698rvjc50";
   };
 
   patchPhase = ''
@@ -14,15 +16,17 @@ stdenv.mkDerivation rec {
     sed -e '/enable linux/d' -i configure
   '';
 
-  configureScript = "../configure";
+  buildInputs = [ yasm which perl ];
 
   preConfigure = ''
     mkdir -p build
     cd build
   '';
 
+  configureScript = "../configure";
   configureFlags = [
     "--disable-install-srcs"
+    "--disable-install-docs"
     "--disable-examples"
     "--enable-vp8"
     "--enable-runtime-cpu-detect"
@@ -33,8 +37,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make quiet=false DIST_DIR=$out install
   '';
-
-  buildInputs = [ yasm which perl ];
 
   meta = {
     description = "VP8 video encoder";

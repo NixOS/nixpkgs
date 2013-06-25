@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   
   src = fetchurl {
     url = "ftp://ftp.ruby-lang.org/pub/ruby/1.8/${name}.tar.gz";
-    sha256 = "0b4n9d1idmsl47cq3mw6zhi94yp048ljlfgg9qdblbkvnd7arp1g";
+    sha256 = "0g2dsn8lmiqwqsp13ryzi97qxr7742v5l7v506x6wq9aiwpk42p6";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   passthru = rec {
     majorVersion = "1.8";
     minorVersion = "7";
-    patchLevel = "357";
+    patchLevel = "371";
     libPath = "lib/ruby/${majorVersion}";
     gemPath = "lib/ruby/gems/${majorVersion}";
   };

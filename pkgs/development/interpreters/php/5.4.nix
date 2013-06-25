@@ -90,7 +90,12 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
       gd = {
         # FIXME: Our own gd package doesn't work, see https://bugs.php.net/bug.php?id=60108.
-        configureFlags = ["--with-gd --with-freetype-dir=${freetype} --with-png-dir=${libpng}"];
+        configureFlags = [
+          "--with-gd"
+          "--with-freetype-dir=${freetype}"
+          "--with-png-dir=${libpng}"
+          "--with-jpeg-dir=${libjpeg}"
+        ];
         buildInputs = [ libpng libjpeg freetype ];
       };
 

@@ -2,7 +2,7 @@
 
 let date = "2009-07-04"; in
   stdenv.mkDerivation rec {
-    name = "html-tidy-${date}";
+    name = "html-tidy-20090704";
 
     # According to http://tidy.sourceforge.net/, there are no new
     # release tarballs, so one has to either get the code from CVS or

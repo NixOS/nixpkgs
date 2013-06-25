@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, gettext }:
+{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, gettext
+, enableJabber ? false, iksemel ? null }:
+
+assert enableJabber -> iksemel != null;
 
 let
 
-  version = "2.0.4";
+  version = "2.0.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/zabbix/zabbix-${version}.tar.gz";
-    sha256 = "0l8038j6ldsv0ywrs2j69ybjl2zv4qw42791glqvcabjj8x24m3m";
+    sha256 = "1y7dp9rqxkn8ik7bvk2qysz3zp3r07kmax5avlf9jf1x7pkagps6";
   };
 
   preConfigure =
@@ -21,13 +24,20 @@ let
 in
 
 {
+  recurseForDerivations = true;
 
   server = stdenv.mkDerivation {
     name = "zabbix-${version}";
 
     inherit src preConfigure;
 
-    configureFlags = "--enable-agent --enable-server --with-postgresql --with-libcurl --with-gettext";
+    configureFlags = [
+      "--enable-agent"
+      "--enable-server"
+      "--with-postgresql"
+      "--with-libcurl"
+      "--with-gettext"
+    ] ++ stdenv.lib.optional enableJabber "--with-jabber=${iksemel}";
 
     buildInputs = [ pkgconfig postgresql curl openssl zlib ];
 

@@ -14,4 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig gtk gettext intltool libart_lgpl libgnomecups bison flex ];
 
   propagatedBuildInputs = [ libxml2 ];
+
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+  };
 }

@@ -5,13 +5,13 @@
 assert readlineSupport -> readline != null;
 
 stdenv.mkDerivation rec {
-  version = "1.1";
+  version = "2.0";
 
   name = "wpa_supplicant-${version}";
 
   src = fetchurl {
     url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
-    sha256 = "00lyifj8cz7qyal6dy1dxbpk3g3bywvdarik8gbj9ds7zmfbwkd5";
+    sha256 = "02cy6wrs4nzm7wbq9mc1vby8lnj58k4sb10h718ks8mmzc4mc49c";
   };
 
   extraConfig =

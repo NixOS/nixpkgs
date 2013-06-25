@@ -84,6 +84,11 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
+  # user namespace sandbox patch
+  userns_patch = if versionOlder sourceInfo.version "29.0.0.0"
+                 then ./sandbox_userns.patch
+                 else ./sandbox_userns_29.patch;
+
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
   inherit packageName;
@@ -116,18 +121,14 @@ in stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  patches = [ ./sandbox_userns.patch ]
+  patches = [ userns_patch ]
          ++ optional cupsSupport ./cups_allow_deprecated.patch;
 
   postPatch = ''
     sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
+    sed -i -e 's|/usr/bin/gcc|gcc|' third_party/WebKit/Source/core/core.gypi
   '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
-  '' + ''
-    sed -i -e 's|/usr/bin/gcc|gcc|' \
-      third_party/WebKit/Source/${if !versionOlder sourceInfo.version "28.0.0.0"
-                                  then "core/core.gypi"
-                                  else "WebCore/WebCore.gyp/WebCore.gyp"}
   '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {

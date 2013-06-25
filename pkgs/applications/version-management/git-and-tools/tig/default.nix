@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "http://jonas.nitro.dk/tig/";
     description = "Tig is a git repository browser that additionally can act as a pager for output from various git commands";
-    maintainers = [ maintainers.garbas maintainers.bjornfor ];
+    maintainers = [ maintainers.garbas maintainers.bjornfor maintainers.iElectric ];
     license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

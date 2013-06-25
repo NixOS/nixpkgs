@@ -7,8 +7,8 @@
 , monadControl, mtl, network, networkInfo, networkMulticast
 , networkProtocolXmpp, openssh, QuickCheck, random, regexTdfa
 , rsync, SafeSemaphore, SHA, stm, text, time, transformers
-, unixCompat, utf8String, uuid, wai, waiLogger, warp, xmlConduit
-, xmlTypes, yesod, yesodDefault, yesodForm, yesodStatic
+, unixCompat, utf8String, uuid, wai, waiLogger, warp, which
+, xmlConduit, xmlTypes, yesod, yesodDefault, yesodForm, yesodStatic
 }:
 
 cabal.mkDerivation (self: {
@@ -28,7 +28,7 @@ cabal.mkDerivation (self: {
     uuid wai waiLogger warp xmlConduit xmlTypes yesod yesodDefault
     yesodForm yesodStatic
   ];
-  buildTools = [ bup curl git gnupg1 lsof openssh rsync ];
+  buildTools = [ bup curl git gnupg1 lsof openssh rsync which ];
   configureFlags = "-fS3
                     -fWebDAV
                     -fInotify
@@ -41,6 +41,7 @@ cabal.mkDerivation (self: {
                     -fProduction
                     -fTDFA";
   preConfigure = "patchShebangs .";
+  installPhase = "make PREFIX=$out CABAL=./Setup docs install";
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP/tmp"
     mkdir "$HOME"

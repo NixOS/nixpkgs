@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   
   src = fetchurl {
     url = "ftp://ftp.ruby-lang.org/pub/ruby/1.9/${name}.tar.bz2";
-    sha256 = "1ymq5lhp3fz0j3cs65521aihcnivbfrn76in900ccxd0msgfmld9";
+    sha256 = "0w1avj8qfskvkgvrjxxc1cxjm14bf1v60ipvcl5q3zpn9k14k2cx";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -30,27 +30,39 @@ stdenv.mkDerivation rec {
     ++ (op zlibSupport zlib)
     ++ (op opensslSupport openssl)
     ++ (op gdbmSupport gdbm)
-    ++ (op yamlSupport libyaml);
+    ++ (op yamlSupport libyaml)
+    # Looks like ruby fails to build on darwin without readline even if curses
+    # support is not enabled, so add readline to the build inputs if curses
+    # support is disabled (if it's enabled, we already have it) and we're
+    # running on darwin
+    ++ (op (!cursesSupport && stdenv.isDarwin) readline);
 
   enableParallelBuilding = true;
-    
-  configureFlags = ["--enable-shared" "--enable-pthread"];
+  patches = [ ./ruby19-parallel-install.patch
+	      ./bitperfect-rdoc.patch
+  ];
+
+  configureFlags = [ "--enable-shared" "--enable-pthread" ]
+    # on darwin, we have /usr/include/tk.h -- so the configure script detects
+    # that tk is installed
+    ++ ( if stdenv.isDarwin then [ "--with-out-ext=tk " ] else [ ]);
 
   installFlags = stdenv.lib.optionalString docSupport "install-doc";
   # Bundler tries to create this directory
   postInstall = "mkdir -pv $out/${passthru.gemPath}";
 
   meta = {
-    license = "Ruby";
-    homepage = "http://www.ruby-lang.org/en/";
+    license     = "Ruby";
+    homepage    = "http://www.ruby-lang.org/en/";
     description = "The Ruby language";
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
+    platforms   = stdenv.lib.platforms.all;
   };
 
   passthru = rec {
     majorVersion = "1.9";
     minorVersion = "3";
-    patchLevel = "194";
+    patchLevel = "429";
     libPath = "lib/ruby/${majorVersion}";
     gemPath = "lib/ruby/gems/${majorVersion}";
   };

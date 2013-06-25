@@ -7,11 +7,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "perl-5.16.2";
+  name = "perl-5.16.3";
 
   src = fetchurl {
     url = "mirror://cpan/src/${name}.tar.gz";
-    sha256 = "03nh8bqnjsdd5izjv3n2yfcxw4ck0llwww36jpbjbjgixwpqpy4f";
+    sha256 = "1dpd9lhc4723wmsn4dsn4m320qlqgyw28bvcbhnfqp2nl3f0ikv9";
   };
 
   outputs = [ "out" "man" ];

@@ -11,7 +11,7 @@ in
     src = fetchsvn {
       url = "https://jdee.svn.sourceforge.net/svnroot/jdee/trunk/jdee";
       rev = revision;
-      sha256 = "1qj5cv74dp6nf6060jyvnlcbmc4sz8a09806gwa1zfiwz6mm9zrs";
+      sha256 = "1z1y957glbqm7z3dhah9h4jysw3173pq1gpx5agfwcw614n516xz";
     };
 
     patchFlags = "-p1 --ignore-whitespace";

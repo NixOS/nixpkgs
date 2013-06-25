@@ -1,28 +1,33 @@
 { stdenv, fetchurl, autoconf, automake, libtool, leptonica, libpng, libtiff }:
 
 let
+  majVersion = "3.02";
+  version = "${majVersion}.02";
+
   f = lang : sha256 : let
       src = fetchurl {
-        url = "http://tesseract-ocr.googlecode.com/files/${lang}.traineddata.gz";
+        url = "http://tesseract-ocr.googlecode.com/files/tesseract-ocr-${majVersion}.${lang}.tar.gz";
         inherit sha256;
       };
     in 
-      "gunzip -c ${src} > $out/share/tessdata/${lang}.traineddata";
+      "tar xfvz ${src} -C $out/share/ --strip=1";
 
   extraLanguages = ''
-    ${f "cat" "1qndk8qygw9bq7nzn7kzgxkm3jhlq7jgvdqpj5id4rrcaavjvifw"}
-    ${f "rus" "0yjzks189bgcmi2vr4v0l0fla11qdrw3cb1nvpxl9mdis8qr9vcc"}
-    ${f "spa" "1q1hw3qi95q5ww3l02fbhjqacxm34cp65fkbx10wjdcg0s5p9q2x"}
-    ${f "nld" "0cbqfhl2rwb1mg4y1140nw2vhhcilc0nk7bfbnxw6bzj1y5n49i8"}
+    ${f "cat" "0d1smiv1b3k9ay2s05sl7q08mb3ln4w5iiiymv2cs8g8333z8jl9"}
+    ${f "rus" "059336mkhsj9m3hwfb818xjlxkcdpy7wfgr62qwz65cx914xl709"}
+    ${f "spa" "1c9iza5mbahd9pa7znnq8yv09v5kz3gbd2sarcgcgc1ps1jc437l"}
+    ${f "nld" "162acxp1yb6gyki2is3ay2msalmfcsnrlsd9wml2ja05k94m6bjy"}
+    ${f "eng" "1y5xf794n832s3lymzlsdm2s9nlrd2v27jjjp0fd9xp7c2ah4461"}
+    ${f "slv" "0rqng43435cly32idxm1lvxkcippvc3xpxbfizwq5j0155ym00dr"}
   '';
 in
 
-stdenv.mkDerivation {
-  name = "tesseract-3.0.1";
+stdenv.mkDerivation rec {
+  name = "tesseract-${version}";
 
   src = fetchurl {
-    url = http://tesseract-ocr.googlecode.com/files/tesseract-3.01.tar.gz;
-    sha256 = "c24b0bd278291bc93ab242f93841c1d8743689c943bd804afbc5b898dc0a1c9b";
+    url = "http://tesseract-ocr.googlecode.com/files/tesseract-ocr-${version}.tar.gz";
+    sha256 = "0g81m9y4iydp7kgr56mlkvjdwpp3mb01q385yhdnyvra7z5kkk96";
   };
 
   buildInputs = [ autoconf automake libtool leptonica libpng libtiff ];

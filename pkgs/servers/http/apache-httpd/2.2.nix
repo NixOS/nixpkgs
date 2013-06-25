@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-iquote ${apr}/include/apr-1";
 
   # Required for ‘pthread_cancel’.
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = (if stdenv.isDarwin then "" else "-lgcc_s");
 
   configureFlags = ''
     --with-z=${zlib}
@@ -65,10 +65,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Apache HTTPD, the world's most popular web server";
-    homepage = http://httpd.apache.org/;
-    license = "ASL2.0";
-
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    homepage    = http://httpd.apache.org/;
+    license     = stdenv.lib.licenses.asl20;
+    platforms   = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ simons lovek323 ];
   };
 }

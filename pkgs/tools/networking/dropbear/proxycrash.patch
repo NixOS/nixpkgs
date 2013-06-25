@@ -1,0 +1,17 @@
+diff -r 5ba19d00da08 cli-runopts.c
+--- a/cli-runopts.c	Sun May 26 18:43:00 2013 +0800
++++ b/cli-runopts.c	Mon Jun 17 19:51:08 2013 +0000
+@@ -383,6 +383,13 @@
+ 		exit(EXIT_FAILURE);
+ 	}
+
++#ifdef ENABLE_CLI_PROXYCMD
++	if (cli_opts.proxycmd) {
++		/* To match the common path of m_freeing it */
++		cli_opts.proxycmd = m_strdup(cli_opts.proxycmd);
++	}
++#endif
++
+ 	if (cli_opts.remoteport == NULL) {
+ 		cli_opts.remoteport = "22";
+ 	}

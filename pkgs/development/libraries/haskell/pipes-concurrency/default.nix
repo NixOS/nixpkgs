@@ -1,10 +1,10 @@
-{ cabal, pipes, stm, transformers }:
+{ cabal, pipes, stm }:
 
 cabal.mkDerivation (self: {
   pname = "pipes-concurrency";
-  version = "1.1.0";
-  sha256 = "05xpwxhf08yf88ya89f8gcy4vphi6qxyccf2yiyi5zrf6c2pkr00";
-  buildDepends = [ pipes stm transformers ];
+  version = "1.2.0";
+  sha256 = "058v9d3wf9n1d25rhdq5vj60p8mll5yv2zn2k1092bg7qisip1fq";
+  buildDepends = [ pipes stm ];
   meta = {
     description = "Concurrency for the pipes ecosystem";
     license = self.stdenv.lib.licenses.bsd3;

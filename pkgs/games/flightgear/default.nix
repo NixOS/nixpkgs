@@ -49,8 +49,7 @@ rec {
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
-      linux;
+    #platforms = a.lib.platforms.linux;
     license = a.lib.licenses.gpl2;
   };
   passthru = {

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   outputs = [ "dev" "out" "doc" "man" ];
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb1 ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus acl ] ;
+    ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus.libs acl ] ;
 
   propagatedBuildInputs = [ openssl ];
 

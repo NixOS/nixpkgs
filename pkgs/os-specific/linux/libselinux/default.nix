@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, libsepol, pcre }:
+{ stdenv, fetchurl, pkgconfig, libsepol, pcre
+, enablePython ? false, swig ? null, python ? null
+}:
+
+assert enablePython -> swig != null && python != null;
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "libselinux-${version}";
@@ -17,7 +23,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fPIC.patch ]; # libsemanage seems to need -fPIC everywhere
 
-  buildInputs = [ pkgconfig libsepol pcre ];
+  buildInputs = [ pkgconfig libsepol pcre ]
+             ++ optionals enablePython [ swig python ];
 
   prePatch = ''
     tar xvf ${patch_src}
@@ -26,7 +33,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  preInstall = '' makeFlags="$makeFlags PREFIX=$out DESTDIR=$out" '';
+  postPatch = optionalString enablePython ''
+    sed -i -e 's|\$(LIBDIR)/libsepol.a|${libsepol}/lib/libsepol.a|' src/Makefile
+  '';
+
+  installFlags = [ "PREFIX=$(out)" "DESTDIR=$(out)" "LIBSEPOLDIR=${libsepol}" ];
+  installTargets = [ "install" ] ++ optional enablePython "install-pywrap";
 
   meta = {
     inherit (libsepol.meta) homepage platforms maintainers;

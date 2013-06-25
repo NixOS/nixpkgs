@@ -17,9 +17,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl libtool perl libxml2 ];
 
-  /* Why --with-libtool? */
-  configureFlags = [ "--with-libtool" "--with-openssl=${openssl}"
-    "--localstatedir=/var" ];
+  configureFlags = [
+    "--localstatedir=/var"
+    "--with-libtool"
+    "--with-libxml2=${libxml2}"
+    "--with-openssl=${openssl}"
+    "--without-atf"
+    "--without-dlopen"
+    "--without-docbook-xsl"
+    "--without-gssapi"
+    "--without-idn"
+    "--without-idnlib"
+    "--without-pkcs11"
+    "--without-purify"
+    "--without-python"
+  ];
 
   meta = {
     homepage = "http://www.isc.org/software/bind";

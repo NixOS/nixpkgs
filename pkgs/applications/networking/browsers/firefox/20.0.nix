@@ -35,7 +35,7 @@ rec {
       #"--enable-profiling"
       "--disable-debug"
       "--enable-strip"
-      # "--with-system-jpeg" # Too old in nixpkgs
+      "--with-system-jpeg" # now we use recent libjpeg-turbo
       "--with-system-zlib"
       "--with-system-bz2"
       "--with-system-nspr"
@@ -135,7 +135,6 @@ rec {
       [ "--enable-application=browser"
         "--with-libxul-sdk=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"
         "--enable-chrome-format=jar"
-        "--disable-elf-hack"
       ]
       ++ commonConfigureFlags
       ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";

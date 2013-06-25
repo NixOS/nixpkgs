@@ -1,11 +1,12 @@
 args: with args;
 
+
 rec {
-  name = "texlive-pgf-2007";
+  name = "texlive-pgf-2010";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pgf/pgf-2.00.tar.gz";
-    sha256 = "0j57niag4jb2k0iyrvjsannxljc3vkx0iag7zd35ilhiy4dh6264";
+    url = "mirror://debian/pool/main/p/pgf/pgf_2.10.orig.tar.gz";
+    sha256 = "642092e6b49df9e33bd901ac7eb7024ff235a29f43d27e78e5827ca3bc03f120";
   };
 
   propagatedBuildInputs = [texLiveLatexXColor texLive];

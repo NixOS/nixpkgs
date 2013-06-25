@@ -68,6 +68,7 @@ python.stdenv.mkDerivation (attrs // {
   pythonPath = [ setuptools ] ++ pythonPath;
 
   preConfigure = ''
+    export DETERMINISTIC_BUILD=1
     PYTHONPATH="${offlineDistutils}/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
     ${preConfigure}
   '';

@@ -201,6 +201,7 @@ with (import ./release-lib.nix);
 
   dbus_all = {
     libs = linux;
+    daemon = linux;
     tools = linux;
   };
 

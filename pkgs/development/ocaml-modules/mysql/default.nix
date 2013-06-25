@@ -7,16 +7,21 @@
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "ocaml-mysql";
-  version = "1.0.4";
+  version = "1.1.1";
 in
 
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://raevnos.pennmush.org/code/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "17i5almar8qrhc9drq0cvlprxf9wi9szj5kh4gnz11l9al8i3lar";
+    url = "https://forge.ocamlcore.org/frs/download.php/870/${pname}-${version}.tar.gz";
+    sha256 = "f896fa101a05d81b85af8122fe1c2809008a5e5fdca00f9ceeb7eec356369e3a";
   };
+
+  configureFlags = [ 
+     "--prefix=$out" 
+     "--libdir=$out/lib/ocaml/${ocaml_version}/site-lib/mysql"
+  ];
 
   buildInputs = [ocaml findlib mysql];
 
@@ -34,7 +39,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://raevnos.pennmush.org/code/ocaml-mysql/;
+    homepage = http://ocaml-mysql.forge.ocamlcore.org;
     description = "Bindings for interacting with MySQL databases from ocaml";
     license = "LGPLv2.1+";
     maintainers = [ stdenv.lib.maintainers.roconnor ];

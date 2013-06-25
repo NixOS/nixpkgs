@@ -1,8 +1,10 @@
 { stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
-, libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
+, libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xlibs
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
-
+, hunspell, libevent, libstartup_notification, libvpx
+, cairo ? null
+, useSystemCairo ? false
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
   # binaries may not be distributed without permission from the
@@ -12,8 +14,10 @@
 }:
 
 assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
+assert useSystemCairo -> cairo != null;
 
-rec {
+let optional = stdenv.lib.optional;
+in rec {
 
   firefoxVersion = "21.0";
 
@@ -35,20 +39,25 @@ rec {
       #"--enable-profiling"
       "--disable-debug"
       "--enable-strip"
-      # "--with-system-jpeg" # Too old in nixpkgs
+      "--with-system-jpeg"
       "--with-system-zlib"
       "--with-system-bz2"
       "--with-system-nspr"
       "--with-system-nss"
+      "--with-system-libevent"
+      "--with-system-libvpx"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
-      # "--enable-system-cairo" # <-- doesn't build
+      "--enable-startup-notification"
+      "--enable-system-ffi"
+      "--enable-system-hunspell"
+      "--enable-system-pixman"
       "--enable-system-sqlite"
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
       "--disable-installer"
       "--disable-updater"
-    ];
+    ] ++ optional useSystemCairo "--enable-system-cairo";
 
 
   xulrunner = stdenv.mkDerivation rec {
@@ -57,13 +66,14 @@ rec {
     inherit src;
 
     buildInputs =
-      [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
+      [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
         alsaLib nspr nss libnotify xlibs.pixman yasm mesa
         xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
         xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
-      ];
+        hunspell libevent libstartup_notification libvpx
+      ] ++ optional useSystemCairo cairo;
 
     configureFlags =
       [ "--enable-application=xulrunner"
@@ -71,6 +81,8 @@ rec {
       ] ++ commonConfigureFlags;
 
     enableParallelBuilding = true;
+
+    patches = optional useSystemCairo ./system-cairo.patch; # probably in 22
 
     preConfigure =
       ''
@@ -124,10 +136,15 @@ rec {
     enableParallelBuilding = true;
 
     buildInputs =
-      [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
+      [ pkgconfig gtk perl zip libIDL libjpeg zlib bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr nss libnotify
         xlibs.pixman yasm mesa sqlite file unzip pysqlite
-      ];
+        hunspell libevent libstartup_notification libvpx
+      ] ++ optional useSystemCairo cairo;
+
+    patches = [
+      ./disable-reporter.patch # fixes "search box not working when built on xulrunner"
+    ];
 
     propagatedBuildInputs = [xulrunner];
 
@@ -135,7 +152,6 @@ rec {
       [ "--enable-application=browser"
         "--with-libxul-sdk=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"
         "--enable-chrome-format=jar"
-        "--disable-elf-hack"
       ]
       ++ commonConfigureFlags
       ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";

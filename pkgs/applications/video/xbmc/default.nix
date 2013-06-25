@@ -68,6 +68,11 @@ stdenv.mkDerivation rec {
 
     dontUseCmakeConfigure = true;
 
+    preConfigure = ''
+      substituteInPlace xbmc/linux/LinuxTimezone.cpp \
+        --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
+    '';
+
     configureFlags = [
       "--enable-external-libraries"
       "--disable-webserver"

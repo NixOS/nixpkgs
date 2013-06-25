@@ -2,7 +2,7 @@
 , crypto ? false, libgcrypt, gnutls, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  pname = "ntfs-3g_ntfsprogs";
+  pname = "ntfs-3g";
   version = "2012.1.15";
   name = "${pname}-${version}";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = stdenv.lib.optional crypto pkgconfig;
 
   src = fetchurl {
-    url = "http://tuxera.com/opensource/${name}.tgz";
+    url = "http://tuxera.com/opensource/ntfs-3g_ntfsprogs-${version}.tgz";
     sha256 = "09gvfgvqm4dswzxmwvg3r23bv39cp8y8b6qs2jcwmrqd032i25kg";
   };
 
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.tuxera.com/community/;
     description = "FUSE-base NTFS driver with full write support";
     maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

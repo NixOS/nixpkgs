@@ -55,6 +55,12 @@ stdenv.mkDerivation ({
          rfc3484_sort: Assertion `src->results[i].native == -1 ||
          src->results[i].native == a2_native' failed." crashes. */
       ./glibc-rh739743.patch
+
+      /* Fix buffer overrun in regexp matcher. */
+      ./cve-2013-0242.patch
+
+      /* Fix stack overflow in getaddrinfo with many results. */
+      ./cve-2013-1914.patch
     ];
 
   postPatch = ''
@@ -81,7 +87,7 @@ stdenv.mkDerivation ({
        then "--enable-profile"
        else "--disable-profile")
     ] ++ stdenv.lib.optionals (cross == null && kernelHeaders != null) [
-      "--enable-kernel=2.6.35"
+      "--enable-kernel=2.6.32"
     ] ++ stdenv.lib.optionals (cross != null) [
       (if cross.withTLS then "--with-tls" else "--without-tls")
       (if cross.float == "soft" then "--without-fp" else "--with-fp")

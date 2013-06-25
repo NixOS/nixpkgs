@@ -21,7 +21,7 @@ standard <varname>Makefile.PL</varname>.  It’s implemented in <link
 xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/perl-modules/generic"><filename>pkgs/development/perl-modules/generic</filename></link>.</para>
 
 <para>Perl packages from CPAN are defined in <link
-xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/perl-packages.nix"><filename>pkgs/perl-packages.nix</filename></link>,
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/perl-packages.nix"><filename>pkgs/top-level/perl-packages.nix</filename></link>,
 rather than <filename>pkgs/all-packages.nix</filename>.  Most Perl
 packages are so straight-forward to build that they are defined here
 directly, rather than having a separate function for each package
@@ -150,6 +150,43 @@ ClassC3Componentised = buildPerlPackage rec {
 </programlisting>
 
 </para>
+
+<section><title>Generation from CPAN</title>
+
+<para>Nix expressions for Perl packages can be generated (almost)
+automatically from CPAN.  This is done by the program
+<command>nix-generate-from-cpan</command>, which can be installed
+as follows:</para>
+
+<screen>
+$ nix-env -i nix-generate-from-cpan
+</screen>
+
+<para>This program takes a Perl module name, looks it up on CPAN,
+fetches and unpacks the corresponding package, and prints a Nix
+expression on standard output.  For example:
+
+<screen>
+$ nix-generate-from-cpan XML::Simple
+  XMLSimple = buildPerlPackage {
+    name = "XML-Simple-2.20";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-Simple-2.20.tar.gz;
+      sha256 = "5cff13d0802792da1eb45895ce1be461903d98ec97c9c953bc8406af7294434a";
+    };
+    propagatedBuildInputs = [ XMLNamespaceSupport XMLSAX XMLSAXExpat ];
+    meta = {
+      description = "Easily read/write XML (esp config files)";
+      license = "perl";
+    };
+  };
+</screen>
+
+The output can be pasted into
+<filename>pkgs/top-level/perl-packages.nix</filename> or wherever else
+you need it.</para>
+
+</section>
 
 </section>
 

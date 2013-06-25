@@ -29,7 +29,7 @@ let
 in {
 
   de = buildDict {
-    shortName = "de-20030222-1";
+    shortName = "de-20030222_1";
     fullName = "German";
     src = fetchurl {
       url = mirror://gnu/aspell/dict/de/aspell6-de-20030222-1.tar.bz2;
@@ -38,7 +38,7 @@ in {
   };
     
   en = buildDict {
-    shortName = "en-6.0-0";
+    shortName = "en-6.0_0";
     fullName = "English";
     src = fetchurl {
       url = mirror://gnu/aspell/dict/en/aspell6-en-6.0-0.tar.bz2;
@@ -47,7 +47,7 @@ in {
   };
     
   es = buildDict {
-    shortName = "es-0.50-2";
+    shortName = "es-0.50_2";
     fullName = "Spanish";
     src = fetchurl {
       url = mirror://gnu/aspell/dict/es/aspell-es-0.50-2.tar.bz2;
@@ -56,7 +56,7 @@ in {
   };
     
   eo = buildDict {
-    shortName = "eo-0.50-2";
+    shortName = "eo-0.50_2";
     fullName = "Esperanto";
     src = fetchurl {
       url = mirror://gnu/aspell/dict/eo/aspell-eo-0.50-2.tar.bz2;
@@ -65,7 +65,7 @@ in {
   };
 
   fr = buildDict {
-    shortName = "fr-0.50-3";
+    shortName = "fr-0.50_3";
     fullName = "French";
     src = fetchurl {
       url = mirror://gnu/aspell/dict/fr/aspell-fr-0.50-3.tar.bz2;
@@ -74,7 +74,7 @@ in {
   };
     
   it = buildDict {
-    shortName = "it-0.53-0";
+    shortName = "it-0.53_0";
     fullName = "Italian";
     src = fetchurl {
       url = mirror://gnu/aspell/dict/it/aspell-it-0.53-0.tar.bz2;
@@ -83,7 +83,7 @@ in {
   };
     
   la = buildDict {
-    shortName = "la-20020503-0";
+    shortName = "la-20020503_0";
     fullName = "Latin";
     src = fetchurl {
       url = mirror://gnu/aspell/dict/la/aspell6-la-20020503-0.tar.bz2;
@@ -92,7 +92,7 @@ in {
   };
     
   nl = buildDict {
-    shortName = "nl-0.50-2";
+    shortName = "nl-0.50_2";
     fullName = "Dutch";
     src = fetchurl {
       url = mirror://gnu/aspell/dict/nl/aspell-nl-0.50-2.tar.bz2;
@@ -105,7 +105,7 @@ in {
   };
     
   pl = buildDict {
-    shortName = "pl-6.0_20061121";
+    shortName = "pl-6.0_20061121_0";
     fullName = "Polish";
     src = fetchurl {
       url = mirror://gnu/aspell/dict/pl/aspell6-pl-6.0_20061121-0.tar.bz2;
@@ -114,7 +114,7 @@ in {
   };
      
   ru = buildDict {
-    shortName = "ru-0.99f7-1";
+    shortName = "ru-0.99f7_1";
     fullName = "Russian";
     src = fetchurl {
       url = mirror://gnu/aspell/dict/ru/aspell6-ru-0.99f7-1.tar.bz2;

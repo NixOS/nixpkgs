@@ -2,11 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "hsdns";
-  version = "1.6";
-  sha256 = "1vf3crkhs7z572bqdf7p2hfcqkjxvnyg0w0cf8b7kyfxzn8bj3fa";
+  version = "1.6.1";
+  sha256 = "0s63acjy1n75k7gjm4kam7v5d4a5kn0aw178mygkqwr5frflghb4";
   buildDepends = [ network ];
   extraLibraries = [ adns ];
-  noHaddock = true;
   meta = {
     homepage = "http://github.com/peti/hsdns";
     description = "Asynchronous DNS Resolver";
