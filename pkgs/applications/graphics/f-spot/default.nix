@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   inherit makeWrapper;
 
   src = fetchurl {
-    url = http://nixos.org/tarballs/f-spot-0.0.10.tar.bz2;
+    url = http://tarballs.nixos.org/f-spot-0.0.10.tar.bz2;
     md5 = "19cc6e067ccc261b0502ff6189b79832";
   };
 

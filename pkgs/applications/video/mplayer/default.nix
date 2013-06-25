@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     # Old kind of URL:
-    # url = http://nixos.org/tarballs/mplayer-snapshot-20101227.tar.bz2;
+    # url = http://tarballs.nixos.org/mplayer-snapshot-20101227.tar.bz2;
     # Snapshot I took on 20110423
 
     #Transient
