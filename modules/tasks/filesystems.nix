@@ -191,7 +191,7 @@ in
           { description = "Initialisation of Filesystem ${fs.device}";
             wantedBy = [ "${mountPoint'}.mount" ];
             before = [ "${mountPoint'}.mount" "systemd-fsck@${device'}.service" ];
-            require = [ "${device'}.device" ];
+            requires = [ "${device'}.device" ];
             after = [ "${device'}.device" ];
             path = [ pkgs.utillinux ] ++ config.system.fsPackages;
             script =
