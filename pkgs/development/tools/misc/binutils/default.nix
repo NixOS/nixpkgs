@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, noSysDirs, zlib, cross ? null, gold ? false, bison ? null, flex2535 ? null, bc ? null, dejagnu ? null }:
+{ stdenv, fetchurl, noSysDirs, zlib
+, cross ? null, gold ? false, bison ? null, flex2535 ? null, bc ? null, dejagnu ? null
+, deterministic ? false }:
 
 let basename = "binutils-2.23.1"; in
 stdenv.mkDerivation rec {
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
     # That requires upstream changes for things to work. So we can patch it to
     # get the old behaviour by now.
     ./dtneeded.patch
-  ];
+  ] ++ (stdenv.lib.optional deterministic ./deterministic.patch);
 
   buildInputs =
     [ zlib ]
@@ -48,7 +50,8 @@ stdenv.mkDerivation rec {
       + stdenv.lib.optionalString (stdenv.system == "mips64el-linux")
         " --enable-fix-loongson2f-nop"
       + stdenv.lib.optionalString (cross != null) " --target=${cross.config}"
-      + stdenv.lib.optionalString gold " --enable-gold";
+      + stdenv.lib.optionalString gold " --enable-gold"
+      + stdenv.lib.optionalString deterministic " --enable-deterministic-archives";
 
   enableParallelBuilding = true;
       

@@ -3206,6 +3206,8 @@ let
     inherit noSysDirs;
   };
 
+  binutils_deterministic = binutils.override { deterministic = true; };
+
   binutils_gold = lowPrio (callPackage ../development/tools/misc/binutils {
     inherit noSysDirs;
     gold = true;
