@@ -3537,8 +3537,6 @@ let
     jre = jdk;
   };
 
-  sbt = callPackage ../development/tools/build-managers/sbt { };
-
   scons = callPackage ../development/tools/build-managers/scons { };
 
   simpleBuildTool = callPackage ../development/tools/build-managers/simple-build-tool { };
