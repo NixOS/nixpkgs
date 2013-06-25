@@ -724,12 +724,12 @@ fixupPhase() {
     if [ -z "$dontStrip" ]; then
         stripDebugList=${stripDebugList:-lib lib32 lib64 libexec bin sbin}
         if [ -n "$stripDebugList" ]; then
-            stripDirs "$stripDebugList" "${stripDebugFlags:--S}"
+            stripDirs "$stripDebugList" "${stripDebugFlags:--S --enable-deterministic-archives}"
         fi
 
         stripAllList=${stripAllList:-}
         if [ -n "$stripAllList" ]; then
-            stripDirs "$stripAllList" "${stripAllFlags:--s}"
+            stripDirs "$stripAllList" "${stripAllFlags:--s --enable-deterministic-archives}"
         fi
     fi
 
