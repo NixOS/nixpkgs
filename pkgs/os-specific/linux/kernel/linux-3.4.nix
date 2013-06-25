@@ -199,6 +199,7 @@ let
       NET_FC y # Fibre Channel driver support
       PPP_MULTILINK y # PPP multilink support
       REGULATOR y # Voltage and Current Regulator Support
+      RC_DEVICES y # Enable IR devices
       SCSI_LOGGING y # SCSI logging facility
       SERIAL_8250 y # 8250/16550 and compatible serial support
       SLIP_COMPRESSED y # CSLIP compressed headers
