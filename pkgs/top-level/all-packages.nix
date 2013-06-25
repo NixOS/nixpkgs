@@ -9384,6 +9384,8 @@ let
   };
   */
 
+  nixops = callPackage ../tools/package-management/nixops { };
+
   nut = callPackage ../applications/misc/nut { };
 
   solfege = callPackage ../misc/solfege {
