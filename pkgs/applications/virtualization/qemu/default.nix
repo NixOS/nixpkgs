@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, zlib, pkgconfig, glib, SDL, ncurses, perl, pixman
-, attr, libcap }:
+, attr, libcap, vde2 }:
 
 stdenv.mkDerivation rec {
   name = "qemu-1.4.0";
@@ -11,12 +11,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     python zlib pkgconfig glib SDL ncurses perl pixman attr libcap
+    vde2
   ];
 
   enableParallelBuilding = true;
 
   configureFlags = [
     "--enable-virtfs"
+    "--enable-vde"
   ];
 
   meta = {
