@@ -1691,6 +1691,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   regexTDFA = callPackage ../development/libraries/haskell/regex-tdfa {};
   regexTdfa = self.regexTDFA;
 
+  regexTdfaText = callPackage ../development/libraries/haskell/regex-tdfa-text {};
+
   regexPCRE = callPackage ../development/libraries/haskell/regex-pcre {};
   regexPcre = self.regexPCRE;
 
