@@ -2844,7 +2844,14 @@ let
     ocaml = ocaml_3_08_0;
   };
 
-  repeatableStdenv  = lowPrio (stdenvAdapters.overrideSetup stdenv ../stdenv/generic/setup-repeatable.sh );
+  deterministicStdenv = lowPrio (
+    overrideInStdenv (
+      stdenvAdapters.overrideGCC
+        (stdenvAdapters.overrideSetup stdenv ../stdenv/generic/setup-repeatable.sh )
+      gcc46_deterministic
+    )
+    [ binutils_deterministic ]
+  );
 
   roadsend = callPackage ../development/compilers/roadsend { };
 
