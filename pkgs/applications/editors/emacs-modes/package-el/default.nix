@@ -34,9 +34,8 @@ stdenv.mkDerivation ({
           (package-install-file "./${packageFile}")
           (setq kill-emacs-hook nil))
         (error (progn
-                 (message "ERROR: %s" (error-message-string err))
                  (setq kill-emacs-hook nil)
-                 (kill-emacs 1))))'
+                 (error (error-message-string err)))))'
     rm ./${packageFile}
 
     runHook postBuild
