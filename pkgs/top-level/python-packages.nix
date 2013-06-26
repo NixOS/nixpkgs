@@ -467,6 +467,10 @@ pythonPackages = python.modules // rec {
       }' blivet/pyudev.py
       sed -i -e 's|"multipath"|"${pkgs.multipath_tools}/sbin/multipath"|' \
         blivet/devicelibs/mpath.py blivet/devices.py
+      sed -i -e '/"wipefs"/ {
+        s|wipefs|${pkgs.utillinux}/sbin/wipefs|
+        s/-f/--force/
+      }' blivet/formats/__init__.py
     '';
 
     propagatedBuildInputs = let
