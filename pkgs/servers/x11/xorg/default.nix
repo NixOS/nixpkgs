@@ -632,23 +632,25 @@ let
     buildInputs = [pkgconfig compositeproto libX11 libXfixes xproto ];
   })) // {inherit compositeproto libX11 libXfixes xproto ;};
 
-  libXcursor = (stdenv.mkDerivation ((if overrides ? libXcursor then overrides.libXcursor else x: x) {
+  libXcursor = (stdenvMulti.mkDerivation ((if overrides ? libXcursor then overrides.libXcursor else x: x) {
     name = "libXcursor-1.1.14";
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/lib/libXcursor-1.1.14.tar.bz2;
       sha256 = "1prkdicl5y5yx32h1azh6gjfbijvjp415javv8dsakd13jrarilv";
     };
+    outputs = [ "dev" "out" "man" ];
     buildInputs = [pkgconfig fixesproto libX11 libXfixes xproto libXrender ];
   })) // {inherit fixesproto libX11 libXfixes xproto libXrender ;};
 
-  libXdamage = (stdenv.mkDerivation ((if overrides ? libXdamage then overrides.libXdamage else x: x) {
+  libXdamage = (stdenvMulti.mkDerivation ((if overrides ? libXdamage then overrides.libXdamage else x: x) {
     name = "libXdamage-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/X11R7.7/src/everything/libXdamage-1.1.3.tar.bz2;
       sha256 = "1a678bwap74sqczbr2z4y4fvbr35km3inkm8bi1igjyk4v46jqdw";
     };
+    outputs = [ "dev" "out" ];
     buildInputs = [pkgconfig damageproto fixesproto libX11 xextproto libXfixes xproto ];
   })) // {inherit damageproto fixesproto libX11 xextproto libXfixes xproto ;};
 
@@ -850,13 +852,14 @@ let
     buildInputs = [pkgconfig libX11 libXext xextproto xf86miscproto xproto ];
   })) // {inherit libX11 libXext xextproto xf86miscproto xproto ;};
 
-  libXxf86vm = (stdenv.mkDerivation ((if overrides ? libXxf86vm then overrides.libXxf86vm else x: x) {
+  libXxf86vm = (stdenvMulti.mkDerivation ((if overrides ? libXxf86vm then overrides.libXxf86vm else x: x) {
     name = "libXxf86vm-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/lib/libXxf86vm-1.1.3.tar.bz2;
       sha256 = "1f1pxj018nk7ybxv58jmn5y8gm2288p4q3l2dng9n1p25v1qcpns";
     };
+    outputs = [ "dev" "out" "man" ];
     buildInputs = [pkgconfig libX11 libXext xextproto xf86vidmodeproto xproto ];
   })) // {inherit libX11 libXext xextproto xf86vidmodeproto xproto ;};
 
