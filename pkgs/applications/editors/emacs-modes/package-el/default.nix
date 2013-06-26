@@ -23,7 +23,7 @@ stdenv.mkDerivation ({
     runHook preBuild
 
     mkdir -pv $out/share/emacs/elpa/
-    ${emacs}/bin/emacs --batch --eval '
+    ${emacs}/bin/emacs --batch -Q --eval '
       (progn
         (setq debug-on-error t)
         (load "'${emacs}/share/emacs/site-lisp/site-start.el'")
