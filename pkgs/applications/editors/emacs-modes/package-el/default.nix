@@ -31,7 +31,8 @@ stdenv.mkDerivation ({
           (setq package-user-dir (expand-file-name "'./share/emacs/elpa/'"))
           (require (quote package))
           (package-initialize)
-          (package-install-file "./${packageFile}"))
+          (package-install-file "./${packageFile}")
+          (setq kill-emacs-hook nil))
         (error (progn
                  (message "ERROR: %s" (error-message-string err))
                  (setq kill-emacs-hook nil)
