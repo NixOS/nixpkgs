@@ -81,17 +81,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig python makedepend file flex bison ];
 
-  propagatedBuildInputs = with xorg; [ libXdamage libXxf86vm ]
-  ++
-  stdenv.lib.optionals stdenv.isLinux [libdrm]
-  ;
-  buildInputs = with xorg; [
-    autoconf automake libtool intltool expat libxml2Python llvm
-    libXfixes glproto dri2proto libX11 libXext libxcb libXt
-    libffi wayland
-  ] ++ stdenv.lib.optionals enableExtraFeatures [ /*libXvMC*/ libvdpau ]
-  ++ stdenv.lib.optional stdenv.isLinux [udev]
-  ;
+  buildInputs = with xorg;
+    [ autoconf automake libtool intltool expat libxml2Python llvm
+      libXfixes glproto dri2proto libX11 libXext libxcb libXt libXdamage libXxf86vm 
+      libffi wayland
+    ]
+    ++ stdenv.lib.optionals enableExtraFeatures [ /*libXvMC*/ libvdpau ]
+    ++ stdenv.lib.optional stdenv.isLinux [ libdrm udev ];
 
   enableParallelBuilding = true;
   doCheck = true;
