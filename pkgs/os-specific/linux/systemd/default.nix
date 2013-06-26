@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "07gvn3rpski8sh1nz16npjf2bvj0spsjdwc5px9685g2pi6kxcb1";
   };
 
+  outputs = [ "out" "man" "libudev" ];
+
   patches =
     [ ./0001-Make-systemctl-daemon-reexec-do-the-right-thing-on-N.patch
       ./0002-Ignore-duplicate-paths-in-systemctl-start.patch
@@ -65,6 +67,8 @@ stdenv.mkDerivation rec {
 
       substituteInPlace src/journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+
+      export NIX_CFLAGS_LINK+=" -Wl,-rpath,$libudev/lib"
     '';
 
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
@@ -114,6 +118,20 @@ stdenv.mkDerivation rec {
       done
 
       rm -rf $out/etc/rpm
+
+      # Move libudev to a separate output.
+      mkdir -p $libudev/lib/pkgconfig $libudev/include
+      mv $out/lib/libudev* $libudev/lib/
+      mv $out/lib/pkgconfig/libudev*.pc $libudev/lib/pkgconfig/
+      mv $out/include/libudev.h $libudev/include/
+
+      for i in $libudev/lib/*.la $libudev/lib/pkgconfig/*.pc; do
+        substituteInPlace $i --replace $out $libudev
+      done
+
+      # FIXME: move into stdenv
+      prefix="$libudev" patchELF
+      prefix="$libudev" stripDirs "lib" "''${stripDebugFlags:--S}"
     ''; # */
 
   enableParallelBuilding = true;

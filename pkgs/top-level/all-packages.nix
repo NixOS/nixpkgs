@@ -6637,7 +6637,9 @@ let
 
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
-  systemd = callPackage ../os-specific/linux/systemd { };
+  systemd = callPackage ../os-specific/linux/systemd {
+    stdenv = stdenvMulti;
+  };
 
   sysvinit = callPackage ../os-specific/linux/sysvinit { };
 
@@ -6679,7 +6681,8 @@ let
   });
 
   udev145 = callPackage ../os-specific/linux/udev/145.nix { };
-  udev = pkgs.systemd;
+
+  udev = pkgs.systemd.libudev;
 
   udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
   udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };
