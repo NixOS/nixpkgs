@@ -22,10 +22,6 @@ let
           attrset)));
 
 in
-{
-
-  tarball = import ./make-tarball.nix;
-
-} // (mapTestOn rec {
+(mapTestOn rec {
   emacs24Packages = jobsForDerivations pkgs.emacs24Packages;
 })
