@@ -24,13 +24,18 @@ stdenv.mkDerivation ({
 
     mkdir -pv $out/share/emacs/elpa/
     ${emacs}/bin/emacs --batch -Q --eval '
-      (progn
-        (setq debug-on-error t)
-        (load "'${emacs}/share/emacs/site-lisp/site-start.el'")
-        (setq package-user-dir (expand-file-name "'./share/emacs/elpa/'"))
-        (require (quote package))
-        (package-initialize)
-        (package-install-file "./${packageFile}"))'
+      (condition-case err
+        (progn
+          (setq debug-on-error t)
+          (load "'${emacs}/share/emacs/site-lisp/site-start.el'")
+          (setq package-user-dir (expand-file-name "'./share/emacs/elpa/'"))
+          (require (quote package))
+          (package-initialize)
+          (package-install-file "./${packageFile}"))
+        (error (progn
+                 (message "ERROR: %s" (error-message-string err))
+                 (setq kill-emacs-hook nil)
+                 (kill-emacs 1))))'
     rm ./${packageFile}
 
     runHook postBuild
