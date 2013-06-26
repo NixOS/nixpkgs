@@ -39,6 +39,11 @@ in
             port overrides the default port, 24800.
           ";
         };
+        autoStart = mkOption {
+          default = true;
+          type = types.bool;
+          description = "Whether synergy-client should be started automatically.";
+        };
       };
 
       server = {
@@ -65,6 +70,11 @@ in
           default = "";
           description = "listen for clients on the given address";
         };
+        autoStart = mkOption {
+          default = true;
+          type = types.bool;
+          description = "Whether synergy-server should be started automatically.";
+        };
       };
     };
 
@@ -75,41 +85,21 @@ in
 
   config = {
 
-    jobs =
+    systemd.services."synergy-client" = mkIf cfgC.enable {
+      after = [ "network.target" ];
+      description = "Synergy client";
+      wantedBy = optional cfgC.autoStart "multi-user.target";
+      path = [ pkgs.synergy ];
+      serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"} ${cfgC.serverAddress}'';
+    };
 
-      optionalAttrs cfgC.enable
-        { synergyClient =
-          { name = "synergy-client";
-
-            description = "Synergy client";
-
-            startOn = "started network-interfaces";
-            stopOn = "stopping network-interfaces";
-
-            exec = ''${pkgs.synergy}/bin/synergyc \
-              -f ${if cfgC.screenName == "" then "" else "-n ${cfgC.screenName}"} \
-              ${cfgC.serverAddress}
-            '';
-          };
-        }
-
-      // optionalAttrs cfgS.enable
-        { synergyServer =
-          { name = "synergy-server";
-
-            description = "Synergy server";
-
-            startOn = "started network-interfaces";
-            stopOn = "stopping network-interfaces";
-
-            exec =
-              ''
-                ${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} \
-                  -f ${if cfgS.address == "" then "" else "-a ${cfgS.address}"} \
-                  ${if cfgS.screenName == "" then "" else "-n ${cfgS.screenName}" }
-              '';
-          };
-        };
+    systemd.services."synergy-server" = mkIf cfgS.enable {
+      after = [ "network.target" ];
+      description = "Synergy server";
+      wantedBy = optional cfgS.autoStart "multi-user.target";
+      path = [ pkgs.synergy ];
+      serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f ${optionalString (cfgS.address != "") "-a ${cfgS.address}"} ${optionalString (cfgS.screenName != "") "-n ${cfgS.screenName}" }'';
+    };
 
   };
 
