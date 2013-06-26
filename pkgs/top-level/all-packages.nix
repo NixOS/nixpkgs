@@ -8107,7 +8107,9 @@ let
 
   seq24 = callPackage ../applications/audio/seq24 { };
 
-  sflphone = callPackage ../applications/networking/instant-messengers/sflphone { };
+  sflphone = callPackage ../applications/networking/instant-messengers/sflphone {
+    gtk = gtk3;
+  };
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
