@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ucommon, openssl, pkgconfig, ccrtp }:
+{ stdenv, fetchurl, cmake, openssl, pkgconfig, ccrtp }:
 
 stdenv.mkDerivation rec {
   name = "libzrtpcpp-2.0.0";
@@ -8,7 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "05yw8n5xpj0jxkvzgsvn3xkxirpypc1japy9k1jqs9301fgb1a3i";
   };
 
-  buildInputs = [ cmake ucommon openssl pkgconfig ccrtp ];
+  # We disallow 'lib64', or pkgconfig will not find it.
+  prePatch = ''
+    sed -i s/lib64/lib/ CMakeLists.txt
+  '';
+
+  buildInputs = [ cmake openssl pkgconfig ccrtp ];
 
   meta = { 
     description = "GNU RTP stack for the zrtp protocol developed by Phil Zimmermann";
