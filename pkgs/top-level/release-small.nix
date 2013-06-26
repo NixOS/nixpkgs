@@ -9,7 +9,7 @@
      nixpkgs "{outPath = ./}" .... release.nix
 
    Hydra can be installed with "nix-env -i hydra".  */
-with (import ./release-lib.nix);
+with import ./release-lib.nix { supportedSystems = [ "x86_64-linux" ]; };
 
 {
 
