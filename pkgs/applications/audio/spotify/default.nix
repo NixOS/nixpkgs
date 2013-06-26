@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl, freetype, glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng12, GConf, libgcrypt, chromium, sqlite, gst_plugins_base, gstreamer }:
+{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl, freetype, glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf, libgcrypt, chromium, sqlite, gst_plugins_base, gstreamer }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
       mkdir -p $out/libexec/spotify
       gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\" -fPIC
 
-      wrapProgram $out/bin/spotify --set LD_PRELOAD $preload --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ GConf libpng12 cups libgcrypt sqlite gst_plugins_base gstreamer]}:$out/lib"
+      wrapProgram $out/bin/spotify --set LD_PRELOAD $preload --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ GConf libpng cups libgcrypt sqlite gst_plugins_base gstreamer]}:$out/lib"
     ''; # */
 
   dontStrip = true;

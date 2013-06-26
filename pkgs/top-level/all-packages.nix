@@ -1191,7 +1191,9 @@ let
 
   minecraft = callPackage ../games/minecraft { };
 
-  minetest = callPackage ../games/minetest { };
+  minetest = callPackage ../games/minetest {
+    libpng = libpng12;
+  };
 
   miniupnpc = callPackage ../tools/networking/miniupnpc { };
 
@@ -2744,7 +2746,9 @@ let
     camomile_0_8_2 = callPackage ../development/ocaml-modules/camomile/0.8.2.nix { };
     camomile = callPackage ../development/ocaml-modules/camomile { };
 
-    camlimages = callPackage ../development/ocaml-modules/camlimages { };
+    camlimages = callPackage ../development/ocaml-modules/camlimages {
+      libpng = libpng12;
+    };
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
@@ -3921,6 +3925,7 @@ let
 
   gegl_0_0_22 = callPackage ../development/libraries/gegl/0_0_22.nix {
     #  avocodec avformat librsvg
+    libpng = libpng12;
   };
 
   geoclue = callPackage ../development/libraries/geoclue {};
@@ -4044,6 +4049,7 @@ let
 
   glsurf = callPackage ../applications/science/math/glsurf {
     inherit (ocamlPackages) lablgl findlib camlimages ocaml_mysql mlgmp;
+    libpng = libpng12;
   };
 
   gmime = callPackage ../development/libraries/gmime { };
@@ -4333,7 +4339,9 @@ let
 
   levmar = callPackage ../development/libraries/levmar { };
 
-  leptonica = callPackage ../development/libraries/leptonica { };
+  leptonica = callPackage ../development/libraries/leptonica {
+    libpng = libpng12;
+  };
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
@@ -5114,6 +5122,7 @@ let
 
   qt3 = callPackage ../development/libraries/qt-3 {
     openglSupport = mesaSupported;
+    libpng = libpng12;
   };
 
   qt4 = pkgs.kde4.qt4;
@@ -7425,6 +7434,7 @@ let
 
   gimp_2_6 = callPackage ../applications/graphics/gimp {
     inherit (gnome) libart_lgpl;
+    libpng = libpng12;
   };
 
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
@@ -7548,7 +7558,9 @@ let
 
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
 
-  google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin { };
+  google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin {
+    libpng = libpng12;
+  };
 
   gosmore = builderDefsPackage ../applications/misc/gosmore {
     inherit fetchsvn curl pkgconfig libxml2 gtk;
@@ -8175,7 +8187,9 @@ let
 
   lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm-gtk-greeter { };
 
-  slim = callPackage ../applications/display-managers/slim { };
+  slim = callPackage ../applications/display-managers/slim {
+    libpng = libpng12;
+  };
 
   sndBase = builderDefsPackage (import ../applications/audio/snd) {
     inherit fetchurl stdenv stringsWithDeps lib fftw;
@@ -8203,6 +8217,7 @@ let
 
   spotify = callPackage ../applications/audio/spotify {
     inherit (gnome) GConf;
+    libpng = libpng12;
   };
 
   libspotify = callPackage ../development/libraries/libspotify {

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, omake, ocaml, omake_rc1, libtiff, libjpeg, libpng12, giflib, findlib, libXpm, freetype, graphicsmagick, ghostscript }:
+{stdenv, fetchurl, omake, ocaml, omake_rc1, libtiff, libjpeg, libpng, giflib, findlib, libXpm, freetype, graphicsmagick, ghostscript }:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -14,9 +14,9 @@ stdenv.mkDerivation {
     sha256 = "b40237c1505487049799a7af296eb3996b3fa08eab94415546f46d61355747c4";
   };
 
-  buildInputs = [ocaml omake_rc1 findlib graphicsmagick ghostscript libtiff libjpeg libpng12 giflib freetype libXpm ];
- 
-  propagatedbuildInputs = [libtiff libjpeg libpng12 giflib freetype libXpm ];
+  buildInputs = [ocaml omake_rc1 findlib graphicsmagick ghostscript libtiff libjpeg libpng giflib freetype libXpm ];
+
+  propagatedbuildInputs = [libtiff libjpeg libpng giflib freetype libXpm ];
 
   createFindlibDestdir = true;
 

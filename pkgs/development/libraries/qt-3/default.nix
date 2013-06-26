@@ -7,10 +7,10 @@
 , threadSupport ? true
 , mysqlSupport ? false, mysql ? null
 , openglSupport ? false, mesa ? null, libXmu ? null
-, x11, xextproto, zlib, libjpeg, libpng12, which
+, x11, xextproto, zlib, libjpeg, libpng, which
 }:
 
-let libpng = libpng12; in
+let libpng = libpng; in
 
 assert xftSupport -> libXft != null;
 assert xrenderSupport -> xftSupport && libXrender != null;

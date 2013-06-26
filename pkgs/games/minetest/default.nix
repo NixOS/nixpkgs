@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, irrlicht3843, libpng12, bzip2,
+{ stdenv, fetchgit, cmake, irrlicht3843, libpng, bzip2,
   libjpeg, libXxf86vm, mesa, openal, libvorbis, x11 }:
 
 let
@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    cmake irrlicht3843 libpng12 bzip2 libjpeg
+    cmake irrlicht3843 libpng bzip2 libjpeg
     libXxf86vm mesa openal libvorbis x11
   ];
 

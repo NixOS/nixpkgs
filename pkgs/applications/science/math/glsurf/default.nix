@@ -1,5 +1,4 @@
-
-{ stdenv, fetchdarcs, ocaml, findlib,  lablgl, camlimages, mesa, freeglut, ocaml_mysql, mlgmp, mpfr, gmp, libtiff, libjpeg, libpng12, giflib }:
+{ stdenv, fetchdarcs, ocaml, findlib,  lablgl, camlimages, mesa, freeglut, ocaml_mysql, mlgmp, mpfr, gmp, libtiff, libjpeg, libpng, giflib }:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -16,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib freeglut mesa
   	          lablgl camlimages ocaml_mysql mlgmp mpfr gmp
-		  libtiff libjpeg libpng12 giflib ];
+		  libtiff libjpeg libpng giflib ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/doc/glsurf

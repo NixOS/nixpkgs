@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk, freetype
-, fontconfig, libart_lgpl, libtiff, libjpeg, libpng12, libexif, zlib, perl
+, fontconfig, libart_lgpl, libtiff, libjpeg, libpng, libexif, zlib, perl
 , perlXMLParser, python, pygtk, gettext, xlibs, intltool, babl_0_0_22, gegl_0_0_22
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig gtk freetype fontconfig
-    libart_lgpl libtiff libjpeg libpng12 libexif zlib perl
+    libart_lgpl libtiff libjpeg libpng libexif zlib perl
     perlXMLParser python pygtk gettext intltool babl_0_0_22 gegl_0_0_22
   ];
 

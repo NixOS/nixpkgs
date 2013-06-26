@@ -1,5 +1,5 @@
 { stdenv, fetchurl, rpm, cpio, mesa, xorg, cairo
-, libpng12, gtk, glib, gdk_pixbuf, fontconfig, freetype, curl
+, libpng, gtk, glib, gdk_pixbuf, fontconfig, freetype, curl
 , dbus_glib, alsaLib, pulseaudio, udev, pango
 }:
 
@@ -14,7 +14,7 @@ let
       xorg.libXt
       xorg.libX11
       cairo
-      libpng12
+      libpng
       gtk
       glib
       fontconfig
