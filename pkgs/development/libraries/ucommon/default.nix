@@ -1,11 +1,11 @@
 { fetchurl, stdenv, gnutls, pkgconfig, zlib, libgcrypt }:
 
 stdenv.mkDerivation rec {
-  name = "ucommon-5.2.2";
+  name = "ucommon-6.0.5";
 
   src = fetchurl {
-    url = mirror://gnu/commoncpp/ucommon-5.2.2.tar.gz;
-    sha256 = "1s9r7yhvqnj57aiw7sklp2p6llfzn1jxvc3hwhpli5zq3r6kypwx";
+    url = mirror://gnu/commoncpp/ucommon-6.0.5.tar.gz;
+    sha256 = "0w5nl2a2l630n4kvfaz22by1s92ybd87g0q1zpcmsl8i5d00789l";
   };
 
   buildInputs = [ pkgconfig gnutls zlib ];
