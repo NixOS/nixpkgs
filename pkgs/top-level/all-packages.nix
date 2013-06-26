@@ -7149,11 +7149,7 @@ let
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
-  eclipses = recurseIntoAttrs (
-    (callPackage ../applications/editors/eclipse { }).deepOverride {
-      cairo = cairo_1_12_2;
-    }
-  );
+  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
 
   ed = callPackage ../applications/editors/ed { };
 
