@@ -389,6 +389,8 @@ let
 
   aespipe = callPackage ../tools/security/aespipe { };
 
+  aescrypt = callPackage ../tools/misc/aescrypt { };
+
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
   aircrackng = callPackage ../tools/networking/aircrack-ng { };
