@@ -46,7 +46,7 @@ in rec {
       "--with-system-nss"
       "--with-system-libevent"
       "--with-system-libvpx"
-      # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
+      "--with-system-png"
       "--enable-startup-notification"
       "--enable-system-ffi"
       "--enable-system-hunspell"
@@ -66,7 +66,7 @@ in rec {
     inherit src;
 
     buildInputs =
-      [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib bzip2
+      [ pkgconfig libpng gtk perl zip libIDL libjpeg zlib bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
         alsaLib nspr nss libnotify xlibs.pixman yasm mesa
@@ -82,7 +82,7 @@ in rec {
 
     enableParallelBuilding = true;
 
-    patches = optional useSystemCairo ./system-cairo.patch; # probably in 22
+    patches = optional useSystemCairo ./system-cairo.patch;
 
     preConfigure =
       ''
@@ -136,7 +136,7 @@ in rec {
     enableParallelBuilding = true;
 
     buildInputs =
-      [ pkgconfig gtk perl zip libIDL libjpeg zlib bzip2 python
+      [ pkgconfig libpng gtk perl zip libIDL libjpeg zlib bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr nss libnotify
         xlibs.pixman yasm mesa sqlite file unzip pysqlite
         hunspell libevent libstartup_notification libvpx

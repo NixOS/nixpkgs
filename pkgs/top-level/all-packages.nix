@@ -7390,6 +7390,7 @@ let
   firefoxPkgs = callPackage ../applications/networking/browsers/firefox {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
+    libpng = libpng.override { apngSupport = true; };
   };
 
   firefoxWrapper = lowPrio (wrapFirefox { browser = firefoxPkgs.firefox; });
