@@ -9433,7 +9433,7 @@ let
 
   disnix = callPackage ../tools/package-management/disnix { };
 
-  disnix_activation_scripts = callPackage ../tools/package-management/disnix/activation-scripts {
+  dysnomia = callPackage ../tools/package-management/disnix/dysnomia {
     enableApacheWebApplication = config.disnix.enableApacheWebApplication or false;
     enableAxis2WebService = config.disnix.enableAxis2WebService or false;
     enableEjabberdDump = config.disnix.enableEjabberdDump or false;
