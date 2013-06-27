@@ -522,6 +522,8 @@ let
   syslogng = callPackage ../tools/system/syslog-ng { };
   rsyslog = callPackage ../tools/system/rsyslog { };
 
+  mcrypt = callPackage ../tools/misc/mcrypt { };
+
   mcelog = callPackage ../os-specific/linux/mcelog { };
 
   asciidoc = callPackage ../tools/typesetting/asciidoc { };
