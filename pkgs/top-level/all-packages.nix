@@ -3096,7 +3096,9 @@ let
 
   qi = callPackage ../development/compilers/qi { };
 
-  racket = callPackage ../development/interpreters/racket { };
+  racket = callPackage ../development/interpreters/racket {
+    libpng = libpng15;
+  };
 
   regina = callPackage ../development/interpreters/regina {};
 
