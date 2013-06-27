@@ -7739,6 +7739,8 @@ let
     poppler = poppler_0_18;
   };
 
+  liferea = callPackage ../applications/networking/newsreaders/liferea { };
+
   lingot = callPackage ../applications/audio/lingot {
     inherit (gnome) libglade;
   };
