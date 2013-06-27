@@ -30,6 +30,22 @@ with pkgs.lib;
     environment.etc."fonts/fonts.conf".source =
       pkgs.makeFontsConf { fontDirectories = config.fonts.fonts; };
 
+    environment.etc."fonts/conf.d/00-nixos.conf".text =
+      ''
+        <?xml version='1.0'?>
+        <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+        <fontconfig>
+
+          <!-- Set the default hinting style to "slight". -->
+          <match target="font">
+            <edit mode="assign" name="hintstyle">
+              <const>hintslight</const>
+            </edit>
+          </match>
+
+        </fontconfig>
+      '';
+
     environment.shellInit =
       ''
         # FIXME: This variable is no longer needed, but we'll keep it
