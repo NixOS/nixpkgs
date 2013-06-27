@@ -33,17 +33,27 @@
 (defun nix-normalize-package-name (package-name)
   (intern (replace-regexp-in-string "+" "-plus" (symbol-name package-name))))
 
-(defun nix-make-deps-string (deps)
-  (concat "[ " (if deps (cl-reduce (lambda (a b)
-                                     (concat a " " b))
-                                   (mapcar (lambda (d)
-                                             (unless (memq (car d) nix-emacs-included-packages)
-                                               (symbol-name
-                                                (nix-normalize-package-name
-                                                 (car d)))))
-                                           deps))
-                 "")
-          " ]"))
+(defun nix-make-deps-string (deps available-packages)
+  (concat
+   "[ "
+   (if deps
+       (cl-reduce
+        (lambda (a b)
+          (concat a " " b))
+        (mapcar (lambda (d)
+                  (let ((in-emacs? (memq (car d) nix-emacs-included-packages)))
+                    ;; We want to add packages to `deps' if it's NOT
+                    ;; shipped with Emacs OR if it's in Emacs AND
+                    ;; there's a (possible newer) version of the
+                    ;; package available in a repository.
+                    (when (or (not in-emacs?)
+                              (and in-emacs? (memq (car d) available-packages)))
+                      (symbol-name
+                       (nix-normalize-package-name
+                        (car d))))))
+                deps))
+     "")
+   " ]"))
 
 (defun nix-prefetch-packages (base-url filenames)
   (let ((tmpdir "/tmp/nix-emacs-packages/"))
@@ -68,9 +78,14 @@
     (when (= (length sha256) 52)
       sha256)))
 
-(defun nix-generate-package-expression (name package-spec base-url)
+(defun nix-generate-package-expression (name
+                                        package-spec
+                                        base-url
+                                        available-packages)
   (let* ((url (nix-make-package-url base-url name package-spec))
-         (sha256 (nix-get-sha256 (nix-make-package-url "file:///tmp/nix-emacs-packages/" name package-spec))))
+         (sha256 (nix-get-sha256 (nix-make-package-url
+                                  "file:///tmp/nix-emacs-packages/"
+                                  name package-spec))))
     (format
      "
   # %s
@@ -90,7 +105,8 @@
      (package-version-join (package-desc-vers package-spec))
      url
      sha256
-     (nix-make-deps-string (package-desc-reqs package-spec)))))
+     (nix-make-deps-string (package-desc-reqs package-spec)
+                           available-packages))))
 
 
 (defun nix-remove-duplicate-packages (package-list)
@@ -134,7 +150,8 @@
           (with-current-buffer out-buffer
             (insert (nix-generate-package-expression
                      (car p) (cdr p)
-                     (aref (cdr p) 4)))))
+                     (aref (cdr p) 4)
+                     (mapcar 'car packages)))))
         (insert "}")
         (let ((coding-system-for-write 'utf-8-emacs))
           (write-file "../../pkgs/top-level/emacs-packages-generated.nix"))))))
