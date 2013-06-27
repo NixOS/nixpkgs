@@ -57,7 +57,7 @@ else
     envHooks+=(addCMakeParams)
 fi
 
-make_cmake_find_libs(){
+makeCmakeFindLibs(){
   for flag in $NIX_CFLAGS_COMPILE $NIX_LDFLAGS; do
     case $flag in
       -I*)
@@ -72,4 +72,4 @@ make_cmake_find_libs(){
 
 # not using setupHook, because it could be a setupHook adding additional
 # include flags to NIX_CFLAGS_COMPILE
-postHooks+=(make_cmake_find_libs)
+postHooks+=(makeCmakeFindLibs)
