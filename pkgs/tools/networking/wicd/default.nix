@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     ./no-var-install.patch
     ./pygtk.patch
     ./no-optimization.patch
-    ./dhclient.patch 
     ./fix-app-icon.patch
     ./fix-gtk-issues.patch
+    ./deftemplate.patch
     ];
 
   # Should I be using pygtk's propogated build inputs?
