@@ -16,7 +16,10 @@
     ;; ("org" . "http://orgmode.org/elpa/")
     ))
 
-(defconst nix-emacs-included-packages '(emacs cl erc)
+(require 'finder-inf)
+(defconst nix-emacs-included-packages
+  (append (mapcar 'car package--builtins)
+          '(emacs))
   "Packages which are included in Emacs and shouldn't be listed
   in the deps argument.")
 

@@ -1935,7 +1935,7 @@ with otherPackages; rec {
       sha256 = "1r7hb28pdxbirbyvwxyavcjy8iwg4qmph0qh99npc3rdy5jzw2l3";
     };
 
-    deps = [ cl-lib ];
+    deps = [  ];
   };
 
   # Diminished modes are minor modes with no modeline display
@@ -2188,7 +2188,7 @@ with otherPackages; rec {
       sha256 = "0aik3hxqcwc7g58yw9ghnix8n5w8bdynpr5jvbpwq77y4sk2wvhr";
     };
 
-    deps = [ json oauth ];
+    deps = [  oauth ];
   };
 
   # Drop-down menu interface
@@ -2463,7 +2463,7 @@ with otherPackages; rec {
       sha256 = "0s4anlcf4g8217hj7kf5zmvsvfyky7qsmgiyvhbky331kz77h0bp";
     };
 
-    deps = [ cl-lib ];
+    deps = [  ];
   };
 
   # Enable eldoc support when minibuffer is in use.
@@ -2518,7 +2518,7 @@ with otherPackages; rec {
       sha256 = "1ha3aprcp6chxphkh2na2j7jwsjzdkpzdv9pjhq2iga8amnfcbgs";
     };
 
-    deps = [ cl-lib ];
+    deps = [  ];
   };
 
   # Emacs integration for Elixir's elixir-mix
@@ -2760,7 +2760,7 @@ with otherPackages; rec {
       sha256 = "1aj9k26cxa073cav1xr5qqhxg2vgrbn4hsqpf8xj752cdw89gz1k";
     };
 
-    deps = [ ert ];
+    deps = [  ];
   };
 
   # An updated manual for Eshell.
@@ -3156,7 +3156,7 @@ with otherPackages; rec {
       sha256 = "0hhln1a7xww9b0lsi6ji5zn9cvi2dmjbyc2ysbdqb9ik6szcyqhm";
     };
 
-    deps = [ button-lock nav-flash back-button smartrep string-utils tabulated-list ];
+    deps = [ button-lock nav-flash back-button smartrep string-utils  ];
   };
 
   # Automatically insert pair braces and quotes, insertion conditions & actions are highly customizable.
@@ -3178,7 +3178,7 @@ with otherPackages; rec {
       sha256 = "1xfr5gzkfmsk539naxc99l9xkaxcpa544sbfwscyfpjacpfqdd1q";
     };
 
-    deps = [ flymake ];
+    deps = [  ];
   };
 
   # On-the-fly syntax checking (Flymake done right)
@@ -3189,7 +3189,7 @@ with otherPackages; rec {
       sha256 = "0brp01vhxd71y6bw3dipsk6vs57857dyydz2bibqdiz7shaqdvy8";
     };
 
-    deps = [ s dash cl-lib  ];
+    deps = [ s dash   ];
   };
 
   # Change mode line color with Flycheck status -*- lexical-binding: t -*-
@@ -3255,7 +3255,7 @@ with otherPackages; rec {
       sha256 = "1xjwjnpll640ll8n0is47pwjmpzninlfjwi153dy9ni2jr02w962";
     };
 
-    deps = [ flymake ];
+    deps = [  ];
   };
 
   # Show flymake messages in the minibuffer after delay
@@ -3266,7 +3266,7 @@ with otherPackages; rec {
       sha256 = "1islig3mfmly82jkc5lrcdixdav0pkj3llypjp45aahrwmdmajdq";
     };
 
-    deps = [ flymake ];
+    deps = [  ];
   };
 
   # A flymake handler for d-mode files
@@ -3310,7 +3310,7 @@ with otherPackages; rec {
       sha256 = "0b04zh0gcdlnjifz2wfjap433684wrbiidzr2v62hnvwbhsggqc0";
     };
 
-    deps = [ flymake ];
+    deps = [  ];
   };
 
   # A flymake handler for go-mode files
@@ -3321,7 +3321,7 @@ with otherPackages; rec {
       sha256 = "02c7pbb5gariwiw2yipxy8xshbsz80zhq478qzkkw6lp1rl62mhz";
     };
 
-    deps = [ flymake ];
+    deps = [  ];
   };
 
   # A flymake handler for haml files
@@ -3420,7 +3420,7 @@ with otherPackages; rec {
       sha256 = "1hba2sjplskb80l3x67g95rz135v47m35gbkk37rszhxsz2zibf0";
     };
 
-    deps = [ flymake ];
+    deps = [  ];
   };
 
   # A flymake handler for php-mode files
@@ -3442,7 +3442,7 @@ with otherPackages; rec {
       sha256 = "130whbijrg58l9nifrjamnjrhpr2y8973dd6dyj9zlkp96946xmv";
     };
 
-    deps = [ flymake ];
+    deps = [  ];
   };
 
   # A flymake handler for python-mode files using pyflakes (or flake8)
@@ -3750,7 +3750,7 @@ with otherPackages; rec {
       sha256 = "1ka0zqdw5zky8swsjyrd8q86ycaw50wkpj3kswsqb4l6d5v79x6j";
     };
 
-    deps = [ eieio pcache logito ];
+    deps = [  pcache logito ];
   };
 
   # Happy Haskell programming on Emacs
@@ -3794,7 +3794,7 @@ with otherPackages; rec {
       sha256 = "1a27r4lpxhbsrxagg6nwjj87ml0xb37wkdnswxl745lh8m93bd5d";
     };
 
-    deps = [ eieio gh tabulated-list ];
+    deps = [  gh  ];
   };
 
   # Emacs Minor mode to automatically commit and push
@@ -4168,7 +4168,7 @@ with otherPackages; rec {
       sha256 = "18ms9jd8blb418glz4ahlchdq62y198cdwv6d5z4fdh1dm8xpvq4";
     };
 
-    deps = [ json ];
+    deps = [  ];
   };
 
   # Major mode for editing Haml files
@@ -4179,7 +4179,7 @@ with otherPackages; rec {
       sha256 = "0ncmwkw3a06n4fx7y8wcwg1gx48xprzxi6acd5sx060v0x1j45px";
     };
 
-    deps = [ ruby-mode ];
+    deps = [  ];
   };
 
   # A major mode for editing Handlebars files.
@@ -4245,7 +4245,7 @@ with otherPackages; rec {
       sha256 = "11b6v4301w7yasz42a3sv2wk2h10bdflm4h69c2a1rp4j6sj9j8w";
     };
 
-    deps = [ json ];
+    deps = [  ];
   };
 
   # An Emacs major mode for haXe
@@ -4476,7 +4476,7 @@ with otherPackages; rec {
       sha256 = "0as1a4djfpzmf7hs4za4pfisys576rrihn83clyxvjw09kqq7vrs";
     };
 
-    deps = [ sql ];
+    deps = [  ];
   };
 
   # import some vim's key bindings
@@ -4641,7 +4641,7 @@ with otherPackages; rec {
       sha256 = "18c59jjpkb7sxnzaqq2z5vpxy5i1803skppvnlhvlizyr96sqyzr";
     };
 
-    deps = [ cl-lib ];
+    deps = [  ];
   };
 
   # Extensions to `icomplete.el'.
@@ -4707,7 +4707,7 @@ with otherPackages; rec {
       sha256 = "0fzi4jdgkm9sijjk2r6z3pim5x7v5f19iicjmqkqcrpw25hyr059";
     };
 
-    deps = [ gnus ];
+    deps = [  ];
   };
 
   # Load-library alternative using ido-completing-read
@@ -4740,7 +4740,7 @@ with otherPackages; rec {
       sha256 = "112pqbxwbbj1v5xqggww99kd95crxcpi0ax87kkql7cv5r9l96zx";
     };
 
-    deps = [ ido ];
+    deps = [  ];
   };
 
   # imenu tag selection with ido
@@ -5268,7 +5268,7 @@ with otherPackages; rec {
       sha256 = "01qwjk6rvgc32vhyp3mvs8s233g7kmlvpb9kwc1n8f9g12xy9mgy";
     };
 
-    deps = [ json ];
+    deps = [  ];
   };
 
   # Emacs key sequence quiz
@@ -5598,7 +5598,7 @@ with otherPackages; rec {
       sha256 = "0cqmw3qsfr2m598h1sivgnny8whqfa9c6jxwjrmy9pf91q9dr1gq";
     };
 
-    deps = [ eieio ];
+    deps = [  ];
   };
 
   # Major mode for editing LOLCODE
@@ -5774,7 +5774,7 @@ with otherPackages; rec {
       sha256 = "0i6bsjh248slwrsvfl4b4yq9dy9brnm9ibwd248wnj4wbdj9k1v5";
     };
 
-    deps = [ magit json ];
+    deps = [ magit  ];
   };
 
   # Simple maildir based MUA.
@@ -5818,7 +5818,7 @@ with otherPackages; rec {
       sha256 = "1vwcwl53s66029whwlqfx51n6x18p29jfcq44nw64q0r1w7raqr0";
     };
 
-    deps = [ web json ];
+    deps = [ web  ];
   };
 
   # Mark additional regions in buffer matching current region.
@@ -6038,7 +6038,7 @@ with otherPackages; rec {
       sha256 = "1kj9dnn9xaabfi38fy0b0qp3g9f9yf6k73s5byrg7kx7ml1mhxy2";
     };
 
-    deps = [ eieio el-x ];
+    deps = [  el-x ];
   };
 
   #  Smart command for compiling files
@@ -6126,7 +6126,7 @@ with otherPackages; rec {
       sha256 = "0bwy7mxjg7lbp1vswvysbhgv4bbijzw4ba3r1i9alyh3wgip2rg7";
     };
 
-    deps = [ ruby-mode ];
+    deps = [  ];
   };
 
   # Extensions to `mouse.el'.
@@ -6665,7 +6665,7 @@ with otherPackages; rec {
       sha256 = "1ypmzhsr1v19kib4cvk4fv72k6jjkhw0lfwgy1cy3jqikimahyxj";
     };
 
-    deps = [ org cl-lib ];
+    deps = [   ];
   };
 
   # Export Org-mode files as editable web pages
@@ -6709,7 +6709,7 @@ with otherPackages; rec {
       sha256 = "19k1bqjrh5d6xmcdkyzxhdm5w3zzw271209jllm68hqxivz0a50f";
     };
 
-    deps = [ magit org ];
+    deps = [ magit  ];
   };
 
   # org html export for text/html MIME emails
@@ -6742,7 +6742,7 @@ with otherPackages; rec {
       sha256 = "14zjzm4rfj7cndbvpk3zv8wj1wqdh59g77zwjqz31kq8af89pk1h";
     };
 
-    deps = [ framesize eimp org ];
+    deps = [ framesize eimp  ];
   };
 
   # Integrates Readme.org and Commentary/Change-logs.
@@ -6775,7 +6775,7 @@ with otherPackages; rec {
       sha256 = "10kddz67f8v6y14nx1xdwbkmp7c6nyhl815vpp1rcjsy7haw45ph";
     };
 
-    deps = [ org xml-rpc ];
+    deps = [  xml-rpc ];
   };
 
   # Web browsing helpers for OS X
@@ -6863,7 +6863,7 @@ with otherPackages; rec {
       sha256 = "0glsa2hz44pinnzm22ysblkimhq70q1jqibyybni2m396dac2c4j";
     };
 
-    deps = [ tabulated-list ];
+    deps = [  ];
   };
 
   # a package cache
@@ -6954,6 +6954,17 @@ with otherPackages; rec {
     deps = [  ];
   };
 
+  # Minor mode for showing the current scope in Lisp-like languages.
+  parscope = buildEmacsPackage {
+    name = "parscope-0.1.0";
+    src = fetchurl {
+      url = "http://marmalade-repo.org/packages/parscope-0.1.0.el";
+      sha256 = "1pdgwlfy7v1j6446xmrnkapvzgsxr7frcbjq21mr2rsa4rdk8ccc";
+    };
+
+    deps = [  ];
+  };
+
   # paste text to KDE's pastebin service
   paste-kde = buildEmacsPackage {
     name = "paste-kde-0.2.1";
@@ -7006,7 +7017,7 @@ with otherPackages; rec {
       sha256 = "1drasyy0mprqwrsajc4gh8j8z3mgbvkflm0rm9l4l3gbnjpg31xw";
     };
 
-    deps = [ eieio ];
+    deps = [  ];
   };
 
   # Enhanced shell command completion    -*- lexical-binding: t -*-
@@ -7028,7 +7039,7 @@ with otherPackages; rec {
       sha256 = "0ccfmk128b97qvg831cqfgs7jf65jcmx0r44i936bb4il8kbwaym";
     };
 
-    deps = [ cl-lib ];
+    deps = [  ];
   };
 
   # Parser of csv -*- lexical-binding: t -*-
@@ -7963,7 +7974,7 @@ with otherPackages; rec {
       sha256 = "1azvd6nyv9dmkmf9s05a6z9kga8v5ia0izanydzyx06n8cmfai4l";
     };
 
-    deps = [ ruby-mode inf-ruby ruby-compilation jump ];
+    deps = [  inf-ruby ruby-compilation jump ];
   };
 
   # Code navigation, documentation lookup and completion for Ruby
@@ -7996,7 +8007,7 @@ with otherPackages; rec {
       sha256 = "1qvcdad9h3qwcbx07anpkbn4d3kgz7xv34cnwprlil1klpfihbnj";
     };
 
-    deps = [ ruby-mode ];
+    deps = [  ];
   };
 
   # An Emacs interface for RuboCop
@@ -8073,7 +8084,7 @@ with otherPackages; rec {
       sha256 = "13l8jg9ncf899n2hcld52bggig335gxsrr2wpci3nhhwpxf08b7q";
     };
 
-    deps = [ ruby-mode ];
+    deps = [  ];
   };
 
   # Collection of handy functions for ruby-mode
@@ -8106,7 +8117,7 @@ with otherPackages; rec {
       sha256 = "09r6csvk3jckgz3c4adf08mzghsdaxn5bqyyh5lw9a76y4543fi9";
     };
 
-    deps = [ eieio ];
+    deps = [  ];
   };
 
   # A major emacs mode for editing Rust source code
@@ -9030,7 +9041,7 @@ with otherPackages; rec {
       sha256 = "016r46pwcwcp3hr09cid83qbl1d7p8kf3nwk38ajcrj5i4vafbg4";
     };
 
-    deps = [ cl-lib ];
+    deps = [  ];
   };
 
   # Major mode for editing stylus templates.
@@ -9255,10 +9266,10 @@ with otherPackages; rec {
 
   # Pretty tabbar, autohide, use both tabbar/ruler
   tabbar-ruler = buildEmacsPackage {
-    name = "tabbar-ruler-0.36";
+    name = "tabbar-ruler-0.37";
     src = fetchurl {
-      url = "http://marmalade-repo.org/packages/tabbar-ruler-0.36.el";
-      sha256 = "16q7603fb4g7r4an9gzsmn2pgfm8sw9x8jl06iy8y08a1f5aijgc";
+      url = "http://marmalade-repo.org/packages/tabbar-ruler-0.37.el";
+      sha256 = "0zr1xgzkb2rjqi5cxq0l2ibczc5aarwajly41ynzngvw4fc9hmm5";
     };
 
     deps = [ tabbar ];
@@ -9877,7 +9888,7 @@ with otherPackages; rec {
       sha256 = "0hvcy24zklx4ydbldrrpl9v1v08ddlmah4cvpbi6jr1wsi00lnpp";
     };
 
-    deps = [ sql ];
+    deps = [  ];
   };
 
   # VimGolf interface for the One True Editor
@@ -9987,7 +9998,7 @@ with otherPackages; rec {
       sha256 = "01fzbkvvhwraq2rm2vmmm638r46ly4v8lp6bg7kmjvkjz875i0ia";
     };
 
-    deps = [ dash cl-lib ];
+    deps = [ dash  ];
   };
 
   # run a shell command when saving a buffer
@@ -10075,7 +10086,7 @@ with otherPackages; rec {
       sha256 = "09sgihahc427w72wpmdac3zl024cpgv24r8mhkj8fsv3k1b0b51j";
     };
 
-    deps = [ s cl-lib  tracking ];
+    deps = [ s   tracking ];
   };
 
   # Emacs-wget is an interface program of GNU wget on Emacs.
@@ -10361,7 +10372,7 @@ with otherPackages; rec {
       sha256 = "1qki213iddniz2cjjd124adg42mzm0s5v2xvwhbcl292p3lqk12p";
     };
 
-    deps = [ json ];
+    deps = [  ];
   };
 
   # Major mode for editing YAML files
