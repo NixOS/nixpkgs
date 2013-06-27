@@ -1,6 +1,6 @@
 { stdenv, fetchurl, zlib, libjpeg }:
 
-let version = "3.9.7"; in
+let version = "4.0.3"; in
 
 stdenv.mkDerivation rec {
   name = "libtiff-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
       [ "ftp://ftp.remotesensing.org/pub/libtiff/tiff-${version}.tar.gz"
         "http://download.osgeo.org/libtiff/tiff-${version}.tar.gz"
       ];
-    sha256 = "0spg1hr5rsrmg88sfzb05qnf0haspq7r5hvdkxg5zib1rva4vmpm";
+    sha256 = "0wj8d1iwk9vnpax2h29xqc2hwknxg3s0ay2d5pxkg59ihbifn6pa";
   };
 
   propagatedBuildInputs = [ zlib libjpeg ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library and utilities for working with the TIFF image file format";
-    homepage = http://www.libtiff.org/;
+    homepage = http://www.remotesensing.org/libtiff/;
     license = "bsd";
   };
 }

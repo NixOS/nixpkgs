@@ -2,11 +2,11 @@
 sftpPath ? "/var/run/current-system/sw/libexec/sftp-server" }:
 
 stdenv.mkDerivation rec {
-  name = "dropbear-0.52";
+  name = "dropbear-2013.58";
 
   src = fetchurl {
-    url = http://matt.ucc.asn.au/dropbear/releases/dropbear-0.52.tar.bz2;
-    sha256 = "1h84dwld8qm19m0a1zslm2ssz65nr93irw7p2h5fjrlh9ix74ywc";
+    url = "http://matt.ucc.asn.au/dropbear/releases/${name}.tar.bz2";
+    sha256 = "0m9fhabs78v35fhqmji5gkm66ahkyqbbdzmlmr9m7q8l3ndihrnq";
   };
 
   dontDisableStatic = enableStatic;
@@ -15,10 +15,26 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-DSFTPSERVER_PATH=\\\"${sftpPath}\\\"";
 
+  # http://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
+  preConfigure = ''
+    makeFlags=VPATH=`cat $NIX_GCC/nix-support/orig-libc`/lib
+  '';
+
+  crossAttrs = {
+    # This works for uclibc, at least.
+    preConfigure = ''
+      makeFlags=VPATH=`cat ${stdenv.gccCross}/nix-support/orig-libc`/lib
+    '';
+  };
+
   patches = [
     # Allow sessions to inherit the PATH from the parent dropbear.
     # Otherwise they only get the usual /bin:/usr/bin kind of PATH
     ./pass-path.patch
+
+    # Bugfix
+    # http://article.gmane.org/gmane.network.ssh.dropbear/1361
+    ./proxycrash.patch
   ];
 
   buildInputs = [ zlib ];

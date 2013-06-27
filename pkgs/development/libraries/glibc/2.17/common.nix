@@ -60,6 +60,12 @@ stdenv.mkDerivation ({
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
+
+      /* Fix buffer overrun in regexp matcher. */
+      ./cve-2013-0242.patch
+
+      /* Fix stack overflow in getaddrinfo with many results. */
+      ./cve-2013-1914.patch
     ];
 
   postPatch = ''

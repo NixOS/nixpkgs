@@ -35,11 +35,17 @@ in
       EOF
       chmod +x $TMPDIR/g++
       
-      
       export CXX=$TMPDIR/g++
       export AR=$(type -p ar)
     '';
     buildInputs = [ python ];
+    NIX_POST_EXTRACT_FILES_HOOK = writeScript "patch-scons" ''
+      #!/bin/sh
+      for i in `find "$1" -name scons`
+      do
+          sed -i -e "s@/usr/bin/env@$(type -p env)@g" $i
+      done
+    '';
   };
   
   sqlite3 = { propagatedBuildInputs = [ sqlite ]; };
@@ -92,6 +98,10 @@ in
   };
 
   xapian_full_alaveteli = {
+    buildInputs = [ zlib libuuid ];
+  };
+
+  xapian_ruby = {
     buildInputs = [ zlib libuuid ];
   };
 

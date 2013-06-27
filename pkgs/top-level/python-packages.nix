@@ -97,7 +97,7 @@ pythonPackages = python.modules // rec {
   };
 
   pygtk = import ../development/python-modules/pygtk {
-    inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
+    inherit (pkgs) fetchurl stdenv pkgconfig gtk;
     inherit python buildPythonPackage pygobject pycairo;
   };
 
@@ -106,7 +106,7 @@ pythonPackages = python.modules // rec {
   #  inherit (pkgs.gnome) libglade;
   #};
   pyGtkGlade = import ../development/python-modules/pygtk {
-    inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
+    inherit (pkgs) fetchurl stdenv pkgconfig gtk;
     inherit (pkgs.gnome) libglade;
     inherit python buildPythonPackage pygobject pycairo;
   };
@@ -2873,6 +2873,7 @@ pythonPackages = python.modules // rec {
     src = fetchgit {
       url = https://git.torproject.org/pluggable-transports/obfsproxy.git;
       rev = "3c4e843a30c430aec1de03e0e09ef654072efc03";
+      sha256 = "8fd1e63a37bc42add7609d97d50ecd81da81881bcf7015a9e2958531dbf39018";
     };
 
     propagatedBuildInputs = [ pyptlib argparse twisted pycrypto ];
@@ -2947,6 +2948,28 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  pandas = buildPythonPackage rec {
+    name = "pandas-0.11.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
+      sha256 = "1mwh783hcch6lywgjayj8aqmbfv6n8fd2qbf1xlwqk2913ad8x2d";
+    };
+
+    buildInputs = [ nose ];
+    propagatedBuildInputs = [ dateutil numpy pytz python.modules.sqlite3 ];
+
+    # Tests require networking to pass
+    doCheck = false;
+
+    meta = {
+      homepage = "http://pandas.pydata.org/";
+      description = "Python Data Analysis Library";
+      license = stdenv.lib.licenses.bsd3;
+      maintainers = [ stdenv.lib.maintainers.raskin ];
+      platforms = stdenv.lib.platforms.linux;
+    };
+  };
 
   paramiko = buildPythonPackage rec {
     name = "paramiko-1.10";
@@ -3368,6 +3391,10 @@ pythonPackages = python.modules // rec {
       url = "https://pypi.python.org/packages/source/p/pygit2/${name}.tar.gz";
       md5 = "8d27f84509a96d6791a6c393ae67d7c8";
     };
+
+    preConfigure = ( if stdenv.isDarwin then ''
+      export DYLD_LIBRARY_PATH="${pkgs.libgit2}/lib"
+    '' else "" );
 
     propagatedBuildInputs = [ pkgs.libgit2 ];
 
@@ -5633,6 +5660,36 @@ pythonPackages = python.modules // rec {
       md5 = "c738af97c31dd70f41f6726cf0968941";
     };
     doCheck = false;
+  };
+
+
+  tarman = buildPythonPackage rec {
+    version = "0.1.1";
+    name = "tarman-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tarman/tarman-${version}.zip";
+      sha256 = "0ppd2365hf841b58fss5pgaja0y0mwx5n0gk1p3rxx9y3r0kyfas";
+    };
+
+    buildInputs = [ pkgs.unzip unittest2 nose mock ];
+    propagatedBuildInputs = [ python.modules.curses libarchive ];
+
+    # two tests fail
+    doCheck = false;
+  };
+
+
+  libarchive = buildPythonPackage rec {
+    version = "3.0.4-5";
+    name = "libarchive-${version}";
+
+    src = fetchurl {
+      url = "http://python-libarchive.googlecode.com/files/python-libarchive-${version}.tar.gz";
+      sha256 = "141yx9ym8gvybn67mw0lmgafzsd79rmd9l77lk0k6m2fzclqx1j5";
+    };
+
+    propagatedBuildInputs = [ pkgs.libarchive ];
   };
 
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation (rec {
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha1 = "c9998383532ba3e8bcaf690f2f0d65e814b48d2f";
+    sha256 = "0gwnzqd64cpwdmk93nll54nidsr74jpimxzj4p4z7502ylwl66p4";
   };
 
   propagatedBuildInputs = [ libgpgerror ];
