@@ -1,4 +1,9 @@
-[ ./config/fonts.nix
+[
+  ./config/fonts/corefonts.nix
+  ./config/fonts/fontconfig.nix
+  ./config/fonts/fontdir.nix
+  ./config/fonts/fonts.nix
+  ./config/fonts/ghostscript.nix
   ./config/gnu.nix
   ./config/i18n.nix
   ./config/krb5.nix
