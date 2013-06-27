@@ -79,13 +79,13 @@ stdenv.mkDerivation rec {
         $plugins/libnpgtpo3dautoplugin.so
 
       mkdir -p $out/libexec/google/talkplugin
-      cp opt/google/talkplugin/GoogleTalkPlugin $out/libexec/google/talkplugin/
-      
+      cp -prd opt/google/talkplugin/{GoogleTalkPlugin,locale,windowpicker.glade} $out/libexec/google/talkplugin/
+
       mkdir -p $out/libexec/google/talkplugin/lib
       cp opt/google/talkplugin/lib/libCg* $out/libexec/google/talkplugin/lib/
 
       patchelf --set-rpath "$out/libexec/google/talkplugin/lib" \
-        $out/libexec/google/talkplugin/lib/libCgGL.so 
+        $out/libexec/google/talkplugin/lib/libCgGL.so
 
       patchelf \
         --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
   dontPatchELF = true;
-  
+
   passthru.mozillaPlugin = "/lib/mozilla/plugins";
 
   meta = {
