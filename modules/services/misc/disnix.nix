@@ -7,7 +7,7 @@ let
 
   cfg = config.services.disnix;
 
-  disnix_activation_scripts = pkgs.disnix_activation_scripts.override (origArgs: {
+  dysnomia = pkgs.dysnomia.override (origArgs: {
     enableApacheWebApplication = config.services.httpd.enable;
     enableAxis2WebService = config.services.tomcat.axis2.enable;
     enableEjabberdDump = config.services.ejabberd.enable;
@@ -95,7 +95,7 @@ in
             name = "supportedtypes";
             buildCommand = ''
               ( echo -n "[ "
-                cd ${disnix_activation_scripts}/libexec/disnix/activation-scripts
+                cd ${dysnomia}/libexec/dysnomia
                 for i in *
                 do
                     echo -n "\"$i\" "
@@ -122,19 +122,19 @@ in
         
           wantedBy = [ "multi-user.target" ];
           after = [ "dbus.service" ]
-          ++ optional config.services.httpd.enable "httpd.service"
-          ++ optional config.services.mysql.enable "mysql.service"
-          ++ optional config.services.tomcat.enable "tomcat.service"
-          ++ optional config.services.svnserve.enable "svnserve.service";
+            ++ optional config.services.httpd.enable "httpd.service"
+            ++ optional config.services.mysql.enable "mysql.service"
+            ++ optional config.services.tomcat.enable "tomcat.service"
+            ++ optional config.services.svnserve.enable "svnserve.service";
 
           restartIfChanged = false;
+          
+          path = [ pkgs.nix pkgs.disnix ];
         
           script =
           ''
-            export PATH=/run/current-system/sw/bin:/run/current-system/sw/sbin
             export HOME=/root
-
-            ${pkgs.disnix}/bin/disnix-service --activation-modules-dir=${disnix_activation_scripts}/libexec/disnix/activation-scripts
+            disnix-service --dysnomia-modules-dir=${dysnomia}/libexec/dysnomia
           '';
         };
     } // optionalAttrs cfg.publishAvahi {
