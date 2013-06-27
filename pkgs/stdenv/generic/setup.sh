@@ -544,7 +544,8 @@ patchPhase() {
                 uncompress="lzma -d"
                 ;;
         esac
-        $uncompress < $i | patch ${patchFlags:--p1}
+        # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
+        $uncompress < $i 2>&1 | patch ${patchFlags:--p1}
         stopNest
     done
 
