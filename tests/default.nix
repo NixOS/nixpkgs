@@ -18,6 +18,7 @@ with import ../lib/testing.nix { inherit system minimal; };
   nat = makeTest (import ./nat.nix);
   nfs = makeTest (import ./nfs.nix);
   openssh = makeTest (import ./openssh.nix);
+  partition = makeTest (import ./partition.nix);
   portmap = makeTest (import ./portmap.nix);
   proxy = makeTest (import ./proxy.nix);
   quake3 = makeTest (import ./quake3.nix);

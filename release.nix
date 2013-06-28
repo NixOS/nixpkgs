@@ -227,6 +227,7 @@ in {
       nat = runTest (t: t.nat.test);
       nfs = runTest (t: t.nfs.test);
       openssh = runTest (t: t.openssh.test);
+      partition = runTest (t: t.partition.test);
       proxy = runTest (t: t.proxy.test);
       quake3 = runTest (t: t.quake3.report);
       #subversion = runTest (t: t.subversion.report);
