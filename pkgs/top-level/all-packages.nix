@@ -2147,9 +2147,9 @@ let
     binutils = binutils_deterministic;
     inherit stdenv coreutils zlib;
   };
-  
+
   wrapDeterministicGCC = wrapDeterministicGCCWith (import ../build-support/gcc-wrapper) glibc;
-  
+
   gcc46_deterministic = lowPrio (wrapDeterministicGCC (callPackage ../development/compilers/gcc/4.6 {
     inherit noSysDirs;
 
