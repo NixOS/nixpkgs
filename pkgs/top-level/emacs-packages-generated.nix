@@ -1025,6 +1025,17 @@ with otherPackages; rec {
     deps = [  ];
   };
 
+  # Replace 'the cloud' with 'my butt'
+  cloud-to-butt-erc = buildEmacsPackage {
+    name = "cloud-to-butt-erc-1.0.0";
+    src = fetchurl {
+      url = "http://marmalade-repo.org/packages/cloud-to-butt-erc-1.0.0.el";
+      sha256 = "1ggrkkx6ahp98crcgm4rkyz3njr4nd9mp1h34nx3vga2203hnv77";
+    };
+
+    deps = [  ];
+  };
+
   # Wrapper for CodeMirror-style Emacs modes
   cm-mode = buildEmacsPackage {
     name = "cm-mode-0.1.0";
@@ -1577,10 +1588,10 @@ with otherPackages; rec {
 
   # Easy real time C++ syntax check and intellisense if you use CMake.
   cpputils-cmake = buildEmacsPackage {
-    name = "cpputils-cmake-0.3.0";
+    name = "cpputils-cmake-0.3.1";
     src = fetchurl {
-      url = "http://marmalade-repo.org/packages/cpputils-cmake-0.3.0.tar";
-      sha256 = "1n6hp2qb4grb36g1hab04hs3mj86bgwh0b6r3k6fjyjlx6g1wbsa";
+      url = "http://marmalade-repo.org/packages/cpputils-cmake-0.3.1.tar";
+      sha256 = "0mlmncc9plwsxa463kbnhy41rs2xvf81pwfnm8w8nv10apipag8i";
     };
 
     deps = [  ];
@@ -1935,7 +1946,7 @@ with otherPackages; rec {
       sha256 = "1r7hb28pdxbirbyvwxyavcjy8iwg4qmph0qh99npc3rdy5jzw2l3";
     };
 
-    deps = [  ];
+    deps = [ cl-lib ];
   };
 
   # Diminished modes are minor modes with no modeline display
@@ -2188,7 +2199,7 @@ with otherPackages; rec {
       sha256 = "0aik3hxqcwc7g58yw9ghnix8n5w8bdynpr5jvbpwq77y4sk2wvhr";
     };
 
-    deps = [  oauth ];
+    deps = [ json oauth ];
   };
 
   # Drop-down menu interface
@@ -2463,7 +2474,7 @@ with otherPackages; rec {
       sha256 = "0s4anlcf4g8217hj7kf5zmvsvfyky7qsmgiyvhbky331kz77h0bp";
     };
 
-    deps = [  ];
+    deps = [ cl-lib ];
   };
 
   # Enable eldoc support when minibuffer is in use.
@@ -2518,7 +2529,7 @@ with otherPackages; rec {
       sha256 = "1ha3aprcp6chxphkh2na2j7jwsjzdkpzdv9pjhq2iga8amnfcbgs";
     };
 
-    deps = [  ];
+    deps = [ cl-lib ];
   };
 
   # Emacs integration for Elixir's elixir-mix
@@ -2545,13 +2556,13 @@ with otherPackages; rec {
 
   # The Emacs webserver.
   elnode = buildEmacsPackage {
-    name = "elnode-0.9.9.7.4";
+    name = "elnode-0.9.9.7.6";
     src = fetchurl {
-      url = "http://marmalade-repo.org/packages/elnode-0.9.9.7.4.tar";
-      sha256 = "1ssrpa1l2yxjr9ixwf7g26bxb10kxq40rm6cmkx3gdl8p036bwd4";
+      url = "http://marmalade-repo.org/packages/elnode-0.9.9.7.6.tar";
+      sha256 = "1rmpw2qnfa6gs4ajlblrdzvqjw7a7s8mg1adw0ibsd2ljn6zshvx";
     };
 
-    deps = [ web dash s creole fakir db kv ];
+    deps = [ web dash noflet s creole fakir db kv ];
   };
 
   # Handy functions for inspecting and comparing package archives
@@ -2615,6 +2626,17 @@ with otherPackages; rec {
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/emamux-0.1.el";
       sha256 = "01vd5gm6ygsifryqh32m5psi68ad55ph4y1hab2mx7lcdf9gjzl3";
+    };
+
+    deps = [  ];
+  };
+
+  # Unofficial Emmet's support for emacs
+  emmet-mode = buildEmacsPackage {
+    name = "emmet-mode-1.0.0";
+    src = fetchurl {
+      url = "http://marmalade-repo.org/packages/emmet-mode-1.0.0.el";
+      sha256 = "0c7b7v3kg5cpm6zbhny7mzbmrplb2msg71nkacyscl018rvjxrpr";
     };
 
     deps = [  ];
@@ -2760,7 +2782,7 @@ with otherPackages; rec {
       sha256 = "1aj9k26cxa073cav1xr5qqhxg2vgrbn4hsqpf8xj752cdw89gz1k";
     };
 
-    deps = [  ];
+    deps = [ ert ];
   };
 
   # An updated manual for Eshell.
@@ -3156,7 +3178,7 @@ with otherPackages; rec {
       sha256 = "0hhln1a7xww9b0lsi6ji5zn9cvi2dmjbyc2ysbdqb9ik6szcyqhm";
     };
 
-    deps = [ button-lock nav-flash back-button smartrep string-utils  ];
+    deps = [ button-lock nav-flash back-button smartrep string-utils tabulated-list ];
   };
 
   # Automatically insert pair braces and quotes, insertion conditions & actions are highly customizable.
@@ -3178,18 +3200,18 @@ with otherPackages; rec {
       sha256 = "1xfr5gzkfmsk539naxc99l9xkaxcpa544sbfwscyfpjacpfqdd1q";
     };
 
-    deps = [  ];
+    deps = [ flymake ];
   };
 
   # On-the-fly syntax checking (Flymake done right)
   flycheck = buildEmacsPackage {
-    name = "flycheck-0.12";
+    name = "flycheck-0.13";
     src = fetchurl {
-      url = "http://marmalade-repo.org/packages/flycheck-0.12.tar";
-      sha256 = "0brp01vhxd71y6bw3dipsk6vs57857dyydz2bibqdiz7shaqdvy8";
+      url = "http://marmalade-repo.org/packages/flycheck-0.13.tar";
+      sha256 = "1vjnyn3v5ar4i0jgi93yiv4br97srf5c42r6nzqcxznqcj95j2y1";
     };
 
-    deps = [ s dash   ];
+    deps = [ s dash cl-lib  ];
   };
 
   # Change mode line color with Flycheck status -*- lexical-binding: t -*-
@@ -3255,7 +3277,7 @@ with otherPackages; rec {
       sha256 = "1xjwjnpll640ll8n0is47pwjmpzninlfjwi153dy9ni2jr02w962";
     };
 
-    deps = [  ];
+    deps = [ flymake ];
   };
 
   # Show flymake messages in the minibuffer after delay
@@ -3266,7 +3288,7 @@ with otherPackages; rec {
       sha256 = "1islig3mfmly82jkc5lrcdixdav0pkj3llypjp45aahrwmdmajdq";
     };
 
-    deps = [  ];
+    deps = [ flymake ];
   };
 
   # A flymake handler for d-mode files
@@ -3310,7 +3332,7 @@ with otherPackages; rec {
       sha256 = "0b04zh0gcdlnjifz2wfjap433684wrbiidzr2v62hnvwbhsggqc0";
     };
 
-    deps = [  ];
+    deps = [ flymake ];
   };
 
   # A flymake handler for go-mode files
@@ -3321,7 +3343,7 @@ with otherPackages; rec {
       sha256 = "02c7pbb5gariwiw2yipxy8xshbsz80zhq478qzkkw6lp1rl62mhz";
     };
 
-    deps = [  ];
+    deps = [ flymake ];
   };
 
   # A flymake handler for haml files
@@ -3420,7 +3442,7 @@ with otherPackages; rec {
       sha256 = "1hba2sjplskb80l3x67g95rz135v47m35gbkk37rszhxsz2zibf0";
     };
 
-    deps = [  ];
+    deps = [ flymake ];
   };
 
   # A flymake handler for php-mode files
@@ -3442,7 +3464,7 @@ with otherPackages; rec {
       sha256 = "130whbijrg58l9nifrjamnjrhpr2y8973dd6dyj9zlkp96946xmv";
     };
 
-    deps = [  ];
+    deps = [ flymake ];
   };
 
   # A flymake handler for python-mode files using pyflakes (or flake8)
@@ -3750,7 +3772,7 @@ with otherPackages; rec {
       sha256 = "1ka0zqdw5zky8swsjyrd8q86ycaw50wkpj3kswsqb4l6d5v79x6j";
     };
 
-    deps = [  pcache logito ];
+    deps = [ eieio pcache logito ];
   };
 
   # Happy Haskell programming on Emacs
@@ -3794,7 +3816,7 @@ with otherPackages; rec {
       sha256 = "1a27r4lpxhbsrxagg6nwjj87ml0xb37wkdnswxl745lh8m93bd5d";
     };
 
-    deps = [  gh  ];
+    deps = [ eieio gh tabulated-list ];
   };
 
   # Emacs Minor mode to automatically commit and push
@@ -4168,7 +4190,7 @@ with otherPackages; rec {
       sha256 = "18ms9jd8blb418glz4ahlchdq62y198cdwv6d5z4fdh1dm8xpvq4";
     };
 
-    deps = [  ];
+    deps = [ json ];
   };
 
   # Major mode for editing Haml files
@@ -4179,7 +4201,7 @@ with otherPackages; rec {
       sha256 = "0ncmwkw3a06n4fx7y8wcwg1gx48xprzxi6acd5sx060v0x1j45px";
     };
 
-    deps = [  ];
+    deps = [ ruby-mode ];
   };
 
   # A major mode for editing Handlebars files.
@@ -4245,7 +4267,7 @@ with otherPackages; rec {
       sha256 = "11b6v4301w7yasz42a3sv2wk2h10bdflm4h69c2a1rp4j6sj9j8w";
     };
 
-    deps = [  ];
+    deps = [ json ];
   };
 
   # An Emacs major mode for haXe
@@ -4342,6 +4364,17 @@ with otherPackages; rec {
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/hide-comnt-40.tar";
       sha256 = "0smcmvif4fjk6mq16mzn3gpkimsml5b7i3bi0sygx60sbhy65iq4";
+    };
+
+    deps = [  ];
+  };
+
+  # Commands for hiding lines based on a regexp
+  hide-lines = buildEmacsPackage {
+    name = "hide-lines-20130623.1701";
+    src = fetchurl {
+      url = "http://marmalade-repo.org/packages/hide-lines-20130623.1701.el";
+      sha256 = "0zv6crjdwyaz9m9rgbvibyicbh9388vhd7q08k06gin06rkl9pd4";
     };
 
     deps = [  ];
@@ -4534,6 +4567,17 @@ with otherPackages; rec {
     deps = [  ];
   };
 
+  # Add a few utility functions for manipulating hooks
+  hook-utils = buildEmacsPackage {
+    name = "hook-utils-1.0";
+    src = fetchurl {
+      url = "http://marmalade-repo.org/packages/hook-utils-1.0.el";
+      sha256 = "0x4k2mbzpj6kn5cahccqwq7fka9nmyqxc461fqa5q34ags8glq8j";
+    };
+
+    deps = [  ];
+  };
+
   # The missing hash table library for Emacs
   ht = buildEmacsPackage {
     name = "ht-0.8";
@@ -4641,7 +4685,7 @@ with otherPackages; rec {
       sha256 = "18c59jjpkb7sxnzaqq2z5vpxy5i1803skppvnlhvlizyr96sqyzr";
     };
 
-    deps = [  ];
+    deps = [ cl-lib ];
   };
 
   # Extensions to `icomplete.el'.
@@ -4701,10 +4745,10 @@ with otherPackages; rec {
 
   # Access gnus groups or servers using ido
   ido-gnus = buildEmacsPackage {
-    name = "ido-gnus-0.1";
+    name = "ido-gnus-0.2";
     src = fetchurl {
-      url = "http://marmalade-repo.org/packages/ido-gnus-0.1.el";
-      sha256 = "0fzi4jdgkm9sijjk2r6z3pim5x7v5f19iicjmqkqcrpw25hyr059";
+      url = "http://marmalade-repo.org/packages/ido-gnus-0.2.el";
+      sha256 = "017rnfnkp12692spcsvqbgr8agky9cwi0w9zbhmbp95mkbpsykz9";
     };
 
     deps = [  ];
@@ -5040,6 +5084,17 @@ with otherPackages; rec {
     deps = [  ];
   };
 
+  # Miscellaneous macros
+  jb-misc-macros = buildEmacsPackage {
+    name = "jb-misc-macros-0.1";
+    src = fetchurl {
+      url = "http://marmalade-repo.org/packages/jb-misc-macros-0.1.el";
+      sha256 = "1baz01sq6v6rp98fy6pw5kz95zmnl9fwb9gnrmrn4x53dn5k2vhs";
+    };
+
+    deps = [ macro-utils ];
+  };
+
   # Python auto-completion for Emacs
   jedi = buildEmacsPackage {
     name = "jedi-0.1.2";
@@ -5207,10 +5262,10 @@ with otherPackages; rec {
 
   # jump to previous insertion points
   jumpc = buildEmacsPackage {
-    name = "jumpc-2.0";
+    name = "jumpc-3.0";
     src = fetchurl {
-      url = "http://elpa.gnu.org/packages/jumpc-2.0.el";
-      sha256 = "0r3r7wyp6qfd4av61q1h4j2fwhay1d7zlg57dpfq95xi25jq4d0y";
+      url = "http://elpa.gnu.org/packages/jumpc-3.0.el";
+      sha256 = "1vhggw3mzaq33al8f16jbg5qq5f95s8365is9qqyb8yq77gqym6a";
     };
 
     deps = [  ];
@@ -5268,7 +5323,7 @@ with otherPackages; rec {
       sha256 = "01qwjk6rvgc32vhyp3mvs8s233g7kmlvpb9kwc1n8f9g12xy9mgy";
     };
 
-    deps = [  ];
+    deps = [ json ];
   };
 
   # Emacs key sequence quiz
@@ -5284,10 +5339,10 @@ with otherPackages; rec {
 
   # Add conditional branching to keyboard macros
   kmacro-decision = buildEmacsPackage {
-    name = "kmacro-decision-0.9";
+    name = "kmacro-decision-1.1";
     src = fetchurl {
-      url = "http://marmalade-repo.org/packages/kmacro-decision-0.9.el";
-      sha256 = "1ybp8m7z913bm0n779852x380x4nd2byapykr1j6bayi207qgz72";
+      url = "http://marmalade-repo.org/packages/kmacro-decision-1.1.el";
+      sha256 = "12chyjd6825x9j9h1p9l0w79kk7x9gk13zq6bq0z348hdlcfqvz3";
     };
 
     deps = [ el-x ];
@@ -5598,7 +5653,7 @@ with otherPackages; rec {
       sha256 = "0cqmw3qsfr2m598h1sivgnny8whqfa9c6jxwjrmy9pf91q9dr1gq";
     };
 
-    deps = [  ];
+    deps = [ eieio ];
   };
 
   # Major mode for editing LOLCODE
@@ -5774,7 +5829,7 @@ with otherPackages; rec {
       sha256 = "0i6bsjh248slwrsvfl4b4yq9dy9brnm9ibwd248wnj4wbdj9k1v5";
     };
 
-    deps = [ magit  ];
+    deps = [ magit json ];
   };
 
   # Simple maildir based MUA.
@@ -5810,6 +5865,17 @@ with otherPackages; rec {
     deps = [  ];
   };
 
+  # Add interactive commands for every manpages installed in your computer.
+  man-commands = buildEmacsPackage {
+    name = "man-commands-1.1";
+    src = fetchurl {
+      url = "http://marmalade-repo.org/packages/man-commands-1.1.el";
+      sha256 = "1y953cz4lzjqdbsdr388fkapyydcgrvaig4n3bz58jsf3p07v6n2";
+    };
+
+    deps = [  ];
+  };
+
   # Client for MarGo, providing Go utilities
   margo = buildEmacsPackage {
     name = "margo-2012.9.18";
@@ -5818,7 +5884,7 @@ with otherPackages; rec {
       sha256 = "1vwcwl53s66029whwlqfx51n6x18p29jfcq44nw64q0r1w7raqr0";
     };
 
-    deps = [ web  ];
+    deps = [ web json ];
   };
 
   # Mark additional regions in buffer matching current region.
@@ -6038,7 +6104,7 @@ with otherPackages; rec {
       sha256 = "1kj9dnn9xaabfi38fy0b0qp3g9f9yf6k73s5byrg7kx7ml1mhxy2";
     };
 
-    deps = [  el-x ];
+    deps = [ eieio el-x ];
   };
 
   #  Smart command for compiling files
@@ -6126,7 +6192,7 @@ with otherPackages; rec {
       sha256 = "0bwy7mxjg7lbp1vswvysbhgv4bbijzw4ba3r1i9alyh3wgip2rg7";
     };
 
-    deps = [  ];
+    deps = [ ruby-mode ];
   };
 
   # Extensions to `mouse.el'.
@@ -6626,10 +6692,10 @@ with otherPackages; rec {
 
   # Outline-based notes management and organizer
   org = buildEmacsPackage {
-    name = "org-20130617";
+    name = "org-20130624";
     src = fetchurl {
-      url = "http://elpa.gnu.org/packages/org-20130617.tar";
-      sha256 = "1izgcmskvgzv89wkm48r7rxhavmibsnh4yhv33asy9vp5xd7nkch";
+      url = "http://elpa.gnu.org/packages/org-20130624.tar";
+      sha256 = "0bz7v0smvixwgpcvl0ffrsz4zrmsbnsl5vmk8v8n1p6nn3xjwk1v";
     };
 
     deps = [  ];
@@ -6665,7 +6731,7 @@ with otherPackages; rec {
       sha256 = "1ypmzhsr1v19kib4cvk4fv72k6jjkhw0lfwgy1cy3jqikimahyxj";
     };
 
-    deps = [   ];
+    deps = [ org cl-lib ];
   };
 
   # Export Org-mode files as editable web pages
@@ -6709,7 +6775,7 @@ with otherPackages; rec {
       sha256 = "19k1bqjrh5d6xmcdkyzxhdm5w3zzw271209jllm68hqxivz0a50f";
     };
 
-    deps = [ magit  ];
+    deps = [ magit org ];
   };
 
   # org html export for text/html MIME emails
@@ -6742,7 +6808,7 @@ with otherPackages; rec {
       sha256 = "14zjzm4rfj7cndbvpk3zv8wj1wqdh59g77zwjqz31kq8af89pk1h";
     };
 
-    deps = [ framesize eimp  ];
+    deps = [ framesize eimp org ];
   };
 
   # Integrates Readme.org and Commentary/Change-logs.
@@ -6775,7 +6841,7 @@ with otherPackages; rec {
       sha256 = "10kddz67f8v6y14nx1xdwbkmp7c6nyhl815vpp1rcjsy7haw45ph";
     };
 
-    deps = [  xml-rpc ];
+    deps = [ org xml-rpc ];
   };
 
   # Web browsing helpers for OS X
@@ -6863,7 +6929,7 @@ with otherPackages; rec {
       sha256 = "0glsa2hz44pinnzm22ysblkimhq70q1jqibyybni2m396dac2c4j";
     };
 
-    deps = [  ];
+    deps = [ tabulated-list ];
   };
 
   # a package cache
@@ -6894,6 +6960,17 @@ with otherPackages; rec {
     src = fetchurl {
       url = "http://marmalade-repo.org/packages/pager-2.0.el";
       sha256 = "1mkkspigyana7lh22ffpkgapfn6xi4v407yqwqpkjch2mnavv4lj";
+    };
+
+    deps = [  ];
+  };
+
+  # Add the default keybindings suggested for pager.el
+  pager-default-keybindings = buildEmacsPackage {
+    name = "pager-default-keybindings-1.0";
+    src = fetchurl {
+      url = "http://marmalade-repo.org/packages/pager-default-keybindings-1.0.el";
+      sha256 = "0nzbr3rahkfwcrzplrzn8g40xd029zzrsg2cy8qx3rwjayv1j9q1";
     };
 
     deps = [  ];
@@ -6967,10 +7044,10 @@ with otherPackages; rec {
 
   # paste text to KDE's pastebin service
   paste-kde = buildEmacsPackage {
-    name = "paste-kde-0.2.1";
+    name = "paste-kde-0.2.2";
     src = fetchurl {
-      url = "http://marmalade-repo.org/packages/paste-kde-0.2.1.el";
-      sha256 = "0qqjhwk0jd274zd8pgw9g20rfgi90zd61r7cb2d6q5gnvkc63vjj";
+      url = "http://marmalade-repo.org/packages/paste-kde-0.2.2.el";
+      sha256 = "1nihvrzj58fkia8ivj24zn8iiz4m3cazhp05lzmbcjqhjsjdnr0f";
     };
 
     deps = [ web ];
@@ -7017,7 +7094,7 @@ with otherPackages; rec {
       sha256 = "1drasyy0mprqwrsajc4gh8j8z3mgbvkflm0rm9l4l3gbnjpg31xw";
     };
 
-    deps = [  ];
+    deps = [ eieio ];
   };
 
   # Enhanced shell command completion    -*- lexical-binding: t -*-
@@ -7039,7 +7116,7 @@ with otherPackages; rec {
       sha256 = "0ccfmk128b97qvg831cqfgs7jf65jcmx0r44i936bb4il8kbwaym";
     };
 
-    deps = [  ];
+    deps = [ cl-lib ];
   };
 
   # Parser of csv -*- lexical-binding: t -*-
@@ -7974,7 +8051,7 @@ with otherPackages; rec {
       sha256 = "1azvd6nyv9dmkmf9s05a6z9kga8v5ia0izanydzyx06n8cmfai4l";
     };
 
-    deps = [  inf-ruby ruby-compilation jump ];
+    deps = [ ruby-mode inf-ruby ruby-compilation jump ];
   };
 
   # Code navigation, documentation lookup and completion for Ruby
@@ -8007,7 +8084,7 @@ with otherPackages; rec {
       sha256 = "1qvcdad9h3qwcbx07anpkbn4d3kgz7xv34cnwprlil1klpfihbnj";
     };
 
-    deps = [  ];
+    deps = [ ruby-mode ];
   };
 
   # An Emacs interface for RuboCop
@@ -8084,7 +8161,7 @@ with otherPackages; rec {
       sha256 = "13l8jg9ncf899n2hcld52bggig335gxsrr2wpci3nhhwpxf08b7q";
     };
 
-    deps = [  ];
+    deps = [ ruby-mode ];
   };
 
   # Collection of handy functions for ruby-mode
@@ -8117,7 +8194,7 @@ with otherPackages; rec {
       sha256 = "09r6csvk3jckgz3c4adf08mzghsdaxn5bqyyh5lw9a76y4543fi9";
     };
 
-    deps = [  ];
+    deps = [ eieio ];
   };
 
   # A major emacs mode for editing Rust source code
@@ -9041,7 +9118,7 @@ with otherPackages; rec {
       sha256 = "016r46pwcwcp3hr09cid83qbl1d7p8kf3nwk38ajcrj5i4vafbg4";
     };
 
-    deps = [  ];
+    deps = [ cl-lib ];
   };
 
   # Major mode for editing stylus templates.
@@ -9231,6 +9308,17 @@ with otherPackages; rec {
     deps = [  ];
   };
 
+  # Major-mode for viewing log files
+  syslog-mode = buildEmacsPackage {
+    name = "syslog-mode-2.0";
+    src = fetchurl {
+      url = "http://marmalade-repo.org/packages/syslog-mode-2.0.el";
+      sha256 = "0b9w33n07bhlxml3cl8vzfk4yv0fsn3fdxhpsibwpqcj41bkfkk4";
+    };
+
+    deps = [ hide-lines ];
+  };
+
   # A mode for SystemTap
   systemtap-mode = buildEmacsPackage {
     name = "systemtap-mode-0.2";
@@ -9266,10 +9354,10 @@ with otherPackages; rec {
 
   # Pretty tabbar, autohide, use both tabbar/ruler
   tabbar-ruler = buildEmacsPackage {
-    name = "tabbar-ruler-0.37";
+    name = "tabbar-ruler-0.39";
     src = fetchurl {
-      url = "http://marmalade-repo.org/packages/tabbar-ruler-0.37.el";
-      sha256 = "0zr1xgzkb2rjqi5cxq0l2ibczc5aarwajly41ynzngvw4fc9hmm5";
+      url = "http://marmalade-repo.org/packages/tabbar-ruler-0.39.el";
+      sha256 = "0p96sq8qmz353ngnzczh70x6159lk70cgy9wk8qg5xiryzvc3578";
     };
 
     deps = [ tabbar ];
@@ -9998,7 +10086,7 @@ with otherPackages; rec {
       sha256 = "01fzbkvvhwraq2rm2vmmm638r46ly4v8lp6bg7kmjvkjz875i0ia";
     };
 
-    deps = [ dash  ];
+    deps = [ dash cl-lib ];
   };
 
   # run a shell command when saving a buffer
@@ -10025,10 +10113,10 @@ with otherPackages; rec {
 
   # General interface for text checkers
   wcheck-mode = buildEmacsPackage {
-    name = "wcheck-mode-2013.6.13";
+    name = "wcheck-mode-2013.6.25";
     src = fetchurl {
-      url = "http://marmalade-repo.org/packages/wcheck-mode-2013.6.13.tar";
-      sha256 = "0bwg07yk8dm2nhvqwyygw1c7yqxh3dg86y5a3m29ih3j39zq4h5k";
+      url = "http://marmalade-repo.org/packages/wcheck-mode-2013.6.25.tar";
+      sha256 = "1vm0il4mxv22yrqiy453hbygkqj58q6la3xqd38qnjqi5ldwdwdv";
     };
 
     deps = [  ];
@@ -10067,6 +10155,17 @@ with otherPackages; rec {
     deps = [  ];
   };
 
+  # major mode for editing html templates
+  web-mode = buildEmacsPackage {
+    name = "web-mode-6.0.10";
+    src = fetchurl {
+      url = "http://marmalade-repo.org/packages/web-mode-6.0.10.el";
+      sha256 = "074n25x6kbkjkiq2i9fbpaxc0h76ngzkfmjnl91hgjmf14j7q5pg";
+    };
+
+    deps = [  ];
+  };
+
   # Emacs WebSocket client and server
   websocket = buildEmacsPackage {
     name = "websocket-1.0";
@@ -10086,7 +10185,7 @@ with otherPackages; rec {
       sha256 = "09sgihahc427w72wpmdac3zl024cpgv24r8mhkj8fsv3k1b0b51j";
     };
 
-    deps = [ s   tracking ];
+    deps = [ s cl-lib  tracking ];
   };
 
   # Emacs-wget is an interface program of GNU wget on Emacs.
@@ -10372,7 +10471,7 @@ with otherPackages; rec {
       sha256 = "1qki213iddniz2cjjd124adg42mzm0s5v2xvwhbcl292p3lqk12p";
     };
 
-    deps = [  ];
+    deps = [ json ];
   };
 
   # Major mode for editing YAML files
