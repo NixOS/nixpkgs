@@ -471,6 +471,8 @@ pythonPackages = python.modules // rec {
         s|wipefs|${pkgs.utillinux}/sbin/wipefs|
         s/-f/--force/
       }' blivet/formats/__init__.py
+      sed -i -e 's|"lsof"|"${pkgs.lsof}/bin/lsof"|' blivet/formats/fs.py
+      sed -i -r -e 's|"(u?mount)"|"${pkgs.utillinux}/bin/\1"|' blivet/util.py
     '';
 
     propagatedBuildInputs = let
