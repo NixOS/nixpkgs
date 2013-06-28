@@ -49,6 +49,20 @@ let
           '';
       };
 
+    virtualisation.emptyDiskImages =
+      mkOption {
+        default = [];
+        type = types.list types.int;
+        description =
+          ''
+            Additional disk images to provide to the VM, the value is a list of
+            sizes in megabytes the empty disk should be.
+
+            These disks are writeable by the VM and will be thrown away
+            afterwards.
+          '';
+      };
+
     virtualisation.graphics =
       mkOption {
         default = true;
@@ -165,6 +179,14 @@ let
 
       ${pkgs.vmTools.startSamba}
 
+      idx=2
+      extraDisks=""
+      ${flip concatMapStrings cfg.emptyDiskImages (size: ''
+        ${pkgs.qemu_kvm}/bin/qemu-img create -f raw "empty$idx" "${toString size}M"
+        extraDisks="$extraDisks -drive index=$idx,file=$(pwd)/empty$idx,if=virtio,werror=report"
+        idx=$((idx + 1))
+      '')}
+
       # Start QEMU.
       # "-boot menu=on" is there, because I don't know how to make qemu boot from 2nd hd.
       exec ${pkgs.qemu_kvm}/bin/qemu-kvm \
@@ -184,6 +206,7 @@ let
             -initrd ${config.system.build.toplevel}/initrd \
             -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
           ''} \
+          $extraDisks \
           ${qemuGraphics} \
           ${toString config.virtualisation.qemu.options} \
           $QEMU_OPTS
