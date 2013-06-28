@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ;; Add profile directories load-path
     (setq load-path
           (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
-                                   nix-profiles))
+                           (split-string (getenv "NIX_PROFILES"))))
                   load-path))
     ;; Add profile directories to package-directory-list for package.el
     (eval-after-load 'package
