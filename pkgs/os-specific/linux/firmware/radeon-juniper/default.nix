@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
   srcRlc = fetchurl {
     url = "http://people.freedesktop.org/~agd5f/radeon_ucode/JUNIPER_rlc.bin";
-    sha256 = "1y3xr7qc7cvszgw0bh66vzy36pn4m1sj17bzy5dc9kfw01kq3n0y";
+    sha256 = "0hglq8ab1f3d81mvcb4aikkfdwh6i4a93ps0f9czq1qz5h0q6wlk";
   };
 
   unpackPhase = "true";
