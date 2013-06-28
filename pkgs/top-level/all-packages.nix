@@ -901,7 +901,7 @@ let
   # use config.packageOverrides if you prefer original gnupg1
   gnupg1 = gnupg1compat;
 
-  gnupg = callPackage ../tools/security/gnupg { };
+  gnupg = callPackage ../tools/security/gnupg { libusb = libusb1; };
 
   gnupg2_1 = lowPrio (callPackage ../tools/security/gnupg/git.nix {
     libassuan = libassuan2_1;
@@ -942,7 +942,7 @@ let
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
   };
 
-  grub2 = callPackage ../tools/misc/grub/2.0x.nix { };
+  grub2 = callPackage ../tools/misc/grub/2.0x.nix { libusb = libusb1; };
 
   grub2_efi = grub2.override { EFIsupport = true; };
 
@@ -8992,6 +8992,7 @@ let
       boost = boost149;
       eigen = eigen2;
       libotr = libotr_3_2;
+      libusb = libusb1;
     }) ../desktops/kde-4.10;
 
   kdePackagesFor = self: dir:
@@ -9379,7 +9380,7 @@ let
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
-  cups = callPackage ../misc/cups { };
+  cups = callPackage ../misc/cups { libusb = libusb1; };
 
   cups_pdf_filter = callPackage ../misc/cups/pdf-filter.nix { };
 
@@ -9547,6 +9548,7 @@ let
   saneBackends = callPackage ../applications/graphics/sane/backends.nix {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
     hotplugSupport = config.sane.hotplugSupport or true;
+    libusb = libusb1;
   };
 
   saneBackendsGit = callPackage ../applications/graphics/sane/backends-git.nix {
