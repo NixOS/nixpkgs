@@ -10,8 +10,6 @@
 , x11, xextproto, zlib, libjpeg, libpng, which
 }:
 
-let libpng = libpng; in
-
 assert xftSupport -> libXft != null;
 assert xrenderSupport -> xftSupport && libXrender != null;
 assert xrandrSupport -> libXrandr != null && randrproto != null;
