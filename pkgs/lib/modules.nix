@@ -309,7 +309,7 @@ rec {
               let opt = option.decl; in
               opt.apply (
                 if isNotDefined then
-                  opt.default or (throw "Not defined.")
+                  opt.default or (throw "Option `${addName name}' not defined and does not have a default value.")
                 else opt.merge defs
               )
             );
