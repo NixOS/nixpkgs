@@ -1015,6 +1015,7 @@ pythonPackages = python.modules // rec {
     meta = {
       description = "Encoder/decoder and lint/validator for JSON (JavaScript Object Notation)";
       homepage = http://deron.meranda.us/python/demjson/;
+      license = stdenv.lib.licenses.lgpl3Plus;
       maintainers = with stdenv.lib.maintainers; [ bjornfor ];
       platforms = stdenv.lib.platforms.all;
     };
