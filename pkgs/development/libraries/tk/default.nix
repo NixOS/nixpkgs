@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, x11 }:
+{ stdenv, fetchurl, tcl, x11, libX11 }:
 
 stdenv.mkDerivation {
   name = "tk-8.5.7";
@@ -16,11 +16,18 @@ stdenv.mkDerivation {
   
   preConfigure = "cd unix";
 
-  buildInputs = [tcl x11];
+  buildInputs = [ tcl x11 libX11 ];
   
   inherit tcl;
 
   passthru = {
     libPrefix = "tk8.5";
+  };
+
+  meta = {
+    description = "A widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
+    homepage = http://www.tcl.tk/;
+    maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
