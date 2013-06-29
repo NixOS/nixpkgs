@@ -4018,15 +4018,17 @@ let
   gmm = callPackage ../development/libraries/gmm { };
 
   gmp = gmp5;
+  gmp5 = gmp51;
 
   gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
   # The GHC bootstrap binaries link against libgmp.so.3, which is in GMP 4.x.
   gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { };
 
-  gmp5 = gmp51;
-
   gmp51 = callPackage ../development/libraries/gmp/5.1.x.nix { };
+
+  #GMP ex-satellite, so better keep it near gmp
+  mpfr = callPackage ../development/libraries/mpfr/default.nix { };
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
@@ -4046,10 +4048,6 @@ let
   goocanvas = callPackage ../development/libraries/goocanvas { };
 
   gperftools = callPackage ../development/libraries/gperftools { };
-
-  #GMP ex-satellite, so better keep it near gmp
-  mpfr = callPackage ../development/libraries/mpfr { };
-  mpfr_3_1_2 = callPackage ../development/libraries/mpfr/3.1.2.nix { };
 
   gst_all = {
     inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
