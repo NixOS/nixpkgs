@@ -42,30 +42,26 @@ in {
 
   config = mkIf cfg.enable {
     environment.etc = [ { source = datadog-conf; target = "dd-agent/datadog.conf"; } ];
+    environment.systemPackages = [ pkgs."dd-agent" ];
 
     users.extraUsers."dd-agent" = {
       description = "Datadog Agent User";
-
       group = "dd-agent";
+      home = "/var/log/datadog/";
+      createHome = true;
     };
 
     users.extraGroups."dd-agent" = { };
 
     systemd.services.dd-agent = {
       description = "Datadog agent monitor";
-
-      path = [ pkgs.sysstat pkgs.procps ];
-
+      path = [ pkgs."dd-agent" ];
       wantedBy = [ "multi-user.target" ];
-
       serviceConfig = {
         ExecStart = "${pkgs.dd-agent}/bin/dd-agent foreground";
-
         User = "dd-agent";
-
         Group = "dd-agent";
       };
-
       restartTriggers = [ pkgs.dd-agent ];
     };
   };
