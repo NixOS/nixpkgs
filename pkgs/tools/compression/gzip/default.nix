@@ -1,16 +1,18 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, less }:
 
 stdenv.mkDerivation rec {
-  name = "gzip-1.5";
+  name = "gzip-1.6";
 
   src = fetchurl {
     url = "mirror://gnu/gzip/${name}.tar.xz";
-    sha256 = "0wx1nqk709kx75cwp2axachnbxryp4gyl06qxn5nl95184w0mhls";
+    sha256 = "0ivqnbhiwd12q8hp3qw6rpsrpw2jg5y2mymk8cn22lsx90dfvprp";
   };
 
-  doCheck = true;
-
   patches = [ ./skip-some-tests.patch ];
+
+  buildInputs = [ less ]; # just for tests
+
+  doCheck = true;
 
   meta = {
     homepage = http://www.gnu.org/software/gzip/;
