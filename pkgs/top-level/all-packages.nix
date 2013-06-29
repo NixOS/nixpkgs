@@ -5376,7 +5376,9 @@ let
 
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
 
-  tk = callPackage ../development/libraries/tk { };
+  tk = callPackage ../development/libraries/tk {
+    libX11 = xlibs.libX11;
+  };
 
   tnt = callPackage ../development/libraries/tnt { };
 
