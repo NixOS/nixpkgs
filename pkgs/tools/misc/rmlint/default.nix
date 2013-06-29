@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "bea39a5872b39d3596e756f242967bc5bde6febeb996fdcd63fbcf5bfdc75f01";
   };
 
-  makeFlags="DESTDIR=$(out)";
+  makeFlags="DESTDIR=$(out) INSTALLPATH=$(out)/bin/";
 
   meta = {
     description = "A tool to remove duplicates and other lint";
