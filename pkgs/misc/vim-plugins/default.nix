@@ -166,5 +166,19 @@ in
       cp -R syntax "$out/vim-plugins"
     '';
   };
+
+  xdebug = stdenv.mkDerivation {
+    name = "vim-xdebug-a4980fa65f7f159780593ee37c178281691ba2c4";
+
+    src = fetchurl {
+      url = "https://github.com/joonty/vim-xdebug/archive/a4980fa65f7f159780593ee37c178281691ba2c4.tar.gz";
+      sha256 = "1348gzp0zhc2wifvs5vmf92m9y8ik8ldnvy7bawsxahy8hmhiksk";
+    };
+
+    installPhase = ''
+      mkdir -p "$out/vim-plugins"
+      cp -R plugin "$out/vim-plugins"
+    '';
+  };
 }
 
