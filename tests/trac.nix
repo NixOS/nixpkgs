@@ -17,6 +17,7 @@
       {
         services.openssh.enable = true;
         services.postgresql.enable = true;
+        services.postgresql.package = pkgs.postgresql92;
         services.postgresql.enableTCPIP = true;
         services.postgresql.authentication = ''
           # Generated file; do not edit!
