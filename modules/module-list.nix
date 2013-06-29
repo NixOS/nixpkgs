@@ -75,6 +75,7 @@
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
   ./services/databases/mongodb.nix
+  ./services/databases/redis.nix
   ./services/databases/mysql.nix
   ./services/databases/mysql55.nix
   ./services/databases/openldap.nix
