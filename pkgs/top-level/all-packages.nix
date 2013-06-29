@@ -4641,7 +4641,7 @@ let
 
   libmowgli = callPackage ../development/libraries/libmowgli { };
 
-  libmng = callPackage ../development/libraries/libmng { };
+  libmng = callPackage ../development/libraries/libmng { lcms = lcms2; };
 
   libmnl = callPackage ../development/libraries/libmnl { };
 
@@ -7682,6 +7682,7 @@ let
 
   inkscape = callPackage ../applications/graphics/inkscape {
     inherit (pythonPackages) lxml;
+    lcms = lcms2;
   };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
