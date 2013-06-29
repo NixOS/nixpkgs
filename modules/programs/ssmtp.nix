@@ -74,7 +74,7 @@ let
       authPass = mkOption {
         default = "";
         example = "correctHorseBatteryStaple";
-        default = "
+        description = "
           Password used for SMTP auth.
         ";
       };
