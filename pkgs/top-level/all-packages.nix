@@ -3094,7 +3094,9 @@ let
 
   python = python27;
   python26 = callPackage ../development/interpreters/python/2.6 { };
-  python27 = callPackage ../development/interpreters/python/2.7 { };
+  python27 = callPackage ../development/interpreters/python/2.7 {
+    libX11 = xlibs.libX11;
+  };
 
   pythonFull = python27Full;
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {

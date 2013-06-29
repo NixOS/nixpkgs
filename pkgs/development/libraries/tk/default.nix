@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
     homepage = http://www.tcl.tk/;
-    maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
     platforms = stdenv.lib.platforms.all;
   };
 }
