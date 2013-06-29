@@ -9498,6 +9498,8 @@ let
 
   putty = callPackage ../applications/networking/remote/putty { };
 
+  retroarch = callPackage ../misc/emulators/retroarch { };
+
   rssglx = callPackage ../misc/screensavers/rss-glx { };
 
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
