@@ -6,7 +6,7 @@
 , libXinerama, openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, gstreamer, gst_plugins_base, mesa
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus_glib, qt4, kde4, clucene_core_2, libcdr, lcms2, vigra
+, libwpg, dbus_glib, qt4, kde4, clucene_core, libcdr, lcms2, vigra
 , libiodbc, mdds, saneBackends, mythes, libexttextcat, libvisio
 , fontsConf
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" ]
@@ -162,7 +162,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    [ ant ArchiveZip autoconf automake bison boost cairo clucene_core_2
+    [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
       CompressZlib cppunit cups curl db4 dbus_glib expat file flex fontconfig
       freetype GConf getopt gnome_vfs gperf gst_plugins_base gstreamer gtk
       hunspell icu jdk kde4.kdelibs lcms2 libcdr libexttextcat libiodbc libjpeg

@@ -5260,7 +5260,7 @@ let
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
-  soprano = callPackage ../development/libraries/soprano { };
+  soprano = callPackage ../development/libraries/soprano { clucene_core = clucene_core_2; };
 
   soqt = callPackage ../development/libraries/soqt { };
 
@@ -5314,7 +5314,7 @@ let
 
   stlport = callPackage ../development/libraries/stlport { };
 
-  strigi = callPackage ../development/libraries/strigi {};
+  strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
 
   suil = callPackage ../development/libraries/audio/suil { };
 
@@ -7779,6 +7779,7 @@ let
       ];
     };
     poppler = poppler_0_18;
+    clucene_core = clucene_core_2;
   };
 
   liferea = callPackage ../applications/networking/newsreaders/liferea { };
