@@ -2,11 +2,11 @@
 , sharutils }:
 
 stdenv.mkDerivation rec {
-  name = "libarchive-3.0.4";
+  name = "libarchive-3.1.2";
 
   src = fetchurl {
-    url = "https://github.com/downloads/libarchive/libarchive/${name}.tar.gz";
-    sha256 = "76e8d7c7b100ec4071e48c1b7d3f3ea1d22b39db3e45b7189f75b5ff4df90fac";
+    url = "${meta.homepage}/downloads/${name}.tar.gz";
+    sha256 = "0pixqnrcf35dnqgv0lp7qlcw7k13620qkhgxr288v7p4iz6ym1zb";
   };
 
   buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz ] ++
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       compressions formats including (but not limited to) tar, shar, cpio, zip, and
       compressed with gzip, bzip2, lzma, xz, .. 
     '';
-    homepage = http://libarchive.github.com/;
+    homepage = http://libarchive.org;
     license = stdenv.lib.licenses.bsd3;
     platforms = with stdenv.lib.platforms; all;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
