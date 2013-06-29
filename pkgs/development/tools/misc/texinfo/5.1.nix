@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, perl }:
+{ stdenv, fetchurl, ncurses, perl, xz }:
 
 stdenv.mkDerivation rec {
   name = "texinfo-5.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0864v5i488x3mb3v5p6nhy2kw0mqkzpa3b0453iibj81zlpq078q";
   };
 
-  buildInputs = [ ncurses perl ];
+  buildInputs = [ ncurses perl xz ];
 
   preInstall = ''
     installFlags="TEXMF=$out/texmf";
