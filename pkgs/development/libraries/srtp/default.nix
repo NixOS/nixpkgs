@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="srtp";
-    version="1.4.2";
+    version="1.4.4";
     name="${baseName}-${version}";
-    url="http://srtp.sourceforge.net/${name}.tgz";
-    hash="1497mcxharnhiccjhny30g4wlv28ckdxhj14jrwvdnnvhl80jf43";
+    url="mirror://sourceforge/${name}.tgz";
+    hash="057k191hx7sf84wdvc8wr1nk4whhrvbg1vv3r4nyswjir6qwphnr";
   };
 in
 rec {

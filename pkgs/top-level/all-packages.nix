@@ -4498,6 +4498,10 @@ let
 
   libexosip = callPackage ../development/libraries/exosip {};
 
+  libexosip_3 = callPackage ../development/libraries/exosip/3.x.nix {
+    libosip = libosip_3;
+  };
+
   libextractor = callPackage ../development/libraries/libextractor {
     libmpeg2 = mpeg2dec;
   };
@@ -4684,6 +4688,8 @@ let
   libopus = callPackage ../development/libraries/libopus { };
 
   libosip = callPackage ../development/libraries/osip {};
+
+  libosip_3 = callPackage ../development/libraries/osip/3.nix {};
 
   libotr = callPackage ../development/libraries/libotr { };
 
@@ -4879,7 +4885,9 @@ let
   mdds = callPackage ../development/libraries/mdds { };
 
   # failed to build
-  mediastreamer = callPackage ../development/libraries/mediastreamer { };
+  mediastreamer = callPackage ../development/libraries/mediastreamer {
+    ffmpeg = ffmpeg_1;
+  };
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
@@ -5049,7 +5057,9 @@ let
     };
   };
 
-  ortp = callPackage ../development/libraries/ortp { };
+  ortp = callPackage ../development/libraries/ortp {
+    srtp = srtp_linphone;
+  };
 
   p11_kit = callPackage ../development/libraries/p11-kit { };
 
@@ -5277,6 +5287,8 @@ let
   sratom = callPackage ../development/libraries/audio/sratom { };
 
   srtp = callPackage ../development/libraries/srtp {};
+
+  srtp_linphone = callPackage ../development/libraries/srtp/linphone.nix { };
 
   sqlite_3_7_16 = lowPrio (callPackage ../development/libraries/sqlite/3.7.16.nix {
     readline = null;
@@ -7771,6 +7783,7 @@ let
 
   linphone = callPackage ../applications/networking/instant-messengers/linphone {
     inherit (gnome) libglade;
+    libexosip = libexosip_3;
   };
 
   linuxsampler = callPackage ../applications/audio/linuxsampler { };

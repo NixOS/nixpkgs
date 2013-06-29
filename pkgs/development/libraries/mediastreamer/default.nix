@@ -1,21 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, alsaLib, ffmpeg, speex, ortp, pulseaudio, xorg,
-  libv4l, libtheora, intltool, libvpx, gsm }:
+{ stdenv, fetchurl, pkgconfig, alsaLib, ffmpeg, speex, ortp, pulseaudio,
+libv4l, libtheora, intltool, libvpx, gsm, mesa, libX11, libXv, libXext,
+glew, libopus, libupnp, vim }:
 
 stdenv.mkDerivation rec {
-  name = "mediastreamer-2.8.2";
+  name = "mediastreamer-2.9.0";
 
   src = fetchurl {
     url = "mirror://savannah/linphone/mediastreamer/${name}.tar.gz";
-    sha256 = "0csg9a4mwfw5j475q9d5klhy82jnpcqfrlbvw81nxnqki40bnbm6";
+    sha256 = "1mdcaqkcdwzlj7hy3bz0ipkrrqiw1cgy01in8f24rfra9i2bjif2";
   };
 
 # TODO: make it load plugins from *_PLUGIN_PATH
   nativeBuildInputs = [pkgconfig intltool];
 
-  propagatedBuildInputs = [alsaLib ffmpeg speex ortp pulseaudio xorg.libX11
-    xorg.libXv xorg.libXext libv4l libtheora libvpx gsm ];
-
-#patches = [ ./h264.patch ./plugins.patch ];
+  propagatedBuildInputs = [ alsaLib ffmpeg speex ortp pulseaudio libX11
+    libXv libXext libv4l libtheora libvpx gsm mesa glew libopus libupnp vim ];
 
   configureFlags = "--enable-external-ortp";
 }
