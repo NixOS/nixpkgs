@@ -4393,7 +4393,7 @@ let
 
   libcdio = callPackage ../development/libraries/libcdio { };
 
-  libcdr = callPackage ../development/libraries/libcdr { };
+  libcdr = callPackage ../development/libraries/libcdr { lcms = lcms2; };
 
   libchamplain = callPackage ../development/libraries/libchamplain {
     inherit (gnome) libsoup;
@@ -5045,7 +5045,7 @@ let
 
   opal = callPackage ../development/libraries/opal {};
 
-  openjpeg = callPackage ../development/libraries/openjpeg { };
+  openjpeg = callPackage ../development/libraries/openjpeg { lcms = lcms2; };
 
   openscenegraph = callPackage ../development/libraries/openscenegraph {};
 
@@ -5099,11 +5099,12 @@ let
 
   policykit = callPackage ../development/libraries/policykit { };
 
-  poppler = let popplers = callPackage ../development/libraries/poppler { };
+  poppler = let popplers = callPackage ../development/libraries/poppler { lcms = lcms2; };
     in popplers // popplers.poppler_glib;
   popplerQt4 = poppler.poppler_qt4;
 
   poppler_0_18 = callPackage ../development/libraries/poppler/0.18.nix {
+    lcms = lcms2;
     glibSupport = true;
     gtk3Support = false;
     qt4Support  = false;
@@ -7470,6 +7471,7 @@ let
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
     inherit (gnome) libart_lgpl;
     webkit = null;
+    lcms = lcms2;
   };
 
   gimp = gimp_2_6;
@@ -7780,6 +7782,7 @@ let
     };
     poppler = poppler_0_18;
     clucene_core = clucene_core_2;
+    lcms = lcms2;
   };
 
   liferea = callPackage ../applications/networking/newsreaders/liferea { };
@@ -9420,6 +9423,7 @@ let
   gensgs = callPackage_i686 ../misc/emulators/gens-gs { };
 
   ghostscript = callPackage ../misc/ghostscript {
+    lcms = lcms2;
     x11Support = false;
     cupsSupport = config.ghostscript.cups or true;
     gnuFork = config.ghostscript.gnu or false;
