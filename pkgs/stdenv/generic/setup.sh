@@ -289,6 +289,9 @@ stripDirs() {
 
     if [ -n "${dirs}" ]; then
         header "stripping (with flags $stripFlags) in $dirs"
+        for dir in $dirs; do
+          test -L "$dir" || chmod -R +rw "$dir"
+        done
         find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
         stopNest
     fi
@@ -639,7 +642,7 @@ patchELF() {
         find "$prefix" \( \
             \( -type f -a -name "*.so*" \) -o \
             \( -type f -a -perm +0100 \) \
-            \) -print -exec patchelf --shrink-rpath {} \;
+            \) -print -exec patchelf --shrink-rpath '{}' \;
     fi
     stopNest
 }
@@ -708,14 +711,20 @@ fixupPhase() {
     fi
 
     if [ -z "$dontGzipMan" ]; then
+        echo "gzipping man pages"
         GLOBIGNORE=.:..:*.gz:*.bz2
-        for f in $out/share/man/*/* $out/share/man/*/*/*; do
-            if [ -f $f ]; then
-                if gzip -c $f > $f.gz; then
-                    rm $f
+        for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
+            if [ -f "$f" -a ! -L "$f" ]; then
+                if gzip -c "$f" > "$f".gz; then
+                    rm "$f"
                 else
-                    rm $f.gz
+                    rm "$f".gz
                 fi
+            fi
+        done
+        for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
+            if [ -L "$f" -a -f `readlink -f "$f"`.gz ]; then
+              ln -sf `readlink "$f"`.gz "$f"
             fi
         done
         unset GLOBIGNORE
@@ -743,23 +752,23 @@ fixupPhase() {
     fi
 
     if [ -n "$propagatedBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
+        mkdir -p "$prefix/nix-support"
+        echo "$propagatedBuildInputs" > "$prefix/nix-support/propagated-build-inputs"
     fi
 
     if [ -n "$propagatedNativeBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
+        mkdir -p "$prefix/nix-support"
+        echo "$propagatedNativeBuildInputs" > "$prefix/nix-support/propagated-native-build-inputs"
     fi
 
     if [ -n "$propagatedUserEnvPkgs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedUserEnvPkgs" > "$out/nix-support/propagated-user-env-packages"
+        mkdir -p "$prefix/nix-support"
+        echo "$propagatedUserEnvPkgs" > "$prefix/nix-support/propagated-user-env-packages"
     fi
 
     if [ -n "$setupHook" ]; then
-        mkdir -p "$out/nix-support"
-        substituteAll "$setupHook" "$out/nix-support/setup-hook"
+        mkdir -p "$prefix/nix-support"
+        substituteAll "$setupHook" "$prefix/nix-support/setup-hook"
     fi
 
     runHook postFixup
@@ -844,9 +853,16 @@ genericBuild() {
         showPhaseHeader "$curPhase"
         dumpVars
 
-        # Evaluate the variable named $curPhase if it exists, otherwise the
-        # function named $curPhase.
-        eval "${!curPhase:-$curPhase}"
+        if [ "$curPhase" = fixupPhase ]; then
+          for pref in ${outputs:-out}; do
+            echo "fixup on \$$pref"
+            prefix=${!pref} eval "${!curPhase:-$curPhase}"
+          done
+        else
+          # Evaluate the variable named $curPhase if it exists, otherwise the
+          # function named $curPhase.
+          eval "${!curPhase:-$curPhase}"
+        fi
 
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
