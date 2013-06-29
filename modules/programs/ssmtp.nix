@@ -63,6 +63,22 @@ let
         ";
       };
 
+      authUser = mkOption {
+        default = "";
+        example = "foo@example.org";
+        description = "
+          Username used for SMTP auth. Leave blank to disable.
+        ";
+      };
+
+      authPass = mkOption {
+        default = "";
+        example = "correctHorseBatteryStaple";
+        default = "
+          Password used for SMTP auth.
+        ";
+      };
+
     };
 
   };
@@ -82,6 +98,8 @@ mkIf cfg.directDelivery {
           UseTLS=${if cfg.useTLS then "YES" else "NO"}
           UseSTARTTLS=${if cfg.useSTARTTLS then "YES" else "NO"}
           #Debug=YES
+          ${if cfg.authUser != "" then "AuthUser=${cfg.authUser}" else ""}
+          ${if cfg.authPass != "" then "AuthPass=${cfg.authPass}" else ""}
         '';
         target = "ssmtp/ssmtp.conf";
       }
