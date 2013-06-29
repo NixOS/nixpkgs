@@ -721,6 +721,7 @@ let
 
   docbook2x = callPackage ../tools/typesetting/docbook2x {
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
+    texinfo = texinfo5;
   };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
@@ -1149,7 +1150,7 @@ let
 
   lxc = callPackage ../os-specific/linux/lxc { };
 
-  lzip = callPackage ../tools/compression/lzip { };
+  lzip = callPackage ../tools/compression/lzip { texinfo = texinfo5; };
 
   lzma = xz;
 
@@ -2020,6 +2021,7 @@ let
 
   bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
     interactive = true;
+    texinfo = texinfo5;
   });
 
   bashCompletion = callPackage ../shells/bash-completion { };
@@ -3870,6 +3872,7 @@ let
 
   ffmpeg_1 = callPackage ../development/libraries/ffmpeg/1.x.nix {
     vpxSupport = !stdenv.isMips;
+    texinfo = texinfo5;
   };
 
   ffms = callPackage ../development/libraries/ffms { };
@@ -7220,6 +7223,7 @@ let
     librsvg = null;
     alsaLib = null;
     imagemagick = null;
+    texinfo = texinfo5;
   };
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
@@ -7227,7 +7231,7 @@ let
 
     autoComplete = callPackage ../applications/editors/emacs-modes/auto-complete { };
 
-    bbdb = callPackage ../applications/editors/emacs-modes/bbdb { };
+    bbdb = callPackage ../applications/editors/emacs-modes/bbdb { texinfo = texinfo5; };
 
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
 
@@ -7247,9 +7251,9 @@ let
 
     emacsSessionManagement = callPackage ../applications/editors/emacs-modes/session-management-for-emacs { };
 
-    emacsw3m = callPackage ../applications/editors/emacs-modes/emacs-w3m { };
+    emacsw3m = callPackage ../applications/editors/emacs-modes/emacs-w3m { texinfo = texinfo5; };
 
-    emms = callPackage ../applications/editors/emacs-modes/emms { };
+    emms = callPackage ../applications/editors/emacs-modes/emms { texinfo = texinfo5; };
 
     ess = callPackage ../applications/editors/emacs-modes/ess { };
 
@@ -7285,7 +7289,7 @@ let
 
     loremIpsum = callPackage ../applications/editors/emacs-modes/lorem-ipsum { };
 
-    magit = callPackage ../applications/editors/emacs-modes/magit { };
+    magit = callPackage ../applications/editors/emacs-modes/magit { texinfo = texinfo5; };
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
 
@@ -7293,7 +7297,7 @@ let
 
     # This is usually a newer version of Org-Mode than that found in GNU Emacs, so
     # we want it to have higher precedence.
-    org = hiPrio (callPackage ../applications/editors/emacs-modes/org { });
+    org = hiPrio (callPackage ../applications/editors/emacs-modes/org { texinfo = texinfo5; });
 
     org2blog = callPackage ../applications/editors/emacs-modes/org2blog { };
 
