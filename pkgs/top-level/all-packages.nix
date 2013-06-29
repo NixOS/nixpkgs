@@ -2311,6 +2311,7 @@ let
       if crossSystem != null && crossSystem.config == "i586-pc-gnu"
       then gnu.libpthreadCross
       else null;
+    texinfo = texinfo413;
   }));
 
   # A non-stripped version of GCC.
