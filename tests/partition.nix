@@ -64,9 +64,16 @@ in {
   };
 
   testScript = ''
-    startAll;
-    $machine->waitForUnit("default.target");
-    my $diskStart = $machine->succeed("dd if=/dev/vda bs=512 count=1");
+    my $diskStart;
+
+    sub parttest {
+      my ($desc, $code) = @_;
+      $machine->start;
+      $machine->waitForUnit("default.target");
+      $diskStart = $machine->succeed("dd if=/dev/vda bs=512 count=1");
+      subtest($desc, $code);
+      $machine->shutdown;
+    }
 
     sub ensureSanity {
       # Check whether the filesystem in /dev/vda is still intact
@@ -100,7 +107,7 @@ in {
       $machine->succeed("test ! -e /dev/$_[0]");
     }
 
-    subtest "ext2, ext3 and ext4 filesystems", sub {
+    parttest "ext2, ext3 and ext4 filesystems", sub {
       kickstart("${ksExt}");
       ensurePartition("boot", "ext2");
       ensurePartition("swap", "swap");
@@ -111,7 +118,7 @@ in {
       ensureNoPartition("vdc1");
     };
 
-    subtest "btrfs filesystem", sub {
+    parttest "btrfs filesystem", sub {
       kickstart("${ksBtrfs}");
       ensurePartition("swap1", "swap");
       ensurePartition("swap2", "swap");
@@ -121,7 +128,7 @@ in {
       ensureNoPartition("vdc3");
     };
 
-    subtest "RAID1 with XFS", sub {
+    parttest "RAID1 with XFS", sub {
       kickstart("${ksRaid}");
       ensurePartition("swap1", "swap");
       ensurePartition("swap2", "swap");
@@ -132,7 +139,7 @@ in {
       ensureNoPartition("md2");
     };
 
-    subtest "RAID1 with LUKS and LVM", sub {
+    parttest "RAID1 with LUKS and LVM", sub {
       kickstart("${ksRaidLvmCrypt}");
       ensurePartition("/dev/vdb1", "data");
       ensureNoPartition("vdb2");
