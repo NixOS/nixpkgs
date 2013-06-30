@@ -13,7 +13,7 @@ let
     baseName="srtp";
     version="1.4.4";
     name="${baseName}-${version}";
-    url="mirror://sourceforge/${name}.tgz";
+    url="mirror://sourceforge/${baseName}/${name}.tgz";
     hash="057k191hx7sf84wdvc8wr1nk4whhrvbg1vv3r4nyswjir6qwphnr";
   };
 in
