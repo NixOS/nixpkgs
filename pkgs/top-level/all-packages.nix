@@ -4184,7 +4184,7 @@ let
   pixman = callPackage ../development/libraries/pixman { };
 
   cairo = callPackage ../development/libraries/cairo {
-    glSupport = lib.elem system lib.platforms.mesaPlatforms;
+    glSupport = config.cairo.gl or stdenv.isLinux;
   };
   cairo_1_12_2 = callPackage ../development/libraries/cairo/1.12.2.nix { };
   cairomm = callPackage ../development/libraries/cairomm { };
