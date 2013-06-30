@@ -60,6 +60,8 @@ stdenv.mkDerivation ({
 
   installPhase = ''
     runHook preInstall
+    # Remove the installation file we copied overin the unpackPhase.
+    rm ${packageFile};
     cp -r * $out/
     runHook postInstall
   '';
