@@ -65,12 +65,23 @@ in {
 
   testScript = ''
     my $diskStart;
+    my @mtab;
+
+    sub getMtab {
+      my $mounts = $machine->succeed("cat /proc/mounts");
+      chomp $mounts;
+      return map [split], split /\n/, $mounts;
+    }
 
     sub parttest {
       my ($desc, $code) = @_;
       $machine->start;
       $machine->waitForUnit("default.target");
+
+      # Gather mounts and superblock
+      @mtab = getMtab;
       $diskStart = $machine->succeed("dd if=/dev/vda bs=512 count=1");
+
       subtest($desc, $code);
       $machine->shutdown;
     }
@@ -83,6 +94,21 @@ in {
                       "something into the first 512 bytes of /dev/vda!");
         die;
       }
+
+      # Check whether nixpart has unmounted anything
+      my @currentMtab = getMtab;
+      for my $mount (@mtab) {
+        my $path = $mount->[1];
+        unless (grep { $_->[1] eq $path } @currentMtab) {
+          $machine->log("The partitioner seems to have unmounted $path.");
+          die;
+        }
+      }
+    }
+
+    sub checkMount {
+      my $mounts = $machine->succeed("cat /proc/mounts");
+
     }
 
     sub kickstart {
