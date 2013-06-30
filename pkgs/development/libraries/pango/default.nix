@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, x11, glib, cairo, libpng, harfbuzz, fontconfig
-, libintlOrEmpty }:
+, libintlOrEmpty, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "pango-1.32.5"; #.6 needs a not-yet-stable fontconfig
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ gettext fontconfig ];
+  configureFlags = "--enable-introspection";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ gettext fontconfig ] ++ [ gobjectIntrospection ];
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -20,6 +22,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = "rm -rf $out/share/gtk-doc";
+
+  passthru = {
+    gir_path = "/share/gir-1.0";
+    gi_typelib_path = "/lib/girepository-1.0";
+  };
 
   meta = {
     description = "A library for laying out and rendering of text, with an emphasis on internationalization";

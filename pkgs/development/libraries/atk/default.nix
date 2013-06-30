@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "atk-2.8.0";
@@ -8,13 +8,20 @@ stdenv.mkDerivation rec {
     sha256 = "1x3dd3hg9l1j9dq70xwph13vxdp6a9wbfcnryryf1wr6c8bij9dj";
   };
 
-  buildInputs = libintlOrEmpty;
+  buildInputs = libintlOrEmpty ++ [ gobjectIntrospection ];
 
   nativeBuildInputs = [ pkgconfig perl ];
 
   propagatedBuildInputs = [ glib ];
 
+  configureFlags = "--enable-introspection";
+
   postInstall = "rm -rf $out/share/gtk-doc";
+
+  passthru = {
+    gir_path = "/share/gir-1.0";
+    gi_typelib_path = "/lib/girepository-1.0";
+  };
 
   meta = {
     description = "ATK, the accessibility toolkit";

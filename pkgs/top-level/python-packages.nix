@@ -4665,6 +4665,34 @@ pythonPackages = python.modules // rec {
   };
 
 
+  slip = buildPythonPackage rec {
+    version = "0.4.0";
+    name = "python-slip-${version}";
+
+    src = fetchurl {
+      url = "https://fedorahosted.org/released/python-slip/python-slip-${version}.tar.bz2";
+      sha256 = "04lj0xg78qawvl8q21d31q93iqbs8hrcrqf5b6aza5qyd1czlnnv";
+    };
+
+    propagatedBuildInputs = [ decorator pygobject pygtk pkgs.polkit pkgs.pythonDBus ];
+
+    buildPhase = ''make'';
+
+    installPhase = ''
+      mkdir $out
+      make DESTDIR="$out" PREFIX="." install
+    '';
+
+    doCheck = false;
+
+    meta = {
+      description = "Simple Library for Python from fedora";
+      homepage = https://fedorahosted.org/python-slip/
+      license = pkgs.lib.licenses.gpl2;
+    };
+  };
+
+
   supervisor = buildPythonPackage rec {
     name = "supervisor-3.0b2";
 

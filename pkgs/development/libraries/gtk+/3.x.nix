@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gettext
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, xlibs, x11
+, gobjectIntrospection
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 }:
@@ -17,7 +18,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig gettext ];
+  configureFlags = "--enable-introspection";
+
+  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection ];
   propagatedBuildInputs = with xlibs; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk ]
     ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor ]
@@ -25,7 +28,20 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional xineramaSupport libXinerama
     ++ stdenv.lib.optionals cupsSupport [ cups ];
 
-  postInstall = "rm -rf $out/share/gtk-doc";
+  preBuild = ''
+    ln -s ${pango + pango.gir_path}/* gdk
+    ln -s ${atk + atk.gir_path}/* gdk
+    ln -s ${gdk_pixbuf + gdk_pixbuf.gir_path}/* gdk
+  '';
+
+  postInstall = ''
+    rm -rf $out/share/gtk-doc
+  '';
+
+  passthru = {
+    gi_typelib_path = "/lib/girepository-1.0";
+    gi_typelib_exports = [ pango atk gdk_pixbuf ];
+  };
 
   meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";

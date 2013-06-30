@@ -1302,6 +1302,10 @@ let
 
   networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
 
+  networkmanager_firewalld = callPackage ../tools/networking/network-manager/firewalld.nix {
+    slip = pythonPackages.slip;
+  };
+
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
