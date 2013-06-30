@@ -2,7 +2,7 @@
 , commoncpp2, ccrtp, libzrtpcpp, dbus, dbus_cplusplus, expat, pcre, gsm, speex, ilbc, libopus
 , autoconf, automake, libtool, gettext, perl
 , cmake, qt4
-, gtk, glib, dbus_glib, libnotify, intltool }:
+, gtk, glib, dbus_glib, libnotify, intltool, makeWrapper }:
 
 let
   name = "sflphone-1.2.3";
@@ -74,6 +74,11 @@ rec {
       cd gnome
     '';
 
-    buildInputs = [ daemon pkgconfig gtk glib dbus_glib libnotify intltool ];
+    # gtk3 programs have the runtime dependency on XDG_DATA_DIRS
+    postInstall = ''
+      wrapProgram $out/bin/sflphone* --prefix XDG_DATA_DIRS ":" ${gtk}/share
+    '';
+
+    buildInputs = [ daemon pkgconfig gtk glib dbus_glib libnotify intltool makeWrapper ];
   };
 }
