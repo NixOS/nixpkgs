@@ -2101,12 +2101,14 @@ let
   });
 
   gcc43 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.3) {
-    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
+    inherit stdenv fetchurl gmp mpfr noSysDirs;
+    texinfo = texinfo4;
     profiledCompiler = true;
   }));
 
   gcc43_realCross = makeOverridable (import ../development/compilers/gcc/4.3) {
-    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
+    inherit stdenv fetchurl gmp mpfr noSysDirs;
+    texinfo = texinfo4;
     binutilsCross = binutilsCross;
     libcCross = libcCross;
     profiledCompiler = false;
@@ -2117,8 +2119,9 @@ let
 
   gcc44_realCross = lib.addMetaAttrs { platforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.4) {
-      inherit stdenv fetchurl texinfo gmp mpfr /* ppl cloogppl */ noSysDirs
+      inherit stdenv fetchurl gmp mpfr /* ppl cloogppl */ noSysDirs
           gettext which;
+      texinfo = texinfo4;
       binutilsCross = binutilsCross;
       libcCross = libcCross;
       profiledCompiler = false;
@@ -2137,8 +2140,9 @@ let
 
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.5) {
-      inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
+      inherit fetchurl stdenv gmp mpfr mpc libelf zlib
         ppl cloogppl gettext which noSysDirs;
+      texinfo = texinfo4;
       binutilsCross = binutilsCross;
       libcCross = libcCross;
       profiledCompiler = false;
@@ -2225,15 +2229,17 @@ let
   }));
 
   gcc44 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.4) {
-    inherit fetchurl stdenv texinfo gmp mpfr /* ppl cloogppl */
+    inherit fetchurl stdenv gmp mpfr /* ppl cloogppl */
       gettext which noSysDirs;
+    texinfo = texinfo4;
     profiledCompiler = true;
   }));
 
   gcc45_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.5) {
-    inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib perl
+    inherit fetchurl stdenv gmp mpfr mpc libelf zlib perl
       ppl cloogppl
       gettext which noSysDirs;
+    texinfo = texinfo4;
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
     profiledCompiler = !stdenv.isArm;
@@ -2483,7 +2489,8 @@ let
   });
 
   ghdl = wrapGCC (import ../development/compilers/gcc/4.3 {
-    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat;
+    inherit stdenv fetchurl gmp mpfr noSysDirs gnat;
+    texinfo = texinfo4;
     name = "ghdl";
     langVhdl = true;
     langCC = false;
@@ -2494,8 +2501,9 @@ let
 
   # Not officially supported version for ghdl
   ghdl_gcc44 = lowPrio (wrapGCC (import ../development/compilers/gcc/4.4 {
-    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat gettext which
+    inherit stdenv fetchurl gmp mpfr noSysDirs gnat gettext which
       ppl cloogppl;
+    texinfo = texinfo4;
     name = "ghdl";
     langVhdl = true;
     langCC = false;
@@ -2642,7 +2650,6 @@ let
 
   julia = callPackage ../development/compilers/julia {
     liblapack = liblapack.override {shared = true;};
-    mpfr = mpfr_3_1_2;
     fftw = fftw.override {pthreads = true;};
     fftwSinglePrec = fftwSinglePrec.override {pthreads = true;};
   };
@@ -3542,6 +3549,7 @@ let
   texinfo49 = callPackage ../development/tools/misc/texinfo/4.9.nix { };
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.1.nix { };
   texinfo = texinfo5;
+  texinfo4 = texinfo413;
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
@@ -9453,7 +9461,8 @@ let
     inherit fetchurl stdenv;
     inherit cups ghostscript glibc patchelf;
     gcc = import ../development/compilers/gcc/4.4 {
-      inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gettext which;
+      inherit stdenv fetchurl gmp mpfr noSysDirs gettext which;
+      texinfo = texinfo4;
       profiledCompiler = true;
     };
   };
