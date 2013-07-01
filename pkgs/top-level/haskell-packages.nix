@@ -1123,6 +1123,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP_4000_2_8 = callPackage ../development/libraries/haskell/HTTP/4000.2.8.nix {};
   HTTP = self.HTTP_4000_2_8;
 
+  httpAttoparsec = callPackage ../development/libraries/haskell/http-attoparsec {};
+
   httpReverseProxy = callPackage ../development/libraries/haskell/http-reverse-proxy {};
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
