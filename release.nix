@@ -43,7 +43,7 @@ let
           passthru = { inherit config; };
         }
         ''
-          ensureDir $out/nix-support
+          mkdir -p $out/nix-support
           echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
         ''; # */
 
@@ -86,7 +86,7 @@ in {
       distPhase = ''
         echo -n $VERSION_SUFFIX > .version-suffix
         releaseName=nixos-$VERSION$VERSION_SUFFIX
-        ensureDir "$out/tarballs"
+        mkdir -p $out/tarballs
         mkdir ../$releaseName
         cp -prd . ../$releaseName
         cd ..
@@ -112,7 +112,7 @@ in {
       distPhase = ''
         echo -n $VERSION_SUFFIX > .version-suffix
         releaseName=nixos-$VERSION$VERSION_SUFFIX
-        ensureDir "$out/tarballs"
+        mkdir -p $out/tarballs
         mkdir ../$releaseName
         cp -prd . ../$releaseName/nixos
         cp -prd ${nixpkgs} ../$releaseName/nixpkgs
@@ -173,6 +173,38 @@ in {
     maintainers = [ "shlevy" ];
     inherit system;
   });
+
+
+  # A bootable VirtualBox image.  FIXME: generate a OVF appliance?
+  vdi.x86_64-linux =
+    with import <nixpkgs> { system = "x86_64-linux"; };
+
+    let
+
+      config = (import lib/eval-config.nix {
+        inherit system;
+        modules =
+          [ ./modules/virtualisation/virtualbox-image.nix
+            ./modules/installer/cd-dvd/channel.nix
+            ./modules/profiles/graphical.nix
+          ];
+      }).config;
+
+    in
+      # Declare the VDI as a build product so that it shows up in Hydra.
+      runCommand "nixos-vdi-${config.system.nixosVersion}"
+        { meta = {
+            description = "NixOS VirtualBox disk image (64-bit)";
+            maintainers = lib.maintainers.eelco;
+          };
+          vdi = config.system.build.virtualBoxImage;
+        }
+        ''
+          mkdir -p $out/nix-support
+          fn=$out/nixos-${config.system.nixosVersion}.vdi.xz
+          xz < $vdi/*.vdi > $fn
+          echo "file vdi $fn" >> $out/nix-support/hydra-build-products
+        ''; # */
 
 
   # Provide a tarball that can be unpacked into an SD card, and easily

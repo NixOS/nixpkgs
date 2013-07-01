@@ -61,7 +61,7 @@ with pkgs.lib;
 
           # Install a configuration.nix.
           mkdir -p /mnt/etc/nixos
-          cp ${./nova-config.nix} /mnt/etc/nixos/configuration.nix
+          cp ${./virtualbox-config.nix} /mnt/etc/nixos/configuration.nix
 
           # `switch-to-configuration' requires a /bin/sh
           mkdir -p /mnt/bin
