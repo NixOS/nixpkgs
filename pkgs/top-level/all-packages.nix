@@ -3129,6 +3129,8 @@ let
 
   avrgcclibc = callPackage ../development/misc/avr-gcc-with-avr-libc {};
 
+  pic32gcc = callPackage ../development/misc/pic32-gcc {};
+
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
   sourceFromHead = import ../build-support/source-from-head-fun.nix {
