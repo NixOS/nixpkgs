@@ -182,6 +182,7 @@ in {
     };
 
     parttest "btrfs filesystem", sub {
+      $machine->succeed("modprobe btrfs");
       kickstart("${ksBtrfs}");
       ensurePartition("swap1", "swap");
       ensurePartition("swap2", "swap");
