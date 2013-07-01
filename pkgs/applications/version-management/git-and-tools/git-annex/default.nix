@@ -8,13 +8,14 @@
 , networkProtocolXmpp, openssh, QuickCheck, random, regexTdfa
 , rsync, SafeSemaphore, SHA, stm, text, time, transformers
 , unixCompat, utf8String, uuid, wai, waiLogger, warp, which
-, xmlConduit, xmlTypes, yesod, yesodDefault, yesodForm, yesodStatic
+, xmlConduit, xmlTypes, yesod, yesodCore, yesodDefault, yesodForm
+, yesodStatic
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "4.20130601";
-  sha256 = "0l6jbi9r26w5h9hfg9v9qybqvijp4n7c9l1zd4ikxg2nqcc8j8ln";
+  version = "4.20130627";
+  sha256 = "1q9hdh7m04idx1nm631624s37p6w1b9j1z5n06j2449b3pxqrn3y";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -25,8 +26,8 @@ cabal.mkDerivation (self: {
     MonadCatchIOTransformers monadControl mtl network networkInfo
     networkMulticast networkProtocolXmpp QuickCheck random regexTdfa
     SafeSemaphore SHA stm text time transformers unixCompat utf8String
-    uuid wai waiLogger warp xmlConduit xmlTypes yesod yesodDefault
-    yesodForm yesodStatic
+    uuid wai waiLogger warp xmlConduit xmlTypes yesod yesodCore
+    yesodDefault yesodForm yesodStatic
   ];
   buildTools = [ bup curl git gnupg1 lsof openssh rsync which ];
   configureFlags = "-fS3
@@ -51,7 +52,7 @@ cabal.mkDerivation (self: {
   meta = {
     homepage = "http://git-annex.branchable.com/";
     description = "manage files with git, without checking their contents into git";
-    license = "GPL";
+    license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
