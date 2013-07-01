@@ -2069,6 +2069,8 @@ let
 
   clean = callPackage ../development/compilers/clean { };
 
+  closurecompiler = callPackage ../development/compilers/closure { };
+
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
 
   cython = callPackage ../development/interpreters/cython { };
