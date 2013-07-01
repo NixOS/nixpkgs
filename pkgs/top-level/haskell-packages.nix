@@ -2042,6 +2042,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   warp = callPackage ../development/libraries/haskell/warp {};
 
+  warpTls = callPackage ../development/libraries/haskell/warp-tls {};
+
   WebBits_1_0 = callPackage ../development/libraries/haskell/WebBits/1.0.nix {
     parsec = self.parsec2;
   };
