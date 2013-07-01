@@ -627,6 +627,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   boomerang = callPackage ../development/libraries/haskell/boomerang {};
 
+  byteable = callPackage ../development/libraries/haskell/byteable {};
+
   bytedump = callPackage ../development/libraries/haskell/bytedump {};
 
   byteorder = callPackage ../development/libraries/haskell/byteorder {};
