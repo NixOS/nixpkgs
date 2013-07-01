@@ -133,6 +133,35 @@ in {
       $machine->succeed("test ! -e /dev/$_[0]");
     }
 
+    sub remount_and_check {
+      $machine->nest("Remounting partitions:", sub {
+        # XXX: "findmnt -ARunl -oTARGET /mnt" seems to NOT print all mounts!
+        my $getmounts_cmd = "cat /proc/mounts | cut -d' ' -f2 | grep '^/mnt'";
+        # Insert canaries first
+        my $canaries = $machine->succeed($getmounts_cmd . " | while read p;" .
+                                         " do touch \"\$p/canary\";" .
+                                         " echo \"\$p/canary\"; done");
+        # Now unmount manually
+        $machine->succeed($getmounts_cmd . " | tac | xargs -r umount");
+        # /mnt should be empty or non-existing
+        my $found = $machine->succeed("find /mnt -mindepth 1");
+        chomp $found;
+        if ($found) {
+          $machine->log("Cruft found in /mnt:\n$found");
+          die;
+        }
+        # Try to remount with nixpart
+        $machine->succeed("nixpart -vm /kickstart");
+        # Check if our beloved canaries are dead
+        chomp $canaries;
+        $machine->nest("Checking canaries:", sub {
+          for my $canary (split /\n/, $canaries) {
+            $machine->succeed("test -e '$canary'");
+          }
+        });
+      });
+    }
+
     parttest "ext2, ext3 and ext4 filesystems", sub {
       kickstart("${ksExt}");
       ensurePartition("boot", "ext2");
@@ -142,6 +171,7 @@ in {
       ensurePartition("/dev/vdb4", "boot sector");
       ensureNoPartition("vdb6");
       ensureNoPartition("vdc1");
+      remount_and_check;
     };
 
     parttest "btrfs filesystem", sub {
@@ -152,6 +182,7 @@ in {
       ensurePartition("/dev/vdc2", "btrfs");
       ensureNoPartition("vdb3");
       ensureNoPartition("vdc3");
+      remount_and_check;
     };
 
     parttest "RAID1 with XFS", sub {
@@ -163,6 +194,7 @@ in {
       ensureNoPartition("vdb4");
       ensureNoPartition("vdc4");
       ensureNoPartition("md2");
+      remount_and_check;
     };
 
     parttest "RAID1 with LUKS and LVM", sub {
@@ -178,6 +210,7 @@ in {
       ensurePartition("/dev/nixos/boot", "ext3");
       ensurePartition("/dev/nixos/swap", "swap");
       ensurePartition("/dev/nixos/root", "ext4");
+      remount_and_check;
     };
   '';
 }
