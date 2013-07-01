@@ -1753,6 +1753,8 @@ let
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
+  twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
+
   txt2man = callPackage ../tools/misc/txt2man { };
 
   ucl = callPackage ../development/libraries/ucl { };
