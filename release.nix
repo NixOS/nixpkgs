@@ -186,7 +186,7 @@ in {
         modules =
           [ ./modules/virtualisation/virtualbox-image.nix
             ./modules/installer/cd-dvd/channel.nix
-            ./modules/profiles/graphical.nix
+            ./modules/profiles/demo.nix
           ];
       }).config;
 
