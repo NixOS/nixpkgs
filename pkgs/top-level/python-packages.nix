@@ -453,12 +453,12 @@ pythonPackages = python.modules // rec {
 
   blivet = buildPythonPackage rec {
     name = "blivet-${version}";
-    version = "0.16-1";
+    version = "0.17-1";
 
     src = fetchurl {
       url = "https://git.fedorahosted.org/cgit/blivet.git/snapshot/"
           + "${name}.tar.bz2";
-      sha256 = "0gfxf86sc0mkpqjcainch6gqh3r7brgma85pbl4nfpzmylhzj5sg";
+      sha256 = "0b28q539657mqif0mn5dfqcpqv7gbyszg83gf2fv6z7q6206rnx5";
     };
 
     postPatch = ''
