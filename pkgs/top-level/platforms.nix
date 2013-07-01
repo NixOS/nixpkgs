@@ -13,6 +13,7 @@ rec {
     kernelExtraConfig =
       ''
         # Virtualisation (KVM, Xen...).
+        HYPERVISOR_GUEST? y #3.10 version of the paravirt options
         PARAVIRT_GUEST? y #Doesn't exist in 3.10
         KVM_CLOCK? y #Part of KVM_GUEST since linux 3.7
         KVM_GUEST? y #Doesn't exist in 3.10
