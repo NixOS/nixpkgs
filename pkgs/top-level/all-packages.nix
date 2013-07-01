@@ -2683,6 +2683,8 @@ let
     fpc = fpc;
   };
 
+  lessc = callPackage ../development/compilers/lessc { };
+
   llvm = callPackage ../development/compilers/llvm {
     stdenv = if stdenv.isDarwin
       then stdenvAdapters.overrideGCC stdenv gccApple
