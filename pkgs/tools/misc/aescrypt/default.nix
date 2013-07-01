@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [];
  
   meta = {
-    description = "AES Crypt is a file encryption software available on several operating systems that uses the industry standard Advanced Encryption Standard (AES) to easily and securely encrypt files.";
+    description = "A file encryption util that uses the industry standard Advanced Encryption Standard (AES) to easily and securely encrypt files";
     homepage = http://www.aescrypt.com/;
     license = "GPLv2";
     platforms = stdenv.lib.platforms.all;
