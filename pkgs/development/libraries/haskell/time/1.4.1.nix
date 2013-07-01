@@ -1,9 +1,15 @@
-{ cabal }:
+{ cabal, Cabal, deepseq, QuickCheck, testFramework
+, testFrameworkQuickcheck2
+}:
 
 cabal.mkDerivation (self: {
   pname = "time";
-  version = "1.1.2.4";
-  sha256 = "11dfcb9b5ca76428a7a31019928c3c1898320f774e5d3df8e4407580d074fad3";
+  version = "1.4.1";
+  sha256 = "04ndcp7m1a7mia4by15dqrwl5k0d2477x20s6xcrdb7in8w9ccvp";
+  buildDepends = [ deepseq ];
+  testDepends = [
+    Cabal deepseq QuickCheck testFramework testFrameworkQuickcheck2
+  ];
   meta = {
     homepage = "http://semantic.org/TimeLib/";
     description = "A time library";
