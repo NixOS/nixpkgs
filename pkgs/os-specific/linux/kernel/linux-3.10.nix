@@ -244,6 +244,9 @@ let
       # Easier debug of NFS issues
       SUNRPC_DEBUG y
 
+      # Our initrd init uses shebang scripts, so can't be modular
+      BINFMT_SCRIPT y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
