@@ -2805,11 +2805,11 @@ pythonPackages = python.modules // rec {
 
   nixpart = buildPythonPackage rec {
     name = "nixpart-${version}";
-    version = "0.1";
+    version = "0.2.0";
 
     src = fetchurl {
       url = "https://github.com/aszlig/nixpart/archive/v${version}.tar.gz";
-      sha256 = "1gyk260qnv14w94f0ljfra4mmigq9i6cx0gy4ppf3fia5wfj2a6j";
+      sha256 = "1z94h76jn9igksgr84wwbi03fjamwb15hg432x189kgsld1ark4n";
     };
 
     propagatedBuildInputs = [ blivet ];
@@ -2817,7 +2817,7 @@ pythonPackages = python.modules // rec {
     doCheck = false;
 
     meta = {
-      description = "NixOS Anaconda Kickstart helper";
+      description = "NixOS storage manager/partitioner";
       license = pkgs.lib.licenses.gpl2Plus;
       maintainers = [ stdenv.lib.maintainers.aszlig ];
     };
