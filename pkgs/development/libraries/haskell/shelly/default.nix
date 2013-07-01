@@ -1,16 +1,12 @@
-{ cabal, hspec, HUnit, mtl, systemFileio, systemFilepath, text
-, time, unixCompat
+{ cabal, mtl, systemFileio, systemFilepath, text, time, unixCompat
 }:
 
 cabal.mkDerivation (self: {
   pname = "shelly";
-  version = "0.15.4.1";
-  sha256 = "12m11s22izz0ny1syb1ykp2hi9n240myf0nhapvn8jx1fgf5iyck";
+  version = "1.3.0.1";
+  sha256 = "0xcx6cxlb13wrn5wfnnb070h8cj3lnk285fxmigi6x97b9rjdl8w";
   buildDepends = [
     mtl systemFileio systemFilepath text time unixCompat
-  ];
-  testDepends = [
-    hspec HUnit mtl systemFileio systemFilepath text time unixCompat
   ];
   meta = {
     homepage = "https://github.com/yesodweb/Shelly.hs";
