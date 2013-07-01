@@ -133,6 +133,10 @@ in {
       $machine->succeed("test ! -e /dev/$_[0]");
     }
 
+    sub ensureMountPoint {
+      $machine->succeed("mountpoint $_[0]");
+    }
+
     sub remount_and_check {
       $machine->nest("Remounting partitions:", sub {
         # XXX: "findmnt -ARunl -oTARGET /mnt" seems to NOT print all mounts!
@@ -152,6 +156,7 @@ in {
         }
         # Try to remount with nixpart
         $machine->succeed("nixpart -vm /kickstart");
+        ensureMountPoint("/mnt");
         # Check if our beloved canaries are dead
         chomp $canaries;
         $machine->nest("Checking canaries:", sub {
@@ -172,6 +177,8 @@ in {
       ensureNoPartition("vdb6");
       ensureNoPartition("vdc1");
       remount_and_check;
+      ensureMountPoint("/mnt/boot");
+      ensureMountPoint("/mnt/nix");
     };
 
     parttest "btrfs filesystem", sub {
@@ -195,6 +202,7 @@ in {
       ensureNoPartition("vdc4");
       ensureNoPartition("md2");
       remount_and_check;
+      ensureMountPoint("/mnt/boot");
     };
 
     parttest "RAID1 with LUKS and LVM", sub {
@@ -211,6 +219,7 @@ in {
       ensurePartition("/dev/nixos/swap", "swap");
       ensurePartition("/dev/nixos/root", "ext4");
       remount_and_check;
+      ensureMountPoint("/mnt/boot");
     };
   '';
 }
