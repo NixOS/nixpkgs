@@ -275,7 +275,7 @@ in
   # CIFS.  Also use paravirtualised network and block devices for
   # performance.
   boot.initrd.availableKernelModules =
-    [ "cifs" "nls_utf8" "hmac" "md4" "ecb" "des_generic" ];
+    [ "cifs" "nls_utf8" "hmac" "md4" "ecb" "des_generic" "sha256" ];
 
   boot.initrd.supportedFilesystems = optional cfg.writableStore "unionfs-fuse";
 
@@ -345,22 +345,23 @@ in
   # disregarded for the purpose of building a VM test image (since
   # those filesystems don't exist in the VM).
   fileSystems = mkOverride 10
+    (let mode = if builtins.compareVersions "3.5" config.boot.kernelPackages.kernel.version == 1 then "none" else "ntlm"; in
     { "/".device = "/dev/vda";
       "/nix/store" =
         { device = "//10.0.2.4/store";
           fsType = "cifs";
-          options = "guest,sec=none,noperm,noacl";
+          options = "guest,sec=${mode},noperm,noacl";
         };
       "/tmp/xchg" =
         { device = "//10.0.2.4/xchg";
           fsType = "cifs";
-          options = "guest,sec=none,noperm,noacl";
+          options = "guest,sec=${mode},noperm,noacl";
           neededForBoot = true;
         };
       "/tmp/shared" =
         { device = "//10.0.2.4/shared";
           fsType = "cifs";
-          options = "guest,sec=none,noperm,noacl";
+          options = "guest,sec=${mode},noperm,noacl";
           neededForBoot = true;
         };
     } // optionalAttrs cfg.useBootLoader
@@ -370,7 +371,7 @@ in
           options = "ro";
           noCheck = true; # fsck fails on a r/o filesystem
         };
-    };
+    });
 
   swapDevices = mkOverride 50 [ ];
 
