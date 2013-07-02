@@ -50,6 +50,8 @@ pythonPackages = python.modules // rec {
 
   # packages defined elsewhere
 
+  blivet = callPackage ../development/python-modules/blivet { };
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
@@ -472,51 +474,6 @@ pythonPackages = python.modules // rec {
       license = licenses.mit;
       platforms = platforms.linux;
       maintainers = [ maintainers.bjornfor ];
-    };
-  };
-
-
-  blivet = buildPythonPackage rec {
-    name = "blivet-${version}";
-    version = "0.17-1";
-
-    src = fetchurl {
-      url = "https://git.fedorahosted.org/cgit/blivet.git/snapshot/"
-          + "${name}.tar.bz2";
-      sha256 = "0b28q539657mqif0mn5dfqcpqv7gbyszg83gf2fv6z7q6206rnx5";
-    };
-
-    postPatch = ''
-      sed -i -e '/find_library/,/find_library/ {
-        c libudev = "${pkgs.udev}/lib/libudev.so.1"
-      }' blivet/pyudev.py
-      sed -i -e 's|"multipath"|"${pkgs.multipath_tools}/sbin/multipath"|' \
-        blivet/devicelibs/mpath.py blivet/devices.py
-      sed -i -e '/"wipefs"/ {
-        s|wipefs|${pkgs.utillinux}/sbin/wipefs|
-        s/-f/--force/
-      }' blivet/formats/__init__.py
-      sed -i -e 's|"lsof"|"${pkgs.lsof}/bin/lsof"|' blivet/formats/fs.py
-      sed -i -r -e 's|"(u?mount)"|"${pkgs.utillinux}/bin/\1"|' blivet/util.py
-      sed -i '/pvscan/s/, *"--cache"//' blivet/devicelibs/lvm.py
-    '';
-
-    propagatedBuildInputs = let
-      pyenable = { enablePython = true; };
-      selinuxWithPython = pkgs.libselinux.override pyenable;
-      cryptsetupWithPython = pkgs.cryptsetup.override pyenable;
-    in [
-      pykickstart pyparted pkgs.udev pyblock
-      selinuxWithPython cryptsetupWithPython
-    ];
-
-    # tests are currently _heavily_ broken upstream
-    doCheck = false;
-
-    meta = {
-      homepage = "https://fedoraproject.org/wiki/Blivet";
-      description = "Module for management of a system's storage configuration";
-      license = [ "GPLv2+" "LGPLv2.1+" ];
     };
   };
 
