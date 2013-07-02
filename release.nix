@@ -13,6 +13,10 @@ let
   pkgs = import <nixpkgs> { system = "x86_64-linux"; };
 
 
+  versionModule =
+    { system.nixosVersionSuffix = pkgs.lib.optionalString (!officialRelease) versionSuffix;  };
+
+
   makeIso =
     { module, type, description ? type, maintainers ? ["eelco"], system }:
 
@@ -20,14 +24,9 @@ let
 
     let
 
-      versionModule =
-        { system.nixosVersionSuffix = lib.optionalString (!officialRelease) versionSuffix;
-          isoImage.isoBaseName = "nixos-${type}";
-        };
-
       config = (import lib/eval-config.nix {
         inherit system;
-        modules = [ module versionModule ];
+        modules = [ module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
       }).config;
 
       iso = config.system.build.isoImage;
@@ -54,7 +53,6 @@ let
     with import <nixpkgs> { inherit system; };
 
     let
-      versionModule = { system.nixosVersionSuffix = lib.optionalString (!officialRelease) versionSuffix; };
 
       config = (import lib/eval-config.nix {
         inherit system;
@@ -62,6 +60,7 @@ let
       }).config;
 
       tarball = config.system.build.tarball;
+
     in
       tarball //
         { meta = {
@@ -184,7 +183,8 @@ in {
       config = (import lib/eval-config.nix {
         inherit system;
         modules =
-          [ ./modules/virtualisation/virtualbox-image.nix
+          [ versionModule
+            ./modules/virtualisation/virtualbox-image.nix
             ./modules/installer/cd-dvd/channel.nix
             ./modules/profiles/demo.nix
           ];
