@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  #require = [ ./graphical.nix ];
+  require = [ ./graphical.nix ];
 
   users.extraUsers.demo =
     { description = "Demo user account";
