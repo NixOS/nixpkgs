@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
   preBuildPhases = "preBuild";
   preBuild = ''substituteInPlace unique/dbus/Makefile --replace -Werror ""'';
 
+  # gcc 4.8 introduces a new warning, -Wunused-local-typedefs, which seems to
+  # be triggered by libunique's static assertion mechanism.
+  configureFlags = "CFLAGS=-Wno-unused-local-typedefs";
+
   doCheck = true;
 
   meta = {
