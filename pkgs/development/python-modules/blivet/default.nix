@@ -1,6 +1,11 @@
 { stdenv, fetchurl, buildPythonPackage, pykickstart, pyparted, pyblock
-, libselinux, cryptsetup, multipath_tools, lsof, utillinux, udev
+, libselinux, cryptsetup, multipath_tools, lsof, utillinux
+, useNixUdev ? true, udev ? null
+# This is only used when useNixUdev is false
+, udevSoMajor ? 1
 }:
+
+assert useNixUdev -> udev != null;
 
 let
   pyenable = { enablePython = true; };
@@ -17,9 +22,6 @@ in buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i -e '/find_library/,/find_library/ {
-      c libudev = "${udev}/lib/libudev.so.1"
-    }' blivet/pyudev.py
     sed -i -e 's|"multipath"|"${multipath_tools}/sbin/multipath"|' \
       blivet/devicelibs/mpath.py blivet/devices.py
     sed -i -e '/"wipefs"/ {
@@ -29,11 +31,18 @@ in buildPythonPackage rec {
     sed -i -e 's|"lsof"|"${lsof}/bin/lsof"|' blivet/formats/fs.py
     sed -i -r -e 's|"(u?mount)"|"${utillinux}/bin/\1"|' blivet/util.py
     sed -i '/pvscan/s/, *"--cache"//' blivet/devicelibs/lvm.py
-  '';
+  '' + (if useNixUdev then ''
+    sed -i -e '/find_library/,/find_library/ {
+      c libudev = "${udev}/lib/libudev.so.1"
+    }' blivet/pyudev.py
+  '' else ''
+    sed -i -e '/^somajor *=/s/=.*/= ${toString udevSoMajor}/p' \
+      blivet/pyudev.py
+  '');
 
   propagatedBuildInputs = [
-    pykickstart pyparted pyblock udev selinuxWithPython cryptsetupWithPython
-  ];
+    pykickstart pyparted pyblock selinuxWithPython cryptsetupWithPython
+  ] ++ stdenv.lib.optional useNixUdev udev;
 
   # tests are currently _heavily_ broken upstream
   doCheck = false;
