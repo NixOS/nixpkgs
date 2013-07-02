@@ -5656,17 +5656,17 @@ let
     python = python27;
   });
 
-  plone41Packages = recurseIntoAttrs (import ../development/web/plone/4.1.6.nix {
+  plone41Packages = recurseIntoAttrs (import ../development/web/plone/4.1.nix {
     inherit pkgs;
     pythonPackages = python26Packages;
   });
 
-  plone42Packages = recurseIntoAttrs (import ../development/web/plone/4.2.5.nix {
+  plone42Packages = recurseIntoAttrs (import ../development/web/plone/4.2.nix {
     inherit pkgs;
     pythonPackages = python26Packages;
   });
 
-  plone43Packages = recurseIntoAttrs (import ../development/web/plone/4.3.0.nix {
+  plone43Packages = recurseIntoAttrs (import ../development/web/plone/4.3.nix {
     inherit pkgs;
     pythonPackages = python27Packages;
   });
