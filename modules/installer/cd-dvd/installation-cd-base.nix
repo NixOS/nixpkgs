@@ -8,8 +8,8 @@ with pkgs.lib;
 {
   require =
     [ ./memtest.nix
-      ./iso-image.nix
       ./channel.nix
+      ./iso-image.nix
 
       # Profiles of this basic installation CD.
       ../../profiles/all-hardware.nix
