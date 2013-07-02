@@ -211,6 +211,16 @@
     ];
   }
   {
+    baseName = "buffertools";
+    version = "1.1.1";
+    fullName = "buffertools->=1.1.1 <2.0.0";
+    hash = "f5962aec81246077a46ee075072d40fa533c31ada7a0ec18e1ff3600af2d8f3f";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
     baseName = "bunyan";
     version = "0.21.1";
     fullName = "bunyan-0.21.1";
@@ -1789,6 +1799,17 @@
     topLevel = false;
     dependencies = [
       { name = "readable-stream"; range = "~1.0.2"; }
+    ];
+  }
+  {
+    baseName = "stream-splitter-transform";
+    version = "0.0.3";
+    fullName = "stream-splitter-transform-*";
+    hash = "613ca5994f2fe645cbb21dcac24f034ed8546d6cc49097d8ee0b4501e6d9a887";
+    patchLatest = false;
+    topLevel = true;
+    dependencies = [
+      { name = "buffertools"; range = ">=1.1.1 <2.0.0"; }
     ];
   }
   {

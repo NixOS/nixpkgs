@@ -35,4 +35,5 @@
 , "ansi-remover"
 , "mkdirp"
 , "jshint"
+, "stream-splitter-transform"
 ]
