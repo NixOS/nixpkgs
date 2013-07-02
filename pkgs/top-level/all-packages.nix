@@ -5405,6 +5405,13 @@ let
 
   SDL_ttf = callPackage ../development/libraries/SDL_ttf { };
 
+  SDL2 = callPackage ../development/libraries/SDL2 {
+    openglSupport = mesaSupported;
+    alsaSupport = true;
+    x11Support = true;
+    pulseaudioSupport = false; # better go through ALSA
+  };
+
   serd = callPackage ../development/libraries/serd {};
 
   silgraphite = callPackage ../development/libraries/silgraphite {};
