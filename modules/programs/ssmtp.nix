@@ -75,7 +75,7 @@ let
         default = "";
         example = "correctHorseBatteryStaple";
         description = "
-          Password used for SMTP auth.
+          Password used for SMTP auth. (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)
         ";
       };
 

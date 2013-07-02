@@ -122,12 +122,13 @@ in
         default = null;
         description = ''If the master is password protected (using the requirePass configuration)
         it is possible to tell the slave to authenticate before starting the replication synchronization
-        process, otherwise the master will refuse the slave request.'';
+        process, otherwise the master will refuse the slave request.
+        (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)'';
       };
 
       requirePass = mkOption {
         default = null;
-        description = "Password for database";
+        description = "Password for database (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)";
         example = "letmein!";
       };
 
