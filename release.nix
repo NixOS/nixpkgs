@@ -252,6 +252,7 @@ in {
       ipv6 = runTest (t: t.ipv6.test);
       kde4 = runTest (t: t.kde4.test);
       login = runTest (t: t.login.test);
+      latestKernel.login = runTest (t: t.latestKernel.login.test);
       misc = runTest (t: t.misc.test);
       mpich = runTest (t: t.mpich.test);
       mysql = runTest (t: t.mysql.test);

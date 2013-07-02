@@ -1,8 +1,8 @@
-{ pkgs, ... }:
+config: { pkgs, ... }:
 
 {
 
-  machine = { config, pkgs, ... }: { };
+  machine = config;
 
   testScript =
     ''
