@@ -3703,8 +3703,7 @@ let
   boost154 = callPackage ../development/libraries/boost/1.54.nix { };
   boost = boost154;
 
-  boostHeaders154 = callPackage ../development/libraries/boost/1.54-headers.nix { };
-  boostHeaders = boostHeaders154;
+  boostHeaders = callPackage ../development/libraries/boost/header-only-wrapper.nix { };
 
   botan = callPackage ../development/libraries/botan { };
 

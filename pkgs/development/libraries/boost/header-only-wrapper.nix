@@ -1,10 +1,15 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, boost }:
+
+let
+  version = stdenv.lib.removePrefix "boost-" boost.name;
+  pkgid = stdenv.lib.replaceChars ["-" "."] ["_" "_"] boost.name;
+in
 
 stdenv.mkDerivation {
-  name = "boost-headers-1.54.0";
+  name = "boost-headers-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/boost/boost_1_54_0.tar.bz2";
+    url = "mirror://sourceforge/boost/${pkgid}.tar.bz2";
     sha256 = "07df925k56pbz3gvhxpx54aij34qd40a7sxw4im11brnwdyr4zh4";
   };
 
@@ -12,7 +17,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/include
-    tar xf $src -C $out/include --strip-components=1 boost_1_54_0/boost
+    tar xf $src -C $out/include --strip-components=1 ${pkgid}/boost
   '';
 
   meta = {
