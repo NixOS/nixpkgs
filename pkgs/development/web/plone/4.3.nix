@@ -4334,10 +4334,10 @@ let plone43Packages = pythonPackages.python.modules // rec {
   };
 
   z3c_form = buildPythonPackage rec {
-    name = "z3c.form-3.0.1";
+    name = "z3c.form-3.0";
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/z/z3c.form/z3c.form-3.0.1.zip";
-      md5 = "7c9338dbe89b8c27ebba7441b14786ac";
+      url = "https://pypi.python.org/packages/source/z/z3c.form/z3c.form-3.0.zip";
+      md5 = "f9fa3cf56c83722425b3b1be4467ce46";
     };
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ zope_i18nmessageid zope_publisher zope_site zope_pagetemplate zope_interface zope_browserresource six zope_security zope_configuration zope_component zope_browserpage zope_event zope_traversing setuptools zope_schema zope_lifecycleevent zope_browser zope_i18n zope_location zope_contentprovider ];
