@@ -88,7 +88,6 @@
                                   name package-spec))))
     (format
      "
-  # %s
   %s = buildEmacsPackage {
     name = \"%s-%s\";
     src = fetchurl {
@@ -97,16 +96,17 @@
     };
 
     deps = %s;
+    description = \"%s\";
   };
 "
-     (package-desc-doc package-spec)
      (symbol-name (nix-normalize-package-name name))
      (symbol-name (nix-normalize-package-name name))
      (package-version-join (package-desc-vers package-spec))
      url
      sha256
      (nix-make-deps-string (package-desc-reqs package-spec)
-                           available-packages))))
+                           available-packages)
+     (replace-regexp-in-string "\"" "'" (package-desc-doc package-spec)))))
 
 
 (defun nix-remove-duplicate-packages (package-list)

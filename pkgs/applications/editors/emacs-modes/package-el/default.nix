@@ -80,4 +80,6 @@ stdenv.mkDerivation ({
         (ert-run-tests-batch-and-exit)
       ''}'
   '';
-} )
+
+  meta.description = if hasAttr "description" args then args.description else null;
+})
