@@ -48,15 +48,15 @@ shift
 
 # Validate the given options
 
-if [ "$@" = "" ]
+if [ "$1" = "" ]
 then
     echo "ERROR: A network expression must be specified!" >&2
     exit 1
 else
-    networkExpr=$(readlink -f $@)
+    networkExpr=$(readlink -f $1)
 fi
 
 # Build a network of VMs
 
 nix-build '<nixos/modules/installer/tools/nixos-build-vms/build-vms.nix>' \
-    --argstr networkExpr $networkExpr  $noOutLinkArg $showTraceArg
+    --argstr networkExpr $networkExpr $noOutLinkArg $showTraceArg
