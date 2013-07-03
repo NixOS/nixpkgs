@@ -34,8 +34,8 @@ cabal.mkDerivation (self: {
                     -fWebDAV
                     -fInotify
                     -fDbus
-                    -f-Assistant
-                    -f-Webapp
+                    -fAssistant
+                    -fWebapp
                     -fPairing
                     -fXMPP
                     -fDNS
