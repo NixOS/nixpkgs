@@ -446,6 +446,8 @@ let
 
   otool = callPackage ../development/tools/misc/otool { };
 
+  setFile = callPackage ../development/tools/misc/setFile { };
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   titaniumenv_2_1 = import ../development/mobile/titaniumenv {
