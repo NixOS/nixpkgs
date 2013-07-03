@@ -56,12 +56,8 @@ with pkgs.lib;
               -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel}
 
           # `nixos-rebuild' requires an /etc/NIXOS.
-          mkdir -p /mnt/etc
-          touch /mnt/etc/NIXOS
-
-          # Install a configuration.nix.
           mkdir -p /mnt/etc/nixos
-          cp ${./virtualbox-config.nix} /mnt/etc/nixos/configuration.nix
+          touch /mnt/etc/NIXOS
 
           # `switch-to-configuration' requires a /bin/sh
           mkdir -p /mnt/bin
