@@ -7102,6 +7102,7 @@ let
   elvis = callPackage ../applications/editors/elvis { };
 
   emacs = emacs24;
+  emacsPackages = recurseIntoAttrs emacs24Packages;
 
   emacs23 = callPackage ../applications/editors/emacs-23 {
     stdenv =
@@ -7131,14 +7132,14 @@ let
     imagemagick = null;
   };
 
-  emacsPackages = emacs: self: import ./emacs-packages.nix {
+  makeEmacsPackages = emacs: self: import ./emacs-packages.nix {
     inherit pkgs;
     inherit emacs;
     callPackage = newScope self;
   };
 
-  emacs23Packages = (emacsPackages emacs23 pkgs.emacs23Packages);
-  emacs24Packages = (emacsPackages emacs24 pkgs.emacs24Packages);
+  emacs23Packages = (makeEmacsPackages emacs23 pkgs.emacs23Packages);
+  emacs24Packages = (makeEmacsPackages emacs24 pkgs.emacs24Packages);
 
   epdfview = callPackage ../applications/misc/epdfview { };
 
