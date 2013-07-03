@@ -184,9 +184,7 @@ in {
         inherit system;
         modules =
           [ versionModule
-            ./modules/virtualisation/virtualbox-image.nix
-            ./modules/installer/cd-dvd/channel.nix
-            ./modules/profiles/demo.nix
+            ./modules/installer/virtualbox-demo.nix
           ];
       }).config;
 
