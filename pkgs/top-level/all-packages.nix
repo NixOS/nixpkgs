@@ -9448,6 +9448,8 @@ let
     x11Support = true;
   });
 
+  guix = callPackage ../tools/package-management/guix { };
+
   gxemul = callPackage ../misc/gxemul { };
 
   hatari = callPackage ../misc/emulators/hatari { };
