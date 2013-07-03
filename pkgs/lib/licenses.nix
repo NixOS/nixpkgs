@@ -4,7 +4,8 @@
    * add it to this list. The URL mentioned above is a good source for inspiration.
    */
 
-  agpl3 = "AGPLv3";
+  agpl3 = {
+    shortName = "AGPLv3";
     fullName = "GNU Affero General Public License version 3 only";
     url = https://www.gnu.org/licenses/agpl.html;
   };
