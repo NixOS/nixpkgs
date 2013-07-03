@@ -44,7 +44,7 @@ EOF
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GNU Emacs 24, the extensible, customizable text editor";
 
     longDescription = ''
@@ -67,7 +67,7 @@ EOF
     homepage = "http://www.gnu.org/software/emacs/";
     license = "GPLv3+";
 
-    maintainers = with stdenv.lib.maintainers; [ ludo simons chaoflow ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ chaoflow lovek323 ludo simons ];
+    platforms = platforms.all;
   };
 }

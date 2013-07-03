@@ -7232,6 +7232,12 @@ let
     alsaLib = null;
     imagemagick = null;
     texinfo = texinfo5;
+
+    # use gccApple on darwin to deal with: unexec: 'my_edata is not in section
+    # __data'
+    stdenv = if stdenv.isDarwin
+      then stdenvAdapters.overrideGCC stdenv gccApple
+      else stdenv;
   };
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
