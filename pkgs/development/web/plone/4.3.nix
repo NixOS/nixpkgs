@@ -1229,10 +1229,10 @@ let plone43Packages = pythonPackages.python.modules // rec {
   };
 
   plone_recipe_varnish = buildPythonPackage rec {
-    name = "plone.recipe.varnish-1.2.2";
+    name = "plone.recipe.varnish-1.3dev";
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/plone.recipe.varnish/plone.recipe.varnish-1.2.2.zip";
-      md5 = "100f8bd4857926b8aa1c6decfd05626b";
+      url = "https://github.com/collective/plone.recipe.varnish/archive/38ef4a86ce2e1c407e35ab36487bc1311c4eb1e3.zip";
+      md5 = "9aa448793ca115790d38df6f676bd7d8";
     };
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ zc_buildout setuptools ];
