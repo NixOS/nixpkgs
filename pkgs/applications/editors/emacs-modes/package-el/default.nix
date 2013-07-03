@@ -1,8 +1,10 @@
 { stdenv, emacs }:
 
-args @ { name, src, deps ? [], ... }:
-
 with stdenv.lib;
+let
+  emacsMajorVersion = head (splitString "." emacs.version);
+in
+args @ { name, namePrefix ? "emacs"+emacsMajorVersion+"-", src, deps ? [], ... }:
 
 let
   packageElSupported = if (versionOlder emacs.version "24")
@@ -27,7 +29,7 @@ let
   '';
 in
 stdenv.mkDerivation ({
-  name = args.name;
+  name = namePrefix+args.name;
 
   # Run the emacs setup hook when this package is a build input
   propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ deps ++ [ emacs ];
