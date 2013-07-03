@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "HAProxy is a free, very fast and reliable solution offering high availability, load balancing, and proxying for TCP and HTTP-based applications.";
-    homepage = "http://haproxy.1wt.eu";
+    homepage = http://haproxy.1wt.eu;
     maintainers = [ stdenv.lib.maintainers.garbas ];
     platforms = stdenv.lib.platforms.linux;
     license = [
-       pkgs.lib.licenses.gpl2
-       pkgs.lib.licenses.lgpl21
+       stdenv.lib.licenses.gpl2
+       stdenv.lib.licenses.lgpl21
     ];
   };
 }
