@@ -444,6 +444,8 @@ let
 
   apg = callPackage ../tools/security/apg { };
 
+  otool = callPackage ../development/tools/misc/otool { };
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   titaniumenv_2_1 = import ../development/mobile/titaniumenv {
