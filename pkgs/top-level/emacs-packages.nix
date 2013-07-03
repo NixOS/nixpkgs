@@ -7,10 +7,10 @@ let
     inherit stdenv;
     inherit emacs;
   };
-  # Legacy emacs packages (not yet built via package.el)
-  otherPackages = rec {
-    inherit (pkgs.lib) lowPrio hiPrio;
-
+  # Legacy emacs packages (not yet built via package.el). lowPrio
+  # because there might be newer releases in the generated package
+  # list.
+  otherPackages = pkgs.lib.mapAttrs (name: value: pkgs.lib.lowPrio value) {
     autoComplete = callPackage ../applications/editors/emacs-modes/auto-complete { };
     bbdb = callPackage ../applications/editors/emacs-modes/bbdb { };
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
