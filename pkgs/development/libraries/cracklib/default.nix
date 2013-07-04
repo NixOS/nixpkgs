@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
   name = "cracklib-2.8.16";
@@ -8,8 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "1g3mchdvra9nihxlkl3rdz96as3xnfw5m59hmr5k17l7qa9a8fpw";
   };
 
-  meta = {
-    homepage = http://sourceforge.net/projects/cracklib;
+  buildInputs = libintlOrEmpty;
+
+  meta = with stdenv.lib; {
+    homepage    = http://sourceforge.net/projects/cracklib;
     description = "A library for checking the strength of passwords";
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
   };
 }
