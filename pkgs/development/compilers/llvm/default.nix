@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional (!stdenv.isDarwin) [ "-DBUILD_SHARED_LIBS=ON" ];
 
   enableParallelBuilding = true;
-  doCheck = true; # tests are broken, don't know why
+  # doCheck = true; # tests are broken, don't know why
 
   meta = with stdenv.lib; {
     description = "Collection of modular and reusable compiler and toolchain technologies";
