@@ -3154,10 +3154,6 @@ let
 
   rubySqlite3 = callPackage ../development/ruby-modules/sqlite3 { };
 
-  rLang = callPackage ../development/interpreters/r-lang {
-    withBioconductor = config.rLang.withBioconductor or false;
-  };
-
   rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {
     inherit ruby makeWrapper;
   };
