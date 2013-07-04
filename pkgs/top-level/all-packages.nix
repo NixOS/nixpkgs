@@ -444,6 +444,8 @@ let
 
   apg = callPackage ../tools/security/apg { };
 
+  install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   titaniumenv_2_1 = import ../development/mobile/titaniumenv {

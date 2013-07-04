@@ -6190,7 +6190,8 @@ pythonPackages = python.modules // rec {
       sha256 = "1rvgrviwn6f037m8vq395chz6a1119dbsdhfwdbv5ambi0bak6ll";
     };
   
-    buildInputs = [ pkgs.libspotify ];
+    buildInputs = [ pkgs.libspotify ]
+      ++ stdenv.lib.optional stdenv.isDarwin pkgs.install_name_tool;
   
     # python zip complains about old timestamps
     preConfigure = ''
