@@ -345,56 +345,6 @@ rec {
     });
 
 
-  qemuCommandGeneric = ''
-    PATH="${samba}/sbin:$PATH" \
-    ${qemuProg} \
-      -enable-kvm \
-      -nographic -no-reboot \
-      -smb $(pwd) -hda $diskImage \
-      $QEMU_OPTS
-  '';
-
-
-  /* Run a command in an x86 virtual machine image containing an
-     arbitrary OS.  The VM should be configured to do the following:
-
-     - Write log output to the serial port.
-
-     - Mount //10.0.2.4/qemu via SMB.
-
-     - Execute the command "cmd" on the SMB share.  It can access the
-       original derivation attributes in "saved-env" on the share.
-
-     - Produce output under "out" on the SMB share.
-
-     - Write an exit code to "in-vm-exit" on the SMB share ("0"
-       meaning success).
-
-     - Power-off or reboot the machine.
-  */
-  runInGenericVM = drv: lib.overrideDerivation drv (attrs: {
-    requiredSystemFeatures = [ "kvm" ];
-    builder = "${bash}/bin/sh";
-    args = ["-e" (vmRunCommand qemuCommandGeneric)];
-    QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
-
-    preVM = ''
-      diskImage=$(pwd)/disk-image.qcow2
-      origImage=${attrs.diskImage}
-      if test -d "$origImage"; then origImage="$origImage/disk-image.qcow2"; fi
-      ${kvm}/bin/qemu-img create -b "$origImage" -f qcow2 $diskImage
-
-      echo "$buildCommand" > cmd
-
-      eval "$postPreVM"
-    '';
-
-    postVM = ''
-      cp -prvd out $out
-    '';
-  });
-
-
   /* Like runInLinuxVM, but run the build not using the stdenv from
      the Nix store, but using the tools provided by /bin, /usr/bin
      etc. from the specified filesystem image, which typically is a
