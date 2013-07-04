@@ -12,11 +12,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ nasm ];
 
-  postInstall =
-    ''
-      rm $out/lib/*.a
-      (cd $out/lib && ln -s *.so.4.* libxvidcore.so && ln -s *.so.4.* libxvidcore.so.4 )
-    '';
+  buildInputs = [ nasm ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ autoconf automake libtool ];
+
+  # don't delete the '.a' files on darwin -- they're needed to compile ffmpeg
+  # (and perhaps other things)
+  postInstall = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    rm $out/lib/*.a
+  '' + ''
+    cd $out/lib
+    ln -s *.so.4.* libxvidcore.so
+    if [ ! -e libxvidcore.so.4 ]; then
+        ln -s *.so.4.* libxvidcore.so.4
+    fi
+  '';
   
   meta = {
     description = "MPEG-4 video codec for PC";
