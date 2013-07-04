@@ -4953,6 +4953,8 @@ let
 
   ming = callPackage ../development/libraries/ming { };
 
+  minmay = callPackage ../development/libraries/minmay { };
+
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
   mlt = callPackage ../development/libraries/mlt {
