@@ -6521,6 +6521,8 @@ let
 
     iwlwifi4965ucode = iwlwifi4965ucodeV2;
 
+    lttngModules = callPackage ../os-specific/linux/lttng-modules { };
+
     atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
