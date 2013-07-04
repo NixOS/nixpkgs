@@ -3542,6 +3542,8 @@ let
 
   ltrace = callPackage ../development/tools/misc/ltrace { };
 
+  lttngTools = callPackage ../development/tools/misc/lttng-tools { };
+
   lttngUst = callPackage ../development/tools/misc/lttng-ust { };
 
   mk = callPackage ../development/tools/build-managers/mk { };
