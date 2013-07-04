@@ -3,6 +3,7 @@
 , sdlSupport ? true, SDL
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? false, spice, spice_protocol
+, x86Only ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,8 @@ stdenv.mkDerivation rec {
     [ "--audio-drv-list=alsa"
       "--smbd=smbd" # use `smbd' from $PATH
     ]
-    ++ stdenv.lib.optional spiceSupport "--enable-spice";
+    ++ stdenv.lib.optional spiceSupport "--enable-spice"
+    ++ stdenv.lib.optional x86Only "--target-list=i386-softmmu,x86_64-softmmu";
 
   meta = {
     homepage = http://www.qemu.org/;
