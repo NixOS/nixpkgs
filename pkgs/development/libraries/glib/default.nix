@@ -24,7 +24,7 @@ let
   '';
 in
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "glib-2.36.1";
 
   src = fetchurl {
@@ -41,10 +41,7 @@ stdenv.mkDerivation (rec {
 
   configureFlags = "--with-pcre=system --disable-fam";
 
-  postConfigure = "sed '/SANE_MALLOC_PROTOS/s,^,//,' -i config.h" # https://bugzilla.gnome.org/show_bug.cgi?id=698716 :-)
-    + stdenv.lib.optionalString stdenv.isDarwin ''
-      sed '24 i #include <Foundation/Foundation.h>'
-    '';
+  postConfigure = "sed '/SANE_MALLOC_PROTOS/s,^,//,' -i config.h";
 
   enableParallelBuilding = true;
 
@@ -55,12 +52,12 @@ stdenv.mkDerivation (rec {
      inherit flattenInclude;
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GLib, a C library of programming buildings blocks";
     homepage    = http://www.gtk.org/;
-    license     = "LGPLv2+";
-    maintainers = with stdenv.lib.maintainers; [ raskin urkud lovek323 ];
-    platforms   = stdenv.lib.platforms.unix;
+    license     = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ lovek323 raskin urkud ];
+    platforms   = platforms.unix;
 
     longDescription = ''
       GLib provides the core application building blocks for libraries
@@ -71,12 +68,3 @@ stdenv.mkDerivation (rec {
   };
 }
 
-//
-
-(stdenv.lib.optionalAttrs stdenv.isDarwin {
-  # XXX: Disable the NeXTstep back-end because stdenv.gcc doesn't support
-  # Objective-C.
-  postConfigure =
-    '' sed -i configure -e's/glib_have_cocoa=yes/glib_have_cocoa=no/g'
-    '';
-}))
