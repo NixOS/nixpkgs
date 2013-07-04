@@ -1,5 +1,5 @@
 { stdenv, fetchurl, sqlite, curl, pkgconfig, libxml2, stfl, json_c, ncurses
-, gettext, libiconvOrEmpty, makeWrapper }:
+, gettext, libiconvOrEmpty, makeWrapper, perl }:
 
 stdenv.mkDerivation rec {
   name = "newsbeuter-2.6";
@@ -12,12 +12,13 @@ stdenv.mkDerivation rec {
   buildInputs
     # use gettext instead of libintlOrEmpty so we have access to the msgfmt
     # command
-    = [ pkgconfig sqlite curl libxml2 stfl json_c ncurses gettext ]
+    = [ pkgconfig sqlite curl libxml2 stfl json_c ncurses gettext perl ]
       ++ libiconvOrEmpty
       ++ stdenv.lib.optional stdenv.isDarwin makeWrapper;
 
   preBuild = ''
     sed -i -e 104,108d config.sh
+    sed -i "1 s%^.*$%#!${perl}/bin/perl%" txt2h.pl
     export LDFLAGS=-lncursesw
   '';
 
