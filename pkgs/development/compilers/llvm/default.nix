@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
-    license     = licenses.bsd;
+    license     = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 raskin shlevy viric ];
     platforms   = platforms.all;
   };
