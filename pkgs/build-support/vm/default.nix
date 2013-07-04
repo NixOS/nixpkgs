@@ -80,6 +80,8 @@ rec {
     mount -t proc none /proc
     mount -t sysfs none /sys
 
+    echo 2 > /proc/sys/vm/panic_on_oom
+
     for o in $(cat /proc/cmdline); do
       case $o in
         mountDisk=1)
