@@ -755,6 +755,11 @@ let
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
 
+  editres = callPackage ../tools/graphics/editres {
+    inherit (xlibs) libXt libXaw;
+    inherit (xorg) utilmacros;
+  };
+
   edk2 = callPackage ../development/compilers/edk2 { };
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
