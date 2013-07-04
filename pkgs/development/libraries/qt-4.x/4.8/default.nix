@@ -17,18 +17,23 @@
 
 with stdenv.lib;
 
-let v = "4.8.4"; in
+let
+  v_maj = "4.8";
+  v_min = "5";
+  vers = "${v_maj}.${v_min}";
+in
 
 # TODO:
 #  * move some plugins (e.g., SQL plugins) to dedicated derivations to avoid
 #    false build-time dependencies
 
 stdenv.mkDerivation rec {
-  name = "qt-${v}";
+  name = "qt-${vers}";
 
   src = fetchurl {
-    url = "http://releases.qt-project.org/qt4/source/qt-everywhere-opensource-src-${v}.tar.gz";
-    sha256 = "0w1j16q6glniv4hppdgcvw52w72gb2jab35ylkw0qjn5lj5y7c1k";
+    url = "http://download.qt-project.org/official_releases/qt/"
+      + "${v_maj}/${vers}/qt-everywhere-opensource-src-${vers}.tar.gz";
+    sha256 = "0f51dbgn1dcck8pqimls2qyf1pfmsmyknh767cvw87c3d218ywpb";
   };
 
   prePatch = ''
@@ -39,11 +44,11 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./glib-2.32.patch
-      ./CVE-2013-0254.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         inherit cups icu libXfixes;
         glibc = stdenv.gcc.libc;
+        openglDriver = mesa.driverLink;
       })
     ] ++ stdenv.lib.optional gtkStyle (substituteAll {
         src = ./dlopen-gtkstyle.diff;
