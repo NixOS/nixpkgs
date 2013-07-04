@@ -1,5 +1,8 @@
 { stdenv }:
 
+# this tool only exists on darwin
+assert stdenv.isDarwin;
+
 stdenv.mkDerivation {
   name = "otool";
 
