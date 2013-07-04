@@ -3302,6 +3302,8 @@ let
 
   avarice = callPackage ../development/tools/misc/avarice { };
 
+  babeltrace = callPackage ../development/tools/misc/babeltrace { };
+
   bam = callPackage ../development/tools/build-managers/bam {};
 
   binutils = callPackage ../development/tools/misc/binutils {
