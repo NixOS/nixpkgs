@@ -16,7 +16,9 @@ rec {
   # in parallel).  So apply a patch to increase the timeout to 120s.
   kernel = assert pkgs.linux.features.cifsTimeout; linuxKernel;
 
-  kvm = pkgs.qemu_kvm;
+  kvm = pkgs.qemu;
+
+  qemuProg = "${kvm}/bin/qemu-system-" + (if stdenv.system == "x86_64-linux" then "x86_64" else "i386");
 
 
   modulesClosure = makeModulesClosure {
@@ -195,7 +197,8 @@ rec {
 
 
   qemuCommandLinux = ''
-    ${kvm}/bin/qemu-kvm \
+    ${qemuProg} \
+      -enable-kvm \
       ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
       -nographic -no-reboot \
       -net nic,model=virtio \
@@ -393,7 +396,8 @@ rec {
 
   qemuCommandGeneric = ''
     PATH="${samba}/sbin:$PATH" \
-    ${kvm}/bin/qemu-kvm \
+    ${qemuProg} \
+      -enable-kvm \
       -nographic -no-reboot \
       -smb $(pwd) -hda $diskImage \
       $QEMU_OPTS
