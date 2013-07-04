@@ -2,7 +2,7 @@
 , linuxKernel ? pkgs.linux_3_9
 , img ? "bzImage"
 , rootModules ?
-    [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3"
+    [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8"
       "ext4" "unix" "hmac" "md4" "ecb" "des_generic" "sha256"
     ]
 }:
@@ -297,8 +297,8 @@ rec {
 
   defaultCreateRootFS = ''
     mkdir /mnt
-    ${e2fsprogs}/sbin/mke2fs -F /dev/${hd}
-    ${utillinux}/bin/mount -t ext2 /dev/${hd} /mnt
+    ${e2fsprogs}/sbin/mkfs.ext4 /dev/${hd}
+    ${utillinux}/bin/mount -t ext4 /dev/${hd} /mnt
 
     if test -e /mnt/.debug; then
       exec ${bash}/bin/sh
