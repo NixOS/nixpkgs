@@ -1,20 +1,13 @@
 { pkgs
-, linuxKernel ? pkgs.linux_3_9
+, kernel ? pkgs.linux_3_9
 , img ? "bzImage"
 , rootModules ?
-    [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8"
-      "ext4" "unix" "hmac" "md4" "ecb" "des_generic" "sha256"
-    ]
+    [ "virtio_pci" "virtio_blk" "virtio_balloon" "ext4" "unix" "9p" "9pnet_virtio" ]
 }:
 
 with pkgs;
 
 rec {
-
-  # The 15 second CIFS timeout is too short if the host if heavily
-  # loaded (e.g., in the Hydra build farm when it's running many jobs
-  # in parallel).  So apply a patch to increase the timeout to 120s.
-  kernel = assert pkgs.linux.features.cifsTimeout; linuxKernel;
 
   kvm = pkgs.qemu;
 
@@ -99,20 +92,12 @@ rec {
     done
 
     for i in $(cat ${modulesClosure}/insmod-list); do
-      args=
-      case $i in
-        */cifs.ko)
-          args="CIFSMaxBufSize=4194304"
-          ;;
-      esac
       echo "loading module $(basename $i .ko)"
-      insmod $i $args
+      insmod $i
     done
 
     mount -t tmpfs none /dev
     ${createDeviceNodes "/dev"}
-
-    ifconfig eth0 up 10.0.2.15
 
     mkdir /fs
 
@@ -127,14 +112,14 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs/nix/store
-    mount -t cifs //10.0.2.4/store /fs/nix/store -o guest,sec=none,sec=ntlm
+    mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,msize=262144,cache=fscache
 
     mkdir -p /fs/tmp
     mount -t tmpfs -o "mode=755" none /fs/tmp
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t cifs //10.0.2.4/xchg /fs/tmp/xchg -o guest,sec=none,sec=ntlm
+    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=262144,cache=fscache
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -203,49 +188,14 @@ rec {
       -enable-kvm \
       ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
       -nographic -no-reboot \
-      -net nic,model=virtio \
-      -chardev socket,id=samba,path=./samba \
-      -net user,guestfwd=tcp:10.0.2.4:445-chardev:samba \
+      -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
+      -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
       -drive file=$diskImage,if=virtio,cache=writeback,werror=report \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
       -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk" \
       $QEMU_OPTS
   '';
-
-
-  startSamba =
-    ''
-      export WHO=`whoami`
-      mkdir -p $TMPDIR/xchg
-
-      cat > $TMPDIR/smb.conf <<SMB
-      [global]
-        private dir = $TMPDIR
-        smb ports = 0
-        socket address = 127.0.0.1
-        pid directory = $TMPDIR
-        lock directory = $TMPDIR
-        log file = $TMPDIR/log.smbd
-        smb passwd file = $TMPDIR/smbpasswd
-        security = share
-      [store]
-        force user = $WHO
-        path = /nix/store
-        read only = no
-        guest ok = yes
-      [xchg]
-        force user = $WHO
-        path = $TMPDIR/xchg
-        read only = no
-        guest ok = yes
-      $EXTRA_SAMBA_CONF
-      SMB
-
-      rm -f ./samba
-      ${socat}/bin/socat unix-listen:./samba exec:"${utillinux}/bin/setsid ${samba}/sbin/smbd -s $TMPDIR/smb.conf",nofork > /dev/null 2>&1 &
-      while [ ! -e ./samba ]; do sleep 0.1; done # ugly
-    '';
 
 
   vmRunCommand = qemuCommand: writeText "vm-run" ''
@@ -267,7 +217,6 @@ rec {
     diskImage=$diskImage
     TMPDIR=$TMPDIR
     cd $TMPDIR
-    ${startSamba}
     ${qemuCommand}
     EOF
 
@@ -314,9 +263,9 @@ rec {
 
   /* Run a derivation in a Linux virtual machine (using Qemu/KVM).  By
      default, there is no disk image; the root filesystem is a tmpfs,
-     and /nix/store is shared with the host (via the CIFS protocol to
-     a Samba instance automatically started by Qemu).  Thus, any pure
-     Nix derivation should run unmodified, e.g. the call
+     and /nix/store is shared with the host (via the 9P protocol).
+     Thus, any pure Nix derivation should run unmodified, e.g. the
+     call
 
        runInLinuxVM patchelf
 
