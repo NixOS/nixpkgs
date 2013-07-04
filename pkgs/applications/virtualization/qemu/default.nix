@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--audio-drv-list=alsa"
-      "--smbd=smbd"  # use `smbd' from $PATH
+      "--smbd=smbd" # use `smbd' from $PATH
     ]
     ++ stdenv.lib.optional spiceSupport "--enable-spice";
 
