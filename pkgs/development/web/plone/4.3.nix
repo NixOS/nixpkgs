@@ -3092,10 +3092,10 @@ let plone43Packages = pythonPackages.python.modules // rec {
   };
 
   plone_app_discussion = buildPythonPackage rec {
-    name = "plone.app.discussion-2.2.6";
+    name = "plone.app.discussion-2.2.7";
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/p/plone.app.discussion/plone.app.discussion-2.2.6.zip";
-      md5 = "36cf9cd22119282f49facd03fb3c2632";
+      url = "https://pypi.python.org/packages/source/p/plone.app.discussion/plone.app.discussion-2.2.7.tar.gz";
+      md5 = "47e2713140dbbcd6dd9c3fa6dbd17fd0";
     };
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ plone_app_uuid zope_site plone_indexer collective_monkeypatcher zope_interface plone_app_z3cform zope_container plone_app_layout plone_z3cform plone_app_registry zope_component zodb3 zope_event setuptools z3c_form zope_lifecycleevent zope_annotation plone_registry ];
