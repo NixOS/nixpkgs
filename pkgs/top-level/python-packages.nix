@@ -6197,14 +6197,24 @@ pythonPackages = python.modules // rec {
     preConfigure = ''
       find -print0 | xargs -0 touch
     '';
+
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      find "$out" -name _spotify.so -exec \
+          install_name_tool -change \
+          @loader_path/../Frameworks/libspotify.framework/libspotify \
+          ${pkgs.libspotify}/lib/libspotify.dylib \
+          {} \;
+    '';
   
     # There are no tests
     doCheck = false;
   
-    meta = {
-      homepage = http://pyspotify.mopidy.com;
+    meta = with stdenv.lib; {
+      homepage    = http://pyspotify.mopidy.com;
       description = "A Python interface to Spotify’s online music streaming service";
-      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      license     = licenses.unfree;
+      maintainers = with maintainers; [ lovek323 rickynils ];
+      platforms   = platforms.unix;
     };
   };
 
