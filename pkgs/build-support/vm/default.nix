@@ -324,7 +324,7 @@ rec {
      `preVM' can optionally contain a shell command to be evaluated
      *before* the VM is started (i.e., on the host).  The attribute
      `memSize' specifies the memory size of the VM in megabytes,
-     defaulting to 256.  The attribute `diskImage' can optionally
+     defaulting to 512.  The attribute `diskImage' can optionally
      specify a file system image to be attached to /dev/sda.  (Note
      that currently we expect the image to contain a filesystem, not a
      full disk image with a partition table etc.)
@@ -339,7 +339,7 @@ rec {
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = attrs.args;
     origBuilder = attrs.builder;
-    QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
+    QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 512)}";
   });
 
 
