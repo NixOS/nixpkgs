@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage    = http://gstreamer.freedesktop.org;
     description = "Base plug-ins for GStreamer";
-    license     = licences.lgpl2Plus;
+    license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
   };
