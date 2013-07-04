@@ -78,8 +78,10 @@ stdenv.mkDerivation rec {
     inherit vdpauSupport;
   };
 
-  meta = {
-    homepage = http://www.ffmpeg.org/;
+  meta = with stdenv.lib; {
+    homepage    = http://www.ffmpeg.org/;
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
   };
 }
