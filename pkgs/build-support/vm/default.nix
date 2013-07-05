@@ -99,6 +99,8 @@ rec {
     mount -t tmpfs none /dev
     ${createDeviceNodes "/dev"}
 
+    ifconfig lo up
+
     mkdir /fs
 
     if test -z "$mountDisk"; then
@@ -129,6 +131,7 @@ rec {
 
     mkdir -p /fs/etc
     ln -sf /proc/mounts /fs/etc/mtab
+    echo "127.0.0.1 localhost" > /fs/etc/hosts
 
     echo "Now running: $command"
     test -n "$command"
