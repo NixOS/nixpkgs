@@ -989,6 +989,30 @@ rec {
       packages = commonOpenSUSEPackages;
     };
 
+    centos64i386 = {
+      name = "centos-6.4-i386";
+      fullName = "CentOS 6.4 (i386)";
+      packagesList = fetchurl {
+        url = http://mirror.centos.org/centos/6.4/os/i386/repodata/87aa4c4e19f9a3ec93e3d820f1ea6b6ece8810cb45f117a16354465e57a1b50d-primary.xml.gz;
+        sha256 = "03dml5bmwijlcfhigwa5rc88ikkfdgmg286qwf9yr8zr3574ral7";
+      };
+      urlPrefix = http://mirror.centos.org/centos/6.4/os/i386/ ;
+      archs = ["noarch" "i386"];
+      packages = commonCentOSPackages;
+    };
+
+    centos64x86_64 = {
+      name = "centos-6.4-x86_64";
+      fullName = "CentOS 6.4 (x86_64)";
+      packagesList = fetchurl {
+        url = http://mirror.centos.org/centos/6.4/os/x86_64/repodata/4d4030b92f010f466eb4f004312b9f532b9e85e60c5e6421e8b429c180ac1efe-primary.xml.gz;
+        sha256 = "1zhymj0c2adlx0hn8phcws2rwaskkwmk217hnip4c3q15ywk0h2d";
+      };
+      urlPrefix = http://mirror.centos.org/centos/6.4/os/x86_64/ ;
+      archs = ["noarch" "x86_64"];
+      packages = commonCentOSPackages;
+    };
+
   };
 
 
@@ -1417,6 +1441,28 @@ rec {
     "unzip"
   ];
 
+  commonCentOSPackages = [
+    "autoconf"
+    "automake"
+    "basesystem"
+    "bzip2"
+    "curl"
+    "diffutils"
+    "centos-release"
+    "findutils"
+    "gawk"
+    "gcc-c++"
+    "gzip"
+    "make"
+    "patch"
+    "perl"
+    "pkgconfig"
+    "procps"
+    "rpm"
+    "rpm-build"
+    "tar"
+    "unzip"
+  ];
 
   /* Common packages for openSUSE images. */
   commonOpenSUSEPackages = [
