@@ -2740,6 +2740,20 @@ rec {
     };
   };
 
+  FileShare = buildPerlPackage {
+    name = "File-Share-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/I/IN/INGY/File-Share-0.02.tar.gz;
+      sha256 = "1vdgyf3m08s4pwj70bgbb31jsj8hixdl940m15phyx2hpy8dkabw";
+    };
+    propagatedBuildInputs = [ FileShareDir ];
+    meta = {
+      homepage = http://github.com/ingydotnet/file-share-pm/tree;
+      description = "Extend File::ShareDir to Local Libraries";
+      license = "perl";
+    };
+  };
+
   FileShareDir = buildPerlPackage {
     name = "File-ShareDir-1.03";
     src = fetchurl {
@@ -4132,6 +4146,32 @@ rec {
     propagatedBuildInputs = [ FileRemove LWPUserAgent ModuleScanDeps PARDist YAMLTiny ];
     meta = {
       description = "Standalone, extensible Perl module installer";
+      license = "perl";
+    };
+  };
+
+  ModuleInstallAuthorRequires = buildPerlPackage {
+    name = "Module-Install-AuthorRequires-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FL/FLORA/Module-Install-AuthorRequires-0.02.tar.gz;
+      sha256 = "1v2ciw75dj5y8lh10d1vrhwmjx266gpqavr8m21jlpblgm9j2qyc";
+    };
+    propagatedBuildInputs = [ ModuleInstall ];
+    meta = {
+      description = "Declare author-only dependencies";
+      license = "perl";
+    };
+  };
+
+  ModuleInstallAuthorTests = buildPerlPackage {
+    name = "Module-Install-AuthorTests-0.002";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Module-Install-AuthorTests-0.002.tar.gz;
+      sha256 = "121dyggy38316xss06v1zkwx4b59gl7b00c5q99xyzimwqnp49a0";
+    };
+    propagatedBuildInputs = [ ModuleInstall ];
+    meta = {
+      description = "Designate tests only run by module authors";
       license = "perl";
     };
   };
@@ -6227,6 +6267,19 @@ rec {
     };
   };
 
+  TestEOL = buildPerlPackage {
+    name = "Test-EOL-1.5";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Test-EOL-1.5.tar.gz;
+      sha256 = "0qfdn71562xzmgnhmkkdbpp3vj851ldl1zlmxvharxsr16gjh6s3";
+    };
+    meta = {
+      homepage = http://metacpan.org/release/Test-EOL;
+      description = "Check the correct line endings in your project";
+      license = "perl5";
+    };
+  };
+
   TestException = buildPerlPackage rec {
     name = "Test-Exception-0.31";
     src = fetchurl {
@@ -6352,6 +6405,18 @@ rec {
     propagatedBuildInputs = [ ExceptionClass TestDeep TestDifferences TestException TestWarn ];
     meta = {
       description = "Most commonly needed test functions and features";
+      license = "perl";
+    };
+  };
+
+  TestNoTabs = buildPerlPackage {
+    name = "Test-NoTabs-1.3";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Test-NoTabs-1.3.tar.gz;
+      sha256 = "06gvj0pgljc7n9rxhvwb0gq9wk51i3ks41lgh7a5ycqfkh9d0glw";
+    };
+    meta = {
+      description = "Check the presence of tabs in your project";
       license = "perl";
     };
   };
