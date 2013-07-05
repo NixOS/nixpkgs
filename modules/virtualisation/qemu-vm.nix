@@ -162,22 +162,12 @@ let
             ${toString config.virtualisation.diskSize}M || exit 1
       fi
 
-      # Start Samba (which wants to put its socket and config files in TMPDIR).
+      # Create a directory for exchanging data with the VM.
       if [ -z "$TMPDIR" -o -z "$USE_TMPDIR" ]; then
-          TMPDIR=$(mktemp -d nix-vm-smbd.XXXXXXXXXX --tmpdir)
+          TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
       fi
       cd $TMPDIR
       mkdir -p $TMPDIR/xchg
-
-      EXTRA_SAMBA_CONF="
-        [shared]
-          force user = $WHO
-          path = ''${SHARED_DIR:-$TMPDIR/xchg}
-          read only = no
-          guest ok = yes
-      "
-
-      ${pkgs.vmTools.startSamba}
 
       idx=2
       extraDisks=""
@@ -189,13 +179,16 @@ let
 
       # Start QEMU.
       # "-boot menu=on" is there, because I don't know how to make qemu boot from 2nd hd.
-      exec ${pkgs.qemu_kvm}/bin/qemu-kvm \
+      exec ${pkgs.qemu}/bin/qemu-system-${if pkgs.stdenv.system == "x86_64-linux" then "x86_64" else "i386"} \
+          -enable-kvm \
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
           ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
           -net nic,vlan=0,model=virtio \
-          -chardev socket,id=samba,path=./samba \
-          -net user,vlan=0,guestfwd=tcp:10.0.2.4:445-chardev:samba''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \
+          -net user,vlan=0''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \
+          -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
+          -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
+          -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
           ${if cfg.useBootLoader then ''
             -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
             -drive index=1,id=drive2,file=${bootDisk}/disk.img,if=virtio,readonly \
@@ -271,12 +264,6 @@ in
 
   boot.loader.grub.device = mkOverride 50 "/dev/vda";
 
-  # All the modules the initrd needs to mount the host filesystem via
-  # CIFS.  Also use paravirtualised network and block devices for
-  # performance.
-  boot.initrd.availableKernelModules =
-    [ "cifs" "nls_utf8" "hmac" "md4" "ecb" "des_generic" "sha256" ];
-
   boot.initrd.supportedFilesystems = optional cfg.writableStore "unionfs-fuse";
 
   boot.initrd.extraUtilsCommands =
@@ -287,10 +274,6 @@ in
 
   boot.initrd.postDeviceCommands =
     ''
-      # Set up networking.  Needed for CIFS mounting.
-      ip link set eth0 up
-      ip addr add 10.0.2.15/24 dev eth0
-
       # If the disk image appears to be empty, run mke2fs to
       # initialise.
       FSTYPE=$(blkid -o value -s TYPE /dev/vda || true)
@@ -338,30 +321,29 @@ in
 
   virtualisation.qemu.options = [ "-vga std" "-usbdevice tablet" ];
 
-  # Mount the host filesystem via CIFS, and bind-mount the Nix store
-  # of the host into our own filesystem.  We use mkOverride to allow
-  # this module to be applied to "normal" NixOS system configuration,
-  # where the regular value for the `fileSystems' attribute should be
+  # Mount the host filesystem via 9P, and bind-mount the Nix store of
+  # the host into our own filesystem.  We use mkOverride to allow this
+  # module to be applied to "normal" NixOS system configuration, where
+  # the regular value for the `fileSystems' attribute should be
   # disregarded for the purpose of building a VM test image (since
   # those filesystems don't exist in the VM).
   fileSystems = mkOverride 10
-    (let mode = if builtins.compareVersions "3.5" config.boot.kernelPackages.kernel.version == 1 then "none" else "ntlm"; in
     { "/".device = "/dev/vda";
       "/nix/store" =
-        { device = "//10.0.2.4/store";
-          fsType = "cifs";
-          options = "guest,sec=${mode},noperm,noacl";
+        { device = "store";
+          fsType = "9p";
+          options = "trans=virtio,version=9p2000.L,msize=1048576,cache=loose";
         };
       "/tmp/xchg" =
-        { device = "//10.0.2.4/xchg";
-          fsType = "cifs";
-          options = "guest,sec=${mode},noperm,noacl";
+        { device = "xchg";
+          fsType = "9p";
+          options = "trans=virtio,version=9p2000.L,msize=1048576,cache=loose";
           neededForBoot = true;
         };
       "/tmp/shared" =
-        { device = "//10.0.2.4/shared";
-          fsType = "cifs";
-          options = "guest,sec=${mode},noperm,noacl";
+        { device = "shared";
+          fsType = "9p";
+          options = "trans=virtio,version=9p2000.L,msize=1048576";
           neededForBoot = true;
         };
     } // optionalAttrs cfg.useBootLoader
@@ -371,23 +353,9 @@ in
           options = "ro";
           noCheck = true; # fsck fails on a r/o filesystem
         };
-    });
+    };
 
   swapDevices = mkOverride 50 [ ];
-
-  # Starting DHCP brings down eth0, which kills the connection to the
-  # host filesystem and thus deadlocks the system.
-  networking.useDHCP = false;
-
-  networking.defaultGateway = mkOverride 200 "10.0.2.2";
-
-  networking.nameservers = [ "10.0.2.3" ];
-
-  networking.interfaces = singleton
-    { name = "eth0";
-      ipAddress = "10.0.2.15";
-      prefixLength = 24;
-    };
 
   # Don't run ntpd in the guest.  It should get the correct time from KVM.
   services.ntp.enable = false;
@@ -397,13 +365,6 @@ in
       ensureDir $out/bin
       ln -s ${config.system.build.toplevel} $out/system
       ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${vmName}-vm
-    '';
-
-  # sendfile() is currently broken over CIFS, so fix it here for all
-  # configurations that use Apache.
-  services.httpd.extraConfig =
-    ''
-      EnableSendFile Off
     '';
 
   # When building a regular system configuration, override whatever
@@ -427,7 +388,6 @@ in
       (isEnabled "VIRTIO_PCI")
       (isEnabled "VIRTIO_NET")
       (isEnabled "EXT4_FS")
-      (isEnabled "CIFS")
       (isYes "BLK_DEV")
       (isYes "PCI")
       (isYes "EXPERIMENTAL")
