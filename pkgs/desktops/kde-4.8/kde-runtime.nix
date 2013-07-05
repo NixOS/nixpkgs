@@ -6,7 +6,7 @@
 kde {
   buildInputs =
     [ kdelibs shared_desktop_ontologies bzip2 libssh exiv2 attica xz networkmanager
-      samba (libcanberra.override { gtk = null; }) ntrack libjpeg qca2 pulseaudio
+      samba libcanberra ntrack libjpeg qca2 pulseaudio
     ];
 
   nativeBuildInputs = [ pkgconfig ];

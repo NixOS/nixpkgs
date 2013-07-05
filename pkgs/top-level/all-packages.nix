@@ -4410,6 +4410,9 @@ let
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcanberra = callPackage ../development/libraries/libcanberra { };
+  libcanberra_kde = if (config.kde_runtime.libcanberraWithoutGTK or true)
+    then libcanberra.override { gtk = null; }
+    else libcanberra;
 
   libcello = callPackage ../development/libraries/libcello {};
 
@@ -9038,6 +9041,7 @@ let
       eigen = eigen2;
       libotr = libotr_3_2;
       libgphoto2 = libgphoto2_4;
+      libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.7;
 
   kde48 = kdePackagesFor (pkgs.kde48 // {
@@ -9045,6 +9049,7 @@ let
       eigen = eigen2;
       libotr = libotr_3_2;
       libgphoto2 = libgphoto2_4;
+      libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.8;
 
   kde410 = kdePackagesFor (pkgs.kde410 // {
@@ -9053,6 +9058,7 @@ let
       libotr = libotr_3_2;
       libusb = libusb1;
       ffmpeg = ffmpeg_1;
+      libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.10;
 
   kdePackagesFor = self: dir:
