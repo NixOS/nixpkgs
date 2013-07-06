@@ -6182,12 +6182,11 @@ pythonPackages = python.modules // rec {
   pyspotify = buildPythonPackage rec {
     name = "pyspotify-${version}";
   
-    version = "1.10";
+    version = "1.11";
   
-    src = fetchgit {
-      url = "https://github.com/mopidy/pyspotify.git";
-      rev = "refs/tags/v${version}";
-      sha256 = "1rvgrviwn6f037m8vq395chz6a1119dbsdhfwdbv5ambi0bak6ll";
+    src = fetchurl {
+      url = "https://github.com/mopidy/pyspotify/archive/v1.11.tar.gz";
+      sha256 = "089ml6pqr3f2d15n70jpzbaqjp5pjgqlyv4algkxw92xscjw2izg";
     };
   
     buildInputs = [ pkgs.libspotify ]
