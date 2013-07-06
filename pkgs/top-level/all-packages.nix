@@ -3548,6 +3548,8 @@ let
 
   lttngUst = callPackage ../development/tools/misc/lttng-ust { };
 
+  lttv = callPackage ../development/tools/misc/lttv { };
+
   mk = callPackage ../development/tools/build-managers/mk { };
 
   neoload = callPackage ../development/tools/neoload {
