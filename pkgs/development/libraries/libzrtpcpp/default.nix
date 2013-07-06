@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, openssl, pkgconfig, ccrtp }:
 
 stdenv.mkDerivation rec {
-  name = "libzrtpcpp-2.3.3";
+  name = "libzrtpcpp-2.3.4";
 
   src = fetchurl {
     url = "mirror://gnu/ccrtp/${name}.tar.gz";
-    sha256 = "1p8i3qb4j1r64r7miva8hamaszk42kncpy1x5xlq1l0465h01rvg";
+    sha256 = "020hfyrh8qdwkqdg1r1n65wdzj5i01ba9dzjghbm9lbz93gd9r83";
   };
 
   # We disallow 'lib64', or pkgconfig will not find it.
