@@ -5149,7 +5149,13 @@ let
 
   popt = callPackage ../development/libraries/popt { };
 
-  portaudio = callPackage ../development/libraries/portaudio { };
+  portaudio = callPackage ../development/libraries/portaudio {
+    # resolves a variety of compile-time errors
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
+
   portaudioSVN = callPackage ../development/libraries/portaudio/svn-head.nix { };
 
   prison = callPackage ../development/libraries/prison { };
