@@ -448,6 +448,8 @@ let
 
   setFile = callPackage ../development/tools/misc/setFile { };
 
+  install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   titaniumenv_2_1 = import ../development/mobile/titaniumenv {
