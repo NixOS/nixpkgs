@@ -11,16 +11,17 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "usbutils-006";
+  name = "usbutils-007";
 
   src = fetchurl {
-    url = mirror://kernel/linux/utils/usb/usbutils/usbutils-006.tar.xz;
-    sha256 = "03pd57vv8c6x0hgjqcbrxnzi14h8hcghmapg89p8k5zpwpkvbdfr";
+    url = "mirror://kernel/linux/utils/usb/usbutils/${name}.tar.xz";
+    sha256 = "197gpbxnspy6ncqv5mziaikcfqgb3irbqqlfwjgzvh5v4hbs14vm";
   };
 
   buildInputs = [ pkgconfig libusb1 ];
 
-  preBuild = "bunzip2 < ${usbids} > usb.ids";
+  # currently up-to-date
+  #preBuild = "bunzip2 < ${usbids} > usb.ids";
 
   meta = {
     homepage = http://www.linux-usb.org/;
