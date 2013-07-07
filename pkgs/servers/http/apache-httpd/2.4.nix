@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     optional libxml2Support libxml2;
 
   # Required for ‘pthread_cancel’.
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
   configureFlags = ''
     --with-apr=${apr}
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     inherit apr aprutil sslSupport proxySupport ldapSupport;
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Apache HTTPD, the world's most popular web server";
-    homepage = "http://httpd.apache.org/";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    homepage    = http://httpd.apache.org/;
+    license     = licenses.asl20;
+    platforms   = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ lovek323 simons ];
   };
 }
