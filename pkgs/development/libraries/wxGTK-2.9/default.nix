@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
-, gstreamer, gst_plugins_base, GConf, setFile
+, gstreamer, gst_plugins_base, GConf, setfile
 , withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true,
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
       gst_plugins_base GConf ]
     ++ optional withMesa mesa
-    ++ optional stdenv.isDarwin setFile;
+    ++ optional stdenv.isDarwin setfile;
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   " + optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace \
       'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' \
-      'ac_cv_prog_SETFILE="${setFile}/bin/SetFile"'
+      'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
   '';
 
   postInstall = "

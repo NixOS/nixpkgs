@@ -444,9 +444,9 @@ let
 
   apg = callPackage ../tools/security/apg { };
 
-  otool = callPackage ../development/tools/misc/otool { };
+  otool = callPackage ../os-specific/darwin/otool { };
 
-  setFile = callPackage ../development/tools/misc/setFile { };
+  setfile = callPackage ../os-specific/darwin/setfile { };
 
   install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
 
