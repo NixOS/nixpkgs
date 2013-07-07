@@ -14,12 +14,13 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p "$out/bin"
-    cp /usr/bin/otool "$out/bin"
+    ln -s $src "$out/bin"
   '';
 
   meta = with stdenv.lib; {
     description = "Object file displaying tool";
     homepage    = https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/otool.1.html;
+    license     = licenses.unfree;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.darwin;
 
