@@ -158,7 +158,7 @@ let
       NIX_DISK_IMAGE=$(readlink -f ''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}})
 
       if ! test -e "$NIX_DISK_IMAGE"; then
-          ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" \
+          ${pkgs.qemu}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" \
             ${toString config.virtualisation.diskSize}M || exit 1
       fi
 
@@ -172,7 +172,7 @@ let
       idx=2
       extraDisks=""
       ${flip concatMapStrings cfg.emptyDiskImages (size: ''
-        ${pkgs.qemu_kvm}/bin/qemu-img create -f raw "empty$idx" "${toString size}M"
+        ${pkgs.qemu}/bin/qemu-img create -f raw "empty$idx" "${toString size}M"
         extraDisks="$extraDisks -drive index=$idx,file=$(pwd)/empty$idx,if=virtio,werror=report"
         idx=$((idx + 1))
       '')}
