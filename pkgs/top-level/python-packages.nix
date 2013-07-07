@@ -451,6 +451,29 @@ pythonPackages = python.modules // rec {
   };
 
 
+  bitstring = buildPythonPackage rec {
+    name = "bitstring-3.1.2";
+
+    src = fetchurl {
+      url = "https://python-bitstring.googlecode.com/files/${name}.zip";
+      sha256 = "1i1p3rkj4ad108f23xyib34r4rcy571gy65paml6fk77knh0k66p";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Module for binary data manipulation";
+      homepage = https://code.google.com/p/python-bitstring/;
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   blivet = buildPythonPackage rec {
     name = "blivet-${version}";
     version = "0.17-1";
