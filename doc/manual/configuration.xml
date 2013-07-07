@@ -135,7 +135,33 @@ always allowed.)</para>
 
 <section><title>Wireless networks</title>
 
-<para>TODO</para>
+<para>
+NixOS will start wpa_supplicant for you if you enable this setting:
+
+<programlisting>
+networking.wireless.enable = true;
+</programlisting>
+
+NixOS currently does not generate wpa_supplicant's
+configuration file, <literal>/etc/wpa_supplicant.conf</literal>. You should edit this file
+ourself to define wireless networks, WPA keys and so on (see
+wpa_supplicant.conf(5)).
+</para>
+
+<para>
+If you are using WPA2 the <command>wpa_passphrase</command> tool might be useful
+to generate the <literal>wpa_supplicant.conf</literal>.
+
+<screen>
+$ wpa_passphrase ESSID PSK > /etc/wpa_supplicant.conf</screen>
+
+After you have edited the <literal>wpa_supplicant.conf</literal>,
+you need to restart the wpa_supplicant service.
+
+<screen>
+$ systemctl restart wpa_supplicant.service</screen>
+</para>
+
 
 </section>
 
