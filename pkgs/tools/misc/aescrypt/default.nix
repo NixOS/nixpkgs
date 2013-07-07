@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, libiconvOrEmpty }:
  
 stdenv.mkDerivation rec {
   version = "3.0.9";
@@ -19,14 +19,16 @@ stdenv.mkDerivation rec {
     cp aescrypt_keygen $out/bin
   '';
  
-  buildInputs = [];
+  buildInputs = [ libiconvOrEmpty ];
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
  
-  meta = {
+  meta = with stdenv.lib; {
     description = "A file encryption util that uses the industry standard Advanced Encryption Standard (AES) to easily and securely encrypt files";
-    homepage = http://www.aescrypt.com/;
-    license = "GPLv2";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.qknight ];
+    homepage    = http://www.aescrypt.com/;
+    license     = licenses.gpl2;
+    maintainers = with maintainers; [ lovek323 qknight ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }
 
