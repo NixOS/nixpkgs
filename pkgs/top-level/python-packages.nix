@@ -3800,6 +3800,26 @@ pythonPackages = python.modules // rec {
   };
 
 
+  pyodbc = buildPythonPackage rec {
+    name = "pyodbc-3.0.6";
+
+    src = fetchurl {
+      url = "https://pyodbc.googlecode.com/files/${name}.zip";
+      sha256 = "0v9nymllw5zq5294rqp8ip3l0g6l3l3mljwhxn5jajyzxlnz39z5";
+    };
+
+    buildInputs = [ pkgs.unzip pkgs.libiodbc ];
+
+    meta = with stdenv.lib; {
+      description = "Python ODBC module to connect to almost any database";
+      homepage = https://code.google.com/p/pyodbc/;
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   pyparsing = buildPythonPackage rec {
     name = "pyparsing-1.5.6";
 
