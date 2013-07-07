@@ -247,6 +247,10 @@ let
       # Our initrd init uses shebang scripts, so can't be modular
       BINFMT_SCRIPT y
 
+      # Enable the 9P cache to speed up NixOS VM tests.
+      9P_FSCACHE y
+      9P_FS_POSIX_ACL y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
