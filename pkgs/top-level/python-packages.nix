@@ -814,6 +814,27 @@ pythonPackages = python.modules // rec {
     };
   });
 
+
+  construct = buildPythonPackage rec {
+    name = "construct-2.5.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/construct/${name}.tar.gz";
+      sha256 = "08qksl87vr6g2wjxwsyrjh4w6v8bfmcgrcgln7irqvw5vv7qgqss";
+    };
+
+    propagatedBuildInputs = [ six ];
+
+    meta = with stdenv.lib; {
+      description = "Powerful declarative parser (and builder) for binary data";
+      homepage = http://construct.readthedocs.org/;
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   coverage = buildPythonPackage rec {
     name = "coverage-3.6";
 
