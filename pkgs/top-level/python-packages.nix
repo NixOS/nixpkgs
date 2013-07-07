@@ -451,6 +451,29 @@ pythonPackages = python.modules // rec {
   };
 
 
+  bitstring = buildPythonPackage rec {
+    name = "bitstring-3.1.2";
+
+    src = fetchurl {
+      url = "https://python-bitstring.googlecode.com/files/${name}.zip";
+      sha256 = "1i1p3rkj4ad108f23xyib34r4rcy571gy65paml6fk77knh0k66p";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Module for binary data manipulation";
+      homepage = https://code.google.com/p/python-bitstring/;
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   blivet = buildPythonPackage rec {
     name = "blivet-${version}";
     version = "0.17-1";
@@ -835,6 +858,27 @@ pythonPackages = python.modules // rec {
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   });
+
+
+  construct = buildPythonPackage rec {
+    name = "construct-2.5.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/construct/${name}.tar.gz";
+      sha256 = "08qksl87vr6g2wjxwsyrjh4w6v8bfmcgrcgln7irqvw5vv7qgqss";
+    };
+
+    propagatedBuildInputs = [ six ];
+
+    meta = with stdenv.lib; {
+      description = "Powerful declarative parser (and builder) for binary data";
+      homepage = http://construct.readthedocs.org/;
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
 
   coverage = buildPythonPackage rec {
     name = "coverage-3.6";
@@ -1984,6 +2028,27 @@ pythonPackages = python.modules // rec {
       license = "BSD";
     };
   };
+
+  gevent = buildPythonPackage rec {
+    name = "gevent-0.13.8";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gevent/${name}.tar.gz";
+      sha256 = "0plmxnb53qbxxf6macq84dvclsiyrpv3xrm32q4qqh6f01ix5f2l";
+    };
+
+    buildInputs = [ pkgs.libevent ];
+    propagatedBuildInputs = [ greenlet ];
+
+    meta = with stdenv.lib; {
+      description = "Coroutine-based networking library";
+      homepage = http://www.gevent.org/;
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
 
   genzshcomp = buildPythonPackage {
     name = "genzshcomp-0.2.2";
@@ -3861,6 +3926,26 @@ pythonPackages = python.modules // rec {
       homepage = "http://fedoraproject.org/wiki/Pykickstart";
       description = "Read and write Fedora kickstart files";
       license = pkgs.lib.licenses.gpl2Plus;
+    };
+  };
+
+
+  pyodbc = buildPythonPackage rec {
+    name = "pyodbc-3.0.6";
+
+    src = fetchurl {
+      url = "https://pyodbc.googlecode.com/files/${name}.zip";
+      sha256 = "0v9nymllw5zq5294rqp8ip3l0g6l3l3mljwhxn5jajyzxlnz39z5";
+    };
+
+    buildInputs = [ pkgs.unzip pkgs.libiodbc ];
+
+    meta = with stdenv.lib; {
+      description = "Python ODBC module to connect to almost any database";
+      homepage = https://code.google.com/p/pyodbc/;
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
     };
   };
 
