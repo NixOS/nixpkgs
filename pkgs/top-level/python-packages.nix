@@ -1903,6 +1903,27 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  gevent = buildPythonPackage rec {
+    name = "gevent-0.13.8";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gevent/${name}.tar.gz";
+      sha256 = "0plmxnb53qbxxf6macq84dvclsiyrpv3xrm32q4qqh6f01ix5f2l";
+    };
+
+    buildInputs = [ pkgs.libevent ];
+    propagatedBuildInputs = [ greenlet ];
+
+    meta = with stdenv.lib; {
+      description = "Coroutine-based networking library";
+      homepage = http://www.gevent.org/;
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   genzshcomp = buildPythonPackage {
     name = "genzshcomp-0.2.2";
 
