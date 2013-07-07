@@ -9637,6 +9637,8 @@ let
 
   slock = callPackage ../misc/screensavers/slock { };
 
+  slic3r = callPackage ../applications/misc/slic3r { };
+
   sourceAndTags = import ../misc/source-and-tags {
     inherit pkgs stdenv unzip lib ctags;
     hasktags = haskellPackages.myhasktags;
