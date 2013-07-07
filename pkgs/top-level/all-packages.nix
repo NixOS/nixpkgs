@@ -7692,6 +7692,7 @@ let
   i3 = callPackage ../applications/window-managers/i3 { };
 
   i3lock = callPackage ../applications/window-managers/i3/lock.nix {
+    inherit (xorg) libxkbfile;
     cairo = cairo.override { xcbSupport = true; };
   };
 
