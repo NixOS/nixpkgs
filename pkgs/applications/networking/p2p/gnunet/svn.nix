@@ -1,7 +1,8 @@
 { stdenv, fetchsvn, libextractor, libmicrohttpd, libgcrypt
 , zlib, gmp, curl, libtool, adns, sqlite, pkgconfig
 , libxml2, ncurses, gettext, libunistring, libidn
-, makeWrapper, autoconf, automake }:
+, makeWrapper, autoconf, automake
+, withVerbose ? false }:
 
 let
   rev = "27775";
@@ -21,6 +22,8 @@ stdenv.mkDerivation rec {
     pkgconfig gettext libunistring makeWrapper
     autoconf automake
   ];
+
+  configureFlags = stdenv.lib.optional withVerbose "--enable-logging=verbose ";
 
   preConfigure = ''
     # Brute force: since nix-worker chroots don't provide
