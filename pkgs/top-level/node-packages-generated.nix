@@ -3351,6 +3351,19 @@
   }
   {
     baseName = "stylus";
+    version = "0.33.1";
+    fullName = "stylus-*";
+    hash = "5db972473ed5d5d50ef4b76b019b35b8a6b368209a694ee2f94bb8d6c9f50245";
+    patchLatest = false;
+    topLevel = true;
+    dependencies = [
+      { name = "cssom"; range = "0.2.x"; }
+      { name = "mkdirp"; range = "0.3.x"; }
+      { name = "debug"; range = "*"; }
+    ];
+  }
+  {
+    baseName = "stylus";
     version = "0.27.2";
     fullName = "stylus-0.27.2";
     hash = "8e18cc51592e04e42096e324d3409a132dbb3b40b0a606a746c4c57268bb63ea";

@@ -59,4 +59,5 @@
 , "timezone"
 , "libyaml"
 , "i18next"
+, "stylus"
 ]
