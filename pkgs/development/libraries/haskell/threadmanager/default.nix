@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "threadmanager";
-  version = "0.1.6";
-  sha256 = "16q09kx3rfjaa3rvyfwrxpsnvw50r3q8pk1if6xm0v4ya3lbvibs";
+  version = "0.1.7";
+  sha256 = "17s26hlailbr8c9d3dv1pwiy81m3nzr3sw0v9y716rmhldf7k09f";
   meta = {
     description = "(deprecated in favor of 'threads') Simple thread management";
     license = self.stdenv.lib.licenses.bsd3;
