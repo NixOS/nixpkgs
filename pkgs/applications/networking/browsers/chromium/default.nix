@@ -145,6 +145,7 @@ in stdenv.mkDerivation rec {
     use_cups = cupsSupport;
     linux_sandbox_path="${libExecPath}/${packageName}_sandbox";
     linux_sandbox_chrome_path="${libExecPath}/${packageName}";
+    werror = "";
   } // optionalAttrs proprietaryCodecs {
     # enable support for the H.264 codec
     proprietary_codecs = true;
