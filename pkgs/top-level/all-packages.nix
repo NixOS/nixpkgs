@@ -2389,7 +2389,7 @@ let
     profiledCompiler = false;
   });
 
-  gcj = gcj45;
+  gcj = gcj47;
 
   gcj44 = wrapGCC (gcc44.gcc.override {
     name = "gcj";
@@ -2424,6 +2424,34 @@ let
     langJava = true;
     langFortran = false;
     langCC = true;
+    langC = false;
+    profiledCompiler = false;
+    inherit zip unzip zlib boehmgc gettext pkgconfig perl;
+    inherit gtk;
+    inherit (gnome) libart_lgpl;
+    inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
+      libXrandr xproto renderproto xextproto inputproto randrproto;
+  });
+
+  gcj47 = wrapGCC (gcc47.gcc.override {
+    name = "gcj";
+    langJava = true;
+    langFortran = false;
+    langCC = true;
+    langC = false;
+    profiledCompiler = false;
+    inherit zip unzip zlib boehmgc gettext pkgconfig perl;
+    inherit gtk;
+    inherit (gnome) libart_lgpl;
+    inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
+      libXrandr xproto renderproto xextproto inputproto randrproto;
+  });
+
+  gcj48 = wrapGCC (gcc48.gcc.override {
+    name = "gcj";
+    langJava = true;
+    langFortran = false;
+    langCC = false;
     langC = false;
     profiledCompiler = false;
     inherit zip unzip zlib boehmgc gettext pkgconfig perl;
