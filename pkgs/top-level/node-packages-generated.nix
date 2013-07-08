@@ -563,9 +563,9 @@
   }
   {
     baseName = "connect";
-    version = "2.8.1";
-    fullName = "connect-2.8.1";
-    hash = "f838a4e8bccdf065cda7affe0118f018bdf1baa87375cd1df92e2cff29da2948";
+    version = "2.8.3";
+    fullName = "connect-2.8.3";
+    hash = "a68c7f95eb1d8f574ffbba1c6ceaaa8a05189774099dcb327e29721f4514f309";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -573,13 +573,14 @@
       { name = "formidable"; range = "1.0.14"; }
       { name = "cookie-signature"; range = "1.0.1"; }
       { name = "buffer-crc32"; range = "0.2.1"; }
-      { name = "cookie"; range = "0.0.5"; }
-      { name = "send"; range = "0.1.1"; }
+      { name = "cookie"; range = "0.1.0"; }
+      { name = "send"; range = "0.1.2"; }
       { name = "bytes"; range = "0.2.0"; }
       { name = "fresh"; range = "0.1.0"; }
       { name = "pause"; range = "0.0.1"; }
       { name = "uid2"; range = "0.0.2"; }
       { name = "debug"; range = "*"; }
+      { name = "methods"; range = "0.0.1"; }
     ];
   }
   {
@@ -594,9 +595,9 @@
   }
   {
     baseName = "connect-mongo";
-    version = "0.3.2";
+    version = "0.3.3";
     fullName = "connect-mongo-*";
-    hash = "1f37b52d7816769f33dfa94fad0323f8685139a3a01d738b7a29531f172f86b6";
+    hash = "d3613f8e747b83ac1cc559366cba85c47fa391337166719ac87d98dd98bb2433";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -605,9 +606,9 @@
   }
   {
     baseName = "connect";
-    version = "2.8.1";
+    version = "2.8.3";
     fullName = "connect-~2";
-    hash = "f838a4e8bccdf065cda7affe0118f018bdf1baa87375cd1df92e2cff29da2948";
+    hash = "a68c7f95eb1d8f574ffbba1c6ceaaa8a05189774099dcb327e29721f4514f309";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -615,13 +616,14 @@
       { name = "formidable"; range = "1.0.14"; }
       { name = "cookie-signature"; range = "1.0.1"; }
       { name = "buffer-crc32"; range = "0.2.1"; }
-      { name = "cookie"; range = "0.0.5"; }
-      { name = "send"; range = "0.1.1"; }
+      { name = "cookie"; range = "0.1.0"; }
+      { name = "send"; range = "0.1.2"; }
       { name = "bytes"; range = "0.2.0"; }
       { name = "fresh"; range = "0.1.0"; }
       { name = "pause"; range = "0.0.1"; }
       { name = "uid2"; range = "0.0.2"; }
       { name = "debug"; range = "*"; }
+      { name = "methods"; range = "0.0.1"; }
     ];
   }
   {
@@ -716,6 +718,16 @@
     ];
   }
   {
+    baseName = "cookies";
+    version = "0.3.6";
+    fullName = "cookies->= 0.2.2";
+    hash = "e35b00cc06a33a3bc1d808daa7bc29f02674c02158c5dd812cf73f275bda8b83";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
     baseName = "cryptiles";
     version = "0.1.3";
     fullName = "cryptiles-0.1.x";
@@ -728,9 +740,9 @@
   }
   {
     baseName = "cryptiles";
-    version = "0.2.1";
+    version = "0.2.2";
     fullName = "cryptiles-0.2.x";
-    hash = "a7ad8087bf6abbbfa0ae159756c04326a490f373212f6f2fd0f3a1f63f475892";
+    hash = "ed3c2d5d3c1322d5389cceb46778a6c39a62842f737047666d63abda5b39fab5";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -962,21 +974,21 @@
   }
   {
     baseName = "express";
-    version = "3.3.1";
+    version = "3.3.3";
     fullName = "express-*";
-    hash = "8ca5ce06324343402e5186263c2dca3a28f055093bc6e7bd7270ce4a7356ae8b";
+    hash = "ba67b79732082d24acebb38e273ce7749a86590d999bab2d5f2f9cc566ee8c9c";
     patchLatest = false;
     topLevel = true;
     dependencies = [
-      { name = "connect"; range = "2.8.1"; }
-      { name = "commander"; range = "0.6.1"; }
+      { name = "connect"; range = "2.8.3"; }
+      { name = "commander"; range = "1.2.0"; }
       { name = "range-parser"; range = "0.0.4"; }
-      { name = "mkdirp"; range = "0.3.4"; }
+      { name = "mkdirp"; range = "0.3.5"; }
       { name = "cookie"; range = "0.1.0"; }
       { name = "buffer-crc32"; range = "0.2.1"; }
       { name = "fresh"; range = "0.1.0"; }
       { name = "methods"; range = "0.0.1"; }
-      { name = "send"; range = "0.1.1"; }
+      { name = "send"; range = "0.1.2"; }
       { name = "cookie-signature"; range = "1.0.1"; }
       { name = "debug"; range = "*"; }
     ];
@@ -1044,9 +1056,9 @@
   }
   {
     baseName = "faye-websocket";
-    version = "0.6.0";
+    version = "0.6.1";
     fullName = "faye-websocket-*";
-    hash = "192f09ecd1c52fc357d2ad3ae3121be35556b7b09e30ce74117d80b9dbae3f60";
+    hash = "f99544759c7f0ae24f283d6e3e062d4ea816243985b88d00c8cd124ba617d7c5";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -1322,6 +1334,16 @@
   }
   {
     baseName = "growl";
+    version = "1.5.1";
+    fullName = "growl-1.5.x";
+    hash = "81ad61e3f06d087da4c680e5e83a878f164925d3ed5a7f44b734e6ecd79cb8b0";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "growl";
     version = "1.7.0";
     fullName = "growl-1.7.x";
     hash = "52a6e9edae2fd5a66ddb87c52a398a17ee697eb0e8e1480e9506a6dcdbf3ffcf";
@@ -1480,9 +1502,9 @@
   }
   {
     baseName = "http-signature";
-    version = "0.9.11";
-    fullName = "http-signature-~0.9.11";
-    hash = "44b89f3c1917bf02723a5720f08fbe47448e0370a5d3498d1be860eaf28beb3b";
+    version = "0.10.0";
+    fullName = "http-signature-~0.10.0";
+    hash = "badaa47893d7a6c352ffb0746d68dd225fbb057b7d7149ad87093276445bf95b";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -1499,6 +1521,17 @@
     patchLatest = false;
     topLevel = false;
     dependencies = [
+    ];
+  }
+  {
+    baseName = "i18next";
+    version = "1.6.8";
+    fullName = "i18next-*";
+    hash = "5c2652a8efaaefa0d268e4cd02dd79742eb3c5a74725621d6b0f5a856db4210a";
+    patchLatest = false;
+    topLevel = true;
+    dependencies = [
+      { name = "cookies"; range = ">= 0.2.2"; }
     ];
   }
   {
@@ -1671,7 +1704,7 @@
   {
     baseName = "kerberos";
     version = "0.0.3";
-    fullName = "kerberos-*";
+    fullName = "kerberos-0.0.3";
     hash = "40300bf5e4ca224127b7e88586dce003c58e59cf4972f699fdc95079135a76fe";
     patchLatest = false;
     topLevel = false;
@@ -1725,6 +1758,16 @@
     hash = "05a9685292102599629d3212fbd04102ff71b0cf306cee9773ab1602c75a4ab0";
     patchLatest = false;
     topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "libyaml";
+    version = "0.2.2";
+    fullName = "libyaml-*";
+    hash = "20bd05a1abc5ba18cc3b5de52bc44095fa59b03c6c3ffb6f46c55bd801cff3db";
+    patchLatest = false;
+    topLevel = true;
     dependencies = [
     ];
   }
@@ -1959,16 +2002,6 @@
   }
   {
     baseName = "mkdirp";
-    version = "0.3.4";
-    fullName = "mkdirp-0.3.4";
-    hash = "f87444f2376c56bf47846f3b885aae926c5d9504328923b166794b78c0e08425";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mkdirp";
     version = "0.3.5";
     fullName = "mkdirp-0.3.5";
     hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
@@ -2026,6 +2059,21 @@
     ];
   }
   {
+    baseName = "mocha";
+    version = "1.3.2";
+    fullName = "mocha-~1.3.2";
+    hash = "38bb1638122140c4c8986e02dd0c23105abedaca2ad8d2c8f3bc64bbfa7f6f53";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "commander"; range = "0.6.1"; }
+      { name = "growl"; range = "1.5.x"; }
+      { name = "jade"; range = "0.26.3"; }
+      { name = "diff"; range = "1.0.2"; }
+      { name = "debug"; range = "*"; }
+    ];
+  }
+  {
     baseName = "mongodb";
     version = "1.2.14";
     fullName = "mongodb-1.2.x";
@@ -2038,32 +2086,44 @@
   }
   {
     baseName = "mongodb";
-    version = "1.3.10";
-    fullName = "mongodb-1.3.10";
-    hash = "ea6f279c0bebedec94f0d757fef775302dba6dd4a3792f59696d094bd2c2f113";
-    patchLatest = true;
+    version = "1.3.11";
+    fullName = "mongodb-1.3.11";
+    hash = "cd00f9c0fafd280d30f9e604c76aa7eb59748521f5b0438c15ced90533376a62";
+    patchLatest = false;
     topLevel = false;
     dependencies = [
       { name = "bson"; range = "0.1.9"; }
-      { name = "kerberos"; range = "*"; }
+      { name = "kerberos"; range = "0.0.3"; }
     ];
   }
   {
     baseName = "mongoose";
-    version = "3.6.13";
+    version = "3.6.14";
     fullName = "mongoose-*";
-    hash = "b6d79ace01b4acbabb0c07d4c053f6fdf4a6b7252cc506ccbbc7a6db5e6bbe36";
+    hash = "eab35fb10f1da7a24a4b3c3c0edfea6941031e8d9e9b6120c683b736329a5781";
     patchLatest = false;
     topLevel = true;
     dependencies = [
       { name = "hooks"; range = "0.2.1"; }
-      { name = "mongodb"; range = "1.3.10"; }
+      { name = "mongodb"; range = "1.3.11"; }
       { name = "ms"; range = "0.1.0"; }
       { name = "sliced"; range = "0.0.3"; }
       { name = "muri"; range = "0.3.1"; }
       { name = "mpromise"; range = "0.2.1"; }
       { name = "mpath"; range = "0.1.1"; }
       { name = "regexp-clone"; range = "0.0.1"; }
+    ];
+  }
+  {
+    baseName = "mongoose-schema-extend";
+    version = "0.1.3";
+    fullName = "mongoose-schema-extend-*";
+    hash = "f91e0851475ea525544bc65578e6ca55de345bc4c3332cc732fd3a66e1af1b1b";
+    patchLatest = false;
+    topLevel = true;
+    dependencies = [
+      { name = "owl-deepcopy"; range = "~0.0.1"; }
+      { name = "mocha"; range = "~1.3.2"; }
     ];
   }
   {
@@ -2242,9 +2302,9 @@
   }
   {
     baseName = "node-gyp";
-    version = "0.10.4";
+    version = "0.10.5";
     fullName = "node-gyp-*";
-    hash = "b8bd44e4f5143fff5c22d5961982ae1504467dff17624be4525728c0500fd3a4";
+    hash = "e52cdb18b2b457600b6c5178a6c5f3de6ec81b94cde85e14c0c8f6e58a2c041a";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -2507,6 +2567,16 @@
     ];
   }
   {
+    baseName = "owl-deepcopy";
+    version = "0.0.2";
+    fullName = "owl-deepcopy-~0.0.1";
+    hash = "69f76104c1f4610a4905ef7a184026850660b5e1fcaac9beb8ad0d6e4d54b58b";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
     baseName = "passport";
     version = "0.1.17";
     fullName = "passport-*";
@@ -2516,6 +2586,18 @@
     dependencies = [
       { name = "pkginfo"; range = "0.2.x"; }
       { name = "pause"; range = "0.0.1"; }
+    ];
+  }
+  {
+    baseName = "passport-http";
+    version = "0.2.2";
+    fullName = "passport-http-*";
+    hash = "3a333781016b3e20462fde18ebeb1d9794c6353564ee646b3008ce2540504d1f";
+    patchLatest = false;
+    topLevel = true;
+    dependencies = [
+      { name = "pkginfo"; range = "0.2.x"; }
+      { name = "passport"; range = "~0.1.3"; }
     ];
   }
   {
@@ -2534,6 +2616,18 @@
     baseName = "passport";
     version = "0.1.17";
     fullName = "passport-~0.1.1";
+    hash = "65c15a1666abc16a86d586233f40b89b68b50bf88107809878742973af8b516e";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "pkginfo"; range = "0.2.x"; }
+      { name = "pause"; range = "0.0.1"; }
+    ];
+  }
+  {
+    baseName = "passport";
+    version = "0.1.17";
+    fullName = "passport-~0.1.3";
     hash = "65c15a1666abc16a86d586233f40b89b68b50bf88107809878742973af8b516e";
     patchLatest = false;
     topLevel = false;
@@ -2796,9 +2890,9 @@
   }
   {
     baseName = "request";
-    version = "2.21.0";
+    version = "2.22.0";
     fullName = "request-2";
-    hash = "fe31c3119bc4423f07aa7c9849cb642d5ad22bdf2a2700eab56fb83fa8ed429c";
+    hash = "d0a7ebc001800143d05cedf616cc164a31425bcbfdb8eb533b59d8c123b1275c";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -2806,7 +2900,7 @@
       { name = "json-stringify-safe"; range = "~4.0.0"; }
       { name = "forever-agent"; range = "~0.5.0"; }
       { name = "tunnel-agent"; range = "~0.3.0"; }
-      { name = "http-signature"; range = "~0.9.11"; }
+      { name = "http-signature"; range = "~0.10.0"; }
       { name = "hawk"; range = "~0.13.0"; }
       { name = "aws-sign"; range = "~0.3.0"; }
       { name = "oauth-sign"; range = "~0.3.0"; }
@@ -2849,9 +2943,9 @@
   }
   {
     baseName = "request";
-    version = "2.21.0";
+    version = "2.22.0";
     fullName = "request-~2";
-    hash = "fe31c3119bc4423f07aa7c9849cb642d5ad22bdf2a2700eab56fb83fa8ed429c";
+    hash = "d0a7ebc001800143d05cedf616cc164a31425bcbfdb8eb533b59d8c123b1275c";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -2859,7 +2953,7 @@
       { name = "json-stringify-safe"; range = "~4.0.0"; }
       { name = "forever-agent"; range = "~0.5.0"; }
       { name = "tunnel-agent"; range = "~0.3.0"; }
-      { name = "http-signature"; range = "~0.9.11"; }
+      { name = "http-signature"; range = "~0.10.0"; }
       { name = "hawk"; range = "~0.13.0"; }
       { name = "aws-sign"; range = "~0.3.0"; }
       { name = "oauth-sign"; range = "~0.3.0"; }
@@ -2973,9 +3067,9 @@
   }
   {
     baseName = "semver";
-    version = "2.0.8";
+    version = "2.0.9";
     fullName = "semver-*";
-    hash = "7eefaea9185bc43025725a55179425f04abc80c33f9d90b10385e0bf54710876";
+    hash = "cc1b4edd155fdec8638cf0acb90ba7855a9c8ea27f0a3ae2da21c12582d40050";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -3003,9 +3097,9 @@
   }
   {
     baseName = "semver";
-    version = "2.0.8";
+    version = "2.0.9";
     fullName = "semver-~2.0.7";
-    hash = "7eefaea9185bc43025725a55179425f04abc80c33f9d90b10385e0bf54710876";
+    hash = "cc1b4edd155fdec8638cf0acb90ba7855a9c8ea27f0a3ae2da21c12582d40050";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -3013,9 +3107,9 @@
   }
   {
     baseName = "send";
-    version = "0.1.1";
+    version = "0.1.2";
     fullName = "send-*";
-    hash = "4d237af8bc86148952d0577bed44bd41928a4422c9a6e25e45fc35103aa6e872";
+    hash = "d3fdea73a77e9f0f826e3fa5fa7ed7ef60a51912f5b976d4c112d7c52ac4668f";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -3041,9 +3135,9 @@
   }
   {
     baseName = "send";
-    version = "0.1.1";
-    fullName = "send-0.1.1";
-    hash = "4d237af8bc86148952d0577bed44bd41928a4422c9a6e25e45fc35103aa6e872";
+    version = "0.1.2";
+    fullName = "send-0.1.2";
+    hash = "d3fdea73a77e9f0f826e3fa5fa7ed7ef60a51912f5b976d4c112d7c52ac4668f";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -3363,6 +3457,16 @@
     ];
   }
   {
+    baseName = "timezone";
+    version = "0.0.21";
+    fullName = "timezone-*";
+    hash = "6f595e6376708b1c35d1dac3b3c1c44384b3928f7b3a4f33165817275548c8d1";
+    patchLatest = false;
+    topLevel = true;
+    dependencies = [
+    ];
+  }
+  {
     baseName = "transformers";
     version = "2.0.1";
     fullName = "transformers-2.0.1";
@@ -3445,9 +3549,9 @@
   }
   {
     baseName = "underscore";
-    version = "1.4.4";
+    version = "1.5.1";
     fullName = "underscore-*";
-    hash = "a848a28193850d58d7b98249d70844bc7f35a7d8b6b5ed75e08e829aa6e763d3";
+    hash = "40e2c86742d4af529cbb58f8cb68de128a18a32a78ab3b8bfa9f9a9544003018";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -3465,9 +3569,9 @@
   }
   {
     baseName = "underscore";
-    version = "1.4.4";
+    version = "1.5.1";
     fullName = "underscore->=1.1.7";
-    hash = "a848a28193850d58d7b98249d70844bc7f35a7d8b6b5ed75e08e829aa6e763d3";
+    hash = "40e2c86742d4af529cbb58f8cb68de128a18a32a78ab3b8bfa9f9a9544003018";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -3475,9 +3579,9 @@
   }
   {
     baseName = "underscore";
-    version = "1.4.4";
+    version = "1.5.1";
     fullName = "underscore->=1.4.3";
-    hash = "a848a28193850d58d7b98249d70844bc7f35a7d8b6b5ed75e08e829aa6e763d3";
+    hash = "40e2c86742d4af529cbb58f8cb68de128a18a32a78ab3b8bfa9f9a9544003018";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -3614,9 +3718,9 @@
   }
   {
     baseName = "websocket-driver";
-    version = "0.2.1";
+    version = "0.2.2";
     fullName = "websocket-driver->=0.2.0";
-    hash = "8aab2b32695fecd2bca57d95bc51f0eb8a9a5bb298187a8fe3a84cd2cd8e3dc7";
+    hash = "2a5da351b8f716ef2595899b1e6911f739a420df64e65bfba2adf1fab42fe423";
     patchLatest = false;
     topLevel = false;
     dependencies = [
