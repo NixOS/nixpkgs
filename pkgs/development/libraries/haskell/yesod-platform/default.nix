@@ -1,21 +1,22 @@
 { cabal, aeson, ansiTerminal, asn1Data, asn1Types, attoparsec
 , attoparsecConduit, authenticate, base64Bytestring
 , baseUnicodeSymbols, blazeBuilder, blazeBuilderConduit, blazeHtml
-, blazeMarkup, byteorder, caseInsensitive, cereal, certificate
-, cipherAes, cipherRc4, clientsession, conduit, cookie, cprngAes
-, cryptoApi, cryptoConduit, cryptohash, cryptoNumbers, cryptoPubkey
-, cryptoPubkeyTypes, cryptoRandomApi, cssText, dataDefault
-, dataDefaultClass, dataDefaultInstancesBase
+, blazeMarkup, byteable, byteorder, caseInsensitive, cereal
+, certificate, cipherAes, cipherRc4, clientsession, conduit, cookie
+, cprngAes, cryptoApi, cryptoConduit, cryptohash, cryptoNumbers
+, cryptoPubkey, cryptoPubkeyTypes, cryptoRandomApi, cssText
+, dataDefault, dataDefaultClass, dataDefaultInstancesBase
 , dataDefaultInstancesContainers, dataDefaultInstancesDlist
 , dataDefaultInstancesOldLocale, dateCache, dlist, emailValidate
 , entropy, failure, fastLogger, fileEmbed, filesystemConduit
-, hamlet, hashable, hjsmin, hspec, hspecExpectations, htmlConduit
-, httpConduit, httpDate, httpTypes, languageJavascript, liftedBase
-, mimeMail, mimeTypes, mmorph, monadControl, monadLogger
-, networkConduit, pathPieces, pem, persistent, persistentTemplate
-, poolConduit, primitive, publicsuffixlist, pureMD5, pwstoreFast
-, quickcheckIo, resourcePool, resourcet, safe, semigroups, setenv
-, SHA, shakespeare, shakespeareCss, shakespeareI18n, shakespeareJs
+, hamlet, hjsmin, hspec, hspecExpectations, htmlConduit
+, httpAttoparsec, httpConduit, httpDate, httpTypes
+, languageJavascript, liftedBase, mimeMail, mimeTypes, mmorph
+, monadControl, monadLogger, networkConduit, pathPieces, pem
+, persistent, persistentTemplate, poolConduit, primitive
+, publicsuffixlist, pureMD5, pwstoreFast, quickcheckIo
+, resourcePool, resourcet, safe, semigroups, setenv, SHA
+, shakespeare, shakespeareCss, shakespeareI18n, shakespeareJs
 , shakespeareText, silently, simpleSendfile, skein, socks
 , stringsearch, systemFileio, systemFilepath, tagged, tagsoup
 , tagstreamConduit, tls, tlsExtra, transformersBase, unixCompat
@@ -28,25 +29,26 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-platform";
-  version = "1.2.1";
-  sha256 = "1wa1g37ipigscv8xwb5zyfawjw0fxqmwr2l6wdf507r0kvclk2ap";
+  version = "1.2.2";
+  sha256 = "18kgw094y3vzlpdn1rfrsrrqymhsw5y7kyrql3ghwgp0cm3fiks0";
   buildDepends = [
     aeson ansiTerminal asn1Data asn1Types attoparsec attoparsecConduit
     authenticate base64Bytestring baseUnicodeSymbols blazeBuilder
-    blazeBuilderConduit blazeHtml blazeMarkup byteorder caseInsensitive
-    cereal certificate cipherAes cipherRc4 clientsession conduit cookie
-    cprngAes cryptoApi cryptoConduit cryptohash cryptoNumbers
-    cryptoPubkey cryptoPubkeyTypes cryptoRandomApi cssText dataDefault
-    dataDefaultClass dataDefaultInstancesBase
-    dataDefaultInstancesContainers dataDefaultInstancesDlist
-    dataDefaultInstancesOldLocale dateCache dlist emailValidate entropy
-    failure fastLogger fileEmbed filesystemConduit hamlet hashable
-    hjsmin hspec hspecExpectations htmlConduit httpConduit httpDate
-    httpTypes languageJavascript liftedBase mimeMail mimeTypes mmorph
-    monadControl monadLogger networkConduit pathPieces pem persistent
-    persistentTemplate poolConduit primitive publicsuffixlist pureMD5
-    pwstoreFast quickcheckIo resourcePool resourcet safe semigroups
-    setenv SHA shakespeare shakespeareCss shakespeareI18n shakespeareJs
+    blazeBuilderConduit blazeHtml blazeMarkup byteable byteorder
+    caseInsensitive cereal certificate cipherAes cipherRc4
+    clientsession conduit cookie cprngAes cryptoApi cryptoConduit
+    cryptohash cryptoNumbers cryptoPubkey cryptoPubkeyTypes
+    cryptoRandomApi cssText dataDefault dataDefaultClass
+    dataDefaultInstancesBase dataDefaultInstancesContainers
+    dataDefaultInstancesDlist dataDefaultInstancesOldLocale dateCache
+    dlist emailValidate entropy failure fastLogger fileEmbed
+    filesystemConduit hamlet hjsmin hspec hspecExpectations htmlConduit
+    httpAttoparsec httpConduit httpDate httpTypes languageJavascript
+    liftedBase mimeMail mimeTypes mmorph monadControl monadLogger
+    networkConduit pathPieces pem persistent persistentTemplate
+    poolConduit primitive publicsuffixlist pureMD5 pwstoreFast
+    quickcheckIo resourcePool resourcet safe semigroups setenv SHA
+    shakespeare shakespeareCss shakespeareI18n shakespeareJs
     shakespeareText silently simpleSendfile skein socks stringsearch
     systemFileio systemFilepath tagged tagsoup tagstreamConduit tls
     tlsExtra transformersBase unixCompat unorderedContainers utf8Light
