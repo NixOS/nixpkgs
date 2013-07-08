@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "comonad";
-  version = "3.0.2";
-  sha256 = "0ryyifcxc5rmjrf9323zzj357709mah1hdsrnrbakd5ck7grjfay";
+  version = "3.0.3";
+  sha256 = "1wngwa1cdww5c631dcil0c7mgkqx9bj7m5i63p7d9ymhpyx9sw2l";
   buildDepends = [ semigroups transformers ];
   testDepends = [ doctest filepath ];
   meta = {

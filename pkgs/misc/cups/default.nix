@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
-, dbus, libusb1, acl }:
+, dbus, libusb, acl }:
 
 let version = "1.5.4"; in
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     md5 = "de3006e5cf1ee78a9c6145ce62c4e982";
   };
 
-  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb1 ]
+  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]
     ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus.libs acl ] ;
 
   propagatedBuildInputs = [ openssl ];

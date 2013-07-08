@@ -1,15 +1,15 @@
-{ stdenv, fetchgit, python, sysstat }:
+{ stdenv, fetchurl, python, sysstat, unzip }:
 
 stdenv.mkDerivation rec {
-    name = "dd-agent-ab14fde6f9";
+    version = "3.8.0";
+    name = "dd-agent-${version}";
 
-    src = fetchgit {
-      url = git://github.com/DataDog/dd-agent.git;
-      rev = "ab14fde6f9b9f6cb3544f643cece97ef18a0d770";
-      sha256 = "2615a2f122ac97363eba8973dfc6c2ce81cb61a26eb61c2988faad2abd05efc5";
+    src = fetchurl {
+      url = "https://github.com/DataDog/dd-agent/archive/${version}.zip";
+      sha256 = "1mh22rbja07gc7ydn357hlij0dl2rygkqsya9ckynsvmkkzn2gyx";
     };
 
-    buildInputs = [ python ];
+    buildInputs = [ python unzip ];
 
     postUnpack = "export sourceRoot=$sourceRoot/packaging";
 

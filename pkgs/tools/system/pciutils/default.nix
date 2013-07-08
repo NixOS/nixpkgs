@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   pciids = fetchurl {
     # Obtained from http://pciids.sourceforge.net/v2.2/pci.ids.bz2.
-    url = http://nixos.org/tarballs/pci.ids.20120929.bz2;
+    url = http://tarballs.nixos.org/pci.ids.20120929.bz2;
     sha256 = "1q3i479ay88wam1zz1vbgkbqb2axg8av9qjxaigrqbnw2pv0srmb";
   };
 

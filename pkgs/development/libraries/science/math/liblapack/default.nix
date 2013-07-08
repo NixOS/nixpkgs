@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gfortran, atlas, cmake, python, shared ? false }:
-let 
-  atlasMaybeShared = if shared then atlas.override {shared=true;} else atlas;
+let
+  atlasMaybeShared = atlas.override { inherit shared; };
   usedLibExtension = if shared then ".so" else ".a";
 in
 stdenv.mkDerivation {

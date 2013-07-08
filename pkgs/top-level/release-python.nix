@@ -1522,7 +1522,7 @@ in
   rhpl = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   rigsofrods = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   rili = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  rLang = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
+  R = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   rockbox_utility = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   rpm = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   rrdtool = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

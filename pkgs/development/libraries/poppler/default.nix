@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, pkgconfig, cmake, libiconvOrEmpty, libintlOrEmpty
-, zlib, curl, cairo, freetype, fontconfig, lcms2, libjpeg, openjpeg
+, zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , qt4Support ? false, qt4 ? null
 }:
 
@@ -26,7 +26,7 @@ let
       inherit sha256;
     };
 
-    propagatedBuildInputs = [ zlib cairo freetype fontconfig libjpeg lcms2 curl openjpeg ];
+    propagatedBuildInputs = [ zlib cairo freetype fontconfig libjpeg lcms curl openjpeg ];
 
     nativeBuildInputs = [ pkgconfig cmake ] ++ libiconvOrEmpty ++ libintlOrEmpty;
 

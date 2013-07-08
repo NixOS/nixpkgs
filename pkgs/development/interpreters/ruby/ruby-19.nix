@@ -38,7 +38,9 @@ stdenv.mkDerivation rec {
     ++ (op (!cursesSupport && stdenv.isDarwin) readline);
 
   enableParallelBuilding = true;
-  patches = [ ./ruby19-parallel-install.patch ];
+  patches = [ ./ruby19-parallel-install.patch
+	      ./bitperfect-rdoc.patch
+  ];
 
   configureFlags = [ "--enable-shared" "--enable-pthread" ]
     # on darwin, we have /usr/include/tk.h -- so the configure script detects

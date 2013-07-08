@@ -200,6 +200,7 @@ let
       NET_FC y # Fibre Channel driver support
       PPP_MULTILINK y # PPP multilink support
       REGULATOR y # Voltage and Current Regulator Support
+      RC_DEVICES y # Enable IR devices
       SCSI_LOGGING y # SCSI logging facility
       SERIAL_8250 y # 8250/16550 and compatible serial support
       SLIP_COMPRESSED y # CSLIP compressed headers
@@ -245,6 +246,10 @@ let
       # Easier debug of NFS issues
       SUNRPC_DEBUG y
 
+      # Enable the 9P cache to speed up NixOS VM tests.
+      9P_FSCACHE y
+      9P_FS_POSIX_ACL y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -253,7 +258,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.9.6";
+    version = "3.9.9";
     testing = false;
 
     preConfigure = ''
@@ -262,7 +267,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "0spba7qkf56j233r84y23xl7d44ndvw5ja7h3pfhsq861dypcc0i";
+      sha256 = "1zrw65m8kvxjkqfj708s418qdm87x0axjm0mr6c2zas5fnla981k";
     };
 
     config = configWithPlatform stdenv.platform;

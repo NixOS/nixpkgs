@@ -1,7 +1,8 @@
 { stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , apacheHttpd, mysql, libxml2, readline, zlib, curl, gd, postgresql, gettext
-, openssl, pkgconfig, sqlite, config, libiconv, libjpeg, libpng, freetype
-, libxslt, libmcrypt, bzip2, icu }:
+, openssl, pkgconfig, sqlite, config, libjpeg, libpng, freetype, libxslt
+, libmcrypt, bzip2, icu, libssh2, makeWrapper, libiconvOrEmpty, libiconv, uwimap
+, pam }:
 
 let
   libmcryptOverride = libmcrypt.override { disablePosixThreads = true; };
@@ -15,7 +16,15 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   enableParallelBuilding = true;
 
-  buildInputs = ["flex" "bison" "pkgconfig"];
+  buildInputs
+    = [ flex bison pkgconfig ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libssh2 makeWrapper ];
+
+  # need to include the C++ standard library when compiling on darwin
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lstdc++";
+
+  # need to specify where the dylib for icu is stored
+  DYLD_LIBRARY_PATH = stdenv.lib.optionalString stdenv.isDarwin "${icu}/lib";
 
   flags = {
 
@@ -35,17 +44,21 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         buildInputs = [curl openssl];
       };
 
+      pcntl = {
+        configureFlags = [ "--enable-pcntl" ];
+      };
+
       zlib = {
         configureFlags = ["--with-zlib=${zlib}"];
         buildInputs = [zlib];
       };
 
       libxml2 = {
-        configureFlags = [
-          "--with-libxml-dir=${libxml2}"
-          #"--with-iconv-dir=${libiconv}"
-          ];
-        buildInputs = [ libxml2 ];
+        configureFlags
+          = [ "--with-libxml-dir=${libxml2}" ]
+            ++ stdenv.lib.optional (libiconvOrEmpty != [])
+              [ "--with-iconv=${libiconv}" ];
+        buildInputs = [ libxml2 ] ++ libiconvOrEmpty;
       };
 
       readline = {
@@ -90,7 +103,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
       gd = {
         configureFlags = [
-          "--with-gd"
+          "--with-gd=${gd}"
           "--with-freetype-dir=${freetype}"
           "--with-png-dir=${libpng}"
           "--with-jpeg-dir=${libjpeg}"
@@ -118,6 +131,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       gettext = {
         configureFlags = ["--with-gettext=${gettext}"];
         buildInputs = [gettext];
+      };
+
+      imap = {
+        configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ];
+        buildInputs = [ uwimap openssl pam ];
       };
 
       intl = {
@@ -151,45 +169,35 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       ftp = {
         configureFlags = ["--enable-ftp"];
       };
-
-      /*
-         php is build within this derivation in order to add the xdebug lines to the php.ini.
-         So both Apache and command line php both use xdebug without having to configure anything.
-         Xdebug could be put in its own derivation.
-      * /
-        meta = {
-                description = "debugging support for PHP";
-                homepage = http://xdebug.org;
-                license = "based on the PHP license - as is";
-                };
-      */
     };
 
   cfg = {
-    mysqlSupport = config.php.mysql or true;
-    mysqliSupport = config.php.mysqli or true;
-    pdo_mysqlSupport = config.php.pdo_mysql or true;
-    libxml2Support = config.php.libxml2 or true;
     apxs2Support = config.php.apxs2 or true;
     bcmathSupport = config.php.bcmath or true;
-    socketsSupport = config.php.sockets or true;
+    bz2Support = config.php.bz2 or false;
     curlSupport = config.php.curl or true;
+    exifSupport = config.php.exif or true;
+    ftpSupport = config.php.ftp or true;
+    gdSupport = config.php.gd or true;
     gettextSupport = config.php.gettext or true;
+    imapSupport = config.php.imap or false;
+    intlSupport = config.php.intl or true;
+    libxml2Support = config.php.libxml2 or true;
+    mbstringSupport = config.php.mbstring or true;
+    mcryptSupport = config.php.mcrypt or false;
+    mysqlSupport = config.php.mysql or true;
+    mysqliSupport = config.php.mysqli or true;
+    opensslSupport = config.php.openssl or true;
+    pcntlSupport = config.php.pcntl or true;
+    pdo_mysqlSupport = config.php.pdo_mysql or true;
     postgresqlSupport = config.php.postgresql or true;
     readlineSupport = config.php.readline or true;
-    sqliteSupport = config.php.sqlite or true;
     soapSupport = config.php.soap or true;
-    zlibSupport = config.php.zlib or true;
-    opensslSupport = config.php.openssl or true;
-    mbstringSupport = config.php.mbstring or true;
-    gdSupport = config.php.gd or true;
-    intlSupport = config.php.intl or true;
-    exifSupport = config.php.exif or true;
+    socketsSupport = config.php.sockets or true;
+    sqliteSupport = config.php.sqlite or true;
     xslSupport = config.php.xsl or false;
-    mcryptSupport = config.php.mcrypt or false;
-    bz2Support = config.php.bz2 or false;
     zipSupport = config.php.zip or true;
-    ftpSupport = config.php.ftp or true;
+    zlibSupport = config.php.zlib or true;
   };
 
   configurePhase = ''
@@ -202,7 +210,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
   installPhase = ''
     unset installPhase; installPhase;
     cp php.ini-production $iniFile
-  '';
+  '' + ( stdenv.lib.optionalString stdenv.isDarwin ''
+    for prog in $out/bin/*; do
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "$DYLD_LIBRARY_PATH"
+    done
+  '' );
 
   src = fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
@@ -212,8 +224,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   meta = {
     description = "The PHP language runtime engine";
-    homepage = http://www.php.net/;
-    license = "PHP-3";
+    homepage    = http://www.php.net/;
+    license     = "PHP-3";
+    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
+    platforms   = stdenv.lib.platforms.unix;
   };
 
   patches = [./fix.patch];

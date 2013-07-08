@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, openssl, libxml2, zlib }:
+{ stdenv, fetchurl, pkgconfig, openssl, libxml2, sqlite, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "aria2-1.10.8";
+  name = "aria2-1.17.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/aria2/stable/${name}/${name}.tar.bz2";
-    sha256 = "1cbcrxwdc6gp4l4zqg2i18zdg5ry5f9r3zj66kx6l5plwfjv9fdc";
+    sha256 = "0v0cdbv6v7fb4870rz5s9vscsj74fzbj70gsa2y4hysai4a0im3y";
   };
 
-  buildInputs = [ openssl libxml2 zlib ];
+  buildInputs = [ pkgconfig openssl libxml2 sqlite zlib ];
 
   meta = {
     homepage = http://aria2.sourceforge.net/;

@@ -5,7 +5,7 @@
 kde {
   buildInputs =
     [ kdelibs shared_desktop_ontologies bzip2 libssh exiv2 attica
-      samba (libcanberra.override { gtk = null; }) ntrack libjpeg
+      samba libcanberra ntrack libjpeg
     ];
 
   passthru.propagatedUserEnvPackages = [ virtuoso ];

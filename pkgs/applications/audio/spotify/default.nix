@@ -1,9 +1,9 @@
-{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl, freetype, glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng12, GConf, libgcrypt, chromium, sqlite, gst_plugins_base, gstreamer }:
+{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl, freetype, glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf, libgcrypt, chromium, sqlite, gst_plugins_base, gstreamer }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 let
-  version = "0.9.0.133";
+  version = "0.9.1.55";
   qt4webkit =
     if stdenv.system == "i686-linux" then
       fetchurl {
@@ -25,13 +25,13 @@ stdenv.mkDerivation {
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.gd18ed58.259-1_i386.deb";
-        sha256 = "15kbwll63pm99262f7xq1z0c5bwmk5cz46pkh8xd5xsqxlsvvv1n";
+        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.gbdd3b79.203-1_i386.deb";
+        sha256 = "1sls4gb85700126bbk4sz73ipa2rjcinmpnsi78q0bsdj365y2wc";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.gd18ed58.259-1_amd64.deb";
-        sha256 = "0l3nikhf4hyj6z7639s668kd806730va005rwqcxvymxddcbcp03";
+        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.gbdd3b79.203-1_amd64.deb";
+        sha256 = "10pzj3p8bjbxh9nnm4qc5s1hn9nh7hgh3vbwm0xblj9rn71wl03y";
       }
     else throw "Spotify not supported on this platform.";
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
       mkdir -p $out/libexec/spotify
       gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\" -fPIC
 
-      wrapProgram $out/bin/spotify --set LD_PRELOAD $preload --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ GConf libpng12 cups libgcrypt sqlite gst_plugins_base gstreamer]}:$out/lib"
+      wrapProgram $out/bin/spotify --set LD_PRELOAD $preload --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ GConf libpng cups libgcrypt sqlite gst_plugins_base gstreamer]}:$out/lib"
     ''; # */
 
   dontStrip = true;

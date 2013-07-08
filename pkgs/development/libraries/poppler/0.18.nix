@@ -1,6 +1,6 @@
 { fetchurl, stdenv, cairo, freetype, fontconfig, zlib
 , libjpeg, curl, libpthreadstubs, xorg, openjpeg
-, libxml2, pkgconfig, cmake, lcms2, libiconvOrEmpty
+, libxml2, pkgconfig, cmake, lcms, libiconvOrEmpty
 , glibSupport ? false, glib, gtk3Support ? false, gtk3 # gtk2 no longer accepted
 , qt4Support ? false, qt4 ? null
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = with xorg;
-    [ zlib cairo freetype fontconfig libjpeg lcms2 curl
+    [ zlib cairo freetype fontconfig libjpeg lcms curl
       libpthreadstubs libxml2 stdenv.gcc.libc
       libXau libXdmcp libxcb libXrender libXext
       openjpeg

@@ -28,6 +28,7 @@ g: # Get dependencies from patched gems
     erubis = g.erubis_2_7_0;
     eventmachine = g.eventmachine_1_0_3;
     eventmachine_tail = g.eventmachine_tail_0_6_4;
+    excon = g.excon_0_25_0;
     execjs = g.execjs_1_4_0;
     fakes3 = g.fakes3_0_1_5;
     faraday = g.faraday_0_8_7;
@@ -36,6 +37,8 @@ g: # Get dependencies from patched gems
     file_tail = g.file_tail_1_0_12;
     foreman = g.foreman_0_62_0;
     gettext = g.gettext_2_3_9;
+    heroku = g.heroku_2_39_4;
+    heroku_api = g.heroku_api_0_3_13;
     highline = g.highline_1_6_16;
     hike = g.hike_1_2_1;
     hoe = g.hoe_3_1_0;
@@ -46,6 +49,7 @@ g: # Get dependencies from patched gems
     jsduck = g.jsduck_4_7_1;
     json = g.json_1_7_7;
     json_pure = g.json_pure_1_7_7;
+    launchy = g.launchy_2_3_0;
     libv8 = g.libv8_3_3_10_4;
     locale = g.locale_2_0_8;
     lockfile = g.lockfile_2_1_0;
@@ -57,6 +61,7 @@ g: # Get dependencies from patched gems
     multipart_post = g.multipart_post_1_2_0;
     net_sftp = g.net_sftp_2_0_5;
     net_ssh = g.net_ssh_2_6_6;
+    netrc = g.netrc_0_7_7;
     nix = g.nix_0_1_1;
     nokogiri = g.nokogiri_1_5_9;
     papertrail = g.papertrail_0_9_7;
@@ -72,9 +77,11 @@ g: # Get dependencies from patched gems
     railties = g.railties_3_2_13;
     rake = g.rake_10_0_4;
     rb_fsevent = g.rb_fsevent_0_9_3;
+    rb_readline = g.rb_readline_0_5_0;
     rdiscount = g.rdiscount_2_0_7_1;
     rdoc = g.rdoc_3_12_2;
     remote_syslog = g.remote_syslog_1_6_13;
+    rest_client = g.rest_client_1_6_7;
     right_aws = g.right_aws_3_0_5;
     right_http_connection = g.right_http_connection_1_3_0;
     rjb = g.rjb_1_4_6;
@@ -221,6 +228,20 @@ adds support for IRIs and URI templates.
       name = ''addressable-2.3.3'';
       requiredGems = [  ];
       sha256 = ''0nn583ba8kq4hhpr4lr2zzpm4r0mga0zfalxxpa6a4v27q71v5hh'';
+    };
+    addressable_2_3_5 = {
+      basename = ''addressable'';
+      meta = {
+        description = ''URI Implementation'';
+        homepage = ''http://addressable.rubyforge.org/'';
+        longDescription = ''Addressable is a replacement for the URI implementation that is part of
+Ruby's standard library. It more closely conforms to the relevant RFCs and
+adds support for IRIs and URI templates.
+'';
+      };
+      name = ''addressable-2.3.5'';
+      requiredGems = [  ];
+      sha256 = ''11hv69v6h39j7m4v51a4p7my7xwjbhxbsg3y7ja156z7by10wkg7'';
     };
     arel_3_0_2 = {
       basename = ''arel'';
@@ -504,6 +525,17 @@ using TCP/IP, especially if custom protocols are required.'';
       requiredGems = [ g.eventmachine_1_0_3 ];
       sha256 = ''1pvlb34vdzd81kf9f3xyibb4f55xjqm7lqqy28dgyci5cyv50y61'';
     };
+    excon_0_25_0 = {
+      basename = ''excon'';
+      meta = {
+        description = ''speed, persistence, http(s)'';
+        homepage = ''https://github.com/geemus/excon'';
+        longDescription = ''EXtended http(s) CONnections'';
+      };
+      name = ''excon-0.25.0'';
+      requiredGems = [  ];
+      sha256 = ''0wv5bc7d138xw2v608ywl9cwhq7d7gl1l2hzdh96ia2a06hf4rry'';
+    };
     execjs_1_4_0 = {
       basename = ''execjs'';
       meta = {
@@ -592,6 +624,28 @@ So you can use GNU gettext tools for maintaining.
       name = ''gettext-2.3.9'';
       requiredGems = [ g.locale_2_0_8 g.text_1_2_1 ];
       sha256 = ''1i4kzkan7mnyr1ihphx0sqs3k4qj9i1ldg4a1cwf5h2fz657wvjj'';
+    };
+    heroku_2_39_4 = {
+      basename = ''heroku'';
+      meta = {
+        description = ''Client library and CLI to deploy apps on Heroku.'';
+        homepage = ''http://heroku.com/'';
+        longDescription = ''Client library and command-line tool to deploy and manage apps on Heroku.'';
+      };
+      name = ''heroku-2.39.4'';
+      requiredGems = [ g.heroku_api_0_3_13 g.netrc_0_7_7 g.rest_client_1_6_7 g.launchy_2_3_0 g.rubyzip_0_9_9 g.rb_readline_0_5_0 ];
+      sha256 = ''1dhj529kqk6q66406f7iwlxwsifndlzcm0513i0hzlhc4lbkbf4x'';
+    };
+    heroku_api_0_3_13 = {
+      basename = ''heroku_api'';
+      meta = {
+        description = ''Ruby Client for the Heroku API'';
+        homepage = ''http://github.com/heroku/heroku.rb'';
+        longDescription = ''Ruby Client for the Heroku API'';
+      };
+      name = ''heroku-api-0.3.13'';
+      requiredGems = [ g.excon_0_25_0 ];
+      sha256 = ''179asf4rxjyg59zh5s7lcrnj7rrz9ymz1km24hdydgyay7px0yvi'';
     };
     highline_1_6_16 = {
       basename = ''highline'';
@@ -753,6 +807,17 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [  ];
       sha256 = ''0jxp0amx9xhka0ixnhvfgwc5ydr82hkxp81pvw32z31arx7jrwl6'';
     };
+    launchy_2_3_0 = {
+      basename = ''launchy'';
+      meta = {
+        description = ''Launchy is helper class for launching cross-platform applications in a fire and forget manner.'';
+        homepage = ''http://github.com/copiousfreetime/launchy'';
+        longDescription = ''Launchy is helper class for launching cross-platform applications in a fire and forget manner. There are application concepts (browser, email client, etc) that are common across all platforms, and they may be launched differently on each platform. Launchy is here to make a common approach to launching external application from within ruby programs.'';
+      };
+      name = ''launchy-2.3.0'';
+      requiredGems = [ g.addressable_2_3_5 ];
+      sha256 = ''0ckvs40f29ancs0ki12pqb94k380cz41b4gbjplm85ly6kd57sph'';
+    };
     libv8_3_3_10_4 = {
       basename = ''libv8'';
       meta = {
@@ -841,6 +906,38 @@ added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp
       requiredGems = [  ];
       sha256 = ''1qmx53a2kqk0nnhjbfvbc213wsxiprl0wqm7f2xvcsh253ld91iw'';
     };
+    mime_types_1_23 = {
+      basename = ''mime_types'';
+      meta = {
+        description = ''This library allows for the identification of a file's likely MIME content type'';
+        homepage = ''http://mime-types.rubyforge.org/'';
+        longDescription = ''This library allows for the identification of a file's likely MIME content
+type. This is release 1.23 that adds the ability to enumerate over the
+collection of MIME types and updates the sources of a few MIME types. The
+identification of MIME content type is based on a file's filename extensions.
+
+MIME types are used in MIME-compliant communications, as in e-mail or HTTP
+traffic, to indicate the type of content which is transmitted. MIME::Types
+provides the ability for detailed information about MIME entities (provided as
+a set of MIME::Type objects) to be determined and used programmatically. There
+are many types defined by RFCs and vendors, so the list is long but not
+complete; don't hesitate to ask to add additional information. This library
+follows the IANA collection of MIME types (see below for reference).
+
+MIME::Types for Ruby was originally based on and synchronized with MIME::Types
+for Perl by Mark Overmeer, copyright 2001 - 2009. As of version 1.15, the data
+format for the MIME::Type list has changed and the synchronization will no
+longer happen.
+
+MIME::Types is built to conform to the MIME types of RFCs 2045 and 2231. It
+follows the official {IANA registry}[http://www.iana.org/assignments/media-types/]
+({ftp}[ftp://ftp.iana.org/assignments/media-types]) with some unofficial types
+added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp].'';
+      };
+      name = ''mime-types-1.23'';
+      requiredGems = [  ];
+      sha256 = ''1ch5ngx67nhbq6j1y79c88gzk6i8pzqi860iwfpxp9c0bwf6fags'';
+    };
     minitar_0_5_3 = {
       basename = ''minitar'';
       meta = {
@@ -906,6 +1003,17 @@ added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp
       name = ''net-ssh-2.6.6'';
       requiredGems = [  ];
       sha256 = ''00fdnwv3jf311jjcc51lq8w26r62vzma91i79h5hj8i1ylrilx51'';
+    };
+    netrc_0_7_7 = {
+      basename = ''netrc'';
+      meta = {
+        description = ''Library to read and write netrc files.'';
+        homepage = ''https://github.com/geemus/netrc'';
+        longDescription = ''This library can read and update netrc files, preserving formatting including comments and whitespace.'';
+      };
+      name = ''netrc-0.7.7'';
+      requiredGems = [  ];
+      sha256 = ''1y64v93hsxdwgx3dfkyzdki3zqd1slm42dmi23v0zy3kap4vpard'';
     };
     nix_0_1_1 = {
       basename = ''nix'';
@@ -1129,6 +1237,17 @@ request helpers feature.'';
       requiredGems = [  ];
       sha256 = ''0bdnxwdxj4r1kdxfi5nszbsb126njrr81p912g64xxs2bgxd1bp1'';
     };
+    rb_readline_0_5_0 = {
+      basename = ''rb_readline'';
+      meta = {
+        description = ''Pure-Ruby Readline Implementation'';
+        homepage = ''http://github.com/luislavena/rb-readline'';
+        longDescription = ''The readline library provides a pure Ruby implementation of the GNU readline C library, as well as the Readline extension that ships as part of the standard library.'';
+      };
+      name = ''rb-readline-0.5.0'';
+      requiredGems = [  ];
+      sha256 = ''1aixbqpwrlzvrii4c80982jih4syanc2jl0lfcbibqvjasy9h9c8'';
+    };
     rdiscount_2_0_7_1 = {
       basename = ''rdiscount'';
       meta = {
@@ -1164,6 +1283,17 @@ See RDoc for a description of RDoc's markup and basic use.'';
       name = ''remote_syslog-1.6.13'';
       requiredGems = [ g.servolux_0_10_0 g.file_tail_1_0_12 g.eventmachine_1_0_3 g.eventmachine_tail_0_6_4 g.syslog_protocol_0_9_2 g.em_resolv_replace_1_1_3 ];
       sha256 = ''0q35j02k2l3fw3fdzq0i3rd6chsqr982gj13f3m3lsxm7kms03nw'';
+    };
+    rest_client_1_6_7 = {
+      basename = ''rest_client'';
+      meta = {
+        description = ''Simple HTTP and REST client for Ruby, inspired by microframework syntax for specifying actions.'';
+        homepage = ''http://github.com/archiloque/rest-client'';
+        longDescription = ''A simple HTTP and REST client for Ruby, inspired by the Sinatra microframework style of specifying actions: get, put, post, delete.'';
+      };
+      name = ''rest-client-1.6.7'';
+      requiredGems = [ g.mime_types_1_23 ];
+      sha256 = ''0nn7zalgidz2yj0iqh3xvzh626krm2al79dfiij19jdhp0rk8853'';
     };
     right_aws_3_0_5 = {
       basename = ''right_aws'';

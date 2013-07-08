@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, unzip, python, asciidoc, re2c }:
+{ stdenv, fetchurl, python, asciidoc, re2c }:
 
 stdenv.mkDerivation rec {
   name = "ninja-${version}";
-  version = "1.2.0";
+  version = "1.3.4";
 
   src = fetchurl {
-    name = "${name}.zip";
-    url = "https://github.com/martine/ninja/archive/v${version}.zip";
-    sha256 = "15ynh806ah37bqb57hcs3mj2g82900sncp6n3bssfggb4azgjlh3";
+    name = "${name}.tar.gz";
+    url = "https://github.com/martine/ninja/archive/v${version}.tar.gz";
+    sha256 = "16b0dxq3v19qjchcmfqq3m4l8s4qx2d674vfvamg0s3vvfqnc477";
   };
 
-  buildInputs = [ python asciidoc unzip re2c ];
+  buildInputs = [ python asciidoc re2c ];
 
   buildPhase = ''
     python bootstrap.py

@@ -18,19 +18,23 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ libffi ];
   buildInputs = [ perl groff cmake python ]; # ToDo: polly, libc++; enable cxx11?
 
-  # created binaries need to be run before installation... I coudn't find a better way
-  preBuild = ''export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:"`pwd`/lib'';
+  # created binaries need to be run before installation... I coudn't find a
+  # better way
+  preBuild = ( if stdenv.isDarwin
+               then "export DYLD_LIBRARY_PATH='$DYLD_LIBRARY_PATH:'`pwd`/lib"
+               else "export LD_LIBRARY_PATH='$LD_LIBRARY_PATH:'`pwd`/lib" );
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) [ "-DBUILD_SHARED_LIBS=ON" ];
 
   enableParallelBuilding = true;
-  #doCheck = true; # tests are broken, don't know why
+  # doCheck = true; # tests are broken, don't know why
 
-  meta = {
-    homepage = http://llvm.org/;
+  meta = with stdenv.lib; {
     description = "Collection of modular and reusable compiler and toolchain technologies";
-    license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [viric shlevy raskin];
-    platforms = with stdenv.lib.platforms; all;
+    homepage    = http://llvm.org/;
+    license     = licenses.bsd3;
+    maintainers = with maintainers; [ lovek323 raskin shlevy viric ];
+    platforms   = platforms.all;
   };
 }

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "cacert-20121229";
 
   src = fetchurl {
-    url = "http://nixos.org/tarballs/${name}.pem.bz2";
+    url = "http://tarballs.nixos.org/${name}.pem.bz2";
     sha256 = "031s86pqvn620zkj6w97hqgjvkp6vsvlymzz7rwvkv25zvrjsgif";
   };
 

@@ -1,21 +1,23 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, libosip, libexosip
-, speex, readline, mediastreamer, libsoup }:
+, speex, readline, mediastreamer, libsoup, udev, libnotify }:
 
 stdenv.mkDerivation rec {
-  name = "linphone-3.5.2";
+  name = "linphone-3.6.1";
 
   src = fetchurl {
-    url = "mirror://savannah/linphone/3.5.x/sources/${name}.tar.gz";
-    sha256 = "0830iam7kgqphgk3q6qx93kp5wrf0gnm5air82jamy7377jxadys";
+    url = "mirror://savannah/linphone/3.6.x/sources/${name}.tar.gz";
+    sha256 = "186jm4nd4ggb0j8cs8wnpm4sy9cr7chq0c6kx2yc6y4k7qi83fh5";
   };
 
-  patches = [ ./fix-deprecated.patch ];
-
-  buildInputs = [ gtk libglade libosip libexosip readline mediastreamer speex libsoup ];
+  buildInputs = [ gtk libglade libosip libexosip readline mediastreamer speex libsoup udev
+    libnotify ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
-  preConfigure = "rm -r mediastreamer2 oRTP";
+  preConfigure = ''
+    rm -r mediastreamer2 oRTP
+    sed -i s,/bin/echo,echo, coreapi/Makefile*
+  '';
 
   configureFlags = "--enable-external-ortp --enable-external-mediastreamer";
 
