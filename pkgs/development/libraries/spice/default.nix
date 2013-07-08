@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-sasl=no"
     "--disable-smartcard"
+    "--enable-client"
   ];
 
   postInstall = ''
