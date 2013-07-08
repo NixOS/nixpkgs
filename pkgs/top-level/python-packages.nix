@@ -483,6 +483,25 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  bpython = buildPythonPackage rec {
+     name = "bpython-0.11";
+     src = fetchurl {
+       url = "http://www.bpython-interpreter.org/releases/bpython-0.11.tar.gz";
+       sha256 = "02dkmsmgy04l33nyw54rlxkjwff0yf3cy2kvdx8s5w344mqkkkv0";
+     };
+
+     propagatedBuildInputs = [ python.modules.curses pygments ];
+     doCheck = false;
+     
+     meta = {
+       description = "UNKNOWN";
+       homepage = "UNKNOWN";
+       maintainers = [
+         stdenv.lib.maintainers.iElectric
+       ];
+     };
+   };
+
 
   # euca2ools (and maybe Nova) needs boto 1.9, 2.0 doesn't work.
   boto_1_9 = buildPythonPackage (rec {
