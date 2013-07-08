@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "oeis";
-  version = "0.3.4";
-  sha256 = "15xn7cybk43lk8wjd22l3zwvkyrmlixpfyrxsy3rnvh0vmn0r25d";
+  version = "0.3.5";
+  sha256 = "0r23mqbfvvvx6shzdclzfrqi8r95gxl93cih7ny7w7px3w5yc5x6";
   buildDepends = [ HTTP network ];
   testDepends = [ HUnit testFramework testFrameworkHunit ];
   meta = {
