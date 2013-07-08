@@ -786,6 +786,8 @@ let
 
   exiftags = callPackage ../tools/graphics/exiftags { };
 
+  extundelete = callPackage ../tools/filesystems/extundelete { };
+
   expect = callPackage ../tools/misc/expect { };
 
   fabric = pythonPackages.fabric;
