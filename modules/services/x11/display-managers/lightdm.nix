@@ -13,7 +13,6 @@ let
   xserverWrapper = writeScript "xserver-wrapper"
     ''
       #! /bin/sh
-      #export XORG_DRI_DRIVER_PATH="${pkgs.mesa_drivers}/lib/dri" # ?? X sets this itself
       export XKB_BINDIR="${pkgs.xorg.xkbcomp}/bin"
       exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs}
     '';
