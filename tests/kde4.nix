@@ -7,6 +7,8 @@
 
     { require = [ ./common/user-account.nix ];
 
+      virtualisation.memorySize = 768;
+
       services.xserver.enable = true;
 
       services.httpd.enable = true;
