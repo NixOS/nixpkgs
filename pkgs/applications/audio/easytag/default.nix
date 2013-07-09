@@ -1,22 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, gtk, libid3tag, id3lib, libvorbis, libogg, flac }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk, glib, libid3tag, id3lib, taglib
+, libvorbis, libogg, flac
+}:
 
-let
-
-  version = "2.1.7";
-  sha256 = "bfed34cbdce96aca299a0db2b531dbc66feb489b911a34f0a9c67f2eb6ee9301";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "easytag-${version}";
+  version = "2.1.8";
+
   src = fetchurl {
-    url = "mirror://sourceforge/easytag/easytag-${version}.tar.bz2";
-    inherit sha256;
+    url = "mirror://gnome/sources/easytag/2.1/${name}.tar.xz";
+    sha256 = "1ab5iv0a83cdf07qzi81ydfk5apay06nxags9m07msqalz4pabqs";
   };
 
-  buildInputs = [ pkgconfig gtk libid3tag id3lib libvorbis libogg flac ];
+  preConfigure = ''
+    # pkg-config v0.23 should be enough.
+    sed -i -e '/_pkg_min_version=0.24/s/24/23/' \
+           -e 's/have_mp3=no/have_mp3=yes/' \
+           -e 's/ID3TAG_DEPS="id3tag"/ID3TAG_DEPS=""/' configure
+  '';
+
+  NIX_LDFLAGS = "-lid3tag -lz";
+
+  buildInputs = [
+    pkgconfig intltool gtk glib libid3tag id3lib taglib libvorbis libogg flac
+  ];
 
   meta = {
-    description = "an utility for viewing and editing tags for various audio files";
-    homepage = http://http://easytag.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
+    description = "View and edit tags for various audio files";
+    homepage = "http://projects.gnome.org/easytag/";
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }
