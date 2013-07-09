@@ -25,6 +25,7 @@ let
                 pkgs.docbook5_xsl
                 pkgs.grub
                 pkgs.perlPackages.XMLLibXML
+                pkgs.unionfs-fuse
               ];
           }
         ];
@@ -334,8 +335,7 @@ in {
             "sed -i 's,^}\$,jobs.sshd.startOn = pkgs.lib.mkOverride 0 \"startup\"; },' /etc/nixos/configuration.nix"
           );
 
-          my $cfg = $machine->succeed("cat /etc/nixos/configuration.nix");
-          print STDERR "New CD config:\n$cfg\n";
+          $machine->succeed("cat /etc/nixos/configuration.nix >&2");
 
           # Apply the new CD configuration.
           $machine->succeed("nixos-rebuild test");
