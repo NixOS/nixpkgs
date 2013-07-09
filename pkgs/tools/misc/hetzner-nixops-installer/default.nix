@@ -102,6 +102,6 @@ in stdenv.mkDerivation {
                        (remember, we're on a non-NixOS system here), together
                        with the partitioner.
     '';
-    maintainer = stdenv.lib.maintainers.aszlig;
+    maintainers = [ stdenv.lib.maintainers.aszlig ];
   };
 }
