@@ -66,10 +66,6 @@ pythonPackages = python.modules // rec {
   });
 
   nixpart = callPackage ../tools/filesystems/nixpart { };
-  nixpartHetzner = nixpart.override {
-    useNixUdev = false;
-    udevSoMajor = 0;
-  };
 
   pil = import ../development/python-modules/pil {
     inherit (pkgs) fetchurl stdenv libjpeg zlib freetype;

@@ -1,6 +1,11 @@
 { stdenv, perl, gnutar, pathsFromGraph, nix, pythonPackages }:
 
 let
+  nixpart = pythonPackages.nixpart.override {
+    useNixUdev = false;
+    udevSoMajor = 0;
+  };
+
   base = stdenv.mkDerivation {
     name = "hetzner-nixops-base";
 
@@ -15,7 +20,7 @@ in stdenv.mkDerivation {
 
   exportReferencesGraph = [
     "refs-base" base
-    "refs-nixpart" pythonPackages.nixpartHetzner
+    "refs-nixpart" nixpart
   ];
 
   buildCommand = ''
@@ -31,7 +36,7 @@ in stdenv.mkDerivation {
     done
 
     # Only a symlink that is goint to be put into the Tar file.
-    ln -ns "${pythonPackages.nixpartHetzner}/bin/nixpart" usr/bin/nixpart
+    ln -ns "${nixpart}/bin/nixpart" usr/bin/nixpart
 
     base_storepaths="$("${perl}/bin/perl" "${pathsFromGraph}" refs-base)"
     base_registration="$(printRegistration=1 \
