@@ -651,8 +651,9 @@ in
             done
           '';
 
-        serviceConfig.ExecStart = "@${httpd}/bin/httpd httpd -f ${httpdConf} -DNO_DETACH";
+        serviceConfig.ExecStart = "@${httpd}/bin/httpd httpd -f ${httpdConf}";
         serviceConfig.ExecStop = "${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop";
+        serviceConfig.Type = "forking";
         serviceConfig.Restart = "always";
       };
 
