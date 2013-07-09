@@ -2125,6 +2125,29 @@ pythonPackages = python.modules // rec {
     };
   };
 
+
+  hetzner = buildPythonPackage rec {
+    name = "hetzner-${version}";
+    version = "0.2.1";
+
+    src = fetchurl {
+      url = "https://github.com/RedMoonStudios/hetzner/archive/"
+          + "v${version}.tar.gz";
+      sha256 = "0im7frzmbd1v89251ci8ahrjhw578nmksqlfcdakim0jr23si4wh";
+    };
+
+    # not there yet, but coming soon.
+    doCheck = false;
+
+    meta = {
+      homepage = "https://github.com/RedMoonStudios/hetzner";
+      description = "High-level Python API for accessing the Hetzner robot";
+      license = stdenv.lib.licenses.bsd3;
+      maintainers = [ stdenv.lib.maintainers.aszlig ];
+    };
+  };
+
+
   html5lib = buildPythonPackage (rec {
     name = "html5lib-0.95";
 
