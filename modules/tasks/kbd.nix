@@ -73,6 +73,7 @@ in
     # it has a restart trigger.
     systemd.services."systemd-vconsole-setup" =
       { description = "Setup Virtual Console";
+        wantedBy = [ "sysinit.target" "multi-user.target" ];
         before = [ "sysinit.target" "shutdown.target" ];
         unitConfig =
           { DefaultDependencies = "no";
