@@ -41,7 +41,7 @@ with pkgs.lib;
 
     # Allow sshd to be started manually through "start sshd".
     services.openssh.enable = true;
-    jobs.sshd.startOn = pkgs.lib.mkOverride 50 "";
+    systemd.services.sshd.wantedBy = mkOverride 50 [];
 
     # Enable wpa_supplicant, but don't start it by default.
     networking.wireless.enable = true;
