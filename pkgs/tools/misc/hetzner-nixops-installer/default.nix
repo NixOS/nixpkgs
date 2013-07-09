@@ -57,6 +57,9 @@ in stdenv.mkDerivation {
     full_storepaths="$("${perl}/bin/perl" "${pathsFromGraph}" refs-*)"
     stripped_full_storepaths="$(echo "$full_storepaths" | sed 's|/*||')"
 
+    # Reset timestamps to those of 'nix-store' to prevent annoying warnings.
+    find usr -exec touch -h -r "${nix}/bin/nix-store" {} +
+
     ( echo "#!${stdenv.shell}"
       echo 'tarfile="$(mktemp)"'
       echo 'trap "rm -f $tarfile" EXIT'
