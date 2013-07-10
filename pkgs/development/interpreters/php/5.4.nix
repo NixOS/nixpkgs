@@ -1,7 +1,7 @@
 { stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , apacheHttpd, mysql, libxml2, readline, zlib, curl, gd, postgresql, gettext
 , openssl, pkgconfig, sqlite, config, libiconv, libjpeg, libpng, freetype
-, libxslt, libmcrypt, bzip2, icu }:
+, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl }:
 
 let
   libmcryptOverride = libmcrypt.override { disablePosixThreads = true; };
@@ -29,6 +29,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       # Extensions
+
+      ldap = {
+        configureFlags = ["--with-ldap=${openldap}"];
+        buildInputs = [openldap cyrus_sasl openssl];
+      };
 
       curl = {
         configureFlags = ["--with-curl=${curl}" "--with-curlwrappers"];
@@ -167,6 +172,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     };
 
   cfg = {
+    ldapSupport = config.php.ldap or true;
     mysqlSupport = config.php.mysql or true;
     mysqliSupport = config.php.mysqli or true;
     pdo_mysqlSupport = config.php.pdo_mysql or true;
@@ -214,7 +220,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
   '';
 
   src = fetchurl {
-    url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
+    urls = [
+      "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror"
+      "http://se1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
+    ];
     sha256 = "0dh159svdrakvm9nsyg3yyln7cqqzpxgs2163cqxplnc93d8a8id";
     name = "php-${version}.tar.bz2";
   };
