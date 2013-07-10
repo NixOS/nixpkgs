@@ -926,7 +926,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/luit-1.1.1.tar.bz2;
       sha256 = "0dn694mk56x6hdk6y9ylx4f128h5jcin278gnw2gb807rf3ygc1h";
     };
-    buildInputs = [pkgconfig libfontenc ];
+    buildInputs = [pkgconfig libfontenc ]; configureFlags = "--disable-selective-werror"; 
   })) // {inherit libfontenc ;};
 
   makedepend = (stdenv.mkDerivation ((if overrides ? makedepend then overrides.makedepend else x: x) {
