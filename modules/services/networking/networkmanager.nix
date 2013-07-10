@@ -92,9 +92,19 @@ in {
       { source = "${networkmanager_openvpn}/etc/NetworkManager/VPN/nm-openvpn-service.name";
         target = "NetworkManager/VPN/nm-openvpn-service.name";
       }
+      { source = "${networkmanager_vpnc}/etc/NetworkManager/VPN/nm-vpnc-service.name";
+        target = "NetworkManager/VPN/nm-vpnc-service.name";
+      }
+      { source = "${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
+        target = "NetworkManager/VPN/nm-openconnect-service.name";
+      }
     ];
 
-    environment.systemPackages = cfg.packages ++ [ networkmanager_openvpn ];
+    environment.systemPackages = cfg.packages ++ [
+        networkmanager_openvpn
+        networkmanager_vpnc
+        networkmanager_openconnect
+        ];
 
     users.extraGroups = singleton {
       name = "networkmanager";
@@ -134,7 +144,11 @@ in {
     security.polkit.permissions = polkitConf;
 
     # openvpn plugin has only dbus interface
-    services.dbus.packages = cfg.packages ++ [ networkmanager_openvpn ];
+    services.dbus.packages = cfg.packages ++ [
+        networkmanager_openvpn
+        networkmanager_vpnc
+        networkmanager_openconnect
+        ];
 
     services.udev.packages = cfg.packages;
   };
