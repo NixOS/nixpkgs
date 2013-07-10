@@ -753,6 +753,8 @@ let
 
   e2fsprogs = callPackage ../tools/filesystems/e2fsprogs { };
 
+  easyrsa = callPackage ../tools/networking/easyrsa { };
+
   ebook_tools = callPackage ../tools/text/ebook-tools { };
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
