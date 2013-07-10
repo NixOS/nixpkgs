@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, openvpn, intltool, pkgconfig, networkmanager
-, withGnome ? true, gtk2, libgnome_keyring, procps, module_init_tools }:
+{ stdenv, fetchurl, openconnect, intltool, pkgconfig, networkmanager
+, withGnome ? true, gtk2, gconf, libgnome_keyring, procps, module_init_tools }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
-  pname = "NetworkManager-openvpn";
+  pname = "NetworkManager-openconnect";
   version = networkmanager.version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/0.9/${pname}-${version}.tar.xz";
-    sha256 = "1klmhcizp6fmbxjbyihsk2w0alnkyiw2a3ldgijq8s224k0z95j1";
+    sha256 = "16sdgrabbh2y7j6g9ic9lm5z6sxn7iz3j0xininkiwnjgbsqf961";
   };
 
-  buildInputs = [ openvpn networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gtk2 libgnome_keyring ];
+  buildInputs = [ openconnect networkmanager ]
+    ++ stdenv.lib.optionals withGnome [ gtk2 libgnome_keyring gconf ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
@@ -24,11 +24,9 @@ stdenv.mkDerivation rec {
   preConfigure = ''
      substituteInPlace "configure" \
        --replace "/sbin/sysctl" "${procps}/sbin/sysctl"
-     substituteInPlace "src/nm-openvpn-service.c" \
-       --replace "/sbin/openvpn" "${openvpn}/sbin/openvpn" \
+     substituteInPlace "src/nm-openconnect-service.c" \
+       --replace "/sbin/openconnect" "${openconnect}/sbin/openconnect" \
        --replace "/sbin/modprobe" "${module_init_tools}/sbin/modprobe"
-     substituteInPlace "properties/auth-helpers.c" \
-       --replace "/sbin/openvpn" "${openvpn}/sbin/openvpn"
   '';
 
   postConfigure = ''
@@ -45,3 +43,4 @@ stdenv.mkDerivation rec {
     inherit (networkmanager.meta) maintainers platforms;
   };
 }
+
