@@ -177,6 +177,12 @@ while (<>) {
         $extraAttrs{$pkg} = " configureFlags = \"--with-fontrootdir=\$(out)/lib/X11/fonts\"; ";
     }
 
+    if ($tarball =~ /\/luit-/) {
+        # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
+        # Once the bug is fixed upstream, this can be removed.
+        $extraAttrs{$pkg} = " configureFlags = \"--disable-selective-werror\"; ";
+    }
+
     sub process {
         my $requires = shift;
         my $s = shift;
