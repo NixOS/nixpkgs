@@ -1,7 +1,7 @@
 { stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , apacheHttpd, mysql, libxml2, readline, zlib, curl, gd, postgresql, gettext
 , openssl, pkgconfig, sqlite, config, libiconv, libjpeg, libpng, freetype
-, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl }:
+, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash }:
 
 let
   libmcryptOverride = libmcrypt.override { disablePosixThreads = true; };
@@ -33,6 +33,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       ldap = {
         configureFlags = ["--with-ldap=${openldap}"];
         buildInputs = [openldap cyrus_sasl openssl];
+      };
+
+      mhash = {
+        configureFlags = ["--with-mhash"];
+        buildInputs = [libmhash];
       };
 
       curl = {
@@ -173,6 +178,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   cfg = {
     ldapSupport = config.php.ldap or true;
+    mhashSupport = config.php.mhash or true;
     mysqlSupport = config.php.mysql or true;
     mysqliSupport = config.php.mysqli or true;
     pdo_mysqlSupport = config.php.pdo_mysql or true;
