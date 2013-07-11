@@ -5679,6 +5679,14 @@ let
     __overrides = (config.perl510PackageOverrides or (p: {})) pkgs;
   };
 
+  perl514Packages = import ./perl-packages.nix {
+    pkgs = pkgs // {
+      perl = perl514;
+      buildPerlPackage = import ../development/perl-modules/generic perl514;
+    };
+    __overrides = (config.perl514PackageOverrides or (p: {})) pkgs;
+  };
+
   perlXMLParser = perlPackages.XMLParser;
 
   ack = perlPackages.ack;
@@ -8300,6 +8308,14 @@ let
   lightdm = callPackage ../applications/display-managers/lightdm { };
 
   lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm-gtk-greeter { };
+
+  # slic3r 0.9.10b says: "Running Slic3r under Perl >= 5.16 is not supported nor recommended"
+  slic3r = callPackage ../applications/misc/slic3r {
+    inherit (perl514Packages) EncodeLocale MathClipper ExtUtilsXSpp
+            BoostGeometryUtils MathConvexHullMonotoneChain MathGeometryVoronoi
+            MathPlanePath Moo IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus;
+    perl = perl514;
+  };
 
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
