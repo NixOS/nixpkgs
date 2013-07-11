@@ -591,6 +591,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
 
+  bindingsDSL = callPackage ../development/libraries/haskell/bindings-DSL {};
+
+  bindingsPosix = callPackage ../development/libraries/haskell/bindings-posix {};
+
   bitarray = callPackage ../development/libraries/haskell/bitarray {};
 
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
