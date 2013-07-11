@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
               EMSA3_SHA512      ///< SHA512, with EMSA3 (ie PKCS#1 Version 1.5) encoding'
     '';
 
+  patches = [ ./gcc47.patch ];
+
   configureFlags = "--no-separate-debug-info";
 
   enableParallelBuilding = true;
