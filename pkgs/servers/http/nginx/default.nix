@@ -9,11 +9,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "nginx-1.2.9";
+  name = "nginx-${meta.version}";
 
   src = fetchurl {
     url = "http://nginx.org/download/${name}.tar.gz";
-    sha256 = "071bs9wh1q1xmprhisyy8i4psmc2xxl6xv7plj9smxjpnxs6cj3i";
+    sha256 = "06ficmjiya3m8mdlyq3bgqx604h475n77qc5c502kfjijzld39dw";
   };
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt ] ++ stdenv.lib.optional fullWebDAV expat;
@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     description = "A reverse proxy and lightweight webserver";
     maintainers = [ stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.all;
+    version = "1.4.1";
   };
 }
