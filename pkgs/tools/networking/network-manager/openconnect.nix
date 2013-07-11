@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "TODO";
+    description = "NetworkManager's OpenConnect plugin";
     inherit (networkmanager.meta) maintainers platforms;
   };
 }
