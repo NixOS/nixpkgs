@@ -82,6 +82,7 @@ let
 
       virtualisation.writableStore = true;
       virtualisation.pathsInNixDB = channelContents;
+      virtualisation.memorySize = 512;
     };
 
   channelContents = [ pkgs.hello.src pkgs.rlwrap ];
