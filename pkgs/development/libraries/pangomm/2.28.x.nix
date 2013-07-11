@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm, libpng }:
+{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm, libpng, cairo }:
 
 stdenv.mkDerivation rec {
   name = "pangomm-2.28.4";
@@ -9,10 +9,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ pango glibmm cairomm libpng ];
+  propagatedBuildInputs = [ pango glibmm cairomm libpng cairo ];
 
-  meta = {
+  NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo";
+
+  meta = with stdenv.lib; {
     description = "C++ interface to the Pango text rendering library";
+    homepage    = http://www.pango.org/;
+    license     = licenses.lgplv2Plus;
+    maintainers = with maintainers; [ lovek323 raskin ];
+    platforms   = platforms.unix;
 
     longDescription = ''
       Pango is a library for laying out and rendering of text, with an
@@ -21,11 +27,5 @@ stdenv.mkDerivation rec {
       far has been done in the context of the GTK+ widget toolkit.
       Pango forms the core of text and font handling for GTK+-2.x.
     '';
-
-    homepage = http://www.pango.org/;
-    license = "LGPLv2+";
-
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
   };
 }

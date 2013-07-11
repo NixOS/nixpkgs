@@ -21,27 +21,26 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     mkdir -p build
     cd build
+    substituteInPlace make/configure.sh --replace "-arch x86_64" "-march=x86-64"
   '';
 
   configureScript = "../configure";
-  configureFlags = [
-    "--disable-install-srcs"
-    "--disable-install-docs"
-    "--disable-examples"
-    "--enable-vp8"
-    "--enable-runtime-cpu-detect"
-    "--enable-shared"
-    "--enable-pic"
-  ];
+  configureFlags =
+    [ "--disable-install-srcs" "--disable-install-docs" "--disable-examples"
+      "--enable-vp8" "--enable-runtime-cpu-detect" "--enable-pic" ]
+    # --enable-shared is only supported on ELF
+    ++ stdenv.lib.optional (!stdenv.isDarwin) "--enable-shared";
 
   installPhase = ''
     make quiet=false DIST_DIR=$out install
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "VP8 video encoder";
-    homepage = http://code.google.com/p/webm;
-    license = "BSD";
+    homepage    = http://code.google.com/p/webm;
+    license     = licenses.bsd;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
   };
 }
 

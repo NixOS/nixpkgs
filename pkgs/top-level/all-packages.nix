@@ -3703,7 +3703,11 @@ let
 
   aubio = callPackage ../development/libraries/aubio { };
 
-  audiofile = callPackage ../development/libraries/audiofile { };
+  audiofile = callPackage ../development/libraries/audiofile {
+    stdenv = if stdenv.isDarwin
+      then overrideGCC stdenv gccApple
+      else stdenv;
+  };
 
   axis = callPackage ../development/libraries/axis { };
 
@@ -3892,6 +3896,10 @@ let
 
   ffmpeg = callPackage ../development/libraries/ffmpeg {
     vpxSupport = !stdenv.isMips;
+
+    stdenv = if stdenv.isDarwin
+      then overrideGCC stdenv gccApple
+      else stdenv;
   };
 
   ffmpeg_0_6_90 = callPackage ../development/libraries/ffmpeg/0.6.90.nix {
@@ -4610,7 +4618,11 @@ let
   libre = callPackage ../development/libraries/libre {};
   librem = callPackage ../development/libraries/librem {};
 
-  libsamplerate = callPackage ../development/libraries/libsamplerate { };
+  libsamplerate = callPackage ../development/libraries/libsamplerate {
+    stdenv = if stdenv.isDarwin
+      then overrideGCC stdenv gccApple
+      else stdenv;
+  };
 
   libspectre = callPackage ../development/libraries/libspectre { };
 
@@ -4668,7 +4680,12 @@ let
 
   libmicrohttpd = callPackage ../development/libraries/libmicrohttpd { };
 
-  libmikmod = callPackage ../development/libraries/libmikmod { };
+  libmikmod = callPackage ../development/libraries/libmikmod {
+    # resolve the "stray '@' in program" errors
+    stdenv = if stdenv.isDarwin
+      then overrideGCC stdenv gccApple
+      else stdenv;
+  };
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
@@ -4764,7 +4781,11 @@ let
   # To bootstrap SBCL, I need CLisp 2.44.1; it needs libsigsegv 2.5
   libsigsegv_25 = callPackage ../development/libraries/libsigsegv/2.5.nix { };
 
-  libsndfile = callPackage ../development/libraries/libsndfile { };
+  libsndfile = callPackage ../development/libraries/libsndfile {
+    stdenv = if stdenv.isDarwin
+      then overrideGCC stdenv gccApple
+      else stdenv;
+  };
 
   libsoup = callPackage ../development/libraries/libsoup { };
 
@@ -5201,6 +5222,11 @@ let
     # GNOME dependencies are not used unless gtkStyle == true
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
     cups = if stdenv.isLinux then cups else null;
+
+    # resolve unrecognised flag '-fconstant-cfstrings' errors
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
   };
 
   qt48Full = callPackage ../development/libraries/qt-4.x/4.8 {
@@ -5873,7 +5899,13 @@ let
 
   mod_wsgi = callPackage ../servers/http/apache-modules/mod_wsgi { };
 
-  mpd = callPackage ../servers/mpd { };
+  mpd = callPackage ../servers/mpd {
+    # resolve the "stray '@' in program" errors
+    stdenv = if stdenv.isDarwin
+      then overrideGCC stdenv gccApple
+      else stdenv;
+  };
+
   mpd_clientlib = callPackage ../servers/mpd/clientlib.nix { };
 
   miniHttpd = callPackage ../servers/http/mini-httpd {};
