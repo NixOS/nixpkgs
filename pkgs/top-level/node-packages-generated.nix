@@ -2303,7 +2303,7 @@
     baseName = "nijs";
     version = "0.0.9";
     fullName = "nijs-*";
-    hash = "1be26e71151d67b0bcced2431b8507ad9a1ce07fdc895480b63c058e89ed4f0b";
+    hash = "fdcc60b869d3308549818608593c5a9eab75574a5e85df66e35f6f896a4d3544";
     patchLatest = false;
     topLevel = true;
     dependencies = [
