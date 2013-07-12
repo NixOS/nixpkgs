@@ -40,13 +40,9 @@ let
     '';
 
   kernelPackages = config.boot.kernelPackages;
-  kernelHasRPFilter = kernelPackages.kernel ? features
-                   && kernelPackages.kernel.features ? netfilterRPFilter
-                   && kernelPackages.kernel.features.netfilterRPFilter;
 
-  kernelCanDisableHelpers = kernelPackages.kernel ? features
-                   && kernelPackages.kernel.features ? canDisableNetfilterConntrackHelpers
-                   && kernelPackages.kernel.features.canDisableNetfilterConntrackHelpers;
+  kernelHasRPFilter = kernelPackages.kernel.features.netfilterRPFilter or false;
+  kernelCanDisableHelpers = kernelPackages.kernel.features.canDisableNetfilterConntrackHelpers or false;
 
 in
 
