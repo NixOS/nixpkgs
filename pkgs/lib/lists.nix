@@ -52,7 +52,7 @@ in rec {
       imap' = n:
         if n == len
           then []
-          else [ (f n (elemAt list n)) ] ++ imap' (inc n);
+          else [ (f (inc n) (elemAt list n)) ] ++ imap' (inc n);
     in imap' 0;
 
     
