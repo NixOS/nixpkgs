@@ -143,9 +143,9 @@
   }
   {
     baseName = "aws-sdk";
-    version = "1.3.1";
+    version = "1.3.2";
     fullName = "aws-sdk-*";
-    hash = "1c8c49435a4ddf5ceb29b0c9d130893a95de30207785c3dc9d902c9174362967";
+    hash = "6ad0b23bf6eba85609caed4a190ff0068cf0a0a94437b6cfab98fa6ea0c911fe";
     patchLatest = true;
     topLevel = true;
     dependencies = [
@@ -155,9 +155,9 @@
   }
   {
     baseName = "aws-sdk";
-    version = "1.3.1";
+    version = "1.3.2";
     fullName = "aws-sdk->=1.2.0 <2";
-    hash = "1c8c49435a4ddf5ceb29b0c9d130893a95de30207785c3dc9d902c9174362967";
+    hash = "6ad0b23bf6eba85609caed4a190ff0068cf0a0a94437b6cfab98fa6ea0c911fe";
     patchLatest = true;
     topLevel = false;
     dependencies = [
@@ -219,9 +219,9 @@
   }
   {
     baseName = "bindings";
-    version = "1.1.0";
+    version = "1.1.1";
     fullName = "bindings-*";
-    hash = "9ce864c7ce347eb3f8728fc03bc5a01f5e6195b145e6b9674eb2b98c5c715865";
+    hash = "6145f4ae35591a3c51bbcc20628070347353ab90b5313993eda1c1c6927e375b";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -563,9 +563,9 @@
   }
   {
     baseName = "connect";
-    version = "2.8.3";
-    fullName = "connect-2.8.3";
-    hash = "a68c7f95eb1d8f574ffbba1c6ceaaa8a05189774099dcb327e29721f4514f309";
+    version = "2.8.4";
+    fullName = "connect-2.8.4";
+    hash = "e42ef0828b98bdcbbe32f3208ee40b0a92026f3b1fd04425854577454e26546f";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -574,7 +574,7 @@
       { name = "cookie-signature"; range = "1.0.1"; }
       { name = "buffer-crc32"; range = "0.2.1"; }
       { name = "cookie"; range = "0.1.0"; }
-      { name = "send"; range = "0.1.2"; }
+      { name = "send"; range = "0.1.3"; }
       { name = "bytes"; range = "0.2.0"; }
       { name = "fresh"; range = "0.1.0"; }
       { name = "pause"; range = "0.0.1"; }
@@ -606,9 +606,9 @@
   }
   {
     baseName = "connect";
-    version = "2.8.3";
+    version = "2.8.4";
     fullName = "connect-~2";
-    hash = "a68c7f95eb1d8f574ffbba1c6ceaaa8a05189774099dcb327e29721f4514f309";
+    hash = "e42ef0828b98bdcbbe32f3208ee40b0a92026f3b1fd04425854577454e26546f";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -617,7 +617,7 @@
       { name = "cookie-signature"; range = "1.0.1"; }
       { name = "buffer-crc32"; range = "0.2.1"; }
       { name = "cookie"; range = "0.1.0"; }
-      { name = "send"; range = "0.1.2"; }
+      { name = "send"; range = "0.1.3"; }
       { name = "bytes"; range = "0.2.0"; }
       { name = "fresh"; range = "0.1.0"; }
       { name = "pause"; range = "0.0.1"; }
@@ -974,13 +974,13 @@
   }
   {
     baseName = "express";
-    version = "3.3.3";
+    version = "3.3.4";
     fullName = "express-*";
-    hash = "ba67b79732082d24acebb38e273ce7749a86590d999bab2d5f2f9cc566ee8c9c";
+    hash = "96a3fc9c2250d13f9aa183660466590fe285a2dd19e6ebdc4b2340295ee1aa65";
     patchLatest = false;
     topLevel = true;
     dependencies = [
-      { name = "connect"; range = "2.8.3"; }
+      { name = "connect"; range = "2.8.4"; }
       { name = "commander"; range = "1.2.0"; }
       { name = "range-parser"; range = "0.0.4"; }
       { name = "mkdirp"; range = "0.3.5"; }
@@ -988,7 +988,7 @@
       { name = "buffer-crc32"; range = "0.2.1"; }
       { name = "fresh"; range = "0.1.0"; }
       { name = "methods"; range = "0.0.1"; }
-      { name = "send"; range = "0.1.2"; }
+      { name = "send"; range = "0.1.3"; }
       { name = "cookie-signature"; range = "1.0.1"; }
       { name = "debug"; range = "*"; }
     ];
@@ -1237,43 +1237,43 @@
   }
   {
     baseName = "fstream";
-    version = "0.1.22";
+    version = "0.1.23";
     fullName = "fstream-0";
-    hash = "2ace3993d34cbf5e97bcb9c7eec3f011fa2041ce66cb688e39e747285084496a";
+    hash = "1f3f03be2b18815b133e551b0cde8ab77148d0de31fdd61d90f21317f02c8342";
     patchLatest = false;
     topLevel = false;
     dependencies = [
       { name = "rimraf"; range = "2"; }
       { name = "mkdirp"; range = "0.3"; }
-      { name = "graceful-fs"; range = "~1.2.0"; }
+      { name = "graceful-fs"; range = "~2.0.0"; }
       { name = "inherits"; range = "~1.0.0"; }
     ];
   }
   {
     baseName = "fstream";
-    version = "0.1.22";
+    version = "0.1.23";
     fullName = "fstream-~0.1.8";
-    hash = "2ace3993d34cbf5e97bcb9c7eec3f011fa2041ce66cb688e39e747285084496a";
+    hash = "1f3f03be2b18815b133e551b0cde8ab77148d0de31fdd61d90f21317f02c8342";
     patchLatest = false;
     topLevel = false;
     dependencies = [
       { name = "rimraf"; range = "2"; }
       { name = "mkdirp"; range = "0.3"; }
-      { name = "graceful-fs"; range = "~1.2.0"; }
+      { name = "graceful-fs"; range = "~2.0.0"; }
       { name = "inherits"; range = "~1.0.0"; }
     ];
   }
   {
     baseName = "glob";
-    version = "3.2.1";
+    version = "3.2.3";
     fullName = "glob-3";
-    hash = "a457c2115213ce2cb59582ddc3a25eb3ae7490af687e412111c0032f72966f51";
+    hash = "82e04561e897c9b682c0568bafbc57b0ee2fc592579535bb0f5929cd1605c9c3";
     patchLatest = false;
     topLevel = false;
     dependencies = [
       { name = "minimatch"; range = "~0.2.11"; }
-      { name = "graceful-fs"; range = "~1.2.0"; }
-      { name = "inherits"; range = "1"; }
+      { name = "graceful-fs"; range = "~2.0.0"; }
+      { name = "inherits"; range = "2"; }
     ];
   }
   {
@@ -1291,22 +1291,22 @@
   }
   {
     baseName = "glob";
-    version = "3.2.1";
+    version = "3.2.3";
     fullName = "glob->= 3.1.4";
-    hash = "a457c2115213ce2cb59582ddc3a25eb3ae7490af687e412111c0032f72966f51";
+    hash = "82e04561e897c9b682c0568bafbc57b0ee2fc592579535bb0f5929cd1605c9c3";
     patchLatest = false;
     topLevel = false;
     dependencies = [
       { name = "minimatch"; range = "~0.2.11"; }
-      { name = "graceful-fs"; range = "~1.2.0"; }
-      { name = "inherits"; range = "1"; }
+      { name = "graceful-fs"; range = "~2.0.0"; }
+      { name = "inherits"; range = "2"; }
     ];
   }
   {
     baseName = "graceful-fs";
-    version = "1.2.2";
-    fullName = "graceful-fs-1";
-    hash = "a23fe552c6b0a221fc961e1ef0ed567e081ad948f4fcac6be660fa6741c0dbd6";
+    version = "2.0.0";
+    fullName = "graceful-fs-2";
+    hash = "36f8fb1de88a8599cc828a0eb4c96f12c25437756e91e42aeadce00a7887241c";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -1314,9 +1314,9 @@
   }
   {
     baseName = "graceful-fs";
-    version = "1.2.2";
+    version = "1.2.3";
     fullName = "graceful-fs-~1";
-    hash = "a23fe552c6b0a221fc961e1ef0ed567e081ad948f4fcac6be660fa6741c0dbd6";
+    hash = "b8d9e0af2261259525a65281573e416b70b91788ea7f7b13f4598aaa7818255a";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -1324,9 +1324,19 @@
   }
   {
     baseName = "graceful-fs";
-    version = "1.2.2";
+    version = "1.2.3";
     fullName = "graceful-fs-~1.2.0";
-    hash = "a23fe552c6b0a221fc961e1ef0ed567e081ad948f4fcac6be660fa6741c0dbd6";
+    hash = "b8d9e0af2261259525a65281573e416b70b91788ea7f7b13f4598aaa7818255a";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "graceful-fs";
+    version = "2.0.0";
+    fullName = "graceful-fs-~2.0.0";
+    hash = "36f8fb1de88a8599cc828a0eb4c96f12c25437756e91e42aeadce00a7887241c";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -1556,6 +1566,16 @@
   }
   {
     baseName = "inherits";
+    version = "2.0.0";
+    fullName = "inherits-2";
+    hash = "9c0e9ab9e025f0be599d62752764964416832d38d93a4143242ec4deb4de1ae0";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "inherits";
     version = "1.0.0";
     fullName = "inherits-~1.0.0";
     hash = "2be196fa6bc6a0c65fecd737af457589ef88b22a95d5dc31aab01d92ace48186";
@@ -1586,9 +1606,9 @@
   }
   {
     baseName = "jade";
-    version = "0.32.0";
+    version = "0.33.0";
     fullName = "jade-*";
-    hash = "25bd8ad332bdf7dba4bcd2bf38b6f5ff49e1a9401668a4c4edf50e1277031e2d";
+    hash = "9c03589c5ca55fcf6b4583c1daefd052fb8ef46e91962bab4ee75f6135963e4f";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -1670,9 +1690,9 @@
   }
   {
     baseName = "jsontool";
-    version = "5.1.3";
+    version = "6.0.0";
     fullName = "jsontool-*";
-    hash = "097889f294920e43c2a8f8d9156971860c67c61ecfe5a1e411c4d641e521985c";
+    hash = "4a1e5d6d89571a561b3f7aea39d6ba6274bb8075d802b0a514e17abf186d781c";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -2281,9 +2301,9 @@
   }
   {
     baseName = "nijs";
-    version = "0.0.8";
+    version = "0.0.9";
     fullName = "nijs-*";
-    hash = "134a4f764835280487334f5cfd5a0d271cdd784fe954ad619fad250f54c3b3b9";
+    hash = "1be26e71151d67b0bcced2431b8507ad9a1ce07fdc895480b63c058e89ed4f0b";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -2302,14 +2322,14 @@
   }
   {
     baseName = "node-gyp";
-    version = "0.10.5";
+    version = "0.10.6";
     fullName = "node-gyp-*";
-    hash = "e52cdb18b2b457600b6c5178a6c5f3de6ec81b94cde85e14c0c8f6e58a2c041a";
+    hash = "1b1fc060c1a84eb0f52c495d7d13e3a7f03b2753b74dc6c1c801c5b8d563c5b0";
     patchLatest = false;
     topLevel = true;
     dependencies = [
       { name = "glob"; range = "3"; }
-      { name = "graceful-fs"; range = "1"; }
+      { name = "graceful-fs"; range = "2"; }
       { name = "fstream"; range = "0"; }
       { name = "minimatch"; range = "0"; }
       { name = "mkdirp"; range = "0"; }
@@ -2418,9 +2438,9 @@
   }
   {
     baseName = "npmlog";
-    version = "0.0.3";
+    version = "0.0.4";
     fullName = "npmlog-0";
-    hash = "3214a04d9a54c588d2585b657c7068f9561dba34dd2323c4ac7ec98e69e3e9cd";
+    hash = "16da9f0f239813f201156b81a5ebe552c9a3f78a405dbb24c2c1743fe3a0d579";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -2795,9 +2815,9 @@
   }
   {
     baseName = "rbytes";
-    version = "0.0.2";
+    version = "1.0.0";
     fullName = "rbytes-*";
-    hash = "0fd4697be996ee12c65f8fb13b2edc7a554d22c31d1a344539bc611ce73b69aa";
+    hash = "ccacb9951421c0a219f63b5d356098adffa43e42367be78afb94a433f84593e7";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -3067,9 +3087,9 @@
   }
   {
     baseName = "semver";
-    version = "2.0.9";
+    version = "2.0.10";
     fullName = "semver-*";
-    hash = "cc1b4edd155fdec8638cf0acb90ba7855a9c8ea27f0a3ae2da21c12582d40050";
+    hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -3097,9 +3117,9 @@
   }
   {
     baseName = "semver";
-    version = "2.0.9";
+    version = "2.0.10";
     fullName = "semver-~2.0.7";
-    hash = "cc1b4edd155fdec8638cf0acb90ba7855a9c8ea27f0a3ae2da21c12582d40050";
+    hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -3107,9 +3127,9 @@
   }
   {
     baseName = "send";
-    version = "0.1.2";
+    version = "0.1.3";
     fullName = "send-*";
-    hash = "d3fdea73a77e9f0f826e3fa5fa7ed7ef60a51912f5b976d4c112d7c52ac4668f";
+    hash = "45d768e247b184ec2d78aef495d4986b62675daa2d40add4f993cc122bba557f";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -3135,9 +3155,9 @@
   }
   {
     baseName = "send";
-    version = "0.1.2";
-    fullName = "send-0.1.2";
-    hash = "d3fdea73a77e9f0f826e3fa5fa7ed7ef60a51912f5b976d4c112d7c52ac4668f";
+    version = "0.1.3";
+    fullName = "send-0.1.3";
+    hash = "45d768e247b184ec2d78aef495d4986b62675daa2d40add4f993cc122bba557f";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -3351,9 +3371,9 @@
   }
   {
     baseName = "stylus";
-    version = "0.33.1";
+    version = "0.34.1";
     fullName = "stylus-*";
-    hash = "5db972473ed5d5d50ef4b76b019b35b8a6b368209a694ee2f94bb8d6c9f50245";
+    hash = "efbcf5f35d84264609be85b122513af30e922687a4f5c961928febf0f27e3d9e";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -3471,9 +3491,9 @@
   }
   {
     baseName = "timezone";
-    version = "0.0.21";
+    version = "0.0.22";
     fullName = "timezone-*";
-    hash = "6f595e6376708b1c35d1dac3b3c1c44384b3928f7b3a4f33165817275548c8d1";
+    hash = "5bb9d42f401ae3084ab7dba7e0ecf1158995a987242311c86062177ad89561c3";
     patchLatest = false;
     topLevel = true;
     dependencies = [
