@@ -8139,6 +8139,8 @@ let
 
   nvi = callPackage ../applications/editors/nvi { };
 
+  nvpy = callPackage ../applications/editors/nvpy { };
+
   ocrad = callPackage ../applications/graphics/ocrad { };
 
   offrss = callPackage ../applications/networking/offrss { };
