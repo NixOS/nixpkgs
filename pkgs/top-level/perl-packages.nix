@@ -7084,7 +7084,7 @@ rec {
   };
 
   URIURL = buildPerlPackage {
-    name = "URI-URL-5.04";
+    name = "URI-URL-1.60";
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GA/GAAS/URI-1.60.tar.gz;
       sha256 = "0xr31mf7lfrwhyvlx4pzp6p7alls5gi4bj8pk5g89f5cckfd74hz";
