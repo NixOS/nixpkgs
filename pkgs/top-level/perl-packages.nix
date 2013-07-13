@@ -3408,7 +3408,7 @@ rec {
   };
 
   IOPager = buildPerlPackage {
-    name = "IO-Pager-0.06.tgz";
+    name = "IO-Pager-0.06";
     src = fetchurl {
       url = mirror://cpan/authors/id/J/JP/JPIERCE/IO-Pager-0.06.tgz;
       sha256 = "0r3af4gyjpy0f7bhs7hy5s7900w0yhbckb2dl3a1x5wpv7hcbkjb";
