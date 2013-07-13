@@ -3211,7 +3211,7 @@ pythonPackages = python.modules // rec {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.10";
+    name = "paramiko-1.10.1";
 
     src = fetchurl {
       url = https://pypi.python.org/packages/source/p/paramiko/paramiko-1.10.1.tar.gz;
