@@ -1,7 +1,7 @@
 {stdenv, fetchurl, pam, openssl}:
 
 stdenv.mkDerivation {
-  name = "uw-imap-2007";
+  name = "uw-imap-2007f";
 
   src = fetchurl {
     url = "ftp://ftp.cac.washington.edu/imap/imap-2007f.tar.gz";
