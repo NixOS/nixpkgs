@@ -12,7 +12,7 @@ let
 
   mysqldOptions =
     "--user=${cfg.user} --datadir=${cfg.dataDir} " +
-    "--log-error=${cfg.logError} --pid-file=${pidFile}";
+    "--pid-file=${pidFile}";
 
   myCnf = pkgs.writeText "my.cnf"
   ''
@@ -26,6 +26,7 @@ let
       master-password = ${cfg.replication.masterPassword}
       master-port = ${toString cfg.replication.masterPort}
     ''}
+    ${cfg.extraOptions}
   '';
 
 in
@@ -67,14 +68,25 @@ in
         description = "Location where MySQL stores its table files";
       };
 
-      logError = mkOption {
-        default = "/var/log/mysql_err.log";
-        description = "Location of the MySQL error logfile";
-      };
-
       pidDir = mkOption {
         default = "/var/run/mysql";
         description = "Location of the file which stores the PID of the MySQL server";
+      };
+
+      extraOptions = mkOption {
+        default = "";
+        example = ''
+          key_buffer_size = 6G
+          table_cache = 1600
+          log-error = /var/log/mysql_err.log
+        '';
+        description = ''
+          Provide extra options to the MySQL configuration file.
+
+          Please note, that these options are added to the
+          <literal>[mysqld]</literal> section so you don't need to explicitly
+          state it again.
+        '';
       };
 
       initialDatabases = mkOption {
