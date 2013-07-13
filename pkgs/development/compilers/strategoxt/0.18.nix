@@ -59,7 +59,7 @@ rec {
   };
 
   javafront = stdenv.mkDerivation (rec {
-    name = "java-front-0.9.1";
+    name = "java-front-0.9.1pre20122";
 
     src = fetchurl {
       url = "http://hydra.nixos.org/build/766286/download/1/java-front-0.9.1pre20122.tar.gz";
