@@ -49,6 +49,7 @@ in
 
   libxcb = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
+    configureFlags = "--enable-xkb";
   };
 
   xcbproto = attrs : attrs // {
