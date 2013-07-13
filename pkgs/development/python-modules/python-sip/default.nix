@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "Creates C++ bindings for Python modules";
-    license     = licenses.gpl3Plus;
+    license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ lovek323 sander urkud ];
     platforms   = platforms.all;
   };
