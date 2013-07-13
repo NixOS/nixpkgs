@@ -4,14 +4,15 @@ stdenv.mkDerivation {
   name = "byacc-1.9";
 
   src = fetchurl {
-    url = http://www.isc.org/sources/devel/tools/byacc-1.9.tar.gz;
-    sha256 = "d61a15ac4ac007c188d0c0e99365f016f8d327755f43032b58e400754846f736";
+    url = http://invisible-island.net/datafiles/release/byacc.tar.gz;
+    sha256 = "1ifiipq6nprd9mcnlnmrg9iskh1v73637k3nx4lcazqaamiliyjs";
   };
 
   preConfigure =
     ''mkdir -p $out/bin
-      sed -i "s@^DEST.*\$@DEST = $out/bin/yacc@" Makefile
+      #sed -i "s@^DEST.*\$@DEST = $out/bin/yacc@" Makefile
     '';
+  postInstall = "mv $out/bin/yacc $out/bin/byacc";
 
   meta = { 
     description = "Berkeley YACC";
