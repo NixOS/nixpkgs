@@ -1,7 +1,7 @@
 {stdenv, fetchurl, curl, libnxml, pkgconfig}:
 
 stdenv.mkDerivation {
-  name = "libmrss-1.0";
+  name = "libmrss-0.19.2";
 
   src = fetchurl {
     url = "http://www.autistici.org/bakunin/libmrss/libmrss-0.19.2.tar.gz";
