@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   version = "0.97.5";
 
   src = fetchurl {
-    url = "http://tenet.dl.sourceforge.net/project/clamav/clamav/${version}/clamav-${version}.tar.gz";
+    url = "mirror://sourceforge/clamav/clamav-${version}.tar.gz";
     sha256 = "039wm64wl2sx7k019g5ll5dkdlsq64fnd0ng0s00pjn8bqd5wv6v";
   };
 
