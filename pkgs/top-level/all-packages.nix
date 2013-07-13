@@ -8086,7 +8086,7 @@ let
     lockfile = rubyLibs.lockfile;
     mime_types = rubyLibs.mime_types;
     ncursesw_sup = ruby_ncursesw_sup;
-    rake = rubyLibs.rake_10_0_4;
+    rake = rubyLibs.rake_10_1_0;
     rmail = rubyLibs.rmail;
     text = rubyLibs.text;
     trollop = rubyLibs.trollop;

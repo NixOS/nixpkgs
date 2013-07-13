@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     # you can choose one of the following licenses:
     # GPL or a commercial-use license (available at
     # http://www.mega-nerd.com/SRC/libsamplerate-cul.pdf)
-    licenses    = with licenses; [ gpl unfree ];
+    licenses    = with licenses; [ gpl3.shortName unfree ];
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;
   };

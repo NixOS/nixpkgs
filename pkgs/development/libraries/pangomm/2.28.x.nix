@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "C++ interface to the Pango text rendering library";
     homepage    = http://www.pango.org/;
-    license     = licenses.lgplv2Plus;
+    license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 raskin ];
     platforms   = platforms.unix;
 

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "VP8 video encoder";
     homepage    = http://code.google.com/p/webm;
-    license     = licenses.bsd;
+    license     = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
   };
