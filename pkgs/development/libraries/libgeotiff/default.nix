@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libtiff }:
 
 stdenv.mkDerivation {
-  name = "libgeotiff-1.2.4";
+  name = "libgeotiff-1.2.5";
 
   src = fetchurl {
     url = ftp://ftp.remotesensing.org/pub/geotiff/libgeotiff/libgeotiff-1.2.5.tar.gz;
