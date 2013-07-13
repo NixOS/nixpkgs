@@ -10018,6 +10018,8 @@ let
 
     autoComplete = callPackage ../applications/editors/emacs-modes/auto-complete { };
 
+    apel = callPackage ../applications/editors/emacs-modes/apel { };
+
     bbdb = callPackage ../applications/editors/emacs-modes/bbdb { };
 
     bbdb3 = callPackage ../applications/editors/emacs-modes/bbdb/3.nix {};
@@ -10055,6 +10057,8 @@ let
     ensime = callPackage ../applications/editors/emacs-modes/ensime { };
 
     ess = callPackage ../applications/editors/emacs-modes/ess { };
+
+    flim = callPackage ../applications/editors/emacs-modes/flim { };
 
     flycheck = callPackage ../applications/editors/emacs-modes/flycheck { };
 
@@ -10147,6 +10151,8 @@ let
 
     sbtMode = callPackage ../applications/editors/emacs-modes/sbt-mode { };
 
+    semi = callPackage ../applications/editors/emacs-modes/semi { };
+
     scalaMode1 = callPackage ../applications/editors/emacs-modes/scala-mode/v1.nix { };
     scalaMode2 = callPackage ../applications/editors/emacs-modes/scala-mode/v2.nix { };
 
@@ -10160,6 +10166,8 @@ let
     sunriseCommander = callPackage ../applications/editors/emacs-modes/sunrise-commander { };
 
     tuaregMode = callPackage ../applications/editors/emacs-modes/tuareg { };
+
+    wanderlust = callPackage ../applications/editors/emacs-modes/wanderlust { };
 
     writeGood = callPackage ../applications/editors/emacs-modes/writegood { };
 
