@@ -13,7 +13,6 @@ stdenv.mkDerivation  rec {
   preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i '40 i\
     #include <CoreAudio/AudioHardware.h>\
-    #include <CoreAudio/AudioHardwareBase.h>\
     #include <CoreAudio/AudioHardwareDeprecated.h>' \
     src/drivers/fluid_coreaudio.c
   '';
