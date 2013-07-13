@@ -1,7 +1,7 @@
 {stdenv, fetchurl, x11, libXp, libXau}:
 
 stdenv.mkDerivation {
-  name = "lesstif-0.95-p2";
+  name = "lesstif-0.95.0-p2";
   src = fetchurl {
     url = mirror://sourceforge/lesstif/lesstif-0.95.0.tar.bz2;
     md5 = "ab895165c149d7f95843c7584b1c7ad4";
