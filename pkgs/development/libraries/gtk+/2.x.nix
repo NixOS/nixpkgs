@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo"
-    + stdenv.lib.optionalString (libintlOrEmpty != null) " -lintl";
+    + stdenv.lib.optionalString (libintlOrEmpty != []) " -lintl";
 
   nativeBuildInputs = [ perl pkgconfig gettext ];
 
