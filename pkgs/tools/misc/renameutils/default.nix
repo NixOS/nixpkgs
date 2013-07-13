@@ -1,7 +1,7 @@
 {stdenv, fetchurl, readline}:
 
 stdenv.mkDerivation {
-  name = "renameutils-0.12";
+  name = "renameutils-0.12.0";
 
   src = fetchurl {
     url = mirror://savannah/renameutils/renameutils-0.12.0.tar.gz;
