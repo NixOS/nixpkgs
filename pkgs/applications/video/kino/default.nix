@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   name = "kino-1.3.4";
 
   src = fetchurl {
-    url = http://downloads.sourceforge.net/kino/kino-1.3.4.tar.gz;
+    url = mirror://sourceforge/kino/kino-1.3.4.tar.gz;
     sha256 = "020s05k0ma83rq2kfs8x474pqicaqp9spar81qc816ddfrnh8k8i";
   };
 
