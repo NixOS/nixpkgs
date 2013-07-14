@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "editres-1.0.6";
 
   src = fetchurl {
-    url = "http://xorg.freedesktop.org/releases/individual/app/${name}.tar.gz";
+    url = "mirror://xorg/individual/app/${name}.tar.gz";
     sha256 = "06kv7dmw6pzlqc46dbh8k9xpb6sn4ihh0bcpxq0zpvw2lm66dx45";
   };
 
