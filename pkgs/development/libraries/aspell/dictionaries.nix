@@ -29,11 +29,11 @@ let
 in {
 
   de = buildDict {
-    shortName = "de-20120607";
+    shortName = "de-20030222-1";
     fullName = "German";
     src = fetchurl {
-      url = https://www.j3e.de/ispell/igerman98/dict/igerman98-20120607.tar.bz2;
-      sha256 = "1m9jzxwrh0hwsrjs6l98v88miia45y643nbayzjjria2harq7yy5";
+      url = mirror://gnu/aspell/dict/de/aspell6-de-20030222-1.tar.bz2;
+      sha256 = "01p92qj66cqb346gk7hjfynaap5sbcn85xz07kjfdq623ghr8v5s";
     };
   };
     
