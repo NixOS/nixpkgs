@@ -45,6 +45,10 @@ stdenv.mkDerivation ({
       find -L $out/node_modules/.bin/* -type f -print0 | \
         xargs -0 sed --follow-symlinks -i 's@#!/usr/bin/env node@#!${nodejs}/bin/node@'
     fi
+    if [ -e "$out/node_modules/${requireName}/man" ]; then
+      mkdir $out/share
+      ln -sv node_modules/${requireName}/man $out/share/man
+    fi
     runHook postInstall
   '';
 
