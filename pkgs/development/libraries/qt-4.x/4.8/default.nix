@@ -61,19 +61,23 @@ stdenv.mkDerivation rec {
         inherit gtk gdk_pixbuf;
       });
 
-  preConfigure =
-    ''
-      export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
-      configureFlags+="
-        -docdir $out/share/doc/${name}
-        -plugindir $out/lib/qt4/plugins
-        -importdir $out/lib/qt4/imports
-        -examplesdir $out/share/doc/${name}/examples
-        -demosdir $out/share/doc/${name}/demos
-        -datadir $out/share/${name}
-        -translationdir $out/share/${name}/translations
-      "
-    '';
+  preConfigure = ''
+    export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
+    configureFlags+="
+      -docdir $out/share/doc/${name}
+      -plugindir $out/lib/qt4/plugins
+      -importdir $out/lib/qt4/imports
+      -examplesdir $out/share/doc/${name}/examples
+      -demosdir $out/share/doc/${name}/demos
+      -datadir $out/share/${name}
+      -translationdir $out/share/${name}/translations
+    "
+  '' + optionalString stdenv.isDarwin ''
+    export CXX=clang++
+    export CC=clang
+    sed -i 's/QMAKE_CC = gcc/QMAKE_CC = clang/' mkspecs/common/g++-base.conf
+    sed -i 's/QMAKE_CXX = g++/QMAKE_CXX = clang++/' mkspecs/common/g++-base.conf
+  '';
 
   prefixKey = "-prefix ";
   configureFlags =
@@ -97,12 +101,10 @@ stdenv.mkDerivation rec {
     '';
 
   propagatedBuildInputs =
-    [ libXrender libXrandr libXinerama libXcursor libXext libXfixes
-      libXv libXi libSM
-    ]
+    [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
+      libSM zlib libpng openssl dbus.libs freetype fontconfig glib ]
     ++ optional (stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms) mesa
     ++ optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
-    ++ [ zlib libpng openssl dbus.libs freetype fontconfig glib ]
     ++ optionals (buildWebkit || buildMultimedia) [ gstreamer gst_plugins_base ];
 
   # The following libraries are only used in plugins
@@ -116,6 +118,18 @@ stdenv.mkDerivation rec {
   # occasional build problems if one has too many cores (like on Hydra)
   # @vcunat has been unable to find a *reliable* fix
   enableParallelBuilding = false;
+
+  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin
+    "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
+
+  NIX_LDFLAGS = optionalString stdenv.isDarwin
+    "-lglib-2.0";
+
+  preBuild = optionalString stdenv.isDarwin ''
+    # resolve "extra qualification on member" error
+    sed -i 's/struct ::TabletProximityRec;/struct TabletProximityRec;/' \
+      src/gui/kernel/qt_cocoa_helpers_mac_p.h
+  '';
 
   crossAttrs = let
     isMingw = stdenv.cross.config == "i686-pc-mingw32" ||
