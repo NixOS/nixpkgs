@@ -107,7 +107,7 @@ rec {
     name = "texturize-2.1";
     buildInputs = [ gimp ] ++ gimp.nativeBuildInputs;
     src = fetchurl {
-      url = http://prdownloads.sourceforge.net/gimp-texturize/texturize-2.1_src.tgz;
+      url = mirror://sourceforge/gimp-texturize/texturize-2.1_src.tgz;
       sha256 = "0cdjq25g3yfxx6bzx6nid21kq659s1vl9id4wxyjs2dhcv229cg3";
     };
     installPhase = "installPlugins src/texturize";

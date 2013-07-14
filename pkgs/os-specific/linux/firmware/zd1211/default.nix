@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   
   src = fetchurl {
-    url = "http://surfnet.dl.sourceforge.net/sourceforge/zd1211/${name}.tar.bz2";
+    url = "mirror://sourceforge/zd1211/${name}.tar.bz2";
     sha256 = "866308f6f59f7075f075d4959dff2ede47735c751251fecd1496df1ba4d338e1";
   };
   
