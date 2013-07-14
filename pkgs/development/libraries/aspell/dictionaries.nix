@@ -36,7 +36,7 @@ in {
       sha256 = "01p92qj66cqb346gk7hjfynaap5sbcn85xz07kjfdq623ghr8v5s";
     };
   };
-    
+
   en = buildDict {
     shortName = "en-7.1-0";
     fullName = "English";
@@ -45,7 +45,7 @@ in {
       sha256 = "02ldfiny4iakgfgy4sdrzjqdzi7l1rmb6y30lv31kfy5x31g77gz";
     };
   };
-    
+
   es = buildDict {
     shortName = "es-1.11-2";
     fullName = "Spanish";
@@ -54,7 +54,7 @@ in {
       sha256 = "1k5g328ac1hdpp6fsg57d8md6i0aqcwlszp3gbmp5706wyhpydmd";
     };
   };
-    
+
   eo = buildDict {
     shortName = "eo-2.1.20000225a-2";
     fullName = "Esperanto";
@@ -72,7 +72,7 @@ in {
       sha256 = "14ffy9mn5jqqpp437kannc3559bfdrpk7r36ljkzjalxa53i0hpr";
     };
   };
-    
+
   it = buildDict {
     shortName = "it-2.2_20050523-0";
     fullName = "Italian";
@@ -81,7 +81,7 @@ in {
       sha256 = "1gdf7bc1a0kmxsmphdqq8pl01h667mjsj6hihy6kqy14k5qdq69v";
     };
   };
-    
+
   la = buildDict {
     shortName = "la-20020503-0";
     fullName = "Latin";
@@ -90,7 +90,7 @@ in {
       sha256 = "1199inwi16dznzl087v4skn66fl7h555hi2palx6s1f3s54b11nl";
     };
   };
-    
+
   nl = buildDict {
     shortName = "nl-0.50-2";
     fullName = "Dutch";
@@ -103,7 +103,7 @@ in {
       echo "add nl.rws" > $out/lib/aspell/nederlands.multi
     '';
   };
-    
+
   pl = buildDict {
     shortName = "pl-6.0_20061121-0";
     fullName = "Polish";
@@ -112,7 +112,7 @@ in {
       sha256 = "0kap4kh6bqbb22ypja1m5z3krc06vv4n0hakiiqmv20anzy42xq1";
     };
   };
-     
+
   ru = buildDict {
     shortName = "ru-0.99f7-1";
     fullName = "Russian";
@@ -121,5 +121,5 @@ in {
       sha256 = "0ip6nq43hcr7vvzbv4lwwmlwgfa60hrhsldh9xy3zg2prv6bcaaw";
     };
   };
-    
+
 }
