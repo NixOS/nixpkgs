@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   version = "4.0.0";
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/exosip/libeXosip2-${version}.tar.gz";
+    url = "mirror://savannah/exosip/libeXosip2-${version}.tar.gz";
     sha256 = "1rdjr3x7s992w004cqf4xji1522an9rpzsr9wvyhp685khmahrsj";
   };
   name = "libexosip2-${version}";

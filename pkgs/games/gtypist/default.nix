@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "gtypist-2.9.1";
 
   src = fetchurl {
-    url = "ftp://ftp.gnu.org/gnu/gtypist/gtypist-2.9.1.tar.xz";
+    url = "mirror://gnu/gtypist/gtypist-2.9.1.tar.xz";
     sha256 = "1yv209aih1ixbs477vzzk1xj013g6w32vi33g0hldfzvfxbl9y5s";
   };
 

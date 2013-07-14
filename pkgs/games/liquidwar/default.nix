@@ -14,7 +14,7 @@ rec {
   name = "liquidwar6-0.0.13beta";
 
   src = a.fetchurl {
-    url = "http://ftp.gnu.org/gnu/liquidwar6/${name}.tar.gz";
+    url = "mirror://gnu/liquidwar6/${name}.tar.gz";
     sha256 = "1jjf7wzb8jf02hl3473vz1q74fhmxn0szbishgi1f1j6a7234wx2";
   };
 
