@@ -5621,7 +5621,11 @@ let
 
   sip = callPackage ../development/python-modules/python-sip { };
 
-  pyqt4 = callPackage ../development/python-modules/pyqt { };
+  pyqt4 = callPackage ../development/python-modules/pyqt {
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
 
   pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
 
