@@ -1,4713 +1,5199 @@
 [
   {
-    baseName = "abbrev";
+    name = "abbrev";
+    spec = "1";
     version = "1.0.4";
-    fullName = "abbrev-1";
-    hash = "8dc0f480571a4a19e74f1abd4f31f6a70f94953d1ccafa16ed1a544a19a6f3a8";
-    patchLatest = false;
     topLevel = false;
     dependencies = [
     ];
+    patchLatest = false;
+    sha1 = "bd55ae5e413ba1722ee4caba1f6ea10414a59ecd";
+    tarball = "http://registry.npmjs.org/abbrev/-/abbrev-1.0.4.tgz";
   }
   {
-    baseName = "abbrev";
+    name = "abbrev";
+    spec = "~1.0.4";
     version = "1.0.4";
-    fullName = "abbrev-~1.0.4";
-    hash = "8dc0f480571a4a19e74f1abd4f31f6a70f94953d1ccafa16ed1a544a19a6f3a8";
-    patchLatest = false;
     topLevel = false;
     dependencies = [
     ];
+    patchLatest = false;
+    sha1 = "bd55ae5e413ba1722ee4caba1f6ea10414a59ecd";
+    tarball = "http://registry.npmjs.org/abbrev/-/abbrev-1.0.4.tgz";
   }
   {
-    baseName = "amdefine";
+    name = "amdefine";
+    spec = "*";
     version = "0.0.5";
-    fullName = "amdefine-*";
-    hash = "7d7a691c9742d4c9aaa8036b823823e45a676dec6897f2e072b90c7d37722fc1";
-    patchLatest = false;
     topLevel = true;
     dependencies = [
     ];
+    patchLatest = false;
+    sha1 = "86b6e9470f8cde955ef7daa3cf5d544ba81aa3db";
+    tarball = "http://registry.npmjs.org/amdefine/-/amdefine-0.0.5.tgz";
   }
   {
-    baseName = "amdefine";
+    name = "amdefine";
+    spec = ">=0.0.4";
     version = "0.0.5";
-    fullName = "amdefine->=0.0.4";
-    hash = "7d7a691c9742d4c9aaa8036b823823e45a676dec6897f2e072b90c7d37722fc1";
-    patchLatest = false;
     topLevel = false;
     dependencies = [
     ];
-  }
-  {
-    baseName = "ansi-remover";
-    version = "0.0.2";
-    fullName = "ansi-remover-*";
-    hash = "cda72261ea8d6b830892764d69eff8d926be852fc91ad3b8b5b258d606400bc7";
     patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
+    sha1 = "86b6e9470f8cde955ef7daa3cf5d544ba81aa3db";
+    tarball = "http://registry.npmjs.org/amdefine/-/amdefine-0.0.5.tgz";
   }
   {
-    baseName = "ansi";
+    name = "ansi";
+    spec = "~0.1.2";
     version = "0.1.2";
-    fullName = "ansi-~0.1.2";
-    hash = "6f2288b1db642eb822578f4ee70bf26bf97173cc7d3f10f496070fb96250006b";
-    patchLatest = false;
     topLevel = false;
     dependencies = [
     ];
-  }
-  {
-    baseName = "apparatus";
-    version = "0.0.7";
-    fullName = "apparatus->= 0.0.4";
-    hash = "77ce711505bf1c65222b5dd01e055284b25cf52ee3229fcae7fcfa3e5664826c";
     patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "sylvester"; range = ">= 0.0.8"; }
-    ];
+    sha1 = "2627e29498f06e2a1c2ece9c21e28fd494430827";
+    tarball = "http://registry.npmjs.org/ansi/-/ansi-0.1.2.tgz";
   }
   {
-    baseName = "archy";
+    name = "ansi-remover";
+    spec = "*";
     version = "0.0.2";
-    fullName = "archy-0";
-    hash = "355bafab4acbb86e4e94c00c55900215abe41ae72ab454be889c766e5889a6e5";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "asn1";
-    version = "0.1.11";
-    fullName = "asn1-0.1.11";
-    hash = "7206eadc8a9344e484bcce979e22a12c9fa64c1395aa0544b8b767808b268f43";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "assert";
-    version = "0.4.9";
-    fullName = "assert-*";
-    hash = "976a12385f7286d123734fabc7355bbeecd2532daccfada02909818b905abeeb";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "util"; range = ">= 0.4.9"; }
-    ];
-  }
-  {
-    baseName = "assert-plus";
-    version = "0.1.2";
-    fullName = "assert-plus-0.1.2";
-    hash = "bd62e853460024d1e35d3f76065f4c856a271e55ef1ce684f3033314b7377c61";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "async";
-    version = "0.2.9";
-    fullName = "async-*";
-    hash = "7215c94b63ccaa543b4b75c5dd9b820fd4839e1f9616b08a0334a8ac74939c53";
-    patchLatest = false;
     topLevel = true;
     dependencies = [
     ];
-  }
-  {
-    baseName = "async";
-    version = "0.1.22";
-    fullName = "async-0.1.x";
-    hash = "6fd2750cd519a754b0e32ef3423e64768055129e00a95d9297005bda29fdef18";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "async";
-    version = "0.2.9";
-    fullName = "async-0.2.x";
-    hash = "7215c94b63ccaa543b4b75c5dd9b820fd4839e1f9616b08a0334a8ac74939c53";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "async";
-    version = "0.2.9";
-    fullName = "async-~0.2.6";
-    hash = "7215c94b63ccaa543b4b75c5dd9b820fd4839e1f9616b08a0334a8ac74939c53";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "async";
-    version = "0.2.9";
-    fullName = "async-~0.2.7";
-    hash = "7215c94b63ccaa543b4b75c5dd9b820fd4839e1f9616b08a0334a8ac74939c53";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "aws-sdk";
-    version = "1.3.2";
-    fullName = "aws-sdk-*";
-    hash = "6ad0b23bf6eba85609caed4a190ff0068cf0a0a94437b6cfab98fa6ea0c911fe";
-    patchLatest = true;
-    topLevel = true;
-    dependencies = [
-      { name = "xml2js"; range = "0.2.4"; }
-      { name = "xmlbuilder"; range = "*"; }
-    ];
-  }
-  {
-    baseName = "aws-sdk";
-    version = "1.3.2";
-    fullName = "aws-sdk->=1.2.0 <2";
-    hash = "6ad0b23bf6eba85609caed4a190ff0068cf0a0a94437b6cfab98fa6ea0c911fe";
-    patchLatest = true;
-    topLevel = false;
-    dependencies = [
-      { name = "xml2js"; range = "0.2.4"; }
-      { name = "xmlbuilder"; range = "*"; }
-    ];
-  }
-  {
-    baseName = "aws-sign";
-    version = "0.2.0";
-    fullName = "aws-sign-~0.2.0";
-    hash = "145962c6b9b4fe70f587fa745157522c2c6dac4c22bb6fdf3f6cb297f723647e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "aws-sign";
-    version = "0.3.0";
-    fullName = "aws-sign-~0.3.0";
-    hash = "5acca27ed2b1b9f081e4dd230e03808b6a038f8a4afa698db985320efe6dda5e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "backbone";
-    version = "1.0.0";
-    fullName = "backbone-*";
-    hash = "6c66edc5134bb531b33a7f140c75c4a65cdc21711eed64c29300a84cba84f3a7";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "underscore"; range = ">=1.4.3"; }
-    ];
-  }
-  {
-    baseName = "backoff";
-    version = "2.1.0";
-    fullName = "backoff-2.1.0";
-    hash = "d1f5bf32f2f5954f6259582ead30fc8a769db35bac9900c94593b77f915cee0d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "bcrypt";
-    version = "0.7.6";
-    fullName = "bcrypt-*";
-    hash = "e7964429b2bc8aea9b9fb66b914cb3a7952a77029ae13a5a4c4cdbf837d40b2a";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "bindings"; range = "1.0.0"; }
-    ];
-  }
-  {
-    baseName = "bindings";
-    version = "1.1.1";
-    fullName = "bindings-*";
-    hash = "6145f4ae35591a3c51bbcc20628070347353ab90b5313993eda1c1c6927e375b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "bindings";
-    version = "1.0.0";
-    fullName = "bindings-1.0.0";
-    hash = "cb211ac856d135af5ee864762fae9e554225a613ea1fd815c20b8fdd1679c9ed";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "block-stream";
-    version = "0.0.6";
-    fullName = "block-stream-*";
-    hash = "2fc365b42b8601c8ee150d453f6cc762a01054b7fb28bdfcfcbce7c97e93601b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "inherits"; range = "~1.0.0"; }
-    ];
-  }
-  {
-    baseName = "boom";
-    version = "0.3.8";
-    fullName = "boom-0.3.x";
-    hash = "0ea9787bd5c5df98a06a2c7b629d4768c712611032d9af162332e825f9131d8a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "hoek"; range = "0.7.x"; }
-    ];
-  }
-  {
-    baseName = "boom";
-    version = "0.4.2";
-    fullName = "boom-0.4.x";
-    hash = "294e022990269e7fa1e3015862d2d24847cc83c3e68d214dad5a2d0d3826a08f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "hoek"; range = "0.9.x"; }
-    ];
-  }
-  {
-    baseName = "broadway";
-    version = "0.2.7";
-    fullName = "broadway-0.2.7";
-    hash = "b1ceb289fb1a6de82cddab0851fc905bb60e75167d0e37f32147f8985fa8d368";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "cliff"; range = "0.1.8"; }
-      { name = "eventemitter2"; range = "0.4.11"; }
-      { name = "nconf"; range = "0.6.7"; }
-      { name = "winston"; range = "0.6.2"; }
-      { name = "utile"; range = "0.1.7"; }
-    ];
-  }
-  {
-    baseName = "broadway";
-    version = "0.2.7";
-    fullName = "broadway-0.2.x";
-    hash = "b1ceb289fb1a6de82cddab0851fc905bb60e75167d0e37f32147f8985fa8d368";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "cliff"; range = "0.1.8"; }
-      { name = "eventemitter2"; range = "0.4.11"; }
-      { name = "nconf"; range = "0.6.7"; }
-      { name = "winston"; range = "0.6.2"; }
-      { name = "utile"; range = "0.1.7"; }
-    ];
-  }
-  {
-    baseName = "browserchannel";
-    version = "1.0.4";
-    fullName = "browserchannel-*";
-    hash = "516add6af10f887500c5eaae7347ce92c0101a6bea1a67d5221a674d07bc7999";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "hat"; range = "*"; }
-      { name = "connect"; range = "~2"; }
-      { name = "request"; range = "~2"; }
-    ];
-  }
-  {
-    baseName = "bson";
-    version = "0.1.8";
-    fullName = "bson-0.1.8";
-    hash = "a9cbdee757f213b93aca860fc06143b1f9e9a983130616732beab452681bae17";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "bson";
-    version = "0.1.9";
-    fullName = "bson-0.1.9";
-    hash = "8bb768566c4e8063883d07d2c7965ce8e5380892fd5e34448729c7f44c5f42c8";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "buffer-crc32";
-    version = "0.1.1";
-    fullName = "buffer-crc32-0.1.1";
-    hash = "9e35b724e4e1fd7112e97a6856e7d52b2644761c184f1ed391f6a576fbbb80e1";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "buffer-crc32";
-    version = "0.2.1";
-    fullName = "buffer-crc32-0.2.1";
-    hash = "b6ea96d57411e37c15e18fb8ca600656399912ce16355f9af3c662f765507f01";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "buffer-crc32";
-    version = "0.2.1";
-    fullName = "buffer-crc32-~0.2.1";
-    hash = "b6ea96d57411e37c15e18fb8ca600656399912ce16355f9af3c662f765507f01";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "buffertools";
-    version = "1.1.1";
-    fullName = "buffertools-*";
-    hash = "f5962aec81246077a46ee075072d40fa533c31ada7a0ec18e1ff3600af2d8f3f";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "buffertools";
-    version = "1.1.1";
-    fullName = "buffertools->=1.1.1 <2.0.0";
-    hash = "f5962aec81246077a46ee075072d40fa533c31ada7a0ec18e1ff3600af2d8f3f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "bunyan";
-    version = "0.21.1";
-    fullName = "bunyan-0.21.1";
-    hash = "95dca2405dcbe5b700e15d7c89b2a64fb21a097fb7ada5c274979f2057adcbef";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "mv"; range = "0.0.5"; }
-      { name = "dtrace-provider"; range = "0.2.8"; }
-    ];
-  }
-  {
-    baseName = "bytes";
-    version = "0.2.0";
-    fullName = "bytes-0.2.0";
-    hash = "e70bd4dccc886a5cf1c925092b4acd7a262a9da3e1b51ccde10a3fcd0a328465";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "character-parser";
-    version = "1.0.2";
-    fullName = "character-parser-1.0.2";
-    hash = "751edecb1143ea951e9cef5c7e1ac71526c712cfab538d09cbb2e90e56d76865";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "child-process-close";
-    version = "0.1.1";
-    fullName = "child-process-close-~0.1.1";
-    hash = "b68574f217d23d11cd4a1e5f1f2be17bf93e2bd38940ae6b07c35b69ec8d456a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "chmodr";
-    version = "0.1.0";
-    fullName = "chmodr-~0.1.0";
-    hash = "2c0bda3df1766290f9fe21940ab455e92bc37d608f2030b0e0b7dfdda9cff9cd";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "chownr";
-    version = "0.0.1";
-    fullName = "chownr-0";
-    hash = "da1fbb894b4103a1a3c912fc780f6dcf7339865298f2fdc4e20afdf00a94b821";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "cli";
-    version = "0.4.4-2";
-    fullName = "cli-0.4.x";
-    hash = "27a0db02501285da601c47495d0cd837ddeb4577bfd507c5503d2ee8cd0caffb";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "glob"; range = ">= 3.1.4"; }
-    ];
-  }
-  {
-    baseName = "cliff";
-    version = "0.1.8";
-    fullName = "cliff-0.1.8";
-    hash = "702f7ce79168e38b982eb3141485bd99e3a6480dac42f579365dc522c3950588";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "colors"; range = "0.x.x"; }
-      { name = "eyes"; range = "0.1.x"; }
-      { name = "winston"; range = "0.6.x"; }
-    ];
-  }
-  {
-    baseName = "clone";
-    version = "0.1.5";
-    fullName = "clone-0.1.5";
-    hash = "9fd586470ccc3fa585dcccad730b5e6fa9c471b49acdb38d724c110777a287d9";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "clone";
-    version = "0.1.6";
-    fullName = "clone-0.1.6";
-    hash = "9849c9faa2549d982106d3b43862dc4ceb308563badcd3ff59e30655d54e897a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "cmd-shim";
-    version = "1.1.0";
-    fullName = "cmd-shim-~1.1.0";
-    hash = "ccc0d6f184b9f77ab9d723e4bcecd88b8fa1a480507eb45cdd67b182617fad33";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "mkdirp"; range = "~0.3.3"; }
-      { name = "graceful-fs"; range = "1.2"; }
-    ];
-  }
-  {
-    baseName = "coffee-script";
-    version = "1.6.3";
-    fullName = "coffee-script-*";
-    hash = "642d226d4fab1a8464e54347cec919b1c8771da55d88e3ceb15d826fcee84525";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "colors";
-    version = "0.6.0-1";
-    fullName = "colors-0.6.0-1";
-    hash = "ca97f462664d77f5ae813029d020d4610ec9fd3f9eef3875e551d3665be7ab7d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "colors";
-    version = "0.6.0-1";
-    fullName = "colors-0.6.x";
-    hash = "ca97f462664d77f5ae813029d020d4610ec9fd3f9eef3875e551d3665be7ab7d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "colors";
-    version = "0.6.0-1";
-    fullName = "colors-0.x.x";
-    hash = "ca97f462664d77f5ae813029d020d4610ec9fd3f9eef3875e551d3665be7ab7d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "combined-stream";
-    version = "0.0.4";
-    fullName = "combined-stream-~0.0.4";
-    hash = "2502ed7a4406db1a65b09cae3106221051d6af20d3f1d7e8cc38cfc72a36432c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "delayed-stream"; range = "0.0.5"; }
-    ];
-  }
-  {
-    baseName = "commander";
-    version = "0.5.1";
-    fullName = "commander-0.5.1";
-    hash = "91042851d0731b28a5e7c342e5cbce7723a7243d31ae378fa86c45ca9493a924";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "commander";
-    version = "0.6.1";
-    fullName = "commander-0.6.1";
-    hash = "7b7fdd1bc4d16f6776169a64f133d629efe2e3a7cd338b1d0884ee909abbd729";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "commander";
-    version = "1.2.0";
-    fullName = "commander-1.2.0";
-    hash = "caeda1cecf7c1b5bf505cdf8d34b984db6ebb307af3798f4af2efdb554d31a4b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "keypress"; range = "0.1.x"; }
-    ];
-  }
-  {
-    baseName = "config-chain";
-    version = "1.1.7";
-    fullName = "config-chain-~1.1.1";
-    hash = "a161af33500f1dc18e4da364ff9f3e0a516c08aa030859ea639480676b9c3f5c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "proto-list"; range = "~1.2.1"; }
-      { name = "ini"; range = "1"; }
-    ];
-  }
-  {
-    baseName = "connect";
-    version = "2.7.5";
-    fullName = "connect-2.7.5";
-    hash = "0c36efa44c6fee030b617a57e52c23f92e7e3949ed01405ee0cb9804403d137f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "qs"; range = "0.5.1"; }
-      { name = "formidable"; range = "1.0.11"; }
-      { name = "cookie-signature"; range = "1.0.0"; }
-      { name = "buffer-crc32"; range = "0.1.1"; }
-      { name = "cookie"; range = "0.0.5"; }
-      { name = "send"; range = "0.1.0"; }
-      { name = "bytes"; range = "0.2.0"; }
-      { name = "fresh"; range = "0.1.0"; }
-      { name = "pause"; range = "0.0.1"; }
-      { name = "debug"; range = "*"; }
-    ];
-  }
-  {
-    baseName = "connect";
-    version = "2.8.4";
-    fullName = "connect-2.8.4";
-    hash = "e42ef0828b98bdcbbe32f3208ee40b0a92026f3b1fd04425854577454e26546f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "qs"; range = "0.6.5"; }
-      { name = "formidable"; range = "1.0.14"; }
-      { name = "cookie-signature"; range = "1.0.1"; }
-      { name = "buffer-crc32"; range = "0.2.1"; }
-      { name = "cookie"; range = "0.1.0"; }
-      { name = "send"; range = "0.1.3"; }
-      { name = "bytes"; range = "0.2.0"; }
-      { name = "fresh"; range = "0.1.0"; }
-      { name = "pause"; range = "0.0.1"; }
-      { name = "uid2"; range = "0.0.2"; }
-      { name = "debug"; range = "*"; }
-      { name = "methods"; range = "0.0.1"; }
-    ];
-  }
-  {
-    baseName = "connect-flash";
-    version = "0.1.1";
-    fullName = "connect-flash-*";
-    hash = "3a0a9ac9d73695abcf67a88cb1bc433cc67c55aeca3b515eb922453c7ba0c393";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "connect-mongo";
-    version = "0.3.3";
-    fullName = "connect-mongo-*";
-    hash = "d3613f8e747b83ac1cc559366cba85c47fa391337166719ac87d98dd98bb2433";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "mongodb"; range = "1.2.x"; }
-    ];
-  }
-  {
-    baseName = "connect";
-    version = "2.8.4";
-    fullName = "connect-~2";
-    hash = "e42ef0828b98bdcbbe32f3208ee40b0a92026f3b1fd04425854577454e26546f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "qs"; range = "0.6.5"; }
-      { name = "formidable"; range = "1.0.14"; }
-      { name = "cookie-signature"; range = "1.0.1"; }
-      { name = "buffer-crc32"; range = "0.2.1"; }
-      { name = "cookie"; range = "0.1.0"; }
-      { name = "send"; range = "0.1.3"; }
-      { name = "bytes"; range = "0.2.0"; }
-      { name = "fresh"; range = "0.1.0"; }
-      { name = "pause"; range = "0.0.1"; }
-      { name = "uid2"; range = "0.0.2"; }
-      { name = "debug"; range = "*"; }
-      { name = "methods"; range = "0.0.1"; }
-    ];
-  }
-  {
-    baseName = "console-browserify";
-    version = "0.1.6";
-    fullName = "console-browserify-0.1.x";
-    hash = "e774c881920562b0893e50844332f79fc5a08752d28791d942c35fcc3ef2d75d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "constantinople";
-    version = "1.0.1";
-    fullName = "constantinople-~1.0.1";
-    hash = "3740bec1b48ee60653c946ab295fecefb9c08b47e1a495330757b415c7cd402f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "uglify-js"; range = "~2.3.6"; }
-    ];
-  }
-  {
-    baseName = "cookie";
-    version = "0.0.5";
-    fullName = "cookie-0.0.5";
-    hash = "17938b21dcd85f09994b85484abb5aeddc4e92c61d1b599b764bbaaa7ad6adee";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "cookie";
-    version = "0.1.0";
-    fullName = "cookie-0.1.0";
-    hash = "aff5d22a617d744319cc70e42fc4ab11bcbcf924244af565495fa799c0639650";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "cookie-jar";
-    version = "0.2.0";
-    fullName = "cookie-jar-~0.2.0";
-    hash = "eeb643c638f828e39dfc9f44ad8d8e5376930868fdcaf3818ff316806e65af6d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "cookie-jar";
-    version = "0.3.0";
-    fullName = "cookie-jar-~0.3.0";
-    hash = "c7bac7739b9ceb194f431a4a9ac1a0ba4ffd4a60492c61dd1925dbcdb9030746";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "cookie-signature";
-    version = "1.0.0";
-    fullName = "cookie-signature-1.0.0";
-    hash = "990a69fb94e6504390dd0fe935b9fe380f925e1a8360e200e97baa908fca86c6";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "cookie-signature";
-    version = "1.0.1";
-    fullName = "cookie-signature-1.0.1";
-    hash = "e2ea4f290fdcfe82d8fb76991fee4106d4ae1f5d5a2f8b8d91442e047c538c8e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "cookiejar";
-    version = "1.3.0";
-    fullName = "cookiejar-1.3.0";
-    hash = "3bf00caf0e2f9dcd03c7175dcf6c5d700fa6d6f6f7ed77875b986e3c1a606ba7";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "cookies";
-    version = "0.3.6";
-    fullName = "cookies->= 0.2.2";
-    hash = "e35b00cc06a33a3bc1d808daa7bc29f02674c02158c5dd812cf73f275bda8b83";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "couch-login";
-    version = "0.1.17";
-    fullName = "couch-login-~0.1.15";
-    hash = "49b941220d82f17077187b66f9fd88d2eb4a791b9f5beaac046290389c73d268";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "request"; range = "2 >=2.14"; }
-    ];
-  }
-  {
-    baseName = "cryptiles";
-    version = "0.1.3";
-    fullName = "cryptiles-0.1.x";
-    hash = "bac017be67d2b33c01a9b625726b3f8e1e1786711f3132a3cc6f85779ee1d103";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "boom"; range = "0.3.x"; }
-    ];
-  }
-  {
-    baseName = "cryptiles";
-    version = "0.2.2";
-    fullName = "cryptiles-0.2.x";
-    hash = "ed3c2d5d3c1322d5389cceb46778a6c39a62842f737047666d63abda5b39fab5";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "boom"; range = "0.4.x"; }
-    ];
-  }
-  {
-    baseName = "css-parse";
-    version = "1.0.4";
-    fullName = "css-parse-1.0.4";
-    hash = "3d7dcc526083cc1dc584d10c179100a199a82e93991c8bdc92b96ee4bfb7ccac";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "css-stringify";
-    version = "1.0.5";
-    fullName = "css-stringify-1.0.5";
-    hash = "ef45a473b200f24e4cb2f0a97da70b629261ae8a54482e49e1eabc3e4cc36c0e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "css";
-    version = "1.0.8";
-    fullName = "css-~1.0.8";
-    hash = "535bcca2a3635e315a5add3536d2b97fe5636bbee5d039e4fadd8cd422912b8b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "css-parse"; range = "1.0.4"; }
-      { name = "css-stringify"; range = "1.0.5"; }
-    ];
-  }
-  {
-    baseName = "cssom";
-    version = "0.2.5";
-    fullName = "cssom-0.2.x";
-    hash = "22594077e4241c81038cdaac23fcb5ed7f8329a1dc5645286fa55db45c8ac13b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "ctype";
-    version = "0.5.0";
-    fullName = "ctype-0.5.0";
-    hash = "50157e6c5e44d1c833bfc239a7a337ee08fd6f3c5a15f7ef5cee5571a86b0378";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "ctype";
-    version = "0.5.2";
-    fullName = "ctype-0.5.2";
-    hash = "4a7224a74f19dc6a1206fa1c04ae1a4ab795cd4ba842466e2f511fa714f82c60";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "cycle";
-    version = "1.0.2";
-    fullName = "cycle-1.0.x";
-    hash = "ee5dd9af8f0a59624bb32bb6a6f67c13710e180112dba5a578f3d427a3268748";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "debug";
-    version = "0.7.2";
-    fullName = "debug-*";
-    hash = "f9142856b1c2652a11e50f2aca068edbad7598f50d9e6d003b8ee85b2a333d63";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "debug";
-    version = "0.7.2";
-    fullName = "debug-~0.7.0";
-    hash = "f9142856b1c2652a11e50f2aca068edbad7598f50d9e6d003b8ee85b2a333d63";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "debug";
-    version = "0.7.2";
-    fullName = "debug-~0.7.2";
-    hash = "f9142856b1c2652a11e50f2aca068edbad7598f50d9e6d003b8ee85b2a333d63";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "deep-equal";
-    version = "0.0.0";
-    fullName = "deep-equal-*";
-    hash = "6a5666d4bfa5d2786a9f86ede2eaa8252f783edb9d78e69cba645f7cb6e153b8";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "deep-equal";
-    version = "0.0.0";
-    fullName = "deep-equal-0.0.0";
-    hash = "6a5666d4bfa5d2786a9f86ede2eaa8252f783edb9d78e69cba645f7cb6e153b8";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "delayed-stream";
-    version = "0.0.5";
-    fullName = "delayed-stream-0.0.5";
-    hash = "f40e440dac0f853577d5225d7bd4b2026ea1447a724f4ba1096e29983ee595dd";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "diff";
-    version = "1.0.2";
-    fullName = "diff-1.0.2";
-    hash = "5de1d8c3f2bfc447a7e664cadd4aca2ef4952a43256310cc51a36b30b5be3045";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "director";
-    version = "1.1.10";
-    fullName = "director-1.1.10";
-    hash = "292c96d0d5bf8276a498595c576a6cfc832247703f2b75f09ad37c19caa5fca6";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "dtrace-provider";
-    version = "0.2.8";
-    fullName = "dtrace-provider-0.2.8";
-    hash = "200941239983fa0953415cf28e96d9347c50218d31280604cfc9252e448e714c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "editor";
-    version = "0.0.4";
-    fullName = "editor-0.0.4";
-    hash = "2f66957e121e49c8b52a9c54ff24b718ab8bf571591177ff09121e603704b591";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "emitter-component";
-    version = "1.0.0";
-    fullName = "emitter-component-1.0.0";
-    hash = "1ffc29fc11b2e4ccbac6064443e65a606a21d826e313886932596bf11784dcdb";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "escape-html";
-    version = "1.0.0";
-    fullName = "escape-html-*";
-    hash = "c763095c6b27fddf666f34d48a4f09f95009a76a6d16d1799175ecd0c1912456";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "event-stream";
-    version = "0.5.3";
-    fullName = "event-stream-~0.5";
-    hash = "988f4ee3e8f86d6f5f267b56de88bf733e05fe6f1adc0e135090c308822e9e86";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "optimist"; range = "0.2"; }
-    ];
-  }
-  {
-    baseName = "eventemitter2";
-    version = "0.4.11";
-    fullName = "eventemitter2-0.4.11";
-    hash = "2825d48a2313f703dfb6829e8a3bc89fe6442272b7dbec9d9c51e4794da81a83";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "eventemitter2";
-    version = "0.4.12";
-    fullName = "eventemitter2-~0.4.11";
-    hash = "466b3aa03fe384b46c8384ec7cc42248117a70e9b48c0e20706889b97edcdeac";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "events.node";
-    version = "0.4.9";
-    fullName = "events.node->= 0.4.0";
-    hash = "aedaf9faa7a33f16e2bf1754ed988a836570d00064748a8c1c8ee48805b9f0b6";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "express";
-    version = "3.3.4";
-    fullName = "express-*";
-    hash = "96a3fc9c2250d13f9aa183660466590fe285a2dd19e6ebdc4b2340295ee1aa65";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "connect"; range = "2.8.4"; }
-      { name = "commander"; range = "1.2.0"; }
-      { name = "range-parser"; range = "0.0.4"; }
-      { name = "mkdirp"; range = "0.3.5"; }
-      { name = "cookie"; range = "0.1.0"; }
-      { name = "buffer-crc32"; range = "0.2.1"; }
-      { name = "fresh"; range = "0.1.0"; }
-      { name = "methods"; range = "0.0.1"; }
-      { name = "send"; range = "0.1.3"; }
-      { name = "cookie-signature"; range = "1.0.1"; }
-      { name = "debug"; range = "*"; }
-    ];
-  }
-  {
-    baseName = "express";
-    version = "3.1.2";
-    fullName = "express-~3.1.1";
-    hash = "d72eb1b799ddfe78afc369168881bfef866213baf5cd47a56902fd732dbbd2b6";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "connect"; range = "2.7.5"; }
-      { name = "commander"; range = "0.6.1"; }
-      { name = "range-parser"; range = "0.0.4"; }
-      { name = "mkdirp"; range = "~0.3.4"; }
-      { name = "cookie"; range = "0.0.5"; }
-      { name = "buffer-crc32"; range = "~0.2.1"; }
-      { name = "fresh"; range = "0.1.0"; }
-      { name = "methods"; range = "0.0.1"; }
-      { name = "send"; range = "0.1.0"; }
-      { name = "cookie-signature"; range = "1.0.0"; }
-      { name = "debug"; range = "*"; }
-    ];
-  }
-  {
-    baseName = "extend";
-    version = "1.1.3";
-    fullName = "extend-*";
-    hash = "0b27709829110f2e84926ebe3494b82df6e79ad49a618ad3444e4edf62b57a57";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "extsprintf";
-    version = "1.0.0";
-    fullName = "extsprintf-1.0.0";
-    hash = "9cae7f1f192e5f35746e13047ab4c13e8b5b686469feeaec301ba7d370df5670";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "extsprintf";
-    version = "1.0.2";
-    fullName = "extsprintf-1.0.2";
-    hash = "ea000cf3e51cba7fac7fb1e425ddb79bf46f3ce40955955bf35fd487184a04ab";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "eyes";
-    version = "0.1.8";
-    fullName = "eyes-0.1.x";
-    hash = "4fa6db8f2c9926fb39a211c622d7eb3a76efbc4878559f9bd155d647a6963735";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "faye-websocket";
-    version = "0.6.1";
-    fullName = "faye-websocket-*";
-    hash = "f99544759c7f0ae24f283d6e3e062d4ea816243985b88d00c8cd124ba617d7c5";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "websocket-driver"; range = ">=0.2.0"; }
-    ];
-  }
-  {
-    baseName = "faye-websocket";
-    version = "0.4.4";
-    fullName = "faye-websocket-0.4.4";
-    hash = "c682f6269bcaba0667ef4ae0ecb0b662e35ea6338b075e25ebce9e13019bc3a2";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "flatiron";
-    version = "0.3.5";
-    fullName = "flatiron-0.3.5";
-    hash = "8f1e074d3f678fe3d4720e27b260f95ee9d69deb2ab3059c6b9854531d8b247f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "broadway"; range = "0.2.7"; }
-      { name = "optimist"; range = "0.3.5"; }
-      { name = "prompt"; range = "0.2.9"; }
-      { name = "director"; range = "1.1.10"; }
-      { name = "pkginfo"; range = "0.3.0"; }
-    ];
-  }
-  {
-    baseName = "forEachAsync";
-    version = "2.2.0";
-    fullName = "forEachAsync-~2.2";
-    hash = "43367e7aad92f59595f22ad3e586ba2b370fd03b7f55da381503494528693e05";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "sequence"; range = ">= 2.2.1"; }
-    ];
-  }
-  {
-    baseName = "forever";
-    version = "0.10.8";
-    fullName = "forever-*";
-    hash = "858a7405a72d55fea21a3f3396d34ad0cfb35f15dd6ded76e2856b828ff20cae";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "colors"; range = "0.6.0-1"; }
-      { name = "cliff"; range = "0.1.8"; }
-      { name = "flatiron"; range = "0.3.5"; }
-      { name = "forever-monitor"; range = "1.2.2"; }
-      { name = "nconf"; range = "0.6.7"; }
-      { name = "nssocket"; range = "~0.5.1"; }
-      { name = "optimist"; range = "0.4.0"; }
-      { name = "pkginfo"; range = "0.3.0"; }
-      { name = "timespan"; range = "2.0.1"; }
-      { name = "watch"; range = "0.7.0"; }
-      { name = "utile"; range = "0.1.7"; }
-      { name = "winston"; range = "0.7.1"; }
-    ];
-  }
-  {
-    baseName = "forever-agent";
-    version = "0.2.0";
-    fullName = "forever-agent-~0.2.0";
-    hash = "d6fac115c60bb3aa6b5b653ea6612e9c1c1d172e08c98251fcfd2d066c1fcda3";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "forever-agent";
-    version = "0.5.0";
-    fullName = "forever-agent-~0.5.0";
-    hash = "0a7eda1f87f3cfa7fad8ba655a642992033b38a1929becfa0bfcab8241b7d78b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "forever-monitor";
-    version = "1.2.2";
-    fullName = "forever-monitor-1.2.2";
-    hash = "ff2f10f179ec6003278a250f76dd53ebaaace37c3c2409478b7b36ecee650a0c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "broadway"; range = "0.2.x"; }
-      { name = "minimatch"; range = "0.0.x"; }
-      { name = "pkginfo"; range = "0.x.x"; }
-      { name = "ps-tree"; range = "0.0.x"; }
-      { name = "watch"; range = "0.5.x"; }
-      { name = "utile"; range = "0.1.x"; }
-    ];
-  }
-  {
-    baseName = "form-data";
-    version = "0.0.8";
-    fullName = "form-data-0.0.8";
-    hash = "cf7d5669259ec4c5474b9c2100127ba065a4757ff33b878a1d99509b8e448220";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "combined-stream"; range = "~0.0.4"; }
-      { name = "mime"; range = "~1.2.2"; }
-      { name = "async"; range = "~0.2.7"; }
-    ];
-  }
-  {
-    baseName = "form-data";
-    version = "0.0.10";
-    fullName = "form-data-~0.0.3";
-    hash = "d49669b81c27dd6c7e359ee9892880c6741dae6c325b617ab3eb5a78bf103822";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "combined-stream"; range = "~0.0.4"; }
-      { name = "mime"; range = "~1.2.2"; }
-      { name = "async"; range = "~0.2.7"; }
-    ];
-  }
-  {
-    baseName = "formidable";
-    version = "1.0.11";
-    fullName = "formidable-1.0.11";
-    hash = "39b345d14d69c27fe262e12f16900cef6be220510788866e0a12c9fedd03766e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "formidable";
-    version = "1.0.13";
-    fullName = "formidable-1.0.13";
-    hash = "c3c7c6ecdd4b1ad9ec9b1c273d8dd1db2bc12f9a699c233d3885fcded58ceec6";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "formidable";
-    version = "1.0.14";
-    fullName = "formidable-1.0.14";
-    hash = "b36e58f659fd0d7c734b4ab2c611fa6e40bd988c2237a29d25025460f18f7ea1";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "formidable";
-    version = "1.0.9";
-    fullName = "formidable-1.0.9";
-    hash = "3b54deef3897d910d1e6dedd81fa2f4a65b7e93b5dd5cf1c8c098b63260c214c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "fresh";
-    version = "0.1.0";
-    fullName = "fresh-0.1.0";
-    hash = "c402fbd25e26c0167bf288e1ba791716808bfaa5de32b76ae68e8e8a3d7e2b33";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "fstream";
-    version = "0.1.23";
-    fullName = "fstream-0";
-    hash = "1f3f03be2b18815b133e551b0cde8ab77148d0de31fdd61d90f21317f02c8342";
     patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "rimraf"; range = "2"; }
-      { name = "mkdirp"; range = "0.3"; }
-      { name = "graceful-fs"; range = "~2.0.0"; }
-      { name = "inherits"; range = "~1.0.0"; }
-    ];
+    sha1 = "7020086289f10e195d85d828de065ccdd50e6e66";
+    tarball = "http://registry.npmjs.org/ansi-remover/-/ansi-remover-0.0.2.tgz";
   }
   {
-    baseName = "fstream-ignore";
+    name = "apparatus";
+    spec = ">= 0.0.4";
     version = "0.0.7";
-    fullName = "fstream-ignore-~0.0.5";
-    hash = "1f009e5aac56314d31c5adc339990d1b814595a5020e828cda4a06da536425c5";
-    patchLatest = false;
     topLevel = false;
     dependencies = [
-      { name = "minimatch"; range = "~0.2.0"; }
-      { name = "fstream"; range = "~0.1.17"; }
-      { name = "inherits"; range = "2"; }
+      { name = "sylvester"; spec = ">= 0.0.8"; }
     ];
+    patchLatest = false;
+    sha1 = "033f355507b6851ebeb1bd9475ede23c802327fe";
+    tarball = "http://registry.npmjs.org/apparatus/-/apparatus-0.0.7.tgz";
   }
   {
-    baseName = "fstream-npm";
-    version = "0.1.5";
-    fullName = "fstream-npm-~0.1.3";
-    hash = "23751124b295b9d9beefd7b4146b8e6d4fe0d4587cc70bc0b134c10da307b1b0";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "fstream-ignore"; range = "~0.0.5"; }
-      { name = "inherits"; range = "2"; }
-    ];
-  }
-  {
-    baseName = "fstream";
-    version = "0.1.23";
-    fullName = "fstream-~0.1.17";
-    hash = "1f3f03be2b18815b133e551b0cde8ab77148d0de31fdd61d90f21317f02c8342";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "rimraf"; range = "2"; }
-      { name = "mkdirp"; range = "0.3"; }
-      { name = "graceful-fs"; range = "~2.0.0"; }
-      { name = "inherits"; range = "~1.0.0"; }
-    ];
-  }
-  {
-    baseName = "fstream";
-    version = "0.1.23";
-    fullName = "fstream-~0.1.23";
-    hash = "1f3f03be2b18815b133e551b0cde8ab77148d0de31fdd61d90f21317f02c8342";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "rimraf"; range = "2"; }
-      { name = "mkdirp"; range = "0.3"; }
-      { name = "graceful-fs"; range = "~2.0.0"; }
-      { name = "inherits"; range = "~1.0.0"; }
-    ];
-  }
-  {
-    baseName = "fstream";
-    version = "0.1.23";
-    fullName = "fstream-~0.1.8";
-    hash = "1f3f03be2b18815b133e551b0cde8ab77148d0de31fdd61d90f21317f02c8342";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "rimraf"; range = "2"; }
-      { name = "mkdirp"; range = "0.3"; }
-      { name = "graceful-fs"; range = "~2.0.0"; }
-      { name = "inherits"; range = "~1.0.0"; }
-    ];
-  }
-  {
-    baseName = "github-url-from-git";
-    version = "1.1.1";
-    fullName = "github-url-from-git-~1.1.1";
-    hash = "7f02b5799b4d73af273a2f4c290118b0cfa999ba5888896b85ab1cbb0c2e207e";
-    patchLatest = false;
+    name = "archy";
+    spec = "0";
+    version = "0.0.2";
     topLevel = false;
     dependencies = [
     ];
-  }
-  {
-    baseName = "glob";
-    version = "3.2.3";
-    fullName = "glob-3";
-    hash = "82e04561e897c9b682c0568bafbc57b0ee2fc592579535bb0f5929cd1605c9c3";
     patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "minimatch"; range = "~0.2.11"; }
-      { name = "graceful-fs"; range = "~2.0.0"; }
-      { name = "inherits"; range = "2"; }
-    ];
+    sha1 = "910f43bf66141fc335564597abc189df44b3d35e";
+    tarball = "http://registry.npmjs.org/archy/-/archy-0.0.2.tgz";
   }
   {
-    baseName = "glob";
-    version = "3.2.1";
-    fullName = "glob-3.2.1";
-    hash = "a457c2115213ce2cb59582ddc3a25eb3ae7490af687e412111c0032f72966f51";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "minimatch"; range = "~0.2.11"; }
-      { name = "graceful-fs"; range = "~1.2.0"; }
-      { name = "inherits"; range = "1"; }
-    ];
-  }
-  {
-    baseName = "glob";
-    version = "3.2.3";
-    fullName = "glob->= 3.1.4";
-    hash = "82e04561e897c9b682c0568bafbc57b0ee2fc592579535bb0f5929cd1605c9c3";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "minimatch"; range = "~0.2.11"; }
-      { name = "graceful-fs"; range = "~2.0.0"; }
-      { name = "inherits"; range = "2"; }
-    ];
-  }
-  {
-    baseName = "glob";
-    version = "3.2.3";
-    fullName = "glob-~3.2.1";
-    hash = "82e04561e897c9b682c0568bafbc57b0ee2fc592579535bb0f5929cd1605c9c3";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "minimatch"; range = "~0.2.11"; }
-      { name = "graceful-fs"; range = "~2.0.0"; }
-      { name = "inherits"; range = "2"; }
-    ];
-  }
-  {
-    baseName = "glob";
-    version = "3.2.3";
-    fullName = "glob-~3.2.3";
-    hash = "82e04561e897c9b682c0568bafbc57b0ee2fc592579535bb0f5929cd1605c9c3";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "minimatch"; range = "~0.2.11"; }
-      { name = "graceful-fs"; range = "~2.0.0"; }
-      { name = "inherits"; range = "2"; }
-    ];
-  }
-  {
-    baseName = "graceful-fs";
-    version = "1.2.3";
-    fullName = "graceful-fs-1.2";
-    hash = "b8d9e0af2261259525a65281573e416b70b91788ea7f7b13f4598aaa7818255a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "graceful-fs";
-    version = "2.0.0";
-    fullName = "graceful-fs-2";
-    hash = "36f8fb1de88a8599cc828a0eb4c96f12c25437756e91e42aeadce00a7887241c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "graceful-fs";
-    version = "1.2.3";
-    fullName = "graceful-fs-~1";
-    hash = "b8d9e0af2261259525a65281573e416b70b91788ea7f7b13f4598aaa7818255a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "graceful-fs";
-    version = "1.2.3";
-    fullName = "graceful-fs-~1.2";
-    hash = "b8d9e0af2261259525a65281573e416b70b91788ea7f7b13f4598aaa7818255a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "graceful-fs";
-    version = "1.2.3";
-    fullName = "graceful-fs-~1.2.0";
-    hash = "b8d9e0af2261259525a65281573e416b70b91788ea7f7b13f4598aaa7818255a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "graceful-fs";
-    version = "2.0.0";
-    fullName = "graceful-fs-~2.0.0";
-    hash = "36f8fb1de88a8599cc828a0eb4c96f12c25437756e91e42aeadce00a7887241c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "growl";
-    version = "1.5.1";
-    fullName = "growl-1.5.x";
-    hash = "81ad61e3f06d087da4c680e5e83a878f164925d3ed5a7f44b734e6ecd79cb8b0";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "growl";
-    version = "1.7.0";
-    fullName = "growl-1.7.x";
-    hash = "52a6e9edae2fd5a66ddb87c52a398a17ee697eb0e8e1480e9506a6dcdbf3ffcf";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "gzippo";
-    version = "0.2.0";
-    fullName = "gzippo-*";
-    hash = "844f214312ef8ec2dee4543e6da383728ae081e96961f5ccb6786f0eed8474ab";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "send"; range = "*"; }
-    ];
-  }
-  {
-    baseName = "hat";
-    version = "0.0.3";
-    fullName = "hat-*";
-    hash = "7bf52b3b020ca333a42eb67411090912b21abb6ac746d587022a0955b16e5f5c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "hawk";
-    version = "0.10.2";
-    fullName = "hawk-~0.10.2";
-    hash = "a55c7f967a8e01b6307185abc796320b54a9d6126952e41281dca3c1841affb8";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "hoek"; range = "0.7.x"; }
-      { name = "boom"; range = "0.3.x"; }
-      { name = "cryptiles"; range = "0.1.x"; }
-      { name = "sntp"; range = "0.1.x"; }
-    ];
-  }
-  {
-    baseName = "hawk";
-    version = "0.13.1";
-    fullName = "hawk-~0.13.0";
-    hash = "659e5ada1e9dc44a634e07899937d5eaeaa1c06658f181ca187f7f6faa0c592a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "hoek"; range = "0.8.x"; }
-      { name = "boom"; range = "0.4.x"; }
-      { name = "cryptiles"; range = "0.2.x"; }
-      { name = "sntp"; range = "0.2.x"; }
-    ];
-  }
-  {
-    baseName = "hiredis";
+    name = "argparse";
+    spec = "0.1.15";
     version = "0.1.15";
-    fullName = "hiredis-*";
-    hash = "621bb738d1ef8335fe2f373d5446a4817a62bf8ab6e956fb6a7aa4932f8ccb08";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "bindings"; range = "*"; }
-    ];
-  }
-  {
-    baseName = "hoek";
-    version = "0.7.6";
-    fullName = "hoek-0.7.x";
-    hash = "135068c73cf7f0db625d95461991db113b9b4a09c6d118a80f4b33d1cad41d9b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "hoek";
-    version = "0.8.5";
-    fullName = "hoek-0.8.x";
-    hash = "637e524cd4b48b66db137d6fa93cbe254f112ce638ea9fd399bab73591ede965";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "hoek";
-    version = "0.9.1";
-    fullName = "hoek-0.9.x";
-    hash = "34480468d2e85781ecdd7134523b4d6fea978d333edd2bcb828edd33bbbe8a3f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "hooks";
-    version = "0.2.1";
-    fullName = "hooks-0.2.1";
-    hash = "65b9c6940a0edc5324e9c7f2422cdf2700436a1d2e9008e2a9f5dcc732cd46bd";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "htdigest";
-    version = "1.0.7";
-    fullName = "htdigest-1.0.7";
-    hash = "10fb047addf1c4f1089a26389066d5ff8f5ffa1ccce272a701bb4c2a30d90c58";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "commander"; range = "0.5.1"; }
-    ];
-  }
-  {
-    baseName = "htpasswd";
-    version = "1.1.0";
-    fullName = "htpasswd-1.1.0";
-    hash = "cee9c0a525e717e3565ba6ffea8a64c480bc8a9e7800cb9bfc385d1a8e713ec9";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "commander"; range = "0.5.1"; }
-    ];
-  }
-  {
-    baseName = "http-auth";
-    version = "1.2.7";
-    fullName = "http-auth-1.2.7";
-    hash = "874dbb5907d03602f31eae959a0927a3112da8e868231d9a2119bb50d2fe63d2";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "node-uuid"; range = "1.2.0"; }
-      { name = "htpasswd"; range = "1.1.0"; }
-      { name = "htdigest"; range = "1.0.7"; }
-    ];
-  }
-  {
-    baseName = "http-signature";
-    version = "0.9.11";
-    fullName = "http-signature-0.9.11";
-    hash = "44b89f3c1917bf02723a5720f08fbe47448e0370a5d3498d1be860eaf28beb3b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "assert-plus"; range = "0.1.2"; }
-      { name = "asn1"; range = "0.1.11"; }
-      { name = "ctype"; range = "0.5.2"; }
-    ];
-  }
-  {
-    baseName = "http-signature";
-    version = "0.10.0";
-    fullName = "http-signature-~0.10.0";
-    hash = "badaa47893d7a6c352ffb0746d68dd225fbb057b7d7149ad87093276445bf95b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "assert-plus"; range = "0.1.2"; }
-      { name = "asn1"; range = "0.1.11"; }
-      { name = "ctype"; range = "0.5.2"; }
-    ];
-  }
-  {
-    baseName = "http-signature";
-    version = "0.9.11";
-    fullName = "http-signature-~0.9.11";
-    hash = "44b89f3c1917bf02723a5720f08fbe47448e0370a5d3498d1be860eaf28beb3b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "assert-plus"; range = "0.1.2"; }
-      { name = "asn1"; range = "0.1.11"; }
-      { name = "ctype"; range = "0.5.2"; }
-    ];
-  }
-  {
-    baseName = "i";
-    version = "0.3.1";
-    fullName = "i-0.3.x";
-    hash = "9dbd68b705366f5bdda60b9cf80149c89255d444649e21cc12556b14fb7ee784";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "i18next";
-    version = "1.6.8";
-    fullName = "i18next-*";
-    hash = "5c2652a8efaaefa0d268e4cd02dd79742eb3c5a74725621d6b0f5a856db4210a";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "cookies"; range = ">= 0.2.2"; }
-    ];
-  }
-  {
-    baseName = "inherits";
-    version = "1.0.0";
-    fullName = "inherits-1";
-    hash = "2be196fa6bc6a0c65fecd737af457589ef88b22a95d5dc31aab01d92ace48186";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "inherits";
-    version = "1.0.0";
-    fullName = "inherits-1.x";
-    hash = "2be196fa6bc6a0c65fecd737af457589ef88b22a95d5dc31aab01d92ace48186";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "inherits";
-    version = "2.0.0";
-    fullName = "inherits-2";
-    hash = "9c0e9ab9e025f0be599d62752764964416832d38d93a4143242ec4deb4de1ae0";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "inherits";
-    version = "1.0.0";
-    fullName = "inherits-~1.0.0";
-    hash = "2be196fa6bc6a0c65fecd737af457589ef88b22a95d5dc31aab01d92ace48186";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "ini";
-    version = "1.1.0";
-    fullName = "ini-1";
-    hash = "307ecc5f8664773587a0d74165d1dbdb226754b638542596b7a1e2ed0a578a28";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "ini";
-    version = "1.1.0";
-    fullName = "ini-1.x.x";
-    hash = "307ecc5f8664773587a0d74165d1dbdb226754b638542596b7a1e2ed0a578a28";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "ini";
-    version = "1.1.0";
-    fullName = "ini-~1.1.0";
-    hash = "307ecc5f8664773587a0d74165d1dbdb226754b638542596b7a1e2ed0a578a28";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "init-package-json";
-    version = "0.0.10";
-    fullName = "init-package-json-0.0.10";
-    hash = "6efeef6f30253ee6b8cc9a22154096f42e1ea8621e79acce96b5425925229431";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "promzard"; range = "~0.2.0"; }
-      { name = "read"; range = "~1.0.1"; }
-      { name = "read-package-json"; range = "1"; }
-      { name = "semver"; range = "2.x"; }
-    ];
-  }
-  {
-    baseName = "is-promise";
-    version = "1.0.0";
-    fullName = "is-promise-~1";
-    hash = "65806ec461b83060a8857d2571c84bd66451db0683969ed3f9180f8a2c1a915f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "jade";
-    version = "0.33.0";
-    fullName = "jade-*";
-    hash = "9c03589c5ca55fcf6b4583c1daefd052fb8ef46e91962bab4ee75f6135963e4f";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "commander"; range = "1.2.0"; }
-      { name = "mkdirp"; range = "0.3.x"; }
-      { name = "transformers"; range = "2.0.1"; }
-      { name = "character-parser"; range = "1.0.2"; }
-      { name = "monocle"; range = "0.1.48"; }
-      { name = "with"; range = "~1.1.0"; }
-      { name = "constantinople"; range = "~1.0.1"; }
-    ];
-  }
-  {
-    baseName = "jade";
-    version = "0.26.3";
-    fullName = "jade-0.26.3";
-    hash = "ea314287eb192b6987f7bb9d7010bf2c35ff6288f125fa00796ad93bdba14d0b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "commander"; range = "0.6.1"; }
-      { name = "mkdirp"; range = "0.3.0"; }
-    ];
-  }
-  {
-    baseName = "jayschema";
-    version = "0.1.5";
-    fullName = "jayschema-*";
-    hash = "66e17d82f0b24d882321d42da2f094ab2b14df8a3f558b88867800e672f5c80d";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "jshint";
-    version = "2.1.4";
-    fullName = "jshint-*";
-    hash = "ff5afb38e1e82801b670a18033dc29a903fe883ca6073459360178871f8d71db";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "shelljs"; range = "0.1.x"; }
-      { name = "underscore"; range = "1.4.x"; }
-      { name = "cli"; range = "0.4.x"; }
-      { name = "minimatch"; range = "0.x.x"; }
-      { name = "console-browserify"; range = "0.1.x"; }
-    ];
-  }
-  {
-    baseName = "json-schema";
-    version = "0.2.2";
-    fullName = "json-schema-0.2.2";
-    hash = "41b873a8fb542caf337ec17ad5593761e8db5ce8e33f4074b733b34ec656f0e8";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "json-stringify-safe";
-    version = "3.0.0";
-    fullName = "json-stringify-safe-~3.0.0";
-    hash = "77580345a4d3d5db0e530757c86a6bd032b69b31f509f58a8d1232abc14690c0";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "json-stringify-safe";
-    version = "4.0.0";
-    fullName = "json-stringify-safe-~4.0.0";
-    hash = "2461befc8dab37d1d83927ab4bf4aa68b162a35b5a85c1a90c70f86500091b60";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "jsontool";
-    version = "6.0.0";
-    fullName = "jsontool-*";
-    hash = "4a1e5d6d89571a561b3f7aea39d6ba6274bb8075d802b0a514e17abf186d781c";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "jsprim";
-    version = "0.3.0";
-    fullName = "jsprim-0.3.0";
-    hash = "0fd12872374ee55cc0c005a1590ef65def0e96de04734a753e0d1480c3ffc4bd";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "extsprintf"; range = "1.0.0"; }
-      { name = "json-schema"; range = "0.2.2"; }
-      { name = "verror"; range = "1.3.3"; }
-    ];
-  }
-  {
-    baseName = "keep-alive-agent";
-    version = "0.0.1";
-    fullName = "keep-alive-agent-0.0.1";
-    hash = "481f10eeb5b9759ad28d9556f30c1747a5e71fbbad55fb130b96eacc7ac1c7a1";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "kerberos";
-    version = "0.0.3";
-    fullName = "kerberos-0.0.3";
-    hash = "40300bf5e4ca224127b7e88586dce003c58e59cf4972f699fdc95079135a76fe";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "keypress";
-    version = "0.1.0";
-    fullName = "keypress-0.1.x";
-    hash = "2e43d67e9df19176f874e1a44693f2ea802df77e255d3fc272a0de8124f83be5";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "knox";
-    version = "0.8.4";
-    fullName = "knox-*";
-    hash = "14072716bf13af98ab908f9f370f18e2353e326a0a945c53e1ff82f70725f161";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "mime"; range = "*"; }
-      { name = "xml2js"; range = "0.2.x"; }
-      { name = "debug"; range = "~0.7.0"; }
-      { name = "stream-counter"; range = "~0.1.0"; }
-    ];
-  }
-  {
-    baseName = "kue";
-    version = "0.6.2";
-    fullName = "kue-*";
-    hash = "c52cb0ebc11226bff8d1fb8068cc4cc562c3970d1d24c201d8a8ed68847b9115";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "redis"; range = "0.7.2"; }
-      { name = "express"; range = "~3.1.1"; }
-      { name = "jade"; range = "0.26.3"; }
-      { name = "stylus"; range = "0.27.2"; }
-      { name = "nib"; range = "0.5.0"; }
-      { name = "reds"; range = "0.1.4"; }
-    ];
-  }
-  {
-    baseName = "lazy";
-    version = "1.0.11";
-    fullName = "lazy-~1.0.11";
-    hash = "05a9685292102599629d3212fbd04102ff71b0cf306cee9773ab1602c75a4ab0";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "libyaml";
-    version = "0.2.2";
-    fullName = "libyaml-*";
-    hash = "20bd05a1abc5ba18cc3b5de52bc44095fa59b03c6c3ffb6f46c55bd801cff3db";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "lockfile";
-    version = "0.4.0";
-    fullName = "lockfile-~0.4.0";
-    hash = "80b81e5d9e8af9f661cfa57f6cf88ec7f2cac90196dae8ca4b382a812694d68e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "lru-cache";
-    version = "2.3.0";
-    fullName = "lru-cache-2";
-    hash = "fbb1a14e0314095b7999a3a7489c92983f3d95b188857af697487ac8a778e942";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "lru-cache";
-    version = "2.2.0";
-    fullName = "lru-cache-2.2.0";
-    hash = "bdfb66f74cc4097f3bfd6062b2edbb7790d709f414c7d0f3419241840b1bffed";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "lru-cache";
-    version = "2.3.0";
-    fullName = "lru-cache-2.3.0";
-    hash = "fbb1a14e0314095b7999a3a7489c92983f3d95b188857af697487ac8a778e942";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "lru-cache";
-    version = "1.0.6";
-    fullName = "lru-cache-~1.0.2";
-    hash = "f3a419d4989d9db292a7207f04b6108eed6d8316553d888a462cccd4c9e8855e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "lru-cache";
-    version = "2.3.0";
-    fullName = "lru-cache-~2.3.0";
-    hash = "fbb1a14e0314095b7999a3a7489c92983f3d95b188857af697487ac8a778e942";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "methods";
-    version = "0.0.1";
-    fullName = "methods-0.0.1";
-    hash = "2f7e32954dff5991dd8220e8f5dcdd32aeec5ec56ce9f7235872444af51b3adb";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mime";
-    version = "1.2.9";
-    fullName = "mime-*";
-    hash = "60120b9859a92a94480a76327a9406b4a72a34f2317bc7fa33dcb99b9c72678a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mime";
-    version = "1.2.5";
-    fullName = "mime-1.2.5";
-    hash = "ccf05a6c47146e8acb9d0671eee09d2eb077cf9ddd1f7e8eccf49dbf969d6c72";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mime";
-    version = "1.2.6";
-    fullName = "mime-1.2.6";
-    hash = "7460134d6b4686d64fd1e7b878d34e2bdd258ad29b6665cf62e6d92659e81591";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mime";
-    version = "1.2.9";
-    fullName = "mime-1.2.9";
-    hash = "60120b9859a92a94480a76327a9406b4a72a34f2317bc7fa33dcb99b9c72678a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mime";
-    version = "1.2.9";
-    fullName = "mime-~1.2.2";
-    hash = "60120b9859a92a94480a76327a9406b4a72a34f2317bc7fa33dcb99b9c72678a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mime";
-    version = "1.2.9";
-    fullName = "mime-~1.2.7";
-    hash = "60120b9859a92a94480a76327a9406b4a72a34f2317bc7fa33dcb99b9c72678a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mime";
-    version = "1.2.9";
-    fullName = "mime-~1.2.9";
-    hash = "60120b9859a92a94480a76327a9406b4a72a34f2317bc7fa33dcb99b9c72678a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "minimatch";
-    version = "0.2.12";
-    fullName = "minimatch-0";
-    hash = "205cff8b4ba926e86ff0e6f7f566553906113892028083ea221989a42500c246";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "lru-cache"; range = "2"; }
-      { name = "sigmund"; range = "~1.0.0"; }
-    ];
-  }
-  {
-    baseName = "minimatch";
-    version = "0.0.5";
-    fullName = "minimatch-0.0.x";
-    hash = "063694baa9f9ab077e687ff59031f461998ef38fda656ec7c3475931177ccf36";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "lru-cache"; range = "~1.0.2"; }
-    ];
-  }
-  {
-    baseName = "minimatch";
-    version = "0.2.12";
-    fullName = "minimatch-0.x.x";
-    hash = "205cff8b4ba926e86ff0e6f7f566553906113892028083ea221989a42500c246";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "lru-cache"; range = "2"; }
-      { name = "sigmund"; range = "~1.0.0"; }
-    ];
-  }
-  {
-    baseName = "minimatch";
-    version = "0.2.12";
-    fullName = "minimatch->=0.2.4";
-    hash = "205cff8b4ba926e86ff0e6f7f566553906113892028083ea221989a42500c246";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "lru-cache"; range = "2"; }
-      { name = "sigmund"; range = "~1.0.0"; }
-    ];
-  }
-  {
-    baseName = "minimatch";
-    version = "0.2.12";
-    fullName = "minimatch-~0.2.0";
-    hash = "205cff8b4ba926e86ff0e6f7f566553906113892028083ea221989a42500c246";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "lru-cache"; range = "2"; }
-      { name = "sigmund"; range = "~1.0.0"; }
-    ];
-  }
-  {
-    baseName = "minimatch";
-    version = "0.2.12";
-    fullName = "minimatch-~0.2.11";
-    hash = "205cff8b4ba926e86ff0e6f7f566553906113892028083ea221989a42500c246";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "lru-cache"; range = "2"; }
-      { name = "sigmund"; range = "~1.0.0"; }
-    ];
-  }
-  {
-    baseName = "minimatch";
-    version = "0.2.12";
-    fullName = "minimatch-~0.2.12";
-    hash = "205cff8b4ba926e86ff0e6f7f566553906113892028083ea221989a42500c246";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "lru-cache"; range = "2"; }
-      { name = "sigmund"; range = "~1.0.0"; }
-    ];
-  }
-  {
-    baseName = "minimist";
-    version = "0.0.1";
-    fullName = "minimist-~0.0.1";
-    hash = "4afcfc7d9ed3d2ff113bf93d777507e2ff7ddfef7ed282e4573ab5dd8422b0d3";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mkdirp";
-    version = "0.3.5";
-    fullName = "mkdirp-*";
-    hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mkdirp";
-    version = "0.3.5";
-    fullName = "mkdirp-0";
-    hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mkdirp";
-    version = "0.3.5";
-    fullName = "mkdirp-0.3";
-    hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mkdirp";
-    version = "0.3.0";
-    fullName = "mkdirp-0.3.0";
-    hash = "708366e3a89c976ae8418056f2c5f784147b9310e8093f9bb7246d2f55f7c27d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mkdirp";
-    version = "0.3.5";
-    fullName = "mkdirp-0.3.5";
-    hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mkdirp";
-    version = "0.3.5";
-    fullName = "mkdirp-0.3.x";
-    hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mkdirp";
-    version = "0.3.5";
-    fullName = "mkdirp-0.x.x";
-    hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mkdirp";
-    version = "0.3.5";
-    fullName = "mkdirp-~0.3.3";
-    hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mkdirp";
-    version = "0.3.5";
-    fullName = "mkdirp-~0.3.4";
-    hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mocha";
-    version = "1.12.0";
-    fullName = "mocha-*";
-    hash = "657b833347df35fc39cd1fb0e420f2713db57c4430cbebd10e2f6b37548e4f20";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "commander"; range = "0.6.1"; }
-      { name = "growl"; range = "1.7.x"; }
-      { name = "jade"; range = "0.26.3"; }
-      { name = "diff"; range = "1.0.2"; }
-      { name = "debug"; range = "*"; }
-      { name = "mkdirp"; range = "0.3.5"; }
-      { name = "ms"; range = "0.3.0"; }
-      { name = "glob"; range = "3.2.1"; }
-    ];
-  }
-  {
-    baseName = "mocha";
-    version = "1.3.2";
-    fullName = "mocha-~1.3.2";
-    hash = "38bb1638122140c4c8986e02dd0c23105abedaca2ad8d2c8f3bc64bbfa7f6f53";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "commander"; range = "0.6.1"; }
-      { name = "growl"; range = "1.5.x"; }
-      { name = "jade"; range = "0.26.3"; }
-      { name = "diff"; range = "1.0.2"; }
-      { name = "debug"; range = "*"; }
-    ];
-  }
-  {
-    baseName = "mongodb";
-    version = "1.2.14";
-    fullName = "mongodb-1.2.x";
-    hash = "011e76d49fb99a58659db12e55d340c4731184dd635b769717db374db3f701a0";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "bson"; range = "0.1.8"; }
-    ];
-  }
-  {
-    baseName = "mongodb";
-    version = "1.3.11";
-    fullName = "mongodb-1.3.11";
-    hash = "cd00f9c0fafd280d30f9e604c76aa7eb59748521f5b0438c15ced90533376a62";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "bson"; range = "0.1.9"; }
-      { name = "kerberos"; range = "0.0.3"; }
-    ];
-  }
-  {
-    baseName = "mongoose";
-    version = "3.6.14";
-    fullName = "mongoose-*";
-    hash = "eab35fb10f1da7a24a4b3c3c0edfea6941031e8d9e9b6120c683b736329a5781";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "hooks"; range = "0.2.1"; }
-      { name = "mongodb"; range = "1.3.11"; }
-      { name = "ms"; range = "0.1.0"; }
-      { name = "sliced"; range = "0.0.3"; }
-      { name = "muri"; range = "0.3.1"; }
-      { name = "mpromise"; range = "0.2.1"; }
-      { name = "mpath"; range = "0.1.1"; }
-      { name = "regexp-clone"; range = "0.0.1"; }
-    ];
-  }
-  {
-    baseName = "mongoose-schema-extend";
-    version = "0.1.3";
-    fullName = "mongoose-schema-extend-*";
-    hash = "f91e0851475ea525544bc65578e6ca55de345bc4c3332cc732fd3a66e1af1b1b";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "owl-deepcopy"; range = "~0.0.1"; }
-      { name = "mocha"; range = "~1.3.2"; }
-    ];
-  }
-  {
-    baseName = "monocle";
-    version = "0.1.48";
-    fullName = "monocle-0.1.48";
-    hash = "3a94a890f37ff135ea82f640d8e693f10a11bca3d30c3ec7456a9f97683f15d5";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "readdirp"; range = "~0.2.3"; }
-    ];
-  }
-  {
-    baseName = "mpath";
-    version = "0.1.1";
-    fullName = "mpath-0.1.1";
-    hash = "23e83ac6c4b3d67cc34dc1ba05d1085a3d9ef8243caa756b1ca4af12b4370751";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mpromise";
-    version = "0.2.1";
-    fullName = "mpromise-0.2.1";
-    hash = "56d035a66b1a19a8ad64e99354355e128b18394f69d545597bb5a25fe80147bf";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "sliced"; range = "0.0.4"; }
-    ];
-  }
-  {
-    baseName = "ms";
-    version = "0.1.0";
-    fullName = "ms-0.1.0";
-    hash = "474bcdb7965551c5a111be2fcdb5e4607491c70a601d04d818ec7e1e1c2ff88b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "ms";
-    version = "0.3.0";
-    fullName = "ms-0.3.0";
-    hash = "f72eab0186a6dabbbea7118f83d4e2c01119e427f6671096a0c7ed522abe07f2";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "muri";
-    version = "0.3.1";
-    fullName = "muri-0.3.1";
-    hash = "5e1b7ac7790350f6043fc8fa1b18f85818fefe0adda18d0c058460413757f959";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mute-stream";
-    version = "0.0.3";
-    fullName = "mute-stream-~0.0.2";
-    hash = "7bb2401ad9afaa6f04bc1d2d9411a6e41d7a6198de929d4522e95eeae78b1082";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "mv";
-    version = "0.0.5";
-    fullName = "mv-0.0.5";
-    hash = "6ddbf4770ffd02170a8fc492cee418ad92ce2f1e2eb4c549febac1f60e6533b9";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "natural";
-    version = "0.0.69";
-    fullName = "natural-0.0.69";
-    hash = "1cd394575cbeba7963378fc572a85a3279c4359b75740f9062dddb5b64d6c402";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "sylvester"; range = ">= 0.0.12"; }
-      { name = "apparatus"; range = ">= 0.0.4"; }
-      { name = "underscore"; range = "*"; }
-    ];
-  }
-  {
-    baseName = "nconf";
-    version = "0.6.7";
-    fullName = "nconf-*";
-    hash = "1ec390b8fa439e1160e432edc0f9ccec544b8216dfaba3db7002d38351ccfa1c";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "async"; range = "0.1.x"; }
-      { name = "ini"; range = "1.x.x"; }
-      { name = "optimist"; range = "0.3.x"; }
-      { name = "pkginfo"; range = "0.2.x"; }
-    ];
-  }
-  {
-    baseName = "nconf";
-    version = "0.6.7";
-    fullName = "nconf-0.6.7";
-    hash = "1ec390b8fa439e1160e432edc0f9ccec544b8216dfaba3db7002d38351ccfa1c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "async"; range = "0.1.x"; }
-      { name = "ini"; range = "1.x.x"; }
-      { name = "optimist"; range = "0.3.x"; }
-      { name = "pkginfo"; range = "0.2.x"; }
-    ];
-  }
-  {
-    baseName = "ncp";
-    version = "0.2.7";
-    fullName = "ncp-0.2.x";
-    hash = "9bae6495de613c5adb418348224512b9dc42f2b74c7a2fabecf02f8b7d08343d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "negotiator";
-    version = "0.2.5";
-    fullName = "negotiator-0.2.5";
-    hash = "37f567acba03ef7748802c4f6b41ca7e57a3fb556c4435cda515028c73d76542";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "nib";
-    version = "0.5.0";
-    fullName = "nib-0.5.0";
-    hash = "9e3ebce2cfb055b8eadcb2fcac3e49570e429a5262ce5a59844857fbcb27f4c7";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "nijs";
-    version = "0.0.9";
-    fullName = "nijs-*";
-    hash = "fdcc60b869d3308549818608593c5a9eab75574a5e85df66e35f6f896a4d3544";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "optparse"; range = ">= 1.0.3"; }
-    ];
-  }
-  {
-    baseName = "node-expat";
-    version = "2.0.0";
-    fullName = "node-expat-*";
-    hash = "9d5b7efd708fc546f5c17e98f4ee322abafaaa02fbb6c281f651d10d9523c83f";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "node-gyp";
-    version = "0.10.6";
-    fullName = "node-gyp-*";
-    hash = "1b1fc060c1a84eb0f52c495d7d13e3a7f03b2753b74dc6c1c801c5b8d563c5b0";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "glob"; range = "3"; }
-      { name = "graceful-fs"; range = "2"; }
-      { name = "fstream"; range = "0"; }
-      { name = "minimatch"; range = "0"; }
-      { name = "mkdirp"; range = "0"; }
-      { name = "nopt"; range = "2"; }
-      { name = "npmlog"; range = "0"; }
-      { name = "osenv"; range = "0"; }
-      { name = "request"; range = "2"; }
-      { name = "rimraf"; range = "2"; }
-      { name = "semver"; range = "~2.0.7"; }
-      { name = "tar"; range = "0"; }
-      { name = "which"; range = "1"; }
-    ];
-  }
-  {
-    baseName = "node-gyp";
-    version = "0.10.6";
-    fullName = "node-gyp-~0.10.6";
-    hash = "1b1fc060c1a84eb0f52c495d7d13e3a7f03b2753b74dc6c1c801c5b8d563c5b0";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "glob"; range = "3"; }
-      { name = "graceful-fs"; range = "2"; }
-      { name = "fstream"; range = "0"; }
-      { name = "minimatch"; range = "0"; }
-      { name = "mkdirp"; range = "0"; }
-      { name = "nopt"; range = "2"; }
-      { name = "npmlog"; range = "0"; }
-      { name = "osenv"; range = "0"; }
-      { name = "request"; range = "2"; }
-      { name = "rimraf"; range = "2"; }
-      { name = "semver"; range = "~2.0.7"; }
-      { name = "tar"; range = "0"; }
-      { name = "which"; range = "1"; }
-    ];
-  }
-  {
-    baseName = "node-uuid";
-    version = "1.4.0";
-    fullName = "node-uuid-*";
-    hash = "87a1944b5334351ddd1d3e44d2e423ebfc027e858111efb72324054092cfd1bc";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "node-uuid";
-    version = "1.2.0";
-    fullName = "node-uuid-1.2.0";
-    hash = "96d3ce178ea0825d27a855630de74243a577dc988512512eea572829b208a3d2";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "node-uuid";
-    version = "1.3.3";
-    fullName = "node-uuid-1.3.3";
-    hash = "a3fbccc904944a9c8eadc59e55aaac908cc458569f539b50077d9672a84587a8";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "node-uuid";
-    version = "1.4.0";
-    fullName = "node-uuid-1.4.0";
-    hash = "87a1944b5334351ddd1d3e44d2e423ebfc027e858111efb72324054092cfd1bc";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "node-uuid";
-    version = "1.4.0";
-    fullName = "node-uuid-~1.4.0";
-    hash = "87a1944b5334351ddd1d3e44d2e423ebfc027e858111efb72324054092cfd1bc";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "nodemon";
-    version = "0.7.8";
-    fullName = "nodemon-*";
-    hash = "123a54f51297e5186061846a5dae5117c2a218a8a477364055828a0c2ea39bed";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "nopt";
-    version = "2.1.1";
-    fullName = "nopt-2";
-    hash = "a7a84f3fe51cb8fb97c678bc73130b53d6782ee90dc0e9b15ae39630ce2fa203";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "abbrev"; range = "1"; }
-    ];
-  }
-  {
-    baseName = "nopt";
-    version = "2.0.0";
-    fullName = "nopt-2.0.0";
-    hash = "112e9bea8b745a2e5a59d239e6f6f02e720e080ab8cdca89b6b8f0143ae718b5";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "abbrev"; range = "1"; }
-    ];
-  }
-  {
-    baseName = "nopt";
-    version = "2.1.1";
-    fullName = "nopt-~2.1.1";
-    hash = "a7a84f3fe51cb8fb97c678bc73130b53d6782ee90dc0e9b15ae39630ce2fa203";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "abbrev"; range = "1"; }
-    ];
-  }
-  {
-    baseName = "normalize-package-data";
-    version = "0.2.0";
-    fullName = "normalize-package-data-~0.2";
-    hash = "acde245885200d357f307740e7d3b3a169e1088bed51cbd81d76d6e7dfcf8fa8";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "semver"; range = "2"; }
-      { name = "github-url-from-git"; range = "~1.1.1"; }
-    ];
-  }
-  {
-    baseName = "npm";
-    version = "1.3.4";
-    fullName = "npm-*";
-    hash = "fcf0a1a2bfb920fb7fd4dd172df3ea02b7155247f509add164041645d8742225";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "semver"; range = "~2.0.8"; }
-      { name = "ini"; range = "~1.1.0"; }
-      { name = "slide"; range = "~1.1.4"; }
-      { name = "abbrev"; range = "~1.0.4"; }
-      { name = "graceful-fs"; range = "~2.0.0"; }
-      { name = "minimatch"; range = "~0.2.12"; }
-      { name = "nopt"; range = "~2.1.1"; }
-      { name = "rimraf"; range = "~2.2.0"; }
-      { name = "request"; range = "~2.21.0"; }
-      { name = "which"; range = "1"; }
-      { name = "tar"; range = "~0.1.17"; }
-      { name = "fstream"; range = "~0.1.23"; }
-      { name = "block-stream"; range = "*"; }
-      { name = "inherits"; range = "1"; }
-      { name = "mkdirp"; range = "~0.3.3"; }
-      { name = "read"; range = "~1.0.4"; }
-      { name = "lru-cache"; range = "~2.3.0"; }
-      { name = "node-gyp"; range = "~0.10.6"; }
-      { name = "fstream-npm"; range = "~0.1.3"; }
-      { name = "uid-number"; range = "0"; }
-      { name = "archy"; range = "0"; }
-      { name = "chownr"; range = "0"; }
-      { name = "npmlog"; range = "0.0.4"; }
-      { name = "ansi"; range = "~0.1.2"; }
-      { name = "npm-registry-client"; range = "~0.2.27"; }
-      { name = "read-package-json"; range = "~1.1.0"; }
-      { name = "read-installed"; range = "~0.2.2"; }
-      { name = "glob"; range = "~3.2.3"; }
-      { name = "init-package-json"; range = "0.0.10"; }
-      { name = "osenv"; range = "0"; }
-      { name = "lockfile"; range = "~0.4.0"; }
-      { name = "retry"; range = "~0.6.0"; }
-      { name = "once"; range = "~1.1.1"; }
-      { name = "npmconf"; range = "~0.1.1"; }
-      { name = "opener"; range = "~1.3.0"; }
-      { name = "chmodr"; range = "~0.1.0"; }
-      { name = "cmd-shim"; range = "~1.1.0"; }
-      { name = "sha"; range = "~1.0.1"; }
-      { name = "editor"; range = "0.0.4"; }
-      { name = "child-process-close"; range = "~0.1.1"; }
-      { name = "npm-user-validate"; range = "0.0.3"; }
-    ];
-  }
-  {
-    baseName = "npm-registry-client";
-    version = "0.2.27";
-    fullName = "npm-registry-client-~0.2.27";
-    hash = "9899d95fb9e71224ae49120621e245d20c2e05658e817442b2a30fcf8928441b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "request"; range = "2 >=2.20.0"; }
-      { name = "graceful-fs"; range = "~2.0.0"; }
-      { name = "semver"; range = "~2.0.5"; }
-      { name = "slide"; range = "~1.1.3"; }
-      { name = "chownr"; range = "0"; }
-      { name = "mkdirp"; range = "~0.3.3"; }
-      { name = "rimraf"; range = "~2"; }
-      { name = "retry"; range = "0.6.0"; }
-      { name = "couch-login"; range = "~0.1.15"; }
-      { name = "npmlog"; range = ""; }
-    ];
-  }
-  {
-    baseName = "npm-user-validate";
-    version = "0.0.3";
-    fullName = "npm-user-validate-0.0.3";
-    hash = "3ba7b67338af6deff49c8c6588542aaea83f034cad0dfe34519b546c05f29402";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "npm2nix";
-    version = "1.2.0";
-    fullName = "npm2nix-*";
-    hash = "b79bd319e4030704bb41078dbbec0db9eebb984966c6bd3cad55ba4c76ec622c";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "semver"; range = "1"; }
-    ];
-  }
-  {
-    baseName = "npmconf";
-    version = "0.1.1";
-    fullName = "npmconf-~0.1.1";
-    hash = "e4448bd02d4745549324fd0dbc333bcd9bf37de11e2ecc7bc02bf9655ddec2e9";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "config-chain"; range = "~1.1.1"; }
-      { name = "inherits"; range = "~1.0.0"; }
-      { name = "once"; range = "~1.1.1"; }
-      { name = "mkdirp"; range = "~0.3.3"; }
-      { name = "osenv"; range = "0.0.3"; }
-      { name = "nopt"; range = "2"; }
-      { name = "semver"; range = "2"; }
-      { name = "ini"; range = "~1.1.0"; }
-    ];
-  }
-  {
-    baseName = "npmlog";
-    version = "0.0.4";
-    fullName = "npmlog-";
-    hash = "16da9f0f239813f201156b81a5ebe552c9a3f78a405dbb24c2c1743fe3a0d579";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "ansi"; range = "~0.1.2"; }
-    ];
-  }
-  {
-    baseName = "npmlog";
-    version = "0.0.4";
-    fullName = "npmlog-0";
-    hash = "16da9f0f239813f201156b81a5ebe552c9a3f78a405dbb24c2c1743fe3a0d579";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "ansi"; range = "~0.1.2"; }
-    ];
-  }
-  {
-    baseName = "npmlog";
-    version = "0.0.4";
-    fullName = "npmlog-0.0.4";
-    hash = "16da9f0f239813f201156b81a5ebe552c9a3f78a405dbb24c2c1743fe3a0d579";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "ansi"; range = "~0.1.2"; }
-    ];
-  }
-  {
-    baseName = "nssocket";
-    version = "0.5.1";
-    fullName = "nssocket-~0.5.1";
-    hash = "aaf06b612cd99bf9e5790b2bf9b0f1963c2b605eaf3529b905c1fbdc1dee5333";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "eventemitter2"; range = "~0.4.11"; }
-      { name = "lazy"; range = "~1.0.11"; }
-    ];
-  }
-  {
-    baseName = "oauth-sign";
-    version = "0.2.0";
-    fullName = "oauth-sign-~0.2.0";
-    hash = "ef91b4266c71c68478dd7c50767085210006ebfb9e9263c72d42f47972991580";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "oauth-sign";
-    version = "0.3.0";
-    fullName = "oauth-sign-~0.3.0";
-    hash = "a202acb9ea84ef53e6a82a6ee5113328cd4bfd68d6ba04d15f1da933660b087e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "once";
-    version = "1.1.1";
-    fullName = "once-1.1.1";
-    hash = "3fdc1a246f2522991fd9a6554a93c012c3192ea99918fdd893a2d4f2d546fe93";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "once";
-    version = "1.1.1";
-    fullName = "once-~1.1.1";
-    hash = "3fdc1a246f2522991fd9a6554a93c012c3192ea99918fdd893a2d4f2d546fe93";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "opener";
-    version = "1.3.0";
-    fullName = "opener-~1.3.0";
-    hash = "8ce1113b83487849625156d72483e4eef7b8eebf63a9e8d7732df15c240efa06";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "optimist";
-    version = "0.6.0";
-    fullName = "optimist-*";
-    hash = "a75df1152906f1b66583c957cbffba34aaead644547d4a0300b713281279d4cf";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "wordwrap"; range = "~0.0.2"; }
-      { name = "minimist"; range = "~0.0.1"; }
-    ];
-  }
-  {
-    baseName = "optimist";
-    version = "0.2.8";
-    fullName = "optimist-0.2";
-    hash = "5ee9f3bbd03239903831ccc33c6c365251550cbfd88d9fb92011feac4376cf84";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "wordwrap"; range = ">=0.0.1 <0.1.0"; }
-    ];
-  }
-  {
-    baseName = "optimist";
-    version = "0.3.5";
-    fullName = "optimist-0.3.5";
-    hash = "a407715c9745c9242923f282a70d55947e21f5c4800c99b09d2eb6e48735a09d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "wordwrap"; range = "~0.0.2"; }
-    ];
-  }
-  {
-    baseName = "optimist";
-    version = "0.3.7";
-    fullName = "optimist-0.3.x";
-    hash = "ba534aa013072a9650a18da311de8025d73b58b71dcea7c7ade4d8e8f274dd33";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "wordwrap"; range = "~0.0.2"; }
-    ];
-  }
-  {
-    baseName = "optimist";
-    version = "0.4.0";
-    fullName = "optimist-0.4.0";
-    hash = "bbbd3c9e8c1e8f59e7097271a78fa628c6dc76de894a02fc625872b72bc99555";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "wordwrap"; range = "~0.0.2"; }
-    ];
-  }
-  {
-    baseName = "optimist";
-    version = "0.3.7";
-    fullName = "optimist-~0.3.5";
-    hash = "ba534aa013072a9650a18da311de8025d73b58b71dcea7c7ade4d8e8f274dd33";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "wordwrap"; range = "~0.0.2"; }
-    ];
-  }
-  {
-    baseName = "optparse";
-    version = "1.0.4";
-    fullName = "optparse-*";
-    hash = "8413ed6a2318ffecdb428181a6966013d1853ff62644afcbcff682c1efc9367a";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "optparse";
-    version = "1.0.4";
-    fullName = "optparse->= 1.0.3";
-    hash = "8413ed6a2318ffecdb428181a6966013d1853ff62644afcbcff682c1efc9367a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "osenv";
-    version = "0.0.3";
-    fullName = "osenv-0";
-    hash = "aafbb23637b7338c9025f9da336f31f96674d7926c30f209e4d93ce16d5251c4";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "osenv";
-    version = "0.0.3";
-    fullName = "osenv-0.0.3";
-    hash = "aafbb23637b7338c9025f9da336f31f96674d7926c30f209e4d93ce16d5251c4";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "owl-deepcopy";
-    version = "0.0.2";
-    fullName = "owl-deepcopy-~0.0.1";
-    hash = "69f76104c1f4610a4905ef7a184026850660b5e1fcaac9beb8ad0d6e4d54b58b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "passport";
-    version = "0.1.17";
-    fullName = "passport-*";
-    hash = "65c15a1666abc16a86d586233f40b89b68b50bf88107809878742973af8b516e";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "pkginfo"; range = "0.2.x"; }
-      { name = "pause"; range = "0.0.1"; }
-    ];
-  }
-  {
-    baseName = "passport-http";
-    version = "0.2.2";
-    fullName = "passport-http-*";
-    hash = "3a333781016b3e20462fde18ebeb1d9794c6353564ee646b3008ce2540504d1f";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "pkginfo"; range = "0.2.x"; }
-      { name = "passport"; range = "~0.1.3"; }
-    ];
-  }
-  {
-    baseName = "passport-local";
-    version = "0.1.6";
-    fullName = "passport-local-*";
-    hash = "de7dbe29a63fc648686425ba4ef23b99195372ae322037977864db08657e262d";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "pkginfo"; range = "0.2.x"; }
-      { name = "passport"; range = "~0.1.1"; }
-    ];
-  }
-  {
-    baseName = "passport";
-    version = "0.1.17";
-    fullName = "passport-~0.1.1";
-    hash = "65c15a1666abc16a86d586233f40b89b68b50bf88107809878742973af8b516e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "pkginfo"; range = "0.2.x"; }
-      { name = "pause"; range = "0.0.1"; }
-    ];
-  }
-  {
-    baseName = "passport";
-    version = "0.1.17";
-    fullName = "passport-~0.1.3";
-    hash = "65c15a1666abc16a86d586233f40b89b68b50bf88107809878742973af8b516e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "pkginfo"; range = "0.2.x"; }
-      { name = "pause"; range = "0.0.1"; }
-    ];
-  }
-  {
-    baseName = "pause";
-    version = "0.0.1";
-    fullName = "pause-0.0.1";
-    hash = "d37b84046db0c28c9768be649e8f02bd991ede34b276b5dba7bade23b523235e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "pkginfo";
-    version = "0.2.3";
-    fullName = "pkginfo-0.2.x";
-    hash = "0685c2cd94db8515a95b8127d1ab4e2a82d37deb4f808b41c9e0c033e34fe77f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "pkginfo";
-    version = "0.3.0";
-    fullName = "pkginfo-0.3.0";
-    hash = "e55f5e0f767cabc55b638808736f952d6d74157938a87192106ce83c66a195a5";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "pkginfo";
-    version = "0.3.0";
-    fullName = "pkginfo-0.3.x";
-    hash = "e55f5e0f767cabc55b638808736f952d6d74157938a87192106ce83c66a195a5";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "pkginfo";
-    version = "0.3.0";
-    fullName = "pkginfo-0.x.x";
-    hash = "e55f5e0f767cabc55b638808736f952d6d74157938a87192106ce83c66a195a5";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "posix-getopt";
-    version = "1.0.0";
-    fullName = "posix-getopt-1.0.0";
-    hash = "134cea188854422ab047db9ebfcb7e2610f0a239fe27382b55c10894c4f5ba9d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "promise";
-    version = "2.0.0";
-    fullName = "promise-~2.0";
-    hash = "ccc3f345cd6facd0bcb0e599320e1da06b447ee573982b04f6b615a3da1ba7df";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "is-promise"; range = "~1"; }
-    ];
-  }
-  {
-    baseName = "prompt";
-    version = "0.2.9";
-    fullName = "prompt-0.2.9";
-    hash = "2444c21920d4169c51cae11fafed129c09df11f4bdda8e7ad76ea626a8828878";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "pkginfo"; range = "0.x.x"; }
-      { name = "read"; range = "1.0.x"; }
-      { name = "revalidator"; range = "0.1.x"; }
-      { name = "utile"; range = "0.1.x"; }
-      { name = "winston"; range = "0.6.x"; }
-    ];
-  }
-  {
-    baseName = "promzard";
-    version = "0.2.0";
-    fullName = "promzard-~0.2.0";
-    hash = "e9dcdf4084876c4b751f2f5939f149071495f0d23bf80a9ec4a73cd84080184b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "read"; range = "1"; }
-    ];
-  }
-  {
-    baseName = "proto-list";
-    version = "1.2.2";
-    fullName = "proto-list-~1.2.1";
-    hash = "1a1916d1a55ada8d8f3530d2073d57b6b9f0547b317686a7bc0492305d1d8e3b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "ps-tree";
-    version = "0.0.3";
-    fullName = "ps-tree-0.0.x";
-    hash = "d6af58e1062457f3aa92306c8eb970f32d2d52b93ecca4920c7409afd419a78d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "event-stream"; range = "~0.5"; }
-    ];
-  }
-  {
-    baseName = "qs";
-    version = "0.5.1";
-    fullName = "qs-0.5.1";
-    hash = "85bf27180b586499902d4e2bea83974b337924c870f6b790a23e6bfeb982c2e5";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "qs";
-    version = "0.5.5";
-    fullName = "qs-0.5.5";
-    hash = "8ed820b83bf4aff299422dc406c7a52793e05f510803cc1cc2da7de1528837f1";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "qs";
-    version = "0.6.5";
-    fullName = "qs-0.6.5";
-    hash = "293e5dfd16bfe0aee8b3fe130abb951ac9c8c084d1103f7d81c4e5c312b2940d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "qs";
-    version = "0.5.6";
-    fullName = "qs-~0.5.4";
-    hash = "3c7b49a51d52e5c8b988c2a53f8605d03a18d5e29b55b4f187c6a0fc714d00e9";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "qs";
-    version = "0.6.5";
-    fullName = "qs-~0.6.0";
-    hash = "293e5dfd16bfe0aee8b3fe130abb951ac9c8c084d1103f7d81c4e5c312b2940d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "range-parser";
-    version = "0.0.4";
-    fullName = "range-parser-0.0.4";
-    hash = "8e1bcce3544330b51644ea0cb4d25f0daa4b43008a75da27e285635f4ac4b1ce";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "rbytes";
-    version = "1.0.0";
-    fullName = "rbytes-*";
-    hash = "ccacb9951421c0a219f63b5d356098adffa43e42367be78afb94a433f84593e7";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "read";
-    version = "1.0.4";
-    fullName = "read-1";
-    hash = "8be269afeaa7cc62feb4672e8e61e5133152266dc5347b23cf5b05bc40789601";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "mute-stream"; range = "~0.0.2"; }
-    ];
-  }
-  {
-    baseName = "read";
-    version = "1.0.4";
-    fullName = "read-1.0.x";
-    hash = "8be269afeaa7cc62feb4672e8e61e5133152266dc5347b23cf5b05bc40789601";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "mute-stream"; range = "~0.0.2"; }
-    ];
-  }
-  {
-    baseName = "read-installed";
-    version = "0.2.2";
-    fullName = "read-installed-~0.2.2";
-    hash = "1237a4eb7444063ef83be336ecd317ffeafd2fef8f9e81468a5d7545e1a80c23";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "semver"; range = "2"; }
-      { name = "slide"; range = "~1.1.3"; }
-      { name = "read-package-json"; range = "1"; }
-      { name = "graceful-fs"; range = "~1.2.0"; }
-    ];
-  }
-  {
-    baseName = "read-package-json";
-    version = "1.1.0";
-    fullName = "read-package-json-1";
-    hash = "f3d2f47ffcab7512bb5cfba1854e708534dcae073704c3c9baba36de19b89969";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "glob"; range = "~3.2.1"; }
-      { name = "lru-cache"; range = "2"; }
-      { name = "normalize-package-data"; range = "~0.2"; }
-      { name = "graceful-fs"; range = "~1.2"; }
-    ];
-  }
-  {
-    baseName = "read-package-json";
-    version = "1.1.0";
-    fullName = "read-package-json-~1.1.0";
-    hash = "f3d2f47ffcab7512bb5cfba1854e708534dcae073704c3c9baba36de19b89969";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "glob"; range = "~3.2.1"; }
-      { name = "lru-cache"; range = "2"; }
-      { name = "normalize-package-data"; range = "~0.2"; }
-      { name = "graceful-fs"; range = "~1.2"; }
-    ];
-  }
-  {
-    baseName = "read";
-    version = "1.0.4";
-    fullName = "read-~1.0.1";
-    hash = "8be269afeaa7cc62feb4672e8e61e5133152266dc5347b23cf5b05bc40789601";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "mute-stream"; range = "~0.0.2"; }
-    ];
-  }
-  {
-    baseName = "read";
-    version = "1.0.4";
-    fullName = "read-~1.0.4";
-    hash = "8be269afeaa7cc62feb4672e8e61e5133152266dc5347b23cf5b05bc40789601";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "mute-stream"; range = "~0.0.2"; }
-    ];
-  }
-  {
-    baseName = "readable-stream";
-    version = "1.0.2";
-    fullName = "readable-stream-~1.0.2";
-    hash = "45a918b25f0799f87d7144dbbb7d2b5974dc079fcb1a2149a305d080f1155754";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "readdirp";
-    version = "0.2.5";
-    fullName = "readdirp-~0.2.3";
-    hash = "22d8e0e38c0d358c951221d0051d1e9e1eafeaf2136ac7fe0aa3bfd36238052c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "minimatch"; range = ">=0.2.4"; }
-    ];
-  }
-  {
-    baseName = "redis";
-    version = "0.8.4";
-    fullName = "redis-*";
-    hash = "077932b14c6b0a4985b7a41cf20e4495463c693c7b9932ebc46e0144918ff3c3";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "redis";
-    version = "0.7.2";
-    fullName = "redis-0.7.2";
-    hash = "d56d99e15dd35f6fabf545d9e91545553d60eaeb32ecf5caa1f357458df161ab";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "hiredis"; range = "*"; }
-    ];
-  }
-  {
-    baseName = "redis";
-    version = "0.8.4";
-    fullName = "redis->= 0.6.6";
-    hash = "077932b14c6b0a4985b7a41cf20e4495463c693c7b9932ebc46e0144918ff3c3";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "reds";
-    version = "0.1.4";
-    fullName = "reds-0.1.4";
-    hash = "3166c2f0f82efc624dac4e9058bc0ffa3bb864499785a746c461b813b90640ac";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "natural"; range = "0.0.69"; }
-      { name = "redis"; range = ">= 0.6.6"; }
-    ];
-  }
-  {
-    baseName = "regexp-clone";
-    version = "0.0.1";
-    fullName = "regexp-clone-0.0.1";
-    hash = "e11276212cce9fa15aa07276b800f750ec7d9c25e76ace7cf07f3e713d6d79e0";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "request";
-    version = "2.22.0";
-    fullName = "request-2";
-    hash = "d0a7ebc001800143d05cedf616cc164a31425bcbfdb8eb533b59d8c123b1275c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "qs"; range = "~0.6.0"; }
-      { name = "json-stringify-safe"; range = "~4.0.0"; }
-      { name = "forever-agent"; range = "~0.5.0"; }
-      { name = "tunnel-agent"; range = "~0.3.0"; }
-      { name = "http-signature"; range = "~0.10.0"; }
-      { name = "hawk"; range = "~0.13.0"; }
-      { name = "aws-sign"; range = "~0.3.0"; }
-      { name = "oauth-sign"; range = "~0.3.0"; }
-      { name = "cookie-jar"; range = "~0.3.0"; }
-      { name = "node-uuid"; range = "~1.4.0"; }
-      { name = "mime"; range = "~1.2.9"; }
-      { name = "form-data"; range = "0.0.8"; }
-    ];
-  }
-  {
-    baseName = "request";
-    version = "2.22.0";
-    fullName = "request-2 >=2.14";
-    hash = "d0a7ebc001800143d05cedf616cc164a31425bcbfdb8eb533b59d8c123b1275c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "qs"; range = "~0.6.0"; }
-      { name = "json-stringify-safe"; range = "~4.0.0"; }
-      { name = "forever-agent"; range = "~0.5.0"; }
-      { name = "tunnel-agent"; range = "~0.3.0"; }
-      { name = "http-signature"; range = "~0.10.0"; }
-      { name = "hawk"; range = "~0.13.0"; }
-      { name = "aws-sign"; range = "~0.3.0"; }
-      { name = "oauth-sign"; range = "~0.3.0"; }
-      { name = "cookie-jar"; range = "~0.3.0"; }
-      { name = "node-uuid"; range = "~1.4.0"; }
-      { name = "mime"; range = "~1.2.9"; }
-      { name = "form-data"; range = "0.0.8"; }
-    ];
-  }
-  {
-    baseName = "request";
-    version = "2.22.0";
-    fullName = "request-2 >=2.20.0";
-    hash = "d0a7ebc001800143d05cedf616cc164a31425bcbfdb8eb533b59d8c123b1275c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "qs"; range = "~0.6.0"; }
-      { name = "json-stringify-safe"; range = "~4.0.0"; }
-      { name = "forever-agent"; range = "~0.5.0"; }
-      { name = "tunnel-agent"; range = "~0.3.0"; }
-      { name = "http-signature"; range = "~0.10.0"; }
-      { name = "hawk"; range = "~0.13.0"; }
-      { name = "aws-sign"; range = "~0.3.0"; }
-      { name = "oauth-sign"; range = "~0.3.0"; }
-      { name = "cookie-jar"; range = "~0.3.0"; }
-      { name = "node-uuid"; range = "~1.4.0"; }
-      { name = "mime"; range = "~1.2.9"; }
-      { name = "form-data"; range = "0.0.8"; }
-    ];
-  }
-  {
-    baseName = "request";
-    version = "2.16.6";
-    fullName = "request-2.16.x";
-    hash = "9424cb952b4c5723678d0c5a6daf3ea6fa76ccad4cbd175f0a489dc54c6e1453";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "form-data"; range = "~0.0.3"; }
-      { name = "mime"; range = "~1.2.7"; }
-      { name = "hawk"; range = "~0.10.2"; }
-      { name = "node-uuid"; range = "~1.4.0"; }
-      { name = "cookie-jar"; range = "~0.2.0"; }
-      { name = "aws-sign"; range = "~0.2.0"; }
-      { name = "oauth-sign"; range = "~0.2.0"; }
-      { name = "forever-agent"; range = "~0.2.0"; }
-      { name = "tunnel-agent"; range = "~0.2.0"; }
-      { name = "json-stringify-safe"; range = "~3.0.0"; }
-      { name = "qs"; range = "~0.5.4"; }
-    ];
-  }
-  {
-    baseName = "request";
-    version = "2.9.203";
-    fullName = "request-2.9.x";
-    hash = "2af8f83a63c7227383fbdd6114e470e0921af86a037c4e82f42883120f35f836";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "request";
-    version = "2.22.0";
-    fullName = "request-~2";
-    hash = "d0a7ebc001800143d05cedf616cc164a31425bcbfdb8eb533b59d8c123b1275c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "qs"; range = "~0.6.0"; }
-      { name = "json-stringify-safe"; range = "~4.0.0"; }
-      { name = "forever-agent"; range = "~0.5.0"; }
-      { name = "tunnel-agent"; range = "~0.3.0"; }
-      { name = "http-signature"; range = "~0.10.0"; }
-      { name = "hawk"; range = "~0.13.0"; }
-      { name = "aws-sign"; range = "~0.3.0"; }
-      { name = "oauth-sign"; range = "~0.3.0"; }
-      { name = "cookie-jar"; range = "~0.3.0"; }
-      { name = "node-uuid"; range = "~1.4.0"; }
-      { name = "mime"; range = "~1.2.9"; }
-      { name = "form-data"; range = "0.0.8"; }
-    ];
-  }
-  {
-    baseName = "request";
-    version = "2.21.0";
-    fullName = "request-~2.21.0";
-    hash = "fe31c3119bc4423f07aa7c9849cb642d5ad22bdf2a2700eab56fb83fa8ed429c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "qs"; range = "~0.6.0"; }
-      { name = "json-stringify-safe"; range = "~4.0.0"; }
-      { name = "forever-agent"; range = "~0.5.0"; }
-      { name = "tunnel-agent"; range = "~0.3.0"; }
-      { name = "http-signature"; range = "~0.9.11"; }
-      { name = "hawk"; range = "~0.13.0"; }
-      { name = "aws-sign"; range = "~0.3.0"; }
-      { name = "oauth-sign"; range = "~0.3.0"; }
-      { name = "cookie-jar"; range = "~0.3.0"; }
-      { name = "node-uuid"; range = "~1.4.0"; }
-      { name = "mime"; range = "~1.2.9"; }
-      { name = "form-data"; range = "0.0.8"; }
-    ];
-  }
-  {
-    baseName = "restify";
-    version = "2.4.1";
-    fullName = "restify-2.4.1";
-    hash = "b46ed86ef17f1896a4dd961de8cc8ec96b57b7f44ef7421f3804764289f5b563";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "assert-plus"; range = "0.1.2"; }
-      { name = "backoff"; range = "2.1.0"; }
-      { name = "bunyan"; range = "0.21.1"; }
-      { name = "deep-equal"; range = "0.0.0"; }
-      { name = "formidable"; range = "1.0.13"; }
-      { name = "http-signature"; range = "0.9.11"; }
-      { name = "keep-alive-agent"; range = "0.0.1"; }
-      { name = "lru-cache"; range = "2.3.0"; }
-      { name = "mime"; range = "1.2.9"; }
-      { name = "negotiator"; range = "0.2.5"; }
-      { name = "node-uuid"; range = "1.4.0"; }
-      { name = "once"; range = "1.1.1"; }
-      { name = "qs"; range = "0.5.5"; }
-      { name = "semver"; range = "1.1.4"; }
-      { name = "spdy"; range = "1.7.1"; }
-      { name = "verror"; range = "1.3.6"; }
-      { name = "dtrace-provider"; range = "0.2.8"; }
-    ];
-  }
-  {
-    baseName = "retry";
-    version = "0.6.0";
-    fullName = "retry-0.6.0";
-    hash = "983e676af24ff4dcbac396420fca3c195ce3b1de5f731f697888b4fe6b7bbd2a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "retry";
-    version = "0.6.0";
-    fullName = "retry-~0.6.0";
-    hash = "983e676af24ff4dcbac396420fca3c195ce3b1de5f731f697888b4fe6b7bbd2a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "revalidator";
-    version = "0.1.5";
-    fullName = "revalidator-0.1.x";
-    hash = "54938a414b54882f9459e93b9bfd5d267c41985c1191a9a913c713e369ec639e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "rimraf";
-    version = "1.0.9";
-    fullName = "rimraf-1.x.x";
-    hash = "3ef93e5f75d1fc4778b8f5409e07c72510ee2f86c926abe4e9acff9825f14c5b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "rimraf";
-    version = "2.2.0";
-    fullName = "rimraf-2";
-    hash = "4d250a91e5da8f0e839647149268d3682c868a65e920477ff5baae26591ebeb2";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "graceful-fs"; range = "~1"; }
-    ];
-  }
-  {
-    baseName = "rimraf";
-    version = "2.2.0";
-    fullName = "rimraf-~2";
-    hash = "4d250a91e5da8f0e839647149268d3682c868a65e920477ff5baae26591ebeb2";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "graceful-fs"; range = "~1"; }
-    ];
-  }
-  {
-    baseName = "rimraf";
-    version = "2.1.4";
-    fullName = "rimraf-~2.1.4";
-    hash = "093154365aab3c09aea8e83dda7c5a7fd785c787ebbf1fcdc415cb5f74d1acac";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "graceful-fs"; range = "~1"; }
-    ];
-  }
-  {
-    baseName = "rimraf";
-    version = "2.2.0";
-    fullName = "rimraf-~2.2.0";
-    hash = "4d250a91e5da8f0e839647149268d3682c868a65e920477ff5baae26591ebeb2";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "graceful-fs"; range = "~1"; }
-    ];
-  }
-  {
-    baseName = "s3http";
-    version = "0.0.2";
-    fullName = "s3http-*";
-    hash = "03cbaa20c8920371c94333d6424c3d3b09824d1c6e30a9e1567805f53d1cd16d";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "aws-sdk"; range = ">=1.2.0 <2"; }
-      { name = "commander"; range = "0.5.1"; }
-      { name = "http-auth"; range = "1.2.7"; }
-    ];
-  }
-  {
-    baseName = "sax";
-    version = "0.5.4";
-    fullName = "sax-0.5.x";
-    hash = "5c4f074b559f56a7170663142e4ccbcf8cbef229ad7eb787b6c6e0b79ddb936a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "sax";
-    version = "0.5.4";
-    fullName = "sax->=0.4.2";
-    hash = "5c4f074b559f56a7170663142e4ccbcf8cbef229ad7eb787b6c6e0b79ddb936a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "semver";
-    version = "2.0.10";
-    fullName = "semver-*";
-    hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "semver";
-    version = "1.1.4";
-    fullName = "semver-1";
-    hash = "59c0180521d0d4cee57caa5f6ef190500b04099bfa5786edb3e21e364ae8e989";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "semver";
-    version = "1.1.4";
-    fullName = "semver-1.1.4";
-    hash = "59c0180521d0d4cee57caa5f6ef190500b04099bfa5786edb3e21e364ae8e989";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "semver";
-    version = "2.0.10";
-    fullName = "semver-2";
-    hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "semver";
-    version = "2.0.10";
-    fullName = "semver-2.x";
-    hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "semver";
-    version = "2.0.10";
-    fullName = "semver-~2.0.5";
-    hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "semver";
-    version = "2.0.10";
-    fullName = "semver-~2.0.7";
-    hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "semver";
-    version = "2.0.10";
-    fullName = "semver-~2.0.8";
-    hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "send";
-    version = "0.1.3";
-    fullName = "send-*";
-    hash = "45d768e247b184ec2d78aef495d4986b62675daa2d40add4f993cc122bba557f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "debug"; range = "*"; }
-      { name = "mime"; range = "~1.2.9"; }
-      { name = "fresh"; range = "0.1.0"; }
-      { name = "range-parser"; range = "0.0.4"; }
-    ];
-  }
-  {
-    baseName = "send";
-    version = "0.1.0";
-    fullName = "send-0.1.0";
-    hash = "28b5a6ec41b5072521eb792cc901b92cdbb6b743c578d7008727dbbd3eb717de";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "debug"; range = "*"; }
-      { name = "mime"; range = "1.2.6"; }
-      { name = "fresh"; range = "0.1.0"; }
-      { name = "range-parser"; range = "0.0.4"; }
-    ];
-  }
-  {
-    baseName = "send";
-    version = "0.1.3";
-    fullName = "send-0.1.3";
-    hash = "45d768e247b184ec2d78aef495d4986b62675daa2d40add4f993cc122bba557f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "debug"; range = "*"; }
-      { name = "mime"; range = "~1.2.9"; }
-      { name = "fresh"; range = "0.1.0"; }
-      { name = "range-parser"; range = "0.0.4"; }
-    ];
-  }
-  {
-    baseName = "sequence";
-    version = "2.2.1";
-    fullName = "sequence->= 2.2.1";
-    hash = "f14e1262b6a234acc3f50fdd5bd28c02f0cc8cbf882922b5af994babf4206b62";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "sha";
-    version = "1.0.1";
-    fullName = "sha-~1.0.1";
-    hash = "b540d2ae52395b7c22c8ad1fa4e0cf430ccab917847ddea5308fa833cf85c5fb";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "graceful-fs"; range = "1.2"; }
-    ];
-  }
-  {
-    baseName = "shelljs";
-    version = "0.1.4";
-    fullName = "shelljs-0.1.x";
-    hash = "21a6f3dc5eaeb1c10efbe62e31aeb6762241f707fb1fdcda4766c8bccde3eaf0";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "should";
-    version = "1.2.2";
-    fullName = "should-*";
-    hash = "af7916b687bf54b95bd8ff2837f430ab2758f1db22b5cde5b4ae30dac472f330";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "sigmund";
-    version = "1.0.0";
-    fullName = "sigmund-~1.0.0";
-    hash = "ddf823295db284ac4720b9d40f381d7375dc0b05881b98269346b33fe9835e25";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "sliced";
-    version = "0.0.3";
-    fullName = "sliced-0.0.3";
-    hash = "ce5765e669217d4c9500d79d6ffaf8d22b6507e826fd1dc0bb05bb746ab6227c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "sliced";
-    version = "0.0.4";
-    fullName = "sliced-0.0.4";
-    hash = "b9320aec8a9c5796d34b4c95b1289912548fcc8682fe9fed09749847b7dc0d85";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "slide";
-    version = "1.1.4";
-    fullName = "slide-~1.1.3";
-    hash = "db50179b7ceac3a1d79527a7c3db39ee1d5e936a07504e6aa542f9078aa33a6a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "slide";
-    version = "1.1.4";
-    fullName = "slide-~1.1.4";
-    hash = "db50179b7ceac3a1d79527a7c3db39ee1d5e936a07504e6aa542f9078aa33a6a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "smartdc";
-    version = "7.0.0";
-    fullName = "smartdc-*";
-    hash = "add769b05ecef4ea657d7bc473d96ee3e67b8ad8bc77077120bd5ae1efe94911";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "assert-plus"; range = "0.1.2"; }
-      { name = "lru-cache"; range = "2.2.0"; }
-      { name = "nopt"; range = "2.0.0"; }
-      { name = "restify"; range = "2.4.1"; }
-      { name = "bunyan"; range = "0.21.1"; }
-      { name = "clone"; range = "0.1.6"; }
-      { name = "smartdc-auth"; range = "1.0.0"; }
-    ];
-  }
-  {
-    baseName = "smartdc-auth";
-    version = "1.0.0";
-    fullName = "smartdc-auth-1.0.0";
-    hash = "7611510ac66507398f6e371b25068c7ad193ecd69a3031fdfca0e3c652cfdcbf";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "assert-plus"; range = "0.1.2"; }
-      { name = "clone"; range = "0.1.5"; }
-      { name = "ssh-agent"; range = "0.2.1"; }
-      { name = "once"; range = "1.1.1"; }
-      { name = "vasync"; range = "1.3.3"; }
-    ];
-  }
-  {
-    baseName = "sntp";
-    version = "0.1.4";
-    fullName = "sntp-0.1.x";
-    hash = "5fc290630e8a4599dfb1ee4ed67fdc3c94fc97c6c0cbbc188691669ff55dcb4f";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "hoek"; range = "0.7.x"; }
-    ];
-  }
-  {
-    baseName = "sntp";
-    version = "0.2.4";
-    fullName = "sntp-0.2.x";
-    hash = "1f91a8d60fd48751e4b169885f530012ce2a8223ed29006abcee175f2b10d779";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "hoek"; range = "0.9.x"; }
-    ];
-  }
-  {
-    baseName = "sockjs";
-    version = "0.3.7";
-    fullName = "sockjs-*";
-    hash = "711a6c41e6a7b2a9cd0dc44abc7407f09729d400be450d94887391997b07a1a5";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "node-uuid"; range = "1.3.3"; }
-      { name = "faye-websocket"; range = "0.4.4"; }
-    ];
-  }
-  {
-    baseName = "source-map";
-    version = "0.1.25";
-    fullName = "source-map-*";
-    hash = "3ef1ff114aa3504871ad8b16a38ac744b293c6d8f37b0b6e673b44592a08626d";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "amdefine"; range = ">=0.0.4"; }
-    ];
-  }
-  {
-    baseName = "source-map";
-    version = "0.1.25";
-    fullName = "source-map-~0.1.7";
-    hash = "3ef1ff114aa3504871ad8b16a38ac744b293c6d8f37b0b6e673b44592a08626d";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "amdefine"; range = ">=0.0.4"; }
-    ];
-  }
-  {
-    baseName = "spdy";
-    version = "1.7.1";
-    fullName = "spdy-1.7.1";
-    hash = "d90516bb6b6cf39fb52face8ec332be98de116ce84d7d400fbb19529a30fa678";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "ssh-agent";
-    version = "0.2.1";
-    fullName = "ssh-agent-0.2.1";
-    hash = "b420d5816d4a8a242a8d1454f064954eab8fec9856310e867a2e7f1b2432f934";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "ctype"; range = "0.5.0"; }
-      { name = "posix-getopt"; range = "1.0.0"; }
-    ];
-  }
-  {
-    baseName = "stack-trace";
-    version = "0.0.6";
-    fullName = "stack-trace-0.0.x";
-    hash = "398b3307d34c25b9249049229cd4a340ce8587dc3e3ab5cec830af19031c10a4";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "stream-counter";
-    version = "0.1.0";
-    fullName = "stream-counter-~0.1.0";
-    hash = "8c51bd894bf905ec607654a1d7d3fe4fdc4763ccec4d37723cb8d0a0fd7cb69c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "readable-stream"; range = "~1.0.2"; }
-    ];
-  }
-  {
-    baseName = "stream-splitter-transform";
-    version = "0.0.3";
-    fullName = "stream-splitter-transform-*";
-    hash = "613ca5994f2fe645cbb21dcac24f034ed8546d6cc49097d8ee0b4501e6d9a887";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "buffertools"; range = ">=1.1.1 <2.0.0"; }
-    ];
-  }
-  {
-    baseName = "stylus";
-    version = "0.34.1";
-    fullName = "stylus-*";
-    hash = "efbcf5f35d84264609be85b122513af30e922687a4f5c961928febf0f27e3d9e";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "cssom"; range = "0.2.x"; }
-      { name = "mkdirp"; range = "0.3.x"; }
-      { name = "debug"; range = "*"; }
-    ];
-  }
-  {
-    baseName = "stylus";
-    version = "0.27.2";
-    fullName = "stylus-0.27.2";
-    hash = "8e18cc51592e04e42096e324d3409a132dbb3b40b0a606a746c4c57268bb63ea";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "cssom"; range = "0.2.x"; }
-      { name = "mkdirp"; range = "0.3.x"; }
-      { name = "debug"; range = "*"; }
-    ];
-  }
-  {
-    baseName = "superagent";
-    version = "0.15.1";
-    fullName = "superagent-0.15.1";
-    hash = "8306a3c7476e9f9d61ffe33117ffcf2a4fba6c9fcc59a2b8eee059f57d7d5614";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "qs"; range = "0.6.5"; }
-      { name = "formidable"; range = "1.0.9"; }
-      { name = "mime"; range = "1.2.5"; }
-      { name = "emitter-component"; range = "1.0.0"; }
-      { name = "methods"; range = "0.0.1"; }
-      { name = "cookiejar"; range = "1.3.0"; }
-      { name = "debug"; range = "~0.7.2"; }
-    ];
-  }
-  {
-    baseName = "supertest";
-    version = "0.7.1";
-    fullName = "supertest-*";
-    hash = "85246177740d16565f6ed4a932f0c85aca55c897ae352e3bb404da0cdad60a16";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "superagent"; range = "0.15.1"; }
-      { name = "methods"; range = "0.0.1"; }
-    ];
-  }
-  {
-    baseName = "swig";
-    version = "0.14.0";
-    fullName = "swig-*";
-    hash = "9eeafb591606008c7ab33501ebfdb6ed80830cca5736513c6c5874ded65cfb3f";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "underscore"; range = ">=1.1.7"; }
-    ];
-  }
-  {
-    baseName = "sylvester";
-    version = "0.0.21";
-    fullName = "sylvester->= 0.0.12";
-    hash = "8b97514fbb01de0f73b9104091bb79e835d227eb4c2ca88a843696b22f347022";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "sylvester";
-    version = "0.0.21";
-    fullName = "sylvester->= 0.0.8";
-    hash = "8b97514fbb01de0f73b9104091bb79e835d227eb4c2ca88a843696b22f347022";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "tar";
-    version = "0.1.17";
-    fullName = "tar-0";
-    hash = "577832975440eba0a9293244d53fa2c383e5c27ec2f68e3defde0cc23910b978";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "inherits"; range = "1.x"; }
-      { name = "block-stream"; range = "*"; }
-      { name = "fstream"; range = "~0.1.8"; }
-    ];
-  }
-  {
-    baseName = "tar";
-    version = "0.1.17";
-    fullName = "tar-~0.1.17";
-    hash = "577832975440eba0a9293244d53fa2c383e5c27ec2f68e3defde0cc23910b978";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "inherits"; range = "1.x"; }
-      { name = "block-stream"; range = "*"; }
-      { name = "fstream"; range = "~0.1.8"; }
-    ];
-  }
-  {
-    baseName = "temp";
-    version = "0.5.1";
-    fullName = "temp-*";
-    hash = "04bb3c0bde8f3ffab53bc4935b5c1ca306735e4da8844c1dc25e74b0ae8f6540";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-      { name = "rimraf"; range = "~2.1.4"; }
-    ];
-  }
-  {
-    baseName = "timespan";
-    version = "2.0.1";
-    fullName = "timespan-2.0.1";
-    hash = "2c9693ac1c16e4bf0061904f487ab5fbf13f3d35817de1575dbfd9eaf85d452c";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "timezone";
-    version = "0.0.22";
-    fullName = "timezone-*";
-    hash = "5bb9d42f401ae3084ab7dba7e0ecf1158995a987242311c86062177ad89561c3";
-    patchLatest = false;
-    topLevel = true;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "transformers";
-    version = "2.0.1";
-    fullName = "transformers-2.0.1";
-    hash = "503430f608716eb2d55764c27f1417e363049aadd08988ad9e26ecb2daa33cb9";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "promise"; range = "~2.0"; }
-      { name = "css"; range = "~1.0.8"; }
-      { name = "uglify-js"; range = "~2.2.5"; }
-    ];
-  }
-  {
-    baseName = "tunnel-agent";
-    version = "0.2.0";
-    fullName = "tunnel-agent-~0.2.0";
-    hash = "d5c7fe6b4cd377ac54ff994f3b53b368fb4c0edafceddcf0e575402aa2451808";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "tunnel-agent";
-    version = "0.3.0";
-    fullName = "tunnel-agent-~0.3.0";
-    hash = "5b23c1d29e85143e213ba5aca118419ab42d25774da92e816074a73f423bcabd";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "uglify-js";
-    version = "2.3.6";
-    fullName = "uglify-js-2.3.6";
-    hash = "a361bc8092c8400d99d73d071c46fcfceb7156a557effd82abd8ca8a5c5ad09e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "async"; range = "~0.2.6"; }
-      { name = "source-map"; range = "~0.1.7"; }
-      { name = "optimist"; range = "~0.3.5"; }
-    ];
-  }
-  {
-    baseName = "uglify-js";
-    version = "2.2.5";
-    fullName = "uglify-js-~2.2.5";
-    hash = "f9d166cda4c881a396b53f8b8892b17bb1bc09ffb531ba1fa16e7bf9022a2ca2";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "source-map"; range = "~0.1.7"; }
-      { name = "optimist"; range = "~0.3.5"; }
-    ];
-  }
-  {
-    baseName = "uglify-js";
-    version = "2.3.6";
-    fullName = "uglify-js-~2.3.6";
-    hash = "a361bc8092c8400d99d73d071c46fcfceb7156a557effd82abd8ca8a5c5ad09e";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "async"; range = "~0.2.6"; }
-      { name = "source-map"; range = "~0.1.7"; }
-      { name = "optimist"; range = "~0.3.5"; }
-    ];
-  }
-  {
-    baseName = "uid-number";
-    version = "0.0.3";
-    fullName = "uid-number-0";
-    hash = "e8eab0de35bcb20a55f58a276b2f6cfe1c531fae5982d7a3af7286807dbbe42b";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "uid2";
-    version = "0.0.2";
-    fullName = "uid2-0.0.2";
-    hash = "8a3b12223830ed536ce022271a4059cedfbb21d0f63149742347c4f7fc0ed442";
-    patchLatest = false;
     topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "underscore";
-    version = "1.5.1";
-    fullName = "underscore-*";
-    hash = "40e2c86742d4af529cbb58f8cb68de128a18a32a78ab3b8bfa9f9a9544003018";
-    patchLatest = false;
-    topLevel = true;
     dependencies = [
+      { name = "underscore"; spec = "~1.4.3"; }
+      { name = "underscore.string"; spec = "~2.3.1"; }
     ];
-  }
-  {
-    baseName = "underscore";
-    version = "1.4.4";
-    fullName = "underscore-1.4.x";
-    hash = "a848a28193850d58d7b98249d70844bc7f35a7d8b6b5ed75e08e829aa6e763d3";
     patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
+    sha1 = "28a1f72c43113e763220e5708414301c8840f0a1";
+    tarball = "http://registry.npmjs.org/argparse/-/argparse-0.1.15.tgz";
   }
   {
-    baseName = "underscore";
-    version = "1.5.1";
-    fullName = "underscore->=1.1.7";
-    hash = "40e2c86742d4af529cbb58f8cb68de128a18a32a78ab3b8bfa9f9a9544003018";
-    patchLatest = false;
+    name = "asn1";
+    spec = "0.1.11";
+    version = "0.1.11";
     topLevel = false;
     dependencies = [
     ];
-  }
-  {
-    baseName = "underscore";
-    version = "1.5.1";
-    fullName = "underscore->=1.4.3";
-    hash = "40e2c86742d4af529cbb58f8cb68de128a18a32a78ab3b8bfa9f9a9544003018";
     patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
+    sha1 = "559be18376d08a4ec4dbe80877d27818639b2df7";
+    tarball = "http://registry.npmjs.org/asn1/-/asn1-0.1.11.tgz";
   }
   {
-    baseName = "util";
+    name = "assert";
+    spec = "*";
     version = "0.4.9";
-    fullName = "util->= 0.4.9";
-    hash = "30ecc26c9e749650562c1ef20bc3f1a0d8d7c109134b510be34526d1ceae90e5";
-    patchLatest = false;
-    topLevel = false;
+    topLevel = true;
     dependencies = [
-      { name = "events.node"; range = ">= 0.4.0"; }
+      { name = "util"; spec = ">= 0.4.9"; }
     ];
+    patchLatest = false;
+    sha1 = "45faff1a58f718508118873dead940c8b51db939";
+    tarball = "http://registry.npmjs.org/assert/-/assert-0.4.9.tgz";
   }
   {
-    baseName = "utile";
-    version = "0.1.7";
-    fullName = "utile-0.1.7";
-    hash = "5e5dc150fa657729c288a211389cdf47419b73f4f8b4304a0c84dc584bf804b5";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "async"; range = "0.1.x"; }
-      { name = "deep-equal"; range = "*"; }
-      { name = "i"; range = "0.3.x"; }
-      { name = "mkdirp"; range = "0.x.x"; }
-      { name = "ncp"; range = "0.2.x"; }
-      { name = "rimraf"; range = "1.x.x"; }
-    ];
-  }
-  {
-    baseName = "utile";
-    version = "0.1.7";
-    fullName = "utile-0.1.x";
-    hash = "5e5dc150fa657729c288a211389cdf47419b73f4f8b4304a0c84dc584bf804b5";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "async"; range = "0.1.x"; }
-      { name = "deep-equal"; range = "*"; }
-      { name = "i"; range = "0.3.x"; }
-      { name = "mkdirp"; range = "0.x.x"; }
-      { name = "ncp"; range = "0.2.x"; }
-      { name = "rimraf"; range = "1.x.x"; }
-    ];
-  }
-  {
-    baseName = "vasync";
-    version = "1.3.3";
-    fullName = "vasync-1.3.3";
-    hash = "603d15b81e25b6a634d7ff2025487b3460a60d0d7e1a1ed02e66faff5ef7b699";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "jsprim"; range = "0.3.0"; }
-      { name = "verror"; range = "1.1.0"; }
-    ];
-  }
-  {
-    baseName = "verror";
-    version = "1.1.0";
-    fullName = "verror-1.1.0";
-    hash = "ac0fc2dfbcdfc3440c281cf272d902ec74bf2abdf2f9c9eb5c0c3505dc6646d7";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "extsprintf"; range = "1.0.0"; }
-    ];
-  }
-  {
-    baseName = "verror";
-    version = "1.3.3";
-    fullName = "verror-1.3.3";
-    hash = "9b3e9307cb5a788c1a4c6706ed32582893ffcd64dc55a14a153be1ea15bb916a";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "extsprintf"; range = "1.0.0"; }
-    ];
-  }
-  {
-    baseName = "verror";
-    version = "1.3.6";
-    fullName = "verror-1.3.6";
-    hash = "96135dd5fef7b75bfe26513658ca3fc1ab38e17a9bec522fc5ec6e54b6b63f89";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "extsprintf"; range = "1.0.2"; }
-    ];
-  }
-  {
-    baseName = "view-helpers";
+    name = "assert-plus";
+    spec = "0.1.2";
     version = "0.1.2";
-    fullName = "view-helpers-*";
-    hash = "b9605b3acd8da98a68a34840061b7dde70eac65529667666014b38b03d198439";
+    topLevel = false;
+    dependencies = [
+    ];
     patchLatest = false;
+    sha1 = "d93ffdbb67ac5507779be316a7d65146417beef8";
+    tarball = "http://registry.npmjs.org/assert-plus/-/assert-plus-0.1.2.tgz";
+  }
+  {
+    name = "async";
+    spec = "*";
+    version = "0.2.9";
     topLevel = true;
     dependencies = [
     ];
+    patchLatest = false;
+    sha1 = "df63060fbf3d33286a76aaf6d55a2986d9ff8619";
+    tarball = "http://registry.npmjs.org/async/-/async-0.2.9.tgz";
   }
   {
-    baseName = "walk";
-    version = "2.2.1";
-    fullName = "walk-*";
-    hash = "ed78c4a01a936c69c43eac60dde1a54a918fed66681671bf4cfdfa090b49a8ad";
+    name = "async";
+    spec = "0.1.x";
+    version = "0.1.22";
+    topLevel = false;
+    dependencies = [
+    ];
     patchLatest = false;
+    sha1 = "0fc1aaa088a0e3ef0ebe2d8831bab0dcf8845061";
+    tarball = "http://registry.npmjs.org/async/-/async-0.1.22.tgz";
+  }
+  {
+    name = "async";
+    spec = "0.2.x";
+    version = "0.2.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "df63060fbf3d33286a76aaf6d55a2986d9ff8619";
+    tarball = "http://registry.npmjs.org/async/-/async-0.2.9.tgz";
+  }
+  {
+    name = "async";
+    spec = "~0.2.6";
+    version = "0.2.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "df63060fbf3d33286a76aaf6d55a2986d9ff8619";
+    tarball = "http://registry.npmjs.org/async/-/async-0.2.9.tgz";
+  }
+  {
+    name = "async";
+    spec = "~0.2.7";
+    version = "0.2.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "df63060fbf3d33286a76aaf6d55a2986d9ff8619";
+    tarball = "http://registry.npmjs.org/async/-/async-0.2.9.tgz";
+  }
+  {
+    name = "aws-sdk";
+    spec = "*";
+    version = "1.3.2";
     topLevel = true;
     dependencies = [
-      { name = "forEachAsync"; range = "~2.2"; }
+      { name = "xml2js"; spec = "0.2.4"; }
+      { name = "xmlbuilder"; spec = "*"; }
     ];
+    patchLatest = true;
+    sha1 = "23a6cca1eb4a3c50ac67fb354ec9a5725d31a1f4";
+    tarball = "http://registry.npmjs.org/aws-sdk/-/aws-sdk-1.3.2.tgz";
   }
   {
-    baseName = "watch";
-    version = "0.5.1";
-    fullName = "watch-0.5.x";
-    hash = "1c7497c12e6ad97e194b3527ee6fa919e8f9045e588d9f810592dfec58f1d965";
-    patchLatest = false;
+    name = "aws-sdk";
+    spec = ">=1.2.0 <2";
+    version = "1.3.2";
+    topLevel = false;
+    dependencies = [
+      { name = "xml2js"; spec = "0.2.4"; }
+      { name = "xmlbuilder"; spec = "*"; }
+    ];
+    patchLatest = true;
+    sha1 = "23a6cca1eb4a3c50ac67fb354ec9a5725d31a1f4";
+    tarball = "http://registry.npmjs.org/aws-sdk/-/aws-sdk-1.3.2.tgz";
+  }
+  {
+    name = "aws-sign";
+    spec = "~0.2.0";
+    version = "0.2.0";
     topLevel = false;
     dependencies = [
     ];
+    patchLatest = false;
+    sha1 = "c55013856c8194ec854a0cbec90aab5a04ce3ac5";
+    tarball = "http://registry.npmjs.org/aws-sign/-/aws-sign-0.2.0.tgz";
   }
   {
-    baseName = "watch";
-    version = "0.7.0";
-    fullName = "watch-0.7.0";
-    hash = "8cebd59e96b3c8a25dce0de0204d29cb94f8bd99c7e0c6772f07eb309fd22c54";
-    patchLatest = false;
+    name = "aws-sign";
+    spec = "~0.3.0";
+    version = "0.3.0";
     topLevel = false;
     dependencies = [
     ];
+    patchLatest = false;
+    sha1 = "3d81ca69b474b1e16518728b51c24ff0bbedc6e9";
+    tarball = "http://registry.npmjs.org/aws-sign/-/aws-sign-0.3.0.tgz";
   }
   {
-    baseName = "websocket-driver";
-    version = "0.2.2";
-    fullName = "websocket-driver->=0.2.0";
-    hash = "2a5da351b8f716ef2595899b1e6911f739a420df64e65bfba2adf1fab42fe423";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "which";
-    version = "1.0.5";
-    fullName = "which-1";
-    hash = "e26f39d7b152c700636472ab4da57bfb9af17972c49a9e2a06f9ff347d8fad42";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "winston";
-    version = "0.7.2";
-    fullName = "winston-*";
-    hash = "562d3a3d8dc0ba580bfdfb167e16297940d3386ac4b82e65ad09f4859c4af181";
-    patchLatest = false;
+    name = "backbone";
+    spec = "*";
+    version = "1.0.0";
     topLevel = true;
     dependencies = [
-      { name = "async"; range = "0.2.x"; }
-      { name = "colors"; range = "0.6.x"; }
-      { name = "cycle"; range = "1.0.x"; }
-      { name = "eyes"; range = "0.1.x"; }
-      { name = "pkginfo"; range = "0.3.x"; }
-      { name = "request"; range = "2.16.x"; }
-      { name = "stack-trace"; range = "0.0.x"; }
+      { name = "underscore"; spec = ">=1.4.3"; }
     ];
+    patchLatest = false;
+    sha1 = "5e146e1efa8a5361462e578377c39ed0f16b0b4c";
+    tarball = "http://registry.npmjs.org/backbone/-/backbone-1.0.0.tgz";
   }
   {
-    baseName = "winston";
-    version = "0.6.2";
-    fullName = "winston-0.6.2";
-    hash = "bfe4e73f8b42e1521a1c5dbdc50150fc80d508148376c4dfc925caa6516b2a81";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "async"; range = "0.1.x"; }
-      { name = "colors"; range = "0.x.x"; }
-      { name = "cycle"; range = "1.0.x"; }
-      { name = "eyes"; range = "0.1.x"; }
-      { name = "pkginfo"; range = "0.2.x"; }
-      { name = "request"; range = "2.9.x"; }
-      { name = "stack-trace"; range = "0.0.x"; }
-    ];
-  }
-  {
-    baseName = "winston";
-    version = "0.6.2";
-    fullName = "winston-0.6.x";
-    hash = "bfe4e73f8b42e1521a1c5dbdc50150fc80d508148376c4dfc925caa6516b2a81";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "async"; range = "0.1.x"; }
-      { name = "colors"; range = "0.x.x"; }
-      { name = "cycle"; range = "1.0.x"; }
-      { name = "eyes"; range = "0.1.x"; }
-      { name = "pkginfo"; range = "0.2.x"; }
-      { name = "request"; range = "2.9.x"; }
-      { name = "stack-trace"; range = "0.0.x"; }
-    ];
-  }
-  {
-    baseName = "winston";
-    version = "0.7.1";
-    fullName = "winston-0.7.1";
-    hash = "8504626efcd7b629a69500b0ab70b964fbabb53d6ebb506fdf3e1ecc6f2ca294";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "async"; range = "0.2.x"; }
-      { name = "colors"; range = "0.6.x"; }
-      { name = "cycle"; range = "1.0.x"; }
-      { name = "eyes"; range = "0.1.x"; }
-      { name = "pkginfo"; range = "0.3.x"; }
-      { name = "request"; range = "2.16.x"; }
-      { name = "stack-trace"; range = "0.0.x"; }
-    ];
-  }
-  {
-    baseName = "with";
-    version = "1.1.0";
-    fullName = "with-~1.1.0";
-    hash = "884c829a32f2b9d79d62bc455fd363cc307cf8b5284b822b550221c319ee6db4";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-      { name = "uglify-js"; range = "2.3.6"; }
-    ];
-  }
-  {
-    baseName = "wordwrap";
-    version = "0.0.2";
-    fullName = "wordwrap->=0.0.1 <0.1.0";
-    hash = "66a2fa688509738922c3ad62a6159fe3c93268bd3bca2bff24df4bc02cc31582";
-    patchLatest = false;
+    name = "backoff";
+    spec = "2.1.0";
+    version = "2.1.0";
     topLevel = false;
     dependencies = [
     ];
+    patchLatest = false;
+    sha1 = "19b4e9f9fb75c122ad7bb1c6c376d6085d43ea09";
+    tarball = "http://registry.npmjs.org/backoff/-/backoff-2.1.0.tgz";
   }
   {
-    baseName = "wordwrap";
-    version = "0.0.2";
-    fullName = "wordwrap-~0.0.2";
-    hash = "66a2fa688509738922c3ad62a6159fe3c93268bd3bca2bff24df4bc02cc31582";
-    patchLatest = false;
-    topLevel = false;
-    dependencies = [
-    ];
-  }
-  {
-    baseName = "wu";
-    version = "0.1.8";
-    fullName = "wu-*";
-    hash = "2400d0ca7da862a9063a6a8d914bb4e585f81a5121b0fda8e40b1f6e782c72c6";
-    patchLatest = false;
+    name = "bcrypt";
+    spec = "*";
+    version = "0.7.6";
     topLevel = true;
     dependencies = [
+      { name = "bindings"; spec = "1.0.0"; }
     ];
+    patchLatest = false;
+    sha1 = "97eae4472baf2352699f5fd1662e77e63d0cd0aa";
+    tarball = "http://registry.npmjs.org/bcrypt/-/bcrypt-0.7.6.tgz";
   }
   {
-    baseName = "xml2js";
-    version = "0.2.4";
-    fullName = "xml2js-0.2.4";
-    hash = "8daebb075fc7c564d84221a0cef7825ac824db8e312f873daee59a6adf38da28";
-    patchLatest = false;
+    name = "bindings";
+    spec = "*";
+    version = "1.1.1";
     topLevel = false;
     dependencies = [
-      { name = "sax"; range = ">=0.4.2"; }
     ];
+    patchLatest = false;
+    sha1 = "951f7ae010302ffc50b265b124032017ed2bf6f3";
+    tarball = "http://registry.npmjs.org/bindings/-/bindings-1.1.1.tgz";
   }
   {
-    baseName = "xml2js";
-    version = "0.2.8";
-    fullName = "xml2js-0.2.x";
-    hash = "faa75fc23ae6346002555df236250c3612cf76dfac104aff131a5ab5de49b8de";
-    patchLatest = false;
+    name = "bindings";
+    spec = "1.0.0";
+    version = "1.0.0";
     topLevel = false;
     dependencies = [
-      { name = "sax"; range = "0.5.x"; }
     ];
+    patchLatest = false;
+    sha1 = "c3ccde60e9de6807c6f1aa4ef4843af29191c828";
+    tarball = "http://registry.npmjs.org/bindings/-/bindings-1.0.0.tgz";
   }
   {
-    baseName = "xmlbuilder";
+    name = "block-stream";
+    spec = "*";
+    version = "0.0.6";
+    topLevel = false;
+    dependencies = [
+      { name = "inherits"; spec = "~1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "f7027aea2ecc357153fa3bad6caeaf25f391aa4f";
+    tarball = "http://registry.npmjs.org/block-stream/-/block-stream-0.0.6.tgz";
+  }
+  {
+    name = "boom";
+    spec = "0.3.x";
+    version = "0.3.8";
+    topLevel = false;
+    dependencies = [
+      { name = "hoek"; spec = "0.7.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "c8cdb041435912741628c044ecc732d1d17c09ea";
+    tarball = "http://registry.npmjs.org/boom/-/boom-0.3.8.tgz";
+  }
+  {
+    name = "boom";
+    spec = "0.4.x";
     version = "0.4.2";
-    fullName = "xmlbuilder-*";
-    hash = "3137e5bf9db1f114767f8ba56be753f2a9f512e38a2df64d7677ae3c9318a0fe";
+    topLevel = false;
+    dependencies = [
+      { name = "hoek"; spec = "0.9.x"; }
+    ];
     patchLatest = false;
+    sha1 = "7a636e9ded4efcefb19cef4947a3c67dfaee911b";
+    tarball = "http://registry.npmjs.org/boom/-/boom-0.4.2.tgz";
+  }
+  {
+    name = "broadway";
+    spec = "0.2.7";
+    version = "0.2.7";
+    topLevel = false;
+    dependencies = [
+      { name = "cliff"; spec = "0.1.8"; }
+      { name = "eventemitter2"; spec = "0.4.11"; }
+      { name = "nconf"; spec = "0.6.7"; }
+      { name = "winston"; spec = "0.6.2"; }
+      { name = "utile"; spec = "0.1.7"; }
+    ];
+    patchLatest = false;
+    sha1 = "3ba2f4b3de163e95e38a4950b61fd5f882a90762";
+    tarball = "http://registry.npmjs.org/broadway/-/broadway-0.2.7.tgz";
+  }
+  {
+    name = "broadway";
+    spec = "0.2.x";
+    version = "0.2.7";
+    topLevel = false;
+    dependencies = [
+      { name = "cliff"; spec = "0.1.8"; }
+      { name = "eventemitter2"; spec = "0.4.11"; }
+      { name = "nconf"; spec = "0.6.7"; }
+      { name = "winston"; spec = "0.6.2"; }
+      { name = "utile"; spec = "0.1.7"; }
+    ];
+    patchLatest = false;
+    sha1 = "3ba2f4b3de163e95e38a4950b61fd5f882a90762";
+    tarball = "http://registry.npmjs.org/broadway/-/broadway-0.2.7.tgz";
+  }
+  {
+    name = "browserchannel";
+    spec = "*";
+    version = "1.0.4";
+    topLevel = true;
+    dependencies = [
+      { name = "hat"; spec = "*"; }
+      { name = "connect"; spec = "~2"; }
+      { name = "request"; spec = "~2"; }
+    ];
+    patchLatest = false;
+    sha1 = "077c1d59d7872d84932172d373c5f8f45698e975";
+    tarball = "http://registry.npmjs.org/browserchannel/-/browserchannel-1.0.4.tgz";
+  }
+  {
+    name = "bson";
+    spec = "0.1.8";
+    version = "0.1.8";
     topLevel = false;
     dependencies = [
     ];
+    patchLatest = false;
+    sha1 = "cf34fdcff081a189b589b4b3e5e9309cd6506c81";
+    tarball = "http://registry.npmjs.org/bson/-/bson-0.1.8.tgz";
+  }
+  {
+    name = "bson";
+    spec = "0.1.9";
+    version = "0.1.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "7528f81ed770e6d630ca8c2ccdf5394a4096db14";
+    tarball = "http://registry.npmjs.org/bson/-/bson-0.1.9.tgz";
+  }
+  {
+    name = "buffer-crc32";
+    spec = "0.1.1";
+    version = "0.1.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "7e110dc9953908ab7c32acdc70c9f945b1cbc526";
+    tarball = "http://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.1.1.tgz";
+  }
+  {
+    name = "buffer-crc32";
+    spec = "0.2.1";
+    version = "0.2.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "be3e5382fc02b6d6324956ac1af98aa98b08534c";
+    tarball = "http://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.2.1.tgz";
+  }
+  {
+    name = "buffer-crc32";
+    spec = "~0.2.1";
+    version = "0.2.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "be3e5382fc02b6d6324956ac1af98aa98b08534c";
+    tarball = "http://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.2.1.tgz";
+  }
+  {
+    name = "buffertools";
+    spec = "*";
+    version = "1.1.1";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1071a5f40fe76c39d7a4fe2ea030324d09d6ec9d";
+    tarball = "http://registry.npmjs.org/buffertools/-/buffertools-1.1.1.tgz";
+  }
+  {
+    name = "buffertools";
+    spec = ">=1.1.1 <2.0.0";
+    version = "1.1.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1071a5f40fe76c39d7a4fe2ea030324d09d6ec9d";
+    tarball = "http://registry.npmjs.org/buffertools/-/buffertools-1.1.1.tgz";
+  }
+  {
+    name = "bunyan";
+    spec = "0.21.1";
+    version = "0.21.1";
+    topLevel = false;
+    dependencies = [
+      { name = "mv"; spec = "0.0.5"; }
+      { name = "dtrace-provider"; spec = "0.2.8"; }
+    ];
+    patchLatest = false;
+    sha1 = "ea00a0d5223572e31e1e71efba2237cb1915942a";
+    tarball = "http://registry.npmjs.org/bunyan/-/bunyan-0.21.1.tgz";
+  }
+  {
+    name = "bytes";
+    spec = "0.2.0";
+    version = "0.2.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "aad33ec14e3dc2ca74e8e7d451f9ba053ad4f7a0";
+    tarball = "http://registry.npmjs.org/bytes/-/bytes-0.2.0.tgz";
+  }
+  {
+    name = "character-parser";
+    spec = "1.0.2";
+    version = "1.0.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "55384d6afcf8c6b9dd483e8347646a790e4545e7";
+    tarball = "http://registry.npmjs.org/character-parser/-/character-parser-1.0.2.tgz";
+  }
+  {
+    name = "child-process-close";
+    spec = "~0.1.1";
+    version = "0.1.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "c153ede7a5eb65ac69e78a38973b1a286377f75f";
+    tarball = "http://registry.npmjs.org/child-process-close/-/child-process-close-0.1.1.tgz";
+  }
+  {
+    name = "chmodr";
+    spec = "~0.1.0";
+    version = "0.1.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e09215a1d51542db2a2576969765bcf6125583eb";
+    tarball = "http://registry.npmjs.org/chmodr/-/chmodr-0.1.0.tgz";
+  }
+  {
+    name = "chownr";
+    spec = "0";
+    version = "0.0.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "51d18189d9092d5f8afd623f3288bfd1c6bf1a62";
+    tarball = "http://registry.npmjs.org/chownr/-/chownr-0.0.1.tgz";
+  }
+  {
+    name = "cli";
+    spec = "0.4.x";
+    version = "0.4.4";
+    topLevel = false;
+    dependencies = [
+      { name = "glob"; spec = ">= 3.1.4"; }
+    ];
+    patchLatest = false;
+    sha1 = "13ceb30872e7c9addc383e5519fb2949ab61ba43";
+    tarball = "http://registry.npmjs.org/cli/-/cli-0.4.4.tgz";
+  }
+  {
+    name = "cliff";
+    spec = "0.1.8";
+    version = "0.1.8";
+    topLevel = false;
+    dependencies = [
+      { name = "colors"; spec = "0.x.x"; }
+      { name = "eyes"; spec = "0.1.x"; }
+      { name = "winston"; spec = "0.6.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "43ca8ad9fe3943489693ab62dce0cae22509d272";
+    tarball = "http://registry.npmjs.org/cliff/-/cliff-0.1.8.tgz";
+  }
+  {
+    name = "clone";
+    spec = "0.1.5";
+    version = "0.1.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "46f29143d0766d663dbd7f80b7520a15783d2042";
+    tarball = "http://registry.npmjs.org/clone/-/clone-0.1.5.tgz";
+  }
+  {
+    name = "clone";
+    spec = "0.1.6";
+    version = "0.1.6";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "4af2296d4a23a64168c2f5fb0a2aa65e80517000";
+    tarball = "http://registry.npmjs.org/clone/-/clone-0.1.6.tgz";
+  }
+  {
+    name = "cmd-shim";
+    spec = "~1.1.0";
+    version = "1.1.0";
+    topLevel = false;
+    dependencies = [
+      { name = "mkdirp"; spec = "~0.3.3"; }
+      { name = "graceful-fs"; spec = "1.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "e69fe26e9a8b9040c7b61dc8ad6b04d7dbabe767";
+    tarball = "http://registry.npmjs.org/cmd-shim/-/cmd-shim-1.1.0.tgz";
+  }
+  {
+    name = "coffee-script";
+    spec = "*";
+    version = "1.6.3";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "6355d32cf1b04cdff6b484e5e711782b2f0c39be";
+    tarball = "http://registry.npmjs.org/coffee-script/-/coffee-script-1.6.3.tgz";
+  }
+  {
+    name = "colors";
+    spec = "0.6.0-1";
+    version = "0.6.0-1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "6dbb68ceb8bc60f2b313dcc5ce1599f06d19e67a";
+    tarball = "http://registry.npmjs.org/colors/-/colors-0.6.0-1.tgz";
+  }
+  {
+    name = "colors";
+    spec = "0.6.x";
+    version = "0.6.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "07ec10d8ac4f5a2e78f8d820e3e7832b3b463cad";
+    tarball = "http://registry.npmjs.org/colors/-/colors-0.6.0.tgz";
+  }
+  {
+    name = "colors";
+    spec = "0.x.x";
+    version = "0.6.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "07ec10d8ac4f5a2e78f8d820e3e7832b3b463cad";
+    tarball = "http://registry.npmjs.org/colors/-/colors-0.6.0.tgz";
+  }
+  {
+    name = "combined-stream";
+    spec = "~0.0.4";
+    version = "0.0.4";
+    topLevel = false;
+    dependencies = [
+      { name = "delayed-stream"; spec = "0.0.5"; }
+    ];
+    patchLatest = false;
+    sha1 = "2d1a43347dbe9515a4a2796732e5b88473840b22";
+    tarball = "http://registry.npmjs.org/combined-stream/-/combined-stream-0.0.4.tgz";
+  }
+  {
+    name = "commander";
+    spec = "0.5.1";
+    version = "0.5.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "08477afb326d1adf9d4ee73af7170c70caa14f95";
+    tarball = "http://registry.npmjs.org/commander/-/commander-0.5.1.tgz";
+  }
+  {
+    name = "commander";
+    spec = "0.6.1";
+    version = "0.6.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "fa68a14f6a945d54dbbe50d8cdb3320e9e3b1a06";
+    tarball = "http://registry.npmjs.org/commander/-/commander-0.6.1.tgz";
+  }
+  {
+    name = "commander";
+    spec = "1.2.0";
+    version = "1.2.0";
+    topLevel = false;
+    dependencies = [
+      { name = "keypress"; spec = "0.1.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "fd5713bfa153c7d6cc599378a5ab4c45c535029e";
+    tarball = "http://registry.npmjs.org/commander/-/commander-1.2.0.tgz";
+  }
+  {
+    name = "config-chain";
+    spec = "~1.1.1";
+    version = "1.1.7";
+    topLevel = false;
+    dependencies = [
+      { name = "proto-list"; spec = "~1.2.1"; }
+      { name = "ini"; spec = "1"; }
+    ];
+    patchLatest = false;
+    sha1 = "99fcaaaf343a557782a142d201747bb8142bbf9a";
+    tarball = "http://registry.npmjs.org/config-chain/-/config-chain-1.1.7.tgz";
+  }
+  {
+    name = "connect";
+    spec = "2.7.5";
+    version = "2.7.5";
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; spec = "0.5.1"; }
+      { name = "formidable"; spec = "1.0.11"; }
+      { name = "cookie-signature"; spec = "1.0.0"; }
+      { name = "buffer-crc32"; spec = "0.1.1"; }
+      { name = "cookie"; spec = "0.0.5"; }
+      { name = "send"; spec = "0.1.0"; }
+      { name = "bytes"; spec = "0.2.0"; }
+      { name = "fresh"; spec = "0.1.0"; }
+      { name = "pause"; spec = "0.0.1"; }
+      { name = "debug"; spec = "*"; }
+    ];
+    patchLatest = false;
+    sha1 = "139111b4b03f0533a524927a88a646ae467b2c02";
+    tarball = "http://registry.npmjs.org/connect/-/connect-2.7.5.tgz";
+  }
+  {
+    name = "connect";
+    spec = "2.8.4";
+    version = "2.8.4";
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; spec = "0.6.5"; }
+      { name = "formidable"; spec = "1.0.14"; }
+      { name = "cookie-signature"; spec = "1.0.1"; }
+      { name = "buffer-crc32"; spec = "0.2.1"; }
+      { name = "cookie"; spec = "0.1.0"; }
+      { name = "send"; spec = "0.1.3"; }
+      { name = "bytes"; spec = "0.2.0"; }
+      { name = "fresh"; spec = "0.1.0"; }
+      { name = "pause"; spec = "0.0.1"; }
+      { name = "uid2"; spec = "0.0.2"; }
+      { name = "debug"; spec = "*"; }
+      { name = "methods"; spec = "0.0.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "ead3eb0e7c5e79bf25e246371d85849cbbbbc656";
+    tarball = "http://registry.npmjs.org/connect/-/connect-2.8.4.tgz";
+  }
+  {
+    name = "connect";
+    spec = "~2";
+    version = "2.8.4";
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; spec = "0.6.5"; }
+      { name = "formidable"; spec = "1.0.14"; }
+      { name = "cookie-signature"; spec = "1.0.1"; }
+      { name = "buffer-crc32"; spec = "0.2.1"; }
+      { name = "cookie"; spec = "0.1.0"; }
+      { name = "send"; spec = "0.1.3"; }
+      { name = "bytes"; spec = "0.2.0"; }
+      { name = "fresh"; spec = "0.1.0"; }
+      { name = "pause"; spec = "0.0.1"; }
+      { name = "uid2"; spec = "0.0.2"; }
+      { name = "debug"; spec = "*"; }
+      { name = "methods"; spec = "0.0.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "ead3eb0e7c5e79bf25e246371d85849cbbbbc656";
+    tarball = "http://registry.npmjs.org/connect/-/connect-2.8.4.tgz";
+  }
+  {
+    name = "connect-flash";
+    spec = "*";
+    version = "0.1.1";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "d8630f26d95a7f851f9956b1e8cc6732f3b6aa30";
+    tarball = "http://registry.npmjs.org/connect-flash/-/connect-flash-0.1.1.tgz";
+  }
+  {
+    name = "connect-mongo";
+    spec = "*";
+    version = "0.3.3";
+    topLevel = true;
+    dependencies = [
+      { name = "mongodb"; spec = "1.2.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "aeaa1ca8c947599131bd90e1a024cdb789fe0100";
+    tarball = "http://registry.npmjs.org/connect-mongo/-/connect-mongo-0.3.3.tgz";
+  }
+  {
+    name = "console-browserify";
+    spec = "0.1.x";
+    version = "0.1.6";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "d128a3c0bb88350eb5626c6e7c71a6f0fd48983c";
+    tarball = "http://registry.npmjs.org/console-browserify/-/console-browserify-0.1.6.tgz";
+  }
+  {
+    name = "constantinople";
+    spec = "~1.0.1";
+    version = "1.0.1";
+    topLevel = false;
+    dependencies = [
+      { name = "uglify-js"; spec = "~2.3.6"; }
+    ];
+    patchLatest = false;
+    sha1 = "038727385eb70567ffb5a825abc44870b56f4de9";
+    tarball = "http://registry.npmjs.org/constantinople/-/constantinople-1.0.1.tgz";
+  }
+  {
+    name = "cookie";
+    spec = "0.0.5";
+    version = "0.0.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "f9acf9db57eb7568c9fcc596256b7bb22e307c81";
+    tarball = "http://registry.npmjs.org/cookie/-/cookie-0.0.5.tgz";
+  }
+  {
+    name = "cookie";
+    spec = "0.1.0";
+    version = "0.1.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "90eb469ddce905c866de687efc43131d8801f9d0";
+    tarball = "http://registry.npmjs.org/cookie/-/cookie-0.1.0.tgz";
+  }
+  {
+    name = "cookie-jar";
+    spec = "~0.2.0";
+    version = "0.2.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "64ecc06ac978db795e4b5290cbe48ba3781400fa";
+    tarball = "http://registry.npmjs.org/cookie-jar/-/cookie-jar-0.2.0.tgz";
+  }
+  {
+    name = "cookie-jar";
+    spec = "~0.3.0";
+    version = "0.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "bc9a27d4e2b97e186cd57c9e2063cb99fa68cccc";
+    tarball = "http://registry.npmjs.org/cookie-jar/-/cookie-jar-0.3.0.tgz";
+  }
+  {
+    name = "cookie-signature";
+    spec = "1.0.0";
+    version = "1.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "0044f332ac623df851c914e88eacc57f0c9704fe";
+    tarball = "http://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.0.tgz";
+  }
+  {
+    name = "cookie-signature";
+    spec = "1.0.1";
+    version = "1.0.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "44e072148af01e6e8e24afbf12690d68ae698ecb";
+    tarball = "http://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.1.tgz";
+  }
+  {
+    name = "cookiejar";
+    spec = "1.3.0";
+    version = "1.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "dd00b35679021e99cbd4e855b9ad041913474765";
+    tarball = "http://registry.npmjs.org/cookiejar/-/cookiejar-1.3.0.tgz";
+  }
+  {
+    name = "cookies";
+    spec = ">= 0.2.2";
+    version = "0.3.6";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1b5e4bd66fc732ea2e8b5087a8fb3718b4ec8597";
+    tarball = "http://registry.npmjs.org/cookies/-/cookies-0.3.6.tgz";
+  }
+  {
+    name = "couch-login";
+    spec = "~0.1.15";
+    version = "0.1.17";
+    topLevel = false;
+    dependencies = [
+      { name = "request"; spec = "2 >=2.14"; }
+    ];
+    patchLatest = false;
+    sha1 = "ab3ac31dd56e1061ea5f7faa838c7bda32a2b2ed";
+    tarball = "http://registry.npmjs.org/couch-login/-/couch-login-0.1.17.tgz";
+  }
+  {
+    name = "cryptiles";
+    spec = "0.1.x";
+    version = "0.1.3";
+    topLevel = false;
+    dependencies = [
+      { name = "boom"; spec = "0.3.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "1a556734f06d24ba34862ae9cb9e709a3afbff1c";
+    tarball = "http://registry.npmjs.org/cryptiles/-/cryptiles-0.1.3.tgz";
+  }
+  {
+    name = "cryptiles";
+    spec = "0.2.x";
+    version = "0.2.2";
+    topLevel = false;
+    dependencies = [
+      { name = "boom"; spec = "0.4.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "ed91ff1f17ad13d3748288594f8a48a0d26f325c";
+    tarball = "http://registry.npmjs.org/cryptiles/-/cryptiles-0.2.2.tgz";
+  }
+  {
+    name = "css";
+    spec = "~1.0.8";
+    version = "1.0.8";
+    topLevel = false;
+    dependencies = [
+      { name = "css-parse"; spec = "1.0.4"; }
+      { name = "css-stringify"; spec = "1.0.5"; }
+    ];
+    patchLatest = false;
+    sha1 = "9386811ca82bccc9ee7fb5a732b1e2a317c8a3e7";
+    tarball = "http://registry.npmjs.org/css/-/css-1.0.8.tgz";
+  }
+  {
+    name = "css-parse";
+    spec = "1.0.4";
+    version = "1.0.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "38b0503fbf9da9f54e9c1dbda60e145c77117bdd";
+    tarball = "http://registry.npmjs.org/css-parse/-/css-parse-1.0.4.tgz";
+  }
+  {
+    name = "css-stringify";
+    spec = "1.0.5";
+    version = "1.0.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "b0d042946db2953bb9d292900a6cb5f6d0122031";
+    tarball = "http://registry.npmjs.org/css-stringify/-/css-stringify-1.0.5.tgz";
+  }
+  {
+    name = "cssom";
+    spec = "0.2.x";
+    version = "0.2.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "2682709b5902e7212df529116ff788cd5b254894";
+    tarball = "http://registry.npmjs.org/cssom/-/cssom-0.2.5.tgz";
+  }
+  {
+    name = "ctype";
+    spec = "0.5.0";
+    version = "0.5.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "672673ec67587eb495c1ed694da1abb964ff65e3";
+    tarball = "http://registry.npmjs.org/ctype/-/ctype-0.5.0.tgz";
+  }
+  {
+    name = "ctype";
+    spec = "0.5.2";
+    version = "0.5.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "fe8091d468a373a0b0c9ff8bbfb3425c00973a1d";
+    tarball = "http://registry.npmjs.org/ctype/-/ctype-0.5.2.tgz";
+  }
+  {
+    name = "cycle";
+    spec = "1.0.x";
+    version = "1.0.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "269aca6f1b8d2baeefc8ccbc888b459f322c4e60";
+    tarball = "http://registry.npmjs.org/cycle/-/cycle-1.0.2.tgz";
+  }
+  {
+    name = "debug";
+    spec = "*";
+    version = "0.7.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "056692c86670977f115de82917918b8e8b9a10f0";
+    tarball = "http://registry.npmjs.org/debug/-/debug-0.7.2.tgz";
+  }
+  {
+    name = "debug";
+    spec = "~0.7.0";
+    version = "0.7.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "056692c86670977f115de82917918b8e8b9a10f0";
+    tarball = "http://registry.npmjs.org/debug/-/debug-0.7.2.tgz";
+  }
+  {
+    name = "debug";
+    spec = "~0.7.2";
+    version = "0.7.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "056692c86670977f115de82917918b8e8b9a10f0";
+    tarball = "http://registry.npmjs.org/debug/-/debug-0.7.2.tgz";
+  }
+  {
+    name = "deep-equal";
+    spec = "*";
+    version = "0.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "99679d3bbd047156fcd450d3d01eeb9068691e83";
+    tarball = "http://registry.npmjs.org/deep-equal/-/deep-equal-0.0.0.tgz";
+  }
+  {
+    name = "deep-equal";
+    spec = "0.0.0";
+    version = "0.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "99679d3bbd047156fcd450d3d01eeb9068691e83";
+    tarball = "http://registry.npmjs.org/deep-equal/-/deep-equal-0.0.0.tgz";
+  }
+  {
+    name = "delayed-stream";
+    spec = "0.0.5";
+    version = "0.0.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "d4b1f43a93e8296dfe02694f4680bc37a313c73f";
+    tarball = "http://registry.npmjs.org/delayed-stream/-/delayed-stream-0.0.5.tgz";
+  }
+  {
+    name = "diff";
+    spec = "1.0.2";
+    version = "1.0.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "4ae73f1aee8d6fcf484f1a1ce77ce651d9b7f0c9";
+    tarball = "http://registry.npmjs.org/diff/-/diff-1.0.2.tgz";
+  }
+  {
+    name = "director";
+    spec = "1.1.10";
+    version = "1.1.10";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e6c1d64f2f079216f19ea83b566035dde9901179";
+    tarball = "http://registry.npmjs.org/director/-/director-1.1.10.tgz";
+  }
+  {
+    name = "dtrace-provider";
+    spec = "0.2.8";
+    version = "0.2.8";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e243f19219aa95fbf0d8f2ffb07f5bd64e94fe20";
+    tarball = "http://registry.npmjs.org/dtrace-provider/-/dtrace-provider-0.2.8.tgz";
+  }
+  {
+    name = "editor";
+    spec = "0.0.4";
+    version = "0.0.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "478920f77bca6c1c1749d5e3edde4bd5966efda8";
+    tarball = "http://registry.npmjs.org/editor/-/editor-0.0.4.tgz";
+  }
+  {
+    name = "emitter-component";
+    spec = "1.0.0";
+    version = "1.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "f04dd18fc3dc3e9a74cbc0f310b088666e4c016f";
+    tarball = "http://registry.npmjs.org/emitter-component/-/emitter-component-1.0.0.tgz";
+  }
+  {
+    name = "escape-html";
+    spec = "*";
+    version = "1.0.0";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "fedcd79564444ddaf2bd85b22c9961b3a3a38bf5";
+    tarball = "http://registry.npmjs.org/escape-html/-/escape-html-1.0.0.tgz";
+  }
+  {
+    name = "event-stream";
+    spec = "~0.5";
+    version = "0.5.3";
+    topLevel = false;
+    dependencies = [
+      { name = "optimist"; spec = "0.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "b77b9309f7107addfeab63f0c0eafd8db0bd8c1c";
+    tarball = "http://registry.npmjs.org/event-stream/-/event-stream-0.5.3.tgz";
+  }
+  {
+    name = "eventemitter2";
+    spec = "0.4.11";
+    version = "0.4.11";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "8bbf2b6ac7b31e2eea0c8d8f533ef41f849a9e2c";
+    tarball = "http://registry.npmjs.org/eventemitter2/-/eventemitter2-0.4.11.tgz";
+  }
+  {
+    name = "eventemitter2";
+    spec = "~0.4.11";
+    version = "0.4.12";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "6cf14249fdc8799be7416e871e73fd2bb89e35e0";
+    tarball = "http://registry.npmjs.org/eventemitter2/-/eventemitter2-0.4.12.tgz";
+  }
+  {
+    name = "events.node";
+    spec = ">= 0.4.0";
+    version = "0.4.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "82998ea749501145fd2da7cf8ecbe6420fac02a4";
+    tarball = "http://registry.npmjs.org/events.node/-/events.node-0.4.9.tgz";
+  }
+  {
+    name = "express";
+    spec = "*";
+    version = "3.3.4";
+    topLevel = true;
+    dependencies = [
+      { name = "connect"; spec = "2.8.4"; }
+      { name = "commander"; spec = "1.2.0"; }
+      { name = "range-parser"; spec = "0.0.4"; }
+      { name = "mkdirp"; spec = "0.3.5"; }
+      { name = "cookie"; spec = "0.1.0"; }
+      { name = "buffer-crc32"; spec = "0.2.1"; }
+      { name = "fresh"; spec = "0.1.0"; }
+      { name = "methods"; spec = "0.0.1"; }
+      { name = "send"; spec = "0.1.3"; }
+      { name = "cookie-signature"; spec = "1.0.1"; }
+      { name = "debug"; spec = "*"; }
+    ];
+    patchLatest = false;
+    sha1 = "9abf22017213a8f6f54a421ce22b8ec27b7def62";
+    tarball = "http://registry.npmjs.org/express/-/express-3.3.4.tgz";
+  }
+  {
+    name = "express";
+    spec = "~3.1.1";
+    version = "3.1.2";
+    topLevel = false;
+    dependencies = [
+      { name = "connect"; spec = "2.7.5"; }
+      { name = "commander"; spec = "0.6.1"; }
+      { name = "range-parser"; spec = "0.0.4"; }
+      { name = "mkdirp"; spec = "~0.3.4"; }
+      { name = "cookie"; spec = "0.0.5"; }
+      { name = "buffer-crc32"; spec = "~0.2.1"; }
+      { name = "fresh"; spec = "0.1.0"; }
+      { name = "methods"; spec = "0.0.1"; }
+      { name = "send"; spec = "0.1.0"; }
+      { name = "cookie-signature"; spec = "1.0.0"; }
+      { name = "debug"; spec = "*"; }
+    ];
+    patchLatest = false;
+    sha1 = "52a02c8db8f22bbfa0d7478d847cd45161f985f7";
+    tarball = "http://registry.npmjs.org/express/-/express-3.1.2.tgz";
+  }
+  {
+    name = "extend";
+    spec = "*";
+    version = "1.1.3";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "5ae3d12e33009879dfb574e911a2da1e3da29ef4";
+    tarball = "http://registry.npmjs.org/extend/-/extend-1.1.3.tgz";
+  }
+  {
+    name = "extsprintf";
+    spec = "1.0.0";
+    version = "1.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "4d58b815ace5bebfc4ebf03cf98b0a7604a99b86";
+    tarball = "http://registry.npmjs.org/extsprintf/-/extsprintf-1.0.0.tgz";
+  }
+  {
+    name = "extsprintf";
+    spec = "1.0.2";
+    version = "1.0.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e1080e0658e300b06294990cc70e1502235fd550";
+    tarball = "http://registry.npmjs.org/extsprintf/-/extsprintf-1.0.2.tgz";
+  }
+  {
+    name = "eyes";
+    spec = "0.1.x";
+    version = "0.1.8";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "62cf120234c683785d902348a800ef3e0cc20bc0";
+    tarball = "http://registry.npmjs.org/eyes/-/eyes-0.1.8.tgz";
+  }
+  {
+    name = "faye-websocket";
+    spec = "*";
+    version = "0.6.1";
+    topLevel = true;
+    dependencies = [
+      { name = "websocket-driver"; spec = ">=0.2.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "43a54b2ab807761d7ec335d12f48eb69ec4ab61c";
+    tarball = "http://registry.npmjs.org/faye-websocket/-/faye-websocket-0.6.1.tgz";
+  }
+  {
+    name = "faye-websocket";
+    spec = "0.4.4";
+    version = "0.4.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "c14c5b3bf14d7417ffbfd990c0a7495cd9f337bc";
+    tarball = "http://registry.npmjs.org/faye-websocket/-/faye-websocket-0.4.4.tgz";
+  }
+  {
+    name = "flatiron";
+    spec = "0.3.5";
+    version = "0.3.5";
+    topLevel = false;
+    dependencies = [
+      { name = "broadway"; spec = "0.2.7"; }
+      { name = "optimist"; spec = "0.3.5"; }
+      { name = "prompt"; spec = "0.2.9"; }
+      { name = "director"; spec = "1.1.10"; }
+      { name = "pkginfo"; spec = "0.3.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "a91fe730f6a7fc1ea655a0ca48eaa977bef64625";
+    tarball = "http://registry.npmjs.org/flatiron/-/flatiron-0.3.5.tgz";
+  }
+  {
+    name = "forEachAsync";
+    spec = "~2.2";
+    version = "2.2.0";
+    topLevel = false;
+    dependencies = [
+      { name = "sequence"; spec = ">= 2.2.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "093b32ce868cb69f5166dcf331fae074adc71cee";
+    tarball = "http://registry.npmjs.org/forEachAsync/-/forEachAsync-2.2.0.tgz";
+  }
+  {
+    name = "forever";
+    spec = "*";
+    version = "0.10.8";
+    topLevel = true;
+    dependencies = [
+      { name = "colors"; spec = "0.6.0-1"; }
+      { name = "cliff"; spec = "0.1.8"; }
+      { name = "flatiron"; spec = "0.3.5"; }
+      { name = "forever-monitor"; spec = "1.2.2"; }
+      { name = "nconf"; spec = "0.6.7"; }
+      { name = "nssocket"; spec = "~0.5.1"; }
+      { name = "optimist"; spec = "0.4.0"; }
+      { name = "pkginfo"; spec = "0.3.0"; }
+      { name = "timespan"; spec = "2.0.1"; }
+      { name = "watch"; spec = "0.7.0"; }
+      { name = "utile"; spec = "0.1.7"; }
+      { name = "winston"; spec = "0.7.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "a78137a46fb8ca4adbf2f497d98816a526bb1f82";
+    tarball = "http://registry.npmjs.org/forever/-/forever-0.10.8.tgz";
+  }
+  {
+    name = "forever-agent";
+    spec = "~0.2.0";
+    version = "0.2.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e1c25c7ad44e09c38f233876c76fcc24ff843b1f";
+    tarball = "http://registry.npmjs.org/forever-agent/-/forever-agent-0.2.0.tgz";
+  }
+  {
+    name = "forever-agent";
+    spec = "~0.5.0";
+    version = "0.5.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "0c1647a74f3af12d76a07a99490ade7c7249c8f0";
+    tarball = "http://registry.npmjs.org/forever-agent/-/forever-agent-0.5.0.tgz";
+  }
+  {
+    name = "forever-monitor";
+    spec = "1.2.2";
+    version = "1.2.2";
+    topLevel = false;
+    dependencies = [
+      { name = "broadway"; spec = "0.2.x"; }
+      { name = "minimatch"; spec = "0.0.x"; }
+      { name = "pkginfo"; spec = "0.x.x"; }
+      { name = "ps-tree"; spec = "0.0.x"; }
+      { name = "watch"; spec = "0.5.x"; }
+      { name = "utile"; spec = "0.1.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "c1ad6c6ab837a89fa2d47bb439727ca968235684";
+    tarball = "http://registry.npmjs.org/forever-monitor/-/forever-monitor-1.2.2.tgz";
+  }
+  {
+    name = "form-data";
+    spec = "0.0.8";
+    version = "0.0.8";
+    topLevel = false;
+    dependencies = [
+      { name = "combined-stream"; spec = "~0.0.4"; }
+      { name = "mime"; spec = "~1.2.2"; }
+      { name = "async"; spec = "~0.2.7"; }
+    ];
+    patchLatest = false;
+    sha1 = "0890cd1005c5ccecc0b9d24a88052c92442d0db5";
+    tarball = "http://registry.npmjs.org/form-data/-/form-data-0.0.8.tgz";
+  }
+  {
+    name = "form-data";
+    spec = "~0.0.3";
+    version = "0.0.10";
+    topLevel = false;
+    dependencies = [
+      { name = "combined-stream"; spec = "~0.0.4"; }
+      { name = "mime"; spec = "~1.2.2"; }
+      { name = "async"; spec = "~0.2.7"; }
+    ];
+    patchLatest = false;
+    sha1 = "db345a5378d86aeeb1ed5d553b869ac192d2f5ed";
+    tarball = "http://registry.npmjs.org/form-data/-/form-data-0.0.10.tgz";
+  }
+  {
+    name = "formidable";
+    spec = "1.0.11";
+    version = "1.0.11";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "68f63325a035e644b6f7bb3d11243b9761de1b30";
+    tarball = "http://registry.npmjs.org/formidable/-/formidable-1.0.11.tgz";
+  }
+  {
+    name = "formidable";
+    spec = "1.0.13";
+    version = "1.0.13";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "70caf0f9d69692a77e04021ddab4f46b01c82aea";
+    tarball = "http://registry.npmjs.org/formidable/-/formidable-1.0.13.tgz";
+  }
+  {
+    name = "formidable";
+    spec = "1.0.14";
+    version = "1.0.14";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "2b3f4c411cbb5fdd695c44843e2a23514a43231a";
+    tarball = "http://registry.npmjs.org/formidable/-/formidable-1.0.14.tgz";
+  }
+  {
+    name = "formidable";
+    spec = "1.0.9";
+    version = "1.0.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "419e3bccead3e8874d539f5b3e72a4c503b31a98";
+    tarball = "http://registry.npmjs.org/formidable/-/formidable-1.0.9.tgz";
+  }
+  {
+    name = "fresh";
+    spec = "0.1.0";
+    version = "0.1.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "03e4b0178424e4c2d5d19a54d8814cdc97934850";
+    tarball = "http://registry.npmjs.org/fresh/-/fresh-0.1.0.tgz";
+  }
+  {
+    name = "fstream";
+    spec = "0";
+    version = "0.1.23";
+    topLevel = false;
+    dependencies = [
+      { name = "rimraf"; spec = "2"; }
+      { name = "mkdirp"; spec = "0.3"; }
+      { name = "graceful-fs"; spec = "~2.0.0"; }
+      { name = "inherits"; spec = "~1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "e1ac8d0945a7f27789e71f00a6d86575d14fc4ec";
+    tarball = "http://registry.npmjs.org/fstream/-/fstream-0.1.23.tgz";
+  }
+  {
+    name = "fstream";
+    spec = "~0.1.17";
+    version = "0.1.23";
+    topLevel = false;
+    dependencies = [
+      { name = "rimraf"; spec = "2"; }
+      { name = "mkdirp"; spec = "0.3"; }
+      { name = "graceful-fs"; spec = "~2.0.0"; }
+      { name = "inherits"; spec = "~1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "e1ac8d0945a7f27789e71f00a6d86575d14fc4ec";
+    tarball = "http://registry.npmjs.org/fstream/-/fstream-0.1.23.tgz";
+  }
+  {
+    name = "fstream";
+    spec = "~0.1.23";
+    version = "0.1.23";
+    topLevel = false;
+    dependencies = [
+      { name = "rimraf"; spec = "2"; }
+      { name = "mkdirp"; spec = "0.3"; }
+      { name = "graceful-fs"; spec = "~2.0.0"; }
+      { name = "inherits"; spec = "~1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "e1ac8d0945a7f27789e71f00a6d86575d14fc4ec";
+    tarball = "http://registry.npmjs.org/fstream/-/fstream-0.1.23.tgz";
+  }
+  {
+    name = "fstream";
+    spec = "~0.1.8";
+    version = "0.1.23";
+    topLevel = false;
+    dependencies = [
+      { name = "rimraf"; spec = "2"; }
+      { name = "mkdirp"; spec = "0.3"; }
+      { name = "graceful-fs"; spec = "~2.0.0"; }
+      { name = "inherits"; spec = "~1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "e1ac8d0945a7f27789e71f00a6d86575d14fc4ec";
+    tarball = "http://registry.npmjs.org/fstream/-/fstream-0.1.23.tgz";
+  }
+  {
+    name = "fstream-ignore";
+    spec = "~0.0.5";
+    version = "0.0.7";
+    topLevel = false;
+    dependencies = [
+      { name = "minimatch"; spec = "~0.2.0"; }
+      { name = "fstream"; spec = "~0.1.17"; }
+      { name = "inherits"; spec = "2"; }
+    ];
+    patchLatest = false;
+    sha1 = "eea3033f0c3728139de7b57ab1b0d6d89c353c63";
+    tarball = "http://registry.npmjs.org/fstream-ignore/-/fstream-ignore-0.0.7.tgz";
+  }
+  {
+    name = "fstream-npm";
+    spec = "~0.1.3";
+    version = "0.1.5";
+    topLevel = false;
+    dependencies = [
+      { name = "fstream-ignore"; spec = "~0.0.5"; }
+      { name = "inherits"; spec = "2"; }
+    ];
+    patchLatest = false;
+    sha1 = "8f9fdd38c0940f91f7b6ebda4b6611be88f97ec9";
+    tarball = "http://registry.npmjs.org/fstream-npm/-/fstream-npm-0.1.5.tgz";
+  }
+  {
+    name = "github-url-from-git";
+    spec = "~1.1.1";
+    version = "1.1.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1f89623453123ef9623956e264c60bf4c3cf5ccf";
+    tarball = "http://registry.npmjs.org/github-url-from-git/-/github-url-from-git-1.1.1.tgz";
+  }
+  {
+    name = "glob";
+    spec = "3";
+    version = "3.2.3";
+    topLevel = false;
+    dependencies = [
+      { name = "minimatch"; spec = "~0.2.11"; }
+      { name = "graceful-fs"; spec = "~2.0.0"; }
+      { name = "inherits"; spec = "2"; }
+    ];
+    patchLatest = false;
+    sha1 = "e313eeb249c7affaa5c475286b0e115b59839467";
+    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.3.tgz";
+  }
+  {
+    name = "glob";
+    spec = "3.2.1";
+    version = "3.2.1";
+    topLevel = false;
+    dependencies = [
+      { name = "minimatch"; spec = "~0.2.11"; }
+      { name = "graceful-fs"; spec = "~1.2.0"; }
+      { name = "inherits"; spec = "1"; }
+    ];
+    patchLatest = false;
+    sha1 = "57af70ec73ba2323bfe3f29a067765db64c5d758";
+    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.1.tgz";
+  }
+  {
+    name = "glob";
+    spec = ">= 3.1.4";
+    version = "3.2.3";
+    topLevel = false;
+    dependencies = [
+      { name = "minimatch"; spec = "~0.2.11"; }
+      { name = "graceful-fs"; spec = "~2.0.0"; }
+      { name = "inherits"; spec = "2"; }
+    ];
+    patchLatest = false;
+    sha1 = "e313eeb249c7affaa5c475286b0e115b59839467";
+    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.3.tgz";
+  }
+  {
+    name = "glob";
+    spec = "~3.2.1";
+    version = "3.2.3";
+    topLevel = false;
+    dependencies = [
+      { name = "minimatch"; spec = "~0.2.11"; }
+      { name = "graceful-fs"; spec = "~2.0.0"; }
+      { name = "inherits"; spec = "2"; }
+    ];
+    patchLatest = false;
+    sha1 = "e313eeb249c7affaa5c475286b0e115b59839467";
+    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.3.tgz";
+  }
+  {
+    name = "glob";
+    spec = "~3.2.3";
+    version = "3.2.3";
+    topLevel = false;
+    dependencies = [
+      { name = "minimatch"; spec = "~0.2.11"; }
+      { name = "graceful-fs"; spec = "~2.0.0"; }
+      { name = "inherits"; spec = "2"; }
+    ];
+    patchLatest = false;
+    sha1 = "e313eeb249c7affaa5c475286b0e115b59839467";
+    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.3.tgz";
+  }
+  {
+    name = "graceful-fs";
+    spec = "1.2";
+    version = "1.2.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "15a4806a57547cb2d2dbf27f42e89a8c3451b364";
+    tarball = "http://registry.npmjs.org/graceful-fs/-/graceful-fs-1.2.3.tgz";
+  }
+  {
+    name = "graceful-fs";
+    spec = "2";
+    version = "2.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "c9a206f6f5f4b94e1046dfaaccfe9e12d0ab8cef";
+    tarball = "http://registry.npmjs.org/graceful-fs/-/graceful-fs-2.0.0.tgz";
+  }
+  {
+    name = "graceful-fs";
+    spec = "~1";
+    version = "1.2.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "15a4806a57547cb2d2dbf27f42e89a8c3451b364";
+    tarball = "http://registry.npmjs.org/graceful-fs/-/graceful-fs-1.2.3.tgz";
+  }
+  {
+    name = "graceful-fs";
+    spec = "~1.2";
+    version = "1.2.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "15a4806a57547cb2d2dbf27f42e89a8c3451b364";
+    tarball = "http://registry.npmjs.org/graceful-fs/-/graceful-fs-1.2.3.tgz";
+  }
+  {
+    name = "graceful-fs";
+    spec = "~1.2.0";
+    version = "1.2.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "15a4806a57547cb2d2dbf27f42e89a8c3451b364";
+    tarball = "http://registry.npmjs.org/graceful-fs/-/graceful-fs-1.2.3.tgz";
+  }
+  {
+    name = "graceful-fs";
+    spec = "~2.0.0";
+    version = "2.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "c9a206f6f5f4b94e1046dfaaccfe9e12d0ab8cef";
+    tarball = "http://registry.npmjs.org/graceful-fs/-/graceful-fs-2.0.0.tgz";
+  }
+  {
+    name = "growl";
+    spec = "1.5.x";
+    version = "1.5.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1decd1f22a4b30dae7d363799ec624cf40cc0070";
+    tarball = "http://registry.npmjs.org/growl/-/growl-1.5.1.tgz";
+  }
+  {
+    name = "growl";
+    spec = "1.7.x";
+    version = "1.7.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "de2d66136d002e112ba70f3f10c31cf7c350b2da";
+    tarball = "http://registry.npmjs.org/growl/-/growl-1.7.0.tgz";
+  }
+  {
+    name = "gzippo";
+    spec = "*";
+    version = "0.2.0";
+    topLevel = true;
+    dependencies = [
+      { name = "send"; spec = "*"; }
+    ];
+    patchLatest = false;
+    sha1 = "ffc594c482190c56531ed2d4a5864d0b0b7d2733";
+    tarball = "http://registry.npmjs.org/gzippo/-/gzippo-0.2.0.tgz";
+  }
+  {
+    name = "hat";
+    spec = "*";
+    version = "0.0.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "bb014a9e64b3788aed8005917413d4ff3d502d8a";
+    tarball = "http://registry.npmjs.org/hat/-/hat-0.0.3.tgz";
+  }
+  {
+    name = "hawk";
+    spec = "~0.10.2";
+    version = "0.10.2";
+    topLevel = false;
+    dependencies = [
+      { name = "hoek"; spec = "0.7.x"; }
+      { name = "boom"; spec = "0.3.x"; }
+      { name = "cryptiles"; spec = "0.1.x"; }
+      { name = "sntp"; spec = "0.1.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "9b361dee95a931640e6d504e05609a8fc3ac45d2";
+    tarball = "http://registry.npmjs.org/hawk/-/hawk-0.10.2.tgz";
+  }
+  {
+    name = "hawk";
+    spec = "~0.13.0";
+    version = "0.13.1";
+    topLevel = false;
+    dependencies = [
+      { name = "hoek"; spec = "0.8.x"; }
+      { name = "boom"; spec = "0.4.x"; }
+      { name = "cryptiles"; spec = "0.2.x"; }
+      { name = "sntp"; spec = "0.2.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "3617958821f58311e4d7f6de291fca662b412ef4";
+    tarball = "http://registry.npmjs.org/hawk/-/hawk-0.13.1.tgz";
+  }
+  {
+    name = "hiredis";
+    spec = "*";
+    version = "0.1.15";
+    topLevel = false;
+    dependencies = [
+      { name = "bindings"; spec = "*"; }
+    ];
+    patchLatest = false;
+    sha1 = "00eb2205c85dcf50de838203e513896dc304dd49";
+    tarball = "http://registry.npmjs.org/hiredis/-/hiredis-0.1.15.tgz";
+  }
+  {
+    name = "hoek";
+    spec = "0.7.x";
+    version = "0.7.6";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "60fbd904557541cd2b8795abf308a1b3770e155a";
+    tarball = "http://registry.npmjs.org/hoek/-/hoek-0.7.6.tgz";
+  }
+  {
+    name = "hoek";
+    spec = "0.8.x";
+    version = "0.8.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1e9fd770ef7ebe0274adfcb5b0806a025a5e4e9f";
+    tarball = "http://registry.npmjs.org/hoek/-/hoek-0.8.5.tgz";
+  }
+  {
+    name = "hoek";
+    spec = "0.9.x";
+    version = "0.9.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "3d322462badf07716ea7eb85baf88079cddce505";
+    tarball = "http://registry.npmjs.org/hoek/-/hoek-0.9.1.tgz";
+  }
+  {
+    name = "hooks";
+    spec = "0.2.1";
+    version = "0.2.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "0f591b1b344bdcb3df59773f62fbbaf85bf4028b";
+    tarball = "http://registry.npmjs.org/hooks/-/hooks-0.2.1.tgz";
+  }
+  {
+    name = "htdigest";
+    spec = "1.0.7";
+    version = "1.0.7";
+    topLevel = false;
+    dependencies = [
+      { name = "commander"; spec = "0.5.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "0c55ba3a018855e134fd82f7a4aa6235167181b2";
+    tarball = "http://registry.npmjs.org/htdigest/-/htdigest-1.0.7.tgz";
+  }
+  {
+    name = "htpasswd";
+    spec = "1.1.0";
+    version = "1.1.0";
+    topLevel = false;
+    dependencies = [
+      { name = "commander"; spec = "0.5.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "4e9e6a2203405005aa1ae7dee80d3b6d6a8d93d6";
+    tarball = "http://registry.npmjs.org/htpasswd/-/htpasswd-1.1.0.tgz";
+  }
+  {
+    name = "http-auth";
+    spec = "1.2.7";
+    version = "1.2.7";
+    topLevel = false;
+    dependencies = [
+      { name = "node-uuid"; spec = "1.2.0"; }
+      { name = "htpasswd"; spec = "1.1.0"; }
+      { name = "htdigest"; spec = "1.0.7"; }
+    ];
+    patchLatest = false;
+    sha1 = "d15b9c08646c9fdcc4f92edb9888f57cb6cf9ca7";
+    tarball = "http://registry.npmjs.org/http-auth/-/http-auth-1.2.7.tgz";
+  }
+  {
+    name = "http-signature";
+    spec = "0.9.11";
+    version = "0.9.11";
+    topLevel = false;
+    dependencies = [
+      { name = "assert-plus"; spec = "0.1.2"; }
+      { name = "asn1"; spec = "0.1.11"; }
+      { name = "ctype"; spec = "0.5.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "9e882714572315e6790a5d0a7955efff1f19e653";
+    tarball = "http://registry.npmjs.org/http-signature/-/http-signature-0.9.11.tgz";
+  }
+  {
+    name = "http-signature";
+    spec = "~0.10.0";
+    version = "0.10.0";
+    topLevel = false;
+    dependencies = [
+      { name = "assert-plus"; spec = "0.1.2"; }
+      { name = "asn1"; spec = "0.1.11"; }
+      { name = "ctype"; spec = "0.5.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "1494e4f5000a83c0f11bcc12d6007c530cb99582";
+    tarball = "http://registry.npmjs.org/http-signature/-/http-signature-0.10.0.tgz";
+  }
+  {
+    name = "http-signature";
+    spec = "~0.9.11";
+    version = "0.9.11";
+    topLevel = false;
+    dependencies = [
+      { name = "assert-plus"; spec = "0.1.2"; }
+      { name = "asn1"; spec = "0.1.11"; }
+      { name = "ctype"; spec = "0.5.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "9e882714572315e6790a5d0a7955efff1f19e653";
+    tarball = "http://registry.npmjs.org/http-signature/-/http-signature-0.9.11.tgz";
+  }
+  {
+    name = "i";
+    spec = "0.3.x";
+    version = "0.3.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "6ecf7847caed3168b17b86ccc390d7b805be0ee4";
+    tarball = "http://registry.npmjs.org/i/-/i-0.3.1.tgz";
+  }
+  {
+    name = "i18next";
+    spec = "*";
+    version = "1.6.8";
+    topLevel = true;
+    dependencies = [
+      { name = "cookies"; spec = ">= 0.2.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "9c5806d50d374d09ad76e13da4c6d7357e8c555b";
+    tarball = "http://registry.npmjs.org/i18next/-/i18next-1.6.8.tgz";
+  }
+  {
+    name = "inherits";
+    spec = "1";
+    version = "1.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "38e1975285bf1f7ba9c84da102bb12771322ac48";
+    tarball = "http://registry.npmjs.org/inherits/-/inherits-1.0.0.tgz";
+  }
+  {
+    name = "inherits";
+    spec = "1.x";
+    version = "1.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "38e1975285bf1f7ba9c84da102bb12771322ac48";
+    tarball = "http://registry.npmjs.org/inherits/-/inherits-1.0.0.tgz";
+  }
+  {
+    name = "inherits";
+    spec = "2";
+    version = "2.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "76c81b3b1c10ddee3a60bf2c247162bc369f8ba8";
+    tarball = "http://registry.npmjs.org/inherits/-/inherits-2.0.0.tgz";
+  }
+  {
+    name = "inherits";
+    spec = "~1.0.0";
+    version = "1.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "38e1975285bf1f7ba9c84da102bb12771322ac48";
+    tarball = "http://registry.npmjs.org/inherits/-/inherits-1.0.0.tgz";
+  }
+  {
+    name = "ini";
+    spec = "1";
+    version = "1.1.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "4e808c2ce144c6c1788918e034d6797bc6cf6281";
+    tarball = "http://registry.npmjs.org/ini/-/ini-1.1.0.tgz";
+  }
+  {
+    name = "ini";
+    spec = "1.x.x";
+    version = "1.1.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "4e808c2ce144c6c1788918e034d6797bc6cf6281";
+    tarball = "http://registry.npmjs.org/ini/-/ini-1.1.0.tgz";
+  }
+  {
+    name = "ini";
+    spec = "~1.1.0";
+    version = "1.1.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "4e808c2ce144c6c1788918e034d6797bc6cf6281";
+    tarball = "http://registry.npmjs.org/ini/-/ini-1.1.0.tgz";
+  }
+  {
+    name = "init-package-json";
+    spec = "0.0.10";
+    version = "0.0.10";
+    topLevel = false;
+    dependencies = [
+      { name = "promzard"; spec = "~0.2.0"; }
+      { name = "read"; spec = "~1.0.1"; }
+      { name = "read-package-json"; spec = "1"; }
+      { name = "semver"; spec = "2.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "7baf10535227e0878105a04e44b78f132475da6a";
+    tarball = "http://registry.npmjs.org/init-package-json/-/init-package-json-0.0.10.tgz";
+  }
+  {
+    name = "is-promise";
+    spec = "~1";
+    version = "1.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "b998d17551f16f69f7bd4828f58f018cc81e064f";
+    tarball = "http://registry.npmjs.org/is-promise/-/is-promise-1.0.0.tgz";
+  }
+  {
+    name = "jade";
+    spec = "*";
+    version = "0.33.0";
+    topLevel = true;
+    dependencies = [
+      { name = "commander"; spec = "1.2.0"; }
+      { name = "mkdirp"; spec = "0.3.x"; }
+      { name = "transformers"; spec = "2.0.1"; }
+      { name = "character-parser"; spec = "1.0.2"; }
+      { name = "monocle"; spec = "0.1.48"; }
+      { name = "with"; spec = "~1.1.0"; }
+      { name = "constantinople"; spec = "~1.0.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "1b0bb45f9dd4ce57723605177713d80bccd4e429";
+    tarball = "http://registry.npmjs.org/jade/-/jade-0.33.0.tgz";
+  }
+  {
+    name = "jade";
+    spec = "0.26.3";
+    version = "0.26.3";
+    topLevel = false;
+    dependencies = [
+      { name = "commander"; spec = "0.6.1"; }
+      { name = "mkdirp"; spec = "0.3.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "8f10d7977d8d79f2f6ff862a81b0513ccb25686c";
+    tarball = "http://registry.npmjs.org/jade/-/jade-0.26.3.tgz";
+  }
+  {
+    name = "jayschema";
+    spec = "*";
+    version = "0.1.5";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "348a83baaec3b5fb9901c7efe7e64cdd1a8f46e2";
+    tarball = "http://registry.npmjs.org/jayschema/-/jayschema-0.1.5.tgz";
+  }
+  {
+    name = "jshint";
+    spec = "*";
+    version = "2.1.4";
+    topLevel = true;
+    dependencies = [
+      { name = "shelljs"; spec = "0.1.x"; }
+      { name = "underscore"; spec = "1.4.x"; }
+      { name = "cli"; spec = "0.4.x"; }
+      { name = "minimatch"; spec = "0.x.x"; }
+      { name = "console-browserify"; spec = "0.1.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "8d5be86628eea91c073c8700dd6e4c90afd9ab38";
+    tarball = "http://registry.npmjs.org/jshint/-/jshint-2.1.4.tgz";
+  }
+  {
+    name = "json-schema";
+    spec = "0.2.2";
+    version = "0.2.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "50354f19f603917c695f70b85afa77c3b0f23506";
+    tarball = "http://registry.npmjs.org/json-schema/-/json-schema-0.2.2.tgz";
+  }
+  {
+    name = "json-stringify-safe";
+    spec = "~3.0.0";
+    version = "3.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "9db7b0e530c7f289c5e8c8432af191c2ff75a5b3";
+    tarball = "http://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-3.0.0.tgz";
+  }
+  {
+    name = "json-stringify-safe";
+    spec = "~4.0.0";
+    version = "4.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "77c271aaea54302e68efeaccb56abbf06a9b1a54";
+    tarball = "http://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-4.0.0.tgz";
+  }
+  {
+    name = "jsontool";
+    spec = "*";
+    version = "6.0.0";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "dc2a535b2aa8a10b0b7359c76fa8920cdb92ce6d";
+    tarball = "http://registry.npmjs.org/jsontool/-/jsontool-6.0.0.tgz";
+  }
+  {
+    name = "jsprim";
+    spec = "0.3.0";
+    version = "0.3.0";
+    topLevel = false;
+    dependencies = [
+      { name = "extsprintf"; spec = "1.0.0"; }
+      { name = "json-schema"; spec = "0.2.2"; }
+      { name = "verror"; spec = "1.3.3"; }
+    ];
+    patchLatest = false;
+    sha1 = "cd13466ea2480dbd8396a570d47d31dda476f8b1";
+    tarball = "http://registry.npmjs.org/jsprim/-/jsprim-0.3.0.tgz";
+  }
+  {
+    name = "keep-alive-agent";
+    spec = "0.0.1";
+    version = "0.0.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "44847ca394ce8d6b521ae85816bd64509942b385";
+    tarball = "http://registry.npmjs.org/keep-alive-agent/-/keep-alive-agent-0.0.1.tgz";
+  }
+  {
+    name = "kerberos";
+    spec = "0.0.3";
+    version = "0.0.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "de3c44078eca649501babab04938c948b1252d1b";
+    tarball = "http://registry.npmjs.org/kerberos/-/kerberos-0.0.3.tgz";
+  }
+  {
+    name = "keypress";
+    spec = "0.1.x";
+    version = "0.1.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "4a3188d4291b66b4f65edb99f806aa9ae293592a";
+    tarball = "http://registry.npmjs.org/keypress/-/keypress-0.1.0.tgz";
+  }
+  {
+    name = "knox";
+    spec = "*";
+    version = "0.8.4";
+    topLevel = true;
+    dependencies = [
+      { name = "mime"; spec = "*"; }
+      { name = "xml2js"; spec = "0.2.x"; }
+      { name = "debug"; spec = "~0.7.0"; }
+      { name = "stream-counter"; spec = "~0.1.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "4e1e98e9942120c3e7fd36286ee4a249b00ac370";
+    tarball = "http://registry.npmjs.org/knox/-/knox-0.8.4.tgz";
+  }
+  {
+    name = "kue";
+    spec = "*";
+    version = "0.6.2";
+    topLevel = true;
+    dependencies = [
+      { name = "redis"; spec = "0.7.2"; }
+      { name = "express"; spec = "~3.1.1"; }
+      { name = "jade"; spec = "0.26.3"; }
+      { name = "stylus"; spec = "0.27.2"; }
+      { name = "nib"; spec = "0.5.0"; }
+      { name = "reds"; spec = "0.1.4"; }
+    ];
+    patchLatest = false;
+    sha1 = "9a6a95081842cf4ee3da5c61770bc23616a943f2";
+    tarball = "http://registry.npmjs.org/kue/-/kue-0.6.2.tgz";
+  }
+  {
+    name = "lazy";
+    spec = "~1.0.11";
+    version = "1.0.11";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "daa068206282542c088288e975c297c1ae77b690";
+    tarball = "http://registry.npmjs.org/lazy/-/lazy-1.0.11.tgz";
+  }
+  {
+    name = "libyaml";
+    spec = "*";
+    version = "0.2.2";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "a22d5f699911b6b622d6dc323fb62320c877c9c8";
+    tarball = "http://registry.npmjs.org/libyaml/-/libyaml-0.2.2.tgz";
+  }
+  {
+    name = "lockfile";
+    spec = "~0.4.0";
+    version = "0.4.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "0f815a7ee7c3d603ddec6fbfa8a212b5645d54c5";
+    tarball = "http://registry.npmjs.org/lockfile/-/lockfile-0.4.0.tgz";
+  }
+  {
+    name = "lru-cache";
+    spec = "2";
+    version = "2.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1cee12d5a9f28ed1ee37e9c332b8888e6b85412a";
+    tarball = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.3.0.tgz";
+  }
+  {
+    name = "lru-cache";
+    spec = "2.2.0";
+    version = "2.2.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "ec2bba603f4c5bb3e7a1bf62ce1c1dbc1d474e08";
+    tarball = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.2.0.tgz";
+  }
+  {
+    name = "lru-cache";
+    spec = "2.3.0";
+    version = "2.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1cee12d5a9f28ed1ee37e9c332b8888e6b85412a";
+    tarball = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.3.0.tgz";
+  }
+  {
+    name = "lru-cache";
+    spec = "~1.0.2";
+    version = "1.0.6";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "aa50f97047422ac72543bda177a9c9d018d98452";
+    tarball = "http://registry.npmjs.org/lru-cache/-/lru-cache-1.0.6.tgz";
+  }
+  {
+    name = "lru-cache";
+    spec = "~2.3.0";
+    version = "2.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1cee12d5a9f28ed1ee37e9c332b8888e6b85412a";
+    tarball = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.3.0.tgz";
+  }
+  {
+    name = "methods";
+    spec = "0.0.1";
+    version = "0.0.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "277c90f8bef39709645a8371c51c3b6c648e068c";
+    tarball = "http://registry.npmjs.org/methods/-/methods-0.0.1.tgz";
+  }
+  {
+    name = "mime";
+    spec = "*";
+    version = "1.2.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "009cd40867bd35de521b3b966f04e2f8d4d13d09";
+    tarball = "http://registry.npmjs.org/mime/-/mime-1.2.9.tgz";
+  }
+  {
+    name = "mime";
+    spec = "1.2.5";
+    version = "1.2.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "9eed073022a8bf5e16c8566c6867b8832bfbfa13";
+    tarball = "http://registry.npmjs.org/mime/-/mime-1.2.5.tgz";
+  }
+  {
+    name = "mime";
+    spec = "1.2.6";
+    version = "1.2.6";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "b1f86c768c025fa87b48075f1709f28aeaf20365";
+    tarball = "http://registry.npmjs.org/mime/-/mime-1.2.6.tgz";
+  }
+  {
+    name = "mime";
+    spec = "1.2.9";
+    version = "1.2.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "009cd40867bd35de521b3b966f04e2f8d4d13d09";
+    tarball = "http://registry.npmjs.org/mime/-/mime-1.2.9.tgz";
+  }
+  {
+    name = "mime";
+    spec = "~1.2.2";
+    version = "1.2.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "009cd40867bd35de521b3b966f04e2f8d4d13d09";
+    tarball = "http://registry.npmjs.org/mime/-/mime-1.2.9.tgz";
+  }
+  {
+    name = "mime";
+    spec = "~1.2.7";
+    version = "1.2.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "009cd40867bd35de521b3b966f04e2f8d4d13d09";
+    tarball = "http://registry.npmjs.org/mime/-/mime-1.2.9.tgz";
+  }
+  {
+    name = "mime";
+    spec = "~1.2.9";
+    version = "1.2.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "009cd40867bd35de521b3b966f04e2f8d4d13d09";
+    tarball = "http://registry.npmjs.org/mime/-/mime-1.2.9.tgz";
+  }
+  {
+    name = "minimatch";
+    spec = "0";
+    version = "0.2.12";
+    topLevel = false;
+    dependencies = [
+      { name = "lru-cache"; spec = "2"; }
+      { name = "sigmund"; spec = "~1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "ea82a012ac662c7ddfaa144f1c147e6946f5dafb";
+    tarball = "http://registry.npmjs.org/minimatch/-/minimatch-0.2.12.tgz";
+  }
+  {
+    name = "minimatch";
+    spec = "0.0.x";
+    version = "0.0.5";
+    topLevel = false;
+    dependencies = [
+      { name = "lru-cache"; spec = "~1.0.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "96bb490bbd3ba6836bbfac111adf75301b1584de";
+    tarball = "http://registry.npmjs.org/minimatch/-/minimatch-0.0.5.tgz";
+  }
+  {
+    name = "minimatch";
+    spec = "0.x.x";
+    version = "0.2.12";
+    topLevel = false;
+    dependencies = [
+      { name = "lru-cache"; spec = "2"; }
+      { name = "sigmund"; spec = "~1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "ea82a012ac662c7ddfaa144f1c147e6946f5dafb";
+    tarball = "http://registry.npmjs.org/minimatch/-/minimatch-0.2.12.tgz";
+  }
+  {
+    name = "minimatch";
+    spec = ">=0.2.4";
+    version = "0.2.12";
+    topLevel = false;
+    dependencies = [
+      { name = "lru-cache"; spec = "2"; }
+      { name = "sigmund"; spec = "~1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "ea82a012ac662c7ddfaa144f1c147e6946f5dafb";
+    tarball = "http://registry.npmjs.org/minimatch/-/minimatch-0.2.12.tgz";
+  }
+  {
+    name = "minimatch";
+    spec = "~0.2.0";
+    version = "0.2.12";
+    topLevel = false;
+    dependencies = [
+      { name = "lru-cache"; spec = "2"; }
+      { name = "sigmund"; spec = "~1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "ea82a012ac662c7ddfaa144f1c147e6946f5dafb";
+    tarball = "http://registry.npmjs.org/minimatch/-/minimatch-0.2.12.tgz";
+  }
+  {
+    name = "minimatch";
+    spec = "~0.2.11";
+    version = "0.2.12";
+    topLevel = false;
+    dependencies = [
+      { name = "lru-cache"; spec = "2"; }
+      { name = "sigmund"; spec = "~1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "ea82a012ac662c7ddfaa144f1c147e6946f5dafb";
+    tarball = "http://registry.npmjs.org/minimatch/-/minimatch-0.2.12.tgz";
+  }
+  {
+    name = "minimatch";
+    spec = "~0.2.12";
+    version = "0.2.12";
+    topLevel = false;
+    dependencies = [
+      { name = "lru-cache"; spec = "2"; }
+      { name = "sigmund"; spec = "~1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "ea82a012ac662c7ddfaa144f1c147e6946f5dafb";
+    tarball = "http://registry.npmjs.org/minimatch/-/minimatch-0.2.12.tgz";
+  }
+  {
+    name = "minimist";
+    spec = "~0.0.1";
+    version = "0.0.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "fa2439fbf7da8525c51b2a74e2815b380abc8ab6";
+    tarball = "http://registry.npmjs.org/minimist/-/minimist-0.0.1.tgz";
+  }
+  {
+    name = "mkdirp";
+    spec = "*";
+    version = "0.3.5";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "de3e5f8961c88c787ee1368df849ac4413eca8d7";
+    tarball = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.5.tgz";
+  }
+  {
+    name = "mkdirp";
+    spec = "0";
+    version = "0.3.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "de3e5f8961c88c787ee1368df849ac4413eca8d7";
+    tarball = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.5.tgz";
+  }
+  {
+    name = "mkdirp";
+    spec = "0.3";
+    version = "0.3.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "de3e5f8961c88c787ee1368df849ac4413eca8d7";
+    tarball = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.5.tgz";
+  }
+  {
+    name = "mkdirp";
+    spec = "0.3.0";
+    version = "0.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1bbf5ab1ba827af23575143490426455f481fe1e";
+    tarball = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.0.tgz";
+  }
+  {
+    name = "mkdirp";
+    spec = "0.3.5";
+    version = "0.3.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "de3e5f8961c88c787ee1368df849ac4413eca8d7";
+    tarball = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.5.tgz";
+  }
+  {
+    name = "mkdirp";
+    spec = "0.3.x";
+    version = "0.3.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "de3e5f8961c88c787ee1368df849ac4413eca8d7";
+    tarball = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.5.tgz";
+  }
+  {
+    name = "mkdirp";
+    spec = "0.x.x";
+    version = "0.3.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "de3e5f8961c88c787ee1368df849ac4413eca8d7";
+    tarball = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.5.tgz";
+  }
+  {
+    name = "mkdirp";
+    spec = "~0.3.3";
+    version = "0.3.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "de3e5f8961c88c787ee1368df849ac4413eca8d7";
+    tarball = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.5.tgz";
+  }
+  {
+    name = "mkdirp";
+    spec = "~0.3.4";
+    version = "0.3.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "de3e5f8961c88c787ee1368df849ac4413eca8d7";
+    tarball = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.5.tgz";
+  }
+  {
+    name = "mocha";
+    spec = "*";
+    version = "1.12.0";
+    topLevel = true;
+    dependencies = [
+      { name = "commander"; spec = "0.6.1"; }
+      { name = "growl"; spec = "1.7.x"; }
+      { name = "jade"; spec = "0.26.3"; }
+      { name = "diff"; spec = "1.0.2"; }
+      { name = "debug"; spec = "*"; }
+      { name = "mkdirp"; spec = "0.3.5"; }
+      { name = "ms"; spec = "0.3.0"; }
+      { name = "glob"; spec = "3.2.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "95fc936622ce156b8b19ff8def466ac2f3a3f29e";
+    tarball = "http://registry.npmjs.org/mocha/-/mocha-1.12.0.tgz";
+  }
+  {
+    name = "mocha";
+    spec = "~1.3.2";
+    version = "1.3.2";
+    topLevel = false;
+    dependencies = [
+      { name = "commander"; spec = "0.6.1"; }
+      { name = "growl"; spec = "1.5.x"; }
+      { name = "jade"; spec = "0.26.3"; }
+      { name = "diff"; spec = "1.0.2"; }
+      { name = "debug"; spec = "*"; }
+    ];
+    patchLatest = false;
+    sha1 = "ab97b4f1e5942b9fe4d4436b8bd9eeda0eb01e13";
+    tarball = "http://registry.npmjs.org/mocha/-/mocha-1.3.2.tgz";
+  }
+  {
+    name = "mongodb";
+    spec = "1.2.x";
+    version = "1.2.14";
+    topLevel = false;
+    dependencies = [
+      { name = "bson"; spec = "0.1.8"; }
+    ];
+    patchLatest = false;
+    sha1 = "269665552066437308d0942036646e6795c3a9a3";
+    tarball = "http://registry.npmjs.org/mongodb/-/mongodb-1.2.14.tgz";
+  }
+  {
+    name = "mongodb";
+    spec = "1.3.11";
+    version = "1.3.11";
+    topLevel = false;
+    dependencies = [
+      { name = "bson"; spec = "0.1.9"; }
+      { name = "kerberos"; spec = "0.0.3"; }
+    ];
+    patchLatest = false;
+    sha1 = "dba6f669dd30612b3d07fc13e2181b9d2b105da2";
+    tarball = "http://registry.npmjs.org/mongodb/-/mongodb-1.3.11.tgz";
+  }
+  {
+    name = "mongoose";
+    spec = "*";
+    version = "3.6.14";
+    topLevel = true;
+    dependencies = [
+      { name = "hooks"; spec = "0.2.1"; }
+      { name = "mongodb"; spec = "1.3.11"; }
+      { name = "ms"; spec = "0.1.0"; }
+      { name = "sliced"; spec = "0.0.3"; }
+      { name = "muri"; spec = "0.3.1"; }
+      { name = "mpromise"; spec = "0.2.1"; }
+      { name = "mpath"; spec = "0.1.1"; }
+      { name = "regexp-clone"; spec = "0.0.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "acf28354ba4f792ded931ccd0dfe038a65757832";
+    tarball = "http://registry.npmjs.org/mongoose/-/mongoose-3.6.14.tgz";
+  }
+  {
+    name = "mongoose-schema-extend";
+    spec = "*";
+    version = "0.1.3";
+    topLevel = true;
+    dependencies = [
+      { name = "owl-deepcopy"; spec = "~0.0.1"; }
+      { name = "mocha"; spec = "~1.3.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "8ee39f48c7a0beb4aad555c25cbac59fe7bd6502";
+    tarball = "http://registry.npmjs.org/mongoose-schema-extend/-/mongoose-schema-extend-0.1.3.tgz";
+  }
+  {
+    name = "monocle";
+    spec = "0.1.48";
+    version = "0.1.48";
+    topLevel = false;
+    dependencies = [
+      { name = "readdirp"; spec = "~0.2.3"; }
+    ];
+    patchLatest = false;
+    sha1 = "b96730f5ca900fa75a56041eb6db10aad980a383";
+    tarball = "http://registry.npmjs.org/monocle/-/monocle-0.1.48.tgz";
+  }
+  {
+    name = "mpath";
+    spec = "0.1.1";
+    version = "0.1.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "23da852b7c232ee097f4759d29c0ee9cd22d5e46";
+    tarball = "http://registry.npmjs.org/mpath/-/mpath-0.1.1.tgz";
+  }
+  {
+    name = "mpromise";
+    spec = "0.2.1";
+    version = "0.2.1";
+    topLevel = false;
+    dependencies = [
+      { name = "sliced"; spec = "0.0.4"; }
+    ];
+    patchLatest = false;
+    sha1 = "fbbdc28cb0207e49b8a4eb1a4c0cea6c2de794c8";
+    tarball = "http://registry.npmjs.org/mpromise/-/mpromise-0.2.1.tgz";
+  }
+  {
+    name = "ms";
+    spec = "0.1.0";
+    version = "0.1.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "f21fac490daf1d7667fd180fe9077389cc9442b2";
+    tarball = "http://registry.npmjs.org/ms/-/ms-0.1.0.tgz";
+  }
+  {
+    name = "ms";
+    spec = "0.3.0";
+    version = "0.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "03edc348d613e66a56486cfdac53bcbe899cbd61";
+    tarball = "http://registry.npmjs.org/ms/-/ms-0.3.0.tgz";
+  }
+  {
+    name = "muri";
+    spec = "0.3.1";
+    version = "0.3.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "861889c5c857f1a43700bee85d50731f61727c9a";
+    tarball = "http://registry.npmjs.org/muri/-/muri-0.3.1.tgz";
+  }
+  {
+    name = "mute-stream";
+    spec = "~0.0.2";
+    version = "0.0.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "f09c090d333b3063f615cbbcca71b349893f0152";
+    tarball = "http://registry.npmjs.org/mute-stream/-/mute-stream-0.0.3.tgz";
+  }
+  {
+    name = "mv";
+    spec = "0.0.5";
+    version = "0.0.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "15eac759479884df1131d6de56bce20b654f5391";
+    tarball = "http://registry.npmjs.org/mv/-/mv-0.0.5.tgz";
+  }
+  {
+    name = "natural";
+    spec = "0.0.69";
+    version = "0.0.69";
+    topLevel = false;
+    dependencies = [
+      { name = "sylvester"; spec = ">= 0.0.12"; }
+      { name = "apparatus"; spec = ">= 0.0.4"; }
+      { name = "underscore"; spec = "*"; }
+    ];
+    patchLatest = false;
+    sha1 = "60d9ce23797a54ec211600eb721cc66779b954d3";
+    tarball = "http://registry.npmjs.org/natural/-/natural-0.0.69.tgz";
+  }
+  {
+    name = "nconf";
+    spec = "*";
+    version = "0.6.7";
+    topLevel = true;
+    dependencies = [
+      { name = "async"; spec = "0.1.x"; }
+      { name = "ini"; spec = "1.x.x"; }
+      { name = "optimist"; spec = "0.3.x"; }
+      { name = "pkginfo"; spec = "0.2.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "f2ffce75f4573857429c719d9f6ed0a9a231a47c";
+    tarball = "http://registry.npmjs.org/nconf/-/nconf-0.6.7.tgz";
+  }
+  {
+    name = "nconf";
+    spec = "0.6.7";
+    version = "0.6.7";
+    topLevel = false;
+    dependencies = [
+      { name = "async"; spec = "0.1.x"; }
+      { name = "ini"; spec = "1.x.x"; }
+      { name = "optimist"; spec = "0.3.x"; }
+      { name = "pkginfo"; spec = "0.2.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "f2ffce75f4573857429c719d9f6ed0a9a231a47c";
+    tarball = "http://registry.npmjs.org/nconf/-/nconf-0.6.7.tgz";
+  }
+  {
+    name = "ncp";
+    spec = "0.2.x";
+    version = "0.2.7";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "46fac2b7dda2560a4cb7e628677bd5f64eac5be1";
+    tarball = "http://registry.npmjs.org/ncp/-/ncp-0.2.7.tgz";
+  }
+  {
+    name = "negotiator";
+    spec = "0.2.5";
+    version = "0.2.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "12ec7b4a9f3b4c894c31d8c4ec015925ba547eec";
+    tarball = "http://registry.npmjs.org/negotiator/-/negotiator-0.2.5.tgz";
+  }
+  {
+    name = "nib";
+    spec = "0.5.0";
+    version = "0.5.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "ad0a7dfa2bca8680c8cb8adaa6ab68c80e5221e5";
+    tarball = "http://registry.npmjs.org/nib/-/nib-0.5.0.tgz";
+  }
+  {
+    name = "nijs";
+    spec = "*";
+    version = "0.0.9";
+    topLevel = true;
+    dependencies = [
+      { name = "optparse"; spec = ">= 1.0.3"; }
+    ];
+    patchLatest = false;
+    sha1 = "26f0165431664b3518c2576f78397f27054e03aa";
+    tarball = "http://registry.npmjs.org/nijs/-/nijs-0.0.9.tgz";
+  }
+  {
+    name = "node-expat";
+    spec = "*";
+    version = "2.0.0";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "a10271b3463484fa4b59895df61693a1de4ac735";
+    tarball = "http://registry.npmjs.org/node-expat/-/node-expat-2.0.0.tgz";
+  }
+  {
+    name = "node-gyp";
+    spec = "*";
+    version = "0.10.6";
+    topLevel = true;
+    dependencies = [
+      { name = "glob"; spec = "3"; }
+      { name = "graceful-fs"; spec = "2"; }
+      { name = "fstream"; spec = "0"; }
+      { name = "minimatch"; spec = "0"; }
+      { name = "mkdirp"; spec = "0"; }
+      { name = "nopt"; spec = "2"; }
+      { name = "npmlog"; spec = "0"; }
+      { name = "osenv"; spec = "0"; }
+      { name = "request"; spec = "2"; }
+      { name = "rimraf"; spec = "2"; }
+      { name = "semver"; spec = "~2.0.7"; }
+      { name = "tar"; spec = "0"; }
+      { name = "which"; spec = "1"; }
+    ];
+    patchLatest = false;
+    sha1 = "2b81f9c1b9cd3cc8fd56fe776744814e394d3427";
+    tarball = "http://registry.npmjs.org/node-gyp/-/node-gyp-0.10.6.tgz";
+  }
+  {
+    name = "node-gyp";
+    spec = "~0.10.6";
+    version = "0.10.6";
+    topLevel = false;
+    dependencies = [
+      { name = "glob"; spec = "3"; }
+      { name = "graceful-fs"; spec = "2"; }
+      { name = "fstream"; spec = "0"; }
+      { name = "minimatch"; spec = "0"; }
+      { name = "mkdirp"; spec = "0"; }
+      { name = "nopt"; spec = "2"; }
+      { name = "npmlog"; spec = "0"; }
+      { name = "osenv"; spec = "0"; }
+      { name = "request"; spec = "2"; }
+      { name = "rimraf"; spec = "2"; }
+      { name = "semver"; spec = "~2.0.7"; }
+      { name = "tar"; spec = "0"; }
+      { name = "which"; spec = "1"; }
+    ];
+    patchLatest = false;
+    sha1 = "2b81f9c1b9cd3cc8fd56fe776744814e394d3427";
+    tarball = "http://registry.npmjs.org/node-gyp/-/node-gyp-0.10.6.tgz";
+  }
+  {
+    name = "node-uuid";
+    spec = "*";
+    version = "1.4.0";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "07f9b2337572ff6275c775e1d48513f3a45d7a65";
+    tarball = "http://registry.npmjs.org/node-uuid/-/node-uuid-1.4.0.tgz";
+  }
+  {
+    name = "node-uuid";
+    spec = "1.2.0";
+    version = "1.2.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "81a9fe32934719852499b58b2523d2cd5fdfd65b";
+    tarball = "http://registry.npmjs.org/node-uuid/-/node-uuid-1.2.0.tgz";
+  }
+  {
+    name = "node-uuid";
+    spec = "1.3.3";
+    version = "1.3.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "d3db4d7b56810d9e4032342766282af07391729b";
+    tarball = "http://registry.npmjs.org/node-uuid/-/node-uuid-1.3.3.tgz";
+  }
+  {
+    name = "node-uuid";
+    spec = "1.4.0";
+    version = "1.4.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "07f9b2337572ff6275c775e1d48513f3a45d7a65";
+    tarball = "http://registry.npmjs.org/node-uuid/-/node-uuid-1.4.0.tgz";
+  }
+  {
+    name = "node-uuid";
+    spec = "~1.4.0";
+    version = "1.4.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "07f9b2337572ff6275c775e1d48513f3a45d7a65";
+    tarball = "http://registry.npmjs.org/node-uuid/-/node-uuid-1.4.0.tgz";
+  }
+  {
+    name = "nodemon";
+    spec = "*";
+    version = "0.7.8";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "c0667a000f208dbf6a4dad08a5186595a9889590";
+    tarball = "http://registry.npmjs.org/nodemon/-/nodemon-0.7.8.tgz";
+  }
+  {
+    name = "nopt";
+    spec = "2";
+    version = "2.1.1";
+    topLevel = false;
+    dependencies = [
+      { name = "abbrev"; spec = "1"; }
+    ];
+    patchLatest = false;
+    sha1 = "91eb7c4b017e7c00adcad1fd6d63944d0fdb75c1";
+    tarball = "http://registry.npmjs.org/nopt/-/nopt-2.1.1.tgz";
+  }
+  {
+    name = "nopt";
+    spec = "2.0.0";
+    version = "2.0.0";
+    topLevel = false;
+    dependencies = [
+      { name = "abbrev"; spec = "1"; }
+    ];
+    patchLatest = false;
+    sha1 = "ca7416f20a5e3f9c3b86180f96295fa3d0b52e0d";
+    tarball = "http://registry.npmjs.org/nopt/-/nopt-2.0.0.tgz";
+  }
+  {
+    name = "nopt";
+    spec = "~2.1.1";
+    version = "2.1.1";
+    topLevel = false;
+    dependencies = [
+      { name = "abbrev"; spec = "1"; }
+    ];
+    patchLatest = false;
+    sha1 = "91eb7c4b017e7c00adcad1fd6d63944d0fdb75c1";
+    tarball = "http://registry.npmjs.org/nopt/-/nopt-2.1.1.tgz";
+  }
+  {
+    name = "normalize-package-data";
+    spec = "~0.2";
+    version = "0.2.0";
+    topLevel = false;
+    dependencies = [
+      { name = "semver"; spec = "2"; }
+      { name = "github-url-from-git"; spec = "~1.1.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "b9349e2db3242912e6ab3d180823309b63a74a92";
+    tarball = "http://registry.npmjs.org/normalize-package-data/-/normalize-package-data-0.2.0.tgz";
+  }
+  {
+    name = "npm";
+    spec = "*";
+    version = "1.3.4";
+    topLevel = true;
+    dependencies = [
+      { name = "semver"; spec = "~2.0.8"; }
+      { name = "ini"; spec = "~1.1.0"; }
+      { name = "slide"; spec = "~1.1.4"; }
+      { name = "abbrev"; spec = "~1.0.4"; }
+      { name = "graceful-fs"; spec = "~2.0.0"; }
+      { name = "minimatch"; spec = "~0.2.12"; }
+      { name = "nopt"; spec = "~2.1.1"; }
+      { name = "rimraf"; spec = "~2.2.0"; }
+      { name = "request"; spec = "~2.21.0"; }
+      { name = "which"; spec = "1"; }
+      { name = "tar"; spec = "~0.1.17"; }
+      { name = "fstream"; spec = "~0.1.23"; }
+      { name = "block-stream"; spec = "*"; }
+      { name = "inherits"; spec = "1"; }
+      { name = "mkdirp"; spec = "~0.3.3"; }
+      { name = "read"; spec = "~1.0.4"; }
+      { name = "lru-cache"; spec = "~2.3.0"; }
+      { name = "node-gyp"; spec = "~0.10.6"; }
+      { name = "fstream-npm"; spec = "~0.1.3"; }
+      { name = "uid-number"; spec = "0"; }
+      { name = "archy"; spec = "0"; }
+      { name = "chownr"; spec = "0"; }
+      { name = "npmlog"; spec = "0.0.4"; }
+      { name = "ansi"; spec = "~0.1.2"; }
+      { name = "npm-registry-client"; spec = "~0.2.27"; }
+      { name = "read-package-json"; spec = "~1.1.0"; }
+      { name = "read-installed"; spec = "~0.2.2"; }
+      { name = "glob"; spec = "~3.2.3"; }
+      { name = "init-package-json"; spec = "0.0.10"; }
+      { name = "osenv"; spec = "0"; }
+      { name = "lockfile"; spec = "~0.4.0"; }
+      { name = "retry"; spec = "~0.6.0"; }
+      { name = "once"; spec = "~1.1.1"; }
+      { name = "npmconf"; spec = "~0.1.1"; }
+      { name = "opener"; spec = "~1.3.0"; }
+      { name = "chmodr"; spec = "~0.1.0"; }
+      { name = "cmd-shim"; spec = "~1.1.0"; }
+      { name = "sha"; spec = "~1.0.1"; }
+      { name = "editor"; spec = "0.0.4"; }
+      { name = "child-process-close"; spec = "~0.1.1"; }
+      { name = "npm-user-validate"; spec = "0.0.3"; }
+    ];
+    patchLatest = false;
+    sha1 = "1dacc91458f2197c362d774d2cbf111680f86ec2";
+    tarball = "http://registry.npmjs.org/npm/-/npm-1.3.4.tgz";
+  }
+  {
+    name = "npm-registry-client";
+    spec = "0.2.27";
+    version = "0.2.27";
+    topLevel = false;
+    dependencies = [
+      { name = "request"; spec = "2 >=2.20.0"; }
+      { name = "graceful-fs"; spec = "~2.0.0"; }
+      { name = "semver"; spec = "~2.0.5"; }
+      { name = "slide"; spec = "~1.1.3"; }
+      { name = "chownr"; spec = "0"; }
+      { name = "mkdirp"; spec = "~0.3.3"; }
+      { name = "rimraf"; spec = "~2"; }
+      { name = "retry"; spec = "0.6.0"; }
+      { name = "couch-login"; spec = "~0.1.15"; }
+      { name = "npmlog"; spec = ""; }
+    ];
+    patchLatest = false;
+    sha1 = "8f338189d32769267886a07ad7b7fd2267446adf";
+    tarball = "http://registry.npmjs.org/npm-registry-client/-/npm-registry-client-0.2.27.tgz";
+  }
+  {
+    name = "npm-registry-client";
+    spec = "~0.2.27";
+    version = "0.2.27";
+    topLevel = false;
+    dependencies = [
+      { name = "request"; spec = "2 >=2.20.0"; }
+      { name = "graceful-fs"; spec = "~2.0.0"; }
+      { name = "semver"; spec = "~2.0.5"; }
+      { name = "slide"; spec = "~1.1.3"; }
+      { name = "chownr"; spec = "0"; }
+      { name = "mkdirp"; spec = "~0.3.3"; }
+      { name = "rimraf"; spec = "~2"; }
+      { name = "retry"; spec = "0.6.0"; }
+      { name = "couch-login"; spec = "~0.1.15"; }
+      { name = "npmlog"; spec = ""; }
+    ];
+    patchLatest = false;
+    sha1 = "8f338189d32769267886a07ad7b7fd2267446adf";
+    tarball = "http://registry.npmjs.org/npm-registry-client/-/npm-registry-client-0.2.27.tgz";
+  }
+  {
+    name = "npm-user-validate";
+    spec = "0.0.3";
+    version = "0.0.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "818eca4312d13da648f9bc1d7f80bb4f151e0c2e";
+    tarball = "http://registry.npmjs.org/npm-user-validate/-/npm-user-validate-0.0.3.tgz";
+  }
+  {
+    name = "npm2nix";
+    spec = "*";
+    version = "2.0.0";
+    topLevel = true;
+    dependencies = [
+      { name = "semver"; spec = ">=2.0.10 <3.0.0"; }
+      { name = "argparse"; spec = "0.1.15"; }
+      { name = "npm-registry-client"; spec = "0.2.27"; }
+      { name = "npmconf"; spec = "0.1.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "9e1ff781524ee313bf64e3b5f390e90ced87ae6d";
+    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-2.0.0.tgz";
+  }
+  {
+    name = "npmconf";
+    spec = "0.1.1";
+    version = "0.1.1";
+    topLevel = false;
+    dependencies = [
+      { name = "config-chain"; spec = "~1.1.1"; }
+      { name = "inherits"; spec = "~1.0.0"; }
+      { name = "once"; spec = "~1.1.1"; }
+      { name = "mkdirp"; spec = "~0.3.3"; }
+      { name = "osenv"; spec = "0.0.3"; }
+      { name = "nopt"; spec = "2"; }
+      { name = "semver"; spec = "2"; }
+      { name = "ini"; spec = "~1.1.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "7a254182591ca22d77b2faecc0d17e0f9bdf25a1";
+    tarball = "http://registry.npmjs.org/npmconf/-/npmconf-0.1.1.tgz";
+  }
+  {
+    name = "npmconf";
+    spec = "~0.1.1";
+    version = "0.1.1";
+    topLevel = false;
+    dependencies = [
+      { name = "config-chain"; spec = "~1.1.1"; }
+      { name = "inherits"; spec = "~1.0.0"; }
+      { name = "once"; spec = "~1.1.1"; }
+      { name = "mkdirp"; spec = "~0.3.3"; }
+      { name = "osenv"; spec = "0.0.3"; }
+      { name = "nopt"; spec = "2"; }
+      { name = "semver"; spec = "2"; }
+      { name = "ini"; spec = "~1.1.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "7a254182591ca22d77b2faecc0d17e0f9bdf25a1";
+    tarball = "http://registry.npmjs.org/npmconf/-/npmconf-0.1.1.tgz";
+  }
+  {
+    name = "npmlog";
+    spec = "";
+    version = "0.0.4";
+    topLevel = false;
+    dependencies = [
+      { name = "ansi"; spec = "~0.1.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "a12a7418606b7e0183a2851d97a8729b9a0f3837";
+    tarball = "http://registry.npmjs.org/npmlog/-/npmlog-0.0.4.tgz";
+  }
+  {
+    name = "npmlog";
+    spec = "0";
+    version = "0.0.4";
+    topLevel = false;
+    dependencies = [
+      { name = "ansi"; spec = "~0.1.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "a12a7418606b7e0183a2851d97a8729b9a0f3837";
+    tarball = "http://registry.npmjs.org/npmlog/-/npmlog-0.0.4.tgz";
+  }
+  {
+    name = "npmlog";
+    spec = "0.0.4";
+    version = "0.0.4";
+    topLevel = false;
+    dependencies = [
+      { name = "ansi"; spec = "~0.1.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "a12a7418606b7e0183a2851d97a8729b9a0f3837";
+    tarball = "http://registry.npmjs.org/npmlog/-/npmlog-0.0.4.tgz";
+  }
+  {
+    name = "nssocket";
+    spec = "~0.5.1";
+    version = "0.5.1";
+    topLevel = false;
+    dependencies = [
+      { name = "eventemitter2"; spec = "~0.4.11"; }
+      { name = "lazy"; spec = "~1.0.11"; }
+    ];
+    patchLatest = false;
+    sha1 = "11f0428335ad8d89ff9cf96ab2852a23b1b33b71";
+    tarball = "http://registry.npmjs.org/nssocket/-/nssocket-0.5.1.tgz";
+  }
+  {
+    name = "oauth-sign";
+    spec = "~0.2.0";
+    version = "0.2.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "a0e6a1715daed062f322b622b7fe5afd1035b6e2";
+    tarball = "http://registry.npmjs.org/oauth-sign/-/oauth-sign-0.2.0.tgz";
+  }
+  {
+    name = "oauth-sign";
+    spec = "~0.3.0";
+    version = "0.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "cb540f93bb2b22a7d5941691a288d60e8ea9386e";
+    tarball = "http://registry.npmjs.org/oauth-sign/-/oauth-sign-0.3.0.tgz";
+  }
+  {
+    name = "once";
+    spec = "1.1.1";
+    version = "1.1.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "9db574933ccb08c3a7614d154032c09ea6f339e7";
+    tarball = "http://registry.npmjs.org/once/-/once-1.1.1.tgz";
+  }
+  {
+    name = "once";
+    spec = "~1.1.1";
+    version = "1.1.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "9db574933ccb08c3a7614d154032c09ea6f339e7";
+    tarball = "http://registry.npmjs.org/once/-/once-1.1.1.tgz";
+  }
+  {
+    name = "opener";
+    spec = "~1.3.0";
+    version = "1.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "130ba662213fa842edb4cd0361d31a15301a43e2";
+    tarball = "http://registry.npmjs.org/opener/-/opener-1.3.0.tgz";
+  }
+  {
+    name = "optimist";
+    spec = "*";
+    version = "0.6.0";
+    topLevel = true;
+    dependencies = [
+      { name = "wordwrap"; spec = "~0.0.2"; }
+      { name = "minimist"; spec = "~0.0.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "69424826f3405f79f142e6fc3d9ae58d4dbb9200";
+    tarball = "http://registry.npmjs.org/optimist/-/optimist-0.6.0.tgz";
+  }
+  {
+    name = "optimist";
+    spec = "0.2";
+    version = "0.2.8";
+    topLevel = false;
+    dependencies = [
+      { name = "wordwrap"; spec = ">=0.0.1 <0.1.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "e981ab7e268b457948593b55674c099a815cac31";
+    tarball = "http://registry.npmjs.org/optimist/-/optimist-0.2.8.tgz";
+  }
+  {
+    name = "optimist";
+    spec = "0.3.5";
+    version = "0.3.5";
+    topLevel = false;
+    dependencies = [
+      { name = "wordwrap"; spec = "~0.0.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "03654b52417030312d109f39b159825b60309304";
+    tarball = "http://registry.npmjs.org/optimist/-/optimist-0.3.5.tgz";
+  }
+  {
+    name = "optimist";
+    spec = "0.3.x";
+    version = "0.3.7";
+    topLevel = false;
+    dependencies = [
+      { name = "wordwrap"; spec = "~0.0.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "c90941ad59e4273328923074d2cf2e7cbc6ec0d9";
+    tarball = "http://registry.npmjs.org/optimist/-/optimist-0.3.7.tgz";
+  }
+  {
+    name = "optimist";
+    spec = "0.4.0";
+    version = "0.4.0";
+    topLevel = false;
+    dependencies = [
+      { name = "wordwrap"; spec = "~0.0.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "cb8ec37f2fe3aa9864cb67a275250e7e19620a25";
+    tarball = "http://registry.npmjs.org/optimist/-/optimist-0.4.0.tgz";
+  }
+  {
+    name = "optimist";
+    spec = "~0.3.5";
+    version = "0.3.7";
+    topLevel = false;
+    dependencies = [
+      { name = "wordwrap"; spec = "~0.0.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "c90941ad59e4273328923074d2cf2e7cbc6ec0d9";
+    tarball = "http://registry.npmjs.org/optimist/-/optimist-0.3.7.tgz";
+  }
+  {
+    name = "optparse";
+    spec = "*";
+    version = "1.0.4";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "c062579d2d05d243c221a304a71e0c979623ccf1";
+    tarball = "http://registry.npmjs.org/optparse/-/optparse-1.0.4.tgz";
+  }
+  {
+    name = "optparse";
+    spec = ">= 1.0.3";
+    version = "1.0.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "c062579d2d05d243c221a304a71e0c979623ccf1";
+    tarball = "http://registry.npmjs.org/optparse/-/optparse-1.0.4.tgz";
+  }
+  {
+    name = "osenv";
+    spec = "0";
+    version = "0.0.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "cd6ad8ddb290915ad9e22765576025d411f29cb6";
+    tarball = "http://registry.npmjs.org/osenv/-/osenv-0.0.3.tgz";
+  }
+  {
+    name = "osenv";
+    spec = "0.0.3";
+    version = "0.0.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "cd6ad8ddb290915ad9e22765576025d411f29cb6";
+    tarball = "http://registry.npmjs.org/osenv/-/osenv-0.0.3.tgz";
+  }
+  {
+    name = "owl-deepcopy";
+    spec = "~0.0.1";
+    version = "0.0.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "056c40e1af73dff6e2c7afae983d2a7760fdff88";
+    tarball = "http://registry.npmjs.org/owl-deepcopy/-/owl-deepcopy-0.0.2.tgz";
+  }
+  {
+    name = "passport";
+    spec = "*";
+    version = "0.1.17";
+    topLevel = true;
+    dependencies = [
+      { name = "pkginfo"; spec = "0.2.x"; }
+      { name = "pause"; spec = "0.0.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "2cd503be0d35f33a9726d00ad2654786643a23fc";
+    tarball = "http://registry.npmjs.org/passport/-/passport-0.1.17.tgz";
+  }
+  {
+    name = "passport";
+    spec = "~0.1.1";
+    version = "0.1.17";
+    topLevel = false;
+    dependencies = [
+      { name = "pkginfo"; spec = "0.2.x"; }
+      { name = "pause"; spec = "0.0.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "2cd503be0d35f33a9726d00ad2654786643a23fc";
+    tarball = "http://registry.npmjs.org/passport/-/passport-0.1.17.tgz";
+  }
+  {
+    name = "passport";
+    spec = "~0.1.3";
+    version = "0.1.17";
+    topLevel = false;
+    dependencies = [
+      { name = "pkginfo"; spec = "0.2.x"; }
+      { name = "pause"; spec = "0.0.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "2cd503be0d35f33a9726d00ad2654786643a23fc";
+    tarball = "http://registry.npmjs.org/passport/-/passport-0.1.17.tgz";
+  }
+  {
+    name = "passport-http";
+    spec = "*";
+    version = "0.2.2";
+    topLevel = true;
+    dependencies = [
+      { name = "pkginfo"; spec = "0.2.x"; }
+      { name = "passport"; spec = "~0.1.3"; }
+    ];
+    patchLatest = false;
+    sha1 = "2501314c0ff4a831e8a51ccfdb1b68f5c7cbc9f6";
+    tarball = "http://registry.npmjs.org/passport-http/-/passport-http-0.2.2.tgz";
+  }
+  {
+    name = "passport-local";
+    spec = "*";
+    version = "0.1.6";
+    topLevel = true;
+    dependencies = [
+      { name = "pkginfo"; spec = "0.2.x"; }
+      { name = "passport"; spec = "~0.1.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "fb0cf828048db931b67d19985c7aa06dd377a9db";
+    tarball = "http://registry.npmjs.org/passport-local/-/passport-local-0.1.6.tgz";
+  }
+  {
+    name = "pause";
+    spec = "0.0.1";
+    version = "0.0.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1d408b3fdb76923b9543d96fb4c9dfd535d9cb5d";
+    tarball = "http://registry.npmjs.org/pause/-/pause-0.0.1.tgz";
+  }
+  {
+    name = "pkginfo";
+    spec = "0.2.x";
+    version = "0.2.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "7239c42a5ef6c30b8f328439d9b9ff71042490f8";
+    tarball = "http://registry.npmjs.org/pkginfo/-/pkginfo-0.2.3.tgz";
+  }
+  {
+    name = "pkginfo";
+    spec = "0.3.0";
+    version = "0.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "726411401039fe9b009eea86614295d5f3a54276";
+    tarball = "http://registry.npmjs.org/pkginfo/-/pkginfo-0.3.0.tgz";
+  }
+  {
+    name = "pkginfo";
+    spec = "0.3.x";
+    version = "0.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "726411401039fe9b009eea86614295d5f3a54276";
+    tarball = "http://registry.npmjs.org/pkginfo/-/pkginfo-0.3.0.tgz";
+  }
+  {
+    name = "pkginfo";
+    spec = "0.x.x";
+    version = "0.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "726411401039fe9b009eea86614295d5f3a54276";
+    tarball = "http://registry.npmjs.org/pkginfo/-/pkginfo-0.3.0.tgz";
+  }
+  {
+    name = "posix-getopt";
+    spec = "1.0.0";
+    version = "1.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "42a90eca6119014c78bc4b9b70463d294db1aa87";
+    tarball = "http://registry.npmjs.org/posix-getopt/-/posix-getopt-1.0.0.tgz";
+  }
+  {
+    name = "promise";
+    spec = "~2.0";
+    version = "2.0.0";
+    topLevel = false;
+    dependencies = [
+      { name = "is-promise"; spec = "~1"; }
+    ];
+    patchLatest = false;
+    sha1 = "46648aa9d605af5d2e70c3024bf59436da02b80e";
+    tarball = "http://registry.npmjs.org/promise/-/promise-2.0.0.tgz";
+  }
+  {
+    name = "prompt";
+    spec = "0.2.9";
+    version = "0.2.9";
+    topLevel = false;
+    dependencies = [
+      { name = "pkginfo"; spec = "0.x.x"; }
+      { name = "read"; spec = "1.0.x"; }
+      { name = "revalidator"; spec = "0.1.x"; }
+      { name = "utile"; spec = "0.1.x"; }
+      { name = "winston"; spec = "0.6.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "fdd01e3f9654d0c44fbb8671f8d3f6ca009e3c16";
+    tarball = "http://registry.npmjs.org/prompt/-/prompt-0.2.9.tgz";
+  }
+  {
+    name = "promzard";
+    spec = "~0.2.0";
+    version = "0.2.0";
+    topLevel = false;
+    dependencies = [
+      { name = "read"; spec = "1"; }
+    ];
+    patchLatest = false;
+    sha1 = "766f33807faadeeecacf8057024fe5f753cfa3c1";
+    tarball = "http://registry.npmjs.org/promzard/-/promzard-0.2.0.tgz";
+  }
+  {
+    name = "proto-list";
+    spec = "~1.2.1";
+    version = "1.2.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "48b88798261ec2c4a785720cdfec6200d57d3326";
+    tarball = "http://registry.npmjs.org/proto-list/-/proto-list-1.2.2.tgz";
+  }
+  {
+    name = "ps-tree";
+    spec = "0.0.x";
+    version = "0.0.3";
+    topLevel = false;
+    dependencies = [
+      { name = "event-stream"; spec = "~0.5"; }
+    ];
+    patchLatest = false;
+    sha1 = "dbf8d752a7fe22fa7d58635689499610e9276ddc";
+    tarball = "http://registry.npmjs.org/ps-tree/-/ps-tree-0.0.3.tgz";
+  }
+  {
+    name = "qs";
+    spec = "0.5.1";
+    version = "0.5.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "9f6bf5d9ac6c76384e95d36d15b48980e5e4add0";
+    tarball = "http://registry.npmjs.org/qs/-/qs-0.5.1.tgz";
+  }
+  {
+    name = "qs";
+    spec = "0.5.5";
+    version = "0.5.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "b07f0d7ffe3efc6fc2fcde6c66a20775641423f3";
+    tarball = "http://registry.npmjs.org/qs/-/qs-0.5.5.tgz";
+  }
+  {
+    name = "qs";
+    spec = "0.6.5";
+    version = "0.6.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "294b268e4b0d4250f6dde19b3b8b34935dff14ef";
+    tarball = "http://registry.npmjs.org/qs/-/qs-0.6.5.tgz";
+  }
+  {
+    name = "qs";
+    spec = "~0.5.4";
+    version = "0.5.6";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "31b1ad058567651c526921506b9a8793911a0384";
+    tarball = "http://registry.npmjs.org/qs/-/qs-0.5.6.tgz";
+  }
+  {
+    name = "qs";
+    spec = "~0.6.0";
+    version = "0.6.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "294b268e4b0d4250f6dde19b3b8b34935dff14ef";
+    tarball = "http://registry.npmjs.org/qs/-/qs-0.6.5.tgz";
+  }
+  {
+    name = "range-parser";
+    spec = "0.0.4";
+    version = "0.0.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "c0427ffef51c10acba0782a46c9602e744ff620b";
+    tarball = "http://registry.npmjs.org/range-parser/-/range-parser-0.0.4.tgz";
+  }
+  {
+    name = "rbytes";
+    spec = "*";
+    version = "1.0.0";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "4eeb85c457f710d8147329d5eed5cd02c798fa4d";
+    tarball = "http://registry.npmjs.org/rbytes/-/rbytes-1.0.0.tgz";
+  }
+  {
+    name = "read";
+    spec = "1";
+    version = "1.0.4";
+    topLevel = false;
+    dependencies = [
+      { name = "mute-stream"; spec = "~0.0.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "c2374be81787fc8633602a1b98232569d52fc655";
+    tarball = "http://registry.npmjs.org/read/-/read-1.0.4.tgz";
+  }
+  {
+    name = "read";
+    spec = "1.0.x";
+    version = "1.0.4";
+    topLevel = false;
+    dependencies = [
+      { name = "mute-stream"; spec = "~0.0.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "c2374be81787fc8633602a1b98232569d52fc655";
+    tarball = "http://registry.npmjs.org/read/-/read-1.0.4.tgz";
+  }
+  {
+    name = "read";
+    spec = "~1.0.1";
+    version = "1.0.4";
+    topLevel = false;
+    dependencies = [
+      { name = "mute-stream"; spec = "~0.0.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "c2374be81787fc8633602a1b98232569d52fc655";
+    tarball = "http://registry.npmjs.org/read/-/read-1.0.4.tgz";
+  }
+  {
+    name = "read";
+    spec = "~1.0.4";
+    version = "1.0.4";
+    topLevel = false;
+    dependencies = [
+      { name = "mute-stream"; spec = "~0.0.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "c2374be81787fc8633602a1b98232569d52fc655";
+    tarball = "http://registry.npmjs.org/read/-/read-1.0.4.tgz";
+  }
+  {
+    name = "read-installed";
+    spec = "~0.2.2";
+    version = "0.2.2";
+    topLevel = false;
+    dependencies = [
+      { name = "semver"; spec = "2"; }
+      { name = "slide"; spec = "~1.1.3"; }
+      { name = "read-package-json"; spec = "1"; }
+      { name = "graceful-fs"; spec = "~1.2.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "f570ac84fb29c75f16faa3940a8c1e602c8eecab";
+    tarball = "http://registry.npmjs.org/read-installed/-/read-installed-0.2.2.tgz";
+  }
+  {
+    name = "read-package-json";
+    spec = "1";
+    version = "1.1.0";
+    topLevel = false;
+    dependencies = [
+      { name = "glob"; spec = "~3.2.1"; }
+      { name = "lru-cache"; spec = "2"; }
+      { name = "normalize-package-data"; spec = "~0.2"; }
+      { name = "graceful-fs"; spec = "~1.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "6447ac4d10788c76d0682cf2086eaa809076aafc";
+    tarball = "http://registry.npmjs.org/read-package-json/-/read-package-json-1.1.0.tgz";
+  }
+  {
+    name = "read-package-json";
+    spec = "~1.1.0";
+    version = "1.1.0";
+    topLevel = false;
+    dependencies = [
+      { name = "glob"; spec = "~3.2.1"; }
+      { name = "lru-cache"; spec = "2"; }
+      { name = "normalize-package-data"; spec = "~0.2"; }
+      { name = "graceful-fs"; spec = "~1.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "6447ac4d10788c76d0682cf2086eaa809076aafc";
+    tarball = "http://registry.npmjs.org/read-package-json/-/read-package-json-1.1.0.tgz";
+  }
+  {
+    name = "readable-stream";
+    spec = "~1.0.2";
+    version = "1.0.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "213ce36864fc1f0d4e98e03b9eb92c64042299d4";
+    tarball = "http://registry.npmjs.org/readable-stream/-/readable-stream-1.0.2.tgz";
+  }
+  {
+    name = "readdirp";
+    spec = "~0.2.3";
+    version = "0.2.5";
+    topLevel = false;
+    dependencies = [
+      { name = "minimatch"; spec = ">=0.2.4"; }
+    ];
+    patchLatest = false;
+    sha1 = "c4c276e52977ae25db5191fe51d008550f15d9bb";
+    tarball = "http://registry.npmjs.org/readdirp/-/readdirp-0.2.5.tgz";
+  }
+  {
+    name = "redis";
+    spec = "*";
+    version = "0.8.4";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "14609f26414e211c31e3cd07dc79b04bf9ff1980";
+    tarball = "http://registry.npmjs.org/redis/-/redis-0.8.4.tgz";
+  }
+  {
+    name = "redis";
+    spec = "0.7.2";
+    version = "0.7.2";
+    topLevel = false;
+    dependencies = [
+      { name = "hiredis"; spec = "*"; }
+    ];
+    patchLatest = false;
+    sha1 = "fa557fef4985ab3e3384fdc5be6e2541a0bb49af";
+    tarball = "http://registry.npmjs.org/redis/-/redis-0.7.2.tgz";
+  }
+  {
+    name = "redis";
+    spec = ">= 0.6.6";
+    version = "0.8.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "14609f26414e211c31e3cd07dc79b04bf9ff1980";
+    tarball = "http://registry.npmjs.org/redis/-/redis-0.8.4.tgz";
+  }
+  {
+    name = "reds";
+    spec = "0.1.4";
+    version = "0.1.4";
+    topLevel = false;
+    dependencies = [
+      { name = "natural"; spec = "0.0.69"; }
+      { name = "redis"; spec = ">= 0.6.6"; }
+    ];
+    patchLatest = false;
+    sha1 = "a97819180c30f6ecd01cad03cecb574eaabb4bee";
+    tarball = "http://registry.npmjs.org/reds/-/reds-0.1.4.tgz";
+  }
+  {
+    name = "regexp-clone";
+    spec = "0.0.1";
+    version = "0.0.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "a7c2e09891fdbf38fbb10d376fb73003e68ac589";
+    tarball = "http://registry.npmjs.org/regexp-clone/-/regexp-clone-0.0.1.tgz";
+  }
+  {
+    name = "request";
+    spec = "2";
+    version = "2.22.0";
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; spec = "~0.6.0"; }
+      { name = "json-stringify-safe"; spec = "~4.0.0"; }
+      { name = "forever-agent"; spec = "~0.5.0"; }
+      { name = "tunnel-agent"; spec = "~0.3.0"; }
+      { name = "http-signature"; spec = "~0.10.0"; }
+      { name = "hawk"; spec = "~0.13.0"; }
+      { name = "aws-sign"; spec = "~0.3.0"; }
+      { name = "oauth-sign"; spec = "~0.3.0"; }
+      { name = "cookie-jar"; spec = "~0.3.0"; }
+      { name = "node-uuid"; spec = "~1.4.0"; }
+      { name = "mime"; spec = "~1.2.9"; }
+      { name = "form-data"; spec = "0.0.8"; }
+    ];
+    patchLatest = false;
+    sha1 = "b883a769cc4a909571eb5004b344c43cf7e51592";
+    tarball = "http://registry.npmjs.org/request/-/request-2.22.0.tgz";
+  }
+  {
+    name = "request";
+    spec = "2 >=2.14";
+    version = "2.22.0";
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; spec = "~0.6.0"; }
+      { name = "json-stringify-safe"; spec = "~4.0.0"; }
+      { name = "forever-agent"; spec = "~0.5.0"; }
+      { name = "tunnel-agent"; spec = "~0.3.0"; }
+      { name = "http-signature"; spec = "~0.10.0"; }
+      { name = "hawk"; spec = "~0.13.0"; }
+      { name = "aws-sign"; spec = "~0.3.0"; }
+      { name = "oauth-sign"; spec = "~0.3.0"; }
+      { name = "cookie-jar"; spec = "~0.3.0"; }
+      { name = "node-uuid"; spec = "~1.4.0"; }
+      { name = "mime"; spec = "~1.2.9"; }
+      { name = "form-data"; spec = "0.0.8"; }
+    ];
+    patchLatest = false;
+    sha1 = "b883a769cc4a909571eb5004b344c43cf7e51592";
+    tarball = "http://registry.npmjs.org/request/-/request-2.22.0.tgz";
+  }
+  {
+    name = "request";
+    spec = "2 >=2.20.0";
+    version = "2.22.0";
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; spec = "~0.6.0"; }
+      { name = "json-stringify-safe"; spec = "~4.0.0"; }
+      { name = "forever-agent"; spec = "~0.5.0"; }
+      { name = "tunnel-agent"; spec = "~0.3.0"; }
+      { name = "http-signature"; spec = "~0.10.0"; }
+      { name = "hawk"; spec = "~0.13.0"; }
+      { name = "aws-sign"; spec = "~0.3.0"; }
+      { name = "oauth-sign"; spec = "~0.3.0"; }
+      { name = "cookie-jar"; spec = "~0.3.0"; }
+      { name = "node-uuid"; spec = "~1.4.0"; }
+      { name = "mime"; spec = "~1.2.9"; }
+      { name = "form-data"; spec = "0.0.8"; }
+    ];
+    patchLatest = false;
+    sha1 = "b883a769cc4a909571eb5004b344c43cf7e51592";
+    tarball = "http://registry.npmjs.org/request/-/request-2.22.0.tgz";
+  }
+  {
+    name = "request";
+    spec = "2.16.x";
+    version = "2.16.6";
+    topLevel = false;
+    dependencies = [
+      { name = "form-data"; spec = "~0.0.3"; }
+      { name = "mime"; spec = "~1.2.7"; }
+      { name = "hawk"; spec = "~0.10.2"; }
+      { name = "node-uuid"; spec = "~1.4.0"; }
+      { name = "cookie-jar"; spec = "~0.2.0"; }
+      { name = "aws-sign"; spec = "~0.2.0"; }
+      { name = "oauth-sign"; spec = "~0.2.0"; }
+      { name = "forever-agent"; spec = "~0.2.0"; }
+      { name = "tunnel-agent"; spec = "~0.2.0"; }
+      { name = "json-stringify-safe"; spec = "~3.0.0"; }
+      { name = "qs"; spec = "~0.5.4"; }
+    ];
+    patchLatest = false;
+    sha1 = "872fe445ae72de266b37879d6ad7dc948fa01cad";
+    tarball = "http://registry.npmjs.org/request/-/request-2.16.6.tgz";
+  }
+  {
+    name = "request";
+    spec = "2.9.x";
+    version = "2.9.203";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "6c1711a5407fb94a114219563e44145bcbf4723a";
+    tarball = "http://registry.npmjs.org/request/-/request-2.9.203.tgz";
+  }
+  {
+    name = "request";
+    spec = "~2";
+    version = "2.22.0";
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; spec = "~0.6.0"; }
+      { name = "json-stringify-safe"; spec = "~4.0.0"; }
+      { name = "forever-agent"; spec = "~0.5.0"; }
+      { name = "tunnel-agent"; spec = "~0.3.0"; }
+      { name = "http-signature"; spec = "~0.10.0"; }
+      { name = "hawk"; spec = "~0.13.0"; }
+      { name = "aws-sign"; spec = "~0.3.0"; }
+      { name = "oauth-sign"; spec = "~0.3.0"; }
+      { name = "cookie-jar"; spec = "~0.3.0"; }
+      { name = "node-uuid"; spec = "~1.4.0"; }
+      { name = "mime"; spec = "~1.2.9"; }
+      { name = "form-data"; spec = "0.0.8"; }
+    ];
+    patchLatest = false;
+    sha1 = "b883a769cc4a909571eb5004b344c43cf7e51592";
+    tarball = "http://registry.npmjs.org/request/-/request-2.22.0.tgz";
+  }
+  {
+    name = "request";
+    spec = "~2.21.0";
+    version = "2.21.0";
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; spec = "~0.6.0"; }
+      { name = "json-stringify-safe"; spec = "~4.0.0"; }
+      { name = "forever-agent"; spec = "~0.5.0"; }
+      { name = "tunnel-agent"; spec = "~0.3.0"; }
+      { name = "http-signature"; spec = "~0.9.11"; }
+      { name = "hawk"; spec = "~0.13.0"; }
+      { name = "aws-sign"; spec = "~0.3.0"; }
+      { name = "oauth-sign"; spec = "~0.3.0"; }
+      { name = "cookie-jar"; spec = "~0.3.0"; }
+      { name = "node-uuid"; spec = "~1.4.0"; }
+      { name = "mime"; spec = "~1.2.9"; }
+      { name = "form-data"; spec = "0.0.8"; }
+    ];
+    patchLatest = false;
+    sha1 = "5728ab9c45e5a87c99daccd530298b6673a868d7";
+    tarball = "http://registry.npmjs.org/request/-/request-2.21.0.tgz";
+  }
+  {
+    name = "restify";
+    spec = "2.4.1";
+    version = "2.4.1";
+    topLevel = false;
+    dependencies = [
+      { name = "assert-plus"; spec = "0.1.2"; }
+      { name = "backoff"; spec = "2.1.0"; }
+      { name = "bunyan"; spec = "0.21.1"; }
+      { name = "deep-equal"; spec = "0.0.0"; }
+      { name = "formidable"; spec = "1.0.13"; }
+      { name = "http-signature"; spec = "0.9.11"; }
+      { name = "keep-alive-agent"; spec = "0.0.1"; }
+      { name = "lru-cache"; spec = "2.3.0"; }
+      { name = "mime"; spec = "1.2.9"; }
+      { name = "negotiator"; spec = "0.2.5"; }
+      { name = "node-uuid"; spec = "1.4.0"; }
+      { name = "once"; spec = "1.1.1"; }
+      { name = "qs"; spec = "0.5.5"; }
+      { name = "semver"; spec = "1.1.4"; }
+      { name = "spdy"; spec = "1.7.1"; }
+      { name = "verror"; spec = "1.3.6"; }
+      { name = "dtrace-provider"; spec = "0.2.8"; }
+    ];
+    patchLatest = false;
+    sha1 = "35790a052bd0927e7f6a06cc3d079e56fabc9371";
+    tarball = "http://registry.npmjs.org/restify/-/restify-2.4.1.tgz";
+  }
+  {
+    name = "retry";
+    spec = "0.6.0";
+    version = "0.6.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1c010713279a6fd1e8def28af0c3ff1871caa537";
+    tarball = "http://registry.npmjs.org/retry/-/retry-0.6.0.tgz";
+  }
+  {
+    name = "retry";
+    spec = "~0.6.0";
+    version = "0.6.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1c010713279a6fd1e8def28af0c3ff1871caa537";
+    tarball = "http://registry.npmjs.org/retry/-/retry-0.6.0.tgz";
+  }
+  {
+    name = "revalidator";
+    spec = "0.1.x";
+    version = "0.1.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "205bc02e4186e63e82a0837498f29ba287be3861";
+    tarball = "http://registry.npmjs.org/revalidator/-/revalidator-0.1.5.tgz";
+  }
+  {
+    name = "rimraf";
+    spec = "1.x.x";
+    version = "1.0.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "be4801ff76c2ba6f1c50c78e9700eb1d21f239f1";
+    tarball = "http://registry.npmjs.org/rimraf/-/rimraf-1.0.9.tgz";
+  }
+  {
+    name = "rimraf";
+    spec = "2";
+    version = "2.2.0";
+    topLevel = false;
+    dependencies = [
+      { name = "graceful-fs"; spec = "~1"; }
+    ];
+    patchLatest = false;
+    sha1 = "70797542e81a935849443d7b69bec612ca74c96e";
+    tarball = "http://registry.npmjs.org/rimraf/-/rimraf-2.2.0.tgz";
+  }
+  {
+    name = "rimraf";
+    spec = "~2";
+    version = "2.2.0";
+    topLevel = false;
+    dependencies = [
+      { name = "graceful-fs"; spec = "~1"; }
+    ];
+    patchLatest = false;
+    sha1 = "70797542e81a935849443d7b69bec612ca74c96e";
+    tarball = "http://registry.npmjs.org/rimraf/-/rimraf-2.2.0.tgz";
+  }
+  {
+    name = "rimraf";
+    spec = "~2.1.4";
+    version = "2.1.4";
+    topLevel = false;
+    dependencies = [
+      { name = "graceful-fs"; spec = "~1"; }
+    ];
+    patchLatest = false;
+    sha1 = "5a6eb62eeda068f51ede50f29b3e5cd22f3d9bb2";
+    tarball = "http://registry.npmjs.org/rimraf/-/rimraf-2.1.4.tgz";
+  }
+  {
+    name = "rimraf";
+    spec = "~2.2.0";
+    version = "2.2.0";
+    topLevel = false;
+    dependencies = [
+      { name = "graceful-fs"; spec = "~1"; }
+    ];
+    patchLatest = false;
+    sha1 = "70797542e81a935849443d7b69bec612ca74c96e";
+    tarball = "http://registry.npmjs.org/rimraf/-/rimraf-2.2.0.tgz";
+  }
+  {
+    name = "s3http";
+    spec = "*";
+    version = "0.0.2";
+    topLevel = true;
+    dependencies = [
+      { name = "aws-sdk"; spec = ">=1.2.0 <2"; }
+      { name = "commander"; spec = "0.5.1"; }
+      { name = "http-auth"; spec = "1.2.7"; }
+    ];
+    patchLatest = false;
+    sha1 = "e0c8bdee66981c6ddef2dfc41bb1fe51765984e5";
+    tarball = "http://registry.npmjs.org/s3http/-/s3http-0.0.2.tgz";
+  }
+  {
+    name = "sax";
+    spec = "0.5.x";
+    version = "0.5.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "a3a4e1a9cf182bb547156c5232a49a1c3732ff7d";
+    tarball = "http://registry.npmjs.org/sax/-/sax-0.5.4.tgz";
+  }
+  {
+    name = "sax";
+    spec = ">=0.4.2";
+    version = "0.5.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "a3a4e1a9cf182bb547156c5232a49a1c3732ff7d";
+    tarball = "http://registry.npmjs.org/sax/-/sax-0.5.4.tgz";
+  }
+  {
+    name = "semver";
+    spec = "*";
+    version = "2.0.10";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+  }
+  {
+    name = "semver";
+    spec = "1.1.4";
+    version = "1.1.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "2e5a4e72bab03472cc97f72753b4508912ef5540";
+    tarball = "http://registry.npmjs.org/semver/-/semver-1.1.4.tgz";
+  }
+  {
+    name = "semver";
+    spec = "2";
+    version = "2.0.10";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+  }
+  {
+    name = "semver";
+    spec = "2.x";
+    version = "2.0.10";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+  }
+  {
+    name = "semver";
+    spec = ">=2.0.10 <3.0.0";
+    version = "2.0.10";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+  }
+  {
+    name = "semver";
+    spec = "~2.0.5";
+    version = "2.0.10";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+  }
+  {
+    name = "semver";
+    spec = "~2.0.7";
+    version = "2.0.10";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+  }
+  {
+    name = "semver";
+    spec = "~2.0.8";
+    version = "2.0.10";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+  }
+  {
+    name = "send";
+    spec = "*";
+    version = "0.1.3";
+    topLevel = false;
+    dependencies = [
+      { name = "debug"; spec = "*"; }
+      { name = "mime"; spec = "~1.2.9"; }
+      { name = "fresh"; spec = "0.1.0"; }
+      { name = "range-parser"; spec = "0.0.4"; }
+    ];
+    patchLatest = false;
+    sha1 = "a7875daa6802d31e2ce32fdad98d3664c51ecea3";
+    tarball = "http://registry.npmjs.org/send/-/send-0.1.3.tgz";
+  }
+  {
+    name = "send";
+    spec = "0.1.0";
+    version = "0.1.0";
+    topLevel = false;
+    dependencies = [
+      { name = "debug"; spec = "*"; }
+      { name = "mime"; spec = "1.2.6"; }
+      { name = "fresh"; spec = "0.1.0"; }
+      { name = "range-parser"; spec = "0.0.4"; }
+    ];
+    patchLatest = false;
+    sha1 = "cfb08ebd3cec9b7fc1a37d9ff9e875a971cf4640";
+    tarball = "http://registry.npmjs.org/send/-/send-0.1.0.tgz";
+  }
+  {
+    name = "send";
+    spec = "0.1.3";
+    version = "0.1.3";
+    topLevel = false;
+    dependencies = [
+      { name = "debug"; spec = "*"; }
+      { name = "mime"; spec = "~1.2.9"; }
+      { name = "fresh"; spec = "0.1.0"; }
+      { name = "range-parser"; spec = "0.0.4"; }
+    ];
+    patchLatest = false;
+    sha1 = "a7875daa6802d31e2ce32fdad98d3664c51ecea3";
+    tarball = "http://registry.npmjs.org/send/-/send-0.1.3.tgz";
+  }
+  {
+    name = "sequence";
+    spec = ">= 2.2.1";
+    version = "2.2.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "7f5617895d44351c0a047e764467690490a16b03";
+    tarball = "http://registry.npmjs.org/sequence/-/sequence-2.2.1.tgz";
+  }
+  {
+    name = "sha";
+    spec = "~1.0.1";
+    version = "1.0.1";
+    topLevel = false;
+    dependencies = [
+      { name = "graceful-fs"; spec = "1.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "9b87a92113103e7406f7e7ef00006f3fa1975122";
+    tarball = "http://registry.npmjs.org/sha/-/sha-1.0.1.tgz";
+  }
+  {
+    name = "shelljs";
+    spec = "0.1.x";
+    version = "0.1.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "dfbbe78d56c3c0168d2fb79e10ecd1dbcb07ec0e";
+    tarball = "http://registry.npmjs.org/shelljs/-/shelljs-0.1.4.tgz";
+  }
+  {
+    name = "should";
+    spec = "*";
+    version = "1.2.2";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "0f03f775066d9ea2632690c917b12824fcc1d582";
+    tarball = "http://registry.npmjs.org/should/-/should-1.2.2.tgz";
+  }
+  {
+    name = "sigmund";
+    spec = "~1.0.0";
+    version = "1.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "66a2b3a749ae8b5fb89efd4fcc01dc94fbe02296";
+    tarball = "http://registry.npmjs.org/sigmund/-/sigmund-1.0.0.tgz";
+  }
+  {
+    name = "sliced";
+    spec = "0.0.3";
+    version = "0.0.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "4f0bac2171eb17162c3ba6df81f5cf040f7c7e50";
+    tarball = "http://registry.npmjs.org/sliced/-/sliced-0.0.3.tgz";
+  }
+  {
+    name = "sliced";
+    spec = "0.0.4";
+    version = "0.0.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "34f89a6db1f31fa525f5a570f5bcf877cf0955ee";
+    tarball = "http://registry.npmjs.org/sliced/-/sliced-0.0.4.tgz";
+  }
+  {
+    name = "slide";
+    spec = "~1.1.3";
+    version = "1.1.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "2b23f1949b369ed61d22bd6570ff0320302fc8df";
+    tarball = "http://registry.npmjs.org/slide/-/slide-1.1.4.tgz";
+  }
+  {
+    name = "slide";
+    spec = "~1.1.4";
+    version = "1.1.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "2b23f1949b369ed61d22bd6570ff0320302fc8df";
+    tarball = "http://registry.npmjs.org/slide/-/slide-1.1.4.tgz";
+  }
+  {
+    name = "smartdc";
+    spec = "*";
+    version = "7.0.0";
+    topLevel = true;
+    dependencies = [
+      { name = "assert-plus"; spec = "0.1.2"; }
+      { name = "lru-cache"; spec = "2.2.0"; }
+      { name = "nopt"; spec = "2.0.0"; }
+      { name = "restify"; spec = "2.4.1"; }
+      { name = "bunyan"; spec = "0.21.1"; }
+      { name = "clone"; spec = "0.1.6"; }
+      { name = "smartdc-auth"; spec = "1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "367ce274e10e3400e19ec62697f9b5ecb3f25c39";
+    tarball = "http://registry.npmjs.org/smartdc/-/smartdc-7.0.0.tgz";
+  }
+  {
+    name = "smartdc-auth";
+    spec = "1.0.0";
+    version = "1.0.0";
+    topLevel = false;
+    dependencies = [
+      { name = "assert-plus"; spec = "0.1.2"; }
+      { name = "clone"; spec = "0.1.5"; }
+      { name = "ssh-agent"; spec = "0.2.1"; }
+      { name = "once"; spec = "1.1.1"; }
+      { name = "vasync"; spec = "1.3.3"; }
+    ];
+    patchLatest = false;
+    sha1 = "9b8569b914f25da53816fe158f80b6571470f270";
+    tarball = "http://registry.npmjs.org/smartdc-auth/-/smartdc-auth-1.0.0.tgz";
+  }
+  {
+    name = "sntp";
+    spec = "0.1.x";
+    version = "0.1.4";
+    topLevel = false;
+    dependencies = [
+      { name = "hoek"; spec = "0.7.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "5ef481b951a7b29affdf4afd7f26838fc1120f84";
+    tarball = "http://registry.npmjs.org/sntp/-/sntp-0.1.4.tgz";
+  }
+  {
+    name = "sntp";
+    spec = "0.2.x";
+    version = "0.2.4";
+    topLevel = false;
+    dependencies = [
+      { name = "hoek"; spec = "0.9.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "fb885f18b0f3aad189f824862536bceeec750900";
+    tarball = "http://registry.npmjs.org/sntp/-/sntp-0.2.4.tgz";
+  }
+  {
+    name = "sockjs";
+    spec = "*";
+    version = "0.3.7";
+    topLevel = true;
+    dependencies = [
+      { name = "node-uuid"; spec = "1.3.3"; }
+      { name = "faye-websocket"; spec = "0.4.4"; }
+    ];
+    patchLatest = false;
+    sha1 = "2950e0586d8a9d3044958a831ade68db197749cb";
+    tarball = "http://registry.npmjs.org/sockjs/-/sockjs-0.3.7.tgz";
+  }
+  {
+    name = "source-map";
+    spec = "*";
+    version = "0.1.25";
+    topLevel = true;
+    dependencies = [
+      { name = "amdefine"; spec = ">=0.0.4"; }
+    ];
+    patchLatest = false;
+    sha1 = "5851545c1f4a40243829065c20e6f40b023fba1a";
+    tarball = "http://registry.npmjs.org/source-map/-/source-map-0.1.25.tgz";
+  }
+  {
+    name = "source-map";
+    spec = "~0.1.7";
+    version = "0.1.25";
+    topLevel = false;
+    dependencies = [
+      { name = "amdefine"; spec = ">=0.0.4"; }
+    ];
+    patchLatest = false;
+    sha1 = "5851545c1f4a40243829065c20e6f40b023fba1a";
+    tarball = "http://registry.npmjs.org/source-map/-/source-map-0.1.25.tgz";
+  }
+  {
+    name = "spdy";
+    spec = "1.7.1";
+    version = "1.7.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "4fde77e602b20c4ecc39ee8619373dd9bf669152";
+    tarball = "http://registry.npmjs.org/spdy/-/spdy-1.7.1.tgz";
+  }
+  {
+    name = "ssh-agent";
+    spec = "0.2.1";
+    version = "0.2.1";
+    topLevel = false;
+    dependencies = [
+      { name = "ctype"; spec = "0.5.0"; }
+      { name = "posix-getopt"; spec = "1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "3044e9eaeca88a9e6971dd7deb19bdcc20012929";
+    tarball = "http://registry.npmjs.org/ssh-agent/-/ssh-agent-0.2.1.tgz";
+  }
+  {
+    name = "stack-trace";
+    spec = "0.0.x";
+    version = "0.0.6";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1e719bd6a2629ff09c189e17a9ef902a94fc5db0";
+    tarball = "http://registry.npmjs.org/stack-trace/-/stack-trace-0.0.6.tgz";
+  }
+  {
+    name = "stream-counter";
+    spec = "~0.1.0";
+    version = "0.1.0";
+    topLevel = false;
+    dependencies = [
+      { name = "readable-stream"; spec = "~1.0.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "a035e429361fb57f361606e17fcd8a8b9677327b";
+    tarball = "http://registry.npmjs.org/stream-counter/-/stream-counter-0.1.0.tgz";
+  }
+  {
+    name = "stream-splitter-transform";
+    spec = "*";
+    version = "0.0.3";
+    topLevel = true;
+    dependencies = [
+      { name = "buffertools"; spec = ">=1.1.1 <2.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "5ccd3bd497ffee4c2fc7c1cc9d7b697b54c42eef";
+    tarball = "http://registry.npmjs.org/stream-splitter-transform/-/stream-splitter-transform-0.0.3.tgz";
+  }
+  {
+    name = "stylus";
+    spec = "*";
+    version = "0.34.1";
+    topLevel = true;
+    dependencies = [
+      { name = "cssom"; spec = "0.2.x"; }
+      { name = "mkdirp"; spec = "0.3.x"; }
+      { name = "debug"; spec = "*"; }
+    ];
+    patchLatest = false;
+    sha1 = "937d8502a3be4e617d5ad493f204c70a93d95b14";
+    tarball = "http://registry.npmjs.org/stylus/-/stylus-0.34.1.tgz";
+  }
+  {
+    name = "stylus";
+    spec = "0.27.2";
+    version = "0.27.2";
+    topLevel = false;
+    dependencies = [
+      { name = "cssom"; spec = "0.2.x"; }
+      { name = "mkdirp"; spec = "0.3.x"; }
+      { name = "debug"; spec = "*"; }
+    ];
+    patchLatest = false;
+    sha1 = "1121f7f8cd152b0f8a4aa6a24a9adea10c825117";
+    tarball = "http://registry.npmjs.org/stylus/-/stylus-0.27.2.tgz";
+  }
+  {
+    name = "superagent";
+    spec = "0.15.1";
+    version = "0.15.1";
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; spec = "0.6.5"; }
+      { name = "formidable"; spec = "1.0.9"; }
+      { name = "mime"; spec = "1.2.5"; }
+      { name = "emitter-component"; spec = "1.0.0"; }
+      { name = "methods"; spec = "0.0.1"; }
+      { name = "cookiejar"; spec = "1.3.0"; }
+      { name = "debug"; spec = "~0.7.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "f0df9954c2b90f29e4ae54ad308e4a2b432cc56a";
+    tarball = "http://registry.npmjs.org/superagent/-/superagent-0.15.1.tgz";
+  }
+  {
+    name = "supertest";
+    spec = "*";
+    version = "0.7.1";
+    topLevel = true;
+    dependencies = [
+      { name = "superagent"; spec = "0.15.1"; }
+      { name = "methods"; spec = "0.0.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "349a65a8bfb5207250658f71761279ad3a671d88";
+    tarball = "http://registry.npmjs.org/supertest/-/supertest-0.7.1.tgz";
+  }
+  {
+    name = "swig";
+    spec = "*";
+    version = "0.14.0";
+    topLevel = true;
+    dependencies = [
+      { name = "underscore"; spec = ">=1.1.7"; }
+    ];
+    patchLatest = false;
+    sha1 = "544bfb3bd837608873eed6a72c672a28cb1f1b3f";
+    tarball = "http://registry.npmjs.org/swig/-/swig-0.14.0.tgz";
+  }
+  {
+    name = "sylvester";
+    spec = ">= 0.0.12";
+    version = "0.0.21";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "2987b1ce2bd2f38b0dce2a34388884bfa4400ea7";
+    tarball = "http://registry.npmjs.org/sylvester/-/sylvester-0.0.21.tgz";
+  }
+  {
+    name = "sylvester";
+    spec = ">= 0.0.8";
+    version = "0.0.21";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "2987b1ce2bd2f38b0dce2a34388884bfa4400ea7";
+    tarball = "http://registry.npmjs.org/sylvester/-/sylvester-0.0.21.tgz";
+  }
+  {
+    name = "tar";
+    spec = "0";
+    version = "0.1.17";
+    topLevel = false;
+    dependencies = [
+      { name = "inherits"; spec = "1.x"; }
+      { name = "block-stream"; spec = "*"; }
+      { name = "fstream"; spec = "~0.1.8"; }
+    ];
+    patchLatest = false;
+    sha1 = "408c8a95deb8e78a65b59b1a51a333183a32badc";
+    tarball = "http://registry.npmjs.org/tar/-/tar-0.1.17.tgz";
+  }
+  {
+    name = "tar";
+    spec = "~0.1.17";
+    version = "0.1.17";
+    topLevel = false;
+    dependencies = [
+      { name = "inherits"; spec = "1.x"; }
+      { name = "block-stream"; spec = "*"; }
+      { name = "fstream"; spec = "~0.1.8"; }
+    ];
+    patchLatest = false;
+    sha1 = "408c8a95deb8e78a65b59b1a51a333183a32badc";
+    tarball = "http://registry.npmjs.org/tar/-/tar-0.1.17.tgz";
+  }
+  {
+    name = "temp";
+    spec = "*";
+    version = "0.5.1";
+    topLevel = true;
+    dependencies = [
+      { name = "rimraf"; spec = "~2.1.4"; }
+    ];
+    patchLatest = false;
+    sha1 = "77ab19c79aa7b593cbe4fac2441768cad987b8df";
+    tarball = "http://registry.npmjs.org/temp/-/temp-0.5.1.tgz";
+  }
+  {
+    name = "timespan";
+    spec = "2.0.1";
+    version = "2.0.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "479b45875937e14d0f4be1625f2abd08d801f68a";
+    tarball = "http://registry.npmjs.org/timespan/-/timespan-2.0.1.tgz";
+  }
+  {
+    name = "timezone";
+    spec = "*";
+    version = "0.0.22";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "933c3d1950224957a349183e124147dd99e182f5";
+    tarball = "http://registry.npmjs.org/timezone/-/timezone-0.0.22.tgz";
+  }
+  {
+    name = "transformers";
+    spec = "2.0.1";
+    version = "2.0.1";
+    topLevel = false;
+    dependencies = [
+      { name = "promise"; spec = "~2.0"; }
+      { name = "css"; spec = "~1.0.8"; }
+      { name = "uglify-js"; spec = "~2.2.5"; }
+    ];
+    patchLatest = false;
+    sha1 = "352131dfceb93a7532dc7535a4f142510435a394";
+    tarball = "http://registry.npmjs.org/transformers/-/transformers-2.0.1.tgz";
+  }
+  {
+    name = "tunnel-agent";
+    spec = "~0.2.0";
+    version = "0.2.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "6853c2afb1b2109e45629e492bde35f459ea69e8";
+    tarball = "http://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.2.0.tgz";
+  }
+  {
+    name = "tunnel-agent";
+    spec = "~0.3.0";
+    version = "0.3.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "ad681b68f5321ad2827c4cfb1b7d5df2cfe942ee";
+    tarball = "http://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.3.0.tgz";
+  }
+  {
+    name = "uglify-js";
+    spec = "2.3.6";
+    version = "2.3.6";
+    topLevel = false;
+    dependencies = [
+      { name = "async"; spec = "~0.2.6"; }
+      { name = "source-map"; spec = "~0.1.7"; }
+      { name = "optimist"; spec = "~0.3.5"; }
+    ];
+    patchLatest = false;
+    sha1 = "fa0984770b428b7a9b2a8058f46355d14fef211a";
+    tarball = "http://registry.npmjs.org/uglify-js/-/uglify-js-2.3.6.tgz";
+  }
+  {
+    name = "uglify-js";
+    spec = "~2.2.5";
+    version = "2.2.5";
+    topLevel = false;
+    dependencies = [
+      { name = "source-map"; spec = "~0.1.7"; }
+      { name = "optimist"; spec = "~0.3.5"; }
+    ];
+    patchLatest = false;
+    sha1 = "a6e02a70d839792b9780488b7b8b184c095c99c7";
+    tarball = "http://registry.npmjs.org/uglify-js/-/uglify-js-2.2.5.tgz";
+  }
+  {
+    name = "uglify-js";
+    spec = "~2.3.6";
+    version = "2.3.6";
+    topLevel = false;
+    dependencies = [
+      { name = "async"; spec = "~0.2.6"; }
+      { name = "source-map"; spec = "~0.1.7"; }
+      { name = "optimist"; spec = "~0.3.5"; }
+    ];
+    patchLatest = false;
+    sha1 = "fa0984770b428b7a9b2a8058f46355d14fef211a";
+    tarball = "http://registry.npmjs.org/uglify-js/-/uglify-js-2.3.6.tgz";
+  }
+  {
+    name = "uid-number";
+    spec = "0";
+    version = "0.0.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "cefb0fa138d8d8098da71a40a0d04a8327d6e1cc";
+    tarball = "http://registry.npmjs.org/uid-number/-/uid-number-0.0.3.tgz";
+  }
+  {
+    name = "uid2";
+    spec = "0.0.2";
+    version = "0.0.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "107fb155c82c1136620797ed4c88cf2b08f6aab8";
+    tarball = "http://registry.npmjs.org/uid2/-/uid2-0.0.2.tgz";
+  }
+  {
+    name = "underscore";
+    spec = "*";
+    version = "1.5.1";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "d2bde817d176ffade894ab71458e682a14b86dc9";
+    tarball = "http://registry.npmjs.org/underscore/-/underscore-1.5.1.tgz";
+  }
+  {
+    name = "underscore";
+    spec = "1.4.x";
+    version = "1.4.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "61a6a32010622afa07963bf325203cf12239d604";
+    tarball = "http://registry.npmjs.org/underscore/-/underscore-1.4.4.tgz";
+  }
+  {
+    name = "underscore";
+    spec = ">=1.1.7";
+    version = "1.5.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "d2bde817d176ffade894ab71458e682a14b86dc9";
+    tarball = "http://registry.npmjs.org/underscore/-/underscore-1.5.1.tgz";
+  }
+  {
+    name = "underscore";
+    spec = ">=1.4.3";
+    version = "1.5.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "d2bde817d176ffade894ab71458e682a14b86dc9";
+    tarball = "http://registry.npmjs.org/underscore/-/underscore-1.5.1.tgz";
+  }
+  {
+    name = "underscore";
+    spec = "~1.4.3";
+    version = "1.4.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "61a6a32010622afa07963bf325203cf12239d604";
+    tarball = "http://registry.npmjs.org/underscore/-/underscore-1.4.4.tgz";
+  }
+  {
+    name = "underscore.string";
+    spec = "~2.3.1";
+    version = "2.3.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "c10835dc04c2677cd49e1d77d26c0d3b22cc5709";
+    tarball = "http://registry.npmjs.org/underscore.string/-/underscore.string-2.3.2.tgz";
+  }
+  {
+    name = "util";
+    spec = ">= 0.4.9";
+    version = "0.4.9";
+    topLevel = false;
+    dependencies = [
+      { name = "events.node"; spec = ">= 0.4.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "d95d5830d2328ec17dee3c80bfc50c33562b75a3";
+    tarball = "http://registry.npmjs.org/util/-/util-0.4.9.tgz";
+  }
+  {
+    name = "utile";
+    spec = "0.1.7";
+    version = "0.1.7";
+    topLevel = false;
+    dependencies = [
+      { name = "async"; spec = "0.1.x"; }
+      { name = "deep-equal"; spec = "*"; }
+      { name = "i"; spec = "0.3.x"; }
+      { name = "mkdirp"; spec = "0.x.x"; }
+      { name = "ncp"; spec = "0.2.x"; }
+      { name = "rimraf"; spec = "1.x.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "55db180d54475339fd6dd9e2d14a4c0b52624b69";
+    tarball = "http://registry.npmjs.org/utile/-/utile-0.1.7.tgz";
+  }
+  {
+    name = "utile";
+    spec = "0.1.x";
+    version = "0.1.7";
+    topLevel = false;
+    dependencies = [
+      { name = "async"; spec = "0.1.x"; }
+      { name = "deep-equal"; spec = "*"; }
+      { name = "i"; spec = "0.3.x"; }
+      { name = "mkdirp"; spec = "0.x.x"; }
+      { name = "ncp"; spec = "0.2.x"; }
+      { name = "rimraf"; spec = "1.x.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "55db180d54475339fd6dd9e2d14a4c0b52624b69";
+    tarball = "http://registry.npmjs.org/utile/-/utile-0.1.7.tgz";
+  }
+  {
+    name = "vasync";
+    spec = "1.3.3";
+    version = "1.3.3";
+    topLevel = false;
+    dependencies = [
+      { name = "jsprim"; spec = "0.3.0"; }
+      { name = "verror"; spec = "1.1.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "84917680717020b67e043902e63bc143174c8728";
+    tarball = "http://registry.npmjs.org/vasync/-/vasync-1.3.3.tgz";
+  }
+  {
+    name = "verror";
+    spec = "1.1.0";
+    version = "1.1.0";
+    topLevel = false;
+    dependencies = [
+      { name = "extsprintf"; spec = "1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "2a4b4eb14a207051e75a6f94ee51315bf173a1b0";
+    tarball = "http://registry.npmjs.org/verror/-/verror-1.1.0.tgz";
+  }
+  {
+    name = "verror";
+    spec = "1.3.3";
+    version = "1.3.3";
+    topLevel = false;
+    dependencies = [
+      { name = "extsprintf"; spec = "1.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "8a6a4ac3a8c774b6f687fece49bdffd78552e2cd";
+    tarball = "http://registry.npmjs.org/verror/-/verror-1.3.3.tgz";
+  }
+  {
+    name = "verror";
+    spec = "1.3.6";
+    version = "1.3.6";
+    topLevel = false;
+    dependencies = [
+      { name = "extsprintf"; spec = "1.0.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "cff5df12946d297d2baaefaa2689e25be01c005c";
+    tarball = "http://registry.npmjs.org/verror/-/verror-1.3.6.tgz";
+  }
+  {
+    name = "view-helpers";
+    spec = "*";
+    version = "0.1.2";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "20643e9f50d00cf46da754dc934d791d4f6e3bb2";
+    tarball = "http://registry.npmjs.org/view-helpers/-/view-helpers-0.1.2.tgz";
+  }
+  {
+    name = "walk";
+    spec = "*";
+    version = "2.2.1";
+    topLevel = true;
+    dependencies = [
+      { name = "forEachAsync"; spec = "~2.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "5ada1f8e49e47d4b7445d8be7a2e1e631ab43016";
+    tarball = "http://registry.npmjs.org/walk/-/walk-2.2.1.tgz";
+  }
+  {
+    name = "watch";
+    spec = "0.5.x";
+    version = "0.5.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "50ea3a056358c98073e0bca59956de4afd20b213";
+    tarball = "http://registry.npmjs.org/watch/-/watch-0.5.1.tgz";
+  }
+  {
+    name = "watch";
+    spec = "0.7.0";
+    version = "0.7.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "3d6e715648af867ec7f1149302b526479e726856";
+    tarball = "http://registry.npmjs.org/watch/-/watch-0.7.0.tgz";
+  }
+  {
+    name = "websocket-driver";
+    spec = ">=0.2.0";
+    version = "0.2.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "998bc1855d8cd0d1e9aa8f8056b83b46ac3e81ef";
+    tarball = "http://registry.npmjs.org/websocket-driver/-/websocket-driver-0.2.2.tgz";
+  }
+  {
+    name = "which";
+    spec = "1";
+    version = "1.0.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "5630d6819dda692f1464462e7956cb42c0842739";
+    tarball = "http://registry.npmjs.org/which/-/which-1.0.5.tgz";
+  }
+  {
+    name = "winston";
+    spec = "*";
+    version = "0.7.2";
+    topLevel = true;
+    dependencies = [
+      { name = "async"; spec = "0.2.x"; }
+      { name = "colors"; spec = "0.6.x"; }
+      { name = "cycle"; spec = "1.0.x"; }
+      { name = "eyes"; spec = "0.1.x"; }
+      { name = "pkginfo"; spec = "0.3.x"; }
+      { name = "request"; spec = "2.16.x"; }
+      { name = "stack-trace"; spec = "0.0.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "2570ae1aa1d8a9401e8d5a88362e1cf936550ceb";
+    tarball = "http://registry.npmjs.org/winston/-/winston-0.7.2.tgz";
+  }
+  {
+    name = "winston";
+    spec = "0.6.2";
+    version = "0.6.2";
+    topLevel = false;
+    dependencies = [
+      { name = "async"; spec = "0.1.x"; }
+      { name = "colors"; spec = "0.x.x"; }
+      { name = "cycle"; spec = "1.0.x"; }
+      { name = "eyes"; spec = "0.1.x"; }
+      { name = "pkginfo"; spec = "0.2.x"; }
+      { name = "request"; spec = "2.9.x"; }
+      { name = "stack-trace"; spec = "0.0.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "4144fe2586cdc19a612bf8c035590132c9064bd2";
+    tarball = "http://registry.npmjs.org/winston/-/winston-0.6.2.tgz";
+  }
+  {
+    name = "winston";
+    spec = "0.6.x";
+    version = "0.6.2";
+    topLevel = false;
+    dependencies = [
+      { name = "async"; spec = "0.1.x"; }
+      { name = "colors"; spec = "0.x.x"; }
+      { name = "cycle"; spec = "1.0.x"; }
+      { name = "eyes"; spec = "0.1.x"; }
+      { name = "pkginfo"; spec = "0.2.x"; }
+      { name = "request"; spec = "2.9.x"; }
+      { name = "stack-trace"; spec = "0.0.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "4144fe2586cdc19a612bf8c035590132c9064bd2";
+    tarball = "http://registry.npmjs.org/winston/-/winston-0.6.2.tgz";
+  }
+  {
+    name = "winston";
+    spec = "0.7.1";
+    version = "0.7.1";
+    topLevel = false;
+    dependencies = [
+      { name = "async"; spec = "0.2.x"; }
+      { name = "colors"; spec = "0.6.x"; }
+      { name = "cycle"; spec = "1.0.x"; }
+      { name = "eyes"; spec = "0.1.x"; }
+      { name = "pkginfo"; spec = "0.3.x"; }
+      { name = "request"; spec = "2.16.x"; }
+      { name = "stack-trace"; spec = "0.0.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "e291ab24eddbf79ea40ff532619277a0d30b0eb3";
+    tarball = "http://registry.npmjs.org/winston/-/winston-0.7.1.tgz";
+  }
+  {
+    name = "with";
+    spec = "~1.1.0";
+    version = "1.1.0";
+    topLevel = false;
+    dependencies = [
+      { name = "uglify-js"; spec = "2.3.6"; }
+    ];
+    patchLatest = false;
+    sha1 = "7f722ce4050ab55310777327b014194c544c66dd";
+    tarball = "http://registry.npmjs.org/with/-/with-1.1.0.tgz";
+  }
+  {
+    name = "wordwrap";
+    spec = ">=0.0.1 <0.1.0";
+    version = "0.0.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "b79669bb42ecb409f83d583cad52ca17eaa1643f";
+    tarball = "http://registry.npmjs.org/wordwrap/-/wordwrap-0.0.2.tgz";
+  }
+  {
+    name = "wordwrap";
+    spec = "~0.0.2";
+    version = "0.0.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "b79669bb42ecb409f83d583cad52ca17eaa1643f";
+    tarball = "http://registry.npmjs.org/wordwrap/-/wordwrap-0.0.2.tgz";
+  }
+  {
+    name = "wu";
+    spec = "*";
+    version = "0.1.8";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "619bcdf64974a487894a25755ae095c5208b4a22";
+    tarball = "http://registry.npmjs.org/wu/-/wu-0.1.8.tgz";
+  }
+  {
+    name = "xml2js";
+    spec = "0.2.4";
+    version = "0.2.4";
+    topLevel = false;
+    dependencies = [
+      { name = "sax"; spec = ">=0.4.2"; }
+    ];
+    patchLatest = false;
+    sha1 = "9a5b577fa1e6cdf8923d5e1372f7a3188436e44d";
+    tarball = "http://registry.npmjs.org/xml2js/-/xml2js-0.2.4.tgz";
+  }
+  {
+    name = "xml2js";
+    spec = "0.2.x";
+    version = "0.2.8";
+    topLevel = false;
+    dependencies = [
+      { name = "sax"; spec = "0.5.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "9b81690931631ff09d1957549faf54f4f980b3c2";
+    tarball = "http://registry.npmjs.org/xml2js/-/xml2js-0.2.8.tgz";
+  }
+  {
+    name = "xmlbuilder";
+    spec = "*";
+    version = "0.4.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "1776d65f3fdbad470a08d8604cdeb1c4e540ff83";
+    tarball = "http://registry.npmjs.org/xmlbuilder/-/xmlbuilder-0.4.2.tgz";
   }
 ]
