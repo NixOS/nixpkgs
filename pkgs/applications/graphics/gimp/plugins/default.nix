@@ -148,7 +148,7 @@ rec {
       name = "gmic-1.3.2.0";
       buildInputs = [ imagemagick pkgconfig gimp pkgs.fftwSinglePrec ] ++ gimp.nativeBuildInputs;
       src = fetchurl {
-        url = http://dfn.dl.sourceforge.net/sourceforge/gmic/gmic_1.3.2.0.tar.gz;
+        url = mirror://sourceforge/gmic/gmic_1.3.2.0.tar.gz;
         sha256 = "0mxq664vzzc2l6k6sqm9syp34mihhi262i6fixk1g12lmc28797h";
       };
       preConfigure = ''

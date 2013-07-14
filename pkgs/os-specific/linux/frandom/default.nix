@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "${baseName}-${kernelDev.version}";
 
   src = fetchurl {
-    url = "http://sourceforge.net/projects/frandom/files/${baseName}.tar.gz";
+    url = "mirror://sourceforge/frandom/${baseName}.tar.gz";
     sha256 = "15rgyk4hfawqg7z1spk2xlk1nn6rcdls8gdhc70f91shrc9pvlls";
   };
 
