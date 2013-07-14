@@ -10,6 +10,16 @@
     ];
   }
   {
+    baseName = "abbrev";
+    version = "1.0.4";
+    fullName = "abbrev-~1.0.4";
+    hash = "8dc0f480571a4a19e74f1abd4f31f6a70f94953d1ccafa16ed1a544a19a6f3a8";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
     baseName = "amdefine";
     version = "0.0.5";
     fullName = "amdefine-*";
@@ -58,6 +68,16 @@
     topLevel = false;
     dependencies = [
       { name = "sylvester"; range = ">= 0.0.8"; }
+    ];
+  }
+  {
+    baseName = "archy";
+    version = "0.0.2";
+    fullName = "archy-0";
+    hash = "355bafab4acbb86e4e94c00c55900215abe41ae72ab454be889c766e5889a6e5";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
     ];
   }
   {
@@ -416,6 +436,36 @@
     ];
   }
   {
+    baseName = "child-process-close";
+    version = "0.1.1";
+    fullName = "child-process-close-~0.1.1";
+    hash = "b68574f217d23d11cd4a1e5f1f2be17bf93e2bd38940ae6b07c35b69ec8d456a";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "chmodr";
+    version = "0.1.0";
+    fullName = "chmodr-~0.1.0";
+    hash = "2c0bda3df1766290f9fe21940ab455e92bc37d608f2030b0e0b7dfdda9cff9cd";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "chownr";
+    version = "0.0.1";
+    fullName = "chownr-0";
+    hash = "da1fbb894b4103a1a3c912fc780f6dcf7339865298f2fdc4e20afdf00a94b821";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
     baseName = "cli";
     version = "0.4.4-2";
     fullName = "cli-0.4.x";
@@ -457,6 +507,18 @@
     patchLatest = false;
     topLevel = false;
     dependencies = [
+    ];
+  }
+  {
+    baseName = "cmd-shim";
+    version = "1.1.0";
+    fullName = "cmd-shim-~1.1.0";
+    hash = "ccc0d6f184b9f77ab9d723e4bcecd88b8fa1a480507eb45cdd67b182617fad33";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "mkdirp"; range = "~0.3.3"; }
+      { name = "graceful-fs"; range = "1.2"; }
     ];
   }
   {
@@ -539,6 +601,18 @@
     topLevel = false;
     dependencies = [
       { name = "keypress"; range = "0.1.x"; }
+    ];
+  }
+  {
+    baseName = "config-chain";
+    version = "1.1.7";
+    fullName = "config-chain-~1.1.1";
+    hash = "a161af33500f1dc18e4da364ff9f3e0a516c08aa030859ea639480676b9c3f5c";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "proto-list"; range = "~1.2.1"; }
+      { name = "ini"; range = "1"; }
     ];
   }
   {
@@ -728,6 +802,17 @@
     ];
   }
   {
+    baseName = "couch-login";
+    version = "0.1.17";
+    fullName = "couch-login-~0.1.15";
+    hash = "49b941220d82f17077187b66f9fd88d2eb4a791b9f5beaac046290389c73d268";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "request"; range = "2 >=2.14"; }
+    ];
+  }
+  {
     baseName = "cryptiles";
     version = "0.1.3";
     fullName = "cryptiles-0.1.x";
@@ -906,6 +991,16 @@
     version = "0.2.8";
     fullName = "dtrace-provider-0.2.8";
     hash = "200941239983fa0953415cf28e96d9347c50218d31280604cfc9252e448e714c";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "editor";
+    version = "0.0.4";
+    fullName = "editor-0.0.4";
+    hash = "2f66957e121e49c8b52a9c54ff24b718ab8bf571591177ff09121e603704b591";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -1250,6 +1345,59 @@
     ];
   }
   {
+    baseName = "fstream-ignore";
+    version = "0.0.7";
+    fullName = "fstream-ignore-~0.0.5";
+    hash = "1f009e5aac56314d31c5adc339990d1b814595a5020e828cda4a06da536425c5";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "minimatch"; range = "~0.2.0"; }
+      { name = "fstream"; range = "~0.1.17"; }
+      { name = "inherits"; range = "2"; }
+    ];
+  }
+  {
+    baseName = "fstream-npm";
+    version = "0.1.5";
+    fullName = "fstream-npm-~0.1.3";
+    hash = "23751124b295b9d9beefd7b4146b8e6d4fe0d4587cc70bc0b134c10da307b1b0";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "fstream-ignore"; range = "~0.0.5"; }
+      { name = "inherits"; range = "2"; }
+    ];
+  }
+  {
+    baseName = "fstream";
+    version = "0.1.23";
+    fullName = "fstream-~0.1.17";
+    hash = "1f3f03be2b18815b133e551b0cde8ab77148d0de31fdd61d90f21317f02c8342";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "rimraf"; range = "2"; }
+      { name = "mkdirp"; range = "0.3"; }
+      { name = "graceful-fs"; range = "~2.0.0"; }
+      { name = "inherits"; range = "~1.0.0"; }
+    ];
+  }
+  {
+    baseName = "fstream";
+    version = "0.1.23";
+    fullName = "fstream-~0.1.23";
+    hash = "1f3f03be2b18815b133e551b0cde8ab77148d0de31fdd61d90f21317f02c8342";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "rimraf"; range = "2"; }
+      { name = "mkdirp"; range = "0.3"; }
+      { name = "graceful-fs"; range = "~2.0.0"; }
+      { name = "inherits"; range = "~1.0.0"; }
+    ];
+  }
+  {
     baseName = "fstream";
     version = "0.1.23";
     fullName = "fstream-~0.1.8";
@@ -1261,6 +1409,16 @@
       { name = "mkdirp"; range = "0.3"; }
       { name = "graceful-fs"; range = "~2.0.0"; }
       { name = "inherits"; range = "~1.0.0"; }
+    ];
+  }
+  {
+    baseName = "github-url-from-git";
+    version = "1.1.1";
+    fullName = "github-url-from-git-~1.1.1";
+    hash = "7f02b5799b4d73af273a2f4c290118b0cfa999ba5888896b85ab1cbb0c2e207e";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
     ];
   }
   {
@@ -1303,6 +1461,42 @@
     ];
   }
   {
+    baseName = "glob";
+    version = "3.2.3";
+    fullName = "glob-~3.2.1";
+    hash = "82e04561e897c9b682c0568bafbc57b0ee2fc592579535bb0f5929cd1605c9c3";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "minimatch"; range = "~0.2.11"; }
+      { name = "graceful-fs"; range = "~2.0.0"; }
+      { name = "inherits"; range = "2"; }
+    ];
+  }
+  {
+    baseName = "glob";
+    version = "3.2.3";
+    fullName = "glob-~3.2.3";
+    hash = "82e04561e897c9b682c0568bafbc57b0ee2fc592579535bb0f5929cd1605c9c3";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "minimatch"; range = "~0.2.11"; }
+      { name = "graceful-fs"; range = "~2.0.0"; }
+      { name = "inherits"; range = "2"; }
+    ];
+  }
+  {
+    baseName = "graceful-fs";
+    version = "1.2.3";
+    fullName = "graceful-fs-1.2";
+    hash = "b8d9e0af2261259525a65281573e416b70b91788ea7f7b13f4598aaa7818255a";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
     baseName = "graceful-fs";
     version = "2.0.0";
     fullName = "graceful-fs-2";
@@ -1316,6 +1510,16 @@
     baseName = "graceful-fs";
     version = "1.2.3";
     fullName = "graceful-fs-~1";
+    hash = "b8d9e0af2261259525a65281573e416b70b91788ea7f7b13f4598aaa7818255a";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "graceful-fs";
+    version = "1.2.3";
+    fullName = "graceful-fs-~1.2";
     hash = "b8d9e0af2261259525a65281573e416b70b91788ea7f7b13f4598aaa7818255a";
     patchLatest = false;
     topLevel = false;
@@ -1524,6 +1728,19 @@
     ];
   }
   {
+    baseName = "http-signature";
+    version = "0.9.11";
+    fullName = "http-signature-~0.9.11";
+    hash = "44b89f3c1917bf02723a5720f08fbe47448e0370a5d3498d1be860eaf28beb3b";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "assert-plus"; range = "0.1.2"; }
+      { name = "asn1"; range = "0.1.11"; }
+      { name = "ctype"; range = "0.5.2"; }
+    ];
+  }
+  {
     baseName = "i";
     version = "0.3.1";
     fullName = "i-0.3.x";
@@ -1587,11 +1804,45 @@
   {
     baseName = "ini";
     version = "1.1.0";
+    fullName = "ini-1";
+    hash = "307ecc5f8664773587a0d74165d1dbdb226754b638542596b7a1e2ed0a578a28";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "ini";
+    version = "1.1.0";
     fullName = "ini-1.x.x";
     hash = "307ecc5f8664773587a0d74165d1dbdb226754b638542596b7a1e2ed0a578a28";
     patchLatest = false;
     topLevel = false;
     dependencies = [
+    ];
+  }
+  {
+    baseName = "ini";
+    version = "1.1.0";
+    fullName = "ini-~1.1.0";
+    hash = "307ecc5f8664773587a0d74165d1dbdb226754b638542596b7a1e2ed0a578a28";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "init-package-json";
+    version = "0.0.10";
+    fullName = "init-package-json-0.0.10";
+    hash = "6efeef6f30253ee6b8cc9a22154096f42e1ea8621e79acce96b5425925229431";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "promzard"; range = "~0.2.0"; }
+      { name = "read"; range = "~1.0.1"; }
+      { name = "read-package-json"; range = "1"; }
+      { name = "semver"; range = "2.x"; }
     ];
   }
   {
@@ -1743,9 +1994,9 @@
   }
   {
     baseName = "knox";
-    version = "0.8.3";
+    version = "0.8.4";
     fullName = "knox-*";
-    hash = "fe3cb0d94b3e85413626ffee386c751931afe200b170bd555173e413d7044c75";
+    hash = "14072716bf13af98ab908f9f370f18e2353e326a0a945c53e1ff82f70725f161";
     patchLatest = false;
     topLevel = true;
     dependencies = [
@@ -1792,6 +2043,16 @@
     ];
   }
   {
+    baseName = "lockfile";
+    version = "0.4.0";
+    fullName = "lockfile-~0.4.0";
+    hash = "80b81e5d9e8af9f661cfa57f6cf88ec7f2cac90196dae8ca4b382a812694d68e";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
     baseName = "lru-cache";
     version = "2.3.0";
     fullName = "lru-cache-2";
@@ -1826,6 +2087,16 @@
     version = "1.0.6";
     fullName = "lru-cache-~1.0.2";
     hash = "f3a419d4989d9db292a7207f04b6108eed6d8316553d888a462cccd4c9e8855e";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "lru-cache";
+    version = "2.3.0";
+    fullName = "lru-cache-~2.3.0";
+    hash = "fbb1a14e0314095b7999a3a7489c92983f3d95b188857af697487ac8a778e942";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -1961,7 +2232,31 @@
   {
     baseName = "minimatch";
     version = "0.2.12";
+    fullName = "minimatch-~0.2.0";
+    hash = "205cff8b4ba926e86ff0e6f7f566553906113892028083ea221989a42500c246";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "lru-cache"; range = "2"; }
+      { name = "sigmund"; range = "~1.0.0"; }
+    ];
+  }
+  {
+    baseName = "minimatch";
+    version = "0.2.12";
     fullName = "minimatch-~0.2.11";
+    hash = "205cff8b4ba926e86ff0e6f7f566553906113892028083ea221989a42500c246";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "lru-cache"; range = "2"; }
+      { name = "sigmund"; range = "~1.0.0"; }
+    ];
+  }
+  {
+    baseName = "minimatch";
+    version = "0.2.12";
+    fullName = "minimatch-~0.2.12";
     hash = "205cff8b4ba926e86ff0e6f7f566553906113892028083ea221989a42500c246";
     patchLatest = false;
     topLevel = false;
@@ -2044,6 +2339,16 @@
     baseName = "mkdirp";
     version = "0.3.5";
     fullName = "mkdirp-0.x.x";
+    hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "mkdirp";
+    version = "0.3.5";
+    fullName = "mkdirp-~0.3.3";
     hash = "8ae9c5107acb41110106224f5e7be2b50b00d15d062ea7941301c111b863fd26";
     patchLatest = false;
     topLevel = false;
@@ -2344,6 +2649,29 @@
     ];
   }
   {
+    baseName = "node-gyp";
+    version = "0.10.6";
+    fullName = "node-gyp-~0.10.6";
+    hash = "1b1fc060c1a84eb0f52c495d7d13e3a7f03b2753b74dc6c1c801c5b8d563c5b0";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "glob"; range = "3"; }
+      { name = "graceful-fs"; range = "2"; }
+      { name = "fstream"; range = "0"; }
+      { name = "minimatch"; range = "0"; }
+      { name = "mkdirp"; range = "0"; }
+      { name = "nopt"; range = "2"; }
+      { name = "npmlog"; range = "0"; }
+      { name = "osenv"; range = "0"; }
+      { name = "request"; range = "2"; }
+      { name = "rimraf"; range = "2"; }
+      { name = "semver"; range = "~2.0.7"; }
+      { name = "tar"; range = "0"; }
+      { name = "which"; range = "1"; }
+    ];
+  }
+  {
     baseName = "node-uuid";
     version = "1.4.0";
     fullName = "node-uuid-*";
@@ -2426,6 +2754,110 @@
     ];
   }
   {
+    baseName = "nopt";
+    version = "2.1.1";
+    fullName = "nopt-~2.1.1";
+    hash = "a7a84f3fe51cb8fb97c678bc73130b53d6782ee90dc0e9b15ae39630ce2fa203";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "abbrev"; range = "1"; }
+    ];
+  }
+  {
+    baseName = "normalize-package-data";
+    version = "0.2.0";
+    fullName = "normalize-package-data-~0.2";
+    hash = "acde245885200d357f307740e7d3b3a169e1088bed51cbd81d76d6e7dfcf8fa8";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "semver"; range = "2"; }
+      { name = "github-url-from-git"; range = "~1.1.1"; }
+    ];
+  }
+  {
+    baseName = "npm";
+    version = "1.3.4";
+    fullName = "npm-*";
+    hash = "fcf0a1a2bfb920fb7fd4dd172df3ea02b7155247f509add164041645d8742225";
+    patchLatest = false;
+    topLevel = true;
+    dependencies = [
+      { name = "semver"; range = "~2.0.8"; }
+      { name = "ini"; range = "~1.1.0"; }
+      { name = "slide"; range = "~1.1.4"; }
+      { name = "abbrev"; range = "~1.0.4"; }
+      { name = "graceful-fs"; range = "~2.0.0"; }
+      { name = "minimatch"; range = "~0.2.12"; }
+      { name = "nopt"; range = "~2.1.1"; }
+      { name = "rimraf"; range = "~2.2.0"; }
+      { name = "request"; range = "~2.21.0"; }
+      { name = "which"; range = "1"; }
+      { name = "tar"; range = "~0.1.17"; }
+      { name = "fstream"; range = "~0.1.23"; }
+      { name = "block-stream"; range = "*"; }
+      { name = "inherits"; range = "1"; }
+      { name = "mkdirp"; range = "~0.3.3"; }
+      { name = "read"; range = "~1.0.4"; }
+      { name = "lru-cache"; range = "~2.3.0"; }
+      { name = "node-gyp"; range = "~0.10.6"; }
+      { name = "fstream-npm"; range = "~0.1.3"; }
+      { name = "uid-number"; range = "0"; }
+      { name = "archy"; range = "0"; }
+      { name = "chownr"; range = "0"; }
+      { name = "npmlog"; range = "0.0.4"; }
+      { name = "ansi"; range = "~0.1.2"; }
+      { name = "npm-registry-client"; range = "~0.2.27"; }
+      { name = "read-package-json"; range = "~1.1.0"; }
+      { name = "read-installed"; range = "~0.2.2"; }
+      { name = "glob"; range = "~3.2.3"; }
+      { name = "init-package-json"; range = "0.0.10"; }
+      { name = "osenv"; range = "0"; }
+      { name = "lockfile"; range = "~0.4.0"; }
+      { name = "retry"; range = "~0.6.0"; }
+      { name = "once"; range = "~1.1.1"; }
+      { name = "npmconf"; range = "~0.1.1"; }
+      { name = "opener"; range = "~1.3.0"; }
+      { name = "chmodr"; range = "~0.1.0"; }
+      { name = "cmd-shim"; range = "~1.1.0"; }
+      { name = "sha"; range = "~1.0.1"; }
+      { name = "editor"; range = "0.0.4"; }
+      { name = "child-process-close"; range = "~0.1.1"; }
+      { name = "npm-user-validate"; range = "0.0.3"; }
+    ];
+  }
+  {
+    baseName = "npm-registry-client";
+    version = "0.2.27";
+    fullName = "npm-registry-client-~0.2.27";
+    hash = "9899d95fb9e71224ae49120621e245d20c2e05658e817442b2a30fcf8928441b";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "request"; range = "2 >=2.20.0"; }
+      { name = "graceful-fs"; range = "~2.0.0"; }
+      { name = "semver"; range = "~2.0.5"; }
+      { name = "slide"; range = "~1.1.3"; }
+      { name = "chownr"; range = "0"; }
+      { name = "mkdirp"; range = "~0.3.3"; }
+      { name = "rimraf"; range = "~2"; }
+      { name = "retry"; range = "0.6.0"; }
+      { name = "couch-login"; range = "~0.1.15"; }
+      { name = "npmlog"; range = ""; }
+    ];
+  }
+  {
+    baseName = "npm-user-validate";
+    version = "0.0.3";
+    fullName = "npm-user-validate-0.0.3";
+    hash = "3ba7b67338af6deff49c8c6588542aaea83f034cad0dfe34519b546c05f29402";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
     baseName = "npm2nix";
     version = "1.2.0";
     fullName = "npm2nix-*";
@@ -2437,9 +2869,49 @@
     ];
   }
   {
+    baseName = "npmconf";
+    version = "0.1.1";
+    fullName = "npmconf-~0.1.1";
+    hash = "e4448bd02d4745549324fd0dbc333bcd9bf37de11e2ecc7bc02bf9655ddec2e9";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "config-chain"; range = "~1.1.1"; }
+      { name = "inherits"; range = "~1.0.0"; }
+      { name = "once"; range = "~1.1.1"; }
+      { name = "mkdirp"; range = "~0.3.3"; }
+      { name = "osenv"; range = "0.0.3"; }
+      { name = "nopt"; range = "2"; }
+      { name = "semver"; range = "2"; }
+      { name = "ini"; range = "~1.1.0"; }
+    ];
+  }
+  {
+    baseName = "npmlog";
+    version = "0.0.4";
+    fullName = "npmlog-";
+    hash = "16da9f0f239813f201156b81a5ebe552c9a3f78a405dbb24c2c1743fe3a0d579";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "ansi"; range = "~0.1.2"; }
+    ];
+  }
+  {
     baseName = "npmlog";
     version = "0.0.4";
     fullName = "npmlog-0";
+    hash = "16da9f0f239813f201156b81a5ebe552c9a3f78a405dbb24c2c1743fe3a0d579";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "ansi"; range = "~0.1.2"; }
+    ];
+  }
+  {
+    baseName = "npmlog";
+    version = "0.0.4";
+    fullName = "npmlog-0.0.4";
     hash = "16da9f0f239813f201156b81a5ebe552c9a3f78a405dbb24c2c1743fe3a0d579";
     patchLatest = false;
     topLevel = false;
@@ -2484,6 +2956,26 @@
     version = "1.1.1";
     fullName = "once-1.1.1";
     hash = "3fdc1a246f2522991fd9a6554a93c012c3192ea99918fdd893a2d4f2d546fe93";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "once";
+    version = "1.1.1";
+    fullName = "once-~1.1.1";
+    hash = "3fdc1a246f2522991fd9a6554a93c012c3192ea99918fdd893a2d4f2d546fe93";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "opener";
+    version = "1.3.0";
+    fullName = "opener-~1.3.0";
+    hash = "8ce1113b83487849625156d72483e4eef7b8eebf63a9e8d7732df15c240efa06";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -2580,6 +3072,16 @@
     baseName = "osenv";
     version = "0.0.3";
     fullName = "osenv-0";
+    hash = "aafbb23637b7338c9025f9da336f31f96674d7926c30f209e4d93ce16d5251c4";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "osenv";
+    version = "0.0.3";
+    fullName = "osenv-0.0.3";
     hash = "aafbb23637b7338c9025f9da336f31f96674d7926c30f209e4d93ce16d5251c4";
     patchLatest = false;
     topLevel = false;
@@ -2743,6 +3245,27 @@
     ];
   }
   {
+    baseName = "promzard";
+    version = "0.2.0";
+    fullName = "promzard-~0.2.0";
+    hash = "e9dcdf4084876c4b751f2f5939f149071495f0d23bf80a9ec4a73cd84080184b";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "read"; range = "1"; }
+    ];
+  }
+  {
+    baseName = "proto-list";
+    version = "1.2.2";
+    fullName = "proto-list-~1.2.1";
+    hash = "1a1916d1a55ada8d8f3530d2073d57b6b9f0547b317686a7bc0492305d1d8e3b";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
     baseName = "ps-tree";
     version = "0.0.3";
     fullName = "ps-tree-0.0.x";
@@ -2826,7 +3349,82 @@
   {
     baseName = "read";
     version = "1.0.4";
+    fullName = "read-1";
+    hash = "8be269afeaa7cc62feb4672e8e61e5133152266dc5347b23cf5b05bc40789601";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "mute-stream"; range = "~0.0.2"; }
+    ];
+  }
+  {
+    baseName = "read";
+    version = "1.0.4";
     fullName = "read-1.0.x";
+    hash = "8be269afeaa7cc62feb4672e8e61e5133152266dc5347b23cf5b05bc40789601";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "mute-stream"; range = "~0.0.2"; }
+    ];
+  }
+  {
+    baseName = "read-installed";
+    version = "0.2.2";
+    fullName = "read-installed-~0.2.2";
+    hash = "1237a4eb7444063ef83be336ecd317ffeafd2fef8f9e81468a5d7545e1a80c23";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "semver"; range = "2"; }
+      { name = "slide"; range = "~1.1.3"; }
+      { name = "read-package-json"; range = "1"; }
+      { name = "graceful-fs"; range = "~1.2.0"; }
+    ];
+  }
+  {
+    baseName = "read-package-json";
+    version = "1.1.0";
+    fullName = "read-package-json-1";
+    hash = "f3d2f47ffcab7512bb5cfba1854e708534dcae073704c3c9baba36de19b89969";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "glob"; range = "~3.2.1"; }
+      { name = "lru-cache"; range = "2"; }
+      { name = "normalize-package-data"; range = "~0.2"; }
+      { name = "graceful-fs"; range = "~1.2"; }
+    ];
+  }
+  {
+    baseName = "read-package-json";
+    version = "1.1.0";
+    fullName = "read-package-json-~1.1.0";
+    hash = "f3d2f47ffcab7512bb5cfba1854e708534dcae073704c3c9baba36de19b89969";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "glob"; range = "~3.2.1"; }
+      { name = "lru-cache"; range = "2"; }
+      { name = "normalize-package-data"; range = "~0.2"; }
+      { name = "graceful-fs"; range = "~1.2"; }
+    ];
+  }
+  {
+    baseName = "read";
+    version = "1.0.4";
+    fullName = "read-~1.0.1";
+    hash = "8be269afeaa7cc62feb4672e8e61e5133152266dc5347b23cf5b05bc40789601";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "mute-stream"; range = "~0.0.2"; }
+    ];
+  }
+  {
+    baseName = "read";
+    version = "1.0.4";
+    fullName = "read-~1.0.4";
     hash = "8be269afeaa7cc62feb4672e8e61e5133152266dc5347b23cf5b05bc40789601";
     patchLatest = false;
     topLevel = false;
@@ -2932,6 +3530,50 @@
   }
   {
     baseName = "request";
+    version = "2.22.0";
+    fullName = "request-2 >=2.14";
+    hash = "d0a7ebc001800143d05cedf616cc164a31425bcbfdb8eb533b59d8c123b1275c";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; range = "~0.6.0"; }
+      { name = "json-stringify-safe"; range = "~4.0.0"; }
+      { name = "forever-agent"; range = "~0.5.0"; }
+      { name = "tunnel-agent"; range = "~0.3.0"; }
+      { name = "http-signature"; range = "~0.10.0"; }
+      { name = "hawk"; range = "~0.13.0"; }
+      { name = "aws-sign"; range = "~0.3.0"; }
+      { name = "oauth-sign"; range = "~0.3.0"; }
+      { name = "cookie-jar"; range = "~0.3.0"; }
+      { name = "node-uuid"; range = "~1.4.0"; }
+      { name = "mime"; range = "~1.2.9"; }
+      { name = "form-data"; range = "0.0.8"; }
+    ];
+  }
+  {
+    baseName = "request";
+    version = "2.22.0";
+    fullName = "request-2 >=2.20.0";
+    hash = "d0a7ebc001800143d05cedf616cc164a31425bcbfdb8eb533b59d8c123b1275c";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; range = "~0.6.0"; }
+      { name = "json-stringify-safe"; range = "~4.0.0"; }
+      { name = "forever-agent"; range = "~0.5.0"; }
+      { name = "tunnel-agent"; range = "~0.3.0"; }
+      { name = "http-signature"; range = "~0.10.0"; }
+      { name = "hawk"; range = "~0.13.0"; }
+      { name = "aws-sign"; range = "~0.3.0"; }
+      { name = "oauth-sign"; range = "~0.3.0"; }
+      { name = "cookie-jar"; range = "~0.3.0"; }
+      { name = "node-uuid"; range = "~1.4.0"; }
+      { name = "mime"; range = "~1.2.9"; }
+      { name = "form-data"; range = "0.0.8"; }
+    ];
+  }
+  {
+    baseName = "request";
     version = "2.16.6";
     fullName = "request-2.16.x";
     hash = "9424cb952b4c5723678d0c5a6daf3ea6fa76ccad4cbd175f0a489dc54c6e1453";
@@ -2984,6 +3626,28 @@
     ];
   }
   {
+    baseName = "request";
+    version = "2.21.0";
+    fullName = "request-~2.21.0";
+    hash = "fe31c3119bc4423f07aa7c9849cb642d5ad22bdf2a2700eab56fb83fa8ed429c";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; range = "~0.6.0"; }
+      { name = "json-stringify-safe"; range = "~4.0.0"; }
+      { name = "forever-agent"; range = "~0.5.0"; }
+      { name = "tunnel-agent"; range = "~0.3.0"; }
+      { name = "http-signature"; range = "~0.9.11"; }
+      { name = "hawk"; range = "~0.13.0"; }
+      { name = "aws-sign"; range = "~0.3.0"; }
+      { name = "oauth-sign"; range = "~0.3.0"; }
+      { name = "cookie-jar"; range = "~0.3.0"; }
+      { name = "node-uuid"; range = "~1.4.0"; }
+      { name = "mime"; range = "~1.2.9"; }
+      { name = "form-data"; range = "0.0.8"; }
+    ];
+  }
+  {
     baseName = "restify";
     version = "2.4.1";
     fullName = "restify-2.4.1";
@@ -3008,6 +3672,26 @@
       { name = "spdy"; range = "1.7.1"; }
       { name = "verror"; range = "1.3.6"; }
       { name = "dtrace-provider"; range = "0.2.8"; }
+    ];
+  }
+  {
+    baseName = "retry";
+    version = "0.6.0";
+    fullName = "retry-0.6.0";
+    hash = "983e676af24ff4dcbac396420fca3c195ce3b1de5f731f697888b4fe6b7bbd2a";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "retry";
+    version = "0.6.0";
+    fullName = "retry-~0.6.0";
+    hash = "983e676af24ff4dcbac396420fca3c195ce3b1de5f731f697888b4fe6b7bbd2a";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
     ];
   }
   {
@@ -3043,9 +3727,31 @@
   }
   {
     baseName = "rimraf";
+    version = "2.2.0";
+    fullName = "rimraf-~2";
+    hash = "4d250a91e5da8f0e839647149268d3682c868a65e920477ff5baae26591ebeb2";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "graceful-fs"; range = "~1"; }
+    ];
+  }
+  {
+    baseName = "rimraf";
     version = "2.1.4";
     fullName = "rimraf-~2.1.4";
     hash = "093154365aab3c09aea8e83dda7c5a7fd785c787ebbf1fcdc415cb5f74d1acac";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "graceful-fs"; range = "~1"; }
+    ];
+  }
+  {
+    baseName = "rimraf";
+    version = "2.2.0";
+    fullName = "rimraf-~2.2.0";
+    hash = "4d250a91e5da8f0e839647149268d3682c868a65e920477ff5baae26591ebeb2";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -3118,7 +3824,47 @@
   {
     baseName = "semver";
     version = "2.0.10";
+    fullName = "semver-2";
+    hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "semver";
+    version = "2.0.10";
+    fullName = "semver-2.x";
+    hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "semver";
+    version = "2.0.10";
+    fullName = "semver-~2.0.5";
+    hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "semver";
+    version = "2.0.10";
     fullName = "semver-~2.0.7";
+    hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "semver";
+    version = "2.0.10";
+    fullName = "semver-~2.0.8";
     hash = "121f81da02804485b7bc06769ec2a71284c2d8933030b1a4f17602c34ef04111";
     patchLatest = false;
     topLevel = false;
@@ -3178,6 +3924,17 @@
     ];
   }
   {
+    baseName = "sha";
+    version = "1.0.1";
+    fullName = "sha-~1.0.1";
+    hash = "b540d2ae52395b7c22c8ad1fa4e0cf430ccab917847ddea5308fa833cf85c5fb";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "graceful-fs"; range = "1.2"; }
+    ];
+  }
+  {
     baseName = "shelljs";
     version = "0.1.4";
     fullName = "shelljs-0.1.x";
@@ -3222,6 +3979,26 @@
     version = "0.0.4";
     fullName = "sliced-0.0.4";
     hash = "b9320aec8a9c5796d34b4c95b1289912548fcc8682fe9fed09749847b7dc0d85";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "slide";
+    version = "1.1.4";
+    fullName = "slide-~1.1.3";
+    hash = "db50179b7ceac3a1d79527a7c3db39ee1d5e936a07504e6aa542f9078aa33a6a";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+    ];
+  }
+  {
+    baseName = "slide";
+    version = "1.1.4";
+    fullName = "slide-~1.1.4";
+    hash = "db50179b7ceac3a1d79527a7c3db39ee1d5e936a07504e6aa542f9078aa33a6a";
     patchLatest = false;
     topLevel = false;
     dependencies = [
@@ -3469,6 +4246,19 @@
     ];
   }
   {
+    baseName = "tar";
+    version = "0.1.17";
+    fullName = "tar-~0.1.17";
+    hash = "577832975440eba0a9293244d53fa2c383e5c27ec2f68e3defde0cc23910b978";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
+      { name = "inherits"; range = "1.x"; }
+      { name = "block-stream"; range = "*"; }
+      { name = "fstream"; range = "~0.1.8"; }
+    ];
+  }
+  {
     baseName = "temp";
     version = "0.5.1";
     fullName = "temp-*";
@@ -3568,6 +4358,16 @@
       { name = "async"; range = "~0.2.6"; }
       { name = "source-map"; range = "~0.1.7"; }
       { name = "optimist"; range = "~0.3.5"; }
+    ];
+  }
+  {
+    baseName = "uid-number";
+    version = "0.0.3";
+    fullName = "uid-number-0";
+    hash = "e8eab0de35bcb20a55f58a276b2f6cfe1c531fae5982d7a3af7286807dbbe42b";
+    patchLatest = false;
+    topLevel = false;
+    dependencies = [
     ];
   }
   {

@@ -60,4 +60,5 @@
 , "libyaml"
 , "i18next"
 , "stylus"
+, "npm"
 ]
