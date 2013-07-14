@@ -129,6 +129,14 @@ in
         default = "";
         description = "Additional text to be appended to <filename>postgresql.conf</filename>.";
       };
+
+      recoveryConfig = mkOption {
+        default = null;
+        type = types.nullOr types.string;
+        description = ''
+          Values to put into recovery.conf file.
+        '';
+      };
     };
 
   };
@@ -177,7 +185,11 @@ in
                 touch "${cfg.dataDir}/.first_startup"
             fi
 
-            ln -sfn ${configFile} ${cfg.dataDir}/postgresql.conf
+            ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"
+            ${optionalString (cfg.recoveryConfig != null) ''
+              ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
+                "${cfg.dataDir}/recovery.conf"
+            ''}
           ''; # */
 
         serviceConfig =
