@@ -3064,6 +3064,10 @@ pythonPackages = python.modules // rec {
       sha256 = "1pawfmf7j7pd3mjzhmmw9hkglc2qdirrkvv29m5nsmpf2b3ip2vq";
     };
 
+    preConfigure = ''
+      sed -i 's/-faltivec//' numpy/distutils/system_info.py
+    '';
+
     # TODO: add ATLAS=${pkgs.atlas}
     installCommand = ''
       export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
