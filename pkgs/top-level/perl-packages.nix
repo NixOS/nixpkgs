@@ -268,7 +268,7 @@ rec {
   BitVector = buildPerlPackage {
     name = "Bit-Vector-7.3";
     src = fetchurl {
-      url = http://cpan.metacpan.org/authors/id/S/ST/STBEY/Bit-Vector-7.3.tar.gz;
+      url = mirror://cpan/authors/id/S/ST/STBEY/Bit-Vector-7.3.tar.gz;
       sha256 = "0gcg1173i1bsx2qvyw77kw90xbf03b861jc42hvq744vzc5k6xjs";
     };
     propagatedBuildInputs = [CarpClan];
@@ -365,7 +365,7 @@ rec {
   CaptchaReCAPTCHA = buildPerlPackage rec {
     name = "Captcha-reCAPTCHA-0.97";
     src = fetchurl {
-      url = http://cpan.metacpan.org/authors/id/P/PH/PHRED/Captcha-reCAPTCHA-0.97.tar.gz;
+      url = mirror://cpan/authors/id/P/PH/PHRED/Captcha-reCAPTCHA-0.97.tar.gz;
       sha256 = "12f2yh89aji6mnkrqxjcllws5dlg545wvz0j7wamy149xyqi12wq";
     };
     propagatedBuildInputs = [HTMLTiny LWP];
@@ -1687,7 +1687,7 @@ rec {
   DateCalc = buildPerlPackage {
     name = "Date-Calc-6.3";
     src = fetchurl {
-      url = http://cpan.metacpan.org/authors/id/S/ST/STBEY/Date-Calc-6.3.tar.gz;
+      url = mirror://cpan/authors/id/S/ST/STBEY/Date-Calc-6.3.tar.gz;
       sha256 = "14yvbgy9n8icwlm5zi86lskvxd6nsl42i1g9f5dwdaw9my463diy";
     };
     propagatedBuildInputs = [CarpClan BitVector];
@@ -2425,7 +2425,7 @@ rec {
   ExceptionBase = buildPerlPackage {
     name = "Exception-Base-0.25";
     src = fetchurl {
-      url = http://cpan.metacpan.org/authors/id/D/DE/DEXTER/Exception-Base-0.25.tar.gz;
+      url = mirror://cpan/authors/id/D/DE/DEXTER/Exception-Base-0.25.tar.gz;
       sha256 = "1s2is862xba2yy633wn2nklrya36yrlwxlbpqjrv8m31xj2c8khw";
     };
     buildInputs = [ TestUnitLite ];
@@ -3641,8 +3641,8 @@ rec {
   libintl_perl = buildPerlPackage rec {
     name = "libintl-perl-1.23";
     src = fetchurl {
-        url = http://cpan.metacpan.org/authors/id/G/GU/GUIDO/libintl-perl-1.23.tar.gz;
-        sha256 = "1ylz6yhjifblhmnva0k05ch12a4cdii5v0icah69ma1gdhsidnk0";
+      url = mirror://cpan/authors/id/G/GU/GUIDO/libintl-perl-1.23.tar.gz;
+      sha256 = "1ylz6yhjifblhmnva0k05ch12a4cdii5v0icah69ma1gdhsidnk0";
     };
   };
 
@@ -3745,8 +3745,8 @@ rec {
   ListUtilsBy = buildPerlPackage rec {
     name = "List-UtilsBy-0.09";
     src = fetchurl {
-        url = http://cpan.metacpan.org/authors/id/P/PE/PEVANS/List-UtilsBy-0.09.tar.gz;
-        sha256 = "1xcsgz8898h670zmwqd8azfn3a2y9nq7z8cva9dsyhzkk8ajmra1";
+      url = mirror://cpan/authors/id/P/PE/PEVANS/List-UtilsBy-0.09.tar.gz;
+      sha256 = "1xcsgz8898h670zmwqd8azfn3a2y9nq7z8cva9dsyhzkk8ajmra1";
     };
   };
 
@@ -4251,7 +4251,7 @@ rec {
   ModuleVersions = buildPerlPackage {
     name = "Module-Versions-0.02";
     src = fetchurl {
-      url = http://cpan.metacpan.org/authors/id/T/TH/THW/Module-Versions-0.02.zip;
+      url = mirror://cpan/authors/id/T/TH/THW/Module-Versions-0.02.zip;
       sha256 = "0g7qs6vqg91xpwg1cdy91m3kh9m1zbkzyz1qsy453b572xdscf0d";
     };
     buildInputs = [ pkgs.unzip ];
@@ -4511,8 +4511,8 @@ rec {
   MooseXSingleton = buildPerlPackage rec {
     name = "MooseX-Singleton-0.29";
     src = fetchurl {
-        url = http://cpan.metacpan.org/authors/id/K/KA/KAARE/MooseX-Singleton-0.29.tar.gz;
-        sha256 = "0103f0hi7fp3mc0y0ydnz4ghcnag5gwgn2160y2zp6rnydx2p2sc";
+      url = mirror://cpan/authors/id/K/KA/KAARE/MooseX-Singleton-0.29.tar.gz;
+      sha256 = "0103f0hi7fp3mc0y0ydnz4ghcnag5gwgn2160y2zp6rnydx2p2sc";
     };
     buildInputs = [ Moose TestFatal TestRequires ];
   };
@@ -4603,7 +4603,7 @@ rec {
   MooseXTypesLoadableClass = buildPerlPackage rec {
     name = "MooseX-Types-LoadableClass-0.008";
     src = fetchurl {
-      url = http://cpan.metacpan.org/authors/id/B/BO/BOBTFISH/MooseX-Types-LoadableClass-0.008.tar.gz;
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/MooseX-Types-LoadableClass-0.008.tar.gz;
       sha256 = "0wh4zxknqv98nrmsp6yg6mazjyl3vacrgywarzjg5gks78c84i8g";
     };
     propagatedBuildInputs = [ ClassLoad Moose MooseXTypes namespaceclean ];
@@ -5500,7 +5500,7 @@ rec {
   RSSParserLite = buildPerlPackage {
     name = "RSS-Parser-Lite-0.10";
     src = fetchurl {
-      url = http://cpan.metacpan.org/authors/id/E/EB/EBOSRUP/RSS-Parser-Lite-0.10.tar.gz;
+      url = mirror://cpan/authors/id/E/EB/EBOSRUP/RSS-Parser-Lite-0.10.tar.gz;
       sha256 = "1spvi0z62saz2cam8kwk2k561aavw2w42g3ykj38w1kmydvsk8z6";
     };
     propagatedBuildInputs = [ SOAPLite ];
@@ -6664,7 +6664,7 @@ rec {
   TestXPath = buildPerlModule {
     name = "Test-XPath-0.16";
     src = fetchurl {
-      url = http://cpan.metacpan.org/authors/id/D/DW/DWHEELER/Test-XPath-0.16.tar.gz;
+      url = mirror://cpan/authors/id/D/DW/DWHEELER/Test-XPath-0.16.tar.gz;
       sha256 = "09s47d5jcrx35dz623gjiqn0qmjrv0wb54czr7h01wffw1w8akxi";
     };
     propagatedBuildInputs = [ XMLLibXML ];
