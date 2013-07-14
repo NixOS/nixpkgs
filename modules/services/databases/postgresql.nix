@@ -87,6 +87,14 @@ in
         '';
       };
 
+      initialScript = mkOption {
+        default = null;
+        type = types.nullOr types.path;
+        description = ''
+          A file containing SQL statements to execute on first startup.
+        '';
+      };
+
       authMethod = mkOption {
         default = " ident sameuser ";
         description = ''
@@ -166,6 +174,7 @@ in
                 chown -R postgres ${cfg.dataDir}
                 su -s ${pkgs.stdenv.shell} postgres -c 'initdb -U root'
                 rm -f ${cfg.dataDir}/*.conf
+                touch "${cfg.dataDir}/.first_startup"
             fi
 
             ln -sfn ${configFile} ${cfg.dataDir}/postgresql.conf
@@ -193,6 +202,13 @@ in
                 if ! kill -0 "$MAINPID"; then exit 1; fi
                 sleep 0.1
             done
+
+            if test -e "${cfg.dataDir}/.first_startup"; then
+              ${optionalString (cfg.initialScript != null) ''
+                cat "${cfg.initialScript}" | psql postgres
+              ''}
+              rm -f "${cfg.dataDir}/.first_startup"
+            fi
           '';
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
