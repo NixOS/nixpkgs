@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "th-orphans";
-  version = "0.6";
-  sha256 = "1ablf4c8vp9kzvr75ngl5yz3ip5klk6zmq7bcqcvks758b9c6qgj";
+  version = "0.7";
+  sha256 = "0fb0wkpvb8wc12gpgm90jfsgcm4p1wf8p0m5xjk64zkcjrdxjr80";
   buildDepends = [ thLift ];
   noHaddock = true;
   meta = {
