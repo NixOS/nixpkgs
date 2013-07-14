@@ -2581,23 +2581,38 @@ pythonPackages = python.modules // rec {
   };
 
 
-  matplotlib = buildPythonPackage ( rec {
-    name = "matplotlib-1.1.0";
+  # not sure if this is the best way to accomplish this -- needed to provide
+  # objective-c compiler on darwin
+  matplotlibStdenv = if stdenv.isDarwin
+    then pkgs.clangStdenv
+    else pkgs.stdenv;
+
+  matplotlib = matplotlibStdenv.mkDerivation (rec {
+    name = "matplotlib-1.2.1";
+
     src = fetchurl {
-      url = "mirror://sourceforge/matplotlib/${name}.tar.gz";
-      sha256 = "be37e1d86c65ecacae6683f8805e051e9904e5f2e02bf2b7a34262c46a6d06a7";
+      url = "http://downloads.sourceforge.net/matplotlib/${name}.tar.gz";
+      sha256 = "16x2ksdxx5p92v98qngh29hdz1bnqy77fhggbjq30pyqmrr8kqaj";
     };
 
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = [ dateutil numpy pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl pkgs.tk pkgs.xlibs.libX11 ];
+    buildInputs = [ python pkgs.which pkgs.ghostscript ];
 
-    meta = {
+    propagatedBuildInputs =
+      [ dateutil numpy pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl
+        pkgs.tk pkgs.xlibs.libX11 ];
+
+    buildPhase = "python setup.py build";
+
+    installPhase = "python setup.py install --prefix=$out";
+
+    meta = with stdenv.lib; {
       description = "python plotting library, making publication quality plots";
-      homepage = "http://matplotlib.sourceforge.net/";
-      platforms = stdenv.lib.platforms.linux;
-      maintainers = [ stdenv.lib.maintainers.simons ];
+      homepage    = "http://matplotlib.sourceforge.net/";
+      maintainers = with maintainers; [ lovek323 simons ];
+      platforms   = platforms.unix;
     };
   });
 
