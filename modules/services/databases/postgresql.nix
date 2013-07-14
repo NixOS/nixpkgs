@@ -29,7 +29,7 @@ let
     ''
       hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
       ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
-      log_destination = 'syslog'
+      log_destination = 'stderr'
       ${cfg.extraConfig}
     '';
 
@@ -63,13 +63,6 @@ in
         default = "5432";
         description = ''
           Port for PostgreSQL.
-        '';
-      };
-
-      logDir = mkOption {
-        default = "/var/log/postgresql";
-        description = ''
-          Log directory for PostgreSQL.
         '';
       };
 
