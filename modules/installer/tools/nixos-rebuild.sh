@@ -71,7 +71,7 @@ while [ "$#" -gt 0 ]; do
       --upgrade)
         upgrade=1
         ;;
-      --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|--fallback)
+      --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|--fallback|--repair)
         extraBuildFlags+=("$i")
         ;;
       --max-jobs|-j|--cores|-I)
