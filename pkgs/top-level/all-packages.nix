@@ -8546,7 +8546,12 @@ let
     flup = pythonPackages.flup;
   };
 
-  vim = callPackage ../applications/editors/vim { };
+  vim = callPackage ../applications/editors/vim {
+    # for Objective-C compilation
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
 
   vimHugeX = vim_configurable;
 

@@ -1,4 +1,4 @@
-{fetchurl, stdenv, python, cmake, vim}:
+{ fetchurl, stdenv, python, cmake, vim, perl, ruby }:
 
 /*
 About Vim and plugins
@@ -142,6 +142,8 @@ in
       cp -R doc "$out/vim-plugins"
       cp -R plugin "$out/vim-plugins"
       cp -R syntax_checkers "$out/vim-plugins"
+
+      ${vimHelptags "$out/vim-plugins/doc"}
     '';
   };
 
@@ -164,6 +166,35 @@ in
       cp -R ftplugin "$out/vim-plugins"
       cp -R indent "$out/vim-plugins"
       cp -R syntax "$out/vim-plugins"
+
+      ${vimHelptags "$out/vim-plugins/doc"}
+    '';
+  };
+
+  commandT = stdenv.mkDerivation {
+    name = "vim-command-t-1.4";
+
+    src = fetchurl {
+      url    = "https://github.com/wincent/Command-T/archive/1.4.tar.gz";
+      sha256 = "1ka9hwx9n0vj1dd5qsd2l1wq0kriwl76jmmdjzh7zaf0p547v98s";
+    };
+
+    buildInputs = [ perl ruby ];
+
+    buildPhase = ''
+      pushd ruby/command-t
+      ruby extconf.rb
+      make
+      popd
+    '';
+
+    installPhase = ''
+      mkdir -p "$out/vim-plugins"
+      cp -R doc "$out/doc"
+      cp -R plugin "$out/vim-plugins"
+      cp -R ruby "$out/vim-plugins"
+
+      ${vimHelptags "$out/vim-plugins/doc"}
     '';
   };
 
@@ -179,6 +210,8 @@ in
       mkdir -p "$out/vim-plugins"
       cp -R plugin "$out/vim-plugins"
     '';
+
+    postInstall = false;
   };
 }
 
