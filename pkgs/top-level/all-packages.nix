@@ -7181,7 +7181,7 @@ let
   chromium = lowPrio (callPackage ../applications/networking/browsers/chromium {
     channel = "stable";
     gconf = gnome.GConf;
-    pulseSupport = config.pulseaudio or false;
+    pulseSupport = config.pulseaudio or true;
   });
 
   chromiumBeta = lowPrio (chromium.override { channel = "beta"; });
@@ -7536,7 +7536,7 @@ let
     libpng = libpng.override { apngSupport = true; };
   };
 
-  firefoxWrapper = lowPrio (wrapFirefox { browser = firefoxPkgs.firefox; });
+  firefoxWrapper = wrapFirefox { browser = firefoxPkgs.firefox; };
 
   flac = callPackage ../applications/audio/flac { };
 
