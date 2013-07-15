@@ -291,7 +291,7 @@ rec {
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = attrs.args;
     origBuilder = attrs.builder;
-    QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 512)}";
+    QEMU_OPTS = "-m ${toString (attrs.memSize or 512)}";
   });
 
 
