@@ -1527,6 +1527,8 @@ let
 
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
+  pssh = callPackage ../tools/networking/pssh { };
+
   pstoedit = callPackage ../tools/graphics/pstoedit { };
 
   pv = callPackage ../tools/misc/pv { };
