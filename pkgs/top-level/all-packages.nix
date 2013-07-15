@@ -5863,6 +5863,8 @@ let
 
   dovecot22 = callPackage ../servers/mail/dovecot/2.2.x.nix { };
 
+  dovecot_pigeonhole = callPackage ../servers/mail/dovecot-pigeonhole { };
+
   ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
   elasticmq = callPackage ../servers/elasticmq { };
