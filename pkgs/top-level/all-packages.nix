@@ -5857,7 +5857,11 @@ let
 
   dictdWordnet = callPackage ../servers/dict/dictd-wordnet.nix {};
 
-  dovecot = callPackage ../servers/mail/dovecot { };
+  dovecot = dovecot21;
+
+  dovecot21 = callPackage ../servers/mail/dovecot { };
+
+  dovecot22 = callPackage ../servers/mail/dovecot/2.2.x.nix { };
 
   ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
