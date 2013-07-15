@@ -5,7 +5,7 @@
 , withVerbose ? false }:
 
 let
-  rev = "27775";
+  rev = "27840";
 in
 stdenv.mkDerivation rec {
   name = "gnunet-svn-${rev}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchsvn {
     url =  https://gnunet.org/svn/gnunet;
     inherit rev;
-    sha256 = "1fa2g63rrn0mmim9v62gnm2hqr556mbcafb7cs7afycbinix4spf";
+    sha256 = "0zhxvvj5rbhca2ykfx3g93dv94xyhqsnj011a6gql7zd5vfhaf6v";
   };
 
   buildInputs = [
