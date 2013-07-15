@@ -1698,6 +1698,17 @@
     tarball = "http://registry.npmjs.org/graceful-fs/-/graceful-fs-2.0.0.tgz";
   }
   {
+    name = "gridfs-stream";
+    spec = "*";
+    version = "0.4.0";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "f76f791e0d1b22649e11beeacddf8e62bd89ca2a";
+    tarball = "http://registry.npmjs.org/gridfs-stream/-/gridfs-stream-0.4.0.tgz";
+  }
+  {
     name = "growl";
     spec = "1.5.x";
     version = "1.5.1";
@@ -2753,14 +2764,14 @@
   }
   {
     name = "mute-stream";
-    spec = "~0.0.2";
-    version = "0.0.3";
+    spec = "~0.0.4";
+    version = "0.0.4";
     topLevel = false;
     dependencies = [
     ];
     patchLatest = false;
-    sha1 = "f09c090d333b3063f615cbbcca71b349893f0152";
-    tarball = "http://registry.npmjs.org/mute-stream/-/mute-stream-0.0.3.tgz";
+    sha1 = "a9219960a6d5d5d046597aee51252c6655f7177e";
+    tarball = "http://registry.npmjs.org/mute-stream/-/mute-stream-0.0.4.tgz";
   }
   {
     name = "mv";
@@ -3700,50 +3711,50 @@
   {
     name = "read";
     spec = "1";
-    version = "1.0.4";
+    version = "1.0.5";
     topLevel = false;
     dependencies = [
-      { name = "mute-stream"; spec = "~0.0.2"; }
+      { name = "mute-stream"; spec = "~0.0.4"; }
     ];
     patchLatest = false;
-    sha1 = "c2374be81787fc8633602a1b98232569d52fc655";
-    tarball = "http://registry.npmjs.org/read/-/read-1.0.4.tgz";
+    sha1 = "007a3d169478aa710a491727e453effb92e76203";
+    tarball = "http://registry.npmjs.org/read/-/read-1.0.5.tgz";
   }
   {
     name = "read";
     spec = "1.0.x";
-    version = "1.0.4";
+    version = "1.0.5";
     topLevel = false;
     dependencies = [
-      { name = "mute-stream"; spec = "~0.0.2"; }
+      { name = "mute-stream"; spec = "~0.0.4"; }
     ];
     patchLatest = false;
-    sha1 = "c2374be81787fc8633602a1b98232569d52fc655";
-    tarball = "http://registry.npmjs.org/read/-/read-1.0.4.tgz";
+    sha1 = "007a3d169478aa710a491727e453effb92e76203";
+    tarball = "http://registry.npmjs.org/read/-/read-1.0.5.tgz";
   }
   {
     name = "read";
     spec = "~1.0.1";
-    version = "1.0.4";
+    version = "1.0.5";
     topLevel = false;
     dependencies = [
-      { name = "mute-stream"; spec = "~0.0.2"; }
+      { name = "mute-stream"; spec = "~0.0.4"; }
     ];
     patchLatest = false;
-    sha1 = "c2374be81787fc8633602a1b98232569d52fc655";
-    tarball = "http://registry.npmjs.org/read/-/read-1.0.4.tgz";
+    sha1 = "007a3d169478aa710a491727e453effb92e76203";
+    tarball = "http://registry.npmjs.org/read/-/read-1.0.5.tgz";
   }
   {
     name = "read";
     spec = "~1.0.4";
-    version = "1.0.4";
+    version = "1.0.5";
     topLevel = false;
     dependencies = [
-      { name = "mute-stream"; spec = "~0.0.2"; }
+      { name = "mute-stream"; spec = "~0.0.4"; }
     ];
     patchLatest = false;
-    sha1 = "c2374be81787fc8633602a1b98232569d52fc655";
-    tarball = "http://registry.npmjs.org/read/-/read-1.0.4.tgz";
+    sha1 = "007a3d169478aa710a491727e453effb92e76203";
+    tarball = "http://registry.npmjs.org/read/-/read-1.0.5.tgz";
   }
   {
     name = "read-installed";
@@ -4094,26 +4105,26 @@
   {
     name = "rimraf";
     spec = "2";
-    version = "2.2.0";
+    version = "2.2.1";
     topLevel = false;
     dependencies = [
       { name = "graceful-fs"; spec = "~1"; }
     ];
     patchLatest = false;
-    sha1 = "70797542e81a935849443d7b69bec612ca74c96e";
-    tarball = "http://registry.npmjs.org/rimraf/-/rimraf-2.2.0.tgz";
+    sha1 = "8f49c57874ce166b667fbfecac2cdf7f26d3d8a5";
+    tarball = "http://registry.npmjs.org/rimraf/-/rimraf-2.2.1.tgz";
   }
   {
     name = "rimraf";
     spec = "~2";
-    version = "2.2.0";
+    version = "2.2.1";
     topLevel = false;
     dependencies = [
       { name = "graceful-fs"; spec = "~1"; }
     ];
     patchLatest = false;
-    sha1 = "70797542e81a935849443d7b69bec612ca74c96e";
-    tarball = "http://registry.npmjs.org/rimraf/-/rimraf-2.2.0.tgz";
+    sha1 = "8f49c57874ce166b667fbfecac2cdf7f26d3d8a5";
+    tarball = "http://registry.npmjs.org/rimraf/-/rimraf-2.2.1.tgz";
   }
   {
     name = "rimraf";
@@ -4130,14 +4141,14 @@
   {
     name = "rimraf";
     spec = "~2.2.0";
-    version = "2.2.0";
+    version = "2.2.1";
     topLevel = false;
     dependencies = [
       { name = "graceful-fs"; spec = "~1"; }
     ];
     patchLatest = false;
-    sha1 = "70797542e81a935849443d7b69bec612ca74c96e";
-    tarball = "http://registry.npmjs.org/rimraf/-/rimraf-2.2.0.tgz";
+    sha1 = "8f49c57874ce166b667fbfecac2cdf7f26d3d8a5";
+    tarball = "http://registry.npmjs.org/rimraf/-/rimraf-2.2.1.tgz";
   }
   {
     name = "s3http";
