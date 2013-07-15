@@ -110,7 +110,9 @@ in
           ''
             ${if ifaces == [] then ''
               for i in $(cd /sys/class/net && echo *); do
-                if [ -e /sys/class/net/$i/wireless ]; then
+                DEVTYPE=
+                source /sys/class/net/$i/uevent
+                if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
                   ifaces="$ifaces''${ifaces:+ -N} -i$i"
                 fi
               done
