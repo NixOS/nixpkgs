@@ -20,5 +20,6 @@ stdenv.mkDerivation {
     description = "Open source flash program for the STM32 ARM processors using the ST bootloader.";
     homepage = https://code.google.com/p/stm32flash/;
     license = "GPLv2";
+    maintainers = [ stdenv.lib.maintainers.the-kenny ];
   };
 }
