@@ -5926,6 +5926,8 @@ let
 
   nginx = callPackage ../servers/http/nginx { };
 
+  opensmtpd = callPackage ../servers/mail/opensmtpd { };
+
   petidomo = callPackage ../servers/mail/petidomo { };
 
   popa3d = callPackage ../servers/mail/popa3d { };
