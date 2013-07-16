@@ -45,8 +45,8 @@ in
 
         path = [ pkgs.nfsUtils pkgs.sysvtools pkgs.utillinux ];
 
-        wantedBy = [ "remote-fs-pre.target" "multi-user.target" ];
-        before = [ "remote-fs-pre.target" ];
+        wantedBy = [ "network-online.target" "multi-user.target" ];
+        before = [ "network-online.target" ];
         requires = [ "basic.target" "rpcbind.service" ];
         after = [ "basic.target" "rpcbind.service" "network.target" ];
 
@@ -69,8 +69,8 @@ in
 
         path = [ pkgs.sysvtools pkgs.utillinux ];
 
-        wantedBy = [ "remote-fs-pre.target" "multi-user.target" ];
-        before = [ "remote-fs-pre.target" ];
+        wantedBy = [ "network-online.target" "multi-user.target" ];
+        before = [ "network-online.target" ];
         requires = [ "rpcbind.service" ];
         after = [ "rpcbind.service" ];
 

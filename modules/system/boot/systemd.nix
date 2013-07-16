@@ -29,6 +29,7 @@ let
       "multi-user.target"
       "getty.target"
       "network.target"
+      "network-online.target"
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
