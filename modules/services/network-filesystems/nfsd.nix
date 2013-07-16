@@ -86,7 +86,8 @@ in
         wantedBy = [ "multi-user.target" ];
 
         requires = [ "rpcbind.service" "mountd.service" ];
-        after = [ "rpcbind.service" "mountd.service" "statd.service" ];
+        after = [ "rpcbind.service" "mountd.service" "idmapd.service" ];
+        before = [ "statd.service" ];
 
         path = [ pkgs.nfsUtils ];
 
@@ -98,8 +99,6 @@ in
             rpc.nfsd \
               ${if cfg.hostName != null then "-H ${cfg.hostName}" else ""} \
               ${builtins.toString cfg.nproc}
-
-            sm-notify -d
           '';
 
         postStop = "rpc.nfsd 0";
@@ -133,13 +132,13 @@ in
               ''
             }
 
-            exportfs -ra
+            exportfs -rav
           '';
 
         restartTriggers = [ exports ];
 
         serviceConfig.Type = "forking";
-        serviceConfig.ExecStart = "@${pkgs.nfsUtils}/sbin/rpc.mountd rpc.mountd -f /etc/exports";
+        serviceConfig.ExecStart = "@${pkgs.nfsUtils}/sbin/rpc.mountd rpc.mountd";
         serviceConfig.Restart = "always";
       };
 
