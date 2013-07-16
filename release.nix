@@ -256,7 +256,8 @@ in {
       mysql = runTest (t: t.mysql.test);
       mysql_replication = runTest (t: t.mysql_replication.test);
       nat = runTest (t: t.nat.test);
-      nfs = runTest (t: t.nfs.test);
+      nfs3 = runTest (t: t.nfs3.test);
+      #nfs4 = runTest (t: t.nfs4.test);
       openssh = runTest (t: t.openssh.test);
       partition = runTest (t: t.partition.test);
       proxy = runTest (t: t.proxy.test);

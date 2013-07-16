@@ -1,3 +1,5 @@
+{ version }:
+
 { pkgs, ... }:
 
 let
@@ -6,9 +8,9 @@ let
     { config, pkgs, ... }:
     { fileSystems = pkgs.lib.mkOverride 50
         [ { mountPoint = "/data";
-            device = "server:/data";
+            device = "server:${if version == 4 then "/" else "/data"}";
             fsType = "nfs";
-            options = "vers=3";
+            options = "vers=${toString version}";
           }
         ];
     };
