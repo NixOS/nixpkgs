@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python, cmake, vim, perl, ruby }:
+{fetchurl, stdenv, python, cmake, vim, perl, ruby}:
 
 /*
 About Vim and plugins
@@ -11,7 +11,7 @@ typical plugin files:
   plugin/P1.vim
   autoload/P1.vim
   ftplugin/xyz.vim
-  doc/plugin-documentation.txt
+  doc/plugin-documentation.txt (traditional documentation)
   README(.md) (nowadays thanks to github)
 
 Traditionally plugins were installed into ~/.vim/* so it was your task to keep track
@@ -25,16 +25,16 @@ this to your .vimrc should make most plugins work:
   set rtp+=~/.nix-profile/vim-plugins/YouCompleteMe
   " or for p in ["YouCompleteMe"] | exec 'set rtp+=~/.nix-profile/vim-plugins/'.p | endfor
 
-Its what
-pathogen, vundle, vim-addon-manager (VAM) use.
+Its what pathogen, vundle, vim-addon-manager (VAM) use.
 
 VAM's benefits:
-- works around after/* directories if they are used in non ~/.vim locations
 - allows activating plugins at runtime, eg when you need them. (works around
   some au command hooks, eg required for TheNerdTree plugin)
 - VAM checkous out all sources (vim.sf.net, git, mercurial, ...)
 - runs :helptags on update/installation only. Obviously it cannot do that on
   store paths.
+- it reads addon-info.json files which can declare dependencies by name
+  (without version)
 
 VAM is made up of
 - the code loading plugins
@@ -63,31 +63,50 @@ How to install VAM? eg provide such a bash function:
     EOF
     }
 
-IMHO having no plugins listed might be better than having outdated ones.
+Marc Weber thinks that having no plugins listed might be better than having
+outdated ones.
 
 So which plugins to add here according to what Marc Weber thinks is best?
-complicated plugins requiring dependencies, such as YouCompleteMe.
+Complicated plugins requiring dependencies, such as YouCompleteMe.
 Then its best to symlink ~/.nix-profile/vim-plugins/YouCompleteMe to
 ~/.vim/{vim-addons,bundle} or whatever plugin management solution you use.
 
 If you feel differently change the comments and proceed.
 */
 
-let vimHelptags = path: ''
-  ${vim}/bin/vim -N -u NONE -i NONE -n -e -s -c "helptags ${path}" +quit!
-'';
+# provide a function creating tag files for vim help documentation (doc/*.txt)
+let vimHelpTags = ''
+    vimHelpTags(){
+      if [ -d "$1/doc" ]; then
+        ${vim}/bin/vim -N -u NONE -i NONE -n -e -s -c "helptags $1/doc" +quit!
+      fi
+    }
+  '';
+
+  # install a simple standard vim plugin
+  simpleDerivation = a@{name, src, path, buildPhase ? "", ...} : stdenv.mkDerivation (a // {
+    inherit buildPhase;
+
+    installPhase = ''
+      target=$out/vim-plugins/$path
+      ensureDir $out/vim-plugins
+      ls -l
+      cp -r . $target
+      ${vimHelpTags}
+      vimHelpTags $target
+    '';
+  });
 
 in
 
 {
 
-  #TODO :helptags should be run
-
   vimAddonNix = {
     # github.com/MarcWeber/vim-addon-nix provides some additional support for
     # editing .nix files
 
-    # This is a placeholder, because I think you always should be using latest git version
+    # This is a placeholder, because I think you always should be using latest
+    # git version. It also depends on some additional plugins (see addon-info.json)
   };
 
   YouCompleteMe = stdenv.mkDerivation {
@@ -100,7 +119,6 @@ in
     configurePhase = ":";
 
     buildPhase = ''
-      set -x
       target=$out/vim-plugins/YouCompleteMe
       mkdir -p $target
       cp -a ./ $target
@@ -110,7 +128,8 @@ in
       cmake -G "Unix Makefiles" . $target/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7
       make -j -j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
 
-      ${vimHelptags "$out/vim-plugins/YouCompleteMe/doc"}
+      ${vimHelpTags}
+      vimHelpTags $target
     '';
 
     # TODO: implement proper install phase rather than keeping everything in store
@@ -126,58 +145,34 @@ in
     };
   };
 
-  syntastic = stdenv.mkDerivation {
+  syntastic = simpleDerivation {
     name = "vim-syntastic-3.0.0";
-   
     src = fetchurl {
       url = "https://github.com/scrooloose/syntastic/archive/3.0.0.tar.gz";
       sha256 = "0nf69wpa8qa7xcfvywy2khmazs4dn1i2nal9qwjh2bzrbwbbkdyl";
     };
-
-    buildPhase = "";
-
-    installPhase = ''
-      mkdir -p "$out/vim-plugins"
-      cp -R autoload "$out/vim-plugins"
-      cp -R doc "$out/vim-plugins"
-      cp -R plugin "$out/vim-plugins"
-      cp -R syntax_checkers "$out/vim-plugins"
-
-      ${vimHelptags "$out/vim-plugins/doc"}
-    '';
+    path = "syntastic";
   };
 
-  coffeeScript = stdenv.mkDerivation {
+  coffeeScript = simpleDerivation {
     name = "vim-coffee-script-v002";
-
     src = fetchurl {
       url = "https://github.com/vim-scripts/vim-coffee-script/archive/v002.tar.gz";
       sha256 = "1xln6i6jbbihcyp5bsdylr2146y41hmp2xf7wi001g2ymj1zdsc0";
     };
-
-    buildPhase = "";
-
-    installPhase = ''
-      mkdir -p "$out/vim-plugins"
-      cp -R after "$out/vim-plugins"
-      cp -R compiler "$out/vim-plugins"
-      cp -R doc "$out/vim-plugins"
-      cp -R ftdetect "$out/vim-plugins"
-      cp -R ftplugin "$out/vim-plugins"
-      cp -R indent "$out/vim-plugins"
-      cp -R syntax "$out/vim-plugins"
-
-      ${vimHelptags "$out/vim-plugins/doc"}
-    '';
+    path = "vim-coffee-script";
   };
 
-  commandT = stdenv.mkDerivation {
+  command_T = simpleDerivation {
+
     name = "vim-command-t-1.4";
 
     src = fetchurl {
       url    = "https://github.com/wincent/Command-T/archive/1.4.tar.gz";
       sha256 = "1ka9hwx9n0vj1dd5qsd2l1wq0kriwl76jmmdjzh7zaf0p547v98s";
     };
+
+    path = "Command-T";
 
     buildInputs = [ perl ruby ];
 
@@ -187,18 +182,10 @@ in
       make
       popd
     '';
-
-    installPhase = ''
-      mkdir -p "$out/vim-plugins"
-      cp -R doc "$out/doc"
-      cp -R plugin "$out/vim-plugins"
-      cp -R ruby "$out/vim-plugins"
-
-      ${vimHelptags "$out/vim-plugins/doc"}
-    '';
   };
 
-  xdebug = stdenv.mkDerivation {
+  xdebug = simpleDerivation {
+
     name = "vim-xdebug-a4980fa65f7f159780593ee37c178281691ba2c4";
 
     src = fetchurl {
@@ -206,12 +193,8 @@ in
       sha256 = "1348gzp0zhc2wifvs5vmf92m9y8ik8ldnvy7bawsxahy8hmhiksk";
     };
 
-    installPhase = ''
-      mkdir -p "$out/vim-plugins"
-      cp -R plugin "$out/vim-plugins"
-    '';
+    path = "xdebug";
 
     postInstall = false;
   };
 }
-
