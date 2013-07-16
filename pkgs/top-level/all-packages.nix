@@ -5822,6 +5822,8 @@ let
     sslSupport = true;
   });
 
+  apcupsd = callPackage ../servers/apcupsd { };
+
   sabnzbd = callPackage ../servers/sabnzbd { };
 
   bind = callPackage ../servers/dns/bind { };
