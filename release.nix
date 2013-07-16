@@ -246,7 +246,7 @@ in {
       installer.rebuildCD = runTest (t: t.installer.rebuildCD.test);
       installer.separateBoot = runTest (t: t.installer.separateBoot.test);
       installer.simple = runTest (t: t.installer.simple.test);
-      installer.swraid = runTest (t: t.installer.swraid.test);
+      #installer.swraid = runTest (t: t.installer.swraid.test);
       ipv6 = runTest (t: t.ipv6.test);
       kde4 = runTest (t: t.kde4.test);
       login = runTest (t: t.login.test);
