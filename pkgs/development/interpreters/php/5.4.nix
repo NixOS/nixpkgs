@@ -9,7 +9,7 @@ in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.4.15";
+  version = "5.4.17";
 
   name = "php-${version}";
 
@@ -227,10 +227,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   src = fetchurl {
     urls = [
-      "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror"
+      "http://nl1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
       "http://se1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
     ];
-    sha256 = "0dh159svdrakvm9nsyg3yyln7cqqzpxgs2163cqxplnc93d8a8id";
+    sha256 = "1d3y69hvplaqif2fl5s1lwx0y0m55j8b8fwag6ngdld5hx9r6jfw";
     name = "php-${version}.tar.bz2";
   };
 
