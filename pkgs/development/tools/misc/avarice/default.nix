@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     description = "AVaRICE translates between GDB's remote debug protocol and the AVR JTAG ICE protocol";
     homepage = http://sourceforge.net/projects/avarice/files/avarice/;
     maintainers = [ stdenv.lib.maintainers.smironov ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 
