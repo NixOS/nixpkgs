@@ -22,7 +22,8 @@ let kernel = config.boot.kernelPackages.kernel; in
             export DISPLAY=:0.0
             source /etc/profile
             cd /tmp
-            exec < /dev/hvc0 > /dev/hvc0 2> /dev/ttyS0
+            exec < /dev/hvc0 > /dev/hvc0
+            while ! exec 2> /dev/ttyS0; do sleep 0.1; done
             echo "connecting to host..." >&2
             stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
             echo
