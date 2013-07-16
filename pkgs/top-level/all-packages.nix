@@ -9105,14 +9105,6 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde48;
 
-  kde47 = kdePackagesFor (pkgs.kde47 // {
-      boost = boost149;
-      eigen = eigen2;
-      libotr = libotr_3_2;
-      libgphoto2 = libgphoto2_4;
-      libcanberra = libcanberra_kde;
-    }) ../desktops/kde-4.7;
-
   kde48 = kdePackagesFor (pkgs.kde48 // {
       boost = boost149;
       eigen = eigen2;
