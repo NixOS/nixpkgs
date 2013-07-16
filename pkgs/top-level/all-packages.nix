@@ -3281,6 +3281,8 @@ let
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
 
+  avarice = callPackage ../development/tools/misc/avarice { };
+
   bam = callPackage ../development/tools/build-managers/bam {};
 
   binutils = callPackage ../development/tools/misc/binutils {
