@@ -2,7 +2,7 @@
 , attr, libcap, vde2, alsaLib, texinfo, libuuid
 , sdlSupport ? true, SDL
 , vncSupport ? true, libjpeg, libpng
-, spiceSupport ? false, spice, spice_protocol
+, spiceSupport ? true, spice, spice_protocol
 , x86Only ? false
 }:
 
