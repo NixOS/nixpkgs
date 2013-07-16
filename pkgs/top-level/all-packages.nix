@@ -2354,12 +2354,14 @@ let
     binutilsCross = null;
   }));
 
-  gcc46_multi = if system == "x86_64-linux" then lowPrio (
+  gcc46_multi =
+    if system == "x86_64-linux" then lowPrio (
       wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc46.gcc.override {
-      stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc.gcc);
-      profiledCompiler = false;
-      enableMultilib = true;
-    })) else throw "Multilib gcc not supported on ‘${system}’";
+        stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc.gcc);
+        profiledCompiler = false;
+        enableMultilib = true;
+      }))
+    else throw "Multilib gcc not supported on ‘${system}’";
 
   gcc47_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.7 {
     inherit noSysDirs;
