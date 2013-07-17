@@ -53,6 +53,11 @@ rec {
 
         # mv cesa requires this sw fallback, for mv-sha1
         CRYPTO_SHA1 y
+        # Fast crypto
+        CRYPTO_TWOFISH y
+        CRYPTO_TWOFISH_COMMON y
+        CRYPTO_BLOWFISH y
+        CRYPTO_BLOWFISH_COMMON y
 
         IP_PNP y
         IP_PNP_DHCP y
