@@ -23,7 +23,7 @@ else
 */
 
 let
-  version = "9.1.3";
+  version = "9.1.4";
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
 stdenv.mkDerivation {
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256="0rnpaambxv5cd6kbfyvv4b8x2rw1xj13a67xbkzmndfh08iaqpcd";
+    sha256 = "1nk8xvw0dg07jd8w5gfdbk0abwv4lr8x6dsh4jm7k3p6x638g1bf";
   };
 
   prePatch = "patchShebangs .";
