@@ -226,7 +226,7 @@ let
             ''
               mkdir $out
               diskImage=$out/disk.img
-              ${pkgs.vmTools.kvm}/bin/qemu-img create -f qcow2 $diskImage "32M"
+              ${pkgs.qemu}/bin/qemu-img create -f qcow2 $diskImage "32M"
             '';
           buildInputs = [ pkgs.utillinux ];
         }

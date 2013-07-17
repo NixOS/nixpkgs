@@ -28,7 +28,8 @@ rec {
 
         wrapProgram $out/bin/nixos-test-driver \
           --prefix PATH : "${pkgs.qemu}/bin:${pkgs.vde2}/bin:${imagemagick}/bin:${coreutils}/bin" \
-          --prefix PERL5LIB : "${lib.makePerlPath [ perlPackages.TermReadLineGnu perlPackages.XMLWriter perlPackages.IOTty ]}:$out/lib/perl5/site_perl"
+          --prefix PERL5LIB : "${lib.makePerlPath [ perlPackages.TermReadLineGnu perlPackages.XMLWriter perlPackages.IOTty ]}:$out/lib/perl5/site_perl" \
+          --set qemu qemu-system-${if pkgs.stdenv.system == "x86_64-linux" then "x86_64" else "i386"}
       '';
   };
 

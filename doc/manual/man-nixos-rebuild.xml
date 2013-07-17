@@ -128,10 +128,10 @@ $ nixos-rebuild build-vm
 $ ./result/bin/run-*-vm
 </screen></para>
 
-      <para>The VM is implemented using the
-      <literal>qemu-kvm</literal> package.  For best performance, you
-      should load the <literal>kvm-intel</literal> or
-      <literal>kvm-amd</literal> kernel modules.</para>
+      <para>The VM is implemented using the <literal>qemu</literal>
+      package.  For best performance, you should load the
+      <literal>kvm-intel</literal> or <literal>kvm-amd</literal>
+      kernel modules to get hardware virtualisation.</para>
 
       <para>The VM mounts the Nix store of the host through the CIFS
       filesystem.  (<literal>qemu-kvm</literal> automatically starts a
