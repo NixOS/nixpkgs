@@ -252,7 +252,7 @@ in {
       login = runTest (t: t.login.test);
       latestKernel.login = runTest (t: t.latestKernel.login.test);
       misc = runTest (t: t.misc.test);
-      mpich = runTest (t: t.mpich.test);
+      #mpich = runTest (t: t.mpich.test);
       mysql = runTest (t: t.mysql.test);
       mysql_replication = runTest (t: t.mysql_replication.test);
       nat = runTest (t: t.nat.test);
