@@ -2128,12 +2128,12 @@ pythonPackages = python.modules // rec {
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.3.0";
+    version = "0.4.0";
 
     src = fetchurl {
       url = "https://github.com/RedMoonStudios/hetzner/archive/"
           + "v${version}.tar.gz";
-      sha256 = "10ywn7jbrv86ippf3bpbf01a4jnalwkkd0k7kxc39a55mfbx5s7d";
+      sha256 = "1dzmb4k83cc6dqvxrk2vxvrhgi4x45b6yzs5jvyfjhgl5daisv4b";
     };
 
     # not there yet, but coming soon.
