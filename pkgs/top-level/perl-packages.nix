@@ -2079,6 +2079,18 @@ rec {
     };
   };
 
+  DBIxSimple = buildPerlPackage {
+    name = "DBIx-Simple-1.35";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JU/JUERD/DBIx-Simple-1.35.tar.gz;
+      sha256 = "445535b3dfab88140c7a0d2776b1e78f254dc7e9c81072d5a01afc95a5db499a";
+    };
+    propagatedBuildInputs = [ DBI ];
+    meta = {
+      description = "Very complete easy-to-use OO interface to DBI";
+    };
+  };
+
   DevelCycle = buildPerlPackage {
     name = "Devel-Cycle-1.11";
     src = fetchurl {
