@@ -2074,6 +2074,8 @@ let
       javaCup = callPackage ../development/libraries/java/cup { };
     };
 
+  aldor = callPackage ../development/compilers/aldor { };
+
   aspectj = callPackage ../development/compilers/aspectj { };
 
   bigloo = callPackage ../development/compilers/bigloo { };
