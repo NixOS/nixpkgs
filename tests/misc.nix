@@ -13,7 +13,7 @@
   testScript =
     ''
       subtest "nixos-version", sub {
-          $machine->succeed("[ `nixos-version | wc -w` = 1 ]");
+          $machine->succeed("[ `nixos-version | wc -w` = 2 ]");
       };
 
       subtest "nixos-rebuild", sub {
