@@ -62,4 +62,5 @@
 , "stylus"
 , "npm"
 , "gridfs-stream"
+, "tar"
 ]

@@ -2665,7 +2665,7 @@
   {
     name = "mongoose";
     spec = "*";
-    version = "3.6.14";
+    version = "3.6.15";
     topLevel = true;
     dependencies = [
       { name = "hooks"; spec = "0.2.1"; }
@@ -2678,8 +2678,8 @@
       { name = "regexp-clone"; spec = "0.0.1"; }
     ];
     patchLatest = false;
-    sha1 = "acf28354ba4f792ded931ccd0dfe038a65757832";
-    tarball = "http://registry.npmjs.org/mongoose/-/mongoose-3.6.14.tgz";
+    sha1 = "272f1575da3b48ec31467abdf15baa61854ba5f1";
+    tarball = "http://registry.npmjs.org/mongoose/-/mongoose-3.6.15.tgz";
   }
   {
     name = "mongoose-schema-extend";
@@ -3155,7 +3155,7 @@
   {
     name = "npm2nix";
     spec = "*";
-    version = "2.0.0";
+    version = "2.0.1";
     topLevel = true;
     dependencies = [
       { name = "semver"; spec = ">=2.0.10 <3.0.0"; }
@@ -3164,8 +3164,8 @@
       { name = "npmconf"; spec = "0.1.1"; }
     ];
     patchLatest = false;
-    sha1 = "9e1ff781524ee313bf64e3b5f390e90ced87ae6d";
-    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-2.0.0.tgz";
+    sha1 = "bf50c8436339d309446582810ce0fff07f307d04";
+    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-2.0.1.tgz";
   }
   {
     name = "npmconf";
@@ -4493,26 +4493,26 @@
   {
     name = "source-map";
     spec = "*";
-    version = "0.1.25";
+    version = "0.1.26";
     topLevel = true;
     dependencies = [
       { name = "amdefine"; spec = ">=0.0.4"; }
     ];
     patchLatest = false;
-    sha1 = "5851545c1f4a40243829065c20e6f40b023fba1a";
-    tarball = "http://registry.npmjs.org/source-map/-/source-map-0.1.25.tgz";
+    sha1 = "4cce2dcb5fa02cfe1b4cf32cc83962b1b3997560";
+    tarball = "http://registry.npmjs.org/source-map/-/source-map-0.1.26.tgz";
   }
   {
     name = "source-map";
     spec = "~0.1.7";
-    version = "0.1.25";
+    version = "0.1.26";
     topLevel = false;
     dependencies = [
       { name = "amdefine"; spec = ">=0.0.4"; }
     ];
     patchLatest = false;
-    sha1 = "5851545c1f4a40243829065c20e6f40b023fba1a";
-    tarball = "http://registry.npmjs.org/source-map/-/source-map-0.1.25.tgz";
+    sha1 = "4cce2dcb5fa02cfe1b4cf32cc83962b1b3997560";
+    tarball = "http://registry.npmjs.org/source-map/-/source-map-0.1.26.tgz";
   }
   {
     name = "spdy";
@@ -4665,6 +4665,20 @@
     patchLatest = false;
     sha1 = "2987b1ce2bd2f38b0dce2a34388884bfa4400ea7";
     tarball = "http://registry.npmjs.org/sylvester/-/sylvester-0.0.21.tgz";
+  }
+  {
+    name = "tar";
+    spec = "*";
+    version = "0.1.17";
+    topLevel = true;
+    dependencies = [
+      { name = "inherits"; spec = "1.x"; }
+      { name = "block-stream"; spec = "*"; }
+      { name = "fstream"; spec = "~0.1.8"; }
+    ];
+    patchLatest = false;
+    sha1 = "408c8a95deb8e78a65b59b1a51a333183a32badc";
+    tarball = "http://registry.npmjs.org/tar/-/tar-0.1.17.tgz";
   }
   {
     name = "tar";
@@ -4885,13 +4899,13 @@
   {
     name = "underscore.string";
     spec = "~2.3.1";
-    version = "2.3.2";
+    version = "2.3.3";
     topLevel = false;
     dependencies = [
     ];
     patchLatest = false;
-    sha1 = "c10835dc04c2677cd49e1d77d26c0d3b22cc5709";
-    tarball = "http://registry.npmjs.org/underscore.string/-/underscore.string-2.3.2.tgz";
+    sha1 = "71c08bf6b428b1133f37e78fa3a21c82f7329b0d";
+    tarball = "http://registry.npmjs.org/underscore.string/-/underscore.string-2.3.3.tgz";
   }
   {
     name = "util";
