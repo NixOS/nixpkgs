@@ -457,6 +457,26 @@ pythonPackages = python.modules // rec {
   };
 
 
+  bitbucket_api = buildPythonPackage rec {
+    name = "bitbucket-api-0.4.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/b/bitbucket-api/${name}.tar.gz";
+      md5 = "6f3cee3586c4aad9c0b2e04fce9704fb";
+    };
+
+    propagatedBuildInputs = [ requests_oauth2 nose sh ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = https://github.com/Sheeprider/BitBucket-api;
+      description = "Python library to interact with BitBucket REST API";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
   bitstring = buildPythonPackage rec {
     name = "bitstring-3.1.2";
 
@@ -3107,6 +3127,26 @@ pythonPackages = python.modules // rec {
     };
   });
 
+
+  oauthlib = buildPythonPackage rec {
+    name = "oauthlib-0.5.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/o/oauthlib/${name}.tar.gz";
+      md5 = "d12c507de33403ebdf290fbffdb98213";
+    };
+
+    buildInputs = [ mock nose unittest2 ];
+
+    propagatedBuildInputs = [ pycrypto ];
+
+    meta = {
+      homepage = https://github.com/idan/oauthlib;
+      description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
+    };
+  };
+
+
   obfsproxy = buildPythonPackage ( rec {
     name = "obfsproxy-0.2.2";
     src = fetchgit {
@@ -4473,6 +4513,7 @@ pythonPackages = python.modules // rec {
     };
   };
 
+
   requests = buildPythonPackage rec {
     name = "requests-1.2.0";
 
@@ -4484,6 +4525,40 @@ pythonPackages = python.modules // rec {
     meta = {
       description = "Requests is an Apache2 Licensed HTTP library, written in Python, for human beings..";
       homepage = http://docs.python-requests.org/en/latest/;
+    };
+  };
+
+
+  requests_oauthlib = buildPythonPackage rec {
+    name = "requests-oauthlib-0.3.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/requests-oauthlib/${name}.tar.gz";
+      md5 = "35b3b750493c231145c39db0216813e7";
+    };
+
+    propagatedBuildInputs = [ oauthlib requests ];
+
+    meta = {
+      description = "OAuthlib authentication support for Requests";
+      homepage = https://github.com/requests/requests-oauthlib;
+    };
+  };
+
+
+  requests_oauth2 = buildPythonPackage rec {
+    name = "requests-oauth2-0.1.1";
+
+    src = fetchurl {
+      url = https://github.com/maraujop/requests-oauth2/archive/0.1.1.tar.gz;
+      sha256 = "1aij66qg9j5j4vzyh64nbg72y7pcafgjddxsi865racsay43xfqg";
+    };
+
+    propagatedBuildInputs = [ requests_oauthlib ];
+
+    meta = {
+      description = "Python's Requests OAuth2 (Open Authentication) plugin";
+      homepage = https://github.com/maraujop/requests-oauth2;
     };
   };
 
@@ -4748,6 +4823,23 @@ pythonPackages = python.modules // rec {
     meta = {
       description = "S-expression parser for Python";
       homepage = "https://github.com/tkf/sexpdata";
+    };
+  };
+
+
+  sh = buildPythonPackage rec {
+    name = "sh-1.08";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/sh/${name}.tar.gz";
+      md5 = "4028bcba85daa0aef579ed24261e88a3";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Python subprocess interface";
+      homepage = http://pypi.python.org/pypi/sh/;
     };
   };
 
