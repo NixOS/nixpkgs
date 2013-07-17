@@ -5,7 +5,5 @@ kde {
 
   buildInputs = [ kdelibs boost ];
 
-  preConfigure = "mv -v strigi-analyzer kfile-plugins";
-
-  patches = [ ./kdenetwork.patch ];
+  #preConfigure = "mv -v kdenetwork-strigi-analyzers kfile-plugins";
 }
