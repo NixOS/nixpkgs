@@ -20,7 +20,7 @@ with pkgs.lib;
   # ISO naming.
   isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixosVersion}-${pkgs.stdenv.system}.iso";
 
-  isoImage.volumeID = "NIXOS_${config.system.nixosVersion}";
+  isoImage.volumeID = substring 0 32 "NIXOS_${config.system.nixosVersion}";
 
   # Make the installer more likely to succeed in low memory
   # environments.  The kernel's overcommit heustistics bite us
