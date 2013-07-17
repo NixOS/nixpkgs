@@ -98,6 +98,14 @@ rec {
     propagatedBuildInputs = [ pkgs.pkgconfig pkgs.gtk2 pkgs.wxGTK ];
   };
 
+  AnyEvent = buildPerlPackage {
+    name = "AnyEvent-7.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-7.04.tar.gz;
+      sha256 = "6a9d94fa61c7f5dc515c834eb224dbc6ce4123da8fd5bfa0cf3815f3f3e908b2";
+    };
+  };
+
   AnyMoose = buildPerlPackage rec {
     name = "Any-Moose-0.10";
     src = fetchurl {
@@ -6866,10 +6874,6 @@ rec {
       sha256 = "0i1mg3ivxhx09x0w06k15izc92bknwqwh0ghpmhlq9s9iw12mmry";
     };
     propagatedBuildInputs = [ URI ];
-    meta = {
-      description = "Unknown";
-      license = "unknown";
-    };
   };
 
   Throwable = buildPerlPackage rec {
