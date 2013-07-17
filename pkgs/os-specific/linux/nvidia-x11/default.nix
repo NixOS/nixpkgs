@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   patches =
     [ ./version-test.patch ]
-    ++ optional (!versionOlder kernelDev.version "3.10") kernel310patch;
+    ++ optional (!libsOnly && versionAtLeast kernelDev.version "3.10") kernel310patch;
 
   src =
     if stdenv.system == "i686-linux" then
