@@ -7704,6 +7704,8 @@ let
 
   hello = callPackage ../applications/misc/hello/ex-2 { };
 
+  herbstluftwm = callPackage ../applications/window-managers/herbstluftwm { };
+
   hexedit = callPackage ../applications/editors/hexedit { };
 
   hetznerNixOpsInstaller =
