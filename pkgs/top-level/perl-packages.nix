@@ -2480,6 +2480,21 @@ rec {
     propagatedBuildInputs = [ ExceptionBase ];
   };
 
+  ExporterDeclare = buildPerlModule {
+    name = "Exporter-Declare-0.113";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/E/EX/EXODIST/Exporter-Declare-0.113.tar.gz;
+      sha256 = "724de5e982c8477df14a360c82233f9e0c26b4af9191647f750f5e465ea42dce";
+    };
+    buildInputs = [ FennecLite TestException ];
+    propagatedBuildInputs = [ MetaBuilder aliased ];
+    meta = {
+      homepage = http://open-exodus.net/projects/Exporter-Declare;
+      description = "Exporting done right";
+      license = "perl";
+    };
+  };
+
   ExporterLite = buildPerlPackage {
     name = "Exporter-Lite-0.02";
     src = fetchurl {
@@ -2652,6 +2667,19 @@ rec {
       sha256 = "0m089q07kpsk8y8g2wmi3d8i1jzn5m5m00shs7vnf2lnvvv4d7pm";
     };
     buildInputs = [ ];
+  };
+
+  FennecLite = buildPerlModule {
+    name = "Fennec-Lite-0.004";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/E/EX/EXODIST/Fennec-Lite-0.004.tar.gz;
+      sha256 = "dce28e3932762c2ff92aa52d90405c06e898e81cb7b164ccae8966ae77f1dcab";
+    };
+    meta = {
+      homepage = http://open-exodus.net/projects/Fennec-Lite;
+      description = "Minimalist Fennec, the commonly used bits";
+      license = "perl";
+    };
   };
 
   FileChangeNotify = buildPerlModule rec {
@@ -3812,6 +3840,20 @@ rec {
     };
   };
 
+  LogContextual = buildPerlPackage {
+    name = "Log-Contextual-0.005003";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FR/FREW/Log-Contextual-0.005003.tar.gz;
+      sha256 = "8519ae92bd8685d003460f99151996e94f38c3c8f12b90634857558605d13719";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ DataDumperConcise ExporterDeclare Moo ];
+    meta = {
+      description = "Simple logging interface with a contextual log";
+      license = "perl";
+    };
+  };
+
   LogDispatch = buildPerlPackage {
     name = "Log-Dispatch-2.39";
     src = fetchurl {
@@ -4048,6 +4090,19 @@ rec {
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
       sha256 = "194dvggf1cmzc701j4wma38jgrcv2pwwzk69rnysjjdcjdv6y255";
+    };
+  };
+
+  MetaBuilder = buildPerlModule {
+    name = "Meta-Builder-0.003";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/E/EX/EXODIST/Meta-Builder-0.003.tar.gz;
+      sha256 = "e7ac289b88d1662e87708d716877ac66a1a8414660996fe58c1db96d834a5375";
+    };
+    buildInputs = [ FennecLite TestException ];
+    meta = {
+      description = "Tools for creating Meta objects to track custom metrics";
+      license = "perl";
     };
   };
 
