@@ -264,7 +264,7 @@ in {
       quake3 = runTest (t: t.quake3.report);
       #subversion = runTest (t: t.subversion.report);
       tomcat = runTest (t: t.tomcat.test);
-      trac = runTest (t: t.trac.test);
+      #trac = runTest (t: t.trac.test);
       xfce = runTest (t: t.xfce.test);
     };
 

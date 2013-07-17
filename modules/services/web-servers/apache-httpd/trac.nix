@@ -86,8 +86,8 @@ in
         AuthLDAPURL "${config.ldapAuthentication.url}"
         authzldapauthoritative Off
         require valid-user
+      </LocationMatch>
     '' else ""}
-    </LocationMatch>
   '';
 
   globalEnvVars = singleton
