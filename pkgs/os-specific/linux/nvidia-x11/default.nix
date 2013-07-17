@@ -8,18 +8,24 @@
 
 with stdenv.lib;
 
-let versionNumber = "319.32";
-    kernel310patch = fetchurl {
-                       url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/nvidia-linux-3.10.patch?h=packages/nvidia";
-                       sha256 = "0nhzg6jdk9sf1vzj519gqi8a2n9xydhz2bcz472pss2cfgbc1ahb";
-                     };
+let
 
-in stdenv.mkDerivation {
+  versionNumber = "319.32";
+  kernel310patch = fetchurl {
+    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/nvidia-linux-3.10.patch?h=packages/nvidia";
+    sha256 = "0nhzg6jdk9sf1vzj519gqi8a2n9xydhz2bcz472pss2cfgbc1ahb";
+  };
+
+in
+
+stdenv.mkDerivation {
   name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernelDev.version}"}";
 
   builder = ./builder.sh;
 
-  patches = [ ./version-test.patch kernel310patch ];
+  patches =
+    [ ./version-test.patch ]
+    ++ optional (!versionOlder kernelDev.version "3.10") kernel310patch;
 
   src =
     if stdenv.system == "i686-linux" then
