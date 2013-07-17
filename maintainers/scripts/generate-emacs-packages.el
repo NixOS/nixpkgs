@@ -31,7 +31,11 @@
           (cl-case (package-desc-kind package-spec) (tar ".tar")  (single ".el"))))
 
 (defun nix-normalize-package-name (package-name)
-  (intern (replace-regexp-in-string "+" "-plus" (symbol-name package-name))))
+  (intern (replace-regexp-in-string
+           "\\+" "-plus"
+           (replace-regexp-in-string
+            "\\." "_"
+            (symbol-name package-name)))))
 
 (defun nix-make-deps-string (deps available-packages)
   (concat
