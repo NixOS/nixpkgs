@@ -55,7 +55,7 @@ let
   nixosVersion = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
-    inherit (config.system) nixosVersion;
+    inherit (config.system) nixosVersion nixosCodeName;
   };
 
   nixosGui = pkgs.xulrunnerWrapper {

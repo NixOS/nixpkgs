@@ -1,2 +1,2 @@
 #! @shell@
-echo @nixosVersion@
+echo "@nixosVersion@ (@nixosCodeName@)"
