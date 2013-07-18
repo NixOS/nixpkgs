@@ -7609,6 +7609,8 @@ let
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
+  mi2ly = callPackage ../applications/audio/mi2ly {};
+
   praat = callPackage ../applications/audio/praat { };
 
   quvi = callPackage ../applications/video/quvi/tool.nix { };
