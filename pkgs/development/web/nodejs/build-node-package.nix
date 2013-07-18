@@ -42,8 +42,14 @@ stdenv.mkDerivation ({
     mv node_modules $out/node_modules/${requireName}
     if [ -d "$out/node_modules/.bin" ]; then
       ln -sv node_modules/.bin $out/bin
+      node=`type -p node`
+      coffee=`type -p coffee || true`
       find -L $out/node_modules/.bin/* -type f -print0 | \
-        xargs -0 sed --follow-symlinks -i 's@#!/usr/bin/env node@#!${nodejs}/bin/node@'
+        xargs -0 sed --follow-symlinks -i \
+          -e 's@#!/usr/bin/env node@#!'"$node"'@' \
+          -e 's@#!/usr/bin/env coffee@#!'"$coffee"'@' \
+          -e 's@#!/.*/node@#!'"$node"'@' \
+          -e 's@#!/.*/coffee@#!'"$coffee"'@'
     fi
     if [ -e "$out/node_modules/${requireName}/man" ]; then
       mkdir $out/share
