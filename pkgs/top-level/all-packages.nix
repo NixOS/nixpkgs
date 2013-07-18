@@ -4786,6 +4786,10 @@ let
 
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
+  libspatialindex = callPackage ../development/libraries/libspatialindex { };
+
+  libspatialite = callPackage ../development/libraries/libspatialite { };
+
   libtasn1 = callPackage ../development/libraries/libtasn1 { };
 
   libtheora = callPackage ../development/libraries/libtheora { };
