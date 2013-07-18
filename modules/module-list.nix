@@ -124,6 +124,7 @@
   ./services/monitoring/smartd.nix
   ./services/monitoring/systemhealth.nix
   ./services/monitoring/ups.nix
+  ./services/monitoring/uptime.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-server.nix
   ./services/network-filesystems/drbd.nix
