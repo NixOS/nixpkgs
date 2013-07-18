@@ -3220,6 +3220,8 @@ let
 
   guile_ncurses = callPackage ../development/guile-modules/guile-ncurses { };
 
+  srecord = callPackage ../development/tools/misc/srecord { };
+
   windowssdk = (
     import ../development/misc/windows-sdk {
       inherit fetchurl stdenv cabextract;
