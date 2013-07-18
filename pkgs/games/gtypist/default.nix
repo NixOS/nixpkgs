@@ -1,19 +1,16 @@
 {stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation {
-  name = "gtypist-2.9.1";
+  name = "gtypist-2.9.3";
 
   src = fetchurl {
-    url = "mirror://gnu/gtypist/gtypist-2.9.1.tar.xz";
-    sha256 = "1yv209aih1ixbs477vzzk1xj013g6w32vi33g0hldfzvfxbl9y5s";
+    url = "mirror://gnu/gtypist/gtypist-2.9.3.tar.xz";
+    sha256 = "0srwa841caci69hzqb47xfbxxf7fvz3640qka083p72vm8z9hsxw";
   };
 
   buildInputs = [ncurses];
 
-  patches = [ (fetchurl {
-    url = "http://projects.archlinux.org/svntogit/community.git/plain/trunk/ncurses.patch?h=packages/gtypist";
-    sha256 = "14crgh21gghszwijxjvixpijqzsgn62wx6kz28zkjskdw0p5vij1";
-  })];
+  patchPhase = "sed -e 's#ncursesw/##' -i configure src/*";
 
   meta = {
     homepage = http://www.gnu.org/software/gtypist;
