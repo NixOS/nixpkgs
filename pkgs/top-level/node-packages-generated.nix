@@ -240,28 +240,28 @@
   {
     name = "aws-sdk";
     spec = "*";
-    version = "1.3.2";
+    version = "1.4.0";
     topLevel = true;
     dependencies = [
       { name = "xml2js"; spec = "0.2.4"; }
       { name = "xmlbuilder"; spec = "*"; }
     ];
     patchLatest = true;
-    sha1 = "23a6cca1eb4a3c50ac67fb354ec9a5725d31a1f4";
-    tarball = "http://registry.npmjs.org/aws-sdk/-/aws-sdk-1.3.2.tgz";
+    sha1 = "57a3291994d2b2b484ebd39e1ecb216a05c1c60e";
+    tarball = "http://registry.npmjs.org/aws-sdk/-/aws-sdk-1.4.0.tgz";
   }
   {
     name = "aws-sdk";
     spec = ">=1.2.0 <2";
-    version = "1.3.2";
+    version = "1.4.0";
     topLevel = false;
     dependencies = [
       { name = "xml2js"; spec = "0.2.4"; }
       { name = "xmlbuilder"; spec = "*"; }
     ];
     patchLatest = true;
-    sha1 = "23a6cca1eb4a3c50ac67fb354ec9a5725d31a1f4";
-    tarball = "http://registry.npmjs.org/aws-sdk/-/aws-sdk-1.3.2.tgz";
+    sha1 = "57a3291994d2b2b484ebd39e1ecb216a05c1c60e";
+    tarball = "http://registry.npmjs.org/aws-sdk/-/aws-sdk-1.4.0.tgz";
   }
   {
     name = "aws-sign";
@@ -646,6 +646,17 @@
     spec = "*";
     version = "1.6.3";
     topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "6355d32cf1b04cdff6b484e5e711782b2f0c39be";
+    tarball = "http://registry.npmjs.org/coffee-script/-/coffee-script-1.6.3.tgz";
+  }
+  {
+    name = "coffee-script";
+    spec = ">= 0.0.1";
+    version = "1.6.3";
+    topLevel = false;
     dependencies = [
     ];
     patchLatest = false;
@@ -1935,6 +1946,22 @@
     tarball = "http://registry.npmjs.org/growl/-/growl-1.7.0.tgz";
   }
   {
+    name = "guifi-earth";
+    spec = "https://github.com/jmendeth/guifi-earth/tarball/f3ee96835fd4fb0e3e12fadbd2cb782770d64854 ";
+    version = "0.2.1";
+    topLevel = true;
+    dependencies = [
+      { name = "coffee-script"; spec = ">= 0.0.1"; }
+      { name = "jade"; spec = ">= 0.0.1"; }
+      { name = "q"; spec = ">= 0.0.1"; }
+      { name = "xml2js"; spec = ">= 0.0.1"; }
+      { name = "msgpack"; spec = ">= 0.0.1"; }
+    ];
+    patchLatest = false;
+    sha256 = "a51a5beef55c14c68630275d51cf66c44a4462d1b20c0f08aef6d88a62ca077c";
+    tarball = "https://github.com/jmendeth/guifi-earth/tarball/f3ee96835fd4fb0e3e12fadbd2cb782770d64854";
+  }
+  {
     name = "gzippo";
     spec = "*";
     version = "0.2.0";
@@ -2290,6 +2317,24 @@
     patchLatest = false;
     sha1 = "8f10d7977d8d79f2f6ff862a81b0513ccb25686c";
     tarball = "http://registry.npmjs.org/jade/-/jade-0.26.3.tgz";
+  }
+  {
+    name = "jade";
+    spec = ">= 0.0.1";
+    version = "0.33.0";
+    topLevel = false;
+    dependencies = [
+      { name = "commander"; spec = "1.2.0"; }
+      { name = "mkdirp"; spec = "0.3.x"; }
+      { name = "transformers"; spec = "2.0.1"; }
+      { name = "character-parser"; spec = "1.0.2"; }
+      { name = "monocle"; spec = "0.1.48"; }
+      { name = "with"; spec = "~1.1.0"; }
+      { name = "constantinople"; spec = "~1.0.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "1b0bb45f9dd4ce57723605177713d80bccd4e429";
+    tarball = "http://registry.npmjs.org/jade/-/jade-0.33.0.tgz";
   }
   {
     name = "jayschema";
@@ -3050,6 +3095,17 @@
     patchLatest = false;
     sha1 = "03edc348d613e66a56486cfdac53bcbe899cbd61";
     tarball = "http://registry.npmjs.org/ms/-/ms-0.3.0.tgz";
+  }
+  {
+    name = "msgpack";
+    spec = ">= 0.0.1";
+    version = "0.1.8";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "cd5c0d2277bf1659a871209ddf59f57ad1124d68";
+    tarball = "http://registry.npmjs.org/msgpack/-/msgpack-0.1.8.tgz";
   }
   {
     name = "muri";
@@ -4004,6 +4060,17 @@
     patchLatest = false;
     sha1 = "dbf8d752a7fe22fa7d58635689499610e9276ddc";
     tarball = "http://registry.npmjs.org/ps-tree/-/ps-tree-0.0.3.tgz";
+  }
+  {
+    name = "q";
+    spec = ">= 0.0.1";
+    version = "0.9.6";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "5884b2154bdb3b6d5765e0fafddcb1506e133619";
+    tarball = "http://registry.npmjs.org/q/-/q-0.9.6.tgz";
   }
   {
     name = "qs";
@@ -5725,6 +5792,18 @@
   {
     name = "xml2js";
     spec = "0.2.x";
+    version = "0.2.8";
+    topLevel = false;
+    dependencies = [
+      { name = "sax"; spec = "0.5.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "9b81690931631ff09d1957549faf54f4f980b3c2";
+    tarball = "http://registry.npmjs.org/xml2js/-/xml2js-0.2.8.tgz";
+  }
+  {
+    name = "xml2js";
+    spec = ">= 0.0.1";
     version = "0.2.8";
     topLevel = false;
     dependencies = [
