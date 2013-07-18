@@ -2603,11 +2603,11 @@ pythonPackages = python.modules // rec {
 
 
   mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.2";
+    name = "mccabe-0.2.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/m/mccabe/${name}.tar.gz";
-      md5 = "c1012c7c24081471f45aab864d4e3805";
+      md5 = "5a3f3fa6a4bad126c88aaaa7dab682f5";
     };
 
     buildInputs = [ ];
@@ -3320,11 +3320,11 @@ pythonPackages = python.modules // rec {
 
   pep8 = buildPythonPackage rec {
     name = "pep8-${version}";
-    version = "1.4.5";
+    version = "1.4.6";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pep8/${name}.tar.gz";
-      md5 = "055dbd22ac5669232fdba752612e9686";
+      md5 = "a03bb494859e87b42601b61b1b043a0c";
     };
 
     #======================================================================
@@ -3823,11 +3823,11 @@ pythonPackages = python.modules // rec {
   };
 
   pyflakes = buildPythonPackage rec {
-    name = "pyflakes-0.6.1";
+    name = "pyflakes-0.7.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyflakes/${name}.tar.gz";
-      md5 = "00debd2280b962e915dfee552a675915";
+      md5 = "ec94ac11cb110e6e72cca23c104b66b1";
     };
 
     buildInputs = [ unittest2 ];
