@@ -3127,17 +3127,18 @@
   {
     name = "npm2nix";
     spec = "*";
-    version = "2.0.1";
+    version = "3.0.0";
     topLevel = true;
     dependencies = [
       { name = "semver"; spec = ">=2.0.10 <3.0.0"; }
       { name = "argparse"; spec = "0.1.15"; }
       { name = "npm-registry-client"; spec = "0.2.27"; }
       { name = "npmconf"; spec = "0.1.1"; }
+      { name = "tar"; spec = "0.1.17"; }
     ];
     patchLatest = false;
-    sha1 = "bf50c8436339d309446582810ce0fff07f307d04";
-    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-2.0.1.tgz";
+    sha1 = "e7efdddb685c35239c8ad00d5af32a391b6bc4a8";
+    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-3.0.0.tgz";
   }
   {
     name = "npmconf";
@@ -4655,6 +4656,20 @@
   {
     name = "tar";
     spec = "0";
+    version = "0.1.17";
+    topLevel = false;
+    dependencies = [
+      { name = "inherits"; spec = "1.x"; }
+      { name = "block-stream"; spec = "*"; }
+      { name = "fstream"; spec = "~0.1.8"; }
+    ];
+    patchLatest = false;
+    sha1 = "408c8a95deb8e78a65b59b1a51a333183a32badc";
+    tarball = "http://registry.npmjs.org/tar/-/tar-0.1.17.tgz";
+  }
+  {
+    name = "tar";
+    spec = "0.1.17";
     version = "0.1.17";
     topLevel = false;
     dependencies = [
