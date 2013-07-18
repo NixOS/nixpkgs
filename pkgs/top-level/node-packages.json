@@ -63,4 +63,5 @@
 , "npm"
 , "gridfs-stream"
 , "tar"
+, "uptime"
 ]

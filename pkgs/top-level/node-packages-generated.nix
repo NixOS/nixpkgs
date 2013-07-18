@@ -1710,17 +1710,6 @@
   }
   {
     name = "growl";
-    spec = "1.5.x";
-    version = "1.5.1";
-    topLevel = false;
-    dependencies = [
-    ];
-    patchLatest = false;
-    sha1 = "1decd1f22a4b30dae7d363799ec624cf40cc0070";
-    tarball = "http://registry.npmjs.org/growl/-/growl-1.5.1.tgz";
-  }
-  {
-    name = "growl";
     spec = "1.7.x";
     version = "1.7.0";
     topLevel = false;
@@ -2622,22 +2611,6 @@
     tarball = "http://registry.npmjs.org/mocha/-/mocha-1.12.0.tgz";
   }
   {
-    name = "mocha";
-    spec = "~1.3.2";
-    version = "1.3.2";
-    topLevel = false;
-    dependencies = [
-      { name = "commander"; spec = "0.6.1"; }
-      { name = "growl"; spec = "1.5.x"; }
-      { name = "jade"; spec = "0.26.3"; }
-      { name = "diff"; spec = "1.0.2"; }
-      { name = "debug"; spec = "*"; }
-    ];
-    patchLatest = false;
-    sha1 = "ab97b4f1e5942b9fe4d4436b8bd9eeda0eb01e13";
-    tarball = "http://registry.npmjs.org/mocha/-/mocha-1.3.2.tgz";
-  }
-  {
     name = "mongodb";
     spec = "1.2.x";
     version = "1.2.14";
@@ -2684,15 +2657,14 @@
   {
     name = "mongoose-schema-extend";
     spec = "*";
-    version = "0.1.3";
+    version = "0.1.4";
     topLevel = true;
     dependencies = [
       { name = "owl-deepcopy"; spec = "~0.0.1"; }
-      { name = "mocha"; spec = "~1.3.2"; }
     ];
     patchLatest = false;
-    sha1 = "8ee39f48c7a0beb4aad555c25cbac59fe7bd6502";
-    tarball = "http://registry.npmjs.org/mongoose-schema-extend/-/mongoose-schema-extend-0.1.3.tgz";
+    sha1 = "9f61b2abba5352fcd3d7b1193ee4b4d9f2a83804";
+    tarball = "http://registry.npmjs.org/mongoose-schema-extend/-/mongoose-schema-extend-0.1.4.tgz";
   }
   {
     name = "monocle";
@@ -3001,14 +2973,14 @@
   {
     name = "nopt";
     spec = "2";
-    version = "2.1.1";
+    version = "2.1.2";
     topLevel = false;
     dependencies = [
       { name = "abbrev"; spec = "1"; }
     ];
     patchLatest = false;
-    sha1 = "91eb7c4b017e7c00adcad1fd6d63944d0fdb75c1";
-    tarball = "http://registry.npmjs.org/nopt/-/nopt-2.1.1.tgz";
+    sha1 = "6cccd977b80132a07731d6e8ce58c2c8303cf9af";
+    tarball = "http://registry.npmjs.org/nopt/-/nopt-2.1.2.tgz";
   }
   {
     name = "nopt";
@@ -3025,14 +2997,14 @@
   {
     name = "nopt";
     spec = "~2.1.1";
-    version = "2.1.1";
+    version = "2.1.2";
     topLevel = false;
     dependencies = [
       { name = "abbrev"; spec = "1"; }
     ];
     patchLatest = false;
-    sha1 = "91eb7c4b017e7c00adcad1fd6d63944d0fdb75c1";
-    tarball = "http://registry.npmjs.org/nopt/-/nopt-2.1.1.tgz";
+    sha1 = "6cccd977b80132a07731d6e8ce58c2c8303cf9af";
+    tarball = "http://registry.npmjs.org/nopt/-/nopt-2.1.2.tgz";
   }
   {
     name = "normalize-package-data";
@@ -4541,13 +4513,13 @@
   {
     name = "stack-trace";
     spec = "0.0.x";
-    version = "0.0.6";
+    version = "0.0.7";
     topLevel = false;
     dependencies = [
     ];
     patchLatest = false;
-    sha1 = "1e719bd6a2629ff09c189e17a9ef902a94fc5db0";
-    tarball = "http://registry.npmjs.org/stack-trace/-/stack-trace-0.0.6.tgz";
+    sha1 = "c72e089744fc3659f508cdce3621af5634ec0fff";
+    tarball = "http://registry.npmjs.org/stack-trace/-/stack-trace-0.0.7.tgz";
   }
   {
     name = "stream-counter";
@@ -4906,6 +4878,17 @@
     patchLatest = false;
     sha1 = "71c08bf6b428b1133f37e78fa3a21c82f7329b0d";
     tarball = "http://registry.npmjs.org/underscore.string/-/underscore.string-2.3.3.tgz";
+  }
+  {
+    name = "uptime";
+    spec = "*";
+    version = "0.0.3";
+    topLevel = true;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "bc94f617767813e2450e035aa6ba6468fa13a07d";
+    tarball = "http://registry.npmjs.org/uptime/-/uptime-0.0.3.tgz";
   }
   {
     name = "util";
