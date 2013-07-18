@@ -1093,7 +1093,6 @@ in
     iscsitarget = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     iwlwifi = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     klibc = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-    kqemu = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     ndiswrapper = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     nvidia_x11 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     nvidia_x11_legacy173 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
