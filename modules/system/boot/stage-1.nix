@@ -249,7 +249,7 @@ let
   # booting (such as the FS containing /nix/store, or an FS needed for
   # mounting /, like / on a loopback).
   fileSystems = filter
-    (fs: fs.mountPoint == "/" || fs.mountPoint == "/nix" || fs.mountPoint == "/nix/store" || fs.neededForBoot)
+    (fs: fs.neededForBoot || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
     (attrValues config.fileSystems);
 
 
