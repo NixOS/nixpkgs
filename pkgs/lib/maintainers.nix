@@ -19,6 +19,7 @@
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
   eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
+  ertes = "Ertugrul Söylemez <es@ertes.de>";
   garbas = "Rok Garbas <rok@garbas.si>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   guibert = "David Guibert <david.guibert@gmail.com>";
