@@ -29,10 +29,12 @@ let
       # other paths in the store, we need the closure of /bin/sh
       # in `build-chroot-dirs' - otherwise any builder that uses
       # /bin/sh won't work.
-      binshDeps = pkgs.writeReferencesToFile config.system.build.binsh;
+      closureFile = pkgs.runCommand "closure" {
+        exportReferencesGraph = concatMap (pkg: [ "closure${baseNameOf pkg}" pkg ]) cfg.chrootClosures;
+      } "cat closure* | sort | uniq > $out";
     in
       pkgs.runCommand "nix.conf" {extraOptions = cfg.extraOptions; } ''
-        extraPaths=$(for i in $(cat ${binshDeps}); do if test -d $i; then echo $i; fi; done)
+        extraPaths=$(for i in $(cat ${closureFile}); do if test -e $i; then echo $i; fi; done)
         cat > $out <<END
         # WARNING: this file is generated.
         build-users-group = nixbld
@@ -93,6 +95,13 @@ in
             Directories from the host filesystem to be included
             in the chroot.
           '';
+      };
+
+      chrootClosures = mkOption {
+        default = [];
+        example = [ config.system.build.binsh pkgs.coreutils ];
+        description = "Packages whose closures should be included in the chroot";
+        type = types.listOf types.package;
       };
 
       extraOptions = mkOption {
@@ -250,6 +259,8 @@ in
   config = {
 
     nix.chrootDirs = [ "/dev" "/dev/pts" "/proc" "/bin/sh=${config.system.build.binsh}/bin/bash" ];
+
+    nix.chrootClosures = [ config.system.build.binsh ];
 
     environment.etc."nix/nix.conf".source = nixConf;
 
