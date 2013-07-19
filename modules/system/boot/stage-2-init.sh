@@ -92,7 +92,6 @@ mkdir -m 0700 -p /root
 mkdir -m 0755 -p /bin # for the /bin/sh symlink
 mkdir -m 0755 -p /home
 mkdir -m 0755 -p /etc/nixos
-mkdir -m 0700 -p /var/log/journal
 
 
 # Miscellaneous boot time cleanup.
