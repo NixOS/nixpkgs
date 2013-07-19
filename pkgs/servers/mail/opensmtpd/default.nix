@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "opensmtpd-${version}";
-  version = "201306271531p1";
+  version = "201307151923p1";
 
   buildInputs = [ libevent zlib openssl db4 bison pam ];
 
   src = fetchurl {
     url = "http://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "0b06vzv566nai9j506rl3cwkk5favqxg23hsn08490ynn23im0sc";
+    sha256 = "0cggq60zzz5mgj093pmgwjp4bm6znnhyv6ibp1vhkba7cxjavr4g";
   };  
 
   configureFlags = [ 
