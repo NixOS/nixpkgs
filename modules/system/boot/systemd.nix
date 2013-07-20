@@ -563,7 +563,9 @@ in
 
     system.activationScripts.systemd = stringAfter [ "groups" ]
       ''
-        mkdir -m 0755 -p /var/lib/udev /var/log/journal
+        mkdir -m 0755 -p /var/lib/udev
+        mkdir -p /var/log/journal
+        chmod 0755 /var/log/journal
 
         # Regenerate the hardware database /var/lib/udev/hwdb.bin
         # whenever systemd changes.
