@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for file in "$out"/etc/apcupsd/*; do
         sed -i -e 's|^WALL=.*|WALL="${utillinux}/bin/wall"|g' \
-               -e 's|^HOSTNAME=.*|HOSTNAME="${nettools}/bin/hostname"|g' \
+               -e 's|^HOSTNAME=.*|HOSTNAME=`${nettools}/bin/hostname`|g' \
                "$file"
     done
   '';
