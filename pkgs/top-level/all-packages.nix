@@ -4219,7 +4219,8 @@ let
   pixman = callPackage ../development/libraries/pixman { };
 
   cairo = callPackage ../development/libraries/cairo {
-    glSupport = config.cairo.gl or stdenv.isLinux;
+    glSupport = config.cairo.gl or (stdenv.isLinux &&
+      !stdenv.isArm && !stdenv.isMips);
   };
   cairo_1_12_2 = callPackage ../development/libraries/cairo/1.12.2.nix { };
   cairomm = callPackage ../development/libraries/cairomm { };
