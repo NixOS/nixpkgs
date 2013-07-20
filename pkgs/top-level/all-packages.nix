@@ -3587,6 +3587,8 @@ let
 
   sparse = callPackage ../development/tools/analysis/sparse { };
 
+  speedtest_cli = callPackage ../tools/networking/speedtest-cli { };
+
   spin = callPackage ../development/tools/analysis/spin { };
 
   splint = callPackage ../development/tools/analysis/splint { };
