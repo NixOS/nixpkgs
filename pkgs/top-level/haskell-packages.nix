@@ -1655,6 +1655,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {};
 
+  qrencode = callPackage ../development/libraries/haskell/qrencode {
+    inherit (pkgs) qrencode;
+  };
+
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
 
   random_1_0_1_1 = callPackage ../development/libraries/haskell/random/1.0.1.1.nix {};
