@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
         --mandir=$out/share/man \
         --with-halpolicydir=$out/share/halpolicy \
         --localstatedir=/var/ \
-        --with-nologin=/etc \
+        --with-nologin=/run \
         --with-log-dir=/var/log/apcupsd \
         --with-pwrfail-dir=/run/apcupsd \
         --with-lock-dir=/run/lock \
