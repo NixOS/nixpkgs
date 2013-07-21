@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "atomic-primops";
-  version = "0.2.2";
-  sha256 = "1a3svsh96pl6915g70sf9zhqby0ahhifww6m13cn0zr4za32vl7n";
+  version = "0.4";
+  sha256 = "01sg0yn25fs0z7dmrvhyp3amay9l028xs570xhy6vvplrji1mxf0";
   buildDepends = [ bitsAtomic Cabal primitive ];
   meta = {
     homepage = "https://github.com/rrnewton/haskell-lockfree-queue/wiki";
