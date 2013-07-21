@@ -150,6 +150,7 @@ in
     systemd.services.apcupsd = {
       description = "UPS daemon";
       wantedBy = [ "multi-user.target" ];
+      preStart = "mkdir -p /run/apcupsd/";
       serviceConfig = {
         ExecStart = "${pkgs.apcupsd}/bin/apcupsd -b -f ${configFile} -d1";
       };
