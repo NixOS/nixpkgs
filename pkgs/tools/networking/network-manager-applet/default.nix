@@ -18,11 +18,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gtk libglade networkmanager GConf libnotify libsecret dbus_glib
-    polkit isocodes makeWrapper udev libgnome_keyring
+    gtk libglade networkmanager libnotify libsecret dbus_glib
+    polkit isocodes makeWrapper udev
   ];
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig];
+
+  propagatedBuildInputs = [ GConf libgnome_keyring ];
 
   makeFlags = [
     ''CFLAGS=-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile_broadband_provider_info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''
