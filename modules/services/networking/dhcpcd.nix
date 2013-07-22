@@ -35,6 +35,8 @@ let
       # Ethernet cards used for bridging.  Likewise for vif* and tap*
       # (Xen) and virbr* and vnet* (libvirt).
       denyinterfaces ${toString ignoredInterfaces} peth* vif* tap* tun* virbr* vnet* vboxnet*
+
+      ${config.networking.dhcpcd.extraConfig}
     '';
 
   # Hook for emitting ip-up/ip-down events.
@@ -82,6 +84,13 @@ in
          any of the shell glob patterns in this list. The purpose of
          this option is blacklist virtual interfaces such as those
          created by Xen, libvirt, LXC, etc.
+      '';
+    };
+
+    networking.dhcpcd.extraConfig = mkOption {
+      default = "";
+      description = ''
+         Literal string to append to the config file generated for dhcpcd.
       '';
     };
 
