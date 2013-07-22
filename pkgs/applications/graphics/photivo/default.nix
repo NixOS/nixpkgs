@@ -13,4 +13,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ qt4 fftw graphicsmagick_q16 lcms2 lensfun libjpeg exiv2 liblqr1 ];
+  patchPhase = '' # kinda icky
+    sed -e '/("@INSTALL@")/d' \
+        -e s,@INSTALL@,$out/share/photivo, \
+        -i Sources/ptSettings.cpp
+  '';
 }
