@@ -154,6 +154,15 @@ rec {
       patch = ./mips-ext3-n32.patch;
     };
 
+  grsecurity_2_9_1_3_2_48 =
+    { name = "grsecurity-2.9.1-3.2.48";
+      patch =
+        (fetchurl {
+           url = http://grsecurity.net/stable/grsecurity-2.9.1-3.2.48-201307212241.patch;
+           sha256 = "1llgrcd7ynxx60dn05bcbysd6a1091wwxkck4d15gvp71s9r6scm";
+         });
+    };
+
   guruplug_defconfig =
     { # Default configuration for the GuruPlug.  From
       # <http://www.openplug.org/plugwiki/images/c/c6/Guruplug-patchset-2.6.33.2.tar.bz2>.

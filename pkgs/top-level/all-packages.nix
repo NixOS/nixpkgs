@@ -6348,6 +6348,10 @@ let
       ];
   };
 
+  linux_3_2_grsecurity = lib.overrideDerivation (linux_3_2.override (args: {
+    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_2_9_1_3_2_48 ];
+  })) (args: { makeFlags = "DISABLE_PAX_PLUGINS=y";});
+
   linux_3_2_apparmor = linux_3_2.override {
     kernelPatches = [ kernelPatches.apparmor_3_2 ];
     extraConfig = ''
