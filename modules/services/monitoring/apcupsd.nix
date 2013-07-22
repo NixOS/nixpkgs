@@ -153,6 +153,13 @@ in
       preStart = "mkdir -p /run/apcupsd/";
       serviceConfig = {
         ExecStart = "${pkgs.apcupsd}/bin/apcupsd -b -f ${configFile} -d1";
+        # TODO: When apcupsd has initiated a shutdown, systemd always ends up
+        # waiting for it to stop ("A stop job is running for UPS daemon"). This
+        # is weird, because in the journal one can clearly see that apcupsd has
+        # received the SIGTERM signal and has already quit (or so it seems).
+        # This reduces the wait time from 90 seconds (default) to just 5. Then
+        # systemd kills it with SIGKILL.
+        TimeoutStopSec = 5;
       };
     };
 
