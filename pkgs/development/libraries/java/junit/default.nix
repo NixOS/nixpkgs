@@ -1,13 +1,12 @@
-{stdenv, fetchgit, unzip} :
+{stdenv, fetchurl, unzip} :
 
 stdenv.mkDerivation {
   name = "junit-4.8.2";
   builder = ./builder.sh;
 
-  src = fetchgit {
-    url = https://github.com/junit-team/junit.git;
-    rev = "refs/tags/r4.8.2";
-    sha256 = "1w73l3x97kg8zmrp44xgvp3gr6sih0crm0dhhky6jiq915ba1dlh";
+  src = fetchurl {
+    url = https://github.com/downloads/junit-team/junit/junit4.8.2.zip;
+    sha256 = "01simvc3pmgp27p7vzavmsx5rphm6hqzwrqfkwllhf3812dcqxy6";
   };
 
   inherit unzip;
