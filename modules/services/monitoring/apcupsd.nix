@@ -156,6 +156,28 @@ in
       };
     };
 
+    # A special service to tell the UPS to power down/hibernate just before the
+    # computer shuts down. (The UPS has a built in delay before it actually
+    # shuts off power.) Copied from here:
+    # http://forums.opensuse.org/english/get-technical-help-here/applications/479499-apcupsd-systemd-killpower-issues.html
+    systemd.services.apcupsd-killpower = {
+      after = [ "shutdown.target" ]; # append umount.target?
+      before = [ "final.target" ];
+      wantedBy = [ "shutdown.target" ];
+      unitConfig = {
+        Description = "APC UPS killpower";
+        ConditionPathExists = "/run/apcupsd/powerfail";
+        DefaultDependencies = "no";
+      };
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.apcupsd}/bin/apcupsd --killpower -f ${configFile}";
+        TimeoutSec = 0;
+        StandardOutput = "tty";
+        RemainAfterExit = "yes";
+      };
+    };
+
   };
 
 }
