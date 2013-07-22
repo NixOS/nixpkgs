@@ -491,6 +491,17 @@
     tarball = "http://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.2.1.tgz";
   }
   {
+    name = "buffer-equal";
+    spec = "~0.0.0";
+    version = "0.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "4a68196ac33522daa17ec99858b302a636b62cf1";
+    tarball = "http://registry.npmjs.org/buffer-equal/-/buffer-equal-0.0.0.tgz";
+  }
+  {
     name = "buffertools";
     spec = "*";
     version = "1.1.1";
@@ -513,6 +524,18 @@
     tarball = "http://registry.npmjs.org/buffertools/-/buffertools-1.1.1.tgz";
   }
   {
+    name = "bunker";
+    spec = "0.1.X";
+    version = "0.1.2";
+    topLevel = false;
+    dependencies = [
+      { name = "burrito"; spec = ">=0.2.5 <0.3"; }
+    ];
+    patchLatest = false;
+    sha1 = "c88992464a8e2a6ede86930375f92b58077ef97c";
+    tarball = "http://registry.npmjs.org/bunker/-/bunker-0.1.2.tgz";
+  }
+  {
     name = "bunyan";
     spec = "0.21.1";
     version = "0.21.1";
@@ -524,6 +547,19 @@
     patchLatest = false;
     sha1 = "ea00a0d5223572e31e1e71efba2237cb1915942a";
     tarball = "http://registry.npmjs.org/bunyan/-/bunyan-0.21.1.tgz";
+  }
+  {
+    name = "burrito";
+    spec = ">=0.2.5 <0.3";
+    version = "0.2.12";
+    topLevel = false;
+    dependencies = [
+      { name = "traverse"; spec = "~0.5.1"; }
+      { name = "uglify-js"; spec = "~1.1.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "d0d6e6ac81d5e99789c6fa4accb0b0031ea54f6b";
+    tarball = "http://registry.npmjs.org/burrito/-/burrito-0.2.12.tgz";
   }
   {
     name = "bytes";
@@ -546,6 +582,17 @@
     patchLatest = false;
     sha1 = "55384d6afcf8c6b9dd483e8347646a790e4545e7";
     tarball = "http://registry.npmjs.org/character-parser/-/character-parser-1.0.2.tgz";
+  }
+  {
+    name = "charm";
+    spec = "0.1.x";
+    version = "0.1.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "06c21eed1a1b06aeb67553cdc53e23274bac2296";
+    tarball = "http://registry.npmjs.org/charm/-/charm-0.1.2.tgz";
   }
   {
     name = "child-process-close";
@@ -1195,6 +1242,28 @@
     tarball = "http://registry.npmjs.org/deep-equal/-/deep-equal-0.0.0.tgz";
   }
   {
+    name = "deep-equal";
+    spec = "~0.0.0";
+    version = "0.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "99679d3bbd047156fcd450d3d01eeb9068691e83";
+    tarball = "http://registry.npmjs.org/deep-equal/-/deep-equal-0.0.0.tgz";
+  }
+  {
+    name = "deep-is";
+    spec = "0.1.x";
+    version = "0.1.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "9ced65ea0bc0b09f42a6d79c1b1903f9d913cc18";
+    tarball = "http://registry.npmjs.org/deep-is/-/deep-is-0.1.2.tgz";
+  }
+  {
     name = "delayed-stream";
     spec = "0.0.5";
     version = "0.0.5";
@@ -1226,6 +1295,20 @@
     patchLatest = false;
     sha1 = "664b6bdb113fb3a51ced79aff621badeed29a02c";
     tarball = "http://registry.npmjs.org/diff/-/diff-1.0.5.tgz";
+  }
+  {
+    name = "difflet";
+    spec = "~0.2.0";
+    version = "0.2.6";
+    topLevel = false;
+    dependencies = [
+      { name = "traverse"; spec = "0.6.x"; }
+      { name = "charm"; spec = "0.1.x"; }
+      { name = "deep-is"; spec = "0.1.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "ab23b31f5649b6faa8e3d2acbd334467365ca6fa";
+    tarball = "http://registry.npmjs.org/difflet/-/difflet-0.2.6.tgz";
   }
   {
     name = "director";
@@ -1515,6 +1598,22 @@
     patchLatest = false;
     sha1 = "c14c5b3bf14d7417ffbfd990c0a7495cd9f337bc";
     tarball = "http://registry.npmjs.org/faye-websocket/-/faye-websocket-0.4.4.tgz";
+  }
+  {
+    name = "flatiron";
+    spec = "*";
+    version = "0.3.8";
+    topLevel = true;
+    dependencies = [
+      { name = "broadway"; spec = "0.2.7"; }
+      { name = "optimist"; spec = "0.3.5"; }
+      { name = "prompt"; spec = "0.2.11"; }
+      { name = "director"; spec = "1.1.10"; }
+      { name = "pkginfo"; spec = "0.3.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "235d691f19154eff033610c12bcd51f304ff09c6";
+    tarball = "http://registry.npmjs.org/flatiron/-/flatiron-0.3.8.tgz";
   }
   {
     name = "flatiron";
@@ -2183,6 +2282,17 @@
     patchLatest = false;
     sha1 = "45be2390d27af4b7613aac4ee4d957e3f4cbdb54";
     tarball = "http://registry.npmjs.org/iconv-lite/-/iconv-lite-0.2.7.tgz";
+  }
+  {
+    name = "inherits";
+    spec = "*";
+    version = "2.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "76c81b3b1c10ddee3a60bf2c247162bc369f8ba8";
+    tarball = "http://registry.npmjs.org/inherits/-/inherits-2.0.0.tgz";
   }
   {
     name = "inherits";
@@ -2892,6 +3002,17 @@
   }
   {
     name = "mkdirp";
+    spec = "~0.3";
+    version = "0.3.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "de3e5f8961c88c787ee1368df849ac4413eca8d7";
+    tarball = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.5.tgz";
+  }
+  {
+    name = "mkdirp";
     spec = "~0.3.3";
     version = "0.3.5";
     topLevel = false;
@@ -3099,13 +3220,14 @@
   {
     name = "msgpack";
     spec = ">= 0.0.1";
-    version = "0.1.8";
+    version = "0.1.10";
     topLevel = false;
     dependencies = [
+      { name = "nodeunit"; spec = "https://github.com/godsflaw/nodeunit/tarball/master"; }
     ];
     patchLatest = false;
-    sha1 = "cd5c0d2277bf1659a871209ddf59f57ad1124d68";
-    tarball = "http://registry.npmjs.org/msgpack/-/msgpack-0.1.8.tgz";
+    sha1 = "ebb2edea5ebc3616a2ce003d8d8ef73b52bf7318";
+    tarball = "http://registry.npmjs.org/msgpack/-/msgpack-0.1.10.tgz";
   }
   {
     name = "muri";
@@ -3406,6 +3528,18 @@
     tarball = "http://registry.npmjs.org/nodemon/-/nodemon-0.7.8.tgz";
   }
   {
+    name = "nodeunit";
+    spec = "https://github.com/godsflaw/nodeunit/tarball/master";
+    version = "0.7.4";
+    topLevel = false;
+    dependencies = [
+      { name = "tap"; spec = ">=0.2.3"; }
+    ];
+    patchLatest = false;
+    sha256 = "c79333b5b54ca3b9eb42e42d6ea48d261aa9e015c0ad9cf340abacb528d0ee3a";
+    tarball = "https://github.com/godsflaw/nodeunit/tarball/master";
+  }
+  {
     name = "nopt";
     spec = "2";
     version = "2.1.2";
@@ -3428,6 +3562,18 @@
     patchLatest = false;
     sha1 = "ca7416f20a5e3f9c3b86180f96295fa3d0b52e0d";
     tarball = "http://registry.npmjs.org/nopt/-/nopt-2.0.0.tgz";
+  }
+  {
+    name = "nopt";
+    spec = "~2";
+    version = "2.1.2";
+    topLevel = false;
+    dependencies = [
+      { name = "abbrev"; spec = "1"; }
+    ];
+    patchLatest = false;
+    sha1 = "6cccd977b80132a07731d6e8ce58c2c8303cf9af";
+    tarball = "http://registry.npmjs.org/nopt/-/nopt-2.1.2.tgz";
   }
   {
     name = "nopt";
@@ -4012,6 +4158,22 @@
   }
   {
     name = "prompt";
+    spec = "0.2.11";
+    version = "0.2.11";
+    topLevel = false;
+    dependencies = [
+      { name = "pkginfo"; spec = "0.x.x"; }
+      { name = "read"; spec = "1.0.x"; }
+      { name = "revalidator"; spec = "0.1.x"; }
+      { name = "utile"; spec = "0.2.x"; }
+      { name = "winston"; spec = "0.6.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "26d455af4b7fac15291dfcdddf2400328c1fa446";
+    tarball = "http://registry.npmjs.org/prompt/-/prompt-0.2.11.tgz";
+  }
+  {
+    name = "prompt";
     spec = "0.2.9";
     version = "0.2.9";
     topLevel = false;
@@ -4590,6 +4752,18 @@
   }
   {
     name = "rimraf";
+    spec = "2.x.x";
+    version = "2.2.1";
+    topLevel = false;
+    dependencies = [
+      { name = "graceful-fs"; spec = "~1"; }
+    ];
+    patchLatest = false;
+    sha1 = "8f49c57874ce166b667fbfecac2cdf7f26d3d8a5";
+    tarball = "http://registry.npmjs.org/rimraf/-/rimraf-2.2.1.tgz";
+  }
+  {
+    name = "rimraf";
     spec = "~2";
     version = "2.2.1";
     topLevel = false;
@@ -4623,6 +4797,18 @@
     patchLatest = false;
     sha1 = "8f49c57874ce166b667fbfecac2cdf7f26d3d8a5";
     tarball = "http://registry.npmjs.org/rimraf/-/rimraf-2.2.1.tgz";
+  }
+  {
+    name = "runforcover";
+    spec = "~0.0.2";
+    version = "0.0.2";
+    topLevel = false;
+    dependencies = [
+      { name = "bunker"; spec = "0.1.X"; }
+    ];
+    patchLatest = false;
+    sha1 = "344f057d8d45d33aebc6cc82204678f69c4857cc";
+    tarball = "http://registry.npmjs.org/runforcover/-/runforcover-0.0.2.tgz";
   }
   {
     name = "s3http";
@@ -4894,6 +5080,17 @@
     patchLatest = false;
     sha1 = "34f89a6db1f31fa525f5a570f5bcf877cf0955ee";
     tarball = "http://registry.npmjs.org/sliced/-/sliced-0.0.4.tgz";
+  }
+  {
+    name = "slide";
+    spec = "*";
+    version = "1.1.4";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "2b23f1949b369ed61d22bd6570ff0320302fc8df";
+    tarball = "http://registry.npmjs.org/slide/-/slide-1.1.4.tgz";
   }
   {
     name = "slide";
@@ -5195,6 +5392,27 @@
     tarball = "http://registry.npmjs.org/sylvester/-/sylvester-0.0.21.tgz";
   }
   {
+    name = "tap";
+    spec = ">=0.2.3";
+    version = "0.4.3";
+    topLevel = false;
+    dependencies = [
+      { name = "inherits"; spec = "*"; }
+      { name = "yamlish"; spec = "*"; }
+      { name = "slide"; spec = "*"; }
+      { name = "runforcover"; spec = "~0.0.2"; }
+      { name = "nopt"; spec = "~2"; }
+      { name = "mkdirp"; spec = "~0.3"; }
+      { name = "difflet"; spec = "~0.2.0"; }
+      { name = "deep-equal"; spec = "~0.0.0"; }
+      { name = "buffer-equal"; spec = "~0.0.0"; }
+      { name = "glob"; spec = "~3.2.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "5ead7ede530658167fe28e3cdb9b0f96d3cf0c76";
+    tarball = "http://registry.npmjs.org/tap/-/tap-0.4.3.tgz";
+  }
+  {
     name = "tar";
     spec = "*";
     version = "0.1.17";
@@ -5310,6 +5528,28 @@
     tarball = "http://registry.npmjs.org/transformers/-/transformers-2.0.1.tgz";
   }
   {
+    name = "traverse";
+    spec = "0.6.x";
+    version = "0.6.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "a053ffa1b6179b9240ea16d74bfd604bd6b6e41b";
+    tarball = "http://registry.npmjs.org/traverse/-/traverse-0.6.3.tgz";
+  }
+  {
+    name = "traverse";
+    spec = "~0.5.1";
+    version = "0.5.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "e203c58d5f7f0e37db6e74c0acb929bb09b61d85";
+    tarball = "http://registry.npmjs.org/traverse/-/traverse-0.5.2.tgz";
+  }
+  {
     name = "tunnel-agent";
     spec = "~0.2.0";
     version = "0.2.0";
@@ -5355,6 +5595,17 @@
     patchLatest = false;
     sha1 = "fa0984770b428b7a9b2a8058f46355d14fef211a";
     tarball = "http://registry.npmjs.org/uglify-js/-/uglify-js-2.3.6.tgz";
+  }
+  {
+    name = "uglify-js";
+    spec = "~1.1.1";
+    version = "1.1.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "ee71a97c4cefd06a1a9b20437f34118982aa035b";
+    tarball = "http://registry.npmjs.org/uglify-js/-/uglify-js-1.1.1.tgz";
   }
   {
     name = "uglify-js";
@@ -5516,6 +5767,23 @@
     patchLatest = false;
     sha1 = "55db180d54475339fd6dd9e2d14a4c0b52624b69";
     tarball = "http://registry.npmjs.org/utile/-/utile-0.1.7.tgz";
+  }
+  {
+    name = "utile";
+    spec = "0.2.x";
+    version = "0.2.0";
+    topLevel = false;
+    dependencies = [
+      { name = "async"; spec = "0.1.x"; }
+      { name = "deep-equal"; spec = "*"; }
+      { name = "i"; spec = "0.3.x"; }
+      { name = "mkdirp"; spec = "0.x.x"; }
+      { name = "ncp"; spec = "0.2.x"; }
+      { name = "rimraf"; spec = "2.x.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "91a2423ca2eb3322390e211ee3d71cf4fa193aea";
+    tarball = "http://registry.npmjs.org/utile/-/utile-0.2.0.tgz";
   }
   {
     name = "vasync";
@@ -5845,6 +6113,17 @@
     patchLatest = false;
     sha1 = "b916ff10ecfb54320f16f24a3e975120653ab0d2";
     tarball = "http://registry.npmjs.org/xoauth2/-/xoauth2-0.1.8.tgz";
+  }
+  {
+    name = "yamlish";
+    spec = "*";
+    version = "0.0.5";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "86c6c8e6b28b0827416dcc86f7419bba5610b57d";
+    tarball = "http://registry.npmjs.org/yamlish/-/yamlish-0.0.5.tgz";
   }
   {
     name = "zeparser";
