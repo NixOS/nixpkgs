@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, libspotify, alsaLib, readline, pkgconfig, apiKey, unzip }:
+{ stdenv, fetchurl, libspotify, alsaLib, readline, pkgconfig, apiKey, unzip, gnused }:
 
 let version = "12.1.51"; in
 
-if (stdenv.system == "x86_64-linux" && stdenv.system != "x86_64-darwin")
+if (stdenv.system != "x86_64-linux" && stdenv.system != "x86_64-darwin")
 then throw "Check https://developer.spotify.com/technologies/libspotify/ for a tarball for your system and add it here"
 else stdenv.mkDerivation {
   name = "libspotify-${version}";
@@ -24,9 +24,10 @@ else stdenv.mkDerivation {
   # common
   buildPhase = "true";
   # no patch or build phase for darwin
-  phases = [ "unpackPhase" "installPhase" ]
-    ++ stdenv.lib.optionals (stdenv.system == "x86_64-linux")
-      [ "patchPhase" "buildPhase" ];
+  phases = 
+    [ "unpackPhase" ] ++ 
+    (stdenv.lib.optionals (stdenv.system == "x86_64-linux") [ "patchPhase" "buildPhase" ]) ++
+    [ "installPhase" ];
   installPhase = if (stdenv.system == "x86_64-linux")
     then "installPhase"
     else ''
@@ -48,7 +49,7 @@ else stdenv.mkDerivation {
   installFlags = stdenv.lib.optionalString (stdenv.system == "x86_64-linux")
     "prefix=$(out)";
   patchPhase = stdenv.lib.optionalString (stdenv.system == "x86_64-linux")
-    "sed -i 's/ldconfig//' Makefile";
+    "${gnused}/bin/sed -i 's/ldconfig//' Makefile";
   postInstall = stdenv.lib.optionalString (stdenv.system == "x86_64-linux")
     "mv -v share $out";
 
