@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -52,23 +52,23 @@ in
     boot.initrd.luks.mitigateDMAAttacks = mkOption {
       default = true;
       description = ''
-	Unless enabled, encryption keys can be easily recovered by an attacker with physical
-	access to any machine with PCMCIA, ExpressCard, ThunderBolt or FireWire port.
-	More information: http://en.wikipedia.org/wiki/DMA_attack
+        Unless enabled, encryption keys can be easily recovered by an attacker with physical
+        access to any machine with PCMCIA, ExpressCard, ThunderBolt or FireWire port.
+        More information: http://en.wikipedia.org/wiki/DMA_attack
 
-	This option blacklists FireWire drivers, but doesn't remove them. You can manually
-	load the drivers if you need to use a FireWire device, but don't forget to unload them!
+        This option blacklists FireWire drivers, but doesn't remove them. You can manually
+        load the drivers if you need to use a FireWire device, but don't forget to unload them!
       '';
     };
 
     boot.initrd.luks.cryptoModules = mkOption {
-      default = [ "aes" "aes_generic" "aes_x86_64" "aes_i586" "blowfish" "twofish" "serpent" "cbc" "xts" "lrw" "sha256" 
-"sha1" 
-"sha2" 
-];
+      default =
+        [ "aes" "aes_generic" "aes_x86_64" "aes_i586" "blowfish" "twofish"
+          "serpent" "cbc" "xts" "lrw" "sha256" "sha1" "sha2"
+        ];
       description = ''
-	A list of cryptographic kernel modules needed to decrypt the root device(s).
-	The default includes all common modules.
+        A list of cryptographic kernel modules needed to decrypt the root device(s).
+        The default includes all common modules.
       '';
     };
 
@@ -151,7 +151,7 @@ in
       ["firewire_ohci" "firewire_core" "firewire_sbp2"];
 
     # Some modules that may be needed for mounting anything ciphered
-    boot.initrd.kernelModules = [ "dm_mod" "dm_crypt" "cryptd" ] ++ luks.cryptoModules; 
+    boot.initrd.kernelModules = [ "dm_mod" "dm_crypt" "cryptd" ] ++ luks.cryptoModules;
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''
