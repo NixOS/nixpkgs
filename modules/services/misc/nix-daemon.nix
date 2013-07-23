@@ -54,7 +54,7 @@ in
   options = {
 
     environment.nix = mkOption {
-      default = pkgs.nixUnstable;
+      default = pkgs.nix;
       merge = mergeOneOption;
       description = ''
         This option specifies the Nix package instance to use throughout the system.
@@ -249,7 +249,7 @@ in
 
   config = {
 
-    nix.chrootDirs = [ "/dev" "/dev/pts" "/proc" "/bin/sh=${config.system.build.binsh}/bin/bash" ];
+    nix.chrootDirs = [ "/dev" "/dev/pts" "/proc" "/bin" ];
 
     environment.etc."nix/nix.conf".source = nixConf;
 
