@@ -1,4 +1,4 @@
-{stdenv, fetchsvn, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2, makeWrapper, libX11, libtiff }:
+{ stdenv, fetchsvn, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2, makeWrapper, libX11, libtiff }:
 
 let rev = 1742; in
 stdenv.mkDerivation {
@@ -29,7 +29,10 @@ stdenv.mkDerivation {
         --subst-var-by "rgbPath1" "$out/lib/rgb.txt" \
         --subst-var-by "rgbPath2" "/var/empty/rgb.txt" \
         --subst-var-by "rgbPath3" "/var/empty/rgb.txt"
+    touch lib/standardppmdfont.c
   '';
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     make package pkgdir=$PWD/netpbmpkg
