@@ -24,10 +24,6 @@ let
             '') cfg.feeds))}
     '';
 
-  cronJob = ''
-    ${cfg.cronInterval} ${cfg.cronUser} ${pkgs.venus}/bin/venus-planet ${configFile}
-  '';
-
 in
 {
 
@@ -43,19 +39,30 @@ in
         '';
       };
 
-      cronInterval = mkOption {
-        default = "*/10 * * * *";
+      dates = mkOption {
+        default = "*:0,15,30,45";
         type = types.string;
         description = ''
-          Interval in cron format. Default is every 10 minutes.
+          Specification (in the format described by
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry>) of the time at
+          which the Venus will collect feeds.
         '';
       };
 
-      cronUser = mkOption {
+      user = mkOption {
         default = "root";
         type = types.string;
         description = ''
-          User for running the cron job.
+          User for running venus script.
+        '';
+      };
+
+      group = mkOption {
+        default = "root";
+        type = types.string;
+        description = ''
+          Group for running venus script.
         '';
       };
 
@@ -142,16 +149,29 @@ in
   };
 
   config = mkIf cfg.enable {
+
     system.activationScripts.venus =
       ''
         mkdir -p ${cfg.outputDirectory}
-        chown ${cfg.cronUser} ${cfg.outputDirectory} -R
-        rm -rf ${cfg.cacheDirectory}/themes
-        mkdir -p ${cfg.cacheDirectory}/themes
+        chown ${cfg.user}:${cfg.group} ${cfg.outputDirectory} -R
+        rm -rf ${cfg.cacheDirectory}/theme
+        mkdir -p ${cfg.cacheDirectory}/theme
         cp -R ${cfg.outputTheme}/* ${cfg.cacheDirectory}/theme
-        chown ${cfg.cronUser} ${cfg.cacheDirectory} -R
+        chown ${cfg.user}:${cfg.group} ${cfg.cacheDirectory} -R
       '';
-    services.cron.systemCronJobs = [ cronJob ];
+
+    systemd.services.venus =
+      { description = "Planet Venus, an awesome ‘river of news’ feed reader";
+        path  = [ pkgs.venus ];
+        script = "exec venus-planet ${configFile}";
+        serviceConfig.User = "${cfg.user}";
+        serviceConfig.Group = "${cfg.group}";
+      };
+
+    systemd.timers.venus =
+      { wantedBy = [ "timers.target" ];
+        timerConfig.OnCalendar = cfg.dates;
+      };
 
   };
 }
