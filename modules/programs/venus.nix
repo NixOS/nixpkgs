@@ -37,7 +37,9 @@ in
         default = false;
         type = types.bool;
         description = ''
-          Enable the venus cron job.
+          Planet Venus is an awesome ‘river of news’ feed reader. It downloads
+          news feeds published by web sites and aggregates their content
+          together into a single combined feed, latest news first.
         '';
       };
 
