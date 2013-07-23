@@ -50,6 +50,7 @@
   ./programs/shell.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/venus.nix
   ./programs/wvdial.nix
   ./rename.nix
   ./security/apparmor.nix
