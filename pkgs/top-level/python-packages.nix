@@ -4171,6 +4171,11 @@ pythonPackages = python.modules // rec {
 
     propagatedBuildInputs = [ logilab_astng ];
 
+    postInstall = ''
+      mkdir -p $out/share/emacs/site-lisp
+      cp "elisp/"*.el $out/share/emacs/site-lisp/
+    '';
+
     meta = {
       homepage = http://www.logilab.org/project/pylint;
       description = "A bug and style checker for Python";
