@@ -75,8 +75,10 @@ let
       if test "''${1:0:1}" = /; then eval exec "$1"; fi
 
       # Start PulseAudio if enabled.
-      ${optionalString config.hardware.pulseaudio.enable ''
-        ${pkgs.pulseaudio}/bin/pulseaudio --start
+      ${optionalString (config.hardware.pulseaudio.enable) ''
+        ${optionalString (!config.hardware.pulseaudio.systemWide)
+          "${pkgs.pulseaudio}/bin/pulseaudio --start"
+        }
 
         # Publish access credentials in the root window.
         ${pkgs.pulseaudio}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
