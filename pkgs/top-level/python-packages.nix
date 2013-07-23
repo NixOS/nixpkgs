@@ -23,7 +23,7 @@ pythonPackages = python.modules // rec {
   wrapPython = pkgs.makeSetupHook
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
-    } 
+    }
    ../development/python-modules/generic/wrap.sh;
 
   # specials
@@ -165,7 +165,7 @@ pythonPackages = python.modules // rec {
       pythonPackages.webtest
     ];
 
-    propagatedBuildInputs = [ 
+    propagatedBuildInputs = [
       pkgs.makeWrapper
       pkgs.bacula
       pythonPackages.colander
@@ -508,7 +508,7 @@ pythonPackages = python.modules // rec {
 
      propagatedBuildInputs = [ python.modules.curses pygments ];
      doCheck = false;
-     
+
      meta = {
        description = "UNKNOWN";
        homepage = "UNKNOWN";
@@ -1124,7 +1124,7 @@ pythonPackages = python.modules // rec {
     buildInputs = [ paver ];
 
     postInstall = ''
-      for prog in $out/bin/*; do
+      for prog in "$out/bin/"*; do
         wrapProgram "$prog" --prefix PYTHONPATH : "$PYTHONPATH"
       done
     '';
@@ -1154,7 +1154,7 @@ pythonPackages = python.modules // rec {
     };
     propagatedBuildInputs = [ paramiko pycrypto ];
     buildInputs = [ fudge nose ];
-  }; 
+  };
 
   fudge = buildPythonPackage rec {
     name = "fudge-0.9.4";
@@ -1247,12 +1247,12 @@ pythonPackages = python.modules // rec {
       md5 = "967a04fcb2143b31b279c3013a778a2b";
     };
 
-    buildInputs = [ 
-      docutils 
-      virtualenv 
-      webtest 
-      zope_component 
-      zope_interface 
+    buildInputs = [
+      docutils
+      virtualenv
+      webtest
+      zope_component
+      zope_interface
     ] ++ optional isPy26 unittest2;
 
     propagatedBuildInputs = [
@@ -1559,7 +1559,7 @@ pythonPackages = python.modules // rec {
     propagatedBuildInputs = with pkgs; [
       pyGtkGlade libtorrentRasterbar twisted Mako chardet pyxdg pyopenssl
     ];
- 
+
     postInstall = ''
        cp -R deluge/data/share $out/share
        cp -R deluge/data/pixmaps $out/share/
@@ -2681,7 +2681,7 @@ pythonPackages = python.modules // rec {
       url = "${meta.homepage}/download/${name}.tar.gz";
       sha256 = "1ddqni6d4kc8ypl6yig4nc00izvbk359sz6hykb9g0lfcpfqlngj";
     };
-    
+
     buildInputs = [
       pkgs.pyopenssl pyasn1 urwid pil lxml flask protobuf netlib
     ];
@@ -2689,7 +2689,7 @@ pythonPackages = python.modules // rec {
     doCheck = false;
 
     postInstall = ''
-      for prog in $out/bin/*; do
+      for prog in "$out/bin/"*; do
         wrapProgram "$prog" \
           --prefix PYTHONPATH : "$PYTHONPATH"
       done
@@ -2917,7 +2917,7 @@ pythonPackages = python.modules // rec {
       name = "${name}.tar.gz";
       sha256 = "1y8lx2j1jrr93mqfb06zg1x5jm9lllw744sb61ib8dagw43nnq3v";
     };
-    
+
     buildInputs = [
       pkgs.pyopenssl pyasn1
     ];
@@ -3529,7 +3529,7 @@ pythonPackages = python.modules // rec {
       homepage = https://github.com/Lokaltog/powerline;
       description = "The ultimate statusline/prompt utility.";
       license = with stdenv.lib.licenses; mit;
-      platforms = with stdenv.lib.platforms; all; 
+      platforms = with stdenv.lib.platforms; all;
     };
   };
 
@@ -4739,7 +4739,7 @@ pythonPackages = python.modules // rec {
         };
 
       preInstall = ''
-        cp ${x_ignore_nofocus}/* .
+        cp "${x_ignore_nofocus}/"* .
         sed -i 's|dlopen(library,|dlopen("libX11.so.6",|' x_ignore_nofocus.c
         gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
         gcc -shared -Wl,-soname,x_ignore_nofocus.so -o x_ignore_nofocus.so  x_ignore_nofocus.o
@@ -6431,17 +6431,17 @@ pythonPackages = python.modules // rec {
 
   pyspotify = buildPythonPackage rec {
     name = "pyspotify-${version}";
-  
+
     version = "1.11";
-  
+
     src = fetchurl {
       url = "https://github.com/mopidy/pyspotify/archive/v1.11.tar.gz";
       sha256 = "089ml6pqr3f2d15n70jpzbaqjp5pjgqlyv4algkxw92xscjw2izg";
     };
-  
+
     buildInputs = [ pkgs.libspotify ]
       ++ stdenv.lib.optional stdenv.isDarwin pkgs.install_name_tool;
-  
+
     # python zip complains about old timestamps
     preConfigure = ''
       find -print0 | xargs -0 touch
@@ -6454,10 +6454,10 @@ pythonPackages = python.modules // rec {
           ${pkgs.libspotify}/lib/libspotify.dylib \
           {} \;
     '';
-  
+
     # There are no tests
     doCheck = false;
-  
+
     meta = with stdenv.lib; {
       homepage    = http://pyspotify.mopidy.com;
       description = "A Python interface to Spotify’s online music streaming service";
@@ -6469,23 +6469,23 @@ pythonPackages = python.modules // rec {
 
   pykka = buildPythonPackage rec {
     name = "pykka-${version}";
-  
+
     version = "1.1.0";
-  
+
     src = fetchgit {
       url = "https://github.com/jodal/pykka.git";
       rev = "refs/tags/v${version}";
       sha256 = "0w6bcaqkzwmd9habszlgjkp3kkhkna08s9aivnmna5hddsghfqmz";
     };
-  
+
     # python zip complains about old timestamps
     preConfigure = ''
       find -print0 | xargs -0 touch
     '';
-  
+
     # There are no tests
     doCheck = false;
-  
+
     meta = {
       homepage = http://www.pykka.org;
       description = "A Python implementation of the actor model";
@@ -6495,23 +6495,23 @@ pythonPackages = python.modules // rec {
 
   ws4py = buildPythonPackage rec {
     name = "ws4py-${version}";
-  
+
     version = "git-20130303";
-  
+
     src = fetchgit {
       url = "https://github.com/Lawouach/WebSocket-for-Python.git";
       rev = "ace276500ca7e4c357595e3773be151d37bcd6e2";
       sha256 = "04m4m3ncn7g4rb81xg5n28imns7rsq8d2w98gjpaib6vlmyly3g1";
     };
-  
+
     # python zip complains about old timestamps
     preConfigure = ''
       find -print0 | xargs -0 touch
     '';
-  
+
     # Tests depend on other packages
     doCheck = false;
-  
+
     meta = {
       homepage = https://ws4py.readthedocs.org;
       description = "A WebSocket package for Python";
