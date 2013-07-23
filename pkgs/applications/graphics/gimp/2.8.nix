@@ -4,18 +4,18 @@
 , python, pygtk, libart_lgpl, libexif, gettext, xlibs }:
 
 stdenv.mkDerivation rec {
-  name = "gimp-2.8.4";
+  name = "gimp-2.8.6";
 
   src = fetchurl {
     url = "ftp://ftp.gimp.org/pub/gimp/v2.8/${name}.tar.bz2";
-    md5 = "392592e8755d046317878d226145900f";
+    md5 = "12b3fdf33d1f07ae79b412a9e38b9693";
   };
 
   buildInputs =
     [ pkgconfig intltool babl gegl gtk glib gdk_pixbuf pango cairo
       freetype fontconfig lcms libpng libjpeg poppler libtiff webkit
       libmng librsvg libwmf zlib libzip ghostscript aalib jasper
-      python pygtk libart_lgpl libexif gettext
+      python pygtk libart_lgpl libexif gettext xlibs.libXpm
     ];
 
   passthru = { inherit gtk; }; # probably its a good idea to use the same gtk in plugins ?
