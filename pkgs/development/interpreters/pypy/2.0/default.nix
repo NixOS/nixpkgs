@@ -35,17 +35,14 @@ let
   '';
 
   buildInputs =
-    optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
+    stdenv.lib.optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
     [ bzip2 openssl pkgconfig pythonFull libffi ncurses ]
-    ++ optional zlibSupport zlib;
+    ++ stdenv.lib.optional zlibSupport zlib;
 
   pypy = stdenv.mkDerivation rec {
     name = "pypy-${version}";
 
     inherit majorVersion version src buildInputs;
-
-    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
-    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
 
     preConfigure = ''
       substituteInPlace Makefile \
@@ -86,4 +83,4 @@ let
     };
   };
 
-in pypy // { inherit modules; }
+in pypy
