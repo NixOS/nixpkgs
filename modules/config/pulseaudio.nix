@@ -132,7 +132,7 @@ in {
         description = "PulseAudio system-wide server";
         wantedBy = [ "sound.target" ];
         before = [ "sound.target" ];
-        path = [ pulseaudio ];
+        path = [ cfg.package ];
         environment.PULSE_RUNTIME_PATH = pulseRuntimePath;
         preStart = ''
           mkdir -p --mode 755 ${pulseRuntimePath}
