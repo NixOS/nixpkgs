@@ -1914,6 +1914,10 @@ let
 
   varnish = callPackage ../servers/varnish { };
 
+  venus = callPackage ../tools/misc/venus {
+    python = python27;
+  };
+
   vlan = callPackage ../tools/networking/vlan { };
 
   wakelan = callPackage ../tools/networking/wakelan { };
