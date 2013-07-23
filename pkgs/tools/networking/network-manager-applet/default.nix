@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     polkit isocodes makeWrapper udev
   ];
 
-  nativeBuildInputs = [ intltool pkgconfig];
+  nativeBuildInputs = [ intltool pkgconfig ];
 
   propagatedBuildInputs = [ GConf libgnome_keyring ];
 
