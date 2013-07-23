@@ -3091,6 +3091,7 @@ let
 
   python3 = hiPrio (callPackage ../development/interpreters/python/3.3 { });
   python33 = callPackage ../development/interpreters/python/3.3 { };
+  python32 = callPackage ../development/interpreters/python/3.2 { };
 
   python = python27;
   python26 = callPackage ../development/interpreters/python/2.6 { };
