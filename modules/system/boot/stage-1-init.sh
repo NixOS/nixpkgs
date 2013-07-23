@@ -66,6 +66,7 @@ mount -t devtmpfs -o "size=@devSize@" none /dev
 mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
 
+
 # Process the kernel command line.
 export stage2Init=/init
 for o in $(cat /proc/cmdline); do

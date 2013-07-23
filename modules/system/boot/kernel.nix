@@ -54,6 +54,16 @@ in
       description = "Additional user-defined kernel parameters.";
     };
 
+    boot.consoleLogLevel = mkOption {
+      type = types.int;
+      default = 4;
+      description = ''
+        The kernel console log level.  Only log messages with a
+        priority numerically less than this will appear on the
+        console.
+      '';
+    };
+
     boot.vesa = mkOption {
       default = config.boot.kernelPackages.splashutils != null;
       example = false;
@@ -146,8 +156,13 @@ in
 
     system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
 
+    # Implement consoleLogLevel both in early boot and using sysctl
+    # (so you don't need to reboot to have changes take effect).
     boot.kernelParams =
+      [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
       optionals config.boot.vesa [ "splash=verbose" "vga=0x317" ];
+
+    boot.kernel.sysctl."kernel.printk" = config.boot.consoleLogLevel;
 
     boot.kernelModules = [ "loop" ];
 
