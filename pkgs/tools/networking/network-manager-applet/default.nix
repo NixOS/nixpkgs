@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, networkmanager, GConf
-, libnotify, libsecret, dbus_glib, polkit, isocodes, libgnome_keyring, gnome_keyring icon
+, libnotify, libsecret, dbus_glib, polkit, isocodes, libgnome_keyring, gnome_keyring
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
 , makeWrapper, networkmanager_openvpn, udev, hicolor_icon_theme }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk libglade networkmanager libnotify libsecret dbus_glib
-    polkit isocodes makeWrapper udev GConf
+    polkit isocodes makeWrapper udev GConf gnome_keyring
   ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
