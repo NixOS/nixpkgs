@@ -2,10 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "fclabels";
-  version = "1.1.7";
-  sha256 = "0mk75fk3c4ilb2hmz972ymv1pkzxp6010mlma7hw1l13dfy0hy9v";
+  version = "1.1.7.1";
+  sha256 = "1f34r3bzn1cbba8d5d1j3wxrlrrj5vf09hpgd6ppina91wyj4dyn";
   buildDepends = [ mtl transformers ];
-  noHaddock = true;
   meta = {
     homepage = "https://github.com/sebastiaanvisser/fclabels";
     description = "First class accessor labels";
