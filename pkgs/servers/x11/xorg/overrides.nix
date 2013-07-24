@@ -85,6 +85,12 @@ in
     propagatedBuildInputs = [ xorg.libSM ];
   };
 
+  # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
+  # Once the bug is fixed upstream, this can be removed.
+  luit = attrs: attrs // {
+    configureFlags = "--disable-selective-werror";
+  };
+
   compositeproto = attrs: attrs // {
     propagatedBuildInputs = [ xorg.fixesproto ];
   };
