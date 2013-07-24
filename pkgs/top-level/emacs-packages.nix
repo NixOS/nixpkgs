@@ -24,6 +24,7 @@ let
     emacsSessionManagement = callPackage ../applications/editors/emacs-modes/session-management-for-emacs { };
     emacsw3m = callPackage ../applications/editors/emacs-modes/emacs-w3m { };
     emms = callPackage ../applications/editors/emacs-modes/emms { };
+    ess = callPackage ../applications/editors/emacs-modes/ess { };
     flymakeCursor = callPackage ../applications/editors/emacs-modes/flymake-cursor { };
     gh = callPackage ../applications/editors/emacs-modes/gh { };
     graphvizDot = callPackage ../applications/editors/emacs-modes/graphviz-dot { };
