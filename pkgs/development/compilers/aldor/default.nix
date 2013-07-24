@@ -1,15 +1,12 @@
 { fetchgit, stdenv, gmp, which, flex, bison, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  pname = "aldor";
-  version = "1.1.0";
-  name = "${pname}-${version}";
-  gitRev = "a02b088c8d5d06f16c50a83ddee4019e962d6673";
+stdenv.mkDerivation {
+  name = "aldor-1.1.0";
 
   src = fetchgit {
     url = "https://github.com/pippijn/aldor";
-    sha256 = "1zd343wq46f74yr30a5nrbv5n831z6wd24yqnrs7w17ccic69lny";
-    rev = gitRev;
+    sha256 = "14xv3jl15ib2knsdz0bd7jx64zg1qrr33q5zcr8gli860ps8gkg3";
+    rev = "a02b088c8d5d06f16c50a83ddee4019e962d6673";
   };
 
   buildInputs = [ gmp which flex bison makeWrapper ];
@@ -28,8 +25,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib ; {
+  meta = {
+    homepage = "http://www.aldor.org/";
     description = "Aldor is a programming language with an expressive type system";
+    license = stdenv.lib.licenses.asl20;
 
     longDescription = ''
       Aldor is a programming language with an expressive type system well-suited
@@ -44,9 +43,7 @@ stdenv.mkDerivation rec {
       and powerful properties of functional, object-oriented and aspect-oriented styles.
     '';
 
-    homepage = http://www.aldor.org/;
-    license = licenses.asl20;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
