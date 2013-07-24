@@ -146,6 +146,14 @@ in stdenv.mkDerivation rec {
     linux_sandbox_path="${libExecPath}/${packageName}_sandbox";
     linux_sandbox_chrome_path="${libExecPath}/${packageName}";
     werror = "";
+
+    # Google API keys, see http://www.chromium.org/developers/how-tos/api-keys.
+    # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
+    # please get your own set of keys.
+    google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
+    google_default_client_id = "404761575300.apps.googleusercontent.com";
+    google_default_client_secret = "9rIFQjfnkykEmqb6FfjJQD1D";
+
   } // optionalAttrs proprietaryCodecs {
     # enable support for the H.264 codec
     proprietary_codecs = true;
