@@ -2051,11 +2051,11 @@ pythonPackages = python.modules // rec {
 
 
   genzshcomp = buildPythonPackage {
-    name = "genzshcomp-0.2.2";
+    name = "genzshcomp-0.5.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/g/genzshcomp/genzshcomp-0.2.2.tar.gz";
-      sha256 = "0bhiyx41kilvy04cgjbvjy2r4b6l7zz31fbrg3l6lvnqm26nihb0";
+      url = "http://pypi.python.org/packages/source/g/genzshcomp/genzshcomp-0.5.1.tar.gz";
+      md5 = "7a954f1835875002e9044fe55ed1b488";
     };
 
     buildInputs = [ pkgs.setuptools ] ++ (optional isPy26 argparse);
