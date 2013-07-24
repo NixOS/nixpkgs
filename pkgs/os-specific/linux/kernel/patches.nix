@@ -55,6 +55,13 @@ rec {
     features.apparmor = true;
   };
 
+  apparmor_3_4 = rec {
+    version = "3.4";
+    name = "apparmor-${version}";
+    patch = makeAppArmorPatch { inherit apparmor version; };
+    features.apparmor = true;
+  };
+
   sec_perm_2_6_24 =
     { name = "sec_perm-2.6.24";
       patch = ./sec_perm-2.6.24.patch;
@@ -145,6 +152,15 @@ rec {
   mips_ext3_n32 =
     { name = "mips-ext3-n32";
       patch = ./mips-ext3-n32.patch;
+    };
+
+  grsecurity_2_9_1_3_2_48 =
+    { name = "grsecurity-2.9.1-3.2.48";
+      patch =
+        (fetchurl {
+           url = http://grsecurity.net/stable/grsecurity-2.9.1-3.2.48-201307212241.patch;
+           sha256 = "1llgrcd7ynxx60dn05bcbysd6a1091wwxkck4d15gvp71s9r6scm";
+         });
     };
 
   guruplug_defconfig =

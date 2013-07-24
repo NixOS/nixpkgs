@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "boinc-7.0.44";
 
   src = fetchgit {
-    url = "git://boinc.berkeley.edu/boinc.git";
+    url = "git://boinc.berkeley.edu/boinc-v2.git";
     rev = "7c449b1fb8a681ceb27d6895751b62a2b3adf0f2";
     sha256 = "0hdramyl9nip3gadp7xiaz8ngyld15i93d8ai1nsd04bmrvdfqia";
   };

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "xcompmgr-1.1.6";
   src = fetchurl {
-    url = "http://www.x.org/releases/individual/app/${name}.tar.bz2";
+    url = "mirror://xorg/individual/app/${name}.tar.bz2";
     sha256 = "c98949d36793b30ed1ed47495c87a05fa245ac0fc2857d2abc54979124687c02";
   };
   buildInputs = [ pkgconfig libXcomposite libXfixes libXdamage libXrender libXext ];

@@ -5,13 +5,13 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "git://github.com/mkottman/acpi_call.git";
-    rev = "b570c3b6c7016174107558464e864391d8bbd176";
-    sha256 = "a89c62d391b721bb87a094f81cefc77d9c80de4bb314bb6ea449c3ef2decad5e";
+    rev = "46dd97e115ddc7219c88b0818c4d5b235162fe6e";
+    sha256 = "1bi0azd7xxhrivjhnmxllj2sfj12br56mxii20mnqdpqwyz0rhni";
   };
   
   preBuild = ''
-    sed -e 's/break/true/' -i test_off.sh
-    sed -e 's@/bin/bash@.bin/sh@' -i test_off.sh
+    sed -e 's/break/true/' -i examples/turn_off_gpu.sh
+    sed -e 's@/bin/bash@.bin/sh@' -i examples/turn_off_gpu.sh
     sed -e "s@/lib/modules/\$(.*)@${kernelDev}/lib/modules/${kernelDev.modDirVersion}@" -i Makefile
   '';
  
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     mkdir -p $out/lib/modules/${kernelDev.modDirVersion}/misc
     cp acpi_call.ko $out/lib/modules/${kernelDev.modDirVersion}/misc
     mkdir -p $out/bin
-    cp test_off.sh $out/bin/test_discrete_video_off.sh
+    cp examples/turn_off_gpu.sh $out/bin/test_discrete_video_off.sh
     chmod a+x $out/bin/test_discrete_video_off.sh
   '';
 

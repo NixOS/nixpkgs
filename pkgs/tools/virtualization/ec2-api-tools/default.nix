@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "ec2-api-tools-1.6.5.1";
 
   src = fetchurl {
-    url = "http://nixos.org/tarballs/${name}.zip";
+    url = "http://tarballs.nixos.org/${name}.zip";
     sha256 = "1j2pc20vggi4hv950999mhh7dl6475yma76nyj6k0hzkd1lf5hda";
   };
 

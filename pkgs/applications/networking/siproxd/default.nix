@@ -1,12 +1,14 @@
 { stdenv, fetchurl, libosip }:
 
-stdenv.mkDerivation {
-  name = "siproxd-0.8.0";
+stdenv.mkDerivation rec {
+  name = "siproxd-0.8.1";
   
   src = fetchurl {
-    url = mirror://sourceforge/siproxd/siproxd-0.8.0.tar.gz;
-    sha256 = "0hl51z33cf68ki707jkrrjjc3a5vpaf49gbrsz3g4rfxypdhc0qs";
+    url = "mirror://sourceforge/siproxd/${name}.tar.gz";
+    sha256 = "1bcxl0h5nc28m8lcdhpbl5yc93w98xm53mfzrf04knsvmx7z0bfz";
   };
+
+  patches = [ ./cheaders.patch ];
 
   buildInputs = [ libosip ];
 

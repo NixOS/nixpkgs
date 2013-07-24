@@ -3,7 +3,10 @@ rec {
   version = "0.7";
   name = "moderntimeline-${version}";
   src = fetchurl {
-    url = "http://www.ctan.org/tex-archive/macros/latex/contrib/moderntimeline.zip";
+    urls = [
+      "http://www.ctan.org/tex-archive/macros/latex/contrib/moderntimeline.zip"
+      "http://mirror.ctan.org/macros/latex/contrib/moderntimeline.zip"
+    ];
     sha256 = "0dxwybanj7qvbr69wgsllha1brq6qjsnjfff6nw4r3nijzvvh876";
   };
 

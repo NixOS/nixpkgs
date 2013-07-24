@@ -1,11 +1,13 @@
 { stdenv, fetchurl, kdelibs, kdebase_workspace, gettext }:
 
+let version = "0.11";
+in
 stdenv.mkDerivation rec {
-  name = "rsibreak-0.11";
+  name = "rsibreak-${version}";
 
   src = fetchurl {
-    url = "${meta.homepage}/files/${name}.tar.bz2";
-    sha256 = "1yrf73r8mixskh8b531wb8dfs9z7rrw010xsrflhjhjmqh94h8mw";
+    url = "mirror://debian/pool/main/r/rsibreak/rsibreak_${version}.orig.tar.gz";
+    sha256 = "0g27aswh8iz5v67v1wkjny4p100vs2gm0lw0qzfkg6sw1pb4i519";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -13,8 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ kdelibs kdebase_workspace ];
 
   meta = {
-    homepage = http://www.rsibreak.org/;
-    description = "Repetitive Strain Injury prevention";
+    homepage = http://userbase.kde.org/RSIBreak; # http://www.rsibreak.org/ is down since 2011
+    description = "Utility to help prevent repetitive strain injury for KDE 4";
     inherit (kdelibs.meta) platforms maintainers;
   };
 }

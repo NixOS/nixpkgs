@@ -8,10 +8,8 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     substituteInPlace Makefile --replace /usr/local "$out"
   '';
-  preInstall = ''
-    export CHOWNPROG=true
-    export CHGRPPROG=true
-  '';
+
+  patches = [ ./apg.patch ];
 
   meta = {
     description = "A tool set for random password generation.";

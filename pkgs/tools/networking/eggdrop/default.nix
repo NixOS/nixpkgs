@@ -1,7 +1,7 @@
 {stdenv, fetchurl, tcl}:
 
 stdenv.mkDerivation {
-  name = "eggdrop-1.6.19";
+  name = "eggdrop-1.6.19+ctcpfix";
 
   src = fetchurl {
     url = ftp://ftp.eggheads.org/pub/eggdrop/GNU/1.6/eggdrop1.6.19+ctcpfix.tar.gz;

@@ -4,6 +4,7 @@ stdenv.mkDerivation {
   name = "bbdb-2.35";
 
   src = fetchurl {
+    # not using mirror:// because it produces a different file
     url = http://bbdb.sourceforge.net/bbdb-2.35.tar.gz;
     sha256 = "3fb1316e2ed74d47ca61187fada550e58797467bd9e8ad67343ed16da769f916";
   };

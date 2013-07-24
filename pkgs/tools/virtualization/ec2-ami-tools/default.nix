@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ unzip makeWrapper ];
 
   src = fetchurl {
-    url = "http://nixos.org/tarballs/${name}.zip";
+    url = "http://tarballs.nixos.org/${name}.zip";
     sha256 = "0icpjr2ipch3f6cf4rg9x5z2y9k6a4rd85npsmw3a1ambs3dwxlq";
   };
 

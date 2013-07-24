@@ -34,7 +34,9 @@
 
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
-  LDFLAGS = "-lgcc_s";
+
+  # don't have "libgcc_s.so.1" on darwin
+  LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
@@ -48,7 +50,8 @@
             s|-lltdl|-L${libtool}/lib -lltdl|g'
   '';
 
-  doCheck = true;
+  # make check doesn't work on darwin
+  doCheck = !stdenv.isDarwin;
 
   setupHook = ./setup-hook-2.0.sh;
 
@@ -63,6 +66,10 @@
 
   meta = {
     description = "GNU Guile 2.0, an embeddable Scheme implementation";
+    homepage    = http://www.gnu.org/software/guile/;
+    license     = stdenv.lib.licenses.lgpl3Plus;
+    maintainers = with stdenv.lib.maintainers; [ ludo lovek323 ];
+    platforms   = stdenv.lib.platforms.all;
 
     longDescription = ''
       GNU Guile is an implementation of the Scheme programming language, with
@@ -73,13 +80,6 @@
       linking, a foreign function call interface, and powerful string
       processing.
     '';
-
-    homepage = http://www.gnu.org/software/guile/;
-    license = "LGPLv3+";
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-
-    platforms = stdenv.lib.platforms.all;
   };
 }
 

@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sed -i -e "s,LIBVA_DRIVERS_PATH=.*,LIBVA_DRIVERS_PATH=$out/lib/dri," configure
   '';
 
+  patches = [ ./glext85.patch ];
+
   meta = {
     homepage = http://cgit.freedesktop.org/vaapi/vdpau-driver/;
     license = "GPLv2+";

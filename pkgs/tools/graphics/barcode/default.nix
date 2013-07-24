@@ -12,8 +12,7 @@ let
     version="0.98";
     baseName="barcode";
     name="${baseName}-${version}";
-    # mirror://gnu/ doesn't work for this package
-    url="http://ftp.gnu.org/gnu/${baseName}/${name}.tar.gz";
+    url="mirror://gnu/${baseName}/${name}.tar.gz";
     hash="0ddn17a6hz817bchgjxrjg76v64kzl5zlll8x73ply5rg69f2aa2";
   };
 in

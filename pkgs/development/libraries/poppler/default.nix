@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchgit, pkgconfig, cmake, libiconvOrEmpty
-, zlib, curl, cairo, freetype, fontconfig, lcms2, libjpeg, openjpeg
+{ stdenv, fetchurl, fetchgit, pkgconfig, cmake, libiconvOrEmpty, libintlOrEmpty
+, zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , qt4Support ? false, qt4 ? null
 }:
 
@@ -26,9 +26,9 @@ let
       inherit sha256;
     };
 
-    propagatedBuildInputs = [ zlib cairo freetype fontconfig libjpeg lcms2 curl openjpeg ];
+    propagatedBuildInputs = [ zlib cairo freetype fontconfig libjpeg lcms curl openjpeg ];
 
-    nativeBuildInputs = [ pkgconfig cmake ] ++ libiconvOrEmpty;
+    nativeBuildInputs = [ pkgconfig cmake ] ++ libiconvOrEmpty ++ libintlOrEmpty;
 
     cmakeFlags = "-DENABLE_XPDF_HEADERS=ON -DENABLE_LIBCURL=ON -DENABLE_ZLIB=ON";
 
@@ -50,6 +50,7 @@ let
       '';
 
       license = "GPLv2";
+      platforms = stdenv.lib.platforms.all;
     };
   } merge ]); # poppler_drv
 

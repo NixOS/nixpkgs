@@ -5,8 +5,8 @@
 , libtiff, glib, icu
 , mysql, postgresql, sqlite
 , perl, coreutils, libXi
-, buildMultimedia ? true, alsaLib, gstreamer, gst_plugins_base
-, buildWebkit ? true
+, buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst_plugins_base
+, buildWebkit ? stdenv.isLinux
 , flashplayerFix ? false, gdk_pixbuf
 , gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
 , developerBuild ? false
@@ -147,10 +147,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://qt-project.org/;
+    homepage    = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
-    license = "GPL/LGPL";
-    maintainers = with maintainers; [ urkud sander phreedom ];
-    platforms = platforms.all;
+    license     = "GPL/LGPL";
+    maintainers = with maintainers; [ lovek323 phreedom sander urkud ];
+    platforms   = platforms.all;
   };
 }

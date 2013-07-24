@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xlibs
-, gdk_pixbuf, libintlOrEmpty
-, xineramaSupport ? true
+, gdk_pixbuf, libintlOrEmpty, x11
+, xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
 }:
 
@@ -17,24 +17,30 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo";
+  NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo"
+    + stdenv.lib.optionalString (libintlOrEmpty != []) " -lintl";
 
   nativeBuildInputs = [ perl pkgconfig gettext ];
 
-  propagatedBuildInputs = with xlibs;
-    [ glib cairo pango gdk_pixbuf atk
-      libXrandr libXrender libXcomposite libXi libXcursor
-    ]
+  propagatedBuildInputs = with xlibs; with stdenv.lib;
+    [ glib cairo pango gdk_pixbuf atk ]
+    ++ optionals stdenv.isLinux
+      [ libXrandr libXrender libXcomposite libXi libXcursor ]
+    ++ optional stdenv.isDarwin x11
     ++ libintlOrEmpty
-    ++ stdenv.lib.optional xineramaSupport libXinerama
-    ++ stdenv.lib.optionals cupsSupport [ cups ];
+    ++ optional xineramaSupport libXinerama
+    ++ optionals cupsSupport [ cups ];
 
   configureFlags = "--with-xinput=yes";
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A multi-platform toolkit for creating graphical user interfaces";
+    homepage    = http://www.gtk.org/;
+    license     = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ lovek323 raskin ];
+    platforms   = platforms.all;
 
     longDescription = ''
       GTK+ is a highly usable, feature rich toolkit for creating
@@ -46,12 +52,5 @@ stdenv.mkDerivation rec {
       proprietary software with GTK+ without any license fees or
       royalties.
     '';
-
-    homepage = http://www.gtk.org/;
-
-    license = "LGPLv2+";
-
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
   };
 }

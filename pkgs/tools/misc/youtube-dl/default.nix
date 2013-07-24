@@ -1,27 +1,25 @@
-{ stdenv, fetchurl, python, pandoc, zip }:
+{ stdenv, fetchurl, python, zip }:
 
 let
-  version = "2012.12.11";
+  version = "2013.06.21";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "youtube-dl-${version}";
 
   src = fetchurl {
-    url = "https://github.com/downloads/rg3/youtube-dl/youtube-dl.${version}.tar.gz";
-    sha256 = "03zv3z8p0fi122nqj7ff8hkgqscir4s7psm03rq7dfpg1z35klmn";
+    url = "http://youtube-dl.org/downloads/${version}/${name}.tar.gz";
+    sha256 = "3d4e9cc38af3c2fccfafd83d0c6382080531fd03e9067ceccc6864dfbea92b1e";
   };
 
   buildInputs = [ python ];
-  nativeBuildInputs = [ zip ] ++
-      stdenv.lib.optional (stdenv.isi686 || stdenv.isx86_64) pandoc;
+  nativeBuildInputs = [ zip ];
 
   patchPhase = ''
     rm youtube-dl
-    substituteInPlace Makefile --replace "#!/usr/bin/env python" "#!${python}/bin/python"
   '';
 
   configurePhase = ''
-    makeFlagsArray=( PREFIX=$out SYSCONFDIR=$out/etc )
+    makeFlagsArray=( PREFIX=$out SYSCONFDIR=$out/etc PYTHON=${python}/bin/python )
   '';
 
   meta = {

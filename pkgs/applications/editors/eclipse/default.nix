@@ -8,7 +8,7 @@ assert stdenv ? glibc;
 let
 
   buildEclipse =
-    { name, src, description }:
+    { name, src ? builtins.getAttr stdenv.system sources, sources ? null, description }:
 
     stdenv.mkDerivation rec {
       inherit name src;
@@ -131,17 +131,16 @@ in {
   eclipse_sdk_37 = buildEclipse {
     name = "eclipse-sdk-3.7";
     description = "Eclipse Classic";
-    src =
-      if stdenv.system == "x86_64-linux" then
-        fetchurl {
-          url = http://archive.eclipse.org/eclipse/downloads/drops/R-3.7-201106131736/eclipse-SDK-3.7-linux-gtk-x86_64.tar.gz;
-          sha256 = "00ig3ww98r8imf32sx5npm6csn5nx288gvdk6w653nijni0di16j";
-        }
-      else
-        fetchurl {
-          url = http://archive.eclipse.org/eclipse/downloads/drops/R-3.7-201106131736/eclipse-SDK-3.7-linux-gtk.tar.gz;
-          sha256 = "08rgw85cam51l98mzb39fdc3ykb369v8pap93qhknbs6a3f5dnff";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = http://archive.eclipse.org/eclipse/downloads/drops/R-3.7.2-201202080800/eclipse-SDK-3.7.2-linux-gtk-x86_64.tar.gz;
+          sha256 = "0nf4nv7awhp1k8b1hjb7chpjyjrqnyszsjbc4dlk9phpjv3j4wg5";
         };
+      "i686-linux" = fetchurl {
+          url = http://archive.eclipse.org/eclipse/downloads/drops/R-3.7.2-201202080800/eclipse-SDK-3.7.2-linux-gtk.tar.gz;
+          sha256 = "1isn7i45l9kyn2yx6vm88jl1gnxph8ynank0aaa218cg8kdygk7j";
+        };
+    };
   };
 
   eclipse_cpp_37 = buildEclipse {
@@ -176,8 +175,8 @@ in {
         };
   };
 
-  eclipse_sdk_42 = buildEclipse {
-    name = "eclipse-sdk-4.2";
+  eclipse_sdk_421 = buildEclipse {
+    name = "eclipse-sdk-4.2.1";
     description = "Eclipse Classic";
     src =
       if stdenv.system == "x86_64-linux" then
@@ -191,4 +190,19 @@ in {
           sha256 = "1av6qm9wkbyk123qqf38f0jq4jv2bj9wp6fmpnl55zg6qr463c1w";
         };
     };
+
+  eclipse_sdk_422 = buildEclipse {
+    name = "eclipse-sdk-4.2.2";
+    description = "Eclipse Classic";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/eclipse/downloads/drops4/R-4.2.2-201302041200/eclipse-SDK-4.2.2-linux-gtk-x86_64.tar.gz;
+          sha256 = "0ysa6ymk4h3k1vn59dc909iy197kmx132671kbzfwbim87jmgnqb";
+        };
+      "i686-linux" = fetchurl {
+          url = http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/eclipse/downloads/drops4/R-4.2.2-201302041200/eclipse-SDK-4.2.2-linux-gtk.tar.gz;
+          sha256 = "038yibbrcia38wi72qrdl03g7l35mpvl5nxdfdnvpqxrkfffb826";
+        };
+    };
+  };
 }

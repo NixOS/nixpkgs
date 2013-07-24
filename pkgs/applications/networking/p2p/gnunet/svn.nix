@@ -4,7 +4,7 @@
 , makeWrapper, autoconf, automake }:
 
 let
-  rev = "27399";
+  rev = "27775";
 in
 stdenv.mkDerivation rec {
   name = "gnunet-svn-${rev}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchsvn {
     url =  https://gnunet.org/svn/gnunet;
     inherit rev;
-    sha256 = "0fn7ppfnc4v6lkxwww11s0h8mdvwyv7f40f6wrbfilqpn2ncrf8c";
+    sha256 = "1fa2g63rrn0mmim9v62gnm2hqr556mbcafb7cs7afycbinix4spf";
   };
 
   buildInputs = [

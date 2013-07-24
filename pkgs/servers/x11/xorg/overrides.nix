@@ -209,6 +209,7 @@ in
         rm -fr $out/share/X11/xkb/compiled
         ln -s /var/tmp $out/share/X11/xkb/compiled
       '';
+    passthru.version = (builtins.parseDrvName attrs.name).version; # needed by virtualbox guest additions
   };
 
 

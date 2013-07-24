@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   buildInputs = with xlibs; [ pkgconfig dri2proto libXext ];
 
   propagatedBuildInputs = [ xlibs.libX11 ];
+  
+  configureFlags = stdenv.lib.optional stdenv.isDarwin [ "--build=x86_64" ];
 
   meta = {
     homepage = http://people.freedesktop.org/~aplattner/vdpau/;

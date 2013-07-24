@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "bvi-1.3.2";
 
   src = fetchurl {
-    url = http://prdownloads.sourceforge.net/bvi/bvi-1.3.2.src.tar.gz;
+    url = mirror://sourceforge/bvi/bvi-1.3.2.src.tar.gz;
     sha256 = "110wxqnyianqamxq4y53drqqxb9vp4k2fcvic45qggvlqkqhlfgz";
   };
 

@@ -91,7 +91,7 @@ stdenv.mkDerivation {
   urls = urls_;
 
   # If set, prefer the content-addressable mirrors
-  # (http://nixos.org/tarballs) over the original URLs.
+  # (http://tarballs.nixos.org) over the original URLs.
   preferHashedMirrors = true;
 
   # New-style output content requirements.

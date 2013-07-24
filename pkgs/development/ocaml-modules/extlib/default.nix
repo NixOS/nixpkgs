@@ -1,7 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib}:
 
 stdenv.mkDerivation {
-  name = "ocaml-extlib-1.5.2";
+  name = "ocaml-extlib-1.5.3";
 
   src = fetchurl {
     url = http://ocaml-extlib.googlecode.com/files/extlib-1.5.3.tar.gz;

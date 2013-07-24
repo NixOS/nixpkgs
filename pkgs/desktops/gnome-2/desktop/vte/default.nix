@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "vte-0.28.0";
   
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/gnome/sources/vte/0.28/${name}.tar.bz2";
+    url = "mirror://gnome/sources/vte/0.28/${name}.tar.bz2";
     sha256 = "0blmblvjr35xajr0a07zcd58lk6x2hzympx17biw2mcym9kcarql";
   };
 

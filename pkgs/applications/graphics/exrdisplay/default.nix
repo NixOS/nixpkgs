@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name ="openexr_viewers-1.0.1";
 
   src = fetchurl {
-    url =  "http://download.savannah.nongnu.org/releases/openexr/openexr_viewers-1.0.1.tar.gz";
+    url =  "mirror://savannah/openexr/openexr_viewers-1.0.1.tar.gz";
     sha256 = "1w5qbcdp7sw48z1wk2v07f7p14vqqb1m2ncxyxnbkm9f4ab0ymg6";
   };
 

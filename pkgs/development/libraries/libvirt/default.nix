@@ -1,21 +1,21 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
-, iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext 
-, libtasn1, ebtables, libgcrypt, yajl
+, iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
+, libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils
 }:
 
-let version = "1.0.3"; in
+let version = "1.1.0"; in
 
 stdenv.mkDerivation {
   name = "libvirt-${version}";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/libvirt-${version}.tar.gz";
-    sha256 = "0mr727n0ygxk6y69srg3ahmjd7wligamw683x2snmz6wgk6llkzn";
+    sha256 = "0a39cwvzwf79gv3zw5mwp9q9n792rr1m0rl9ji39bdgcjxb7d7nf";
   };
 
   buildInputs =
     [ pkgconfig libxml2 gnutls devicemapper perl python readline lvm2
-      utillinux udev libpciaccess gettext libtasn1 libgcrypt yajl
+      utillinux udev libpciaccess gettext libtasn1 libgcrypt yajl makeWrapper
     ];
 
   preConfigure =
@@ -32,6 +32,8 @@ stdenv.mkDerivation {
     ''
       substituteInPlace $out/libexec/libvirt-guests.sh \
         --replace "$out/bin" "${gettext}/bin"
+      wrapProgram $out/sbin/libvirtd \
+        --prefix PATH : ${iptables}/sbin:${iproute}/sbin:${pmutils}/bin
     '';
 
   enableParallelBuilding = true;

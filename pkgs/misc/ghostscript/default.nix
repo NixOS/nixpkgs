@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libjpeg, libpng, libtiff, zlib, pkgconfig, fontconfig, openssl
-, lcms2, freetype, libpaper, jbig2dec, expat, libiconvOrEmpty
+, lcms, freetype, libpaper, jbig2dec, expat, libiconvOrEmpty
 , x11Support, x11 ? null
 , cupsSupport ? false, cups ? null
 , gnuFork ? true
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libjpeg libpng libtiff zlib pkgconfig fontconfig openssl lcms2
+    libjpeg libpng libtiff zlib pkgconfig fontconfig openssl lcms
     libpaper jbig2dec expat
   ] ++ stdenv.lib.optionals x11Support [x11 freetype]
     ++ stdenv.lib.optional cupsSupport cups

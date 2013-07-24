@@ -9,7 +9,7 @@ let
 in
 rec {
   src = fetchurl {
-    url = "http://sourceforge.net/projects/statifier/files/statifier/statifier-${version}.tar.gz";
+    url = "mirror://sourceforge/statifier/statifier-${version}.tar.gz";
     sha256 = "0lhdbp7hc15nn6r31yxx7i993a5k8926n5r6j2gi2vvkmf1hciqf";
   };
 

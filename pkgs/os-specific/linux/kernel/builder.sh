@@ -1,7 +1,7 @@
 source $stdenv/setup
 
 
-makeFlags="ARCH=$arch SHELL=/bin/sh"
+makeFlags="ARCH=$arch SHELL=/bin/sh $makeFlags"
 if [ -n "$crossConfig" ]; then
   makeFlags="$makeFlags CROSS_COMPILE=$crossConfig-"
 fi

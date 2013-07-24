@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, gettext }:
+{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, gettext
+, enableJabber ? false, minmay ? null }:
+
+assert enableJabber -> minmay != null;
 
 let
 
@@ -21,13 +24,28 @@ let
 in
 
 {
+  recurseForDerivations = true;
 
   server = stdenv.mkDerivation {
     name = "zabbix-${version}";
 
     inherit src preConfigure;
 
-    configureFlags = "--enable-agent --enable-server --with-postgresql --with-libcurl --with-gettext";
+    configureFlags = [
+      "--enable-agent"
+      "--enable-server"
+      "--with-postgresql"
+      "--with-libcurl"
+      "--with-gettext"
+    ] ++ stdenv.lib.optional enableJabber "--with-jabber=${minmay}";
+
+    postPatch = ''
+      sed -i -e 's/iksemel/minmay/g' configure src/libs/zbxmedia/jabber.c
+      sed -i \
+        -e '/^static ikstransport/,/}/d' \
+        -e 's/iks_connect_with\(.*\), &zbx_iks_transport/mmay_connect_via\1/' \
+        -e 's/iks/mmay/g' -e 's/IKS/MMAY/g' src/libs/zbxmedia/jabber.c
+    '';
 
     buildInputs = [ pkgconfig postgresql curl openssl zlib ];
 

@@ -13,10 +13,11 @@ rec {
     kernelExtraConfig =
       ''
         # Virtualisation (KVM, Xen...).
-        PARAVIRT_GUEST y
+        HYPERVISOR_GUEST? y #3.10 version of the paravirt options
+        PARAVIRT_GUEST? y #Doesn't exist in 3.10
         KVM_CLOCK? y #Part of KVM_GUEST since linux 3.7
-        KVM_GUEST y
-        XEN y
+        KVM_GUEST? y #Doesn't exist in 3.10
+        XEN? y #Doesn't exist in 3.10
         KSM y
 
         # We need 64 GB (PAE) support for Xen guest support.
@@ -52,6 +53,11 @@ rec {
 
         # mv cesa requires this sw fallback, for mv-sha1
         CRYPTO_SHA1 y
+        # Fast crypto
+        CRYPTO_TWOFISH y
+        CRYPTO_TWOFISH_COMMON y
+        CRYPTO_BLOWFISH y
+        CRYPTO_BLOWFISH_COMMON y
 
         IP_PNP y
         IP_PNP_DHCP y

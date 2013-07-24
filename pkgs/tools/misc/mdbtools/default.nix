@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "mdbtools-0.6pre1";
 
   src = fetchurl {
-    url = http://prdownloads.sourceforge.net/mdbtools/mdbtools-0.6pre1.tar.gz;
+    url = mirror://sourceforge/mdbtools/mdbtools-0.6pre1.tar.gz;
     sha256 = "1lz33lmqifjszad7rl1r7rpxbziprrm5rkb27wmswyl5v98dqsbi";
   };
 

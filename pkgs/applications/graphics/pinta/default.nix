@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "pinta-1.4";
 
   src = fetchurl {
-    url = "https://github.com/PintaProject/pinta/tarball/3f7ccfa93d";
+    url = "https://github.com/PintaProject/Pinta/tarball/3f7ccfa93d";
     name = "pinta-1.4.tar.gz";
     sha256 = "1kgb4gy5l6bd0akniwhiqqkvqayr5jgdsvn2pgg1038q9raafnpn";
   };
