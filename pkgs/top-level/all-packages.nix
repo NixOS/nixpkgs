@@ -3107,6 +3107,8 @@ let
     libX11 = xlibs.libX11;
   };
 
+  pypy = callPackage ../development/interpreters/pypy/2.0 { };
+
   pythonFull = python27Full;
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
     extraLibs = lib.attrValues python26.modules;
