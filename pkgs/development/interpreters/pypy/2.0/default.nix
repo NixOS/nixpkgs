@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
-, sqlite, openssl, ncurses, pythonFull }:
+, sqlite, openssl, ncurses, pythonFull, expat }:
 
 assert zlibSupport -> zlib != null;
 
@@ -8,46 +8,24 @@ let
   majorVersion = "2.0";
   version = "${majorVersion}.2";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/pypy/pypy/downloads/pypy-${version}-src.tar.bz2";
-    sha256 = "0g2cajs6m3yf0lak5f18ccs6j77cf5xvbm4h6y5l1qlqdc6wk48r";
-  };
-
-  #patches =
-  #  [ # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
-  #    ./search-path.patch
-
-      # Python recompiles a Python if the mtime stored *in* the
-      # pyc/pyo file differs from the mtime of the source file.  This
-      # doesn't work in Nix because Nix changes the mtime of files in
-      # the Nix store to 1.  So treat that as a special case.
-  #    ./nix-store-mtime.patch
-
-      # patch python to put zero timestamp into pyc
-      # if DETERMINISTIC_BUILD env var is set
-  #    ./deterministic-build.patch
-  #  ];
-  #'';
-
-  install = ''
-    cd ./pypy/pypy/tool/release/
-    ${pythonFull}/bin/python package.py ../../.. pypy-my-own-package-name
-  '';
-
-  buildInputs =
-    stdenv.lib.optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
-    [ bzip2 openssl pkgconfig pythonFull libffi ncurses ]
-    ++ stdenv.lib.optional zlibSupport zlib;
-
   pypy = stdenv.mkDerivation rec {
     name = "pypy-${version}";
 
-    inherit majorVersion version src buildInputs;
+    inherit majorVersion version;
+
+    src = fetchurl {
+      url = "https://bitbucket.org/pypy/pypy/downloads/pypy-${version}-src.tar.bz2";
+      sha256 = "0g2cajs6m3yf0lak5f18ccs6j77cf5xvbm4h6y5l1qlqdc6wk48r";
+    };
+
+    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses sqlite ]
+      ++ stdenv.lib.optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc
+      ++ stdenv.lib.optional zlibSupport zlib;
 
     preConfigure = ''
       substituteInPlace Makefile \
         --replace "-Ojit" "-Ojit --batch" \
-        --replace "pypy/goal/targetpypystandalone.py" "pypy/goal/targetpypystandalone.py --withmod-_minimal_curses"
+        --replace "pypy/goal/targetpypystandalone.py" "pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2"
 
       # we are using cpython and not pypy to do translation
       substituteInPlace rpython/bin/rpython \
@@ -65,6 +43,22 @@ let
       #substituteInPlace rpython/translator/platform/__init__.py \
       #  --replace "return include_dirs" "return tuple(\"{expat}\", *include_dirs)" \
       #  --replace "return library_dirs" "return tuple(\"{expat}\", *library_dirs)"
+    '';
+
+    TERMINFO = "${ncurses}/share/terminfo/";
+
+    doCheck = true;
+    checkPhase = ''
+       export HOME="$TMPDIR"
+      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k "not shutil" lib-python
+    '';
+
+    installPhase = ''
+       mkdir -p $out/bin
+       cp -R {include,lib_pypy,lib-python,pypy-c} $out/
+       ln -s $out/pypy-c $out/bin/pypy
+       chmod +x $out/bin/pypy
+       # TODO: compile python files?
     '';
 
     passthru = {
