@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, zlib, e2fsprogs }:
 
 stdenv.mkDerivation {
-  name = "tarsnap-1.0.34";
+  name = "tarsnap-1.0.35";
 
   src = fetchurl {
-    url = "https://www.tarsnap.com/download/tarsnap-autoconf-1.0.34.tgz";
-    sha256 = "049q0mbz9i4m87n1r78zf62mcxd04wm49rjqpiy5yzy4z8m1gh0l";
+    url = "https://www.tarsnap.com/download/tarsnap-autoconf-1.0.35.tgz";
+    sha256 = "16lc14rwrq84fz95j1g10vv0qki0qw73lzighidj5g23pib6g7vc";
   };
 
   buildInputs = [ openssl zlib e2fsprogs ];
