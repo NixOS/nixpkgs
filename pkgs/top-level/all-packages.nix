@@ -7749,9 +7749,6 @@ let
 
   hexedit = callPackage ../applications/editors/hexedit { };
 
-  hetznerNixOpsInstaller =
-    callPackage ../tools/misc/hetzner-nixops-installer { };
-
   hipchat = callPackage_i686 ../applications/networking/instant-messengers/hipchat { };
 
   homebank = callPackage ../applications/office/homebank { };
