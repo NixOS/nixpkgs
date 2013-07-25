@@ -16,5 +16,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -fa colormake.pl colormake colormake-short clmake clmake-short $out/bin
   '';
- 
+
+  meta = {
+    description = "A simple wrapper around make to colorize the output.";
+    license = "GPLv2";
+  };
 }
