@@ -50,7 +50,7 @@ let
     doCheck = true;
     checkPhase = ''
        export HOME="$TMPDIR"
-      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k "not shutil" lib-python
+      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -m "not shutil" lib-python
     '';
 
     installPhase = ''
