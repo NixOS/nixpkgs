@@ -238,30 +238,41 @@
     tarball = "http://registry.npmjs.org/async/-/async-0.2.9.tgz";
   }
   {
+    name = "async";
+    spec = "~0.2.9";
+    version = "0.2.9";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "df63060fbf3d33286a76aaf6d55a2986d9ff8619";
+    tarball = "http://registry.npmjs.org/async/-/async-0.2.9.tgz";
+  }
+  {
     name = "aws-sdk";
     spec = "*";
-    version = "1.4.0";
+    version = "1.4.1";
     topLevel = true;
     dependencies = [
       { name = "xml2js"; spec = "0.2.4"; }
       { name = "xmlbuilder"; spec = "*"; }
     ];
     patchLatest = true;
-    sha1 = "57a3291994d2b2b484ebd39e1ecb216a05c1c60e";
-    tarball = "http://registry.npmjs.org/aws-sdk/-/aws-sdk-1.4.0.tgz";
+    sha1 = "e429d77c09f94aa2e295b7e83678d818ae5621e9";
+    tarball = "http://registry.npmjs.org/aws-sdk/-/aws-sdk-1.4.1.tgz";
   }
   {
     name = "aws-sdk";
     spec = ">=1.2.0 <2";
-    version = "1.4.0";
+    version = "1.4.1";
     topLevel = false;
     dependencies = [
       { name = "xml2js"; spec = "0.2.4"; }
       { name = "xmlbuilder"; spec = "*"; }
     ];
     patchLatest = true;
-    sha1 = "57a3291994d2b2b484ebd39e1ecb216a05c1c60e";
-    tarball = "http://registry.npmjs.org/aws-sdk/-/aws-sdk-1.4.0.tgz";
+    sha1 = "e429d77c09f94aa2e295b7e83678d818ae5621e9";
+    tarball = "http://registry.npmjs.org/aws-sdk/-/aws-sdk-1.4.1.tgz";
   }
   {
     name = "aws-sign";
@@ -356,14 +367,26 @@
   {
     name = "block-stream";
     spec = "*";
-    version = "0.0.6";
+    version = "0.0.7";
     topLevel = false;
     dependencies = [
-      { name = "inherits"; spec = "~1.0.0"; }
+      { name = "inherits"; spec = "~2.0.0"; }
     ];
     patchLatest = false;
-    sha1 = "f7027aea2ecc357153fa3bad6caeaf25f391aa4f";
-    tarball = "http://registry.npmjs.org/block-stream/-/block-stream-0.0.6.tgz";
+    sha1 = "9088ab5ae1e861f4d81b176b4a8046080703deed";
+    tarball = "http://registry.npmjs.org/block-stream/-/block-stream-0.0.7.tgz";
+  }
+  {
+    name = "block-stream";
+    spec = "0.0.7";
+    version = "0.0.7";
+    topLevel = false;
+    dependencies = [
+      { name = "inherits"; spec = "~2.0.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "9088ab5ae1e861f4d81b176b4a8046080703deed";
+    tarball = "http://registry.npmjs.org/block-stream/-/block-stream-0.0.7.tgz";
   }
   {
     name = "boom";
@@ -677,16 +700,16 @@
   }
   {
     name = "cmd-shim";
-    spec = "~1.1.0";
-    version = "1.1.0";
+    spec = "~1.0.1";
+    version = "1.0.1";
     topLevel = false;
     dependencies = [
       { name = "mkdirp"; spec = "~0.3.3"; }
-      { name = "graceful-fs"; spec = "1.2"; }
+      { name = "graceful-fs"; spec = "2"; }
     ];
     patchLatest = false;
-    sha1 = "e69fe26e9a8b9040c7b61dc8ad6b04d7dbabe767";
-    tarball = "http://registry.npmjs.org/cmd-shim/-/cmd-shim-1.1.0.tgz";
+    sha1 = "75e917c2185240854718c686346770640083d7bc";
+    tarball = "http://registry.npmjs.org/cmd-shim/-/cmd-shim-1.0.1.tgz";
   }
   {
     name = "coffee-script";
@@ -1734,6 +1757,20 @@
     tarball = "http://registry.npmjs.org/form-data/-/form-data-0.0.10.tgz";
   }
   {
+    name = "form-data";
+    spec = "~0.1.0";
+    version = "0.1.0";
+    topLevel = false;
+    dependencies = [
+      { name = "combined-stream"; spec = "~0.0.4"; }
+      { name = "mime"; spec = "~1.2.9"; }
+      { name = "async"; spec = "~0.2.9"; }
+    ];
+    patchLatest = false;
+    sha1 = "d36b59baf9b292bb2e5034d7a6079b2bd1e9df83";
+    tarball = "http://registry.npmjs.org/form-data/-/form-data-0.1.0.tgz";
+  }
+  {
     name = "formidable";
     spec = "1.0.11";
     version = "1.0.11";
@@ -1791,62 +1828,62 @@
   {
     name = "fstream";
     spec = "0";
-    version = "0.1.23";
+    version = "0.1.24";
     topLevel = false;
     dependencies = [
       { name = "rimraf"; spec = "2"; }
       { name = "mkdirp"; spec = "0.3"; }
       { name = "graceful-fs"; spec = "~2.0.0"; }
-      { name = "inherits"; spec = "~1.0.0"; }
+      { name = "inherits"; spec = "~2.0.0"; }
     ];
     patchLatest = false;
-    sha1 = "e1ac8d0945a7f27789e71f00a6d86575d14fc4ec";
-    tarball = "http://registry.npmjs.org/fstream/-/fstream-0.1.23.tgz";
+    sha1 = "267fe9d034f46bc99f824789d38b987ad01be884";
+    tarball = "http://registry.npmjs.org/fstream/-/fstream-0.1.24.tgz";
   }
   {
     name = "fstream";
     spec = "~0.1.17";
-    version = "0.1.23";
+    version = "0.1.24";
     topLevel = false;
     dependencies = [
       { name = "rimraf"; spec = "2"; }
       { name = "mkdirp"; spec = "0.3"; }
       { name = "graceful-fs"; spec = "~2.0.0"; }
-      { name = "inherits"; spec = "~1.0.0"; }
+      { name = "inherits"; spec = "~2.0.0"; }
     ];
     patchLatest = false;
-    sha1 = "e1ac8d0945a7f27789e71f00a6d86575d14fc4ec";
-    tarball = "http://registry.npmjs.org/fstream/-/fstream-0.1.23.tgz";
+    sha1 = "267fe9d034f46bc99f824789d38b987ad01be884";
+    tarball = "http://registry.npmjs.org/fstream/-/fstream-0.1.24.tgz";
   }
   {
     name = "fstream";
     spec = "~0.1.23";
-    version = "0.1.23";
+    version = "0.1.24";
     topLevel = false;
     dependencies = [
       { name = "rimraf"; spec = "2"; }
       { name = "mkdirp"; spec = "0.3"; }
       { name = "graceful-fs"; spec = "~2.0.0"; }
-      { name = "inherits"; spec = "~1.0.0"; }
+      { name = "inherits"; spec = "~2.0.0"; }
     ];
     patchLatest = false;
-    sha1 = "e1ac8d0945a7f27789e71f00a6d86575d14fc4ec";
-    tarball = "http://registry.npmjs.org/fstream/-/fstream-0.1.23.tgz";
+    sha1 = "267fe9d034f46bc99f824789d38b987ad01be884";
+    tarball = "http://registry.npmjs.org/fstream/-/fstream-0.1.24.tgz";
   }
   {
     name = "fstream";
     spec = "~0.1.8";
-    version = "0.1.23";
+    version = "0.1.24";
     topLevel = false;
     dependencies = [
       { name = "rimraf"; spec = "2"; }
       { name = "mkdirp"; spec = "0.3"; }
       { name = "graceful-fs"; spec = "~2.0.0"; }
-      { name = "inherits"; spec = "~1.0.0"; }
+      { name = "inherits"; spec = "~2.0.0"; }
     ];
     patchLatest = false;
-    sha1 = "e1ac8d0945a7f27789e71f00a6d86575d14fc4ec";
-    tarball = "http://registry.npmjs.org/fstream/-/fstream-0.1.23.tgz";
+    sha1 = "267fe9d034f46bc99f824789d38b987ad01be884";
+    tarball = "http://registry.npmjs.org/fstream/-/fstream-0.1.24.tgz";
   }
   {
     name = "fstream-ignore";
@@ -1889,16 +1926,15 @@
   {
     name = "glob";
     spec = "3";
-    version = "3.2.3";
+    version = "3.2.6";
     topLevel = false;
     dependencies = [
       { name = "minimatch"; spec = "~0.2.11"; }
-      { name = "graceful-fs"; spec = "~2.0.0"; }
       { name = "inherits"; spec = "2"; }
     ];
     patchLatest = false;
-    sha1 = "e313eeb249c7affaa5c475286b0e115b59839467";
-    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.3.tgz";
+    sha1 = "28c805b47bc6c19ba3059cbdf079b98ff62442f2";
+    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.6.tgz";
   }
   {
     name = "glob";
@@ -1917,55 +1953,41 @@
   {
     name = "glob";
     spec = ">= 3.1.4";
-    version = "3.2.3";
+    version = "3.2.6";
     topLevel = false;
     dependencies = [
       { name = "minimatch"; spec = "~0.2.11"; }
-      { name = "graceful-fs"; spec = "~2.0.0"; }
       { name = "inherits"; spec = "2"; }
     ];
     patchLatest = false;
-    sha1 = "e313eeb249c7affaa5c475286b0e115b59839467";
-    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.3.tgz";
+    sha1 = "28c805b47bc6c19ba3059cbdf079b98ff62442f2";
+    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.6.tgz";
   }
   {
     name = "glob";
     spec = "~3.2.1";
-    version = "3.2.3";
+    version = "3.2.6";
     topLevel = false;
     dependencies = [
       { name = "minimatch"; spec = "~0.2.11"; }
-      { name = "graceful-fs"; spec = "~2.0.0"; }
       { name = "inherits"; spec = "2"; }
     ];
     patchLatest = false;
-    sha1 = "e313eeb249c7affaa5c475286b0e115b59839467";
-    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.3.tgz";
+    sha1 = "28c805b47bc6c19ba3059cbdf079b98ff62442f2";
+    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.6.tgz";
   }
   {
     name = "glob";
     spec = "~3.2.3";
-    version = "3.2.3";
+    version = "3.2.6";
     topLevel = false;
     dependencies = [
       { name = "minimatch"; spec = "~0.2.11"; }
-      { name = "graceful-fs"; spec = "~2.0.0"; }
       { name = "inherits"; spec = "2"; }
     ];
     patchLatest = false;
-    sha1 = "e313eeb249c7affaa5c475286b0e115b59839467";
-    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.3.tgz";
-  }
-  {
-    name = "graceful-fs";
-    spec = "1.2";
-    version = "1.2.3";
-    topLevel = false;
-    dependencies = [
-    ];
-    patchLatest = false;
-    sha1 = "15a4806a57547cb2d2dbf27f42e89a8c3451b364";
-    tarball = "http://registry.npmjs.org/graceful-fs/-/graceful-fs-1.2.3.tgz";
+    sha1 = "28c805b47bc6c19ba3059cbdf079b98ff62442f2";
+    tarball = "http://registry.npmjs.org/glob/-/glob-3.2.6.tgz";
   }
   {
     name = "graceful-fs";
@@ -2112,6 +2134,21 @@
     patchLatest = false;
     sha1 = "3617958821f58311e4d7f6de291fca662b412ef4";
     tarball = "http://registry.npmjs.org/hawk/-/hawk-0.13.1.tgz";
+  }
+  {
+    name = "hawk";
+    spec = "~1.0.0";
+    version = "1.0.0";
+    topLevel = false;
+    dependencies = [
+      { name = "hoek"; spec = "0.9.x"; }
+      { name = "boom"; spec = "0.4.x"; }
+      { name = "cryptiles"; spec = "0.2.x"; }
+      { name = "sntp"; spec = "0.2.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "b90bb169807285411da7ffcb8dd2598502d3b52d";
+    tarball = "http://registry.npmjs.org/hawk/-/hawk-1.0.0.tgz";
   }
   {
     name = "hiredis";
@@ -2339,6 +2376,17 @@
     tarball = "http://registry.npmjs.org/inherits/-/inherits-1.0.0.tgz";
   }
   {
+    name = "inherits";
+    spec = "~2.0.0";
+    version = "2.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "76c81b3b1c10ddee3a60bf2c247162bc369f8ba8";
+    tarball = "http://registry.npmjs.org/inherits/-/inherits-2.0.0.tgz";
+  }
+  {
     name = "ini";
     spec = "1";
     version = "1.1.0";
@@ -2461,13 +2509,14 @@
   {
     name = "jayschema";
     spec = "*";
-    version = "0.1.5";
+    version = "0.2.0";
     topLevel = true;
     dependencies = [
+      { name = "when"; spec = "~2.2.1"; }
     ];
     patchLatest = false;
-    sha1 = "348a83baaec3b5fb9901c7efe7e64cdd1a8f46e2";
-    tarball = "http://registry.npmjs.org/jayschema/-/jayschema-0.1.5.tgz";
+    sha1 = "ab250dd51224ef36ac8119ce143e0525300d99d4";
+    tarball = "http://registry.npmjs.org/jayschema/-/jayschema-0.2.0.tgz";
   }
   {
     name = "js-yaml";
@@ -2541,6 +2590,17 @@
     patchLatest = false;
     sha1 = "77c271aaea54302e68efeaccb56abbf06a9b1a54";
     tarball = "http://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-4.0.0.tgz";
+  }
+  {
+    name = "json-stringify-safe";
+    spec = "~5.0.0";
+    version = "5.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "156515f55e62ed4cd912ec13bfc79d5013dfd1e7";
+    tarball = "http://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.0.tgz";
   }
   {
     name = "jsontool";
@@ -3366,14 +3426,14 @@
   {
     name = "nijs";
     spec = "*";
-    version = "0.0.9";
+    version = "0.0.10";
     topLevel = true;
     dependencies = [
       { name = "optparse"; spec = ">= 1.0.3"; }
     ];
     patchLatest = false;
-    sha1 = "26f0165431664b3518c2576f78397f27054e03aa";
-    tarball = "http://registry.npmjs.org/nijs/-/nijs-0.0.9.tgz";
+    sha1 = "79d09c5c9a2f1f3e96708c9dc6b4547b89cf8177";
+    tarball = "http://registry.npmjs.org/nijs/-/nijs-0.0.10.tgz";
   }
   {
     name = "node-expat";
@@ -3589,7 +3649,7 @@
   }
   {
     name = "nopt";
-    spec = "~2.1.1";
+    spec = "~2.1.2";
     version = "2.1.2";
     topLevel = false;
     dependencies = [
@@ -3602,20 +3662,20 @@
   {
     name = "normalize-package-data";
     spec = "~0.2";
-    version = "0.2.0";
+    version = "0.2.1";
     topLevel = false;
     dependencies = [
       { name = "semver"; spec = "2"; }
       { name = "github-url-from-git"; spec = "~1.1.1"; }
     ];
     patchLatest = false;
-    sha1 = "b9349e2db3242912e6ab3d180823309b63a74a92";
-    tarball = "http://registry.npmjs.org/normalize-package-data/-/normalize-package-data-0.2.0.tgz";
+    sha1 = "6c13a4b7ab1bca0323265418d354666da2e5ad43";
+    tarball = "http://registry.npmjs.org/normalize-package-data/-/normalize-package-data-0.2.1.tgz";
   }
   {
     name = "npm";
     spec = "*";
-    version = "1.3.4";
+    version = "1.3.5";
     topLevel = true;
     dependencies = [
       { name = "semver"; spec = "~2.0.8"; }
@@ -3624,14 +3684,13 @@
       { name = "abbrev"; spec = "~1.0.4"; }
       { name = "graceful-fs"; spec = "~2.0.0"; }
       { name = "minimatch"; spec = "~0.2.12"; }
-      { name = "nopt"; spec = "~2.1.1"; }
+      { name = "nopt"; spec = "~2.1.2"; }
       { name = "rimraf"; spec = "~2.2.0"; }
       { name = "request"; spec = "~2.21.0"; }
       { name = "which"; spec = "1"; }
-      { name = "tar"; spec = "~0.1.17"; }
+      { name = "tar"; spec = "~0.1.18"; }
       { name = "fstream"; spec = "~0.1.23"; }
-      { name = "block-stream"; spec = "*"; }
-      { name = "inherits"; spec = "1"; }
+      { name = "block-stream"; spec = "0.0.7"; }
       { name = "mkdirp"; spec = "~0.3.3"; }
       { name = "read"; spec = "~1.0.4"; }
       { name = "lru-cache"; spec = "~2.3.0"; }
@@ -3651,18 +3710,18 @@
       { name = "lockfile"; spec = "~0.4.0"; }
       { name = "retry"; spec = "~0.6.0"; }
       { name = "once"; spec = "~1.1.1"; }
-      { name = "npmconf"; spec = "~0.1.1"; }
+      { name = "npmconf"; spec = "~0.1.2"; }
       { name = "opener"; spec = "~1.3.0"; }
       { name = "chmodr"; spec = "~0.1.0"; }
-      { name = "cmd-shim"; spec = "~1.1.0"; }
-      { name = "sha"; spec = "~1.0.1"; }
+      { name = "cmd-shim"; spec = "~1.0.1"; }
+      { name = "sha"; spec = "~1.2.1"; }
       { name = "editor"; spec = "0.0.4"; }
       { name = "child-process-close"; spec = "~0.1.1"; }
       { name = "npm-user-validate"; spec = "0.0.3"; }
     ];
     patchLatest = false;
-    sha1 = "1dacc91458f2197c362d774d2cbf111680f86ec2";
-    tarball = "http://registry.npmjs.org/npm/-/npm-1.3.4.tgz";
+    sha1 = "05d6c4d01d2bc3f1adf15948adf2f7110553f471";
+    tarball = "http://registry.npmjs.org/npm/-/npm-1.3.5.tgz";
   }
   {
     name = "npm-registry-client";
@@ -3754,12 +3813,12 @@
   }
   {
     name = "npmconf";
-    spec = "~0.1.1";
-    version = "0.1.1";
+    spec = "~0.1.2";
+    version = "0.1.2";
     topLevel = false;
     dependencies = [
       { name = "config-chain"; spec = "~1.1.1"; }
-      { name = "inherits"; spec = "~1.0.0"; }
+      { name = "inherits"; spec = "~2.0.0"; }
       { name = "once"; spec = "~1.1.1"; }
       { name = "mkdirp"; spec = "~0.3.3"; }
       { name = "osenv"; spec = "0.0.3"; }
@@ -3768,8 +3827,8 @@
       { name = "ini"; spec = "~1.1.0"; }
     ];
     patchLatest = false;
-    sha1 = "7a254182591ca22d77b2faecc0d17e0f9bdf25a1";
-    tarball = "http://registry.npmjs.org/npmconf/-/npmconf-0.1.1.tgz";
+    sha1 = "99af8122f0067802436a5b71dbf8c3539697e62c";
+    tarball = "http://registry.npmjs.org/npmconf/-/npmconf-0.1.2.tgz";
   }
   {
     name = "npmlog";
@@ -4440,6 +4499,17 @@
   }
   {
     name = "readable-stream";
+    spec = "1.0";
+    version = "1.0.2";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "213ce36864fc1f0d4e98e03b9eb92c64042299d4";
+    tarball = "http://registry.npmjs.org/readable-stream/-/readable-stream-1.0.2.tgz";
+  }
+  {
+    name = "readable-stream";
     spec = "~1.0.2";
     version = "1.0.2";
     topLevel = false;
@@ -4533,71 +4603,71 @@
   {
     name = "request";
     spec = "2";
-    version = "2.23.0";
+    version = "2.25.0";
     topLevel = false;
     dependencies = [
       { name = "qs"; spec = "~0.6.0"; }
-      { name = "json-stringify-safe"; spec = "~4.0.0"; }
+      { name = "json-stringify-safe"; spec = "~5.0.0"; }
       { name = "forever-agent"; spec = "~0.5.0"; }
       { name = "tunnel-agent"; spec = "~0.3.0"; }
       { name = "http-signature"; spec = "~0.10.0"; }
-      { name = "hawk"; spec = "~0.13.0"; }
+      { name = "hawk"; spec = "~1.0.0"; }
       { name = "aws-sign"; spec = "~0.3.0"; }
       { name = "oauth-sign"; spec = "~0.3.0"; }
       { name = "cookie-jar"; spec = "~0.3.0"; }
       { name = "node-uuid"; spec = "~1.4.0"; }
       { name = "mime"; spec = "~1.2.9"; }
-      { name = "form-data"; spec = "0.0.8"; }
+      { name = "form-data"; spec = "~0.1.0"; }
     ];
     patchLatest = false;
-    sha1 = "121742874bf40b3c149fe113b7a35847597fc885";
-    tarball = "http://registry.npmjs.org/request/-/request-2.23.0.tgz";
+    sha1 = "dac1673181887fe0b2ce6bd7e12f46d554a02ce9";
+    tarball = "http://registry.npmjs.org/request/-/request-2.25.0.tgz";
   }
   {
     name = "request";
     spec = "2 >=2.14";
-    version = "2.23.0";
+    version = "2.25.0";
     topLevel = false;
     dependencies = [
       { name = "qs"; spec = "~0.6.0"; }
-      { name = "json-stringify-safe"; spec = "~4.0.0"; }
+      { name = "json-stringify-safe"; spec = "~5.0.0"; }
       { name = "forever-agent"; spec = "~0.5.0"; }
       { name = "tunnel-agent"; spec = "~0.3.0"; }
       { name = "http-signature"; spec = "~0.10.0"; }
-      { name = "hawk"; spec = "~0.13.0"; }
+      { name = "hawk"; spec = "~1.0.0"; }
       { name = "aws-sign"; spec = "~0.3.0"; }
       { name = "oauth-sign"; spec = "~0.3.0"; }
       { name = "cookie-jar"; spec = "~0.3.0"; }
       { name = "node-uuid"; spec = "~1.4.0"; }
       { name = "mime"; spec = "~1.2.9"; }
-      { name = "form-data"; spec = "0.0.8"; }
+      { name = "form-data"; spec = "~0.1.0"; }
     ];
     patchLatest = false;
-    sha1 = "121742874bf40b3c149fe113b7a35847597fc885";
-    tarball = "http://registry.npmjs.org/request/-/request-2.23.0.tgz";
+    sha1 = "dac1673181887fe0b2ce6bd7e12f46d554a02ce9";
+    tarball = "http://registry.npmjs.org/request/-/request-2.25.0.tgz";
   }
   {
     name = "request";
     spec = "2 >=2.20.0";
-    version = "2.23.0";
+    version = "2.25.0";
     topLevel = false;
     dependencies = [
       { name = "qs"; spec = "~0.6.0"; }
-      { name = "json-stringify-safe"; spec = "~4.0.0"; }
+      { name = "json-stringify-safe"; spec = "~5.0.0"; }
       { name = "forever-agent"; spec = "~0.5.0"; }
       { name = "tunnel-agent"; spec = "~0.3.0"; }
       { name = "http-signature"; spec = "~0.10.0"; }
-      { name = "hawk"; spec = "~0.13.0"; }
+      { name = "hawk"; spec = "~1.0.0"; }
       { name = "aws-sign"; spec = "~0.3.0"; }
       { name = "oauth-sign"; spec = "~0.3.0"; }
       { name = "cookie-jar"; spec = "~0.3.0"; }
       { name = "node-uuid"; spec = "~1.4.0"; }
       { name = "mime"; spec = "~1.2.9"; }
-      { name = "form-data"; spec = "0.0.8"; }
+      { name = "form-data"; spec = "~0.1.0"; }
     ];
     patchLatest = false;
-    sha1 = "121742874bf40b3c149fe113b7a35847597fc885";
-    tarball = "http://registry.npmjs.org/request/-/request-2.23.0.tgz";
+    sha1 = "dac1673181887fe0b2ce6bd7e12f46d554a02ce9";
+    tarball = "http://registry.npmjs.org/request/-/request-2.25.0.tgz";
   }
   {
     name = "request";
@@ -4635,25 +4705,25 @@
   {
     name = "request";
     spec = "~2";
-    version = "2.23.0";
+    version = "2.25.0";
     topLevel = false;
     dependencies = [
       { name = "qs"; spec = "~0.6.0"; }
-      { name = "json-stringify-safe"; spec = "~4.0.0"; }
+      { name = "json-stringify-safe"; spec = "~5.0.0"; }
       { name = "forever-agent"; spec = "~0.5.0"; }
       { name = "tunnel-agent"; spec = "~0.3.0"; }
       { name = "http-signature"; spec = "~0.10.0"; }
-      { name = "hawk"; spec = "~0.13.0"; }
+      { name = "hawk"; spec = "~1.0.0"; }
       { name = "aws-sign"; spec = "~0.3.0"; }
       { name = "oauth-sign"; spec = "~0.3.0"; }
       { name = "cookie-jar"; spec = "~0.3.0"; }
       { name = "node-uuid"; spec = "~1.4.0"; }
       { name = "mime"; spec = "~1.2.9"; }
-      { name = "form-data"; spec = "0.0.8"; }
+      { name = "form-data"; spec = "~0.1.0"; }
     ];
     patchLatest = false;
-    sha1 = "121742874bf40b3c149fe113b7a35847597fc885";
-    tarball = "http://registry.npmjs.org/request/-/request-2.23.0.tgz";
+    sha1 = "dac1673181887fe0b2ce6bd7e12f46d554a02ce9";
+    tarball = "http://registry.npmjs.org/request/-/request-2.25.0.tgz";
   }
   {
     name = "request";
@@ -4861,13 +4931,13 @@
   {
     name = "semver";
     spec = "*";
-    version = "2.0.10";
+    version = "2.0.11";
     topLevel = true;
     dependencies = [
     ];
     patchLatest = false;
-    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
-    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+    sha1 = "f51f07d03fa5af79beb537fc067a7e141786cced";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.11.tgz";
   }
   {
     name = "semver";
@@ -4894,68 +4964,68 @@
   {
     name = "semver";
     spec = "2";
-    version = "2.0.10";
+    version = "2.0.11";
     topLevel = false;
     dependencies = [
     ];
     patchLatest = false;
-    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
-    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+    sha1 = "f51f07d03fa5af79beb537fc067a7e141786cced";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.11.tgz";
   }
   {
     name = "semver";
     spec = "2.x";
-    version = "2.0.10";
+    version = "2.0.11";
     topLevel = false;
     dependencies = [
     ];
     patchLatest = false;
-    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
-    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+    sha1 = "f51f07d03fa5af79beb537fc067a7e141786cced";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.11.tgz";
   }
   {
     name = "semver";
     spec = ">=2.0.10 <3.0.0";
-    version = "2.0.10";
+    version = "2.0.11";
     topLevel = false;
     dependencies = [
     ];
     patchLatest = false;
-    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
-    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+    sha1 = "f51f07d03fa5af79beb537fc067a7e141786cced";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.11.tgz";
   }
   {
     name = "semver";
     spec = "~2.0.5";
-    version = "2.0.10";
+    version = "2.0.11";
     topLevel = false;
     dependencies = [
     ];
     patchLatest = false;
-    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
-    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+    sha1 = "f51f07d03fa5af79beb537fc067a7e141786cced";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.11.tgz";
   }
   {
     name = "semver";
     spec = "~2.0.7";
-    version = "2.0.10";
+    version = "2.0.11";
     topLevel = false;
     dependencies = [
     ];
     patchLatest = false;
-    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
-    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+    sha1 = "f51f07d03fa5af79beb537fc067a7e141786cced";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.11.tgz";
   }
   {
     name = "semver";
     spec = "~2.0.8";
-    version = "2.0.10";
+    version = "2.0.11";
     topLevel = false;
     dependencies = [
     ];
     patchLatest = false;
-    sha1 = "e3199263b1e9f1913dbc91efb4af559e8e4d3d31";
-    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.10.tgz";
+    sha1 = "f51f07d03fa5af79beb537fc067a7e141786cced";
+    tarball = "http://registry.npmjs.org/semver/-/semver-2.0.11.tgz";
   }
   {
     name = "send";
@@ -5015,15 +5085,16 @@
   }
   {
     name = "sha";
-    spec = "~1.0.1";
-    version = "1.0.1";
+    spec = "~1.2.1";
+    version = "1.2.1";
     topLevel = false;
     dependencies = [
-      { name = "graceful-fs"; spec = "1.2"; }
+      { name = "graceful-fs"; spec = "2"; }
+      { name = "readable-stream"; spec = "1.0"; }
     ];
     patchLatest = false;
-    sha1 = "9b87a92113103e7406f7e7ef00006f3fa1975122";
-    tarball = "http://registry.npmjs.org/sha/-/sha-1.0.1.tgz";
+    sha1 = "30bd5f770852fa6ac2b110ab3698fd4840f7f1cd";
+    tarball = "http://registry.npmjs.org/sha/-/sha-1.2.1.tgz";
   }
   {
     name = "shelljs";
@@ -5427,30 +5498,30 @@
   {
     name = "tar";
     spec = "*";
-    version = "0.1.17";
+    version = "0.1.18";
     topLevel = true;
     dependencies = [
-      { name = "inherits"; spec = "1.x"; }
+      { name = "inherits"; spec = "2"; }
       { name = "block-stream"; spec = "*"; }
       { name = "fstream"; spec = "~0.1.8"; }
     ];
     patchLatest = false;
-    sha1 = "408c8a95deb8e78a65b59b1a51a333183a32badc";
-    tarball = "http://registry.npmjs.org/tar/-/tar-0.1.17.tgz";
+    sha1 = "b76c3b23c5e90f9e3e344462f537047c695ba635";
+    tarball = "http://registry.npmjs.org/tar/-/tar-0.1.18.tgz";
   }
   {
     name = "tar";
     spec = "0";
-    version = "0.1.17";
+    version = "0.1.18";
     topLevel = false;
     dependencies = [
-      { name = "inherits"; spec = "1.x"; }
+      { name = "inherits"; spec = "2"; }
       { name = "block-stream"; spec = "*"; }
       { name = "fstream"; spec = "~0.1.8"; }
     ];
     patchLatest = false;
-    sha1 = "408c8a95deb8e78a65b59b1a51a333183a32badc";
-    tarball = "http://registry.npmjs.org/tar/-/tar-0.1.17.tgz";
+    sha1 = "b76c3b23c5e90f9e3e344462f537047c695ba635";
+    tarball = "http://registry.npmjs.org/tar/-/tar-0.1.18.tgz";
   }
   {
     name = "tar";
@@ -5468,17 +5539,17 @@
   }
   {
     name = "tar";
-    spec = "~0.1.17";
-    version = "0.1.17";
+    spec = "~0.1.18";
+    version = "0.1.18";
     topLevel = false;
     dependencies = [
-      { name = "inherits"; spec = "1.x"; }
+      { name = "inherits"; spec = "2"; }
       { name = "block-stream"; spec = "*"; }
       { name = "fstream"; spec = "~0.1.8"; }
     ];
     patchLatest = false;
-    sha1 = "408c8a95deb8e78a65b59b1a51a333183a32badc";
-    tarball = "http://registry.npmjs.org/tar/-/tar-0.1.17.tgz";
+    sha1 = "b76c3b23c5e90f9e3e344462f537047c695ba635";
+    tarball = "http://registry.npmjs.org/tar/-/tar-0.1.18.tgz";
   }
   {
     name = "temp";
@@ -5914,6 +5985,17 @@
     patchLatest = false;
     sha1 = "998bc1855d8cd0d1e9aa8f8056b83b46ac3e81ef";
     tarball = "http://registry.npmjs.org/websocket-driver/-/websocket-driver-0.2.2.tgz";
+  }
+  {
+    name = "when";
+    spec = "~2.2.1";
+    version = "2.2.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "b1def994017350b8087f6e9a7596ab2833bdc712";
+    tarball = "http://registry.npmjs.org/when/-/when-2.2.1.tgz";
   }
   {
     name = "which";
