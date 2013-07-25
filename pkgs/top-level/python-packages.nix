@@ -3473,6 +3473,17 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  plumbum = buildPythonPackage rec {
+    name = "plumbum-1.2.0";
+
+    buildInputs = [ pythonPackages.six ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/plumbum/plumbum-1.2.0.tar.gz";
+      md5 = "18b7f888dfaf62a48df937abffe07897";
+    };
+  };
+
 
   polib = buildPythonPackage rec {
     name = "polib-${version}";
