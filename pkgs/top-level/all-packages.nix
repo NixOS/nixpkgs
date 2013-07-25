@@ -615,6 +615,8 @@ let
 
   convertlit = callPackage ../tools/text/convertlit { };
 
+  colormake = callPackage ../development/tools/build-managers/colormake { };
+
   cowsay = callPackage ../tools/misc/cowsay { };
 
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
