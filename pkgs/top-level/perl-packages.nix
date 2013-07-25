@@ -513,7 +513,7 @@ rec {
       url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
       sha256 = "09mn0wjwfvnfi28y47g816nx50zdpvwvbxp0nrpsap0ir1m80wi3";
     };
-    buildInputs = [ TestWWWMechanizeCatalyst TestUseOk ];
+    buildInputs = [ TestWWWMechanizeCatalyst Testuseok ];
     propagatedBuildInputs =
       [ CatalystPluginAuthentication ClassAccessor CryptPasswdMD5 AuthenHtpasswd HTMLForm ];
   };
@@ -715,7 +715,7 @@ rec {
       url = mirror://cpan/authors/id/G/GR/GRAF/Catalyst-Plugin-Cache-HTTP-0.001000.tar.gz;
       sha256 = "0v5iphbq4csc4r6wkvxnqlh97p8g0yhjky9qqmsdyqczn87agbba";
     };
-    buildInputs = [ CatalystRuntime TestUseOk TestWWWMechanizeCatalyst ];
+    buildInputs = [ CatalystRuntime Testuseok TestWWWMechanizeCatalyst ];
     propagatedBuildInputs = [ ClassAccessorFast HTTPMessage MROCompat ];
     meta = {
       description = "HTTP/1.1 cache validators for Catalyst";
@@ -834,7 +834,7 @@ rec {
       url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
       sha256 = "1c6k4x6az0fkany16zlyaqhlp7bcx922vl4qzd3z707vs6pc06rz";
     };
-    buildInputs = [  TestWWWMechanizeCatalyst TestUseOk ];
+    buildInputs = [  TestWWWMechanizeCatalyst Testuseok ];
     propagatedBuildInputs = [ CatalystRuntime TextCSV XMLSimple ];
   };
 
@@ -1356,7 +1356,7 @@ rec {
       url = "mirror://cpan/authors/id/J/JR/JROCKWAY/${name}.tar.gz";
       sha256 = "0gssillawjknqks81x7fg7w2x94bnyklgd8ry2pr1k6ifkjhwz46";
     };
-    buildInputs = [ TestException TestUseOk ];
+    buildInputs = [ TestException Testuseok ];
   };
 
   CookieXS = buildPerlPackage rec {
@@ -1485,7 +1485,7 @@ rec {
       url = mirror://cpan/authors/id/N/NU/NUFFIN/Crypt-Random-Source-0.07.tar.gz;
       sha256 = "0kxcqcpknh9hhfnpiymxrjg74yj7nfr7k4fgrfmd9s2cw9p9mqdv";
     };
-    buildInputs = [ TestUseOk TestException ];
+    buildInputs = [ Testuseok TestException ];
     propagatedBuildInputs = [ AnyMoose CaptureTiny ModuleFind namespaceclean SubExporter ];
     meta = {
       homepage = http://search.cpan.org/dist/Crypt-Random-Source;
@@ -2193,7 +2193,7 @@ rec {
       url = mirror://cpan/authors/id/F/FL/FLORA/Devel-PartialDump-0.15.tar.gz;
       sha256 = "0xm42030qlbimay5x72sjj0na43ciniai2xdcdx8zf191jw5dz7n";
     };
-    propagatedBuildInputs = [ Moose namespaceclean SubExporter TestUseOk TestWarn ];
+    propagatedBuildInputs = [ Moose namespaceclean SubExporter Testuseok TestWarn ];
   };
 
   DevelStackTrace = buildPerlPackage {
@@ -3131,7 +3131,7 @@ rec {
       url = mirror://cpan/authors/id/N/NU/NUFFIN/Hash-Util-FieldHash-Compat-0.03.tar.gz;
       sha256 = "0pmai98a89j82fjksfax87brmpimjn74kr7bl874lc1k40dfhx47";
     };
-    propagatedBuildInputs = [ TestUseOk ];
+    propagatedBuildInputs = [ Testuseok ];
   };  
 
   HeapFibonacci = buildPerlPackage {
@@ -3149,6 +3149,17 @@ rec {
       sha256 = "eda90ba26f8a0cef02d38f08a1786a203beec1309279493c78eed13567d0fa7e";
     };
     buildInputs = [ pkgs.unzip ];
+  };
+
+  HTMLFromANSI = buildPerlPackage {
+    name = "HTML-FromANSI-2.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NU/NUFFIN/HTML-FromANSI-2.03.tar.gz;
+      sha256 = "21776345ed701b2c04c7b09380af943f9984cc7f99624087aea45db5fc09c359";
+    };
+    propagatedBuildInputs = [ HTMLParser TermVT102Boundless Testuseok ];
+    meta = {
+    };
   };
 
   HTMLForm = buildPerlPackage {
@@ -4486,7 +4497,7 @@ rec {
       sha256 = "6d2d8fdc4f3f7fa76dc82c10d71b099f1572c054a72f373e5a9fa6237e48634a";
     };
     buildInputs = [ MooseXConfigFromFile TestOutput YAML ];
-    propagatedBuildInputs = [ AppCmd GetoptLongDescriptive Moose MooseXConfigFromFile MooseXGetopt MooseXHasOptions MooseXMarkAsMethods TestUseOk ];
+    propagatedBuildInputs = [ AppCmd GetoptLongDescriptive Moose MooseXConfigFromFile MooseXGetopt MooseXHasOptions MooseXMarkAsMethods Testuseok ];
     meta = {
       homepage = http://metacpan.org/release/MooseX-App-Cmd;
       description = "Mashes up MooseX::Getopt and App::Cmd";
@@ -4523,7 +4534,7 @@ rec {
       url = mirror://cpan/authors/id/N/NU/NUFFIN/MooseX-Clone-0.05.tar.gz;
       sha256 = "11pbw3zdbcn54hrj6z74qisnmj9k4qliy6yjj9d71qndq3xg3x0f";
     };
-    propagatedBuildInputs = [ DataVisitor HashUtilFieldHashCompat Moose namespaceclean TestUseOk ];
+    propagatedBuildInputs = [ DataVisitor HashUtilFieldHashCompat Moose namespaceclean Testuseok ];
   };
 
   MooseXConfigFromFile = buildPerlPackage {
@@ -4702,7 +4713,7 @@ rec {
       url = mirror://cpan/authors/id/J/JR/JROCKWAY/MooseX-Runnable-0.03.tar.gz;
       sha256 = "1hl3pnldjlbyj6gm3bzwj827qp54di14hp4zhypmrmbg1lscfdwc";
     };
-    buildInputs = [ TestUseOk TestTableDriven ];
+    buildInputs = [ Testuseok TestTableDriven ];
     propagatedBuildInputs = [ ListMoreUtils Moose MooseXGetopt MooseXTypes MooseXTypesPathClass namespaceautoclean ParamsUtil ];
   };
 
@@ -4754,7 +4765,7 @@ rec {
       url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
       sha256 = "0sqmpf2kw25847fwrrwpcfhrq694bgs8jbix7qxp9qyjm769np6n";
     };
-    buildInputs = [ TestException TestUseOk ];
+    buildInputs = [ TestException Testuseok ];
     propagatedBuildInputs = [ ClassMOP Moose namespaceautoclean ];
   };
 
@@ -4800,7 +4811,7 @@ rec {
       url = mirror://cpan/authors/id/I/IL/ILMARI/MooseX-Types-DateTime-0.08.tar.gz;
       sha256 = "0q0d1dd8737rc3k3jb22wvybf03hg3lp1iyda0ivkd8020cib996";
     };
-    propagatedBuildInputs = [ DateTime DateTimeLocale DateTimeTimeZone Moose MooseXTypes namespaceclean TestException TestUseOk ];
+    propagatedBuildInputs = [ DateTime DateTimeLocale DateTimeTimeZone Moose MooseXTypes namespaceclean TestException Testuseok ];
   };
 
   MooseXTypesDateTimeMoreCoercions = buildPerlPackage {
@@ -4809,7 +4820,7 @@ rec {
       url = mirror://cpan/authors/id/I/IL/ILMARI/MooseX-Types-DateTime-MoreCoercions-0.11.tar.gz;
       sha256 = "c746a9284b7db49ce9acb2fbce26629fa816e6636e883d2ed6c62e336cfc52cb";
     };
-    buildInputs = [ TestException TestUseOk ];
+    buildInputs = [ TestException Testuseok ];
     propagatedBuildInputs = [ DateTime DateTimeXEasy Moose MooseXTypes MooseXTypesDateTime TimeDurationParse namespaceclean ];
     meta = {
       description = "Extensions to MooseX::Types::DateTime";
@@ -4890,7 +4901,7 @@ rec {
       url = mirror://cpan/authors/id/F/FL/FLORA/MooseX-Types-URI-0.03.tar.gz;
       sha256 = "056v08kzcd93h8l69iqdxbr05h85bgz6jvp6iwc0vv68dacr299s";
     };
-    propagatedBuildInputs = [ Moose MooseXTypes MooseXTypesPathClass namespaceclean TestUseOk URI URIFromHash ];
+    propagatedBuildInputs = [ Moose MooseXTypes MooseXTypesPathClass namespaceclean Testuseok URI URIFromHash ];
   };
 
   Mouse = buildPerlPackage rec {
@@ -6158,7 +6169,7 @@ rec {
       url = mirror://cpan/authors/id/B/BO/BOBTFISH/String-TT-0.03.tar.gz;
       sha256 = "1asjr79wqcl9wk96afxrm1yhpj8lk9bk8kyz78yi5ypr0h55yq7p";
     };
-    buildInputs = [ TestUseOk TestException TestTableDriven ];
+    buildInputs = [ Testuseok TestException TestTableDriven ];
     propagatedBuildInputs = [ PadWalker SubExporter TemplateToolkit ];
     meta = {
       description = "Use TT to interpolate lexical variables";
@@ -6503,6 +6514,28 @@ rec {
 
     # Tests don't work because they require /dev/tty.
     doCheck = false;
+  };
+
+  TermVT102 = buildPerlPackage {
+    name = "Term-VT102-0.91";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AJ/AJWOOD/Term-VT102-0.91.tar.gz;
+      sha256 = "f954e0310941d45c0fc3eb4a40f5d3a00d68119e277d303a1e6af11ded6fbd94";
+    };
+    meta = {
+    };
+  };
+
+  TermVT102Boundless = buildPerlPackage {
+    name = "Term-VT102-Boundless-0.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NU/NUFFIN/Term-VT102-Boundless-0.04.tar.gz;
+      sha256 = "5bb88b5aecb44ebf56d3ac7240be80cd26def9dcf1ebeb4e77d9983dfc7a8f19";
+    };
+    propagatedBuildInputs = [ TermVT102 Testuseok ];
+    meta = {
+      license = "unknown";
+    };
   };
 
   TestAssert = buildPerlPackage {
@@ -6903,7 +6936,7 @@ rec {
     };
   };
 
-  TestUseOk = buildPerlPackage {
+  Testuseok = buildPerlPackage {
     name = "Test-use-ok-0.11";
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AU/AUDREYT/Test-use-ok-0.11.tar.gz;
@@ -7226,7 +7259,7 @@ rec {
       url = mirror://cpan/authors/id/N/NU/NUFFIN/Tie-ToObject-0.03.tar.gz;
       sha256 = "1x1smn1kw383xc5h9wajxk9dlx92bgrbf7gk4abga57y6120s6m3";
     };
-    propagatedBuildInputs = [TestUseOk];
+    propagatedBuildInputs = [Testuseok];
   };
 
   TimeDate = buildPerlPackage {
