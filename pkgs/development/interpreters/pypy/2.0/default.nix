@@ -18,9 +18,13 @@ let
       sha256 = "0g2cajs6m3yf0lak5f18ccs6j77cf5xvbm4h6y5l1qlqdc6wk48r";
     };
 
-    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses sqlite ]
+    buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite ]
       ++ stdenv.lib.optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
+
+    C_INCLUDE_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/include") buildInputs);
+    LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
+    LD_LIBRARY_PATH = LIBRARY_PATH;
 
     preConfigure = ''
       substituteInPlace Makefile \
@@ -39,10 +43,6 @@ let
         --replace "ncurses/curses.h" "${ncurses}/include/curses.h" \
         --replace "ncurses/term.h" "${ncurses}/include/term.h" \
         --replace "libraries = ['curses']" "libraries = ['ncurses']"
-
-      #substituteInPlace rpython/translator/platform/__init__.py \
-      #  --replace "return include_dirs" "return tuple(\"{expat}\", *include_dirs)" \
-      #  --replace "return library_dirs" "return tuple(\"{expat}\", *library_dirs)"
     '';
 
     TERMINFO = "${ncurses}/share/terminfo/";
@@ -55,8 +55,9 @@ let
 
     installPhase = ''
        mkdir -p $out/bin
-       cp -R {include,lib_pypy,lib-python,pypy-c} $out/
-       ln -s $out/pypy-c $out/bin/pypy
+       mkdir -p $out/pypy-c
+       cp -R {include,lib_pypy,lib-python,pypy-c} $out/pypy-c
+       ln -s $out/pypy-c/pypy-c $out/bin/pypy
        chmod +x $out/bin/pypy
        # TODO: compile python files?
     '';
