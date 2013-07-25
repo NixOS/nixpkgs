@@ -50,7 +50,7 @@ let
     doCheck = true;
     checkPhase = ''
        export HOME="$TMPDIR"
-      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -m "not shutil" lib-python
+      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c --ignore lib-python/2.7/test/test_shutil.py lib-python
     '';
 
     installPhase = ''
