@@ -114,7 +114,11 @@ in
             mkdir -p /var/run/fail2ban -m 0755
           '';
           
-        serviceConfig.ExecStart = "${pkgs.fail2ban}/bin/fail2ban-server -f";
+        serviceConfig =
+          { ExecStart = "${pkgs.fail2ban}/bin/fail2ban-server -f";
+            ReadOnlyDirectories = "/";
+            ReadWriteDirectories = "/var/run/fail2ban";
+          };
 
         postStart =
           ''
