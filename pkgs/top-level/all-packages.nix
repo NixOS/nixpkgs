@@ -503,6 +503,8 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  bmon = callPackage ../tools/misc/bmon { };
+
   boomerang = callPackage ../development/tools/boomerang { };
 
   bootchart = callPackage ../tools/system/bootchart { };
