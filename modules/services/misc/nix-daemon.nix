@@ -155,26 +155,32 @@ in
             sshKey = "/root/.ssh/id_buildfarm";
             system = "x86_64-linux";
             maxJobs = 2;
+            supportedFeatures = "kvm";
+            mandatoryFeatures = "perf";
           }
         ];
         description = "
           This option lists the machines to be used if distributed
           builds are enabled (see
           <option>nix.distributedBuilds</option>).  Nix will perform
-          derivations on those machines via SSh by copying the inputs to
-          the Nix store on the remote machine, starting the build, then
-          copying the output back to the local Nix store.  Each element
-          of the list should be an attribute set containing the
-          machine's host name (<varname>hostname</varname>), the user
-          name to be used for the SSH connection
+          derivations on those machines via SSh by copying the inputs
+          to the Nix store on the remote machine, starting the build,
+          then copying the output back to the local Nix store.  Each
+          element of the list should be an attribute set containing
+          the machine's host name (<varname>hostname</varname>), the
+          user name to be used for the SSH connection
           (<varname>sshUser</varname>), the Nix system type
           (<varname>system</varname>, e.g.,
-          <literal>\"i686-linux\"</literal>), the maximum number of jobs
-          to be run in parallel on that machine
-          (<varname>maxJobs</varname>), and the path to the SSH private
-          key to be used to connect (<varname>sshKey</varname>).  The
-          SSH private key should not have a passphrase, and the
-          corresponding public key should be added to
+          <literal>\"i686-linux\"</literal>), the maximum number of
+          jobs to be run in parallel on that machine
+          (<varname>maxJobs</varname>), the path to the SSH private
+          key to be used to connect (<varname>sshKey</varname>), a
+          list of supported features of the machine
+          (<varname>supportedFeatures</varname>) and a list of
+          mandatory features of the machine
+          (<varname>mandatoryFeatures</varname>). The SSH private key
+          should not have a passphrase, and the corresponding public
+          key should be added to
           <filename>~<replaceable>sshUser</replaceable>/authorized_keys</filename>
           on the remote machine.
         ";
@@ -263,6 +269,10 @@ in
             + (if machine ? system then machine.system else concatStringsSep "," machine.systems)
             + " ${machine.sshKey} ${toString machine.maxJobs} "
             + (if machine ? speedFactor then toString machine.speedFactor else "1" )
+            + " "
+            + (if machine ? supportedFeatures then concatStringsSep "," machine.supportedFeatures else "" )
+            + " "
+            + (if machine ? mandatoryFeatures then concatStringsSep "," machine.mandatoryFeatures else "" )
             + "\n"
           ) cfg.buildMachines;
       };
