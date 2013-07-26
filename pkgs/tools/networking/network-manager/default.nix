@@ -56,6 +56,9 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       mkdir -p $out/lib/NetworkManager
+      
+      # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
+      substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
     '';
 
   meta = with stdenv.lib; {
