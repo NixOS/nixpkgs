@@ -2908,6 +2908,21 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  netifaces = buildPythonPackage rec {
+    version = "0.8";
+    name = "netifaces-${version}";
+
+    src = fetchurl {
+      url = "http://alastairs-place.net/projects/netifaces/${name}.tar.gz";
+      sha256 = "1v5i39kx4yz1pwgjfbzi63w55l2z318zgmi9f77ybmmkil1i39sk";
+    };
+
+    meta = {
+      homepage = http://alastairs-place.net/projects/netifaces/;
+      description = "Portable access to network interfaces from Python";
+    };
+  };
+
   netlib = buildPythonPackage rec {
     baseName = "netlib";
     name = "${baseName}-${meta.version}";
