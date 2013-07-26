@@ -45,12 +45,15 @@ let
         --replace "libraries = ['curses']" "libraries = ['ncurses']"
     '';
 
-    TERMINFO = "${ncurses}/share/terminfo/";
 
     doCheck = true;
     checkPhase = ''
-       export HOME="$TMPDIR"
-      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c --ignore lib-python/2.7/test/test_shutil.py lib-python
+       export TERMINFO = "${ncurses}/share/terminfo/";
+       export TERM = "xterm";
+       export HOME = "$TMPDIR"
+       # disable shutils because it assumes gid 0 exists
+       # disable socket because it has two actual network tests that fail
+      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c --ignore lib-python/2.7/test/test_shutil.py --ignore lib-python/2.7/test_socket.py lib-python
     '';
 
     installPhase = ''
