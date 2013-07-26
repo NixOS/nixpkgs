@@ -29,7 +29,7 @@ let
     preConfigure = ''
       substituteInPlace Makefile \
         --replace "-Ojit" "-Ojit --batch" \
-        --replace "pypy/goal/targetpypystandalone.py" "pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2"
+        --replace "pypy/goal/targetpypystandalone.py" "pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing"
 
       # we are using cpython and not pypy to do translation
       substituteInPlace rpython/bin/rpython \
