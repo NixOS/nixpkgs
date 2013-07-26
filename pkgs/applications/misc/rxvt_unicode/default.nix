@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perlSupport, libX11, libXt, libXft, ncurses, perl,
-  fontconfig, freetype, pkgconfig, libXrender }:
+  fontconfig, freetype, pkgconfig, libXrender, gdkPixbufSupport, gdk_pixbuf }:
 
 let 
   name = "rxvt-unicode";
@@ -19,7 +19,8 @@ stdenv.mkDerivation (rec {
   buildInputs =
     [ libX11 libXt libXft ncurses /* required to build the terminfo file */ 
       fontconfig freetype pkgconfig libXrender ]
-    ++ stdenv.lib.optional perlSupport perl;
+    ++ stdenv.lib.optional perlSupport perl
+    ++ stdenv.lib.optional gdkPixbufSupport gdk_pixbuf;
 
   preConfigure =
     ''

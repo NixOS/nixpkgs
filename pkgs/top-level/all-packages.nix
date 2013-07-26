@@ -8314,6 +8314,7 @@ let
   # = urxvt
   rxvt_unicode = callPackage ../applications/misc/rxvt_unicode {
     perlSupport = true;
+    gdkPixbufSupport = true;
   };
 
   sakura = callPackage ../applications/misc/sakura {
