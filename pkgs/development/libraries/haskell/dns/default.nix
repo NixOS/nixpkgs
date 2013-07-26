@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     attoparsec attoparsecConduit binary blazeBuilder conduit hspec
     iproute mtl network networkConduit random
   ];
+  doCheck = false;
   meta = {
     description = "DNS library in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
