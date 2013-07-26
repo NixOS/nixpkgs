@@ -8648,6 +8648,8 @@ let
 
   wmname = callPackage ../applications/misc/wmname { };
 
+  wmctrl = callPackage ../tools/X11/wmctrl { };
+
   # I'm keen on wmiimenu only  >wmii-3.5 no longer has it...
   wmiimenu = import ../applications/window-managers/wmii31 {
     libixp = libixp_for_wmii;
