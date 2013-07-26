@@ -5414,6 +5414,8 @@ pythonPackages = python.modules // rec {
       md5 = "7a3094d812c0dffb948d1334ef5fd56f";
     };
 
+    doCheck = false;
+
     meta = {
        maintainers = [
          stdenv.lib.maintainers.garbas
