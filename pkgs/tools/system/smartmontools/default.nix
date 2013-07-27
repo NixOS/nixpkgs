@@ -8,15 +8,15 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "smartmontools-6.1";
+  name = "smartmontools-6.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/smartmontools/${name}.tar.gz";
-    sha256 = "01yfv6hqsqandg6x8mnwa4g42hhqvc7dfxnfb3v849n8rj5kn059";
+    sha256 = "0nq6jvfh8nqwfrvp6fb6qs2rdydi3i9xgpi7p7vb83xvg42ncvs8";
   };
 
   patchPhase = ''
-    cp ${driverdb} drivedb.h
+    : cp ${driverdb} drivedb.h
     sed -i -e 's@which which >/dev/null || exit 1@alias which="type -p"@' update-smart-drivedb.in
   '';
 
