@@ -5,6 +5,15 @@ let
 
   importGeneratedPackages = generated: nativeDeps: self:
     let
+      nativeDepsList = { name, spec, ... }:
+        let
+          nameOr = if builtins.hasAttr name nativeDeps
+            then builtins.getAttr name nativeDeps
+            else {};
+          depsOr = if builtins.hasAttr spec nameOr
+            then builtins.getAttr spec nameOr
+            else [];
+        in depsOr;
       all = pkgs.lib.fold (pkg: { top-level, full }: {
         top-level = top-level ++ pkgs.lib.optional pkg.topLevel {
           name = pkg.name;
@@ -25,6 +34,7 @@ let
                 sha256 = pkg.sha256 or "";
               };
               deps = map (dep: builtins.getAttr dep.spec (builtins.getAttr dep.name self.full)) pkg.dependencies;
+              buildInputs = nativeDepsList pkg;
             };
           } ];
         } ];
@@ -34,8 +44,8 @@ in {
   inherit importGeneratedPackages;
 
   nativeDeps = {
-    "node-expat-*" = [ pkgs.expat ];
-    "rbytes-0.0.2" = [ pkgs.openssl ];
+    "node-expat"."*" = [ pkgs.expat ];
+    "rbytes"."0.0.2" = [ pkgs.openssl ];
   };
 
   buildNodePackage = import ../development/web/nodejs/build-node-package.nix {
