@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo"
     + stdenv.lib.optionalString (libintlOrEmpty != []) " -lintl";
 
+  buildInputs = stdenv.lib.optional stdenv.isDarwin xlibs.libXi;
+
   nativeBuildInputs = [ perl pkgconfig gettext ];
 
   propagatedBuildInputs = with xlibs; with stdenv.lib;
