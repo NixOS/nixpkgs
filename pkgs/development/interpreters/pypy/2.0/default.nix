@@ -59,6 +59,7 @@ let
     installPhase = ''
        mkdir -p $out/bin
        mkdir -p $out/pypy-c
+       # TODO: make libPrefix work
        cp -R {include,lib_pypy,lib-python,pypy-c} $out/pypy-c
        ln -s $out/pypy-c/pypy-c $out/bin/pypy
        chmod +x $out/bin/pypy
@@ -68,6 +69,7 @@ let
     passthru = {
       inherit zlibSupport;
       libPrefix = "pypy${majorVersion}";
+      executable = "pypy";
     };
 
     enableParallelBuilding = true;

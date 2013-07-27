@@ -33,7 +33,7 @@
 , checkPhase ?
     ''
       runHook preCheck
-      python setup.py test
+      ${python}/bin/${python.executable} setup.py test
       runHook postCheck
     ''
 

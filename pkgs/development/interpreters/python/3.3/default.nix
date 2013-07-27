@@ -32,6 +32,8 @@ stdenv.mkDerivation {
     sha256 = "16myvina7nakyyg7r5gnjyydk8bzar988vmxsw2k485w5gz04wpp";
   };
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
       substituteInPlace ./setup.py --replace $i /no-such-path
@@ -58,7 +60,8 @@ stdenv.mkDerivation {
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
-    libPrefix = "python${majorVersion}m";
+    libPrefix = "python${majorVersion}";
+    executable = "python3.3m";
   };
 
   enableParallelBuilding = true;

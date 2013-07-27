@@ -5750,6 +5750,20 @@ let
     python = python26;
   };
 
+  python3Packages = python33Packages;
+
+  python33Packages = import ./python-packages.nix {
+    inherit pkgs;
+    inherit (lib) lowPrio;
+    python = python33;
+  };
+
+  python32Packages = import ./python-packages.nix {
+    inherit pkgs;
+    inherit (lib) lowPrio;
+    python = python32;
+  };
+
   python27Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
     inherit (lib) lowPrio;

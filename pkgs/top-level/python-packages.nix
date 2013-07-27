@@ -5,8 +5,9 @@ isPy26 = python.majorVersion == "2.6";
 isPy27 = python.majorVersion == "2.7";
 optional = pkgs.lib.optional;
 optionals = pkgs.lib.optionals;
+modules = python.modules or { readline = null; sqlite3 = null; curses = null; ssl = null; };
 
-pythonPackages = python.modules // rec {
+pythonPackages = modules // rec {
 
   inherit python;
   inherit (pkgs) fetchurl fetchsvn fetchgit stdenv;
@@ -444,8 +445,8 @@ pythonPackages = python.modules // rec {
         pythonPackages.mutagen
         pythonPackages.munkres
         pythonPackages.musicbrainzngs
-        python.modules.sqlite3
-        python.modules.readline
+        modules.sqlite3
+        modules.readline
       ];
 
     meta = {
@@ -506,7 +507,7 @@ pythonPackages = python.modules // rec {
        sha256 = "02dkmsmgy04l33nyw54rlxkjwff0yf3cy2kvdx8s5w344mqkkkv0";
      };
 
-     propagatedBuildInputs = [ python.modules.curses pygments ];
+     propagatedBuildInputs = [ modules.curses pygments ];
      doCheck = false;
 
      meta = {
@@ -606,7 +607,7 @@ pythonPackages = python.modules // rec {
   #     rev = "refs/tags/0.9.3";
   #   };
   #
-  #   propagatedBuildInputs = [ pythonPackages.argparse python.modules.ssl ];
+  #   propagatedBuildInputs = [ pythonPackages.argparse modules.ssl ];
   #
   #   doCheck = false;
   #
@@ -2387,7 +2388,7 @@ pythonPackages = python.modules // rec {
       sha256 = "0xfaa6h8css3yhsmx5vcffizrz6mvmgm46q7449z3hq7g3793184";
     };
 
-    propagatedBuildInputs = [ python.modules.sqlite3 ];
+    propagatedBuildInputs = [ modules.sqlite3 ];
 
     doCheck = false;
 
@@ -2754,7 +2755,7 @@ pythonPackages = python.modules // rec {
 
     buildInputs = [ pkgs.unzip ];
 
-    propagatedBuildInputs = [ argparse jinja2 six python.modules.readline ] ++
+    propagatedBuildInputs = [ argparse jinja2 six modules.readline ] ++
                             (optionals isPy26 [ importlib ordereddict ]);
 
     meta = {
@@ -3273,7 +3274,7 @@ pythonPackages = python.modules // rec {
     };
 
     buildInputs = [ nose ];
-    propagatedBuildInputs = [ dateutil numpy pytz python.modules.sqlite3 ];
+    propagatedBuildInputs = [ dateutil numpy pytz modules.sqlite3 ];
 
     # Tests require networking to pass
     doCheck = false;
@@ -4629,7 +4630,7 @@ pythonPackages = python.modules // rec {
 
     propagatedBuildInputs =
       [ recaptcha_client pytz memcached dateutil_1_5 paramiko flup pygments
-        djblets django_1_3 django_evolution pycrypto python.modules.sqlite3
+        djblets django_1_3 django_evolution pycrypto modules.sqlite3
         pysvn pil psycopg2
       ];
   };
@@ -5022,7 +5023,7 @@ pythonPackages = python.modules // rec {
 
     buildInputs = [ nose ];
 
-    propagatedBuildInputs = [ python.modules.sqlite3 ];
+    propagatedBuildInputs = [ modules.sqlite3 ];
 
     meta = {
       homepage = http://www.sqlalchemy.org/;
@@ -5201,7 +5202,7 @@ pythonPackages = python.modules // rec {
 
     PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
 
-    propagatedBuildInputs = [ genshi pkgs.setuptools python.modules.sqlite3 ];
+    propagatedBuildInputs = [ genshi pkgs.setuptools modules.sqlite3 ];
 
     meta = {
       description = "Enhanced wiki and issue tracking system for software development projects";
@@ -5384,9 +5385,12 @@ pythonPackages = python.modules // rec {
       md5 = "9745c28256c70c76d36adb3767a00212";
     };
 
+    inherit recursivePthLoader;
+    pythonPath = [ recursivePthLoader ];
+
     patches = [ ../development/python-modules/virtualenv-change-prefix.patch ];
 
-    propagatedBuildInputs = [ python.modules.readline python.modules.sqlite3 ];
+    propagatedBuildInputs = [ modules.readline modules.sqlite3 modules.curses ];
 
     buildInputs = [ mock nose ];
 
@@ -5446,7 +5450,7 @@ pythonPackages = python.modules // rec {
       md5 = "11825b7074ba7043e157805e4e6e0f55";
     };
 
-    propagatedBuildInputs = [ nose python.modules.ssl ];
+    propagatedBuildInputs = [ nose modules.ssl ];
 
     meta = {
       description = "WSGI request and response object";
@@ -6237,7 +6241,7 @@ pythonPackages = python.modules // rec {
     };
 
     buildInputs = [ pkgs.unzip unittest2 nose mock ];
-    propagatedBuildInputs = [ python.modules.curses libarchive ];
+    propagatedBuildInputs = [ modules.curses libarchive ];
 
     # two tests fail
     doCheck = false;
@@ -6478,7 +6482,7 @@ pythonPackages = python.modules // rec {
       sha256 = "1gj8i6j2i172cldqw98395235bn78ciagw6v17fgv01rmind3lag";
     };
 
-    buildInputs = [ django pkgs.pycairo ldap memcached python.modules.sqlite3 ];
+    buildInputs = [ django pkgs.pycairo ldap memcached modules.sqlite3 ];
 
     # error: invalid command 'test'
     doCheck = false;
