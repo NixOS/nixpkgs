@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     sed -i 's/guint32 page_size/size_t page_size/' src/lib/lib.cpp
   '';
 
-  NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
+  NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__"
+    + stdenv.lib.optionalString stdenv.isDarwin " -lintl";
 }
 
