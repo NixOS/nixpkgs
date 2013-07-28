@@ -1,22 +1,28 @@
-{ stdenv, fetchurl, pam, pkgconfig, libxcb, glib, libXdmcp, itstool, libxml2, intltool, x11, libxklavier, libgcrypt, makeWrapper }:
+{ stdenv, fetchurl, pam, pkgconfig, libxcb, glib, libXdmcp, itstool, libxml2
+, intltool, x11, libxklavier, libgcrypt, dbus/*for tests*/ }:
 
-stdenv.mkDerivation {
-  name = "lightdm-1.5.1";
+let
+  ver_branch = "1.8";
+  version = "1.7.0";
+in
+stdenv.mkDerivation rec {
+  name = "lightdm-${version}";
 
   src = fetchurl {
-    url = https://launchpad.net/lightdm/1.6/1.5.1/+download/lightdm-1.5.1.tar.xz;
-    sha256 = "645db2d763cc514d6aecb1838f4a9c33c3dcf0c94567a7ef36c6b23d8aa56c86";
+    url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.xz";
+    sha256 = "0nwwjgc9xvwili6714ag88wsrf0lr5hv1i6z9f0xvin4ym18cbs5";
   };
 
-  buildInputs = [ pkgconfig pam libxcb glib libXdmcp itstool libxml2 intltool libxklavier libgcrypt makeWrapper ];
-
-  configureFlags = [ "--enable-liblightdm-gobject" ];
-
-  patches =
-    [ ./lightdm.patch
-    ];
-
+  patches = [ ./lightdm.patch ];
   patchFlags = "-p0";
+
+  buildInputs = [
+    pkgconfig pam libxcb glib libXdmcp itstool libxml2 intltool libxklavier libgcrypt
+  ] ++ stdenv.lib.optional doCheck dbus.daemon;
+
+  configureFlags = [ "--enable-liblightdm-gobject" "--localstatedir=/var" ];
+
+  doCheck = false; # some tests fail, don't know why
 
   meta = {
     homepage = http://launchpad.net/lightdm;
