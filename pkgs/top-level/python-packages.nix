@@ -2991,11 +2991,11 @@ pythonPackages = python.modules // rec {
   });
 
   nose = buildPythonPackage rec {
-    name = "nose-1.2.1";
+    name = "nose-1.3.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/n/nose/${name}.tar.gz";
-      md5 = "735e3f1ce8b07e70ee1b742a8a53585a";
+      sha256 = "0q2j9zz39h3liwbp6lb94kl3sxb9z9rbwh5dzyccyxfy4lrwqqsf";
     };
 
     meta = {
