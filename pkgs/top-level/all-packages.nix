@@ -4433,6 +4433,7 @@ let
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcanberra = callPackage ../development/libraries/libcanberra { };
+  libcanberra_gtk3 = libcanberra.override { gtk = gtk3; };
   libcanberra_kde = if (config.kde_runtime.libcanberraWithoutGTK or true)
     then libcanberra.override { gtk = null; }
     else libcanberra;
@@ -8192,9 +8193,7 @@ let
 
   panotools = callPackage ../applications/graphics/panotools { };
 
-  pavucontrol = callPackage ../applications/audio/pavucontrol {
-    inherit (gnome) libglademm;
-  };
+  pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
   paraview = callPackage ../applications/graphics/paraview { };
 
