@@ -3,6 +3,7 @@
 }:
 
 cabal.mkDerivation (self: {
+  jailbreak = true;
   pname = "elm-server";
   version = "0.8";
   sha256 = "0mnxayfg54f5mr27sd1zw3xrdijppgvrz2yzzmhp07qc1jiyfald";
