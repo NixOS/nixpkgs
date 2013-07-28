@@ -41,7 +41,7 @@ stdenv.mkDerivation ({
     rm -fR $out/lib/node_modules/${requireName}/node_modules
     mv node_modules $out/lib/node_modules/${requireName}
     if [ -d "$out/lib/node_modules/.bin" ]; then
-      ln -sv node_modules/.bin $out/bin
+      ln -sv $out/lib/node_modules/.bin $out/bin
       node=`type -p node`
       coffee=`type -p coffee || true`
       find -L $out/lib/node_modules/.bin/* -type f -print0 | \
