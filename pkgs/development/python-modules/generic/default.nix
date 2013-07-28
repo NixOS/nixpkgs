@@ -5,7 +5,7 @@
 
 { python, setuptools, wrapPython, lib, offlineDistutils, recursivePthLoader }:
 
-{ name, namePrefix ? "python-"
+{ name, namePrefix ? python.libPrefix + "-"
 
 , buildInputs ? []
 
