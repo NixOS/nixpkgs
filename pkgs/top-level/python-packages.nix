@@ -2295,13 +2295,15 @@ pythonPackages = python.modules // rec {
     };
   });
 
-  jinja2 = buildPythonPackage {
-    name = "jinja2-2.6";
+  jinja2 = buildPythonPackage rec {
+    name = "Jinja2-2.7";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/J/Jinja2/Jinja2-2.6.tar.gz";
-      md5 = "1c49a8825c993bfdcf55bb36897d28a2";
+      url = "http://pypi.python.org/packages/source/J/Jinja2/${name}.tar.gz";
+      sha256 = "0kgsd7h27jl2jpqa1ks88h93z50bsg0yr7qkicqpxbl9s4c1aks7";
     };
+
+    propagatedBuildInputs = [ pythonPackages.markupsafe ];
 
     meta = {
       homepage = http://jinja.pocoo.org/;
@@ -2517,8 +2519,8 @@ pythonPackages = python.modules // rec {
       md5 = "daf7cc50f997533b573f9b40193139a2";
     };
 
-    buildInputs = [ MarkupSafe nose ];
-    propagatedBuildInputs = [ MarkupSafe ];
+    buildInputs = [ markupsafe nose ];
+    propagatedBuildInputs = [ markupsafe ];
 
     meta = {
       description = "Super-fast templating language.";
@@ -2529,8 +2531,8 @@ pythonPackages = python.modules // rec {
   };
 
 
-  MarkupSafe = buildPythonPackage rec {
-    name = "MarkupSafe-0.15";
+  markupsafe = buildPythonPackage rec {
+    name = "markupsafe-0.15";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/M/MarkupSafe/${name}.tar.gz";
@@ -6367,7 +6369,7 @@ pythonPackages = python.modules // rec {
       md5 = "32749ffadfc40fea51075a7def32588b";
     };
 
-    buildInputs = [ routes MarkupSafe webob nose ];
+    buildInputs = [ routes markupsafe webob nose ];
 
     # TODO: failing tests https://bitbucket.org/bbangert/webhelpers/pull-request/1/fix-error-on-webob-123/diff
     doCheck = false;
