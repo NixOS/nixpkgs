@@ -5002,13 +5002,20 @@ pythonPackages = python.modules // rec {
   });
 
 
-  sqlalchemy = buildPythonPackage {
-    name = "sqlalchemy-0.7.9";
+  sqlalchemy = buildPythonPackage rec {
+    name = "sqlalchemy-${version}";
+    version = "0.7.10";
 
     src = fetchurl {
-      url = mirror://sourceforge/sqlalchemy/0.7.9/SQLAlchemy-0.7.9.tar.gz;
-      md5 = "c4852d586d95a59fbc9358f4467875d5";
+      url = "http://pypi.python.org/packages/source/S/SQLAlchemy/SQLAlchemy-${version}.tar.gz";
+      sha256 = "0rhxgr85xdhjn467qfs0dkyj8x46zxcv6ad3dfx3w14xbkb3kakp";
     };
+
+    patches = [
+      # see https://groups.google.com/forum/#!searchin/sqlalchemy/module$20logging$20handlers/sqlalchemy/ukuGhmQ2p6g/2_dOpBEYdDYJ
+      # waiting for 0.7.11 release
+      ../development/python-modules/sqlalchemy-0.7.10-test-failures.patch
+    ];
 
     buildInputs = [ nose ];
 
