@@ -117,7 +117,7 @@ in
         serviceConfig =
           { ExecStart = "${pkgs.fail2ban}/bin/fail2ban-server -f";
             ReadOnlyDirectories = "/";
-            ReadWriteDirectories = "/var/run/fail2ban";
+            ReadWriteDirectories = "/var/run/fail2ban /var/tmp";
             CapabilityBoundingSet="CAP_DAC_READ_SEARCH CAP_NET_ADMIN CAP_NET_RAW";
           };
 
