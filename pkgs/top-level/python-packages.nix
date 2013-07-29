@@ -2980,6 +2980,10 @@ pythonPackages = modules // rec {
 
     buildInputs = [ coverage ];
 
+    preCheck = ''
+      # see https://github.com/nose-devs/nose/issues/627
+      rm functional_tests/test_multiprocessing/test_concurrent_shared.py
+    '';
     doCheck = ! stdenv.isDarwin;
   };
 
