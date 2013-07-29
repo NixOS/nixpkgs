@@ -4841,11 +4841,11 @@ pythonPackages = modules // rec {
 
 
   simplejson = buildPythonPackage (rec {
-    name = "simplejson-2.1.3";
+    name = "simplejson-3.3.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/s/simplejson/${name}.tar.gz";
-      md5 = "58d9b1d8fa17ea4ce205cea088607e02";
+      md5 = "0e29b393bceac8081fa4e93ff9f6a001";
     };
 
     meta = {
