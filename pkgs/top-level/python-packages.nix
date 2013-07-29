@@ -3109,11 +3109,11 @@ pythonPackages = modules // rec {
   };
 
   numpy = buildPythonPackage ( rec {
-    name = "numpy-1.6.1";
+    name = "numpy-1.7.1";
 
     src = fetchurl {
       url = "mirror://sourceforge/numpy/${name}.tar.gz";
-      sha256 = "1pawfmf7j7pd3mjzhmmw9hkglc2qdirrkvv29m5nsmpf2b3ip2vq";
+      sha256 = "0jh832j439jj2b7m1z5a4rv5cpdn1yiw1r6gwrhdihw562d029am";
     };
 
     preConfigure = ''
