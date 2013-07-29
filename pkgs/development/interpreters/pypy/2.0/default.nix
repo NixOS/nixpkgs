@@ -7,6 +7,8 @@ let
 
   majorVersion = "2.0";
   version = "${majorVersion}.2";
+  pythonVersion = "2.7";
+  libPrefix = "pypy${majorVersion}";
 
   pypy = stdenv.mkDerivation rec {
     name = "pypy-${version}";
@@ -57,18 +59,21 @@ let
     '';
 
     installPhase = ''
-       mkdir -p $out/bin
-       mkdir -p $out/pypy-c
-       # TODO: make libPrefix work
+       mkdir -p $out/{bin,include,lib,pypy-c}
+
        cp -R {include,lib_pypy,lib-python,pypy-c} $out/pypy-c
        ln -s $out/pypy-c/pypy-c $out/bin/pypy
        chmod +x $out/bin/pypy
+
+       # other packages expect to find stuff according to libPrefix
+       ln -s $out/pypy-c/include $out/include/${libPrefix}
+       ln -s $out/pypy-c/lib-python/${pythonVersion} $out/lib/${libPrefix}
+
        # TODO: compile python files?
     '';
 
     passthru = {
-      inherit zlibSupport;
-      libPrefix = "pypy${majorVersion}";
+      inherit zlibSupport libPrefix;
       executable = "pypy";
     };
 

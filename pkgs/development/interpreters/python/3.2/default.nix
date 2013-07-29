@@ -51,6 +51,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     rm -rf "$out/lib/python${majorVersion}/test"
+    ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
   '';
 
   passthru = {
@@ -62,6 +63,7 @@ stdenv.mkDerivation {
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python3.2m";
+    is_py3k = true;
   };
 
   enableParallelBuilding = true;

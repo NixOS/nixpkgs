@@ -302,8 +302,6 @@ pythonPackages = modules // rec {
       sha256 = "b0c12b8c48ed9180c7475fab18de50d63e1b517cfb46da4d2c66fc406fe902bc";
     };
 
-    installCommand = "python setup.py install --prefix=$out";
-
     # error: invalid command 'test'
     doCheck = false;
 
@@ -501,10 +499,10 @@ pythonPackages = modules // rec {
   };
 
   bpython = buildPythonPackage rec {
-     name = "bpython-0.11";
+     name = "bpython-0.12";
      src = fetchurl {
-       url = "http://www.bpython-interpreter.org/releases/bpython-0.11.tar.gz";
-       sha256 = "02dkmsmgy04l33nyw54rlxkjwff0yf3cy2kvdx8s5w344mqkkkv0";
+       url = "http://www.bpython-interpreter.org/releases/bpython-0.12.tar.gz";
+       sha256 = "1ilf58qq7sazmcgg4f1wswbhcn2gb8qbbrpgm6gf0j2lbm60gabl";
      };
 
      propagatedBuildInputs = [ modules.curses pygments ];
@@ -1491,7 +1489,7 @@ pythonPackages = modules // rec {
       PYTHONPATH="${offlineDistutils}/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       export PYTHONPATH="$dst:$PYTHONPATH"
 
-      python setup.py install --prefix="$out"
+      ${python}/bin/${python.executable} setup.py install --prefix="$out"
 
       eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
       if [ -e "$eapth" ]; then
@@ -1692,7 +1690,7 @@ pythonPackages = modules // rec {
 
     buildPhase = "make build";
     installCommand = ''
-      python setup.py install --prefix="$out" --root=/ --record="$out/lib/${python.libPrefix}/site-packages/dulwich/list.txt" --single-version-externally-managed
+      ${python}/bin/${python.executable} setup.py install --prefix="$out" --root=/ --record="$out/lib/${python.libPrefix}/site-packages/dulwich/list.txt" --single-version-externally-managed
     '';
 
     # For some reason "python setup.py test" doesn't work with Python 2.6.
@@ -2477,10 +2475,10 @@ pythonPackages = modules // rec {
 
     configurePhase = "cd python";
 
-    buildPhase = "python setup.py build";
+    buildPhase = "${python}/bin/${python.executable} setup.py build";
 
     installPhase = ''
-      python setup.py install --prefix=$out
+      ${python}/bin/${python.executable} setup.py install --prefix=$out
     '';
 
     meta = {
@@ -2501,7 +2499,7 @@ pythonPackages = modules // rec {
 
     buildInputs = [ pkgs.swig pkgs.openssl ];
 
-    buildPhase = "python setup.py build_ext --openssl=${pkgs.openssl}";
+    buildPhase = "${python}/bin/${python.executable} setup.py build_ext --openssl=${pkgs.openssl}";
 
     doCheck = false; # another test that depends on the network.
 
@@ -3125,8 +3123,8 @@ pythonPackages = modules // rec {
     # TODO: add ATLAS=${pkgs.atlas}
     installCommand = ''
       export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
-      python setup.py build --fcompiler="gnu95"
-      python setup.py install --prefix=$out
+      ${python}/bin/${python.executable} setup.py build --fcompiler="gnu95"
+      ${python}/bin/${python.executable} setup.py install --prefix=$out
     '';
 
     # error: invalid command 'test'
@@ -3704,12 +3702,12 @@ pythonPackages = modules // rec {
     buildInputs = [ python pkgs.portaudio ];
 
     buildPhase = if stdenv.isDarwin then ''
-      PORTAUDIO_PATH="${pkgs.portaudio}" python setup.py build --static-link
+      PORTAUDIO_PATH="${pkgs.portaudio}" ${python}/bin/${python.executable} setup.py build --static-link
     '' else ''
-      python setup.py build
+      ${python}/bin/${python.executable} setup.py build
     '';
 
-    installPhase = "python setup.py install --prefix=$out";
+    installPhase = "${python}/bin/${python.executable} setup.py install --prefix=$out";
 
     meta = {
       description = "Python bindings for PortAudio";
@@ -3965,7 +3963,7 @@ pythonPackages = modules // rec {
     buildInputs = [ python ];
 
     installPhase = ''
-      python setup.py install --prefix=$out
+      ${python}/bin/${python.executable} setup.py install --prefix=$out
     '';
 
     meta = {
@@ -3994,7 +3992,7 @@ pythonPackages = modules // rec {
     propagatedBuildInputs = [ urlgrabber ];
 
     checkPhase = ''
-      python tests/baseclass.py -vv
+      ${python}/bin/${python.executable} tests/baseclass.py -vv
     '';
 
     meta = {
@@ -4072,7 +4070,7 @@ pythonPackages = modules // rec {
     propagatedBuildInputs = [ pkgs.parted ];
 
     checkPhase = ''
-      python -m unittest discover -v
+      ${python}/bin/${python.executable} -m unittest discover -v
     '';
 
     meta = {
@@ -4744,8 +4742,8 @@ pythonPackages = modules // rec {
     # TODO: add ATLAS=${pkgs.atlas}
     installCommand = ''
       export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
-      python setup.py build --fcompiler="gnu95"
-      python setup.py install --prefix=$out
+      ${python}/bin/${python.executable} setup.py build --fcompiler="gnu95"
+      ${python}/bin/${python.executable} setup.py install --prefix=$out
     '';
 
     meta = {
@@ -5323,12 +5321,18 @@ pythonPackages = modules // rec {
 
 
   unittest2 = buildPythonPackage rec {
-    name = "unittest2-0.5.1";
+    version = "0.5.1";
+    name = "unittest2-${version}";
 
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/u/unittest2/${name}.tar.gz";
-      md5 = "a0af5cac92bbbfa0c3b0e99571390e0f";
-    };
+    src = if python.is_py3k or false
+       then fetchurl {
+           url = "http://pypi.python.org/packages/source/u/unittest2py3k/unittest2py3k-${version}.tar.gz";
+           sha256 = "00yl6lskygcrddx5zspkhr0ibgvpknl4678kkm6s626539grq93q";
+         }
+       else fetchurl {
+           url = "http://pypi.python.org/packages/source/u/unittest2/unittest2-${version}.tar.gz";
+           md5 = "a0af5cac92bbbfa0c3b0e99571390e0f";
+         };
 
     meta = {
       description = "A backport of the new features added to the unittest testing framework in Python 2.7";
@@ -6104,13 +6108,14 @@ pythonPackages = modules // rec {
 
   zope_testing = buildPythonPackage rec {
     name = "zope.testing-${version}";
-    version = "4.1.1";
+    version = "4.1.2";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.testing/${name}.tar.gz";
-      md5 = "2e3829841090d6adff718b8b73c87b6b";
+      url = "http://pypi.python.org/packages/source/z/zope.testing/${name}.zip";
+      md5 = "01c30c342c6a18002a762bd5d320a6e9";
     };
 
+    buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ zope_interface zope_exceptions zope_location ];
 
     meta = {

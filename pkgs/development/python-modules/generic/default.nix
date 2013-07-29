@@ -55,7 +55,7 @@ python.stdenv.mkDerivation (attrs // {
   meta = {
     platforms = python.meta.platforms;
   } // meta // {
-    maintainers = (meta.maintainers or []) ++ [ lib.maintainers.chaoflow ];
+    maintainers = (meta.maintainers or []) ++ [ lib.maintainers.chaoflow lib.maintainers.iElectric ];
   };
 
   # checkPhase after installPhase to run tests on installed packages
