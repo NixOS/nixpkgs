@@ -6103,6 +6103,8 @@ let
   });
   squid = squids.squid31; # has ipv6 support
 
+  thttpd = callPackage ../servers/http/thttpd { };
+
   tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
 
   tomcat6 = callPackage ../servers/http/tomcat/6.0.nix { };
