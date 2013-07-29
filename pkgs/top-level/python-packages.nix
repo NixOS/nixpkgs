@@ -2565,12 +2565,12 @@ pythonPackages = modules // rec {
   };
 
   markdown = buildPythonPackage rec {
-    version = "2.0.3";
+    version = "2.3.1";
     name = "markdown-${version}";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/M/Markdown/Markdown-2.0.3.tar.gz";
-      md5 = "751e8055be2433dfd1a82e0fb1b12f13";
+      url = "http://pypi.python.org/packages/source/M/Markdown/Markdown-${version}.tar.gz";
+      sha256 = "147j9hznv2r187a86d28glmg3pckfrdp0nz9yh7s1aqpawwdkszz";
     };
 
     # error: invalid command 'test'
