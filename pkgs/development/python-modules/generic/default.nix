@@ -5,7 +5,7 @@
 
 { python, setuptools, wrapPython, lib, offlineDistutils, recursivePthLoader }:
 
-{ name, namePrefix ? "python-"
+{ name, namePrefix ? python.libPrefix + "-"
 
 , buildInputs ? []
 
@@ -33,7 +33,7 @@
 , checkPhase ?
     ''
       runHook preCheck
-      python setup.py test
+      ${python}/bin/${python.executable} setup.py test
       runHook postCheck
     ''
 
@@ -55,7 +55,7 @@ python.stdenv.mkDerivation (attrs // {
   meta = {
     platforms = python.meta.platforms;
   } // meta // {
-    maintainers = (meta.maintainers or []) ++ [ lib.maintainers.chaoflow ];
+    maintainers = (meta.maintainers or []) ++ [ lib.maintainers.chaoflow lib.maintainers.iElectric ];
   };
 
   # checkPhase after installPhase to run tests on installed packages
