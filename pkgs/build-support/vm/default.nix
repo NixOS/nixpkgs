@@ -599,8 +599,17 @@ rec {
             debs="$debs /inst/$i";
           done
           chroot=$(type -tP chroot)
+
+          # Create a fake start-stop-daemon script, as done in debootstrap.
+          mv "/mnt/sbin/start-stop-daemon" "/mnt/sbin/start-stop-daemon.REAL"
+          echo "#!/bin/true" > "/mnt/sbin/start-stop-daemon"
+          chmod 755 "/mnt/sbin/start-stop-daemon"
+
           PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
             /usr/bin/dpkg --install --force-all $debs < /dev/null || true
+
+          # Move the real start-stop-daemon back into its place.
+          mv "/mnt/sbin/start-stop-daemon.REAL" "/mnt/sbin/start-stop-daemon"
         done
 
         echo "running post-install script..."
