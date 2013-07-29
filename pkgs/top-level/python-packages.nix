@@ -3624,14 +3624,14 @@ pythonPackages = modules // rec {
 
 
   psycopg2 = buildPythonPackage rec {
-    name = "psycopg2-2.0.13";
+    name = "psycopg2-2.5.1";
 
     # error: invalid command 'test'
     doCheck = false;
 
     src = fetchurl {
-      url = "http://initd.org/pub/software/psycopg/PSYCOPG-2-0/${name}.tar.gz";
-      sha256 = "0arkaa1nbbd3pyn4l1bc75wi7nff3vxxh4s8sj5al5hv20p64pm1";
+      url = "https://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.5.1.tar.gz";
+      sha256 = "1v7glzzzykbaqj7dhpr0qds9cf4maxmn7f5aazpqnbg0ly40r9v5";
     };
 
     propagatedBuildInputs = [ pkgs.postgresql ];
