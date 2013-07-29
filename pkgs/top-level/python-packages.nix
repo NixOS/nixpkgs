@@ -6631,12 +6631,12 @@ pythonPackages = modules // rec {
 
   Logbook = buildPythonPackage rec {
     name = "Logbook-${version}";
-    version = "0.4.1";
+    version = "0.4.2";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/L/Logbook/${name}.tar.gz";
       # md5 = "143cb15af4c4a784ca785a1546ad1b93";
-      sha256 = "0iim9pcyl57c6z9i1kfw5nz92qrnpz2l0bz4lir2xrqi8m03q3d7";
+      sha256 = "1g2pnhxh7m64qsrs0ifwcmpfk7gqjvrawd8z66i001rsdnq778v0";
     };
 
     meta = {
