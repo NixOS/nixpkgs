@@ -1510,29 +1510,6 @@ pythonPackages = modules // rec {
   };
 
 
-  distutils2  = buildPythonPackage rec {
-    name = "distutils2-${version}";
-    version = "1.0a4";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/D/Distutils2/Distutils2-${version}.tar.gz";
-      md5 = "52bc9dffb394970c27e02853ae3a3241";
-    };
-
-    patchPhase = ''
-      sed -e "s#html.entities#htmlentitydefs#g" -i distutils2/pypi/simple.py
-    '';
-
-    doCheck = false;
-
-    meta = {
-      description = "A Python Packaging Library";
-      homepage = http://pypi.python.org/pypi/Distutils2;
-      license = "PSF";
-    };
-  };
-
-
   distutils_extra = buildPythonPackage rec {
     name = "distutils-extra-2.26";
 
