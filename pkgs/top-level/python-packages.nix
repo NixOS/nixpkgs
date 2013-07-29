@@ -5078,11 +5078,11 @@ pythonPackages = modules // rec {
 
   subunit = buildPythonPackage rec {
     name = "subunit-${version}";
-    version = "0.0.9";
+    version = "0.0.13";
 
     src = fetchurl {
-      url = "https://launchpad.net/subunit/trunk/0.0.9/+download/python-${name}.tar.gz";
-      sha256 = "0g3bk8lfd52zjzg43h47h2kckchm3xyv1gcr85nca2i50rcrpj56";
+      url = "https://launchpad.net/subunit/trunk/${version}/+download/python-${name}.tar.gz";
+      sha256 = "0f3xni4z1hbmg4dqxak85ibpf9pajxn6qzw1xj79gwnr8xxb66zj";
     };
 
     propagatedBuildInputs = [ testtools ];
@@ -5157,16 +5157,58 @@ pythonPackages = modules // rec {
 
   testtools = buildPythonPackage rec {
     name = "testtools-${version}";
-    version = "0.9.24";
+    version = "0.9.32";
 
     src = fetchurl {
-      url = "https://launchpad.net/testtools/0.9/0.9.24/+download/${name}.tar.gz";
-      sha256 = "0mgkvd7c1aw34nlnz2nmll5k01aqhixxiikbs2nfyk3xfa4221x7";
+      url = "https://pypi.python.org/packages/source/t/testtools/${name}.tar.gz";
+      sha256 = "1smgk3y7xfzh5xk5wydb6n5lx4g5i6y4w8ajrdnskx1jqr67wyyq";
     };
+
+    propagatedBuildInputs = [ pythonPackages.python_mimeparse pythonPackages.extras ];
 
     meta = {
       description = "A set of extensions to the Python standard library's unit testing framework";
       homepage = http://pypi.python.org/pypi/testtools;
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
+  python_mimeparse = buildPythonPackage rec {
+    name = "python-mimeparse-${version}";
+    version = "0.1.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-mimeparse/${name}.tar.gz";
+      sha256 = "1hyxg09kaj02ri0rmwjqi86wk4nd1akvv7n0dx77azz76wga4s9w";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      description = "A module provides basic functions for parsing mime-type names and matching them against a list of media-ranges.";
+      homepage = https://code.google.com/p/mimeparse/;
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
+  extras = buildPythonPackage rec {
+    name = "extras-${version}";
+    version = "0.0.3";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/e/extras/extras-${version}.tar.gz";
+      sha256 = "1h7zx4dfyclalg0fqnfjijpn0f793a9mx8sy3b27gd31nr6dhq3s";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      description = "A module provides basic functions for parsing mime-type names and matching them against a list of media-ranges.";
+      homepage = https://code.google.com/p/mimeparse/;
       license = pkgs.lib.licenses.mit;
     };
   };
@@ -6129,16 +6171,16 @@ pythonPackages = modules // rec {
 
   zope_testrunner = buildPythonPackage rec {
     name = "zope.testrunner-${version}";
-    version = "4.0.4";
+    version = "4.4.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.testrunner/${name}.zip";
-      md5 = "cd648fc865a79aa0950e73342836dd4c";
+      md5 = "1d689abad000419891494b30dd7d8190";
     };
 
     buildInputs = [ pkgs.unzip ];
 
-    propagatedBuildInputs = [ subunit zope_interface zope_exceptions zope_testing ];
+    propagatedBuildInputs = [ subunit zope_interface zope_exceptions zope_testing six ];
 
     meta = {
       description = "A flexible test runner with layer support";
