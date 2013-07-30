@@ -2039,7 +2039,6 @@ pythonPackages = modules // rec {
     meta = {
       description = "automatically generated zsh completion function for Python's option parser modules";
       license = "BSD";
-      maintainers = [ stdenv.lib.maintainers.simons ];
     };
   };
 
@@ -2590,7 +2589,7 @@ pythonPackages = modules // rec {
     meta = with stdenv.lib; {
       description = "python plotting library, making publication quality plots";
       homepage    = "http://matplotlib.sourceforge.net/";
-      maintainers = with maintainers; [ lovek323 simons ];
+      maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
   });
@@ -3415,8 +3414,6 @@ pythonPackages = modules // rec {
         does it require C extensions to be compiled. It should work on
         any platform that supports the standard Python pty module.
       '';
-
-      maintainers = [ stdenv.lib.maintainers.simons ];
     };
   };
 
