@@ -25,7 +25,6 @@ stdenv.mkDerivation {
     inherit (s) version;
     description = ''A tool to have Escape and Control on a single key'';
     license = stdenv.lib.licenses.gpl3 ;
-    inherit (s) url sha256;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
   };
