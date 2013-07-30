@@ -3052,6 +3052,8 @@ let
      lua = lua5;
   };
 
+  lush2 = callPackage ../development/interpreters/lush {};
+
   maude = callPackage ../development/interpreters/maude { };
 
   octave = callPackage ../development/interpreters/octave {
