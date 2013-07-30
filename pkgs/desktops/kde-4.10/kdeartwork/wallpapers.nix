@@ -1,7 +1,7 @@
 { kde, kdelibs }:
 
 kde rec {
-  name = "kde-wallpapers";
+  name = "kdeartwork-wallpapers";
 
   buildInputs = [ kdelibs ];
 
