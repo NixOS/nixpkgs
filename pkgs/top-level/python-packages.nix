@@ -2363,6 +2363,7 @@ pythonPackages = modules // rec {
       sha256 = "0xfaa6h8css3yhsmx5vcffizrz6mvmgm46q7449z3hq7g3793184";
     };
 
+    buildInputs = [ pkgs.git ];
     propagatedBuildInputs = [ modules.sqlite3 ];
 
     doCheck = false;
