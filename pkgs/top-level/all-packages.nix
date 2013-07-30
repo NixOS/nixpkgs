@@ -8745,6 +8745,8 @@ let
 
   xcalib = callPackage ../tools/X11/xcalib { };
 
+  xcape = callPackage ../tools/X11/xcape { };
+
   xchainkeys = callPackage ../tools/X11/xchainkeys { };
 
   xchat = callPackage ../applications/networking/irc/xchat { };
