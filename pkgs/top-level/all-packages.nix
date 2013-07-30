@@ -4015,8 +4015,6 @@ let
 
   glfw = callPackage ../development/libraries/glfw { };
 
-  glibc = glibc217;
-
   glibcCross = glibc217Cross;
 
   glibc213 = (callPackage ../development/libraries/glibc/2.13 {
@@ -4040,7 +4038,7 @@ let
         inherit fetchgit;
       }));
 
-  glibc217 = callPackage ../development/libraries/glibc/2.17 {
+  glibc = callPackage ../development/libraries/glibc/2.17 {
     kernelHeaders = linuxHeaders;
     installLocales = config.glibc.locales or false;
     machHeaders = null;
