@@ -76,6 +76,8 @@ in
     nslcd = 58;
     nginx = 60;
     chrony = 61;
+    smtpd = 63;
+    smtpq = 64;    
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -135,6 +137,8 @@ in
     scanner = 59;
     nginx = 60;
     systemd-journal = 62;
+    smtpd = 63;
+    smtpq = 64;    
 
     # When adding a gid, make sure it doesn't match an existing uid.
 
