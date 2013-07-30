@@ -128,8 +128,8 @@ foreach my $name (sort keys %pkgsByName) {
     @pkgs = grep { my $x = $drvsSeen{$_->{drvPath}}; $drvsSeen{$_->{drvPath}} = 1; !defined $x } @pkgs;
 
     # Filter packages that have a lower priority.
-    my $highest = min (map { $_->{priority} // 0 } @pkgs);
-    @pkgs = grep { ($_->{priority} // 0) == $highest } @pkgs;
+    my $highest = min (map { $_->{meta}->{priority}->{value} // 0 } @pkgs);
+    @pkgs = grep { ($_->{meta}->{priority}->{value} // 0) == $highest } @pkgs;
 
     next if scalar @pkgs == 1;
 
