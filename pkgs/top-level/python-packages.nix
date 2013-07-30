@@ -2981,11 +2981,12 @@ pythonPackages = modules // rec {
 
     buildInputs = [ coverage ];
 
-    preCheck = ''
-      # see https://github.com/nose-devs/nose/issues/627
-      rm functional_tests/test_multiprocessing/test_concurrent_shared.py
-    '';
     doCheck = ! stdenv.isDarwin;
+    checkPhase = if python.is_py3k or false then ''
+      ${python}/bin/${python.executable} setup.py build_tests
+    '' else "" + ''
+      ${python}/bin/${python.executable} selftest.py
+    '';
   };
 
   nose2 = if isPy26 then null else (buildPythonPackage rec {
