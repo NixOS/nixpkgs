@@ -10,7 +10,7 @@ let
   # Legacy emacs packages (not yet built via package.el). lowPrio
   # because there might be newer releases in the generated package
   # list.
-  otherPackages = pkgs.lib.mapAttrs (name: value: pkgs.lib.lowPrio value) {
+  otherPackages = {
     autoComplete = callPackage ../applications/editors/emacs-modes/auto-complete { };
     bbdb = callPackage ../applications/editors/emacs-modes/bbdb { };
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
@@ -63,8 +63,30 @@ let
     sunriseCommander = callPackage ../applications/editors/emacs-modes/sunrise-commander { };
     xmlRpc = callPackage ../applications/editors/emacs-modes/xml-rpc { };
   };
-in otherPackages // (import ./emacs-packages-generated.nix {
-  inherit buildEmacsPackage;
-  inherit fetchurl;
-  inherit otherPackages;
-})
+  generatedPackages = (import ./emacs-packages-generated.nix {
+    inherit buildEmacsPackage;
+    inherit fetchurl;
+    inherit otherPackages;
+  });
+  hasAttr = builtins.hasAttr;
+  getAttr = builtins.getAttr;
+  versionOlder = pkgs.lib.versionOlder;
+  getVersion = pkgs.lib.getVersion;
+in
+# Merge generated and manual packages, then update older versions etc.
+pkgs.lib.mapAttrs (name: value:
+let
+  generatedVersion = if (hasAttr name otherPackages)
+    then
+      getVersion (getAttr name generatedPackages)
+    else
+      null;
+  otherVersion = getVersion value;
+in
+  if (generatedVersion != null &&
+      versionOlder otherVersion generatedVersion)
+    then
+      getAttr name generatedPackages
+    else
+      value) (generatedPackages // otherPackages)
+  
