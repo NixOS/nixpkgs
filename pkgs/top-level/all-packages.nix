@@ -4189,8 +4189,8 @@ let
     guileBindings = config.gnutls.guile or true;
   };
 
-  gnutls_without_guile = gnutls.override { guileBindings = false; };
-  gnutls2_without_guile = gnutls2.override { guileBindings = false; };
+  gnutls_without_guile = lowPrio (gnutls.override { guileBindings = false; });
+  gnutls2_without_guile = lowPrio (gnutls2.override { guileBindings = false; });
 
   gpac = callPackage ../applications/video/gpac { };
 
@@ -5245,13 +5245,13 @@ let
       else stdenv;
   };
 
-  qt48Full = callPackage ../development/libraries/qt-4.x/4.8 {
+  qt48Full = lowPrio (callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
     docs = true;
     demos = true;
     examples = true;
-  };
+  });
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
@@ -5779,15 +5779,15 @@ let
     python = pypy;
   });
 
-  plone41Packages = recurseIntoAttrs (import ../development/web/plone/4.1.nix {
+  plone41Packages = import ../development/web/plone/4.1.nix {
     inherit pkgs;
     pythonPackages = python26Packages;
-  });
+  };
 
-  plone42Packages = recurseIntoAttrs (import ../development/web/plone/4.2.nix {
+  plone42Packages = import ../development/web/plone/4.2.nix {
     inherit pkgs;
     pythonPackages = python26Packages;
-  });
+  };
 
   plone43Packages = recurseIntoAttrs (import ../development/web/plone/4.3.nix {
     inherit pkgs;
@@ -6387,23 +6387,23 @@ let
       ];
   };
 
-  linux_3_2_grsecurity = lib.overrideDerivation (linux_3_2.override (args: {
+  linux_3_2_grsecurity = lowPrio (lib.overrideDerivation (linux_3_2.override (args: {
     kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_2_9_1_3_2_48 ];
-  })) (args: { makeFlags = "DISABLE_PAX_PLUGINS=y";});
+  })) (args: { makeFlags = "DISABLE_PAX_PLUGINS=y";}));
 
-  linux_3_2_apparmor = linux_3_2.override {
+  linux_3_2_apparmor = lowPrio (linux_3_2.override {
     kernelPatches = [ kernelPatches.apparmor_3_2 ];
     extraConfig = ''
       SECURITY_APPARMOR y
       DEFAULT_SECURITY_APPARMOR y
     '';
-  };
+  });
 
-  linux_3_2_xen = linux_3_2.override {
+  linux_3_2_xen = lowPrio (linux_3_2.override {
     extraConfig = ''
       XEN_DOM0 y
     '';
-  };
+  });
 
   linux_3_4 = makeOverridable (import ../os-specific/linux/kernel/linux-3.4.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
@@ -6416,13 +6416,13 @@ let
       ];
   };
 
-  linux_3_4_apparmor = linux_3_4.override {
+  linux_3_4_apparmor = lowPrio (linux_3_4.override {
     kernelPatches = [ kernelPatches.apparmor_3_4 ];
     extraConfig = ''
       SECURITY_APPARMOR y
       DEFAULT_SECURITY_APPARMOR y
     '';
-  };
+  });
 
   linux_3_6_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi-3.6.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
@@ -6582,10 +6582,10 @@ let
   # Build the kernel modules for the some of the kernels.
   linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0 linuxPackages_3_0);
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
-  linuxPackages_3_2_apparmor = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2_apparmor linuxPackages_3_2_apparmor);
-  linuxPackages_3_2_xen = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2_xen linuxPackages_3_2_xen);
+  linuxPackages_3_2_apparmor = linuxPackagesFor pkgs.linux_3_2_apparmor linuxPackages_3_2_apparmor;
+  linuxPackages_3_2_xen = linuxPackagesFor pkgs.linux_3_2_xen linuxPackages_3_2_xen;
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 linuxPackages_3_4);
-  linuxPackages_3_4_apparmor = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4_apparmor linuxPackages_3_4_apparmor);
+  linuxPackages_3_4_apparmor = linuxPackagesFor pkgs.linux_3_4_apparmor linuxPackages_3_4_apparmor;
   linuxPackages_3_6_rpi = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi);
   linuxPackages_3_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_8 linuxPackages_3_8);
   linuxPackages_3_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_9 linuxPackages_3_9);
@@ -6624,7 +6624,7 @@ let
     linuxHeaders = glibc.kernelHeaders;
   };
 
-  klibcShrunk = callPackage ../os-specific/linux/klibc/shrunk.nix { };
+  klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
   kmod = callPackage ../os-specific/linux/kmod { };
 
@@ -7447,7 +7447,7 @@ let
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
 
-    notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
+    notmuch = lowPrio (callPackage ../applications/networking/mailreaders/notmuch { });
 
     # This is usually a newer version of Org-Mode than that found in GNU Emacs, so
     # we want it to have higher precedence.
@@ -8403,12 +8403,12 @@ let
     libpng = libpng12;
   };
 
-  sndBase = builderDefsPackage (import ../applications/audio/snd) {
+  sndBase = lowPrio (builderDefsPackage (import ../applications/audio/snd) {
     inherit fetchurl stdenv stringsWithDeps lib fftw;
     inherit pkgconfig gmp gettext;
     inherit (xlibs) libXpm libX11;
     inherit gtk glib;
-  };
+  });
 
   snd = sndBase.passthru.function {
     inherit mesa libtool jackaudio alsaLib;
@@ -8621,8 +8621,8 @@ let
     # so that we can use gccApple if we're building on darwin
     inherit stdenvAdapters gccApple;
   };
-  vimLatest = vim_configurable.override { source = "latest"; };
-  vimNox = vim_configurable.override { source = "vim-nox"; };
+  vimLatest = lowPrio (vim_configurable.override { source = "latest"; });
+  vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
   virtmanager = callPackage ../applications/virtualization/virt-manager {
