@@ -7347,11 +7347,11 @@ let
       else stdenv;
   };
 
-  makeEmacsPackages = emacs: self: import ./emacs-packages.nix {
+  makeEmacsPackages = emacs: self: (import ./emacs-packages.nix {
     inherit pkgs;
     inherit emacs;
     callPackage = newScope self;
-  };
+  }).allPackages;
 
   emacs23Packages = (makeEmacsPackages emacs23 pkgs.emacs23Packages);
   emacs24Packages = (makeEmacsPackages emacs24 pkgs.emacs24Packages);
