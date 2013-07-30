@@ -9889,5 +9889,7 @@ let
   dart = callPackage ../development/interpreters/dart { };
 
   httrack = callPackage ../tools/backup/httrack { };
+  
+  mg = callPackage ../applications/editors/mg { };
 
 }; in pkgs
