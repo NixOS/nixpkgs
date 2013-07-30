@@ -52,6 +52,7 @@
 , "gzippo"
 , "walk"
 , "forever"
+, "forever-monitor"
 , "kue"
 , "supertest"
 , "should"

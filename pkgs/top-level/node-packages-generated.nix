@@ -1725,6 +1725,23 @@
   }
   {
     name = "forever-monitor";
+    spec = "*";
+    version = "1.2.2";
+    topLevel = true;
+    dependencies = [
+      { name = "broadway"; spec = "0.2.x"; }
+      { name = "minimatch"; spec = "0.0.x"; }
+      { name = "pkginfo"; spec = "0.x.x"; }
+      { name = "ps-tree"; spec = "0.0.x"; }
+      { name = "watch"; spec = "0.5.x"; }
+      { name = "utile"; spec = "0.1.x"; }
+    ];
+    patchLatest = false;
+    sha1 = "c1ad6c6ab837a89fa2d47bb439727ca968235684";
+    tarball = "http://registry.npmjs.org/forever-monitor/-/forever-monitor-1.2.2.tgz";
+  }
+  {
+    name = "forever-monitor";
     spec = "1.2.2";
     version = "1.2.2";
     topLevel = false;
