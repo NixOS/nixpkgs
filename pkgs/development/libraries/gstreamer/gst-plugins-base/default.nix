@@ -1,5 +1,6 @@
 { fetchurl, stdenv, pkgconfig, python, gstreamer, xlibs, alsaLib, cdparanoia
 , libogg, libtheora, libvorbis, freetype, pango, liboil, glib, cairo
+, libintlOrEmpty
 , # Whether to build no plugins that have external dependencies
   # (except the ALSA plugin).
   minimalDeps ? false
@@ -30,7 +31,10 @@ stdenv.mkDerivation rec {
       [ xlibs.xlibs xlibs.libXv libogg libtheora libvorbis freetype pango
         liboil ]
     # can't build cdparanoia on darwin
-    ++ stdenv.lib.optional (!minimalDeps && !stdenv.isDarwin) cdparanoia;
+    ++ stdenv.lib.optional (!minimalDeps && !stdenv.isDarwin) cdparanoia
+    ++ libintlOrEmpty;
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   propagatedBuildInputs = [ gstreamer ];
  

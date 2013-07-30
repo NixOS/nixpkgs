@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, networkmanager, GConf
-, libnotify, libsecret, dbus_glib, polkit, isocodes, libgnome_keyring
+, libnotify, libsecret, dbus_glib, polkit, isocodes, libgnome_keyring, gnome_keyring
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
-, makeWrapper, networkmanager_openvpn, udev }:
+, makeWrapper, networkmanager_openvpn, udev, hicolor_icon_theme }:
 
 let
   pn = "network-manager-applet";
@@ -18,11 +18,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gtk libglade networkmanager GConf libnotify libsecret dbus_glib
-    polkit isocodes makeWrapper udev libgnome_keyring
+    gtk libglade networkmanager libnotify libsecret dbus_glib
+    polkit isocodes makeWrapper udev GConf libgnome_keyring
   ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
+
+  propagatedUserEnvPkgs = [ GConf gnome_keyring hicolor_icon_theme ];
 
   makeFlags = [
     ''CFLAGS=-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile_broadband_provider_info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''

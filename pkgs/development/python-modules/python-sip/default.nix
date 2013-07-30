@@ -10,14 +10,21 @@ stdenv.mkDerivation rec {
     ];
     sha256 = "1bwdd5xhrx8dx8rr86r043ddlbg7gd1vh0pm2nxw5l1yprwa7paa";
   };
-  
-  configurePhase = "python ./configure.py -d $out/lib/${python.libPrefix}/site-packages -b $out/bin -e $out/include";
+
+  configurePhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    # prevent sip from complaining about python not being built as a framework
+    sed -i -e 1564,1565d siputils.py
+  '' + ''
+    python ./configure.py -d $out/lib/${python.libPrefix}/site-packages \
+      -b $out/bin -e $out/include
+  '';
   
   buildInputs = [ python ];
   
-  meta = {
+  meta = with stdenv.lib; {
     description = "Creates C++ bindings for Python modules";
-    license = "GPL";
-    maintainers = with stdenv.lib.maintainers; [ urkud sander ];
+    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lovek323 sander urkud ];
+    platforms   = platforms.all;
   };
 }

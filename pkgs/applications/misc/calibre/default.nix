@@ -1,15 +1,15 @@
 { stdenv, fetchurl, python, pyqt4, sip, popplerQt4, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qt4, icu, sqlite
-, pil, makeWrapper, unrar, chmlib, pythonPackages, xz, udisks, libusb1, libmtp
+, imagemagick, libjpeg, fontconfig, podofo, qt48, icu, sqlite
+, pil, makeWrapper, unrar, chmlib, pythonPackages, xz, libusb1, libmtp
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-0.8.70";
-  # 0.9.* versions won't build: https://bugs.launchpad.net/calibre/+bug/1094719
+  name = "calibre-0.9.11";
+  # 0.9.12+ versions won't build due to missing qt4 private headers: https://bugs.launchpad.net/calibre/+bug/1094719
 
   src = fetchurl {
     url = "mirror://sourceforge/calibre/${name}.tar.xz";
-    sha256 = "12avwp8r6cnrw6c32gmd2hksa9rszdb76zs6fcmr3n8r1wkwa71g";
+    sha256 = "0jjs2cx222pbv4nrivlxag5fxa0v9m63x7arcll6xi173zdn4gg8";
   };
 
   inherit python;
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ python pyqt4 sip popplerQt4 libpng imagemagick libjpeg
-      fontconfig podofo qt4 pil chmlib icu
+      fontconfig podofo qt48 pil chmlib icu
       pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
-      pythonPackages.cssutils pythonPackages.beautifulsoup
-      pythonPackages.sqlite3 sqlite udisks libusb1 libmtp
+      pythonPackages.cssutils pythonPackages.beautifulsoup pythonPackages.pillow
+      pythonPackages.sqlite3 pythonPackages.netifaces sqlite libusb1 libmtp
     ];
 
   installPhase = ''
@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Comprehensive e-book software";
     homepage = http://calibre-ebook.com;
-    license = "GPLv3";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ viric iElectric ];
+    platforms = platforms.linux;
   };
 }

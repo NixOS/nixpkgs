@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pythonPackages, pygobject, gst_python
+{ stdenv, fetchurl, pythonPackages, pygobject, gst_python
 , gst_plugins_good, gst_plugins_base
 }:
 
@@ -7,7 +7,7 @@ pythonPackages.buildPythonPackage rec {
 
   version = "0.14.2";
 
-  src = fetchgit {
+  src = fetchurl {
     url = "https://github.com/mopidy/mopidy/archive/v${version}.tar.gz";
     sha256 = "0fqx7lk9g61d744b951cwx0szqbyji58dhw2ravnq9785nkhi7i4";
   };

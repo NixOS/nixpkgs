@@ -1,4 +1,23 @@
-diff -ruN wicd-1.7.2.4.orig/wicd/wnettools.py wicd-1.7.2.4/wicd/wnettools.py
+diff -ruN wicd-1.7.2.4.orig/wicd/wicd-daemon.py wicd-1.7.2.4/wicd/wicd-daemon.py
+--- wicd-1.7.2.4.orig/wicd/wicd-daemon.py	2013-06-22 18:55:02.641242947 +0000
++++ wicd-1.7.2.4/wicd/wicd-daemon.py	2013-06-22 18:58:33.990244153 +0000
+@@ -69,6 +69,7 @@
+ wireless_conf = os.path.join(wpath.etc, "wireless-settings.conf")
+ wired_conf = os.path.join(wpath.etc, "wired-settings.conf")
+ dhclient_conf = os.path.join(wpath.etc, "dhclient.conf.template")
++dhclient_conf_default = os.path.join(wpath.share, "other", "dhclient.conf.template.default")
+ 
+ class WicdDaemon(dbus.service.Object):
+     """ The main wicd daemon class.
+@@ -910,7 +911,7 @@
+ 
+         if not os.path.isfile(dhclient_conf):
+             print "dhclient.conf.template not found, copying..."
+-            shutil.copy(dhclient_conf + ".default", dhclient_conf)            
++            shutil.copy(dhclient_conf_default, dhclient_conf)
+         # Hide the files, so the keys aren't exposed.
+         print "chmoding configuration files 0600..."
+         os.chmod(app_conf.get_config(), 0600)diff -ruN wicd-1.7.2.4.orig/wicd/wnettools.py wicd-1.7.2.4/wicd/wnettools.py
 --- wicd-1.7.2.4.orig/wicd/wnettools.py	2013-03-30 21:47:19.804907552 +0000
 +++ wicd-1.7.2.4/wicd/wnettools.py	2013-03-31 08:44:37.572792110 +0000
 @@ -37,6 +37,7 @@

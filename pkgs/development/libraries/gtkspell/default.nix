@@ -1,12 +1,12 @@
-{stdenv, fetchurl, gtk, aspell, pkgconfig}:
+{stdenv, fetchurl, gtk, aspell, pkgconfig, enchant, intltool}:
 
 stdenv.mkDerivation {
-  name = "gtkspell-2.0.11";
+  name = "gtkspell-2.0.16";
   
   src = fetchurl {
-    url = http://gtkspell.sourceforge.net/download/gtkspell-2.0.11.tar.gz;
-    md5 = "494869f67146a12a3f17a958f51aeb05";
+    url = mirror://sourceforge/gtkspell/gtkspell-2.0.16.tar.gz;
+    sha256 = "00hdv28bp72kg1mq2jdz1sdw2b8mb9iclsp7jdqwpck705bdriwg";
   };
   
-  buildInputs = [aspell pkgconfig gtk];
+  buildInputs = [aspell pkgconfig gtk enchant intltool];
 }

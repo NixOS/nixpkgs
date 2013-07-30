@@ -3,7 +3,7 @@
 kde {
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "0nl3praln6kfdpr4diln850f29242496p5yrfcyq6xjkpsswq55w";
+  outputHash = "1aad2qb9zrjcild5s584q4zz6zc3wgkclv79gnfwkhmy0viqx9l6";
 
   nativeBuildInputs = [ cmake ];
 

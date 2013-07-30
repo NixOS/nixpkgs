@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
     };
 
     buildInputs = [ python unzip ];
+    propagatedBuildInputs = [ python ];
 
     postUnpack = "export sourceRoot=$sourceRoot/packaging";
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
 
       homepage = http://www.datadoghq.com;
 
-      maintainers = [ stdenv.lib.maintainers.shlevy ];
+      maintainers = [ stdenv.lib.maintainers.shlevy stdenv.lib.maintainers.iElectric ];
 
       license = stdenv.lib.licenses.bsd3;
 

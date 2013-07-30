@@ -581,6 +581,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
 
+  bindingsDSL = callPackage ../development/libraries/haskell/bindings-DSL {};
+
+  bindingsPosix = callPackage ../development/libraries/haskell/bindings-posix {};
+
   bitarray = callPackage ../development/libraries/haskell/bitarray {};
 
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
@@ -709,6 +713,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   comonadTransformers = callPackage ../development/libraries/haskell/comonad-transformers {};
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
+
+  concatenative = callPackage ../development/libraries/haskell/concatenative {};
 
   conduit = callPackage ../development/libraries/haskell/conduit {};
 
@@ -886,6 +892,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   editline = self.editline_0_2_1_1;
 
   elerea = callPackage ../development/libraries/haskell/elerea {};
+
+  Elm = callPackage ../development/compilers/elm/elm.nix {};
+
+  elmServer = callPackage ../development/compilers/elm/elm-server.nix {};
 
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
 
@@ -1069,6 +1079,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   happstackHamlet = callPackage ../development/libraries/haskell/happstack/happstack-hamlet.nix {};
 
+  happstackLite = callPackage ../development/libraries/haskell/happstack/happstack-lite.nix {};
+
   hashable_1_1_2_5 = callPackage ../development/libraries/haskell/hashable/1.1.2.5.nix {};
   hashable_1_2_0_10 = callPackage ../development/libraries/haskell/hashable/1.2.0.10.nix {};
   hashable = self.hashable_1_2_0_10;
@@ -1247,6 +1259,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ieee754 = callPackage ../development/libraries/haskell/ieee754 {};
 
+  indents = callPackage ../development/libraries/haskell/indents {};
+
   instantGenerics = callPackage ../development/libraries/haskell/instant-generics {};
 
   ioChoice = callPackage ../development/libraries/haskell/io-choice {};
@@ -1383,8 +1397,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   monadLogger = callPackage ../development/libraries/haskell/monad-logger {};
 
   monadPar_0_1_0_3 = callPackage ../development/libraries/haskell/monad-par/0.1.0.3.nix {};
-  monadPar_0_3_4_2 = callPackage ../development/libraries/haskell/monad-par/0.3.4.2.nix {};
-  monadPar = self.monadPar_0_3_4_2;
+  monadPar_0_3_4_3 = callPackage ../development/libraries/haskell/monad-par/0.3.4.3.nix {};
+  monadPar = self.monadPar_0_3_4_3;
 
   monadParExtras = callPackage ../development/libraries/haskell/monad-par-extras {};
 
@@ -1630,6 +1644,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   QuickCheck  = self.QuickCheck2;
 
   quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {};
+
+  qrencode = callPackage ../development/libraries/haskell/qrencode {
+    inherit (pkgs) qrencode;
+  };
 
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
 

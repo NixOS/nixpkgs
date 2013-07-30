@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libunwind-1.0.1";
   
   src = fetchurl {
-    url = "http://download.savannah.nongnu.org/releases/libunwind/${name}.tar.gz";
+    url = "mirror://savannah/libunwind/${name}.tar.gz";
     sha256 = "aa95fd184c0b90d95891c2f3bac2c7df708ff016d2a6ee8b2eabb769f864101f";
   };
   

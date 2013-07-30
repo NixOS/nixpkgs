@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "zeromq3-haskell";
-  version = "0.4";
-  sha256 = "0kwf4bzqp02vk78c9rphyamwbmvzff1z9hqp70dhfggm0q2d655s";
+  version = "0.5";
+  sha256 = "16qh3q5rshaxzl79aiivrysl3dhilnd2mw2p45ifgbgv87m277gq";
   buildDepends = [
     async MonadCatchIOTransformers semigroups transformers
   ];

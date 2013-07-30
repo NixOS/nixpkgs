@@ -2,10 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "abstract-deque";
-  version = "0.2";
-  sha256 = "0cq1k74b854flfvh7qhfnpngn4vyzp1az1rkaara23wlylydgs89";
-  buildDepends = [ HUnit random ];
+  version = "0.2.2";
+  sha256 = "12g4y3j59nkjw9ja247m8ydhj6a033lzfbqkp4a5slrqdxfdlvyb";
+  buildDepends = [ HUnit random testFramework testFrameworkHunit ];
   testDepends = [ HUnit random testFramework testFrameworkHunit ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/rrnewton/haskell-lockfree-queue/wiki";
     description = "Abstract, parameterized interface to mutable Deques";

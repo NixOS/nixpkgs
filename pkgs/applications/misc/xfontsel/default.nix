@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "xfontsel-1.0.2";
 
   src = fetchurl {
-    url = "http://www.x.org/releases/individual/app/${name}.tar.bz2";
+    url = "mirror://xorg/individual/app/${name}.tar.bz2";
     sha256 = "1a86a08sf0wjrki9ydh7hr5qf6hrixc4ljlxizakjzmx20wvlrks";
   };
 

@@ -75,6 +75,7 @@ let
     passthru = {
       inherit zlibSupport;
       libPrefix = "python${majorVersion}";
+      executable = "python2.6";
     };
 
     enableParallelBuilding = true;

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "dmidecode-2.11";
 
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/dmidecode/${name}.tar.bz2";
+    url = "mirror://savannah/dmidecode/${name}.tar.bz2";
     sha256 = "0l9v8985piykc98hmbg1cq5r4xwvp0jjl4li3avr3ddkg4s699bd";
   };
 

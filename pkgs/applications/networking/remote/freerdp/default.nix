@@ -21,11 +21,11 @@
 assert printerSupport -> cups != null;
 stdenv.mkDerivation rec {
   name = "freerdp-${version}";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "https://github.com/FreeRDP/FreeRDP/archive/${version}.tar.gz";
-    sha256 = "1my8gamvfrn6v9gcqxsa9cgxr42shc0l826zvxj8wpcay6gd321w";
+    sha256 = "1w9dk7dsbppspnnms2xwwmbg7jm61i7aw5nkwzbpdyxngbgkgwf0";
   };
 
   buildInputs = [

@@ -10,7 +10,7 @@ in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.3.25";
+  version = "5.3.27";
 
   name = "php-${version}";
 
@@ -134,8 +134,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       imap = {
-        configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ];
-        buildInputs = [ uwimap openssl pam ];
+        configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ]
+          # uwimap builds with kerberos on darwin
+          ++ stdenv.lib.optional (stdenv.isDarwin) "--with-kerberos";
+        buildInputs = [ uwimap openssl ]
+          ++ stdenv.lib.optional (!stdenv.isDarwin) pam;
       };
 
       intl = {
@@ -205,6 +208,9 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
     ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out $configureFlags
     echo configurePhase end
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # don't build php.dSYM as the php binary
+    sed -i 's/EXEEXT = \.dSYM/EXEEXT =/' Makefile
   '';
 
   installPhase = ''
@@ -217,8 +223,8 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
   '' );
 
   src = fetchurl {
-    url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
-    sha256 = "15dwks0823m0vc3qv58yxfvchwx9ydg5gjvjy8kpc5w3syras76m";
+    url = "http://nl1.php.net/get/php-${version}.tar.bz2/from/this/mirror";
+    sha256 = "11xj6v65m6l2lq2s2j5pq5l0iwjsnxmv1nad9hja50ivc8fb4bg1";
     name = "php-${version}.tar.bz2";
   };
 

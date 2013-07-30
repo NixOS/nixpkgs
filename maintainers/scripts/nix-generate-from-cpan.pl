@@ -51,15 +51,21 @@ print STDERR "unpacked to: $pkg_path\n";
 my $meta;
 if (-e "$pkg_path/META.yml") {
     eval {
-	$meta = YAML::XS::LoadFile("$pkg_path/META.yml");
+        $meta = YAML::XS::LoadFile("$pkg_path/META.yml");
     };
     if ($@) {
-	system("iconv -f windows-1252 -t utf-8 '$pkg_path/META.yml' > '$pkg_path/META.yml.tmp'");
-	$meta = YAML::XS::LoadFile("$pkg_path/META.yml.tmp");
+        system("iconv -f windows-1252 -t utf-8 '$pkg_path/META.yml' > '$pkg_path/META.yml.tmp'");
+        $meta = YAML::XS::LoadFile("$pkg_path/META.yml.tmp");
     }
+} elsif (-e "$pkg_path/META.json") {
+    local $/;
+    open(my $fh, '<', "$pkg_path/META.json") or die;
+    $meta = decode_json(<$fh>);
+} else {
+    warn "package has no META.yml or META.json\n";
 }
 
-print STDERR "metadata: ", encode_json($meta), "\n";
+print STDERR "metadata: ", encode_json($meta), "\n" if defined $meta;
 
 # Map a module to the attribute corresponding to its package
 # (e.g. HTML::HeadParser will be mapped to HTMLParser, because that
@@ -120,11 +126,13 @@ my $homepage = $meta->{resources}->{homepage};
 print STDERR "homepage: $homepage\n" if defined $homepage;
 
 my $description = $meta->{abstract};
-$description = uc(substr($description, 0, 1)) . substr($description, 1); # capitalise first letter
-$description =~ s/\.$//; # remove period at the end
-$description =~ s/\s*$//;
-$description =~ s/^\s*//;
-print STDERR "description: $description\n";
+if (defined $description) {
+    $description = uc(substr($description, 0, 1)) . substr($description, 1); # capitalise first letter
+    $description =~ s/\.$//; # remove period at the end
+    $description =~ s/\s*$//;
+    $description =~ s/^\s*//;
+    print STDERR "description: $description\n";
+}
 
 my $license = $meta->{license};
 if (defined $license) {
@@ -156,7 +164,7 @@ EOF
 print <<EOF if defined $homepage;
       homepage = $homepage;
 EOF
-print <<EOF;
+print <<EOF if defined $description;
       description = "$description";
 EOF
 print <<EOF if defined $license;

@@ -9,7 +9,7 @@ let
 in
 rec {
   src = fetchurl {
-    url = "http://prdownloads.sourceforge.net/sourceforge/xmpppy/xmpppy-${version}.tar.gz";
+    url = "mirror://sourceforge/xmpppy/xmpppy-${version}.tar.gz";
     sha256 = "16hbh8kwc5n4qw2rz1mrs8q17rh1zq9cdl05b1nc404n7idh56si";
   };
 

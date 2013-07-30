@@ -27,7 +27,7 @@ let
 in
 rec {
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/snd/snd-${version}.tar.gz";
+    url = "mirror://sourceforge/snd/snd-${version}.tar.gz";
     sha256 = "0zqgfnkvkqxby1k74mwba1r4pb520glcsz5jjmpzm9m41nqnghmm";
   };
 

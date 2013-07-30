@@ -1,23 +1,29 @@
 {stdenv, fetchurl, pam, openssl}:
 
 stdenv.mkDerivation {
-  name = "uw-imap-2007";
+  name = "uw-imap-2007f";
 
   src = fetchurl {
     url = "ftp://ftp.cac.washington.edu/imap/imap-2007f.tar.gz";
     sha256 = "0a2a00hbakh0640r2wdpnwr8789z59wnk7rfsihh3j0vbhmmmqak";
   };
 
-  makeFlags = "lnp" # Linux with PAM modules
+  makeFlags = if stdenv.isDarwin
+    then "osx"
+    else "lnp" # Linux with PAM modules;
     # -fPIC is required to compile php with imap on x86_64 systems
     + stdenv.lib.optionalString stdenv.isx86_64 " EXTRACFLAGS=-fPIC";
 
-  buildInputs = [ pam openssl ];
+  buildInputs = [ openssl ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) pam;
 
   patchPhase = ''
     sed -i -e s,/usr/local/ssl,${openssl}, \
       src/osdep/unix/Makefile
   '';
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin
+    "-I${openssl}/include/openssl";
 
   installPhase = ''
     mkdir -p $out/bin $out/lib $out/include

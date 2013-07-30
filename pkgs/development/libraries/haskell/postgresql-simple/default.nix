@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "postgresql-simple";
-  version = "0.3.3.2";
-  sha256 = "1gh2ih1n6g17jry12g7nv344sfzrhfc1assslx0cjlsryhbz25lp";
+  version = "0.3.4.0";
+  sha256 = "1xqs5hpljsapgisr7q3yd8ir351196xrdrk51dsizvk4vcs85wgs";
   buildDepends = [
     attoparsec blazeBuilder blazeTextual postgresqlLibpq text time
     transformers vector

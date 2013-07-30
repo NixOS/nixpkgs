@@ -15,11 +15,11 @@ let
     };
   };
 in stdenv.mkDerivation rec {
-  name = "guix-0.2";
+  name = "guix-0.3";
 
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/guix/${name}.tar.gz";
-    sha256 = "140y0ywbgl6vxl4nwswz4vim2wwdiajxlksj24lnv40aw5hyvifr";
+    sha256 = "0xpfdmlfkkpmgrb8lpaqs5wxx31m4jslajs6b9waz5wp91zk7fix";
   };
 
   configureFlags =
@@ -31,11 +31,6 @@ in stdenv.mkDerivation rec {
     # Copy the bootstrap Guile tarballs like Guix's makefile normally does.
     '' cp -v "${boot_guile.i686}" gnu/packages/bootstrap/i686-linux/guile-2.0.7.tar.xz
        cp -v "${boot_guile.x86_64}" gnu/packages/bootstrap/x86_64-linux/guile-2.0.7.tar.xz
-    '';
-
-  preCheck =
-    # XXX: Skip this test (see commit 91fe0e20c7da2b706a1ac0e7b75235b6c1e6ed0a).
-    '' sed -i tests/guix-package.sh -e's/guix package --version/exit 0/'
     '';
 
   nativeBuildInputs = [ pkgconfig ];
@@ -52,7 +47,7 @@ in stdenv.mkDerivation rec {
 
       In addition to standard package management features, Guix supports
       transactional upgrades and roll-backs, unprivileged package management,
-      per-user profiles, and garbage collection. 
+      per-user profiles, and garbage collection.
 
       It provides Guile Scheme APIs, including high-level embedded
       domain-specific languages (EDSLs), to describe how packages are built
@@ -67,6 +62,7 @@ in stdenv.mkDerivation rec {
     license = "GPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.linux;
 
     homepage = http://www.gnu.org/software/guix;
   };

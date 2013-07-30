@@ -291,7 +291,7 @@ rec {
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = attrs.args;
     origBuilder = attrs.builder;
-    QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 512)}";
+    QEMU_OPTS = "-m ${toString (attrs.memSize or 512)}";
   });
 
 
@@ -599,8 +599,17 @@ rec {
             debs="$debs /inst/$i";
           done
           chroot=$(type -tP chroot)
+
+          # Create a fake start-stop-daemon script, as done in debootstrap.
+          mv "/mnt/sbin/start-stop-daemon" "/mnt/sbin/start-stop-daemon.REAL"
+          echo "#!/bin/true" > "/mnt/sbin/start-stop-daemon"
+          chmod 755 "/mnt/sbin/start-stop-daemon"
+
           PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
             /usr/bin/dpkg --install --force-all $debs < /dev/null || true
+
+          # Move the real start-stop-daemon back into its place.
+          mv "/mnt/sbin/start-stop-daemon.REAL" "/mnt/sbin/start-stop-daemon"
         done
 
         echo "running post-install script..."
@@ -1394,22 +1403,22 @@ rec {
     };
 
     debian70i386 = {
-      name = "debian-7.0.0-wheezy-i386";
-      fullName = "Debian 7.0.0 Wheezy (i386)";
+      name = "debian-7.1.0-wheezy-i386";
+      fullName = "Debian 7.1.0 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "712939639e2cc82615c85bdf81edf31edef0fda003ac2b32998e438aee403ab8";
+        sha256 = "c2751c48805b41c3eddd31cfe92ffa46df13a7d6ce7896b8dc5ce4b2f7f329c5";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian70x86_64 = {
-      name = "debian-7.0.0-wheezy-amd64";
-      fullName = "Debian 7.0.0 Wheezy (amd64)";
+      name = "debian-7.1.0-wheezy-amd64";
+      fullName = "Debian 7.1.0 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "e79132f7db6655013be1f75feb9812b071386525246d8639679b322487d2732a";
+        sha256 = "9b15b4348cadbcf170c9e83d6fbcb64efac2b787ebdfef16ba21dd70dfca0001";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

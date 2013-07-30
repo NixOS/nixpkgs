@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.8.2.3";
+  version = "1.8.3.2";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
-    sha1 = "2831f7deec472db4d0d0cdffb4d82d91cecdf295";
+    sha256 = "0mfylhcdrh8prxkbs0gc877rmra2ks48bchg4hhaf2vpw9hpdf63";
   };
 
   patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   # required to support pthread_cancel()
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
-  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
+  makeFlags = "prefix=\${out} sysconfdir=/etc/ PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
       + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
       + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "");
 

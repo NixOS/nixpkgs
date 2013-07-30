@@ -59,7 +59,7 @@ rec {
   };
 
   javafront = stdenv.mkDerivation (rec {
-    name = "java-front-0.9.1";
+    name = "java-front-0.9.1pre20122";
 
     src = fetchurl {
       url = "http://hydra.nixos.org/build/766286/download/1/java-front-0.9.1pre20122.tar.gz";
@@ -92,7 +92,7 @@ rec {
   } // ( if stdenv.system == "i686-cygwin" then { CFLAGS = "-O2"; } else {} ) ) ;
 
   dryad = stdenv.mkDerivation rec {
-    name = "dryad-0.2pre1835518355";
+    name = "dryad-0.2pre18355";
 
     src = fetchurl {
       url = "http://releases.strategoxt.org/dryad/${name}-zbqfh1rm/dryad-0.2pre18355.tar.gz";

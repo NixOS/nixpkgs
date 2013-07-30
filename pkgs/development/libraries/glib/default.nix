@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl, libiconvOrEmpty, zlib, libffi
-, python, pcre, libelf }:
+, python, pcre, libelf, libintlOrEmpty }:
 
 # TODO:
 # * Add gio-module-fam
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   # configure script looks for d-bus but it is only needed for tests
-  buildInputs = [ libelf ];
+  buildInputs = [ libelf ] ++ libintlOrEmpty;
 
   nativeBuildInputs = [ perl pkgconfig gettext python ];
 
@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
   CPPFLAGS = stdenv.lib.optionalString stdenv.isSunOS "-DBSD_COMP";
 
   postConfigure = "sed '/SANE_MALLOC_PROTOS/s,^,//,' -i config.h";
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   enableParallelBuilding = true;
 
