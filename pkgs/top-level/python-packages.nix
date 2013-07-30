@@ -2358,9 +2358,9 @@ pythonPackages = modules // rec {
     name = "limnoria-20130327";
 
     src = fetchurl {
-      url = https://pypi.python.org/packages/source/l/limnoria/limnoria-2013-03-27T16:32:26+0100.tar.gz;
-      name = "limnoria-2013-03-27.tar.gz";
-      sha256 = "0xfaa6h8css3yhsmx5vcffizrz6mvmgm46q7449z3hq7g3793184";
+      url = https://pypi.python.org/packages/source/l/limnoria/limnoria-2013-06-01T10:32:51+0200.tar.gz;
+      name = "limnoria-2013-06-01.tar.gz";
+      sha256 = "1i8q9zzf43sr3n1q4h6h1z8nz31g4aa8dq94ywvfbh7hklmchq6n";
     };
 
     buildInputs = [ pkgs.git ];
