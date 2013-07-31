@@ -133,11 +133,10 @@ rec {
 
   grsecurity_2_9_1_3_2_48 =
     { name = "grsecurity-2.9.1-3.2.48";
-      patch =
-        (fetchurl {
-           url = http://grsecurity.net/stable/grsecurity-2.9.1-3.2.48-201307212241.patch;
-           sha256 = "1llgrcd7ynxx60dn05bcbysd6a1091wwxkck4d15gvp71s9r6scm";
-         });
+      patch = fetchurl {
+        url = http://grsecurity.net/stable/grsecurity-2.9.1-3.2.48-201307212241.patch;
+        sha256 = "1llgrcd7ynxx60dn05bcbysd6a1091wwxkck4d15gvp71s9r6scm";
+      };
     };
 
 }
