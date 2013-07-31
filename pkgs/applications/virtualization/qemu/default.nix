@@ -7,11 +7,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "qemu-1.5.1";
+  name = "qemu-1.5.2";
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/${name}.tar.bz2";
-    sha256 = "1s7316pgizpayr472la8p8a4vhv7ymmzd5qlbkmq6y9q5zpa25ac";
+    sha256 = "0l52jwlxmwp9g3jpq0g7ix9dq4qgh46nd2h58lh47f0a35yi8qgn";
   };
 
   buildInputs =
