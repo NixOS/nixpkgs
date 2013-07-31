@@ -165,6 +165,7 @@ with stdenv.lib;
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   DEVKMEM n # Disable /dev/kmem
+  CC_STACKPROTECTOR y # Detect buffer overflows on the stack
 
   # Misc. options.
   8139TOO_8129 y
