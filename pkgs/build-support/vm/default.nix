@@ -9,9 +9,9 @@ with pkgs;
 
 rec {
 
-  kvm = pkgs.qemu;
+  qemu = pkgs.qemu_kvm;
 
-  qemuProg = "${kvm}/bin/qemu-system-" + (if stdenv.system == "x86_64-linux" then "x86_64" else "i386");
+  qemuProg = "${qemu}/bin/qemu-kvm";
 
 
   modulesClosure = makeModulesClosure {
@@ -188,7 +188,6 @@ rec {
 
   qemuCommandLinux = ''
     ${qemuProg} \
-      -enable-kvm \
       ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
       -nographic -no-reboot \
       -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
@@ -242,7 +241,7 @@ rec {
   createEmptyImage = {size, fullName}: ''
     mkdir $out
     diskImage=$out/disk-image.qcow2
-    ${kvm}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
+    ${qemu}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
 
     mkdir $out/nix-support
     echo "${fullName}" > $out/nix-support/full-name
@@ -362,7 +361,7 @@ rec {
       diskImage=$(pwd)/disk-image.qcow2
       origImage=${attrs.diskImage}
       if test -d "$origImage"; then origImage="$origImage/disk-image.qcow2"; fi
-      ${kvm}/bin/qemu-img create -b "$origImage" -f qcow2 $diskImage
+      ${qemu}/bin/qemu-img create -b "$origImage" -f qcow2 $diskImage
     '';
 
     /* Inside the VM, run the stdenv setup script normally, but at the
@@ -459,7 +458,7 @@ rec {
     fi
     diskImage="$1"
     if ! test -e "$diskImage"; then
-      ${kvm}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 "$diskImage"
+      ${qemu}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 "$diskImage"
     fi
     export TMPDIR=$(mktemp -d)
     export out=/dummy
