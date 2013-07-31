@@ -102,9 +102,9 @@ in
         target = "profile";
       }
 
-      { # /etc/bashrc: executed every time a bash starts. Sources
-        # /etc/profile to ensure that the system environment is
-        # configured properly.
+      { # /etc/bashrc: executed every time an interactive bash
+        # starts. Sources /etc/profile to ensure that the system
+        # environment is configured properly.
         source = pkgs.substituteAll {
           src = ./bashrc.sh;
           inherit (cfg) interactiveShellInit;
@@ -133,6 +133,9 @@ in
       ${cfg.promptInit}
       ${initBashCompletion}
       ${shellAliases}
+
+      # Disable hashing (i.e. caching) of command lookups.
+      set +h
     '';
 
   system.build.binsh = pkgs.bashInteractive;
