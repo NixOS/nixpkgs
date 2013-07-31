@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname = "NetworkManager-pptp";
-  version = "0.9.8.0";
+  version = networkmanager.version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/0.9/${pname}-${version}.tar.xz";
-    sha256 = "1j4wczf0lv2c58pgdfxg2qsva5v0r1w99x6l1p78m56qc8a9il1l";
+    sha256 = "7f46ea61376d13d03685eca3f26a26e0022f6e92e6f1fc356034ca9717eb6dac";
   };
 
   buildInputs = [ networkmanager pptp ppp ]
