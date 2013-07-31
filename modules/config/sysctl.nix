@@ -60,6 +60,10 @@ in
     boot.kernel.sysctl."fs.protected_hardlinks" = true;
     boot.kernel.sysctl."fs.protected_symlinks" = true;
 
+    # Hide kernel pointers (e.g. in /proc/modules) for unprivileged
+    # users as these make it easier to exploit kernel vulnerabilities.
+    boot.kernel.sysctl."kernel.kptr_restrict" = 1;
+
   };
 
 }
