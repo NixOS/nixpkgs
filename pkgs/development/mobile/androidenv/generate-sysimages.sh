@@ -1,3 +1,3 @@
 #!/bin/sh -e
 
-xsltproc generate-sysimages.xsl repository-7.xml > sysimages.nix
+xsltproc generate-sysimages.xsl repository-8.xml > sysimages.nix

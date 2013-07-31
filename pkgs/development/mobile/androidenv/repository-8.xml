@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<sdk:sdk-repository xmlns:sdk="http://schemas.android.com/sdk/android/repository/7" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<sdk:sdk-repository xmlns:sdk="http://schemas.android.com/sdk/android/repository/8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <sdk:license id="android-sdk-license" type="text">Terms and Conditions
 
@@ -570,33 +570,33 @@ November 13, 2012
     </sdk:platform>
 
     <sdk:platform>
-        <!-- Generated at Tue Oct  9 13:42:01 2012 from git_jb-dev @ 495790 -->
-        <sdk:revision>3</sdk:revision>
-        <sdk:description>Android SDK Platform 4.1</sdk:description>
+        <!-- Generated at Thu Dec  6 10:54:05 2012 from git_jb-dev @ 543062 -->
+        <sdk:revision>4</sdk:revision>
+        <sdk:description>Android SDK Platform 4.1.2</sdk:description>
         <sdk:version>4.1.2</sdk:version>
         <sdk:api-level>16</sdk:api-level>
         <sdk:min-tools-rev>
-            <sdk:major>20</sdk:major>
+            <sdk:major>21</sdk:major>
         </sdk:min-tools-rev>
         <sdk:layoutlib>
-            <sdk:api>8</sdk:api>
+            <sdk:api>9</sdk:api>
             <sdk:revision>1</sdk:revision>
         </sdk:layoutlib>
         <sdk:archives>
             <sdk:archive arch="any" os="any">
-                <sdk:size>47995505</sdk:size>
-                <sdk:checksum type="sha1">80d9ffef58168f9bccd862830e2ee51f686b167e</sdk:checksum>
-                <sdk:url>android-16_r03.zip</sdk:url>
+                <sdk:size>48005140</sdk:size>
+                <sdk:checksum type="sha1">90b9157b8b45f966be97e11a22fba4591b96c2ee</sdk:checksum>
+                <sdk:url>android-16_r04.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
     </sdk:platform>
 
     <sdk:platform>
-        <!-- Generated at Mon Nov 12 17:12:35 2012 from git_jb-mr1-dev @ 526865 -->
-        <sdk:revision>1</sdk:revision>
-        <sdk:description>Android SDK Platform 4.2</sdk:description>
-        <sdk:version>4.2</sdk:version>
+        <!-- Generated at Wed Feb 13 11:27:09 2013 from git_jb-mr1.1-dev @ 576024 -->
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>Android SDK Platform 4.2.2</sdk:description>
+        <sdk:version>4.2.2</sdk:version>
         <sdk:api-level>17</sdk:api-level>
         <sdk:min-tools-rev>
             <sdk:major>21</sdk:major>
@@ -607,9 +607,32 @@ November 13, 2012
         </sdk:layoutlib>
         <sdk:archives>
             <sdk:archive arch="any" os="any">
-                <sdk:size>47886130</sdk:size>
-                <sdk:checksum type="sha1">c2e7c8c8db40e06b804ddb1725ac2c3555b55025</sdk:checksum>
-                <sdk:url>android-17_r01.zip</sdk:url>
+                <sdk:size>48057484</sdk:size>
+                <sdk:checksum type="sha1">c442c32c1b702173ab0929a74486e4f86fe528ec</sdk:checksum>
+                <sdk:url>android-17_r02.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:platform>
+
+    <sdk:platform>
+        <!-- Generated at Tue Jul 23 17:16:25 2013 from git_jb-mr2-release @ 737497 -->
+        <sdk:revision>1</sdk:revision>
+        <sdk:description>Android SDK Platform 4.3</sdk:description>
+        <sdk:version>4.3</sdk:version>
+        <sdk:api-level>18</sdk:api-level>
+        <sdk:min-tools-rev>
+            <sdk:major>21</sdk:major>
+        </sdk:min-tools-rev>
+        <sdk:layoutlib>
+            <sdk:api>9</sdk:api>
+            <sdk:revision>1</sdk:revision>
+        </sdk:layoutlib>
+        <sdk:archives>
+            <sdk:archive arch="any" os="any">
+                <sdk:size>48752456</sdk:size>
+                <sdk:checksum type="sha1">c24de91d6f296cf453701aef281609779fffb379</sdk:checksum>
+                <sdk:url>android-18_r01.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -666,16 +689,32 @@ November 13, 2012
     </sdk:system-image>
 
     <sdk:system-image>
-        <!-- Generated at Mon Nov 12 17:14:39 2012 from git_jb-mr1-dev @ 526865 -->
-        <sdk:revision>1</sdk:revision>
-        <sdk:description>Android SDK Platform 4.2</sdk:description>
+        <!-- Generated at Wed Feb 13 11:29:12 2013 from git_jb-mr1.1-dev @ 576024 -->
+        <sdk:revision>2</sdk:revision>
+        <sdk:description>Android SDK Platform 4.2.2</sdk:description>
         <sdk:api-level>17</sdk:api-level>
         <sdk:abi>armeabi-v7a</sdk:abi>
         <sdk:archives>
             <sdk:archive arch="any" os="any">
-                <sdk:size>116831648</sdk:size>
-                <sdk:checksum type="sha1">45b9344473e0a6d063c2b1fe58d8cd47d307905e</sdk:checksum>
-                <sdk:url>sysimg_armv7a-17_r01.zip</sdk:url>
+                <sdk:size>116553808</sdk:size>
+                <sdk:checksum type="sha1">1c321cda1af793b84d47d1a8d15f85444d265e3c</sdk:checksum>
+                <sdk:url>sysimg_armv7a-17_r02.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:system-image>
+
+    <sdk:system-image>
+        <!-- Generated at Tue Jul 23 17:18:11 2013 from git_jb-mr2-release @ 737497 -->
+        <sdk:revision>1</sdk:revision>
+        <sdk:description>Android SDK Platform 4.3</sdk:description>
+        <sdk:api-level>18</sdk:api-level>
+        <sdk:abi>armeabi-v7a</sdk:abi>
+        <sdk:archives>
+            <sdk:archive arch="any" os="any">
+                <sdk:size>125597583</sdk:size>
+                <sdk:checksum type="sha1">5a9b8ac5b57dd0e3278f47deb5ee58e1db6f1f9e</sdk:checksum>
+                <sdk:url>sysimg_armv7a-18_r01.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -866,89 +905,134 @@ November 13, 2012
         <sdk:uses-license ref="android-sdk-license"/>
     </sdk:sample>
 
+    <sdk:sample>
+        <!-- Generated at Tue Jul 23 17:17:22 2013 from git_jb-mr2-ub-dev @ 751786 -->
+        <sdk:revision>1</sdk:revision>
+        <sdk:api-level>18</sdk:api-level>
+        <sdk:archives>
+            <sdk:archive arch="any" os="any">
+                <sdk:size>19897793</sdk:size>
+                <sdk:checksum type="sha1">73e879ce46c04a6e63ad1a9107018b4782945007</sdk:checksum>
+                <sdk:url>samples-18_r01.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:sample>
+
     <!-- PLATFORM-TOOLS ........................ -->
 
     <sdk:platform-tool>
-        <!-- Generated at Mon Nov 12 17:13:48 2012 from git_jb-mr1-dev @ 527242 -->
+        <!-- Generated at Mon Jul 29 15:56:24 2013 from git_jb-mr2-dev @ 754669 -->
         <sdk:revision>
-            <sdk:major>16</sdk:major>
+            <sdk:major>18</sdk:major>
+            <sdk:minor>0</sdk:minor>
+            <sdk:micro>1</sdk:micro>
         </sdk:revision>
         <sdk:archives>
             <sdk:archive arch="any" os="windows">
-                <sdk:size>11938435</sdk:size>
-                <sdk:checksum type="sha1">0d6245b685c7d303cf4a054a3d373c4427b7ad01</sdk:checksum>
-                <sdk:url>platform-tools_r16-windows.zip</sdk:url>
+                <sdk:size>954769</sdk:size>
+                <sdk:checksum type="sha1">b40fea3ed72296dd42dd616a7abf536b8dace20d</sdk:checksum>
+                <sdk:url>platform-tools_r18.0.1-windows.zip</sdk:url>
             </sdk:archive>
             <sdk:archive arch="any" os="linux">
-                <sdk:size>12676089</sdk:size>
-                <sdk:checksum type="sha1">84d563ae5e324f223f335f11bf511bf6207c05fb</sdk:checksum>
-                <sdk:url>platform-tools_r16-linux.zip</sdk:url>
+                <sdk:size>1011194</sdk:size>
+                <sdk:checksum type="sha1">cf9bdbbaa34da37b59724f914dad907c2c74a387</sdk:checksum>
+                <sdk:url>platform-tools_r18.0.1-linux.zip</sdk:url>
             </sdk:archive>
             <sdk:archive arch="any" os="macosx">
-                <sdk:size>13147351</sdk:size>
-                <sdk:checksum type="sha1">fbb0f8d2786a83b8c3eb6df402e706e136db8fed</sdk:checksum>
-                <sdk:url>platform-tools_r16-macosx.zip</sdk:url>
+                <sdk:size>971087</sdk:size>
+                <sdk:checksum type="sha1">126325cbb55928c38acbb9c7bb5d9145d94fad56</sdk:checksum>
+                <sdk:url>platform-tools_r18.0.1-macosx.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
     </sdk:platform-tool>
 
-    <!-- TOOLS ........................ -->
+    <!-- BUILD-TOOLS ........................ -->
 
-    <sdk:tool>
-        <!-- Generated at Mon Nov 12 17:07:47 2012 from git_tools_r21 @ 519525 -->
+    <sdk:build-tool>
+        <!-- Generated at Tue May 14 16:40:25 2013 from git_jb-mr1.1-dev @ 673949 -->
         <sdk:revision>
-            <sdk:major>21</sdk:major>
+            <sdk:major>17</sdk:major>
+            <sdk:minor>0</sdk:minor>
+            <sdk:micro>0</sdk:micro>
         </sdk:revision>
-        <sdk:min-platform-tools-rev>
-            <sdk:major>16</sdk:major>
-        </sdk:min-platform-tools-rev>
         <sdk:archives>
             <sdk:archive arch="any" os="windows">
-                <sdk:size>98982670</sdk:size>
-                <sdk:checksum type="sha1">57bbfadcedbef44fc322e5e037666393668cf3fe</sdk:checksum>
-                <sdk:url>tools_r21-windows.zip</sdk:url>
+                <sdk:size>11004914</sdk:size>
+                <sdk:checksum type="sha1">899897d327b0bad492d3a40d3db4d96119c15bc0</sdk:checksum>
+                <sdk:url>build-tools_r17-windows.zip</sdk:url>
             </sdk:archive>
             <sdk:archive arch="any" os="linux">
-                <sdk:size>91495104</sdk:size>
-                <sdk:checksum type="sha1">013b9c04407a9d73b8bf3c574327fbe870acd264</sdk:checksum>
-                <sdk:url>tools_r21-linux.zip</sdk:url>
+                <sdk:size>11696007</sdk:size>
+                <sdk:checksum type="sha1">2c2872bc3806aabf16a12e3959c2183ddc866e6d</sdk:checksum>
+                <sdk:url>build-tools_r17-linux.zip</sdk:url>
             </sdk:archive>
             <sdk:archive arch="any" os="macosx">
-                <sdk:size>65767130</sdk:size>
-                <sdk:checksum type="sha1">fcfa3a6932f2ed0d970a0ca959bb2b4972f7d46d</sdk:checksum>
-                <sdk:url>tools_r21-macosx.zip</sdk:url>
+                <sdk:size>12208114</sdk:size>
+                <sdk:checksum type="sha1">602ee709be9dbb8f179b1e4075148a57f9419930</sdk:checksum>
+                <sdk:url>build-tools_r17-macosx.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
-    </sdk:tool>
+    </sdk:build-tool>
 
-    <sdk:tool>
-        <!-- Generated at Fri Nov 30 13:45:55 2012 from git_tools_r21 @ 539280 -->
+    <!-- Build tools version 18.0.0 was broken for renderscript, so it has been removed -->
+
+    <sdk:build-tool>
+        <!-- Generated at Mon Jul 29 15:14:00 2013 from git_jb-mr2-dev @ 754669 -->
         <sdk:revision>
-            <sdk:major>21</sdk:major>
+            <sdk:major>18</sdk:major>
             <sdk:minor>0</sdk:minor>
             <sdk:micro>1</sdk:micro>
-            <sdk:preview>1</sdk:preview>
+        </sdk:revision>
+        <sdk:archives>
+            <sdk:archive arch="any" os="windows">
+                <sdk:size>15413527</sdk:size>
+                <sdk:checksum type="sha1">a6c2afd0b6289d589351956d2f5212b37014ca7d</sdk:checksum>
+                <sdk:url>build-tools_r18.0.1-windows.zip</sdk:url>
+            </sdk:archive>
+            <sdk:archive arch="any" os="linux">
+                <sdk:size>16627330</sdk:size>
+                <sdk:checksum type="sha1">f11618492b0d2270c332325d45d752d3656a9640</sdk:checksum>
+                <sdk:url>build-tools_r18.0.1-linux.zip</sdk:url>
+            </sdk:archive>
+            <sdk:archive arch="any" os="macosx">
+                <sdk:size>16633121</sdk:size>
+                <sdk:checksum type="sha1">d84f5692fb44d60fc53e5b2507cebf9f24626902</sdk:checksum>
+                <sdk:url>build-tools_r18.0.1-macosx.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:build-tool>
+
+    <!-- TOOLS ........................ -->
+
+    <sdk:tool>
+        <!-- Generated at Mon Jul 29 16:02:44 2013 from git_tools_r22 @ 757759 -->
+        <sdk:revision>
+            <sdk:major>22</sdk:major>
+            <sdk:minor>0</sdk:minor>
+            <sdk:micro>5</sdk:micro>
         </sdk:revision>
         <sdk:min-platform-tools-rev>
-            <sdk:major>16</sdk:major>
+            <sdk:major>18</sdk:major>
         </sdk:min-platform-tools-rev>
         <sdk:archives>
             <sdk:archive arch="any" os="windows">
-                <sdk:size>98998088</sdk:size>
-                <sdk:checksum type="sha1">1503aaf2c91cb07c0240a2db3af0de027941a4f6</sdk:checksum>
-                <sdk:url>tools_r21.0.1_rc1-windows.zip</sdk:url>
+                <sdk:size>113389691</sdk:size>
+                <sdk:checksum type="sha1">a3f450706b5374122f0edb76a4488462ba5171ca</sdk:checksum>
+                <sdk:url>tools_r22.0.5-windows.zip</sdk:url>
             </sdk:archive>
             <sdk:archive arch="any" os="linux">
-                <sdk:size>91510079</sdk:size>
-                <sdk:checksum type="sha1">183670a7f9878d8d3693d5fcf32e1357b69f0fed</sdk:checksum>
-                <sdk:url>tools_r21.0.1_rc1-linux.zip</sdk:url>
+                <sdk:size>105904090</sdk:size>
+                <sdk:checksum type="sha1">06a3e1d66b9280cba49c7ba1893ea14beae072d2</sdk:checksum>
+                <sdk:url>tools_r22.0.5-linux.zip</sdk:url>
             </sdk:archive>
             <sdk:archive arch="any" os="macosx">
-                <sdk:size>65777178</sdk:size>
-                <sdk:checksum type="sha1">109d4f287904875f067e021be3fd1f549e6afb67</sdk:checksum>
-                <sdk:url>tools_r21.0.1_rc1-macosx.zip</sdk:url>
+                <sdk:size>77191184</sdk:size>
+                <sdk:checksum type="sha1">318947edef0ab46603eb7f4d21333ee4b4fa1ff3</sdk:checksum>
+                <sdk:url>tools_r22.0.5-macosx.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -957,14 +1041,14 @@ November 13, 2012
     <!-- DOCS ........................ -->
 
     <sdk:doc>
-        <!-- Generated at Mon Nov 12 17:17:53 2012 from git_jb-mr1-dev @ 528390 -->
+        <!-- Generated at Tue Jul 23 17:15:55 2013 from git_jb-mr2-release @ 737497 -->
         <sdk:revision>1</sdk:revision>
-        <sdk:api-level>17</sdk:api-level>
+        <sdk:api-level>18</sdk:api-level>
         <sdk:archives>
             <sdk:archive arch="any" os="any">
-                <sdk:size>171564393</sdk:size>
-                <sdk:checksum type="sha1">fb988cdd2beaac0dd47dc630821ccc30557c67e5</sdk:checksum>
-                <sdk:url>docs-17_r01.zip</sdk:url>
+                <sdk:size>142332266</sdk:size>
+                <sdk:checksum type="sha1">83632d157781d31f2a8e52acad5c4c5d0f307cba</sdk:checksum>
+                <sdk:url>docs-18_r01.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -1023,6 +1107,20 @@ November 13, 2012
                 <sdk:size>18976816</sdk:size>
                 <sdk:checksum type="sha1">6f1f18cd2d2b1852d7f6892df9cee3823349d43a</sdk:checksum>
                 <sdk:url>sources-17_r01.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:source>
+
+    <sdk:source>
+        <!-- Generated at Tue Jul 23 17:18:30 2013 from git_jb-mr2-release @ 737497 -->
+        <sdk:revision>1</sdk:revision>
+        <sdk:api-level>18</sdk:api-level>
+        <sdk:archives>
+            <sdk:archive arch="any" os="any">
+                <sdk:size>20226735</sdk:size>
+                <sdk:checksum type="sha1">8b49fdf7433f4881a2bfb559b5dd05d8ec65fb78</sdk:checksum>
+                <sdk:url>sources-18_r01.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
