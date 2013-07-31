@@ -1,5 +1,5 @@
 { stdenv, androidsdk, jdk, ant }:
-{ name, src, platformVersions ? [ "8" ], useGoogleAPIs ? false
+{ name, src, platformVersions ? [ "8" ], abiVersions ? [ "armeabi-v7a" ], useGoogleAPIs ? false
 , release ? false, keyStore ? null, keyAlias ? null, keyStorePassword ? null, keyAliasPassword ? null
 }:
 
@@ -10,7 +10,9 @@ let
     else if stdenv.system == "x86_64-darwin" then "macosx"
     else throw "Platform: ${stdenv.system} is not supported!";
 
-  androidsdkComposition = androidsdk { inherit platformVersions useGoogleAPIs; };
+  androidsdkComposition = androidsdk {
+    inherit platformVersions abiVersions useGoogleAPIs;
+  };
 in
 stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
