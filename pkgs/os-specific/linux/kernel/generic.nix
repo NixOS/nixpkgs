@@ -69,7 +69,7 @@ stdenv.mkDerivation {
   passthru = {
     inherit version modDirVersion kernelPatches;
     # Combine the `features' attribute sets of all the kernel patches.
-    features = lib.fold (x: y: (if x ? features then x.features else {}) // y) features kernelPatches;
+    features = lib.fold (x: y: (x.features or {}) // y) features kernelPatches;
   };
 
   builder = ./builder.sh;
@@ -133,7 +133,6 @@ stdenv.mkDerivation {
         " (with patches: "
         + lib.concatStrings (lib.intersperse ", " (map (x: x.name) kernelPatches))
         + ")");
-    inherit version;
     license = "GPLv2";
     homepage = http://www.kernel.org/;
     maintainers = [
