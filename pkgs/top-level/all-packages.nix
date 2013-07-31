@@ -1331,6 +1331,10 @@ let
 
   networkmanager_pptp_gnome = networkmanager_pptp.override { withGnome = true; };
 
+  networkmanager_vpnc = callPackage ../tools/networking/network-manager/vpnc.nix { };
+
+  networkmanager_openconnect = callPackage ../tools/networking/network-manager/openconnect.nix { gconf = gnome.GConf; };
+
   networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
