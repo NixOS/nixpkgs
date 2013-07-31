@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = https://dl-ssl.google.com/android/repository/platform-tools_r18.0.1-macosx.zip;
-      sha1 = "cf9bdbbaa34da37b59724f914dad907c2c74a387";
+      sha1 = "126325cbb55928c38acbb9c7bb5d9145d94fad56";
     }
     else throw "System ${stdenv.system} not supported!";
   
