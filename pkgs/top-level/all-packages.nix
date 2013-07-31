@@ -446,6 +446,8 @@ let
 
   apg = callPackage ../tools/security/apg { };
 
+  grc = callPackage ../tools/misc/grc { };
+
   otool = callPackage ../os-specific/darwin/otool { };
 
   setfile = callPackage ../os-specific/darwin/setfile { };
