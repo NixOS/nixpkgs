@@ -1,7 +1,7 @@
 source $stdenv/setup
 
 
-makeFlags="ARCH=$arch SHELL=/bin/sh $makeFlags"
+makeFlags="ARCH=$arch SHELL=/bin/sh KBUILD_BUILD_VERSION=1-NixOS $makeFlags"
 if [ -n "$crossConfig" ]; then
   makeFlags="$makeFlags CROSS_COMPILE=$crossConfig-"
 fi
