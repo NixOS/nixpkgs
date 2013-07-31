@@ -125,14 +125,6 @@ rec {
     features.aufs3 = true;
   };
 
-  # Increase the timeout on CIFS requests from 15 to 120 seconds to
-  # make CIFS more resilient to high load on the CIFS server.
-  cifs_timeout_2_6_38 =
-    { name = "cifs-timeout";
-      patch = ./cifs-timeout-2.6.38.patch;
-      features.cifsTimeout = true;
-    };
-
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;

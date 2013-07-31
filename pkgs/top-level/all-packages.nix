@@ -6380,7 +6380,6 @@ let
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
         # kernelPatches.aufs3_2
-        kernelPatches.cifs_timeout_2_6_38
       ];
   };
 
