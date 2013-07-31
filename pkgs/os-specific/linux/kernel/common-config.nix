@@ -19,6 +19,7 @@ with stdenv.lib;
   DEBUG_STACKOVERFLOW n
   RCU_TORTURE_TEST n
   SCHEDSTATS n
+  DETECT_HUNG_TASK y
 
   # Support drivers that need external firmware.
   STANDALONE n
