@@ -30,7 +30,7 @@ sub new {
     if (!$startCommand) {
         # !!! merge with qemu-vm.nix.
         $startCommand =
-            "$ENV{'qemu'} -enable-kvm -m 384 " .
+            "qemu-kvm -m 384 " .
             "-net nic,model=virtio \$QEMU_OPTS ";
         my $iface = $args->{hdaInterface} || "virtio";
         $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=$iface,boot=on,werror=report "

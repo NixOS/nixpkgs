@@ -12,7 +12,7 @@ with pkgs.lib;
             ''
               mkdir $out
               diskImage=$out/image
-              ${pkgs.vmTools.kvm}/bin/qemu-img create -f raw $diskImage "4G"
+              ${pkgs.vmTools.qemu}/bin/qemu-img create -f raw $diskImage "4G"
               mv closure xchg/
             '';
           buildInputs = [ pkgs.utillinux pkgs.perl ];
