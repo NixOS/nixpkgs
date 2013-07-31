@@ -3864,6 +3864,8 @@ let
   dbus_libs = dbus.libs;
   dbus_daemon = dbus.daemon;
 
+  dhex = callPackage ../applications/editors/dhex { };
+
   dclib = callPackage ../development/libraries/dclib { };
 
   directfb = callPackage ../development/libraries/directfb { };
