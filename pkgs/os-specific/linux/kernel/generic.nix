@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, mktemp, module_init_tools
+{ stdenv, fetchurl, perl, mktemp, module_init_tools, bc
 
 , # The kernel source tarball.
   src
@@ -6,14 +6,11 @@
 , # The kernel version.
   version
 
+, # Overrides to the kernel config.
+  extraConfig ? ""
+
 , # The version number used for the module directory
   modDirVersion ? version
-
-, # The kernel configuration.
-  config
-
-, # The kernel configuration when cross building.
-  configCross ? {}
 
 , # An attribute set whose attributes express the availability of
   # certain features in this kernel.  E.g. `{iwlwifi = true;}'
@@ -40,7 +37,6 @@
   # we force building the target asked: bzImage/zImage/uImage/...
   postBuild ? "make $makeFlags $kernelTarget; make $makeFlags -C scripts unifdef"
 
-, extraNativeBuildInputs ? []
 , ...
 }:
 
@@ -58,6 +54,12 @@ let
       configFromPatches =
         map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
     in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
+
+  configWithPlatform = kernelPlatform:
+    import ./common-config.nix { inherit stdenv version kernelPlatform extraConfig; };
+
+  config = configWithPlatform stdenv.platform;
+  configCross = configWithPlatform stdenv.cross.platform;
 
 in
 
@@ -85,7 +87,7 @@ stdenv.mkDerivation {
   # For UML and non-PC, just ignore all options that don't apply (We are lazy).
   ignoreConfigErrors = stdenv.platform.name != "pc";
 
-  nativeBuildInputs = [ perl mktemp ] ++ extraNativeBuildInputs;
+  nativeBuildInputs = [ perl mktemp bc ];
 
   buildInputs = lib.optional (stdenv.platform.uboot != null)
     (ubootChooser stdenv.platform.uboot);
