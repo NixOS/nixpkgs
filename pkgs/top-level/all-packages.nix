@@ -6717,7 +6717,7 @@ let
 
   "procps-ng" = callPackage ../os-specific/linux/procps-ng { };
 
-  qemu_kvm = callPackage ../os-specific/linux/qemu-kvm { };
+  qemu_kvm = qemu.override { x86Only = true; };
 
   firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
 
