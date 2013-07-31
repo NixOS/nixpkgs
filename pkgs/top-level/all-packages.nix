@@ -421,6 +421,8 @@ let
     };
   };
 
+  awscli = callPackage ../tools/admin/awscli { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
@@ -1824,6 +1826,8 @@ let
   viking = callPackage ../applications/misc/viking {
     inherit (gnome) scrollkeeper;
   };
+
+  vnc2flv = callPackage ../tools/video/vnc2flv {};
 
   vncrec = builderDefsPackage ../tools/video/vncrec {
     inherit (xlibs) imake libX11 xproto gccmakedep libXt
@@ -5740,11 +5744,11 @@ let
 
   python3Packages = python33Packages;
 
-  python33Packages = import ./python-packages.nix {
+  python33Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
     inherit (lib) lowPrio;
     python = python33;
-  };
+  });
 
   python32Packages = import ./python-packages.nix {
     inherit pkgs;
@@ -5758,11 +5762,11 @@ let
     python = python27;
   });
 
-  pypyPackages = import ./python-packages.nix {
+  pypyPackages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
     inherit (lib) lowPrio;
     python = pypy;
-  };
+  });
 
   plone41Packages = import ../development/web/plone/4.1.nix {
     inherit pkgs;
@@ -5807,6 +5811,8 @@ let
 
   pyGtkGlade = pythonPackages.pyGtkGlade;
 
+  pylint = callPackage ../development/python-modules/pylint { };
+
   pyopenssl = builderDefsPackage (import ../development/python-modules/pyopenssl) {
     inherit python openssl;
   };
@@ -5830,6 +5836,8 @@ let
   pyx = callPackage ../development/python-modules/pyx { };
 
   pyxml = callPackage ../development/python-modules/pyxml { };
+
+  rbtools = callPackage ../development/python-modules/rbtools { };
 
   setuptools = pythonPackages.setuptools;
 
@@ -9308,7 +9316,8 @@ let
 
   spyder = callPackage ../applications/science/spyder {
     inherit (pythonPackages) pyflakes rope sphinx numpy scipy matplotlib; # recommended
-    inherit (pythonPackages) ipython pylint pep8; # optional
+    inherit (pythonPackages) ipython pep8; # optional
+    inherit pylint;
   };
 
   stellarium = callPackage ../applications/science/astronomy/stellarium { };

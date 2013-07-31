@@ -34,9 +34,10 @@ stdenv.mkDerivation rec {
     ${python}/bin/${python.executable} setup.py test
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = http://pypi.python.org/pypi/setuptools;
     licenses = [ "PSF" "ZPL" ];
+    platforms = platforms.all;
   };    
 }

@@ -341,24 +341,6 @@ pythonPackages = modules // rec {
     };
   });
 
-
-  awscli = buildPythonPackage rec {
-    name = "awscli-0.8.3";
-    namePrefix = "";
-
-    src = fetchurl {
-      url = https://github.com/aws/aws-cli/archive/0.8.3.tar.gz;
-      sha256 = "0v7igh00zja560v8qz315g3m7x9six1hprrrb10cpp9sy8n58xnn";
-    };
-
-    propagatedBuildInputs =
-      [ pythonPackages.argparse
-        pythonPackages.botocore
-        pythonPackages.colorama
-      ];
-  };
-
-
   beautifulsoup = buildPythonPackage (rec {
     name = "beautifulsoup-3.2.1";
 
@@ -573,11 +555,12 @@ pythonPackages = modules // rec {
 
 
   botocore = buildPythonPackage rec {
-    name = "botocore-0.8.3";
+    version = "0.13.1";
+    name = "botocore-${version}";
 
     src = fetchurl {
-      url = https://github.com/boto/botocore/archive/0.8.3.tar.gz;
-      sha256 = "0dbm2clrh7zs4brqqj3xssz3nymdg24ff2lww27s3wliirwqdiv1";
+      url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
+      sha256 = "192kxgw76b22zmk5mxjkij5rskibb9jfaggvpznzy3ggsgja7yy8";
     };
 
     propagatedBuildInputs =
@@ -2294,11 +2277,11 @@ pythonPackages = modules // rec {
 
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.0.1";
+    name = "jmespath-0.0.2";
 
     src = fetchurl {
-      url = "https://github.com/boto/jmespath/archive/0.0.1.tar.gz";
-      sha256 = "1a5d62qbgfjbaw8wgkfh78gairnpy6bbdsygwm1prqwap1kyq6ch";
+      url = "https://github.com/boto/jmespath/archive/0.0.2.tar.gz";
+      sha256 = "0wr1gq3gdyn3n21pvj62csdm095512zxd10gkg5ai1vvxh0mbn3r";
     };
 
     propagatedBuildInputs = [ ply ];
@@ -4167,8 +4150,7 @@ pythonPackages = modules // rec {
   });
 
   ldap = buildPythonPackage rec {
-    name = "python-ldap-2.4.10";
-    namePrefix = "";
+    name = "ldap-2.4.10";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-ldap/${name}.tar.gz";
@@ -4199,29 +4181,6 @@ pythonPackages = modules // rec {
       license = stdenv.lib.licenses.lgpl21Plus;
     };
   });
-
-
-  pylint = buildPythonPackage rec {
-    name = "pylint-0.26.0";
-    namePrefix = "";
-
-    src = fetchurl {
-      url = "http://download.logilab.org/pub/pylint/${name}.tar.gz";
-      sha256 = "1mg1ywpj0klklv63s2hwn5xwxi3wfwgnyz9d4pz32hzb53azq835";
-    };
-
-    propagatedBuildInputs = [ logilab_astng ];
-
-    postInstall = ''
-      mkdir -p $out/share/emacs/site-lisp
-      cp "elisp/"*.el $out/share/emacs/site-lisp/
-    '';
-
-    meta = {
-      homepage = http://www.logilab.org/project/pylint;
-      description = "A bug and style checker for Python";
-    };
-  };
 
 
   pymacs = pkgs.stdenv.mkDerivation rec {
@@ -4512,19 +4471,6 @@ pythonPackages = modules // rec {
       license = "free"; # !?
     };
   });
-
-
-  RBTools = buildPythonPackage rec {
-    name = "rbtools-0.4.1";
-    namePrefix = "";
-
-    src = fetchurl {
-      url = "http://downloads.reviewboard.org/releases/RBTools/0.4/RBTools-0.4.1.tar.gz";
-      sha256 = "1v0r7rfzrasj56s53mib51wl056g7ykh2y1c6dwv12r6hzqsycgv";
-    };
-
-    propagatedBuildInputs = [ setuptools ];
-  };
 
 
   recaptcha_client = buildPythonPackage rec {
@@ -5442,24 +5388,6 @@ pythonPackages = modules // rec {
       homepage = http://www.virtualenv.org;
       license = licenses.mit;
       maintainers = [ maintainers.goibhniu ];
-    };
-  };
-
-  vnc2flv = buildPythonPackage rec {
-    name = "vnc2flv-20100207";
-    namePrefix = "";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/v/vnc2flv/${name}.tar.gz";
-      md5 = "8492e46496e187b49fe5569b5639804e";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      description = "Tool to record VNC sessions to Flash Video";
-      homepage = http://www.unixuser.org/~euske/python/vnc2flv/;
     };
   };
 
