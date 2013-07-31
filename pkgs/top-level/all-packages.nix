@@ -6313,8 +6313,6 @@ let
 
   iwlwifi3945ucode = callPackage ../os-specific/linux/firmware/iwlwifi-3945-ucode { };
 
-  iwlwifi4965ucodeV1 = callPackage ../os-specific/linux/firmware/iwlwifi-4965-ucode { };
-
   iwlwifi4965ucodeV2 = callPackage ../os-specific/linux/firmware/iwlwifi-4965-ucode/version-2.nix { };
 
   iwlwifi5000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-5000-ucode { };
@@ -6510,11 +6508,7 @@ let
 
     iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
 
-    iwlwifi4965ucode =
-      if builtins.compareVersions self.kernel.version "2.6.27" == 0
-         || builtins.compareVersions self.kernel.version "2.6.27" == 1
-      then iwlwifi4965ucodeV2
-      else iwlwifi4965ucodeV1;
+    iwlwifi4965ucode = iwlwifi4965ucodeV2;
 
     atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
 
