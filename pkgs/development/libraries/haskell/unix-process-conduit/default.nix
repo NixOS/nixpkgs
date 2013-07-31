@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "unix-process-conduit";
-  version = "0.2.1.1";
-  sha256 = "038z99gzwqhig65zzb3hc9zisnvzslvvy86wjgx6wz90p6vbxzn4";
+  version = "0.2.1.2";
+  sha256 = "1gg1ynqd8hka5ynpmpsj8qw0lqsyg7l1m1py05iw3bd3cldwflx1";
   buildDepends = [ conduit filepath stm time transformers ];
   testDepends = [ conduit hspec transformers ];
   meta = {
