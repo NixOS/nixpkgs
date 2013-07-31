@@ -1,8 +1,12 @@
 {stdenv, androidsdk}:
-{name, app, platformVersion ? "8", useGoogleAPIs ? false, package, activity}:
+{name, app, platformVersion ? "8", abiVersion ? "armeabi-v7a", useGoogleAPIs ? false, enableGPU ? false, package, activity}:
 
 let
-  androidsdkComposition = androidsdk { inherit useGoogleAPIs; platformVersions = [ platformVersion ]; };
+  androidsdkComposition = androidsdk {
+    inherit useGoogleAPIs;
+    platformVersions = [ platformVersion ];
+    abiVersions = [ abiVersion ];
+  };
 in
 stdenv.mkDerivation {
   inherit name;
@@ -47,6 +51,11 @@ stdenv.mkDerivation {
     
     # Create a virtual android device
     ${androidsdkComposition}/libexec/android-sdk-*/tools/android create avd -n device -t ${if useGoogleAPIs then "'Google Inc.:Google APIs:"+platformVersion+"'" else "android-"+platformVersion}
+    
+    # Enable GPU acceleration
+    ${stdenv.lib.optionalString enableGPU ''
+      echo "hw.gpu.enabled=yes" >> $ANDROID_SDK_HOME/.android/avd/device.avd/config.ini
+    ''}
     
     # Launch the emulator
     ${androidsdkComposition}/libexec/android-sdk-*/tools/emulator -avd device -no-boot-anim -port $port &

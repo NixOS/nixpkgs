@@ -53,6 +53,7 @@ rec {
   
   androidsdk_4_1 = androidsdk {
     platformVersions = [ "16" ];
+    abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
   

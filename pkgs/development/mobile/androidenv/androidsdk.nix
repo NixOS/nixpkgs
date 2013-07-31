@@ -5,7 +5,7 @@
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, mesa
 , freetype, fontconfig, gtk, atk
 }:
-{platformVersions, useGoogleAPIs}:
+{platformVersions, abiVersions, useGoogleAPIs}:
 
 stdenv.mkDerivation {
   name = "android-sdk-22.05";
@@ -148,19 +148,21 @@ stdenv.mkDerivation {
     mkdir -p system-images
     cd system-images
     
-    ${stdenv.lib.concatMapStrings (platformVersion:
-      if (builtins.hasAttr ("sysimg_"+platformVersion) sysimages) then
-        let
-          sysimg = builtins.getAttr ("sysimg_"+platformVersion) sysimages;
-        in
-        ''
-          mkdir -p android-${platformVersion}
-          cd android-${platformVersion}
-          ln -s ${sysimg}/*
-          cd ..
-        ''
-      else ""
-    ) platformVersions}
+    ${stdenv.lib.concatMapStrings (abiVersion:
+      stdenv.lib.concatMapStrings (platformVersion:
+        if (builtins.hasAttr ("sysimg_" + abiVersion + "_" + platformVersion) sysimages) then
+          let
+            sysimg = builtins.getAttr ("sysimg_" + abiVersion + "_" + platformVersion) sysimages;
+          in
+          ''
+            mkdir -p android-${platformVersion}
+            cd android-${platformVersion}
+            ln -s ${sysimg}/*
+            cd ..
+          ''
+        else ""
+      ) platformVersions
+    ) abiVersions}
     
     # Create wrappers to the most important tools and platform tools so that we can run them if the SDK is in our PATH
     
