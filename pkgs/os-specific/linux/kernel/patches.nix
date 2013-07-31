@@ -110,21 +110,6 @@ rec {
     features.aufs3 = true;
   };
 
-  # not officially released yet, but 3.x seems to work fine
-  aufs3_7 = rec {
-    name = "aufs3.7";
-    version = "3.x.20121210";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "8d24d728c7eb54dd624bccd8e87afa826670142c";
-      sha256 = "02dcb46e02b2a6b90c1601b5747614276074488c9308625c3a52ab74cad997a5";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
