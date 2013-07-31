@@ -76,6 +76,7 @@ in
     nslcd = 58;
     nginx = 60;
     chrony = 61;
+    supybot = 62;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
