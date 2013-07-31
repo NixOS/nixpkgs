@@ -5740,11 +5740,11 @@ let
 
   python3Packages = python33Packages;
 
-  python33Packages = recurseIntoAttrs (import ./python-packages.nix {
+  python33Packages = import ./python-packages.nix {
     inherit pkgs;
     inherit (lib) lowPrio;
     python = python33;
-  });
+  };
 
   python32Packages = import ./python-packages.nix {
     inherit pkgs;
@@ -5758,11 +5758,11 @@ let
     python = python27;
   });
 
-  pypyPackages = recurseIntoAttrs (import ./python-packages.nix {
+  pypyPackages = import ./python-packages.nix {
     inherit pkgs;
     inherit (lib) lowPrio;
     python = pypy;
-  });
+  };
 
   plone41Packages = import ../development/web/plone/4.1.nix {
     inherit pkgs;
