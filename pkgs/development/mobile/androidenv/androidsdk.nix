@@ -61,14 +61,14 @@ stdenv.mkDerivation {
       for i in emulator emulator-arm emulator-mips emulator-x86
       do
           wrapProgram `pwd`/$i \
-            --prefix LD_LIBRARY_PATH : `pwd`/lib:${libX11_32bit}/lib:${libxcb_32bit}/lib:${libXau_32bit}/lib:${libXdmcp_32bit}/lib:${libXext_32bit}/lib:${mesa_32bit}/lib
+            --suffix LD_LIBRARY_PATH : `pwd`/lib:${libX11_32bit}/lib:${libxcb_32bit}/lib:${libXau_32bit}/lib:${libXdmcp_32bit}/lib:${libXext_32bit}/lib:${mesa_32bit}/lib
       done
       
       ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
         for i in emulator64-arm emulator64-mips emulator64-x86
         do
             wrapProgram `pwd`/$i \
-            --prefix LD_LIBRARY_PATH : `pwd`/lib:${libX11}/lib:${libxcb}/lib:${libXau}/lib:${libXdmcp}/lib:${libXext}/lib:${mesa}/lib
+            --suffix LD_LIBRARY_PATH : `pwd`/lib:${libX11}/lib:${libxcb}/lib:${libXau}/lib:${libXdmcp}/lib:${libXext}/lib:${mesa}/lib
         done
       ''}
     ''}
