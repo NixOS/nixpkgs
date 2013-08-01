@@ -91,8 +91,8 @@ rec {
       esac
     done
 
+    echo "loading kernel modules..."
     for i in $(cat ${modulesClosure}/insmod-list); do
-      echo "loading module $(basename $i .ko)"
       insmod $i
     done
 
@@ -133,7 +133,7 @@ rec {
     ln -sf /proc/mounts /fs/etc/mtab
     echo "127.0.0.1 localhost" > /fs/etc/hosts
 
-    echo "Now running: $command"
+    echo "starting stage 2 ($command)"
     test -n "$command"
 
     set +e
@@ -195,7 +195,7 @@ rec {
       -drive file=$diskImage,if=virtio,cache=writeback,werror=report \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk" \
+      -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
 
