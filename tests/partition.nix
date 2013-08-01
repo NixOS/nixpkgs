@@ -137,7 +137,7 @@ in {
       $machine->succeed("mountpoint $_[0]");
     }
 
-    sub remount_and_check {
+    sub remountAndCheck {
       $machine->nest("Remounting partitions:", sub {
         # XXX: "findmnt -ARunl -oTARGET /mnt" seems to NOT print all mounts!
         my $getmounts_cmd = "cat /proc/mounts | cut -d' ' -f2 | grep '^/mnt'";
@@ -176,7 +176,7 @@ in {
       ensurePartition("/dev/vdb4", "boot sector");
       ensureNoPartition("vdb6");
       ensureNoPartition("vdc1");
-      remount_and_check;
+      remountAndCheck;
       ensureMountPoint("/mnt/boot");
       ensureMountPoint("/mnt/nix");
     };
@@ -190,7 +190,7 @@ in {
       ensurePartition("/dev/vdc2", "btrfs");
       ensureNoPartition("vdb3");
       ensureNoPartition("vdc3");
-      remount_and_check;
+      remountAndCheck;
     };
 
     parttest "RAID1 with XFS", sub {
@@ -202,7 +202,7 @@ in {
       ensureNoPartition("vdb4");
       ensureNoPartition("vdc4");
       ensureNoPartition("md2");
-      remount_and_check;
+      remountAndCheck;
       ensureMountPoint("/mnt/boot");
     };
 
@@ -219,7 +219,8 @@ in {
       ensurePartition("/dev/nixos/boot", "ext3");
       ensurePartition("/dev/nixos/swap", "swap");
       ensurePartition("/dev/nixos/root", "ext4");
-      remount_and_check;
+
+      remountAndCheck;
       ensureMountPoint("/mnt/boot");
     };
   '';
