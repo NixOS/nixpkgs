@@ -9153,6 +9153,8 @@ let
 
   gnome = recurseIntoAttrs gnome2;
 
+  hsetroot = callPackage ../tools/X11/hsetroot { };
+
   kde4 = recurseIntoAttrs pkgs.kde410;
 
   kde48 = kdePackagesFor (pkgs.kde48 // {
