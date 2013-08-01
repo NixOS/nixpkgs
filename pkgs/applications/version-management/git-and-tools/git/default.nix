@@ -50,6 +50,13 @@ stdenv.mkDerivation {
         chmod +x $1
       }
 
+      # Install git-subtree.
+      pushd contrib/subtree
+      make
+      make install install-doc
+      popd
+      rm -rf contrib/subtree
+
       # Install contrib stuff.
       mkdir -p $out/share/git
       mv contrib $out/share/git/
