@@ -265,7 +265,22 @@ with stdenv.lib;
   ''}
 
   # Virtualisation.
+  PARAVIRT y
+  ${if versionAtLeast version "3.10" then ''
+    HYPERVISOR_GUEST y
+  '' else ''
+    PARAVIRT_GUEST y
+  ''}
+  KVM_GUEST y
+  ${optionalString (versionOlder version "3.7") ''
+    KVM_CLOCK y
+  ''}
+  XEN y
   XEN_DOM0? y
+  KSM y
+  ${optionalString (!stdenv.is64bit) ''
+    HIGHMEM64G? y # We need 64 GB (PAE) support for Xen guest support.
+  ''}
 
   # Media support.
   ${optionalString (versionAtLeast version "3.6") ''
