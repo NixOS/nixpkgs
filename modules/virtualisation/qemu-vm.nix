@@ -114,6 +114,16 @@ let
           '';
       };
 
+    virtualisation.writableStoreUseTmpfs =
+      mkOption {
+        default = true;
+        description =
+          ''
+            Use a tmpfs for the writable store instead of writing to the VM's
+            own filesystem.
+          '';
+      };
+
     networking.primaryIPAddress =
       mkOption {
         default = "";
@@ -297,7 +307,13 @@ in
         mount --rbind $targetRoot/nix/store /unionfs-chroot/ro-store
 
         mkdir /unionfs-chroot/rw-store
+        ${if cfg.writableStoreUseTmpfs then ''
         mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-store
+        '' else ''
+        mkdir $targetRoot/.nix-rw-store
+        mount --bind $targetRoot/.nix-rw-store /unionfs-chroot/rw-store
+        ''}
+
         unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot,max_files=32768,hide_meta_files /rw-store=RW:/ro-store=RO $targetRoot/nix/store
       ''}
     '';
