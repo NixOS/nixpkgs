@@ -89,9 +89,5 @@ rec {
 
   svn2git_kde = callPackage ./svn2git-kde { };
 
-  gitSubtree = import ./git-subtree {
-    inherit stdenv fetchurl git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt;
-  };
-
   darcsToGit = callPackage ./darcs-to-git { };
 }
