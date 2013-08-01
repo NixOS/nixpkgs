@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     export ANDROID_SERIAL="emulator-$port"
     
     # Create a virtual android device
-    ${androidsdkComposition}/libexec/android-sdk-*/tools/android create avd -n device -t ${if useGoogleAPIs then "'Google Inc.:Google APIs:"+platformVersion+"'" else "android-"+platformVersion}
+    yes "" | ${androidsdkComposition}/libexec/android-sdk-*/tools/android create avd -n device -t ${if useGoogleAPIs then "'Google Inc.:Google APIs:"+platformVersion+"'" else "android-"+platformVersion}
     
     # Enable GPU acceleration
     ${stdenv.lib.optionalString enableGPU ''
