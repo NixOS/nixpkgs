@@ -3360,6 +3360,8 @@ let
 
   chromedriver = callPackage ../development/tools/selenium/chromedriver { gconf = gnome.GConf; };
 
+  "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
+
   complexity = callPackage ../development/tools/misc/complexity { };
 
   ctags = callPackage ../development/tools/misc/ctags { };

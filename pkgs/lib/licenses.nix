@@ -148,6 +148,12 @@
     url = http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html;
   };
 
+  llgpl21 = {
+    shortName = "LLGPLv2.1";
+    fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
+    url = http://opensource.franz.com/preamble.html;
+  };
+
   lgpl3 = {
     shortName = "LGPLv3";
     fullName = "GNU Lesser General Public License version 3 only";
