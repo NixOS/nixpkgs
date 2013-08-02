@@ -3,7 +3,7 @@
 , libdrm, xorg, wayland, udev, llvm, libffi
 , libvdpau
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
-, enableR600LlvmCompiler ? false # we would need currently unreleased LLVM or patches
+, enableR600LlvmCompiler ? false # current llvm-3.3 + mesa-9.1.6 don't configure
 , enableExtraFeatures ? false # add ~15 MB to mesa_drivers
 }:
 
@@ -23,7 +23,7 @@ else
 */
 
 let
-  version = "9.1.4";
+  version = "9.1.6";
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
 stdenv.mkDerivation {
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "1nk8xvw0dg07jd8w5gfdbk0abwv4lr8x6dsh4jm7k3p6x638g1bf";
+    sha256 = "0gay00fy84hrnp25hpacz5cbvxrpvgg1d390vichmbdgmkqdycp6";
   };
 
   prePatch = "patchShebangs .";
