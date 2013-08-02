@@ -55,6 +55,13 @@ rec {
     features.apparmor = true;
   };
 
+  apparmor_3_4 = rec {
+    version = "3.4";
+    name = "apparmor-${version}";
+    patch = makeAppArmorPatch { inherit apparmor version; };
+    features.apparmor = true;
+  };
+
   sec_perm_2_6_24 =
     { name = "sec_perm-2.6.24";
       patch = ./sec_perm-2.6.24.patch;
@@ -103,29 +110,6 @@ rec {
     features.aufs3 = true;
   };
 
-  # not officially released yet, but 3.x seems to work fine
-  aufs3_7 = rec {
-    name = "aufs3.7";
-    version = "3.x.20121210";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "8d24d728c7eb54dd624bccd8e87afa826670142c";
-      sha256 = "02dcb46e02b2a6b90c1601b5747614276074488c9308625c3a52ab74cad997a5";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
-  # Increase the timeout on CIFS requests from 15 to 120 seconds to
-  # make CIFS more resilient to high load on the CIFS server.
-  cifs_timeout_2_6_38 =
-    { name = "cifs-timeout";
-      patch = ./cifs-timeout-2.6.38.patch;
-      features.cifsTimeout = true;
-    };
-
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
@@ -147,19 +131,12 @@ rec {
       patch = ./mips-ext3-n32.patch;
     };
 
-  guruplug_defconfig =
-    { # Default configuration for the GuruPlug.  From
-      # <http://www.openplug.org/plugwiki/images/c/c6/Guruplug-patchset-2.6.33.2.tar.bz2>.
-      name = "guruplug-defconfig";
-      patch = ./guruplug-defconfig.patch;
+  grsecurity_2_9_1_3_2_48 =
+    { name = "grsecurity-2.9.1-3.2.48";
+      patch = fetchurl {
+        url = http://grsecurity.net/stable/grsecurity-2.9.1-3.2.48-201307212241.patch;
+        sha256 = "1llgrcd7ynxx60dn05bcbysd6a1091wwxkck4d15gvp71s9r6scm";
+      };
     };
 
-  guruplug_arch_number =
-    { # Hack to match the `arch_number' of the U-Boot that ships with the
-      # GuruPlug.  This is only needed when using this specific U-Boot
-      # binary.  See
-      # <http://www.plugcomputer.org/plugwiki/index.php/Compiling_Linux_Kernel_for_the_Plug_Computer>.
-      name = "guruplug-arch-number";
-      patch = ./guruplug-mach-type.patch;
-    };
 }

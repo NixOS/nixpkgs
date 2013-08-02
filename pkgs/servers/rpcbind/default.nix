@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "rpcbind-0.2.0";
   
   src = fetchurl {
-    url = "http://freefr.dl.sourceforge.net/project/rpcbind/rpcbind/0.2.0/rpcbind-0.2.0.tar.bz2";
+    url = "mirror://sourceforge/rpcbind/rpcbind-0.2.0.tar.bz2";
     sha256 = "c92f263e0353887f16379d7708ef1fb4c7eedcf20448bc1e4838f59497a00de3";
   };
 

@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "bea39a5872b39d3596e756f242967bc5bde6febeb996fdcd63fbcf5bfdc75f01";
   };
 
+  preConfigure = ''
+    substituteInPlace Makefile.in \
+      --replace "/usr/" "/"
+  '';
+
   makeFlags="DESTDIR=$(out)";
 
   meta = {

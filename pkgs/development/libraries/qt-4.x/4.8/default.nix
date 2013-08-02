@@ -166,10 +166,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://qt-project.org/;
+    homepage    = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
-    license = "GPL/LGPL";
-    maintainers = with maintainers; [ urkud sander phreedom ];
-    platforms = platforms.all;
+    license     = "GPL/LGPL";
+    maintainers = with maintainers; [ lovek323 phreedom sander urkud ];
+    platforms   = platforms.all;
   };
 }

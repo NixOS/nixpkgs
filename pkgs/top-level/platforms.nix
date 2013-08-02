@@ -10,18 +10,6 @@ rec {
     # Currently ignored - it should be set according to 'system' once it is
     # not ignored. This is for stdenv-updates.
     kernelArch = "i386";
-    kernelExtraConfig =
-      ''
-        # Virtualisation (KVM, Xen...).
-        PARAVIRT_GUEST y
-        KVM_CLOCK? y #Part of KVM_GUEST since linux 3.7
-        KVM_GUEST y
-        XEN y
-        KSM y
-
-        # We need 64 GB (PAE) support for Xen guest support.
-        HIGHMEM64G? y
-      '';
   };
 
   pc_simplekernel = pc // {
@@ -52,6 +40,11 @@ rec {
 
         # mv cesa requires this sw fallback, for mv-sha1
         CRYPTO_SHA1 y
+        # Fast crypto
+        CRYPTO_TWOFISH y
+        CRYPTO_TWOFISH_COMMON y
+        CRYPTO_BLOWFISH y
+        CRYPTO_BLOWFISH_COMMON y
 
         IP_PNP y
         IP_PNP_DHCP y

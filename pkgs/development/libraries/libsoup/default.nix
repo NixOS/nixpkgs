@@ -1,5 +1,6 @@
 { stdenv, fetchurl, glib, libxml2, pkgconfig
-, gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking }:
+, gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking
+, libintlOrEmpty }:
 
 stdenv.mkDerivation {
   name = "libsoup-2.38.1";
@@ -10,6 +11,7 @@ stdenv.mkDerivation {
   };
 
 
+  buildInputs = libintlOrEmpty;
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 ]
     ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring sqlite ];
@@ -17,6 +19,8 @@ stdenv.mkDerivation {
 
   # glib_networking is a runtime dependency, not a compile-time dependency
   configureFlags = "--disable-tls-check";
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   meta = {
     inherit (glib.meta) maintainers platforms;

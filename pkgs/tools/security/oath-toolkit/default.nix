@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "oath-toolkit-2.0.2";
 
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/oath-toolkit/${name}.tar.gz";
+    url = "mirror://savannah/oath-toolkit/${name}.tar.gz";
     sha256 = "0i2rf5j83kb8h3sd9lsm0a46zq805kzagvccc4rk7879lg1fnl99";
   };
 

@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   inherit name;
  
   src = fetchurl {
-    url = "http://savannah.nongnu.org/download/autocutsel/${name}.tar.gz";
+    url = "mirror://savannah/autocutsel/${name}.tar.gz";
     sha256 = "0hp335qq57l0kp58pfwb0bk930zx5497frq8y0lzr4icvk1fpw5y";
   };
  

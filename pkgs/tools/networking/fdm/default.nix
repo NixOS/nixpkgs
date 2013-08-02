@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="fdm";
-    version="1.6";
+    version="1.7";
     name="${baseName}-${version}";
-    url="http://downloads.sourceforge.net/${baseName}/${name}.tar.gz";
-    hash="01ipxay4rv52ra2zzybf92x6n1hyklib94ncsg04k3rp4w5a8sbj";
+    url="mirror://sourceforge/${baseName}/${baseName}/${name}.tar.gz";
+    hash="0apg1jasn4m5j3vh0v9lr2l3lyzy35av1ylxr0wf8k0j9w4p8i28";
   };
 in
 rec {
@@ -26,7 +26,7 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["fixInstall" "doMakeInstall"];
+  phaseNames = ["doConfigure" "fixInstall" "doMakeInstall"];
   makeFlags = ["PREFIX=$out"];
   fixInstall = a.fullDepEntry (''
     sed -i */Makefile -i Makefile -e 's@ -g bin @ @'

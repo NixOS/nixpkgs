@@ -1,8 +1,6 @@
-{ callPackage, callPackageOrig, stdenv, qt48 }:
+{ callPackage, callPackageOrig, stdenv, qt48, release ? "4.10.5" }:
 
 let
-  release = "4.10.4";
-
   # Need callPackageOrig to avoid infinite cycle
   kde = callPackageOrig ./kde-package {
     inherit release ignoreList extraSubpkgs callPackage;

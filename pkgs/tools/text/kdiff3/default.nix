@@ -1,10 +1,10 @@
 { stdenv, fetchurl, cmake, kdelibs, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "kdiff3-0.9.96";
+  name = "kdiff3-0.9.97";
   src = fetchurl {
     url = "mirror://sourceforge/kdiff3/${name}.tar.gz";
-    sha256 = "14fnflp5ansi7b59h8vn81mb8pdqpbanz0qzyw9sxk2pgp24xrqh";
+    sha256 = "0ajsnzfr0aqzdiv5wqssxsgfv87v4g5c2zl16264v0cw8jxiddz3";
   };
 
   buildInputs = [ kdelibs ];

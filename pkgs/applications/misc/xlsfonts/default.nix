@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "xlsfonts-1.0.2";
 
   src = fetchurl {
-    url = "http://www.x.org/releases/individual/app/${name}.tar.bz2";
+    url = "mirror://xorg/individual/app/${name}.tar.bz2";
     sha256 = "070iym754g3mf9x6xczl4gdnpvlk6rdyl1ndwhpjl21vg2dm2vnc";
   };
 

@@ -11,16 +11,16 @@ let
     "${gnupg}/bin/gpg2";
 in
 stdenv.mkDerivation rec {
-  name = "gpgme-1.3.1";
+  name = "gpgme-1.4.1";
   
   src = fetchurl {
     url = "ftp://ftp.gnupg.org/gcrypt/gpgme/${name}.tar.bz2";
-    sha256 = "1m7l7nicn6gd952cgspv9xr8whqivbg33nbg8kbpj3dffnl2gvqm";
+    sha1 = "d6110763e7459214fd72705e87ebc682e3b5815e";
   };
   
   propagatedBuildInputs = [ libgpgerror glib libassuan pth ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gnupg ];
 
   configureFlags = "--with-gpg=${gpgPath}";
 }

@@ -66,8 +66,8 @@ versionedDerivation "simple-build-tool" version {
   "xsbt-0.12.3" = let version = "0.12.3"; in {
     name = "xsbt-${version}";
 
-    # scala needs much more PermGen space
-    javaArgs = "-Xmx1024M";
+    # Recommended java options from sbt Getting started guide
+    javaArgs = "-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=384M";
     # from https://github.com/harrah/xsbt/wiki/Getting-Started-Setup
     src = fetchurl {
       url = http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.12.3/sbt-launch.jar;

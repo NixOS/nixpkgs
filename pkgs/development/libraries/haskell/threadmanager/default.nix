@@ -2,11 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "threadmanager";
-  version = "0.1.5";
-  sha256 = "0jdr0rrpx7frnh0a2vibg0170w48wvn6gv8imkiqiz6y6481ny5p";
+  version = "0.1.7";
+  sha256 = "17s26hlailbr8c9d3dv1pwiy81m3nzr3sw0v9y716rmhldf7k09f";
   meta = {
-    homepage = "http://github.com/bsl/threadmanager";
-    description = "Simple thread management";
+    description = "(deprecated in favor of 'threads') Simple thread management";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];

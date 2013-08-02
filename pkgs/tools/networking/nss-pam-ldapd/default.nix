@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "nss-pam-ldapd-${version}";
-  version = "0.8.11";
+  version = "0.8.13";
   
   src = fetchurl {
     url = "http://arthurdejong.org/nss-pam-ldapd/${name}.tar.gz";
-    sha256 = "9a841f6a46bf9f87213dc806c0f6507ac5016a2ee550d42c3ed9fb280c1e38e6";
+    sha256 = "08jxxskzv983grc28zksk9fd8q5qad64rma9vcjsq0l4r6cax4mp";
   };
   
   buildInputs = [ makeWrapper pkgconfig python openldap pam ];

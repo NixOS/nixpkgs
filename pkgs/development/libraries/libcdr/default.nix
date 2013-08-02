@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libwpg, libwpd, lcms2, pkgconfig }:
+{ stdenv, fetchurl, libwpg, libwpd, lcms, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "libcdr-0.0.8";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "117a8gp29xs3kin6kaisb3frsx8dwrsjgs4wq4y5hjqprzy6lwz0";
   };
 
-  buildInputs = [ libwpg libwpd lcms2 ];
+  buildInputs = [ libwpg libwpd lcms ];
 
   nativeBuildInputs = [ pkgconfig ];
 

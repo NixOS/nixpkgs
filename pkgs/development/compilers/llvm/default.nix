@@ -17,20 +17,22 @@ stdenv.mkDerivation {
   # unless something needs it just an input is fine.
   buildInputs = [ perl groff cmake python libffi ]; # ToDo: polly, libc++; enable cxx11?
 
-  # created binaries need to be run before installation... I coudn't find a better way
-  preBuild = ''export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:"`pwd`/lib'';
+  # hacky fix: created binaries need to be run before installation
+  preBuild = let LD = if stdenv.isDarwin then "DYLD" else "LD";
+    in "export ${LD}_LIBRARY_PATH='$$${LD}_LIBRARY_PATH:'`pwd`/lib";
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DBUILD_SHARED_LIBS=ON" "-DLLVM_ENABLE_FFI=ON" ];
+  cmakeFlags = with stdenv; [ "-DCMAKE_BUILD_TYPE=Release" "-DLLVM_ENABLE_FFI=ON" ]
+    ++ lib.optional (!isDarwin) [ "-DBUILD_SHARED_LIBS=ON" ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
-  meta = {
-    homepage = http://llvm.org/;
+  meta = with stdenv.lib; {
     description = "Collection of modular and reusable compiler and toolchain technologies";
-    license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [viric shlevy raskin];
-    platforms = with stdenv.lib.platforms; all;
+    homepage    = http://llvm.org/;
+    license     = licenses.bsd3;
+    maintainers = with maintainers; [ lovek323 raskin shlevy viric ];
+    platforms   = platforms.all;
   };
 }

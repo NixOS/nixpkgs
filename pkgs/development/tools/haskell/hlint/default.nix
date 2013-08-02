@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hlint";
-  version = "1.8.46";
-  sha256 = "0mq25xv0lmxfp9099pj7akmmw5pi0adq2w286wb4lpli82v8nfzf";
+  version = "1.8.49";
+  sha256 = "03i5nw2v2s4c5860vpqnvil2wrxblavjkbnrgi59jkmcbhl2h70f";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

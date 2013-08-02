@@ -9,8 +9,9 @@ rec {
 
   git = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
-      asciidoc texinfo xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
-      cpio tcl tk makeWrapper subversionClient gzip;
+      asciidoc xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt cpio tcl
+      tk makeWrapper subversionClient gzip;
+    texinfo = texinfo5;
     svnSupport = false;		# for git-svn support
     guiSupport = false;		# requires tcl/tk
     sendEmailSupport = false;	# requires plenty of perl libraries
@@ -87,10 +88,6 @@ rec {
   };
 
   svn2git_kde = callPackage ./svn2git-kde { };
-
-  gitSubtree = import ./git-subtree {
-    inherit stdenv fetchurl git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt;
-  };
 
   darcsToGit = callPackage ./darcs-to-git { };
 }

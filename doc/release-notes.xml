@@ -237,12 +237,12 @@ fetchurl {
 
   <function>fetchurl</function> will first try to download this file
   from <link
-  xlink:href="http://nixos.org/tarballs/sha1/eb72f55e4a8bf08e8c6ef227c0ade3d068ba1082"/>.
+  xlink:href="http://tarballs.nixos.org/sha1/eb72f55e4a8bf08e8c6ef227c0ade3d068ba1082"/>.
   If that file doesn’t exist, it will try the original URL.  In
   general, the “content-addressed” location is
   <replaceable>mirror</replaceable><literal>/</literal><replaceable>hash-type</replaceable><literal>/</literal><replaceable>hash</replaceable>.
   There is currently only one content-addressable mirror (<link
-  xlink:href="http://nixos.org/tarballs"/>), but more can be
+  xlink:href="http://tarballs.nixos.org"/>), but more can be
   specified in the <varname>hashedMirrors</varname> attribute in
   <filename>pkgs/build-support/fetchurl/mirrors.nix</filename>, or by
   setting the <envar>NIX_HASHED_MIRRORS</envar> environment variable

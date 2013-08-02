@@ -13,7 +13,7 @@ let
     baseName="philter";
     version="1.1";
     name="${baseName}-${version}";
-    url="http://prdownloads.sourceforge.net/${baseName}/${name}.tar.gz";
+    url="mirror://sourceforge/${baseName}/${name}.tar.gz";
     hash="177pqfflhdn2mw9lc1wv9ik32ji69rjqr6dw83hfndwlsva5151l";
   };
 in

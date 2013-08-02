@@ -2,7 +2,7 @@ rec {
 
   # Content-addressable Nix mirrors.
   hashedMirrors = [
-    http://nixos.org/tarballs
+    http://tarballs.nixos.org
   ];
 
   # Mirrors for mirror://site/filename URIs, where "site" is
@@ -159,6 +159,7 @@ rec {
 
   # Debian.
   debian = [
+    ftp://ftp.au.debian.org/debian/
     ftp://ftp.de.debian.org/debian/
     ftp://ftp.es.debian.org/debian/
     ftp://ftp.fr.debian.org/debian/

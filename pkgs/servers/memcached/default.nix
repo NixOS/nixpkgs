@@ -15,6 +15,7 @@ stdenv.mkDerivation {
     homepage = http://memcached.org/;
     license = "bsd";
     maintainers = [ stdenv.lib.maintainers.coconnor ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 

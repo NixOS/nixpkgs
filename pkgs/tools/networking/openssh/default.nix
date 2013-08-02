@@ -6,7 +6,7 @@
 let
 
   hpnSrc = fetchurl {
-    url = http://nixos.org/tarballs/openssh-6.1p1-hpn13v14.diff.gz;
+    url = http://tarballs.nixos.org/openssh-6.1p1-hpn13v14.diff.gz;
     sha256 = "14das6lim6fxxnx887ssw76ywsbvx3s4q3n43afgh5rgvs4xmnnq";
   };
 

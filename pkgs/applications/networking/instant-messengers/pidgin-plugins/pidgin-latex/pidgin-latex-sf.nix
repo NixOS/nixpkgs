@@ -1,7 +1,7 @@
 args : with args; 
 rec {
   src = fetchurl {
-    url = http://mesh.dl.sourceforge.net/sourceforge/pidgin-latex/pidgin-latex-1.2.1.tar.bz2;
+    url = mirror://sourceforge/pidgin-latex/pidgin-latex-1.2.1.tar.bz2;
     sha256 = "19h76fwsx5y30l5wda2930k10r385aipngfljz5bdi7b9y52lii7";
   };
 

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "numtype-tf";
-  version = "0.1";
-  sha256 = "1hvnqgjg7yifxdsji9v0wqwbp4syhdc97pa3nrn4p96g7kmvw25v";
+  version = "0.1.1";
+  sha256 = "0aj24jlfcv4rsa0zfglsfgq9f0kxln32drypp66652ycffz3ip9a";
   meta = {
     homepage = "http://dimensional.googlecode.com/";
     description = "Type-level (low cardinality) integers, implemented using type families";

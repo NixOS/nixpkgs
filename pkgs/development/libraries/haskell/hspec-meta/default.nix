@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hspec-meta";
-  version = "1.5.4";
-  sha256 = "07m7wxannk9rr8q2bdxhkjjlvwlzp7lq2c41y6cgjkjcm2x9qcc8";
+  version = "1.6.1";
+  sha256 = "089j6dpl856q3m1wyc7n822k7vppzb7pxdcwvzbhck2cadad3zn5";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -14,9 +14,9 @@ cabal.mkDerivation (self: {
   ];
   doCheck = false;
   meta = {
-    homepage = "http://hspec.github.com/";
+    homepage = "http://hspec.github.io/";
     description = "A version of Hspec which is used to test Hspec itself";
-    license = self.stdenv.lib.licenses.bsd3;
+    license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
   };
 })

@@ -28,6 +28,13 @@ rec {
     # extraConfigs (list of possible configurations)
   };
 
+  mkEnableOption = name: mkOption {
+    default = false;
+    example = true;
+    description = "Whether to enable ${name}";
+    type = lib.types.bool;
+  };
+
   mapSubOptions = f: opt:
     if opt ? options then
       opt // {

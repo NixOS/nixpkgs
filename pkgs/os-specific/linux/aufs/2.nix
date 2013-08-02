@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = 
   if (builtins.lessThan (builtins.compareVersions kernelDev.version "2.6.35") 0) then
     fetchurl {
-      url = "http://nixos.org/tarballs/aufs2-standalone-git-${version}.tar.bz2";
+      url = "http://tarballs.nixos.org/aufs2-standalone-git-${version}.tar.bz2";
       sha256 = "1g4mw4qx2xzpygdwjiw36bkhfz1hi7wxx7w79n2h0lr5grzzdnd6";
     }
   else

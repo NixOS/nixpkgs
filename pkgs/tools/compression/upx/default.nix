@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "upx-3.07";
   src = fetchurl {
-    url = http://upx.sourceforge.net/download/upx-3.07-src.tar.bz2;
+    url = mirror://sourceforge/upx/upx-3.07-src.tar.bz2;
     sha256 = "07pcgjn7x0a734mvhgqwz24qkm1rzqrkcp67pmagzz6i765cp7bs";
   };
 

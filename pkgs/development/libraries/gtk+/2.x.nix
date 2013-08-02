@@ -17,7 +17,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo";
+  NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo"
+    + stdenv.lib.optionalString (libintlOrEmpty != []) " -lintl";
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin xlibs.libXi;
 
   nativeBuildInputs = [ perl pkgconfig gettext ];
 
@@ -34,8 +37,12 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A multi-platform toolkit for creating graphical user interfaces";
+    homepage    = http://www.gtk.org/;
+    license     = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ lovek323 raskin ];
+    platforms   = platforms.all;
 
     longDescription = ''
       GTK+ is a highly usable, feature rich toolkit for creating
@@ -47,12 +54,5 @@ stdenv.mkDerivation rec {
       proprietary software with GTK+ without any license fees or
       royalties.
     '';
-
-    homepage = http://www.gtk.org/;
-
-    license = "LGPLv2+";
-
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.all;
   };
 }

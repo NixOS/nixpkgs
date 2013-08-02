@@ -10,7 +10,7 @@ let
 in
 rec {
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/opende/ode-${version}.tar.bz2";
+    url = "mirror://sourceforge/opende/ode-${version}.tar.bz2";
     sha256 = "1883gbsnn7zldrpwfdh6kwj20g627n5bspz3yb2z6lrxdal88y47";
   };
 

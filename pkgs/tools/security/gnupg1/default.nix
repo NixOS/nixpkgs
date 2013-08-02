@@ -8,7 +8,7 @@
 let
 
   idea = fetchurl {
-    url = http://nixos.org/tarballs/idea.c.gz;
+    url = http://tarballs.nixos.org/idea.c.gz;
     md5 = "9dc3bc086824a8c7a331f35e09a3e57f";
   };
 

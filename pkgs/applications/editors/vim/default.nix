@@ -41,8 +41,10 @@ stdenv.mkDerivation rec {
     sed -i -e 's/as_fn_error.*int32.*/:/' src/auto/configure
   '';
   
-  meta = {
+  meta = with stdenv.lib; {
     description = "The most popular clone of the VI editor";
-    homepage = http://www.vim.org;
+    homepage    = http://www.vim.org;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
   };
 }

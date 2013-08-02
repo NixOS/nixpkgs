@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libmatchbox, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  name = "matchbox-1.2.2";
+  name = "matchbox-1.2";
 
   buildInputs = [ libmatchbox pkgconfig ];
 

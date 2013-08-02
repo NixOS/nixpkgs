@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network-conduit-tls";
-  version = "1.0.0.2";
-  sha256 = "1vzhalz6hxal73rxm6f2l9m7j34mldamz16wrb6ay67wg6giq55z";
+  version = "1.0.0.3";
+  sha256 = "0gaws4spd50dmqjsxdxvjk5n5l0ib4q0brwnxrk725d3b3hanpz1";
   buildDepends = [
     aeson certificate conduit cryptoApi cryptoRandomApi network
     networkConduit pem systemFileio systemFilepath tls tlsExtra

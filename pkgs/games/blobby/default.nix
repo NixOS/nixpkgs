@@ -1,6 +1,6 @@
 {stdenv, fetchurl, SDL, SDL_image, mesa, cmake, physfs, boost, zip, zlib}:
 stdenv.mkDerivation rec {
-  version = "2.0-rc3";
+  version = "1.0-rc3";
   name = "blobby-volley-${version}";
 
   src = fetchurl {

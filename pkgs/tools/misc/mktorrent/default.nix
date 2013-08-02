@@ -1,7 +1,7 @@
 {stdenv, fetchurl, openssl}:
 
 stdenv.mkDerivation {
-  name = "mktorrent-1.0.0";
+  name = "mktorrent-1.0";
 
   src = fetchurl {
     url = mirror://sourceforge/mktorrent/mktorrent-1.0.tar.gz;

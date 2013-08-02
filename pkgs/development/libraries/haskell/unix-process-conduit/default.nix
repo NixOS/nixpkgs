@@ -1,10 +1,10 @@
-{ cabal, conduit, hspec, transformers }:
+{ cabal, conduit, filepath, hspec, stm, time, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "unix-process-conduit";
-  version = "0.2.0.2";
-  sha256 = "1n9ja7dlxhsxyglfzk397xdgvdny766y1isrb5d065srxprsj2g6";
-  buildDepends = [ conduit transformers ];
+  version = "0.2.1.2";
+  sha256 = "1gg1ynqd8hka5ynpmpsj8qw0lqsyg7l1m1py05iw3bd3cldwflx1";
+  buildDepends = [ conduit filepath stm time transformers ];
   testDepends = [ conduit hspec transformers ];
   meta = {
     homepage = "https://github.com/snoyberg/conduit";
