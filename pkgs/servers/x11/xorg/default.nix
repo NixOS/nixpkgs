@@ -580,11 +580,11 @@ let
   })) // {inherit windowswmproto libX11 libXext xextproto ;};
 
   libX11 = (stdenv.mkDerivation ((if overrides ? libX11 then overrides.libX11 else x: x) {
-    name = "libX11-1.6.0";
+    name = "libX11-1.6.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libX11-1.6.0.tar.bz2;
-      sha256 = "1yhrf36is2f2h28x8wjd87wmdhslmzg06jg1gwq55hiy6h9184sk";
+      url = mirror://xorg/individual/lib/libX11-1.6.1.tar.bz2;
+      sha256 = "14hqf180dxax3xf65bq95psd4bx8az1q1l6lxsjzbd2qdg0lz98h";
     };
     buildInputs = [pkgconfig inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ];
   })) // {inherit inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ;};
@@ -680,11 +680,11 @@ let
   })) // {inherit fixesproto libX11 xextproto xproto ;};
 
   libXfont = (stdenv.mkDerivation ((if overrides ? libXfont then overrides.libXfont else x: x) {
-    name = "libXfont-1.4.5";
+    name = "libXfont-1.4.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libXfont-1.4.5.tar.bz2;
-      sha256 = "0w3irg00k6b6mziddnacln9q2rkf5848b04nvjqwv5bb1fw6zydv";
+      url = mirror://xorg/individual/lib/libXfont-1.4.6.tar.bz2;
+      sha256 = "17vy2p8myxx8644yd05qsl2qvv9m3mhdbniw87mcw5ywai2zxjyh";
     };
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
   })) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
@@ -700,11 +700,11 @@ let
   })) // {inherit fontconfig freetype libX11 xproto libXrender ;};
 
   libXi = (stdenv.mkDerivation ((if overrides ? libXi then overrides.libXi else x: x) {
-    name = "libXi-1.7.1";
+    name = "libXi-1.7.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXi-1.7.1.tar.bz2;
-      sha256 = "1ib6026bh4bcc2q0y04klqsvjl9pwabxnr8ybkh52g65d5mxnap9";
+      url = mirror://xorg/individual/lib/libXi-1.7.2.tar.bz2;
+      sha256 = "03mj9i6h0n8icjkx5a16wh1gyyhfiayj02ydc6sy4i9nqqfph96z";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto libXfixes xproto ];
   })) // {inherit inputproto libX11 libXext xextproto libXfixes xproto ;};
@@ -870,11 +870,11 @@ let
   })) // {inherit xproto zlib ;};
 
   libpciaccess = (stdenv.mkDerivation ((if overrides ? libpciaccess then overrides.libpciaccess else x: x) {
-    name = "libpciaccess-0.13.1";
+    name = "libpciaccess-0.13.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libpciaccess-0.13.1.tar.bz2;
-      sha256 = "11509lkgd5j4g5wy0g13z4sf31h50hqx3jfwb2i4q6k98pv6iar7";
+      url = mirror://xorg/individual/lib/libpciaccess-0.13.2.tar.bz2;
+      sha256 = "06fy43n3c450h7xqpn3094bnfn7ca1mrq3i856y8kyqa0lmqraxb";
     };
     buildInputs = [pkgconfig zlib ];
   })) // {inherit zlib ;};
