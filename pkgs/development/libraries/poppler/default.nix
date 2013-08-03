@@ -4,8 +4,8 @@
 }:
 
 let
-  version = "0.22.4"; # even major numbers are stable
-  sha256 = "0fz1vk0rbxvnv7ssj8l910k1rx0gjhzl5wr7hkdf4r9jwqs8yhsg";
+  version = "0.22.5"; # even major numbers are stable
+  sha256 = "0678frlr39xvrbva490hk0mqyfnx3bk7i5pma8j6hjmzy68a6hpp";
 
   qtcairo_patches =
     let qtcairo = fetchgit { # the version for poppler-0.22
