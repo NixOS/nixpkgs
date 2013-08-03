@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pango glibmm cairomm libpng cairo ];
 
-  NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo";
-
   meta = with stdenv.lib; {
     description = "C++ interface to the Pango text rendering library";
     homepage    = http://www.pango.org/;

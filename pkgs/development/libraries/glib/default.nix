@@ -12,15 +12,17 @@
 #       $out/bin/gtester-report' to postInstall if this is solved
 
 let
-  # some packages don't get "Cflags" from pkgconfig correctly
-  # and then fail to build when directly including like <glib/...>
+  # Some packages don't get "Cflags" from pkgconfig correctly
+  # and then fail to build when directly including like <glib/...>.
+  # This is intended to be run in postInstall of any package
+  # which has $out/include/ containing just some disjunct directories.
   flattenInclude = ''
-    for dir in $out/include/*; do
-      cp -r $dir/* "$out/include/"
+    for dir in "$out"/include/*; do
+      cp -r "$dir"/* "$out/include/"
       rm -r "$dir"
       ln -s . "$dir"
     done
-    ln -sr -t "$out/include/" $out/lib/*/include/* 2>/dev/null || true
+    ln -sr -t "$out/include/" "$out"/lib/*/include/* 2>/dev/null || true
   '';
 in
 with { inherit (stdenv.lib) optionalString; };

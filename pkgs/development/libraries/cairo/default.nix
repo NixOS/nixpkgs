@@ -34,8 +34,6 @@ stdenv.mkDerivation rec {
     ++ optional pdfSupport "--enable-pdf"
     ;
 
-  NIX_CFLAGS_COMPILE = "-I${pixman}/include/pixman-1";
-
   preConfigure =
   # On FreeBSD, `-ldl' doesn't exist.
     (stdenv.lib.optionalString stdenv.isFreeBSD
