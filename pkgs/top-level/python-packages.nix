@@ -1148,6 +1148,28 @@ pythonPackages = modules // rec {
     propagatedBuildInputs = [ sphinx ];
   };
 
+
+  googlecl = buildPythonPackage rec {
+    version = "0.9.14";
+    name    = "googlecl-${version}";
+
+    src = fetchurl {
+      url    = "https://googlecl.googlecode.com/files/${name}.tar.gz";
+      sha256 = "0nnf7xkr780wivr5xnchfcrahlzy9bi2dxcs1w1bh1014jql0iha";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Brings Google services to the command line.";
+      homepage    = "https://code.google.com/p/googlecl/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+
+    propagatedBuildInputs = [ gdata ];
+  };
+
+
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.1";
 
