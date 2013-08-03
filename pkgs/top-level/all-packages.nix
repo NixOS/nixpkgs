@@ -450,6 +450,8 @@ let
 
   otool = callPackage ../os-specific/darwin/otool { };
 
+  pass = callPackage ../tools/security/pass { };
+
   setfile = callPackage ../os-specific/darwin/setfile { };
 
   install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
