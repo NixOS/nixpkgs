@@ -2,11 +2,11 @@
 , jasper, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
-  name = "gdk-pixbuf-2.28.1";
+  name = "gdk-pixbuf-2.28.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/2.28/${name}.tar.xz";
-    sha256 = "1fy2a05xhfg7gy4l4aajsbmgj62zxhikdxqh6bicihxmzm1vg85y";
+    sha256 = "05s6ksvy1yan6h6zny9n3bmvygcnzma6ljl6i0z9cci2xg116c8q";
   };
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.

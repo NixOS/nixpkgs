@@ -11,7 +11,7 @@ rec {
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
-  at_spi2_atk = lib.lowPrio (callPackage ./core/at-spi2-atk { });
+  at_spi2_atk = callPackage ./core/at-spi2-atk { };
 
   at_spi2_core = callPackage ./core/at-spi2-core { };
 
