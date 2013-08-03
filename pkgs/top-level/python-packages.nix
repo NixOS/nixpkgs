@@ -3274,7 +3274,7 @@ pythonPackages = modules // rec {
       md5 = "a2c55dc04904bd08d984533703177084";
     };
 
-    buildInputs = [ pycrypto ];
+    propagatedBuildInputs = [ pycrypto ];
 
     meta = {
       homepage = "http://www.lag.net/paramiko/";
