@@ -3319,7 +3319,9 @@ let
     cross = assert crossSystem != null; crossSystem;
   }));
 
-  bison = callPackage ../development/tools/parsing/bison { };
+  bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
+  bison3 = callPackage ../development/tools/parsing/bison/3.x.nix { };
+  bison = bison2;
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     inherit (pythonPackages) twisted jinja2 sqlalchemy sqlalchemy_migrate;
