@@ -3267,11 +3267,11 @@ pythonPackages = modules // rec {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.10.1";
+    name = "paramiko-1.11.0";
 
     src = fetchurl {
-      url = https://pypi.python.org/packages/source/p/paramiko/paramiko-1.10.1.tar.gz;
-      sha256 = "1g5sbzfxdhps61z3vm30wa87m5xq1j9ar3qvgr5bz63l7nxhvb2z";
+      url = "http://pypi.python.org/packages/source/p/paramiko/${name}.tar.gz";
+      md5 = "a2c55dc04904bd08d984533703177084";
     };
 
     buildInputs = [ pycrypto ];
