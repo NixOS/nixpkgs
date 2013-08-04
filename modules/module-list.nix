@@ -154,6 +154,7 @@
   ./services/networking/gvpe.nix
   ./services/networking/hostapd.nix
   ./services/networking/ifplugd.nix
+  ./services/networking/iodined.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/minidlna.nix
   ./services/networking/nat.nix
