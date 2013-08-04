@@ -136,6 +136,7 @@ in
     scanner = 59;
     nginx = 60;
     systemd-journal = 62;
+    supybot = 63;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 
