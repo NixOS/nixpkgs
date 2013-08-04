@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     "--disable-precomp-headers"
     (if unicode then "--enable-unicode" else "")
     "--enable-mediactrl"
+    "--enable-graphics_ctx"
   ] ++ optional withMesa "--with-opengl";
 
   # These variables are used by configure to find some dependencies.
