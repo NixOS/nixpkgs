@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  patchPhase = ''sed -i "s,/sbin/ifconfig,${nettools}/sbin/ifconfig,; s,/sbin/route,${nettools}/sbin/route," src/tun.c'';
+  patchPhase = ''sed -i "s,/sbin/ifconfig,${nettools}/bin/ifconfig,; s,/sbin/route,${nettools}/bin/route," src/tun.c'';
 
   installFlags = "prefix=\${out}";
 
