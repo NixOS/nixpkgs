@@ -1390,7 +1390,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   misfortune = callPackage ../development/libraries/haskell/misfortune {};
 
-  MissingH = callPackage ../development/libraries/haskell/MissingH {};
+  MissingH = callPackage ../development/libraries/haskell/MissingH {
+    testpack = null;
+  };
 
   mmap = callPackage ../development/libraries/haskell/mmap {};
 
