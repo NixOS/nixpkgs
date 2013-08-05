@@ -1,5 +1,9 @@
 {stdenv, xcodewrapper}:
-{name, appName ? null, app, device ? "iPhone", baseDir ? ""}:
+{ name, appName ? null, app
+, device ? "iPhone", baseDir ? ""
+, sdkRoot ? "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs"
+, sdkVersion ? "6.1"
+}:
 
 let
   _appName = if appName == null then name else appName;
@@ -12,7 +16,7 @@ stdenv.mkDerivation {
     #! ${stdenv.shell} -e
 
     cd "${app}/${baseDir}/${_appName}.app"
-    "$(readlink "${xcodewrapper}/bin/iPhone Simulator")" -SimulateApplication './${_appName}' -SimulateDevice '${device}'
+    "$(readlink "${xcodewrapper}/bin/iPhone Simulator")" -SimulateApplication './${_appName}' -SimulateDevice '${device}' -currentSDKRoot '${sdkRoot}/iPhoneSimulator${sdkVersion}.sdk'
     EOF
     chmod +x $out/bin/run-test-simulator
   '';
