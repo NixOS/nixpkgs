@@ -36,7 +36,7 @@ rec {
 
   androidsdk = import ./androidsdk.nix {
     inherit (pkgs) stdenv fetchurl unzip makeWrapper;
-    inherit (pkgs) freetype fontconfig gtk atk mesa;
+    inherit (pkgs) freetype fontconfig gtk atk mesa file alsaLib;
     inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp;
     
     inherit platformTools buildTools support platforms sysimages addons;
@@ -49,6 +49,7 @@ rec {
     libXdmcp_32bit = pkgs_i686.xorg.libXdmcp;
     libXext_32bit = pkgs_i686.xorg.libXext;
     mesa_32bit = pkgs_i686.mesa;
+    alsaLib_32bit = pkgs_i686.alsaLib;
   };
   
   androidsdk_4_1 = androidsdk {
