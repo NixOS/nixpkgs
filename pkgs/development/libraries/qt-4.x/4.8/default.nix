@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll
 , libXrender, libXinerama, libXcursor, libXmu , libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig
-, zlib, libjpeg, libpng, libmng, which, mesa, openssl, dbus, cups, pkgconfig
+, zlib, libjpeg, libpng, libmng, which, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu
 , mysql, postgresql, sqlite
 , perl, coreutils, libXi
@@ -103,7 +103,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
       libSM zlib libpng openssl dbus.libs freetype fontconfig glib ]
-    ++ optional (stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms) mesa
+        # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
+    ++ optional (stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms) mesa_glu
     ++ optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
     ++ optionals (buildWebkit || buildMultimedia) [ gstreamer gst_plugins_base ];
 
