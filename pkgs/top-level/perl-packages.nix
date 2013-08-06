@@ -7400,6 +7400,14 @@ rec {
     buildInputs = [ pkgs.icu ];
   };
 
+  UnixGetrusage = buildPerlPackage {
+    name = "Unix-Getrusage-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TA/TAFFY/Unix-Getrusage-0.03.tar.gz;
+      sha256 = "76cde1cee2453260b85abbddc27cdc9875f01d2457e176e03dcabf05fb444d12";
+    };
+  };
+
   URI = buildPerlPackage {
     name = "URI-1.60";
     src = fetchurl {
