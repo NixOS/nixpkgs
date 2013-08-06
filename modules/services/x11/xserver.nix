@@ -434,6 +434,7 @@ in
         xorg.xlsclients
         xorg.xset
         xorg.xsetroot
+        xorg.xinput
         xorg.xprop
         pkgs.xterm
         pkgs.xdg_utils
