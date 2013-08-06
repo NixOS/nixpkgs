@@ -18,10 +18,20 @@ uses the NixOS and Nixpkgs sources provided by the
 <literal>nixos-unstable</literal> channel (kept in
 <filename>/nix/var/nix/profiles/per-user/root/channels/nixos</filename>).
 To modify NixOS, however, you should check out the latest sources from
-Subversion.  This is done using the following command:
+Git.  This is done using the following command:
 
 <screen>
 $ nixos-checkout <replaceable>/my/sources</replaceable>
+</screen>
+
+or
+
+<screen>
+$ mkdir -p <replaceable>/my/sources</replaceable>
+$ cd <replaceable>/my/sources</replaceable>
+$ nix-env -i git
+$ git clone git://github.com/NixOS/nixos.git
+$ git clone git://github.com/NixOS/nixpkgs.git
 </screen>
 
 This will check out the latest NixOS sources to
