@@ -359,9 +359,27 @@ $ mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso</screen>
 
 <section>
 
+<title>Testing/building the NixOS Manual</title>
+
+<para>A quick way to see if your documentation improvements
+or option descriptions look good:
+
+<screen>
+$ nix-build -A config.system.build.manual</screen>
+
+</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section>
+
 <title>Testing the installer</title>
 
-<para>Building, burning, and booting from an installation CD is rather
+<para>Building, burning, and 
+booting from an installation CD is rather
 tedious, so here is a quick way to see if the installer works
 properly:
 
@@ -376,6 +394,7 @@ $ ./result/bin/nixos-install</screen>
 </para>
 
 </section>
+
 
 
 <!--===============================================================-->
