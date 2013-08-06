@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ clutter gtk3 ];
   nativeBuildInputs = [ pkgconfig ];
 
+  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
+
   postBuild = "rm -rf $out/share/gtk-doc";
 
   meta = {

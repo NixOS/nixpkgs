@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ GConf gnome_keyring hicolor_icon_theme ];
 
+  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
+
   makeFlags = [
     ''CFLAGS=-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile_broadband_provider_info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''
   ];
