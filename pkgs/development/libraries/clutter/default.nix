@@ -15,6 +15,8 @@ stdenv.mkDerivation {
       atk json_glib
     ];
 
+  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
+
   meta = {
     description = "Clutter, a library for creating fast, dynamic graphical user interfaces";
 
