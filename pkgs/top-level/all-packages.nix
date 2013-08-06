@@ -8794,6 +8794,8 @@ let
 
   xpra = callPackage ../tools/X11/xpra { };
 
+  xrestop = callPackage ../tools/X11/xrestop { };
+
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
     inherit (gnome) libglade;
   };
