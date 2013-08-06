@@ -127,7 +127,7 @@ in
       };
 
       daemonNiceLevel = mkOption {
-        default = 10;
+        default = 0;
         description = "
           Nix daemon process priority. This priority propagates to build processes.
           0 is the default Unix process priority, 20 is the lowest.
@@ -135,7 +135,7 @@ in
       };
 
       daemonIONiceLevel = mkOption {
-        default = 7;
+        default = 0;
         description = "
           Nix daemon process I/O priority. This priority propagates to build processes.
           0 is the default Unix process I/O priority, 7 is the lowest.
