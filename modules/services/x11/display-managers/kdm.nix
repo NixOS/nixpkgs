@@ -132,7 +132,7 @@ in
           ''
             mkdir -m 0755 -p /var/lib/kdm
             chown kdm /var/lib/kdm
-            ${(optionalString (config.system.boot.loader.id == "grub") "PATH=${config.system.build.grub}/sbin:$PATH ") +
+            ${(optionalString (config.system.boot.loader.id == "grub" && config.system.build.grub != null) "PATH=${config.system.build.grub}/sbin:$PATH ") +
               "KDEDIRS=/run/current-system/sw exec ${kdebase_workspace}/bin/kdm -config ${kdmrc} -nodaemon"}
           '';
         logsXsession = true;
