@@ -15,7 +15,12 @@ let
     src = pkgs.writeScript "nixos-checkout"
       ''
         #! ${pkgs.stdenv.shell} -e
-        
+
+        if [ -z "$1" ] || [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+          echo "Usage: `basename $0` PREFIX. See NixOS Manual for more info."
+          exit 0
+        fi        
+
         prefix="$1"
         if [ -z "$prefix" ]; then prefix=/etc/nixos; fi
         mkdir -p "$prefix"
