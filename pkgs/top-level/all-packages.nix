@@ -3035,6 +3035,10 @@ let
   erlangR16B01 = callPackage ../development/interpreters/erlang/R16B01.nix { };
   erlang = erlangR16B01;
 
+  rebar = callPackage ../development/tools/build-managers/rebar { };
+
+  elixir = callPackage ../development/interpreters/elixir { };
+
   groovy = callPackage ../development/interpreters/groovy { };
 
   guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
