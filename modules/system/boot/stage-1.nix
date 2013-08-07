@@ -200,7 +200,8 @@ let
       cp -v ${pkgs.attr}/lib/libattr.so.* $out/lib
 
       # Copy modprobe.
-      cp -v ${pkgs.module_init_tools}/sbin/modprobe $out/bin/modprobe
+      cp -v ${pkgs.kmod}/bin/kmod $out/bin/
+      ln -s kmod $out/bin/modprobe
 
       # Maybe copy splashutils.
       ${optionalString enableSplashScreen ''
