@@ -6,9 +6,9 @@
     sha256 = "16l0gprinxbhdsx67yaq6qwy45018v6vww0hnyji4wdzd5drkf9r";
   };
   beta = {
-    version = "29.0.1547.32";
-    url = "http://commondatastorage.googleapis.com/chromium-browser-official/chromium-29.0.1547.32.tar.xz";
-    sha256 = "14p5s1xn15mdrlf87hv4y9kczw5r8s461a56kkdzb5xzyq25ph8w";
+    version = "29.0.1547.41";
+    url = "http://commondatastorage.googleapis.com/chromium-browser-official/chromium-29.0.1547.41.tar.xz";
+    sha256 = "0xb2y7n3qyakg08606zdaw6wf60ypx9p61g56sqhxamgd5byfsg1";
   };
   stable = {
     version = "28.0.1500.95";
