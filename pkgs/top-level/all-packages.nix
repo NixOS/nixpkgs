@@ -348,10 +348,9 @@ let
 
   makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
 
-  makeModulesClosure = {kernel, rootModules, allowMissing ? false}:
+  makeModulesClosure = { kernel, rootModules, allowMissing ? false }:
     import ../build-support/kernel/modules-closure.nix {
-      inherit stdenv module_init_tools kernel nukeReferences
-        rootModules allowMissing;
+      inherit stdenv kmod kernel nukeReferences rootModules allowMissing;
     };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
