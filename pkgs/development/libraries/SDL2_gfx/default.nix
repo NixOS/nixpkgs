@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
     sed -i -e 's,"SDL.h",<SDL2/SDL.h>,' \
       $out/include/SDL2/*.h
     
+    ln -s $out/include/SDL2/SDL2_framerate.h $out/include/SDL2/SDL_framerate.h;
+    ln -s $out/include/SDL2/SDL2_gfxPrimitives.h $out/include/SDL2/SDL_gfxPrimitives.h;
+    ln -s $out/include/SDL2/SDL2_rotozoom.h $out/include/SDL2/SDL_rotozoom.h;
     ln -s $out/include/SDL2/*.h $out/include/;
   '';
 
