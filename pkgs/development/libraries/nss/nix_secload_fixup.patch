@@ -1,18 +1,7 @@
-diff --git a/mozilla/security/coreconf/config.mk b/mozilla/security/coreconf/config.mk
-index 72557c6..bdcbf88 100644
---- a/mozilla/security/coreconf/config.mk
-+++ b/mozilla/security/coreconf/config.mk
-@@ -207,3 +207,5 @@ endif
- DEFINES += -DUSE_UTIL_DIRECTLY
- USE_UTIL_DIRECTLY = 1
- 
-+# nix specific stuff:
-+DEFINES += -DNIX_NSS_LIBDIR=\"$(out)/lib/\"
-diff --git a/mozilla/security/nss/cmd/shlibsign/shlibsign.c b/mozilla/security/nss/cmd/shlibsign/shlibsign.c
-index 5ce626e..e1e8039 100644
---- a/mozilla/security/nss/cmd/shlibsign/shlibsign.c
-+++ b/mozilla/security/nss/cmd/shlibsign/shlibsign.c
-@@ -770,7 +770,7 @@ int main(int argc, char **argv)
+diff -ru -x '*~' nss-3.15.1-orig/nss/cmd/shlibsign/shlibsign.c nss-3.15.1/nss/cmd/shlibsign/shlibsign.c
+--- nss-3.15.1-orig/nss/cmd/shlibsign/shlibsign.c	2013-08-07 16:03:40.013256377 +0200
++++ nss-3.15.1/nss/cmd/shlibsign/shlibsign.c	2013-08-07 16:04:21.128410153 +0200
+@@ -853,7 +853,7 @@
      assert(libname != NULL);
      lib = PR_LoadLibrary(libname);
      if (!lib)
@@ -21,11 +10,20 @@ index 5ce626e..e1e8039 100644
      assert(lib != NULL);
      PR_FreeLibraryName(libname);
  
-diff --git a/mozilla/security/nss/lib/util/secload.c b/mozilla/security/nss/lib/util/secload.c
-index 7d6fc22..0b7759b 100644
---- a/mozilla/security/nss/lib/util/secload.c
-+++ b/mozilla/security/nss/lib/util/secload.c
-@@ -105,9 +105,9 @@ loader_LoadLibInReferenceDir(const char *referencePath, const char *name)
+diff -ru -x '*~' nss-3.15.1-orig/nss/coreconf/config.mk nss-3.15.1/nss/coreconf/config.mk
+--- nss-3.15.1-orig/nss/coreconf/config.mk	2013-06-27 19:58:08.000000000 +0200
++++ nss-3.15.1/nss/coreconf/config.mk	2013-08-07 16:11:27.364608802 +0200
+@@ -181,3 +181,6 @@
+ 
+ # Build with NO_NSPR_10_SUPPORT to avoid using obsolete NSPR features
+ DEFINES += -DNO_NSPR_10_SUPPORT
++
++# Nix specific stuff.
++DEFINES += -DNIX_NSS_LIBDIR=\"$(out)/lib/\"
+diff -ru -x '*~' nss-3.15.1-orig/nss/lib/util/secload.c nss-3.15.1/nss/lib/util/secload.c
+--- nss-3.15.1-orig/nss/lib/util/secload.c	2013-08-07 16:03:40.014256381 +0200
++++ nss-3.15.1/nss/lib/util/secload.c	2013-08-07 16:05:02.453563064 +0200
+@@ -70,9 +70,9 @@
      /* Remove the trailing filename from referencePath and add the new one */
      c = strrchr(referencePath, PR_GetDirectorySeparator());
      if (!c) { /* referencePath doesn't contain a / means that dladdr gave us argv[0]
@@ -38,7 +36,7 @@ index 7d6fc22..0b7759b 100644
      }
      if (c) {
          size_t referencePathSize = 1 + c - referencePath;
-@@ -125,8 +125,7 @@ loader_LoadLibInReferenceDir(const char *referencePath, const char *name)
+@@ -90,8 +90,7 @@
                  (strncmp(fullName + referencePathSize - 4, "bin", 3) == 0)) {
                  memcpy(fullName + referencePathSize -4, "lib", 3);
              }
