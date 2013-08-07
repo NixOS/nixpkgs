@@ -4259,7 +4259,9 @@ let
   cairomm = callPackage ../development/libraries/cairomm { };
 
   pango = callPackage ../development/libraries/pango { };
-  pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
+  pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix {
+    cairo = cairo_1_12_2;
+  };
 
   pangox_compat = callPackage ../development/libraries/pangox-compat { };
 
