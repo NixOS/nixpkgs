@@ -543,6 +543,9 @@ patchPhase() {
             *.bz2)
                 uncompress="bzip2 -d"
                 ;;
+            *.xz)
+                uncompress="xz -d"
+                ;;
             *.lzma)
                 uncompress="lzma -d"
                 ;;
