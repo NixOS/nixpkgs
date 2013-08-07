@@ -580,11 +580,11 @@ let
   })) // {inherit windowswmproto libX11 libXext xextproto ;};
 
   libX11 = (stdenv.mkDerivation ((if overrides ? libX11 then overrides.libX11 else x: x) {
-    name = "libX11-1.6.0";
+    name = "libX11-1.6.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libX11-1.6.0.tar.bz2;
-      sha256 = "1yhrf36is2f2h28x8wjd87wmdhslmzg06jg1gwq55hiy6h9184sk";
+      url = mirror://xorg/individual/lib/libX11-1.6.1.tar.bz2;
+      sha256 = "14hqf180dxax3xf65bq95psd4bx8az1q1l6lxsjzbd2qdg0lz98h";
     };
     buildInputs = [pkgconfig inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ];
   })) // {inherit inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ;};
