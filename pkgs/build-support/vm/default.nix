@@ -1,5 +1,5 @@
 { pkgs
-, kernel ? pkgs.linux
+, kernel ? pkgs.linux_3_10
 , img ? "bzImage"
 , rootModules ?
     [ "virtio_pci" "virtio_blk" "virtio_balloon" "ext4" "unix" "9p" "9pnet_virtio" ]
