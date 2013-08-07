@@ -4908,11 +4908,11 @@ pythonPackages = modules // rec {
 
 
   supervisor = buildPythonPackage rec {
-    name = "supervisor-3.0b2";
+    name = "supervisor-3.0";
 
     src = fetchurl {
-      url = https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0b2.tar.gz;
-      md5 = "e2557853239ee69955f993091b0eddc4";
+      url = "https://pypi.python.org/packages/source/s/supervisor/${name}.tar.gz";
+      md5 = "94ff3cf09618c36889425a8e002cd51a";
     };
 
     buildInputs = [ mock ];
