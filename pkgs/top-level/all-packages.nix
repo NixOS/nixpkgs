@@ -448,6 +448,8 @@ let
 
   apg = callPackage ../tools/security/apg { };
 
+  grc = callPackage ../tools/misc/grc { };
+
   otool = callPackage ../os-specific/darwin/otool { };
 
   pass = callPackage ../tools/security/pass { };
