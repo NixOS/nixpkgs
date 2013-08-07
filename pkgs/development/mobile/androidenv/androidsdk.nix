@@ -2,8 +2,8 @@
 , platformTools, buildTools, support, platforms, sysimages, addons
 , zlib_32bit
 , libX11_32bit, libxcb_32bit, libXau_32bit, libXdmcp_32bit, libXext_32bit, mesa_32bit, alsaLib_32bit
-, libX11, libXext, libXrender, libxcb, libXau, libXdmcp, mesa, alsaLib
-, freetype, fontconfig, gtk, atk, file
+, libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
+, freetype, fontconfig, glib, gtk, atk, file
 }:
 {platformVersions, abiVersions, useGoogleAPIs}:
 
@@ -56,7 +56,15 @@ stdenv.mkDerivation {
           patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib:${zlib_32bit}/lib $i
       done
     
-      # The emulators need additional libraries, which are not in the RPATH => let's wrap them
+      # The android script has a hardcoded reference to /bin/ls that must be patched
+      sed -i -e "s|/bin/ls|ls|" android
+      
+      # The android script used SWT and wants to dynamically load some GTK+ stuff.
+      # The following wrapper ensures that they can be found:
+      wrapProgram `pwd`/android \
+        --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
+    
+      # The emulators need additional libraries, which are dynamically loaded => let's wrap them
     
       for i in emulator emulator-arm emulator-mips emulator-x86
       do
@@ -174,11 +182,7 @@ stdenv.mkDerivation {
     do
         if [ ! -d $i ] && [ -x $i ]
         then
-            ( echo '#! ${stdenv.shell} -e'
-              echo "cd $out/libexec/android-sdk-*/tools"
-              echo "exec ./$(basename $i) \"\$@\"" ) > $out/bin/$(basename $i)
-          
-              chmod +x $out/bin/$(basename $i)
+            ln -sf $i $out/bin/$(basename $i)
         fi
     done
     
@@ -186,11 +190,7 @@ stdenv.mkDerivation {
     do
         if [ ! -d $i ] && [ -x $i ]
         then
-            ( echo '#! ${stdenv.shell} -e'
-              echo "cd $out/libexec/android-sdk-*/platform-tools"
-              echo "exec ./$(basename $i) \"\$@\"") > $out/bin/$(basename $i)
-          
-              chmod +x $out/bin/$(basename $i)
+            ln -sf $i $out/bin/$(basename $i)
         fi
     done
   '';
