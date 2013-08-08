@@ -3766,7 +3766,9 @@ let
 
   bwidget = callPackage ../development/libraries/bwidget { };
 
-  c-ares = callPackage ../development/libraries/c-ares { };
+  c-ares = callPackage ../development/libraries/c-ares {
+    fetchurl = fetchurlBoot;
+  };
 
   caelum = callPackage ../development/libraries/caelum { };
 
