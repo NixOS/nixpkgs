@@ -97,6 +97,11 @@ in
             # See http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
             rm -fv $HOME/.kde/cache-*/icon-cache.kcache
 
+            # Speed up application start by 50-150ms according to
+            # http://kdemonkey.blogspot.nl/2008/04/magic-trick.html
+            rm -fv $HOME/.compose-cache
+            mkdir $HOME/.compose-cache
+
             # Qt writes a weird ‘libraryPath’ line to
             # ~/.config/Trolltech.conf that causes the KDE plugin
             # paths of previous KDE invocations to be searched.
