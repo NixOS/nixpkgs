@@ -135,6 +135,9 @@ in stdenv.mkDerivation rec {
     sed -i -e 's|/usr/bin/gcc|gcc|' third_party/WebKit/Source/core/core.gypi
   '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
+  '' + optionalString (versionOlder sourceInfo.version "29.0.0.0") ''
+    sed -i -e '/struct SECItemArray/,/^};/d' \
+      net/third_party/nss/ssl/bodge/secitem_array.c
   '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
