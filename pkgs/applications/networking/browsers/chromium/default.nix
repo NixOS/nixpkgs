@@ -127,8 +127,7 @@ in stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  patches = [ userns_patch ]
-         ++ optional cupsSupport ./cups_allow_deprecated.patch;
+  patches = [ userns_patch ];
 
   postPatch = ''
     sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
