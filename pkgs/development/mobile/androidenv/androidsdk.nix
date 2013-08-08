@@ -3,7 +3,7 @@
 , zlib_32bit
 , libX11_32bit, libxcb_32bit, libXau_32bit, libXdmcp_32bit, libXext_32bit, mesa_32bit, alsaLib_32bit
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
-, freetype, fontconfig, glib, gtk, atk, file
+, freetype, fontconfig, glib, gtk, atk, file, jdk
 }:
 {platformVersions, abiVersions, useGoogleAPIs}:
 
@@ -62,6 +62,7 @@ stdenv.mkDerivation {
       # The android script used SWT and wants to dynamically load some GTK+ stuff.
       # The following wrapper ensures that they can be found:
       wrapProgram `pwd`/android \
+        --prefix PATH : ${jdk}/bin \
         --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
     
       # The emulators need additional libraries, which are dynamically loaded => let's wrap them
