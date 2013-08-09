@@ -40,6 +40,8 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    # Note: Maintainer of prev. erlang version was simons. If he wants
+    # to continue maintaining erlang I'm totally ok with that.
+    maintainers = [ stdenv.lib.maintainers.the-kenny ];
   };
 }
