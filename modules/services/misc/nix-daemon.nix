@@ -34,7 +34,8 @@ let
       pkgs.runCommand "nix.conf" {extraOptions = cfg.extraOptions; } ''
         extraPaths=$(for i in $(cat ${binshDeps}); do if test -d $i; then echo $i; fi; done)
         cat > $out <<END
-        # WARNING: this file is generated.
+        # WARNING: this file is generated from the nix.* entries in
+        # ${maybeEnv "NIXOS_CONFIG" "/etc/nixos/configuration.nix"}
         build-users-group = nixbld
         build-max-jobs = ${toString (cfg.maxJobs)}
         build-use-chroot = ${if cfg.useChroot then "true" else "false"}
