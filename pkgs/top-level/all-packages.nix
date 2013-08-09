@@ -6647,8 +6647,8 @@ let
   mountall = callPackage ../os-specific/linux/mountall { };
 
   aggregateModules = modules:
-    import ../os-specific/linux/module-init-tools/aggregator.nix {
-      inherit stdenv module_init_tools modules buildEnv;
+    callPackage ../os-specific/linux/kmod/aggregator.nix {
+      inherit modules;
     };
 
   multipath_tools = callPackage ../os-specific/linux/multipath-tools { };
