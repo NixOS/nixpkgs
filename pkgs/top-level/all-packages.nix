@@ -348,10 +348,9 @@ let
 
   makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
 
-  makeModulesClosure = {kernel, rootModules, allowMissing ? false}:
+  makeModulesClosure = { kernel, rootModules, allowMissing ? false }:
     import ../build-support/kernel/modules-closure.nix {
-      inherit stdenv module_init_tools kernel nukeReferences
-        rootModules allowMissing;
+      inherit stdenv kmod kernel nukeReferences rootModules allowMissing;
     };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
@@ -448,7 +447,11 @@ let
 
   apg = callPackage ../tools/security/apg { };
 
+  grc = callPackage ../tools/misc/grc { };
+
   otool = callPackage ../os-specific/darwin/otool { };
+
+  pass = callPackage ../tools/security/pass { };
 
   setfile = callPackage ../os-specific/darwin/setfile { };
 
@@ -3319,7 +3322,9 @@ let
     cross = assert crossSystem != null; crossSystem;
   }));
 
-  bison = callPackage ../development/tools/parsing/bison { };
+  bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
+  bison3 = lowPrio (callPackage ../development/tools/parsing/bison/3.x.nix { });
+  bison = bison2;
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     inherit (pythonPackages) twisted jinja2 sqlalchemy sqlalchemy_migrate;
@@ -3359,6 +3364,8 @@ let
   cgdb = callPackage ../development/tools/misc/cgdb { };
 
   chromedriver = callPackage ../development/tools/selenium/chromedriver { gconf = gnome.GConf; };
+
+  "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
@@ -4251,7 +4258,9 @@ let
   cairomm = callPackage ../development/libraries/cairomm { };
 
   pango = callPackage ../development/libraries/pango { };
-  pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
+  pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix {
+    cairo = cairo_1_12_2;
+  };
 
   pangox_compat = callPackage ../development/libraries/pangox-compat { };
 
@@ -6313,8 +6322,6 @@ let
 
   iwlwifi3945ucode = callPackage ../os-specific/linux/firmware/iwlwifi-3945-ucode { };
 
-  iwlwifi4965ucodeV1 = callPackage ../os-specific/linux/firmware/iwlwifi-4965-ucode { };
-
   iwlwifi4965ucodeV2 = callPackage ../os-specific/linux/firmware/iwlwifi-4965-ucode/version-2.nix { };
 
   iwlwifi5000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-5000-ucode { };
@@ -6370,7 +6377,7 @@ let
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
   linux_3_0 = makeOverridable (import ../os-specific/linux/kernel/linux-3.0.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
         # kernelPatches.aufs3_0
@@ -6378,11 +6385,10 @@ let
   };
 
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
         # kernelPatches.aufs3_2
-        kernelPatches.cifs_timeout_2_6_38
       ];
   };
 
@@ -6405,7 +6411,7 @@ let
   });
 
   linux_3_4 = makeOverridable (import ../os-specific/linux/kernel/linux-3.4.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
         # kernelPatches.aufs3_4
@@ -6424,19 +6430,7 @@ let
   });
 
   linux_3_6_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi-3.6.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-  };
-
-  linux_3_8 = makeOverridable (import ../os-specific/linux/kernel/linux-3.8.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    kernelPatches =
-      [
-        kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals (platform.kernelArch == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
+    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
   };
 
   linux_3_9 = makeOverridable (import ../os-specific/linux/kernel/linux-3.9.nix) {
@@ -6510,11 +6504,7 @@ let
 
     iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
 
-    iwlwifi4965ucode =
-      if builtins.compareVersions self.kernel.version "2.6.27" == 0
-         || builtins.compareVersions self.kernel.version "2.6.27" == 1
-      then iwlwifi4965ucodeV2
-      else iwlwifi4965ucodeV1;
+    iwlwifi4965ucode = iwlwifi4965ucodeV2;
 
     atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
 
@@ -6586,7 +6576,6 @@ let
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 linuxPackages_3_4);
   linuxPackages_3_4_apparmor = linuxPackagesFor pkgs.linux_3_4_apparmor linuxPackages_3_4_apparmor;
   linuxPackages_3_6_rpi = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi);
-  linuxPackages_3_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_8 linuxPackages_3_8);
   linuxPackages_3_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_9 linuxPackages_3_9);
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   # Update this when adding a new version!
@@ -8797,6 +8786,8 @@ let
 
   xpra = callPackage ../tools/X11/xpra { };
 
+  xrestop = callPackage ../tools/X11/xrestop { };
+
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
     inherit (gnome) libglade;
   };
@@ -9159,6 +9150,8 @@ let
   });
 
   gnome = recurseIntoAttrs gnome2;
+
+  hsetroot = callPackage ../tools/X11/hsetroot { };
 
   kde4 = recurseIntoAttrs pkgs.kde410;
 

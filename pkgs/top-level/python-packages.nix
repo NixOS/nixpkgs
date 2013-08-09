@@ -68,6 +68,10 @@ pythonPackages = modules // rec {
 
   nixpart = callPackage ../tools/filesystems/nixpart { };
 
+  # This is used for NixOps to make sure we won't break it with the next major
+  # version of nixpart.
+  nixpart0 = nixpart;
+
   pil = import ../development/python-modules/pil {
     inherit (pkgs) fetchurl stdenv libjpeg zlib freetype;
     inherit python buildPythonPackage;
@@ -3267,14 +3271,14 @@ pythonPackages = modules // rec {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.10.1";
+    name = "paramiko-1.11.0";
 
     src = fetchurl {
-      url = https://pypi.python.org/packages/source/p/paramiko/paramiko-1.10.1.tar.gz;
-      sha256 = "1g5sbzfxdhps61z3vm30wa87m5xq1j9ar3qvgr5bz63l7nxhvb2z";
+      url = "http://pypi.python.org/packages/source/p/paramiko/${name}.tar.gz";
+      md5 = "a2c55dc04904bd08d984533703177084";
     };
 
-    buildInputs = [ pycrypto ];
+    propagatedBuildInputs = [ pycrypto ];
 
     meta = {
       homepage = "http://www.lag.net/paramiko/";
@@ -4908,11 +4912,11 @@ pythonPackages = modules // rec {
 
 
   supervisor = buildPythonPackage rec {
-    name = "supervisor-3.0b2";
+    name = "supervisor-3.0";
 
     src = fetchurl {
-      url = https://pypi.python.org/packages/source/s/supervisor/supervisor-3.0b2.tar.gz;
-      md5 = "e2557853239ee69955f993091b0eddc4";
+      url = "https://pypi.python.org/packages/source/s/supervisor/${name}.tar.gz";
+      md5 = "94ff3cf09618c36889425a8e002cd51a";
     };
 
     buildInputs = [ mock ];

@@ -1,5 +1,5 @@
 { stdenv, androidsdk, jdk, ant }:
-{ name, src, platformVersions ? [ "8" ], abiVersions ? [ "armeabi-v7a" ], useGoogleAPIs ? false
+{ name, src, platformVersions ? [ "8" ], useGoogleAPIs ? false, antFlags ? ""
 , release ? false, keyStore ? null, keyAlias ? null, keyStorePassword ? null, keyAliasPassword ? null
 }:
 
@@ -11,7 +11,8 @@ let
     else throw "Platform: ${stdenv.system} is not supported!";
 
   androidsdkComposition = androidsdk {
-    inherit platformVersions abiVersions useGoogleAPIs;
+    inherit platformVersions useGoogleAPIs;
+    abiVersions = [];
   };
 in
 stdenv.mkDerivation {
@@ -34,7 +35,7 @@ stdenv.mkDerivation {
     ''}
   
     export ANDROID_SDK_HOME=`pwd` # Key files cannot be stored in the user's home directory. This overrides it.
-    ant ${if release then "release" else "debug"}
+    ant ${antFlags} ${if release then "release" else "debug"}
   '';
   
   installPhase = ''

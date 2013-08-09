@@ -1,9 +1,9 @@
 { stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
 , platformTools, buildTools, support, platforms, sysimages, addons
 , zlib_32bit
-, libX11_32bit, libxcb_32bit, libXau_32bit, libXdmcp_32bit, libXext_32bit, mesa_32bit
-, libX11, libXext, libXrender, libxcb, libXau, libXdmcp, mesa
-, freetype, fontconfig, gtk, atk
+, libX11_32bit, libxcb_32bit, libXau_32bit, libXdmcp_32bit, libXext_32bit, mesa_32bit, alsaLib_32bit
+, libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
+, freetype, fontconfig, glib, gtk, atk, file, jdk
 }:
 {platformVersions, abiVersions, useGoogleAPIs}:
 
@@ -56,19 +56,30 @@ stdenv.mkDerivation {
           patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib:${zlib_32bit}/lib $i
       done
     
-      # The emulators need additional libraries, which are not in the RPATH => let's wrap them
+      # The android script has a hardcoded reference to /bin/ls that must be patched
+      sed -i -e "s|/bin/ls|ls|" android
+      
+      # The android script used SWT and wants to dynamically load some GTK+ stuff.
+      # The following wrapper ensures that they can be found:
+      wrapProgram `pwd`/android \
+        --prefix PATH : ${jdk}/bin \
+        --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
+    
+      # The emulators need additional libraries, which are dynamically loaded => let's wrap them
     
       for i in emulator emulator-arm emulator-mips emulator-x86
       do
           wrapProgram `pwd`/$i \
-            --prefix LD_LIBRARY_PATH : `pwd`/lib:${libX11_32bit}/lib:${libxcb_32bit}/lib:${libXau_32bit}/lib:${libXdmcp_32bit}/lib:${libXext_32bit}/lib:${mesa_32bit}/lib
+            --prefix PATH : ${file}/bin \
+            --suffix LD_LIBRARY_PATH : `pwd`/lib:${libX11_32bit}/lib:${libxcb_32bit}/lib:${libXau_32bit}/lib:${libXdmcp_32bit}/lib:${libXext_32bit}/lib:${mesa_32bit}/lib
       done
       
       ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
         for i in emulator64-arm emulator64-mips emulator64-x86
         do
             wrapProgram `pwd`/$i \
-            --prefix LD_LIBRARY_PATH : `pwd`/lib:${libX11}/lib:${libxcb}/lib:${libXau}/lib:${libXdmcp}/lib:${libXext}/lib:${mesa}/lib
+              --prefix PATH : ${file}/bin \
+              --suffix LD_LIBRARY_PATH : `pwd`/lib:${libX11}/lib:${libxcb}/lib:${libXau}/lib:${libXdmcp}/lib:${libXext}/lib:${mesa}/lib:${alsaLib}/lib
         done
       ''}
     ''}
@@ -172,11 +183,7 @@ stdenv.mkDerivation {
     do
         if [ ! -d $i ] && [ -x $i ]
         then
-            ( echo '#! ${stdenv.shell} -e'
-              echo "cd $out/libexec/android-sdk-*/tools"
-              echo "exec ./$(basename $i) \"\$@\"" ) > $out/bin/$(basename $i)
-          
-              chmod +x $out/bin/$(basename $i)
+            ln -sf $i $out/bin/$(basename $i)
         fi
     done
     
@@ -184,11 +191,7 @@ stdenv.mkDerivation {
     do
         if [ ! -d $i ] && [ -x $i ]
         then
-            ( echo '#! ${stdenv.shell} -e'
-              echo "cd $out/libexec/android-sdk-*/platform-tools"
-              echo "exec ./$(basename $i) \"\$@\"") > $out/bin/$(basename $i)
-          
-              chmod +x $out/bin/$(basename $i)
+            ln -sf $i $out/bin/$(basename $i)
         fi
     done
   '';

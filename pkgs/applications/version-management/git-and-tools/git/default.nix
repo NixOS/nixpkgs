@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.8.3.2";
+  version = "1.8.3.4";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
-    sha256 = "0mfylhcdrh8prxkbs0gc877rmra2ks48bchg4hhaf2vpw9hpdf63";
+    sha256 = "1nfr4hgqs3b6k9wanqcix0wlw71q61h5irxiavlspd4jvzrcv8nz";
   };
 
   patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ];
@@ -49,6 +49,13 @@ stdenv.mkDerivation {
         echo -e "#\!/bin/sh\necho '`basename $1` not supported, $2'\nexit 1" > "$1"
         chmod +x $1
       }
+
+      # Install git-subtree.
+      pushd contrib/subtree
+      make
+      make install install-doc
+      popd
+      rm -rf contrib/subtree
 
       # Install contrib stuff.
       mkdir -p $out/share/git

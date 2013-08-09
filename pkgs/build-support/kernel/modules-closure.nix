@@ -4,12 +4,12 @@
 # Also generate an appropriate modules.dep.
 
 { stdenv, kernel, nukeReferences, rootModules
-, module_init_tools, allowMissing ? false }:
+, kmod, allowMissing ? false }:
 
 stdenv.mkDerivation {
   name = kernel.name + "-shrunk";
   builder = ./modules-closure.sh;
   buildInputs = [nukeReferences];
-  inherit kernel rootModules module_init_tools allowMissing;
+  inherit kernel rootModules kmod allowMissing;
   allowedReferences = ["out"];
 }
