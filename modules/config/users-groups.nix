@@ -160,6 +160,7 @@ in
       };
       description = ''
         Additional user accounts to be created automatically by the system.
+        This can also be used to set options for root.
       '';
       options = [ userOpts ];
     };
