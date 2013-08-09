@@ -1526,6 +1526,8 @@ let
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
 
+  ponysay = callPackage ../tools/misc/ponysay { };
+
   povray = callPackage ../tools/graphics/povray { };
 
   ppl = callPackage ../development/libraries/ppl { };
