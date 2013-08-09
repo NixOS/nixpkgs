@@ -406,24 +406,27 @@ in
       optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions ++
       optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
 
-    environment.etc =
-    (optionals cfg.exportConfiguration
-      [ { source = "${configFile}";
-          target = "X11/xorg.conf";
-        }
-        # -xkbdir command line option does not seems to be passed to xkbcomp.
-        { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
-          target = "X11/xkb";
-        }
-      ])
-    ++ (optionals (elem "ati_unfree" driverNames) [
+    boot.blacklistedKernelModules =
+      optionals (elem "nvidia" driverNames) [ "nouveau" "nvidiafb" ];
 
-        # according toiive on #ati you don't need the pcs, it is like registry... keeps old stuff to make your
-        # life harder ;) Still it seems to be required
-        { source = "${kernelPackages.ati_drivers_x11}/etc/ati";
-          target = "ati";
-        }
-    ]);
+    environment.etc =
+      (optionals cfg.exportConfiguration
+        [ { source = "${configFile}";
+            target = "X11/xorg.conf";
+          }
+          # -xkbdir command line option does not seems to be passed to xkbcomp.
+          { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+            target = "X11/xkb";
+          }
+        ])
+      ++ (optionals (elem "ati_unfree" driverNames) [
+
+          # according toiive on #ati you don't need the pcs, it is like registry... keeps old stuff to make your
+          # life harder ;) Still it seems to be required
+          { source = "${kernelPackages.ati_drivers_x11}/etc/ati";
+            target = "ati";
+          }
+      ]);
 
     environment.x11Packages =
       [ xorg.xorgserver
