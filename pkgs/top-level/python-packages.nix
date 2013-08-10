@@ -7,7 +7,11 @@ optional = pkgs.lib.optional;
 optionals = pkgs.lib.optionals;
 modules = python.modules or { readline = null; sqlite3 = null; curses = null; ssl = null; };
 
-pythonPackages = modules // rec {
+pythonPackages = modules // import ./python-packages-generated.nix {
+  inherit pkgs python;
+  inherit (pkgs) stdenv fetchurl;
+  self = pythonPackages;
+} // rec {
 
   inherit python;
   inherit (pkgs) fetchurl fetchsvn fetchgit stdenv;
