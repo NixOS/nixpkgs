@@ -44,7 +44,7 @@ in
         '';
       description =
         ''
-          Allows the default permissions of privileged actions to be overriden.
+          Allows the default permissions of privileged actions to be overridden.
         '';
     };
 
@@ -55,7 +55,7 @@ in
         ''
           Specifies which users are considered “administrators”, for those
           actions that require the user to authenticate as an
-          administrator (i.e. have a <literal>auth_admin</literal>
+          administrator (i.e. have an <literal>auth_admin</literal>
           value).  By default, this is the <literal>root</literal>
           user and all users in the <literal>wheel</literal> group.
         '';

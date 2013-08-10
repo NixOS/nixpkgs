@@ -7,7 +7,7 @@ with pkgs.lib;
     gnu = mkOption {
       default = false;
       description =
-        '' When enable, GNU software is chosent by default whenever a there is
+        '' When enabled, GNU software is chosen by default whenever a there is
            a choice between GNU and non-GNU software (e.g., GNU lsh
            vs. OpenSSH).
         '';

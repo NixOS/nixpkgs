@@ -25,7 +25,7 @@ let
       port = mkOption {
         type = types.uniq types.string;
         description = ''
-          The serial port where your UPS is connected.  /dev/ttyS0 is
+          The serial port to which your UPS is connected.  /dev/ttyS0 is
           usually the first port on Linux boxes, for example.
         '';
       };

@@ -19,7 +19,7 @@ the systemd program.  Systemd is the “init” process of the system
 so-called “units”, which can be things like system services
 (programs), but also mount points, swap files, devices, targets
 (groups of units) and more.  Units can have complex dependencies; for
-instance, one unit can require that another unit must be succesfully
+instance, one unit can require that another unit must be successfully
 started before the first unit can be started.  When the system boots,
 it starts a unit named <literal>default.target</literal>; the
 dependencies of this unit cause all system services to be started,
@@ -122,7 +122,7 @@ authentication.</para>
 
 <para>Systemd keeps track of all users who are logged into the system
 (e.g. on a virtual console or remotely via SSH).  The command
-<command>loginctl</command> allows quering and manipulating user
+<command>loginctl</command> allows querying and manipulating user
 sessions.  For instance, to list all user sessions:
 
 <screen>

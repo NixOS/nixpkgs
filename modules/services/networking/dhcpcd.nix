@@ -80,9 +80,9 @@ in
     networking.dhcpcd.denyInterfaces = mkOption {
       default = [];
       description = ''
-         Disable the DHCP client for any interface which's name matches
+         Disable the DHCP client for any interface whose name matches
          any of the shell glob patterns in this list. The purpose of
-         this option is blacklist virtual interfaces such as those
+         this option is to blacklist virtual interfaces such as those
          created by Xen, libvirt, LXC, etc.
       '';
     };

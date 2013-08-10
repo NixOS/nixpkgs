@@ -13,7 +13,7 @@ in
     environment.blcr.enable = mkOption {
       default = false;
       description =
-        "Wheter to enable support for the BLCR checkpointing tool.";
+        "Whether to enable support for the BLCR checkpointing tool.";
     };
   };
 

@@ -29,7 +29,7 @@ in
           default = "";
           description = "
             use screen-name instead the hostname to identify
-            ourselfs to the server.
+            ourselves to the server.
             ";
         };
         serverAddress = mkOption {

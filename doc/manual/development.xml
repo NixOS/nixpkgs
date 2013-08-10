@@ -65,7 +65,7 @@ $ nixos-rebuild switch -I <replaceable>/my/sources</replaceable>
   directory</para>
 
 <para>A module is a file which handles one specific part of the
-  configuration.  This part of the configuration could correspond to an
+  configuration.  This part of the configuration could correspond to
   hardware, a service, network settings, or preferences.  A module
   configuration does not have to handle everything from scratch, it can base
   its configuration on other configurations provided by other modules.  Thus
@@ -321,7 +321,7 @@ where <replaceable>attr</replaceable> is an attribute in
 </para>
 
 <para>
-Most parts of NixOS can be build through the <varname>config</varname>
+Most parts of NixOS can be built through the <varname>config</varname>
 attribute set.  This attribute set allows you to have a view of the merged
 option definitions and all its derivations.  Important derivations are store
 inside the option <option>system.build</option> and can be listed with the
@@ -341,7 +341,7 @@ config.system.build</command>
 <para>Building a NixOS CD is as easy as configuring your own computer. The
 idea is to use another module which will replace
 your <filename>configuration.nix</filename> to configure the system that
-would be install on the CD.</para>
+would be installed on the CD.</para>
 
 <para>Default CD/DVD configurations are available
 inside <filename>nixos/modules/installer/cd-dvd</filename>.  To build them

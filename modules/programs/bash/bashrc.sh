@@ -7,7 +7,7 @@ if [ -n "$__ETC_BASHRC_SOURCED" -o -n "$NOSYSBASHRC" ]; then return; fi
 __ETC_BASHRC_SOURCED=1
 
 # If the profile was not loaded in a parent process, source it.  But
-# otherwise don't do it because we don't want to clobber overriden
+# otherwise don't do it because we don't want to clobber overridden
 # values of $PATH, etc.
 if [ -z "$__ETC_PROFILE_DONE" ]; then
     . /etc/profile

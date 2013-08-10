@@ -144,7 +144,7 @@ networking.wireless.enable = true;
 
 NixOS currently does not generate wpa_supplicant's
 configuration file, <literal>/etc/wpa_supplicant.conf</literal>. You should edit this file
-ourself to define wireless networks, WPA keys and so on (see
+yourself to define wireless networks, WPA keys and so on (see
 wpa_supplicant.conf(5)).
 </para>
 

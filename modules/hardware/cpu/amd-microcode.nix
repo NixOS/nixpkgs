@@ -12,7 +12,7 @@ with pkgs.lib;
       default = false;
       type = types.bool;
       description = ''
-        Update the CPU microcode for Amd processors.
+        Update the CPU microcode for AMD processors.
       '';
     };
 

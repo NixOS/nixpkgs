@@ -97,7 +97,7 @@ in
       description =
         ''
           If set, forbidden packets are rejected rather than dropped
-          (ignored).  This means that a ICMP "port unreachable" error
+          (ignored).  This means that an ICMP "port unreachable" error
           message is sent back to the client.  Rejecting packets makes
           port scanning somewhat easier.
         '';
@@ -170,7 +170,7 @@ in
           List of connection-tracking helpers that are auto-loaded.
           The complete list of possible values is given in the example.
 
-          As helpers can pose as a security risk, it is adviced to
+          As helpers can pose as a security risk, it is advised to
           set this to an empty list and disable the setting
           networking.firewall.autoLoadConntrackHelpers
 

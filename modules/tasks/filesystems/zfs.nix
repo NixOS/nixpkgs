@@ -29,7 +29,7 @@ in
         ZFS uses a system's hostid to determine if a storage pool (zpool) is
         native to this system, and should thus be imported automatically.
         Unfortunately, this hostid can change under linux from boot to boot (by
-        changing network adapaters, for instance). Specify a unique 32 bit hostid in
+        changing network adapters, for instance). Specify a unique 32 bit hostid in
         hex here for zfs to prevent getting a random hostid between boots and having to
         manually import pools.
       '';
