@@ -105,5 +105,8 @@
         "propagatedBuildInputs": [ "eggtestinfo" ]
       }
     }
+  },
+  { "name": "Distutils2"
+    "doCheck": false
   }
 ]

@@ -53,6 +53,25 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit python setuptools;
   };
 
+  pypi2nix = buildPythonPackage rec {
+    rev = "f0bed8037538de481fab19af0521cb771c148aff";
+    name = "pypi2nix-1.0_${rev}";
+
+    src = fetchurl {
+      url = "https://github.com/garbas/pypi2nix/tarball/${rev}";
+      name = "${name}.tar.bz";
+      sha256 = "14cabnln65v9s3y23dkmbp0zjhbgniyfwmrragwqv3wzi63bvhhk";
+    };
+
+    propagatedBuildInputs = [ pythonPackages."Distutils2-1.0a4" ];
+    doCheck = false;
+
+    meta = {
+      homepage = https://github.com/garbas/pypi2nix;
+      description = "";
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+    };
+  };
   # packages defined elsewhere
 
   blivet = callPackage ../development/python-modules/blivet { };
