@@ -1788,6 +1788,8 @@ let
 
   tor = callPackage ../tools/security/tor { };
 
+  torbutton = callPackage ../tools/security/torbutton { };
+
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
   trickle = callPackage ../tools/networking/trickle {};
