@@ -1,32 +1,25 @@
-{ stdenv, fetchurl, dpkg, makeWrapper, xz, libX11, gcc, glibc215
+{ stdenv, fetchurl, dpkg, makeWrapper, xz, libX11, gcc, glibc
 , libselinux, libXrandr, pango, freetype, fontconfig, glib, gtk
 , gdk_pixbuf, cairo, libXi, alsaLib, libXrender, nss, nspr, zlib
 , dbus, libpng12, libXfixes, cups, libgcrypt, openal, pulseaudio
-, libxcb, libXau, libXdmcp, flashplayer
+, libxcb, libXau, libXdmcp, flashplayer, libSM, libICE, libXext
+, dbus_glib, libusb1, networkmanager
 , SDL # World of Goo
 , libvorbis # Osmos
 , curl, mesa # Superbrothers: S&S EP
 , patchelf }:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
-let version = "1.0.0.28"; in
+let version = "1.0.0.39"; in
 
 stdenv.mkDerivation rec {
   name = "steam-${version}";
 
-  src =
-    if stdenv.system == "i686-linux" then 
-      fetchurl {
-        url = "http://repo.steampowered.com/steam/archive/precise/steam_${version}_i386.deb";
-        sha256 = "0c0n1v9rnn6jj2wrvbmi77j9v93f3ndw039z9db6092yqls1amqk";
-      }
-    else if stdenv.system == "x86_64-linux" then 
-      fetchurl {
-        url = "http://repo.steampowered.com/steam/archive/precise/steam64_${version}_amd64.deb";
-        sha256 = "1dr2b9s036w8r46az1f9cjddrjaf8a9k564g65j288y6w9pcdb2w";
-      }
-    else throw "Steam not supported on this platform.";
+  src = fetchurl {
+    url = "http://repo.steampowered.com/steam/archive/precise/steam-launcher_${version}_all.deb";
+    sha256 = "1z1cnlr2qw2ndnqsfwjck9617m2p0f3p9q9409vczj909h2a9wyk";
+  };
 
   buildInputs = [ dpkg makeWrapper ];
 
@@ -35,18 +28,17 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     dpkg-deb -x $src $out
-    mv $out/usr/* $out/
-    rmdir $out/usr
-    substituteInPlace "$out/bin/steam" --replace "/bin/bash" "/bin/sh"
+    cp -r $out/usr/* $out/
+    rm -rf $out/usr
+    substituteInPlace "$out/bin/steam" --replace "/usr/bin/env bash" "/bin/sh"
     substituteInPlace "$out/bin/steam" --replace "/usr/" "$out/"
     sed -i 's,STEAMPACKAGE=.*,STEAMPACKAGE=steam,' $out/bin/steam
     sed -i '/STEAMSCRIPT/d' $out/bin/steam
 
     mv $out/bin/steam $out/bin/.steam-wrapped
     cat > $out/bin/steam << EOF
-    #!${stdenv.shell}
 
-    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${libX11}/lib:${gcc.gcc}/lib:${glibc215}/lib:${libselinux}/lib:${libXrandr}/lib:${pango}/lib:${freetype}/lib:${fontconfig}/lib:${glib}/lib:${gtk}/lib:${gdk_pixbuf}/lib:${cairo}/lib:${libXi}/lib:${alsaLib}/lib:${libXrender}/lib:${nss}/lib:${nspr}/lib:${zlib}/lib:${dbus}/lib:${libpng12}/lib:${libXfixes}/lib:${cups}/lib:${libgcrypt}/lib:${openal}/lib:${pulseaudio}/lib:${libxcb}/lib:${libXau}/lib:${libXdmcp}/lib:${SDL}/lib:${libvorbis}/lib:${curl}/lib
+    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${libX11}/lib:${gcc.gcc}/lib:${libselinux}/lib:${libXrandr}/lib:${pango}/lib:${freetype}/lib:${fontconfig}/lib:${glib}/lib:${gtk}/lib:${gdk_pixbuf}/lib:${cairo}/lib:${libXi}/lib:${alsaLib}/lib:${libXrender}/lib:${nss}/lib:${nspr}/lib:${zlib}/lib:${dbus}/lib:${libpng12}/lib:${libXfixes}/lib:${cups}/lib:${libgcrypt}/lib:${openal}/lib:${pulseaudio}/lib:${libxcb}/lib:${libXau}/lib:${libXdmcp}/lib:${SDL}/lib:${libvorbis}/lib:${curl}/lib:${libSM}/lib:${libICE}/lib:${dbus_glib}/lib:${networkmanager}/lib:${libXext}/lib:${libusb1}/lib
     STEAMBOOTSTRAP=~/.steam/steam/steam.sh
     if [ -f \$STEAMBOOTSTRAP ]; then
       PLATFORM32=ubuntu12_32
@@ -85,9 +77,10 @@ stdenv.mkDerivation rec {
       FLASHLINK="\$STEAMCONFIG/bin32/plugins"
       rm -f "\$FLASHLINK" && ln -s "${flashplayer}/lib/mozilla/plugins" "\$FLASHLINK"
       LDSO="\$STEAMBIN32LINK/ld.so"
-      cp ${glibc215}/lib/ld-linux.so.2 "\$LDSO"
+      cp ${glibc}/lib/ld-linux.so.2 "\$LDSO"
       chmod u+w "\$LDSO"
       echo \$\$ > "\$PIDFILE" # pid of the shell will become pid of steam
+      export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${glibc}/lib
       exec "\$LDSO" "\$STEAMBIN32LINK/steam"
     else
       export PATH=${xz}/bin:\$PATH
