@@ -34,8 +34,10 @@ let
   extpackRevision = "86992";
   extensionPack = requireFile rec {
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
-    # Has to be base16 because it's used as an input to VBoxExtPackHelperApp!
-    sha256 = "03gsl0548hrcspl5mi7snng08phwd3vfn6qmx41h2xwvwvmv324g";
+    # IMPORTANT: Hash must be base16 encoded because it's used as an input to
+    # VBoxExtPackHelperApp!
+    # Tip: nix-hash --type sha256 --to-base16 "hash from nix-prefetch-url"
+    sha256 = "8f88b1ebe69b770103e9151bebf6681c5e049eb5fac45ae8d52c43440aa0fa0d";
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
       and Evaluation License (PUEL) by downloading the related binaries from:
