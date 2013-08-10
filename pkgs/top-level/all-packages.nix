@@ -1830,7 +1830,9 @@ let
 
   vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
 
-  vifm = callPackage ../applications/misc/vifm {};
+  vifm = callPackage ../applications/misc/vifm {
+    inherit (xlibs) libX11;
+  };
 
   viking = callPackage ../applications/misc/viking {
     inherit (gnome) scrollkeeper;
