@@ -76,6 +76,11 @@ stdenv.mkDerivation rec {
           ln -s $f $out/share/emacs/site-lisp/
           echo -n .
         done
+        for f in "$currentPath/share/ghci/"*; do
+          mkdir -p $out/share/ghci
+          ln -s $f $out/share/ghci/
+          echo -n .
+        done
         for f in "$currentPkgDir/"*.conf; do
           ln -s $f $linkedPkgDir
           echo -n .
