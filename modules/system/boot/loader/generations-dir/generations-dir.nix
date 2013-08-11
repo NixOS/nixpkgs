@@ -31,7 +31,7 @@ let
             default = false;
             description = "
               Whether copy the necessary boot files into /boot, so
-              /nix/store is not needed by the boot loadear.
+              /nix/store is not needed by the boot loader.
             ";
           };
         };

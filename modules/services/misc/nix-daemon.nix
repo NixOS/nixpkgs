@@ -69,7 +69,7 @@ in
         description = "
           This option defines the maximum number of jobs that Nix will try
           to build in parallel.  The default is 1.  You should generally
-          set it to the number of CPUs in your system (e.g., 2 on a Athlon
+          set it to the number of CPUs in your system (e.g., 2 on an Athlon
           64 X2).
         ";
       };
@@ -114,14 +114,14 @@ in
           <command>nixos-rebuild --no-build-hook</command>
           or consider managing <filename>/etc/nix.machines</filename> manually
           by setting <option>manualNixMachines</option>. Then you can comment
-          unavailable buildmachines.
+          unavailable build machines.
         ";
       };
 
       manualNixMachines = mkOption {
         default = false;
         description = "
-          Whether to manually manage the list of buildmachines used in distributed
+          Whether to manually manage the list of build machines used in distributed
           builds in /etc/nix.machines.
         ";
       };
@@ -163,7 +163,7 @@ in
           This option lists the machines to be used if distributed
           builds are enabled (see
           <option>nix.distributedBuilds</option>).  Nix will perform
-          derivations on those machines via SSh by copying the inputs
+          derivations on those machines via SSH by copying the inputs
           to the Nix store on the remote machine, starting the build,
           then copying the output back to the local Nix store.  Each
           element of the list should be an attribute set containing

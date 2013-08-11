@@ -13,7 +13,7 @@ in
       default = false;
       type = pkgs.lib.types.bool;
       description = ''
-        completely disable the nvidia gfx chip (saves power / heat) and just use IGP
+        Completely disable the nvidia gfx chip (saves power / heat) and just use IGP
       '';
     };
 

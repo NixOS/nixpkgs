@@ -47,7 +47,7 @@ in
         ];
       description = ''
         This option allows the ownership and permissions on the setuid
-        wrappers for specific programs to be overriden from the
+        wrappers for specific programs to be overridden from the
         default (setuid root, but not setgid root).
       '';
     };

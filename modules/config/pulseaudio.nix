@@ -58,7 +58,7 @@ in {
         description = ''
           If false, a PulseAudio server is launched automatically for
           each user that tries to use the sound system. The server runs
-          with user priviliges. This is the recommended and most secure
+          with user privileges. This is the recommended and most secure
           way to use PulseAudio. If true, one system-wide PulseAudio
           server is launched on boot, running as the user "pulse".
           Please read the PulseAudio documentation for more details.

@@ -28,10 +28,10 @@ in
           Or having it makes starting NixOS easier.
           This applies to some kind of hosting services and user mode linux.
 
-          Additionaly this script will create
+          Additionally this script will create
           /boot/init-other-configurations-contents.txt containing
           contents of remaining configurations. You can copy paste them into
-          /sbin/init manually running a recue system or such.
+          /sbin/init manually running a rescue system or such.
         '';
       };
     };

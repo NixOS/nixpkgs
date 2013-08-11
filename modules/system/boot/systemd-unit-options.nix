@@ -118,7 +118,7 @@ rec {
       default = {};
       type = types.attrs;
       example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
-      description = "Environment variables passed to the services's processes.";
+      description = "Environment variables passed to the service's processes.";
     };
 
     path = mkOption {

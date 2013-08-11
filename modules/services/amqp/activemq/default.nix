@@ -55,7 +55,7 @@ in {
         default = "/var/activemq";
         description = ''
           The base directory where ActiveMQ stores its persistent data and logs.
-          This will be overriden if you set "activemq.base" and "activemq.data"
+          This will be overridden if you set "activemq.base" and "activemq.data"
           in the <literal>javaProperties</literal> option. You can also override
           this in activemq.xml.
         '';
@@ -94,7 +94,7 @@ in {
           type = types.bool;
           default = true;
           description = ''
-            If true, the a system user with the specified name will be added
+            If true, a system user with the specified name will be added
             to the system configuration. If false, a user with the specified
             name is expected to exist.
           '';

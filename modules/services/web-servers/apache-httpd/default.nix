@@ -639,7 +639,7 @@ in
 
             # Get rid of old semaphores.  These tend to accumulate across
             # server restarts, eventually preventing it from restarting
-            # succesfully.
+            # successfully.
             for i in $(${pkgs.utillinux}/bin/ipcs -s | grep ' ${mainCfg.user} ' | cut -f2 -d ' '); do
                 ${pkgs.utillinux}/bin/ipcrm -s $i
             done

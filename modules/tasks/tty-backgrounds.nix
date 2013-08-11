@@ -15,13 +15,13 @@ let
 
       specificThemes = config.services.ttyBackgrounds.specificThemes;
 
-      overridenTTYs = map (x: x.tty) specificThemes;
+      overriddenTTYs = map (x: x.tty) specificThemes;
 
       # Use the default theme for all the mingetty ttys and for the
       # syslog tty, except those for which a specific theme is
       # specified.
       defaultTTYs =
-        filter (x: !(elem x overridenTTYs)) requiredTTYs;
+        filter (x: !(elem x overriddenTTYs)) requiredTTYs;
 
     in
       (map (tty: { inherit tty; }) defaultTTYs) ++ specificThemes;

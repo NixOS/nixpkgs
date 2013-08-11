@@ -54,7 +54,7 @@ in {
       default = false;
       merge = mergeEnableOption;
       description = ''
-        Whether to use NetworkManager to obtain an IP adress and other
+        Whether to use NetworkManager to obtain an IP address and other
         configuration for all network interfaces that are not manually
         configured. If enabled, a group <literal>networkmanager</literal>
         will be created. Add all users that should have permission

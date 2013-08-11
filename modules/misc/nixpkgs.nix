@@ -54,7 +54,7 @@ in
         globally through the <varname>packageOverrides</varname>
         option.  The latter is a function that takes as an argument
         the <emphasis>original</emphasis> Nixpkgs, and must evaluate
-        to a set of new or overriden packages.
+        to a set of new or overridden packages.
       '';
     };
 

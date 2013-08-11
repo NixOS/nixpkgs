@@ -1,5 +1,5 @@
 # This module defines the global list of uids and gids.  We keep a
-# central list to prevent id collissions.
+# central list to prevent id collisions.
 
 {config, pkgs, ...}:
 

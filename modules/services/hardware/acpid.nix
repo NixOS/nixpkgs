@@ -82,7 +82,7 @@ in
 
       acEventCommands = mkOption {
         default = "";
-        description = "Shell commands to execute on a ac_adapter.* event.";
+        description = "Shell commands to execute on an ac_adapter.* event.";
       };
 
     };

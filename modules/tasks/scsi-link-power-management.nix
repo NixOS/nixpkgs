@@ -12,7 +12,7 @@ with pkgs.lib;
       example = "min_power";
       type = types.uniq types.string;
       description = ''
-        Configure the scsi link power management policy. By default,
+        Configure the SCSI link power management policy. By default,
         the kernel configures "max_performance".
       '';
     };
