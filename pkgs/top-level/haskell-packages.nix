@@ -1755,6 +1755,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   scotty = callPackage ../development/libraries/haskell/scotty {};
 
+  securemem = callPackage ../development/libraries/haskell/securemem {};
+
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
   semigroups = callPackage ../development/libraries/haskell/semigroups {};
