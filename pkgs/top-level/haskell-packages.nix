@@ -758,6 +758,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cryptoCipherTests = callPackage ../development/libraries/haskell/crypto-cipher-tests {};
 
+  cryptoCipherTypes = callPackage ../development/libraries/haskell/crypto-cipher-types {};
+
   cryptoConduit = callPackage ../development/libraries/haskell/crypto-conduit {};
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
