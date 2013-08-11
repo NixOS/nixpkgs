@@ -1990,6 +1990,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   unboundedDelays = callPackage ../development/libraries/haskell/unbounded-delays {};
 
+  unionFind = callPackage ../development/libraries/haskell/union-find {};
+
   uniplate = callPackage ../development/libraries/haskell/uniplate {};
 
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
