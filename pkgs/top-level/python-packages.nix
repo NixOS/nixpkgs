@@ -3822,6 +3822,26 @@ pythonPackages = modules // rec {
     };
   });
 
+
+  pycurl2 = buildPythonPackage (rec {
+    name = "pycurl2-7.20.0";
+
+    src = fetchgit {
+      url = "https://github.com/Lispython/pycurl.git";
+      rev = "0f00109950b883d680bd85dc6e8a9c731a7d0d13";
+      sha256 = "0mhg7f9y5zl0m2xgz3rf1yqjd6l8n0qhfk7bpf36r44jfnhj75ld";
+    };
+
+    buildInputs = [ pkgs.curl simplejson unittest2 nose ];
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/pycurl2;
+      description = "A fork from original PycURL library that no maintained from 7.19.0";
+      platforms = stdenv.lib.platforms.linux;
+    };
+  });
+
+
   pydot = buildPythonPackage rec {
     name = "pydot-1.0.2";
 
@@ -6399,8 +6419,7 @@ pythonPackages = modules // rec {
       sha256 = "0wjhd87pvpcpvaj3wql2d92g8lpp33iwmxdkp7npic5mjl2y0dsg";
     };
 
-    buildInputs = [ txamqp zope_interface twisted ];
-    propagatedBuildInputs = [ whisper ];
+    propagatedBuildInputs = [ whisper txamqp zope_interface twisted ];
 
     # error: invalid command 'test'
     doCheck = false;

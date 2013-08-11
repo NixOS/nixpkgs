@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     make DESTDIR="$out" MANPATH="$out/share/man" PREFIX="" install.man
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Hides mouse pointer while not in use.";
     longDescription = ''
       Unclutter hides your X mouse cursor when you do not need it, to prevent
@@ -28,5 +28,7 @@ stdenv.mkDerivation {
 
           unclutter -idle 1 &
     '';
+    maintainers = with maintainers; [ iElectric ];
+    platforms = platforms.unix;
   };
 }
