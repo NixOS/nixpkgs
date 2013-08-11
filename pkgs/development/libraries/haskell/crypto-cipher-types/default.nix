@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     byteable HUnit mtl QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/vincenthz/hs-crypto-cipher";
     description = "Generic cryptography cipher types";
