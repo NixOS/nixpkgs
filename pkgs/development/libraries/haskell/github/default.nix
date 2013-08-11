@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "github";
-  version = "0.7.0";
-  sha256 = "0r803hpyyd0nfhlk5jn4ripzi2cpj708zp9g961g7wvvvi66013p";
+  version = "0.7.1";
+  sha256 = "0aipaamd7gn5f79f451v8ifjs5g8b40g9w4kvi1i62imsh0zhh90";
   buildDepends = [
     aeson attoparsec caseInsensitive conduit dataDefault failure HTTP
     httpConduit httpTypes network text time unorderedContainers vector
