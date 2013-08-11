@@ -24,7 +24,7 @@ for source in $dbs; do
 			echo "selector $selector does not match any revision";
 		fi
 	else
-		echo "pulling branch $branch wasn't succesfull";
+		echo "pulling branch $branch wasn't successful";
 	fi;
 	if test -n "$done"; then
 		break;
