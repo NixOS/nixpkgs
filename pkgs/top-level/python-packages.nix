@@ -808,11 +808,11 @@ pythonPackages = modules // rec {
 
 
   colander = buildPythonPackage rec {
-    name = "colander-0.9.6";
+    name = "colander-1.0a5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/c/colander/${name}.tar.gz";
-      md5 = "2d9f65a64cb6b7f35d6a0d7b607ce4c6";
+      md5 = "569dea523561f5d94338ef9d9a98d249";
     };
 
     propagatedBuildInputs = [ pythonPackages.translationstring ];
@@ -1005,11 +1005,11 @@ pythonPackages = modules // rec {
 
 
   deform = buildPythonPackage rec {
-    name = "deform-0.9.4";
+    name = "deform-0.9.7";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/deform/${name}.tar.gz";
-      md5 = "2ed7b69644a6d8f4e1404e1892329240";
+      md5 = "d450eef05432d473257da5621c72c8b7";
     };
 
     buildInputs = [] ++ optional isPy26 unittest2;
@@ -1020,6 +1020,9 @@ pythonPackages = modules // rec {
         pythonPackages.colander
         pythonPackages.translationstring
         pythonPackages.chameleon
+        pythonPackages.zope_deprecation
+        pythonPackages.coverage
+        pythonPackages.nose
       ];
 
     meta = {
@@ -1392,6 +1395,8 @@ pythonPackages = modules // rec {
       maintainers = [ maintainers.goibhniu ];
     };
   };
+
+
 
 
   zope_deprecation = buildPythonPackage rec {
@@ -6328,11 +6333,11 @@ pythonPackages = modules // rec {
   };
 
   translationstring = buildPythonPackage rec {
-    name = "translationstring-0.4";
+    name = "translationstring-1.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/translationstring/${name}.tar.gz";
-      md5 = "392287923c475b660b7549b2c2f03dbc";
+      md5 = "0979b46d8f0f852810c8ec4be5c26cf2";
     };
 
     meta = {
