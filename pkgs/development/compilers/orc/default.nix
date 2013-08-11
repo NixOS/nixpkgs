@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
     homepage = "http://code.entropywave.com/orc/";
     license = stdenv.lib.license.bsd3;
     platform = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.iyzsong ];
   };
 }
