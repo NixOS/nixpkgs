@@ -1509,6 +1509,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
 
+  numericExtras = callPackage ../development/libraries/haskell/numeric-extras {};
+
   numericPrelude = callPackage ../development/libraries/haskell/numeric-prelude {};
 
   NumInstances = callPackage ../development/libraries/haskell/NumInstances {};
