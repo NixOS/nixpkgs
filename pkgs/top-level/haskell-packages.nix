@@ -647,9 +647,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bytestringProgress = callPackage ../development/libraries/haskell/bytestring-progress {};
 
-  c2hs = callPackage ../development/libraries/haskell/c2hs {
-    languageC = self.languageC_0_3_2_1;
-  };
+  c2hs = callPackage ../development/libraries/haskell/c2hs {};
 
   Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix { cabal = self.cabal.override { Cabal = null; }; };
@@ -1314,9 +1312,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   knob = callPackage ../development/libraries/haskell/knob {};
 
-  languageC_0_4_2   = callPackage ../development/libraries/haskell/language-c/0.4.2.nix {};
-  languageC_0_3_2_1 = callPackage ../development/libraries/haskell/language-c/0.3.2.1.nix {};
-  languageC = self.languageC_0_4_2;
+  languageC = callPackage ../development/libraries/haskell/language-c {};
 
   languageCQuote = callPackage ../development/libraries/haskell/language-c-quote {};
 
