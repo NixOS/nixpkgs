@@ -1277,6 +1277,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   instantGenerics = callPackage ../development/libraries/haskell/instant-generics {};
 
+  intervals = callPackage ../development/libraries/haskell/intervals {};
+
   ioChoice = callPackage ../development/libraries/haskell/io-choice {};
 
   IORefCAS = callPackage ../development/libraries/haskell/IORefCAS {};
