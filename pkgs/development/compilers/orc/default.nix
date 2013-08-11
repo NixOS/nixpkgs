@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The Oil Runtime Compiler";
     homepage = "http://code.entropywave.com/orc/";
+    # The source code implementing the Marsenne Twister algorithm is licensed
+    # under the 3-clause BSD license. The rest is 2-clause BSD license.
     license = stdenv.lib.license.bsd3;
     platform = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.iyzsong ];
