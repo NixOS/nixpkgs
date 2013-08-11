@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   jarsrc = fetchurl {
     url = "https://leiningen.s3.amazonaws.com/downloads/${pname}-${version}-standalone.jar";
-    sha256 = "1higd309b43lly7fv1pd5lfd3lyrij95nrzklqmk8vf9llw6974p";
+    sha256 = "04xmnw80f39qs2vfm5ic8bmhks1fvasiwg4snckg2zhfjkhzms05";
   };
 
   patches = ./lein_2.3.0.patch;
