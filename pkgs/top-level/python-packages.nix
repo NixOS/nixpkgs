@@ -1627,6 +1627,26 @@ pythonPackages = modules // rec {
   };
 
 
+  django_tagging = buildPythonPackage rec {
+    name = "django-tagging-0.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django-tagging/${name}.tar.gz";
+      md5 = "a0855f2b044db15f3f8a025fa1016ddf";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    propagatedBuildInputs = [ django_1_3 ];
+
+    meta = {
+      description = "A generic tagging application for Django projects";
+      homepage = http://code.google.com/p/django-tagging/;
+    };
+  };
+
+
   djblets = buildPythonPackage rec {
     name = "Djblets-0.6.28";
 
@@ -6475,7 +6495,19 @@ pythonPackages = modules // rec {
       sha256 = "1gj8i6j2i172cldqw98395235bn78ciagw6v17fgv01rmind3lag";
     };
 
-    buildInputs = [ django pkgs.pycairo ldap memcached modules.sqlite3 ];
+    propagatedBuildInputs = [ django_1_3 django_tagging modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
+
+    postInstall = ''
+      wrapProgram $out/bin/run-graphite-devel-server.py \
+        --prefix PATH : ${pkgs.which}/bin
+    '';
+
+    preConfigure = ''
+      substituteInPlace webapp/graphite/thirdparty/pytz/__init__.py --replace '/usr/share/zoneinfo' '/etc/zoneinfo'
+      substituteInPlace webapp/graphite/settings.py --replace "join(WEBAPP_DIR, 'content')" "join(WEBAPP_DIR, 'webapp', 'content')"
+      cp webapp/graphite/manage.py bin/manage-graphite.py
+      substituteInPlace bin/manage-graphite.py --replace 'settings' 'graphite.settings'
+    '';
 
     # error: invalid command 'test'
     doCheck = false;
