@@ -6399,8 +6399,7 @@ pythonPackages = modules // rec {
       sha256 = "0wjhd87pvpcpvaj3wql2d92g8lpp33iwmxdkp7npic5mjl2y0dsg";
     };
 
-    buildInputs = [ txamqp zope_interface twisted ];
-    propagatedBuildInputs = [ whisper ];
+    propagatedBuildInputs = [ whisper txamqp zope_interface twisted ];
 
     # error: invalid command 'test'
     doCheck = false;
