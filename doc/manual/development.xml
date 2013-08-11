@@ -48,6 +48,25 @@ $ nixos-rebuild switch -I <replaceable>/my/sources</replaceable>
 
 </para>
 
+<para><command>nixos-rebuild</command> affects only the system profile.
+To install packages to your user profile from expressions in
+<replaceable>/my/sources</replaceable>, use
+<command>nix-env -f <replaceable>/my/sources</replaceable>/nixpkgs</command>,
+or change the default by replacing the symlink in
+<filename>~/.nix-defexpr</filename>:
+
+<screen>
+$ rm -f ~/.nix-defexpr/channels
+$ ln -s <replaceable>/my/sources</replaceable>/nixpkgs ~/.nix-defexpr/nixpkgs
+</screen>
+
+</para>
+
+<para>You should not pass the base directory
+<filename><replaceable>/my/sources</replaceable></filename>
+to <command>nix-env</command>, as it will break after interpreting expressions
+in <filename>nixos/</filename> as packages.</para>
+
 </section>
 
 

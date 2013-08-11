@@ -152,7 +152,7 @@ $ nixos-option --install</screen>
 $ nixos-checkout</screen>
 
   to make the installer use the latest NixOS/Nixpkgs sources from the
-  Subversion repository, rather than the sources on CD.</para></listitem>
+  Git repository, rather than the sources on CD.</para></listitem>
   -->
 
   <listitem><para>Do the installation:
@@ -315,7 +315,7 @@ available.</para>
 use the <literal>nixos-unstable</literal> channel.  (A channel is a
 Nix mechanism for distributing Nix expressions and associated
 binaries.)  The NixOS channel is updated automatically from NixOS’s
-Subversion repository after running certain tests and building most
+Git repository after running certain tests and building most
 packages.</para>
 
 <para>NixOS automatically subscribes you to the NixOS channel.  If for
