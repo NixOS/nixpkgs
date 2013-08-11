@@ -4898,6 +4898,8 @@ let
 
   libvisio = callPackage ../development/libraries/libvisio { };
 
+  libvisual = callPackage ../development/libraries/libvisual { };
+
   libvncserver = builderDefsPackage (import ../development/libraries/libvncserver) {
     inherit libtool libjpeg openssl zlib;
     inherit (xlibs) xproto libX11 damageproto libXdamage
