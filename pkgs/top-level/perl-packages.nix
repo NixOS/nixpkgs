@@ -2947,6 +2947,7 @@ rec {
       url = mirror://cpan/authors/id/M/MO/MOB/Forks-Super-0.67.tar.gz;
       sha256 = "8831cd70e1eb3d4ab7d9a8c3692caa7b7220dc888cd1a8dc5640fb2a08379141";
     };
+    doCheck = false;
     meta = {
       description = "Extensions and convenience methods to manage background processes";
       license = "perl";
