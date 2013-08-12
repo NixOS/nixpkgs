@@ -3,7 +3,7 @@
 {
   require = [ ./installation-cd-minimal.nix ];
 
-  boot.kernelPackages = pkgs.linuxPackages_3_8;
+  boot.kernelPackages = pkgs.linuxPackages_3_9;
   boot.vesa = false;
 
   # What follows should probably move into base once the base kernel has the
