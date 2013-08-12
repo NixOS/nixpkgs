@@ -41,7 +41,7 @@ NB:
 
 Keep in mind that many programs are not very well suited for cross
 compilation. Either they are not intended to run on other platforms,
-because the code is highly platform specific, or the configuration proces
+because the code is highly platform specific, or the configuration process
 is not written with cross compilation in mind.
 
 Nix will not solve these problems for you!
@@ -290,7 +290,7 @@ this compiler and verified to be working on a HP Jornada 820 running Linux
 are "patch", "make" and "wget".
 
 If we want to build C++ programs it gets a lot more difficult. GCC has a
-three step compilation proces. In the first step a simple compiler, called
+three step compilation process. In the first step a simple compiler, called
 xgcc, that can compile only C programs is built. With that compiler it
 compiles itself two more times: one time to build a full compiler, and another
 time to build a full compiler once again with the freshly built compiler from
@@ -318,7 +318,7 @@ with compilation flags. This is still work in progress for Nix.
 
 ---
 
-After succesfully completing the whole toolchain you can start building
+After successfully completing the whole toolchain you can start building
 packages with the newly built tools. To make everything build correctly
 you will need a stdenv for your target platform. Setting up this platform
 will take some effort. Right now there is a very experimental setup for

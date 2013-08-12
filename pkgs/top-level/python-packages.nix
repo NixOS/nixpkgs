@@ -808,11 +808,11 @@ pythonPackages = modules // rec {
 
 
   colander = buildPythonPackage rec {
-    name = "colander-0.9.6";
+    name = "colander-1.0a5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/c/colander/${name}.tar.gz";
-      md5 = "2d9f65a64cb6b7f35d6a0d7b607ce4c6";
+      md5 = "569dea523561f5d94338ef9d9a98d249";
     };
 
     propagatedBuildInputs = [ pythonPackages.translationstring ];
@@ -1005,11 +1005,11 @@ pythonPackages = modules // rec {
 
 
   deform = buildPythonPackage rec {
-    name = "deform-0.9.4";
+    name = "deform-0.9.7";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/deform/${name}.tar.gz";
-      md5 = "2ed7b69644a6d8f4e1404e1892329240";
+      md5 = "d450eef05432d473257da5621c72c8b7";
     };
 
     buildInputs = [] ++ optional isPy26 unittest2;
@@ -1020,6 +1020,9 @@ pythonPackages = modules // rec {
         pythonPackages.colander
         pythonPackages.translationstring
         pythonPackages.chameleon
+        pythonPackages.zope_deprecation
+        pythonPackages.coverage
+        pythonPackages.nose
       ];
 
     meta = {
@@ -1394,6 +1397,8 @@ pythonPackages = modules // rec {
   };
 
 
+
+
   zope_deprecation = buildPythonPackage rec {
     name = "zope.deprecation-3.5.0";
 
@@ -1623,6 +1628,26 @@ pythonPackages = modules // rec {
     meta = {
       description = "A database schema evolution tool for the Django web framework";
       homepage = http://code.google.com/p/django-evolution/;
+    };
+  };
+
+
+  django_tagging = buildPythonPackage rec {
+    name = "django-tagging-0.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django-tagging/${name}.tar.gz";
+      md5 = "a0855f2b044db15f3f8a025fa1016ddf";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    propagatedBuildInputs = [ django_1_3 ];
+
+    meta = {
+      description = "A generic tagging application for Django projects";
+      homepage = http://code.google.com/p/django-tagging/;
     };
   };
 
@@ -3821,6 +3846,26 @@ pythonPackages = modules // rec {
       platforms = stdenv.lib.platforms.linux;
     };
   });
+
+
+  pycurl2 = buildPythonPackage (rec {
+    name = "pycurl2-7.20.0";
+
+    src = fetchgit {
+      url = "https://github.com/Lispython/pycurl.git";
+      rev = "0f00109950b883d680bd85dc6e8a9c731a7d0d13";
+      sha256 = "0mhg7f9y5zl0m2xgz3rf1yqjd6l8n0qhfk7bpf36r44jfnhj75ld";
+    };
+
+    buildInputs = [ pkgs.curl simplejson unittest2 nose ];
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/pycurl2;
+      description = "A fork from original PycURL library that no maintained from 7.19.0";
+      platforms = stdenv.lib.platforms.linux;
+    };
+  });
+
 
   pydot = buildPythonPackage rec {
     name = "pydot-1.0.2";
@@ -6288,11 +6333,11 @@ pythonPackages = modules // rec {
   };
 
   translationstring = buildPythonPackage rec {
-    name = "translationstring-0.4";
+    name = "translationstring-1.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/translationstring/${name}.tar.gz";
-      md5 = "392287923c475b660b7549b2c2f03dbc";
+      md5 = "0979b46d8f0f852810c8ec4be5c26cf2";
     };
 
     meta = {
@@ -6399,8 +6444,7 @@ pythonPackages = modules // rec {
       sha256 = "0wjhd87pvpcpvaj3wql2d92g8lpp33iwmxdkp7npic5mjl2y0dsg";
     };
 
-    buildInputs = [ txamqp zope_interface twisted ];
-    propagatedBuildInputs = [ whisper ];
+    propagatedBuildInputs = [ whisper txamqp zope_interface twisted ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -6456,7 +6500,19 @@ pythonPackages = modules // rec {
       sha256 = "1gj8i6j2i172cldqw98395235bn78ciagw6v17fgv01rmind3lag";
     };
 
-    buildInputs = [ django pkgs.pycairo ldap memcached modules.sqlite3 ];
+    propagatedBuildInputs = [ django_1_3 django_tagging modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
+
+    postInstall = ''
+      wrapProgram $out/bin/run-graphite-devel-server.py \
+        --prefix PATH : ${pkgs.which}/bin
+    '';
+
+    preConfigure = ''
+      substituteInPlace webapp/graphite/thirdparty/pytz/__init__.py --replace '/usr/share/zoneinfo' '/etc/zoneinfo'
+      substituteInPlace webapp/graphite/settings.py --replace "join(WEBAPP_DIR, 'content')" "join(WEBAPP_DIR, 'webapp', 'content')"
+      cp webapp/graphite/manage.py bin/manage-graphite.py
+      substituteInPlace bin/manage-graphite.py --replace 'settings' 'graphite.settings'
+    '';
 
     # error: invalid command 'test'
     doCheck = false;

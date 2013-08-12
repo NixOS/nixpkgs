@@ -131,11 +131,22 @@ rec {
       patch = ./mips-ext3-n32.patch;
     };
 
-  grsecurity_2_9_1_3_2_48 =
-    { name = "grsecurity-2.9.1-3.2.48";
+  grsecurity_2_9_1_3_2_50 =
+    { name = "grsecurity-2.9.1-3.2.50";
       patch = fetchurl {
-        url = http://grsecurity.net/stable/grsecurity-2.9.1-3.2.48-201307212241.patch;
-        sha256 = "1llgrcd7ynxx60dn05bcbysd6a1091wwxkck4d15gvp71s9r6scm";
+        url = http://grsecurity.net/stable/grsecurity-2.9.1-3.2.50-201308052151.patch;
+        sha256 = "178y68bx4h4r9gq1p4izbjah8vhjmb3yvr3sfjglz8blxxahgd6n";
+      };
+    };
+
+  # this patch will probably make it into 3.11 or 3.12
+  # it only touches 1 file (fs/btrfs/send.c) so it only affects people that use
+  # the btrfs send feature.
+  btrfs_send_backport =
+    { name = "btrfs-send-check-parent-dir-when-doing-a-compare-send";
+      patch = fetchurl {
+        url = https://patchwork.kernel.org/patch/2839612/mbox;
+        sha256 = "0qv5mxpfrzj2dibac64n4b3d6pg7gzsafd11548bihwmsa3dlbhg";
       };
     };
 

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-svg";
-  version = "0.6.0.1";
-  sha256 = "0x4yjm1wdhicknls1y3fhdg89m8wcvfk2svabww9075w6ras79qk";
+  version = "0.7";
+  sha256 = "0vfykrx29dxii9mdjjkia5a42jfg4hbzgxzv5rp7zvf3fz9w8w1x";
   buildDepends = [
     blazeSvg cmdargs colour diagramsCore diagramsLib filepath
     monoidExtras mtl split time vectorSpace

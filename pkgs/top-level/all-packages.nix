@@ -1526,6 +1526,8 @@ let
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
 
+  ponysay = callPackage ../tools/misc/ponysay { };
+
   povray = callPackage ../tools/graphics/povray { };
 
   ppl = callPackage ../development/libraries/ppl { };
@@ -1786,6 +1788,8 @@ let
 
   tor = callPackage ../tools/security/tor { };
 
+  torbutton = callPackage ../tools/security/torbutton { };
+
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
   trickle = callPackage ../tools/networking/trickle {};
@@ -1828,7 +1832,7 @@ let
 
   vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
 
-  vifm = callPackage ../applications/misc/vifm {};
+  vifm = callPackage ../applications/misc/vifm { };
 
   viking = callPackage ../applications/misc/viking {
     inherit (gnome) scrollkeeper;
@@ -2759,6 +2763,8 @@ let
 
   ocaml_4_00_1 = callPackage ../development/compilers/ocaml/4.00.1.nix { };
 
+  orc = callPackage ../development/compilers/orc { };
+
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
 
   ber_metaocaml_003 = callPackage ../development/compilers/ocaml/ber-metaocaml-003.nix { };
@@ -3152,9 +3158,7 @@ let
 
   qi = callPackage ../development/compilers/qi { };
 
-  racket = callPackage ../development/interpreters/racket {
-    libpng = libpng15;
-  };
+  racket = callPackage ../development/interpreters/racket { };
 
   regina = callPackage ../development/interpreters/regina {};
 
@@ -3299,6 +3303,8 @@ let
   avrdude = callPackage ../development/tools/misc/avrdude { };
 
   avarice = callPackage ../development/tools/misc/avarice { };
+
+  babeltrace = callPackage ../development/tools/misc/babeltrace { };
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
@@ -3539,6 +3545,12 @@ let
   lsof = callPackage ../development/tools/misc/lsof { };
 
   ltrace = callPackage ../development/tools/misc/ltrace { };
+
+  lttngTools = callPackage ../development/tools/misc/lttng-tools { };
+
+  lttngUst = callPackage ../development/tools/misc/lttng-ust { };
+
+  lttv = callPackage ../development/tools/misc/lttv { };
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
@@ -4844,6 +4856,8 @@ let
 
   libtunepimp = callPackage ../development/libraries/libtunepimp { };
 
+  libtxc_dxtn = callPackage ../development/libraries/libtxc_dxtn { };
+
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
 
   libunistring = callPackage ../development/libraries/libunistring { };
@@ -4855,6 +4869,8 @@ let
   libungif = callPackage ../development/libraries/giflib/libungif.nix { };
 
   libunique = callPackage ../development/libraries/libunique/default.nix { };
+
+  liburcu = callPackage ../development/libraries/liburcu { };
 
   libusb = callPackage ../development/libraries/libusb {
     stdenv = if stdenv.isDarwin
@@ -4881,6 +4897,8 @@ let
   libvirt = callPackage ../development/libraries/libvirt { };
 
   libvisio = callPackage ../development/libraries/libvisio { };
+
+  libvisual = callPackage ../development/libraries/libvisual { };
 
   libvncserver = builderDefsPackage (import ../development/libraries/libvncserver) {
     inherit libtool libjpeg openssl zlib;
@@ -6377,7 +6395,7 @@ let
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
   linux_3_0 = makeOverridable (import ../os-specific/linux/kernel/linux-3.0.nix) {
-    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
         # kernelPatches.aufs3_0
@@ -6385,7 +6403,7 @@ let
   };
 
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
-    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
         # kernelPatches.aufs3_2
@@ -6393,7 +6411,7 @@ let
   };
 
   linux_3_2_grsecurity = lowPrio (lib.overrideDerivation (linux_3_2.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_2_9_1_3_2_48 ];
+    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_2_9_1_3_2_50 ];
   })) (args: { makeFlags = "DISABLE_PAX_PLUGINS=y";}));
 
   linux_3_2_apparmor = lowPrio (linux_3_2.override {
@@ -6411,7 +6429,7 @@ let
   });
 
   linux_3_4 = makeOverridable (import ../os-specific/linux/kernel/linux-3.4.nix) {
-    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
         # kernelPatches.aufs3_4
@@ -6430,11 +6448,11 @@ let
   });
 
   linux_3_6_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi-3.6.nix) {
-    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
   };
 
   linux_3_9 = makeOverridable (import ../os-specific/linux/kernel/linux-3.9.nix) {
-    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
@@ -6446,10 +6464,11 @@ let
   };
 
   linux_3_10 = makeOverridable (import ../os-specific/linux/kernel/linux-3.10.nix) {
-    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
+        kernelPatches.btrfs_send_backport
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -6505,6 +6524,8 @@ let
     iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
 
     iwlwifi4965ucode = iwlwifi4965ucodeV2;
+
+    lttngModules = callPackage ../os-specific/linux/lttng-modules { };
 
     atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
 
@@ -6647,8 +6668,8 @@ let
   mountall = callPackage ../os-specific/linux/mountall { };
 
   aggregateModules = modules:
-    import ../os-specific/linux/module-init-tools/aggregator.nix {
-      inherit stdenv module_init_tools modules buildEnv;
+    callPackage ../os-specific/linux/kmod/aggregator.nix {
+      inherit modules;
     };
 
   multipath_tools = callPackage ../os-specific/linux/multipath-tools { };
@@ -7998,7 +8019,7 @@ let
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
     inherit imagemagick intltool python pkgconfig webkit libxml2
       which gettext makeWrapper file libidn sqlite docutils libnotify
-      vala dbus_glib;
+      vala dbus_glib glib_networking;
     inherit gtk3 glib;
     inherit (gnome) gtksourceview;
     inherit (webkit.passthru.args) libsoup;
@@ -9029,6 +9050,8 @@ let
   springLobby = callPackage ../games/spring/springlobby.nix { };
 
   stardust = callPackage ../games/stardust {};
+
+  steam = callPackage_i686 ../games/steam {};
 
   stuntrally = callPackage ../games/stuntrally { };
 
