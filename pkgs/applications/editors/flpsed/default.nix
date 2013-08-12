@@ -8,11 +8,13 @@ stdenv.mkDerivation {
     sha1 = "7966fd3b6fb3aa2a376386533ed4421ebb66ad62";
   };
 
-  buildInputs = [ stdenv fltk13 ghostscript ];
+  buildInputs = [ fltk13 ghostscript ];
 
   meta = {
     description = "A WYSIWYG PostScript annotator.";
-    license = "GPL";
+    homepage = "http://http://flpsed.org/flpsed.html";
+    license = "GPLv3";
+    platforms = stdenv.lib.platforms.all;
   };
 
 }
