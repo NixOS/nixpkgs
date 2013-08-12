@@ -917,8 +917,8 @@
   }
   {
     name = "connect";
-    spec = "2.8.4";
-    version = "2.8.4";
+    spec = "2.8.5";
+    version = "2.8.5";
     topLevel = false;
     dependencies = [
       { name = "qs"; spec = "0.6.5"; }
@@ -926,22 +926,22 @@
       { name = "cookie-signature"; spec = "1.0.1"; }
       { name = "buffer-crc32"; spec = "0.2.1"; }
       { name = "cookie"; spec = "0.1.0"; }
-      { name = "send"; spec = "0.1.3"; }
+      { name = "send"; spec = "0.1.4"; }
       { name = "bytes"; spec = "0.2.0"; }
-      { name = "fresh"; spec = "0.1.0"; }
+      { name = "fresh"; spec = "0.2.0"; }
       { name = "pause"; spec = "0.0.1"; }
       { name = "uid2"; spec = "0.0.2"; }
       { name = "debug"; spec = "*"; }
       { name = "methods"; spec = "0.0.1"; }
     ];
     patchLatest = false;
-    sha1 = "ead3eb0e7c5e79bf25e246371d85849cbbbbc656";
-    tarball = "http://registry.npmjs.org/connect/-/connect-2.8.4.tgz";
+    sha1 = "20572077ba1f626fdb740b0ad7068f9130d701b8";
+    tarball = "http://registry.npmjs.org/connect/-/connect-2.8.5.tgz";
   }
   {
     name = "connect";
     spec = "~2";
-    version = "2.8.4";
+    version = "2.8.5";
     topLevel = false;
     dependencies = [
       { name = "qs"; spec = "0.6.5"; }
@@ -949,17 +949,17 @@
       { name = "cookie-signature"; spec = "1.0.1"; }
       { name = "buffer-crc32"; spec = "0.2.1"; }
       { name = "cookie"; spec = "0.1.0"; }
-      { name = "send"; spec = "0.1.3"; }
+      { name = "send"; spec = "0.1.4"; }
       { name = "bytes"; spec = "0.2.0"; }
-      { name = "fresh"; spec = "0.1.0"; }
+      { name = "fresh"; spec = "0.2.0"; }
       { name = "pause"; spec = "0.0.1"; }
       { name = "uid2"; spec = "0.0.2"; }
       { name = "debug"; spec = "*"; }
       { name = "methods"; spec = "0.0.1"; }
     ];
     patchLatest = false;
-    sha1 = "ead3eb0e7c5e79bf25e246371d85849cbbbbc656";
-    tarball = "http://registry.npmjs.org/connect/-/connect-2.8.4.tgz";
+    sha1 = "20572077ba1f626fdb740b0ad7068f9130d701b8";
+    tarball = "http://registry.npmjs.org/connect/-/connect-2.8.5.tgz";
   }
   {
     name = "connect-flash";
@@ -1505,24 +1505,24 @@
   {
     name = "express";
     spec = "*";
-    version = "3.3.4";
+    version = "3.3.5";
     topLevel = true;
     dependencies = [
-      { name = "connect"; spec = "2.8.4"; }
+      { name = "connect"; spec = "2.8.5"; }
       { name = "commander"; spec = "1.2.0"; }
       { name = "range-parser"; spec = "0.0.4"; }
       { name = "mkdirp"; spec = "0.3.5"; }
       { name = "cookie"; spec = "0.1.0"; }
       { name = "buffer-crc32"; spec = "0.2.1"; }
-      { name = "fresh"; spec = "0.1.0"; }
+      { name = "fresh"; spec = "0.2.0"; }
       { name = "methods"; spec = "0.0.1"; }
-      { name = "send"; spec = "0.1.3"; }
+      { name = "send"; spec = "0.1.4"; }
       { name = "cookie-signature"; spec = "1.0.1"; }
       { name = "debug"; spec = "*"; }
     ];
     patchLatest = false;
-    sha1 = "9abf22017213a8f6f54a421ce22b8ec27b7def62";
-    tarball = "http://registry.npmjs.org/express/-/express-3.3.4.tgz";
+    sha1 = "3fd077660c9ccae4710fcfb326290a01d1e72566";
+    tarball = "http://registry.npmjs.org/express/-/express-3.3.5.tgz";
   }
   {
     name = "express";
@@ -1567,6 +1567,19 @@
     patchLatest = false;
     sha1 = "52a02c8db8f22bbfa0d7478d847cd45161f985f7";
     tarball = "http://registry.npmjs.org/express/-/express-3.1.2.tgz";
+  }
+  {
+    name = "express-form";
+    spec = "*";
+    version = "0.8.1";
+    topLevel = true;
+    dependencies = [
+      { name = "validator"; spec = "0.4.x"; }
+      { name = "object-additions"; spec = ">= 0.5.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "14299158646a796fac584cb5980d63e587c02019";
+    tarball = "http://registry.npmjs.org/express-form/-/express-form-0.8.1.tgz";
   }
   {
     name = "express-partials";
@@ -1862,6 +1875,17 @@
     patchLatest = false;
     sha1 = "03e4b0178424e4c2d5d19a54d8814cdc97934850";
     tarball = "http://registry.npmjs.org/fresh/-/fresh-0.1.0.tgz";
+  }
+  {
+    name = "fresh";
+    spec = "0.2.0";
+    version = "0.2.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "bfd9402cf3df12c4a4c310c79f99a3dde13d34a7";
+    tarball = "http://registry.npmjs.org/fresh/-/fresh-0.2.0.tgz";
   }
   {
     name = "fs-walk";
@@ -3942,6 +3966,17 @@
     tarball = "http://registry.npmjs.org/oauth-sign/-/oauth-sign-0.3.0.tgz";
   }
   {
+    name = "object-additions";
+    spec = ">= 0.5.0";
+    version = "0.5.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "ac624e0995e696c94cc69b41f316462b16a3bda4";
+    tarball = "http://registry.npmjs.org/object-additions/-/object-additions-0.5.1.tgz";
+  }
+  {
     name = "once";
     spec = "1.1.1";
     version = "1.1.1";
@@ -5070,17 +5105,17 @@
   {
     name = "send";
     spec = "*";
-    version = "0.1.3";
+    version = "0.1.4";
     topLevel = false;
     dependencies = [
       { name = "debug"; spec = "*"; }
       { name = "mime"; spec = "~1.2.9"; }
-      { name = "fresh"; spec = "0.1.0"; }
+      { name = "fresh"; spec = "0.2.0"; }
       { name = "range-parser"; spec = "0.0.4"; }
     ];
     patchLatest = false;
-    sha1 = "a7875daa6802d31e2ce32fdad98d3664c51ecea3";
-    tarball = "http://registry.npmjs.org/send/-/send-0.1.3.tgz";
+    sha1 = "be70d8d1be01de61821af13780b50345a4f71abd";
+    tarball = "http://registry.npmjs.org/send/-/send-0.1.4.tgz";
   }
   {
     name = "send";
@@ -5099,18 +5134,18 @@
   }
   {
     name = "send";
-    spec = "0.1.3";
-    version = "0.1.3";
+    spec = "0.1.4";
+    version = "0.1.4";
     topLevel = false;
     dependencies = [
       { name = "debug"; spec = "*"; }
       { name = "mime"; spec = "~1.2.9"; }
-      { name = "fresh"; spec = "0.1.0"; }
+      { name = "fresh"; spec = "0.2.0"; }
       { name = "range-parser"; spec = "0.0.4"; }
     ];
     patchLatest = false;
-    sha1 = "a7875daa6802d31e2ce32fdad98d3664c51ecea3";
-    tarball = "http://registry.npmjs.org/send/-/send-0.1.3.tgz";
+    sha1 = "be70d8d1be01de61821af13780b50345a4f71abd";
+    tarball = "http://registry.npmjs.org/send/-/send-0.1.4.tgz";
   }
   {
     name = "sequence";
@@ -5919,6 +5954,17 @@
     patchLatest = false;
     sha1 = "91a2423ca2eb3322390e211ee3d71cf4fa193aea";
     tarball = "http://registry.npmjs.org/utile/-/utile-0.2.0.tgz";
+  }
+  {
+    name = "validator";
+    spec = "0.4.x";
+    version = "0.4.28";
+    topLevel = false;
+    dependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "311d439ae6cf3fbe6f85da6ebaccd0c7007986f4";
+    tarball = "http://registry.npmjs.org/validator/-/validator-0.4.28.tgz";
   }
   {
     name = "vasync";

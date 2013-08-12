@@ -6,6 +6,7 @@
 , "underscore"
 , "extend"
 , "express"
+, "express-form"
 , "s3http"
 , "aws-sdk"
 , "nijs"
