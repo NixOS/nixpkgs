@@ -52,9 +52,9 @@ in
       kernelModules = [ "spl" "zfs" ] ;
       extraUtilsCommands =
         ''
-          cp -v ${kernel.zfs}/sbin/zfs $out/sbin
-          cp -v ${kernel.zfs}/sbin/zdb $out/sbin
-          cp -v ${kernel.zfs}/sbin/zpool $out/sbin
+          cp -v ${kernel.zfs}/sbin/zfs $out/bin
+          cp -v ${kernel.zfs}/sbin/zdb $out/bin
+          cp -v ${kernel.zfs}/sbin/zpool $out/bin
         '';
       postDeviceCommands =
         ''
