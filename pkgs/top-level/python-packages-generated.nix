@@ -175,6 +175,27 @@ in
   };
 
 
+  "waitress-0.8.6" = self.buildPythonPackage {
+    name = "waitress-0.8.6";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/w/waitress/waitress-0.8.6.tar.gz";
+        md5 = "eb5a8968780cfbc6b75364683b09f5fe";
+    };
+    doCheck = false;
+    buildInputs = [  ];
+    propagatedBuildInputs = [ self.setuptools ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
+
+    meta = {
+      description = ''
+        Waitress WSGI server
+        '';
+      homepage = "https://github.com/Pylons/waitress";
+      license = "ZPL 2.1";
+    };
+  };
+
+
   "coverage-3.6" = self.buildPythonPackage {
     name = "coverage-3.6";
     src = fetchurl {
@@ -1774,6 +1795,27 @@ development, check it into Subversion, and not touch Diazo during deployment.
   };
 
 
+  "beautifulsoup4-4.3.0" = self.buildPythonPackage {
+    name = "beautifulsoup4-4.3.0";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/b/beautifulsoup4/beautifulsoup4-4.3.0.tar.gz";
+        md5 = "8341b12402d942661bbfcc9f35420529";
+    };
+    doCheck = false;
+    buildInputs = [  ];
+    propagatedBuildInputs = [  ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
+
+    meta = {
+      description = ''
+        Improvements to the lxml tree builder.
+        '';
+      homepage = "http://www.crummy.com/software/BeautifulSoup/bs4/";
+      license = "MIT";
+    };
+  };
+
+
   "nose-1.3.0" = self.buildPythonPackage {
     name = "nose-1.3.0";
     src = fetchurl {
@@ -1917,27 +1959,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
         '';
       homepage = "http://pypi.python.org/pypi/plone.indexer";
       license = "BSD";
-    };
-  };
-
-
-  "waitress-0.8.5" = self.buildPythonPackage {
-    name = "waitress-0.8.5";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/w/waitress/waitress-0.8.5.tar.gz";
-        md5 = "7a3094d812c0dffb948d1334ef5fd56f";
-    };
-    doCheck = false;
-    buildInputs = [  ];
-    propagatedBuildInputs = [ self.setuptools ];
-    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
-    meta = {
-      description = ''
-        Waitress WSGI server
-        '';
-      homepage = "https://github.com/Pylons/waitress";
-      license = "ZPL 2.1";
     };
   };
 
@@ -2400,27 +2421,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
         '';
       homepage = "http://plone.org/products/plonetestcase";
       license = "GPL";
-    };
-  };
-
-
-  "beautifulsoup4-4.2.1" = self.buildPythonPackage {
-    name = "beautifulsoup4-4.2.1";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/b/beautifulsoup4/beautifulsoup4-4.2.1.tar.gz";
-        md5 = "91ea70ce16a5f1f43e58f2ef05651679";
-    };
-    doCheck = false;
-    buildInputs = [  ];
-    propagatedBuildInputs = [  ];
-    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
-    meta = {
-      description = ''
-        UNKNOWN
-        '';
-      homepage = "http://www.crummy.com/software/BeautifulSoup/bs4/";
-      license = "MIT";
     };
   };
 
@@ -3084,7 +3084,7 @@ development, check it into Subversion, and not touch Diazo during deployment.
     };
     doCheck = true;
     buildInputs = [ self."nose-1.3.0" self."unittest2-0.5.1" self."pyquery-1.2.4" self."WSGIProxy2-0.2" self."PasteDeploy-1.5.0" self."mock-1.0.1" self."coverage-3.6" pkgs.unzip ];
-    propagatedBuildInputs = [ self."beautifulsoup4-4.2.1" self."six-1.3.0" self."waitress-0.8.5" self."WebOb-1.2.3" ];
+    propagatedBuildInputs = [ self."beautifulsoup4-4.3.0" self."six-1.3.0" self."waitress-0.8.6" self."WebOb-1.2.3" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
 
     meta = {
