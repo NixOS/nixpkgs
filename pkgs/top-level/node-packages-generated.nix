@@ -1576,6 +1576,7 @@
     dependencies = [
       { name = "validator"; spec = "0.4.x"; }
       { name = "object-additions"; spec = ">= 0.5.0"; }
+      { name = "express"; spec = "*"; }
     ];
     patchLatest = false;
     sha1 = "14299158646a796fac584cb5980d63e587c02019";
