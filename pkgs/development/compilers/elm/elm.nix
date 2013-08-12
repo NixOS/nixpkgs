@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     binary blazeHtml blazeMarkup cmdargs filepath hjsmin indents mtl
     pandoc parsec transformers unionFind uniplate
   ];
+  doCheck = false;
   meta = {
     homepage = "http://elm-lang.org";
     description = "The Elm language module";
