@@ -54,13 +54,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   pypi2nix = buildPythonPackage rec {
-    rev = "f0bed8037538de481fab19af0521cb771c148aff";
+    rev = "e231db7e8874d4543a6f0fffc46c0fffbe6108c5";
     name = "pypi2nix-1.0_${rev}";
 
     src = fetchurl {
       url = "https://github.com/garbas/pypi2nix/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "14cabnln65v9s3y23dkmbp0zjhbgniyfwmrragwqv3wzi63bvhhk";
+      sha256 = "0wqk6milnagr0b0v8igjp8p25d5y63pki3pkdy7hbgjxvyw8wril";
     };
 
     propagatedBuildInputs = [ pythonPackages."Distutils2-1.0a4" ];
