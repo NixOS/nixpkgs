@@ -10,21 +10,24 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python3 texinfo makeWrapper ];
 
-  phases = "unpackPhase patchPhase installPhase";
+  inherit python3;
 
-  patches = [ ./pathfix.patch ];
+  phases = "unpackPhase installPhase fixupPhase";
 
   installPhase = ''
-    python3 setup.py --prefix=$out --freedom=partial install --with-shared-cache=$out/share/ponysay
-    for i in $(cd $out/bin && ls); do
-        wrapProgram $out/bin/$i \
-            --prefix PYTHONPATH : "$(toPythonPath $out):$PYTHONPATH"
-    done
+    find -type f -name "*.py" | xargs sed -i "s@/usr/bin/env python3@$python3/bin/python3@g"
+    substituteInPlace setup.py --replace \
+        "fileout.write(('#!/usr/bin/env %s\n' % env).encode('utf-8'))" \
+        "fileout.write(('#!%s/bin/%s\n' % (os.environ['python3'], env)).encode('utf-8'))"
+    python3 setup.py --prefix=$out --freedom=partial install \
+        --with-shared-cache=$out/share/ponysay \
+        --with-bash
   '';
 
   meta = {
     description = "cowsay reimplemention for ponies.";
     homepage = http://terse.tk/ponysay/;
     license = "GPLv3";
+    maintainers = with stdenv.lib.maintainers; [ bodil ];
   };
 }
