@@ -4,6 +4,12 @@
    * add it to this list. The URL mentioned above is a good source for inspiration.
    */
 
+  artistic2 = {
+    shortName = "Artistic 2.0";
+    fullName = "Artistic 2.0";
+    url = "http://opensource.org/licenses/artistic-license-2.0.php";
+  }
+
   agpl3 = {
     shortName = "AGPLv3";
     fullName = "GNU Affero General Public License version 3 only";
