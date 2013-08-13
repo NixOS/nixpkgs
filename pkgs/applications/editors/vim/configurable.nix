@@ -1,6 +1,6 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{source ? "latest", ...}: with args;
+args@{source ? "default", ...}: with args;
 
 
 let inherit (args.composableDerivation) composableDerivation edf; in
@@ -11,7 +11,7 @@ composableDerivation {
                    else stdenv ).mkDerivation;
 } (fix: {
 
-    name = "vim_configurable-7.3";
+    name = "vim_configurable-7.4";
 
     enableParallelBuilding = true; # test this
 
@@ -20,8 +20,8 @@ composableDerivation {
       "default" =
         # latest release
         args.fetchurl {
-            url = ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2;
-            sha256 = "079201qk8g9yisrrb0dn52ch96z3lzw6z473dydw9fzi0xp5spaw";
+            url = ftp://ftp.vim.org/pub/vim/unix/vim-7.4.tar.bz2;
+            sha256 = "1pjaffap91l2rb9pjnlbrpvb3ay5yhhr3g91zabjvw1rqk9adxfh";
           };
       "vim-nox" =
           {
