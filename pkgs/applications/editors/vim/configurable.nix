@@ -31,14 +31,7 @@ composableDerivation {
             name = "vim-nox-hg-2082fc3";
             # END
           }.src;
-      "latest" = {
-        # vim latest usually is vim + bug fixes. So it should be very stable
-         # REGION AUTO UPDATE: { name="vim"; type="hg"; url="https://vim.googlecode.com/hg"; }
-         src = (fetchurl { url = "http://mawercer.de/~nix/repos/vim-hg-7f98896.tar.bz2"; sha256 = "efcb8cc5924b530631a8e5fc2a0622045c2892210d32d300add24aded51866f1"; });
-         name = "vim-hg-7f98896";
-         # END
-      }.src;
-    };
+      };
 
     # if darwin support is enabled, we want to make sure we're not building with
     # OS-installed python framework
