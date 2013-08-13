@@ -2744,13 +2744,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   python_magic = buildPythonPackage rec {
-    # TODO: wait for release 0.4.3+
-    rev = "9f18d2c125b2f0240caec7096625834624cc4c20";
-    name = "python-magic-${rev}";
+    name = "python-magic-0.4.3";
 
-    src = fetchgit {
-      inherit rev;
-      url = "https://github.com/ahupp/python-magic.git";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/python-magic/${name}.tar.gz";
+      md5 = "eec9e2b1bcaf43308b7dacb3f2ecd8c1";
     };
 
     propagatedBuildInputs = [ pkgs.file ];
