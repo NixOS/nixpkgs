@@ -5805,21 +5805,6 @@ let
     python = pypy;
   });
 
-  plone41Packages = import ../development/web/plone/4.1.nix {
-    inherit pkgs;
-    pythonPackages = python26Packages;
-  };
-
-  plone42Packages = import ../development/web/plone/4.2.nix {
-    inherit pkgs;
-    pythonPackages = python26Packages;
-  };
-
-  plone43Packages = recurseIntoAttrs (import ../development/web/plone/4.3.nix {
-    inherit pkgs;
-    pythonPackages = python27Packages;
-  });
-
   foursuite = callPackage ../development/python-modules/4suite { };
 
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
