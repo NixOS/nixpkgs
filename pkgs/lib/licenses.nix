@@ -8,7 +8,7 @@
     shortName = "Artistic 2.0";
     fullName = "Artistic 2.0";
     url = "http://opensource.org/licenses/artistic-license-2.0.php";
-  }
+  };
 
   agpl3 = {
     shortName = "AGPLv3";
