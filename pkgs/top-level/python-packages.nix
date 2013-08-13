@@ -1612,7 +1612,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       colander
       deform
       deform_bootstrap
-      magic
+      python_magic
       pyyaml
       cryptacular
       hypatia
@@ -2743,7 +2743,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
 
-  magic = buildPythonPackage rec {
+  python_magic = buildPythonPackage rec {
     # TODO: wait for release 0.4.3+
     rev = "9f18d2c125b2f0240caec7096625834624cc4c20";
     name = "python-magic-${rev}";
@@ -2767,6 +2767,28 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "python-magic is a python interface to the libmagic file type identification library";
       homepage = https://github.com/ahupp/python-magic;
+    };
+  };
+
+  magic = pkgs.stdenv.mkDerivation rec {
+    name = "python-${pkgs.file.name}";
+
+    src = pkgs.file.src;
+
+    patches = [ ../tools/misc/file/python.patch ];
+    buildInputs = [ python pkgs.file ];
+
+    configurePhase = "cd python";
+
+    buildPhase = "${python}/bin/${python.executable} setup.py build";
+
+    installPhase = ''
+      ${python}/bin/${python.executable} setup.py install --prefix=$out
+    '';
+
+    meta = {
+      description = "A Python wrapper around libmagic";
+      homepage = http://www.darwinsys.com/file/;
     };
   };
 
