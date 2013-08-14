@@ -1,0 +1,293 @@
+diff -Nur common/lib/modules/fglrx/build_mod/drmP.h common-r1/lib/modules/fglrx/build_mod/drmP.h
+--- common/lib/modules/fglrx/build_mod/drmP.h	2013-05-15 09:26:23.555752577 +0300
++++ common-r1/lib/modules/fglrx/build_mod/drmP.h	2013-05-16 10:39:17.496212055 +0300
+@@ -901,10 +901,6 @@
+ int                   DRM(stub_unregister)(int minor);
+ 
+ 				/* Proc support (drm_proc.h) */
+-extern struct proc_dir_entry *DRM(proc_init)(drm_device_t *dev,
+-					     int minor,
+-					     struct proc_dir_entry *root,
+-					     struct proc_dir_entry **dev_root);
+ extern int            DRM(proc_cleanup)(int minor,
+ 					struct proc_dir_entry *root,
+ 					struct proc_dir_entry *dev_root);
+diff -Nur common/lib/modules/fglrx/build_mod/drm_proc.h common-r1/lib/modules/fglrx/build_mod/drm_proc.h
+--- common/lib/modules/fglrx/build_mod/drm_proc.h	2013-05-15 09:26:23.555752577 +0300
++++ common-r1/lib/modules/fglrx/build_mod/drm_proc.h	2013-05-19 02:16:16.584406160 +0300
+@@ -75,61 +75,6 @@
+ #define DRM_PROC_ENTRIES (sizeof(DRM(proc_list))/sizeof(DRM(proc_list)[0]))
+ 
+ /**
+- * Initialize the DRI proc filesystem for a device.
+- *
+- * \param dev DRM device.
+- * \param minor device minor number.
+- * \param root DRI proc dir entry.
+- * \param dev_root resulting DRI device proc dir entry.
+- * \return root entry pointer on success, or NULL on failure.
+- * 
+- * Create the DRI proc root entry "/proc/ati", the device proc root entry
+- * "/proc/ati/%minor%/", and each entry in proc_list as
+- * "/proc/ati/%minor%/%name%".
+- */
+-struct proc_dir_entry *DRM(proc_init)(drm_device_t *dev, int minor,
+-				      struct proc_dir_entry *root,
+-				      struct proc_dir_entry **dev_root)
+-{
+-	struct proc_dir_entry *ent;
+-	int		      i, j;
+-	char                  name[64];
+-
+-	if (!minor) root = create_proc_entry("dri", S_IFDIR, NULL);
+-	if (!root) {
+-		DRM_ERROR("Cannot create /proc/ati\n");
+-		return NULL;
+-	}
+-
+-	sprintf(name, "%d", minor);
+-	*dev_root = create_proc_entry(name, S_IFDIR, root);
+-	if (!*dev_root) {
+-		DRM_ERROR("Cannot create /proc/ati/%s\n", name);
+-		return NULL;
+-	}
+-
+-	for (i = 0; i < DRM_PROC_ENTRIES; i++) {
+-		ent = create_proc_entry(DRM(proc_list)[i].name,
+-					S_IFREG|S_IRUGO, *dev_root);
+-		if (!ent) {
+-			DRM_ERROR("Cannot create /proc/ati/%s/%s\n",
+-				  name, DRM(proc_list)[i].name);
+-			for (j = 0; j < i; j++)
+-				remove_proc_entry(DRM(proc_list)[i].name,
+-						  *dev_root);
+-			remove_proc_entry(name, root);
+-			if (!minor) remove_proc_entry("dri", NULL);
+-			return NULL;
+-		}
+-		ent->read_proc = DRM(proc_list)[i].f;
+-		ent->data      = dev;
+-	}
+-
+-	return root;
+-}
+-
+-
+-/**
+  * Cleanup the proc filesystem resources.
+  *
+  * \param minor device minor number.
+diff -Nur common/lib/modules/fglrx/build_mod/firegl_public.c common-r1/lib/modules/fglrx/build_mod/firegl_public.c
+--- common/lib/modules/fglrx/build_mod/firegl_public.c	2013-05-15 09:26:23.545752925 +0300
++++ common-r1/lib/modules/fglrx/build_mod/firegl_public.c	2013-05-19 03:07:10.236552522 +0300
+@@ -583,6 +583,202 @@
+     { "NULL",           NULL,                       NULL} // Terminate List!!!
+ };
+ 
++
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
++typedef int (read_proc_t)(char *page, char **start, off_t off, int count, int *eof, void *data);
++typedef int (write_proc_t)(struct file *file, const char __user *buffer, unsigned long count, void *data);
++#else
++#define PDE_DATA(inode) (PDE((inode))->data)
++#endif
++
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
++typedef struct {
++	read_proc_t *read_func;
++	write_proc_t *write_func;
++	void *data;
++} gentoo_proc_wrapper_t;
++
++#define GENTOO_PROC_WRAPPER_OVERFLOW_MAGIC 939750305
++
++static ssize_t gentoo_proc_wrapper_read (struct file *myfile, char __user *buffer, size_t count, loff_t *offset) {
++	int is_eof=0, retval;
++	char *start, *usebuffer=NULL;
++	gentoo_proc_wrapper_t* wrapper_data=(gentoo_proc_wrapper_t*)(myfile->private_data);
++	if (PAGE_SIZE<*offset) {
++		printk(KERN_ERR "Trying to read beyond 4k on proc\n");
++		return -EIO;
++	}
++	//printk(KERN_NOTICE " call with: dev %p, func %p\n", wrapper_data->data, wrapper_data->read_func);
++	
++	usebuffer=kmalloc(2*PAGE_SIZE, GFP_KERNEL);
++	if (!usebuffer)
++		return -ENOMEM;
++	((u32*)usebuffer)[1024]=GENTOO_PROC_WRAPPER_OVERFLOW_MAGIC;
++
++	retval=wrapper_data->read_func(usebuffer, &start, *offset, count, &is_eof, wrapper_data->data);
++
++	BUG_ON(GENTOO_PROC_WRAPPER_OVERFLOW_MAGIC != ((u32*)usebuffer)[1024]);
++
++	if (0 > retval)
++	{
++		printk(KERN_ERR "Proc read failed with %d", retval);
++		goto out;
++	}
++
++	if (copy_to_user(buffer, start, retval)) {
++		printk(KERN_NOTICE "copy to user failed in amd drivers proc code\n");
++		retval=-EFAULT;
++		goto out;
++	}
++	*offset+=retval;
++	
++out:
++	if (usebuffer)
++		kfree(usebuffer);
++	return retval;
++}
++static ssize_t gentoo_proc_wrapper_write (struct file *myfile, const char __user *buffer, size_t count, loff_t *offset) {
++	gentoo_proc_wrapper_t* wrapper_data=(gentoo_proc_wrapper_t*)(myfile->private_data);
++	int retval=0;
++	void *usebuffer=NULL;
++
++	BUG_ON(*offset);
++	if (!wrapper_data->write_func)
++		return -EPERM;
++	
++	usebuffer=kmalloc(count, GFP_KERNEL);
++	if (!usebuffer)
++		return -ENOMEM;
++	if (copy_from_user(usebuffer, buffer, count)) {
++		printk(KERN_NOTICE "copy from user failed in amd drivers proc code\n");
++		retval=-EFAULT;
++		goto out;
++	}
++	
++	retval=wrapper_data->write_func(myfile, buffer, count, wrapper_data->data);
++	*offset+=retval;
++out:
++	if (usebuffer)
++		kfree(usebuffer);
++	return retval;
++}
++static int gentoo_proc_wrapper_open(struct inode *myinode, struct file *myfile) {
++	myfile->private_data=PDE_DATA(myinode);
++	return generic_file_open(myinode, myfile);
++}
++struct file_operations gentoo_proc_fops = {
++	.read=gentoo_proc_wrapper_read,
++	.write=gentoo_proc_wrapper_write,
++	.open=gentoo_proc_wrapper_open,
++};
++	
++static void *gentoo_proc_wrapper_data(read_proc_t *reader, write_proc_t *writer, void *mydata) {
++	gentoo_proc_wrapper_t *retval=kmalloc(sizeof(gentoo_proc_wrapper_t), GFP_KERNEL);
++	if (!retval)
++		return retval;
++	retval->read_func=reader;
++	retval->write_func=writer;
++	retval->data=mydata;
++	return retval;
++}
++
++static struct proc_dir_entry *firegl_proc_init( device_t *dev,
++                                                int minor,
++                                                struct proc_dir_entry *root,
++                                                struct proc_dir_entry **dev_root,
++                                                kcl_proc_list_t *proc_list ) // proc_list must be terminated!
++{
++    struct proc_dir_entry *ent;
++    char    name[64];
++    kcl_proc_list_t *list = proc_list;
++	void *tempdata;
++    KCL_DEBUG1(FN_FIREGL_PROC, "minor %d, proc_list 0x%08lx\n", minor, (unsigned long)proc_list);
++    if (!minor)
++    {
++        root = proc_mkdir("ati", NULL);
++    }
++
++    if (!root)
++    {
++        KCL_DEBUG_ERROR("Cannot create /proc/ati\n");
++        return NULL;
++    }
++
++    if (minor == 0)
++    {
++        // Global major debice number entry
++		tempdata=gentoo_proc_wrapper_data((read_proc_t*)firegl_major_proc_read, NULL, NULL);
++		if (!tempdata)
++			return NULL;
++        ent = proc_create_data("major", S_IFREG|S_IRUGO, root, &gentoo_proc_fops, tempdata);
++        if (!ent)
++        {
++            remove_proc_entry("ati", NULL);
++            KCL_DEBUG_ERROR("Cannot create /proc/ati/major\n");
++            return NULL;
++        }
++    }
++
++    sprintf(name, "%d", minor);
++    *dev_root = proc_mkdir(name, root);
++    if (!*dev_root) {
++        remove_proc_entry("major", root);
++        remove_proc_entry("ati", NULL);
++        KCL_DEBUG_ERROR("Cannot create /proc/ati/%s\n", name);
++        return NULL;
++    }
++
++    while (list->f || list->fops)
++    {
++		struct file_operations *my_fops = &gentoo_proc_fops;
++        if (list->fops)
++        {
++            my_fops = (struct file_operations*)list->fops;
++			tempdata=(dev->pubdev.signature == FGL_DEVICE_SIGNATURE)? firegl_find_device(minor) : (dev);
++        }
++		else {
++			BUG_ON(!list->f);
++			tempdata=gentoo_proc_wrapper_data((read_proc_t*)list->f, NULL, (dev->pubdev.signature == FGL_DEVICE_SIGNATURE)? firegl_find_device(minor) : (dev) );
++			if (!tempdata)
++				return NULL;
++		}
++		//printk(KERN_NOTICE "name %s, dev %p, func %p, data %p\n", list->name, (dev->pubdev.signature == FGL_DEVICE_SIGNATURE)? firegl_find_device(minor) : (dev), list->f, tempdata);
++        ent = proc_create_data(list->name, S_IFREG|S_IRUGO, *dev_root, my_fops, tempdata);
++
++        if (!ent)
++        {
++            KCL_DEBUG_ERROR("Cannot create /proc/ati/%s/%s\n", name, list->name);
++            while (proc_list != list)
++            {
++                remove_proc_entry(proc_list->name, *dev_root);
++                proc_list++;
++            }
++            remove_proc_entry(name, root);
++            if (!minor)
++            {
++                remove_proc_entry("major", root);
++                remove_proc_entry("ati", NULL);
++            }
++            return NULL;
++        }
++
++        list++;
++    }
++
++    if (minor == 0)
++    {
++        // Global debug entry, only create it once
++		tempdata=gentoo_proc_wrapper_data((read_proc_t*)firegl_debug_proc_read_wrap, (write_proc_t*)firegl_debug_proc_write_wrap, dev);
++		if (!tempdata)
++			return NULL;
++        ent=proc_create_data("debug", S_IFREG|S_IRUGO, root, &gentoo_proc_fops, tempdata);
++		if (!ent)
++			return NULL;
++    }
++
++    return root;
++}
++#else
+ static struct proc_dir_entry *firegl_proc_init( device_t *dev,
+                                                 int minor,
+                                                 struct proc_dir_entry *root,
+@@ -677,6 +873,7 @@
+ 
+     return root;
+ }
++#endif
+ 
+ static int firegl_proc_cleanup( int minor,
+                                 struct proc_dir_entry *root,
