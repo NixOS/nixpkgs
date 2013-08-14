@@ -3042,7 +3042,12 @@ let
 
   erlangR14B04 = callPackage ../development/interpreters/erlang/R14B04.nix { };
   erlangR15B03 = callPackage ../development/interpreters/erlang/R15B03.nix { };
-  erlang = erlangR15B03;
+  erlangR16B01 = callPackage ../development/interpreters/erlang/R16B01.nix { };
+  erlang = erlangR16B01;
+
+  rebar = callPackage ../development/tools/build-managers/rebar { };
+
+  elixir = callPackage ../development/interpreters/elixir { };
 
   groovy = callPackage ../development/interpreters/groovy { };
 
