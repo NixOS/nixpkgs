@@ -10,7 +10,7 @@
       default = false;
       type = pkgs.lib.types.bool;
       description = ''
-        Turn on this option if you want firmware for the RT73 NIC
+        Turn on this option if you want firmware for the RT73 NIC.
       '';
     };
 
