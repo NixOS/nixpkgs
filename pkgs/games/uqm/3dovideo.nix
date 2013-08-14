@@ -21,8 +21,8 @@ let
 
     src = fetchgit {
       url = "git://github.com/aszlig/uqm3donix.git";
-      rev = "97fc4fd736dcf9fe03e6e5a2c347c5bdc71c8366";
-      sha256 = "09ws6j21mxkcjx444fxkf8a3q17jj6i7h2i9pf5ky52f6xds1h0j";
+      rev = "c4e43b0d2eeb15e4caa93b0ddcf6b886d1cdaf8f";
+      sha256 = "15vkgqsnwqn758nb3b55gbk5fw49lakax344sj9gvkpn8vxjn10y";
     };
 
     isLibrary = false;
