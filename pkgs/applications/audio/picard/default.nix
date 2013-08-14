@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pythonPackages, gettext, pyqt4
-, pkgconfig, libdiscid, libofa, ffmpeg }:
+, pkgconfig, libdiscid, libofa, ffmpeg, acoustidFingerprinter
+}:
 
 pythonPackages.buildPythonPackage rec {
   name = "picard-${version}";
@@ -10,6 +11,13 @@ pythonPackages.buildPythonPackage rec {
     url = "http://ftp.musicbrainz.org/pub/musicbrainz/picard/${name}.tar.gz";
     md5 = "d1086687b7f7b0d359a731b1a25e7b66";
   };
+
+  postPatch = let
+    fpr = "${acoustidFingerprinter}/bin/acoustid_fpcalc";
+  in ''
+    sed -ri -e 's|(TextOption.*"acoustid_fpcalc"[^"]*")[^"]*|\1${fpr}|' \
+      picard/ui/options/fingerprinting.py
+  '';
 
   buildInputs = [
     pkgconfig
