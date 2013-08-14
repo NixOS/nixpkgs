@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 {
 
@@ -22,7 +22,7 @@
 
   config = pkgs.lib.mkIf config.networking.enableIntel3945ABGFirmware {
 
-    hardware.firmware = [ pkgs.iwlwifi3945ucode ];
+    hardware.enableAllFirmware = true;
 
   };
 

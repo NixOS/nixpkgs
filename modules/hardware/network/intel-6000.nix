@@ -1,5 +1,3 @@
-{pkgs, config, ...}:
-
 {
-  hardware.firmware = [ pkgs.iwlwifi6000ucode ];
+  hardware.enableAllFirmware = true;
 }
