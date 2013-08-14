@@ -48,7 +48,7 @@ in
         script =
           ''
             mkdir -m 0755 -p $(dirname ${locatedb})
-            exec updatedb --localuser=nobody --output=${locatedb}
+            exec updatedb --localuser=nobody --output=${locatedb} --prunepaths='/tmp /var/tmp /media /run'
           '';
         serviceConfig.Nice = 19;
         serviceConfig.IOSchedulingClass = "idle";
