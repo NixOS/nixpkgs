@@ -20,7 +20,7 @@
   ###### implementation
 
   config = pkgs.lib.mkIf config.networking.enableRalinkFirmware {
-    hardware.firmware = [ pkgs.ralink_fw ];
+    hardware.enableAllFirmware = true;
   };
 
 }

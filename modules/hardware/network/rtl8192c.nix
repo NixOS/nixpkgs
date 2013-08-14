@@ -20,7 +20,7 @@
   ###### implementation
 
   config = pkgs.lib.mkIf config.networking.enableRTL8192cFirmware {
-    hardware.firmware = [ pkgs.rtl8192cfw ];
+    hardware.enableAllFirmware = true;
   };
 
 }

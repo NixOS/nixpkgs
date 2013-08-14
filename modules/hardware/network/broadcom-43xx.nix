@@ -1,5 +1,3 @@
-{ config, pkgs, ... }:
-
 {
-  hardware.firmware = [ pkgs.bcm43xx ];
+  hardware.enableAllFirmware = true;
 }
