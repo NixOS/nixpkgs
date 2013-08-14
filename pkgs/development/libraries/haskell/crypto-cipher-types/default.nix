@@ -1,17 +1,10 @@
-{ cabal, byteable, HUnit, mtl, QuickCheck, securemem, testFramework
-, testFrameworkHunit, testFrameworkQuickcheck2
-}:
+{ cabal, byteable, securemem }:
 
 cabal.mkDerivation (self: {
   pname = "crypto-cipher-types";
-  version = "0.0.1";
-  sha256 = "0brwb6awni3jm152vi68saz6gla7kgwf2pfjalzqsi8qjpjbzgpj";
+  version = "0.0.2";
+  sha256 = "1vjf9g1w7ja8x42k6hq6pcw7jvviw9rq512ncdqd7j20411zjbf4";
   buildDepends = [ byteable securemem ];
-  testDepends = [
-    byteable HUnit mtl QuickCheck testFramework testFrameworkHunit
-    testFrameworkQuickcheck2
-  ];
-  doCheck = false;
   meta = {
     homepage = "http://github.com/vincenthz/hs-crypto-cipher";
     description = "Generic cryptography cipher types";
