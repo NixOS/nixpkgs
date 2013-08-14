@@ -8635,6 +8635,8 @@ let
     };
   };
 
+  windowmaker = callPackage ../applications/window-managers/windowmaker { };
+
   winswitch = callPackage ../tools/X11/winswitch { };
 
   wings = callPackage ../applications/graphics/wings {
