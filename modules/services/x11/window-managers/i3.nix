@@ -1,7 +1,8 @@
-{pkgs, config, ...}:
+{ pkgs, config, ... }:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption mkIf;
   cfg = config.services.xserver.windowManager.i3;
 in
 
@@ -13,6 +14,15 @@ in
         example = true;
         description = "Enable the i3 tiling window manager.";
       };
+
+      configFile = mkOption {
+        default = null;
+        type = types.nullOr types.path;
+        description = ''
+          Path to the i3 configuration file.
+          If left at the default value, $HOME/.i3/config will be used.
+        '';
+      };
     };
   };
 
@@ -21,7 +31,9 @@ in
       session = [{
         name = "i3";
         start = "
-          ${pkgs.i3}/bin/i3 &
+          ${pkgs.i3}/bin/i3 ${optionalString (cfg.configFile != null)
+            "-c \"${cfg.configFile}\""
+          } &
           waitPID=$!
         ";
       }];
