@@ -1,7 +1,7 @@
 { fetchsvn, stdenv, emacs, cedet, ant }:
 
 let
-  revision = "137";
+  revision = "292";             # release 2.4.1
 in
   stdenv.mkDerivation rec {
     name = "jdee-svn${revision}";
@@ -11,16 +11,8 @@ in
     src = fetchsvn {
       url = "https://jdee.svn.sourceforge.net/svnroot/jdee/trunk/jdee";
       rev = revision;
-      sha256 = "1z1y957glbqm7z3dhah9h4jysw3173pq1gpx5agfwcw614n516xz";
+      sha256 = "0jd6sr02aq19mmbafjdd1mrhj8g4vc9hd5rsxjwh5r25a8j27780";
     };
-
-    patchFlags = "-p1 --ignore-whitespace";
-
-    patches = [
-      ./build-properties.patch
-      ./cedet-paths.patch ./elib-avltree.patch
-      ./java-directory.patch
-    ];
 
     configurePhase = ''
       mkdir -p "dist"
@@ -29,10 +21,10 @@ in
         dist.java.lib.dir = dist/lib/java
         dist.jar.jde.file = dist/lib/java/jde.jar
         dist.java.src.dir = dist/src/${name}/java
-        dist.doc.dir  dist/doc/${name}
+        dist.doc.dir = dist/doc/${name}
         prefix.dir = $out
         cedet.dir = ${cedet}/share/emacs/site-lisp
-        elib.dir = /nowhere
+        elib.dir =
         build.bin.emacs = ${emacs}/bin/emacs
       EOF
 
@@ -45,8 +37,8 @@ in
       done
     '';
 
-    buildPhase = "ant dist";
-
+    buildPhase = "ant build";
+    
     installPhase = ''
       ant install
 
@@ -55,6 +47,7 @@ in
 
       # Move everything that's not a JAR to $datadir.  This includes
       # `sun_checks.xml', license files, etc.
+      mkdir -p $out/lib/java
       cd "$out/lib/java"
       for i in *
       do
