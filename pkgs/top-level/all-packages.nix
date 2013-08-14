@@ -1784,6 +1784,8 @@ let
     guile = guile_1_8;
   };
 
+  tiled-qt = callPackage ../applications/editors/tiled-qt { qt = qt4; };
+
   tinc = callPackage ../tools/networking/tinc { };
 
   tmux = callPackage ../tools/misc/tmux { };
