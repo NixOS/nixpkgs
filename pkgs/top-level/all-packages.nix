@@ -7375,6 +7375,10 @@ let
       else stdenv;
   };
 
+  emacs24-nox = (appendToName "nox" (emacs24.override {
+    withX = false;
+  }));
+
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
 

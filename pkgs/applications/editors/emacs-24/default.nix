@@ -2,9 +2,9 @@
 , pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
 , alsaLib
+, withX ? true
 }:
 
-assert (gtk != null) -> (pkgconfig != null);
 assert (libXft != null) -> libpng != null;	# probably a bug
 assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
 
@@ -19,14 +19,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ ncurses x11 texinfo libXaw Xaw3d libXpm libpng libjpeg libungif
-      libtiff librsvg libXft gconf libxml2 imagemagick gnutls alsaLib
-    ]
-    ++ stdenv.lib.optionals (gtk != null) [ gtk pkgconfig ]
-    ++ stdenv.lib.optional stdenv.isLinux dbus;
+    [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo ]
+    ++ stdenv.lib.optional stdenv.isLinux dbus
+    ++ stdenv.lib.optionals withX [
+         x11 libXaw Xaw3d libXpm libpng libjpeg libungif
+         libtiff librsvg libXft imagemagick gtk
+       ];
 
   configureFlags =
-    (if gtk != null then 
+    (if withX then 
       [ "--with-x-toolkit=gtk" "--with-xft"]
     else
       [ "--with-x-toolkit=no" ])
@@ -69,7 +70,7 @@ EOF
     homepage = "http://www.gnu.org/software/emacs/";
     license = "GPLv3+";
 
-    maintainers = with maintainers; [ chaoflow lovek323 simons ];
+    maintainers = with maintainers; [ chaoflow lovek323 simons the-kenny ];
     platforms = platforms.all;
   };
 }
