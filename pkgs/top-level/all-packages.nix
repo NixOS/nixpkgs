@@ -386,6 +386,9 @@ let
 
   acct = callPackage ../tools/system/acct { };
 
+  acoustidFingerprinter = callPackage
+    ../tools/audio/acoustid-fingerprinter { };
+
   aefs = callPackage ../tools/filesystems/aefs { };
 
   aespipe = callPackage ../tools/security/aespipe { };
