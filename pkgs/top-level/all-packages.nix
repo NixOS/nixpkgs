@@ -2107,6 +2107,8 @@ let
 
   aspectj = callPackage ../development/compilers/aspectj { };
 
+  avra = callPackage ../development/compilers/avra { };
+
   bigloo = callPackage ../development/compilers/bigloo { };
 
   chicken = callPackage ../development/compilers/chicken { };
