@@ -6205,8 +6205,6 @@ let
 
   batctl = callPackage ../os-specific/linux/batman-adv/batctl.nix { };
 
-  bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
-
   bluez4 = callPackage ../os-specific/linux/bluez {
     pygobject = pygobject3;
   };
@@ -6706,10 +6704,6 @@ let
 
   radeontools = callPackage ../os-specific/linux/radeontools { };
 
-  radeonR700 = callPackage ../os-specific/linux/firmware/radeon-r700 { };
-  radeonR600 = callPackage ../os-specific/linux/firmware/radeon-r600 { };
-  radeonJuniper = callPackage ../os-specific/linux/firmware/radeon-juniper { };
-
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi {};
 
   regionset = callPackage ../os-specific/linux/regionset { };
@@ -6718,17 +6712,7 @@ let
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
-  ralink_fw = callPackage ../os-specific/linux/firmware/ralink { };
-
-  rt2860fw = callPackage ../os-specific/linux/firmware/rt2860 { };
-
-  rt2870fw = callPackage ../os-specific/linux/firmware/rt2870 { };
-
   rtkit = callPackage ../os-specific/linux/rtkit { };
-
-  rtl8192cfw = callPackage ../os-specific/linux/firmware/rtl8192c { };
-
-  rtl8168e2fw = callPackage ../os-specific/linux/firmware/rtl8168e-2 { };
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
