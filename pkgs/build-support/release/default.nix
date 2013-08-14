@@ -46,7 +46,15 @@ rec {
         _hydraAggregate = true;
       }
       ''
-        echo $members > $out
+        mkdir -p $out/nix-support
+        echo $members > $out/nix-support/hydra-aggregate-members
+
+        # Propagate build failures.
+        for i in $members; do
+          if [ -e $i/nix-support/failed ]; then
+            touch $out/nix-support/failed
+          fi
+        done
       '';
 
 }
