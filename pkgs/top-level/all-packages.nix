@@ -3814,6 +3814,8 @@ let
 
   chmlib = callPackage ../development/libraries/chmlib { };
 
+  chromaprint = callPackage ../development/libraries/chromaprint { };
+
   cil = callPackage ../development/libraries/cil { };
 
   cilaterm = callPackage ../development/libraries/cil-aterm {
