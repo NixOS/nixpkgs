@@ -2814,11 +2814,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   Mako = buildPythonPackage rec {
-    name = "Mako-0.7.3";
+    name = "Mako-0.8.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/M/Mako/${name}.tar.gz";
-      md5 = "daf7cc50f997533b573f9b40193139a2";
+      md5 = "96d962464ce6316004af0cc48495d73e";
     };
 
     buildInputs = [ markupsafe nose ];
