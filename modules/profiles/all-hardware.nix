@@ -47,21 +47,9 @@
     ];
 
   # Include lots of firmware.
-  require =
-    [ ../hardware/network/intel-4965agn.nix
-      ../hardware/network/intel-5000.nix
-      ../hardware/network/intel-6000.nix
-      ../hardware/network/intel-6000g2a.nix
-      ../hardware/network/intel-6000g2b.nix
-      ../hardware/network/intel-2030.nix
-      ../hardware/network/broadcom-43xx.nix
-      ../hardware/network/zydas-zd1211.nix
-      ../hardware/video/radeon.nix
-    ];
+  hardware.enableAllFirmware = true;
 
-  networking.enableIntel2100BGFirmware = true;
-  networking.enableIntel2200BGFirmware = true;
-  networking.enableIntel3945ABGFirmware = true;
-  #networking.enableRTL8192cFirmware = true; # doesn't build
-  
+  require =
+    [ ../hardware/network/zydas-zd1211.nix ];
+
 }
