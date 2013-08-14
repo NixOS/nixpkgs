@@ -6319,29 +6319,7 @@ let
 
   iptables = callPackage ../os-specific/linux/iptables { };
 
-  ipw2100fw = callPackage ../os-specific/linux/firmware/ipw2100 { };
-
-  ipw2200fw = callPackage ../os-specific/linux/firmware/ipw2200 { };
-
   iw = callPackage ../os-specific/linux/iw { };
-
-  iwlwifi1000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-1000-ucode { };
-
-  iwlwifi2030ucode = callPackage ../os-specific/linux/firmware/iwlwifi-2030-ucode { };
-
-  iwlwifi3945ucode = callPackage ../os-specific/linux/firmware/iwlwifi-3945-ucode { };
-
-  iwlwifi4965ucodeV2 = callPackage ../os-specific/linux/firmware/iwlwifi-4965-ucode/version-2.nix { };
-
-  iwlwifi5000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-5000-ucode { };
-
-  iwlwifi5150ucode = callPackage ../os-specific/linux/firmware/iwlwifi-5150-ucode { };
-
-  iwlwifi6000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000-ucode { };
-
-  iwlwifi6000g2aucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000g2a-ucode { };
-
-  iwlwifi6000g2bucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000g2b-ucode { };
 
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
@@ -6513,8 +6491,6 @@ let
     iscsitarget = callPackage ../os-specific/linux/iscsitarget { };
 
     iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
-
-    iwlwifi4965ucode = iwlwifi4965ucodeV2;
 
     lttngModules = callPackage ../os-specific/linux/lttng-modules { };
 
