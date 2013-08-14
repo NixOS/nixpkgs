@@ -34,13 +34,14 @@ in rec {
         else
           value) (generatedPackages // otherPackages);
 
-  # Legacy emacs packages (not yet built via package.el). lowPrio
-  # because there might be newer releases in the generated package
-  # list.
+  # Legacy emacs packages, not yet built via package.el or newer
+  # version
   otherPackages = {
     autoComplete = callPackage ../applications/editors/emacs-modes/auto-complete { };
     bbdb = callPackage ../applications/editors/emacs-modes/bbdb { };
-    cedet = callPackage ../applications/editors/emacs-modes/cedet { };
+    cedet = callPackage ../applications/editors/emacs-modes/cedet {
+      python = pkgs.python;
+    };
     calfw = callPackage ../applications/editors/emacs-modes/calfw { };
     coffee = callPackage ../applications/editors/emacs-modes/coffee { };
     colorTheme = callPackage ../applications/editors/emacs-modes/color-theme { };
