@@ -1594,7 +1594,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   substanced = buildPythonPackage rec {
     # no release yet
-    rev = "318a3d6a0324fd43585b8385f456d9d74c212eb8";
+    rev = "bd8822be62f0f356e4e44d5c614fe14d3fa08f45";
     name = "substanced-${rev}";
 
     src = fetchgit {
