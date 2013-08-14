@@ -3619,6 +3619,8 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     propagatedBuildInputs = [ pycrypto ];
 
+    checkPhase = "python test.py";
+
     meta = {
       homepage = "http://www.lag.net/paramiko/";
       description = "SSH2 protocol for python";
