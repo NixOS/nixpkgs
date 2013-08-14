@@ -525,6 +525,8 @@ let
 
   btrfsProgs = callPackage ../tools/filesystems/btrfsprogs { };
 
+  bwm_ng = callPackage ../tools/networking/bwm-ng { };
+
   byobu = callPackage ../tools/misc/byobu { };
 
   catdoc = callPackage ../tools/text/catdoc { };
