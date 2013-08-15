@@ -32,7 +32,7 @@ in rec {
       description = "Release-critical builds for the NixOS unstable channel";
       maintainers = [ pkgs.lib.maintainers.shlevy ];
     };
-    members =
+    constituents =
       [ nixos.channel
         nixos.manual
 
