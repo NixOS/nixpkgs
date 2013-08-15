@@ -536,11 +536,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   boto = buildPythonPackage rec {
-    name = "boto-2.6.0";
+    name = "boto-${version}";
+    version = "2.9.9";
 
     src = fetchurl {
-      url = "https://github.com/downloads/boto/boto/${name}.tar.gz";
-      sha256 = "1wnzs9frf44mrnw7l2vijc5anbcvcqqrv7237gjn27v0ja76slff";
+      url = "https://github.com/boto/boto/archive/${version}.tar.gz";
+      sha256 = "18wqpzd1zf8nivcn2rl1wnladf7hhyy5p75b5l6kafynm4l9j6jq";
     };
 
     # The tests seem to require AWS credentials.
