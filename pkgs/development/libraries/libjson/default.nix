@@ -1,13 +1,16 @@
 { stdenv, fetchurl, unzip }:
-
-stdenv.mkDerivation rec {
-  name = "libjson-7.4.0";
+let
+  version = "7.6.1";
+in stdenv.mkDerivation rec {
+  name = "libjson-${version}";
   src = fetchurl {
-    url = "mirror://sourceforge/libjson/libjson_7.4.0.zip";
-    sha256 = "0rd6m3r3acm7xq6f0mbyyhc3dnwmiga60cws29yjl6nx2f9h3r0x";
+    url = "mirror://sourceforge/libjson/libjson_${version}.zip";
+    sha256 = "0xkk5qc7kjcdwz9l04kmiz1nhmi7iszl3k165phf53h3a4wpl9h7";
   };
+  patches = [ ./install-fix.patch ];
   buildInputs = [ unzip ];
-  makeFlags = "prefix=$out";
+  makeFlags = [ "prefix=$(out)" ];
+  preInstall = "mkdir -p $out/lib";
   meta = {
     homepage = "http://libjson.sourceforge.net/";
     description = "A JSON reader and writer";
