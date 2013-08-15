@@ -103,6 +103,6 @@ in stdenv.mkDerivation rec {
     '';
     homepage = http://sc2.sourceforge.net/;
     license = "GPLv2";
-    maintainers = with maintainers; [ jcumming ];
+    maintainers = with maintainers; [ jcumming aszlig ];
   };
 }
