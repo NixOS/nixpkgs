@@ -28,11 +28,11 @@ in
 with { inherit (stdenv.lib) optionalString; };
 
 stdenv.mkDerivation rec {
-  name = "glib-2.36.3";
+  name = "glib-2.36.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/2.36/${name}.tar.xz";
-    sha256 = "07kn9j0gbh97mmmn72ird628klfdrswx1hqrcr1lqbp0djzk7i2y";
+    sha256 = "0zmdbkg2yjyxdl72w34lxvrssbzqzdficskkfn22s0994dad4m7n";
   };
 
   # configure script looks for d-bus but it is (probably) only needed for tests
