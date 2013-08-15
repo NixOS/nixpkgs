@@ -6975,7 +6975,7 @@ let
 
   inherit (gnome3) gsettings_desktop_schemas;
 
-  hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
+  hicolor_icon_theme = callPackage ../data/icons/hicolor-icon-theme { };
 
   inconsolata = callPackage ../data/fonts/inconsolata {};
 
