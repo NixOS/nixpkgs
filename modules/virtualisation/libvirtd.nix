@@ -7,6 +7,13 @@ with pkgs.lib;
 let
 
   cfg = config.virtualisation.libvirtd;
+  configFile = pkgs.writeText "libvirtd.conf" ''
+    unix_sock_group = "libvirtd"
+    unix_sock_rw_perms = "0770"
+    auth_unix_ro = "none"
+    auth_unix_rw = "none"
+    ${cfg.extraConfig}
+  '';
 
 in
 
@@ -33,6 +40,16 @@ in
         description =
           ''
             This option enables support for QEMU/KVM in libvirtd.
+          '';
+      };
+
+    virtualisation.libvirtd.extraConfig =
+      mkOption {
+        default = "";
+        description =
+          ''
+            Extra contents appended to the libvirtd configuration file,
+            libvirtd.conf.
           '';
       };
 
@@ -83,7 +100,7 @@ in
             done
           ''; # */
 
-        serviceConfig.ExecStart = "@${pkgs.libvirt}/sbin/libvirtd libvirtd --daemon --verbose";
+        serviceConfig.ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" --daemon --verbose'';
         serviceConfig.Type = "forking";
         serviceConfig.KillMode = "process"; # when stopping, leave the VMs alone
 
@@ -123,6 +140,8 @@ in
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
       };
+
+    users.extraGroups.libvirtd = {};
 
   };
 
