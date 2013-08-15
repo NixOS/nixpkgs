@@ -141,7 +141,7 @@ in
         serviceConfig.RemainAfterExit = true;
       };
 
-    users.extraGroups.libvirtd = {};
+    users.extraGroups.libvirtd.gid = config.ids.gids.libvirtd;
 
   };
 
