@@ -9606,7 +9606,6 @@ let
   gensgs = callPackage_i686 ../misc/emulators/gens-gs { };
 
   ghostscript = callPackage ../misc/ghostscript {
-    lcms = lcms2;
     x11Support = false;
     cupsSupport = config.ghostscript.cups or true;
     gnuFork = config.ghostscript.gnu or false;
