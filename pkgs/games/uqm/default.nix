@@ -18,22 +18,22 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/sc2/uqm-${version}-source.tgz";
-    sha256 = "a3695c5f7f0be7ec9c0f80ec569907b382023a1fee6e635532bd53b7b53bb221";
+    sha256 = "08dj7fsvflxx69an6vpf3wx050mk0ycmdv401yffrrqbgxgmqsd3";
   };
 
   content = fetchurl {
     url = "mirror://sourceforge/sc2/uqm-${version}-content.uqm";
-    sha256 = "b8f6db8ba29f0628fb1d5c233830896b19f441aee3744bda671ea264b44da3bf";
+    sha256 = "1gx39ns698hyczd4nx73mr0z86bbi4q3h8sw3pxjh1lzla5xpxmq";
   };
 
   voice = fetchurl {
     url = "mirror://sourceforge/sc2/uqm-${version}-voice.uqm";
-    sha256 = "bcccf801b4ba37594ff6217b292744ea586ee2d447e927804842ccae8b73c979";
+    sha256 = "0yf9ff5sxk229202gsa7ski6wn7a8hkjjyr1yr7mjdxsnh0zik5w";
   };
 
   music = fetchurl {
     url = "mirror://sourceforge/sc2/uqm-${version}-3domusic.uqm";
-    sha256 = "c57085e64dad4bddf8a679a9aa2adf63f2156d5f6cbabe63af80519033dbcb82";
+    sha256 = "10nbvcrr0lc0mxivxfkcbxnibwk3vwmamabrlvwdsjxd9pk8aw65";
   };
 
 
