@@ -44,31 +44,50 @@ let
     fi
   '';
 
+  overrideNameserversScript = writeScript "02overridedns" ''
+    #!/bin/sh
+    ${pkgs.gnused}/bin/sed -i '/nameserver /d' /etc/resolv.conf
+    ${pkgs.lib.concatStringsSep ";" (map (s: "echo 'nameserver ${s}' >> /etc/resolv.conf") config.networking.nameservers)}
+  '';
+
 in {
 
   ###### interface
 
   options = {
 
-    networking.networkmanager.enable = mkOption {
-      default = false;
-      merge = mergeEnableOption;
-      description = ''
-        Whether to use NetworkManager to obtain an IP address and other
-        configuration for all network interfaces that are not manually
-        configured. If enabled, a group <literal>networkmanager</literal>
-        will be created. Add all users that should have permission
-        to change network settings to this group.
-      '';
-    };
+    networking.networkmanager = {
 
-    networking.networkmanager.packages = mkOption {
-      default = [ ];
-      description = ''
-        Extra packages that provide NetworkManager plugins.
-      '';
-      merge = mergeListOption;
-      apply = list: [ networkmanager modemmanager wpa_supplicant ] ++ list;
+      enable = mkOption {
+        default = false;
+        merge = mergeEnableOption;
+        description = ''
+          Whether to use NetworkManager to obtain an IP address and other
+          configuration for all network interfaces that are not manually
+          configured. If enabled, a group <literal>networkmanager</literal>
+          will be created. Add all users that should have permission
+          to change network settings to this group.
+        '';
+      };
+  
+      packages = mkOption {
+        default = [ ];
+        description = ''
+          Extra packages that provide NetworkManager plugins.
+        '';
+        merge = mergeListOption;
+        apply = list: [ networkmanager modemmanager wpa_supplicant ] ++ list;
+      };
+
+      overrideNameservers = mkOption {
+        default = false;
+        description = ''
+          If enabled, any nameservers received by DHCP or configured in
+          NetworkManager will be replaced by the nameservers configured
+          in the <literal>networking.nameservers</literal> option.
+        '';
+      };
+
     };
   };
 
@@ -98,7 +117,10 @@ in {
       { source = "${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
         target = "NetworkManager/VPN/nm-openconnect-service.name";
       }
-    ];
+    ] ++ pkgs.lib.optional cfg.overrideNameservers
+           { source = overrideNameserversScript;
+             target = "NetworkManager/dispatcher.d/02overridedns";
+           };
 
     environment.systemPackages = cfg.packages ++ [
         networkmanager_openvpn
