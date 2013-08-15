@@ -46,7 +46,7 @@ let
       description = ''
         Shell script code used to initialise the shell prompt.
       '';
-      type = with pkgs.lib.types; lines;
+      type = types.lines;
     };
 
     environment.shellInit = mkOption {
@@ -55,7 +55,7 @@ let
       description = ''
         Shell script code called during login shell initialisation.
       '';
-      type = with pkgs.lib.types; lines;
+      type = types.lines;
     };
 
     environment.interactiveShellInit = mkOption {
@@ -64,19 +64,19 @@ let
       description = ''
         Shell script code called during interactive shell initialisation.
       '';
-      type = with pkgs.lib.types; lines;
+      type = types.lines;
     };
 
     environment.enableBashCompletion = mkOption {
       default = false;
       description = "Enable Bash completion for all interactive shells.";
-      type = with pkgs.lib.types; bool;
+      type = types.bool;
     };
 
     environment.binsh = mkOption {
       default = "${config.system.build.binsh}/bin/sh";
       example = "\${pkgs.dash}/bin/dash";
-      type = with pkgs.lib.types; path;
+      type = types.path;
       description = ''
         Select the shell executable that is linked system-wide to
         <literal>/bin/sh</literal>. Please note that NixOS assumes all
