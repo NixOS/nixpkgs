@@ -64,11 +64,11 @@ in stdenv.mkDerivation rec {
   postUnpack = ''
     mkdir -p uqm-${version}/content/packages
     mkdir -p uqm-${version}/content/addons
-    cp $content uqm-${version}/content/packages/uqm-0.7.0-content.uqm
-    cp $music uqm-${version}/content/addons/uqm-0.7.0-3domusic.uqm
-    cp $voice uqm-${version}/content/addons/uqm-0.7.0-voice.uqm
+    ln -s "$content" "uqm-${version}/content/packages/uqm-0.7.0-content.uqm"
+    ln -s "$music" "uqm-${version}/content/addons/uqm-0.7.0-3domusic.uqm"
+    ln -s "$voice" "uqm-${version}/content/addons/uqm-0.7.0-voice.uqm"
   '' + optionalString useRemixPacks (concatMapStrings (disc: ''
-    cp "${disc}" "uqm-$version/content/addons/${disc.name}"
+    ln -s "${disc}" "uqm-$version/content/addons/${disc.name}"
   '') remixPacks) + optionalString use3DOVideos ''
     ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"
   '';
