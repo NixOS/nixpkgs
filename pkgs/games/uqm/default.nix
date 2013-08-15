@@ -2,15 +2,15 @@
 , pkgconfig, mesa
 , SDL, SDL_image, libpng, zlib, libvorbis, libogg, libmikmod, unzip
 , use3DOVideos ? false, requireFile ? null, writeText ? null
-, fetchgit ? null, haskellPackages ? null
+, haskellPackages ? null
 }:
 
 assert use3DOVideos -> requireFile != null && writeText != null
-                    && fetchgit != null && haskellPackages != null;
+                    && haskellPackages != null;
 
 let
   videos = import ./3dovideo.nix {
-    inherit stdenv requireFile writeText fetchgit haskellPackages;
+    inherit stdenv requireFile writeText fetchurl haskellPackages;
   };
 in stdenv.mkDerivation rec {
   name = "uqm-${version}";
