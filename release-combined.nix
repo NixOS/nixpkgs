@@ -4,6 +4,7 @@
 }:
 
 let
+
   nixpkgs' = nixpkgs; # urgh
 
   pkgs = import <nixpkgs> {};
@@ -13,6 +14,7 @@ let
       then set // { meta = builtins.removeAttrs (set.meta or {}) [ "maintainers" ]; }
       else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else set;
+
 in rec {
   nixos = removeMaintainers (import ./release.nix {
     inherit nixosSrc officialRelease;
@@ -30,32 +32,30 @@ in rec {
     name = "nixos-${nixos.tarball.version}";
     meta = {
       description = "Release-critical builds for the NixOS unstable channel";
-      maintainers = [ pkgs.lib.maintainers.shlevy ];
+      maintainers = [ pkgs.lib.maintainers.eelco pkgs.lib.maintainers.shlevy ];
     };
     constituents =
+      let all = x: [ x.x86_64-linux x.i686-linux ]; in
       [ nixos.channel
         nixos.manual
 
-        nixos.iso_minimal.x86_64-linux
-        nixos.iso_minimal.i686-linux
-        nixos.iso_graphical.x86_64-linux
-        nixos.iso_graphical.i686-linux
+        (all nixos.iso_minimal)
+        (all nixos.iso_graphical)
+        nixos.vdi.x86_64-linux
 
-        nixos.tests.firefox.x86_64-linux
-        nixos.tests.firewall.x86_64-linux
-        nixos.tests.installer.lvm.x86_64-linux
-        nixos.tests.installer.separateBoot.x86_64-linux
-        nixos.tests.installer.simple.i686-linux
-        nixos.tests.installer.simple.x86_64-linux
-        nixos.tests.kde4.i686-linux
-        nixos.tests.login.i686-linux
-        nixos.tests.login.x86_64-linux
-        nixos.tests.misc.i686-linux
-        nixos.tests.misc.x86_64-linux
+        (all nixos.tests.firefox)
+        (all nixos.tests.firewall)
+        (all nixos.tests.installer.lvm)
+        (all nixos.tests.installer.separateBoot)
+        (all nixos.tests.installer.simple)
+        (all nixos.tests.kde4)
+        (all nixos.tests.login)
+        (all nixos.tests.misc)
+        (all nixos.tests.openssh)
+        (all nixos.tests.xfce)
 
         nixpkgs.tarball
-        nixpkgs.emacs.i686-linux
-        nixpkgs.emacs.x86_64-linux
+        (all nixpkgs.emacs)
       ];
   };
 
