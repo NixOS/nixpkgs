@@ -12,10 +12,14 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [
-    pkgconfig intltool libxfce4util libxfcegui4
-    gtk gtksourceview dbus dbus_glib
-  ];
+  buildInputs =
+    [ pkgconfig intltool libxfce4util libxfcegui4
+      gtk gtksourceview dbus dbus_glib
+    ];
+
+  # Propagate gtksourceview into $XDG_DATA_DIRS to provide syntax
+  # highlighting (in fact Mousepad segfaults without it).
+  propagatedUserEnvPkgs = [ gtksourceview ];
 
   meta = {
     homepage = http://www.xfce.org/;
