@@ -45,6 +45,7 @@ in
     environment.systemPackages =
       [ pkgs.gtk # To get GTK+'s themes.
         pkgs.hicolor_icon_theme
+        pkgs.tango-icon-theme
         pkgs.shared_mime_info
         pkgs.which # Needed by the xfce's xinitrc script.
         pkgs.xfce.exo
