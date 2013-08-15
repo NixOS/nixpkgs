@@ -7021,6 +7021,8 @@ let
 
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
+  tango-icon-theme = callPackage ../data/icons/tango-icon-theme { };
+
   themes = name: import (../data/misc/themes + ("/" + name + ".nix")) {
     inherit fetchurl;
   };
