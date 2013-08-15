@@ -1,17 +1,34 @@
 { stdenv, fetchurl
 , pkgconfig, mesa
 , SDL, SDL_image, libpng, zlib, libvorbis, libogg, libmikmod, unzip
+
 , use3DOVideos ? false, requireFile ? null, writeText ? null
 , haskellPackages ? null
+
+, useRemixPacks ? false
 }:
 
 assert use3DOVideos -> requireFile != null && writeText != null
                     && haskellPackages != null;
 
+with stdenv.lib;
+
 let
   videos = import ./3dovideo.nix {
     inherit stdenv requireFile writeText fetchurl haskellPackages;
   };
+
+  remixPacks = imap (num: sha256: fetchurl rec {
+    name = "uqm-remix-disc${toString num}.uqm";
+    url = "mirror://sourceforge/sc2/${name}";
+    inherit sha256;
+  }) [
+    "1s470i6hm53l214f2rkrbp111q4jyvnxbzdziqg32ffr8m3nk5xn"
+    "1pmsq65k8gk4jcbyk3qjgi9yqlm0dlaimc2r8hz2fc9f2124gfvz"
+    "07g966ylvw9k5q9jdzqdczp7c5qv4s91xjlg4z5z27fgcs7rzn76"
+    "1l46k9aqlcp7d3fjkjb3n05cjfkxx8rjlypgqy0jmdx529vikj54"
+  ];
+
 in stdenv.mkDerivation rec {
   name = "uqm-${version}";
   version = "0.7.0";
@@ -50,7 +67,9 @@ in stdenv.mkDerivation rec {
     cp $content uqm-${version}/content/packages/uqm-0.7.0-content.uqm
     cp $music uqm-${version}/content/addons/uqm-0.7.0-3domusic.uqm
     cp $voice uqm-${version}/content/addons/uqm-0.7.0-voice.uqm
-  '' + stdenv.lib.optionalString use3DOVideos ''
+  '' + optionalString useRemixPacks (concatMapStrings (disc: ''
+    cp "${disc}" "uqm-$version/content/addons/${disc.name}"
+  '') remixPacks) + optionalString use3DOVideos ''
     ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"
   '';
 
@@ -84,6 +103,6 @@ in stdenv.mkDerivation rec {
     '';
     homepage = http://sc2.sourceforge.net/;
     license = "GPLv2";
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    maintainers = with maintainers; [ jcumming ];
   };
 }
