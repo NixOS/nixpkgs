@@ -16,6 +16,7 @@ let
     else set;
 
 in rec {
+
   nixos = removeMaintainers (import ./release.nix {
     inherit nixosSrc officialRelease;
     nixpkgs = nixpkgs';

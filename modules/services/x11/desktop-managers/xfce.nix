@@ -76,7 +76,7 @@ in
       ++ optional config.powerManagement.enable pkgs.xfce.xfce4_power_manager;
 
     environment.pathsToLink =
-      [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" ];
+      [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" "/share/gtksourceview-2.0" ];
 
     environment.shellInit =
       ''
