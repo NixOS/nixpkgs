@@ -15,7 +15,10 @@ let
             else [];
         in depsOr;
       all = pkgs.lib.fold (pkg: { top-level, full }: {
-        top-level = top-level ++ pkgs.lib.optional pkg.topLevel {
+        top-level = top-level ++ [ {
+          name = "${pkg.name}-${pkg.version}";
+          value = builtins.getAttr pkg.spec (builtins.getAttr pkg.name self.full);
+        } ] ++ pkgs.lib.optional pkg.topLevel {
           name = pkg.name;
           value = builtins.getAttr pkg.spec (builtins.getAttr pkg.name self.full);
         };
