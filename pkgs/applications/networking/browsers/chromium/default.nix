@@ -215,7 +215,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Chromium, an open source web browser";
+    description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
     maintainers = with maintainers; [ goibhniu chaoflow aszlig ];
     license = licenses.bsd3;
