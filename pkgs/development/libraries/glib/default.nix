@@ -46,13 +46,6 @@ stdenv.mkDerivation rec {
   preConfigure = "autoreconf -fi";
   configureFlags = "--with-pcre=system --disable-fam";
 
-  postConfigure =
-    optionalString stdenv.isDarwin (''
-      sed '24 i #include <Foundation/Foundation.h>'
-    '' + /* Disable the NeXTstep back-end because stdenv.gcc doesn't support Objective-C. */ ''
-      sed -i configure -e's/glib_have_cocoa=yes/glib_have_cocoa=no/g'
-    '');
-
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-lintl";
 
   enableParallelBuilding = true;
