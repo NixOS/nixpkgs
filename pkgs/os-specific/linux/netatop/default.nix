@@ -1,11 +1,11 @@
 { stdenv, fetchurl, kernelDev, zlib }:
 
 stdenv.mkDerivation {
-  name = "netatop-${kernelDev.version}-0.2";
+  name = "netatop-${kernelDev.version}-0.3";
 
   src = fetchurl {
-    url = http://www.atoptool.nl/download/netatop-0.2.tar.gz;
-    sha256 = "0ya4qys2qpw080sbgixyx1kawdx1c3smnxwmqcchn0hg9hhndvc0";
+    url = http://www.atoptool.nl/download/netatop-0.3.tar.gz;
+    sha256 = "0rk873nb1hgfnz040plmv6rm9mcm813n0clfjs53fsqbn8y1lhvv";
   };
 
   buildInputs = [ zlib ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   preInstall = ''
-    ensureDir $out/bin $out/share/man/man{4,8}
+    ensureDir $out/bin $out/sbin $out/share/man/man{4,8}
     ensureDir $out/lib/modules/${kernelDev.modDirVersion}/extra
   '';
       

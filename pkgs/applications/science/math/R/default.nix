@@ -36,9 +36,15 @@ stdenv.mkDerivation rec {
       --with-system-pcre
       --with-system-xz
       --with-ICU
-      R_SHELL="${stdenv.shell}"
+      AR=$(type -p ar)
+      AWK=$(type -p gawk)
+      CC=$(type -p gcc)
+      CXX=$(type -p g++)
+      FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
       LDFLAGS="-L${gfortran.gcc}/lib"
+      RANLIB=$(type -p ranlib)
+      R_SHELL="${stdenv.shell}"
     )
     echo "TCLLIBPATH=${tk}/lib" >>etc/Renviron.in
   '';

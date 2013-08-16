@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "redshift";
-  version = "1.6";
+  version = "1.7";
   name = "${pname}-${version}";
   src = fetchurl {
     url = "http://launchpad.net/${pname}/trunk/${version}/+download/${pname}-${version}.tar.bz2";
-    sha256 = "0g46zhqnx3y2fssmyjgaardzhjw1j29l1dbc2kmccw9wxqfla1wi";
+    sha256 = "1j0hs0vnlic90cf4bryn11n4ani1x2s5l8z6ll3fmrlw98ykrylv";
   };
 
   buildInputs = [ libX11 libXrandr libXxf86vm libxcb pkgconfig python

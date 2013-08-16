@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cryptocipher";
-  version = "0.5.0";
-  sha256 = "16gqsy23y3g9089ng94124g5pvc4d0vnh2r47ii789f8j96062nd";
+  version = "0.5.1";
+  sha256 = "118sabi90qjyqbvfincn737c4mi9mvjij1dzx7k9rsgad47p0753";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -17,7 +17,7 @@ cabal.mkDerivation (self: {
     testFrameworkQuickcheck2 vector
   ];
   meta = {
-    homepage = "http://github.com/vincenthz/hs-cryptocipher";
+    homepage = "http://github.com/vincenthz/hs-crypto-cipher";
     description = "Symmetrical block and stream ciphers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

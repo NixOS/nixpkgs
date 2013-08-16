@@ -16,10 +16,10 @@ assert enableSubversionRepository -> subversion != null;
 assert enableEjabberdDump -> ejabberd != null;
 
 stdenv.mkDerivation {
-  name = "dysnomia-0.3predff2da00e2d29d15feb2b6b42931232d691f7f03";
+  name = "dysnomia-0.3pre7c81cc254a0f6966dd9ac55f945c458b45b3d428.tar.gz";
   src = fetchurl {
-    url = http://hydra.nixos.org/build/5430159/download/1/dysnomia-0.3predff2da00e2d29d15feb2b6b42931232d691f7f03.tar.gz;
-    sha256 = "1y9qf14ygdgq2hjh1p6rf7hcgij02wv091s8wpsn36mrmc9zk6rf";
+    url = http://hydra.nixos.org/build/5613342/download/1/dysnomia-0.3pre7c81cc254a0f6966dd9ac55f945c458b45b3d428.tar.gz;
+    sha256 = "0ll09vh94ygqkncq4ddb62s4c84n3pr5qy0gi1ywy0j30qk6zvsq";
   };
   
   preConfigure = if enableEjabberdDump then "export PATH=$PATH:${ejabberd}/sbin" else "";

@@ -2947,6 +2947,7 @@ rec {
       url = mirror://cpan/authors/id/M/MO/MOB/Forks-Super-0.67.tar.gz;
       sha256 = "8831cd70e1eb3d4ab7d9a8c3692caa7b7220dc888cd1a8dc5640fb2a08379141";
     };
+    doCheck = false;
     meta = {
       description = "Extensions and convenience methods to manage background processes";
       license = "perl";
@@ -6040,11 +6041,16 @@ rec {
     };
   };
 
-  StatisticsDescriptive = buildPerlPackage rec {
-    name = "Statistics-Descriptive-3.0202";
+  StatisticsDescriptive = buildPerlPackage {
+    name = "Statistics-Descriptive-3.0605";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Statistics/${name}.tar.gz";
-      sha256 = "0y8l3dkhfc2gqwfigrg363ac7pxcyshdna66afpdvs8r1gd53a1i";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Statistics-Descriptive-3.0605.tar.gz;
+      sha256 = "8e7dae184444e27ee959e33b3ae161cc83115d11da189ed5003b004450e04b48";
+    };
+    meta = {
+      homepage = http://web-cpan.berlios.de/modules/Statistics-Descriptive/;
+      description = "Module of basic descriptive statistical functions";
+      license = "perl";
     };
   };
 
@@ -7393,6 +7399,14 @@ rec {
       license = "perl";
     };
     buildInputs = [ pkgs.icu ];
+  };
+
+  UnixGetrusage = buildPerlPackage {
+    name = "Unix-Getrusage-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TA/TAFFY/Unix-Getrusage-0.03.tar.gz;
+      sha256 = "76cde1cee2453260b85abbddc27cdc9875f01d2457e176e03dcabf05fb444d12";
+    };
   };
 
   URI = buildPerlPackage {

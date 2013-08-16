@@ -24,6 +24,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   libxfcegui4     = callPackage ./core/libxfcegui4.nix { };
   thunar          = callPackage ./core/thunar.nix { };
   thunar_volman   = callPackage ./core/thunar-volman.nix { }; # ToDo: probably inside Thunar now
+  thunar_archive_plugin  = callPackage ./core/thunar-archive-plugin.nix { };
   tumbler         = callPackage ./core/tumbler.nix { };
   xfce4panel      = callPackage ./core/xfce4-panel.nix { }; # ToDo: impure plugins from /run/current-system/sw/lib/xfce4
   xfce4session    = callPackage ./core/xfce4-session.nix { };
@@ -48,11 +49,9 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4taskmanager= callPackage ./applications/xfce4-taskmanager.nix { };
   xfce4terminal   = callPackage ./applications/terminal.nix { };
 
-
   #### ART                  from "mirror://xfce/src/art/${p_name}/${ver_maj}/${name}.tar.bz2"
 
   xfce4icontheme  = callPackage ./art/xfce4-icon-theme.nix { };
-
 
   #### PANEL PLUGINS        from "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.bz2"
 

@@ -1,6 +1,6 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{source ? "latest", ...}: with args;
+args@{source ? "default", ...}: with args;
 
 
 let inherit (args.composableDerivation) composableDerivation edf; in
@@ -11,7 +11,7 @@ composableDerivation {
                    else stdenv ).mkDerivation;
 } (fix: {
 
-    name = "vim_configurable-7.3";
+    name = "vim_configurable-7.4";
 
     enableParallelBuilding = true; # test this
 
@@ -20,8 +20,8 @@ composableDerivation {
       "default" =
         # latest release
         args.fetchurl {
-            url = ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2;
-            sha256 = "079201qk8g9yisrrb0dn52ch96z3lzw6z473dydw9fzi0xp5spaw";
+            url = ftp://ftp.vim.org/pub/vim/unix/vim-7.4.tar.bz2;
+            sha256 = "1pjaffap91l2rb9pjnlbrpvb3ay5yhhr3g91zabjvw1rqk9adxfh";
           };
       "vim-nox" =
           {
@@ -31,14 +31,7 @@ composableDerivation {
             name = "vim-nox-hg-2082fc3";
             # END
           }.src;
-      "latest" = {
-        # vim latest usually is vim + bug fixes. So it should be very stable
-         # REGION AUTO UPDATE: { name="vim"; type="hg"; url="https://vim.googlecode.com/hg"; }
-         src = (fetchurl { url = "http://mawercer.de/~nix/repos/vim-hg-7f98896.tar.bz2"; sha256 = "efcb8cc5924b530631a8e5fc2a0622045c2892210d32d300add24aded51866f1"; });
-         name = "vim-hg-7f98896";
-         # END
-      }.src;
-    };
+      };
 
     # if darwin support is enabled, we want to make sure we're not building with
     # OS-installed python framework

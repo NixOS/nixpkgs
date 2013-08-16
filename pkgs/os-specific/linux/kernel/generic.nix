@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, mktemp, module_init_tools
+{ stdenv, fetchurl, perl, mktemp, kmod, bc
 
 , # The kernel source tarball.
   src
@@ -6,14 +6,11 @@
 , # The kernel version.
   version
 
+, # Overrides to the kernel config.
+  extraConfig ? ""
+
 , # The version number used for the module directory
   modDirVersion ? version
-
-, # The kernel configuration.
-  config
-
-, # The kernel configuration when cross building.
-  configCross ? {}
 
 , # An attribute set whose attributes express the availability of
   # certain features in this kernel.  E.g. `{iwlwifi = true;}'
@@ -40,7 +37,6 @@
   # we force building the target asked: bzImage/zImage/uImage/...
   postBuild ? "make $makeFlags $kernelTarget; make $makeFlags -C scripts unifdef"
 
-, extraNativeBuildInputs ? []
 , ...
 }:
 
@@ -59,6 +55,12 @@ let
         map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
     in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
 
+  configWithPlatform = kernelPlatform:
+    import ./common-config.nix { inherit stdenv version kernelPlatform extraConfig; };
+
+  config = configWithPlatform stdenv.platform;
+  configCross = configWithPlatform stdenv.cross.platform;
+
 in
 
 stdenv.mkDerivation {
@@ -69,14 +71,14 @@ stdenv.mkDerivation {
   passthru = {
     inherit version modDirVersion kernelPatches;
     # Combine the `features' attribute sets of all the kernel patches.
-    features = lib.fold (x: y: (if x ? features then x.features else {}) // y) features kernelPatches;
+    features = lib.fold (x: y: (x.features or {}) // y) features kernelPatches;
   };
 
   builder = ./builder.sh;
 
   generateConfig = ./generate-config.pl;
 
-  inherit preConfigure src module_init_tools localVersion postInstall postBuild;
+  inherit preConfigure src kmod localVersion postInstall postBuild;
 
   patches = map (p: p.patch) kernelPatches;
 
@@ -85,7 +87,7 @@ stdenv.mkDerivation {
   # For UML and non-PC, just ignore all options that don't apply (We are lazy).
   ignoreConfigErrors = stdenv.platform.name != "pc";
 
-  nativeBuildInputs = [ perl mktemp ] ++ extraNativeBuildInputs;
+  nativeBuildInputs = [ perl mktemp bc ];
 
   buildInputs = lib.optional (stdenv.platform.uboot != null)
     (ubootChooser stdenv.platform.uboot);
@@ -133,7 +135,6 @@ stdenv.mkDerivation {
         " (with patches: "
         + lib.concatStrings (lib.intersperse ", " (map (x: x.name) kernelPatches))
         + ")");
-    inherit version;
     license = "GPLv2";
     homepage = http://www.kernel.org/;
     maintainers = [

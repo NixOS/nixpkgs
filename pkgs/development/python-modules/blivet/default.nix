@@ -18,7 +18,7 @@ in buildPythonPackage rec {
   src = fetchurl {
     url = "https://git.fedorahosted.org/cgit/blivet.git/snapshot/"
         + "${name}.tar.bz2";
-    sha256 = "0b28q539657mqif0mn5dfqcpqv7gbyszg83gf2fv6z7q6206rnx5";
+    sha256 = "1k3mws2q0ryb7422mml6idmaasz2i2v6ngyvg6d976dx090qnmci";
   };
 
   postPatch = ''

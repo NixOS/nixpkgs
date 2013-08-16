@@ -127,14 +127,16 @@ in stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  patches = [ userns_patch ]
-         ++ optional cupsSupport ./cups_allow_deprecated.patch;
+  patches = [ userns_patch ];
 
   postPatch = ''
     sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
     sed -i -e 's|/usr/bin/gcc|gcc|' third_party/WebKit/Source/core/core.gypi
   '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
+  '' + optionalString (versionOlder sourceInfo.version "29.0.0.0") ''
+    sed -i -e '/struct SECItemArray/,/^};/d' \
+      net/third_party/nss/ssl/bodge/secitem_array.c
   '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
@@ -213,7 +215,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Chromium, an open source web browser";
+    description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
     maintainers = with maintainers; [ goibhniu chaoflow aszlig ];
     license = licenses.bsd3;

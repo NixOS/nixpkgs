@@ -11,6 +11,9 @@ stdenv.mkDerivation {
     ln -s /usr/bin/security
     ln -s "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone Simulator.app/Contents/MacOS/iPhone Simulator"
 
+    cd ..
+    ln -s "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs"
+
     # Check if we have the xcodebuild version that we want
     if [ -z "$($out/bin/xcodebuild -version | grep ${version})" ]
     then

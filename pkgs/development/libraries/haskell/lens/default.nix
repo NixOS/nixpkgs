@@ -26,6 +26,9 @@ cabal.mkDerivation (self: {
     transformers unorderedContainers vector
   ];
   doCheck = false;
+  patchPhase = ''
+    sed -i -e 's|generic-deriving.*,|generic-deriving,|' lens.cabal
+  '';
   meta = {
     homepage = "http://github.com/ekmett/lens/";
     description = "Lenses, Folds and Traversals";

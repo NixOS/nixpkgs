@@ -3,8 +3,13 @@
 rec {
   platformTools = import ./platform-tools.nix {
     inherit (pkgs) stdenv fetchurl unzip;
-    inherit (pkgs_i686) zlib ncurses;
     stdenv_32bit = pkgs_i686.stdenv;
+  };
+  
+  buildTools = import ./build-tools.nix {
+    inherit (pkgs) stdenv fetchurl unzip;
+    stdenv_32bit = pkgs_i686.stdenv;
+    zlib_32bit = pkgs_i686.zlib;
   };
   
   support = import ./support.nix {
@@ -31,10 +36,10 @@ rec {
 
   androidsdk = import ./androidsdk.nix {
     inherit (pkgs) stdenv fetchurl unzip makeWrapper;
-    inherit (pkgs) freetype fontconfig gtk atk;
-    inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp;
+    inherit (pkgs) freetype fontconfig glib gtk atk mesa file alsaLib jdk;
+    inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst;
     
-    inherit platformTools support platforms sysimages addons;
+    inherit platformTools buildTools support platforms sysimages addons;
     
     stdenv_32bit = pkgs_i686.stdenv;
     zlib_32bit = pkgs_i686.zlib;
@@ -43,10 +48,19 @@ rec {
     libXau_32bit = pkgs_i686.xorg.libXau;
     libXdmcp_32bit = pkgs_i686.xorg.libXdmcp;
     libXext_32bit = pkgs_i686.xorg.libXext;
+    mesa_32bit = pkgs_i686.mesa;
+    alsaLib_32bit = pkgs_i686.alsaLib;
   };
   
   androidsdk_4_1 = androidsdk {
     platformVersions = [ "16" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
+  androidsdk_4_2 = androidsdk {
+    platformVersions = [ "17" ];
+    abiVersions = [ "armeabi-v7a" ];
     useGoogleAPIs = true;
   };
   

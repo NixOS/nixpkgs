@@ -1,12 +1,14 @@
 { stdenv, fetchurl, ncurses, gettext, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "vim-7.3";
+  name = "vim-7.4";
  
   src = fetchurl {
     url = "ftp://ftp.vim.org/pub/vim/unix/${name}.tar.bz2";
-    sha256 = "079201qk8g9yisrrb0dn52ch96z3lzw6z473dydw9fzi0xp5spaw";
+    sha256 = "1pjaffap91l2rb9pjnlbrpvb3ay5yhhr3g91zabjvw1rqk9adxfh";
   };
+
+  enableParallelBuilding = true;
  
   buildInputs = [ ncurses pkgconfig ];
   nativeBuildInputs = [ gettext ];

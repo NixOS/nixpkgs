@@ -3,12 +3,14 @@
 , sslSupport ? false, openssl ? null
 , scpSupport ? false, libssh2 ? null
 , gssSupport ? false, gss ? null
+, c-aresSupport ? false, c-ares ? null
 , linkStatic ? false
 }:
 
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 assert scpSupport -> libssh2 != null;
+assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
   name = "curl-7.31.0";
@@ -24,6 +26,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = with stdenv.lib;
     optional zlibSupport zlib ++
     optional gssSupport gss ++
+    optional c-aresSupport c-ares ++
     optional sslSupport openssl;
 
   preConfigure = ''
@@ -33,6 +36,7 @@ stdenv.mkDerivation rec {
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
     ]
+    ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}"
     ++ stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ]
   ;

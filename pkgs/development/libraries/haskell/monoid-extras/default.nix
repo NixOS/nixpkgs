@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monoid-extras";
-  version = "0.2.2.3";
-  sha256 = "00yj7wdyznsis82fb7i07s0vz8vsn2mpqk7jkgl9xxa57gk1rsax";
+  version = "0.3.0.0";
+  sha256 = "1bb8yq2vja80177h3wfadkjkwvcrszx0nq6m5n10f4lh9spvr087";
   buildDepends = [ semigroups ];
   meta = {
     description = "Various extra monoid-related definitions and utilities";

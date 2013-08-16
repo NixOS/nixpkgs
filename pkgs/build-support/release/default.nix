@@ -40,13 +40,21 @@ rec {
     } // args);
 
   aggregate =
-    { name, members, meta ? { } }:
+    { name, constituents, meta ? { } }:
     pkgs.runCommand name
-      { inherit members meta;
+      { inherit constituents meta;
         _hydraAggregate = true;
       }
       ''
-        echo $members > $out
+        mkdir -p $out/nix-support
+        echo $constituents > $out/nix-support/hydra-aggregate-constituents
+
+        # Propagate build failures.
+        for i in $constituents; do
+          if [ -e $i/nix-support/failed ]; then
+            touch $out/nix-support/failed
+          fi
+        done
       '';
 
 }

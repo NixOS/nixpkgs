@@ -24,9 +24,10 @@
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   guibert = "David Guibert <david.guibert@gmail.com>";
   iElectric = "Domen Kozar <domen@dev.si>";
-  lovek323 = "Jason O'Conal <jason@oconal.id.au>";
+  iyzsong = "Song Wenwu <iyzsong@gmail.com>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
+  lovek323 = "Jason O'Conal <jason@oconal.id.au>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   mornfall = "Petr Ročkai <me@mornfall.net>";

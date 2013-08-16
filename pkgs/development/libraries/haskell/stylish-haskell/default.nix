@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "stylish-haskell";
-  version = "0.5.6.1";
-  sha256 = "0fxncnl9bvb7qjha3r06qli9qlzfljism6k688hrr9y6l06jdc2c";
+  version = "0.5.7.0";
+  sha256 = "12ka5lyp28fy8gablhymxdldl792ycr8d51lsknhldb54pmklf73";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

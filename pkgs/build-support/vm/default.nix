@@ -1,5 +1,5 @@
 { pkgs
-, kernel ? pkgs.linux_3_9
+, kernel ? pkgs.linux_3_10
 , img ? "bzImage"
 , rootModules ?
     [ "virtio_pci" "virtio_blk" "virtio_balloon" "ext4" "unix" "9p" "9pnet_virtio" ]
@@ -9,9 +9,9 @@ with pkgs;
 
 rec {
 
-  kvm = pkgs.qemu;
+  qemu = pkgs.qemu_kvm;
 
-  qemuProg = "${kvm}/bin/qemu-system-" + (if stdenv.system == "x86_64-linux" then "x86_64" else "i386");
+  qemuProg = "${qemu}/bin/qemu-kvm";
 
 
   modulesClosure = makeModulesClosure {
@@ -91,8 +91,8 @@ rec {
       esac
     done
 
+    echo "loading kernel modules..."
     for i in $(cat ${modulesClosure}/insmod-list); do
-      echo "loading module $(basename $i .ko)"
       insmod $i
     done
 
@@ -114,14 +114,14 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs/nix/store
-    mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,msize=262144,cache=fscache
+    mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,msize=262144,cache=loose
 
     mkdir -p /fs/tmp
     mount -t tmpfs -o "mode=755" none /fs/tmp
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=262144,cache=fscache
+    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=262144,cache=loose
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -133,7 +133,7 @@ rec {
     ln -sf /proc/mounts /fs/etc/mtab
     echo "127.0.0.1 localhost" > /fs/etc/hosts
 
-    echo "Now running: $command"
+    echo "starting stage 2 ($command)"
     test -n "$command"
 
     set +e
@@ -188,7 +188,6 @@ rec {
 
   qemuCommandLinux = ''
     ${qemuProg} \
-      -enable-kvm \
       ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
       -nographic -no-reboot \
       -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
@@ -196,7 +195,7 @@ rec {
       -drive file=$diskImage,if=virtio,cache=writeback,werror=report \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk" \
+      -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
 
@@ -242,7 +241,7 @@ rec {
   createEmptyImage = {size, fullName}: ''
     mkdir $out
     diskImage=$out/disk-image.qcow2
-    ${kvm}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
+    ${qemu}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
 
     mkdir $out/nix-support
     echo "${fullName}" > $out/nix-support/full-name
@@ -362,7 +361,7 @@ rec {
       diskImage=$(pwd)/disk-image.qcow2
       origImage=${attrs.diskImage}
       if test -d "$origImage"; then origImage="$origImage/disk-image.qcow2"; fi
-      ${kvm}/bin/qemu-img create -b "$origImage" -f qcow2 $diskImage
+      ${qemu}/bin/qemu-img create -b "$origImage" -f qcow2 $diskImage
     '';
 
     /* Inside the VM, run the stdenv setup script normally, but at the
@@ -459,7 +458,7 @@ rec {
     fi
     diskImage="$1"
     if ! test -e "$diskImage"; then
-      ${kvm}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 "$diskImage"
+      ${qemu}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 "$diskImage"
     fi
     export TMPDIR=$(mktemp -d)
     export out=/dummy
