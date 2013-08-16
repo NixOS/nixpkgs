@@ -90,7 +90,7 @@ buildPythonPackage {
 
     license = [ "GPLv2+" /* or */ "TGPPLv1+" ];
 
-    maintainers = [ lib.maintainers.ludo lib.maintainers.simons  ];
+    maintainers = [ lib.maintainers.simons  ];
     platforms = lib.platforms.gnu;  # arbitrary choice
   };
 }

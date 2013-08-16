@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "GNU Aspell, A spell checker for many languages";
     homepage = http://aspell.net/;
     license = "LGPLv2+";
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

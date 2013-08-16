@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/gettext/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

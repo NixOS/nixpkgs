@@ -67,7 +67,7 @@ EOF
     homepage = "http://www.gnu.org/software/emacs/";
     license = "GPLv3+";
 
-    maintainers = with maintainers; [ chaoflow lovek323 ludo simons ];
+    maintainers = with maintainers; [ chaoflow lovek323 simons ];
     platforms = platforms.all;
   };
 }

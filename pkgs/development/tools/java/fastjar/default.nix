@@ -26,6 +26,6 @@ let version = "0.94"; in
 
       license = "GPLv2+";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   }

@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     # Supports both the GNU and FreeBSD NSS.
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.freebsd;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     '';
 
     license = "GPLv3+";
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

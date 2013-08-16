@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     # dependency on `libsamplerate'.  See `LICENSE' for details.
     licenses = "LGPLv2+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }

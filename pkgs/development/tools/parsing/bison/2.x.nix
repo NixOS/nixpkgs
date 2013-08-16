@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       to use Bison.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.unix;
   };
 

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/xnee/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

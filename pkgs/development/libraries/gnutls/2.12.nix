@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/gnutls/;
     license = "LGPLv2.1+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

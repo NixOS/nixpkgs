@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     license = "GPLv2+";
     description = "Stalin, an optimizing Scheme compiler";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

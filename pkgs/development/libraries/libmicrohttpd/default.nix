@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/libmicrohttpd/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

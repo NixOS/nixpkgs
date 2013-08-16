@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
     homepage = http://wordnet.princeton.edu/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

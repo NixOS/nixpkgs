@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
 
     license = "LGPLv2+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

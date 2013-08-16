@@ -36,6 +36,6 @@ let date = "2009-07-04"; in
 
       homepage = http://tidy.sourceforge.net/;
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   }

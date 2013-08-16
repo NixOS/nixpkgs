@@ -51,6 +51,6 @@ in
 
       licenses = [ "MPLv1.1" /* or */ "GPLv2+" ];
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   }
