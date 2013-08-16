@@ -1996,6 +1996,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
+  unixBytestring = callPackage ../development/libraries/haskell/unix-bytestring {};
+
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
 
   unixProcessConduit = callPackage ../development/libraries/haskell/unix-process-conduit {};
