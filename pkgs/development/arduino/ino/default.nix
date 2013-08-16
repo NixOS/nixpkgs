@@ -7,7 +7,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/i/ino/${name}.tar.gz";
-    sha256 = "1v7z3da31cv212k28aci269qkg92p377fm7i76rymjjpjra7payv";
+    sha256 = "1j2qzcjp6r2an1v431whq9l47s81d5af6ni8j87gv294f53sl1ab";
   };
 
   # TODO: add avrgcclibc, it must be rebuild with C++ support
