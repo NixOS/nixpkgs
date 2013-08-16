@@ -1576,6 +1576,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pcap = callPackage ../development/libraries/haskell/pcap {};
 
+  pcapEnumerator = callPackage ../development/libraries/haskell/pcap-enumerator {};
+
   pcreLight = callPackage ../development/libraries/haskell/pcre-light {};
 
   pem = callPackage ../development/libraries/haskell/pem {};
