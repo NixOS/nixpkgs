@@ -38,7 +38,10 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Linear Algebra PACKage";
-    license = "revised-BSD";
     homepage = "http://www.netlib.org/lapack/";
+    license = "revised-BSD";
+
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
