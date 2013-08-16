@@ -8597,7 +8597,7 @@ let
     # so that we can use gccApple if we're building on darwin
     inherit stdenvAdapters gccApple;
   };
-  vimLatest = lowPrio (vim_configurable.override { source = "latest"; });
+
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
