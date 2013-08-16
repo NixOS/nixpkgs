@@ -1,86 +1,59 @@
-{ stdenv, fetchurl, pkgconfig, yasm, bzip2, zlib
-, mp3Support    ? true,   lame      ? null
-, speexSupport  ? true,   speex     ? null
-, theoraSupport ? true,   libtheora ? null
-, vorbisSupport ? true,   libvorbis ? null
-, vpxSupport    ? true,   libvpx    ? null
-, x264Support   ? false,  x264      ? null
-, xvidSupport   ? true,   xvidcore  ? null
-, faacSupport   ? false,  faac      ? null
-, vaapiSupport  ? false,  libva     ? null # ToDo: it has huge closure
-, vdpauSupport  ? true,   libvdpau  ? null
-, freetypeSupport ? true, freetype  ? null # it's small and almost everywhere
-, SDL # only for avplay in $tools, adds nontrivial closure to it
-, enableGPL ? true # ToDo: some additional default stuff may need GPL
-, enableUnfree ? faacSupport
+{ stdenv, fetchurl, pkgconfig, yasm, xz
+, mp3Support ? true, lame ? null
+, speexSupport ? true, speex ? null
+, theoraSupport ? true, libtheora ? null
+, vorbisSupport ? true, libvorbis ? null
+, vpxSupport ? false, libvpx ? null
+, x264Support ? false, x264 ? null
+, xvidSupport ? true, xvidcore ? null
+, faacSupport ? false, faac ? null
 }:
 
-assert faacSupport -> enableUnfree;
+assert speexSupport -> speex != null;
+assert theoraSupport -> libtheora != null;
+assert vorbisSupport -> libvorbis != null;
+assert vpxSupport -> libvpx != null;
+assert x264Support -> x264 != null;
+assert xvidSupport -> xvidcore != null;
 
-with { inherit (stdenv.lib) optional optionals; };
-
-/* ToDo:
-    - more deps, inspiration: http://packages.ubuntu.com/raring/libav-tools
-    - maybe do some more splitting into outputs
-*/
-
-let derivSrc = rec { # derivSrc is exported and re-used by expressions for older versions
-  name = "libav-9.8";
-
+stdenv.mkDerivation rec {
+  name = "libav-0.7";
+  
   src = fetchurl {
     url = "http://libav.org/releases/${name}.tar.xz";
-    sha256 = "0r7hg9wg3cxjsmwzpa6f2p1a092g2iazyjjy23604ccskzbnirg3";
+    sha256 = "04pl6y53xh6xmwzz0f12mg5vh62ylp5zwwinj6dxzd8pnbjg4lsz";
   };
 
-  configureFlags =
-    assert stdenv.lib.all (x: x!=null) buildInputs;
-  [
-    #"--enable-postproc" # it's now a separate package in upstream
-    "--disable-avserver" # upstream says it's in a bad state
-    "--enable-avplay"
+  # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
+  # the resulting library is GPL'ed, so it can only be used in GPL'ed
+  # applications.
+  configureFlags = [
+    "--enable-gpl"
+    "--enable-postproc"
+    "--enable-swscale"
+    "--disable-ffserver"
+    "--disable-ffplay"
     "--enable-shared"
     "--enable-runtime-cpudetect"
   ]
-    ++ optionals enableGPL [ "--enable-gpl" "--enable-swscale" ]
-    ++ optional mp3Support "--enable-libmp3lame"
-    ++ optional speexSupport "--enable-libspeex"
-    ++ optional theoraSupport "--enable-libtheora"
-    ++ optional vorbisSupport "--enable-libvorbis"
-    ++ optional vpxSupport "--enable-libvpx"
-    ++ optional x264Support "--enable-libx264"
-    ++ optional xvidSupport "--enable-libxvid"
-    ++ optional faacSupport "--enable-libfaac --enable-nonfree"
-    ++ optional vaapiSupport "--enable-vaapi"
-    ++ optional vdpauSupport "--enable-vdpau"
-    ++ optional freetypeSupport "--enable-libfreetype"
-    ;
+    ++ stdenv.lib.optional mp3Support "--enable-libmp3lame"
+    ++ stdenv.lib.optional speexSupport "--enable-libspeex"
+    ++ stdenv.lib.optional theoraSupport "--enable-libtheora"
+    ++ stdenv.lib.optional vorbisSupport "--enable-libvorbis"
+    ++ stdenv.lib.optional vpxSupport "--enable-libvpx"
+    ++ stdenv.lib.optional x264Support "--enable-libx264"
+    ++ stdenv.lib.optional xvidSupport "--enable-libxvid"
+    ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree";
 
-  buildInputs = [ pkgconfig lame yasm zlib bzip2 SDL ]
-    ++ optional mp3Support lame
-    ++ optional speexSupport speex
-    ++ optional theoraSupport libtheora
-    ++ optional vorbisSupport libvorbis
-    ++ optional vpxSupport libvpx
-    ++ optional x264Support x264
-    ++ optional xvidSupport xvidcore
-    ++ optional faacSupport faac
-    ++ optional vaapiSupport libva
-    ++ optional vdpauSupport libvdpau
-    ++ optional freetypeSupport freetype
-    ;
-
-  enableParallelBuilding = true;
-
-  outputs = [ "out" "tools" ];
-
-  postInstall = ''
-    mkdir -p "$tools/bin"
-    mv "$out/bin/avplay" "$tools/bin"
-    cp -s "$out"/bin/* "$tools/bin/"
-  '';
-
-  doInstallCheck = true;
-  installCheckTarget = "check"; # tests need to be run *after* installation
+  buildInputs = [ pkgconfig lame yasm ]
+    ++ stdenv.lib.optional mp3Support lame
+    ++ stdenv.lib.optional speexSupport speex
+    ++ stdenv.lib.optional theoraSupport libtheora
+    ++ stdenv.lib.optional vorbisSupport libvorbis
+    ++ stdenv.lib.optional vpxSupport libvpx
+    ++ stdenv.lib.optional x264Support x264
+    ++ stdenv.lib.optional xvidSupport xvidcore
+    ++ stdenv.lib.optional faacSupport faac;
 
   crossAttrs = {
     dontSetConfigureCross = true;
@@ -92,15 +65,8 @@ let derivSrc = rec { # derivSrc is exported and re-used by expressions for older
       ];
   };
 
-  passthru = { inherit derivSrc vdpauSupport; };
-
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://libav.org/;
     description = "A complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
-    license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
-      else if enableGPL then gpl2Plus else lgpl21Plus;
-    platforms = platforms.all;
   };
-};
-in stdenv.mkDerivation derivSrc
-
+}
