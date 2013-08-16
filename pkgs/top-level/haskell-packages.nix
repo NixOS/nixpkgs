@@ -1574,6 +1574,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pathtype = callPackage ../development/libraries/haskell/pathtype {};
 
+  pcap = callPackage ../development/libraries/haskell/pcap {};
+
   pcreLight = callPackage ../development/libraries/haskell/pcre-light {};
 
   pem = callPackage ../development/libraries/haskell/pem {};
