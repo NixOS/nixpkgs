@@ -354,7 +354,7 @@ let
 
   makeInitrd = {contents, compressor ? "gzip -9"}:
     import ../build-support/kernel/make-initrd.nix {
-      inherit stdenv perl cpio contents ubootChooser compressor;
+      inherit stdenv perl perlArchiveCpio cpio contents ubootChooser compressor;
     };
 
   makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
@@ -6178,6 +6178,8 @@ let
   perlXMLParser = perlPackages.XMLParser;
 
   ack = perlPackages.ack;
+
+  perlArchiveCpio = perlPackages.ArchiveCpio;
 
   perlcritic = perlPackages.PerlCritic;
   
