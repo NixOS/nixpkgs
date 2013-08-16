@@ -28,8 +28,8 @@ in
         description =
           ''
             This option enables libvirtd, a daemon that manages
-            virtual machines.  You can interact with the daemon
-            (e.g. to start or stop VMs) using the
+            virtual machines. Users in the "libvirtd" group can interact with
+            the daemon (e.g. to start or stop VMs) using the
             <command>virsh</command> command line tool, among others.
           '';
       };
