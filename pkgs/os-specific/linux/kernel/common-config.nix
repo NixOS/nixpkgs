@@ -24,7 +24,9 @@ with stdenv.lib;
   # Support drivers that need external firmware.
   STANDALONE n
 
-  # Make /proc/config.gz available.
+  # Enable the complete Linux kernel ".config" file to be saved in the kernel.
+  # Also, make it available at runtime as /proc/config.gz.
+  IKCONFIG y
   IKCONFIG_PROC y
 
   # Optimize with -O2, not -Os.
