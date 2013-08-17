@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://geeqie.sourceforge.net;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }

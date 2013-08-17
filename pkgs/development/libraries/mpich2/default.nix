@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     homepage = http://www.mcs.anl.gov/mpi/mpich2/;
     license = "free, see http://www.mcs.anl.gov/research/projects/mpich2/downloads/index.php?s=license";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

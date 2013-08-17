@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "Crypto++, a free C++ class library of cryptographic schemes";
     homepage = http://cryptopp.com/;
     license = "Boost 1.0";
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

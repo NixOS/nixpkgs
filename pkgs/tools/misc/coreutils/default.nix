@@ -72,7 +72,7 @@ let
 
       license = "GPLv3+";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   };
 in

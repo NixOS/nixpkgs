@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = http://oprofile.sourceforge.net/;
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv3+";
 
-    maintainers = with stdenv.lib.maintainers; [ ludo shlevy ];
+    maintainers = with stdenv.lib.maintainers; [ shlevy ];
 
     platforms = if EFIsupport then
       [ "i686-linux" "x86_64-linux" ]

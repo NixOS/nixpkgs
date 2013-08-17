@@ -80,7 +80,7 @@ buildPythonPackage (rec {
          in code.
       '';
 
-    maintainers = with maintainers; [ ludo bjornfor ];
+    maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.all;
   };
 })

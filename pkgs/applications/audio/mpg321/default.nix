@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     description = "mpg321, a command-line MP3 player";
     homepage = http://mpg321.sourceforge.net/;
     license = "GPLv2";
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }

@@ -25,7 +25,7 @@ let
     license = "GPLv3+";
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.viric ];
+    maintainers = [ stdenv.lib.maintainers.viric ];
   };
 
   gnuForkSrc = rec {

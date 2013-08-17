@@ -52,6 +52,6 @@ in
       homepage = http://xml.apache.org/xalan-j/;
       license = "Apache-2.0";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   }

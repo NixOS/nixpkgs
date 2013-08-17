@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     license = "LGPLv2+";
     homepage = http://www.clutter-project.org/;
 
-    maintainers = with stdenv.lib.maintainers; [ urkud ludo ];
+    maintainers = with stdenv.lib.maintainers; [ urkud ];
     platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }

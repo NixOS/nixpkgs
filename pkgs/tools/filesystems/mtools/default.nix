@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/mtools/;
     description = "GNU mtools, utilities to access MS-DOS disks";
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

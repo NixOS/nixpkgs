@@ -2225,7 +2225,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       # See http://foolscap.lothar.com/trac/browser/LICENSE.
       license = "MIT";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   });
 
@@ -3564,7 +3564,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
       license = "revised-BSD";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   });
 
@@ -4115,7 +4115,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
       license = "GPLv2+";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
       platforms = stdenv.lib.platforms.linux;
     };
   });
@@ -4682,7 +4682,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
       license = "revised BSD";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   });
 
@@ -5645,7 +5645,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
       license = "MIT";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   };
 

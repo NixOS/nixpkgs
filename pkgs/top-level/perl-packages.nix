@@ -266,7 +266,7 @@ rec {
       homepage = http://www.aarontrevena.co.uk/opensource/autodia/;
       license = "GPLv2+";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   };
 
@@ -3072,7 +3072,7 @@ rec {
     meta = {
       description = "Perl interface to the GraphViz graphing tool";
       license = [ "Artistic" ];
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   };
 
@@ -3662,7 +3662,7 @@ rec {
 
       licenses = [ "GPLv1+" /* or */ "Artistic" ];
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
       platforms = stdenv.lib.platforms.unix;
     };
   };
@@ -3689,7 +3689,7 @@ rec {
 
       license = "Artistic";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   };
 
@@ -3721,7 +3721,7 @@ rec {
 
       license = "Artistic";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   };
 

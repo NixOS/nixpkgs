@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://icedtea.classpath.org/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
 
     # Restrict to GNU systems for now.
     platforms = stdenv.lib.platforms.gnu;

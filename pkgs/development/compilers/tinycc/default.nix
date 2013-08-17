@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     license = "LGPLv2+";
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }
