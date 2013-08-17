@@ -6451,7 +6451,6 @@ let
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-        kernelPatches.btrfs_send_backport
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
