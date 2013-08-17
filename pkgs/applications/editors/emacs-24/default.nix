@@ -23,12 +23,11 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isLinux dbus
     ++ stdenv.lib.optionals buildWithX [
          x11 libXaw Xaw3d libXpm libpng libjpeg libungif
-         libtiff librsvg libXft imagemagick
-       ]
-    ++ stdenv.lib.optional (gtk != null) gtk;
+         libtiff librsvg libXft imagemagick gtk
+       ];
 
   configureFlags =
-    stdenv.lib.optionals (gtk != null) [ "--with-x-toolkit=gtk" "--with-xft" ]
+    stdenv.lib.optionals buildWithX [ "--with-x-toolkit=gtk" "--with-xft" ]
 
     # On NixOS, help Emacs find `crt*.o'.
     ++ stdenv.lib.optional (stdenv ? glibc)

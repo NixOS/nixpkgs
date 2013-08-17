@@ -7349,7 +7349,6 @@ let
 
   emacs24-nox = (appendToName "nox" (emacs24.override {
     buildWithX = false;
-    gtk = null;
   }));
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
