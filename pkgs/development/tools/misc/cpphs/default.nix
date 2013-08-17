@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cpphs";
-  version = "1.16";
-  sha256 = "1fv91s3h2s76h1hadb3mmnkg0rrfakmbfsrw6q522kshvpk2wmmp";
+  version = "1.17";
+  sha256 = "01m71zhm16kdkagr2ykxr07vdvr4kvs8s8ar1dnlbdidb4szljzx";
   isLibrary = true;
   isExecutable = true;
   meta = {
