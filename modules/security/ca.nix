@@ -7,8 +7,15 @@ with pkgs.lib;
   config = {
 
     environment.etc =
-      [ { source = "${pkgs.cacert}/etc/ca-bundle.crt";
-          target = "ssl/certs/ca-bundle.crt";
+      [
+        # Provide both Fedora and Ubuntu certificate locations for
+        # compatibility.
+        { source = "${pkgs.cacert}/etc/ca-bundle.crt";
+          target = "ssl/certs/ca-bundle.crt"; # Same location as in Fedora
+        }
+
+        { source = "${pkgs.cacert}/etc/ca-bundle.crt";
+          target = "ssl/certs/ca-certificates.crt"; # Same location as in Ubuntu
         }
 
         # Backward compatibility; may remove at some point.
