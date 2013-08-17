@@ -4484,7 +4484,9 @@ let
 
   libassuan2_1 = callPackage ../development/libraries/libassuan/git.nix { };
 
-  libav = callPackage ../development/libraries/libav { };
+  libav = libav_9;
+  libav_all = callPackage ../development/libraries/libav { };
+  inherit (libav_all) libav_9 libav_0_8;
 
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
