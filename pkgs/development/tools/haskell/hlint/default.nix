@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     cpphs filepath haskellSrcExts hscolour transformers uniplate
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://community.haskell.org/~ndm/hlint/";
     description = "Source code suggestions";
