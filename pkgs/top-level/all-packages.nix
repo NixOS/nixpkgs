@@ -7243,6 +7243,11 @@ let
   comical = callPackage ../applications/graphics/comical { };
 
   conkeror = callPackage ../applications/networking/browsers/conkeror { };
+  conkerorWrapper = wrapFirefox {
+    browser = conkeror;
+    browserName = "conkeror";
+    desktopName = "Conkeror";
+  };
 
   cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
     inherit cmake patchelf;
