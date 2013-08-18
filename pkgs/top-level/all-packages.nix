@@ -9289,6 +9289,8 @@ let
 
   oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { };
 
+  gtk_engines = callPackage ../misc/themes/gtk2/gtk-engines { };
+
   gnome_themes_standard = callPackage ../misc/themes/gnome-themes-standard { };
 
   xfce = xfce4_10;
