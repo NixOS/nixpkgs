@@ -1,6 +1,6 @@
 { stdenv, runCommand, nodejs, neededNatives}:
 
-args @ { name, src, deps ? [], flags ? [], ... }:
+args @ { name, src, deps ? [], peerDeps ? [], flags ? [], ... }:
 
 with stdenv.lib;
 
@@ -12,7 +12,7 @@ let
     mv *node* $out
   '';
 
-  requireName = (builtins.parseDrvName name).name;
+  requireName = name: (builtins.parseDrvName name).name;
 in
 stdenv.mkDerivation ({
   unpackPhase = "true";
@@ -21,8 +21,11 @@ stdenv.mkDerivation ({
     runHook preConfigure
     mkdir node_modules
     ${stdenv.lib.concatStrings (map (dep: ''
-      ln -sv ${dep}/lib/node_modules/${(builtins.parseDrvName dep.name).name} node_modules/
+      ln -sv ${dep}/lib/node_modules/${requireName dep.name} node_modules/
     '') deps)}
+    ${stdenv.lib.concatStrings (map (dep: ''
+      ln -sv ${dep}/lib/node_modules/${requireName dep.name} node_modules/
+    '') peerDeps)}
     export HOME=$(pwd)
     runHook postConfigure
   '';
@@ -36,10 +39,13 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
     mkdir -p $out/lib/node_modules
-    mv node_modules/${requireName} $out/lib/node_modules
+    mv node_modules/${requireName name} $out/lib/node_modules
+    ${stdenv.lib.concatStrings (map (dep: ''
+      mv node_modules/${requireName dep.name} $out/lib/node_modules
+    '') peerDeps)}
     mv node_modules/.bin $out/lib/node_modules 2>/dev/null || true
-    rm -fR $out/lib/node_modules/${requireName}/node_modules
-    mv node_modules $out/lib/node_modules/${requireName}
+    rm -fR $out/lib/node_modules/${requireName name}/node_modules
+    mv node_modules $out/lib/node_modules/${requireName name}
     if [ -d "$out/lib/node_modules/.bin" ]; then
       ln -sv $out/lib/node_modules/.bin $out/bin
       node=`type -p node`
@@ -51,9 +57,9 @@ stdenv.mkDerivation ({
           -e 's@#!/.*/node@#!'"$node"'@' \
           -e 's@#!/.*/coffee@#!'"$coffee"'@'
     fi
-    if [ -e "$out/lib/node_modules/${requireName}/man" ]; then
+    if [ -e "$out/lib/node_modules/${requireName name}/man" ]; then
       mkdir $out/share
-      ln -sv $out/lib/node_modules/${requireName}/man $out/share/man
+      ln -sv $out/lib/node_modules/${requireName name}/man $out/share/man
     fi
     runHook postInstall
   '';
@@ -66,5 +72,5 @@ stdenv.mkDerivation ({
   propagatedNativeBuildInputs = (args.propagatedNativeBuildInputs or []) ++ [ nodejs ];
 
   # Make buildNodePackage useful with --run-env
-  nativeBuildInputs = (args.nativeBuildInputs or []) ++ deps ++ neededNatives;
+  nativeBuildInputs = (args.nativeBuildInputs or []) ++ deps ++ peerDeps ++ neededNatives;
 } )

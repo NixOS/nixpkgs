@@ -34,6 +34,7 @@ let
                 sha256 = pkg.sha256 or "";
               };
               deps = map (dep: builtins.getAttr dep.spec (builtins.getAttr dep.name self.full)) pkg.dependencies;
+              peerDeps  = map (dep: builtins.getAttr dep.spec (builtins.getAttr dep.name self.full)) pkg.peerDependencies;
               buildInputs = nativeDepsList pkg;
             };
           } ];
