@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     { echo 2; echo $out; } | ./configure.sh
-    '';
+  '';
 
   inherit games;
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       unzip $a
     done
     popd
-    '';
+  '';
 
   meta = {
     description = "Simple text adventure interpreter for Unix and Windows";
