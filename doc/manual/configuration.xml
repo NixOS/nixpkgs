@@ -13,6 +13,300 @@ effect after you run <command>nixos-rebuild</command>.</para>
 
 <!--===============================================================-->
 
+<section><title>Package management</title>
+
+<para>This section describes how to add additional packages to your
+system.  NixOS has two distinct styles of package management:
+
+<itemizedlist>
+
+  <listitem><para><emphasis>Declarative</emphasis>, where you declare
+  what packages you want in your
+  <filename>configuration.nix</filename>.  Every time you run
+  <command>nixos-rebuild</command>, NixOS will ensure that you get a
+  consistent set of binaries corresponding to your
+  specification.</para></listitem>
+
+  <listitem><para><emphasis>Ad hoc</emphasis>, where you install,
+  upgrade and uninstall packages via the <command>nix-env</command>
+  command.  This style allows mixing packages from different Nixpkgs
+  versions.  It’s the only choice for non-root
+  users.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>The next two sections describe these two styles.</para>
+
+
+<section><title>Declarative package management</title>
+
+<para>With declarative package management, you specify which packages
+you want on your system by setting the option
+<option>environment.systemPackages</option>.  For instance, adding the
+following line to <filename>configuration.nix</filename> enables the
+Mozilla Thunderbird email application:
+
+<programlisting>
+environment.systemPackages = [ pkgs.thunderbird ];
+</programlisting>
+
+The effect of this specification is that the Thunderbird package from
+Nixpkgs will be built or downloaded as part of the system when you run
+<command>nixos-rebuild switch</command>.</para>
+
+<para>You can get a list of the available packages as follows:
+<screen>
+$ nix-env -qaP '*' --description
+nixos.pkgs.firefox   firefox-23.0   Mozilla Firefox - the browser, reloaded
+<replaceable>...</replaceable>
+</screen>
+
+The first column in the output is the <emphasis>attribute
+name</emphasis>, such as
+<literal>nixos.pkgs.thunderbird</literal>. (The
+<literal>nixos</literal> prefix allows distinguishing between
+different channels that you might have.)</para>
+
+<para>To “uninstall” a package, simply remove it from
+<option>environment.systemPackages</option> and run
+<command>nixos-rebuild switch</command>.</para>
+
+
+<section><title>Customising packages</title>
+
+<para>Some packages in Nixpkgs have options to enable or disable
+optional functionality or change other aspects of the package.  For
+instance, the Firefox wrapper package (which provides Firefox with a
+set of plugins such as the Adobe Flash player) has an option to enable
+the Google Talk plugin.  It can be set in
+<filename>configuration.nix</filename> as follows:
+
+<filename>
+nixpkgs.config.firefox.enableGoogleTalkPlugin = true;
+</filename>
+</para>
+
+<warning><para>Unfortunately, Nixpkgs currently lacks a way to query
+available configuration options.</para></warning>
+
+<para>Apart from high-level options, it’s possible to tweak a package
+in almost arbitrary ways, such as changing or disabling dependencies
+of a package.  For instance, the Emacs package in Nixpkgs by default
+has a dependency on GTK+ 2.  If you want to build it against GTK+ 3,
+you can specify that as follows:
+
+<programlisting>
+environment.systemPackages = [ (pkgs.emacs.override { gtk = pkgs.gtk3; }) ];
+</programlisting>
+
+The function <varname>override</varname> performs the call to the Nix
+function that produces Emacs, with the original arguments amended by
+the set of arguments specified by you.  So here the function argument
+<varname>gtk</varname> gets the value <literal>pkgs.gtk3</literal>,
+causing Emacs to depend on GTK+ 3.  (The parentheses are necessary
+because in Nix, function application binds more weakly than list
+construction, so without them,
+<literal>environment.systemPackages</literal> would be a list with two
+elements.)</para>
+
+<para>Even greater customisation is possible using the function
+<varname>overrideDerivation</varname>.  While the
+<varname>override</varname> mechanism above overrides the arguments of
+a package function, <varname>overrideDerivation</varname> allows
+changing the <emphasis>result</emphasis> of the function.  This
+permits changing any aspect of the package, such as the source code.
+For instance, if you want to override the source code of Emacs, you
+can say:
+
+<programlisting>
+environment.systemPackages =
+  [ (pkgs.lib.overrideDerivation pkgs.emacs (attrs: {
+      name = "emacs-25.0-pre";
+      src = /path/to/my/emacs/tree;
+    }))
+  ];
+</programlisting>
+
+Here, <varname>overrideDerivation</varname> takes the Nix derivation
+specified by <varname>pkgs.emacs</varname> and produces a new
+derivation in which the original’s <literal>name</literal> and
+<literal>src</literal> attribute have been replaced by the given
+values.  The original attributes are accessible via
+<varname>attrs</varname>.</para>
+
+<para>The overrides shown above are not global.  They do not affect
+the original package; other packages in Nixpkgs continue to depend on
+the original rather than the customised package.  This means that if
+another package in your system depends on the original package, you
+end up with two instances of the package.  If you want to have
+everything depend on your customised instance, you can apply a
+<emphasis>global</emphasis> override as follows:
+
+<screen>
+nixpkgs.config.packageOverrides = pkgs:
+  { emacs = pkgs.emacs.override { gtk = pkgs.gtk3; };
+  };
+</screen>
+
+The effect of this definition is essentially equivalent to modifying
+the <literal>emacs</literal> attribute in the Nixpkgs source tree.
+Any package in Nixpkgs that depends on <literal>emacs</literal> will
+be passed your customised instance.  (However, the value
+<literal>pkgs.emacs</literal> in
+<varname>nixpkgs.config.packageOverrides</varname> refers to the
+original rather than overriden instance, to prevent an infinite
+recursion.)</para>
+
+</section>
+
+<section><title>Adding custom packages</title>
+
+<para>It’s possible that a package you need is not available in NixOS.
+In that case, you can do two things.  First, you can clone the Nixpkgs
+repository, add the package to your clone, and (optionally) submit a
+patch or pull request to have it accepted into the main Nixpkgs
+repository.  This is described in detail in the <link
+xlink:href="http://hydra.nixos.org/job/nixpkgs/trunk/tarball/latest/download-by-type/doc/manual">Nixpkgs
+manual</link>.  In short, you clone Nixpkgs:
+
+<screen>
+$ git clone git://github.com/NixOS/nixpkgs.git
+$ cd nixpkgs
+</screen>
+
+Then you write and test the package as described in the Nixpkgs
+manual.  Finally, you add it to
+<literal>environment.systemPackages</literal>, e.g.
+
+<programlisting>
+environment.systemPackages = [ pkgs.my-package ];
+</programlisting>
+
+and you run <command>nixos-rebuild</command>, specifying your own
+Nixpkgs tree:
+
+<screen>
+$ nixos-rebuild switch -I nixpkgs=/path/to/my/nixpkgs</screen>
+
+</para>
+
+<para>The second possibility is to add the package outside of the
+Nixpkgs tree.  For instance, here is how you specify a build of the
+<link xlink:href="http://www.gnu.org/software/hello/">GNU Hello</link>
+package directly in <filename>configuration.nix</filename>:
+
+<programlisting>
+environment.systemPackages =
+  let
+    my-hello = with pkgs; stdenv.mkDerivation rec {
+      name = "hello-2.8";
+      src = fetchurl {
+        url = "mirror://gnu/hello/${name}.tar.gz";
+        sha256 = "0wqd8sjmxfskrflaxywc7gqw7sfawrfvdxd9skxawzfgyy0pzdz6";
+      };
+    };
+  in
+  [ my-hello ];
+</programlisting>
+
+Of course, you can also move the definition of
+<literal>my-hello</literal> into a separate Nix expression, e.g.
+<programlisting>
+environment.systemPackages = [ (import ./my-hello.nix) ];
+</programlisting>
+where <filename>my-hello.nix</filename> contains:
+<programlisting>
+with &lt;nixpkgs> {}; # bring all of Nixpkgs into scope
+
+stdenv.mkDerivation rec {
+  name = "hello-2.8";
+  src = fetchurl {
+    url = "mirror://gnu/hello/${name}.tar.gz";
+    sha256 = "0wqd8sjmxfskrflaxywc7gqw7sfawrfvdxd9skxawzfgyy0pzdz6";
+  };
+}
+</programlisting>
+
+This allows testing the package easily:
+<screen>
+$ nix-build my-hello.nix
+$ ./result/bin/hello
+Hello, world!
+</screen>
+
+</para>
+
+</section>
+
+</section>
+
+
+<section><title>Ad hoc package management</title>
+
+<para>With the command <command>nix-env</command>, you can install and
+uninstall packages from the command line.  For instance, to install
+Mozilla Thunderbird:
+
+<screen>
+$ nix-env -iA nixos.pkgs.thunderbird</screen>
+
+If you invoke this as root, the package is installed in the Nix
+profile <filename>/nix/var/nix/profiles/default</filename> and visible
+to all users of the system; otherwise, the package ends up in
+<filename>/nix/var/nix/profiles/per-user/<replaceable>username</replaceable>/profile</filename>
+and is not visible to other users.  The <option>-A</option> flag
+specifies the package by its attribute name; without it, the package
+is installed by matching against its package name
+(e.g. <literal>thunderbird</literal>).  The latter is slower because
+it requires matching against all available Nix packages, and is
+ambiguous if there are multiple matching packages.</para>
+
+<para>Packages come from the NixOS channel.  You typically upgrade a
+package by updating to the latest version of the NixOS channel:
+<screen>
+$ nix-channel --update nixos
+</screen>
+and then running <literal>nix-env -i</literal> again.  Other packages
+in the profile are <emphasis>not</emphasis> affected; this is the
+crucial difference with the declarative style of package management,
+where running <command>nixos-rebuild switch</command> causes all
+packages to be updated to their current versions in the NixOS channel.
+You can however upgrade all packages for which there is a newer
+version by doing:
+<screen>
+$ nix-env -u '*'
+</screen>
+</para>
+
+<para>A package can be unstalled using the <option>-e</option>
+flag:
+<screen>
+$ nix-env -e thunderbird
+</screen>
+</para>
+
+<para>Finally, you can roll back an undesirable
+<command>nix-env</command> action:
+<screen>
+$ nix-env --rollback
+</screen>
+</para>
+
+<para><command>nix-env</command> has many more flags.  For details,
+see the
+<citerefentry><refentrytitle>nix-env</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+manpage or the Nix manual.</para>
+
+</section>
+
+
+</section>
+
+
+<!--===============================================================-->
+
 <section><title>Networking</title>
 
 <section><title>Secure shell access</title>

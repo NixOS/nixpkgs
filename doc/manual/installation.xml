@@ -307,7 +307,7 @@ available.</para>
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-upgrading">
 
 <title>Upgrading NixOS</title>
 
