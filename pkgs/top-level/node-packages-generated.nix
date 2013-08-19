@@ -5766,7 +5766,7 @@
   {
     name = "npm2nix";
     spec = "*";
-    version = "3.1.1";
+    version = "3.1.3";
     topLevel = true;
     dependencies = [
       { name = "semver"; spec = ">=2.0.10 <3.0.0"; }
@@ -5778,8 +5778,8 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "ee4e1220cbe71f4d7f2f8e57514a6b180e4d522b";
-    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-3.1.1.tgz";
+    sha1 = "fcfb76b6fdf9966e5c21d7e4292bb9185678a990";
+    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-3.1.3.tgz";
   }
   {
     name = "npmconf";
