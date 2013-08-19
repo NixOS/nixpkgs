@@ -131,7 +131,7 @@ in {
 
   ###### implementation
 
-  config = mkIf (cfg.carbon.enableAggregator || cfg.carbon.enableCache || cfg.cabon.enableRelay || cfg.web.enable) {
+  config = mkIf (cfg.carbon.enableAggregator || cfg.carbon.enableCache || cfg.carbon.enableRelay || cfg.web.enable) {
     environment.etc = lists.filter (el: el.source != null) [
       { source = writeTextOrNull "carbon.conf" cfg.carbon.config;
         target = "graphite/carbon.conf"; }
