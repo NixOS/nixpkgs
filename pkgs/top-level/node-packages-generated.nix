@@ -594,15 +594,15 @@
   {
     name = "bower";
     spec = ">=0.9.0";
-    version = "1.1.2";
+    version = "1.2.0";
     topLevel = false;
     dependencies = [
       { name = "abbrev"; spec = "~1.0.4"; }
       { name = "archy"; spec = "0.0.2"; }
-      { name = "bower-config"; spec = "~0.3.0"; }
+      { name = "bower-config"; spec = "~0.4.0"; }
       { name = "bower-endpoint-parser"; spec = "~0.2.0"; }
-      { name = "bower-json"; spec = "~0.3.0"; }
-      { name = "bower-logger"; spec = "~0.1.0"; }
+      { name = "bower-json"; spec = "~0.4.0"; }
+      { name = "bower-logger"; spec = "~0.2.0"; }
       { name = "bower-registry-client"; spec = "~0.1.2"; }
       { name = "cardinal"; spec = "~0.4.0"; }
       { name = "chalk"; spec = "~0.2.0"; }
@@ -637,8 +637,8 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "89c8d5c75b8359e06fc6a6e3cf4105c3bd6946a1";
-    tarball = "http://registry.npmjs.org/bower/-/bower-1.1.2.tgz";
+    sha1 = "8ec3d0feb4dc2ea5d995f76801a7063ff497b8c3";
+    tarball = "http://registry.npmjs.org/bower/-/bower-1.2.0.tgz";
   }
   {
     name = "bower-config";
@@ -659,8 +659,8 @@
   }
   {
     name = "bower-config";
-    spec = "~0.3.0";
-    version = "0.3.5";
+    spec = "~0.4.0";
+    version = "0.4.3";
     topLevel = false;
     dependencies = [
       { name = "graceful-fs"; spec = "~2.0.0"; }
@@ -671,8 +671,8 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "45fe4d27cc9f98ba3d57ca1a86c95dbdc90e513c";
-    tarball = "http://registry.npmjs.org/bower-config/-/bower-config-0.3.5.tgz";
+    sha1 = "6d3d9d31967c76daf140eca4b06924b13daccc89";
+    tarball = "http://registry.npmjs.org/bower-config/-/bower-config-0.4.3.tgz";
   }
   {
     name = "bower-endpoint-parser";
@@ -689,31 +689,32 @@
   }
   {
     name = "bower-json";
-    spec = "~0.3.0";
-    version = "0.3.0";
+    spec = "~0.4.0";
+    version = "0.4.0";
     topLevel = false;
     dependencies = [
       { name = "deep-extend"; spec = "~0.2.5"; }
       { name = "graceful-fs"; spec = "~2.0.0"; }
+      { name = "intersect"; spec = "~0.0.3"; }
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "4b3c8ac94adf728616d3a2df07874e4eab172d24";
-    tarball = "http://registry.npmjs.org/bower-json/-/bower-json-0.3.0.tgz";
+    sha1 = "a99c3ccf416ef0590ed0ded252c760f1c6d93766";
+    tarball = "http://registry.npmjs.org/bower-json/-/bower-json-0.4.0.tgz";
   }
   {
     name = "bower-logger";
-    spec = "~0.1.0";
-    version = "0.1.0";
+    spec = "~0.2.0";
+    version = "0.2.0";
     topLevel = false;
     dependencies = [
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "a63ce6cda18749b01e474c6bd6cb3d0cd01aafeb";
-    tarball = "http://registry.npmjs.org/bower-logger/-/bower-logger-0.1.0.tgz";
+    sha1 = "c70705790c70985f4b34805d1f8bb63821a37656";
+    tarball = "http://registry.npmjs.org/bower-logger/-/bower-logger-0.2.0.tgz";
   }
   {
     name = "bower-registry-client";
@@ -1339,6 +1340,19 @@
   }
   {
     name = "commander";
+    spec = "*";
+    version = "2.0.0";
+    topLevel = false;
+    dependencies = [
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "d1b86f901f8b64bd941bdeadaf924530393be928";
+    tarball = "http://registry.npmjs.org/commander/-/commander-2.0.0.tgz";
+  }
+  {
+    name = "commander";
     spec = "0.5.1";
     version = "0.5.1";
     topLevel = false;
@@ -1438,7 +1452,7 @@
   {
     name = "configstore";
     spec = "~0.1.0";
-    version = "0.1.4";
+    version = "0.1.5";
     topLevel = false;
     dependencies = [
       { name = "lodash"; spec = "~1.3.0"; }
@@ -1449,8 +1463,8 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "7a0dabb3160323bd70e8e170828e6be66bacdfa8";
-    tarball = "http://registry.npmjs.org/configstore/-/configstore-0.1.4.tgz";
+    sha1 = "807cfd60ef69c87f4a7b60561d940190a438503e";
+    tarball = "http://registry.npmjs.org/configstore/-/configstore-0.1.5.tgz";
   }
   {
     name = "connect";
@@ -3788,6 +3802,19 @@
     tarball = "http://registry.npmjs.org/insight/-/insight-0.1.3.tgz";
   }
   {
+    name = "intersect";
+    spec = "~0.0.3";
+    version = "0.0.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "c1a4a5e5eac6ede4af7504cc07e0ada7bc9f4920";
+    tarball = "http://registry.npmjs.org/intersect/-/intersect-0.0.3.tgz";
+  }
+  {
     name = "ironhorse";
     spec = "*";
     version = "0.0.6";
@@ -5237,6 +5264,19 @@
     patchLatest = false;
     sha1 = "de5e20f75ee291975d67c105a5653b981bf8974f";
     tarball = "http://registry.npmjs.org/node-gyp/-/node-gyp-0.10.9.tgz";
+  }
+  {
+    name = "node-syslog";
+    spec = "1.1.3";
+    version = "1.1.3";
+    topLevel = false;
+    dependencies = [
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "dce11e3091d39889a2af166501e67e0098a0bb64";
+    tarball = "http://registry.npmjs.org/node-syslog/-/node-syslog-1.1.3.tgz";
   }
   {
     name = "node-uptime";
@@ -7366,6 +7406,19 @@
   }
   {
     name = "sequence";
+    spec = "*";
+    version = "2.2.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "7f5617895d44351c0a047e764467690490a16b03";
+    tarball = "http://registry.npmjs.org/sequence/-/sequence-2.2.1.tgz";
+  }
+  {
+    name = "sequence";
     spec = ">= 2.2.1";
     version = "2.2.1";
     topLevel = false;
@@ -7747,6 +7800,21 @@
     patchLatest = false;
     sha1 = "c72e089744fc3659f508cdce3621af5634ec0fff";
     tarball = "http://registry.npmjs.org/stack-trace/-/stack-trace-0.0.7.tgz";
+  }
+  {
+    name = "statsd";
+    spec = "*";
+    version = "0.6.0";
+    topLevel = true;
+    dependencies = [
+      { name = "node-syslog"; spec = "1.1.3"; }
+      { name = "winser"; spec = "=0.0.11"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "9902dba319c46726f0348ced9b7b3e20184de1c4";
+    tarball = "http://registry.npmjs.org/statsd/-/statsd-0.6.0.tgz";
   }
   {
     name = "stream-counter";
@@ -8664,6 +8732,21 @@
     patchLatest = false;
     sha1 = "5630d6819dda692f1464462e7956cb42c0842739";
     tarball = "http://registry.npmjs.org/which/-/which-1.0.5.tgz";
+  }
+  {
+    name = "winser";
+    spec = "=0.0.11";
+    version = "0.0.11";
+    topLevel = false;
+    dependencies = [
+      { name = "sequence"; spec = "*"; }
+      { name = "commander"; spec = "*"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "38474086a89ac72f90f9c6762e23375d12046c7c";
+    tarball = "http://registry.npmjs.org/winser/-/winser-0.0.11.tgz";
   }
   {
     name = "winston";
