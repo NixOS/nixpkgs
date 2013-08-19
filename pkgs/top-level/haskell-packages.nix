@@ -1617,8 +1617,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
   prettyShow_1_2 = callPackage ../development/libraries/haskell/pretty-show/1.2.nix {};
-  prettyShow_1_5 = callPackage ../development/libraries/haskell/pretty-show/1.5.nix {};
-  prettyShow = self.prettyShow_1_5;
+  prettyShow_1_6_1 = callPackage ../development/libraries/haskell/pretty-show/1.6.1.nix {};
+  prettyShow = self.prettyShow_1_6_1;
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
