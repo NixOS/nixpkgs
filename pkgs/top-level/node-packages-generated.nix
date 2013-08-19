@@ -391,7 +391,7 @@
     topLevel = true;
     dependencies = [
       { name = "xml2js"; spec = "0.2.4"; }
-      { name = "xmlbuilder"; spec = "latest"; }
+      { name = "xmlbuilder"; spec = "*"; }
     ];
     peerDependencies = [
     ];
@@ -406,7 +406,7 @@
     topLevel = false;
     dependencies = [
       { name = "xml2js"; spec = "0.2.4"; }
-      { name = "xmlbuilder"; spec = "latest"; }
+      { name = "xmlbuilder"; spec = "*"; }
     ];
     peerDependencies = [
     ];
@@ -5628,7 +5628,7 @@
   {
     name = "npm2nix";
     spec = "*";
-    version = "3.1.0";
+    version = "3.1.1";
     topLevel = true;
     dependencies = [
       { name = "semver"; spec = ">=2.0.10 <3.0.0"; }
@@ -5640,8 +5640,8 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "274988cf0adf40b0313deac4ded7eb3163819bf3";
-    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-3.1.0.tgz";
+    sha1 = "ee4e1220cbe71f4d7f2f8e57514a6b180e4d522b";
+    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-3.1.1.tgz";
   }
   {
     name = "npmconf";
