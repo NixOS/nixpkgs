@@ -5766,7 +5766,7 @@
   {
     name = "npm2nix";
     spec = "*";
-    version = "3.1.3";
+    version = "3.1.4";
     topLevel = true;
     dependencies = [
       { name = "semver"; spec = ">=2.0.10 <3.0.0"; }
@@ -5778,8 +5778,8 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "fcfb76b6fdf9966e5c21d7e4292bb9185678a990";
-    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-3.1.3.tgz";
+    sha1 = "f00743699f8940e7efabf1623c629ad1dd25a990";
+    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-3.1.4.tgz";
   }
   {
     name = "npmconf";
@@ -8009,15 +8009,15 @@
   {
     name = "stringify-object";
     spec = "~0.1.4";
-    version = "0.1.4";
+    version = "0.1.5";
     topLevel = false;
     dependencies = [
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "9555131f0b6429498075d0d8ec6891334ae44d3f";
-    tarball = "http://registry.npmjs.org/stringify-object/-/stringify-object-0.1.4.tgz";
+    sha1 = "87d8b63a3e5dfb189370622f241beeedf706ab3b";
+    tarball = "http://registry.npmjs.org/stringify-object/-/stringify-object-0.1.5.tgz";
   }
   {
     name = "stylus";
