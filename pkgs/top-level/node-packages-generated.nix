@@ -1065,7 +1065,41 @@
   }
   {
     name = "cheerio";
+    spec = "~0.10.8";
+    version = "0.10.8";
+    topLevel = false;
+    dependencies = [
+      { name = "cheerio-select"; spec = "*"; }
+      { name = "htmlparser2"; spec = "2.x"; }
+      { name = "underscore"; spec = "~1.4"; }
+      { name = "entities"; spec = "0.x"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "ece5ad0c8baa9b9adc87394bbdb1c68bc4552ba0";
+    tarball = "http://registry.npmjs.org/cheerio/-/cheerio-0.10.8.tgz";
+  }
+  {
+    name = "cheerio";
     spec = "~0.12.0";
+    version = "0.12.1";
+    topLevel = false;
+    dependencies = [
+      { name = "cheerio-select"; spec = "*"; }
+      { name = "htmlparser2"; spec = "3.1.4"; }
+      { name = "underscore"; spec = "~1.4"; }
+      { name = "entities"; spec = "0.x"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "82cf2b7e9a260f216142cf3c41e94289a3ea4aa3";
+    tarball = "http://registry.npmjs.org/cheerio/-/cheerio-0.12.1.tgz";
+  }
+  {
+    name = "cheerio";
+    spec = "~0.12.1";
     version = "0.12.1";
     topLevel = false;
     dependencies = [
@@ -2122,6 +2156,20 @@
   }
   {
     name = "domutils";
+    spec = "1.0";
+    version = "1.0.1";
+    topLevel = false;
+    dependencies = [
+      { name = "domelementtype"; spec = "1"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "58b58d774774911556c16b8b02d99c609d987869";
+    tarball = "http://registry.npmjs.org/domutils/-/domutils-1.0.1.tgz";
+  }
+  {
+    name = "domutils";
     spec = "1.1";
     version = "1.1.2";
     topLevel = false;
@@ -3006,6 +3054,67 @@
     tarball = "http://registry.npmjs.org/fstream-npm/-/fstream-npm-0.1.5.tgz";
   }
   {
+    name = "generator-angular";
+    spec = "*";
+    version = "0.3.1";
+    topLevel = true;
+    dependencies = [
+      { name = "yeoman-generator"; spec = "~0.12.0"; }
+    ];
+    peerDependencies = [
+      { name = "generator-karma"; spec = "~0.4.0"; }
+      { name = "yo"; spec = ">=1.0.0-rc.1.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "124d8752a0252b2ba833285ee3415a455d0b4bdd";
+    tarball = "http://registry.npmjs.org/generator-angular/-/generator-angular-0.3.1.tgz";
+  }
+  {
+    name = "generator-karma";
+    spec = "~0.4.0";
+    version = "0.4.1";
+    topLevel = false;
+    dependencies = [
+      { name = "yeoman-generator"; spec = "~0.12.0"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "50ee26e3e9d246d2f2a1ada72c5f4a7bf1c08a0b";
+    tarball = "http://registry.npmjs.org/generator-karma/-/generator-karma-0.4.1.tgz";
+  }
+  {
+    name = "generator-mocha";
+    spec = "~0.1.1";
+    version = "0.1.1";
+    topLevel = false;
+    dependencies = [
+      { name = "yeoman-generator"; spec = "~0.10.0"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "818f7028a1c149774a882a0e3c7c04ba9852d7d1";
+    tarball = "http://registry.npmjs.org/generator-mocha/-/generator-mocha-0.1.1.tgz";
+  }
+  {
+    name = "generator-webapp";
+    spec = "*";
+    version = "0.2.7";
+    topLevel = true;
+    dependencies = [
+      { name = "yeoman-generator"; spec = "~0.12.3"; }
+      { name = "cheerio"; spec = "~0.12.1"; }
+    ];
+    peerDependencies = [
+      { name = "generator-mocha"; spec = "~0.1.1"; }
+      { name = "yo"; spec = ">=1.0.0-rc.1.1"; }
+    ];
+    patchLatest = false;
+    sha1 = "3d8f776719910802f4bf5156d6473f435c5fd570";
+    tarball = "http://registry.npmjs.org/generator-webapp/-/generator-webapp-0.2.7.tgz";
+  }
+  {
     name = "github-url-from-git";
     spec = "1.1.1";
     version = "1.1.1";
@@ -3448,6 +3557,22 @@
     patchLatest = false;
     sha1 = "0c55ba3a018855e134fd82f7a4aa6235167181b2";
     tarball = "http://registry.npmjs.org/htdigest/-/htdigest-1.0.7.tgz";
+  }
+  {
+    name = "htmlparser2";
+    spec = "2.x";
+    version = "2.6.0";
+    topLevel = false;
+    dependencies = [
+      { name = "domhandler"; spec = "2.0"; }
+      { name = "domutils"; spec = "1.0"; }
+      { name = "domelementtype"; spec = "1"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "b28564ea9d1ba56a104ace6a7b0fdda2f315836f";
+    tarball = "http://registry.npmjs.org/htmlparser2/-/htmlparser2-2.6.0.tgz";
   }
   {
     name = "htmlparser2";
@@ -4218,6 +4343,19 @@
     patchLatest = false;
     sha1 = "b751fb1c141fe8bcee6fc1bad44a30f9b9ccd95e";
     tarball = "http://registry.npmjs.org/lodash/-/lodash-1.0.1.tgz";
+  }
+  {
+    name = "lodash";
+    spec = "~1.1.1";
+    version = "1.1.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "7b7384521f12bef886368a9450162ebec14fa394";
+    tarball = "http://registry.npmjs.org/lodash/-/lodash-1.1.1.tgz";
   }
   {
     name = "lodash";
@@ -6876,6 +7014,30 @@
   }
   {
     name = "request";
+    spec = "~2.16.6";
+    version = "2.16.6";
+    topLevel = false;
+    dependencies = [
+      { name = "form-data"; spec = "~0.0.3"; }
+      { name = "mime"; spec = "~1.2.7"; }
+      { name = "hawk"; spec = "~0.10.2"; }
+      { name = "node-uuid"; spec = "~1.4.0"; }
+      { name = "cookie-jar"; spec = "~0.2.0"; }
+      { name = "aws-sign"; spec = "~0.2.0"; }
+      { name = "oauth-sign"; spec = "~0.2.0"; }
+      { name = "forever-agent"; spec = "~0.2.0"; }
+      { name = "tunnel-agent"; spec = "~0.2.0"; }
+      { name = "json-stringify-safe"; spec = "~3.0.0"; }
+      { name = "qs"; spec = "~0.5.4"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "872fe445ae72de266b37879d6ad7dc948fa01cad";
+    tarball = "http://registry.npmjs.org/request/-/request-2.16.6.tgz";
+  }
+  {
+    name = "request";
     spec = "~2.21.0";
     version = "2.21.0";
     topLevel = false;
@@ -8993,6 +9155,66 @@
   }
   {
     name = "yeoman-generator";
+    spec = "~0.10.0";
+    version = "0.10.5";
+    topLevel = false;
+    dependencies = [
+      { name = "cheerio"; spec = "~0.10.8"; }
+      { name = "request"; spec = "~2.16.6"; }
+      { name = "rimraf"; spec = "~2.1.4"; }
+      { name = "tar"; spec = "~0.1.17"; }
+      { name = "diff"; spec = "~1.0.4"; }
+      { name = "mime"; spec = "~1.2.9"; }
+      { name = "underscore.string"; spec = "~2.3.1"; }
+      { name = "lodash"; spec = "~1.1.1"; }
+      { name = "mkdirp"; spec = "~0.3.5"; }
+      { name = "read"; spec = "~1.0.4"; }
+      { name = "glob"; spec = "~3.1.21"; }
+      { name = "nopt"; spec = "~2.1.1"; }
+      { name = "cli-table"; spec = "~0.2.0"; }
+      { name = "debug"; spec = "~0.7.2"; }
+      { name = "isbinaryfile"; spec = "~0.1.8"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "67b28a6c453addc785e43180236df65e2f93554a";
+    tarball = "http://registry.npmjs.org/yeoman-generator/-/yeoman-generator-0.10.5.tgz";
+  }
+  {
+    name = "yeoman-generator";
+    spec = "~0.12.0";
+    version = "0.12.3";
+    topLevel = false;
+    dependencies = [
+      { name = "cheerio"; spec = "~0.12.0"; }
+      { name = "request"; spec = "~2.21.0"; }
+      { name = "rimraf"; spec = "~2.1.4"; }
+      { name = "tar"; spec = "~0.1.17"; }
+      { name = "diff"; spec = "~1.0.4"; }
+      { name = "mime"; spec = "~1.2.9"; }
+      { name = "underscore.string"; spec = "~2.3.1"; }
+      { name = "lodash"; spec = "~1.3.0"; }
+      { name = "mkdirp"; spec = "~0.3.5"; }
+      { name = "glob"; spec = "~3.2.0"; }
+      { name = "nopt"; spec = "~2.1.1"; }
+      { name = "cli-table"; spec = "~0.2.0"; }
+      { name = "debug"; spec = "~0.7.2"; }
+      { name = "isbinaryfile"; spec = "~0.1.8"; }
+      { name = "dargs"; spec = "~0.1.0"; }
+      { name = "async"; spec = "~0.2.8"; }
+      { name = "inquirer"; spec = "~0.2.0"; }
+      { name = "iconv-lite"; spec = "~0.2.10"; }
+      { name = "shelljs"; spec = "~0.1.4"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "a11288e7ed11c46efd816b268eeea96acd960d1f";
+    tarball = "http://registry.npmjs.org/yeoman-generator/-/yeoman-generator-0.12.3.tgz";
+  }
+  {
+    name = "yeoman-generator";
     spec = "~0.12.3";
     version = "0.12.3";
     topLevel = false;
@@ -9028,6 +9250,30 @@
     spec = "*";
     version = "1.0.0-rc.1.4";
     topLevel = true;
+    dependencies = [
+      { name = "yeoman-generator"; spec = "~0.12.3"; }
+      { name = "nopt"; spec = "~2.1.1"; }
+      { name = "lodash"; spec = "~1.3.1"; }
+      { name = "update-notifier"; spec = "~0.1.3"; }
+      { name = "insight"; spec = "~0.1.0"; }
+      { name = "sudo-block"; spec = "~0.2.0"; }
+      { name = "async"; spec = "~0.2.9"; }
+      { name = "open"; spec = "0.0.4"; }
+      { name = "chalk"; spec = "~0.1.0"; }
+    ];
+    peerDependencies = [
+      { name = "grunt-cli"; spec = "~0.1.7"; }
+      { name = "bower"; spec = ">=0.9.0"; }
+    ];
+    patchLatest = false;
+    sha1 = "9c416c7006e94e756eb52a7a6884127b41f62ca6";
+    tarball = "http://registry.npmjs.org/yo/-/yo-1.0.0-rc.1.4.tgz";
+  }
+  {
+    name = "yo";
+    spec = ">=1.0.0-rc.1.1";
+    version = "1.0.0-rc.1.4";
+    topLevel = false;
     dependencies = [
       { name = "yeoman-generator"; spec = "~0.12.3"; }
       { name = "nopt"; spec = "~2.1.1"; }
