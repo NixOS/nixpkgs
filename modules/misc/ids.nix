@@ -80,6 +80,7 @@ in
     smtpq = 64;
     supybot = 65;
     iodined = 66;
+    graphite = 68;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -144,6 +145,7 @@ in
     supybot = 65;
     iodined = 66;
     libvirtd = 67;
+    graphite = 68;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 
