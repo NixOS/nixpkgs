@@ -4624,7 +4624,7 @@
       { name = "rimraf"; spec = "~2"; }
       { name = "retry"; spec = "0.6.0"; }
       { name = "couch-login"; spec = "~0.1.15"; }
-      { name = "npmlog"; spec = ""; }
+      { name = "npmlog"; spec = "*"; }
     ];
     peerDependencies = [
     ];
@@ -4644,7 +4644,7 @@
       { name = "rimraf"; spec = "~2"; }
       { name = "retry"; spec = "0.6.0"; }
       { name = "couch-login"; spec = "~0.1.18"; }
-      { name = "npmlog"; spec = ""; }
+      { name = "npmlog"; spec = "*"; }
     ];
     peerDependencies = [
     ];
@@ -4663,7 +4663,7 @@
     tarball = "http://registry.npmjs.org/npm-user-validate/-/npm-user-validate-0.0.3.tgz";
   };
   "npm2nix"."*" = {
-    version = "4.0.0";
+    version = "4.0.1";
     dependencies = [
       { name = "semver"; spec = ">=2.0.10 <3.0.0"; }
       { name = "argparse"; spec = "0.1.15"; }
@@ -4674,8 +4674,8 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "4bfdbf335a4a3b42133124a82c87ff1a3a9a36ed";
-    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-4.0.0.tgz";
+    sha1 = "2dd2b913c2bff527b9bf2cb0f9c7dec214f6aff6";
+    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-4.0.1.tgz";
   };
   "#topLevel"."npm2nix" = "*";
   "npmconf"."0.1.1" = {
