@@ -537,6 +537,23 @@ service.xserver.driSupport32Bit = true;
 </section>
 
 
+<section><title>Touchpads</title>
+
+<para>Support for Synaptics touchpads (found in many laptops such as
+the Dell Latitude series) can be enabled as follows:
+<programlisting>
+services.xserver.synaptics.enable = true;
+</programlisting>
+The driver has many options (see <xref linkend="ch-options"/>).  For
+instance, the following enables two-finger scrolling:
+<programlisting>
+services.xserver.synaptics.twoFingerScroll = true;
+</programlisting>
+</para>
+
+</section>
+
+
 </section>
 
 
