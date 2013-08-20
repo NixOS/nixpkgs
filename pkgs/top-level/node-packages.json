@@ -14,7 +14,7 @@
 , "smartdc"
 , "optparse"
 , "jsontool"
-, "swig"
+, { "swig": "0.14.x" }
 , "coffee-script"
 , "escape-html"
 , "buffertools"

@@ -8164,18 +8164,17 @@
   }
   {
     name = "swig";
-    spec = "*";
-    version = "1.0.0-pre2";
+    spec = "0.14.x";
+    version = "0.14.0";
     topLevel = true;
     dependencies = [
-      { name = "uglify-js"; spec = "~2.3"; }
-      { name = "optimist"; spec = "~0.6.0"; }
+      { name = "underscore"; spec = ">=1.1.7"; }
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "e1ee52591921aab9ca8763fc351131a1d08400f5";
-    tarball = "http://registry.npmjs.org/swig/-/swig-1.0.0-pre2.tgz";
+    sha1 = "544bfb3bd837608873eed6a72c672a28cb1f1b3f";
+    tarball = "http://registry.npmjs.org/swig/-/swig-0.14.0.tgz";
   }
   {
     name = "sylvester";
@@ -8606,6 +8605,19 @@
     patchLatest = false;
     sha1 = "61a6a32010622afa07963bf325203cf12239d604";
     tarball = "http://registry.npmjs.org/underscore/-/underscore-1.4.4.tgz";
+  }
+  {
+    name = "underscore";
+    spec = ">=1.1.7";
+    version = "1.5.1";
+    topLevel = false;
+    dependencies = [
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "d2bde817d176ffade894ab71458e682a14b86dc9";
+    tarball = "http://registry.npmjs.org/underscore/-/underscore-1.5.1.tgz";
   }
   {
     name = "underscore";
