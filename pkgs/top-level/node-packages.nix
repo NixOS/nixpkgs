@@ -4,6 +4,7 @@
   nativeDeps = {
     "node-expat"."*" = [ pkgs.expat ];
     "rbytes"."0.0.2" = [ pkgs.openssl ];
+    "phantomjs"."~1.9" = [ pkgs.phantomjs ];
   };
 
   buildNodePackage = import ../development/web/nodejs/build-node-package.nix {
