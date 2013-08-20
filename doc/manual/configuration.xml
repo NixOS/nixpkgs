@@ -394,9 +394,82 @@ groups can be managed using <command>groupadd</command>,
 
 <!--===============================================================-->
 
-<section><title>X11</title>
+<section><title>Filesystems</title>
 
-<para>The X11 windowing system provides the basis of NixOS’ graphical
+<para>You can define filesystems using the
+<option>fileSystems</option> configuration option.  For instance, the
+following definition causes NixOS to mount the Ext4 filesystem on
+device <filename>/dev/disk/by-label/data</filename> onto the mount
+point <filename>/data</filename>:
+
+<programlisting>
+fileSystems."/data" =
+  { device = "/dev/disk/by-label/data";
+    fsType = "ext4";
+  };
+</programlisting>
+
+Mount points are created automatically if they don’t already exist.
+For <option>device</option>, it’s best to use the topology-independent
+device aliases in <filename>/dev/disk/by-label</filename> and
+<filename>/dev/disk/by-uuid</filename>, as these don’t change if the
+topology changes (e.g. if a disk is moved to another IDE
+controller).</para>
+
+<para>You can usually omit the filesystem type
+(<option>fsType</option>), since <command>mount</command> can usually
+detect the type and load the necessary kernel module automatically.
+However, if the filesystem is needed at early boot (in the initial
+ramdisk) and is not <literal>ext2</literal>, <literal>ext3</literal>
+or <literal>ext4</literal>, then it’s best to specify
+<option>fsType</option> to ensure that the kernel module is
+available.</para>
+
+<section><title>LUKS-encrypted filesystems</title>
+
+<para>NixOS supports filesystems that are encrypted using
+<emphasis>LUKS</emphasis> (Linux Unified Key Setup).  For example,
+here is how you create an encrypted Ext4 filesystem on the device
+<filename>/dev/sda2</filename>:
+
+<screen>
+$ cryptsetup luksFormat /dev/sda2
+
+WARNING!
+========
+This will overwrite data on /dev/sda2 irrevocably.
+
+Are you sure? (Type uppercase yes): YES
+Enter LUKS passphrase: ***
+Verify passphrase: ***
+
+$ cryptsetup luksOpen /dev/sda2 crypted
+Enter passphrase for /dev/sda2: ***
+
+$ mkfs.ext4 /dev/mapper/crypted
+</screen>
+
+To ensure that this filesystem is automatically mounted at boot time
+as <filename>/</filename>, add the following to
+<filename>configuration.nix</filename>:
+
+<programlisting>
+boot.initrd.luks.devices = [ { device = "/dev/sda2"; name = "crypted"; } ];
+fileSystems."/".device = "/dev/mapper/crypted";
+</programlisting>
+
+</para>
+
+</section>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>X Window System</title>
+
+<para>The X Window System (X11) provides the basis of NixOS’ graphical
 user interface.  It can be enabled as follows:
 <programlisting>
 services.xserver.enable = true;
