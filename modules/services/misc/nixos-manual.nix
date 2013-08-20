@@ -21,10 +21,18 @@ let
   help = pkgs.writeScriptBin "nixos-help"
     ''
       #! ${pkgs.stdenv.shell} -e
-      if ! ''${BROWSER:-w3m} ${entry}; then
-        echo "$0: unable to start a web browser; please set \$BROWSER or install ‘w3m’"
-        exit 1
+      browser="$BROWSER"
+      if [ -z "$browser" ]; then
+        browser="$(type -P xdg-open || true)"
+        if [ -z "$browser" ]; then
+          browser="$(type -P w3m || true)"
+          if [ -z "$browser" ]; then
+            echo "$0: unable to start a web browser; please set \$BROWSER"
+            exit 1
+          fi
+        fi
       fi
+      exec "$browser" ${entry}
     '';
 
 in
