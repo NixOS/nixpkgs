@@ -24,9 +24,13 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches =
+    # See https://github.com/NixOS/nixpkgs/issues/762
+    # and http://public.kitware.com/Bug/view.php?id=13887
+    # Remove this patch when a CMake release contains the corresponding fix
+    [ ./762-13887.patch ]
     # Don't search in non-Nix locations such as /usr, but do search in
-    # Nixpkgs' Glibc.
-    optional (stdenv ? glibc) ./search-path.patch;
+    # Nixpkgs' Glibc. 
+    ++ optional (stdenv ? glibc) ./search-path.patch;
 
   buildInputs = [ curl expat zlib bzip2 libarchive ]
     ++ optional useNcurses ncurses
