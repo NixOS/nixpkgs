@@ -594,7 +594,7 @@
   {
     name = "bower";
     spec = ">=0.9.0";
-    version = "1.2.0";
+    version = "1.2.1";
     topLevel = false;
     dependencies = [
       { name = "abbrev"; spec = "~1.0.4"; }
@@ -637,13 +637,13 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "8ec3d0feb4dc2ea5d995f76801a7063ff497b8c3";
-    tarball = "http://registry.npmjs.org/bower/-/bower-1.2.0.tgz";
+    sha1 = "e25fd6c7677205f04b0992f6725048b899f7d779";
+    tarball = "http://registry.npmjs.org/bower/-/bower-1.2.1.tgz";
   }
   {
     name = "bower-config";
-    spec = "~0.2.0";
-    version = "0.2.0-rc.2";
+    spec = "~0.4.0";
+    version = "0.4.3";
     topLevel = false;
     dependencies = [
       { name = "graceful-fs"; spec = "~2.0.0"; }
@@ -654,12 +654,12 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "1bb91e82f2155ce219764be99451aadacc5edecb";
-    tarball = "http://registry.npmjs.org/bower-config/-/bower-config-0.2.0-rc.2.tgz";
+    sha1 = "6d3d9d31967c76daf140eca4b06924b13daccc89";
+    tarball = "http://registry.npmjs.org/bower-config/-/bower-config-0.4.3.tgz";
   }
   {
     name = "bower-config";
-    spec = "~0.4.0";
+    spec = "~0.4.3";
     version = "0.4.3";
     topLevel = false;
     dependencies = [
@@ -706,27 +706,27 @@
   {
     name = "bower-logger";
     spec = "~0.2.0";
-    version = "0.2.0";
+    version = "0.2.1";
     topLevel = false;
     dependencies = [
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "c70705790c70985f4b34805d1f8bb63821a37656";
-    tarball = "http://registry.npmjs.org/bower-logger/-/bower-logger-0.2.0.tgz";
+    sha1 = "0c1817c48063a88d96cc3d516c55e57fff5d9ecb";
+    tarball = "http://registry.npmjs.org/bower-logger/-/bower-logger-0.2.1.tgz";
   }
   {
     name = "bower-registry-client";
     spec = "~0.1.2";
-    version = "0.1.3";
+    version = "0.1.4";
     topLevel = false;
     dependencies = [
       { name = "async"; spec = "~0.2.8"; }
-      { name = "bower-config"; spec = "~0.2.0"; }
+      { name = "bower-config"; spec = "~0.4.3"; }
       { name = "graceful-fs"; spec = "~2.0.0"; }
       { name = "lru-cache"; spec = "~2.3.0"; }
-      { name = "request"; spec = "~2.25.0"; }
+      { name = "request"; spec = "~2.27.0"; }
       { name = "request-replay"; spec = "~0.2.0"; }
       { name = "rimraf"; spec = "~2.2.0"; }
       { name = "mkdirp"; spec = "~0.3.5"; }
@@ -734,8 +734,8 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "eb168dc977d5967cd18acccd14f2718c63e17e11";
-    tarball = "http://registry.npmjs.org/bower-registry-client/-/bower-registry-client-0.1.3.tgz";
+    sha1 = "334669747ca0b60fdda24b0de1f4c3057429813c";
+    tarball = "http://registry.npmjs.org/bower-registry-client/-/bower-registry-client-0.1.4.tgz";
   }
   {
     name = "broadway";
@@ -3725,15 +3725,15 @@
   {
     name = "inherits";
     spec = "*";
-    version = "2.0.0";
+    version = "2.0.1";
     topLevel = false;
     dependencies = [
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "76c81b3b1c10ddee3a60bf2c247162bc369f8ba8";
-    tarball = "http://registry.npmjs.org/inherits/-/inherits-2.0.0.tgz";
+    sha1 = "b17d08d326b4423e568eff719f91b0b1cbdf69f1";
+    tarball = "http://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz";
   }
   {
     name = "inherits";
@@ -3764,15 +3764,15 @@
   {
     name = "inherits";
     spec = "2";
-    version = "2.0.0";
+    version = "2.0.1";
     topLevel = false;
     dependencies = [
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "76c81b3b1c10ddee3a60bf2c247162bc369f8ba8";
-    tarball = "http://registry.npmjs.org/inherits/-/inherits-2.0.0.tgz";
+    sha1 = "b17d08d326b4423e568eff719f91b0b1cbdf69f1";
+    tarball = "http://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz";
   }
   {
     name = "inherits";
@@ -3790,15 +3790,15 @@
   {
     name = "inherits";
     spec = "~2.0.0";
-    version = "2.0.0";
+    version = "2.0.1";
     topLevel = false;
     dependencies = [
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "76c81b3b1c10ddee3a60bf2c247162bc369f8ba8";
-    tarball = "http://registry.npmjs.org/inherits/-/inherits-2.0.0.tgz";
+    sha1 = "b17d08d326b4423e568eff719f91b0b1cbdf69f1";
+    tarball = "http://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz";
   }
   {
     name = "ini";
@@ -4399,15 +4399,15 @@
   {
     name = "lru-cache";
     spec = "2";
-    version = "2.3.0";
+    version = "2.3.1";
     topLevel = false;
     dependencies = [
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "1cee12d5a9f28ed1ee37e9c332b8888e6b85412a";
-    tarball = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.3.0.tgz";
+    sha1 = "b3adf6b3d856e954e2c390e6cef22081245a53d6";
+    tarball = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.3.1.tgz";
   }
   {
     name = "lru-cache";
@@ -4451,15 +4451,15 @@
   {
     name = "lru-cache";
     spec = "~2.3.0";
-    version = "2.3.0";
+    version = "2.3.1";
     topLevel = false;
     dependencies = [
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "1cee12d5a9f28ed1ee37e9c332b8888e6b85412a";
-    tarball = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.3.0.tgz";
+    sha1 = "b3adf6b3d856e954e2c390e6cef22081245a53d6";
+    tarball = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.3.1.tgz";
   }
   {
     name = "mailcomposer";
@@ -4967,7 +4967,7 @@
     name = "mongoose";
     spec = "*";
     version = "3.7.2";
-    topLevel = true;
+    topLevel = false;
     dependencies = [
       { name = "hooks"; spec = "0.2.1"; }
       { name = "mongodb"; spec = "1.3.18"; }
@@ -5004,6 +5004,27 @@
     patchLatest = false;
     sha1 = "aa6c9f4dfb740c7721dbe734fbb97714e5ab0ebc";
     tarball = "http://registry.npmjs.org/mongoose/-/mongoose-3.6.7.tgz";
+  }
+  {
+    name = "mongoose";
+    spec = "3.6.x";
+    version = "3.6.17";
+    topLevel = true;
+    dependencies = [
+      { name = "hooks"; spec = "0.2.1"; }
+      { name = "mongodb"; spec = "1.3.18"; }
+      { name = "ms"; spec = "0.1.0"; }
+      { name = "sliced"; spec = "0.0.5"; }
+      { name = "muri"; spec = "0.3.1"; }
+      { name = "mpromise"; spec = "0.2.1"; }
+      { name = "mpath"; spec = "0.1.1"; }
+      { name = "regexp-clone"; spec = "0.0.1"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "2f53a041fe28974f3e536aabd81dd4bb31e2abd0";
+    tarball = "http://registry.npmjs.org/mongoose/-/mongoose-3.6.17.tgz";
   }
   {
     name = "mongoose-lifecycle";
@@ -5145,7 +5166,7 @@
   {
     name = "msgpack";
     spec = ">= 0.0.1";
-    version = "0.1.11";
+    version = "0.2.0";
     topLevel = false;
     dependencies = [
       { name = "nodeunit"; spec = "https://github.com/godsflaw/nodeunit/tarball/master"; }
@@ -5153,8 +5174,8 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "203f7cfd1d1917fae196bbe01a701599f338cf0b";
-    tarball = "http://registry.npmjs.org/msgpack/-/msgpack-0.1.11.tgz";
+    sha1 = "d022af5c7db98eff5c01dd48942bc5354e167817";
+    tarball = "http://registry.npmjs.org/msgpack/-/msgpack-0.2.0.tgz";
   }
   {
     name = "muri";
@@ -5766,7 +5787,7 @@
   {
     name = "npm2nix";
     spec = "*";
-    version = "3.1.4";
+    version = "3.1.5";
     topLevel = true;
     dependencies = [
       { name = "semver"; spec = ">=2.0.10 <3.0.0"; }
@@ -5778,8 +5799,8 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "f00743699f8940e7efabf1623c629ad1dd25a990";
-    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-3.1.4.tgz";
+    sha1 = "3201210696bdff5e7cdccd679f07fffa419094bc";
+    tarball = "http://registry.npmjs.org/npm2nix/-/npm2nix-3.1.5.tgz";
   }
   {
     name = "npmconf";
@@ -6679,7 +6700,7 @@
   {
     name = "read-installed";
     spec = "~0.2.2";
-    version = "0.2.3";
+    version = "0.2.4";
     topLevel = false;
     dependencies = [
       { name = "semver"; spec = "2"; }
@@ -6690,13 +6711,13 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "234204b47f6a0eb82c662fc04f7b7c5f7e795239";
-    tarball = "http://registry.npmjs.org/read-installed/-/read-installed-0.2.3.tgz";
+    sha1 = "9a45ca0a8ae1ecdb05972f362b63bc59450b572d";
+    tarball = "http://registry.npmjs.org/read-installed/-/read-installed-0.2.4.tgz";
   }
   {
     name = "read-package-json";
     spec = "1";
-    version = "1.1.1";
+    version = "1.1.3";
     topLevel = false;
     dependencies = [
       { name = "glob"; spec = "~3.2.1"; }
@@ -6707,13 +6728,13 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "5d679b34ddf53ac3bc232aeb421f6b6857f925e5";
-    tarball = "http://registry.npmjs.org/read-package-json/-/read-package-json-1.1.1.tgz";
+    sha1 = "a361ab3da88f6f78998df223ad8186a4b7e1f391";
+    tarball = "http://registry.npmjs.org/read-package-json/-/read-package-json-1.1.3.tgz";
   }
   {
     name = "read-package-json";
     spec = "~1.1.0";
-    version = "1.1.1";
+    version = "1.1.3";
     topLevel = false;
     dependencies = [
       { name = "glob"; spec = "~3.2.1"; }
@@ -6724,8 +6745,8 @@
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "5d679b34ddf53ac3bc232aeb421f6b6857f925e5";
-    tarball = "http://registry.npmjs.org/read-package-json/-/read-package-json-1.1.1.tgz";
+    sha1 = "a361ab3da88f6f78998df223ad8186a4b7e1f391";
+    tarball = "http://registry.npmjs.org/read-package-json/-/read-package-json-1.1.3.tgz";
   }
   {
     name = "readable-stream";
@@ -7135,6 +7156,31 @@
     patchLatest = false;
     sha1 = "79b03075cbac2e22ebe41aa7fca884e869c1c212";
     tarball = "http://registry.npmjs.org/request/-/request-2.26.0.tgz";
+  }
+  {
+    name = "request";
+    spec = "~2.27.0";
+    version = "2.27.0";
+    topLevel = false;
+    dependencies = [
+      { name = "qs"; spec = "~0.6.0"; }
+      { name = "json-stringify-safe"; spec = "~5.0.0"; }
+      { name = "forever-agent"; spec = "~0.5.0"; }
+      { name = "tunnel-agent"; spec = "~0.3.0"; }
+      { name = "http-signature"; spec = "~0.10.0"; }
+      { name = "hawk"; spec = "~1.0.0"; }
+      { name = "aws-sign"; spec = "~0.3.0"; }
+      { name = "oauth-sign"; spec = "~0.3.0"; }
+      { name = "cookie-jar"; spec = "~0.3.0"; }
+      { name = "node-uuid"; spec = "~1.4.0"; }
+      { name = "mime"; spec = "~1.2.9"; }
+      { name = "form-data"; spec = "~0.1.0"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "dfb1a224dd3a5a9bade4337012503d710e538668";
+    tarball = "http://registry.npmjs.org/request/-/request-2.27.0.tgz";
   }
   {
     name = "request-progress";
@@ -7743,41 +7789,41 @@
   {
     name = "slide";
     spec = "*";
-    version = "1.1.4";
+    version = "1.1.5";
     topLevel = false;
     dependencies = [
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "2b23f1949b369ed61d22bd6570ff0320302fc8df";
-    tarball = "http://registry.npmjs.org/slide/-/slide-1.1.4.tgz";
+    sha1 = "31732adeae78f1d2d60a29b63baf6a032df7c25d";
+    tarball = "http://registry.npmjs.org/slide/-/slide-1.1.5.tgz";
   }
   {
     name = "slide";
     spec = "~1.1.3";
-    version = "1.1.4";
+    version = "1.1.5";
     topLevel = false;
     dependencies = [
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "2b23f1949b369ed61d22bd6570ff0320302fc8df";
-    tarball = "http://registry.npmjs.org/slide/-/slide-1.1.4.tgz";
+    sha1 = "31732adeae78f1d2d60a29b63baf6a032df7c25d";
+    tarball = "http://registry.npmjs.org/slide/-/slide-1.1.5.tgz";
   }
   {
     name = "slide";
     spec = "~1.1.4";
-    version = "1.1.4";
+    version = "1.1.5";
     topLevel = false;
     dependencies = [
     ];
     peerDependencies = [
     ];
     patchLatest = false;
-    sha1 = "2b23f1949b369ed61d22bd6570ff0320302fc8df";
-    tarball = "http://registry.npmjs.org/slide/-/slide-1.1.4.tgz";
+    sha1 = "31732adeae78f1d2d60a29b63baf6a032df7c25d";
+    tarball = "http://registry.npmjs.org/slide/-/slide-1.1.5.tgz";
   }
   {
     name = "smartdc";

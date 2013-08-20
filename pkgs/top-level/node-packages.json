@@ -43,7 +43,7 @@
 , "jade"
 , "view-helpers"
 , "redis"
-, "mongoose"
+, { "mongoose": "3.6.x" }
 , "mongoose-schema-extend"
 , "connect-mongo"
 , "connect-flash"
