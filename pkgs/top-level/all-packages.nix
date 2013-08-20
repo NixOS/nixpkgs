@@ -4099,6 +4099,12 @@ let
     gccCross = null;
   };
 
+  glibc_memusage = callPackage ../development/libraries/glibc/2.17 {
+    kernelHeaders = linuxHeaders;
+    installLocales = false;
+    withGd = true;
+  };
+
   glibc217Cross = forceNativeDrv (makeOverridable (import ../development/libraries/glibc/2.17)
     (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
      in {
