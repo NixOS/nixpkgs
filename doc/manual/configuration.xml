@@ -477,12 +477,11 @@ services.xserver.enable = true;
 The X server will automatically detect and use the appropriate video
 driver from a set of X.org drivers (such as <literal>vesa</literal>
 and <literal>intel</literal>).  You can also specify a driver
-manually.  For instance, to enable the proprietary NVIDIA driver, you need
+manually, e.g.
 <programlisting>
-services.xserver.videoDrivers = [ "nvidia" ];
+services.xserver.videoDrivers = [ "r128" ];
 </programlisting>
-(You may need to reboot after enabling this driver to prevent a clash
-with other kernel modules.)</para>
+to enable X.org’s <literal>xf86-video-r128</literal> driver.</para>
 
 <para>You also need to enable at least one desktop or window manager.
 Otherwise, you can only log into a plain undecorated
@@ -515,6 +514,28 @@ The X server can then be started manually:
 $ systemctl start display-manager.service
 </screen>
 </para>
+
+
+<section><title>NVIDIA graphics cards</title>
+
+<para>NVIDIA provides a proprietary driver for its graphics cards that
+has better 3D performance than the X.org drivers.  It is not enabled
+by default because it’s not free software.  You can enable it as follows:
+<programlisting>
+services.xserver.videoDrivers = [ "nvidia" ];
+</programlisting>
+You may need to reboot after enabling this driver to prevent a clash
+with other kernel modules.</para>
+
+<para>On 64-bit systems, if you want full acceleration for 32-bit
+programs such as Wine, you should also set the following:
+<programlisting>
+service.xserver.driSupport32Bit = true;
+</programlisting>
+</para>
+
+</section>
+
 
 </section>
 
