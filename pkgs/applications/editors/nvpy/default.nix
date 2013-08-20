@@ -26,10 +26,10 @@ buildPythonPackage rec {
     wrapProgram $out/bin/nvpy --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
   '';
 
-  meta = {
+  meta = with pkgs.lib; {
     description = "A simplenote-syncing note-taking tool inspired by Notational Velocity";
     homepage = "https://github.com/cpbotha/nvpy";
-    platforms = stdenv.lib.platforms.linux;
-    license = pkgs.lib.licenses.bsd3;
+    platforms = platforms.linux;
+    license = licenses.bsd3;
   };
 }
