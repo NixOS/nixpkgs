@@ -5,7 +5,7 @@ let
 
   importGeneratedPackages = generated: nativeDeps: self:
     let
-      nativeDepsList = { name, spec, ... }:
+      nativeDepsList = { name, spec }:
         let
           nameOr = if builtins.hasAttr name nativeDeps
             then builtins.getAttr name nativeDeps
@@ -14,33 +14,23 @@ let
             then builtins.getAttr spec nameOr
             else [];
         in depsOr;
-      all = pkgs.lib.fold (pkg: { top-level, full }: {
-        top-level = top-level ++ pkgs.lib.optional pkg.topLevel {
-          name = pkg.name;
-          value = builtins.getAttr pkg.spec (builtins.getAttr pkg.name self.full);
-        };
-        full = full // builtins.listToAttrs [ {
-          inherit (pkg) name;
-          value = (if builtins.hasAttr pkg.name full
-            then builtins.getAttr pkg.name full
-            else {}
-          ) // builtins.listToAttrs [ {
-            name = pkg.spec;
-            value = pkgs.lib.makeOverridable buildNodePackage {
-              name = "${pkg.name}-${pkg.version}";
-              src = (if pkg.patchLatest then patchLatest else fetchurl) {
-                url = pkg.tarball;
-                sha1 = pkg.sha1 or "";
-                sha256 = pkg.sha256 or "";
-              };
-              deps = map (dep: builtins.getAttr dep.spec (builtins.getAttr dep.name self.full)) pkg.dependencies;
-              peerDeps  = map (dep: builtins.getAttr dep.spec (builtins.getAttr dep.name self.full)) pkg.peerDependencies;
-              buildInputs = nativeDepsList pkg;
-            };
-          } ];
-        } ];
-      } ) { top-level = []; full = {}; } generated;
-    in builtins.listToAttrs all.top-level // { inherit (all) full; };
+      full = pkgs.lib.mapAttrs (name: specs: pkgs.lib.mapAttrs (spec: pkg:
+        pkgs.lib.makeOverridable buildNodePackage {
+          name = "${name}-${pkg.version}";
+          src = (if pkg.patchLatest then patchLatest else fetchurl) {
+            url = pkg.tarball;
+            sha1 = pkg.sha1 or "";
+            sha256 = pkg.sha256 or "";
+          };
+          deps = map (dep: builtins.getAttr dep.spec (builtins.getAttr dep.name self.full)) pkg.dependencies;
+          peerDeps  = map (dep: builtins.getAttr dep.spec (builtins.getAttr dep.name self.full)) pkg.peerDependencies;
+          buildInputs = nativeDepsList { inherit name spec; };
+        }
+      ) specs) (removeAttrs generated [ "#topLevel" ]);
+      topLevel = pkgs.lib.mapAttrs (name: spec:
+        builtins.getAttr spec (builtins.getAttr name self.full)
+      ) generated."#topLevel" or {};
+    in topLevel // { inherit full; };
 in {
   inherit importGeneratedPackages;
 
