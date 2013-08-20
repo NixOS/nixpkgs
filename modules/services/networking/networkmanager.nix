@@ -46,8 +46,8 @@ let
 
   overrideNameserversScript = writeScript "02overridedns" ''
     #!/bin/sh
-    ${pkgs.gnused}/bin/sed -i '/nameserver /d' /etc/resolv.conf
-    ${pkgs.lib.concatStringsSep ";" (map (s: "echo 'nameserver ${s}' >> /etc/resolv.conf") config.networking.nameservers)}
+    ${optionalString cfg.overrideNameservers "${gnused}/bin/sed -i '/nameserver /d' /etc/resolv.conf"}
+    ${concatStringsSep ";" (map (s: "echo 'nameserver ${s}' >> /etc/resolv.conf") config.networking.nameservers)}
   '';
 
 in {
@@ -84,7 +84,18 @@ in {
         description = ''
           If enabled, any nameservers received by DHCP or configured in
           NetworkManager will be replaced by the nameservers configured
-          in the <literal>networking.nameservers</literal> option.
+          in the <literal>networking.nameservers</literal> option. This
+          option overrides the <literal>appendNameservers</literal> option
+          if both are enabled.
+        '';
+      };
+
+      appendNameservers = mkOption {
+        default = false;
+        description = ''
+          If enabled, the name servers configured in the
+          <literal>networking.nameservers</literal> option will be appended
+          to the ones configured in NetworkManager or received by DHCP.
         '';
       };
 
@@ -117,7 +128,7 @@ in {
       { source = "${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
         target = "NetworkManager/VPN/nm-openconnect-service.name";
       }
-    ] ++ pkgs.lib.optional cfg.overrideNameservers
+    ] ++ pkgs.lib.optional (cfg.overrideNameservers || cfg.appendNameservers)
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
            };
