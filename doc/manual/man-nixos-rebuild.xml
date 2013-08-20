@@ -133,22 +133,21 @@ $ ./result/bin/run-*-vm
       <literal>kvm-intel</literal> or <literal>kvm-amd</literal>
       kernel modules to get hardware virtualisation.</para>
 
-      <para>The VM mounts the Nix store of the host through the CIFS
-      filesystem.  (<literal>qemu-kvm</literal> automatically starts a
-      Samba daemon for this purpose.)  The host Nix store is
-      read-only, so Nix commands that modify the Nix store will not
-      work in the VM.  This includes commands such as
-      <command>nixos-rebuild</command>; to change the VM’s
-      configuration, you must halt the VM and re-run the commands
-      above.
+      <para>The VM mounts the Nix store of the host through the 9P
+      file system.  The host Nix store is read-only, so Nix commands
+      that modify the Nix store will not work in the VM.  This
+      includes commands such as <command>nixos-rebuild</command>; to
+      change the VM’s configuration, you must halt the VM and re-run
+      the commands above.
       </para>
 
-      <para>The VM has its own <literal>ext3</literal> root
-      filesystem, which is automatically created when the VM is first
+      <para>The VM has its own <literal>ext3</literal> root file
+      system, which is automatically created when the VM is first
       started, and is persistent across reboots of the VM.  It is
-      stored in <literal>./<replaceable>hostname</replaceable>.qcow2</literal>.
-      <!-- The entire filesystem hierarchy of the host is available in the
-      VM under <filename>/hostfs</filename>.--></para>
+      stored in
+      <literal>./<replaceable>hostname</replaceable>.qcow2</literal>.
+      <!-- The entire file system hierarchy of the host is available in
+      the VM under <filename>/hostfs</filename>.--></para>
     </listitem>
   </varlistentry>
 

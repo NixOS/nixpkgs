@@ -23,7 +23,7 @@ instance, one unit can require that another unit must be successfully
 started before the first unit can be started.  When the system boots,
 it starts a unit named <literal>default.target</literal>; the
 dependencies of this unit cause all system services to be started,
-filesystems to be mounted, swap files to be activated, and so
+file systems to be mounted, swap files to be activated, and so
 on.</para>
 
 <para>The command <command>systemctl</command> is the main way to
