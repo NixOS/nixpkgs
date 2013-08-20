@@ -26,8 +26,10 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isLinux dbus;
 
   configureFlags =
-    stdenv.lib.optionals (gtk != null) [ "--with-x-toolkit=gtk" "--with-xft"]
-
+    (if gtk != null then 
+      [ "--with-x-toolkit=gtk" "--with-xft"]
+    else
+      [ "--with-x-toolkit=no" ])
     # On NixOS, help Emacs find `crt*.o'.
     ++ stdenv.lib.optional (stdenv ? glibc)
          [ "--with-crt-dir=${stdenv.glibc}/lib" ];
