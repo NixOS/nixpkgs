@@ -43,6 +43,7 @@
 , "jade"
 , "view-helpers"
 , "redis"
+, "mongodb"
 , { "mongoose": "3.6.x" }
 , "mongoose-schema-extend"
 , "connect-mongo"

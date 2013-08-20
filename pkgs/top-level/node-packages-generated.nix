@@ -4922,6 +4922,21 @@
   }
   {
     name = "mongodb";
+    spec = "*";
+    version = "1.3.18";
+    topLevel = true;
+    dependencies = [
+      { name = "bson"; spec = "0.2.2"; }
+      { name = "kerberos"; spec = "0.0.3"; }
+    ];
+    peerDependencies = [
+    ];
+    patchLatest = false;
+    sha1 = "9dd1ba4f6c2c04c014a9aabb8f194c1c0ee7da5d";
+    tarball = "http://registry.npmjs.org/mongodb/-/mongodb-1.3.18.tgz";
+  }
+  {
+    name = "mongodb";
     spec = "1.2.14";
     version = "1.2.14";
     topLevel = false;
