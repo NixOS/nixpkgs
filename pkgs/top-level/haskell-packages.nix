@@ -1920,6 +1920,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   tagstreamConduit = callPackage ../development/libraries/haskell/tagstream-conduit {};
 
+  tasty = callPackage ../development/libraries/haskell/tasty {};
+
+  tastyHunit = callPackage ../development/libraries/haskell/tasty-hunit {};
+
+  tastySmallcheck = callPackage ../development/libraries/haskell/tasty-smallcheck {};
+
   templateDefault = callPackage ../development/libraries/haskell/template-default {};
 
   temporary = callPackage ../development/libraries/haskell/temporary {};
