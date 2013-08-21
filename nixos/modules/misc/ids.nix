@@ -236,6 +236,7 @@
       grsecurity = 121;
       hydra = 122;
       spiped = 123;
+      tss = 124;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 

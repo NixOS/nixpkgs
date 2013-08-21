@@ -115,11 +115,12 @@
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
   ./services/hardware/sane.nix
+  ./services/hardware/tcsd.nix
+  ./services/hardware/thinkfan.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks.nix
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
-  ./services/hardware/thinkfan.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
