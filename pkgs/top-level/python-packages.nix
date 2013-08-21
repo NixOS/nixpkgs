@@ -6813,11 +6813,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   graphite_web = buildPythonPackage rec {
     name = "graphite-web-${version}";
-    version = "0.9.10";
+    version = "0.9.11";
 
     src = fetchurl rec {
-      url = "https://launchpad.net/graphite/0.9/${version}/+download/${name}.tar.gz";
-      sha256 = "1gj8i6j2i172cldqw98395235bn78ciagw6v17fgv01rmind3lag";
+      url = "https://pypi.python.org/packages/source/g/graphite-web/${name}.tar.gz";
+      md5 = "1499b5dded3d1054d598760fd450a6f9";
     };
 
     propagatedBuildInputs = [ django_1_3 django_tagging modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
