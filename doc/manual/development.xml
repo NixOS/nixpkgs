@@ -407,7 +407,7 @@ $ nix-build -A config.system.build.manual</screen>
 
 <title>Testing the installer</title>
 
-<para>Building, burning, and 
+<para>Building, burning, and
 booting from an installation CD is rather
 tedious, so here is a quick way to see if the installer works
 properly:
@@ -543,10 +543,10 @@ starting VDE switch for network 1
 
   <para>
     This and other tests are continuously run on <link
-    xlink:href="http://hydra.nixos.org/jobset/nixos/trunk/with-status">the
-    Hydra instance at <literal>nixos.org</literal></link>, which
-    allows developers to be notified of any regressions introduced by
-    a NixOS or Nixpkgs change.
+    xlink:href="http://hydra.nixos.org/jobset/nixos/trunk">the Hydra
+    instance at <literal>nixos.org</literal></link>, which allows
+    developers to be notified of any regressions introduced by a NixOS
+    or Nixpkgs change.
   </para>
 
   <para>
@@ -572,28 +572,27 @@ starting VDE switch for network 1
     <variablelist>
 
       <varlistentry>
-	<term><varname>test</varname></term>
-	<listitem><para>A derivation containing the test log as an HTML file,
-	as seen above, suitable for presentation in the Hydra continuous
-	build system.</para></listitem>
+        <term><varname>test</varname></term>
+        <listitem><para>A derivation containing the test log as an HTML file,
+        as seen above, suitable for presentation in the Hydra continuous
+        build system.</para></listitem>
       </varlistentry>
 
       <varlistentry>
-	<term><varname>report</varname></term>
-	<listitem><para>A derivation containing a code coverage report, with
-	meta-data suitable for Hydra.</para></listitem>
+        <term><varname>report</varname></term>
+        <listitem><para>A derivation containing a code coverage report, with
+        meta-data suitable for Hydra.</para></listitem>
       </varlistentry>
 
       <varlistentry>
-	<term><varname>driver</varname></term>
-	<listitem><para>A derivation containing scripts to run the VM test or
-	interact with the VM network interactively, as seen above.</para>
-	</listitem>
+        <term><varname>driver</varname></term>
+        <listitem><para>A derivation containing scripts to run the VM test or
+        interact with the VM network interactively, as seen above.</para>
+        </listitem>
       </varlistentry>
 
     </variablelist>
   </para>
-    
 
 </section>
 

@@ -168,8 +168,8 @@ In that case, you can do two things.  First, you can clone the Nixpkgs
 repository, add the package to your clone, and (optionally) submit a
 patch or pull request to have it accepted into the main Nixpkgs
 repository.  This is described in detail in the <link
-xlink:href="http://hydra.nixos.org/job/nixpkgs/trunk/tarball/latest/download-by-type/doc/manual">Nixpkgs
-manual</link>.  In short, you clone Nixpkgs:
+xlink:href="http://nixos.org/nixpkgs/manual">Nixpkgs manual</link>.
+In short, you clone Nixpkgs:
 
 <screen>
 $ git clone git://github.com/NixOS/nixpkgs.git
