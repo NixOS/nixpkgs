@@ -763,6 +763,8 @@ let
     gnupg = gnupg1;
   };
 
+  duply = callPackage ../tools/backup/duply { };
+
   dvdplusrwtools = callPackage ../tools/cd-dvd/dvd+rw-tools { };
 
   dvgrab = callPackage ../tools/video/dvgrab { };
