@@ -81,6 +81,7 @@ in
     supybot = 65;
     iodined = 66;
     graphite = 68;
+    statsd = 69;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
