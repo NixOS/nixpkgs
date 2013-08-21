@@ -1398,6 +1398,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   mmap = callPackage ../development/libraries/haskell/mmap {};
 
+  modularArithmetic = callPackage ../development/libraries/haskell/modular-arithmetic {};
+
   MonadCatchIOMtl = callPackage ../development/libraries/haskell/MonadCatchIO-mtl {};
 
   MonadCatchIOTransformers = callPackage ../development/libraries/haskell/MonadCatchIO-transformers {};
