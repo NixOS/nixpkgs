@@ -13,11 +13,11 @@ assert useUsb -> (libusb != null);
 assert useCurl -> (curl != null);
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.0.20";
+  name = "gnupg-2.0.21";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "16mp0j5inrcqcb3fxbn0b3aamascy3n923wiy0y8marc0rzrp53f";
+    sha256 = "1xgf1q1phdawk6y66haaqcvfnlsqk12jmjin1m2d5x6fqw18kpq0";
   };
 
   buildInputs
