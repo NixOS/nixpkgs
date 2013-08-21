@@ -1,6 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
-, sqlite, tcl, tk, x11, openssl, readline, db4, ncurses, gdbm
-}:
+, sqlite, tcl, tk, x11, openssl, readline, db4, ncurses, gdbm, libX11 }:
 
 assert zlibSupport -> zlib != null;
 
@@ -86,6 +85,7 @@ let
     passthru = {
       inherit zlibSupport;
       libPrefix = "python${majorVersion}";
+      executable = "python2.7";
     };
 
     enableParallelBuilding = true;
@@ -164,6 +164,12 @@ let
       deps = [ ncurses ];
     };
 
+    crypt = buildInternalPythonModule {
+      moduleName = "crypt";
+      internalName = "crypt";
+      deps = [ ];
+    };
+
     gdbm = buildInternalPythonModule {
       moduleName = "gdbm";
       internalName = "gdbm";
@@ -179,7 +185,7 @@ let
 
     tkinter = buildInternalPythonModule {
       moduleName = "tkinter";
-      deps = [ tcl tk x11 ];
+      deps = [ tcl tk x11 libX11 ];
     };
 
     readline = buildInternalPythonModule {

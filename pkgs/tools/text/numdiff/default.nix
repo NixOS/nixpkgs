@@ -6,7 +6,7 @@ in
 stdenv.mkDerivation {
   name = "numdiff-${version}";
   src = fetchurl {
-    url = "http://ftp.igh.cnrs.fr/pub/nongnu/numdiff/numdiff-${version}.tar.gz";
+    url = "mirror://savannah/numdiff/numdiff-${version}.tar.gz";
     sha256 = "062byxp9vajj4flg1rqh0r2nwg9yx608mbsj5y25wkrzmkgcq3fx";
   };
   meta = {

@@ -1,11 +1,12 @@
 { stdenv, fetchurl, php, autoconf, automake }:
 
-stdenv.mkDerivation {
-  name = "php-xdebug-2.0.5";
+stdenv.mkDerivation rec {
+  version = "2.2.3";
+  name = "php-xdebug-${version}";
 
   src = fetchurl {
-    url = "http://xdebug.org/files/xdebug-2.0.5.tgz";
-    sha256 = "1cmq7c36gj8n41mfq1wba5rij8j77yqhydpcsbcysk1zchg68f26";
+    url = "http://xdebug.org/files/xdebug-2.2.3.tgz";
+    sha256 = "076px4ax3qcqr3mmhi9jjkfhn7pcymrpda4hzy6kgn3flhnqfldk";
   };
 
   buildInputs = [ php autoconf automake ];
@@ -13,6 +14,9 @@ stdenv.mkDerivation {
   configurePhase = ''
     phpize
     ./configure --prefix=$out
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # looks for this file for some reason -- isn't needed
+    touch unix.h
   '';
 
   buildPhase = ''

@@ -61,7 +61,7 @@ in
 
     meta = {
       homepage = "http://lly.org/~rcw/abcde/page/";
-      licence = "GPLv2+";
+      license = "GPLv2+";
       description = "A Better CD Encoder (ABCDE)";
 
       longDescription = ''

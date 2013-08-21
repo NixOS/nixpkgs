@@ -1,7 +1,7 @@
 {stdenv, fetchurl, jre}:
 
 stdenv.mkDerivation {
-  name = "alchemy-007-alpha";
+  name = "alchemy-007";
   enableParallelBuilding = true;
 
   src = fetchurl {

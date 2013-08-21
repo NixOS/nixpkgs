@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "sabnzbd-0.4.12";
   
   src = fetchurl {
-    url = http://mesh.dl.sourceforge.net/project/sabnzbdplus/sabnzbdplus/sabnzbd-0.4.12/SABnzbd-0.4.12-src.tar.gz;
+    url = mirro://sourceforge/sabnzbdplus/SABnzbd-0.4.12-src.tar.gz;
     sha256 = "35ce4172688925ef608fba433ff676357dab7d2abdc1cf83112a1c99682fdd32";
   };
 

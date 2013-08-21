@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, x11, libjpeg, libpng12, libXmu
+{ stdenv, fetchurl, cmake, pkgconfig, x11, libjpeg, libpng, libXmu
 , fontconfig, freetype, pam, dbus_libs }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    [ cmake pkgconfig x11 libjpeg libpng12 libXmu fontconfig freetype
+    [ cmake pkgconfig x11 libjpeg libpng libXmu fontconfig freetype
       pam dbus_libs
     ];
 

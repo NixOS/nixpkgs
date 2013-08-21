@@ -4,7 +4,7 @@
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname = "NetworkManager-openvpn";
-  version = "0.9.8.0";
+  version = networkmanager.version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/0.9/${pname}-${version}.tar.xz";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "TODO";
+    description = "NetworkManager's OpenVPN plugin";
     inherit (networkmanager.meta) maintainers platforms;
   };
 }

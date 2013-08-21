@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       dealing with different structured file formats.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

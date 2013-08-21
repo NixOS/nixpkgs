@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, glib, babl_0_0_22, libpng12, cairo, libjpeg
+{ stdenv, fetchurl, pkgconfig, glib, babl_0_0_22, libpng, cairo, libjpeg
 , librsvg, pango, gtk }:
-        
+
 stdenv.mkDerivation {
   name = "gegl-0.0.22";
 
@@ -11,9 +11,9 @@ stdenv.mkDerivation {
 
   configureFlags = "--disable-docs"; # needs fonts otherwise  don't know how to pass them
 
-  buildInputs = [ pkgconfig glib babl_0_0_22 libpng12 cairo libjpeg librsvg pango gtk ];
+  buildInputs = [ pkgconfig glib babl_0_0_22 libpng cairo libjpeg librsvg pango gtk ];
 
-  meta = { 
+  meta = {
     description = "Graph-based image processing framework";
     homepage = http://www.gegl.org;
     license = "GPL3";

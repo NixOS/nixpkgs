@@ -6,18 +6,28 @@
 assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
-stdenv.mkDerivation rec {
-  version = "1.5.31";
+let gecko = fetchurl {
+      url = "mirror://sourceforge/wine/wine_gecko-2.21-x86.msi";
+      sha256 = "1n0zccnvchkg0m896sjx5psk4bxw9if32xyxib1rbfdasykay7zh";
+    };
+
+    gecko64 = fetchurl {
+      url = "mirror://sourceforge/wine/wine_gecko-2.21-x86_64.msi";
+      sha256 = "0grc86dkq90i59zw43hakh62ra1ajnk11m64667xjrlzi7f0ndxw";
+    };
+
+    mono = fetchurl {
+      url = "mirror://sourceforge/wine/wine-mono-0.0.8.msi";
+      sha256 = "00jl24qp7vh3hlqv7wsw1s529lr5p0ybif6s73jy85chqaxj7z1x";
+    };
+
+in stdenv.mkDerivation rec {
+  version = "1.6";
   name = "wine-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/wine/${name}.tar.bz2";
-    sha256 = "1hlj1r3xi1mbqblkiwrcphvvb8rd50qig25jhyid58qp3r2lf9a6";
-  };
-
-  gecko = fetchurl {
-    url = "mirror://sourceforge/wine/wine_gecko-1.9-x86.msi";
-    sha256 = "10p7djsf85xjk8rzg3hgw5fskrn8402y2aijy701xwm4hy9ga79g";
+    sha256 = "1bj21d94i0mqvkmzxd4971232yniribk7q3fllf23ynbpppk1wg1";
   };
 
   buildInputs = [
@@ -44,6 +54,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     install -D ${gecko} $out/share/wine/gecko/${gecko.name}
+  '' + stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
+    install -D ${gecko} $out/share/wine/gecko/${gecko64.name}
+  '' + ''
+    install -D ${mono} $out/share/wine/mono/${mono.name}
     wrapProgram $out/bin/wine --prefix LD_LIBRARY_PATH : ${stdenv.gcc.gcc}/lib
   '';
 

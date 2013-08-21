@@ -1,12 +1,14 @@
 { stdenv, fetchurl, ncurses, gettext, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "vim-7.3";
+  name = "vim-7.4";
  
   src = fetchurl {
     url = "ftp://ftp.vim.org/pub/vim/unix/${name}.tar.bz2";
-    sha256 = "079201qk8g9yisrrb0dn52ch96z3lzw6z473dydw9fzi0xp5spaw";
+    sha256 = "1pjaffap91l2rb9pjnlbrpvb3ay5yhhr3g91zabjvw1rqk9adxfh";
   };
+
+  enableParallelBuilding = true;
  
   buildInputs = [ ncurses pkgconfig ];
   nativeBuildInputs = [ gettext ];
@@ -41,8 +43,10 @@ stdenv.mkDerivation rec {
     sed -i -e 's/as_fn_error.*int32.*/:/' src/auto/configure
   '';
   
-  meta = {
+  meta = with stdenv.lib; {
     description = "The most popular clone of the VI editor";
-    homepage = http://www.vim.org;
+    homepage    = http://www.vim.org;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
   };
 }

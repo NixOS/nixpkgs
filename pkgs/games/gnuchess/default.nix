@@ -6,7 +6,7 @@ let
     version="6.0.3";
     name="${baseName}-${version}";
     hash="01ff8qd8pk39c6pv24wbcqkx78kvay8rxvgxqq9cqp9gqv39jfkw";
-    url="http://ftp.gnu.org/gnu/chess/gnuchess-6.0.3.tar.gz";
+    url="mirror://gnu/chess/gnuchess-6.0.3.tar.gz";
     sha256="01ff8qd8pk39c6pv24wbcqkx78kvay8rxvgxqq9cqp9gqv39jfkw";
   };
   buildInputs = [

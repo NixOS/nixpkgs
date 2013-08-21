@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "pstoedit-3.50";
 
   src = fetchurl {
-    url = http://prdownloads.sourceforge.net/pstoedit/pstoedit-3.50.tar.gz;
+    url = mirror://sourceforge/pstoedit/pstoedit-3.50.tar.gz;
     sha256 = "04ap21fxj2zn6vj9mv7zknj4svcbkb1gxwfzxkw5i0sksx969c92";
   };
 

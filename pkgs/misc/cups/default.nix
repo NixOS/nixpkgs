@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
-, dbus, libusb1, acl }:
+, dbus, libusb, acl }:
 
 let version = "1.5.4"; in
 

@@ -8,7 +8,7 @@ let
     version="4.7.1";
     name="${baseName}-${version}";
     hash="0hnav2swswaf0463c4wnmgwaif3g42f2a1mqyqc5fa1py32iy6ry";
-    url="http://ftp.gnu.org/gnu/xboard/xboard-4.7.1.tar.gz";
+    url="mirror://gnu/xboard/xboard-4.7.1.tar.gz";
     sha256="0hnav2swswaf0463c4wnmgwaif3g42f2a1mqyqc5fa1py32iy6ry";
   };
   buildInputs = [

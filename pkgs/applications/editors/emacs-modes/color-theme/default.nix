@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "color-theme-6.6.0";
 
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/color-theme/${name}.tar.gz";
+    url = "mirror://savannah/color-theme/${name}.tar.gz";
     sha256 = "0yx1ghcjc66s1rl0v3d4r1k88ifw591hf814ly3d73acvh15zlsn";
   };
 

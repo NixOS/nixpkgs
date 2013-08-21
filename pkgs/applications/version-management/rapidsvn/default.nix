@@ -1,7 +1,7 @@
 {stdenv, fetchurl, wxGTK, subversion, apr, aprutil, python}:
 
 stdenv.mkDerivation {
-  name = "rapidsvn-0.12";
+  name = "rapidsvn-0.12.0-1";
 
   src = fetchurl {
     url = http://www.rapidsvn.org/download/release/0.12/rapidsvn-0.12.0-1.tar.gz;

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "yap-5.1.1";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/yap/Yap-5.1.1.tar.gz";
+    url = "mirror://sourceforge/yap/Yap-5.1.1.tar.gz";
     sha256 = "0bajxmlla9gay4m4l7y7x6qldxzi0jcq2ykgpjk9liky7g5kbnya";
   };
 

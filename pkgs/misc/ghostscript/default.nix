@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libjpeg, libpng, libtiff, zlib, pkgconfig, fontconfig, openssl
-, lcms2, freetype, libpaper, jbig2dec, expat, libiconvOrEmpty
+, lcms, freetype, libpaper, jbig2dec, expat, libiconvOrEmpty
 , x11Support, x11 ? null
 , cupsSupport ? false, cups ? null
 , gnuFork ? true
@@ -25,7 +25,7 @@ let
     license = "GPLv3+";
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.viric ];
+    maintainers = [ stdenv.lib.maintainers.viric ];
   };
 
   gnuForkSrc = rec {
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libjpeg libpng libtiff zlib pkgconfig fontconfig openssl lcms2
+    libjpeg libpng libtiff zlib pkgconfig fontconfig openssl lcms
     libpaper jbig2dec expat
   ] ++ stdenv.lib.optionals x11Support [x11 freetype]
     ++ stdenv.lib.optional cupsSupport cups

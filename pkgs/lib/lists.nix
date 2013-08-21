@@ -1,9 +1,13 @@
 # General list operations.
-with {
+let
   inherit (import ./trivial.nix) deepSeq;
-};
 
-rec {
+  inc = builtins.add 1;
+
+  dec = n: builtins.sub n 1;
+
+  inherit (builtins) elemAt;
+in rec {
   inherit (builtins) head tail length isList add sub lessThan;
 
 
@@ -17,50 +21,39 @@ rec {
   # `list' with `nul' as the starting value, i.e., `fold op nul [x_1
   # x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))'.  (This is
   # Haskell's foldr).
-  fold =
-    if builtins ? elemAt
-    then op: nul: list:
-      let
-        len = length list;
-        fold' = n:
-          if n == len
-          then nul
-          else op (builtins.elemAt list n) (fold' (add n 1));
-      in fold' 0
-    else op: nul:
-      let fold' = list:
-        if list == []
+  fold = op: nul: list:
+    let
+      len = length list;
+      fold' = n:
+        if n == len
         then nul
-        else op (head list) (fold' (tail list));
-      in fold';
+        else op (elemAt list n) (fold' (inc n));
+    in fold' 0;
 
-    
   # Left fold: `fold op nul [x_1 x_2 ... x_n] == op (... (op (op nul
   # x_1) x_2) ... x_n)'.
-  foldl =
-    if builtins ? elemAt
-    then op: nul: list:
-      let
-        len = length list;
-        foldl' = n:
-          if n == minus1
-          then nul
-          else op (foldl' (sub n 1)) (builtins.elemAt list n);
-      in foldl' (sub (length list) 1)
-    else op:
-      let foldl' = nul: list:
-        if list == []
+  foldl = op: nul: list:
+    let
+      len = length list;
+      foldl' = n:
+        if n == minus1
         then nul
-        else foldl' (op nul (head list)) (tail list);
-      in foldl';
+        else op (foldl' (dec n)) (elemAt list n);
+    in foldl' (dec (length list));
 
-  minus1 = sub 0 1;
+  minus1 = dec 0;
 
 
   # map with index: `imap (i: v: "${v}-${toString i}") ["a" "b"] ==
   # ["a-1" "b-2"]'
   imap = f: list:
-    zipListsWith f (range 1 (length list)) list;
+    let
+      len = length list;
+      imap' = n:
+        if n == len
+          then []
+          else [ (f (inc n) (elemAt list n)) ] ++ imap' (inc n);
+    in imap' 0;
 
     
   # Concatenate a list of lists.
@@ -102,10 +95,10 @@ rec {
   # predicate, returns `default' if no such element exists, or
   # `multiple' if there are multiple matching elements.
   findSingle = pred: default: multiple: list:
-    let found = filter pred list;
-    in if found == [] then default
-       else if tail found != [] then multiple
-       else head found;
+    let found = filter pred list; len = length found;
+    in if len == 0 then default
+      else if len != 1 then multiple
+      else head found;
 
 
   # Find the first element in the list matching the specified
@@ -159,65 +152,84 @@ rec {
 
 
   zipListsWith = f: fst: snd:
-    if fst != [] && snd != [] then
-      [ (f (head fst) (head snd)) ]
-      ++ zipListsWith f (tail fst) (tail snd)
-    else [];
+    let
+      len1 = length fst;
+      len2 = length snd;
+      len = if builtins.lessThan len1 len2 then len1 else len2;
+      zipListsWith' = n:
+        if n != len then
+          [ (f (elemAt fst n) (elemAt snd n)) ]
+          ++ zipListsWith' (inc n)
+        else [];
+    in zipListsWith' 0;
 
   zipLists = zipListsWith (fst: snd: { inherit fst snd; });
 
   
   # Reverse the order of the elements of a list.
-  reverseList = l:
-    let reverse_ = accu: l:
-      if l == [] then accu
-      else reverse_ ([(head l)] ++ accu) (tail l);
-    in reverse_ [] l;
+  reverseList = fold (e: acc: acc ++ [ e ]) [];
 
-    
   # Sort a list based on a comparator function which compares two
   # elements and returns true if the first argument is strictly below
   # the second argument.  The returned list is sorted in an increasing
   # order.  The implementation does a quick-sort.
   sort = strictLess: list:
     let
-      # This implementation only has one element list on the left hand
-      # side of the concatenation operator.
-      qs = l: concat:
-        if l == [] then concat
-        else if length l == 1 then l ++ concat
-        else let
-          part = partition (strictLess (head l)) (tail l);
-        in
-          qs part.wrong ([(head l)] ++ qs part.right concat);
+      len = length list;
+      first = head list;
+      pivot' = n: acc@{ left, right }: let el = elemAt list n; next = pivot' (inc n); in
+        if n == len
+          then acc
+        else if strictLess first el
+          then next { inherit left; right = [ el ] ++ right; }
+        else
+          next { left = [ el ] ++ left; inherit right; };
+      pivot = pivot' 1 { left = []; right = []; };
     in
-      qs list [];
+      if lessThan len 2 then list
+      else (sort strictLess pivot.left) ++  [ first ] ++  (sort strictLess pivot.right);
 
 
   # Return the first (at most) N elements of a list.
   take = count: list:
-    if list == [] || count == 0 then []
-    else [ (head list) ] ++ take (builtins.sub count 1) (tail list);
+    let
+      len = length list;
+      take' = n:
+        if n == len || n == count
+          then []
+        else
+          [ (elemAt list n) ] ++ take' (inc n);
+    in take' 0;
 
     
   # Remove the first (at most) N elements of a list.
   drop = count: list:
-    if count == 0 then list
-    else drop (builtins.sub count 1) (tail list);
+    let
+      len = length list;
+      drop' = n:
+        if n == minus1 || lessThan n count
+          then []
+        else
+          drop' (dec n) ++ [ (elemAt list n) ];
+    in drop' (dec len);
 
     
   last = list:
-    assert list != [];
-    let loop = l: if tail l == [] then head l else loop (tail l); in
-    loop list;
+    assert list != []; elemAt list (dec (length list));
 
 
   # Zip two lists together.
   zipTwoLists = xs: ys:
-    if xs != [] && ys != [] then
-      [ {first = head xs; second = head ys;} ]
-      ++ zipTwoLists (tail xs) (tail ys)
-    else [];
+    let
+      len1 = length xs;
+      len2 = length ys;
+      len = if lessThan len1 len2 then len1 else len2;
+      zipTwoLists' = n:
+        if n != len then
+          [ { first = elemAt xs n; second = elemAt ys n; } ]
+          ++ zipTwoLists' (inc n)
+        else [];
+    in zipTwoLists' 0;
 
   deepSeqList = xs: y: if any (x: deepSeq x false) xs then y else y;
 }

@@ -16,6 +16,9 @@ in
     dontBuild = true;
 
     installPhase = ''
+      # don't check shell support (we're running with bash anyway)
+      sed -i -e 150,153d install.sh
+
       bash ./install.sh -d $out
 
       mkdir -p "$out/etc/bash_completion.d"

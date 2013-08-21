@@ -25,7 +25,7 @@ let
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
-          members =
+          constituents =
             [ jobs.tarball
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
@@ -115,7 +115,6 @@ let
       gcc33 = linux;
       gcc34 = linux;
       gcc42 = linux;
-      gcc43_multi = ["x86_64-linux"];
       gcc44 = linux;
       gcj44 = linux;
       ghdl = linux;
@@ -359,7 +358,7 @@ let
       };
 
       firefox36Pkgs.firefox = linux;
-      firefox21Pkgs.firefox = linux;
+      firefoxPkgs.firefox = linux;
 
       gnome = {
         gnome_panel = linux;

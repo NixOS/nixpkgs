@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "reactive-banana";
-  version = "0.7.1.2";
-  sha256 = "1x4ln3dr937va0ii7lr86d6wsrh2qd1sxany4y9dkpcrsvb3db0l";
+  version = "0.7.1.3";
+  sha256 = "117y1sk97kpiq0cippq0ydl2zqb99q49y2m2m6pgg2nh6gz6a3zb";
   buildDepends = [ hashable transformers unorderedContainers vault ];
   testDepends = [
     hashable HUnit testFramework testFrameworkHunit transformers

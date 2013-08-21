@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "fpc-${version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/sourceforge/freepascal/Source/${version}/fpcbuild-${version}.tar.gz";
+    url = "mirror://sourceforge/freepascal/fpcbuild-${version}.tar.gz";
     sha256 = "1vxy2y8pm0ribhpdhqlwwz696ncnz4rk2dafbn1mjgipm97qb26p";
   };
 

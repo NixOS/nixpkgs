@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "spice-protocol-0.12.2";
+  name = "spice-protocol-0.12.6";
 
   src = fetchurl {
     url = "http://www.spice-space.org/download/releases/${name}.tar.bz2";
-    sha256 = "0v6msf6gbl8g69qamp97dggz148zpc3ncbfgbq3b472wszjdkclb";
+    sha256 = "16r5x2sppiaa6pzawkrvk5q4hmw7ynmlp2xr38f1vaxj5rh4aiwx";
   };
 
   meta = {

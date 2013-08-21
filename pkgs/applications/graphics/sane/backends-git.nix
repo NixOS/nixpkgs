@@ -5,12 +5,12 @@ in
 assert hotplugSupport -> (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux");
 
 stdenv.mkDerivation {
-  name = "sane-backends-1.0.22.482-g071f226";
+  name = "sane-backends-1.0.23.296-gf139120";
 
   src = fetchgit {
     url = "http://git.debian.org/git/sane/sane-backends.git";
-    rev = "071f2269cd68d3411cbfa05a3d028b74496db970";
-    sha256 = "178xkv30m6irk4k0gqnfcl5kramm1qyj24dar8gp32428z1444xf";
+    rev = "f139120c72db6de98be95b52c206c2a4d8071e92";
+    sha256 = "1b2fv19c8ijh9l0jjilli3j70n17wvcgpqq1nxmiby3ai6nrzk8d";
   };
 
   udevSupport = hotplugSupport;
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.sane-project.org/";
     description = "Scanner Access Now Easy";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux;

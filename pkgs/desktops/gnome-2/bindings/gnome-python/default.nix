@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "gnome-python-${version}.1";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/gnome-python/${version}/${name}.tar.bz2";
+    url = "mirror://gnome/sources/gnome-python/${version}/${name}.tar.bz2";
     sha256 = "759ce9344cbf89cf7f8449d945822a0c9f317a494f56787782a901e4119b96d8";
   };
 

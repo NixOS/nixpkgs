@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "meld-${version}";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/gnome/sources/meld/${minor}/meld-${version}.tar.xz";
+    url = "mirror://gnome/sources/meld/${minor}/meld-${version}.tar.xz";
     sha256 = "00rsff0yl5qwzh0igkdns6ry2xsbxad70avpqpkbd2bldi94v76y";
   };
 

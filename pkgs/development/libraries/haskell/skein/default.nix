@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "15vzydywhwjdgybabvv6lfk1vjs7blvs3k2apwxjdjh2q7jmgkam";
   buildDepends = [ cereal cryptoApi tagged ];
   testDepends = [ cereal cryptoApi filepath hspec tagged ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/meteficha/skein";
     description = "Skein, a family of cryptographic hash functions. Includes Skein-MAC as well.";

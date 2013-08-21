@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = http://namazu.org/;
 
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

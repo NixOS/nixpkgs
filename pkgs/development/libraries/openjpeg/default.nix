@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libpng, libtiff, lcms2, glib/*passthru only*/ }:
+{ stdenv, fetchurl, pkgconfig, libpng, libtiff, lcms, glib/*passthru only*/ }:
 
 stdenv.mkDerivation rec {
   name = "openjpeg-1.5.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativebuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ libpng libtiff lcms2 ]; # in closure anyway
+  propagatedBuildInputs = [ libpng libtiff lcms ]; # in closure anyway
 
   postInstall = glib.flattenInclude;
 

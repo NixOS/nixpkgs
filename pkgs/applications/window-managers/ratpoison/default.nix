@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
        cripples Emacs and other quality pieces of software.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

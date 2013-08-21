@@ -11,7 +11,7 @@ assert sslSupport -> openssl != null;
 assert gpgSupport -> gpgme != null;
 
 stdenv.mkDerivation {
-  name = "sylpheed-3.2";
+  name = "sylpheed-3.2.0";
 
   src = fetchurl {
     url = http://sylpheed.sraoss.jp/sylpheed/v3.2/sylpheed-3.2.0.tar.bz2;

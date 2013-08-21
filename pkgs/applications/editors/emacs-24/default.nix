@@ -26,8 +26,10 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isLinux dbus;
 
   configureFlags =
-    stdenv.lib.optionals (gtk != null) [ "--with-x-toolkit=gtk" "--with-xft"]
-
+    (if gtk != null then 
+      [ "--with-x-toolkit=gtk" "--with-xft"]
+    else
+      [ "--with-x-toolkit=no" ])
     # On NixOS, help Emacs find `crt*.o'.
     ++ stdenv.lib.optional (stdenv ? glibc)
          [ "--with-crt-dir=${stdenv.glibc}/lib" ];
@@ -44,7 +46,7 @@ EOF
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GNU Emacs 24, the extensible, customizable text editor";
 
     longDescription = ''
@@ -67,7 +69,7 @@ EOF
     homepage = "http://www.gnu.org/software/emacs/";
     license = "GPLv3+";
 
-    maintainers = with stdenv.lib.maintainers; [ ludo simons chaoflow ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ chaoflow lovek323 simons ];
+    platforms = platforms.all;
   };
 }

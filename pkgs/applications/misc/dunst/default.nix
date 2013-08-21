@@ -1,15 +1,18 @@
-{ stdenv, fetchurl, coreutils , unzip, which, pkgconfig , dbus
+{ stdenv, fetchgit, coreutils , unzip, which, pkgconfig , dbus
 , freetype, xdg_utils , libXext, glib, pango , cairo, libX11, libnotify
 , libxdg_basedir , libXScrnSaver, xproto, libXinerama , perl, gdk_pixbuf
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.0";
-  name = "dunst-${version}";
+  rev = "6a3a855b48a3db64821d1cf8a91c5ee2815a2b2d";
+  name = "dunst-${rev}";
 
-  src = fetchurl {
-    url = "https://github.com/knopwob/dunst/archive/v${version}.zip";
-    sha256 = "1x6k6jrf219v8hmhqhnnfjycldvsnp7ag8a2y8adp5rhfmgyn671";
+  # 1.0.0 release doesn't include 100% CPU fix
+  # https://github.com/knopwob/dunst/issues/98
+  src = fetchgit {
+    inherit rev;
+    url = "https://github.com/knopwob/dunst.git";
+    sha256 = "0m7yki16d72xm9n2m2fjszd8phqpn5b95q894cz75pmd0sv1j6bj";
   };
 
   patchPhase = ''
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver xproto libXinerama perl];
 
   buildPhase = ''
-    export VERSION=${version};
+    export VERSION=${rev};
     export PREFIX=$out;
     make dunst;
   '';

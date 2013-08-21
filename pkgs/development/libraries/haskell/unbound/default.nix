@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "unbound";
-  version = "0.4.1.1";
-  sha256 = "0niv8mm4zjkndj0g32dgr32177dfp647hi32hqzwiis77vcfvdzb";
+  version = "0.4.2";
+  sha256 = "1bnnnv4rmzb0pw7i56nzr7k7pahr9rcmlfi4xkpsjhrxmizcfml9";
   buildDepends = [ mtl RepLib transformers ];
   meta = {
     homepage = "http://code.google.com/p/replib/";

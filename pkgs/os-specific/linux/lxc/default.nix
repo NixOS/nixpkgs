@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "lxc-0.9.0";
 
   src = fetchurl {
-    url = "http://lxc.sf.net/download/lxc/${name}.tar.gz";
+    url = "mirror://sourceforge/lxc/${name}.tar.gz";
     sha256 = "0821clxymkgp71n720xj5ngs22s2v8jks68f5j4vypycwvm6f5qy";
   };
 

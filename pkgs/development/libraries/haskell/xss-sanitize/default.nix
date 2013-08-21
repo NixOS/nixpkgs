@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xss-sanitize";
-  version = "0.3.3";
-  sha256 = "0xnyp8nwglh4waawijk1q5z8higf8mggh6hp0pp6ys4bm7gsp74a";
+  version = "0.3.4";
+  sha256 = "0xal75mk90a2hj70ipgcj95n6yw8hiki1r1vzad918aq2ihjqa53";
   buildDepends = [
     attoparsec cssText network tagsoup text utf8String
   ];

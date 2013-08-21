@@ -82,7 +82,7 @@ rec {
 
 
   dryad = stdenv.mkDerivation rec {
-    name = "dryad-0.2pre1835518355";
+    name = "dryad-0.2pre18355";
 
     src = fetchurl {
       url = "http://releases.strategoxt.org/dryad/${name}-zbqfh1rm/dryad-0.2pre18355.tar.gz";

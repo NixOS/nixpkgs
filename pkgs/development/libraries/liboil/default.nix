@@ -12,9 +12,15 @@ stdenv.mkDerivation rec {
 
   patches = [ ./x86_64-cpuid.patch ];
 
-  meta = {
-    homepage = http://liboil.freedesktop.org;
+  # fix "argb_paint_i386.c:53:Incorrect register `%rax' used with `l' suffix"
+  # errors
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--build=x86_64";
+
+  meta = with stdenv.lib; {
     description = "A library of simple functions that are optimized for various CPUs";
-    license = "BSD-2";
+    homepage    = http://liboil.freedesktop.org;
+    license     = licenses.bsd2;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.all;
   };
 }

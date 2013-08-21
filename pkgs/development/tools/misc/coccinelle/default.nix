@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
     homepage = http://coccinelle.lip6.fr/;
     license = "GPLv2";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

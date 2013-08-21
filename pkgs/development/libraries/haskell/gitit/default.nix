@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     safe SHA syb tagsoup text time url utf8String xhtml xml xssSanitize
     zlib
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://gitit.net";
     description = "Wiki using happstack, git or darcs, and pandoc";

@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hspec";
-  version = "1.5.4";
-  sha256 = "18c7mj2qh0q7ksb9sa7jhpfzsbbsfbv3gpkjpz1fx17bd3h8vkld";
+  version = "1.7.0";
+  sha256 = "0cw24vmns06z5308wva9bb5czs9i5wm6qdhymgiyl2i47ibxp5bj";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -20,9 +20,9 @@ cabal.mkDerivation (self: {
   ];
   doCheck = false;
   meta = {
-    homepage = "http://hspec.github.com/";
+    homepage = "http://hspec.github.io/";
     description = "Behavior-Driven Development for Haskell";
-    license = self.stdenv.lib.licenses.bsd3;
+    license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
   };
 })

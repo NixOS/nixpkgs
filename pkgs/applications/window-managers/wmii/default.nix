@@ -1,5 +1,5 @@
 args: with args; stdenv.mkDerivation {
-  name = "wmii-20071116";
+  name = "wmii-3.6";
 
   src = fetchurl {
     url = http://dl.suckless.org/wmii/wmii-3.6.tar.gz;

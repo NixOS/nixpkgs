@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gfortran, atlas, cmake, python, shared ? false }:
-let 
-  atlasMaybeShared = if shared then atlas.override {shared=true;} else atlas;
+let
+  atlasMaybeShared = atlas.override { inherit shared; };
   usedLibExtension = if shared then ".so" else ".a";
 in
 stdenv.mkDerivation {
@@ -38,7 +38,10 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Linear Algebra PACKage";
-    license = "revised-BSD";
     homepage = "http://www.netlib.org/lapack/";
+    license = "revised-BSD";
+
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

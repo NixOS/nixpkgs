@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "thinkfan-${version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/thinkfan/thinkfan-${version}.tar.gz";
+    url = "mirror://sourceforge/thinkfan/thinkfan-${version}.tar.gz";
     sha256 = "04akla66r8k10x0jvmcpfi92hj2sppygcl7hhwn8n8zsvvf0yqxs";
   };
   

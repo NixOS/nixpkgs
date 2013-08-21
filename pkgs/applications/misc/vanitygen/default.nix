@@ -1,13 +1,13 @@
-{ fetchurl, stdenv, openssl, pcre }:
+{ fetchgit, stdenv, openssl, pcre }:
 
 stdenv.mkDerivation rec {
   version = "0.21";
   name = "vanitygen-${version}";
 
-  src = fetchurl {
-    name = "vanitygen-${version}.tar.gz";
-    url = "https://github.com/samr7/vanitygen/tarball/0.21";
-    sha256 = "1lj0gi08lg0pcby5pbpi08ysynzy24qa1n1065112shkpasi0kxv";
+  src = fetchgit {
+    url = "https://github.com/samr7/vanitygen";
+    rev = "refs/tags/${version}";
+    sha256  = "1vzfv74hhiyrrpvjca8paydx1ashgbgn5plzrx4swyzxy1xkamah";
   };
 
   buildInputs = [ openssl pcre ];

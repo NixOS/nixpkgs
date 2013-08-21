@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "WYSIWYM frontend for LaTeX, DocBook, etc.";
     homepage = "http://www.lyx.org";
     license = "GPL2";
-    maintainers = [ stdenv.lib.maintainers.neznalek ];
+    maintainers = [ stdenv.lib.maintainers.vcunat ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

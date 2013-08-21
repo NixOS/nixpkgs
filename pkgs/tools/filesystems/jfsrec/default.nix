@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "jfsrec-pre-svn-7";
   
   src = fetchurl {
-    url = http://downloads.sourceforge.net/jfsrec/jfsrec-svn-7.tar.gz;
+    url = mirror://sourceforge/jfsrec/jfsrec-svn-7.tar.gz;
     sha256 = "163z6ljr05vw2k5mj4fim2nlg4khjyibrii95370pvn474mg28vg";
   };
 

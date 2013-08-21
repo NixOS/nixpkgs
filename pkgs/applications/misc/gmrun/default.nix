@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   name = "gmrun-${version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/gmrun/gmrun/${version}/${name}.tar.gz";
-    md5 = "6cef37a968006d9496fc56a7099c603c";
+    url = "mirror://sourceforge/gmrun/${name}.tar.gz";
+    sha256 = "180z6hbax1qypy5cyy2z6nn7fzxla4ib47ck8mqwr714ag77na8p";
   };
 
   buildInputs = [ glib gtk2 pkgconfig popt ];

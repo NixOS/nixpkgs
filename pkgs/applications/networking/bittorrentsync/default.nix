@@ -14,9 +14,9 @@ let
     else if stdenv.system == "i686-linux" then "ld-linux.so.2"
     else throw "Bittorrent Sync for: ${stdenv.system} not supported!";
 
-  version = "1.0.134";
-  sha256 = if stdenv.system == "x86_64-linux" then "1kyxiqjabqgsg7n0a8snh03axxzpniazp93shb2l1b6x0f7d24n7"
-    else if stdenv.system == "i686-linux" then "02wb8pqcb1rk108r49cqyg7s14grmjnkr6p3068pkiwdwwgi8jak"
+  version = "1.1.42";
+  sha256 = if stdenv.system == "x86_64-linux" then "07gcjzhhr8simkjjxhyzkvh3748ll81d742fz7j31nwdi34my8ri"
+    else if stdenv.system == "i686-linux" then "0awf5bfhb4dp4aydzrgdp3wqv1mz6ys1z45i0r1hbqszvf44xj7c"
     else throw "Bittorrent Sync for: ${stdenv.system} not supported!";
 
 in stdenv.mkDerivation {

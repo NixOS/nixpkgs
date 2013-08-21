@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/2.12/gtk-sharp-2.12.10.tar.gz;
+    url = mirror://gnome/sources/gtk-sharp/2.12/gtk-sharp-2.12.10.tar.gz;
     sha256 = "1y55vc2cp4lggmbil2lb28d0gn71iq6wfyja1l9mya5xll8svzwc";
   };
 

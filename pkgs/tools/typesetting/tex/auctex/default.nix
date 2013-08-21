@@ -11,7 +11,7 @@ stdenv.mkDerivation ( rec {
   };
 
   src = fetchurl {
-    url = "http://ftp.gnu.org/pub/gnu/${pname}/${name}.tar.gz";
+    url = "mirror://gnu/${pname}/${name}.tar.gz";
     sha256 = "aebbea00431f8fd1e6be6519d9cc28e974942000737f956027da2c952a6d304e";
   };
 

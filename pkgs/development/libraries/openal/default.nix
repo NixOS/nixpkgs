@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     name = "openal-soft-${version}.tar.bz2";
   };
 
-  buildInputs = [ cmake alsaLib ];
+  buildInputs = [ cmake ] ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
   meta = {
     description = "OpenAL, a cross-platform 3D audio API";

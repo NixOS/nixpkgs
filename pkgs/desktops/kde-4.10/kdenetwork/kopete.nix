@@ -18,6 +18,8 @@ kde {
   patchPhase =
     ''
       cp -v ${./FindmsiLBC.cmake} kopete/cmake/modules/FindmsiLBC.cmake
+      patch -p1 < ${./kopete-4.10.4-kopete-linphonemediaengine.patch}
+      patch -p1 < ${./kopete-4.10.4-kopete-stun.patch}
     '';
 
   cmakeFlags = [ "-DBUILD_skypebuttons=TRUE" ];

@@ -6,7 +6,7 @@
 
 
 <para>The standard build environment in the Nix Packages collection
-provides a environment for building Unix packages that does a lot of
+provides an environment for building Unix packages that does a lot of
 common build tasks automatically.  In fact, for Unix packages that use
 the standard <literal>./configure; make; make install</literal> build
 interface, you don’t need to write a build script at all; the standard

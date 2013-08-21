@@ -1,12 +1,16 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, srtp, libzrtpcpp, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "ortp-0.18.0";
+  name = "ortp-0.22.0";
 
   src = fetchurl {
     url = "mirror://savannah/linphone/ortp/sources/${name}.tar.gz";
-    sha256 = "1cgx9xid0abk3cad3xjdvx7p9whinlhrviphyrd9zkhhx7ddkih2";
+    sha256 = "02rdm6ymgblbx8fnjfvivkl4qkgbdizrf35fyb0vln9m7jdy4dvf";
   };
+
+  configureFlags = "--enable-zrtp";
+
+  propagatedBuildInputs = [ srtp libzrtpcpp pkgconfig ];
 
   meta = {
     description = "A Real-Time Transport Protocol (RFC3550) stack";

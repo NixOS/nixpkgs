@@ -1,11 +1,11 @@
 {stdenv, fetchurl, kdelibs, cmake, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "kile-2.1.2";
+  name = "kile-2.1.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/kile/${name}.tar.bz2";
-    sha256 = "0nx5fmjrxrndnzvknxnybd8qh15jzfxzbny2rljq3amjw02y9lc2";
+    sha256 = "18nfi37s46v9xav7vyki3phasddgcy4m7nywzxis198vr97yqqx0";
   };
 
   nativeBuildInputs = [ cmake gettext ];

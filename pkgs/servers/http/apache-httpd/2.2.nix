@@ -12,12 +12,12 @@ assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert mpm == "prefork" || mpm == "worker" || mpm == "event";
 
 stdenv.mkDerivation rec {
-  version = "2.2.24";
+  version = "2.2.25";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha1 = "f73bce14832ec40c1aae68f4f8c367cab2266241";
+    sha1 = "e34222d1a8de38825397a1c70949bcc5836a1236";
   };
 
   outputs = [ "dev" "out" "doc" ];

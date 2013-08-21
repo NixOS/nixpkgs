@@ -18,6 +18,9 @@
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 
+# dependency for version 30
+, file
+
 # package customization
 , channel ? "stable"
 , enableSELinux ? false, libselinux ? null
@@ -87,7 +90,9 @@ let
   # user namespace sandbox patch
   userns_patch = if versionOlder sourceInfo.version "29.0.0.0"
                  then ./sandbox_userns.patch
-                 else ./sandbox_userns_29.patch;
+                 else if versionOlder sourceInfo.version "30.0.0.0"
+                      then ./sandbox_userns_29.patch
+                      else ./sandbox_userns_30.patch;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
@@ -115,20 +120,23 @@ in stdenv.mkDerivation rec {
     ++ optionals gnomeSupport [ gconf libgcrypt ]
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
-    ++ optional pulseSupport pulseaudio;
+    ++ optional pulseSupport pulseaudio
+    ++ optional (!versionOlder sourceInfo.version "30.0.0.0") file;
 
   opensslPatches = optional useOpenSSL openssl.patches;
 
   prePatch = "patchShebangs .";
 
-  patches = [ userns_patch ]
-         ++ optional cupsSupport ./cups_allow_deprecated.patch;
+  patches = [ userns_patch ];
 
   postPatch = ''
     sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
     sed -i -e 's|/usr/bin/gcc|gcc|' third_party/WebKit/Source/core/core.gypi
   '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
+  '' + optionalString (versionOlder sourceInfo.version "29.0.0.0") ''
+    sed -i -e '/struct SECItemArray/,/^};/d' \
+      net/third_party/nss/ssl/bodge/secitem_array.c
   '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
@@ -145,6 +153,15 @@ in stdenv.mkDerivation rec {
     use_cups = cupsSupport;
     linux_sandbox_path="${libExecPath}/${packageName}_sandbox";
     linux_sandbox_chrome_path="${libExecPath}/${packageName}";
+    werror = "";
+
+    # Google API keys, see http://www.chromium.org/developers/how-tos/api-keys.
+    # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
+    # please get your own set of keys.
+    google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
+    google_default_client_id = "404761575300.apps.googleusercontent.com";
+    google_default_client_secret = "9rIFQjfnkykEmqb6FfjJQD1D";
+
   } // optionalAttrs proprietaryCodecs {
     # enable support for the H.264 codec
     proprietary_codecs = true;
@@ -198,7 +215,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Chromium, an open source web browser";
+    description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
     maintainers = with maintainers; [ goibhniu chaoflow aszlig ];
     license = licenses.bsd3;

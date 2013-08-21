@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, fuse, perl }:
 
 stdenv.mkDerivation rec {
-  name = "cromfs-1.5.10";
+  name = "cromfs-1.5.10.1";
   
   src = fetchurl {
     url = "http://bisqwit.iki.fi/src/arch/${name}.tar.bz2";
-    sha256 = "1w079zb5scv6bj919ndr0fkiirq2bkyjrnmwqrr9yzwbyinzg73j";
+    sha256 = "0fg6vnbxr5jk4gqj31yqc9fj1gp3bj955qhxav28nvc6sbql7ac2";
   };
 
   patchPhase = ''sed -i 's@/bin/bash@/bin/sh@g' configure'';

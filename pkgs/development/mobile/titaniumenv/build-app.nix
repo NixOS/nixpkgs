@@ -1,5 +1,5 @@
 {stdenv, androidsdk, titaniumsdk, xcodewrapper}:
-{ appId, name, appName ? null, src, target, androidPlatformVersions ? [ "8" ]
+{ appId, name, appName ? null, src, target, androidPlatformVersions ? [ "8" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ]
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
 , iosKeyFile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosDistribute ? false
 }:
@@ -10,6 +10,7 @@ assert (release && target == "iphone") -> iosKeyFile != null && iosCertificateNa
 let
   androidsdkComposition = androidsdk {
     platformVersions = androidPlatformVersions;
+    abiVersions = androidAbiVersions;
     useGoogleAPIs = true;
   };
   

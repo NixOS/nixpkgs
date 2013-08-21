@@ -9,7 +9,7 @@ let
 in
    
 stdenv.mkDerivation {
-  name = "pam_console-0.99.5";
+  name = "pam_console-0.99.5-1";
    
   src = fetchurl {
     url = http://cvs.fedora.redhat.com/repo/dist/pam/pam-redhat-0.99.5-1.tar.bz2/e2edde7861c48195728bc531e5a277e0/pam-redhat-0.99.5-1.tar.bz2;

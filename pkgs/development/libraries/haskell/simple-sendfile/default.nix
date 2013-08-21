@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "simple-sendfile";
-  version = "0.2.11";
-  sha256 = "1q9m9lxv9jfkn6a1lf07jcl4li3n5996df1qrfkfjq2n0bvn4qfj";
+  version = "0.2.12";
+  sha256 = "019n82700fbhsqxgn1cwfqii27r436gljis7yl02zjnzy7xlvrha";
   buildDepends = [ network ];
   testDepends = [ conduit hspec HUnit network networkConduit ];
   doCheck = false;

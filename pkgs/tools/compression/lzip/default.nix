@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ texinfo ];
 
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/lzip/${name}.tar.gz";
+    url = "mirror://savannah/lzip/${name}.tar.gz";
     sha256 = "1rybhk2pxpfh2789ck9mrkdv3bpx7b7miwndlshb5vb02m9crxbz";
   };
 

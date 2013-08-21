@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv3+";
 
-    maintainers = with stdenv.lib.maintainers; [ ludo chaoflow ];
+    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }

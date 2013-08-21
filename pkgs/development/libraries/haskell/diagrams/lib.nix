@@ -1,14 +1,15 @@
-{ cabal, active, colour, dataDefault, diagramsCore, monoidExtras
-, newtype, NumInstances, semigroups, vectorSpace
+{ cabal, active, colour, dataDefaultClass, diagramsCore, fingertree
+, intervals, monoidExtras, newtype, NumInstances, semigroups
+, vectorSpace
 }:
 
 cabal.mkDerivation (self: {
   pname = "diagrams-lib";
-  version = "0.6.0.3";
-  sha256 = "0rc3m2v1bxlm5rz1pi1w4k37sbgmr9qv54rllsqan1kicafjaqw1";
+  version = "0.7";
+  sha256 = "02zb9j2qb5f26azscv1m4iivp1ixdhx6rcjns5smka1hdgyzld1j";
   buildDepends = [
-    active colour dataDefault diagramsCore monoidExtras newtype
-    NumInstances semigroups vectorSpace
+    active colour dataDefaultClass diagramsCore fingertree intervals
+    monoidExtras newtype NumInstances semigroups vectorSpace
   ];
   meta = {
     homepage = "http://projects.haskell.org/diagrams";

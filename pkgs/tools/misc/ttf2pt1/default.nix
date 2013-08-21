@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "ttf2pt1-3.4.4";
 
   src = fetchurl {
-    url = http://prdownloads.sourceforge.net/ttf2pt1/ttf2pt1-3.4.4.tgz;
+    url = mirror://sourceforge/ttf2pt1/ttf2pt1-3.4.4.tgz;
     sha256 = "1l718n4k4widx49xz7qrj4mybzb8q67kp2jw7f47604ips4654mf";
   };
 

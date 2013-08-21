@@ -4,6 +4,12 @@
    * add it to this list. The URL mentioned above is a good source for inspiration.
    */
 
+  artistic2 = {
+    shortName = "Artistic 2.0";
+    fullName = "Artistic 2.0";
+    url = "http://opensource.org/licenses/artistic-license-2.0.php";
+  };
+
   agpl3 = {
     shortName = "AGPLv3";
     fullName = "GNU Affero General Public License version 3 only";
@@ -76,11 +82,7 @@
     url = http://www.eclipse.org/legal/epl-v10.html;
   };
 
-  gpl2 = {
-    shortName = "GPLv2";
-    fullName = "GNU General Public License version 2 only";
-    url = http://www.gnu.org/licenses/old-licenses/gpl-2.0.html;
-  };
+  gpl2 = "GPLv2";
 
   gpl2Oss = {
     shortName = "GPLv2+OSS";
@@ -136,11 +138,7 @@
     url = https://fedoraproject.org/wiki/Licensing/libtiff;
   };
 
-  lgpl2 = {
-    shortName = "LGPLv2";
-    fullName = "GNU Library General Public License version 2";
-    url = http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html;
-  };
+  lgpl2 = "LGPLv2";
 
   lgpl2Plus = {
     shortName = "LGPLv2+";
@@ -148,16 +146,18 @@
     url = http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html;
   };
 
-  lgpl21 = {
-    shortName = "LGPLv2.1";
-    fullName = "GNU Lesser General Public License version 2.1 only";
-    url = http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html;
-  };
+  lgpl21 = "LGPLv2.1";
 
   lgpl21Plus = {
     shortName = "LGPLv2.1+";
     fullName = "GNU Lesser General Public License version 2.1 or later";
     url = http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html;
+  };
+
+  llgpl21 = {
+    shortName = "LLGPLv2.1";
+    fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
+    url = http://opensource.franz.com/preamble.html;
   };
 
   lgpl3 = {

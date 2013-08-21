@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "shared-desktop-ontologies-0.10.0";
+  name = "shared-desktop-ontologies-0.11.0";
   
   src = fetchurl {
     url = "mirror://sourceforge/oscaf/${name}.tar.bz2";
-    sha256 = "00y55bjmxrwiiw8q0n0jcv95l945hp7nglbwj408sk5m2vq026di";
+    sha256 = "1m5vnijg7rnwg41vig2ckg632dlczzdab1gsq51g4x7m9k1fdbw2";
   };
   
   buildInputs = [ cmake ];

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "confuse-2.7";
   src = fetchurl {
-    url = "http://savannah.nongnu.org/download/confuse/${name}.tar.gz";
+    url = "mirror://savannah/confuse/${name}.tar.gz";
     sha256 = "0y47r2ashz44wvnxdb18ivpmj8nxhw3y9bf7v9w0g5byhgyp89g3";
   };
 

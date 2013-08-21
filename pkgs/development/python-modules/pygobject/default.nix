@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "pygobject-2.28.6";
   
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.28/${name}.tar.xz";
+    url = "mirror://gnome/sources/pygobject/2.28/${name}.tar.xz";
     sha256 = "1f5dfxjnil2glfwxnqr14d2cjfbkghsbsn8n04js2c2icr7iv2pv";
   };
 

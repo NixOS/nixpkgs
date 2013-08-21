@@ -185,23 +185,35 @@ in
   platform_16 = buildPlatform {
     name = "android-platform-4.1.2";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-16_r03.zip;
-      sha1 = "80d9ffef58168f9bccd862830e2ee51f686b167e";
+      url = https://dl-ssl.google.com/android/repository/android-16_r04.zip;
+      sha1 = "90b9157b8b45f966be97e11a22fba4591b96c2ee";
     };
     meta = {
-      description = "Android SDK Platform 4.1";
+      description = "Android SDK Platform 4.1.2";
       
     };
   };
     
   platform_17 = buildPlatform {
-    name = "android-platform-4.2";
+    name = "android-platform-4.2.2";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-17_r01.zip;
-      sha1 = "c2e7c8c8db40e06b804ddb1725ac2c3555b55025";
+      url = https://dl-ssl.google.com/android/repository/android-17_r02.zip;
+      sha1 = "c442c32c1b702173ab0929a74486e4f86fe528ec";
     };
     meta = {
-      description = "Android SDK Platform 4.2";
+      description = "Android SDK Platform 4.2.2";
+      
+    };
+  };
+    
+  platform_18 = buildPlatform {
+    name = "android-platform-4.3";
+    src = fetchurl {
+      url = https://dl-ssl.google.com/android/repository/android-18_r01.zip;
+      sha1 = "c24de91d6f296cf453701aef281609779fffb379";
+    };
+    meta = {
+      description = "Android SDK Platform 4.3";
       
     };
   };

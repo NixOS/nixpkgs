@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "rapcad-${version}";
 
   src = fetchgit {
-    url = "git://git.rapcad.org/rapcad";
+    url = "https://github.com/GilesBathgate/RapCAD.git";
     rev = "refs/tags/v${version}";
     sha256 = "37c7107dc4fcf8942a4ad35377c4e42e6aedfa35296e5fcf8d84882ae35087c7";
   };

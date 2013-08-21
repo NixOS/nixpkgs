@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "e1000e-1.5.1-${kernelDev.version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/e1000/e1000e-1.5.1.tar.gz";
+    url = "mirror://sourceforge/e1000/e1000e-1.5.1.tar.gz";
     sha256 = "0nzjlarpqcpm5y112n3vzra4qv32hiygpfkk10y8g4nln4adhqsw";
   };
 

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "profunctor-extras";
-  version = "3.3";
-  sha256 = "0sdiwc1d2jx2xrzsxjsxjh8m24f4blr2m8vmh78knpi9hy0bxgvr";
+  version = "3.3.3.1";
+  sha256 = "16naa6ksgwy6fh8vwflcc9s0rpamn886as8qhjqrkpjlc8s83h7g";
   buildDepends = [
     comonad profunctors semigroupoidExtras semigroupoids tagged
     transformers

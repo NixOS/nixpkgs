@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "libchamplain-0.6.1";
 
   src = fetchurl {
-    url = "http://download.gnome.org/sources/libchamplain/0.6/${name}.tar.gz";
+    url = "mirror://gnome/sources/libchamplain/0.6/${name}.tar.gz";
     sha256 = "1l1in4khnral157j46aq2d26nviz23icnm353587vcwjhdbw86sg";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
          OpenCycleMap, OpenAerialMap, and Maps for free.
       '';
 
-     maintainers = [ stdenv.lib.maintainers.ludo ];
+     maintainers = [ ];
      platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

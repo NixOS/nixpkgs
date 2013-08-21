@@ -15,7 +15,7 @@ let
     version="0.9.4";
     patchlevel="4";
     name="${baseName}-${version}.${patchlevel}";
-    url="http://dl.sv.nongnu.org/releases/glob2/${version}/${name}.tar.gz";
+    url="mirror://savannah/glob2/${version}/${name}.tar.gz";
     hash="1f0l2cqp2g3llhr9jl6jj15k0wb5q8n29vqj99xy4p5hqs78jk8g";
   };
 in

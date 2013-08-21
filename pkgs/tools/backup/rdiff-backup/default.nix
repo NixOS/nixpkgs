@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "rdiff-backup-1.2.8";
 
   src = fetchurl {
-    url = http://savannah.nongnu.org/download/rdiff-backup/rdiff-backup-1.2.8.tar.gz;
+    url = mirror://savannah/rdiff-backup/rdiff-backup-1.2.8.tar.gz;
     sha256 = "1nwmmh816f96h0ff1jxk95ad38ilbhbdl5dgibx1d4cl81dsi48d";
   };
 

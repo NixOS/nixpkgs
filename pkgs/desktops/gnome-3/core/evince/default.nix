@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   name = "evince-3.6.1";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/evince/3.6/${name}.tar.xz";
+    url = "mirror://gnome/sources/evince/3.6/${name}.tar.xz";
     sha256 = "1da1pij030dh8mb0pr0jnyszgsbjnh8lc17rj5ii52j3kmbv51qv";
   };
 

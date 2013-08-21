@@ -12,7 +12,7 @@ let
 in
 rec {
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/stumpwm/${pkgName}-${version}.tgz";
+    url = "mirror://savannah/stumpwm/${pkgName}-${version}.tgz";
     sha256 = "a0793d22ef90731d34f84e51deafb4bc2095a357c70b9505dc57516f481cdf78";
   };
 

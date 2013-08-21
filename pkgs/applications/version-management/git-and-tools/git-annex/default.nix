@@ -1,40 +1,41 @@
 { cabal, aeson, async, blazeBuilder, bloomfilter, bup
 , caseInsensitive, clientsession, cryptoApi, curl, dataDefault
 , dataenc, DAV, dbus, dlist, dns, editDistance
-, extensibleExceptions, filepath, git, gnupg1, gnutls, hamlet
+, extensibleExceptions, feed, filepath, git, gnupg1, gnutls, hamlet
 , hinotify, hS3, hslogger, HTTP, httpConduit, httpTypes, HUnit
 , IfElse, json, lsof, MissingH, MonadCatchIOTransformers
 , monadControl, mtl, network, networkInfo, networkMulticast
 , networkProtocolXmpp, openssh, QuickCheck, random, regexTdfa
 , rsync, SafeSemaphore, SHA, stm, text, time, transformers
 , unixCompat, utf8String, uuid, wai, waiLogger, warp, which
-, xmlConduit, xmlTypes, yesod, yesodDefault, yesodForm, yesodStatic
+, xmlConduit, xmlTypes, yesod, yesodCore, yesodDefault, yesodForm
+, yesodStatic
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "4.20130601";
-  sha256 = "0l6jbi9r26w5h9hfg9v9qybqvijp4n7c9l1zd4ikxg2nqcc8j8ln";
+  version = "4.20130815";
+  sha256 = "0c4fvqmnvyrncmiz0dxwax2rnb4yrqw1y54q2zkqiifzrihcyi71";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     aeson async blazeBuilder bloomfilter caseInsensitive clientsession
     cryptoApi dataDefault dataenc DAV dbus dlist dns editDistance
-    extensibleExceptions filepath gnutls hamlet hinotify hS3 hslogger
-    HTTP httpConduit httpTypes HUnit IfElse json MissingH
+    extensibleExceptions feed filepath gnutls hamlet hinotify hS3
+    hslogger HTTP httpConduit httpTypes HUnit IfElse json MissingH
     MonadCatchIOTransformers monadControl mtl network networkInfo
     networkMulticast networkProtocolXmpp QuickCheck random regexTdfa
     SafeSemaphore SHA stm text time transformers unixCompat utf8String
-    uuid wai waiLogger warp xmlConduit xmlTypes yesod yesodDefault
-    yesodForm yesodStatic
+    uuid wai waiLogger warp xmlConduit xmlTypes yesod yesodCore
+    yesodDefault yesodForm yesodStatic
   ];
   buildTools = [ bup curl git gnupg1 lsof openssh rsync which ];
   configureFlags = "-fS3
                     -fWebDAV
                     -fInotify
                     -fDbus
-                    -f-Assistant
-                    -f-Webapp
+                    -fAssistant
+                    -fWebapp
                     -fPairing
                     -fXMPP
                     -fDNS
@@ -51,7 +52,7 @@ cabal.mkDerivation (self: {
   meta = {
     homepage = "http://git-annex.branchable.com/";
     description = "manage files with git, without checking their contents into git";
-    license = "GPL";
+    license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.simons ];
   };

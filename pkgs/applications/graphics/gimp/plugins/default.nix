@@ -107,7 +107,7 @@ rec {
     name = "texturize-2.1";
     buildInputs = [ gimp ] ++ gimp.nativeBuildInputs;
     src = fetchurl {
-      url = http://prdownloads.sourceforge.net/gimp-texturize/texturize-2.1_src.tgz;
+      url = mirror://sourceforge/gimp-texturize/texturize-2.1_src.tgz;
       sha256 = "0cdjq25g3yfxx6bzx6nid21kq659s1vl9id4wxyjs2dhcv229cg3";
     };
     installPhase = "installPlugins src/texturize";
@@ -148,7 +148,7 @@ rec {
       name = "gmic-1.3.2.0";
       buildInputs = [ imagemagick pkgconfig gimp pkgs.fftwSinglePrec ] ++ gimp.nativeBuildInputs;
       src = fetchurl {
-        url = http://dfn.dl.sourceforge.net/sourceforge/gmic/gmic_1.3.2.0.tar.gz;
+        url = mirror://sourceforge/gmic/gmic_1.3.2.0.tar.gz;
         sha256 = "0mxq664vzzc2l6k6sqm9syp34mihhi262i6fixk1g12lmc28797h";
       };
       preConfigure = ''

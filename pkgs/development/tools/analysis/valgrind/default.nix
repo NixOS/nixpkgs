@@ -43,7 +43,7 @@ stdenv.mkDerivation (rec {
 
     license = "GPLv2+";
 
-    maintainers = with stdenv.lib.maintainers; [ eelco ludo ];
+    maintainers = with stdenv.lib.maintainers; [ eelco ];
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

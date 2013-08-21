@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.7.0";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/openocd/openocd/${version}/openocd-${version}.tar.bz2";
+    url = "mirror://sourceforge/openocd/openocd-${version}.tar.bz2";
     sha256 = "0qwfyd821sy5p0agz0ybgn5nd7vplipw4mhm485ldj1hcmw7n8sj";
   };
 

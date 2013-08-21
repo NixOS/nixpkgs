@@ -1,7 +1,7 @@
 {stdenv, fetchurl, SDL, SDL_mixer, libvorbis, mesa, gtk, pkgconfig, nasm, libvpx, flac, makeDesktopItem}:
 
 stdenv.mkDerivation rec {
-  name = "eduke32-3542";
+  name = "eduke32-20130303-3542";
   
   src = fetchurl {
     url = http://dukeworld.duke4.net/eduke32/synthesis/20130303-3542/eduke32_src_20130303-3542.tar.bz2;

@@ -1,12 +1,12 @@
-{ cabal, binary, blas, gsl, liblapack, random, storableComplex
-, vector
+{ cabal, binary, blas, deepseq, gsl, liblapack, random
+, storableComplex, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "hmatrix";
-  version = "0.14.1.0";
-  sha256 = "10fvbk3k2fgac46a86mc8g0s5gsw1p1bz4k57gn6dzgwh73mxjx7";
-  buildDepends = [ binary random storableComplex vector ];
+  version = "0.15.0.1";
+  sha256 = "0hm3jnh7lds74zyk2m8i3zcdmsv1jlvplrzlxxr68j1cqwfdxilg";
+  buildDepends = [ binary deepseq random storableComplex vector ];
   extraLibraries = [ blas gsl liblapack ];
   meta = {
     homepage = "https://github.com/albertoruiz/hmatrix";

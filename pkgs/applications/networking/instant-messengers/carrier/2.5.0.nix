@@ -9,7 +9,7 @@ let
 in
 rec {
   src = fetchurl {
-    url = http://downloads.sourceforge.net/funpidgin/carrier-2.5.0.tar.bz2;
+    url = mirror://sourceforge/funpidgin/carrier-2.5.0.tar.bz2;
     sha256 = "0m80s7hnvz5vc2dy3xiy1zfb6incmb7p28zahzxdif2vz44riz28";
   };
 

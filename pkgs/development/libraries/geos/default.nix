@@ -2,7 +2,7 @@
 
 let inherit (composableDerivation) edf; in
 
-composableDerivation.composableDerivation {} {
+composableDerivation.composableDerivation {} rec {
 
   flags =
   # python and ruby untested 
@@ -10,20 +10,14 @@ composableDerivation.composableDerivation {} {
     # (if args.use_svn then ["libtool" "autoconf" "automake" "swig"] else [])
     # // edf { name = "ruby"; enable = { buildInputs = [ ruby ]; };}
 
-  name = "geos-3.2.2";
+  name = "geos-3.3.8";
 
   src = fetchurl {
-    url = http://download.osgeo.org/geos/geos-3.2.2.tar.bz2;
-    sha256 = "0711wcq46h7zgvp0bk4m60vmx1wal9db1q36mayf0vwk34hprpr4";
+    url = "http://download.osgeo.org/geos/${name}.tar.bz2";
+    sha256 = "0fshz8s9g610ycl4grrmcdcxb01aqpc6qac3x3jjik0vlz8x9v7b";
   };
 
-  # for development version. can be removed ?
-  #configurePhase = "
-  #  [ -f configure ] || \\
-  #  LIBTOOLIZE=libtoolize ./autogen.sh
-  #  [>{ automake --add-missing; autoconf; }
-  #  unset configurePhase; configurePhase
-  #";
+  enableParallelBuilding = true;
 
   meta = {
     description = "C++ port of the Java Topology Suite (JTS)";

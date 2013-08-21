@@ -12,7 +12,7 @@ let
 in
 rec {
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/libvncserver/LibVNCServer-${version}.tar.gz";
+    url = "mirror://sourceforge/libvncserver/LibVNCServer-${version}.tar.gz";
     sha256 = "1y83z31wbjivbxs60kj8a8mmjmdkgxlvr2x15yz95yy24lshs1ng";
   };
 

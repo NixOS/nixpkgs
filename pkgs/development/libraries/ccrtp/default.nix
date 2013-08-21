@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1p4zzqn02zvnyjy84khiq8v65pl422fb6ni946h9sxh4yw2lgn01";
   };
 
-  buildInputs = [ openssl pkgconfig libgcrypt ucommon ];
+  buildInputs = [ openssl pkgconfig libgcrypt ];
+  propagatedBuildInputs = [ ucommon ];
 
   doCheck = true;
 
@@ -16,7 +17,7 @@ stdenv.mkDerivation {
     description = "GNU ccRTP, an implementation of the IETF real-time transport protocol (RTP)";
     homepage = http://www.gnu.org/software/ccrtp/;
     license = "GPLv2";
-    maintainers = with stdenv.lib.maintainers; [ marcweber ludo ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

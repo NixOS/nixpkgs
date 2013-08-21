@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "lingot-0.9.0";
 
   src = fetchurl {
-    url = http://download.savannah.gnu.org/releases/lingot/lingot-0.9.0.tar.gz;
+    url = mirror://savannah/lingot/lingot-0.9.0.tar.gz;
     sha256 = "07z129lp8m4sz608q409wb11c639w7cbn497r7bscgg08p6c07xb";
   };
 

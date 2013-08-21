@@ -6,15 +6,17 @@ stdenv.mkDerivation rec {
     sha256 = "07k6iyx6pyzisncgdkd071w2dhm3rx6l34hbja3wbc7rpf888k3k";
   };
   buildInputs = [ texinfo ];
-  meta = {
+
+  meta = with stdenv.lib; {
     description = "A library for playing tracker music module files";
+    homepage    = http://mikmod.shlomifish.org/;
+    license     = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ astsmtl lovek323 ];
+    platforms   = platforms.unix;
+
     longDescription = ''
       A library for playing tracker music module files supporting many formats,
       including MOD, S3M, IT and XM.
     '';
-    homepage = http://mikmod.shlomifish.org/;
-    license = "LGPLv2+";
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -22,7 +22,7 @@
 */
 
 stdenv.mkDerivation rec {
-  version = "2.5.2";
+  version = "2.5.2.26539-0";
   name = "firebird-${version}";
 
   configureFlags =
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional superServer "--enable-superserver=true");
 
   src = fetchurl {
-    url = "mirror://sourceforge/firebird/Firebird-${version}.26539-0.tar.bz2";
+    url = "mirror://sourceforge/firebird/Firebird-${version}.tar.bz2";
     sha256 = "1j5bcfl35hr6i4lcd08zls19bal2js3ar16gnwkzbhwxkxbyb43b";
   };
 

@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/gsl/;
     license = "GPLv3+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

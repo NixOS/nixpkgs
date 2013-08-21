@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "${webpage}/${name}-coq8.4.tar.gz";
+    url = "http://ssr.msr-inria.inria.fr/FTP/${name}-coq8.4.tar.gz";
     sha256 = "1ysx29xw09i86lq0d92z9cnyx133jfgq4qddy3501000fn7xwi7h";
   };
 

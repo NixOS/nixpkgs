@@ -1,15 +1,16 @@
-{ stdenv, fetchurl, unzip, xulrunner, makeWrapper }:
+{ stdenv, fetchgit, unzip, xulrunner, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "conkeror-1.0pre-20130401";
-  
-  src = fetchurl {
-    url = http://repo.or.cz/w/conkeror.git/snapshot/0341e791c78653a2f5bbbff9a1dac04bf898dd65.zip;
-    sha256 = "11v7p40lcz6r5z0w54f8pk6hyn9mqjcw44fqszjyz25rkhx951ry";
+  name = "conkeror-1.0pre-20130817-1";
+
+  src = fetchgit {
+    url = git://repo.or.cz/conkeror.git;
+    rev = "refs/tags/debian-1.0--pre+git130817-1";
+    sha256 = "aef3c782ac98c031e7b99852f42538e225e151cd226cde3094823a5cae015fcf";
   };
-  
+
   buildInputs = [ unzip makeWrapper ];
-  
+
   installPhase = ''
     mkdir -p $out/libexec/conkeror
     cp -r * $out/libexec/conkeror

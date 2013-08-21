@@ -1,7 +1,7 @@
 { stdenv, fetchgit, cmake, pysideApiextractor, python27Packages, qt4 }:
 
 stdenv.mkDerivation {
-  name = "pyside-generatorrunner-0.6.13-9-g567ca6e";
+  name = "pyside-generatorrunner-0.6.15";
 
   src = fetchgit {
     url = "git://github.com/PySide/Generatorrunner.git";

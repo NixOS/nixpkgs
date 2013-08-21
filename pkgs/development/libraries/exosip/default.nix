@@ -1,10 +1,10 @@
 {stdenv, fetchurl, libosip, openssl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "3.6.0";
+  version = "4.0.0";
   src = fetchurl {
-    url = "http://download.savannah.gnu.org/releases/exosip/libeXosip2-${version}.tar.gz";
-    sha256 = "0r1mj8x5991bgwf03bx1ajn5kbbmw1136jabw2pn7dls9h41mnli";
+    url = "mirror://savannah/exosip/libeXosip2-${version}.tar.gz";
+    sha256 = "1rdjr3x7s992w004cqf4xji1522an9rpzsr9wvyhp685khmahrsj";
   };
   name = "libexosip2-${version}";
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, gd, texinfo, makeWrapper
+{ stdenv, fetchurl, zlib, gd, texinfo, makeWrapper, readline
 , texLive ? null
 , lua ? null
 , emacs ? null
@@ -10,9 +10,9 @@
 , pango ? null
 , cairo ? null
 , pkgconfig ? null
-, readline
-, fontconfig ? null, gnused ? null, coreutils ? null
-}:
+, fontconfig ? null
+, gnused ? null
+, coreutils ? null }:
 
 assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 
@@ -26,10 +26,13 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib gd texinfo readline emacs lua texLive libX11 libXt libXpm libXaw
-      wxGTK pango cairo pkgconfig makeWrapper
-    ];
+      pango cairo pkgconfig makeWrapper ]
+    # compiling with wxGTK causes a malloc (double free) error on darwin
+    ++ stdenv.lib.optional (!stdenv.isDarwin) wxGTK;
 
   configureFlags = if libX11 != null then ["--with-x"] else ["--without-x"];
+
+  NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo";
 
   postInstall = stdenv.lib.optionalString (libX11 != null) ''
     wrapProgram $out/bin/gnuplot \
@@ -39,9 +42,10 @@ stdenv.mkDerivation rec {
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
   '';
 
-  meta = {
-    homepage = "http://www.gnuplot.info";
+  meta = with stdenv.lib; {
+    homepage    = http://www.gnuplot.info;
     description = "A portable command-line driven graphing utility for many platforms";
-    platforms = stdenv.lib.platforms.all;
+    platforms   = platforms.all;
+    maintainers = with maintainers; [ lovek323 ];
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchsvn, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2, makeWrapper, libX11 }:
+{ stdenv, fetchsvn, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2, makeWrapper, libX11, libtiff }:
 
 let rev = 1742; in
 stdenv.mkDerivation {
@@ -12,17 +12,27 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-fPIC"; # Gentoo adds this on every platform
 
-  buildInputs = [ pkgconfig flex zlib perl libpng libjpeg libxml2 makeWrapper libX11 ];
+  buildInputs = [ pkgconfig flex zlib perl libpng libjpeg libxml2 makeWrapper libX11 libtiff ];
 
-  configurePhase = "cp config.mk.in config.mk";
+  configurePhase = ''
+    cp config.mk.in config.mk
+    substituteInPlace "config.mk" \
+        --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff}/lib/libtiff.so" \
+        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff}/include" \
+        --replace "TIFFLIB_NEEDS_JPEG = Y" "TIFFLIB_NEEDS_JPEG = N" \
+        --replace "TIFFLIB_NEEDS_Z = Y" "TIFFLIB_NEEDS_Z = N"
+  '';
 
   preBuild = ''
-    export LDFLAGS=-lz
+    export LDFLAGS="-lz"
     substituteInPlace "pm_config.in.h" \
         --subst-var-by "rgbPath1" "$out/lib/rgb.txt" \
         --subst-var-by "rgbPath2" "/var/empty/rgb.txt" \
         --subst-var-by "rgbPath3" "/var/empty/rgb.txt"
+    touch lib/standardppmdfont.c
   '';
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     make package pkgdir=$PWD/netpbmpkg
@@ -51,5 +61,6 @@ stdenv.mkDerivation {
     homepage = http://netpbm.sourceforge.net/;
     description = "Toolkit for manipulation of graphic images";
     license = "GPL,free";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

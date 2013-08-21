@@ -52,11 +52,13 @@
     #### APPLICATIONS
     #TODO: correct links; more stuff
 
-    xfce4notifyd      = callPackage ./applications/xfce4-notifyd.nix      { v= "0.2.2"; h= "0s4ilc36sl5k5mg5727rmqims1l3dy5pwg6dk93wyjqnqbgnhvmn"; };
-    gigolo            = callPackage ./applications/gigolo.nix             { v= "0.4.1"; h= "1y8p9bbv1a4qgbxl4vn6zbag3gb7gl8qj75cmhgrrw9zrvqbbww2"; };
-    xfce4taskmanager  = callPackage ./applications/xfce4-taskmanager.nix  { v= "1.0.0"; h= "1vm9gw7j4ngjlpdhnwdf7ifx6xrrn21011almx2vwidhk2f9zvy0"; };
-    mousepad          = callPackage ./applications/mousepad.nix           { v= "0.3.0"; h= "0v84zwhjv2xynvisn5vmp7dbxfj4l4258m82ks7hn3adk437bwhh"; };
-    thunar_volman     = callPackage ./core/thunar-volman.nix              { };
+    xfce4notifyd           = callPackage ./applications/xfce4-notifyd.nix      { v= "0.2.2"; h= "0s4ilc36sl5k5mg5727rmqims1l3dy5pwg6dk93wyjqnqbgnhvmn"; };
+    gigolo                 = callPackage ./applications/gigolo.nix             { v= "0.4.1"; h= "1y8p9bbv1a4qgbxl4vn6zbag3gb7gl8qj75cmhgrrw9zrvqbbww2"; };
+    xfce4taskmanager       = callPackage ./applications/xfce4-taskmanager.nix  { v= "1.0.0"; h= "1vm9gw7j4ngjlpdhnwdf7ifx6xrrn21011almx2vwidhk2f9zvy0"; };
+    mousepad               = callPackage ./applications/mousepad.nix           { v= "0.3.0"; h= "0v84zwhjv2xynvisn5vmp7dbxfj4l4258m82ks7hn3adk437bwhh"; };
+    thunar_volman          = callPackage ./core/thunar-volman.nix              { };
+    thunar_archive_plugin  = callPackage ./core/thunar-archive-plugin.nix      { };
+
 
     #### ART
 

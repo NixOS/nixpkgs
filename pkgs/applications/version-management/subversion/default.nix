@@ -21,13 +21,13 @@ assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation rec {
 
-  version = "1.7.10";
+  version = "1.7.11";
 
   name = "subversion-${version}";
 
   src = fetchurl {
     url = "mirror://apache/subversion//${name}.tar.bz2";
-    sha1 = "a4f3de0a13b034b0eab4d35512c6c91a4abcf4f5";
+    sha1 = "d82e187803043b74c072cd5a861ac02e4a027684";
   };
 
   buildInputs = [ zlib apr aprutil sqlite ]
@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace "-no-cpp-precomp" ""
   '';
 
   postInstall = ''
@@ -74,7 +76,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A version control system intended to be a compelling replacement for CVS in the open source community";
     homepage = http://subversion.apache.org/;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
     platforms = stdenv.lib.platforms.all;
   };
 }

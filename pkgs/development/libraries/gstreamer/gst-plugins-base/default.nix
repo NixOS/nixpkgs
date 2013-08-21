@@ -1,7 +1,6 @@
-{ fetchurl, stdenv, pkgconfig, python, gstreamer
-, xlibs, alsaLib, cdparanoia, libogg
-, libtheora, libvorbis, freetype, pango
-, liboil, glib
+{ fetchurl, stdenv, pkgconfig, python, gstreamer, xlibs, alsaLib, cdparanoia
+, libogg, libtheora, libvorbis, freetype, pango, liboil, glib, cairo
+, libintlOrEmpty
 , # Whether to build no plugins that have external dependencies
   # (except the ALSA plugin).
   minimalDeps ? false
@@ -25,22 +24,28 @@ stdenv.mkDerivation rec {
 
   # TODO : v4l, libvisual
   buildInputs =
-    [ pkgconfig glib alsaLib ]
+    [ pkgconfig glib cairo ]
+    # can't build alsaLib on darwin
+    ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib
     ++ stdenv.lib.optionals (!minimalDeps)
-      [ xlibs.xlibs xlibs.libXv cdparanoia libogg libtheora libvorbis
-        freetype pango liboil
-      ];
+      [ xlibs.xlibs xlibs.libXv libogg libtheora libvorbis freetype pango
+        liboil ]
+    # can't build cdparanoia on darwin
+    ++ stdenv.lib.optional (!minimalDeps && !stdenv.isDarwin) cdparanoia
+    ++ libintlOrEmpty;
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   propagatedBuildInputs = [ gstreamer ];
  
   postInstall = "rm -rf $out/share/gtk-doc";
   
-  meta = {
-    homepage = http://gstreamer.freedesktop.org;
-
+  meta = with stdenv.lib; {
+    homepage    = http://gstreamer.freedesktop.org;
     description = "Base plug-ins for GStreamer";
-
-    license = "LGPLv2+";
+    license     = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
   };
 }
 

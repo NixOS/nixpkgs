@@ -9,7 +9,7 @@ let
 in
 rec {
   src = fetchurl {
-    url = "http://prdownloads.sourceforge.net/sourceforge/xmpppy/irc-transport-${version}.tar.gz";
+    url = "mirror://sourceforge/xmpppy/irc-transport-${version}.tar.gz";
     sha256 = "0gbc0dvj1p3088b6x315yjrlwnc5vvzp0var36wlf9z60ghvk8yb";
   };
 
