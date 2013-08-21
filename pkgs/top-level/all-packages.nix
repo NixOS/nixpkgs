@@ -9180,6 +9180,15 @@ let
       libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.10;
 
+ kde411 = kdePackagesFor (pkgs.kde411 // {
+      boost = boost149;
+      eigen = eigen2;
+      libotr = libotr_3_2;
+      libusb = libusb1;
+      ffmpeg = ffmpeg_1;
+      libcanberra = libcanberra_kde;
+    }) ../desktops/kde-4.11;
+
   kdePackagesFor = self: dir:
     let callPackageOrig = callPackage; in
     let
