@@ -43,6 +43,7 @@ rec {
     { name, constituents, meta ? { } }:
     pkgs.runCommand name
       { inherit constituents meta;
+        preferLocalBuild = true;
         _hydraAggregate = true;
       }
       ''
