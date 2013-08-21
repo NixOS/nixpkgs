@@ -19,6 +19,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     conduit hspec hspecExpectations HUnit systemFileio transformers
   ];
+  doCheck = false;
   meta = {
     homepage = "http://www.haskell.org/hoogle/";
     description = "Haskell API Search";
