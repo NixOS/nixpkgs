@@ -11,13 +11,13 @@ with import ./attrsets.nix;
 
 rec {
 
-  inherit (lib) isType;
+  inherit (lib) typeOf;
 
   # Tell that nothing is defined.  When properties are evaluated, this type
   # is used to remove an entry.  Thus if your property evaluation semantic
   # implies that you have to mute the content of an attribute, then your
   # property should produce this value.
-  isNotdef = isType "notdef";
+  isNotdef = attrs: (typeOf attrs) == "notdef";
   mkNotdef = {_type = "notdef";};
 
   # General property type, it has a property attribute and a content
@@ -32,7 +32,7 @@ rec {
   #  - onGlobalDelay: run on all copied properties.
   #  - onEval: run on an evaluated property.
   #  - onGlobalEval: run on a list of property stack on top of their values.
-  isProperty = isType "property";
+  isProperty = attrs: (typeOf attrs) == "property";
   mkProperty = p@{property, content, ...}: p // {
     _type = "property";
   };
@@ -187,7 +187,7 @@ rec {
   # and interpreted by the underlying system using properties (modules).
 
   # Create a "Merge" property which only contains a condition.
-  isMerge = isType "merge";
+  isMerge = attrs: (typeOf attrs) == "merge";
   mkMerge = content: mkProperty {
     property = {
       _type = "merge";
@@ -204,7 +204,7 @@ rec {
   # is ignore.
 
   # Create a "If" property which only contains a condition.
-  isIf = isType "if";
+  isIf = attrs: (typeOf attrs) == "if";
   mkIf = condition: content: mkProperty {
     property = {
       _type = "if";
@@ -271,7 +271,7 @@ rec {
   # priorities between values.  The default priority is 100. The lowest
   # priorities are kept.  The template argument must reproduce the same
   # attribute set hierarchy to override leaves of the hierarchy.
-  isOverride = isType "override";
+  isOverride = attrs: (typeOf attrs) == "override";
   mkOverrideTemplate = priority: template: content: mkProperty {
     property = {
       _type = "override";
@@ -371,7 +371,7 @@ rec {
   # of the list used by the merge function.  And the highest ranked
   # definition would be the last.  Definitions which does not have any rank
   # value have the default rank of 100.
-  isOrder = isType "order";
+  isOrder = attrs: (typeOf attrs) == "order";
   mkOrder = rank: content: mkProperty {
     property = {
       _type = "order";
@@ -434,7 +434,7 @@ rec {
   # properties on top of the option definition is nice for user manipulation
   # but require to check if the content of the property is not another
   # property.  Such testing implies to verify if this is an attribute set
-  # and if it possess the type 'property'. (see isProperty & typeOf/isType)
+  # and if it possess the type 'property'. (see isProperty & typeOf)
   #
   # To avoid strict evaluation of option definitions, 'mkFixStrictness' is
   # introduced.  This property protects an option definition by replacing

@@ -10,7 +10,6 @@ with import ./trivial.nix;
 
 rec {
 
-  isType = type: x: (x._type or "") == type;
   hasType = x: isAttrs x && x ? _type;
   typeOf = x: x._type or "";
 
@@ -27,7 +26,7 @@ rec {
   # hasOptions (boolean: whatever this option contains an option set)
   # delayOnGlobalEval (boolean: should properties go through the evaluation of this option)
   # docPath (path concatenated to the option name contained in the option set)
-  isOptionType = isType "option-type";
+  isOptionType = attrs: typeOf attrs == "option-type";
   mkOptionType =
     { name
     , check ? (x: true)
