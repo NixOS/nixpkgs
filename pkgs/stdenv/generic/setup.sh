@@ -666,14 +666,15 @@ checkPhase() {
 
 patchELF() {
     # Patch all ELF executables and shared libraries.
-    header "patching ELF executables and libraries"
-    if [ -e "$prefix" ]; then
-        find "$prefix" \( \
+    local dir="$1"
+    if [ -e "$dir" ]; then
+        header "patching ELF executables and libraries in $dir"
+        find "$dir" \( \
             \( -type f -a -name "*.so*" \) -o \
             \( -type f -a -perm +0100 \) \
             \) -print -exec patchelf --shrink-rpath {} \;
+        stopNest
     fi
-    stopNest
 }
 
 
@@ -682,8 +683,8 @@ patchShebangs() {
     # specified  directory tree to paths found in $PATH.  E.g.,
     # /bin/sh will be rewritten to /nix/store/<hash>-some-bash/bin/sh.
     # Interpreters that are already in the store are left untouched.
-    header "patching script interpreter paths"
     local dir="$1"
+    header "patching script interpreter paths in $dir"
     local f
     for f in $(find "$dir" -type f -perm +0100); do
         local oldPath=$(sed -ne '1 s,^#![ ]*\([^ ]*\).*$,\1,p' "$f")
