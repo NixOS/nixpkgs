@@ -184,6 +184,22 @@ in
     '';
   };
 
+  eighties = simpleDerivation {
+    name = "vim-eighties-1.0.4";
+    src = fetchurl {
+      url    = "https://github.com/justincampbell/vim-eighties/archive/1.0.4.tar.gz";
+      sha256 = "0cjd9hbg2qd7jjkvyi15f9ysp7m3aa2sg8nvbf80yb890rfkwaqr";
+    };
+    path = "eighties";
+    meta = with stdenv.lib; {
+      description = "Automatically resizes your windows to 80 characters";
+      homepage    = https://github.com/justincampbell/vim-eighties;
+      license     = licenses.publicDomain;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
+
   xdebug = simpleDerivation {
 
     name = "vim-xdebug-a4980fa65f7f159780593ee37c178281691ba2c4";
