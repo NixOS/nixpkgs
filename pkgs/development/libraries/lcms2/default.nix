@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/lcms/${name}.tar.gz";
-    sha256 = "1vyjsvld0881n5vrvw3bcxiqmn7yyy6j1yj1nz76ksaxkarschnk";
+    sha256 = "0ax71bmscjzlpmg1r8vj3dypxf2jr7j9qfx5vc8j22j78hmpf9v7";
   };
 
   propagatedBuildInputs = [ libtiff libjpeg zlib ];
