@@ -774,6 +774,8 @@ fixupPhase() {
 fixupPrefix() {
     local prefix="$1"
 
+    if ! [ -d "$prefix" ]; then return; fi
+
     # Put man/doc/info under share/.
     forceShare=${forceShare:=man doc info}
     if [ -n "$forceShare" ]; then
