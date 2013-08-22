@@ -96,8 +96,10 @@ rec {
       check = lib.traceValIfNot (x: builtins.unsafeDiscardStringContext (builtins.substring 0 1 (toString x)) == "/");
     };
 
-    listOf = types.list;
-    list = elemType: mkOptionType {
+    # drop this in the future:
+    list = builtins.trace "types.list is deprecated, use types.listOf instead" types.listOf;
+
+    listOf = elemType: mkOptionType { 
       name = "list of ${elemType.name}s";
       check = value: lib.traceValIfNot isList value && all elemType.check value;
       merge = concatLists;
