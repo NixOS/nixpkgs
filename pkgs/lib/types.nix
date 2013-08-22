@@ -117,7 +117,7 @@ rec {
       name = "attribute set of ${elemType.name}s";
       check = x: lib.traceValIfNot isAttrs x
         && fold (e: v: v && elemType.check e) true (lib.attrValues x);
-      merge = lib.zip (name: elemType.merge);
+      merge = lib.zipAttrsWith (name: elemType.merge);
       iter = f: path: set: lib.mapAttrs (name: elemType.iter f (path + "." + name)) set;
       fold = op: nul: set: fold (e: l: elemType.fold op l e) nul (lib.attrValues set);
       docPath = path: elemType.docPath (path + ".<name>");
