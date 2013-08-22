@@ -737,7 +737,7 @@ fixupPhase() {
 
     # Apply fixup to each output.
     local output
-    for output in $outputs; do
+    for output in ${outputs:-out}; do
         fixupPrefix ${!output}
     done
 
