@@ -26,7 +26,7 @@ let
 
 
   zipModules = list: with pkgs.lib;
-    zip (n: v:
+    zipAttrsWith (n: v:
       if tail v != [] then
         if n == "_type" then (head v)
         else if n == "extraConfigs" then (concatLists v)
