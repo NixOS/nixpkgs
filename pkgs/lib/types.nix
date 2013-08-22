@@ -166,7 +166,7 @@ rec {
         if length list == 1 then
           head list
         else
-          throw "Multiple definitions. Only one is allowed for this option.";
+          throw "Multiple definitions of ${elemType.name}. Only one is allowed for this option.";
     };
 
     none = elemType: mkOptionType {
