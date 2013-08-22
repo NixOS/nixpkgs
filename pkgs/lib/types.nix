@@ -47,10 +47,6 @@ rec {
 
   types = rec {
 
-    inferred = mkOptionType {
-      name = "inferred type";
-    };
-
     bool = mkOptionType {
       name = "boolean";
       check = lib.traceValIfNot builtins.isBool;
