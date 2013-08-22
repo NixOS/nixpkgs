@@ -758,8 +758,8 @@ fixupPhase() {
     fi
 
     if [ -n "$setupHook" ]; then
-        mkdir -p "$out/nix-support"
-        substituteAll "$setupHook" "$out/nix-support/setup-hook"
+        mkdir -p "$_dev/nix-support"
+        substituteAll "$setupHook" "$_dev/nix-support/setup-hook"
     fi
 
     runHook postFixup
