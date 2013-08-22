@@ -149,6 +149,12 @@ let
       deps = [ db4 ];
     };
 
+    crypt = buildInternalPythonModule {
+      moduleName = "crypt";
+      internalName = "crypt";
+      deps = [ ];
+    };
+
     curses = buildInternalPythonModule {
       moduleName = "curses";
       deps = [ ncurses ];

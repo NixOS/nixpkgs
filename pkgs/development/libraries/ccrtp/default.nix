@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     description = "GNU ccRTP, an implementation of the IETF real-time transport protocol (RTP)";
     homepage = http://www.gnu.org/software/ccrtp/;
     license = "GPLv2";
-    maintainers = with stdenv.lib.maintainers; [ marcweber ludo ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

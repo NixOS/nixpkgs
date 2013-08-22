@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://splint.org/;
-    description = "Splint, an annotation-assisted lightweight static analyzer for C";
+    description = "Annotation-assisted lightweight static analyzer for C";
 
     longDescription = ''
       Splint is a tool for statically checking C programs for security
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
       checking than can be done by any standard lint.
     '';
 
-    license = "GPLv2+";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

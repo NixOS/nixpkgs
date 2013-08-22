@@ -6,7 +6,7 @@ let
     ln -sv /usr/sbin/dtrace $out/bin
   '';
 
-  version = "0.10.10";
+  version = "0.10.12";
 
   # !!! Should we also do shared libuv?
   deps = {
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "0p6ii9xgshv2aak1rb4hq54pszdjxip0nr5r9a3axirs5hfyfkd5";
+    sha256 = "1dlnjjr135h2xcxifb06g33yi2bc5zpvc06985x5cjj56g1sffbk";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/commoncpp/;
     license = "LGPLv3+";
 
-    maintainers = with stdenv.lib.maintainers; [ viric ludo ];
+    maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = stdenv.lib.platforms.all;
   };
 }

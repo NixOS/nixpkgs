@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "uniplate";
-  version = "1.6.10";
-  sha256 = "0j0hsvlkml8v9f8iijcgq58qnxnmk7gzxcnl9rxx4fdr9fnaffj3";
+  version = "1.6.11";
+  sha256 = "10ppc9hqc0y17r3y4vdajshrp3956dybna7qa5zm0akgl3pbla9j";
   buildDepends = [ hashable syb unorderedContainers ];
   meta = {
     homepage = "http://community.haskell.org/~ndm/uniplate/";

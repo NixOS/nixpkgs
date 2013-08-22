@@ -1,18 +1,19 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "strace-4.7";
+  name = "strace-4.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/strace/${name}.tar.xz";
-    sha256 = "158iwk0pl2mfw93m1843xb7a2zb8p6lh0qim07rca6f1ff4dk764";
+    sha256 = "1y6pw4aj4rw5470lqks1ml0n8jh5xbhwr5c3gb00bj570wgjk4pl";
   };
 
   nativeBuildInputs = [ perl ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://strace.sourceforge.net/;
     description = "A system call tracer for Linux";
-    license = "bsd";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

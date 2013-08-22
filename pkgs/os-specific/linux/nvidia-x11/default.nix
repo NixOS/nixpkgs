@@ -12,7 +12,8 @@ let
 
   versionNumber = "319.32";
   kernel310patch = fetchurl {
-    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/nvidia-linux-3.10.patch?h=packages/nvidia";
+    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/nvidia-linux-3.10.patch?h=packages/nvidia&id=415c1daa9ccb1ec46c172b304f40929239d87af8";
+    name = "nvidia-linux-3.10.patch";
     sha256 = "0nhzg6jdk9sf1vzj519gqi8a2n9xydhz2bcz472pss2cfgbc1ahb";
   };
 

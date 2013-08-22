@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage    = http://avahi.org;
     license     = licenses.lgpl2Plus;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ lovek323 ludo ];
+    maintainers = with maintainers; [ lovek323 ];
 
     longDescription = ''
       Avahi is a system which facilitates service discovery on a local

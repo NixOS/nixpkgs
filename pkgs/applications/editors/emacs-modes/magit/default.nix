@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ simons ludo ];
+    maintainers = with stdenv.lib.maintainers; [ simons ];
   };
 }

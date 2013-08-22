@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://ecb.sourceforge.net/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

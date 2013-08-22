@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
       wrapPythonPrograms
     '';
 
-  doCheck = true;
+  doCheck = (!stdenv.isDarwin);
+
   checkPhase = ''
     ${python}/bin/${python.executable} setup.py test
   '';

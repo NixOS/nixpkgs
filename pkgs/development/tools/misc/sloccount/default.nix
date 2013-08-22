@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.dwheeler.com/sloccount/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

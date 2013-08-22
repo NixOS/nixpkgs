@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     certificate cipherAes cipherRc4 cryptohash cryptoPubkey
     cryptoRandomApi mtl network pem text time tls vector
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/vincenthz/hs-tls";
     description = "TLS extra default values and helpers";

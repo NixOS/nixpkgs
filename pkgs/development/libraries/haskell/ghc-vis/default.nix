@@ -10,6 +10,10 @@ cabal.mkDerivation (self: {
     cairo deepseq fgl ghcHeapView graphviz gtk mtl svgcairo text
     transformers xdot
   ];
+  postInstall = ''
+    ensureDir "$out/share/ghci"
+    ln -s "$out/share/$pname-$version/ghci" "$out/share/ghci/$pname"
+  '';
   meta = {
     homepage = "http://felsin9.de/nnis/ghc-vis";
     description = "Live visualization of data structures in GHCi";

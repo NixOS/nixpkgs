@@ -8,11 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "10j7rc1nzdp7vvcpc3340yi3qw7abby4szv8zkwh10d0zizpwma9";
   };
 
-  preConfigure =
-    ''
-      makeFlagsArray=(DEST_HOME=$out)
-      buildFlags=all3
-    '';
+  preConfigure = ''
+    makeFlagsArray=(DEST_HOME=$out)
+    buildFlags=all3
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    cp makefile.macosx_64bits makefile.machine
+  '';
 
   enableParallelBuilding = true;
 

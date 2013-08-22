@@ -1,18 +1,18 @@
 {stdenv, fetchurl, qt, libXext, libX11}:
 
 stdenv.mkDerivation rec {
-  name = "qgit-2.3";
+  name = "qgit-2.5";
   meta =
   {
     license = "GPLv2";
-    homepage = "http://digilander.libero.it/mcostalba/";
+    homepage = "http://libre.tibirna.org/projects/qgit/wiki/QGit";
     description = "Graphical front-end to Git";
     inherit (qt.meta) platforms;
   };
   src = fetchurl
   {
-    url = "mirror://sourceforge/qgit/${name}.tar.bz2";
-    sha256 = "a5fdd7e27fea376790eed787e22f4863eb9d2fe0217fd98b9fdbcf47a45bdc64";
+    url = "http://libre.tibirna.org/attachments/download/9/${name}.tar.gz";
+    sha256 = "25f1ca2860d840d87b9919d34fc3a1b05d4163671ed87d29c3e4a8a09e0b2499";
   };
   buildInputs = [qt libXext libX11];
   configurePhase = "qmake PREFIX=$out";

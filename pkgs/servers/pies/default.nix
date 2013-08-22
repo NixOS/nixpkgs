@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/pies/;
 
     platforms = stdenv.lib.platforms.gnu;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

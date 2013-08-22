@@ -23,8 +23,6 @@ configurePhase() {
     export INSTALL_PATH=$out
     export INSTALL_MOD_PATH=$out
 
-    substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
-
     # Set our own localversion, if specified.
     rm -f localversion*
     if test -n "$localVersion"; then
@@ -70,14 +68,9 @@ installPhase() {
     cp vmlinux $out
 
     if grep -q "CONFIG_MODULES=y" .config; then
-        # Install the modules in $out/lib/modules with matching paths
-        # in modules.dep (i.e., refererring to $out/lib/modules, not
-        # /lib/modules).  The depmod_opts= is to prevent the kernel
-        # from passing `-b PATH' to depmod.
-        export MODULE_DIR=$out/lib/modules/
-        substituteInPlace Makefile --replace '-b $(INSTALL_MOD_PATH)' ''
+        # Install the modules in $out/lib/modules.
         make modules_install \
-            DEPMOD=$module_init_tools/sbin/depmod depmod_opts= \
+            DEPMOD=$kmod/sbin/depmod \
             $makeFlags "${makeFlagsArray[@]}" \
             $installFlags "${installFlagsArray[@]}"
 

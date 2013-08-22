@@ -1,16 +1,19 @@
-{ cabal, filepath, hslogger, HUnit, mtl, network, parsec, random
-, regexCompat, time
+{ cabal, filepath, hslogger, HUnit, mtl, network, parsec
+, QuickCheck, random, regexCompat, testpack, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "MissingH";
-  version = "1.2.0.0";
-  sha256 = "0bqg1j2pvm0ixrbnsxrr5kgibhbp191irhcavqlwfwgaxhrpqnm1";
-  isLibrary = true;
-  isExecutable = true;
+  version = "1.2.0.1";
+  sha256 = "0hxyf82g2rz36ks6n136p6brgs0r9cnxfkh4xgl6iw11wbq2rb5m";
   buildDepends = [
     filepath hslogger HUnit mtl network parsec random regexCompat time
   ];
+  testDepends = [
+    filepath hslogger HUnit mtl network parsec QuickCheck random
+    regexCompat testpack time
+  ];
+  doCheck = false;
   meta = {
     homepage = "http://software.complete.org/missingh";
     description = "Large utility library";

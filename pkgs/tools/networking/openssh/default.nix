@@ -1,7 +1,11 @@
 { stdenv, fetchurl, zlib, openssl, perl, libedit, pkgconfig, pam
 , etcDir ? null
 , hpnSupport ? false
+, withKerberos ? false
+, kerberos
 }:
+
+assert withKerberos -> kerberos != null;
 
 let
 
@@ -13,11 +17,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "openssh-6.2p1";
+  name = "openssh-6.2p2";
 
   src = fetchurl {
     url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/portable/${name}.tar.gz";
-    sha1 = "8824708c617cc781b2bb29fa20bd905fd3d2a43d";
+    sha1 = "c2b4909eba6f5ec6f9f75866c202db47f3b501ba";
   };
 
   prePatch = stdenv.lib.optionalString hpnSupport
@@ -26,13 +30,11 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
 
-  patches =
-    [ ./locale_archive.patch
-      # Upstream fix for gratuitous "no such identity" warnings.
-      ./fix-identity-warnings.patch
-    ];
+  patches = [ ./locale_archive.patch ];
 
-  buildInputs = [ zlib openssl libedit pkgconfig pam ];
+  buildInputs = [ zlib openssl libedit pkgconfig pam ] ++
+    (if withKerberos then [ kerberos ] else [])
+  ;
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
@@ -43,6 +45,7 @@ stdenv.mkDerivation rec {
       --disable-strip
       ${if pam != null then "--with-pam" else "--without-pam"}
       ${if etcDir != null then "--sysconfdir=${etcDir}" else ""}
+      ${if withKerberos  then "--with-kerberos5=${kerberos}" else ""}
     '';
 
   preConfigure =

@@ -52,6 +52,6 @@ in
 
       license = "Apache-2.0";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   }

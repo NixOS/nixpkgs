@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     license = "LGPLv2+";
 
-    maintainers = with stdenv.lib.maintainers; [ urkud ludo ];
+    maintainers = with stdenv.lib.maintainers; [ urkud ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

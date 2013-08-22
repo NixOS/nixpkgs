@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, mktemp, module_init_tools, bc
+{ stdenv, fetchurl, perl, mktemp, kmod, bc
 
 , # The kernel source tarball.
   src
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
 
   generateConfig = ./generate-config.pl;
 
-  inherit preConfigure src module_init_tools localVersion postInstall postBuild;
+  inherit preConfigure src kmod localVersion postInstall postBuild;
 
   patches = map (p: p.patch) kernelPatches;
 

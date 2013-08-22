@@ -64,6 +64,6 @@ export LD_LIBRARY_PATH=\"$(cat ${stdenv.gcc}/nix-support/orig-gcc)/lib64\:"'${do
 
     license = "unknown";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

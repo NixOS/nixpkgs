@@ -11,6 +11,7 @@ unzip $src
 run_file=$(echo amd-driver-installer-*)
 sh $run_file --extract .
 
+eval "$patchPhase"
 
 kernelVersion=$(cd ${kernel}/lib/modules && ls)
 kernelBuild=$(echo ${kernel}/lib/modules/$kernelVersion/build)
@@ -166,7 +167,7 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   # fail saying different kernel versions
   cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/modules/dri $out/lib
   cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/modules/dri/* $out/lib
-  cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/*.so.* $out/lib
+  cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/*.so* $out/lib
   cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/fglrx/fglrx-libGL.so.1.2 $out/lib/fglrx-libGL.so.1.2
 
   cp -r $TMP/arch/$arch/usr/$lib_arch/* $out/lib
@@ -224,3 +225,9 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   rm -fr $out/lib/modules/fglrx # don't think those .a files are needed. They cause failure of the mod
 
 }
+
+for p in $extraDRIlibs; do
+  for lib in $p/lib/*.so*; do
+    ln -s $lib $out/lib/
+  done
+done

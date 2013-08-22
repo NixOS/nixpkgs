@@ -55,12 +55,7 @@ rec {
       };
 
       functionsFromType = opt:
-        if decl ? type && decl.type ? merge then
-          opt
-          // optionalAttrs (decl.type ? merge) { inherit (decl.type) merge; }
-          // optionalAttrs (decl.type ? check) { inherit (decl.type) check; }
-        else
-          opt;
+        opt // (builtins.intersectAttrs { merge = 1; check = 1; } (decl.type or {})); 
 
       addDeclaration = opt: opt // decl;
 
@@ -71,18 +66,18 @@ rec {
               if all opt.check list then
                 opt.merge list
               else
-                throw "One of the definitions has a bad type.";
+                throw "One of option ${name} values is of a bad type.";
           }
         else opt;
 
-      ensureDefaultType = opt:
+      checkDefault = opt:
         if opt ? check && opt ? default then
           opt // {
             default =
               if opt.check opt.default then
                 opt.default
               else
-                throw "The default value has a bad type.";
+                throw "The default value of option ${name} is of a bad type.";
           }
         else opt;
 
@@ -141,7 +136,7 @@ rec {
 
         # override settings
         ensureMergeInputType
-        ensureDefaultType
+        checkDefault
         handleOptionSets
       ];
 

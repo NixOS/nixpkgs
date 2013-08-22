@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     description = "GNU Source-Highlight, source code renderer with syntax highlighting";
     homepage = "http://www.gnu.org/software/src-highlite/";
     license = "GPLv3+";
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
     longDescription =
       ''

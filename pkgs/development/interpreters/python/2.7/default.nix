@@ -164,6 +164,12 @@ let
       deps = [ ncurses ];
     };
 
+    crypt = buildInternalPythonModule {
+      moduleName = "crypt";
+      internalName = "crypt";
+      deps = [ ];
+    };
+
     gdbm = buildInternalPythonModule {
       moduleName = "gdbm";
       internalName = "gdbm";
