@@ -1,15 +1,24 @@
-{stdenv, fetchurl, jre, unzip}:
+{ stdenv, fetchurl, unzip, jre }:
 
 stdenv.mkDerivation {
-  name = "trang-20030619";
+  name = "trang-20091111";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://www.thaiopensource.com/download/trang-20030619.zip;
-    md5 = "9611ea59fda0f62fecc4a5017a72984e";
+    url = https://jing-trang.googlecode.com/files/trang-20091111.zip;
+    sha256 = "16551j63n2y3w9lc7krjazddsab7xvdymbss4rdvx3liz4sg18yq";
   };
 
-  buildInputs = [unzip];
-
   inherit jre;
+
+  buildInputs = [ unzip ];
+
+  meta = with stdenv.lib; {
+    description = "Multi-format schema converter based on RELAX NG";
+    # The homepage is www.thaiopensource.com, but it links to googlecode.com
+    # for downloads and call it the "project site".
+    homepage = http://www.thaiopensource.com/relaxng/trang.html;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+  };
 }
