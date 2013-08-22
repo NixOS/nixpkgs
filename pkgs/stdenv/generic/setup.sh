@@ -236,11 +236,11 @@ export TZ=UTC
 # for instance if we just want to perform a test build/install to a
 # temporary location and write a build report to $out.
 if [ -z "$prefix" ]; then
-    prefix="$out";
+    prefix="$out"
 fi
 
 if [ "$useTempPrefix" = 1 ]; then
-    prefix="$NIX_BUILD_TOP/tmp_prefix";
+    prefix="$NIX_BUILD_TOP/tmp_prefix"
 fi
 
 
@@ -608,7 +608,7 @@ configurePhase() {
         fi
     fi
 
-    if [ -z "$dontAddPrefix" ]; then
+    if [ -z "$dontAddPrefix" -a -n "$prefix" ]; then
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
@@ -702,7 +702,9 @@ patchShebangs() {
 installPhase() {
     runHook preInstall
 
-    mkdir -p "$prefix"
+    if [ -n "$prefix" ]; then
+        mkdir -p "$prefix"
+    fi
 
     installTargets=${installTargets:-install}
     echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
@@ -721,7 +723,7 @@ fixupPhase() {
     runHook preFixup
 
     # Move $out/share{doc,gtk-doc} to the "doc" output, if defined.
-    if [ -n "$doc" -a "${autoMoveDocs-1}" ]; then
+    if [ -n "$doc" -a -n "$out" -a "${autoMoveDocs-1}" ]; then
         for i in share/doc share/gtk-doc; do
             if [ -e $out/$i ]; then
                 mkdir -p $doc/$i
