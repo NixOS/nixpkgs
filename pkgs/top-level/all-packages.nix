@@ -1112,8 +1112,6 @@ let
 
   jing = callPackage ../tools/text/xml/jing { };
 
-  jing_tools = callPackage ../tools/text/xml/jing/jing-script.nix { };
-
   jnettop = callPackage ../tools/networking/jnettop { };
 
   jq = callPackage ../development/tools/jq {};
