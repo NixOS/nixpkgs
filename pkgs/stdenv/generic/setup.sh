@@ -580,7 +580,7 @@ configurePhase() {
         done
     fi
 
-    if [ -z "$dontAddPrefix" ]; then
+    if [ -n "${setOutputConfigureFlags-1}" ]; then
         local _man="$man"
 
         # Put programs in the "bin" output.
@@ -606,7 +606,9 @@ configurePhase() {
             configureFlags="--includedir=$dev/include $configureFlags"
             installFlags="pkgconfigdir=$dev/lib/pkgconfig m4datadir=$dev/share/aclocal aclocaldir=$dev/share/aclocal $installFlags"
         fi
+    fi
 
+    if [ -z "$dontAddPrefix" ]; then
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
