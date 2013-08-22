@@ -888,8 +888,6 @@ showPhaseHeader() {
 
 
 genericBuild() {
-    header "building $out"
-
     if [ -n "$buildCommand" ]; then
         eval "$buildCommand"
         return
@@ -933,8 +931,6 @@ genericBuild() {
 
         stopNest
     done
-
-    stopNest
 }
 
 
