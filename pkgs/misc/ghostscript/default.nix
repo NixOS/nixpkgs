@@ -41,10 +41,10 @@ let
   };
 
   mainlineSrc = rec {
-    name = "ghostscript-9.08";
+    name = "ghostscript-9.09";
     src = fetchurl {
       url = "http://downloads.ghostscript.com/public/${name}.tar.bz2";
-      sha256 = "0k1rvnvmiz456hiixfm130p3irbp1ddd0ycf7rf6bx7nzkp6sxb1";
+      sha256 = "1xwn4zlfb9jz0vrda0vd42qwfqddiav7rdkga0q94jc2q1qddzx6";
     };
     meta = meta_common // {
       homepage = "http://www.ghostscript.com/";
