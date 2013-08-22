@@ -19,7 +19,7 @@ rec {
 
 
   # name (name of the type)
-  # check (boolean function)
+  # check (check the config value. Before returning false it should trace the bad value eg using traceValIfNot)
   # merge (default merge function)
   # iter (iterate on all elements contained in this type)
   # fold (fold all elements contained in this type)
@@ -196,8 +196,21 @@ rec {
       hasOptions = false;
     };
 
-    # !!! this should be a type constructor that takes the options as
-    # an argument.
+    # usually used with listOf, attrsOf, loaOf like this:
+    # users = mkOption {
+    #   type = loaOf optionSet;
+    #
+    #   # you can omit the list if there is one element only
+    #   options = [ {
+    #     name = mkOption {
+    #       description = "name of the user"
+    #       ...
+    #     };
+    #     # more options here
+    #   } { more options } ];
+    # }
+    # TODO: !!! document passing options as an argument to optionSet,
+    # deprecate the current approach.
     optionSet = mkOptionType {
       name = "option set";
       # merge is done in "options.nix > addOptionMakeUp > handleOptionSets"
