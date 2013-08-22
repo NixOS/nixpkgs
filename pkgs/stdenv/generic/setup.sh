@@ -275,23 +275,28 @@ export NIX_BUILD_CORES
 # Misc. helper functions.
 
 
-stripDirs() {
-    local dirs="$1"
+stripDir() {
+    local dir="$1"
     local stripFlags="$2"
-    local dirsNew=
 
-    for d in ${dirs}; do
-        if [ -d "$prefix/$d" ]; then
-            dirsNew="${dirsNew} $prefix/$d "
-        fi
-    done
-    dirs=${dirsNew}
-
-    if [ -n "${dirs}" ]; then
-        header "stripping (with flags $stripFlags) in $dirs"
-        find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
+    if [ -e "$dir" ]; then
+        header "stripping (with flags $stripFlags) in $dir"
+        find "$dir" -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
         stopNest
     fi
+}
+
+
+stripDirs() {
+    local prefix="$1"
+    local subdirs="$2"
+    local stripFlags="$3"
+
+    for d in $subdirs; do
+        if [ -d "$prefix/$d" ]; then
+            stripDir "$prefix/$d" "$stripFlags"
+        fi
+    done
 }
 
 
@@ -806,12 +811,12 @@ fixupPrefix() {
     if [ -z "$dontStrip" ]; then
         stripDebugList=${stripDebugList:-lib lib32 lib64 libexec bin sbin}
         if [ -n "$stripDebugList" ]; then
-            stripDirs "$stripDebugList" "${stripDebugFlags:--S}"
+            stripDirs "$prefix" "$stripDebugList" "${stripDebugFlags:--S}"
         fi
 
         stripAllList=${stripAllList:-}
         if [ -n "$stripAllList" ]; then
-            stripDirs "$stripAllList" "${stripAllFlags:--s}"
+            stripDirs "$prefix" "$stripAllList" "${stripAllFlags:--s}"
         fi
     fi
 
