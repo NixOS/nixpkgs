@@ -576,6 +576,32 @@ configurePhase() {
     fi
 
     if [ -z "$dontAddPrefix" ]; then
+        local _man="$man"
+
+        # Put programs in the "bin" output.
+        if [ -n "$bin" ]; then
+            configureFlags="--bindir=$bin/bin --sbindir=$bin/sbin $configureFlags"
+            _man="${_man:-$bin}"
+        fi
+
+        # Put man and info pages in the "man" output if it exists,
+        # otherwise in the "bin" output.
+        if [ -n "$_man" ]; then
+            configureFlags="--mandir=$_man/share/man --infodir=$_man/share/info $configureFlags"
+        fi
+
+        # Put libraries in the "lib" output.
+        if [ -n "$lib" ]; then
+            configureFlags="--libdir=$lib/lib $configureFlags"
+        fi
+
+        # Put development stuff (headers, pkg-config files, etc.) in
+        # the "dev" output.
+        if [ -n "$dev" ]; then
+            configureFlags="--includedir=$dev/include $configureFlags"
+            installFlags="pkgconfigdir=$dev/lib/pkgconfig m4datadir=$dev/share/aclocal aclocaldir=$dev/share/aclocal $installFlags"
+        fi
+
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
@@ -687,7 +713,63 @@ installPhase() {
 fixupPhase() {
     runHook preFixup
 
-    # Put man/doc/info under $out/share.
+    # Move $out/share{doc,gtk-doc} to the "doc" output, if defined.
+    if [ -n "$doc" -a "${autoMoveDocs-1}" ]; then
+        for i in share/doc share/gtk-doc; do
+            if [ -e $out/$i ]; then
+                mkdir -p $doc/$i
+                mv $out/$i/* $doc/$i/
+                rmdir $out/$i
+            fi
+        done
+        [ -d $out/share ] && rmdir --ignore-fail-on-non-empty $out/share
+    fi
+
+    # Apply fixup to each output.
+    local output
+    for output in $outputs; do
+        fixupPrefix ${!output}
+    done
+
+    # If we have a "dev" output, propagate the other default outputs
+    # from it.  That way, including a "dev" output in buildInputs also
+    # gets you the other outputs.
+    if [ -n "$dev" ]; then
+        propagatedNativeBuildInputs="$(echo $out $lib $bin $propagatedNativeBuildInputs)"
+    fi
+
+    # Write the propagated build inputs to "dev" if it exists, "out"
+    # otherwise.
+    local _dev="${dev:-$out}"
+
+    if [ -n "$propagatedBuildInputs" ]; then
+        mkdir -p "$_dev/nix-support"
+        echo "$propagatedBuildInputs" > "$_dev/nix-support/propagated-build-inputs"
+    fi
+
+    if [ -n "$propagatedNativeBuildInputs" ]; then
+        mkdir -p "$_dev/nix-support"
+        echo "$propagatedNativeBuildInputs" > "$_dev/nix-support/propagated-native-build-inputs"
+    fi
+
+    if [ -n "$propagatedUserEnvPkgs" ]; then
+        mkdir -p "$out/nix-support"
+        echo "$propagatedUserEnvPkgs" > "$out/nix-support/propagated-user-env-packages"
+    fi
+
+    if [ -n "$setupHook" ]; then
+        mkdir -p "$out/nix-support"
+        substituteAll "$setupHook" "$out/nix-support/setup-hook"
+    fi
+
+    runHook postFixup
+}
+
+
+fixupPrefix() {
+    local prefix="$1"
+
+    # Put man/doc/info under share/.
     forceShare=${forceShare:=man doc info}
     if [ -n "$forceShare" ]; then
         for d in $forceShare; do
@@ -708,7 +790,7 @@ fixupPhase() {
 
     if [ -z "$dontGzipMan" ]; then
         GLOBIGNORE=.:..:*.gz:*.bz2
-        for f in $out/share/man/*/* $out/share/man/*/*/*; do
+        for f in $prefix/share/man/*/* $prefix/share/man/*/*/*; do
             if [ -f $f ]; then
                 if gzip -c $f > $f.gz; then
                     rm $f
@@ -740,28 +822,6 @@ fixupPhase() {
     if [ -z "$dontPatchShebangs" ]; then
         patchShebangs "$prefix"
     fi
-
-    if [ -n "$propagatedBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
-    fi
-
-    if [ -n "$propagatedNativeBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
-    fi
-
-    if [ -n "$propagatedUserEnvPkgs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedUserEnvPkgs" > "$out/nix-support/propagated-user-env-packages"
-    fi
-
-    if [ -n "$setupHook" ]; then
-        mkdir -p "$out/nix-support"
-        substituteAll "$setupHook" "$out/nix-support/setup-hook"
-    fi
-
-    runHook postFixup
 }
 
 
