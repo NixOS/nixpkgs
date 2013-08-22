@@ -776,6 +776,9 @@ fixupPrefix() {
 
     if ! [ -d "$prefix" ]; then return; fi
 
+    # Make sure everything is writable so "strip" et al. work.
+    chmod -R u+w "$prefix"
+
     # Put man/doc/info under share/.
     forceShare=${forceShare:=man doc info}
     if [ -n "$forceShare" ]; then
