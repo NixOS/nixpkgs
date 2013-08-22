@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
-, dbus, libusb1, acl }:
+, dbus, libusb, acl }:
 
 let version = "1.5.4"; in
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   # FIXME: Split off the cups client library.
   outputs = [ "dev" "out" "doc" "man" ];
 
-  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb1 ]
+  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]
     ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus.libs acl ] ;
 
   propagatedBuildInputs = [ openssl ];

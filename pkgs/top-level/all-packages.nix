@@ -9630,6 +9630,7 @@ let
 
   cups = callPackage ../misc/cups {
     stdenv = stdenvMulti;
+    libusb = libusb1;
   };
 
   cups_pdf_filter = callPackage ../misc/cups/pdf-filter.nix { };
