@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0blmblvjr35xajr0a07zcd58lk6x2hzympx17biw2mcym9kcarql";
   };
 
+  patches = [ ./alt.patch ];
+
   buildInputs = [ intltool pkgconfig glib gtk ncurses ] ++
                 stdenv.lib.optionals pythonSupport [python pygtk];
                 
