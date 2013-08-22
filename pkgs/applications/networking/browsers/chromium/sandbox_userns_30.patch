@@ -1,4 +1,4 @@
-commit b9a1fa30eb3296b169f51ffa8ee05513c5c1dbae
+commit 41510de6ae32e6161073992bd1243f7f33148a06
 Author: aszlig <aszlig@redmoonstudios.org>
 Date:   Thu May 16 14:17:56 2013 +0200
 
@@ -43,10 +43,10 @@ index 45b1053..ce71418 100644
  
  #if defined(OS_CHROMEOS)
 diff --git a/base/process/launch_posix.cc b/base/process/launch_posix.cc
-index 336633c..4b50a5d 100644
+index 52e149c..312f835 100644
 --- a/base/process/launch_posix.cc
 +++ b/base/process/launch_posix.cc
-@@ -36,6 +36,13 @@
+@@ -37,6 +37,13 @@
  #include "base/threading/platform_thread.h"
  #include "base/threading/thread_restrictions.h"
  
@@ -60,12 +60,11 @@ index 336633c..4b50a5d 100644
  #if defined(OS_CHROMEOS)
  #include <sys/ioctl.h>
  #endif
-@@ -395,8 +402,19 @@ bool LaunchProcess(const std::vector<std::string>& argv,
+@@ -416,13 +423,23 @@ bool LaunchProcess(const std::vector<std::string>& argv,
  
    pid_t pid;
  #if defined(OS_LINUX)
 -  if (options.clone_flags) {
--    pid = syscall(__NR_clone, options.clone_flags, 0, 0, 0);
 +  int map_pipe_fd[2];
 +  int flags = options.clone_flags;
 +
@@ -78,11 +77,18 @@ index 336633c..4b50a5d 100644
 +  }
 +
 +  if (options.clone_flags || options.new_user_namespace) {
+     // Signal handling in this function assumes the creation of a new
+     // process, so we check that a thread is not being created by mistake
+     // and that signal handling follows the process-creation rules.
+-    RAW_CHECK(
+-        !(options.clone_flags & (CLONE_SIGHAND | CLONE_THREAD | CLONE_VM)));
+-    pid = syscall(__NR_clone, options.clone_flags, 0, 0, 0);
++    RAW_CHECK(!(flags & (CLONE_SIGHAND | CLONE_THREAD | CLONE_VM)));
 +    pid = syscall(__NR_clone, flags, 0, 0, 0);
    } else
  #endif
    {
-@@ -409,6 +427,21 @@ bool LaunchProcess(const std::vector<std::string>& argv,
+@@ -440,6 +457,21 @@ bool LaunchProcess(const std::vector<std::string>& argv,
    } else if (pid == 0) {
      // Child process
  
@@ -104,7 +110,7 @@ index 336633c..4b50a5d 100644
      // DANGER: fork() rule: in the child, if you don't end up doing exec*(),
      // you call _exit() instead of exit(). This is because _exit() does not
      // call any previously-registered (in the parent) exit handlers, which
-@@ -523,6 +556,40 @@ bool LaunchProcess(const std::vector<std::string>& argv,
+@@ -555,6 +587,40 @@ bool LaunchProcess(const std::vector<std::string>& argv,
      _exit(127);
    } else {
      // Parent process
@@ -209,10 +215,10 @@ index bb84e62..bce0d18 100644
  
    if (using_suid_sandbox_) {
 diff --git a/content/zygote/zygote_main_linux.cc b/content/zygote/zygote_main_linux.cc
-index dcea4c0..c06b4ae 100644
+index 1f0e9f5..ade5aab 100644
 --- a/content/zygote/zygote_main_linux.cc
 +++ b/content/zygote/zygote_main_linux.cc
-@@ -398,6 +398,13 @@ static bool EnterSandbox(sandbox::SetuidSandboxClient* setuid_sandbox,
+@@ -420,6 +420,13 @@ static bool EnterSandbox(sandbox::SetuidSandboxClient* setuid_sandbox,
        *has_started_new_init = true;
      }
  

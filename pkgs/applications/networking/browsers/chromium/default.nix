@@ -137,6 +137,11 @@ in stdenv.mkDerivation rec {
   '' + optionalString (versionOlder sourceInfo.version "29.0.0.0") ''
     sed -i -e '/struct SECItemArray/,/^};/d' \
       net/third_party/nss/ssl/bodge/secitem_array.c
+  '' + optionalString (!versionOlder sourceInfo.version "30.0.0.0") ''
+    sed -i -e '/base::FilePath exe_dir/,/^ *} *$/c \
+      sandbox_binary = \
+        base::FilePath("'"${libExecPath}/${packageName}_sandbox"'");
+    ' content/browser/browser_main_loop.cc
   '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
