@@ -2,16 +2,18 @@
 , pythonSupport ? false, python, pygtk}:
 
 stdenv.mkDerivation rec {
-  name = "vte-0.28.0";
-  
+  name = "vte-0.28.2";
+
   src = fetchurl {
     url = "mirror://gnome/sources/vte/0.28/${name}.tar.bz2";
-    sha256 = "0blmblvjr35xajr0a07zcd58lk6x2hzympx17biw2mcym9kcarql";
+    sha256 = "00zrip28issgmz2cqk5k824cbqpbixi5x7k88zxksdqpnq1f414d";
   };
+
+  patches = [ ./alt.patch ];
 
   buildInputs = [ intltool pkgconfig glib gtk ncurses ] ++
                 stdenv.lib.optionals pythonSupport [python pygtk];
-                
+
   configureFlags = ''
     ${if pythonSupport then "--enable-python" else "--disable-python"}
   '';
