@@ -47,6 +47,7 @@ let
         --replace "libraries = ['curses']" "libraries = ['ncurses']"
     '';
 
+    setupHook = ./setup-hook.sh;
 
     doCheck = true;
     checkPhase = ''
