@@ -3,14 +3,14 @@
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils
 }:
 
-let version = "1.1.0"; in
+let version = "1.1.1"; in
 
 stdenv.mkDerivation {
   name = "libvirt-${version}";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/libvirt-${version}.tar.gz";
-    sha256 = "0a39cwvzwf79gv3zw5mwp9q9n792rr1m0rl9ji39bdgcjxb7d7nf";
+    sha256 = "1hi27d5pld925g1azx8jq0wv557wpkd6xrq6lzm91cdr2lg1wvyw";
   };
 
   buildInputs =
