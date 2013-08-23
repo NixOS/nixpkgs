@@ -44,7 +44,7 @@ let
         --replace "/usr/include/ncurses/curses.h" "${ncurses}/include/curses.h" \
         --replace "ncurses/curses.h" "${ncurses}/include/curses.h" \
         --replace "ncurses/term.h" "${ncurses}/include/term.h" \
-        --replace "libraries = ['curses']" "libraries = ['ncurses']"
+        --replace "libraries=['curses']" "libraries=['ncurses']"
     '';
 
     setupHook = ./setup-hook.sh;
