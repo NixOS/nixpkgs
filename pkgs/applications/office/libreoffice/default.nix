@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
     for a in sbase scalc sdraw smath swriter spadmin simpress soffice; do
       ln -s $out/lib/libreoffice/program/$a $out/bin/$a
     done
+    ln -s $out/bin/soffice $out/bin/libreoffice
   '';
 
   configureFlags = [
