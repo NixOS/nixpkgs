@@ -5,8 +5,8 @@ assert zlibSupport -> zlib != null;
 
 let
 
-  majorVersion = "2.0";
-  version = "${majorVersion}.2";
+  majorVersion = "2.1";
+  version = "${majorVersion}";
   pythonVersion = "2.7";
   libPrefix = "pypy${majorVersion}";
 
@@ -17,7 +17,7 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/downloads/pypy-${version}-src.tar.bz2";
-      sha256 = "0g2cajs6m3yf0lak5f18ccs6j77cf5xvbm4h6y5l1qlqdc6wk48r";
+      sha256 = "05vz7ya6jh5pw5yl607cf1rvdhwxj5d4ip0vpgb1gc9rjxn0dcri";
     };
 
     buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite ]
