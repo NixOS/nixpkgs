@@ -3138,6 +3138,25 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
 
+  muttils = buildPythonPackage (rec {
+    name = "muttils-1.3";
+
+    src = fetchurl {
+      url = http://www.blacktrash.org/hg/muttils/archive/8bb26094df06.tar.bz2;
+      sha256 = "1a4kxa0fpgg6rdj5p4kggfn8xpniqh8v5kbiaqc6wids02m7kag6";
+    };
+
+    # Tests don't work
+    doCheck = false;
+
+    meta = {
+      description = "Utilities for use with console mail clients, like mutt";
+      homepage = http://www.blacktrash.org/hg/muttils;
+      license = "GPLv2+";
+    };
+  });
+
+
   MySQL_python = buildPythonPackage {
     name = "MySQL-python-1.2.3";
 
