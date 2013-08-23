@@ -9,13 +9,21 @@ let whenPatched = stdenv.lib.optionalString apngSupport;
       sha256 = "0fy7p197ilr9phwqqk9h91s1mc28r6gj0w2ilrw5liagi71z75j1";
     };
 
-in stdenv.mkDerivation (rec {
+in stdenv.mkDerivation rec {
   name = "libpng" + whenPatched "-apng" + "-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/libpng-${version}.tar.xz";
     sha256 = "1pljkqjqgyz8c32w8fipd9f0v2gcyhah2ypp0h7ya1r1q85sk5qw";
   };
+
+  outputs = [ "dev" "out" "man" ];
+
+  preConfigure = "export bin=$dev";
+
+  postPatch = stdenv.lib.optionalString apngSupport ''
+    gunzip < ${patch_src} | patch -Np1
+  '';
 
   propagatedBuildInputs = [ zlib ];
 
@@ -29,10 +37,4 @@ in stdenv.mkDerivation (rec {
     license = "free-non-copyleft"; # http://www.libpng.org/pub/png/src/libpng-LICENSE.txt
     platforms = stdenv.lib.platforms.all;
   };
-} // stdenv.lib.optionalAttrs apngSupport {
-
-  postPatch = ''
-    gunzip < ${patch_src} | patch -Np1
-  '';
-
-})
+}
