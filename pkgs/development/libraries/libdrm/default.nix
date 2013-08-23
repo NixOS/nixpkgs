@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qbnpi64hyqzd650hj6jki1d50pzypdhj3rw9m3whwbqly110rz0";
   };
 
+  outputs = [ "dev" "out" ];
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libpthreadstubs libpciaccess ]
     ++ stdenv.lib.optional stdenv.isLinux udev;
