@@ -129,12 +129,13 @@ in
 
     users.extraUsers.transmission = {
       group = "transmission";
+      uid = config.ids.uids.transmission;
       description = "Transmission BitTorrent user";
       home = homeDir;
       createHome = true;
     };
 
-    users.extraGroups.transmission = {};
+    users.extraGroups.transmission.gid = config.ids.gids.transmission;
 
     # AppArmor profile
     security.apparmor.profiles = mkIf (config.security.apparmor.enable && cfg.apparmor) [

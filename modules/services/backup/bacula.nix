@@ -396,12 +396,13 @@ in {
 
     users.extraUsers.bacula = {
       group = "bacula";
+      uid = config.ids.uids.bacula;
       home = "${libDir}";
       createHome = true;
       description = "Bacula Daemons user";
       shell = "${pkgs.bash}/bin/bash";
     };
 
-    users.extraGroups.bacula = {};
+    users.extraGroups.bacula.gid = config.ids.gids.bacula;
   };
 }

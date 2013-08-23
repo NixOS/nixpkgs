@@ -161,10 +161,11 @@ in {
 
     users.extraUsers.almir = {
       group = "almir";
+      uid = config.ids.uids.almir;
       createHome = true;
       shell = "${pkgs.bash}/bin/bash";
     };
 
-    users.extraGroups.almir = {};
+    users.extraGroups.almir.gid = config.ids.gids.almir;
   };
 }

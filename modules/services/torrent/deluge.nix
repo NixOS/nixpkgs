@@ -54,11 +54,12 @@ in {
 
     users.extraUsers.deluge = {
       group = "deluge";
+      uid = config.ids.uids.deluge;
       home = "/var/lib/deluge/";
       createHome = true;
       description = "Deluge Daemon user";
     };
 
-    users.extraGroups.deluge = {};
+    users.extraGroups.deluge.gid = config.ids.gids.deluge;
   };
 }

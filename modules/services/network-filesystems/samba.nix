@@ -188,16 +188,13 @@ in
       }
 
       (mkIf config.services.samba.enable {
-        users.extraUsers = singleton
-          { name = user;
-            description = "Samba service user";
-            group = group;
-          };
+        users.extraUsers.smbguest = {
+          description = "Samba service user";
+          group = group;
+          uid = config.ids.uids.smbguest;
+        };
 
-        users.extraGroups = singleton
-          { name = group;
-          };
-
+        users.extraGroups.smbguest.gid = config.ids.uids.smbguest;
 
         systemd = {
           targets.samba = {

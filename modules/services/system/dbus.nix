@@ -103,18 +103,14 @@ in
         target = "dbus-1";
       };
 
-    users.extraUsers = singleton
-      { name = "messagebus";
-        uid = config.ids.uids.messagebus;
-        description = "D-Bus system message bus daemon user";
-        home = homeDir;
-        group = "messagebus";
-      };
+    users.extraUsers.messagebus = {
+      uid = config.ids.uids.messagebus;
+      description = "D-Bus system message bus daemon user";
+      home = homeDir;
+      group = "messagebus";
+    };
 
-    users.extraGroups = singleton
-      { name = "messagebus";
-        gid = config.ids.gids.messagebus;
-      };
+    users.extraGroups.messagebus.gid = config.ids.gids.messagebus;
 
     # FIXME: these are copied verbatim from the dbus source tree.  We
     # should install and use the originals.

@@ -38,7 +38,7 @@ optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
 
     boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
 
-    users.extraGroups = singleton { name = "vboxsf"; };
+    users.extraGroups.vboxsf.gid = config.ids.gids.vboxsf;
 
     jobs.virtualbox =
       { description = "VirtualBox Guest Services";

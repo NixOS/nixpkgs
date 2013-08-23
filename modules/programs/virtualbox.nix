@@ -9,7 +9,7 @@ let virtualbox = config.boot.kernelPackages.virtualbox; in
   boot.extraModulePackages = [ virtualbox ];
   environment.systemPackages = [ virtualbox ];
 
-  users.extraGroups = singleton { name = "vboxusers"; };
+  users.extraGroups.vboxusers.gid = config.ids.gids.vboxusers;
 
   services.udev.extraRules =
     ''

@@ -170,8 +170,9 @@ in
     users.extraUsers.lighttpd = {
       group = "lighttpd";
       description = "lighttpd web server privilege separation user";
+      uid = config.ids.uids.lighttpd;
     };
 
-    users.extraGroups.lighttpd = {};
+    users.extraGroups.lighttpd.gid = config.ids.gids.lighttpd;
   };
 }

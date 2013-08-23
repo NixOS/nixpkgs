@@ -154,13 +154,14 @@ in
         host  all all ::1/128      md5
       '';
 
-    users.extraUsers = singleton
+    users.extraUsers.postgres =
       { name = "postgres";
+        uid = config.ids.uids.postgres;
+        group = "postgres";
         description = "PostgreSQL server user";
       };
 
-    users.extraGroups = singleton
-      { name = "postgres"; };
+    users.extraGroups.postgres.gid = config.ids.gids.postgres;
 
     environment.systemPackages = [postgresql];
 

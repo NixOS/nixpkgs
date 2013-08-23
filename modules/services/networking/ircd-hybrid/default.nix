@@ -115,10 +115,11 @@ in
     users.extraUsers = singleton
       { name = "ircd";
         description = "IRCD owner";
+        group = "ircd";
+        uid = config.ids.uids.ircd;
       };
 
-    users.extraGroups = singleton
-      { name = "ircd"; };
+    users.extraGroups.ircd.gid = config.ids.gids.ircd;
 
     jobs.ircd_hybrid =
       { name = "ircd-hybrid";

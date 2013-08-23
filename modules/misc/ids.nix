@@ -82,6 +82,18 @@ in
     iodined = 66;
     graphite = 68;
     statsd = 69;
+    transmission = 70;
+    postgres = 71;
+    smbguest = 74;
+    varnish = 75;
+    dd-agent = 76;
+    lighttpd = 77;
+    lightdm = 78;
+    freenet = 79;
+    ircd = 80;
+    bacula = 81;
+    almir = 82;
+    deluge = 83;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -147,6 +159,20 @@ in
     iodined = 66;
     libvirtd = 67;
     graphite = 68;
+    transmission = 70;
+    postgres = 71;
+    vboxusers = 72;
+    vboxsf = 73;
+    smbguest = 74;
+    varnish = 75;
+    dd-agent = 76;
+    lighttpd = 77;
+    lightdm = 78;
+    freenet = 79;
+    ircd = 80;
+    bacula = 81;
+    almir = 82;
+    deluge = 83;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 

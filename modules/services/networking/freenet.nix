@@ -55,9 +55,10 @@ in
       description = "Freenet daemon user";
       home = varDir;
       createHome = true;
+      uid = config.ids.uids.freenet;
     };
 
-    users.extraGroups.freenet = {};
+    users.extraGroups.freenet.gid = config.ids.gids.freenet;
   };
 
 }

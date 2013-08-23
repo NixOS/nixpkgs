@@ -46,12 +46,13 @@ in {
 
     users.extraUsers."dd-agent" = {
       description = "Datadog Agent User";
+      uid = config.ids.uids.dd-agent;
       group = "dd-agent";
       home = "/var/log/datadog/";
       createHome = true;
     };
 
-    users.extraGroups."dd-agent" = { };
+    users.extraGroups.dd-agent.gid = config.ids.gids.dd-agent;
 
     systemd.services.dd-agent = {
       description = "Datadog agent monitor";

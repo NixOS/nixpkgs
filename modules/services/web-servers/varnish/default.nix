@@ -47,8 +47,9 @@ with pkgs.lib;
 
     users.extraUsers.varnish = {
       group = "varnish";
+      uid = config.ids.uids.varnish;
     };
 
-    users.extraGroups.varnish = {};
+    users.extraGroups.varnish.gid = config.ids.uids.varnish;
   };
 }
