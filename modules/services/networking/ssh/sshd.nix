@@ -15,29 +15,6 @@ let
     v == "forced-commands-only" ||
     v == "no";
 
-  hostKeyTypeNames = {
-    dsa1024  = "dsa"; # DSA has a key size limitation due to standards
-    rsa3072  = "rsa";
-    ecdsa521 = "ecdsa";
-  };
-
-  hostKeyTypeBits = {
-    dsa1024  = 1024; # =80 bits of security
-    rsa3072  = 3072; # =128 bits of security
-    ecdsa521 = 521;  # =256 bits of security
-  };
-
-  # equivalent to 112 bit of security strength. Anything below this is very unsafe.
-  hostKeyTypeSafeBits = {
-    dsa1024  = 2048;
-    rsa3072  = 2048;
-    ecdsa521 = 255;
-  };
-
-  hktn = attrByPath [cfg.hostKeyType] (throw "unknown host key type `${cfg.hostKeyType}'") hostKeyTypeNames;
-  hktb = attrByPath [cfg.hostKeyType] (throw "unknown host key type `${cfg.hostKeyType}'") hostKeyTypeBits;
-  hktsb = attrByPath [cfg.hostKeyType] (throw "unknown host key type `${cfg.hostKeyType}'") hostKeyTypeSafeBits;
-
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
   knownHostsFile = pkgs.writeText "ssh_known_hosts" (
@@ -176,22 +153,23 @@ in
         '';
       };
 
-      hostKeyType = mkOption {
-        default = "dsa1024";
+      hostKeys = mkOption {
+        default =
+          [ { path = "/etc/ssh/ssh_host_dsa_key";
+              type = "dsa";
+              bits = 1024;
+            }
+            { path = "/etc/ssh/ssh_host_ecdsa_key";
+              type = "ecdsa";
+              bits = 521;
+            }
+          ];
         description = ''
-          Type of host key to generate (dsa1024/rsa3072/ecdsa521), if
-          the file specified by <literal>hostKeyPath</literal> does not
-          exist when the service starts.
-        '';
-      };
-
-      hostKeyPath = mkOption {
-        default = "/etc/ssh/ssh_host_${hktn}_key";
-        description = ''
-          Path to the server's private key. If there is no key file
-          on this path, it will be generated when the service is
-          started for the first time. Otherwise, the ssh daemon will
-          use the specified key directly in-place.
+          NixOS can automatically generate SSH host keys.  This option
+          specifies the path, type and size of each key.  See
+          <citerefentry><refentrytitle>ssh-keygen</refentrytitle>
+          <manvolnum>1</manvolnum></citerefentry> for supported types
+          and sizes.
         '';
       };
 
@@ -252,7 +230,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.openssh.enable {
+  config = mkIf cfg.enable {
 
     users.extraUsers = singleton
       { name = "sshd";
@@ -286,21 +264,16 @@ in
           ''
             mkdir -m 0755 -p /etc/ssh
 
-            if ! test -f ${cfg.hostKeyPath}; then
-                ssh-keygen -t ${hktn} -b ${toString hktb} -f ${cfg.hostKeyPath} -N ""
-            fi
-
-            result=$(ssh-keygen -lf ${cfg.hostKeyPath}|awk '{ print ($1>=${toString hktsb}?1:0)}')
-            if [ "$result" -ne "1" ]; then
-              ERROR="SECURITY ALERT: SSH Host Key is too weak. Generate a strong key NOW."
-              echo "$ERROR"
-              echo "$ERROR" > /dev/console
-            fi
+            ${flip concatMapStrings cfg.hostKeys (k: ''
+              if ! [ -f "${k.path}" ]; then
+                  ssh-keygen -t "${k.type}" -b "${toString k.bits}" -f "${k.path}" -N ""
+              fi
+            '')}
           '';
 
         serviceConfig =
           { ExecStart =
-              "${pkgs.openssh}/sbin/sshd -h ${cfg.hostKeyPath} " +
+              "${pkgs.openssh}/sbin/sshd " +
               "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
             Restart = "always";
             Type = "forking";
@@ -351,6 +324,10 @@ in
         PrintMotd no # handled by pam_motd
 
         AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
+
+        ${flip concatMapStrings cfg.hostKeys (k: ''
+          HostKey ${k.path}
+        '')}
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
