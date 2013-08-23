@@ -16,19 +16,27 @@ let
     v == "no";
 
   hostKeyTypeNames = {
-    dsa1024  = "dsa";
-    rsa1024  = "rsa";
+    dsa1024  = "dsa"; # DSA has a key size limitation due to standards
+    rsa3072  = "rsa";
     ecdsa521 = "ecdsa";
   };
 
   hostKeyTypeBits = {
-    dsa1024  = 1024;
-    rsa1024  = 1024;
-    ecdsa521 = 521;
+    dsa1024  = 1024; # =80 bits of security
+    rsa3072  = 3072; # =128 bits of security
+    ecdsa521 = 521;  # =256 bits of security
+  };
+
+  # equivalent to 112 bit of security strength. Anything below this is very unsafe.
+  hostKeyTypeSafeBits = {
+    dsa1024  = 2048;
+    rsa3072  = 2048;
+    ecdsa521 = 255;
   };
 
   hktn = attrByPath [cfg.hostKeyType] (throw "unknown host key type `${cfg.hostKeyType}'") hostKeyTypeNames;
   hktb = attrByPath [cfg.hostKeyType] (throw "unknown host key type `${cfg.hostKeyType}'") hostKeyTypeBits;
+  hktsb = attrByPath [cfg.hostKeyType] (throw "unknown host key type `${cfg.hostKeyType}'") hostKeyTypeSafeBits;
 
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
@@ -171,7 +179,7 @@ in
       hostKeyType = mkOption {
         default = "dsa1024";
         description = ''
-          Type of host key to generate (dsa1024/rsa1024/ecdsa521), if
+          Type of host key to generate (dsa1024/rsa3072/ecdsa521), if
           the file specified by <literal>hostKeyPath</literal> does not
           exist when the service starts.
         '';
@@ -269,7 +277,7 @@ in
 
         stopIfChanged = false;
 
-        path = [ pkgs.openssh ];
+        path = [ pkgs.openssh pkgs.gawk ];
 
         environment.LD_LIBRARY_PATH = nssModulesPath;
         environment.LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
@@ -280,6 +288,13 @@ in
 
             if ! test -f ${cfg.hostKeyPath}; then
                 ssh-keygen -t ${hktn} -b ${toString hktb} -f ${cfg.hostKeyPath} -N ""
+            fi
+
+            result=$(ssh-keygen -lf ${cfg.hostKeyPath}|awk '{ print ($1>=${toString hktsb}?1:0)}')
+            if [ "$result" -ne "1" ]; then
+              ERROR="SECURITY ALERT: SSH Host Key is too weak. Generate a strong key NOW."
+              echo "$ERROR"
+              echo "$ERROR" > /dev/console
             fi
           '';
 
