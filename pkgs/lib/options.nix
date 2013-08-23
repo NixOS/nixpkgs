@@ -66,7 +66,7 @@ rec {
               if all opt.check list then
                 opt.merge list
               else
-                throw "One of option ${name} values is of a bad type.";
+                throw "One of option ${name} values has a bad type.";
           }
         else opt;
 
@@ -77,7 +77,7 @@ rec {
               if opt.check opt.default then
                 opt.default
               else
-                throw "The default value of option ${name} is of a bad type.";
+                throw "The default value of option ${name} has a bad type.";
           }
         else opt;
 
