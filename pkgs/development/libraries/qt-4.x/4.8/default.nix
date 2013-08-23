@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll
 , libXrender, libXinerama, libXcursor, libXmu , libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig
-, zlib, libjpeg, libpng, libmng, which, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
+, zlib, libjpeg, libpng, libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu
 , mysql, postgresql, sqlite
 , perl, coreutils, libXi
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
         src = ./dlopen-absolute-paths.diff;
         inherit cups icu libXfixes;
         glibc = stdenv.gcc.libc;
-        openglDriver = mesa.driverLink;
+        openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
       })
     ] ++ stdenv.lib.optional gtkStyle (substituteAll {
         src = ./dlopen-gtkstyle.diff;
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
       libSM zlib libpng openssl dbus.libs freetype fontconfig glib ]
         # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
-    ++ optional (stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms) mesa_glu
+    ++ optional mesaSupported mesa_glu
     ++ optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
     ++ optionals (buildWebkit || buildMultimedia) [ gstreamer gst_plugins_base ];
 
