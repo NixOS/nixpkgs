@@ -128,10 +128,6 @@ stdenv.mkDerivation rec {
       for i in $libudev/lib/*.la $libudev/lib/pkgconfig/*.pc; do
         substituteInPlace $i --replace $out $libudev
       done
-
-      # FIXME: move into stdenv
-      prefix="$libudev" patchELF
-      prefix="$libudev" stripDirs "lib" "''${stripDebugFlags:--S}"
     ''; # */
 
   enableParallelBuilding = true;

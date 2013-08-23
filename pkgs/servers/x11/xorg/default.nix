@@ -579,7 +579,7 @@ let
     buildInputs = [pkgconfig windowswmproto libX11 libXext xextproto ];
   })) // {inherit windowswmproto libX11 libXext xextproto ;};
 
-  libX11 = (stdenvMulti.mkDerivation ((if overrides ? libX11 then overrides.libX11 else x: x) {
+  libX11 = (stdenv.mkDerivation ((if overrides ? libX11 then overrides.libX11 else x: x) {
     name = "libX11-1.6.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -600,7 +600,7 @@ let
     buildInputs = [pkgconfig scrnsaverproto libX11 libXext xextproto ];
   })) // {inherit scrnsaverproto libX11 libXext xextproto ;};
 
-  libXau = (stdenvMulti.mkDerivation ((if overrides ? libXau then overrides.libXau else x: x) {
+  libXau = (stdenv.mkDerivation ((if overrides ? libXau then overrides.libXau else x: x) {
     name = "libXau-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -621,7 +621,7 @@ let
     buildInputs = [pkgconfig libX11 libXext xextproto libXmu libXpm xproto libXt ];
   })) // {inherit libX11 libXext xextproto libXmu libXpm xproto libXt ;};
 
-  libXcomposite = (stdenvMulti.mkDerivation ((if overrides ? libXcomposite then overrides.libXcomposite else x: x) {
+  libXcomposite = (stdenv.mkDerivation ((if overrides ? libXcomposite then overrides.libXcomposite else x: x) {
     name = "libXcomposite-0.4.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -632,7 +632,7 @@ let
     buildInputs = [pkgconfig compositeproto libX11 libXfixes xproto ];
   })) // {inherit compositeproto libX11 libXfixes xproto ;};
 
-  libXcursor = (stdenvMulti.mkDerivation ((if overrides ? libXcursor then overrides.libXcursor else x: x) {
+  libXcursor = (stdenv.mkDerivation ((if overrides ? libXcursor then overrides.libXcursor else x: x) {
     name = "libXcursor-1.1.14";
     builder = ./builder.sh;
     src = fetchurl {
@@ -643,7 +643,7 @@ let
     buildInputs = [pkgconfig fixesproto libX11 libXfixes xproto libXrender ];
   })) // {inherit fixesproto libX11 libXfixes xproto libXrender ;};
 
-  libXdamage = (stdenvMulti.mkDerivation ((if overrides ? libXdamage then overrides.libXdamage else x: x) {
+  libXdamage = (stdenv.mkDerivation ((if overrides ? libXdamage then overrides.libXdamage else x: x) {
     name = "libXdamage-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -654,7 +654,7 @@ let
     buildInputs = [pkgconfig damageproto fixesproto libX11 xextproto libXfixes xproto ];
   })) // {inherit damageproto fixesproto libX11 xextproto libXfixes xproto ;};
 
-  libXdmcp = (stdenvMulti.mkDerivation ((if overrides ? libXdmcp then overrides.libXdmcp else x: x) {
+  libXdmcp = (stdenv.mkDerivation ((if overrides ? libXdmcp then overrides.libXdmcp else x: x) {
     name = "libXdmcp-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -665,7 +665,7 @@ let
     buildInputs = [pkgconfig xproto ];
   })) // {inherit xproto ;};
 
-  libXext = (stdenvMulti.mkDerivation ((if overrides ? libXext then overrides.libXext else x: x) {
+  libXext = (stdenv.mkDerivation ((if overrides ? libXext then overrides.libXext else x: x) {
     name = "libXext-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -676,7 +676,7 @@ let
     buildInputs = [pkgconfig libX11 xextproto xproto ];
   })) // {inherit libX11 xextproto xproto ;};
 
-  libXfixes = (stdenvMulti.mkDerivation ((if overrides ? libXfixes then overrides.libXfixes else x: x) {
+  libXfixes = (stdenv.mkDerivation ((if overrides ? libXfixes then overrides.libXfixes else x: x) {
     name = "libXfixes-5.0.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -697,7 +697,7 @@ let
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
   })) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
 
-  libXft = (stdenvMulti.mkDerivation ((if overrides ? libXft then overrides.libXft else x: x) {
+  libXft = (stdenv.mkDerivation ((if overrides ? libXft then overrides.libXft else x: x) {
     name = "libXft-2.3.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -708,7 +708,7 @@ let
     buildInputs = [pkgconfig fontconfig freetype libX11 xproto libXrender ];
   })) // {inherit fontconfig freetype libX11 xproto libXrender ;};
 
-  libXi = (stdenvMulti.mkDerivation ((if overrides ? libXi then overrides.libXi else x: x) {
+  libXi = (stdenv.mkDerivation ((if overrides ? libXi then overrides.libXi else x: x) {
     name = "libXi-1.7.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -719,7 +719,7 @@ let
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto libXfixes xproto ];
   })) // {inherit inputproto libX11 libXext xextproto libXfixes xproto ;};
 
-  libXinerama = (stdenvMulti.mkDerivation ((if overrides ? libXinerama then overrides.libXinerama else x: x) {
+  libXinerama = (stdenv.mkDerivation ((if overrides ? libXinerama then overrides.libXinerama else x: x) {
     name = "libXinerama-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -760,7 +760,7 @@ let
     buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
   })) // {inherit libX11 libXext xextproto xproto libXt ;};
 
-  libXrandr = (stdenvMulti.mkDerivation ((if overrides ? libXrandr then overrides.libXrandr else x: x) {
+  libXrandr = (stdenv.mkDerivation ((if overrides ? libXrandr then overrides.libXrandr else x: x) {
     name = "libXrandr-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -771,7 +771,7 @@ let
     buildInputs = [pkgconfig randrproto renderproto libX11 libXext xextproto xproto libXrender ];
   })) // {inherit randrproto renderproto libX11 libXext xextproto xproto libXrender ;};
 
-  libXrender = (stdenvMulti.mkDerivation ((if overrides ? libXrender then overrides.libXrender else x: x) {
+  libXrender = (stdenv.mkDerivation ((if overrides ? libXrender then overrides.libXrender else x: x) {
     name = "libXrender-0.9.8";
     builder = ./builder.sh;
     src = fetchurl {
@@ -852,7 +852,7 @@ let
     buildInputs = [pkgconfig libX11 libXext xextproto xf86miscproto xproto ];
   })) // {inherit libX11 libXext xextproto xf86miscproto xproto ;};
 
-  libXxf86vm = (stdenvMulti.mkDerivation ((if overrides ? libXxf86vm then overrides.libXxf86vm else x: x) {
+  libXxf86vm = (stdenv.mkDerivation ((if overrides ? libXxf86vm then overrides.libXxf86vm else x: x) {
     name = "libXxf86vm-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -903,7 +903,7 @@ let
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
 
-  libxcb = (stdenvMulti.mkDerivation ((if overrides ? libxcb then overrides.libxcb else x: x) {
+  libxcb = (stdenv.mkDerivation ((if overrides ? libxcb then overrides.libxcb else x: x) {
     name = "libxcb-1.9.1";
     builder = ./builder.sh;
     src = fetchurl {

@@ -346,10 +346,6 @@ let
       inherit stdenv perl cpio contents ubootChooser compressor;
     };
 
-  stdenvMulti = stdenv // {
-    mkDerivation = import ../build-support/multiple-outputs.nix { inherit (pkgs) stdenv; };
-  };
-
   makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
 
   makeModulesClosure = { kernel, rootModules, allowMissing ? false }:
@@ -2353,7 +2349,6 @@ let
   }));
 
   gcc46_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
-    stdenv = stdenvMulti;
     inherit noSysDirs;
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:
@@ -3112,7 +3107,6 @@ let
   perl514 = callPackage ../development/interpreters/perl/5.14 { };
 
   perl516 = callPackage ../development/interpreters/perl/5.16 {
-    stdenv = stdenvMulti;
     fetchurl = fetchurlBoot;
   };
 
@@ -3564,9 +3558,7 @@ let
 
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
 
-  libtool_2 = callPackage ../development/tools/misc/libtool/libtool2.nix {
-    stdenv = stdenvMulti;
-  };
+  libtool_2 = callPackage ../development/tools/misc/libtool/libtool2.nix { };
 
   lsof = callPackage ../development/tools/misc/lsof { };
 
@@ -3723,9 +3715,7 @@ let
 
   aalib = callPackage ../development/libraries/aalib { };
 
-  acl = callPackage ../development/libraries/acl {
-    stdenv = stdenvMulti;
-  };
+  acl = callPackage ../development/libraries/acl { };
 
   activemq = callPackage ../development/libraries/apache-activemq { };
 
@@ -3742,9 +3732,7 @@ let
 
   amrwb = callPackage ../development/libraries/amrwb { };
 
-  apr = callPackage ../development/libraries/apr {
-    stdenv = stdenvMulti;
-  };
+  apr = callPackage ../development/libraries/apr { };
 
   aprutil = callPackage ../development/libraries/apr-util {
     bdbSupport = true;
@@ -3766,9 +3754,7 @@ let
 
   attica = callPackage ../development/libraries/attica { };
 
-  attr = callPackage ../development/libraries/attr {
-    stdenv = stdenvMulti;
-  };
+  attr = callPackage ../development/libraries/attr { };
 
   aqbanking = callPackage ../development/libraries/aqbanking { };
 
@@ -4026,9 +4012,7 @@ let
   freeglut = if stdenv.isDarwin then darwinX11AndOpenGL else
     callPackage ../development/libraries/freeglut { };
 
-  freetype = callPackage ../development/libraries/freetype {
-    stdenv = stdenvMulti;
-  };
+  freetype = callPackage ../development/libraries/freetype { };
 
   fribidi = callPackage ../development/libraries/fribidi { };
 
@@ -4108,7 +4092,6 @@ let
       }));
 
   glibc = callPackage ../development/libraries/glibc/2.17 {
-    stdenv = stdenvMulti;
     kernelHeaders = linuxHeaders;
     installLocales = config.glibc.locales or false;
     machHeaders = null;
@@ -4184,9 +4167,7 @@ let
     libpng = libpng12;
   };
 
-  gmime = callPackage ../development/libraries/gmime {
-    stdenv = stdenvMulti;
-  };
+  gmime = callPackage ../development/libraries/gmime { };
 
   gmm = callPackage ../development/libraries/gmm { };
 
@@ -4296,25 +4277,20 @@ let
   };
 
   glib = callPackage ../development/libraries/glib {
-    stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenvMulti;
+    stdenv = if stdenv.isDarwin then overrideGCC stdenv gccApple else stdenv;
   };
 
   glibmm = callPackage ../development/libraries/glibmm { };
 
   glib_networking = callPackage ../development/libraries/glib-networking {};
 
-  atk = callPackage ../development/libraries/atk {
-    stdenv = stdenvMulti;
-  };
+  atk = callPackage ../development/libraries/atk { };
 
   atkmm = callPackage ../development/libraries/atkmm { };
 
   pixman = callPackage ../development/libraries/pixman { };
 
   cairo = callPackage ../development/libraries/cairo {
-    stdenv = stdenvMulti;
     glSupport = config.cairo.gl or (stdenv.isLinux &&
       !stdenv.isArm && !stdenv.isMips);
   };
@@ -4323,9 +4299,7 @@ let
 
   cairomm = callPackage ../development/libraries/cairomm { };
 
-  pango = callPackage ../development/libraries/pango {
-    stdenv = stdenvMulti;
-  };
+  pango = callPackage ../development/libraries/pango { };
 
   pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix {
     cairo = cairo_1_12_2;
@@ -4333,12 +4307,9 @@ let
 
   pangox_compat = callPackage ../development/libraries/pangox-compat { };
 
-  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf {
-    stdenv = stdenvMulti;
-  };
+  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
-    stdenv = stdenvMulti;
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
   };
 
@@ -4451,9 +4422,7 @@ let
     inherit mesa SDL SDL_image SDL_mixer;
   };
 
-  jasper = callPackage ../development/libraries/jasper {
-    stdenv = stdenvMulti;
-  };
+  jasper = callPackage ../development/libraries/jasper { };
 
   jama = callPackage ../development/libraries/jama { };
 
@@ -4589,7 +4558,6 @@ let
   libdnet = callPackage ../development/libraries/libdnet { };
 
   libdrm = callPackage ../development/libraries/libdrm {
-    inherit fetchurl stdenv pkgconfig;
     inherit (xorg) libpthreadstubs;
   };
 
@@ -4724,9 +4692,7 @@ let
   librem = callPackage ../development/libraries/librem {};
 
   libsamplerate = callPackage ../development/libraries/libsamplerate {
-    stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenvMulti;
+    stdenv = if stdenv.isDarwin then overrideGCC stdenv gccApple else stdenv;
   };
 
   libspectre = callPackage ../development/libraries/libspectre { };
@@ -4759,13 +4725,9 @@ let
 
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
-  libjpeg_original = callPackage ../development/libraries/libjpeg {
-    stdenv = stdenvMulti;
-  };
+  libjpeg_original = callPackage ../development/libraries/libjpeg { };
 
-  libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo {
-    stdenv = stdenvMulti;
-  };
+  libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
 
   libjpeg = if stdenv.isLinux then libjpeg_turbo else libjpeg_original; # some problems, both on FreeBSD and Darwin
 
@@ -4840,9 +4802,7 @@ let
 
   libofx = callPackage ../development/libraries/libofx { };
 
-  libogg = callPackage ../development/libraries/libogg {
-    stdenv = stdenvMulti;
-  };
+  libogg = callPackage ../development/libraries/libogg { };
 
   liboggz = callPackage ../development/libraries/liboggz { };
 
@@ -4895,9 +4855,7 @@ let
   libsigsegv_25 = callPackage ../development/libraries/libsigsegv/2.5.nix { };
 
   libsndfile = callPackage ../development/libraries/libsndfile {
-    stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenvMulti;
+    stdenv = if stdenv.isDarwin then overrideGCC stdenv gccApple else stdenv;
   };
 
   libsoup = callPackage ../development/libraries/libsoup { };
@@ -4916,9 +4874,7 @@ let
 
   libtheora = callPackage ../development/libraries/libtheora { };
 
-  libtiff = callPackage ../development/libraries/libtiff {
-    stdenv = stdenvMulti;
-  };
+  libtiff = callPackage ../development/libraries/libtiff { };
 
   libtiger = callPackage ../development/libraries/libtiger { };
 
@@ -4985,9 +4941,7 @@ let
 
   libvterm = callPackage ../development/libraries/libvterm { };
 
-  libvorbis = callPackage ../development/libraries/libvorbis {
-    stdenv = stdenvMulti;
-  };
+  libvorbis = callPackage ../development/libraries/libvorbis { };
 
   libwebp = callPackage ../development/libraries/libwebp { };
 
@@ -5243,7 +5197,6 @@ let
   openscenegraph = callPackage ../development/libraries/openscenegraph {};
 
   openssl = callPackage ../development/libraries/openssl {
-    stdenv = stdenvMulti;
     fetchurl = fetchurlBoot;
     cryptodevHeaders = linuxPackages.cryptodev.override {
       fetchurl = fetchurlBoot;
@@ -5264,7 +5217,6 @@ let
   };
 
   pcre = callPackage ../development/libraries/pcre {
-    stdenv = stdenvMulti;
     unicodeSupport = config.pcre.unicode or true;
   };
 
@@ -5479,9 +5431,7 @@ let
 
   speech_tools = callPackage ../development/libraries/speech-tools {};
 
-  speex = callPackage ../development/libraries/speex {
-    stdenv = stdenvMulti;
-  };
+  speex = callPackage ../development/libraries/speex { };
 
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
 
@@ -5952,7 +5902,6 @@ let
   apacheHttpd = pkgs.apacheHttpd_2_2;
 
   apacheHttpd_2_2 = callPackage ../servers/http/apache-httpd/2.2.nix {
-    stdenv = stdenvMulti;
     sslSupport = true;
   };
 
@@ -6214,7 +6163,7 @@ let
   xinetd = callPackage ../servers/xinetd { };
 
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
-    inherit fetchurl fetchgit stdenv stdenvMulti pkgconfig intltool freetype fontconfig
+    inherit fetchurl fetchgit stdenv pkgconfig intltool freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa_drivers
       xkeyboard_config dbus libuuid openssl gperf m4
       autoconf libtool xmlto asciidoc udev flex bison python mtdev pixman;
@@ -6725,9 +6674,7 @@ let
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
-  pam = callPackage ../os-specific/linux/pam {
-    stdenv = stdenvMulti;
-  };
+  pam = callPackage ../os-specific/linux/pam { };
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
@@ -6812,9 +6759,7 @@ let
 
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
-  systemd = callPackage ../os-specific/linux/systemd {
-    stdenv = stdenvMulti;
-  };
+  systemd = callPackage ../os-specific/linux/systemd { };
 
   sysvinit = callPackage ../os-specific/linux/sysvinit { };
 
@@ -6874,12 +6819,10 @@ let
   utillinux = lowPrio (callPackage ../os-specific/linux/util-linux {
     ncurses = null;
     perl = null;
-    stdenv = stdenvMulti;
   });
 
   utillinuxCurses = utillinux.override {
     inherit ncurses perl;
-    stdenv = stdenvMulti;
   };
 
   v4l_utils = callPackage ../os-specific/linux/v4l-utils {
@@ -7632,9 +7575,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = firefoxPkgs.firefox; };
 
-  flac = callPackage ../applications/audio/flac {
-    stdenv = stdenvMulti;
-  };
+  flac = callPackage ../applications/audio/flac { };
 
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {
     debug = config.flashplayer.debug or false;
@@ -9629,7 +9570,6 @@ let
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
   cups = callPackage ../misc/cups {
-    stdenv = stdenvMulti;
     libusb = libusb1;
   };
 

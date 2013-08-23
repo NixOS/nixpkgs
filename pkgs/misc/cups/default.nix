@@ -45,8 +45,6 @@ stdenv.mkDerivation {
     ''
       mkdir $dev/bin
       mv $out/bin/cups-config $dev/bin/
-
-      chmod -R +w $out
     '';
 
   meta = {
