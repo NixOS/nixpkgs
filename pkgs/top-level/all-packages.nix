@@ -7375,7 +7375,7 @@ let
       else stdenv;
   };
 
-  emacs24-nox = (appendToName "nox" (emacs24.override {
+  emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
     withX = false;
   }));
 
