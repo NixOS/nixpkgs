@@ -27,13 +27,17 @@ in
     boot.kernelModules = [ "bbswitch" ];
     boot.extraModulePackages = [ kernel.bbswitch ];
 
-    jobs.bbswitch = {
-      name = "bbswitch";
+    systemd.services.bbswitch = {
       description = "turn off nvidia card";
-      startOn = "stopped udevtrigger";
-      exec = "discrete_vga_poweroff";
-      path = [kernel.bbswitch];
-      task = true;
+      after = [ "sysinit.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${kernel.bbswitch}/bin/discrete_vga_poweroff";
+        ExecStop = "${kernel.bbswitch}/bin/discrete_vga_poweron";
+      };
+      path = [ kernel.bbswitch ];
     };
   };
 
