@@ -8,7 +8,7 @@ let
     name = "torify";
     text = ''
         #!${pkgs.stdenv.shell}
-        TSOCKS_CONF_FILE=${pkgs.writeText "tsocks.conf" cfg.torify.config} LD_PRELOAD="${pkgs.tsocks}/lib/libtsocks.so $LD_PRELOAD" $@
+        TSOCKS_CONF_FILE=${pkgs.writeText "tsocks.conf" cfg.torify.config} LD_PRELOAD="${pkgs.tsocks}/lib/libtsocks.so $LD_PRELOAD" "$@"
     '';
     executable = true;
     destination = "/bin/torify";

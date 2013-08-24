@@ -20,7 +20,7 @@ let
     name = name;
     text = ''
         #!${pkgs.stdenv.shell}
-        TORSOCKS_CONF_FILE=${pkgs.writeText "torsocks.conf" (makeConfig server)} LD_PRELOAD="${pkgs.torsocks}/lib/torsocks/libtorsocks.so $LD_PRELOAD" $@
+        TORSOCKS_CONF_FILE=${pkgs.writeText "torsocks.conf" (makeConfig server)} LD_PRELOAD="${pkgs.torsocks}/lib/torsocks/libtorsocks.so $LD_PRELOAD" "$@"
     '';
     executable = true;
     destination = "/bin/${name}";
