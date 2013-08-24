@@ -72,6 +72,14 @@ in
     powerManagement.cpuFreqGovernor = mkDefault "ondemand";
     powerManagement.scsiLinkPolicy = mkDefault "min_power";
 
+    systemd.targets.post-resume = {
+      description = "This target is reached after a hibernate/suspend/hybrid-sleep has woken up.";
+      requires = [ "post-resume.service" ];
+      after = [ "post-resume.service" ];
+      wantedBy = [ "sleep.target" ];
+      unitConfig.StopWhenUnneeded = true;
+    };
+
     # Service executed before suspending/hibernating.
     systemd.services."pre-sleep" =
       { description = "Pre-Sleep Actions";
@@ -84,25 +92,9 @@ in
         serviceConfig.Type = "oneshot";
       };
 
-    # Service executed before suspending/hibernating.  There doesn't
-    # seem to be a good way to hook in a service to be executed after
-    # both suspend *and* hibernate, so have a separate one for each.
-    systemd.services."post-suspend" =
-      { description = "Post-Suspend Actions";
-        wantedBy = [ "suspend.target" ];
-        after = [ "systemd-suspend.service" ];
-        script =
-          ''
-            ${cfg.resumeCommands}
-            ${cfg.powerUpCommands}
-          '';
-        serviceConfig.Type = "oneshot";
-      };
-
-    systemd.services."post-hibernate" =
-      { description = "Post-Hibernate Actions";
-        wantedBy = [ "hibernate.target" ];
-        after = [ "systemd-hibernate.service" ];
+    systemd.services."post-resume" =
+      { description = "Post-Resume Actions";
+        after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
         script =
           ''
             ${cfg.resumeCommands}
