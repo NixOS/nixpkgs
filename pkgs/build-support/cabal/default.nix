@@ -142,6 +142,7 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
 
               ./Setup build
 
+              export LANG=en_US.UTF-8
               export GHC_PACKAGE_PATH=$(ghc-packages)
               [ -n "$noHaddock" ] || ./Setup haddock
 
