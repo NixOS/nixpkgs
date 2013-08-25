@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
       ln -sv ../../../bin/smbspool $out/lib/cups/backend/smb
       mkdir -pv $out/etc/openldap/schema
       cp ../examples/LDAP/samba.schema $out/etc/openldap/schema
+      cp -v ../nsswitch/libnss_wins.so "$out/lib"
+      cp -v ../nsswitch/libnss_winbind.so "$out/lib"
     '' # */
     + stdenv.lib.optionalString (configDir == "") "touch $out/lib/smb.conf";
 
