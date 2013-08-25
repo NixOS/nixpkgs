@@ -35,6 +35,14 @@ in
           Pulls in X11 dependency.
         '';
       };
+
+      extraConfig = mkOption {
+        default = "";
+        description = ''
+          Extra configuration text appended to <filename>ssh_config</filename>.
+          See the ssh_config(5) man page for help.
+        '';
+      };
     };
   };
 
@@ -51,6 +59,7 @@ in
               XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
             ''}
             ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
+            ${cfg.extraConfig}
           '';
           target = "ssh/ssh_config";
         }
