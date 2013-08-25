@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     tar xf ${qt48.src}
+    qtdir=$(realpath $(ls | grep qt | grep 4.8 | grep src))
     sed -i setup/build_environment.py \
-        -e "s|^qt_private_inc = .*|qt_private_inc = ['../qt-everywhere-opensource-src-4.8.5/include/%s'%(m) for m in ('QtGui', 'QtCore')]|"
+        -e "s|^qt_private_inc = .*|qt_private_inc = ['$qtdir/include/%s\'%(m) for m in ('QtGui', 'QtCore')]|"
   '';
 
   buildInputs =
