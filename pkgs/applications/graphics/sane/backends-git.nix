@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, hotplugSupport ? true, libusb ? null, gt68xxFirmware ? null }:
+{ stdenv, fetchurl, fetchgit, hotplugSupport ? true, libusb ? null, gt68xxFirmware ? null, snapscanFirmware ? null }:
 let
   firmware = gt68xxFirmware { inherit fetchurl; };
 in
@@ -29,6 +29,11 @@ stdenv.mkDerivation {
     if gt68xxFirmware != null then
       "mkdir -p \${out}/share/sane/gt68xx ; ln -s " + firmware.fw +
       " \${out}/share/sane/gt68xx/" + firmware.name
+    else if snapscanFirmware != null then
+      "mkdir -p \${out}/share/sane/snapscan ; ln -s " + snapscanFirmware +
+      " \${out}/share/sane/snapscan/your-firmwarefile.bin ;" +
+      "mkdir -p \${out}/etc/sane.d ; " +
+      "echo epson2 > \${out}/etc/sane.d/dll.conf"
     else "";
 
   meta = {
