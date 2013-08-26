@@ -51,11 +51,14 @@ in
 
     environment.systemPackages = [ pkgs.rabbitmq_server ];
 
-    users.extraUsers = singleton
-      { name = "rabbitmq";
-        description = "RabbitMQ server user";
-        home = "/var/empty";
-      };
+    users.extraUsers.rabbitmq = {
+      description = "RabbitMQ server user";
+      home = "/var/empty";
+      group = "rabbitmq";
+      uid = config.ids.uids.rabbitmq;
+    };
+
+    users.extraGroups.rabbitmq.gid = config.ids.gids.rabbitmq;
 
     jobs.rabbitmq = {
         description = "RabbitMQ server";

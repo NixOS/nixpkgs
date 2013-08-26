@@ -109,6 +109,10 @@ in
     users.extraUsers.lightdm = {
       createHome = true;
       home = "/var/lib/lightdm";
+      group = "lightdm";
+      uid = config.ids.uids.lightdm;
     };
+
+    users.extraGroups.lightdm.gid = config.ids.gids.lightdm;
   };
 }

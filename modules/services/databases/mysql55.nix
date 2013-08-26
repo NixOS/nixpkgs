@@ -139,10 +139,13 @@ in
 
   config = mkIf config.services.mysql55.enable {
 
-    users.extraUsers = singleton
-      { name = "mysql";
-        description = "MySQL server user";
-      };
+    users.extraUsers.mysql = {
+      description = "MySQL server user";
+      group = "mysql";
+      uid = config.ids.uids.mysql;
+    };
+
+    users.extraGroups.mysql.gid = config.ids.gids.mysql;
 
     environment.systemPackages = [mysql];
 

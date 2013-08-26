@@ -31,10 +31,13 @@ with pkgs.lib;
         exec = "${pkgs.oidentd}/sbin/oidentd -u oidentd -g nogroup";
       };
 
-    users.extraUsers = singleton
-      { name = "oidentd";
-        description = "Ident Protocol daemon user";
-      };
+    users.extraUsers.oidentd = {
+      description = "Ident Protocol daemon user";
+      group = "oidentd";
+      uid = config.ids.uids.oidentd;
+    };
+
+    users.extraGroups.oidentd.gid = config.ids.gids.oidentd;
 
   };
 

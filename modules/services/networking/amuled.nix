@@ -48,6 +48,13 @@ in
     users.extraUsers = mkIf (cfg.user == null) [
       { name = "amule";
         description = "AMule daemon";
+        group = "amule";
+        uid = config.ids.uids.amule;
+      } ];
+
+    users.extraGroups = mkIf (cfg.user == null) [
+      { name = "amule";
+        gid = config.ids.gids.amule;
       } ];
 
     jobs.amuled =

@@ -94,6 +94,14 @@ in
     bacula = 81;
     almir = 82;
     deluge = 83;
+    mysql = 84;
+    rabbitmq = 85;
+    activemq = 86;
+    gnunet = 87;
+    oidentd = 88;
+    quassel = 89;
+    amule = 90;
+    minidlna = 91;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -173,6 +181,14 @@ in
     bacula = 81;
     almir = 82;
     deluge = 83;
+    mysql = 84;
+    rabbitmq = 85;
+    activemq = 86;
+    gnunet = 87;
+    oidentd = 88;
+    quassel = 89;
+    amule = 90;
+    minidlna = 91;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 

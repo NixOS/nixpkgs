@@ -65,8 +65,14 @@ in
     users.extraUsers = mkIf (cfg.user == null) [
       { name = "quassel";
         description = "Quassel IRC client daemon";
+        group = "quassel";
+        uid = config.ids.uids.quassel;
       }];
 
+    users.extraGroups = mkIf (cfg.user == null) [
+      { name = "quassel";
+        gid = config.ids.gids.quassel;
+      }];
 
     jobs.quassel =
       { description = "Quassel IRC client daemon";

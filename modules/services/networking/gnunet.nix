@@ -118,17 +118,15 @@ in
 
   config = mkIf config.services.gnunet.enable {
 
-    users.extraUsers = singleton
-      { name = "gnunet";
-        group = "gnunet";
-        description = "GNUnet User";
-        home = homeDir;
-        createHome = true; 
-      };
+    users.extraUsers.gnunet = {
+      group = "gnunet";
+      description = "GNUnet User";
+      home = homeDir;
+      createHome = true; 
+      uid = config.ids.uids.gnunet;
+    };
 
-    users.extraGroups = singleton
-      { name = "gnunet";
-      };
+    users.extraGroups.gnunet.gid = config.ids.gids.gnunet;
 
     # The user tools that talk to `gnunetd' should come from the same source,
     # so install them globally.
