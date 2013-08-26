@@ -1,7 +1,6 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
-let kernel = config.boot.kernelPackages;
-in
+let kernel = config.boot.kernelPackages; in
 
 {
 
@@ -13,7 +12,8 @@ in
       default = false;
       type = pkgs.lib.types.bool;
       description = ''
-        Completely disable the nvidia gfx chip (saves power / heat) and just use IGP
+        Completely disable the NVIDIA graphics card and use the
+        integrated graphics processor instead.
       '';
     };
 
@@ -28,8 +28,7 @@ in
     boot.extraModulePackages = [ kernel.bbswitch ];
 
     systemd.services.bbswitch = {
-      description = "turn off nvidia card";
-      after = [ "sysinit.target" ];
+      description = "Disable NVIDIA Card";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
