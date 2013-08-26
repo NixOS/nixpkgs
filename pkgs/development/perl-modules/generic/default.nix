@@ -1,13 +1,15 @@
 perl:
 
-{ buildInputs ? [], ... } @ attrs:
+{ buildInputs ? [], name, ... } @ attrs:
 
 perl.stdenv.mkDerivation (
   {
+    outputs = [ "out" "man" ];
+
     doCheck = true;
-    
+
     checkTarget = "test";
-    
+
     # Prevent CPAN downloads.
     PERL_AUTOINSTALL = "--skipdeps";
 
@@ -20,7 +22,7 @@ perl.stdenv.mkDerivation (
   attrs
   //
   {
-    name = "perl-" + attrs.name;
+    name = "perl-" + name;
     builder = ./builder.sh;
     buildInputs = buildInputs ++ [ perl ];
   }
