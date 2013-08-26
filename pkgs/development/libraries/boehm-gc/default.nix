@@ -8,12 +8,20 @@ stdenv.mkDerivation rec {
     sha256 = "0phwa5driahnpn79zqff14w9yc8sn3599cxz91m78hqdcpl0mznr";
   };
 
+  outputs = [ "dev" "out" "doc" ];
+
   configureFlags = "--enable-cplusplus";
 
   doCheck = true;
 
   # Don't run the native `strip' when cross-compiling.
   dontStrip = stdenv ? cross;
+
+  postInstall =
+    ''
+      mkdir -p $out/share/doc
+      mv $out/share/gc $out/share/doc/gc
+    '';
 
   meta = {
     description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
