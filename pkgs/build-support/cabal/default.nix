@@ -80,6 +80,9 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
             # build-depends Cabal fields stated in test-suite stanzas
             testDepends = [];
 
+            # target(s) passed to the cabal test phase as an argument
+            testTarget = "";
+
             # build-tools Cabal field
             buildTools = [];
 
@@ -159,7 +162,7 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
             checkPhase = stdenv.lib.optional self.doCheck ''
               eval "$preCheck"
 
-              ./Setup test
+              ./Setup test ${self.testTarget}
 
               eval "$postCheck"
             '';
