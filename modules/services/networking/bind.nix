@@ -19,7 +19,7 @@ let
         allow-query { cachenetworks; };
         blackhole { badnetworks; };
         forward first;
-        forwarders { ${concatMapStrings (entry: " ${entry}; ") config.networking.nameservers} };
+        forwarders { ${concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
         directory "/var/run/named";
         pid-file "/var/run/named/named.pid";
       };
@@ -83,7 +83,14 @@ in
       ipv4Only = mkOption {
         default = false;
         description = "
-          Only use ipv4, even if the host supports ipv6
+          Only use ipv4, even if the host supports ipv6.
+        ";
+      };
+
+      forwarders = mkOption {
+        default = config.networking.nameservers;
+        description = "
+          List of servers we should forward requests to.
         ";
       };
 
