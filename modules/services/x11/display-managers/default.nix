@@ -94,6 +94,11 @@ let
 
       export LIBVA_DRIVERS_PATH=${vaapiDrivers}/lib/dri
 
+      # Speed up application start by 50-150ms according to
+      # http://kdemonkey.blogspot.nl/2008/04/magic-trick.html
+      rm -fv $HOME/.compose-cache
+      mkdir $HOME/.compose-cache
+
       ${cfg.displayManager.sessionCommands}
 
       # Allow the user to setup a custom session type.
