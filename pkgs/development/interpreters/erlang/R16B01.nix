@@ -1,4 +1,5 @@
 { stdenv, fetchurl, perl, gnum4, ncurses, openssl
+, gnused, gawk, makeWrapper
 , wxSupport ? false, mesa ? null, wxGTK ? null, xlibs ? null }:
 
 assert wxSupport -> mesa != null && wxGTK != null && xlibs != null;
@@ -14,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ perl gnum4 ncurses openssl
+    [ perl gnum4 ncurses openssl makeWrapper
     ] ++ stdenv.lib.optional wxSupport [ mesa wxGTK xlibs.libX11 ];
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
@@ -25,6 +26,12 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = "--with-ssl=${openssl}";
+
+  # Some erlang bin/ scripts run sed and awk
+  postFixup = ''
+    wrapProgram $out/lib/erlang/bin/erl --prefix PATH ":" "${gnused}/bin/"
+    wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${gnused}/bin/:${gawk}/bin"
+  '';
 
   meta = {
     homepage = "http://www.erlang.org/";
