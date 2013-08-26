@@ -6,7 +6,6 @@ cabal.mkDerivation (self: {
   sha256 = "1bh20i1rb8ng0ni1v98nm8qv5wni19dvxwf5i3ijxhrxqdq4i7p6";
   buildDepends = [ wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
-  noHaddock = true;
   postInstall = ''
     cp -v dist/build/libwxc.so.${self.version} $out/lib/libwxc.so
   '';
