@@ -5,7 +5,6 @@ cabal.mkDerivation (self: {
   version = "1.0.3";
   sha256 = "1v9cl7d4fcchbdrpbgjj4ilg79cj241vzijiifdsgkq30ikv2yxs";
   buildDepends = [ terminalProgressBar time ];
-  noHaddock = true;
   meta = {
     homepage = "http://github.com/acw/bytestring-progress";
     description = "A library for tracking the consumption of a lazy ByteString";
