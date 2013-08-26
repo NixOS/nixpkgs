@@ -5,6 +5,7 @@
 , profilingLibraries ? false
 , gccCross ? null
 , debugSymbols ? false
+, withGd ? false, gd ? null, libpng ? null
 }:
 
 assert stdenv.gcc.gcc != null;
@@ -16,10 +17,11 @@ in
   build cross ({
     name = "glibc"
       + stdenv.lib.optionalString (hurdHeaders != null) "-hurd"
-      + stdenv.lib.optionalString debugSymbols "-debug";
+      + stdenv.lib.optionalString debugSymbols "-debug"
+      + stdenv.lib.optionalString withGd "-gd";
 
     inherit fetchurl fetchgit stdenv kernelHeaders installLocales
-      profilingLibraries gccCross;
+      profilingLibraries gccCross withGd gd libpng;
 
     builder = ./builder.sh;
 

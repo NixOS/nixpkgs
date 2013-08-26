@@ -1,13 +1,22 @@
-{stdenv, fetchurl, unzip} :
+{ stdenv, fetchurl, unzip, jre }:
 
 stdenv.mkDerivation {
-  name = "jing-20030619";
+  name = "jing-20091111";
   builder = ./unzip-builder.sh;
 
   src = fetchurl {
-    url = http://www.thaiopensource.com/download/jing-20030619.zip;
-    md5 = "f9b0775d8740f16ab3df82ad3707a093";
+    url = https://jing-trang.googlecode.com/files/jing-20091111.zip;
+    sha256 = "134h2r22r64v5yk4v8mhl6r893dlw5vzx9daf2sj2mbbma004sap";
   };
 
-  inherit unzip;
+  inherit unzip jre;
+
+  meta = with stdenv.lib; {
+    description = "A RELAX NG validator in Java";
+    # The homepage is www.thaiopensource.com, but it links to googlecode.com
+    # for downloads and call it the "project site".
+    homepage = http://www.thaiopensource.com/relaxng/jing.html;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+  };
 }

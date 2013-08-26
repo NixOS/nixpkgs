@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
-  version = "4.5.1";
+  version = "4.6";
 
   src = fetchurl {
     url = "http://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "bae55f1c7c4a21d71aae182e4fab6038ba65ba4be5d1ceff9e269f4f74b823f2";
+    sha256 = "1qand44hjqz84f2xzd0mmyk9vpsm7iwz6446s4ivdj6f86213lpm";
   };
 
   buildInputs = [ which pkgconfig libxcb xcbutilkeysyms xcbutil xcbutilwm
@@ -20,12 +20,21 @@ stdenv.mkDerivation rec {
 
   configurePhase = "makeFlags=PREFIX=$out";
 
-  meta = {
-    description = "i3 is a tiling window manager";
-    homepage = "http://i3wm.org";
-    maintainers = [ stdenv.lib.maintainers.garbas ];
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.all;
+  meta = with stdenv.lib; {
+    description = "A tiling window manager";
+    homepage    = "http://i3wm.org";
+    maintainers = with maintainers; [ garbas modulistic ];
+    license     = licenses.bsd3;
+    platforms   = platforms.all;
+
+    longDescription = ''
+      A tiling window manager primarily targeted at advanced users and
+      developers. Based on a tree as data structure, supports tiling,
+      stacking, and tabbing layouts, handled dynamically, as well as
+      floating windows. Configured via plain text file. Multi-monitor.
+      UTF-8 clean.
+    '';
   };
 
 }
+

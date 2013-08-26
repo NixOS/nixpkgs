@@ -11,9 +11,9 @@ cabal.mkDerivation (self: {
     transformers xdot
   ];
   postInstall = ''
-      ensureDir "$out/share/ghci"
-      ln -s "$out/share/$pname-$version/ghci" "$out/share/ghci/$pname"
-    '';
+    ensureDir "$out/share/ghci"
+    ln -s "$out/share/$pname-$version/ghci" "$out/share/ghci/$pname"
+  '';
   meta = {
     homepage = "http://felsin9.de/nnis/ghc-vis";
     description = "Live visualization of data structures in GHCi";

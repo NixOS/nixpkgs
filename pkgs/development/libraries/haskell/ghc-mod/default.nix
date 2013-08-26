@@ -19,13 +19,13 @@ cabal.mkDerivation (self: {
   buildTools = [ emacs ];
   doCheck = false;
   postInstall = ''
-      cd $out/share/$pname-$version
-      make
-      rm Makefile
-      cd ..
-      ensureDir "$out/share/emacs"
-      mv $pname-$version emacs/site-lisp
-    '';
+    cd $out/share/$pname-$version
+    make
+    rm Makefile
+    cd ..
+    ensureDir "$out/share/emacs"
+    mv $pname-$version emacs/site-lisp
+  '';
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/ghc-mod/";
     description = "Happy Haskell Programming";

@@ -763,6 +763,8 @@ let
     gnupg = gnupg1;
   };
 
+  duply = callPackage ../tools/backup/duply { };
+
   dvdplusrwtools = callPackage ../tools/cd-dvd/dvd+rw-tools { };
 
   dvgrab = callPackage ../tools/video/dvgrab { };
@@ -833,7 +835,7 @@ let
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
 
   fio = callPackage ../tools/system/fio { };
-  
+
   flpsed = callPackage ../applications/editors/flpsed { };
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
@@ -1110,8 +1112,6 @@ let
 
   jing = callPackage ../tools/text/xml/jing { };
 
-  jing_tools = callPackage ../tools/text/xml/jing/jing-script.nix { };
-
   jnettop = callPackage ../tools/networking/jnettop { };
 
   jq = callPackage ../development/tools/jq {};
@@ -1349,6 +1349,8 @@ let
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
 
+  mpack = callPackage ../tools/networking/mpack { };
+
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
@@ -1416,11 +1418,14 @@ let
 
   opensc_dnie_wrapper = callPackage ../tools/security/opensc-dnie-wrapper { };
 
-  openssh = callPackage ../tools/networking/openssh {
-    hpnSupport = false;
-    etcDir = "/etc/ssh";
-    pam = if stdenv.isLinux then pam else null;
-  };
+  openssh =
+    callPackage ../tools/networking/openssh {
+      hpnSupport = false;
+      withKerberos = false;
+      etcDir = "/etc/ssh";
+      pam = if stdenv.isLinux then pam else null;
+    };
+  openssh_with_kerberos = lowPrio (pkgs.appendToName "with-kerberos" (openssh.override { withKerberos = true; }));
 
   opensp = callPackage ../tools/text/sgml/opensp { };
 
@@ -3193,7 +3198,7 @@ let
     libX11 = xlibs.libX11;
   };
 
-  pypy = callPackage ../development/interpreters/pypy/2.0 { };
+  pypy = callPackage ../development/interpreters/pypy/2.1 { };
 
   pythonFull = python27Full;
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
@@ -4143,6 +4148,12 @@ let
     machHeaders = null;
     hurdHeaders = null;
     gccCross = null;
+  };
+
+  glibc_memusage = callPackage ../development/libraries/glibc/2.17 {
+    kernelHeaders = linuxHeaders;
+    installLocales = false;
+    withGd = true;
   };
 
   glibc217Cross = forceNativeDrv (makeOverridable (import ../development/libraries/glibc/2.17)
@@ -5320,6 +5331,8 @@ let
 
   ptlib = callPackage ../development/libraries/ptlib {};
 
+  re2 = callPackage ../development/libraries/re2 { };
+
   qca2 = callPackage ../development/libraries/qca2 {};
 
   qca2_ossl = callPackage ../development/libraries/qca2/ossl.nix {};
@@ -5973,6 +5986,8 @@ let
 
   dictdWordnet = callPackage ../servers/dict/dictd-wordnet.nix {};
 
+  diod = callPackage ../servers/diod { };
+
   dovecot = dovecot21;
 
   dovecot21 = callPackage ../servers/mail/dovecot { };
@@ -6495,7 +6510,6 @@ let
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-        kernelPatches.btrfs_send_backport
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -7288,6 +7302,11 @@ let
   comical = callPackage ../applications/graphics/comical { };
 
   conkeror = callPackage ../applications/networking/browsers/conkeror { };
+  conkerorWrapper = wrapFirefox {
+    browser = conkeror;
+    browserName = "conkeror";
+    desktopName = "Conkeror";
+  };
 
   cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
     inherit cmake patchelf;
@@ -7401,6 +7420,10 @@ let
       then stdenvAdapters.overrideGCC stdenv gccApple
       else stdenv;
   };
+
+  emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
+    withX = false;
+  }));
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
@@ -8207,6 +8230,8 @@ let
   nspluginwrapper = callPackage ../applications/networking/browsers/mozilla-plugins/nspluginwrapper {};
 
   nvi = callPackage ../applications/editors/nvi { };
+
+  nvpy = callPackage ../applications/editors/nvpy { };
 
   ocrad = callPackage ../applications/graphics/ocrad { };
 
@@ -9210,6 +9235,15 @@ let
       libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.10;
 
+ kde411 = kdePackagesFor (pkgs.kde411 // {
+      boost = boost149;
+      eigen = eigen2;
+      libotr = libotr_3_2;
+      libusb = libusb1;
+      ffmpeg = ffmpeg_1;
+      libcanberra = libcanberra_kde;
+    }) ../desktops/kde-4.11;
+
   kdePackagesFor = self: dir:
     let callPackageOrig = callPackage; in
     let
@@ -9332,6 +9366,8 @@ let
   };
 
   oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { };
+
+  gtk_engines = callPackage ../misc/themes/gtk2/gtk-engines { };
 
   gnome_themes_standard = callPackage ../misc/themes/gnome-themes-standard { };
 

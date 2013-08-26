@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
       wrapPythonPrograms
     '';
 
-  doCheck = true;
+  # tests fail on darwin, see http://bitbucket.org/pypa/setuptools/issue/55/1-failure-lc_all-c-python33m-setuppy-test 
+  doCheck = (!stdenv.isDarwin);
+
   checkPhase = ''
     ${python}/bin/${python.executable} setup.py test
   '';

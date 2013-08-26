@@ -1,7 +1,11 @@
 { stdenv, fetchurl, zlib, openssl, perl, libedit, pkgconfig, pam
 , etcDir ? null
 , hpnSupport ? false
+, withKerberos ? false
+, kerberos
 }:
+
+assert withKerberos -> kerberos != null;
 
 let
 
@@ -28,7 +32,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./locale_archive.patch ];
 
-  buildInputs = [ zlib openssl libedit pkgconfig pam ];
+  buildInputs = [ zlib openssl libedit pkgconfig pam ] ++
+    (if withKerberos then [ kerberos ] else [])
+  ;
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
@@ -39,6 +45,7 @@ stdenv.mkDerivation rec {
       --disable-strip
       ${if pam != null then "--with-pam" else "--without-pam"}
       ${if etcDir != null then "--sysconfdir=${etcDir}" else ""}
+      ${if withKerberos  then "--with-kerberos5=${kerberos}" else ""}
     '';
 
   preConfigure =

@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, python, librsync, gnupg, boto, makeWrapper }:
+{ stdenv, fetchurl, python, librsync, ncftp, gnupg, boto, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "duplicity-0.6.20";
+  name = "duplicity-0.6.21";
 
   src = fetchurl {
-    url = "http://code.launchpad.net/duplicity/0.6-series/0.6.20/+download/duplicity-0.6.20.tar.gz";
-    sha256 = "0r0nf7arc3n5ipvvbh7h6ksqzbl236iv5pjpmd5s7lff3xswdl2i";
+    url = "http://code.launchpad.net/duplicity/0.6-series/0.6.21/+download/duplicity-0.6.21.tar.gz";
+    sha256 = "01ppxzghnig7al9cwi8ap95y0d3j5n0vf3ag06iw3ysiq6k8lqm3";
   };
 
   installPhase = ''
     python setup.py install --prefix=$out
     wrapProgram $out/bin/duplicity \
       --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto})" \
-      --prefix PATH : "${gnupg}/bin"
+      --prefix PATH : "${gnupg}/bin:${ncftp}/bin"
     wrapProgram $out/bin/rdiffdir \
       --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto})" \
   '';

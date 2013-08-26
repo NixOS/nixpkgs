@@ -1,4 +1,4 @@
-{fetchurl, stdenv, python, cmake, vim, perl, ruby}:
+{ fetchurl, stdenv, python, cmake, vim, perl, ruby, unzip }:
 
 /*
 About Vim and plugins
@@ -164,18 +164,13 @@ in
   };
 
   command_T = simpleDerivation {
-
     name = "vim-command-t-1.4";
-
     src = fetchurl {
       url    = "https://github.com/wincent/Command-T/archive/1.4.tar.gz";
       sha256 = "1ka9hwx9n0vj1dd5qsd2l1wq0kriwl76jmmdjzh7zaf0p547v98s";
     };
-
     path = "Command-T";
-
     buildInputs = [ perl ruby ];
-
     buildPhase = ''
       pushd ruby/command-t
       ruby extconf.rb
@@ -184,17 +179,53 @@ in
     '';
   };
 
+  eighties = simpleDerivation {
+    name = "vim-eighties-1.0.4";
+    src = fetchurl {
+      url    = "https://github.com/justincampbell/vim-eighties/archive/1.0.4.tar.gz";
+      sha256 = "0cjd9hbg2qd7jjkvyi15f9ysp7m3aa2sg8nvbf80yb890rfkwaqr";
+    };
+    path = "eighties";
+    meta = with stdenv.lib; {
+      description = "Automatically resizes your windows to 80 characters";
+      homepage    = https://github.com/justincampbell/vim-eighties;
+      license     = licenses.publicDomain;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
+
+  taglist = simpleDerivation {
+    name = "vim-taglist-4.6";
+    meta = with stdenv.lib; {
+      description = "Source code browser plugin";
+      homepage    = "http://www.vim.org/scripts/script.php?script_id=273";
+      license     = stdenv.lib.licenses.gpl3;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+    src = fetchurl {
+      url    = "http://www.vim.org/scripts/download_script.php?src_id=19574";
+      name   = "taglist_46.zip";
+      sha256 = "18cbv462vwg7vip2p99qlahm99hswav96cj4ki227kyi05q2lkjj";
+    };
+    setSourceRoot = ''
+      export sourceRoot=taglist
+      mkdir taglist
+      mv doc taglist
+      mv plugin taglist
+    '';
+    buildInputs = [ unzip ];
+    path = "taglist";
+  };
+
   xdebug = simpleDerivation {
-
     name = "vim-xdebug-a4980fa65f7f159780593ee37c178281691ba2c4";
-
     src = fetchurl {
       url = "https://github.com/joonty/vim-xdebug/archive/a4980fa65f7f159780593ee37c178281691ba2c4.tar.gz";
       sha256 = "1348gzp0zhc2wifvs5vmf92m9y8ik8ldnvy7bawsxahy8hmhiksk";
     };
-
     path = "xdebug";
-
     postInstall = false;
   };
 }

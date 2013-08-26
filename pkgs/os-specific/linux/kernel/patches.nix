@@ -139,15 +139,4 @@ rec {
       };
     };
 
-  # this patch will probably make it into 3.11 or 3.12
-  # it only touches 1 file (fs/btrfs/send.c) so it only affects people that use
-  # the btrfs send feature.
-  btrfs_send_backport =
-    { name = "btrfs-send-check-parent-dir-when-doing-a-compare-send";
-      patch = fetchurl {
-        url = https://patchwork.kernel.org/patch/2839612/mbox;
-        sha256 = "0qv5mxpfrzj2dibac64n4b3d6pg7gzsafd11548bihwmsa3dlbhg";
-      };
-    };
-
 }

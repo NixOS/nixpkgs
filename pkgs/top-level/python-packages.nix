@@ -1256,6 +1256,28 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     propagatedBuildInputs = [ sphinx ];
   };
 
+
+  googlecl = buildPythonPackage rec {
+    version = "0.9.14";
+    name    = "googlecl-${version}";
+
+    src = fetchurl {
+      url    = "https://googlecl.googlecode.com/files/${name}.tar.gz";
+      sha256 = "0nnf7xkr780wivr5xnchfcrahlzy9bi2dxcs1w1bh1014jql0iha";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Brings Google services to the command line.";
+      homepage    = "https://code.google.com/p/googlecl/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+
+    propagatedBuildInputs = [ gdata ];
+  };
+
+
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.1";
 
@@ -3112,6 +3134,25 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       description = "Python multimedia tagging library";
       homepage = http://code.google.com/p/mutagen;
       license = "LGPLv2";
+    };
+  });
+
+
+  muttils = buildPythonPackage (rec {
+    name = "muttils-1.3";
+
+    src = fetchurl {
+      url = http://www.blacktrash.org/hg/muttils/archive/8bb26094df06.tar.bz2;
+      sha256 = "1a4kxa0fpgg6rdj5p4kggfn8xpniqh8v5kbiaqc6wids02m7kag6";
+    };
+
+    # Tests don't work
+    doCheck = false;
+
+    meta = {
+      description = "Utilities for use with console mail clients, like mutt";
+      homepage = http://www.blacktrash.org/hg/muttils;
+      license = "GPLv2+";
     };
   });
 
@@ -6791,11 +6832,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   graphite_web = buildPythonPackage rec {
     name = "graphite-web-${version}";
-    version = "0.9.10";
+    version = "0.9.11";
 
     src = fetchurl rec {
-      url = "https://launchpad.net/graphite/0.9/${version}/+download/${name}.tar.gz";
-      sha256 = "1gj8i6j2i172cldqw98395235bn78ciagw6v17fgv01rmind3lag";
+      url = "https://pypi.python.org/packages/source/g/graphite-web/${name}.tar.gz";
+      md5 = "1499b5dded3d1054d598760fd450a6f9";
     };
 
     propagatedBuildInputs = [ django_1_3 django_tagging modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
@@ -6973,13 +7014,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 } // pkgs.lib.optionalAttrs (python.majorVersion == "2.7") {
 
   pypi2nix = pythonPackages.buildPythonPackage rec {
-    rev = "e231db7e8874d4543a6f0fffc46c0fffbe6108c5";
+    rev = "e85eb9e75e7290c17e89822d6a5c1c52c1b59269";
     name = "pypi2nix-1.0_${rev}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/garbas/pypi2nix/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "0wqk6milnagr0b0v8igjp8p25d5y63pki3pkdy7hbgjxvyw8wril";
+      sha256 = "0wk9019pgpc2467819cz98fdvihjkpihlh1yywfxlvn04ymb315q";
     };
 
     propagatedBuildInputs = [ pythonPackages."Distutils2-1.0a4" ];
