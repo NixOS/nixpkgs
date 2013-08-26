@@ -1338,6 +1338,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   lens = callPackage ../development/libraries/haskell/lens {};
 
+  lensDatetime = callPackage ../development/libraries/haskell/lens-datetime {};
+
   lenses = callPackage ../development/libraries/haskell/lenses {};
 
   libffi = callPackage ../development/libraries/haskell/libffi {
