@@ -175,8 +175,9 @@ in {
 
 
   # A bootable VirtualBox image.  FIXME: generate a OVF appliance?
-  vdi.x86_64-linux =
-    with import <nixpkgs> { system = "x86_64-linux"; };
+  vdi = pkgs.lib.genAttrs systems (system:
+
+    with import <nixpkgs> { inherit system; };
 
     let
 
@@ -190,19 +191,21 @@ in {
 
     in
       # Declare the VDI as a build product so that it shows up in Hydra.
-      runCommand "nixos-vdi-${config.system.nixosVersion}"
+      runCommand "nixos-vdi-${config.system.nixosVersion}-${system}"
         { meta = {
-            description = "NixOS VirtualBox disk image (64-bit)";
+            description = "NixOS VirtualBox disk image (${system})";
             maintainers = lib.maintainers.eelco;
           };
           vdi = config.system.build.virtualBoxImage;
         }
         ''
           mkdir -p $out/nix-support
-          fn=$out/nixos-${config.system.nixosVersion}.vdi.xz
+          fn=$out/nixos-${config.system.nixosVersion}-${system}.vdi.xz
           xz < $vdi/*.vdi > $fn
           echo "file vdi $fn" >> $out/nix-support/hydra-build-products
-        ''; # */
+        '' # */
+
+  );
 
 
   # Provide a tarball that can be unpacked into an SD card, and easily
