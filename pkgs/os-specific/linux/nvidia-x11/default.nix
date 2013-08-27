@@ -12,12 +12,6 @@ let
 
   versionNumber = "319.49";
 
-  kernel310patch = fetchurl {
-    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/nvidia-linux-3.10.patch?h=packages/nvidia&id=415c1daa9ccb1ec46c172b304f40929239d87af8";
-    name = "nvidia-linux-3.10.patch";
-    sha256 = "0nhzg6jdk9sf1vzj519gqi8a2n9xydhz2bcz472pss2cfgbc1ahb";
-  };
-
 in
 
 stdenv.mkDerivation {
@@ -27,7 +21,7 @@ stdenv.mkDerivation {
 
   patches =
     [ ./version-test.patch ]
-    ++ optional (!libsOnly && versionAtLeast kernelDev.version "3.10") kernel310patch;
+    ;
 
   src =
     if stdenv.system == "i686-linux" then
