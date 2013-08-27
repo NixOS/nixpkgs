@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "0qafmy2i6dzx4n1dqp6pygyy6gjljnb7hwjcj2z11c1wgclsq4dw";
   };
 
+  patches = [( fetchurl {
+    url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/dbus-c%2B%2B/files/dbus-c%2B%2B-0.9.0-gcc-4.7.patch;
+    name = "gcc-4.7.patch";
+    sha256 = "0rwcz9pvc13b3yfr0lkifnfz0vb5q6dg240bzgf37ni4s8rpc72g";
+  })];
+
   buildInputs = [ dbus glib gtkmm pkgconfig expat ];
 
   configureFlags = "--disable-ecore";
