@@ -1,13 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, dbus, glib, libusb, alsaLib, python, makeWrapper
-, pythonDBus, pygobject, readline, libsndfile, udev, libical, systemd }:
+{ stdenv, fetchurl, pkgconfig, dbus, glib, libusb, alsaLib, python,
+  pythonPackages, pythonDBus, readline, libsndfile, udev, libical,
+  systemd }:
 
 assert stdenv.isLinux;
 
-let
-  pythonpath = "${pythonDBus}/lib/${python.libPrefix}/site-packages:"
-    + "${pygobject}/lib/${python.libPrefix}/site-packages";
-in
-   
 stdenv.mkDerivation rec {
   name = "bluez-5.8";
    
@@ -16,8 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "1l33lq1lpg7hy26138ir5dj4gl3mql2qxpj20rjnnwyckc3jk700";
   };
 
+  pythonPath = with pythonPackages;
+    [ pythonDBus pygobject3 recursivePthLoader ];
+
   buildInputs =
-    [ pkgconfig dbus.libs glib libusb alsaLib python makeWrapper
+    [ pkgconfig dbus.libs glib libusb alsaLib python pythonPackages.wrapPython
       readline libsndfile udev libical
       # Disables GStreamer; not clear what it gains us other than a
       # zillion extra dependencies.
@@ -49,7 +48,9 @@ stdenv.mkDerivation rec {
   # FIXME: Move these into a separate package to prevent Bluez from
   # depending on Python etc.
   postInstall = ''
-    pushd test
+    mkdir $out/test
+    cp -a test $out
+    pushd $out/test
     for a in \
             simple-agent \
             test-adapter \
@@ -58,10 +59,10 @@ stdenv.mkDerivation rec {
             list-devices \
             monitor-bluetooth \
             ; do
-      cp $a $out/bin/bluez-$a
-      wrapProgram $out/bin/bluez-$a --prefix PYTHONPATH : ${pythonpath}
+      ln -s ../test/$a $out/bin/bluez-$a
     done
     popd
+    wrapPythonProgramsIn $out/test "$out/test $pythonPath"
   '';
 
   meta = {
