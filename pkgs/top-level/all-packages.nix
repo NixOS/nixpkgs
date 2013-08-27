@@ -8505,8 +8505,6 @@ let
 
   teamspeak_client = callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
 
-  taskjuggler = callPackage ../applications/misc/taskjuggler { };
-
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
 
   telepathy_gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble {

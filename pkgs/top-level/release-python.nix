@@ -1628,7 +1628,6 @@ let
   tahoelafs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   tailor = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   tangogps = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  taskjuggler = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   tbe = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   teamspeak_client = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   teetertorture = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
