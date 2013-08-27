@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.libsdl.org/projects/SDL_mixer/release/${name}.tar.gz";
-    sha256 = "0dpqh6ak77wvxwk06ak57vm79n27jbqfxzv5hv2yyzfj0852pmx3";
+    sha256 = "0nvjdxjchrajrn0jag877hdx9zb788hsd315zzg1lyck2wb0xkm8";
   };
 
   buildInputs = [SDL2 libogg libvorbis];

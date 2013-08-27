@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.libsdl.org/projects/SDL_image/release/${name}.tar.gz";
-    sha256 = "0cxb4ss2d6d13ivm40cb230cy880v9jwlxkgmnpxkaf498ban54w";
+    sha256 = "0d3jlhkmr0j5a2dd5h6y29jfcsj7mkl16wghm6n3nqqp7g3ib65j";
   };
 
   buildInputs = [SDL2 libpng libjpeg libtiff libungif libXpm zlib];
