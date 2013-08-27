@@ -869,10 +869,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
-  distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
-
-  distributedProcessSimplelocalnet = callPackage ../development/libraries/haskell/distributed-process-simplelocalnet {};
-
   distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
@@ -1337,6 +1333,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
   lens = callPackage ../development/libraries/haskell/lens {};
+
+  lensDatetime = callPackage ../development/libraries/haskell/lens-datetime {};
 
   lenses = callPackage ../development/libraries/haskell/lenses {};
 

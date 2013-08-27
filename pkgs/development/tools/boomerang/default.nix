@@ -1,29 +1,49 @@
-{ stdenv, fetchgit, cmake, boehmgc, expat, cppunit }:
+{ stdenv, fetchgit, cmake, expat }:
 
-stdenv.mkDerivation {
-  name = "boomerang-1.0pre";
-
-  buildInputs = [ cmake boehmgc expat cppunit ];
-
-  installPhase = ''
-    for loaderfile in loader/*.so
-    do
-      install -vD "$loaderfile" "$out/lib/$(basename "$loaderfile")"
-    done
-
-    install -vD boomerang "$out/bin/boomerang"
-  '';
-
-  patches = [ ./dlopen_path.patch ];
+stdenv.mkDerivation rec {
+  name = "boomerang-${version}";
+  version = "0.3.2alpha";
 
   src = fetchgit {
-    url = "git://github.com/aszlig/boomerang.git";
-    rev = "d0b147a5dfc915a5fa8fe6c517e66a049a37bf22";
-    sha256 = "6cfd95a3539ff45c18b17de76407568b0d0c17fde4e45dda54486c7eac113969";
+    url = "https://github.com/nemerle/boomerang.git";
+    rev = "78c6b9dd33790be43dcb07edc549161398904006";
+    sha256 = "1hh8v0kcnipwrfz4d45d6pm5bzbm9wgbrdgg0ir2l7wyshbkff6i";
   };
 
+  buildInputs = [ cmake expat ];
+
+  postPatch = ''
+    sed -i -e 's/-std=c++0x/-std=c++11 -fpermissive/' CMakeLists.txt
+
+    # Hardcode library base path ("lib/" is appended elsewhere)
+    sed -i -e 's|::m_base_path = "|&'"$out"'/|' loader/BinaryFileFactory.cpp
+    # Deactivate setting base path at runtime
+    sed -i -e 's/m_base_path *=[^}]*//' include/BinaryFile.h
+
+    # Fix up shared directory locations
+    shared="$out/share/boomerang/"
+    find frontend -name '*.cpp' -print | xargs sed -i -e \
+      's|Boomerang::get()->getProgPath()|std::string("'"$shared"'")|'
+
+    cat >> loader/CMakeLists.txt <<CMAKE
+    INSTALL(TARGETS bffDump BinaryFile
+            ElfBinaryFile Win32BinaryFile ExeBinaryFile HpSomBinaryFile
+            PalmBinaryFile DOS4GWBinaryFile MachOBinaryFile
+            RUNTIME DESTINATION bin
+            LIBRARY DESTINATION lib)
+    CMAKE
+
+    cat >> CMakeLists.txt <<CMAKE
+    INSTALL(TARGETS boomerang DESTINATION bin)
+    INSTALL(DIRECTORY signatures DESTINATION share/boomerang)
+    INSTALL(DIRECTORY frontend/machine DESTINATION share/boomerang/frontend)
+    CMAKE
+  '';
+
+  enableParallelBuilding = true;
+
   meta = {
-    homepage = http://boomerang.sourceforge.net/;
+    homepage = "http://boomerang.sourceforge.net/";
     license = stdenv.lib.licenses.bsd3;
     description = "A general, open source, retargetable decompiler";
   };

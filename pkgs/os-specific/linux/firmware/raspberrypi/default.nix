@@ -1,11 +1,15 @@
 {stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "raspberrypi-firmware-20160106";
+let
+
+  rev = "3ab17ac25e";
+
+in stdenv.mkDerivation {
+  name = "raspberrypi-firmware-${rev}";
 
   src = fetchurl {
-    url = "https://github.com/raspberrypi/firmware/archive/4ade27942e.tar.gz";
-    sha256 = "0f4p920vr7dcj4hprgil8baqqbnsjx1jykz0pkdx29mqy0n0xanl";
+    url = "https://github.com/raspberrypi/firmware/archive/${rev}.tar.gz";
+    sha256 = "080va4zz858bwwgxam8zy58gpwjpxfg7v5h1q5b4cpbzjihsxcx9";
   };
 
   installPhase = ''
