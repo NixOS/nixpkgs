@@ -126,6 +126,9 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit python buildPythonPackage pygobject pycairo;
   };
 
+  # A patched version of buildout, useful for buildout based development on Nix
+  zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
+
   # packages defined here
 
   afew = buildPythonPackage rec {
