@@ -1,5 +1,5 @@
 { stdenv, fetchurl, patchelf, perl, ncurses, expat, python, zlib
-, xlibs, fontconfig, freetype, unixODBC, alsaLib
+, xlibs, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib
 } :
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     ncurses expat python zlib
     xlibs.libX11 xlibs.libXext xlibs.libXrender xlibs.libXt xlibs.libXtst xlibs.libXi xlibs.libXext
-    fontconfig freetype unixODBC alsaLib
+    gtk2 glib fontconfig freetype unixODBC alsaLib
   ];
 
   rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.gcc.gcc}/lib64";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
       '{}' \; || true
     find . -type f -exec patchelf \
-      --set-rpath $rpath:$out/lib:$out/lib64::$out/nvvm/lib:$out/nvvm/lib64:$(cat $NIX_GCC/nix-support/orig-gcc)/lib \
+      --set-rpath $rpath:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64:$(cat $NIX_GCC/nix-support/orig-gcc)/lib \
       --force-rpath \
       '{}' \; || true
   '';
