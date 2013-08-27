@@ -5130,7 +5130,9 @@ let
 
   mtdev = callPackage ../development/libraries/mtdev { };
 
-  mu = callPackage ../tools/networking/mu { };
+  mu = callPackage ../tools/networking/mu {
+    texinfo = texinfo4;
+  };
 
   muparser = callPackage ../development/libraries/muparser { };
 
