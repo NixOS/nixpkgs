@@ -9,11 +9,11 @@ let
 in
    
 stdenv.mkDerivation rec {
-  name = "bluez-5.3";
+  name = "bluez-5.8";
    
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "41b0559e3a8436a739eb7cc79156ca91daf8c115f57971b6bcb422ee0213db42";
+    sha256 = "1l33lq1lpg7hy26138ir5dj4gl3mql2qxpj20rjnnwyckc3jk700";
   };
 
   buildInputs =
