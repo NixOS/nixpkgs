@@ -1,4 +1,4 @@
-{stdenv, fetchurl, id3lib, groff}:
+{stdenv, fetchurl, id3lib, groff, zlib}:
 
 stdenv.mkDerivation rec {
   name = "id3v2-0.1.11";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   patches = [ ./id3v2-0.1.11-track-bad-free.patch ];
 
   nativeBuildInputs = [ groff ];
-  buildInputs = [ id3lib ];
+  buildInputs = [ id3lib zlib ];
 
   configurePhase = ''
     export makeFlags=PREFIX=$out
