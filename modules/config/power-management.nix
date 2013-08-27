@@ -73,7 +73,7 @@ in
     powerManagement.scsiLinkPolicy = mkDefault "min_power";
 
     systemd.targets.post-resume = {
-      description = "This target is reached after a hibernate/suspend/hybrid-sleep has woken up.";
+      description = "Post-Resume Actions";
       requires = [ "post-resume.service" ];
       after = [ "post-resume.service" ];
       wantedBy = [ "sleep.target" ];
