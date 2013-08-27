@@ -8114,6 +8114,7 @@ let
   };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
+  lbdb = callPackage ../tools/misc/lbdb { };
 
   ruby_gpgme = callPackage ../development/libraries/ruby_gpgme {
     ruby = ruby19;
