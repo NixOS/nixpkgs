@@ -9327,6 +9327,8 @@ let
 
   gtk_engines = callPackage ../misc/themes/gtk2/gtk-engines { };
 
+  gtk-engine-murrine = callPackage ../misc/themes/gtk2/gtk-engine-murrine { };
+
   gnome_themes_standard = callPackage ../misc/themes/gnome-themes-standard { };
 
   xfce = xfce4_10;
