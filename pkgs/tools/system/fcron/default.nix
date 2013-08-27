@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
       # fcron would have been default user/grp
       "--with-username=root"
       "--with-groupname=root"
+      "--with-rootname=root"
+      "--with-rootgroup=root"
+      "--disable-checks"
     ];
     
   installTargets = "install-staged"; # install does also try to change permissions of /etc/* files
