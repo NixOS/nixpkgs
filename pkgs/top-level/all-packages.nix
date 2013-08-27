@@ -9331,6 +9331,8 @@ let
 
   gnome_themes_standard = callPackage ../misc/themes/gnome-themes-standard { };
 
+  mate-icon-theme = callPackage ../misc/themes/mate-icon-theme { };
+
   xfce = xfce4_10;
   xfce4_10 = recurseIntoAttrs (import ../desktops/xfce { inherit pkgs newScope; });
 
