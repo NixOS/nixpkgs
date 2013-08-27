@@ -14,7 +14,9 @@ stdenv.mkDerivation {
   	buildInputs = [ perl finger_bsd ];
 
 	meta = {
-	    homepage = "http://www.spinnaker.de/lbdb/";
-	    description = "The Little Brother's Database (lbdb)";
+		homepage = "http://www.spinnaker.de/lbdb/";
+		license = stdenv.lib.licenses.gpl2;
+      		platforms = stdenv.lib.platforms.all;
+		description = "The Little Brother's Database (lbdb)";
 	};
 }
