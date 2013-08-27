@@ -3,7 +3,7 @@
 } :
 
 stdenv.mkDerivation rec {
-  name = "cudatoolkit-4.2.9";
+  name = "cudatoolkit-5.5.22";
 
   dontPatchELF = true;
   dontStrip = true;
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = http://developer.download.nvidia.com/compute/cuda/4_2/rel/toolkit/cudatoolkit_4.2.9_linux_64_suse11.2.run;
-        sha256 = "1inngzwq520bhpdfrh5bm4cxfyf3hxj94jialjxgviri5bj9hz60";
+        url = http://developer.download.nvidia.com/compute/cuda/5_5/rel/installers/cuda_5.5.22_linux_64.run;
+        sha256 = "b997e1dbe95704e0e806e0cedc5fd370a385351fef565c7bae0917baf3a29aa4";
       }
     else throw "cudatoolkit does not support platform ${stdenv.system}";
 
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ''
     sh $src --keep --noexec
+    cd pkg/run_files
+    sh cuda-linux64-rel-5.5.22-16488124.run --keep --noexec
     cd pkg
   '';
 
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
       --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
       '{}' \; || true
     find . -type f -exec patchelf \
-      --set-rpath $rpath:$out/lib:$out/lib64:$(cat $NIX_GCC/nix-support/orig-gcc)/lib \
+      --set-rpath $rpath:$out/lib:$out/lib64::$out/nvvm/lib:$out/nvvm/lib64:$(cat $NIX_GCC/nix-support/orig-gcc)/lib \
       --force-rpath \
       '{}' \; || true
   '';
