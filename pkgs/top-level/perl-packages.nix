@@ -35,6 +35,7 @@ rec {
       description = "A grep-like tool tailored to working with large trees of source code";
       homepage = http://betterthangrep.com/;
       license = "free";  # Artistic 2.0
+      platforms = stdenv.lib.platforms.unix;
     };
     # t/swamp/{0,perl-without-extension} are datafiles for the test
     # t/ack-show-types.t, but the perl generic builder confuses them
