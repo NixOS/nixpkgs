@@ -69,8 +69,9 @@ stdenv.mkDerivation rec {
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.bluez.org/;
     description = "Bluetooth support for Linux";
+    platforms = platforms.linux;
   };
 }
