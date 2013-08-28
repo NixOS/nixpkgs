@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   postInstall = ''
     # Make sure that maxima can find its runtime dependencies.
     for prog in "$out/bin/"*; do
-      wrapProgram "$prog" --prefix PATH ":" "${searchPath}"
+      wrapProgram "$prog" --prefix PATH ":" "$out/bin:${searchPath}"
     done
     # Move emacs modules and documentation into the right place.
     mkdir -p $out/share/emacs $out/share/doc
