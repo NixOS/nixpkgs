@@ -17,7 +17,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.browserpage-3.12.2" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.publisher-3.12.6" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         UUIDs for content items
@@ -38,7 +37,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Python 2 and 3 compatibility utilities
@@ -59,7 +57,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self.setuptools self."transaction-1.1.1" self."ZODB3-3.10.5" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Version Control
@@ -80,7 +77,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."ExtensionClass-2.13.2" self."plone.app.folder-1.0.5" self."plone.folder-1.0.4" self."plone.uuid-1.0.3" self."Products.CMFCalendar-2.2.2" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.CMFFormController-3.0.3" self."Products.CMFQuickInstallerTool-3.0.6" self."Products.DCWorkflow-2.2.4" self."Products.GenericSetup-1.7.3" self."Products.Marshall-2.1.2" self."Products.MimetypesRegistry-2.0.4" self."Products.PlacelessTranslationService-2.0.3" self."Products.PortalTransforms-2.1.2" self."Products.statusmessages-4.0" self."Products.validation-2.0" self."Products.ZSQLMethods-2.13.4" self.setuptools self."transaction-1.1.1" self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.contenttype-3.5.5" self."zope.datetime-3.4.1" self."zope.deferredimport-3.5.3" self."zope.event-3.5.2" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.site-3.9.2" self."zope.tal-3.5.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Archetypes is a developers framework for rapidly developing and deploying rich, full featured content types within the context of Zope/CMF and Plone.
@@ -101,7 +97,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."ExtensionClass-2.13.2" self."plone.uuid-1.0.3" self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools self."transaction-1.1.1" self."zope.contenttype-3.5.5" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Configurable Marshallers for Archetypes
@@ -122,7 +117,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.memoize-1.1.1" self.setuptools self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.container-3.11.2" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         BTree-based folder implementation with order support
@@ -143,7 +137,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."archetypes.querywidget-1.0.8" self."archetypes.referencebrowserwidget-2.4.18" self."borg.localrole-3.0.2" self."DateTime-3.0.3" self."ExtensionClass-2.13.2" self."five.customerize-1.1" self."five.localsitemanager-2.0.5" self."Pillow-1.7.8" self."plone.app.blob-1.5.8" self."plone.app.collection-1.0.10" self."plone.app.content-2.1.2" self."plone.app.contentlisting-1.0.4" self."plone.app.contentmenu-2.0.8" self."plone.app.contentrules-3.0.3" self."plone.app.controlpanel-2.3.6" self."plone.app.customerize-1.2.2" self."plone.app.discussion-2.2.6" self."plone.app.folder-1.0.5" self."plone.app.form-2.2.2" self."plone.app.i18n-2.0.2" self."plone.app.jquery-1.7.2" self."plone.app.jquerytools-1.5.5" self."plone.app.layout-2.3.5" self."plone.app.linkintegrity-1.5.2" self."plone.app.locales-4.3.1" self."plone.app.portlets-2.4.4" self."plone.app.redirector-1.2" self."plone.app.search-1.1.4" self."plone.app.upgrade-1.3.3" self."plone.app.users-1.2a2" self."plone.app.uuid-1.0" self."plone.app.viewletmanager-2.0.3" self."plone.app.vocabularies-2.1.10" self."plone.app.workflow-2.1.5" self."plone.batching-1.0" self."plone.browserlayer-2.1.2" self."plone.contentrules-2.0.3" self."plone.fieldsets-2.0.2" self."plone.i18n-2.0.8" self."plone.indexer-1.0.2" self."plone.intelligenttext-2.0.2" self."plone.locking-2.0.4" self."plone.memoize-1.1.1" self."plone.portlet.collection-2.1.5" self."plone.portlet.static-2.0.2" self."plone.portlets-2.2" self."plone.protect-2.0.2" self."plone.registry-1.0.1" self."plone.session-3.5.3" self."plone.theme-2.1" self."plonetheme.classic-1.3.2" self."plonetheme.sunburst-1.4.4" self."Products.Archetypes-1.9.1" self."Products.ATContentTypes-2.1.13" self."Products.CMFActionIcons-2.1.3" self."Products.CMFCalendar-2.2.2" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.CMFDiffTool-2.1" self."Products.CMFDynamicViewFTI-4.0.5" self."Products.CMFEditions-2.2.8" self."Products.CMFFormController-3.0.3" self."Products.CMFQuickInstallerTool-3.0.6" self."Products.CMFUid-2.2.1" self."Products.DCWorkflow-2.2.4" self."Products.ExtendedPathIndex-3.1" self."Products.ExternalEditor-1.1.0" self."Products.GenericSetup-1.7.3" self."Products.MimetypesRegistry-2.0.4" self."Products.PasswordResetTool-2.0.14" self."Products.PlacelessTranslationService-2.0.3" self."Products.PloneLanguageTool-3.2.7" self."Products.PlonePAS-4.1.1" self."Products.PluggableAuthService-1.10.0" self."Products.PluginRegistry-1.3" self."Products.PortalTransforms-2.1.2" self."Products.ResourceRegistries-2.2.9" self."Products.statusmessages-4.0" self."Products.TinyMCE-1.3.4" self.setuptools self."transaction-1.1.1" self."z3c.autoinclude-0.3.4" self."ZODB3-3.10.5" self."zope.app.locales-3.6.2" self."zope.component__zcml-3.9.5" self."zope.container-3.11.2" self."zope.deferredimport-3.5.3" self."zope.deprecation-3.4.1" self."zope.dottedname-3.4.6" self."zope.event-3.5.2" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.pagetemplate-3.6.3" self."zope.publisher-3.12.6" self."zope.site-3.9.2" self."zope.structuredtext-3.5.1" self."zope.tal-3.5.2" self."zope.tales-3.5.3" self."zope.traversing-3.13.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         The Plone Content Management System (core)
@@ -164,7 +157,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.proxy-3.6.1" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         zope.deferredimport allows you to perform imports names that will only be resolved when used in the code.
@@ -185,7 +177,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Waitress WSGI server
@@ -206,7 +197,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Code coverage measurement for Python
@@ -227,7 +217,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."plone.memoize-1.1.1" self."Products.CMFCore-2.2.7" self."Products.DCWorkflow-2.2.4" self."Products.GenericSetup-1.7.3" self."Products.statusmessages-4.0" self.setuptools self."transaction-1.1.1" self."zope.component__zcml-3.9.5" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.site-3.9.2" self."zope.testing-3.9.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         workflow and security settings for Plone
@@ -248,7 +237,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools self."Zope2-2.13.20" self."eggtestinfo-0.3" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Uid product for the Zope Content Management Framework
@@ -269,7 +257,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Integer to Roman numerals converter
@@ -290,7 +277,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.supermodel-1.2.2" self."plone.z3cform-0.8.0" self.setuptools self."z3c.form-3.0" self."zope.dottedname-3.4.6" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Tools to construct z3c.form forms
@@ -311,7 +297,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         US-ASCII transliterations of Unicode text
@@ -332,7 +317,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."five.formlib-1.0.4" self.setuptools self."zope.component__zcml-3.9.5" self."zope.formlib-4.0.6" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         An extension to zope.formlib, which allows to group fields into different fieldsets.
@@ -353,7 +337,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.memoize-1.1.1" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         redirection tool
@@ -374,7 +357,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."archetypes.schemaextender-2.1.2" self."plone.app.imaging-1.0.9" self."plone.scale__storage-1.3.2" self.setuptools self."ZODB3-3.10.5" self."zope.proxy-3.6.1" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         ZODB blob support for Plone
@@ -395,7 +377,6 @@ in
     buildInputs = [ self."nose-1.3.0" ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         WSGI request and response object
@@ -416,7 +397,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self."mechanize-0.2.5" self."pytz-2013b" self.setuptools self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Programmable browser for functional black-box tests
@@ -437,7 +417,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.traversing-3.13.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Tools for managing themes in CMF and Plone sites
@@ -458,7 +437,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self."Products.MimetypesRegistry-2.0.4" self."Products.PortalTransforms-2.1.2" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Transformations applied to HTML in Plone text fields as they are rendered
@@ -479,7 +457,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.container-3.11.2" self."zope.event-3.5.2" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.location-3.9.1" self."zope.security__untrustedpython-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Local registries for zope component architecture
@@ -500,7 +477,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Batching facilities used in Plone.
@@ -521,7 +497,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Python 2 and 3 compatibility utilities
@@ -542,7 +517,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."Products.CMFCore-2.2.7" self."Products.CMFDiffTool-2.1" self."Products.CMFUid-2.2.1" self."Products.GenericSetup-1.7.3" self."Products.ZopeVersionControl-1.1.3" self.setuptools self."transaction-1.1.1" self."ZODB3-3.10.5" self."zope.copy-3.5.0" self."zope.dottedname-3.4.6" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Versioning for Plone
@@ -560,10 +534,17 @@ in
         md5 = "41d8688d4db72673069a6dc63b5289d6";
     };
     doCheck = false;
-    buildInputs = [ pkgs.unzip ];
+    buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.unzip ];
     propagatedBuildInputs = [  ];
+    configurePhase = ''
+      sed -i "setup.py" \
+          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
+              s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
+              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;
+              s|^LCMS_ROOT =.*$|LCMS_ROOT = _lib_include("${pkgs.libwebp}")|g ;
+              s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;'
+    '';
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Python Imaging Library (fork)
@@ -584,7 +565,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Structured Configuration Library
@@ -605,7 +585,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."ExtensionClass-2.13.2" self."python-gettext-1.2" self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.deferredimport-3.5.3" self."zope.deprecation-3.4.1" self."zope.i18n__zcml-3.7.4" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         PTS provides a way of internationalizing (i18n'ing) and localizing (l10n'ing) software for Zope 2.
@@ -626,7 +605,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Deprecation Infrastructure
@@ -647,7 +625,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools self."transaction-1.1.1" self."zope.interface-3.6.7" self."zope.structuredtext-3.5.1" self."zope.tales-3.5.3" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         CMFFormController provides a form validation mechanism for CMF.
@@ -668,7 +645,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self.setuptools self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Data validation package for Archetypes
@@ -689,7 +665,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Very basic event publishing system
@@ -710,7 +685,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."five.globalrequest-1.0" self."plone.registry-1.0.1" self."plone.transformchain-1.0.3" self.setuptools self."z3c.caching__zcml-2.0a1" self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope 2 integration for z3c.caching
@@ -731,7 +705,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Generic Transparent Proxies
@@ -752,7 +725,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Component vocabularies
@@ -773,7 +745,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.event-4.0.2" self."zope.interface-4.0.5" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Component Architecture
@@ -794,7 +765,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.i18n-2.0.8" self."plone.memoize-1.1.1" self."plone.session-3.5.3" self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self."Products.PluggableAuthService-1.10.0" self.setuptools self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         PlonePAS adapts the PluggableAuthService for use by Plone.
@@ -815,7 +785,6 @@ in
     buildInputs = [ self."unittest2-0.5.1" ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         A Python Mocking and Patching Library for Testing
@@ -836,7 +805,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."archetypes.referencebrowserwidget-2.4.18" self.setuptools self."zope.deprecation-3.4.1" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         ATReferenceBrowserWidget is reference widget for Archetypes.
@@ -857,7 +825,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."ExtensionClass-2.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Special MultiMapping objects used in Zope2.
@@ -878,7 +845,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."ExtensionClass-2.13.2" self."Missing-2.13.1" self."Persistence-2.13.2" self."Record-2.13.0" self.setuptools self."transaction-1.1.1" self."ZODB3-3.10.5" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         SQL method support for Zope 2.
@@ -899,7 +865,6 @@ in
     buildInputs = [ self."nose-1.3.0" ];
     propagatedBuildInputs = [ self."MarkupSafe-0.18" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         A super-fast templating language that borrows the  best ideas from the existing templating languages.
@@ -920,7 +885,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Hook into repoze.zope2 that allows third party packages to register a sequence of hooks that will be allowed to modify the response before it is returned to the browser
@@ -941,7 +905,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.event-4.0.2" self."zope.interface-4.0.5" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         zope.interface extension for defining data schemas
@@ -962,7 +925,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."Zope2-2.13.20" self."eggtestinfo-0.3" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         CMFQuickInstallerTool is a facility for comfortable activation/deactivation of CMF compliant products.
@@ -983,7 +945,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Deprecation Infrastructure
@@ -1004,7 +965,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."five.formlib-1.0.4" self."plone.app.vocabularies-2.1.10" self."plone.locking-2.0.4" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self.setuptools self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.event-3.5.2" self."zope.formlib-4.0.6" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.schema-4.2.2" self."zope.site-3.9.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         zope.formlib integration for Plone
@@ -1025,7 +985,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self."five.formlib-1.0.4" self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools self."Zope2-2.13.20" self."eggtestinfo-0.3" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Default product for the Zope Content Management Framework
@@ -1046,7 +1005,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope process lifetime events
@@ -1067,7 +1025,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."plone.memoize-1.1.1" self."Products.CMFCore-2.2.7" self.setuptools self."zope.component__zcml-3.9.5" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Password reset tool for Plone
@@ -1088,7 +1045,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self."six-1.3.0" self."WebOb-1.2.3" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         UNKNOWN
@@ -1109,7 +1065,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Simple decorators to support synchronized methods
@@ -1130,7 +1085,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Support for applying monkey patches late in the startup cycle by using ZCML configuration actions
@@ -1151,7 +1105,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self.setuptools self."zope.i18n__zcml-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Adaptable string interpolation
@@ -1172,7 +1125,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         The default theme for Plone 4.
@@ -1193,7 +1145,6 @@ in
     buildInputs = [ self."nose-1.3.0" ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Load, configure, and compose WSGI applications and servers
@@ -1214,7 +1165,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Sequence Sorting
@@ -1235,7 +1185,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."Products.PluggableAuthService-1.10.0" self."python-openid-2.2.5" self.setuptools self."transaction-1.1.1" self."ZODB3-3.10.5" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         OpenID authentication support for PAS
@@ -1256,7 +1205,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.resource-1.0.2" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         UNKNOWN
@@ -1277,7 +1225,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."six-1.2.0" self."zope.browser-1.3" self."zope.browserpage-3.12.2" self."zope.browserresource-3.10.3" self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.contentprovider-3.7.2" self."zope.event-3.5.2" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.location-3.9.1" self."zope.pagetemplate-3.6.3" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.site-3.9.2" self."zope.traversing-3.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         An advanced form and widget framework for Zope 3
@@ -1298,7 +1245,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.authentication-3.7.1" self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.error-3.7.4" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.publisher-3.12.6" self."zope.traversing-3.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope publication
@@ -1319,7 +1265,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.event-3.5.2" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         zope.interface extension for defining data schemas
@@ -1340,7 +1285,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope External Editor
@@ -1361,7 +1305,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."plone.batching-1.0" self."plone.i18n-2.0.8" self."plone.memoize-1.1.1" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self.setuptools self."zope.component__zcml-3.9.5" self."zope.container-3.11.2" self."zope.event-3.5.2" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Content Views for Plone
@@ -1382,7 +1325,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Diff tool for Plone
@@ -1403,7 +1345,6 @@ in
     buildInputs = [ self."nose-1.3.0" ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         A tiny LRU cache implementation and decorator
@@ -1424,7 +1365,6 @@ in
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Python implementation of Markdown.
@@ -1445,7 +1385,6 @@ in
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."experimental.cssselect-0.3" self."lxml-2.3.6" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Diazo implements a Deliverance like language using a pure XSLT engine. With Diazo, you
@@ -1469,7 +1408,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Infrastructure for maintaining a registry of available behaviors
@@ -1490,7 +1428,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Basic inter-process locks
@@ -1511,7 +1448,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.interface-3.6.7" self."zope.tal-3.5.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Template Application Language Expression Syntax (TALES)
@@ -1532,7 +1468,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."pytz-2013b" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         This package provides a DateTime data type, as known from Zope 2.Unless you need to communicate with Zope 2 APIs, you're probablybetter off using Python's built-in datetime module.
@@ -1553,7 +1488,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zc.buildout-1.7.1" self."zope.configuration-3.7.4" self."zope.dottedname-3.4.6" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Automatically include ZCML
@@ -1574,7 +1508,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         World timezone definitions, modern and historical
@@ -1595,7 +1528,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.interface-4.0.5" self."zope.proxy-4.1.3" self."zope.schema-4.3.2" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Location
@@ -1616,7 +1548,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."plone.locking-2.0.4" self."plone.memoize-1.1.1" self."Products.Archetypes-1.9.1" self."Products.CMFCore-2.2.7" self."Products.CMFEditions-2.2.8" self."Products.CMFPlacefulWorkflow-1.5.9" self."Products.DCWorkflow-2.2.4" self."Products.statusmessages-4.0" self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.event-3.5.2" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.schema-4.2.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         check-out/check-in staging for Plone
@@ -1637,7 +1568,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."Markdown-2.0.3" self."plone.intelligenttext-2.0.2" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.MimetypesRegistry-2.0.4" self.setuptools self."ZODB3-3.10.5" self."zope.interface-3.6.7" self."zope.structuredtext-3.5.1" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         MIME based content transformations
@@ -1658,7 +1588,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         zope.sendmail integration for Zope 2.
@@ -1679,7 +1608,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API.
@@ -1700,7 +1628,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."AccessControl-3.0.6" self."Acquisition-2.13.8" self."ExtensionClass-2.13.2" self."RestrictedPython-3.6.0" self."zExceptions-2.13.0" self."zope.sequencesort-3.4.0" self."zope.structuredtext-3.5.1" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Document Templating Markup Language (DTML)
@@ -1721,7 +1648,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."plone.app.form-2.2.2" self."plone.app.vocabularies-2.1.10" self."plone.app.workflow-2.1.5" self."plone.fieldsets-2.0.2" self."plone.locking-2.0.4" self."plone.memoize-1.1.1" self."plone.protect-2.0.2" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.PlonePAS-4.1.1" self."Products.PortalTransforms-2.1.2" self."Products.statusmessages-4.0" self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.cachedescriptors-3.5.1" self."zope.component__zcml-3.9.5" self."zope.event-3.5.2" self."zope.formlib-4.0.6" self."zope.i18n__zcml-3.7.4" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.ramcache-1.0" self."zope.schema-4.2.2" self."zope.site-3.9.2" self."zope.testing-3.9.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Formlib-based controlpanels for Plone.
@@ -1742,7 +1668,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.browserresource-3.10.3" self."zope.interface-3.6.7" self."zope.pagetemplate-3.6.3" self."zope.publisher-3.12.6" self."zope.security__untrustedpython-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Page template resource plugin for zope.browserresource
@@ -1763,7 +1688,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."Products.CMFCore-2.2.7" self.setuptools self."ZODB3-3.10.5" self."zope.contenttype-3.5.5" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         MIME type handling for Zope
@@ -1784,7 +1708,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Docutils -- Python Documentation Utilities
@@ -1795,20 +1718,19 @@ development, check it into Subversion, and not touch Diazo during deployment.
   };
 
 
-  "beautifulsoup4-4.3.0" = self.buildPythonPackage {
-    name = "beautifulsoup4-4.3.0";
+  "beautifulsoup4-4.3.1" = self.buildPythonPackage {
+    name = "beautifulsoup4-4.3.1";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/b/beautifulsoup4/beautifulsoup4-4.3.0.tar.gz";
-        md5 = "8341b12402d942661bbfcc9f35420529";
+        url = "https://pypi.python.org/packages/source/b/beautifulsoup4/beautifulsoup4-4.3.1.tar.gz";
+        md5 = "508095f2784c64114e06856edc1dafed";
     };
     doCheck = false;
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
-        Improvements to the lxml tree builder.
+        UNKNOWN
         '';
       homepage = "http://www.crummy.com/software/BeautifulSoup/bs4/";
       license = "MIT";
@@ -1826,7 +1748,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         nose extends unittest to make testing easier
@@ -1847,7 +1768,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Python Packaging Library
@@ -1868,7 +1788,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."borg.localrole-3.0.2" self."five.localsitemanager-2.0.5" self."plone.app.folder-1.0.5" self."plone.app.portlets-2.4.4" self."plone.portlets-2.2" self."plone.session-3.5.3" self."Products.Archetypes-1.9.1" self."Products.CMFActionIcons-2.1.3" self."Products.CMFCalendar-2.2.2" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.CMFDiffTool-2.1" self."Products.CMFEditions-2.2.8" self."Products.CMFFormController-3.0.3" self."Products.CMFQuickInstallerTool-3.0.6" self."Products.CMFUid-2.2.1" self."Products.contentmigration-2.1.4" self."Products.DCWorkflow-2.2.4" self."Products.GenericSetup-1.7.3" self."Products.MimetypesRegistry-2.0.4" self."Products.PloneLanguageTool-3.2.7" self."Products.PlonePAS-4.1.1" self."Products.PluggableAuthService-1.10.0" self."Products.PortalTransforms-2.1.2" self."Products.ResourceRegistries-2.2.9" self."Products.SecureMailHost-1.1.2" self."Products.ZCatalog-2.13.23" self.setuptools self."transaction-1.1.1" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.ramcache-1.0" self."zope.site-3.9.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Upgrade machinery for Plone.
@@ -1889,7 +1808,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.exceptions-3.6.2" self."zope.interface-3.6.7" self."zope.location-3.9.1" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         An error reporting utility for Zope3
@@ -1910,7 +1828,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."plone.app.portlets-2.4.4" self."plone.openid-2.0.1" self."plone.portlets-2.2" self."Products.CMFCore-2.2.7" self."Products.PlonePAS-4.1.1" self."Products.PluggableAuthService-1.10.0" self.setuptools self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Plone OpenID authentication support
@@ -1931,7 +1848,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.globalrequest-1.0" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope 2 integration for zope.globalrequest
@@ -1952,7 +1868,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Hooks to facilitate managing custom index values in Zope 2/CMF applications
@@ -1973,7 +1888,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.container-3.11.2" self."zope.interface-3.6.7" self."zope.location-3.9.1" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Manage secrets
@@ -1994,7 +1908,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."feedparser-5.0.1" self."five.customerize-1.1" self."five.formlib-1.0.4" self."plone.app.form-2.2.2" self."plone.app.i18n-2.0.2" self."plone.app.vocabularies-2.1.10" self."plone.i18n-2.0.8" self."plone.memoize-1.1.1" self."plone.portlets-2.2" self."Products.CMFCore-2.2.7" self."Products.CMFDynamicViewFTI-4.0.5" self."Products.GenericSetup-1.7.3" self."Products.PluggableAuthService-1.10.0" self.setuptools self."transaction-1.1.1" self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.container-3.11.2" self."zope.contentprovider-3.7.2" self."zope.event-3.5.2" self."zope.formlib-4.0.6" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.site-3.9.2" self."zope.traversing-3.13.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Plone integration for the basic plone.portlets package
@@ -2015,7 +1928,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.alterego-1.0" self."plone.autoform-1.4" self."plone.behavior-1.0.2" self."plone.folder-1.0.4" self."plone.memoize-1.1.1" self."plone.rfc822-1.0.1" self."plone.supermodel-1.2.2" self."plone.synchronize-1.0.1" self."plone.uuid-1.0.3" self."plone.z3cform-0.8.0" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.CMFDynamicViewFTI-4.0.5" self."Products.statusmessages-4.0" self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.container-3.11.2" self."zope.dottedname-3.4.6" self."zope.filerepresentation-3.6.1" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.location-3.9.1" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.size-3.4.1" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Flexible CMF content
@@ -2036,7 +1948,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         
@@ -2057,7 +1968,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."AccessControl-3.0.6" self."Acquisition-2.13.8" self."Persistence-2.13.2" self.setuptools self."ZODB3-3.10.5" self."zope.container-3.11.2" self."zope.event-3.5.2" self."zope.lifecycleevent-3.6.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A BTree based implementation for Zope 2's OFS.
@@ -2078,7 +1988,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."DocumentTemplate-2.13.2" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         MIMETools provides the &lt;!--#mime--&gt; tag for DocumentTemplate.
@@ -2099,7 +2008,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.exceptions-3.6.2" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope testing framework, including the testrunner script.
@@ -2120,7 +2028,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.event-3.5.2" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Object life-cycle events
@@ -2141,7 +2048,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Metaclass for subclassable extension types
@@ -2162,7 +2068,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."five.formlib-1.0.4" self."plone.app.form-2.2.2" self."plone.app.vocabularies-2.1.10" self."plone.contentrules-2.0.3" self."plone.memoize-1.1.1" self."plone.stringinterp-1.0.10" self."plone.uuid-1.0.3" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.GenericSetup-1.7.3" self."Products.statusmessages-4.0" self.setuptools self."transaction-1.1.1" self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.container-3.11.2" self."zope.event-3.5.2" self."zope.formlib-4.0.6" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.site-3.9.2" self."zope.traversing-3.13.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Plone integration for plone.contentrules
@@ -2183,7 +2088,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ self."nose-1.3.0" ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Utility library for i18n relied on by various Repoze and Pyramid packages
@@ -2204,7 +2108,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Implements a XML/HTML/XHTML Markup safe string for Python
@@ -2225,7 +2128,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.security__untrustedpython-3.7.4" self."zope.tal-3.5.2" self."zope.tales-3.5.3" self."zope.traversing-3.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Page Templates
@@ -2246,7 +2148,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."unittest2-0.5.1" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Python Gettext po to mo file compiler.
@@ -2267,7 +2168,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         System for managing development buildouts
@@ -2288,7 +2188,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.uuid-1.0.3" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Dynamically extend Archetypes schemas with named adapters.
@@ -2309,7 +2208,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope 3 Template Application Languate (TAL)
@@ -2330,7 +2228,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."AccessControl-3.0.6" self."Persistence-2.13.2" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         General Zope 2 help screens.
@@ -2351,7 +2248,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         cssselect parses CSS3 Selectors and translates them to XPath 1.0
@@ -2372,7 +2268,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.app.contentlisting-1.0.4" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Search user interface for Plone CMS.
@@ -2393,7 +2288,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.broken-3.6.0" self."zope.component__zcml-3.9.5" self."zope.dottedname-3.4.6" self."zope.event-3.5.2" self."zope.filerepresentation-3.6.1" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.location-3.9.1" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.size-3.4.1" self."zope.traversing-3.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Container
@@ -2414,7 +2308,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."Products.ATContentTypes-2.1.13" self."Products.CMFCore-2.2.7" self."Products.CMFPlone-4.3.1" self."Products.GenericSetup-1.7.3" self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.site-3.9.2" self."zope.testing-3.9.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Integration testing framework for Plone.
@@ -2435,7 +2328,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         The new features in unittest for Python 2.7 backported to Python 2.3+.
@@ -2456,7 +2348,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.security__untrustedpython-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         zExceptions contains common exceptions used in Zope2.
@@ -2477,7 +2368,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."ExtensionClass-2.13.2" self."ZODB3-3.10.5" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Persistent ExtensionClass
@@ -2498,7 +2388,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."ExtensionClass-2.13.2" self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools self."zope.browsermenu-3.9.1" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         CMFDynamicViewFTI is a product for dynamic views in CMF.
@@ -2519,7 +2408,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.contenttype-3.5.5" self."zope.event-3.5.2" self."zope.exceptions-3.6.2" self."zope.i18n__zcml-3.7.4" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.proxy-3.6.1" self."zope.security__untrustedpython-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         The Zope publisher publishes Python objects on the web.
@@ -2540,7 +2428,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.interface-3.6.7" self."zope.pagetemplate-3.6.3" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.traversing-3.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         ZCML directives for configuring browser views for Zope.
@@ -2561,7 +2448,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Plone specific i18n extensions.
@@ -2582,7 +2468,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.proxy-3.6.1" self."zope.schema-4.2.2" self."RestrictedPython-3.6.0" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Security Framework
@@ -2603,7 +2488,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."five.globalrequest-1.0" self."plone.registry-1.0.1" self.setuptools self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.event-3.5.2" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Cache purging support for Zope 2 applications
@@ -2624,7 +2508,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools self."zope.component__zcml-3.9.5" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         jQuery Tools integration for Plone plus overlay and AJAX form helpers.
@@ -2645,7 +2528,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.event-3.5.2" self."zope.interface-3.6.7" self."zope.configuration-3.7.4" self."zope.i18nmessageid-3.5.3" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Component Architecture
@@ -2666,7 +2548,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.browserpage-3.12.2" self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.contentprovider-3.7.2" self."zope.event-3.5.2" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.traversing-3.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Viewlets
@@ -2687,7 +2568,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."pytz-2013b" self.setuptools self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.schema-4.2.2" self."zope.configuration-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Internationalization Support
@@ -2708,7 +2588,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."archetypes.referencebrowserwidget-2.4.18" self."DateTime-3.0.3" self."ExtensionClass-2.13.2" self."plone.app.folder-1.0.5" self."plone.app.layout-2.3.5" self."plone.i18n-2.0.8" self."plone.memoize-1.1.1" self."Products.Archetypes-1.9.1" self."Products.ATReferenceBrowserWidget-3.0" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.CMFDynamicViewFTI-4.0.5" self."Products.GenericSetup-1.7.3" self."Products.MimetypesRegistry-2.0.4" self."Products.PortalTransforms-2.1.2" self."Products.validation-2.0" self.setuptools self."transaction-1.1.1" self."ZConfig-2.9.1" self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.tal-3.5.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Default Content Types for Plone
@@ -2729,7 +2608,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.contenttype-3.5.5" self."zope.i18n__zcml-3.7.4" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.traversing-3.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Browser resources implementation for Zope.
@@ -2750,7 +2628,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.viewlet-3.7.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Registry for managing CSS and JS
@@ -2771,7 +2648,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."ExtensionClass-2.13.2" self.setuptools self."transaction-1.1.1" self."zope.app.form-4.0.2" self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.event-3.5.2" self."zope.formlib-4.0.6" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.location-3.9.1" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         zope.formlib integration for Zope 2
@@ -2792,7 +2668,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.annotation-3.5.0" self."zope.i18n__zcml-3.7.4" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         statusmessages provides an easy way of handling internationalized status messages managed via an BrowserRequest adapter storing status messages in client-side cookies.
@@ -2813,7 +2688,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ self."nose-1.3.0" self."WebTest-2.0.7" self."zope.component-4.1.0" self."zope.interface-4.0.5" ];
     propagatedBuildInputs = [ self."Chameleon-2.11" self."Mako-0.8.1" self."PasteDeploy-1.5.0" self."repoze.lru-0.6" self.setuptools self."translationstring-1.1" self."venusian-1.0a8" self."WebOb-1.2.3" self."zope.deprecation-4.0.2" self."zope.interface-4.0.5" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         The Pyramid web application development framework, a Pylons project
@@ -2834,7 +2708,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Extensions to the standard python 2.3+ datetime module
@@ -2855,7 +2728,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         PloneLanguageTool allows you to set the available languages in your Plone site, select various fallback mechanisms, and control the use of flags for language selection and translations.
@@ -2876,7 +2748,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Provides transforms from text/x-web-intelligent to text/html and vice versa.
@@ -2897,7 +2768,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.rfc822-1.0.1" self.setuptools self."zope.browserpage-3.12.2" self."zope.component__zcml-3.9.5" self."zope.security__untrustedpython-3.7.4" self."zope.traversing-3.13.2" self."plone.scale__storage-1.3.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         File types and fields for images, files and blob files with filenames
@@ -2918,7 +2788,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope contenttype
@@ -2939,7 +2808,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.interface-4.0.5" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Generic Transparent Proxies
@@ -2960,7 +2828,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Global way of retrieving the currently active request.
@@ -2981,7 +2848,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."python-dateutil-1.5" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         RFC822 marshalling for zope.schema fields
@@ -3002,7 +2868,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."transaction-1.1.1" self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope sendmail
@@ -3023,7 +2888,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."Products.CMFCore-2.2.7" self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         webdav locking support
@@ -3044,7 +2908,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.proxy-3.6.1" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Object annotation mechanism
@@ -3065,7 +2928,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."five.customerize-1.1" self."plone.browserlayer-2.1.2" self."plone.portlets-2.2" self."Products.CMFCore-2.2.7" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.viewlet-3.7.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Integrate five.customerize into Plone.
@@ -3084,9 +2946,8 @@ development, check it into Subversion, and not touch Diazo during deployment.
     };
     doCheck = true;
     buildInputs = [ self."nose-1.3.0" self."unittest2-0.5.1" self."pyquery-1.2.4" self."WSGIProxy2-0.2" self."PasteDeploy-1.5.0" self."mock-1.0.1" self."coverage-3.6" pkgs.unzip ];
-    propagatedBuildInputs = [ self."beautifulsoup4-4.3.0" self."six-1.3.0" self."waitress-0.8.6" self."WebOb-1.2.3" ];
+    propagatedBuildInputs = [ self."beautifulsoup4-4.3.1" self."six-1.3.0" self."waitress-0.8.6" self."WebOb-1.2.3" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Helper to test WSGI applications
@@ -3107,7 +2968,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."lxml-2.3.6" self."plone.app.z3cform-0.7.3" self."plone.autoform-1.4" self."plone.registry-1.0.1" self."plone.supermodel-1.2.2" self."Products.CMFCore-2.2.7" self."Products.CMFPlone-4.3.1" self."Products.GenericSetup-1.7.3" self."Products.statusmessages-4.0" self.setuptools self."zope.component__zcml-3.9.5" self."zope.dottedname-3.4.6" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope 2 and Plone  integration for plone.registry
@@ -3128,7 +2988,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.keyring-2.0.1" self."plone.protect-2.0.2" self."Products.PluggableAuthService-1.10.0" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Session based authentication for Zope
@@ -3149,7 +3008,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.event-3.5.2" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.configuration-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Caching infrastructure for web apps
@@ -3170,7 +3028,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."AccessControl-3.0.6" self."Acquisition-2.13.8" self."Persistence-2.13.2" self.setuptools self."transaction-1.1.1" self."zExceptions-2.13.0" self."ZODB3-3.10.5" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Full text indexing for ZCatalog / Zope 2.
@@ -3191,7 +3048,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         File-system Representation Interfaces
@@ -3212,7 +3068,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.ramcache-1.0" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Decorators for caching the values of functions and methods
@@ -3233,7 +3088,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Interfaces for Python
@@ -3254,7 +3108,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Interfaces and simple adapter that give the size of an object
@@ -3275,7 +3128,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."plone.portlets-2.2" self.setuptools self."transaction-1.1.1" self."zope.component__zcml-3.9.5" self."zope.componentvocabulary-1.0.1" self."zope.dottedname-3.4.6" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.pagetemplate-3.6.3" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.site-3.9.2" self."zope.testing-3.9.7" self."zope.traversing-3.13.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         TTW customization of template-based Zope views
@@ -3296,7 +3148,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Resolver for Python dotted names.
@@ -3317,7 +3168,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.caching-1.0" self."python-dateutil-1.5" self.setuptools self."z3c.caching__zcml-2.0a1" self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.filerepresentation-3.6.1" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.traversing-3.13.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         UNKNOWN
@@ -3338,7 +3188,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools self."Zope2-2.13.20" self."eggtestinfo-0.3" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         DCWorkflow product for the Zope Content Management Framework
@@ -3359,7 +3208,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Translation files for Plone
@@ -3380,7 +3228,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."z3c.form-3.0" self."zope.deprecation-3.4.1" self."zope.i18n__zcml-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         z3c.form date and datetime widgets
@@ -3401,7 +3248,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.uuid-1.0.3" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Listing of content for the Plone CMS
@@ -3422,7 +3268,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."AccessControl-3.0.6" self."Acquisition-2.13.8" self."DateTime-3.0.3" self."DocumentTemplate-2.13.2" self."docutils-0.9.1" self."ExtensionClass-2.13.2" self."initgroups-2.13.0" self."Missing-2.13.1" self."MultiMapping-2.13.0" self."Persistence-2.13.2" self."Products.BTreeFolder2-2.13.3" self."Products.ExternalMethod-2.13.0" self."Products.MailHost-2.13.1" self."Products.MIMETools-2.13.0" self."Products.OFSP-2.13.2" self."Products.PythonScripts-2.13.2" self."Products.StandardCacheManagers-2.13.0" self."Products.ZCatalog-2.13.23" self."Products.ZCTextIndex-2.13.4" self."pytz-2013b" self."Record-2.13.0" self."RestrictedPython-3.6.0" self.setuptools self."tempstorage-2.12.2" self."transaction-1.1.1" self."ZConfig-2.9.1" self."zdaemon-2.0.7" self."zExceptions-2.13.0" self."zLOG-2.11.1" self."ZODB3-3.10.5" self."zope.browser-1.3" self."zope.browsermenu-3.9.1" self."zope.browserpage-3.12.2" self."zope.browserresource-3.10.3" self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.container-3.11.2" self."zope.contentprovider-3.7.2" self."zope.contenttype-3.5.5" self."zope.deferredimport-3.5.3" self."zope.event-3.5.2" self."zope.exceptions-3.6.2" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.location-3.9.1" self."zope.pagetemplate-3.6.3" self."zope.processlifetime-1.0" self."zope.proxy-3.6.1" self."zope.ptresource-3.9.0" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.sendmail-3.7.5" self."zope.sequencesort-3.4.0" self."zope.site-3.9.2" self."zope.size-3.4.1" self."zope.structuredtext-3.5.1" self."zope.tal-3.5.2" self."zope.tales-3.5.3" self."zope.testbrowser-3.11.1" self."zope.testing-3.9.7" self."zope.traversing-3.13.2" self."zope.viewlet-3.7.2" self."ZopeUndo-2.12.0" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope2 application server / web framework
@@ -3443,7 +3288,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."AccessControl-3.0.6" self."Acquisition-2.13.8" self."ExtensionClass-2.13.2" self."Persistence-2.13.2" self.setuptools self."ZODB3-3.10.5" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         This package provides support for external Python methods within a Zope 2 environment.
@@ -3464,7 +3308,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.traversing-3.13.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Browser layer management for Zope 2 applications
@@ -3485,7 +3328,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.folder-1.0.4" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Integration package for `plone.folder` into Plone
@@ -3506,7 +3348,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ self."zope.event-4.0.2" ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Fast HTML/XML Template Compiler.
@@ -3527,7 +3368,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."AccessControl-3.0.6" self.setuptools self."transaction-1.1.1" self."zope.component__zcml-3.9.5" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Cache managers for Zope 2.
@@ -3548,7 +3388,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         RestrictedPython provides a restricted execution environment for Python, e.g. for running untrusted code.
@@ -3569,7 +3408,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.testing-3.9.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A RAM-based storage for ZODB
@@ -3590,7 +3428,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.indexer-1.0.2" self."plone.uuid-1.0.3" self.setuptools self."zope.interface-3.6.7" self."zope.publisher-3.12.6" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Plone integration for the basic plone.uuid package
@@ -3611,7 +3448,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."ExtensionClass-2.13.2" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Acquisition is a mechanism that allows objects to obtain attributes from the containment hierarchy they're in.
@@ -3632,7 +3468,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope datetime
@@ -3653,7 +3488,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API.
@@ -3674,7 +3508,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."collective.z3cform.datetimewidget-1.2.3" self."lxml-2.3.6" self."plone.app.content-2.1.2" self."plone.app.layout-2.3.5" self."plone.app.textfield-1.2.2" self."plone.app.uuid-1.0" self."plone.app.z3cform-0.7.3" self."plone.autoform-1.4" self."plone.behavior-1.0.2" self."plone.contentrules-2.0.3" self."plone.dexterity-2.1.3" self."plone.formwidget.namedfile-1.0.6" self."plone.namedfile__scales-2.0.2" self."plone.portlets-2.2" self."plone.rfc822-1.0.1" self."plone.schemaeditor-1.3.2" self."plone.supermodel-1.2.2" self."plone.z3cform-0.8.0" self."Products.ATContentTypes-2.1.13" self."Products.CMFCore-2.2.7" self."Products.CMFPlone-4.3.1" self."Products.GenericSetup-1.7.3" self.setuptools self."z3c.form-3.0" self."zope.browserpage-3.12.2" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Dexterity is a content type framework for CMF applications, with particular emphasis on Plone. It can be viewed as an alternative to Archetypes that is more light-weight and modular.
@@ -3695,7 +3528,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope locale extraction and management utilities
@@ -3716,7 +3548,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."plone.app.portlets-2.4.4" self."plone.app.viewletmanager-2.0.3" self."plone.i18n-2.0.8" self."plone.locking-2.0.4" self."plone.memoize-1.1.1" self."plone.portlets-2.2" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.CMFDynamicViewFTI-4.0.5" self."Products.CMFEditions-2.2.8" self.setuptools self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.deprecation-3.4.1" self."zope.dottedname-3.4.6" self."zope.i18n__zcml-3.7.4" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Layout mechanisms for Plone
@@ -3737,7 +3568,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.componentvocabulary-1.0.1" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Content Type
@@ -3758,7 +3588,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Stateful programmatic web browsing.
@@ -3779,7 +3608,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."z3c.form-3.0" self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A source query widget for z3c.form.
@@ -3800,7 +3628,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."collective.z3cform.datetimewidget-1.2.3" self."plone.protect-2.0.2" self."plone.z3cform-0.8.0" self.setuptools self."z3c.formwidget.query-0.9" self."zope.browserpage-3.12.2" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.traversing-3.13.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A collection of widgets, templates and other components for use with z3c.form and Plone
@@ -3821,7 +3648,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."DateTime-3.0.3" self."plone.app.contentlisting-1.0.4" self."plone.app.layout-2.3.5" self."plone.app.vocabularies-2.1.10" self."plone.registry-1.0.1" self."Products.CMFCore-2.2.7" self.setuptools self."zope.component__zcml-3.9.5" self."zope.dottedname-3.4.6" self."zope.globalrequest-1.0" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         UNKNOWN
@@ -3842,7 +3668,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ self."zope.event-4.0.2" pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         Interfaces for Python
@@ -3863,7 +3688,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."Unidecode-0.04.1" self."zope.component__zcml-3.9.5" self."zope.i18n__zcml-3.7.4" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Advanced i18n/l10n features
@@ -3884,7 +3708,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A generic content migration framework for Plone.
@@ -3905,7 +3728,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."ExtensionClass-2.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Special Missing objects used in Zope2.
@@ -3926,7 +3748,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Method and property caching decorators
@@ -3947,7 +3768,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.pagetemplate-3.6.3" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.traversing-3.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Browser menu implementation for Zope.
@@ -3968,7 +3788,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."transaction-1.1.1" self."zc.lockfile-1.0.2" self."ZConfig-2.9.1" self."zdaemon-2.0.7" self."zope.event-3.5.2" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Object Database: object database and persistence
@@ -3989,7 +3808,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.app.form-2.2.2" self."plone.app.jquerytools-1.5.5" self.setuptools self."zope.component__zcml-3.9.5" self."zope.formlib-4.0.6" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A referencebrowser implementation for Archetypes
@@ -4010,7 +3828,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Configuration Markup Language (ZCML)
@@ -4031,7 +3848,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ self."nose-1.3.0" ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         A library for deferring decorator actions
@@ -4052,7 +3868,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."plone.app.content-2.1.2" self."plone.locking-2.0.4" self."plone.memoize-1.1.1" self."Products.CMFCore-2.2.7" self."Products.CMFDynamicViewFTI-4.0.5" self.setuptools self."zope.browsermenu-3.9.1" self."zope.component__zcml-3.9.5" self."zope.contentprovider-3.7.2" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Plone's content menu implementation
@@ -4073,7 +3888,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.componentvocabulary-1.0.1" self."zope.configuration-3.7.4" self."zope.container-3.11.2" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.schema-4.2.2" self."zope.testing-3.9.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Plone ContentRules Engine
@@ -4094,7 +3908,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.keyring-2.0.1" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Security for browser forms
@@ -4115,7 +3928,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Transaction management for Python
@@ -4136,7 +3948,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."diazo-1.0.3" self."docutils-0.9.1" self."five.globalrequest-1.0" self."lxml-2.3.6" self."plone.app.registry-1.2.3" self."plone.resource-1.0.2" self."plone.resourceeditor-1.0" self."plone.subrequest-1.6.7" self."plone.transformchain-1.0.3" self."Products.CMFPlone-4.3.1" self."repoze.xmliter-0.5" self."roman-1.4.0" self.setuptools self."zope.traversing-3.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Integrates the Diazo theming engine with Plone
@@ -4157,7 +3968,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."collective.monkeypatcher-1.0.1" self."plone.app.layout-2.3.5" self."plone.app.uuid-1.0" self."plone.app.z3cform-0.7.3" self."plone.indexer-1.0.2" self."plone.registry-1.0.1" self."plone.z3cform-0.8.0" self.setuptools self."z3c.form-3.0" self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.container-3.11.2" self."zope.event-3.5.2" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.site-3.9.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Enhanced discussion support for Plone
@@ -4178,7 +3988,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."plone.memoize-1.1.1" self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self."Products.PlonePAS-4.1.1" self."Products.PluggableAuthService-1.10.0" self.setuptools self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.deferredimport-3.5.3" self."zope.interface-3.6.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A PAS plugin which can manage local roles via an adapter lookup on the current context
@@ -4199,7 +4008,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."AccessControl-3.0.6" self."Acquisition-2.13.8" self."DateTime-3.0.3" self."DocumentTemplate-2.13.2" self."ExtensionClass-2.13.2" self."Missing-2.13.1" self."Persistence-2.13.2" self."Products.ZCTextIndex-2.13.4" self."Record-2.13.0" self."RestrictedPython-3.6.0" self.setuptools self."zExceptions-2.13.0" self."ZODB3-3.10.5" self."zope.dottedname-3.4.6" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.testing-3.9.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope 2's indexing and search solution.
@@ -4220,7 +4028,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.app.imaging-1.0.9" self."plone.app.layout-2.3.5" self."plone.caching-1.0" self."plone.namedfile__scales-2.0.2" self."plone.outputfilters-1.10" self."Products.Archetypes-1.9.1" self."Products.ResourceRegistries-2.2.9" self.setuptools self."zope.app.content-3.5.1" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Adds support for TinyMCE, a platform independent web based Javascript HTML WYSIWYG editor, to Plone.
@@ -4241,7 +4048,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         OpenID support for servers and consumers.
@@ -4262,7 +4068,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."lxml-2.3.6" self.setuptools self."z3c.zcmlhook-1.0b1" self."zope.component__zcml-3.9.5" self."zope.deferredimport-3.5.3" self."zope.dottedname-3.4.6" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Serialize Zope schema definitions to and from XML
@@ -4283,7 +4088,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Exceptions
@@ -4304,7 +4108,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."five.formlib-1.0.4" self."plone.app.controlpanel-2.3.6" self."plone.app.layout-2.3.5" self."plone.protect-2.0.2" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.statusmessages-4.0" self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.formlib-4.0.6" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.site-3.9.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A package for all things users and groups related (specific to plone)
@@ -4325,7 +4128,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.batching-1.0" self.setuptools self."z3c.form-3.0" self."zope.browserpage-3.12.2" self."zope.component__zcml-3.9.5" self."zope.i18n__zcml-3.7.4" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         plone.z3cform is a library that allows use of z3c.form with Zope 2 and the CMF.
@@ -4346,7 +4148,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."plone.app.registry-1.2.3" self."plone.app.z3cform-0.7.3" self."plone.cachepurging-1.0.4" self."plone.caching-1.0" self."plone.memoize-1.1.1" self."plone.protect-2.0.2" self."plone.registry-1.0.1" self."Products.CMFCore-2.2.7" self."Products.CMFDynamicViewFTI-4.0.5" self."Products.GenericSetup-1.7.3" self."Products.statusmessages-4.0" self."python-dateutil-1.5" self.setuptools self."z3c.form-3.0" self."z3c.zcmlhook-1.0b1" self."zope.browserresource-3.10.3" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.pagetemplate-3.6.3" self."zope.publisher-3.12.6" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Plone UI and default rules for plone.caching/z3c.caching
@@ -4367,7 +4168,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."ExtensionClass-2.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Special Record objects used in Zope2.
@@ -4388,7 +4188,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."ExtensionClass-2.13.2" self."Persistence-2.13.2" self."Record-2.13.0" self."RestrictedPython-3.6.0" self."transaction-1.1.1" self."zExceptions-2.13.0" self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.deferredimport-3.5.3" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.testing-3.9.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Security framework for Zope2.
@@ -4409,7 +4208,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.CMFPlone-4.3.1" self."Products.GenericSetup-1.7.3" self."Products.PloneTestCase-0.9.17" self.setuptools self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.testing-3.9.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Workflow policies for CMF and Plone
@@ -4430,7 +4228,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Text field with MIME type support
@@ -4451,7 +4248,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Very basic event publishing system
@@ -4472,7 +4268,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."cssselect-0.8" self."lxml-3.2.3" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-
     meta = {
       description = ''
         A jquery-like library for python
@@ -4493,7 +4288,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Convenience uid/gid helper function used in Zope2.
@@ -4514,7 +4308,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."ZConfig-2.9.1" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Daemon process control library and tools for Unix-based systems
@@ -4535,7 +4328,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Low level support for dynamic modules
@@ -4556,7 +4348,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Easily hook into the ZCML processing machinery
@@ -4577,7 +4368,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Definition of authentication basics for the Zope Framework
@@ -4598,7 +4388,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Add test information to .egg-info
@@ -4619,7 +4408,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.app.form-2.2.2" self."plone.app.portlets-2.4.4" self."plone.app.vocabularies-2.1.10" self."plone.memoize-1.1.1" self."plone.portlets-2.2" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A portlet that fetches results from a collection
@@ -4640,7 +4428,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Shared Zope Toolkit browser components
@@ -4661,7 +4448,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."archetypes.querywidget-1.0.8" self."plone.app.contentlisting-1.0.4" self."plone.app.form-2.2.2" self."plone.app.portlets-2.4.4" self."plone.app.vocabularies-2.1.10" self."plone.portlet.collection-2.1.5" self."plone.portlets-2.2" self."Products.Archetypes-1.9.1" self."Products.CMFCore-2.2.7" self."Products.CMFQuickInstallerTool-3.0.6" self."Products.validation-2.0" self.setuptools self."transaction-1.1.1" self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.formlib-4.0.6" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         This package adds 'saved search' functionality to Plone.
@@ -4682,7 +4468,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.GenericSetup-1.7.3" self.setuptools self."Zope2-2.13.20" self."eggtestinfo-0.3" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Calendar product for the Zope Content Management Framework
@@ -4703,7 +4488,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."Products.GenericSetup-1.7.3" self."Products.PluginRegistry-1.3" self.setuptools self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Pluggable Zope2 authentication / authorization framework
@@ -4724,7 +4508,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.app.caching-1.1.4" self."plone.app.dexterity-2.0.8" self."plone.app.iterate-2.1.10" self."plone.app.openid-2.0.2" self."plone.app.theming-1.1.1" self."Products.CMFPlacefulWorkflow-1.5.9" self."Products.CMFPlone-4.3.1" self.setuptools self."wicked-1.1.10" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         The Plone Content Management System
@@ -4745,7 +4528,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.container-3.11.2" self."zope.lifecycleevent-3.6.2" self."zope.schema-4.2.2" self."zope.traversing-3.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         wicked is a compact syntax for doing wiki-like content linking and creation in zope and plone
@@ -4766,7 +4548,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Broken Object Interfaces
@@ -4787,7 +4568,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.namedfile__scales-2.0.2" self."plone.z3cform-0.8.0" self.setuptools self."z3c.form-3.0" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Image widget for z3c.form and Plone
@@ -4808,7 +4588,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."plone.app.vocabularies-2.1.10" self."Products.GenericSetup-1.7.3" self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.contentprovider-3.7.2" self."zope.interface-3.6.7" self."zope.site-3.9.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         configurable viewlet manager
@@ -4829,7 +4608,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."five.localsitemanager-2.0.5" self.setuptools self."zope.formlib-4.0.6" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Read Zope configuration state from profile dirs / tarballs
@@ -4850,7 +4628,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         jQuery integration for Plone
@@ -4871,7 +4648,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.autoform-1.4" self."plone.z3cform-0.8.0" self.setuptools self."z3c.form-3.0" self."zope.component__zcml-3.9.5" self."zope.container-3.11.2" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Provides through-the-web editing of a zope schema/interface.
@@ -4892,7 +4668,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         StructuredText parser
@@ -4913,7 +4688,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.testing-3.9.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope RAM Cache
@@ -4934,7 +4708,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         ZODB undo support for Zope2.
@@ -4955,7 +4728,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.proxy-3.6.1" self."zope.publisher-3.12.6" self."zope.security__untrustedpython-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Resolving paths in the object hierarchy
@@ -4976,7 +4748,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.event-3.5.2" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.tales-3.5.3" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Content Provider Framework for Zope Templates
@@ -4997,7 +4768,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         The classic Plone 3 default theme.
@@ -5018,7 +4788,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."five.localsitemanager-2.0.5" self."Products.GenericSetup-1.7.3" self."Products.ZSQLMethods-2.13.4" self.setuptools self."zope.app.publication-3.12.0" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Content Management Framework core components
@@ -5039,7 +4808,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."Persistence-2.13.2" self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Image scaling
@@ -5060,7 +4828,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.app.form-2.2.2" self."plone.app.portlets-2.4.4" self."plone.i18n-2.0.8" self."plone.portlets-2.2" self.setuptools self."zope.component__zcml-3.9.5" self."zope.formlib-4.0.6" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A simple static HTML portlet for Plone.
@@ -5081,7 +4848,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.scale__storage-1.3.2" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         User-configurable, blob-aware image scaling for Plone.
@@ -5102,7 +4868,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         SecureMailHost is a reimplementation of the standard Zope2 MailHost with some security and usability enhancements.
@@ -5123,7 +4888,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.memoize-1.1.1" self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.container-3.11.2" self."zope.contentprovider-3.7.2" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.site-3.9.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         An extension of zope.viewlet to support dynamic portlets
@@ -5144,7 +4908,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."plone.app.jquerytools-1.5.5" self."plone.app.querystring-1.0.8" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         UNKNOWN
@@ -5165,7 +4928,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."Products.GenericSetup-1.7.3" self.setuptools self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Configure application plugins based on interfaces
@@ -5186,7 +4948,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."lxml-2.3.6" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Wrapper for ``lxml`` trees which serializes to string upon iteration.
@@ -5207,7 +4968,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."ZConfig-2.9.1" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A general logging facility
@@ -5228,7 +4988,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.proxy-3.6.1" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope Location
@@ -5249,7 +5008,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."lxml-2.3.6" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Experimental version of lxml.cssselect
@@ -5270,7 +5028,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."pytz-2013b" self.setuptools self."zope.browser-1.3" self."zope.browserpage-3.12.2" self."zope.component__zcml-3.9.5" self."zope.datetime-3.4.1" self."zope.event-3.5.2" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.traversing-3.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Form generation and validation library for Zope
@@ -5291,7 +5048,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Pluggable object copying mechanism
@@ -5312,7 +5068,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."five.globalrequest-1.0" self.setuptools self."zope.globalrequest-1.0" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Subrequests for Zope2
@@ -5333,7 +5088,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self."Products.CMFCore-2.2.7" self.setuptools self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.formlib-4.0.6" self."zope.i18n__zcml-3.7.4" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.site-3.9.2" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A collection of generally useful vocabularies.
@@ -5354,7 +5108,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.dottedname-3.4.6" self."zope.event-3.5.2" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.testing-3.9.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         A debconf-like (or about:config-like) registry for storing application settings
@@ -5375,7 +5128,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."AccessControl-3.0.6" self.setuptools self."transaction-1.1.1" self."ZODB3-3.10.5" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Zope catalog index for paths
@@ -5396,7 +5148,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Message Identifiers for internationalization
@@ -5417,7 +5168,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Manage link integrity in Plone.
@@ -5438,7 +5188,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.3" self.setuptools self."eggtestinfo-0.3" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Action icons product for the Zope Content Management Framework
@@ -5459,7 +5208,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [  ];
     propagatedBuildInputs = [ self.setuptools self."transaction-1.1.1" self."zope.browser-1.3" self."zope.browsermenu-3.9.1" self."zope.browserpage-3.12.2" self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.datetime-3.4.1" self."zope.exceptions-3.6.2" self."zope.formlib-4.0.6" self."zope.i18n__zcml-3.7.4" self."zope.interface-3.6.7" self."zope.proxy-3.6.1" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         The Original Zope 3 Form Framework
@@ -5480,7 +5228,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."Acquisition-2.13.8" self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.event-3.5.2" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.location-3.9.1" self."zope.site-3.9.2" self."zope.testing-3.9.7" self."Zope2-2.13.20" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Local site manager implementation for Zope 2
@@ -5501,7 +5248,6 @@ development, check it into Subversion, and not touch Diazo during deployment.
     buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ self."AccessControl-3.0.6" self."Acquisition-2.13.8" self."DateTime-3.0.3" self."DocumentTemplate-2.13.2" self."RestrictedPython-3.6.0" self.setuptools self."zExceptions-2.13.0" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-
     meta = {
       description = ''
         Provides support for restricted execution of Python scripts in Zope 2.

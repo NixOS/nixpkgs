@@ -5,11 +5,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "spice-0.12.3";
+  name = "spice-0.12.4";
 
   src = fetchurl {
     url = "http://www.spice-space.org/download/releases/${name}.tar.bz2";
-    sha256 = "0il50hcw87mzs3dw80a9gkidmhgf9s8691xmki3gj9358qf5xmmz";
+    sha256 = "11xkdz26b39syynxm3iyjsr8q7x0v09zdli9an1ilcrfyiykw1ng";
   };
 
   buildInputs = [ pixman celt alsaLib openssl libjpeg zlib

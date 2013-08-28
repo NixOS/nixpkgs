@@ -19,7 +19,8 @@ rec {
   # Default meta attribute
   defMeta = {
     homepage = http://www.kde.org;
-    inherit (qt4.meta) platforms maintainers;
+    platforms = stdenv.lib.platforms.linux;
+    inherit (qt4.meta) maintainers;
   };
 
   # KDE package built from the whole tarball

@@ -1,4 +1,4 @@
-{ pkgs, stdenv, nodejs, fetchurl, neededNatives, self }:
+{ pkgs, stdenv, nodejs, fetchurl, neededNatives, self, generated ? ./node-packages-generated.nix }:
 
 {
   nativeDeps = {
@@ -23,4 +23,4 @@
     '';
 
   /* Put manual packages below here (ideally eventually managed by npm2nix */
-} // import ./node-packages-generated.nix { inherit self fetchurl; inherit (pkgs) lib; }
+} // import generated { inherit self fetchurl; inherit (pkgs) lib; }

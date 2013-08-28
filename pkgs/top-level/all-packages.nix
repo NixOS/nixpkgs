@@ -515,7 +515,9 @@ let
 
   bmon = callPackage ../tools/misc/bmon { };
 
-  boomerang = callPackage ../development/tools/boomerang { };
+  boomerang = callPackage ../development/tools/boomerang {
+    stdenv = overrideGCC stdenv gcc47;
+  };
 
   bootchart = callPackage ../tools/system/bootchart { };
 
@@ -1111,8 +1113,6 @@ let
   jhead = callPackage ../tools/graphics/jhead { };
 
   jing = callPackage ../tools/text/xml/jing { };
-
-  jing_tools = callPackage ../tools/text/xml/jing/jing-script.nix { };
 
   jnettop = callPackage ../tools/networking/jnettop { };
 
@@ -3153,7 +3153,7 @@ let
     libX11 = xlibs.libX11;
   };
 
-  pypy = callPackage ../development/interpreters/pypy/2.0 { };
+  pypy = callPackage ../development/interpreters/pypy/2.1 { };
 
   pythonFull = python27Full;
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
@@ -4487,7 +4487,9 @@ let
 
   libassuan2_1 = callPackage ../development/libraries/libassuan/git.nix { };
 
-  libav = callPackage ../development/libraries/libav { };
+  libav = libav_9;
+  libav_all = callPackage ../development/libraries/libav { };
+  inherit (libav_all) libav_9 libav_0_8;
 
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
@@ -7382,6 +7384,10 @@ let
       else stdenv;
   };
 
+  emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
+    withX = false;
+  }));
+
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
 
@@ -7925,6 +7931,8 @@ let
   caps = callPackage ../applications/audio/caps { };
 
   lastwatch = callPackage ../applications/audio/lastwatch { };
+
+  lbdb = callPackage ../tools/misc/lbdb { };
 
   lci = callPackage ../applications/science/logic/lci {};
 
@@ -9326,7 +9334,13 @@ let
 
   gtk_engines = callPackage ../misc/themes/gtk2/gtk-engines { };
 
+  gtk-engine-murrine = callPackage ../misc/themes/gtk2/gtk-engine-murrine { };
+
   gnome_themes_standard = callPackage ../misc/themes/gnome-themes-standard { };
+
+  mate-icon-theme = callPackage ../misc/themes/mate-icon-theme { };
+
+  mate-themes = callPackage ../misc/themes/mate-themes { };
 
   xfce = xfce4_10;
   xfce4_10 = recurseIntoAttrs (import ../desktops/xfce { inherit pkgs newScope; });

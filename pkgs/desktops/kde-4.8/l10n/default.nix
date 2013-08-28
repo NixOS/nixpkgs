@@ -23,7 +23,8 @@ let
       meta = {
         description = "KDE translation for ${lang}";
         license = "GPL";
-        inherit (kdelibs.meta) maintainers platforms homepage;
+        platforms = stdenv.lib.platforms.linux;
+        inherit (kdelibs.meta) maintainers homepage;
       };
     };
 

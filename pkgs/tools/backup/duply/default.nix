@@ -34,6 +34,6 @@ stdenv.mkDerivation {
     homepage = http://duply.net/;
     license = licenses.gpl2;
     maintainers = [ maintainers.bjornfor ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
