@@ -63,6 +63,10 @@ stdenv.mkDerivation rec {
     done
     popd
     wrapPythonProgramsIn $out/test "$out/test $pythonPath"
+
+    # for bluez4 compatibility for NixOS
+    mkdir $out/sbin
+    ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
   '';
 
   meta = {
