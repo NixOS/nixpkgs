@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, bluez, libusb, udev, cmake}:
+{stdenv, fetchurl, pkgconfig, bluez, libusb, cmake}:
    
 stdenv.mkDerivation rec {
   name = "openobex-1.7.1";
