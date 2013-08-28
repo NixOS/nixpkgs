@@ -7927,6 +7927,8 @@ let
 
   lastwatch = callPackage ../applications/audio/lastwatch { };
 
+  lbdb = callPackage ../tools/misc/lbdb { };
+
   lci = callPackage ../applications/science/logic/lci {};
 
   ldcpp = callPackage ../applications/networking/p2p/ldcpp {
