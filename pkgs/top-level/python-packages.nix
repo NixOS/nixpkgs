@@ -6593,18 +6593,18 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   tarman = buildPythonPackage rec {
-    version = "0.1.1";
+    version = "0.1.3";
     name = "tarman-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/t/tarman/tarman-${version}.zip";
-      sha256 = "0ppd2365hf841b58fss5pgaja0y0mwx5n0gk1p3rxx9y3r0kyfas";
+      sha256 = "0ri6gj883k042xaxa2d5ymmhbw2bfcxdzhh4bz7700ibxwxxj62h";
     };
 
     buildInputs = [ pkgs.unzip unittest2 nose mock ];
     propagatedBuildInputs = [ modules.curses libarchive ];
 
-    # two tests fail
+    # tests are still failing
     doCheck = false;
   };
 
