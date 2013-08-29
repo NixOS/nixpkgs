@@ -5458,6 +5458,7 @@ let
 
   slibGuile = callPackage ../development/libraries/slib {
     scheme = guile_1_8;
+    texinfo = texinfo4; # otherwise erros: must be after `@defun' to use `@defunx'
   };
 
   smpeg = callPackage ../development/libraries/smpeg { };
