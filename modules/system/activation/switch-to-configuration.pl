@@ -136,7 +136,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             # swap devices).  FIXME: the suspend target is sometimes
             # active after the system has resumed, which probably
             # should not be the case.  Just ignore it.
-            if ($unit ne "suspend.target" && $unit ne "hibernate.target") {
+            if ($unit ne "suspend.target" && $unit ne "hibernate.target" && $unit ne "hybrid-sleep.target") {
                 unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "no")) {
                     write_file($startListFile, { append => 1 }, "$unit\n");
                 }
