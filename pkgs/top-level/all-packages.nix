@@ -6460,7 +6460,7 @@ let
   };
 
   linux_3_2_grsecurity = lowPrio (lib.overrideDerivation (linux_3_2.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_2_9_1_3_2_50 ];
+    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_2_9_1_3_2_51 ];
   })) (args: { makeFlags = "DISABLE_PAX_PLUGINS=y";}));
 
   linux_3_2_apparmor = lowPrio (linux_3_2.override {
