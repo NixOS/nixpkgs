@@ -8489,7 +8489,7 @@ let
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
   stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
-    inherit texinfo;
+    texinfo = texinfo4; # otherwise error: @itemx must follow @item
     clisp = clisp_2_44_1;
   };
 
