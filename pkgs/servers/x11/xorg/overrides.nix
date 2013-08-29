@@ -191,6 +191,13 @@ in
     buildInputs = attrs.buildInputs ++ [args.intltool];
   };
 
+  xmodmap = attrs: attrs // {
+    patches = [(args.fetchurl {
+      url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-apps/xmodmap/files/xmodmap-1.0.7-_GNU_SOURCE.patch;
+      sha256 = "0q3zhy0wy1kkbpagzav8869fais4lw5q5vybgjj7wkmak06c5648";
+      name = "new-gcc.patch";
+    })];
+  };
   xorgserver = with xorg; attrs: attrs // {
     configureFlags = [
       "--enable-xcsecurity" # enable SECURITY extension
