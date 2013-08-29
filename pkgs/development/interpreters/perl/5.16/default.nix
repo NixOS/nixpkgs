@@ -77,12 +77,12 @@ stdenv.mkDerivation rec {
     cpan/CPANPLUS/t/20_CPANPLUS-Dist-MM.t \
   '' + " ";
 
-  postPatch = optionalString (!stdenv.isDarwin) /* this failed on Darwin, no idea why */ ''
+  postPatch = ''
     for test in ${testsToSkip}; do
       echo "Removing test" $test
       rm "$test"
       pat=`echo "$test" | sed 's,/,\\\\/,g'` # just escape slashes
-      sed "/^$pat/d" -i MANIFEST
+      sed "/^$pat/d" -i.bak MANIFEST
     done
   '';
 
