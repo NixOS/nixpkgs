@@ -631,6 +631,8 @@ let
 
   convertlit = callPackage ../tools/text/convertlit { };
 
+  collectd = callPackage ../tools/system/collectd { };
+
   colormake = callPackage ../development/tools/build-managers/colormake { };
 
   cowsay = callPackage ../tools/misc/cowsay { };
