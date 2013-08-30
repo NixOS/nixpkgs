@@ -188,6 +188,7 @@
   ./services/scheduling/atd.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
+  ./services/search/elasticsearch.nix
   ./services/security/clamav.nix
   ./services/security/fprot.nix
   ./services/security/frandom.nix
