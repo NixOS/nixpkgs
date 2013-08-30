@@ -1,13 +1,9 @@
 { stdenv, fetchgit, pkgconfig, libuuid, openssl }:
 
-let
-  arch = if stdenv.system == "x86_64-linux" then "x86_64"
-    else if stdenv.system == "i686-linux" then "x86"
-    else throw "vboot_reference for: ${stdenv.system} not supported!";
-
+stdenv.mkDerivation rec {
   version = "20130507";
   checkout = "25/50225/2";
-in stdenv.mkDerivation {
+
   name = "vboot_reference-${version}";
 
   src = fetchgit {
@@ -21,6 +17,10 @@ in stdenv.mkDerivation {
                  then []
                  else [ (stdenv.lib.overrideDerivation libuuid
                           (args: { configureFlags = args.configureFlags + " --enable-static"; })) ]);
+
+  arch = if stdenv.system == "x86_64-linux" then "x86_64"
+    else if stdenv.system == "i686-linux" then "x86"
+    else throw "vboot_reference for: ${stdenv.system} not supported!";
 
   buildPhase = ''
     make ARCH=${arch} `pwd`/build/cgpt/cgpt
@@ -38,4 +38,10 @@ in stdenv.mkDerivation {
     cp build/utility/vbutil_keyblock $out/bin
     cp build/utility/vbutil_firmware $out/bin
   '';
+
+  meta = {
+    description = "Chrome OS partitioning and kernel signing tools.";
+    license = stdenv.lib.licenses.bsd3;
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

@@ -859,10 +859,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
-  distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
-
-  distributedProcessSimplelocalnet = callPackage ../development/libraries/haskell/distributed-process-simplelocalnet {};
-
   distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
@@ -1328,6 +1324,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   lens = callPackage ../development/libraries/haskell/lens {};
 
+  lensDatetime = callPackage ../development/libraries/haskell/lens-datetime {};
+
   lenses = callPackage ../development/libraries/haskell/lenses {};
 
   libffi = callPackage ../development/libraries/haskell/libffi {
@@ -1341,6 +1339,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   libxmlSax = callPackage ../development/libraries/haskell/libxml-sax {};
 
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
+
+  linear = callPackage ../development/libraries/haskell/linear {};
 
   List = callPackage ../development/libraries/haskell/List {};
 

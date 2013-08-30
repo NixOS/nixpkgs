@@ -28,6 +28,15 @@ let
 
 in {
 
+  cs = buildDict {
+    shortName = "cs-20040614-1";
+    fullName = "Czech";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/cs/aspell6-cs-20040614-1.tar.bz2;
+      sha256 = "0rihj4hsw96pd9casvmpvw3r8040pfa28p1h73x4vyn20zwr3h01";
+    };
+  };
+
   de = buildDict {
     shortName = "de-20030222-1";
     fullName = "German";
