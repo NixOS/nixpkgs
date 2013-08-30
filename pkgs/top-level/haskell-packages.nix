@@ -74,6 +74,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   final = self;
 
+  callPackage = callPackage;
+
   # GHC and its wrapper
   #
   # We use a wrapped version of GHC for nearly everything. The wrapped version
