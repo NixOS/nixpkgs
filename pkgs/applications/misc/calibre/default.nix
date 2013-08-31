@@ -4,12 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-1.0.0";
-  # 0.9.12+ versions won't build due to missing qt4 private headers: https://bugs.launchpad.net/calibre/+bug/1094719
+  name = "calibre-1.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/calibre/${name}.tar.xz";
-    sha256 = "0qz369n46ijk8jbbgwnvj3v0byp5npn2zdb4lvc6mwa143mr6d62";
+    sha256 = "1gb6h6jn2fj5b1xv5xkmsrdrid2k8zp496alnfi88x7dmahfb6f6";
   };
 
   inherit python;
