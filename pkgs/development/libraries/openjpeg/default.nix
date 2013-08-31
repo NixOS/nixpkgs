@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, libpng, libtiff, lcms, glib/*passthru only*/ }:
+{ stdenv, fetchurl, pkgconfig, libpng, libtiff, lcms, cmake, glib/*passthru only*/ }:
 
 stdenv.mkDerivation rec {
-  name = "openjpeg-1.5.1";
+  name = "openjpeg-2.0.0";
   passthru = {
-    incDir = "openjpeg-1.5";
+    incDir = "openjpeg-2.0";
   };
 
   src = fetchurl {
     url = "http://openjpeg.googlecode.com/files/${name}.tar.gz";
-    sha256 = "13dbyf3jwr4h2dn1k11zph3jgx17z7d66xmi640mbsf8l6bk1yvc";
+    sha1 = "0af78ab2283b43421458f80373422d8029a9f7a7";
   };
 
+  buildInputs = [ cmake ];
   nativebuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ libpng libtiff lcms ]; # in closure anyway
 
