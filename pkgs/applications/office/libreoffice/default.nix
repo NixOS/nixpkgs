@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, pam, python, tcsh, libxslt, perl, ArchiveZip
+# when updating version, wait for the build to fail
+# run make without sourcing the environment and let libreoffice
+# download all extra files
+# then list extra files separated by newline and pipe them to
+# generate-libreoffice-srcs.sh and copy output to libreoffice-srcs.nix
+
+{ stdenv, fetchurl, pam, python3, tcsh, libxslt, perl, ArchiveZip
 , CompressZlib, zlib, libjpeg, expat, pkgconfigUpstream, freetype, libwpd
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
@@ -6,54 +12,89 @@
 , libXinerama, openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, gstreamer, gst_plugins_base, mesa
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus_glib, qt4, kde4, clucene_core, libcdr, lcms, vigra
-, libiodbc, mdds, saneBackends, mythes, libexttextcat, libvisio
-, fontsConf
-, langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" ]
+, libwpg, dbus_glib, glibc, qt4, kde4, clucene_core, libcdr, lcms, vigra
+, unixODBC, mdds, saneBackends, mythes, libexttextcat, libvisio
+, fontsConf, pkgconfig, libzip, bluez5, libtool, maven
+, langs ? [ "ALL" ]
 }:
 
 let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
-  major = "3";
-  minor = "6";
-  patch = "6";
+  major = "4";
+  minor = "0";
+  patch = "5";
   tweak = "2";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
+  
+  # doesn't work with srcs versioning
+  libmspub = stdenv.mkDerivation rec {
+     version = "0.0.6";
+     name = "libmspub-${version}";
+
+     src = fetchurl {
+       url = "http://dev-www.libreoffice.org/src/${name}.tar.gz";
+       sha256 = "1zdcvnm0dpac5yqdv34hq9j38cnhyqzyjgb19iyp54ajnwfjhmcq";
+     };
+
+     configureFlags = "--disable-werror";
+ 
+     buildInputs = [ zlib libwpd libwpg pkgconfig boost icu ];  
+  };
+
+  # doesn't exist in srcs
+  libixion = stdenv.mkDerivation rec {
+     version = "0.5.0";
+     name = "libixion-${version}";
+
+     src = fetchurl {
+       url = "http://kohei.us/files/ixion/src/${name}.tar.bz2";
+       sha256 = "010k33bfkckx28r4rdk5mkd0mmayy5ng9ja0j0zg0z237gcfgrzb";
+     };
+
+     configureFlags = "--with-boost=${boost}";
+
+     buildInputs = [ boost mdds pkgconfig ];  
+  };
+
   fetchThirdParty = {name, md5}: fetchurl {
     inherit name md5;
     url = "http://dev-www.libreoffice.org/src/${md5}-${name}";
   };
+
   fetchSrc = {name, sha256}: fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${name}-${version}.tar.xz";
     inherit sha256;
   };
+
   srcs = {
     third_party = [ (fetchurl rec {
         url = "http://dev-www.libreoffice.org/extern/${md5}-${name}";
         md5 = "185d60944ea767075d27247c3162b3bc";
         name = "unowinreg.dll";
       }) ] ++ (map fetchThirdParty (import ./libreoffice-srcs.nix));
+
     translations = fetchSrc {
       name = "translations";
-      sha256 = "1n3yk2077adyxrhs0jpkbm8dg3lxpn3sy63f0dl87ifv7ha1rfpn";
+      sha256 = "0x96wlwr5m7w4k3ygydzak3ycq35hjq60vfi6nfxczlr8pfjyjxv";
     };
+
+    # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "12rb5mw6sbi41w1zaxrj4qffiis9qcx8ibp5cpmwsz07nsdv5sxk";
+      sha256 = "0nab5jcgrrgn0v1yrm18nl9avp4vifbas48l1absz3jmzf9wka7b";
     };
 
-    core = fetchSrc {
-      name = "core";
-      sha256 = "0xw36sa73cgk3k3fv1spv5pavm95bc02lszn8415ay36lcc098pn";
-    };
   };
 in
 stdenv.mkDerivation rec {
   name = "libreoffice-${version}";
 
-  src = srcs.core;
+  src = fetchurl {
+    url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
+    sha256 = "195g1iab7j2x7sl326xbq7vya412ns57xrwpv9hqdrb7iiz2n8la";
+  };
 
   # Openoffice will open libcups dynamically, so we link it directly
   # to make its dlopen work.
@@ -69,30 +110,30 @@ stdenv.mkDerivation rec {
   '' + (stdenv.lib.concatMapStrings (f: "ln -sv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\n") srcs.third_party)
   + ''
     ln -sv ${srcs.help} $sourceRoot/src/${srcs.help.name}
+    tar xf $sourceRoot/src/${srcs.help.name} -C $sourceRoot/../
     ln -sv ${srcs.translations} $sourceRoot/src/${srcs.translations.name}
+    tar xf $sourceRoot/src/${srcs.translations.name} -C $sourceRoot/../
   '';
 
   patchPhase = ''
     find . -type f -print0 | xargs -0 sed -i \
       -e 's,! */bin/bash,!${bash}/bin/bash,' -e 's,\(!\|SHELL=\) */usr/bin/env bash,\1${bash}/bin/bash,' \
       -e 's,! */usr/bin/perl,!${perl}/bin/perl,' -e 's,! */usr/bin/env perl,!${perl}/bin/perl,' \
-      -e 's,! */usr/bin/python,!${python}/bin/python,' -e 's,! */usr/bin/env python,!${python}/bin/python,'
-    sed -i 's,ANT_OPTS+="\(.*\)",ANT_OPTS+=\1,' apache-commons/java/*/makefile.mk
+      -e 's,! */usr/bin/python,!${python3}/bin/python,' -e 's,! */usr/bin/env python,!${python3}/bin/python,'
+    #sed -i 's,ANT_OPTS+="\(.*\)",ANT_OPTS+=\1,' apache-commons/java/*/makefile.mk
   '';
 
   QT4DIR = qt4;
   KDE4DIR = kde4.kdelibs;
 
-  # I set --with-num-cpus=$NIX_BUILD_CORES, as it's the equivalent of
-  # enableParallelBuilding=true in this build system.
   preConfigure = ''
     # Needed to find genccode
     PATH=$PATH:${icu}/sbin
-
-    configureFlagsArray=("--with-lang=${langsSpaces}" "--with-num-cpus=$NIX_BUILD_CORES")
   '';
 
   makeFlags = "SHELL=${bash}/bin/bash";
+
+  enableParallelBuilding = true;
 
   buildPhase = ''
     # This is required as some cppunittests require fontconfig configured
@@ -119,7 +160,10 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    #"--enable-verbose"
+    "--with-lang=${langsSpaces}"
+    "--with-vender=NixOS"
+    "--with-parallelism=1"
+    "--enable-verbose="
 
     # Without these, configure does not finish
     "--without-junit"
@@ -131,16 +175,16 @@ stdenv.mkDerivation rec {
     "--disable-odk"
     "--with-system-cairo"
     "--with-system-libs"
+    "--with-system-headers"
+    "--with-system-openssl"
+    "--with-system-openldap"
     "--with-boost-libdir=${boost}/lib"
-    "--with-system-db"
-    "--with-openldap" "--enable-ldap"
-    "--without-system-libwps"
+    "--without-system-libwps"  # TODO
     "--without-doxygen"
 
     # I imagine this helps. Copied from go-oo.
     "--disable-epm"
     "--disable-mathmldtd"
-    "--disable-mozilla"
     "--disable-kde"
     "--disable-postgresql-sdbc"
     "--with-package-format=native"
@@ -156,28 +200,33 @@ stdenv.mkDerivation rec {
     "--without-system-altlinuxhyph"
     "--without-system-lpsolve"
     "--without-system-graphite"
-    "--without-system-mozilla-headers"
+    "--without-system-npapi-headers"
     "--without-system-libcmis"
-
-    "--with-java-target-version=1.6" # The default 1.7 not supported
+    "--without-system-mozilla"
   ];
+
+  checkPhase = ''
+    make unitcheck
+    make slowcheck
+  '';
 
   buildInputs =
     [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
       CompressZlib cppunit cups curl db4 dbus_glib expat file flex fontconfig
       freetype GConf getopt gnome_vfs gperf gst_plugins_base gstreamer gtk
-      hunspell icu jdk kde4.kdelibs lcms libcdr libexttextcat libiodbc libjpeg
+      hunspell icu jdk kde4.kdelibs lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst mdds mesa mythes
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
-      python sablotron saneBackends tcsh unzip vigra which zip zlib
+      python3 sablotron saneBackends tcsh unzip vigra which zip zlib libmspub
+      mdds liborcus bluez5 liblangtag glibc
     ];
 
-  meta = {
-    description = "Libre-office, variant of openoffice.org";
+  meta = with stdenv.lib; {
+    description = "LibreOffice is a comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = http://libreoffice.org/;
-    license = "LGPL";
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.viric ];
+    platforms = platforms.linux;
   };
 }

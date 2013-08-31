@@ -1,4 +1,4 @@
-#!/var/run/current-system/bin/bash
+#!/run/current-system/sw/bin/bash
 
 # Take the list of files from the main package, ooo.lst.in
 
