@@ -64,7 +64,7 @@
 # modifyPrio argument can be set to lowPrio to make all Haskell packages have
 # low priority.
 
-let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
+let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x y);
                  self = (prefFun result) result; in
 
 # Indentation deliberately broken at this point to keep the bulk
@@ -72,7 +72,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
 {
 
-  final = self;
+  finalReturn = self;
 
   callPackage = callPackage;
 
@@ -961,6 +961,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   filestore = callPackage ../development/libraries/haskell/filestore {};
 
   filesystemConduit = callPackage ../development/libraries/haskell/filesystem-conduit {};
+
+  final = callPackage ../development/libraries/haskell/final {};
 
   fgl_5_4_2_2 = callPackage ../development/libraries/haskell/fgl/5.4.2.2.nix {};
   fgl_5_4_2_3 = callPackage ../development/libraries/haskell/fgl/5.4.2.3.nix {};
@@ -2383,4 +2385,4 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
 };
 
-in result.final
+in result.finalReturn
