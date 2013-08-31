@@ -3687,6 +3687,8 @@ let
 
   uisp = callPackage ../development/tools/misc/uisp { };
 
+  uncrustify = callPackage ../development/tools/misc/uncrustify { };
+
   gdb = callPackage ../development/tools/misc/gdb {
     hurd = gnu.hurdCross;
     inherit (gnu) mig;
