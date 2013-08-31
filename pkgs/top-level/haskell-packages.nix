@@ -105,6 +105,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cabal = callPackage ../build-support/cabal {
     enableLibraryProfiling = enableLibraryProfiling;
     enableCheckPhase = pkgs.stdenv.lib.versionOlder "7.4" self.ghc.ghcVersion;
+    glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
   };
 
   # A variant of the cabal build driver that disables unit testing.

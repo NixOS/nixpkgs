@@ -1,6 +1,6 @@
 # generic builder for Cabal packages
 
-{ stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, jailbreakCabal
+{ stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, jailbreakCabal, glibcLocales
 , enableLibraryProfiling ? false
 , enableCheckPhase ? true
 }:
@@ -112,6 +112,10 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
               (stdenv.lib.enableFeature self.enableSplitObjs "split-objs")
             ] ++ stdenv.lib.optional (stdenv.lib.versionOlder "7" ghc.ghcVersion) (stdenv.lib.enableFeature self.doCheck "tests");
 
+            # GHC needs the locale configured during the Haddock phase.
+            LANG = "en_US.UTF-8";
+            LOCALE_ARCHIVE = lib.optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
+
             # compiles Setup and configures
             configurePhase = ''
               eval "$preConfigure"
@@ -150,11 +154,7 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
               ./Setup build
 
               export GHC_PACKAGE_PATH=$(${ghc.GHCPackages})
-              if [ -z "$noHaddock" ]; then
-                export LANG="en_US.UTF-8"
-                ./Setup haddock
-                unset LANG
-              fi
+              test -n "$noHaddock" || ./Setup haddock
 
               eval "$postBuild"
             '';
