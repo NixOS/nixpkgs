@@ -2,7 +2,7 @@
 
 let
   name    = "maxima";
-  version = "5.29.1";
+  version = "5.30.0";
 
   searchPath =
     stdenv.lib.makeSearchPath "bin"
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "1p94l28adcn0826nah460r9pz71h7wd5klsg885sl2gzds75bn74";
+    sha256 = "1mhx7g0kzpiagg97s2zhaplsq1li9ya2764mhwl7jgfw2vp3jlm0";
   };
 
   buildInputs = [sbcl texinfo perl makeWrapper];
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   postInstall = ''
     # Make sure that maxima can find its runtime dependencies.
     for prog in "$out/bin/"*; do
-      wrapProgram "$prog" --prefix PATH ":" "${searchPath}"
+      wrapProgram "$prog" --prefix PATH ":" "$out/bin:${searchPath}"
     done
     # Move emacs modules and documentation into the right place.
     mkdir -p $out/share/emacs $out/share/doc

@@ -16,4 +16,10 @@
   preFixup = ''
     make clean
   '';
+
+  meta = {
+    description = "Encoder for the JBIG2 image compression format";
+    license = stdenv.lib.licenses.asl20;
+    platforms = stdenv.lib.platforms.all;
+  };
 }

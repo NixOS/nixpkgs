@@ -116,4 +116,5 @@ in
     extraWrapperFlags = "--prefix RUBYLIB : .";
   };
   
+  pry = { gemFlags = "--no-ri --no-rdoc"; };
 }

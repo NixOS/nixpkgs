@@ -52,7 +52,7 @@ stdenv.mkDerivation ({
       fi
     '') args.passthru.names)}
     ${concatStrings (concatMap (dep: map (name: ''
-      mv node_modules/${dep.name} $out/lib/node_modules
+      mv node_modules/${name} $out/lib/node_modules
     '') dep.names) peerDependencies)}
     mv node_modules/.bin $out/lib/node_modules 2>/dev/null || true
     mv node_modules $out/.dependent-node-modules
