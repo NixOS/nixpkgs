@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     (if withX then 
       [ "--with-x-toolkit=gtk" "--with-xft"]
     else
-      [ "--with-x-toolkit=no" ])
+      [ "--with-x=no --with-xpm=no --with-jpeg=no --with-png=no --with-gif=no --with-tiff=no" ])
     # On NixOS, help Emacs find `crt*.o'.
     ++ stdenv.lib.optional (stdenv ? glibc)
          [ "--with-crt-dir=${stdenv.glibc}/lib" ];
