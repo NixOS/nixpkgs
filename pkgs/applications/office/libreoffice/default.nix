@@ -217,7 +217,7 @@ stdenv.mkDerivation rec {
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst mdds mesa mythes
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
       python3 sablotron saneBackends tcsh unzip vigra which zip zlib
-      mdds bluez5 glibc
+      mdds bluez5 glibc libmspub libixion
     ];
 
   meta = with stdenv.lib; {
