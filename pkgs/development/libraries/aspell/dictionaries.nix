@@ -131,4 +131,13 @@ in {
     };
   };
 
+  sv = buildDict {
+    shortName = "sv-0.51-0";
+    fullName = "Swedish";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/sv/aspell-sv-0.51-0.tar.bz2;
+      sha256 = "02jwkjhr32kvyibnyzgx3smbnm576jwdzg3avdf6zxwckhy5fw4v";
+    };
+  };
+
 }
