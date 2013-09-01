@@ -8,6 +8,7 @@ in
 {
   imports = [
     ./compiz.nix
+    ./openbox.nix
     ./kwm.nix
     ./metacity.nix
     ./none.nix
