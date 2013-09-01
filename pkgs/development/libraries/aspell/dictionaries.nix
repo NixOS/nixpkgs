@@ -100,6 +100,15 @@ in {
     };
   };
 
+  nb = buildDict {
+    shortName = "nb-0.50.1-0";
+    fullName = "Norwegian Bokmal";
+    src = fetchurl {
+      url = "mirror://gnu/aspell/dict/nb/aspell-nb-0.50.1-0.tar.bz2";
+      sha256 = "12i2bmgdnlkzfinb20j2a0j4a20q91a9j8qpq5vgabbvc65nwx77";
+    };
+  };
+
   nl = buildDict {
     shortName = "nl-0.50-2";
     fullName = "Dutch";
@@ -111,6 +120,15 @@ in {
     postInstall = ''
       echo "add nl.rws" > $out/lib/aspell/nederlands.multi
     '';
+  };
+
+  nn = buildDict {
+    shortName = "nn-0.50.1-0";
+    fullName = "Norwegian Nynorsk";
+    src = fetchurl {
+      url = "mirror://gnu/aspell/dict/nn/aspell-nn-0.50.1-1.tar.bz2";
+      sha256 = "0w2k5l5rbqpliripgqwiqixz5ghnjf7i9ggbrc4ly4vy1ia10rmc";
+    };
   };
 
   pl = buildDict {
