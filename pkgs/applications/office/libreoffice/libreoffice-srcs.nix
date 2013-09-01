@@ -12,20 +12,12 @@
   md5 = "3c219630e4302863a9a83d0efde889db";
 }
 {
-  name = "liborcus_0.3.0.tar.bz2";
-  md5 = "8755aac23317494a9028569374dc87b2";
-}
-{
   name = "liblayout-0.2.10.zip";
   md5 = "db60e4fde8dd6d6807523deb71ee34dc";
 }
 {
   name = "hsqldb_1_8_0.zip";
   md5 = "17410483b5b5f267aa18b7e00b65e6e0";
-}
-{
-  name = "liblangtag-0.4.0.tar.bz2";
-  md5 = "54e578c91b1b68e69c72be22adcb2195";
 }
 {
   name = "rhino1_5R5.zip";
