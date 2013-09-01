@@ -162,8 +162,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-lang=${langsSpaces}"
     "--with-vender=NixOS"
-    "--with-parallelism=1"
-    "--enable-verbose="
 
     # Without these, configure does not finish
     "--without-junit"
@@ -218,8 +216,8 @@ stdenv.mkDerivation rec {
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst mdds mesa mythes
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
-      python3 sablotron saneBackends tcsh unzip vigra which zip zlib libmspub
-      mdds liborcus bluez5 liblangtag glibc
+      python3 sablotron saneBackends tcsh unzip vigra which zip zlib
+      mdds bluez5 glibc
     ];
 
   meta = with stdenv.lib; {
