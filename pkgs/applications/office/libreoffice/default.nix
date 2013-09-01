@@ -26,6 +26,34 @@ let
   tweak = "2";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
+
+  # configure phase dependency
+  liborcus = stdenv.mkDerivation rec {
+     version = "0.3.0";
+     name = "liborcus-${version}";
+
+     src = fetchurl {
+       url = "http://dev-www.libreoffice.org/src/8755aac23317494a9028569374dc87b2-liborcus_0.3.0.tar.bz2";
+       sha256 = "0xrw13s390mcpm50apclydl38sw2sdq27csrr1k0d39jna2990ih";
+     };
+
+     configureFlags = "--disable-werror";
+
+     buildInputs = [ zlib boost mdds pkgconfig libixion libzip ];
+  };
+
+  # configure phase dependency
+  liblangtag = stdenv.mkDerivation rec {
+     version = "0.4.0";
+     name = "liblangtag-${version}";
+
+     src = fetchurl {
+       url = "http://dev-www.libreoffice.org/src/54e578c91b1b68e69c72be22adcb2195-${name}.tar.bz2";
+       sha256 = "1bjb0fxjmvzxlhr5by9wgisf6w5yvy6wgfzfkjyw6igk39fivdyb";
+     };
+
+     buildInputs = [ libtool pkgconfig libxml2 ];
+  };
   
   # doesn't work with srcs versioning
   libmspub = stdenv.mkDerivation rec {
@@ -217,7 +245,7 @@ stdenv.mkDerivation rec {
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst mdds mesa mythes
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
       python3 sablotron saneBackends tcsh unzip vigra which zip zlib
-      mdds bluez5 glibc libmspub libixion
+      mdds bluez5 glibc libmspub libixion liborcus liblangtag
     ];
 
   meta = with stdenv.lib; {
