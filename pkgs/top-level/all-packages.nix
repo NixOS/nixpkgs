@@ -1834,6 +1834,8 @@ let
 
   unfs3 = callPackage ../servers/unfs3 { };
 
+  unoconv = callPackage ../tools/text/unoconv { };
+
   upx = callPackage ../tools/compression/upx { };
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
