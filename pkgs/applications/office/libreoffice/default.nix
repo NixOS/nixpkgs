@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
     find . -type f -print0 | xargs -0 sed -i \
       -e 's,! */bin/bash,!${bash}/bin/bash,' -e 's,\(!\|SHELL=\) */usr/bin/env bash,\1${bash}/bin/bash,' \
       -e 's,! */usr/bin/perl,!${perl}/bin/perl,' -e 's,! */usr/bin/env perl,!${perl}/bin/perl,' \
-      -e 's,! */usr/bin/python,!${python3}/bin/${python.executable},' -e 's,! */usr/bin/env python,!${python3}/bin/${python.executable},'
+      -e 's,! */usr/bin/python,!${python3}/bin/${python3.executable},' -e 's,! */usr/bin/env python,!${python3}/bin/${python3.executable},'
     #sed -i 's,ANT_OPTS+="\(.*\)",ANT_OPTS+=\1,' apache-commons/java/*/makefile.mk
   '';
 
