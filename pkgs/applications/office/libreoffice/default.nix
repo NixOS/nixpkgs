@@ -157,6 +157,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # Needed to find genccode
     PATH=$PATH:${icu}/sbin
+
+    configureFlagsArray=(
+      "--with-parallelism=$NIX_BUILD_CORES"
+    );
   '';
 
   makeFlags = "SHELL=${bash}/bin/bash";
