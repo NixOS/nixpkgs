@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
 
-  maintainers = [ stdenv.lib.maintainers.blue ];
+  maintainers = [ stdenv.lib.maintainers.vizanto ];
   meta = {
     homepage = "http://www.zeromq.org";
     description = "Java bindings for ZeroMQ";
