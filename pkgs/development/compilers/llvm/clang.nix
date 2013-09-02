@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, perl, groff, llvm, cmake, libxml2 }:
+{ stdenv, fetchurl, perl, groff, llvm, cmake, libxml2, python }:
 
 let
-  version = "3.2";
+  version = "3.3";
   gccReal = if (stdenv.gcc.gcc or null) == null then stdenv.gcc else stdenv.gcc.gcc;
 in
 
 stdenv.mkDerivation {
   name = "clang-${version}";
 
-  buildInputs = [ perl llvm groff cmake libxml2 ];
+  buildInputs = [ perl llvm groff cmake libxml2 python ];
 
   patches = stdenv.lib.optional (stdenv.gcc.libc != null) ./clang-purity.patch;
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   src = fetchurl {
-      url = "http://llvm.org/releases/${version}/clang-${version}.src.tar.gz";
-      sha256 = "0n2nzw3pw2v7fk67f2k2qyzd9wibvi3i5j7cjzz1csqgghzz1aia";
+      url = "http://llvm.org/releases/${version}/cfe-${version}.src.tar.gz";
+      sha256 = "15mrvw43s4frk1j49qr4v5viq68h8qlf10qs6ghd6mrsmgj5vddi";
   };
 
   passthru = { gcc = stdenv.gcc.gcc; };

@@ -47,7 +47,7 @@ releaseTools.sourceTarball {
     nix-store --init
 
     # Run the regression tests in `lib'.
-    res="$(nix-instantiate --eval-only --strict pkgs/lib/tests.nix)"
+    res="$(nix-instantiate --eval-only --strict --show-trace pkgs/lib/tests.nix)"
     if test "$res" != "[ ]"; then
         echo "regression tests for lib failed, got: $res"
         exit 1
@@ -63,7 +63,7 @@ releaseTools.sourceTarball {
     done
 
     header "checking eval-release.nix"
-    nix-instantiate --eval-only --strict --xml ./maintainers/scripts/eval-release.nix > $TMPDIR/out.xml
+    nix-instantiate --eval-only --strict --xml --show-trace ./maintainers/scripts/eval-release.nix > $TMPDIR/out.xml
     xmllint --noout $TMPDIR/out.xml
     stopNest
   '';

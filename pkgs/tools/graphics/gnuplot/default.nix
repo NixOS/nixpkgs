@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = if libX11 != null then ["--with-x"] else ["--without-x"];
 
-  NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo";
-
   postInstall = stdenv.lib.optionalString (libX11 != null) ''
     wrapProgram $out/bin/gnuplot \
        --prefix PATH : '${gnused}/bin' \

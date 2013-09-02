@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   versionMajor = "2.8";
-  versionMinor = "0";
+  versionMinor = "1";
   moduleName   = "at-spi2-atk";
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "085sqww174vl3i9ccb477v706rkjs2d107rl96ma1kbl2jyar226";
+    sha256 = "01pxfnksixrjj27ivllpla54r6nkwsjj34acb0phmp76zna9nrgb";
   };
 
   buildInputs = [ python pkgconfig popt atk libX11 libICE xlibs.libXtst libXi

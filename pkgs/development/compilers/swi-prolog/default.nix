@@ -18,10 +18,6 @@ stdenv.mkDerivation {
   configureFlags = "--with-world --enable-gmp --enable-shared";
   makeFlags = "world";
 
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2"
-  '';
-
   meta = {
     homepage = http://www.swi-prolog.org/;
     description = "A Prolog compiler and interpreter";

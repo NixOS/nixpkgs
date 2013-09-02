@@ -9,4 +9,6 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ pkgconfig libX11 gtk intltool ];
+
+  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
 }

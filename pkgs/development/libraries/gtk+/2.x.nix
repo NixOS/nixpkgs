@@ -8,19 +8,16 @@ assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
-  name = "gtk+-2.24.18";
+  name = "gtk+-2.24.20";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.xz";
-    sha256 = "1193frzg0qrwa885w77kd055zfpbdjwby88xn2skpx9g4w0k35kc";
+    sha256 = "18qdvb7nxi25hfnpmcy01p3majw9jnx83ikm263dk9rrjazvqrnc";
   };
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-I${cairo}/include/cairo"
-    + stdenv.lib.optionalString (libintlOrEmpty != []) " -lintl";
-
-  buildInputs = stdenv.lib.optional stdenv.isDarwin xlibs.libXi;
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (libintlOrEmpty != []) "-lintl";
 
   nativeBuildInputs = [ perl pkgconfig gettext ];
 

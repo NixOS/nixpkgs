@@ -4331,6 +4331,7 @@ let
     stdenv = if stdenv.isDarwin
       then overrideGCC stdenv gccApple
       else stdenv;
+    automake = automake113x;
   };
   glibmm = callPackage ../development/libraries/glibmm { };
 
@@ -5082,7 +5083,8 @@ let
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
   mesa_original = callPackage ../development/libraries/mesa { };
-  mesa_noglu = if stdenv.isDarwin then darwinX11AndOpenGL
+  mesa_noglu = if stdenv.isDarwin
+    then darwinX11AndOpenGL // { driverLink = mesa_noglu; }
     else mesa_original;
   mesa_drivers = mesa_original.drivers;
   mesa_glu = callPackage ../development/libraries/mesa-glu { };
@@ -5358,6 +5360,7 @@ let
 
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
+    mesa = mesa_noglu;
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
     cups = if stdenv.isLinux then cups else null;
 
@@ -5367,13 +5370,11 @@ let
       else stdenv;
   };
 
-  qt48Full = lowPrio (callPackage ../development/libraries/qt-4.x/4.8 {
-    # GNOME dependencies are not used unless gtkStyle == true
-    inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
+  qt48Full = qt48.override {
     docs = true;
     demos = true;
     examples = true;
-  });
+  };
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
@@ -5925,7 +5926,11 @@ let
 
   sip = callPackage ../development/python-modules/python-sip { };
 
-  pyqt4 = callPackage ../development/python-modules/pyqt { };
+  pyqt4 = callPackage ../development/python-modules/pyqt {
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
 
   pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
 
@@ -9686,7 +9691,6 @@ let
   gensgs = callPackage_i686 ../misc/emulators/gens-gs { };
 
   ghostscript = callPackage ../misc/ghostscript {
-    lcms = lcms2;
     x11Support = false;
     cupsSupport = config.ghostscript.cups or true;
     gnuFork = config.ghostscript.gnu or false;
