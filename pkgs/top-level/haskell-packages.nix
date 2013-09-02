@@ -143,7 +143,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     inherit (self) cabal ghc;
     async        = self.async_2_0_1_4;
     attoparsec   = self.attoparsec_0_10_4_0;
-    caseInsensitive = self.caseInsensitive_1_0_0_1;
+    caseInsensitive = self.caseInsensitive_1_1;
     cgi          = self.cgi_3001_1_7_5;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_4_0_0;
@@ -168,7 +168,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     stm          = self.stm_2_4_2;
     syb          = self.syb_0_4_1;
     text         = self.text_0_11_3_1;
-    transformers = self.transformers_0_3_0_0;
+    transformers = null;                        # this has become a core package in GHC 7.7
     unorderedContainers = self.unorderedContainers_0_2_3_0;
     vector       = self.vector_0_10_0_1;
     xhtml        = self.xhtml_3000_2_1;
@@ -667,8 +667,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   carray = callPackage ../development/libraries/haskell/carray {};
 
   caseInsensitive_1_0_0_1 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.1.nix {};
-  caseInsensitive_1_0_0_2 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.2.nix {};
-  caseInsensitive = self.caseInsensitive_1_0_0_2;
+  caseInsensitive_1_1 = callPackage ../development/libraries/haskell/case-insensitive/1.1.nix {};
+  caseInsensitive = self.caseInsensitive_1_1;
 
   cautiousFile = callPackage ../development/libraries/haskell/cautious-file {};
 
@@ -771,6 +771,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cryptoPubkeyTypes = callPackage ../development/libraries/haskell/crypto-pubkey-types {};
 
   cryptoPubkey = callPackage ../development/libraries/haskell/crypto-pubkey {};
+
+  cryptoRandom = callPackage ../development/libraries/haskell/crypto-random {};
 
   cryptoRandomApi = callPackage ../development/libraries/haskell/crypto-random-api {};
 
@@ -1080,6 +1082,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   };
 
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
+
+  groups = callPackage ../development/libraries/haskell/groups {};
 
   groupoids = callPackage ../development/libraries/haskell/groupoids {};
 

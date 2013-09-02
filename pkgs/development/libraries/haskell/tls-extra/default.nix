@@ -1,17 +1,16 @@
 { cabal, certificate, cipherAes, cipherRc4, cryptohash
-, cryptoPubkey, cryptoRandomApi, mtl, network, pem, text, time, tls
-, vector
+, cryptoPubkey, cryptoRandom, mtl, network, pem, time, tls, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "tls-extra";
-  version = "0.6.4";
-  sha256 = "058ia1cabs7ribz287iqkkjvqpp2n7c219f3xc92fhm0qq00mh5n";
+  version = "0.6.5";
+  sha256 = "09b8wxg4k88gdzpbxhd2apf0x5y51zh2zbw2cvraffjnnfkgvzqc";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     certificate cipherAes cipherRc4 cryptohash cryptoPubkey
-    cryptoRandomApi mtl network pem text time tls vector
+    cryptoRandom mtl network pem time tls vector
   ];
   jailbreak = true;
   meta = {

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty";
-  version = "0.2";
-  sha256 = "1shd4bl0wb67abs7vv3cagvpinkz2348fh7fdh3rq8l5g1jflp8q";
+  version = "0.3";
+  sha256 = "0sgc0529sqhj0b75a4mkdw0bkx56ynyl4msmi8hd20jvv5wnzyi6";
   buildDepends = [
     ansiTerminal mtl optparseApplicative regexPosix stm tagged
   ];
