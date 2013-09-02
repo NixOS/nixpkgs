@@ -168,7 +168,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     stm          = self.stm_2_4_2;
     syb          = self.syb_0_4_1;
     text         = self.text_0_11_3_1;
-    transformers = self.transformers_0_3_0_0;
+    transformers = null;                        # this has become a core package in GHC 7.7
     unorderedContainers = self.unorderedContainers_0_2_3_0;
     vector       = self.vector_0_10_0_1;
     xhtml        = self.xhtml_3000_2_1;
