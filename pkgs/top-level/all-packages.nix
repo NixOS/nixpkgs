@@ -418,8 +418,6 @@ let
       texinfo lzma;
     texLive = texLiveAggregationFun {
       paths = [ texLive texLiveExtra ];
-
-      inherit makeWrapper poppler;
     };
   };
 
@@ -9841,8 +9839,6 @@ let
     paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
               texLivePGF texLiveBeamer texLiveModerncv tipa tex4ht texinfo5
               texLiveModerntimeline ];
-
-    inherit poppler makeWrapper;
   });
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions
@@ -9857,8 +9853,9 @@ let
   You need to use texLiveAggregationFun to regenerate, say, ls-R (TeX-related file list)
   Just installing a few packages doesn't work.
   */
-  texLiveAggregationFun =
-    (builderDefsPackage (import ../tools/typesetting/tex/texlive/aggregate.nix));
+  texLiveAggregationFun = params:
+    builderDefsPackage (import ../tools/typesetting/tex/texlive/aggregate.nix)
+      ({inherit poppler makeWrapper;} // params);
 
   texDisser = callPackage ../tools/typesetting/tex/disser {};
 

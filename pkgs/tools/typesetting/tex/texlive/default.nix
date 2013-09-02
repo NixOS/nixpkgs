@@ -113,7 +113,7 @@ rec {
   meta = with stdenv.lib; {
     description = "A TeX distribution";
     homepage    = http://www.tug.org/texlive;
-    licnese     = stdenv.lib.licneses.gpl2;
+    license     = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ lovek323 raskin ];
     platforms   = platforms.unix;
   };
