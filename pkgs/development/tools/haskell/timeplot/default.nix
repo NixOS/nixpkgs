@@ -1,5 +1,5 @@
 { cabal, bytestringLexing, cairo, Chart, ChartCairo, colour
-, dataDefault, regexTdfa, strptime, time, transformers
+, dataDefault, lens, regexTdfa, strptime, time, transformers
 , vcsRevision
 }:
 
@@ -10,9 +10,8 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    bytestringLexing cairo Chart ChartCairo colour
-    dataDefault regexTdfa strptime time transformers
-    vcsRevision
+    bytestringLexing cairo Chart ChartCairo colour dataDefault lens
+    regexTdfa strptime time transformers vcsRevision
   ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/Timeplot";
