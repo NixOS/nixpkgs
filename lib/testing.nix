@@ -39,7 +39,7 @@ rec {
     stdenv.mkDerivation {
       name = "vm-test-run";
 
-      requiredSystemFeatures = [ "kvm" ];
+      requiredSystemFeatures = [ "kvm" "nixos-test" ];
 
       buildInputs = [ pkgs.libxslt ];
 
