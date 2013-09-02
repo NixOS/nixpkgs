@@ -3,8 +3,11 @@
 , deterministic ? false }:
 
 let basename = "binutils-2.23.2"; in
+
+with { inherit (stdenv.lib) optional optionals optionalString; };
+
 stdenv.mkDerivation rec {
-  name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
+  name = basename + optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
@@ -21,18 +24,18 @@ stdenv.mkDerivation rec {
     # That requires upstream changes for things to work. So we can patch it to
     # get the old behaviour by now.
     ./dtneeded.patch
-  ] ++ (stdenv.lib.optional deterministic ./deterministic.patch);
+  ] ++ optional deterministic ./deterministic.patch;
 
   buildInputs =
     [ zlib ]
-    ++ stdenv.lib.optional gold bison;
+    ++ optional gold bison;
 
   inherit noSysDirs;
 
   preConfigure = ''
     # Clear the default library search path.
     if test "$noSysDirs" = "1"; then
-	echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
+        echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
     fi
 
     # Use symlinks instead of hard links to save space ("strip" in the
@@ -46,15 +49,16 @@ stdenv.mkDerivation rec {
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
   NIX_CFLAGS_COMPILE = "-static-libgcc";
 
-  configureFlags = "--disable-werror" # needed for dietlibc build
-      + stdenv.lib.optionalString (stdenv.system == "mips64el-linux")
-        " --enable-fix-loongson2f-nop"
-      + stdenv.lib.optionalString (cross != null) " --target=${cross.config}"
-      + stdenv.lib.optionalString gold " --enable-gold --enable-plugins"
-      + stdenv.lib.optionalString deterministic " --enable-deterministic-archives";
+  configureFlags = [ "--disable-werror" ] # needed for dietlibc build
+    ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
+    ++ optional (cross != null) "--target=${cross.config}"
+    ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
+    ++ optional deterministic "--enable-deterministic-archives"
+    ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu"
+    ;
 
   enableParallelBuilding = true;
-      
+
   meta = {
     description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";
 
