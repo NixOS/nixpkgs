@@ -1,17 +1,17 @@
-{ cabal, bytestringLexing, cairo, Chart, colour, dataAccessor
-, dataAccessorTemplate, regexTdfa, strptime, time, transformers
+{ cabal, bytestringLexing, cairo, Chart, ChartCairo, colour
+, dataDefault, regexTdfa, strptime, time, transformers
 , vcsRevision
 }:
 
 cabal.mkDerivation (self: {
   pname = "timeplot";
-  version = "1.0.21";
-  sha256 = "0x9f95w235yijp98xx9nry0ibsxr0iyshk6cd89n51xrk1zpk41l";
+  version = "1.0.22";
+  sha256 = "1dp1prcx3d6a0fr3xrdj6flp27sy7qbng5bbdjgjbb7rq8497if9";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    bytestringLexing cairo Chart colour dataAccessor
-    dataAccessorTemplate regexTdfa strptime time transformers
+    bytestringLexing cairo Chart ChartCairo colour
+    dataDefault regexTdfa strptime time transformers
     vcsRevision
   ];
   meta = {
