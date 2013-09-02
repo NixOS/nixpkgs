@@ -44,6 +44,6 @@ stdenv.mkDerivation {
     homepage = "http://storm-project.net";
     description = "Storm, free and open source distributed realtime computation system.";
     license = "Eclipse Public License 1.0";
-    maintainers = [ lib.maintainers.blue ];
+    maintainers = [ lib.maintainers.vizanto ];
   };
 }
