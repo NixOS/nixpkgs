@@ -772,6 +772,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   cryptoPubkey = callPackage ../development/libraries/haskell/crypto-pubkey {};
 
+  cryptoRandom = callPackage ../development/libraries/haskell/crypto-random {};
+
   cryptoRandomApi = callPackage ../development/libraries/haskell/crypto-random-api {};
 
   cuda = callPackage ../development/libraries/haskell/cuda {
