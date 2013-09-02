@@ -312,7 +312,7 @@ manpage or the Nix manual.</para>
 <para>NixOS supports both declarative and imperative styles of user
 management.  In the declarative style, users are specified in
 <filename>configuration.nix</filename>.  For instance, the following
-states that a user accound named <literal>alice</literal> shall exist:
+states that a user account named <literal>alice</literal> shall exist:
 
 <programlisting>
 users.extraUsers.alice =
@@ -746,7 +746,7 @@ networking.localCommands =
 the option <option>boot.kernelPackages</option>.  For instance, this
 selects the Linux 3.10 kernel:
 <programlisting>
-boot.kernelPackages = pkgs.kernelPackages_3_10;
+boot.kernelPackages = pkgs.linuxPackages_3_10;
 </programlisting>
 Note that this not only replaces the kernel, but also packages that
 are specific to the kernel version, such as the NVIDIA video drivers.
