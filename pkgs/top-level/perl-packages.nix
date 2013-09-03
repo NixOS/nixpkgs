@@ -35,6 +35,7 @@ rec {
       description = "A grep-like tool tailored to working with large trees of source code";
       homepage = http://betterthangrep.com/;
       license = "free";  # Artistic 2.0
+      platforms = stdenv.lib.platforms.unix;
     };
     # t/swamp/{0,perl-without-extension} are datafiles for the test
     # t/ack-show-types.t, but the perl generic builder confuses them
@@ -3163,10 +3164,10 @@ rec {
   };
 
   FileChangeNotify = buildPerlModule rec {
-    name = "File-ChangeNotify-0.20";
+    name = "File-ChangeNotify-0.23";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
-      sha256 = "000aiiijf16j5cf8gql4vr6l9y561famkfb5qv5d29xz2ad4mmd9";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "18aq6lcldniciw189ihmcji98y6zqa1gdl3mjqdg8f37i9amn4i3";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs =
@@ -3230,10 +3231,10 @@ rec {
   };
 
   FileFindRule = buildPerlPackage rec {
-    name = "File-Find-Rule-0.32";
+    name = "File-Find-Rule-0.33";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
-      sha256 = "0fdci3k9j8x69p28jb793gni4y9qbgzpfnnj1avzf8nnib9w1wrd";
+      url = "mirror://cpan/authors/id/R/RC/RCLAMP/${name}.tar.gz";
+      sha256 = "0w73b4jr2fcrd74a1w3b2jryq3mqzc8z5mk7ia9p85xn3qmpa5r4";
     };
     propagatedBuildInputs = [ NumberCompare TextGlob ];
   };
@@ -3894,7 +3895,7 @@ rec {
   HTTPParserXS = buildPerlPackage rec {
     name = "HTTP-Parser-XS-0.14";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/HTTP/${name}.tar.gz";
+      url = "mirror://cpan/authors/id/K/KA/KAZUHO/${name}.tar.gz";
       sha256 = "06srbjc380kvvj76r8n5c2y282j5zfgn0s0zmb9h3shwrynfqj05";
     };
     buildInputs = [ TestMore ];
@@ -4318,7 +4319,7 @@ rec {
   LinguaENInflectPhrase = buildPerlPackage rec {
     name = "Lingua-EN-Inflect-Phrase-0.10";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Lingua/${name}.tar.gz";
+      url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
       sha256 = "1l7sjnibnvgb7a73cjhysmrg4j2bfcn0x5yrqmh0v23laj9fsbbm";
     };
     buildInputs = [ TestMore ];
@@ -5686,7 +5687,10 @@ rec {
       sha256 = "94f2bd6b317a9142e400d7d17bd573dc9d22284c3ceaa4864474ba674e0e2e9f";
     };
     buildInputs = [ LWP TestException ];
-    propagatedBuildInputs = [ DataStreamBulk DateTimeFormatHTTP DigestHMAC DigestMD5File FileFindRule HTTPDate HTTPMessage LWPUserAgentDetermined MIMETypes Moose MooseXStrictConstructor MooseXTypesDateTimeMoreCoercions PathClass RegexpCommon TermEncoding TermProgressBarSimple URI XMLLibXML ];
+    propagatedBuildInputs = [ DataStreamBulk DateTimeFormatHTTP DigestHMAC DigestMD5File FileFindRule HTTPDate HTTPMessage LWPUserAgentDetermined MIMETypes Moose MooseXStrictConstructor MooseXTypesDateTimeMoreCoercions PathClass RegexpCommon TermEncoding TermProgressBarSimple URI XMLLibXML JSON ];
+    # See https://github.com/pfig/net-amazon-s3/pull/25
+    patches =
+      [ ../development/perl-modules/net-amazon-s3-credentials-provider.patch ];
     meta = {
       description = "Use the Amazon S3 - Simple Storage Service";
       license = "perl";
@@ -7931,7 +7935,7 @@ rec {
   TestSharedFork = buildPerlPackage rec {
     name = "Test-SharedFork-0.18";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Test/${name}.tar.gz";
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
       sha256 = "1wc41jzi780w75m2ry1038mzxyz7386r8rmhbnmj3krcdxy676cc";
     };
   };
@@ -8872,10 +8876,10 @@ rec {
   };
 
   YAMLTiny = buildPerlPackage rec {
-    name = "YAML-Tiny-1.50";
+    name = "YAML-Tiny-1.53";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/YAML/${name}.tar.gz";
-      sha256 = "0ag1llgf0qn3sxy832xhvc1mq6s0bdv13ij7vh7df8nv0jnxyyd3";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "14p93i60x394ba6sdwpnckmv2vq7pfi9q7rzksp3nkxsz4484qmm";
     };
   };
 

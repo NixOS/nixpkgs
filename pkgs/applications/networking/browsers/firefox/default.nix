@@ -19,9 +19,9 @@ assert useSystemCairo -> cairo != null;
 let optional = stdenv.lib.optional;
 in rec {
 
-  firefoxVersion = "23.0";
+  firefoxVersion = "23.0.1";
 
-  xulVersion = "23.0"; # this attribute is used by other packages
+  xulVersion = "23.0.1"; # this attribute is used by other packages
 
 
   src = fetchurl {
@@ -31,7 +31,7 @@ in rec {
         # Fall back to this url for versions not available at releases.mozilla.org.
         "ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
     ];
-    sha1 = "31936d2ddb727640c96a3ae697bf145c42a2a20e";
+    sha1 = "66361fcvyl9liyh41gvgysiim90wsywk";
   };
 
   commonConfigureFlags =

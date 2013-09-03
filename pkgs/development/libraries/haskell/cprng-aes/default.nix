@@ -1,12 +1,10 @@
-{ cabal, cipherAes, cryptoApi, cryptoRandomApi, entropy, random }:
+{ cabal, byteable, cipherAes, cryptoRandom, random }:
 
 cabal.mkDerivation (self: {
   pname = "cprng-aes";
-  version = "0.3.4";
-  sha256 = "0k1zh4nw30qgdrkgn6x6zfbpp129f9cparzyqsdqfbf44j0mf2rw";
-  buildDepends = [
-    cipherAes cryptoApi cryptoRandomApi entropy random
-  ];
+  version = "0.5.1";
+  sha256 = "1bw76y2krcshimvwzph76d69bdfaxfi21w4dxfslmqm78knlls47";
+  buildDepends = [ byteable cipherAes cryptoRandom random ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-cprng-aes";
     description = "Crypto Pseudo Random Number Generator using AES in counter mode";

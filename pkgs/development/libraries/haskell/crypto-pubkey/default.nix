@@ -1,17 +1,17 @@
-{ cabal, cryptohash, cryptoNumbers, cryptoPubkeyTypes
-, cryptoRandomApi, HUnit, QuickCheck, testFramework
+{ cabal, byteable, cryptohash, cryptoNumbers, cryptoPubkeyTypes
+, cryptoRandom, HUnit, QuickCheck, testFramework
 , testFrameworkHunit, testFrameworkQuickcheck2
 }:
 
 cabal.mkDerivation (self: {
   pname = "crypto-pubkey";
-  version = "0.1.4";
-  sha256 = "13ah3ip6gdv7b1zz5qwi7515a3k8pp3l0jr1kq4q2a0vqy24gkn1";
+  version = "0.2.1";
+  sha256 = "06cb2h9c3r1ycgcw7scc191gbr86qi8pxil07207n5fccq3vpjys";
   buildDepends = [
-    cryptohash cryptoNumbers cryptoPubkeyTypes cryptoRandomApi
+    byteable cryptohash cryptoNumbers cryptoPubkeyTypes cryptoRandom
   ];
   testDepends = [
-    cryptohash cryptoNumbers cryptoRandomApi HUnit QuickCheck
+    byteable cryptohash cryptoNumbers cryptoRandom HUnit QuickCheck
     testFramework testFrameworkHunit testFrameworkQuickcheck2
   ];
   meta = {

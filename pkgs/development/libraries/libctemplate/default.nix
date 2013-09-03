@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   pname = "ctemplate";
-  version = "2.0";
+  version = "2.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://ctemplate.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0scdqqbp8fy9jiak60dj1051gbyb8xmlm4rdz4h1myxifjagwbfa";
+    sha256 = "0vv8gvyndppm9m5s1i5k0jvwcz41l1vfgg04r7nssdpzyz0cpwq4";
   };
 }

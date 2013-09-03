@@ -1,18 +1,17 @@
 { cabal, cereal, certificate, cprngAes, cryptohash, cryptoPubkey
-, cryptoRandomApi, mtl, network, QuickCheck, testFramework
+, cryptoRandom, mtl, network, QuickCheck, testFramework
 , testFrameworkQuickcheck2, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "tls";
-  version = "1.1.2";
-  sha256 = "1vg1mnz6cxxgs48pbpjp4hwyvsysxyzvjfy4p1vd23lwc32cdjqg";
+  version = "1.1.4";
+  sha256 = "0fq6hnc3j54kkzlvcvhskjrj740p44y65fggnj3m4kgfiwjphw5p";
   buildDepends = [
-    cereal certificate cryptohash cryptoPubkey cryptoRandomApi mtl
-    network
+    cereal certificate cryptohash cryptoPubkey cryptoRandom mtl network
   ];
   testDepends = [
-    cereal certificate cprngAes cryptoPubkey cryptoRandomApi mtl
+    cereal certificate cprngAes cryptoPubkey cryptoRandom mtl
     QuickCheck testFramework testFrameworkQuickcheck2 time
   ];
   doCheck = false;

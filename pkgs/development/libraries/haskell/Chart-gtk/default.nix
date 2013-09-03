@@ -1,14 +1,10 @@
-{ cabal, cairo, Chart, colour, dataAccessor, dataAccessorTemplate
-, gtk, mtl, time
-}:
+{ cabal, cairo, Chart, ChartCairo, colour, gtk, mtl, time }:
 
 cabal.mkDerivation (self: {
   pname = "Chart-gtk";
-  version = "0.17";
-  sha256 = "1i411kdpz75azyhfaryazr0bpij5xcl0y82m9a7k23w8mhybqwc7";
-  buildDepends = [
-    cairo Chart colour dataAccessor dataAccessorTemplate gtk mtl time
-  ];
+  version = "1.0";
+  sha256 = "06i53922hdc7dvh2a76ccvwrwfhvhji0ya8j4f2lddg5zckvp3yj";
+  buildDepends = [ cairo Chart ChartCairo colour gtk mtl time ];
   meta = {
     homepage = "https://github.com/timbod7/haskell-chart/wiki";
     description = "Utility functions for using the chart library with GTK";
