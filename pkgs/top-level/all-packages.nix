@@ -1680,6 +1680,8 @@ let
 
   scrot = callPackage ../tools/graphics/scrot { };
 
+  scrypt = callPackage ../tools/security/scrypt { };
+
   sdcv = callPackage ../applications/misc/sdcv { };
 
   seccure = callPackage ../tools/security/seccure/0.4.nix { };
