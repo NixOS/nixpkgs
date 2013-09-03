@@ -1,14 +1,16 @@
-{stdenv, fetchurl, tcl, tk, xproto, libX11}:
+{ stdenv, fetchurl, tcl }:
 
+let version = "5.45";
+in
 stdenv.mkDerivation {
-  name = "expect-5.44.1";
+  name = "expect-${version}";
 
   src = fetchurl {
-    url = http://expect.nist.gov/old/expect-5.44.1.tar.gz;
-    sha256 = "13zxqiclzk1paxc0mr2vwp9nhfyr2mkwk9gs73fg0l3iss16n6p4";
+    url = "mirror://sourceforge/expect/Expect/${version}/expect${version}.tar.gz";
+    sha256 = "0h60bifxj876afz4im35rmnbnxjx4lbdqp2ja3k30fwa8a8cm3dj";
   };
 
-  buildInputs = [tcl tk xproto libX11];
+  buildInputs = [ tcl ];
 
   #NIX_CFLAGS_COMPILE = "-DHAVE_UNISTD_H";
 
@@ -23,14 +25,16 @@ stdenv.mkDerivation {
     export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
   '';
 
-  configureFlags = ["--with-tcl=${tcl}/lib"
+  configureFlags = [
+    "--with-tcl=${tcl}/lib"
     "--with-tclinclude=${tcl}/include"
-    "--with-tk=${tk}/lib"
-    "--exec-prefix=$out"];
+    "--exec-prefix=$out"
+  ];
+
+  postInstall="cp expect $out/bin; mkdir -p $out/lib; cp *.so $out/lib";
 
   meta = {
     description = "A tool for automating interactive applications";
     homepage = http://expect.nist.gov/;
   };
-  postInstall="cp expect{,k} $out/bin; mkdir -p $out/lib; cp *.so $out/lib";
 }
