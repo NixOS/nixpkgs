@@ -17,6 +17,13 @@ stdenv.mkDerivation {
   doCheck = true;
   enableParallelBuilding = true;
 
+  # Skip byte-compiling of emacs-lisp files because this is currently
+  # broken in ledger...
+  postInstall = ''
+    mkdir -p $out/share/emacs/site-lisp/
+    cp -v $src/lisp/*.el $out/share/emacs/site-lisp/
+  '';
+
   meta = {
     homepage = "http://ledger-cli.org/";
     description = "A double-entry accounting system with a command-line reporting interface";
