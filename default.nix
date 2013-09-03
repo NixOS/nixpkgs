@@ -41,6 +41,4 @@ in
 
   # The following are used by nixos-rebuild.
   nixFallback = pkgs.nixUnstable;
-
-  tests = config.tests;
 }
