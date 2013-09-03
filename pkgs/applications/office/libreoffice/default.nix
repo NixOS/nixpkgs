@@ -184,11 +184,17 @@ stdenv.mkDerivation rec {
 
   # It installs only things to $out/lib/libreoffice
   postInstall = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share
     for a in sbase scalc sdraw smath swriter spadmin simpress soffice; do
       ln -s $out/lib/libreoffice/program/$a $out/bin/$a
     done
     ln -s $out/bin/soffice $out/bin/libreoffice
+
+    ln -s $out/lib/libreoffice/share/xdg $out/share/applications
+    for f in $out/share/applications/*.desktop; do
+      substituteInPlace "$f" --replace "Exec=libreoffice4.0" "$out/bin/soffice"
+      substituteInPlace "$f" --replace "Exec=libreoffice" "$out/bin/soffice"
+    done
   '';
 
   configureFlags = [
