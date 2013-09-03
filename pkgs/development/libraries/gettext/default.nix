@@ -8,7 +8,7 @@ stdenv.mkDerivation (rec {
     sha256 = "1sa3ch12qxa4h3ya6hkz119yclcccmincl9j20dhrdx5mykp3b4k";
   };
 
-  patches = [ ./no-gets.patch ];
+  patches = [ ./no-gets.patch ./stpncpy.patch ];
 
   configureFlags = [ "--disable-csharp" ]
      ++ (stdenv.lib.optionals stdenv.isCygwin
