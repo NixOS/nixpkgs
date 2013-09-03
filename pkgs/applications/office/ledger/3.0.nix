@@ -1,7 +1,7 @@
 { stdenv, fetchgit, cmake, boost, gmp, mpfr, libedit, python, texinfo }:
 
 let
-  rev = "0ec4291013bae966df2f5ca504d2216e488cd7ec";
+  rev = "0ec4291";
 in
 stdenv.mkDerivation {
   name = "ledger3-2013.08.${rev}";
