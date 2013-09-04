@@ -1,0 +1,148 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.022
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.022
+Problem:    Deadlock while exiting, because of allocating memory.
+Solution:   Do not use gettext() in deathtrap(). (James McCoy)
+Files:	    src/os_unix.c, src/misc1.c
+
+
+*** ../vim-7.4.021/src/os_unix.c	2013-07-03 16:32:32.000000000 +0200
+--- src/os_unix.c	2013-09-05 21:40:06.000000000 +0200
+***************
+*** 957,964 ****
+  
+  /*
+   * This function handles deadly signals.
+!  * It tries to preserve any swap file and exit properly.
+   * (partly from Elvis).
+   */
+      static RETSIGTYPE
+  deathtrap SIGDEFARG(sigarg)
+--- 957,966 ----
+  
+  /*
+   * This function handles deadly signals.
+!  * It tries to preserve any swap files and exit properly.
+   * (partly from Elvis).
++  * NOTE: Avoid unsafe functions, such as allocating memory, they can result in
++  * a deadlock.
+   */
+      static RETSIGTYPE
+  deathtrap SIGDEFARG(sigarg)
+***************
+*** 1090,1107 ****
+      }
+      if (entered == 2)
+      {
+! 	OUT_STR(_("Vim: Double signal, exiting\n"));
+  	out_flush();
+  	getout(1);
+      }
+  
+  #ifdef SIGHASARG
+!     sprintf((char *)IObuff, _("Vim: Caught deadly signal %s\n"),
+  							 signal_info[i].name);
+  #else
+!     sprintf((char *)IObuff, _("Vim: Caught deadly signal\n"));
+  #endif
+!     preserve_exit();		    /* preserve files and exit */
+  
+  #ifdef NBDEBUG
+      reset_signals();
+--- 1092,1114 ----
+      }
+      if (entered == 2)
+      {
+! 	/* No translation, it may call malloc(). */
+! 	OUT_STR("Vim: Double signal, exiting\n");
+  	out_flush();
+  	getout(1);
+      }
+  
++     /* No translation, it may call malloc(). */
+  #ifdef SIGHASARG
+!     sprintf((char *)IObuff, "Vim: Caught deadly signal %s\n",
+  							 signal_info[i].name);
+  #else
+!     sprintf((char *)IObuff, "Vim: Caught deadly signal\n");
+  #endif
+! 
+!     /* Preserve files and exit.  This sets the really_exiting flag to prevent
+!      * calling free(). */
+!     preserve_exit();
+  
+  #ifdef NBDEBUG
+      reset_signals();
+*** ../vim-7.4.021/src/misc1.c	2013-08-03 17:29:33.000000000 +0200
+--- src/misc1.c	2013-09-05 21:34:04.000000000 +0200
+***************
+*** 9174,9179 ****
+--- 9174,9181 ----
+  /*
+   * Preserve files and exit.
+   * When called IObuff must contain a message.
++  * NOTE: This may be called from deathtrap() in a signal handler, avoid unsafe
++  * functions, such as allocating memory.
+   */
+      void
+  preserve_exit()
+***************
+*** 9196,9202 ****
+      {
+  	if (buf->b_ml.ml_mfp != NULL && buf->b_ml.ml_mfp->mf_fname != NULL)
+  	{
+! 	    OUT_STR(_("Vim: preserving files...\n"));
+  	    screen_start();	    /* don't know where cursor is now */
+  	    out_flush();
+  	    ml_sync_all(FALSE, FALSE);	/* preserve all swap files */
+--- 9198,9204 ----
+      {
+  	if (buf->b_ml.ml_mfp != NULL && buf->b_ml.ml_mfp->mf_fname != NULL)
+  	{
+! 	    OUT_STR("Vim: preserving files...\n");
+  	    screen_start();	    /* don't know where cursor is now */
+  	    out_flush();
+  	    ml_sync_all(FALSE, FALSE);	/* preserve all swap files */
+***************
+*** 9206,9212 ****
+  
+      ml_close_all(FALSE);	    /* close all memfiles, without deleting */
+  
+!     OUT_STR(_("Vim: Finished.\n"));
+  
+      getout(1);
+  }
+--- 9208,9214 ----
+  
+      ml_close_all(FALSE);	    /* close all memfiles, without deleting */
+  
+!     OUT_STR("Vim: Finished.\n");
+  
+      getout(1);
+  }
+*** ../vim-7.4.021/src/version.c	2013-09-05 21:15:38.000000000 +0200
+--- src/version.c	2013-09-05 21:30:18.000000000 +0200
+***************
+*** 740,741 ****
+--- 740,743 ----
+  {   /* Add new patch number below this line */
++ /**/
++     22,
+  /**/
+
+-- 
+hundred-and-one symptoms of being an internet addict:
+175. You send yourself e-mail before you go to bed to remind you
+     what to do when you wake up.
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

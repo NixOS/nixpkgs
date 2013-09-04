@@ -1,0 +1,48 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.005
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.005
+Problem:    Using "vaB" while 'virtualedit' is set selects the wrong area.
+	    (Dimitar Dimitrov)
+Solution:   Reset coladd when finding a match.
+Files:	    src/search.c
+
+
+*** ../vim-7.4.004/src/search.c	2013-07-17 19:20:47.000000000 +0200
+--- src/search.c	2013-08-14 17:32:38.000000000 +0200
+***************
+*** 1760,1765 ****
+--- 1760,1768 ----
+  #endif
+  
+      pos = curwin->w_cursor;
++ #ifdef FEAT_VIRTUALEDIT
++     pos.coladd = 0;
++ #endif
+      linep = ml_get(pos.lnum);
+  
+      cpo_match = (vim_strchr(p_cpo, CPO_MATCH) != NULL);
+*** ../vim-7.4.004/src/version.c	2013-08-14 17:11:14.000000000 +0200
+--- src/version.c	2013-08-14 17:38:05.000000000 +0200
+***************
+*** 729,730 ****
+--- 729,732 ----
+  {   /* Add new patch number below this line */
++ /**/
++     5,
+  /**/
+
+-- 
+You can't have everything.  Where would you put it?
+		-- Steven Wright
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

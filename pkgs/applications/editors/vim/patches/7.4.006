@@ -1,0 +1,66 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.006
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.006
+Problem:    mkdir("foo/bar/", "p") gives an error message. (David Barnett)
+Solution:   Remove the trailing slash. (lcd)
+Files:	    src/eval.c
+
+
+*** ../vim-7.4.005/src/eval.c	2013-07-05 18:23:42.000000000 +0200
+--- src/eval.c	2013-08-22 12:00:28.000000000 +0200
+***************
+*** 14292,14297 ****
+--- 14292,14301 ----
+  	return;
+  
+      dir = get_tv_string_buf(&argvars[0], buf);
++     if (*gettail(dir) == NUL)
++ 	/* remove trailing slashes */
++ 	*gettail_sep(dir) = NUL;
++ 
+      if (argvars[1].v_type != VAR_UNKNOWN)
+      {
+  	if (argvars[2].v_type != VAR_UNKNOWN)
+***************
+*** 14299,14305 ****
+  	if (prot != -1 && STRCMP(get_tv_string(&argvars[1]), "p") == 0)
+  	    mkdir_recurse(dir, prot);
+      }
+!     rettv->vval.v_number = prot != -1 ? vim_mkdir_emsg(dir, prot) : 0;
+  }
+  #endif
+  
+--- 14303,14309 ----
+  	if (prot != -1 && STRCMP(get_tv_string(&argvars[1]), "p") == 0)
+  	    mkdir_recurse(dir, prot);
+      }
+!     rettv->vval.v_number = prot == -1 ? FAIL : vim_mkdir_emsg(dir, prot);
+  }
+  #endif
+  
+*** ../vim-7.4.005/src/version.c	2013-08-14 17:45:25.000000000 +0200
+--- src/version.c	2013-08-22 12:02:46.000000000 +0200
+***************
+*** 729,730 ****
+--- 729,732 ----
+  {   /* Add new patch number below this line */
++ /**/
++     6,
+  /**/
+
+-- 
+hundred-and-one symptoms of being an internet addict:
+97. Your mother tells you to remember something, and you look for
+    a File/Save command.
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

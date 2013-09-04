@@ -1,0 +1,82 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.020
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.020
+Problem:    NFA engine matches too much with \@>. (John McGowan)
+Solution:   When a whole pattern match is found stop searching.
+Files:	    src/regexp_nfa.c, src/testdir/test64.in, src/testdir/test64.ok
+
+
+*** ../vim-7.4.019/src/regexp_nfa.c	2013-08-25 17:01:36.000000000 +0200
+--- src/regexp_nfa.c	2013-09-05 15:59:44.000000000 +0200
+***************
+*** 5322,5328 ****
+  		log_subsexpr(m);
+  #endif
+  		nfa_match = TRUE;
+! 		break;
+  
+  	    case NFA_START_INVISIBLE:
+  	    case NFA_START_INVISIBLE_FIRST:
+--- 5322,5331 ----
+  		log_subsexpr(m);
+  #endif
+  		nfa_match = TRUE;
+! 		/* See comment above at "goto nextchar". */
+! 		if (nextlist->n == 0)
+! 		    clen = 0;
+! 		goto nextchar;
+  
+  	    case NFA_START_INVISIBLE:
+  	    case NFA_START_INVISIBLE_FIRST:
+*** ../vim-7.4.019/src/testdir/test64.in	2013-08-14 13:31:03.000000000 +0200
+--- src/testdir/test64.in	2013-09-05 15:35:44.000000000 +0200
+***************
+*** 427,432 ****
+--- 427,433 ----
+  :""""" \@>
+  :call add(tl, [2, '\(a*\)\@>a', 'aaaa'])
+  :call add(tl, [2, '\(a*\)\@>b', 'aaab', 'aaab', 'aaa'])
++ :call add(tl, [2, '^\(.\{-}b\)\@>.', '  abcbd', '  abc', '  ab'])
+  :" TODO: BT engine does not restore submatch after failure
+  :call add(tl, [1, '\(a*\)\@>a\|a\+', 'aaaa', 'aaaa'])
+  :"
+*** ../vim-7.4.019/src/testdir/test64.ok	2013-08-14 13:31:03.000000000 +0200
+--- src/testdir/test64.ok	2013-09-05 16:03:34.000000000 +0200
+***************
+*** 983,988 ****
+--- 983,991 ----
+  OK 0 - \(a*\)\@>b
+  OK 1 - \(a*\)\@>b
+  OK 2 - \(a*\)\@>b
++ OK 0 - ^\(.\{-}b\)\@>.
++ OK 1 - ^\(.\{-}b\)\@>.
++ OK 2 - ^\(.\{-}b\)\@>.
+  OK 0 - \(a*\)\@>a\|a\+
+  OK 2 - \(a*\)\@>a\|a\+
+  OK 0 - \_[^8-9]\+
+*** ../vim-7.4.019/src/version.c	2013-09-05 13:50:49.000000000 +0200
+--- src/version.c	2013-09-05 16:04:32.000000000 +0200
+***************
+*** 740,741 ****
+--- 740,743 ----
+  {   /* Add new patch number below this line */
++ /**/
++     20,
+  /**/
+
+-- 
+hundred-and-one symptoms of being an internet addict:
+173. You keep tracking down the email addresses of all your friends
+     (even childhood friends).
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

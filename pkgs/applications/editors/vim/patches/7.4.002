@@ -1,0 +1,77 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.002
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4b.002
+Problem:    Pattern with two alternative look-behind matches does not match.
+	    (Amadeus Demarzi)
+Solution:   When comparing PIMs also compare their state ID to see if they are
+	    different.
+Files:	    src/regexp_nfa.c, src/testdir/test64.in, src/testdir/test64.ok
+
+
+*** ../vim-7.4.001/src/regexp_nfa.c	2013-08-14 12:05:54.000000000 +0200
+--- src/regexp_nfa.c	2013-08-14 13:12:09.000000000 +0200
+***************
+*** 3782,3787 ****
+--- 3782,3790 ----
+      if (two_unused)
+  	/* one is used and two is not: not equal */
+  	return FALSE;
++     /* compare the state id */
++     if (one->state->id != two->state->id)
++ 	return FALSE;
+      /* compare the position */
+      if (REG_MULTI)
+  	return one->end.pos.lnum == two->end.pos.lnum
+*** ../vim-7.4.001/src/testdir/test64.in	2013-08-14 12:05:54.000000000 +0200
+--- src/testdir/test64.in	2013-08-14 12:58:38.000000000 +0200
+***************
+*** 421,426 ****
+--- 421,429 ----
+  :call add(tl, [2, '\(foo\)\@<=\>', 'barfoo', '', 'foo'])
+  :call add(tl, [2, '\(foo\)\@<=.*', 'foobar', 'bar', 'foo'])
+  :"
++ :" complicated look-behind match
++ :call add(tl, [2, '\(r\@<=\|\w\@<!\)\/', 'x = /word/;', '/'])
++ :"
+  :""""" \@>
+  :call add(tl, [2, '\(a*\)\@>a', 'aaaa'])
+  :call add(tl, [2, '\(a*\)\@>b', 'aaab', 'aaab', 'aaa'])
+*** ../vim-7.4.001/src/testdir/test64.ok	2013-08-14 12:05:54.000000000 +0200
+--- src/testdir/test64.ok	2013-08-14 13:14:09.000000000 +0200
+***************
+*** 974,979 ****
+--- 974,982 ----
+  OK 0 - \(foo\)\@<=.*
+  OK 1 - \(foo\)\@<=.*
+  OK 2 - \(foo\)\@<=.*
++ OK 0 - \(r\@<=\|\w\@<!\)\/
++ OK 1 - \(r\@<=\|\w\@<!\)\/
++ OK 2 - \(r\@<=\|\w\@<!\)\/
+  OK 0 - \(a*\)\@>a
+  OK 1 - \(a*\)\@>a
+  OK 2 - \(a*\)\@>a
+*** ../vim-7.4.001/src/version.c	2013-08-14 12:05:54.000000000 +0200
+--- src/version.c	2013-08-14 13:13:45.000000000 +0200
+***************
+*** 729,730 ****
+--- 729,732 ----
+  {   /* Add new patch number below this line */
++ /**/
++     2,
+  /**/
+
+-- 
+From "know your smileys":
+ :-)-O	Smiling doctor with stethoscope
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///
