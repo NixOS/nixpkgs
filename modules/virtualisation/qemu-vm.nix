@@ -169,7 +169,7 @@ in
     virtualisation.emptyDiskImages =
       mkOption {
         default = [];
-        type = types.list types.int;
+        type = types.listOf types.int;
         description =
           ''
             Additional disk images to provide to the VM, the value is a list of
