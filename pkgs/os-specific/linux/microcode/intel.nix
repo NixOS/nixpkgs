@@ -1,12 +1,13 @@
 { stdenv, fetchurl, microcode2ucode }:
 
-let version = "20120606";
-    num = "21385";
-in stdenv.mkDerivation {
+let version = "20130808"; in
+
+stdenv.mkDerivation {
   name = "microcode-intel-${version}";
+
   src = fetchurl {
-    url = "http://downloadmirror.intel.com/${num}/eng/microcode-${version}.tgz";
-    sha256 = "0hs95lj24zx3jscc64zg3hf8xc95vrnsyqlid66h453ib0wf8fg1";
+    url = "http://downloadmirror.intel.com/23082/eng/microcode-${version}.tgz";
+    sha256 = "19v0059v6dxv7ly57wgqy9nkjjnmprgwz4s94khdf213k5vikpfm";
   };
 
   buildInputs = [ microcode2ucode ];
@@ -17,12 +18,13 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp -r intel-ucode "$out/"
   '';
 
   meta = {
     homepage = http://www.intel.com/;
     description = "Microcode for Intel processors";
+    license = stdenv.lib.licenses.unfree;
   };
 }
