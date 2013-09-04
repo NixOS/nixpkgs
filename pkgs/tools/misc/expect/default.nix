@@ -31,7 +31,8 @@ stdenv.mkDerivation {
     "--exec-prefix=$out"
   ];
 
-  postInstall="cp expect $out/bin; mkdir -p $out/lib; cp *.so $out/lib";
+  postInstall = let libSuff = if stdenv.isDarwin then "dylib" else "so";
+    in "cp expect $out/bin; mkdir -p $out/lib; cp *.${libSuff} $out/lib";
 
   meta = {
     description = "A tool for automating interactive applications";
