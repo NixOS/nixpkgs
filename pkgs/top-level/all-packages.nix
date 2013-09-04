@@ -9891,7 +9891,9 @@ let
 
   thinkfan = callPackage ../tools/system/thinkfan { };
 
-  vice = callPackage ../misc/emulators/vice { };
+  vice = callPackage ../misc/emulators/vice {
+    libX11 = xlibs.libX11;
+  };
 
   viewnior = callPackage ../applications/graphics/viewnior { };
 
