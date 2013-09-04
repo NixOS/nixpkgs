@@ -4036,6 +4036,8 @@ let
 
   fribidi = callPackage ../development/libraries/fribidi { };
 
+  fribid = callPackage ../applications/networking/browsers/mozilla-plugins/fribid { };
+
   funambol = callPackage ../development/libraries/funambol { };
 
   fam = gamin;
