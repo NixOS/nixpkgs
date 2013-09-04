@@ -698,6 +698,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   cipherAes = callPackage ../development/libraries/haskell/cipher-aes {};
 
+  cipherBlowfish = callPackage ../development/libraries/haskell/cipher-blowfish {};
+
+  cipherCamellia = callPackage ../development/libraries/haskell/cipher-camellia {};
+
+  cipherDes = callPackage ../development/libraries/haskell/cipher-des {};
+
   cipherRc4 = callPackage ../development/libraries/haskell/cipher-rc4 {};
 
   circlePacking = callPackage ../development/libraries/haskell/circle-packing {};
