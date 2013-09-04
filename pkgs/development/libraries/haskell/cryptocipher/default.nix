@@ -1,20 +1,14 @@
-{ cabal, cereal, cipherAes, cipherRc4, cpu, cryptoApi, cryptohash
-, entropy, primitive, QuickCheck, testFramework
-, testFrameworkQuickcheck2, vector
+{ cabal, cipherAes, cipherBlowfish, cipherCamellia, cipherDes
+, cipherRc4, cryptoCipherTypes
 }:
 
 cabal.mkDerivation (self: {
   pname = "cryptocipher";
-  version = "0.5.2";
-  sha256 = "0ffd3w2hvi1zbhgk0xvgbnlfzzwijbrs5b9b4g2vc5p69wkv24zr";
-  isLibrary = true;
-  isExecutable = true;
+  version = "0.6.0";
+  sha256 = "1jgwn1j7h5rhg872ghmz54phxn7nlwmk83qv1cbnbww1l2ay8gz5";
   buildDepends = [
-    cereal cipherAes cipherRc4 cpu cryptoApi primitive vector
-  ];
-  testDepends = [
-    cryptoApi cryptohash entropy QuickCheck testFramework
-    testFrameworkQuickcheck2 vector
+    cipherAes cipherBlowfish cipherCamellia cipherDes cipherRc4
+    cryptoCipherTypes
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-crypto-cipher";
