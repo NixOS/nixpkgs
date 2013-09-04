@@ -3,7 +3,7 @@
 {
   nativeDeps = {
     "node-expat"."*" = [ pkgs.expat ];
-    "rbytes"."0.0.2" = [ pkgs.openssl ];
+    "rbytes"."*" = [ pkgs.openssl ];
     "phantomjs"."~1.9" = [ pkgs.phantomjs ];
   };
 
