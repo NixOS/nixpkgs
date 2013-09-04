@@ -38,8 +38,10 @@ composableDerivation {
     preConfigure
       = stdenv.lib.optionalString
         (stdenv.isDarwin && (config.vim.darwin or true)) ''
-          sed -i "5387,5390d" src/auto/configure
-          sed -i "5394d" src/auto/configure
+          # TODO: we should find a better way of doing this as, if the configure
+          # file changes, we need to change these line numbers
+          sed -i "5641,5644d" src/auto/configure
+          sed -i "5648d" src/auto/configure
         '';
 
     configureFlags
