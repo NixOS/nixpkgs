@@ -4,7 +4,6 @@ stdenv.mkDerivation rec {
   version = "1.0.2";
   name = "fribid-1.0.2";
   builder = ./builder.sh;
-  #name = "fribid-$version";
 
   src = fetchurl {
     url = https://fribid.se/releases/source/fribid-1.0.2.tar.bz2;
@@ -21,6 +20,7 @@ stdenv.mkDerivation rec {
     description = "A browser plugin to manage Swedish BankID:s";
     homepage = http://fribid.se;
     licenses = [ "GPLv2" "MPLv1" ];
+    maintainers = [ lib.maintainers.edwtjo ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }
