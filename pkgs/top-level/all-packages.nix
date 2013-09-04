@@ -7556,6 +7556,8 @@ let
 
   fossil = callPackage ../applications/version-management/fossil { };
 
+  fribid = callPackage ../applications/networking/browsers/mozilla-plugins/fribid { };
+
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
   geany = callPackage ../applications/editors/geany { };
