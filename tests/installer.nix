@@ -37,7 +37,7 @@ let
     ''
       { config, pkgs, modulesPath, ... }:
 
-      { require =
+      { imports =
           [ ./hardware.nix
             "''${modulesPath}/testing/test-instrumentation.nix"
           ];

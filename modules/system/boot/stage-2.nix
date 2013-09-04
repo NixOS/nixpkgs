@@ -4,6 +4,38 @@ with pkgs.lib;
 
 let
 
+  kernel = config.boot.kernelPackages.kernel;
+  activateConfiguration = config.system.activationScripts.script;
+
+  readonlyMountpoint = pkgs.runCommand "readonly-mountpoint" {} ''
+    mkdir -p $out/bin
+    cc -O3 ${./readonly-mountpoint.c} -o $out/bin/readonly-mountpoint
+    strip -s $out/bin/readonly-mountpoint
+  '';
+
+  bootStage2 = pkgs.substituteAll {
+    src = ./stage-2-init.sh;
+    shellDebug = "${pkgs.bashInteractive}/bin/bash";
+    isExecutable = true;
+    inherit (config.boot) devShmSize runSize cleanTmpDir;
+    inherit (config.nix) readOnlyStore;
+    ttyGid = config.ids.gids.tty;
+    path =
+      [ pkgs.coreutils
+        pkgs.utillinux
+        pkgs.sysvtools
+      ] ++ (optional config.boot.cleanTmpDir pkgs.findutils)
+      ++ optional config.nix.readOnlyStore readonlyMountpoint;
+    postBootCommands = pkgs.writeText "local-cmds"
+      ''
+        ${config.boot.postBootCommands}
+        ${config.powerManagement.powerUpCommands}
+      '';
+  };
+
+in
+
+{
   options = {
 
     boot = {
@@ -59,39 +91,10 @@ let
 
   };
 
-  kernel = config.boot.kernelPackages.kernel;
-  activateConfiguration = config.system.activationScripts.script;
 
-  readonlyMountpoint = pkgs.runCommand "readonly-mountpoint" {} ''
-    mkdir -p $out/bin
-    cc -O3 ${./readonly-mountpoint.c} -o $out/bin/readonly-mountpoint
-    strip -s $out/bin/readonly-mountpoint
-  '';
+  config = {
 
-  bootStage2 = pkgs.substituteAll {
-    src = ./stage-2-init.sh;
-    shellDebug = "${pkgs.bashInteractive}/bin/bash";
-    isExecutable = true;
-    inherit (config.boot) devShmSize runSize cleanTmpDir;
-    inherit (config.nix) readOnlyStore;
-    ttyGid = config.ids.gids.tty;
-    path =
-      [ pkgs.coreutils
-        pkgs.utillinux
-        pkgs.sysvtools
-      ] ++ (optional config.boot.cleanTmpDir pkgs.findutils)
-      ++ optional config.nix.readOnlyStore readonlyMountpoint;
-    postBootCommands = pkgs.writeText "local-cmds"
-      ''
-        ${config.boot.postBootCommands}
-        ${config.powerManagement.powerUpCommands}
-      '';
+    system.build.bootStage2 = bootStage2;
+
   };
-
-in
-
-{
-  require = [options];
-
-  system.build.bootStage2 = bootStage2;
 }

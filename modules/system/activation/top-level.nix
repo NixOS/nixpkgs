@@ -4,66 +4,6 @@ with pkgs.lib;
 
 let
 
-  options = {
-
-    system.build = mkOption {
-      default = {};
-      description = ''
-        Attribute set of derivations used to setup the system.
-      '';
-    };
-
-    nesting.children = mkOption {
-      default = [];
-      description = ''
-        Additional configurations to build.
-      '';
-    };
-
-    nesting.clone = mkOption {
-      default = [];
-      description = ''
-        Additional configurations to build based on the current
-        configuration which is has a lower priority.
-      '';
-    };
-
-    system.boot.loader.id = mkOption {
-      default = "";
-      description = ''
-        Id string of the used bootloader.
-      '';
-    };
-
-    system.boot.loader.kernelFile = mkOption {
-      default = pkgs.stdenv.platform.kernelTarget;
-      type = types.uniq types.string;
-      description = ''
-        Name of the kernel file to be passed to the bootloader.
-      '';
-    };
-
-    system.copySystemConfiguration = mkOption {
-      default = false;
-      description = ''
-        If enabled, copies the NixOS configuration file
-        <literal>$NIXOS_CONFIG</literal> (usually
-        <filename>/etc/nixos/configuration.nix</filename>)
-        to the system store path.
-      '';
-    };
-
-    system.extraSystemBuilderCmds = mkOption {
-      default = "";
-      internal = true;
-      merge = concatStringsSep "\n";
-      description = ''
-        This code will be added to the builder creating the system store path.
-      '';
-    };
-
-  };
-
 
   # This attribute is responsible for creating boot entries for
   # child configuration. They are only (directly) accessible
@@ -176,13 +116,79 @@ let
   };
 
 
-in {
-  require = [options];
+in
 
-  system.extraSystemBuilderCmds =
-    optionalString
-      config.system.copySystemConfiguration
-      "cp ${maybeEnv "NIXOS_CONFIG" "/etc/nixos/configuration.nix"} $out";
+{
+  options = {
 
-  system.build.toplevel = system;
+    system.build = mkOption {
+      default = {};
+      description = ''
+        Attribute set of derivations used to setup the system.
+      '';
+    };
+
+    nesting.children = mkOption {
+      default = [];
+      description = ''
+        Additional configurations to build.
+      '';
+    };
+
+    nesting.clone = mkOption {
+      default = [];
+      description = ''
+        Additional configurations to build based on the current
+        configuration which is has a lower priority.
+      '';
+    };
+
+    system.boot.loader.id = mkOption {
+      default = "";
+      description = ''
+        Id string of the used bootloader.
+      '';
+    };
+
+    system.boot.loader.kernelFile = mkOption {
+      default = pkgs.stdenv.platform.kernelTarget;
+      type = types.uniq types.string;
+      description = ''
+        Name of the kernel file to be passed to the bootloader.
+      '';
+    };
+
+    system.copySystemConfiguration = mkOption {
+      default = false;
+      description = ''
+        If enabled, copies the NixOS configuration file
+        <literal>$NIXOS_CONFIG</literal> (usually
+        <filename>/etc/nixos/configuration.nix</filename>)
+        to the system store path.
+      '';
+    };
+
+    system.extraSystemBuilderCmds = mkOption {
+      default = "";
+      internal = true;
+      merge = concatStringsSep "\n";
+      description = ''
+        This code will be added to the builder creating the system store path.
+      '';
+    };
+
+  };
+
+
+  config = {
+
+    system.extraSystemBuilderCmds =
+      optionalString
+        config.system.copySystemConfiguration
+        "cp ${maybeEnv "NIXOS_CONFIG" "/etc/nixos/configuration.nix"} $out";
+
+    system.build.toplevel = system;
+
+  };
+
 }

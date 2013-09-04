@@ -65,7 +65,7 @@ let
 in
 
 {
-  require =
+  imports =
     [ ./system-tarball.nix
 
       # Profiles of this basic installation.

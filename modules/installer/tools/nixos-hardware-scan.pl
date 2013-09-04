@@ -8,7 +8,7 @@ my @attrs = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
 my @modulePackages = ();
-my @requires = ("<nixos/modules/installer/scan/not-detected.nix>");
+my @imports = ("<nixos/modules/installer/scan/not-detected.nix>");
 
 
 sub debug {
@@ -227,7 +227,7 @@ my $initrdKernelModules = toNixExpr(removeDups @initrdKernelModules);
 my $kernelModules = toNixExpr(removeDups @kernelModules);
 my $modulePackages = toNixExpr(removeDups @modulePackages);
 my $attrs = multiLineList("  ", removeDups @attrs);
-my $requires = multiLineList("    ", removeDups @requires);
+my $imports = multiLineList("    ", removeDups @imports);
 
 
 print <<EOF ;
@@ -236,7 +236,7 @@ print <<EOF ;
 { config, pkgs, ... }:
 
 {
-  require = [$requires  ];
+  imports = [$imports  ];
 
   boot.initrd.kernelModules = [$initrdKernelModules ];
   boot.kernelModules = [$kernelModules ];

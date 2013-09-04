@@ -6,10 +6,7 @@
 with pkgs.lib;
 
 {
-  require = [
-    ./installation-cd-base.nix
-    ../../profiles/graphical.nix
-  ];
+  imports = [ ./installation-cd-base.nix ../../profiles/graphical.nix ];
 
   # Provide wicd for easy wireless configuration.
   #networking.wicd.enable = true;

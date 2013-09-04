@@ -2,11 +2,20 @@
 
 with pkgs.lib;
 
-###### interface
-
 let
 
+  glibcLocales = pkgs.glibcLocales.override {
+    allLocales = any (x: x == "all") config.i18n.supportedLocales;
+    locales = config.i18n.supportedLocales;
+  };
+
+in
+
+{
+  ###### interface
+
   options = {
+
     i18n = {
       defaultLocale = mkOption {
         default = "en_US.UTF-8";
@@ -53,31 +62,26 @@ let
 
   };
 
-###### implementation
 
-  glibcLocales = pkgs.glibcLocales.override {
-    allLocales = any (x: x == "all") config.i18n.supportedLocales;
-    locales = config.i18n.supportedLocales;
+  ###### implementation
+
+  config = {
+
+    environment.systemPackages = [ glibcLocales ];
+
+    environment.shellInit =
+      ''
+        export LANG=${config.i18n.defaultLocale}
+      '';
+
+    # ‘/etc/locale.conf’ is used by systemd.
+    environment.etc = singleton
+      { target = "locale.conf";
+        source = pkgs.writeText "locale.conf"
+          ''
+            LANG=${config.i18n.defaultLocale}
+          '';
+      };
+
   };
-
-in
-
-{
-  require = options;
-
-  environment.systemPackages = [ glibcLocales ];
-
-  environment.shellInit =
-    ''
-      export LANG=${config.i18n.defaultLocale}
-    '';
-
-  # ‘/etc/locale.conf’ is used by systemd.
-  environment.etc = singleton
-    { target = "locale.conf";
-      source = pkgs.writeText "locale.conf"
-        ''
-          LANG=${config.i18n.defaultLocale}
-        '';
-    };
 }

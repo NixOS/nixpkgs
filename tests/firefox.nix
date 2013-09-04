@@ -5,7 +5,7 @@
   machine =
     { config, pkgs, ... }:
 
-    { require = [ ./common/x11.nix ];
+    { imports = [ ./common/x11.nix ];
       environment.systemPackages = [ pkgs.firefox ];
     };
 

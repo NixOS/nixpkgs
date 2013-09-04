@@ -1,10 +1,14 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
 
-  inherit (pkgs.lib) mkOption mkIf;
   cfg = config.services.xserver.desktopManager.xterm;
 
+in
+
+{
   options = {
 
     services.xserver.desktopManager.xterm.enable = mkOption {
@@ -15,30 +19,18 @@ let
 
   };
 
-in
+  config = mkIf cfg.enable {
 
-mkIf cfg.enable {
-  require = options;
-
-  services = {
-    xserver = {
-
-      desktopManager = {
-        session = [{
-          name = "xterm";
-          start = ''
-            ${pkgs.xterm}/bin/xterm -ls &
-            waitPID=$!
-          '';
-        }];
+    services.xserver.desktopManager.session = singleton
+      { name = "xterm";
+        start = ''
+          ${pkgs.xterm}/bin/xterm -ls &
+          waitPID=$!
+        '';
       };
 
-    };
+    environment.systemPackages = [ pkgs.xterm ];
+
   };
 
-  environment = {
-    x11Packages = [
-      pkgs.xterm
-    ];
-  };
 }

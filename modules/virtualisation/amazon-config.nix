@@ -1,5 +1,5 @@
 { config, pkgs, modulesPath, ... }:
 
 {
-  require = [ "${modulesPath}/virtualisation/amazon-image.nix" ];
+  imports = [ "${modulesPath}/virtualisation/amazon-image.nix" ];
 }

@@ -5,7 +5,7 @@
   machine =
     { config, pkgs, ... }:
 
-    { require = [ ./common/user-account.nix ];
+    { imports = [ ./common/user-account.nix ];
 
       services.xserver.enable = true;
 

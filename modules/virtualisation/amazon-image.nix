@@ -3,7 +3,7 @@
 with pkgs.lib;
 
 {
-  require = [ ../profiles/headless.nix ./ec2-data.nix ];
+  imports = [ ../profiles/headless.nix ./ec2-data.nix ];
 
   system.build.amazonImage =
     pkgs.vmTools.runInLinuxVM (
@@ -83,7 +83,7 @@ with pkgs.lib;
       udevadm control --exit || true
       kill -9 -1
     '';
-    
+
   # Mount all formatted ephemeral disks and activate all swap devices.
   # We cannot do this with the ‘fileSystems’ and ‘swapDevices’ options
   # because the set of devices is dependent on the instance type

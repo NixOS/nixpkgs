@@ -1,11 +1,11 @@
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
 
 {
-  require = [./installation-cd-base.nix];
+  imports = [ ./installation-cd-base.nix ];
 
   # Build the build-time dependencies of this configuration on the DVD
   # to speed up installation.
-  isoImage.storeContents = [config.system.build.toplevel.drvPath];
+  isoImage.storeContents = [ config.system.build.toplevel.drvPath ];
 
   # Include lots of packages.
   environment.systemPackages =

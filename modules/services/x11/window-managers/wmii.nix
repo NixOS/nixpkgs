@@ -1,27 +1,27 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
-  inherit (pkgs.lib) mkOption mkIf;
+
   cfg = config.services.xserver.windowManager.wmii;
 
-  option = { services = { xserver = { windowManager = {
-
-    wmii = {
-      enable = mkOption {
-        default = false;
-        example = true;
-        description = "Enable the wmii window manager.";
-      };
-    };
-
-  }; }; }; };
 in
 
-mkIf cfg.enable {
-  require = option;
+{
+  options = {
 
-  services = {
-    xserver = {
+    services.xserver.windowManager.wmii.enable = mkOption {
+      default = false;
+      example = true;
+      description = "Enable the wmii window manager.";
+    };
+
+  };
+
+  config = mkIf cfg.enable {
+
+    services.xserver.windowManager.session = singleton
       # stop wmii by
       #   $wmiir xwrite /ctl quit
       # this will cause wmii exiting with exit code 0
@@ -32,23 +32,16 @@ mkIf cfg.enable {
       # lost and all applications running on X will terminate.
       # Another use case is kill -9 wmii; after rotating screen.
       # Note: we don't like kill for that purpose. But it works (-> subject "wmii and xrandr" on mailinglist)
-      windowManager = {
-        session = [{
-          name = "wmii";
-          start = "
-            while :; do
-              ${pkgs.wmiiSnap}/bin/wmii && break
-            done
-          ";
-        }];
+      { name = "wmii";
+        start = ''
+          while :; do
+            ${pkgs.wmiiSnap}/bin/wmii && break
+          done
+        '';
       };
 
-    };
+    environment.systemPackages = [ pkgs.wmiiSnap ];
+
   };
 
-  environment = {
-    x11Packages = [
-      pkgs.wmiiSnap
-    ];
-  };
 }

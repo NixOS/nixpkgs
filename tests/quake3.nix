@@ -17,7 +17,7 @@ rec {
   client =
     { config, pkgs, ... }:
 
-    { require = [ ./common/x11.nix ];
+    { imports = [ ./common/x11.nix ];
       services.xserver.driSupport = true;
       services.xserver.defaultDepth = pkgs.lib.mkOverride 0 16;
       environment.systemPackages = [ pkgs.quake3demo ];

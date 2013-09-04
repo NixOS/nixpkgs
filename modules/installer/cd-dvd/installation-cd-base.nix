@@ -6,7 +6,7 @@
 with pkgs.lib;
 
 {
-  require =
+  imports =
     [ ./memtest.nix
       ./channel.nix
       ./iso-image.nix

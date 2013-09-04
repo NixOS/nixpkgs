@@ -4,7 +4,7 @@
 { config, pkgs, ... }:
 
 {
-  require =
+  imports =
     [ ./installation-cd-base.nix
       ../../profiles/minimal.nix
     ];

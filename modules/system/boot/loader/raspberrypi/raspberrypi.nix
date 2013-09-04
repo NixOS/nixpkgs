@@ -1,30 +1,9 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
-###### interface
+with pkgs.lib;
+
 let
-  inherit (pkgs.lib) mkOption mkIf;
 
-  options = {
-    boot = {
-      loader = {
-        raspberryPi = {
-          enable = mkOption {
-            default = false;
-            description = ''
-              Whether to create files with the system generations in
-              <literal>/boot</literal>. 
-              <literal>/boot/old</literal> will hold files from old generations.
-            '';
-          };
-        };
-      };
-    };
-  };
-
-in
-
-###### implementation
-let
   builder = pkgs.substituteAll {
     src = ./builder.sh;
     isExecutable = true;
@@ -34,18 +13,26 @@ let
   };
 
   platform = pkgs.stdenv.platform;
+
 in
+
 {
-  require = [
-    options
+  options = {
 
-    # config.system.build
-    # ../system/system-options.nix
-  ];
+    boot.loader.raspberryPi.enable = mkOption {
+      default = false;
+      description = ''
+        Whether to create files with the system generations in
+        <literal>/boot</literal>.
+        <literal>/boot/old</literal> will hold files from old generations.
+      '';
+    };
 
-  system = mkIf config.boot.loader.raspberryPi.enable {
-    build.installBootLoader = builder;
-    boot.loader.id = "raspberrypi";
-    boot.loader.kernelFile = platform.kernelTarget;
+  };
+
+  config = mkIf config.boot.loader.raspberryPi.enable {
+    system.build.installBootLoader = builder;
+    system.boot.loader.id = "raspberrypi";
+    system.boot.loader.kernelFile = platform.kernelTarget;
   };
 }

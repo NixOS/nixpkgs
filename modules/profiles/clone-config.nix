@@ -47,7 +47,7 @@ let
       { config, pkgs, ... }:
 
       {
-        require = [ ${toString config.installer.cloneConfigIncludes} ];
+        imports = [ ${toString config.installer.cloneConfigIncludes} ];
       }
     '';
 

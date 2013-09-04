@@ -31,6 +31,9 @@ let
     mapAttrsFlatten (k: v: "alias ${k}='${v}'") cfg.shellAliases
   );
 
+in
+
+{
   options = {
 
     environment.promptInit = mkOption {
@@ -87,70 +90,65 @@ let
 
   };
 
-in
 
-{
-  require = [options];
+  config = {
 
-  environment.etc =
-    [ { # Script executed when the shell starts as a login shell.
-        source = pkgs.substituteAll {
-          src = ./profile.sh;
-          wrapperDir = config.security.wrapperDir;
-          inherit (cfg) shellInit;
-        };
-        target = "profile";
-      }
+    # Script executed when the shell starts as a login shell.
+    environment.etc."profile".source =
+      pkgs.substituteAll {
+        src = ./profile.sh;
+        wrapperDir = config.security.wrapperDir;
+        inherit (cfg) shellInit;
+      };
 
-      { # /etc/bashrc: executed every time an interactive bash
-        # starts. Sources /etc/profile to ensure that the system
-        # environment is configured properly.
-        source = pkgs.substituteAll {
-          src = ./bashrc.sh;
-          inherit (cfg) interactiveShellInit;
-        };
-        target = "bashrc";
-      }
+    # /etc/bashrc: executed every time an interactive bash
+    # starts. Sources /etc/profile to ensure that the system
+    # environment is configured properly.
+    environment.etc."bashrc".source =
+      pkgs.substituteAll {
+        src = ./bashrc.sh;
+        inherit (cfg) interactiveShellInit;
+      };
 
-      { # Configuration for readline in bash.
-        source = ./inputrc;
-        target = "inputrc";
-      }
+    # Configuration for readline in bash.
+    environment.etc."inputrc".source = ./inputrc;
+
+    environment.shellAliases =
+      { ls = "ls --color=tty";
+        ll = "ls -l";
+        l = "ls -alh";
+        which = "type -P";
+      };
+
+    environment.interactiveShellInit =
+      ''
+        # Check the window size after every command.
+        shopt -s checkwinsize
+
+        ${cfg.promptInit}
+        ${initBashCompletion}
+        ${shellAliases}
+
+        # Disable hashing (i.e. caching) of command lookups.
+        set +h
+      '';
+
+    system.build.binsh = pkgs.bashInteractive;
+
+    system.activationScripts.binsh = stringAfter [ "stdio" ]
+      ''
+        # Create the required /bin/sh symlink; otherwise lots of things
+        # (notably the system() function) won't work.
+        mkdir -m 0755 -p /bin
+        ln -sfn "${cfg.binsh}" /bin/.sh.tmp
+        mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
+      '';
+
+    environment.pathsToLink = optionals cfg.enableBashCompletion [
+      "/etc/bash_completion.d"
+      "/share/bash-completion"
     ];
 
-  environment.shellAliases =
-    { ls = "ls --color=tty";
-      ll = "ls -l";
-      l = "ls -alh";
-      which = "type -P";
-    };
+  };
 
-  environment.interactiveShellInit =
-    ''
-      # Check the window size after every command.
-      shopt -s checkwinsize
-
-      ${cfg.promptInit}
-      ${initBashCompletion}
-      ${shellAliases}
-
-      # Disable hashing (i.e. caching) of command lookups.
-      set +h
-    '';
-
-  system.build.binsh = pkgs.bashInteractive;
-
-  system.activationScripts.binsh = stringAfter [ "stdio" ]
-    ''
-      # Create the required /bin/sh symlink; otherwise lots of things
-      # (notably the system() function) won't work.
-      mkdir -m 0755 -p /bin
-      ln -sfn "${cfg.binsh}" /bin/.sh.tmp
-      mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
-    '';
-
-  environment.pathsToLink = optionals cfg.enableBashCompletion [
-    "/etc/bash_completion.d"
-    "/share/bash-completion"
-  ];
 }

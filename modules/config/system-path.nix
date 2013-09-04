@@ -54,7 +54,9 @@ let
       extraManpages
     ];
 
+in
 
+{
   options = {
 
     environment = {
@@ -78,9 +80,7 @@ let
         # to work.
         default = [];
         example = ["/"];
-        description = "
-          Lists directories to be symlinked in `/run/current-system/sw'.
-        ";
+        description = "List of directories to be symlinked in `/run/current-system/sw'.";
       };
     };
 
@@ -120,24 +120,23 @@ let
 
   };
 
+  config = {
 
-in
+    environment.systemPackages = requiredPackages;
 
-{
-  require = [ options ];
+    environment.pathsToLink =
+      [ "/bin"
+        "/etc/xdg"
+        "/info"
+        "/lib"
+        "/man"
+        "/sbin"
+        "/share/emacs"
+        "/share/org"
+        "/share/info"
+        "/share/terminfo"
+        "/share/man"
+      ];
 
-  environment.systemPackages = requiredPackages;
-  environment.pathsToLink = [
-    "/bin"
-    "/etc/xdg"
-    "/info"
-    "/lib"
-    "/man"
-    "/sbin"
-    "/share/emacs"
-    "/share/org"
-    "/share/info"
-    "/share/terminfo"
-    "/share/man"
-  ];
+  };
 }

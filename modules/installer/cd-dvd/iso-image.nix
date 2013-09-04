@@ -8,6 +8,79 @@ with pkgs.lib;
 
 let
 
+  # The Grub image.
+  grubImage = pkgs.runCommand "grub_eltorito" {}
+    ''
+      ${pkgs.grub2}/bin/grub-mkimage -O i386-pc -o tmp biosdisk iso9660 help linux linux16 chain png jpeg echo gfxmenu reboot
+      cat ${pkgs.grub2}/lib/grub/*/cdboot.img tmp > $out
+    ''; # */
+
+
+  # The configuration file for Grub.
+  grubCfg =
+    ''
+      set default=${builtins.toString config.boot.loader.grub.default}
+      set timeout=${builtins.toString config.boot.loader.grub.timeout}
+
+      if loadfont /boot/grub/unicode.pf2; then
+        set gfxmode=640x480
+        insmod gfxterm
+        insmod vbe
+        terminal_output gfxterm
+
+        insmod png
+        if background_image /boot/grub/splash.png; then
+          set color_normal=white/black
+          set color_highlight=black/white
+        else
+          set menu_color_normal=cyan/blue
+          set menu_color_highlight=white/blue
+        fi
+
+      fi
+
+      ${config.boot.loader.grub.extraEntries}
+    '';
+
+
+  # The efi boot image
+  efiImg = pkgs.runCommand "efi-image_eltorito" {}
+    ''
+      #Let's hope 10M is enough
+      dd bs=2048 count=5120 if=/dev/zero of="$out"
+      ${pkgs.dosfstools}/sbin/mkfs.vfat "$out"
+      ${pkgs.mtools}/bin/mmd -i "$out" efi
+      ${pkgs.mtools}/bin/mmd -i "$out" efi/boot
+      ${pkgs.mtools}/bin/mmd -i "$out" efi/nixos
+      ${pkgs.mtools}/bin/mmd -i "$out" loader
+      ${pkgs.mtools}/bin/mmd -i "$out" loader/entries
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
+        ${pkgs.gummiboot}/lib/gummiboot/gummiboot${targetArch}.efi \
+        ::efi/boot/boot${targetArch}.efi
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
+        ${config.boot.kernelPackages.kernel + "/bzImage"} ::bzImage
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
+        ${config.system.build.initialRamdisk + "/initrd"} ::efi/nixos/initrd
+      echo "title NixOS LiveCD" > boot-params
+      echo "linux /bzImage" >> boot-params
+      echo "initrd /efi/nixos/initrd" >> boot-params
+      echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> boot-params
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::loader/entries/nixos-livecd.conf
+      echo "default nixos-livecd" > boot-params
+      echo "timeout 5" >> boot-params
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::loader/loader.conf
+    '';
+
+  targetArch = if pkgs.stdenv.isi686 then
+    "ia32"
+  else if pkgs.stdenv.isx86_64 then
+    "x64"
+  else
+    throw "Unsupported architecture";
+
+in
+
+{
   options = {
 
     isoImage.isoName = mkOption {
@@ -84,228 +157,157 @@ let
   };
 
 
-  # The Grub image.
-  grubImage = pkgs.runCommand "grub_eltorito" {}
-    ''
-      ${pkgs.grub2}/bin/grub-mkimage -O i386-pc -o tmp biosdisk iso9660 help linux linux16 chain png jpeg echo gfxmenu reboot
-      cat ${pkgs.grub2}/lib/grub/*/cdboot.img tmp > $out
-    ''; # */
+  config = {
 
+    boot.loader.grub.version = 2;
 
-  # The configuration file for Grub.
-  grubCfg =
-    ''
-      set default=${builtins.toString config.boot.loader.grub.default}
-      set timeout=${builtins.toString config.boot.loader.grub.timeout}
+    # Don't build the GRUB menu builder script, since we don't need it
+    # here and it causes a cyclic dependency.
+    boot.loader.grub.enable = false;
 
-      if loadfont /boot/grub/unicode.pf2; then
-        set gfxmode=640x480
-        insmod gfxterm
-        insmod vbe
-        terminal_output gfxterm
+    # !!! Hack - attributes expected by other modules.
+    system.boot.loader.kernelFile = "bzImage";
+    environment.systemPackages = [ pkgs.grub2 ];
 
-        insmod png
-        if background_image /boot/grub/splash.png; then
-          set color_normal=white/black
-          set color_highlight=black/white
-        else
-          set menu_color_normal=cyan/blue
-          set menu_color_highlight=white/blue
-        fi
+    # In stage 1 of the boot, mount the CD as the root FS by label so
+    # that we don't need to know its device.  We pass the label of the
+    # root filesystem on the kernel command line, rather than in
+    # `fileSystems' below.  This allows CD-to-USB converters such as
+    # UNetbootin to rewrite the kernel command line to pass the label or
+    # UUID of the USB stick.  It would be nicer to write
+    # `root=/dev/disk/by-label/...' here, but UNetbootin doesn't
+    # recognise that.
+    boot.kernelParams = [ "root=LABEL=${config.isoImage.volumeID}" ];
 
-      fi
+    # Note that /dev/root is a symlink to the actual root device
+    # specified on the kernel command line, created in the stage 1 init
+    # script.
+    fileSystems."/".device = "/dev/root";
 
-      ${config.boot.loader.grub.extraEntries}
-    '';
+    fileSystems."/nix/store" =
+      { fsType = "squashfs";
+        device = "/nix-store.squashfs";
+        options = "loop";
+      };
 
+    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" ];
 
-  # The efi boot image
-  efiImg = pkgs.runCommand "efi-image_eltorito" {}
-    ''
-      #Let's hope 10M is enough
-      dd bs=2048 count=5120 if=/dev/zero of="$out"
-      ${pkgs.dosfstools}/sbin/mkfs.vfat "$out"
-      ${pkgs.mtools}/bin/mmd -i "$out" efi
-      ${pkgs.mtools}/bin/mmd -i "$out" efi/boot
-      ${pkgs.mtools}/bin/mmd -i "$out" efi/nixos
-      ${pkgs.mtools}/bin/mmd -i "$out" loader
-      ${pkgs.mtools}/bin/mmd -i "$out" loader/entries
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
-        ${pkgs.gummiboot}/lib/gummiboot/gummiboot${targetArch}.efi \
-        ::efi/boot/boot${targetArch}.efi
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
-        ${config.boot.kernelPackages.kernel + "/bzImage"} ::bzImage
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
-        ${config.system.build.initialRamdisk + "/initrd"} ::efi/nixos/initrd
-      echo "title NixOS LiveCD" > boot-params
-      echo "linux /bzImage" >> boot-params
-      echo "initrd /efi/nixos/initrd" >> boot-params
-      echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> boot-params
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::loader/entries/nixos-livecd.conf
-      echo "default nixos-livecd" > boot-params
-      echo "timeout 5" >> boot-params
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::loader/loader.conf
-    '';
+    boot.initrd.kernelModules = [ "loop" ];
 
-  targetArch = if pkgs.stdenv.isi686 then
-    "ia32"
-  else if pkgs.stdenv.isx86_64 then
-    "x64"
-  else
-    throw "Unsupported architecture";
+    boot.kernelModules = pkgs.stdenv.lib.optional config.isoImage.makeEfiBootable "efivars";
 
-in
+    # In stage 1, mount a tmpfs on top of / (the ISO image) and
+    # /nix/store (the squashfs image) to make this a live CD.
+    boot.initrd.postMountCommands =
+      ''
+        mkdir -p /unionfs-chroot/ro-root
+        mount --rbind $targetRoot /unionfs-chroot/ro-root
 
-{
-  require = options;
+        mkdir /unionfs-chroot/rw-root
+        mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-root
+        mkdir /mnt-root-union
+        unionfs -o allow_other,cow,chroot=/unionfs-chroot,max_files=32768 /rw-root=RW:/ro-root=RO /mnt-root-union
+        oldTargetRoot=$targetRoot
+        targetRoot=/mnt-root-union
 
-  boot.loader.grub.version = 2;
+        mkdir /unionfs-chroot/rw-store
+        mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-store
+        mkdir -p $oldTargetRoot/nix/store
+        unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot,max_files=32768 /rw-store=RW:/ro-root/nix/store=RO /mnt-root-union/nix/store
+      '';
 
-  # Don't build the GRUB menu builder script, since we don't need it
-  # here and it causes a cyclic dependency.
-  boot.loader.grub.enable = false;
+    # Closures to be copied to the Nix store on the CD, namely the init
+    # script and the top-level system configuration directory.
+    isoImage.storeContents =
+      [ config.system.build.toplevel ] ++
+      optional config.isoImage.includeSystemBuildDependencies
+        config.system.build.toplevel.drvPath;
 
-  # !!! Hack - attributes expected by other modules.
-  system.boot.loader.kernelFile = "bzImage";
-  environment.systemPackages = [ pkgs.grub2 ];
-
-  # In stage 1 of the boot, mount the CD as the root FS by label so
-  # that we don't need to know its device.  We pass the label of the
-  # root filesystem on the kernel command line, rather than in
-  # `fileSystems' below.  This allows CD-to-USB converters such as
-  # UNetbootin to rewrite the kernel command line to pass the label or
-  # UUID of the USB stick.  It would be nicer to write
-  # `root=/dev/disk/by-label/...' here, but UNetbootin doesn't
-  # recognise that.
-  boot.kernelParams = [ "root=LABEL=${config.isoImage.volumeID}" ];
-
-  # Note that /dev/root is a symlink to the actual root device
-  # specified on the kernel command line, created in the stage 1 init
-  # script.
-  fileSystems."/".device = "/dev/root";
-
-  fileSystems."/nix/store" =
-    { fsType = "squashfs";
-      device = "/nix-store.squashfs";
-      options = "loop";
+    # Create the squashfs image that contains the Nix store.
+    system.build.squashfsStore = import ../../../lib/make-squashfs.nix {
+      inherit (pkgs) stdenv squashfsTools perl pathsFromGraph;
+      storeContents = config.isoImage.storeContents;
     };
 
-  boot.initrd.availableKernelModules = [ "squashfs" "iso9660" ];
+    # Individual files to be included on the CD, outside of the Nix
+    # store on the CD.
+    isoImage.contents =
+      [ { source = grubImage;
+          target = "/boot/grub/grub_eltorito";
+        }
+        { source = pkgs.writeText "grub.cfg" grubCfg;
+          target = "/boot/grub/grub.cfg";
+        }
+        { source = config.boot.kernelPackages.kernel + "/bzImage";
+          target = "/boot/bzImage";
+        }
+        { source = config.system.build.initialRamdisk + "/initrd";
+          target = "/boot/initrd";
+        }
+        { source = "${pkgs.grub2}/share/grub/unicode.pf2";
+          target = "/boot/grub/unicode.pf2";
+        }
+        { source = config.boot.loader.grub.splashImage;
+          target = "/boot/grub/splash.png";
+        }
+        { source = config.system.build.squashfsStore;
+          target = "/nix-store.squashfs";
+        }
+        { # Quick hack: need a mount point for the store.
+          source = pkgs.runCommand "empty" {} "ensureDir $out";
+          target = "/nix/store";
+        }
+      ] ++ pkgs.stdenv.lib.optionals config.isoImage.makeEfiBootable [
+        { source = efiImg;
+          target = "/boot/efi.img";
+        }
+      ];
 
-  boot.initrd.kernelModules = [ "loop" ];
+    # The Grub menu.
+    boot.loader.grub.extraEntries =
+      ''
+        menuentry "NixOS Installer / Rescue" {
+          linux /boot/bzImage init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+          initrd /boot/initrd
+        }
 
-  boot.kernelModules = pkgs.stdenv.lib.optional config.isoImage.makeEfiBootable "efivars";
+        menuentry "Boot from hard disk" {
+          set root=(hd0)
+          chainloader +1
+        }
+      '';
 
-  # In stage 1, mount a tmpfs on top of / (the ISO image) and
-  # /nix/store (the squashfs image) to make this a live CD.
-  boot.initrd.postMountCommands =
-    ''
-      mkdir -p /unionfs-chroot/ro-root
-      mount --rbind $targetRoot /unionfs-chroot/ro-root
+    boot.loader.grub.timeout = 10;
 
-      mkdir /unionfs-chroot/rw-root
-      mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-root
-      mkdir /mnt-root-union
-      unionfs -o allow_other,cow,chroot=/unionfs-chroot,max_files=32768 /rw-root=RW:/ro-root=RO /mnt-root-union
-      oldTargetRoot=$targetRoot
-      targetRoot=/mnt-root-union
+    # Create the ISO image.
+    system.build.isoImage = import ../../../lib/make-iso9660-image.nix ({
+      inherit (pkgs) stdenv perl cdrkit pathsFromGraph;
 
-      mkdir /unionfs-chroot/rw-store
-      mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-store
-      mkdir -p $oldTargetRoot/nix/store
-      unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot,max_files=32768 /rw-store=RW:/ro-root/nix/store=RO /mnt-root-union/nix/store
-    '';
+      inherit (config.isoImage) isoName compressImage volumeID contents;
 
-  # Closures to be copied to the Nix store on the CD, namely the init
-  # script and the top-level system configuration directory.
-  isoImage.storeContents =
-    [ config.system.build.toplevel ] ++
-    optional config.isoImage.includeSystemBuildDependencies
-      config.system.build.toplevel.drvPath;
+      bootable = true;
+      bootImage = "/boot/grub/grub_eltorito";
+    } // pkgs.stdenv.lib.optionalAttrs config.isoImage.makeEfiBootable {
+      efiBootable = true;
+      efiBootImage = "boot/efi.img";
+    });
 
-  # Create the squashfs image that contains the Nix store.
-  system.build.squashfsStore = import ../../../lib/make-squashfs.nix {
-    inherit (pkgs) stdenv squashfsTools perl pathsFromGraph;
-    storeContents = config.isoImage.storeContents;
+    boot.postBootCommands =
+      ''
+        # After booting, register the contents of the Nix store on the
+        # CD in the Nix database in the tmpfs.
+        ${config.environment.nix}/bin/nix-store --load-db < /nix/store/nix-path-registration
+
+        # nixos-rebuild also requires a "system" profile and an
+        # /etc/NIXOS tag.
+        touch /etc/NIXOS
+        ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+      '';
+
+    # Add vfat support to the initrd to enable people to copy the
+    # contents of the CD to a bootable USB stick. Need unionfs-fuse for union mounts
+    boot.initrd.supportedFilesystems = [ "vfat" "unionfs-fuse" ];
+
   };
 
-  # Individual files to be included on the CD, outside of the Nix
-  # store on the CD.
-  isoImage.contents =
-    [ { source = grubImage;
-        target = "/boot/grub/grub_eltorito";
-      }
-      { source = pkgs.writeText "grub.cfg" grubCfg;
-        target = "/boot/grub/grub.cfg";
-      }
-      { source = config.boot.kernelPackages.kernel + "/bzImage";
-        target = "/boot/bzImage";
-      }
-      { source = config.system.build.initialRamdisk + "/initrd";
-        target = "/boot/initrd";
-      }
-      { source = "${pkgs.grub2}/share/grub/unicode.pf2";
-        target = "/boot/grub/unicode.pf2";
-      }
-      { source = config.boot.loader.grub.splashImage;
-        target = "/boot/grub/splash.png";
-      }
-      { source = config.system.build.squashfsStore;
-        target = "/nix-store.squashfs";
-      }
-      { # Quick hack: need a mount point for the store.
-        source = pkgs.runCommand "empty" {} "ensureDir $out";
-        target = "/nix/store";
-      }
-    ] ++ pkgs.stdenv.lib.optionals config.isoImage.makeEfiBootable [
-      { source = efiImg;
-        target = "/boot/efi.img";
-      }
-    ];
-
-  # The Grub menu.
-  boot.loader.grub.extraEntries =
-    ''
-      menuentry "NixOS Installer / Rescue" {
-        linux /boot/bzImage init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
-        initrd /boot/initrd
-      }
-
-      menuentry "Boot from hard disk" {
-        set root=(hd0)
-        chainloader +1
-      }
-    '';
-
-  boot.loader.grub.timeout = 10;
-
-  # Create the ISO image.
-  system.build.isoImage = import ../../../lib/make-iso9660-image.nix ({
-    inherit (pkgs) stdenv perl cdrkit pathsFromGraph;
-
-    inherit (config.isoImage) isoName compressImage volumeID contents;
-
-    bootable = true;
-    bootImage = "/boot/grub/grub_eltorito";
-  } // pkgs.stdenv.lib.optionalAttrs config.isoImage.makeEfiBootable {
-    efiBootable = true;
-    efiBootImage = "boot/efi.img";
-  });
-
-  boot.postBootCommands =
-    ''
-      # After booting, register the contents of the Nix store on the
-      # CD in the Nix database in the tmpfs.
-      ${config.environment.nix}/bin/nix-store --load-db < /nix/store/nix-path-registration
-
-      # nixos-rebuild also requires a "system" profile and an
-      # /etc/NIXOS tag.
-      touch /etc/NIXOS
-      ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-    '';
-
-  # Add vfat support to the initrd to enable people to copy the
-  # contents of the CD to a bootable USB stick. Need unionfs-fuse for union mounts
-  boot.initrd.supportedFilesystems = [ "vfat" "unionfs-fuse" ];
-    
 }

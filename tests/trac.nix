@@ -3,9 +3,8 @@
 {
   nodes = {
     storage =
-      {pkgs, config, ...}:
-      {
-        services.nfs.server.enable = true;
+      { config, pkgs, ... }:
+      { services.nfs.server.enable = true;
         services.nfs.server.exports = ''
           /repos 192.168.1.0/255.255.255.0(rw,no_root_squash)
         '';
@@ -13,10 +12,8 @@
       };
 
     postgresql =
-      {config, pkgs, ...}:
-      {
-        services.openssh.enable = true;
-        services.postgresql.enable = true;
+      { config, pkgs, ... }:
+      { services.postgresql.enable = true;
         services.postgresql.package = pkgs.postgresql92;
         services.postgresql.enableTCPIP = true;
         services.postgresql.authentication = ''
@@ -29,15 +26,13 @@
       };
 
     webserver =
-      {config, pkgs, ...}:
-      {
-        fileSystems = pkgs.lib.mkOverride 50
+      { config, pkgs, ... }:
+      { fileSystems = pkgs.lib.mkOverride 50
           [ { mountPoint = "/repos";
               device = "storage:/repos";
               fsType = "nfs";
             }
           ];
-
         services.httpd.enable = true;
         services.httpd.adminAddr = "root@localhost";
         services.httpd.extraSubservices = [ { serviceType = "trac"; } ];
@@ -45,9 +40,8 @@
       };
 
     client =
-      {config, pkgs, ...}:
-      {
-        require = [ ./common/x11.nix ];
+      { config, pkgs, ... }:
+      { imports = [ ./common/x11.nix ];
         services.xserver.desktopManager.kde4.enable = true;
       };
   };

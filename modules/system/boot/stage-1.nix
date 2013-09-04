@@ -11,116 +11,6 @@ let
 
   udev = config.systemd.package;
 
-  options = {
-
-    boot.resumeDevice = mkOption {
-      default = "";
-      example = "0:0";
-      description = "
-        Device for manual resume attempt during boot. Looks like
-        major:minor. ls -l /dev/SWAP_PARTION shows them.
-      ";
-    };
-
-    boot.initrd.enableSplashScreen = mkOption {
-      default = true;
-      description = "
-        Whether to show a nice splash screen while booting.
-      ";
-    };
-
-    boot.initrd.checkJournalingFS = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to run fsck on journaling filesystems such as ext3.
-      '';
-    };
-
-    boot.initrd.mdadmConf = mkOption {
-      default = "";
-      type = with types; string;
-      description = ''
-        Contents of /etc/mdadm.conf at initrd.
-      '';
-    };
-
-    boot.initrd.preLVMCommands = mkOption {
-      default = "";
-      type = with types; string;
-      description = ''
-        Shell commands to be executed immediately before lvm discovery.
-      '';
-    };
-
-    boot.initrd.postDeviceCommands = mkOption {
-      default = "";
-      type = with types; string;
-      description = ''
-        Shell commands to be executed immediately after stage 1 of the
-        boot has loaded kernel modules and created device nodes in
-        /dev.
-      '';
-    };
-
-    boot.initrd.postMountCommands = mkOption {
-      default = "";
-      type = with types; string;
-      description = ''
-        Shell commands to be executed immediately after the stage 1
-        filesystems have been mounted.
-      '';
-    };
-
-    boot.initrd.extraUtilsCommands = mkOption {
-      internal = true;
-      default = "";
-      type = with types; string;
-      description = ''
-        Shell commands to be executed in the builder of the
-        extra-utils derivation.  This can be used to provide
-        additional utilities in the initial ramdisk.
-      '';
-    };
-
-    boot.initrd.extraUtilsCommandsTest = mkOption {
-      internal = true;
-      default = "";
-      type = with types; string;
-      description = ''
-        Shell commands to be executed in the builder of the
-        extra-utils derivation after patchelf has done its
-        job.  This can be used to test additional utilities
-        copied in extraUtilsCommands.
-      '';
-    };
-
-    boot.initrd.compressor = mkOption {
-      default = "gzip -9";
-
-      type = types.string;
-
-      description = "The compressor to use on the initrd";
-
-      example = "xz";
-    };
-
-    fileSystems = mkOption {
-      options.neededForBoot = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          If set, this file system will be mounted in the initial
-          ramdisk.  By default, this applies to the root file system
-          and to the file system containing
-          <filename>/nix/store</filename>.
-        '';
-      };
-    };
-
-  };
-
-
   kernelPackages = config.boot.kernelPackages;
   modulesTree = config.system.modulesTree;
 
@@ -141,14 +31,15 @@ let
                 && kernelPackages.kernel.features.needsCifsUtils
                 && any (fs: fs.fsType == "cifs") fileSystems;
 
-  busybox = if needsCifsUtils
-            then pkgs.busybox.override {
-                   extraConfig = ''
-                     CONFIG_FEATURE_MOUNT_CIFS n
-                     CONFIG_FEATURE_MOUNT_HELPERS y
-                   '';
-                 }
-            else pkgs.busybox;
+  busybox =
+    if needsCifsUtils
+    then pkgs.busybox.override {
+           extraConfig = ''
+             CONFIG_FEATURE_MOUNT_CIFS n
+             CONFIG_FEATURE_MOUNT_HELPERS y
+           '';
+         }
+    else pkgs.busybox;
 
 
   # Some additional utilities needed in stage 1, like mount, lvm, fsck
@@ -351,16 +242,128 @@ let
         ];
   };
 
-in {
+in
 
-  require = [options];
+{
+  options = {
 
-  system.build.bootStage1 = bootStage1;
-  system.build.initialRamdisk = initialRamdisk;
-  system.build.extraUtils = extraUtils;
+    boot.resumeDevice = mkOption {
+      default = "";
+      example = "0:0";
+      description = "
+        Device for manual resume attempt during boot. Looks like
+        major:minor. ls -l /dev/SWAP_PARTION shows them.
+      ";
+    };
 
-  system.requiredKernelConfig = with config.lib.kernelConfig; [
-    (isYes "TMPFS")
-    (isYes "BLK_DEV_INITRD")
-  ];
+    boot.initrd.enableSplashScreen = mkOption {
+      default = true;
+      description = "
+        Whether to show a nice splash screen while booting.
+      ";
+    };
+
+    boot.initrd.checkJournalingFS = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to run fsck on journaling filesystems such as ext3.
+      '';
+    };
+
+    boot.initrd.mdadmConf = mkOption {
+      default = "";
+      type = with types; string;
+      description = ''
+        Contents of /etc/mdadm.conf at initrd.
+      '';
+    };
+
+    boot.initrd.preLVMCommands = mkOption {
+      default = "";
+      type = with types; string;
+      description = ''
+        Shell commands to be executed immediately before lvm discovery.
+      '';
+    };
+
+    boot.initrd.postDeviceCommands = mkOption {
+      default = "";
+      type = with types; string;
+      description = ''
+        Shell commands to be executed immediately after stage 1 of the
+        boot has loaded kernel modules and created device nodes in
+        /dev.
+      '';
+    };
+
+    boot.initrd.postMountCommands = mkOption {
+      default = "";
+      type = with types; string;
+      description = ''
+        Shell commands to be executed immediately after the stage 1
+        filesystems have been mounted.
+      '';
+    };
+
+    boot.initrd.extraUtilsCommands = mkOption {
+      internal = true;
+      default = "";
+      type = with types; string;
+      description = ''
+        Shell commands to be executed in the builder of the
+        extra-utils derivation.  This can be used to provide
+        additional utilities in the initial ramdisk.
+      '';
+    };
+
+    boot.initrd.extraUtilsCommandsTest = mkOption {
+      internal = true;
+      default = "";
+      type = with types; string;
+      description = ''
+        Shell commands to be executed in the builder of the
+        extra-utils derivation after patchelf has done its
+        job.  This can be used to test additional utilities
+        copied in extraUtilsCommands.
+      '';
+    };
+
+    boot.initrd.compressor = mkOption {
+      default = "gzip -9";
+
+      type = types.string;
+
+      description = "The compressor to use on the initrd";
+
+      example = "xz";
+    };
+
+    fileSystems = mkOption {
+      options.neededForBoot = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If set, this file system will be mounted in the initial
+          ramdisk.  By default, this applies to the root file system
+          and to the file system containing
+          <filename>/nix/store</filename>.
+        '';
+      };
+    };
+
+  };
+
+  config = {
+
+    system.build.bootStage1 = bootStage1;
+    system.build.initialRamdisk = initialRamdisk;
+    system.build.extraUtils = extraUtils;
+
+    system.requiredKernelConfig = with config.lib.kernelConfig; [
+      (isYes "TMPFS")
+      (isYes "BLK_DEV_INITRD")
+    ];
+
+  };
 }

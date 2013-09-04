@@ -49,7 +49,7 @@
   # Include lots of firmware.
   hardware.enableAllFirmware = true;
 
-  require =
+  imports =
     [ ../hardware/network/zydas-zd1211.nix ];
 
 }

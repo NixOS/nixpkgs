@@ -215,7 +215,7 @@ if $generate; then
 { config, pkgs, ... }:
 
 {
-  require =
+  imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
