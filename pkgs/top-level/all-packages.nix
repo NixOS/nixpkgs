@@ -417,9 +417,9 @@ let
       mesa ncurses readline gsl libsigsegv python zlib perl
       texinfo lzma;
     texLive = texLiveAggregationFun {
-      paths = [
-        texLive texLiveExtra
-      ];
+      paths = [ texLive texLiveExtra ];
+
+      inherit makeWrapper poppler;
     };
   };
 
@@ -9827,17 +9827,22 @@ let
   texLive = builderDefsPackage (import ../tools/typesetting/tex/texlive) {
     inherit builderDefs zlib bzip2 ncurses libpng ed lesstif
       gd t1lib freetype icu perl expat curl xz pkgconfig zziplib
-      libjpeg bison python fontconfig flex poppler silgraphite;
+      libjpeg bison python fontconfig flex poppler silgraphite makeWrapper;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
-    ruby = ruby18;
+
+    # ruby18 build with tk which requires x11, to eliminate this dependency,
+    # we'll build with ruby19 on darwin
+    ruby = if stdenv.isDarwin then ruby19 else ruby18;
   };
 
   texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
     paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
               texLivePGF texLiveBeamer texLiveModerncv tipa tex4ht texinfo5
               texLiveModerntimeline ];
+
+    inherit poppler makeWrapper;
   });
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions
