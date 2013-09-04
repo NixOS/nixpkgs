@@ -6492,6 +6492,18 @@ let
       ];
   };
 
+  linux_3_11 = makeOverridable (import ../os-specific/linux/kernel/linux-3.11.nix) {
+    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
+    kernelPatches =
+      [
+        kernelPatches.sec_perm_2_6_24
+      ] ++ lib.optionals (platform.kernelArch == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -6613,8 +6625,9 @@ let
   linuxPackages_3_6_rpi = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi);
   linuxPackages_3_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_9 linuxPackages_3_9);
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
+  linuxPackages_3_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_11 linuxPackages_3_11);
   # Update this when adding a new version!
-  linuxPackages_latest = pkgs.linuxPackages_3_10;
+  linuxPackages_latest = pkgs.linuxPackages_3_11;
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
