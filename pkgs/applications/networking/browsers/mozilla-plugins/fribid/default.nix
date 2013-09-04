@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openssl, glib, libX11, gtk3, gettext, intltool }:
+{ stdenv, fetchurl, pkgconfig, lib, openssl, glib, libX11, gtk3, gettext, intltool }:
 
 stdenv.mkDerivation rec {
   version = "1.0.2";
