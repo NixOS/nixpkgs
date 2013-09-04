@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
         " --enable-fix-loongson2f-nop"
       + stdenv.lib.optionalString (cross != null) " --target=${cross.config}"
       + stdenv.lib.optionalString gold " --enable-gold"
-      + stdenv.lib.optionalString deterministic " --enable-deterministic-archives";
+      + stdenv.lib.optionalString deterministic " --enable-deterministic-archives"
+      + (if stdenv.system == "i686-linux" then " --enable-targets=x86_64-linux-gnu" else "");
 
   enableParallelBuilding = true;
       
