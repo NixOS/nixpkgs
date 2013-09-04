@@ -1,7 +1,6 @@
 { stdenv, fetchurl, pkgconfig, lib, openssl, glib, libX11, gtk3, gettext, intltool }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.2";
   name = "fribid-1.0.2";
   builder = ./builder.sh;
 
