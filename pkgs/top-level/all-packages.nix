@@ -1737,7 +1737,10 @@ let
 
   socat = callPackage ../tools/networking/socat { };
 
-  sourceHighlight = callPackage ../tools/text/source-highlight { };
+  sourceHighlight = callPackage ../tools/text/source-highlight {
+    # Boost 1.54 causes the "test_regexranges" test to fail
+    boost = boost153;
+  };
 
   socat2pre = lowPrio (builderDefsPackage ../tools/networking/socat/2.0.0-b3.nix {
     inherit fetchurl stdenv openssl;
