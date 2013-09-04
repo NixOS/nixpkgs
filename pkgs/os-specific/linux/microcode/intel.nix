@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ microcode2ucode ];
+
   sourceRoot = ".";
 
   buildPhase = ''
@@ -18,8 +19,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    mkdir -p $out
-    cp -r intel-ucode "$out/"
+    mkdir -p $out/lib/firmware
+    cp -r intel-ucode "$out/lib/firmware/"
   '';
 
   meta = {

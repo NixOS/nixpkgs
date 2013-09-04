@@ -54,8 +54,8 @@ in stdenv.mkDerivation {
   buildInputs = [ dpkg ];
 
   installPhase = ''
-    mkdir -p $out/share
-    cp -r lib/firmware/* "$out/"
+    mkdir -p $out/share $out/lib/firmware
+    cp -r lib/firmware/* "$out/lib/firmware/"
     cp -r usr/share/doc $out/share/
     find $out/share -name changelog.gz | xargs rm
   '';
