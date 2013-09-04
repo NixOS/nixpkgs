@@ -20,7 +20,7 @@
   ###### implementation
 
   config = pkgs.lib.mkIf config.hardware.enableAllFirmware {
-    hardware.firmware = [ pkgs.firmwareLinuxNonfree ];
+    hardware.firmware = [ "${pkgs.firmwareLinuxNonfree}/lib/firmware" ];
   };
 
 }

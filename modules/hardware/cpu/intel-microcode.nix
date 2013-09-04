@@ -22,7 +22,7 @@ with pkgs.lib;
   ###### implementation
 
   config = mkIf config.hardware.cpu.intel.updateMicrocode {
-    hardware.firmware = [ pkgs.microcodeIntel ];
+    hardware.firmware = [ "${pkgs.microcodeIntel}/lib/firmware" ];
     boot.kernelModules = [ "microcode" ];
   };
 

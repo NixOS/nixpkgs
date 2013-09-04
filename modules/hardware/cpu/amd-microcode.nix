@@ -22,7 +22,7 @@ with pkgs.lib;
   ###### implementation
 
   config = mkIf config.hardware.cpu.amd.updateMicrocode {
-    hardware.firmware = [ pkgs.amdUcode ];
+    hardware.firmware = [ "${pkgs.amdUcode}/lib/firmware" ];
     boot.kernelModules = [ "microcode" ];
   };
 
