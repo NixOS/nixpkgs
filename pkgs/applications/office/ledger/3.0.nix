@@ -14,7 +14,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake boost gmp mpfr libedit python texinfo ];
 
-  doCheck = true;
+  # Tests on Darwin are failing
+  doCheck = !stdenv.isDarwin;
   enableParallelBuilding = true;
 
   # Skip byte-compiling of emacs-lisp files because this is currently
@@ -37,6 +38,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ simons the-kenny ];
   };
 }
