@@ -65,6 +65,5 @@ in stdenv.mkDerivation {
     homepage = http://packages.debian.org/sid/firmware-linux-nonfree;
     license = stdenv.lib.licenses.unfreeRedistributableFirmware;
     platforms = stdenv.lib.platforms.linux;
-    priority = 10; # low priority so that other packages can override this big package
   };
 }
