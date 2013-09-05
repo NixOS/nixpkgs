@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ udev ];
+  propagatedBuildInputs = stdenv.lib.optional (stdenv.isLinux) udev;
 
   meta = {
     homepage = http://www.libusb.org;
     description = "User-space USB library";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }
