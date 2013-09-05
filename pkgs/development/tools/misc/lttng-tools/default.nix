@@ -1,11 +1,11 @@
 { stdenv, fetchurl, popt, libuuid, liburcu, lttngUst }:
 
 stdenv.mkDerivation rec {
-  name = "lttng-tools-2.2.3";
+  name = "lttng-tools-2.3.0";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-tools/${name}.tar.bz2";
-    sha256 = "1p16n42j34xkaj17zg2g12rzkfwpdv9ay1h4bkdq6038v320mljv";
+    sha256 = "16j55xqrh00mjbcvdmdkfxchavi7jsxlpnfjqc1g1d3x65ss9wri";
   };
 
   buildInputs = [ popt libuuid liburcu lttngUst ];
