@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ udev ];
+  propagatedBuildInputs = stdenv.lib.optional (!stdenv.isDarwin) udev;
 
   meta = {
     homepage = http://www.libusb.org;
