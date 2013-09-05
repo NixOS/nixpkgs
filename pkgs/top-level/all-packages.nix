@@ -1764,6 +1764,8 @@ let
 
   storeBackup = callPackage ../tools/backup/store-backup { };
 
+  stow = callPackage ../tools/misc/stow { };
+
   stun = callPackage ../tools/networking/stun { };
 
   stunnel = callPackage ../tools/networking/stunnel { };
