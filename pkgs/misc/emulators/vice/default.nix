@@ -33,9 +33,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
-    
-    # Patch executables to find libX11
-    #patchelf --set-rpath $(patchelf --print-rpath $out/bin/x64):${libX11}/lib $out/bin/x64
   '';
   
   meta = {
