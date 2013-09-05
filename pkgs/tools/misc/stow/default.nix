@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchurl, perl, perlPackages }:
 
 stdenv.mkDerivation {
   name = "stow-2.2.0";
@@ -8,7 +8,9 @@ stdenv.mkDerivation {
     sha256 = "01bbsqjmrnd9925s3grvgjnrl52q4w65imrvzy05qaij3pz31g46";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [ perl perlPackages.TestOutput ];
+
+  doCheck = true;
 
   meta = {
     description = "Stow is a tool for managing the installation of multiple software packages in the same run-time directory tree.";
