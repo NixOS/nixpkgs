@@ -7135,6 +7135,8 @@ let
     inherit (gnome) libglade libgnomecanvas;
   };
 
+  abook = callPackage ../applications/misc/abook { };
+
   adobeReader = callPackage_i686 ../applications/misc/adobe-reader { };
 
   aewan = callPackage ../applications/editors/aewan { };
@@ -7557,6 +7559,8 @@ let
   fluidsynth = callPackage ../applications/audio/fluidsynth { };
 
   fossil = callPackage ../applications/version-management/fossil { };
+
+  fribid = callPackage ../applications/networking/browsers/mozilla-plugins/fribid { };
 
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
