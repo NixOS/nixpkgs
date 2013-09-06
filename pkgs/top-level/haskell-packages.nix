@@ -1832,6 +1832,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   statistics = callPackage ../development/libraries/haskell/statistics {};
 
+  StrafunskiStrategyLib = callPackage ../development/libraries/haskell/Strafunski-StrategyLib {};
+
   streamproc = callPackage ../development/libraries/haskell/streamproc {};
 
   strict = callPackage ../development/libraries/haskell/strict {};
