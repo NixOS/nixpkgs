@@ -9,7 +9,7 @@
 
 rec {
 
-  inherit (pkgs) buildPerlPackage fetchurl stdenv perl fetchsvn;
+  inherit (pkgs) buildPerlPackage fetchurl stdenv perl fetchsvn gnused;
 
   inherit __overrides;
 
@@ -30,12 +30,15 @@ rec {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/${name}.tar.gz";
       sha256 = "de5560f2ce6334f3f83bef4ee942fdb09b792f05cf534fe67be3cb0431bf758f";
     };
+    # use gnused so that the preCheck command passes
+    buildInputs = stdenv.lib.optional stdenv.isDarwin [ gnused ];
     propagatedBuildInputs = [ FileNext ];
-    meta = {
+    meta = with stdenv.lib; {
       description = "A grep-like tool tailored to working with large trees of source code";
-      homepage = http://betterthangrep.com/;
-      license = "free";  # Artistic 2.0
-      platforms = stdenv.lib.platforms.unix;
+      homepage    = http://betterthangrep.com/;
+      license     = "free";  # Artistic 2.0
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = stdenv.lib.platforms.unix;
     };
     # t/swamp/{0,perl-without-extension} are datafiles for the test
     # t/ack-show-types.t, but the perl generic builder confuses them
