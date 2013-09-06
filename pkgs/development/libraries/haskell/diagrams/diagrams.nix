@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     diagramsContrib diagramsCore diagramsLib diagramsSvg
   ];
+  noHaddock = true;
   jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
