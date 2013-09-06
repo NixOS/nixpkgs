@@ -19,6 +19,7 @@ cabal.mkDerivation (self: {
     HUnit mtl QuickCheck rosezipper silently StrafunskiStrategyLib
     stringbuilder syb syz time transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.cs.kent.ac.uk/projects/refactor-fp";
     description = "the Haskell Refactorer";
