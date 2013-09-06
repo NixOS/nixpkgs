@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cryptocipher";
-  version = "0.6.0";
-  sha256 = "1jgwn1j7h5rhg872ghmz54phxn7nlwmk83qv1cbnbww1l2ay8gz5";
+  version = "0.6.1";
+  sha256 = "1qa0s7mr1a3nv4ppyk8wr57rxbfc2qpw9rq26pfziwnpin5k2j3x";
   buildDepends = [
     cipherAes cipherBlowfish cipherCamellia cipherDes cipherRc4
     cryptoCipherTypes
