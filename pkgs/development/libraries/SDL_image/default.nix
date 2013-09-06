@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
   name = "SDL_image-1.2.12";
 
   src = fetchurl {
-    url = "http://www.libsdl.org/projects/SDL_image/release/${name}.tar.gz";
+    url    = "http://www.libsdl.org/projects/SDL_image/release/${name}.tar.gz";
     sha256 = "16an9slbb8ci7d89wakkmyfvp7c0cval8xw4hkg0842nhhlp540b";
   };
 
-  buildInputs = [SDL libpng libjpeg libtiff libungif libXpm];
+  buildInputs = [ SDL libpng libjpeg libtiff libungif libXpm ];
 
   postInstall = ''
     sed -i -e 's,"SDL.h",<SDL/SDL.h>,' \
@@ -19,9 +19,10 @@ stdenv.mkDerivation rec {
     ln -sv SDL/SDL_image.h $out/include/SDL_image.h
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "SDL image library";
-    homepage = "http://www.libsdl.org/projects/SDL_image/";
-    platforms = stdenv.lib.platforms.linux;
+    homepage    = http://www.libsdl.org/projects/SDL_image/;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
   };
 }
