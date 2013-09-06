@@ -1865,6 +1865,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   sybWithClassInstancesText = callPackage ../development/libraries/haskell/syb/syb-with-class-instances-text.nix {};
 
+  syz = callPackage ../development/libraries/haskell/syz {};
+
   SDLImage = callPackage ../development/libraries/haskell/SDL-image {};
 
   SDLMixer = callPackage ../development/libraries/haskell/SDL-mixer {};
