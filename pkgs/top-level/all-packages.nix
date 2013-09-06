@@ -888,6 +888,8 @@ let
 
   fuse_zip = callPackage ../tools/filesystems/fuse-zip { };
 
+  fuse_exfat = callPackage ../tools/filesystems/fuse-exfat { };
+
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
