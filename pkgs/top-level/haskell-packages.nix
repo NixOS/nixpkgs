@@ -687,6 +687,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cgi = self.cgi_3001_1_8_4;
 
   Chart = callPackage ../development/libraries/haskell/Chart {};
+  Chart_0_17 = callPackage ../development/libraries/haskell/Chart/0.17.nix {};
   ChartCairo = callPackage ../development/libraries/haskell/Chart-cairo {};
   ChartGtk = callPackage ../development/libraries/haskell/Chart-gtk {};
 

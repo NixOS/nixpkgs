@@ -1,4 +1,4 @@
-{ cabal, bytestringLexing, cairo, Chart, colour, HUnit, mtl
+{ cabal, bytestringLexing, cairo, Chart_0_17, colour, HUnit, mtl
 , strptime, time, vcsRevision
 }:
 
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    bytestringLexing cairo Chart colour HUnit mtl strptime time
+    bytestringLexing cairo Chart_0_17 colour HUnit mtl strptime time
     vcsRevision
   ];
   meta = {
