@@ -1993,6 +1993,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   threads = callPackage ../development/libraries/haskell/threads {};
 
+  thyme = callPackage ../development/libraries/haskell/thyme {};
+
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
   time_1_4_1 = callPackage ../development/libraries/haskell/time/1.4.1.nix {};
   # time is in the core package set. It should only be necessary to
