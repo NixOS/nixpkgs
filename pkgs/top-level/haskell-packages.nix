@@ -1774,6 +1774,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
 
+  rosezipper = callPackage ../development/libraries/haskell/rosezipper {};
+
   RSA = callPackage ../development/libraries/haskell/RSA {};
 
   sampleFrame = callPackage ../development/libraries/haskell/sample-frame {};
