@@ -21,6 +21,7 @@ stdenv.mkDerivation {
 
   patches =
     [ ./version-test.patch ]
+    ++ optional (!libsOnly && versionAtLeast kernelDev.version "3.11") ./nvidia-drivers-linux-3.11-incremental.patch
     ;
 
   src =
