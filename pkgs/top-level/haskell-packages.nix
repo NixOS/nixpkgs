@@ -1739,6 +1739,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   regexCompat93 = self.regexCompat_0_93_1;
   regexCompat = self.regexCompat_0_71_0_1;
 
+  regexCompatTdfa = callPackage ../development/libraries/haskell/regex-compat-tdfa {};
+
   regexPosix_0_72_0_3 = callPackage ../development/libraries/haskell/regex-posix/0.72.0.3.nix {};
   regexPosix_0_94_1 = callPackage ../development/libraries/haskell/regex-posix/0.94.1.nix {};
   regexPosix_0_94_2 = callPackage ../development/libraries/haskell/regex-posix/0.94.2.nix {};
