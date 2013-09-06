@@ -7135,6 +7135,8 @@ let
     inherit (gnome) libglade libgnomecanvas;
   };
 
+  abook = callPackage ../applications/misc/abook { };
+
   adobeReader = callPackage_i686 ../applications/misc/adobe-reader { };
 
   aewan = callPackage ../applications/editors/aewan { };
