@@ -126,8 +126,9 @@
         (setq lst (cons p lst))))
     lst))
 
-(defun nix-generate-emacs-packages (&optional write-files)
+(defun nix-generate-emacs-packages (filename)
   (setq package-archives nix-package-repositories)
+  (message "Generating emacs packages to %s" filename)
   (let ((out-buffer (get-buffer-create "generated-emacs-packages.nix")))
     (with-current-buffer out-buffer
       ;; Insert preamble and nix-lambda, 
@@ -158,4 +159,4 @@
                      (mapcar 'car packages)))))
         (insert "}")
         (let ((coding-system-for-write 'utf-8-emacs))
-          (write-file "../../pkgs/top-level/emacs-packages-generated.nix"))))))
+          (write-file filename))))))
