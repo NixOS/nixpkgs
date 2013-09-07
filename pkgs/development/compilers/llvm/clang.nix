@@ -10,7 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl llvm groff cmake libxml2 python ];
 
-  patches = stdenv.lib.optional (stdenv.gcc.libc != null) ./clang-purity.patch;
+  patches = [ ./clang-tablegen-dir.patch ] ++
+            stdenv.lib.optional (stdenv.gcc.libc != null) ./clang-purity.patch;
 
   cmakeFlags = [
     "-DCLANG_PATH_TO_LLVM_BUILD=${llvm}"
