@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata}:
+{ stdenv, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc }:
 
 let
   loader386 = "${glibc}/lib/ld-linux.so.2";
@@ -7,11 +7,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "go-1.1.1";
+  name = "go-1.1.2";
 
   src = fetchurl {
-    url = http://go.googlecode.com/files/go1.1.1.src.tar.gz;
-    sha1 = "f365aed8183e487a48a66ace7bf36e5974dffbb3";
+    url = http://go.googlecode.com/files/go1.1.2.src.tar.gz;
+    sha256 = "0w7bchhb4b053az3wjp6z342rs9lp9nxf4w2mnfd1b89d6sb7izz";
   };
 
   buildInputs = [ bison glibc bash makeWrapper ];
@@ -36,6 +36,7 @@ stdenv.mkDerivation {
     sed -i 's,/lib64/ld-linux-x86-64.so.2,${loaderAmd64},' src/cmd/6l/asm.c
     sed -i 's,/lib64/ld-linux-x86-64.so.3,${loaderArm},' src/cmd/5l/asm.c
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/pkg/time/zoneinfo_unix.go
+    sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/pkg/net/lookup_unix.go
 
     #sed -i -e 's,/bin/cat,${coreutils}/bin/cat,' \
     #  -e 's,/bin/echo,${coreutils}/bin/echo,' \
@@ -49,8 +50,6 @@ stdenv.mkDerivation {
     sed -i 's,/bin/pwd,'"`type -P pwd`", src/pkg/os/os_test.go
     # Disable the hostname test
     sed -i '/TestHostname/areturn' src/pkg/os/os_test.go
-    # Disable a failing icmp test (maybe because not being root?)
-    sed -i '/ip[46]:.*icmp.*nil/d' src/pkg/net/ipraw_test.go
   '';
 
   patches = [ ./cacert.patch ];

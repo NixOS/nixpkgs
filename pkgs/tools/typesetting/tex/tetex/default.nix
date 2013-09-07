@@ -15,30 +15,33 @@ stdenv.mkDerivation {
 
   buildInputs = [ flex bison zlib libpng ncurses ed ];
 
+  # fixes "error: conflicting types for 'calloc'", etc.
+  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 57d texk/kpathsea/c-std.h
+  '';
+
   patches = [ ./environment.patch ./getline.patch ];
 
   setupHook = ./setup-hook.sh;
 
   configureFlags =
-    [ "--disable-multiplatform"
-      "--without-x11"
-      "--without-xdvik"
-      "--without-oxdvik"
-      "--without-texinfo"
-      "--without-texi2html"
-      "--with-system-zlib"
-      "--with-system-pnglib"
-      "--with-system-ncurses"
-    ];
+    [ "--disable-multiplatform" "--without-x11" "--without-xdvik"
+      "--without-oxdvik" "--without-texinfo" "--without-texi2html"
+      "--with-system-zlib" "--with-system-pnglib" "--with-system-ncurses" ]
+    # couldn't get gsftopk working on darwin
+    ++ stdenv.lib.optional stdenv.isDarwin "--without-gsftopk";
 
-  postUnpack =
-    ''
-      mkdir -p $out/share/texmf
-      mkdir -p $out/share/texmf-dist
-      gunzip < $texmf | (cd $out/share/texmf-dist && tar xvf -)
-    '';
+  postUnpack = ''
+    mkdir -p $out/share/texmf
+    mkdir -p $out/share/texmf-dist
+    gunzip < $texmf | (cd $out/share/texmf-dist && tar xvf -)
+  '';
 
-  meta = {
-    description = "A full-featured (La)TeX distribution";
+  meta = with stdenv.lib; {
+    description  = "A full-featured (La)TeX distribution";
+    homepage     = http://www.tug.org/tetex/;
+    matintainers = with maintainers; [ lovek323 ];
+    platforms    = platforms.unix;
   };
 }
+

@@ -17,7 +17,9 @@ rec {
 
   setupHook = ./setup-hook.sh;
 
-  doMainBuild = fullDepEntry (''
+  doMainBuild = fullDepEntry ( stdenv.lib.optionalString stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH="${poppler}/lib"
+  '' + ''
     mkdir -p $out
     mkdir -p $out/nix-support
     cp ${setupHook} $out/nix-support/setup-hook.sh
@@ -41,24 +43,26 @@ rec {
     ./Build --prefix="$out" --datadir="$out/share" --mandir "$out/share/man" --infodir "$out/share/info" \
       ${args.lib.concatStringsSep " " configureFlags}
     cd Work
-  '') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
+  '' ) [ "minInit" "doUnpack" "addInputs" "defEnsureDir" ];
 
-  doPostInstall = fullDepEntry(''
+  doPostInstall = fullDepEntry( ''
     mkdir -p $out/libexec/
     mv $out/bin $out/libexec/$(uname -m)
     mkdir -p $out/bin
     for i in "$out/libexec/"* "$out/libexec/"*/* ; do
         test \( \! -d "$i" \) -a \( -x "$i" -o -L "$i" \) || continue
-	if [ -x "$i" ]; then
-	    echo -ne "#! $SHELL\\nexec $i \"\$@\"" >$out/bin/$(basename $i)
-            chmod a+x $out/bin/$(basename $i)
-	else
-	    mv "$i" "$out/libexec"
-	    ln -s "$(readlink -f "$out/libexec/$(basename "$i")")" "$out/bin/$(basename "$i")";
-	    ln -sf "$(readlink -f "$out/libexec/$(basename "$i")")" "$out/libexec/$(uname -m)/$(basename "$i")";
-            rm "$out/libexec/$(basename "$i")"
-	fi;
+
+      if [ -x "$i" ]; then
+          echo -ne "#! $SHELL\\nexec $i \"\$@\"" >$out/bin/$(basename $i)
+                chmod a+x $out/bin/$(basename $i)
+      else
+          mv "$i" "$out/libexec"
+          ln -s "$(readlink -f "$out/libexec/$(basename "$i")")" "$out/bin/$(basename "$i")";
+          ln -sf "$(readlink -f "$out/libexec/$(basename "$i")")" "$out/libexec/$(uname -m)/$(basename "$i")";
+          rm "$out/libexec/$(basename "$i")"
+      fi;
     done
+
     [ -d $out/texmf-config ] || ln -s $out/texmf $out/texmf-config
     ln -s -v "$out/"*texmf* "$out/share/" || true
 
@@ -81,29 +85,37 @@ rec {
     PATH="$PATH:$out/bin" fmtutil-sys --all || true
 
     PATH=$PATH:$out/bin mktexlsr $out/texmf*
- '') ["minInit" "defEnsureDir" "doUnpack" "doMakeInstall"];
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    for prog in $out/bin/*; do
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${poppler}/lib"
+    done
+  '' ) [ "minInit" "defEnsureDir" "doUnpack" "doMakeInstall" ];
 
-  buildInputs = [
-    zlib bzip2 ncurses libpng flex bison libX11 libICE
-    xproto freetype t1lib gd libXaw icu ghostscript ed
-    libXt libXpm libXmu libXext xextproto perl libSM
-    ruby expat curl libjpeg python fontconfig xz
-    pkgconfig poppler silgraphite lesstif zziplib
-  ];
+  buildInputs = [ zlib bzip2 ncurses libpng flex bison libX11 libICE xproto
+    freetype t1lib gd libXaw icu ghostscript ed libXt libXpm libXmu libXext
+    xextproto perl libSM ruby expat curl libjpeg python fontconfig xz pkgconfig
+    poppler silgraphite lesstif zziplib ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ];
 
-  configureFlags = [ "--with-x11"
-    "--enable-ipc" "--with-mktexfmt" "--enable-shared"
-    "--disable-native-texlive-build" "--with-system-zziplib"
-    "--with-system-icu" "--with-system-libgs" "--with-system-t1lib"
-    "--with-system-freetype2"
-  ];
+  configureFlags = [ "--with-x11" "--enable-ipc" "--with-mktexfmt"
+    "--enable-shared" "--disable-native-texlive-build" "--with-system-zziplib"
+    "--with-system-libgs" "--with-system-t1lib" "--with-system-freetype2" ]
+    ++ ( if stdenv.isDarwin
+         # ironically, couldn't get xetex compiling on darwin
+         then [ "--disable-xetex" "--disable-xdv2pdf" "--disable-xdvipdfmx" ]
+         # couldn't seem to get system icu working on darwin
+         else [ "--with-system-icu" ] );
 
-  phaseNames = ["addInputs" "doMainBuild" "doMakeInstall" "doPostInstall"];
+  phaseNames = [ "addInputs" "doMainBuild" "doMakeInstall" "doPostInstall" ];
 
   name = "texlive-core-2012";
-  meta = {
+
+  meta = with stdenv.lib; {
     description = "A TeX distribution";
-    maintainers = [ args.lib.maintainers.raskin ];
-    platforms = args.lib.platforms.linux ++ args.lib.platforms.freebsd ;
+    homepage    = http://www.tug.org/texlive;
+    license     = stdenv.lib.licenses.gpl2;
+    maintainers = with maintainers; [ lovek323 raskin ];
+    platforms   = platforms.unix;
   };
 }
+
