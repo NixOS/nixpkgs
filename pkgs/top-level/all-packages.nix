@@ -802,7 +802,12 @@ let
 
   encfs = callPackage ../tools/filesystems/encfs { };
 
-  enscript = callPackage ../tools/text/enscript { };
+  enscript = callPackage ../tools/text/enscript {
+    # fix syntax errors
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
