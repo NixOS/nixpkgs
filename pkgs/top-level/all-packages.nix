@@ -2226,7 +2226,7 @@ let
   clangUnwrapped = callPackage ../development/compilers/llvm/clang.nix {
     stdenv = if stdenv.isDarwin
       then stdenvAdapters.overrideGCC stdenv gccApple
-      else stdenv;
+      else stdenvAdapters.overrideGCC stdenv gcc47;
   };
 
   clang = wrapClang clangUnwrapped;
