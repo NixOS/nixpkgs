@@ -1,15 +1,15 @@
-{ cabal, bytestringLexing, cairo, Chart, colour, HUnit, mtl
+{ cabal, bytestringLexing, cairo, colour, HUnit, mtl
 , strptime, time, vcsRevision
 }:
 
 cabal.mkDerivation (self: {
   pname = "splot";
-  version = "0.3.9";
-  sha256 = "039k6lgwdvpyc8w74zh98wxi1wj2jmin69jnwp7gnmv43kjpbgh5";
+  version = "0.3.11";
+  sha256 = "0mpyfmafjjcf85v740h69p5mggyqsq3li8m1fa5c0z4rdd0395an";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    bytestringLexing cairo Chart colour HUnit mtl strptime time
+    bytestringLexing cairo colour HUnit mtl strptime time
     vcsRevision
   ];
   meta = {
