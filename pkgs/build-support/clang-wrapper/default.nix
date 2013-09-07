@@ -7,7 +7,7 @@
 
 { name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
 , clang ? null, libc ? null, binutils ? null, coreutils ? null, shell ? ""
-, zlib ? null
+, zlib ? null, libcxx ? null
 }:
 
 assert nativeTools -> nativePrefix != "";
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   utils = ./utils.sh;
   addFlags = ./add-flags;
   
-  inherit nativeTools nativeLibc nativePrefix clang clangVersion;
+  inherit nativeTools nativeLibc nativePrefix clang clangVersion libcxx;
   gcc = clang.gcc;
   libc = if nativeLibc then null else libc;
   binutils = if nativeTools then null else binutils;

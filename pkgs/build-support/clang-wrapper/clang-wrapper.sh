@@ -52,7 +52,6 @@ if test "$nonFlagArgs" = "0"; then
     dontLink=1
 fi
 
-
 # Optionally filter out paths not refering to the store.
 params=("$@")
 if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
@@ -79,6 +78,10 @@ if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
     params=("${rest[@]}")
 fi
 
+if test -n "@libcxx@"; then
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem@libcxx@/include/c++/v1 -stdlib=libc++"
+    NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L@libcxx@/lib -stdlib=libc++ -lc++abi"
+fi
 
 # Add the flags for the C compiler proper.
 extraAfter=($NIX_CFLAGS_COMPILE)
