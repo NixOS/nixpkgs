@@ -2231,8 +2231,26 @@ let
 
   clang = wrapClang clangUnwrapped;
 
+  libcxxLLVM = callPackage ../development/compilers/llvm { stdenv = libcxxStdenv; };
+  clangSelf = clangWrapSelf (callPackage ../development/compilers/llvm/clang.nix {
+     stdenv = libcxxStdenv;
+     llvm = libcxxLLVM;
+  });
+
+  clangWrapSelf = build: (import ../build-support/clang-wrapper) {
+      clang = build;
+      stdenv = clangStdenv;
+      libc = glibc;
+      binutils = binutils_gold;
+      shell = bash;
+      inherit libcxx coreutils zlib;
+      nativeTools = false;
+      nativeLibc = false;
+  };
+
   #Use this instead of stdenv to build with clang
   clangStdenv = lowPrio (stdenvAdapters.overrideGCC stdenv clang);
+  libcxxStdenv = stdenvAdapters.overrideGCC stdenv (clangWrapSelf clangUnwrapped);
 
   clean = callPackage ../development/compilers/clean { };
 
