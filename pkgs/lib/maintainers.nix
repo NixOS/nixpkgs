@@ -19,6 +19,7 @@
   bodil = "Bodil Stokke <nix@bodil.org>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
+  edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
   eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
   ertes = "Ertugrul Söylemez <es@ertes.de>";
   garbas = "Rok Garbas <rok@garbas.si>";

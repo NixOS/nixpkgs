@@ -1,11 +1,12 @@
-{ cabal, HUnit, minimorph, testFramework, testFrameworkHunit, text
+{ cabal, binary, HUnit, minimorph, testFramework
+, testFrameworkHunit, text
 }:
 
 cabal.mkDerivation (self: {
   pname = "miniutter";
-  version = "0.4.0";
-  sha256 = "1l275aad8svrqp22jv9s0mmlam7wbdlf6m4m97658rm8ks4j2mbx";
-  buildDepends = [ minimorph text ];
+  version = "0.4.2";
+  sha256 = "00027aqxa0631v3n1jsv4aj9kf39s5yivi3dl573s5nj0wibj008";
+  buildDepends = [ binary minimorph text ];
   testDepends = [ HUnit testFramework testFrameworkHunit text ];
   meta = {
     homepage = "https://github.com/Mikolaj/miniutter";

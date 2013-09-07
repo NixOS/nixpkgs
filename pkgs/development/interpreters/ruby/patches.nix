@@ -116,4 +116,12 @@ in
     extraWrapperFlags = "--prefix RUBYLIB : .";
   };
   
+  pry = { gemFlags = "--no-ri --no-rdoc"; };
+
+  fakes3 = {
+    postInstall = ''
+      cd $out/${ruby.gemPath}/gems/*
+      patch -Np1 -i ${../../ruby-modules/fake-s3-list-bucket.patch}
+    '';
+  };
 }

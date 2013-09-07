@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
       '';
       homepage = "https://github.com/samr7/vanitygen";
       license = "AGPLv3";
+      platforms = stdenv.lib.platforms.all;
   };
 }

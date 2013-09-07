@@ -68,8 +68,13 @@ stdenv.mkDerivation rec {
       ln -sv ../../../bin/smbspool $out/lib/cups/backend/smb
       mkdir -pv $out/etc/openldap/schema
       cp ../examples/LDAP/samba.schema $out/etc/openldap/schema
+
+      # For nsswitch. Glibc >= 2.1 looks for libnss_<name>.so.2 (see man
+      # nsswitch.conf), so provide that too.
       cp -v ../nsswitch/libnss_wins.so "$out/lib"
       cp -v ../nsswitch/libnss_winbind.so "$out/lib"
+      (cd "$out/lib" && ln -s libnss_winbind.so libnss_winbind.so.2)
+      (cd "$out/lib" && ln -s libnss_wins.so libnss_wins.so.2)
     '' # */
     + stdenv.lib.optionalString (configDir == "") "touch $out/lib/smb.conf";
 

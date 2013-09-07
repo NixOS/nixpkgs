@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hslogger";
-  version = "1.2.2";
-  sha256 = "0j15nma6yf3cxb9j232kif1a836zmncfyklz9wp1mx064nblr5jf";
+  version = "1.2.3";
+  sha256 = "0rmijkrf24srcg8zgizf5vidpsgr4171wbzbwgrg66l704mkkb7m";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ mtl network time ];

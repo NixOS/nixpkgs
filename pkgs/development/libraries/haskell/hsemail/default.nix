@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hsemail";
-  version = "1.7.6";
-  sha256 = "0v4c6ljrzc7680i85wyxq7fkfs2j00941ps3rn8r16x3x2r8di04";
+  version = "1.7.7";
+  sha256 = "16wqrpzi5njv26za1rckn74jsqmyswndb6k38yz1567h1y4w7ai5";
   buildDepends = [ mtl parsec ];
   testDepends = [ doctest hspec parsec ];
   meta = {

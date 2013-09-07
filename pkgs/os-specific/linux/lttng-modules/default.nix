@@ -1,12 +1,12 @@
 { stdenv, fetchurl, kernelDev }:
 
 stdenv.mkDerivation rec {
-  pname = "lttng-modules-2.2.1";
+  pname = "lttng-modules-2.3.0";
   name = "${pname}-${kernelDev.version}";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-modules/${pname}.tar.bz2";
-    sha256 = "00ww1443ssv614s1ix6zby8llaf6zzlxcf5k4w7jsyji47ng33m2";
+    sha256 = "0l9fbmpsjvm5pbrc6axy8chdp21j4b8fm0hmjhpk658ll0iixmpb";
   };
 
   patches = [ ./lttng-fix-build-error-on-linux-3.2.patch ];
