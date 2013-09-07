@@ -17,4 +17,15 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-debug --with-python=${python} CPPFLAGS=-D_GNU_SOURCE";
 
   patches = [ ./deadlock.patch ] ++ map fetchurl (import ./debian-patches.nix);
+
+  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's/,--version-script=.*$/\\/' libgamin/Makefile
+  '';
+
+  meta = with stdenv.lib; {
+    homepage    = https://people.gnome.org/~veillard/gamin/;
+    description = "A file and directory monitoring system";
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
+  };
 }
