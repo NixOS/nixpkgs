@@ -7,6 +7,7 @@ with pkgs.lib;
 let
 
   inherit (config.services.avahi) nssmdns;
+  inherit (config.services.samba) nsswins;
 
 in
 
@@ -43,7 +44,7 @@ in
               passwd:    files ldap
               group:     files ldap
               shadow:    files ldap
-              hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"} myhostname
+              hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"} ${optionalString nsswins "wins"} myhostname
               networks:  files dns
               ethers:    files
               services:  files
