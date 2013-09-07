@@ -6851,7 +6851,9 @@ let
 
   untie = callPackage ../os-specific/linux/untie { };
 
-  upower = callPackage ../os-specific/linux/upower { };
+  upower = callPackage ../os-specific/linux/upower {
+    libusb1 = callPackage ../development/libraries/libusb1/1_0_9.nix {};
+    };
 
   upstart = callPackage ../os-specific/linux/upstart { };
 
