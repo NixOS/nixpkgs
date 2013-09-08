@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gnutls";
-  version = "0.1.4";
-  sha256 = "0xgjp274m4z005z77lhmh7blg6rw9g28jm0sd376rr49hykbxwd1";
+  version = "0.1.5";
+  sha256 = "1sf6b4g0jwk1jrzjq4vwwak57lzm1zc43ggysp973q5icm6gs8wp";
   buildDepends = [ monadsTf transformers ];
   extraLibraries = [ gnutls ];
   pkgconfigDepends = [ gnutls ];
