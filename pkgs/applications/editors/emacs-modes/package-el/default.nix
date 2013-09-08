@@ -81,5 +81,5 @@ stdenv.mkDerivation ({
       ''}'
   '';
 
-  meta.description = if hasAttr "description" args then args.description else null;
+  inherit (args) meta;
 })

@@ -8,17 +8,14 @@ let
   };
 in rec {
   inherit (builtins) hasAttr getAttr;
-  inherit (pkgs.lib) versionOlder getVersion attrValues fold;
+  inherit (pkgs.lib) versionOlder getVersion;
   inherit (pkgs) fetchurl;
 
-  generatedPackages =
-    fold (a: b: a // b)
-         {}
-         (attrValues (import ./emacs-packages-generated.nix {
+  generatedPackages = (import ./emacs-packages-generated.nix {
     inherit buildEmacsPackage;
     inherit fetchurl;
     inherit otherPackages;
-  }));
+  });
 
   # Merge generated and manual packages, then update older versions etc.
   allPackages = pkgs.lib.mapAttrs (name: value:
