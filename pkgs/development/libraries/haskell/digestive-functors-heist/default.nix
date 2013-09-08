@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     blazeBuilder digestiveFunctors heist mtl text xmlhtml
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/jaspervdj/digestive-functors";
     description = "Heist frontend for the digestive-functors library";
