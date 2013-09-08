@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "crypto-random";
-  version = "0.0.5";
-  sha256 = "1wvbbqqfqaylq9w8pyiz243d06ivh982mhb2ci5yhjl06vqv2gk3";
+  version = "0.0.7";
+  sha256 = "1dj63y85l3f1x7fw8j7hykz56ajd38iikl3f8ygaz8r95pd1zjxw";
   buildDepends = [ securemem vector ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-crypto-random";
