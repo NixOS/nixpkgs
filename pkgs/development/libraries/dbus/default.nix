@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, autoconf, automake, libtool
 , expat, systemd, glib, dbus_glib, python
-, libX11, libICE, libSM, useX11 ? stdenv.isLinux }:
+, libX11, libICE, libSM, useX11 ? (stdenv.isLinux || stdenv.isDarwin) }:
 
 let
   version = "1.6.14"; # 1.7.* isn't recommended, even for gnome 3.8
@@ -89,7 +89,9 @@ in rec {
   tools = dbus_drv "tools" "tools" {
     configureFlags = [ "--with-dbus-daemondir=${daemon}/bin" ];
     buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs daemon dbus_glib ];
-    NIX_CFLAGS_LINK = "-Wl,--as-needed -ldbus-1";
+    NIX_CFLAGS_LINK = 
+      stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
+      + "-ldbus-1";
 
     meta.platforms = stdenv.lib.platforms.all;
   };
@@ -104,7 +106,9 @@ in rec {
   tests = dbus_drv "tests" "test" {
     preBuild = makeInternalLib;
     buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs tools daemon dbus_glib python ];
-    NIX_CFLAGS_LINK = "-Wl,--as-needed -ldbus-1";
+    NIX_CFLAGS_LINK = 
+      stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
+      + "-ldbus-1";
   };
 
   docs = dbus_drv "docs" "doc" {
