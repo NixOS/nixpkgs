@@ -3414,8 +3414,8 @@ let
   }));
 
   bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
-  bison3 = lowPrio (callPackage ../development/tools/parsing/bison/3.x.nix { });
-  bison = bison2;
+  bison3 = callPackage ../development/tools/parsing/bison/3.x.nix { };
+  bison = bison3;
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     inherit (pythonPackages) twisted jinja2 sqlalchemy sqlalchemy_migrate;
