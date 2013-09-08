@@ -145,12 +145,15 @@ in
     };
   };
 
-  syntastic = simpleDerivation {
-    name = "vim-syntastic-3.0.0";
+  syntastic = simpleDerivation rec {
+    version = "3.1.0";
+    name    = "vim-syntastic-${version}";
+
     src = fetchurl {
-      url = "https://github.com/scrooloose/syntastic/archive/3.0.0.tar.gz";
-      sha256 = "0nf69wpa8qa7xcfvywy2khmazs4dn1i2nal9qwjh2bzrbwbbkdyl";
+      url    = "https://github.com/scrooloose/syntastic/archive/${version}.tar.gz";
+      sha256 = "155zfb5z0gmd1xrpna4varqf502lq0cr41gmxq5v71r6kmb7ql82";
     };
+
     path = "syntastic";
   };
 
