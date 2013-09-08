@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-1.1.0";
+  name = "calibre-1.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/calibre/${name}.tar.xz";
-    sha256 = "1gb6h6jn2fj5b1xv5xkmsrdrid2k8zp496alnfi88x7dmahfb6f6";
+    sha256 = "0h6afn57pw3rb03ffbnss774gdx7ldirr43hbhzsc2k2h7lxnzyj";
   };
 
   inherit python;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     tar xf ${qt48.src}
     qtdir=$(realpath $(ls | grep qt | grep 4.8 | grep src))
     sed -i setup/build_environment.py \
-        -e "s|^qt_private_inc = .*|qt_private_inc = ['$qtdir/include/%s\'%(m) for m in ('QtGui', 'QtCore')]|"
+        -e "s|^qt_private_inc = .*|qt_private_inc = ['$qtdir/include/%s'%(m) for m in ('QtGui', 'QtCore')]|"
   '';
 
   buildInputs =
