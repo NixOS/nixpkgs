@@ -145,12 +145,15 @@ in
     };
   };
 
-  syntastic = simpleDerivation {
-    name = "vim-syntastic-3.0.0";
+  syntastic = simpleDerivation rec {
+    version = "3.1.0";
+    name    = "vim-syntastic-${version}";
+
     src = fetchurl {
-      url = "https://github.com/scrooloose/syntastic/archive/3.0.0.tar.gz";
-      sha256 = "0nf69wpa8qa7xcfvywy2khmazs4dn1i2nal9qwjh2bzrbwbbkdyl";
+      url    = "https://github.com/scrooloose/syntastic/archive/${version}.tar.gz";
+      sha256 = "155zfb5z0gmd1xrpna4varqf502lq0cr41gmxq5v71r6kmb7ql82";
     };
+
     path = "syntastic";
   };
 
@@ -200,7 +203,7 @@ in
     meta = with stdenv.lib; {
       description = "Source code browser plugin";
       homepage    = "http://www.vim.org/scripts/script.php?script_id=273";
-      license     = stdenv.lib.licenses.gpl3;
+      license     = licenses.gpl3;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
@@ -217,6 +220,26 @@ in
     '';
     buildInputs = [ unzip ];
     path = "taglist";
+  };
+
+  tagbar = simpleDerivation rec {
+    version = "2.5";
+    name    = "vim-tagbar-${version}";
+
+    meta = with stdenv.lib; {
+      description = "A vim plugin for browsing the tags of source code files";
+      homepage    = https://github.com/majutsushi/tagbar;
+      license     = licenses.gpl3;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+
+    src = fetchurl {
+      url    = "https://github.com/majutsushi/tagbar/archive/v${version}.tar.gz";
+      sha256 = "1s4aic3qbk2ra2cif06g16d0avlmpxhrm96dksrw9qnv4hcjqqxr";
+    };
+
+    path = "tagbar";
   };
 
   xdebug = simpleDerivation {

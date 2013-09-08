@@ -1,24 +1,29 @@
 { stdenv, fetchgit, cmake, boost, gmp, mpfr, libedit, python, texinfo }:
 
 let
-  rev = "26d7197";
+  rev = "0ec4291";
 in
 stdenv.mkDerivation {
-  name = "ledger3-2013.06.${rev}";
+  name = "ledger3-2013.08.${rev}";
 
   src = fetchgit {
     url = "https://github.com/ledger/ledger.git";
     inherit rev;
-    sha256 = "02nf4kdrd61q9rf5rrarwmx47y2ya5qix7n82cj9qi9p4v3k3m2g";
+    sha256 = "1y4rcbx8y2fxkdc7i06n1i5jf3cq05bvzpb8498mis2gwfmkw470";
   };
 
   buildInputs = [ cmake boost gmp mpfr libedit python texinfo ];
 
-  # Unit tests fail in the current git snapshot. Try enabling them again
-  # when updating this package!
-  doCheck = false;
-
+  # Tests on Darwin are failing
+  doCheck = !stdenv.isDarwin;
   enableParallelBuilding = true;
+
+  # Skip byte-compiling of emacs-lisp files because this is currently
+  # broken in ledger...
+  postInstall = ''
+    mkdir -p $out/share/emacs/site-lisp/
+    cp -v $src/lisp/*.el $out/share/emacs/site-lisp/
+  '';
 
   meta = {
     homepage = "http://ledger-cli.org/";
@@ -33,6 +38,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ simons the-kenny ];
   };
 }

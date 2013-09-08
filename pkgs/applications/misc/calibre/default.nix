@@ -4,12 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-1.0.0";
-  # 0.9.12+ versions won't build due to missing qt4 private headers: https://bugs.launchpad.net/calibre/+bug/1094719
+  name = "calibre-1.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/calibre/${name}.tar.xz";
-    sha256 = "0qz369n46ijk8jbbgwnvj3v0byp5npn2zdb4lvc6mwa143mr6d62";
+    sha256 = "0h6afn57pw3rb03ffbnss774gdx7ldirr43hbhzsc2k2h7lxnzyj";
   };
 
   inherit python;
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
     tar xf ${qt48.src}
     qtdir=$(realpath $(ls | grep qt | grep 4.8 | grep src))
     sed -i setup/build_environment.py \
-        -e "s|^qt_private_inc = .*|qt_private_inc = ['$qtdir/include/%s\'%(m) for m in ('QtGui', 'QtCore')]|"
+        -e "s|^qt_private_inc = .*|qt_private_inc = ['$qtdir/include/%s'%(m) for m in ('QtGui', 'QtCore')]|"
   '';
 
   buildInputs =

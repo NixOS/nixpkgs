@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation {
-  name = "heimdall-1.3.0";
+  name = "heimdall-1.4.0";
 
   src = fetchgit {
     url = git://github.com/Benjamin-Dobell/Heimdall.git;
-    rev = "ed9b08e5d9e3db60d52bccf6cb6919fb4bd47602";
-    sha256 = "e65f18299a05699595548cb27393a01b4e1dbbced82d4add8d0d55ef6514a691";
+    rev = "refs/tags/v1.4.0";
+    sha256 = "285785d83fd4edbe98c0fa38c27772f72950a5887b255c00937a1f11c79ebf57";
   };
 
   buildInputs =
@@ -16,14 +16,14 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional enableGUI qt4 ;
 
   makeFlags = "udevrulesdir=$(out)/lib/udev/rules.d";
-  
+
   preConfigure =
     ''
       pushd libpit
       ./configure
       make
       popd
-    
+
       cd heimdall
       substituteInPlace Makefile.in --replace sudo true
 

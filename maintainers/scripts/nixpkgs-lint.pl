@@ -44,6 +44,7 @@ my $info = XMLin($xml, KeyAttr => { 'item' => '+attrPath', 'meta' => 'name' }, F
 print "=== Package meta information ===\n\n";
 my $nrBadNames = 0;
 my $nrMissingMaintainers = 0;
+my $nrMissingPlatforms = 0;
 my $nrMissingDescriptions = 0;
 my $nrBadDescriptions = 0;
 my $nrMissingLicenses = 0;
@@ -75,6 +76,12 @@ foreach my $attr (sort keys %{$info->{item}}) {
     if (scalar @maintainers == 0) {
         print "$attr: Lacks a maintainer\n";
         $nrMissingMaintainers++;
+    }
+
+    # Check the platforms.
+    if (!defined $pkg->{meta}->{platforms}) {
+        print "$attr: Lacks a platform\n";
+        $nrMissingPlatforms++;
     }
 
     # Package names should not be capitalised.
@@ -159,6 +166,7 @@ print "=== Bottom line ===\n";
 print "Number of packages: ", scalar(keys %{$info->{item}}), "\n";
 print "Number of bad names: $nrBadNames\n";
 print "Number of missing maintainers: $nrMissingMaintainers\n";
+print "Number of missing platforms: $nrMissingPlatforms\n";
 print "Number of missing licenses: $nrMissingLicenses\n";
 print "Number of missing descriptions: $nrMissingDescriptions\n";
 print "Number of bad descriptions: $nrBadDescriptions\n";
