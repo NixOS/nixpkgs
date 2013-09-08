@@ -3890,13 +3890,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   powerline = buildPythonPackage rec {
-    rev = "72ea6730ead85fc19b983bd70173d15e6caa4965";
+    rev  = "db80fc95ed01d2c559c4bdc7da8514ed3cc7fcd9";
     name = "powerline-beta_${rev}";
 
     src = fetchurl {
-      url = "https://github.com/Lokaltog/powerline/tarball/${rev}";
-      name = "${name}.tar.bz";
-      sha256 = "08sr8ymhphh7rsn2gcmpdz3kzd04b7w3k4pc35h8w60jvg9i449s";
+      url    = "https://github.com/Lokaltog/powerline/tarball/${rev}";
+      name   = "${name}.tar.bz";
+      sha256 = "1csd4vasy0avwfxrpdr61plj6k1nzf36f6qvd9kl15s3lnspsfaz";
     };
 
     propagatedBuildInputs = [ pkgs.git pkgs.mercurial pkgs.bazaar pythonPackages.psutil pythonPackages.pygit2 ];
@@ -3920,11 +3920,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       install -m644 "powerline/bindings/tmux/powerline.conf" "$out/share/tmux/powerline.conf"
     '';
 
-    meta = {
-      homepage = https://github.com/Lokaltog/powerline;
+    meta = with stdenv.lib; {
+      homepage    = https://github.com/Lokaltog/powerline;
       description = "The ultimate statusline/prompt utility.";
-      license = with stdenv.lib.licenses; mit;
-      platforms = with stdenv.lib.platforms; all;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.all;
     };
   };
 
