@@ -25,6 +25,14 @@ cabal.mkDerivation (self: {
     cd ..
     ensureDir "$out/share/emacs"
     mv $pname-$version emacs/site-lisp
+    mv $out/bin/ghc-mod $out/ghc-mod
+    cat - > $out/bin/ghc-mod <<EOF
+    #!/bin/sh
+    COMMAND=\$1
+    shift
+    eval exec $out/ghc-mod \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.ghcVersion} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
+    EOF
+    chmod +x $out/bin/ghc-mod
   '';
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/ghc-mod/";
@@ -34,6 +42,7 @@ cabal.mkDerivation (self: {
     maintainers = [
       self.stdenv.lib.maintainers.andres
       self.stdenv.lib.maintainers.bluescreen303
+      self.stdenv.lib.maintainers.ocharles
     ];
   };
 })
