@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = "cat ${./sitecustomize.py} > sitecustomize.py";
 
-  buildPhase = "python -m compileall .";
+  buildPhase = "${python}/bin/${python.executable} -m compileall .";
 
   installPhase =
     ''
