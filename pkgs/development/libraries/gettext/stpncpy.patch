@@ -1,0 +1,11 @@
+--- gettext-0.18.1.1/gettext-tools/gnulib-lib/stpncpy.c.orig	2013-09-03 22:40:19.000000000 +0200
++++ gettext-0.18.1.1/gettext-tools/gnulib-lib/stpncpy.c	2013-09-03 22:40:50.000000000 +0200
+@@ -31,7 +31,7 @@
+ /* Copy no more than N bytes of SRC to DST, returning a pointer past the
+    last non-NUL byte written into DST.  */
+ char *
+-__stpncpy (char *dest, const char *src, size_t n)
++(__stpncpy) (char *dest, const char *src, size_t n)
+ {
+   char c;
+   char *s = dest;
