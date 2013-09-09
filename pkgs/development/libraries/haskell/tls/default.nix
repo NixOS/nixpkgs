@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tls";
-  version = "1.1.4";
-  sha256 = "0fq6hnc3j54kkzlvcvhskjrj740p44y65fggnj3m4kgfiwjphw5p";
+  version = "1.1.5";
+  sha256 = "1ja03x3i7dgjpy22h4shnni1xslph8i8q4accqq8njpqpz54c84c";
   buildDepends = [
     cereal certificate cryptohash cryptoPubkey cryptoRandom mtl network
   ];

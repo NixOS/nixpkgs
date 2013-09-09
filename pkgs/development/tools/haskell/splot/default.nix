@@ -1,5 +1,5 @@
-{ cabal, bytestringLexing, cairo, colour, HUnit, mtl
-, strptime, time, vcsRevision
+{ cabal, bytestringLexing, cairo, colour, HUnit, mtl, strptime
+, time, vcsRevision
 }:
 
 cabal.mkDerivation (self: {
@@ -9,8 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    bytestringLexing cairo colour HUnit mtl strptime time
-    vcsRevision
+    bytestringLexing cairo colour HUnit mtl strptime time vcsRevision
   ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Splot";

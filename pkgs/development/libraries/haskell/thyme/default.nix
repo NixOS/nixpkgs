@@ -1,5 +1,5 @@
-{ cabal, attoparsec, deepseq, lens, QuickCheck
-, random, text, time, transformers, vector
+{ cabal, attoparsec, Cabal, deepseq, filepath, lens, QuickCheck
+, random, systemPosixRedirect, text, time, transformers, vector
 , vectorSpace
 }:
 
@@ -11,8 +11,10 @@ cabal.mkDerivation (self: {
     attoparsec deepseq lens QuickCheck random text time transformers
     vector vectorSpace
   ];
-  # have some strange test depends
-  doCheck = false;
+  testDepends = [
+    attoparsec Cabal filepath lens QuickCheck random
+    systemPosixRedirect text time vectorSpace
+  ];
   meta = {
     homepage = "https://github.com/liyang/thyme";
     description = "A faster time library";

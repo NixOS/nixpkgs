@@ -160,11 +160,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     syb          = self.syb_0_4_1;
     text         = self.text_0_11_3_1;
     transformers = null;                        # this has become a core package in GHC 7.7
-    unorderedContainers = self.unorderedContainers_0_2_3_0;
+    unorderedContainers = self.unorderedContainers_0_2_3_2;
     vector       = self.vector_0_10_0_1;
     xhtml        = self.xhtml_3000_2_1;
     zlib         = self.zlib_0_5_4_1;
-    cabalInstall = self.cabalInstall_1_18_0;
+    cabalInstall = self.cabalInstall_1_18_0_1;
     alex         = self.alex_3_0_5;
     haddock      = self.haddock_2_13_2;
     happy        = self.happy_1_18_10;
@@ -1954,6 +1954,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   systemFileio = callPackage ../development/libraries/haskell/system-fileio {};
 
+  systemPosixRedirect = callPackage ../development/libraries/haskell/system-posix-redirect {};
+
   TableAlgebra = callPackage ../development/libraries/haskell/TableAlgebra {};
 
   tabular = callPackage ../development/libraries/haskell/tabular {};
@@ -2070,8 +2072,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   unlambda = callPackage ../development/libraries/haskell/unlambda {};
 
   unorderedContainers_0_2_3_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.3.0.nix {};
-  unorderedContainers_0_2_3_1 = callPackage ../development/libraries/haskell/unordered-containers/0.2.3.1.nix {};
-  unorderedContainers = self.unorderedContainers_0_2_3_1;
+  unorderedContainers_0_2_3_2 = callPackage ../development/libraries/haskell/unordered-containers/0.2.3.2.nix {};
+  unorderedContainers = self.unorderedContainers_0_2_3_2;
 
   url = callPackage ../development/libraries/haskell/url {};
 
@@ -2389,7 +2391,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cabalInstall_0_10_2 = callPackage ../tools/package-management/cabal-install/0.10.2.nix {};
   cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix {};
-  cabalInstall_1_18_0 = callPackage ../tools/package-management/cabal-install/1.18.0.nix {};
+  cabalInstall_1_18_0_1 = callPackage ../tools/package-management/cabal-install/1.18.0.1.nix {};
   cabalInstall = self.cabalInstall_1_18_0;
 
   gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {};

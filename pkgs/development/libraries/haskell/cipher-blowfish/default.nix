@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cipher-blowfish";
-  version = "0.0.1";
-  sha256 = "0bz8jd65idcalyzcbmgz16hr6y5mnw7mckk5yvrm9k19cr6mwq52";
+  version = "0.0.2";
+  sha256 = "08jc1qsvnyk7zm7bp0nibkc6lx3bkid79cn1r6fidmccf716r3sp";
   buildDepends = [ byteable cryptoCipherTypes securemem vector ];
   testDepends = [
     byteable cryptoCipherTests cryptoCipherTypes QuickCheck

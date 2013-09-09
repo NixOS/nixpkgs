@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "crypto-numbers";
-  version = "0.2.0";
-  sha256 = "1s4q9qqb7qb0shaxmhhxixsnhgwn2h6nxxblkfqqqvkdiwis278j";
+  version = "0.2.1";
+  sha256 = "1bc24xk101x7npv083gzh3vjzwjh65ql85h4z0vxk3lnd0pmdmnq";
   buildDepends = [ cryptoRandom vector ];
   testDepends = [
     byteable cryptoRandom HUnit QuickCheck testFramework

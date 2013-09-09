@@ -4,14 +4,17 @@
 
 cabal.mkDerivation (self: {
   pname = "yaml";
-  version = "0.8.4.1";
-  sha256 = "0zbnyf5hp206ywqkdd7c1hsdbn4wxwk7p3rzn53m7rzxvfshlbbx";
+  version = "0.8.5";
+  sha256 = "12jj785gzcnrif460cx2k69pc2h9h956g0w1gp8pcr5hawrvd6rg";
+  isLibrary = true;
+  isExecutable = true;
   buildDepends = [
     aeson attoparsec conduit resourcet text transformers
     unorderedContainers vector
   ];
   testDepends = [
-    conduit hspec HUnit text transformers unorderedContainers
+    aeson conduit hspec HUnit text transformers unorderedContainers
+    vector
   ];
   meta = {
     homepage = "http://github.com/snoyberg/yaml/";
