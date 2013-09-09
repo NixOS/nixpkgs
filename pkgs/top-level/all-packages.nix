@@ -1794,6 +1794,8 @@ let
 
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
+  tcpcrypt = callPackage ../tools/security/tcpcrypt { };
+
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
   teamviewer = callPackage_i686 ../applications/networking/remote/teamviewer { };
