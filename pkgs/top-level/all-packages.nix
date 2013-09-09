@@ -3552,16 +3552,25 @@ let
 
   flex = flex2535;
 
-  flex2535 = callPackage ../development/tools/parsing/flex/flex-2.5.35.nix { };
+  flex2535 = callPackage ../development/tools/parsing/flex/flex-2.5.35.nix {
+    # Break infinite recursion: bison's test suite needs flex, so we
+    # use an untested bison build to build flex first.
+    yacc = bison.override { flex = null; };
+  };
 
-  flex2534 = callPackage ../development/tools/parsing/flex/flex-2.5.34.nix { };
+  flex2534 = callPackage ../development/tools/parsing/flex/flex-2.5.34.nix {
+    yacc = bison.override { flex = null; };
+  };
 
-  flex2533 = callPackage ../development/tools/parsing/flex/flex-2.5.33.nix { };
+  flex2533 = callPackage ../development/tools/parsing/flex/flex-2.5.33.nix {
+    yacc = bison.override { flex = null; };
+  };
 
   # Note: 2.5.4a is much older than 2.5.35 but happens first when sorting
   # alphabetically, hence the low priority.
   flex254a = lowPrio (import ../development/tools/parsing/flex/flex-2.5.4a.nix {
-    inherit fetchurl stdenv yacc;
+    inherit fetchurl stdenv;
+    yacc = bison.override { flex = null; };
   });
 
   m4 = gnum4;
