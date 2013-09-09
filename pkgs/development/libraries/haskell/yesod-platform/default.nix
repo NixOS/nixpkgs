@@ -21,8 +21,8 @@
 , shakespeareText, silently, simpleSendfile, skein, socks
 , stringsearch, systemFileio, systemFilepath, tagged, tagsoup
 , tagstreamConduit, tls, tlsExtra, transformersBase, unixCompat
-, unorderedContainers, utf8Light, utf8String, vault, vector, void
-, wai, waiAppStatic, waiExtra, waiLogger, waiTest, warp, word8
+, unorderedContainers, utf8Light, utf8String, vector, void, wai
+, waiAppStatic, waiExtra, waiLogger, waiTest, warp, word8
 , xmlConduit, xmlTypes, xssSanitize, yaml, yesod, yesodAuth
 , yesodCore, yesodForm, yesodPersistent, yesodRoutes, yesodStatic
 , yesodTest, zlibBindings, zlibConduit
@@ -30,8 +30,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-platform";
-  version = "1.2.4.1";
-  sha256 = "13fw1svs3769m8rf5mnks0ibgdd73s1qq9dgg4h49xkzrdgs31rk";
+  version = "1.2.4.2";
+  sha256 = "1hmzdwjqi3cxdmyvcr48kprrsa8h548z272mif07114d0qh48x4w";
   buildDepends = [
     aeson ansiTerminal asn1Data asn1Types attoparsec attoparsecConduit
     authenticate base64Bytestring baseUnicodeSymbols blazeBuilder
@@ -53,7 +53,7 @@ cabal.mkDerivation (self: {
     shakespeareJs shakespeareText silently simpleSendfile skein socks
     stringsearch systemFileio systemFilepath tagged tagsoup
     tagstreamConduit tls tlsExtra transformersBase unixCompat
-    unorderedContainers utf8Light utf8String vault vector void wai
+    unorderedContainers utf8Light utf8String vector void wai
     waiAppStatic waiExtra waiLogger waiTest warp word8 xmlConduit
     xmlTypes xssSanitize yaml yesod yesodAuth yesodCore yesodForm
     yesodPersistent yesodRoutes yesodStatic yesodTest zlibBindings
