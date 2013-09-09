@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     mtl QuickCheck testFramework testFrameworkQuickcheck2 transformers
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/ekmett/exceptions/";
     description = "Extensible optionally-pure exceptions";
@@ -17,5 +18,4 @@ cabal.mkDerivation (self: {
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
-  doCheck = false; # https://github.com/ekmett/exceptions/issues/18
 })
