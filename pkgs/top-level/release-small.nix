@@ -46,7 +46,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   file = all;
   findutils = all;
   flex = all;
-  flex2535 = all;
   gcc = all;
   gcc33 = linux;
   gcc34 = linux;

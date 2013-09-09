@@ -106,7 +106,6 @@ let
       file = all;
       findutils = all;
       flex = all;
-      flex2535 = all;
       fontforge = linux;
       fuse = linux;
       gajim = linux;
