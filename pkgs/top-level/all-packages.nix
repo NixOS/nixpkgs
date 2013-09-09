@@ -8465,6 +8465,8 @@ let
 
   skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
 
+  ssvnc = callPackage ../applications/networking/remote/ssvnc { };
+
   st = callPackage ../applications/misc/st {
     conf = config.st.conf or null;
   };
