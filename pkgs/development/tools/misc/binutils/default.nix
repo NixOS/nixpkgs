@@ -1,5 +1,5 @@
 { stdenv, fetchurl, noSysDirs, zlib
-, cross ? null, gold ? true, bison ? null, flex2535 ? null, bc ? null, dejagnu ? null
+, cross ? null, gold ? true, bison ? null
 , deterministic ? false }:
 
 let basename = "binutils-2.23.2"; in
