@@ -4,9 +4,9 @@ stdenv.mkDerivation rec {
   name = "gpac-0.5.0-svn";
 
   src = fetchsvn {
-    url = "https://gpac.svn.sourceforge.net/svnroot/gpac/trunk/gpac";
-    rev = "4253";
-    sha256 = "0z4bd63c805q53hpb09gq0m0apy12z5a90zxx4jjx3ln64xq0pnn";
+    url = "http://svn.code.sf.net/p/gpac/code/trunk/gpac";
+    rev = "4749";
+    sha256 = "0y38pmp64a2l70y1yby90qzxfzx8y7r0cdmgjxzw86jh6si5ndhp";
   };
 
   # this is the bare minimum configuration, as I'm only interested in MP4Box
