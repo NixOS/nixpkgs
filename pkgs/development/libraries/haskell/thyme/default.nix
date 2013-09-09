@@ -15,7 +15,7 @@ cabal.mkDerivation (self: {
     attoparsec Cabal filepath lens QuickCheck random
     systemPosixRedirect text time vectorSpace
   ];
-  check = false;
+  doCheck = false;
   meta = {
     homepage = "https://github.com/liyang/thyme";
     description = "A faster time library";
