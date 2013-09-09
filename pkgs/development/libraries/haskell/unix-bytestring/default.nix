@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "unix-bytestring";
-  version = "0.3.6";
-  sha256 = "0m2ndw6r88vb4cqdkd8jg8dlk9h99mp3rand5j1gxxdjfv7q63ap";
+  version = "0.3.7";
+  sha256 = "1qwgs2bwga057csfa8izq0kc5vwi2vcaz2snlcgp0h9vql3qmvrg";
   meta = {
     homepage = "http://code.haskell.org/~wren/";
     description = "Unix/Posix-specific functions for ByteStrings";
