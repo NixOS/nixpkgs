@@ -5,6 +5,7 @@ with pkgs.lib;
 let
 
   dmcfg = config.services.xserver.displayManager;
+  xEnv = config.systemd.services."display-manager".environment;
   cfg = dmcfg.lightdm;
 
   inherit (pkgs) stdenv lightdm writeScript writeText;
@@ -13,7 +14,7 @@ let
   xserverWrapper = writeScript "xserver-wrapper"
     ''
       #! /bin/sh
-      export XKB_BINDIR="${pkgs.xorg.xkbcomp}/bin"
+      ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
       exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs}
     '';
 
