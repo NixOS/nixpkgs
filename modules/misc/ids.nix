@@ -100,6 +100,7 @@
       amule = 90;
       minidlna = 91;
       elasticsearch = 92;
+      tcpcryptd = 666;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
