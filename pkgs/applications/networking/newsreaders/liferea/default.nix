@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "A GTK-based news feed agregator";
     homepage = http://lzone.de/liferea/;
     maintainers = [ stdenv.lib.maintainers.vcunat ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
