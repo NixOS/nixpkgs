@@ -245,10 +245,10 @@ in
             # Flush the old firewall rules.  !!! Ideally, updating the
             # firewall would be atomic.  Apparently that's possible
             # with iptables-restore.
-            ip46tables -D INPUT -j nixos-fw || true
+            ip46tables -D INPUT -j nixos-fw 2> /dev/null || true
             for chain in nixos-fw nixos-fw-accept nixos-fw-log-refuse nixos-fw-refuse FW_REFUSE; do
-              ip46tables -F "$chain" || true
-              ip46tables -X "$chain" || true
+              ip46tables -F "$chain" 2> /dev/null || true
+              ip46tables -X "$chain" 2> /dev/null || true
             done
 
 
