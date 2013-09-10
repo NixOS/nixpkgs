@@ -9,13 +9,13 @@
 , rsync, SafeSemaphore, SHA, stm, text, time, transformers
 , unixCompat, utf8String, uuid, wai, waiLogger, warp, which
 , xmlConduit, xmlTypes, yesod, yesodCore, yesodDefault, yesodForm
-, yesodStatic
+, yesodStatic, fetchurl, perl
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "4.20130827";
-  sha256 = "07kfp0d2wg3p8s0v2100r4giw5ay1il5j15lrah43fk2rrszgm5z";
+  version = "4.20130909";
+  sha256 = "0rqbaz4hqfv1nxks62bx282vsvv7vzaxxz1576wk93f659rd06jp";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -29,7 +29,7 @@ cabal.mkDerivation (self: {
     uuid wai waiLogger warp xmlConduit xmlTypes yesod yesodCore
     yesodDefault yesodForm yesodStatic
   ];
-  buildTools = [ bup curl git gnupg1 lsof openssh rsync which ];
+  buildTools = [ bup curl git gnupg1 lsof openssh rsync which perl ];
   configureFlags = "-fS3
                     -fWebDAV
                     -fInotify
@@ -49,6 +49,9 @@ cabal.mkDerivation (self: {
     cp dist/build/git-annex/git-annex git-annex
     ./git-annex test
   '';
+  patches = [ (fetchurl { url = "https://github.com/joeyh/git-annex/commit/e4d0b2f180627472b017af8bcfc2ae3fc04d6767.patch";
+                          sha256 = "08lz0zq5y3b3wgi1vbzka7kyihkhzjv02pmq8ab02674yrqrnr5k"; })
+            ];
   meta = {
     homepage = "http://git-annex.branchable.com/";
     description = "manage files with git, without checking their contents into git";
