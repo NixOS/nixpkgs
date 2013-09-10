@@ -298,7 +298,9 @@ in
             # Perform a reverse-path test to refuse spoofers
             # For now, we just drop, as the raw table doesn't have a log-refuse yet
             ${optionalString (kernelHasRPFilter && cfg.checkReversePath) ''
-              ip46tables -A PREROUTING -t raw -m rpfilter --invert -j DROP
+              if ! ip46tables -A PREROUTING -t raw -m rpfilter --invert -j DROP; then
+                echo "<2>failed to initialise rpfilter support" >&2
+              fi
             ''}
 
             # Accept all traffic on the trusted interfaces.
