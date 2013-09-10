@@ -1109,11 +1109,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   deform = buildPythonPackage rec {
-    name = "deform-0.9.7";
+    name = "deform-0.9.8";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/deform/${name}.tar.gz";
-      md5 = "d450eef05432d473257da5621c72c8b7";
+      sha256 = "15500rm33n6kxsdpqyn3ih25y3rvab4nxy2yzsj2754kdlhlyjpx";
     };
 
     buildInputs = [] ++ optional isPy26 unittest2;
@@ -1140,11 +1140,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   deform_bootstrap = buildPythonPackage rec {
-    name = "deform_bootstrap-0.2";
+    name = "deform_bootstrap-0.2.9";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/deform_bootstrap/${name}.tar.gz";
-      md5 = "57812251f327367761f32d49a8286aa4";
+      sha256 = "1hgq3vqsfqdmlyahnlc40w13viawhpzqf4jzigsggdb41x545fda";
     };
 
     propagatedBuildInputs = [ deform ];
