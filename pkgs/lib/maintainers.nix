@@ -57,4 +57,5 @@
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
+  zef = "Zef Hemel <zef@zef.me>";
 }
