@@ -6410,6 +6410,8 @@ let
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
+  linuxHeaders36 = callPackage ../os-specific/linux/kernel-headers/2.6.32.nix { };
+
   linuxHeaders37 = callPackage ../os-specific/linux/kernel-headers/3.7.nix { };
 
   linuxHeaders26Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
