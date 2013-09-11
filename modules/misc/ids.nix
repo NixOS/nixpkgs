@@ -100,7 +100,7 @@
       amule = 90;
       minidlna = 91;
       elasticsearch = 92;
-      tcpcryptd = 666; # tcpcryptd hard-codes that UID in its source code. :-(
+      tcpcryptd = 93;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
