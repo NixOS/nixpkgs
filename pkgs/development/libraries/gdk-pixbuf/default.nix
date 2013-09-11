@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, xz
-, jasper, libintlOrEmpty }:
+, jasper, libintlOrEmpty, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  name = "gdk-pixbuf-2.28.1";
+  name = "gdk-pixbuf-2.28.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/2.28/${name}.tar.xz";
-    sha256 = "1fy2a05xhfg7gy4l4aajsbmgj62zxhikdxqh6bicihxmzm1vg85y";
+    sha256 = "05s6ksvy1yan6h6zny9n3bmvygcnzma6ljl6i0z9cci2xg116c8q";
   };
 
   outputs = [ "dev" "out" "bin" "doc" ];
@@ -16,11 +16,13 @@ stdenv.mkDerivation rec {
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
   buildInputs = [ libX11 libintlOrEmpty ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
 
   propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
 
-  configureFlags = "--with-libjasper --with-x11";
+  configureFlags = "--with-libjasper --with-x11"
+    + stdenv.lib.optionalString (gobjectIntrospection != null) " --enable-introspection=yes"
+    ;
 
   meta = {
     description = "A library for image loading and manipulation";

@@ -1,13 +1,12 @@
-{ stdenv, fetchgit, groff, rake, makeWrapper }:
+{ stdenv, fetchurl, groff, rake, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
-  version = "1.10.3";
+  version = "1.10.6";
 
-  src = fetchgit {
-    url = "git://github.com/defunkt/hub.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "0j0krmf0sf09hhw3nsn0w1y97d67762g4qrc8080bwcx38lbyvbg";
+  src = fetchurl {
+    url = "https://github.com/github/hub/archive/v${version}.tar.gz";
+    sha256 = "0vfl1iq1927in81vd7zvp7yqqzay7pciyj87s83qfxrqyjpxn609";
   };
 
   buildInputs = [ rake makeWrapper ];

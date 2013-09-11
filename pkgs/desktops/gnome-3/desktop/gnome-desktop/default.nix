@@ -1,11 +1,13 @@
 { stdenv, fetchurl, pkgconfig, python, libxml2Python, libxslt, which, libX11, gnome3
-, intltool, gnome_doc_utils}:
+, intltool, gnome_doc_utils }:
 
 stdenv.mkDerivation rec {
 
   majorVersion = "3.5";
   minorVersion = "3";
   name = "gnome-desktop-${majorVersion}.${minorVersion}";
+
+  enableParallelBuilding = true;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${majorVersion}/${name}.tar.xz";

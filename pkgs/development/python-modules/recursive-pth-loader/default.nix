@@ -7,11 +7,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python ];
 
+  patchPhase = "cat ${./sitecustomize.py} > sitecustomize.py";
+
+  buildPhase = "${python}/bin/${python.executable} -m compileall .";
+
   installPhase =
     ''
       dst=$out/lib/${python.libPrefix}/site-packages
       mkdir -p $dst
-      cat ${./sitecustomize.py} >> $dst/sitecustomize.py
+      cp sitecustomize.* $dst/
     '';
 
   meta = {

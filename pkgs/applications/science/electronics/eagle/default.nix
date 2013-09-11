@@ -13,15 +13,15 @@ in
 
 stdenv.mkDerivation rec {
   name = "eagle-${version}";
-  version = "6.4.0";
+  version = "6.5.0";
 
   src = fetchurl {
-    url = "ftp://ftp.cadsoft.de/eagle/program/6.4/eagle-lin-${version}.run";
-    sha256 = "0jb44dsq4cl9rx5nam6rxsw9fsmm6fsksv9s544p2zrwnad2x2i8";
+    url = "ftp://ftp.cadsoft.de/eagle/program/6.5/eagle-lin-${version}.run";
+    sha256 = "17plwx2p8q2ylk0nzj5crfbdm7jc35pw7v3j8f4j81yl37l7bj22";
   };
 
   desktopItem = makeDesktopItem {
-    name = "Eagle";
+    name = "eagle";
     exec = "eagle";
     icon = "eagle";
     comment = "Schematic capture and PCB layout";

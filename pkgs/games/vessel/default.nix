@@ -78,7 +78,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.strangeloopgames.com;
     license = [ "unfree" ];
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
-    platforms = [ "i686-linux"] ;
   };
 
 }

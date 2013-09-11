@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "MissingH";
-  version = "1.2.0.1";
-  sha256 = "0hxyf82g2rz36ks6n136p6brgs0r9cnxfkh4xgl6iw11wbq2rb5m";
+  version = "1.2.0.2";
+  sha256 = "1wrrfa8dy0h0c53f1zjzwdkj8wkwsbi6qhv35wwlaz39dk32c4nn";
   buildDepends = [
     filepath hslogger HUnit mtl network parsec random regexCompat time
   ];

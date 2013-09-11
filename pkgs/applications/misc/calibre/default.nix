@@ -4,24 +4,31 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-0.9.11";
-  # 0.9.12+ versions won't build due to missing qt4 private headers: https://bugs.launchpad.net/calibre/+bug/1094719
+  name = "calibre-1.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/calibre/${name}.tar.xz";
-    sha256 = "0jjs2cx222pbv4nrivlxag5fxa0v9m63x7arcll6xi173zdn4gg8";
+    sha256 = "0h6afn57pw3rb03ffbnss774gdx7ldirr43hbhzsc2k2h7lxnzyj";
   };
 
   inherit python;
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
 
+  patchPhase = ''
+    tar xf ${qt48.src}
+    qtdir=$(realpath $(ls | grep qt | grep 4.8 | grep src))
+    sed -i setup/build_environment.py \
+        -e "s|^qt_private_inc = .*|qt_private_inc = ['$qtdir/include/%s'%(m) for m in ('QtGui', 'QtCore')]|"
+  '';
+
   buildInputs =
     [ python pyqt4 sip popplerQt4 libpng imagemagick libjpeg
-      fontconfig podofo qt48 pil chmlib icu
+      fontconfig podofo qt48 pil chmlib icu sqlite libusb1 libmtp
       pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
       pythonPackages.cssutils pythonPackages.beautifulsoup pythonPackages.pillow
-      pythonPackages.sqlite3 pythonPackages.netifaces sqlite libusb1 libmtp
+      pythonPackages.sqlite3 pythonPackages.netifaces pythonPackages.apsw
+      pythonPackages.cssselect
     ];
 
   installPhase = ''

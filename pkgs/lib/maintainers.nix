@@ -7,8 +7,8 @@
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
   amiddelk = "Arie Middelkoop <amiddelk@gmail.com>";
-  andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   amorsillo = "Andrew Morsillo <andrew.morsillo@gmail.com>";
+  andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   antono = "Antono Vasiljev <self@antono.info>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
@@ -19,6 +19,7 @@
   bodil = "Bodil Stokke <nix@bodil.org>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
+  edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
   eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
   ertes = "Ertugrul Söylemez <es@ertes.de>";
   garbas = "Rok Garbas <rok@garbas.si>";
@@ -31,7 +32,9 @@
   lovek323 = "Jason O'Conal <jason@oconal.id.au>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
+  modulistic = "Pablo Costa <modulistic@gmail.com>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
+  ocharles = "Oliver Charles <ollie@ocharles.org.uk>";
   offline = "Jaka Hudoklin <jakahudoklin@gmail.com>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   page = "Carles Pagès <page@cubata.homelinux.net>";
@@ -52,6 +55,7 @@
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
+  vizanto = "Danny Wilson <danny@prime.vc>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
 }

@@ -1,15 +1,15 @@
-{ cabal, cryptoRandomApi, HUnit, QuickCheck, testFramework
+{ cabal, byteable, cryptoRandom, HUnit, QuickCheck, testFramework
 , testFrameworkHunit, testFrameworkQuickcheck2, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "crypto-numbers";
-  version = "0.1.3";
-  sha256 = "115lgnay3ly5r53flh3v5jygqks0rg1i8qmbvrqf9nkmnmw6a5x1";
-  buildDepends = [ cryptoRandomApi vector ];
+  version = "0.2.1";
+  sha256 = "1bc24xk101x7npv083gzh3vjzwjh65ql85h4z0vxk3lnd0pmdmnq";
+  buildDepends = [ cryptoRandom vector ];
   testDepends = [
-    cryptoRandomApi HUnit QuickCheck testFramework testFrameworkHunit
-    testFrameworkQuickcheck2 vector
+    byteable cryptoRandom HUnit QuickCheck testFramework
+    testFrameworkHunit testFrameworkQuickcheck2 vector
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-crypto-numbers";

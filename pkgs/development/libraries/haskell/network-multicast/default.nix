@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network-multicast";
-  version = "0.0.7";
-  sha256 = "18qlg4cg7ci1z3mbqh5z16mxkjir0079a0rgm4qk6jbmsnvfsq43";
+  version = "0.0.10";
+  sha256 = "092v4ba6mrl5ykx2fscclcsc5dbnq99hbn93sc2mjnnr8c9r0n5x";
   buildDepends = [ network ];
   meta = {
     description = "Simple multicast library";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, libwpd, libwpg, pkgconfig }:
+{ stdenv, fetchurl, boost, libwpd, libwpg, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
   name = "libvisio-0.0.19";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ boost libwpd libwpg ];
+  buildInputs = [ boost libwpd libwpg zlib ];
 
   configureFlags = "--disable-werror";
 

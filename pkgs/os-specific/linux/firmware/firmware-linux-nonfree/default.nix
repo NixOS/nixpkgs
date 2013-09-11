@@ -54,8 +54,8 @@ in stdenv.mkDerivation {
   buildInputs = [ dpkg ];
 
   installPhase = ''
-    mkdir -p $out/share
-    cp -r lib/firmware/* "$out/"
+    mkdir -p $out/share $out/lib/firmware
+    cp -r lib/firmware/* "$out/lib/firmware/"
     cp -r usr/share/doc $out/share/
     find $out/share -name changelog.gz | xargs rm
   '';
@@ -65,6 +65,5 @@ in stdenv.mkDerivation {
     homepage = http://packages.debian.org/sid/firmware-linux-nonfree;
     license = stdenv.lib.licenses.unfreeRedistributableFirmware;
     platforms = stdenv.lib.platforms.linux;
-    priority = 10; # low priority so that other packages can override this big package
   };
 }

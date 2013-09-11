@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     filepath hexpat hsBibutils HTTP json mtl network pandocTypes parsec
     syb time utf8String
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://gorgias.mine.nu/repos/citeproc-hs/";
     description = "A Citation Style Language implementation in Haskell";

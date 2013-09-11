@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "test-framework-th-prime";
-  version = "0.0.5";
-  sha256 = "0lsxnbckh88cq38azml86szdcvx3rhs3is13ib4z0ryfqnv4hhpl";
+  version = "0.0.6";
+  sha256 = "11fk7sk644ky8f22imrfqk8yx07050vy9szha0pnkkjk9i3bqfcq";
   buildDepends = [ cpphs haskellSrcExts testFramework ];
   meta = {
     description = "Template Haskell for test framework";

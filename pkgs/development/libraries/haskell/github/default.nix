@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     aeson attoparsec caseInsensitive conduit dataDefault failure HTTP
     httpConduit httpTypes network text time unorderedContainers vector
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/fpco/github";
     description = "Access to the Github API, v3";

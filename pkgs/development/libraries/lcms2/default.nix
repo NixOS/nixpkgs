@@ -1,11 +1,11 @@
 {stdenv, fetchurl, libtiff, libjpeg, zlib}:
 
 stdenv.mkDerivation rec {
-  name = "lcms2-2.3";
+  name = "lcms2-2.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/lcms/${name}.tar.gz";
-    sha256 = "1r5gmzhginzm90y70dcbamycdfcaz4f7v0bb4nwyaywlvsxpg89y";
+    sha256 = "0ax71bmscjzlpmg1r8vj3dypxf2jr7j9qfx5vc8j22j78hmpf9v7";
   };
 
   propagatedBuildInputs = [ libtiff libjpeg zlib ];

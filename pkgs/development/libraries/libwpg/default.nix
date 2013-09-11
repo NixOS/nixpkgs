@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libwpd }:
+{ stdenv, fetchurl, pkgconfig, libwpd, zlib }:
 
 stdenv.mkDerivation rec {
   name = "libwpg-0.2.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0d83nx4rxkrq2sbfbbqpddni56h1328dzmraxyl6vh9p4f19rh5d";
   };
 
-  buildInputs = [ libwpd ];
+  buildInputs = [ libwpd zlib ];
   nativeBuildInputs = [ pkgconfig ];
 
   meta = {

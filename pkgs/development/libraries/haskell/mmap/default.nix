@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "mmap";
-  version = "0.5.8";
-  sha256 = "17zsb95ynyrqj51h4jxi9glsih4vq33hbxycgw13z5fivv261m7y";
+  version = "0.5.9";
+  sha256 = "1y5mk3yf4b8r6rzmlx1xqn4skaigrqnv08sqq0v7r3nbw42bpz2q";
   isLibrary = true;
   isExecutable = true;
   meta = {

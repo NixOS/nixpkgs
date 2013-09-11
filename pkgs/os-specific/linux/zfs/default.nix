@@ -1,11 +1,11 @@
 { stdenv, fetchurl, kernelDev, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
 
 stdenv.mkDerivation {
-  name = "zfs-0.6.1-${kernelDev.version}";
+  name = "zfs-0.6.2-${kernelDev.version}";
 
   src = fetchurl {
-    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.1.tar.gz;
-    sha256 = "1ykph9d4p70mam6lvcx0zld6d34gch15dsilds5ncbxh0m52knl0";
+    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.2.tar.gz;
+    sha256 = "18b5f18k8mwb17r5ippsilmp1a2sqjw9fwn0z82159dkhsadg33b";
   };
 
   patches = [ ./mount_zfs_prefix.patch ./nix-build.patch ];
@@ -32,6 +32,8 @@ stdenv.mkDerivation {
     --with-linux-obj=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build 
     --with-spl=${spl}/libexec/spl
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "ZFS Filesystem Linux Kernel module";

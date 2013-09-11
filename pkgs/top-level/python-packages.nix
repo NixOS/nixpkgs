@@ -126,6 +126,9 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit python buildPythonPackage pygobject pycairo;
   };
 
+  # A patched version of buildout, useful for buildout based development on Nix
+  zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
+
   # packages defined here
 
   afew = buildPythonPackage rec {
@@ -1106,11 +1109,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   deform = buildPythonPackage rec {
-    name = "deform-0.9.7";
+    name = "deform-0.9.8";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/deform/${name}.tar.gz";
-      md5 = "d450eef05432d473257da5621c72c8b7";
+      sha256 = "15500rm33n6kxsdpqyn3ih25y3rvab4nxy2yzsj2754kdlhlyjpx";
     };
 
     buildInputs = [] ++ optional isPy26 unittest2;
@@ -1137,11 +1140,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   deform_bootstrap = buildPythonPackage rec {
-    name = "deform_bootstrap-0.2";
+    name = "deform_bootstrap-0.2.9";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/deform_bootstrap/${name}.tar.gz";
-      md5 = "57812251f327367761f32d49a8286aa4";
+      sha256 = "1hgq3vqsfqdmlyahnlc40w13viawhpzqf4jzigsggdb41x545fda";
     };
 
     propagatedBuildInputs = [ deform ];
@@ -3138,6 +3141,25 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
 
+  muttils = buildPythonPackage (rec {
+    name = "muttils-1.3";
+
+    src = fetchurl {
+      url = http://www.blacktrash.org/hg/muttils/archive/8bb26094df06.tar.bz2;
+      sha256 = "1a4kxa0fpgg6rdj5p4kggfn8xpniqh8v5kbiaqc6wids02m7kag6";
+    };
+
+    # Tests don't work
+    doCheck = false;
+
+    meta = {
+      description = "Utilities for use with console mail clients, like mutt";
+      homepage = http://www.blacktrash.org/hg/muttils;
+      license = "GPLv2+";
+    };
+  });
+
+
   MySQL_python = buildPythonPackage {
     name = "MySQL-python-1.2.3";
 
@@ -3868,13 +3890,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   powerline = buildPythonPackage rec {
-    rev = "72ea6730ead85fc19b983bd70173d15e6caa4965";
+    rev  = "db80fc95ed01d2c559c4bdc7da8514ed3cc7fcd9";
     name = "powerline-beta_${rev}";
 
     src = fetchurl {
-      url = "https://github.com/Lokaltog/powerline/tarball/${rev}";
-      name = "${name}.tar.bz";
-      sha256 = "08sr8ymhphh7rsn2gcmpdz3kzd04b7w3k4pc35h8w60jvg9i449s";
+      url    = "https://github.com/Lokaltog/powerline/tarball/${rev}";
+      name   = "${name}.tar.bz";
+      sha256 = "1csd4vasy0avwfxrpdr61plj6k1nzf36f6qvd9kl15s3lnspsfaz";
     };
 
     propagatedBuildInputs = [ pkgs.git pkgs.mercurial pkgs.bazaar pythonPackages.psutil pythonPackages.pygit2 ];
@@ -3898,11 +3920,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       install -m644 "powerline/bindings/tmux/powerline.conf" "$out/share/tmux/powerline.conf"
     '';
 
-    meta = {
-      homepage = https://github.com/Lokaltog/powerline;
+    meta = with stdenv.lib; {
+      homepage    = https://github.com/Lokaltog/powerline;
       description = "The ultimate statusline/prompt utility.";
-      license = with stdenv.lib.licenses; mit;
-      platforms = with stdenv.lib.platforms; all;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.all;
     };
   };
 
@@ -5540,11 +5563,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   trac = buildPythonPackage {
-    name = "trac-0.12.2";
+    name = "trac-1.0.1";
 
     src = fetchurl {
-      url = http://ftp.edgewall.com/pub/trac/Trac-0.12.2.tar.gz;
-      sha256 = "1ihf5031pc1wpwbxpfzzz2bcpwww795n5y22baglyim1lalivd65";
+      url = http://ftp.edgewall.com/pub/trac/Trac-1.0.1.tar.gz;
+      sha256 = "1nqa95fcnkpyq4jk6az7l7sqgm3b3pjq3bx1n7y4v3bad5jr1m4x";
     };
 
     # couple of failing tests
@@ -6571,18 +6594,18 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   tarman = buildPythonPackage rec {
-    version = "0.1.1";
+    version = "0.1.3";
     name = "tarman-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/t/tarman/tarman-${version}.zip";
-      sha256 = "0ppd2365hf841b58fss5pgaja0y0mwx5n0gk1p3rxx9y3r0kyfas";
+      sha256 = "0ri6gj883k042xaxa2d5ymmhbw2bfcxdzhh4bz7700ibxwxxj62h";
     };
 
     buildInputs = [ pkgs.unzip unittest2 nose mock ];
     propagatedBuildInputs = [ modules.curses libarchive ];
 
-    # two tests fail
+    # tests are still failing
     doCheck = false;
   };
 
@@ -6995,13 +7018,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 } // pkgs.lib.optionalAttrs (python.majorVersion == "2.7") {
 
   pypi2nix = pythonPackages.buildPythonPackage rec {
-    rev = "e231db7e8874d4543a6f0fffc46c0fffbe6108c5";
+    rev = "e85eb9e75e7290c17e89822d6a5c1c52c1b59269";
     name = "pypi2nix-1.0_${rev}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/garbas/pypi2nix/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "0wqk6milnagr0b0v8igjp8p25d5y63pki3pkdy7hbgjxvyw8wril";
+      sha256 = "0wk9019pgpc2467819cz98fdvihjkpihlh1yywfxlvn04ymb315q";
     };
 
     propagatedBuildInputs = [ pythonPackages."Distutils2-1.0a4" ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, perl }:
+{ stdenv, fetchurl, m4, perl, flex }:
 
 stdenv.mkDerivation rec {
   name = "bison-3.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1j14fqgi9wzqgsy4fhkcdrv4hv6rrvhvn84axs520w9b022mbb79";
   };
 
-  nativeBuildInputs = [ m4 ] ++ stdenv.lib.optional doCheck perl;
+  nativeBuildInputs = [ m4 ] ++ stdenv.lib.optionals doCheck [perl flex];
   propagatedBuildInputs = [ m4 ];
 
   doCheck = true;

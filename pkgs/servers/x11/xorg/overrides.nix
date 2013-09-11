@@ -49,6 +49,7 @@ in
 
   libxcb = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
+    configureFlags = "--enable-xkb";
   };
 
   xcbproto = attrs : attrs // {
@@ -109,13 +110,6 @@ in
 
   libSM = attrs: attrs
     // { propagatedBuildInputs = [ xorg.libICE ]; };
-
-  libXi = gitRelease {
-    libName = "libXi";
-    version = "1.7.1.91";
-    rev = "661c45ca17c434dbd342a46fd3fb813852ae0ca9";
-    sha256 = "01wx8fgjjfqm0sm9anj6rmz72yvjyb4y3ifjk2q4ixd7pdp63bx6";
-  };
 
   libXrender = attrs: attrs
     // { preConfigure = setMalloc0ReturnsNullCrossCompiling; };

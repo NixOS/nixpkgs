@@ -28,6 +28,15 @@ let
 
 in {
 
+  cs = buildDict {
+    shortName = "cs-20040614-1";
+    fullName = "Czech";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/cs/aspell6-cs-20040614-1.tar.bz2;
+      sha256 = "0rihj4hsw96pd9casvmpvw3r8040pfa28p1h73x4vyn20zwr3h01";
+    };
+  };
+
   de = buildDict {
     shortName = "de-20030222-1";
     fullName = "German";
@@ -91,6 +100,15 @@ in {
     };
   };
 
+  nb = buildDict {
+    shortName = "nb-0.50.1-0";
+    fullName = "Norwegian Bokmal";
+    src = fetchurl {
+      url = "mirror://gnu/aspell/dict/nb/aspell-nb-0.50.1-0.tar.bz2";
+      sha256 = "12i2bmgdnlkzfinb20j2a0j4a20q91a9j8qpq5vgabbvc65nwx77";
+    };
+  };
+
   nl = buildDict {
     shortName = "nl-0.50-2";
     fullName = "Dutch";
@@ -102,6 +120,15 @@ in {
     postInstall = ''
       echo "add nl.rws" > $out/lib/aspell/nederlands.multi
     '';
+  };
+
+  nn = buildDict {
+    shortName = "nn-0.50.1-0";
+    fullName = "Norwegian Nynorsk";
+    src = fetchurl {
+      url = "mirror://gnu/aspell/dict/nn/aspell-nn-0.50.1-1.tar.bz2";
+      sha256 = "0w2k5l5rbqpliripgqwiqixz5ghnjf7i9ggbrc4ly4vy1ia10rmc";
+    };
   };
 
   pl = buildDict {
@@ -119,6 +146,15 @@ in {
     src = fetchurl {
       url = mirror://gnu/aspell/dict/ru/aspell6-ru-0.99f7-1.tar.bz2;
       sha256 = "0ip6nq43hcr7vvzbv4lwwmlwgfa60hrhsldh9xy3zg2prv6bcaaw";
+    };
+  };
+
+  sv = buildDict {
+    shortName = "sv-0.51-0";
+    fullName = "Swedish";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/sv/aspell-sv-0.51-0.tar.bz2;
+      sha256 = "02jwkjhr32kvyibnyzgx3smbnm576jwdzg3avdf6zxwckhy5fw4v";
     };
   };
 

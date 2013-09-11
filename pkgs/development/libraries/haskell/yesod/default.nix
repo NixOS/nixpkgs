@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod";
-  version = "1.2.2";
-  sha256 = "06ac99srh44rwj6mwyl7h0d0ckyb19dvpabylbawmks25v5ig0y3";
+  version = "1.2.2.1";
+  sha256 = "0xhpsqfshnay7kaz0czr7ass84cbjlgz2n13jk08hs8g8dw72as4";
   buildDepends = [
     aeson blazeHtml blazeMarkup dataDefault hamlet monadControl
     networkConduit safe shakespeareCss shakespeareJs text transformers

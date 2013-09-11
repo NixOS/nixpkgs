@@ -24,9 +24,7 @@ with stdenv.lib;
   # Support drivers that need external firmware.
   STANDALONE n
 
-  # Enable the complete Linux kernel ".config" file to be saved in the kernel.
-  # Also, make it available at runtime as /proc/config.gz.
-  IKCONFIG y
+  # Make /proc/config.gz available.
   IKCONFIG_PROC y
 
   # Optimize with -O2, not -Os.
@@ -103,7 +101,9 @@ with stdenv.lib;
   FB_SIS_300 y
   FB_SIS_315 y
   FB_3DFX_ACCEL y
-  FB_GEODE y
+  ${optionalString (versionOlder version "3.9" || stdenv.system == "i686-linux") ''
+    FB_GEODE y
+  ''}
 
   # Video configuration.
   # Enable KMS for devices whose X.org driver supports it.

@@ -1,6 +1,6 @@
-diff -rc elasticsearch-0.20.5/bin/elasticsearch elasticsearch-0.20.5-new/bin/elasticsearch
-*** elasticsearch-0.20.5/bin/elasticsearch	2013-03-07 12:16:31.152494626 +0100
---- elasticsearch-0.20.5-new/bin/elasticsearch	2013-03-07 12:24:41.076081272 +0100
+diff -rc elasticsearch-0.90.3/bin/elasticsearch elasticsearch-0.90.3-new/bin/elasticsearch
+*** elasticsearch-0.90.3/bin/elasticsearch	2013-08-06 15:19:22.000000000 +0200
+--- elasticsearch-0.90.3-new/bin/elasticsearch	2013-08-27 16:42:00.935880011 +0200
 ***************
 *** 62,68 ****
   done
@@ -10,11 +10,50 @@ diff -rc elasticsearch-0.20.5/bin/elasticsearch elasticsearch-0.20.5-new/bin/ela
   
   # make ELASTICSEARCH_HOME absolute
   ES_HOME=`cd "$ES_HOME"; pwd`
---- 62,68 ----
+--- 62,71 ----
   done
   
   # determine elasticsearch home
-! ES_HOME=${ES_HOME:=`dirname "$SCRIPT"`/..}
+! if [ -z "$ES_HOME" ]; then
+!     echo "You must set the ES_HOME var" >&2
+!     exit 1
+! fi
   
   # make ELASTICSEARCH_HOME absolute
   ES_HOME=`cd "$ES_HOME"; pwd`
+diff -rc elasticsearch-0.90.3/bin/plugin elasticsearch-0.90.3-new/bin/plugin
+*** elasticsearch-0.90.3/bin/plugin	2013-08-06 15:19:22.000000000 +0200
+--- elasticsearch-0.90.3-new/bin/plugin	2013-08-27 16:49:01.024160295 +0200
+***************
+*** 16,22 ****
+  done
+  
+  # determine elasticsearch home
+! ES_HOME=`dirname "$SCRIPT"`/..
+  
+  # make ELASTICSEARCH_HOME absolute
+  ES_HOME=`cd "$ES_HOME"; pwd`
+--- 16,25 ----
+  done
+  
+  # determine elasticsearch home
+! if [ -z "$ES_HOME" ]; then
+!     echo "You must set the ES_HOME var" >&2
+!     exit 1
+! fi
+  
+  # make ELASTICSEARCH_HOME absolute
+  ES_HOME=`cd "$ES_HOME"; pwd`
+***************
+*** 46,50 ****
+    shift
+  done
+  
+! exec $JAVA $JAVA_OPTS -Xmx64m -Xms16m -Delasticsearch -Des.path.home="$ES_HOME" $properties -cp "$ES_HOME/lib/*" org.elasticsearch.plugins.PluginManager $args
+  
+--- 49,53 ----
+    shift
+  done
+  
+! exec $JAVA $JAVA_OPTS -Xmx64m -Xms16m -Delasticsearch -Des.path.home="$ES_HOME" $properties -cp "$ES_CLASSPATH/lib/*" org.elasticsearch.plugins.PluginManager $args
+  

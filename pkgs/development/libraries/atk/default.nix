@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "atk-2.8.0";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig perl ];
 
-  propagatedBuildInputs = [ glib ];
+  propagatedBuildInputs = [ glib gobjectIntrospection /*ToDo: why propagate*/ ];
 
   meta = {
     description = "ATK, the accessibility toolkit";
