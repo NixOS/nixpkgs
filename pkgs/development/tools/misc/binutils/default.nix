@@ -2,7 +2,7 @@
 , cross ? null, gold ? true, bison ? null
 , deterministic ? false }:
 
-let basename = "binutils-2.23.2"; in
+let basename = "binutils-2.23.1"; in
 
 with { inherit (stdenv.lib) optional optionals optionalString; };
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "15qhbkz3r266xaa52slh857qn3abw7rb2x2jnhpfrafpzrb4x4gy";
+    sha256 = "06bs5v5ndb4g5qx96d52lc818gkbskd1m0sz57314v887sqfbcia";
   };
 
   patches = [
