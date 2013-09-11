@@ -1,6 +1,6 @@
-{ cabal, binary, Cabal, filepath, gmp, happy, haskeline
+{ cabal, binary, boehmgc, Cabal, filepath, gmp, happy, haskeline
 , languageJava, libffi, llvmGeneral, mtl, parsec, split, text
-, transformers, vector, vectorBinaryInstances, boehmgc
+, transformers, vector, vectorBinaryInstances
 }:
 
 cabal.mkDerivation (self: {
@@ -14,7 +14,7 @@ cabal.mkDerivation (self: {
     parsec split text transformers vector vectorBinaryInstances
   ];
   buildTools = [ happy ];
-  extraLibraries = [ gmp boehmgc ];
+  extraLibraries = [ boehmgc gmp ];
   meta = {
     homepage = "http://www.idris-lang.org/";
     description = "Functional Programming Language with Dependent Types";
