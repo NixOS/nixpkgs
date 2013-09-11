@@ -38,7 +38,8 @@ in
     jobs.tcpcrypt = {
       description = "tcpcrypt";
 
-      startOn = "started network-interfaces";
+      wantedBy = ["multi-user.target"];
+      after = ["network-interfaces.target"];
 
       path = [ pkgs.iptables pkgs.tcpcrypt pkgs.procps ];
 
