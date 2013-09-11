@@ -53,10 +53,10 @@ mirror://xorg/individual/lib/libdmx-1.1.3.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libfontenc-1.1.1.tar.bz2
 mirror://xorg/individual/lib/libFS-1.0.5.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libICE-1.0.8.tar.bz2
-mirror://xorg/X11R7.7/src/everything/libpciaccess-0.13.1.tar.bz2
+mirror://xorg/individual/lib/libpciaccess-0.13.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libSM-1.2.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libWindowsWM-1.0.1.tar.bz2
-mirror://xorg/individual/lib/libX11-1.6.0.tar.bz2
+mirror://xorg/individual/lib/libX11-1.6.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXau-1.0.7.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXaw-1.0.11.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXcomposite-0.4.3.tar.bz2
@@ -65,9 +65,9 @@ mirror://xorg/X11R7.7/src/everything/libXdamage-1.1.3.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXdmcp-1.1.1.tar.bz2
 mirror://xorg/individual/lib/libXext-1.3.2.tar.bz2
 mirror://xorg/individual/lib/libXfixes-5.0.1.tar.bz2
-mirror://xorg/X11R7.7/src/everything/libXfont-1.4.5.tar.bz2
+mirror://xorg/individual/lib/libXfont-1.4.6.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXft-2.3.1.tar.bz2
-mirror://xorg/individual/lib/libXi-1.7.1.tar.bz2
+mirror://xorg/individual/lib/libXi-1.7.2.tar.bz2
 mirror://xorg/individual/lib/libXinerama-1.1.3.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libxkbfile-1.0.8.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXmu-1.1.1.tar.bz2

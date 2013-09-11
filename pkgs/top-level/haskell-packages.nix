@@ -1384,6 +1384,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
 
+  llvmGeneral = callPackage ../development/libraries/haskell/llvm-general {
+    llvmConfig = pkgs.llvm;
+  };
+
   lrucache = callPackage ../development/libraries/haskell/lrucache {};
 
   ltk = callPackage ../development/libraries/haskell/ltk {};

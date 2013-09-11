@@ -3,7 +3,8 @@
 rec {
   inherit (pkgs) fetchurl_gnome glib gtk3 atk pango;
   gtk = gtk3;
-  orbit = pkgs.gnome2.ORBit2;
+  inherit (pkgs.gnome2) gnome_common ORBit2;
+  orbit = ORBit2;
 
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
 
@@ -11,7 +12,7 @@ rec {
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
-  at_spi2_atk = lib.lowPrio (callPackage ./core/at-spi2-atk { });
+  at_spi2_atk = callPackage ./core/at-spi2-atk { };
 
   at_spi2_core = callPackage ./core/at-spi2-core { };
 

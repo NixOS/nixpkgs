@@ -19,7 +19,8 @@ stdenv.mkDerivation {
     ];
 
   nativeBuildInputs = [ pkgconfig intltool which ];
-  configureFlags = "--disable-scrollkeeper";
+
+  configureFlags = [ "--disable-scrollkeeper" "--disable-introspection"/*not useful AFAIK*/ ];
 
   NIX_CFLAGS_COMPILE="-I${GConf}/include/gconf/2";
 }
