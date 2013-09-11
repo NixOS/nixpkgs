@@ -1,12 +1,15 @@
-{ stdenv, fetchurl }:
-        
+{ stdenv, fetchurl, readline }:
+
 stdenv.mkDerivation rec {
-  name = "yap-5.1.1";
+  version = "6.2.2";
+  name = "yap-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/yap/Yap-5.1.1.tar.gz";
-    sha256 = "0bajxmlla9gay4m4l7y7x6qldxzi0jcq2ykgpjk9liky7g5kbnya";
+    url = "http://www.dcc.fc.up.pt/~vsc/Yap/${name}.tar.gz";
+    sha256 = "0l6p0vy667wws64cvwf74ssl6h9gypjzrsl3b2d32hs422186pzi";
   };
+
+  buildInputs = [ readline ];
 
   meta = { 
     description = "Yap Prolog System is a ISO-compatible high-performance Prolog compiler";
