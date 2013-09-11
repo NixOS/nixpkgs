@@ -1,0 +1,25 @@
+From 4ef50d76a2da61be60fea448690e24f35bc37299 Mon Sep 17 00:00:00 2001
+From: Peter Simons <simons@cryp.to>
+Date: Wed, 11 Sep 2013 17:19:29 +0200
+Subject: [PATCH] Run tcpcryptd under uid 93 instead of 666.
+
+---
+ user/src/linux.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/user/src/linux.c b/user/src/linux.c
+index b51e6b2..8199193 100644
+--- a/user/src/linux.c
++++ b/user/src/linux.c
+@@ -198,7 +198,7 @@ void linux_drop_privs(void)
+ 
+ 	cap_free(caps);
+ 
+-	if (setuid(666) == -1)
++	if (setuid(93) == -1)
+ 		err(1, "setuid()");
+ 
+ 	caps = cap_init();
+-- 
+1.8.3.4
+
