@@ -1388,6 +1388,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     llvmConfig = pkgs.llvm;
   };
 
+  llvmGeneralPure = callPackage ../development/libraries/haskell/llvm-general-pure {};
+
   lrucache = callPackage ../development/libraries/haskell/lrucache {};
 
   ltk = callPackage ../development/libraries/haskell/ltk {};
