@@ -1,11 +1,11 @@
 { fetchurl, stdenv, expect, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "dejagnu-1.5";
+  name = "dejagnu-1.5.1";
 
   src = fetchurl {
     url = "mirror://gnu/dejagnu/${name}.tar.gz";
-    sha256 = "1nx3x3h96a82q92q108q71giv2nz9xmbbn2nrlr3wvvs6l45id68";
+    sha256 = "1lik8h4qi7x0mhsi8xmj91an1yb63rjbk6v4xrmzgiy5lk8lgrv0";
   };
 
   patches = [ ./wrapped-runtest-program-name.patch ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/runtest" \
-		--prefix PATH ":" "${expect}/bin"
+      --prefix PATH ":" "${expect}/bin"
   '';
 
   meta = {

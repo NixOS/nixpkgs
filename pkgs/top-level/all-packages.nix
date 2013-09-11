@@ -1794,6 +1794,8 @@ let
 
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
+  tcpcrypt = callPackage ../tools/security/tcpcrypt { };
+
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
   teamviewer = callPackage_i686 ../applications/networking/remote/teamviewer { };
@@ -4851,6 +4853,8 @@ let
 
   libnetfilter_conntrack = callPackage ../development/libraries/libnetfilter_conntrack { };
 
+  libnetfilter_queue = callPackage ../development/libraries/libnetfilter_queue { };
+
   libnfnetlink = callPackage ../development/libraries/libnfnetlink { };
 
   libnih = callPackage ../development/libraries/libnih { };
@@ -5795,6 +5799,8 @@ let
 
   junit = callPackage ../development/libraries/java/junit { };
 
+  jzmq = callPackage ../development/libraries/java/jzmq { };
+
   lucene = callPackage ../development/libraries/java/lucene { };
 
   mockobjects = callPackage ../development/libraries/java/mockobjects { };
@@ -6231,6 +6237,8 @@ let
 
   thttpd = callPackage ../servers/http/thttpd { };
 
+  storm = callPackage ../servers/computing/storm { };
+
   tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
 
   tomcat6 = callPackage ../servers/http/tomcat/6.0.nix { };
@@ -6447,6 +6455,8 @@ let
   linuxHeaders = linuxHeaders37;
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
+
+  linuxHeaders26 = callPackage ../os-specific/linux/kernel-headers/2.6.32.nix { };
 
   linuxHeaders37 = callPackage ../os-specific/linux/kernel-headers/3.7.nix { };
 
@@ -9780,10 +9790,13 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
+  nixUnstable = nixStable;
+  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
+  */
 
   nixops = callPackage ../tools/package-management/nixops { };
 

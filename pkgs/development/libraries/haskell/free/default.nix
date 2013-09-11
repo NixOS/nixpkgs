@@ -1,14 +1,15 @@
 { cabal, bifunctors, comonad, comonadsFd, comonadTransformers
-, distributive, mtl, semigroupoids, semigroups, transformers
+, distributive, mtl, profunctors, semigroupoids, semigroups
+, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "free";
-  version = "3.4.1";
-  sha256 = "09yfkmnmhwwq22fsm1f4li4h13c3bqnh274z8jpgw0hrcnssh0rk";
+  version = "3.4.2";
+  sha256 = "1x6pdkcxk6z9ndph2yzz5n21afc2330m0ryv4w67jsss5aa69fwb";
   buildDepends = [
     bifunctors comonad comonadsFd comonadTransformers distributive mtl
-    semigroupoids semigroups transformers
+    profunctors semigroupoids semigroups transformers
   ];
   meta = {
     homepage = "http://github.com/ekmett/free/";
