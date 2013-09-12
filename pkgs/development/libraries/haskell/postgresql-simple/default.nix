@@ -1,15 +1,15 @@
-{ cabal, attoparsec, base16Bytestring, blazeBuilder, blazeTextual
-, cryptohash, HUnit, postgresqlLibpq, text, time, transformers
-, vector
+{ cabal, aeson, attoparsec, base16Bytestring, blazeBuilder
+, blazeTextual, cryptohash, HUnit, postgresqlLibpq, text, time
+, transformers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "postgresql-simple";
-  version = "0.3.6.0";
-  sha256 = "1qszr3k7cihizbaq3naj134gavkpamk8q3g02rsilzvn0ivq8wb8";
+  version = "0.3.7.1";
+  sha256 = "1xrgwpg58srmzv1d0jdknyh5vwdq2c40fyqy0wvgppisxzq469wh";
   buildDepends = [
-    attoparsec blazeBuilder blazeTextual postgresqlLibpq text time
-    transformers vector
+    aeson attoparsec blazeBuilder blazeTextual postgresqlLibpq text
+    time transformers vector
   ];
   testDepends = [
     base16Bytestring cryptohash HUnit text time vector
