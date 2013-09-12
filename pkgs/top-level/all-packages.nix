@@ -533,6 +533,8 @@ let
 
   catdoc = callPackage ../tools/text/catdoc { };
 
+  ditaa = callPackage ../tools/graphics/ditaa { };
+
   dlx = callPackage ../misc/emulators/dlx { };
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
