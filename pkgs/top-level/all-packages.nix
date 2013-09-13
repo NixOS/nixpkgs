@@ -1542,6 +1542,8 @@ let
 
   podiff = callPackage ../tools/text/podiff { };
 
+  poedit = callPackage ../tools/text/poedit { };
+
   polipo = callPackage ../servers/polipo { };
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
