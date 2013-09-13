@@ -10352,6 +10352,12 @@ let
     inherit (stdenv) mkDerivation;
   };
 
+  myEnvRun = import ../build-support/my-env-run {
+    inherit writeScript bash myEnvFun;
+  };
+
+  nix-run = callPackage ../misc/nix-run { };
+
   # patoline requires a rather large ocaml compilation environment.
   # this is why it is build as an environment and not just a normal package.
   # remark : the emacs mode is also installed, but you have to adjust your load-path.
