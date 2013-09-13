@@ -3793,14 +3793,16 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
-  pip = buildPythonPackage {
-    name = "pip-1.2.1";
+  pip = buildPythonPackage rec {
+    version = "1.4.1";
+    name = "pip-${version}";
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pip/pip-1.2.1.tar.gz";
-      md5 = "db8a6d8a4564d3dc7f337ebed67b1a85";
+      url = "http://pypi.python.org/packages/source/p/pip/pip-${version}.tar.gz";
+      sha256 = "0knhj3c1nqqzxgqin8l0gzy6nzsbcxinyr0cbp1j99hi8xahcyjf";
     };
     buildInputs = [ mock scripttest virtualenv nose ];
     # ValueError: Working directory tests not found, or not a directory
+    # see https://github.com/pypa/pip/issues/92
     doCheck = false;
   };
 
