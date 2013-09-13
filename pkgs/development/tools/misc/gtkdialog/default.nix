@@ -1,17 +1,17 @@
 {stdenv, fetchurl, gtk, pkgconfig}:
 
 stdenv.mkDerivation {
-  name = "gtkdialog-0.7.9";
+  name = "gtkdialog-0.8.3";
 
   src = fetchurl {
-    url = ftp://linux.pte.hu/pub/gtkdialog/gtkdialog-0.7.9.tar.gz;
-    sha256 = "142k8fnh1b8jclm7my2rhk7n8j1b0xh76b2gg712r738r94qwka2";
+    url = http://gtkdialog.googlecode.com/files/gtkdialog-0.8.3.tar.gz;
+    sha256 = "ff89d2d7f1e6488e5df5f895716ac1d4198c2467a2a5dc1f51ab408a2faec38e";
   };
 
   buildInputs = [ gtk pkgconfig ];
 
   meta = {
-    homepage = http://linux.pte.hu/~pipas/gtkdialog/;
+    homepage = http://gtkdialog.googlecode.com/;
     description = "Small utility for fast and easy GUI building from many scripted and compiled languages";
     license = "GPLv2+";
   };
