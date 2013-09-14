@@ -4919,7 +4919,12 @@ let
 
   libtommath = callPackage ../development/libraries/libtommath { };
 
-  libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
+  libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar {
+    # fix "unrecognized option -arch" error
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
 
   libtunepimp = callPackage ../development/libraries/libtunepimp { };
 
