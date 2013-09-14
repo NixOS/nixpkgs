@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-gcc-arch=generic" ]; # no detection of -march= or -mtune=
 
-  doCheck = !stdenv.isDarwin; # until we solve dejagnu problems on darwin
+  doCheck = stdenv.isLinux; # until we solve dejagnu problems on darwin and expect on BSD
 
   dontStrip = stdenv ? cross; # Don't run the native `strip' when cross-compiling.
 
