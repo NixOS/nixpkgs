@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, pkgconfig, glib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "gamin-0.1.10";
 
   src = fetchurl {
@@ -18,9 +18,6 @@ stdenv.mkDerivation rec {
 
   patches = [ ./deadlock.patch ] ++ map fetchurl (import ./debian-patches.nix);
 
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i 's/,--version-script=.*$/\\/' libgamin/Makefile
-  '';
 
   meta = with stdenv.lib; {
     homepage    = https://people.gnome.org/~veillard/gamin/;
@@ -29,3 +26,10 @@ stdenv.mkDerivation rec {
     platforms   = platforms.unix;
   };
 }
+
+// stdenv.lib.optionalAttrs stdenv.isDarwin {
+  preBuild =  ''
+    sed -i 's/,--version-script=.*$/\\/' libgamin/Makefile
+  '';
+})
+
