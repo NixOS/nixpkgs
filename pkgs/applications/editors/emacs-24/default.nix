@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cat >$out/share/emacs/site-lisp/site-start.el <<EOF
-;; nixos specific load-path
-(when (getenv "NIX_PROFILES") (setq load-path
-                      (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
-                                               (split-string (getenv "NIX_PROFILES"))))
-                       load-path)))
-EOF
+    ;; nixos specific load-path
+    (when (getenv "NIX_PROFILES") (setq load-path
+                          (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
+                                                   (split-string (getenv "NIX_PROFILES"))))
+                           load-path)))
+    EOF
   '';
 
 
@@ -56,7 +56,7 @@ EOF
   meta = with stdenv.lib; {
     description = "GNU Emacs 24, the extensible, customizable text editor";
     homepage    = http://www.gnu.org/software/emacs/;
-    license     = licenses.gplv3Plus;
+    license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ chaoflow lovek323 simons the-kenny ];
     platforms   = platforms.all;
 
