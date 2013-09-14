@@ -19,6 +19,9 @@ stdenv.mkDerivation (rec {
             "--config-cache"
           ]);
 
+  makeFlags = stdenv.lib.optionalString stdenv.isDarwin
+    "CFLAGS=-D_FORTIFY_SOURCE=0";
+
   # On cross building, gettext supposes that the wchar.h from libc
   # does not fulfill gettext needs, so it tries to work with its
   # own wchar.h file, which does not cope well with the system's

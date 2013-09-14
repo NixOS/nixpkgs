@@ -59,6 +59,9 @@ let
 
     NIX_LDFLAGS = stdenv.lib.optionalString selinuxSupport "-lsepol";
 
+    makeFlags = stdenv.lib.optionalString stdenv.isDarwin
+      "CFLAGS=-D_FORTIFY_SOURCE=0";
+
     meta = {
       homepage = http://www.gnu.org/software/coreutils/;
       description = "The basic file, shell and text manipulation utilities of the GNU operating system";
