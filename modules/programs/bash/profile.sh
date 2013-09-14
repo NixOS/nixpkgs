@@ -56,10 +56,12 @@ for i in $NIX_PROFILES; do # !!! reverse
 
     # Mozilla plugins.
     export MOZ_PLUGIN_PATH=$i/lib/mozilla/plugins${MOZ_PLUGIN_PATH:+:}$MOZ_PLUGIN_PATH
-done
 
-# Search directory for Aspell dictionaries.
-export ASPELL_CONF="dict-dir $HOME/.nix-profile/lib/aspell"
+    # Search directory for Aspell dictionaries.
+    if [ -d "$i/lib/aspell" ]; then
+        export ASPELL_CONF="dict-dir $i/lib/aspell"
+    fi
+done
 
 # The setuid wrappers override other bin directories.
 export PATH=@wrapperDir@:$PATH
