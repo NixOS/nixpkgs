@@ -1,4 +1,4 @@
-{stdenv, which, coreutils, perl, fetchurl, perlPackages, makeWrapper, diffutils , writeScriptBin, bzip2}:
+{stdenv, which, coreutils, perl, fetchurl, perlPackages, makeWrapper, diffutils , writeScriptBin, writeTextFile, bzip2}:
 
 # quick usage:
 # storeBackup.pl --sourceDir /home/user --backupDir /tmp/my_backup_destination
@@ -48,56 +48,31 @@ stdenv.mkDerivation {
     PATH=$PATH:${dummyMount}/bin
 
 
-    { # simple sanity test, test backup/restore of simple store paths
-
+    ## test it
+    backup_init(){
       mkdir backup
-
-      backupRestore(){
-        source="$2"
-        echo =========
-        echo RUNNING TEST "$1" source: "$source"
-        mkdir restored
-
-        $out/bin/storeBackup.pl --sourceDir "$source" --backupDir backup
-        latestBackup=backup/default/$(ls -1 backup/default | sort | tail -n 1)
-        $out/bin/storeBackupRecover.pl -b "$latestBackup" -t restored -r /
-        ${diffutils}/bin/diff -r "$source" restored
-
-        # storeBackupCheckSource should return 0
-        $out/bin/storeBackupCheckSource.pl -s "$source" -b "$latestBackup"
-        # storeBackupCheckSource should return not 0 when using different source
-        ! $out/bin/storeBackupCheckSource.pl -s $TMP -b "$latestBackup"
-
-        # storeBackupCheckBackup should return 0
-        $out/bin/storeBackupCheckBackup.pl -c "$latestBackup"
-
-        chmod -R +w restored
-        rm -fr restored
-      }
-
-      testDir=$TMP/testDir
-
-      mkdir $testDir
-      echo X > $testDir/X
-      ln -s ./X $testDir/Y
-
-      backupRestore 'test 1: backup, restore' $testDir
-
-      # test huge blocks, according to docs files bigger than 100MB get split
-      # into pieces
-      dd if=/dev/urandom bs=100M of=block-1 count=1
-      dd if=/dev/urandom bs=100M of=block-2 count=1
-      cat block-1 block-2 > $testDir/block
-      backupRestore 'test 1 with huge block' $testDir
-
-      cat block-2 block-1 > $testDir/block
-      backupRestore 'test 1 with huge block reversed' $testDir
-
-      backupRestore 'test 2: backup, restore' $out
-      backupRestore 'test 3: backup, restore' $out
-      backupRestore 'test 4: backup diffutils to same backup locations, restore' ${diffutils}
     }
-  '';
+    latestBackup(){
+      echo backup/default/$(ls -1 backup/default | sort | tail -n 1)
+    }
+    backup_make(){
+      # $1=source
+      $out/bin/storeBackup.pl --sourceDir "$1" --backupDir "backup"
+    }
+    backup_restore_latest(){
+      $out/bin/storeBackupRecover.pl -b "$(latestBackup)" -t "$1" -r /
+    }
+
+    backup_verify_integrity_latest(){
+      $out/bin/storeBackupCheckBackup.pl -c "$(latestBackup)"
+    }
+    backup_verify_latest(){
+      $out/bin/storeBackupCheckSource.pl -s "$1" -b "$(latestBackup)"
+    }
+
+    . ${import ../test-case.nix { inherit diffutils writeTextFile; }}
+    backup_test backup 100M
+'';
 
   meta = {
     description = "Storebackup is a backup suite that stores files on other disks";
