@@ -1,4 +1,4 @@
-{ fetchurl, stdenv
+{ fetchurl, stdenv, autoconf, automake, libtool
 , openssl, libcap, libnfnetlink, libnetfilter_queue
 }:
 
@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
     name = "${name}.tar.gz";
   };
 
-  buildInputs = [ openssl libcap libnfnetlink libnetfilter_queue ];
+  dontStrip = true;
 
-  preConfigure = "cd user";
+  buildInputs = [ autoconf automake libtool openssl libcap libnfnetlink libnetfilter_queue ];
+
+  patches = [ ./0001-Run-tcpcryptd-under-uid-93-instead-of-666.patch ];
+
+  preConfigure = "cd user; autoreconf -i";
 
   meta = {
     homepage = "http://tcpcrypt.org/";

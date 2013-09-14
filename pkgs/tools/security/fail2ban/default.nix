@@ -9,7 +9,7 @@ pythonPackages.buildPythonPackage {
   src = fetchurl {
     url = "https://github.com/fail2ban/fail2ban/zipball/${version}";
     name = "fail2ban-${version}.zip";
-    sha256 = "1linfz5qxmm4225lzi9vawsa79y41d3rcdahvrzlyqlhb02ipd55";
+    sha256 = "0lbanfshr8kasa1bb7861w3mrm2d0c1bvv4s5703265s8zp5m284";
   };
 
   buildInputs = [ unzip ];

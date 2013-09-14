@@ -20,7 +20,6 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Set attributes of files and directories";
     homepage    = "http://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man1/setfile.1.html";
-    license     = licenses.unfree;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.darwin;
 
@@ -32,4 +31,3 @@ stdenv.mkDerivation {
     '';
   };
 }
-

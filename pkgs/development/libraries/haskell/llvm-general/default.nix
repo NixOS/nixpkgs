@@ -1,16 +1,18 @@
-{ cabal, HUnit, llvmConfig, mtl, parsec, QuickCheck, setenv
-, testFramework, testFrameworkHunit, testFrameworkQuickcheck2, text
-, transformers
+{ cabal, HUnit, llvmConfig, llvmGeneralPure, mtl, parsec
+, QuickCheck, setenv, testFramework, testFrameworkHunit
+, testFrameworkQuickcheck2, transformers, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "llvm-general";
-  version = "3.3.5.0";
-  sha256 = "15zrav7339jn6p75g1d7h3qkr1wyal1jzfs8xy73kckw2fzn4nlf";
-  buildDepends = [ mtl parsec setenv text transformers ];
+  version = "3.3.8.1";
+  sha256 = "1w9wqi9mj673s0bm3j4a5kapl5f65sy8mwjbw7ydism6j5jmxhpk";
+  buildDepends = [
+    llvmGeneralPure mtl parsec setenv transformers utf8String
+  ];
   testDepends = [
-    HUnit mtl QuickCheck testFramework testFrameworkHunit
-    testFrameworkQuickcheck2
+    HUnit llvmGeneralPure mtl QuickCheck testFramework
+    testFrameworkHunit testFrameworkQuickcheck2
   ];
   buildTools = [ llvmConfig ];
   meta = {
