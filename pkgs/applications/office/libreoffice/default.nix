@@ -160,6 +160,7 @@ stdenv.mkDerivation rec {
 
     configureFlagsArray=(
       "--with-parallelism=$NIX_BUILD_CORES"
+      "--with-lang=${langsSpaces}"
     );
   '';
 
@@ -198,7 +199,6 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-lang=${langsSpaces}"
     "--with-vender=NixOS"
 
     # Without these, configure does not finish
