@@ -530,6 +530,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   alsaPcm = callPackage ../development/libraries/haskell/alsa-pcm {};
 
+  amqp = callPackage ../development/libraries/haskell/amqp {};
+
   appar = callPackage ../development/libraries/haskell/appar {};
 
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
