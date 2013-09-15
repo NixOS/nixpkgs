@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.wolfram.com/mathematica/";
     license = "unfree";
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 
 }
