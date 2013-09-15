@@ -8465,6 +8465,10 @@ let
 
   skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
 
+  ssvnc = callPackage ../applications/networking/remote/ssvnc {
+    inherit (xlibs) imake libXt libXmu libXaw libXext;
+  };
+
   st = callPackage ../applications/misc/st {
     conf = config.st.conf or null;
   };
