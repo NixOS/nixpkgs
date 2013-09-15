@@ -2189,17 +2189,18 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
-
-  flexget = buildPythonPackage (rec {
-    name = "FlexGet-1.0.3353";
+  flexget = buildPythonPackage rec {
+    name = "FlexGet-1.1.121";
 
     src = fetchurl {
-      url = "http://download.flexget.com/archive/${name}.tar.gz";
-      md5 = "cffc4e51b5c5efddb339d265524e46b8";
+      url = "https://pypi.python.org/packages/source/F/FlexGet/${name}.tar.gz";
+      md5 = "44521bcbc2c1e941b656ecfa358adcaa";
     };
 
     buildInputs = [ nose ];
-    propagatedBuildInputs = [ beautifulsoup4 pyrss2gen feedparser pynzb html5lib dateutil beautifulsoup flask jinja2 requests sqlalchemy pyyaml cherrypy progressbar deluge ];
+    propagatedBuildInputs = [ beautifulsoup4 pyrss2gen feedparser pynzb html5lib dateutil
+        beautifulsoup flask jinja2 requests sqlalchemy pyyaml cherrypy progressbar deluge
+        python_tvrage jsonschema ];
 
     meta = {
       homepage = http://flexget.com/;
@@ -2207,8 +2208,51 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       license = stdenv.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
+  };
+
+  python_tvrage = buildPythonPackage (rec {
+    version = "0.4.1";
+    name = "tvrage-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-tvrage/python-tvrage-${version}.tar.gz";
+      md5 = "cdfec252158c5047b626861900186dfb";
+    };
+
+    # has mostly networking dependent tests
+    doCheck = false;
+    propagatedBuildInputs = [ beautifulsoup ];
+
+    meta = {
+      homepage = https://github.com/ckreutzer/python-tvrage;
+      description = "Client interface for tvrage.com's XML-based api feeds";
+      license = stdenv.lib.licenses.bsd3;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
   });
 
+  jsonschema = buildPythonPackage (rec {
+    version = "2.0.0";
+    name = "jsonschema-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jsonschema/jsonschema-${version}.tar.gz";
+      md5 = "1793d97a668760ef540fadd342aa08e5";
+    };
+
+    buildInputs = [ nose mock ];
+
+    checkPhase = ''
+      nosetests
+    '';
+
+    meta = {
+      homepage = https://github.com/Julian/jsonschema;
+      description = "An implementation of JSON Schema validation for Python";
+      license = stdenv.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  });
 
   flup = buildPythonPackage (rec {
     name = "flup-1.0.2";
