@@ -122,8 +122,5 @@ stdenv.mkDerivation rec {
     description = "Wolfram Mathematica computational software system";
     homepage = "http://www.wolfram.com/mathematica/";
     license = "unfree";
-
-    platforms = stdenv.lib.platforms.linux;
   };
-
 }
