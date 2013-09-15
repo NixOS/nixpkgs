@@ -8,10 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1ll22hcfslyl9n3pgvvphzdp18w9cyic8m0qimfnb8mrs1syrdz5";
   };
 
-  nativeBuildInputs = [ m4 ] ++ stdenv.lib.optionals doCheck [perl flex];
+  nativeBuildInputs = [ m4 perl ] ++ stdenv.lib.optionals doCheck [ flex ];
   propagatedBuildInputs = [ m4 ];
 
-  doCheck = true;
+  doCheck = flex != null;
 
   meta = {
     homepage = "http://www.gnu.org/software/bison/";
