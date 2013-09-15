@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "1hp6325gdkzx8yqn2d2r915ak3k6hfshjjh0sc54z3vr0i99688h";
   };
 
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango cairo ]
+  buildInputs = [ libxml2 libgsf bzip2 libcroco pango ]
     ++ stdenv.lib.optional enableIntrospection [ gobjectIntrospection ];
 
-  propagatedBuildInputs = [ glib gdk_pixbuf gtk2 gtk3 ];
+  propagatedBuildInputs = [ glib gdk_pixbuf cairo gtk2 gtk3 ];
 
   nativeBuildInputs = [ pkgconfig ];
 
