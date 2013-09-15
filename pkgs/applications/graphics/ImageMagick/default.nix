@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     sha256 = "1bpj8676mph5cvyjsdgf27i6yg2iw9iskk5c69mvpxkyawgjw1vg";
   };
 
+  preConfigure = if tetex != null then
+    ''
+      export DVIDecodeDelegate=${tetex}/bin/dvips
+    '' else "";
+
   configureFlags = "" + stdenv.lib.optionalString (ghostscript != null && stdenv.system != "x86_64-darwin") ''
     --with-gs-font-dir=${ghostscript}/share/ghostscript/fonts
     --with-gslib
@@ -41,10 +46,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ tetex graphviz ];
 
-  preConfigure = if tetex != null then
-    ''
-      export DVIDecodeDelegate=${tetex}/bin/dvips
-    '' else "";
+  postInstall = ''(cd "$out/include" && ln -s ImageMagick* ImageMagick)'';
 
   meta = {
     homepage = http://www.imagemagick.org/;
