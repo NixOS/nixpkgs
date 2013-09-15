@@ -19,6 +19,7 @@ stdenv.mkDerivation {
       libcap_ng
     ];
 
+  # see http://www.mail-archive.com/libvir-list@redhat.com/msg83693.html
   patches = [ ./securtyfs_userns.patch ];
 
   preConfigure =
