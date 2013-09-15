@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     # non-copyleft, BSD-style
     license = "permissive";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

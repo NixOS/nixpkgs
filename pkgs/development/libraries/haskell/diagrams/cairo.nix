@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-cairo";
-  version = "0.6";
-  sha256 = "0fxqwkv2cpgpkr80q828rm91ybn7j0dwj1p5ysc3648w28jvhkil";
+  version = "0.7";
+  sha256 = "14ghcrzzpqdnvmpvykhf4r74sb9jgp69094mkwydslzmi8dsgdiy";
   buildDepends = [
     cairo cmdargs colour diagramsCore diagramsLib filepath mtl split
     time

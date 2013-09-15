@@ -1,11 +1,15 @@
-{ cabal, QuickCheck, testFramework, testFrameworkQuickcheck2 }:
+{ cabal, byteable, cryptoCipherTests, cryptoCipherTypes, QuickCheck
+, securemem, testFramework, testFrameworkQuickcheck2
+}:
 
 cabal.mkDerivation (self: {
   pname = "cipher-aes";
-  version = "0.1.8";
-  sha256 = "171mj9abm0x9bg6mf225mhb25i7xh4v5la5866llb1qrrpvsk1xf";
+  version = "0.2.5";
+  sha256 = "1ayypdfn2nnxp595dpyivmzw2jc4iyjz2in3z7ldccx36gn5j6b3";
+  buildDepends = [ byteable cryptoCipherTypes securemem ];
   testDepends = [
-    QuickCheck testFramework testFrameworkQuickcheck2
+    byteable cryptoCipherTests cryptoCipherTypes QuickCheck
+    testFramework testFrameworkQuickcheck2
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-cipher-aes";

@@ -18,6 +18,9 @@
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 
+# dependency for version 30
+, file
+
 # package customization
 , channel ? "stable"
 , enableSELinux ? false, libselinux ? null
@@ -85,9 +88,9 @@ let
   libExecPath = "$out/libexec/${packageName}";
 
   # user namespace sandbox patch
-  userns_patch = if versionOlder sourceInfo.version "29.0.0.0"
-                 then ./sandbox_userns.patch
-                 else ./sandbox_userns_29.patch;
+  userns_patch = if versionOlder sourceInfo.version "30.0.0.0"
+                 then ./sandbox_userns_29.patch
+                 else ./sandbox_userns_30.patch;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
@@ -115,20 +118,25 @@ in stdenv.mkDerivation rec {
     ++ optionals gnomeSupport [ gconf libgcrypt ]
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
-    ++ optional pulseSupport pulseaudio;
+    ++ optional pulseSupport pulseaudio
+    ++ optional (!versionOlder sourceInfo.version "30.0.0.0") file;
 
   opensslPatches = optional useOpenSSL openssl.patches;
 
   prePatch = "patchShebangs .";
 
-  patches = [ userns_patch ]
-         ++ optional cupsSupport ./cups_allow_deprecated.patch;
+  patches = [ userns_patch ];
 
   postPatch = ''
     sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
     sed -i -e 's|/usr/bin/gcc|gcc|' third_party/WebKit/Source/core/core.gypi
   '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
+  '' + optionalString (!versionOlder sourceInfo.version "30.0.0.0") ''
+    sed -i -e '/base::FilePath exe_dir/,/^ *} *$/c \
+      sandbox_binary = \
+        base::FilePath("'"${libExecPath}/${packageName}_sandbox"'");
+    ' content/browser/browser_main_loop.cc
   '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
@@ -207,7 +215,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Chromium, an open source web browser";
+    description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
     maintainers = with maintainers; [ goibhniu chaoflow aszlig ];
     license = licenses.bsd3;

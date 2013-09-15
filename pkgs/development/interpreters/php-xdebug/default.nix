@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     phpize
     ./configure --prefix=$out
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # looks for this file for some reason -- isn't needed
+    touch unix.h
   '';
 
   buildPhase = ''

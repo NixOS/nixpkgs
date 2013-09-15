@@ -1,7 +1,7 @@
 { cabal, aeson, async, blazeBuilder, bloomfilter, bup
 , caseInsensitive, clientsession, cryptoApi, curl, dataDefault
 , dataenc, DAV, dbus, dlist, dns, editDistance
-, extensibleExceptions, filepath, git, gnupg1, gnutls, hamlet
+, extensibleExceptions, feed, filepath, git, gnupg1, gnutls, hamlet
 , hinotify, hS3, hslogger, HTTP, httpConduit, httpTypes, HUnit
 , IfElse, json, lsof, MissingH, MonadCatchIOTransformers
 , monadControl, mtl, network, networkInfo, networkMulticast
@@ -9,27 +9,27 @@
 , rsync, SafeSemaphore, SHA, stm, text, time, transformers
 , unixCompat, utf8String, uuid, wai, waiLogger, warp, which
 , xmlConduit, xmlTypes, yesod, yesodCore, yesodDefault, yesodForm
-, yesodStatic
+, yesodStatic, fetchurl, perl
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "4.20130709";
-  sha256 = "1xsv5wi0sipp71p7yw90cwd4spm4sr0kcqj47zyd19mgdyd80p9i";
+  version = "4.20130909";
+  sha256 = "0rqbaz4hqfv1nxks62bx282vsvv7vzaxxz1576wk93f659rd06jp";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     aeson async blazeBuilder bloomfilter caseInsensitive clientsession
     cryptoApi dataDefault dataenc DAV dbus dlist dns editDistance
-    extensibleExceptions filepath gnutls hamlet hinotify hS3 hslogger
-    HTTP httpConduit httpTypes HUnit IfElse json MissingH
+    extensibleExceptions feed filepath gnutls hamlet hinotify hS3
+    hslogger HTTP httpConduit httpTypes HUnit IfElse json MissingH
     MonadCatchIOTransformers monadControl mtl network networkInfo
     networkMulticast networkProtocolXmpp QuickCheck random regexTdfa
     SafeSemaphore SHA stm text time transformers unixCompat utf8String
     uuid wai waiLogger warp xmlConduit xmlTypes yesod yesodCore
     yesodDefault yesodForm yesodStatic
   ];
-  buildTools = [ bup curl git gnupg1 lsof openssh rsync which ];
+  buildTools = [ bup curl git gnupg1 lsof openssh rsync which perl ];
   configureFlags = "-fS3
                     -fWebDAV
                     -fInotify
@@ -49,6 +49,9 @@ cabal.mkDerivation (self: {
     cp dist/build/git-annex/git-annex git-annex
     ./git-annex test
   '';
+  patches = [ (fetchurl { url = "https://github.com/joeyh/git-annex/commit/e4d0b2f180627472b017af8bcfc2ae3fc04d6767.patch";
+                          sha256 = "08lz0zq5y3b3wgi1vbzka7kyihkhzjv02pmq8ab02674yrqrnr5k"; })
+            ];
   meta = {
     homepage = "http://git-annex.branchable.com/";
     description = "manage files with git, without checking their contents into git";

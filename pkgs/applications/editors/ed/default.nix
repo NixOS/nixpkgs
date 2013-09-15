@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/ed/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

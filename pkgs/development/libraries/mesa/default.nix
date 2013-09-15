@@ -3,7 +3,7 @@
 , libdrm, xorg, wayland, udev, llvm, libffi
 , libvdpau
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
-, enableR600LlvmCompiler ? false # we would need currently unreleased LLVM or patches
+, enableR600LlvmCompiler ? false # current llvm-3.3 + mesa-9.1.6 don't configure
 , enableExtraFeatures ? false # add ~15 MB to mesa_drivers
 }:
 
@@ -23,7 +23,8 @@ else
 */
 
 let
-  version = "9.1.3";
+  version = "9.1.6";
+  # this is the default search path for DRI drivers (note: X server introduces an overriding env var)
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
 stdenv.mkDerivation {
@@ -31,7 +32,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256="0rnpaambxv5cd6kbfyvv4b8x2rw1xj13a67xbkzmndfh08iaqpcd";
+    sha256 = "0gay00fy84hrnp25hpacz5cbvxrpvgg1d390vichmbdgmkqdycp6";
   };
 
   prePatch = "patchShebangs .";
@@ -134,10 +135,12 @@ stdenv.mkDerivation {
         patchelf --set-rpath "$(patchelf --print-rpath $lib):$drivers/lib" "$lib"
       fi
     done
+  '' + /* set the default search path for DRI drivers; used e.g. by X server */ ''
+    substituteInPlace "$out/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
   '';
   #ToDo: @vcunat isn't sure if drirc will be found when in $out/etc/, but it doesn't seem important ATM
 
-  passthru = { inherit libdrm; inherit version; };
+  passthru = { inherit libdrm version driverLink; };
 
   meta = {
     description = "An open source implementation of OpenGL";

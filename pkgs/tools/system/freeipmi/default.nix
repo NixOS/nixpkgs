@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv3+";
 
-    maintainers = with stdenv.lib.maintainers; [ raskin ludo ];
+    maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

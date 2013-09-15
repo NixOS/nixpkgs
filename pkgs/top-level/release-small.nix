@@ -93,6 +93,7 @@ with (import ./release-lib.nix);
   qemu_kvm = linux;
   less = all;
   lftp = all;
+  liblapack = linux;
   libtool = all;
   libtool_2 = all;
   libxml2 = all;

@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = http://texmacs.org/;
     license = "GPLv2+";
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.roconnor ];
+    maintainers = [ stdenv.lib.maintainers.roconnor ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

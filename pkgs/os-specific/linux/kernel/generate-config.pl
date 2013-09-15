@@ -54,8 +54,8 @@ sub runConfig {
         if ($s eq "\n") {
             print STDERR "GOT: $line" if $debug;
 
-            # Remember choice alternatives ("> 1. bla (FOO)" or " 2. bla (BAR)").
-            if ($line =~ /^\s*>?\s*(\d+)\.\s+.*\(([A-Za-z0-9_]+)\)$/) {
+            # Remember choice alternatives ("> 1. bla (FOO)" or " 2. bla (BAR) (NEW)").
+            if ($line =~ /^\s*>?\s*(\d+)\.\s+.*?\(([A-Za-z0-9_]+)\)(?:\s+\(NEW\))?\s*$/) {
                 $choices{$2} = $1;
             }
 

@@ -134,8 +134,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       imap = {
-        configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ];
-        buildInputs = [ uwimap openssl pam ];
+        configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ]
+          # uwimap builds with kerberos on darwin
+          ++ stdenv.lib.optional (stdenv.isDarwin) "--with-kerberos";
+        buildInputs = [ uwimap openssl ]
+          ++ stdenv.lib.optional (!stdenv.isDarwin) pam;
       };
 
       intl = {
@@ -205,6 +208,9 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
     ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out $configureFlags
     echo configurePhase end
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # don't build php.dSYM as the php binary
+    sed -i 's/EXEEXT = \.dSYM/EXEEXT =/' Makefile
   '';
 
   installPhase = ''

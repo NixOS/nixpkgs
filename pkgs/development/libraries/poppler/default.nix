@@ -4,14 +4,14 @@
 }:
 
 let
-  version = "0.22.4"; # even major numbers are stable
-  sha256 = "0fz1vk0rbxvnv7ssj8l910k1rx0gjhzl5wr7hkdf4r9jwqs8yhsg";
+  version = "0.24.1"; # even major numbers are stable
+  sha256 = "1ipzirrh5ppkq99zb59xpfg5j2fgc8mr569r1cmxjjqql0dc1vsw";
 
   qtcairo_patches =
     let qtcairo = fetchgit { # the version for poppler-0.22
       url = "git://github.com/giddie/poppler-qt4-cairo-backend.git";
-      rev = "7a12c58e5cefc2b7a5179c53b387fca8963195c0";
-      sha256 = "1jg2d5y62d0bv206nijb63x426zfb2awy70505nx22d0fx1v1p9k";
+      rev = "ad9a9ba0628df33522f4b7722cb0cd027269babe";
+      sha256 = "072p7x9902avg2r1ma5br97q8nm8sbk19y0qi4b4g9x2xj2fpajq";
     }; in
       [ "${qtcairo}/0001-Cairo-backend-added-to-Qt4-wrapper.patch"
         "${qtcairo}/0002-Setting-default-Qt4-backend-to-Cairo.patch"
@@ -22,7 +22,7 @@ let
     name = "poppler-${nameSuff}-${version}";
 
     src = fetchurl {
-      url = "${meta.homepage}/poppler-${version}.tar.gz";
+      url = "${meta.homepage}/poppler-${version}.tar.xz";
       inherit sha256;
     };
 

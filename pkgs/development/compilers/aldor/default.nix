@@ -1,4 +1,5 @@
-{ fetchgit, stdenv, gmp, which, flex, bison, makeWrapper }:
+{ fetchgit, stdenv, gmp, which, flex, bison, makeWrapper
+, autoconf, automake, libtool, openjdk, perl }:
 
 stdenv.mkDerivation {
   name = "aldor-1.1.0";
@@ -6,21 +7,22 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/pippijn/aldor";
     sha256 = "14xv3jl15ib2knsdz0bd7jx64zg1qrr33q5zcr8gli860ps8gkg3";
-    rev = "a02b088c8d5d06f16c50a83ddee4019e962d6673";
+    rev = "f7b95835cf709654744441ddb1c515bfc2bec998";
   };
 
-  buildInputs = [ gmp which flex bison makeWrapper ];
+  buildInputs = [ gmp which flex bison makeWrapper autoconf automake libtool
+                  openjdk perl ];
 
-  installPhase = ''
-    for d in bin include lib ;
-    do
-      ensureDir $out/$d ;
-      cp -r build/$d $out/ ;
-    done
+  preConfigure = ''
+    cd aldor ;
+    ./autogen.sh ;
+  '';
 
-    for prog in aldor unicl zacc ;
+  postInstall = ''
+    for prog in aldor unicl javagen ;
     do
       wrapProgram $out/bin/$prog --set ALDORROOT $out \
+        --prefix PATH : ${openjdk}/bin \
         --prefix PATH : ${stdenv.gcc}/bin ;
     done
   '';

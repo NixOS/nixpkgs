@@ -1,12 +1,13 @@
 args : with args;
 rec {
-  phaseNames = ["doAggregate"];
   name = "TeXLive-linkdir";
 
-  buildInputs = lib.closePropagation paths;
+  buildInputs = lib.closePropagation paths
+    ++ stdenv.lib.optional stdenv.isDarwin makeWrapper;
+
+  phaseNames = [ "doAggregate" ];
 
   doAggregate = fullDepEntry (''
-
     mkdir -p $out/bin
     for currentPath in ${lib.concatStringsSep " " buildInputs}; do
         echo Symlinking "$currentPath"
@@ -54,7 +55,13 @@ rec {
     yes | PATH=$PATH:$out/bin mktexlsr $out/texmf*
     yes | TEXMFCONFIG=$out/texmf-config HOME=$PWD PATH=$PATH:$out/bin updmap --syncwithtrees
     yes | PATH=$PATH:$out/bin mktexlsr $out/texmf*
-  '') ["minInit" "defEnsureDir" "addInputs"];
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # did the same thing in texLive, but couldn't get it to carry to the
+    # binaries installed by texLiveFull
+    for prog in $out/bin/*; do
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${poppler}/lib"
+    done
+  '' ) [ "minInit" "defEnsureDir" "addInputs" ];
 
   meta = {
     description = "TeX distribution directory";

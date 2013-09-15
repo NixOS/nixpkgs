@@ -1,16 +1,20 @@
-{stdenv, fetchurl, pkgconfig, bluez, libusb}:
+{stdenv, fetchurl, pkgconfig, bluez, libusb, cmake}:
    
 stdenv.mkDerivation rec {
-  name = "openobex-1.5";
+  name = "openobex-1.7.1";
    
   src = fetchurl {
-    url = "mirror://kernel/linux/bluetooth/${name}.tar.gz";
-    sha256 = "0rayjci99ahhvs2d16as1qql3vrcizd0nhi8n3n4g6krf1sh80p6";
+    url = "mirror://sourceforge/openobex/${name}-Source.tar.gz";
+    sha256 = "0mza0mrdrbcw4yix6qvl31kqy7bdkgxjycr0yx7yl089v5jlc9iv";
   };
 
-  buildInputs = [pkgconfig bluez libusb];
+  buildInputs = [pkgconfig bluez libusb cmake];
 
   configureFlags = "--enable-apps";
+
+  patchPhase = ''
+    sed -i "s!/lib/udev!$out/lib/udev!" udev/CMakeLists.txt
+    '';
 
   meta = {
     homepage = http://dev.zuckschwerdt.org/openobex/;

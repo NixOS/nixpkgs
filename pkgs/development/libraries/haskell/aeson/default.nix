@@ -5,15 +5,15 @@
 
 cabal.mkDerivation (self: {
   pname = "aeson";
-  version = "0.6.1.0";
-  sha256 = "16hjwcybmgmk1sg8x02r9bxisx4gl61rlq8w2zsxfgkxwjpfhkbx";
+  version = "0.6.2.0";
+  sha256 = "1f7bzgwl9pm5a79gr3a8wxh7dyz4k2508d0bw4l0mbjgv6r7s4an";
   buildDepends = [
     attoparsec blazeBuilder deepseq dlist hashable mtl syb text time
     unorderedContainers vector
   ];
   testDepends = [
     attoparsec QuickCheck testFramework testFrameworkQuickcheck2 text
-    time
+    time unorderedContainers vector
   ];
   doCheck = false;
   meta = {

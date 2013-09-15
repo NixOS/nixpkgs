@@ -1,0 +1,48 @@
+#! @shell@ -e
+
+chrootenvDest=/run/chrootenv/@name@
+
+# Create some mount points for stuff that must be bind mounted
+mkdir -p $chrootenvDest/{nix/store,dev,proc,sys,host-etc,home,var,run}
+
+# Symlink the software that should be part of the chroot system profile
+for i in @chrootEnv@/sw/*
+do
+    if [ "$i" != "@chrootEnv@/sw/etc" ] && [ "$i" != "@chrootEnv@/sw/var" ]
+    then
+        ln -s "$i" "$chrootenvDest"
+    fi
+done
+
+# Symlink the contents of the chroot software's /etc
+
+mkdir $chrootenvDest/etc
+
+for i in @chrootEnv@/sw/etc/*
+do
+    ln -s "$i" $chrootenvDest/etc
+done
+
+# Symlink some NSS stuff
+ln -s ../host-etc/passwd $chrootenvDest/etc/passwd
+ln -s ../host-etc/group $chrootenvDest/etc/group
+ln -s ../host-etc/shadow $chrootenvDest/etc/shadow
+ln -s ../host-etc/hosts $chrootenvDest/etc/hosts
+ln -s ../host-etc/resolv.conf $chrootenvDest/etc/resolv.conf
+ln -s ../host-etc/nsswitch.conf $chrootenvDest/etc/nsswitch.conf
+
+# Symlink PAM stuff
+rm $chrootenvDest/etc/pam.d
+ln -s ../host-etc/static/pam.d $chrootenvDest/etc/pam.d
+
+# Symlink Font stuff
+mkdir $chrootenvDest/etc/fonts
+ln -s ../../host-etc/static/fonts/fonts.conf $chrootenvDest/etc/fonts
+mkdir $chrootenvDest/etc/fonts/conf.d
+ln -s ../../../host-etc/static/fonts/conf.d/00-nixos.conf $chrootenvDest/etc/fonts/conf.d
+
+# Create root folder
+mkdir $chrootenvDest/root
+
+# Create tmp folder
+mkdir -m1777 $chrootenvDest/tmp

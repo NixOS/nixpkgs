@@ -3,11 +3,11 @@
 let edf = composableDerivation.edf; in
 
 composableDerivation.composableDerivation {} rec {
-  name="avrdude-5.10";
+  name="avrdude-5.11";
 
   src = fetchurl {
     url = "mirror://savannah/avrdude/${name}.tar.gz";
-    sha256 = "0pmy73777x8p7f2aj2w2q1dnk1bvhd1cm7hcs1s9hsdqsmiinl41";
+    sha256 = "1mwmslqysak25a3x61pj97wygqgk79s5qpp50xzay6yb1zrz85v3";
   };
 
   configureFlags = [ "--disable-dependency-tracking" ];

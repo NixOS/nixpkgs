@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib gtk3 cairo clutter_gtk sqlite libsoup ];
 
+  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
+
   meta = {
     homepage = http://projects.gnome.org/libchamplain/;
     license = "LGPLv2+";
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
          OpenCycleMap, OpenAerialMap, and Maps for free.
       '';
 
-     maintainers = [ stdenv.lib.maintainers.ludo ];
+     maintainers = [ ];
      platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

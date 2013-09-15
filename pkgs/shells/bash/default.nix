@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv3+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 
   passthru = {

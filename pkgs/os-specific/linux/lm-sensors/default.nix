@@ -1,13 +1,13 @@
 { stdenv, fetchurl, bison, flex, which, perl }:
 
-let version = "3.3.1"; in
+let version = "3.3.4"; in
 
 stdenv.mkDerivation rec {
-  name = "lm-sensors-3.3.1";
+  name = "lm-sensors-${version}";
   
   src = fetchurl {
     url = "http://dl.lm-sensors.org/lm-sensors/releases/lm_sensors-${version}.tar.bz2";
-    sha256 = "13v2gszagmx8hwjyzh2k47rdpc2kyg9zky3kdqhdbgzp8lwpik6g";
+    sha256 = "0vd7dgpcri7cbvgl5fwvja53lqz829vkbbp17x7b5r2xrc88cq5l";
   };
 
   buildInputs = [ bison flex which perl ];

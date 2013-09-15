@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext
-, expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, xlibs, x11
+, expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, xlibs, x11, gobjectIntrospection
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 }:
@@ -8,16 +8,16 @@ assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
-  name = "gtk+-3.8.2";
+  name = "gtk+-3.8.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/3.8/${name}.tar.xz";
-    sha256 = "15zjmyky4yw70ipi12dllira4av8wjpw5f7g9kbrbpx12nf0ra0w";
+    sha256 = "1qlj0qdhkp8j5xiris4l4xnx47g4pbk4qnj3nf8rwa82fwb610xh";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection ];
   propagatedBuildInputs = with xlibs; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk ]
     ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor ]
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
     license = "LGPLv2+";
 
-    maintainers = with stdenv.lib.maintainers; [urkud raskin];
+    maintainers = with stdenv.lib.maintainers; [ urkud raskin vcunat];
     platforms = stdenv.lib.platforms.all;
   };
 }

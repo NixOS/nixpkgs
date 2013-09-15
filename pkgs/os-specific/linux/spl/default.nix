@@ -1,10 +1,10 @@
 { stdenv, fetchurl, kernelDev, perl, autoconf, automake, libtool, coreutils, gawk }:
 
 stdenv.mkDerivation {
-  name = "spl-0.6.1-${kernelDev.version}";
+  name = "spl-0.6.2-${kernelDev.version}";
   src = fetchurl {
-    url = "http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-0.6.1.tar.gz";
-    sha256 = "1bnianc00bkpdbcmignzqfv9yr8h6vj56wfl7lkhi9a5m5b3xakb";
+    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-0.6.2.tar.gz;
+    sha256 = "196scl8q0bkkak6m0p1l1fz254cgsizqm73bf9wk3iynamq7qmrw";
   };
 
   patches = [ ./install_prefix.patch ];
@@ -26,6 +26,8 @@ stdenv.mkDerivation {
      --with-linux=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build
      --with-linux-obj=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Kernel module driver for solaris porting layer (needed by in-kernel zfs)";

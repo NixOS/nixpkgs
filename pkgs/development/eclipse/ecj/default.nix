@@ -54,6 +54,6 @@ EOF
       # http://www.eclipse.org/legal/epl-v10.html (free software, copyleft)
       license = "EPLv1.0";
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   }

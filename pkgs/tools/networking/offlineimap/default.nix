@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   version = "6.5.5-rc2";
   name = "offlineimap-${version}";
+  namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/OfflineIMAP/offlineimap/tarball/v${version}";

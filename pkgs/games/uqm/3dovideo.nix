@@ -1,4 +1,4 @@
-{ stdenv, requireFile, writeText, fetchgit, haskellPackages }:
+{ stdenv, requireFile, writeText, fetchurl, haskellPackages }:
 
 with stdenv.lib;
 
@@ -19,10 +19,9 @@ let
     pname = "uqm3donix";
     version = "0.1.0.0";
 
-    src = fetchgit {
-      url = "git://github.com/aszlig/uqm3donix.git";
-      rev = "97fc4fd736dcf9fe03e6e5a2c347c5bdc71c8366";
-      sha256 = "09ws6j21mxkcjx444fxkf8a3q17jj6i7h2i9pf5ky52f6xds1h0j";
+    src = fetchurl {
+      url = "https://github.com/aszlig/uqm3donix/archive/v0.1.0.0.tar.gz";
+      sha256 = "0d40gpc3bqkw68varjxwgbdzxw0dvwqksijmvij5ixmlcspbjgvb";
     };
 
     isLibrary = false;

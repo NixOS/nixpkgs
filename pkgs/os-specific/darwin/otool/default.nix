@@ -1,7 +1,11 @@
 { stdenv }:
 
-# this tool only exists on darwin
 assert stdenv.isDarwin;
+/*  this tool only exists on darwin
+    NOTE: it might make sense to compile this from source (maybe it even works for non-darwin)
+    I see cctools source is under GPL2+ as well as APSL 2.0
+    http://opensource.apple.com/release/developer-tools-46/
+*/
 
 stdenv.mkDerivation {
   name = "otool";
@@ -20,7 +24,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Object file displaying tool";
     homepage    = https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/otool.1.html;
-    license     = licenses.unfree;
+    license     = with licenses; [ apsl20 gpl2Plus ];
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.darwin;
 

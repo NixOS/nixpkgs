@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     hashtables languageCQuote mainlandPretty mtl SafeSemaphore srcloc
     text transformers unorderedContainers
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/AccelerateHS/accelerate-cuda/";
     description = "Accelerate backend for NVIDIA GPUs";

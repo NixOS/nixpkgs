@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "mongoDB";
-  version = "1.4.1";
-  sha256 = "1r1ywqy3igcmmwxjy4fjqdnf8m4zqbc8l0nj43h2xwrl86lhfym9";
+  version = "1.4.1.1";
+  sha256 = "1c9980x3i0jgacgz7mx65l5nyp3h83mqp9b52pzxq90lix6xnwhi";
   buildDepends = [
     binary bson cryptohash liftedBase monadControl mtl network parsec
     random randomShuffle text transformersBase

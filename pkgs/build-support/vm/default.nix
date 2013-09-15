@@ -1,5 +1,5 @@
 { pkgs
-, kernel ? pkgs.linux_3_9
+, kernel ? pkgs.linux_3_10
 , img ? "bzImage"
 , rootModules ?
     [ "virtio_pci" "virtio_blk" "virtio_balloon" "ext4" "unix" "9p" "9pnet_virtio" ]
@@ -9,9 +9,9 @@ with pkgs;
 
 rec {
 
-  kvm = pkgs.qemu;
+  qemu = pkgs.qemu_kvm;
 
-  qemuProg = "${kvm}/bin/qemu-system-" + (if stdenv.system == "x86_64-linux" then "x86_64" else "i386");
+  qemuProg = "${qemu}/bin/qemu-kvm";
 
 
   modulesClosure = makeModulesClosure {
@@ -91,8 +91,8 @@ rec {
       esac
     done
 
+    echo "loading kernel modules..."
     for i in $(cat ${modulesClosure}/insmod-list); do
-      echo "loading module $(basename $i .ko)"
       insmod $i
     done
 
@@ -114,14 +114,14 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs/nix/store
-    mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,msize=262144,cache=fscache
+    mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,msize=262144,cache=loose
 
     mkdir -p /fs/tmp
     mount -t tmpfs -o "mode=755" none /fs/tmp
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=262144,cache=fscache
+    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=262144,cache=loose
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -133,7 +133,7 @@ rec {
     ln -sf /proc/mounts /fs/etc/mtab
     echo "127.0.0.1 localhost" > /fs/etc/hosts
 
-    echo "Now running: $command"
+    echo "starting stage 2 ($command)"
     test -n "$command"
 
     set +e
@@ -188,7 +188,6 @@ rec {
 
   qemuCommandLinux = ''
     ${qemuProg} \
-      -enable-kvm \
       ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
       -nographic -no-reboot \
       -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
@@ -196,7 +195,7 @@ rec {
       -drive file=$diskImage,if=virtio,cache=writeback,werror=report \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk" \
+      -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
 
@@ -242,7 +241,7 @@ rec {
   createEmptyImage = {size, fullName}: ''
     mkdir $out
     diskImage=$out/disk-image.qcow2
-    ${kvm}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
+    ${qemu}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
 
     mkdir $out/nix-support
     echo "${fullName}" > $out/nix-support/full-name
@@ -362,7 +361,7 @@ rec {
       diskImage=$(pwd)/disk-image.qcow2
       origImage=${attrs.diskImage}
       if test -d "$origImage"; then origImage="$origImage/disk-image.qcow2"; fi
-      ${kvm}/bin/qemu-img create -b "$origImage" -f qcow2 $diskImage
+      ${qemu}/bin/qemu-img create -b "$origImage" -f qcow2 $diskImage
     '';
 
     /* Inside the VM, run the stdenv setup script normally, but at the
@@ -459,7 +458,7 @@ rec {
     fi
     diskImage="$1"
     if ! test -e "$diskImage"; then
-      ${kvm}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 "$diskImage"
+      ${qemu}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 "$diskImage"
     fi
     export TMPDIR=$(mktemp -d)
     export out=/dummy
@@ -599,8 +598,17 @@ rec {
             debs="$debs /inst/$i";
           done
           chroot=$(type -tP chroot)
+
+          # Create a fake start-stop-daemon script, as done in debootstrap.
+          mv "/mnt/sbin/start-stop-daemon" "/mnt/sbin/start-stop-daemon.REAL"
+          echo "#!/bin/true" > "/mnt/sbin/start-stop-daemon"
+          chmod 755 "/mnt/sbin/start-stop-daemon"
+
           PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
             /usr/bin/dpkg --install --force-all $debs < /dev/null || true
+
+          # Move the real start-stop-daemon back into its place.
+          mv "/mnt/sbin/start-stop-daemon.REAL" "/mnt/sbin/start-stop-daemon"
         done
 
         echo "running post-install script..."
@@ -1394,22 +1402,22 @@ rec {
     };
 
     debian70i386 = {
-      name = "debian-7.0.0-wheezy-i386";
-      fullName = "Debian 7.0.0 Wheezy (i386)";
+      name = "debian-7.1.0-wheezy-i386";
+      fullName = "Debian 7.1.0 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "712939639e2cc82615c85bdf81edf31edef0fda003ac2b32998e438aee403ab8";
+        sha256 = "c2751c48805b41c3eddd31cfe92ffa46df13a7d6ce7896b8dc5ce4b2f7f329c5";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian70x86_64 = {
-      name = "debian-7.0.0-wheezy-amd64";
-      fullName = "Debian 7.0.0 Wheezy (amd64)";
+      name = "debian-7.1.0-wheezy-amd64";
+      fullName = "Debian 7.1.0 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "e79132f7db6655013be1f75feb9812b071386525246d8639679b322487d2732a";
+        sha256 = "9b15b4348cadbcf170c9e83d6fbcb64efac2b787ebdfef16ba21dd70dfca0001";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

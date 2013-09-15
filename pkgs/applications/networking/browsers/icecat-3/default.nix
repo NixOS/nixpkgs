@@ -107,7 +107,7 @@ stdenv.mkDerivation {
     homepage = http://www.gnu.org/software/gnuzilla/;
     licenses = [ "GPLv2+" "LGPLv2+" "MPLv1+" ];
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;
   };
 

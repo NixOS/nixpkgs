@@ -1,7 +1,7 @@
 source $stdenv/setup
 
 
-makeFlags="ARCH=$arch SHELL=/bin/sh $makeFlags"
+makeFlags="ARCH=$arch SHELL=/bin/sh KBUILD_BUILD_VERSION=1-NixOS $makeFlags"
 if [ -n "$crossConfig" ]; then
   makeFlags="$makeFlags CROSS_COMPILE=$crossConfig-"
 fi
@@ -10,26 +10,24 @@ postPatch() {
     # Makefiles are full of /bin/pwd, /bin/false, /bin/bash, etc.
     # Patch these away, assuming the tools are in $PATH.
     for mf in $(find -name Makefile); do
-	echo "stripping FHS paths in \`$mf'..."
-	sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g'
+        echo "stripping FHS paths in \`$mf'..."
+        sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g'
     done
 }
 
 configurePhase() {
     if test -n "$preConfigure"; then
-        eval "$preConfigure";
+        eval "$preConfigure"
     fi
 
     export INSTALL_PATH=$out
     export INSTALL_MOD_PATH=$out
-
 
     # Set our own localversion, if specified.
     rm -f localversion*
     if test -n "$localVersion"; then
         echo "$localVersion" > localversion-nix
     fi
-
 
     # Patch kconfig to print "###" after every question so that
     # generate-config.pl can answer them.
@@ -70,14 +68,9 @@ installPhase() {
     cp vmlinux $out
 
     if grep -q "CONFIG_MODULES=y" .config; then
-        # Install the modules in $out/lib/modules with matching paths
-        # in modules.dep (i.e., refererring to $out/lib/modules, not
-        # /lib/modules).  The depmod_opts= is to prevent the kernel
-        # from passing `-b PATH' to depmod.
-        export MODULE_DIR=$out/lib/modules/
-        substituteInPlace Makefile --replace '-b $(INSTALL_MOD_PATH)' ''
+        # Install the modules in $out/lib/modules.
         make modules_install \
-            DEPMOD=$module_init_tools/sbin/depmod depmod_opts= \
+            DEPMOD=$kmod/sbin/depmod \
             $makeFlags "${makeFlagsArray[@]}" \
             $installFlags "${installFlagsArray[@]}"
 
@@ -112,7 +105,7 @@ installPhase() {
 
         if test "$dontStrip" = "1"; then
             # copy any debugging info that can be found
-            cp --parents -rv `find -name \*.debug -o -name debug.a`	\
+            cp --parents -rv `find -name \*.debug -o -name debug.a`     \
                "$out/lib/modules/$version/build"
         fi
 

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "mueval";
-  version = "0.9";
-  sha256 = "1y6n3zvdlzxl5hi1raz7ac6fgy9321ilka3g2pk7p1ss9d10k8pb";
+  version = "0.9.1";
+  sha256 = "1f668z7rpdj2m239f5i54v7kd7wsvx3qvvhwyiavf28cmk32mxpq";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

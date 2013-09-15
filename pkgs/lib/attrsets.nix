@@ -246,7 +246,7 @@ rec {
 
   /* backward compatibility */
   zipWithNames = zipAttrsWithNames;
-  zip = zipAttrsWith;
+  zip = builtins.trace "lib.zip is deprecated, use lib.zipAttrsWith instead" zipAttrsWith;
 
 
   /* Does the same as the update operator '//' except that attributes are

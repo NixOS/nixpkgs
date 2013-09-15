@@ -10,6 +10,7 @@ with import ./trivial.nix;
 
 rec {
 
+  isType = type: x: (x._type or "") == type;
   hasType = x: isAttrs x && x ? _type;
   typeOf = x: x._type or "";
 
@@ -19,14 +20,14 @@ rec {
 
 
   # name (name of the type)
-  # check (boolean function)
+  # check (check the config value. Before returning false it should trace the bad value eg using traceValIfNot)
   # merge (default merge function)
   # iter (iterate on all elements contained in this type)
   # fold (fold all elements contained in this type)
   # hasOptions (boolean: whatever this option contains an option set)
   # delayOnGlobalEval (boolean: should properties go through the evaluation of this option)
   # docPath (path concatenated to the option name contained in the option set)
-  isOptionType = attrs: typeOf attrs == "option-type";
+  isOptionType = isType "option-type";
   mkOptionType =
     { name
     , check ? (x: true)
@@ -46,10 +47,6 @@ rec {
 
 
   types = rec {
-
-    inferred = mkOptionType {
-      name = "inferred type";
-    };
 
     bool = mkOptionType {
       name = "boolean";
@@ -100,8 +97,10 @@ rec {
       check = lib.traceValIfNot (x: builtins.unsafeDiscardStringContext (builtins.substring 0 1 (toString x)) == "/");
     };
 
-    listOf = types.list;
-    list = elemType: mkOptionType {
+    # drop this in the future:
+    list = builtins.trace "types.list is deprecated, use types.listOf instead" types.listOf;
+
+    listOf = elemType: mkOptionType { 
       name = "list of ${elemType.name}s";
       check = value: lib.traceValIfNot isList value && all elemType.check value;
       merge = concatLists;
@@ -118,8 +117,8 @@ rec {
     attrsOf = elemType: mkOptionType {
       name = "attribute set of ${elemType.name}s";
       check = x: lib.traceValIfNot isAttrs x
-        && fold (e: v: v && elemType.check e) true (lib.attrValues x);
-      merge = lib.zip (name: elemType.merge);
+        && all elemType.check (lib.attrValues x); 
+      merge = lib.zipAttrsWith (name: elemType.merge);
       iter = f: path: set: lib.mapAttrs (name: elemType.iter f (path + "." + name)) set;
       fold = op: nul: set: fold (e: l: elemType.fold op l e) nul (lib.attrValues set);
       docPath = path: elemType.docPath (path + ".<name>");
@@ -168,7 +167,7 @@ rec {
         if length list == 1 then
           head list
         else
-          throw "Multiple definitions. Only one is allowed for this option.";
+          throw "Multiple definitions of ${elemType.name}. Only one is allowed for this option.";
     };
 
     none = elemType: mkOptionType {
@@ -198,8 +197,21 @@ rec {
       hasOptions = false;
     };
 
-    # !!! this should be a type constructor that takes the options as
-    # an argument.
+    # usually used with listOf, attrsOf, loaOf like this:
+    # users = mkOption {
+    #   type = loaOf optionSet;
+    #
+    #   # you can omit the list if there is one element only
+    #   options = [ {
+    #     name = mkOption {
+    #       description = "name of the user"
+    #       ...
+    #     };
+    #     # more options here
+    #   } { more options } ];
+    # }
+    # TODO: !!! document passing options as an argument to optionSet,
+    # deprecate the current approach.
     optionSet = mkOptionType {
       name = "option set";
       # merge is done in "options.nix > addOptionMakeUp > handleOptionSets"

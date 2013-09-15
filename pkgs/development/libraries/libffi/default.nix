@@ -1,6 +1,6 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, dejagnu }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "libffi-3.0.13";
 
   src = fetchurl {
@@ -8,15 +8,21 @@ stdenv.mkDerivation (rec {
     sha256 = "077ibkf84bvcd6rw1m6jb107br63i2pp301rkmsbgg6300adxp8x";
   };
 
-  doCheck = true;
+  buildInputs = stdenv.lib.optional doCheck dejagnu;
+
+  configureFlags = [ "--with-gcc-arch=generic" ]; # no detection of -march= or -mtune=
+
+  doCheck = stdenv.isLinux; # until we solve dejagnu problems on darwin and expect on BSD
+
+  dontStrip = stdenv ? cross; # Don't run the native `strip' when cross-compiling.
 
   postInstall =
     # Install headers in the right place.
-    '' ln -sv "$out/lib/"libffi*/include "$out/include"
+    '' ln -s${if stdenv.isFreeBSD then "" else "r"}v "$out/lib/"libffi*/include "$out/include"
     '';
 
   meta = {
-    description = "libffi, a foreign function call interface library";
+    description = "A foreign function call interface library";
 
     longDescription = ''
       The libffi library provides a portable, high level programming
@@ -33,7 +39,7 @@ stdenv.mkDerivation (rec {
       conversions for values passed between the two languages.
     '';
 
-    homepage = http://sources.redhat.com/libffi/;
+    homepage = http://sourceware.org/libffi/;
 
     # See http://github.com/atgreen/libffi/blob/master/LICENSE .
     license = "free, non-copyleft";
@@ -43,9 +49,3 @@ stdenv.mkDerivation (rec {
   };
 }
 
-//
-
-# Don't run the native `strip' when cross-compiling.
-(if (stdenv ? cross)
- then { dontStrip = true; }
- else { }))

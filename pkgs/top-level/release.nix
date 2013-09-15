@@ -25,7 +25,7 @@ let
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
-          members =
+          constituents =
             [ jobs.tarball
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux

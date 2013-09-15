@@ -23,10 +23,13 @@ wrapPythonProgramsIn() {
         fi
         
         if head -n1 "$i" | grep -q /python; then
-            echo "wrapping \`$i'..."
-            wrapProgram "$i" \
-                --prefix PYTHONPATH ":" $program_PYTHONPATH \
-                --prefix PATH ":" $program_PATH
+            # dont wrap EGG-INFO scripts since they are called from python
+            if echo "$i" | grep -v EGG-INFO/scripts; then
+                echo "wrapping \`$i'..."
+                wrapProgram "$i" \
+                    --prefix PYTHONPATH ":" $program_PYTHONPATH \
+                    --prefix PATH ":" $program_PATH
+            fi
         fi
     done
 }

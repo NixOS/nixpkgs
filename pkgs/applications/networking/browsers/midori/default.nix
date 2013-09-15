@@ -12,6 +12,7 @@ let
     gtksourceview pkgconfig which gettext makeWrapper 
     file libidn sqlite docutils libnotify libsoup vala
     kbproto xproto scrnsaverproto libXScrnSaver dbus_glib
+    glib_networking
   ];
 in
 rec {
@@ -34,7 +35,11 @@ rec {
       
   shebangsHere = (doPatchShebangs ".");
   shebangsInstalled = (doPatchShebangs "$out/bin");
-  wrapWK = (makeManyWrappers "$out/bin/*" "--set WEBKIT_IGNORE_SSL_ERRORS 1");
+  wrapWK = (makeManyWrappers "$out/bin/*" 
+  ''
+    --set WEBKIT_IGNORE_SSL_ERRORS 1 \
+    --prefix GIO_EXTRA_MODULES : "${args.glib_networking}/lib/gio/modules" 
+  '');
 
   name = "midori-${version}.${release}";
   meta = {

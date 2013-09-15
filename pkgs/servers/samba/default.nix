@@ -18,17 +18,12 @@
 assert useKerberos -> kerberos != null;
 
 stdenv.mkDerivation rec {
-  name = "samba-3.6.8";
+  name = "samba-3.6.18";
 
   src = fetchurl {
     url = "http://us3.samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "1phl6mmrc72jyvbyrw6cv6b92cxq3v2pbn1fh97nnb4hild1fnjg";
+    sha256 = "14lrb7724952wyc1sah4nsngd6cv8x8y96cm7f3awzjnfyxajwbd";
   };
-
-  patches =
-    [ # Allow cross-builds for GNU/Hurd.
-      ./libnss-wins-pthread.patch
-    ];
 
   buildInputs = [ readline pam openldap popt iniparser libunwind fam acl cups ]
     ++ stdenv.lib.optional useKerberos kerberos;
@@ -73,6 +68,13 @@ stdenv.mkDerivation rec {
       ln -sv ../../../bin/smbspool $out/lib/cups/backend/smb
       mkdir -pv $out/etc/openldap/schema
       cp ../examples/LDAP/samba.schema $out/etc/openldap/schema
+
+      # For nsswitch. Glibc >= 2.1 looks for libnss_<name>.so.2 (see man
+      # nsswitch.conf), so provide that too.
+      cp -v ../nsswitch/libnss_wins.so "$out/lib"
+      cp -v ../nsswitch/libnss_winbind.so "$out/lib"
+      (cd "$out/lib" && ln -s libnss_winbind.so libnss_winbind.so.2)
+      (cd "$out/lib" && ln -s libnss_wins.so libnss_wins.so.2)
     '' # */
     + stdenv.lib.optionalString (configDir == "") "touch $out/lib/smb.conf";
 

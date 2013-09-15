@@ -1,24 +1,24 @@
 { stdenv, fetchurl, lib, qtscriptgenerator, perl, gettext, curl
 , libxml2, mysql, taglib, taglib_extras, loudmouth , kdelibs
 , qca2, libmtp, liblastfm, libgpod, pkgconfig, automoc4, phonon
-, strigi, soprano, qjson, ffmpeg, libofa }:
+, strigi, soprano, qjson, ffmpeg, libofa, nepomuk_core ? null }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   pname = "amarok";
-  version = "2.6.0";
+  version = "2.8.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.bz2";
-    sha256 = "1h6jzl0jnn8g05pz4mw01kz20wjjxwwz6iki7lvgj70qi3jq04m9";
+    sha256 = "1ilf9wdp3wna5pmvxill8x08rb9gw86qkc2zwm3xk9hpy8l9pf7l";
   };
 
   QT_PLUGIN_PATH="${qtscriptgenerator}/lib/qt4/plugins";
-  patches = ./find-mysql.patch;
+
   buildInputs = [ qtscriptgenerator stdenv.gcc.libc gettext curl
     libxml2 mysql taglib taglib_extras loudmouth kdelibs automoc4 phonon strigi
-    soprano qca2 libmtp liblastfm libgpod pkgconfig qjson ffmpeg libofa ];
+    soprano qca2 libmtp liblastfm libgpod pkgconfig qjson ffmpeg libofa nepomuk_core ];
 
   cmakeFlags = "-DKDE4_BUILD_TESTS=OFF";
 

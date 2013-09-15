@@ -12,17 +12,17 @@
   enableOfficialBranding ? false
 }:
 
-let version = "17.0.7"; in
+let version = "17.0.8"; in
 
 stdenv.mkDerivation {
   name = "thunderbird-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.mozilla.org/pub/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.bz2";
-    sha1 = "d6dca3e1cc4293f2e15d6b35056bd8dc319014ee";
+    sha1 = "4bcbb33f0b3ea050e805723680b5669d80438812";
   };
 
-  enableParallelBuilding = false;
+  #enableParallelBuilding = true;
 
   buildInputs =
     [ pkgconfig perl python zip unzip bzip2 gtk dbus_glib alsaLib libIDL nspr

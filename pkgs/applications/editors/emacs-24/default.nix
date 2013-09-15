@@ -1,10 +1,10 @@
 { stdenv, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
 , pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
-, alsaLib
+, alsaLib, cairo
+, withX ? true
 }:
 
-assert (gtk != null) -> (pkgconfig != null);
 assert (libXft != null) -> libpng != null;	# probably a bug
 assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
 
@@ -15,23 +15,35 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "mirror://gnu/emacs/${name}.tar.xz";
+    url    = "mirror://gnu/emacs/${name}.tar.xz";
     sha256 = "1385qzs3bsa52s5rcncbrkxlydkw0ajzrvfxgv8rws5fx512kakh";
   };
 
   buildInputs =
-    [ ncurses x11 texinfo libXaw Xaw3d libXpm libpng libjpeg libungif
-      libtiff librsvg libXft gconf libxml2 imagemagick gnutls alsaLib
-    ]
-    ++ stdenv.lib.optionals (gtk != null) [ gtk pkgconfig ]
-    ++ stdenv.lib.optional stdenv.isLinux dbus;
+    [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo ]
+    ++ stdenv.lib.optional stdenv.isLinux dbus
+    ++ stdenv.lib.optionals withX
+      [ x11 libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
+        imagemagick gtk ]
+    ++ stdenv.lib.optional stdenv.isDarwin cairo;
 
   configureFlags =
-    stdenv.lib.optionals (gtk != null) [ "--with-x-toolkit=gtk" "--with-xft"]
-
+    ( if withX then
+        [ "--with-x-toolkit=gtk" "--with-xft"]
+      else
+        [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
+          "--with-gif=no" "--with-tiff=no" ] )
     # On NixOS, help Emacs find `crt*.o'.
     ++ stdenv.lib.optional (stdenv ? glibc)
          [ "--with-crt-dir=${stdenv.glibc}/lib" ];
+
+
+  setupHook = ./setup-hook.sh;
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
+    "-I${cairo}/include/cairo";
+
+  doCheck = true;
 
   # Note: the usual backtick-apostrophe notation for elisp variables
   # and functions in comments is broken in Nix expressions.
@@ -59,12 +71,12 @@ stdenv.mkDerivation rec {
 EOF
   '';
 
-  setupHook = ./setup-hook.sh;
-
-  doCheck = true;
-
   meta = with stdenv.lib; {
     description = "GNU Emacs 24, the extensible, customizable text editor";
+    homepage    = http://www.gnu.org/software/emacs/;
+    license     = licenses.gpl3Plus;
+    maintainers = with maintainers; [ chaoflow lovek323 simons the-kenny ];
+    platforms   = platforms.all;
 
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more.  At its
@@ -82,11 +94,5 @@ EOF
       extensions are distributed with GNU Emacs; others are available
       separately.
     '';
-
-    homepage = "http://www.gnu.org/software/emacs/";
-    license = "GPLv3+";
-
-    maintainers = with maintainers; [ chaoflow lovek323 ludo simons ];
-    platforms = platforms.all;
   };
 }

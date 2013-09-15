@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "boomerang";
-  version = "1.3.3";
-  sha256 = "1i44j3qyjkq69h65wfsrps5zp097i3nh9fwcb2f1spr8nznb5mff";
+  version = "1.4.0";
+  sha256 = "1z6sx2r886jms59ah31is0fqkwix2kwxmpnrc6bb2r6xazznxfc9";
   buildDepends = [ mtl text ];
   meta = {
     description = "Library for invertible parsing and printing";

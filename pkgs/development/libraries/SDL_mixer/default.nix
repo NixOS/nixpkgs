@@ -1,14 +1,13 @@
 { stdenv, fetchurl, SDL, libogg, libvorbis, enableNativeMidi ? false }:
 
 stdenv.mkDerivation rec {
-  pname = "SDL_mixer";
-  version = "1.2.8";
-
-  name = "${pname}-${version}";
+  pname   = "SDL_mixer";
+  version = "1.2.12";
+  name    = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://www.libsdl.org/projects/${pname}/release/${name}.tar.gz";
-    sha256 = "a8222a274778ff16d0e3ee49a30db27a48a4d357169a915fc599a764e405e0b6";
+    url    = "http://www.libsdl.org/projects/${pname}/release/${name}.tar.gz";
+    sha256 = "0alrhqgm40p4c92s26mimg9cm1y7rzr6m0p49687jxd9g6130i0n";
   };
 
   buildInputs = [SDL libogg libvorbis];
@@ -17,7 +16,10 @@ stdenv.mkDerivation rec {
 
   postInstall = "ln -s $out/include/SDL/SDL_mixer.h $out/include/";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "SDL multi-channel audio mixer library";
+    homepage    = http://www.libsdl.org/projects/SDL_mixer/;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
   };
 }

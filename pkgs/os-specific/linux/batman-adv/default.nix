@@ -1,10 +1,12 @@
-{stdenv, fetchurl, kernelDev }:
+{ stdenv, fetchurl, kernelDev }:
+
+let base = "batman-adv-2013.2.0"; in
 
 stdenv.mkDerivation rec {
-  name = "batman-adv-2013.2.0";
+  name = "${base}-${kernelDev.version}";
 
   src = fetchurl {
-    url = "http://downloads.open-mesh.org/batman/releases/${name}/${name}.tar.gz";
+    url = "http://downloads.open-mesh.org/batman/releases/${base}/${base}.tar.gz";
     sha1 = "7d2aff2ad118cbc5452de43f7e9da8374521ec0e";
   };
 

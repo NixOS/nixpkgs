@@ -135,7 +135,7 @@ stdenv.mkDerivation ({
     homepage = "http://gcc.gnu.org/";
     license = "GPL/LGPL";
     description = "GNU Compiler Collection, 4.3.x";
-    maintainers = with stdenv.lib.maintainers; [viric ludo];
+    maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };
 

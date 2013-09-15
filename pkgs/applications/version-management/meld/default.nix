@@ -24,9 +24,10 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/meld --prefix PYTHONPATH : $PYTHONPATH:${pygtk}/lib/${python.libPrefix}/site-packages/gtk-2.0
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Visual diff and merge tool";
     homepage = http://meld.sourceforge.net;
     license = "GPLv2+";
+    platforms = platforms.linux;
   };
 }

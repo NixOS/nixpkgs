@@ -10,19 +10,6 @@ rec {
     # Currently ignored - it should be set according to 'system' once it is
     # not ignored. This is for stdenv-updates.
     kernelArch = "i386";
-    kernelExtraConfig =
-      ''
-        # Virtualisation (KVM, Xen...).
-        HYPERVISOR_GUEST? y #3.10 version of the paravirt options
-        PARAVIRT_GUEST? y #Doesn't exist in 3.10
-        KVM_CLOCK? y #Part of KVM_GUEST since linux 3.7
-        KVM_GUEST? y #Doesn't exist in 3.10
-        XEN? y #Doesn't exist in 3.10
-        KSM y
-
-        # We need 64 GB (PAE) support for Xen guest support.
-        HIGHMEM64G? y
-      '';
   };
 
   pc_simplekernel = pc // {

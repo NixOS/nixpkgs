@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       '';
 
     licenses = [ "GPLv2+" "LGPLv2.1+" ];
-    maintainers = with stdenv.lib.maintainers; [ sander ludo ];
+    maintainers = with stdenv.lib.maintainers; [ sander ];
     platforms = stdenv.lib.platforms.all;
   };
 }

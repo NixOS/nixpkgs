@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ clutter gtk ];
   nativeBuildInputs = [ pkgconfig ];
 
+  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
+
   postBuild = "rm -rf $out/share/gtk-doc";
 
   meta = {
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
 
     license = "LGPLv2+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

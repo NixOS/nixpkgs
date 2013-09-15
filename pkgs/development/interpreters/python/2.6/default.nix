@@ -75,6 +75,7 @@ let
     passthru = {
       inherit zlibSupport;
       libPrefix = "python${majorVersion}";
+      executable = "python2.6";
     };
 
     enableParallelBuilding = true;
@@ -146,6 +147,12 @@ let
     bsddb = buildInternalPythonModule {
       moduleName = "bsddb";
       deps = [ db4 ];
+    };
+
+    crypt = buildInternalPythonModule {
+      moduleName = "crypt";
+      internalName = "crypt";
+      deps = [ ];
     };
 
     curses = buildInternalPythonModule {

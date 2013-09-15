@@ -46,25 +46,21 @@ rec {
   unifyModuleSyntax = m:
     let
       delayedModule = delayProperties m;
-      getImports =
-        if m ? config || m ? options then
-          m.imports or []
-        else
-          toList (rmProperties (delayedModule.require or []));
 
+      getImports =
+        toList (rmProperties (delayedModule.require or []));
       getImportedPaths = filter isPath getImports;
       getImportedSets = filter (x: !isPath x) getImports;
 
       getConfig =
-        removeAttrs delayedModule ["require" "key"];
+        removeAttrs delayedModule ["require" "key" "imports"];
 
     in
       if isModule m then
         { key = "<unknown location>"; } // m
       else
-        {
-          key = "<unknown location>";
-          imports = getImportedPaths;
+        { key = "<unknown location>";
+          imports = (m.imports or []) ++ getImportedPaths;
           config = getConfig;
         } // (
           if getImportedSets != [] then

@@ -13,12 +13,12 @@ assert qtconsoleSupport == true -> pyqt4 != null;
 assert pylabQtSupport == true -> pyqt4 != null && sip != null;
 
 buildPythonPackage rec {
-  name = "ipython-0.13.2";
+  name = "ipython-1.0.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/i/ipython/${name}.tar.gz";
-    sha256 = "1sh0n47i1zxqmbzjv6iqc66c8pdk9spzgzchgmhqscgjvyhyxyqp";
+    sha256 = "074i08a1zr7wjpqc7rm0k3rnq0laf0gjrcxlfvvb3qc48wdm41qd";
   };
 
   propagatedBuildInputs = [

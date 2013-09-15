@@ -8,6 +8,7 @@ cross:
 , machHeaders ? null, hurdHeaders ? null, libpthreadHeaders ? null
 , mig ? null
 , profilingLibraries ? false, meta
+, withGd ? false, gd ? null, libpng ? null
 , preConfigure ? "", ... }@args:
 
 let
@@ -103,12 +104,13 @@ stdenv.mkDerivation ({
       # To avoid linking with -lgcc_s (dynamic link)
       # so the glibc does not depend on its compiler store path
       "libc_cv_as_needed=no"
-    ];
+    ] ++ stdenv.lib.optional withGd "--with-gd";
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
   buildInputs = stdenv.lib.optionals (cross != null) [ gccCross ]
-    ++ stdenv.lib.optional (mig != null) mig;
+    ++ stdenv.lib.optional (mig != null) mig
+    ++ stdenv.lib.optionals withGd [ gd libpng ];
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
@@ -125,7 +127,7 @@ stdenv.mkDerivation ({
 
 # Remove the `gccCross' attribute so that the *native* glibc store path
 # doesn't depend on whether `gccCross' is null or not.
-// (removeAttrs args [ "gccCross" "fetchurl" "fetchgit" ]) //
+// (removeAttrs args [ "gccCross" "fetchurl" "fetchgit" "withGd" "gd" "libpng" ]) //
 
 {
   name = name + "-${version}" +
@@ -186,6 +188,10 @@ stdenv.mkDerivation ({
     maintainers = [ stdenv.lib.maintainers.ludo ];
     #platforms = stdenv.lib.platforms.linux;
   } // meta;
+}
+
+// stdenv.lib.optionalAttrs withGd {
+  preBuild = "unset NIX_DONT_SET_RPATH";
 }
 
 // stdenv.lib.optionalAttrs (hurdHeaders != null) {

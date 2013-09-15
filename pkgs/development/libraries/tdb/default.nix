@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = http://tdb.samba.org/;
     license = "LGPLv3+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

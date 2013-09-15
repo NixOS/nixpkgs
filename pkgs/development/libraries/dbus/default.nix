@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, autoconf, automake, libtool
 , expat, systemd, glib, dbus_glib, python
-, libX11, libICE, libSM, useX11 ? stdenv.isLinux }:
+, libX11, libICE, libSM, useX11 ? (stdenv.isLinux || stdenv.isDarwin) }:
 
 let
-  version = "1.6.12"; # 1.7.* isn't recommended, even for gnome 3.8
-  sha256 = "14pfh2ksn4srfry752kf1jy3c61hklcs9fx2xglw2ifhsszplypn";
+  version = "1.6.14"; # 1.7.* isn't recommended, even for gnome 3.8
+  sha256 = "0v7mcxwfmpjf7vndnvf2kf02al61clrxs36bqii20s0lawfh2xjn";
 
   inherit (stdenv) lib;
 
@@ -25,30 +25,13 @@ let
       inherit sha256;
     };
 
-    configureFlags = [
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--with-session-socket-dir=/tmp"
-      "--with-systemdsystemunitdir=$(out)/lib/systemd"
-    ];
-
-    preConfigure = ''
-      patchShebangs .
-      substituteInPlace tools/Makefile.am --replace 'install-localstatelibDATA:' 'disabled:'
-      autoreconf -fi
-    '';
-
-    installFlags = "sysconfdir=$(out)/etc";
-
-    doCheck = true;
-
-    patches = [ ./ignore-missing-includedirs.patch ]
-      ++ lib.optional (stdenv.isSunOS || stdenv.isLinux/*avoid rebuilds*/) ./implement-getgrouplist.patch
-      ++ [ ./ucred-dirty-hack.patch ./no-create-dirs.patch ];
-
-    nativeBuildInputs = [ pkgconfig ];
-    propagatedBuildInputs = [ expat ];
-    buildInputs = [ autoconf automake libtool ]; # ToDo: optional selinux?
+    patches = [
+        ./ignore-missing-includedirs.patch
+        ./ucred-dirty-hack.patch
+        ./no-create-dirs.patch
+      ]
+      ++ lib.optional (stdenv.isSunOS || stdenv.isLinux) ./implement-getgrouplist.patch
+      ;
 
     # build only the specified subdirs
     postPatch = "sed '/SUBDIRS/s/=.*/=" + subdirs + "/' -i Makefile.am\n"
@@ -58,6 +41,29 @@ let
             sed 's,\$(top_builddir)/dbus/\(libdbus-[0-9]\),${libs}/lib/\1,g' -i "$mfile"
           done
         '';
+
+    nativeBuildInputs = [ pkgconfig ];
+    propagatedBuildInputs = [ expat ];
+    buildInputs = [ autoconf automake libtool ]; # ToDo: optional selinux?
+
+    preConfigure = ''
+      patchShebangs .
+      substituteInPlace tools/Makefile.am --replace 'install-localstatelibDATA:' 'disabled:'
+      autoreconf -fi
+    '';
+
+    configureFlags = [
+      "--localstatedir=/var"
+      "--sysconfdir=/etc"
+      "--with-session-socket-dir=/tmp"
+      "--with-systemdsystemunitdir=$(out)/lib/systemd"
+    ];
+
+    enableParallelBuilding = true;
+
+    doCheck = true;
+
+    installFlags = "sysconfdir=$(out)/etc";
 
   } merge ]);
 
@@ -83,7 +89,9 @@ in rec {
   tools = dbus_drv "tools" "tools" {
     configureFlags = [ "--with-dbus-daemondir=${daemon}/bin" ];
     buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs daemon dbus_glib ];
-    NIX_CFLAGS_LINK = "-Wl,--as-needed -ldbus-1";
+    NIX_CFLAGS_LINK = 
+      stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
+      + "-ldbus-1";
 
     meta.platforms = stdenv.lib.platforms.all;
   };
@@ -98,7 +106,9 @@ in rec {
   tests = dbus_drv "tests" "test" {
     preBuild = makeInternalLib;
     buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs tools daemon dbus_glib python ];
-    NIX_CFLAGS_LINK = "-Wl,--as-needed -ldbus-1";
+    NIX_CFLAGS_LINK = 
+      stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
+      + "-ldbus-1";
   };
 
   docs = dbus_drv "docs" "doc" {

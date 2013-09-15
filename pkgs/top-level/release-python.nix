@@ -1,13 +1,15 @@
 /*
-  This file will be evaluated by hydra with a call like this:
-  hydra_eval_jobs --gc-roots-dir \
-    /nix/var/nix/gcroots/per-user/hydra/hydra-roots --argstr \
-    system i686-linux --argstr system x86_64-linux --arg \
-    nixpkgs "{outPath = ./}" .... release.nix
-
-  Hydra can be installed with "nix-env -i hydra".
+   test for example like this
+   $ nix-build pkgs/top-level/release-python.nix
 */
-with (import ./release-lib.nix);
+
+{ nixpkgs ? { outPath = (import ./all-packages.nix {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+, officialRelease ? false
+, # The platforms for which we build Nixpkgs.
+  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" "x86_64-freebsd" "i686-freebsd" ]
+}:
+
+with import ./release-lib.nix {inherit supportedSystems; };
 
 let
   jobsForDerivations = attrset: pkgs.lib.attrsets.listToAttrs
@@ -19,12 +21,13 @@ let
           (n: v: (v.type or null) == "derivation")
           attrset)));
 
-in
-{
 
-  tarball = import ./make-tarball.nix;
+  jobs =
+    {
 
-} // (mapTestOn rec {
+   # } // (mapTestOn ((packagesWithMetaPlatform pkgs) // rec {
+
+    } // (mapTestOn rec {
 
   a2jmidid = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   aacskeys = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -714,7 +717,6 @@ in
   jedit = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   jfsrec = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   jigdo = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  jing_tools = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   jjtraveler = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   jnettop = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   jre = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1738,7 +1740,6 @@ in
   wdfs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   webkit = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   webkit_gtk2 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  webkitSVN = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   weechat = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   welkin = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   wesnoth = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1992,4 +1993,6 @@ in
   zsnes = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   zynaddsubfx = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   zziplib = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-})
+});
+
+in jobs

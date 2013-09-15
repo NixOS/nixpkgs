@@ -1,16 +1,15 @@
-{ cabal, bytestringLexing, cairo, Chart, colour, HUnit, mtl
-, strptime, time, vcsRevision
+{ cabal, bytestringLexing, cairo, colour, HUnit, mtl, strptime
+, time, vcsRevision
 }:
 
 cabal.mkDerivation (self: {
   pname = "splot";
-  version = "0.3.8";
-  sha256 = "188v9c070wn6gr47k5q55gsiph0lj96d96bss76gz7znknfj9rm3";
+  version = "0.3.11";
+  sha256 = "0mpyfmafjjcf85v740h69p5mggyqsq3li8m1fa5c0z4rdd0395an";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    bytestringLexing cairo Chart colour HUnit mtl strptime time
-    vcsRevision
+    bytestringLexing cairo colour HUnit mtl strptime time vcsRevision
   ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Splot";

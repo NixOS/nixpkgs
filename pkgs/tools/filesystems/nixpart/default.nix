@@ -9,11 +9,11 @@ let
   };
 in buildPythonPackage rec {
   name = "nixpart-${version}";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "https://github.com/aszlig/nixpart/archive/v${version}.tar.gz";
-    sha256 = "1kgiyqh7gndr0zs3qgi6r0dpy5p71d32c2k9kbd8pjf2xyyb6fk6";
+    sha256 = "0avwd8p47xy9cydlbjxk8pj8q75zyl68gw2w6fnkk78dcb1a3swp";
   };
 
   propagatedBuildInputs = [ (blivet.override blivetOverrides) ];

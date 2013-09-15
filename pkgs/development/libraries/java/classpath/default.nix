@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     # The exception makes it similar to LGPLv2+ AFAICS.
     license = "GPLv2+ + exception";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

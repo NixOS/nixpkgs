@@ -85,6 +85,7 @@ let
     passthru = {
       inherit zlibSupport;
       libPrefix = "python${majorVersion}";
+      executable = "python2.7";
     };
 
     enableParallelBuilding = true;
@@ -161,6 +162,12 @@ let
     curses = buildInternalPythonModule {
       moduleName = "curses";
       deps = [ ncurses ];
+    };
+
+    crypt = buildInternalPythonModule {
+      moduleName = "crypt";
+      internalName = "crypt";
+      deps = [ ];
     };
 
     gdbm = buildInternalPythonModule {

@@ -1,23 +1,23 @@
 { stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
-, platformTools, support, platforms, sysimages, addons
+, platformTools, buildTools, support, platforms, sysimages, addons
 , zlib_32bit
-, libX11_32bit, libxcb_32bit, libXau_32bit, libXdmcp_32bit, libXext_32bit
-, libX11, libXext, libXrender, libxcb, libXau, libXdmcp
-, freetype, fontconfig, gtk, atk
+, libX11_32bit, libxcb_32bit, libXau_32bit, libXdmcp_32bit, libXext_32bit, mesa_32bit, alsaLib_32bit
+, libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
+, freetype, fontconfig, glib, gtk, atk, file, jdk
 }:
-{platformVersions, useGoogleAPIs}:
+{platformVersions, abiVersions, useGoogleAPIs}:
 
 stdenv.mkDerivation {
-  name = "android-sdk-21";
+  name = "android-sdk-22.05";
   
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = http://dl.google.com/android/android-sdk_r21-linux.tgz;
-      md5 = "7f8d73b629f808cdcfc9f9900bbd7580";
+      url = http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz;
+      md5 = "8201b10c21510f082c54f58a9bb082c8";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = http://dl.google.com/android/android-sdk_r21-macosx.zip;
-      md5 = "67e46adca90dd18d7291443f6c15d6af";
+      url = http://dl.google.com/android/android-sdk_r22.0.5-macosx.zip;
+      md5 = "94f3cbe896c332b94ee0408ae610a4b8";
     }
     else throw "platform not ${stdenv.system} supported!";
   
@@ -56,19 +56,30 @@ stdenv.mkDerivation {
           patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib:${zlib_32bit}/lib $i
       done
     
-      # The emulators need additional libraries, which are not in the RPATH => let's wrap them
+      # The android script has a hardcoded reference to /bin/ls that must be patched
+      sed -i -e "s|/bin/ls|ls|" android
+      
+      # The android script used SWT and wants to dynamically load some GTK+ stuff.
+      # The following wrapper ensures that they can be found:
+      wrapProgram `pwd`/android \
+        --prefix PATH : ${jdk}/bin \
+        --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib
+    
+      # The emulators need additional libraries, which are dynamically loaded => let's wrap them
     
       for i in emulator emulator-arm emulator-mips emulator-x86
       do
           wrapProgram `pwd`/$i \
-            --prefix LD_LIBRARY_PATH : `pwd`/lib:${libX11_32bit}/lib:${libxcb_32bit}/lib:${libXau_32bit}/lib:${libXdmcp_32bit}/lib:${libXext_32bit}/lib
+            --prefix PATH : ${file}/bin \
+            --suffix LD_LIBRARY_PATH : `pwd`/lib:${libX11_32bit}/lib:${libxcb_32bit}/lib:${libXau_32bit}/lib:${libXdmcp_32bit}/lib:${libXext_32bit}/lib:${mesa_32bit}/lib
       done
       
       ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
         for i in emulator64-arm emulator64-mips emulator64-x86
         do
             wrapProgram `pwd`/$i \
-            --prefix LD_LIBRARY_PATH : `pwd`/lib:${libX11}/lib:${libxcb}/lib:${libXau}/lib:${libXdmcp}/lib:${libXext}/lib
+              --prefix PATH : ${file}/bin \
+              --suffix LD_LIBRARY_PATH : `pwd`/lib:${libX11}/lib:${libxcb}/lib:${libXau}/lib:${libXdmcp}/lib:${libXext}/lib:${mesa}/lib:${alsaLib}/lib
         done
       ''}
     ''}
@@ -107,6 +118,7 @@ stdenv.mkDerivation {
     
     cd ..
     ln -s ${platformTools}/platform-tools
+    ln -s ${buildTools}/build-tools
     ln -s ${support}/support
     
     # Symlink required Google API add-ons
@@ -147,19 +159,21 @@ stdenv.mkDerivation {
     mkdir -p system-images
     cd system-images
     
-    ${stdenv.lib.concatMapStrings (platformVersion:
-      if (builtins.hasAttr ("sysimg_"+platformVersion) sysimages) then
-        let
-          sysimg = builtins.getAttr ("sysimg_"+platformVersion) sysimages;
-        in
-        ''
-          mkdir -p android-${platformVersion}
-          cd android-${platformVersion}
-          ln -s ${sysimg}/*
-          cd ..
-        ''
-      else ""
-    ) platformVersions}
+    ${stdenv.lib.concatMapStrings (abiVersion:
+      stdenv.lib.concatMapStrings (platformVersion:
+        if (builtins.hasAttr ("sysimg_" + abiVersion + "_" + platformVersion) sysimages) then
+          let
+            sysimg = builtins.getAttr ("sysimg_" + abiVersion + "_" + platformVersion) sysimages;
+          in
+          ''
+            mkdir -p android-${platformVersion}
+            cd android-${platformVersion}
+            ln -s ${sysimg}/*
+            cd ..
+          ''
+        else ""
+      ) platformVersions
+    ) abiVersions}
     
     # Create wrappers to the most important tools and platform tools so that we can run them if the SDK is in our PATH
     
@@ -169,11 +183,7 @@ stdenv.mkDerivation {
     do
         if [ ! -d $i ] && [ -x $i ]
         then
-            ( echo '#! ${stdenv.shell} -e'
-              echo "cd $out/libexec/android-sdk-*/tools"
-              echo "exec ./$(basename $i) \"\$@\"" ) > $out/bin/$(basename $i)
-          
-              chmod +x $out/bin/$(basename $i)
+            ln -sf $i $out/bin/$(basename $i)
         fi
     done
     
@@ -181,11 +191,7 @@ stdenv.mkDerivation {
     do
         if [ ! -d $i ] && [ -x $i ]
         then
-            ( echo '#! ${stdenv.shell} -e'
-              echo "cd $out/libexec/android-sdk-*/platform-tools"
-              echo "exec ./$(basename $i) \"\$@\"") > $out/bin/$(basename $i)
-          
-              chmod +x $out/bin/$(basename $i)
+            ln -sf $i $out/bin/$(basename $i)
         fi
     done
   '';

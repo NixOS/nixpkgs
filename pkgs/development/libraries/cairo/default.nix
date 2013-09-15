@@ -11,11 +11,11 @@ assert glSupport -> mesa_noglu != null;
 with { inherit (stdenv.lib) optional optionals; };
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.12.14";
+  name = "cairo-1.12.16";
 
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha256 = "04xcykglff58ygs0dkrmmnqljmpjwp2qgwcz8sijqkdpz7ix3l4n";
+    sha256 = "0inqwsylqkrzcjivdirkjx5nhdgxbdc62fq284c3xppinfg9a195";
   };
 
   nativeBuildInputs = [ pkgconfig ] ++ libintlOrEmpty ++ libiconvOrEmpty;
@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
     ++ optional glSupport "--enable-gl"
     ++ optional pdfSupport "--enable-pdf"
     ;
-
-  NIX_CFLAGS_COMPILE = "-I${pixman}/include/pixman-1";
 
   preConfigure =
   # On FreeBSD, `-ldl' doesn't exist.
@@ -56,7 +54,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # The default `--disable-gtk-doc' is ignored.
-  postInstall = "rm -rf $out/share/gtk-doc";
+  postInstall = "rm -rf $out/share/gtk-doc"
+    + stdenv.lib.optionalString stdenv.isDarwin (''
+      #newline
+    '' + glib.flattenInclude
+    );
 
   meta = {
     description = "A 2D graphics library with support for multiple output devices";

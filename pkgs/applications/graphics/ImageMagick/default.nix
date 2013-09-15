@@ -17,14 +17,14 @@
 }:
 
 let
-  version = "6.7.5-3";
+  version = "6.8.6-9";
 in
 stdenv.mkDerivation rec {
   name = "ImageMagick-${version}";
 
   src = fetchurl {
     url = "mirror://imagemagick/${name}.tar.xz";
-    sha256 = "0m0sa4jxsvm8pf9nfvkzlbzq13d1lj15lfz6jif12l6ywyh2c1cs";
+    sha256 = "1bpj8676mph5cvyjsdgf27i6yg2iw9iskk5c69mvpxkyawgjw1vg";
   };
 
   configureFlags = "" + stdenv.lib.optionalString (ghostscript != null && stdenv.system != "x86_64-darwin") ''

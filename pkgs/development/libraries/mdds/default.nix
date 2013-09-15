@@ -1,11 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "mdds-0.6.0";
+  version = "0.7.1";
+  name = "mdds-${version}";
 
   src = fetchurl {
-    url = http://multidimalgorithm.googlecode.com/files/mdds_0.6.0.tar.bz2;
-    sha256 = "0yx6cx2cxk9wpmfpv6k3agkr1sjzxdgxrm3zfj34zwyxr3sh0ql4";
+    url = "http://multidimalgorithm.googlecode.com/files/mdds_${version}.tar.bz2";
+    sha256 = "0zhrx7m04pknc8i2cialmbna1hmwa0fzs8qphan4rdxibf0c4yzy";
   };
 
   meta = {
