@@ -5988,6 +5988,8 @@ let
 
   bind = callPackage ../servers/dns/bind { };
 
+  bird = callPackage ../servers/bird { };
+
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_185;
   };
