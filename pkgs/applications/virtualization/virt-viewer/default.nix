@@ -1,6 +1,6 @@
 x@{builderDefsPackage
   , gnome, gtk, glib, libxml2, pkgconfig, libvirt, gtkvnc, cyrus_sasl, libtasn1
-  , gnupg, libgcrypt, perl, nettle, yajl
+  , gnupg, libgcrypt, perl, nettle, yajl, libcap_ng
   , ...}:
 builderDefsPackage
 (a :  
