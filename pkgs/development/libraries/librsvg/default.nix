@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/librsvg/2.36/${name}.tar.xz";
     sha256 = "1hp6325gdkzx8yqn2d2r915ak3k6hfshjjh0sc54z3vr0i99688h";
   };
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango cairo ]
+  buildInputs = [ libxml2 libgsf bzip2 libcroco pango ]
     ++ stdenv.lib.optional enableIntrospection [ gobjectIntrospection ];
-  propagatedBuildInputs = [ glib gdk_pixbuf gtk2 gtk3 ];
+  propagatedBuildInputs = [ glib gdk_pixbuf gtk2 gtk3 cairo ];
   nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = ["--enable-introspection=auto"];
