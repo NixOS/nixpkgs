@@ -38,10 +38,8 @@ in rec {
   # version
   otherPackages = {
     autoComplete = callPackage ../applications/editors/emacs-modes/auto-complete { };
-    bbdb = callPackage ../applications/editors/emacs-modes/bbdb { };
-    cedet = callPackage ../applications/editors/emacs-modes/cedet {
-      python = pkgs.python;
-    };
+    bbdb = callPackage ../applications/editors/emacs-modes/bbdb { texinfo = pkgs.texinfo5; };
+    cedet = callPackage ../applications/editors/emacs-modes/cedet { python = pkgs.python; };
     calfw = callPackage ../applications/editors/emacs-modes/calfw { };
     coffee = callPackage ../applications/editors/emacs-modes/coffee { };
     colorTheme = callPackage ../applications/editors/emacs-modes/color-theme { };
@@ -50,8 +48,8 @@ in rec {
     jabber = callPackage ../applications/editors/emacs-modes/jabber { };
     emacsClangCompleteAsync = callPackage ../applications/editors/emacs-modes/emacs-clang-complete-async { };
     emacsSessionManagement = callPackage ../applications/editors/emacs-modes/session-management-for-emacs { };
-    emacsw3m = callPackage ../applications/editors/emacs-modes/emacs-w3m { };
-    emms = callPackage ../applications/editors/emacs-modes/emms { };
+    emacsw3m = callPackage ../applications/editors/emacs-modes/emacs-w3m { texinfo = pkgs.texinfo5; };
+    emms = callPackage ../applications/editors/emacs-modes/emms { texinfo = pkgs.texinfo5; };
     ess = callPackage ../applications/editors/emacs-modes/ess { };
     flymakeCursor = callPackage ../applications/editors/emacs-modes/flymake-cursor { };
     gh = callPackage ../applications/editors/emacs-modes/gh { };
@@ -70,10 +68,10 @@ in rec {
     htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
     logito = callPackage ../applications/editors/emacs-modes/logito { };
     loremIpsum = callPackage ../applications/editors/emacs-modes/lorem-ipsum { };
-    magit = callPackage ../applications/editors/emacs-modes/magit { };
+    magit = callPackage ../applications/editors/emacs-modes/magit { texinfo = pkgs.texinfo5; };
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
     notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
-    org = (callPackage ../applications/editors/emacs-modes/org { });
+    org = (callPackage ../applications/editors/emacs-modes/org { texinfo = pkgs.texinfo5; });
     org2blog = callPackage ../applications/editors/emacs-modes/org2blog { };
     pcache = callPackage ../applications/editors/emacs-modes/pcache { };
     phpMode = callPackage ../applications/editors/emacs-modes/php { };
