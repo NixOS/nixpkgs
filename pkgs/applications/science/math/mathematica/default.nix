@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   unpackPhase = ''
     echo "=== Extracting makeself archive ==="
     # find offset from file
-    offset=$(/bin/sh -c "$(grep -axm1 -e 'offset=.*' $src); echo \$offset" $src)
+    offset=$(${stdenv.shell} -c "$(grep -axm1 -e 'offset=.*' $src); echo \$offset" $src)
     dd if="$src" ibs=$offset skip=1 | tar -xf -
     cd Unix
   '';
@@ -118,5 +118,12 @@ stdenv.mkDerivation rec {
   # we did this in prefixup already
   dontPatchELF = true;
 
-  meta.license = "unfree";
+  meta = {
+    description = "Wolfram Mathematica computational software system";
+    homepage = "http://www.wolfram.com/mathematica/";
+    license = "unfree";
+
+    platforms = stdenv.lib.platforms.unix;
+  };
+
 }
