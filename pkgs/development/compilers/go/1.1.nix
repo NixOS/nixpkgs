@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc }:
+{ stdenv, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc
+, removeGodocExternals ? false }:
 
 let
   loader386 = "${glibc}/lib/ld-linux.so.2";
@@ -50,6 +51,8 @@ stdenv.mkDerivation {
     sed -i 's,/bin/pwd,'"`type -P pwd`", src/pkg/os/os_test.go
     # Disable the hostname test
     sed -i '/TestHostname/areturn' src/pkg/os/os_test.go
+  '' + stdenv.lib.optionalString removeGodocExternals ''
+    sed -i -e '/googleapi/d' -e '/javascript">$/,+6d' lib/godoc/godoc.html 
   '';
 
   patches = [ ./cacert.patch ];
