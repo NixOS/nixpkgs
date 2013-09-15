@@ -2553,10 +2553,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   ipdbplugin = buildPythonPackage {
-    name = "ipdbplugin-1.2";
+    name = "ipdbplugin-1.4";
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/i/ipdbplugin/ipdbplugin-1.2.tar.gz";
-      md5 = "39169b00a2186b99469249c5b0613753";
+      url = "https://pypi.python.org/packages/source/i/ipdbplugin/ipdbplugin-1.4.tar.gz";
+      md5 = "f9a41512e5d901ea0fa199c3f648bba7";
     };
     propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipython ];
   };
