@@ -1885,6 +1885,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   strict = callPackage ../development/libraries/haskell/strict {};
 
+  stringable = callPackage ../development/libraries/haskell/stringable {};
+
   stringCombinators = callPackage ../development/libraries/haskell/string-combinators {};
 
   stringprep = callPackage ../development/libraries/haskell/stringprep {};
