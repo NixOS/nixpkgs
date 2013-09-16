@@ -94,4 +94,5 @@
 , "almond"
 , "lcov-result-merger"
 , "coveralls"
+, "js-yaml"
 ]
