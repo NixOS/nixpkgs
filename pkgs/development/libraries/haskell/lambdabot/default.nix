@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lambdabot";
-  version = "4.3";
-  sha256 = "0pjwxlq4rbmg9wj44vrillly967y35b4i995mz5167hpji05clvy";
+  version = "4.3.0.1";
+  sha256 = "19pkm4m2xk9ziai3ka4scxjavi0as8dmivz9q6vg3npmv0kyhkhb";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
