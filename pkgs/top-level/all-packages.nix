@@ -1326,6 +1326,8 @@ let
 
   nbd = callPackage ../tools/networking/nbd { };
 
+  netatalk = callPackage ../tools/filesystems/netatalk { };
+
   netcdf = callPackage ../development/libraries/netcdf { };
 
   nc6 = callPackage ../tools/networking/nc6 { };
