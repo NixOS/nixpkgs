@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Client library for AMQP servers (currently only RabbitMQ)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    mantainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
 })
