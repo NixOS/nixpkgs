@@ -1243,6 +1243,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
 
+  hslua = callPackage ../development/libraries/haskell/hslua {};
+
   HSH = callPackage ../development/libraries/haskell/HSH {};
 
   HsSyck = callPackage ../development/libraries/haskell/HsSyck {};
