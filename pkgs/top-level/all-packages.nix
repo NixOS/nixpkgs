@@ -266,7 +266,7 @@ let
   buildEnv = import ../build-support/buildenv {
     inherit (pkgs) runCommand perl;
   };
-  
+
   buildFHSChrootEnv = import ../build-support/build-fhs-chrootenv {
     inherit stdenv glibc glibcLocales gcc coreutils diffutils findutils;
     inherit gnused gnugrep gnutar gzip bzip2 bashInteractive xz shadow gawk;
@@ -9169,7 +9169,7 @@ let
   stardust = callPackage ../games/stardust {};
 
   steam = callPackage_i686 ../games/steam {};
-  
+
   steamChrootEnv = callPackage_i686 ../games/steam/chrootenv.nix {
     zenity = gnome2.zenity;
   };
