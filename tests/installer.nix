@@ -268,6 +268,7 @@ in {
       fileSystems = rootFS;
     };
 
+  /*
   swraid = makeTest
     { createPartitions =
         ''
@@ -300,6 +301,7 @@ in {
         '';
       fileSystems = rootFS + bootFS;
     };
+  */
 
   # Test a basic install using GRUB 1.
   grub1 = makeTest

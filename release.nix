@@ -234,41 +234,14 @@ in {
   */
 
 
+  # Run the tests in ./tests/default.nix for each platform.  You can
+  # run a test by doing e.g. "nix-build -A tests.login.x86_64-linux".
   tests =
+    with pkgs.lib;
     let
-      runTest = f: pkgs.lib.genAttrs systems (system:
-        f (import ./tests { inherit system; })
-      );
-    in {
-      avahi = runTest (t: t.avahi.test);
-      bittorrent = runTest (t: t.bittorrent.test);
-      firefox = runTest (t: t.firefox.test);
-      firewall = runTest (t: t.firewall.test);
-      installer.grub1 = runTest (t: t.installer.grub1.test);
-      installer.lvm = runTest (t: t.installer.lvm.test);
-      installer.rebuildCD = runTest (t: t.installer.rebuildCD.test);
-      installer.separateBoot = runTest (t: t.installer.separateBoot.test);
-      installer.simple = runTest (t: t.installer.simple.test);
-      #installer.swraid = runTest (t: t.installer.swraid.test);
-      ipv6 = runTest (t: t.ipv6.test);
-      kde4 = runTest (t: t.kde4.test);
-      login = runTest (t: t.login.test);
-      latestKernel.login = runTest (t: t.latestKernel.login.test);
-      misc = runTest (t: t.misc.test);
-      #mpich = runTest (t: t.mpich.test);
-      mysql = runTest (t: t.mysql.test);
-      mysql_replication = runTest (t: t.mysql_replication.test);
-      nat = runTest (t: t.nat.test);
-      nfs3 = runTest (t: t.nfs3.test);
-      #nfs4 = runTest (t: t.nfs4.test);
-      openssh = runTest (t: t.openssh.test);
-      partition = runTest (t: t.partition.test);
-      proxy = runTest (t: t.proxy.test);
-      quake3 = runTest (t: t.quake3.report);
-      #subversion = runTest (t: t.subversion.report);
-      tomcat = runTest (t: t.tomcat.test);
-      #trac = runTest (t: t.trac.test);
-      xfce = runTest (t: t.xfce.test);
-    };
+      testsFor = system:
+        mapAttrsRecursiveCond (x: !x ? test) (n: v: listToAttrs [(nameValuePair system v.test)])
+          (import ./tests { inherit system; });
+    in fold recursiveUpdate {} (map testsFor systems);
 
 }
