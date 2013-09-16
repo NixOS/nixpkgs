@@ -1,22 +1,24 @@
-{ cabal, ansiTerminal, base64Bytestring, blazeHtml, blazeMarkup
-, citeprocHs, dataDefault, Diff, extensibleExceptions, filepath
-, highlightingKate, HTTP, HUnit, json, mtl, network, pandocTypes
-, parsec, QuickCheck, random, syb, tagsoup, temporary
-, testFramework, testFrameworkHunit, testFrameworkQuickcheck2
-, texmath, text, time, xml, zipArchive, zlib
+{ cabal, aeson, alex, ansiTerminal, attoparsec, base64Bytestring
+, blazeHtml, blazeMarkup, dataDefault, Diff, extensibleExceptions
+, filepath, happy, highlightingKate, hslua, HTTP, httpConduit
+, httpTypes, HUnit, mtl, network, pandocTypes, parsec, QuickCheck
+, random, stringable, syb, tagsoup, temporary, testFramework
+, testFrameworkHunit, testFrameworkQuickcheck2, texmath, text, time
+, unorderedContainers, vector, xml, yaml, zipArchive, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "pandoc";
-  version = "1.11.1";
-  sha256 = "0b23vrgkm1csykx1zrldkg5ka816j6m7a5fhs4cxffalifq91c7b";
+  version = "1.12";
+  sha256 = "04jng6mrb78gzksspihkcmiidrjyqya06lnqiwvfq7mk9jd1wy49";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    base64Bytestring blazeHtml blazeMarkup citeprocHs dataDefault
-    extensibleExceptions filepath highlightingKate HTTP json mtl
-    network pandocTypes parsec random syb tagsoup temporary texmath
-    text time xml zipArchive zlib
+    aeson alex attoparsec base64Bytestring blazeHtml blazeMarkup
+    dataDefault extensibleExceptions filepath happy highlightingKate
+    hslua HTTP httpConduit httpTypes mtl network pandocTypes parsec
+    random stringable syb tagsoup temporary texmath text time
+    unorderedContainers vector xml yaml zipArchive zlib
   ];
   testDepends = [
     ansiTerminal Diff filepath highlightingKate HUnit pandocTypes
