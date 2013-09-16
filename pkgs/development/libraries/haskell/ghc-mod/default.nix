@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ghc-mod";
-  version = "3.0.0";
-  sha256 = "1ll2vn4vv4k7jaah0ngr2ml381cpprqy9ndqpf8cn44m5xd9qn6p";
+  version = "3.0.2";
+  sha256 = "1p16fcnxrpxszpn5cwagzswdyprw77cs7zb67xa98m3c1p98jgd1";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
