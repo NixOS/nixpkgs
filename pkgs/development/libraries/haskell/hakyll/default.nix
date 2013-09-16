@@ -27,7 +27,7 @@ cabal.mkDerivation (self: {
   ];
   doCheck = false;
   patchPhase = ''
-    sed -i -e 's|cryptohash.*,|cryptohash,|' hakyll.cabal
+    sed -i -e 's|cryptohash.*,|cryptohash,|' -e 's|tagsoup.*,|tagsoup,|' -e 's|pandoc.*,|pandoc,|' hakyll.cabal
   '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
