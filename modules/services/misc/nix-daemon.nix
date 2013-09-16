@@ -292,7 +292,7 @@ in
         path = [ nix pkgs.openssl pkgs.utillinux ]
           ++ optionals cfg.distributedBuilds [ pkgs.openssh pkgs.gzip ];
 
-        environment = cfg.envVars;
+        environment = cfg.envVars // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; };
 
         serviceConfig =
           { ExecStart = "@${nix}/bin/nix-daemon nix-daemon --daemon";
