@@ -156,7 +156,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     mtl          = self.mtl_2_1_2;
     network      = self.network_2_4_1_2;
     OpenGL       = self.OpenGL_2_8_0_0;
-    OpenGLRaw    = self.OpenGLRaw_1_3_0_0;
+    OpenGLRaw    = self.OpenGLRaw_1_4_0_0;
     parallel     = self.parallel_3_2_0_3;
     parsec       = self.parsec_3_1_3;
     QuickCheck   = self.QuickCheck_2_6;
@@ -1580,7 +1580,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   OpenGL = self.OpenGL_2_8_0_0;
 
   OpenGLRaw_1_3_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.3.0.0.nix {};
-  OpenGLRaw = self.OpenGLRaw_1_3_0_0;
+  OpenGLRaw_1_4_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.4.0.0.nix {};
+  OpenGLRaw = self.OpenGLRaw_1_4_0_0;
 
   operational = callPackage ../development/libraries/haskell/operational {};
 
