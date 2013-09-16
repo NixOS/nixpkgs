@@ -1247,6 +1247,8 @@ let
 
   mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix { };
 
+  megacli = callPackage ../tools/misc/megacli { };
+
   megatools = callPackage ../tools/networking/megatools { };
 
   minecraft = callPackage ../games/minecraft { };
