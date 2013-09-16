@@ -2,17 +2,18 @@
 
 let
   dsoPatch = fetchurl {
-    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/lua-arch.patch?h=packages/lua51";
-    sha256 = "11fcyb4q55p4p7kdb8yp85xlw8imy14kzamp2khvcyxss4vw8ipw";
+    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/liblua.so.patch?h=packages/lua";
+    sha256 = "1by1dy4ql61f5c6njq9ibf9kaqm3y633g2q8j54iyjr4cxvqwqz9";
     name = "lua-arch.patch";
   };
 in
 stdenv.mkDerivation rec {
-  name = "lua-5.1.5";
+  name = "lua-${version}";
+  version = "5.2.2";
 
   src = fetchurl {
     url = "http://www.lua.org/ftp/${name}.tar.gz";
-    sha256 = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333";
+    sha256 = "004zyh9p3lpvbwhyhlmrw6wwcia5abx84q4h2brkn4zdypipvmiz";
   };
 
   buildInputs = [ readline ];
@@ -21,14 +22,30 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-O2 -fPIC" LDLAGS="-fPIC" )
-    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.5.1" INSTALL_DATA='cp -d' )
+    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.5.2" INSTALL_DATA='cp -d' )
   '';
 
   postInstall = ''
     mkdir -p "$out/share/doc/lua" "$out/lib/pkgconfig"
-    mv "etc/lua.pc" "$out/lib/pkgconfig/"
     mv "doc/"*.{gif,png,css,html} "$out/share/doc/lua/"
-    rmdir $out/{share,lib}/lua/5.1 $out/{share,lib}/lua
+    rmdir $out/{share,lib}/lua/5.2 $out/{share,lib}/lua
+    mkdir -p "$out/lib/pkgconfig"
+    cat >"$out/lib/pkgconfig/lua.pc" <<EOF
+    prefix=$out
+    libdir=$out/lib
+    includedir=$out/include
+    INSTALL_BIN=$out/bin
+    INSTALL_INC=$out/include
+    INSTALL_LIB=$out/lib
+    INSTALL_MAN=$out/man/man1
+
+    Name: Lua
+    Description: An Extensible Extension Language
+    Version: ${version}
+    Requires:
+    Libs: -L$out/lib -llua -lm
+    Cflags: -I$out/include
+    EOF
   '';
 
   meta = {
