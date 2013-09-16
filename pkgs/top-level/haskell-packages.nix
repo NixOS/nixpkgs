@@ -939,6 +939,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   either = callPackage ../development/libraries/haskell/either {};
 
+  esqueleto = callPackage ../development/libraries/haskell/esqueleto {};
+
   exceptionMtl = callPackage ../development/libraries/haskell/exception-mtl {};
 
   exceptionTransformers = callPackage ../development/libraries/haskell/exception-transformers {};
