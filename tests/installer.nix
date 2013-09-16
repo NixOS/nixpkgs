@@ -81,11 +81,11 @@ let
         };
 
       virtualisation.writableStore = true;
-      virtualisation.pathsInNixDB = channelContents;
+      virtualisation.pathsInNixDB = channelContents ++ [ pkgs.hello.src ];
       virtualisation.memorySize = 768;
     };
 
-  channelContents = [ pkgs.hello.src pkgs.rlwrap ];
+  channelContents = [ pkgs.rlwrap ];
 
 
   # The test script boots the CD, installs NixOS on an empty hard
@@ -112,6 +112,8 @@ let
         $webserver->succeed(
             "nix-push --bzip2 --dest /tmp/channel --manifest --url-prefix http://nixos.org/channels/nixos-unstable " .
             "${toString channelContents} >&2");
+        $webserver->succeed("mkdir /tmp/channel/sha256");
+        $webserver->succeed("cp ${pkgs.hello.src} /tmp/channel/sha256/${pkgs.hello.src.outputHash}");
       ''}
 
       # Make sure that we get a login prompt etc.
@@ -125,7 +127,7 @@ let
         # Allow the machine to talk to the fake nixos.org.
         $machine->succeed(
             "rm /etc/hosts",
-            "echo 192.168.1.1 nixos.org cache.nixos.org > /etc/hosts",
+            "echo 192.168.1.1 nixos.org cache.nixos.org tarballs.nixos.org > /etc/hosts",
             "ifconfig eth1 up 192.168.1.2",
         );
 
