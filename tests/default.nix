@@ -10,6 +10,7 @@ with import ../lib/testing.nix { inherit system minimal; };
   installer = makeTests (import ./installer.nix);
   ipv6 = makeTest (import ./ipv6.nix);
   kde4 = makeTest (import ./kde4.nix);
+  #kexec = makeTest (import ./kexec.nix);
   login = makeTest (import ./login.nix {});
   latestKernel.login = makeTest (import ./login.nix ({ config, pkgs, ... }: { boot.kernelPackages = pkgs.linuxPackages_latest; }));
   misc = makeTest (import ./misc.nix);

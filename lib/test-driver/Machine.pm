@@ -232,9 +232,9 @@ sub connect {
 
         $self->start;
 
-        local $SIG{ALRM} = sub { die "timed out waiting for the guest to connect\n"; };
+        local $SIG{ALRM} = sub { die "timed out waiting for the VM to connect\n"; };
         alarm 300;
-        readline $self->{socket} or die;
+        readline $self->{socket} or die "the VM quit before connecting\n";
         alarm 0;
         
         $self->log("connected to guest root shell");

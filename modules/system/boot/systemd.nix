@@ -129,6 +129,7 @@ let
       "umount.target"
       "final.target"
       "kexec.target"
+      "systemd-kexec.service"
 
       # Password entry.
       "systemd-ask-password-console.path"
