@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hashable";
-  version = "1.2.0.10";
-  sha256 = "155r7zqc0kisjdslr8d1c04yqwvzwqx4d99c0zla113dvsdjhp37";
+  version = "1.2.1.0";
+  sha256 = "09m1glpcxm3f6s9cwz8xzljy6j0n271cym4d9dllw5rpzrwp9h2f";
   buildDepends = [ text ];
   testDepends = [
     HUnit QuickCheck random testFramework testFrameworkHunit
