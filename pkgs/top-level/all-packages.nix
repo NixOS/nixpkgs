@@ -4286,7 +4286,9 @@ let
     gstFfmpeg = pkgs.gst_ffmpeg;
   };
 
-  gstreamer = callPackage ../development/libraries/gstreamer/gstreamer {};
+  gstreamer = callPackage ../development/libraries/gstreamer/gstreamer {
+    bison = bison2;
+  };
 
   gst_plugins_base = callPackage ../development/libraries/gstreamer/gst-plugins-base {};
 
