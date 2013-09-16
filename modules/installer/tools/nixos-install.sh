@@ -157,6 +157,9 @@ fi
 # /mnt in the chroot is the root of the CD.
 export NIX_OTHER_STORES=/mnt/nix:$NIX_OTHER_STORES
 
+p=@nix@/libexec/nix/substituters
+export NIX_SUBSTITUTERS=$p/copy-from-other-stores.pl:$p/download-from-binary-cache.pl
+
 
 # Make manifests available in the chroot.
 rm -f $mountPoint/nix/var/nix/manifests/*
