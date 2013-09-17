@@ -3613,11 +3613,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   pandas = buildPythonPackage rec {
-    name = "pandas-0.11.0";
+    name = "pandas-0.12.0";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "1mwh783hcch6lywgjayj8aqmbfv6n8fd2qbf1xlwqk2913ad8x2d";
+      sha256 = "0vf865wh1kcq33189ykqgngb25nxhxxch6skfdl3c6w024v4r6xy";
     };
 
     buildInputs = [ nose ];
