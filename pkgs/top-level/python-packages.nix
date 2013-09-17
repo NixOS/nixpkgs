@@ -4157,13 +4157,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pyblock = stdenv.mkDerivation rec {
-    name = "python-pyblock-${version}";
-    version = "0.52-1";
+    name = "pyblock-${version}";
+    version = "0.53";
 
-    src = fetchurl {
-      url = "https://git.fedorahosted.org/cgit/pyblock.git/snapshot/"
-          + "pyblock-${version}.tar.bz2";
-      sha256 = "1jj5hd1dcr8xx00rg3jynsf4ak88wwr5id3fmb0qf6zvim1whj7l";
+    src = fetchurl rec {
+      url = "http://pkgs.fedoraproject.org/repo/pkgs/python-pyblock/"
+          + "${name}.tar.bz2/${md5}/${name}.tar.bz2";
+      md5 = "f6d33a8362dee358517d0a9e2ebdd044";
     };
 
     postPatch = ''
