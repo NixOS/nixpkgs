@@ -82,7 +82,7 @@
     }
   },
   { "name": "Plone",
-    "extends": "http://dist.plone.org/release/4.3.1/versions.cfg",
+    "extends": "http://dist.plone.org/release/4.3.2/versions.cfg",
     "doCheck": false,
     "installCommand": "easy_install --always-unzip --no-deps --prefix=\"$out\" .",
     "override": {
