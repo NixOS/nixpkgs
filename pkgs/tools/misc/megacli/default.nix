@@ -1,7 +1,11 @@
-{ stdenv, rpm, cpio, ncurses, patchelf, makeWrapper, requireFile, unzip }: 
+{ stdenv, rpm, cpio, ncurses, patchelf, makeWrapper, requireFile, unzip }:
+
+assert stdenv.system == "x86_64-linux";
+
 stdenv.mkDerivation rec {
   name = "megacli-8.07.07";
-  src = 
+
+  src =
     requireFile {
       name = "8.07.07_MegaCLI.zip";
       url = http://www.lsi.com/downloads/Public/MegaRAID%20Common%20Files/8.07.07_MegaCLI.zip;
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "CLI program for LSI MegaRAID cards, which also works with some Dell PERC RAID cards.";
+    description = "CLI program for LSI MegaRAID cards, which also works with some Dell PERC RAID cards";
     license = "unfree";
   };
 }
