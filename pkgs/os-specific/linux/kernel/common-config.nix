@@ -242,6 +242,8 @@ with stdenv.lib;
     CGROUP_MEM_RES_CTLR_SWAP y
   ''}
   DEVPTS_MULTIPLE_INSTANCES y
+  BLK_DEV_THROTTLING y
+  CFQ_GROUP_IOSCHED y
 
   # Enable staging drivers.  These are somewhat experimental, but
   # they generally don't hurt.
