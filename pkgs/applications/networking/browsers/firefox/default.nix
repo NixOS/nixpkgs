@@ -19,9 +19,9 @@ assert useSystemCairo -> cairo != null;
 let optional = stdenv.lib.optional;
 in rec {
 
-  firefoxVersion = "23.0.1";
+  firefoxVersion = "24.0";
 
-  xulVersion = "23.0.1"; # this attribute is used by other packages
+  xulVersion = "24.0"; # this attribute is used by other packages
 
 
   src = fetchurl {
@@ -31,7 +31,7 @@ in rec {
         # Fall back to this url for versions not available at releases.mozilla.org.
         "ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
     ];
-    sha1 = "66361fcvyl9liyh41gvgysiim90wsywk";
+    sha1 = "8scch0gr59j86vp9c1v0yx6mq1pkwcvg";
   };
 
   commonConfigureFlags =
@@ -57,6 +57,7 @@ in rec {
       "--disable-necko-wifi" # maybe we want to enable this at some point
       "--disable-installer"
       "--disable-updater"
+      "--disable-gstreamer"
     ] ++ optional useSystemCairo "--enable-system-cairo";
 
 
@@ -81,8 +82,6 @@ in rec {
       ] ++ commonConfigureFlags;
 
     enableParallelBuilding = true;
-
-    patches = optional useSystemCairo ./system-cairo.patch;
 
     preConfigure =
       ''
