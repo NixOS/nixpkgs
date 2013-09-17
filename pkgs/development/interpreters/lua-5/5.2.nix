@@ -9,7 +9,8 @@ let
 in
 stdenv.mkDerivation rec {
   name = "lua-${version}";
-  version = "5.2.2";
+  majorVersion = "5.2";
+  version = "${majorVersion}.2";
 
   src = fetchurl {
     url = "http://www.lua.org/ftp/${name}.tar.gz";
@@ -21,14 +22,14 @@ stdenv.mkDerivation rec {
   patches = [ dsoPatch ];
 
   configurePhase = ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-O2 -fPIC" LDLAGS="-fPIC" )
-    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.5.2" INSTALL_DATA='cp -d' )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-O2 -fPIC" LDLAGS="-fPIC" V=${majorVersion} R=${version} )
+    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.${majorVersion} liblua.so.${version}" INSTALL_DATA='cp -d' )
   '';
 
   postInstall = ''
     mkdir -p "$out/share/doc/lua" "$out/lib/pkgconfig"
     mv "doc/"*.{gif,png,css,html} "$out/share/doc/lua/"
-    rmdir $out/{share,lib}/lua/5.2 $out/{share,lib}/lua
+    rmdir $out/{share,lib}/lua/${majorVersion} $out/{share,lib}/lua
     mkdir -p "$out/lib/pkgconfig"
     cat >"$out/lib/pkgconfig/lua.pc" <<EOF
     prefix=$out
