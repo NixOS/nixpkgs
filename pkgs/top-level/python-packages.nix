@@ -4392,12 +4392,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   pykickstart = buildPythonPackage rec {
     name = "pykickstart-${version}";
-    version = "1.99.32-1";
+    version = "1.99.39";
 
-    src = fetchurl {
-      url = "https://git.fedorahosted.org/cgit/pykickstart.git/snapshot/"
-          + "r${version}.tar.bz2";
-      sha256 = "1sq68jvc39k9wrkcc4xlabhwi8gdz019yh2k5nrl7ya35b8daqw0";
+    src = fetchurl rec {
+      url = "http://pkgs.fedoraproject.org/repo/pkgs/pykickstart/"
+          + "${name}.tar.gz/${md5}/${name}.tar.gz";
+      md5 = "d249f60aa89b1b4facd63f776925116d";
     };
 
     postPatch = ''
