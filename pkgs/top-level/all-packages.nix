@@ -9798,6 +9798,8 @@ let
 
   nixops = callPackage ../tools/package-management/nixops { };
 
+  nix-repl = callPackage ../tools/package-management/nix-repl { };
+
   nut = callPackage ../applications/misc/nut { };
 
   solfege = callPackage ../misc/solfege {
