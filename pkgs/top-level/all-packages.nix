@@ -6239,7 +6239,11 @@ let
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
-  virtuoso = callPackage ../servers/sql/virtuoso { };
+  virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix { };
+
+  virtuoso7 = callPackage ../servers/sql/virtuoso/7.x.nix { };
+
+  virtuoso = virtuoso6;
 
   vsftpd = callPackage ../servers/ftp/vsftpd { };
 
