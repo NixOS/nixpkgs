@@ -5537,10 +5537,6 @@ let
     inherit readline ncurses;
   });
 
-  sqliteFull = lowPrio (callPackage ../development/libraries/sqlite/3.7.9-full.nix {
-    inherit readline ncurses;
-  });
-
   stfl = callPackage ../development/libraries/stfl {
     stdenv = if stdenv.isDarwin
       then overrideGCC stdenv gccApple
