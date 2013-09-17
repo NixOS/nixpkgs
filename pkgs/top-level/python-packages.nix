@@ -5244,6 +5244,118 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+  sigal = buildPythonPackage rec {
+    name = "sigal-0.5.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/sigal/${name}.tar.gz";
+      md5 = "93c93725674c0702583a638f5a09c9e4";
+    };
+
+    propagatedBuildInputs = [ jinja2 markdown pillow pilkit clint argh ];
+
+    meta = with stdenv.lib; {
+      description = "Yet another simple static gallery generator";
+      homepage = http://sigal.saimon.org/en/latest/index.html;
+      license = licenses.mit;
+      maintainers = [ maintainers.iElectric ];
+    };
+  };
+
+  pilkit = buildPythonPackage rec {
+    name = "pilkit-1.1.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pilkit/${name}.tar.gz";
+      md5 = "659dd67440f4b576889f2cd350f43d7b";
+    };
+
+    preConfigure = ''
+      substituteInPlace setup.py --replace 'nose==1.2.1' 'nose'
+    '';
+
+    # tests fail, see https://github.com/matthewwithanm/pilkit/issues/9
+    doCheck = false;
+
+    buildInputs = [ pillow nose_progressive nose mock blessings ];
+
+    meta = with stdenv.lib; {
+      maintainers = [ maintainers.iElectric ];
+    };
+  };
+
+  clint = buildPythonPackage rec {
+    name = "clint-0.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/clint/${name}.tar.gz";
+      md5 = "7dcd43fb08bfb84c7d63e9356ada7b73";
+    };
+
+    checkPhase = ''
+      nosetests
+    '';
+
+    buildInputs = [ pillow nose_progressive nose mock blessings nose ];
+
+    meta = with stdenv.lib; {
+      maintainers = [ maintainers.iElectric ];
+    };
+  };
+
+  argh = buildPythonPackage rec {
+    name = "argh-0.23.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/a/argh/${name}.tar.gz";
+      md5 = "25bb02c6552b42875f2c36714e0ff16c";
+    };
+
+    preCheck = ''
+      export LANG="en_US.UTF-8"
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+    '';
+
+    buildInputs = [ pytest py mock ];
+
+    meta = with stdenv.lib; {
+      maintainers = [ maintainers.iElectric ];
+    };
+  };
+
+  nose_progressive = buildPythonPackage rec {
+    name = "nose-progressive-1.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nose-progressive/${name}.tar.gz";
+      md5 = "180be93929c5962044a35489f193259d";
+    };
+
+    buildInputs = [ pillow blessings nose ];
+    propagatedBuildInputs = [ modules.curses ];
+
+    meta = with stdenv.lib; {
+      maintainers = [ maintainers.iElectric ];
+    };
+  };
+
+  blessings = buildPythonPackage rec {
+    name = "blessings-1.5.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/b/blessings/${name}.tar.gz";
+      md5 = "fbbddbf20b1f9a13e3fa612b1e086fd8";
+    };
+
+    # 4 failing tests
+    doCheck = false; 
+
+    buildInputs = [ nose modules.curses ];
+
+    meta = with stdenv.lib; {
+      maintainers = [ maintainers.iElectric ];
+    };
+  };
 
   sexpdata = buildPythonPackage rec {
     name = "sexpdata-0.0.2";
