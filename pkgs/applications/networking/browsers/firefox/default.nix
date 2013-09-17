@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo
+, cairo, gstreamer, gst_plugins_base
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
   # binaries may not be distributed without permission from the
@@ -56,7 +56,6 @@ in rec {
       "--disable-necko-wifi" # maybe we want to enable this at some point
       "--disable-installer"
       "--disable-updater"
-      "--disable-gstreamer"
     ];
 
 
@@ -73,6 +72,7 @@ in rec {
         xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
         xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
         hunspell libevent libstartup_notification libvpx cairo
+        gstreamer gst_plugins_base
       ];
 
     configureFlags =
@@ -138,6 +138,7 @@ in rec {
         dbus dbus_glib pango freetype fontconfig alsaLib nspr nss libnotify
         xlibs.pixman yasm mesa sqlite file unzip pysqlite
         hunspell libevent libstartup_notification libvpx cairo
+        gstreamer gst_plugins_base
       ];
 
     patches = [
