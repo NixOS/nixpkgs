@@ -3,8 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo ? null
-, useSystemCairo ? false
+, cairo
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
   # binaries may not be distributed without permission from the
@@ -14,7 +13,6 @@
 }:
 
 assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
-assert useSystemCairo -> cairo != null;
 
 let optional = stdenv.lib.optional;
 in rec {
@@ -52,13 +50,14 @@ in rec {
       "--enable-system-hunspell"
       "--enable-system-pixman"
       "--enable-system-sqlite"
+      "--enable-system-cairo"
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
       "--disable-installer"
       "--disable-updater"
       "--disable-gstreamer"
-    ] ++ optional useSystemCairo "--enable-system-cairo";
+    ];
 
 
   xulrunner = stdenv.mkDerivation rec {
@@ -73,8 +72,8 @@ in rec {
         alsaLib nspr nss libnotify xlibs.pixman yasm mesa
         xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
         xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
-        hunspell libevent libstartup_notification libvpx
-      ] ++ optional useSystemCairo cairo;
+        hunspell libevent libstartup_notification libvpx cairo
+      ];
 
     configureFlags =
       [ "--enable-application=xulrunner"
@@ -138,8 +137,8 @@ in rec {
       [ pkgconfig libpng gtk perl zip libIDL libjpeg zlib bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr nss libnotify
         xlibs.pixman yasm mesa sqlite file unzip pysqlite
-        hunspell libevent libstartup_notification libvpx
-      ] ++ optional useSystemCairo cairo;
+        hunspell libevent libstartup_notification libvpx cairo
+      ];
 
     patches = [
       ./disable-reporter.patch # fixes "search box not working when built on xulrunner"
