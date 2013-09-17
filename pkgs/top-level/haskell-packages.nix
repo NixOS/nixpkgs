@@ -174,7 +174,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     xhtml        = self.xhtml_3000_2_1;
     zlib         = self.zlib_0_5_4_1;
     cabalInstall = self.cabalInstall_1_18_0_1;
-    alex         = self.alex_3_0_5;
+    alex         = self.alex_3_1_0;
     haddock      = self.haddock_2_13_2;
     happy        = self.happy_1_18_11;
     primitive    = self.primitive_0_5_0_1;      # semi-official, but specified
@@ -2332,7 +2332,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   alex_3_0_1 = callPackage ../development/tools/parsing/alex/3.0.1.nix {};
   alex_3_0_2 = callPackage ../development/tools/parsing/alex/3.0.2.nix {};
   alex_3_0_5 = callPackage ../development/tools/parsing/alex/3.0.5.nix {};
-  alex = self.alex_3_0_5;
+  alex_3_1_0 = callPackage ../development/tools/parsing/alex/3.1.0.nix {};
+  alex = self.alex_3_1_0;
 
   alexMeta = callPackage ../development/tools/haskell/alex-meta {};
 
