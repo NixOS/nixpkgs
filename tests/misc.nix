@@ -42,6 +42,11 @@
       subtest "poweroff_cmd", sub {
           $machine->succeed("[ -x \"\$(cat /proc/sys/kernel/poweroff_cmd)\" ]")
       };
+
+      # Test whether the blkio controller is properly enabled.
+      subtest "blkio-cgroup", sub {
+          $machine->succeed("[ -n \"\$(cat /sys/fs/cgroup/blkio/blkio.sectors)\" ]")
+      };
     '';
 
 }
