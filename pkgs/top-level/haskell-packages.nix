@@ -1390,6 +1390,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   List = callPackage ../development/libraries/haskell/List {};
 
+  listTries = callPackage ../development/libraries/haskell/list-tries {};
+
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
 
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
