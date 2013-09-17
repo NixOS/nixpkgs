@@ -9039,7 +9039,10 @@ rec {
       sha256 = "046jm18liq7rwkdawdh9520cnalkfrk26yqryp7xgw71y65lvq61";
     };
     propagatedBuildInputs = [ HTTPRequestAsCGI WWWMechanize ];
-    preConfigure = "sed -i 's|#!/usr/bin/perl|#!${perl}/bin/perl|' t/cgi-bin/script.cgi";
+    preConfigure = ''
+      substituteInPlace t/cgi-bin/script.cgi \
+        --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
+    '';
     meta = {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
