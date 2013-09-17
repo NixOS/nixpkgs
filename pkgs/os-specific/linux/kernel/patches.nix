@@ -134,8 +134,8 @@ rec {
   grsecurity_2_9_1_3_2_51 =
     { name = "grsecurity-2.9.1-3.2.51";
       patch = fetchurl {
-        url = http://grsecurity.net/stable/grsecurity-2.9.1-3.2.51-201309101928.patch;
-        sha256 = "90f9ddc74d56f4525b8faa8505a95f45c23a2e763c7519ba5ae953069a51aca2";
+        url = http://grsecurity.net/stable/grsecurity-2.9.1-3.2.51-201309281102.patch;
+        sha256 = "0mwwdmccihzhl25c9q92x0k33c5kxbz6mikid9diramvki7sk0l8";
       };
       # The grsec kernel patch seems to include the apparmor patches as of 2.9.1-3.2.51
       features.apparmor = true;
