@@ -1,10 +1,10 @@
-{ cabal, base64Bytestring, cryptohash, random }:
+{ cabal, base64Bytestring, binary, cryptohash, random, SHA }:
 
 cabal.mkDerivation (self: {
   pname = "pwstore-fast";
-  version = "2.3";
-  sha256 = "014l4n00lpg5037fkdwnxnv7xjfc3vlz1dphr7hfbqnjwf1z9ibw";
-  buildDepends = [ base64Bytestring cryptohash random ];
+  version = "2.4";
+  sha256 = "0n0qw1w7j1h5c1pk2vscwwnxxb4qx2dd73jr5y1rn63gwd0wp171";
+  buildDepends = [ base64Bytestring binary cryptohash random SHA ];
   meta = {
     homepage = "https://github.com/PeterScott/pwstore";
     description = "Secure password storage";
