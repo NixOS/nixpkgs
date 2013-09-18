@@ -1,0 +1,64 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.009
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.009
+Problem:    When a file was not decrypted (yet), writing it may destroy the
+	    contents.
+Solution:   Mark the file as readonly until decryption was done. (Christian
+	    Brabandt)
+Files:	    src/fileio.c
+
+
+*** ../vim-7.4.008/src/fileio.c	2013-08-05 21:58:03.000000000 +0200
+--- src/fileio.c	2013-08-25 17:45:27.000000000 +0200
+***************
+*** 2926,2934 ****
+--- 2926,2939 ----
+      int		*did_ask;	/* flag: whether already asked for key */
+  {
+      int method = crypt_method_from_magic((char *)ptr, *sizep);
++     int b_p_ro = curbuf->b_p_ro;
+  
+      if (method >= 0)
+      {
++ 	/* Mark the buffer as read-only until the decryption has taken place.
++ 	 * Avoids accidentally overwriting the file with garbage. */
++ 	curbuf->b_p_ro = TRUE;
++ 
+  	set_crypt_method(curbuf, method);
+  	if (method > 0)
+  	    (void)blowfish_self_test();
+***************
+*** 2977,2982 ****
+--- 2982,2989 ----
+  	    *sizep -= CRYPT_MAGIC_LEN + salt_len + seed_len;
+  	    mch_memmove(ptr, ptr + CRYPT_MAGIC_LEN + salt_len + seed_len,
+  							      (size_t)*sizep);
++ 	    /* Restore the read-only flag. */
++ 	    curbuf->b_p_ro = b_p_ro;
+  	}
+      }
+      /* When starting to edit a new file which does not have encryption, clear
+*** ../vim-7.4.008/src/version.c	2013-08-25 17:01:36.000000000 +0200
+--- src/version.c	2013-08-25 17:44:30.000000000 +0200
+***************
+*** 729,730 ****
+--- 729,732 ----
+  {   /* Add new patch number below this line */
++ /**/
++     9,
+  /**/
+
+-- 
+I have a watch cat! Just break in and she'll watch.
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

@@ -1,0 +1,78 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.017
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.017
+Problem:    ":help !!" does not find the "!!" tag in the help file. (Ben
+	    Fritz)
+Solution:   When reading the start of the tags file do parse lines that are
+	    not header lines.
+Files:	    src/tag.c
+
+
+*** ../vim-7.4.016/src/tag.c	2013-06-15 22:26:26.000000000 +0200
+--- src/tag.c	2013-09-05 12:03:38.000000000 +0200
+***************
+*** 1797,1809 ****
+  	     */
+  	    if (state == TS_START)
+  	    {
+! 		/* The header ends when the line sorts below "!_TAG_".
+! 		 * There may be non-header items before the header though,
+! 		 * e.g. "!" itself. When case is folded lower case letters
+! 		 * sort before "_". */
+  		if (STRNCMP(lbuf, "!_TAG_", 6) <= 0
+  				|| (lbuf[0] == '!' && ASCII_ISLOWER(lbuf[1])))
+  		{
+  		    /*
+  		     * Read header line.
+  		     */
+--- 1797,1812 ----
+  	     */
+  	    if (state == TS_START)
+  	    {
+! 		/* The header ends when the line sorts below "!_TAG_".  When
+! 		 * case is folded lower case letters sort before "_". */
+  		if (STRNCMP(lbuf, "!_TAG_", 6) <= 0
+  				|| (lbuf[0] == '!' && ASCII_ISLOWER(lbuf[1])))
+  		{
++ 		    if (STRNCMP(lbuf, "!_TAG_", 6) != 0)
++ 			/* Non-header item before the header, e.g. "!" itself.
++ 			 */
++ 			goto parse_line;
++ 
+  		    /*
+  		     * Read header line.
+  		     */
+***************
+*** 1898,1903 ****
+--- 1901,1907 ----
+  #endif
+  	    }
+  
++ parse_line:
+  	    /*
+  	     * Figure out where the different strings are in this line.
+  	     * For "normal" tags: Do a quick check if the tag matches.
+*** ../vim-7.4.016/src/version.c	2013-08-30 17:29:10.000000000 +0200
+--- src/version.c	2013-09-05 12:02:01.000000000 +0200
+***************
+*** 740,741 ****
+--- 740,743 ----
+  {   /* Add new patch number below this line */
++ /**/
++     17,
+  /**/
+
+-- 
+An error has occurred.  Hit any user to continue.
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

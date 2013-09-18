@@ -1,0 +1,232 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.004
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.004
+Problem:    When closing a window fails ":bwipe" may hang.
+Solution:   Let win_close() return FAIL and break out of the loop.
+Files:	    src/window.c, src/proto/window.pro, src/buffer.c
+
+
+*** ../vim-7.4.003/src/window.c	2013-07-24 17:38:29.000000000 +0200
+--- src/window.c	2013-08-14 16:52:44.000000000 +0200
+***************
+*** 2172,2179 ****
+   * If "free_buf" is TRUE related buffer may be unloaded.
+   *
+   * Called by :quit, :close, :xit, :wq and findtag().
+   */
+!     void
+  win_close(win, free_buf)
+      win_T	*win;
+      int		free_buf;
+--- 2172,2180 ----
+   * If "free_buf" is TRUE related buffer may be unloaded.
+   *
+   * Called by :quit, :close, :xit, :wq and findtag().
++  * Returns FAIL when the window was not closed.
+   */
+!     int
+  win_close(win, free_buf)
+      win_T	*win;
+      int		free_buf;
+***************
+*** 2190,2210 ****
+      if (last_window())
+      {
+  	EMSG(_("E444: Cannot close last window"));
+! 	return;
+      }
+  
+  #ifdef FEAT_AUTOCMD
+      if (win->w_closing || (win->w_buffer != NULL && win->w_buffer->b_closing))
+! 	return; /* window is already being closed */
+      if (win == aucmd_win)
+      {
+  	EMSG(_("E813: Cannot close autocmd window"));
+! 	return;
+      }
+      if ((firstwin == aucmd_win || lastwin == aucmd_win) && one_window())
+      {
+  	EMSG(_("E814: Cannot close window, only autocmd window would remain"));
+! 	return;
+      }
+  #endif
+  
+--- 2191,2211 ----
+      if (last_window())
+      {
+  	EMSG(_("E444: Cannot close last window"));
+! 	return FAIL;
+      }
+  
+  #ifdef FEAT_AUTOCMD
+      if (win->w_closing || (win->w_buffer != NULL && win->w_buffer->b_closing))
+! 	return FAIL; /* window is already being closed */
+      if (win == aucmd_win)
+      {
+  	EMSG(_("E813: Cannot close autocmd window"));
+! 	return FAIL;
+      }
+      if ((firstwin == aucmd_win || lastwin == aucmd_win) && one_window())
+      {
+  	EMSG(_("E814: Cannot close window, only autocmd window would remain"));
+! 	return FAIL;
+      }
+  #endif
+  
+***************
+*** 2212,2218 ****
+       * and then close the window and the tab page to avoid that curwin and
+       * curtab are invalid while we are freeing memory. */
+      if (close_last_window_tabpage(win, free_buf, prev_curtab))
+!       return;
+  
+      /* When closing the help window, try restoring a snapshot after closing
+       * the window.  Otherwise clear the snapshot, it's now invalid. */
+--- 2213,2219 ----
+       * and then close the window and the tab page to avoid that curwin and
+       * curtab are invalid while we are freeing memory. */
+      if (close_last_window_tabpage(win, free_buf, prev_curtab))
+!       return FAIL;
+  
+      /* When closing the help window, try restoring a snapshot after closing
+       * the window.  Otherwise clear the snapshot, it's now invalid. */
+***************
+*** 2240,2261 ****
+  	    win->w_closing = TRUE;
+  	    apply_autocmds(EVENT_BUFLEAVE, NULL, NULL, FALSE, curbuf);
+  	    if (!win_valid(win))
+! 		return;
+  	    win->w_closing = FALSE;
+  	    if (last_window())
+! 		return;
+  	}
+  	win->w_closing = TRUE;
+  	apply_autocmds(EVENT_WINLEAVE, NULL, NULL, FALSE, curbuf);
+  	if (!win_valid(win))
+! 	    return;
+  	win->w_closing = FALSE;
+  	if (last_window())
+! 	    return;
+  # ifdef FEAT_EVAL
+  	/* autocmds may abort script processing */
+  	if (aborting())
+! 	    return;
+  # endif
+      }
+  #endif
+--- 2241,2262 ----
+  	    win->w_closing = TRUE;
+  	    apply_autocmds(EVENT_BUFLEAVE, NULL, NULL, FALSE, curbuf);
+  	    if (!win_valid(win))
+! 		return FAIL;
+  	    win->w_closing = FALSE;
+  	    if (last_window())
+! 		return FAIL;
+  	}
+  	win->w_closing = TRUE;
+  	apply_autocmds(EVENT_WINLEAVE, NULL, NULL, FALSE, curbuf);
+  	if (!win_valid(win))
+! 	    return FAIL;
+  	win->w_closing = FALSE;
+  	if (last_window())
+! 	    return FAIL;
+  # ifdef FEAT_EVAL
+  	/* autocmds may abort script processing */
+  	if (aborting())
+! 	    return FAIL;
+  # endif
+      }
+  #endif
+***************
+*** 2303,2309 ****
+       * other window or moved to another tab page. */
+      else if (!win_valid(win) || last_window() || curtab != prev_curtab
+  	    || close_last_window_tabpage(win, free_buf, prev_curtab))
+! 	return;
+  
+      /* Free the memory used for the window and get the window that received
+       * the screen space. */
+--- 2304,2310 ----
+       * other window or moved to another tab page. */
+      else if (!win_valid(win) || last_window() || curtab != prev_curtab
+  	    || close_last_window_tabpage(win, free_buf, prev_curtab))
+! 	return FAIL;
+  
+      /* Free the memory used for the window and get the window that received
+       * the screen space. */
+***************
+*** 2383,2388 ****
+--- 2384,2390 ----
+  #endif
+  
+      redraw_all_later(NOT_VALID);
++     return OK;
+  }
+  
+  /*
+*** ../vim-7.4.003/src/proto/window.pro	2013-08-10 13:37:30.000000000 +0200
+--- src/proto/window.pro	2013-08-14 16:52:50.000000000 +0200
+***************
+*** 9,15 ****
+  void win_equal __ARGS((win_T *next_curwin, int current, int dir));
+  void close_windows __ARGS((buf_T *buf, int keep_curwin));
+  int one_window __ARGS((void));
+! void win_close __ARGS((win_T *win, int free_buf));
+  void win_close_othertab __ARGS((win_T *win, int free_buf, tabpage_T *tp));
+  void win_free_all __ARGS((void));
+  win_T *winframe_remove __ARGS((win_T *win, int *dirp, tabpage_T *tp));
+--- 9,15 ----
+  void win_equal __ARGS((win_T *next_curwin, int current, int dir));
+  void close_windows __ARGS((buf_T *buf, int keep_curwin));
+  int one_window __ARGS((void));
+! int win_close __ARGS((win_T *win, int free_buf));
+  void win_close_othertab __ARGS((win_T *win, int free_buf, tabpage_T *tp));
+  void win_free_all __ARGS((void));
+  win_T *winframe_remove __ARGS((win_T *win, int *dirp, tabpage_T *tp));
+*** ../vim-7.4.003/src/buffer.c	2013-07-17 16:39:00.000000000 +0200
+--- src/buffer.c	2013-08-14 16:54:34.000000000 +0200
+***************
+*** 1186,1192 ****
+  		   && !(curwin->w_closing || curwin->w_buffer->b_closing)
+  # endif
+  		   && (firstwin != lastwin || first_tabpage->tp_next != NULL))
+! 	    win_close(curwin, FALSE);
+  #endif
+  
+  	/*
+--- 1186,1195 ----
+  		   && !(curwin->w_closing || curwin->w_buffer->b_closing)
+  # endif
+  		   && (firstwin != lastwin || first_tabpage->tp_next != NULL))
+! 	{
+! 	    if (win_close(curwin, FALSE) == FAIL)
+! 		break;
+! 	}
+  #endif
+  
+  	/*
+*** ../vim-7.4.003/src/version.c	2013-08-14 14:18:37.000000000 +0200
+--- src/version.c	2013-08-14 17:10:23.000000000 +0200
+***************
+*** 729,730 ****
+--- 729,732 ----
+  {   /* Add new patch number below this line */
++ /**/
++     4,
+  /**/
+
+-- 
+From "know your smileys":
+ *<|:-)	Santa Claus (Ho Ho Ho)
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///
