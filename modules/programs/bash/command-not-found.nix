@@ -23,7 +23,7 @@ in
 
 {
 
-  environment.interactiveShellInit =
+  programs.bash.interactiveShellInit =
     ''
       # This function is called whenever a command is not found.
       command_not_found_handle() {

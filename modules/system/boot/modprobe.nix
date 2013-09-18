@@ -105,10 +105,7 @@ with pkgs.lib;
         echo ${config.system.sbin.modprobe}/sbin/modprobe > /proc/sys/kernel/modprobe
       '';
 
-    environment.shellInit =
-      ''
-        export MODULE_DIR=/run/current-system/kernel-modules/lib/modules
-      '';
+    environment.variables.MODULE_DIR.value = "/run/current-system/kernel-modules/lib/modules";
 
   };
 

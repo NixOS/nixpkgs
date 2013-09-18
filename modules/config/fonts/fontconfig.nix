@@ -46,13 +46,10 @@ with pkgs.lib;
         </fontconfig>
       '';
 
-    environment.shellInit =
-      ''
-        # FIXME: This variable is no longer needed, but we'll keep it
-        # around for a while for applications linked against old
-        # fontconfig builds.
-        export FONTCONFIG_FILE=/etc/fonts/fonts.conf
-      '';
+    # FIXME: This variable is no longer needed, but we'll keep it
+    # around for a while for applications linked against old
+    # fontconfig builds.
+    environment.variables.FONTCONFIG_FILE.value = "/etc/fonts/fonts.conf";
 
     environment.systemPackages = [ pkgs.fontconfig ];
 
