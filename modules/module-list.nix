@@ -53,6 +53,7 @@
   ./programs/ssmtp.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
+  ./programs/zsh/zsh.nix
   ./rename.nix
   ./security/apparmor.nix
   ./security/apparmor-suid.nix
