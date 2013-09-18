@@ -524,6 +524,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   aeson = callPackage ../development/libraries/haskell/aeson {};
 
+  aesonPretty = callPackage ../development/libraries/haskell/aeson-pretty {};
+
   alternativeIo = callPackage ../development/libraries/haskell/alternative-io {};
 
   alsaCore = callPackage ../development/libraries/haskell/alsa-core {};
