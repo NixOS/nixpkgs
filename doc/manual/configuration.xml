@@ -280,7 +280,7 @@ $ nix-env -u '*'
 </screen>
 </para>
 
-<para>A package can be unstalled using the <option>-e</option>
+<para>A package can be uninstalled using the <option>-e</option>
 flag:
 <screen>
 $ nix-env -e thunderbird
