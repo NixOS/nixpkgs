@@ -11,7 +11,7 @@ composableDerivation {
                    else stdenv ).mkDerivation;
 } (fix: {
 
-    name = "vim_configurable-7.4";
+    name = "vim_configurable-7.4.23";
 
     enableParallelBuilding = true; # test this
 
@@ -38,8 +38,10 @@ composableDerivation {
     preConfigure
       = stdenv.lib.optionalString
         (stdenv.isDarwin && (config.vim.darwin or true)) ''
-          sed -i "5387,5390d" src/auto/configure
-          sed -i "5394d" src/auto/configure
+          # TODO: we should find a better way of doing this as, if the configure
+          # file changes, we need to change these line numbers
+          sed -i "5641,5644d" src/auto/configure
+          sed -i "5648d" src/auto/configure
         '';
 
     configureFlags
@@ -49,10 +51,26 @@ composableDerivation {
       = [ ncurses pkgconfig gtk libX11 libXext libSM libXpm libXt libXaw libXau
           libXmu glib libICE ];
 
+    prePatch = "cd src";
+    
+    patches =
+      [ ./patches/7.4.001 ./patches/7.4.002 ./patches/7.4.003 ./patches/7.4.004
+        ./patches/7.4.005 ./patches/7.4.006 ./patches/7.4.007 ./patches/7.4.008
+        ./patches/7.4.009 ./patches/7.4.010 ./patches/7.4.011 ./patches/7.4.012
+        ./patches/7.4.013 ./patches/7.4.014 ./patches/7.4.015 ./patches/7.4.016
+        ./patches/7.4.017 ./patches/7.4.018 ./patches/7.4.019 ./patches/7.4.020
+        ./patches/7.4.021 ./patches/7.4.022 ./patches/7.4.023 ];
+
     # most interpreters aren't tested yet.. (see python for example how to do it)
     flags = {
         ftNix = {
-          patches = [ ./ft-nix-support.patch ];
+          # because we cd to src in the main patch phase, we can't just add this
+          # patch to the list, we have to apply it manually
+          postPatch = ''
+            cd ../runtime
+            patch -p2 < ${./ft-nix-support.patch}
+            cd ..
+          '';
         };
       }
       // edf { name = "darwin"; } #Disable Darwin (Mac OS X) support.
@@ -131,10 +149,11 @@ composableDerivation {
 
   dontStrip = 1;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "The most popular clone of the VI editor";
-    homepage    = "www.vim.org";
-    platforms   = lib.platforms.unix;
+    homepage    = http://www.vim.org;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
   };
 })
 

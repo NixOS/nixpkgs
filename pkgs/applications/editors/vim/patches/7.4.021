@@ -1,0 +1,86 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.021
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.021
+Problem:    NFA regexp: Using \ze in one branch which doesn't match may cause
+	    end of another branch to be wrong. (William Fugh)
+Solution:   Set end position if it wasn't set yet.
+Files:	    src/regexp_nfa.c, src/testdir/test64.in, src/testdir/test64.ok
+
+
+*** ../vim-7.4.020/src/regexp_nfa.c	2013-09-05 16:05:32.000000000 +0200
+--- src/regexp_nfa.c	2013-09-05 20:56:25.000000000 +0200
+***************
+*** 4209,4218 ****
+  	    break;
+  
+  	case NFA_MCLOSE:
+! 	    if (nfa_has_zend)
+  	    {
+! 		/* Do not overwrite the position set by \ze. If no \ze
+! 		 * encountered end will be set in nfa_regtry(). */
+  		subs = addstate(l, state->out, subs, pim, off);
+  		break;
+  	    }
+--- 4209,4219 ----
+  	    break;
+  
+  	case NFA_MCLOSE:
+! 	    if (nfa_has_zend && (REG_MULTI
+! 			? subs->norm.list.multi[0].end.lnum >= 0
+! 			: subs->norm.list.line[0].end != NULL))
+  	    {
+! 		/* Do not overwrite the position set by \ze. */
+  		subs = addstate(l, state->out, subs, pim, off);
+  		break;
+  	    }
+*** ../vim-7.4.020/src/testdir/test64.in	2013-09-05 16:05:32.000000000 +0200
+--- src/testdir/test64.in	2013-09-05 20:55:18.000000000 +0200
+***************
+*** 328,333 ****
+--- 328,334 ----
+  :call add(tl, [2, 'abc \zsmatch\ze abc', 'abc abc abc match abc abc', 'match'])
+  :call add(tl, [2, '\v(a \zsif .*){2}', 'a if then a if last', 'if last', 'a if last'])
+  :call add(tl, [2, '\>\zs.', 'aword. ', '.'])
++ :call add(tl, [2, '\s\+\ze\[/\|\s\zs\s\+', 'is   [a t', '  '])
+  :"
+  :"""" Tests for \@= and \& features
+  :call add(tl, [2, 'abc\@=', 'abc', 'ab'])
+*** ../vim-7.4.020/src/testdir/test64.ok	2013-09-05 16:05:32.000000000 +0200
+--- src/testdir/test64.ok	2013-09-05 21:09:56.000000000 +0200
+***************
+*** 752,757 ****
+--- 752,760 ----
+  OK 0 - \>\zs.
+  OK 1 - \>\zs.
+  OK 2 - \>\zs.
++ OK 0 - \s\+\ze\[/\|\s\zs\s\+
++ OK 1 - \s\+\ze\[/\|\s\zs\s\+
++ OK 2 - \s\+\ze\[/\|\s\zs\s\+
+  OK 0 - abc\@=
+  OK 1 - abc\@=
+  OK 2 - abc\@=
+*** ../vim-7.4.020/src/version.c	2013-09-05 16:05:32.000000000 +0200
+--- src/version.c	2013-09-05 21:11:38.000000000 +0200
+***************
+*** 740,741 ****
+--- 740,743 ----
+  {   /* Add new patch number below this line */
++ /**/
++     21,
+  /**/
+
+-- 
+hundred-and-one symptoms of being an internet addict:
+174. You know what a listserv is.
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///
