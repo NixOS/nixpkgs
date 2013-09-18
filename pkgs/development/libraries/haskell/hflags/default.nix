@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hflags";
-  version = "0.2";
-  sha256 = "1bz8w1vxqlc2c9iygr2dhy2ck1sd56zjwqzz707nqcmsqqsfmyhb";
+  version = "0.3";
+  sha256 = "113pqdjnxfhkk95969ia393n1jvbbnfljsz42vfapgzvd8f1fci2";
   buildDepends = [ text ];
   meta = {
     homepage = "http://github.com/errge/hflags";
