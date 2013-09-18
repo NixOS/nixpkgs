@@ -51,6 +51,8 @@ cabal.mkDerivation (self: {
   '';
   patches = [ (fetchurl { url = "https://github.com/joeyh/git-annex/commit/e4d0b2f180627472b017af8bcfc2ae3fc04d6767.patch";
                           sha256 = "08lz0zq5y3b3wgi1vbzka7kyihkhzjv02pmq8ab02674yrqrnr5k"; })
+              (fetchurl { url = "https://github.com/joeyh/git-annex/commit/26baae8967d55d0793d0609475a75d265bdd64a3.patch";
+                          sha256 = "0yzgj55jjcqv1975bnj4wafyh4vdzjjn4ajx3wahsyg0gsrm5lpv"; })
             ];
   meta = {
     homepage = "http://git-annex.branchable.com/";
