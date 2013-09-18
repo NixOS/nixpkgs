@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, freetype, pkgconfig, yasm, freefont_ttf
+{ stdenv, fetchurl, pkgconfig, freetype, yasm
+, fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
@@ -22,6 +23,8 @@
 , useUnfreeCodecs ? false
 }:
 
+assert fontconfigSupport -> (fontconfig != null);
+assert (!fontconfigSupport) -> (freefont_ttf != null);
 assert x11Support -> (libX11 != null && libXext != null && mesa != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
@@ -95,7 +98,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = with stdenv.lib;
-    [ freetype pkgconfig ]
+    [ pkgconfig freetype ]
+    ++ optional fontconfigSupport fontconfig
     ++ optionals x11Support [ libX11 libXext mesa ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
@@ -125,6 +129,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = with stdenv.lib;
     ''
+      --enable-freetype
+      ${if fontconfigSupport then "--enable-fontconfig" else "--disable-fontconfig"}
       ${if x11Support then "--enable-x11 --enable-gl" else "--disable-x11 --disable-gl"}
       ${if xineramaSupport then "--enable-xinerama" else "--disable-xinerama"}
       ${if xvSupport then "--enable-xv" else "--disable-xv"}
@@ -144,7 +150,6 @@ stdenv.mkDerivation rec {
       ${if pulseSupport then "--enable-pulse" else "--disable-pulse"}
       ${optionalString (useUnfreeCodecs && codecs != null) "--codecsdir=${codecs}"}
       ${optionalString (stdenv.isi686 || stdenv.isx86_64) "--enable-runtime-cpudetection"}
-      --enable-freetype
       --disable-xanim
       --disable-ivtv
       --disable-xvid --disable-xvid-lavc
@@ -153,14 +158,17 @@ stdenv.mkDerivation rec {
       --disable-ossaudio
     '';
 
-  NIX_LDFLAGS = stdenv.lib.optionalString x11Support "-lX11 -lXext";
+  NIX_LDFLAGS = with stdenv.lib;
+       optional  fontconfigSupport "-lfontconfig"
+    ++ optionals x11Support [ "-lX11" "-lXext" ]
+    ;
 
   installTargets = [ "install" ] ++ stdenv.lib.optional x11Support "install-gui";
 
   enableParallelBuilding = true;
 
-  # Provide a reasonable standard font.  Maybe we should symlink here.
-  postInstall =
+  # Provide a reasonable standard font when not using fontconfig. Maybe we should symlink here.
+  postInstall = stdenv.lib.optionalString (!fontconfigSupport)
     ''
       mkdir -p $out/share/mplayer
       cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
