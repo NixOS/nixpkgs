@@ -1602,6 +1602,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   pandoc = callPackage ../development/libraries/haskell/pandoc {};
 
+  pandocCiteproc = callPackage ../development/libraries/haskell/pandoc-citeproc {};
+
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
   pango = callPackage ../development/libraries/haskell/pango {
