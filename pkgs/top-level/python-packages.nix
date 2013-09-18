@@ -5165,10 +5165,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   selenium =
     buildPythonPackage rec {
-      name = "selenium-2.25.0";
+      name = "selenium-2.35.0";
       src = pkgs.fetchurl {
-        url = http://pypi.python.org/packages/source/s/selenium/selenium-2.25.0.tar.gz;
-        sha256 = "0iinpry1vr4dydh44sc0ny22sa9fqhy2302hf56pf8fakvza9m0a";
+        url = "http://pypi.python.org/packages/source/s/selenium/${name}.tar.gz";
+        sha256 = "0c8apd538ji8kmryvcdiz0dndf33mnf8wzpp9k8zmkpmfdfcwnk0";
       };
 
       buildInputs = [pkgs.xlibs.libX11];
