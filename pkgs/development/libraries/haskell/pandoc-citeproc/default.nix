@@ -1,7 +1,7 @@
 { cabal, aeson, aesonPretty, attoparsec, Diff, filepath, hexpat
 , hsBibutils, HTTP, json, mtl, network, pandocTypes, parsec
 , rfc5051, syb, tagsoup, texmath, text, time, utf8String, vector
-, yaml
+, yaml, glibcLocales
 }:
 
 cabal.mkDerivation (self: {
@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     vector yaml
   ];
   testDepends = [ aeson aesonPretty Diff pandocTypes utf8String ];
+  doCheck = false;
   meta = {
     description = "Supports using pandoc with citeproc";
     license = self.stdenv.lib.licenses.bsd3;
