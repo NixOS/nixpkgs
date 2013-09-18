@@ -25,7 +25,6 @@ cabal.mkDerivation (self: {
     QuickCheck syb testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text
   ];
-  configureFlags = "-fblaze_html_0_5";
   doCheck = false;
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
