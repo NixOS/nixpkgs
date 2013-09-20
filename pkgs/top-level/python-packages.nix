@@ -1104,6 +1104,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  pytest_xdist = buildPythonPackage rec {
+    name = "pytest-xdist-1.8";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pytest-xdist/pytest-xdist-1.8.zip";
+      md5 = "9c0b8efe9d43b460f8cf049fa46ce14d";
+    };
+
+    buildInputs = [ pkgs.unzip pytest ];
+    propagatedBuildInputs = [ execnet ];
+
+    meta = {
+      description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
+      homepage = http://bitbucket.org/hpk42/pytest-xdist;
+    };
+  };
+
   cssselect = buildPythonPackage rec {
     name = "cssselect-0.7.1";
     src = fetchurl {
