@@ -3473,6 +3473,8 @@ let
 
   ddd = callPackage ../development/tools/misc/ddd { };
 
+  dispcalgui = callPackage ../tools/graphics/dispcalgui { };
+
   distcc = callPackage ../development/tools/misc/distcc { };
 
   # distccWrapper: wrapper that works as gcc or g++
