@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     HUnit mtl QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2
   ];
+  doCheck = false;
   meta = {
     description = "Pure Haskell LLVM functionality (no FFI)";
     license = self.stdenv.lib.licenses.bsd3;
