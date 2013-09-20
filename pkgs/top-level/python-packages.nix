@@ -1639,6 +1639,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  pyramid_multiauth = buildPythonPackage rec {
+    name = "pyramid_multiauth-${version}";
+    version = "0.3.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyramid_multiauth/${name}.tar.gz";
+      md5 = "044e423abc4fb76937ac0c21c1205e9c";
+    };
+
+    propagatedBuildInputs = [ pyramid ];
+
+    meta = with stdenv.lib; {
+      description = "Authentication policy for Pyramid that proxies to a stack of other authentication policies";
+      homepage = https://github.com/mozilla-services/pyramid_multiauth;
+    };
+  };
+
+
   raven = buildPythonPackage rec {
     name = "raven-3.4.1";
 
