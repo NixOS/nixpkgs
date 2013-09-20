@@ -1345,6 +1345,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  execnet = buildPythonPackage rec {
+    name = "execnet-1.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/e/execnet/${name}.zip";
+      md5 = "be885ccd9612966bb81839670d2da099";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    meta = {
+      description = "rapid multi-Python deployment";
+      license = stdenv.lib.licenses.gpl2;
+    };
+  };
+
+
   fabric = buildPythonPackage rec {
     name = "fabric-1.6.1";
     src = fetchurl {
