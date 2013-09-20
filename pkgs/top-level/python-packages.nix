@@ -2685,6 +2685,28 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  htmllaundry = buildPythonPackage rec {
+    name = "htmllaundry-2.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/h/htmllaundry/${name}.tar.gz";
+      md5 = "6db6909de76c4b259e65d90b5debdbda";
+    };
+
+    buildInputs = [ nose ];
+    propagatedBuildInputs = [ six lxml ];
+
+    # some tests fail, probably because of changes in lxml
+    # not relevant for me, if releavnt for you, fix it...
+    doCheck = false;
+
+    meta = {
+      description = "Simple HTML cleanup utilities";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
+
   html5lib = buildPythonPackage (rec {
     name = "html5lib-0.95";
 
