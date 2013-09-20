@@ -24,9 +24,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '';
 
-  configureFlags = [
-    "--with-gcc=${stdenv.gcc}/bin/gcc"
-  ];
+  configureFlags = "--with-gcc='${stdenv.gcc}/bin/gcc'";
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
