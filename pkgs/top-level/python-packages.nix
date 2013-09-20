@@ -5793,6 +5793,29 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  sqlalchemy_imageattach = buildPythonPackage rec {
+    name = "SQLAlchemy-ImageAttach-${version}";
+    version = "0.8.1";
+
+    src = fetchgit {
+      url = https://github.com/crosspop/sqlalchemy-imageattach.git;
+      rev = "refs/tags/${version}";
+      md5 = "051dd9de0757714d33c3ecd5ab37b97d";
+    };
+
+    buildInputs = [ pytest webob pkgs.imagemagick ];
+    propagatedBuildInputs = [ sqlalchemy8 wand ];
+
+    checkPhase = "cd tests && LD_LIBRARY_PATH=${pkgs.imagemagick}/lib py.test";
+
+    meta = {
+      homepage = https://github.com/crosspop/sqlalchemy-imageattach;
+      description = "SQLAlchemy extension for attaching images to entity objects";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
   sqlalchemy_migrate = buildPythonPackage rec {
     name = "sqlalchemy-migrate-0.6.1";
 
