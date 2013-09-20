@@ -5882,6 +5882,26 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+
+  statd = buildPythonPackage rec {
+    name = "python-statsd-${version}";
+    version = "1.6.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-statsd/${name}.tar.gz";
+      md5 = "3a0c71a160b504b843703c3041c7d7fb";
+    };
+
+    buildInputs = [ mock nose coverage ];
+
+    meta = {
+      description = "A client for Etsy's node-js statsd server";
+      homepage = https://github.com/WoLpH/python-statsd;
+      license = pkgs.lib.licenses.bsd3;
+    };
+  };
+
+
   stompclient = buildPythonPackage (rec {
     name = "stompclient-0.3.2";
 
