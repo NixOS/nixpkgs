@@ -214,6 +214,25 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  alembic = buildPythonPackage rec {
+    name = "alembic-0.6.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/alembic/${name}.tar.gz";
+      md5 = "084fe81b48ebae43b0f6031af68a03d6";
+    };
+
+    buildInputs = [ nose ];
+    propagatedBuildInputs = [ Mako sqlalchemy ];
+
+    meta = {
+      homepage = http://bitbucket.org/zzzeek/alembic;
+      description = "A database migration tool for SQLAlchemy.";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+
   almir = buildPythonPackage rec {
     name = "almir-0.1.8";
 
