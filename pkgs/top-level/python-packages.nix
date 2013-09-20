@@ -3215,6 +3215,25 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+
+  memory_profiler = buildPythonPackage rec {
+    name = "memory_profiler-0.27";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/m/memory_profiler/memory_profiler-0.27.tar.gz";
+      md5 = "212c0d7452dbaffb6b09474ac07b0668";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      description = "A module for monitoring memory usage of a python program";
+      homepage = http://pypi.python.org/pypi/memory_profiler;
+    };
+  };
+
+
   mitmproxy = buildPythonPackage rec {
     baseName = "mitmproxy";
     name = "${baseName}-${meta.version}";
