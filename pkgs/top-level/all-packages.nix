@@ -2428,6 +2428,7 @@ let
 
   gcc47_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.7 {
     inherit noSysDirs;
+    texinfo = texinfo4;
     # I'm not sure if profiling with enableParallelBuilding helps a lot.
     # We can enable it back some day. This makes the *gcc* builds faster now.
     profiledCompiler = false;
@@ -2445,7 +2446,7 @@ let
 
   gcc47_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.7 {
     stripped = false;
-
+    texinfo = texinfo4;
     inherit noSysDirs;
     cross = null;
     libcCross = null;
