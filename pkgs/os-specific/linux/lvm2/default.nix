@@ -40,6 +40,11 @@ stdenv.mkDerivation {
     ''
       substituteInPlace $out/lib/udev/rules.d/13-dm-disk.rules \
         --replace $out/sbin/blkid ${utillinux}/sbin/blkid
+
+      # Systemd stuff
+      mkdir -p $out/etc/systemd/system $out/lib/systemd/system-generators
+      cp scripts/blk_availability_systemd_red_hat.service $out/etc/systemd/system
+      cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
     '';
 
   meta = {
