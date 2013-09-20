@@ -22,7 +22,8 @@ stdenv.mkDerivation {
       substituteInPlace scripts/lvmdump.sh \
         --replace /usr/bin/tr ${coreutils}/bin/tr
       substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-        --replace /usr/sbin/lvm $out/sbin/lvm
+        --replace /usr/sbin/lvm $out/sbin/lvm \
+        --replace /usr/bin/udevadm ${udev}/bin/udevadm
 
       sed -i /DEFAULT_SYS_DIR/d Makefile.in
       sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
