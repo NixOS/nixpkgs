@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     testFrameworkHunit testFrameworkQuickcheck2
   ];
   buildTools = [ llvmConfig ];
+  doCheck = false;
   meta = {
     description = "General purpose LLVM bindings";
     license = self.stdenv.lib.licenses.bsd3;
