@@ -5773,6 +5773,26 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  sqlalchemy8 = buildPythonPackage rec {
+    name = "SQLAlchemy-${version}";
+    version = "0.8.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
+      md5 = "5a33fb43dea93468dbb2a6562ee80b54";
+    };
+
+    buildInputs = [ nose mock ];
+
+    propagatedBuildInputs = [ modules.sqlite3 ];
+
+    meta = {
+      homepage = http://www.sqlalchemy.org/;
+      description = "A Python SQL toolkit and Object Relational Mapper";
+    };
+  };
+
+
   sqlalchemy_migrate = buildPythonPackage rec {
     name = "sqlalchemy-migrate-0.6.1";
 
