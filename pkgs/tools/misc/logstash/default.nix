@@ -1,11 +1,11 @@
 { fetchurl }:
 
-let version = "1.1.0"; in
+let version = "1.2.1"; in
 
 fetchurl {
-  url = "http://semicomplete.com/files/logstash/logstash-${version}-monolithic.jar";
+  url = "https://logstash.objects.dreamhost.com/release/logstash-${version}-flatjar.jar";
 
   name = "logstash-${version}.jar";
 
-  sha256 = "03s9g2appsmdg973212dl37ldws36fgsvxi9w1lxbvmmclc4k7vc";
+  sha256 = "08zfhq6klhkqapqnyzbdikgryd8bj2fp0wdb5d6dawdan5psbf6h";
 }
