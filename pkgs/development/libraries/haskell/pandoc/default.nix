@@ -2,29 +2,30 @@
 , blazeHtml, blazeMarkup, dataDefault, Diff, extensibleExceptions
 , filepath, happy, highlightingKate, hslua, HTTP, httpConduit
 , httpTypes, HUnit, mtl, network, pandocTypes, parsec, QuickCheck
-, random, stringable, syb, tagsoup, temporary, testFramework
+, random, syb, tagsoup, temporary, testFramework
 , testFrameworkHunit, testFrameworkQuickcheck2, texmath, text, time
 , unorderedContainers, vector, xml, yaml, zipArchive, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "pandoc";
-  version = "1.12";
-  sha256 = "04jng6mrb78gzksspihkcmiidrjyqya06lnqiwvfq7mk9jd1wy49";
+  version = "1.12.0.2";
+  sha256 = "125vl6l7nd3s3zwkms46y8l5zhg22iwz5387ll9rd2hf6asfpp56";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson alex attoparsec base64Bytestring blazeHtml blazeMarkup
     dataDefault extensibleExceptions filepath happy highlightingKate
     hslua HTTP httpConduit httpTypes mtl network pandocTypes parsec
-    random stringable syb tagsoup temporary texmath text time
-    unorderedContainers vector xml yaml zipArchive zlib
+    random syb tagsoup temporary texmath text time unorderedContainers
+    vector xml yaml zipArchive zlib
   ];
   testDepends = [
     ansiTerminal Diff filepath highlightingKate HUnit pandocTypes
     QuickCheck syb testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text
   ];
+  buildTools = [ alex happy ];
   doCheck = false;
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
