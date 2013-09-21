@@ -1403,6 +1403,8 @@ let
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
 
+  nwdiag = pythonPackages.nwdiag;
+
   nylon = callPackage ../tools/networking/nylon { };
 
   nzbget = callPackage ../tools/networking/nzbget { };

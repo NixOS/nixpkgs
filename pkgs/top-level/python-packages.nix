@@ -3618,6 +3618,32 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+
+  nwdiag = buildPythonPackage rec {
+    name = "nwdiag-0.9.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/n/nwdiag/${name}.tar.gz";
+      md5 = "199b22f66ec3012c3999177d376a3842";
+    };
+
+    buildInputs = [ pep8 nose unittest2 docutils ];
+
+    propagatedBuildInputs = [ blockdiag ];
+
+    # tests fail
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Generate network-diagram image from spec-text file (similar to Graphviz)";
+      homepage = http://blockdiag.com/;
+      license = licenses.asl20;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   oauth2 = buildPythonPackage (rec {
     name = "oauth2-1.5.211";
 
