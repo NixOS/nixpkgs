@@ -519,6 +519,8 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  blockdiag = pythonPackages.blockdiag;
+
   bmon = callPackage ../tools/misc/bmon { };
 
   boomerang = callPackage ../development/tools/boomerang {

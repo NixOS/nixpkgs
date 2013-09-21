@@ -491,6 +491,34 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+
+  blockdiag = buildPythonPackage rec {
+    name = "blockdiag-1.2.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/blockdiag/${name}.tar.gz";
+      md5 = "244334f60cc10b0cb73b5df5279bcdd1";
+    };
+
+    buildInputs = [ pep8 nose unittest2 docutils ];
+
+    propagatedBuildInputs = [ pil webcolors funcparserlib ];
+
+    # One test fails:
+    #   ...
+    #   FAIL: test_auto_font_detection (blockdiag.tests.test_boot_params.TestBootParams)
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
+      homepage = http://blockdiag.com/;
+      license = licenses.asl20;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   bpython = buildPythonPackage rec {
      name = "bpython-0.12";
      src = fetchurl {
@@ -1258,6 +1286,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     buildInputs = [ nose nosejs ];
     propagatedBuildInputs = [ sphinx ];
   };
+
+
+  funcparserlib = buildPythonPackage rec {
+    name = "funcparserlib-0.3.6";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/f/funcparserlib/${name}.tar.gz";
+      md5 = "3aba546bdad5d0826596910551ce37c0";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Recursive descent parsing library based on functional combinators";
+      homepage = https://code.google.com/p/funcparserlib/;
+      license = licenses.mit;
+      platforms = platforms.linux;
+    };
+  };
+
 
   googlecl = buildPythonPackage rec {
     version = "0.9.14";
@@ -5974,6 +6020,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
        platforms = stdenv.lib.platforms.all;
     };
   };
+
+
+  webcolors = buildPythonPackage rec {
+    name = "webcolors-1.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/w/webcolors/${name}.tar.gz";
+      md5 = "35de9d785b5c04a9cc66a2eae0519254";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Library for working with color names/values defined by the HTML and CSS specifications";
+      homepage = https://bitbucket.org/ubernostrum/webcolors/overview/;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+    };
+  };
+
 
   webob = buildPythonPackage rec {
     version = "1.2.3";
