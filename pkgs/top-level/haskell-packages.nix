@@ -933,6 +933,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   enumerator = callPackage ../development/libraries/haskell/enumerator {};
 
+  enummapset = callPackage ../development/libraries/haskell/enummapset {};
+
   entropy = callPackage ../development/libraries/haskell/entropy {};
 
   erf = callPackage ../development/libraries/haskell/erf {};
