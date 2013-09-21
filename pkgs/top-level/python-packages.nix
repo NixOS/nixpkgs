@@ -5165,6 +5165,33 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  seqdiag = buildPythonPackage rec {
+    name = "seqdiag-0.8.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/seqdiag/${name}.tar.gz";
+      md5 = "61b3da29b5efaa89701b4db6d2d4d5fa";
+    };
+
+    buildInputs = [ pep8 nose unittest2 docutils ];
+
+    propagatedBuildInputs = [ blockdiag ];
+
+    # Some tests fail (because of missing input files?):
+    #   ...
+    #   IOError: [Errno 2] No such file or directory: '/tmp/nix-build-python2.7-seqdiag-0.8.2.drv-0/seqdiag-0.8.2/src/seqdiag/tests/diagrams/separators.diag'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Generate sequence-diagram image from spec-text file (similar to Graphviz)";
+      homepage = http://blockdiag.com/;
+      license = licenses.asl20;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   scipy = buildPythonPackage rec {
     name = "scipy-0.9.0";
 

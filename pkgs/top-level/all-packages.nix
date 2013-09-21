@@ -1709,6 +1709,8 @@ let
     inherit groff;
   };
 
+  seqdiag = pythonPackages.seqdiag;
+
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
   sharutils = callPackage ../tools/archivers/sharutils { };
