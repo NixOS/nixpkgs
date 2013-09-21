@@ -1,7 +1,7 @@
 { cabal, aeson, aesonPretty, attoparsec, Diff, filepath, hexpat
 , hsBibutils, HTTP, json, mtl, network, pandocTypes, parsec
 , rfc5051, syb, tagsoup, texmath, text, time, utf8String, vector
-, yaml, glibcLocales
+, yaml
 }:
 
 cabal.mkDerivation (self: {
