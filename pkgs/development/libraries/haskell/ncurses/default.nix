@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ text transformers ];
   buildTools = [ c2hs ];
   extraLibraries = [ ncurses ];
+  patchPhase = "find . -type f -exec sed -i -e 's|ncursesw/||' {} \\;";
   meta = {
     homepage = "https://john-millikin.com/software/haskell-ncurses/";
     description = "Modernised bindings to GNU ncurses";
