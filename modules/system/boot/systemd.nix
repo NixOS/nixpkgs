@@ -72,20 +72,12 @@ let
       # SysV init compatibility.
       "systemd-initctl.socket"
       "systemd-initctl.service"
-      "runlevel0.target"
-      "runlevel1.target"
-      "runlevel2.target"
-      "runlevel3.target"
-      "runlevel4.target"
-      "runlevel5.target"
-      "runlevel6.target"
 
       # Random seed.
       "systemd-random-seed-load.service"
       "systemd-random-seed-save.service"
 
       # Utmp maintenance.
-      "systemd-update-utmp-runlevel.service"
       "systemd-update-utmp-shutdown.service"
 
       # Kernel module loading.
