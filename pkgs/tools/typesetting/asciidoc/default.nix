@@ -4,12 +4,14 @@
 , enableMscgenFilter ? false, mscgen ? null
 , enableDiagFilter ? false, blockdiag ? null, seqdiag ? null, actdiag ? null, nwdiag ? null
 , enableQrcodeFilter ? false, qrencode ? null
+, enableMatplotlibFilter ? false, matplotlib ? null, numpy ? null
 }:
 
 assert (enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter) -> unzip != null;
 assert enableDitaaFilter -> jre != null;
 assert enableMscgenFilter -> mscgen != null;
 assert enableDiagFilter -> blockdiag != null && seqdiag != null && actdiag != null && nwdiag != null;
+assert enableMatplotlibFilter -> matplotlib != null && numpy != null;
 
 let
   ditaaFilterSrc = fetchurl {
@@ -31,6 +33,13 @@ let
   qrcodeFilterSrc = fetchurl {
     url = "https://asciidoc-qrencode-filter.googlecode.com/files/qrcode-filter-1.0.zip";
     sha256 = "0h4bql1nb4y4fmg2yvlpfjhvy22ln8jsaxdr10f8bfcg5lr0zkxs";
+  };
+
+  # latest commit in master branch as per 2013-09-22
+  matplotlibFilterSrc = let commit = "75f0d009629f93f33fab04b83faca20cc35dd358"; in fetchurl rec {
+    name = "mplw-${commit}.tar.gz";
+    url = "https://api.github.com/repos/lvv/mplw/tarball/${commit}";
+    sha256 = "0yfhkm2dr8gnp0fcg25x89hwiymkri2m5cyqzmzragzwj0hbmcf1";
   };
 
 in
@@ -73,6 +82,15 @@ stdenv.mkDerivation rec {
     unzip -d "$out/etc/asciidoc/filters/qrcode" "${qrcodeFilterSrc}"
     sed -i -e "s|systemcmd('qrencode|systemcmd('${qrencode}/bin/qrencode|" \
         "$out/etc/asciidoc/filters/qrcode/qrcode2img.py"
+  '' + optionalString enableMatplotlibFilter ''
+    echo "Extracting mpl (matplotlib) filter"
+    mkdir -p "$out/etc/asciidoc/filters/mpl"
+    tar xvf "${matplotlibFilterSrc}" -C "$out/etc/asciidoc/filters/mpl" --strip-components=1
+    # Add matplotlib and numpy to sys.path
+    matplotlib_path="$(toPythonPath ${matplotlib})"
+    numpy_path="$(toPythonPath ${numpy})"
+    sed -i "/^import.*sys/asys.path.append(\"$matplotlib_path\"); sys.path.append(\"$numpy_path\");" \
+        "$out/etc/asciidoc/filters/mpl/mplw.py"
   '' + ''
     for n in $(find "$out" . -name \*.py); do
       sed -i -e "s,^#![[:space:]]*/usr/bin/env python,#!${python}/bin/python,g" "$n"
