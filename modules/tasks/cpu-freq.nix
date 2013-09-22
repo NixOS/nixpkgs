@@ -28,7 +28,7 @@ with pkgs.lib;
     environment.systemPackages = [ pkgs.cpufrequtils ];
 
     jobs.cpufreq =
-      { description = "Initialize CPU frequency governor";
+      { description = "CPU Frequency Governor Setup";
 
         after = [ "systemd-modules-load.service" ];
         wantedBy = [ "multi-user.target" ];
