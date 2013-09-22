@@ -3392,15 +3392,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   nose = buildPythonPackage rec {
-    name = "nose-1.3.0";
+    version = "1.3.0";
+    name = "nose-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/n/nose/${name}.tar.gz";
       sha256 = "0q2j9zz39h3liwbp6lb94kl3sxb9z9rbwh5dzyccyxfy4lrwqqsf";
-    };
-
-    meta = {
-      description = "A unittest-based testing framework for python that makes writing and running tests easier";
     };
 
     buildInputs = [ coverage ];
@@ -3411,6 +3408,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     '' else "" + ''
       ${python}/bin/${python.executable} selftest.py
     '';
+
+    meta = {
+      description = "A unittest-based testing framework for python that makes writing and running tests easier";
+    };
   };
 
   nose2 = if isPy26 then null else (buildPythonPackage rec {
