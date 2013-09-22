@@ -33,7 +33,10 @@ in
 
       enable = mkOption {
         default = false;
-        description = "Whether to enable the cgminer.";
+        description = ''
+          Whether to enable cgminer, an ASIC/FPGA/GPU miner for bitcoin and
+          litecoin.
+        '';
       };
 
       package = mkOption {
