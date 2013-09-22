@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "gnum4-1.4.17";
 
   src = fetchurl {
-    url = "mirror://gnu/m4/${name}.tar.bz2";
+    url = "mirror://gnu/m4/m4-1.4.17.tar.bz2";
     sha256 = "0w0da1chh12mczxa5lnwzjk9czi3dq6gnnndbpa6w4rj76b1yklf";
   };
 
