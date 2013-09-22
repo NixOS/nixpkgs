@@ -52,12 +52,14 @@ in
 
     systemd.services."alsa-store" =
       { description = "Store Sound Card State";
-        wantedBy = [ "shutdown.target" ];
-        before = [ "shutdown.target" ];
-        unitConfig.DefaultDependencies = "no";
-        serviceConfig.Type = "oneshot";
-        serviceConfig.ExecStart = "${alsaUtils}/sbin/alsactl store --ignore";
-        serviceConfig.ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/alsa";
+        wantedBy = [ "multi-user.target" ];
+        unitConfig.RequiresMountsFor = "/var/lib/alsa";
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${pkgs.coreutils}/bin/mkdir -p /var/lib/alsa";
+          ExecStop = "${alsaUtils}/sbin/alsactl store --ignore";
+        };
       };
 
   };
