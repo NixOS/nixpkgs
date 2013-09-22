@@ -76,6 +76,15 @@ rec {
       '';
     };
 
+    conflicts = mkOption {
+      default = [];
+      types = types.listOf types.string;
+      description = ''
+        If the specified units are started, then this unit is stopped
+        and vice versa.
+      '';
+    };
+
     requiredBy = mkOption {
       default = [];
       types = types.listOf types.string;

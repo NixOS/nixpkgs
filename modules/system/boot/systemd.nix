@@ -73,13 +73,6 @@ let
       "systemd-initctl.socket"
       "systemd-initctl.service"
 
-      # Random seed.
-      "systemd-random-seed-load.service"
-      "systemd-random-seed-save.service"
-
-      # Utmp maintenance.
-      "systemd-update-utmp-shutdown.service"
-
       # Kernel module loading.
       #"systemd-modules-load.service"
 
@@ -158,6 +151,7 @@ let
           Before = concatStringsSep " " config.before;
           BindsTo = concatStringsSep " " config.bindsTo;
           PartOf = concatStringsSep " " config.partOf;
+          Conflicts = concatStringsSep " " config.conflicts;
           "X-Restart-Triggers" = toString config.restartTriggers;
         } // optionalAttrs (config.description != "") {
           Description = config.description;
@@ -600,13 +594,42 @@ in
 
     users.extraGroups.systemd-journal.gid = config.ids.gids.systemd-journal;
 
-    # FIXME: This should no longer be needed with systemd >= 204.
-    systemd.services."systemd-update-utmp-reboot.service" =
-      { description = "Update UTMP about System Reboot";
+    # FIXME: These are borrowed from upstream systemd.
+    systemd.services."systemd-update-utmp" =
+      { description = "Update UTMP about System Reboot/Shutdown";
         wantedBy = [ "sysinit.target" ];
-        unitConfig.DefaultDependencies = false;
-        serviceConfig.Type = "oneshot";
-        serviceConfig.ExecStart = "${systemd}/lib/systemd/systemd-update-utmp reboot";
+        after = [ "systemd-remount-fs.service" ];
+        before = [ "sysinit.target" "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
+        unitConfig = {
+          DefaultDependencies = false;
+          RequiresMountsFor = "/var/log";
+        };
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${systemd}/lib/systemd/systemd-update-utmp reboot";
+          ExecStop = "${systemd}/lib/systemd/systemd-update-utmp shutdown";
+        };
+        restartIfChanged = false;
+      };
+
+    systemd.services."systemd-random-seed" =
+      { description = "Load/Save Random Seed";
+        wantedBy = [ "sysinit.target" "multi-user.target" ];
+        after = [ "systemd-remount-fs.service" ];
+        before = [ "sysinit.target" "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
+        unitConfig = {
+          DefaultDependencies = false;
+          RequiresMountsFor = "/var/lib";
+        };
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${systemd}/lib/systemd/systemd-random-seed load";
+          ExecStop = "${systemd}/lib/systemd/systemd-random-seed save";
+        };
       };
 
   };
