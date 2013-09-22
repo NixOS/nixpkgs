@@ -832,6 +832,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   dataMemocombinators = callPackage ../development/libraries/haskell/data-memocombinators {};
 
+  dataPprint = callPackage ../development/libraries/haskell/data-pprint {};
+
   dataReify = callPackage ../development/libraries/haskell/data-reify {};
 
   dateCache = callPackage ../development/libraries/haskell/date-cache {};
