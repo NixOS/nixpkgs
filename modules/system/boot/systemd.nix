@@ -608,5 +608,14 @@ in
 
     users.extraGroups.systemd-journal.gid = config.ids.gids.systemd-journal;
 
+    # FIXME: This should no longer be needed with systemd >= 204.
+    systemd.services."systemd-update-utmp-reboot.service" =
+      { description = "Update UTMP about System Reboot";
+        wantedBy = [ "sysinit.target" ];
+        unitConfig.DefaultDependencies = false;
+        serviceConfig.Type = "oneshot";
+        serviceConfig.ExecStart = "${systemd}/lib/systemd/systemd-update-utmp reboot";
+      };
+
   };
 }

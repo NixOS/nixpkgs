@@ -47,6 +47,11 @@
       subtest "blkio-cgroup", sub {
           $machine->succeed("[ -n \"\$(cat /sys/fs/cgroup/blkio/blkio.sectors)\" ]")
       };
+
+      # Test whether we have a reboot record in wtmp.
+      subtest "reboot-wtmp", sub {
+          $machine->succeed("last | grep reboot >&2");
+      };
     '';
 
 }
