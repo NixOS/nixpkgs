@@ -563,7 +563,7 @@ let
   mcelog = callPackage ../os-specific/linux/mcelog { };
 
   asciidoc = callPackage ../tools/typesetting/asciidoc {
-    inherit (pythonPackages) matplotlib numpy;
+    inherit (pythonPackages) matplotlib numpy aafigure recursivePthLoader;
   };
 
   autossh = callPackage ../tools/networking/autossh { };

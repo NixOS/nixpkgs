@@ -5,13 +5,15 @@
 , enableDiagFilter ? false, blockdiag ? null, seqdiag ? null, actdiag ? null, nwdiag ? null
 , enableQrcodeFilter ? false, qrencode ? null
 , enableMatplotlibFilter ? false, matplotlib ? null, numpy ? null
+, enableAafigureFilter ? false, aafigure ? null, recursivePthLoader ? null
 }:
 
-assert (enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter) -> unzip != null;
+assert (enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter || enableAafigureFilter) -> unzip != null;
 assert enableDitaaFilter -> jre != null;
 assert enableMscgenFilter -> mscgen != null;
 assert enableDiagFilter -> blockdiag != null && seqdiag != null && actdiag != null && nwdiag != null;
 assert enableMatplotlibFilter -> matplotlib != null && numpy != null;
+assert enableAafigureFilter -> aafigure != null && recursivePthLoader != null;
 
 let
   ditaaFilterSrc = fetchurl {
@@ -40,6 +42,11 @@ let
     name = "mplw-${commit}.tar.gz";
     url = "https://api.github.com/repos/lvv/mplw/tarball/${commit}";
     sha256 = "0yfhkm2dr8gnp0fcg25x89hwiymkri2m5cyqzmzragzwj0hbmcf1";
+  };
+
+  aafigureFilterSrc = fetchurl {
+    url = "https://asciidoc-aafigure-filter.googlecode.com/files/aafigure-filter-1.1.zip";
+    sha256 = "1hq2s30dvmv5dqvj0xm1qwdwafhgm9w1iyr0lr0c40cyk8h00j8j";
   };
 
 in
@@ -91,6 +98,14 @@ stdenv.mkDerivation rec {
     numpy_path="$(toPythonPath ${numpy})"
     sed -i "/^import.*sys/asys.path.append(\"$matplotlib_path\"); sys.path.append(\"$numpy_path\");" \
         "$out/etc/asciidoc/filters/mpl/mplw.py"
+  '' + optionalString enableAafigureFilter ''
+    echo "Extracting aafigure filter"
+    unzip -d "$out/etc/asciidoc/filters/aafigure" "${aafigureFilterSrc}"
+    # Add aafigure to sys.path (and it needs recursive-pth-loader)
+    pth_loader_path="$(toPythonPath ${recursivePthLoader})"
+    aafigure_path="$(toPythonPath ${aafigure})"
+    sed -i "/^import.*sys/asys.path.append(\"$pth_loader_path\"); sys.path.append(\"$aafigure_path\"); import sitecustomize" \
+        "$out/etc/asciidoc/filters/aafigure/aafig2img.py"
   '' + ''
     for n in $(find "$out" . -name \*.py); do
       sed -i -e "s,^#![[:space:]]*/usr/bin/env python,#!${python}/bin/python,g" "$n"
