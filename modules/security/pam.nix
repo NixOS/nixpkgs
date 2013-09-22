@@ -70,6 +70,8 @@ let
       limits ? config.security.pam.loginLimits
     , # Whether to show the message of the day.
       showMotd ? false
+    , # Whether to update /var/log/wtmp.
+      updateWtmp ? false
     }:
 
     { source = pkgs.writeText "${name}.pam"
@@ -114,6 +116,8 @@ let
 
           # Session management.
           session required pam_unix.so
+          ${optionalString updateWtmp
+              "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
           ${optionalString config.users.ldap.enable
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.krb5.enable

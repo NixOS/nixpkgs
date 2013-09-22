@@ -91,7 +91,7 @@ in
         { name = "groupmod"; rootOK = true; }
         { name = "groupmems"; rootOK = true; }
         { name = "groupdel"; rootOK = true; }
-        { name = "login"; startSession = true; allowNullPassword = true; showMotd = true; }
+        { name = "login"; startSession = true; allowNullPassword = true; showMotd = true; updateWtmp = true; }
       ];
 
     security.setuidPrograms = [ "passwd" "chfn" "su" "newgrp" ];
