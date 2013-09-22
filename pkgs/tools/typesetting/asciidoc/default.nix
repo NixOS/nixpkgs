@@ -3,9 +3,10 @@
 , enableDitaaFilter ? false, jre ? null
 , enableMscgenFilter ? false, mscgen ? null
 , enableDiagFilter ? false, blockdiag ? null, seqdiag ? null, actdiag ? null, nwdiag ? null
+, enableQrcodeFilter ? false, qrencode ? null
 }:
 
-assert (enableDitaaFilter || enableMscgenFilter || enableDiagFilter) -> unzip != null;
+assert (enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter) -> unzip != null;
 assert enableDitaaFilter -> jre != null;
 assert enableMscgenFilter -> mscgen != null;
 assert enableDiagFilter -> blockdiag != null && seqdiag != null && actdiag != null && nwdiag != null;
@@ -25,6 +26,11 @@ let
     # unfortunately no version number
     url = "https://asciidoc-diag-filter.googlecode.com/files/diag_filter.zip";
     sha256 = "1qlqrdbqkdqqgfdhjsgdws1al0sacsyq6jmwxdfy7r8k7bv7n7mm";
+  };
+
+  qrcodeFilterSrc = fetchurl {
+    url = "https://asciidoc-qrencode-filter.googlecode.com/files/qrcode-filter-1.0.zip";
+    sha256 = "0h4bql1nb4y4fmg2yvlpfjhvy22ln8jsaxdr10f8bfcg5lr0zkxs";
   };
 
 in
@@ -62,6 +68,11 @@ stdenv.mkDerivation rec {
         -e "s|filter='nwdiag|filter=\'${nwdiag}/bin/nwdiag|" \
         -e "s|filter='packetdiag|filter=\'${nwdiag}/bin/packetdiag|" \
         "$out/etc/asciidoc/filters/diag/diag-filter.conf"
+  '' + optionalString enableQrcodeFilter ''
+    echo "Extracting qrcode filter"
+    unzip -d "$out/etc/asciidoc/filters/qrcode" "${qrcodeFilterSrc}"
+    sed -i -e "s|systemcmd('qrencode|systemcmd('${qrencode}/bin/qrencode|" \
+        "$out/etc/asciidoc/filters/qrcode/qrcode2img.py"
   '' + ''
     for n in $(find "$out" . -name \*.py); do
       sed -i -e "s,^#![[:space:]]*/usr/bin/env python,#!${python}/bin/python,g" "$n"
