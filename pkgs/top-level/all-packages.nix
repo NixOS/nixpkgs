@@ -9508,6 +9508,8 @@ let
 
   pal2nal = callPackage ../applications/science/biology/pal2nal { };
 
+  plink = callPackage ../applications/science/biology/plink/default.nix { };
+
 
   ### SCIENCE/MATH
 
