@@ -1,21 +1,32 @@
 { fetchurl, stdenv, python
 , unzip ? null
+# filters
 , enableDitaaFilter ? false, jre ? null
 , enableMscgenFilter ? false, mscgen ? null
 , enableDiagFilter ? false, blockdiag ? null, seqdiag ? null, actdiag ? null, nwdiag ? null
 , enableQrcodeFilter ? false, qrencode ? null
 , enableMatplotlibFilter ? false, matplotlib ? null, numpy ? null
 , enableAafigureFilter ? false, aafigure ? null, recursivePthLoader ? null
+# backends
+, enableDeckjsBackend ? false
 }:
 
+# filters
 assert (enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter || enableAafigureFilter) -> unzip != null;
 assert enableDitaaFilter -> jre != null;
 assert enableMscgenFilter -> mscgen != null;
 assert enableDiagFilter -> blockdiag != null && seqdiag != null && actdiag != null && nwdiag != null;
 assert enableMatplotlibFilter -> matplotlib != null && numpy != null;
 assert enableAafigureFilter -> aafigure != null && recursivePthLoader != null;
+# backends
+assert enableDeckjsBackend -> unzip != null;
 
 let
+
+  #
+  # filters
+  #
+
   ditaaFilterSrc = fetchurl {
     url = "https://asciidoc-ditaa-filter.googlecode.com/files/ditaa-filter-1.1.zip";
     sha256 = "0p7hm2a1xywx982ia3vg4c0lam5sz0xknsc10i2a5vswy026naf6";
@@ -49,6 +60,15 @@ let
     sha256 = "1hq2s30dvmv5dqvj0xm1qwdwafhgm9w1iyr0lr0c40cyk8h00j8j";
   };
 
+  #
+  # backends
+  #
+
+  deckjsBackendSrc = fetchurl {
+    url = "https://github.com/downloads/houqp/asciidoc-deckjs/deckjs-1.6.2.zip";
+    sha256 = "1siy1j8naj5irrrrv5bfgl4d8nal6j9pyahy4f50wmrr9wv59s46";
+  };
+
 in
 
 stdenv.mkDerivation rec {
@@ -64,6 +84,7 @@ stdenv.mkDerivation rec {
   # install filters early, so their shebangs are patched too
   patchPhase = with stdenv.lib; ''
     mkdir -p "$out/etc/asciidoc/filters"
+    mkdir -p "$out/etc/asciidoc/backends"
   '' + optionalString enableDitaaFilter ''
     echo "Extracting ditaa filter"
     unzip -d "$out/etc/asciidoc/filters/ditaa" "${ditaaFilterSrc}"
@@ -106,6 +127,9 @@ stdenv.mkDerivation rec {
     aafigure_path="$(toPythonPath ${aafigure})"
     sed -i "/^import.*sys/asys.path.append(\"$pth_loader_path\"); sys.path.append(\"$aafigure_path\"); import sitecustomize" \
         "$out/etc/asciidoc/filters/aafigure/aafig2img.py"
+  '' + optionalString enableDeckjsBackend ''
+    echo "Extracting deckjs backend"
+    unzip -d "$out/etc/asciidoc/backends/deckjs" "${deckjsBackendSrc}"
   '' + ''
     for n in $(find "$out" . -name \*.py); do
       sed -i -e "s,^#![[:space:]]*/usr/bin/env python,#!${python}/bin/python,g" "$n"
