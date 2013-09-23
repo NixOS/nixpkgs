@@ -1,0 +1,26 @@
+{ stdenv, fetchurl, mpd_clientlib }:
+
+stdenv.mkDerivation rec {
+  version = "0.23";
+  name = "mpc-${version}";
+
+  src = fetchurl {
+    url = "http://www.musicpd.org/download/mpc/0/${name}.tar.bz2";
+    sha256 = "1ir96wfgq5qfdd2s06zfycv38g3bhn3bpndwx9hwf1w507rvifi9";
+  };
+	
+  buildInputs = [ mpd_clientlib ]; 
+  
+  preConfigure =
+    ''
+      export LIBMPDCLIENT_LIBS=${mpd_clientlib}/lib/libmpdclient.so.2.0.8
+      export LIBMPDCLIENT_CFLAGS=${mpd_clientlib}
+    '';
+
+  meta = {
+    description = "A minimalist command line interface to MPD";
+    homepage = http://www.musicpd.org/clients/mpc/;
+    license = "GPL2";
+    platforms = stdenv.lib.platforms.linux;
+  };
+}
