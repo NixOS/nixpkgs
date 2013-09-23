@@ -411,6 +411,8 @@ let
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
+  arandr = callPackage ../tools/X11/arandr { };
+
   arduino_core = callPackage ../development/arduino/arduino-core {
     jdk = jdk;
     jre = jdk;
