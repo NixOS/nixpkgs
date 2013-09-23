@@ -1,8 +1,6 @@
 { stdenv, fetchurl, doxygen }:
 
 stdenv.mkDerivation rec {
-
-
   version = "${passthru.majorVersion}.${passthru.minorVersion}";
   name = "libmpdclient-${version}";
 
