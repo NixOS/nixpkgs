@@ -131,6 +131,61 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   # packages defined here
 
+  aafigure = buildPythonPackage rec {
+    name = "aafigure-0.5";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/aafigure/${name}.tar.gz";
+      md5 = "5322888a21eb0bb2e749fbf98eddf574";
+    };
+
+    propagatedBuildInputs = [ pillow ];
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    # Fix impurity. TODO: Do the font lookup using fontconfig instead of this
+    # manual method. Until that is fixed, we get this whenever we run aafigure:
+    #   WARNING: font not found, using PIL default font
+    patchPhase = ''
+      sed -i "s|/usr/share/fonts|/nonexisting-fonts-path|" aafigure/PILhelper.py
+    '';
+
+    meta = with stdenv.lib; {
+      description = "ASCII art to image converter";
+      homepage = https://launchpad.net/aafigure/;
+      license = licenses.bsd2;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
+  actdiag = buildPythonPackage rec {
+    name = "actdiag-0.4.3";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/actdiag/${name}.tar.gz";
+      md5 = "428aaab849f04668fa12388b964a56ea";
+    };
+
+    buildInputs = [ pep8 nose unittest2 docutils ];
+
+    propagatedBuildInputs = [ blockdiag ];
+
+    # One test fails, because of missing simple.diag input file
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Generate activity-diagram image from spec-text file (similar to Graphviz)";
+      homepage = http://blockdiag.com/;
+      license = licenses.asl20;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   afew = buildPythonPackage rec {
     rev = "6bb3915636aaf86f046a017ffffd9a4ef395e199";
     name = "afew-1.0_${rev}";
@@ -490,6 +545,34 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       maintainers = [ maintainers.bjornfor ];
     };
   };
+
+
+  blockdiag = buildPythonPackage rec {
+    name = "blockdiag-1.2.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/blockdiag/${name}.tar.gz";
+      md5 = "244334f60cc10b0cb73b5df5279bcdd1";
+    };
+
+    buildInputs = [ pep8 nose unittest2 docutils ];
+
+    propagatedBuildInputs = [ pil webcolors funcparserlib ];
+
+    # One test fails:
+    #   ...
+    #   FAIL: test_auto_font_detection (blockdiag.tests.test_boot_params.TestBootParams)
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
+      homepage = http://blockdiag.com/;
+      license = licenses.asl20;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
 
   bpython = buildPythonPackage rec {
      name = "bpython-0.12";
@@ -1258,6 +1341,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     buildInputs = [ nose nosejs ];
     propagatedBuildInputs = [ sphinx ];
   };
+
+
+  funcparserlib = buildPythonPackage rec {
+    name = "funcparserlib-0.3.6";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/f/funcparserlib/${name}.tar.gz";
+      md5 = "3aba546bdad5d0826596910551ce37c0";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Recursive descent parsing library based on functional combinators";
+      homepage = https://code.google.com/p/funcparserlib/;
+      license = licenses.mit;
+      platforms = platforms.linux;
+    };
+  };
+
 
   googlecl = buildPythonPackage rec {
     version = "0.9.14";
@@ -3547,6 +3648,32 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+
+  nwdiag = buildPythonPackage rec {
+    name = "nwdiag-0.9.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/n/nwdiag/${name}.tar.gz";
+      md5 = "199b22f66ec3012c3999177d376a3842";
+    };
+
+    buildInputs = [ pep8 nose unittest2 docutils ];
+
+    propagatedBuildInputs = [ blockdiag ];
+
+    # tests fail
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Generate network-diagram image from spec-text file (similar to Graphviz)";
+      homepage = http://blockdiag.com/;
+      license = licenses.asl20;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   oauth2 = buildPythonPackage (rec {
     name = "oauth2-1.5.211";
 
@@ -5119,6 +5246,33 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  seqdiag = buildPythonPackage rec {
+    name = "seqdiag-0.8.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/seqdiag/${name}.tar.gz";
+      md5 = "61b3da29b5efaa89701b4db6d2d4d5fa";
+    };
+
+    buildInputs = [ pep8 nose unittest2 docutils ];
+
+    propagatedBuildInputs = [ blockdiag ];
+
+    # Some tests fail (because of missing input files?):
+    #   ...
+    #   IOError: [Errno 2] No such file or directory: '/tmp/nix-build-python2.7-seqdiag-0.8.2.drv-0/seqdiag-0.8.2/src/seqdiag/tests/diagrams/separators.diag'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Generate sequence-diagram image from spec-text file (similar to Graphviz)";
+      homepage = http://blockdiag.com/;
+      license = licenses.asl20;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   scipy = buildPythonPackage rec {
     name = "scipy-0.9.0";
 
@@ -5974,6 +6128,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
        platforms = stdenv.lib.platforms.all;
     };
   };
+
+
+  webcolors = buildPythonPackage rec {
+    name = "webcolors-1.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/w/webcolors/${name}.tar.gz";
+      md5 = "35de9d785b5c04a9cc66a2eae0519254";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Library for working with color names/values defined by the HTML and CSS specifications";
+      homepage = https://bitbucket.org/ubernostrum/webcolors/overview/;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+    };
+  };
+
 
   webob = buildPythonPackage rec {
     version = "1.2.3";

@@ -395,6 +395,8 @@ let
   acoustidFingerprinter = callPackage
     ../tools/audio/acoustid-fingerprinter { };
 
+  actdiag = pythonPackages.actdiag;
+
   aefs = callPackage ../tools/filesystems/aefs { };
 
   aespipe = callPackage ../tools/security/aespipe { };
@@ -519,6 +521,8 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  blockdiag = pythonPackages.blockdiag;
+
   bmon = callPackage ../tools/misc/bmon { };
 
   boomerang = callPackage ../development/tools/boomerang {
@@ -558,7 +562,9 @@ let
 
   mcelog = callPackage ../os-specific/linux/mcelog { };
 
-  asciidoc = callPackage ../tools/typesetting/asciidoc { };
+  asciidoc = callPackage ../tools/typesetting/asciidoc {
+    inherit (pythonPackages) matplotlib numpy aafigure recursivePthLoader;
+  };
 
   autossh = callPackage ../tools/networking/autossh { };
 
@@ -1399,6 +1405,8 @@ let
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
 
+  nwdiag = pythonPackages.nwdiag;
+
   nylon = callPackage ../tools/networking/nylon { };
 
   nzbget = callPackage ../tools/networking/nzbget { };
@@ -1706,6 +1714,8 @@ let
   setserial = builderDefsPackage (import ../tools/system/setserial) {
     inherit groff;
   };
+
+  seqdiag = pythonPackages.seqdiag;
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
