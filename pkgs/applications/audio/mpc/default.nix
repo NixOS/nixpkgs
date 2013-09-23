@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   
   preConfigure =
     ''
-      export LIBMPDCLIENT_LIBS=${mpd_clientlib}/lib/libmpdclient.so.2.0.8
+      export LIBMPDCLIENT_LIBS=${mpd_clientlib}/lib/libmpdclient.so.${mpd_clientlib.majorVersion}.0.${mpd_clientlib.minorVersion}
       export LIBMPDCLIENT_CFLAGS=${mpd_clientlib}
     '';
 
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     description = "A minimalist command line interface to MPD";
     homepage = http://www.musicpd.org/clients/mpc/;
     license = "GPL2";
+    maintainers = [ stdenv.lib.maintainers.algorith ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
