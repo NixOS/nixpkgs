@@ -409,7 +409,7 @@ in
     boot.blacklistedKernelModules =
       optionals (elem "nvidia" driverNames) [ "nouveau" "nvidiafb" ];
 
-    environment.variables.LD_LIBRARY_PATH.list =
+    environment.variables.LD_LIBRARY_PATH =
       [ "/run/opengl-driver/lib" "/run/opengl-driver-32/lib" ];
 
     environment.etc =

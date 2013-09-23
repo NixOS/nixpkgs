@@ -9,40 +9,6 @@ let
 
   cfg = config.environment;
 
-  environOpts = { name, config, ... }: {
-
-    options = {
-
-      value = mkOption {
-        example = "/foo/bin";
-        description =
-          ''
-            Variable value.
-            Exactly one of this or <option>list</option> must be set.
-          '';
-        type = types.uniq types.string;
-      };
-
-      list = mkOption {
-        default = null;
-        example = [ "/foo/bin" "/bar/bin" ];
-        description =
-          ''
-            Variable value.
-            Exactly one of this or <option>value</option> must be set.
-          '';
-        type = types.nullOr (types.listOf types.string);
-      };
-
-    };
-
-    config = {
-      value = mkIf (config.list != null)
-        (concatStringsSep ":" config.list);
-    };
-
-  };
-
 in
 
 {
@@ -53,9 +19,15 @@ in
       default = {};
       description = ''
         A set of environment variables used in the global environment.
+        The value of each variable can be either a string or a list of
+        strings.  The latter is concatenated, interspersed with colon
+        characters.
       '';
-      type = types.attrsOf types.optionSet;
-      options = [ environOpts ];
+      type = types.attrsOf (mkOptionType {
+        name = "a string or a list of strings";
+        check = x: builtins.isString x || isList x;
+      });
+      apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
     };
 
     environment.profiles = mkOption {
@@ -140,7 +112,7 @@ in
     environment.binsh = mkOption {
       default = "${config.system.build.binsh}/bin/sh";
       example = "\${pkgs.dash}/bin/dash";
-      type = with pkgs.lib.types; path;
+      type = types.path;
       description = ''
         The shell executable that is linked system-wide to
         <literal>/bin/sh</literal>. Please note that NixOS assumes all
@@ -177,7 +149,7 @@ in
          ${concatStringsSep "\n" (
            (mapAttrsToList (n: v: ''export ${n}="${concatStringsSep ":" v}"'')
              # This line is a kind of a hack because of !!! note above
-             (fold (mergeAttrsWithFunc concat) {} ([ (mapAttrs (n: v: [ v.value ]) cfg.variables) ] ++ map cfg.profileVariables cfg.profiles))))}
+             (fold (mergeAttrsWithFunc concat) {} ([ (mapAttrs (n: v: [ v ]) cfg.variables) ] ++ map cfg.profileVariables cfg.profiles))))}
 
          ${cfg.extraInit}
 

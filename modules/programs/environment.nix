@@ -17,18 +17,18 @@ in
   config = {
 
     environment.variables =
-      { LOCALE_ARCHIVE.value = "/run/current-system/sw/lib/locale/locale-archive";
-        LOCATE_PATH.value = "/var/cache/locatedb";
-        NIXPKGS_CONFIG.value = "/etc/nix/nixpkgs-config.nix";
-        NIX_PATH.list =
+      { LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
+        LOCATE_PATH = "/var/cache/locatedb";
+        NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
+        NIX_PATH =
           [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixpkgs=/etc/nixos/nixpkgs"
             "nixos=/etc/nixos/nixos"
             "nixos-config=/etc/nixos/configuration.nix"
             "services=/etc/nixos/services"
           ];
-        PAGER.value = "less -R";
-        EDITOR.value = "nano";
+        PAGER = "less -R";
+        EDITOR = "nano";
       };
 
     environment.profiles =

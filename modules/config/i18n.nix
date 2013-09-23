@@ -69,7 +69,7 @@ in
 
     environment.systemPackages = [ glibcLocales ];
 
-    environment.variables.LANG.value = config.i18n.defaultLocale;
+    environment.variables.LANG = config.i18n.defaultLocale;
 
     # ‘/etc/locale.conf’ is used by systemd.
     environment.etc = singleton
