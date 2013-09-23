@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , GConf, atk, cairo, cmake, curl, dbus_glib, exiv2, glib
-, libgnome_keyring, gphoto2, gtk, ilmbase, intltool, lcms, lcms2
+, libgnome_keyring, gtk, ilmbase, intltool, lcms, lcms2
 , lensfun, libXau, libXdmcp, libexif, libglade, libgphoto2, libjpeg
 , libpng, libpthreadstubs, libraw1394, librsvg, libtiff, libxcb
 , openexr, pixman, pkgconfig, sqlite, bash, libxslt }:
@@ -8,12 +8,12 @@
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  version = "1.2.2";
+  version = "1.2.3";
   name = "darktable-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/darktable/darktable/1.2/darktable-${version}.tar.xz";
-    sha256 = "0nf85wjhlisbgwkfkc1wb8y7dpnx3v8zk9g3ghbd51gi7s62x40j";
+    sha256 = "05kkkz13a5rhb246rq1nxv7h91pcvm15filvik8n8gn143h64sv8";
   };
 
   buildInputs =
