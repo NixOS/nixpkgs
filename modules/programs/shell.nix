@@ -1,25 +1,67 @@
-# This module defines global configuration for the shells.
+# This module defines a standard configuration for NixOS shells.
 
 { config, pkgs, ... }:
 
 with pkgs.lib;
 
+let
+
+  cfg = config.environment;
+
+in
+
 {
-  options = {
-    environment.shellAliases = mkOption {
-      type = types.attrs; # types.attrsOf types.stringOrPath;
-      default = {};
-      example = {
-        ll = "ls -lh";
-      };
-      description = ''
-        An attribute set that maps aliases (the top level attribute names in
-        this option) to command strings or directly to build outputs. The
-        aliases are added to all users' shells.
-      '';
-    };
-  };
 
   config = {
+
+    environment.shellAliases =
+      { ls = "ls --color=tty";
+        ll = "ls -l";
+        l  = "ls -alh";
+      };
+
+    environment.shellInit =
+      ''
+        # Set up the per-user profile.
+        mkdir -m 0755 -p $NIX_USER_PROFILE_DIR
+        if test "$(stat --printf '%u' $NIX_USER_PROFILE_DIR)" != "$(id -u)"; then
+            echo "WARNING: bad ownership on $NIX_USER_PROFILE_DIR" >&2
+        fi
+
+        if ! test -L $HOME/.nix-profile; then
+            echo "creating $HOME/.nix-profile" >&2
+            if test "$USER" != root; then
+                ln -s $NIX_USER_PROFILE_DIR/profile $HOME/.nix-profile
+            else
+                # Root installs in the system-wide profile by default.
+                ln -s /nix/var/nix/profiles/default $HOME/.nix-profile
+            fi
+        fi
+
+        # Subscribe the root user to the NixOS channel by default.
+        if [ "$USER" = root -a ! -e $HOME/.nix-channels ]; then
+            echo "creating $HOME/.nix-channels with nixos-unstable subscription" >&2
+            echo "http://nixos.org/channels/nixos-unstable nixos" > $HOME/.nix-channels
+        fi
+
+        # Create the per-user garbage collector roots directory.
+        NIX_USER_GCROOTS_DIR=/nix/var/nix/gcroots/per-user/$USER
+        mkdir -m 0755 -p $NIX_USER_GCROOTS_DIR
+        if test "$(stat --printf '%u' $NIX_USER_GCROOTS_DIR)" != "$(id -u)"; then
+            echo "WARNING: bad ownership on $NIX_USER_GCROOTS_DIR" >&2
+        fi
+
+        # Set up a default Nix expression from which to install stuff.
+        if [ ! -e $HOME/.nix-defexpr -o -L $HOME/.nix-defexpr ]; then
+            echo "creating $HOME/.nix-defexpr" >&2
+            rm -f $HOME/.nix-defexpr
+            mkdir $HOME/.nix-defexpr
+            if [ "$USER" != root ]; then
+                ln -s /nix/var/nix/profiles/per-user/root/channels $HOME/.nix-defexpr/channels_root
+            fi
+        fi
+      '';
+
   };
+
 }

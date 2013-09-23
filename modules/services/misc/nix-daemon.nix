@@ -198,8 +198,7 @@ in
         example = "http://127.0.0.1:3128";
       };
 
-      # Environment variables for running Nix.  !!! Misnomer - it's
-      # actually a shell script.
+      # Environment variables for running Nix.
       envVars = mkOption {
         internal = true;
         default = {};
@@ -328,11 +327,11 @@ in
         ftp_proxy = cfg.proxy;
       };
 
-    environment.shellInit =
-      ''
-        # Set up the environment variables for running Nix.
-        ${concatMapStrings (n: "export ${n}=\"${getAttr n cfg.envVars}\"\n") (attrNames cfg.envVars)}
+    # Set up the environment variables for running Nix.
+    environment.variables = mapAttrs (n: v: { value = v; }) cfg.envVars;
 
+    environment.extraInit =
+      ''
         # Set up secure multi-user builds: non-root users build through the
         # Nix daemon.
         if test "$USER" != root; then

@@ -2,6 +2,8 @@
 
 { config, pkgs, ... }:
 
+with pkgs.lib;
+
 let
 
   loginDefs =
@@ -39,7 +41,6 @@ in
   options = {
 
     users.defaultUserShell = pkgs.lib.mkOption {
-      default = "/run/current-system/sw/bin/bash";
       description = ''
         This option defines the default shell assigned to user
         accounts.  This must not be a store path, since the path is
@@ -47,6 +48,7 @@ in
         Rather, it should be the path of a symlink that points to the
         actual shell in the Nix store.
       '';
+      type = types.uniq types.path;
     };
 
   };

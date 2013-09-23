@@ -409,6 +409,9 @@ in
     boot.blacklistedKernelModules =
       optionals (elem "nvidia" driverNames) [ "nouveau" "nvidiafb" ];
 
+    environment.variables.LD_LIBRARY_PATH.list =
+      [ "/run/opengl-driver/lib" "/run/opengl-driver-32/lib" ];
+
     environment.etc =
       (optionals cfg.exportConfiguration
         [ { source = "${configFile}";

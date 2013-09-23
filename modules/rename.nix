@@ -66,6 +66,7 @@ in zipModules ([]
 # usage example:
 # ++ rename alias "services.xserver.slim.theme" "services.xserver.displayManager.slim.theme"
 ++ rename obsolete "environment.extraPackages" "environment.systemPackages"
+++ rename obsolete "environment.enableBashCompletion" "programs.bash.enableCompletion"
 
 ++ rename obsolete "security.extraSetuidPrograms" "security.setuidPrograms"
 ++ rename obsolete "networking.enableWLAN" "networking.wireless.enable"
