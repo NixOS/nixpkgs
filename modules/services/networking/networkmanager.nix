@@ -47,7 +47,12 @@ let
   overrideNameserversScript = writeScript "02overridedns" ''
     #!/bin/sh
     ${optionalString cfg.overrideNameservers "${gnused}/bin/sed -i '/nameserver /d' /etc/resolv.conf"}
-    ${concatStringsSep ";" (map (s: "echo 'nameserver ${s}' >> /etc/resolv.conf") config.networking.nameservers)}
+    ${concatStrings (map (s: ''
+      ${optionalString cfg.appendNameservers
+        "${gnused}/bin/sed -i '/nameserver ${s}/d' /etc/resolv.conf"
+      }
+      echo 'nameserver ${s}' >> /etc/resolv.conf
+    '') config.networking.nameservers)}
   '';
 
 in {
