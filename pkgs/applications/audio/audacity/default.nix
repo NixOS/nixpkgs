@@ -4,12 +4,12 @@
   }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.3";
+  version = "2.0.4";
   name = "audacity-${version}";
 
   src = fetchurl {
     url = "http://audacity.googlecode.com/files/audacity-minsrc-${version}.tar.xz";
-    sha256 = "1k4bbxhpfl80vm3gm3jxqly0syqjij5kwziy4xyq2c8aj2miwj1f";
+    sha256 = "0pl92filykzs4g2pn7i02kdqgja326wjgafzw2vcgwn3dwrs4avp";
   };
 
   preConfigure = /* we prefer system-wide libs */ ''

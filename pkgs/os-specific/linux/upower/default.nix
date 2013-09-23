@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
         --replace /usr/bin/dbus-send ${dbus_tools}/bin/dbus-send
     '';
 
+  NIX_CFLAGS_LINK = "-lgcc_s";
+
   installFlags = "historydir=$(TMPDIR)/foo";
 
   meta = {

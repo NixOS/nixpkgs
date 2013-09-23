@@ -69,5 +69,7 @@ stdenv.mkDerivation rec {
     description = "The Nix Deployment System";
     homepage = http://nixos.org/;
     license = "LGPLv2+";
+    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.platforms.all;
   };
 }

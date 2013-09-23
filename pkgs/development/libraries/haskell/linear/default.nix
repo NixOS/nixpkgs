@@ -1,17 +1,21 @@
-{ cabal, distributive, doctest, filepath, hashable, lens
+{ cabal, distributive, doctest, filepath, hashable, HUnit, lens
 , reflection, semigroupoids, semigroups, simpleReflect, tagged
-, transformers, unorderedContainers, vector
+, testFramework, testFrameworkHunit, transformers
+, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "linear";
-  version = "1.2";
-  sha256 = "0mna8k6plq0akki5j5zjk1xk1hgks1076q1h5s14v87d0h45wlrh";
+  version = "1.3";
+  sha256 = "0b5qjsbdkqv0h1236lv2nisjh9yz7gc5bd6xv6i8q5jryzs43pi9";
   buildDepends = [
     distributive hashable reflection semigroupoids semigroups tagged
     transformers unorderedContainers vector
   ];
-  testDepends = [ doctest filepath lens simpleReflect ];
+  testDepends = [
+    doctest filepath HUnit lens simpleReflect testFramework
+    testFrameworkHunit
+  ];
   meta = {
     homepage = "http://github.com/ekmett/linear/";
     description = "Linear Algebra";

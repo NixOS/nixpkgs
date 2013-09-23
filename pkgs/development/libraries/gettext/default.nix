@@ -70,9 +70,11 @@ stdenv.mkDerivation (rec {
   };
 }
 
-//
+// optionalAttrs stdenv.isDarwin {
+  makeFlags = "CFLAGS=-D_FORTIFY_SOURCE=0";
+}
 
-stdenv.lib.optionalAttrs stdenv.isCygwin {
+// optionalAttrs stdenv.isCygwin {
   patchPhase =
    # Make sure `error.c' gets compiled and is part of `libgettextlib.la'.
    # This fixes:

@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "heist";
-  version = "0.13.0";
-  sha256 = "1f406i7jdz45s88n0nrd76vj927a0fx02nf1f98r4in0ic5anp11";
+  version = "0.13.0.1";
+  sha256 = "1hxf131xhvsqbvmrm8wbjpndy41pz1lq65gqlk3lxr57dhi59s4w";
   buildDepends = [
     aeson attoparsec blazeBuilder blazeHtml directoryTree dlist errors
     filepath hashable MonadCatchIOTransformers mtl random text time

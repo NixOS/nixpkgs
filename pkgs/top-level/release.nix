@@ -217,8 +217,6 @@ let
       ncat = linux;
       netcat = all;
       nfsUtils = linux;
-      nix = all;
-      nixUnstable = all;
       nmap = linux;
       nss_ldap = linux;
       nssmdns = linux;

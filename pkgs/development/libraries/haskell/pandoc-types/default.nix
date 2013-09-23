@@ -1,10 +1,10 @@
-{ cabal, syb }:
+{ cabal, aeson, syb }:
 
 cabal.mkDerivation (self: {
   pname = "pandoc-types";
-  version = "1.10";
-  sha256 = "1xbqvgb95h0jhqx2y0jzds3xvycx5gwi3xn6agdmfkg7xhx9hnz6";
-  buildDepends = [ syb ];
+  version = "1.12.1";
+  sha256 = "0gqn7byag5vx09mwbx6y3zs3hqmncarlpml0cfc5picwv8kg4vbj";
+  buildDepends = [ aeson syb ];
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
     description = "Types for representing a structured document";

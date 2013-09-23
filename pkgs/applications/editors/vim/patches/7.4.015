@@ -1,0 +1,106 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.015
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.015
+Problem:    MS-Windows: Detecting node type does not work for multi-byte
+	    characters.
+Solution:   Use wide character function when needed. (Ken Takata)
+Files:	    src/os_win32.c
+
+
+*** ../vim-7.4.014/src/os_win32.c	2013-08-10 12:39:12.000000000 +0200
+--- src/os_win32.c	2013-08-30 17:09:47.000000000 +0200
+***************
+*** 3107,3112 ****
+--- 3107,3115 ----
+  {
+      HANDLE	hFile;
+      int		type;
++ #ifdef FEAT_MBYTE
++     WCHAR	*wn = NULL;
++ #endif
+  
+      /* We can't open a file with a name "\\.\con" or "\\.\prn" and trying to
+       * read from it later will cause Vim to hang.  Thus return NODE_WRITABLE
+***************
+*** 3114,3127 ****
+      if (STRNCMP(name, "\\\\.\\", 4) == 0)
+  	return NODE_WRITABLE;
+  
+!     hFile = CreateFile(name,		/* file name */
+! 		GENERIC_WRITE,		/* access mode */
+! 		0,			/* share mode */
+! 		NULL,			/* security descriptor */
+! 		OPEN_EXISTING,		/* creation disposition */
+! 		0,			/* file attributes */
+! 		NULL);			/* handle to template file */
+  
+      if (hFile == INVALID_HANDLE_VALUE)
+  	return NODE_NORMAL;
+  
+--- 3117,3157 ----
+      if (STRNCMP(name, "\\\\.\\", 4) == 0)
+  	return NODE_WRITABLE;
+  
+! #ifdef FEAT_MBYTE
+!     if (enc_codepage >= 0 && (int)GetACP() != enc_codepage)
+!     {
+! 	wn = enc_to_utf16(name, NULL);
+! 	if (wn != NULL)
+! 	{
+! 	    hFile = CreateFileW(wn,	/* file name */
+! 			GENERIC_WRITE,	/* access mode */
+! 			0,		/* share mode */
+! 			NULL,		/* security descriptor */
+! 			OPEN_EXISTING,	/* creation disposition */
+! 			0,		/* file attributes */
+! 			NULL);		/* handle to template file */
+! 	    if (hFile == INVALID_HANDLE_VALUE
+! 			      && GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)
+! 	    {
+! 		/* Retry with non-wide function (for Windows 98). */
+! 		vim_free(wn);
+! 		wn = NULL;
+! 	    }
+! 	}
+!     }
+!     if (wn == NULL)
+! #endif
+! 	hFile = CreateFile(name,	/* file name */
+! 		    GENERIC_WRITE,	/* access mode */
+! 		    0,			/* share mode */
+! 		    NULL,		/* security descriptor */
+! 		    OPEN_EXISTING,	/* creation disposition */
+! 		    0,			/* file attributes */
+! 		    NULL);		/* handle to template file */
+  
++ #ifdef FEAT_MBYTE
++     vim_free(wn);
++ #endif
+      if (hFile == INVALID_HANDLE_VALUE)
+  	return NODE_NORMAL;
+  
+*** ../vim-7.4.014/src/version.c	2013-08-30 17:06:56.000000000 +0200
+--- src/version.c	2013-08-30 17:09:35.000000000 +0200
+***************
+*** 740,741 ****
+--- 740,743 ----
+  {   /* Add new patch number below this line */
++ /**/
++     15,
+  /**/
+
+-- 
+hundred-and-one symptoms of being an internet addict:
+144. You eagerly await the update of the "Cool Site of the Day."
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

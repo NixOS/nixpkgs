@@ -1,0 +1,100 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.003
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.003
+Problem:    Memory access error in Ruby syntax highlighting. (Christopher Chow)
+Solution:   Refresh stale pointer. (James McCoy)
+Files:	    src/regexp_nfa.c
+
+
+*** ../vim-7.4.002/src/regexp_nfa.c	2013-08-14 13:31:03.000000000 +0200
+--- src/regexp_nfa.c	2013-08-14 14:02:06.000000000 +0200
+***************
+*** 4120,4126 ****
+  		sub = &subs->norm;
+  	    }
+  #ifdef FEAT_SYN_HL
+! 	    else if (state->c >= NFA_ZOPEN)
+  	    {
+  		subidx = state->c - NFA_ZOPEN;
+  		sub = &subs->synt;
+--- 4120,4126 ----
+  		sub = &subs->norm;
+  	    }
+  #ifdef FEAT_SYN_HL
+! 	    else if (state->c >= NFA_ZOPEN && state->c <= NFA_ZOPEN9)
+  	    {
+  		subidx = state->c - NFA_ZOPEN;
+  		sub = &subs->synt;
+***************
+*** 4189,4194 ****
+--- 4189,4201 ----
+  	    }
+  
+  	    subs = addstate(l, state->out, subs, pim, off);
++ 	    /* "subs" may have changed, need to set "sub" again */
++ #ifdef FEAT_SYN_HL
++ 	    if (state->c >= NFA_ZOPEN && state->c <= NFA_ZOPEN9)
++ 		sub = &subs->synt;
++ 	    else
++ #endif
++ 		sub = &subs->norm;
+  
+  	    if (save_in_use == -1)
+  	    {
+***************
+*** 4237,4243 ****
+  		sub = &subs->norm;
+  	    }
+  #ifdef FEAT_SYN_HL
+! 	    else if (state->c >= NFA_ZCLOSE)
+  	    {
+  		subidx = state->c - NFA_ZCLOSE;
+  		sub = &subs->synt;
+--- 4244,4250 ----
+  		sub = &subs->norm;
+  	    }
+  #ifdef FEAT_SYN_HL
+! 	    else if (state->c >= NFA_ZCLOSE && state->c <= NFA_ZCLOSE9)
+  	    {
+  		subidx = state->c - NFA_ZCLOSE;
+  		sub = &subs->synt;
+***************
+*** 4281,4286 ****
+--- 4288,4300 ----
+  	    }
+  
+  	    subs = addstate(l, state->out, subs, pim, off);
++ 	    /* "subs" may have changed, need to set "sub" again */
++ #ifdef FEAT_SYN_HL
++ 	    if (state->c >= NFA_ZCLOSE && state->c <= NFA_ZCLOSE9)
++ 		sub = &subs->synt;
++ 	    else
++ #endif
++ 		sub = &subs->norm;
+  
+  	    if (REG_MULTI)
+  		sub->list.multi[subidx].end = save_lpos;
+*** ../vim-7.4.002/src/version.c	2013-08-14 13:31:03.000000000 +0200
+--- src/version.c	2013-08-14 14:03:51.000000000 +0200
+***************
+*** 729,730 ****
+--- 729,732 ----
+  {   /* Add new patch number below this line */
++ /**/
++     3,
+  /**/
+
+-- 
+Where do you want to crash today?
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

@@ -616,8 +616,8 @@ November 13, 2012
     </sdk:platform>
 
     <sdk:platform>
-        <!-- Generated at Tue Jul 23 17:16:25 2013 from git_jb-mr2-release @ 737497 -->
-        <sdk:revision>1</sdk:revision>
+        <!-- Generated at Wed Sep 11 18:15:07 2013 from git_jb-mr2-dev @ 819563 -->
+        <sdk:revision>2</sdk:revision>
         <sdk:description>Android SDK Platform 4.3</sdk:description>
         <sdk:version>4.3</sdk:version>
         <sdk:api-level>18</sdk:api-level>
@@ -625,14 +625,14 @@ November 13, 2012
             <sdk:major>21</sdk:major>
         </sdk:min-tools-rev>
         <sdk:layoutlib>
-            <sdk:api>9</sdk:api>
+            <sdk:api>10</sdk:api>
             <sdk:revision>1</sdk:revision>
         </sdk:layoutlib>
         <sdk:archives>
             <sdk:archive arch="any" os="any">
-                <sdk:size>48752456</sdk:size>
-                <sdk:checksum type="sha1">c24de91d6f296cf453701aef281609779fffb379</sdk:checksum>
-                <sdk:url>android-18_r01.zip</sdk:url>
+                <sdk:size>57319855</sdk:size>
+                <sdk:checksum type="sha1">62a9438d4cf6692f4d6510c27a380be195db9534</sdk:checksum>
+                <sdk:url>android-18_r02.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -705,16 +705,16 @@ November 13, 2012
     </sdk:system-image>
 
     <sdk:system-image>
-        <!-- Generated at Tue Jul 23 17:18:11 2013 from git_jb-mr2-release @ 737497 -->
-        <sdk:revision>1</sdk:revision>
+        <!-- Generated at Mon Aug 12 12:43:28 2013 from git_jb-mr2-dev @ 774058 -->
+        <sdk:revision>2</sdk:revision>
         <sdk:description>Android SDK Platform 4.3</sdk:description>
         <sdk:api-level>18</sdk:api-level>
         <sdk:abi>armeabi-v7a</sdk:abi>
         <sdk:archives>
             <sdk:archive arch="any" os="any">
-                <sdk:size>125597583</sdk:size>
-                <sdk:checksum type="sha1">5a9b8ac5b57dd0e3278f47deb5ee58e1db6f1f9e</sdk:checksum>
-                <sdk:url>sysimg_armv7a-18_r01.zip</sdk:url>
+                <sdk:size>125457135</sdk:size>
+                <sdk:checksum type="sha1">4a1a93200210d8c42793324362868846f67401ab</sdk:checksum>
+                <sdk:url>sysimg_armv7a-18_r02.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -1006,33 +1006,60 @@ November 13, 2012
         <sdk:uses-license ref="android-sdk-license"/>
     </sdk:build-tool>
 
+    <sdk:build-tool>
+        <!-- Generated at Wed Sep 11 17:41:47 2013 from git_jb-mr2-dev @ 819563 -->
+        <sdk:revision>
+            <sdk:major>18</sdk:major>
+            <sdk:minor>1</sdk:minor>
+            <sdk:micro>0</sdk:micro>
+        </sdk:revision>
+        <sdk:archives>
+            <sdk:archive arch="any" os="windows">
+                <sdk:size>19659547</sdk:size>
+                <sdk:checksum type="sha1">3a9810fc8559ab03c09378f07531e8cae2f1db30</sdk:checksum>
+                <sdk:url>build-tools_r18.1-windows.zip</sdk:url>
+            </sdk:archive>
+            <sdk:archive arch="any" os="linux">
+                <sdk:size>20229298</sdk:size>
+                <sdk:checksum type="sha1">f314a0599e51397f0886fe888b50dd98f2f050d8</sdk:checksum>
+                <sdk:url>build-tools_r18.1-linux.zip</sdk:url>
+            </sdk:archive>
+            <sdk:archive arch="any" os="macosx">
+                <sdk:size>20451524</sdk:size>
+                <sdk:checksum type="sha1">16ddb299b8b43063e5bb3387ec17147c5053dfd8</sdk:checksum>
+                <sdk:url>build-tools_r18.1-macosx.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:build-tool>
+
     <!-- TOOLS ........................ -->
 
     <sdk:tool>
-        <!-- Generated at Mon Jul 29 16:02:44 2013 from git_tools_r22 @ 757759 -->
+        <!-- Generated at Wed Sep 11 18:24:51 2013 from git_mirror-aosp-tools_r22.2 @ 822324 -->
         <sdk:revision>
             <sdk:major>22</sdk:major>
-            <sdk:minor>0</sdk:minor>
-            <sdk:micro>5</sdk:micro>
+            <sdk:minor>2</sdk:minor>
+            <sdk:micro>0</sdk:micro>
         </sdk:revision>
         <sdk:min-platform-tools-rev>
             <sdk:major>18</sdk:major>
         </sdk:min-platform-tools-rev>
         <sdk:archives>
             <sdk:archive arch="any" os="windows">
-                <sdk:size>113389691</sdk:size>
-                <sdk:checksum type="sha1">a3f450706b5374122f0edb76a4488462ba5171ca</sdk:checksum>
-                <sdk:url>tools_r22.0.5-windows.zip</sdk:url>
+                <sdk:size>108669997</sdk:size>
+                <sdk:checksum type="sha1">c4231cd769ef9d1b6ae69202a1a0d0f783f04ea7</sdk:checksum>
+                <sdk:url>tools_r22.2-windows.zip</sdk:url>
             </sdk:archive>
             <sdk:archive arch="any" os="linux">
-                <sdk:size>105904090</sdk:size>
-                <sdk:checksum type="sha1">06a3e1d66b9280cba49c7ba1893ea14beae072d2</sdk:checksum>
-                <sdk:url>tools_r22.0.5-linux.zip</sdk:url>
+                <sdk:size>101168674</sdk:size>
+                <sdk:checksum type="sha1">a11febd30023ed2590bca4c2d7b1dc2b0cfcd715</sdk:checksum>
+                <sdk:url>tools_r22.2-linux.zip</sdk:url>
             </sdk:archive>
             <sdk:archive arch="any" os="macosx">
-                <sdk:size>77191184</sdk:size>
-                <sdk:checksum type="sha1">318947edef0ab46603eb7f4d21333ee4b4fa1ff3</sdk:checksum>
-                <sdk:url>tools_r22.0.5-macosx.zip</sdk:url>
+                <sdk:size>74822802</sdk:size>
+                <sdk:checksum type="sha1">76896171d0c9ba91c875c8f13ac58cd2e50e9f28</sdk:checksum>
+                <sdk:url>tools_r22.2-macosx.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>

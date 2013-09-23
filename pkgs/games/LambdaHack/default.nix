@@ -1,15 +1,17 @@
-{ cabal, binary, ConfigFile, filepath, gtk, miniutter, mtl, random
-, text, zlib
+{ cabal, binary, ConfigFile, deepseq, enummapset, filepath, gtk
+, hashable, keys, miniutter, mtl, random, stm, text, transformers
+, unorderedContainers, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "LambdaHack";
-  version = "0.2.6.5";
-  sha256 = "114s3adqs5mh566dbn0bb20v088wgg8arsm6m8hs9vx8j3jc8nx5";
+  version = "0.2.8";
+  sha256 = "0dwv6ljigwc46czyivn4ivszfiykvhjx6n4agv7lwx8faan7kax3";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    binary ConfigFile filepath gtk miniutter mtl random text zlib
+    binary ConfigFile deepseq enummapset filepath gtk hashable keys
+    miniutter mtl random stm text transformers unorderedContainers zlib
   ];
   meta = {
     homepage = "http://github.com/kosmikus/LambdaHack";

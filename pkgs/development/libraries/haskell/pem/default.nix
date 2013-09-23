@@ -1,14 +1,15 @@
-{ cabal, attoparsec, base64Bytestring, cereal, mtl, QuickCheck
-, testFramework, testFrameworkQuickcheck2
+{ cabal, base64Bytestring, HUnit, mtl, QuickCheck, testFramework
+, testFrameworkHunit, testFrameworkQuickcheck2
 }:
 
 cabal.mkDerivation (self: {
   pname = "pem";
-  version = "0.1.2";
-  sha256 = "1p2sw36b9w6lf53jzj86ibyy9a48fjd786mx3x8mvc5lczx8v78m";
-  buildDepends = [ attoparsec base64Bytestring cereal mtl ];
+  version = "0.2.0";
+  sha256 = "1hmsyavqzjx1chbn4a8vf0r2wz2fg0xl9cxgja4ap04si3qr458v";
+  buildDepends = [ base64Bytestring mtl ];
   testDepends = [
-    QuickCheck testFramework testFrameworkQuickcheck2
+    HUnit QuickCheck testFramework testFrameworkHunit
+    testFrameworkQuickcheck2
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-pem";

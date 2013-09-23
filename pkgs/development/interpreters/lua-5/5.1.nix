@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, readline}:
+{ stdenv, fetchurl, readline }:
 
 let
   dsoPatch = fetchurl {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-O2 -fPIC" LDLAGS="-fPIC" )
-    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.5.1" INSTALL_DATA='cp -d' )
+    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.5.1 liblua.so.5.1.5" INSTALL_DATA='cp -d' )
   '';
 
   postInstall = ''

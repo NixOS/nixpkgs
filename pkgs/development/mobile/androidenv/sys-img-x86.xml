@@ -136,4 +136,19 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED POSSIBLY 
     </sdk:archives>
 </sdk:system-image>
 
+<sdk:system-image>
+    <sdk:description>Android SDK Platform 4.3</sdk:description>
+    <sdk:revision>1</sdk:revision>
+    <sdk:api-level>18</sdk:api-level>
+    <sdk:abi>x86</sdk:abi>
+    <sdk:uses-license ref="intel-android-sysimage-license"/>
+    <sdk:archives>
+        <sdk:archive arch="any" os="any">
+            <sdk:size>155656419</sdk:size>
+            <sdk:checksum type="sha1">f11bc9fccd3e7e46c07d8b26e112a8d0b45966c1</sdk:checksum>
+            <sdk:url>sysimg_x86-18_r01.zip</sdk:url>
+        </sdk:archive>
+    </sdk:archives>
+</sdk:system-image>
+
 </sdk:sdk-sys-img>

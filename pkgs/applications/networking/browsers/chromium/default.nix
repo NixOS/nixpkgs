@@ -90,7 +90,9 @@ let
   # user namespace sandbox patch
   userns_patch = if versionOlder sourceInfo.version "30.0.0.0"
                  then ./sandbox_userns_29.patch
-                 else ./sandbox_userns_30.patch;
+                 else if versionOlder sourceInfo.version "31.0.0.0"
+                 then ./sandbox_userns_30.patch
+                 else ./sandbox_userns_31.patch;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";

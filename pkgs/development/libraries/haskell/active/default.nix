@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     newtype QuickCheck semigroupoids semigroups vectorSpace
   ];
+  jailbreak = true;
   meta = {
     description = "Abstractions for animation";
     license = self.stdenv.lib.licenses.bsd3;

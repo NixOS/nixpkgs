@@ -1,11 +1,14 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "libmpdclient-2.6";
+  version = "2.8";
+  name = "libmpdclient-${version}";
   src = fetchurl {
-    url = "mirror://sourceforge/musicpd/${name}.tar.bz2";
-    sha256 = "1j8kn0fawdsvczrkhf6xm2yp0h6w49b326i3c08zwvhskd3phljw";
+    url = "http://www.musicpd.org/download/libmpdclient/2/${name}.tar.bz2";
+    sha256 = "1qwjkb56rsbk0hwhg7fl15d6sf580a19gh778zcdg374j4yym3hh";
   };
+
+  buildInputs = [ doxygen ];
 
   meta = {
     description = "Client library for MPD (music player daemon)";

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo
-, libxml2, libgsf, bzip2, libcroco
+{ stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
+, bzip2, libcroco
 , gtk2 ? null, gtk3 ? null
 , gobjectIntrospection ? null, enableIntrospection ? false }:
 
@@ -9,15 +9,22 @@ stdenv.mkDerivation rec {
   name = "librsvg-2.36.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/librsvg/2.36/${name}.tar.xz";
+    url    = "mirror://gnome/sources/librsvg/2.36/${name}.tar.xz";
     sha256 = "1hp6325gdkzx8yqn2d2r915ak3k6hfshjjh0sc54z3vr0i99688h";
   };
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango cairo ]
+
+  buildInputs = [ libxml2 libgsf bzip2 libcroco pango ]
     ++ stdenv.lib.optional enableIntrospection [ gobjectIntrospection ];
-  propagatedBuildInputs = [ glib gdk_pixbuf gtk2 gtk3 ];
+
+  propagatedBuildInputs = [ glib gdk_pixbuf cairo gtk2 gtk3 ];
+
   nativeBuildInputs = [ pkgconfig ];
 
-  configureFlags = ["--enable-introspection=auto"];
+  configureFlags = [ "--enable-introspection=auto" ]
+    ++ stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";
+
+  NIX_CFLAGS_COMPILE
+    = stdenv.lib.optionalString stdenv.isDarwin "-I${cairo}/include/cairo";
 
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf
   # Patching the Makefiles to it creates rsvg specific loaders and the

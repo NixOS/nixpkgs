@@ -2,17 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "ncurses";
-  version = "0.2.4";
-  sha256 = "0d4h85qgva1sf59g55k9xidqdpw18qj51xj7w5cqsf5pcpxgkcwh";
+  version = "0.2.6";
+  sha256 = "0mcgbq67f8hfdqmvm3p59949mbxcc2mgjw889zxvxx0174kn205q";
   buildDepends = [ text transformers ];
   buildTools = [ c2hs ];
   extraLibraries = [ ncurses ];
-  preConfigure = ''
-    sed -i -e "s,ncursesw/,," lib/UI/NCurses.chs
-    sed -i -e "s,ncursesw/,," lib/UI/NCurses/Enums.chs
-    sed -i -e "s,ncursesw/,," lib/UI/NCurses/Panel.chs
-    sed -i -e "s,ncursesw/,," cbits/hsncurses-shim.c
-  '';
+  patchPhase = "find . -type f -exec sed -i -e 's|ncursesw/||' {} \\;";
   meta = {
     homepage = "https://john-millikin.com/software/haskell-ncurses/";
     description = "Modernised bindings to GNU ncurses";
