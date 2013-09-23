@@ -9,6 +9,7 @@
 , enableAafigureFilter ? false, aafigure ? null, recursivePthLoader ? null
 # backends
 , enableDeckjsBackend ? false
+, enableOdfBackend ? false
 }:
 
 # filters
@@ -19,7 +20,7 @@ assert enableDiagFilter -> blockdiag != null && seqdiag != null && actdiag != nu
 assert enableMatplotlibFilter -> matplotlib != null && numpy != null;
 assert enableAafigureFilter -> aafigure != null && recursivePthLoader != null;
 # backends
-assert enableDeckjsBackend -> unzip != null;
+assert (enableDeckjsBackend || enableOdfBackend) -> unzip != null;
 
 let
 
@@ -67,6 +68,16 @@ let
   deckjsBackendSrc = fetchurl {
     url = "https://github.com/downloads/houqp/asciidoc-deckjs/deckjs-1.6.2.zip";
     sha256 = "1siy1j8naj5irrrrv5bfgl4d8nal6j9pyahy4f50wmrr9wv59s46";
+  };
+
+  # the odf backend is actually two plugins: odt + odp
+  odtBackendSrc = fetchurl {
+    url = "https://github.com/downloads/dagwieers/asciidoc-odf/odt-backend-0.1.zip";
+    sha256 = "1zaa97h9sx6ncxcdkl1x3ggydi7f8kjgvrnpjnkjiizi45k350kw";
+  };
+  odpBackendSrc = fetchurl {
+    url = "https://github.com/downloads/dagwieers/asciidoc-odf/odp-backend-0.1.zip";
+    sha256 = "08ya4bskygzqkfqwjllpg31qc5k08xp2k78z9b2480g8y57bfy10";
   };
 
 in
@@ -130,9 +141,17 @@ stdenv.mkDerivation rec {
   '' + optionalString enableDeckjsBackend ''
     echo "Extracting deckjs backend"
     unzip -d "$out/etc/asciidoc/backends/deckjs" "${deckjsBackendSrc}"
+  '' + optionalString enableOdfBackend ''
+    echo "Extracting odf backend (odt + odp)"
+    unzip -d "$out/etc/asciidoc/backends/odt" "${odtBackendSrc}"
+    unzip -d "$out/etc/asciidoc/backends/odp" "${odpBackendSrc}"
+    # The odt backend has a TODO note about removing this hardcoded path, but
+    # the odp backend already has that fix. Copy it here until fixed upstream.
+    sed -i "s|'/etc/asciidoc/backends/odt/asciidoc.ott'|os.path.dirname(__file__),'asciidoc.ott'|" \
+        "$out/etc/asciidoc/backends/odt/a2x-backend.py"
   '' + ''
     for n in $(find "$out" . -name \*.py); do
-      sed -i -e "s,^#![[:space:]]*/usr/bin/env python,#!${python}/bin/python,g" "$n"
+      sed -i -e "s,^#![[:space:]]*.*/bin/env python,#!${python}/bin/python,g" "$n"
       chmod +x "$n"
     done
     sed -i -e "s,/etc/vim,,g" Makefile.in
