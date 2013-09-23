@@ -7191,16 +7191,15 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 } // pkgs.lib.optionalAttrs (python.majorVersion == "2.7") {
 
   pypi2nix = pythonPackages.buildPythonPackage rec {
-    rev = "e85eb9e75e7290c17e89822d6a5c1c52c1b59269";
+    rev = "04a68d8577acbceb88bdf51b1231a9dbdead7003";
     name = "pypi2nix-1.0_${rev}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/garbas/pypi2nix/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "0wk9019pgpc2467819cz98fdvihjkpihlh1yywfxlvn04ymb315q";
+      sha256 = "1fv85x2bz442iyxsvka2g75zibjcq48gp2fc7szaqcfqxq42syy9";
     };
 
-    propagatedBuildInputs = [ pythonPackages."Distutils2-1.0a4" ];
     doCheck = false;
 
     meta = {
