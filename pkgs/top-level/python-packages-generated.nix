@@ -87,21 +87,21 @@ in
   };
 
 
-  "plone.app.contentlisting-1.0.5" = self.buildPythonPackage {
-    name = "plone.app.contentlisting-1.0.5";
+  "collective.z3cform.datetimewidget-1.2.5" = self.buildPythonPackage {
+    name = "collective.z3cform.datetimewidget-1.2.5";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.app.contentlisting/plone.app.contentlisting-1.0.5.zip";
-        md5 = "9fc15b8ecad1c918778c3ea9a75bf533";
+        url = "https://pypi.python.org/packages/source/c/collective.z3cform.datetimewidget/collective.z3cform.datetimewidget-1.2.5.zip";
+        md5 = "38fa463ea9b0b3cf5f61540250968214";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."plone.uuid-1.0.3" self.setuptools ];
+    propagatedBuildInputs = [ self.setuptools self."z3c.form-3.0.2" self."zope.deprecation-3.4.1" self."zope.i18n__zcml-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Listing of content for the Plone CMS
+        z3c.form date and datetime widgets
         '';
-      homepage = "http://pypi.python.org/pypi/plone.app.contentlisting";
+      homepage = "https://github.com/collective/collective.z3cform.datetimewidget";
       license = "GPL version 2";
     };
   };
@@ -147,22 +147,22 @@ in
   };
 
 
-  "plone.z3cform-0.8.0" = self.buildPythonPackage {
-    name = "plone.z3cform-0.8.0";
+  "plone.app.caching-1.1.6" = self.buildPythonPackage {
+    name = "plone.app.caching-1.1.6";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.z3cform/plone.z3cform-0.8.0.zip";
-        md5 = "bdb23dd162544964d2f8f8f5f002e874";
+        url = "https://pypi.python.org/packages/source/p/plone.app.caching/plone.app.caching-1.1.6.zip";
+        md5 = "52f817d67e6da1508bf6f1486e5466d2";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."plone.batching-1.0" self.setuptools self."z3c.form-3.0.2" self."zope.browserpage-3.12.2" self."zope.component__zcml-3.9.5" self."zope.i18n__zcml-3.7.4" self."Zope2-2.13.21" ];
+    propagatedBuildInputs = [ self."Acquisition-2.13.8" self."plone.app.registry-1.2.3" self."plone.app.z3cform-0.7.4" self."plone.cachepurging-1.0.4" self."plone.caching-1.0" self."plone.memoize-1.1.1" self."plone.protect-2.0.2" self."plone.registry-1.0.1" self."Products.CMFCore-2.2.7" self."Products.CMFDynamicViewFTI-4.0.5" self."Products.GenericSetup-1.7.4" self."Products.statusmessages-4.0" self."python-dateutil-1.5" self.setuptools self."z3c.form-3.0.2" self."z3c.zcmlhook-1.0b1" self."zope.browserresource-3.10.3" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.pagetemplate-3.6.3" self."zope.publisher-3.12.6" self."Zope2-2.13.21" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        plone.z3cform is a library that allows use of z3c.form with Zope 2 and the CMF.
+        Plone UI and default rules for plone.caching/z3c.caching
         '';
-      homepage = "http://pypi.python.org/pypi/plone.z3cform";
-      license = "ZPL 2.1";
+      homepage = "http://pypi.python.org/pypi/plone.app.caching";
+      license = "GPL version 2";
     };
   };
 
@@ -287,22 +287,22 @@ in
   };
 
 
-  "Products.ExternalMethod-2.13.0" = self.buildPythonPackage {
-    name = "Products.ExternalMethod-2.13.0";
+  "plone.app.textfield-1.2.2" = self.buildPythonPackage {
+    name = "plone.app.textfield-1.2.2";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/P/Products.ExternalMethod/Products.ExternalMethod-2.13.0.zip";
-        md5 = "15ba953ef6cb632eb571977651252ea6";
+        url = "https://pypi.python.org/packages/source/p/plone.app.textfield/plone.app.textfield-1.2.2.zip";
+        md5 = "f832887a40826d6f68c48b48f071fb9c";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."AccessControl-3.0.8" self."Acquisition-2.13.8" self."ExtensionClass-2.13.2" self."Persistence-2.13.2" self.setuptools self."ZODB3-3.10.5" ];
+    propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        This package provides support for external Python methods within a Zope 2 environment.
+        Text field with MIME type support
         '';
-      homepage = "http://pypi.python.org/pypi/Products.ExternalMethod";
-      license = "ZPL 2.1";
+      homepage = "http://pypi.python.org/pypi/plone.app.textfield";
+      license = "GPL";
     };
   };
 
@@ -383,6 +383,26 @@ in
         '';
       homepage = "http://pypi.python.org/pypi/plone.fieldsets";
       license = "GPL version 2";
+    };
+  };
+
+
+  "Products.GenericSetup-1.7.4" = self.buildPythonPackage {
+    name = "Products.GenericSetup-1.7.4";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/P/Products.GenericSetup/Products.GenericSetup-1.7.4.tar.gz";
+        md5 = "f93251ed519e8c4aea0bc001416027b1";
+    };
+    doCheck = false;
+    buildInputs = [  ];
+    propagatedBuildInputs = [ self."five.localsitemanager-2.0.5" self.setuptools self."zope.formlib-4.0.6" self."Zope2-2.13.21" ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    meta = {
+      description = ''
+        Read Zope configuration state from profile dirs / tarballs
+        '';
+      homepage = "http://pypi.python.org/pypi/Products.GenericSetup";
+      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
     };
   };
 
@@ -523,6 +543,26 @@ in
         '';
       homepage = "http://pypi.python.org/pypi/plone.batching";
       license = "GPL";
+    };
+  };
+
+
+  "mechanize-0.2.5" = self.buildPythonPackage {
+    name = "mechanize-0.2.5";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/m/mechanize/mechanize-0.2.5.tar.gz";
+        md5 = "32657f139fc2fb75bcf193b63b8c60b2";
+    };
+    doCheck = false;
+    buildInputs = [  ];
+    propagatedBuildInputs = [  ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    meta = {
+      description = ''
+        Stateful programmatic web browsing.
+        '';
+      homepage = "http://wwwsearch.sourceforge.net/mechanize/";
+      license = "BSD";
     };
   };
 
@@ -875,22 +915,22 @@ in
   };
 
 
-  "zope.schema-4.3.2" = self.buildPythonPackage {
-    name = "zope.schema-4.3.2";
+  "plone.indexer-1.0.2" = self.buildPythonPackage {
+    name = "plone.indexer-1.0.2";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/z/zope.schema/zope.schema-4.3.2.zip";
-        md5 = "b63df4a3035f29113f8130c8ae28bb13";
+        url = "https://pypi.python.org/packages/source/p/plone.indexer/plone.indexer-1.0.2.zip";
+        md5 = "538aeee1f9db78bc8c85ae1bcb0153ed";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self.setuptools self."zope.event-4.0.2" self."zope.interface-4.0.5" ];
-    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
+    propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        zope.interface extension for defining data schemas
+        Hooks to facilitate managing custom index values in Zope 2/CMF applications
         '';
-      homepage = "http://pypi.python.org/pypi/zope.schema";
-      license = "ZPL 2.1";
+      homepage = "http://pypi.python.org/pypi/plone.indexer";
+      license = "BSD";
     };
   };
 
@@ -1075,22 +1115,22 @@ in
   };
 
 
-  "plone.stringinterp-1.0.10" = self.buildPythonPackage {
-    name = "plone.stringinterp-1.0.10";
+  "tempstorage-2.12.2" = self.buildPythonPackage {
+    name = "tempstorage-2.12.2";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.stringinterp/plone.stringinterp-1.0.10.zip";
-        md5 = "595074e94944ad6860e2105a020a3b9a";
+        url = "https://pypi.python.org/packages/source/t/tempstorage/tempstorage-2.12.2.zip";
+        md5 = "7a2b76b39839e229249b1bb175604480";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self.setuptools self."zope.i18n__zcml-3.7.4" ];
+    propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.testing-3.9.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Adaptable string interpolation
+        A RAM-based storage for ZODB
         '';
-      homepage = "http://pypi.python.org/pypi/plone.stringinterp";
-      license = "GPL version 2";
+      homepage = "http://pypi.python.org/pypi/tempstorage";
+      license = "ZPL 2.1";
     };
   };
 
@@ -1171,26 +1211,6 @@ in
         '';
       homepage = "http://svn.plone.org/svn/plone/plone.openid";
       license = "BSD";
-    };
-  };
-
-
-  "plone.resourceeditor-1.0" = self.buildPythonPackage {
-    name = "plone.resourceeditor-1.0";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.resourceeditor/plone.resourceeditor-1.0.zip";
-        md5 = "443ff0a0ad83b94fc08cac46ee3b2ad4";
-    };
-    doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."plone.resource-1.0.2" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."Zope2-2.13.21" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-    meta = {
-      description = ''
-        UNKNOWN
-        '';
-      homepage = "https://github.com/plone/plone.resourceeditor";
-      license = "GPL";
     };
   };
 
@@ -1315,22 +1335,22 @@ in
   };
 
 
-  "plone.dexterity-2.1.3" = self.buildPythonPackage {
-    name = "plone.dexterity-2.1.3";
+  "Persistence-2.13.2" = self.buildPythonPackage {
+    name = "Persistence-2.13.2";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.dexterity/plone.dexterity-2.1.3.zip";
-        md5 = "7f6444a2c26488e4068217266fd243b7";
+        url = "https://pypi.python.org/packages/source/P/Persistence/Persistence-2.13.2.zip";
+        md5 = "92693648ccdc59c8fc71f7f06b1d228c";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."plone.alterego-1.0" self."plone.autoform-1.5" self."plone.behavior-1.0.2" self."plone.folder-1.0.4" self."plone.memoize-1.1.1" self."plone.rfc822-1.1" self."plone.supermodel-1.2.3" self."plone.synchronize-1.0.1" self."plone.uuid-1.0.3" self."plone.z3cform-0.8.0" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.CMFDynamicViewFTI-4.0.5" self."Products.statusmessages-4.0" self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.container-3.11.2" self."zope.dottedname-3.4.6" self."zope.filerepresentation-3.6.1" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.location-3.9.1" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.size-3.4.1" self."Zope2-2.13.21" ];
+    propagatedBuildInputs = [ self."ExtensionClass-2.13.2" self."ZODB3-3.10.5" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Flexible CMF content
+        Persistent ExtensionClass
         '';
-      homepage = "http://code.google.com/p/dexterity";
-      license = "GPL version 2";
+      homepage = "http://pypi.python.org/pypi/Persistence";
+      license = "ZPL 2.1";
     };
   };
 
@@ -1499,6 +1519,26 @@ in
   };
 
 
+  "Missing-2.13.1" = self.buildPythonPackage {
+    name = "Missing-2.13.1";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/M/Missing/Missing-2.13.1.zip";
+        md5 = "9823cff54444cbbcaef8fc45d8e42572";
+    };
+    doCheck = false;
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self."ExtensionClass-2.13.2" ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    meta = {
+      description = ''
+        Special Missing objects used in Zope2.
+        '';
+      homepage = "http://pypi.python.org/pypi/Missing";
+      license = "ZPL 2.1";
+    };
+  };
+
+
   "plone.app.iterate-2.1.10" = self.buildPythonPackage {
     name = "plone.app.iterate-2.1.10";
     src = fetchurl {
@@ -1559,26 +1599,6 @@ in
   };
 
 
-  "zope.broken-3.6.0" = self.buildPythonPackage {
-    name = "zope.broken-3.6.0";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/z/zope.broken/zope.broken-3.6.0.zip";
-        md5 = "eff24d7918099a3e899ee63a9c31bee6";
-    };
-    doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self.setuptools self."zope.interface-3.6.7" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-    meta = {
-      description = ''
-        Zope Broken Object Interfaces
-        '';
-      homepage = "http://pypi.python.org/pypi/zope.broken";
-      license = "ZPL 2.1";
-    };
-  };
-
-
   "lxml-3.2.3" = self.buildPythonPackage {
     name = "lxml-3.2.3";
     src = fetchurl {
@@ -1595,26 +1615,6 @@ in
         '';
       homepage = "http://lxml.de/";
       license = "UNKNOWN";
-    };
-  };
-
-
-  "DocumentTemplate-2.13.2" = self.buildPythonPackage {
-    name = "DocumentTemplate-2.13.2";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/D/DocumentTemplate/DocumentTemplate-2.13.2.zip";
-        md5 = "07bb086c77c1dfe94125ad2efbba94b7";
-    };
-    doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."AccessControl-3.0.8" self."Acquisition-2.13.8" self."ExtensionClass-2.13.2" self."RestrictedPython-3.6.0" self."zExceptions-2.13.0" self."zope.sequencesort-3.4.0" self."zope.structuredtext-3.5.1" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-    meta = {
-      description = ''
-        Document Templating Markup Language (DTML)
-        '';
-      homepage = "http://pypi.python.org/pypi/DocumentTemplate";
-      license = "ZPL 2.1";
     };
   };
 
@@ -1719,22 +1719,22 @@ in
   };
 
 
-  "Products.PloneLanguageTool-3.2.7" = self.buildPythonPackage {
-    name = "Products.PloneLanguageTool-3.2.7";
+  "plone.app.upgrade-1.3.4" = self.buildPythonPackage {
+    name = "plone.app.upgrade-1.3.4";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/P/Products.PloneLanguageTool/Products.PloneLanguageTool-3.2.7.zip";
-        md5 = "bd9eb6278bf76e8cbce99437ca362164";
+        url = "https://pypi.python.org/packages/source/p/plone.app.upgrade/plone.app.upgrade-1.3.4.zip";
+        md5 = "10c192ee4a2422f901e020fd5b39879a";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self.setuptools ];
+    propagatedBuildInputs = [ self."Acquisition-2.13.8" self."borg.localrole-3.0.2" self."five.localsitemanager-2.0.5" self."plone.app.folder-1.0.5" self."plone.app.portlets-2.4.5" self."plone.portlets-2.2" self."plone.session-3.5.3" self."Products.Archetypes-1.9.4" self."Products.CMFActionIcons-2.1.3" self."Products.CMFCalendar-2.2.2" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.CMFDiffTool-2.1" self."Products.CMFEditions-2.2.8" self."Products.CMFFormController-3.0.3" self."Products.CMFQuickInstallerTool-3.0.6" self."Products.CMFUid-2.2.1" self."Products.contentmigration-2.1.5" self."Products.DCWorkflow-2.2.4" self."Products.GenericSetup-1.7.4" self."Products.MimetypesRegistry-2.0.5" self."Products.PloneLanguageTool-3.2.7" self."Products.PlonePAS-4.1.1" self."Products.PluggableAuthService-1.10.0" self."Products.PortalTransforms-2.1.2" self."Products.ResourceRegistries-2.2.9" self."Products.SecureMailHost-1.1.2" self."Products.ZCatalog-2.13.23" self.setuptools self."transaction-1.1.1" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.ramcache-1.0" self."zope.site-3.9.2" self."Zope2-2.13.21" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        PloneLanguageTool allows you to set the available languages in your Plone site, select various fallback mechanisms, and control the use of flags for language selection and translations.
+        Upgrade machinery for Plone.
         '';
-      homepage = "http://pypi.python.org/pypi/Products.PloneLanguageTool";
-      license = "GPL";
+      homepage = "http://pypi.python.org/pypi/plone.app.upgrade";
+      license = "GPL version 2";
     };
   };
 
@@ -1755,26 +1755,6 @@ in
         '';
       homepage = "http://readthedocs.org/docs/nose/";
       license = "GNU LGPL";
-    };
-  };
-
-
-  "Distutils2-1.0a4" = self.buildPythonPackage {
-    name = "Distutils2-1.0a4";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/D/Distutils2/Distutils2-1.0a4.tar.gz";
-        md5 = "52bc9dffb394970c27e02853ae3a3241";
-    };
-    doCheck = false;
-    buildInputs = [  ];
-    propagatedBuildInputs = [  ];
-    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-    meta = {
-      description = ''
-        Python Packaging Library
-        '';
-      homepage = "http://wiki.python.org/moin/Distutils2";
-      license = "Python license";
     };
   };
 
@@ -1839,22 +1819,22 @@ in
   };
 
 
-  "plone.indexer-1.0.2" = self.buildPythonPackage {
-    name = "plone.indexer-1.0.2";
+  "zope.schema-4.3.2" = self.buildPythonPackage {
+    name = "zope.schema-4.3.2";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.indexer/plone.indexer-1.0.2.zip";
-        md5 = "538aeee1f9db78bc8c85ae1bcb0153ed";
+        url = "https://pypi.python.org/packages/source/z/zope.schema/zope.schema-4.3.2.zip";
+        md5 = "b63df4a3035f29113f8130c8ae28bb13";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    propagatedBuildInputs = [ self.setuptools self."zope.event-4.0.2" self."zope.interface-4.0.5" ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
     meta = {
       description = ''
-        Hooks to facilitate managing custom index values in Zope 2/CMF applications
+        zope.interface extension for defining data schemas
         '';
-      homepage = "http://pypi.python.org/pypi/plone.indexer";
-      license = "BSD";
+      homepage = "http://pypi.python.org/pypi/zope.schema";
+      license = "ZPL 2.1";
     };
   };
 
@@ -1899,42 +1879,42 @@ in
   };
 
 
-  "Plone-4.3.2" = self.buildPythonPackage {
-    name = "Plone-4.3.2";
+  "Products.PluggableAuthService-1.10.0" = self.buildPythonPackage {
+    name = "Products.PluggableAuthService-1.10.0";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/P/Plone/Plone-4.3.2.zip";
-        md5 = "809f9fe8b8d23b49778e8ce304ea34f6";
+        url = "https://pypi.python.org/packages/source/P/Products.PluggableAuthService/Products.PluggableAuthService-1.10.0.tar.gz";
+        md5 = "1a1db6b1d9dd34f8b93a8a3104385a37";
     };
     doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."plone.app.caching-1.1.6" self."plone.app.dexterity-2.0.9" self."plone.app.iterate-2.1.10" self."plone.app.openid-2.0.2" self."plone.app.theming-1.1.1" self."Products.CMFPlacefulWorkflow-1.5.9" self."Products.CMFPlone-4.3.2" self.setuptools self."wicked-1.1.10" ];
+    buildInputs = [  ];
+    propagatedBuildInputs = [ self."Products.GenericSetup-1.7.4" self."Products.PluginRegistry-1.3" self.setuptools self."Zope2-2.13.21" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        The Plone Content Management System
+        Pluggable Zope2 authentication / authorization framework
         '';
-      homepage = "http://plone.org/";
-      license = "GPL version 2";
+      homepage = "http://pypi.python.org/pypi/Products.PluggableAuthService";
+      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
     };
   };
 
 
-  "Persistence-2.13.2" = self.buildPythonPackage {
-    name = "Persistence-2.13.2";
+  "plone.dexterity-2.1.3" = self.buildPythonPackage {
+    name = "plone.dexterity-2.1.3";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/P/Persistence/Persistence-2.13.2.zip";
-        md5 = "92693648ccdc59c8fc71f7f06b1d228c";
+        url = "https://pypi.python.org/packages/source/p/plone.dexterity/plone.dexterity-2.1.3.zip";
+        md5 = "7f6444a2c26488e4068217266fd243b7";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."ExtensionClass-2.13.2" self."ZODB3-3.10.5" ];
+    propagatedBuildInputs = [ self."plone.alterego-1.0" self."plone.autoform-1.5" self."plone.behavior-1.0.2" self."plone.folder-1.0.4" self."plone.memoize-1.1.1" self."plone.rfc822-1.1" self."plone.supermodel-1.2.3" self."plone.synchronize-1.0.1" self."plone.uuid-1.0.3" self."plone.z3cform-0.8.0" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.CMFDynamicViewFTI-4.0.5" self."Products.statusmessages-4.0" self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.browser-1.3" self."zope.component__zcml-3.9.5" self."zope.container-3.11.2" self."zope.dottedname-3.4.6" self."zope.filerepresentation-3.6.1" self."zope.interface-3.6.7" self."zope.lifecycleevent-3.6.2" self."zope.location-3.9.1" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.size-3.4.1" self."Zope2-2.13.21" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Persistent ExtensionClass
+        Flexible CMF content
         '';
-      homepage = "http://pypi.python.org/pypi/Persistence";
-      license = "ZPL 2.1";
+      homepage = "http://code.google.com/p/dexterity";
+      license = "GPL version 2";
     };
   };
 
@@ -1959,22 +1939,22 @@ in
   };
 
 
-  "plone.app.jquerytools-1.5.6" = self.buildPythonPackage {
-    name = "plone.app.jquerytools-1.5.6";
+  "wicked-1.1.10" = self.buildPythonPackage {
+    name = "wicked-1.1.10";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.app.jquerytools/plone.app.jquerytools-1.5.6.zip";
-        md5 = "4ae9a72baa8e9899c1706b4fedbb516b";
+        url = "https://pypi.python.org/packages/source/w/wicked/wicked-1.1.10.zip";
+        md5 = "f65611f11d547d7dc8e623bf87d3929d";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.4" self.setuptools self."zope.component__zcml-3.9.5" self."Zope2-2.13.21" ];
+    propagatedBuildInputs = [ self.setuptools self."zope.container-3.11.2" self."zope.lifecycleevent-3.6.2" self."zope.schema-4.2.2" self."zope.traversing-3.13.2" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        jQuery Tools integration for Plone plus overlay and AJAX form helpers.
+        wicked is a compact syntax for doing wiki-like content linking and creation in zope and plone
         '';
-      homepage = "http://pypi.python.org/pypi/plone.app.jquerytools";
-      license = "GPL version 2";
+      homepage = "http://pypi.python.org/pypi/wicked";
+      license = "GPL";
     };
   };
 
@@ -2079,22 +2059,22 @@ in
   };
 
 
-  "ExtensionClass-2.13.2" = self.buildPythonPackage {
-    name = "ExtensionClass-2.13.2";
+  "plone.app.viewletmanager-2.0.4" = self.buildPythonPackage {
+    name = "plone.app.viewletmanager-2.0.4";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/E/ExtensionClass/ExtensionClass-2.13.2.zip";
-        md5 = "0236e6d7da9e8b87b9ba45f1b8f930b8";
+        url = "https://pypi.python.org/packages/source/p/plone.app.viewletmanager/plone.app.viewletmanager-2.0.4.zip";
+        md5 = "565a12ac71d20b2823b9e44daebe432f";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [  ];
+    propagatedBuildInputs = [ self."Acquisition-2.13.8" self."plone.app.vocabularies-2.1.11" self."Products.GenericSetup-1.7.4" self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.contentprovider-3.7.2" self."zope.interface-3.6.7" self."zope.site-3.9.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.21" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Metaclass for subclassable extension types
+        configurable viewlet manager
         '';
-      homepage = "http://pypi.python.org/pypi/ExtensionClass";
-      license = "ZPL 2.1";
+      homepage = "http://pypi.python.org/pypi/plone.app.viewletmanager";
+      license = "GPL version 2";
     };
   };
 
@@ -2739,6 +2719,8 @@ in
   };
 
 
+  "pyramid" = self."pyramid-1.4.5";
+
   "pyramid-1.4.5" = self.buildPythonPackage {
     name = "pyramid-1.4.5";
     src = fetchurl {
@@ -2746,7 +2728,7 @@ in
         md5 = "321731aad69e9788b7819e257a50be1a";
     };
     doCheck = true;
-    buildInputs = [ self."nose-1.3.0" self."WebTest-2.0.7" self."zope.component-4.1.0" self."zope.interface-4.0.5" ];
+    buildInputs = [ self."nose-1.3.0" self."WebTest-2.0.9" self."zope.component-4.1.0" self."zope.interface-4.0.5" ];
     propagatedBuildInputs = [ self."Chameleon-2.12" self."Mako-0.9.0" self."PasteDeploy-1.5.0" self."repoze.lru-0.6" self.setuptools self."translationstring-1.1" self."venusian-1.0a8" self."WebOb-1.2.3" self."zope.deprecation-4.0.2" self."zope.interface-4.0.5" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
     meta = {
@@ -2755,26 +2737,6 @@ in
         '';
       homepage = "http://pylonsproject.org";
       license = "BSD-derived (http://www.repoze.org/LICENSE.txt)";
-    };
-  };
-
-
-  "Products.contentmigration-2.1.5" = self.buildPythonPackage {
-    name = "Products.contentmigration-2.1.5";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/P/Products.contentmigration/Products.contentmigration-2.1.5.zip";
-        md5 = "f08e5f2572fc6f4c61b930a17f99418f";
-    };
-    doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self.setuptools ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-    meta = {
-      description = ''
-        A generic content migration framework for Plone.
-        '';
-      homepage = "http://pypi.python.org/pypi/Products.contentmigration";
-      license = "LGPL";
     };
   };
 
@@ -2819,22 +2781,22 @@ in
   };
 
 
-  "plone.app.upgrade-1.3.4" = self.buildPythonPackage {
-    name = "plone.app.upgrade-1.3.4";
+  "Products.PloneLanguageTool-3.2.7" = self.buildPythonPackage {
+    name = "Products.PloneLanguageTool-3.2.7";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.app.upgrade/plone.app.upgrade-1.3.4.zip";
-        md5 = "10c192ee4a2422f901e020fd5b39879a";
+        url = "https://pypi.python.org/packages/source/P/Products.PloneLanguageTool/Products.PloneLanguageTool-3.2.7.zip";
+        md5 = "bd9eb6278bf76e8cbce99437ca362164";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."Acquisition-2.13.8" self."borg.localrole-3.0.2" self."five.localsitemanager-2.0.5" self."plone.app.folder-1.0.5" self."plone.app.portlets-2.4.5" self."plone.portlets-2.2" self."plone.session-3.5.3" self."Products.Archetypes-1.9.4" self."Products.CMFActionIcons-2.1.3" self."Products.CMFCalendar-2.2.2" self."Products.CMFCore-2.2.7" self."Products.CMFDefault-2.2.3" self."Products.CMFDiffTool-2.1" self."Products.CMFEditions-2.2.8" self."Products.CMFFormController-3.0.3" self."Products.CMFQuickInstallerTool-3.0.6" self."Products.CMFUid-2.2.1" self."Products.contentmigration-2.1.5" self."Products.DCWorkflow-2.2.4" self."Products.GenericSetup-1.7.4" self."Products.MimetypesRegistry-2.0.5" self."Products.PloneLanguageTool-3.2.7" self."Products.PlonePAS-4.1.1" self."Products.PluggableAuthService-1.10.0" self."Products.PortalTransforms-2.1.2" self."Products.ResourceRegistries-2.2.9" self."Products.SecureMailHost-1.1.2" self."Products.ZCatalog-2.13.23" self.setuptools self."transaction-1.1.1" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.location-3.9.1" self."zope.ramcache-1.0" self."zope.site-3.9.2" self."Zope2-2.13.21" ];
+    propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Upgrade machinery for Plone.
+        PloneLanguageTool allows you to set the available languages in your Plone site, select various fallback mechanisms, and control the use of flags for language selection and translations.
         '';
-      homepage = "http://pypi.python.org/pypi/plone.app.upgrade";
-      license = "GPL version 2";
+      homepage = "http://pypi.python.org/pypi/Products.PloneLanguageTool";
+      license = "GPL";
     };
   };
 
@@ -2919,6 +2881,26 @@ in
   };
 
 
+  "plone.app.theming-1.1.1" = self.buildPythonPackage {
+    name = "plone.app.theming-1.1.1";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/p/plone.app.theming/plone.app.theming-1.1.1.zip";
+        md5 = "a694b7a050b6e7c25d720d1e99bb73fa";
+    };
+    doCheck = false;
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self."diazo-1.0.4" self."docutils-0.9.1" self."five.globalrequest-1.0" self."lxml-2.3.6" self."plone.app.registry-1.2.3" self."plone.resource-1.0.2" self."plone.resourceeditor-1.0" self."plone.subrequest-1.6.7" self."plone.transformchain-1.0.3" self."Products.CMFPlone-4.3.2" self."repoze.xmliter-0.5" self."roman-1.4.0" self.setuptools self."zope.traversing-3.13.2" ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    meta = {
+      description = ''
+        Integrates the Diazo theming engine with Plone
+        '';
+      homepage = "http://pypi.python.org/pypi/plone.app.theming";
+      license = "GPL";
+    };
+  };
+
+
   "zope.globalrequest-1.0" = self.buildPythonPackage {
     name = "zope.globalrequest-1.0";
     src = fetchurl {
@@ -2959,26 +2941,6 @@ in
   };
 
 
-  "plone.locking-2.0.4" = self.buildPythonPackage {
-    name = "plone.locking-2.0.4";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.locking/plone.locking-2.0.4.zip";
-        md5 = "a7f8b8db78f57272d351d7fe0d067eb2";
-    };
-    doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."Products.CMFCore-2.2.7" self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.21" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-    meta = {
-      description = ''
-        webdav locking support
-        '';
-      homepage = "http://pypi.python.org/pypi/plone.locking";
-      license = "GPL version 2";
-    };
-  };
-
-
   "zope.annotation-3.5.0" = self.buildPythonPackage {
     name = "zope.annotation-3.5.0";
     src = fetchurl {
@@ -3015,26 +2977,6 @@ in
         '';
       homepage = "http://pypi.python.org/pypi/plone.app.customerize/";
       license = "GPL version 2";
-    };
-  };
-
-
-  "WebTest-2.0.7" = self.buildPythonPackage {
-    name = "WebTest-2.0.7";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/W/WebTest/WebTest-2.0.7.zip";
-        md5 = "4ca4e944a7f5f08b5aebd3bf90699890";
-    };
-    doCheck = true;
-    buildInputs = [ self."nose-1.3.0" self."unittest2-0.5.1" self."pyquery-1.2.4" self."WSGIProxy2-0.3" self."PasteDeploy-1.5.0" self."mock-1.0.1" self."coverage-3.6" pkgs.unzip ];
-    propagatedBuildInputs = [ self."beautifulsoup4-4.3.1" self."six-1.4.1" self."waitress-0.8.7" self."WebOb-1.2.3" ];
-    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-    meta = {
-      description = ''
-        Helper to test WSGI applications
-        '';
-      homepage = "http://webtest.pythonpaste.org/";
-      license = "MIT";
     };
   };
 
@@ -3119,6 +3061,26 @@ in
   };
 
 
+  "Products.CMFPlacefulWorkflow-1.5.9" = self.buildPythonPackage {
+    name = "Products.CMFPlacefulWorkflow-1.5.9";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/P/Products.CMFPlacefulWorkflow/Products.CMFPlacefulWorkflow-1.5.9.zip";
+        md5 = "9041e1f52eab5b348c0dfa85be438722";
+    };
+    doCheck = false;
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.CMFPlone-4.3.2" self."Products.GenericSetup-1.7.4" self."Products.PloneTestCase-0.9.17" self.setuptools self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.testing-3.9.7" ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    meta = {
+      description = ''
+        Workflow policies for CMF and Plone
+        '';
+      homepage = "http://pypi.python.org/pypi/Products.CMFPlacefulWorkflow";
+      license = "GPL";
+    };
+  };
+
+
   "zope.filerepresentation-3.6.1" = self.buildPythonPackage {
     name = "zope.filerepresentation-3.6.1";
     src = fetchurl {
@@ -3199,21 +3161,21 @@ in
   };
 
 
-  "ZODB3-3.10.5" = self.buildPythonPackage {
-    name = "ZODB3-3.10.5";
+  "archetypes.referencebrowserwidget-2.4.19" = self.buildPythonPackage {
+    name = "archetypes.referencebrowserwidget-2.4.19";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/Z/ZODB3/ZODB3-3.10.5.tar.gz";
-        md5 = "6f180c6897a1820948fee2a6290503cd";
+        url = "https://pypi.python.org/packages/source/a/archetypes.referencebrowserwidget/archetypes.referencebrowserwidget-2.4.19.zip";
+        md5 = "b70af6b2da6d8c57c1138a52e94e588c";
     };
     doCheck = false;
-    buildInputs = [  ];
-    propagatedBuildInputs = [ self."transaction-1.1.1" self."zc.lockfile-1.0.2" self."ZConfig-2.9.1" self."zdaemon-2.0.7" self."zope.event-3.5.2" self."zope.interface-3.6.7" ];
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self."plone.app.form-2.2.3" self."plone.app.jquerytools-1.5.6" self.setuptools self."zope.component__zcml-3.9.5" self."zope.formlib-4.0.6" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Zope Object Database: object database and persistence
+        A referencebrowser implementation for Archetypes
         '';
-      homepage = "UNKNOWN";
+      homepage = "http://pypi.python.org/pypi/archetypes.referencebrowserwidget";
       license = "ZPL 2.1";
     };
   };
@@ -3319,21 +3281,21 @@ in
   };
 
 
-  "collective.z3cform.datetimewidget-1.2.5" = self.buildPythonPackage {
-    name = "collective.z3cform.datetimewidget-1.2.5";
+  "plone.app.contentlisting-1.0.5" = self.buildPythonPackage {
+    name = "plone.app.contentlisting-1.0.5";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/c/collective.z3cform.datetimewidget/collective.z3cform.datetimewidget-1.2.5.zip";
-        md5 = "38fa463ea9b0b3cf5f61540250968214";
+        url = "https://pypi.python.org/packages/source/p/plone.app.contentlisting/plone.app.contentlisting-1.0.5.zip";
+        md5 = "9fc15b8ecad1c918778c3ea9a75bf533";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self.setuptools self."z3c.form-3.0.2" self."zope.deprecation-3.4.1" self."zope.i18n__zcml-3.7.4" ];
+    propagatedBuildInputs = [ self."plone.uuid-1.0.3" self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        z3c.form date and datetime widgets
+        Listing of content for the Plone CMS
         '';
-      homepage = "https://github.com/collective/collective.z3cform.datetimewidget";
+      homepage = "http://pypi.python.org/pypi/plone.app.contentlisting";
       license = "GPL version 2";
     };
   };
@@ -3359,22 +3321,22 @@ in
   };
 
 
-  "plone.app.textfield-1.2.2" = self.buildPythonPackage {
-    name = "plone.app.textfield-1.2.2";
+  "Products.ExternalMethod-2.13.0" = self.buildPythonPackage {
+    name = "Products.ExternalMethod-2.13.0";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.app.textfield/plone.app.textfield-1.2.2.zip";
-        md5 = "f832887a40826d6f68c48b48f071fb9c";
+        url = "https://pypi.python.org/packages/source/P/Products.ExternalMethod/Products.ExternalMethod-2.13.0.zip";
+        md5 = "15ba953ef6cb632eb571977651252ea6";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
+    propagatedBuildInputs = [ self."AccessControl-3.0.8" self."Acquisition-2.13.8" self."ExtensionClass-2.13.2" self."Persistence-2.13.2" self.setuptools self."ZODB3-3.10.5" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Text field with MIME type support
+        This package provides support for external Python methods within a Zope 2 environment.
         '';
-      homepage = "http://pypi.python.org/pypi/plone.app.textfield";
-      license = "GPL";
+      homepage = "http://pypi.python.org/pypi/Products.ExternalMethod";
+      license = "ZPL 2.1";
     };
   };
 
@@ -3499,22 +3461,22 @@ in
   };
 
 
-  "tempstorage-2.12.2" = self.buildPythonPackage {
-    name = "tempstorage-2.12.2";
+  "plone.stringinterp-1.0.10" = self.buildPythonPackage {
+    name = "plone.stringinterp-1.0.10";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/t/tempstorage/tempstorage-2.12.2.zip";
-        md5 = "7a2b76b39839e229249b1bb175604480";
+        url = "https://pypi.python.org/packages/source/p/plone.stringinterp/plone.stringinterp-1.0.10.zip";
+        md5 = "595074e94944ad6860e2105a020a3b9a";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.testing-3.9.7" ];
+    propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self.setuptools self."zope.i18n__zcml-3.7.4" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        A RAM-based storage for ZODB
+        Adaptable string interpolation
         '';
-      homepage = "http://pypi.python.org/pypi/tempstorage";
-      license = "ZPL 2.1";
+      homepage = "http://pypi.python.org/pypi/plone.stringinterp";
+      license = "GPL version 2";
     };
   };
 
@@ -3539,22 +3501,22 @@ in
   };
 
 
-  "Acquisition-2.13.8" = self.buildPythonPackage {
-    name = "Acquisition-2.13.8";
+  "Products.PluginRegistry-1.3" = self.buildPythonPackage {
+    name = "Products.PluginRegistry-1.3";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/A/Acquisition/Acquisition-2.13.8.zip";
-        md5 = "8c33160c157b50649e2b2b3224622579";
+        url = "https://pypi.python.org/packages/source/P/Products.PluginRegistry/Products.PluginRegistry-1.3.tar.gz";
+        md5 = "5b166193ca1eb84dfb402051f779ebab";
     };
     doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."ExtensionClass-2.13.2" self."zope.interface-3.6.7" ];
+    buildInputs = [  ];
+    propagatedBuildInputs = [ self."Products.GenericSetup-1.7.4" self.setuptools self."Zope2-2.13.21" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Acquisition is a mechanism that allows objects to obtain attributes from the containment hierarchy they're in.
+        Configure application plugins based on interfaces
         '';
-      homepage = "http://pypi.python.org/pypi/Acquisition";
-      license = "ZPL 2.1";
+      homepage = "http://pypi.python.org/pypi/Products.PluginRegistry";
+      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
     };
   };
 
@@ -3719,22 +3681,22 @@ in
   };
 
 
-  "mechanize-0.2.5" = self.buildPythonPackage {
-    name = "mechanize-0.2.5";
+  "plone.locking-2.0.4" = self.buildPythonPackage {
+    name = "plone.locking-2.0.4";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/m/mechanize/mechanize-0.2.5.tar.gz";
-        md5 = "32657f139fc2fb75bcf193b63b8c60b2";
+        url = "https://pypi.python.org/packages/source/p/plone.locking/plone.locking-2.0.4.zip";
+        md5 = "a7f8b8db78f57272d351d7fe0d067eb2";
     };
     doCheck = false;
-    buildInputs = [  ];
-    propagatedBuildInputs = [  ];
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."Products.CMFCore-2.2.7" self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.21" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Stateful programmatic web browsing.
+        webdav locking support
         '';
-      homepage = "http://wwwsearch.sourceforge.net/mechanize/";
-      license = "BSD";
+      homepage = "http://pypi.python.org/pypi/plone.locking";
+      license = "GPL version 2";
     };
   };
 
@@ -3839,26 +3801,6 @@ in
   };
 
 
-  "plone.portlet.static-2.0.2" = self.buildPythonPackage {
-    name = "plone.portlet.static-2.0.2";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.portlet.static/plone.portlet.static-2.0.2.zip";
-        md5 = "ec0dc691b4191a41ff97779b117f9985";
-    };
-    doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."plone.app.form-2.2.3" self."plone.app.portlets-2.4.5" self."plone.i18n-2.0.9" self."plone.portlets-2.2" self.setuptools self."zope.component__zcml-3.9.5" self."zope.formlib-4.0.6" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."Zope2-2.13.21" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-    meta = {
-      description = ''
-        A simple static HTML portlet for Plone.
-        '';
-      homepage = "http://pypi.python.org/pypi/plone.portlet.static";
-      license = "GPL version 2";
-    };
-  };
-
-
   "plone.i18n-2.0.9" = self.buildPythonPackage {
     name = "plone.i18n-2.0.9";
     src = fetchurl {
@@ -3879,31 +3821,11 @@ in
   };
 
 
-  "Missing-2.13.1" = self.buildPythonPackage {
-    name = "Missing-2.13.1";
+  "Products.contentmigration-2.1.5" = self.buildPythonPackage {
+    name = "Products.contentmigration-2.1.5";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/M/Missing/Missing-2.13.1.zip";
-        md5 = "9823cff54444cbbcaef8fc45d8e42572";
-    };
-    doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."ExtensionClass-2.13.2" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-    meta = {
-      description = ''
-        Special Missing objects used in Zope2.
-        '';
-      homepage = "http://pypi.python.org/pypi/Missing";
-      license = "ZPL 2.1";
-    };
-  };
-
-
-  "zope.cachedescriptors-3.5.1" = self.buildPythonPackage {
-    name = "zope.cachedescriptors-3.5.1";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/z/zope.cachedescriptors/zope.cachedescriptors-3.5.1.zip";
-        md5 = "263459a95238fd61d17e815d97ca49ce";
+        url = "https://pypi.python.org/packages/source/P/Products.contentmigration/Products.contentmigration-2.1.5.zip";
+        md5 = "f08e5f2572fc6f4c61b930a17f99418f";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
@@ -3911,10 +3833,10 @@ in
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Method and property caching decorators
+        A generic content migration framework for Plone.
         '';
-      homepage = "http://pypi.python.org/pypi/zope.cachedescriptors";
-      license = "ZPL 2.1";
+      homepage = "http://pypi.python.org/pypi/Products.contentmigration";
+      license = "LGPL";
     };
   };
 
@@ -3939,21 +3861,21 @@ in
   };
 
 
-  "archetypes.referencebrowserwidget-2.4.19" = self.buildPythonPackage {
-    name = "archetypes.referencebrowserwidget-2.4.19";
+  "ZODB3-3.10.5" = self.buildPythonPackage {
+    name = "ZODB3-3.10.5";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/a/archetypes.referencebrowserwidget/archetypes.referencebrowserwidget-2.4.19.zip";
-        md5 = "b70af6b2da6d8c57c1138a52e94e588c";
+        url = "https://pypi.python.org/packages/source/Z/ZODB3/ZODB3-3.10.5.tar.gz";
+        md5 = "6f180c6897a1820948fee2a6290503cd";
     };
     doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."plone.app.form-2.2.3" self."plone.app.jquerytools-1.5.6" self.setuptools self."zope.component__zcml-3.9.5" self."zope.formlib-4.0.6" self."zope.interface-3.6.7" ];
+    buildInputs = [  ];
+    propagatedBuildInputs = [ self."transaction-1.1.1" self."zc.lockfile-1.0.2" self."ZConfig-2.9.1" self."zdaemon-2.0.7" self."zope.event-3.5.2" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        A referencebrowser implementation for Archetypes
+        Zope Object Database: object database and persistence
         '';
-      homepage = "http://pypi.python.org/pypi/archetypes.referencebrowserwidget";
+      homepage = "UNKNOWN";
       license = "ZPL 2.1";
     };
   };
@@ -3995,6 +3917,26 @@ in
         '';
       homepage = "http://pylonsproject.org";
       license = "BSD-derived (http://www.repoze.org/LICENSE.txt)";
+    };
+  };
+
+
+  "WebTest-2.0.9" = self.buildPythonPackage {
+    name = "WebTest-2.0.9";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/W/WebTest/WebTest-2.0.9.zip";
+        md5 = "bf0a04fcf8b2cdcaa13b04324cefb53d";
+    };
+    doCheck = true;
+    buildInputs = [ self."nose-1.3.0" self."unittest2-0.5.1" self."pyquery-1.2.4" self."WSGIProxy2-0.3" self."PasteDeploy-1.5.0" self."mock-1.0.1" self."coverage-3.6" pkgs.unzip ];
+    propagatedBuildInputs = [ self."beautifulsoup4-4.3.1" self."six-1.4.1" self."waitress-0.8.7" self."WebOb-1.2.3" ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
+    meta = {
+      description = ''
+        Helper to test WSGI applications
+        '';
+      homepage = "http://webtest.pythonpaste.org/";
+      license = "MIT";
     };
   };
 
@@ -4079,22 +4021,22 @@ in
   };
 
 
-  "plone.app.theming-1.1.1" = self.buildPythonPackage {
-    name = "plone.app.theming-1.1.1";
+  "zope.cachedescriptors-3.5.1" = self.buildPythonPackage {
+    name = "zope.cachedescriptors-3.5.1";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.app.theming/plone.app.theming-1.1.1.zip";
-        md5 = "a694b7a050b6e7c25d720d1e99bb73fa";
+        url = "https://pypi.python.org/packages/source/z/zope.cachedescriptors/zope.cachedescriptors-3.5.1.zip";
+        md5 = "263459a95238fd61d17e815d97ca49ce";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."diazo-1.0.4" self."docutils-0.9.1" self."five.globalrequest-1.0" self."lxml-2.3.6" self."plone.app.registry-1.2.3" self."plone.resource-1.0.2" self."plone.resourceeditor-1.0" self."plone.subrequest-1.6.7" self."plone.transformchain-1.0.3" self."Products.CMFPlone-4.3.2" self."repoze.xmliter-0.5" self."roman-1.4.0" self.setuptools self."zope.traversing-3.13.2" ];
+    propagatedBuildInputs = [ self.setuptools ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Integrates the Diazo theming engine with Plone
+        Method and property caching decorators
         '';
-      homepage = "http://pypi.python.org/pypi/plone.app.theming";
-      license = "GPL";
+      homepage = "http://pypi.python.org/pypi/zope.cachedescriptors";
+      license = "ZPL 2.1";
     };
   };
 
@@ -4239,22 +4181,22 @@ in
   };
 
 
-  "plone.app.caching-1.1.6" = self.buildPythonPackage {
-    name = "plone.app.caching-1.1.6";
+  "plone.z3cform-0.8.0" = self.buildPythonPackage {
+    name = "plone.z3cform-0.8.0";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.app.caching/plone.app.caching-1.1.6.zip";
-        md5 = "52f817d67e6da1508bf6f1486e5466d2";
+        url = "https://pypi.python.org/packages/source/p/plone.z3cform/plone.z3cform-0.8.0.zip";
+        md5 = "bdb23dd162544964d2f8f8f5f002e874";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."Acquisition-2.13.8" self."plone.app.registry-1.2.3" self."plone.app.z3cform-0.7.4" self."plone.cachepurging-1.0.4" self."plone.caching-1.0" self."plone.memoize-1.1.1" self."plone.protect-2.0.2" self."plone.registry-1.0.1" self."Products.CMFCore-2.2.7" self."Products.CMFDynamicViewFTI-4.0.5" self."Products.GenericSetup-1.7.4" self."Products.statusmessages-4.0" self."python-dateutil-1.5" self.setuptools self."z3c.form-3.0.2" self."z3c.zcmlhook-1.0b1" self."zope.browserresource-3.10.3" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.pagetemplate-3.6.3" self."zope.publisher-3.12.6" self."Zope2-2.13.21" ];
+    propagatedBuildInputs = [ self."plone.batching-1.0" self.setuptools self."z3c.form-3.0.2" self."zope.browserpage-3.12.2" self."zope.component__zcml-3.9.5" self."zope.i18n__zcml-3.7.4" self."Zope2-2.13.21" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Plone UI and default rules for plone.caching/z3c.caching
+        plone.z3cform is a library that allows use of z3c.form with Zope 2 and the CMF.
         '';
-      homepage = "http://pypi.python.org/pypi/plone.app.caching";
-      license = "GPL version 2";
+      homepage = "http://pypi.python.org/pypi/plone.z3cform";
+      license = "ZPL 2.1";
     };
   };
 
@@ -4319,21 +4261,21 @@ in
   };
 
 
-  "Products.CMFPlacefulWorkflow-1.5.9" = self.buildPythonPackage {
-    name = "Products.CMFPlacefulWorkflow-1.5.9";
+  "plone.resourceeditor-1.0" = self.buildPythonPackage {
+    name = "plone.resourceeditor-1.0";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/P/Products.CMFPlacefulWorkflow/Products.CMFPlacefulWorkflow-1.5.9.zip";
-        md5 = "9041e1f52eab5b348c0dfa85be438722";
+        url = "https://pypi.python.org/packages/source/p/plone.resourceeditor/plone.resourceeditor-1.0.zip";
+        md5 = "443ff0a0ad83b94fc08cac46ee3b2ad4";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.CMFPlone-4.3.2" self."Products.GenericSetup-1.7.4" self."Products.PloneTestCase-0.9.17" self.setuptools self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.testing-3.9.7" ];
+    propagatedBuildInputs = [ self."plone.resource-1.0.2" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."Zope2-2.13.21" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Workflow policies for CMF and Plone
+        UNKNOWN
         '';
-      homepage = "http://pypi.python.org/pypi/Products.CMFPlacefulWorkflow";
+      homepage = "https://github.com/plone/plone.resourceeditor";
       license = "GPL";
     };
   };
@@ -4579,82 +4521,84 @@ in
   };
 
 
-  "Products.PluggableAuthService-1.10.0" = self.buildPythonPackage {
-    name = "Products.PluggableAuthService-1.10.0";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/P/Products.PluggableAuthService/Products.PluggableAuthService-1.10.0.tar.gz";
-        md5 = "1a1db6b1d9dd34f8b93a8a3104385a37";
-    };
-    doCheck = false;
-    buildInputs = [  ];
-    propagatedBuildInputs = [ self."Products.GenericSetup-1.7.4" self."Products.PluginRegistry-1.3" self.setuptools self."Zope2-2.13.21" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-    meta = {
-      description = ''
-        Pluggable Zope2 authentication / authorization framework
-        '';
-      homepage = "http://pypi.python.org/pypi/Products.PluggableAuthService";
-      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
-    };
-  };
+  "Plone" = self."Plone-4.3.2";
 
-
-  "wicked-1.1.10" = self.buildPythonPackage {
-    name = "wicked-1.1.10";
+  "Plone-4.3.2" = self.buildPythonPackage {
+    name = "Plone-4.3.2";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/w/wicked/wicked-1.1.10.zip";
-        md5 = "f65611f11d547d7dc8e623bf87d3929d";
+        url = "https://pypi.python.org/packages/source/P/Plone/Plone-4.3.2.zip";
+        md5 = "809f9fe8b8d23b49778e8ce304ea34f6";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self.setuptools self."zope.container-3.11.2" self."zope.lifecycleevent-3.6.2" self."zope.schema-4.2.2" self."zope.traversing-3.13.2" ];
+    propagatedBuildInputs = [ self."plone.app.caching-1.1.6" self."plone.app.dexterity-2.0.9" self."plone.app.iterate-2.1.10" self."plone.app.openid-2.0.2" self."plone.app.theming-1.1.1" self."Products.CMFPlacefulWorkflow-1.5.9" self."Products.CMFPlone-4.3.2" self.setuptools self."wicked-1.1.10" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        wicked is a compact syntax for doing wiki-like content linking and creation in zope and plone
+        The Plone Content Management System
         '';
-      homepage = "http://pypi.python.org/pypi/wicked";
-      license = "GPL";
-    };
-  };
-
-
-  "Products.GenericSetup-1.7.4" = self.buildPythonPackage {
-    name = "Products.GenericSetup-1.7.4";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/P/Products.GenericSetup/Products.GenericSetup-1.7.4.tar.gz";
-        md5 = "f93251ed519e8c4aea0bc001416027b1";
-    };
-    doCheck = false;
-    buildInputs = [  ];
-    propagatedBuildInputs = [ self."five.localsitemanager-2.0.5" self.setuptools self."zope.formlib-4.0.6" self."Zope2-2.13.21" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-    meta = {
-      description = ''
-        Read Zope configuration state from profile dirs / tarballs
-        '';
-      homepage = "http://pypi.python.org/pypi/Products.GenericSetup";
-      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
-    };
-  };
-
-
-  "plone.app.viewletmanager-2.0.4" = self.buildPythonPackage {
-    name = "plone.app.viewletmanager-2.0.4";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.app.viewletmanager/plone.app.viewletmanager-2.0.4.zip";
-        md5 = "565a12ac71d20b2823b9e44daebe432f";
-    };
-    doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."Acquisition-2.13.8" self."plone.app.vocabularies-2.1.11" self."Products.GenericSetup-1.7.4" self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.contentprovider-3.7.2" self."zope.interface-3.6.7" self."zope.site-3.9.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.21" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-    meta = {
-      description = ''
-        configurable viewlet manager
-        '';
-      homepage = "http://pypi.python.org/pypi/plone.app.viewletmanager";
+      homepage = "http://plone.org/";
       license = "GPL version 2";
+    };
+  };
+
+
+  "plone.app.jquerytools-1.5.6" = self.buildPythonPackage {
+    name = "plone.app.jquerytools-1.5.6";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/p/plone.app.jquerytools/plone.app.jquerytools-1.5.6.zip";
+        md5 = "4ae9a72baa8e9899c1706b4fedbb516b";
+    };
+    doCheck = false;
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self."Products.GenericSetup-1.7.4" self.setuptools self."zope.component__zcml-3.9.5" self."Zope2-2.13.21" ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    meta = {
+      description = ''
+        jQuery Tools integration for Plone plus overlay and AJAX form helpers.
+        '';
+      homepage = "http://pypi.python.org/pypi/plone.app.jquerytools";
+      license = "GPL version 2";
+    };
+  };
+
+
+  "zope.broken-3.6.0" = self.buildPythonPackage {
+    name = "zope.broken-3.6.0";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/z/zope.broken/zope.broken-3.6.0.zip";
+        md5 = "eff24d7918099a3e899ee63a9c31bee6";
+    };
+    doCheck = false;
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self.setuptools self."zope.interface-3.6.7" ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    meta = {
+      description = ''
+        Zope Broken Object Interfaces
+        '';
+      homepage = "http://pypi.python.org/pypi/zope.broken";
+      license = "ZPL 2.1";
+    };
+  };
+
+
+  "ExtensionClass-2.13.2" = self.buildPythonPackage {
+    name = "ExtensionClass-2.13.2";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/E/ExtensionClass/ExtensionClass-2.13.2.zip";
+        md5 = "0236e6d7da9e8b87b9ba45f1b8f930b8";
+    };
+    doCheck = false;
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [  ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    meta = {
+      description = ''
+        Metaclass for subclassable extension types
+        '';
+      homepage = "http://pypi.python.org/pypi/ExtensionClass";
+      license = "ZPL 2.1";
     };
   };
 
@@ -4675,6 +4619,26 @@ in
         '';
       homepage = "http://svn.plone.org/svn/plone/plone.schemaeditor";
       license = "BSD";
+    };
+  };
+
+
+  "zope.browserpage-3.12.2" = self.buildPythonPackage {
+    name = "zope.browserpage-3.12.2";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/z/zope.browserpage/zope.browserpage-3.12.2.tar.gz";
+        md5 = "a543ef3cb1b42f7233b3fca23dc9ea60";
+    };
+    doCheck = false;
+    buildInputs = [  ];
+    propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.interface-3.6.7" self."zope.pagetemplate-3.6.3" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.traversing-3.13.2" ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    meta = {
+      description = ''
+        ZCML directives for configuring browser views for Zope.
+        '';
+      homepage = "http://pypi.python.org/pypi/zope.browserpage/";
+      license = "ZPL 2.1";
     };
   };
 
@@ -4819,22 +4783,22 @@ in
   };
 
 
-  "zope.browserpage-3.12.2" = self.buildPythonPackage {
-    name = "zope.browserpage-3.12.2";
+  "plone.portlet.static-2.0.2" = self.buildPythonPackage {
+    name = "plone.portlet.static-2.0.2";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/z/zope.browserpage/zope.browserpage-3.12.2.tar.gz";
-        md5 = "a543ef3cb1b42f7233b3fca23dc9ea60";
+        url = "https://pypi.python.org/packages/source/p/plone.portlet.static/plone.portlet.static-2.0.2.zip";
+        md5 = "ec0dc691b4191a41ff97779b117f9985";
     };
     doCheck = false;
-    buildInputs = [  ];
-    propagatedBuildInputs = [ self.setuptools self."zope.component__zcml-3.9.5" self."zope.configuration-3.7.4" self."zope.interface-3.6.7" self."zope.pagetemplate-3.6.3" self."zope.publisher-3.12.6" self."zope.schema-4.2.2" self."zope.security__untrustedpython-3.7.4" self."zope.traversing-3.13.2" ];
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self."plone.app.form-2.2.3" self."plone.app.portlets-2.4.5" self."plone.i18n-2.0.9" self."plone.portlets-2.2" self.setuptools self."zope.component__zcml-3.9.5" self."zope.formlib-4.0.6" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."Zope2-2.13.21" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        ZCML directives for configuring browser views for Zope.
+        A simple static HTML portlet for Plone.
         '';
-      homepage = "http://pypi.python.org/pypi/zope.browserpage/";
-      license = "ZPL 2.1";
+      homepage = "http://pypi.python.org/pypi/plone.portlet.static";
+      license = "GPL version 2";
     };
   };
 
@@ -4919,22 +4883,22 @@ in
   };
 
 
-  "Products.PluginRegistry-1.3" = self.buildPythonPackage {
-    name = "Products.PluginRegistry-1.3";
+  "Acquisition-2.13.8" = self.buildPythonPackage {
+    name = "Acquisition-2.13.8";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/P/Products.PluginRegistry/Products.PluginRegistry-1.3.tar.gz";
-        md5 = "5b166193ca1eb84dfb402051f779ebab";
+        url = "https://pypi.python.org/packages/source/A/Acquisition/Acquisition-2.13.8.zip";
+        md5 = "8c33160c157b50649e2b2b3224622579";
     };
     doCheck = false;
-    buildInputs = [  ];
-    propagatedBuildInputs = [ self."Products.GenericSetup-1.7.4" self.setuptools self."Zope2-2.13.21" ];
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self."ExtensionClass-2.13.2" self."zope.interface-3.6.7" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Configure application plugins based on interfaces
+        Acquisition is a mechanism that allows objects to obtain attributes from the containment hierarchy they're in.
         '';
-      homepage = "http://pypi.python.org/pypi/Products.PluginRegistry";
-      license = "ZPL 2.1 (http://www.zope.org/Resources/License/ZPL-2.1)";
+      homepage = "http://pypi.python.org/pypi/Acquisition";
+      license = "ZPL 2.1";
     };
   };
 
@@ -5095,6 +5059,26 @@ in
         '';
       homepage = "https://github.com/plone/plone.app.vocabularies";
       license = "GPL version 2";
+    };
+  };
+
+
+  "DocumentTemplate-2.13.2" = self.buildPythonPackage {
+    name = "DocumentTemplate-2.13.2";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/D/DocumentTemplate/DocumentTemplate-2.13.2.zip";
+        md5 = "07bb086c77c1dfe94125ad2efbba94b7";
+    };
+    doCheck = false;
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self."AccessControl-3.0.8" self."Acquisition-2.13.8" self."ExtensionClass-2.13.2" self."RestrictedPython-3.6.0" self."zExceptions-2.13.0" self."zope.sequencesort-3.4.0" self."zope.structuredtext-3.5.1" ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    meta = {
+      description = ''
+        Document Templating Markup Language (DTML)
+        '';
+      homepage = "http://pypi.python.org/pypi/DocumentTemplate";
+      license = "ZPL 2.1";
     };
   };
 
