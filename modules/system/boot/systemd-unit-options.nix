@@ -323,4 +323,28 @@ rec {
     };
   };
 
+  automountOptions = unitOptions // {
+
+    where = mkOption {
+      example = "/mnt";
+      type = types.uniq types.string;
+      description = ''
+        Absolute path of a directory of the mount point.
+        Will be created if it doesn't exist. (Mandatory)
+      '';
+    };
+
+    automountConfig = mkOption {
+      default = {};
+      example = { DirectoryMode = "0775"; };
+      type = types.attrs;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Automount]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.automount</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+  };
+
 }

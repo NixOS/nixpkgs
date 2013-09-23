@@ -185,6 +185,14 @@ let
     };
   };
 
+  automountConfig = { name, config, ... }: {
+    config = {
+      automountConfig =
+        { Where = config.where;
+        };
+    };
+  };
+
   toOption = x:
     if x == true then "true"
     else if x == false then "false"
@@ -288,6 +296,18 @@ let
 
           [Mount]
           ${attrsToSection def.mountConfig}
+        '';
+    };
+
+  automountToUnit = name: def:
+    { inherit (def) wantedBy requiredBy enable;
+      text =
+        ''
+          [Unit]
+          ${attrsToSection def.unitConfig}
+
+          [Automount]
+          ${attrsToSection def.automountConfig}
         '';
     };
 
@@ -440,6 +460,17 @@ in
       '';
     };
 
+    systemd.automounts = mkOption {
+      default = [];
+      type = types.listOf types.optionSet;
+      options = [ automountOptions unitConfig automountConfig ];
+      description = ''
+        Definition of systemd automount units.
+        This is a list instead of an attrSet, because systemd mandates the names to be derived from
+        the 'where' attribute.
+      '';
+    };
+
     systemd.defaultUnit = mkOption {
       default = "multi-user.target";
       type = types.uniq types.string;
@@ -579,7 +610,10 @@ in
       // mapAttrs' (n: v: nameValuePair "${n}.timer" (timerToUnit n v)) cfg.timers
       // listToAttrs (map
                    (v: let n = escapeSystemdPath v.where;
-                       in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts);
+                       in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts)
+      // listToAttrs (map
+                   (v: let n = escapeSystemdPath v.where;
+                       in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
       "CGROUPS" "AUTOFS4_FS" "DEVTMPFS"
