@@ -125,6 +125,8 @@ stdenv.mkDerivation rec {
     echo "Extracting mpl (matplotlib) filter"
     mkdir -p "$out/etc/asciidoc/filters/mpl"
     tar xvf "${matplotlibFilterSrc}" -C "$out/etc/asciidoc/filters/mpl" --strip-components=1
+    # Stop asciidoc from loading mpl/.old/chart-filter.conf
+    rm -rf "$out/etc/asciidoc/filters/mpl/.old"
     # Add matplotlib and numpy to sys.path
     matplotlib_path="$(toPythonPath ${matplotlib})"
     numpy_path="$(toPythonPath ${numpy})"
