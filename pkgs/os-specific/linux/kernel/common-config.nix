@@ -148,9 +148,6 @@ with stdenv.lib;
   REISERFS_FS_SECURITY y
   JFS_POSIX_ACL y
   JFS_SECURITY y
-  XFS_QUOTA y
-  XFS_POSIX_ACL y
-  XFS_RT y # XFS Realtime subvolume support
   OCFS2_DEBUG_MASKLOG n
   BTRFS_FS_POSIX_ACL y
   UBIFS_FS_XATTR? y

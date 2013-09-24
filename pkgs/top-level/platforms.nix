@@ -10,10 +10,25 @@ rec {
     # Currently ignored - it should be set according to 'system' once it is
     # not ignored. This is for stdenv-updates.
     kernelArch = "i386";
+    kernelExtraConfig =
+      ''
+        # Move to common-config when XFS will support USER_NS
+        XFS_QUOTA y
+        XFS_POSIX_ACL y
+        XFS_RT y # XFS Realtime subvolume support
+      '';
   };
 
   pc_simplekernel = pc // {
     kernelAutoModules = false;
+  };
+
+  pc_userns = pc // {
+    kernelExtraConfig =
+      ''
+        XFS_FS n
+        USER_NS y
+      '';
   };
 
   sheevaplug = {
