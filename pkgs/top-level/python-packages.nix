@@ -1456,11 +1456,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pudb = buildPythonPackage rec {
-    name = "pudb-2013.1";
+    name = "pudb-2013.3.6";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pudb/${name}.tar.gz";
-      md5 = "f94922aba7f862f13886457dc3fadc6a";
+      url = "https://pypi.python.org/packages/source/p/pudb/${name}.tar.gz";
+      md5 = "063030763bf914166a0b2bc8c011143b";
     };
 
     propagatedBuildInputs = [ pythonPackages.pygments pythonPackages.urwid ];
@@ -4391,6 +4391,9 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       rev = "0f00109950b883d680bd85dc6e8a9c731a7d0d13";
       sha256 = "0mhg7f9y5zl0m2xgz3rf1yqjd6l8n0qhfk7bpf36r44jfnhj75ld";
     };
+
+    # error: (6, "Couldn't resolve host 'h.wrttn.me'")
+    doCheck = false;
 
     buildInputs = [ pkgs.curl simplejson unittest2 nose ];
 
