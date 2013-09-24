@@ -25,7 +25,12 @@ in
       '';
       type = types.attrsOf (mkOptionType {
         name = "a string or a list of strings";
-        check = x: builtins.isString x || isList x;
+        merge = xs:
+          let xs' = evalProperties xs; in
+          if isList (head xs') then concatLists xs'
+          else if length xs' > 1 then abort "variable in ‘environment.variables’ has multiple values"
+          else if !builtins.isString (head xs') then abort "variable in ‘environment.variables’ does not have a string value"
+          else head xs';
       });
       apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
     };

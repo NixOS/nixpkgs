@@ -8,6 +8,7 @@
     { config, pkgs, ... }:
     { swapDevices = pkgs.lib.mkOverride 0
         [ { device = "/root/swapfile"; size = 128; } ];
+      environment.variables.EDITOR = pkgs.lib.mkOverride 0 "emacs";
     };
 
   testScript =
@@ -51,6 +52,11 @@
       # Test whether we have a reboot record in wtmp.
       subtest "reboot-wtmp", sub {
           $machine->succeed("last | grep reboot >&2");
+      };
+
+      # Test whether we can override environment variables.
+      subtest "override-env-var", sub {
+          $machine->succeed('[ "$EDITOR" = emacs ]');
       };
     '';
 
