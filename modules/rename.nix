@@ -108,4 +108,8 @@ in zipModules ([]
 ++ rename obsolete "boot.loader.efiBootStub.runEfibootmgr" "boot.loader.efi.canTouchEfiVariables"
 ++ rename obsolete "boot.loader.efi.efibootmgr.enable" "boot.loader.efi.canTouchEfiVariables"
 
+# NixOS environment changes
+# !!! this hardcodes bash, could we detect from config which shell is actually used?
+++ rename obsolete "environment.promptInit" "programs.bash.promptInit"
+
 ) # do not add renaming after this.
