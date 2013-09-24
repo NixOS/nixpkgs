@@ -154,7 +154,7 @@ in
          ${concatStringsSep "\n" (
            (mapAttrsToList (n: v: ''export ${n}="${concatStringsSep ":" v}"'')
              # This line is a kind of a hack because of !!! note above
-             (fold (mergeAttrsWithFunc concat) {} ([ (mapAttrs (n: v: [ v ]) cfg.variables) ] ++ map cfg.profileVariables cfg.profiles))))}
+             (zipAttrsWith (const concatLists) ([ (mapAttrs (n: v: [ v ]) cfg.variables) ] ++ map cfg.profileVariables cfg.profiles))))}
 
          ${cfg.extraInit}
 
