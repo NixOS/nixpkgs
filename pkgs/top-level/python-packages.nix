@@ -5787,6 +5787,26 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
 
+  sphinxcontrib_httpdomain = buildPythonPackage (rec {
+    name = "sphinxcontrib-httpdomain-1.1.9";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sphinxcontrib-httpdomain/${name}.tar.gz";
+      md5 = "0f63aea612cc9e0b55a6c39e5b0f87b7";
+    };
+
+    propagatedBuildInputs = [sphinx];
+
+    meta = {
+      description = "Provides a Sphinx domain for describing RESTful HTTP APIs";
+
+      homepage = http://bitbucket.org/birkenfeld/sphinx-contrib;
+
+      license = "BSD";
+    };
+  });
+
+
   sqlalchemy = buildPythonPackage rec {
     name = "sqlalchemy-${version}";
     version = "0.7.10";
