@@ -429,6 +429,12 @@ in
           { source = "${kernelPackages.ati_drivers_x11}/etc/ati";
             target = "ati";
           }
+      ])
+      ++ (optionals (elem "nvidia" driverNames) [
+
+          { source = "${kernelPackages.nvidia_x11}/lib/vendors/nvidia.icd";
+            target = "OpenCL/vendors/nvidia.icd";
+          }
       ]);
 
     environment.x11Packages =
