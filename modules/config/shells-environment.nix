@@ -28,7 +28,7 @@ in
         merge = xs:
           let xs' = evalProperties xs; in
           if isList (head xs') then concatLists xs'
-          else if length xs' > 1 then abort "variable in ‘environment.variables’ has multiple values"
+          else if builtins.lessThan 1 (length xs') then abort "variable in ‘environment.variables’ has multiple values"
           else if !builtins.isString (head xs') then abort "variable in ‘environment.variables’ does not have a string value"
           else head xs';
       });
