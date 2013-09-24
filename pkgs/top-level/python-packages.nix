@@ -5807,6 +5807,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
 
+  sphinx_pypi_upload = buildPythonPackage (rec {
+    name = "Sphinx-PyPI-upload-0.2.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/S/Sphinx-PyPI-upload/${name}.tar.gz";
+      md5 = "b9f1df5c8443197e4d49abbba1cfddc4";
+    };
+
+    meta = {
+      description = "Setuptools command for uploading Sphinx documentation to PyPI";
+
+      homepage = http://bitbucket.org/jezdez/sphinx-pypi-upload/;
+
+      license = "BSD";
+    };
+  });
+
+
   sqlalchemy = buildPythonPackage rec {
     name = "sqlalchemy-${version}";
     version = "0.7.10";
