@@ -151,11 +151,10 @@ in
         if [ -n "$__ETC_PROFILE_SOURCED" ]; then return; fi
         __ETC_PROFILE_SOURCED=1
 
-        if [ -z "$__BASH_SHELL_INIT_DONE" ]; then
-          __BASH_SHELL_INIT_DONE=1
-          ${cfg.shellInit}
-        fi
+        # Prevent this file from being sourced by interactive non-login child shells.
+        export __ETC_PROFILE_DONE=1
 
+        ${cfg.shellInit}
         ${cfg.loginShellInit}
 
         # Read system-wide modifications.
@@ -176,9 +175,11 @@ in
         if [ -n "$__ETC_BASHRC_SOURCED" -o -n "$NOSYSBASHRC" ]; then return; fi
         __ETC_BASHRC_SOURCED=1
 
-        if [ -z "$__BASH_SHELL_INIT_DONE" ]; then
-          __BASH_SHELL_INIT_DONE=1
-          ${cfg.shellInit}
+        # If the profile was not loaded in a parent process, source
+        # it.  But otherwise don't do it because we don't want to
+        # clobber overridden values of $PATH, etc.
+        if [ -z "$__ETC_PROFILE_DONE" ]; then
+            . /etc/profile
         fi
 
         # We are not always an interactive shell.
