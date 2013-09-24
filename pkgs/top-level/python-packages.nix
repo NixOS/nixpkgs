@@ -1074,10 +1074,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "18f150e7be96b5fe3c388b0e817b8087";
     };
 
-    buildInputs = [ py ];
+    propagatedBuildInputs = [ pythonPackages.py ]
+      ++ stdenv.lib.optional
+        pkgs.config.pythonPackages.pytest.selenium
+        pythonPackages.selenium;
 
-    meta = {
-      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    meta = with stdenv.lib; {
+      maintainers = with maintainers; [ iElectric lovek323 ];
+      platforms   = platforms.unix;
     };
   };
 
@@ -5341,7 +5345,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
         cp "${x_ignore_nofocus}/"* .
         sed -i 's|dlopen(library,|dlopen("libX11.so.6",|' x_ignore_nofocus.c
         gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
-        gcc -shared -Wl,-soname,x_ignore_nofocus.so -o x_ignore_nofocus.so  x_ignore_nofocus.o
+        gcc -shared \
+          -Wl,${if stdenv.isDarwin then "-install_name" else "-soname"},x_ignore_nofocus.so \
+          -o x_ignore_nofocus.so \
+          x_ignore_nofocus.o \
+          ${if stdenv.isDarwin then "-lx11" else ""}
         cp -v x_ignore_nofocus.so py/selenium/webdriver/firefox/${if pkgs.stdenv.is64bit then "amd64" else "x86"}/
       '';
     };
