@@ -4202,6 +4202,9 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "0mhg7f9y5zl0m2xgz3rf1yqjd6l8n0qhfk7bpf36r44jfnhj75ld";
     };
 
+    # error: (6, "Couldn't resolve host 'h.wrttn.me'")
+    doCheck = false;
+
     buildInputs = [ pkgs.curl simplejson unittest2 nose ];
 
     meta = {
