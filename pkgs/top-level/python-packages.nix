@@ -5058,11 +5058,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   scipy = buildPythonPackage rec {
-    name = "scipy-0.9.0";
+    name = "scipy-0.12.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/s/scipy/${name}.tar.gz";
-      md5 = "ebfef6e8e82d15c875a4ee6a46d4e1cd";
+      md5 = "8fb4da324649f655e8557ea92b998786";
     };
 
     buildInputs = [pkgs.gfortran];
