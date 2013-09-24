@@ -119,7 +119,7 @@ in
     programs.bash = {
 
       shellInit = ''
-        . /etc/environment
+        . ${config.system.build.setEnvironment}
 
         ${cfge.shellInit}
       '';

@@ -144,7 +144,7 @@ in
         /bin/sh
       '';
 
-    environment.etc."environment".text =
+    system.build.setEnvironment = pkgs.writeText "set-environment"
        ''
          ${concatStringsSep "\n" (
            (mapAttrsToList (n: v: ''export ${n}="${concatStringsSep ":" v}"'')

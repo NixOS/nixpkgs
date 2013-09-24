@@ -87,7 +87,7 @@ in
     programs.zsh = {
 
       shellInit = ''
-        . /etc/environment
+        . ${config.system.build.setEnvironment}
 
         ${cfge.shellInit}
       '';
