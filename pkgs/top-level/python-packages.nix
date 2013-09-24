@@ -1337,11 +1337,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pudb = buildPythonPackage rec {
-    name = "pudb-2013.1";
+    name = "pudb-2013.3.6";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pudb/${name}.tar.gz";
-      md5 = "f94922aba7f862f13886457dc3fadc6a";
+      url = "https://pypi.python.org/packages/source/p/pudb/${name}.tar.gz";
+      md5 = "063030763bf914166a0b2bc8c011143b";
     };
 
     propagatedBuildInputs = [ pythonPackages.pygments pythonPackages.urwid ];
