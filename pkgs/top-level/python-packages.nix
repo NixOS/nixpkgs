@@ -1076,7 +1076,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     propagatedBuildInputs = [ pythonPackages.py ]
       ++ stdenv.lib.optional
-        pkgs.config.pythonPackages.pytest.selenium
+        pkgs.config.pythonPackages.pytest.selenium or false
         pythonPackages.selenium;
 
     meta = with stdenv.lib; {
