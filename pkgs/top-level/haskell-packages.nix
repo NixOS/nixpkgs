@@ -1640,6 +1640,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   parsec3 = self.parsec_3_1_3;
   parsec  = self.parsec3;
 
+  parsers = callPackage ../development/libraries/haskell/parsers {};
+
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
   Pathfinder = callPackage ../development/libraries/haskell/Pathfinder {};
