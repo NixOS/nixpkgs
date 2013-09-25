@@ -1,17 +1,19 @@
 { cabal, ansiTerminal, binary, boehmgc, Cabal, filepath, gmp, happy
-, haskeline, languageJava, libffi, llvmGeneral, mtl, parsec, split
-, text, time, transformers, vector, vectorBinaryInstances
+, haskeline, languageJava, libffi, llvmGeneral, llvmGeneralPure
+, mtl, parsec, parsers, split, text, time, transformers, trifecta
+, unorderedContainers, utf8String, vector, vectorBinaryInstances
 }:
 
 cabal.mkDerivation (self: {
   pname = "idris";
-  version = "0.9.9.1";
-  sha256 = "1glxkx2hcr0lrvj3jjnlqqifyzyixjzq1hl86wmn540dccw82yah";
+  version = "0.9.9.2";
+  sha256 = "0xfwnlf3jca64i4piyx9scmk4z8f6rak2cvrcjwji505a9vaa0rw";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     ansiTerminal binary Cabal filepath haskeline languageJava libffi
-    llvmGeneral mtl parsec split text time transformers vector
+    llvmGeneral llvmGeneralPure mtl parsec parsers split text time
+    transformers trifecta unorderedContainers utf8String vector
     vectorBinaryInstances
   ];
   buildTools = [ happy ];
