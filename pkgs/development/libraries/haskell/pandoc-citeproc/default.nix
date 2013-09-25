@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pandoc-citeproc";
-  version = "0.1.1";
-  sha256 = "1pna6m83ay1jjcnazgc70vif55fff9xhk7129fbv9wf7d29hlw32";
+  version = "0.1.1.1";
+  sha256 = "07h277cz5wzc2dsfqfh9lasz7ypb4pspvqljs9maj6lx5rkk5fq1";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
