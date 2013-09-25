@@ -790,6 +790,10 @@ let
 
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
+  docbook2odf = callPackage ../tools/typesetting/docbook2odf {
+    inherit (perlPackages) PerlMagick;
+  };
+
   docbook2x = callPackage ../tools/typesetting/docbook2x {
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
     texinfo = texinfo5;
