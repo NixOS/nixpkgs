@@ -694,6 +694,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cgi_3001_1_8_4 = callPackage ../development/libraries/haskell/cgi/3001.1.8.4.nix {};
   cgi = self.cgi_3001_1_8_4;
 
+  charset = callPackage ../development/libraries/haskell/charset {};
+
   Chart = callPackage ../development/libraries/haskell/Chart {};
   ChartCairo = callPackage ../development/libraries/haskell/Chart-cairo {};
   ChartGtk = callPackage ../development/libraries/haskell/Chart-gtk {};
