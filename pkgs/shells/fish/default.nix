@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
     autoconf
   '';
 
-  meta = {
-    homepage = http://fishshell.com;
+  meta = with stdenv.lib; {
+    description = "Smart and user-friendly command line shell";
+    homepage = http://fishshell.com/;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }
