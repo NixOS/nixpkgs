@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   patches = [ dsoPatch ];
 
   configurePhase = ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-O2 -fPIC" LDLAGS="-fPIC" V=${majorVersion} R=${version} )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC" LDLAGS="-fPIC" V=${majorVersion} R=${version} )
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.${majorVersion} liblua.so.${version}" INSTALL_DATA='cp -d' )
   '';
 
