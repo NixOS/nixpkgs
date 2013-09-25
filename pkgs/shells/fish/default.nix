@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, ncurses, which }:
+{ stdenv, fetchurl, autoconf, ncurses, which, groff, gettext }:
 
 stdenv.mkDerivation rec {
   name = "fish-2.0.0";
@@ -14,6 +14,14 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     autoconf
+  '';
+
+  postInstall = ''
+    sed -i "s|which |command -v |" "$out/share/fish/functions/type.fish"
+    sed -i "s|nroff |${groff}/bin/nroff |" "$out/share/fish/functions/__fish_print_help.fish"
+    sed -e "s|gettext |${gettext}/bin/gettext |" \
+        -e "s|which |command -v |" \
+        -i "$out/share/fish/functions/_.fish"
   '';
 
   meta = with stdenv.lib; {
