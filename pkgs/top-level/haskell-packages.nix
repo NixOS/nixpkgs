@@ -169,7 +169,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     syb          = self.syb_0_4_1;
     text         = self.text_0_11_3_1;
     transformers = null;                        # this has become a core package in GHC 7.7
-    unorderedContainers = self.unorderedContainers_0_2_3_2;
+    unorderedContainers = self.unorderedContainers_0_2_3_3;
     vector       = self.vector_0_10_0_1;
     xhtml        = self.xhtml_3000_2_1;
     zlib         = self.zlib_0_5_4_1;
@@ -2124,8 +2124,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   unlambda = callPackage ../development/libraries/haskell/unlambda {};
 
   unorderedContainers_0_2_3_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.3.0.nix {};
-  unorderedContainers_0_2_3_2 = callPackage ../development/libraries/haskell/unordered-containers/0.2.3.2.nix {};
-  unorderedContainers = self.unorderedContainers_0_2_3_2;
+  unorderedContainers_0_2_3_3 = callPackage ../development/libraries/haskell/unordered-containers/0.2.3.3.nix {};
+  unorderedContainers = self.unorderedContainers_0_2_3_3;
 
   url = callPackage ../development/libraries/haskell/url {};
 
