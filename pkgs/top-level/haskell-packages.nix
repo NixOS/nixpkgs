@@ -1690,6 +1690,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   polyparse = callPackage ../development/libraries/haskell/polyparse {};
 
+  pointed = callPackage ../development/libraries/haskell/pointed {};
+
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
 
   pop3client = callPackage ../development/libraries/haskell/pop3-client {};
