@@ -53,6 +53,7 @@ in rec {
         (all nixos.tests.login)
         (all nixos.tests.misc)
         (all nixos.tests.openssh)
+        (all nixos.tests.printing)
         (all nixos.tests.xfce)
 
         nixpkgs.tarball
