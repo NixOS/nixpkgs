@@ -6,8 +6,6 @@ let
 
   inherit (pkgs) cups;
 
-  logDir = "/var/log/cups";
-
   cfg = config.services.printing;
 
   additionalBackends = pkgs.runCommand "additional-cups-backends" { }
@@ -128,7 +126,6 @@ in
         preStart =
           ''
             mkdir -m 0755 -p /etc/cups
-            mkdir -m 0755 -p ${logDir}
             mkdir -m 0700 -p /var/cache/cups
             mkdir -m 0700 -p /var/spool/cups
             mkdir -m 0755 -p ${cfg.tempDir}
@@ -159,9 +156,9 @@ in
 
         SetEnv PATH ${bindir}/lib/cups/filter:${bindir}/bin:${bindir}/sbin
 
-        AccessLog ${logDir}/access_log
-        ErrorLog ${logDir}/error_log
-        PageLog ${logDir}/page_log
+        AccessLog syslog
+        ErrorLog syslog
+        PageLog syslog
 
         TempDir ${cfg.tempDir}
 
