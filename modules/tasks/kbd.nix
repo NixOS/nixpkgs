@@ -4,19 +4,10 @@ with pkgs.lib;
 
 let
 
-  # think about where to put this chunk of code!
-  # required by other pieces as well
-  requiredTTYs = config.services.mingetty.ttys
-    ++ config.boot.extraTTYs
-    ++ [ config.services.syslogd.tty ];
-  ttys = map (dev: "/dev/${dev}") requiredTTYs;
-  consoleFont = config.i18n.consoleFont;
-  consoleKeyMap = config.i18n.consoleKeyMap;
-
   vconsoleConf = pkgs.writeText "vconsole.conf"
     ''
-      KEYMAP=${consoleKeyMap}
-      FONT=${consoleFont}
+      KEYMAP=${config.i18n.consoleKeyMap}
+      FONT=${config.i18n.consoleFont}
     '';
 
 in
@@ -42,23 +33,12 @@ in
       '';
     };
 
-    # dummy option so that requiredTTYs can be passed
-    requiredTTYs = mkOption {
-      default = [];
-      description = "
-        FIXME: find another place for this option.
-        FIXME: find a good description.
-      ";
-    };
-
   };
 
 
   ###### implementation
 
   config = {
-
-    inherit requiredTTYs; # pass it to ./modules/tasks/tty-backgrounds.nix
 
     environment.systemPackages = [ pkgs.kbd ];
 

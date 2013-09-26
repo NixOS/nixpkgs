@@ -154,8 +154,6 @@ in
 
   jobs.openssh.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
 
-  services.ttyBackgrounds.enable = false;
-
   boot.loader.grub.enable = false;
   boot.loader.generationsDir.enable = false;
   system.boot.loader.kernelFile = "vmlinux";

@@ -11,9 +11,6 @@
 
   boot.initrd.kernelModules = [ "xen-blkfront" ];
 
-  # Backgrounds don't work, so don't bother.
-  services.ttyBackgrounds.enable = false;
-
   # Send syslog messages to the Xen console.
   services.syslogd.tty = "hvc0";
 

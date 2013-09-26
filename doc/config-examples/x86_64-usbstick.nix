@@ -15,12 +15,6 @@
     }
   ];
 
-  services = {
-    ttyBackgrounds = {
-      enable = false;
-    };
-  };
-
   fonts = {
     enableFontConfig = false;
   };

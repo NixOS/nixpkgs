@@ -65,8 +65,7 @@ in
     };
 
     boot.vesa = mkOption {
-      default = config.boot.kernelPackages.splashutils != null;
-      example = false;
+      default = false;
       description = ''
         Whether to activate VESA video mode on boot.
       '';
@@ -160,7 +159,7 @@ in
     # (so you don't need to reboot to have changes take effect).
     boot.kernelParams =
       [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
-      optionals config.boot.vesa [ "splash=verbose" "vga=0x317" ];
+      optionals config.boot.vesa [ "vga=0x317" ];
 
     boot.kernel.sysctl."kernel.printk" = config.boot.consoleLogLevel;
 

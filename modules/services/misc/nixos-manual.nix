@@ -108,12 +108,6 @@ in
         };
       };
 
-    services.ttyBackgrounds.specificThemes = mkIf cfg.showManual
-      [ { tty = "tty${cfg.ttyNumber}";
-          theme = pkgs.themes "green";
-        }
-      ];
-
     services.mingetty.helpLine = mkIf cfg.showManual
       "\nPress <Alt-F${toString cfg.ttyNumber}> for the NixOS manual.";
 

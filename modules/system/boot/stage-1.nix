@@ -23,9 +23,6 @@ let
   };
 
 
-  enableSplashScreen =
-    config.boot.vesa && config.boot.initrd.enableSplashScreen && kernelPackages.splashutils != null;
-
   needsCifsUtils = kernelPackages.kernel ? features
                 && kernelPackages.kernel.features ? needsCifsUtils
                 && kernelPackages.kernel.features.needsCifsUtils
@@ -93,11 +90,6 @@ let
       # Copy modprobe.
       cp -v ${pkgs.kmod}/bin/kmod $out/bin/
       ln -s kmod $out/bin/modprobe
-
-      # Maybe copy splashutils.
-      ${optionalString enableSplashScreen ''
-        cp ${kernelPackages.splashutils}/${kernelPackages.splashutils.helperName} $out/bin/splash_helper
-      ''}
 
       # Maybe copy cifs utils
       ${optionalString needsCifsUtils ''
@@ -228,18 +220,7 @@ let
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
-      ] ++ optionals enableSplashScreen
-        [ { object = extraUtils;
-            suffix = "/bin/splash_helper";
-            symlink = "/${kernelPackages.splashutils.helperName}";
-          }
-          { object = import ../../../lib/unpack-theme.nix {
-              inherit (pkgs) stdenv;
-              theme = config.services.ttyBackgrounds.defaultTheme;
-            };
-            symlink = "/etc/splash";
-          }
-        ];
+      ];
   };
 
 in
@@ -253,13 +234,6 @@ in
       description = "
         Device for manual resume attempt during boot. Looks like
         major:minor. ls -l /dev/SWAP_PARTION shows them.
-      ";
-    };
-
-    boot.initrd.enableSplashScreen = mkOption {
-      default = true;
-      description = "
-        Whether to show a nice splash screen while booting.
       ";
     };
 

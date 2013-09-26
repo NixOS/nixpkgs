@@ -9,7 +9,6 @@ with pkgs.lib;
   sound.enable = false;
   boot.vesa = false;
   boot.initrd.enableSplashScreen = false;
-  services.ttyBackgrounds.enable = false;
 
   # Don't start a tty on the serial consoles.
   systemd.services."serial-getty@ttyS0".enable = false;

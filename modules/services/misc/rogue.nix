@@ -54,11 +54,6 @@ in
           };
       };
 
-    services.ttyBackgrounds.specificThemes = singleton
-      { tty = cfg.tty;
-        theme = pkgs.themes "theme-gnu";
-      };
-
   };
 
 }
