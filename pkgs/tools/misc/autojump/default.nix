@@ -19,13 +19,11 @@ in
       # don't check shell support (we're running with bash anyway)
       sed -i -e 150,153d install.sh
 
-      bash ./install.sh -d $out
+      bash ./install.sh -d $out -p ""
       chmod +x $out/etc/profile.d/*
 
       mkdir -p "$out/etc/bash_completion.d"
       cp -v $out/etc/profile.d/autojump.bash "$out/etc/bash_completion.d"
-      mkdir -p $out/bin
-      ln -s $out/usr/local/bin/autojump $out/bin/j
 
       # FIXME: What's the right place for `autojump.zsh'?
     '';
