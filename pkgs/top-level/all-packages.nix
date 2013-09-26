@@ -6640,6 +6640,8 @@ let
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
+    broadcom_sta6 = callPackage ../os-specific/linux/broadcom-sta-v6/default.nix { };
+
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
     nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
