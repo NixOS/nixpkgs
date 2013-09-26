@@ -115,11 +115,11 @@ in
     # gets loaded, and then cups cannot access the printers.
     boot.blacklistedKernelModules = [ "usblp" ];
 
-    jobs.cupsd =
+    systemd.services.cupsd =
       { description = "CUPS Printing Daemon";
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network-interfaces.target" ];
 
         path = [ cups ];
 
@@ -131,7 +131,8 @@ in
             mkdir -m 0755 -p ${cfg.tempDir}
           '';
 
-        exec = "cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf} -F";
+        serviceConfig.Type = "forking";
+        serviceConfig.ExecStart = "@${cups}/sbin/cupsd cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf}";
       };
 
     services.printing.drivers =
