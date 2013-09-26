@@ -41,10 +41,10 @@ let
   };
 
   mainlineSrc = rec {
-    name = "ghostscript-9.10";
+    name = "ghostscript-9.06";
     src = fetchurl {
       url = "http://downloads.ghostscript.com/public/${name}.tar.bz2";
-      sha256 = "106mglk77dhdra1m0ddnmaq645xj1aj45qvlh8izv3xx4cdrv3bc";
+      sha256 = "014f10rxn4ihvcr1frby4szd1jvkrwvmdhnbivpp55c9fssx3b05";
     };
     meta = meta_common // {
       homepage = "http://www.ghostscript.com/";
@@ -79,10 +79,13 @@ stdenv.mkDerivation rec {
     # ... add other fonts here
   ];
 
-  buildInputs = [
-    pkgconfig zlib expat openssl
-    libjpeg libpng libtiff freetype fontconfig lcms2 libpaper jbig2dec
-  ] ++ stdenv.lib.optional x11Support x11
+  enableParallelBuilding = true;
+
+  buildInputs =
+    [ pkgconfig zlib expat openssl
+      libjpeg libpng libtiff freetype fontconfig lcms2 libpaper jbig2dec
+    ]
+    ++ stdenv.lib.optional x11Support x11
     ++ stdenv.lib.optional cupsSupport cups
     ++ libiconvOrEmpty
     # [] # maybe sometimes jpeg2000 support
@@ -102,11 +105,11 @@ stdenv.mkDerivation rec {
     makeFlagsArray=(CUPSSERVERBIN=$out/lib/cups CUPSSERVERROOT=$out/etc/cups CUPSDATA=$out/share/cups)
   '' + stdenv.lib.optionalString (variant ? preConfigure) variant.preConfigure;
 
-  configureFlags = [
-    "--with-system-libtiff"
-    (if x11Support then "--with-x" else "--without-x")
-    (if cupsSupport then "--enable-cups" else "--disable-cups")
-  ];
+  configureFlags =
+    [ "--with-system-libtiff"
+      (if x11Support then "--with-x" else "--without-x")
+      (if cupsSupport then "--enable-cups --with-install-cups" else "--disable-cups")
+    ];
 
   doCheck = true;
 
