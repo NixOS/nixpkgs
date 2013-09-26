@@ -6658,11 +6658,6 @@ let
       linuxHeaders = glibc.kernelHeaders;
     };
 
-    splashutils = let hasFbConDecor = if self.kernel ? features
-      then self.kernel.features ? fbConDecor
-      else self.kernel.config.isEnabled "FB_CON_DECOR";
-    in if hasFbConDecor then pkgs.splashutils else null;
-
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
     */
@@ -6865,8 +6860,6 @@ let
   sepolgen = callPackage ../os-specific/linux/sepolgen { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
-
-  splashutils = callPackage ../os-specific/linux/splashutils/default.nix { };
 
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) { };
 

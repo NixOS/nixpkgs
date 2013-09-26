@@ -86,9 +86,6 @@ with stdenv.lib;
   ''}
   BCMA_HOST_PCI y
 
-  # Some settings to make sure that fbcondecor works - in particular,
-  # disable tileblitting and the drivers that need it.
-
   # Enable various FB devices.
   FB y
   FB_EFI y
