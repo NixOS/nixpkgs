@@ -2663,24 +2663,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   gyp = buildPythonPackage rec {
-    rev = "1635";
+    rev = "1738";
     name = "gyp-r${rev}";
 
     src = fetchsvn {
       url = "http://gyp.googlecode.com/svn/trunk";
       inherit rev;
-      sha256 = "1hn5gxgj2z399f71kz11m61ifds7mx4zkymnd1c87k1wyp7bs5k5";
+      sha256 = "155k7v6453j2kg02xqfqbkzkbaqc8aynxs2k462jmrp638vxia9s";
     };
 
-   patches = if pkgs.stdenv.isDarwin then [ ../development/python-modules/gyp/no-xcode.patch ../development/python-modules/gyp/no-darwin-cflags.patch ] else null;
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    postUnpack = "find . -print0 | xargs -0 touch";
+    patches = optionals pkgs.stdenv.isDarwin [
+      ../development/python-modules/gyp/no-xcode.patch
+      ../development/python-modules/gyp/no-darwin-cflags.patch
+    ];
 
     meta = {
       homepage = http://code.google.com/p/gyp;
+      license = stdenv.lib.licenses.bsd3;
       description = "Generate Your Projects";
     };
   };
