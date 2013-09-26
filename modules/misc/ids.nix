@@ -35,7 +35,6 @@
       ftp = 8;
       bitlbee = 9;
       avahi = 10;
-      portmap = 11;
       atd = 12;
       zabbix = 13;
       postfix = 14;
@@ -120,7 +119,6 @@
       ftp = 8;
       bitlbee = 9;
       avahi = 10;
-      portmap = 11;
       atd = 12;
       postfix = 13;
       postdrop = 14;

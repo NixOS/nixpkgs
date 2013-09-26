@@ -22,7 +22,6 @@ with import ../lib/testing.nix { inherit system minimal; };
   #nfs4 = makeTest (import ./nfs.nix { version = 4; });
   openssh = makeTest (import ./openssh.nix);
   partition = makeTest (import ./partition.nix);
-  portmap = makeTest (import ./portmap.nix);
   proxy = makeTest (import ./proxy.nix);
   quake3 = makeTest (import ./quake3.nix);
   simple = makeTest (import ./simple.nix);
