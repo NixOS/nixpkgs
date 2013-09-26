@@ -198,6 +198,11 @@ in
 
     users.defaultUserShell = mkDefault "/run/current-system/sw/bin/bash";
 
+    environment.pathsToLink = optionals cfg.enableCompletion [
+      "/etc/bash_completion.d"
+      "/share/bash-completion"
+    ];
+
     environment.shells =
       [ "/run/current-system/sw/bin/bash"
         "/var/run/current-system/sw/bin/bash"
