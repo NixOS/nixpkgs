@@ -86,7 +86,7 @@ mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" tmpfs /dev/shm
 mkdir -m 0755 -p /dev/pts
 [ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # UML doesn't have USB by default
 mkdir -m 01777 -p /tmp
-mkdir -m 0755 -p /var /var/log
+mkdir -m 0755 -p /var /var/log /var/lib /var/db
 mkdir -m 0755 -p /nix/var
 mkdir -m 0700 -p /root
 mkdir -m 0755 -p /bin # for the /bin/sh symlink
