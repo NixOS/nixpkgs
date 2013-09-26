@@ -3938,11 +3938,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   pandas = buildPythonPackage rec {
-    name = "pandas-0.11.0";
+    name = "pandas-0.12.0";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "1mwh783hcch6lywgjayj8aqmbfv6n8fd2qbf1xlwqk2913ad8x2d";
+      sha256 = "0vf865wh1kcq33189ykqgngb25nxhxxch6skfdl3c6w024v4r6xy";
     };
 
     buildInputs = [ nose ];
@@ -5267,6 +5267,37 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  qutip = buildPythonPackage rec {
+    name = "qutip-2.2.0";
+
+    src = fetchurl {
+      url = "https://qutip.googlecode.com/files/QuTiP-2.2.0.tar.gz";
+      sha1 = "76ba4991322a991d580e78a197adc80d58bd5fb3";
+    };
+
+    propagatedBuildInputs = [ numpy scipy matplotlib pkgs.pyqt4
+      pkgs.cython ];
+
+    buildInputs = with pkgs; [ gcc qt4 blas ] ++ [ nose ];
+
+    meta = {
+      description = "QuTiP - Quantum Toolbox in Python";
+      longDescription = ''
+        QuTiP is open-source software for simulating the dynamics of
+        open quantum systems. The QuTiP library depends on the
+        excellent Numpy and Scipy numerical packages. In addition,
+        graphical output is provided by Matplotlib. QuTiP aims to
+        provide user-friendly and efficient numerical simulations of a
+        wide variety of Hamiltonians, including those with arbitrary
+        time-dependence, commonly found in a wide range of physics
+        applications such as quantum optics, trapped ions,
+        superconducting circuits, and quantum nanomechanical
+        resonators.
+      '';
+      homepage = http://qutip.org/;
+    };
+  };
+
   requests_oauth2 = buildPythonPackage rec {
     name = "requests-oauth2-0.1.1";
 
@@ -5419,11 +5450,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   scipy = buildPythonPackage rec {
-    name = "scipy-0.9.0";
+    name = "scipy-0.12.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/s/scipy/${name}.tar.gz";
-      md5 = "ebfef6e8e82d15c875a4ee6a46d4e1cd";
+      md5 = "8fb4da324649f655e8557ea92b998786";
     };
 
     buildInputs = [pkgs.gfortran];
