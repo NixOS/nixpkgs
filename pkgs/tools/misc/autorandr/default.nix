@@ -1,4 +1,11 @@
-{ fetchgit, stdenv, disper ? null, xrandr, xdpyinfo }:
+{ fetchgit
+, stdenv
+, enableXRandr ? true, xrandr ? null
+, enableDisper ? false, disper ? null
+, xdpyinfo }:
+
+assert enableXRandr -> xrandr != null;
+assert enableDisper -> disper != null;
 
 let
   rev = "4f5e2401ef";
@@ -13,11 +20,9 @@ in
 
     patchPhase = ''
       substituteInPlace "autorandr" \
-        --replace "/usr/bin/xrandr" "${xrandr}/bin/xrandr" \
+        --replace "/usr/bin/xrandr" "${if enableXRandr then xrandr else "/nowhere"}/bin/xrandr" \
+        --replace "/usr/bin/disper" "${if enableDisper then disper else "/nowhere"}/bin/disper" \
         --replace "/usr/bin/xdpyinfo" "${xdpyinfo}/bin/xdpyinfo"
-    '' + stdenv.lib.optionalString (disper != null) ''
-      substituteInPlace "autorandr"
-        --replace "/usr/bin/disper" "${disper}/bin/disper"
     '';
 
     installPhase = ''

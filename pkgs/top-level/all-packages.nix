@@ -497,7 +497,6 @@ let
 
   autorandr = callPackage ../tools/misc/autorandr {
     inherit (xorg) xrandr xdpyinfo;
-    disper = null;
   };
 
   avahi = callPackage ../development/libraries/avahi {
