@@ -6579,7 +6579,22 @@ let
 
   linux_3_2_grsecurity = lowPrio (lib.overrideDerivation (linux_3_2.override (args: {
     kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_2_9_1_3_2_51 ];
-  })) (args: { makeFlags = "DISABLE_PAX_PLUGINS=y";}));
+  })) (args: {
+    # Install gcc plugins. These are needed for compiling dependant packages.
+    postInstall = ''
+      ${args.postInstall or ""}
+      cp tools/gcc/*.so $out/lib/modules/$version/build/tools/gcc/
+    '';
+    # Apparently as of gcc 4.6, gcc-plugin headers (which are needed by PaX plugins)
+    # include libgmp headers, so we need these extra tweaks
+    buildInputs = args.buildInputs ++ [ gmp ];
+    preConfigure = ''
+      ${args.preConfigure or ""}
+      sed -i 's|-I|-I${gmp}/include -I|' scripts/gcc-plugin.sh
+      sed -i 's|HOST_EXTRACFLAGS +=|HOST_EXTRACFLAGS += -I${gmp}/include|' tools/gcc/Makefile
+      sed -i 's|HOST_EXTRACXXFLAGS +=|HOST_EXTRACXXFLAGS += -I${gmp}/include|' tools/gcc/Makefile
+    '';
+  }));
 
   linux_3_2_apparmor = lowPrio (linux_3_2.override {
     kernelPatches = [ kernelPatches.apparmor_3_2 ];
