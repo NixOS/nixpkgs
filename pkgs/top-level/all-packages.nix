@@ -6577,6 +6577,9 @@ let
       ];
   };
 
+  # Note: grsec is not enabled automatically, you need to specify which kernel
+  # config options you need (e.g. by overriding extraConfig). See list of options here:
+  # https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options
   linux_3_2_grsecurity = lowPrio (lib.overrideDerivation (linux_3_2.override (args: {
     kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_2_9_1_3_2_51 ];
   })) (args: {
