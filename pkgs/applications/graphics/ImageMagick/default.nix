@@ -2,7 +2,6 @@
 , fetchurl
 , bzip2
 , freetype
-, graphviz
 , ghostscript ? null
 , libjpeg
 , libpng
@@ -27,6 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "1bpj8676mph5cvyjsdgf27i6yg2iw9iskk5c69mvpxkyawgjw1vg";
   };
 
+  enableParallelBuilding = true;
+
   preConfigure = if tetex != null then
     ''
       export DVIDecodeDelegate=${tetex}/bin/dvips
@@ -42,9 +43,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg libpng libtiff libxml2 zlib librsvg
-    libtool jasper libX11 ] ++ stdenv.lib.optional (ghostscript != null && stdenv.system != "x86_64-darwin") ghostscript;
+      libtool jasper libX11
+    ] ++ stdenv.lib.optional (ghostscript != null && stdenv.system != "x86_64-darwin") ghostscript;
 
-  buildInputs = [ tetex graphviz ];
+  buildInputs = [ tetex ];
 
   postInstall = ''(cd "$out/include" && ln -s ImageMagick* ImageMagick)'';
 
