@@ -7,7 +7,7 @@
 , xdg_utils, yasm, zlib
 , libusb1, libexif, pciutils
 
-, python, perl, pkgconfig
+, python, pythonPackages, perl, pkgconfig
 , nspr, udev, krb5
 , utillinux, alsaLib
 , gcc, bison, gperf
@@ -36,7 +36,67 @@
 with stdenv.lib;
 
 let
-  sourceInfo = builtins.getAttr channel (import ./sources.nix);
+  src = with getAttr channel (import ./sources.nix); stdenv.mkDerivation {
+    name = "chromium-source-${version}";
+
+    src = fetchurl {
+      inherit url sha256;
+    };
+
+    phases = [ "unpackPhase" "patchPhase" "installPhase" ];
+
+    opensslPatches = optional useOpenSSL openssl.patches;
+
+    prePatch = "patchShebangs .";
+
+    patches = singleton (
+      if versionOlder version "30.0.0.0"
+      then ./sandbox_userns_29.patch
+      else if versionOlder version "31.0.0.0"
+      then ./sandbox_userns_30.patch
+      else ./sandbox_userns_31.patch
+    );
+
+    postPatch = ''
+      sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
+      sed -i -e 's|/usr/bin/gcc|gcc|' third_party/WebKit/Source/core/core.gypi
+    '' + optionalString useOpenSSL ''
+      cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
+    '';
+
+    outputs = [ "out" "sandbox" "bundled" "main" ];
+    installPhase = ''
+      ensureDir "$out" "$sandbox" "$bundled" "$main"
+
+      header "copying browser main sources to $main"
+      find . -mindepth 1 -maxdepth 1 \
+        \! -path ./sandbox \
+        \! -path ./third_party \
+        \! -path ./build \
+        \! -path ./tools \
+        \! -name '.*' \
+        -print | xargs cp -rt "$main"
+      stopNest
+
+      header "copying sandbox components to $sandbox"
+      cp -rt "$sandbox" sandbox/*
+      stopNest
+
+      header "copying third party sources to $bundled"
+      cp -rt "$bundled" third_party/*
+      stopNest
+
+      header "copying build requisites to $out"
+      cp -rt "$out" build tools
+      stopNest
+
+      rm -rf "$out/tools/gyp" # XXX: Don't even copy it in the first place.
+    '';
+
+    passthru = {
+      inherit version;
+    };
+  };
 
   mkGypFlags =
     let
@@ -94,23 +154,9 @@ let
   libExecPath = "$out/libexec/${packageName}";
   sandboxPath = "${sandbox}/bin/${packageName}_sandbox";
 
-  # user namespace sandbox patch
-  userns_patch = if versionOlder sourceInfo.version "30.0.0.0"
-                 then ./sandbox_userns_29.patch
-                 else if versionOlder sourceInfo.version "31.0.0.0"
-                 then ./sandbox_userns_30.patch
-                 else ./sandbox_userns_31.patch;
-
 in stdenv.mkDerivation rec {
-  name = "${packageName}-${version}";
-  inherit packageName;
-
-  version = sourceInfo.version;
-
-  src = fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.sha256;
-  };
+  name = "${packageName}-${src.version}";
+  inherit packageName src;
 
   buildInputs = defaultDependencies ++ [
     which makeWrapper
@@ -123,25 +169,25 @@ in stdenv.mkDerivation rec {
     glib gtk dbus_glib
     libXScrnSaver libXcursor libXtst mesa
     pciutils protobuf speechd libXdamage
+    pythonPackages.gyp
   ] ++ optional gnomeKeyringSupport libgnome_keyring
     ++ optionals gnomeSupport [ gconf libgcrypt ]
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
     ++ optional pulseSupport pulseaudio
-    ++ optional (!versionOlder sourceInfo.version "30.0.0.0") file;
+    ++ optional (!versionOlder src.version "30.0.0.0") file;
 
-  opensslPatches = optional useOpenSSL openssl.patches;
+  prePatch = ''
+    # XXX: Figure out a way how to split these properly.
+    #cpflags="-dsr --no-preserve=mode"
+    cpflags="-dr"
+    cp $cpflags "${src.main}"/* .
+    cp $cpflags "${src.bundled}" third_party
+    cp $cpflags "${src.sandbox}" sandbox
+    chmod -R u+w . # XXX!
+  '';
 
-  prePatch = "patchShebangs .";
-
-  patches = [ userns_patch ];
-
-  postPatch = ''
-    sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
-    sed -i -e 's|/usr/bin/gcc|gcc|' third_party/WebKit/Source/core/core.gypi
-  '' + optionalString useOpenSSL ''
-    cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
-  '' + optionalString (!versionOlder sourceInfo.version "30.0.0.0") ''
+  postPatch = optionalString (!versionOlder src.version "30.0.0.0") ''
     sed -i -e '/base::FilePath exe_dir/,/^ *} *$/c \
       sandbox_binary = \
         base::FilePath("'"${sandboxPath}"'");
@@ -182,7 +228,7 @@ in stdenv.mkDerivation rec {
   });
 
   configurePhase = ''
-    GYP_GENERATORS=ninja python build/gyp_chromium --depth "$(pwd)" ${gypFlags}
+    python build/gyp_chromium -f ninja --depth "$(pwd)" ${gypFlags}
   '';
 
   buildPhase = let
