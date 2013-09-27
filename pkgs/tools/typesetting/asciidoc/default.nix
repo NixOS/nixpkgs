@@ -161,14 +161,21 @@ stdenv.mkDerivation rec {
 
   preInstall = "mkdir -p $out/etc/vim";
 
-  meta = {
-    homepage = "http://www.methods.co.nz/asciidoc/";
-    description = "ASCII text-based document generation system";
-    license = "GPLv2+";
-
+  meta = with stdenv.lib; {
+    description = "Text-based document generation system";
     longDescription = ''
-      AsciiDoc is a text-based document generation system.  AsciiDoc
-      input files can be translated to HTML and DocBook markups.
+      AsciiDoc is a text document format for writing notes, documentation,
+      articles, books, ebooks, slideshows, web pages, man pages and blogs.
+      AsciiDoc files can be translated to many formats including HTML, PDF,
+      EPUB, man page.
+
+      AsciiDoc is highly configurable: both the AsciiDoc source file syntax and
+      the backend output markups (which can be almost any type of SGML/XML
+      markup) can be customized and extended by the user.
     '';
+    homepage = "http://www.methods.co.nz/asciidoc/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
   };
 }
