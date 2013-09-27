@@ -9784,7 +9784,13 @@ let
 
   dbacl = callPackage ../tools/misc/dbacl { };
 
-  dblatex = callPackage ../tools/typesetting/tex/dblatex { };
+  dblatex = callPackage ../tools/typesetting/tex/dblatex {
+    enableAllFeatures = false;
+  };
+
+  dblatexFull = appendToName "full" (dblatex.override {
+    enableAllFeatures = true;
+  });
 
   dosbox = callPackage ../misc/emulators/dosbox { };
 
