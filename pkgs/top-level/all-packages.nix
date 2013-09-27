@@ -9709,6 +9709,11 @@ let
 
   yacas = callPackage ../applications/science/math/yacas { };
 
+  speedcrunch = callPackage ../applications/science/math/speedcrunch {
+    qt = qt4;
+    cmake = cmakeCurses;
+  };
+
 
   ### SCIENCE / MISC
 
