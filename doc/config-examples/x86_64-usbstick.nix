@@ -5,7 +5,6 @@
     loader.grub.device = "/dev/sda";
     initrd = {
       kernelModules = ["usb_storage" "ehci_hcd" "ohci_hcd"];
-      enableSplashScreen = false;
     };
   };
 
