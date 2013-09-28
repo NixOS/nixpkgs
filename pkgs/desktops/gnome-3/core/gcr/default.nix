@@ -14,5 +14,7 @@ stdenv.mkDerivation rec {
     libgcrypt libtasn1 dbus_glib gtk pango gdk_pixbuf atk
   ];
 
+  configureFlags = "--disable-introspection";
+
   #doCheck = true;
 }
