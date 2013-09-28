@@ -4970,6 +4970,8 @@ let
 
   libungif = callPackage ../development/libraries/giflib/libungif.nix { };
 
+  libunibreak = callPackage ../development/libraries/libunibreak/default.nix { };
+
   libunique = callPackage ../development/libraries/libunique/default.nix { };
 
   liburcu = callPackage ../development/libraries/liburcu { };
