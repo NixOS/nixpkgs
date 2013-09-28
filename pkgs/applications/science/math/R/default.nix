@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   enableParallelBuilding = true;
+  
+  setupHook = ./setup-hook.sh;
 
   meta = {
     homepage = "http://www.r-project.org/";

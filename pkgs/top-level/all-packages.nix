@@ -5974,6 +5974,15 @@ let
   twisted = pythonPackages.twisted;
 
   ZopeInterface = pythonPackages.zope_interface;
+  
+  ### DEVELOPMENT / R MODULES
+
+  buildRPackage = import ../development/r-modules/generic R;
+
+  rPackages = recurseIntoAttrs (import ./r-packages.nix {
+    inherit pkgs;
+    __overrides = (config.rPackageOverrides or (p: {})) pkgs;
+  });
 
 
   ### SERVERS
