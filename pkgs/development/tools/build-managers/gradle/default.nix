@@ -1,24 +1,25 @@
-{ stdenv, fetchurl, unzip }:
-
-# at runtime, need jdk
+{ stdenv, fetchurl, unzip, jdk, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "gradle-0.8";
+  name = "gradle-1.8";
 
   src = fetchurl {
-    url = "http://dist.codehaus.org/gradle/gradle-0.8-bin.zip";
-    sha256 = "940e623ea98e40ea9ad398770a6ebb91a61c0869d394dda81aa86b0f4f0025e7";
+    url = "http://services.gradle.org/distributions/${name}-bin.zip";
+    sha256 = "00spxad9b5vddshp02cic0ds8icgb1clknl7494f467x2pxbnhm3";
   };
 
   installPhase = ''
-    mkdir -p $out
-    rm bin/*.bat
-    mv * $out
+    mkdir -pv $out
+    cp -rv lib $out
+
+    makeWrapper ${jdk}/bin/java $out/bin/gradle \
+      --set JAVA_HOME ${jdk} \
+      --add-flags "-classpath $out/lib/gradle-launcher-1.8.jar org.gradle.launcher.GradleMain"
   '';
 
   phases = "unpackPhase installPhase";
 
-  buildInputs = [unzip];
+  buildInputs = [ unzip jdk makeWrapper ];
 
   meta = {
     description = "Gradle is an enterprise-grade build system";
