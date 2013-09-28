@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python
+{ fetchurl, stdenv, python, sourceHighlight, highlight, pygments
 , unzip ? null
 # filters
 , enableDitaaFilter ? false, jre ? null
@@ -160,6 +160,13 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = "mkdir -p $out/etc/vim";
+
+  postInstall = ''
+    sed -e 's|filter="source-highlight|filter="${sourceHighlight}/bin/source-highlight|' \
+        -e 's|filter="highlight|filter="${highlight}/bin/highlight|' \
+        -e 's|filter="pygmentize|filter="${pygments}/bin/pygmentize|' \
+        -i "$out/etc/asciidoc/filters/source/source-highlight-filter.conf"
+  '';
 
   meta = {
     homepage = "http://www.methods.co.nz/asciidoc/";
