@@ -177,7 +177,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     alex         = self.alex_3_1_0;
     haddock      = self.haddock_2_13_2;
     happy        = self.happy_1_19_0;
-    primitive    = self.primitive_0_5_0_1;      # semi-official, but specified
+    primitive    = self.primitive_0_5_1_0;      # semi-official, but specified
   };
 
   haskellPlatformArgs_2013_2_0_0 = self : {
@@ -1711,7 +1711,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
-  primitive = self.primitive_0_5_0_1;
+  primitive_0_5_1_0 = callPackage ../development/libraries/haskell/primitive/0.5.1.0.nix   {};
+  primitive = self.primitive_0_5_1_0;
 
   profunctors = callPackage ../development/libraries/haskell/profunctors {};
 
