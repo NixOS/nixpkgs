@@ -170,7 +170,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     text         = self.text_0_11_3_1;
     transformers = null;                        # this has become a core package in GHC 7.7
     unorderedContainers = self.unorderedContainers_0_2_3_3;
-    vector       = self.vector_0_10_0_1;
+    vector       = self.vector_0_10_9_1;
     xhtml        = self.xhtml_3000_2_1;
     zlib         = self.zlib_0_5_4_1;
     cabalInstall = self.cabalInstall_1_18_0_1;
@@ -2171,7 +2171,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   vect = callPackage ../development/libraries/haskell/vect {};
 
   vector_0_10_0_1  = callPackage ../development/libraries/haskell/vector/0.10.0.1.nix  {};
-  vector = self.vector_0_10_0_1;
+  vector_0_10_9_1  = callPackage ../development/libraries/haskell/vector/0.10.9.1.nix  {};
+  vector = self.vector_0_10_9_1;
 
   vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
 
