@@ -2178,6 +2178,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   vectorBinaryInstances = callPackage ../development/libraries/haskell/vector-binary-instances {};
 
+  vectorInstances = callPackage ../development/libraries/haskell/vector-instances {};
+
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
 
   vectorSpacePoints = callPackage ../development/libraries/haskell/vector-space-points {};
