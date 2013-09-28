@@ -3766,7 +3766,6 @@ let
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
-  texinfo49 = callPackage ../development/tools/misc/texinfo/4.9.nix { };
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
   texinfo4 = texinfo413;
   texinfo = texinfo5;
