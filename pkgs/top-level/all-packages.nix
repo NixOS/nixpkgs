@@ -3767,9 +3767,9 @@ let
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo49 = callPackage ../development/tools/misc/texinfo/4.9.nix { };
-  texinfo5 = callPackage ../development/tools/misc/texinfo/5.1.nix { };
-  texinfo = texinfo5;
+  texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
   texinfo4 = texinfo413;
+  texinfo = texinfo5;
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
