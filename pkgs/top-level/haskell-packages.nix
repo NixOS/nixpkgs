@@ -1490,6 +1490,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   mongoDB = callPackage ../development/libraries/haskell/mongoDB {};
 
+  monoTraversable = callPackage ../development/libraries/haskell/mono-traversable {};
+
   mmorph = callPackage ../development/libraries/haskell/mmorph {};
 
   mpppc = callPackage ../development/libraries/haskell/mpppc {};
