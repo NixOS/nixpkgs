@@ -24,7 +24,10 @@ stdenv.mkDerivation rec{
   '';
 
   postInstall = ''
-     for f in $out/bin/*; do wrapProgram $f --set GUILE_AUTO_COMPILE 0; done
+    for f in "$out"/bin/*; do
+        wrapProgram "$f" --set GUILE_AUTO_COMPILE 0 \
+                         --set PATH "${ghostscript}/bin"
+    done
   '';
 
   configureFlags = [ "--disable-documentation" "--with-ncsb-dir=${urwfonts}"];
