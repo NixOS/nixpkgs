@@ -7249,6 +7249,8 @@ let
 
   arora = callPackage ../applications/networking/browsers/arora { };
 
+  aseprite = callPackage ../applications/editors/aseprite { };
+
   audacious = callPackage ../applications/audio/audacious { };
 
   audacity = callPackage ../applications/audio/audacity { };
