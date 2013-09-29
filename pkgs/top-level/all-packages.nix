@@ -8470,6 +8470,8 @@ let
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
   };
 
+  rubyripper = callPackage ../applications/audio/rubyripper {};
+
   rxvt = callPackage ../applications/misc/rxvt { };
 
   # = urxvt
