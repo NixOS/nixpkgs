@@ -7636,6 +7636,8 @@ let
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
+  fbreader = callPackage ../applications/misc/fbreader { };
+
   fetchmail = import ../applications/misc/fetchmail {
     inherit stdenv fetchurl openssl;
   };
