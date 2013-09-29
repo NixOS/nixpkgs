@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perlSupport, libX11, libXt, libXft, ncurses, perl,
   fontconfig, freetype, pkgconfig, libXrender, gdkPixbufSupport, gdk_pixbuf }:
 
-let 
+let
   name = "rxvt-unicode";
   version = "9.16";
   n = "${name}-${version}";
@@ -17,14 +17,14 @@ stdenv.mkDerivation (rec {
   };
 
   buildInputs =
-    [ libX11 libXt libXft ncurses /* required to build the terminfo file */ 
+    [ libX11 libXt libXft ncurses /* required to build the terminfo file */
       fontconfig freetype pkgconfig libXrender ]
     ++ stdenv.lib.optional perlSupport perl
     ++ stdenv.lib.optional gdkPixbufSupport gdk_pixbuf;
 
   preConfigure =
     ''
-      configureFlags="--with-terminfo=$out/share/terminfo ${if perlSupport then "--enable-perl" else "--disable-perl"}";
+      configureFlags="--with-terminfo=$out/share/terminfo --enable-256-color ${if perlSupport then "--enable-perl" else "--disable-perl"}";
       export TERMINFO=$out/share/terminfo # without this the terminfo won't be compiled by tic, see man tic
       NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2"
       NIX_LDFLAGS="$NIX_LDFLAGS -lfontconfig -lXrender "
