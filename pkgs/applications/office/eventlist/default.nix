@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://kde-look.org/CONTENT/content-files/107779-plasmoid-eventlist-0.6.95.tar.bz2";
-    sha256 = "29d3ff0b84353c2e563e05f75cd729b9e2971365eed9b8ce9b38d94f51901b94"
+    sha256 = "29d3ff0b84353c2e563e05f75cd729b9e2971365eed9b8ce9b38d94f51901b94";
   };
 
   doCheck = true;
