@@ -25,6 +25,7 @@ cabal.mkDerivation (self: {
     QuickCheck random resourcet shakespeareCss shakespeareJs text
     transformers wai waiTest
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Creation of type-safe, RESTful web applications";

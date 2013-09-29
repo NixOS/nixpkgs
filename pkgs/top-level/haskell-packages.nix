@@ -170,14 +170,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     text         = self.text_0_11_3_1;
     transformers = null;                        # this has become a core package in GHC 7.7
     unorderedContainers = self.unorderedContainers_0_2_3_3;
-    vector       = self.vector_0_10_0_1;
+    vector       = self.vector_0_10_9_1;
     xhtml        = self.xhtml_3000_2_1;
     zlib         = self.zlib_0_5_4_1;
     cabalInstall = self.cabalInstall_1_18_0_1;
     alex         = self.alex_3_1_0;
     haddock      = self.haddock_2_13_2;
     happy        = self.happy_1_19_0;
-    primitive    = self.primitive_0_5_0_1;      # semi-official, but specified
+    primitive    = self.primitive_0_5_1_0;      # semi-official, but specified
   };
 
   haskellPlatformArgs_2013_2_0_0 = self : {
@@ -1490,6 +1490,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   mongoDB = callPackage ../development/libraries/haskell/mongoDB {};
 
+  monoTraversable = callPackage ../development/libraries/haskell/mono-traversable {};
+
   mmorph = callPackage ../development/libraries/haskell/mmorph {};
 
   mpppc = callPackage ../development/libraries/haskell/mpppc {};
@@ -1711,7 +1713,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
-  primitive = self.primitive_0_5_0_1;
+  primitive_0_5_1_0 = callPackage ../development/libraries/haskell/primitive/0.5.1.0.nix   {};
+  primitive = self.primitive_0_5_1_0;
 
   profunctors = callPackage ../development/libraries/haskell/profunctors {};
 
@@ -2170,11 +2173,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   vect = callPackage ../development/libraries/haskell/vect {};
 
   vector_0_10_0_1  = callPackage ../development/libraries/haskell/vector/0.10.0.1.nix  {};
-  vector = self.vector_0_10_0_1;
+  vector_0_10_9_1  = callPackage ../development/libraries/haskell/vector/0.10.9.1.nix  {};
+  vector = self.vector_0_10_9_1;
 
   vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
 
   vectorBinaryInstances = callPackage ../development/libraries/haskell/vector-binary-instances {};
+
+  vectorInstances = callPackage ../development/libraries/haskell/vector-instances {};
 
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
 

@@ -5975,6 +5975,14 @@ let
 
   ZopeInterface = pythonPackages.zope_interface;
 
+  ### DEVELOPMENT / R MODULES
+
+  buildRPackage = import ../development/r-modules/generic R;
+
+  rPackages = recurseIntoAttrs (import ./r-packages.nix {
+    inherit pkgs;
+    __overrides = (config.rPackageOverrides or (p: {})) pkgs;
+  });
 
   ### SERVERS
 
@@ -7241,6 +7249,8 @@ let
 
   arora = callPackage ../applications/networking/browsers/arora { };
 
+  aseprite = callPackage ../applications/editors/aseprite { };
+
   audacious = callPackage ../applications/audio/audacious { };
 
   audacity = callPackage ../applications/audio/audacity { };
@@ -8201,6 +8211,8 @@ let
   mpg123 = callPackage ../applications/audio/mpg123 { };
 
   mpg321 = callPackage ../applications/audio/mpg321 { };
+  
+  mpc_cli = callPackage ../applications/audio/mpc { };
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
@@ -8459,6 +8471,8 @@ let
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
   };
+
+  rubyripper = callPackage ../applications/audio/rubyripper {};
 
   rxvt = callPackage ../applications/misc/rxvt { };
 

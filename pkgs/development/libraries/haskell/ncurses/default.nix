@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ncurses";
-  version = "0.2.6";
-  sha256 = "0mcgbq67f8hfdqmvm3p59949mbxcc2mgjw889zxvxx0174kn205q";
+  version = "0.2.7";
+  sha256 = "026p6b2apgi9r65py45h3rl57xgwzyamq511a0rsb7myzagw22vz";
   buildDepends = [ text transformers ];
   buildTools = [ c2hs ];
   extraLibraries = [ ncurses ];
