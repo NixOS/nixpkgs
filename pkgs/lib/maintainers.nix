@@ -5,6 +5,7 @@
      alphabetically sorted.  */
 
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
+  algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
   amiddelk = "Arie Middelkoop <amiddelk@gmail.com>";
   amorsillo = "Andrew Morsillo <andrew.morsillo@gmail.com>";

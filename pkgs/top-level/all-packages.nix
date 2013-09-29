@@ -8211,6 +8211,8 @@ let
   mpg123 = callPackage ../applications/audio/mpg123 { };
 
   mpg321 = callPackage ../applications/audio/mpg321 { };
+  
+  mpc_cli = callPackage ../applications/audio/mpc { };
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
