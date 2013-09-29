@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/0.9/${pname}-${version}.tar.xz";
-    sha256 = "16sdgrabbh2y7j6g9ic9lm5z6sxn7iz3j0xininkiwnjgbsqf961";
+    sha256 = "1dl7wcmibrzf9qnpchgk9fxfhw0j2hzzzqmylkm2c41iv81xrd4r";
   };
 
   buildInputs = [ openconnect networkmanager ]
