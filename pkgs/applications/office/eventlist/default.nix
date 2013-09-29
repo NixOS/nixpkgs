@@ -1,16 +1,19 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, kdelibs }:
 
 stdenv.mkDerivation rec {
   name = "eventlist-0.6.95";
 
   src = fetchurl {
     url = "http://kde-look.org/CONTENT/content-files/107779-plasmoid-eventlist-0.6.95.tar.bz2";
-    md5 = "67531c52806eee0a6cd911265f1eb9f5";
+    sha256 = "29d3ff0b84353c2e563e05f75cd729b9e2971365eed9b8ce9b38d94f51901b94"
   };
 
   doCheck = true;
 
+  buildInputs = [ kdelibs ];
+
   meta = {
+    inherit (kdelibs.meta) platforms;
     description = "KDE Plasmoid to show events and todos on the desktop.";
     longDescription = ''
       This is a plasmoid to show the events and todos from Akonadi resources (KOrganizer, Birthdays etc.).
@@ -20,9 +23,8 @@ stdenv.mkDerivation rec {
 
       Incidences can be filtered, added, edited, deleted via context menu.
     '';
-    homepage = http://kde-look.org/content/show.php/Eventlist?content=107779;
+    homepage = "http://kde-look.org/content/show.php/Eventlist?content=107779";
     license = "GPLv3+";
 
-    platforms = stdenv.lib.platforms.all;
-  };
+	  };
 }
