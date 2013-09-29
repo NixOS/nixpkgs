@@ -8,6 +8,24 @@
 #   * nix-env -p /nix/var/nix/profiles/system -i <nix-expr for the configuration>
 #   * run the activation script of the configuration (also installs Grub)
 
+# Parse the command line for the -I flag
+extraBuildFlags=()
+
+while [ "$#" -gt 0 ]; do
+    i="$1"; shift 1
+    case "$i" in
+      -I)
+        given_path="$1"; shift 1
+        absolute_path=$(readlink -m $given_path)
+        extraBuildFlags+=("$i" "/mnt$absolute_path")
+        ;;
+      *)
+        echo "$0: unknown option \`$i'"
+        exit 1
+        ;;
+    esac
+done
+
 set -e
 shopt -s nullglob
 
@@ -179,7 +197,7 @@ mount --bind $(readlink -f $(nix-instantiate --find-file nixos)) $mountPoint/mnt
 echo "building the system configuration..."
 NIX_PATH="nixpkgs=/mnt-nixpkgs:nixos=/mnt-nixos:nixos-config=$NIXOS_CONFIG" NIXOS_CONFIG= \
     chroot $mountPoint @nix@/bin/nix-env \
-    -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system --show-trace
+    "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system --show-trace
 
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
@@ -187,11 +205,11 @@ NIX_PATH="nixpkgs=/mnt-nixpkgs:nixos=/mnt-nixos:nixos-config=$NIXOS_CONFIG" NIXO
 mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles
 mkdir -m 1777 -p $mountPoint/nix/var/nix/profiles/per-user
 mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles/per-user/root
-srcs=$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")
+srcs=$(nix-env "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")
 if test -n "$srcs"; then
     echo "copying NixOS/Nixpkgs sources..."
     chroot $mountPoint @nix@/bin/nix-env \
-        -p /nix/var/nix/profiles/per-user/root/channels -i "$srcs" --quiet
+        "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/per-user/root/channels -i "$srcs" --quiet
 fi
 mkdir -m 0700 -p $mountPoint/root/.nix-defexpr
 ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
