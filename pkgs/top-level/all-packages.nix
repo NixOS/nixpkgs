@@ -553,6 +553,8 @@ let
 
   enca = callPackage ../tools/text/enca { };
 
+  fop = callPackage ../tools/typesetting/fop { };
+
   mcrl = callPackage ../tools/misc/mcrl { };
 
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
