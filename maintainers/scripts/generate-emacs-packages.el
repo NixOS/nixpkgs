@@ -16,6 +16,9 @@
     ;; ("org" . "http://orgmode.org/elpa/")
     ))
 
+(defvar tmpdir (or (concat (getenv "NIX_EMACS_PACKAGE_CACHE_DIR") "/")
+                   "/tmp/nix-emacs-packages/"))
+
 (require 'finder-inf)
 (defconst nix-emacs-included-packages
   (append (mapcar 'car package--builtins)
@@ -60,18 +63,17 @@
    " ]"))
 
 (defun nix-prefetch-packages (base-url filenames)
-  (let ((tmpdir "/tmp/nix-emacs-packages/"))
-    (ignore-errors (mkdir tmpdir))
-    (list tmpdir
-          (mapcar (lambda (filename)
-                    (let ((out (concat tmpdir filename))
-                          (location (concat base-url filename)))
-                      (if (file-regular-p out)
-                          out
-                        (when (url-copy-file location out)
-                          (message "Prefetching package from %s" location)
-                          filename))))
-                  filenames))))
+  (ignore-errors (mkdir tmpdir))
+  (list tmpdir
+        (mapcar (lambda (filename)
+                  (let ((out (concat tmpdir filename))
+                        (location (concat base-url filename)))
+                    (if (file-regular-p out)
+                        out
+                      (when (url-copy-file location out)
+                        (message "Prefetching package from %s" location)
+                        filename))))
+                filenames)))
 
 (defun nix-get-sha256 (url)
   (message "Getting sha256 of %s" url)
@@ -91,7 +93,7 @@
                                         available-packages)
   (let* ((url (nix-make-package-url base-url name package-spec))
          (sha256 (nix-get-sha256 (nix-make-package-url
-                                  "file:///tmp/nix-emacs-packages/"
+                                  (concat "file://" tmpdir)
                                   name package-spec)))
          (repository-name (car (nix-archive-from-url base-url))))
     (format
