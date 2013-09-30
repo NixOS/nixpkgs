@@ -4973,6 +4973,8 @@ let
 
   libungif = callPackage ../development/libraries/giflib/libungif.nix { };
 
+  libunibreak = callPackage ../development/libraries/libunibreak/default.nix { };
+
   libunique = callPackage ../development/libraries/libunique/default.nix { };
 
   liburcu = callPackage ../development/libraries/liburcu { };
@@ -7646,6 +7648,8 @@ let
   };
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
+
+  fbreader = callPackage ../applications/misc/fbreader { };
 
   fetchmail = import ../applications/misc/fetchmail {
     inherit stdenv fetchurl openssl;
