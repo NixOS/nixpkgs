@@ -5438,6 +5438,16 @@ let
     docs = true;
     demos = true;
     examples = true;
+    developerBuild = true;
+  };
+
+  qt4SDK = qtcreator.override {
+    sdkBuild = true;
+    qtLib = qt48Full;
+  };
+
+  qtcreator = callPackage ../development/qtcreator {
+    qtLib = qt48.override { developerBuild = true; };
   };
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
@@ -8510,8 +8520,6 @@ let
   qsampler = callPackage ../applications/audio/qsampler { };
 
   qsynth = callPackage ../applications/audio/qsynth { };
-
-  qtcreator = callPackage ../development/qtcreator { };
 
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
