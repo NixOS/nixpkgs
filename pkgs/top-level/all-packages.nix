@@ -46,7 +46,7 @@ let config_ = config; platform_ = platform; in # rename the function arguments
 
 let
 
-  lib = import ../lib;
+  lib = import ../../lib;
 
   # The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.nixpkgs/config.nix.
@@ -381,7 +381,7 @@ let
     inherit pkgs;
   };
 
-  composableDerivation = (import ../lib/composable-derivation.nix) {
+  composableDerivation = (import ../../lib/composable-derivation.nix) {
     inherit pkgs lib;
   };
 
@@ -8886,7 +8886,7 @@ let
       enableGnash = cfg.enableGnash or false;
     in
     import ../applications/networking/browsers/firefox/wrapper.nix {
-      inherit stdenv makeWrapper makeDesktopItem browser browserName desktopName nameSuffix icon;
+      inherit stdenv lib makeWrapper makeDesktopItem browser browserName desktopName nameSuffix icon;
       plugins =
          assert !(enableGnash && enableAdobeFlash);
          ([ ]

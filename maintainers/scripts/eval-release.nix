@@ -1,7 +1,7 @@
 # Evaluate `release.nix' like Hydra would.  Too bad nix-instantiate
 # can't to do this.
 
-with import ../../pkgs/lib;
+with import ../../lib;
 
 let
   trace = if builtins.getEnv "VERBOSE" == "1" then builtins.trace else (x: y: y);
