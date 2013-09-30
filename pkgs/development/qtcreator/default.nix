@@ -2,7 +2,7 @@
 
 let
   baseVersion = "2.8";
-  revision = "0";
+  revision = "1";
   version = "${baseVersion}.${revision}";
   qt4_for_qtcreator = qt48.override {
     developerBuild = true;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-${version}-src.tar.gz";
-    sha256 = "7ac5d9a36c2f561f74d77378d4eae95a78c7752b323e1df924d6e895e99f45d2";
+    sha256 = "d5ae007a297a4288d0e95fd605edbfb8aee80f6788c7a6cfb9cb297f50c364b9";
   };
 
   buildInputs = [ qt4_for_qtcreator ];
