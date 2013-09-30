@@ -9,7 +9,8 @@ assert (libXft != null) -> libpng != null;	# probably a bug
 assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
 
 stdenv.mkDerivation rec {
-  name = "emacs-24.3";
+  version = "24.3";
+  name = "emacs-${version}";
 
   builder = ./builder.sh;
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin cairo;
 
   configureFlags =
-    ( if withX then 
+    ( if withX then
         [ "--with-x-toolkit=gtk" "--with-xft"]
       else
         [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
@@ -36,22 +37,39 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (stdenv ? glibc)
          [ "--with-crt-dir=${stdenv.glibc}/lib" ];
 
+
+  setupHook = ./setup-hook.sh;
+
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
     "-I${cairo}/include/cairo";
 
+  doCheck = true;
+
+  # Note: the usual backtick-apostrophe notation for elisp variables
+  # and functions in comments is broken in Nix expressions.
   postInstall = ''
     cat >$out/share/emacs/site-lisp/site-start.el <<EOF
-    ;; nixos specific load-path
-    (when (getenv "NIX_PROFILES") (setq load-path
-                          (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
-                                                   (split-string (getenv "NIX_PROFILES"))))
-                           load-path)))
-    EOF
+;; NixOS specific load-path and package-directory-list
+(when (getenv "NIX_PROFILES")
+    ;; Add profile directories load-path
+    (setq load-path
+          (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
+                           (split-string (getenv "NIX_PROFILES"))))
+                  load-path))
+    ;; Add profile directories to package-directory-list for package.el
+    (eval-after-load 'package
+      '(setq package-directory-list
+             (append (mapcar (lambda (x) (concat x "/share/emacs/elpa/"))
+                             (split-string (getenv "NIX_PROFILES")))
+                     package-directory-list))))
+
+;;; Add package-directories added via Emacs' setupHook to package-directory-list
+(eval-after-load 'package
+  '(setq package-directory-list
+         (append (split-string (or (getenv "EMACS_PACKAGE_EL_PACKAGES") "") ":")
+                 package-directory-list)))
+EOF
   '';
-
-
-
-  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "GNU Emacs 24, the extensible, customizable text editor";

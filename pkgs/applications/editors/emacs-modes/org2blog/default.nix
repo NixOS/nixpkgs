@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, emacs, xmlRpc }:
+{ stdenv, fetchgit, emacs, xml-rpc }:
 
 stdenv.mkDerivation rec {
   name = "org2blog-0.5";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ emacs ];
-  propagatedUserEnvPkgs = [ xmlRpc ];
+  propagatedUserEnvPkgs = [ xml-rpc ];
 
   buildPhase = ''
     emacs -L . -L ${xmlRpc}/share/emacs/site-lisp --batch -f batch-byte-compile *.el
