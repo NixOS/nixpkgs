@@ -1,7 +1,7 @@
 From 4731a9074538e9e24d2b81fc737917b064e194e6 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 8 Jan 2013 18:36:28 +0100
-Subject: [PATCH 6/9] Don't call "plymouth quit"
+Subject: [PATCH 06/11] Don't call "plymouth quit"
 
 NixOS doesn't use Plymouth (yet).
 ---
@@ -34,5 +34,5 @@ index 269797a..2c640f4 100644
  ExecStart=-/sbin/sulogin
  ExecStopPost=-@SYSTEMCTL@ --fail --no-block default
 -- 
-1.8.2.1
+1.8.3.4
 

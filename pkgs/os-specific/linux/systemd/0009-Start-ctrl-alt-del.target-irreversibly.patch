@@ -1,7 +1,7 @@
 From ed7c22c76e1399861ec8e0216f08a7f9419eea50 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 7 May 2013 14:03:13 +0200
-Subject: [PATCH 9/9] Start ctrl-alt-del.target irreversibly
+Subject: [PATCH 09/11] Start ctrl-alt-del.target irreversibly
 
 This makes ctrl-alt-del reboots more robust, just like "systemctl
 reboot".
@@ -23,5 +23,5 @@ index c7f8f20..0508628 100644
                          }
  
 -- 
-1.8.2.1
+1.8.3.4
 
