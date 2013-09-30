@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, expat, pam, intltool, gettext
+{ stdenv, fetchurl, pkgconfig, glib, expat, pam, intltool, spidermonkey
 , gobjectIntrospection
 , useSystemd ? true, systemd }:
 
@@ -16,18 +16,22 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "polkit-0.105";
+  name = "polkit-0.112";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/polkit/releases/${name}.tar.gz";
-    sha256 = "1pz1hn4z0f1wk4f7w8q1g6ygwan1b6kxmfad3b7gql27pb47rp4g";
+    sha256 = "1xkary7yirdcjdva950nqyhmsz48qhrdsr78zciahj27p8yg95fn";
   };
 
   buildInputs =
-    [ pkgconfig glib expat pam intltool gobjectIntrospection ]
+    [ pkgconfig glib expat pam intltool spidermonkey gobjectIntrospection ]
     ++ stdenv.lib.optional useSystemd systemd;
 
-  configureFlags = "--libexecdir=$(out)/libexec/polkit-1";
+  # TODO: Distro/OS detection is impure
+  configureFlags = [
+    "--libexecdir=$(out)/libexec/polkit-1"
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+  ];
 
   # Ugly hack to overwrite hardcoded directories
   # TODO: investigate a proper patch which will be accepted upstream
