@@ -6,7 +6,7 @@ OUTPUT="../../pkgs/top-level/emacs-packages-generated.nix"
 
 if [ -z "$NIX_EMACS_PACKAGE_CACHE_DIR" ]
 then
-  export NIX_EMACS_PACKAGE_CACHE_DIR="/tmp/"
+  export NIX_EMACS_PACKAGE_CACHE_DIR="/tmp/nix-emacs-packages/"
 fi
 
 pushd $DIR

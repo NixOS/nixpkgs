@@ -16,8 +16,9 @@
     ;; ("org" . "http://orgmode.org/elpa/")
     ))
 
-(defvar tmpdir (or (concat (getenv "NIX_EMACS_PACKAGE_CACHE_DIR") "/")
-                   "/tmp/nix-emacs-packages/"))
+(defvar tmpdir (concat (or (getenv "NIX_EMACS_PACKAGE_CACHE_DIR")
+                           "/tmp/nix-emacs-packages/")
+                       ""))
 
 (require 'finder-inf)
 (defconst nix-emacs-included-packages
