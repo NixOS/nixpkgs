@@ -574,6 +574,8 @@ let
 
   bacula = callPackage ../tools/backup/bacula { };
 
+  bgs = callPackage ../tools/X11/bgs { };
+  
   bibtextools = callPackage ../tools/typesetting/bibtex-tools {
     inherit (strategoPackages016) strategoxt sdf;
   };
