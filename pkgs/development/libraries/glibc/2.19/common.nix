@@ -58,6 +58,9 @@ stdenv.mkDerivation ({
       ./fix_path_attribute_in_getconf.patch
 
       ./fix-math.patch
+
+      /* Remove references to the compilation date.  Also try to create archives using 0-timestamps */
+      ./glibc-remove-date-from-compilation-banner.patch
     ];
 
   postPatch = ''
