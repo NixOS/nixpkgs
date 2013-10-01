@@ -61,6 +61,14 @@ stdenv.mkDerivation ({
 
       ./cve-2014-0475.patch
       ./cve-2014-5119.patch
+
+      /* Remove references to the compilation date.  */
+      ./glibc-remove-date-from-compilation-banner.patch
+
+      /* Remove the date and time from nscd.  It is used as a protocol
+         compatibility check, but we assume nix takes care of that for
+         us. */
+      ./glibc-remove-datetime-from-nscd.patch
     ];
 
   postPatch = ''
