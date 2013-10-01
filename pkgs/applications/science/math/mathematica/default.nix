@@ -23,7 +23,7 @@ let
     else if stdenv.system == "x86_64-linux" then
       "Linux-x86-64"
     else
-      abort "Mathematica requires i686-linux or x86_64 linux";
+      throw "Mathematica requires i686-linux or x86_64 linux";
 in
 stdenv.mkDerivation rec {
 

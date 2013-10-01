@@ -34,11 +34,9 @@
     url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/licenses/AMD-ADL?revision=1.1";
   };
 
-  apsl20 = {
-    shortName = "APSL 2.0";
-    fullName = "Apple Public Source License 2.0";
-    url = http://opensource.org/licenses/APSL-2.0;
-  };
+  # Apple Public Source License 2.0;
+  # http://opensource.org/licenses/APSL-2.0
+  apsl20 = "APSL 2.0";
 
   asl20 = {
     shortName = "ASL2.0";
@@ -96,11 +94,9 @@
     url = http://www.mysql.com/about/legal/licensing/foss-exception;
   };
 
-  gpl2Plus = {
-    shortName = "GPLv2+";
-    fullName = "GNU General Public License version 2 or later";
-    url = http://www.gnu.org/licenses/old-licenses/gpl-2.0.html;
-  };
+  # GNU General Public License version 2 or later;
+  # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+  gpl2Plus = "GPLv2+";
 
   gpl3 = {
     shortName = "GPLv3";
