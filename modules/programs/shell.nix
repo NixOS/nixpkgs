@@ -29,7 +29,6 @@ in
         fi
 
         if ! test -L $HOME/.nix-profile; then
-            echo "creating $HOME/.nix-profile" >&2
             if test "$USER" != root; then
                 ln -s $NIX_USER_PROFILE_DIR/profile $HOME/.nix-profile
             else
@@ -40,7 +39,6 @@ in
 
         # Subscribe the root user to the NixOS channel by default.
         if [ "$USER" = root -a ! -e $HOME/.nix-channels ]; then
-            echo "creating $HOME/.nix-channels with nixos-unstable subscription" >&2
             echo "http://nixos.org/channels/nixos-unstable nixos" > $HOME/.nix-channels
         fi
 
@@ -53,7 +51,6 @@ in
 
         # Set up a default Nix expression from which to install stuff.
         if [ ! -e $HOME/.nix-defexpr -o -L $HOME/.nix-defexpr ]; then
-            echo "creating $HOME/.nix-defexpr" >&2
             rm -f $HOME/.nix-defexpr
             mkdir $HOME/.nix-defexpr
             if [ "$USER" != root ]; then
