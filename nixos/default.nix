@@ -1,12 +1,11 @@
 { configuration ? import ./lib/from-env.nix "NIXOS_CONFIG" <nixos-config>
 , system ? builtins.currentSystem
-, nixpkgs ? <nixpkgs>
 }:
 
 let
 
   eval = import ./lib/eval-config.nix {
-    inherit system nixpkgs;
+    inherit system;
     modules = [ configuration ];
   };
 
@@ -14,13 +13,13 @@ let
 
   # This is for `nixos-rebuild build-vm'.
   vmConfig = (import ./lib/eval-config.nix {
-    inherit system nixpkgs;
+    inherit system;
     modules = [ configuration ./modules/virtualisation/qemu-vm.nix ];
   }).config;
 
   # This is for `nixos-rebuild build-vm-with-bootloader'.
   vmWithBootLoaderConfig = (import ./lib/eval-config.nix {
-    inherit system nixpkgs;
+    inherit system;
     modules =
       [ configuration
         ./modules/virtualisation/qemu-vm.nix

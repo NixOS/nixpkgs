@@ -7,7 +7,6 @@
 , baseModules ? import ../modules/module-list.nix
 , extraArgs ? {}
 , modules
-, nixpkgs ? <nixpkgs>
 }:
 
 let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system; in
@@ -31,7 +30,7 @@ rec {
   extraArgs = extraArgs_ // {
     inherit pkgs modules baseModules;
     modulesPath = ../modules;
-    pkgs_i686 = import nixpkgs { system = "i686-linux"; };
+    pkgs_i686 = import ../.. { system = "i686-linux"; };
     utils = import ./utils.nix pkgs;
   };
 
@@ -48,7 +47,7 @@ rec {
   pkgs =
     if pkgs_ != null
     then pkgs_
-    else import nixpkgs (
+    else import ../.. (
       let
         system = if nixpkgsOptions.system != "" then nixpkgsOptions.system else system_;
         nixpkgsOptions = (import ./eval-config.nix {
@@ -56,7 +55,7 @@ rec {
           # For efficiency, leave out most NixOS modules; they don't
           # define nixpkgs.config, so it's pointless to evaluate them.
           baseModules = [ ../modules/misc/nixpkgs.nix ];
-          pkgs = import nixpkgs { system = system_; config = {}; };
+          pkgs = import ../.. { system = system_; config = {}; };
         }).optionDefinitions.nixpkgs;
       in
       {

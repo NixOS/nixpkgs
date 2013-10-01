@@ -23,7 +23,6 @@ in
         NIX_PATH =
           [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixpkgs=/etc/nixos/nixpkgs"
-            "nixos=/etc/nixos/nixos"
             "nixos-config=/etc/nixos/configuration.nix"
             "services=/etc/nixos/services"
           ];

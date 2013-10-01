@@ -1,5 +1,4 @@
-{ nixosSrc ? { outPath = ./.; revCount = 1234; shortRev = "abcdefg"; }
-, nixpkgs ? { outPath = <nixpkgs>; revCount = 5678; shortRev = "gfedcba"; }
+{ nixpkgs ? { outPath = ./..; revCount = 5678; shortRev = "gfedcba"; }
 , officialRelease ? false
 }:
 
@@ -10,7 +9,7 @@ let
 
   systems = [ "x86_64-linux" "i686-linux" ];
 
-  pkgs = import <nixpkgs> { system = "x86_64-linux"; };
+  pkgs = import nixpkgs { system = "x86_64-linux"; };
 
 
   versionModule =
@@ -20,7 +19,7 @@ let
   makeIso =
     { module, type, description ? type, maintainers ? ["eelco"], system }:
 
-    with import <nixpkgs> { inherit system; };
+    with import nixpkgs { inherit system; };
 
     let
 
@@ -50,7 +49,7 @@ let
   makeSystemTarball =
     { module, maintainers ? ["viric"], system }:
 
-    with import <nixpkgs> { inherit system; };
+    with import nixpkgs { inherit system; };
 
     let
 
@@ -73,36 +72,13 @@ let
 
 in {
 
-  tarball =
-    pkgs.releaseTools.makeSourceTarball {
-      name = "nixos-tarball";
-
-      src = nixosSrc;
-
-      inherit officialRelease version;
-      versionSuffix = pkgs.lib.optionalString (!officialRelease) versionSuffix;
-
-      distPhase = ''
-        echo -n $VERSION_SUFFIX > .version-suffix
-        releaseName=nixos-$VERSION$VERSION_SUFFIX
-        mkdir -p $out/tarballs
-        mkdir ../$releaseName
-        cp -prd . ../$releaseName
-        cd ..
-        chmod -R u+w $releaseName
-        tar cfvj $out/tarballs/$releaseName.tar.bz2 $releaseName
-      ''; # */
-    };
-
-
   channel =
     pkgs.releaseTools.makeSourceTarball {
       name = "nixos-channel";
 
-      src = nixosSrc;
+      src = nixpkgs;
 
-      inherit officialRelease version;
-      versionSuffix = pkgs.lib.optionalString (!officialRelease) versionSuffix;
+      inherit officialRelease version versionSuffix;
 
       buildInputs = [ pkgs.nixUnstable ];
 
@@ -113,8 +89,10 @@ in {
         releaseName=nixos-$VERSION$VERSION_SUFFIX
         mkdir -p $out/tarballs
         mkdir ../$releaseName
-        cp -prd . ../$releaseName/nixos
         cp -prd ${nixpkgs} ../$releaseName/nixpkgs
+        chmod -R u+w ../$releaseName
+        rm -rf .git
+        ln -s nixpkgs/nixos ../$releaseName/nixos
         echo "$expr" > ../$releaseName/default.nix
         NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --xml \* > /dev/null
         cd ..
@@ -125,7 +103,7 @@ in {
 
 
   manual =
-    (import "${nixosSrc}/doc/manual" {
+    (import ./doc/manual {
       inherit pkgs;
       options =
         (import lib/eval-config.nix {
@@ -134,7 +112,7 @@ in {
               boot.loader.grub.device = "/dev/sda";
             } ];
         }).options;
-      revision = toString (nixosSrc.rev or nixosSrc.shortRev);
+      revision = toString (nixpkgs.rev or nixpkgs.shortRev);
     }).manual;
 
 
@@ -177,7 +155,7 @@ in {
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = pkgs.lib.genAttrs systems (system:
 
-    with import <nixpkgs> { inherit system; };
+    with import nixpkgs { inherit system; };
 
     let
 

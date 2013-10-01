@@ -1,13 +1,12 @@
-{ nixosSrc ? { outPath = ./.; revCount = 1234; shortRev = "abcdefg"; }
-, nixpkgs ? { outPath = <nixpkgs>; revCount = 5678; shortRev = "gfedcba"; }
+{ nixpkgs ? { outPath = ./..; revCount = 5678; shortRev = "gfedcba"; }
 , officialRelease ? false
 }:
 
 let
 
-  nixpkgs' = nixpkgs; # urgh
+  nixpkgsSrc = nixpkgs; # urgh
 
-  pkgs = import <nixpkgs> {};
+  pkgs = import ./.. {};
 
   removeMaintainers = set: if builtins.isAttrs set
     then if (set.type or "") == "derivation"
@@ -18,19 +17,19 @@ let
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
-    inherit nixosSrc officialRelease;
-    nixpkgs = nixpkgs';
+    inherit officialRelease;
+    nixpkgs = nixpkgsSrc;
   });
 
-  nixpkgs = builtins.removeAttrs (removeMaintainers (import <nixpkgs/pkgs/top-level/release.nix> {
+  nixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
     inherit officialRelease;
-    nixpkgs = nixpkgs';
+    nixpkgs = nixpkgsSrc;
     # Only do Linux builds.
     supportedSystems = [ "x86_64-linux" "i686-linux" ];
   })) [ "unstable" ];
 
   tested = pkgs.releaseTools.aggregate {
-    name = "nixos-${nixos.tarball.version}";
+    name = "nixos-${nixos.channel.version}";
     meta = {
       description = "Release-critical builds for the NixOS unstable channel";
       maintainers = [ pkgs.lib.maintainers.eelco pkgs.lib.maintainers.shlevy ];
