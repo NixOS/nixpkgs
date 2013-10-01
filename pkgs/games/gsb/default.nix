@@ -2,7 +2,7 @@
 , curl3, SDL, SDL_image, libpng12, libjpeg62, libvorbis, libogg, openal, mesa
 , libX11, libXext, libXft, fontconfig, zlib }:
 
-# TODO: add i686 support
+assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   name = "gsb-1.56.0";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
      sha256 = "12jsz9v55w9zxwiz4kbm6phkv60q3c2kyv5imsls13385pzwcs8i";
   };
 
+  arch = if stdenv.system == "i686-linux" then "x86" else "x86_64";
+
   phases = "unpackPhase installPhase";
 
   # XXX: stdenv.lib.makeLibraryPath doesn't pick up /lib64
@@ -33,17 +35,21 @@ stdenv.mkDerivation rec {
     ensureDir $out/libexec/positech/GSB/
     ensureDir $out/bin
 
-    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" --set-rpath $libPath ./GSB.bin.x86_64
+    patchelf \
+      --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      --set-rpath $libPath \
+      ./GSB.bin.$arch
 
     cp -r * $out/libexec/positech/GSB/
     rm -rf $out/libexec/positech/GSB/lib64/
+    rm -rf $out/libexec/positech/GSB/lib/
 
     #makeWrapper doesn't do cd. :(
 
     cat > $out/bin/GSB << EOF
     #!/bin/sh
     cd $out/libexec/positech/GSB
-    exec ./GSB.bin.x86_64
+    exec ./GSB.bin.$arch
     EOF
     chmod +x $out/bin/GSB
   '';
@@ -62,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.positech.co.uk/gratuitousspacebattles/index.html;
     license = [ "unfree" ];
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
-    platforms = [ "x86_64-linux"] ;
+    platforms = [ "x86_64-linux" "i686-linux" ] ;
   };
 
 }
