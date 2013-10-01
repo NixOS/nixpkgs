@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 {
   options = {
@@ -12,11 +12,9 @@
       '';
     };
   };
+
   config = pkgs.lib.mkIf config.environment.noXlibs {
     programs.ssh.setXAuthLocation = false;
-    services = {
-      dbus.enable = false;
-    };
     fonts = {
       enableCoreFonts = false;
       enableFontConfig = false;
