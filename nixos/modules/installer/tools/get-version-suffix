@@ -14,16 +14,9 @@ getVersion() {
     fi
 }
 
-if nixos=$(nix-instantiate --find-file nixos "$@"); then
-    getVersion $nixos
+if nixpkgs=$(nix-instantiate --find-file nixpkgs "$@"); then
+    getVersion $nixpkgs
     if [ -n "$rev" ]; then
-        suffix="pre-$rev"
-        if nixpkgs=$(nix-instantiate --find-file nixpkgs "$@"); then
-            getVersion $nixpkgs
-            if [ -n "$rev" ]; then
-                suffix+="-$rev"
-            fi
-        fi
-        echo $suffix
+        echo "pre-$rev"
     fi
 fi

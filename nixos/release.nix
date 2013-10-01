@@ -5,8 +5,8 @@
 
 let
 
-  version = builtins.readFile ./.version;
-  versionSuffix = "pre${toString nixosSrc.revCount}_${nixosSrc.shortRev}-${nixpkgs.shortRev}";
+  version = builtins.readFile ../.version;
+  versionSuffix = "pre${toString nixpkgs.revCount}_${nixpkgs.shortRev}";
 
   systems = [ "x86_64-linux" "i686-linux" ];
 

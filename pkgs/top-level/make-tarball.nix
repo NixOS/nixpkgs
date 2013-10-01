@@ -1,4 +1,4 @@
-/* Hydra job to build a tarball for Nixpkgs from a SVN checkout.  It
+/* Hydra job to build a tarball for Nixpkgs from a Git checkout.  It
    also builds the documentation and tests whether the Nix expressions
    evaluate correctly. */
 
@@ -6,13 +6,13 @@
 
 with import nixpkgs.outPath {};
 
-releaseTools.sourceTarball {
+releaseTools.sourceTarball rec {
   name = "nixpkgs-tarball";
   src = nixpkgs;
-  inherit officialRelease;
 
-  version = builtins.readFile ../../VERSION;
-  versionSuffix = if officialRelease then "" else "pre${toString nixpkgs.revCount}_${nixpkgs.shortRev}";
+  inherit officialRelease;
+  version = builtins.readFile ../../.version;
+  versionSuffix = "pre${toString nixpkgs.revCount}_${nixpkgs.shortRev}";
 
   buildInputs = [
     lzma
@@ -26,8 +26,8 @@ releaseTools.sourceTarball {
   configurePhase = ''
     eval "$preConfigure"
     releaseName=nixpkgs-$VERSION$VERSION_SUFFIX
+    echo -n $VERSION_SUFFIX > .version-suffix
     echo "release name is $releaseName"
-    echo $releaseName > relname
   '';
 
   dontBuild = false;
@@ -47,7 +47,7 @@ releaseTools.sourceTarball {
     nix-store --init
 
     # Run the regression tests in `lib'.
-    res="$(nix-instantiate --eval-only --strict --show-trace pkgs/lib/tests.nix)"
+    res="$(nix-instantiate --eval-only --strict --show-trace lib/tests.nix)"
     if test "$res" != "[ ]"; then
         echo "regression tests for lib failed, got: $res"
         exit 1
