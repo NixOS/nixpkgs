@@ -218,8 +218,6 @@ let
       ncat = linux;
       netcat = all;
       nfsUtils = linux;
-      nix = all;
-      nixUnstable = all;
       nmap = linux;
       nss_ldap = linux;
       nssmdns = linux;
@@ -273,7 +271,6 @@ let
       sloccount = allBut "i686-cygwin";
       smartmontools = linux;
       spidermonkey = linux;
-      splashutils = linux;
       sqlite = allBut "i686-cygwin";
       squid = linux;
       ssmtp = linux;

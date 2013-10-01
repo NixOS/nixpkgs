@@ -1,15 +1,15 @@
 {stdenv, stdenv_32bit, fetchurl, unzip, zlib_32bit}:
 
 stdenv.mkDerivation {
-  name = "android-build-tools-r18.0.1";
+  name = "android-build-tools-r18.1.0";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = https://dl-ssl.google.com/android/repository/build-tools_r18.0.1-linux.zip;
-      sha1 = "f11618492b0d2270c332325d45d752d3656a9640";
+      url = https://dl-ssl.google.com/android/repository/build-tools_r18.1-linux.zip;
+      sha1 = "f314a0599e51397f0886fe888b50dd98f2f050d8";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = https://dl-ssl.google.com/android/repository/build-tools_r18.0.1-macosx.zip;
-      sha1 = "d84f5692fb44d60fc53e5b2507cebf9f24626902";
+      url = https://dl-ssl.google.com/android/repository/build-tools_r18.1-macosx.zip;
+      sha1 = "16ddb299b8b43063e5bb3387ec17147c5053dfd8";
     }
     else throw "System ${stdenv.system} not supported!";
   

@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   udevSupport = hotplugSupport;
 
+  configureFlags = stdenv.lib.optional (libusb != null) "--enable-libusb_1_0";
+
   buildInputs = []
     ++ stdenv.lib.optional (libusb != null) libusb
     ++ stdenv.lib.optional (libv4l != null) libv4l

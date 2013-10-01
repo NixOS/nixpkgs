@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "regex-compat-tdfa";
-  version = "0.95.1.2";
-  sha256 = "0b7pp5xq4ybgji5shz5v1a91y6wwzila3vjiyq4nma0xj3njy802";
+  version = "0.95.1.3";
+  sha256 = "0wl5sqbb3rl5dai3qni8w09wlipc4n1mn9kh5zgb9xl0lcd59pjx";
   buildDepends = [ regexBase regexTdfa ];
   meta = {
     homepage = "http://hub.darcs.net/shelarcy/regex-compat-tdfa";

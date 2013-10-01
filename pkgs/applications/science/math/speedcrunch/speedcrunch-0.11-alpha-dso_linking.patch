@@ -1,0 +1,23 @@
+diff -up speedcrunch-0.11-alpha/src/CMakeLists.txt.dso_linking speedcrunch-0.11-alpha/src/CMakeLists.txt
+--- speedcrunch-0.11-alpha/src/CMakeLists.txt.dso_linking	2009-11-04 15:37:15.000000000 -0600
++++ speedcrunch-0.11-alpha/src/CMakeLists.txt	2010-06-25 13:25:07.133460528 -0500
+@@ -54,6 +54,10 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX )
+ SET(QT_USE_QTNETWORK TRUE)
+ #SET(QT_USE_QTXML TRUE)
+ find_package(Qt4 REQUIRED)
++if (Q_WS_X11)
++   find_package(X11 REQUIRED)
++endif (Q_WS_X11)
++
+ include(${QT_USE_FILE})
+ 
+ # build everything
+@@ -80,7 +84,7 @@ ENDIF( APPLE )
+ 
+ ADD_CUSTOM_TARGET( confclean COMMAND rm -rf Makefile CMakeFiles/ CMakeCache.txt cmake_install.cmake DartTestfile.txt install_manifest.txt )
+ 
+-TARGET_LINK_LIBRARIES(${PROGNAME} ${QT_LIBRARIES})
++TARGET_LINK_LIBRARIES(${PROGNAME} ${QT_LIBRARIES} ${X11_X11_LIB} )
+ # only needed for static builds when directx is enabled in qt and you
+ # get a linker error because of missing a directx function
+ #IF(WIN32)

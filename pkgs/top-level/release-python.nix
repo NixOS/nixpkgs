@@ -1166,7 +1166,6 @@ let
   monodoc = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   monotone = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   monotoneViz = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  mountall = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   mozart = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   mozilla = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   mozplugger = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

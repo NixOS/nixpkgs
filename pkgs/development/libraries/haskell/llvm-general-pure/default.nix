@@ -4,13 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "llvm-general-pure";
-  version = "3.3.8.1";
-  sha256 = "1izn30pka7z60dr73c3mhr5i8n2fb0yvpdgg66r7c5qf1m5bmqbx";
+  version = "3.3.8.2";
+  sha256 = "171mp9rydw6r2khcmvkcfjk934ckfahwyx1b4a15gmj8sr1s9hzp";
   buildDepends = [ mtl parsec setenv transformers ];
   testDepends = [
     HUnit mtl QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2
   ];
+  doCheck = false;
   meta = {
     description = "Pure Haskell LLVM functionality (no FFI)";
     license = self.stdenv.lib.licenses.bsd3;

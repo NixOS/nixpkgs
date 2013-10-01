@@ -158,7 +158,6 @@ with (import ./release-lib.nix);
   sharutils = all;
   sloccount = allBut "i686-cygwin";
   smartmontools = all;
-  splashutils = linux;
   sqlite = allBut "i686-cygwin";
   squid = linux;
   ssmtp = linux;

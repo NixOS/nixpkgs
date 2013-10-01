@@ -48,8 +48,8 @@ in
   sysimg_armeabi-v7a_18 = buildSystemImage {
     name = "armeabi-v7a-18";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/sysimg_armv7a-18_r01.zip;
-      sha1 = "5a9b8ac5b57dd0e3278f47deb5ee58e1db6f1f9e";
+      url = https://dl-ssl.google.com/android/repository/sysimg_armv7a-18_r02.zip;
+      sha1 = "4a1a93200210d8c42793324362868846f67401ab";
     };
   };
     
@@ -82,6 +82,14 @@ in
     src = fetchurl {
       url = https://dl-ssl.google.com/android/repository/sys-img/x86/sysimg_x86-17_r01.zip;
       sha1 = "ddb3313e8dcd07926003f7b828eafea1115ea35b";
+    };
+  };
+    
+  sysimg_x86_18 = buildSystemImage {
+    name = "x86-18";
+    src = fetchurl {
+      url = https://dl-ssl.google.com/android/repository/sys-img/x86/sysimg_x86-18_r01.zip;
+      sha1 = "f11bc9fccd3e7e46c07d8b26e112a8d0b45966c1";
     };
   };
     

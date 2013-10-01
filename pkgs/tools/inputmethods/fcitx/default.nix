@@ -1,18 +1,18 @@
 { stdenv, fetchurl, pkgconfig, cmake, intltool, gettext
 , libxml2, enchant, isocodes, icu, libpthreadstubs
-, pango, cairo, libxkbfile, xorg
+, pango, cairo, libxkbfile, libXau, libXdmcp
 }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-4.2.7";
+  name = "fcitx-4.2.8.3";
   src = fetchurl {
-    url = "https://fcitx.googlecode.com/files/${name}_dict.tar.xz";
-    sha256 = "1dfvr77j9vnlg76155clrjxnm59r5fzv0d3n6c6yn10zb0bjd40c";
+    url = "http://download.fcitx-im.org/fcitx/${name}_dict.tar.xz";
+    sha256 = "05dw6cbjh2jyjrkr4qx2bcq6nyhhrs0akf6fcjk5a72bgphhwqnb";
   };
 
   buildInputs = [
     cmake enchant pango gettext libxml2 isocodes pkgconfig libxkbfile
-    intltool cairo icu libpthreadstubs xorg.libXau xorg.libXdmcp
+    intltool cairo icu libpthreadstubs libXau libXdmcp
   ];
 
   cmakeFlags = ''
@@ -28,5 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://code.google.com/p/fcitx/";
     description = "A Flexible Input Method Framework";
     license = "GPLv2";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [iyzsong];
   };
 }

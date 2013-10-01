@@ -1,7 +1,7 @@
 From 2afcee0b4da066fb5f8fc00b749d88f5bd9df3d3 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 8 Jan 2013 15:45:01 +0100
-Subject: [PATCH 2/9] Ignore duplicate paths in "systemctl start"
+Subject: [PATCH 02/11] Ignore duplicate paths in "systemctl start"
 
 ---
  src/systemctl/systemctl.c | 2 +-
@@ -21,5 +21,5 @@ index 3cca861..16791a2 100644
                          return r;
                  }
 -- 
-1.8.2.1
+1.8.3.4
 

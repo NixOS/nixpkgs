@@ -64,6 +64,12 @@ rec {
     useGoogleAPIs = true;
   };
   
+  androidsdk_4_3 = androidsdk {
+    platformVersions = [ "18" ];
+    abiVersions = [ "armeabi-v7a" "x86" ];
+    useGoogleAPIs = true;
+  };
+  
   buildApp = import ./build-app.nix {
     inherit (pkgs) stdenv jdk ant;
     inherit androidsdk;

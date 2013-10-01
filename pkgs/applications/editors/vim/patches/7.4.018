@@ -1,0 +1,45 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.018
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.018
+Problem:    When completing item becomes unselected. (Shougo Matsu)
+Solution:   Revert patch 7.3.1269.
+Files:	    src/edit.c
+
+
+*** ../vim-7.4.017/src/edit.c	2013-07-04 20:22:25.000000000 +0200
+--- src/edit.c	2013-09-05 12:39:53.000000000 +0200
+***************
+*** 3467,3473 ****
+      }
+  
+      compl_enter_selects = !compl_used_match;
+-     compl_shown_match = compl_curr_match = compl_first_match;
+  
+      /* Show the popup menu with a different set of matches. */
+      ins_compl_show_pum();
+--- 3467,3472 ----
+*** ../vim-7.4.017/src/version.c	2013-09-05 12:06:26.000000000 +0200
+--- src/version.c	2013-09-05 12:40:34.000000000 +0200
+***************
+*** 740,741 ****
+--- 740,743 ----
+  {   /* Add new patch number below this line */
++ /**/
++     18,
+  /**/
+
+-- 
+hundred-and-one symptoms of being an internet addict:
+169. You hire a housekeeper for your home page.
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

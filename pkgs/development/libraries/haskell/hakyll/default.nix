@@ -1,9 +1,9 @@
-{ cabal, binary, blazeHtml, blazeMarkup, citeprocHs, cmdargs
+{ cabal, binary, blazeHtml, blazeMarkup, pandocCiteproc, cmdargs
 , cryptohash, dataDefault, deepseq, filepath, fsnotify, httpConduit
 , httpTypes, HUnit, lrucache, mtl, network, pandoc, parsec
 , QuickCheck, random, regexBase, regexTdfa, snapCore, snapServer
 , systemFilepath, tagsoup, testFramework, testFrameworkHunit
-, testFrameworkQuickcheck2, text, time
+, testFrameworkQuickcheck2, text, time, fetchurl
 }:
 
 cabal.mkDerivation (self: {
@@ -12,22 +12,26 @@ cabal.mkDerivation (self: {
   sha256 = "11zfz55a7dr5l7xzknphqninyrb2pw2qmrs7v7ajq2gvbl0lf37n";
   isLibrary = true;
   isExecutable = true;
+  patches = [ (fetchurl { url = "https://github.com/jaspervdj/hakyll/pull/183.patch";
+                          sha256 = "0vjrxvgyc05nnshapjhk65pcamj9rigqff5q6wjbssx3ggqggrz9";
+                          name = "hakyll-pandoc-fix.patch";
+                        }) ];
   buildDepends = [
-    binary blazeHtml blazeMarkup citeprocHs cmdargs cryptohash
+    binary blazeHtml blazeMarkup pandocCiteproc cmdargs cryptohash
     dataDefault deepseq filepath fsnotify httpConduit httpTypes
     lrucache mtl network pandoc parsec random regexBase regexTdfa
     snapCore snapServer systemFilepath tagsoup text time
   ];
   testDepends = [
-    binary blazeHtml blazeMarkup citeprocHs cmdargs cryptohash
+    binary blazeHtml blazeMarkup pandocCiteproc cmdargs cryptohash
     dataDefault deepseq filepath fsnotify httpConduit httpTypes HUnit
     lrucache mtl network pandoc parsec QuickCheck random regexBase
     regexTdfa snapCore snapServer systemFilepath tagsoup testFramework
     testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
   doCheck = false;
-  patchPhase = ''
-    sed -i -e 's|cryptohash.*,|cryptohash,|' hakyll.cabal
+  postPatch = ''
+    sed -i -e 's|cryptohash.*,|cryptohash,|' -e 's|tagsoup.*,|tagsoup,|' hakyll.cabal
   '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";

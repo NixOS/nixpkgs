@@ -5,6 +5,7 @@
      alphabetically sorted.  */
 
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
+  algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
   amiddelk = "Arie Middelkoop <amiddelk@gmail.com>";
   amorsillo = "Andrew Morsillo <andrew.morsillo@gmail.com>";
@@ -19,6 +20,7 @@
   bodil = "Bodil Stokke <nix@bodil.org>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
+  coroa = "Jonas Hörsch <jonas@chaoflow.net>";
   edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
   eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
   ertes = "Ertugrul Söylemez <es@ertes.de>";

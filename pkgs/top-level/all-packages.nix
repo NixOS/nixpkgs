@@ -266,7 +266,7 @@ let
   buildEnv = import ../build-support/buildenv {
     inherit (pkgs) runCommand perl;
   };
-  
+
   buildFHSChrootEnv = import ../build-support/build-fhs-chrootenv {
     inherit stdenv glibc glibcLocales gcc coreutils diffutils findutils;
     inherit gnused gnugrep gnutar gzip bzip2 bashInteractive xz shadow gawk;
@@ -395,6 +395,8 @@ let
   acoustidFingerprinter = callPackage
     ../tools/audio/acoustid-fingerprinter { };
 
+  actdiag = pythonPackages.actdiag;
+
   aefs = callPackage ../tools/filesystems/aefs { };
 
   aespipe = callPackage ../tools/security/aespipe { };
@@ -408,6 +410,8 @@ let
   analog = callPackage ../tools/admin/analog {};
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
+
+  arandr = callPackage ../tools/X11/arandr { };
 
   arduino_core = callPackage ../development/arduino/arduino-core {
     jdk = jdk;
@@ -519,6 +523,8 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  blockdiag = pythonPackages.blockdiag;
+
   bmon = callPackage ../tools/misc/bmon { };
 
   boomerang = callPackage ../development/tools/boomerang {
@@ -547,6 +553,8 @@ let
 
   enca = callPackage ../tools/text/enca { };
 
+  fop = callPackage ../tools/typesetting/fop { };
+
   mcrl = callPackage ../tools/misc/mcrl { };
 
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
@@ -558,7 +566,9 @@ let
 
   mcelog = callPackage ../os-specific/linux/mcelog { };
 
-  asciidoc = callPackage ../tools/typesetting/asciidoc { };
+  asciidoc = callPackage ../tools/typesetting/asciidoc {
+    inherit (pythonPackages) matplotlib numpy aafigure recursivePthLoader;
+  };
 
   autossh = callPackage ../tools/networking/autossh { };
 
@@ -1252,6 +1262,8 @@ let
 
   mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix { };
 
+  megacli = callPackage ../tools/misc/megacli { };
+
   megatools = callPackage ../tools/networking/megatools { };
 
   minecraft = callPackage ../games/minecraft { };
@@ -1331,6 +1343,8 @@ let
 
   nbd = callPackage ../tools/networking/nbd { };
 
+  netatalk = callPackage ../tools/filesystems/netatalk { };
+
   netcdf = callPackage ../development/libraries/netcdf { };
 
   nc6 = callPackage ../tools/networking/nc6 { };
@@ -1399,6 +1413,8 @@ let
   numdiff = callPackage ../tools/text/numdiff { };
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
+
+  nwdiag = pythonPackages.nwdiag;
 
   nylon = callPackage ../tools/networking/nylon { };
 
@@ -1707,6 +1723,8 @@ let
   setserial = builderDefsPackage (import ../tools/system/setserial) {
     inherit groff;
   };
+
+  seqdiag = pythonPackages.seqdiag;
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
@@ -3123,9 +3141,10 @@ let
   love = callPackage ../development/interpreters/love {};
 
   lua4 = callPackage ../development/interpreters/lua-4 { };
-  lua5 = callPackage ../development/interpreters/lua-5 { };
   lua5_0 = callPackage ../development/interpreters/lua-5/5.0.3.nix { };
   lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix { };
+  lua5_2 = callPackage ../development/interpreters/lua-5/5.2.nix { };
+  lua5 = lua5_1;
 
   luarocks = callPackage ../development/tools/misc/luarocks {
      lua = lua5;
@@ -3211,6 +3230,8 @@ let
   });
 
   pythonLinkmeWrapper = callPackage ../development/interpreters/python/python-linkme-wrapper.nix { };
+
+  pypi2nix = python27Packages.pypi2nix;
 
   pyrex = pyrex095;
 
@@ -4958,6 +4979,8 @@ let
 
   libungif = callPackage ../development/libraries/giflib/libungif.nix { };
 
+  libunibreak = callPackage ../development/libraries/libunibreak/default.nix { };
+
   libunique = callPackage ../development/libraries/libunique/default.nix { };
 
   liburcu = callPackage ../development/libraries/liburcu { };
@@ -5523,23 +5546,12 @@ let
 
   srtp_linphone = callPackage ../development/libraries/srtp/linphone.nix { };
 
-  sqlite_3_7_16 = lowPrio (callPackage ../development/libraries/sqlite/3.7.16.nix {
+  sqlite = lowPrio (callPackage ../development/libraries/sqlite {
     readline = null;
     ncurses = null;
   });
-
-  sqlite_3_7_14 = lowPrio (callPackage ../development/libraries/sqlite/3.7.14.nix {
-    readline = null;
-    ncurses = null;
-  });
-
-  sqlite = sqlite_3_7_16;
 
   sqliteInteractive = appendToName "interactive" (sqlite.override {
-    inherit readline ncurses;
-  });
-
-  sqliteFull = lowPrio (callPackage ../development/libraries/sqlite/3.7.9-full.nix {
     inherit readline ncurses;
   });
 
@@ -5974,6 +5986,14 @@ let
 
   ZopeInterface = pythonPackages.zope_interface;
 
+  ### DEVELOPMENT / R MODULES
+
+  buildRPackage = import ../development/r-modules/generic R;
+
+  rPackages = recurseIntoAttrs (import ./r-packages.nix {
+    inherit pkgs;
+    __overrides = (config.rPackageOverrides or (p: {})) pkgs;
+  });
 
   ### SERVERS
 
@@ -6241,7 +6261,11 @@ let
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
-  virtuoso = callPackage ../servers/sql/virtuoso { };
+  virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix { };
+
+  virtuoso7 = callPackage ../servers/sql/virtuoso/7.x.nix { };
+
+  virtuoso = virtuoso6;
 
   vsftpd = callPackage ../servers/ftp/vsftpd { };
 
@@ -6569,6 +6593,19 @@ let
       ];
   };
 
+  linux_3_12 = makeOverridable (import ../os-specific/linux/kernel/linux-3.12.nix) {
+    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
+    kernelPatches =
+      [
+        kernelPatches.sec_perm_2_6_24
+      ] ++ lib.optionals (platform.kernelArch == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -6622,6 +6659,8 @@ let
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
+    broadcom_sta6 = callPackage ../os-specific/linux/broadcom-sta-v6/default.nix { };
+
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
     nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
@@ -6637,11 +6676,6 @@ let
     klibc = callPackage ../os-specific/linux/klibc {
       linuxHeaders = glibc.kernelHeaders;
     };
-
-    splashutils = let hasFbConDecor = if self.kernel ? features
-      then self.kernel.features ? fbConDecor
-      else self.kernel.config.isEnabled "FB_CON_DECOR";
-    in if hasFbConDecor then pkgs.splashutils else null;
 
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
@@ -6691,6 +6725,7 @@ let
   linuxPackages_3_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_9 linuxPackages_3_9);
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_11 linuxPackages_3_11);
+  linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   # Update this when adding a new version!
   linuxPackages_latest = pkgs.linuxPackages_3_11;
 
@@ -6756,8 +6791,6 @@ let
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
   module_init_tools = callPackage ../os-specific/linux/module-init-tools { };
-
-  mountall = callPackage ../os-specific/linux/mountall { };
 
   aggregateModules = modules:
     callPackage ../os-specific/linux/kmod/aggregator.nix {
@@ -6847,8 +6880,6 @@ let
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
-  splashutils = callPackage ../os-specific/linux/splashutils/default.nix { };
-
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) { };
 
   sysfsutils = callPackage ../os-specific/linux/sysfsutils { };
@@ -6864,6 +6895,15 @@ let
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
   systemd = callPackage ../os-specific/linux/systemd { };
+
+  # In nixos, you can set systemd.package = pkgs.systemd_with_lvm2 to get
+  # LVM2 working in systemd.
+  systemd_with_lvm2 = pkgs.lib.overrideDerivation pkgs.systemd (p: {
+      name = p.name + "-with-lvm2";
+      postInstall = p.postInstall + ''
+        cp ${pkgs.lvm2}/lib/systemd/system-generators/* $out/lib/systemd/system-generators
+      '';
+  });
 
   sysvinit = callPackage ../os-specific/linux/sysvinit { };
 
@@ -7219,6 +7259,8 @@ let
   });
 
   arora = callPackage ../applications/networking/browsers/arora { };
+
+  aseprite = callPackage ../applications/editors/aseprite { };
 
   audacious = callPackage ../applications/audio/audacious { };
 
@@ -7613,6 +7655,8 @@ let
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
+  fbreader = callPackage ../applications/misc/fbreader { };
+
   fetchmail = import ../applications/misc/fetchmail {
     inherit stdenv fetchurl openssl;
   };
@@ -7644,6 +7688,8 @@ let
   grip = callPackage ../applications/misc/grip {
     inherit (gnome) libgnome libgnomeui vte;
   };
+
+  gtimelog = pythonPackages.gtimelog;
 
   guitarix = callPackage ../applications/audio/guitarix {
     fftw = fftwSinglePrec;
@@ -8159,7 +8205,6 @@ let
   };
 
   mopidy = callPackage ../applications/audio/mopidy { };
-  mopidy_git = callPackage ../applications/audio/mopidy/git.nix { };
 
   mozilla = callPackage ../applications/networking/browsers/mozilla {
     inherit (gnome) libIDL;
@@ -8179,6 +8224,8 @@ let
   mpg123 = callPackage ../applications/audio/mpg123 { };
 
   mpg321 = callPackage ../applications/audio/mpg321 { };
+  
+  mpc_cli = callPackage ../applications/audio/mpc { };
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
@@ -8437,6 +8484,8 @@ let
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
   };
+
+  rubyripper = callPackage ../applications/audio/rubyripper {};
 
   rxvt = callPackage ../applications/misc/rxvt { };
 
@@ -9152,7 +9201,7 @@ let
   stardust = callPackage ../games/stardust {};
 
   steam = callPackage_i686 ../games/steam {};
-  
+
   steamChrootEnv = callPackage_i686 ../games/steam/chrootenv.nix {
     zenity = gnome2.zenity;
   };
@@ -9508,6 +9557,8 @@ let
 
   pal2nal = callPackage ../applications/science/biology/pal2nal { };
 
+  plink = callPackage ../applications/science/biology/plink/default.nix { };
+
 
   ### SCIENCE/MATH
 
@@ -9533,6 +9584,7 @@ let
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
 
+  mathematica = callPackage ../applications/science/math/mathematica { };
 
   ### SCIENCE/MOLECULAR-DYNAMICS
 
@@ -9659,6 +9711,10 @@ let
 
   pari = callPackage ../applications/science/math/pari {};
 
+  pspp = callPackage ../applications/science/math/pssp {
+    inherit (gnome) libglade gtksourceview;
+  };
+
   R = callPackage ../applications/science/math/R {
     inherit (xlibs) libX11 libXt;
     texLive = texLiveAggregationFun { paths = [ texLive texLiveExtra ]; };
@@ -9679,6 +9735,11 @@ let
   weka = callPackage ../applications/science/math/weka { };
 
   yacas = callPackage ../applications/science/math/yacas { };
+
+  speedcrunch = callPackage ../applications/science/math/speedcrunch {
+    qt = qt4;
+    cmake = cmakeCurses;
+  };
 
 
   ### SCIENCE / MISC
@@ -9798,6 +9859,8 @@ let
   */
 
   nixops = callPackage ../tools/package-management/nixops { };
+
+  nix-repl = callPackage ../tools/package-management/nix-repl { };
 
   nut = callPackage ../applications/misc/nut { };
 
