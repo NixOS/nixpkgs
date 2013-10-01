@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
   name = "filegive-${version}";
 
   src = fetchurl {
-    url = "http://viric.name/cgi-bin/filegive/tarball/${name}.tar.gz";
-    sha256 = "17vd09vfvy01bsnhlanwpfgjczigxisccm9bpaswg9r2kih39b92";
+    url = "http://viric.name/cgi-bin/filegive/tarball/${name}.tar.gz?uuid=v${version}";
+    name = "${name}.tar.gz";
+    sha256 = "0wj6vjfqfzqb75ii0djczdbcwilr05ahil5sqm65kimv11hc4j9n";
   };
 
   buildInputs = [ go ];
