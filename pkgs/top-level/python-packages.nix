@@ -3981,14 +3981,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.11.0";
+    name = "paramiko-1.12.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/paramiko/${name}.tar.gz";
-      md5 = "a2c55dc04904bd08d984533703177084";
+      md5 = "4187f77b1a5a313c899993930e30c321";
     };
 
-    propagatedBuildInputs = [ pycrypto ];
+    propagatedBuildInputs = [ pycrypto ecdsa ];
 
     checkPhase = "python test.py";
 
