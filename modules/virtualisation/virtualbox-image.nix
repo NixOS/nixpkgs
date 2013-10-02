@@ -6,7 +6,7 @@ with pkgs.lib;
   system.build.virtualBoxImage =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "virtualbox-image"
-        { memSize = 2047;
+        { memSize = 512;
           preVM =
             ''
               mkdir $out
@@ -45,8 +45,9 @@ with pkgs.lib;
           # Copy all paths in the closure to the filesystem.
           storePaths=$(perl ${pkgs.pathsFromGraph} /tmp/xchg/closure)
 
+          echo "filling Nix store..."
           mkdir -p /mnt/nix/store
-          ${pkgs.rsync}/bin/rsync -av $storePaths /mnt/nix/store/
+          cp -prd $storePaths /mnt/nix/store/
 
           # Register the paths in the Nix database.
           printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
