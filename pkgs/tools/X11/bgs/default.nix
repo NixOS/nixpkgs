@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXinerama imlib2 ];
 
-  preConfigure = [ ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'' ];
+  preConfigure = ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'';
 
   meta = { 
       description = "bgs is an extremely fast and small background setter for X.";
