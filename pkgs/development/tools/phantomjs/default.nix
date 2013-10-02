@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, freetype, fontconfig }:
+{ stdenv, fetchurl, freetype, fontconfig, openssl }:
 
 assert stdenv.lib.elem stdenv.system [ "i686-linux" "x86_64-linux" ];
 
@@ -24,11 +24,12 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     patchelf \
       --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-      --set-rpath ${freetype}/lib:${fontconfig}/lib:${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib \
+      --set-rpath "${freetype}/lib:${fontconfig}/lib:${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib:${openssl}/lib" \
       bin/phantomjs
   '';
 
-  dontStrip = true;
+  dontPatchELF = true;
+  dontStrip    = true;
 
   installPhase = ''
     mkdir -p $out/share/doc/phantomjs
