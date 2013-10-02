@@ -6946,6 +6946,8 @@ let
   udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };
   udisks = udisks1;
 
+  udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
+
   untie = callPackage ../os-specific/linux/untie { };
 
   upower = callPackage ../os-specific/linux/upower {
