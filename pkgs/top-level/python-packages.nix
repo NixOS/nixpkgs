@@ -3988,6 +3988,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "4187f77b1a5a313c899993930e30c321";
     };
 
+    patches = pkgs.lib.singleton (fetchurl {
+      # See https://github.com/paramiko/paramiko/pull/218
+      name = "ecdsa-private-keys.patch";
+      url = "https://github.com/aszlig/paramiko/compare/"
+          + "c73764a947...ad33bb186f.diff";
+      sha256 = "1f1dxnd2di7jh3knn4qfipa46f6f9rqdzmc1lncwb3sbd772r8fx";
+    });
+
     propagatedBuildInputs = [ pycrypto ecdsa ];
 
     checkPhase = "python test.py";
