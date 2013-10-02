@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
+    chmod -x memtest.bin
     cp memtest.bin $out/
   '';
 
