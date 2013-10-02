@@ -1,7 +1,5 @@
 {stdenv, fetchurl, libX11, libXinerama, imlib2}:
 
-with stdenv.lib;
-
 stdenv.mkDerivation rec {
 
   name = "bgs-${version}";
