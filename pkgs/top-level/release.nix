@@ -270,7 +270,6 @@ let
       sloccount = allBut "i686-cygwin";
       smartmontools = linux;
       spidermonkey = linux;
-      splashutils = linux;
       sqlite = allBut "i686-cygwin";
       squid = linux;
       ssmtp = linux;

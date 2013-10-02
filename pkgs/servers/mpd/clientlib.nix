@@ -1,14 +1,20 @@
 { stdenv, fetchurl, doxygen }:
 
 stdenv.mkDerivation rec {
-  version = "2.8";
+  version = "${passthru.majorVersion}.${passthru.minorVersion}";
   name = "libmpdclient-${version}";
+
   src = fetchurl {
     url = "http://www.musicpd.org/download/libmpdclient/2/${name}.tar.bz2";
     sha256 = "1qwjkb56rsbk0hwhg7fl15d6sf580a19gh778zcdg374j4yym3hh";
   };
 
   buildInputs = [ doxygen ];
+
+  passthru = {
+    majorVersion = "2";
+    minorVersion = "8";
+  };
 
   meta = {
     description = "Client library for MPD (music player daemon)";

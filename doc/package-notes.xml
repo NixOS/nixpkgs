@@ -106,16 +106,6 @@ $ make menuconfig ARCH=<replaceable>arch</replaceable></screen>
         </listitem>
 
         <listitem>
-          <para>Make sure that
-          <literal>CONFIG_FB_TILEBLITTING</literal> is <emphasis>not
-          set</emphasis> (otherwise <command>fbsplash</command> won't
-          work).  This option has a tendency to be enabled as a
-          side-effect of other options.  If it is, investigate why
-          (there's probably another option that forces it to be on)
-          and fix it.</para>
-        </listitem>
-
-        <listitem>
           <para>Copy <filename>.config</filename> over the new config
           file (e.g. <filename>config-2.6.22-i686-smp</filename>).</para>
         </listitem>
@@ -137,22 +127,9 @@ $ make menuconfig ARCH=<replaceable>arch</replaceable></screen>
     kernel modules and kernel-dependent packages listed in the
     <varname>kernelPackagesFor</varname> function in
     <filename>all-packages.nix</filename> (such as the NVIDIA drivers,
-    AUFS, splashutils, etc.).  If the updated packages aren’t
-    backwards compatible with older kernels, you need to keep the
-    older versions and use some conditionals.  For example, new
-    kernels require splashutils 1.5 while old kernel require 1.3, so
-    <varname>kernelPackagesFor</varname> says:
-
-      <programlisting>
-splashutils =
-  if kernel.features ? fbSplash then splashutils_13 else
-  if kernel.features ? fbConDecor then splashutils_15 else
-  null;
-
-splashutils_13 = ...;
-splashutils_15 = ...;</programlisting>
-
-    </para>
+    AUFS, etc.).  If the updated packages aren’t backwards compatible
+    with older kernels, you may need to keep the older versions
+    around.</para>
   </listitem>
 
 </orderedlist>

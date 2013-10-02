@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
       ./0007-Ignore-IPv6-link-local-addresses.patch
       ./0008-Don-t-try-to-unmount-nix-or-nix-store.patch
       ./0009-Start-ctrl-alt-del.target-irreversibly.patch
+      ./0010-Fix-CPUShares-configuration-option.patch
+      ./0011-polkit-Avoid-race-condition-in-scraping-proc.patch
     ] ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =

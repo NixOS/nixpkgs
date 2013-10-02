@@ -395,6 +395,8 @@ let
   acoustidFingerprinter = callPackage
     ../tools/audio/acoustid-fingerprinter { };
 
+  actdiag = pythonPackages.actdiag;
+
   aefs = callPackage ../tools/filesystems/aefs { };
 
   aespipe = callPackage ../tools/security/aespipe { };
@@ -408,6 +410,8 @@ let
   analog = callPackage ../tools/admin/analog {};
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
+
+  arandr = callPackage ../tools/X11/arandr { };
 
   arduino_core = callPackage ../development/arduino/arduino-core {
     jdk = jdk;
@@ -519,6 +523,8 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  blockdiag = pythonPackages.blockdiag;
+
   bmon = callPackage ../tools/misc/bmon { };
 
   boomerang = callPackage ../development/tools/boomerang {
@@ -547,6 +553,8 @@ let
 
   enca = callPackage ../tools/text/enca { };
 
+  fop = callPackage ../tools/typesetting/fop { };
+
   mcrl = callPackage ../tools/misc/mcrl { };
 
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
@@ -558,12 +566,16 @@ let
 
   mcelog = callPackage ../os-specific/linux/mcelog { };
 
-  asciidoc = callPackage ../tools/typesetting/asciidoc { };
+  asciidoc = callPackage ../tools/typesetting/asciidoc {
+    inherit (pythonPackages) matplotlib numpy aafigure recursivePthLoader;
+  };
 
   autossh = callPackage ../tools/networking/autossh { };
 
   bacula = callPackage ../tools/backup/bacula { };
 
+  bgs = callPackage ../tools/X11/bgs { };
+  
   bibtextools = callPackage ../tools/typesetting/bibtex-tools {
     inherit (strategoPackages016) strategoxt sdf;
   };
@@ -1231,7 +1243,7 @@ let
 
   memtest86 = callPackage ../tools/misc/memtest86 { };
 
-  memtest86plus = callPackage ../tools/misc/memtest86/plus.nix { };
+  memtest86plus = callPackage ../tools/misc/memtest86+ { };
 
   meo = callPackage ../tools/security/meo { };
 
@@ -1398,6 +1410,8 @@ let
   numdiff = callPackage ../tools/text/numdiff { };
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
+
+  nwdiag = pythonPackages.nwdiag;
 
   nylon = callPackage ../tools/networking/nylon { };
 
@@ -1706,6 +1720,8 @@ let
   setserial = builderDefsPackage (import ../tools/system/setserial) {
     inherit groff;
   };
+
+  seqdiag = pythonPackages.seqdiag;
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
@@ -5006,6 +5022,8 @@ let
 
   libungif = callPackage ../development/libraries/giflib/libungif.nix { };
 
+  libunibreak = callPackage ../development/libraries/libunibreak/default.nix { };
+
   libunique = callPackage ../development/libraries/libunique/default.nix { };
 
   liburcu = callPackage ../development/libraries/liburcu { };
@@ -6014,6 +6032,14 @@ let
 
   ZopeInterface = pythonPackages.zope_interface;
 
+  ### DEVELOPMENT / R MODULES
+
+  buildRPackage = import ../development/r-modules/generic R;
+
+  rPackages = recurseIntoAttrs (import ./r-packages.nix {
+    inherit pkgs;
+    __overrides = (config.rPackageOverrides or (p: {})) pkgs;
+  });
 
   ### SERVERS
 
@@ -6613,6 +6639,19 @@ let
       ];
   };
 
+  linux_3_12 = makeOverridable (import ../os-specific/linux/kernel/linux-3.12.nix) {
+    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
+    kernelPatches =
+      [
+        kernelPatches.sec_perm_2_6_24
+      ] ++ lib.optionals (platform.kernelArch == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -6666,6 +6705,8 @@ let
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
+    broadcom_sta6 = callPackage ../os-specific/linux/broadcom-sta-v6/default.nix { };
+
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
     nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
@@ -6681,11 +6722,6 @@ let
     klibc = callPackage ../os-specific/linux/klibc {
       linuxHeaders = glibc.kernelHeaders;
     };
-
-    splashutils = let hasFbConDecor = if self.kernel ? features
-      then self.kernel.features ? fbConDecor
-      else self.kernel.config.isEnabled "FB_CON_DECOR";
-    in if hasFbConDecor then pkgs.splashutils else null;
 
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
@@ -6735,6 +6771,7 @@ let
   linuxPackages_3_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_9 linuxPackages_3_9);
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_11 linuxPackages_3_11);
+  linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   # Update this when adding a new version!
   linuxPackages_latest = pkgs.linuxPackages_3_11;
 
@@ -6889,8 +6926,6 @@ let
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
-  splashutils = callPackage ../os-specific/linux/splashutils/default.nix { };
-
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) { };
 
   sysfsutils = callPackage ../os-specific/linux/sysfsutils { };
@@ -6961,6 +6996,8 @@ let
   udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
   udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };
   udisks = udisks1;
+
+  udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
 
   untie = callPackage ../os-specific/linux/untie { };
 
@@ -7270,6 +7307,8 @@ let
   });
 
   arora = callPackage ../applications/networking/browsers/arora { };
+
+  aseprite = callPackage ../applications/editors/aseprite { };
 
   audacious = callPackage ../applications/audio/audacious { };
 
@@ -7663,6 +7702,8 @@ let
   };
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
+
+  fbreader = callPackage ../applications/misc/fbreader { };
 
   fetchmail = import ../applications/misc/fetchmail {
     inherit stdenv fetchurl openssl;
@@ -8212,7 +8253,6 @@ let
   };
 
   mopidy = callPackage ../applications/audio/mopidy { };
-  mopidy_git = callPackage ../applications/audio/mopidy/git.nix { };
 
   mozilla = callPackage ../applications/networking/browsers/mozilla {
     inherit (gnome) libIDL;
@@ -8232,6 +8272,8 @@ let
   mpg123 = callPackage ../applications/audio/mpg123 { };
 
   mpg321 = callPackage ../applications/audio/mpg321 { };
+  
+  mpc_cli = callPackage ../applications/audio/mpc { };
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
@@ -8490,6 +8532,8 @@ let
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
   };
+
+  rubyripper = callPackage ../applications/audio/rubyripper {};
 
   rxvt = callPackage ../applications/misc/rxvt { };
 
@@ -9715,6 +9759,10 @@ let
 
   pari = callPackage ../applications/science/math/pari {};
 
+  pspp = callPackage ../applications/science/math/pssp {
+    inherit (gnome) libglade gtksourceview;
+  };
+
   R = callPackage ../applications/science/math/R {
     inherit (xlibs) libX11 libXt;
     texLive = texLiveAggregationFun { paths = [ texLive texLiveExtra ]; };
@@ -9735,6 +9783,11 @@ let
   weka = callPackage ../applications/science/math/weka { };
 
   yacas = callPackage ../applications/science/math/yacas { };
+
+  speedcrunch = callPackage ../applications/science/math/speedcrunch {
+    qt = qt4;
+    cmake = cmakeCurses;
+  };
 
 
   ### SCIENCE / MISC

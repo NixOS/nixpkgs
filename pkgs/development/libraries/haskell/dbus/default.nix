@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     cereal libxmlSax network parsec random text transformers vector
     xmlTypes
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://john-millikin.com/software/haskell-dbus/";
     description = "A client library for the D-Bus IPC system";

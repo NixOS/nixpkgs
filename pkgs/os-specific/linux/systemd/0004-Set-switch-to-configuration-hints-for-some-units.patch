@@ -1,7 +1,7 @@
 From 7a498e661f3d111fa09700a6cfa62cfd6733b1cc Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 8 Jan 2013 15:48:19 +0100
-Subject: [PATCH 4/9] Set switch-to-configuration hints for some units
+Subject: [PATCH 04/11] Set switch-to-configuration hints for some units
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -70,5 +70,5 @@ index 0869e73..b6ed958 100644
 +# Restart kills all active sessions.
 +X-RestartIfChanged=no
 -- 
-1.8.2.1
+1.8.3.4
 

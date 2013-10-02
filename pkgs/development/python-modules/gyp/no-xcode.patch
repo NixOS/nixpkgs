@@ -56,11 +56,11 @@ index b2aab986a427d5285d70558bf97f0a42bfe1556e..20592c73fae660009aac621097cf3c4f
          l = '-l' + m.group(1)
        else:
          l = library
--    return l.replace('$(SDKROOT)', self._SdkPath())
+-    return l.replace('$(SDKROOT)', self._SdkPath(config_name))
 +    if self._SdkPath():
-+      return l.replace('$(SDKROOT)', self._SdkPath())
++      return l.replace('$(SDKROOT)', self._SdkPath(config_name))
 +    else:
 +      return l
  
-   def AdjustLibraries(self, libraries):
+   def AdjustLibraries(self, libraries, config_name=None):
      """Transforms entries like 'Cocoa.framework' in libraries into entries like

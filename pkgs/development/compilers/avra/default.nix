@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
     automake -a
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Assember for the Atmel AVR microcontroller family";
     homepage = http://avra.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ the-kenny ];
   };
 }

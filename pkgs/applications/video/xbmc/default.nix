@@ -19,6 +19,7 @@
 , udev, udevSupport ? true
 , libusb ? null, usbSupport ? false
 , samba ? null, sambaSupport ? true
+, libmicrohttpd
 # TODO: would be nice to have nfsSupport (needs libnfs library)
 # TODO: librtmp
 , libvdpau ? null, vdpauSupport ? true
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     buildInputs = [
       makeWrapper
       pkgconfig cmake gnumake yasm python
-      boost
+      boost libmicrohttpd
       gettext pcre yajl fribidi
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto
@@ -75,7 +76,6 @@ stdenv.mkDerivation rec {
 
     configureFlags = [
       "--enable-external-libraries"
-      "--disable-webserver"
     ]
     ++ lib.optional (! sambaSupport) "--disable-samba"
     ++ lib.optional vdpauSupport "--enable-vdpau"

@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, getopt }:
+{ stdenv, fetchurl
+, coreutils, gnused, getopt, pwgen, git, tree, gnupg
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "1.4.2";
@@ -9,11 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "00m3q6dihrhw8cxsrham3bdqg5841an8ch4s3a4k5fynlcb802m1";
   };
 
+  buildInputs = [ makeWrapper ];
+
   meta = with stdenv.lib; {
-    description = "Stores, retrieves, generates, and synchronizes passwords securely.";
+    description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage    = http://zx2c4.com/projects/password-store/;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 the-kenny ];
     platforms   = platforms.unix;
 
     longDescription = ''
@@ -24,8 +28,6 @@ stdenv.mkDerivation rec {
       synchronize, generate, and manipulate passwords.
     '';
   };
-
-  propagatedBuildInputs = [ getopt ];
 
   installPhase = ''
     # link zsh and fish completions
@@ -44,5 +46,14 @@ stdenv.mkDerivation rec {
     sed -ie '34c GETOPT="${getopt}/bin/getopt"' \
       "$out/lib/password-store.platform.sh"
   '';
-}
 
+  postFixup = ''
+    # Fix program name in --help
+    substituteInPlace $out/bin/pass \
+      --replace "\$program" "pass"
+
+    # Ensure all dependencies are in PATH
+    wrapProgram $out/bin/pass \
+      --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin"
+  '';
+}

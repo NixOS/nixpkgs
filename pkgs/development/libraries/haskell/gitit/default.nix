@@ -2,7 +2,7 @@
 , filepath, filestore, ghcPaths, happstackServer, highlightingKate
 , hslogger, HStringTemplate, HTTP, json, mtl, network, pandoc
 , pandocTypes, parsec, random, recaptcha, safe, SHA, syb, tagsoup
-, text, time, url, utf8String, xhtml, xml, xssSanitize, zlib
+, text, time, url, utf8String, xhtml, xml, xssSanitize, zlib, fetchurl
 }:
 
 cabal.mkDerivation (self: {
@@ -19,6 +19,10 @@ cabal.mkDerivation (self: {
     zlib
   ];
   jailbreak = true;
+  patches = [ (fetchurl { url = "https://github.com/jgm/gitit/commit/48155008397bdaed4f97c5678d83c70d4bc3f0ff.patch";
+                          sha256 = "0xdg9frr8lany8ry6vj4vpskmhkpww8jswnb05pzl8a4xfqxh9gd";
+                        })
+            ];
   meta = {
     homepage = "http://gitit.net";
     description = "Wiki using happstack, git or darcs, and pandoc";

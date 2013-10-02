@@ -6,12 +6,12 @@
 # FIXME: munin tries to write log files and web graphs to its installation path.
 
 stdenv.mkDerivation rec {
-  version = "2.0.14";
+  version = "2.0.17";
   name = "munin-${version}";
 
   src = fetchurl {
     url = "https://github.com/munin-monitoring/munin/archive/${version}.tar.gz";
-    sha256 = "1d71gvmkrck42z1h1dfk9napbhn7apfmlnp7r62fyylv0m7s2ylx";
+    sha256 = "0xfml2r6nssn3lcfqcf3yshxfijyrf9frnhdp83mg6raaznlhx1z";
   };
 
   buildInputs = [ 

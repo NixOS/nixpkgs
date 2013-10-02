@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "amqp";
-  version = "0.5.0";
-  sha256 = "1i02pp184r1iq40mz16m9qh8i3h1jmf3ykpg67j3i1732cks8n8w";
+  version = "0.6.0";
+  sha256 = "0rfczmhf46sc3pxxb5gwv4ggsxkqkvdi4kkqdnrdpdhs7p41im2n";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ binary dataBinaryIeee754 network text xml ];

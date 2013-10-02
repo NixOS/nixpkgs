@@ -156,7 +156,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   sharutils = all;
   sloccount = allBut "i686-cygwin";
   smartmontools = all;
-  splashutils = linux;
   sqlite = allBut "i686-cygwin";
   squid = linux;
   ssmtp = linux;

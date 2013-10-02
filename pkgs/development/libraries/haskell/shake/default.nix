@@ -1,16 +1,16 @@
 { cabal, binary, deepseq, filepath, hashable, random, time
-, transformers, unorderedContainers
+, transformers, unorderedContainers, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "shake";
-  version = "0.10.6";
-  sha256 = "0d2wrgraifcj0rv9jmvc5a0gl0j1jjkc4r0nmaypnv6929kl26q8";
+  version = "0.10.7";
+  sha256 = "0r48kzldbgixr1c83sd7frvygqyjx32n67nri1nnamcwpvlv8hgv";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     binary deepseq filepath hashable random time transformers
-    unorderedContainers
+    unorderedContainers utf8String
   ];
   meta = {
     homepage = "http://community.haskell.org/~ndm/shake/";
