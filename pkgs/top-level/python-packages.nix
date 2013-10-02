@@ -2268,6 +2268,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  ecdsa = buildPythonPackage rec {
+    name = "ecdsa-${version}";
+    version = "0.9";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/e/ecdsa/${name}.tar.gz";
+      md5 = "2b9c35245ce391d6b7d8f991aad5c630";
+    };
+
+    # Only needed for tests
+    buildInputs = [ pkgs.openssl ];
+
+    meta = {
+      description = "ECDSA cryptographic signature library";
+      homepage = "https://github.com/warner/python-ecdsa";
+      license = stdenv.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.aszlig ];
+    };
+  };
+
+
   elpy = buildPythonPackage rec {
     name = "elpy-1.0.1";
     src = fetchurl {
