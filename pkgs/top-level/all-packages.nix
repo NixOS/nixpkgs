@@ -1241,7 +1241,7 @@ let
 
   memtest86 = callPackage ../tools/misc/memtest86 { };
 
-  memtest86plus = callPackage ../tools/misc/memtest86/plus.nix { };
+  memtest86plus = callPackage ../tools/misc/memtest86+ { };
 
   meo = callPackage ../tools/security/meo { };
 
