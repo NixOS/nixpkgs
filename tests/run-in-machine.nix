@@ -1,8 +1,8 @@
-{ nixpkgs ? ../../nixpkgs
+{ nixpkgs ? <nixpkgs>
 , system ? builtins.currentSystem
 }:
 
-with import ../lib/testing.nix { inherit nixpkgs system; };
+with import ../lib/testing.nix { inherit system; };
 
 runInMachine {
   drv = (import nixpkgs { }).aterm;
