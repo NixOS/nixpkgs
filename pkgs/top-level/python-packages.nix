@@ -4004,6 +4004,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = "https://github.com/paramiko/paramiko/";
       description = "Native Python SSHv2 protocol library";
       license = stdenv.lib.licenses.lgpl21Plus;
+      maintainer = [ stdenv.lib.maintainers.aszlig ];
 
       longDescription = ''
         This is a library for making SSH2 connections (client or server).
