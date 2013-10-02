@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "org-8.2.1";
-  
+
   src = fetchurl {
     url = "http://orgmode.org/${name}.tar.gz";
     sha256 = "625e2b6786158bcf6c43194075f7638ab8048c68a60025289a051c407e467823";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   configurePhase =
     '' sed -i mk/default.mk \
-           -e "s|^prefix\t=.*$|prefix=$out|g"
+           -e "s|^prefix\t=.*$|prefix=$out/share|g"
     '';
 
   postBuild =
