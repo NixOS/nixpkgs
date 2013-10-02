@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "memtest86+-4.20";
-  
+stdenv.mkDerivation rec {
+  name = "memtest86+-5.01";
+
   src = fetchurl {
-    url = http://www.memtest.org/download/4.20/memtest86+-4.20.tar.gz;
-    sha256 = "0dw7kvfxiwqdmhapbz6ds1j9fralbky56hnzj4c6fsqfinbwwc2n";
+    url = "http://www.memtest.org/download/5.01/${name}.tar.gz";
+    sha256 = "0fch1l55753y6jkk0hj8f6vw4h1kinkn9ysp22dq5g9zjnvjf88l";
   };
 
   preBuild = ''
@@ -18,7 +18,9 @@ stdenv.mkDerivation {
   '';
 
   NIX_CFLAGS_COMPILE = "-I.";
-  
+
+  buildFlags = "memtest.bin";
+
   installPhase = ''
     mkdir -p $out
     cp memtest.bin $out/
@@ -26,6 +28,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.memtest.org/;
-    description = "A tool to detect memory errors, fork from memtest86";
+    description = "A tool to detect memory errors";
+    license = stdenv.lib.licenses.gpl2;
   };
 }
