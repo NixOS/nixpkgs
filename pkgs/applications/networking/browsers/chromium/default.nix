@@ -8,7 +8,7 @@
 , libusb1, libexif, pciutils
 
 , python, pythonPackages, perl, pkgconfig
-, nspr, udev, krb5
+, nspr, udev, krb5, file
 , utillinux, alsaLib
 , gcc, bison, gperf
 , glib, gtk, dbus_glib
@@ -17,9 +17,6 @@
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
-
-# dependency for version 30
-, file
 
 # package customization
 , channel ? "stable"
@@ -50,9 +47,7 @@ let
     prePatch = "patchShebangs .";
 
     patches = singleton (
-      if versionOlder version "30.0.0.0"
-      then ./sandbox_userns_29.patch
-      else if versionOlder version "31.0.0.0"
+      if versionOlder version "31.0.0.0"
       then ./sandbox_userns_30.patch
       else ./sandbox_userns_31.patch
     );
@@ -165,7 +160,7 @@ in stdenv.mkDerivation rec {
     (if useOpenSSL then openssl else nss)
     utillinux alsaLib
     gcc bison gperf
-    krb5
+    krb5 file
     glib gtk dbus_glib
     libXScrnSaver libXcursor libXtst mesa
     pciutils protobuf speechd libXdamage
@@ -174,8 +169,7 @@ in stdenv.mkDerivation rec {
     ++ optionals gnomeSupport [ gconf libgcrypt ]
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
-    ++ optional pulseSupport pulseaudio
-    ++ optional (!versionOlder src.version "30.0.0.0") file;
+    ++ optional pulseSupport pulseaudio;
 
   prePatch = ''
     # XXX: Figure out a way how to split these properly.
@@ -187,7 +181,7 @@ in stdenv.mkDerivation rec {
     chmod -R u+w . # XXX!
   '';
 
-  postPatch = optionalString (!versionOlder src.version "30.0.0.0") ''
+  postPatch = ''
     sed -i -e '/base::FilePath exe_dir/,/^ *} *$/c \
       sandbox_binary = \
         base::FilePath("'"${sandboxPath}"'");
