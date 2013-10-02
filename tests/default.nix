@@ -33,5 +33,4 @@ with import ../lib/testing.nix { inherit system minimal; };
   tomcat = makeTest (import ./tomcat.nix);
   trac = makeTest (import ./trac.nix);
   xfce = makeTest (import ./xfce.nix);
-  run-in-machine = import ./run-in-machine.nix { inherit nixpkgs system; };
 }

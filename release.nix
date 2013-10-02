@@ -243,5 +243,7 @@ in {
         mapAttrsRecursiveCond (x: !x ? test) (n: v: listToAttrs [(nameValuePair system v.test)])
           (import ./tests { inherit nixpkgs system; });
     in fold recursiveUpdate {} (map testsFor systems);
-
+    
+    
+  run-in-machine-tests = pkgs.lib.genAttrs systems (system: import ./tests/run-in-machine.nix { inherit nixpkgs system; });
 }
