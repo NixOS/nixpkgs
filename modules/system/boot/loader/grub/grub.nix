@@ -150,6 +150,19 @@ in
         '';
       };
 
+      extraFiles = mkOption {
+        default = {};
+        example = literalExample ''
+          { "memtest.bin" = "${pkgs.memtest86plus}/memtest.bin"; }
+        '';
+        description = ''
+          A set of files to be copied to <filename>/boot</filename>.
+          Each attribute name denotes the destination file name in
+          <filename>/boot</filename>, while the corresponding
+          attribute value specifies the source file.
+        '';
+      };
+
       splashImage = mkOption {
         default =
           if cfg.version == 1
@@ -224,6 +237,11 @@ in
     system.boot.loader.id = "grub";
 
     environment.systemPackages = [ grub ];
+
+    boot.loader.grub.extraPrepareConfig =
+      concatStrings (mapAttrsToList (n: v: ''
+        ${pkgs.coreutils}/bin/cp -pf "${v}" "/boot/${n}"
+      '') config.boot.loader.grub.extraFiles);
 
   };
 

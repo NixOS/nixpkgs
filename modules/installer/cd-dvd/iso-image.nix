@@ -194,7 +194,7 @@ in
 
     boot.initrd.kernelModules = [ "loop" ];
 
-    boot.kernelModules = pkgs.stdenv.lib.optional config.isoImage.makeEfiBootable "efivars";
+    boot.kernelModules = optional config.isoImage.makeEfiBootable "efivars";
 
     # In stage 1, mount a tmpfs on top of / (the ISO image) and
     # /nix/store (the squashfs image) to make this a live CD.
@@ -235,7 +235,11 @@ in
       [ { source = grubImage;
           target = "/boot/grub/grub_eltorito";
         }
-        { source = pkgs.writeText "grub.cfg" grubCfg;
+        { source = pkgs.substituteAll  {
+            name = "grub.cfg";
+            src = pkgs.writeText "grub.cfg-in" grubCfg;
+            bootRoot = "/boot";
+          };
           target = "/boot/grub/grub.cfg";
         }
         { source = config.boot.kernelPackages.kernel + "/bzImage";
@@ -254,19 +258,19 @@ in
           target = "/nix-store.squashfs";
         }
         { # Quick hack: need a mount point for the store.
-          source = pkgs.runCommand "empty" {} "ensureDir $out";
+          source = pkgs.runCommand "empty" {} "mkdir -p $out";
           target = "/nix/store";
         }
-      ] ++ pkgs.stdenv.lib.optionals config.isoImage.makeEfiBootable [
+      ] ++ optionals config.isoImage.makeEfiBootable [
         { source = efiImg;
           target = "/boot/efi.img";
         }
-      ];
+      ] ++ mapAttrsToList (n: v: { source = v; target = "/boot/${n}"; }) config.boot.loader.grub.extraFiles;
 
     # The Grub menu.
     boot.loader.grub.extraEntries =
       ''
-        menuentry "NixOS Installer / Rescue" {
+        menuentry "NixOS ${config.system.nixosVersion} Installer" {
           linux /boot/bzImage init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
           initrd /boot/initrd
         }
@@ -287,7 +291,7 @@ in
 
       bootable = true;
       bootImage = "/boot/grub/grub_eltorito";
-    } // pkgs.stdenv.lib.optionalAttrs config.isoImage.makeEfiBootable {
+    } // optionalAttrs config.isoImage.makeEfiBootable {
       efiBootable = true;
       efiBootImage = "boot/efi.img";
     });
