@@ -67,7 +67,7 @@
 , "gridfs-stream"
 , "tar"
 , "flatiron"
-, { "ironhorse": "0.0.8" }
+, "ironhorse"
 , "fs-walk"
 , "yo"
 , "generator-webapp"
@@ -102,4 +102,7 @@
 , "chai"
 , "selenium-webdriver"
 , "webdrvr"
+, "connect-jade-static"
+, "plist-native"
+, "x509"
 ]

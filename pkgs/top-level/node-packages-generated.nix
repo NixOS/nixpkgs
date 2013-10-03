@@ -2390,6 +2390,24 @@
     ];
     passthru.names = [ "connect-flash" ];
   };
+  full."connect-jade-static"."*" = lib.makeOverridable self.buildNodePackage {
+    name = "connect-jade-static-0.1.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/connect-jade-static/-/connect-jade-static-0.1.1.tgz";
+        sha1 = "11d16fa00aca28cb004e89cd0a7d6b0fa0342cdb";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."connect-jade-static"."*" or []);
+    deps = [
+      self.full."jade"."*"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "connect-jade-static" ];
+  };
+  "connect-jade-static" = self.full."connect-jade-static"."*";
   full."connect-mongo"."*" = lib.makeOverridable self.buildNodePackage {
     name = "connect-mongo-0.3.3";
     src = [
@@ -4101,11 +4119,11 @@
     passthru.names = [ "form-data" ];
   };
   full."form-data"."~0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "form-data-0.1.1";
+    name = "form-data-0.1.2";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/form-data/-/form-data-0.1.1.tgz";
-        sha1 = "0d5f2805647b45533ba10bc8a59cf17d1efa5f12";
+        url = "http://registry.npmjs.org/form-data/-/form-data-0.1.2.tgz";
+        sha1 = "1143c21357911a78dd7913b189b4bab5d5d57445";
       })
     ];
     buildInputs =
@@ -5965,16 +5983,16 @@
     ];
     passthru.names = [ "intersect" ];
   };
-  full."ironhorse"."0.0.8" = lib.makeOverridable self.buildNodePackage {
-    name = "ironhorse-0.0.8";
+  full."ironhorse"."*" = lib.makeOverridable self.buildNodePackage {
+    name = "ironhorse-0.0.9";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/ironhorse/-/ironhorse-0.0.8.tgz";
-        sha1 = "b0c9c0908e6e22f7a48001be48533f12227c7980";
+        url = "http://registry.npmjs.org/ironhorse/-/ironhorse-0.0.9.tgz";
+        sha1 = "9cfaf75e464a0bf394d511a05c0a8b8de080a1d9";
       })
     ];
     buildInputs =
-      (self.nativeDeps."ironhorse"."0.0.8" or []);
+      (self.nativeDeps."ironhorse"."*" or []);
     deps = [
       self.full."underscore"."~1.5.2"
       self.full."winston"."*"
@@ -5985,7 +6003,7 @@
       self.full."jade"."*"
       self.full."passport"."*"
       self.full."passport-http"."*"
-      self.full."libyaml"."*"
+      self.full."js-yaml"."*"
       self.full."mongoose"."3.6.x"
       self.full."gridfs-stream"."*"
       self.full."temp"."*"
@@ -5997,7 +6015,7 @@
     ];
     passthru.names = [ "ironhorse" ];
   };
-  "ironhorse" = self.full."ironhorse"."0.0.8";
+  "ironhorse" = self.full."ironhorse"."*";
   full."is-promise"."~1" = lib.makeOverridable self.buildNodePackage {
     name = "is-promise-1.0.0";
     src = [
@@ -6998,6 +7016,23 @@
     ];
     passthru.names = [ "less" ];
   };
+  full."libxmljs"."~0.8.1" = lib.makeOverridable self.buildNodePackage {
+    name = "libxmljs-0.8.1";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/libxmljs/-/libxmljs-0.8.1.tgz";
+        sha1 = "b8b1d3962a92dbc5be9dc798bac028e09db8d630";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."libxmljs"."~0.8.1" or []);
+    deps = [
+      self.full."bindings"."1.0.0"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "libxmljs" ];
+  };
   full."libyaml"."*" = lib.makeOverridable self.buildNodePackage {
     name = "libyaml-0.2.2";
     src = [
@@ -7538,11 +7573,11 @@
     passthru.names = [ "mime" ];
   };
   full."mimelib"."~0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "mimelib-0.2.12";
+    name = "mimelib-0.2.13";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/mimelib/-/mimelib-0.2.12.tgz";
-        sha1 = "5dcbb99c7369e5d62d7e12e71fa334179aebd748";
+        url = "http://registry.npmjs.org/mimelib/-/mimelib-0.2.13.tgz";
+        sha1 = "0668eb85e870c510be747a67ece43b9bbf8e20b0";
       })
     ];
     buildInputs =
@@ -10150,6 +10185,24 @@
     ];
     passthru.names = [ "pkginfo" ];
   };
+  full."plist-native"."*" = lib.makeOverridable self.buildNodePackage {
+    name = "plist-native-0.2.2";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/plist-native/-/plist-native-0.2.2.tgz";
+        sha1 = "6abde856b07a52f0d6bc027f7750f4d97ff93858";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."plist-native"."*" or []);
+    deps = [
+      self.full."libxmljs"."~0.8.1"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "plist-native" ];
+  };
+  "plist-native" = self.full."plist-native"."*";
   full."policyfile"."0.0.4" = lib.makeOverridable self.buildNodePackage {
     name = "policyfile-0.0.4";
     src = [
@@ -10854,11 +10907,11 @@
     passthru.names = [ "redeyed" ];
   };
   full."redis"."*" = lib.makeOverridable self.buildNodePackage {
-    name = "redis-0.8.5";
+    name = "redis-0.8.6";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/redis/-/redis-0.8.5.tgz";
-        sha1 = "ffacd223164fc506b50e5b836133162588691106";
+        url = "http://registry.npmjs.org/redis/-/redis-0.8.6.tgz";
+        sha1 = "a7ae8f0d6fad24bdeaffe28158d6cd1f1c9d30b8";
       })
     ];
     buildInputs =
@@ -10904,11 +10957,11 @@
     passthru.names = [ "redis" ];
   };
   full."redis".">= 0.6.6" = lib.makeOverridable self.buildNodePackage {
-    name = "redis-0.8.5";
+    name = "redis-0.8.6";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/redis/-/redis-0.8.5.tgz";
-        sha1 = "ffacd223164fc506b50e5b836133162588691106";
+        url = "http://registry.npmjs.org/redis/-/redis-0.8.6.tgz";
+        sha1 = "a7ae8f0d6fad24bdeaffe28158d6cd1f1c9d30b8";
       })
     ];
     buildInputs =
@@ -14365,6 +14418,23 @@
     passthru.names = [ "wu" ];
   };
   "wu" = self.full."wu"."*";
+  full."x509"."*" = lib.makeOverridable self.buildNodePackage {
+    name = "x509-0.0.6";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/x509/-/x509-0.0.6.tgz";
+        sha1 = "b58747854ff33df7ff8f1653756bff6a32a8c838";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."x509"."*" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "x509" ];
+  };
+  "x509" = self.full."x509"."*";
   full."xml2js"."0.2.4" = lib.makeOverridable self.buildNodePackage {
     name = "xml2js-0.2.4";
     src = [
