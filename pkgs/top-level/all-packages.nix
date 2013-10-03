@@ -7466,6 +7466,8 @@ let
 
   dvswitch = callPackage ../applications/video/dvswitch { };
 
+  dwb = callPackage ../applications/networking/browsers/dwb { };
+
   dwm = callPackage ../applications/window-managers/dwm {
     patches = config.dwm.patches or [];
   };
