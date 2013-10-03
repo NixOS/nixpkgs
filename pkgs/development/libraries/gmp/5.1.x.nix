@@ -1,11 +1,11 @@
 { stdenv, fetchurl, m4, cxx ? true }:
 
 stdenv.mkDerivation rec {
-  name = "gmp-5.1.2";
+  name = "gmp-5.1.3";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
     urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
-    sha256 = "13qv3ihk3ykbh2fkb4z8m0q188y3hq1amsj25fn5hgpgckmdx690";
+    sha256 = "0q5i39pxrasgn9qdxzpfbwhh11ph80p57x6hf48m74261d97j83m";
   };
 
   nativeBuildInputs = [ m4 ];
