@@ -1721,7 +1721,7 @@ let
 
   sdcv = callPackage ../applications/misc/sdcv { };
 
-  seccure = callPackage ../tools/security/seccure/0.4.nix { };
+  seccure = callPackage ../tools/security/seccure { };
 
   setserial = builderDefsPackage (import ../tools/system/setserial) {
     inherit groff;
