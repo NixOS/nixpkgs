@@ -579,7 +579,7 @@ let
   bacula = callPackage ../tools/backup/bacula { };
 
   bgs = callPackage ../tools/X11/bgs { };
-  
+
   bibtextools = callPackage ../tools/typesetting/bibtex-tools {
     inherit (strategoPackages016) strategoxt sdf;
   };
@@ -8231,7 +8231,7 @@ let
   mpg123 = callPackage ../applications/audio/mpg123 { };
 
   mpg321 = callPackage ../applications/audio/mpg321 { };
-  
+
   mpc_cli = callPackage ../applications/audio/mpc { };
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
