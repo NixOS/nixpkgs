@@ -5,9 +5,7 @@ with pkgs.lib;
 let
   cfg = config.services.graphite;
   writeTextOrNull = f: t: if t == null then null else pkgs.writeText f t;
-
   dataDir = "/var/db/graphite";
-
 in {
 
   ###### interface
@@ -160,13 +158,16 @@ in {
         GRAPHITE_STORAGE_DIR = "/var/db/graphite/";
       };
       serviceConfig = {
-        ExecStart = "${pkgs.pythonPackages.carbon}/bin/carbon-cache.py --debug --pidfile /tmp/carbonCache.pid start";
+        ExecStart = "${pkgs.pythonPackages.carbon}/bin/carbon-cache.py --pidfile /tmp/carbonCache.pid start";
         User = "graphite";
         Group = "graphite";
       };
       restartTriggers = [
-        pkgs.pythonPackages.carbon cfg.carbon.config cfg.carbon.storageAggregation
-        cfg.carbon.storageSchemas cfg.carbon.rewriteRules
+        pkgs.pythonPackages.carbon
+        cfg.carbon.config
+        cfg.carbon.storageAggregation
+        cfg.carbon.storageSchemas
+        cfg.carbon.rewriteRules
       ];
       preStart = ''
         mkdir -p ${dataDir}/whisper
@@ -182,7 +183,7 @@ in {
         GRAPHITE_STORAGE_DIR = "${dataDir}";
       };
       serviceConfig = {
-        ExecStart = "${pkgs.pythonPackages.carbon}/bin/carbon-aggregator.py --debug --pidfile /tmp/carbonAggregator.pid start";
+        ExecStart = "${pkgs.pythonPackages.carbon}/bin/carbon-aggregator.py --pidfile /tmp/carbonAggregator.pid start";
         User = "graphite";
         Group = "graphite";
       };
@@ -200,7 +201,7 @@ in {
         GRAPHITE_STORAGE_DIR = "${dataDir}";
       };
       serviceConfig = {
-        ExecStart = "${pkgs.pythonPackages.carbon}/bin/carbon-relay.py --debug --pidfile /tmp/carbonRelay.pid start";
+        ExecStart = "${pkgs.pythonPackages.carbon}/bin/carbon-relay.py --pidfile /tmp/carbonRelay.pid start";
         User = "graphite";
         Group = "graphite";
       };
@@ -241,12 +242,14 @@ in {
         fi
       '';
       restartTriggers = [
-        pkgs.python27Packages.graphite_web pkgs.python27Packages.waitress
+        pkgs.python27Packages.graphite_web
+        pkgs.python27Packages.waitress
       ];
     };
 
     environment.systemPackages = [
-      pkgs.pythonPackages.carbon pkgs.python27Packages.graphite_web
+      pkgs.pythonPackages.carbon
+      pkgs.python27Packages.graphite_web
       pkgs.python27Packages.waitress
     ];
 
