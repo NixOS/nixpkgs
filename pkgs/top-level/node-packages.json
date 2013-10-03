@@ -67,7 +67,7 @@
 , "gridfs-stream"
 , "tar"
 , "flatiron"
-, "ironhorse"
+, { "ironhorse": "0.0.8" }
 , "fs-walk"
 , "yo"
 , "generator-webapp"
@@ -97,4 +97,9 @@
 , "coveralls"
 , "js-yaml"
 , "node-inspector"
+, "istanbul"
+, "mocha-unfunk-reporter"
+, "chai"
+, "selenium-webdriver"
+, "webdrvr"
 ]
