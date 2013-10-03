@@ -136,21 +136,17 @@ if _interactive:
               '';
             env = pkgs.buildEnv {
               name = "zope2-${name}-env";
-              paths = [ pyenv pkgs.gnumake ];
-              postBuild =
-                ''
-                echo "#!$out/bin/python" > $out/bin/interpreter
-                cat ${interpreter} >> $out/bin/interpreter
-                '';
-            };
-            pyenv = pkgs.buildEnv {
-              name = "zope2-${name}-pyenv";
               paths = [
                 pkgs.python27
                 pkgs.python27Packages.recursivePthLoader
                 pkgs.python27Packages."plone.recipe.zope2instance"
               ] ++ attrValues pkgs.python27.modules
                 ++ opts.packages;
+              postBuild =
+                ''
+                echo "#!$out/bin/python" > $out/bin/interpreter
+                cat ${interpreter} >> $out/bin/interpreter
+                '';
             };
             conf = pkgs.writeText "zope2-${name}-conf"
               ''%define INSTANCEHOME ${env}
@@ -204,7 +200,7 @@ container-class Products.TemporaryFolder.TemporaryContainer
 
 ${opts.extra}
               '';
-            ctl = pkgs.writeScript "zope2-${name}-ctl"
+            ctlScript = pkgs.writeScript "zope2-${name}-ctl-script"
               ''#!${env}/bin/python
 
 import sys
@@ -213,7 +209,14 @@ import plone.recipe.zope2instance.ctl
 if __name__ == '__main__':
     sys.exit(plone.recipe.zope2instance.ctl.main(
         ["-C", "${conf}"]
-        + sys.argv[1:]))'';
+        + sys.argv[1:]))
+              '';
+
+            ctl = pkgs.writeScript "zope2-${name}-ctl"
+              ''#!${pkgs.bash}/bin/bash -e
+export PYTHONHOME=${env}
+exec ${ctlScript} "$@"
+              '';
           in {
             description = "zope2 ${name} instance";
             after = [ "network.target" ];  # with RelStorage also add "postgresql.service"
