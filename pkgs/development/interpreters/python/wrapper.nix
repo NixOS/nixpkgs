@@ -9,6 +9,9 @@
 
   postBuild = ''
     . "${makeWrapper}/nix-support/setup-hook"
+    if [ -L "$out/bin" ]; then
+        unlink "$out/bin"
+    fi
     mkdir -p "$out/bin"
     cd "${python}/bin"
     for prg in *; do
