@@ -122,5 +122,9 @@
         ]
       }
     }
+  },
+  { "name": "plone.recipe.zope2instance",
+    "extends": "http://dist.plone.org/release/4.3.2/versions.cfg",
+    "doCheck": false
   }
 ]
