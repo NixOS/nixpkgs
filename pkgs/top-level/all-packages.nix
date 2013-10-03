@@ -6904,7 +6904,7 @@ let
   systemd_with_lvm2 = pkgs.lib.overrideDerivation pkgs.systemd (p: {
       name = p.name + "-with-lvm2";
       postInstall = p.postInstall + ''
-        cp ${pkgs.lvm2}/lib/systemd/system-generators/* $out/lib/systemd/system-generators
+        cp "${pkgs.lvm2}/lib/systemd/system-generators/"* $out/lib/systemd/system-generators
       '';
   });
 
