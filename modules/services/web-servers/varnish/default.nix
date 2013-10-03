@@ -1,6 +1,7 @@
 { config, pkgs, ...}:
 let
   cfg = config.services.varnish;
+
 in
 with pkgs.lib;
 {
@@ -10,6 +11,13 @@ with pkgs.lib;
         default = false;
         description = "
           Enable the Varnish Server.
+        ";
+      };
+
+      http_address = mkOption {
+        default = "*:6081";
+        description = "
+          HTTP listen address and port.
         ";
       };
 
@@ -39,7 +47,7 @@ with pkgs.lib;
         chown -R varnish:varnish ${cfg.stateDir}
       '';
       path = [ pkgs.gcc ];
-      serviceConfig.ExecStart = "${pkgs.varnish}/sbin/varnishd -f ${pkgs.writeText "default.vcl" cfg.config} -n ${cfg.stateDir} -u varnish";
+      serviceConfig.ExecStart = "${pkgs.varnish}/sbin/varnishd -a ${cfg.http_address} -f ${pkgs.writeText "default.vcl" cfg.config} -n ${cfg.stateDir} -u varnish";
       serviceConfig.Type = "forking";
     };
 
