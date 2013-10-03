@@ -42,6 +42,7 @@ cabal.mkDerivation (self: {
                     -fProduction
                     -fTDFA";
   preConfigure = "patchShebangs .";
+  installPhase = "./Setup install";
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP/tmp"
     mkdir "$HOME"
