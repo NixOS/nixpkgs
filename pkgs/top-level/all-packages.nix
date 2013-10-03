@@ -497,6 +497,10 @@ let
 
   autojump = callPackage ../tools/misc/autojump { };
 
+  autorandr = callPackage ../tools/misc/autorandr {
+    inherit (xorg) xrandr xdpyinfo;
+  };
+
   avahi = callPackage ../development/libraries/avahi {
     qt4Support = config.avahi.qt4Support or false;
   };
