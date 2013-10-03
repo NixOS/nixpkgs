@@ -1,22 +1,9 @@
-diff -ubr lxc-0.9.0-orig/Makefile.am lxc-0.9.0/Makefile.am
---- lxc-0.9.0-orig/Makefile.am	2013-04-15 10:50:22.899103057 +0200
-+++ lxc-0.9.0/Makefile.am	2013-04-15 10:58:41.189504254 +0200
-@@ -25,8 +25,8 @@
+diff --git a/Makefile.am b/Makefile.am
+index eac2bfd..8f040d3 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -25,8 +25,8 @@ pcdatadir = $(libdir)/pkgconfig
  pcdata_DATA = lxc.pc
- 
- install-data-local:
--	$(MKDIR_P) $(DESTDIR)$(LXCPATH)
--	$(MKDIR_P) $(DESTDIR)$(localstatedir)/cache/lxc
-+	$(MKDIR_P) $(out)$(LXCPATH)
-+	$(MKDIR_P) $(out)$(localstatedir)/cache/lxc
- 
- ChangeLog::
- 	@touch ChangeLog
-diff -ubr lxc-0.9.0-orig/Makefile.in lxc-0.9.0/Makefile.in
---- lxc-0.9.0-orig/Makefile.in	2013-04-15 10:50:22.899103057 +0200
-+++ lxc-0.9.0/Makefile.in	2013-04-15 10:58:58.817870957 +0200
-@@ -805,8 +805,8 @@
- 
  
  install-data-local:
 -	$(MKDIR_P) $(DESTDIR)$(LXCPATH)

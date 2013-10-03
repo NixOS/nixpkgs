@@ -1,20 +1,18 @@
-{ stdenv, fetchurl, libcap, apparmor, perl, docbook2x, docbook_xml_dtd_45 }:
+{ stdenv, autoreconfHook, fetchurl, libcap, apparmor, perl, docbook2x
+, docbook_xml_dtd_45, gnutls, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
-  name = "lxc-0.9.0";
+  name = "lxc-1.0.0.alpha1-92-g8111adf";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lxc/${name}.tar.gz";
-    sha256 = "0821clxymkgp71n720xj5ngs22s2v8jks68f5j4vypycwvm6f5qy";
+    url = "http://github.com/lxc/lxc/archive/${name}.tar.gz";
+    sha256 = "05hjrn79wyjnm4ynf8y0j7pk2hwfrzp4dzwynxq4z2wxlc1ficd5";
   };
 
-  buildInputs = [ libcap apparmor perl docbook2x ];
+  buildInputs = [ libcap apparmor perl docbook2x gnutls autoreconfHook pkgconfig ];
 
-  patches = [
-    ./dont-run-ldconfig.patch
-    ./install-localstatedir-in-store.patch
-    ./support-db2x.patch
-  ];
+  patches = [ ./install-localstatedir-in-store.patch ./support-db2x.patch ];
 
   preConfigure = "export XML_CATALOG_FILES=${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 
