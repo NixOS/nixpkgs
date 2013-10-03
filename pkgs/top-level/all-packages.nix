@@ -821,6 +821,8 @@ let
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
+  ettercap = callPackage ../applications/networking/sniffers/ettercap { };
+
   euca2ools = callPackage ../tools/virtualization/euca2ools { pythonPackages = python26Packages; };
 
   evtest = callPackage ../applications/misc/evtest { };
@@ -4852,6 +4854,8 @@ let
   libmusicbrainz3 = callPackage ../development/libraries/libmusicbrainz { };
 
   libmusicbrainz = libmusicbrainz3;
+
+  libnet = callPackage ../development/libraries/libnet { };
 
   libnetfilter_conntrack = callPackage ../development/libraries/libnetfilter_conntrack { };
 
