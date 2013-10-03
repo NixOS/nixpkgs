@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p "$out/share/doc/lua" "$out/lib/pkgconfig"
-    mv "etc/lua.pc" "$out/lib/pkgconfig/"
+    sed <"etc/lua.pc" >"$out/lib/pkgconfig/lua.pc" -e "s|^prefix=.*|prefix=$out|"
     mv "doc/"*.{gif,png,css,html} "$out/share/doc/lua/"
     rmdir $out/{share,lib}/lua/5.1 $out/{share,lib}/lua
   '';
