@@ -165,8 +165,8 @@ default-zpublisher-encoding utf-8
 zserver-threads ${toString opts.threads}
 effective-user ${opts.user}
 
-pid-filename /var/run/zope2-${name}.pid
-lock-filename /var/lock/zope2-${name}.lock
+pid-filename /var/lib/zope2/${name}/pid
+lock-filename /var/lib/zope2/${name}/lock
 python-check-interval 1000
 enable-product-installation off
 
@@ -222,6 +222,11 @@ if __name__ == '__main__':
             preStart =
               ''
               mkdir -p /var/log/zope2/
+              touch /var/log/zope2/${name}.log
+              touch /var/log/zope2/${name}-Z2.log
+              chown ${opts.user} /var/log/zope2/${name}.log
+              chown ${opts.user} /var/log/zope2/${name}-Z2.log
+
               mkdir -p /var/lib/zope2/${name}/filestorage /var/lib/zope2/${name}/blobstorage
               chown ${opts.user} /var/lib/zope2/${name} -R
 
