@@ -7882,6 +7882,12 @@ let
 
   # This builds the gtk client
   transmission_260 = callPackage ../applications/networking/p2p/transmission/2.60.nix { };
+  # It needs gtk3+ version  >= 3.4.0
+  # transmission_gtk = callPackage ../applications/networking/p2p/transmission { 
+  #  enableGtk = true;
+  # };
+
+  transmission_gtk = callPackage ../applications/networking/p2p/transmission/2.60.nix { };
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
 
