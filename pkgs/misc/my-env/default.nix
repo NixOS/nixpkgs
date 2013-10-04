@@ -59,7 +59,7 @@
 { mkDerivation, substituteAll, pkgs }:
     { stdenv ? pkgs.stdenv, name, buildInputs ? []
     , propagatedBuildInputs ? [], gcc ? stdenv.gcc, cTags ? [], extraCmds ? ""
-    , cleanupCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash"}:
+    , cleanupCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash --norc"}:
 
 mkDerivation {
   # The setup.sh script from stdenv will expect the native build inputs in
@@ -146,8 +146,8 @@ mkDerivation {
     EOF
 
     mkdir -p $out/bin
-    sed -e s,@shell@,${shell}, -e s,@myenvpath@,$out/dev-envs/${name}, \
-      -e s,@name@,${name}, ${./loadenv.sh} > $out/bin/load-env-${name}
+    sed -e 's,@shell@,${shell},' -e s,@myenvpath@,$out/dev-envs/${name}, \
+      -e 's,@name@,${name},' ${./loadenv.sh} > $out/bin/load-env-${name}
     chmod +x $out/bin/load-env-${name}
   '';
 }
