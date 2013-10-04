@@ -31,6 +31,14 @@ in
 
     inherit src preConfigure;
 
+    patchFlags = "-p0";
+    patches =
+      [ (fetchurl {
+          url = "https://support.zabbix.com/secure/attachment/24449/ZBX-7091-2.0.8.patch";
+          sha256 = "1rlk3812dd12imk29i0fw6bzpgi44a8231kiq3bl5yryx18qh580";
+        })
+      ];
+
     configureFlags = [
       "--enable-agent"
       "--enable-server"
