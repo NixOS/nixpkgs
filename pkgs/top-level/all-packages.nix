@@ -8701,10 +8701,8 @@ let
     wrapPython = pythonPackages.wrapPython;
   };
 
-  # This builds the gtk client
-  transmission_260 = callPackage ../applications/networking/p2p/transmission/2.60.nix { };
-
   transmission = callPackage ../applications/networking/p2p/transmission { };
+  transmission_gtk = transmission.override { enableGTK3 = true; };
 
   transmission_remote_gtk = callPackage ../applications/networking/p2p/transmission-remote-gtk {};
 
