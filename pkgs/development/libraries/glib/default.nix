@@ -10,6 +10,13 @@
 #     Possible solution: disable compilation of this example somehow
 #     Reminder: add 'sed -e 's@python2\.[0-9]@python@' -i
 #       $out/bin/gtester-report' to postInstall if this is solved
+/*
+  * Use --enable-installed-tests for GNOME-related packages,
+      and use them as a separately installed tests runned by Hydra
+      (they should test an already installed package)
+      https://wiki.gnome.org/GnomeGoals/InstalledTests
+  * Support org.freedesktop.Application, including D-Bus activation from desktop files
+*/
 
 let
   # Some packages don't get "Cflags" from pkgconfig correctly
@@ -24,15 +31,18 @@ let
     done
     ln -sr -t "$out/include/" "$out"/lib/*/include/* 2>/dev/null || true
   '';
+
+  ver_maj = "2.38";
+  ver_min = "0";
 in
 with { inherit (stdenv.lib) optionalString; };
 
 stdenv.mkDerivation rec {
-  name = "glib-2.36.4";
+  name = "glib-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/2.36/${name}.tar.xz";
-    sha256 = "0zmdbkg2yjyxdl72w34lxvrssbzqzdficskkfn22s0994dad4m7n";
+    url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
+    sha256 = "0cpzqadqk6z6bmb79p04pykxc8x57rvshh33414cnk41bvgaf4vm";
   };
 
   # configure script looks for d-bus but it is (probably) only needed for tests
