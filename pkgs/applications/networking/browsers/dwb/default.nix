@@ -21,6 +21,8 @@ stdenv.mkDerivation {
     wrapProgram "$out/bin/dwb" \
      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:$out/share"
+    wrapProgram "$out/bin/dwbem" \
+     --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules"
   '';
 
   meta = {
