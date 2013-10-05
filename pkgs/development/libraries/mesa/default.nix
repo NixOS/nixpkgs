@@ -3,8 +3,8 @@
 , libdrm, xorg, wayland, udev, llvm, libffi
 , libvdpau
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
-, enableR600LlvmCompiler ? false # current llvm-3.3 + mesa-9.1.6 don't configure
-, enableExtraFeatures ? false # add ~15 MB to mesa_drivers
+, enableR600LlvmCompiler ? true, libelf
+, enableExtraFeatures ? false # add ~15 MB to mesa_drivers; some problems building currently
 }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
@@ -16,23 +16,25 @@ else
     This or the mesa attribute (which also contains GLU) are small (~ 2.2 MB, mostly headers)
     and are designed to be the buildInput of other packages.
   - DRI and EGL drivers are compiled into $drivers output,
-    which is bigger (~13 MB) and depends on LLVM (~40 MB).
-    These should be searched at runtime in /run/current-system/sw/lib/*
+    which is bigger (~13 MB) and depends on LLVM (~44 MB).
+    These should be searched at runtime in "/run/opengl-driver{,-32}/lib/*"
     and so are kind-of impure (given by NixOS).
     (I suppose on non-NixOS one would create the appropriate symlinks from there.)
 */
 
 let
-  version = "9.1.6";
+  version = "9.2.1";
   # this is the default search path for DRI drivers (note: X server introduces an overriding env var)
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
+with { inherit (stdenv.lib) optional optionals optionalString; };
+
 stdenv.mkDerivation {
   name = "mesa-noglu-${version}";
 
-  src = fetchurl {
+  src =  fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "0gay00fy84hrnp25hpacz5cbvxrpvgg1d390vichmbdgmkqdycp6";
+    sha256 = "1l56zlma7ijhczdqanwv3ssrd36j07pp2996bsq9z7kpnmm7xd78";
   };
 
   prePatch = "patchShebangs .";
@@ -40,7 +42,6 @@ stdenv.mkDerivation {
   patches = [
     ./static-gallium.patch
     ./dricore-gallium.patch
-    ./fix-rounding.patch
   ];
 
   # Change the search path for EGL drivers from $drivers/* to driverLink
@@ -53,7 +54,7 @@ stdenv.mkDerivation {
 
   preConfigure = "./autogen.sh";
 
-  configureFlags = with stdenv.lib; [
+  configureFlags = [
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-egl-driver-dir=$(drivers)/lib/egl"
     "--with-dri-searchpath=${driverLink}/lib/dri"
@@ -66,10 +67,11 @@ stdenv.mkDerivation {
     "--enable-xa" # used in vmware driver
 
     "--with-dri-drivers=i965,r200,radeon"
-    "--with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast" # radeonsi complains about R600 missing in LLVM
+    ("--with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast"
+      + optionalString enableR600LlvmCompiler ",radeonsi")
     "--with-egl-platforms=x11,wayland,drm" "--enable-gbm" "--enable-shared-glapi"
   ]
-    ++ optional enableR600LlvmCompiler "--enable-r600-llvm-compiler" # complains about R600 missing in LLVM
+    ++ optional enableR600LlvmCompiler "--enable-r600-llvm-compiler"
     ++ optional enableTextureFloats "--enable-texture-float"
     ++ optionals enableExtraFeatures [
       "--enable-gles1" "--enable-gles2"
@@ -83,16 +85,16 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig python makedepend file flex bison ];
 
   propagatedBuildInputs = with xorg; [ libXdamage libXxf86vm ]
-  ++
-  stdenv.lib.optionals stdenv.isLinux [libdrm]
-  ;
+    ++ optionals stdenv.isLinux [libdrm]
+    ;
   buildInputs = with xorg; [
     autoconf automake libtool intltool expat libxml2Python llvm
     libXfixes glproto dri2proto libX11 libXext libxcb libXt
     libffi wayland
-  ] ++ stdenv.lib.optionals enableExtraFeatures [ /*libXvMC*/ libvdpau ]
-  ++ stdenv.lib.optional stdenv.isLinux [udev]
-  ;
+  ] ++ optionals enableExtraFeatures [ /*libXvMC*/ libvdpau ]
+    ++ optional stdenv.isLinux udev
+    ++ optional enableR600LlvmCompiler libelf
+    ;
 
   enableParallelBuilding = true;
   doCheck = true;
