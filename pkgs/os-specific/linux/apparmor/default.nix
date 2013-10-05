@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://apparmor.net/;
-    description = "A Linux application security system";
+    description = "Linux application security system";
     license = licenses.gpl2;
     maintainers = [ maintainers.phreedom ];
     platforms = platforms.linux;

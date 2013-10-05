@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.winfield.demon.nl/";
-    description = "convert MS Word documents to plain text or PostScript";
+    description = "Convert MS Word documents to plain text or PostScript";
     license = stdenv.lib.licenses.gpl2;
 
     maintainers = [ stdenv.lib.maintainers.simons ];

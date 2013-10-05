@@ -62,7 +62,7 @@ in
     meta = {
       homepage = "http://lly.org/~rcw/abcde/page/";
       license = "GPLv2+";
-      description = "A Better CD Encoder (ABCDE)";
+      description = "Command-line audio CD ripper";
 
       longDescription = ''
         abcde is a front-end command-line utility (actually, a shell

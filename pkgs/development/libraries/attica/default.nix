@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   
   meta = with stdenv.lib; {
-    description = "A library to access Open Collaboration Service providers";
+    description = "Library to access Open Collaboration Service providers";
     license = "LGPL";
     maintainers = [ maintainers.sander maintainers.urkud maintainers.phreedom ];
     inherit (qt4.meta) platforms;

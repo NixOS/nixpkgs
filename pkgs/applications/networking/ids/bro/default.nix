@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   
   meta = {
-    description = "Bro is a powerful network analysis framework that is much different from the typical IDS you may know.";
+    description = "Powerful network analysis framework that is much different from the typical IDS you may know";
     homepage = http://www.bro.org/;
     license = "BSD";
   };

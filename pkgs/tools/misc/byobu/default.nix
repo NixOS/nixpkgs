@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://launchpad.net/byobu/;
-    description = "Byobu is a GPLv3 open source text-based window manager and terminal multiplexer.";
+    description = "Text-based window manager and terminal multiplexer";
 
     longDescription =
       ''Byobu is a GPLv3 open source text-based window manager and terminal multiplexer. 

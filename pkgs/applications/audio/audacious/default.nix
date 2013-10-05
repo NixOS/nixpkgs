@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Audacious, a media player forked from the Beep Media Player, which was itself an XMMS fork";
+    description = "Audio player";
     homepage = http://audacious-media-player.org/;
     maintainers = with stdenv.lib.maintainers; [ eelco simons ];
     platforms = stdenv.lib.platforms.linux;

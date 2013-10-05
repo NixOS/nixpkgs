@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline ] ++ stdenv.lib.optional stdenv.isLinux libcap;
 
   meta = with stdenv.lib; {
-    description = "A pair of programs which are used to maintain the accuracy of the system clock on a computer.";
+    description = "Sets your computer's clock from time servers on the Net";
     homepage = "http://chrony.tuxfamily.org/";
     license = licenses.gpl2;
     platforms = platforms.unix;

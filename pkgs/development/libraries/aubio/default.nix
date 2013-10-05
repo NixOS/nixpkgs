@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ];
 
   meta = { 
-    description = "A library for audio labelling";
+    description = "Library for audio labelling";
     homepage = http://aubio.org/;
     license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.marcweber ];
