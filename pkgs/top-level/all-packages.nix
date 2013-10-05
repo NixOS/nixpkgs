@@ -1789,6 +1789,8 @@ let
 
   sshfsFuse = callPackage ../tools/filesystems/sshfs-fuse { };
 
+  sshuttle = callPackage ../tools/security/sshuttle { };
+
   sudo = callPackage ../tools/security/sudo { };
 
   suidChroot = builderDefsPackage (import ../tools/system/suid-chroot) { };
