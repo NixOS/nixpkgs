@@ -1,5 +1,7 @@
 {fetchurl, stdenv, perl, openssh, rsync, logger}:
 
+let patch = ./rsnapshot-config.patch;
+in
 stdenv.mkDerivation rec {
   name = "rsnapshot-1.3.0";
   src = fetchurl {
@@ -12,6 +14,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace "Makefile.in" --replace \
       "/usr/bin/pod2man" "${perl}/bin/pod2man"
+    patch -p0 <${patch}
   '';
 
   meta = {
