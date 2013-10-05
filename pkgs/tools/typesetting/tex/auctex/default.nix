@@ -6,7 +6,7 @@ stdenv.mkDerivation ( rec {
   name = "${pname}-${version}";
 
   meta = {
-    description = "AUCTeX is an extensible package for writing and formatting TeX files in GNU Emacs and XEmacs.";
+    description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
     homepage = http://www.gnu.org/software/auctex;
   };
 

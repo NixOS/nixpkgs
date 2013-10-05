@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
 
   meta = {
     homepage = "http://labs.bittorrent.com/experiments/sync.html";
-    description = "Automatically sync files via secure, distributed technology.";
+    description = "Automatically sync files via secure, distributed technology";
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.iElectric ];
   };

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.gnu.org/software/automake/";
-    description = "GNU Automake, a GNU standard-compliant makefile generator";
+    description = "GNU standard-compliant makefile generator";
     license = "GPLv2+";
 
     longDescription = ''

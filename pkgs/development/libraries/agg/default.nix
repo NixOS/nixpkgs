@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--x-includes=${libX11}/include --x-libraries=${libX11}/lib";
 
   meta = {
-    description = "The Anti-Grain Geometry (AGG) library, a high quality rendering engine for C++";
+    description = "High quality rendering engine for C++";
 
     longDescription = ''
       Anti-Grain Geometry (AGG) is an Open Source, free of charge

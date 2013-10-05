@@ -33,7 +33,7 @@ rec {
   '') ["addInputs"];
       
   meta = {
-    description = "A TrueType font set intended for source code";
+    description = "TrueType font set intended for source code";
     maintainers = with a.lib.maintainers;
     [
       raskin

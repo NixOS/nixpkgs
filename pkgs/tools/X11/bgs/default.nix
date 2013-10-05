@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'';
 
   meta = { 
-      description = "bgs is an extremely fast and small background setter for X.";
+      description = "Extremely fast and small background setter for X";
       license = "MIT";
       platforms = with stdenv.lib.platforms; all;
       maintainers = with stdenv.lib.maintainers; [pSub]; 

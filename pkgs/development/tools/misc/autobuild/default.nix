@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Simon Josefsson's Autobuild, a continuous integration tool";
+    description = "Continuous integration tool";
 
     longDescription = ''
       Autobuild is a package that process output from building

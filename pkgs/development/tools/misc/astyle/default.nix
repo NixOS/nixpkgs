@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://astyle.sourceforge.net/";
-    description = "source code reformatter";
+    description = "Source code indenter, formatter, and beautifier for C, C++, C# and Java";
     license = "LGPL";
 
     platforms = stdenv.lib.platforms.linux;

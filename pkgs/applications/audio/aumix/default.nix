@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ++ (if gtkGUI then [pkgconfig gtk] else []);
 
   meta = {
-    description = "Aumix, an audio mixer for X and the console";
+    description = "Audio mixer for X and the console";
     longDescription = ''
       Aumix adjusts an audio mixer from X, the console, a terminal,
       the command line or a script.
