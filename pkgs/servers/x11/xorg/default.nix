@@ -1370,11 +1370,11 @@ let
   })) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputsynaptics = (stdenv.mkDerivation ((if overrides ? xf86inputsynaptics then overrides.xf86inputsynaptics else x: x) {
-    name = "xf86-input-synaptics-1.6.2";
+    name = "xf86-input-synaptics-1.7.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.6.2.tar.bz2;
-      sha256 = "082rlbyw63sashjbwd7dd0a0smp5n8yv9bihy19c706lhnhddxy3";
+      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.7.1.tar.bz2;
+      sha256 = "13mmpcwp1d69w6c458a4fdqgwl24bpvrnq3zd6833chz1rk2an6v";
     };
     buildInputs = [pkgconfig inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ];
   })) // {inherit inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ;};
@@ -1420,11 +1420,11 @@ let
   })) // {inherit fontsproto libpciaccess xextproto xorgserver xproto ;};
 
   xf86videoast = (stdenv.mkDerivation ((if overrides ? xf86videoast then overrides.xf86videoast else x: x) {
-    name = "xf86-video-ast-0.97.0";
+    name = "xf86-video-ast-0.98.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-ast-0.97.0.tar.bz2;
-      sha256 = "0xlfk64pa0vbg74m261fw8cn4vw6jw3nxm6wys9m4j3n2rwd9z18";
+      url = mirror://xorg/individual/driver/xf86-video-ast-0.98.0.tar.bz2;
+      sha256 = "188nv73w0p5xhfxz2dffli44yzyn1qhhq3qkwc8wva9dhg25n8lh";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
@@ -1440,31 +1440,31 @@ let
   })) // {inherit fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videocirrus = (stdenv.mkDerivation ((if overrides ? xf86videocirrus then overrides.xf86videocirrus else x: x) {
-    name = "xf86-video-cirrus-1.5.1";
+    name = "xf86-video-cirrus-1.5.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-cirrus-1.5.1.tar.bz2;
-      sha256 = "0my54x52fsa82bsh196hz79750xjlv8ddbvin7230ck7pnf44md9";
+      url = mirror://xorg/individual/driver/xf86-video-cirrus-1.5.2.tar.bz2;
+      sha256 = "1mycqgjp18b6adqj2h90vp324xh8ysyi5migfmjc914vbnkf2q9k";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videodummy = (stdenv.mkDerivation ((if overrides ? xf86videodummy then overrides.xf86videodummy else x: x) {
-    name = "xf86-video-dummy-0.3.6";
+    name = "xf86-video-dummy-0.3.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-dummy-0.3.6.tar.bz2;
-      sha256 = "16773lxa74d9v2x758bx0byrmxssplqygnjn09q3klr605j5ncs4";
+      url = mirror://xorg/individual/driver/xf86-video-dummy-0.3.7.tar.bz2;
+      sha256 = "1046p64xap69vlsmsz5rjv0djc970yhvq44fmllmas0mqp5lzy2n";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ];
   })) // {inherit fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ;};
 
   xf86videofbdev = (stdenv.mkDerivation ((if overrides ? xf86videofbdev then overrides.xf86videofbdev else x: x) {
-    name = "xf86-video-fbdev-0.4.3";
+    name = "xf86-video-fbdev-0.4.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-fbdev-0.4.3.tar.bz2;
-      sha256 = "0ca8khgy3wv0fys7s4087apvnp8j86blxj5m5m70l10hs5x06yzz";
+      url = mirror://xorg/individual/driver/xf86-video-fbdev-0.4.4.tar.bz2;
+      sha256 = "06ym7yy017lanj730hfkpfk4znx3dsj8jq3qvyzsn8w294kb7m4x";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xorgserver xproto ;};
@@ -1540,14 +1540,14 @@ let
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videoneomagic = (stdenv.mkDerivation ((if overrides ? xf86videoneomagic then overrides.xf86videoneomagic else x: x) {
-    name = "xf86-video-neomagic-1.2.7";
+    name = "xf86-video-neomagic-1.2.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-neomagic-1.2.7.tar.bz2;
-      sha256 = "0xnbk2y5pzs1g3w2rmjc4k3nyq6kazf67bv4q3dnbywalsgfh1lz";
+      url = mirror://xorg/individual/driver/xf86-video-neomagic-1.2.8.tar.bz2;
+      sha256 = "0x48sxs1p3kmwk3pq1j7vl93y59gdmgkq1x5xbnh0yal0angdash";
     };
-    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
-  })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libpciaccess xorgserver xproto ];
+  })) // {inherit fontsproto libpciaccess xorgserver xproto ;};
 
   xf86videonewport = (stdenv.mkDerivation ((if overrides ? xf86videonewport then overrides.xf86videonewport else x: x) {
     name = "xf86-video-newport-0.2.4";
@@ -1680,11 +1680,11 @@ let
   })) // {inherit randrproto videoproto xorgserver xproto ;};
 
   xf86videovesa = (stdenv.mkDerivation ((if overrides ? xf86videovesa then overrides.xf86videovesa else x: x) {
-    name = "xf86-video-vesa-2.3.2";
+    name = "xf86-video-vesa-2.3.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-vesa-2.3.2.tar.bz2;
-      sha256 = "1qqf97baii1dcsm3y8gqw674j4r8llhkbqsavhyn11iwmvzifjhl";
+      url = mirror://xorg/individual/driver/xf86-video-vesa-2.3.3.tar.bz2;
+      sha256 = "1y5fsg0c4bgmh1cfsbnaaf388fppyy02i7mcy9vax78flkjpb2yf";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
@@ -1900,11 +1900,11 @@ let
   })) // {inherit ;};
 
   xorgserver = (stdenv.mkDerivation ((if overrides ? xorgserver then overrides.xorgserver else x: x) {
-    name = "xorg-server-1.13.4";
+    name = "xorg-server-1.14.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.13.4.tar.bz2;
-      sha256 = "1kwq5hqgl3qmm4nxh5iwpa0wwwzsj67fxqiiglzhyyrwgy46kjd2";
+      url = mirror://xorg/individual/xserver/xorg-server-1.14.3.tar.bz2;
+      sha256 = "0pjgp30j7v3v0db26462ajnmhbysy4vmqkcnbyswnga47bhml4h2";
     };
     buildInputs = [pkgconfig renderproto libdrm openssl libX11 libXau libXaw libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libXv ];
   })) // {inherit renderproto libdrm openssl libX11 libXau libXaw libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libXv ;};

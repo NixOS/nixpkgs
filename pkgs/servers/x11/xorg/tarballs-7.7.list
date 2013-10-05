@@ -116,15 +116,15 @@ mirror://xorg/individual/driver/xf86-input-evdev-2.7.3.tar.bz2
 mirror://xorg/individual/driver/xf86-input-joystick-1.6.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-input-keyboard-1.6.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-input-mouse-1.7.2.tar.bz2
-mirror://xorg/individual/driver/xf86-input-synaptics-1.6.2.tar.bz2
+mirror://xorg/individual/driver/xf86-input-synaptics-1.7.1.tar.bz2
 mirror://xorg/individual/driver/xf86-input-vmmouse-13.0.0.tar.bz2
 mirror://xorg/individual/driver/xf86-input-void-1.4.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ark-0.7.5.tar.bz2
-mirror://xorg/individual/driver/xf86-video-ast-0.97.0.tar.bz2
+mirror://xorg/individual/driver/xf86-video-ast-0.98.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ati-7.1.0.tar.bz2
-mirror://xorg/individual/driver/xf86-video-cirrus-1.5.1.tar.bz2
-mirror://xorg/individual/driver/xf86-video-dummy-0.3.6.tar.bz2
-mirror://xorg/individual/driver/xf86-video-fbdev-0.4.3.tar.bz2
+mirror://xorg/individual/driver/xf86-video-cirrus-1.5.2.tar.bz2
+mirror://xorg/individual/driver/xf86-video-dummy-0.3.7.tar.bz2
+mirror://xorg/individual/driver/xf86-video-fbdev-0.4.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-geode-2.11.14.tar.bz2
 mirror://xorg/individual/driver/xf86-video-glide-1.2.1.tar.bz2
 mirror://xorg/individual/driver/xf86-video-glint-1.2.8.tar.bz2
@@ -132,7 +132,7 @@ mirror://xorg/individual/driver/xf86-video-i128-1.3.6.tar.bz2
 mirror://xorg/individual/driver/xf86-video-intel-2.21.9.tar.bz2
 mirror://xorg/individual/driver/xf86-video-mach64-6.9.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-mga-1.6.2.tar.bz2
-mirror://xorg/individual/driver/xf86-video-neomagic-1.2.7.tar.bz2
+mirror://xorg/individual/driver/xf86-video-neomagic-1.2.8.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-video-newport-0.2.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-nv-2.1.20.tar.bz2
 mirror://xorg/individual/driver/xf86-video-openchrome-0.3.3.tar.bz2
@@ -146,7 +146,7 @@ mirror://xorg/individual/driver/xf86-video-tdfx-1.4.5.tar.bz2
 mirror://xorg/individual/driver/xf86-video-tga-1.2.2.tar.bz2
 mirror://xorg/individual/driver/xf86-video-trident-1.3.6.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-video-v4l-0.2.0.tar.bz2
-mirror://xorg/individual/driver/xf86-video-vesa-2.3.2.tar.bz2
+mirror://xorg/individual/driver/xf86-video-vesa-2.3.3.tar.bz2
 mirror://xorg/individual/driver/xf86-video-vmware-13.0.1.tar.bz2
 mirror://xorg/individual/driver/xf86-video-voodoo-1.2.5.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-video-wsfb-0.4.0.tar.bz2
@@ -164,7 +164,7 @@ mirror://xorg/X11R7.7/src/everything/xlsatoms-1.1.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xlsclients-1.1.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xmodmap-1.0.7.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xorg-docs-1.7.tar.bz2
-mirror://xorg/individual/xserver/xorg-server-1.13.4.tar.bz2
+mirror://xorg/individual/xserver/xorg-server-1.14.3.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xorg-sgml-doctools-1.11.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xpr-1.0.4.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xprop-1.2.1.tar.bz2
