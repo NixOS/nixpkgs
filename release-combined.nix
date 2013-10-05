@@ -22,12 +22,12 @@ in rec {
     nixpkgs = nixpkgs';
   });
 
-  nixpkgs = removeMaintainers (import <nixpkgs/pkgs/top-level/release.nix> {
+  nixpkgs = builtins.removeAttrs (removeMaintainers (import <nixpkgs/pkgs/top-level/release.nix> {
     inherit officialRelease;
     nixpkgs = nixpkgs';
     # Only do Linux builds.
     supportedSystems = [ "x86_64-linux" "i686-linux" ];
-  });
+  })) [ "unstable" ];
 
   tested = pkgs.releaseTools.aggregate {
     name = "nixos-${nixos.tarball.version}";
