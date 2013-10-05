@@ -1,0 +1,26 @@
+--- rsnapshot-program.pl	2006-10-21 06:12:30.000000000 +0000
++++ rsnapshot-program.pl	2013-10-05 17:17:24.408591363 +0000
+@@ -365,23 +365,6 @@
+ 	my $autoconf_prefix		= '@prefix@';
+ 	my $default_config_file	= '/etc/rsnapshot.conf';
+ 	
+-	# consolidate multiple slashes
+-	$autoconf_sysconfdir	=~ s/\/+/\//g;
+-	$autoconf_prefix		=~ s/\/+/\//g;
+-	
+-	# remove trailing slashes
+-	$autoconf_sysconfdir	=~ s/\/$//g;
+-	$autoconf_prefix		=~ s/\/$//g;
+-	
+-	# if --sysconfdir was not set explicitly during ./configure, but we did use autoconf
+-	if ($autoconf_sysconfdir eq '${prefix}/etc') {
+-		$default_config_file = "$autoconf_prefix/etc/rsnapshot.conf";
+-		
+-	# if --sysconfdir was set explicitly at ./configure, overriding the --prefix setting
+-	} elsif ($autoconf_sysconfdir ne ('@' . 'sysconfdir' . '@')) {
+-		$default_config_file = "$autoconf_sysconfdir/rsnapshot.conf";
+-	}
+-	
+ 	# set global variable
+ 	$config_file = $default_config_file;
+ }
