@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.aldor.org/";
-    description = "Aldor is a programming language with an expressive type system";
+    description = "Programming language with an expressive type system";
     license = stdenv.lib.licenses.asl20;
 
     longDescription = ''

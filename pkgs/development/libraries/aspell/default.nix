@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # doesn't expand environment variables such as `$HOME'.
 
   meta = {
-    description = "GNU Aspell, A spell checker for many languages";
+    description = "Spell checker for many languages";
     homepage = http://aspell.net/;
     license = "LGPLv2+";
     maintainers = [ ];

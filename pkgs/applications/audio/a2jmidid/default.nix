@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://home.gna.org/a2jmidid;
-    description = "daemon for exposing legacy ALSA sequencer applications in JACK MIDI system";
+    description = "Daemon for exposing legacy ALSA sequencer applications in JACK MIDI system";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
 

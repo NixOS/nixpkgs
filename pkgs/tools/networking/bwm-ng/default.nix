@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = with stdenv.lib; {
-    description = "Bandwidth Monitor NG is a small and simple console-based live network and disk io bandwidth monitor.";
+    description = "Bandwidth Monitor NG is a small and simple console-based live network and disk io bandwidth monitor";
     homepage = "http://www.gropp.org/?id=projects&sub=bwm-ng";
     license = licenses.gpl2;
     platforms = platforms.unix;

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://tcl.activestate.com/software/tcllib/";
-    description = "The BWidget toolkit is a high-level widget set for Tcl/Tk.";
+    description = "High-level widget set for Tcl/Tk";
     license = stdenv.lib.licenses.tcltk;
   };
 }

@@ -8,6 +8,6 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "A console downloading program. Has some features for parallel connections for faster downloading.";
+    description = "Console downloading program with some features for parallel connections for faster downloading";
   };
 }

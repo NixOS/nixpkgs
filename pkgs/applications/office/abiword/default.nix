@@ -26,4 +26,8 @@ stdenv.mkDerivation {
     [ pkgconfig gtk libglade librsvg bzip2 libgnomecanvas fribidi libpng popt
       libgsf enchant wv libjpeg
     ];
+
+  meta = {
+    description = "Word processing program, similar to Microsof Word";
+  };
 }

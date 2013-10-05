@@ -15,6 +15,6 @@ rec {
       
   name = "bzr-tools-${version}";
   meta = {
-    description = "Bazaar plugins.";
+    description = "Bazaar plugins";
   };
 }

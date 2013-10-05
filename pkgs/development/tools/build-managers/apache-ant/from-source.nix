@@ -57,7 +57,7 @@ EOF
   '';
 
   meta = {
-    description = "Apache Ant, a Java-based build tool";
+    description = "Java-based build tool";
 
     longDescription = ''
       Apache Ant is a Java-based build tool.  In theory, it is kind of like

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Navigation scripting & testing utility for PhantomJS.";
+    description = "Navigation scripting & testing utility for PhantomJS";
     longDescription = ''
       CasperJS is a navigation scripting & testing utility for PhantomJS.
       It eases the process of defining a full navigation scenario and provides useful high-level
