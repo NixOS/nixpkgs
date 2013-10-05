@@ -63,8 +63,7 @@ releaseTools.sourceTarball {
     done
 
     header "checking eval-release.nix"
-    nix-instantiate --eval-only --strict --xml --show-trace ./maintainers/scripts/eval-release.nix > $TMPDIR/out.xml
-    xmllint --noout $TMPDIR/out.xml
+    nix-instantiate --eval-only --strict --show-trace ./maintainers/scripts/eval-release.nix > /dev/null
     stopNest
   '';
 
