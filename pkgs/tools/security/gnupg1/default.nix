@@ -15,11 +15,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gnupg-1.4.13";
+  name = "gnupg-1.4.15";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha1 = "17a75c54d292bd0923f0a1817a1b02ded37d1de1";
+    sha1 = "63ebf0ab375150903c65738070e4105200197fd4";
   };
 
   buildInputs = [ readline bzip2 ];
