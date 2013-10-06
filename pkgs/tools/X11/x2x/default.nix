@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "x2x allows the keyboard, mouse on one X display to be used to control another X display.";
+    description = "Allows the keyboard, mouse on one X display to be used to control another X display";
     homepage = http://x2x.dottedmag.net;
     license = "BSD";
   };

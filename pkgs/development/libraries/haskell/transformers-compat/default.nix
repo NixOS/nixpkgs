@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ transformers ];
   meta = {
     homepage = "http://github.com/ekmett/transformers-compat/";
-    description = "A small compatibility shim exposing the new types from transformers 0.3 to older Haskell platforms.";
+    description = "Small compatibility shim exposing the new types from transformers 0.3 to older Haskell platforms";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };

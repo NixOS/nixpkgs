@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    description = "A tool to generate X11 mouse clicks from keyboard.";
+    description = "Generate X11 mouse clicks from keyboard";
   };
 }

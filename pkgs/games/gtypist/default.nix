@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.gnu.org/software/gtypist;
-    description = "GNU Typist (also called gtypist) is a universal typing tutor.";
+    description = "Universal typing tutor";
     license = stdenv.lib.licenses.gpl3Plus;
   };
 }

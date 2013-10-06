@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "ion-3-20090110";
   meta = {
-    description = "Ion is a tiling tabbed window manager designed with keyboard users in mind.";
+    description = "Tiling tabbed window manager designed with keyboard users in mind";
     homepage = http://modeemi.fi/~tuomov/ion;
   };
   src = fetchurl {

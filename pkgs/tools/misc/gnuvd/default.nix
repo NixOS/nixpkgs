@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "gnuvd is a command-line dutch dictionary application.";
+    description = "Command-line dutch dictionary application";
     homepage = http://www.djcbsoftware.nl/code/gnuvd/;
   };
 }

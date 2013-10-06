@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "WYSIWYM frontend for LaTeX, DocBook, etc.";
+    description = "WYSIWYM frontend for LaTeX, DocBook";
     homepage = "http://www.lyx.org";
     license = "GPL2";
     maintainers = [ stdenv.lib.maintainers.vcunat ];

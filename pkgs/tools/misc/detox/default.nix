@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [flex];
 
   meta = {
-    description = "Detox is a utility designed to clean up filenames.";
+    description = "Utility designed to clean up filenames";
     longDescription = ''
       Detox is a utility designed to clean up filenames. It replaces
       difficult to work with characters, such as spaces, with standard

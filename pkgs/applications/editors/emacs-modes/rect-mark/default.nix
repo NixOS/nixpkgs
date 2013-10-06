@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Mark a rectangle of text with highlighting.";
+    description = "Mark a rectangle of text with highlighting";
     homepage = http://emacswiki.org/emacs/RectangleMark;
     license = "GPLv2+";
 

@@ -13,9 +13,15 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://hunspell.sourceforge.net;
-    description = "The spell checker of OpenOffice.org and Mozilla Firefox 3 & Thunderbird, Google Chrome etc.";
+    description = "Spell checker";
     longDescription = ''
+      Hunspell is the spell checker of LibreOffice, OpenOffice.org, Mozilla
+      Firefox 3 & Thunderbird, Google Chrome, and it is also used by
+      proprietary software packages, like Mac OS X, InDesign, memoQ, Opera and
+      SDL Trados.
+
       Main features:
+
       * Extended support for language peculiarities; Unicode character encoding, compounding and complex morphology.
       * Improved suggestion using n-gram similarity, rule and dictionary based pronounciation data.
       * Morphological analysis, stemming and generation.

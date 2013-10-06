@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var" ];
 
   meta = {
-    description = "Unbound, a validating, recursive, and caching DNS resolver.";
+    description = "Validating, recursive, and caching DNS resolver";
     license = "BSD";
     homepage = http://www.unbound.net;
     platforms = with stdenv.lib.platforms; linux;

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ++ optional server readline;
 
   meta = with stdenv.lib; {
-    description = "multiplayer (or single player), turn-based strategy game.";
+    description = "Multiplayer (or single player), turn-based strategy game";
 
     longDescription = ''
       Freeciv is a Free and Open Source empire-building strategy game

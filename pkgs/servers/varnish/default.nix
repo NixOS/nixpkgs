@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pcre libxslt groff ncurses pkgconfig ];
 
   meta = {
-    description = "Varnish Cache is a web application accelerator also known as a caching HTTP reverse proxy.";
+    description = "Web application accelerator also known as a caching HTTP reverse proxy";
     homepage = "https://www.varnish-cache.org";
     license = stdenv.lib.licenses.bsd2;
     maintainers = [ stdenv.lib.maintainers.garbas ];

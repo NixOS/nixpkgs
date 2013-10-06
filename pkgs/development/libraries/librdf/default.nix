@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   #doCheck = true; # would need swh_lv2 and some path patching
 
   meta = {
-    description = "A lightweight RDF library with special support for LADSPA plugins.";
+    description = "Lightweight RDF library with special support for LADSPA plugins";
     homepage = http://sourceforge.net/projects/lrdf/;
     license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.marcweber ];

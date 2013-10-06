@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   patches = [ ./g++4.patch ];
 
   meta = {
-    description = "SuperTux is a classic 2D jump'n run sidescroller game in a style similar to the original Super Mario games covered under the GPL.";
+    description = "Classic 2D jump'n run sidescroller game";
 
     homepage = http://supertux.lethargik.org/index.html;
 

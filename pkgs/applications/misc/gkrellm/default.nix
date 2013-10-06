@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
      make install PREFIX="$out" '';
 
   meta = {
-    description = "GKrellM, a themeable process stack of system monitors.";
+    description = "Themeable process stack of system monitors";
     longDescription =
       '' GKrellM is a single process stack of system monitors which supports
          applying themes to match its appearance to your window manager, Gtk,

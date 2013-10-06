@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://ocamlgraph.lri.fr/;
-    description = "ocamlgraph is a graph library for Objective Caml.";
+    description = "Graph library for Objective Caml";
     license = "GNU Library General Public License version 2, with the special exception on linking described in file LICENSE";
     platforms = ocaml.meta.platforms;
     maintainers = [

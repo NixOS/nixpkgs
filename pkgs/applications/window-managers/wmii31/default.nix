@@ -29,7 +29,7 @@ args: with args; stdenv.mkDerivation {
      cp cmd/wmiimenu \$out/bin
   ";
   meta = { homepage = "www.suckless.org";
-           description = "one small tool of the wmii window manger to let the user select an item from a list by filtering..";
+           description = "One small tool of the wmii window manger to let the user select an item from a list by filtering";
            license="MIT";
          };
 }

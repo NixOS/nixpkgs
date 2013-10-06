@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
 
   meta = {
-    description = "Ur/Web supports construction of dynamic web applications backed by SQL databases.";
+    description = "Construct dynamic web applications backed by SQL databases";
     longDescription = ''
       Ur is a programming language in the tradition of ML and Haskell, but
       featuring a significantly richer type system. Ur is functional, pure,

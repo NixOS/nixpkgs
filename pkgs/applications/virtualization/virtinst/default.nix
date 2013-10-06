@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = http://virt-manager.org;
     license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [qknight];
-    description = "The Virt Install tool (virt-install for short command name, virtinst for package name) is a command line tool which provides an easy way to provision operating systems into virtual machines.";
+    description = "Command line tool which provides an easy way to provision operating systems into virtual machines";
   };
 }

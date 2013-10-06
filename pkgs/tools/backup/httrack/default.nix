@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.httrack.com";
-    description = "HTTrack is a free (GPL, libre/free software) and easy-to-use offline browser utility.";
+    description = "Easy-to-use offline browser utility";
     license = "GPL";
   };
 }
