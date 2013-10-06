@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kdelibs }:
+{ stdenv, fetchurl, kdelibs, kdepimlibs, akonadi }:
 
 stdenv.mkDerivation rec {
   name = "eventlist-0.6.95";
