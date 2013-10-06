@@ -9,7 +9,7 @@ in
     services.rsnapshot = {
       enable = mkEnableOption "rsnapshot backups";
 
-      extraConfiguration = mkOption {
+      extraConfig = mkOption {
         default = "";
         example = ''
           retains	hourly	24
@@ -58,6 +58,6 @@ in
         cmd_rsnapshot_diff	${rsnapshot}/bin/rsnapshot-diff
         lockfile	/run/rsnapshot.pid
 
-      '' + cfg.extraConfiguration);
+      '' + cfg.extraConfig);
   };
 }
