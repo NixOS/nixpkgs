@@ -4,6 +4,7 @@
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base
+, debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
   # binaries may not be distributed without permission from the
@@ -35,7 +36,7 @@ in rec {
   commonConfigureFlags =
     [ "--enable-optimize"
       #"--enable-profiling"
-      "--disable-debug"
+      (if debugBuild then "--enable-debug" else "--disable-debug")
       "--enable-strip"
       "--with-system-jpeg"
       "--with-system-zlib"
