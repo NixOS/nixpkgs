@@ -1,7 +1,7 @@
 { stdenv, fetchurl, kdelibs, kdepimlibs, akonadi, gettext, boost }:
 
 stdenv.mkDerivation rec {
-  name = "eventlist-0.6.96";
+  name = "plasmoid-eventlist-0.6.96";
 
   src = fetchurl {
     url = "http://kde-look.org/CONTENT/content-files/107779-plasmoid-eventlist-0.6.96.tar.bz2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     inherit (kdelibs.meta) platforms;
-    description = "KDE Plasmoid to show events and todos on the desktop.";
+    description = "KDE Plasmoid to show events and todos on the desktop";
     longDescription = ''
       This is a plasmoid to show the events and todos from Akonadi resources (KOrganizer, Birthdays etc.).
       With a google resource also Google calendar items can be shown.
