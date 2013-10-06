@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kdelibs, kdepimlibs, akonadi }:
+{ stdenv, fetchurl, kdelibs, kdepimlibs, akonadi, gettext }:
 
 stdenv.mkDerivation rec {
   name = "eventlist-0.6.96";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ kdelibs ];
+  buildInputs = [ kdelibs kdepimlibs akonadi gettext ];
 
   meta = {
     inherit (kdelibs.meta) platforms;
