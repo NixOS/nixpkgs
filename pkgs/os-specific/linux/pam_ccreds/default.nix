@@ -14,6 +14,6 @@ stdenv.mkDerivation {
   buildInputs = [pam openssl db];
   meta = {
     homepage = "http://www.padl.com/OSS/pam_ccreds.html";
-    description = "The pam_ccreds module provides the means for Linux workstations to locally authenticate using an enterprise identity when the network is unavailable.";
+    description = "PAM module to locally authenticate using an enterprise identity when the network is unavailable";
   };
 }

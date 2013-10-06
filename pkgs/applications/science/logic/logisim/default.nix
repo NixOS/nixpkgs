@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   
   meta = {
     homepage = "http://ozark.hendrix.edu/~burch/logisim";
-    description = "Logisim is an educational tool for designing and simulating digital logic circuits.";
+    description = "Educational tool for designing and simulating digital logic circuits";
     license = "GPLv2+";
   };
 }

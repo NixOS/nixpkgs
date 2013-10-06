@@ -39,9 +39,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "HOL4, an interactive theorem prover based on Higher-Order Logic.";
+    description = "Interactive theorem prover based on Higher-Order Logic";
     longDescription = ''
-
       HOL4 is the latest version of the HOL interactive proof
       assistant for higher order logic: a programming environment in
       which theorems can be proved and proof tools
@@ -52,7 +51,6 @@ stdenv.mkDerivation {
       engines. HOL4 is particularly suitable as a platform for
       implementing combinations of deduction, execution and property
       checking.
-
     '';
     homepage = "http://hol.sourceforge.net/";
     license = "BSD";

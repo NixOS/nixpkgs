@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "low-level library for netfilter related kernel/userspace communication.";
+    description = "Low-level library for netfilter related kernel/userspace communication";
     longDescription = ''
       libnfnetlink is the low-level library for netfilter related kernel/userspace communication.
       It provides a generic messaging infrastructure for in-kernel netfilter subsystems

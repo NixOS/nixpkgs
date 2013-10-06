@@ -53,7 +53,7 @@ rec {
       
   name = "${pkgName}-" + version;
   meta = {
-    description = "Common Lisp-based ratpoison-like window manager.";
+    description = "Common Lisp-based ratpoison-like window manager";
     maintainers = [args.lib.maintainers.raskin];
     platforms = with args.lib.platforms;
       linux ++ freebsd;

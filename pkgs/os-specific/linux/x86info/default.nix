@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An identification utility for the x86 series of processors.";
+    description = "Identification utility for the x86 series of processors";
     longDescription =
     ''
       x86info will identify all Intel/AMD/Centaur/Cyrix/VIA CPUs. It leverages

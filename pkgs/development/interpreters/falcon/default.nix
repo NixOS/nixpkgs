@@ -29,6 +29,6 @@ rec {
 
   name = "falcon-" + version;
   meta = {
-    description = "A programming language. Has macros and syntax at once.";
+    description = "Programming language with macros and syntax at once";
   };
 }

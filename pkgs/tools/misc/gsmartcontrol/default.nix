@@ -14,7 +14,16 @@ stdenv.mkDerivation rec {
   #installTargets = "install datainstall";
 
   meta = {
-    description = "GSmartControl is a graphical user interface for smartctl (from smartmontools package), which is a tool for querying and controlling SMART (Self-Monitoring, Analysis, and Reporting Technology) data on modern hard disk drives.";
+    description = "Hard disk drive health inspection tool";
+    longDescription = ''
+      GSmartControl is a graphical user interface for smartctl (from
+      smartmontools package), which is a tool for querying and controlling
+      SMART (Self-Monitoring, Analysis, and Reporting Technology) data on
+      modern hard disk drives.
+
+      It allows you to inspect the drive's SMART data to determine its health,
+      as well as run various tests on it.
+    '';
     homepage = http://gsmartcontrol.berlios.de;
     license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [qknight];

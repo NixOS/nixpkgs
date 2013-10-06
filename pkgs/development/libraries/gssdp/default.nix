@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [pkgconfig libsoup glib libxml2];
 
   meta = {
-    description = "A GObject-based API for handling resource discovery and announcement over SSDP.";
+    description = "GObject-based API for handling resource discovery and announcement over SSDP";
     homepage = http://www.gupnp.org/;
     license = "LGPL v2";
     platforms = stdenv.lib.platforms.all;

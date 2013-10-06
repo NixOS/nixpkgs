@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   patches = [./tbb.patch];
 
   meta = {
-    description = "HipHop is a high performance PHP toolchain.";
+    description = "High performance PHP toolchain";
     homepage = https://github.com/facebook/hiphop-php;
     platforms = ["x86_64-linux"];
   };

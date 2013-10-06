@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "PMD scans Java source code and looks for potential problems." ;
+    description = "Scans Java source code and looks for potential problems";
     homepage = http://pmd.sourceforge.net/;
   };
 }

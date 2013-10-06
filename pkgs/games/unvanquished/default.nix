@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A FLOSS FPS combining RTS elements with a futuristic, sci-fi setting.";
+    description = "FPS game set in a futuristic, sci-fi setting";
     longDescription = ''
       Unvanquished is a free, open-source first-person shooter
       combining real-time strategy elements with a futuristic, sci-fi

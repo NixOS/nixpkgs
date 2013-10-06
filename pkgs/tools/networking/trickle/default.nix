@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-libevent";
 
   meta = {
-    description = "Trickle, a portable lightweight userspace bandwidth shaper.";
+    description = "Lightweight userspace bandwidth shaper";
     license = "BSD";
     homepage = http://monkey.org/~marius/pages/?page=trickle;
     platforms = stdenv.lib.platforms.linux;

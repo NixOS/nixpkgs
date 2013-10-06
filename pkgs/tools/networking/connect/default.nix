@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "make network connection via SOCKS and https proxy.";
+    description = "Make network connection via SOCKS and https proxy";
     longDescription = ''
       This proxy traversal tool is intended to assist OpenSSH (via ProxyCommand
       in ~/.ssh/config) and GIT (via $GIT_PROXY_COMMAND) utilize SOCKS and https proxies. 

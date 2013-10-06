@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ];
 
   meta = {
-    description = "Gnome Completion-Run Utility.";
+    description = "Gnome Completion-Run Utility";
     longDescription = ''
       A simple program which provides a "run program" window, featuring a bash-like TAB completion.
       It uses GTK+ interface.

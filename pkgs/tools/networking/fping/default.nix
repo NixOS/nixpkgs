@@ -10,6 +10,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://fping.org/";
-    description = "A program to send ICMP echo probes to network hosts.";
+    description = "Send ICMP echo probes to network hosts";
   };
 }

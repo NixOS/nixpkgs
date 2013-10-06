@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     + (if pam != null then " --enable-pam --enable-bad-pam" else " --disable-pam");
 
   meta = {
-    description = "Xlockmore, a screen locker for the X Window System.";
+    description = "Screen locker for the X Window System";
     homepage = "http://www.tux.org/~bagleyd/xlockmore.html";
     license = "GPL";
   };

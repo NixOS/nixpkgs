@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [zlib];
 
   meta = {
-    description = "An ID3 tag manipulation library.";
+    description = "ID3 tag manipulation library";
     homepage = http://mad.sourceforge.net/;
     license = "GPL";
   };

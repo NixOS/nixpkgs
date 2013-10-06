@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
  ];
 
   meta = {
-    description = "Mails anomalies in the system logfiles to the administrator.";
+    description = "Mails anomalies in the system logfiles to the administrator";
     longDescription = ''
       Mails anomalies in the system logfiles to the administrator.
 

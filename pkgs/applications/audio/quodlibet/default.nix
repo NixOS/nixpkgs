@@ -46,7 +46,7 @@ buildPythonPackage {
   '';
 
   meta = {
-    description = "Quod Libet is a GTK+-based audio player written in Python, using the Mutagen tagging library.";
+    description = "GTK+-based audio player written in Python, using the Mutagen tagging library";
 
     longDescription = ''
       Quod Libet is a GTK+-based audio player written in Python, using

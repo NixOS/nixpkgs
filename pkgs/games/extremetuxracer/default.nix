@@ -26,6 +26,9 @@ rec {
 
   name = "extremetuxracer-" + version;
   meta = {
-    description = "ExtremeTuxRacer - Tux lies on his belly and accelerates down ice slopes..";
+    description = "High speed arctic racing game based on Tux Racer";
+    longDescription = ''
+      ExtremeTuxRacer - Tux lies on his belly and accelerates down ice slopes.
+    '';
   };
 }

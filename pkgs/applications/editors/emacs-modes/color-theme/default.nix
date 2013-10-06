@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installTargets = "install-bin";
 
   meta = {
-    description = "An emacs-lisp mode for skinning your emacs.";
+    description = "Emacs-lisp mode for skinning your Emacs";
     homepage = http://www.nongnu.org/color-theme;
     license = "GPLv2+";
 
