@@ -9,16 +9,23 @@ in
     services.rsnapshot = {
       enable = mkEnableOption "rsnapshot backups";
 
-      configuration = mkOption {
+      extraConfiguration = mkOption {
         default = "";
         example = ''
-          retain hourly 24
-          retain daily 365
-          backup /home/ localhost/
+          retains	hourly	24
+          retain	daily	365
+          backup	/home/	localhost/
         '';
         type = types.lines;
         description = ''
-        rsnapshot configuration option in addition to the defaults from rsnapshot and this module.
+          rsnapshot configuration option in addition to the defaults from
+          rsnapshot and this module.
+
+          Note that tabs are required to separate option arguments, and
+          directory names require trailing slashes.
+
+          The "extra" in the option name might be a little misleading right
+          now, as it is required to get a functional configuration.
         '';
       };
 
@@ -27,9 +34,9 @@ in
         example = { "hourly" = "0 * * * *"; "daily" = "50 21 * * *"; };
         type = types.attrsOf types.string;
         description = ''
-        Periodicity at which intervals should be run by cron.
-        Note that the intervals also have to exist in configuration
-        as retain options.
+          Periodicity at which intervals should be run by cron.
+          Note that the intervals also have to exist in configuration
+          as retain options.
         '';
       };
     };
@@ -51,6 +58,6 @@ in
         cmd_rsnapshot_diff	${rsnapshot}/bin/rsnapshot-diff
         lockfile	/run/rsnapshot.pid
 
-      '' + cfg.configuration);
+      '' + cfg.extraConfiguration);
   };
 }
