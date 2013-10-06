@@ -9397,6 +9397,8 @@ let
         else
           callPackage ../applications/graphics/digikam { };
 
+      eventlist = callPackage ../applications/office/eventlist {};
+ 
       k3b = callPackage ../applications/misc/k3b { };
 
       kadu = callPackage ../applications/networking/instant-messengers/kadu { };
