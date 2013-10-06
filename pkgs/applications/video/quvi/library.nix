@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig lua5 curl quvi_scripts ];
 
   meta = { 
-    description = "Quvi is a web video downloader.";
+    description = "Web video downloader";
     homepage = http://quvi.sf.net;
     license = "LGPLv2.1+";
     platforms = stdenv.lib.platforms.linux;

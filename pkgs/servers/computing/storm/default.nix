@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://storm-project.net";
-    description = "Storm, free and open source distributed realtime computation system.";
+    description = "Distributed realtime computation system";
     license = "Eclipse Public License 1.0";
     maintainers = [ lib.maintainers.vizanto ];
   };

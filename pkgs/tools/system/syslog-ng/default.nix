@@ -13,9 +13,8 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.balabit.com/network-security/syslog-ng/";
-    description = "Next-generation syslogd with advanced networking and filtering capabilities.";
+    description = "Next-generation syslogd with advanced networking and filtering capabilities";
     license = "GPLv2";
-
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };

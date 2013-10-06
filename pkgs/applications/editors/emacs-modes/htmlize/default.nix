@@ -11,6 +11,6 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "Convert buffer text and decorations to HTML.";
+    description = "Convert buffer text and decorations to HTML";
   };
 }

@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "High-level performance-oriented dynamical language for technical computing.";
+    description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "http://julialang.org/";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.raskin ];

@@ -32,6 +32,6 @@ stdenv.mkDerivation {
     '';
     
   meta = {
-    description = "Unicode font for Base Multilingual Plane.";
+    description = "Unicode font for Base Multilingual Plane";
   };
 }

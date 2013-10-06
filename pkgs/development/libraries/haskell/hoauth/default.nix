@@ -11,7 +11,7 @@ cabal.mkDerivation (self: {
     time utf8String
   ];
   meta = {
-    description = "A Haskell implementation of OAuth 1.0a protocol.";
+    description = "A Haskell implementation of OAuth 1.0a protocol";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];

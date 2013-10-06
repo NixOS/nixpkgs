@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "SysBench is a modular, cross-platform and multi-threaded benchmark tool.";
+    description = "Modular, cross-platform and multi-threaded benchmark tool";
     license = "GPLv2";
     platforms = stdenv.lib.platforms.linux;
   };

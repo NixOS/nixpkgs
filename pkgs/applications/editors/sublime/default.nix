@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Sublime Text is a sophisticated text editor for code, markup and prose.";
+    description = "Sophisticated text editor for code, markup and prose";
     license = "unfree";
   };
 }

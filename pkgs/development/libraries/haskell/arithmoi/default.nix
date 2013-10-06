@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ mtl random ];
   meta = {
     homepage = "https://bitbucket.org/dafis/arithmoi";
-    description = "Efficient basic number-theoretic functions. Primes, powers, integer logarithms.";
+    description = "Basic number theoretic functions and utilities";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
   };

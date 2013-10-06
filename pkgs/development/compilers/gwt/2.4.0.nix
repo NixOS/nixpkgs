@@ -18,6 +18,6 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://code.google.com/webtoolkit/;
-    description = "Google Web Toolkit (GWT) is a development toolkit for building and optimizing complex browser-based applications.";
+    description = "Google Web Toolkit (GWT) is a development toolkit for building and optimizing complex browser-based applications";
   };
 }

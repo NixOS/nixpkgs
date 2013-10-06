@@ -28,7 +28,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Gmvault Gmail Backup - Backup and restore your gmail account at will.";
+    description = "Backup and restore your gmail account";
     homepage = "http://gmvault.org";
     license = pkgs.lib.licenses.agpl3Plus;
   };

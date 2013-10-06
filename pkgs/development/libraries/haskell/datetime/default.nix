@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ QuickCheck time ];
   meta = {
     homepage = "http://github.com/esessoms/datetime";
-    description = "Utilities to make Data.Time.* easier to use.";
+    description = "Utilities to make Data.Time.* easier to use";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];

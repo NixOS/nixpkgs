@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Cross platform GUI for the computer algebra system Maxima.";
+    description = "Cross platform GUI for the computer algebra system Maxima";
     license = "GPL2";
     homepage = http://wxmaxima.sourceforge.net;
     platforms = stdenv.lib.platforms.linux;

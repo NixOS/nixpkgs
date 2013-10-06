@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.digip.org/jansson/";
-    description = "Jansson is a C library for encoding, decoding and manipulating JSON data.";
+    description = "C library for encoding, decoding and manipulating JSON data";
     license = "MIT";
   };
 }
