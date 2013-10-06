@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kdelibs, kdepimlibs, akonadi, gettext }:
+{ stdenv, fetchurl, kdelibs, kdepimlibs, akonadi, gettext, boost }:
 
 stdenv.mkDerivation rec {
   name = "eventlist-0.6.96";
@@ -8,9 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "26cc7bd1c465bf1379fd0ba1fa8592eaa62f2553734d1b283e17359103908eea";
   };
 
-  doCheck = true;
-
-  buildInputs = [ kdelibs kdepimlibs akonadi gettext ];
+  buildInputs = [ kdelibs kdepimlibs akonadi gettext boost ];
 
   meta = {
     inherit (kdelibs.meta) platforms;
