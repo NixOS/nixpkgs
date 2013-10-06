@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, expat, pam, intltool, spidermonkey
 , gobjectIntrospection
-, useSystemd ? true, systemd }:
+, useSystemd ? stdenv.isLinux, systemd }:
 
 let
 
@@ -27,17 +27,17 @@ stdenv.mkDerivation rec {
     [ pkgconfig glib expat pam intltool spidermonkey gobjectIntrospection ]
     ++ stdenv.lib.optional useSystemd systemd;
 
+  preConfigure = ''
+    patchShebangs .
+  '' + stdenv.lib.optionalString useSystemd /* bogus chroot detection */ ''
+    sed '/libsystemd-login autoconfigured, but system does not appear to use systemd/s/.*/:/' -i configure
+  '';
+
   # TODO: Distro/OS detection is impure
   configureFlags = [
     "--libexecdir=$(out)/libexec/polkit-1"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
   ];
-
-  # Ugly hack to overwrite hardcoded directories
-  # TODO: investigate a proper patch which will be accepted upstream
-  CFLAGS = stdenv.lib.concatStringsSep " "
-    ( map (var: ''-DPACKAGE_${var}_DIR=\""${builtins.getAttr var foolVars}"\"'')
-        (builtins.attrNames foolVars) );
 
   preBuild =
     ''
