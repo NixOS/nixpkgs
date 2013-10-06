@@ -19,7 +19,7 @@
     '';
 
     meta = {
-      description = "wgetpaste";
+      description = "Command-line interface to various pastebins";
       homepage = http://wgetpaste.zlin.dk/;
       license = "publicDomain";
       maintainers = with stdenv.lib.maintainers; [qknight];
