@@ -42,22 +42,24 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.rsnapshot ];
-
-    services.cron.systemCronJobs =
-      mapAttrsToList (interval: time: "${time} root ${pkgs.rsnapshot}/bin/rsnapshot ${interval}") cfg.cronIntervals;
-
-    environment.etc."rsnapshot.conf".source = with pkgs; writeText "gen-rsnapshot.conf" (''
+  config = mkIf cfg.enable (let
+    myRsnapshot = pkgs.rsnapshot.override { configFile = rsnapshotCfg; };
+    rsnapshotCfg = with pkgs; writeText "gen-rsnapshot.conf" (''
         config_version	1.2
         cmd_cp	${coreutils}/bin/cp
         cmd_rsync	${rsync}/bin/rsync
         cmd_ssh	${openssh}/bin/ssh
         cmd_logger	${inetutils}/bin/logger
         cmd_du	${coreutils}/bin/du
-        cmd_rsnapshot_diff	${rsnapshot}/bin/rsnapshot-diff
         lockfile	/run/rsnapshot.pid
 
-      '' + cfg.extraConfig);
-  };
+        ${cfg.extraConfig}
+      '');
+    in {
+      environment.systemPackages = [ myRsnapshot ];
+
+      services.cron.systemCronJobs =
+        mapAttrsToList (interval: time: "${time} root ${myRsnapshot}/bin/rsnapshot ${interval}") cfg.cronIntervals;
+    }
+  );
 }
