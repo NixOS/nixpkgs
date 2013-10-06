@@ -1,11 +1,11 @@
 { stdenv, fetchurl, kdelibs, kdepimlibs, akonadi }:
 
 stdenv.mkDerivation rec {
-  name = "eventlist-0.6.95";
+  name = "eventlist-0.6.96";
 
   src = fetchurl {
-    url = "http://kde-look.org/CONTENT/content-files/107779-plasmoid-eventlist-0.6.95.tar.bz2";
-    sha256 = "29d3ff0b84353c2e563e05f75cd729b9e2971365eed9b8ce9b38d94f51901b94";
+    url = "http://kde-look.org/CONTENT/content-files/107779-plasmoid-eventlist-0.6.96.tar.bz2";
+    sha256 = "26cc7bd1c465bf1379fd0ba1fa8592eaa62f2553734d1b283e17359103908eea";
   };
 
   doCheck = true;
