@@ -31,10 +31,7 @@ in
           }
         ''
       else
-        ''
-          menuentry "Memtest86+"
-            linux16 @bootRoot@/memtest.bin
-        '';
+        throw "Memtest86+ is not supported with GRUB 1.";
 
     boot.loader.grub.extraFiles."memtest.bin" = "${memtest86}/memtest.bin";
 
