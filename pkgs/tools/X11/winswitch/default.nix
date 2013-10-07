@@ -38,6 +38,8 @@ let
     '';
 
     doCheck = false;
+
+    meta.platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 in stdenv.lib.overrideDerivation base (b: {
   postFixup = b.postFixup + ''

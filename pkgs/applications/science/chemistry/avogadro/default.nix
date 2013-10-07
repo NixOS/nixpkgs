@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Molecule editor and visualizer";
     maintainers = [ stdenv.lib.maintainers.urkud ];
-    inherit (qt4.meta) platforms;
+    platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }

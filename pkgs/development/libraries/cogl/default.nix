@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
       render without stepping on each other's toes.
     '';
 
-    inherit (glib.meta) platforms;
+    platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }

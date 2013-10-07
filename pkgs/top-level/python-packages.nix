@@ -1347,6 +1347,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = http://pythonhosted.org/evdev;
       license = licenses.bsd3;
       maintainers = [ maintainers.goibhniu ];
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -4628,6 +4629,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = "http://www.pyglet.org/";
       description = "A cross-platform windowing and multimedia library";
       license = stdenv.lib.licenses.bsd3;
+      platforms = stdenv.lib.platforms.mesaPlatforms;
     };
   };
 
@@ -4795,7 +4797,8 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = "https://fedorahosted.org/pyparted/";
       description = "Python interface for libparted";
-      license = pkgs.lib.licenses.gpl2Plus;
+      license = stdenv.lib.licenses.gpl2Plus;
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -4851,6 +4854,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = "http://pyudev.readthedocs.org/";
       description = "Pure Python libudev binding";
       license = stdenv.lib.licenses.lgpl21Plus;
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -4974,6 +4978,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
           '';
 
           license = "BSD-style";
+          platforms = stdenv.lib.platforms.mesaPlatforms;
         };
       };
 
