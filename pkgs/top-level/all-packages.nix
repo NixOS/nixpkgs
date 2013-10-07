@@ -8908,6 +8908,8 @@ let
 
   xbmc = callPackage ../applications/video/xbmc { };
 
+  xca = callPackage ../applications/misc/xca { };
+
   xcalib = callPackage ../tools/X11/xcalib { };
 
   xcape = callPackage ../tools/X11/xcape { };
