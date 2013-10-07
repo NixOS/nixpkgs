@@ -8826,7 +8826,10 @@ let
     graphicsSupport = false;
   };
 
-  weechat = callPackage ../applications/networking/irc/weechat { };
+  weechat = callPackage ../applications/networking/irc/weechat {
+    # weechat crashes on /exit when using gnutls 3.1.x. gnutls2 works.
+    gnutls = gnutls2;
+  };
 
   weston = callPackage ../applications/window-managers/weston {
     cairo = cairo.override {
