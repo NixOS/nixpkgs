@@ -72,6 +72,7 @@ with pkgs.lib;
   boot.kernelModules = [ "xen-netfront" ];
 
   # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
+  boot.loader.grub.version = 1;
   boot.loader.grub.device = "nodev";
   boot.loader.grub.timeout = 0;
   boot.loader.grub.extraPerEntryConfig = "root (hd0)";
