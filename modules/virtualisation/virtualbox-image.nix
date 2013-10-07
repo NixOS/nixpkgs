@@ -6,7 +6,7 @@ with pkgs.lib;
   system.build.virtualBoxImage =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "virtualbox-image"
-        { memSize = 512;
+        { memSize = 768;
           preVM =
             ''
               mkdir $out
