@@ -3147,6 +3147,8 @@ let
 
   j = callPackage ../development/interpreters/j {};
 
+  jmeter = callPackage ../applications/networking/jmeter {};
+
   kaffe = callPackage ../development/interpreters/kaffe { };
 
   kona = callPackage ../development/interpreters/kona {};
