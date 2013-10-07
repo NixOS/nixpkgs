@@ -4330,6 +4330,10 @@ let
     guileBindings = config.gnutls.guile or true;
   };
 
+  gnutls32 = callPackage ../development/libraries/gnutls/3.2.nix {
+    guileBindings = config.gnutls.guile or true;
+  };
+
   gnutls_without_guile = lowPrio (gnutls.override { guileBindings = false; });
   gnutls2_without_guile = lowPrio (gnutls2.override { guileBindings = false; });
 
@@ -8827,8 +8831,8 @@ let
   };
 
   weechat = callPackage ../applications/networking/irc/weechat {
-    # weechat crashes on /exit when using gnutls 3.1.x. gnutls2 works.
-    gnutls = gnutls2;
+    # weechat crashes on /exit when using gnutls 3.1.x. gnutls 3.2.x works.
+    gnutls = gnutls32;
   };
 
   weston = callPackage ../applications/window-managers/weston {
