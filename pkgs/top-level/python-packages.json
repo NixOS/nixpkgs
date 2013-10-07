@@ -126,5 +126,14 @@
   { "name": "plone.recipe.zope2instance",
     "extends": "http://dist.plone.org/release/4.3.2/versions.cfg",
     "doCheck": false
+  },
+  { "name": "RelStorage",
+    "extends": "http://dist.plone.org/release/4.3.2/versions.cfg",
+    "doCheck": false
+  },
+  { "name": "psycopg2",
+    "buildInputs": [ "pkgs.postgresql" ],
+    "doCheck": false
   }
+
 ]
