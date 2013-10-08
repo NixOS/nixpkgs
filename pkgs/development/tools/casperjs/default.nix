@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

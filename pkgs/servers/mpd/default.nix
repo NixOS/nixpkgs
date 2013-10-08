@@ -34,8 +34,8 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig glib ]
-    ++ opt (!stdenv.isDarwin) systemd
-    ++ opt (!stdenv.isDarwin && alsaSupport) alsaLib
+    ++ opt stdenv.isLinux systemd
+    ++ opt (stdenv.isLinux && alsaSupport) alsaLib
     ++ opt flacSupport flac
     ++ opt vorbisSupport libvorbis
     # using libmad to decode mp3 files on darwin is causing a segfault -- there
@@ -81,7 +81,7 @@ in stdenv.mkDerivation rec {
       (mkFlag mpg123Support "mpg123")
       (mkFlag aacSupport "aac")
       "--enable-debugging" ]
-    ++ opt (!stdenv.isDarwin)
+    ++ opt stdenv.isLinux
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system";
 
   NIX_LDFLAGS = ''
