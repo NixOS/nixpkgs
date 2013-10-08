@@ -599,6 +599,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   bindingsDSL = callPackage ../development/libraries/haskell/bindings-DSL {};
 
+  bindingsLibusb = callPackage ../development/libraries/haskell/bindings-libusb {
+    libusb = pkgs.libusb1;
+  };
+
   bindingsPosix = callPackage ../development/libraries/haskell/bindings-posix {};
 
   bitarray = callPackage ../development/libraries/haskell/bitarray {};
@@ -2142,6 +2146,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   url = callPackage ../development/libraries/haskell/url {};
 
   urlencoded = callPackage ../development/libraries/haskell/urlencoded {};
+
+  usb = callPackage ../development/libraries/haskell/usb {};
 
   utf8Light = callPackage ../development/libraries/haskell/utf8-light {};
 
