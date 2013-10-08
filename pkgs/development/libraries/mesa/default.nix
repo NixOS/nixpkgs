@@ -65,6 +65,7 @@ stdenv.mkDerivation {
     "--enable-driglx-direct" # seems enabled anyway
     "--enable-gallium-llvm" "--with-llvm-shared-libs"
     "--enable-xa" # used in vmware driver
+    "--enable-gles1" "--enable-gles2"
 
     "--with-dri-drivers=i965,r200,radeon"
     ("--with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast"
@@ -74,7 +75,6 @@ stdenv.mkDerivation {
     ++ optional enableR600LlvmCompiler "--enable-r600-llvm-compiler"
     ++ optional enableTextureFloats "--enable-texture-float"
     ++ optionals enableExtraFeatures [
-      "--enable-gles1" "--enable-gles2"
       "--enable-osmesa"
       "--enable-openvg" "--enable-gallium-egl" # not needed for EGL in Gallium, but OpenVG might be useful
       #"--enable-xvmc" # tests segfault with 9.1.{1,2,3}
