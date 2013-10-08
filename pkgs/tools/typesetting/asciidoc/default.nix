@@ -19,6 +19,8 @@
 , fop ? null
 # TODO: Package this:
 #, epubcheck ? null
+, gnused ? null
+, coreutils ? null
 
 , unzip ? null
 # filters
@@ -49,9 +51,11 @@ assert enableStandardFeatures ->
   docbook_xml_dtd_45 != null &&
   docbook5_xsl != null &&
   docbook_xsl != null &&
-  fop != null;
+  fop != null &&
 # TODO: Package this:
-#  epubcheck != null;
+#  epubcheck != null &&
+  gnused != null &&
+  coreutils != null;
 
 # filters
 assert (enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter || enableAafigureFilter) -> unzip != null;
@@ -218,7 +222,7 @@ stdenv.mkDerivation rec {
     # use it to work around an impurity in the tetex package; tetex tools
     # cannot find their neighbours (e.g. pdflatex doesn't find mktextfm).
     # We can remove PATH= when those impurities are fixed.
-    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook5_xsl}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${tetex}/bin')|" \
+    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook5_xsl}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${tetex}/bin:${coreutils}/bin:${gnused}/bin')|" \
         -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
         -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt}/bin/xsltproc'|" \
         -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
