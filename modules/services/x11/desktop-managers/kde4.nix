@@ -145,6 +145,7 @@ in
           xorg.xauth # used by kdesu
           pkgs.shared_desktop_ontologies # used by nepomuk
           pkgs.strigi # used by nepomuk
+          pkgs.mysql # used by akonadi
         ]
       ++ [ nepomukConfig ] ++ phononBackendPackages
       ++ config.environment.kdePackages;
