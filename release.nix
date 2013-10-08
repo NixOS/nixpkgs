@@ -174,8 +174,8 @@ in {
   });
 
 
-  # A bootable VirtualBox image.  FIXME: generate a OVF appliance?
-  vdi = pkgs.lib.genAttrs systems (system:
+  # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
+  ova = pkgs.lib.genAttrs systems (system:
 
     with import <nixpkgs> { inherit system; };
 
@@ -190,19 +190,18 @@ in {
       }).config;
 
     in
-      # Declare the VDI as a build product so that it shows up in Hydra.
-      runCommand "nixos-vdi-${config.system.nixosVersion}-${system}"
+      # Declare the OVA as a build product so that it shows up in Hydra.
+      runCommand "nixos-ova-${config.system.nixosVersion}-${system}"
         { meta = {
-            description = "NixOS VirtualBox disk image (${system})";
+            description = "NixOS VirtualBox appliance (${system})";
             maintainers = lib.maintainers.eelco;
           };
-          vdi = config.system.build.virtualBoxImage;
+          ova = config.system.build.virtualBoxOVA;
         }
         ''
           mkdir -p $out/nix-support
-          fn=$out/nixos-${config.system.nixosVersion}-${system}.vdi.xz
-          xz < $vdi/*.vdi > $fn
-          echo "file vdi $fn" >> $out/nix-support/hydra-build-products
+          fn=$(echo $ova/*.ova)
+          echo "file ova $fn" >> $out/nix-support/hydra-build-products
         '' # */
 
   );

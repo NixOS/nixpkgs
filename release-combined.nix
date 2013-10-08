@@ -42,7 +42,7 @@ in rec {
 
         (all nixos.iso_minimal)
         (all nixos.iso_graphical)
-        (all nixos.vdi)
+        (all nixos.ova)
 
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)

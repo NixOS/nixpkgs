@@ -16,6 +16,7 @@ with pkgs.lib;
             '';
           postVM =
             ''
+              echo "creating VirtualBox disk image..."
               ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -O vdi $diskImage $out/disk.vdi
               rm $diskImage
             '';
@@ -73,6 +74,31 @@ with pkgs.lib;
           umount /mnt
         ''
     );
+
+  system.build.virtualBoxOVA = pkgs.runCommand "virtualbox-ova"
+    { buildInputs = [ pkgs.linuxPackages.virtualbox ];
+      vmName = "NixOS ${config.system.nixosVersion} (${pkgs.stdenv.system})";
+      fileName = "nixos-${config.system.nixosVersion}-${pkgs.stdenv.system}.ova";
+    }
+    ''
+      echo "creating VirtualBox VM..."
+      export HOME=$PWD
+      VBoxManage createvm --name "$vmName" --register \
+        --ostype ${if pkgs.stdenv.system == "x86_64-linux" then "Linux26_64" else "Linux26"}
+      VBoxManage modifyvm "$vmName" \
+        --memory 1536 --acpi on --vram 10 \
+        --nictype1 virtio --nic1 nat \
+        --audiocontroller ac97 --audio alsa \
+        --rtcuseutc on \
+        --usb on --mouse usbtablet
+      VBoxManage storagectl "$vmName" --name SATA --add sata --sataportcount 4 --bootable on --hostiocache on
+      VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
+        --medium ${config.system.build.virtualBoxImage}/disk.vdi
+
+      echo "exporting VirtualBox VM..."
+      mkdir -p $out
+      VBoxManage export "$vmName" --output "$out/$fileName"
+    '';
 
   fileSystems."/".device = "/dev/disk/by-label/nixos";
 
