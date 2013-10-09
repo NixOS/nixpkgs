@@ -5,7 +5,7 @@
 
     system.fsPackages = [ pkgs.e2fsprogs ];
 
-    boot.initrd.kernelModules = [ "ext2" "ext3" "ext4" ];
+    boot.initrd.availableKernelModules = [ "ext2" "ext3" "ext4" ];
 
     boot.initrd.extraUtilsCommands =
       ''
