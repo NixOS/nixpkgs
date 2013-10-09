@@ -10130,9 +10130,7 @@ let
 
   znc = callPackage ../applications/networking/znc { };
 
-  zsnes = callPackage_i686 ../misc/emulators/zsnes {
-    libpng = libpng12;
-  };
+  zsnes = callPackage_i686 ../misc/emulators/zsnes { };
 
   misc = import ../misc/misc.nix { inherit pkgs stdenv; };
 
