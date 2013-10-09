@@ -1,5 +1,7 @@
 { config, pkgs, ... }:
 
+with pkgs.lib;
+
 {
   imports =
     [ ../virtualisation/virtualbox-image.nix
