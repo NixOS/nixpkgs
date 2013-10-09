@@ -63,8 +63,9 @@ in
 
     boot.initrd.luks.cryptoModules = mkOption {
       default =
-        [ "aes" "aes_generic" "aes_x86_64" "aes_i586" "blowfish" "twofish"
-          "serpent" "cbc" "xts" "lrw" "sha256" "sha1" "sha2"
+        [ "aes" "aes_generic" "blowfish" "twofish"
+          "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
+          (if pkgs.stdenv.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
         ];
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).
@@ -151,7 +152,7 @@ in
       ["firewire_ohci" "firewire_core" "firewire_sbp2"];
 
     # Some modules that may be needed for mounting anything ciphered
-    boot.initrd.kernelModules = [ "dm_mod" "dm_crypt" "cryptd" ] ++ luks.cryptoModules;
+    boot.initrd.availableKernelModules = [ "dm_mod" "dm_crypt" "cryptd" ] ++ luks.cryptoModules;
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''
