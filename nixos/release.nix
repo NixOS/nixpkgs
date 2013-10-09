@@ -85,13 +85,13 @@ in {
       expr = builtins.readFile lib/channel-expr.nix;
 
       distPhase = ''
+        rm -rf .git
         echo -n $VERSION_SUFFIX > .version-suffix
         releaseName=nixos-$VERSION$VERSION_SUFFIX
         mkdir -p $out/tarballs
         mkdir ../$releaseName
-        cp -prd ${nixpkgs} ../$releaseName/nixpkgs
+        cp -prd . ../$releaseName/nixpkgs
         chmod -R u+w ../$releaseName
-        rm -rf .git
         ln -s nixpkgs/nixos ../$releaseName/nixos
         echo "$expr" > ../$releaseName/default.nix
         NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --xml \* > /dev/null
