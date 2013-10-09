@@ -193,27 +193,42 @@ $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 # extraEntries could refer to @bootRoot@, which we have to substitute
 $conf =~ s/\@bootRoot\@/$bootRoot/g;
 
-# Add entries for all previous generations of the system profile.
-$conf .= "submenu \"NixOS - All configurations\" {\n" if $grubVersion == 2;
+# Emit submenus for all system profiles.
+sub addProfile {
+    my ($profile, $description) = @_;
 
-sub nrFromGen { my ($x) = @_; $x =~ /system-(.*)-link/; return $1; }
+    # Add entries for all generations of this profile.
+    $conf .= "submenu \"$description\" {\n" if $grubVersion == 2;
 
-my @links = sort
-    { nrFromGen($b) <=> nrFromGen($a) }
-    (glob "/nix/var/nix/profiles/system-*-link");
+    sub nrFromGen { my ($x) = @_; $x =~ /\/\w+-(\d+)-link/; return $1; }
 
-my $curEntry = 0;
-foreach my $link (@links) {
-    last if $curEntry++ >= $configurationLimit;
-    my $date = strftime("%F", localtime(lstat($link)->mtime));
-    my $version =
-        -e "$link/nixos-version"
-        ? readFile("$link/nixos-version")
-        : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-    addEntry("NixOS - Configuration " . nrFromGen($link) . " ($date - $version)", $link);
+    my @links = sort
+        { nrFromGen($b) <=> nrFromGen($a) }
+        (glob "$profile-*-link");
+
+    my $curEntry = 0;
+    foreach my $link (@links) {
+        last if $curEntry++ >= $configurationLimit;
+        my $date = strftime("%F", localtime(lstat($link)->mtime));
+        my $version =
+            -e "$link/nixos-version"
+            ? readFile("$link/nixos-version")
+            : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
+        addEntry("NixOS - Configuration " . nrFromGen($link) . " ($date - $version)", $link);
+    }
+
+    $conf .= "}\n" if $grubVersion == 2;
 }
 
-$conf .= "}\n" if $grubVersion == 2;
+addProfile "/nix/var/nix/profiles/system", "NixOS - All configurations";
+
+if ($grubVersion == 2) {
+    for my $profile (glob "/nix/var/nix/profiles/system-profiles/*") {
+        my $name = basename($profile);
+        next unless $name =~ /^\w+$/;
+        addProfile $profile, "NixOS - Profile '$name'";
+    }
+}
 
 # Run extraPrepareConfig in sh
 if ($extraPrepareConfig ne "") {

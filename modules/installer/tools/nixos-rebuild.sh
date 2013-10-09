@@ -24,10 +24,10 @@ Options:
   --upgrade              fetch the latest version of NixOS before rebuilding
   --install-grub         (re-)install the Grub bootloader
   --no-build-nix         don't build the latest Nix from Nixpkgs before
-                         building NixOS
+                           building NixOS
   --rollback             restore the previous NixOS configuration (only
-                         with switch, boot, test, build)
-
+                           with switch, boot, test, build)
+  --profile-name / -p    install in the specified system profile
   --fast                 same as --no-build-nix --show-trace
 
 Various nix-build options are also accepted, in particular:
@@ -50,6 +50,7 @@ buildNix=1
 rollback=
 upgrade=
 repair=
+profile=/nix/var/nix/profiles/system
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -91,6 +92,17 @@ while [ "$#" -gt 0 ]; do
       --fast)
         buildNix=
         extraBuildFlags+=(--show-trace)
+        ;;
+      --profile-name|-p)
+        if [ -z "$1" ]; then
+            echo "$0: ‘--profile-name’ requires an argument"
+            exit 1
+        fi
+        if [ "$1" != system ]; then
+            profile="/nix/var/nix/profiles/system-profiles/$1"
+            mkdir -p -m 0755 "$(dirname "$profile")"
+        fi
+        shift 1
         ;;
       *)
         echo "$0: unknown option \`$i'"
@@ -164,8 +176,8 @@ fi
 if [ -z "$rollback" ]; then
     echo "building the system configuration..." >&2
     if [ "$action" = switch -o "$action" = boot ]; then
-        nix-env "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system
-        pathToConfig=/nix/var/nix/profiles/system
+        nix-env "${extraBuildFlags[@]}" -p "$profile" -f '<nixos>' --set -A system
+        pathToConfig="$profile"
     elif [ "$action" = test -o "$action" = build -o "$action" = dry-run ]; then
         nix-build '<nixos>' -A system -K -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
@@ -180,14 +192,14 @@ if [ -z "$rollback" ]; then
     fi
 else # [ -n "$rollback" ]
     if [ "$action" = switch -o "$action" = boot ]; then
-        nix-env --rollback -p /nix/var/nix/profiles/system
-        pathToConfig=/nix/var/nix/profiles/system
+        nix-env --rollback -p "$profile"
+        pathToConfig="$profile"
     elif [ "$action" = test -o "$action" = build ]; then
         systemNumber=$(
-            nix-env -p /nix/var/nix/profiles/system --list-generations |
+            nix-env -p "$profile" --list-generations |
             sed -n '/current/ {g; p;}; s/ *\([0-9]*\).*/\1/; h'
         )
-        ln -sT /nix/var/nix/profiles/system-${systemNumber}-link ./result
+        ln -sT "$profile"-${systemNumber}-link ./result
         pathToConfig=./result
     else
         showSyntax
