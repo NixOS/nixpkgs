@@ -628,6 +628,14 @@ in
 
     users.extraGroups.systemd-journal.gid = config.ids.gids.systemd-journal;
 
+    # Generate timer units for all services that have a ‘startAt’ value.
+    systemd.timers =
+      mapAttrs (name: service:
+        { wantedBy = [ "timers.target" ];
+          timerConfig.OnCalendar = service.startAt;
+        })
+        (filterAttrs (name: service: service.startAt != "") cfg.services);
+
     # FIXME: These are borrowed from upstream systemd.
     systemd.services."systemd-update-utmp" =
       { description = "Update UTMP about System Reboot/Shutdown";

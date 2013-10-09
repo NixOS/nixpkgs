@@ -167,11 +167,7 @@ in
         serviceConfig.User = "${cfg.user}";
         serviceConfig.Group = "${cfg.group}";
         environment.OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
-      };
-
-    systemd.timers.venus =
-      { wantedBy = [ "timers.target" ];
-        timerConfig.OnCalendar = cfg.dates;
+        startOn = cfg.dates;
       };
 
   };

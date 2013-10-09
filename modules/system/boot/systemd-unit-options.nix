@@ -229,6 +229,20 @@ rec {
       '';
     };
 
+    startAt = mkOption {
+      type = types.uniq types.string;
+      default = "";
+      example = "Sun 14:00:00";
+      description = ''
+        Automatically start this unit at the given date/time, which
+        must be in the format described in
+        <citerefentry><refentrytitle>systemd.time</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry>.  This is equivalent
+        to adding a corresponding timer unit with
+        <option>OnCalendar</option> set to the value given here.
+      '';
+    };
+
   };
 
 

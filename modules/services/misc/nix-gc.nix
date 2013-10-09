@@ -48,22 +48,14 @@ in
 
   ###### implementation
 
-  config = mkMerge [
+  config = {
 
-    { systemd.services.nix-gc =
-        { description = "Nix Garbage Collector";
-          path  = [ config.environment.nix ];
-          script = "exec nix-collect-garbage ${cfg.options}";
-        };
-    }
+    systemd.services.nix-gc =
+      { description = "Nix Garbage Collector";
+        serviceConfig.ExecStart = "${config.environment.nix}/bin/nix-collect-garbage ${cfg.options}";
+        startAt = optionalString cfg.automatic cfg.dates;
+      };
 
-    (mkIf cfg.automatic {
-      systemd.timers.nix-gc =
-        { wantedBy = [ "timers.target" ];
-          timerConfig.OnCalendar = cfg.dates;
-        };
-    })
-
-  ];
+  };
 
 }
