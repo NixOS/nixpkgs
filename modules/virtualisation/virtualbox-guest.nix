@@ -40,14 +40,16 @@ optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
 
     users.extraGroups.vboxsf.gid = config.ids.gids.vboxsf;
 
-    jobs.virtualbox =
+    systemd.services.virtualbox =
       { description = "VirtualBox Guest Services";
 
         wantedBy = [ "multi-user.target" ];
         requires = [ "dev-vboxguest.device" ];
         after = [ "dev-vboxguest.device" ];
 
-        exec = "${kernel.virtualboxGuestAdditions}/sbin/VBoxService --foreground";
+        unitConfig.ConditionVirtualization = "oracle";
+
+        serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/sbin/VBoxService VBoxService --foreground";
       };
 
     services.xserver.videoDrivers = mkOverride 50 [ "virtualbox" ];
