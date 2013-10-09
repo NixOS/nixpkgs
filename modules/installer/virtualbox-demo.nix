@@ -7,4 +7,7 @@
       ../profiles/demo.nix
       ../profiles/clone-config.nix
     ];
+
+  # Allow mounting of shared folders.
+  users.extraUsers.demo.extraGroups = [ "vboxsf" ];
 }
