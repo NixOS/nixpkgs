@@ -44,31 +44,31 @@ let
 
 
   # The efi boot image
-  efiImg = pkgs.runCommand "efi-image_eltorito" {}
+  efiImg = pkgs.runCommand "efi-image_eltorito" { buildInputs = [ pkgs.mtools ]; }
     ''
       #Let's hope 10M is enough
       dd bs=2048 count=5120 if=/dev/zero of="$out"
       ${pkgs.dosfstools}/sbin/mkfs.vfat "$out"
-      ${pkgs.mtools}/bin/mmd -i "$out" efi
-      ${pkgs.mtools}/bin/mmd -i "$out" efi/boot
-      ${pkgs.mtools}/bin/mmd -i "$out" efi/nixos
-      ${pkgs.mtools}/bin/mmd -i "$out" loader
-      ${pkgs.mtools}/bin/mmd -i "$out" loader/entries
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
+      mmd -i "$out" efi
+      mmd -i "$out" efi/boot
+      mmd -i "$out" efi/nixos
+      mmd -i "$out" loader
+      mmd -i "$out" loader/entries
+      mcopy -v -i "$out" \
         ${pkgs.gummiboot}/lib/gummiboot/gummiboot${targetArch}.efi \
         ::efi/boot/boot${targetArch}.efi
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
-        ${config.boot.kernelPackages.kernel + "/bzImage"} ::bzImage
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
-        ${config.system.build.initialRamdisk + "/initrd"} ::efi/nixos/initrd
+      mcopy -v -i "$out" \
+        ${config.boot.kernelPackages.kernel}/bzImage ::bzImage
+      mcopy -v -i "$out" \
+        ${config.system.build.initialRamdisk}/initrd ::efi/nixos/initrd
       echo "title NixOS LiveCD" > boot-params
       echo "linux /bzImage" >> boot-params
       echo "initrd /efi/nixos/initrd" >> boot-params
       echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> boot-params
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::loader/entries/nixos-livecd.conf
+      mcopy -v -i "$out" boot-params ::loader/entries/nixos-livecd.conf
       echo "default nixos-livecd" > boot-params
       echo "timeout 5" >> boot-params
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::loader/loader.conf
+      mcopy -v -i "$out" boot-params ::loader/loader.conf
     '';
 
   targetArch = if pkgs.stdenv.isi686 then
@@ -193,8 +193,6 @@ in
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" ];
 
     boot.initrd.kernelModules = [ "loop" ];
-
-    boot.kernelModules = optional config.isoImage.makeEfiBootable "efivars";
 
     # In stage 1, mount a tmpfs on top of / (the ISO image) and
     # /nix/store (the squashfs image) to make this a live CD.
