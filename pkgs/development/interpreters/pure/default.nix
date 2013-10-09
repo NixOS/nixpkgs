@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , llvm, gmp, mpfr, readline, bison, flex
+  , llvm, gmp, mpfr, readline, bison, flex, makeWrapper
   , ...}:
 builderDefsPackage
 (a :  
@@ -12,11 +12,11 @@ let
   sourceInfo = rec {
     baseName="pure";
     project="pure-lang";
-    version="0.56";
+    version="0.58";
     name="${baseName}-${version}";
     extension="tar.gz";
-    url="http://${project}.googlecode.com/files/${name}.${extension}";
-    hash="1ll29j31lp7ymp1kq57328q8md7pkp8jmwsadp67j4cdlzc3zdhj";
+    url="https://bitbucket.org/purelang/${project}/downloads/${name}.${extension}";
+    hash="180ygv8nmfy8v4696km8jdahn5cnr454sc8i1av7s6z4ss7mrxmi";
   };
 in
 rec {
@@ -29,9 +29,9 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doPatch" "doConfigure" "doMakeInstall"];
+  phaseNames = ["doConfigure" "doMakeInstall" "doWrap"];
 
-  patches = [ ./new-gcc.patch ];
+  doWrap = a.makeManyWrappers ''$out/bin/pure'' ''--prefix LD_LIBRARY_PATH : "${llvm}/lib"'';
 
   meta = {
     description = "A purely functional programming language based on term rewriting";
@@ -45,7 +45,7 @@ rec {
   };
   passthru = {
     updateInfo = {
-      downloadPage = "http://code.google.com/p/pure-lang/downloads/list";
+      downloadPage = "https://bitbucket.org/purelang/pure-lang/downloads";
     };
   };
 }) x
