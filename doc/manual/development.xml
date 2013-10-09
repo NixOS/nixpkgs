@@ -490,7 +490,7 @@ $ nix-build tests/ -A nfs.test
     browser like this:
 
 <screen>
-$ icecat result/log.html
+$ firefox result/log.html
 </screen>
   </para>
 
