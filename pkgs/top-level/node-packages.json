@@ -1,7 +1,11 @@
 [
   "async"
 , "assert"
+, "meat"
 , "mocha"
+, "node.extend"
+, "open"
+, "ws"
 , "jayschema"
 , "underscore"
 , "extend"
