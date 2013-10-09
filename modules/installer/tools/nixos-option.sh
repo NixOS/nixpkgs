@@ -203,6 +203,26 @@ if $generate; then
     exit 1
   fi
 
+  nl="
+"
+  if test -e /sys/firmware/efi/efivars; then
+    l1="  # Use the gummiboot efi boot loader."
+    l2="  boot.loader.grub.enable = false;"
+    l3="  boot.loader.gummiboot.enable = true;"
+    l4="  boot.loader.efi.canTouchEfiVariables = true;"
+    # !!! Remove me when nixos is on 3.10 or greater by default
+    l5="  # EFI booting requires kernel >= 3.10"
+    l6="  boot.kernelPackages = pkgs.linuxPackages_3_10;"
+    bootloader_config="$l1$nl$l2$nl$l3$nl$l4$nl$nl$l5$nl$l6"
+  else
+    l1="  # Use the Grub2 boot loader."
+    l2="  boot.loader.grub.enable = true;"
+    l3="  boot.loader.grub.version = 2;"
+    l4="  # Define on which hard drive you want to install Grub."
+    l5='  # boot.loader.grub.device = "/dev/sda";'
+    bootloader_config="$l1$nl$l2$nl$l3$nl$nl$l4$nl$l5"
+  fi
+
   echo "Generating a basic configuration file in $NIXOS_CONFIG..."
 
   # Generate a template configuration file where the user has to
@@ -224,14 +244,10 @@ if $generate; then
     [ # Specify all kernel modules that are necessary for mounting the root
       # filesystem.
       # "xfs" "ata_piix"
+      # fbcon # Uncomment this when EFI booting to see the console before the root partition is mounted
     ];
     
-  # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-
-  # Define on which hard drive you want to install Grub.
-  # boot.loader.grub.device = "/dev/sda";
+$bootloader_config
 
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables Wireless.
