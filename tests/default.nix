@@ -11,6 +11,7 @@ with import ../lib/testing.nix { inherit system minimal; };
   firefox = makeTest (import ./firefox.nix);
   firewall = makeTest (import ./firewall.nix);
   installer = makeTests (import ./installer.nix);
+  efi-installer = makeTests (import ./efi-installer.nix);
   ipv6 = makeTest (import ./ipv6.nix);
   kde4 = makeTest (import ./kde4.nix);
   #kexec = makeTest (import ./kexec.nix);
