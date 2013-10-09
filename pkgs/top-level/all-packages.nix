@@ -9096,6 +9096,8 @@ let
     copyDataDirectory = true;
   });
 
+  dwarf-therapist = callPackage ../games/dwarf-therapist { };
+
   d1x_rebirth = callPackage ../games/d1x-rebirth { };
 
   d2x_rebirth = callPackage ../games/d2x-rebirth { };
