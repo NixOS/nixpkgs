@@ -4321,7 +4321,7 @@ let
   gnet = callPackage ../development/libraries/gnet { };
 
   gnu-efi = callPackage ../development/libraries/gnu-efi {
-    stdenv = overrideInStdenv stdenv [gnumake381];
+    stdenv = overrideGCC stdenv gcc47;
   };
 
   gnutls = callPackage ../development/libraries/gnutls {
