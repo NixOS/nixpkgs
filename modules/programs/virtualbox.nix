@@ -23,13 +23,15 @@ let virtualbox = config.boot.kernelPackages.virtualbox; in
 
   # Since we lack the right setuid binaries, set up a host-only network by default.
 
-  jobs."vboxnet0" =
+  systemd.services."vboxnet0" =
     { description = "VirtualBox vboxnet0 Interface";
       requires = [ "dev-vboxnetctl.device" ];
       after = [ "dev-vboxnetctl.device" ];
       wantedBy = [ "network.target" "sys-subsystem-net-devices-vboxnet0.device" ];
       path = [ virtualbox ];
-      preStart =
+      serviceConfig.RemainAfterExit = true;
+      serviceConfig.Type = "oneshot";
+      script =
         ''
           if ! [ -e /sys/class/net/vboxnet0 ]; then
             VBoxManage hostonlyif create
