@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     testFramework testFrameworkHunit testFrameworkQuickcheck2
   ];
   doCheck = false;
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/uuid/";
     description = "For creating, comparing, parsing and printing Universally Unique Identifiers";
