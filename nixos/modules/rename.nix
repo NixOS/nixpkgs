@@ -101,11 +101,6 @@ in zipModules ([]
 # ++ rename obsolete "environment.kdePackages" "environment.systemPackages" # !!! doesn't work!
 
 # Multiple efi bootloaders now
-++ rename obsolete "boot.loader.efiBootStub.efiSysMountPoint" "boot.loader.efi.efiSysMountPoint"
-++ rename obsolete "boot.loader.efiBootStub.efiDisk" "boot.loader.efi.efibootmgr.efiDisk"
-++ rename obsolete "boot.loader.efiBootStub.efiPartition" "boot.loader.efi.efibootmgr.efiPartition"
-++ rename obsolete "boot.loader.efiBootStub.postEfiBootMgrCommands" "boot.loader.efi.efibootmgr.postEfiBootMgrCommands"
-++ rename obsolete "boot.loader.efiBootStub.runEfibootmgr" "boot.loader.efi.canTouchEfiVariables"
 ++ rename obsolete "boot.loader.efi.efibootmgr.enable" "boot.loader.efi.canTouchEfiVariables"
 
 # NixOS environment changes
