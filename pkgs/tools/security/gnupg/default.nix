@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://gnupg.org/";
-    description = "GNU Privacy Guard (GnuPG), GNU Project's implementation of the OpenPGP standard";
+    description = "free implementation of the OpenPGP standard for encrypting and signing data";
     license = stdenv.lib.licenses.gpl3Plus;
 
     longDescription = ''
