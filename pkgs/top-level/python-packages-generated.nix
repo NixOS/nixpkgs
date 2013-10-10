@@ -2552,7 +2552,7 @@ in
         md5 = "1b433f83d50d1bc61e09026e906d84c7";
     };
     doCheck = false;
-    buildInputs = [  ];
+    buildInputs = [ pkgs.postgresql ];
     propagatedBuildInputs = [  ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
     meta = {

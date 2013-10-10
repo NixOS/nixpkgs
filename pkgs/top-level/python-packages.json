@@ -133,7 +133,12 @@
   },
   { "name": "psycopg2",
     "buildInputs": [ "pkgs.postgresql" ],
-    "doCheck": false
+    "doCheck": false,
+    "override": {
+      "psycopg2": {
+        "buildInputs": [ "pkgs.postgresql" ]
+      }
+    }
   }
 
 ]
