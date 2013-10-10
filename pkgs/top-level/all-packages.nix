@@ -3029,6 +3029,8 @@ let
     boost = boost149; # sdcc 3.2.0 fails to build with boost 1.53
   };
 
+  smlnj = callPackage_i686 ../development/compilers/smlnj { };
+
   stalin = callPackage ../development/compilers/stalin { };
 
   strategoPackages = recurseIntoAttrs strategoPackages018;
