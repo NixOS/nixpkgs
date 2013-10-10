@@ -1,8 +1,9 @@
-{stdenv, fetchurl, polyml, experimentalKernel ? false}:
+{stdenv, fetchurl, polyml, graphviz, experimentalKernel ? true}:
 
 let
   pname = "hol4";
-  version = "k.7";
+  version = "k.8";
+  holsubdir = "hol-kananaskis-8";
   kernelFlag = if experimentalKernel then "-expk" else "-stdknl";
 in
 
@@ -10,31 +11,33 @@ stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = mirror://sourceforge/hol/hol/kananaskis-7/kananaskis-7.tar.gz;
-    sha256 = "0gs1nmjvsjhnndama9v7gids2g86iip53v7d7dm3sfq6jxmqkwkl";
+    url = mirror://sourceforge/hol/hol/kananaskis-8/kananaskis-8.tar.gz;
+    sha256 = "5ce4c1e37301dbc38772694e98f1c7eabf69255908de204b280d8b2b1709e9d0";
   };
 
-  buildInputs = [polyml];
+  buildInputs = [polyml graphviz];
 
   buildCommand = ''
     mkdir -p "$out/src"
     cd  "$out/src"
 
     tar -xzf "$src"
-    cd hol4.${version}
+    cd ${holsubdir}
 
     substituteInPlace tools/Holmake/Holmake_types.sml \
       --replace "\"/bin/mv\"" "\"mv\"" \
       --replace "\"/bin/cp\"" "\"cp\""
 
+    substituteInPlace tools/buildutils.sml --replace "\"/usr/bin/dot\"" "\"dot\""
+
     #sed -ie "/compute/,999 d" tools/build-sequence # for testing
 
     poly < tools/smart-configure.sml
-    
+
     bin/build ${kernelFlag} -symlink
 
     mkdir -p "$out/bin"
-    ln -st $out/bin  $out/src/hol4.${version}/bin/*
+    ln -st $out/bin  "$out/src/${holsubdir}/bin/"*
     # ln -s $out/src/hol4.${version}/bin $out/bin
   '';
 
