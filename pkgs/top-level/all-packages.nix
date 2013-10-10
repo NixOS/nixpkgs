@@ -7788,6 +7788,8 @@ let
 
   goldendict = callPackage ../applications/misc/goldendict { };
 
+  google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
+
   gpicview = callPackage ../applications/graphics/gpicview { };
 
   grass = import ../applications/misc/grass {
