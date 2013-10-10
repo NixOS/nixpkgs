@@ -1,0 +1,31 @@
+<reference xmlns="http://docbook.org/ns/docbook"
+           xmlns:xlink="http://www.w3.org/1999/xlink"
+           xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <title>NixOS Reference Pages</title>
+
+  <info>
+
+    <author>
+      <personname>
+        <firstname>Eelco</firstname>
+        <surname>Dolstra</surname>
+      </personname>
+      <contrib>Author</contrib>
+    </author>
+
+    <copyright>
+      <year>2007</year>
+      <year>2008</year>
+      <year>2009</year>
+      <holder>Eelco Dolstra</holder>
+    </copyright>
+    
+  </info>
+  
+  <xi:include href="man-configuration.xml" />
+  <xi:include href="man-nixos-rebuild.xml" />
+  <xi:include href="man-nixos-option.xml" />
+  <xi:include href="man-nixos-build-vms.xml" />
+  
+</reference>

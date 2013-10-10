@@ -1,0 +1,170 @@
+<refentry xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude">
+  
+<refmeta>
+  <refentrytitle><command>nixos-option</command></refentrytitle>
+  <manvolnum>8</manvolnum>
+  <refmiscinfo class="source">NixOS</refmiscinfo>
+  <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
+</refmeta>
+
+<refnamediv>
+  <refname><command>nixos-option</command></refname>
+  <refpurpose>inspect a NixOS configuration</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+  <cmdsynopsis>
+    <command>nixos-option</command>
+    <group choice="opt">
+      <option>-i</option>
+      <option>v</option>
+      <option>d</option>
+      <option>l</option>
+    </group>
+    <arg choice='plain'><replaceable>option.name</replaceable></arg>
+  </cmdsynopsis>
+  <cmdsynopsis>
+    <command>nixos-option</command>
+    <arg choice='plain'><option>--install</option></arg>
+  </cmdsynopsis>
+</refsynopsisdiv>
+
+
+<refsection><title>Description</title>
+
+<para>This command evaluates the configuration specified in
+<filename>/etc/nixos/configuration.nix</filename> and returns the properties
+of the option name given as argument.  By default, it returns the value of
+the option.</para>
+
+<para>When the option name is not an option, the command prints the list of
+attributes in contained in the attribute set.  This could used to provide
+completion in some editors.</para>
+
+<para>When the option <option>--install</option> (or <option>-i</option>) is
+used with no option name, this command generates a template configuration
+with a scan of the target system.  It produces a template configuration
+in <filename>/etc/nixos/configuration.nix</filename>, and a scan of the
+machine in <filename>/etc/nixos/hardware-configuration.nix</filename>.  The
+scan of the machine is produced
+by <command>nixos-hardware-scan</command>.</para>
+
+</refsection>
+
+<refsection><title>Options</title>
+
+<para>This command accepts the following options:</para>
+
+<variablelist>
+
+  <varlistentry>
+    <term><option>--install</option>, <option>-i</option></term>
+    <listitem>
+      <para>Use the installation configuration instead of current system
+      configuration.  Generate a template configuration if no option name is
+      specified.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--value</option>, <option>-v</option></term>
+    <listitem>
+      <para>Returns the value of the option.  This is the default operation
+      if no other options are defined.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--description</option>, <option>-d</option></term>
+    <listitem>
+      <para>Return the default value, the example and the description of the
+      option when available.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--lookup</option>, <option>-l</option></term>
+    <listitem>
+      <para>Return the locations where the option is declared and where it
+      is defined.  This is extremely useful to find sources of errors in
+      your configuration.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</refsection>
+
+
+<refsection><title>Environment</title>
+
+<variablelist>
+
+  <varlistentry>
+    <term><envar>mountPoint</envar></term>
+    <listitem>
+      <para>Location of the target file system.  Defaults to
+      <filename>/mnt</filename>.  This environment variable is only used in
+      combinaison with <option>--install</option> option.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><envar>NIXOS_CONFIG</envar></term>
+    <listitem>
+      <para>Path to the main NixOS configuration module.  Defaults to
+      <filename>/etc/nixos/configuration.nix</filename>.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</refsection>
+
+
+<refsection><title>Examples</title>
+
+<para>Investigate option values:
+
+<screen>$ nixos-option boot.loader
+This attribute set contains:
+generationsDir
+grub
+initScript
+
+$ nixos-option boot.loader.grub.enable
+true</screen></para>
+
+<para>Prints option information:
+
+<screen>$ nixos-option -d networking.hostName
+Default: "nixos"
+Description:
+The name of the machine. Leave it empty if you want to obtain
+it from a DHCP server (if using DHCP).</screen></para>
+
+<para>Find the locations which are declaring and defining an option:
+
+<screen>$ nixos-option -l hardware.firmware
+Declared by:
+  /mnt/data/nix-sources/nixos/modules/services/hardware/udev.nix
+
+Defined by:
+  /etc/nixos/nixos/modules/system/boot/kernel.nix
+  /etc/nixos/nixos/modules/hardware/network/rt73.nix
+  /etc/nixos/nixos/modules/hardware/network/intel-3945abg.nix
+  /etc/nixos/nixos/modules/hardware/network/intel-2200bg.nix</screen></para>
+
+</refsection>
+
+<refsection><title>Bugs</title>
+
+<para>The author listed in the following section is wrong.  If there is any
+  other bug, please report to Nicolas Pierron.</para>
+
+</refsection>
+
+
+</refentry>

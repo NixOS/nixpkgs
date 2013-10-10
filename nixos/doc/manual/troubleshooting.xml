@@ -1,0 +1,198 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<title>Troubleshooting</title>
+
+
+<!--===============================================================-->
+
+<section><title>Boot problems</title>
+
+<para>If NixOS fails to boot, there are a number of kernel command
+line parameters that may help you to identify or fix the issue.  You
+can add these parameters in the GRUB boot menu by pressing “e” to
+modify the selected boot entry and editing the line starting with
+<literal>linux</literal>.  The following are some useful kernel command
+line parameters that are recognised by the NixOS boot scripts or by
+systemd:
+
+<variablelist>
+
+  <varlistentry><term><literal>boot.shell_on_fail</literal></term>
+    <listitem><para>Start a root shell if something goes wrong in
+    stage 1 of the boot process (the initial ramdisk).  This is
+    disabled by default because there is no authentication for the
+    root shell.</para></listitem>
+  </varlistentry>
+
+  <varlistentry><term><literal>boot.debug1</literal></term>
+    <listitem><para>Start an interactive shell in stage 1 before
+    anything useful has been done.  That is, no modules have been
+    loaded and no file systems have been mounted, except for
+    <filename>/proc</filename> and
+    <filename>/sys</filename>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry><term><literal>boot.trace</literal></term>
+    <listitem><para>Print every shell command executed by the stage 1
+    and 2 boot scripts.</para></listitem>
+  </varlistentry>
+
+  <varlistentry><term><literal>single</literal></term>
+    <listitem><para>Boot into rescue mode (a.k.a. single user mode).
+    This will cause systemd to start nothing but the unit
+    <literal>rescue.target</literal>, which runs
+    <command>sulogin</command> to prompt for the root password and
+    start a root login shell.  Exiting the shell causes the system to
+    continue with the normal boot process.</para></listitem>
+  </varlistentry>
+
+  <varlistentry><term><literal>systemd.log_level=debug systemd.log_target=console</literal></term>
+    <listitem><para>Make systemd very verbose and send log messages to
+    the console instead of the journal.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+For more parameters recognised by systemd, see
+<citerefentry><refentrytitle>systemd</refentrytitle><manvolnum>1</manvolnum></citerefentry>.</para>
+
+<para>If no login prompts or X11 login screens appear (e.g. due to
+hanging dependencies), you can press Alt+ArrowUp.  If you’re lucky,
+this will start rescue mode (described above).  (Also note that since
+most units have a 90-second timeout before systemd gives up on them,
+the <command>agetty</command> login prompts should appear eventually
+unless something is very wrong.)</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>Maintenance mode</title>
+
+<para>You can enter rescue mode by running:
+
+<screen>
+$ systemctl rescue</screen>
+
+This will eventually give you a single-user root shell.  Systemd will
+stop (almost) all system services.  To get out of maintenance mode,
+just exit from the rescue shell.</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>Rolling back configuration changes</title>
+
+<para>After running <command>nixos-rebuild</command> to switch to a
+new configuration, you may find that the new configuration doesn’t
+work very well.  In that case, there are several ways to return to a
+previous configuration.</para>
+
+<para>First, the GRUB boot manager allows you to boot into any
+previous configuration that hasn’t been garbage-collected.  These
+configurations can be found under the GRUB submenu “NixOS - All
+configurations”.  This is especially useful if the new configuration
+fails to boot.  After the system has booted, you can make the selected
+configuration the default for subsequent boots:
+
+<screen>
+$ /run/current-system/bin/switch-to-configuration boot</screen>
+
+</para>
+
+<para>Second, you can switch to the previous configuration in a running
+system:
+
+<screen>
+$ nixos-rebuild switch --rollback</screen>
+
+This is equivalent to running:
+
+<screen>
+$ /nix/var/nix/profiles/system-<replaceable>N</replaceable>-link/bin/switch-to-configuration switch</screen>
+
+where <replaceable>N</replaceable> is the number of the NixOS system
+configuration.  To get a list of the available configurations, do:
+
+<screen>
+$ ls -l /nix/var/nix/profiles/system-*-link
+<replaceable>...</replaceable>
+lrwxrwxrwx 1 root root 78 Aug 12 13:54 /nix/var/nix/profiles/system-268-link -> /nix/store/202b...-nixos-13.07pre4932_5a676e4-4be1055
+</screen>
+
+</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>Nix store corruption</title>
+
+<para>After a system crash, it’s possible for files in the Nix store
+to become corrupted.  (For instance, the Ext4 file system has the
+tendency to replace un-synced files with zero bytes.)  NixOS tries
+hard to prevent this from happening: it performs a
+<command>sync</command> before switching to a new configuration, and
+Nix’s database is fully transactional.  If corruption still occurs,
+you may be able to fix it automatically.</para>
+
+<para>If the corruption is in a path in the closure of the NixOS
+system configuration, you can fix it by doing
+
+<screen>
+$ nixos-rebuild switch --repair
+</screen>
+
+This will cause Nix to check every path in the closure, and if its
+cryptographic hash differs from the hash recorded in Nix’s database,
+the path is rebuilt or redownloaded.</para>
+
+<para>You can also scan the entire Nix store for corrupt paths:
+
+<screen>
+$ nix-store --verify --check-contents --repair
+</screen>
+
+Any corrupt paths will be redownloaded if they’re available in a
+binary cache; otherwise, they cannot be repaired.</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>Nix network issues</title>
+
+<para>Nix uses a so-called <emphasis>binary cache</emphasis> to
+optimise building a package from source into downloading it as a
+pre-built binary.  That is, whenever a command like
+<command>nixos-rebuild</command> needs a path in the Nix store, Nix
+will try to download that path from the Internet rather than build it
+from source.  The default binary cache is
+<uri>http://cache.nixos.org/</uri>.  If this cache is unreachable, Nix
+operations may take a long time due to HTTP connection timeouts.  You
+can disable the use of the binary cache by adding <option>--option
+use-binary-caches false</option>, e.g.
+
+<screen>
+$ nixos-rebuild switch --option use-binary-caches false
+</screen>
+
+If you have an alternative binary cache at your disposal, you can use
+it instead:
+
+<screen>
+$ nixos-rebuild switch --option binary-caches http://my-cache.example.org/
+</screen>
+
+</para>
+
+</section>
+
+
+</chapter>
