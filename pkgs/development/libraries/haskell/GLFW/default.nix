@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "GLFW";
-  version = "0.5.1.0";
-  sha256 = "190d75w84y9gayxvdz13dnzpyflc5qy4vdg5iv9p2dpcamcih3km";
+  version = "0.5.2.0";
+  sha256 = "06vps929dmk9yimfv7jj12m0p0bf4ih0ssf6rbcq2j6i9wbhpxq3";
   buildDepends = [ OpenGL ];
   extraLibraries = [ libX11 mesa ];
   meta = {
