@@ -1,11 +1,14 @@
 { nixpkgs ? { outPath = ./..; revCount = 5678; shortRev = "gfedcba"; }
 , officialRelease ? false
+, stableBranch ? false
 }:
 
 let
 
   version = builtins.readFile ../.version;
-  versionSuffix = "pre${toString nixpkgs.revCount}_${nixpkgs.shortRev}";
+  versionSuffix =
+    if officialRelease then ""
+    else (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
   systems = [ "x86_64-linux" "i686-linux" ];
 
@@ -13,7 +16,7 @@ let
 
 
   versionModule =
-    { system.nixosVersionSuffix = pkgs.lib.optionalString (!officialRelease) versionSuffix;  };
+    { system.nixosVersionSuffix = versionSuffix;  };
 
 
   makeIso =
@@ -78,7 +81,8 @@ in {
 
       src = nixpkgs;
 
-      inherit officialRelease version versionSuffix;
+      officialRelease = false; # FIXME: fix this in makeSourceTarball
+      inherit version versionSuffix;
 
       buildInputs = [ pkgs.nixUnstable ];
 
