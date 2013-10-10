@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "math-functions";
-  version = "0.1.3.0";
-  sha256 = "06wxr8fbhmsgkpyx2vimx9l6apk0p27mwrxrvbjk0b7m9vsg3ay5";
+  version = "0.1.4.0";
+  sha256 = "1cijm224gfvd7rvrrndcks8d7aj89c9qv0m4wx2qqngr7rk78kav";
   buildDepends = [ erf vector ];
   testDepends = [
     HUnit ieee754 QuickCheck testFramework testFrameworkHunit
