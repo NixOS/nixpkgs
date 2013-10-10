@@ -971,9 +971,7 @@ let
 
   gnupatch = callPackage ../tools/text/gnupatch { };
 
-  gnupg1orig = callPackage ../tools/security/gnupg1 {
-    ideaSupport = false;
-  };
+  gnupg1orig = callPackage ../tools/security/gnupg1 { };
 
   gnupg1compat = callPackage ../tools/security/gnupg1compat { };
 
