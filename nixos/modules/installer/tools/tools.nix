@@ -34,9 +34,9 @@ let
     src = ./nixos-rebuild.sh;
   };
 
-  nixos-hardware-scan = makeProg {
-    name = "nixos-hardware-scan";
-    src = ./nixos-hardware-scan.pl;
+  nixos-generate-config = makeProg {
+    name = "nixos-generate-config";
+    src = ./nixos-generate-config.pl;
     inherit (pkgs) perl dmidecode;
   };
 
@@ -92,14 +92,13 @@ in
       [ nixos-build-vms
         nixos-install
         nixos-rebuild
-        nixos-hardware-scan
-        #nixosGenSeccureKeys
+        nixos-generate-config
         nixos-option
         nixos-version
       ] ++ pkgs.lib.optional cfg.enableGraphicalTools nixos-gui;
 
     system.build = {
-      inherit nixos-install nixos-hardware-scan nixos-option;
+      inherit nixos-install nixos-generate-config nixos-option;
     };
   };
 }
