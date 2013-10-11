@@ -38,23 +38,7 @@ sub debug {
 }
 
 
-# Read a file, returning undef if the file cannot be opened.
-sub readFile {
-    my $filename = shift;
-    my $res;
-    if (open FILE, "<$filename") {
-        my $prev = $/;
-        undef $/;
-        $res = <FILE>;
-        $/ = $prev;
-        close FILE;
-        chomp $res;
-    }
-    return $res;
-}
-
-
-my $cpuinfo = readFile "/proc/cpuinfo";
+my $cpuinfo = read_file "/proc/cpuinfo";
 
 
 sub hasCPUFeature {
@@ -80,9 +64,9 @@ my $videoDriver;
 
 sub pciCheck {
     my $path = shift;
-    my $vendor = readFile "$path/vendor";
-    my $device = readFile "$path/device";
-    my $class = readFile "$path/class";
+    my $vendor = read_file "$path/vendor";
+    my $device = read_file "$path/device";
+    my $class = read_file "$path/class";
 
     my $module;
     if (-e "$path/driver/module") {
@@ -152,9 +136,9 @@ foreach my $path (glob "/sys/bus/pci/devices/*") {
 
 sub usbCheck {
     my $path = shift;
-    my $class = readFile "$path/bInterfaceClass";
-    my $subclass = readFile "$path/bInterfaceSubClass";
-    my $protocol = readFile "$path/bInterfaceProtocol";
+    my $class = read_file "$path/bInterfaceClass";
+    my $subclass = read_file "$path/bInterfaceSubClass";
+    my $protocol = read_file "$path/bInterfaceProtocol";
 
     my $module;
     if (-e "$path/driver/module") {
@@ -283,7 +267,7 @@ if (! -e $fn) {
   boot.loader.grub.enable = false;
   boot.loader.gummiboot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  # !!! Remove me when nixos is on 3.10 or greater by default
+  # !!! Remove this when nixos is on 3.10 or greater by default
   # EFI booting requires kernel >= 3.10
   boot.kernelPackages = pkgs.linuxPackages_3_10;
 EOF
