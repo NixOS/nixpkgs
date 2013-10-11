@@ -127,8 +127,6 @@ in
       loginShellInit = cfge.loginShellInit;
 
       interactiveShellInit = ''
-        ${cfge.interactiveShellInit}
-
         # Check the window size after every command.
         shopt -s checkwinsize
 
@@ -138,6 +136,8 @@ in
         ${cfg.promptInit}
         ${bashCompletion}
         ${bashAliases}
+
+        ${cfge.interactiveShellInit}
       '';
 
     };
