@@ -4984,6 +4984,8 @@ let
       else stdenv;
   };
 
+  libtoxcore = callPackage ../development/libraries/libtoxcore { };
+
   libtunepimp = callPackage ../development/libraries/libtunepimp { };
 
   libtxc_dxtn = callPackage ../development/libraries/libtxc_dxtn { };
@@ -8716,8 +8718,6 @@ let
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
     wrapPython = pythonPackages.wrapPython;
   };
-
-  tox_core = callPackage ../applications/networking/instant-messengers/toxcore { };
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 

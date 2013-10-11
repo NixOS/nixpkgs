@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, libtool, automake, libsodium, ncurses
-, tox_core, pkgconfig }:
+, libtoxcore, pkgconfig }:
 
 let
   version = "75d356e52a";
@@ -21,13 +21,13 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lsodium";
 
   configureFlags = [
-    "--with-libtoxcore-headers=${tox_core}/include"
-    "--with-libtoxcore-libs=${tox_core}/lib" 
-    "--with-libsodium-headers=${tox_core}/include"
-    "--with-libsodium-libs=${tox_core}/lib" 
+    "--with-libtoxcore-headers=${libtoxcore}/include"
+    "--with-libtoxcore-libs=${libtoxcore}/lib" 
+    "--with-libsodium-headers=${libtoxcore}/include"
+    "--with-libsodium-libs=${libtoxcore}/lib" 
   ];
 
-  buildInputs = [ autoconf libtool automake tox_core libsodium ncurses pkgconfig ];
+  buildInputs = [ autoconf libtool automake libtoxcore libsodium ncurses pkgconfig ];
 
   doCheck = true;
 
