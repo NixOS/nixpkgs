@@ -131,6 +131,8 @@ foreach my $path (glob "/sys/bus/pci/devices/*") {
     pciCheck $path;
 }
 
+push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
+
 
 # Idem for USB devices.
 
@@ -172,7 +174,6 @@ foreach my $path (glob "/sys/bus/usb/devices/*") {
 
 
 # Add the modules for all block devices.
-
 foreach my $path (glob "/sys/class/block/*") {
     my $module;
     if (-e "$path/device/driver/module") {
@@ -183,16 +184,21 @@ foreach my $path (glob "/sys/class/block/*") {
 }
 
 
-if ($videoDriver) {
-    push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];";
-}
-
-
 # Check if we're a VirtualBox guest.  If so, enable the guest
 # additions.
 my $dmi = `@dmidecode@/sbin/dmidecode`;
 if ($dmi =~ /Manufacturer: innotek/) {
     push @attrs, "services.virtualbox.enable = true;"
+}
+
+
+# Generate the list of swap devices.
+my @swaps = read_file("/proc/swaps");
+shift @swaps;
+my @swapDevices;
+foreach my $swap (@swaps) {
+    $swap =~ /^(\S+)\s/;
+    push @swapDevices, "{ device = \"$1\"; }";
 }
 
 
@@ -220,19 +226,21 @@ sub toNixExpr {
 
 sub multiLineList {
     my $indent = shift;
-    my $res = "";
-    $res = "\n" if scalar @_ > 0;
+    return "[ ]" if !@_;
+    $res = "\n${indent}[ ";
+    my $first = 1;
     foreach my $s (@_) {
-        $res .= "$indent$s\n";
+        $res .= "$indent  " if !$first;
+        $first = 0;
+        $res .= "$s\n";
     }
+    $res .= "$indent]";
     return $res;
 }
 
 my $initrdKernelModules = toNixExpr(removeDups @initrdKernelModules);
 my $kernelModules = toNixExpr(removeDups @kernelModules);
 my $modulePackages = toNixExpr(removeDups @modulePackages);
-my $attrs = multiLineList("  ", removeDups @attrs);
-my $imports = multiLineList("    ", removeDups @imports);
 
 my $fn = "$outDir/hardware-configuration.nix";
 print STDERR "writing $fn...\n";
@@ -245,15 +253,18 @@ write_file($fn, <<EOF);
 { config, pkgs, ... }:
 
 {
-  imports = [$imports  ];
+  imports = ${\multiLineList("    ", @imports)};
 
   boot.initrd.kernelModules = [$initrdKernelModules ];
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 
+  swapDevices = ${\multiLineList("    ", @swapDevices)};
+
   nix.maxJobs = $cpus;
-$attrs}
+${\join "", (map { "  $_\n" } (removeDups @attrs))}}
 EOF
+
 
 # Generate a basic configuration.nix, unless one already exists.
 $fn = "$outDir/configuration.nix";
@@ -316,11 +327,6 @@ $bootLoaderConfig
   #     fsType = "ext3";      # the type of the partition
   #     options = "data=journal";
   #   };
-
-  # List swap partitions activated at boot time.
-  swapDevices =
-    [ # { device = "/dev/disk/by-label/swap"; }
-    ];
 
   # Select internationalisation properties.
   # i18n = {
