@@ -157,10 +157,10 @@ fi
 
 # Update the version suffix if we're building from Git (so that
 # nixos-version shows something useful).
-if nixos=$(nix-instantiate --find-file nixos "${extraBuildFlags[@]}"); then
-    suffix=$(@shell@ $nixos/modules/installer/tools/get-version-suffix "${extraBuildFlags[@]}")
+if nixpkgs=$(nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
+    suffix=$(@shell@ $nixpkgs/nixos/modules/installer/tools/get-version-suffix "${extraBuildFlags[@]}")
     if [ -n "$suffix" ]; then
-        echo -n "$suffix" > "$nixos/.version-suffix" || true
+        echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
     fi
 fi
 
