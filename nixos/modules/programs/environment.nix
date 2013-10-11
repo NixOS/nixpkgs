@@ -24,7 +24,6 @@ in
           [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixpkgs=/etc/nixos/nixpkgs"
             "nixos-config=/etc/nixos/configuration.nix"
-            "services=/etc/nixos/services"
           ];
         PAGER = "less -R";
         EDITOR = "nano";
