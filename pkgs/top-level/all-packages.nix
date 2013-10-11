@@ -8719,6 +8719,8 @@ let
 
   tox_core = callPackage ../applications/networking/instant-messengers/toxcore { };
 
+  toxic = callPackage ../applications/networking/instant-messengers/toxic { };
+
   transmission = callPackage ../applications/networking/p2p/transmission { };
   transmission_gtk = transmission.override { enableGTK3 = true; };
 
