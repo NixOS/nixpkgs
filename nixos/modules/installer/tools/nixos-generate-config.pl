@@ -248,13 +248,20 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     if (defined $fsByDev{$fields[2]}) {
         my $path = $fields[3]; $path = "" if $path eq "/";
         $fileSystems .= <<EOF;
-  fileSystems.\"$mountPoint\" = {
-    device = \"$fsByDev{$fields[2]}$path\";
-    fsType = \"none\";
-    options = \"bind\";
-  };
+  fileSystems.\"$mountPoint\" =
+    { device = \"$fsByDev{$fields[2]}$path\";
+      fsType = \"none\";
+      options = \"bind\";
+    };
 
 EOF
+        next;
+    }
+    $fsByDev{$fields[2]} = $mountPoint;
+
+    # We don't know how to handle FUSE filesystems.
+    if ($fsType eq "fuseblk" || $fsType eq "fuse") {
+        print STDERR "warning: don't know how to emit ‘fileSystem’ option for FUSE filesystem ‘$mountPoint’\n";
         next;
     }
 
@@ -271,13 +278,12 @@ EOF
     }
 
     # Emit the filesystem.
-    $fsByDev{$fields[2]} = $mountPoint;
     $fileSystems .= <<EOF;
-  fileSystems.\"$mountPoint\" = {
-    device = \"$device\";
-    fsType = \"$fsType\";
-    options = \"${\join ",", uniq(@extraOptions, @superOptions, @mountOptions)}\";
-  };
+  fileSystems.\"$mountPoint\" =
+    { device = \"$device\";
+      fsType = \"$fsType\";
+      options = \"${\join ",", uniq(@extraOptions, @superOptions, @mountOptions)}\";
+    };
 
 EOF
 }
