@@ -4,7 +4,7 @@
 { config, pkgs, modulesPath, ... }:
 
 let
-  ### implementation
+
   cfg = config.installer;
 
   makeProg = args: pkgs.substituteAll (args // {
@@ -12,12 +12,12 @@ let
     isExecutable = true;
   });
 
-  nixosBuildVMS = makeProg {
+  nixos-build-vms = makeProg {
     name = "nixos-build-vms";
     src = ./nixos-build-vms/nixos-build-vms.sh;
   };
 
-  nixosInstall = makeProg {
+  nixos-install = makeProg {
     name = "nixos-install";
     src = ./nixos-install.sh;
 
@@ -29,7 +29,7 @@ let
       "cp refs $out";
   };
 
-  nixosRebuild = makeProg {
+  nixos-rebuild = makeProg {
     name = "nixos-rebuild";
     src = ./nixos-rebuild.sh;
   };
@@ -41,24 +41,24 @@ let
   };
   */
 
-  nixosHardwareScan = makeProg {
+  nixos-hardware-scan = makeProg {
     name = "nixos-hardware-scan";
     src = ./nixos-hardware-scan.pl;
     inherit (pkgs) perl dmidecode;
   };
 
-  nixosOption = makeProg {
+  nixos-option = makeProg {
     name = "nixos-option";
     src = ./nixos-option.sh;
   };
 
-  nixosVersion = makeProg {
+  nixos-version = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
     inherit (config.system) nixosVersion nixosCodeName;
   };
 
-  nixosGui = pkgs.xulrunnerWrapper {
+  nixos-gui = pkgs.xulrunnerWrapper {
     launcher = "nixos-gui";
     application = pkgs.stdenv.mkDerivation {
       name = "nixos-gui";
@@ -96,17 +96,17 @@ in
 
   config = {
     environment.systemPackages =
-      [ nixosBuildVMS
-        nixosInstall
-        nixosRebuild
-        nixosHardwareScan
+      [ nixos-build-vms
+        nixos-install
+        nixos-rebuild
+        nixos-hardware-scan
         #nixosGenSeccureKeys
-        nixosOption
-        nixosVersion
-      ] ++ pkgs.lib.optional cfg.enableGraphicalTools nixosGui;
+        nixos-option
+        nixos-version
+      ] ++ pkgs.lib.optional cfg.enableGraphicalTools nixos-gui;
 
     system.build = {
-      inherit nixosInstall nixosHardwareScan nixosOption;
+      inherit nixos-install nixos-hardware-scan nixos-option;
     };
   };
 }

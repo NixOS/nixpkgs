@@ -414,7 +414,7 @@ properly:
 
 <screen>
 $ export NIXOS_CONFIG=/etc/nixos/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix
-$ nix-build /etc/nixos/nixos -A config.system.build.nixosInstall
+$ nix-build /etc/nixos/nixos -A config.system.build.nixos-install
 $ dd if=/dev/zero of=diskimage seek=2G count=0 bs=1
 $ yes | mke2fs -j diskimage
 $ mount -o loop diskimage /mnt
