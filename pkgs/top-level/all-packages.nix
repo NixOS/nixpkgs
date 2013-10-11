@@ -8717,6 +8717,8 @@ let
     wrapPython = pythonPackages.wrapPython;
   };
 
+  tox_core = callPackage ../applications/networking/instant-messengers/toxcore { };
+
   transmission = callPackage ../applications/networking/p2p/transmission { };
   transmission_gtk = transmission.override { enableGTK3 = true; };
 
