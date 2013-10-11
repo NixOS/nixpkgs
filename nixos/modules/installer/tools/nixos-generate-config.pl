@@ -6,6 +6,19 @@ use File::Basename;
 use File::Slurp;
 
 
+sub uniq {
+    my %seen;
+    my @res = ();
+    foreach my $s (@_) {
+        if (!defined $seen{$s}) {
+            $seen{$s} = 1;
+            push @res, $s;
+        }
+    }
+    return @res;
+}
+
+
 # Process the command line.
 my $outDir = "/etc/nixos";
 
@@ -192,7 +205,8 @@ if ($dmi =~ /Manufacturer: innotek/) {
 }
 
 
-# Generate the list of swap devices.
+# Generate the swapDevices option from the currently activated swap
+# devices.
 my @swaps = read_file("/proc/swaps");
 shift @swaps;
 my @swapDevices;
@@ -202,19 +216,74 @@ foreach my $swap (@swaps) {
 }
 
 
-# Generate the hardware configuration file.
+# Generate the fileSystems option from the currently mounted
+# filesystems.
+sub in {
+    my ($d1, $d2) = @_;
+    return $d1 eq $d2 || substr($d1, 0, length($d2) + 1) eq "$d2/";
+}
 
-sub removeDups {
-    my %seen;
-    my @res = ();
-    foreach my $s (@_) {
-        if (!defined $seen{$s}) {
-            $seen{$s} = "";
-            push @res, $s;
+my $fileSystems;
+my %fsByDev;
+foreach my $fs (read_file("/proc/self/mountinfo")) {
+    chomp $fs;
+    my @fields = split / /, $fs;
+    my $mountPoint = $fields[4];
+    next unless -d $mountPoint;
+    my @mountOptions = split /,/, $fields[5];
+
+    # Skip special filesystems.
+    next if in($mountPoint, "/proc") || in($mountPoint, "/dev") || in($mountPoint, "/sys") || in($mountPoint, "/run");
+
+    # Skip the optional fields.
+    my $n = 6; $n++ while $fields[$n] ne "-"; $n++;
+    my $fsType = $fields[$n];
+    my $device = $fields[$n + 1];
+    my @superOptions = split /,/, $fields[$n + 2];
+
+    # Skip the read-only bind-mount on /nix/store.
+    next if $mountPoint eq "/nix/store" && (grep { $_ eq "rw" } @superOptions) && (grep { $_ eq "ro" } @mountOptions);
+
+    # Maybe this is a bind-mount of a filesystem we saw earlier?
+    if (defined $fsByDev{$fields[2]}) {
+        my $path = $fields[3]; $path = "" if $path eq "/";
+        $fileSystems .= <<EOF;
+  fileSystems.\"$mountPoint\" = {
+    device = \"$fsByDev{$fields[2]}$path\";
+    fsType = \"none\";
+    options = \"bind\";
+  };
+
+EOF
+        next;
+    }
+
+    # Is this a mount of a loopback device?
+    my @extraOptions;
+    if ($device =~ /\/dev\/loop(\d+)/) {
+        my $loopnr = $1;
+        my $backer = read_file "/sys/block/loop$loopnr/loop/backing_file";
+        if (defined $backer) {
+            chomp $backer;
+            $device = $backer;
+            push @extraOptions, "loop";
         }
     }
-    return @res;
+
+    # Emit the filesystem.
+    $fsByDev{$fields[2]} = $mountPoint;
+    $fileSystems .= <<EOF;
+  fileSystems.\"$mountPoint\" = {
+    device = \"$device\";
+    fsType = \"$fsType\";
+    options = \"${\join ",", uniq(@extraOptions, @superOptions, @mountOptions)}\";
+  };
+
+EOF
 }
+
+
+# Generate the hardware configuration file.
 
 sub toNixExpr {
     my $res = "";
@@ -238,9 +307,9 @@ sub multiLineList {
     return $res;
 }
 
-my $initrdKernelModules = toNixExpr(removeDups @initrdKernelModules);
-my $kernelModules = toNixExpr(removeDups @kernelModules);
-my $modulePackages = toNixExpr(removeDups @modulePackages);
+my $initrdKernelModules = toNixExpr(uniq @initrdKernelModules);
+my $kernelModules = toNixExpr(uniq @kernelModules);
+my $modulePackages = toNixExpr(uniq @modulePackages);
 
 my $fn = "$outDir/hardware-configuration.nix";
 print STDERR "writing $fn...\n";
@@ -259,10 +328,10 @@ write_file($fn, <<EOF);
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 
-  swapDevices = ${\multiLineList("    ", @swapDevices)};
+${fileSystems}  swapDevices = ${\multiLineList("    ", @swapDevices)};
 
   nix.maxJobs = $cpus;
-${\join "", (map { "  $_\n" } (removeDups @attrs))}}
+${\join "", (map { "  $_\n" } (uniq @attrs))}}
 EOF
 
 
