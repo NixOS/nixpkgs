@@ -14,15 +14,19 @@ extraBuildFlags=()
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
     case "$i" in
-      -I)
-        given_path="$1"; shift 1
-        absolute_path=$(readlink -m $given_path)
-        extraBuildFlags+=("$i" "/mnt$absolute_path")
-        ;;
-      *)
-        echo "$0: unknown option \`$i'"
-        exit 1
-        ;;
+        -I)
+            given_path="$1"; shift 1
+            absolute_path=$(readlink -m $given_path)
+            extraBuildFlags+=("$i" "/mnt$absolute_path")
+            ;;
+        --help)
+            exec man nixos-install
+            exit 1
+            ;;
+        *)
+            echo "$0: unknown option \`$i'"
+            exit 1
+            ;;
     esac
 done
 

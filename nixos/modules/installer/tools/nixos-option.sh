@@ -8,36 +8,8 @@
 export NIXOS_CONFIG
 
 usage () {
-  echo 1>&2 "
-Usage: $0 [-v] [-d] [-l] [--xml] OPTION_NAME
-       $0 --install
-
-This program allows you to inspect the current value of NixOS
-configuration options.  It can also generate a basic NixOS
-configuration file.
-
-Options:
-
-  -i | --install        Write a template NixOS configuration file to
-                        ${mountPoint:+$mountPoint/}$NIXOS_CONFIG.
-  -v | --value          Display the current value, based on your
-                        configuration.
-  -d | --description    Display the default value, the example and the
-                        description.
-  -l | --lookup         Display where the option is defined and where it
-                        is declared.
-  --xml                 Print an XML representation of the result.
-                        Implies -vdl options.
-  --help                Show this message.
-
-Environment variables affecting $0:
-
-  \$mountPoint          Path to the target file system.
-  \$NIXOS_CONFIG        Path to your configuration file.
-
-"
-
-  exit 1;
+    exec man nixos-rebuild
+    exit 1
 }
 
 #####################

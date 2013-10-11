@@ -2,14 +2,9 @@
 
 # Shows the usage of this command to the user
 
-showUsage()
-{
-    echo "Usage: $0 network_expr"
-    echo "Options:"
-    echo
-    echo "--no-out-link   Do not create a 'result' symlink"
-    echo "--show-trace    Shows the output trace"
-    echo "-h,--help       Shows the usage of this command"
+showUsage() {
+    exec man nixos-build-vms
+    exit 1
 }
 
 # Parse valid argument options
