@@ -1,9 +1,18 @@
 { config, pkgs, ... }:
 
-# TODO: this file needs some additional work - at least you can connect to
-# firebird ..
-# Example how to connect:
-# isql /var/db/firebird/data/your-db.fdb -u sysdba -p <default password>
+# TODO: This may file may need additional review, eg which configuartions to
+# expose to the user.
+#
+# I only used it to access some simple databases.
+
+# test:
+# isql, then type the following commands:
+# CREATE DATABASE '/var/db/firebird/data/test.fdb' USER 'SYSDBA' PASSWORD 'masterkey';
+# CONNECT '/var/db/firebird/data/test.fdb' USER 'SYSDBA' PASSWORD 'masterkey';
+# CREATE TABLE test ( text varchar(100) );
+# DROP DATABASE;
+#
+# Be careful, virtuoso-opensource also provides a different isql command !
 
 # There are at least two ways to run firebird. superserver has been choosen
 # however there are no strong reasons to prefer this or the other one AFAIK
@@ -18,7 +27,8 @@ let
 
   firebird = cfg.package;
 
-  pidFile = "${cfg.pidDir}/firebirdd.pid";
+  dataDir = "${cfg.baseDir}/data";
+  systemDir = "${cfg.baseDir}/system";
 
 in
 
@@ -32,9 +42,9 @@ in
 
       enable = mkOption {
         default = false;
-        description = "
-          Whether to enable the firebird super server.
-        ";
+        description = ''
+          Whether to enable the Firebird super server.
+        '';
       };
 
       package = mkOption {
@@ -45,29 +55,31 @@ in
             reasons. See comments at the firebirdSuper derivation
         */
 
-        description = "
+        description = ''
           Which firebird derivation to use.
-        ";
+        '';
       };
 
       port = mkOption {
         default = "3050";
-        description = "Port of Firebird.";
+        description = ''
+          Port Firebird uses.
+        '';
       };
 
       user = mkOption {
         default = "firebird";
-        description = "User account under which firebird runs.";
+        description = ''
+          User account under which firebird runs.
+        '';
       };
 
-      dataDir = mkOption {
-        default = "/var/db/firebird/data"; # ubuntu is using /var/lib/firebird/2.1/data/.. ?
-        description = "Location where firebird databases are stored.";
-      };
-
-      pidDir = mkOption {
-        default = "/run/firebird";
-        description = "Location of the file which stores the PID of the firebird server.";
+      baseDir = mkOption {
+        default = "/var/db/firebird"; # ubuntu is using /var/lib/firebird/2.1/data/.. ?
+        description = ''
+          Location containing data/ and system/ directories.
+          data/ stores the databases, system/ stores the password database security2.fdb.
+        '';
       };
 
     };
@@ -79,12 +91,10 @@ in
 
   config = mkIf config.services.firebird.enable {
 
-    users.extraUsers.firebird.description =  "Firebird server user";
-
-    environment.systemPackages = [firebird];
+    environment.systemPackages = [cfg.package];
 
     systemd.services.firebird =
-      { description = "firebird super server";
+      { description = "Firebird Super-Server";
 
         wantedBy = [ "multi-user.target" ];
 
@@ -92,20 +102,17 @@ in
         # is a better way
         preStart =
           ''
-            secureDir="${cfg.dataDir}/../system"
-
             mkdir -m 0700 -p \
-              "${cfg.dataDir}" \
-              "${cfg.pidDir}" \
-              /var/log/firebird \
-              "$secureDir"
+              "${dataDir}" \
+              "${systemDir}" \
+              /var/log/firebird
 
-            if ! test -e "$secureDir/security2.fdb"; then
-                cp ${firebird}/security2.fdb "$secureDir"
+            if ! test -e "${systemDir}/security2.fdb"; then
+                cp ${firebird}/security2.fdb "${systemDir}"
             fi
 
-            chown -R ${cfg.user} "${cfg.pidDir}" "${cfg.dataDir}" "$secureDir" /var/log/firebird
-            chmod -R 700 "${cfg.pidDir}" "${cfg.dataDir}" "$secureDir" /var/log/firebird
+            chown -R ${cfg.user} "${dataDir}" "${systemDir}" /var/log/firebird
+            chmod -R 700         "${dataDir}" "${systemDir}" /var/log/firebird
           '';
 
         serviceConfig.PermissionsStartOnly = true; # preStart must be run as root
@@ -119,9 +126,9 @@ in
 
     # think about this again - and eventually make it an option
     environment.etc."firebird/firebird.conf".text = ''
-      # RootDirectory = Restrict ${cfg.dataDir}
-      DatabaseAccess = Restrict ${cfg.dataDir}
-      ExternalFileAccess = Restrict ${cfg.dataDir}
+      # RootDirectory = Restrict ${dataDir}
+      DatabaseAccess = Restrict ${dataDir}
+      ExternalFileAccess = Restrict ${dataDir}
       # what is this? is None allowed?
       UdfAccess = None
       # "Native" =  traditional interbase/firebird, "mixed" is windows only
@@ -142,8 +149,14 @@ in
       #RemoteAuxPort = 0
       # rsetrict connections to a network card:
       #RemoteBindAddress =
-      # there are some more settings ..
+      # there are some additional settings which should be reviewed
     '';
+    };
+
+    users.extraUsers.firebird = {
+      description = "firebird server user";
+      group = "firebird";
+      uid = config.ids.uids.firebird;
     };
 
 }
