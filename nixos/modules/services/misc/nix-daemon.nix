@@ -108,24 +108,16 @@ in
 
       distributedBuilds = mkOption {
         default = false;
-        description = "
+        description = ''
           Whether to distribute builds to the machines listed in
           <option>nix.buildMachines</option>.
           If you know that the <option>buildMachines</option> are not
           always available either use nixos
           <command>nixos-rebuild --no-build-hook</command>
           or consider managing <filename>/etc/nix.machines</filename> manually
-          by setting <option>manualNixMachines</option>. Then you can comment
-          unavailable build machines.
-        ";
-      };
-
-      manualNixMachines = mkOption {
-        default = false;
-        description = "
-          Whether to manually manage the list of build machines used in distributed
-          builds in /etc/nix.machines.
-        ";
+          by setting <option>environment.etc."nix/nix.conf".target</option> to
+          "etc/nix.conf.sample". Then you can comment unavailable buildmachines.
+        '';
       };
 
       daemonNiceLevel = mkOption {
@@ -263,7 +255,7 @@ in
     # List of machines for distributed Nix builds in the format
     # expected by build-remote.pl.
     environment.etc."nix.machines" =
-      { enable = cfg.distributedBuilds && !cfg.manualNixMachines;
+      { enable = cfg.distributedBuilds;
         text =
           concatMapStrings (machine:
             "${machine.sshUser}@${machine.hostName} "
