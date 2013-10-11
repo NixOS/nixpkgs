@@ -34,13 +34,6 @@ let
     src = ./nixos-rebuild.sh;
   };
 
-  /*
-  nixosGenSeccureKeys = makeProg {
-    name = "nixos-gen-seccure-keys";
-    src = ./nixos-gen-seccure-keys.sh;
-  };
-  */
-
   nixos-hardware-scan = makeProg {
     name = "nixos-hardware-scan";
     src = ./nixos-hardware-scan.pl;
