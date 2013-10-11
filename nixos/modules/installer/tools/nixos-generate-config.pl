@@ -250,7 +250,7 @@ my $modulePackages = toNixExpr(removeDups @modulePackages);
 my $attrs = multiLineList("  ", removeDups @attrs);
 my $imports = multiLineList("    ", removeDups @imports);
 
-my $fn = "$outDir/hardware.nix";
+my $fn = "$outDir/hardware-configuration.nix";
 print STDERR "writing $fn...\n";
 mkpath($outDir, 0, 0755);
 
@@ -270,5 +270,101 @@ write_file($fn, <<EOF);
   nix.maxJobs = $cpus;
 $attrs}
 EOF
+
+# Generate a basic configuration.nix, unless one already exists.
+$fn = "$outDir/configuration.nix";
+if (! -e $fn) {
+    print STDERR "writing $fn...\n";
+
+    my $bootloaderConfig;
+    if (-e "/sys/firmware/efi/efivars") {
+        $bootLoaderConfig = <<EOF;
+  # Use the gummiboot efi boot loader.
+  boot.loader.grub.enable = false;
+  boot.loader.gummiboot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  # !!! Remove me when nixos is on 3.10 or greater by default
+  # EFI booting requires kernel >= 3.10
+  boot.kernelPackages = pkgs.linuxPackages_3_10;
+EOF
+    } else {
+        $bootLoaderConfig = <<EOF;
+  # Use the GRUB 2 boot loader.
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  # Define on which hard drive you want to install Grub.
+  # boot.loader.grub.device = "/dev/sda";
+EOF
+    }
+
+    write_file($fn, <<EOF);
+# Edit this configuration file to define what should be installed on
+# your system.  Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running ‘nixos-help’).
+
+{ config, pkgs, ... }:
+
+{
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
+
+  boot.initrd.kernelModules =
+    [ # Specify all kernel modules that are necessary for mounting the root
+      # filesystem.
+      # "xfs" "ata_piix"
+      # fbcon # Uncomment this when EFI booting to see the console before the root partition is mounted
+    ];
+
+$bootLoaderConfig
+  # networking.hostName = "nixos"; # Define your hostname.
+  # networking.wireless.enable = true;  # Enables wireless.
+
+  # Add filesystem entries for each partition that you want to see
+  # mounted at boot time.  This should include at least the root
+  # filesystem.
+
+  # fileSystems."/".device = "/dev/disk/by-label/nixos";
+
+  # fileSystems."/data" =     # where you want to mount the device
+  #   { device = "/dev/sdb";  # the device
+  #     fsType = "ext3";      # the type of the partition
+  #     options = "data=journal";
+  #   };
+
+  # List swap partitions activated at boot time.
+  swapDevices =
+    [ # { device = "/dev/disk/by-label/swap"; }
+    ];
+
+  # Select internationalisation properties.
+  # i18n = {
+  #   consoleFont = "lat9w-16";
+  #   consoleKeyMap = "us";
+  #   defaultLocale = "en_US.UTF-8";
+  # };
+
+  # List services that you want to enable:
+
+  # Enable the OpenSSH daemon.
+  # services.openssh.enable = true;
+
+  # Enable CUPS to print documents.
+  # services.printing.enable = true;
+
+  # Enable the X11 windowing system.
+  # services.xserver.enable = true;
+  # services.xserver.layout = "us";
+  # services.xserver.xkbOptions = "eurosign:e";
+
+  # Enable the KDE Desktop Environment.
+  # services.xserver.displayManager.kdm.enable = true;
+  # services.xserver.desktopManager.kde4.enable = true;
+}
+EOF
+} else {
+    print STDERR "warning: not overwriting existing $fn\n";
+}
 
 # workaround for a bug in substituteAll

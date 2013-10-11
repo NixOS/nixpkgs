@@ -1,14 +1,7 @@
 #! @shell@ -e
 
-# Allow the location of NixOS sources and the system configuration
-# file to be overridden.
-
-: ${mountPoint=/mnt}
-: ${NIXOS_CONFIG=/etc/nixos/configuration.nix}
-export NIXOS_CONFIG
-
 usage () {
-    exec man nixos-rebuild
+    exec man nixos-option
     exit 1
 }
 
@@ -20,7 +13,6 @@ desc=false
 defs=false
 value=false
 xml=false
-install=false
 verbose=false
 
 option=""
@@ -38,7 +30,6 @@ for arg; do
             -d*) longarg="$longarg --description";;
             -v*) longarg="$longarg --value";;
             -l*) longarg="$longarg --lookup";;
-            -i*) longarg="$longarg --install";;
             -*) usage;;
           esac
           # remove the first letter option
@@ -53,7 +44,6 @@ for arg; do
         --value) value=true;;
         --lookup) defs=true;;
         --xml) xml=true;;
-        --install) install=true;;
         --verbose) verbose=true;;
         --help) usage;;
         -*) usage;;
@@ -79,16 +69,6 @@ if $xml; then
   value=true
   desc=true
   defs=true
-fi
-
-# --install cannot be used with -d -v -l without option name.
-if $value || $desc || $defs && $install && test -z "$option"; then
-  usage
-fi
-
-generate=false
-if ! $defs && ! $desc && ! $value && $install && test -z "$option"; then
-  generate=true
 fi
 
 if ! $defs && ! $desc; then
@@ -153,122 +133,6 @@ nixMap() {
     $fun $elem
   done
 }
-
-if $install; then
-  NIXOS_CONFIG="$mountPoint$NIXOS_CONFIG"
-fi
-
-if $generate; then
-  mkdir -p $(dirname "$NIXOS_CONFIG")
-
-  # Scan the hardware and add the result to /etc/nixos/hardware-scan.nix.
-  hardware_config="${NIXOS_CONFIG%/configuration.nix}/hardware-configuration.nix"
-  if test -e "$hardware_config"; then
-    echo "A hardware configuration file exists, generation skipped."
-  else
-    echo "Generating a hardware configuration file in $hardware_config..."
-    nixos-hardware-scan > "$hardware_config"
-  fi
-
-  if test -e "$NIXOS_CONFIG"; then
-    echo 1>&2 "error: Cannot generate a template configuration because a configuration file exists."
-    exit 1
-  fi
-
-  nl="
-"
-  if test -e /sys/firmware/efi/efivars; then
-    l1="  # Use the gummiboot efi boot loader."
-    l2="  boot.loader.grub.enable = false;"
-    l3="  boot.loader.gummiboot.enable = true;"
-    l4="  boot.loader.efi.canTouchEfiVariables = true;"
-    # !!! Remove me when nixos is on 3.10 or greater by default
-    l5="  # EFI booting requires kernel >= 3.10"
-    l6="  boot.kernelPackages = pkgs.linuxPackages_3_10;"
-    bootloader_config="$l1$nl$l2$nl$l3$nl$l4$nl$nl$l5$nl$l6"
-  else
-    l1="  # Use the Grub2 boot loader."
-    l2="  boot.loader.grub.enable = true;"
-    l3="  boot.loader.grub.version = 2;"
-    l4="  # Define on which hard drive you want to install Grub."
-    l5='  # boot.loader.grub.device = "/dev/sda";'
-    bootloader_config="$l1$nl$l2$nl$l3$nl$nl$l4$nl$l5"
-  fi
-
-  echo "Generating a basic configuration file in $NIXOS_CONFIG..."
-
-  # Generate a template configuration file where the user has to
-  # fill the gaps.
-  cat <<EOF > "$NIXOS_CONFIG"
-# Edit this configuration file to define what should be installed on
-# the system.  Help is available in the configuration.nix(5) man page
-# or the NixOS manual available on virtual console 8 (Alt+F8).
-
-{ config, pkgs, ... }:
-
-{
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-
-  boot.initrd.kernelModules =
-    [ # Specify all kernel modules that are necessary for mounting the root
-      # filesystem.
-      # "xfs" "ata_piix"
-      # fbcon # Uncomment this when EFI booting to see the console before the root partition is mounted
-    ];
-    
-$bootloader_config
-
-  # networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables Wireless.
-
-  # Add filesystem entries for each partition that you want to see
-  # mounted at boot time.  This should include at least the root
-  # filesystem.
-
-  # fileSystems."/".device = "/dev/disk/by-label/nixos";
-
-  # fileSystems."/data" =     # where you want to mount the device
-  #   { device = "/dev/sdb";  # the device
-  #     fsType = "ext3";      # the type of the partition
-  #     options = "data=journal";
-  #   };
-
-  # List swap partitions activated at boot time.
-  swapDevices =
-    [ # { device = "/dev/disk/by-label/swap"; }
-    ];
-
-  # Select internationalisation properties.
-  # i18n = {
-  #   consoleFont = "lat9w-16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.kdm.enable = true;
-  # services.xserver.desktopManager.kde4.enable = true;
-}
-EOF
-
-  exit 0
-fi;
 
 # This duplicates the work made below, but it is useful for processing
 # the output of nixos-option with other tools such as nixos-gui.
