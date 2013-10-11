@@ -33,6 +33,14 @@
     <arg><option>--fast</option></arg>
     <arg><option>--rollback</option></arg>
     <sbr />
+    <arg>
+      <group choice='req'>
+        <arg choice='plain'><option>--profile-name</option></arg>
+        <arg choice='plain'><option>-p</option></arg>
+      </group>
+      <replaceable>name</replaceable>
+    </arg>
+    <sbr />
     <arg><option>--show-trace</option></arg>
   </cmdsynopsis>
 </refsynopsisdiv>
@@ -229,7 +237,34 @@ $ ./result/bin/run-*-vm
       <filename>/etc/nixos/configuration.nix</filename>, roll back to
       the previous configuration.  (The previous configuration is
       defined as the one before the “current” generation of the
-      profile <filename>/nix/var/nix/profiles/system</filename>.)</para>
+      Nix profile <filename>/nix/var/nix/profiles/system</filename>.)</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--profile-name</option></term>
+    <term><option>-p</option></term>
+    <listitem>
+      <para>Instead of using the Nix profile
+      <filename>/nix/var/nix/profiles/system</filename> to keep track
+      of the current and previous system configurations, use
+      <filename>/nix/var/nix/profiles/system-profiles/<replaceable>name</replaceable></filename>.
+      When you use GRUB 2, for every system profile created with this
+      flag, NixOS will create a submenu named “NixOS - Profile
+      '<replaceable>name</replaceable>'” in GRUB’s boot menu,
+      containing the current and previous configurations of this
+      profile.</para>
+
+      <para>For instance, if you want to test a configuration file
+      named <filename>test.nix</filename> without affecting the
+      default system profile, you would do:
+
+<screen>
+$ nixos-rebuild switch -p test -I nixos-config=./test.nix
+</screen>
+
+      The new configuration will appear in the GRUB 2 submenu “NixOS - Profile
+      'test'”.</para>
     </listitem>
   </varlistentry>
 
