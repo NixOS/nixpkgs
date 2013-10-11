@@ -4953,6 +4953,8 @@ let
       else stdenv;
   };
 
+  libsodium = callPackage ../development/libraries/libsodium { };
+
   libsoup = callPackage ../development/libraries/libsoup { };
 
   libssh = callPackage ../development/libraries/libssh { };
