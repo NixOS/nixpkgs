@@ -1,44 +1,7 @@
 #! @shell@ -e
 
 showSyntax() {
-    # !!! more or less cut&paste from
-    # system/switch-to-configuration.sh (which we call, of course).
-    cat <<EOF
-Usage: $0 [OPTIONS...] OPERATION
-
-The operation is one of the following:
-
-  switch:   make the configuration the boot default and activate now
-  boot:     make the configuration the boot default
-  test:     activate the configuration, but don't make it the boot default
-  build:    build the configuration, but don't make it the default or
-            activate it
-  build-vm: build a virtual machine containing the configuration
-            (useful for testing)
-  build-vm-with-bootloader:
-            like build-vm, but include a boot loader in the VM
-  dry-run:  just show what store paths would be built/downloaded
-
-Options:
-
-  --upgrade              fetch the latest version of NixOS before rebuilding
-  --install-grub         (re-)install the Grub bootloader
-  --no-build-nix         don't build the latest Nix from Nixpkgs before
-                           building NixOS
-  --rollback             restore the previous NixOS configuration (only
-                           with switch, boot, test, build)
-  --profile-name / -p    install in the specified system profile
-  --fast                 same as --no-build-nix --show-trace
-
-Various nix-build options are also accepted, in particular:
-
-  --show-trace           show a detailed stack trace for evaluation errors
-
-Environment variables affecting nixos-rebuild:
-
-  \$NIX_PATH              Nix expression search path
-  \$NIXOS_CONFIG          path to the NixOS system configuration specification
-EOF
+    exec man nixos-rebuild
     exit 1
 }
 
