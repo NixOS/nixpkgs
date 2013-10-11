@@ -592,7 +592,7 @@ users.extraUsers.alice.openssh.authorizedKeys.keys =
 <section><title>IPv4 configuration</title>
 
 <para>By default, NixOS uses DHCP (specifically,
-(<command>dhcpcd</command>)) to automatically configure network
+<command>dhcpcd</command>) to automatically configure network
 interfaces.  However, you can configure an interface manually as
 follows:
 
