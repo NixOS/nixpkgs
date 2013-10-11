@@ -1,23 +1,14 @@
-{ stdenv, fetchurl, autoconf, libtool, automake }:
+{ stdenv, fetchurl }:
 
-let
-  version = "0.4.3";
-in
 stdenv.mkDerivation rec {
-  name = "libsodium-${version}";
+  name = "libsodium-0.4.3";
 
   src = fetchurl {
-    url = "https://github.com/jedisct1/libsodium/tarball/${version}";
-    name = "${name}.tar.gz";
-    sha256 = "0vammhvkz6masnwyacqkzkah05bgv3syb97jvg2y49vb67pwmspn";
+    url = "https://download.libsodium.org/libsodium/releases/${name}.tar.gz";
+    sha256 = "0hk0zca1kpj6xlc2j2qx9qy7287pi0896frmxq5d7qmcwsdf372r";
   };
 
-  preConfigure = ''
-    ACLOCAL_PATH=$ACLOCAL_PATH:`pwd`/m4
-    ./autogen.sh
-  '';
-
-  buildInputs = [ autoconf libtool automake ];
+  NIX_LDFLAGS = "-lssp";
 
   doCheck = true;
 
