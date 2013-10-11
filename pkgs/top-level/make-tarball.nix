@@ -12,7 +12,7 @@ releaseTools.sourceTarball rec {
 
   inherit officialRelease;
   version = builtins.readFile ../../.version;
-  versionSuffix = "pre${toString nixpkgs.revCount}_${nixpkgs.shortRev}";
+  versionSuffix = "pre${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
   buildInputs = [
     lzma
