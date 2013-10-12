@@ -10,6 +10,8 @@ let
     {
       host: "${cfg.host}",
       port: "${toString cfg.port}",
+      mgmt_address: "${cfg.mgmt_address}",
+      mgmt_port: "${toString cfg.mgmt_port}",
       backends: [${concatMapStrings (el: ''"./backends/${el}",'') cfg.backends}],
       graphiteHost: "${cfg.graphiteHost}",
       graphitePort: "${toString cfg.graphitePort}",
@@ -40,6 +42,18 @@ in
     port = mkOption {
       description = "Port that stats listens for messages on over UDP";
       default = 8125;
+      type = types.uniq types.int;
+    };
+
+    mgmt_address = mkOption {
+      description = "Address to run managment TCP interface on";
+      default = "127.0.0.1";
+      type = types.uniq types.string;
+    };
+
+    mgmt_port = mkOption {
+      description = "Port to run the management TCP interface on";
+      default = 8126;
       type = types.uniq types.int;
     };
 
