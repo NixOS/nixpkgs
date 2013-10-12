@@ -9222,6 +9222,8 @@ let
 
   scorched3d = callPackage ../games/scorched3d { };
 
+  sdlmame = callPackage ../games/sdlmame { };
+
   sgtpuzzles = builderDefsPackage (import ../games/sgt-puzzles) {
     inherit pkgconfig fetchsvn perl gtk;
     inherit (xlibs) libX11;
