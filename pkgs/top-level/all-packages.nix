@@ -2751,6 +2751,8 @@ let
 
   ocaml_4_00_1 = callPackage ../development/compilers/ocaml/4.00.1.nix { };
 
+  ocaml_4_01_0 = callPackage ../development/compilers/ocaml/4.01.0.nix { };
+
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
 
   ber_metaocaml_003 = callPackage ../development/compilers/ocaml/ber-metaocaml-003.nix { };
