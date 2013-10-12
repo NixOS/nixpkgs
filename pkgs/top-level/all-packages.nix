@@ -8436,6 +8436,8 @@ let
 
   pidginsipe = callPackage ../applications/networking/instant-messengers/pidgin-plugins/sipe { };
 
+  toxprpl = callPackage ../applications/networking/instant-messengers/pidgin-plugins/tox-prpl { };
+
   pinfo = callPackage ../applications/misc/pinfo { };
 
   pinta = callPackage ../applications/graphics/pinta {
