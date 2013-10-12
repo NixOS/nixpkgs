@@ -66,9 +66,9 @@ in {
     logging = mkOption {
       description = "Elasticsearch logging configuration";
       default = ''
-        rootLogger: DEBUG, console
+        rootLogger: INFO, console
         logger:
-          action: DEBUG
+          action: INFO
           com.amazonaws: WARN
         appender:
           console:
