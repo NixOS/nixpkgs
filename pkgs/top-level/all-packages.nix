@@ -5878,6 +5878,9 @@ let
 
   jquery_ui = callPackage ../development/libraries/javascript/jquery-ui { };
 
+  ### DEVELOPMENT / LISP MODULES
+
+  asdf = callPackage ../development/lisp-modules/asdf {};
 
   ### DEVELOPMENT / PERL MODULES
 
