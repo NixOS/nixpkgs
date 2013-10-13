@@ -38,7 +38,7 @@ let
       { config, pkgs, modulesPath, ... }:
 
       { imports =
-          [ ./hardware.nix
+          [ ./hardware-configuration.nix
             "''${modulesPath}/testing/test-instrumentation.nix"
           ];
 
@@ -48,10 +48,7 @@ let
         ''}
         boot.loader.grub.device = "${grubDevice}";
         boot.loader.grub.extraConfig = "serial; terminal_output.serial";
-        boot.initrd.kernelModules = [ "ext3" "ext4" "xfs" "virtio_console" ];
-
-        ${fileSystems}
-        swapDevices = [ { label = "swap"; } ];
+        boot.initrd.kernelModules = [ "virtio_console" ];
 
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
       }
@@ -143,12 +140,10 @@ let
 
       # Create the NixOS configuration.
       $machine->succeed(
-          "mkdir -p /mnt/etc/nixos",
-          "nixos-hardware-scan > /mnt/etc/nixos/hardware.nix",
+          "nixos-generate-config --root /mnt",
       );
 
-      my $cfg = $machine->succeed("cat /mnt/etc/nixos/hardware.nix");
-      print STDERR "Result of the hardware scan:\n$cfg\n";
+      $machine->succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2");
 
       $machine->copyFileFromHost(
           "${ config { inherit fileSystems testChannel grubVersion grubDevice; } }",

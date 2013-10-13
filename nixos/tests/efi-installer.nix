@@ -37,13 +37,12 @@ let
   # The config to install
   config = builtins.toFile "configuration.nix" ''
     { pkgs, ... }: {
-      imports = [ ./hardware.nix <nixos/modules/testing/test-instrumentation.nix> ];
+      imports = [ ./hardware-configuration.nix <nixos/modules/testing/test-instrumentation.nix> ];
       boot.kernelPackages = pkgs.linuxPackages_3_10;
       boot.loader.grub.enable = false;
       boot.loader.efi.canTouchEfiVariables = true;
       boot.loader.gummiboot.enable = true;
       fonts.enableFontConfig = false;
-      fileSystems."/".label = "nixos";
     }
   '';
 
@@ -84,12 +83,10 @@ in {
 
       # Create the NixOS configuration.
       $machine->succeed(
-          "mkdir -p /mnt/etc/nixos",
-          "nixos-hardware-scan > /mnt/etc/nixos/hardware.nix",
+          "nixos-generate-config --root /mnt",
       );
 
-      my $cfg = $machine->succeed("cat /mnt/etc/nixos/hardware.nix");
-      print STDERR "Result of the hardware scan:\n$cfg\n";
+      $machine->succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2");
 
       $machine->copyFileFromHost(
           "${config}",
