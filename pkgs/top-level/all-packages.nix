@@ -8648,10 +8648,7 @@ let
 
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
-  stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
-    inherit texinfo;
-    clisp = clisp_2_44_1;
-  };
+  stumpwm = lispPackages.stumpwm;
 
   sublime = callPackage ../applications/editors/sublime { };
 
