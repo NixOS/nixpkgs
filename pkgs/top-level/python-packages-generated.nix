@@ -2263,11 +2263,11 @@ in
   };
 
 
-  "cssselect-0.8" = self.buildPythonPackage {
-    name = "cssselect-0.8";
+  "cssselect-0.9" = self.buildPythonPackage {
+    name = "cssselect-0.9";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/c/cssselect/cssselect-0.8.tar.gz";
-        md5 = "c4683e050351abcbbd5990b01f5344e2";
+        url = "https://pypi.python.org/packages/source/c/cssselect/cssselect-0.9.tar.gz";
+        md5 = "3aba1e431787da957a9cd1e2c2e0bf1c";
     };
     doCheck = false;
     buildInputs = [  ];
@@ -4036,7 +4036,7 @@ in
         md5 = "bf0a04fcf8b2cdcaa13b04324cefb53d";
     };
     doCheck = true;
-    buildInputs = [ self."nose-1.3.0" self."unittest2-0.5.1" self."pyquery-1.2.4" self."WSGIProxy2-0.3" self."PasteDeploy-1.5.0" self."mock-1.0.1" self."coverage-3.7" pkgs.unzip ];
+    buildInputs = [ self."nose-1.3.0" self."unittest2-0.5.1" self."pyquery-1.2.6" self."WSGIProxy2-0.3" self."PasteDeploy-1.5.0" self."mock-1.0.1" self."coverage-3.7" pkgs.unzip ];
     propagatedBuildInputs = [ self."beautifulsoup4-4.3.2" self."six-1.4.1" self."waitress-0.8.7" self."WebOb-1.2.3" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
     meta = {
@@ -4409,6 +4409,26 @@ in
   };
 
 
+  "pyquery-1.2.6" = self.buildPythonPackage {
+    name = "pyquery-1.2.6";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/p/pyquery/pyquery-1.2.6.zip";
+        md5 = "af51aa835f24eef06175c48dc1218029";
+    };
+    doCheck = true;
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self."cssselect-0.9" self."lxml-3.2.3" ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
+    meta = {
+      description = ''
+        A jquery-like library for python
+        '';
+      homepage = "https://github.com/gawel/pyquery";
+      license = "BSD";
+    };
+  };
+
+
   "zope.event-3.5.2" = self.buildPythonPackage {
     name = "zope.event-3.5.2";
     src = fetchurl {
@@ -4425,26 +4445,6 @@ in
         '';
       homepage = "http://pypi.python.org/pypi/zope.event";
       license = "ZPL 2.1";
-    };
-  };
-
-
-  "pyquery-1.2.4" = self.buildPythonPackage {
-    name = "pyquery-1.2.4";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/pyquery/pyquery-1.2.4.tar.gz";
-        md5 = "268f08258738d21bc1920d7522f2a63b";
-    };
-    doCheck = true;
-    buildInputs = [  ];
-    propagatedBuildInputs = [ self."cssselect-0.8" self."lxml-3.2.3" ];
-    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-    meta = {
-      description = ''
-        A jquery-like library for python
-        '';
-      homepage = "https://github.com/gawel/pyquery";
-      license = "BSD";
     };
   };
 
