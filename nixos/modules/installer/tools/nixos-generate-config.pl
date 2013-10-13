@@ -21,6 +21,8 @@ sub uniq {
 
 # Process the command line.
 my $outDir = "/etc/nixos";
+my $rootDir = ""; # = /
+my $force = 0;
 
 for (my $n = 0; $n < scalar @ARGV; $n++) {
     my $arg = $ARGV[$n];
@@ -31,6 +33,15 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
         $n++;
         $outDir = $ARGV[$n];
         die "$0: ‘--dir’ requires an argument\n" unless defined $outDir;
+    }
+    elsif ($arg eq "--root") {
+        $n++;
+        $rootDir = $ARGV[$n];
+        die "$0: ‘--root’ requires an argument\n" unless defined $rootDir;
+        $rootDir =~ s/\/*$//; # remove trailing slashes
+    }
+    elsif ($arg eq "--force") {
+        $force = 1;
     }
     else {
         die "$0: unrecognized argument ‘$arg’\n";
@@ -232,6 +243,10 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     next unless -d $mountPoint;
     my @mountOptions = split /,/, $fields[5];
 
+    next if !in($mountPoint, $rootDir);
+    $mountPoint = substr($mountPoint, length($rootDir)); # strip the root directory (e.g. /mnt)
+    $mountPoint = "/" if $mountPoint eq "";
+
     # Skip special filesystems.
     next if in($mountPoint, "/proc") || in($mountPoint, "/dev") || in($mountPoint, "/sys") || in($mountPoint, "/run");
 
@@ -317,6 +332,8 @@ my $initrdAvailableKernelModules = toNixExpr(uniq @initrdAvailableKernelModules)
 my $kernelModules = toNixExpr(uniq @kernelModules);
 my $modulePackages = toNixExpr(uniq @modulePackages);
 
+$outDir = "$rootDir$outDir";
+
 my $fn = "$outDir/hardware-configuration.nix";
 print STDERR "writing $fn...\n";
 mkpath($outDir, 0, 0755);
@@ -343,7 +360,7 @@ EOF
 
 # Generate a basic configuration.nix, unless one already exists.
 $fn = "$outDir/configuration.nix";
-if (! -e $fn) {
+if ($force || ! -e $fn) {
     print STDERR "writing $fn...\n";
 
     my $bootloaderConfig;
