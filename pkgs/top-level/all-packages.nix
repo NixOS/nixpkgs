@@ -5883,6 +5883,12 @@ let
   asdf = callPackage ../development/lisp-modules/asdf {};
   clwrapperFunction = callPackage ../development/lisp-modules/clwrapper;
   wrapLisp = lisp: clwrapperFunction {lisp=lisp;};
+  lispPackagesFor = clwrapper: callPackage ../development/lisp-modules/lisp-packages.nix{
+    inherit clwrapper;
+  };
+  lispPackagesClisp = lispPackagesFor (wrapLisp clisp);
+  lispPackagesSBCL = lispPackagesFor (wrapLisp sbcl);
+  lispPackages = recurseIntoAttrs lispPackagesSBCL;
 
   ### DEVELOPMENT / PERL MODULES
 
