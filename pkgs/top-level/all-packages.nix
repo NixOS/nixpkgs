@@ -5881,6 +5881,8 @@ let
   ### DEVELOPMENT / LISP MODULES
 
   asdf = callPackage ../development/lisp-modules/asdf {};
+  clwrapperFunction = callPackage ../development/lisp-modules/clwrapper;
+  wrapLisp = lisp: clwrapperFunction {lisp=lisp;};
 
   ### DEVELOPMENT / PERL MODULES
 
