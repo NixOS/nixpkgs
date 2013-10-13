@@ -43,5 +43,7 @@ let lispPackages = rec {
       configurePhase="buildPhase(){ true; }";
     };
   };
+
+  stumpwm = callPackage ./stumpwm {};
 };
 in lispPackages
