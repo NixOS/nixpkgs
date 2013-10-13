@@ -105,7 +105,7 @@ sub pciCheck {
             $class =~ /^0x0c03/
             )
         {
-            push @initrdKernelModules, $module;
+            push @initrdAvailableKernelModules, $module;
         }
     }
 
@@ -174,7 +174,7 @@ sub usbCheck {
             ($class eq "03" && $protocol eq "01")
             )
         {
-            push @initrdKernelModules, $module;
+            push @initrdAvailableKernelModules, $module;
         }
     }
 }
@@ -192,7 +192,7 @@ foreach my $path (glob "/sys/class/block/*") {
     if (-e "$path/device/driver/module") {
         $module = basename `readlink -f $path/device/driver/module`;
         chomp $module;
-        push @initrdKernelModules, $module;
+        push @initrdAvailableKernelModules, $module;
     }
 }
 
@@ -313,7 +313,7 @@ sub multiLineList {
     return $res;
 }
 
-my $initrdKernelModules = toNixExpr(uniq @initrdKernelModules);
+my $initrdAvailableKernelModules = toNixExpr(uniq @initrdAvailableKernelModules);
 my $kernelModules = toNixExpr(uniq @kernelModules);
 my $modulePackages = toNixExpr(uniq @modulePackages);
 
@@ -330,7 +330,7 @@ write_file($fn, <<EOF);
 {
   imports = ${\multiLineList("    ", @imports)};
 
-  boot.initrd.kernelModules = [$initrdKernelModules ];
+  boot.initrd.availableKernelModules = [$initrdAvailableKernelModules ];
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 
