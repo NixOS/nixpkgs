@@ -754,6 +754,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   configurator = callPackage ../development/libraries/haskell/configurator {};
 
+  connection = callPackage ../development/libraries/haskell/connection {};
+
   constraints = callPackage ../development/libraries/haskell/constraints {};
 
   convertible = callPackage ../development/libraries/haskell/convertible {};
