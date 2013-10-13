@@ -174,6 +174,11 @@ let
 
       $machine->succeed("nixos-rebuild switch >&2");
 
+      # Test nixos-option.
+      $machine->succeed("nixos-option boot.initrd.kernelModules | grep virtio_console");
+      $machine->succeed("nixos-option -d boot.initrd.kernelModules | grep 'List of modules'");
+      $machine->succeed("nixos-option -l boot.initrd.kernelModules | grep /etc/nixos/configuration.nix");
+
       $machine->shutdown;
 
       # And just to be sure, check that the machine still boots after
