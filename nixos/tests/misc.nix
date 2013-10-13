@@ -9,6 +9,7 @@
     { swapDevices = pkgs.lib.mkOverride 0
         [ { device = "/root/swapfile"; size = 128; } ];
       environment.variables.EDITOR = pkgs.lib.mkOverride 0 "emacs";
+      services.nixosManual.enable = pkgs.lib.mkOverride 0 true;
     };
 
   testScript =
@@ -18,7 +19,7 @@
       };
 
       subtest "nixos-rebuild", sub {
-          $machine->succeed("nixos-rebuild --help | grep 'Usage:'");
+          $machine->succeed("nixos-rebuild --help | grep SYNOPSIS");
       };
 
       # Sanity check for uid/gid assignment.
