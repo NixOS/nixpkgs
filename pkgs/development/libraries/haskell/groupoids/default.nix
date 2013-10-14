@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "4.0";
   sha256 = "08la44c19pz2clws5mb939zc1d17cb6qy9qlh2n1634pl0zrawb6";
   buildDepends = [ semigroupoids ];
+  noHaddock = true;
   meta = {
     homepage = "http://github.com/ekmett/groupoids/";
     description = "This package has been absorbed into semigroupoids 4.0";
