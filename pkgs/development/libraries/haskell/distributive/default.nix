@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "distributive";
-  version = "0.3.1";
-  sha256 = "0zf3wq1xz9sbb0g6fg852jckrwkffsfkghq3zx03d2q9ginc6jbc";
+  version = "0.3.2";
+  sha256 = "1n2xnjffrbfw736qn9w5fxy4pjl2319yhimkglhbayq85pz51r1h";
   buildDepends = [ transformers transformersCompat ];
   testDepends = [ doctest filepath ];
   meta = {
