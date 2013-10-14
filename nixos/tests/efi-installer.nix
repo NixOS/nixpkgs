@@ -59,7 +59,7 @@ in {
       createDisk("harddisk", 4 * 1024);
 
       my $machine = createMachine({ hda => "harddisk",
-        hdaInterface => "virtio",
+        hdaInterface => "scsi",
         cdrom => glob("${iso}/iso/*.iso"),
         qemuFlags => '-L ${biosDir} ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"}'});
       $machine->start;
