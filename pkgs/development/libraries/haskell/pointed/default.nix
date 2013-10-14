@@ -1,18 +1,18 @@
-{ cabal, comonad, comonadTransformers, dataDefault, semigroupoids
-, semigroups, stm, tagged, transformers
+{ cabal, comonad, dataDefaultClass, semigroupoids, semigroups, stm
+, tagged, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "pointed";
-  version = "3.1";
-  sha256 = "13vx1vy3qfa23145fdfdivdmw01qyl2k6g8ynqxl8pzbj9cbb08n";
+  version = "4.0";
+  sha256 = "02y7ba1pcpmwcp762516p4x75y3ma2kml9mbiv1y8gcnn4ylvir4";
   buildDepends = [
-    comonad comonadTransformers dataDefault semigroupoids semigroups
-    stm tagged transformers
+    comonad dataDefaultClass semigroupoids semigroups stm tagged
+    transformers
   ];
   meta = {
     homepage = "http://github.com/ekmett/pointed/";
-    description = "Haskell 98 pointed and copointed data";
+    description = "Pointed and copointed data";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
