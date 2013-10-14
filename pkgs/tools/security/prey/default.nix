@@ -1,10 +1,10 @@
 { stdenv, fetchurl, fetchgit, curl, scrot, imagemagick, xawtv, inetutils, makeWrapper, coreutils
-, apiKey ? null
-, deviceKey ? null }:
+, apiKey ? ""
+, deviceKey ? "" }:
 
 # TODO: this should assert keys are set, somehow if set through .override assertion fails
-#assert apiKey != null;
-#assert deviceKey != null;
+#assert apiKey != "";
+#assert deviceKey != "";
 
 let
   modulesSrc = fetchgit {
