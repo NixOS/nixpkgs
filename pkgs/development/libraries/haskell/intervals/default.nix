@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "intervals";
-  version = "0.2.2";
-  sha256 = "059xmk373xz6nwk61iyhx4d7xd328jxb694qmq9plry3k77mdh5q";
+  version = "0.2.2.1";
+  sha256 = "0kbsms3742ppmzbmrfp94aq4wvwrayx5ppsyk7pd1mj7y47aay0f";
   buildDepends = [ numericExtras ];
   meta = {
     homepage = "http://github.com/ekmett/intervals";
