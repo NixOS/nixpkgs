@@ -3,7 +3,7 @@
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 let
-  version = "0.9.1.55";
+  version = "0.9.4.183";
   qt4webkit =
     if stdenv.system == "i686-linux" then
       fetchurl {
@@ -25,13 +25,13 @@ stdenv.mkDerivation {
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.gbdd3b79.203-1_i386.deb";
-        sha256 = "1sls4gb85700126bbk4sz73ipa2rjcinmpnsi78q0bsdj365y2wc";
+        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.g644e24e.428-1_i386.deb";
+        sha256 = "1wl6v5x8vm74h5lxp8fhvmih8l122aadsf1qxvpk0k3y6mbx0ifa";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.gbdd3b79.203-1_amd64.deb";
-        sha256 = "10pzj3p8bjbxh9nnm4qc5s1hn9nh7hgh3vbwm0xblj9rn71wl03y";
+        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.g644e24e.428-1_amd64.deb";
+        sha256 = "1yniln6iswrrrny01qr2w5zcvam0vnrvy9mwbnk9i14i2ch0f3fx";
       }
     else throw "Spotify not supported on this platform.";
 
