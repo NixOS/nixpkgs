@@ -4829,6 +4829,8 @@ let
     libtool = libtool_1_5;
   };
 
+  libjson_rpc_cpp = callPackage ../development/libraries/libjson-rpc-cpp { };
+
   libkate = callPackage ../development/libraries/libkate { };
 
   libksba = callPackage ../development/libraries/libksba { };
