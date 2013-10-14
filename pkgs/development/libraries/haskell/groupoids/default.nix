@@ -2,12 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "groupoids";
-  version = "3.0.1.1";
-  sha256 = "0r4xjyq7icd52nas27bhr5k8q7li6lba8mlkcipghhsgxsyjfp63";
+  version = "4.0";
+  sha256 = "08la44c19pz2clws5mb939zc1d17cb6qy9qlh2n1634pl0zrawb6";
   buildDepends = [ semigroupoids ];
   meta = {
     homepage = "http://github.com/ekmett/groupoids/";
-    description = "Haskell 98 Groupoids";
+    description = "This package has been absorbed into semigroupoids 4.0";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
