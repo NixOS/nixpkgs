@@ -1561,6 +1561,8 @@ let
 
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
+  plantuml = callPackage ../tools/misc/plantuml { };
+
   plan9port = callPackage ../tools/system/plan9port { };
 
   ploticus = callPackage ../tools/graphics/ploticus {
