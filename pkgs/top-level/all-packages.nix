@@ -1597,6 +1597,8 @@ let
 
   pptp = callPackage ../tools/networking/pptp {};
 
+  "prey-bash-client" = callPackage ../tools/security/prey { };
+
   proxychains = callPackage ../tools/networking/proxychains { };
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
