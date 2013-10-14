@@ -8,7 +8,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20130611";
+  date = "20131013";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1.1";
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "60cc4e44bf415dcda90f2bbe22300f842fe44098";
-    sha256 = "018s0zyvdkxjldbvcdv40q3v2gcjznyyql5pv3zhhy1iq11jddfz";
+    rev = "76d2b87a45fff637473c4c342c9f5f9387675fda";
+    sha256 = "079g44r27lv0wsfbg84ihrmgzl73djjjr41xjiaqdph55zqfbn4f";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
