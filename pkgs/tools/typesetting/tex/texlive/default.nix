@@ -1,18 +1,18 @@
 args : with args;
 rec {
   src = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2012.20120628.orig.tar.xz;
-    sha256 = "0k94df3lfvghngzdzi2d4fz2z0gs8iglz7h3w2lxvlhiwwpmx601";
+    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2013.20130729.30972.orig.tar.xz;
+    sha256 = "1idgyim6r4bi3id245k616qrdarfh65xv3gi2psarqqmsw504yhd";
   };
 
   texmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2012.20120611.orig.tar.xz;
-    sha256 = "116zm0qdq9rd4vakhd2py9q7lq3ihspc7hy33bh8wy5v1rgiqsm6";
+    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2013.20130918.orig.tar.xz;
+    sha256 = "0h7x49zsd2gs8fr28f4h04dv5m8p2mpgqxk2vvl5xlf4wwxxbm2p";
   };
 
   langTexmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-lang/texlive-lang_2012.20120611.orig.tar.xz;
-    sha256 = "0zh9svszfkbjx72i7sa9gg0gak93wf05845mxpjv56h8qwk4bffv";
+    url = mirror://debian/pool/main/t/texlive-lang/texlive-lang_2013.20131010.orig.tar.xz;
+    sha256 = "17wfd2qmyafv74ac3ssy9aga12g09l2q0r1p19fb4vvs0wrkwzbz";
   };
 
   setupHook = ./setup-hook.sh;
@@ -34,6 +34,8 @@ rec {
     sed -e 's@\<env python@${python}/bin/python@' -i $(grep 'env python' -rl . )
 
     sed -e '/ubidi_open/i#include <unicode/urename.h>' -i $(find . -name configure)
+    sed -e 's/-lttf/-lfreetype/' -i $(find . -name configure)
+
     sed -e s@ncurses/curses.h@curses.h@g -i $(grep ncurses/curses.h -rl . )
     sed -e '1i\#include <string.h>\n\#include <stdlib.h>' -i $( find libs/teckit -name '*.cpp' -o -name '*.c' )
 
@@ -44,7 +46,7 @@ rec {
     cd Work
   '' ) [ "minInit" "doUnpack" "addInputs" "defEnsureDir" ];
 
-  doPostInstall = fullDepEntry( ''
+  promoteLibexec = fullDepEntry (''
     mkdir -p $out/libexec/
     mv $out/bin $out/libexec/$(uname -m)
     mkdir -p $out/bin
@@ -61,13 +63,15 @@ rec {
           rm "$out/libexec/$(basename "$i")"
       fi;
     done
+  '') ["doMakeInstall"];
 
-    [ -d $out/texmf-config ] || ln -s $out/texmf $out/texmf-config
-    ln -s -v "$out/"*texmf* "$out/share/" || true
+  doPostInstall = fullDepEntry( ''
+    cp -r "$out/"texmf* "$out/share/" || true
+    rm -rf "$out"/texmf*
+    [ -d $out/share/texmf-config ] || ln -s $out/share/texmf-dist $out/share/texmf-config
+    ln -s "$out"/share/texmf* "$out"/
 
-    sed -e 's/.*pyhyph.*/=&/' -i $out/texmf-config/tex/generic/config/language.dat
-
-    PATH=$PATH:$out/bin mktexlsr $out/texmf*
+    PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
 
     HOME=. PATH=$PATH:$out/bin updmap-sys --syncwithtrees
 
@@ -80,25 +84,37 @@ rec {
     #
     # I find it acceptable, hence the "|| true".
     echo "building format files..."
-    mkdir -p "$out/texmf-var/web2c"
+    mkdir -p "$out/share/texmf-var/web2c"
+    ln -sf "$out"/out/share/texmf* "$out"/
     PATH="$PATH:$out/bin" fmtutil-sys --all || true
 
-    PATH=$PATH:$out/bin mktexlsr $out/texmf*
+    PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${poppler}/lib"
     done
-  '' ) [ "minInit" "defEnsureDir" "doUnpack" "doMakeInstall" ];
+  '' ) [ "minInit" "defEnsureDir" "doUnpack" "doMakeInstall" "promoteLibexec" "patchShebangsInterim"];
+
+  patchShebangsInterimBin = doPatchShebangs ''$out/bin/'';
+  patchShebangsInterimLibexec = doPatchShebangs ''$out/libexec/'';
+  patchShebangsInterimShareTexmfDist = doPatchShebangs ''$out/share/texmf-dist/scripts/'';
+  patchShebangsInterimTexmfDist = doPatchShebangs ''$out/texmf-dist/scripts/'';
+
+  patchShebangsInterim = fullDepEntry ("") ["patchShebangsInterimBin" 
+    "patchShebangsInterimLibexec" "patchShebangsInterimTexmfDist" 
+    "patchShebangsInterimShareTexmfDist"];
 
   buildInputs = [ zlib bzip2 ncurses libpng flex bison libX11 libICE xproto
     freetype t1lib gd libXaw icu ghostscript ed libXt libXpm libXmu libXext
     xextproto perl libSM ruby expat curl libjpeg python fontconfig xz pkgconfig
-    poppler silgraphite lesstif zziplib ]
+    poppler graphite2 lesstif zziplib harfbuzz texinfo ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ];
 
   configureFlags = [ "--with-x11" "--enable-ipc" "--with-mktexfmt"
     "--enable-shared" "--disable-native-texlive-build" "--with-system-zziplib"
-    "--with-system-libgs" "--with-system-t1lib" "--with-system-freetype2" ]
+    "--with-system-libgs" "--with-system-t1lib" "--with-system-freetype2" 
+    "--with-system-freetype=no" "--disable-ttf2pk" "--enable-ttf2pk2"
+    ]
     ++ ( if stdenv.isDarwin
          # ironically, couldn't get xetex compiling on darwin
          then [ "--disable-xetex" "--disable-xdv2pdf" "--disable-xdvipdfmx" ]
@@ -107,7 +123,7 @@ rec {
 
   phaseNames = [ "addInputs" "doMainBuild" "doMakeInstall" "doPostInstall" ];
 
-  name = "texlive-core-2012";
+  name = "texlive-core-2013";
 
   meta = with stdenv.lib; {
     description = "A TeX distribution";

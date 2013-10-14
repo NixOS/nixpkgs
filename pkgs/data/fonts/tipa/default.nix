@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    export PREFIX="$out/texmf"
+    export PREFIX="$out/texmf-dist"
     mkdir -p "$PREFIX" "$out/share"
     make install PREFIX="$PREFIX"
 

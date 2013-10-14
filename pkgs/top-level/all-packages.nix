@@ -4442,7 +4442,10 @@ let
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
-  harfbuzz = callPackage ../development/libraries/harfbuzz { };
+  harfbuzz = callPackage ../development/libraries/harfbuzz { 
+    icu = null;
+    graphite2 = null;
+  };
 
   hawknl = callPackage ../development/libraries/hawknl { };
 
@@ -5530,6 +5533,7 @@ let
   serd = callPackage ../development/libraries/serd {};
 
   silgraphite = callPackage ../development/libraries/silgraphite {};
+  graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
   simgear = callPackage ../development/libraries/simgear { };
 
@@ -10028,11 +10032,14 @@ let
 
   texLive = builderDefsPackage (import ../tools/typesetting/tex/texlive) {
     inherit builderDefs zlib bzip2 ncurses libpng ed lesstif ruby
-      gd t1lib freetype icu perl expat curl xz pkgconfig zziplib
-      libjpeg bison python fontconfig flex poppler silgraphite makeWrapper;
+      gd t1lib freetype icu perl expat curl xz pkgconfig zziplib texinfo
+      libjpeg bison python fontconfig flex poppler graphite2 makeWrapper;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
+    harfbuzz = harfbuzz.override {
+      inherit icu graphite2;
+    };
   };
 
   texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
@@ -10055,7 +10062,7 @@ let
   */
   texLiveAggregationFun = params:
     builderDefsPackage (import ../tools/typesetting/tex/texlive/aggregate.nix)
-      ({inherit poppler makeWrapper;} // params);
+      ({inherit poppler perl makeWrapper;} // params);
 
   texDisser = callPackage ../tools/typesetting/tex/disser {};
 

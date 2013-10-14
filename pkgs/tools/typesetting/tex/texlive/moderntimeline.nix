@@ -13,9 +13,9 @@ rec {
   buildInputs = [texLive unzip];
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
-    mkdir -p $out/texmf/tex/latex/moderntimeline $out/texmf/doc/moderntimeline $out/share
-    mv *.dtx *.ins $out/texmf/tex/latex/moderntimeline/
-    mv *.pdf $out/texmf/doc/moderntimeline/
+    mkdir -p $out/texmf-dist/tex/latex/moderntimeline $out/texmf-dist/doc/moderntimeline $out/share
+    mv *.dtx *.ins $out/texmf-dist/tex/latex/moderntimeline/
+    mv *.pdf $out/texmf-dist/doc/moderntimeline/
     ln -s $out/texmf* $out/share/
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
 

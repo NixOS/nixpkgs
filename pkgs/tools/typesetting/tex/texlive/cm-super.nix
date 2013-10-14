@@ -10,16 +10,16 @@ rec {
   doCopy = fullDepEntry (''
     mkdir -p $out/share/
 
-    mkdir -p $out/texmf/fonts/enc
-    mkdir -p $out/texmf/fonts/map
-    mkdir -p $out/texmf/fonts/type1/public/cm-super
-    cp pfb/*.pfb $out/texmf/fonts/type1/public/cm-super
-    mkdir -p $out/texmf/dvips/cm-super
-    cp dvips/*.{map,enc}  $out/texmf/dvips/cm-super
-    cp dvips/*.enc  $out/texmf/fonts/enc
-    cp dvips/*.map  $out/texmf/fonts/map
-    mkdir -p $out/texmf/dvipdfm/config
-    cp dvipdfm/*.map  $out/texmf/dvipdfm/config
+    mkdir -p $out/texmf-dist/fonts/enc
+    mkdir -p $out/texmf-dist/fonts/map
+    mkdir -p $out/texmf-dist/fonts/type1/public/cm-super
+    cp pfb/*.pfb $out/texmf-dist/fonts/type1/public/cm-super
+    mkdir -p $out/texmf-dist/dvips/cm-super
+    cp dvips/*.{map,enc}  $out/texmf-dist/dvips/cm-super
+    cp dvips/*.enc  $out/texmf-dist/fonts/enc
+    cp dvips/*.map  $out/texmf-dist/fonts/map
+    mkdir -p $out/texmf-dist/dvipdfm/config
+    cp dvipdfm/*.map  $out/texmf-dist/dvipdfm/config
 
     ln -s $out/texmf* $out/share/
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
