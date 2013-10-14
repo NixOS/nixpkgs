@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "trifecta";
-  version = "1.2.1";
-  sha256 = "0l7q6id3l9km7vrqald87d6l03k5w5zxfh44w425kxmm8fwj2j0j";
+  version = "1.2.1.1";
+  sha256 = "1bv35ip7g0h7r2w0s8pkcbvm0b9hx91vblf5w57q3jr843v9314c";
   buildDepends = [
     ansiTerminal ansiWlPprint blazeBuilder blazeHtml blazeMarkup
     charset comonad deepseq fingertree hashable lens mtl parsers
