@@ -8849,6 +8849,7 @@ let
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
   virtmanager = callPackage ../applications/virtualization/virt-manager {
     inherit (gnome) gnome_python;
+    vte = gnome.vte.override { pythonSupport = true; };
   };
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
