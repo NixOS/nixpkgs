@@ -1,28 +1,31 @@
-{ stdenv, fetchurl, cmake, pkgconfig, x11, libjpeg, libpng, libXmu
+{ stdenv, fetchurl, cmake, pkgconfig, xorg, libjpeg, libpng
 , fontconfig, freetype, pam, dbus_libs }:
 
 stdenv.mkDerivation rec {
-  name = "slim-1.3.4";
+  name = "slim-1.3.6";
 
   src = fetchurl {
     url = "http://download.berlios.de/slim/${name}.tar.gz";
-    sha256 = "00fmrg2v41jnqhx0yc1kv97xxh5gai18n0i4as9g1fcq1i32cp0m";
+    sha256 = "1pqhk22jb4aja4hkrm7rjgbgzjyh7i4zswdgf5nw862l2znzxpi1";
   };
 
-  patches = [
-    # Allow the paths of the configuration file and theme directory to
-    # be set at runtime.
-    ./runtime-paths.patch
-  ];
-
-  buildInputs =
-    [ cmake pkgconfig x11 libjpeg libpng libXmu fontconfig freetype
-      pam dbus_libs
+  patches =
+    [ # Allow the paths of the configuration file and theme directory to
+      # be set at runtime.
+      ./runtime-paths.patch
     ];
 
-  preConfigure = "substituteInPlace CMakeLists.txt --replace /etc $out/etc";
+  preConfigure = "substituteInPlace CMakeLists.txt --replace /etc $out/etc --replace /lib $out/lib";
 
   cmakeFlags = [ "-DUSE_PAM=1" ];
+
+  enableParallelBuilding = true;
+
+  buildInputs =
+    [ cmake pkgconfig libjpeg libpng fontconfig freetype
+      pam dbus_libs
+      xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXmu xorg.libXft
+    ];
 
   NIX_CFLAGS_LINK = "-lXmu";
 
