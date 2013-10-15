@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
     cat > $out/bin/skype << EOF
     #!${stdenv.shell}
+    export PULSE_LATENCY_MSEC=60  # workaround for pulseaudio glitches
     export LD_LIBRARY_PATH=$fullPath:$LD_LIBRARY_PATH
     $dynlinker $out/libexec/skype/skype --resources=$out/libexec/skype "\$@"
     EOF
