@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
     [ # Allow the paths of the configuration file and theme directory to
       # be set at runtime.
       ./runtime-paths.patch
+
+      # Exit after the user's session has finished.  This works around
+      # slim's broken PAM session handling (see
+      # http://developer.berlios.de/bugs/?func=detailbug&bug_id=19102&group_id=2663).
+      ./run-once.patch
     ];
 
   preConfigure = "substituteInPlace CMakeLists.txt --replace /etc $out/etc --replace /lib $out/lib";

@@ -527,6 +527,11 @@ in
           '';
 
         script = "${cfg.displayManager.job.execCmd}";
+
+        serviceConfig = {
+          Restart = "always";
+          RestartSec = "200ms";
+        };
       };
 
     services.xserver.displayManager.xserverArgs =
