@@ -14,10 +14,7 @@ let
     { expr = builtins.readFile ../../../lib/channel-expr.nix; }
     ''
       mkdir -p $out/nixos
-      # FIXME: should use ../../../.. instead of <nixpkgs>, but that
-      # doesn't work properly if <nixos> is a symlink to
-      # nixpkgs/nixos.
-      cp -prd ${<nixpkgs>} $out/nixos/nixpkgs
+      cp -prd ${pkgs.path} $out/nixos/nixpkgs
       ln -s nixpkgs/nixos $out/nixos/nixos
       chmod -R u+w $out/nixos
       rm -rf $out/nixos/nixpkgs/.git
