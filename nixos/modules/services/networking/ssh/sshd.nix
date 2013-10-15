@@ -128,21 +128,10 @@ in
         '';
       };
 
-      usePAM = mkOption {
-        default = true;
-        description = ''
-          Specifies whether the OpenSSH daemon uses PAM to authenticate
-          login attempts.
-        '';
-      };
-
       passwordAuthentication = mkOption {
         default = true;
         description = ''
-          Specifies whether password authentication is allowed. Note
-          that setting this value to <literal>false</literal> is most
-          probably not going to have the desired effect unless
-          <literal>usePAM</literal> is disabled as well.
+          Specifies whether password authentication is allowed.
         '';
       };
 
@@ -284,7 +273,11 @@ in
 
     networking.firewall.allowedTCPPorts = cfg.ports;
 
-    security.pam.services = optional cfg.usePAM { name = "sshd"; startSession = true; showMotd = true; };
+    security.pam.services.sshd =
+      { startSession = true;
+        showMotd = true;
+        unixAuth = cfg.passwordAuthentication;
+      };
 
     services.openssh.authorizedKeysFiles =
       [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
@@ -295,7 +288,7 @@ in
 
         Protocol 2
 
-        UsePAM ${if cfg.usePAM then "yes" else "no"}
+        UsePAM yes
 
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
         ${concatMapStrings (port: ''

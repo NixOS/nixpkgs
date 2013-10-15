@@ -17,6 +17,15 @@ let
         description = "Name of the PAM service.";
       };
 
+      unixAuth = mkOption {
+        default = true;
+        type = types.bool;
+        description = ''
+          Whether users can log in with passwords defined in
+          <filename>/etc/shadow</filename>.
+        '';
+      };
+
       rootOK = mkOption {
         default = false;
         type = types.bool;
@@ -154,7 +163,8 @@ let
               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
           ${optionalString cfg.usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
-          auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
+          ${optionalString cfg.unixAuth
+              "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth"}
           ${optionalString cfg.otpwAuth
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${optionalString config.users.ldap.enable
