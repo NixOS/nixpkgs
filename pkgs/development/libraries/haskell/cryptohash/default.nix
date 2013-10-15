@@ -11,7 +11,6 @@ cabal.mkDerivation (self: {
     byteable HUnit QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2
   ];
-  doCheck = false;
   meta = {
     homepage = "http://github.com/vincenthz/hs-cryptohash";
     description = "collection of crypto hashes, fast, pure and practical";
