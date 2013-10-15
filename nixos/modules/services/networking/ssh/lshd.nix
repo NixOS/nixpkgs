@@ -170,6 +170,8 @@ in
           '';
       };
 
+    security.pam.services.lshd = {};
+
   };
 
 }

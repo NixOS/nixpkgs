@@ -162,7 +162,7 @@ in
     services.udisks2.enable = wantsUdisks2;
     services.upower.enable = config.powerManagement.enable;
 
-    security.pam.services = [ { name = "kde"; allowNullPassword = true; startSession = true; } ];
+    security.pam.services.kde = { allowNullPassword = true; };
 
   };
 

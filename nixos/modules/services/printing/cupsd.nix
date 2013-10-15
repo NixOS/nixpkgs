@@ -219,5 +219,7 @@ in
     # Allow CUPS to receive IPP printer announcements via UDP.
     networking.firewall.allowedUDPPorts = [ 631 ];
 
+    security.pam.services.cups = {};
+
   };
 }

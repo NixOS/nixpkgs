@@ -104,14 +104,12 @@ in
         execCmd = "exec ${pkgs.slim}/bin/slim";
       };
 
-    security.pam.services =
-      [ # Allow null passwords so that the user can login as root on the
-        # installation CD.
-        { name = "slim"; allowNullPassword = true; startSession = true; }
+    # Allow null passwords so that the user can login as root on the
+    # installation CD.
+    security.pam.services.slim = { allowNullPassword = true; startSession = true; };
 
-        # Allow slimlock to work.
-        { name = "slimlock"; }
-      ];
+    # Allow slimlock to work.
+    security.pam.services.slimlock = {};
 
     environment.systemPackages = [ pkgs.slim ];
 

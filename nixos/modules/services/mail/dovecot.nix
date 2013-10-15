@@ -124,7 +124,7 @@ in
 
   config = mkIf config.services.dovecot2.enable {
 
-    security.pam.services = [ { name = "dovecot2"; } ];
+    security.pam.services.dovecot2 = {};
 
     users.extraUsers = [
       { name = cfg.user;

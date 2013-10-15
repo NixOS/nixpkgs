@@ -7,77 +7,138 @@ with pkgs.lib;
 
 let
 
-  inherit (pkgs) pam_krb5 pam_ccreds;
+  pamOpts = args: {
 
-  pam_ldap = if config.users.ldap.daemon.enable then pkgs.nss_pam_ldapd else pkgs.pam_ldap;
+    options = {
 
-  otherService = pkgs.writeText "other.pam"
-    ''
-      auth     required pam_warn.so
-      auth     required pam_deny.so
-      account  required pam_warn.so
-      account  required pam_deny.so
-      password required pam_warn.so
-      password required pam_deny.so
-      session  required pam_warn.so
-      session  required pam_deny.so
-    '';
+      name = mkOption {
+        example = "sshd";
+        type = types.uniq types.string;
+        description = "Name of the PAM service.";
+      };
 
-  # Create a limits.conf(5) file.
-  makeLimitsConf = limits:
-    pkgs.writeText "limits.conf"
-      (concatStringsSep "\n"
-           (map ({ domain, type, item, value }:
-                 concatStringsSep " " [ domain type item value ])
-                limits));
+      rootOK = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If set, root doesn't need to authenticate (e.g. for the
+          <command>useradd</command> service).
+        '';
+      };
 
-  motd = pkgs.writeText "motd" config.users.motd;
+      usbAuth = mkOption {
+        default = config.security.pam.usb.enable;
+        type = types.bool;
+        description = ''
+          If set, users listed in
+          <filename>/etc/pamusb.conf</filename> are able to log in
+          with the associated USB key.
+        '';
+      };
 
-  makePAMService =
-    { name
-    , # If set, root doesn't need to authenticate (e.g. for the "chsh"
-      # service).
-      rootOK ? false
-    , # If set, user listed in /etc/pamusb.conf are able to log in with
-      # the associated usb key.
-      usbAuth ? config.security.pam.usb.enable
-    , # If set, OTPW system will be used (if ~/.otpw exists)
-      otpwAuth ? config.security.pam.enableOTPW
-    , # If set, the calling user's SSH agent is used to authenticate
-      # against the keys in the calling user's ~/.ssh/authorized_keys.
-      # This is useful for "sudo" on password-less remote systems.
-      sshAgentAuth ? false
-    , # If set, the service will register a new session with systemd's
-      # login manager.  If the service is running locally, this will
-      # give the user ownership of audio devices etc.
-      startSession ? false
-    , # Set the login uid of the process (/proc/self/loginuid) for
-      # auditing purposes.  The login uid is only set by "entry
-      # points" like login and sshd, not by commands like sudo.
-      setLoginUid ? startSession
-    , # Whether to forward XAuth keys between users.  Mostly useful
-      # for "su".
-      forwardXAuth ? false
-    , # Whether to allow logging into accounts that have no password
-      # set (i.e., have an empty password field in /etc/passwd or
-      # /etc/group).  This does not enable logging into disabled
-      # accounts (i.e., that have the password field set to `!').
-      # Note that regardless of what the pam_unix documentation says,
-      # accounts with hashed empty passwords are always allowed to log
-      # in.
-      allowNullPassword ? false
-    , # The limits, as per limits.conf(5).
-      limits ? config.security.pam.loginLimits
-    , # Whether to show the message of the day.
-      showMotd ? false
-    , # Whether to update /var/log/wtmp.
-      updateWtmp ? false
-    }:
+      otpwAuth = mkOption {
+        default = config.security.pam.enableOTPW;
+        type = types.bool;
+        description = ''
+          If set, the OTPW system will be used (if
+          <filename>~/.otpw</filename> exists).
+        '';
+      };
 
-    { source = pkgs.writeText "${name}.pam"
-        # !!! TODO: move the LDAP stuff to the LDAP module, and the
-        # Samba stuff to the Samba module.  This requires that the PAM
-        # module provides the right hooks.
+      sshAgentAuth = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If set, the calling user's SSH agent is used to authenticate
+          against the keys in the calling user's
+          <filename>~/.ssh/authorized_keys</filename>.  This is useful
+          for <command>sudo</command> on password-less remote systems.
+        '';
+      };
+
+      startSession = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If set, the service will register a new session with
+          systemd's login manager.  For local sessions, this will give
+          the user access to audio devices, CD-ROM drives.  In the
+          default PolicyKit configuration, it also allows the user to
+          reboot the system.
+        '';
+      };
+
+      setLoginUid = mkOption {
+        type = types.bool;
+        description = ''
+          Set the login uid of the process
+          (<filename>/proc/self/loginuid</filename>) for auditing
+          purposes.  The login uid is only set by ‘entry points’ like
+          <command>login</command> and <command>sshd</command>, not by
+          commands like <command>sudo</command>.
+        '';
+      };
+
+      forwardXAuth = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether X authentication keys should be passed from the
+          calling user to the target user (e.g. for
+          <command>su</command>)
+        '';
+      };
+
+      allowNullPassword = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to allow logging into accounts that have no password
+          set (i.e., have an empty password field in
+          <filename>/etc/passwd</filename> or
+          <filename>/etc/group</filename>).  This does not enable
+          logging into disabled accounts (i.e., that have the password
+          field set to <literal>!</literal>).  Note that regardless of
+          what the pam_unix documentation says, accounts with hashed
+          empty passwords are always allowed to log in.
+        '';
+      };
+
+      limits = mkOption {
+        description = ''
+          Attribute set describing resource limits.  Defaults to the
+          value of <option>security.pam.loginLimits</option>.
+        '';
+      };
+
+      showMotd = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Whether to show the message of the day.";
+      };
+
+      updateWtmp = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Whether to update <filename>/var/log/wtmp</filename>.";
+      };
+
+      text = mkOption {
+        type = types.nullOr types.string;
+        description = "Contents of the PAM service file.";
+      };
+
+    };
+
+    config = let cfg = args.config; in {
+      name = mkDefault args.name;
+      setLoginUid = mkDefault cfg.startSession;
+      limits = mkDefault config.security.pam.loginLimits;
+
+      # !!! TODO: move the LDAP stuff to the LDAP module, and the
+      # Samba stuff to the Samba module.  This requires that the PAM
+      # module provides the right hooks.
+      text = mkDefault
         ''
           # Account management.
           account sufficient pam_unix.so
@@ -87,14 +148,14 @@ let
               "account sufficient ${pam_krb5}/lib/security/pam_krb5.so"}
 
           # Authentication management.
-          ${optionalString rootOK
+          ${optionalString cfg.rootOK
               "auth sufficient pam_rootok.so"}
-          ${optionalString (config.security.pam.enableSSHAgentAuth && sshAgentAuth)
+          ${optionalString (config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth)
               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
-          ${optionalString usbAuth
+          ${optionalString cfg.usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
-          auth sufficient pam_unix.so ${optionalString allowNullPassword "nullok"} likeauth
-          ${optionalString otpwAuth
+          auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
+          ${optionalString cfg.otpwAuth
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${optionalString config.users.ldap.enable
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
@@ -116,26 +177,47 @@ let
 
           # Session management.
           session required pam_unix.so
-          ${optionalString updateWtmp
+          ${optionalString cfg.updateWtmp
               "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
           ${optionalString config.users.ldap.enable
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.krb5.enable
               "session optional ${pam_krb5}/lib/security/pam_krb5.so"}
-          ${optionalString otpwAuth
+          ${optionalString cfg.otpwAuth
               "session optional ${pkgs.otpw}/lib/security/pam_otpw.so"}
-          ${optionalString startSession
+          ${optionalString cfg.startSession
               "session optional ${pkgs.systemd}/lib/security/pam_systemd.so"}
-          ${optionalString setLoginUid
+          ${optionalString cfg.setLoginUid
               "session required pam_loginuid.so"}
-          ${optionalString forwardXAuth
+          ${optionalString cfg.forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
-          ${optionalString (limits != [])
+          ${optionalString (cfg.limits != [])
               "session required ${pkgs.pam}/lib/security/pam_limits.so conf=${makeLimitsConf limits}"}
-          ${optionalString (showMotd && config.users.motd != null)
+          ${optionalString (cfg.showMotd && config.users.motd != null)
               "session optional ${pkgs.pam}/lib/security/pam_motd.so motd=${motd}"}
         '';
-      target = "pam.d/${name}";
+    };
+
+  };
+
+
+  inherit (pkgs) pam_krb5 pam_ccreds;
+
+  pam_ldap = if config.users.ldap.daemon.enable then pkgs.nss_pam_ldapd else pkgs.pam_ldap;
+
+  # Create a limits.conf(5) file.
+  makeLimitsConf = limits:
+    pkgs.writeText "limits.conf"
+      (concatStringsSep "\n"
+           (map ({ domain, type, item, value }:
+                 concatStringsSep " " [ domain type item value ])
+                limits));
+
+  motd = pkgs.writeText "motd" config.users.motd;
+
+  makePAMService = pamService:
+    { source = pkgs.writeText "${pamService.name}.pam" pamService.text;
+      target = "pam.d/${pamService.name}";
     };
 
 in
@@ -173,44 +255,15 @@ in
 
     security.pam.services = mkOption {
       default = [];
-      example = [
-        { name = "chsh"; rootOK = true; }
-        { name = "login"; startSession = true; allowNullPassword = true;
-          limits = [
-            { domain = "ftp";
-              type   = "hard";
-              item   = "nproc";
-              value  = "0";
-            }
-          ];
-        }
-      ];
-
+      type = types.loaOf types.optionSet;
+      options = [ pamOpts ];
       description =
         ''
           This option defines the PAM services.  A service typically
           corresponds to a program that uses PAM,
           e.g. <command>login</command> or <command>passwd</command>.
-          Each element of this list is an attribute set describing a
-          service.  The attribute <varname>name</varname> specifies
-          the name of the service.  The attribute
-          <varname>rootOK</varname> specifies whether the root user is
-          allowed to use this service without authentication.  The
-          attribute <varname>startSession</varname> specifies whether
-          systemd's PAM connector module should be used to start a new
-          session; for local sessions, this will give the user
-          ownership of devices such as audio and CD-ROM drives.  The
-          attribute <varname>forwardXAuth</varname> specifies whether
-          X authentication keys should be passed from the calling user
-          to the target user (e.g. for <command>su</command>).
-
-          The attribute <varname>limits</varname> defines resource limits
-          that should apply to users or groups for the service.  Each item in
-          the list should be an attribute set with a
-          <varname>domain</varname>, <varname>type</varname>,
-          <varname>item</varname>, and <varname>value</varname> attribute.
-          The syntax and semantics of these attributes must be that described
-          in the limits.conf(5) man page.
+          Each attribute of this set defines a PAM service, with the attribute name
+          defining the name of the service.
         '';
     };
 
@@ -228,7 +281,7 @@ in
     security.pam.enableOTPW = mkOption {
       default = false;
       description = ''
-        Enable the OTPW (one-time password) PAM module
+        Enable the OTPW (one-time password) PAM module.
       '';
     };
 
@@ -254,11 +307,7 @@ in
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ];
 
     environment.etc =
-      map makePAMService config.security.pam.services
-      ++ singleton
-        { source = otherService;
-          target = "pam.d/other";
-        };
+      mapAttrsToList (n: v: makePAMService v) config.security.pam.services;
 
     security.setuidOwners = [ {
       program = "unix_chkpwd";
@@ -268,18 +317,27 @@ in
     } ];
 
     security.pam.services =
-      # Most of these should be moved to specific modules.
-      [ { name = "cups"; }
-        { name = "ejabberd"; }
-        { name = "ftp"; }
-        { name = "i3lock"; }
-        { name = "lshd"; }
-        { name = "samba"; }
-        { name = "screen"; }
-        { name = "vlock"; }
-        { name = "xlock"; }
-        { name = "xscreensaver"; }
-      ];
+      { other.text =
+          ''
+            auth     required pam_warn.so
+            auth     required pam_deny.so
+            account  required pam_warn.so
+            account  required pam_deny.so
+            password required pam_warn.so
+            password required pam_deny.so
+            session  required pam_warn.so
+            session  required pam_deny.so
+          '';
+
+        # Most of these should be moved to specific modules.
+        cups = {};
+        ftp = {};
+        i3lock = {};
+        screen = {};
+        vlock = {};
+        xlock = {};
+        xscreensaver = {};
+      };
 
   };
 

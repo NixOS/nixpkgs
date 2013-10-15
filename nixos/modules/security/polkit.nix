@@ -94,7 +94,7 @@ in
 
     services.dbus.packages = [ pkgs.polkit ];
 
-    security.pam.services = [ { name = "polkit-1"; } ];
+    security.pam.services.polkit-1 = {};
 
     security.setuidPrograms = [ "pkexec" ];
 

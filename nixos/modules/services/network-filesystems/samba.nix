@@ -198,6 +198,7 @@ in
       }
 
       (mkIf config.services.samba.enable {
+
         users.extraUsers.smbguest = {
           description = "Samba service user";
           group = group;
@@ -227,6 +228,8 @@ in
             };
           };
         };
+
+        security.pam.services.sambda = {};
 
       })
     ];

@@ -49,7 +49,7 @@ in
 
     environment.systemPackages = [ at ];
 
-    security.pam.services = [ { name = "atd"; } ];
+    security.pam.services.atd = {};
 
     users.extraUsers = singleton
       { name = "atd";

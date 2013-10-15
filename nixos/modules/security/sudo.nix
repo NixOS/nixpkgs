@@ -74,7 +74,7 @@ in
 
     environment.systemPackages = [ sudo ];
 
-    security.pam.services = [ { name = "sudo"; sshAgentAuth = true; } ];
+    security.pam.services.sudo = { sshAgentAuth = true; };
 
     environment.etc = singleton
       { source = pkgs.writeText "sudoers-in" cfg.configFile;

@@ -130,6 +130,8 @@ in
           '';
       };
 
+    security.pam.services.ejabberd = {};
+
   };
 
 }
