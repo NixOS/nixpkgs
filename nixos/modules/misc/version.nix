@@ -26,10 +26,11 @@ with pkgs.lib;
   config = {
 
     system.nixosVersion =
-      mkDefault (builtins.readFile ../../../.version + config.system.nixosVersionSuffix);
+      mkDefault (builtins.readFile "${pkgs.path}/.version" + config.system.nixosVersionSuffix);
 
     system.nixosVersionSuffix =
-      mkDefault (if builtins.pathExists ../../../.version-suffix then builtins.readFile ../../../.version-suffix else "pre-git");
+      let suffixFile = "${pkgs.path}/.version-suffix"; in
+      mkDefault (if builtins.pathExists suffixFile then builtins.readFile suffixFile else "pre-git");
 
     # Note: code names must only increase in alphabetical order.
     system.nixosCodeName = "Aardvark";
