@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python, curl, python, makeWrapper, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc}:
+{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python, curl,
+  python, makeWrapper, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte}:
 
 with stdenv.lib;
 
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
       distutils_extra simplejson readline glance cheetah lockfile httplib2
       # !!! should libvirt be a build-time dependency?  Note that
       # libxml2Python is a dependency of libvirt.py. 
-      libvirt libxml2Python urlgrabber virtinst pyGtkGlade pythonDBus gnome_python gtkvnc
+      libvirt libxml2Python urlgrabber virtinst pyGtkGlade pythonDBus gnome_python
+      gtkvnc vte
     ];
 
   buildInputs =
