@@ -1,6 +1,7 @@
 { stdenv, androidsdk, jdk, ant }:
 args@{ name, src, platformVersions ? [ "8" ], useGoogleAPIs ? false, antFlags ? ""
 , release ? false, keyStore ? null, keyAlias ? null, keyStorePassword ? null, keyAliasPassword ? null
+, ...
 }:
 
 assert release -> keyStore != null && keyAlias != null && keyStorePassword != null && keyAliasPassword != null;
