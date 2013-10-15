@@ -239,39 +239,35 @@ in
         };
       };
 
-      job = mkOption {
-        default = {};
-        type = types.uniq types.optionSet;
-        description = "This option defines how to start the display manager.";
+      job = {
 
-        options = {
+        preStart = mkOption {
+          type = types.lines;
+          default = "";
+          example = "rm -f /var/log/my-display-manager.log";
+          description = "Script executed before the display manager is started.";
+        };
 
-          preStart = mkOption {
-            default = "";
-            example = "rm -f /var/log/my-display-manager.log";
-            description = "Script executed before the display manager is started.";
-          };
+        execCmd = mkOption {
+          type = types.uniq types.string;
+          example = "${pkgs.slim}/bin/slim";
+          description = "Command to start the display manager.";
+        };
 
-          execCmd = mkOption {
-            example = "${pkgs.slim}/bin/slim";
-            description = "Command to start the display manager.";
-          };
+        environment = mkOption {
+          default = {};
+          example = { SLIM_CFGFILE = /etc/slim.conf; };
+          description = "Additional environment variables needed by the display manager.";
+        };
 
-          environment = mkOption {
-            default = {};
-            example = { SLIM_CFGFILE = /etc/slim.conf; };
-            description = "Additional environment variables needed by the display manager.";
-          };
-
-          logsXsession = mkOption {
-            default = false;
-            description = ''
-              Whether the display manager redirects the
-              output of the session script to
-              <filename>~/.xsession-errors</filename>.
-            '';
-          };
-
+        logsXsession = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether the display manager redirects the
+            output of the session script to
+            <filename>~/.xsession-errors</filename>.
+          '';
         };
 
       };

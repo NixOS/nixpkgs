@@ -89,11 +89,14 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    services.xserver.displayManager.slim.enable = false;
+
     services.xserver.displayManager.job = {
       logsXsession = true;
 
       # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
-      execCmd = ''
+      execCmd = mkFixStrictness ''
         export PATH=${lightdm}/sbin:$PATH
         ${lightdm}/sbin/lightdm --log-dir=/var/log --run-dir=/run --config=${lightdmConf}
       '';
