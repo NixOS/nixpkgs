@@ -5,7 +5,18 @@ with pkgs.lib;
 let
   cfg = config.services.graphite;
   writeTextOrNull = f: t: if t == null then null else pkgs.writeText f t;
+
   dataDir = "/var/db/graphite";
+  carbonOpts = name: with config.ids; ''
+    --nodaemon --syslog --prefix=${name} \
+    --uid ${toString uids.graphite} --gid ${toString uids.graphite} ${name}
+  '';
+  carbonEnv = {
+    PYTHONPATH = "${pkgs.python27Packages.carbon}/lib/python2.7/site-packages";
+    GRAPHITE_ROOT = dataDir;
+    GRAPHITE_CONF_DIR = "/etc/graphite/";
+  };
+
 in {
 
   ###### interface
@@ -59,7 +70,7 @@ in {
           [all_min]
           pattern = \.min$
           xFilesFactor = 0.1
-         aggregationMethod = min
+          aggregationMethod = min
         '';
       };
 
@@ -160,15 +171,8 @@ in {
       description = "Graphite data storage backend";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
-      environment = {
-        GRAPHITE_CONF_DIR = "/etc/graphite/";
-        GRAPHITE_STORAGE_DIR = "/var/db/graphite/";
-      };
-      serviceConfig = {
-        ExecStart = "${pkgs.pythonPackages.carbon}/bin/carbon-cache.py --pidfile /tmp/carbonCache.pid start";
-        User = "graphite";
-        Group = "graphite";
-      };
+      environment = carbonEnv;
+      serviceConfig.ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-cache"}";
       restartTriggers = [
         pkgs.pythonPackages.carbon
         cfg.carbon.config
@@ -185,15 +189,8 @@ in {
       description = "Carbon data aggregator";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
-      environment = {
-        GRAPHITE_CONF_DIR = "/etc/graphite/";
-        GRAPHITE_STORAGE_DIR = "${dataDir}";
-      };
-      serviceConfig = {
-        ExecStart = "${pkgs.pythonPackages.carbon}/bin/carbon-aggregator.py --pidfile /tmp/carbonAggregator.pid start";
-        User = "graphite";
-        Group = "graphite";
-      };
+      environment = carbonEnv;
+      serviceConfig.ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-aggregator"}";
       restartTriggers = [
         pkgs.pythonPackages.carbon cfg.carbon.config cfg.carbon.aggregationRules
       ];
@@ -203,15 +200,8 @@ in {
       description = "Carbon data relay";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
-      environment = {
-        GRAPHITE_CONF_DIR = "/etc/graphite/";
-        GRAPHITE_STORAGE_DIR = "${dataDir}";
-      };
-      serviceConfig = {
-        ExecStart = "${pkgs.pythonPackages.carbon}/bin/carbon-relay.py --pidfile /tmp/carbonRelay.pid start";
-        User = "graphite";
-        Group = "graphite";
-      };
+      environment = carbonEnv;
+      serviceConfig.ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-relay"}";
       restartTriggers = [
         pkgs.pythonPackages.carbon cfg.carbon.config cfg.carbon.relayRules
       ];
@@ -225,7 +215,7 @@ in {
         PYTHONPATH = "${pkgs.python27Packages.graphite_web}/lib/python2.7/site-packages";
         DJANGO_SETTINGS_MODULE = "graphite.settings";
         GRAPHITE_CONF_DIR = "/etc/graphite/";
-        GRAPHITE_STORAGE_DIR = "${dataDir}";
+        GRAPHITE_STORAGE_DIR = dataDir;
       };
       serviceConfig = {
         ExecStart = ''
@@ -264,7 +254,7 @@ in {
       name = "graphite";
       uid = config.ids.uids.graphite;
       description = "Graphite daemon user";
-      home = "${dataDir}";
+      home = dataDir;
       createHome = true;
     };
     users.extraGroups.graphite.gid = config.ids.gids.graphite;
