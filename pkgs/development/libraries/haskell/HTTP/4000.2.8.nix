@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     network pureMD5 split testFramework testFrameworkHunit wai warp
   ];
   doCheck = false;
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/haskell/HTTP";
     description = "A library for client-side HTTP";
