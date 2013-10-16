@@ -35,6 +35,7 @@
   ./misc/assertions.nix
   ./misc/check-config.nix
   ./misc/crashdump.nix
+  ./misc/gurobi.nix
   ./misc/ids.nix
   ./misc/lib.nix
   ./misc/locate.nix
