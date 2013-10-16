@@ -249,7 +249,7 @@ in
 
     # List of machines for distributed Nix builds in the format
     # expected by build-remote.pl.
-    environment.etc."nix.machines" =
+    environment.etc."nix/machines" =
       { enable = cfg.buildMachines != [];
         text =
           concatMapStrings (machine:
@@ -294,17 +294,17 @@ in
     nix.envVars =
       { NIX_CONF_DIR = "/etc/nix";
 
-        # Enable the copy-from-other-stores substituter, which allows builds
-        # to be sped up by copying build results from remote Nix stores.  To
-        # do this, mount the remote file system on a subdirectory of
-        # /var/run/nix/remote-stores.
-        NIX_OTHER_STORES = "/var/run/nix/remote-stores/*/nix";
+        # Enable the copy-from-other-stores substituter, which allows
+        # builds to be sped up by copying build results from remote
+        # Nix stores.  To do this, mount the remote file system on a
+        # subdirectory of /run/nix/remote-stores.
+        NIX_OTHER_STORES = "/run/nix/remote-stores/*/nix";
       }
 
       // optionalAttrs cfg.distributedBuilds {
         NIX_BUILD_HOOK = "${config.environment.nix}/libexec/nix/build-remote.pl";
-        NIX_REMOTE_SYSTEMS = "/etc/nix.machines";
-        NIX_CURRENT_LOAD = "/var/run/nix/current-load";
+        NIX_REMOTE_SYSTEMS = "/etc/nix/machines";
+        NIX_CURRENT_LOAD = "/run/nix/current-load";
       }
 
       # !!! These should not be defined here, but in some general proxy configuration module!
