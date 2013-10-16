@@ -36,6 +36,8 @@ in {
           name = "gurobi-generated-license";
           text = "TOKENSERVER=${cfg.tokenServerAddress}";
         };
+
+      environment.systemPackages = [ pkgs.gurobi ];
     };
   };
 }
