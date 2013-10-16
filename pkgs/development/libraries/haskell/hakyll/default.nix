@@ -25,7 +25,7 @@ cabal.mkDerivation (self: {
     snapCore snapServer systemFilepath tagsoup testFramework
     testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
-  postPatch = ''
+  patchPhase = ''
     sed -i -e 's|cryptohash.*,|cryptohash,|' -e 's|tagsoup.*,|tagsoup,|' hakyll.cabal
   '';
   doCheck = false;
