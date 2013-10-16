@@ -23,21 +23,21 @@ in {
         type = types.nullOr types.string;
       };
     };
+  };
 
-    config = mkIf (cfg.license != null || cfg.tokenServerAddress != null) {
-      assertions = [ {
-        assertion = cfg.license == null || cfg.tokenServerAddress == null;
-        message = "Please only set one of a gurobi license file and a gurobi token server address";
-      } ];
+  config = mkIf (cfg.license != null || cfg.tokenServerAddress != null) {
+    assertions = [ {
+      assertion = cfg.license == null || cfg.tokenServerAddress == null;
+      message = "Please only set one of a gurobi license file and a gurobi token server address";
+    } ];
 
-      environment.variables.GRB_LICENSE_FILE = if cfg.license != null
-        then cfg.license
-        else pkgs.writeTextFile {
-          name = "gurobi-generated-license";
-          text = "TOKENSERVER=${cfg.tokenServerAddress}";
-        };
+    environment.variables.GRB_LICENSE_FILE = if cfg.license != null
+      then cfg.license
+      else pkgs.writeTextFile {
+        name = "gurobi-generated-license";
+        text = "TOKENSERVER=${cfg.tokenServerAddress}";
+      };
 
-      environment.systemPackages = [ pkgs.gurobi ];
-    };
+    environment.systemPackages = [ pkgs.gurobi ];
   };
 }

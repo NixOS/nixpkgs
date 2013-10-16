@@ -35,7 +35,6 @@
   ./misc/assertions.nix
   ./misc/check-config.nix
   ./misc/crashdump.nix
-  ./misc/gurobi.nix
   ./misc/ids.nix
   ./misc/lib.nix
   ./misc/locate.nix
@@ -120,6 +119,7 @@
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
   ./services/misc/gpsd.nix
+  ./services/misc/gurobi.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
