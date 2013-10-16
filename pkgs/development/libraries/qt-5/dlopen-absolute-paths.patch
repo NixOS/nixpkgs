@@ -1,0 +1,36 @@
+diff -ruN qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/network/kernel/qhostinfo_unix.cpp qt-everywhere-opensource-src-5.1.1/qtbase/src/network/kernel/qhostinfo_unix.cpp
+--- qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/network/kernel/qhostinfo_unix.cpp	2013-08-25 20:03:35.000000000 +0200
++++ qt-everywhere-opensource-src-5.1.1/qtbase/src/network/kernel/qhostinfo_unix.cpp	2013-09-25 17:43:14.047015411 +0200
+@@ -93,7 +93,7 @@
+ static void resolveLibrary()
+ {
+ #if !defined(QT_NO_LIBRARY) && !defined(Q_OS_QNX)
+-    QLibrary lib(QLatin1String("resolv"));
++    QLibrary lib(QLatin1String("@glibc@/lib/libresolv"));
+     if (!lib.load())
+         return;
+ 
+diff -ruN qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/plugins/platforms/xcb/qglxintegration.cpp qt-everywhere-opensource-src-5.1.1/qtbase/src/plugins/platforms/xcb/qglxintegration.cpp
+--- qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/plugins/platforms/xcb/qglxintegration.cpp	2013-08-25 20:03:35.000000000 +0200
++++ qt-everywhere-opensource-src-5.1.1/qtbase/src/plugins/platforms/xcb/qglxintegration.cpp	2013-09-25 17:51:29.834674976 +0200
+@@ -379,7 +379,7 @@
+             {
+                 extern const QString qt_gl_library_name();
+ //                QLibrary lib(qt_gl_library_name());
+-                QLibrary lib(QLatin1String("GL"));
++                QLibrary lib(QLatin1String("@openglDriver@/lib/libGL"));
+                 glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
+             }
+         }
+diff -ruN qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/printsupport/kernel/qcups.cpp qt-everywhere-opensource-src-5.1.1/qtbase/src/printsupport/kernel/qcups.cpp
+--- qt-everywhere-opensource-src-5.1.1-orig/qtbase/src/printsupport/kernel/qcups.cpp	2013-08-25 20:03:36.000000000 +0200
++++ qt-everywhere-opensource-src-5.1.1/qtbase/src/printsupport/kernel/qcups.cpp	2013-09-25 17:40:35.895942599 +0200
+@@ -91,7 +91,7 @@
+ 
+ static void resolveCups()
+ {
+-    QLibrary cupsLib(QLatin1String("cups"), 2);
++    QLibrary cupsLib(QLatin1String("@cups@/lib/libcups"), 2);
+     if(cupsLib.load()) {
+         _cupsGetDests = (CupsGetDests) cupsLib.resolve("cupsGetDests");
+         _cupsFreeDests = (CupsFreeDests) cupsLib.resolve("cupsFreeDests");
