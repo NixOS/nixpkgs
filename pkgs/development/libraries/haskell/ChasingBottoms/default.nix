@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ChasingBottoms";
-  version = "1.3.0.6";
-  sha256 = "1l40n1ylzrbp0lhm80q9djl8mf39zvmw7zzlg0gzxsqbzwbsggx8";
+  version = "1.3.0.7";
+  sha256 = "0g1bx6d2mi27qsb4bxvby50g39fm56gyi2658fyjiq1gamy50ypa";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ mtl QuickCheck random syb ];
