@@ -4437,6 +4437,8 @@ let
 
   gts = callPackage ../development/libraries/gts { };
 
+  gurobi = callPackage ../development/libraries/gurobi {};
+
   gvfs = callPackage ../development/libraries/gvfs { };
 
   gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
