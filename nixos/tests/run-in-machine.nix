@@ -1,10 +1,8 @@
-{ nixpkgs ? <nixpkgs>
-, system ? builtins.currentSystem
-}:
+{ system ? builtins.currentSystem }:
 
 with import ../lib/testing.nix { inherit system; };
 
 runInMachine {
-  drv = (import nixpkgs { inherit system; }).aterm;
+  drv = pkgs.patchelf;
   machine = { config, pkgs, ... }: { services.sshd.enable = true; };
 }

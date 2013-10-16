@@ -176,7 +176,10 @@ rec {
     let
       vm = buildVM { }
         [ machine
-          { key = "hostname"; networking.hostName = "client"; }
+          { key = "run-in-machine";
+            networking.hostName = "client";
+            nix.readOnlyStore = false;
+          }
         ];
 
       buildrunner = writeText "vm-build" ''
@@ -192,9 +195,11 @@ rec {
 
       testscript = ''
         startAll;
+        $client->waitForUnit("multi-user.target");
         ${preBuild}
         $client->succeed("env -i ${pkgs.bash}/bin/bash ${buildrunner} /tmp/xchg/saved-env >&2");
         ${postBuild}
+        $client->succeed("sync"); # flush all data before pulling the plug
       '';
 
       vmRunCommand = writeText "vm-run" ''

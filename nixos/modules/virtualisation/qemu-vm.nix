@@ -295,7 +295,7 @@ in
 
     boot.initrd.postMountCommands =
       ''
-        # Mark this as a NixOS machinex.
+        # Mark this as a NixOS machine.
         mkdir -p $targetRoot/etc
         echo -n > $targetRoot/etc/NIXOS
 
@@ -303,7 +303,6 @@ in
         chmod 1777 $targetRoot/tmp
 
         mkdir -p $targetRoot/boot
-        mount -o remount,ro $targetRoot/nix/store
         ${optionalString cfg.writableStore ''
           mkdir -p /unionfs-chroot/ro-store
           mount --rbind $targetRoot/nix/store /unionfs-chroot/ro-store
