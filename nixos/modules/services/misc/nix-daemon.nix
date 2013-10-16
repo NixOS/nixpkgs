@@ -108,24 +108,10 @@ in
 
       distributedBuilds = mkOption {
         default = false;
-        description = "
+        description = ''
           Whether to distribute builds to the machines listed in
           <option>nix.buildMachines</option>.
-          If you know that the <option>buildMachines</option> are not
-          always available either use nixos
-          <command>nixos-rebuild --no-build-hook</command>
-          or consider managing <filename>/etc/nix.machines</filename> manually
-          by setting <option>manualNixMachines</option>. Then you can comment
-          unavailable build machines.
-        ";
-      };
-
-      manualNixMachines = mkOption {
-        default = false;
-        description = "
-          Whether to manually manage the list of build machines used in distributed
-          builds in /etc/nix.machines.
-        ";
+        '';
       };
 
       daemonNiceLevel = mkOption {
@@ -145,6 +131,7 @@ in
       };
 
       buildMachines = mkOption {
+        default = [];
         example = [
           { hostName = "voila.labs.cs.uu.nl";
             sshUser = "nix";
@@ -161,7 +148,7 @@ in
             mandatoryFeatures = "perf";
           }
         ];
-        description = "
+        description = ''
           This option lists the machines to be used if distributed
           builds are enabled (see
           <option>nix.distributedBuilds</option>).  Nix will perform
@@ -185,7 +172,7 @@ in
           key should be added to
           <filename>~<replaceable>sshUser</replaceable>/authorized_keys</filename>
           on the remote machine.
-        ";
+        '';
       };
 
       proxy = mkOption {
@@ -263,7 +250,7 @@ in
     # List of machines for distributed Nix builds in the format
     # expected by build-remote.pl.
     environment.etc."nix.machines" =
-      { enable = cfg.distributedBuilds && !cfg.manualNixMachines;
+      { enable = cfg.buildMachines != [];
         text =
           concatMapStrings (machine:
             "${machine.sshUser}@${machine.hostName} "
