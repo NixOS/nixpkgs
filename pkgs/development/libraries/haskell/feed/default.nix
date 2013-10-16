@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ utf8String xml ];
   meta = {
     homepage = "https://github.com/sof/feed";
-    description = "Interfacing with RSS (v 0.9x, 2.x, 1.0) + Atom feeds";
+    description = "Interfacing with RSS (v 0.9x, 2.x, 1.0) + Atom feeds.";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
