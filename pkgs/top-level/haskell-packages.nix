@@ -2470,7 +2470,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix {};
   cabalInstall_1_18_0_2 = callPackage ../tools/package-management/cabal-install/1.18.0.2.nix {
-    Cabal = self.Cabal_1_18_1;
+    Cabal = self.Cabal_1_18_1_1;
   };
   cabalInstall = self.cabalInstall_1_18_0_2;
 
