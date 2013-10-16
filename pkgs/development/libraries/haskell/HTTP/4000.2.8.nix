@@ -12,8 +12,8 @@ cabal.mkDerivation (self: {
     caseInsensitive conduit deepseq httpdShed httpTypes HUnit mtl
     network pureMD5 split testFramework testFrameworkHunit wai warp
   ];
-  doCheck = false;
   jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "https://github.com/haskell/HTTP";
     description = "A library for client-side HTTP";
