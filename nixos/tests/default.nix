@@ -32,6 +32,6 @@ with import ../lib/testing.nix { inherit system minimal; };
   simple = makeTest (import ./simple.nix);
   #subversion = makeTest (import ./subversion.nix);
   tomcat = makeTest (import ./tomcat.nix);
-  trac = makeTest (import ./trac.nix);
+  #trac = makeTest (import ./trac.nix);
   xfce = makeTest (import ./xfce.nix);
 }
