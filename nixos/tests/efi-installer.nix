@@ -68,14 +68,13 @@ in {
       $machine->succeed("echo hello");
       $machine->waitForUnit("rogue");
       $machine->waitForUnit("nixos-manual");
-      $machine->waitForUnit("dhcpcd");
 
       # Partition the disk.
       $machine->succeed(
-          "sgdisk -Z /dev/vda",
-          "sgdisk -n 1:0:+256M -N 2 -t 1:ef00 -t 2:8300 -c 1:boot -c 2:root /dev/vda",
-          "mkfs.vfat -n BOOT /dev/vda1",
-          "mkfs.ext3 -L nixos /dev/vda2",
+          "sgdisk -Z /dev/sda",
+          "sgdisk -n 1:0:+256M -N 2 -t 1:ef00 -t 2:8300 -c 1:boot -c 2:root /dev/sda",
+          "mkfs.vfat -n BOOT /dev/sda1",
+          "mkfs.ext3 -L nixos /dev/sda2",
           "mount LABEL=nixos /mnt",
           "mkdir /mnt/boot",
           "mount LABEL=BOOT /mnt/boot",
