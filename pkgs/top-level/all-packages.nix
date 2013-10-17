@@ -1060,6 +1060,8 @@ let
 
   gzip = callPackage ../tools/compression/gzip { };
 
+  gzrt = callPackage ../tools/compression/gzrt { };
+
   partclone = callPackage ../tools/backup/partclone { };
 
   partimage = callPackage ../tools/backup/partimage { };
