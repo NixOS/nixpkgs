@@ -82,10 +82,6 @@ optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
         # Allow systemd dependencies on vboxguest.
         KERNEL=="vboxguest", TAG+="systemd"
       '';
-
-    # Make the ACPI Shutdown command to do the right thing.
-    services.acpid.enable = true;
-    services.acpid.powerEventCommands = "poweroff";
   };
 
 }
