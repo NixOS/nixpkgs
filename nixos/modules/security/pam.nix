@@ -202,7 +202,7 @@ let
           ${optionalString cfg.forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
           ${optionalString (cfg.limits != [])
-              "session required ${pkgs.pam}/lib/security/pam_limits.so conf=${makeLimitsConf limits}"}
+              "session required ${pkgs.pam}/lib/security/pam_limits.so conf=${makeLimitsConf cfg.limits}"}
           ${optionalString (cfg.showMotd && config.users.motd != null)
               "session optional ${pkgs.pam}/lib/security/pam_motd.so motd=${motd}"}
         '';
