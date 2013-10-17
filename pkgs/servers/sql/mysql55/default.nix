@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.5.31";
+  version = "5.5.34";
 
   src = fetchurl {
     url = "http://cdn.mysql.com/Downloads/MySQL-5.5/${name}.tar.gz";
-    md5 = "bf402cbd52a9af33e5c25b2a4bbc56db";
+    md5 = "930970a42d51e48599deb7fe01778a4a";
   };
 
   buildInputs = [ cmake bison ncurses openssl readline zlib ]
