@@ -266,8 +266,7 @@ rec {
 
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.
-  optionAttrSetToDocList = ignore: newOptionAttrSetToDocList;
-  newOptionAttrSetToDocList = attrs:
+  optionAttrSetToDocList = attrs:
     let options = collect isOption attrs; in
       fold (opt: rest:
         let
@@ -285,7 +284,7 @@ rec {
 
           subOptions =
             if opt ? options then
-              newOptionAttrSetToDocList opt.options
+              optionAttrSetToDocList opt.options
             else
               [];
         in

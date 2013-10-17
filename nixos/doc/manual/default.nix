@@ -3,6 +3,8 @@
 , revision ? "HEAD"
 }:
 
+with pkgs.lib;
+
 let
 
   # To prevent infinite recursion, remove system.path from the
@@ -12,7 +14,7 @@ let
     { system = removeAttrs options.system ["path"]; };
 
   optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
-    (builtins.toXML (pkgs.lib.optionAttrSetToDocList "" options_)));
+    (builtins.toXML (optionAttrSetToDocList options_)));
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
     ${pkgs.libxslt}/bin/xsltproc \
@@ -26,7 +28,7 @@ in rec {
   manual = pkgs.stdenv.mkDerivation {
     name = "nixos-manual";
 
-    sources = pkgs.lib.sourceFilesBySuffices ./. [".xml"];
+    sources = sourceFilesBySuffices ./. [".xml"];
 
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
 
@@ -71,7 +73,7 @@ in rec {
   manpages = pkgs.stdenv.mkDerivation {
     name = "nixos-manpages";
 
-    sources = pkgs.lib.sourceFilesBySuffices ./. [".xml"];
+    sources = sourceFilesBySuffices ./. [".xml"];
 
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
 
