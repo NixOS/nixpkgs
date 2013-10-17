@@ -237,13 +237,14 @@ in
 
     boot.loader.grub.devices = optional (cfg.device != "") cfg.device;
 
-    system.build = mkAssert (cfg.devices != [])
-      "You must set the ‘boot.loader.grub.device’ option to make the system bootable."
-      { installBootLoader =
-          "PERL5LIB=${makePerlPath [ pkgs.perlPackages.XMLLibXML pkgs.perlPackages.XMLSAX ]} " +
-          "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
-        inherit grub;
-      };
+    system.build.installBootLoader =
+      if cfg.devices == [] then
+        throw "You must set the ‘boot.loader.grub.device’ option to make the system bootable."
+      else
+        "PERL5LIB=${makePerlPath [ pkgs.perlPackages.XMLLibXML pkgs.perlPackages.XMLSAX ]} " +
+        "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
+
+    system.build.grub = grub;
 
     # Common attribute for boot loaders so only one of them can be
     # set at once.
