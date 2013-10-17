@@ -3,7 +3,7 @@
 # of the virtual consoles.  The latter is useful for the installation
 # CD.
 
-{ config, pkgs, options, ... }:
+{ config, pkgs, baseModules, ... } @ extraArgs:
 
 with pkgs.lib;
 
@@ -13,7 +13,11 @@ let
 
   manual = import ../../../doc/manual {
     inherit (cfg) revision;
-    inherit pkgs options;
+    inherit pkgs;
+    options = (fixMergeModules baseModules
+      (removeAttrs extraArgs ["config" "options"]) // {
+        modules = [ ];
+      }).options;
   };
 
   entry = "${manual.manual}/share/doc/nixos/manual.html";
