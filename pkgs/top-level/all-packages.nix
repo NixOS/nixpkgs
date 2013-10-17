@@ -7007,7 +7007,7 @@ let
 
   upower = callPackage ../os-specific/linux/upower {
     libusb1 = callPackage ../development/libraries/libusb1/1_0_9.nix {};
-    };
+  };
 
   upstart = callPackage ../os-specific/linux/upstart { };
 
