@@ -218,10 +218,9 @@ let
   # Create a limits.conf(5) file.
   makeLimitsConf = limits:
     pkgs.writeText "limits.conf"
-      (concatStringsSep "\n"
-           (map ({ domain, type, item, value }:
-                 concatStringsSep " " [ domain type item value ])
-                limits));
+       (concatMapStrings ({ domain, type, item, value }:
+         "${domain} ${type} ${item} ${toString value}\n")
+         limits);
 
   motd = pkgs.writeText "motd" config.users.motd;
 
