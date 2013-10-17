@@ -1948,6 +1948,8 @@ let
 
   htmlTidy = callPackage ../tools/text/html-tidy { };
 
+  html-xml-utils = callPackage ../tools/text/xml/html-xml-utils { };
+
   tftp_hpa = callPackage ../tools/networking/tftp-hpa {};
 
   tigervnc = callPackage ../tools/admin/tigervnc {
