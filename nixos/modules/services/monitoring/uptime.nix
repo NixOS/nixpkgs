@@ -51,7 +51,7 @@ in {
 
     enableWebService = mkEnableOption "the uptime monitoring program web service";
 
-    enableSeparateMonitoringService = mkEnableOption "the uptime monitoring service (default: enableWebService == true)" // { default = cfg.enableWebService; };
+    enableSeparateMonitoringService = mkEnableOption "the uptime monitoring service" // { default = cfg.enableWebService; };
 
     nodeEnv = mkOption {
       description = "The node environment to run in (development, production, etc.)";

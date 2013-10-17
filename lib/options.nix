@@ -31,7 +31,7 @@ rec {
   mkEnableOption = name: mkOption {
     default = false;
     example = true;
-    description = "Whether to enable ${name}";
+    description = "Whether to enable ${name}.";
     type = lib.types.bool;
   };
 
@@ -272,9 +272,7 @@ rec {
         let
           docOption = {
             inherit (opt) name;
-            description = if opt ? description then opt.description else
-              throw "Option ${opt.name}: No description.";
-
+            description = opt.description or (throw "Option ${opt.name}: No description.");
             declarations = map (x: toString x.source) opt.declarations;
             #definitions = map (x: toString x.source) opt.definitions;
           }
@@ -297,7 +295,7 @@ rec {
      generation of `options.xml' much more efficient: the XML
      representation of derivations is very large (on the order of
      megabytes) and is not actually used by the manual generator. */
-  scrubOptionValue = x: 
+  scrubOptionValue = x:
     if isDerivation x then { type = "derivation"; drvPath = x.name; outPath = x.name; name = x.name; }
     else if isList x then map scrubOptionValue x
     else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
