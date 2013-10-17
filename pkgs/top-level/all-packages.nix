@@ -1381,6 +1381,8 @@ let
 
   netcat = callPackage ../tools/networking/netcat { };
 
+  netcat-openbsd = callPackage ../tools/networking/netcat-openbsd { };
+
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
 
   netpbm = callPackage ../tools/graphics/netpbm { };
