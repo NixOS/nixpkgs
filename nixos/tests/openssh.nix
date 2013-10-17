@@ -8,6 +8,8 @@
 
       {
         services.openssh.enable = true;
+        security.pam.services.sshd.limits =
+          [ { domain = "*"; item = "memlock"; type = "-"; value = 1024; } ];
       };
 
     client =
@@ -31,5 +33,6 @@
 
     $client->waitForUnit("network.target");
     $client->succeed("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2");
+    $client->succeed("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'ulimit -l' | grep 1024");
   '';
 }
