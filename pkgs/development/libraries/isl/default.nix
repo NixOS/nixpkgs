@@ -4,11 +4,8 @@ stdenv.mkDerivation rec {
   name = "isl-0.11.1"; # CLooG 0.16.3 fails to build with ISL 0.08.
 
   src = fetchurl {
-    urls = [
-        "http://www.kotnet.org/~skimo/isl/${name}.tar.bz2"
-        "ftp://ftp.linux.student.kuleuven.be/pub/people/skimo/isl/${name}.tar.bz2"
-      ];
-    sha256 = "095f4b54c88ca13a80d2b025d9c551f89ea7ba6f6201d701960bfe5c1466a98d";
+    url = "http://pkgs.fedoraproject.org/repo/pkgs/gcc/isl-0.11.1.tar.bz2/bce1586384d8635a76d2f017fb067cd2/isl-0.11.1.tar.bz2";
+    sha256 = "13d9cqa5rzhbjq0xf0b2dyxag7pqa72xj9dhsa03m8ccr1a4npq9";
   };
 
   buildInputs = [ gmp ];
