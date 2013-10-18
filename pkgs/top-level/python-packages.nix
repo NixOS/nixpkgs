@@ -2668,6 +2668,31 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  glances = buildPythonPackage rec {
+    name = "glances-${meta.version}";
+
+    src = fetchurl {
+      url = "https://github.com/nicolargo/glances/archive/v${meta.version}.tar.gz";
+      sha256 = "0g2yg9qf7qgjwv13x0rx51rzhn99pcmjpb3vk0g3gmmdsqyqi0d6";
+    };
+
+    buildInputs = [ pkgs.hddtemp ];
+
+    propagatedBuildInputs = [ psutil jinja2 modules.curses modules.curses_panel];
+
+    doCheck = false;
+
+    preConfigure = ''
+      sed -i -r -e '/data_files.append[(][(](conf|etc)_path/ietc_path="etc/glances"; conf_path="etc/glances"' setup.py;
+    '';
+
+    meta = {
+      version = "1.7.1";
+      homepage = "http://nicolargo.github.io/glances/";
+      description = "Cross-platform curses-based monitoring tool";
+    };
+  };
+
 
   greenlet = buildPythonPackage rec {
     name = "greenlet-0.3.1";
