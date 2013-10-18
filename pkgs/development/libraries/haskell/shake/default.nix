@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     binary deepseq filepath hashable random time transformers
     unorderedContainers utf8String
   ];
+  doCheck = false;
   meta = {
     homepage = "http://community.haskell.org/~ndm/shake/";
     description = "Build system library, like Make, but more accurate dependencies";
