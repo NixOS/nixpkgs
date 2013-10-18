@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-types";
-  version = "0.8.1";
-  sha256 = "07hxxlhgnwsvjr2dzqbswwwkjxwsc0pk6shpkvzgclrsyn3xrg7p";
+  version = "0.8.2";
+  sha256 = "1536wpmicmq90qvnvcvq1dzk2vfhj7ls6hz4pqp0ll9aksk3msr1";
   buildDepends = [ blazeBuilder caseInsensitive text ];
   testDepends = [ blazeBuilder hspec QuickCheck text ];
   meta = {
