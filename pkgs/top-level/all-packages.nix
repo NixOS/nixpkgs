@@ -8029,6 +8029,8 @@ let
 
   ii = callPackage ../applications/networking/irc/ii { };
 
+  ike = callPackage ../applications/ike { };
+
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
