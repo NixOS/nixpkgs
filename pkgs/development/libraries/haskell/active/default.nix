@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "active";
-  version = "0.1.0.7";
-  sha256 = "18pcw98ni8fiy0yd7wmrqvpaf2wgav70rsikqfl571zjmdmzdw7p";
+  version = "0.1.0.8";
+  sha256 = "1q2zrx1i5j04c9bss7c19nm6lqasmwxyfzkh49my7yaik95k7bw9";
   buildDepends = [ newtype semigroupoids semigroups vectorSpace ];
   testDepends = [
     newtype QuickCheck semigroupoids semigroups vectorSpace
