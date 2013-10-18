@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "0yrwmx2f721ahpnki4fnzvnmrd3md3bq417icb4wrjky7k3caf12";
   };
 
-  patches = [ ./gets-undeclared.patch ];
-
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
   FORCE_UNSAFE_CONFIGURE = stdenv.lib.optionalString (stdenv.system == "armv7l-linux" || stdenv.isSunOS) "1";
