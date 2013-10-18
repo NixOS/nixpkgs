@@ -5,7 +5,7 @@ isPy26 = python.majorVersion == "2.6";
 isPy27 = python.majorVersion == "2.7";
 optional = pkgs.lib.optional;
 optionals = pkgs.lib.optionals;
-modules = python.modules or { readline = null; sqlite3 = null; curses = null; ssl = null; crypt = null; };
+modules = python.modules or { readline = null; sqlite3 = null; curses = null; curses_panel = null; ssl = null; crypt = null; };
 
 pythonPackages = modules // import ./python-packages-generated.nix {
   inherit pkgs python;
