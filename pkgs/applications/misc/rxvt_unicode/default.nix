@@ -22,10 +22,13 @@ stdenv.mkDerivation (rec {
     ++ stdenv.lib.optional perlSupport perl
     ++ stdenv.lib.optional gdkPixbufSupport gdk_pixbuf;
 
+  outputs = [ "out" "terminfo" ];
+
   preConfigure =
     ''
-      configureFlags="--with-terminfo=$out/share/terminfo --enable-256-color ${if perlSupport then "--enable-perl" else "--disable-perl"}";
-      export TERMINFO=$out/share/terminfo # without this the terminfo won't be compiled by tic, see man tic
+      mkdir -p $terminfo/share/terminfo
+      configureFlags="--with-terminfo=$terminfo/share/terminfo --enable-256-color ${if perlSupport then "--enable-perl" else "--disable-perl"}";
+      export TERMINFO=$terminfo/share/terminfo # without this the terminfo won't be compiled by tic, see man tic
       NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2"
       NIX_LDFLAGS="$NIX_LDFLAGS -lfontconfig -lXrender "
     ''
@@ -34,6 +37,13 @@ stdenv.mkDerivation (rec {
       mkdir -p $out/lib/perl5
       ln -s $out/{lib/urxvt,lib/perl5/site_perl}
     '';
+
+  # we link the separate terminfo output to the main output
+  # as I don't think there's a usecase for wanting urxvt without its terminfo files
+  # and we don't want users to install them separately
+  postInstall = ''
+    ln -s $terminfo/share/terminfo $out/share
+  '';
 
   meta = {
     description = "A clone of the well-known terminal emulator rxvt";

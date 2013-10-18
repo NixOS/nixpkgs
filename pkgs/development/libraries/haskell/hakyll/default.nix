@@ -1,38 +1,34 @@
-{ cabal, binary, blazeHtml, blazeMarkup, pandocCiteproc, cmdargs
-, cryptohash, dataDefault, deepseq, filepath, fsnotify, httpConduit
-, httpTypes, HUnit, lrucache, mtl, network, pandoc, parsec
+{ cabal, binary, blazeHtml, blazeMarkup, cmdargs, cryptohash
+, dataDefault, deepseq, filepath, fsnotify, httpConduit, httpTypes
+, HUnit, lrucache, mtl, network, pandoc, pandocCiteproc, parsec
 , QuickCheck, random, regexBase, regexTdfa, snapCore, snapServer
 , systemFilepath, tagsoup, testFramework, testFrameworkHunit
-, testFrameworkQuickcheck2, text, time, fetchurl
+, testFrameworkQuickcheck2, text, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "4.3.3.0";
-  sha256 = "11zfz55a7dr5l7xzknphqninyrb2pw2qmrs7v7ajq2gvbl0lf37n";
+  version = "4.4.1.0";
+  sha256 = "17bns61l5d0h8qyhbz5gnc4j9yjjajk57whp0j4gfshaq0s2aif9";
   isLibrary = true;
   isExecutable = true;
-  patches = [ (fetchurl { url = "https://github.com/jaspervdj/hakyll/pull/183.patch";
-                          sha256 = "0vjrxvgyc05nnshapjhk65pcamj9rigqff5q6wjbssx3ggqggrz9";
-                          name = "hakyll-pandoc-fix.patch";
-                        }) ];
   buildDepends = [
-    binary blazeHtml blazeMarkup pandocCiteproc cmdargs cryptohash
-    dataDefault deepseq filepath fsnotify httpConduit httpTypes
-    lrucache mtl network pandoc parsec random regexBase regexTdfa
-    snapCore snapServer systemFilepath tagsoup text time
+    binary blazeHtml blazeMarkup cmdargs cryptohash dataDefault deepseq
+    filepath fsnotify httpConduit httpTypes lrucache mtl network pandoc
+    pandocCiteproc parsec random regexBase regexTdfa snapCore
+    snapServer systemFilepath tagsoup text time
   ];
   testDepends = [
-    binary blazeHtml blazeMarkup pandocCiteproc cmdargs cryptohash
-    dataDefault deepseq filepath fsnotify httpConduit httpTypes HUnit
-    lrucache mtl network pandoc parsec QuickCheck random regexBase
-    regexTdfa snapCore snapServer systemFilepath tagsoup testFramework
+    binary blazeHtml blazeMarkup cmdargs cryptohash dataDefault deepseq
+    filepath fsnotify httpConduit httpTypes HUnit lrucache mtl network
+    pandoc pandocCiteproc parsec QuickCheck random regexBase regexTdfa
+    snapCore snapServer systemFilepath tagsoup testFramework
     testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
-  doCheck = false;
-  postPatch = ''
+  patchPhase = ''
     sed -i -e 's|cryptohash.*,|cryptohash,|' -e 's|tagsoup.*,|tagsoup,|' hakyll.cabal
   '';
+  doCheck = false;
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";

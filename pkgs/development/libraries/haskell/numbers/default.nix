@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "numbers";
-  version = "3000.1.0.3";
-  sha256 = "0w2m2m3vp3lpvnc7wkw6pqfz741a68dma4s0asl7cryykwf94xgz";
+  version = "3000.2.0.0";
+  sha256 = "035qc7dgh4nd661z4mm742v8y7xqdyyp0r0vkinxiifciqb1fkbm";
   testDepends = [
     QuickCheck testFramework testFrameworkQuickcheck2
   ];

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, expat, pam, intltool, gettext
 , gobjectIntrospection
-, useSystemd ? true, systemd }:
+, useSystemd ? stdenv.isLinux, systemd }:
 
 let
 

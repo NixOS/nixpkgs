@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   # Since `libpulse*.la' contain `-lgdbm' and `-lcap', it must be propagated.
   propagatedBuildInputs
-    = [ gdbm ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libcap ];
+    = [ gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
     [ pkgconfig gnum4 libtool intltool glib dbus avahi libsamplerate libsndfile
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional jackaudioSupport jackaudio
     ++ stdenv.lib.optionals x11Support [ xlibs.xlibs xlibs.libXtst xlibs.libXi ]
     ++ stdenv.lib.optional useSystemd systemd
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ alsaLib bluez sbc udev ];
+    ++ stdenv.lib.optionals stdenv.isLinux [ alsaLib bluez sbc udev ];
 
   preConfigure = ''
     # Move the udev rules under $(prefix).

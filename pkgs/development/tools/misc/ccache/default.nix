@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "ccache, a tool that caches compilation results.";
+    description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = http://ccache.samba.org/;
     license = "GPL";
   };

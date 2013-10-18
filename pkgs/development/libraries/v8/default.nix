@@ -59,7 +59,7 @@ stdenv.mkDerivation {
 
     meta = with stdenv.lib; {
       description = "V8 is Google's open source JavaScript engine";
-      platforms = platforms.unix; 
+      platforms = platforms.linux ++ platforms.darwin;
       license = licenses.bsd3;
     };
 }

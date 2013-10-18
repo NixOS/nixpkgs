@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    description = "Hides mouse pointer while not in use.";
+    description = "Hides mouse pointer while not in use";
     longDescription = ''
       Unclutter hides your X mouse cursor when you do not need it, to prevent
       it from getting in the way. You have only to move the mouse to restore

@@ -48,6 +48,11 @@ stdenv.mkDerivation rec {
     cd builddir
   '';
 
+  postInstall = ''
+    ./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full \
+        clx/new-clx bindings/glibc pcre rawsock wildcard zlib
+  '';
+
   NIX_CFLAGS_COMPILE="-O0";
 
   # TODO : make mod-check fails

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "Alternative MSN protocol plug-in for Pidgin IM.";
+    description = "Alternative MSN protocol plug-in for Pidgin IM";
     homepage = http://code.google.com/p/msn-pecan/;
   };
 

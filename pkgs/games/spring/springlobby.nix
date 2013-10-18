@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://springlobby.info/;
-    description = "A free cross-platform lobby client for the Spring RTS project.";
+    description = "Cross-platform lobby client for the Spring RTS project";
     license = licenses.gpl2;
     maintainers = [ maintainers.phreedom maintainers.qknight];
     platforms = platforms.linux;

@@ -145,7 +145,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     HTTP         = self.HTTP_4000_2_8;
     HUnit        = self.HUnit_1_2_5_2;
     mtl          = self.mtl_2_1_2;
-    network      = self.network_2_4_1_2;
+    network      = self.network_2_4_2_0;
     OpenGL       = self.OpenGL_2_8_0_0;
     OpenGLRaw    = self.OpenGLRaw_1_4_0_0;
     parallel     = self.parallel_3_2_0_3;
@@ -590,6 +590,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   bindingsDSL = callPackage ../development/libraries/haskell/bindings-DSL {};
 
+  bindingsLibusb = callPackage ../development/libraries/haskell/bindings-libusb {
+    libusb = pkgs.libusb1;
+  };
+
   bindingsPosix = callPackage ../development/libraries/haskell/bindings-posix {};
 
   bitarray = callPackage ../development/libraries/haskell/bitarray {};
@@ -648,7 +652,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix { cabal = self.cabal.override { Cabal = null; }; };
-  Cabal_1_18_1 = callPackage ../development/libraries/haskell/Cabal/1.18.1.nix {
+  Cabal_1_18_1_1 = callPackage ../development/libraries/haskell/Cabal/1.18.1.1.nix {
     cabal = self.cabal.override { Cabal = null; };
     deepseq = self.deepseq_1_3_0_1;
   };
@@ -740,6 +744,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
 
   configurator = callPackage ../development/libraries/haskell/configurator {};
+
+  connection = callPackage ../development/libraries/haskell/connection {};
 
   constraints = callPackage ../development/libraries/haskell/constraints {};
 
@@ -1147,7 +1153,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   haskellSrcExts_1_13_5 = callPackage ../development/libraries/haskell/haskell-src-exts/1.13.5.nix {};
   haskellSrcExts_1_14_0 = callPackage ../development/libraries/haskell/haskell-src-exts/1.14.0.nix {};
-  haskellSrcExts = self.haskellSrcExts_1_13_5;
+  haskellSrcExts = self.haskellSrcExts_1_14_0;
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
@@ -1242,7 +1248,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
 
-  hslua = callPackage ../development/libraries/haskell/hslua {};
+  hslua = callPackage ../development/libraries/haskell/hslua {
+    lua = pkgs.lua5_1;
+  };
 
   HSH = callPackage ../development/libraries/haskell/HSH {};
 
@@ -1397,13 +1405,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
 
-  llvmGeneral_3_3_5 = callPackage ../development/libraries/haskell/llvm-general/3.3.5.nix {
+  llvmGeneral = callPackage ../development/libraries/haskell/llvm-general {
     llvmConfig = pkgs.llvm;
   };
-  llvmGeneral_3_3_8_2 = callPackage ../development/libraries/haskell/llvm-general/3.3.8.2.nix {
-    llvmConfig = pkgs.llvm;
-  };
-  llvmGeneral = self.llvmGeneral_3_3_8_2;
 
   llvmGeneralPure = callPackage ../development/libraries/haskell/llvm-general-pure {};
 
@@ -1543,7 +1547,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   network_2_3_0_13 = callPackage ../development/libraries/haskell/network/2.3.0.13.nix {};
   network_2_3_1_0 = callPackage ../development/libraries/haskell/network/2.3.1.0.nix {};
   network_2_4_1_2 = callPackage ../development/libraries/haskell/network/2.4.1.2.nix {};
-  network = self.network_2_4_1_2;
+  network_2_4_2_0 = callPackage ../development/libraries/haskell/network/2.4.2.0.nix {};
+  network = self.network_2_4_2_0;
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
   networkConduitTls = callPackage ../development/libraries/haskell/network-conduit-tls {};
@@ -2135,6 +2140,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   urlencoded = callPackage ../development/libraries/haskell/urlencoded {};
 
+  usb = callPackage ../development/libraries/haskell/usb {};
+
   utf8Light = callPackage ../development/libraries/haskell/utf8-light {};
 
   utf8String = callPackage ../development/libraries/haskell/utf8-string {};
@@ -2421,9 +2428,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   darcs = callPackage ../applications/version-management/darcs {};
 
-  idris_plain = callPackage ../development/compilers/idris {
-    llvmGeneral = self.llvmGeneral_3_3_5;
-  };
+  idris_plain = callPackage ../development/compilers/idris {};
 
   idris = callPackage ../development/compilers/idris/wrapper.nix {};
 
@@ -2456,7 +2461,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix {};
   cabalInstall_1_18_0_2 = callPackage ../tools/package-management/cabal-install/1.18.0.2.nix {
-    Cabal = self.Cabal_1_18_1;
+    Cabal = self.Cabal_1_18_1_1;
   };
   cabalInstall = self.cabalInstall_1_18_0_2;
 

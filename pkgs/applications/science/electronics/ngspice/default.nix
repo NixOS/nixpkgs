@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--enable-x" "--with-x" "--with-readline" ];
 
   meta = {
-    description = "The Next Generation Spice (Electronic Circuit Simulator).";
+    description = "The Next Generation Spice (Electronic Circuit Simulator)";
     homepage = "http://ngspice.sourceforge.net";
     license = ["BSD" "GPLv2"];
     maintainers = with stdenv.lib.maintainers; [viric];

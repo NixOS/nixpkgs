@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "Protocol headers for the SPICE protocol.";
+    description = "Protocol headers for the SPICE protocol";
     homepage = http://www.spice-space.org;
     license = stdenv.lib.licenses.bsd3;
 

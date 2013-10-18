@@ -11,7 +11,7 @@ let
     sha256 = "1swwfyzaj3l40yh9np3x4fcracgs79nwryc85sxbdakx8wwxs2xb";
   };
 
-  version = "0.7";
+  version = "0.7.1";
 
 in
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "http://viric.name/cgi-bin/filegive/tarball/${name}.tar.gz?uuid=v${version}";
     name = "${name}.tar.gz";
-    sha256 = "0wj6vjfqfzqb75ii0djczdbcwilr05ahil5sqm65kimv11hc4j9n";
+    sha256 = "14yyif6q89ihn28kliszaf19vywjg9f7192q1ak8823da1svbq8a";
   };
 
   buildInputs = [ go ];

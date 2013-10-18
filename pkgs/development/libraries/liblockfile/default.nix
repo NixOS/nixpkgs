@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
 
   meta = {
-    description = "Liblockfile is a shared library with NFS-safe locking functions.";
+    description = "Shared library with NFS-safe locking functions";
     homepage = http://packages.debian.org/unstable/libs/liblockfile1;
     license = "GPLv2+";
 

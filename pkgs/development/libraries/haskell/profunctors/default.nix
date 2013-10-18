@@ -1,13 +1,13 @@
-{ cabal, comonad, tagged }:
+{ cabal, comonad, semigroupoids, tagged, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "profunctors";
-  version = "3.3.0.1";
-  sha256 = "16d7xg929r4smmmcgi54bz7rsjxs6psksrdvzl4336sjpp3dw5h2";
-  buildDepends = [ comonad tagged ];
+  version = "4.0.1";
+  sha256 = "13yr3n7jkhxbk4gk6nd1j8p1a7g5ir8g9xprcy3s1x39cqf4m986";
+  buildDepends = [ comonad semigroupoids tagged transformers ];
   meta = {
     homepage = "http://github.com/ekmett/profunctors/";
-    description = "Haskell 98 Profunctors";
+    description = "Profunctors";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };

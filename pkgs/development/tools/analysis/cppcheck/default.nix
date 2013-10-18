@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   configurePhase = "makeFlags=PREFIX=$out";
 
   meta = {
-    description = "check C/C++ code for memory leaks, mismatching allocation-deallocation, buffer overrun, etc.";
+    description = "Check C/C++ code for memory leaks, mismatching allocation-deallocation, buffer overrun and more";
     homepage = "http://sourceforge.net/apps/mediawiki/cppcheck/";
     license = "GPL";
     platforms = stdenv.lib.platforms.unix;

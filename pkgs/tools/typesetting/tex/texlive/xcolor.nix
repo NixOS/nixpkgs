@@ -12,11 +12,11 @@ rec {
     export HOME=$PWD
     mkdir -p $out/share/
 
-    mkdir -p $out/texmf/tex/latex/xcolor
-    mkdir -p $out/texmf/dvips/xcolor
+    mkdir -p $out/texmf-dist/tex/latex/xcolor
+    mkdir -p $out/texmf-dist/dvips/xcolor
     latex xcolor.ins 
-    cp *.sty *.def $out/texmf/tex/latex/xcolor
-    cp *.pro $out/texmf/dvips/xcolor
+    cp *.sty *.def $out/texmf-dist/tex/latex/xcolor
+    cp *.pro $out/texmf-dist/dvips/xcolor
 
     #latex xcolor.dtx
     #latex xcolor.dtx
@@ -25,8 +25,8 @@ rec {
     #latex xcolor.dtx
 
     rm *.sty *.pro *.ins *.def *.dtx
-    mkdir -p $out/texmf/doc/latex-xcolor
-    cp *  $out/texmf/doc/latex-xcolor
+    mkdir -p $out/texmf-dist/doc/latex-xcolor
+    cp *  $out/texmf-dist/doc/latex-xcolor
 
     ln -s $out/texmf* $out/share/
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];

@@ -12,7 +12,12 @@ stdenv.mkDerivation rec {
   buildInputs = [libmcrypt libmhash];
  
   meta = {
-    description = "mcrypt, and the accompanying libmcrypt, are intended to be replacements for the old Unix crypt, except that they are under the GPL and support an ever-wider range of algorithms and modes.";
+    description = "Replacement for old UNIX crypt(1)";
+    longDescription = ''
+      mcrypt, and the accompanying libmcrypt, are intended to be replacements
+      for the old Unix crypt, except that they are under the GPL and support an
+      ever-wider range of algorithms and modes.
+    '';
     homepage = http://mcrypt.sourceforge.net;
     license = "GPLv2";
     platforms = stdenv.lib.platforms.all;

@@ -39,5 +39,6 @@ pythonPackages.buildPythonPackage rec {
       local hard drive.
     '';
     maintainers = [ stdenv.lib.maintainers.rickynils ];
+    platforms = [];
   };
 }

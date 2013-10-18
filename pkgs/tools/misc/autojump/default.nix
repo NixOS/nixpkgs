@@ -29,7 +29,7 @@ in
     '';
 
     meta = {
-      description = "Autojump, a `cd' command that learns";
+      description = "A `cd' command that learns";
       longDescription = ''
         One of the most used shell commands is “cd”.  A quick survey
         among my friends revealed that between 10 and 20% of all

@@ -1,29 +1,16 @@
-diff -ubr lxc-0.9.0-orig/configure lxc-0.9.0/configure
---- lxc-0.9.0-orig/configure	2013-04-15 10:50:22.899103057 +0200
-+++ lxc-0.9.0/configure	2013-04-15 11:08:08.696539776 +0200
-@@ -4792,7 +4792,7 @@
- 
- 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for docbook2x-man" >&5
- $as_echo_n "checking for docbook2x-man... " >&6; }
--	for name in docbook2x-man db2x_docbook2man; do
-+	for name in docbook2x-man db2x_docbook2man docbook2man; do
- 		if "$name" --help >/dev/null 2>&1; then
- 			db2xman="$name"
- 			break;
-@@ -8353,4 +8353,3 @@
-   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
- $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
+diff --git a/configure.ac b/configure.ac
+index 92a4690..4dd341b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -91,9 +91,9 @@ if test "x$enable_doc" = "xyes" -o "x$enable_doc" = "xauto"; then
+ 	AC_SUBST(db2xman)
  fi
--
-diff -ubr lxc-0.9.0-orig/configure.ac lxc-0.9.0/configure.ac
---- lxc-0.9.0-orig/configure.ac	2013-04-15 10:50:22.896102806 +0200
-+++ lxc-0.9.0/configure.ac	2013-04-15 11:07:52.399582819 +0200
-@@ -67,7 +67,7 @@
- 	db2xman=""
+ AM_CONDITIONAL([ENABLE_DOCBOOK], [test "x$db2xman" != "x"])
+-AM_CONDITIONAL([USE_DOCBOOK2X], [test "x$db2xman" != "xdocbook2man"])
++AM_CONDITIONAL([USE_DOCBOOK2X], [test "x$db2xman" != "no-no-no"])
  
- 	AC_MSG_CHECKING(for docbook2x-man)
--	for name in docbook2x-man db2x_docbook2man; do
-+	for name in docbook2x-man db2x_docbook2man docbook2man; do
- 		if "$name" --help >/dev/null 2>&1; then
- 			db2xman="$name"
- 			break;
+-if test "x$db2xman" = "xdocbook2man"; then
++if test "x$db2xman" = "no-no-no"; then
+ 	docdtd="\"-//Davenport//DTD DocBook V3.0//EN\""
+ else
+ 	docdtd="\"-//OASIS//DTD DocBook XML\" \"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd\""

@@ -77,7 +77,6 @@ stdenv.mkDerivation rec {
     homepage = http://worldofgoo.com;
     license = [ "unfree" ];
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
-    platforms = [ "x86_64-linux"] ;
   };
 
 }

@@ -11,10 +11,9 @@ stdenv.mkDerivation {
   buildInputs = [ fltk13 ghostscript ];
 
   meta = {
-    description = "A WYSIWYG PostScript annotator.";
+    description = "WYSIWYG PostScript annotator";
     homepage = "http://http://flpsed.org/flpsed.html";
     license = "GPLv3";
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.mesaPlatforms;
   };
-
 }

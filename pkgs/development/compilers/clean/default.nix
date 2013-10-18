@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Clean is a general purpose, state-of-the-art, pure and lazy functional programming language.";
+    description = "General purpose, state-of-the-art, pure and lazy functional programming language";
     longDescription = ''
       Clean is a general purpose, state-of-the-art, pure and lazy functional
       programming language designed for making real-world applications. Some

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Liberation Fonts, replacements for Times New Roman, Arial, and Courier New.";
+    description = "Liberation Fonts, replacements for Times New Roman, Arial, and Courier New";
 
     longDescription = ''
       The Liberation Fonts are intended to be replacements for the three most

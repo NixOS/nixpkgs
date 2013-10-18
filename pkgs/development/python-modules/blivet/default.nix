@@ -53,5 +53,6 @@ in buildPythonPackage rec {
     homepage = "https://fedoraproject.org/wiki/Blivet";
     description = "Module for management of a system's storage configuration";
     license = [ "GPLv2+" "LGPLv2.1+" ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

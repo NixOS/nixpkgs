@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [ ./apg.patch ];
 
   meta = {
-    description = "A tool set for random password generation.";
+    description = "Tools for random password generation";
     longDescription = ''
       APG (Automated Password Generator) is the tool set for random
       password generation.

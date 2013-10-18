@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cipher-rc4";
-  version = "0.1.3";
-  sha256 = "1pdkm7m3v8c7wks7asvqixxjk9jixf78n489ckmw10p77wrqby78";
+  version = "0.1.4";
+  sha256 = "0k9qf0cn5yxc4qlqikcm5yyrnkkvr6g3v7306cp8iwz7r4dp6zn6";
   buildDepends = [ byteable cryptoCipherTypes ];
   testDepends = [
     cryptoCipherTests cryptoCipherTypes QuickCheck testFramework

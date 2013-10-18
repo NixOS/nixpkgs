@@ -1,6 +1,7 @@
 { stdenv, androidsdk, jdk, ant }:
-{ name, src, platformVersions ? [ "8" ], useGoogleAPIs ? false, antFlags ? ""
+args@{ name, src, platformVersions ? [ "8" ], useGoogleAPIs ? false, antFlags ? ""
 , release ? false, keyStore ? null, keyAlias ? null, keyStorePassword ? null, keyAliasPassword ? null
+, ...
 }:
 
 assert release -> keyStore != null && keyAlias != null && keyStorePassword != null && keyAliasPassword != null;
@@ -15,9 +16,8 @@ let
     abiVersions = [];
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = stdenv.lib.replaceChars [" "] [""] name;
-  inherit src;
   
   ANDROID_HOME = "${androidsdkComposition}/libexec/android-sdk-${platformName}";
 
@@ -45,4 +45,5 @@ stdenv.mkDerivation {
     mkdir -p $out/nix-support
     echo "file binary-dist \"$(echo $out/*.apk)\"" > $out/nix-support/hydra-build-products
   '';
-}
+} //
+builtins.removeAttrs args ["name"])

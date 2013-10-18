@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.argyllcms.com;
-    description = "An ICC compatible color management system";
+    description = "Color management system (compatible with ICC)";
     license = licenses.gpl3;
     maintainers = [ maintainers.rickynils ];
     platforms = platforms.linux;

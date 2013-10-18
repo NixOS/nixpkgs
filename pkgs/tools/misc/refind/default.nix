@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnu_efi, unzip }:
+{ stdenv, fetchurl, gnu-efi, unzip }:
 
 let version = "0.4.5"; in
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ unzip ];
 
-  buildFlags = [ "prefix=" "EFIINC=${gnu_efi}/include/efi" "GNUEFILIB=${gnu_efi}/lib" "EFILIB=${gnu_efi}/lib" "EFICRT0=${gnu_efi}/lib" "LOCAL_CFLAGS=-I${gnu_efi}/include" ];
+  buildFlags = [ "prefix=" "EFIINC=${gnu-efi}/include/efi" "GNUEFILIB=${gnu-efi}/lib" "EFILIB=${gnu-efi}/lib" "EFICRT0=${gnu-efi}/lib" "LOCAL_CFLAGS=-I${gnu-efi}/include" ];
 
   installPhase = ''
     mkdir -pv $out

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE window>
+
+<!-- To edit this file I recommend you to use:
+     http://xulfr.org/outils/xulediteur.xul
+  -->
+
+<window
+  id     = "nixos-gui"
+  title  = "NixOS gui"
+  width  = "800"
+  height = "600"
+  xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="jquery-1.5.2.js"/>
+  <script src="io.js"/>
+  <script src="nixos.js"/>
+  <script src="optionView.js"/>
+  <script src="main.js"/>
+  <hbox flex="1">
+    <vbox width="250">
+      <tree flex="1" id="option-tree" persist="height" onselect="gOptionView.selectionChanged()">
+        <treecols>
+          <treecol persist="hidden width" flex="9" id="opt-name"
+                   label="Option" primary="true"/>
+          <!-- Uncomment the following column to see the number of option
+               printed below each options. -->
+          <!--
+          <treecol persist="hidden width" flex="1" id="dbg-size"
+                   label="sz"/>
+          -->
+        </treecols>
+        <treechildren id="first-child" flex="1"/>
+      </tree>
+    </vbox>
+    <vbox flex="3" style="overflow: auto">
+      <caption id="name" label=""/>
+      <caption id="typename" label=""/>
+      <separator/>
+      <description id="desc" hidden="false"></description>
+      <separator/>
+      <caption label="Value:"/>
+      <textbox id="val" readonly="true" multiline="true" value=""
+      class="plain" hidden="false" onoverflow="this.height =
+      this.inputField.scrollHeight;" />
+      <separator/>
+      <caption label="Default:"/>
+      <textbox id="def" readonly="true" multiline="true" value="" class="plain" hidden="false" onoverflow="this.height = this.inputField.scrollHeight;" />
+      <separator/>
+      <caption label="Example:"/>
+      <textbox id="exp" readonly="true" multiline="true" value="" class="plain" hidden="false" onoverflow="this.height = this.inputField.scrollHeight;" />
+      <separator/>
+      <caption label="Declarations:"/>
+      <textbox id="decls" readonly="true" multiline="true" value="" class="plain" hidden="false" onoverflow="this.height = this.inputField.scrollHeight;" />
+      <separator/>
+      <caption label="Definitions:"/>
+      <textbox id="defs" readonly="true" multiline="true" value=""
+      class="plain" hidden="false" onoverflow="this.height = this.inputField.scrollHeight;" />
+    </vbox>
+  </hbox>
+<!--  <progressmeter id="progress-bar" value="0%"/> -->
+</window>

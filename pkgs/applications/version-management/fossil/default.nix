@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "Simple, high-reliability, distributed software configuration management.";
+    description = "Simple, high-reliability, distributed software configuration management";
     longDescription = ''
       Fossil is a software configuration management system.  Fossil is
       software that is designed to control and track the development of a

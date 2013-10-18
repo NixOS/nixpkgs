@@ -78,7 +78,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://virt-manager.org;
-    description = "The 'Virtual Machine Manager' application (virt-manager for short package name) is a desktop user interface for managing virtual machines.";
+    description = "Desktop user interface for managing virtual machines";
+    longDescription = ''
+      The virt-manager application is a desktop user interface for managing
+      virtual machines through libvirt. It primarily targets KVM VMs, but also
+      manages Xen and LXC (linux containers).
+    '';
     license = "GPLv2";
     maintainers = with stdenv.lib.maintainers; [qknight];
   };

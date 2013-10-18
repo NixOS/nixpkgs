@@ -17,7 +17,15 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://mosh.mit.edu/;
-    description = "Remote terminal application that allows roaming, local echo, etc.";
+    description = "Mobile shell (ssh replacement)";
+    longDescription = ''
+      Remote terminal application that allows roaming, supports intermittent
+      connectivity, and provides intelligent local echo and line editing of
+      user keystrokes.
+
+      Mosh is a replacement for SSH. It's more robust and responsive,
+      especially over Wi-Fi, cellular, and long-distance links.
+    '';
     license = "GPLv3+";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

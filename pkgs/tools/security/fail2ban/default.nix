@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages, unzip, gamin }:
 
-let version = "0.8.6"; in
+let version = "0.8.10"; in
 
 pythonPackages.buildPythonPackage {
   name = "fail2ban-${version}";
@@ -9,7 +9,7 @@ pythonPackages.buildPythonPackage {
   src = fetchurl {
     url    = "https://github.com/fail2ban/fail2ban/zipball/${version}";
     name   = "fail2ban-${version}.zip";
-    sha256 = "0lbanfshr8kasa1bb7861w3mrm2d0c1bvv4s5703265s8zp5m284";
+    sha256 = "0zbjwnghpdnzan7hn40cjjh2r06p2ph5kblpm0w1r72djwsk67x9";
   };
 
   buildInputs = [ unzip ];
@@ -21,6 +21,7 @@ pythonPackages.buildPythonPackage {
       --replace /usr $out
 
     substituteInPlace setup.py \
+      --replace /usr $out \
       --replace /etc $out/etc \
       --replace /var $TMPDIR/var \
 
@@ -28,7 +29,7 @@ pythonPackages.buildPythonPackage {
       substituteInPlace $i \
         --replace /usr/share/fail2ban $out/share/fail2ban
     done
-    
+
     for i in config/action.d/sendmail*.conf; do
       substituteInPlace $i \
         --replace /usr/sbin/sendmail sendmail \
@@ -37,7 +38,7 @@ pythonPackages.buildPythonPackage {
   '';
 
   doCheck = false;
-  
+
   installCommand = ''
     python setup.py install --prefix=$out
   '';

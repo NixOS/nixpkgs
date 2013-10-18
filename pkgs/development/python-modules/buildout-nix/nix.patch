@@ -1,21 +1,36 @@
 --- a/src/zc/buildout/easy_install.py	2013-08-27 22:28:40.233718116 +0200
-+++ b/src/zc/buildout/easy_install.py	2013-08-27 22:31:07.967871186 +0200
-@@ -508,16 +508,15 @@
++++ b/src/zc/buildout/easy_install.py   2013-10-07 00:29:31.077413935 +0200
+@@ -508,16 +508,31 @@
                          self._dest, os.path.basename(dist.location))
  
                      if os.path.isdir(dist.location):
 -                        # we got a directory. It must have been
 -                        # obtained locally.  Just copy it.
 -                        shutil.copytree(dist.location, newloc)
-+                        # Symlink to dists in /nix/store
-+                        if not os.path.exists(newloc):
++                        # Replace links to garbage collected eggs in
++                        # /nix/store
++                        if os.path.islink(newloc):
++                            # It seems necessary to jump through these
++                            # hoops, otherwise we end up in an
++                            # infinite loop because
++                            # self._env.best_match fails to find the dist
++                            os.remove(newloc)
++                            dist = self._fetch(avail, tmp, self._download_cache)
 +                            os.symlink(dist.location, newloc)
++                            newdist = pkg_resources.Distribution.from_filename(
++                                newloc)
++                            self._env.add(newdist)
++                            logger.info("Updated link to %s" %dist.location)
++                        # Symlink to the egg in /nix/store
++                        elif not os.path.exists(newloc):
++                            os.symlink(dist.location, newloc)
++                            logger.info("Created link to %s" %dist.location)
                      else:
  
  
                          setuptools.archive_util.unpack_archive(
                              dist.location, newloc)
--
+ 
 -                    redo_pyc(newloc)
 +                        redo_pyc(newloc)
  

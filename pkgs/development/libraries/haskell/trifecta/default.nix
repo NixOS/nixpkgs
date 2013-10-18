@@ -6,14 +6,20 @@
 
 cabal.mkDerivation (self: {
   pname = "trifecta";
-  version = "1.1";
-  sha256 = "19wnblpn31hvdi5dc8ir24s0hfjj4vvzr43gg9ydl2qdjq6s166w";
+  version = "1.2.1.1";
+  sha256 = "1bv35ip7g0h7r2w0s8pkcbvm0b9hx91vblf5w57q3jr843v9314c";
   buildDepends = [
     ansiTerminal ansiWlPprint blazeBuilder blazeHtml blazeMarkup
     charset comonad deepseq fingertree hashable lens mtl parsers
     reducers semigroups transformers unorderedContainers utf8String
   ];
   testDepends = [ doctest filepath ];
+  postPatch = ''
+    substituteInPlace trifecta.cabal \
+      --replace "blaze-html           >= 0.5     && < 0.6," "blaze-html           >= 0.5     && < 0.7," \
+      --replace "hashable             >= 1.2     && < 1.3," "hashable             >= 1.1     && < 1.3," \
+      --replace "fingertree           >= 0.0.1   && < 0.1," "fingertree           >= 0.0.1   && < 0.2,"
+  '';
   meta = {
     homepage = "http://github.com/ekmett/trifecta/";
     description = "A modern parser combinator library with convenient diagnostics";

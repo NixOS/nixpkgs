@@ -30,14 +30,14 @@ stdenv.mkDerivation rec {
   installFlags = "INSTALL_ROOT=$(out)";
 
   meta = {
-    description = "Qt Creator is a cross-platform IDE tailored to the needs of Qt developers.";
+    description = "Cross-platform IDE tailored to the needs of Qt developers";
     longDescription = ''
-        Qt Creator is a cross-platform IDE (integrated development environment) tailored to the needs of Qt developers.
-        It includes features such as an advanced code editor, a visual debugger and a GUI designer.
-      '';
+      Qt Creator is a cross-platform IDE (integrated development environment)
+      tailored to the needs of Qt developers. It includes features such as an
+      advanced code editor, a visual debugger and a GUI designer.
+    '';
     homepage = "http://qt-project.org/wiki/Category:Tools::QtCreator";
     license = "LGPL";
-
     maintainers = [ stdenv.lib.maintainers.bbenoist ];
     platforms = stdenv.lib.platforms.all;
   };

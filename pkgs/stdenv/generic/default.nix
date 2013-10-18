@@ -14,7 +14,7 @@ else
 
 let
 
-  lib = import ../../lib;
+  lib = import ../../../lib;
 
   allowUnfree = config.allowUnfree or true && builtins.getEnv "HYDRA_DISALLOW_UNFREE" != "1";
 

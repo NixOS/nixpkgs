@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Depend traverses Java class file directories and generates design quality metrics for each Java package." ;
+    description = "Traverses Java class file directories and generates design quality metrics for each Java package";
     homepage = http://www.clarkware.com/software/JDepend.html ;
   };
 }

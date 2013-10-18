@@ -26,14 +26,14 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p "$out/share/doc/lua" "$out/lib/pkgconfig"
-    mv "etc/lua.pc" "$out/lib/pkgconfig/"
+    sed <"etc/lua.pc" >"$out/lib/pkgconfig/lua.pc" -e "s|^prefix=.*|prefix=$out|"
     mv "doc/"*.{gif,png,css,html} "$out/share/doc/lua/"
     rmdir $out/{share,lib}/lua/5.1 $out/{share,lib}/lua
   '';
 
   meta = {
     homepage = "http://www.lua.org";
-    description = "Lua is a powerful, fast, lightweight, embeddable scripting language.";
+    description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data
       description constructs based on associative arrays and extensible

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://forge.ocamlcore.org/projects/sexplib/";
-    description = "Library for serializing OCaml values to and from S-expressions.";
+    description = "Library for serializing OCaml values to and from S-expressions";
     license = "LGPL";
     platforms = ocaml.meta.platforms;
   };

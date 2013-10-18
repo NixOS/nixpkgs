@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ cmake pyside python27 qt4 pysideShiboken ];
 
   meta = {
-    description = "Tools for pyside, the LGPL-licensed Python bindings for the Qt cross-platform application and UI framework.";
+    description = "Tools for pyside, the LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
     license = stdenv.lib.licenses.gpl2;
     homepage = "http://www.pyside.org";
     maintainers = [ stdenv.lib.maintainers.chaoflow ];

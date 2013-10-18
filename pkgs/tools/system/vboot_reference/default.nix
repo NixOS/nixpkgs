@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Chrome OS partitioning and kernel signing tools.";
+    description = "Chrome OS partitioning and kernel signing tools";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
   };

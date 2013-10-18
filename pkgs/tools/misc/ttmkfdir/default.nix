@@ -26,6 +26,6 @@ stdenv.mkDerivation {
   buildInputs = [freetype fontconfig libunwind libtool flex bison];
 
   meta = {
-    description = "Create fonts.dir for TTF font directory.";
+    description = "Create fonts.dir for TTF font directory";
   };
 }

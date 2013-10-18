@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     criterion deepseq HUnit mersenneRandomPure64 QuickCheck random
     testFramework testFrameworkHunit testFrameworkQuickcheck2
   ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "http://projects.haskell.org/uuid/";

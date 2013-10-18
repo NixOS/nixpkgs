@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 libxslt curl libvorbis libtheora speex libkate ];
 
   meta = {
-    description = "icecast is free server software for streaming multimedia.";
+    description = "Server software for streaming multimedia";
 
     longDescription = ''
       Icecast is a streaming media server which currently supports Ogg Vorbis and MP3

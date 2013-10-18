@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   + (lib.optionalString (gnutls != null) " --enable-gnutls=yes --enable-nss=no")
   ;
   meta = {
-    description = "Pidgin IM - XMPP(Jabber), AIM/ICQ, IRC, SIP etc client.";
+    description = "Pidgin IM - XMPP(Jabber), AIM/ICQ, IRC, SIP etc client";
     homepage = http://pidgin.im;
   };
 }

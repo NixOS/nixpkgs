@@ -160,6 +160,11 @@ let
       deps = [ ncurses ];
     };
 
+    curses_panel = buildInternalPythonModule {
+      moduleName = "curses_panel";
+      deps = [ ncurses modules.curses ];
+    };
+
     gdbm = buildInternalPythonModule {
       moduleName = "gdbm";
       internalName = "gdbm";

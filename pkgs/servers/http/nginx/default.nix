@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://nginx.org/download/${name}.tar.gz";
-    sha256 = "06ficmjiya3m8mdlyq3bgqx604h475n77qc5c502kfjijzld39dw";
+    sha256 = "116yfy0k65mwxdkld0w7c3gly77jdqlvga5hpbsw79i3r62kh4mf";
   };
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt ] ++ stdenv.lib.optional fullWebDAV expat;
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "A reverse proxy and lightweight webserver";
     maintainers = [ stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.all;
-    version = "1.4.1";
+    version = "1.4.3";
   };
 }

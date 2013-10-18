@@ -14,8 +14,8 @@
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "4.20130927";
-  sha256 = "0ycfdwqicmqfj5ygrk11z7cz2b28ccvb45ny8h5i0wr6mg3apj38";
+  version = "4.20131002";
+  sha256 = "00pjb0ivcggpx4qdihrarss68c1q5viwfz4jgg7rqjnhslwvk440";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -42,6 +42,7 @@ cabal.mkDerivation (self: {
                     -fProduction
                     -fTDFA";
   preConfigure = "patchShebangs .";
+  installPhase = "./Setup install";
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP/tmp"
     mkdir "$HOME"

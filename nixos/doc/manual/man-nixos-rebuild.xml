@@ -1,0 +1,335 @@
+<refentry xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude">
+  
+<refmeta>
+  <refentrytitle><command>nixos-rebuild</command></refentrytitle>
+  <manvolnum>8</manvolnum>
+  <refmiscinfo class="source">NixOS</refmiscinfo>
+  <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
+</refmeta>
+
+<refnamediv>
+  <refname><command>nixos-rebuild</command></refname>
+  <refpurpose>reconfigure a NixOS machine</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+  <cmdsynopsis>
+    <command>nixos-rebuild</command>
+    <group choice='req'>
+      <arg choice='plain'><option>switch</option></arg>
+      <arg choice='plain'><option>boot</option></arg>
+      <arg choice='plain'><option>test</option></arg>
+      <arg choice='plain'><option>build</option></arg>
+      <arg choice='plain'><option>dry-run</option></arg>
+      <arg choice='plain'><option>build-vm</option></arg>
+      <arg choice='plain'><option>build-vm-with-bootloader</option></arg>
+    </group>
+    <sbr />
+    <arg><option>--upgrade</option></arg>
+    <arg><option>--install-grub</option></arg>
+    <arg><option>--no-build-nix</option></arg>
+    <arg><option>--fast</option></arg>
+    <arg><option>--rollback</option></arg>
+    <sbr />
+    <arg>
+      <group choice='req'>
+        <arg choice='plain'><option>--profile-name</option></arg>
+        <arg choice='plain'><option>-p</option></arg>
+      </group>
+      <replaceable>name</replaceable>
+    </arg>
+    <sbr />
+    <arg><option>--show-trace</option></arg>
+  </cmdsynopsis>
+</refsynopsisdiv>
+
+
+<refsection><title>Description</title>
+
+<para>This command updates the system so that it corresponds to the
+configuration specified in
+<filename>/etc/nixos/configuration.nix</filename>.  Thus, every time
+you modify <filename>/etc/nixos/configuration.nix</filename> or any
+NixOS module, you must run <command>nixos-rebuild</command> to make
+the changes take effect.  It builds the new system in
+<filename>/nix/store</filename>, runs its activation script, and stop
+and (re)starts any system services if needed.</para>
+
+<para>This command has one required argument, which specifies the
+desired operation.  It must be one of the following:
+
+<variablelist>
+
+  <varlistentry>
+    <term><option>switch</option></term>
+    <listitem>
+      <para>Build and activate the new configuration, and make it the
+      boot default.  That is, the configuration is added to the GRUB
+      boot menu as the default meny entry, so that subsequent reboots
+      will boot the system into the new configuration.  Previous
+      configurations activated with <command>nixos-rebuild
+      switch</command> or <command>nixos-rebuild boot</command> remain
+      available in the GRUB menu.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>boot</option></term>
+    <listitem>
+      <para>Build the new configuration and make it the boot default
+      (as with <command>nixos-rebuild switch</command>), but do not
+      activate it.  That is, the system continues to run the previous
+      configuration until the next reboot.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>test</option></term>
+    <listitem>
+      <para>Build and activate the new configuration, but do not add
+      it to the GRUB boot menu.  Thus, if you reboot the system (or if
+      it crashes), you will automatically revert to the default
+      configuration (i.e. the configuration resulting from the last
+      call to <command>nixos-rebuild switch</command> or
+      <command>nixos-rebuild boot</command>).</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>build</option></term>
+    <listitem>
+      <para>Build the new configuration, but neither activate it nor
+      add it to the GRUB boot menu.  It leaves a symlink named
+      <filename>result</filename> in the current directory, which
+      points to the output of the top-level “system” derivation.  This
+      is essentially the same as doing
+<screen>
+$ nix-build /etc/nixos/nixos -A system
+</screen>
+      Note that you do not need to be <literal>root</literal> to run
+      <command>nixos-rebuild build</command>.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>dry-run</option></term>
+    <listitem>
+      <para>Simply show what store paths would be built or downloaded
+      by any of the operations above.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>build-vm</option></term>
+    <listitem>
+      <para>Build a script that starts a NixOS virtual machine with
+      the desired configuration.  It leaves a symlink
+      <filename>result</filename> in the current directory that points
+      (under
+      <filename>result/bin/run-<replaceable>hostname</replaceable>-vm</filename>)
+      at the script that starts the VM.  Thus, to test a NixOS
+      configuration in a virtual machine, you should do the following:
+<screen>
+$ nixos-rebuild build-vm
+$ ./result/bin/run-*-vm
+</screen></para>
+
+      <para>The VM is implemented using the <literal>qemu</literal>
+      package.  For best performance, you should load the
+      <literal>kvm-intel</literal> or <literal>kvm-amd</literal>
+      kernel modules to get hardware virtualisation.</para>
+
+      <para>The VM mounts the Nix store of the host through the 9P
+      file system.  The host Nix store is read-only, so Nix commands
+      that modify the Nix store will not work in the VM.  This
+      includes commands such as <command>nixos-rebuild</command>; to
+      change the VM’s configuration, you must halt the VM and re-run
+      the commands above.
+      </para>
+
+      <para>The VM has its own <literal>ext3</literal> root file
+      system, which is automatically created when the VM is first
+      started, and is persistent across reboots of the VM.  It is
+      stored in
+      <literal>./<replaceable>hostname</replaceable>.qcow2</literal>.
+      <!-- The entire file system hierarchy of the host is available in
+      the VM under <filename>/hostfs</filename>.--></para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>build-vm-with-bootloader</option></term>
+    <listitem>
+      <para>Like <option>build-vm</option>, but boots using the
+      regular boot loader of your configuration (e.g., GRUB 1 or 2),
+      rather than booting directly into the kernel and initial ramdisk
+      of the system.  This allows you to test whether the boot loader
+      works correctly.  However, it does not guarantee that your NixOS
+      configuration will boot successfully on the host hardware (i.e.,
+      after running <command>nixos-rebuild switch</command>), because
+      the hardware and boot loader configuration in the VM are
+      different.  The boot loader is installed on an automatically
+      generated virtual disk containing a <filename>/boot</filename>
+      partition, which is mounted read-only in the VM.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</para>
+
+
+</refsection>
+
+
+<refsection><title>Options</title>
+
+<para>This command accepts the following options:</para>
+
+<variablelist>
+
+  <varlistentry>
+    <term><option>--upgrade</option></term>
+    <listitem>
+      <para>Fetch the latest version of NixOS from the NixOS
+      channel.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--install-grub</option></term>
+    <listitem>
+      <para>Causes the GRUB boot loader to be (re)installed on the
+      device specified by the
+      <varname>boot.loader.grub.device</varname> configuration
+      option.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--no-build-nix</option></term>
+    <listitem>
+      <para>Normally, <command>nixos-rebuild</command> first builds
+      the <varname>nixUnstable</varname> attribute in Nixpkgs, and
+      uses the resulting instance of the Nix package manager to build
+      the new system configuration.  This is necessary if the NixOS
+      modules use features not provided by the currently installed
+      version of Nix.  This option disables building a new Nix.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--fast</option></term>
+    <listitem>
+      <para>Equivalent to <option>--no-build-nix</option>
+      <option>--show-trace</option>.  This option is useful if you
+      call <command>nixos-rebuild</command> frequently (e.g. if you’re
+      hacking on a NixOS module).</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--rollback</option></term>
+    <listitem>
+      <para>Instead of building a new configuration as specified by
+      <filename>/etc/nixos/configuration.nix</filename>, roll back to
+      the previous configuration.  (The previous configuration is
+      defined as the one before the “current” generation of the
+      Nix profile <filename>/nix/var/nix/profiles/system</filename>.)</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--profile-name</option></term>
+    <term><option>-p</option></term>
+    <listitem>
+      <para>Instead of using the Nix profile
+      <filename>/nix/var/nix/profiles/system</filename> to keep track
+      of the current and previous system configurations, use
+      <filename>/nix/var/nix/profiles/system-profiles/<replaceable>name</replaceable></filename>.
+      When you use GRUB 2, for every system profile created with this
+      flag, NixOS will create a submenu named “NixOS - Profile
+      '<replaceable>name</replaceable>'” in GRUB’s boot menu,
+      containing the current and previous configurations of this
+      profile.</para>
+
+      <para>For instance, if you want to test a configuration file
+      named <filename>test.nix</filename> without affecting the
+      default system profile, you would do:
+
+<screen>
+$ nixos-rebuild switch -p test -I nixos-config=./test.nix
+</screen>
+
+      The new configuration will appear in the GRUB 2 submenu “NixOS - Profile
+      'test'”.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+<para>In addition, <command>nixos-rebuild</command> accepts various
+Nix-related flags, including <option>--max-jobs</option> /
+<option>-j</option>, <option>--show-trace</option>,
+<option>--keep-failed</option>, <option>--keep-going</option> and
+<option>--verbose</option> / <option>-v</option>.  See
+the Nix manual for details.</para>
+
+</refsection>
+
+
+<refsection><title>Environment</title>
+
+<variablelist>
+
+  <varlistentry>
+    <term><envar>NIXOS_CONFIG</envar></term>
+    <listitem>
+      <para>Path to the main NixOS configuration module.  Defaults to
+      <filename>/etc/nixos/configuration.nix</filename>.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</refsection>
+
+
+<refsection><title>Files</title>
+
+<variablelist>
+
+  <varlistentry>
+    <term><filename>/run/current-system</filename></term>
+    <listitem>
+      <para>A symlink to the currently active system configuration in
+      the Nix store.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><filename>/nix/var/nix/profiles/system</filename></term>
+    <listitem>
+      <para>The Nix profile that contains the current and previous
+      system configurations.  Used to generate the GRUB boot
+      menu.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</refsection>
+
+
+<refsection><title>Bugs</title>
+
+<para>This command should be renamed to something more
+descriptive.</para>
+
+</refsection>
+
+
+
+</refentry>

@@ -8,6 +8,6 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "Re2c is a tool for writing very fast and very flexible scanners.";
+    description = "Tool for writing very fast and very flexible scanners";
   };
 }

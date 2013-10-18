@@ -17,6 +17,6 @@ rec {
       
   name = "arkpandora-" + version;
   meta = {
-    description = "ArkPandora fonts, metrically identical to Arial and Times New Roman.";
+    description = "Font, metrically identical to Arial and Times New Roman";
   };
 }

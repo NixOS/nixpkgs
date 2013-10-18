@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = stdenv.lib.licenses.gpl2;
-    description = "AVaRICE translates between GDB's remote debug protocol and the AVR JTAG ICE protocol";
+    description = "Translator between GDB's remote debug protocol and the AVR JTAG ICE protocol";
     homepage = http://sourceforge.net/projects/avarice/files/avarice/;
     maintainers = [ stdenv.lib.maintainers.smironov ];
     platforms = stdenv.lib.platforms.linux;

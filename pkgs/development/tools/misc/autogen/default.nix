@@ -25,7 +25,7 @@ let version = "5.17"; in
     #doCheck = true; # 2 tests fail because of missing /dev/tty
 
     meta = {
-      description = "GNU AutoGen, an automated text and program generation tool";
+      description = "Automated text and program generation tool";
 
       longDescription = ''
         AutoGen is a tool designed to simplify the creation and maintenance

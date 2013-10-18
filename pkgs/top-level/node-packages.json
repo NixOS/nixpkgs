@@ -97,4 +97,13 @@
 , "coveralls"
 , "js-yaml"
 , "node-inspector"
+, "istanbul"
+, "mocha-unfunk-reporter"
+, "chai"
+, "selenium-webdriver"
+, "webdrvr"
+, "connect-jade-static"
+, "plist-native"
+, "x509"
+, "owl-deepcopy"
 ]
