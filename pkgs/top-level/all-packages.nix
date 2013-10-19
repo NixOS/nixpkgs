@@ -5131,8 +5131,6 @@ let
 
   libxslt = callPackage ../development/libraries/libxslt { };
 
-  libxtc_dxtn = callPackage ../development/libraries/libxtc_dxtn { };
-
   libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
     inherit fetchurl stdenv;
   });
@@ -8063,6 +8061,8 @@ let
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
   ii = callPackage ../applications/networking/irc/ii { };
+
+  ike = callPackage ../applications/ike { };
 
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber

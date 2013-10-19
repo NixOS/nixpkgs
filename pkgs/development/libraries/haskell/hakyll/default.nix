@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "4.4.1.0";
-  sha256 = "17bns61l5d0h8qyhbz5gnc4j9yjjajk57whp0j4gfshaq0s2aif9";
+  version = "4.4.1.2";
+  sha256 = "0rbl0gl5ds63mv8cbcwb8aj0vic9padqs3zrdxr2ny70md1v9m9y";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -25,9 +25,6 @@ cabal.mkDerivation (self: {
     snapCore snapServer systemFilepath tagsoup testFramework
     testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
-  patchPhase = ''
-    sed -i -e 's|cryptohash.*,|cryptohash,|' -e 's|tagsoup.*,|tagsoup,|' hakyll.cabal
-  '';
   doCheck = false;
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
