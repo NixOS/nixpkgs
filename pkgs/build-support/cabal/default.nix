@@ -2,6 +2,8 @@
 
 { stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, jailbreakCabal, glibcLocales
 , enableLibraryProfiling ? false
+, enableSharedLibraries ? false
+, enableSharedExecutables ? false
 , enableCheckPhase ? true
 }:
 
@@ -42,8 +44,12 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
             # if that is not desired (for applications), name can be set to
             # fname.
             name = if self.isLibrary then
-                     if enableLibraryProfiling then
+                     if enableLibraryProfiling && self.enableSharedLibraries then
+                       "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}-profiling-shared"
+                     else if enableLibraryProfiling && !self.enableSharedLibraries then
                        "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}-profiling"
+                     else if !enableLibraryProfiling && self.enableSharedLibraries then
+                       "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}-shared"
                      else
                        "haskell-${self.pname}-ghc${ghc.ghc.version}-${self.version}"
                    else
@@ -107,8 +113,18 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
             # and run any regression test suites the package might have
             doCheck = enableCheckPhase;
 
+            # pass the '--enable-shared' flag to cabal in the configure
+            # stage to enable building shared libraries
+            inherit enableSharedLibraries;
+
+            # pass the '--enable-executable-dynamic' flag to cabal in
+            # the configure stage to enable linking shared libraries
+            inherit enableSharedExecutables;
+
             extraConfigureFlags = [
               (stdenv.lib.enableFeature enableLibraryProfiling "library-profiling")
+              (stdenv.lib.enableFeature self.enableSharedLibraries "shared")
+              (stdenv.lib.enableFeature self.enableSharedExecutables "executable-dynamic")
               (stdenv.lib.enableFeature self.enableSplitObjs "split-objs")
             ] ++ stdenv.lib.optional (stdenv.lib.versionOlder "7" ghc.ghcVersion) (stdenv.lib.enableFeature self.doCheck "tests");
 
