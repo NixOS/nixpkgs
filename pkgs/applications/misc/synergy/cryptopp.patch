@@ -20,10 +20,10 @@ index 3b61fc0..2206646 100644
  
  if (WIN32)
  	# add /analyze in order to unconver potential bugs in the source code
-diff --git a/src/lib/synergy/CCryptoMode.h b/src/lib/synergy/CCryptoMode.h
+diff --git a/src/lib/io/CCryptoMode.h b/src/lib/io/CCryptoMode.h
 index 9b7e8ad..0d659ac 100644
---- a/src/lib/synergy/CCryptoMode.h
-+++ b/src/lib/synergy/CCryptoMode.h
+--- a/src/lib/io/CCryptoMode.h
++++ b/src/lib/io/CCryptoMode.h
 @@ -17,9 +17,9 @@
  
  #pragma once
@@ -37,10 +37,10 @@ index 9b7e8ad..0d659ac 100644
  #include "ECryptoMode.h"
  #include "CString.h"
  
-diff --git a/src/lib/synergy/CCryptoStream.h b/src/lib/synergy/CCryptoStream.h
+diff --git a/src/lib/io/CCryptoStream.h b/src/lib/io/CCryptoStream.h
 index 104b1f6..09c4dc4 100644
---- a/src/lib/synergy/CCryptoStream.h
-+++ b/src/lib/synergy/CCryptoStream.h
+--- a/src/lib/io/CCryptoStream.h
++++ b/src/lib/io/CCryptoStream.h
 @@ -20,8 +20,8 @@
  #include "BasicTypes.h"
  #include "CStreamFilter.h"
