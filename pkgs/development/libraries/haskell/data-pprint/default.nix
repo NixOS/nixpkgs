@@ -1,4 +1,4 @@
-{ cabal, deepseq, mtl, parallel, time }:
+{ cabal, deepseq, mtl, parallel, time, fetchurl }:
 
 cabal.mkDerivation (self: {
   pname = "data-pprint";
@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
                           sha256 = "0wxvc7cbv4qpjl5zxy41863qpzda2ma75pmnnqx29qyh3rxp7biw";
                         })
             ];
+  patchFlags = "-p2";
   meta = {
     description = "Prettyprint and compare Data values";
     license = self.stdenv.lib.licenses.bsd3;
