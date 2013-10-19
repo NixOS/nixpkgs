@@ -728,6 +728,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   clientsession = callPackage ../development/libraries/haskell/clientsession {};
 
+  clock = callPackage ../development/libraries/haskell/clock {};
+
   cmdargs = callPackage ../development/libraries/haskell/cmdargs {};
 
   cmdlib = callPackage ../development/libraries/haskell/cmdlib {};
