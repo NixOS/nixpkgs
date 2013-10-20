@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pandoc-citeproc";
-  version = "0.1.2";
-  sha256 = "055msvrcqjkijkhzws48scpc4z90g0qjjsdcd0fhy309da6vax57";
+  version = "0.1.2.1";
+  sha256 = "13i4shpbd9swbsrpmkpb7jx79m12z12m9f3x167fs78509dak3iv";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -15,7 +15,9 @@ cabal.mkDerivation (self: {
     pandoc pandocTypes parsec rfc5051 split syb tagsoup texmath text
     time utf8String vector yaml
   ];
-  testDepends = [ aeson aesonPretty Diff pandoc pandocTypes ];
+  testDepends = [
+    aeson aesonPretty Diff filepath pandoc pandocTypes yaml
+  ];
   doCheck = false;
   meta = {
     description = "Supports using pandoc with citeproc";
