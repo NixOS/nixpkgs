@@ -8,7 +8,7 @@ assert stdenv.gcc.gcc != null;
 
 let gecko = fetchurl {
       url = "mirror://sourceforge/wine/wine_gecko-2.21-x86.msi";
-      sha256 = "1n0zccnvchkg0m896sjx5psk4bxw9if32xyxib1rbfdasykay7zh";
+      sha256 = "0sb9zfrvlrjx1icfb94clgac239i9yfhyv48zv9iddgmvdjk8ysi";
     };
 
     gecko64 = fetchurl {
@@ -22,7 +22,7 @@ let gecko = fetchurl {
     };
 
 in stdenv.mkDerivation rec {
-  version = "1.6";
+  version = "1.7.4";
   name = "wine-${version}";
 
   src = fetchurl {
