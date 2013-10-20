@@ -1,16 +1,18 @@
-{ cabal, binary, criterion, cryptohash, deepseq, HUnit, maccatcher
-, mersenneRandomPure64, QuickCheck, random, testFramework
-, testFrameworkHunit, testFrameworkQuickcheck2, time
+{ cabal, binary, cryptohash, deepseq, hashable, HUnit, networkInfo
+, QuickCheck, random, testFramework, testFrameworkHunit
+, testFrameworkQuickcheck2, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "uuid";
-  version = "1.2.14";
-  sha256 = "13r2yzhb9nj1h6wfy7w9k59d27z9iza5r4apmf72zby2fi9vdnwy";
-  buildDepends = [ binary cryptohash maccatcher random time ];
+  version = "1.3.0";
+  sha256 = "0bzgprrag170j55vwi03lc6h4lk6cl9jsbawcp9nc7hivkqib26j";
+  buildDepends = [
+    binary cryptohash deepseq hashable networkInfo random time
+  ];
   testDepends = [
-    criterion deepseq HUnit mersenneRandomPure64 QuickCheck random
-    testFramework testFrameworkHunit testFrameworkQuickcheck2
+    HUnit QuickCheck random testFramework testFrameworkHunit
+    testFrameworkQuickcheck2
   ];
   jailbreak = true;
   doCheck = false;
