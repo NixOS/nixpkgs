@@ -661,6 +661,8 @@ let
 
   connect = callPackage ../tools/networking/connect { };
 
+  conspy = callPackage ../os-specific/linux/conspy {};
+
   convertlit = callPackage ../tools/text/convertlit { };
 
   collectd = callPackage ../tools/system/collectd { };
@@ -1884,6 +1886,8 @@ let
   trickle = callPackage ../tools/networking/trickle {};
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
+
+  ttysnoop = callPackage ../os-specific/linux/ttysnoop {};
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
