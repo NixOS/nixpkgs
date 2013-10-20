@@ -195,10 +195,9 @@ in
     system.activationScripts.munin-node = ''
       echo "updating munin plugins..."
 
-      export PATH="/run/current-system/sw/bin:/run/current-system/sw/sbin";
       mkdir -p /etc/munin/plugins
       rm -rf /etc/munin/plugins/*
-      ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
+      PATH="/run/current-system/sw/bin:/run/current-system/sw/sbin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
     '';
 
   }) (mkIf cronCfg.enable {
