@@ -9186,6 +9186,11 @@ let
 
   freeciv = callPackage ../games/freeciv { };
 
+  freeciv_gtk = callPackage ../games/freeciv {
+    gtkClient = true;
+    sdlClient = false;
+  };
+
   freedink = callPackage ../games/freedink { };
 
   fsg = callPackage ../games/fsg {

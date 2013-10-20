@@ -6,12 +6,17 @@
 let
   inherit (stdenv.lib) optional optionals;
   client = sdlClient || gtkClient;
+
+  sdlName = if sdlClient then "-sdl" else "";
+  gtkName = if gtkClient then "-gtk" else "";
+
+  baseName = "freeciv-2.4.0";
 in
-stdenv.mkDerivation rec {
-  name = "freeciv-2.4.0";
+stdenv.mkDerivation {
+  name = baseName + sdlName + gtkName;
 
   src = fetchurl {
-    url = "mirror://sourceforge/freeciv/${name}.tar.bz2";
+    url = "mirror://sourceforge/freeciv/${baseName}.tar.bz2";
     sha256 = "1bc01pyihsrby6w95n49gi90ggp40dyxsy4kmlmwcakxfxprwakv";
   };
 
