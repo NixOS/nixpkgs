@@ -203,13 +203,11 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
                 GHC_PACKAGE_PATH=$installedPkgConf ghc-pkg --global register $pkgConf --force
               fi
 
-              eval "$postInstall"
-            '';
-
-            postFixup = ''
               if test -f $out/nix-support/propagated-native-build-inputs; then
                 ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
               fi
+
+              eval "$postInstall"
             '';
 
             # We inherit stdenv and ghc so that they can be used
