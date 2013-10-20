@@ -3740,6 +3740,8 @@ let
 
   simpleBuildTool = callPackage ../development/tools/build-managers/simple-build-tool { };
 
+  slimerjs = callPackage ../development/tools/slimerjs {};
+
   sloccount = callPackage ../development/tools/misc/sloccount { };
 
   smatch = callPackage ../development/tools/analysis/smatch {
