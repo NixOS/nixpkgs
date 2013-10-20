@@ -898,6 +898,8 @@ let
     withX11 = true;
   };
 
+  forktty = callPackage ../os-specific/linux/forktty {};
+
   fortune = callPackage ../tools/misc/fortune { };
 
   fox = callPackage ../development/libraries/fox/default.nix {
