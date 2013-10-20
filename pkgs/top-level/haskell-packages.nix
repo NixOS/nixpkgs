@@ -58,7 +58,12 @@
 #
 # For most packages, however, we keep only one version, and use default.nix.
 
-{pkgs, newScope, ghc, prefFun, enableLibraryProfiling ? false, modifyPrio ? (x : x)}:
+{ pkgs, newScope, ghc, prefFun, modifyPrio ? (x : x)
+, enableLibraryProfiling ? false
+, enableSharedLibraries ? true
+, enableSharedExecutables ? false
+, enableCheckPhase ? pkgs.stdenv.lib.versionOlder "7.4" ghc.version
+}:
 
 # We redefine callPackage to take into account the new scope. The optional
 # modifyPrio argument can be set to lowPrio to make all Haskell packages have
@@ -105,8 +110,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   # packages. It isn't the Cabal library, which is spelled "Cabal".
 
   cabal = callPackage ../build-support/cabal {
-    enableLibraryProfiling = enableLibraryProfiling;
-    enableCheckPhase = pkgs.stdenv.lib.versionOlder "7.4" self.ghc.ghcVersion;
+    inherit enableLibraryProfiling;
+    inherit enableSharedLibraries;
+    inherit enableSharedExecutables;
+    inherit enableCheckPhase;
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
   };
 

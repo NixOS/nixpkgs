@@ -4,11 +4,26 @@
 , enableLibraryProfiling ? false
 , enableSharedLibraries ? false
 , enableSharedExecutables ? false
-, enableCheckPhase ? true
+, enableCheckPhase ? stdenv.lib.versionOlder "7.4" ghc.version
 }:
 
-# The Cabal library shipped with GHC versions older than 7.x doesn't accept the --enable-tests configure flag.
-assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
+let
+  enableFeature         = stdenv.lib.enableFeature;
+  versionOlder          = stdenv.lib.versionOlder;
+  optional              = stdenv.lib.optional;
+  optionals             = stdenv.lib.optionals;
+  optionalString        = stdenv.lib.optionalString;
+  filter                = stdenv.lib.filter;
+in
+
+# Cabal shipped with GHC 6.12.4 or earlier doesn't know the "--enable-tests configure" flag.
+assert enableCheckPhase -> versionOlder "7" ghc.version;
+
+# GHC prior to 7.4.x doesn't know the "--enable-executable-dynamic" flag.
+assert enableSharedExecutables -> versionOlder "7.4" ghc.version;
+
+# Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
+assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
 
 {
   mkDerivation =
@@ -25,8 +40,8 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
         # in the interest of keeping hashes stable.
         postprocess =
           x : (removeAttrs x internalAttrs) // {
-                buildInputs           = stdenv.lib.filter (y : ! (y == null)) x.buildInputs;
-                propagatedBuildInputs = stdenv.lib.filter (y : ! (y == null)) x.propagatedBuildInputs;
+                buildInputs           = filter (y : ! (y == null)) x.buildInputs;
+                propagatedBuildInputs = filter (y : ! (y == null)) x.propagatedBuildInputs;
                 doCheck               = enableCheckPhase && x.doCheck;
               };
 
@@ -69,7 +84,7 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
             # but often propagatedBuildInputs is preferable anyway
             buildInputs = [ghc Cabal] ++ self.extraBuildInputs;
             extraBuildInputs = self.buildTools ++
-                               (stdenv.lib.optionals self.doCheck self.testDepends) ++
+                               (optionals self.doCheck self.testDepends) ++
                                (if self.pkgconfigDepends == [] then [] else [pkgconfig]) ++
                                (if self.isLibrary then [] else self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends);
 
@@ -105,8 +120,8 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
             jailbreak = false;
 
             # pass the '--enable-split-objs' flag to cabal in the configure stage
-            enableSplitObjs = !(  stdenv.isDarwin         # http://hackage.haskell.org/trac/ghc/ticket/4013
-                               || stdenv.lib.versionOlder "7.6.99" ghc.ghcVersion  # -fsplit-ojbs is broken in 7.7 snapshot
+            enableSplitObjs = !(  stdenv.isDarwin                       # http://hackage.haskell.org/trac/ghc/ticket/4013
+                               || versionOlder "7.6.99" ghc.version     # -fsplit-ojbs is broken in 7.7 snapshot
                                );
 
             # pass the '--enable-tests' flag to cabal in the configure stage
@@ -122,21 +137,22 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
             inherit enableSharedExecutables;
 
             extraConfigureFlags = [
-              (stdenv.lib.enableFeature enableLibraryProfiling "library-profiling")
-              (stdenv.lib.enableFeature self.enableSharedLibraries "shared")
-              (stdenv.lib.enableFeature self.enableSharedExecutables "executable-dynamic")
-              (stdenv.lib.enableFeature self.enableSplitObjs "split-objs")
-            ] ++ stdenv.lib.optional (stdenv.lib.versionOlder "7" ghc.ghcVersion) (stdenv.lib.enableFeature self.doCheck "tests");
+              (enableFeature self.enableSplitObjs "split-objs")
+              (enableFeature enableLibraryProfiling "library-profiling")
+              (enableFeature self.enableSharedLibraries "shared")
+              (optional (versionOlder "7.4" ghc.version) (enableFeature self.enableSharedExecutables "executable-dynamic"))
+              (optional (versionOlder "7" ghc.version) (enableFeature self.doCheck "tests"))
+            ];
 
             # GHC needs the locale configured during the Haddock phase.
             LANG = "en_US.UTF-8";
-            LOCALE_ARCHIVE = lib.optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
+            LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
 
             # compiles Setup and configures
             configurePhase = ''
               eval "$preConfigure"
 
-              ${lib.optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
+              ${optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
 
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
@@ -175,7 +191,7 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
               eval "$postBuild"
             '';
 
-            checkPhase = stdenv.lib.optional self.doCheck ''
+            checkPhase = optional self.doCheck ''
               eval "$preCheck"
 
               ./Setup test ${self.testTarget}
