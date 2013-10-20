@@ -5058,12 +5058,7 @@ let
 
   libvisual = callPackage ../development/libraries/libvisual { };
 
-  libvncserver = builderDefsPackage (import ../development/libraries/libvncserver) {
-    inherit libtool libjpeg openssl zlib;
-    inherit (xlibs) xproto libX11 damageproto libXdamage
-      libXext xextproto fixesproto libXfixes xineramaproto
-      libXinerama libXrandr randrproto libXtst;
-  };
+  libvncserver = callPackage ../development/libraries/libvncserver {};
 
   libviper = callPackage ../development/libraries/libviper { };
 
