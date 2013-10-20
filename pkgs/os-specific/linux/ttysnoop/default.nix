@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "A tool to clone input and output of another tty/pty to the current one";
-    license = stdenv.lib.licenses.gpl ;
+    license = stdenv.lib.licenses.gpl2 ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
   };
