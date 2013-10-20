@@ -126,6 +126,13 @@ in
         '';
       };
 
+      anonymousUserHome = mkOption {
+        default = "/home/ftp/";
+	description = ''
+	  Directory to consider the HOME of the anonymous user.
+	'';
+      };
+
     } // (listToAttrs (catAttrs "nixosOption" optionDescription)) ;
 
   };
