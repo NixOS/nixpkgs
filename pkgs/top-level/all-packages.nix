@@ -7759,6 +7759,8 @@ let
 
   goldendict = callPackage ../applications/misc/goldendict { };
 
+  google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
+
   grass = import ../applications/misc/grass {
     inherit (xlibs) libXmu libXext libXp libX11 libXt libSM libICE libXpm
       libXaw libXrender;
