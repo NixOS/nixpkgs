@@ -30,7 +30,7 @@ cabal.mkDerivation (self: {
     #!/bin/sh
     COMMAND=\$1
     shift
-    eval exec $out/ghc-mod \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.ghcVersion} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
+    eval exec $out/ghc-mod \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.version} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
     EOF
     chmod +x $out/bin/ghc-mod
   '';

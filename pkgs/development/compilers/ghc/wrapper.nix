@@ -82,6 +82,5 @@ stdenv.mkDerivation {
   '';
 
   inherit ghc GHCGetPackages GHCPackages;
-  inherit (ghc) meta;
-  ghcVersion = ghc.version;
+  inherit (ghc) meta version;
 }
