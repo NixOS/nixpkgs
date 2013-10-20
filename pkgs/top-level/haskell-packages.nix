@@ -60,7 +60,7 @@
 
 { pkgs, newScope, ghc, prefFun, modifyPrio ? (x : x)
 , enableLibraryProfiling ? false
-, enableSharedLibraries ? true
+, enableSharedLibraries ? false
 , enableSharedExecutables ? false
 , enableCheckPhase ? pkgs.stdenv.lib.versionOlder "7.4" ghc.version
 }:
