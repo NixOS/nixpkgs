@@ -6116,6 +6116,7 @@ rec {
       url = "mirror://cpan/authors/id/D/DT/DTOWN/${name}.tar.gz";
       sha256 = "0hdpn1cw52x8cw24m9ayzpf4rwarm0khygn1sv3wvwxkrg0pphql";
     };
+    doCheck = false; # The test suite fails, see https://rt.cpan.org/Public/Bug/Display.html?id=85799
   };
 
   NetSSLeay = buildPerlPackage rec {
