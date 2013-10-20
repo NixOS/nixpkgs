@@ -36,6 +36,7 @@ rec {
 
   name = "cuneiform-" + version;
   meta = {
+    inherit version;
     description = "Cuneiform OCR";
   };
 }
