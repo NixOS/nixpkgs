@@ -1,9 +1,5 @@
 { stdenv, fetchurl, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
-, python, ruby, openjdk }:
-
-# TODO: split into server/node derivations
-
-# FIXME: munin tries to write log files and web graphs to its installation path.
+, python, ruby, openjdk, nettools }:
 
 stdenv.mkDerivation rec {
   version = "2.0.17";
@@ -19,6 +15,7 @@ stdenv.mkDerivation rec {
     which
     coreutils
     rrdtool
+    nettools
     perl
     perlPackages.ModuleBuild
     perlPackages.HTMLTemplate
@@ -36,17 +33,49 @@ stdenv.mkDerivation rec {
     perlPackages.NetServer
     perlPackages.ListMoreUtils
     perlPackages.TimeHiRes
+    perlPackages.LWPUserAgent
+    perlPackages.DBDPg
     python
     ruby
     openjdk
+    # tests
+    perlPackages.TestLongString
+    perlPackages.TestDifferences
+    perlPackages.TestDeep
+    perlPackages.TestMockModule
+    perlPackages.TestMockObject
+    perlPackages.FileSlurp
+    perlPackages.IOStringy
+  ];
+
+  # TODO: tests are failing http://munin-monitoring.org/ticket/1390#comment:1
+  # NOTE: important, test command always exits with 0, think of a way to abort the build once tests pass
+  doCheck = false;
+
+  checkPhase = ''
+   export PERL5LIB="$PERL5LIB:${rrdtool}/lib/perl"
+   LC_ALL=C make -j1 test 
+  '';
+
+  patches = [
+    # https://rt.cpan.org/Public/Bug/Display.html?id=75112
+    ./dont_preserve_source_dir_permissions.patch
+
+    # https://github.com/munin-monitoring/munin/pull/134
+    ./adding_servicedir_munin-node.patch
   ];
 
   preBuild = ''
+    substituteInPlace "Makefile" \
+      --replace "/bin/pwd" "pwd"
+
+    # munin checks at build time if user/group exists, unpure
     sed -i '/CHECKUSER/d' Makefile
     sed -i '/CHOWN/d' Makefile
     sed -i '/CHECKGROUP/d' Makefile
-    substituteInPlace "Makefile" \
-      --replace "/usr/pwd" "pwd"
+
+    # munin hardcodes PATH, we need it to obey $PATH
+    sed -i '/ENV{PATH}/d' node/lib/Munin/Node/Service.pm
   '';
 
   # DESTDIR shouldn't be needed (and shouldn't have worked), but munin
@@ -60,7 +89,7 @@ stdenv.mkDerivation rec {
     PYTHON=${python}/bin/python
     RUBY=${ruby}/bin/ruby
     JAVARUN=${openjdk}/bin/java
-    HOSTNAME=default
+    PLUGINUSER=munin
   '';
 
   postFixup = ''
@@ -78,7 +107,8 @@ stdenv.mkDerivation rec {
         case "$file" in
             *.jar) continue;;
         esac
-        wrapProgram "$file" --set PERL5LIB $out/lib/perl5/site_perl:${perlPackages.Log4Perl}/lib/perl5/site_perl:${perlPackages.IOSocketInet6}/lib/perl5/site_perl:${perlPackages.Socket6}/lib/perl5/site_perl:${perlPackages.URI}/lib/perl5/site_perl:${perlPackages.DBFile}/lib/perl5/site_perl:${perlPackages.DateManip}/lib/perl5/site_perl:${perlPackages.HTMLTemplate}/lib/perl5/site_perl:${perlPackages.FileCopyRecursive}/lib/perl5/site_perl:${perlPackages.FCGI}/lib/perl5/site_perl:${perlPackages.NetSNMP}/lib/perl5/site_perl:${perlPackages.NetServer}/lib/perl5/site_perl:${perlPackages.ListMoreUtils}/lib/perl5/site_perl:${perlPackages.TimeHiRes}/lib/perl5/site_perl:${rrdtool}/lib/perl
+        wrapProgram "$file" \
+          --set PERL5LIB "$out/lib/perl5/site_perl:${perlPackages.Log4Perl}/lib/perl5/site_perl:${perlPackages.IOSocketInet6}/lib/perl5/site_perl:${perlPackages.Socket6}/lib/perl5/site_perl:${perlPackages.URI}/lib/perl5/site_perl:${perlPackages.DBFile}/lib/perl5/site_perl:${perlPackages.DateManip}/lib/perl5/site_perl:${perlPackages.HTMLTemplate}/lib/perl5/site_perl:${perlPackages.FileCopyRecursive}/lib/perl5/site_perl:${perlPackages.FCGI}/lib/perl5/site_perl:${perlPackages.NetSNMP}/lib/perl5/site_perl:${perlPackages.NetServer}/lib/perl5/site_perl:${perlPackages.ListMoreUtils}/lib/perl5/site_perl:${perlPackages.TimeHiRes}/lib/perl5/site_perl:${rrdtool}/lib/perl:${perlPackages.DBDPg}/lib/perl5/site_perl:${perlPackages.LWPUserAgent}/lib/perl5/site_perl"
     done
   '';
 
