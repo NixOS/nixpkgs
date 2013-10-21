@@ -100,11 +100,11 @@ $ lvcreate --size 1G --name smalldisk MyVolGroup</screen>
     model: you create or edit a description of the configuration that
     you want to be built and activated, and then NixOS takes care of
     realising that configuration.  The command
-    <command>nixos-option</command> can generate an initial
+    <command>nixos-generate-config</command> can generate an initial
     configuration file for you:
 
 <screen>
-$ nixos-option --install</screen>
+$ nixos-generate-config --root /mnt</screen>
 
     It tries to figure out the kernel modules necessary for mounting
     the root device, as well as various other hardware
@@ -130,7 +130,7 @@ $ nixos-option --install</screen>
     <filename>/mnt</filename>, fix
     <filename>/mnt/etc/nixos/configuration.nix</filename> and rerun
     <filename>nixos-install</filename>.)  In most cases,
-    <command>nixos-option --install</command> will figure out the
+    <command>nixos-generate-config</command> will figure out the
     required modules.</para></note>
 
     <para>Examples of real-world NixOS configuration files can be
@@ -218,7 +218,7 @@ $ fdisk /dev/sda <lineannotation>(or whatever device you want to install on)</li
 $ mkfs.ext4 -L nixos /dev/sda1 <lineannotation>(idem)</lineannotation>
 $ mkswap -L swap /dev/sda2 <lineannotation>(idem)</lineannotation>
 $ mount LABEL=nixos /mnt
-$ nixos-option --install
+$ nixos-generate-config --root /mnt
 $ nano /mnt/etc/nixos/configuration.nix
 <lineannotation>(in particular, set the fileSystems and swapDevices options)</lineannotation>
 $ nixos-install
