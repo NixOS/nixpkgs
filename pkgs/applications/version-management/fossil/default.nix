@@ -1,11 +1,11 @@
-{stdenv, fetchurl, zlib, openssl, tcl, readline, sqlite}:
+{stdenv, fetchurl, zlib, openssl, tcl, readline, sqlite, withJson ? true}:
 
 stdenv.mkDerivation {
-  name = "fossil-1.24";
+  name = "fossil-1.27";
 
   src = fetchurl {
-    url = http://www.fossil-scm.org/download/fossil-src-20121022124804.tar.gz;
-    sha256 = "0gcvcrd368acxd79gh7p7caicgqd0f076n0i2if63mg3b8ivz9im";
+    url = http://www.fossil-scm.org/download/fossil-src-20130911114349.tar.gz;
+    sha256 = "0n40z8bx2311i11zjx2x15lw3q8vzjwvfqzikrjlqnpal4vzd72f";
   };
 
   buildInputs = [ zlib openssl readline sqlite ];
@@ -14,6 +14,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   checkTarget = "test";
+  configureFlags = if withJson then  "--json" else  "";
 
   preBuild=''
     export USER=nonexistent-but-specified-user
