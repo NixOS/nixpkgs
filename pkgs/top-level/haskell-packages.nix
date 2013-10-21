@@ -2079,6 +2079,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   text_0_11_3_1 = callPackage ../development/libraries/haskell/text/0.11.3.1.nix {};
   text = self.text_0_11_3_1;
 
+  textFormat = callPackage ../development/libraries/haskell/text-format {};
+
   textIcu = callPackage ../development/libraries/haskell/text-icu {};
 
   thespian = callPackage ../development/libraries/haskell/thespian {};
