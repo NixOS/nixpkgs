@@ -3633,6 +3633,19 @@ rec {
     };
   };
 
+  GnuPG = buildPerlPackage {
+    name = "GnuPG-0.19";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/Y/YA/YANICK/GnuPG-0.19.tar.gz;
+      sha256 = "af53f2d3f63297e046676eae14a76296afdd2910e09723b6b113708622b7989b";
+    };
+    buildInputs = [ pkgs.gnupg1orig ];
+    meta = {
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = with maintainers; [ ocharles ];
+    };
+  };
+
   GoogleProtocolBuffers = buildPerlPackage rec {
     name = "Google-ProtocolBuffers-0.08";
     src = fetchurl {
