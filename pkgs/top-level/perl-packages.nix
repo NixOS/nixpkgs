@@ -7638,6 +7638,21 @@ rec {
     doCheck = false; # no `hostname' in stdenv
   };
 
+  TAPParserSourceHandlerpgTAP = buildPerlModule {
+    name = "TAP-Parser-SourceHandler-pgTAP-3.29";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DW/DWHEELER/TAP-Parser-SourceHandler-pgTAP-3.29.tar.gz;
+      sha256 = "918aa9ada7a05334ace7304e7b9e002bbf0b569bfcf8fb06118777bdabd60e1b";
+    };
+    meta = {
+      homepage = http://search.cpan.org/dist/Tap-Parser-Sourcehandler-pgTAP/;
+      description = "Stream TAP from pgTAP test scripts";
+      license = "perl";
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = with maintainers; [ ocharles ];
+    };
+  };
+
   TaskCatalystTutorial = buildPerlPackage rec {
     name = "Task-Catalyst-Tutorial-0.06";
     src = fetchurl {
