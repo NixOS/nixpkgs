@@ -52,7 +52,7 @@ in
 
     systemd.services.nix-gc =
       { description = "Nix Garbage Collector";
-        serviceConfig.ExecStart = "${config.environment.nix}/bin/nix-collect-garbage ${cfg.options}";
+        script = "exec ${config.environment.nix}/bin/nix-collect-garbage ${cfg.options}";
         startAt = optionalString cfg.automatic cfg.dates;
       };
 
