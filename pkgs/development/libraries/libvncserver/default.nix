@@ -3,6 +3,9 @@
   xextproto, libXext, fixesproto, libXfixes, xineramaproto, libXinerama, 
   libXrandr, randrproto, libXtst, zlib
 }:
+
+assert stdenv.isLinux;
+
 let
   s = # Generated upstream information
   rec {
