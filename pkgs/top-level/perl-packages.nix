@@ -4603,6 +4603,21 @@ rec {
     };
   };
 
+  LocalePO = buildPerlPackage {
+    name = "Locale-PO-0.23";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CO/COSIMO/Locale-PO-0.23.tar.gz;
+      sha256 = "52e5fdc88ec4eb00512418a938dc5089476ea66c9e744fee3c6bbfdf17a0d302";
+    };
+    propagatedBuildInputs = [ FileSlurp ];
+    meta = {
+      description = "Perl module for manipulating .po entries from GNU gettext";
+      license = "unknown";
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = with maintainers; [ ocharles ];
+    };
+  };
+
   LockFileSimple = buildPerlPackage rec {
     name = "LockFile-Simple-0.207";
     src = fetchurl {
