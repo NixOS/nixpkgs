@@ -1,11 +1,17 @@
-{ fetchurl, stdenv, flex, bison, gettext, ncurses, libusb, freetype, qemu
-, devicemapper, EFIsupport ? false }:
+{ fetchurl, stdenv, autogen, flex, bison, python, autoconf, automake
+, gettext, ncurses, libusb, freetype, qemu, devicemapper
+, linuxPackages ? null
+, EFIsupport ? false
+, zfsSupport ? false
+}:
+
+assert zfsSupport -> linuxPackages != null && linuxPackages.zfs != null;
 
 let
 
   prefix = "grub${if EFIsupport then "-efi" else ""}";
 
-  version = "2.00";
+  version = "2.02-beta2";
 
   unifont_bdf = fetchurl {
     url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
@@ -18,13 +24,14 @@ stdenv.mkDerivation rec {
   name = "${prefix}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnu/grub/grub-${version}.tar.xz";
-    sha256 = "0n64hpmsccvicagvr0c6v0kgp2yw0kgnd3jvsyd26cnwgs7c6kkq";
+    url = "http://git.savannah.gnu.org/cgit/grub.git/snapshot/grub-2.02-beta2.tar.gz";
+    sha256 = "1n2l7k76lqqaavz12615vx5kca0kl8g13bkimc7xsd9s7c1ir5lr";
   };
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [ autogen flex bison python autoconf automake ];
   buildInputs = [ ncurses libusb freetype gettext devicemapper ]
-    ++ stdenv.lib.optional doCheck qemu;
+    ++ stdenv.lib.optional doCheck qemu
+    ++ stdenv.lib.optional zfsSupport linuxPackages.zfs;
 
   preConfigure =
     '' for i in "tests/util/"*.in
@@ -43,14 +50,11 @@ stdenv.mkDerivation rec {
        # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
        sed -i "tests/util/grub-shell.in" \
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
-
-       # Fix for building on Glibc 2.16.  Won't be needed once the
-       # gnulib in grub is updated.
-       sed -i '/gets is a security hole/d' grub-core/gnulib/stdio.in.h
     '';
 
   prePatch =
-    '' gunzip < "${unifont_bdf}" > "unifont.bdf"
+    '' sh autogen.sh
+       gunzip < "${unifont_bdf}" > "unifont.bdf"
        sed -i "configure" \
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
@@ -61,8 +65,8 @@ stdenv.mkDerivation rec {
     let arch = if stdenv.system == "i686-linux" then "i386"
                else if stdenv.system == "x86_64-linux" then "x86_64"
                else throw "unsupported EFI firmware architecture";
-    in
-      stdenv.lib.optionals EFIsupport
+    in stdenv.lib.optional zfsSupport "--enable-libzfs"
+      ++ stdenv.lib.optionals EFIsupport
         [ "--with-platform=efi" "--target=${arch}" "--program-prefix=" ];
 
   doCheck = false;
@@ -72,7 +76,7 @@ stdenv.mkDerivation rec {
     paxmark pms $out/sbin/grub-{probe,bios-setup}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GNU GRUB, the Grand Unified Boot Loader (2.x beta)";
 
     longDescription =
@@ -87,13 +91,13 @@ stdenv.mkDerivation rec {
          operating system (e.g., GNU).
       '';
 
-    homepage = http://www.gnu.org/software/grub/;
+    homepage = http://wwwp.gnu.org/software/grub/; 
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
     platforms = if EFIsupport then
       [ "i686-linux" "x86_64-linux" ]
     else
-      stdenv.lib.platforms.gnu;
+      platforms.gnu;
   };
 }

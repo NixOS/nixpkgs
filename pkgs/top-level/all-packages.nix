@@ -1218,7 +1218,7 @@ let
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
   };
 
-  grub2 = callPackage ../tools/misc/grub/2.0x.nix { libusb = libusb1; flex = flex_2_5_35; };
+  grub2 = callPackage ../tools/misc/grub/2.0x.nix { };
 
   grub2_efi = grub2.override { EFIsupport = true; };
 
