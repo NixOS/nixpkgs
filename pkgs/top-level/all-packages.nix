@@ -10164,7 +10164,9 @@ let
   VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
 
   # Wine cannot be built in 64-bit; use a 32-bit build instead.
-  wine = callPackage_i686 ../misc/emulators/wine { };
+  wineStable = callPackage_i686 ../misc/emulators/wine/stable.nix { };
+  wineUnstable = callPackage_i686 ../misc/emulators/wine/unstable.nix { };
+  wine = wineStable;
 
   # winetricks is a shell script with no binary components. Safe to just use the current platforms
   # build instead of the i686 specific build.

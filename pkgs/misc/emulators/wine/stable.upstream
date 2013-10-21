@@ -1,5 +1,5 @@
 url http://sourceforge.net/projects/wine/files/Source/
-version_link '[.]tar[.][^./]+/download$'
+version_link '[-][0-9]+[.][0-9]*[24680][.]([0-9]+[.])*tar[.][^./]+/download$'
 SF_redirect
 do_overwrite () {
   ensure_hash
