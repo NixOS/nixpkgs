@@ -4470,7 +4470,7 @@ let
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
-  harfbuzz = callPackage ../development/libraries/harfbuzz { 
+  harfbuzz = callPackage ../development/libraries/harfbuzz {
     icu = null;
     graphite2 = null;
   };
@@ -6156,6 +6156,8 @@ let
   joseki = callPackage ../servers/http/joseki {};
 
   lighttpd = callPackage ../servers/http/lighttpd { };
+
+  mailman = callPackage ../servers/mail/mailman { };
 
   mediatomb = callPackage ../servers/mediatomb {
     ffmpeg = ffmpeg_0_6_90;
