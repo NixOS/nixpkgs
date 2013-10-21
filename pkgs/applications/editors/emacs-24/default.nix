@@ -46,11 +46,6 @@ stdenv.mkDerivation rec {
                           (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
                                                    (split-string (getenv "NIX_PROFILES"))))
                            load-path)))
-
-    ;; enable nix-mode (lazy)
-    (autoload 'nix-mode "nix-mode" "Major mode for editing Nix expressions." t)
-    (push '("\\\\.nix\\\\'" . nix-mode) auto-mode-alist)
-    (push '("\\\\.nix.in\\\\'" . nix-mode) auto-mode-alist)
         
     ;; make tramp work for NixOS machines
     (eval-after-load 'tramp '(add-to-list 'tramp-remote-path "/run/current-system/sw/bin"))
