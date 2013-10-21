@@ -7723,6 +7723,19 @@ rec {
     };
   };
 
+  TemplatePluginJSONEscape = buildPerlPackage {
+    name = "Template-Plugin-JSON-Escape-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NA/NANTO/Template-Plugin-JSON-Escape-0.02.tar.gz;
+      sha256 = "051a8b1d3bc601d58fc51e246067d36450cfe970278a0456e8ab61940f13cd86";
+    };
+    propagatedBuildInputs = [ JSON TemplateToolkit ];
+    meta = {
+      maintainers = with maintainers; [ ocharles ];
+      platforms   = stdenv.lib.platforms.unix;
+    };
+  };
+
   TemplateTimer = buildPerlPackage {
     name = "Template-Timer-1.00";
     src = fetchurl {
