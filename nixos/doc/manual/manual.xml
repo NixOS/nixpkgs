@@ -42,7 +42,7 @@
     xlink:href="irc://irc.freenode.net/#nixos">
     <literal>#nixos</literal> channel on Freenode</link>.  Bugs should
     be reported in <link
-    xlink:href="https://github.com/NixOS/nixos/issues">NixOS’ GitHub
+    xlink:href="https://github.com/NixOS/nixpkgs/issues">NixOS’ GitHub
     issue tracker</link>.</para>
 
   </preface>
@@ -55,7 +55,7 @@
   <xi:include href="troubleshooting.xml" />
   <xi:include href="development.xml" />
   <chapter xml:id="ch-options">
-    <title>List of Options</title>
+    <title>List of options</title>
     <xi:include href="options-db.xml" />
   </chapter>
 
