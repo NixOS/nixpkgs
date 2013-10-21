@@ -232,8 +232,11 @@ in
       s3tcSupport = mkOption {
         default = false;
         description = ''
-          Make S2TC via libtxc_dxtn available to OpenGL drivers. Using
-          this library may require a patent license depending on your location.
+          Make S3TC(S3 Texture Compression) via libtxc_dxtn available
+          to OpenGL drivers. It is essential for many games to work
+          with FOSS GPU drivers.
+
+          Using this library may require a patent license depending on your location.
         '';
       };
 
