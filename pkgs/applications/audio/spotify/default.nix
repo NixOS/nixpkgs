@@ -79,6 +79,11 @@ stdenv.mkDerivation {
       gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\" -fPIC
 
       wrapProgram $out/bin/spotify --set LD_PRELOAD $preload --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ GConf libpng cups libgcrypt sqlite gst_plugins_base gstreamer]}:$out/lib"
+
+      # Desktop file
+      mkdir -p "$out/share/applications/"
+      cp "$out/spotify-client/spotify.desktop" "$out/share/applications/"
+      sed -i "s|Icon=.*|Icon=$out/spotify-client/Icons/spotify-linux-512.png|" "$out/share/applications/spotify.desktop"
     ''; # */
 
   dontStrip = true;
