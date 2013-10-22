@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl, freetype, glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf, libgcrypt, chromium, sqlite, gst_plugins_base, gstreamer }:
+{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl, freetype
+, glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
+, libgcrypt, chromium, sqlite, gst_plugins_base, gstreamer, udev }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
@@ -57,12 +59,15 @@ stdenv.mkDerivation {
       ln -s ${nspr}/lib/libnspr4.so $out/lib/libnspr4.so.0d
       ln -s ${nspr}/lib/libplc4.so $out/lib/libplc4.so.0d
 
+      # Work around Spotify trying to open libudev.so.0 (which we don't have)
+      ln -s ${udev}/lib/libudev.so.1 $out/lib/libudev.so.0
+
       mkdir -p $out/bin
 
       ln -s $out/spotify-client/spotify $out/bin/spotify
       patchelf \
         --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-        --set-rpath $out/lib:$out/spotify-client:${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib stdenv.gcc.gcc freetype glib pango cairo atk gdk_pixbuf gtk GConf cups sqlite]}:${stdenv.gcc.gcc}/lib64 \
+        --set-rpath $out/spotify-client/Data:$out/lib:$out/spotify-client:${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib stdenv.gcc.gcc freetype glib pango cairo atk gdk_pixbuf gtk GConf cups sqlite]}:${stdenv.gcc.gcc}/lib64 \
         $out/spotify-client/spotify
 
       dpkg-deb -x ${qt4webkit} ./
