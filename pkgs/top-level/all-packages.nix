@@ -6491,6 +6491,8 @@ let
 
   fxload = callPackage ../os-specific/linux/fxload { };
 
+  gfxtablet = callPackage ../os-specific/linux/gfxtablet {};
+
   gpm = callPackage ../servers/gpm { };
 
   hdparm = callPackage ../os-specific/linux/hdparm { };
