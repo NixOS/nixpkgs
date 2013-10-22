@@ -18,26 +18,20 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    (if enableGUI then [x11 motif] else []) ++
-    (if useT1Lib then [t1lib] else []);
+    stdenv.lib.optionals enableGUI [x11 motif] ++
+    stdenv.lib.optional useT1Lib t1lib ++
+    stdenv.lib.optional enablePDFtoPPM freetype;
 
   # Debian uses '-fpermissive' to bypass some errors on char* constantness.
   CXXFLAGS = "-O2 -fpermissive";
 
-  configureFlags =
-    "--infodir=$out/share/info --mandir=$out/share/man --enable-a4-paper"
-    + (if enablePDFtoPPM then
-         " --with-freetype2-library=${freetype}/lib"
-         + " --with-freetype2-includes=${freetype}/include/freetype2"
-       else "");
+  configureFlags = "--enable-a4-paper";
 
-  postInstall = "
-    if test -n \"${base14Fonts}\"; then
-      substituteInPlace $out/etc/xpdfrc \\
-        --replace /usr/local/share/ghostscript/fonts ${base14Fonts} \\
-        --replace '#fontFile' fontFile
-    fi
-  ";
+  postInstall = stdenv.lib.optionalString (base14Fonts != null) ''
+    substituteInPlace $out/etc/xpdfrc \
+      --replace /usr/local/share/ghostscript/fonts ${base14Fonts} \
+      --replace '#fontFile' fontFile
+  '';
 
   meta = {
     homepage = "http://www.foolabs.com/xpdf/";
