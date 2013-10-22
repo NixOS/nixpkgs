@@ -85,7 +85,7 @@ stdenv.mkDerivation {
   dontPatchELF = true;
 
   meta = {
-    homepage = https://www.spotify.com/download/previews/;
+    homepage = https://www.spotify.com/;
     description = "Spotify for Linux allows you to play music from the Spotify music service";
     license = "unfree";
     maintainers = [ stdenv.lib.maintainers.eelco ];
