@@ -4557,6 +4557,8 @@ let
 
   json_c = callPackage ../development/libraries/json-c { };
 
+  jsoncpp = callPackage ../development/libraries/jsoncpp { };
+
   libjson = callPackage ../development/libraries/libjson { };
 
   judy = callPackage ../development/libraries/judy { };
