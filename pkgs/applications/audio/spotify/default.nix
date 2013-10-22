@@ -89,13 +89,5 @@ stdenv.mkDerivation {
     description = "Spotify for Linux allows you to play music from the Spotify music service";
     license = "unfree";
     maintainers = [ stdenv.lib.maintainers.eelco ];
-
-    longDescription =
-      ''
-        Spotify is a digital music streaming service.  This package
-        provides the Spotify client for Linux.  At present, it does not
-        work with free Spotify accounts; it requires a Premium or
-        Unlimited account.
-      '';
   };
 }
