@@ -16,7 +16,7 @@ let
   });
 
   prefix = toString pkgs.path;
-  
+
   stripPrefix = fn:
     if substring 0 (stringLength prefix) fn == prefix then
       substring (add (stringLength prefix) 1) 1000 fn
@@ -26,6 +26,13 @@ let
   optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext (builtins.toXML options''));
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
+    if grep /nixpkgs/nixos/modules ${optionsXML}; then
+      echo "The manual appears to depend on the location of Nixpkgs, which is bad"
+      echo "since this prevents sharing via the NixOS channel.  This is typically"
+      echo "caused by an option default that refers to a relative path (see above"
+      echo "for hints about the offending path)."
+      exit 1
+    fi
     ${pkgs.libxslt}/bin/xsltproc \
       --stringparam revision '${revision}' \
       -o $out ${./options-to-docbook.xsl} ${optionsXML}
