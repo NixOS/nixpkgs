@@ -110,6 +110,14 @@
     </listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><option>--no-filesystems</option></term>
+    <listitem>
+      <para>Omit everything concerning file system information
+      (which includes swap devices) from the hardware configuration.</para>
+    </listitem>
+  </varlistentry>
+
 </variablelist>
 
 </refsection>
