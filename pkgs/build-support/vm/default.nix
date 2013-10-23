@@ -1052,7 +1052,7 @@ rec {
 
   /* The set of supported Dpkg-based distributions. */
 
-  debDistros = {
+  debDistros = rec {
 
     # Interestingly, the SHA-256 hashes provided by Ubuntu in
     # http://nl.archive.ubuntu.com/ubuntu/dists/{gutsy,hardy}/Release are
@@ -1461,23 +1461,27 @@ rec {
       packages = commonDebianPackages;
     };
 
-    debian70i386 = {
-      name = "debian-7.1.0-wheezy-i386";
-      fullName = "Debian 7.1.0 Wheezy (i386)";
+    # Backward compatibility.
+    debian70i386 = debian7i386;
+    debian70x86_64 = debian7x86_64;
+
+    debian7i386 = {
+      name = "debian-7.2-wheezy-i386";
+      fullName = "Debian 7.2 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "c2751c48805b41c3eddd31cfe92ffa46df13a7d6ce7896b8dc5ce4b2f7f329c5";
+        sha256 = "2e80242e323f233c40b3020b0f1a57d12df8a120ee82af88ff7032ba4688f97d";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
-    debian70x86_64 = {
-      name = "debian-7.1.0-wheezy-amd64";
-      fullName = "Debian 7.1.0 Wheezy (amd64)";
+    debian7x86_64 = {
+      name = "debian-7.2-wheezy-amd64";
+      fullName = "Debian 7.2 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "9b15b4348cadbcf170c9e83d6fbcb64efac2b787ebdfef16ba21dd70dfca0001";
+        sha256 = "adfc4cd3d3b855c73c9e2e12163a33c193f98c9bad25765080fa6136378a6e3b";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
