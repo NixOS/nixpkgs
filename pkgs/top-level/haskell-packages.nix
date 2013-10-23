@@ -2278,6 +2278,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
 
+  xmlgen = callPackage ../development/libraries/haskell/xmlgen {};
+
   xmlHamlet = callPackage ../development/libraries/haskell/xml-hamlet {};
 
   xmlhtml = callPackage ../development/libraries/haskell/xmlhtml {};
