@@ -7,8 +7,9 @@ with pkgs.lib;
 
 let
 
-  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
-    (builtins.toXML (optionAttrSetToDocList options)));
+  options' = filter (x: !x.internal) (optionAttrSetToDocList options);
+
+  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext (builtins.toXML options'));
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
     ${pkgs.libxslt}/bin/xsltproc \

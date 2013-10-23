@@ -275,6 +275,7 @@ rec {
             description = opt.description or (throw "Option ${opt.name}: No description.");
             declarations = map (x: toString x.source) opt.declarations;
             #definitions = map (x: toString x.source) opt.definitions;
+            internal = opt.internal or false;
           }
           // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
           // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }

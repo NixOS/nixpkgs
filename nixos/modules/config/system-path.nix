@@ -85,6 +85,7 @@ in
     system = {
 
       path = mkOption {
+        internal = true;
         description = ''
           The packages you want in the boot environment.
         '';

@@ -7,16 +7,19 @@ with pkgs.lib;
   options = {
 
     system.nixosVersion = mkOption {
+      internal = true;
       type = types.uniq types.string;
       description = "NixOS version.";
     };
 
     system.nixosVersionSuffix = mkOption {
+      internal = true;
       type = types.uniq types.string;
       description = "NixOS version suffix.";
     };
 
     system.nixosCodeName = mkOption {
+      internal = true;
       type = types.uniq types.string;
       description = "NixOS release code name.";
     };

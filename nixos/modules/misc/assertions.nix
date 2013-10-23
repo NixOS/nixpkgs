@@ -13,6 +13,7 @@ in
   options = {
 
     assertions = mkOption {
+      internal = true;
       default = [];
       example = [ { assertion = false; message = "you can't enable this for that reason"; } ];
       merge = pkgs.lib.mergeListOption;
