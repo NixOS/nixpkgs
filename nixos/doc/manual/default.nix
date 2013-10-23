@@ -7,9 +7,23 @@ with pkgs.lib;
 
 let
 
-  options' = filter (x: x.visible && !x.internal) (optionAttrSetToDocList options);
+  # Remove invisible and internal options.
+  options' = filter (opt: opt.visible && !opt.internal) (optionAttrSetToDocList options);
 
-  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext (builtins.toXML options'));
+  # Clean up declaration sites to not refer to the NixOS source tree.
+  options'' = flip map options' (opt: opt // {
+    declarations = map (fn: stripPrefix fn) opt.declarations;
+  });
+
+  prefix = toString pkgs.path;
+  
+  stripPrefix = fn:
+    if substring 0 (stringLength prefix) fn == prefix then
+      substring (add (stringLength prefix) 1) 1000 fn
+    else
+      fn;
+
+  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext (builtins.toXML options''));
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
     ${pkgs.libxslt}/bin/xsltproc \

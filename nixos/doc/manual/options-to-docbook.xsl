@@ -155,8 +155,15 @@
           repository (if it’s a module and we have a revision number),
           or to the local filesystem. -->
           <xsl:choose>
-            <xsl:when test="$revision != 'local' and contains(@value, '/modules/')">
-              <xsl:attribute name="xlink:href">https://github.com/NixOS/nixos/blob/<xsl:value-of select="$revision"/>/modules/<xsl:value-of select="substring-after(@value, '/modules/')"/></xsl:attribute>
+            <xsl:when test="not(starts-with(@value, '/'))">
+              <xsl:choose>
+                <xsl:when test="$revision = 'local'">
+                  <xsl:attribute name="xlink:href">https://github.com/NixOS/nixpkgs/blob/master/<xsl:value-of select="@value"/></xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:attribute name="xlink:href">https://github.com/NixOS/nixpkgs/blob/<xsl:value-of select="$revision"/>/<xsl:value-of select="@value"/></xsl:attribute>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:when>
             <xsl:when test="$revision != 'local' and contains(@value, 'nixops') and contains(@value, '/nix/')">
               <xsl:attribute name="xlink:href">https://github.com/NixOS/nixops/blob/<xsl:value-of select="$revision"/>/nix/<xsl:value-of select="substring-after(@value, '/nix/')"/></xsl:attribute>
@@ -169,8 +176,8 @@
           /nix/store/<hash> prefix by the default location of nixos
           sources. -->
           <xsl:choose>
-            <xsl:when test="contains(@value, '/modules/')">
-              &lt;nixos/modules/<xsl:value-of select="substring-after(@value, '/modules/')"/>&gt;
+            <xsl:when test="not(starts-with(@value, '/'))">
+              &lt;nixpkgs/<xsl:value-of select="@value"/>&gt;
             </xsl:when>
             <xsl:when test="contains(@value, 'nixops') and contains(@value, '/nix/')">
               &lt;nixops/<xsl:value-of select="substring-after(@value, '/nix/')"/>&gt;
