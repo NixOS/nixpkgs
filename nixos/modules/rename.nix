@@ -50,6 +50,7 @@ let
         options = setFrom (mkOption {
           description = "${status.name} of <option>${to}</option>.";
           apply = x: status.msg.use (toOf config);
+          visible = false;
         });
       }] ++
       [{

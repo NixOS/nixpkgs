@@ -276,6 +276,7 @@ rec {
             declarations = map (x: toString x.source) opt.declarations;
             #definitions = map (x: toString x.source) opt.definitions;
             internal = opt.internal or false;
+            visible = opt.visible or true;
           }
           // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
           // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }

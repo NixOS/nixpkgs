@@ -7,7 +7,7 @@ with pkgs.lib;
 
 let
 
-  options' = filter (x: !x.internal) (optionAttrSetToDocList options);
+  options' = filter (x: x.visible && !x.internal) (optionAttrSetToDocList options);
 
   optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext (builtins.toXML options'));
 
