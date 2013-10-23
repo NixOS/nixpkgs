@@ -1,4 +1,6 @@
-{pkgs, options, config, ...}:
+{ config, pkgs, options, ... }:
+
+with pkgs.lib;
 
 let
 
@@ -24,8 +26,7 @@ let
       abort "Deprecated option `${from}' is defined instead of `${to}'.";
   };
 
-
-  zipModules = list: with pkgs.lib;
+  zipModules = list:
     zipAttrsWith (n: v:
       if tail v != [] then
         if n == "_type" then (head v)
@@ -36,7 +37,7 @@ let
       else head v
     ) list;
 
-  rename = statusTemplate: from: to: with pkgs.lib;
+  rename = statusTemplate: from: to:
     let
       status = statusTemplate from to;
       setTo = setAttrByPath (splitString "." to);
@@ -46,21 +47,20 @@ let
       fromOf = attrByPath (splitString "." from)
         (abort "Internal error: option `${from}' should be declared.");
     in
-      [{
-        options = setFrom (mkOption {
-          description = "${status.name} of <option>${to}</option>.";
-          apply = x: status.msg.use (toOf config);
-          visible = false;
-        });
-      }] ++
-      [{
-        options = setTo (mkOption {
-          extraConfigs =
-            let externalDefs = (fromOf options).definitions; in
-            if externalDefs == [] then []
-            else map (def: def.value) (status.msg.define externalDefs);
-        });
-      }];
+      [ { options = setFrom (mkOption {
+            description = "${status.name} of <option>${to}</option>.";
+            apply = x: status.msg.use (toOf config);
+            visible = false;
+          });
+        }
+        { options = setTo (mkOption {
+            extraConfigs =
+              let externalDefs = (fromOf options).definitions; in
+              if externalDefs == [] then []
+              else map (def: def.value) (status.msg.define externalDefs);
+          });
+        }
+      ];
 
 in zipModules ([]
 
