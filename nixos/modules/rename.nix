@@ -9,23 +9,24 @@ let
     name = "Alias";
     use = id;
     define = id;
+    visible = true;
   };
 
   obsolete = from: to: rename {
     inherit from to;
     name = "Obsolete name";
-    use = x: builtins.trace "Obsolete option ${showOption from} is used instead of ${showOption to}." x;
-    define = x: builtins.trace "Obsolete option ${showOption from} is defined instead of ${showOption to}." x;
+    use = x: builtins.trace "Obsolete option `${showOption from}' is used instead of `${showOption to}'." x;
+    define = x: builtins.trace "Obsolete option `${showOption from}' is defined instead of `${showOption to}'." x;
   };
 
   deprecated = from: to: rename {
     inherit from to;
     name = "Deprecated name";
-    use = x: abort "Deprecated option ${showOption from} is used instead of ${showOption to}.";
-    define = x: abort "Deprecated option ${showOption from} is defined instead of ${showOption to}.";
+    use = x: abort "Deprecated option `${showOption from}' is used instead of `${showOption to}'.";
+    define = x: abort "Deprecated option `${showOption from}' is defined instead of `${showOption to}'.";
   };
 
-  showOption = name: "`${concatStringsSep "." name}'";
+  showOption = concatStringsSep ".";
 
   zipModules = list:
     zipAttrsWith (n: v:
@@ -39,18 +40,19 @@ let
       else head v
     ) list;
 
-  rename = { from, to, name, use, define }:
+  rename = { from, to, name, use, define, visible ? false }:
     let
       setTo = setAttrByPath to;
       setFrom = setAttrByPath from;
       toOf = attrByPath to
-        (abort "Renaming error: option ${showOption to} does not exists.");
+        (abort "Renaming error: option `${showOption to}' does not exists.");
       fromOf = attrByPath from
-        (abort "Internal error: option ${showOption from} should be declared.");
+        (abort "Internal error: option `${showOption from}' should be declared.");
     in
       [ { options = setFrom (mkOption {
+            description = "${name} of <option>${showOption to}</option>.";
             apply = x: use (toOf config);
-            visible = false;
+            inherit visible;
           });
         }
         { options = setTo (mkOption {
@@ -68,7 +70,7 @@ let
         visible = false;
       });
       config.warnings = optional (getAttrFromPath option config != null)
-        "The option ${showOption option} defined in your configuration no longer has any effect; please remove it.";
+        "The option `${showOption option}' defined in your configuration no longer has any effect; please remove it.";
     };
 
 in zipModules ([]
