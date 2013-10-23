@@ -345,7 +345,7 @@ mkpath($outDir, 0, 0755);
 my $fsAndSwap = "";
 if (!$noFilesystems) {
     $fsAndSwap = "\n${fileSystems}  ";
-    $fsAndSwap .= "swapDevices = " . multiLineList("    ", @swapDevices) . ";\n";
+    $fsAndSwap .= "swapDevices =" . multiLineList("    ", @swapDevices) . ";\n";
 }
 
 write_file($fn, <<EOF);
@@ -355,7 +355,7 @@ write_file($fn, <<EOF);
 { config, pkgs, ... }:
 
 {
-  imports = ${\multiLineList("    ", @imports)};
+  imports =${\multiLineList("    ", @imports)};
 
   boot.initrd.availableKernelModules = [$initrdAvailableKernelModules ];
   boot.kernelModules = [$kernelModules ];
