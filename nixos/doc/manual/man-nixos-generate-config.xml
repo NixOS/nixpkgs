@@ -118,6 +118,15 @@
     </listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><option>--show-hardware-config</option></term>
+    <listitem>
+      <para>Don't generate <filename>configuration.nix</filename> or
+      <filename>hardware-configuration.nix</filename> and print the
+      hardware configuration to stdout only.</para>
+    </listitem>
+  </varlistentry>
+
 </variablelist>
 
 </refsection>
