@@ -937,6 +937,32 @@ rec {
       unifiedSystemDir = true;
     };
 
+    fedora19i386 = {
+      name = "fedora-19-i386";
+      fullName = "Fedora 19 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/19/Everything/i386/os/repodata/b72220bcdefff8b38de1c9029a630db4813e073f88c4b080ca274d133e0460d1-primary.xml.gz;
+        sha256 = "b72220bcdefff8b38de1c9029a630db4813e073f88c4b080ca274d133e0460d1";
+      };
+      urlPrefix = mirror://fedora/linux/releases/19/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora19x86_64 = {
+      name = "fedora-19-x86_64";
+      fullName = "Fedora 19 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/19/Everything/x86_64/os/repodata/d3f67da6461748f57a06459e6877fd07858828e256f58f032704186a65430fd3-primary.xml.gz;
+        sha256 = "d3f67da6461748f57a06459e6877fd07858828e256f58f032704186a65430fd3";
+      };
+      urlPrefix = mirror://fedora/linux/releases/19/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
     opensuse103i386 = {
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
