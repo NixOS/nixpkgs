@@ -60,8 +60,7 @@ with pkgs.lib;
       };
 
       vfolder = mkOption {
-        default = ./fuppes/vfolder.cfg;
-        example = /etc/fuppes/vfolder.cfg;
+        example = literalExample "/etc/fuppes/vfolder.cfg";
         description = ''
           XML file describing the layout of virtual folder visible by the
           client.
@@ -108,6 +107,8 @@ with pkgs.lib;
     };
 
     services.fuppesd.name = mkDefault config.networking.hostName;
+
+    services.fuppesd.vfolder = mkDefault ./fuppes/vfolder.cfg;
 
     security.sudo.enable = true;
   };

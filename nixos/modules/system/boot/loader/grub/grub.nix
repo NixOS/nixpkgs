@@ -167,15 +167,7 @@ in
       };
 
       splashImage = mkOption {
-        default =
-          if cfg.version == 1
-          then pkgs.fetchurl {
-            url = http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz;
-            sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
-          }
-          # GRUB 1.97 doesn't support gzipped XPMs.
-          else ./winkler-gnu-blue-640x480.png;
-        example = null;
+        example = literalExample "./my-background.png";
         description = ''
           Background image used for GRUB.  It must be a 640x480,
           14-colour image in XPM format, optionally compressed with
@@ -230,6 +222,14 @@ in
   config = mkIf cfg.enable {
 
     boot.loader.grub.devices = optional (cfg.device != "") cfg.device;
+
+    boot.loader.grub.splashImage = mkDefault (
+      if cfg.version == 1 then pkgs.fetchurl {
+        url = http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz;
+        sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
+      }
+      # GRUB 1.97 doesn't support gzipped XPMs.
+      else ./winkler-gnu-blue-640x480.png);
 
     system.build.installBootLoader =
       if cfg.devices == [] then
