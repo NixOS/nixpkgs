@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "uuid";
-  version = "1.3.0";
-  sha256 = "0bzgprrag170j55vwi03lc6h4lk6cl9jsbawcp9nc7hivkqib26j";
+  version = "1.3.2";
+  sha256 = "0kwrb200i41l8ipgwviv934sa2ic2hqvlpj72pmkw4ba50viyc8m";
   buildDepends = [
     binary cryptohash deepseq hashable networkInfo random time
   ];
