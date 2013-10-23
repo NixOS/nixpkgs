@@ -7,11 +7,11 @@ assert !stdenv.isLinux -> unzip != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "synergy-1.4.14";
+  name = "synergy-1.4.15";
 
   src = fetchurl {
     url = "http://synergy.googlecode.com/files/${name}-Source.tar.gz";
-    sha256 = "1sprg3yb0gjhl2927l4c5nymmqhg318ar6dpki8dr42dgvx3d2ir";
+    sha256 = "0l1mxxky9hacyva0npzkgkwg4wkmihzq3abdrds0w5f6is44adv4";
   };
 
   patches = optional stdenv.isLinux ./cryptopp.patch;
