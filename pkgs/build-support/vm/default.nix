@@ -1335,6 +1335,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1310i386 = {
+      name = "ubuntu-13.10-saucy-i386";
+      fullName = "Ubuntu 13.10 Saucy (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/saucy/main/binary-i386/Packages.bz2;
+            sha256 = "9b35d44a737e6aa7e1cb5e2b52ba0ed8717c8820b3950c2e7ade07024db9c138";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/saucy/universe/binary-i386/Packages.bz2;
+            sha256 = "84ff81ef23bcece68bfc3dd4b0b1fd38e5b81ac90ad48b4e4210396b425da500";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1310x86_64 = {
+      name = "ubuntu-13.10-saucy-amd64";
+      fullName = "Ubuntu 13.10 Saucy (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/saucy/main/binary-amd64/Packages.bz2;
+            sha256 = "d000968f9653d7c25928002b0850fe2da97607682f63a351eb2c89896a219a12";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/saucy/universe/binary-amd64/Packages.bz2;
+            sha256 = "06ec77f2f5d6ee70ffb805affe3a6b3e8d5b6463fbfe42ba6588295c7e1f65bc";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
@@ -1515,6 +1549,7 @@ rec {
     "curl"
     "patch"
     "locales"
+    "coreutils"
     # Needed by checkinstall:
     "util-linux"
     "file"
