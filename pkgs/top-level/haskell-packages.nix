@@ -1370,6 +1370,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   languageCQuote = callPackage ../development/libraries/haskell/language-c-quote {};
 
+  languageEcmascript = callPackage ../development/libraries/haskell/language-ecmascript {};
+
   languageJava = callPackage ../development/libraries/haskell/language-java {};
 
   languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
