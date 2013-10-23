@@ -94,7 +94,7 @@ in
           Enable Munin Node agent. Munin node listens on 0.0.0.0 and
           by default accepts connections only from 127.0.0.1 for security reasons.
 
-          See <link xlink:href='http://munin-monitoring.org/wiki/munin-node' />.
+          See <link xlink:href='http://munin-monitoring.org/wiki/munin-node.conf' />.
         '';
       };
       
@@ -143,7 +143,7 @@ in
         default = "";
         description = ''
           <filename>munin.conf</filename> extra global configuration.
-          See <link xlink:href='http://munin-monitoring.org/wiki/munin-node' />.
+          See <link xlink:href='http://munin-monitoring.org/wiki/munin.conf' />.
           Useful to setup notifications, see
           <link xlink:href='http://munin-monitoring.org/wiki/HowToContact' />
         '';
