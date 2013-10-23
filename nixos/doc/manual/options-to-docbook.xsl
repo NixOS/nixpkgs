@@ -125,6 +125,11 @@
   </xsl:template>
 
 
+  <xsl:template match="attrs[attr[@name = '_type' and string[@value = 'literalExample']]]">
+    <xsl:value-of select="attr[@name = 'text']/string/@value" />
+  </xsl:template>
+
+
   <xsl:template match="attrs">
     {
     <xsl:for-each select="attr">
