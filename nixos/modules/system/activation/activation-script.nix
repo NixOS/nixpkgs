@@ -44,8 +44,12 @@ in
       };
 
       description = ''
-        Activate the new configuration (i.e., update /etc, make accounts,
-        and so on).
+        A set of shell script fragments that are executed when a NixOS
+        system configuration is activated.  Examples are updating
+        /etc, creating accounts, and so on.  Since these are executed
+        every time you boot the system or run
+        <command>nixos-rebuild</command>, it's important that they are
+        idempotent and fast.
       '';
 
       merge = mergeTypedOption "script" builtins.isAttrs (fold mergeAttrs {});
