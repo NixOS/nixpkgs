@@ -7,14 +7,8 @@ with pkgs.lib;
 
 let
 
-  # To prevent infinite recursion, remove system.path from the
-  # options.  Not sure why this happens.
-  options_ =
-    options //
-    { system = removeAttrs options.system ["path"]; };
-
   optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
-    (builtins.toXML (optionAttrSetToDocList options_)));
+    (builtins.toXML (optionAttrSetToDocList options)));
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
     ${pkgs.libxslt}/bin/xsltproc \
