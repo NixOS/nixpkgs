@@ -219,38 +219,43 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkMerge [
 
-    boot.loader.grub.devices = optional (cfg.device != "") cfg.device;
+    { boot.loader.grub.splashImage = mkDefault (
+        if cfg.version == 1 then pkgs.fetchurl {
+          url = http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz;
+          sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
+        }
+        # GRUB 1.97 doesn't support gzipped XPMs.
+        else ./winkler-gnu-blue-640x480.png);
+    }
 
-    boot.loader.grub.splashImage = mkDefault (
-      if cfg.version == 1 then pkgs.fetchurl {
-        url = http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz;
-        sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
-      }
-      # GRUB 1.97 doesn't support gzipped XPMs.
-      else ./winkler-gnu-blue-640x480.png);
+    (mkIf cfg.enable {
 
-    system.build.installBootLoader =
-      if cfg.devices == [] then
-        throw "You must set the ‘boot.loader.grub.device’ option to make the system bootable."
-      else
-        "PERL5LIB=${makePerlPath [ pkgs.perlPackages.XMLLibXML pkgs.perlPackages.XMLSAX ]} " +
-        "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
+      boot.loader.grub.devices = optional (cfg.device != "") cfg.device;
 
-    system.build.grub = grub;
+      system.build.installBootLoader =
+        if cfg.devices == [] then
+          throw "You must set the ‘boot.loader.grub.device’ option to make the system bootable."
+        else
+          "PERL5LIB=${makePerlPath [ pkgs.perlPackages.XMLLibXML pkgs.perlPackages.XMLSAX ]} " +
+          "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
 
-    # Common attribute for boot loaders so only one of them can be
-    # set at once.
-    system.boot.loader.id = "grub";
+      system.build.grub = grub;
 
-    environment.systemPackages = [ grub ];
+      # Common attribute for boot loaders so only one of them can be
+      # set at once.
+      system.boot.loader.id = "grub";
 
-    boot.loader.grub.extraPrepareConfig =
-      concatStrings (mapAttrsToList (n: v: ''
-        ${pkgs.coreutils}/bin/cp -pf "${v}" "/boot/${n}"
-      '') config.boot.loader.grub.extraFiles);
+      environment.systemPackages = [ grub ];
 
-  };
+      boot.loader.grub.extraPrepareConfig =
+        concatStrings (mapAttrsToList (n: v: ''
+          ${pkgs.coreutils}/bin/cp -pf "${v}" "/boot/${n}"
+        '') config.boot.loader.grub.extraFiles);
+
+    })
+
+  ];
 
 }
