@@ -514,7 +514,8 @@ rec {
 
       echo "%_topdir $rpmout" >> $HOME/.rpmmacros
 
-      rpmbuild -vv -ta "$srcName"
+      if [ `uname -m` = i686 ]; then extra="--target i686-linux"; fi
+      rpmbuild -vv $extra -ta "$srcName"
 
       eval "$postBuild"
     '';
