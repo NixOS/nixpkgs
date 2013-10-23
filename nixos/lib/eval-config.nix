@@ -66,7 +66,6 @@ rec {
   # Optionally check wether all config values have corresponding
   # option declarations.
   config =
-    let doCheck = optionDefinitions.environment.checkConfigurationOptions; in
-    assert doCheck -> pkgs.lib.checkModule "" systemModule;
+    assert optionDefinitions.environment.checkConfigurationOptions -> pkgs.lib.checkModule "" systemModule;
     systemModule.config;
 }

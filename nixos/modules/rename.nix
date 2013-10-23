@@ -30,7 +30,8 @@ let
     zipAttrsWith (n: v:
       if tail v != [] then
         if n == "_type" then (head v)
-        else if n == "extraConfigs" then (concatLists v)
+        else if n == "extraConfigs" then concatLists v
+        else if n == "warnings" then concatLists v
         else if n == "description" || n == "apply" then
           abort "Cannot rename an option to multiple options."
         else zipModules v
@@ -61,6 +62,15 @@ let
           });
         }
       ];
+
+  obsolete' = option: let option' = splitString "." option; in singleton
+    { options = setAttrByPath option' (mkOption {
+        default = null;
+        visible = false;
+      });
+      config.warnings = optional (getAttrFromPath option' config != null)
+        "The option `${option}' set in your configuration no longer has any effect; please remove it.";
+    };
 
 in zipModules ([]
 
@@ -107,5 +117,9 @@ in zipModules ([]
 # NixOS environment changes
 # !!! this hardcodes bash, could we detect from config which shell is actually used?
 ++ rename obsolete "environment.promptInit" "programs.bash.promptInit"
+
+# Options that are obsolete and have no replacement.
+++ obsolete' "boot.loader.grub.bootDevice"
+++ obsolete' "boot.initrd.luks.enable"
 
 ) # do not add renaming after this.

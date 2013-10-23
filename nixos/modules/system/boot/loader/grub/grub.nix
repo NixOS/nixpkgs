@@ -86,12 +86,6 @@ in
         '';
       };
 
-      # !!! How can we mark options as obsolete?
-      bootDevice = mkOption {
-        default = "";
-        description = "Obsolete.";
-      };
-
       configurationName = mkOption {
         default = "";
         example = "Stable 2.6.21";

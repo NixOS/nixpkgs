@@ -44,12 +44,9 @@ in
 {
 
   options = {
-    boot.initrd.luks.enable = mkOption {
-      default = false;
-      description = "Obsolete.";
-    };
 
     boot.initrd.luks.mitigateDMAAttacks = mkOption {
+      type = types.bool;
       default = true;
       description = ''
         Unless enabled, encryption keys can be easily recovered by an attacker with physical
@@ -62,6 +59,7 @@ in
     };
 
     boot.initrd.luks.cryptoModules = mkOption {
+      type = types.listOf types.string;
       default =
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
@@ -142,7 +140,9 @@ in
         };
 
       };
+
     };
+
   };
 
   config = mkIf (luks.devices != []) {
