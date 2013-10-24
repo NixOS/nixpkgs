@@ -79,9 +79,12 @@ in rec {
 
       cp ${./style.css} $dst/style.css
 
-      ensureDir $out/nix-support
+      mkdir -p $out/nix-support
+      echo "nix-build out $out" >> $out/nix-support/hydra-build-products
       echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
     ''; # */
+
+    meta.description = "The NixOS manual in HTML format";
   };
 
   # Generate the NixOS manpages.
@@ -102,7 +105,7 @@ in rec {
         ./man-pages.xml
 
       # Generate manpages.
-      ensureDir $out/share/man
+      mkdir -p $out/share/man
       xsltproc --nonet --xinclude \
         --param man.output.in.separate.dir 1 \
         --param man.output.base.dir "'$out/share/man/'" \
