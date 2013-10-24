@@ -73,7 +73,7 @@ let
         };
 
 
-in {
+in rec {
 
   channel =
     pkgs.releaseTools.makeSourceTarball {
@@ -107,18 +107,7 @@ in {
     };
 
 
-  manual =
-    (import ./doc/manual {
-      inherit pkgs;
-      options =
-        (import lib/eval-config.nix {
-          modules = [
-            { fileSystems = [];
-              boot.loader.grub.device = "/dev/sda";
-            } ];
-        }).options;
-      revision = toString (nixpkgs.rev or nixpkgs.shortRev);
-    }).manual;
+  manual = iso_minimal.x86_64-linux.config.system.build.manual.manual;
 
 
   iso_minimal = pkgs.lib.genAttrs systems (system: makeIso {
