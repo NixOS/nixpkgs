@@ -2,11 +2,11 @@
 , libvorbis, freetype, openal, mesa }:
 
 stdenv.mkDerivation rec {
-  name = "alienarena-7.52";
+  name = "alienarena-7.65";
 
   src = fetchurl {
-    url = "http://icculus.org/alienarena/Files/alienarena-7_52-linux20110929.tar.gz";
-    sha256 = "1s1l3apxsxnd8lyi568y38a1fcdr0gwmc3lkgq2nkc676k4gki3m";
+    url = "http://icculus.org/alienarena/Files/alienarena-7.65-linux20130207.tar.gz";
+    sha256 = "03nnv4m2xmswr0020hssajncdb8sy95jp5yccsm53sgxga4r8igg";
   };
 
   buildInputs = [ pkgconfig libjpeg libX11 curl libogg libvorbis
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace ./configure \
-      --replace libopenal.so.1 ${openal}/lib/libopenal.so.1
+      --replace libopenal.so.1 ${openal}/lib/libopenal.so.1 \
+      --replace libGL.so.1 ${mesa}/lib/libGL.so.1
   '';
 
   meta = {
