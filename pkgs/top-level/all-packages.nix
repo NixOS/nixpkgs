@@ -6295,6 +6295,8 @@ let
     inherit xmpppy python makeWrapper fetchcvs;
   };
 
+  qpid-cpp = callPackage ../servers/amqp/qpid-cpp { };
+
   rabbitmq_server = callPackage ../servers/amqp/rabbitmq-server { };
 
   radius = callPackage ../servers/radius { };
