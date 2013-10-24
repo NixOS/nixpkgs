@@ -16,7 +16,9 @@ let
 
 
   versionModule =
-    { system.nixosVersionSuffix = versionSuffix;  };
+    { system.nixosVersionSuffix = versionSuffix;
+      system.nixosRevision = nixpkgs.rev or nixpkgs.shortRev;
+    };
 
 
   makeIso =

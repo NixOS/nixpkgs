@@ -18,6 +18,12 @@ with pkgs.lib;
       description = "NixOS version suffix.";
     };
 
+    system.nixosRevision = mkOption {
+      internal = true;
+      type = types.uniq types.string;
+      description = "NixOS Git revision hash.";
+    };
+
     system.nixosCodeName = mkOption {
       internal = true;
       type = types.uniq types.string;
@@ -41,6 +47,10 @@ with pkgs.lib;
     system.nixosVersionSuffix =
       let suffixFile = "${toString pkgs.path}/.version-suffix"; in
       mkDefault (if pathExists suffixFile then readFile suffixFile else "pre-git");
+
+    system.nixosRevision =
+      let fn = "${toString pkgs.path}/.git-revision"; in
+      mkDefault (if pathExists fn then readFile fn else "master");
 
     # Note: code names must only increase in alphabetical order.
     system.nixosCodeName = "Aardvark";

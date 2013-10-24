@@ -11,12 +11,15 @@ let
 
   cfg = config.services.nixosManual;
 
+  versionModule =
+    { system.nixosVersionSuffix = config.system.nixosVersionSuffix;
+      system.nixosRevision = config.system.nixosRevision;
+    };
+
   manual = import ../../../doc/manual {
     inherit pkgs;
-    revision =
-      let fn = "${toString pkgs.path}/.git-revision";
-      in if pathExists fn then readFile fn else "master";
-    options = (fixMergeModules baseModules
+    revision = config.system.nixosRevision;
+    options = (fixMergeModules ([ versionModule ] ++ baseModules)
       (removeAttrs extraArgs ["config" "options"]) // {
         modules = [ ];
       }).options;
