@@ -413,28 +413,9 @@ EOF
       ./hardware-configuration.nix
     ];
 
-  boot.initrd.kernelModules =
-    [ # Specify all kernel modules that are necessary for mounting the root
-      # filesystem.
-      # "xfs" "ata_piix"
-      # fbcon # Uncomment this when EFI booting to see the console before the root partition is mounted
-    ];
-
 $bootLoaderConfig
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless.
-
-  # Add filesystem entries for each partition that you want to see
-  # mounted at boot time.  This should include at least the root
-  # filesystem.
-
-  # fileSystems."/".device = "/dev/disk/by-label/nixos";
-
-  # fileSystems."/data" =     # where you want to mount the device
-  #   { device = "/dev/sdb";  # the device
-  #     fsType = "ext3";      # the type of the partition
-  #     options = "data=journal";
-  #   };
 
   # Select internationalisation properties.
   # i18n = {
