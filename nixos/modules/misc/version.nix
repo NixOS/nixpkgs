@@ -24,6 +24,13 @@ with pkgs.lib;
       description = "NixOS release code name.";
     };
 
+    system.defaultChannel = mkOption {
+      internal = true;
+      type = types.uniq types.string;
+      default = https://nixos.org/channels/nixos-unstable;
+      description = "Default NixOS channel to which the root user is subscribed.";
+    };
+
   };
 
   config = {
