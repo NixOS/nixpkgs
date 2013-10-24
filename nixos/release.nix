@@ -110,6 +110,7 @@ in rec {
 
 
   manual = iso_minimal.x86_64-linux.config.system.build.manual.manual;
+  manpages = iso_minimal.x86_64-linux.config.system.build.manual.manpages;
 
 
   iso_minimal = pkgs.lib.genAttrs systems (system: makeIso {
