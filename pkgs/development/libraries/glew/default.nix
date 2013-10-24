@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "11xpmsw7m5qn7y8fa2ihhqcislz1bdd83mp99didd5ac84756dlv";
   };
 
+
   buildInputs = [ x11 libXmu libXi ];
   propagatedBuildInputs = [ mesa_glu ]; # GL/glew.h includes GL/glu.h
 
@@ -15,8 +16,9 @@ stdenv.mkDerivation rec {
     sed -i 's|lib64|lib|' config/Makefile.linux
   '';
 
+buildPhase = "make all";
   installPhase = ''
-    GLEW_DEST=$out make install
+    GLEW_DEST=$out make install.all
     mkdir -pv $out/share/doc/glew
     mkdir -p $out/lib/pkgconfig
     cp glew*.pc $out/lib/pkgconfig
