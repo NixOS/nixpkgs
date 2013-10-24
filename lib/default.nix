@@ -22,6 +22,8 @@ let
 in
   { inherit trivial lists strings stringsWithDeps attrsets sources options
       properties modules types meta debug maintainers licenses platforms systems;
+    # Pull in some builtins not included elsewhere.
+    inherit (builtins) pathExists readFile;
   }
   # !!! don't include everything at top-level; perhaps only the most
   # commonly used functions.

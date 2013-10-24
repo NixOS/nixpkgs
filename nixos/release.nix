@@ -91,6 +91,7 @@ in {
       distPhase = ''
         rm -rf .git
         echo -n $VERSION_SUFFIX > .version-suffix
+        echo -n ${nixpkgs.rev or nixpkgs.shortRev} > .git-revision
         releaseName=nixos-$VERSION$VERSION_SUFFIX
         mkdir -p $out/tarballs
         mkdir ../$releaseName

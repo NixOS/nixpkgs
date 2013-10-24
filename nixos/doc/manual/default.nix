@@ -1,6 +1,5 @@
 { pkgs, options
-# revision can have multiple values: local, HEAD or any revision number.
-, revision ? "HEAD"
+, revision ? "master"
 }:
 
 with pkgs.lib;

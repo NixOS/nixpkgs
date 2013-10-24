@@ -12,8 +12,10 @@ let
   cfg = config.services.nixosManual;
 
   manual = import ../../../doc/manual {
-    inherit (cfg) revision;
     inherit pkgs;
+    revision =
+      let fn = "${toString pkgs.path}/.git-revision";
+      in if pathExists fn then readFile fn else "master";
     options = (fixMergeModules baseModules
       (removeAttrs extraArgs ["config" "options"]) // {
         modules = [ ];
@@ -72,16 +74,6 @@ in
       default = "${pkgs.w3m}/bin/w3m";
       description = ''
         Browser used to show the manual.
-      '';
-    };
-
-    services.nixosManual.revision = mkOption {
-      default = "local";
-      type = types.uniq types.string;
-      description = ''
-        Revision of the targeted source file.  This value can either be
-        <literal>"local"</literal>, <literal>"HEAD"</literal> or any
-        revision number embedded in a string.
       '';
     };
 
