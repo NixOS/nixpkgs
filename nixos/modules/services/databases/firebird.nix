@@ -151,12 +151,12 @@ in
       #RemoteBindAddress =
       # there are some additional settings which should be reviewed
     '';
-    };
 
     users.extraUsers.firebird = {
-      description = "firebird server user";
+      description = "Firebird server user";
       group = "firebird";
       uid = config.ids.uids.firebird;
     };
 
+  };
 }
