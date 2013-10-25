@@ -9287,6 +9287,10 @@ let
 
   racer = callPackage ../games/racer { };
 
+  residualvm = callPackage ../games/residualvm { 
+    openglSupport = mesaSupported; 
+  };
+
   rigsofrods = callPackage ../games/rigsofrods {
     mygui = myguiSvn;
   };
