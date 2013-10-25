@@ -9303,6 +9303,10 @@ let
 
   scummvm = callPackage ../games/scummvm { };
 
+  residualvm = callPackage ../games/residualvm { 
+    openglSupport = mesaSupported; 
+  };
+
   scorched3d = callPackage ../games/scorched3d { };
 
   sdlmame = callPackage ../games/sdlmame { };
