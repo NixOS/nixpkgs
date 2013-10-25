@@ -1402,6 +1402,36 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  faker = buildPythonPackage rec {
+    name = "faker-0.0.4";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/F/Faker/Faker-0.0.4.tar.gz;
+      sha256 = "09q5jna3j8di0gw5yjx0dvlndkrk2x9vvqzwyfsvg3nlp8h38js1";
+    };
+    buildInputs = [ nose ];
+    meta = with stdenv.lib; {
+      description = "A Python library for generating fake user data.";
+      homepage    = http://pypi.python.org/pypi/Faker;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
+
+  fake_factory = buildPythonPackage rec {
+    name = "fake-factory-0.2";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/f/fake-factory/fake-factory-0.2.tar.gz;
+      sha256 = "0qdmk8p4anrj9mf95dh9v7bkhv1pz69hvhlw380kj4iz7b44b6zn";
+    };
+    meta = with stdenv.lib; {
+      description = "A Python package that generates fake data for you.";
+      homepage    = https://pypi.python.org/pypi/fake-factory;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
 
   fabric = buildPythonPackage rec {
     name = "fabric-1.6.1";
