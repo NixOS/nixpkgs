@@ -1912,6 +1912,8 @@ let
   unoconv = callPackage ../tools/text/unoconv { };
 
   upx = callPackage ../tools/compression/upx { };
+ 
+  urlview = callPackage ../applications/misc/urlview {};
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
@@ -9286,6 +9288,10 @@ let
   quake3game = callPackage ../games/quake3/game { };
 
   racer = callPackage ../games/racer { };
+
+  residualvm = callPackage ../games/residualvm { 
+    openglSupport = mesaSupported; 
+  };
 
   rigsofrods = callPackage ../games/rigsofrods {
     mygui = myguiSvn;
