@@ -13,7 +13,7 @@ let version = "0.0.3"; in stdenv.mkDerivation {
   meta = {
     description = "A statically typed programming language that unifies implementation with formal specification";
     homepage = http://www.ats-lang.org/;
-    license = stdenv.lib.gpl3Plus;
+    license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }
