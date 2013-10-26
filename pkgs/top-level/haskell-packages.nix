@@ -680,7 +680,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   caseInsensitive_1_0_0_1 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.1.nix {};
   caseInsensitive_1_1_0_1 = callPackage ../development/libraries/haskell/case-insensitive/1.1.0.1.nix {};
-  caseInsensitive = self.caseInsensitive_1_1;
+  caseInsensitive = self.caseInsensitive_1_1_0_1;
 
   cautiousFile = callPackage ../development/libraries/haskell/cautious-file {};
 
