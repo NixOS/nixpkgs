@@ -3396,6 +3396,15 @@ rec {
     propagatedBuildInputs = [ HTTPDate ];
   };
 
+  FileMimeInfo = buildPerlPackage {
+    name = "File-MimeInfo-0.20";
+    src = fetchurl {
+      url = "http://search.cpan.org/CPAN/authors/id/M/MI/MICHIELB/File-MimeInfo-0.20.tar.gz";
+      sha256 = "1738yi3a0xcbvffqymjb6cyh999q4pryalfwbkmdbjdks2y0bxz0";
+    };
+    propagatedBuildInputs = [ FileBaseDir FileDesktopEntry ];
+  };
+
   FileModified = buildPerlPackage {
     name = "File-Modified-0.07";
     src = fetchurl {
