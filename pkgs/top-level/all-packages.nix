@@ -7775,6 +7775,8 @@ let
 
   goldendict = callPackage ../applications/misc/goldendict { };
 
+  gpicview = callPackage ../applications/graphics/gpicview { };
+
   grass = import ../applications/misc/grass {
     inherit (xlibs) libXmu libXext libXp libX11 libXt libSM libICE libXpm
       libXaw libXrender;
