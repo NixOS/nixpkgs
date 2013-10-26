@@ -86,8 +86,8 @@ in
         default = [];
         description = "List of database names and their initial schemas that should be used to create databases on the first startup of MySQL";
         example = [
-          { name = "foodatabase"; schema = ./foodatabase.sql; }
-          { name = "bardatabase"; schema = ./bardatabase.sql; }
+          { name = "foodatabase"; schema = literalExample "./foodatabase.sql"; }
+          { name = "bardatabase"; schema = literalExample "./bardatabase.sql"; }
         ];
       };
 

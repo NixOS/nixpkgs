@@ -122,6 +122,7 @@ in
   options = {
 
     system.build = mkOption {
+      internal = true;
       default = {};
       description = ''
         Attribute set of derivations used to setup the system.
@@ -144,6 +145,7 @@ in
     };
 
     system.boot.loader.id = mkOption {
+      internal = true;
       default = "";
       description = ''
         Id string of the used bootloader.
@@ -151,6 +153,7 @@ in
     };
 
     system.boot.loader.kernelFile = mkOption {
+      internal = true;
       default = pkgs.stdenv.platform.kernelTarget;
       type = types.uniq types.string;
       description = ''
@@ -169,8 +172,8 @@ in
     };
 
     system.extraSystemBuilderCmds = mkOption {
-      default = "";
       internal = true;
+      default = "";
       merge = concatStringsSep "\n";
       description = ''
         This code will be added to the builder creating the system store path.

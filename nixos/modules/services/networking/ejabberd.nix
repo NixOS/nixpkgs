@@ -44,7 +44,7 @@ in
       loadDumps = mkOption {
         default = [];
         description = "Configuration dump that should be loaded on the first startup";
-        example = [ ./myejabberd.dump ];
+        example = literalExample "[ ./myejabberd.dump ]";
       };
     };
 

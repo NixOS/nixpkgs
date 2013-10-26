@@ -5,11 +5,11 @@ assert enableJabber -> minmay != null;
 
 let
 
-  version = "2.0.8";
+  version = "2.0.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/zabbix/zabbix-${version}.tar.gz";
-    sha256 = "16jiwjw4041j3qn1cs4k812mih8mjwz5022ac0h0n78avrh4kff4";
+    sha256 = "057fjqww0qzs56nm8m3c36kbrhwriysvjvqzgwm9j2bg9ylixvym";
   };
 
   preConfigure =
@@ -30,14 +30,6 @@ in
     name = "zabbix-${version}";
 
     inherit src preConfigure;
-
-    patchFlags = "-p0";
-    patches =
-      [ (fetchurl {
-          url = "https://support.zabbix.com/secure/attachment/24449/ZBX-7091-2.0.8.patch";
-          sha256 = "1rlk3812dd12imk29i0fw6bzpgi44a8231kiq3bl5yryx18qh580";
-        })
-      ];
 
     configureFlags = [
       "--enable-agent"

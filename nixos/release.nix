@@ -16,7 +16,9 @@ let
 
 
   versionModule =
-    { system.nixosVersionSuffix = versionSuffix;  };
+    { system.nixosVersionSuffix = versionSuffix;
+      system.nixosRevision = nixpkgs.rev or nixpkgs.shortRev;
+    };
 
 
   makeIso =
@@ -73,7 +75,7 @@ let
         };
 
 
-in {
+in rec {
 
   channel =
     pkgs.releaseTools.makeSourceTarball {
@@ -91,6 +93,7 @@ in {
       distPhase = ''
         rm -rf .git
         echo -n $VERSION_SUFFIX > .version-suffix
+        echo -n ${nixpkgs.rev or nixpkgs.shortRev} > .git-revision
         releaseName=nixos-$VERSION$VERSION_SUFFIX
         mkdir -p $out/tarballs
         mkdir ../$releaseName
@@ -106,18 +109,8 @@ in {
     };
 
 
-  manual =
-    (import ./doc/manual {
-      inherit pkgs;
-      options =
-        (import lib/eval-config.nix {
-          modules = [
-            { fileSystems = [];
-              boot.loader.grub.device = "/dev/sda";
-            } ];
-        }).options;
-      revision = toString (nixpkgs.rev or nixpkgs.shortRev);
-    }).manual;
+  manual = iso_minimal.x86_64-linux.config.system.build.manual.manual;
+  manpages = iso_minimal.x86_64-linux.config.system.build.manual.manpages;
 
 
   iso_minimal = pkgs.lib.genAttrs systems (system: makeIso {

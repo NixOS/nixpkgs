@@ -130,6 +130,7 @@
   ./services/monitoring/dd-agent.nix
   ./services/monitoring/graphite.nix
   ./services/monitoring/monit.nix
+  ./services/monitoring/munin.nix
   ./services/monitoring/nagios/default.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/statsd.nix
@@ -237,6 +238,7 @@
   ./services/x11/window-managers/twm.nix
   ./services/x11/window-managers/wmii.nix
   ./services/x11/window-managers/xmonad.nix
+  ./services/x11/redshift.nix
   ./services/x11/xfs.nix
   ./services/x11/xserver.nix
   ./system/activation/activation-script.nix

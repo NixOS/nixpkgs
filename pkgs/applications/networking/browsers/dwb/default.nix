@@ -6,8 +6,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "https://bitbucket.org/portix/dwb.git";
-    rev = "4a4c3adb8fbc680a0a2b8c9d3d3a4105c07c2514";
-    sha256 = "93e8f2c82609447d54a3c139c153cc66d37d3c6aa8922cd09717caa95fd8b1d5";
+    rev = "84a8621787baded72e84afdd5cdda278cb81e007";
+    sha256 = "5a32f3c21ad59b43935a16108244f84d260fafaea9b93d41e8de9ba9089ee7b0";
   };
 
   buildInputs = [ pkgconfig makeWrapper libsoup webkit gtk3 gnutls json_c m4  ];
@@ -21,6 +21,8 @@ stdenv.mkDerivation {
     wrapProgram "$out/bin/dwb" \
      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:$out/share"
+    wrapProgram "$out/bin/dwbem" \
+     --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules"
   '';
 
   meta = {

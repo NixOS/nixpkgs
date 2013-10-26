@@ -1,9 +1,11 @@
-{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl, freetype, glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf, libgcrypt, chromium, sqlite, gst_plugins_base, gstreamer }:
+{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl, freetype
+, glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
+, libgcrypt, chromium, sqlite, gst_plugins_base, gstreamer, udev }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 let
-  version = "0.9.1.55";
+  version = "0.9.4.183";
   qt4webkit =
     if stdenv.system == "i686-linux" then
       fetchurl {
@@ -25,13 +27,13 @@ stdenv.mkDerivation {
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.gbdd3b79.203-1_i386.deb";
-        sha256 = "1sls4gb85700126bbk4sz73ipa2rjcinmpnsi78q0bsdj365y2wc";
+        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.g644e24e.428-1_i386.deb";
+        sha256 = "1wl6v5x8vm74h5lxp8fhvmih8l122aadsf1qxvpk0k3y6mbx0ifa";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.gbdd3b79.203-1_amd64.deb";
-        sha256 = "10pzj3p8bjbxh9nnm4qc5s1hn9nh7hgh3vbwm0xblj9rn71wl03y";
+        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.g644e24e.428-1_amd64.deb";
+        sha256 = "1yniln6iswrrrny01qr2w5zcvam0vnrvy9mwbnk9i14i2ch0f3fx";
       }
     else throw "Spotify not supported on this platform.";
 
@@ -57,12 +59,15 @@ stdenv.mkDerivation {
       ln -s ${nspr}/lib/libnspr4.so $out/lib/libnspr4.so.0d
       ln -s ${nspr}/lib/libplc4.so $out/lib/libplc4.so.0d
 
+      # Work around Spotify trying to open libudev.so.0 (which we don't have)
+      ln -s ${udev}/lib/libudev.so.1 $out/lib/libudev.so.0
+
       mkdir -p $out/bin
 
       ln -s $out/spotify-client/spotify $out/bin/spotify
       patchelf \
         --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-        --set-rpath $out/lib:$out/spotify-client:${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib stdenv.gcc.gcc freetype glib pango cairo atk gdk_pixbuf gtk GConf cups sqlite]}:${stdenv.gcc.gcc}/lib64 \
+        --set-rpath $out/spotify-client/Data:$out/lib:$out/spotify-client:${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib stdenv.gcc.gcc freetype glib pango cairo atk gdk_pixbuf gtk GConf cups sqlite]}:${stdenv.gcc.gcc}/lib64 \
         $out/spotify-client/spotify
 
       dpkg-deb -x ${qt4webkit} ./
@@ -74,23 +79,20 @@ stdenv.mkDerivation {
       gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\" -fPIC
 
       wrapProgram $out/bin/spotify --set LD_PRELOAD $preload --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ GConf libpng cups libgcrypt sqlite gst_plugins_base gstreamer]}:$out/lib"
+
+      # Desktop file
+      mkdir -p "$out/share/applications/"
+      cp "$out/spotify-client/spotify.desktop" "$out/share/applications/"
+      sed -i "s|Icon=.*|Icon=$out/spotify-client/Icons/spotify-linux-512.png|" "$out/share/applications/spotify.desktop"
     ''; # */
 
   dontStrip = true;
   dontPatchELF = true;
 
   meta = {
-    homepage = https://www.spotify.com/download/previews/;
+    homepage = https://www.spotify.com/;
     description = "Spotify for Linux allows you to play music from the Spotify music service";
     license = "unfree";
     maintainers = [ stdenv.lib.maintainers.eelco ];
-
-    longDescription =
-      ''
-        Spotify is a digital music streaming service.  This package
-        provides the Spotify client for Linux.  At present, it does not
-        work with free Spotify accounts; it requires a Premium or
-        Unlimited account.
-      '';
   };
 }

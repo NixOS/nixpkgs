@@ -1,22 +1,37 @@
 { pkgs, options
-# revision can have multiple values: local, HEAD or any revision number.
-, revision ? "HEAD"
+, revision ? "master"
 }:
 
 with pkgs.lib;
 
 let
 
-  # To prevent infinite recursion, remove system.path from the
-  # options.  Not sure why this happens.
-  options_ =
-    options //
-    { system = removeAttrs options.system ["path"]; };
+  # Remove invisible and internal options.
+  options' = filter (opt: opt.visible && !opt.internal) (optionAttrSetToDocList options);
 
-  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext
-    (builtins.toXML (optionAttrSetToDocList options_)));
+  # Clean up declaration sites to not refer to the NixOS source tree.
+  options'' = flip map options' (opt: opt // {
+    declarations = map (fn: stripPrefix fn) opt.declarations;
+  });
+
+  prefix = toString pkgs.path;
+
+  stripPrefix = fn:
+    if substring 0 (stringLength prefix) fn == prefix then
+      substring (add (stringLength prefix) 1) 1000 fn
+    else
+      fn;
+
+  optionsXML = builtins.toFile "options.xml" (builtins.unsafeDiscardStringContext (builtins.toXML options''));
 
   optionsDocBook = pkgs.runCommand "options-db.xml" {} ''
+    if grep /nixpkgs/nixos/modules ${optionsXML}; then
+      echo "The manual appears to depend on the location of Nixpkgs, which is bad"
+      echo "since this prevents sharing via the NixOS channel.  This is typically"
+      echo "caused by an option default that refers to a relative path (see above"
+      echo "for hints about the offending path)."
+      exit 1
+    fi
     ${pkgs.libxslt}/bin/xsltproc \
       --stringparam revision '${revision}' \
       -o $out ${./options-to-docbook.xsl} ${optionsXML}
@@ -64,9 +79,12 @@ in rec {
 
       cp ${./style.css} $dst/style.css
 
-      ensureDir $out/nix-support
+      mkdir -p $out/nix-support
+      echo "nix-build out $out" >> $out/nix-support/hydra-build-products
       echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
     ''; # */
+
+    meta.description = "The NixOS manual in HTML format";
   };
 
   # Generate the NixOS manpages.
@@ -87,7 +105,7 @@ in rec {
         ./man-pages.xml
 
       # Generate manpages.
-      ensureDir $out/share/man
+      mkdir -p $out/share/man
       xsltproc --nonet --xinclude \
         --param man.output.in.separate.dir 1 \
         --param man.output.base.dir "'$out/share/man/'" \

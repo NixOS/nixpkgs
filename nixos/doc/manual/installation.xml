@@ -44,7 +44,7 @@ Wiki</link>.</para>
   <listitem><para>The NixOS manual is available on virtual console 8
   (press Alt+F8 to access).</para></listitem>
 
-  <listitem><para>Login as <literal>root</literal>, empty
+  <listitem><para>Login as <literal>root</literal> and the empty
   password.</para></listitem>
 
   <listitem><para>If you downloaded the graphical ISO image, you can
@@ -89,7 +89,13 @@ $ lvcreate --size 1G --name smalldisk MyVolGroup</screen>
   </para></listitem>
 
   <listitem><para>Mount the target file system on which NixOS should
-  be installed on <filename>/mnt</filename>.</para></listitem>
+  be installed on <filename>/mnt</filename>, e.g.
+
+<screen>
+$ mount /dev/disk/by-label/nixos /mnt
+</screen>
+
+  </para></listitem>
 
   <listitem>
 
@@ -97,40 +103,56 @@ $ lvcreate --size 1G --name smalldisk MyVolGroup</screen>
     <filename>/mnt/etc/nixos/configuration.nix</filename> that
     specifies the intended configuration of the system.  This is
     because NixOS has a <emphasis>declarative</emphasis> configuration
-    model: you create or edit a description of the configuration that
-    you want to be built and activated, and then NixOS takes care of
-    realising that configuration.  The command
-    <command>nixos-option</command> can generate an initial
-    configuration file for you:
+    model: you create or edit a description of the desired
+    configuration of your system, and then NixOS takes care of making
+    it happen.  The syntax of the NixOS configuration file is
+    described in <xref linkend="sec-configuration-syntax"/>, while a
+    list of available configuration options appears in <xref
+    linkend="ch-options"/>.  A minimal example is shown in <xref
+    linkend="ex-config"/>.</para>
+
+    <para>The command <command>nixos-generate-config</command> can
+    generate an initial configuration file for you:
 
 <screen>
-$ nixos-option --install</screen>
+$ nixos-generate-config --root /mnt</screen>
 
-    It tries to figure out the kernel modules necessary for mounting
-    the root device, as well as various other hardware
-    characteristics.  However, it doesn’t try to figure out the
-    <option>fileSystems</option> option yet.</para>
-
-    <para>You should edit
+    You should then edit
     <filename>/mnt/etc/nixos/configuration.nix</filename> to suit your
-    needs.  The text editors <command>nano</command> and
-    <command>vim</command> are available.</para>
+    needs:
 
-    <para>You need to specify a root file system in
-    <option>fileSystems</option> and the target device for the Grub boot
-    loader in <option>boot.loader.grub.device</option>.  See
-    <xref linkend="ch-options"/> for a list of the available configuration
-    options.</para>
+<screen>
+$ nano /mnt/etc/nixos/configuration.nix
+</screen>
 
-    <note><para>It is very important that you specify in the option
-    <option>boot.initrd.kernelModules</option> all kernel modules that
-    are necessary for mounting the root file system, otherwise the
-    installed system will not be able to boot.  (If this happens, boot
-    from the CD again, mount the target file system on
+    The <command>vim</command> text editor is also available.</para>
+
+    <para>You <emphasis>must</emphasis> set the option
+    <option>boot.loader.grub.device</option> to specify on which disk
+    the GRUB boot loader is to be installed.  Without it, NixOS cannot
+    boot.</para>
+
+    <para>Another critical option is <option>fileSystems</option>,
+    specifying the file systems that need to be mounted by NixOS.
+    However, you typically don’t need to set it yourself, because
+    <command>nixos-generate-config</command> sets it automatically in
+    <filename>/mnt/etc/nixos/hardware-configuration.nix</filename>
+    from your currently mounted file systems.  (The configuration file
+    <filename>hardware-configuration.nix</filename> is included from
+    <filename>configuration.nix</filename> and will be overwritten by
+    future invocations of <command>nixos-generate-config</command>;
+    thus, you generally should not modify it.)</para>
+
+    <note><para>Depending on your hardware configuration or type of
+    file system, you may need to set the option
+    <option>boot.initrd.kernelModules</option> to include the kernel
+    modules that are necessary for mounting the root file system,
+    otherwise the installed system will not be able to boot.  (If this
+    happens, boot from the CD again, mount the target file system on
     <filename>/mnt</filename>, fix
     <filename>/mnt/etc/nixos/configuration.nix</filename> and rerun
     <filename>nixos-install</filename>.)  In most cases,
-    <command>nixos-option --install</command> will figure out the
+    <command>nixos-generate-config</command> will figure out the
     required modules.</para></note>
 
     <para>Examples of real-world NixOS configuration files can be
@@ -218,7 +240,7 @@ $ fdisk /dev/sda <lineannotation>(or whatever device you want to install on)</li
 $ mkfs.ext4 -L nixos /dev/sda1 <lineannotation>(idem)</lineannotation>
 $ mkswap -L swap /dev/sda2 <lineannotation>(idem)</lineannotation>
 $ mount LABEL=nixos /mnt
-$ nixos-option --install
+$ nixos-generate-config
 $ nano /mnt/etc/nixos/configuration.nix
 <lineannotation>(in particular, set the fileSystems and swapDevices options)</lineannotation>
 $ nixos-install
@@ -228,8 +250,16 @@ $ reboot</screen>
 <example xml:id='ex-config'><title>NixOS configuration</title>
 <screen>
 {
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
+
   boot.loader.grub.device = "/dev/sda";
 
+  # Note: setting fileSystems and swapDevices is generally not
+  # necessary, since nixos-generate-config has set them automatically
+  # in hardware-configuration.nix.
   fileSystems."/".device = "/dev/disk/by-label/nixos";
 
   swapDevices =

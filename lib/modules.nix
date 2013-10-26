@@ -185,8 +185,7 @@ rec {
     ) funs;
 
 
-  moduleMerge = path: modules:
-    let modules_ = modules; in
+  moduleMerge = path: modules_:
     let
       addName = name:
         if path == "" then name else path + "." + name;

@@ -141,7 +141,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     inherit (self) cabal ghc;
     async        = self.async_2_0_1_4;
     attoparsec   = self.attoparsec_0_10_4_0;
-    caseInsensitive = self.caseInsensitive_1_1;
+    caseInsensitive = self.caseInsensitive_1_1_0_1;
     cgi          = self.cgi_3001_1_7_5;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_5_0_1;
@@ -677,8 +677,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   carray = callPackage ../development/libraries/haskell/carray {};
 
   caseInsensitive_1_0_0_1 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.1.nix {};
-  caseInsensitive_1_1 = callPackage ../development/libraries/haskell/case-insensitive/1.1.nix {};
-  caseInsensitive = self.caseInsensitive_1_1;
+  caseInsensitive_1_1_0_1 = callPackage ../development/libraries/haskell/case-insensitive/1.1.0.1.nix {};
+  caseInsensitive = self.caseInsensitive_1_1_0_1;
 
   cautiousFile = callPackage ../development/libraries/haskell/cautious-file {};
 
@@ -1170,6 +1170,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
 
+  HTF = callPackage ../development/libraries/haskell/HTF {};
+
   HTTP_4000_0_6 = callPackage ../development/libraries/haskell/HTTP/4000.0.6.nix {};
   HTTP_4000_0_9 = callPackage ../development/libraries/haskell/HTTP/4000.0.9.nix {};
   HTTP_4000_1_1 = callPackage ../development/libraries/haskell/HTTP/4000.1.1.nix {};
@@ -1257,9 +1259,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
 
-  hslua = callPackage ../development/libraries/haskell/hslua {
-    lua = pkgs.lua5_1;
-  };
+  hslua = callPackage ../development/libraries/haskell/hslua {};
 
   HSH = callPackage ../development/libraries/haskell/HSH {};
 
@@ -1367,6 +1367,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   languageC = callPackage ../development/libraries/haskell/language-c {};
 
   languageCQuote = callPackage ../development/libraries/haskell/language-c-quote {};
+
+  languageEcmascript = callPackage ../development/libraries/haskell/language-ecmascript {};
 
   languageJava = callPackage ../development/libraries/haskell/language-java {};
 
@@ -2077,6 +2079,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   text_0_11_3_1 = callPackage ../development/libraries/haskell/text/0.11.3.1.nix {};
   text = self.text_0_11_3_1;
 
+  textFormat = callPackage ../development/libraries/haskell/text-format {};
+
   textIcu = callPackage ../development/libraries/haskell/text-icu {};
 
   thespian = callPackage ../development/libraries/haskell/thespian {};
@@ -2275,6 +2279,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   xml = callPackage ../development/libraries/haskell/xml {};
 
   xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
+
+  xmlgen = callPackage ../development/libraries/haskell/xmlgen {};
 
   xmlHamlet = callPackage ../development/libraries/haskell/xml-hamlet {};
 

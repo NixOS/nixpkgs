@@ -186,6 +186,12 @@
     url = http://www.mozilla.org/MPL/MPL-1.1.html;
   };
 
+  mpl20 = {
+    shortName = "MPL2.0";
+    fullName = "Mozilla Public License version 2.0";
+    url = https://www.mozilla.org/MPL/2.0;
+  };
+
   openssl = {
     shortName = "openssl";
     fullName = "OpenSSL license";

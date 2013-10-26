@@ -13,6 +13,15 @@ effect after you run <command>nixos-rebuild</command>.</para>
 
 <!--===============================================================-->
 
+<section xml:id="sec-configuration-syntax"><title>Configuration syntax</title>
+
+<para>TODO</para>
+
+</section>
+
+
+<!--===============================================================-->
+
 <section><title>Package management</title>
 
 <para>This section describes how to add additional packages to your

@@ -61,7 +61,7 @@ in
   config = mkIf cfg.enable {
 
     environment.systemPackages =
-      [ pkgs.libvirt ]
+      [ pkgs.libvirt pkgs.netcat-openbsd ]
        ++ optional cfg.enableKVM pkgs.qemu_kvm;
 
     boot.kernelModules = [ "tun" ];

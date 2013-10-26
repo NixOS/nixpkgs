@@ -2271,11 +2271,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   ecdsa = buildPythonPackage rec {
     name = "ecdsa-${version}";
-    version = "0.9";
+    version = "0.10";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/e/ecdsa/${name}.tar.gz";
-      md5 = "2b9c35245ce391d6b7d8f991aad5c630";
+      md5 = "e95941b3bcbf1726472bb724d7478551";
     };
 
     # Only needed for tests

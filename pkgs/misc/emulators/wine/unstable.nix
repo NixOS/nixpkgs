@@ -6,7 +6,16 @@
 assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
-let gecko = fetchurl {
+let 
+    version = "1.7.4";
+    name = "wine-${version}";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/wine/${name}.tar.bz2";
+      sha256 = "0sb9zfrvlrjx1icfb94clgac239i9yfhyv48zv9iddgmvdjk8ysi";
+    };
+
+    gecko = fetchurl {
       url = "mirror://sourceforge/wine/wine_gecko-2.21-x86.msi";
       sha256 = "1n0zccnvchkg0m896sjx5psk4bxw9if32xyxib1rbfdasykay7zh";
     };
@@ -22,13 +31,7 @@ let gecko = fetchurl {
     };
 
 in stdenv.mkDerivation rec {
-  version = "1.6";
-  name = "wine-${version}";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/wine/${name}.tar.bz2";
-    sha256 = "1bj21d94i0mqvkmzxd4971232yniribk7q3fllf23ynbpppk1wg1";
-  };
+  inherit version name src;
 
   buildInputs = [
     xlibs.xlibs flex bison xlibs.libXi mesa

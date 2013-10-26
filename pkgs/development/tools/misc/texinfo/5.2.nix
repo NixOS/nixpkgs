@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses perl xz ];
 
   preInstall = ''
-    installFlags="TEXMF=$out/texmf";
+    installFlags="TEXMF=$out/texmf-dist";
     installTargets="install install-tex";
   '';
 

@@ -7,18 +7,34 @@ with pkgs.lib;
   options = {
 
     system.nixosVersion = mkOption {
+      internal = true;
       type = types.uniq types.string;
       description = "NixOS version.";
     };
 
     system.nixosVersionSuffix = mkOption {
+      internal = true;
       type = types.uniq types.string;
       description = "NixOS version suffix.";
     };
 
+    system.nixosRevision = mkOption {
+      internal = true;
+      type = types.uniq types.string;
+      description = "NixOS Git revision hash.";
+    };
+
     system.nixosCodeName = mkOption {
+      internal = true;
       type = types.uniq types.string;
       description = "NixOS release code name.";
+    };
+
+    system.defaultChannel = mkOption {
+      internal = true;
+      type = types.uniq types.string;
+      default = https://nixos.org/channels/nixos-unstable;
+      description = "Default NixOS channel to which the root user is subscribed.";
     };
 
   };
@@ -26,11 +42,15 @@ with pkgs.lib;
   config = {
 
     system.nixosVersion =
-      mkDefault (builtins.readFile "${toString pkgs.path}/.version" + config.system.nixosVersionSuffix);
+      mkDefault (readFile "${toString pkgs.path}/.version" + config.system.nixosVersionSuffix);
 
     system.nixosVersionSuffix =
       let suffixFile = "${toString pkgs.path}/.version-suffix"; in
-      mkDefault (if builtins.pathExists suffixFile then builtins.readFile suffixFile else "pre-git");
+      mkDefault (if pathExists suffixFile then readFile suffixFile else "pre-git");
+
+    system.nixosRevision =
+      let fn = "${toString pkgs.path}/.git-revision"; in
+      mkDefault (if pathExists fn then readFile fn else "master");
 
     # Note: code names must only increase in alphabetical order.
     system.nixosCodeName = "Aardvark";

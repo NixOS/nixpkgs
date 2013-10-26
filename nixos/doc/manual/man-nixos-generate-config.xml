@@ -110,6 +110,23 @@
     </listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><option>--no-filesystems</option></term>
+    <listitem>
+      <para>Omit everything concerning file system information
+      (which includes swap devices) from the hardware configuration.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--show-hardware-config</option></term>
+    <listitem>
+      <para>Don't generate <filename>configuration.nix</filename> or
+      <filename>hardware-configuration.nix</filename> and print the
+      hardware configuration to stdout only.</para>
+    </listitem>
+  </varlistentry>
+
 </variablelist>
 
 </refsection>

@@ -1,0 +1,12 @@
+--- a/common/defines.h  2012-11-14 18:02:43.000000000 +0100
++++ b/common/defines.h  2013-09-20 19:17:45.669290630 +0200
+@@ -39,7 +39,7 @@
+ #define RELEASE_TIME        1352912534
+ #define IPCVERSION          "10"
+ 
+-#define EMULATED_VERSION    "4.15.0.14"
++#define EMULATED_VERSION    "4.17.0.11" // Was 4.15.0.14
+ #define DNSVERSION          "2"
+ #define STATUSDOMAIN        ".status.fribid.se"
+ 
+

@@ -11,10 +11,15 @@ let
 
   cfg = config.services.nixosManual;
 
+  versionModule =
+    { system.nixosVersionSuffix = config.system.nixosVersionSuffix;
+      system.nixosRevision = config.system.nixosRevision;
+    };
+
   manual = import ../../../doc/manual {
-    inherit (cfg) revision;
     inherit pkgs;
-    options = (fixMergeModules baseModules
+    revision = config.system.nixosRevision;
+    options = (fixMergeModules ([ versionModule ] ++ baseModules)
       (removeAttrs extraArgs ["config" "options"]) // {
         modules = [ ];
       }).options;
@@ -72,16 +77,6 @@ in
       default = "${pkgs.w3m}/bin/w3m";
       description = ''
         Browser used to show the manual.
-      '';
-    };
-
-    services.nixosManual.revision = mkOption {
-      default = "local";
-      type = types.uniq types.string;
-      description = ''
-        Revision of the targeted source file.  This value can either be
-        <literal>"local"</literal>, <literal>"HEAD"</literal> or any
-        revision number embedded in a string.
       '';
     };
 

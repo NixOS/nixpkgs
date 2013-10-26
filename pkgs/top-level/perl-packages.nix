@@ -3633,6 +3633,19 @@ rec {
     };
   };
 
+  GnuPG = buildPerlPackage {
+    name = "GnuPG-0.19";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/Y/YA/YANICK/GnuPG-0.19.tar.gz;
+      sha256 = "af53f2d3f63297e046676eae14a76296afdd2910e09723b6b113708622b7989b";
+    };
+    buildInputs = [ pkgs.gnupg1orig ];
+    meta = {
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = with maintainers; [ ocharles ];
+    };
+  };
+
   GoogleProtocolBuffers = buildPerlPackage rec {
     name = "Google-ProtocolBuffers-0.08";
     src = fetchurl {
@@ -4587,6 +4600,21 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/A/AU/AUDREYT/Locale-Maketext-Simple-0.18.tar.gz;
       sha256 = "14kx7vkxyfqndy90rzavrjp2346aidyc7x5dzzdj293qf8s4q6ig";
+    };
+  };
+
+  LocalePO = buildPerlPackage {
+    name = "Locale-PO-0.23";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CO/COSIMO/Locale-PO-0.23.tar.gz;
+      sha256 = "52e5fdc88ec4eb00512418a938dc5089476ea66c9e744fee3c6bbfdf17a0d302";
+    };
+    propagatedBuildInputs = [ FileSlurp ];
+    meta = {
+      description = "Perl module for manipulating .po entries from GNU gettext";
+      license = "unknown";
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = with maintainers; [ ocharles ];
     };
   };
 
@@ -6116,6 +6144,7 @@ rec {
       url = "mirror://cpan/authors/id/D/DT/DTOWN/${name}.tar.gz";
       sha256 = "0hdpn1cw52x8cw24m9ayzpf4rwarm0khygn1sv3wvwxkrg0pphql";
     };
+    doCheck = false; # The test suite fails, see https://rt.cpan.org/Public/Bug/Display.html?id=85799
   };
 
   NetSSLeay = buildPerlPackage rec {
@@ -7609,6 +7638,21 @@ rec {
     doCheck = false; # no `hostname' in stdenv
   };
 
+  TAPParserSourceHandlerpgTAP = buildPerlModule {
+    name = "TAP-Parser-SourceHandler-pgTAP-3.29";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DW/DWHEELER/TAP-Parser-SourceHandler-pgTAP-3.29.tar.gz;
+      sha256 = "918aa9ada7a05334ace7304e7b9e002bbf0b569bfcf8fb06118777bdabd60e1b";
+    };
+    meta = {
+      homepage = http://search.cpan.org/dist/Tap-Parser-Sourcehandler-pgTAP/;
+      description = "Stream TAP from pgTAP test scripts";
+      license = "perl";
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = with maintainers; [ ocharles ];
+    };
+  };
+
   TaskCatalystTutorial = buildPerlPackage rec {
     name = "Task-Catalyst-Tutorial-0.06";
     src = fetchurl {
@@ -7673,6 +7717,19 @@ rec {
       sha256 = "1mqqqs0dhfr6bp1305j9ns05q4pq1n3f561l6p8848k5ml3dh87a";
     };
     propagatedBuildInputs = [ TemplateToolkit ];
+    meta = {
+      maintainers = with maintainers; [ ocharles ];
+      platforms   = stdenv.lib.platforms.unix;
+    };
+  };
+
+  TemplatePluginJSONEscape = buildPerlPackage {
+    name = "Template-Plugin-JSON-Escape-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NA/NANTO/Template-Plugin-JSON-Escape-0.02.tar.gz;
+      sha256 = "051a8b1d3bc601d58fc51e246067d36450cfe970278a0456e8ab61940f13cd86";
+    };
+    propagatedBuildInputs = [ JSON TemplateToolkit ];
     meta = {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;

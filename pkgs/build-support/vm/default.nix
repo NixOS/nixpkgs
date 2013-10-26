@@ -514,7 +514,8 @@ rec {
 
       echo "%_topdir $rpmout" >> $HOME/.rpmmacros
 
-      rpmbuild -vv -ta "$srcName"
+      if [ `uname -m` = i686 ]; then extra="--target i686-linux"; fi
+      rpmbuild -vv $extra -ta "$srcName"
 
       eval "$postBuild"
     '';
@@ -937,6 +938,32 @@ rec {
       unifiedSystemDir = true;
     };
 
+    fedora19i386 = {
+      name = "fedora-19-i386";
+      fullName = "Fedora 19 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/19/Everything/i386/os/repodata/b72220bcdefff8b38de1c9029a630db4813e073f88c4b080ca274d133e0460d1-primary.xml.gz;
+        sha256 = "b72220bcdefff8b38de1c9029a630db4813e073f88c4b080ca274d133e0460d1";
+      };
+      urlPrefix = mirror://fedora/linux/releases/19/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora19x86_64 = {
+      name = "fedora-19-x86_64";
+      fullName = "Fedora 19 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/19/Everything/x86_64/os/repodata/d3f67da6461748f57a06459e6877fd07858828e256f58f032704186a65430fd3-primary.xml.gz;
+        sha256 = "d3f67da6461748f57a06459e6877fd07858828e256f58f032704186a65430fd3";
+      };
+      urlPrefix = mirror://fedora/linux/releases/19/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
     opensuse103i386 = {
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
@@ -1026,7 +1053,7 @@ rec {
 
   /* The set of supported Dpkg-based distributions. */
 
-  debDistros = {
+  debDistros = rec {
 
     # Interestingly, the SHA-256 hashes provided by Ubuntu in
     # http://nl.archive.ubuntu.com/ubuntu/dists/{gutsy,hardy}/Release are
@@ -1335,6 +1362,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1310i386 = {
+      name = "ubuntu-13.10-saucy-i386";
+      fullName = "Ubuntu 13.10 Saucy (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/saucy/main/binary-i386/Packages.bz2;
+            sha256 = "9b35d44a737e6aa7e1cb5e2b52ba0ed8717c8820b3950c2e7ade07024db9c138";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/saucy/universe/binary-i386/Packages.bz2;
+            sha256 = "84ff81ef23bcece68bfc3dd4b0b1fd38e5b81ac90ad48b4e4210396b425da500";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1310x86_64 = {
+      name = "ubuntu-13.10-saucy-amd64";
+      fullName = "Ubuntu 13.10 Saucy (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/saucy/main/binary-amd64/Packages.bz2;
+            sha256 = "d000968f9653d7c25928002b0850fe2da97607682f63a351eb2c89896a219a12";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/saucy/universe/binary-amd64/Packages.bz2;
+            sha256 = "06ec77f2f5d6ee70ffb805affe3a6b3e8d5b6463fbfe42ba6588295c7e1f65bc";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
@@ -1380,44 +1441,48 @@ rec {
     };
 
     debian60i386 = {
-      name = "debian-6.0.7-squeeze-i386";
-      fullName = "Debian 6.0.7 Squeeze (i386)";
+      name = "debian-6.0.8-squeeze-i386";
+      fullName = "Debian 6.0.8 Squeeze (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-i386/Packages.bz2;
-        sha256 = "a770f26b5fce1a16460b68f135dfe97f4f4a9894b538ece0104a508c83ec65d5";
+        sha256 = "c850339aaf46a4ed4abc7c1789c29ea58c3a152aa173ee004578fda86b28391f";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian60x86_64 = {
-      name = "debian-6.0.7-squeeze-amd64";
-      fullName = "Debian 6.0.7 Squeeze (amd64)";
+      name = "debian-6.0.8-squeeze-amd64";
+      fullName = "Debian 6.0.8 Squeeze (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-amd64/Packages.bz2;
-        sha256 = "b2bb561bde59ac67e07c70aa7c86a33f237436e6891796a93c6ed6ffb032080e";
+        sha256 = "1506ab7de3ad5a2c706183536d2ee88589d7cb922d9e0de36ac062d464082dda";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
-    debian70i386 = {
-      name = "debian-7.1.0-wheezy-i386";
-      fullName = "Debian 7.1.0 Wheezy (i386)";
+    # Backward compatibility.
+    debian70i386 = debian7i386;
+    debian70x86_64 = debian7x86_64;
+
+    debian7i386 = {
+      name = "debian-7.2-wheezy-i386";
+      fullName = "Debian 7.2 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "c2751c48805b41c3eddd31cfe92ffa46df13a7d6ce7896b8dc5ce4b2f7f329c5";
+        sha256 = "2e80242e323f233c40b3020b0f1a57d12df8a120ee82af88ff7032ba4688f97d";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
-    debian70x86_64 = {
-      name = "debian-7.1.0-wheezy-amd64";
-      fullName = "Debian 7.1.0 Wheezy (amd64)";
+    debian7x86_64 = {
+      name = "debian-7.2-wheezy-amd64";
+      fullName = "Debian 7.2 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "9b15b4348cadbcf170c9e83d6fbcb64efac2b787ebdfef16ba21dd70dfca0001";
+        sha256 = "adfc4cd3d3b855c73c9e2e12163a33c193f98c9bad25765080fa6136378a6e3b";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1515,6 +1580,7 @@ rec {
     "curl"
     "patch"
     "locales"
+    "coreutils"
     # Needed by checkinstall:
     "util-linux"
     "file"

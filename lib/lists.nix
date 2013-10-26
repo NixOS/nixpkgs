@@ -1,14 +1,14 @@
 # General list operations.
 let
+
   inherit (import ./trivial.nix) deepSeq;
 
   inc = builtins.add 1;
 
   dec = n: builtins.sub n 1;
 
-  inherit (builtins) elemAt;
 in rec {
-  inherit (builtins) head tail length isList add sub lessThan;
+  inherit (builtins) head tail length isList add sub lessThan elemAt;
 
 
   # Create a list consisting of a single element.  `singleton x' is

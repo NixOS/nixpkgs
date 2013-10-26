@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     for f in src/tex4ht src/t4ht src/htcmd "bin/unix/"*; do
       mv $f $out/bin/
     done
-    mv texmf $out/
+    mv texmf $out/texmf-dist
   '';
 
   meta = {
