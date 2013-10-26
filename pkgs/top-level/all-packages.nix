@@ -3812,6 +3812,8 @@ let
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
+  xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
+
   xxdiff = callPackage ../development/tools/misc/xxdiff { };
 
   yacc = bison;
