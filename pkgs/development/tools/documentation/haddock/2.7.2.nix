@@ -10,7 +10,7 @@ cabal.mkDerivation (self : {
   doCheck = false;
 
   postInstall = ''
-   wrapProgram $out/bin/haddock --add-flags "\$(${self.ghc.GHCGetPackages} ${self.ghc.ghcVersion} \"\$(dirname \$0)\" \"--optghc=-package-conf --optghc=\")"
+   wrapProgram $out/bin/haddock --add-flags "\$(${self.ghc.GHCGetPackages} ${self.ghc.version} \"\$(dirname \$0)\" \"--optghc=-package-conf --optghc=\")"
   '';
 
   meta = {

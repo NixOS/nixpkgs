@@ -58,7 +58,12 @@
 #
 # For most packages, however, we keep only one version, and use default.nix.
 
-{pkgs, newScope, ghc, prefFun, enableLibraryProfiling ? false, modifyPrio ? (x : x)}:
+{ pkgs, newScope, ghc, prefFun, modifyPrio ? (x : x)
+, enableLibraryProfiling ? false
+, enableSharedLibraries ? false
+, enableSharedExecutables ? false
+, enableCheckPhase ? pkgs.stdenv.lib.versionOlder "7.4" ghc.version
+}:
 
 # We redefine callPackage to take into account the new scope. The optional
 # modifyPrio argument can be set to lowPrio to make all Haskell packages have
@@ -91,16 +96,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     ghc = ghc; # refers to ghcPlain
   };
 
-  # The normal GHC wrapper doesn't create links to the documentation in
-  # ~/.nix-profile. Having this second wrapper allows us to remedy the
-  # situation without re-building all Haskell packages. At the next
-  # stdenv-updates merge, this second wrapper will go away.
-
-  ghcUserEnvWrapper = pkgs.appendToName "new" (callPackage ../development/compilers/ghc/wrapper.nix {
-    ghc = ghc; # refers to ghcPlain
-    forUserEnv = true;
-  });
-
   # An experimental wrapper around ghcPlain that does not automatically
   # pick up packages from the profile, but instead has a fixed set of packages
   # in its global database. The set of packages can be specified as an
@@ -115,8 +110,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   # packages. It isn't the Cabal library, which is spelled "Cabal".
 
   cabal = callPackage ../build-support/cabal {
-    enableLibraryProfiling = enableLibraryProfiling;
-    enableCheckPhase = pkgs.stdenv.lib.versionOlder "7.4" self.ghc.ghcVersion;
+    inherit enableLibraryProfiling;
+    inherit enableSharedLibraries;
+    inherit enableSharedExecutables;
+    inherit enableCheckPhase;
+    glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
   };
 
   # A variant of the cabal build driver that disables unit testing.

@@ -4,7 +4,7 @@
 
 # this check won't be needed anymore after ghc-wrapper is fixed
 # to show ghc-builtin packages in "ghc-pkg list" output.
-let binaryIsBuiltIn = builtins.compareVersions "7.2.1" ghc.ghcVersion != 1;
+let binaryIsBuiltIn = builtins.compareVersions "7.2.1" ghc.version != 1;
 
 in stdenv.mkDerivation {
   name = "uhc-svn-git20120502";
