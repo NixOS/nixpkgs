@@ -117,11 +117,11 @@ in
 
       type = types.attrsOf types.optionSet;
 
-      options =  {
+      options = {
 
         config = mkOption {
-          type = types.string;
-            description = ''
+          type = types.lines;
+          description = ''
             Configuration of this OpenVPN instance.  See
             <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
             for details.
@@ -130,7 +130,7 @@ in
 
         up = mkOption {
           default = "";
-          type = types.string;
+          type = types.lines;
           description = ''
             Shell commands executed when the instance is starting.
           '';
@@ -138,7 +138,7 @@ in
 
         down = mkOption {
           default = "";
-          type = types.string;
+          type = types.lines;
           description = ''
             Shell commands executed when the instance is shutting down.
           '';
