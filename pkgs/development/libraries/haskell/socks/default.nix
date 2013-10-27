@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "socks";
-  version = "0.5.3";
-  sha256 = "0cajbl7vrljawaxl3vbbf0sq92ry3cj925sww4nw70lhpz96ay4x";
+  version = "0.5.4";
+  sha256 = "1nmldlwxqasmg359i2aa3a903gi3lmnlspvf12xk49jrg3mf3dg9";
   buildDepends = [ cereal network ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-socks";
