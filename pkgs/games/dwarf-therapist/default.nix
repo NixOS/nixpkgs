@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Tool to manage dwarves in in a running game of Dwarf Fortress";
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
     license = "MIT";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.none;
     homepage = https://code.google.com/r/splintermind-attributes/;
   };
 }
