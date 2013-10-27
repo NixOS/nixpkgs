@@ -246,7 +246,7 @@ let
     config = {
 
       # The default name is the name extracted from the attribute path.
-      name = mkDefaultValue name;
+      name = mkDefault name;
 
     };
 
