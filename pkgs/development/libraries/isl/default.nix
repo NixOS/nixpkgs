@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gmp ];
+  patches = [ ./fix-gcc-build.diff ];
 
   meta = {
     homepage = http://www.kotnet.org/~skimo/isl/;
