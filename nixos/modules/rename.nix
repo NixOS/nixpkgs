@@ -32,7 +32,6 @@ let
     zipAttrsWith (n: v:
       if tail v != [] then
         if n == "_type" then (head v)
-        else if n == "extraConfigs" then concatLists v
         else if n == "warnings" then concatLists v
         else if n == "description" || n == "apply" then
           abort "Cannot rename an option to multiple options."
@@ -55,12 +54,7 @@ let
             inherit visible;
           });
         }
-        { options = setTo (mkOption {
-            extraConfigs =
-              let externalDefs = (fromOf options).definitions; in
-              if externalDefs == [] then []
-              else map (def: def.value) (define externalDefs);
-          });
+        { config = setTo (mkIf (fromOf options).isDefined (define (mkMerge (fromOf options).definitions)));
         }
       ];
 
