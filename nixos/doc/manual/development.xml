@@ -30,12 +30,11 @@ or
 $ mkdir -p <replaceable>/my/sources</replaceable>
 $ cd <replaceable>/my/sources</replaceable>
 $ nix-env -i git
-$ git clone git://github.com/NixOS/nixos.git
 $ git clone git://github.com/NixOS/nixpkgs.git
 </screen>
 
 This will check out the latest NixOS sources to
-<filename><replaceable>/my/sources</replaceable>/nixos</filename> and
+<filename><replaceable>/my/sources</replaceable>/nixpkgs/nixos</filename> and
 the Nixpkgs sources to
 <filename><replaceable>/my/sources</replaceable>/nixpkgs</filename>.
 If you want to rebuild your system using your (modified) sources, you
@@ -43,7 +42,7 @@ need to tell <command>nixos-rebuild</command> about them using the
 <option>-I</option> flag:
 
 <screen>
-$ nixos-rebuild switch -I <replaceable>/my/sources</replaceable>
+$ nixos-rebuild switch -I <replaceable>/my/sources</replaceable>/nixpkgs
 </screen>
 
 </para>
