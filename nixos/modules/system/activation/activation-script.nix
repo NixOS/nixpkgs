@@ -52,7 +52,7 @@ in
         idempotent and fast.
       '';
 
-      merge = mergeTypedOption "script" builtins.isAttrs (fold mergeAttrs {});
+      type = types.attrsOf types.unspecified; # FIXME
 
       apply = set: {
         script =

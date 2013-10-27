@@ -2,12 +2,10 @@
 
 let lib = import ./default.nix; in
 
-with { inherit (builtins) head length; };
 with import ./trivial.nix;
 with import ./lists.nix;
 with import ./misc.nix;
 with import ./attrsets.nix;
-with import ./properties.nix;
 
 rec {
 
@@ -137,46 +135,6 @@ rec {
         handleOptionSets
       ];
 
-  # Merge a list of options containning different field.  This is useful to
-  # separate the merge & apply fields from the interface.
-  mergeOptionDecls = opts:
-    if opts == [] then {}
-    else if length opts == 1 then
-      let opt = head opts; in
-      if opt ? options then
-        opt // { options = toList opt.options; }
-      else
-        opt
-    else
-      fold (opt1: opt2:
-        lib.addErrorContext "opt1 = ${lib.showVal opt1}\nopt2 = ${lib.showVal opt2}" (
-        # You cannot merge if two options have the same field.
-        assert opt1 ? default -> ! opt2 ? default;
-        assert opt1 ? example -> ! opt2 ? example;
-        assert opt1 ? description -> ! opt2 ? description;
-        assert opt1 ? merge -> ! opt2 ? merge;
-        assert opt1 ? apply -> ! opt2 ? apply;
-        assert opt1 ? type -> ! opt2 ? type;
-        opt1 // opt2
-        // optionalAttrs (opt1 ? options || opt2 ? options) {
-            options =
-               (toList (opt1.options or []))
-            ++ (toList (opt2.options or []));
-          }
-        // optionalAttrs (opt1 ? extraConfigs || opt2 ? extraConfigs) {
-            extraConfigs = opt1.extraConfigs or [] ++ opt2.extraConfigs or [];
-          }
-        // optionalAttrs (opt1 ? extraArgs || opt2 ? extraArgs) {
-            extraArgs = opt1.extraArgs or {} // opt2.extraArgs or {};
-          }
-        // optionalAttrs (opt1 ? individualExtraArgs || opt2 ? individualExtraArgs) {
-            individualExtraArgs = zipAttrsWith (name: values:
-              if length values == 1 then head values else (head values // (head (tail values)))
-            ) [ (opt1.individualExtraArgs or {}) (opt2.individualExtraArgs or {}) ];
-          }
-      )) {} opts;
-
-  
   # !!! This function will be removed because this can be done with the
   # multiple option declarations.
   addDefaultOptionValues = defs: opts: opts //
@@ -285,6 +243,7 @@ rec {
             else
               [];
         in
+          # FIXME: expensive (O(n^2)
           [ docOption ] ++ subOptions ++ rest
       ) [] options;
 
@@ -307,5 +266,8 @@ rec {
      functions. */
   literalExample = text: { _type = "literalExample"; inherit text; };
 
+
+  /* Helper functions. */
+  showOption = concatStringsSep ".";
 
 }

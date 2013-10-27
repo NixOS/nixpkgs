@@ -165,9 +165,10 @@ in rec {
 
   zipLists = zipListsWith (fst: snd: { inherit fst snd; });
 
-  
-  # Reverse the order of the elements of a list.
+
+  # Reverse the order of the elements of a list.  FIXME: O(n^2)!
   reverseList = fold (e: acc: acc ++ [ e ]) [];
+
 
   # Sort a list based on a comparator function which compares two
   # elements and returns true if the first argument is strictly below

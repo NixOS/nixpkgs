@@ -19,11 +19,9 @@ rec {
   # Merge the option definitions in all modules, forming the full
   # system configuration.  It's not checked for undeclared options.
   systemModule =
-    pkgs.lib.fixMergeModules configComponents extraArgs;
+    pkgs.lib.evalModules configComponents extraArgs;
 
-  optionDefinitions = systemModule.config;
-  optionDeclarations = systemModule.options;
-  inherit (systemModule) options;
+  config = systemModule.config;
 
   # These are the extra arguments passed to every module.  In
   # particular, Nixpkgs is passed through the "pkgs" argument.
@@ -56,16 +54,11 @@ rec {
           # define nixpkgs.config, so it's pointless to evaluate them.
           baseModules = [ ../modules/misc/nixpkgs.nix ];
           pkgs = import ./nixpkgs.nix { system = system_; config = {}; };
-        }).optionDefinitions.nixpkgs;
+        }).config.nixpkgs;
       in
       {
         inherit system;
         inherit (nixpkgsOptions) config;
       });
 
-  # Optionally check wether all config values have corresponding
-  # option declarations.
-  config =
-    assert optionDefinitions.environment.checkConfigurationOptions -> pkgs.lib.checkModule "" systemModule;
-    systemModule.config;
 }
