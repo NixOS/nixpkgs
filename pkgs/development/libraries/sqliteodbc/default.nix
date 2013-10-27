@@ -24,6 +24,7 @@ stdenv.mkDerivation ({
     homepage = http://www.ch-werner.de/sqliteodbc/;
     description = "ODBC driver for SQLite";
     platforms = stdenv.lib.platforms.linux;
+    license = "BSD";
     maintainers = with stdenv.lib.maintainers; [ vlstill ];
   };
 })
