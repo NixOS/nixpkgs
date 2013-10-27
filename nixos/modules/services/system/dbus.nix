@@ -122,7 +122,7 @@ in
         [Socket]
         ListenStream=/var/run/dbus/system_bus_socket
       '';
-      
+
     systemd.units."dbus.service".text =
       ''
         [Unit]
@@ -136,41 +136,6 @@ in
         ExecReload=${pkgs.dbus_tools}/bin/dbus-send --print-reply --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig
         OOMScoreAdjust=-900
       '';
-
-    /*
-    jobs.dbus =
-      { startOn = "started udev and started syslogd";
-      
-        restartIfChanged = false;
-        
-        path = [ pkgs.dbus_daemon pkgs.dbus_tools ];
-
-        preStart =
-          ''
-            mkdir -m 0755 -p ${homeDir}
-            chown messagebus ${homeDir}
-
-            mkdir -m 0755 -p /var/lib/dbus
-            dbus-uuidgen --ensure
-
-            rm -f ${homeDir}/pid
-          '';
-
-        daemonType = "fork";
-
-        exec = "dbus-daemon --system";
-
-        postStop =
-          ''
-            # !!! Hack: doesn't belong here.
-            pid=$(cat /var/run/ConsoleKit/pid || true)
-            if test -n "$pid"; then
-                kill $pid || true
-                rm -f /var/run/ConsoleKit/pid
-            fi
-          '';
-      };
-    */    
 
     security.setuidOwners = singleton
       { program = "dbus-daemon-launch-helper";
