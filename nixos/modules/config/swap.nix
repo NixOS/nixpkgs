@@ -72,11 +72,8 @@ with utils;
         };
 
         config = {
-          device =
-            if options.label.isDefined then
-              "/dev/disk/by-label/${config.label}"
-            else
-              mkNotdef;
+          device = mkIf options.label.isDefined
+            "/dev/disk/by-label/${config.label}";
         };
 
       };
