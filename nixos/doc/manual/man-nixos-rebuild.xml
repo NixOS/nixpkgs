@@ -106,7 +106,7 @@ desired operation.  It must be one of the following:
       points to the output of the top-level “system” derivation.  This
       is essentially the same as doing
 <screen>
-$ nix-build /etc/nixos/nixos -A system
+$ nix-build /path/to/nixpkgs/nixos -A system
 </screen>
       Note that you do not need to be <literal>root</literal> to run
       <command>nixos-rebuild build</command>.</para>
