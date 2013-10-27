@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = https://ngrok.com/;
     license = licenses.asl20;
     maintainers = with maintainers; [ iElectric ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
