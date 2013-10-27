@@ -120,10 +120,10 @@ Declared by:
   /mnt/data/nix-sources/nixos/modules/services/hardware/udev.nix
 
 Defined by:
-  /etc/nixos/nixos/modules/system/boot/kernel.nix
-  /etc/nixos/nixos/modules/hardware/network/rt73.nix
-  /etc/nixos/nixos/modules/hardware/network/intel-3945abg.nix
-  /etc/nixos/nixos/modules/hardware/network/intel-2200bg.nix</screen></para>
+  /path/to/nixpkgs/nixos/modules/system/boot/kernel.nix
+  /path/to/nixpkgs/nixos/modules/hardware/network/rt73.nix
+  /path/to/nixpkgs/nixos/modules/hardware/network/intel-3945abg.nix
+  /path/to/nixpkgs/nixos/modules/hardware/network/intel-2200bg.nix</screen></para>
 
 </refsection>
 

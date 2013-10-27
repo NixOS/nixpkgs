@@ -59,6 +59,7 @@
   vcunat = "Vladimír Čunát <vcunat@gmail.com>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
   vizanto = "Danny Wilson <danny@prime.vc>";
+  vlstill = "Vladimír Štill <xstill@fi.muni.cz>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
   zef = "Zef Hemel <zef@zef.me>";

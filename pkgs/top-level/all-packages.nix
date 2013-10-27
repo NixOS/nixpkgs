@@ -7810,6 +7810,8 @@ let
 
   goldendict = callPackage ../applications/misc/goldendict { };
 
+  gpicview = callPackage ../applications/graphics/gpicview { };
+
   grass = import ../applications/misc/grass {
     inherit (xlibs) libXmu libXext libXp libX11 libXt libSM libICE libXpm
       libXaw libXrender;
@@ -9638,6 +9640,8 @@ let
   redshift = callPackage ../applications/misc/redshift {
     inherit (xorg) libX11 libXrandr libxcb randrproto libXxf86vm
       xf86vidmodeproto;
+    inherit (gnome) GConf;
+    inherit (pythonPackages) pyxdg;
   };
 
   oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { };

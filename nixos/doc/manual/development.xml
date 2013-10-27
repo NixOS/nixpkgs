@@ -30,12 +30,11 @@ or
 $ mkdir -p <replaceable>/my/sources</replaceable>
 $ cd <replaceable>/my/sources</replaceable>
 $ nix-env -i git
-$ git clone git://github.com/NixOS/nixos.git
 $ git clone git://github.com/NixOS/nixpkgs.git
 </screen>
 
 This will check out the latest NixOS sources to
-<filename><replaceable>/my/sources</replaceable>/nixos</filename> and
+<filename><replaceable>/my/sources</replaceable>/nixpkgs/nixos</filename> and
 the Nixpkgs sources to
 <filename><replaceable>/my/sources</replaceable>/nixpkgs</filename>.
 If you want to rebuild your system using your (modified) sources, you
@@ -43,7 +42,7 @@ need to tell <command>nixos-rebuild</command> about them using the
 <option>-I</option> flag:
 
 <screen>
-$ nixos-rebuild switch -I <replaceable>/my/sources</replaceable>
+$ nixos-rebuild switch -I <replaceable>/my/sources</replaceable>/nixpkgs
 </screen>
 
 </para>
@@ -250,7 +249,7 @@ let
 in
 
 {
-  imports = [ /etc/nixos/nixos/modules/services/scheduling/cron.nix ];
+  imports = [ /path/to/nixpkgs/nixos/modules/services/scheduling/cron.nix ];
 
   options = {
     services.locate = {
@@ -307,10 +306,10 @@ in
 <para>
 
 <screen>
-$ nix-build /etc/nixos/nixos -A <replaceable>attr</replaceable></screen>
+$ nix-build /path/to/nixpkgs/nixos -A <replaceable>attr</replaceable></screen>
 
 where <replaceable>attr</replaceable> is an attribute in
-<filename>/etc/nixos/nixos/default.nix</filename>.  Attributes of interest include:
+<filename>/path/to/nixpkgs/nixos/default.nix</filename>.  Attributes of interest include:
 
 <variablelist>
 
@@ -344,7 +343,7 @@ Most parts of NixOS can be built through the <varname>config</varname>
 attribute set.  This attribute set allows you to have a view of the merged
 option definitions and all its derivations.  Important derivations are store
 inside the option <option>system.build</option> and can be listed with the
-command <command>nix-instantiate --xml --eval-only /etc/nixos/nixos -A
+command <command>nix-instantiate --xml --eval-only /path/to/nixpkgs/nixos -A
 config.system.build</command>
 </para>
 
@@ -368,8 +367,8 @@ you have to set <envar>NIXOS_CONFIG</envar> before
 running <command>nix-build</command> to build the ISO.
 
 <screen>
-$ export NIXOS_CONFIG=/etc/nixos/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix
-$ nix-build /etc/nixos/nixos -A config.system.build.isoImage</screen>
+$ export NIXOS_CONFIG=/path/to/nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix
+$ nix-build /path/to/nixpkgs/nixos -A config.system.build.isoImage</screen>
 
 </para>
 
@@ -413,8 +412,8 @@ tedious, so here is a quick way to see if the installer works
 properly:
 
 <screen>
-$ export NIXOS_CONFIG=/etc/nixos/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix
-$ nix-build /etc/nixos/nixos -A config.system.build.nixos-install
+$ export NIXOS_CONFIG=/path/to/nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix
+$ nix-build /path/to/nixpkgs/nixos -A config.system.build.nixos-install
 $ dd if=/dev/zero of=diskimage seek=2G count=0 bs=1
 $ yes | mke2fs -j diskimage
 $ mount -o loop diskimage /mnt
@@ -437,8 +436,8 @@ boot correctly is to use QEMU’s <option>-kernel</option> and
 <option>-initrd</option> options:
 
 <screen>
-$ nix-build /etc/nixos/nixos -A config.system.build.initialRamdisk -o initrd
-$ nix-build /etc/nixos/nixos -A config.system.build.kernel -o kernel
+$ nix-build /path/to/nixpkgs/nixos -A config.system.build.initialRamdisk -o initrd
+$ nix-build /path/to/nixpkgs/nixos -A config.system.build.kernel -o kernel
 $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/null
 </screen>
 
