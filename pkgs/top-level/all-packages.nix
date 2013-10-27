@@ -9293,6 +9293,8 @@ let
 
   quake3game = callPackage ../games/quake3/game { };
 
+  quantumminigolf = callPackage ../games/quantumminigolf {};
+
   racer = callPackage ../games/racer { };
 
   residualvm = callPackage ../games/residualvm { 
