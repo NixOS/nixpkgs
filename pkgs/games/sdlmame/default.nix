@@ -1,6 +1,6 @@
 { stdenv, fetchurl, alsaLib, qt48, SDL, fontconfig, freetype, SDL_ttf, xlibs }:
 
-assert stdenv.system == "x86_64-linux" || stdenv.system == "1686-linux";
+assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
 stdenv.mkDerivation rec {
   version = "0.150.u0-1";
