@@ -182,11 +182,11 @@ rec {
           let
             coerce = def: if builtins.isFunction def then def else { config = def; };
             modules = opts' ++ map coerce defs;
-          in (evalModules' args.prefix modules args).config;
-        getSubOptions = prefix: (evalModules' prefix opts'
-          # FIXME: hack to get shit to evaluate.
-          { name = ""; }
-        ).options;
+          in (evalModules { inherit modules args; prefix = args.prefix; }).config;
+        getSubOptions = prefix: (evalModules
+          { modules = opts'; inherit prefix;
+            # FIXME: hack to get shit to evaluate.
+            args = { name = ""; }; }).options;
       };
 
     # Obsolete alternative to configOf.  It takes its option

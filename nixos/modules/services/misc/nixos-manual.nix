@@ -16,13 +16,15 @@ let
       system.nixosRevision = config.system.nixosRevision;
     };
 
+  eval = evalModules {
+    modules = [ versionModule ] ++ baseModules;
+    args = (removeAttrs extraArgs ["config" "options"]) // { modules = [ ]; };
+  };
+
   manual = import ../../../doc/manual {
     inherit pkgs;
     revision = config.system.nixosRevision;
-    options = (evalModules ([ versionModule ] ++ baseModules)
-      (removeAttrs extraArgs ["config" "options"]) // {
-        modules = [ ];
-      }).options;
+    options = eval.options;
   };
 
   entry = "${manual.manual}/share/doc/nixos/manual.html";
