@@ -36,7 +36,7 @@ rec {
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
-    if m ? config || m ? options || m ? imports then
+    if m ? config || m ? options then
       let badAttrs = removeAttrs m ["imports" "options" "config" "key"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'."
@@ -50,9 +50,9 @@ rec {
     else
       { inherit file;
         key = m.key or key;
-        imports = m.require or [];
+        imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = removeAttrs m ["key" "require"];
+        config = removeAttrs m ["key" "require" "imports"];
       };
 
   applyIfFunction = f: arg: if builtins.isFunction f then f arg else f;
