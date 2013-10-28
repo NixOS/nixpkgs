@@ -5210,6 +5210,10 @@ let
 
   minmay = callPackage ../development/libraries/minmay { };
 
+  miro = callPackage ../applications/video/miro {
+    inherit (pythonPackages) pywebkitgtk pysqlite pycurl mutagen;
+  };
+
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
   mlt = callPackage ../development/libraries/mlt {
