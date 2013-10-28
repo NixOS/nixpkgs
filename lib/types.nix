@@ -22,18 +22,18 @@ rec {
   # name (name of the type)
   # check (check the config value)
   # merge (default merge function)
-  # docPath (path concatenated to the option name contained in the option set)
+  # getSubOptions (returns sub-options for manual generation)
   isOptionType = isType "option-type";
   mkOptionType =
     { name
     , check ? (x: true)
     , merge ? mergeDefaultOption
     , merge' ? args: merge
-    , docPath ? lib.id
+    , getSubOptions ? prefix: {}
     }:
 
     { _type = "option-type";
-      inherit name check merge merge' docPath;
+      inherit name check merge merge' getSubOptions;
     };
 
 
@@ -99,14 +99,14 @@ rec {
       name = "list of ${elemType.name}s";
       check = value: isList value && all elemType.check value;
       merge = defs: map (def: elemType.merge [def]) (concatLists defs);
-      docPath = path: elemType.docPath (path + ".*");
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
     };
 
     attrsOf = elemType: mkOptionType {
       name = "attribute set of ${elemType.name}s";
       check = x: isAttrs x && all elemType.check (lib.attrValues x);
       merge = lib.zipAttrsWith (name: elemType.merge' { inherit name; });
-      docPath = path: elemType.docPath (path + ".<name>");
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
     };
 
     # List or attribute set of ...
@@ -129,26 +129,27 @@ rec {
           else if isAttrs x then attrOnly.check x
           else false;
         merge = defs: attrOnly.merge (imap convertIfList defs);
-        docPath = path: elemType.docPath (path + ".<name?>");
+        getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
       };
 
     uniq = elemType: mkOptionType {
-      inherit (elemType) name check docPath;
+      inherit (elemType) name check;
       merge = list:
         if length list == 1 then
           head list
         else
           throw "Multiple definitions of ${elemType.name}. Only one is allowed for this option.";
+      getSubOptions = elemType.getSubOptions;
     };
 
     none = elemType: mkOptionType {
-      inherit (elemType) name check docPath;
+      inherit (elemType) name check;
       merge = list:
         throw "No definitions are allowed for this option.";
+      getSubOptions = elemType.getSubOptions;
     };
 
     nullOr = elemType: mkOptionType {
-      inherit (elemType) docPath;
       name = "null or ${elemType.name}";
       check = x: builtins.isNull x || elemType.check x;
       merge = defs:
@@ -156,6 +157,7 @@ rec {
         else if any isNull defs then
           throw "Some but not all values are null."
         else elemType.merge defs;
+      getSubOptions = elemType.getSubOptions;
     };
 
     functionTo = elemType: mkOptionType {
@@ -163,19 +165,26 @@ rec {
       check = builtins.isFunction;
       merge = fns:
         args: elemType.merge (map (fn: fn args) fns);
+      getSubOptions = elemType.getSubOptions;
     };
 
-    submodule = opts: mkOptionType rec {
-      name = "submodule";
-      check = x: isAttrs x || builtins.isFunction x;
-      # FIXME: make error messages include the parent attrpath.
-      merge = merge' {};
-      merge' = args: defs:
-        let
-          coerce = def: if builtins.isFunction def then def else { config = def; };
-          modules = (toList opts) ++ map coerce defs;
-        in (evalModules modules args).config;
-    };
+    submodule = opts:
+      let opts' = toList opts; in
+      mkOptionType rec {
+        name = "submodule";
+        check = x: isAttrs x || builtins.isFunction x;
+        # FIXME: make error messages include the parent attrpath.
+        merge = merge' {};
+        merge' = args: defs:
+          let
+            coerce = def: if builtins.isFunction def then def else { config = def; };
+            modules = opts' ++ map coerce defs;
+          in (evalModules modules args).config;
+        getSubOptions = prefix: (evalModules' prefix opts'
+          # FIXME: hack to get shit to evaluate.
+          { name = ""; }
+        ).options;
+      };
 
     # Obsolete alternative to configOf.  It takes its option
     # declarations from the ‘options’ attribute of containing option

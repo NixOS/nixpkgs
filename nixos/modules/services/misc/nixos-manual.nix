@@ -19,7 +19,7 @@ let
   manual = import ../../../doc/manual {
     inherit pkgs;
     revision = config.system.nixosRevision;
-    options = (fixMergeModules ([ versionModule ] ++ baseModules)
+    options = (evalModules ([ versionModule ] ++ baseModules)
       (removeAttrs extraArgs ["config" "options"]) // {
         modules = [ ];
       }).options;

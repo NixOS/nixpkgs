@@ -6,14 +6,16 @@ rec {
   /* Evaluate a set of modules.  The result is a set of two
      attributes: ‘options’: the nested set of all option declarations,
      and ‘config’: the nested set of all option values. */
-  evalModules = modules: args:
+  evalModules = evalModules' [];
+
+  evalModules' = prefix: modules: args:
     let
       args' = args // result;
       closed = closeModules modules args';
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
       # the most sensible policy.
-      options = mergeModules (reverseList closed);
+      options = mergeModules prefix (reverseList closed);
       config = yieldConfig options;
       yieldConfig = mapAttrs (n: v: if isOption v then v.value else yieldConfig v);
       result = { inherit options config; };
@@ -22,16 +24,15 @@ rec {
   /* Close a set of modules under the ‘imports’ relation. */
   closeModules = modules: args:
     let
-      coerceToModule = n: x:
+      toClosureList = parent: imap (n: x: 
         if isAttrs x || builtins.isFunction x then
-          unifyModuleSyntax "<unknown-file>" "anon-${toString n}" (applyIfFunction x args)
+          unifyModuleSyntax parent "anon-${toString n}" (applyIfFunction x args)
         else
-          unifyModuleSyntax (toString x) (toString x) (applyIfFunction (import x) args);
-      toClosureList = imap (path: coerceToModule path);
+          unifyModuleSyntax (toString x) (toString x) (applyIfFunction (import x) args));
     in
       builtins.genericClosure {
-        startSet = toClosureList modules;
-        operator = m: toClosureList m.imports;
+        startSet = toClosureList unknownModule modules;
+        operator = m: toClosureList m.file m.imports;
       };
 
   /* Massage a module into canonical form, that is, a set consisting
@@ -61,18 +62,18 @@ rec {
      At the same time, for each option declaration, it will merge the
      corresponding option definitions in all machines, returning them
      in the ‘value’ attribute of each option. */
-  mergeModules = modules:
-    mergeModules' [] modules
+  mergeModules = prefix: modules:
+    mergeModules' prefix modules
       (concatMap (m: map (config: { inherit (m) file; inherit config; }) (pushDownProperties m.config)) modules);
 
-  mergeModules' = loc: options: configs:
+  mergeModules' = prefix: options: configs:
     let names = concatMap (m: attrNames m.options) options;
     in listToAttrs (map (name: {
       # We're descending into attribute ‘name’.
       inherit name;
       value =
         let
-          loc' = loc ++ [name];
+          loc = prefix ++ [name];
           # Get all submodules that declare ‘name’.
           decls = concatLists (map (m:
             if hasAttr name m.options
@@ -95,16 +96,16 @@ rec {
             ) configs;
         in
           if nrOptions == length decls then
-            let opt = fixupOptionType loc' (mergeOptionDecls loc' decls);
-            in evalOptionValue loc' opt defns'
+            let opt = fixupOptionType loc (mergeOptionDecls loc decls);
+            in evalOptionValue loc opt defns'
           else if nrOptions != 0 then
             let
               firstOption = findFirst (m: isOption m.options) "" decls;
               firstNonOption = findFirst (m: !isOption m.options) "" decls;
             in
-              throw "The option `${showOption loc'}' in `${firstOption.file}' is a prefix of options in `${firstNonOption.file}'."
+              throw "The option `${showOption loc}' in `${firstOption.file}' is a prefix of options in `${firstNonOption.file}'."
           else
-            mergeModules' loc' decls defns;
+            mergeModules' loc decls defns;
     }) names);
 
   /* Merge multiple option declarations into a single declaration.  In
@@ -128,7 +129,7 @@ rec {
           { declarations = [opt.file] ++ res.declarations;
             options = if opt.options ? options then [(toList opt.options.options ++ res.options)] else [];
           }
-    ) { declarations = []; options = []; } opts;
+    ) { inherit loc; declarations = []; options = []; } opts;
 
   /* Merge all the definitions of an option to produce the final
      config value. */

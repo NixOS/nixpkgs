@@ -87,31 +87,28 @@ rec {
 
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.
-  optionAttrSetToDocList = attrs:
-    let options = collect isOption attrs; in
-      fold (opt: rest:
-        let
-          docOption = {
-            inherit (opt) name;
-            description = opt.description or (throw "Option ${opt.name}: No description.");
-            declarations = map (x: toString x.source) opt.declarations;
-            #definitions = map (x: toString x.source) opt.definitions;
-            internal = opt.internal or false;
-            visible = opt.visible or true;
-          }
-          // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
-          // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
-          // optionalAttrs (opt ? defaultText) { default = opt.defaultText; };
+  optionAttrSetToDocList = optionAttrSetToDocList' [];
 
-          subOptions =
-            if opt ? options then
-              optionAttrSetToDocList opt.options
-            else
-              [];
-        in
-          # FIXME: expensive (O(n^2)
-          [ docOption ] ++ subOptions ++ rest
-      ) [] options;
+  optionAttrSetToDocList' = prefix: options:
+    fold (opt: rest:
+      let
+        docOption = rec {
+          name = showOption opt.loc;
+          description = opt.description or (throw "Option `${name}' has no description.");
+          declarations = filter (x: x != unknownModule) opt.declarations;
+          internal = opt.internal or false;
+          visible = opt.visible or true;
+        }
+        // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
+        // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
+        // optionalAttrs (opt ? defaultText) { default = opt.defaultText; };
+
+        subOptions =
+          let ss = opt.type.getSubOptions opt.loc;
+          in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
+      in
+        # FIXME: expensive, O(n^2)
+        [ docOption ] ++ subOptions ++ rest) [] (collect isOption options);
 
 
   /* This function recursively removes all derivation attributes from
@@ -135,5 +132,6 @@ rec {
 
   /* Helper functions. */
   showOption = concatStringsSep ".";
+  unknownModule = "<unknown-file>";
 
 }
