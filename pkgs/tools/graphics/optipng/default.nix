@@ -3,11 +3,11 @@
 # This package comes with its own copy of zlib, libpng and pngxtern
 
 stdenv.mkDerivation rec {
-  name = "optipng-0.6.5";
+  name = "optipng-0.7.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/optipng/${name}.tar.gz";
-    sha256 = "0i2vpakj60bb0zgy4bynly2mwxiv5fq48yjqjzmrbnqwjh1y5619";
+    sha256 = "1zrphbz17rhhfl1l95q5s979rrhifbwczl2xj1fdrnq5jid5s2sj";
   };
 
   meta = {
