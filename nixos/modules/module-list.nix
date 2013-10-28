@@ -276,7 +276,7 @@
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
   ./virtualisation/libvirtd.nix
-  ./virtualisation/nova.nix
+  #./virtualisation/nova.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/xen-dom0.nix
 ]
