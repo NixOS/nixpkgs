@@ -22,35 +22,37 @@ rec {
   /* Close a set of modules under the ‘imports’ relation. */
   closeModules = modules: args:
     let
-      toClosureList = parent: imap (n: x: 
+      toClosureList = file: parentKey: imap (n: x:
         if isAttrs x || builtins.isFunction x then
-          unifyModuleSyntax parent "anon-${toString n}" (applyIfFunction x args)
+          unifyModuleSyntax file "${parentKey}:anon-${toString n}" (applyIfFunction x args)
         else
           unifyModuleSyntax (toString x) (toString x) (applyIfFunction (import x) args));
     in
       builtins.genericClosure {
-        startSet = toClosureList unknownModule modules;
-        operator = m: toClosureList m.file m.imports;
+        startSet = toClosureList unknownModule "" modules;
+        operator = m: toClosureList m.file m.key m.imports;
       };
 
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
     if m ? config || m ? options || m ? imports then
-      let badAttrs = removeAttrs m ["imports" "options" "config"]; in
+      let badAttrs = removeAttrs m ["imports" "options" "config" "key"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. ${builtins.toXML m} "
       else
-        { inherit file key;
+        { inherit file;
+          key = m.key or key;
           imports = m.imports or [];
           options = m.options or {};
           config = m.config or {};
         }
     else
-      { inherit file key;
+      { inherit file;
+        key = m.key or key;
         imports = m.require or [];
         options = {};
-        config = removeAttrs m ["require"];
+        config = removeAttrs m ["key" "require"];
       };
 
   applyIfFunction = f: arg: if builtins.isFunction f then f arg else f;

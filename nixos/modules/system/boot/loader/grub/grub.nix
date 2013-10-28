@@ -236,7 +236,7 @@ in
 
       system.build.installBootLoader =
         if cfg.devices == [] then
-          throw "You must set the ‘boot.loader.grub.device’ option to make the system bootable."
+          throw "You must set the option ‘boot.loader.grub.device’ to make the system bootable."
         else
           "PERL5LIB=${makePerlPath [ pkgs.perlPackages.XMLLibXML pkgs.perlPackages.XMLSAX ]} " +
           "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
