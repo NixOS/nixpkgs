@@ -78,6 +78,7 @@ in
     };
 
     boot.kernelModules = mkOption {
+      type = types.listOf types.string;
       default = [];
       description = ''
         The set of kernel modules to be loaded in the second stage of
@@ -89,6 +90,7 @@ in
     };
 
     boot.initrd.availableKernelModules = mkOption {
+      type = types.listOf types.string;
       default = [];
       example = [ "sata_nv" "ext3" ];
       description = ''
@@ -109,6 +111,7 @@ in
     };
 
     boot.initrd.kernelModules = mkOption {
+      type = types.listOf types.string;
       default = [];
       description = "List of modules that are always loaded by the initrd.";
     };
