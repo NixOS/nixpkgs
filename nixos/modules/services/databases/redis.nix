@@ -14,6 +14,7 @@ let
     ${condOption "unixsocket" cfg.unixSocket}
     loglevel ${cfg.logLevel}
     logfile ${cfg.logfile}
+    syslog-enabled ${redisBool cfg.syslog}
     databases ${toString cfg.databases}
     ${concatMapStrings (d: "save ${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}\n") cfg.save}
     dbfilename ${cfg.dbFilename}
@@ -82,10 +83,16 @@ in
       };
 
       logfile = mkOption {
-        default = "stdout";
+        default = "/dev/null";
         description = "Specify the log file name. Also 'stdout' can be used to force Redis to log on the standard output.";
         example = "/var/log/redis.log";
         type = with types; string;
+      };
+
+      syslog = mkOption {
+        default = true;
+        description = "Enable logging to the system logger.";
+        type = with types; bool;
       };
 
       databases = mkOption {
