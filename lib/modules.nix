@@ -125,7 +125,6 @@ rec {
       if opt.options ? default && res ? default ||
          opt.options ? example && res ? example ||
          opt.options ? description && res ? description ||
-         opt.options ? merge && res ? merge || # FIXME: remove merge
          opt.options ? apply && res ? apply ||
          opt.options ? type && res ? type
       then
@@ -185,8 +184,9 @@ rec {
       concatMap pushDownProperties cfg.contents
     else if cfg._type or "" == "if" then
       map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
+    else if cfg._type or "" == "override" then
+      map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
     else
-      # FIXME: handle mkOverride?
       [ cfg ];
 
   /* Given a config value, expand mkMerge properties, and discharge
