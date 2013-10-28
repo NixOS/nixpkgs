@@ -10,7 +10,7 @@ let
 in
 buildEnv {
   name = "haskell-env-${ghc.name}";
-  paths = stdenv.lib.filter (x: x ? ghc) (stdenv.lib.closePropagation (packages ++ [ghc]));
+  paths = stdenv.lib.filter (x: x ? ghc) (stdenv.lib.closePropagation packages) ++ [ghc];
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
