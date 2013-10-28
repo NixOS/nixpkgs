@@ -8291,6 +8291,10 @@ let
 
   mirage = callPackage ../applications/graphics/mirage {};
 
+  mixxx = callPackage ../applications/audio/mixxx {
+    inherit (vamp) vampSDK;
+  };
+
   mmex = callPackage ../applications/office/mmex { };
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
