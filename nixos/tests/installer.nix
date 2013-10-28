@@ -14,7 +14,7 @@ let
         [ ../modules/installer/cd-dvd/installation-cd-graphical.nix
           ../modules/testing/test-instrumentation.nix
           { key = "serial";
-            boot.loader.grub.timeout = mkOverrideTemplate 0 {} 0;
+            boot.loader.grub.timeout = mkOverride 0 0;
 
             # The test cannot access the network, so any sources we
             # need must be included in the ISO.

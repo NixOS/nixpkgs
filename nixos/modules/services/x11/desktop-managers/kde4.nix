@@ -80,7 +80,7 @@ in
     # overridden by the user's configuration).
     # !!! doesn't work yet ("Multiple definitions. Only one is allowed
     # for this option.")
-    # services.xserver.desktopManager.default = mkOverrideTemplate 900 "kde4";
+    # services.xserver.desktopManager.default = mkOverride 900 "kde4";
 
     services.xserver.desktopManager.session = singleton
       { name = "kde4";

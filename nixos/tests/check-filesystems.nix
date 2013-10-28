@@ -40,7 +40,7 @@ rec {
             device = "share:/repos2";
             fsType = "nfs";
           };
-        in pkgs.lib.mkOverrideTemplate 50 {} [
+        in pkgs.lib.mkOverride 50 [
           repos1
           repos1 # check remount
           repos2 # check after remount
