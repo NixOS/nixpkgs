@@ -5731,7 +5731,7 @@ let
 
   vtk = callPackage ../development/libraries/vtk { };
 
-  vtkWithQt4 = vtk.override { useQt4 = true; };
+  vtkWithQt4 = vtk.override { qtLib = qt4; };
 
   vxl = callPackage ../development/libraries/vxl {
     libpng = libpng12;
