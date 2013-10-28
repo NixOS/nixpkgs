@@ -159,7 +159,7 @@ rec {
       value = (opt.apply or id) merged;
     in opt //
       { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
-        definitions = defsFinal;
+        definitions = map (def: def.value) defsFinal;
         isDefined = defsFinal != [];
       };
 
