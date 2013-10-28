@@ -3469,6 +3469,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  mpmath = buildPythonPackage rec {
+    name = "mpmath-0.17";
+
+    src = fetchurl {
+      url    = "https://mpmath.googlecode.com/files/${name}.tar.gz";
+      sha256 = "1blgzwq4irzaf8abb4z0d2r48903n9zxf51fhnv3gv09bgxjqzxh";
+    };
+
+    meta = with stdenv.lib; {
+      homepage    = http://mpmath.googlecode.com;
+      description = "A pure-Python library for multiprecision floating arithmetic";
+      license     = licenses.bsd3;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+  };
+
+
   mrbob = buildPythonPackage rec {
     name = "mrbob-${version}";
     version = "0.1a9";
