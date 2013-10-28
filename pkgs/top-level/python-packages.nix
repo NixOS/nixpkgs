@@ -5205,6 +5205,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
 
+  pywebkitgtk = stdenv.mkDerivation rec {
+    name = "pywebkitgtk-${version}";
+    version = "1.1.8";
+
+    src = fetchurl {
+      url = "http://pywebkitgtk.googlecode.com/files/${name}.tar.bz2";
+      sha256 = "1svlwyl61rvbqbcbalkg6pbf38yjyv7qkq9sx4x35yk69lscaac2";
+    };
+
+    buildInputs = with pkgs; [
+      pkgconfig python gtk2 pygtk libxml2 libxslt libsoup webkit_gtk2 icu
+    ];
+
+    meta = {
+      homepage = "https://code.google.com/p/pywebkitgtk/";
+      description = "Python bindings for the WebKit GTK+ port";
+      license = stdenv.lib.licenses.lgpl2Plus;
+    };
+  };
+
+
   pyxattr = buildPythonPackage (rec {
     name = "pyxattr-0.5.1";
 
