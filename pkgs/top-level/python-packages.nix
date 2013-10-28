@@ -5678,6 +5678,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  sympy = buildPythonPackage rec {
+    name = "sympy-0.7.3";
+
+    src = fetchurl {
+      url    = "https://github.com/sympy/sympy/releases/download/${name}/${name}.tar.gz";
+      sha256 = "081g9gs2d1d41ipn8zr034d98cnrxvc4zsmihqmfwzirwzpcii5x";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A Python library for symbolic mathematics";
+      homepage    = http://www.sympy.org/;
+      license     = "free";
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
+
   pilkit = buildPythonPackage rec {
     name = "pilkit-1.1.4";
 
