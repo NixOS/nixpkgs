@@ -177,8 +177,9 @@ in
 
   config = mkIf config.services.redis.enable {
 
-    users.extraUsers = singleton
+    users.extraUsers.redis =
       { name = cfg.user;
+        uid = config.ids.uids.redis;
         description = "Redis database user";
       };
 
