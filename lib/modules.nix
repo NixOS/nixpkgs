@@ -119,7 +119,7 @@ rec {
       if opt.options ? default && res ? default ||
          opt.options ? example && res ? example ||
          opt.options ? description && res ? description ||
-         opt.options ? merge && res ? merge ||
+         opt.options ? merge && res ? merge || # FIXME: remove merge
          opt.options ? apply && res ? apply ||
          opt.options ? type && res ? type
       then
@@ -148,13 +148,13 @@ rec {
           fold (def: res:
             if opt.type.check def.value then res
             else throw "The option value `${showOption loc}' in `${def.file}' is not a ${opt.type.name}.")
-            (opt.type.merge (map (m: m.value) defsFinal)) defsFinal;
+            (opt.type.merge' { prefix = loc; } (map (m: m.value) defsFinal)) defsFinal;
       # Finally, apply the ‘apply’ function to the merged
       # value.  This allows options to yield a value computed
       # from the definitions.
       value = (opt.apply or id) merged;
     in opt //
-      { inherit value;
+      { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
         definitions = defsFinal;
         isDefined = defsFinal != [];
       };

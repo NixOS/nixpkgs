@@ -37,6 +37,9 @@ rec {
     };
 
 
+  addToPrefix = args: name: args // { prefix = args.prefix ++ [name]; };
+
+
   types = rec {
 
     unspecified = mkOptionType {
@@ -98,14 +101,15 @@ rec {
     listOf = elemType: mkOptionType {
       name = "list of ${elemType.name}s";
       check = value: isList value && all elemType.check value;
-      merge = defs: map (def: elemType.merge [def]) (concatLists defs);
+      merge' = args: defs: imap (n: def: elemType.merge' (addToPrefix args (toString n)) [def]) (concatLists defs);
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
     };
 
     attrsOf = elemType: mkOptionType {
       name = "attribute set of ${elemType.name}s";
       check = x: isAttrs x && all elemType.check (lib.attrValues x);
-      merge = lib.zipAttrsWith (name: elemType.merge' { inherit name; });
+      merge' = args: lib.zipAttrsWith (name:
+        elemType.merge' (addToPrefix (args // { inherit name; }) name));
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
     };
 
@@ -128,7 +132,7 @@ rec {
           if isList x       then listOnly.check x
           else if isAttrs x then attrOnly.check x
           else false;
-        merge = defs: attrOnly.merge (imap convertIfList defs);
+        merge' = args: defs: attrOnly.merge' args (imap convertIfList defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
       };
 
@@ -152,19 +156,19 @@ rec {
     nullOr = elemType: mkOptionType {
       name = "null or ${elemType.name}";
       check = x: builtins.isNull x || elemType.check x;
-      merge = defs:
+      merge' = args: defs:
         if all isNull defs then null
         else if any isNull defs then
           throw "Some but not all values are null."
-        else elemType.merge defs;
+        else elemType.merge' args defs;
       getSubOptions = elemType.getSubOptions;
     };
 
     functionTo = elemType: mkOptionType {
       name = "function that evaluates to a(n) ${elemType.name}";
       check = builtins.isFunction;
-      merge = fns:
-        args: elemType.merge (map (fn: fn args) fns);
+      merge' = args: fns:
+        fnArgs: elemType.merge' args (map (fn: fn fnArgs) fns);
       getSubOptions = elemType.getSubOptions;
     };
 
@@ -173,13 +177,12 @@ rec {
       mkOptionType rec {
         name = "submodule";
         check = x: isAttrs x || builtins.isFunction x;
-        # FIXME: make error messages include the parent attrpath.
         merge = merge' {};
         merge' = args: defs:
           let
             coerce = def: if builtins.isFunction def then def else { config = def; };
             modules = opts' ++ map coerce defs;
-          in (evalModules modules args).config;
+          in (evalModules' args.prefix modules args).config;
         getSubOptions = prefix: (evalModules' prefix opts'
           # FIXME: hack to get shit to evaluate.
           { name = ""; }
