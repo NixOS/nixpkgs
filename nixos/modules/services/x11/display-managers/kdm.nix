@@ -128,7 +128,7 @@ in
     services.xserver.displayManager.slim.enable = false;
 
     services.xserver.displayManager.job =
-      { execCmd = mkFixStrictness
+      { execCmd =
           ''
             mkdir -m 0755 -p /var/lib/kdm
             chown kdm /var/lib/kdm

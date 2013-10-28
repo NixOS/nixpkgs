@@ -6,6 +6,7 @@ with import ./trivial.nix;
 with import ./lists.nix;
 with import ./misc.nix;
 with import ./attrsets.nix;
+with import ./strings.nix;
 
 rec {
 

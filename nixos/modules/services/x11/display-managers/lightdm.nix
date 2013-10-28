@@ -96,7 +96,7 @@ in
       logsXsession = true;
 
       # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
-      execCmd = mkFixStrictness ''
+      execCmd = ''
         export PATH=${lightdm}/sbin:$PATH
         ${lightdm}/sbin/lightdm --log-dir=/var/log --run-dir=/run --config=${lightdmConf}
       '';
