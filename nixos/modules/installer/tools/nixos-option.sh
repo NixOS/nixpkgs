@@ -1,5 +1,7 @@
 #! @shell@ -e
 
+# FIXME: rewrite this in a more suitable language.
+
 usage () {
     exec man nixos-option
     exit 1
@@ -90,24 +92,25 @@ evalNix(){
 }
 
 evalAttr(){
-  local prefix=$1
-  local suffix=$2
-  local strict=$3
+  local prefix="$1"
+  local strict="$2"
+  local suffix="$3"
   echo "(import <nixos> {}).$prefix${option:+.$option}${suffix:+.$suffix}" |
     evalNix ${strict:+--strict}
 }
 
 evalOpt(){
-  evalAttr "eval.options" "$@"
+  evalAttr "options" "" "$@"
 }
 
 evalCfg(){
-  evalAttr "config" "$@"
+  local strict="$1"
+  evalAttr "config" "$strict"
 }
 
 findSources(){
   local suffix=$1
-  echo "builtins.map (f: f.source) (import <nixos> {}).eval.options${option:+.$option}.$suffix" |
+  echo "(import <nixos> {}).options${option:+.$option}.$suffix" |
     evalNix --strict
 }
 
@@ -143,7 +146,7 @@ let
   nixos = import <nixos> {};
   nixpkgs = import <nixpkgs> {};
   sources = builtins.map (f: f.source);
-  opt = reach nixos.eval.options;
+  opt = reach nixos.options;
   cfg = reach nixos.config;
 in
 
@@ -186,7 +189,7 @@ EOF
 fi
 
 if test "$(evalOpt "_type" 2> /dev/null)" = '"option"'; then
-  $value && evalCfg;
+  $value && evalCfg 1
 
   if $desc; then
     $value && echo;
@@ -212,14 +215,14 @@ if test "$(evalOpt "_type" 2> /dev/null)" = '"option"'; then
     nixMap printPath "$(findSources "declarations")"
     echo ""
     echo "Defined by:"
-    nixMap printPath "$(findSources "definitions")"
+    nixMap printPath "$(findSources "files")"
     echo ""
   fi
 
 else
   # echo 1>&2 "Warning: This value is not an option."
 
-  result=$(evalCfg)
+  result=$(evalCfg "")
   if names=$(attrNames "$result" 2> /dev/null); then
     echo 1>&2 "This attribute set contains:"
     escapeQuotes () { eval echo "$1"; }

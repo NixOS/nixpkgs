@@ -16,14 +16,11 @@ rec {
 
   # Merge the option definitions in all modules, forming the full
   # system configuration.
-  systemModule =
-    pkgs.lib.evalModules {
-      modules = modules ++ baseModules;
-      args = extraArgs;
-      inherit check;
-    };
-
-  config = systemModule.config;
+  inherit (pkgs.lib.evalModules {
+    modules = modules ++ baseModules;
+    args = extraArgs;
+    inherit check;
+  }) config options;
 
   # These are the extra arguments passed to every module.  In
   # particular, Nixpkgs is passed through the "pkgs" argument.
