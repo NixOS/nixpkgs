@@ -39,7 +39,7 @@ rec {
     if m ? config || m ? options || m ? imports then
       let badAttrs = removeAttrs m ["imports" "options" "config" "key"]; in
       if badAttrs != {} then
-        throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. ${builtins.toXML m} "
+        throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'."
       else
         { inherit file;
           key = m.key or key;
