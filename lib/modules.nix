@@ -85,15 +85,15 @@ rec {
                 (pushDownProperties (getAttr name m.config)))
             ) configs);
           nrOptions = count (m: isOption m.options) decls;
-
-          defns2 = concatMap (m:
-            optional (hasAttr name m.config)
-              { inherit (m) file; config = getAttr name m.config; }
+          # Process mkMerge and mkIf properties.
+          defns' = concatMap (m:
+            optionals (hasAttr name m.config)
+              (map (m': { inherit (m) file; value = m'; }) (dischargeProperties (getAttr name m.config)))
             ) configs;
         in
           if nrOptions == length decls then
             let opt = fixupOptionType loc' (mergeOptionDecls loc' decls);
-            in evalOptionValue loc' opt defns2
+            in evalOptionValue loc' opt defns'
           else if nrOptions != 0 then
             let
               firstOption = findFirst (m: isOption m.options) "" decls;
@@ -129,13 +129,11 @@ rec {
 
   /* Merge all the definitions of an option to produce the final
      config value. */
-  evalOptionValue = loc: opt: cfgs:
+  evalOptionValue = loc: opt: defs:
     let
-      # Process mkMerge and mkIf properties.
-      defs' = concatMap (m: map (config: { inherit (m) file; inherit config; }) (dischargeProperties m.config)) cfgs;
       # Process mkOverride properties, adding in the default
       # value specified in the option declaration (if any).
-      defsFinal = filterOverrides (optional (opt ? default) ({ file = head opt.declarations; config = mkOptionDefault opt.default; }) ++ defs');
+      defsFinal = filterOverrides (optional (opt ? default) ({ file = head opt.declarations; value = mkOptionDefault opt.default; }) ++ defs);
       # Type-check the remaining definitions, and merge them if
       # possible.
       merged =
@@ -143,9 +141,9 @@ rec {
           throw "The option `${showOption loc}' is used but not defined."
         else
           fold (def: res:
-            if opt.type.check def.config then res
+            if opt.type.check def.value then res
             else throw "The option value `${showOption loc}' in `${def.file}' is not a ${opt.type.name}.")
-            (opt.type.merge (map (m: m.config) defsFinal)) defsFinal;
+            (opt.type.merge (map (m: m.value) defsFinal)) defsFinal;
       # Finally, apply the ‘apply’ function to the merged
       # value.  This allows options to yield a value computed
       # from the definitions.
@@ -223,10 +221,10 @@ rec {
   filterOverrides = defs:
     let
       defaultPrio = 100;
-      getPrio = def: if def.config._type or "" == "override" then def.config.priority else defaultPrio;
+      getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPrio;
       min = x: y: if x < y then x else y;
       highestPrio = fold (def: prio: min (getPrio def) prio) 9999 defs;
-      strip = def: if def.config._type or "" == "override" then def // { config = def.config.content; } else def;
+      strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
 
   /* Hack for backward compatibility: convert options of type
