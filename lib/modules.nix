@@ -24,9 +24,9 @@ rec {
     let
       coerceToModule = n: x:
         if isAttrs x || builtins.isFunction x then
-          unifyModuleSyntax "anon-${toString n}" (applyIfFunction x args)
+          unifyModuleSyntax "<unknown-file>" "anon-${toString n}" (applyIfFunction x args)
         else
-          unifyModuleSyntax (toString x) (applyIfFunction (import x) args);
+          unifyModuleSyntax (toString x) (toString x) (applyIfFunction (import x) args);
       toClosureList = imap (path: coerceToModule path);
     in
       builtins.genericClosure {
@@ -36,19 +36,19 @@ rec {
 
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
-  unifyModuleSyntax = key: m:
+  unifyModuleSyntax = file: key: m:
     if m ? config || m ? options || m ? imports then
       let badAttrs = removeAttrs m ["imports" "options" "config"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. ${builtins.toXML m} "
       else
-        { inherit key;
+        { inherit file key;
           imports = m.imports or [];
           options = m.options or {};
           config = m.config or {};
         }
     else
-      { inherit key;
+      { inherit file key;
         imports = m.require or [];
         options = {};
         config = m;
@@ -62,19 +62,47 @@ rec {
      corresponding option definitions in all machines, returning them
      in the ‘value’ attribute of each option. */
   mergeModules = modules:
-    mergeModules' [] (map (m: m.options) modules) (concatMap (m: pushDownProperties m.config) modules);
+    mergeModules' [] modules
+      (concatMap (m: map (config: { inherit (m) file; inherit config; }) (pushDownProperties m.config)) modules);
 
   mergeModules' = loc: options: configs:
-    zipAttrsWith (name: vals:
-      let loc' = loc ++ [name]; in
-      if all isOption vals then
-        let opt = fixupOptionType loc' (mergeOptionDecls loc' vals);
-        in evalOptionValue loc' opt (catAttrs name configs)
-      else if any isOption vals then
-        throw "There are options with the prefix `${showOption loc'}', which is itself an option."
-      else
-        mergeModules' loc' vals (concatMap pushDownProperties (catAttrs name configs))
-    ) options;
+    let names = concatMap (m: attrNames m.options) options;
+    in listToAttrs (map (name: {
+      # We're descending into attribute ‘name’.
+      inherit name;
+      value =
+        let
+          loc' = loc ++ [name];
+          # Get all submodules that declare ‘name’.
+          decls = concatLists (map (m:
+            optional (hasAttr name m.options)
+              { inherit (m) file; options = getAttr name m.options; }
+            ) options);
+          # Get all submodules that define ‘name’.
+          defns = concatLists (map (m:
+            optionals (hasAttr name m.config)
+              (map (config: { inherit (m) file; inherit config; })
+                (pushDownProperties (getAttr name m.config)))
+            ) configs);
+          nrOptions = count (m: isOption m.options) decls;
+
+          defns2 = concatMap (m:
+            optional (hasAttr name m.config)
+              { inherit (m) file; config = getAttr name m.config; }
+            ) configs;
+        in
+          if nrOptions == length decls then
+            let opt = fixupOptionType loc' (mergeOptionDecls loc' decls);
+            in evalOptionValue loc' opt defns2
+          else if nrOptions != 0 then
+            let
+              firstOption = findFirst (m: isOption m.options) "" decls;
+              firstNonOption = findFirst (m: !isOption m.options) "" decls;
+            in
+              throw "The option `${showOption loc'}' in `${firstOption.file}' is a prefix of options in `${firstNonOption.file}'."
+          else
+            mergeModules' loc' decls defns;
+    }) names);
 
   /* Merge multiple option declarations into a single declaration.  In
      general, there should be only one declaration of each option.
@@ -83,41 +111,41 @@ rec {
      module to add sub-options to an option declared somewhere else
      (e.g. multiple modules define sub-options for ‘fileSystems’). */
   mergeOptionDecls = loc: opts:
-    fold (opt1: opt2:
-      if opt1 ? default && opt2 ? default ||
-         opt1 ? example && opt2 ? example ||
-         opt1 ? description && opt2 ? description ||
-         opt1 ? merge && opt2 ? merge ||
-         opt1 ? apply && opt2 ? apply ||
-         opt1 ? type && opt2 ? type
+    fold (opt: res:
+      if opt.options ? default && res ? default ||
+         opt.options ? example && res ? example ||
+         opt.options ? description && res ? description ||
+         opt.options ? merge && res ? merge ||
+         opt.options ? apply && res ? apply ||
+         opt.options ? type && res ? type
       then
-        throw "Conflicting declarations of the option `${showOption loc}'."
+        throw "The option `${showOption loc}' in `${opt.file}' is already declared in ${concatStringsSep " and " (map (d: "`${d}'") res.declarations)}."
       else
-        opt1 // opt2
-          // optionalAttrs (opt1 ? options && opt2 ? options)
-            { options = [ opt1.options opt2.options ]; }
-    ) {} opts;
+        opt.options // res //
+          { declarations = [opt.file] ++ res.declarations;
+            options = optionals (opt.options ? options) (toList opt.options.options ++ res.options);
+          }
+    ) { declarations = []; options = []; } opts;
 
   /* Merge all the definitions of an option to produce the final
      config value. */
-  evalOptionValue = loc: opt: defs:
+  evalOptionValue = loc: opt: cfgs:
     let
       # Process mkMerge and mkIf properties.
-      defs' = concatMap dischargeProperties defs;
+      defs' = concatMap (m: map (config: { inherit (m) file; inherit config; }) (dischargeProperties m.config)) cfgs;
       # Process mkOverride properties, adding in the default
       # value specified in the option declaration (if any).
-      defsFinal = filterOverrides (optional (opt ? default) (mkOptionDefault opt.default) ++ defs');
-      # Type-check the remaining definitions, and merge them
-      # if possible.
+      defsFinal = filterOverrides (optional (opt ? default) ({ file = head opt.declarations; config = mkOptionDefault opt.default; }) ++ defs');
+      # Type-check the remaining definitions, and merge them if
+      # possible.
       merged =
         if defsFinal == [] then
           throw "The option `${showOption loc}' is used but not defined."
         else
-          if all opt.type.check defsFinal then
-            opt.type.merge defsFinal
-            #throw "The option `${showOption loc}' has multiple values (with no way to merge them)."
-          else
-            throw "A value of the option `${showOption loc}' has a bad type.";
+          fold (def: res:
+            if opt.type.check def.config then res
+            else throw "The option value `${showOption loc}' in `${def.file}' is not a ${opt.type.name}.")
+            (opt.type.merge (map (m: m.config) defsFinal)) defsFinal;
       # Finally, apply the ‘apply’ function to the merged
       # value.  This allows options to yield a value computed
       # from the definitions.
@@ -178,17 +206,27 @@ rec {
      is,. numerically lowest) priority, and strip the mkOverride
      properties.  For example,
 
-       [ (mkOverride 10 "a") (mkOverride 20 "b") "z" (mkOverride 10 "d")  ]
+       [ { file = "/1"; config = mkOverride 10 "a"; }
+         { file = "/2"; config = mkOverride 20 "b"; }
+         { file = "/3"; config = "z"; }
+         { file = "/4"; config = mkOverride 10 "d"; }
+       ]
 
-     yields ‘[ "a" "d" ]’.  Note that "z" has the default priority 100.
+     yields
+
+       [ { file = "/1"; config = "a"; }
+         { file = "/4"; config = "d"; }
+       ]
+
+     Note that "z" has the default priority 100.
   */
   filterOverrides = defs:
     let
       defaultPrio = 100;
-      getPrio = def: if def._type or "" == "override" then def.priority else defaultPrio;
+      getPrio = def: if def.config._type or "" == "override" then def.config.priority else defaultPrio;
       min = x: y: if x < y then x else y;
       highestPrio = fold (def: prio: min (getPrio def) prio) 9999 defs;
-      strip = def: if def._type or "" == "override" then def.content else def;
+      strip = def: if def.config._type or "" == "override" then def // { config = def.config.content; } else def;
     in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
 
   /* Hack for backward compatibility: convert options of type

@@ -240,7 +240,7 @@ rec {
   # names, hopefully this does not affect the system because the maximal
   # laziness avoid computing twice the same expression and listToAttrs does
   # not care about duplicated attribute names.
-  zipAttrsWith = f: sets: zipWithNames (concatMap attrNames sets) f sets;
+  zipAttrsWith = f: sets: zipAttrsWithNames (concatMap attrNames sets) f sets;
 
   zipAttrs = zipAttrsWith (name: values: values);
 

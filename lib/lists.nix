@@ -118,6 +118,11 @@ in rec {
   all = pred: fold (x: y: if pred x then y else false) true;
 
 
+  # Count how many times function `pred' returns true for the elements
+  # of `list'.
+  count = pred: fold (x: c: if pred x then inc c else c) 0;
+
+
   # Return a singleton list or an empty list, depending on a boolean
   # value.  Useful when building lists with optional elements
   # (e.g. `++ optional (system == "i686-linux") flashplayer').
