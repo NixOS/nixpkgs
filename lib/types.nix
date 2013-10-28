@@ -12,7 +12,6 @@ with lib.modules;
 rec {
 
   isType = type: x: (x._type or "") == type;
-  hasType = x: isAttrs x && x ? _type;
   typeOf = x: x._type or "";
 
   setType = typeName: value: value // {

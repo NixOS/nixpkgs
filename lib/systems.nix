@@ -22,7 +22,7 @@ rec {
   };
 
 
-  isCpuType = x: typeOf x == "cpu-type"
+  isCpuType = x: isType "cpu-type" x
     && elem x.bits [8 16 32 64 128]
     && (builtins.lessThan 8 x.bits -> isSignificantByte x.significantByte);
 
@@ -69,7 +69,7 @@ rec {
   };
 
 
-  isSystem = x: typeOf x == "system"
+  isSystem = x: isType "system" x
     && isCpuType x.cpu
     && isArchitecture x.arch
     && isKernel x.kernel;
