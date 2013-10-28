@@ -75,20 +75,23 @@ rec {
           loc' = loc ++ [name];
           # Get all submodules that declare ‘name’.
           decls = concatLists (map (m:
-            optional (hasAttr name m.options)
-              { inherit (m) file; options = getAttr name m.options; }
+            if hasAttr name m.options
+              then [ { inherit (m) file; options = getAttr name m.options; } ]
+              else []
             ) options);
           # Get all submodules that define ‘name’.
           defns = concatLists (map (m:
-            optionals (hasAttr name m.config)
-              (map (config: { inherit (m) file; inherit config; })
-                (pushDownProperties (getAttr name m.config)))
+            if hasAttr name m.config
+              then map (config: { inherit (m) file; inherit config; })
+                (pushDownProperties (getAttr name m.config))
+              else []
             ) configs);
           nrOptions = count (m: isOption m.options) decls;
           # Process mkMerge and mkIf properties.
           defns' = concatMap (m:
-            optionals (hasAttr name m.config)
-              (map (m': { inherit (m) file; value = m'; }) (dischargeProperties (getAttr name m.config)))
+            if hasAttr name m.config
+              then map (m': { inherit (m) file; value = m'; }) (dischargeProperties (getAttr name m.config))
+              else []
             ) configs;
         in
           if nrOptions == length decls then
@@ -123,7 +126,7 @@ rec {
       else
         opt.options // res //
           { declarations = [opt.file] ++ res.declarations;
-            options = optionals (opt.options ? options) (toList opt.options.options ++ res.options);
+            options = if opt.options ? options then [(toList opt.options.options ++ res.options)] else [];
           }
     ) { declarations = []; options = []; } opts;
 
@@ -133,7 +136,8 @@ rec {
     let
       # Process mkOverride properties, adding in the default
       # value specified in the option declaration (if any).
-      defsFinal = filterOverrides (optional (opt ? default) ({ file = head opt.declarations; value = mkOptionDefault opt.default; }) ++ defs);
+      defsFinal = filterOverrides
+        ((if opt ? default then [{ file = head opt.declarations; value = mkOptionDefault opt.default; }] else []) ++ defs);
       # Type-check the remaining definitions, and merge them if
       # possible.
       merged =

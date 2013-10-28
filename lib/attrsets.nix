@@ -29,9 +29,8 @@ rec {
      ["x" "y"] applied with some value v returns `x.y = v;' */
   setAttrByPath = attrPath: value:
     if attrPath == [] then value
-    else listToAttrs [(
-      nameValuePair (head attrPath) (setAttrByPath (tail attrPath) value)
-    )];
+    else listToAttrs
+      [ { name = head attrPath; value = setAttrByPath (tail attrPath) value; } ];
 
 
   getAttrFromPath = attrPath: set:
@@ -133,7 +132,7 @@ rec {
        => { x = "x-foo"; y = "y-bar"; }
   */
   mapAttrs = f: set:
-    listToAttrs (map (attr: nameValuePair attr (f attr (getAttr attr set))) (attrNames set));
+    listToAttrs (map (attr: { name = attr; value = f attr (getAttr attr set); }) (attrNames set));
 
 
   /* Like `mapAttrs', but allows the name of each attribute to be

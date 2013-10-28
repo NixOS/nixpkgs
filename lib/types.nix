@@ -116,7 +116,7 @@ rec {
           if isList def then
             listToAttrs (
               flip imap def (elemIdx: elem:
-                nameValuePair "unnamed-${toString defIdx}.${toString elemIdx}" elem))
+                { name = "unnamed-${toString defIdx}.${toString elemIdx}"; value = elem; }))
           else
             def;
         listOnly = listOf elemType;
