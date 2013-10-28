@@ -143,7 +143,7 @@ rec {
     let
       # Process mkOverride properties, adding in the default
       # value specified in the option declaration (if any).
-      defsFinal = filterOverrides
+      defsFinal = filterOverrides'
         ((if opt ? default then [{ file = head opt.declarations; value = mkOptionDefault opt.default; }] else []) ++ defs);
       # Type-check the remaining definitions, and merge them if
       # possible.
@@ -229,7 +229,7 @@ rec {
 
      Note that "z" has the default priority 100.
   */
-  filterOverrides = defs:
+  filterOverrides' = defs:
     let
       defaultPrio = 100;
       getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPrio;
@@ -237,6 +237,9 @@ rec {
       highestPrio = fold (def: prio: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
+
+  /* For use in options like environment.variables. */
+  filterOverrides = defs: map (def: def.value) (filterOverrides' (map (def: { value = def; }) defs));
 
   /* Hack for backward compatibility: convert options of type
      optionSet to configOf.  FIXME: remove eventually. */
