@@ -8,7 +8,7 @@ rec {
 
     enable = mkOption {
       default = true;
-      types = types.bool;
+      type = types.bool;
       description = ''
         If set to false, this unit will be a symlink to
         /dev/null. This is primarily useful to prevent specific
@@ -19,13 +19,13 @@ rec {
 
     description = mkOption {
       default = "";
-      types = types.uniq types.string;
+      type = types.uniq types.string;
       description = "Description of this unit used in systemd messages and progress indicators.";
     };
 
     requires = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         Start the specified units when this unit is started, and stop
         this unit when the specified units are stopped or fail.
@@ -34,7 +34,7 @@ rec {
 
     wants = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         Start the specified units when this unit is started.
       '';
@@ -42,7 +42,7 @@ rec {
 
     after = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         If the specified units are started at the same time as
         this unit, delay this unit until they have started.
@@ -51,7 +51,7 @@ rec {
 
     before = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         If the specified units are started at the same time as
         this unit, delay them until this unit has started.
@@ -60,7 +60,7 @@ rec {
 
     bindsTo = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         Like ‘requires’, but in addition, if the specified units
         unexpectedly disappear, this unit will be stopped as well.
@@ -69,7 +69,7 @@ rec {
 
     partOf = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         If the specified units are stopped or restarted, then this
         unit is stopped or restarted as well.
@@ -78,7 +78,7 @@ rec {
 
     conflicts = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         If the specified units are started, then this unit is stopped
         and vice versa.
@@ -87,13 +87,13 @@ rec {
 
     requiredBy = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = "Units that require (i.e. depend on and need to go down with) this unit.";
     };
 
     wantedBy = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = "Units that want (i.e. depend on) this unit.";
     };
 
@@ -250,7 +250,7 @@ rec {
 
     listenStreams = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       example = [ "0.0.0.0:993" "/run/my-socket" ];
       description = ''
         For each item in this list, a <literal>ListenStream</literal>

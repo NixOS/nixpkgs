@@ -389,12 +389,12 @@ in
       type = types.attrsOf types.optionSet;
       options = {
         text = mkOption {
-          types = types.uniq types.string;
+          type = types.uniq types.string;
           description = "Text of this systemd unit.";
         };
         enable = mkOption {
           default = true;
-          types = types.bool;
+          type = types.bool;
           description = ''
             If set to false, this unit will be a symlink to
             /dev/null. This is primarily useful to prevent specific
@@ -404,12 +404,12 @@ in
         };
         requiredBy = mkOption {
           default = [];
-          types = types.listOf types.string;
+          type = types.listOf types.string;
           description = "Units that require (i.e. depend on and need to go down with) this unit.";
         };
         wantedBy = mkOption {
           default = [];
-          types = types.listOf types.string;
+          type = types.listOf types.string;
           description = "Units that want (i.e. depend on) this unit.";
         };
       };

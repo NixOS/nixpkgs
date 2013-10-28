@@ -70,7 +70,7 @@ in
             };
 
             source = mkOption {
-              types = types.path;
+              type = types.path;
               description = "Path of the source file.";
             };
 
