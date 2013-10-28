@@ -7,7 +7,7 @@ let
   sysctlOption = mkOptionType {
     name = "sysctl option value";
     check = x: builtins.isBool x || builtins.isString x || builtins.isInt x;
-    merge = xs: last xs; # FIXME: hacky way to allow overriding in configuration.nix.
+    merge = args: xs: last xs; # FIXME: hacky way to allow overriding in configuration.nix.
   };
 
 in

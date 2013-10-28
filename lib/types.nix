@@ -19,25 +19,22 @@ rec {
   };
 
 
-  # name (name of the type)
-  # check (check the config value)
-  # merge (default merge function)
-  # getSubOptions (returns sub-options for manual generation)
   isOptionType = isType "option-type";
   mkOptionType =
-    { name
-    , check ? (x: true)
-    , merge ? mergeDefaultOption
-    , merge' ? args: merge
-    , getSubOptions ? prefix: {}
+    { # Human-readable representation of the type.
+      name
+    , # Function applied to each definition that should return true if
+      # its type-correct, false otherwise.
+      check ? (x: true)
+    , # Merge a list of definitions together into a single value.
+      merge ? mergeDefaultOption
+    , # Return a flat list of sub-options.  Used to generate
+      # documentation.
+      getSubOptions ? prefix: {}
     }:
-
     { _type = "option-type";
-      inherit name check merge merge' getSubOptions;
+      inherit name check merge getSubOptions;
     };
-
-
-  addToPrefix = args: name: args // { prefix = args.prefix ++ [name]; };
 
 
   types = rec {
@@ -49,7 +46,7 @@ rec {
     bool = mkOptionType {
       name = "boolean";
       check = builtins.isBool;
-      merge = fold lib.or false;
+      merge = args: fold lib.or false;
     };
 
     int = mkOptionType {
@@ -60,7 +57,7 @@ rec {
     string = mkOptionType {
       name = "string";
       check = builtins.isString;
-      merge = lib.concatStrings;
+      merge = args: lib.concatStrings;
     };
 
     # Like ‘string’, but add newlines between every value.  Useful for
@@ -68,54 +65,56 @@ rec {
     lines = mkOptionType {
       name = "string";
       check = builtins.isString;
-      merge = lib.concatStringsSep "\n";
+      merge = args: lib.concatStringsSep "\n";
     };
 
     commas = mkOptionType {
       name = "string";
       check = builtins.isString;
-      merge = lib.concatStringsSep ",";
+      merge = args: lib.concatStringsSep ",";
     };
 
     envVar = mkOptionType {
       name = "environment variable";
       inherit (string) check;
-      merge = lib.concatStringsSep ":";
+      merge = args: lib.concatStringsSep ":";
     };
 
     attrs = mkOptionType {
       name = "attribute set";
       check = isAttrs;
-      merge = fold lib.mergeAttrs {};
+      merge = args: fold lib.mergeAttrs {};
     };
 
     # derivation is a reserved keyword.
     package = mkOptionType {
       name = "derivation";
       check = isDerivation;
+      merge = mergeOneOption;
     };
 
     path = mkOptionType {
       name = "path";
       # Hacky: there is no ‘isPath’ primop.
       check = x: builtins.unsafeDiscardStringContext (builtins.substring 0 1 (toString x)) == "/";
+      merge = mergeOneOption;
     };
 
     # drop this in the future:
-    list = builtins.trace "types.list is deprecated; use types.listOf instead" types.listOf;
+    list = builtins.trace "`types.list' is deprecated; use `types.listOf' instead" types.listOf;
 
     listOf = elemType: mkOptionType {
       name = "list of ${elemType.name}s";
       check = value: isList value && all elemType.check value;
-      merge' = args: defs: imap (n: def: elemType.merge' (addToPrefix args (toString n)) [def]) (concatLists defs);
+      merge = args: defs: imap (n: def: elemType.merge (addToPrefix args (toString n)) [def]) (concatLists defs);
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
     };
 
     attrsOf = elemType: mkOptionType {
       name = "attribute set of ${elemType.name}s";
       check = x: isAttrs x && all elemType.check (lib.attrValues x);
-      merge' = args: lib.zipAttrsWith (name:
-        elemType.merge' (addToPrefix (args // { inherit name; }) name));
+      merge = args: lib.zipAttrsWith (name:
+        elemType.merge (addToPrefix (args // { inherit name; }) name));
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
     };
 
@@ -138,43 +137,39 @@ rec {
           if isList x       then listOnly.check x
           else if isAttrs x then attrOnly.check x
           else false;
-        merge' = args: defs: attrOnly.merge' args (imap convertIfList defs);
+        merge = args: defs: attrOnly.merge args (imap convertIfList defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
       };
 
     uniq = elemType: mkOptionType {
       inherit (elemType) name check;
-      merge = list:
-        if length list == 1 then
-          head list
-        else
-          throw "Multiple definitions of ${elemType.name}. Only one is allowed for this option.";
+      merge = mergeOneOption;
       getSubOptions = elemType.getSubOptions;
     };
 
     none = elemType: mkOptionType {
       inherit (elemType) name check;
-      merge = list:
-        throw "No definitions are allowed for this option.";
+      merge = args: list:
+        throw "No definitions are allowed for the option `${showOption args.prefix}'.";
       getSubOptions = elemType.getSubOptions;
     };
 
     nullOr = elemType: mkOptionType {
       name = "null or ${elemType.name}";
       check = x: builtins.isNull x || elemType.check x;
-      merge' = args: defs:
+      merge = args: defs:
         if all isNull defs then null
         else if any isNull defs then
-          throw "Some but not all values are null."
-        else elemType.merge' args defs;
+          throw "The option `${showOption args.prefix}' is defined both null and not null, in ${showFiles args.files}."
+        else elemType.merge args defs;
       getSubOptions = elemType.getSubOptions;
     };
 
     functionTo = elemType: mkOptionType {
       name = "function that evaluates to a(n) ${elemType.name}";
       check = builtins.isFunction;
-      merge' = args: fns:
-        fnArgs: elemType.merge' args (map (fn: fn fnArgs) fns);
+      merge = args: fns:
+        fnArgs: elemType.merge args (map (fn: fn fnArgs) fns);
       getSubOptions = elemType.getSubOptions;
     };
 
@@ -183,8 +178,7 @@ rec {
       mkOptionType rec {
         name = "submodule";
         check = x: isAttrs x || builtins.isFunction x;
-        merge = merge' {};
-        merge' = args: defs:
+        merge = args: defs:
           let
             coerce = def: if builtins.isFunction def then def else { config = def; };
             modules = opts' ++ map coerce defs;
@@ -203,5 +197,9 @@ rec {
     };
 
   };
+
+
+  /* Helper function. */
+  addToPrefix = args: name: args // { prefix = args.prefix ++ [name]; };
 
 }

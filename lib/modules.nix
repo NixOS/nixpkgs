@@ -128,7 +128,7 @@ rec {
          opt.options ? apply && res ? apply ||
          opt.options ? type && res ? type
       then
-        throw "The option `${showOption loc}' in `${opt.file}' is already declared in ${concatStringsSep " and " (map (d: "`${d}'") res.declarations)}."
+        throw "The option `${showOption loc}' in `${opt.file}' is already declared in ${showFiles res.declarations}."
       else
         opt.options // res //
           { declarations = [opt.file] ++ res.declarations;
@@ -153,7 +153,7 @@ rec {
           fold (def: res:
             if opt.type.check def.value then res
             else throw "The option value `${showOption loc}' in `${def.file}' is not a ${opt.type.name}.")
-            (opt.type.merge' { prefix = loc; } (map (m: m.value) defsFinal)) defsFinal;
+            (opt.type.merge { prefix = loc; files = map (m: m.file) defsFinal; } (map (m: m.value) defsFinal)) defsFinal;
       # Finally, apply the ‘apply’ function to the merged
       # value.  This allows options to yield a value computed
       # from the definitions.

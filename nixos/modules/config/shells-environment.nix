@@ -25,11 +25,14 @@ in
       '';
       type = types.attrsOf (mkOptionType {
         name = "a string or a list of strings";
-        merge = xs:
+        merge = args: xs:
           let xs' = filterOverrides xs; in
           if isList (head xs') then concatLists xs'
-          else if builtins.lessThan 1 (length xs') then abort "variable in ‘environment.variables’ has multiple values"
-          else if !builtins.isString (head xs') then abort "variable in ‘environment.variables’ does not have a string value"
+          else if builtins.lessThan 1 (length xs') then
+            # Don't show location info here, since it's too general.
+            throw "The option `${showOption args.prefix}' is defined multiple times."
+          else if !builtins.isString (head xs') then
+            throw "The option `${showOption args.prefix}' does not have a string value."
           else head xs';
       });
       apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);

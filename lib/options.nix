@@ -35,7 +35,7 @@ rec {
   addDefaultOptionValues = defs: opts: opts //
     builtins.listToAttrs (map (defName:
       { name = defName;
-        value = 
+        value =
           let
             defValue = builtins.getAttr defName defs;
             optValue = builtins.getAttr defName opts;
@@ -49,27 +49,26 @@ rec {
           else
             # `defValue' is an attribute set containing options.
             # So recurse.
-            if hasAttr defName opts && isAttrs optValue 
+            if hasAttr defName opts && isAttrs optValue
             then addDefaultOptionValues defValue optValue
             else addDefaultOptionValues defValue {};
       }
     ) (attrNames defs));
 
-  mergeDefaultOption = list:
+  mergeDefaultOption = args: list:
     if length list == 1 then head list
-    else if all builtins.isFunction list then x: mergeDefaultOption (map (f: f x) list)
+    else if all builtins.isFunction list then x: mergeDefaultOption args (map (f: f x) list)
     else if all isList list then concatLists list
     else if all isAttrs list then fold lib.mergeAttrs {} list
     else if all builtins.isBool list then fold lib.or false list
     else if all builtins.isString list then lib.concatStrings list
-    else if all builtins.isInt list && all (x: x == head list) list
-         then head list
-    else throw "Cannot merge values.";
+    else if all builtins.isInt list && all (x: x == head list) list then head list
+    else throw "Cannot merge definitions of `${showOption args.prefix}' given in ${showFiles args.files}.";
 
 
   /* Obsolete, will remove soon.  Specify an option type or apply
      function instead.  */
-  mergeTypedOption = typeName: predicate: merge: list:
+  mergeTypedOption = typeName: predicate: merge: args: list:
     if all predicate list then merge list
     else throw "Expect a ${typeName}.";
 
@@ -82,9 +81,10 @@ rec {
     (x: if builtins ? isString then builtins.isString x else x + "")
     lib.concatStrings;
 
-  mergeOneOption = list:
+  mergeOneOption = args: list:
     if list == [] then abort "This case should never happen."
-    else if length list != 1 then throw "Multiple definitions. Only one is allowed for this option."
+    else if length list != 1 then
+      throw "The unique option `${showOption args.prefix}' is defined multiple times, in ${showFiles args.files}."
     else head list;
 
 
@@ -135,6 +135,7 @@ rec {
 
   /* Helper functions. */
   showOption = concatStringsSep ".";
+  showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
   unknownModule = "<unknown-file>";
 
 }
