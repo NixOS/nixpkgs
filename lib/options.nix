@@ -21,7 +21,6 @@ rec {
     # merge (function used to merge definitions into one definition: [ /type/ ] -> /type/)
     # apply (convert the option value to ease the manipulation of the option result)
     # options (set of sub-options declarations & definitions)
-    # extraConfigs (list of possible configurations)
   };
 
   mkEnableOption = name: mkOption {
@@ -30,111 +29,6 @@ rec {
     description = "Whether to enable ${name}.";
     type = lib.types.bool;
   };
-
-  mapSubOptions = f: opt:
-    if opt ? options then
-      opt // {
-        options = imap f (toList opt.options);
-      }
-    else
-      opt;
-
-  # Make the option declaration more user-friendly by adding default
-  # settings and some verifications based on the declaration content (like
-  # type correctness).
-  addOptionMakeUp = {name, recurseInto}: decl:
-    let
-      init = {
-        inherit name;
-        merge = mergeDefaultOption;
-        apply = lib.id;
-      };
-
-      functionsFromType = opt:
-        opt // (builtins.intersectAttrs { merge = 1; check = 1; } (decl.type or {})); 
-
-      addDeclaration = opt: opt // decl;
-
-      ensureMergeInputType = opt:
-        if opt ? check then
-          opt // {
-            merge = list:
-              if all opt.check list then
-                opt.merge list
-              else
-                throw "A value of the option `${name}' has a bad type.";
-          }
-        else opt;
-
-      checkDefault = opt:
-        if opt ? check && opt ? default then
-          opt // {
-            default =
-              if opt.check opt.default then
-                opt.default
-              else
-                throw "The default value of the option `${name}' has a bad type.";
-          }
-        else opt;
-
-      handleOptionSets = opt:
-        if opt ? type && opt.type.hasOptions then
-          let
-            # Evaluate sub-modules.
-            subModuleMerge = path: vals:
-              lib.fix (args:
-                let
-                  result = recurseInto path (opt.options ++ imap (index: v: args: {
-                    key = rec {
-                      #!!! Would be nice if we had the file the val was from
-                      option = path;
-                      number = index;
-                      outPath = "option ${option} config number ${toString number}";
-                    };
-                  } // (lib.applyIfFunction v args)) (toList vals)) args;
-                  name = lib.removePrefix (opt.name + ".") path;
-                  extraArgs = opt.extraArgs or {};
-                  individualExtraArgs = opt.individualExtraArgs or {};
-                in {
-                  inherit (result) config options;
-                  inherit name;
-                } //
-                  (opt.extraArgs or {}) //
-                  (if hasAttr name individualExtraArgs then getAttr name individualExtraArgs else {})
-              );
-
-            # Add _options in sub-modules to make it viewable from other
-            # modules.
-            subModuleMergeConfig = path: vals:
-              let result = subModuleMerge path vals; in
-                { _args = result; } // result.config;
-
-          in
-            opt // {
-              merge = list:
-                opt.type.iter
-                  subModuleMergeConfig
-                  opt.name
-                  (opt.merge list);
-              options =
-                let path = opt.type.docPath opt.name; in
-                  (subModuleMerge path []).options;
-            }
-        else
-          opt;
-    in
-      foldl (opt: f: f opt) init [
-        # default settings
-        functionsFromType
-
-        # user settings
-        addDeclaration
-
-        # override settings
-        ensureMergeInputType
-        checkDefault
-        handleOptionSets
-      ];
 
   # !!! This function will be removed because this can be done with the
   # multiple option declarations.
@@ -189,35 +83,6 @@ rec {
     if list == [] then abort "This case should never happen."
     else if length list != 1 then throw "Multiple definitions. Only one is allowed for this option."
     else head list;
-
-
-  fixableMergeFun = merge: f: config:
-    merge (
-      # generate the list of option sets.
-      f config
-    );
-
-  fixableMergeModules = merge: initModules: {...}@args: config:
-    fixableMergeFun merge (config:
-      lib.moduleClosure initModules (args // { inherit config; })
-    ) config;
-
-
-  fixableDefinitionsOf = initModules: {...}@args:
-    fixableMergeModules (modules: (lib.moduleMerge "" modules).config) initModules args;
-
-  fixableDeclarationsOf = initModules: {...}@args:
-    fixableMergeModules (modules: (lib.moduleMerge "" modules).options) initModules args;
-
-  definitionsOf = initModules: {...}@args:
-    (lib.fix (module:
-      fixableMergeModules (lib.moduleMerge "") initModules args module.config
-    )).config;
-
-  declarationsOf = initModules: {...}@args:
-    (lib.fix (module:
-      fixableMergeModules (lib.moduleMerge "") initModules args module.config
-    )).options;
 
 
   # Generate documentation template from the list of option declaration like
