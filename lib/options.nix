@@ -30,31 +30,6 @@ rec {
     type = lib.types.bool;
   };
 
-  # !!! This function will be removed because this can be done with the
-  # multiple option declarations.
-  addDefaultOptionValues = defs: opts: opts //
-    builtins.listToAttrs (map (defName:
-      { name = defName;
-        value =
-          let
-            defValue = builtins.getAttr defName defs;
-            optValue = builtins.getAttr defName opts;
-          in
-          if isOption defValue
-          then
-            # `defValue' is an option.
-            if hasAttr defName opts
-            then builtins.getAttr defName opts
-            else defValue.default
-          else
-            # `defValue' is an attribute set containing options.
-            # So recurse.
-            if hasAttr defName opts && isAttrs optValue
-            then addDefaultOptionValues defValue optValue
-            else addDefaultOptionValues defValue {};
-      }
-    ) (attrNames defs));
-
   mergeDefaultOption = args: list:
     if length list == 1 then head list
     else if all builtins.isFunction list then x: mergeDefaultOption args (map (f: f x) list)
@@ -64,7 +39,6 @@ rec {
     else if all builtins.isString list then lib.concatStrings list
     else if all builtins.isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption args.prefix}' given in ${showFiles args.files}.";
-
 
   /* Obsolete, will remove soon.  Specify an option type or apply
      function instead.  */
