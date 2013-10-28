@@ -95,14 +95,14 @@ in
       options = [ fileSystemOpts ];
       description = ''
         The file systems to be mounted.  It must include an entry for
-        the root directory (<literal>mountPoint = \"/\"</literal>).  Each
+        the root directory (<literal>mountPoint = "/"</literal>).  Each
         entry in the list is an attribute set with the following fields:
         <literal>mountPoint</literal>, <literal>device</literal>,
         <literal>fsType</literal> (a file system type recognised by
         <command>mount</command>; defaults to
-        <literal>\"auto\"</literal>), and <literal>options</literal>
+        <literal>"auto"</literal>), and <literal>options</literal>
         (the mount options passed to <command>mount</command> using the
-        <option>-o</option> flag; defaults to <literal>\"defaults\"</literal>).
+        <option>-o</option> flag; defaults to <literal>"defaults"</literal>).
 
         Instead of specifying <literal>device</literal>, you can also
         specify a volume label (<literal>label</literal>) for file

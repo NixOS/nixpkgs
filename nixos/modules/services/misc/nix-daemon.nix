@@ -160,7 +160,7 @@ in
           user name to be used for the SSH connection
           (<varname>sshUser</varname>), the Nix system type
           (<varname>system</varname>, e.g.,
-          <literal>\"i686-linux\"</literal>), the maximum number of
+          <literal>"i686-linux"</literal>), the maximum number of
           jobs to be run in parallel on that machine
           (<varname>maxJobs</varname>), the path to the SSH private
           key to be used to connect (<varname>sshKey</varname>), a
