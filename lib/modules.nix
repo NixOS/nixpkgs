@@ -203,21 +203,21 @@ rec {
     else
       [ def ];
 
-  /* Given a list of config value, process the mkOverride properties,
-     that is, return the values that have the highest (that
-     is,. numerically lowest) priority, and strip the mkOverride
+  /* Given a list of config values, process the mkOverride properties,
+     that is, return the values that have the highest (that is,
+     numerically lowest) priority, and strip the mkOverride
      properties.  For example,
 
-       [ { file = "/1"; config = mkOverride 10 "a"; }
-         { file = "/2"; config = mkOverride 20 "b"; }
-         { file = "/3"; config = "z"; }
-         { file = "/4"; config = mkOverride 10 "d"; }
+       [ { file = "/1"; value = mkOverride 10 "a"; }
+         { file = "/2"; value = mkOverride 20 "b"; }
+         { file = "/3"; value = "z"; }
+         { file = "/4"; value = mkOverride 10 "d"; }
        ]
 
      yields
 
-       [ { file = "/1"; config = "a"; }
-         { file = "/4"; config = "d"; }
+       [ { file = "/1"; value = "a"; }
+         { file = "/4"; value = "d"; }
        ]
 
      Note that "z" has the default priority 100.
