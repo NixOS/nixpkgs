@@ -109,7 +109,7 @@ fi
 # more conservative.
 if [ "$action" != dry-run -a -n "$buildNix" ]; then
     echo "building Nix..." >&2
-    if ! nix-build '<nixpkgs/nixos>' -A config.environment.nix -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
+    if ! nix-build '<nixpkgs/nixos>' -A config.nix.package -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
         if ! nix-build '<nixpkgs/nixos>' -A nixFallback -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
             nix-build '<nixpkgs>' -A nixUnstable -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null
         fi

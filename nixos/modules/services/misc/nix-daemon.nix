@@ -6,7 +6,7 @@ let
 
   cfg = config.nix;
 
-  inherit (config.environment) nix;
+  nix = cfg.package;
 
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
@@ -55,15 +55,15 @@ in
 
   options = {
 
-    environment.nix = mkOption {
-      type = types.path;
-      default = pkgs.nix;
-      description = ''
-        This option specifies the Nix package instance to use throughout the system.
-      '';
-    };
-
     nix = {
+
+      package = mkOption {
+        type = types.path;
+        default = pkgs.nix;
+        description = ''
+          This option specifies the Nix package instance to use throughout the system.
+        '';
+      };
 
       maxJobs = mkOption {
         default = 1;
@@ -302,7 +302,7 @@ in
       }
 
       // optionalAttrs cfg.distributedBuilds {
-        NIX_BUILD_HOOK = "${config.environment.nix}/libexec/nix/build-remote.pl";
+        NIX_BUILD_HOOK = "${nix}/libexec/nix/build-remote.pl";
         NIX_REMOTE_SYSTEMS = "/etc/nix/machines";
         NIX_CURRENT_LOAD = "/run/nix/current-load";
       }

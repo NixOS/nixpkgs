@@ -14,7 +14,7 @@ let
     '';
 
   requiredPackages =
-    [ config.environment.nix
+    [ config.nix.package
       pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support

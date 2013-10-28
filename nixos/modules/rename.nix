@@ -73,6 +73,7 @@ in zipModules ([]
 # ++ alias [ "services" "xserver" "slim" "theme" ] [ "services" "xserver" "displayManager" "slim" "theme" ]
 ++ obsolete [ "environment" "extraPackages" ] [ "environment" "systemPackages" ]
 ++ obsolete [ "environment" "enableBashCompletion" ] [ "programs" "bash" "enableCompletion" ]
+++ obsolete [ "environment" "nix" ] [ "nix" "package" ]
 
 ++ obsolete [ "security" "extraSetuidPrograms" ] [ "security" "setuidPrograms" ]
 ++ obsolete [ "networking" "enableWLAN" ] [ "networking" "wireless" "enable" ]

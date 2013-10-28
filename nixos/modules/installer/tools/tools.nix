@@ -22,10 +22,10 @@ let
     src = ./nixos-install.sh;
 
     inherit (pkgs) perl pathsFromGraph;
-    nix = config.environment.nix;
+    nix = config.nix.package;
 
     nixClosure = pkgs.runCommand "closure"
-      { exportReferencesGraph = ["refs" config.environment.nix]; }
+      { exportReferencesGraph = ["refs" config.nix.package]; }
       "cp refs $out";
   };
 
