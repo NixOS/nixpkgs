@@ -8,7 +8,7 @@ let
 
   dataDir = "/var/db/graphite";
   carbonOpts = name: with config.ids; ''
-    --nodaemon --syslog --prefix=${name} \
+    --nodaemon --syslog --prefix=${name} --pidfile /var/run/${name}.pid \
     --uid ${toString uids.graphite} --gid ${toString uids.graphite} ${name}
   '';
   carbonEnv = {
