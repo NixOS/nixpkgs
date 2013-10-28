@@ -197,6 +197,23 @@ in rec
     };
   };
 
+  ipython = simpleDerivation {
+    name = "vim-ipython-ff8f88f3fe518851a91dc88aaa5a75f8f352a960";
+    src = fetchurl {
+      url    = "https://github.com/ivanov/vim-ipython/archive/ff8f88f3fe518851a91dc88aaa5a75f8f352a960.tar.gz";
+      sha256 = "0hlx526dm8amrvh41kwnmgvvdzs6sh5yc5sfq4nk1zjkfcp1ah5j";
+    };
+    path = "ipython";
+    meta = with stdenv.lib; {
+      description = "A two-way integration between vim and iPython";
+      homepage    = https://github.com/ivanov/vim-ipython;
+      repositories.git = https://github.com/ivanov/vim-ipython.git;
+      license     = licenses.publicDomain;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
+
   taglist = simpleDerivation {
     name = "vim-taglist-4.6";
     meta = with stdenv.lib; {
