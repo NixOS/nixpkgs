@@ -8,7 +8,7 @@ let
 
   dataDir = "/var/db/graphite";
   carbonOpts = name: with config.ids; ''
-    --nodaemon --syslog --prefix=${name} \
+    --nodaemon --syslog --prefix=${name} --pidfile /var/run/${name}.pid \
     --uid ${toString uids.graphite} --gid ${toString uids.graphite} ${name}
   '';
   carbonEnv = {
@@ -52,6 +52,9 @@ in {
           PICKLE_RECEIVER_INTERFACE = 127.0.0.1
           LINE_RECEIVER_INTERFACE = 127.0.0.1
           CACHE_QUERY_INTERFACE = 127.0.0.1
+          # Do not log every update
+          LOG_UPDATES = False
+          LOG_CACHE_HITS = False
         '';
         type = types.uniq types.string;
       };
