@@ -14,14 +14,14 @@ let
 
       name = mkOption {
         example = "eth0";
-        type = types.string;
+        type = types.uniq types.string;
         description = "Name of the interface.";
       };
 
       ipAddress = mkOption {
         default = null;
         example = "10.0.0.1";
-        type = types.nullOr types.string;
+        type = types.nullOr (types.uniq types.string);
         description = ''
           IP address of the interface.  Leave empty to configure the
           interface using DHCP.
@@ -41,7 +41,7 @@ let
       subnetMask = mkOption {
         default = "";
         example = "255.255.255.0";
-        type = types.string;
+        type = types.uniq types.string;
         description = ''
           Subnet mask of the interface, specified as a bitmask.
           This is deprecated; use <option>prefixLength</option>
@@ -52,7 +52,7 @@ let
       macAddress = mkOption {
         default = null;
         example = "00:11:22:33:44:55";
-        type = types.nullOr types.string;
+        type = types.nullOr (types.uniq types.string);
         description = ''
           MAC address of the interface. Leave empty to use the default.
         '';
