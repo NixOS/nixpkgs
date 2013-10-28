@@ -18,16 +18,16 @@ in
 
     hardware.pcmcia = {
       enable = mkOption {
+        type = types.bool;
         default = false;
-        merge = mergeEnableOption;
         description = ''
           Enable this option to support PCMCIA card.
         '';
       };
 
       firmware = mkOption {
+        type = types.listOf types.path;
         default = [];
-        merge = mergeListOption;
         description = ''
           List of firmware used to handle specific PCMCIA card.
         '';

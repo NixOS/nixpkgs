@@ -50,10 +50,10 @@ in
       };
 
       default = mkOption {
+        type = types.uniq types.string;
         default = "";
         example = "none";
         description = "Default desktop manager loaded if none have been chosen.";
-        merge = mergeOneOption;
         apply = defaultDM:
           if defaultDM == "" && cfg.session.list != [] then
             (head cfg.session.list).name

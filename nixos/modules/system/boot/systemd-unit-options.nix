@@ -319,8 +319,7 @@ rec {
     options = mkOption {
       default = "";
       example = "noatime";
-      type = types.string;
-      merge = concatStringsSep ",";
+      type = types.commas;
       description = "Options used to mount the file system.";
     };
 

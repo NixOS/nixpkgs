@@ -15,10 +15,10 @@ in
   options = {
 
     assertions = mkOption {
+      type = types.listOf types.unspecified;
       internal = true;
       default = [];
       example = [ { assertion = false; message = "you can't enable this for that reason"; } ];
-      merge = pkgs.lib.mergeListOption;
       description = ''
         This option allows modules to express conditions that must
         hold for the evaluation of the system configuration to

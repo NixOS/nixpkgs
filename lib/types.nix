@@ -71,6 +71,12 @@ rec {
       merge = lib.concatStringsSep "\n";
     };
 
+    commas = mkOptionType {
+      name = "string";
+      check = builtins.isString;
+      merge = lib.concatStringsSep ",";
+    };
+
     envVar = mkOptionType {
       name = "environment variable";
       inherit (string) check;

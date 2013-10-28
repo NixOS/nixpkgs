@@ -20,8 +20,8 @@ let
         default = "";
         example = "-d sat";
         type = types.string;
-        merge = pkgs.lib.concatStringsSep " ";
-        description = "Options that determine how smartd monitors the device";
+        apply = pkgs.lib.concatStringsSep " ";
+        description = "Options that determine how smartd monitors the device.";
       };
     };
 

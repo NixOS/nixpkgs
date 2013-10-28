@@ -64,8 +64,8 @@ in {
     networking.networkmanager = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
-        merge = mergeEnableOption;
         description = ''
           Whether to use NetworkManager to obtain an IP address and other
           configuration for all network interfaces that are not manually
@@ -76,11 +76,11 @@ in {
       };
   
       packages = mkOption {
+        type = types.listOf types.path;
         default = [ ];
         description = ''
           Extra packages that provide NetworkManager plugins.
         '';
-        merge = mergeListOption;
         apply = list: [ networkmanager modemmanager wpa_supplicant ] ++ list;
       };
 

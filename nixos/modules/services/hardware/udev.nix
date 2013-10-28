@@ -126,8 +126,8 @@ in
     services.udev = {
 
       packages = mkOption {
+        type = types.listOf types.path;
         default = [];
-        merge = mergeListOption;
         description = ''
           List of packages containing <command>udev</command> rules.
           All files found in
@@ -138,8 +138,8 @@ in
       };
 
       path = mkOption {
+        type = types.listOf types.path;
         default = [];
-        merge = mergeListOption;
         description = ''
           Packages added to the <envar>PATH</envar> environment variable when
           executing programs from Udev rules.
@@ -162,9 +162,9 @@ in
     };
 
     hardware.firmware = mkOption {
+      type = types.listOf types.path;
       default = [];
       example = [ "/root/my-firmware" ];
-      merge = mergeListOption;
       description = ''
         List of directories containing firmware files.  Such files
         will be loaded automatically if the kernel asks for them

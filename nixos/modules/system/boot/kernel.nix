@@ -117,6 +117,7 @@ in
     };
 
     system.modulesTree = mkOption {
+      type = types.listOf types.path;
       internal = true;
       default = [];
       description = ''
@@ -124,7 +125,6 @@ in
         built outside of the kernel.  Combine these into a single tree of
         symlinks because modprobe only supports one directory.
       '';
-      merge = mergeListOption;
       # Convert the list of path to only one path.
       apply = pkgs.aggregateModules;
     };

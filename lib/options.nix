@@ -66,6 +66,9 @@ rec {
          then head list
     else throw "Cannot merge values.";
 
+
+  /* Obsolete, will remove soon.  Specify an option type or apply
+     function instead.  */
   mergeTypedOption = typeName: predicate: merge: list:
     if all predicate list then merge list
     else throw "Expect a ${typeName}.";

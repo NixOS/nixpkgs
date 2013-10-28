@@ -99,7 +99,7 @@ in
           mkHash functions, which take a string representation of a float and an
           attrset, respectively.
         '';
-        merge = mergeConfigs;
+        apply = mergeConfigs;
       };
 
       filterConfig = mkOption {
@@ -109,7 +109,7 @@ in
           representing a logstash configuration's filter section.
           See inputConfig description for details.
         '';
-        merge = mergeConfigs;
+        apply = mergeConfigs;
       };
 
       outputConfig = mkOption {
@@ -119,7 +119,7 @@ in
           representing a logstash configuration's output section.
           See inputConfig description for details.
         '';
-        merge = mergeConfigs;
+        apply = mergeConfigs;
       };
     };
   };

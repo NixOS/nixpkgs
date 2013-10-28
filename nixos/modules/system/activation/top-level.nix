@@ -172,9 +172,9 @@ in
     };
 
     system.extraSystemBuilderCmds = mkOption {
+      type = types.lines;
       internal = true;
       default = "";
-      merge = concatStringsSep "\n";
       description = ''
         This code will be added to the builder creating the system store path.
       '';

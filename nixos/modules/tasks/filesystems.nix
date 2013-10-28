@@ -43,8 +43,7 @@ let
       options = mkOption {
         default = "defaults,relatime";
         example = "data=journal";
-        type = types.string;
-        merge = pkgs.lib.concatStringsSep ",";
+        type = types.commas;
         description = "Options used to mount the file system.";
       };
 
