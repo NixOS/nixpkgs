@@ -5642,6 +5642,8 @@ let
     inherit readline ncurses;
   });
 
+  sqliteodbc = callPackage ../development/libraries/sqliteodbc { };
+
   stfl = callPackage ../development/libraries/stfl {
     stdenv = if stdenv.isDarwin
       then overrideGCC stdenv gccApple
