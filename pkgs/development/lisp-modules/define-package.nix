@@ -9,6 +9,10 @@ let
     echo "export NIX_LISP_COMMAND='$NIX_LISP_COMMAND'" >> "$config_script"
     echo "export NIX_LISP_ASDF='$NIX_LISP_ASDF'" >> "$config_script"
     echo "export CL_SOURCE_REGISTRY="\$CL_SOURCE_REGISTRY\''${CL_SOURCE_REGISTRY:+:}"'$CL_SOURCE_REGISTRY:$out/lib/common-lisp/${args.baseName}/'" >> "$config_script"
+    test -n "$LD_LIBRARY_PATH" &&
+        echo "export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}\"'$LD_LIBRARY_PATH'" >> "$config_script"
+    test -n "$NIX_LISP_LD_LIBRARY_PATH" &&
+        echo "export NIX_LISP_LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${NIX_LISP_LD_LIBRARY_PATH:+:}\"'$NIX_LISP_LD_LIBRARY_PATH'" >> "$config_script"
   '';
   deployLaunchScript = ''
     launch_script="$out"/bin/${args.baseName}-lisp-launcher.sh
@@ -17,6 +21,7 @@ let
     chmod a+x "$launch_script"
     echo "#! /bin/sh" >> "$launch_script"
     echo "source '$config_script'" >> "$launch_script"
+    echo "export LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${NIX_LISP_LD_LIBRARY_PATH:+:}\$LD_LIBRARY_PATH\"" >> "$launch_script"
     echo '"${clwrapper}/bin/common-lisp.sh" "$@"' >> "$launch_script" 
   '';
 basePackage = {
