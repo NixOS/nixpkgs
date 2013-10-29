@@ -296,6 +296,6 @@ rec {
 
 
   /* Compatibility. */
-  fixMergeModules = modules: args: evalModules { inherit modules args; };
+  fixMergeModules = modules: args: evalModules { inherit modules args; check = false; };
 
 }
