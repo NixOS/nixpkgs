@@ -36,23 +36,15 @@
                                select="attr[@name = 'description']/string/@value" />
                </para>
 
-               <para>
-                 <emphasis>Default:</emphasis>
-                 <xsl:text> </xsl:text>
-                 <xsl:choose>
-                   <xsl:when test="attr[@name = 'default']">
-                     <literal>
-                       <xsl:apply-templates select="attr[@name = 'default']" />
-                     </literal>
-                   </xsl:when>
-                   <xsl:otherwise>
-                     none
-                   </xsl:otherwise>
-                 </xsl:choose>
-               </para>
+               <xsl:if test="attr[@name = 'default']">
+                 <para>
+                   <emphasis>Default:</emphasis>
+                   <xsl:text> </xsl:text>
+                   <literal><xsl:apply-templates select="attr[@name = 'default']" /></literal>
+                 </para>
+               </xsl:if>
 
                <xsl:if test="attr[@name = 'example']">
-
                  <para>
                    <emphasis>Example:</emphasis>
                    <xsl:text> </xsl:text>
@@ -61,9 +53,7 @@
                        <programlisting><xsl:value-of select="attr[@name = 'example']/attrs/attr[@name = 'text']/string/@value" /></programlisting>
                      </xsl:when>
                      <xsl:otherwise>
-                       <literal>
-                         <xsl:apply-templates select="attr[@name = 'example']" />
-                       </literal>
+                       <literal><xsl:apply-templates select="attr[@name = 'example']" /></literal>
                      </xsl:otherwise>
                    </xsl:choose>
                  </para>
