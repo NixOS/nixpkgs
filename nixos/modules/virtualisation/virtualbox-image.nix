@@ -49,7 +49,7 @@ with pkgs.lib;
           echo "filling Nix store..."
           mkdir -p /mnt/nix/store
           set -f
-          cp -prvd $storePaths /mnt/nix/store/
+          cp -prd $storePaths /mnt/nix/store/
 
           # Register the paths in the Nix database.
           printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
