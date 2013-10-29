@@ -4158,6 +4158,10 @@ let
 
   geoclue = callPackage ../development/libraries/geoclue {};
 
+  geoclue2 = callPackage ../development/libraries/geoclue/2.0.nix {
+    libsoup = libsoup_2_40;
+  };
+
   geoip = builderDefsPackage ../development/libraries/geoip {
     inherit zlib;
   };
@@ -5002,6 +5006,7 @@ let
   libsodium = callPackage ../development/libraries/libsodium { };
 
   libsoup = callPackage ../development/libraries/libsoup { };
+  libsoup_2_40 = callPackage ../development/libraries/libsoup/2.40.nix { };
 
   libssh = callPackage ../development/libraries/libssh { };
 
@@ -5750,8 +5755,7 @@ let
       inherit (gnome) gtkdoc libsoup;
       inherit pkgconfig libtool intltool autoconf automake gperf bison flex
         libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
-        which libproxy geoclue enchant python ruby perl
-        mesa xlibs;
+        which libproxy geoclue enchant python ruby perl mesa xlibs;
       inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
     };
 
@@ -5761,8 +5765,7 @@ let
       inherit (gnome) gtkdoc libsoup;
       inherit pkgconfig libtool intltool autoconf automake gperf bison flex
         libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
-        which libproxy geoclue enchant python ruby perl
-        mesa xlibs;
+        which libproxy geoclue enchant python ruby perl mesa xlibs;
       inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
     };
 
@@ -9616,6 +9619,7 @@ let
       xf86vidmodeproto;
     inherit (gnome) GConf;
     inherit (pythonPackages) pyxdg;
+    geoclue = geoclue2;
   };
 
   oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { };
