@@ -19,7 +19,7 @@ rec {
   inherit (pkgs.lib.evalModules {
     modules = modules ++ baseModules;
     args = extraArgs;
-    inherit check;
+    check = check && options.environment.checkConfigurationOptions.value;
   }) config options;
 
   # These are the extra arguments passed to every module.  In

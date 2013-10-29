@@ -13,9 +13,24 @@ rec {
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
       # the most sensible policy.
-      options = mergeModules check prefix (reverseList closed);
-      config = yieldConfig options;
-      yieldConfig = mapAttrs (n: v: if isOption v then v.value else yieldConfig v);
+      options = mergeModules prefix (reverseList closed);
+      # Traverse options and extract the option values into the final
+      # config set.  At the same time, check whether all option
+      # definitions have matching declarations.
+      config = yieldConfig [] options;
+      yieldConfig = prefix: set:
+        let res = removeAttrs (mapAttrs (n: v:
+          if isOption v then v.value
+          else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
+        in
+        if check && set ? _definedNames then
+          fold (m: res:
+            fold (name: res:
+              if hasAttr name set then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
+              res m.names)
+            res set._definedNames
+        else
+          res;
       result = { inherit options config; };
     in result;
 
@@ -62,19 +77,12 @@ rec {
      At the same time, for each option declaration, it will merge the
      corresponding option definitions in all machines, returning them
      in the ‘value’ attribute of each option. */
-  mergeModules = check: prefix: modules:
-    mergeModules' check prefix modules
+  mergeModules = prefix: modules:
+    mergeModules' prefix modules
       (concatMap (m: map (config: { inherit (m) file; inherit config; }) (pushDownProperties m.config)) modules);
 
-  mergeModules' = check: prefix: options: configs:
-    let
-      declaredNames = concatMap (m: attrNames m.options) options;
-      declaredNames' = listToAttrs (map (n: { name = n; value = 1; }) declaredNames);
-      checkDefinedNames = res: fold (m: res: fold (n: res:
-          if hasAttr n declaredNames' then res else
-            throw "The option `${showOption (prefix ++ [n])}' defined in `${m.file}' does not exist."
-        ) res (attrNames m.config)) res configs;
-    in (if check then checkDefinedNames else id) (listToAttrs (map (name: {
+  mergeModules' = prefix: options: configs:
+    listToAttrs (map (name: {
       # We're descending into attribute ‘name’.
       inherit name;
       value =
@@ -111,8 +119,9 @@ rec {
             in
               throw "The option `${showOption loc}' in `${firstOption.file}' is a prefix of options in `${firstNonOption.file}'."
           else
-            mergeModules' check loc decls defns;
-    }) declaredNames));
+            mergeModules' loc decls defns;
+    }) (concatMap (m: attrNames m.options) options))
+    // { _definedNames = map (m: { inherit (m) file; names = attrNames m.config; }) configs; };
 
   /* Merge multiple option declarations into a single declaration.  In
      general, there should be only one declaration of each option.
