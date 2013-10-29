@@ -26,6 +26,7 @@ in
 
     networking.wireless = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to start <command>wpa_supplicant</command> to scan for
@@ -40,6 +41,7 @@ in
       };
 
       interfaces = mkOption {
+        type = types.listOf types.string;
         default = [];
         example = [ "wlan0" "wlan1" ];
         description = ''
@@ -51,12 +53,14 @@ in
       };
 
       driver = mkOption {
+        type = types.uniq types.string;
         default = "nl80211,wext";
         description = "Force a specific wpa_supplicant driver.";
       };
 
       userControlled = {
         enable = mkOption {
+          type = types.bool;
           default = false;
           description = ''
             Allow normal users to control wpa_supplicant through wpa_gui or wpa_cli.
@@ -70,9 +74,9 @@ in
         };
 
         group = mkOption {
+          type = types.uniq types.string;
           default = "wheel";
           example = "network";
-          type = types.string;
           description = "Members of this group can control wpa_supplicant.";
         };
       };
