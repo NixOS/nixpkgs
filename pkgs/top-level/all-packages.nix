@@ -8562,6 +8562,12 @@ let
     inherit (pythonPackages) mutagen;
   };
 
+  quodlibet-with-gst-plugins = callPackage ../applications/audio/quodlibet {
+    inherit (pythonPackages) mutagen;
+    withGstPlugins = true;
+    gst_plugins_bad = null;
+  };
+
   rakarrack = callPackage ../applications/audio/rakarrack {
     inherit (xorg) libXpm libXft;
     fltk = fltk13;
