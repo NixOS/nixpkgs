@@ -43,7 +43,7 @@ in rec {
         (all nixos.iso_graphical)
         (all nixos.ova)
 
-        (all nixos.tests.efi-installer.simple)
+        #(all nixos.tests.efi-installer.simple)
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.installer.grub1)
