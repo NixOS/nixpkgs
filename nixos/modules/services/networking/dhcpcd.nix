@@ -6,7 +6,7 @@ let
 
   inherit (pkgs) dhcpcd;
 
-  # Don't start dhclient on explicitly configured interfaces or on
+  # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge.
   ignoredInterfaces =
     map (i: i.name) (filter (i: i.ipAddress != null) (attrValues config.networking.interfaces))
