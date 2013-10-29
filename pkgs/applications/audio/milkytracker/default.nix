@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, alsaLib, SDL, automake, autoconf, jackaudio, perl, zlib, zziplib }:
+{ stdenv, fetchurl, SDL, alsaLib, autoconf, automake, jackaudio, perl
+, zlib, zziplib
+}:
 
 stdenv.mkDerivation rec {
   version = "0.90.85";
@@ -30,11 +32,11 @@ stdenv.mkDerivation rec {
     export CPATH=${zlib}/lib
   '';
 
-  buildInputs = [ alsaLib SDL automake autoconf jackaudio perl zlib zziplib ];
+  buildInputs = [ SDL alsaLib autoconf automake jackaudio perl zlib zziplib ];
 
   meta = {
     description = "Music tracker application, similar to Fasttracker II.";
     homepage = http://milkytracker.org;
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 }
