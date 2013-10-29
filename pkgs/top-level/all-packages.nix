@@ -7358,6 +7358,8 @@ let
 
   audacity = callPackage ../applications/audio/audacity { };
 
+  milkytracker = callPackage ../applications/audio/milkytracker { };
+
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
   };
