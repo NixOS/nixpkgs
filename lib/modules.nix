@@ -294,4 +294,8 @@ rec {
   # FIXME: Add mkOrder back in. It's not currently used anywhere in
   # NixOS, but it should be useful.
 
+
+  /* Compatibility. */
+  fixMergeModules = modules: args: evalModules { inherit modules args; };
+
 }
