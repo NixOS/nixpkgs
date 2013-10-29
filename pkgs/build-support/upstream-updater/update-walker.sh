@@ -3,6 +3,8 @@
 own_dir="$(cd "$(dirname "$0")"; pwd)"
 
 CURRENT_URL=
+CURRENT_REV=
+PREFETCH_COMMAND=
 NEED_TO_CHOOSE_URL=1
 
 url () {
@@ -118,13 +120,25 @@ ensure_choice () {
   }
 }
 
+rev () {
+  CURRENT_REV="$1"
+}
+
+prefetch_command () {
+  PREFETCH_COMMAND="$1"
+}
+
+prefetch_command_rel () {
+  PREFETCH_COMMAND="$(dirname "$0")/$1"
+}
+
 ensure_hash () {
   echo "Ensuring hash. CURRENT_HASH: $CURRENT_HASH" >&2
   [ -z "$CURRENT_HASH" ] && hash
 }
 
 hash () {
-  CURRENT_HASH="$(nix-prefetch-url "$CURRENT_URL")"
+  CURRENT_HASH="$(${PREFETCH_COMMAND:-nix-prefetch-url} "$CURRENT_URL" $CURRENT_REV)"
   echo "CURRENT_HASH: $CURRENT_HASH" >&2
 }
 
@@ -172,6 +186,7 @@ do_write_expression () {
   echo "${1}  name=\"\${baseName}-\${version}\";"
   echo "${1}  hash=\"$CURRENT_HASH\";"
   echo "${1}  url=\"$CURRENT_URL\";"
+  [ -n "$CURRENT_REV" ] && echo "${1}  rev=\"$CURRENT_REV\";"
   echo "${1}  sha256=\"$CURRENT_HASH\";"
   echo "$2"
 }
