@@ -54,6 +54,14 @@ rec {
       check = builtins.isInt;
     };
 
+    str = mkOptionType {
+      name = "string";
+      check = builtins.isString;
+      merge = mergeOneOption;
+    };
+
+    # Deprecated; should not be used because it quietly concatenates
+    # strings, which is usually not what you want.
     string = mkOptionType {
       name = "string";
       check = builtins.isString;
