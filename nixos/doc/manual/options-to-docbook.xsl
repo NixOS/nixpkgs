@@ -94,6 +94,11 @@
   </xsl:template>
 
 
+  <xsl:template match="null">
+    <xsl:text>null</xsl:text>
+  </xsl:template>
+
+
   <xsl:template match="string">
     <!-- !!! escaping -->
     <xsl:text>"</xsl:text><xsl:value-of select="str:replace(str:replace(str:replace(@value, '\', '\\'), '&quot;', '\&quot;'), '&#010;', '\n')" /><xsl:text>"</xsl:text>
