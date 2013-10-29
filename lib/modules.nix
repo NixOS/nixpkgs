@@ -42,14 +42,14 @@ rec {
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'."
       else
         { inherit file;
-          key = m.key or key;
+          key = toString m.key or key;
           imports = m.imports or [];
           options = m.options or {};
           config = m.config or {};
         }
     else
       { inherit file;
-        key = m.key or key;
+        key = toString m.key or key;
         imports = m.require or [] ++ m.imports or [];
         options = {};
         config = removeAttrs m ["key" "require" "imports"];
