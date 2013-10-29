@@ -40,7 +40,7 @@
                  <para>
                    <emphasis>Default:</emphasis>
                    <xsl:text> </xsl:text>
-                   <literal><xsl:apply-templates select="attr[@name = 'default']" /></literal>
+                   <xsl:apply-templates select="attr[@name = 'default']" mode="top" />
                  </para>
                </xsl:if>
 
@@ -53,7 +53,7 @@
                        <programlisting><xsl:value-of select="attr[@name = 'example']/attrs/attr[@name = 'text']/string/@value" /></programlisting>
                      </xsl:when>
                      <xsl:otherwise>
-                       <literal><xsl:apply-templates select="attr[@name = 'example']" /></literal>
+                       <xsl:apply-templates select="attr[@name = 'example']" mode="top" />
                      </xsl:otherwise>
                    </xsl:choose>
                  </para>
@@ -81,6 +81,20 @@
 
       </variablelist>
 
+  </xsl:template>
+
+
+  <xsl:template match="*" mode="top">
+    <xsl:choose>
+      <xsl:when test="string[contains(@value, '&#010;')]">
+<programlisting>
+<xsl:text>''
+</xsl:text><xsl:value-of select='str:replace(string/@value, "${", "&apos;&apos;${")' /><xsl:text>''</xsl:text></programlisting>
+      </xsl:when>
+      <xsl:otherwise>
+        <literal><xsl:apply-templates /></literal>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 

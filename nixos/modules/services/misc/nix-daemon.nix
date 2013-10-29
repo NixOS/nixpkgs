@@ -99,10 +99,10 @@ in
 
       extraOptions = mkOption {
         default = "";
-        example = "
+        example = ''
           gc-keep-outputs = true
           gc-keep-derivations = true
-        ";
+        '';
         description = "Additional text appended to <filename>nix.conf</filename>.";
       };
 
