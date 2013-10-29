@@ -46,7 +46,7 @@ let
       let
         svcFunction =
           if svc ? function then svc.function
-          else import "${./.}/${if svc ? serviceType then svc.serviceType else svc.serviceName}.nix";
+          else import (toString "${toString ./.}/${if svc ? serviceType then svc.serviceType else svc.serviceName}.nix");
         config = (evalModules
           { modules = [ { options = res.options; config = svc.config or svc; } ];
             check = false;
