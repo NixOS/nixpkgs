@@ -1821,6 +1821,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     src = fetchgit {
       inherit rev;
       url = "https://github.com/Pylons/substanced.git";
+      sha256 = "e32ddfba5310a2a9814abb4f6702eded8e7b7ad867d7a7337e8f4e3b3fb8e0b3";
     };
 
     buildInputs = [ mock ];
