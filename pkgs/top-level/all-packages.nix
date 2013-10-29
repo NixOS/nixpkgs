@@ -2552,15 +2552,7 @@ let
       stdenv = allStdenvs.stdenvNative;
     });
 
-  gfortran = gfortran47; # 48 has problems building ATM
-
-  gfortran47 = wrapGCC (gcc47.gcc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
+  gfortran = gfortran48;
 
   gfortran48 = wrapGCC (gcc48.gcc.override {
     name = "gfortran";
