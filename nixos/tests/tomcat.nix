@@ -10,10 +10,7 @@
         services.httpd.enable = true;
         services.httpd.adminAddr = "foo@bar.com";
         services.httpd.extraSubservices = [
-          { serviceType = "tomcat-connector";
-            stateDir = "/var/run/httpd";
-            logDir = "/var/log/httpd";
-          }
+          { serviceType = "tomcat-connector"; }
         ];
       };
 

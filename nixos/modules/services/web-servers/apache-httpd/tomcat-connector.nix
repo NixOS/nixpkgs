@@ -38,7 +38,7 @@ in
 JkWorkersFile ${workersProperties}
 
 # Where to put jk logs
-JkLogFile ${config.logDir}/mod_jk.log
+JkLogFile ${serverInfo.serverConfig.logDir}/mod_jk.log
 
 # Set the jk log level [debug/error/info]
 JkLogLevel info
@@ -69,7 +69,7 @@ JkMount /__application__/* loadbalancer
 # for load balancing to work properly
 # Note: Replaced JkShmFile logs/jk.shm due to SELinux issues. Refer to
 # https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=225452
-JkShmFile ${config.stateDir}/jk.shm
+JkShmFile ${serverInfo.serverConfig.stateDir}/jk.shm
 
 # Static files in all Tomcat webapp context directories are served by apache
 JkAutoAlias /var/tomcat/webapps
