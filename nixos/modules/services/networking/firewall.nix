@@ -53,6 +53,7 @@ in
   options = {
 
     networking.firewall.enable = mkOption {
+      type = types.bool;
       default = false;
       description =
         ''
@@ -64,6 +65,7 @@ in
     };
 
     networking.firewall.logRefusedConnections = mkOption {
+      type = types.bool;
       default = true;
       description =
         ''
@@ -72,6 +74,7 @@ in
     };
 
     networking.firewall.logRefusedPackets = mkOption {
+      type = types.bool;
       default = false;
       description =
         ''
@@ -82,6 +85,7 @@ in
     };
 
     networking.firewall.logRefusedUnicastsOnly = mkOption {
+      type = types.bool;
       default = true;
       description =
         ''
@@ -93,6 +97,7 @@ in
     };
 
     networking.firewall.rejectPackets = mkOption {
+      type = types.bool;
       default = false;
       description =
         ''
@@ -193,6 +198,7 @@ in
     };
 
     networking.firewall.extraCommands = mkOption {
+      type = types.lines;
       default = "";
       example = "iptables -A INPUT -p icmp -j ACCEPT";
       description =

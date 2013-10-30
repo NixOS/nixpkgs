@@ -10,6 +10,7 @@ with pkgs.lib;
   options = {
 
     security.rtkit.enable = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Whether to enable the RealtimeKit system service, which hands

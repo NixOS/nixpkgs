@@ -25,7 +25,9 @@ in
   options = {
 
     security.setuidPrograms = mkOption {
+      type = types.listOf types.str;
       default = [];
+      example = ["passwd"];
       description = ''
         The Nix store cannot contain setuid/setgid programs directly.
         For this reason, NixOS can automatically generate wrapper
@@ -36,6 +38,7 @@ in
     };
 
     security.setuidOwners = mkOption {
+      type = types.listOf types.attrs;
       default = [];
       example =
         [ { program = "sendmail";
@@ -53,6 +56,8 @@ in
     };
 
     security.wrapperDir = mkOption {
+      internal = true;
+      type = types.path;
       default = "/var/setuid-wrappers";
       description = ''
         This option defines the path to the setuid wrappers.  It

@@ -166,16 +166,19 @@ in
     services.xserver.displayManager = {
 
       xauthBin = mkOption {
+        internal = true;
         default = "${xorg.xauth}/bin/xauth";
         description = "Path to the <command>xauth</command> program used by display managers.";
       };
 
       xserverBin = mkOption {
+        type = types.path;
         default = "${xorg.xorgserver}/bin/X";
         description = "Path to the X server used by display managers.";
       };
 
       xserverArgs = mkOption {
+        type = types.listOf types.str;
         default = [];
         example = [ "-ac" "-logverbose" "-nolisten tcp" ];
         description = "List of arguments for the X server.";
@@ -183,16 +186,17 @@ in
       };
 
       sessionCommands = mkOption {
+        type = types.lines;
         default = "";
         example =
           ''
             xmessage "Hello World!" &
           '';
-        type = types.string;
         description = "Shell commands executed just before the window or desktop manager is started.";
       };
 
       desktopManagerHandlesLidAndPower = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether the display manager should prevent systemd from handling
@@ -256,6 +260,7 @@ in
         };
 
         environment = mkOption {
+          type = types.attrsOf types.unspecified;
           default = {};
           example = { SLIM_CFGFILE = /etc/slim.conf; };
           description = "Additional environment variables needed by the display manager.";

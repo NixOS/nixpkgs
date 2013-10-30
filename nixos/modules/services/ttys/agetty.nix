@@ -11,6 +11,7 @@ with pkgs.lib;
     services.mingetty = {
 
       greetingLine = mkOption {
+        type = types.str;
         default = ''<<< Welcome to NixOS ${config.system.nixosVersion} (\m) - \l >>>'';
         description = ''
           Welcome line printed by mingetty.
@@ -18,6 +19,7 @@ with pkgs.lib;
       };
 
       helpLine = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Help line printed by mingetty below the welcome line.

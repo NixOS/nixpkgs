@@ -24,17 +24,18 @@ in
     services.xserver.desktopManager = {
 
       session = mkOption {
+        internal = true;
         default = [];
         example = singleton
           { name = "kde";
             bgSupport = true;
             start = "...";
           };
-        description = "
+        description = ''
           Internal option used to add some common line to desktop manager
           scripts before forwarding the value to the
           <varname>displayManager</varname>.
-        ";
+        '';
         apply = list: {
           list = map (d: d // {
             manage = "desktop";

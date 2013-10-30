@@ -24,7 +24,7 @@ in
       # We don't want to evaluate all of linuxPackages for the manual
       # - some of it might not even evaluate correctly.
       defaultText = "pkgs.linuxPackages";
-      example = "pkgs.linuxPackages_2_6_25";
+      example = literalExample "pkgs.linuxPackages_2_6_25";
       description = ''
         This option allows you to override the Linux kernel used by
         NixOS.  Since things like external kernel module packages are
@@ -40,18 +40,9 @@ in
     };
 
     boot.kernelParams = mkOption {
+      type = types.listOf types.str;
       default = [ ];
-      description = ''
-        The kernel parameters.  If you want to add additional
-        parameters, it's best to set
-        <option>boot.extraKernelParams</option>.
-      '';
-    };
-
-    boot.extraKernelParams = mkOption {
-      default = [ ];
-      example = [ "boot.trace" ];
-      description = "Additional user-defined kernel parameters.";
+      description = "Parameters added to the kernel command line.";
     };
 
     boot.consoleLogLevel = mkOption {
@@ -65,6 +56,7 @@ in
     };
 
     boot.vesa = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Whether to activate VESA video mode on boot.
@@ -72,13 +64,14 @@ in
     };
 
     boot.extraModulePackages = mkOption {
+      type = types.listOf types.path;
       default = [];
-      # !!! example = [pkgs.nvidia_x11];
+      example = literalExample "[ pkgs.linuxPackages.nvidia_x11 ]";
       description = "A list of additional packages supplying kernel modules.";
     };
 
     boot.kernelModules = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       description = ''
         The set of kernel modules to be loaded in the second stage of
@@ -90,7 +83,7 @@ in
     };
 
     boot.initrd.availableKernelModules = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       example = [ "sata_nv" "ext3" ];
       description = ''
@@ -111,7 +104,7 @@ in
     };
 
     boot.initrd.kernelModules = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       description = "List of modules that are always loaded by the initrd.";
     };

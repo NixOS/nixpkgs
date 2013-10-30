@@ -77,6 +77,7 @@ in
       };
 
       packages = mkOption {
+        type = types.listOf types.path;
         default = [];
         description = ''
           Packages whose D-Bus configuration files should be included in

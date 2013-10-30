@@ -13,6 +13,7 @@ with pkgs.lib;
     services.upower = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable Upower, a DBus service that provides power

@@ -27,7 +27,7 @@ let
 
     openssh.authorizedKeys = {
       keys = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         description = ''
           A list of verbatim OpenSSH public keys that should be added to the
@@ -39,6 +39,7 @@ let
       };
 
       keyFiles = mkOption {
+        type = types.listOf types.str;
         default = [];
         description = ''
           A list of files each containing one OpenSSH public key that should be
@@ -77,6 +78,7 @@ in
     services.openssh = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the OpenSSH secure shell daemon, which
@@ -85,6 +87,7 @@ in
       };
 
       forwardX11 = mkOption {
+        type = types.bool;
         default = cfgc.setXAuthLocation;
         description = ''
           Whether to allow X11 connections to be forwarded.
@@ -92,6 +95,7 @@ in
       };
 
       allowSFTP = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to enable the SFTP subsystem in the SSH daemon.  This
@@ -112,6 +116,7 @@ in
       };
 
       gatewayPorts = mkOption {
+        type = types.str;
         default = "no";
         description = ''
           Specifies whether remote hosts are allowed to connect to
@@ -122,6 +127,7 @@ in
       };
 
       ports = mkOption {
+        type = types.listOf types.int;
         default = [22];
         description = ''
           Specifies on which ports the SSH daemon listens.
@@ -129,6 +135,7 @@ in
       };
 
       passwordAuthentication = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Specifies whether password authentication is allowed.
@@ -136,6 +143,7 @@ in
       };
 
       challengeResponseAuthentication = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Specifies whether challenge/response authentication is allowed.
@@ -143,6 +151,7 @@ in
       };
 
       hostKeys = mkOption {
+        type = types.listOf types.attrs;
         default =
           [ { path = "/etc/ssh/ssh_host_dsa_key";
               type = "dsa";
@@ -163,11 +172,13 @@ in
       };
 
       authorizedKeysFiles = mkOption {
+        type = types.listOf types.str;
         default = [];
         description = "Files from with authorized keys are read.";
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = "Verbatim contents of <filename>sshd_config</filename>.";
       };
@@ -202,7 +213,7 @@ in
               The path to the public key file for the host. The public
               key file is read at build time and saved in the Nix store.
               You can fetch a public key file from a running SSH server
-              with the <literal>ssh-keyscan</literal> command.
+              with the <command>ssh-keyscan</command> command.
             '';
           };
         };

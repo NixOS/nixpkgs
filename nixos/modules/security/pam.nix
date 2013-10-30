@@ -133,7 +133,7 @@ let
       };
 
       text = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.lines;
         description = "Contents of the PAM service file.";
       };
 

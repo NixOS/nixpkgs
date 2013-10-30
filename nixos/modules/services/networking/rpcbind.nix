@@ -40,6 +40,7 @@ in
     services.rpcbind = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable `rpcbind', an ONC RPC directory service

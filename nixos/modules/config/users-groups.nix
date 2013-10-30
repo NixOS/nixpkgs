@@ -35,7 +35,7 @@ let
       };
 
       extraGroups = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         description = "The user's auxiliary groups.";
       };
@@ -65,7 +65,7 @@ let
       };
 
       password = mkOption {
-        type = with types; uniq (nullOr string);
+        type = with types; uniq (nullOr str);
         default = null;
         description = "The user's password. If undefined, no password is set for the user.  Warning: do not set confidential information here because this data would be readable by all.  This option should only be used for public account such as guest.";
       };

@@ -14,8 +14,8 @@ in
     boot = {
       crashDump = {
         enable = mkOption {
+          type = types.bool;
           default = false;
-          example = true;
           description = ''
             If enabled, NixOS will set up a kernel that will
             boot on crash, and leave the user to a stage1 debug1devices
@@ -35,6 +35,7 @@ in
           '';
         };
         kernelParams = mkOption {
+          type = types.listOf types.str;
           default = [ "debug1devices" ];
           description = ''
             Parameters that will be passed to the kernel kexec-ed on crash.

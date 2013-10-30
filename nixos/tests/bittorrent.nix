@@ -40,7 +40,7 @@ in
         { environment.systemPackages = [ pkgs.miniupnpd ];
           virtualisation.vlans = [ 1 2 ];
           networking.nat.enable = true;
-          networking.nat.internalIPs = "192.168.2.0/24";
+          networking.nat.internalIPs = [ "192.168.2.0/24" ];
           networking.nat.externalInterface = "eth1";
         };
 

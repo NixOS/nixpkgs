@@ -51,13 +51,13 @@ in
 
     services.xserver.desktopManager.kde4 = {
       enable = mkOption {
+        type = types.bool;
         default = false;
-        example = true;
         description = "Enable the KDE 4 desktop environment.";
       };
 
       phononBackends = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = ["gstreamer"];
         example = ["gstreamer" "vlc"];
         description = "Which phonon multimedia backend kde should use";

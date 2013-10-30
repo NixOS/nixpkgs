@@ -17,6 +17,7 @@ in
     services.gpm = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable GPM, the General Purpose Mouse daemon,
@@ -25,6 +26,7 @@ in
       };
 
       protocol = mkOption {
+        type = types.str;
         default = "ps/2";
         description = "Mouse protocol to use.";
       };

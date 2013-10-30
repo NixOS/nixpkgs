@@ -16,6 +16,7 @@ in
     programs.ssh = {
 
       forwardX11 = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to request X11 forwarding on outgoing connections by default.
@@ -29,18 +30,21 @@ in
       };
 
       setXAuthLocation = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to set the path to <command>xauth</command> for X11-forwarded connections.
-          Pulls in X11 dependency.
+          This causes a dependency on X11 packages.
         '';
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration text appended to <filename>ssh_config</filename>.
-          See the ssh_config(5) man page for help.
+          See <citerefentry><refentrytitle>ssh_config</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+          for help.
         '';
       };
     };

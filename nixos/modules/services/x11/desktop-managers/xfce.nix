@@ -13,8 +13,8 @@ in
   options = {
 
     services.xserver.desktopManager.xfce.enable = mkOption {
+      type = types.bool;
       default = false;
-      example = true;
       description = "Enable the Xfce desktop environment.";
     };
 

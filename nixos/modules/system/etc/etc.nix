@@ -57,6 +57,7 @@ in
             };
 
             target = mkOption {
+              type = types.str;
               description = ''
                 Name of symlink (relative to
                 <filename>/etc</filename>).  Defaults to the attribute
@@ -66,7 +67,7 @@ in
 
             text = mkOption {
               default = null;
-              type = types.nullOr types.string;
+              type = types.nullOr types.lines;
               description = "Text of the file.";
             };
 
@@ -76,6 +77,7 @@ in
             };
 
             mode = mkOption {
+              type = types.str;
               default = "symlink";
               example = "0600";
               description = ''

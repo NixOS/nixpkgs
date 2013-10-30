@@ -92,8 +92,7 @@ let
     systemd = config.systemd.package;
 
     inherit children;
-    kernelParams =
-      config.boot.kernelParams ++ config.boot.extraKernelParams;
+    kernelParams = config.boot.kernelParams;
     installBootLoader =
       config.system.build.installBootLoader
       or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
@@ -162,6 +161,7 @@ in
     };
 
     system.copySystemConfiguration = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         If enabled, copies the NixOS configuration file

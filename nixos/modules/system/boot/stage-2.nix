@@ -43,7 +43,7 @@ in
       postBootCommands = mkOption {
         default = "";
         example = "rm -f /var/log/messages";
-        type = types.string;
+        type = types.lines;
         description = ''
           Shell commands to be executed just before systemd is started.
         '';
@@ -80,10 +80,10 @@ in
       };
 
       cleanTmpDir = mkOption {
+        type = types.bool;
         default = false;
-        example = true;
         description = ''
-          Delete all files in /tmp/ during boot.
+          Whether to delete all files in <filename>/tmp</filename> during boot.
         '';
       };
 

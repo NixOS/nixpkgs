@@ -114,6 +114,7 @@ in
   options = {
 
     boot.hardwareScan = mkOption {
+      type = types.bool;
       default = true;
       description = ''
         Whether to try to load kernel modules for all detected hardware.

@@ -36,7 +36,7 @@ in
       config = mkOption {
         default = null;
         description = ''
-          Path to the configuration file which map the memory, irq
+          Path to the configuration file which maps the memory, IRQs
           and ports used by the PCMCIA hardware.
         '';
       };

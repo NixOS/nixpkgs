@@ -93,6 +93,7 @@ in zipModules ([]
 ++ obsolete [ "boot" "grubSplashImage" ] [ "boot" "loader" "grub" "splashImage" ]
 
 ++ obsolete [ "boot" "initrd" "extraKernelModules" ] [ "boot" "initrd" "kernelModules" ]
+++ obsolete [ "boot" "extraKernelParams" ] [ "boot" "kernelParams" ]
 
 # OpenSSH
 ++ obsolete [ "services" "sshd" "ports" ] [ "services" "openssh" "ports" ]

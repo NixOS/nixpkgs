@@ -78,7 +78,7 @@ in
       devices = mkOption {
         default = [];
         example = [ "/dev/hda" ];
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         description = ''
           The devices on which the boot loader, GRUB, will be
           installed. Can be used instead of <literal>device</literal> to

@@ -7,12 +7,14 @@
   options = {
 
     ids.uids = pkgs.lib.mkOption {
+      internal = true;
       description = ''
         The user IDs used in NixOS.
       '';
     };
 
     ids.gids = pkgs.lib.mkOption {
+      internal = true;
       description = ''
         The group IDs used in NixOS.
       '';

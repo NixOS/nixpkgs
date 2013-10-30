@@ -11,7 +11,9 @@ let
     ''
       SHELL=${pkgs.bash}/bin/bash
       PATH=${config.system.path}/bin:${config.system.path}/sbin
-      MAILTO="${config.services.cron.mailto}"
+      ${optionalString (config.services.cron.mailto != null) ''
+        MAILTO="${config.services.cron.mailto}"
+      ''}
       NIX_CONF_DIR=/etc/nix
       ${pkgs.lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
     '';
@@ -34,21 +36,25 @@ in
     services.cron = {
 
       enable = mkOption {
+        type = types.bool;
         default = true;
-        description = "Whether to enable the `vixie cron' daemon.";
+        description = "Whether to enable the Vixie cron daemon.";
       };
 
       mailto = mkOption {
-        default = "";
-        description = " The job output will be mailed to this email address. ";
+        type = types.nullOr types.str;
+        default = null;
+        description = "Email address to which job output will be mailed.";
       };
 
       systemCronJobs = mkOption {
+        type = types.listOf types.str;
         default = [];
-        example = [
-          "* * * * *  test   ls -l / > /tmp/cronout 2>&1"
-          "* * * * *  eelco  echo Hello World > /home/eelco/cronout"
-        ];
+        example = literalExample ''
+          [ "* * * * *  test   ls -l / > /tmp/cronout 2>&1"
+            "* * * * *  eelco  echo Hello World > /home/eelco/cronout"
+          ]
+        '';
         description = ''
           A list of Cron jobs to be appended to the system-wide
           crontab.  See the manual page for crontab for the expected

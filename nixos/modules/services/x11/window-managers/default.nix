@@ -24,6 +24,7 @@ in
     services.xserver.windowManager = {
 
       session = mkOption {
+        internal = true;
         default = [];
         example = [{
           name = "wmii";

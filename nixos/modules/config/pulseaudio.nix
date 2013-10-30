@@ -46,6 +46,7 @@ in {
 
     hardware.pulseaudio = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the PulseAudio sound server.
@@ -72,12 +73,13 @@ in {
           The path to the configuration the PulseAudio server
           should use. By default, the "default.pa" configuration
           from the PulseAudio distribution is used.
-        ''; 
+        '';
       };
-  
+
       package = mkOption {
+        type = types.path;
         default = pulseaudio;
-        example = "pulseaudio.override { jackaudioSupport = true; }";
+        example = literalExample "pulseaudio.override { jackaudioSupport = true; }";
         description = ''
           The PulseAudio derivation to use.  This can be used to enable
           features (such as JACK support) that are not enabled in the
@@ -125,9 +127,9 @@ in {
         description = "PulseAudio system service user";
         home = pulseRuntimePath;
       };
-  
+
       users.extraGroups.pulse.gid = gid;
-  
+
       systemd.services.pulseaudio = {
         description = "PulseAudio system-wide server";
         wantedBy = [ "sound.target" ];
