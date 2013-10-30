@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
     sed -i s/-lncurses/-lncursesw/g $out/lib/pkgconfig/libedit.pc
   '';
 
+  # taken from gentoo http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/libedit/files/
+  patches = [ ./freebsd.patch ./freebsd_weak_ref.patch ];
+
   configureFlags = "--enable-widec";
 
   propagatedBuildInputs = [ ncurses ];
