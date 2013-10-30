@@ -30,36 +30,39 @@ rec {
     type = lib.types.bool;
   };
 
-  mergeDefaultOption = args: list:
+  mergeDefaultOption = loc: defs:
+    let list = getValues defs; in
     if length list == 1 then head list
-    else if all builtins.isFunction list then x: mergeDefaultOption args (map (f: f x) list)
+    else if all builtins.isFunction list then x: mergeDefaultOption loc (map (f: f x) list)
     else if all isList list then concatLists list
     else if all isAttrs list then fold lib.mergeAttrs {} list
     else if all builtins.isBool list then fold lib.or false list
     else if all builtins.isString list then lib.concatStrings list
     else if all builtins.isInt list && all (x: x == head list) list then head list
-    else throw "Cannot merge definitions of `${showOption args.prefix}' given in ${showFiles args.files}.";
+    else throw "Cannot merge definitions of `${showOption loc}' given in ${showFiles (getFiles defs)}.";
 
   /* Obsolete, will remove soon.  Specify an option type or apply
      function instead.  */
-  mergeTypedOption = typeName: predicate: merge: args: list:
-    if all predicate list then merge list
-    else throw "Expect a ${typeName}.";
+  mergeTypedOption = typeName: predicate: merge: loc: list:
+    let list' = map (x: x.value) list; in
+    if all predicate list then merge list'
+    else throw "Expected a ${typeName}.";
 
   mergeEnableOption = mergeTypedOption "boolean"
     (x: true == x || false == x) (fold lib.or false);
 
   mergeListOption = mergeTypedOption "list" isList concatLists;
 
-  mergeStringOption = mergeTypedOption "string"
-    (x: if builtins ? isString then builtins.isString x else x + "")
-    lib.concatStrings;
+  mergeStringOption = mergeTypedOption "string" builtins.isString lib.concatStrings;
 
-  mergeOneOption = args: list:
-    if list == [] then abort "This case should never happen."
-    else if length list != 1 then
-      throw "The unique option `${showOption args.prefix}' is defined multiple times, in ${showFiles args.files}."
-    else head list;
+  mergeOneOption = loc: defs:
+    if defs == [] then abort "This case should never happen."
+    else if length defs != 1 then
+      throw "The unique option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
+    else (head defs).value;
+
+  getValues = map (x: x.value);
+  getFiles = map (x: x.file);
 
 
   # Generate documentation template from the list of option declaration like

@@ -17,7 +17,7 @@ rec {
       # Traverse options and extract the option values into the final
       # config set.  At the same time, check whether all option
       # definitions have matching declarations.
-      config = yieldConfig [] options;
+      config = yieldConfig prefix options;
       yieldConfig = prefix: set:
         let res = removeAttrs (mapAttrs (n: v:
           if isOption v then v.value
@@ -52,22 +52,22 @@ rec {
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
     if m ? config || m ? options then
-      let badAttrs = removeAttrs m ["imports" "options" "config" "key"]; in
+      let badAttrs = removeAttrs m ["imports" "options" "config" "key" "_file"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'."
       else
-        { inherit file;
+        { file = m._file or file;
           key = toString m.key or key;
           imports = m.imports or [];
           options = m.options or {};
           config = m.config or {};
         }
     else
-      { inherit file;
+      { file = m._file or file;
         key = toString m.key or key;
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = removeAttrs m ["key" "require" "imports"];
+        config = removeAttrs m ["key" "_file" "require" "imports"];
       };
 
   applyIfFunction = f: arg: if builtins.isFunction f then f arg else f;
@@ -151,7 +151,7 @@ rec {
     let
       # Process mkOverride properties, adding in the default
       # value specified in the option declaration (if any).
-      defsFinal = filterOverrides'
+      defsFinal = filterOverrides
         ((if opt ? default then [{ file = head opt.declarations; value = mkOptionDefault opt.default; }] else []) ++ defs);
       files = map (def: def.file) defsFinal;
       # Type-check the remaining definitions, and merge them if
@@ -163,7 +163,7 @@ rec {
           fold (def: res:
             if opt.type.check def.value then res
             else throw "The option value `${showOption loc}' in `${def.file}' is not a ${opt.type.name}.")
-            (opt.type.merge { prefix = loc; inherit files; } (map (m: m.value) defsFinal)) defsFinal;
+            (opt.type.merge loc defsFinal) defsFinal;
       # Finally, apply the ‘apply’ function to the merged
       # value.  This allows options to yield a value computed
       # from the definitions.
@@ -240,7 +240,7 @@ rec {
 
      Note that "z" has the default priority 100.
   */
-  filterOverrides' = defs:
+  filterOverrides = defs:
     let
       defaultPrio = 100;
       getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPrio;
@@ -248,9 +248,6 @@ rec {
       highestPrio = fold (def: prio: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
-
-  /* For use in options like environment.variables. */
-  filterOverrides = defs: map (def: def.value) (filterOverrides' (map (def: { value = def; }) defs));
 
   /* Hack for backward compatibility: convert options of type
      optionSet to configOf.  FIXME: remove eventually. */

@@ -25,15 +25,17 @@ in
       '';
       type = types.attrsOf (mkOptionType {
         name = "a string or a list of strings";
-        merge = args: xs:
-          let xs' = filterOverrides xs; in
-          if isList (head xs') then concatLists xs'
-          else if builtins.lessThan 1 (length xs') then
-            # Don't show location info here, since it's too general.
-            throw "The option `${showOption args.prefix}' is defined multiple times."
-          else if !builtins.isString (head xs') then
-            throw "The option `${showOption args.prefix}' does not have a string value."
-          else head xs';
+        merge = loc: defs:
+          let
+            defs' = filterOverrides defs;
+            res = (head defs').value;
+          in
+          if isList res then concatLists (getValues defs')
+          else if builtins.lessThan 1 (length defs') then
+            throw "The option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
+          else if !builtins.isString res then
+            throw "The option `${showOption loc}' does not have a string value, in ${showFiles (getFiles defs)}."
+          else res;
       });
       apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
     };
