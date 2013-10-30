@@ -120,8 +120,9 @@ ensure_choice () {
   }
 }
 
-rev () {
+revision () {
   CURRENT_REV="$1"
+  echo "CURRENT_REV: $CURRENT_REV"
 }
 
 prefetch_command () {

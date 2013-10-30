@@ -10,5 +10,7 @@ SF_version_dir () {
 
 GH_latest () {
   prefetch_command_rel ../fetchgit/nix-prefetch-git
-  rev "$(curl "$CURRENT_URL/commits" | grep /commit/ | head -n 1 | xargs basename )"
+  revision "$("$(dirname "$0")/urls-from-page.sh" "$CURRENT_URL/commits" | grep /commit/ | head -n 1 | xargs basename )"
+  version '.*' "git-$(date +%Y-%m-%d)"
+  NEED_TO_CHOOSE_URL=
 }
