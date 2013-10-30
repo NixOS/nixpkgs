@@ -155,7 +155,7 @@ in
     system.boot.loader.kernelFile = mkOption {
       internal = true;
       default = pkgs.stdenv.platform.kernelTarget;
-      type = types.uniq types.string;
+      type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.
       '';

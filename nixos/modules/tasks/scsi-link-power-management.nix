@@ -10,7 +10,7 @@ with pkgs.lib;
     powerManagement.scsiLinkPolicy = mkOption {
       default = "";
       example = "min_power";
-      type = types.uniq types.string;
+      type = types.str;
       description = ''
         Configure the SCSI link power management policy. By default,
         the kernel configures "max_performance".

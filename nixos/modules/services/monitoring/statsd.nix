@@ -36,7 +36,7 @@ in
     host = mkOption {
       description = "Address that statsd listens on over UDP";
       default = "127.0.0.1";
-      type = types.uniq types.string;
+      type = types.str;
     };
 
     port = mkOption {
@@ -48,7 +48,7 @@ in
     mgmt_address = mkOption {
       description = "Address to run managment TCP interface on";
       default = "127.0.0.1";
-      type = types.uniq types.string;
+      type = types.str;
     };
 
     mgmt_port = mkOption {
@@ -65,7 +65,7 @@ in
     graphiteHost = mkOption {
       description = "Hostname or IP of Graphite server";
       default = "127.0.0.1";
-      type = types.uniq types.string;
+      type = types.str;
     };
 
     graphitePort = mkOption {
@@ -77,7 +77,7 @@ in
     extraConfig = mkOption {
       default = "";
       description = "Extra configuration options for statsd";
-      type = types.uniq types.string;
+      type = types.str;
     };
 
   };

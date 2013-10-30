@@ -40,7 +40,7 @@ in
       };
 
       default = mkOption {
-        type = types.uniq types.string;
+        type = types.str;
         default = "none";
         example = "wmii";
         description = "Default window manager loaded if none have been chosen.";

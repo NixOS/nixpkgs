@@ -13,7 +13,7 @@ let
 
       name = mkOption {
         example = "sshd";
-        type = types.uniq types.string;
+        type = types.str;
         description = "Name of the PAM service.";
       };
 

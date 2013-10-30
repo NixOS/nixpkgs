@@ -65,7 +65,7 @@ in
       device = mkOption {
         default = "";
         example = "/dev/hda";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           The device on which the GRUB boot loader will be installed.
           The special value <literal>nodev</literal> means that a GRUB
@@ -89,7 +89,7 @@ in
       configurationName = mkOption {
         default = "";
         example = "Stable 2.6.21";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           GRUB entry name instead of default.
         '';

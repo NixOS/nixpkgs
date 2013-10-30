@@ -50,7 +50,7 @@ in
       };
 
       default = mkOption {
-        type = types.uniq types.string;
+        type = types.str;
         default = "";
         example = "none";
         description = "Default desktop manager loaded if none have been chosen.";

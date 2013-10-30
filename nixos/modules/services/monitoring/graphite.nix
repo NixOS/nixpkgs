@@ -32,13 +32,13 @@ in {
       host = mkOption {
         description = "Graphite web frontend listen address";
         default = "127.0.0.1";
-        type = types.uniq types.string;
+        type = types.str;
       };
 
       port = mkOption {
         description = "Graphite web frontend port";
         default = "8080";
-        type = types.uniq types.string;
+        type = types.str;
       };
     };
 
@@ -56,7 +56,7 @@ in {
           LOG_UPDATES = False
           LOG_CACHE_HITS = False
         '';
-        type = types.uniq types.string;
+        type = types.str;
       };
 
       enableCache = mkOption {

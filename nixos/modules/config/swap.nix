@@ -34,13 +34,13 @@ with utils;
 
           device = mkOption {
             example = "/dev/sda3";
-            type = types.uniq types.string;
+            type = types.str;
             description = "Path of the device.";
           };
 
           label = mkOption {
             example = "swap";
-            type = types.uniq types.string;
+            type = types.str;
             description = ''
               Label of the device.  Can be used instead of <varname>device</varname>.
             '';

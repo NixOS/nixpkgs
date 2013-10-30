@@ -22,7 +22,7 @@ in
 
       dates = mkOption {
         default = "03:15";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Specification (in the format described by
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
@@ -34,7 +34,7 @@ in
       options = mkOption {
         default = "";
         example = "--max-freed $((64 * 1024**3))";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Options given to <filename>nix-collect-garbage</filename> when the
           garbage collector is run automatically.

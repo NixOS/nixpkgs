@@ -265,7 +265,7 @@ in
 
       period = mkOption {
         default = "15 02 * * *";
-        type = with types; uniq string;
+        type = types.str;
         description = ''
           This option defines (in the format used by cron) when the
           locate database is updated.

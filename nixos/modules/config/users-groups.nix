@@ -12,12 +12,12 @@ let
     options = {
 
       name = mkOption {
-        type = with types; uniq string;
+        type = types.str;
         description = "The name of the user account. If undefined, the name of the attribute set will be used.";
       };
 
       description = mkOption {
-        type = with types; uniq string;
+        type = types.str;
         default = "";
         description = "A short description of the user account.";
       };
@@ -29,7 +29,7 @@ let
       };
 
       group = mkOption {
-        type = with types; uniq string;
+        type = types.str;
         default = "nogroup";
         description = "The user's primary group.";
       };
@@ -41,13 +41,13 @@ let
       };
 
       home = mkOption {
-        type = with types; uniq string;
+        type = types.str;
         default = "/var/empty";
         description = "The user's home directory.";
       };
 
       shell = mkOption {
-        type = with types; uniq string;
+        type = types.str;
         default = "/run/current-system/sw/sbin/nologin";
         description = "The path to the user's shell.";
       };
@@ -107,7 +107,7 @@ let
     options = {
 
       name = mkOption {
-        type = with types; uniq string;
+        type = types.str;
         description = "The name of the group. If undefined, the name of the attribute set will be used.";
       };
 

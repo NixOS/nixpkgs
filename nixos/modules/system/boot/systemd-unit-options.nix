@@ -19,7 +19,7 @@ rec {
 
     description = mkOption {
       default = "";
-      type = types.uniq types.string;
+      type = types.str;
       description = "Description of this unit used in systemd messages and progress indicators.";
     };
 
@@ -167,13 +167,13 @@ rec {
     };
 
     script = mkOption {
-      type = types.uniq types.string;
+      type = types.str;
       default = "";
       description = "Shell commands executed as the service's main process.";
     };
 
     scriptArgs = mkOption {
-      type = types.uniq types.string;
+      type = types.str;
       default = "";
       description = "Arguments passed to the main process script.";
     };
@@ -230,7 +230,7 @@ rec {
     };
 
     startAt = mkOption {
-      type = types.uniq types.string;
+      type = types.str;
       default = "";
       example = "Sun 14:00:00";
       description = ''
@@ -296,13 +296,13 @@ rec {
 
     what = mkOption {
       example = "/dev/sda1";
-      type = types.uniq types.string;
+      type = types.str;
       description = "Absolute path of device node, file or other resource. (Mandatory)";
     };
 
     where = mkOption {
       example = "/mnt";
-      type = types.uniq types.string;
+      type = types.str;
       description = ''
         Absolute path of a directory of the mount point.
         Will be created if it doesn't exist. (Mandatory)
@@ -312,7 +312,7 @@ rec {
     type = mkOption {
       default = "";
       example = "ext4";
-      type = types.uniq types.string;
+      type = types.str;
       description = "File system type.";
     };
 
@@ -340,7 +340,7 @@ rec {
 
     where = mkOption {
       example = "/mnt";
-      type = types.uniq types.string;
+      type = types.str;
       description = ''
         Absolute path of a directory of the mount point.
         Will be created if it doesn't exist. (Mandatory)

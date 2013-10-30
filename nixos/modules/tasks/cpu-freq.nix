@@ -10,7 +10,7 @@ with pkgs.lib;
     powerManagement.cpuFreqGovernor = mkOption {
       default = "";
       example = "ondemand";
-      type = types.uniq types.string;
+      type = types.str;
       description = ''
         Configure the governor used to regulate the frequence of the
         available CPUs. By default, the kernel configures the

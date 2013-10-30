@@ -55,7 +55,7 @@ in
         description = "
           The keyboard mapping table for the virtual consoles.
         ";
-        type = types.uniq types.string;
+        type = types.str;
       };
 
     };

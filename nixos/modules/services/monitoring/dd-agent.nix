@@ -26,7 +26,7 @@ in {
 
       example = "ae0aa6a8f08efa988ba0a17578f009ab";
 
-      type = types.uniq types.string;
+      type = types.str;
     };
 
     hostname = mkOption {

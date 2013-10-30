@@ -249,7 +249,7 @@ in
         };
 
         execCmd = mkOption {
-          type = types.uniq types.string;
+          type = types.str;
           example = "${pkgs.slim}/bin/slim";
           description = "Command to start the display manager.";
         };

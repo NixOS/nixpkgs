@@ -8,31 +8,31 @@ with pkgs.lib;
 
     system.nixosVersion = mkOption {
       internal = true;
-      type = types.uniq types.string;
+      type = types.str;
       description = "NixOS version.";
     };
 
     system.nixosVersionSuffix = mkOption {
       internal = true;
-      type = types.uniq types.string;
+      type = types.str;
       description = "NixOS version suffix.";
     };
 
     system.nixosRevision = mkOption {
       internal = true;
-      type = types.uniq types.string;
+      type = types.str;
       description = "NixOS Git revision hash.";
     };
 
     system.nixosCodeName = mkOption {
       internal = true;
-      type = types.uniq types.string;
+      type = types.str;
       description = "NixOS release code name.";
     };
 
     system.defaultChannel = mkOption {
       internal = true;
-      type = types.uniq types.string;
+      type = types.str;
       default = https://nixos.org/channels/nixos-unstable;
       description = "Default NixOS channel to which the root user is subscribed.";
     };

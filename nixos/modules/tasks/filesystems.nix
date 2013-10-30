@@ -15,7 +15,7 @@ let
 
       mountPoint = mkOption {
         example = "/mnt/usb";
-        type = types.uniq types.string;
+        type = types.str;
         description = "Location of the mounted the file system.";
       };
 
@@ -36,7 +36,7 @@ let
       fsType = mkOption {
         default = "auto";
         example = "ext3";
-        type = types.uniq types.string;
+        type = types.str;
         description = "Type of the file system.";
       };
 

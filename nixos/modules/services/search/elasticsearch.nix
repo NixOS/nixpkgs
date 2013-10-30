@@ -29,31 +29,31 @@ in {
     host = mkOption {
       description = "Elasticsearch listen address";
       default = "127.0.0.1";
-      type = types.uniq types.string;
+      type = types.str;
     };
 
     port = mkOption {
       description = "Elasticsearch port to listen for HTTP traffic";
       default = "9200";
-      type = types.uniq types.string;
+      type = types.str;
     };
 
     tcp_port = mkOption {
       description = "Elasticsearch port for the node to node communication";
       default = "9300";
-      type = types.uniq types.string;
+      type = types.str;
     };
 
     cluster_name = mkOption {
       description = "Elasticsearch name that identifies your cluster for auto-discovery";
       default = "elasticsearch";
-      type = types.uniq types.string;
+      type = types.str;
     };
 
     extraConf = mkOption {
       description = "Extra configuration for elasticsearch";
       default = "";
-      type = types.uniq types.string;
+      type = types.str;
       example = ''
         node.name: "elasticsearch"
         node.master: true
@@ -77,7 +77,7 @@ in {
               type: consolePattern
               conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"
       '';
-      type = types.uniq types.string;
+      type = types.str;
     };
   };
 

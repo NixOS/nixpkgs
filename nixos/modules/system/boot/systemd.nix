@@ -389,7 +389,7 @@ in
       type = types.attrsOf types.optionSet;
       options = {
         text = mkOption {
-          type = types.uniq types.string;
+          type = types.str;
           description = "Text of this systemd unit.";
         };
         enable = mkOption {
@@ -473,7 +473,7 @@ in
 
     systemd.defaultUnit = mkOption {
       default = "multi-user.target";
-      type = types.uniq types.string;
+      type = types.str;
       description = "Default unit started when the system boots.";
     };
 
@@ -488,13 +488,13 @@ in
 
     services.journald.console = mkOption {
       default = "";
-      type = types.uniq types.string;
+      type = types.str;
       description = "If non-empty, write log messages to the specified TTY device.";
     };
 
     services.journald.rateLimitInterval = mkOption {
       default = "10s";
-      type = types.uniq types.string;
+      type = types.str;
       description = ''
         Configures the rate limiting interval that is applied to all
         messages generated on the system. This rate limiting is applied
@@ -518,7 +518,7 @@ in
 
     services.logind.extraConfig = mkOption {
       default = "";
-      type = types.uniq types.string;
+      type = types.str;
       example = "HandleLidSwitch=ignore";
       description = ''
         Extra config options for systemd-logind. See man logind.conf for

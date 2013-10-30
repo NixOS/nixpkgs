@@ -53,7 +53,7 @@ in
       };
 
       driver = mkOption {
-        type = types.uniq types.string;
+        type = types.str;
         default = "nl80211,wext";
         description = "Force a specific wpa_supplicant driver.";
       };
@@ -74,7 +74,7 @@ in
         };
 
         group = mkOption {
-          type = types.uniq types.string;
+          type = types.str;
           default = "wheel";
           example = "network";
           description = "Members of this group can control wpa_supplicant.";

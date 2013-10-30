@@ -46,7 +46,7 @@ in
       };
 
       tty = mkOption {
-        type = types.uniq types.string;
+        type = types.str;
         default = "tty10";
         description = ''
           The tty device on which syslogd will print important log
