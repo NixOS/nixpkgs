@@ -102,7 +102,7 @@ in
 
       permitRootLogin = mkOption {
         default = "without-password";
-        check = permitRootLoginCheck;
+        type = types.addCheck types.str permitRootLoginCheck;
         description = ''
           Whether the root user can login using ssh. Valid values are
           <literal>yes</literal>, <literal>without-password</literal>,

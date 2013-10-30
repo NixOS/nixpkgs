@@ -32,7 +32,7 @@ in
     services.minidlna.mediaDirs = mkOption {
       type = types.listOf types.string;
       default = [];
-      examples = [ "/data/media" "V,/home/alice/video" ];
+      example = [ "/data/media" "V,/home/alice/video" ];
       description =
         ''
           Directories to be scanned for media files.  The prefixes

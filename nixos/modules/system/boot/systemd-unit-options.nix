@@ -2,7 +2,19 @@
 
 with pkgs.lib;
 
-rec {
+let
+
+  checkService = v:
+    let assertValueOneOf = name: values: attr:
+          let val = getAttr name attr;
+          in optional ( hasAttr name attr && !elem val values) "Systemd service field `${name}' cannot have value `${val}'.";
+        checkType = assertValueOneOf "Type" ["simple" "forking" "oneshot" "dbus" "notify" "idle"];
+        checkRestart = assertValueOneOf "Restart" ["no" "on-success" "on-failure" "on-abort" "always"];
+        errors = concatMap (c: c v) [checkType checkRestart];
+    in if errors == [] then true
+       else builtins.trace (concatStringsSep "\n" errors) false;
+
+in rec {
 
   unitOptions = {
 
@@ -147,23 +159,13 @@ rec {
         { StartLimitInterval = 10;
           RestartSec = 5;
         };
-      type = types.attrs;
+      type = types.addCheck types.attrs checkService;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Service]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.service</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
-
-      check = v:
-        let assertValueOneOf = name: values: attr:
-              let val = getAttr name attr;
-              in optional ( hasAttr name attr && !elem val values) "${name} ${val} not known to systemd";
-            checkType = assertValueOneOf "Type" ["simple" "forking" "oneshot" "dbus" "notify" "idle"];
-            checkRestart = assertValueOneOf "Restart" ["no" "on-success" "on-failure" "on-abort" "always"];
-            errors = concatMap (c: c v) [checkType checkRestart];
-        in if errors == [] then true
-           else builtins.trace (concatStringsSep "\n" errors) false;
     };
 
     script = mkOption {

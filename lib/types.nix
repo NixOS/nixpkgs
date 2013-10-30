@@ -201,6 +201,9 @@ rec {
       name = /* builtins.trace "types.optionSet is deprecated; use types.submodule instead" */ "option set";
     };
 
+    # Augment the given type with an additional type check function.
+    addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
+
   };
 
 }

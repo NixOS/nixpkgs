@@ -104,7 +104,7 @@ let
 
     name = mkOption {
       # !!! The type should ensure that this could be a filename.
-      type = types.string;
+      type = types.str;
       example = "sshd";
       description = ''
         Name of the Upstart job.
@@ -113,7 +113,7 @@ let
 
     startOn = mkOption {
       # !!! Re-enable this once we're on Upstart >= 0.6.
-      #type = types.string;
+      #type = types.str;
       default = "";
       description = ''
         The Upstart event that triggers this job to be started.
@@ -122,7 +122,7 @@ let
     };
 
     stopOn = mkOption {
-      type = types.string;
+      type = types.str;
       default = "starting shutdown";
       description = ''
         The Upstart event that triggers this job to be stopped.
@@ -130,7 +130,7 @@ let
     };
 
     postStart = mkOption {
-      type = types.string;
+      type = types.lines;
       default = "";
       description = ''
         Shell commands executed after the job is started (i.e. after
@@ -140,7 +140,7 @@ let
     };
 
     preStop = mkOption {
-      type = types.string;
+      type = types.lines;
       default = "";
       description = ''
         Shell commands executed before the job is stopped
@@ -150,7 +150,7 @@ let
     };
 
     postStop = mkOption {
-      type = types.string;
+      type = types.lines;
       default = "";
       description = ''
         Shell commands executed after the job has stopped
@@ -159,7 +159,7 @@ let
     };
 
     exec = mkOption {
-      type = types.string;
+      type = types.str;
       default = "";
       description = ''
         Command to start the job's main process.  If empty, the
@@ -189,7 +189,7 @@ let
     };
 
     daemonType = mkOption {
-      type = types.string;
+      type = types.str;
       default = "none";
       description = ''
         Determines how Upstart detects when a daemon should be
@@ -203,8 +203,7 @@ let
     };
 
     setuid = mkOption {
-      type = types.string;
-      check = userExists;
+      type = types.addCheck types.str userExists;
       default = "";
       description = ''
         Run the daemon as a different user.
@@ -212,8 +211,7 @@ let
     };
 
     setgid = mkOption {
-      type = types.string;
-      check = groupExists;
+      type = types.addCheck types.str groupExists;
       default = "";
       description = ''
         Run the daemon as a different group.
