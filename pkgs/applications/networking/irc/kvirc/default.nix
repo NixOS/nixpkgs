@@ -17,8 +17,8 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Graphic IRC client with Qt";
-    license = "GPL";
+    license = licences.gpl3;
     homepage = http://www.kvirc.net/;
-    platforms   = with stdenv.lib.platforms; linux;
+    platforms   = platforms.linux;
   };
 }
