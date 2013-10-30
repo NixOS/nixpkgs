@@ -24,12 +24,12 @@ with pkgs.lib;
       };
 
       listenAddress = mkOption {
-	default = null;
+        default = null;
         description = "IP address to listen on.";
       };
 
       port = mkOption {
-	default = 8080;
+        default = 8080;
         description = "port to listen on.";
       };
 
@@ -45,9 +45,12 @@ with pkgs.lib;
 
   ###### implementation
 
-  config = mkIf cfg.enable (
-    mkAssert (cfg.enable -> cfg.database != "")
-      "Must specify database name" {
+  config = mkIf cfg.enable {
+
+    assertions = singleton
+      { assertion = cfg.enable -> cfg.database != "";
+        message = "Must specify 4Store database name";
+      };
 
     users.extraUsers = singleton
       { name = endpointUser;
@@ -63,10 +66,10 @@ with pkgs.lib;
       startOn = "filesystem";
 
       exec = ''
-	${run} '${pkgs.rdf4store}/bin/4s-httpd -D ${cfg.options} ${if cfg.listenAddress!=null then "-H ${cfg.listenAddress}" else "" } -p ${toString cfg.port} ${cfg.database}'
+        ${run} '${pkgs.rdf4store}/bin/4s-httpd -D ${cfg.options} ${if cfg.listenAddress!=null then "-H ${cfg.listenAddress}" else "" } -p ${toString cfg.port} ${cfg.database}'
       '';
     };
 
-  });
+  };
 
 }

@@ -36,9 +36,12 @@ with pkgs.lib;
 
   ###### implementation
 
-  config = mkIf cfg.enable (
-    mkAssert (cfg.enable -> cfg.database != "")
-      "Must specify database name" {
+  config = mkIf cfg.enable {
+
+    assertions = singleton
+      { assertion = cfg.enable -> cfg.database != "";
+        message = "Must specify 4Store database name.";
+      };
 
     users.extraUsers = singleton
       { name = fourStoreUser;
@@ -56,16 +59,16 @@ with pkgs.lib;
       preStart = ''
         mkdir -p ${stateDir}/
         chown ${fourStoreUser} ${stateDir}
-	if ! test -e "${stateDir}/${cfg.database}"; then
-	  ${run} -c '${pkgs.rdf4store}/bin/4s-backend-setup ${cfg.database}'
+        if ! test -e "${stateDir}/${cfg.database}"; then
+          ${run} -c '${pkgs.rdf4store}/bin/4s-backend-setup ${cfg.database}'
         fi
       '';
 
       exec = ''
-	${run} -c '${pkgs.rdf4store}/bin/4s-backend -D ${cfg.options} ${cfg.database}'
+        ${run} -c '${pkgs.rdf4store}/bin/4s-backend -D ${cfg.options} ${cfg.database}'
       '';
     };
 
-  });
+  };
 
 }

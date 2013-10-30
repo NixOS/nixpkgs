@@ -108,17 +108,6 @@ let
       ''; # */
   };
 
-
-  checkAgent = mkAssert (!(cfg.startOpenSSHAgent && cfg.startGnuPGAgent))
-    ''
-      The OpenSSH agent and GnuPG agent cannot be started both.
-      Choose between `startOpenSSHAgent' and `startGnuPGAgent'.
-    '';
-
-  checkPolkit = mkAssert config.security.polkit.enable
-    "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
-
-
 in
 
 {
@@ -425,7 +414,20 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable (checkAgent (checkPolkit {
+  config = mkIf cfg.enable {
+
+    assertions =
+      [ { assertion = !(cfg.startOpenSSHAgent && cfg.startGnuPGAgent);
+          message =
+            ''
+              The OpenSSH agent and GnuPG agent cannot be started both.
+              Choose between `startOpenSSHAgent' and `startGnuPGAgent'.
+            '';
+        }
+        { assertion = config.security.polkit.enable;
+          message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
+        }
+      ];
 
     boot.extraModulePackages =
       optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++
@@ -669,7 +671,7 @@ in
         ${xrandrMonitorSections}
       '';
 
-  }));
+  };
 
 }
 
