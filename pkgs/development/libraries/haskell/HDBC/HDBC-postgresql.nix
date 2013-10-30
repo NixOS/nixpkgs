@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HDBC-postgresql";
-  version = "2.3.2.1";
-  sha256 = "1ji10w4d91dp3ci7pn1jd8nb3wasszwlsy1lfbb4mqnr15c9vnpb";
+  version = "2.3.2.2";
+  sha256 = "0x42lf429dxjkz22jn5fybimlixxs20zq01ap40344qlwh01hd90";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ convertible HDBC mtl parsec time utf8String ];
