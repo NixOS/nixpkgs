@@ -419,15 +419,6 @@ in
 
     };
 
-    environment.x11Packages = mkOption {
-      default = [];
-      type = types.listOf types.package;
-      description = ''
-        List of packages added to the system when the X server is
-        activated (<option>services.xserver.enable</option>).
-      '';
-    };
-
   };
 
 
@@ -477,7 +468,7 @@ in
           }
       ]);
 
-    environment.x11Packages =
+    environment.systemPackages =
       [ xorg.xorgserver
         xorg.xrandr
         xorg.xrdb
@@ -497,8 +488,6 @@ in
       ++ optional (elem "nvidiaLegacy304" driverNames) kernelPackages.nvidia_x11_legacy304
       ++ optional (elem "virtualbox" driverNames) xorg.xrefresh
       ++ optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
-
-    environment.systemPackages = config.environment.x11Packages;
 
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];

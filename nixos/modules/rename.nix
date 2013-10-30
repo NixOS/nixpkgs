@@ -69,9 +69,7 @@ let
 
 in zipModules ([]
 
-# usage example:
-# ++ alias [ "services" "xserver" "slim" "theme" ] [ "services" "xserver" "displayManager" "slim" "theme" ]
-++ obsolete [ "environment" "extraPackages" ] [ "environment" "systemPackages" ]
+++ obsolete [ "environment" "x11Packages" ] [ "environment" "systemPackages" ]
 ++ obsolete [ "environment" "enableBashCompletion" ] [ "programs" "bash" "enableCompletion" ]
 ++ obsolete [ "environment" "nix" ] [ "nix" "package" ]
 

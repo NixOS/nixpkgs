@@ -35,7 +35,7 @@ in
           '';
       };
 
-    environment.x11Packages = [ pkgs.icewm ];
+    environment.systemPackages = [ pkgs.icewm ];
 
   };
 

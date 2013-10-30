@@ -35,7 +35,7 @@ in
           '';
       };
 
-    environment.x11Packages = [ pkgs.awesome ];
+    environment.systemPackages = [ pkgs.awesome ];
 
   };
 

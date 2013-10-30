@@ -35,7 +35,7 @@ in
           '';
       };
 
-    environment.x11Packages = [ pkgs.xorg.twm ];
+    environment.systemPackages = [ pkgs.xorg.twm ];
 
   };
 
