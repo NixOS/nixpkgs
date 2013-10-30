@@ -153,6 +153,7 @@ rec {
       # value specified in the option declaration (if any).
       defsFinal = filterOverrides'
         ((if opt ? default then [{ file = head opt.declarations; value = mkOptionDefault opt.default; }] else []) ++ defs);
+      files = map (def: def.file) defsFinal;
       # Type-check the remaining definitions, and merge them if
       # possible.
       merged =
@@ -162,16 +163,16 @@ rec {
           fold (def: res:
             if opt.type.check def.value then res
             else throw "The option value `${showOption loc}' in `${def.file}' is not a ${opt.type.name}.")
-            (opt.type.merge { prefix = loc; files = map (m: m.file) defsFinal; } (map (m: m.value) defsFinal)) defsFinal;
+            (opt.type.merge { prefix = loc; inherit files; } (map (m: m.value) defsFinal)) defsFinal;
       # Finally, apply the ‘apply’ function to the merged
       # value.  This allows options to yield a value computed
       # from the definitions.
       value = (opt.apply or id) merged;
     in opt //
       { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
-        files = map (def: def.file) defs;
         definitions = map (def: def.value) defsFinal;
         isDefined = defsFinal != [];
+        inherit files;
       };
 
   /* Given a config set, expand mkMerge properties, and push down the
