@@ -996,6 +996,7 @@ let
   gnuplot = callPackage ../tools/graphics/gnuplot {
     texLive = null;
     lua = null;
+    texinfo = texinfo4; # build errors with gnuplot-4.6.3
 
     # use gccApple to compile on darwin, seems to resolve a malloc error
     stdenv = if stdenv.isDarwin
