@@ -168,7 +168,7 @@ if test -e /sys/power/tuxonice/resume; then
     fi
 fi
 
-if test -e /sys/power/resume -a -e /sys/power/disk; then
+if test -n "@resumeDevice@" -a -e /sys/power/resume -a -e /sys/power/disk; then
     echo "@resumeDevice@" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
     echo shutdown > /sys/power/disk
 fi

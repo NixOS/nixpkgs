@@ -229,12 +229,14 @@ in
   options = {
 
     boot.resumeDevice = mkOption {
-      default = "";
-      example = "0:0";
-      description = "
-        Device for manual resume attempt during boot. Looks like
-        major:minor. ls -l /dev/SWAP_PARTION shows them.
-      ";
+      type = types.nullOr types.str;
+      default = null;
+      example = "8:2";
+      description = ''
+        Device for manual resume attempt during boot, specified using
+        the device's major and minor number as
+        <literal><replaceable>major</replaceable>:<replaceable>minor</replaceable></literal>.
+      '';
     };
 
     boot.initrd.checkJournalingFS = mkOption {
