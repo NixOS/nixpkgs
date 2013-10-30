@@ -12,15 +12,14 @@ let
 
       device = mkOption {
         example = "/dev/sda";
-        type = types.string;
+        type = types.str;
         description = "Location of the device.";
       };
 
       options = mkOption {
         default = "";
         example = "-d sat";
-        type = types.string;
-        apply = pkgs.lib.concatStringsSep " ";
+        type = types.separatedString " ";
         description = "Options that determine how smartd monitors the device.";
       };
     };
