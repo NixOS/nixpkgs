@@ -1596,6 +1596,8 @@ let
     libpng = libpng12;
   };
 
+  pngquant = callPackage ../tools/graphics/pngquant { };
+
   podiff = callPackage ../tools/text/podiff { };
 
   poedit = callPackage ../tools/text/poedit { };
