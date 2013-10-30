@@ -10258,6 +10258,10 @@ let
 
   znc = callPackage ../applications/networking/znc { };
 
+  zncModules = recurseIntoAttrs (
+    callPackage ../applications/networking/znc/modules.nix { }
+  );
+
   zsnes = callPackage_i686 ../misc/emulators/zsnes {
     libpng = libpng12;
   };
