@@ -204,16 +204,17 @@ in
 
       session = mkOption {
         default = [];
-        example = [
-          {
-            manage = "desktop";
-            name = "xterm";
-            start = "
-              ${pkgs.xterm}/bin/xterm -ls &
-              waitPID=$!
-            ";
-          }
-        ];
+        example = literalExample
+          ''
+            [ { manage = "desktop";
+                name = "xterm";
+                start = '''
+                  ''${pkgs.xterm}/bin/xterm -ls &
+                  waitPID=$!
+                ''';
+              }
+            ]
+          '';
         description = ''
           List of sessions supported with the command used to start each
           session.  Each session script can set the

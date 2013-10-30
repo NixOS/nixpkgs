@@ -157,14 +157,7 @@
 
 
   <xsl:template match="derivation">
-    <xsl:choose>
-      <xsl:when test="attr[@name = 'url']/string/@value">
-        <replaceable>(download of <xsl:value-of select="attr[@name = 'url']/string/@value" />)</replaceable>
-      </xsl:when>
-      <xsl:otherwise>
-        <replaceable>(build of <xsl:value-of select="attr[@name = 'name']/string/@value" />)</replaceable>
-      </xsl:otherwise>
-    </xsl:choose>
+    <replaceable>(build of <xsl:value-of select="attr[@name = 'name']/string/@value" />)</replaceable>
   </xsl:template>
 
   <xsl:template match="attr[@name = 'declarations' or @name = 'definitions']">

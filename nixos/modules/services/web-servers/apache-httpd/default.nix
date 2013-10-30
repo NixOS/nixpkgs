@@ -445,7 +445,7 @@ in
       extraModules = mkOption {
         type = types.listOf types.unspecified;
         default = [];
-        example = [ "proxy_connect" { name = "php5"; path = "${php}/modules/libphp5.so"; } ];
+        example = literalExample ''[ "proxy_connect" { name = "php5"; path = "''${php}/modules/libphp5.so"; } ]'';
         description = ''
           Additional Apache modules to be used.  These can be
           specified as a string in the case of modules distributed

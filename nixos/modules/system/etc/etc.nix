@@ -32,13 +32,14 @@ in
     environment.etc = mkOption {
       type = types.loaOf types.optionSet;
       default = {};
-      example =
+      example = literalExample ''
         { hosts =
             { source = "/nix/store/.../etc/dir/file.conf.example";
               mode = "0440";
             };
           "default/useradd".text = "GROUP=100 ...";
-        };
+        }
+      '';
       description = ''
         Set of files that have to be linked in <filename>/etc</filename>.
       '';

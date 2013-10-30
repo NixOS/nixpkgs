@@ -75,36 +75,36 @@ in
     services.openvpn.servers = mkOption {
       default = {};
 
-      example = {
+      example = literalExample ''
+        {
+          server = {
+            config = '''
+              # Simplest server configuration: http://openvpn.net/index.php/documentation/miscellaneous/static-key-mini-howto.html.
+              # server :
+              dev tun
+              ifconfig 10.8.0.1 10.8.0.2
+              secret /root/static.key
+            ''';
+            up = "ip route add ...";
+            down = "ip route del ...";
+          };
 
-        server = {
-          config = ''
-            # Simplest server configuration: http://openvpn.net/index.php/documentation/miscellaneous/static-key-mini-howto.html.
-            # server :
-            dev tun
-            ifconfig 10.8.0.1 10.8.0.2
-            secret /root/static.key
-          '';
-          up = "ip route add ...";
-          down = "ip route del ...";
-        };
-
-        client = {
-          config = ''
-            client
-            remote vpn.example.org
-            dev tun
-            proto tcp-client
-            port 8080
-            ca /root/.vpn/ca.crt
-            cert /root/.vpn/alice.crt
-            key /root/.vpn/alice.key
-          '';
-          up = "echo nameserver $nameserver | ${pkgs.openresolv}/sbin/resolvconf -m 0 -a $dev";
-          down = "${pkgs.openresolv}/sbin/resolvconf -d $dev";
-        };
-
-      };
+          client = {
+            config = '''
+              client
+              remote vpn.example.org
+              dev tun
+              proto tcp-client
+              port 8080
+              ca /root/.vpn/ca.crt
+              cert /root/.vpn/alice.crt
+              key /root/.vpn/alice.key
+            ''';
+            up = "echo nameserver $nameserver | ''${pkgs.openresolv}/sbin/resolvconf -m 0 -a $dev";
+            down = "''${pkgs.openresolv}/sbin/resolvconf -d $dev";
+          };
+        }
+      '';
 
       description = ''
         Each attribute of this option defines an Upstart job to run an

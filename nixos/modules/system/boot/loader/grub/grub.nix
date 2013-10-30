@@ -156,7 +156,7 @@ in
       extraFiles = mkOption {
         default = {};
         example = literalExample ''
-          { "memtest.bin" = "${pkgs.memtest86plus}/memtest.bin"; }
+          { "memtest.bin" = "''${pkgs.memtest86plus}/memtest.bin"; }
         '';
         description = ''
           A set of files to be copied to <filename>/boot</filename>.
