@@ -124,7 +124,7 @@ in
       postBuild =
         ''
           if [ -x $out/bin/update-mime-database -a -w $out/share/mime/packages ]; then
-              $out/bin/update-mime-database -V $out/share/mime
+              XDG_DATA_DIRS=$out/share $out/bin/update-mime-database -V $out/share/mime > /dev/null
           fi
 
           if [ -x $out/bin/gtk-update-icon-cache -a -f $out/share/icons/hicolor/index.theme ]; then
