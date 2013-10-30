@@ -28,5 +28,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://qpid.apache.org;
     description = "An AMQP message broker and a C++ messaging API";
+    license = stdenv.lib.licenses.asl20;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.page ];
   };
 }
