@@ -18,9 +18,9 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 let optional = stdenv.lib.optional;
 in rec {
 
-  firefoxVersion = "24.0";
+  firefoxVersion = "25.0";
 
-  xulVersion = "24.0"; # this attribute is used by other packages
+  xulVersion = "25.0"; # this attribute is used by other packages
 
 
   src = fetchurl {
@@ -30,7 +30,7 @@ in rec {
         # Fall back to this url for versions not available at releases.mozilla.org.
         "ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
     ];
-    sha1 = "8scch0gr59j86vp9c1v0yx6mq1pkwcvg";
+    sha1 = "92j66nrwgdsqzlxc5rmjp7b5hgi24iw5";
   };
 
   commonConfigureFlags =
