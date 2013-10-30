@@ -115,7 +115,7 @@ let
       gcc34 = linux;
       gcc42 = linux;
       gcc44 = linux;
-      gcj44 = linux;
+      gcj = linux;
       ghdl = linux;
       ghostscript = linux;
       ghostscriptX = linux;

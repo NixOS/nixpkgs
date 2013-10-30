@@ -51,7 +51,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   gcc34 = linux;
   gcc42 = linux;
   gcc44 = linux;
-  gcj44 = linux;
+  gcj = linux;
   ghdl = linux;
   glibc = linux;
   glibcLocales = linux;
