@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gloss";
-  version = "1.8.0.1";
-  sha256 = "17nnmv84pjls1my58yzifbin3pxcnlbpkprglad707rr4lrkkjvv";
+  version = "1.8.1.1";
+  sha256 = "135rrgzx4xq8279zbsl4538hjn8np4g6409fgva2cb9shw8z5pmj";
   buildDepends = [ bmp GLUT OpenGL ];
   jailbreak = true;
   meta = {
