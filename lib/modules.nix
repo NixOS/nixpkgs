@@ -1,5 +1,9 @@
-with import ./.. {};
-with lib;
+with import ./lists.nix;
+with import ./trivial.nix;
+with import ./attrsets.nix;
+with import ./options.nix;
+with import ./debug.nix;
+with import ./types.nix;
 
 rec {
 
@@ -244,7 +248,7 @@ rec {
     let
       defaultPrio = 100;
       getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPrio;
-      min = x: y: if x < y then x else y;
+      min = x: y: if builtins.lessThan x y then x else y;
       highestPrio = fold (def: prio: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;

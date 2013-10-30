@@ -1,13 +1,11 @@
 # Definitions related to run-time type checking.  Used in particular
 # to type-check NixOS configurations.
 
-let lib = import ./default.nix; in
-
-with lib.lists;
-with lib.attrsets;
-with lib.options;
-with lib.trivial;
-with lib.modules;
+with import ./lists.nix;
+with import ./attrsets.nix;
+with import ./options.nix;
+with import ./trivial.nix;
+with import ./strings.nix;
 
 rec {
 
@@ -51,7 +49,7 @@ rec {
     bool = mkOptionType {
       name = "boolean";
       check = builtins.isBool;
-      merge = loc: fold (x: lib.or x.value) false;
+      merge = loc: fold (x: y: x.value || y) false;
     };
 
     int = mkOptionType {
@@ -71,7 +69,7 @@ rec {
     separatedString = sep: mkOptionType {
       name = "string";
       check = builtins.isString;
-      merge = loc: defs: lib.concatStringsSep sep (getValues defs);
+      merge = loc: defs: concatStringsSep sep (getValues defs);
     };
 
     lines = separatedString "\n";
@@ -85,7 +83,7 @@ rec {
     attrs = mkOptionType {
       name = "attribute set";
       check = isAttrs;
-      merge = loc: fold (def: lib.mergeAttrs def.value) {};
+      merge = loc: fold (def: mergeAttrs def.value) {};
     };
 
     # derivation is a reserved keyword.
@@ -117,7 +115,7 @@ rec {
 
     attrsOf = elemType: mkOptionType {
       name = "attribute set of ${elemType.name}s";
-      check = x: isAttrs x && all elemType.check (lib.attrValues x);
+      check = x: isAttrs x && all elemType.check (attrValues x);
       merge = loc: defs:
         zipAttrsWith (name: elemType.merge (loc ++ [name]))
           # Push down position info.
@@ -179,7 +177,10 @@ rec {
     };
 
     submodule = opts:
-      let opts' = toList opts; in
+      let
+        opts' = toList opts;
+        inherit (import ./modules.nix) evalModules;
+      in
       mkOptionType rec {
         name = "submodule";
         check = x: isAttrs x || builtins.isFunction x;
