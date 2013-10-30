@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     homepage = http://wiki.znc.in/ZNC;
     maintainers = [ stdenv.lib.maintainers.viric ];
     license = "ASL2.0";
+    platforms = stdenv.lib.platforms.unix;
   };
 }
