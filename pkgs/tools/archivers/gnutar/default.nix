@@ -1,14 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gnutar-1.26";
+  name = "gnutar-1.27";
 
   src = fetchurl {
-    url = "mirror://gnu/tar/tar-1.26.tar.bz2";
-    sha256 = "0hbdkzmchq9ycr2x1pxqdcgdbaxksh8c6ac0jf75jajhcks6jlss";
+    url = "mirror://gnu/tar/tar-1.27.tar.bz2";
+    sha256 = "0yrwmx2f721ahpnki4fnzvnmrd3md3bq417icb4wrjky7k3caf12";
   };
-
-  patches = [ ./gets-undeclared.patch ];
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
