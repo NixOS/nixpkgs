@@ -9561,6 +9561,8 @@ let
 
       konversation = callPackage ../applications/networking/irc/konversation { };
 
+      kvirc = callPackage ../applications/networking/irc/kvirc { };
+
       krename = callPackage ../applications/misc/krename { };
 
       krusader = callPackage ../applications/misc/krusader { };
