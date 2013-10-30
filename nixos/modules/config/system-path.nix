@@ -60,6 +60,7 @@ in
     environment = {
 
       systemPackages = mkOption {
+        type = types.listOf types.path;
         default = [];
         example = "[ pkgs.icecat3 pkgs.thunderbird ]";
         description = ''
@@ -74,6 +75,7 @@ in
       };
 
       pathsToLink = mkOption {
+        type = types.listOf types.str;
         # Note: We need `/lib' to be among `pathsToLink' for NSS modules
         # to work.
         default = [];

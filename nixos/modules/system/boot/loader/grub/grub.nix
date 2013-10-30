@@ -247,7 +247,7 @@ in
       # set at once.
       system.boot.loader.id = "grub";
 
-      environment.systemPackages = [ grub ];
+      environment.systemPackages = optional (grub != null) grub;
 
       boot.loader.grub.extraPrepareConfig =
         concatStrings (mapAttrsToList (n: v: ''
