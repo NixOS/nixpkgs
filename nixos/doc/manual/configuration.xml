@@ -7,7 +7,7 @@
 <para>This chapter describes how to configure various aspects of a
 NixOS machine through the configuration file
 <filename>/etc/nixos/configuration.nix</filename>.  As described in
-<xref linkend="sec-changing-config" />, changes to that file only take
+<xref linkend="sec-changing-config" />, changes to this file only take
 effect after you run <command>nixos-rebuild</command>.</para>
 
 
@@ -15,7 +15,698 @@ effect after you run <command>nixos-rebuild</command>.</para>
 
 <section xml:id="sec-configuration-syntax"><title>Configuration syntax</title>
 
-<para>TODO</para>
+<section><title>The basics</title>
+
+<para>The NixOS configuration file
+<filename>/etc/nixos/configuration.nix</filename> is actually a
+<emphasis>Nix expression</emphasis>, which is the Nix package
+manager’s purely functional language for describing how to build
+packages and configurations.  This means you have all the expressive
+power of that language at your disposal, including the ability to
+abstract over common patterns, which is very useful when managing
+complex systems.  The syntax and semantics of the Nix language are
+fully described in the <link
+xlink:href="http://nixos.org/nix/manual/#chap-writing-nix-expressions">Nix
+manual</link>, but here we give a short overview of the most important
+constructs useful in NixOS configuration files.</para>
+
+<para>The NixOS configuration file generally looks like this:
+
+<programlisting>
+{ config, pkgs, ... }:
+
+{ <replaceable>option definitions</replaceable>
+}
+</programlisting>
+
+The first line (<literal>{ config, pkgs, ... }:</literal>) denotes
+that this is actually a function that takes at least the two arguments
+ <varname>config</varname> and <varname>pkgs</varname>.  (These are
+explained later.)  The function returns a <emphasis>set</emphasis> of
+option definitions (<literal>{ <replaceable>...</replaceable> }</literal>).  These definitions have the
+form <literal><replaceable>name</replaceable> =
+<replaceable>value</replaceable></literal>, where
+<replaceable>name</replaceable> is the name of an option and
+<replaceable>value</replaceable> is its value.  For example,
+
+<programlisting>
+{ config, pkgs, ... }:
+
+{ services.httpd.enable = true;
+  services.httpd.adminAddr = "alice@example.org";
+  services.httpd.documentRoot = "/webroot";
+}
+</programlisting>
+
+defines a configuration with three option definitions that together
+enable the Apache HTTP Server with <filename>/webroot</filename> as
+the document root.</para>
+
+<para>Sets can be nested, and in fact dots in option names are
+shorthand for defining a set containing another set.  For instance,
+<option>services.httpd.enable</option> defines a set named
+<varname>services</varname> that contains a set named
+<varname>httpd</varname>, which in turn contains an option definition
+named <varname>enable</varname> with value <literal>true</literal>.
+This means that the example above can also be written as:
+
+<programlisting>
+{ config, pkgs, ... }:
+
+{ services = {
+    httpd = {
+      enable = true;
+      adminAddr = "alice@example.org";
+      documentRoot = "/webroot";
+    };
+  };
+}
+</programlisting>
+
+which may be more convenient if you have lots of option definitions
+that share the same prefix (such as
+<literal>services.httpd</literal>).</para>
+
+<para>NixOS checks your option definitions for correctness.  For
+instance, if you try to define an option that doesn’t exist (that is,
+doesn’t have a corresponding <emphasis>option declaration</emphasis>),
+<command>nixos-rebuild</command> will give an error like:
+<screen>
+The option `services.httpd.enabl' defined in `/etc/nixos/configuration.nix' does not exist.
+</screen>
+Likewise, values in option definitions must have a correct type.  For
+instance, <option>services.httpd.enable</option> must be a Boolean
+(<literal>true</literal> or <literal>false</literal>).  Trying to give
+it a value of another type, such as a string, will cause an error:
+<screen>
+The option value `services.httpd.enable' in `/etc/nixos/configuration.nix' is not a boolean.
+</screen>
+
+</para>
+
+<para>Options have various types of values.  The most important are:
+
+<variablelist>
+  <varlistentry>
+    <term>Strings</term>
+    <listitem>
+      <para>Strings are enclosed in double quotes, e.g.
+
+<programlisting>
+networking.hostName = "dexter";
+</programlisting>
+
+      Special characters can be escaped by prefixing them with a
+      backslash (e.g. <literal>\"</literal>).</para>
+
+      <para>Multi-line strings can be enclosed in <emphasis>double
+      single quotes</emphasis>, e.g.
+
+<programlisting>
+networking.extraHosts =
+  ''
+    127.0.0.2 other-localhost
+    10.0.0.1 server
+  '';
+</programlisting>
+
+      The main difference is that preceding whitespace is
+      automatically stripped from each line, and that characters like
+      <literal>"</literal> and <literal>\</literal> are not special
+      (making it more convenient for including things like shell
+      code).</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Booleans</term>
+    <listitem>
+      <para>These can be <literal>true</literal> or
+      <literal>false</literal>, e.g.
+
+<programlisting>
+networking.firewall.enable = true;
+networking.firewall.allowPing = false;
+</programlisting>
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Integers</term>
+    <listitem>
+      <para>For example,
+
+<programlisting>
+boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60;
+</programlisting>
+
+      (Note that here the attribute name
+      <literal>net.ipv4.tcp_keepalive_time</literal> is enclosed in
+      quotes to prevent it from being interpreted as a set named
+      <literal>net</literal> containing a set named
+      <literal>ipv4</literal>, and so on.  This is because it’s not a
+      NixOS option but the literal name of a Linux kernel
+      setting.)</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Sets</term>
+    <listitem>
+      <para>Sets were introduced above.  They are name/value pairs
+      enclosed in braces, as in the option definition
+
+<programlisting>
+fileSystems."/boot" =
+  { device = "/dev/sda1";
+    fsType = "ext4";
+    options = "rw,data=ordered,relatime";
+  };
+</programlisting>
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Lists</term>
+    <listitem>
+      <para>The important thing to note about lists is that list
+      elements are separated by whitespace, like this:
+
+<programlisting>
+boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
+</programlisting>
+
+      List elements can be any other type, e.g. sets:
+
+<programlisting>
+swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
+</programlisting>
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Packages</term>
+    <listitem>
+      <para>Usually, the packages you need are already part of the Nix
+      Packages collection, which is a set that can be accessed through
+      the function argument <varname>pkgs</varname>.  Typical uses:
+
+<programlisting>
+environment.systemPackages =
+  [ pkgs.thunderbird
+    pkgs.emacs
+  ];
+
+postgresql.package = pkgs.postgresql90;
+</programlisting>
+
+      The latter option definition changes the default PostgreSQL
+      package used by NixOS’s PostgreSQL service to 9.0.  For more
+      information on packages, including how to add new ones, see
+      <xref linkend="sec-custom-packages"/>.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</para>
+
+</section>
+
+
+<section><title>Abstractions</title>
+
+<para>If you find yourself repeating yourself over and over, it’s time
+to abstract.  Take, for instance, this Apache HTTP Server configuration:
+
+<programlisting>
+{
+  services.httpd.virtualHosts =
+    [ { hostName = "example.org";
+        documentRoot = "/webroot";
+        adminAddr = "alice@example.org";
+        enableUserDir = true;
+      }
+      { hostName = "example.org";
+        documentRoot = "/webroot";
+        adminAddr = "alice@example.org";
+        enableUserDir = true;
+        enableSSL = true;
+        sslServerCert = "/root/ssl-example-org.crt";
+        sslServerKey = "/root/ssl-example-org.key";
+      }
+    ];
+}
+</programlisting>
+
+It defines two virtual hosts with nearly identical configuration; the
+only difference is that the second one has SSL enabled.  To prevent
+this duplication, we can use a <literal>let</literal>:
+
+<programlisting>
+let
+  exampleOrgCommon =
+    { hostName = "example.org";
+      documentRoot = "/webroot";
+      adminAddr = "alice@example.org";
+      enableUserDir = true;
+    };
+in
+{
+  services.httpd.virtualHosts =
+    [ exampleOrgCommon
+      (exampleOrgCommon // {
+        enableSSL = true;
+        sslServerCert = "/root/ssl-example-org.crt";
+        sslServerKey = "/root/ssl-example-org.key";
+      })
+    ];
+}
+</programlisting>
+
+The <literal>let exampleOrgCommon =
+<replaceable>...</replaceable></literal> defines a variable named
+<literal>exampleOrgCommon</literal>.  The <literal>//</literal>
+operator merges two attribute sets, so the configuration of the second
+virtual host is the set <literal>exampleOrgCommon</literal> extended
+with the SSL options.</para>
+
+<para>You can write a <literal>let</literal> wherever an expression is
+allowed.  Thus, you also could have written:
+
+<programlisting>
+{
+  services.httpd.virtualHosts =
+    let exampleOrgCommon = <replaceable>...</replaceable>; in
+    [ exampleOrgCommon
+      (exampleOrgCommon // { <replaceable>...</replaceable> })
+    ];
+}
+</programlisting>
+
+but not <literal>{ let exampleOrgCommon =
+<replaceable>...</replaceable>; in <replaceable>...</replaceable>;
+}</literal> since attributes (as opposed to attribute values) are not
+expressions.</para>
+
+<para><emphasis>Functions</emphasis> provide another method of
+abstraction.  For instance, suppose that we want to generate lots of
+different virtual hosts, all with identical configuration except for
+the host name.  This can be done as follows:
+
+<programlisting>
+{
+  services.httpd.virtualHosts =
+    let
+      makeVirtualHost = name:
+        { hostName = name;
+          documentRoot = "/webroot";
+          adminAddr = "alice@example.org";
+        };
+    in
+      [ (makeVirtualHost "example.org")
+        (makeVirtualHost "example.com")
+        (makeVirtualHost "example.gov")
+        (makeVirtualHost "example.nl")
+      ];
+}
+</programlisting>
+
+Here, <varname>makeVirtualHost</varname> is a function that takes a
+single argument <literal>name</literal> and returns the configuration
+for a virtual host.  That function is then called for several names to
+produce the list of virtual host configurations.</para>
+
+<para>We can further improve on this by using the function
+<varname>map</varname>, which applies another function to every
+element in a list:
+
+<programlisting>
+{
+  services.httpd.virtualHosts =
+    let
+      makeVirtualHost = <replaceable>...</replaceable>;
+    in map makeVirtualHost
+      [ "example.org" "example.com" "example.gov" "example.nl" ];
+}
+</programlisting>
+
+(The function <literal>map</literal> is called a
+<emphasis>higher-order function</emphasis> because it takes another
+function as an argument.)</para>
+
+<para>What if you need more than one argument, for instance, if we
+want to use a different <literal>documentRoot</literal> for each
+virtual host?  Then we can make <varname>makeVirtualHost</varname> a
+function that takes a <emphasis>set</emphasis> as its argument, like this:
+
+<programlisting>
+{
+  services.httpd.virtualHosts =
+    let
+      makeVirtualHost = { name, root }:
+        { hostName = name;
+          documentRoot = root;
+          adminAddr = "alice@example.org";
+        };
+    in map makeVirtualHost
+      [ { name = "example.org"; root = "/sites/example.org"; }
+        { name = "example.com"; root = "/sites/example.com"; }
+        { name = "example.gov"; root = "/sites/example.gov"; }
+        { name = "example.nl"; root = "/sites/example.nl"; }
+      ];
+}
+</programlisting>
+
+But in this case (where every root is a subdirectory of
+<filename>/sites</filename> named after the virtual host), it would
+have been shorter to define <varname>makeVirtualHost</varname> as
+<programlisting>
+makeVirtualHost = name:
+  { hostName = name;
+    documentRoot = "/sites/${name}";
+    adminAddr = "alice@example.org";
+  };
+</programlisting>
+
+Here, the construct
+<literal>${<replaceable>...</replaceable>}</literal> allows the result
+of an expression to be spliced into a string.</para>
+
+</section>
+
+
+<section><title>Modularity</title>
+
+<para>The NixOS configuration mechanism is modular.  If your
+<filename>configuration.nix</filename> becomes too big, you can split
+it into multiple files.  Likewise, if you have multiple NixOS
+configurations (e.g. for different computers) with some commonality,
+you can move the common configuration into a shared file.</para>
+
+<para>Modules have exactly the same syntax as
+<filename>configuration.nix</filename>.  In fact,
+<filename>configuration.nix</filename> is itself a module.  You can
+use other modules by including them from
+<filename>configuration.nix</filename>, e.g.:
+
+<programlisting>
+{ config, pkgs, ... }:
+
+{ imports = [ ./vpn.nix ./kde.nix ];
+  services.httpd.enable = true;
+  environment.systemPackages = [ pkgs.emacs ];
+  <replaceable>...</replaceable>
+}
+</programlisting>
+
+Here, we include two modules from the same directory,
+<filename>vpn.nix</filename> and <filename>kde.nix</filename>.  The
+latter might look like this:
+
+<programlisting>
+{ config, pkgs, ... }:
+
+{ services.xserver.enable = true;
+  services.xserver.displayManager.kdm.enable = true;
+  services.xserver.desktopManager.kde4.enable = true;
+  environment.systemPackages = [ pkgs.kde4.kscreensaver ];
+}
+</programlisting>
+
+Note that both <filename>configuration.nix</filename> and
+<filename>kde.nix</filename> define the option
+<option>environment.systemPackages</option>.  When multiple modules
+define an option, NixOS will try to <emphasis>merge</emphasis> the
+definitions.  In the case of
+<option>environment.systemPackages</option>, that’s easy: the lists of
+packages can simply be concatenated.  For other types of options, a
+merge may not be possible: for instance, if two modules define
+<option>services.httpd.adminAddr</option>,
+<command>nixos-rebuild</command> will give an error:
+
+<screen>
+The unique option `services.httpd.adminAddr' is defined multiple times, in `/etc/nixos/httpd.nix' and `/etc/nixos/configuration.nix'.
+</screen>
+
+When that happens, it’s possible to force one definition take
+precedence over the others:
+
+<programlisting>
+services.httpd.adminAddr = mkForce "bob@example.org";
+</programlisting>
+
+</para>
+
+<para>When using multiple modules, you may need to access
+configuration values defined in other modules.  This is what the
+<varname>config</varname> function argument is for: it contains the
+complete, merged system configuration.  That is,
+<varname>config</varname> is the result of combining the
+configurations returned by every module<footnote><para>If you’re
+wondering how it’s possible that the (indirect)
+<emphasis>result</emphasis> of a function is passed as an
+<emphasis>input</emphasis> to that same function: that’s because Nix
+is a “lazy” language — it only computes values when they are needed.
+This works as long as no individual configuration value depends on
+itself.</para></footnote>.  For example, here is a module that adds
+some packages to <option>environment.systemPackages</option> only if
+<option>services.xserver.enable</option> is set to
+<literal>true</literal> somewhere else:
+
+<programlisting>
+{ config, pkgs, ... }:
+
+{ environment.systemPackages =
+    if config.services.xserver.enable then
+      [ pkgs.firefox
+        pkgs.thunderbird
+      ]
+    else
+      [ ];
+}
+</programlisting>
+
+</para>
+
+<para>With multiple modules, it may not be obvious what the final
+value of a configuration option is.  The command
+<option>nixos-option</option> allows you to find out:
+
+<screen>
+$ nixos-option services.xserver.enable
+true
+
+$ nixos-option boot.kernelModules
+[ "tun" "ipv6" "loop" <replaceable>...</replaceable> ]
+</screen>
+
+Interactive exploration of the configuration is possible using
+<command
+xlink:href="https://github.com/edolstra/nix-repl">nix-repl</command>,
+a read-eval-print loop for Nix expressions.  It’s not installed by
+default; run <literal>nix-env -i nix-repl</literal> to get it.  A
+typical use:
+
+<screen>
+$ nix-repl '&lt;nixos>'
+
+nix-repl> config.networking.hostName
+"mandark"
+
+nix-repl> map (x: x.hostName) config.services.httpd.virtualHosts
+[ "example.org" "example.gov" ]
+</screen>
+
+</para>
+
+</section>
+
+
+<section><title>Syntax summary</title>
+
+<para>Below is a summary of the most important syntactic constructs in
+the Nix expression language.  It’s not complete.  In particular, there
+are many other built-in functions.  See the <link
+xlink:href="http://nixos.org/nix/manual/#chap-writing-nix-expressions">Nix
+manual</link> for the rest.</para>
+
+<informaltable frame='none'>
+  <tgroup cols='2'>
+    <colspec colname='c1' rowsep='1' colsep='1' />
+    <colspec colname='c2' rowsep='1' />
+    <thead>
+      <row>
+        <entry>Example</entry>
+        <entry>Description</entry>
+      </row>
+    </thead>
+    <tbody>
+
+      <row>
+        <entry namest="c1" nameend="c2"><emphasis>Basic values</emphasis></entry>
+      </row>
+      <row>
+        <entry><literal>"Hello world"</literal></entry>
+        <entry>A string</entry>
+      </row>
+      <row>
+        <entry><literal>"${pkgs.bash}/bin/sh"</literal></entry>
+        <entry>A string containing an expression (expands to <literal>"/nix/store/<replaceable>hash</replaceable>-bash-<replaceable>version</replaceable>/bin/sh"</literal>)</entry>
+      </row>
+      <row>
+        <entry><literal>true</literal>, <literal>false</literal></entry>
+        <entry>Booleans</entry>
+      </row>
+      <row>
+        <entry><literal>123</literal></entry>
+        <entry>An integer</entry>
+      </row>
+      <row>
+        <entry><literal>./foo.png</literal></entry>
+        <entry>A path (relative to the containing Nix expression)</entry>
+      </row>
+
+      <row>
+        <entry namest="c1" nameend="c2"><emphasis>Compound values</emphasis></entry>
+      </row>
+      <row>
+        <entry><literal>{ x = 1; y = 2; }</literal></entry>
+        <entry>An set with attributes names <literal>x</literal> and <literal>y</literal></entry>
+      </row>
+      <row>
+        <entry><literal>{ foo.bar = 1; }</literal></entry>
+        <entry>A nested set, equivalent to <literal>{ foo = { bar = 1; }; }</literal></entry>
+      </row>
+      <row>
+        <entry><literal>rec { x = "bla"; y = x + "bar"; }</literal></entry>
+        <entry>A recursive set, equivalent to <literal>{ x = "foo"; y = "foobar"; }</literal></entry>
+      </row>
+      <row>
+        <entry><literal>[ "foo" "bar" ]</literal></entry>
+        <entry>A list with two elements</entry>
+      </row>
+
+      <row>
+        <entry namest="c1" nameend="c2"><emphasis>Operators</emphasis></entry>
+      </row>
+      <row>
+        <entry><literal>"foo" + "bar"</literal></entry>
+        <entry>String concatenation</entry>
+      </row>
+      <row>
+        <entry><literal>1 + 2</literal></entry>
+        <entry>Integer addition</entry>
+      </row>
+      <row>
+        <entry><literal>"foo" == "f" + "oo"</literal></entry>
+        <entry>Equality test (evaluates to <literal>true</literal>)</entry>
+      </row>
+      <row>
+        <entry><literal>"foo" != "bar"</literal></entry>
+        <entry>Inequality test (evaluates to <literal>true</literal>)</entry>
+      </row>
+      <row>
+        <entry><literal>!true</literal></entry>
+        <entry>Boolean negation</entry>
+      </row>
+      <row>
+        <entry><literal>{ x = 1; y = 2; }.x</literal></entry>
+        <entry>Attribute selection (evaluates to <literal>1</literal>)</entry>
+      </row>
+      <row>
+        <entry><literal>{ x = 1; y = 2; }.z or 3</literal></entry>
+        <entry>Attribute selection with default (evaluates to <literal>3</literal>)</entry>
+      </row>
+      <row>
+        <entry><literal>{ x = 1; y = 2; } // { z = 3; }</literal></entry>
+        <entry>Merge two sets (attributes in the right-hand set taking precedence)</entry>
+      </row>
+
+      <row>
+        <entry namest="c1" nameend="c2"><emphasis>Control structures</emphasis></entry>
+      </row>
+      <row>
+        <entry><literal>if 1 + 1 == 2 then "yes!" else "no!"</literal></entry>
+        <entry>Conditional expression</entry>
+      </row>
+      <row>
+        <entry><literal>assert 1 + 1 == 2; "yes!"</literal></entry>
+        <entry>Assertion check (evaluates to <literal>"yes!"</literal>)</entry>
+      </row>
+      <row>
+        <entry><literal>let x = "foo"; y = "bar"; in x + y</literal></entry>
+        <entry>Variable definition</entry>
+      </row>
+
+      <row>
+        <entry namest="c1" nameend="c2"><emphasis>Functions (lambdas)</emphasis></entry>
+      </row>
+      <row>
+        <entry><literal>x: x + 1</literal></entry>
+        <entry>A function that expects an integer and returns it increased by 1</entry>
+      </row>
+      <row>
+        <entry><literal>(x: x + 1) 100</literal></entry>
+        <entry>A function call (evaluates to 101)</entry>
+      </row>
+      <row>
+        <entry><literal>let inc = x: x + 1; in inc (inc (inc 100))</literal></entry>
+        <entry>A function bound to a variable and subsequently called by name (evaluates to 103)</entry>
+      </row>
+      <row>
+        <entry><literal>{ x, y }: x + y</literal></entry>
+        <entry>A function that expects a set with required attributes
+        <literal>x</literal> and <literal>y</literal> and concatenates
+        them</entry>
+      </row>
+      <row>
+        <entry><literal>{ x, y ? "bar" }: x + y</literal></entry>
+        <entry>A function that expects a set with required attribute
+        <literal>x</literal> and optional <literal>y</literal>, using
+        <literal>"bar"</literal> as default value for
+        <literal>y</literal></entry>
+      </row>
+      <row>
+        <entry><literal>{ x, y, ... }: x + y</literal></entry>
+        <entry>A function that expects a set with required attributes
+        <literal>x</literal> and <literal>y</literal> and ignores any
+        other attributes</entry>
+      </row>
+      <row>
+        <entry><literal>{ x, y } @ args: x + y</literal></entry>
+        <entry>A function that expects a set with required attributes
+        <literal>x</literal> and <literal>y</literal>, and binds the
+        whole set to <literal>args</literal></entry>
+      </row>
+
+      <row>
+        <entry namest="c1" nameend="c2"><emphasis>Built-in functions</emphasis></entry>
+      </row>
+      <row>
+        <entry><literal>import ./foo.nix</literal></entry>
+        <entry>Load and return Nix expression in given file</entry>
+      </row>
+      <row>
+        <entry><literal>map (x: x + x) [ 1 2 3 ]</literal></entry>
+        <entry>Apply a function to every element of a list (evaluates to <literal>[ 2 4 6 ]</literal>)</entry>
+      </row>
+      <!--
+      <row>
+        <entry><literal>throw "Urgh"</literal></entry>
+        <entry>Raise an error condition</entry>
+      </row>
+      -->
+
+    </tbody>
+  </tgroup>
+</informaltable>
+
+</section>
+
 
 </section>
 
@@ -170,7 +861,7 @@ recursion.)</para>
 
 </section>
 
-<section><title>Adding custom packages</title>
+<section xml:id="sec-custom-packages"><title>Adding custom packages</title>
 
 <para>It’s possible that a package you need is not available in NixOS.
 In that case, you can do two things.  First, you can clone the Nixpkgs

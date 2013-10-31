@@ -275,6 +275,8 @@ $ reboot</screen>
 
 <example xml:id='ex-config'><title>NixOS configuration</title>
 <screen>
+{ config, pkgs, ... }:
+
 {
   imports =
     [ # Include the results of the hardware scan.
