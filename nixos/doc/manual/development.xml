@@ -76,190 +76,132 @@ in <filename>nixos/</filename> as packages.</para>
 
 <section>
 
-<title>Extending NixOS</title>
+<title>Writing NixOS modules</title>
 
-<para>NixOS is based on a modular system for declarative configuration.
-  This system combines multiple <emphasis>modules</emphasis> to produce one
-  configuration.  One of the module which compose your computer
-  configuration is <filename>/etc/nixos/configuration.nix</filename>.  Other
-  modules are available under NixOS <filename>modules</filename>
-  directory</para>
+<para>NixOS has a modular system for declarative configuration.  This
+system combines multiple <emphasis>modules</emphasis> to produce the
+full system configuration.  One of the modules that constitute the
+configuration is <filename>/etc/nixos/configuration.nix</filename>.
+Most of the others live in the <link
+xlink:href="https://github.com/NixOS/nixpkgs/tree/master/nixos/modules"><filename>nixos/modules</filename></link>
+subdirectory of the Nixpkgs tree.</para>
 
-<para>A module is a file which handles one specific part of the
-  configuration.  This part of the configuration could correspond to
-  hardware, a service, network settings, or preferences.  A module
-  configuration does not have to handle everything from scratch, it can base
-  its configuration on other configurations provided by other modules.  Thus
-  a module can <emphasis>define</emphasis> options to setup its
-  configuration, and it can also <emphasis>declare</emphasis> options to be
-  fed by other modules.</para>
+<para>Each NixOS module is a file that handles one logical aspect of
+the configuration, such as a specific kind of hardware, a service, or
+network settings.  A module configuration does not have to handle
+everything from scratch; it can use the functionality provided by
+other modules for its implementation.  Thus a module can
+<emphasis>declare</emphasis> options that can be used by other
+modules, and conversely can <emphasis>define</emphasis> options
+provided by other modules in its own implementation.  For example, the
+module <link
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/security/pam.nix"><filename>pam.nix</filename></link>
+declares the option <option>security.pam.services</option> that allows
+other modules (e.g. <link
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/networking/ssh/sshd.nix"><filename>sshd.nix</filename></link>)
+to define PAM services; and it defines the option
+<option>environment.etc</option> (declared by <link
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/system/etc/etc.nix"><filename>etc.nix</filename></link>)
+to cause files to be created in
+<filename>/etc/pam.d</filename>.</para>
 
-<!-- module syntax -->
+<para xml:id="para-module-syn">In <xref
+linkend="sec-configuration-syntax"/>, we saw the following structure
+of NixOS modules:
 
-<para xml:id="para-module-syn">A module is a file which contains a Nix
-  expression.  This expression should be either an expression which gets
-  evaluated into an attribute set or a function which returns an attribute
-  set.</para>
+<programlisting>
+{ config, pkgs, ... }:
 
-<para>When the expression is a function, it should expect only one argument
-  which is an attribute set containing an attribute
-  named <varname>config</varname> and another attribute
-  named <varname>pkgs</varname>.  The <varname>config</varname> attribute
-  contains the result of the merge of all modules.  This attribute is
-  evaluated lazily, such as any Nix expression.  For more details on how
-  options are merged, see the details in <xref linkend="para-opt-decl"/>.
-  The <varname>pkgs</varname> attribute
-  contains <emphasis>nixpkgs</emphasis> attribute set of packages.  This
-  attribute is necessary for declaring options.</para>
+{ <replaceable>option definitions</replaceable>
+}
+</programlisting>
 
-<example xml:id='module-syntax'><title>Usual module content</title>
+This is actually an <emphasis>abbreviated</emphasis> form of module
+that only defines options, but does not declare any.  The structure of
+full NixOS modules is shown in <xref linkend='ex-module-syntax' />.</para>
+
+<example xml:id='ex-module-syntax'><title>Structure of NixOS modules</title>
 <programlisting>
 { config, pkgs, ... }: <co xml:id='module-syntax-1' />
 
 {
   imports =
-    [ <co xml:id='module-syntax-2' />
+    [ <replaceable>paths of other modules</replaceable> <co xml:id='module-syntax-2' />
     ];
 
   options = {
-    <co xml:id='module-syntax-3' />
+    <replaceable>option declarations</replaceable> <co xml:id='module-syntax-3' />
   };
 
   config = {
-    <co xml:id='module-syntax-4' />
+    <replaceable>option definitions</replaceable> <co xml:id='module-syntax-4' />
   };
 }</programlisting>
 </example>
 
-<para><xref linkend='module-syntax' /> Illustrates
-  a <emphasis>module</emphasis> skeleton.
+<para>The meaning of each part is as follows.
 
 <calloutlist>
   <callout arearefs='module-syntax-1'>
-    <para>This line makes the current Nix expression a function.  This
-    line can be omitted if there is no reference to <varname>pkgs</varname>
-    and <varname>config</varname> inside the module.</para>
+    <para>This line makes the current Nix expression a function.  The
+    variable <varname>pkgs</varname> contains Nixpkgs, while
+    <varname>config</varname> contains the full system configuration.
+    This line can be omitted if there is no reference to
+    <varname>pkgs</varname> and <varname>config</varname> inside the
+    module.</para>
   </callout>
 
   <callout arearefs='module-syntax-2'>
-    <para>This list is used to enumerate path to other modules which are
-    declaring options used by the current module.  In NixOS, default modules
-    are listed in the file <filename>modules/module-list.nix</filename>.
-    The default modules don't need to be added in the import list.</para>
+    <para>This list enumerates the paths to other NixOS modules that
+    should be included in the evaluation of the system configuration.
+    A default set of modules is defined in the file
+    <filename>modules/module-list.nix</filename>.  These don't need to
+    be added in the import list.</para>
   </callout>
 
   <callout arearefs='module-syntax-3'>
-    <para>This attribute set contains an attribute set of <emphasis>option
-    declaration</emphasis>.</para>
+    <para>The attribute <varname>options</varname> is a nested set of
+    <emphasis>option declarations</emphasis> (described below).</para>
   </callout>
 
   <callout arearefs='module-syntax-4'>
-    <para>This attribute set contains an attribute set of <emphasis>option
-    definitions</emphasis>.  If the module does not have any imported
-    modules or any option declarations, then this attribute set can be used
-    in place of its parent attribute set.  This is a common case for simple
-    modules such
-    as <filename>/etc/nixos/configuration.nix</filename>.</para>
+    <para>The attribute <varname>config</varname> is a nested set of
+    <emphasis>option definitions</emphasis> (also described
+    below).</para>
   </callout>
 </calloutlist>
 
 </para>
 
-<!-- option definitions -->
+<para><xref linkend='locate-example' /> shows a module that handles
+the regular update of the “locate” database, an index of all files in
+the file system.  This module declares two options that can be defined
+by other modules (typically the user’s
+<filename>configuration.nix</filename>):
+<option>services.locate.enable</option> (whether the database should
+be updated) and <option>services.locate.period</option> (when the
+update should be done).  It implements its functionality by defining
+two options declared by other modules:
+<option>systemd.services</option> (the set of all systemd services)
+and <option>services.cron.systemCronJobs</option> (the list of
+commands to be executed periodically by <command>cron</command>).</para>
 
-<para xml:id="para-opt-def">A module defines a configuration which would be
-  interpreted by other modules.  To define a configuration, a module needs
-  to provide option definitions.  An option definition is a simple
-  attribute assignment.</para>
-
-<para>Option definitions are made in a declarative manner.  Without
-  properties, options will always be defined with the same value.  To
-  introduce more flexibility in the system, option definitions are guarded
-  by <emphasis>properties</emphasis>.</para>
-
-<para>Properties are means to introduce conditional values inside option
-  definitions.  This conditional values can be distinguished in two
-  categories.  The condition which are local to the current configuration
-  and conditions which are dependent on others configurations.  Local
-  properties are <varname>mkIf</varname>
-  and <varname>mkAssert</varname>.  Global properties
-  are <varname>mkOverride</varname>, <varname>mkDefault</varname>
-  and <varname>mkOrder</varname>.</para>
-
-<para><varname>mkIf</varname> is used to remove the option definitions which
-  are below it if the condition is evaluated to
-  false.  <varname>mkAssert</varname> expects the condition to be evaluated
-  to true otherwise it raises an error message.</para>
-
-<para><varname>mkOverride</varname> is used to mask previous definitions if
-  the current value has a lower mask number.  The mask value is 100 (default)
-  for any option definition which does not use this property.
-  Thus, <varname>mkDefault</varname> is just a short-cut with a higher mask
-  (1000) than the default mask value.  This means that a module can set an
-  option definition as a preference, and still let another module defining
-  it with a different value without using any property.</para>
-
-<para><varname>mkOrder</varname> is used to sort definitions based on the
-  rank number.  The rank number will sort all options definitions before
-  giving the sorted list of option definition to the merge function defined
-  in the option declaration.  A lower rank will move the definition to the
-  beginning and a higher rank will move the option toward the end.  The
-  default rank is 100.</para>
-
-<!-- option declarations -->
-
-<para xml:id="para-opt-decl">A module may declare options which are used by
-  other module to change the configuration provided by the current module.
-  Changes to the option definitions are made with properties which are using
-  values extracted from the result of the merge of all modules
-  (the <varname>config</varname> argument).</para>
-
-<para>The <varname>config</varname> argument reproduce the same hierarchy of
-  all options declared in all modules.  For each option, the result of the
-  option is available, it is either the default value or the merge of all
-  definitions of the option.</para>
-
-<para>Options are declared with the
-  function <varname>pkgs.lib.mkOption</varname>.  This function expects an
-  attribute set which at least provides a description.  A default value, an
-  example, a type, a merge function and a post-process function can be
-  added.</para>
-
-<para>Types are used to provide a merge strategy for options and to ensure
-  the type of each option definitions.  They are defined
-  in <varname>pkgs.lib.types</varname>.</para>
-
-<para>The merge function expects a list of option definitions and merge
-  them to obtain one result of the same type.</para>
-
-<para>The post-process function (named <varname>apply</varname>) takes the
-  result of the merge or of the default value, and produce an output which
-  could have a different type than the type expected by the option.</para>
-
-<!-- end -->
-
-<example xml:id='locate-example'><title>Locate Module Example</title>
+<example xml:id='locate-example'><title>NixOS module for the “locate” service</title>
 <programlisting>
 { config, pkgs, ... }:
 
 with pkgs.lib;
 
-let
-  cfg = config.services.locate;
-  locatedb = "/var/cache/locatedb";
-  logfile = "/var/log/updatedb";
-  cmd =''root  updatedb --localuser=nobody --output=${locatedb} > ${logfile}'';
-in
+let locatedb = "/var/cache/locatedb"; in
 
 {
-  imports = [ /path/to/nixpkgs/nixos/modules/services/scheduling/cron.nix ];
-
   options = {
+
     services.locate = {
+
       enable = mkOption {
+        type = types.bool;
         default = false;
-        example = true;
-        type = with types; bool;
         description = ''
           If enabled, NixOS will periodically update the database of
           files used by the <command>locate</command> command.
@@ -267,35 +209,370 @@ in
       };
 
       period = mkOption {
-        default = "15 02 * * *";
         type = types.str;
+        default = "15 02 * * *";
         description = ''
           This option defines (in the format used by cron) when the
-          locate database is updated.
-          The default is to update at 02:15 (at night) every day.
+          locate database is updated.  The default is to update at
+          02:15 at night every day.
         '';
       };
+
     };
+
   };
 
-  config = mkIf cfg.enable {
-    services.cron = {
-      enable = true;
-      systemCronJobs = "${cfg.period}  root ${cmd}";
-    };
+  config = {
+
+    systemd.services.update-locatedb =
+      { description = "Update Locate Database";
+        path  = [ pkgs.su ];
+        script =
+          ''
+            mkdir -m 0755 -p $(dirname ${locatedb})
+            exec updatedb --localuser=nobody --output=${locatedb} --prunepaths='/tmp /var/tmp /media /run'
+          '';
+      };
+
+    services.cron.systemCronJobs = optional config.services.locate.enable
+      "${config.services.locate.period} root ${config.systemd.package}/bin/systemctl start update-locatedb.service";
+
   };
 }</programlisting>
 </example>
 
-<para><xref linkend='locate-example' /> illustrates a module which handles
-  the regular update of the database which index all files on the file
-  system.  This modules has option definitions to rely on the cron service
-  to run the command at predefined dates.  In addition, this modules
-  provides option declarations to enable the indexing and to use different
-  period of time to run the indexing.  Properties are used to prevent
-  ambiguous definitions of option (enable locate service and disable cron
-  services) and to ensure that no options would be defined if the locate
-  service is not enabled.</para>
+<section><title>Option declarations</title>
+
+<para>An option declaration specifies the name, type and description
+of a NixOS configuration option.  It is illegal to define an option
+that hasn’t been declared in any module.  A option declaration
+generally looks like this:
+
+<programlisting>
+options = {
+  <replaceable>name</replaceable> = mkOption {
+    type = <replaceable>type specification</replaceable>;
+    default = <replaceable>default value</replaceable>;
+    example = <replaceable>example value</replaceable>;
+    description = "<replaceable>Description for use in the NixOS manual.</replaceable>";
+  };
+};
+</programlisting>
+
+</para>
+
+<para>The function <varname>mkOption</varname> accepts the following arguments.
+
+<variablelist>
+
+  <varlistentry>
+    <term><varname>type</varname></term>
+    <listitem>
+      <para>The type of the option (see below).  It may be omitted,
+      but that’s not advisable since it may lead to errors that are
+      hard to diagnose.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>default</varname></term>
+    <listitem>
+      <para>The default value used if no value is defined by any
+      module.  A default is not required; in that case, if the option
+      value is ever used, an error will be thrown.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>example</varname></term>
+    <listitem>
+      <para>An example value that will be shown in the NixOS manual.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>description</varname></term>
+    <listitem>
+      <para>A textual description of the option, in DocBook format,
+      that will be included in the NixOS manual.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</para>
+
+<para>Here is a non-exhaustive list of option types:
+
+<variablelist>
+
+  <varlistentry>
+    <term><varname>types.bool</varname></term>
+    <listitem>
+      <para>A Boolean.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>types.int</varname></term>
+    <listitem>
+      <para>An integer.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>types.str</varname></term>
+    <listitem>
+      <para>A string.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>types.lines</varname></term>
+    <listitem>
+      <para>A string.  If there are multiple definitions, they are
+      concatenated, with newline characters in between.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>types.path</varname></term>
+    <listitem>
+      <para>A path, defined as anything that, when coerced to a
+      string, starts with a slash.  This includes derivations.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>types.listOf</varname> <replaceable>t</replaceable></term>
+    <listitem>
+      <para>A list of elements of type <replaceable>t</replaceable>
+      (e.g., <literal>types.listOf types.str</literal> is a list of
+      strings).  Multiple definitions are concatenated together.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>types.attrsOf</varname> <replaceable>t</replaceable></term>
+    <listitem>
+      <para>A set of elements of type <replaceable>t</replaceable>
+      (e.g., <literal>types.attrsOf types.int</literal> is a set of
+      name/value pairs, the values being integers).</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>types.nullOr</varname> <replaceable>t</replaceable></term>
+    <listitem>
+      <para>Either the value <literal>null</literal> or something of
+      type <replaceable>t</replaceable>.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+You can also create new types using the function
+<varname>mkOptionType</varname>.  See
+<filename>lib/types.nix</filename> in Nixpkgs for details.</para>
+
+</section>
+
+
+<section><title>Option definitions</title>
+
+<para>Option definitions are generally straight-forward bindings of values to option names, like
+
+<programlisting>
+config = {
+  services.httpd.enable = true;
+};
+</programlisting>
+
+However, sometimes you need to wrap an option definition or set of
+option definitions in a <emphasis>property</emphasis> to achieve
+certain effects:</para>
+
+<simplesect><title>Delaying conditionals</title>
+
+<para>If a set of option definitions is conditional on the value of
+another option, you may need to use <varname>mkIf</varname>.
+Consider, for instance:
+
+<programlisting>
+config = if config.services.httpd.enable then {
+  environment.systemPackages = [ <replaceable>...</replaceable> ];
+  <replaceable>...</replaceable>
+} else {};
+</programlisting>
+
+This definition will cause Nix to fail with an “infinite recursion”
+error.  Why?  Because the value of
+<option>config.services.httpd.enable</option> depends on the value
+being constructed here.  After all, you could also write the clearly
+circular and contradictory:
+<programlisting>
+config = if config.services.httpd.enable then {
+  services.httpd.enable = false;
+} else {
+  services.httpd.enable = true;
+};
+</programlisting>
+
+The solution is to write:
+
+<programlisting>
+config = mkIf config.services.httpd.enable {
+  environment.systemPackages = [ <replaceable>...</replaceable> ];
+  <replaceable>...</replaceable>
+};
+</programlisting>
+
+The special function <varname>mkIf</varname> causes the evaluation of
+the conditional to be “pushed down” into the individual definitions,
+as if you had written:
+
+<programlisting>
+config = {
+  environment.systemPackages = if config.services.httpd.enable then [ <replaceable>...</replaceable> ] else [];
+  <replaceable>...</replaceable>
+};
+</programlisting>
+
+</para>
+
+</simplesect>
+
+<simplesect><title>Setting priorities</title>
+
+<para>A module can override the definitions of an option in other
+modules by setting a <emphasis>priority</emphasis>.  All option
+definitions that do not have the lowest priority value are discarded.
+By default, option definitions have priority 1000.  You can specify an
+explicit priority by using <varname>mkOverride</varname>, e.g.
+
+<programlisting>
+services.openssh.enable = mkOverride 10 false;
+</programlisting>
+
+This definition causes all other definitions with priorities above 10
+to be discarded.  The function <varname>mkForce</varname> is
+equal to <varname>mkOverride 50</varname>.</para>
+
+</simplesect>
+
+<simplesect><title>Merging configurations</title>
+
+<para>In conjunction with <literal>mkIf</literal>, it is sometimes
+useful for a module to return multiple sets of option definitions, to
+be merged together as if they were declared in separate modules.  This
+can be done using <varname>mkMerge</varname>:
+
+<programlisting>
+config = mkMerge
+  [ # Unconditional stuff.
+    { environment.systemPackages = [ <replaceable>...</replaceable> ];
+    }
+    # Conditional stuff.
+    (mkIf config.services.bla.enable {
+      environment.systemPackages = [ <replaceable>...</replaceable> ];
+    })
+  ];
+</programlisting>
+
+</para>
+
+</simplesect>
+
+</section>
+
+
+<section><title>Important options</title>
+
+<para>NixOS has many options, but some are of particular importance to
+module writers.</para>
+
+<variablelist>
+
+  <varlistentry>
+    <term><option>etc.environment</option></term>
+    <listitem>
+      <para>This set defines files in <filename>/etc</filename>.  A
+      typical use is:
+<programlisting>
+environment.etc."os-release".text =
+  ''
+    NAME=NixOS
+    <replaceable>...</replaceable>
+  '';
+</programlisting>
+      which causes a file named <filename>/etc/os-release</filename>
+      to be created with the given contents.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>system.activationScripts</option></term>
+    <listitem>
+      <para>A set of shell script fragments that must be executed
+      whenever the configuration is activated (i.e., at boot time, or
+      after running <command>nixos-rebuild switch</command>).  For instance,
+<programlisting>
+system.activationScripts.media =
+  ''
+    mkdir -m 0755 -p /media
+  '';
+</programlisting>
+      causes the directory <filename>/media</filename> to be created.
+      Activation scripts must be idempotent.  They should not start
+      background processes such as daemons; use
+      <option>systemd.services</option> for that.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>systemd.services</option></term>
+    <listitem>
+      <para>This is the set of systemd services.  Example:
+<programlisting>
+systemd.services.dhcpcd =
+  { description = "DHCP Client";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "systemd-udev-settle.service" ];
+    path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
+    serviceConfig =
+      { Type = "forking";
+        PIDFile = "/run/dhcpcd.pid";
+        ExecStart = "${dhcpcd}/sbin/dhcpcd --config ${dhcpcdConf}";
+        Restart = "always";
+      };
+  };
+</programlisting>
+      which creates the systemd unit
+      <literal>dhcpcd.service</literal>.  The option
+      <option>wantedBy</option> determined which other units pull this
+      one in; <literal>multi-user.target</literal> is the default
+      target of the system, so <literal>dhcpcd.service</literal> will
+      always be started.  The option
+      <option>serviceConfig.ExecStart</option> provides the main
+      command for the service; it’s also possible to provide pre-start
+      actions, stop scripts, and so on.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>users.extraUsers</option></term>
+    <term><option>users.extraGroups</option></term>
+    <listitem>
+      <para>If your service requires special UIDs or GIDs, you can
+      define them with these options.  See <xref
+      linkend="sec-user-management"/> for details.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</section>
+
 
 </section>
 
@@ -306,48 +583,77 @@ in
 
 <title>Building specific parts of NixOS</title>
 
-<para>
+<para>With the command <command>nix-build</command>, you can build
+specific parts of your NixOS configuration.  This is done as follows:
 
 <screen>
-$ nix-build /path/to/nixpkgs/nixos -A <replaceable>attr</replaceable></screen>
+$ cd <replaceable>/path/to/nixpkgs/nixos</replaceable>
+$ nix-build -A config.<replaceable>option</replaceable></screen>
 
-where <replaceable>attr</replaceable> is an attribute in
-<filename>/path/to/nixpkgs/nixos/default.nix</filename>.  Attributes of interest include:
+where <replaceable>option</replaceable> is a NixOS option with type
+“derivation” (i.e. something that can be built).  Attributes of
+interest include:
 
 <variablelist>
 
   <varlistentry>
-    <term><varname>config</varname></term>
-    <listitem><para>The computer configuration generated from
-    the <envar>NIXOS_CONFIG</envar> environment variable (default
-    is <filename>/etc/nixos/configuration.nix</filename>) with the NixOS
-    default set of modules.</para></listitem>
+    <term><varname>system.build.toplevel</varname></term>
+    <listitem>
+      <para>The top-level option that builds the entire NixOS system.
+      Everything else in your configuration is indirectly pulled in by
+      this option.  This is what <command>nixos-rebuild</command>
+      builds and what <filename>/run/current-system</filename> points
+      to afterwards.</para>
+
+      <para>A shortcut to build this is:
+
+<screen>
+$ nix-build -A system</screen>
+      </para>
+    </listitem>
   </varlistentry>
 
   <varlistentry>
-    <term><varname>system</varname></term>
-    <listitem><para>The derivation which build your computer system.  It is
-    built by the command <command>nixos-rebuild
-    build</command></para></listitem>
+    <term><varname>system.build.manual.manual</varname></term>
+    <listitem><para>The NixOS manual.</para></listitem>
   </varlistentry>
 
   <varlistentry>
-    <term><varname>vm</varname></term>
-    <listitem><para>The derivation which build your computer system inside a
-    virtual machine.  It is built by the command <command>nixos-rebuild
-    build-vm</command></para></listitem>
+    <term><varname>system.build.etc</varname></term>
+    <listitem><para>A tree of symlinks that form the static parts of
+    <filename>/etc</filename>.</para></listitem>
   </varlistentry>
+
+  <varlistentry>
+    <term><varname>system.build.initialRamdisk</varname></term>
+    <term><varname>system.build.kernel</varname></term>
+    <listitem>
+      <para>The initial ramdisk and kernel of the system.  This allows
+      a quick way to test whether the kernel and the initial ramdisk
+      boot correctly, by using QEMU’s <option>-kernel</option> and
+      <option>-initrd</option> options:
+
+<screen>
+$ nix-build -A config.system.build.initialRamdisk -o initrd
+$ nix-build -A config.system.build.kernel -o kernel
+$ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/null
+</screen>
+
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>system.build.nixos-rebuild</varname></term>
+    <term><varname>system.build.nixos-install</varname></term>
+    <term><varname>system.build.nixos-generate-config</varname></term>
+    <listitem>
+      <para>These build the corresponding NixOS commands.</para>
+    </listitem>
+  </varlistentry>
+
 </variablelist>
 
-</para>
-
-<para>
-Most parts of NixOS can be built through the <varname>config</varname>
-attribute set.  This attribute set allows you to have a view of the merged
-option definitions and all its derivations.  Important derivations are store
-inside the option <option>system.build</option> and can be listed with the
-command <command>nix-instantiate --xml --eval-only /path/to/nixpkgs/nixos -A
-config.system.build</command>
 </para>
 
 </section>
@@ -370,8 +676,7 @@ you have to set <envar>NIXOS_CONFIG</envar> before
 running <command>nix-build</command> to build the ISO.
 
 <screen>
-$ export NIXOS_CONFIG=/path/to/nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix
-$ nix-build /path/to/nixpkgs/nixos -A config.system.build.isoImage</screen>
+$ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd-dvd/installation-cd-minimal.nix</screen>
 
 </para>
 
@@ -390,23 +695,6 @@ $ mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso</screen>
 
 <section>
 
-<title>Testing/building the NixOS Manual</title>
-
-<para>A quick way to see if your documentation improvements
-or option descriptions look good:
-
-<screen>
-$ nix-build -A config.system.build.manual</screen>
-
-</para>
-
-</section>
-
-
-<!--===============================================================-->
-
-<section>
-
 <title>Testing the installer</title>
 
 <para>Building, burning, and
@@ -415,8 +703,7 @@ tedious, so here is a quick way to see if the installer works
 properly:
 
 <screen>
-$ export NIXOS_CONFIG=/path/to/nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix
-$ nix-build /path/to/nixpkgs/nixos -A config.system.build.nixos-install
+$ nix-build -A config.system.build.nixos-install
 $ dd if=/dev/zero of=diskimage seek=2G count=0 bs=1
 $ yes | mke2fs -j diskimage
 $ mount -o loop diskimage /mnt
@@ -430,91 +717,61 @@ $ ./result/bin/nixos-install</screen>
 
 <!--===============================================================-->
 
-<section>
+<section><title>Whole-system testing using virtual machines</title>
 
-<title>Testing the <literal>initrd</literal></title>
+<para>Complete NixOS GNU/Linux systems can be tested in virtual
+machines (VMs).  This makes it possible to test a system upgrade or
+configuration change before rebooting into it, using the
+<command>nixos-rebuild build-vm</command> or <command>nixos-rebuild
+build-vm-with-bootloader</command> command.</para>
 
-<para>A quick way to test whether the kernel and the initial ramdisk
-boot correctly is to use QEMU’s <option>-kernel</option> and
-<option>-initrd</option> options:
-
-<screen>
-$ nix-build /path/to/nixpkgs/nixos -A config.system.build.initialRamdisk -o initrd
-$ nix-build /path/to/nixpkgs/nixos -A config.system.build.kernel -o kernel
-$ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/null
-</screen>
-
-</para>
-
-</section>
-
-<section>
-
-  <title>Whole-system testing using virtual machines</title>
-
-  <para>
-    Complete NixOS GNU/Linux systems can be tested in virtual machines
-    (VMs).  This makes it possible to test a system upgrade or
-    configuration change before rebooting into it, using the
-    <command>nixos-rebuild build-vm</command> or
-    <command>nixos-rebuild build-vm-with-bootloader</command> command.
-  </para>
-
-  <para>
-    <!-- The following is adapted from
-         http://wiki.nixos.org/wiki/NixOS_VM_tests, by Eelco Dolstra. -->
-
-    The <filename>tests/</filename> directory in the NixOS source tree
-    contains several <emphasis>whole-system unit tests</emphasis>.
-    These tests can be run<footnote><para>NixOS tests can be run both from
-    NixOS and from a non-NixOS GNU/Linux distribution, provided the
-    Nix package manager is installed.</para></footnote> from the NixOS
-    source tree as follows:
+<!-- The following is adapted from
+     http://wiki.nixos.org/wiki/NixOS_VM_tests, by Eelco Dolstra. -->
+<para>The <filename>tests/</filename> directory in the NixOS source
+tree contains several <emphasis>whole-system unit tests</emphasis>.
+These tests can be run<footnote><para>NixOS tests can be run both from
+NixOS and from a non-NixOS GNU/Linux distribution, provided the Nix
+package manager is installed.</para></footnote> from the NixOS source
+tree as follows:
 
 <screen>
 $ nix-build tests/ -A nfs.test
 </screen>
 
-    This performs an automated test of the NFS client and server
-    functionality in the Linux kernel, including file locking
-    semantics (e.g., whether locks are maintained across server
-    crashes).  It will first build or download all the dependencies of
-    the test (e.g., all packages needed to run a NixOS VM). The test
-    is defined in <link
-    xlink:href="https://nixos.org/repos/nix/nixos/trunk/tests/nfs.nix">
-    <filename>tests/nfs.nix</filename></link>.  If the test succeeds,
-    <command>nix-build</command> will place a symlink
-    <filename>./result</filename> in the current directory pointing at
-    the location in the Nix store of the test results (e.g.,
-    screenshots, test reports, and so on).  In particular, a
-    pretty-printed log of the test is written to
-    <filename>log.html</filename>, which can be viewed using a web
-    browser like this:
+This performs an automated test of the NFS client and server
+functionality in the Linux kernel, including file locking semantics
+(e.g., whether locks are maintained across server crashes).  It will
+first build or download all the dependencies of the test (e.g., all
+packages needed to run a NixOS VM). The test is defined in <link
+xlink:href="https://nixos.org/repos/nix/nixos/trunk/tests/nfs.nix">
+<filename>tests/nfs.nix</filename></link>.  If the test succeeds,
+<command>nix-build</command> will place a symlink
+<filename>./result</filename> in the current directory pointing at the
+location in the Nix store of the test results (e.g., screenshots, test
+reports, and so on).  In particular, a pretty-printed log of the test
+is written to <filename>log.html</filename>, which can be viewed using
+a web browser like this:
 
 <screen>
 $ firefox result/log.html
 </screen>
-  </para>
+</para>
 
-  <para>
-    It is also possible to run the test environment interactively,
-    allowing you to experiment with the VMs.  For example:
+<para>It is also possible to run the test environment interactively,
+allowing you to experiment with the VMs.  For example:
 
 <screen>
 $ nix-build tests/ -A nfs.driver
 $ ./result/bin/nixos-run-vms
 </screen>
 
-    The script <command>nixos-run-vms</command> starts the three
-    virtual machines defined in the NFS test using QEMU/KVM.  The root
-    file system of the VMs is created on the fly and kept across VM
-    restarts in
-    <filename>./</filename><varname>hostname</varname><filename>.qcow2</filename>.
-  </para>
+The script <command>nixos-run-vms</command> starts the three virtual
+machines defined in the NFS test using QEMU/KVM.  The root file system
+of the VMs is created on the fly and kept across VM restarts in
+<filename>./</filename><varname>hostname</varname><filename>.qcow2</filename>.</para>
 
-  <para>
-    Finally, the test itself can be run interactively.  This is
-    particularly useful when developing or debugging a test:
+<para>Finally, the test itself can be run interactively.  This is
+particularly useful when developing or debugging a test:
 
 <screen>
 $ nix-build tests/ -A nfs.driver
@@ -523,8 +780,7 @@ starting VDE switch for network 1
 &gt;
 </screen>
 
-    Perl statements can now be typed in to start or manipulate the
-    VMs:
+Perl statements can now be typed in to start or manipulate the VMs:
 
 <screen>
 &gt; startAll;
@@ -537,65 +793,61 @@ starting VDE switch for network 1
 &gt; $client2-&gt;succeed("flock -n -s /data/lock true");
 </screen>
 
-    The function <command>testScript</command> executes the entire
-    test script and drops you back into the test driver command line
-    upon its completion.  This allows you to inspect the state of the
-    VMs after the test (e.g. to debug the test script).
-  </para>
+The function <command>testScript</command> executes the entire test
+script and drops you back into the test driver command line upon its
+completion.  This allows you to inspect the state of the VMs after the
+test (e.g. to debug the test script).</para>
 
-  <para>
-    This and other tests are continuously run on <link
-    xlink:href="http://hydra.nixos.org/jobset/nixos/trunk">the Hydra
-    instance at <literal>nixos.org</literal></link>, which allows
-    developers to be notified of any regressions introduced by a NixOS
-    or Nixpkgs change.
-  </para>
+<para>This and other tests are continuously run on <link
+xlink:href="http://hydra.nixos.org/jobset/nixos/trunk">the Hydra
+instance at <literal>nixos.org</literal></link>, which allows
+developers to be notified of any regressions introduced by a NixOS or
+Nixpkgs change.</para>
 
-  <para>
-    The actual Nix programming interface to VM testing is in NixOS,
-    under <link
-    xlink:href="https://nixos.org/repos/nix/nixos/trunk/lib/testing.nix">
-    <filename>lib/testing.nix</filename></link>.  This file defines a
-    function which takes an attribute set containing a
-    <literal>nixpkgs</literal> attribute (the path to a Nixpkgs
-    checkout), and a <literal>system</literal> attribute (the system
-    type).  It returns an attribute set containing several utility
-    functions, among which the main entry point is
-    <literal>makeTest</literal>.
-  </para>
+<para>The actual Nix programming interface to VM testing is in NixOS,
+under <link
+xlink:href="https://nixos.org/repos/nix/nixos/trunk/lib/testing.nix">
+<filename>lib/testing.nix</filename></link>.  This file defines a
+function which takes an attribute set containing a
+<literal>nixpkgs</literal> attribute (the path to a Nixpkgs checkout),
+and a <literal>system</literal> attribute (the system type).  It
+returns an attribute set containing several utility functions, among
+which the main entry point is <literal>makeTest</literal>.
+</para>
 
-  <para>
-    The <literal>makeTest</literal> function takes a function similar to
-    that found in <link
-    xlink:href="https://nixos.org/repos/nix/nixos/trunk/tests/nfs.nix">
-    <filename>tests/nfs.nix</filename></link> (discussed above).  It
-    returns an attribute set containing (among others):
+<para>The <literal>makeTest</literal> function takes a function
+similar to that found in <link
+xlink:href="https://nixos.org/repos/nix/nixos/trunk/tests/nfs.nix">
+<filename>tests/nfs.nix</filename></link> (discussed above).  It
+returns an attribute set containing (among others):
 
-    <variablelist>
+<variablelist>
 
-      <varlistentry>
-        <term><varname>test</varname></term>
-        <listitem><para>A derivation containing the test log as an HTML file,
-        as seen above, suitable for presentation in the Hydra continuous
-        build system.</para></listitem>
-      </varlistentry>
+  <varlistentry>
+    <term><varname>test</varname></term>
+    <listitem><para>A derivation containing the test log as an HTML
+    file, as seen above, suitable for presentation in the Hydra
+    continuous build system.</para></listitem>
+  </varlistentry>
 
-      <varlistentry>
-        <term><varname>report</varname></term>
-        <listitem><para>A derivation containing a code coverage report, with
-        meta-data suitable for Hydra.</para></listitem>
-      </varlistentry>
+  <varlistentry>
+    <term><varname>report</varname></term>
+    <listitem><para>A derivation containing a code coverage report, with
+    meta-data suitable for Hydra.</para></listitem>
+  </varlistentry>
 
-      <varlistentry>
-        <term><varname>driver</varname></term>
-        <listitem><para>A derivation containing scripts to run the VM test or
-        interact with the VM network interactively, as seen above.</para>
-        </listitem>
-      </varlistentry>
+  <varlistentry>
+    <term><varname>driver</varname></term>
+    <listitem><para>A derivation containing scripts to run the VM test or
+    interact with the VM network interactively, as seen above.</para>
+    </listitem>
+  </varlistentry>
 
-    </variablelist>
-  </para>
+</variablelist>
+
+</para>
 
 </section>
+
 
 </chapter>

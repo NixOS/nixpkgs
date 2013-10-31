@@ -103,7 +103,7 @@ in
       ];
 
     system.build = {
-      inherit nixos-install nixos-generate-config nixos-option;
+      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild;
     };
   };
 }

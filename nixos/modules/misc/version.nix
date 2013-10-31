@@ -58,18 +58,15 @@ with pkgs.lib;
     # Generate /etc/os-release.  See
     # http://0pointer.de/public/systemd-man/os-release.html for the
     # format.
-    environment.etc = singleton
-      { source = pkgs.writeText "os-release"
-          ''
-            NAME=NixOS
-            ID=nixos
-            VERSION="${config.system.nixosVersion} (${config.system.nixosCodeName})"
-            VERSION_ID="${config.system.nixosVersion}"
-            PRETTY_NAME="NixOS ${config.system.nixosVersion} (${config.system.nixosCodeName})"
-            HOME_URL="http://nixos.org/"
-          '';
-        target = "os-release";
-      };
+    environment.etc."os-release".text =
+      ''
+        NAME=NixOS
+        ID=nixos
+        VERSION="${config.system.nixosVersion} (${config.system.nixosCodeName})"
+        VERSION_ID="${config.system.nixosVersion}"
+        PRETTY_NAME="NixOS ${config.system.nixosVersion} (${config.system.nixosCodeName})"
+        HOME_URL="http://nixos.org/"
+      '';
 
   };
 

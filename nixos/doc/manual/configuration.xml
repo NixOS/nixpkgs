@@ -1012,7 +1012,7 @@ manpage or the Nix manual.</para>
 
 <!--===============================================================-->
 
-<section><title>User management</title>
+<section xml:id="sec-user-management"><title>User management</title>
 
 <para>NixOS supports both declarative and imperative styles of user
 management.  In the declarative style, users are specified in
