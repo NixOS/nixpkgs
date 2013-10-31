@@ -89,9 +89,14 @@ running NixOS system through several other means:
     <listitem><para>For initialising Ext4 partitions:
     <command>mkfs.ext4</command>.  It is recommended that you assign a
     unique symbolic label to the file system using the option
-    <option>-L <replaceable>label</replaceable></option>.  This will
-    make the file system configuration independent from device
-    changes.</para></listitem>
+    <option>-L <replaceable>label</replaceable></option>, since this
+    makes the file system configuration independent from device
+    changes.  For example:
+
+<screen>
+$ mkfs.ext4 -L nixos /dev/sda1</screen>
+
+    </para></listitem>
 
     <listitem><para>For creating swap partitions:
     <command>mkswap</command>.  Again it’s recommended to assign a
@@ -123,6 +128,12 @@ $ mount /dev/disk/by-label/nixos /mnt
 </screen>
 
   </para></listitem>
+
+  <listitem><para>If your machine has a limited amount of memory, you
+  may want to activate swap devices now (<command>swapon
+  <replaceable>device</replaceable></command>).  The installer (or
+  rather, the build actions that it may spawn) may need quite a bit of
+  RAM, depending on your configuration.</para></listitem>
 
   <listitem>
 
@@ -188,28 +199,16 @@ $ nano /mnt/etc/nixos/configuration.nix
 
   </listitem>
 
-  <listitem><para>If your machine has a limited amount of memory, you
-  may want to activate swap devices now (<command>swapon
-  <replaceable>device</replaceable></command>).  The installer (or
-  rather, the build actions that it may spawn) may need quite a bit of
-  RAM, depending on your configuration.</para></listitem>
-
-  <!--
-  <listitem><para>Optionally, you can run
-
-<screen>
-$ nixos-checkout</screen>
-
-  to make the installer use the latest NixOS/Nixpkgs sources from the
-  Git repository, rather than the sources on CD.</para></listitem>
-  -->
-
   <listitem><para>Do the installation:
 
 <screen>
 $ nixos-install</screen>
 
-    Cross fingers.</para></listitem>
+    Cross fingers.  If this fails due to a temporary problem (such as
+    a network issue while downloading binaries from the NixOS binary
+    cache), you can just re-run <command>nixos-install</command>.
+    Otherwise, fix your <filename>configuration.nix</filename> and
+    then re-run <command>nixos-install</command>.</para></listitem>
 
   <listitem><para>If everything went well:
 
@@ -221,7 +220,7 @@ $ reboot</screen>
   <listitem>
 
     <para>You should now be able to boot into the installed NixOS.
-    The Grub boot menu shows a list of <emphasis>available
+    The GRUB boot menu shows a list of <emphasis>available
     configurations</emphasis> (initially just one).  Every time you
     change the NixOS configuration (see <xref
     linkend="sec-changing-config" />), a new item appears in the menu.
@@ -256,20 +255,20 @@ $ nix-env -i w3m</screen>
 
 </orderedlist>
 
-<para><xref linkend="ex-install-sequence" /> shows a typical sequence
-of commands for installing NixOS on an empty hard drive (here
-<filename>/dev/sda</filename>).  <xref linkend="ex-config" /> shows a
-corresponding configuration Nix expression.</para>
+<para>To summarise, <xref linkend="ex-install-sequence" /> shows a
+typical sequence of commands for installing NixOS on an empty hard
+drive (here <filename>/dev/sda</filename>).  <xref linkend="ex-config"
+/> shows a corresponding configuration Nix expression.</para>
 
 <example xml:id='ex-install-sequence'><title>Commands for installing NixOS on <filename>/dev/sda</filename></title>
 <screen>
-$ fdisk /dev/sda <lineannotation>(or whatever device you want to install on)</lineannotation>
-$ mkfs.ext4 -L nixos /dev/sda1 <lineannotation>(idem)</lineannotation>
-$ mkswap -L swap /dev/sda2 <lineannotation>(idem)</lineannotation>
-$ mount LABEL=nixos /mnt
-$ nixos-generate-config
+$ fdisk /dev/sda # <lineannotation>(or whatever device you want to install on)</lineannotation>
+$ mkfs.ext4 -L nixos /dev/sda1
+$ mkswap -L swap /dev/sda2
+$ swapon /dev/sda2
+$ mount /dev/disk/by-label/nixos /mnt
+$ nixos-generate-config --root /mnt
 $ nano /mnt/etc/nixos/configuration.nix
-<lineannotation>(in particular, set the fileSystems and swapDevices options)</lineannotation>
 $ nixos-install
 $ reboot</screen>
 </example>
@@ -284,14 +283,12 @@ $ reboot</screen>
 
   boot.loader.grub.device = "/dev/sda";
 
-  # Note: setting fileSystems and swapDevices is generally not
-  # necessary, since nixos-generate-config has set them automatically
-  # in hardware-configuration.nix.
-  fileSystems."/".device = "/dev/disk/by-label/nixos";
+  # Note: setting fileSystems is generally not
+  # necessary, since nixos-generate-config figures them out
+  # automatically in hardware-configuration.nix.
+  #fileSystems."/".device = "/dev/disk/by-label/nixos";
 
-  swapDevices =
-    [ { device = "/dev/disk/by-label/swap"; } ];
-
+  # Enable the OpenSSH server.
   services.sshd.enable = true;
 }</screen>
 </example>
@@ -317,6 +314,10 @@ to build the new configuration, make it the default configuration for
 booting, and try to realise the configuration in the running system
 (e.g., by restarting system services).</para>
 
+<warning><para>These commands must be executed as root, so you should
+either run them from a root shell or by prefixing them with
+<literal>sudo -i</literal>.</para></warning>
+
 <para>You can also do
 
 <screen>
@@ -336,6 +337,18 @@ to build the configuration and make it the boot default, but not
 switch to it now (so it will only take effect after the next
 reboot).</para>
 
+<para>You can make your configuration show up in a different submenu
+of the GRUB 2 boot screen by giving it a different <emphasis>profile
+name</emphasis>, e.g.
+
+<screen>
+$ nixos-rebuild switch -p test </screen>
+
+which causes the new configuration (and previous ones created using
+<literal>-p test</literal>) to show up in the GRUB submenu “NixOS -
+Profile 'test'”.  This can be useful to separate test configurations
+from “stable” configurations.</para>
+
 <para>Finally, you can do
 
 <screen>
@@ -346,7 +359,7 @@ whether everything compiles cleanly.</para>
 
 <para>If you have a machine that supports hardware virtualisation, you
 can also test the new configuration in a sandbox by building and
-running a <emphasis>virtual machine</emphasis> that contains the
+running a QEMU <emphasis>virtual machine</emphasis> that contains the
 desired configuration.  Just do
 
 <screen>
@@ -361,7 +374,6 @@ available.</para>
 </section>
 
 
-
 <!--===============================================================-->
 
 <section xml:id="sec-upgrading">
@@ -369,28 +381,85 @@ available.</para>
 <title>Upgrading NixOS</title>
 
 <para>The best way to keep your NixOS installation up to date is to
-use the <literal>nixos-unstable</literal> channel.  (A channel is a
+use one of the NixOS <emphasis>channels</emphasis>.  A channel is a
 Nix mechanism for distributing Nix expressions and associated
-binaries.)  The NixOS channel is updated automatically from NixOS’s
-Git repository after running certain tests and building most
-packages.</para>
+binaries.  The NixOS channels are updated automatically from NixOS’s
+Git repository after certain tests have passed and all packages have
+been built.  These channels are:
 
-<para>NixOS automatically subscribes you to the NixOS channel.  If for
-some reason this is not the case, just do
+<itemizedlist>
+  <listitem>
+    <para>Stable channels, such as <literal
+    xlink:href="http://nixos.org/channels/nixos-13.10">nixos-13.10</literal>.
+    These only get conservative bug fixes and package upgrades.  For
+    instance, a channel update may cause the Linux kernel on your
+    system to be upgraded from 3.4.66 to 3.4.67 (a minor bug fix), but
+    not from 3.4.<replaceable>x</replaceable> to
+    3.11.<replaceable>x</replaceable> (a major change that has the
+    potential to break things).</para>
+  </listitem>
+  <listitem>
+    <para>The unstable channel, <literal
+    xlink:href="http://nixos.org/channels/nixos-unstable">nixos-unstable</literal>.
+    This corresponds to NixOS’s main development branch, and may thus
+    see radical changes between channel updates.  It’s not recommended
+    for production systems.</para>
+  </listitem>
+</itemizedlist>
+
+To see what channels are available, go to <link
+xlink:href="http://nixos.org/channels"/>.  (Note that the URIs of the
+various channels redirect to a directory that contains the channel’s
+latest version and includes ISO images and VirtualBox
+appliances.)</para>
+
+<para>When you first install NixOS, you’re automatically subscribed to
+the NixOS channel that corresponds to your installation source.   For
+instance, if you installed from a 13.10 ISO, you will be subscribed to
+the <literal>nixos-13.10</literal> channel.  To see which NixOS
+channel you’re subscribed to, run the following as root:
 
 <screen>
-$ nix-channel --add http://nixos.org/channels/nixos-unstable
+$ nix-channel --list | grep nixos
+nixos https://nixos.org/channels/nixos-unstable
 </screen>
 
-You can then upgrade NixOS to the latest version in the channel by
-running
+To switch to a different NixOS channel, do
 
 <screen>
-$ nix-channel --update nixos
+$ nix-channel --add http://nixos.org/channels/<replaceable>channel-name</replaceable> nixos
 </screen>
 
-and running the <command>nixos-rebuild</command> command as described
-in <xref linkend="sec-changing-config"/>.</para>
+(Be sure to include the <literal>nixos</literal> parameter at the
+end.)  For instance, to use the NixOS 13.10 stable channel:
+
+<screen>
+$ nix-channel --add http://nixos.org/channels/nixos-13.10 nixos
+</screen>
+
+But it you want to live on the bleeding edge:
+
+<screen>
+$ nix-channel --add http://nixos.org/channels/nixos-unstable nixos
+</screen>
+
+</para>
+
+<para>You can then upgrade NixOS to the latest version in your chosen
+channel by running
+
+<screen>
+$ nixos-rebuild switch --upgrade
+</screen>
+
+which is equivalent to the more verbose <literal>nix-channel --update
+nixos; nixos-rebuild switch</literal>.</para>
+
+<warning><para>It is generally safe to switch back and forth between
+channels.  The only exception is that a newer NixOS may also have a
+newer Nix version, which may involve an upgrade of Nix’s database
+schema.  This cannot be undone easily, so in that case you will not be
+able to go back to your original channel.</para></warning>
 
 </section>
 
