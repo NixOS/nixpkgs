@@ -19,7 +19,12 @@ let
       description = mkOption {
         type = types.str;
         default = "";
-        description = "A short description of the user account.";
+        example = "Alice Q. User";
+        description = ''
+          A short description of the user account, typically the
+          user's full name.  This is actually the “GECOS” or “comment”
+          field in <filename>/etc/passwd</filename>.
+        '';
       };
 
       uid = mkOption {
@@ -67,7 +72,13 @@ let
       password = mkOption {
         type = with types; uniq (nullOr str);
         default = null;
-        description = "The user's password. If undefined, no password is set for the user.  Warning: do not set confidential information here because this data would be readable by all.  This option should only be used for public account such as guest.";
+        description = ''
+          The user's password. If undefined, no password is set for
+          the user.  Warning: do not set confidential information here
+          because it is world-readable in the Nix store.  This option
+          should only be used for public accounts such as
+          <literal>guest</literal>.
+        '';
       };
 
       isSystemUser = mkOption {
@@ -79,11 +90,11 @@ let
       createUser = mkOption {
         type = types.bool;
         default = true;
-        description = "
+        description = ''
           Indicates if the user should be created automatically as a local user.
           Set this to false if the user for instance is an LDAP user. NixOS will
           then not modify any of the basic properties for the user account.
-        ";
+        '';
       };
 
       isAlias = mkOption {
@@ -149,13 +160,12 @@ in
       example = {
         alice = {
           uid = 1234;
-          description = "Alice";
+          description = "Alice Q. User";
           home = "/home/alice";
           createHome = true;
           group = "users";
           extraGroups = ["wheel"];
           shell = "/bin/sh";
-          password = "foobar";
         };
       };
       description = ''
