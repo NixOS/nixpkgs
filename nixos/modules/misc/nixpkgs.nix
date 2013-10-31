@@ -72,6 +72,6 @@ in
   };
 
   config = {
-    nixpkgs.system = pkgs.stdenv.system;
+    nixpkgs.system = mkDefault pkgs.stdenv.system;
   };
 }
