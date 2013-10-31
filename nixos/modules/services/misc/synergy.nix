@@ -22,58 +22,56 @@ in
         enable = mkOption {
           default = false;
           description = "
-            Whether to enable the synergy client (receive keyboard and mouse events from a synergy server)
+            Whether to enable the Synergy client (receive keyboard and mouse events from a Synergy server).
           ";
         };
         screenName = mkOption {
           default = "";
-          description = "
-            use screen-name instead the hostname to identify
+          description = ''
+            Use the given name instead of the hostname to identify
             ourselves to the server.
-            ";
+          '';
         };
         serverAddress = mkOption {
-          description = "
+          description = ''
             The server address is of the form: [hostname][:port].  The
             hostname must be the address or hostname of the server.  The
             port overrides the default port, 24800.
-          ";
+          '';
         };
         autoStart = mkOption {
           default = true;
           type = types.bool;
-          description = "Whether synergy-client should be started automatically.";
+          description = "Whether the Synergy client should be started automatically.";
         };
       };
 
       server = {
         enable = mkOption {
           default = false;
-          description = "
-            Whether to enable the synergy server (send keyboard and mouse events)
-          ";
+          description = ''
+            Whether to enable the Synergy server (send keyboard and mouse events).
+          '';
         };
         configFile = mkOption {
           default = "/etc/synergy-server.conf";
-          description = "
-            The synergy server configuration file. open upstart-jobs/synergy.nix to see an example
-          ";
+          description = "The Synergy server configuration file.";
         };
         screenName = mkOption {
           default = "";
-          description = "
-            use screen-name instead the hostname to identify
+          description = ''
+            Use the given name instead of the hostname to identify
             this screen in the configuration.
-            ";
+          '';
         };
         address = mkOption {
           default = "";
-          description = "listen for clients on the given address";
+          description = "Address on which to listen for clients.";
         };
         autoStart = mkOption {
           default = true;
           type = types.bool;
-          description = "Whether synergy-server should be started automatically.";
+          description = "Whether the Synergy server should be started automatically.";
         };
       };
     };
