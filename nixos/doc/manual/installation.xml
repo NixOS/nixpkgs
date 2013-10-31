@@ -18,6 +18,33 @@ details, see the <link
 xlink:href="https://nixos.org/wiki/Installing_NixOS_from_a_USB_stick">NixOS
 Wiki</link>.</para>
 
+<para>As an alternative to installing NixOS yourself, you can get a
+running NixOS system through several other means:
+
+<itemizedlist>
+  <listitem>
+    <para>Using virtual appliances in Open Virtualization Format (OVF)
+    that can be imported into VirtualBox.  These are available from
+    the <link xlink:href="http://nixos.org/nixos/download.html">NixOS
+    homepage</link>.</para>
+  </listitem>
+  <listitem>
+    <para>Using AMIs for Amazon’s EC2.  To find one for your region
+    and instance type, please refer to the <link
+    xlink:href="https://github.com/NixOS/nixops/blob/master/nix/ec2-amis.nix">list
+    of most recent AMIs</link>.</para>
+  </listitem>
+  <listitem>
+    <para>Using NixOps, the NixOS-based cloud deployment tool, which
+    allows you to provision VirtualBox and EC2 NixOS instances from
+    declarative specifications.  Check out the <link
+    xlink:href="https://github.com/NixOS/nixops">NixOps
+    homepage</link> for details.</para>
+  </listitem>
+</itemizedlist>
+
+</para>
+
 </section>
 
 
