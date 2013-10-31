@@ -215,11 +215,8 @@ in
 
   ###### implementation
 
-  # !!! Maybe if `enable' is false, the firewall should still be built
-  # but not started by default.  However, currently nixos-rebuild
-  # doesn't deal with such Upstart jobs properly (it starts them if
-  # they are changed, regardless of whether the start condition
-  # holds).
+  # FIXME: Maybe if `enable' is false, the firewall should still be
+  # built but not started by default?
   config = mkIf cfg.enable {
 
     networking.firewall.trustedInterfaces = [ "lo" ];

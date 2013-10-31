@@ -107,10 +107,10 @@ in
       '';
 
       description = ''
-        Each attribute of this option defines an Upstart job to run an
-        OpenVPN instance.  These can be OpenVPN servers or clients.
-        The name of each Upstart job is
-        <literal>openvpn-</literal><replaceable>name</replaceable>,
+        Each attribute of this option defines a systemd service that
+        runs an OpenVPN instance.  These can be OpenVPN servers or
+        clients.  The name of each systemd service is
+        <literal>openvpn-<replaceable>name</replaceable>.service</literal>,
         where <replaceable>name</replaceable> is the corresponding
         attribute name.
       '';

@@ -1,4 +1,4 @@
-# Upstart jobs for libvirtd.
+# Systemd services for libvirtd.
 
 { config, pkgs, ... }:
 
@@ -121,9 +121,6 @@ in
         wantedBy = [ "multi-user.target" ];
         wants = [ "libvirtd.service" ];
         after = [ "libvirtd.service" ];
-
-        # We want to suspend VMs only on shutdown, but Upstart is broken.
-        #stopOn = "";
 
         restartIfChanged = false;
 

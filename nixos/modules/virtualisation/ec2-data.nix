@@ -1,5 +1,5 @@
-# This module defines an Upstart job that obtains the SSH key and host
-# name of virtual machines running on Amazon EC2, Eucalyptus and
+# This module defines a systemd service that obtains the SSH key and
+# host name of virtual machines running on Amazon EC2, Eucalyptus and
 # OpenStack Compute (Nova).
 
 { config, pkgs, ... }:

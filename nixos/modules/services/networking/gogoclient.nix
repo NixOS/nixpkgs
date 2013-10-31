@@ -15,38 +15,35 @@ in
         default = false;
         type =  types.bool;
         description = ''
-          Enable the gogoclient ipv6 tunnel.
+          Enable the gogoCLIENT IPv6 tunnel.
         '';
       };
       autorun = mkOption {
         default = true;
-        description = "
-          Switch to false to create upstart-job and configuration,
-          but not run it automatically
-        ";
+        description = ''
+          Whether to automatically start the tunnel.
+        '';
       };
 
       username = mkOption {
         default = "";
-        description = "
+        description = ''
           Your Gateway6 login name, if any.
-        ";
+        '';
       };
 
       password = mkOption {
         default = "";
         type = types.string;
-        description = "
-          Path to a file (as a string), containing your gogonet password, if any.
-        ";
+        description = ''
+          Path to a file (as a string), containing your gogoNET password, if any.
+        '';
       };
 
       server = mkOption {
         default = "anonymous.freenet6.net";
         example = "broker.freenet6.net";
-        description = "
-          Used Gateway6 server.
-        ";
+        description = "The Gateway6 server to be used.";
       };
     };
   };
