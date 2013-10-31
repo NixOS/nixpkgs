@@ -4,11 +4,11 @@ let
   baseURL = mirror://kernel/linux/daemons/autofs/v5;
 in
 stdenv.mkDerivation {
-  name = "autofs-5.0.5";
+  name = "autofs-5.0.8";
 
   src = fetchurl {
-    url = "${baseURL}/autofs-5.0.5.tar.bz2";
-    sha256 = "00k0k3jkbr29gn1wnzqjyc9iqq5bwjyip1isc79wf51wph0kxiv8";
+    url = "${baseURL}/autofs-5.0.8.tar.bz2";
+    sha256 = "2e0e42c654b7762b1235ec0131317224c57fdc6757ec00c820b2aa86338c9f7d";
   };
 
   patches = import ./patches-v5.nix fetchurl;
