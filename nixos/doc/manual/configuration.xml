@@ -641,6 +641,11 @@ manual</link> for the rest.</para>
         <entry><literal>let x = "foo"; y = "bar"; in x + y</literal></entry>
         <entry>Variable definition</entry>
       </row>
+      <row>
+        <entry><literal>with pkgs.lib; head [ 1 2 3 ]</literal></entry>
+        <entry>Add all attributes from the given set to the scope
+        (evaluates to <literal>1</literal>)</entry>
+      </row>
 
       <row>
         <entry namest="c1" nameend="c2"><emphasis>Functions (lambdas)</emphasis></entry>

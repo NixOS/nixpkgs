@@ -398,7 +398,8 @@ been built.  These channels are:
     system to be upgraded from 3.4.66 to 3.4.67 (a minor bug fix), but
     not from 3.4.<replaceable>x</replaceable> to
     3.11.<replaceable>x</replaceable> (a major change that has the
-    potential to break things).</para>
+    potential to break things).  Stable channels are generally
+    maintained until the next stable branch is created.</para>
   </listitem>
   <listitem>
     <para>The unstable channel, <literal
