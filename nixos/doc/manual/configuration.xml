@@ -456,7 +456,7 @@ When that happens, it’s possible to force one definition take
 precedence over the others:
 
 <programlisting>
-services.httpd.adminAddr = mkForce "bob@example.org";
+services.httpd.adminAddr = pkgs.lib.mkForce "bob@example.org";
 </programlisting>
 
 </para>
