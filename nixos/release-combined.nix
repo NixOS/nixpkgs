@@ -37,7 +37,7 @@ in rec {
     constituents =
       let all = x: [ x.x86_64-linux x.i686-linux ]; in
       [ nixos.channel
-        nixos.manual
+        (all nixos.manual)
 
         (all nixos.iso_minimal)
         (all nixos.iso_graphical)

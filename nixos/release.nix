@@ -12,7 +12,11 @@ let
 
   systems = [ "x86_64-linux" "i686-linux" ];
 
+  forAllSystems = pkgs.lib.genAttrs systems;
+
   pkgs = import nixpkgs { system = "x86_64-linux"; };
+
+  lib = pkgs.lib;
 
 
   versionModule =
@@ -109,23 +113,23 @@ in rec {
     };
 
 
-  manual = iso_minimal.x86_64-linux.config.system.build.manual.manual;
-  manpages = iso_minimal.x86_64-linux.config.system.build.manual.manpages;
+  manual = forAllSystems (system: (builtins.getAttr system iso_minimal).config.system.build.manual.manual);
+  manpages = forAllSystems (system: (builtins.getAttr system iso_minimal).config.system.build.manual.manpages);
 
 
-  iso_minimal = pkgs.lib.genAttrs systems (system: makeIso {
+  iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
     type = "minimal";
     inherit system;
   });
 
-  iso_minimal_new_kernel = pkgs.lib.genAttrs systems (system: makeIso {
+  iso_minimal_new_kernel = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
     inherit system;
   });
 
-  iso_graphical = pkgs.lib.genAttrs systems (system: makeIso {
+  iso_graphical = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical.nix;
     type = "graphical";
     inherit system;
@@ -133,7 +137,7 @@ in rec {
 
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
-  iso_new_kernel = pkgs.lib.genAttrs systems (system: makeIso {
+  iso_new_kernel = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-new-kernel.nix;
     type = "new-kernel";
     inherit system;
@@ -141,7 +145,7 @@ in rec {
 
   # A variant with efi booting support. Once cd-minimal has a newer kernel,
   # this should be enabled by default.
-  iso_efi = pkgs.lib.genAttrs systems (system: makeIso {
+  iso_efi = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-efi.nix;
     type = "efi";
     maintainers = [ "shlevy" ];
@@ -150,7 +154,7 @@ in rec {
 
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
-  ova = pkgs.lib.genAttrs systems (system:
+  ova = forAllSystems (system:
 
     with import nixpkgs { inherit system; };
 
@@ -186,7 +190,7 @@ in rec {
   # boot that system from uboot (like for the sheevaplug).
   # The pc variant helps preparing the expression for the system tarball
   # in a machine faster than the sheevpalug
-  system_tarball_pc = pkgs.lib.genAttrs systems (system: makeSystemTarball {
+  system_tarball_pc = forAllSystems (system: makeSystemTarball {
     module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
     inherit system;
   });
@@ -211,7 +215,7 @@ in rec {
   # Run the tests in ./tests/default.nix for each platform.  You can
   # run a test by doing e.g. "nix-build -A tests.login.x86_64-linux".
   tests =
-    with pkgs.lib;
+    with lib;
     let
       testsFor = system:
         mapAttrsRecursiveCond (x: !x ? test) (n: v: listToAttrs [(nameValuePair system v.test)])
