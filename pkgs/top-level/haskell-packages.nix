@@ -2116,7 +2116,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   transformersCompat = callPackage ../development/libraries/haskell/transformers-compat {};
 
-  trifecta = callPackage ../development/libraries/haskell/trifecta {};
+  trifecta_1_1 = callPackage ../development/libraries/haskell/trifecta/1.1.nix {};
+  trifecta_1_2 = callPackage ../development/libraries/haskell/trifecta/1.2.nix {};
+  trifecta = self.trifecta_1_2;
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
 
@@ -2442,7 +2444,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   darcs = callPackage ../applications/version-management/darcs {};
 
-  idris_plain = callPackage ../development/compilers/idris {};
+  idris_plain = callPackage ../development/compilers/idris {
+    trifecta = self.trifecta_1_1;
+  };
 
   idris = callPackage ../development/compilers/idris/wrapper.nix {};
 
