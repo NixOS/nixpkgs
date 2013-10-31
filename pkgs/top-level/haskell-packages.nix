@@ -1650,7 +1650,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   parsec3 = self.parsec_3_1_3;
   parsec  = self.parsec3;
 
-  parsers = callPackage ../development/libraries/haskell/parsers {};
+  parsers_0_9 = callPackage ../development/libraries/haskell/parsers/0.9.nix {};
+  parsers_0_10 = callPackage ../development/libraries/haskell/parsers/0.10.nix {};
+  parsers = self.parsers_0_10;
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
@@ -2116,7 +2118,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   transformersCompat = callPackage ../development/libraries/haskell/transformers-compat {};
 
-  trifecta_1_1 = callPackage ../development/libraries/haskell/trifecta/1.1.nix {};
+  trifecta_1_1 = callPackage ../development/libraries/haskell/trifecta/1.1.nix {
+    parsers = self.parsers_0_9;
+  };
   trifecta_1_2 = callPackage ../development/libraries/haskell/trifecta/1.2.nix {};
   trifecta = self.trifecta_1_2;
 
@@ -2445,6 +2449,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   darcs = callPackage ../applications/version-management/darcs {};
 
   idris_plain = callPackage ../development/compilers/idris {
+    parsers = self.parsers_0_9;
     trifecta = self.trifecta_1_1;
   };
 
