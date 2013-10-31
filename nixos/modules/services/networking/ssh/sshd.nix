@@ -39,7 +39,7 @@ let
       };
 
       keyFiles = mkOption {
-        type = types.listOf types.str;
+        type = types.listOf types.unspecified;
         default = [];
         description = ''
           A list of files each containing one OpenSSH public key that should be
@@ -172,7 +172,7 @@ in
       };
 
       authorizedKeysFiles = mkOption {
-        type = types.listOf types.str;
+        type = types.listOf types.unspecified;
         default = [];
         description = "Files from with authorized keys are read.";
       };
