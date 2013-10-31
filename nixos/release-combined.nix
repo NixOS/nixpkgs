@@ -1,5 +1,6 @@
 { nixpkgs ? { outPath = ./..; revCount = 5678; shortRev = "gfedcba"; }
 , officialRelease ? false
+, stableBranch ? false
 }:
 
 let
@@ -17,7 +18,7 @@ let
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
-    inherit officialRelease;
+    inherit officialRelease stableBranch;
     nixpkgs = nixpkgsSrc;
   });
 
