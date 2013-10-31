@@ -3,7 +3,7 @@
 
 <title>Development</title>
 
-<para>This chapter has some random notes on hacking on
+<para>This chapter describes how you can modify and extend
 NixOS.</para>
 
 
@@ -11,7 +11,7 @@ NixOS.</para>
 
 <section>
 
-<title>Hacking on NixOS</title>
+<title>Getting the sources</title>
 
 <para>By default, NixOS’s <command>nixos-rebuild</command> command
 uses the NixOS and Nixpkgs sources provided by the
@@ -34,12 +34,13 @@ $ git clone git://github.com/NixOS/nixpkgs.git
 </screen>
 
 This will check out the latest NixOS sources to
-<filename><replaceable>/my/sources</replaceable>/nixpkgs/nixos</filename> and
-the Nixpkgs sources to
+<filename><replaceable>/my/sources</replaceable>/nixpkgs/nixos</filename>
+and the Nixpkgs sources to
 <filename><replaceable>/my/sources</replaceable>/nixpkgs</filename>.
-If you want to rebuild your system using your (modified) sources, you
-need to tell <command>nixos-rebuild</command> about them using the
-<option>-I</option> flag:
+(The NixOS source tree lives in a subdirectory of the Nixpkgs
+repository.)  If you want to rebuild your system using your (modified)
+sources, you need to tell <command>nixos-rebuild</command> about them
+using the <option>-I</option> flag:
 
 <screen>
 $ nixos-rebuild switch -I nixpkgs=<replaceable>/my/sources</replaceable>/nixpkgs
@@ -47,24 +48,26 @@ $ nixos-rebuild switch -I nixpkgs=<replaceable>/my/sources</replaceable>/nixpkgs
 
 </para>
 
-<para><command>nixos-rebuild</command> affects only the system profile.
-To install packages to your user profile from expressions in
-<replaceable>/my/sources</replaceable>, use
-<command>nix-env -f <replaceable>/my/sources</replaceable>/nixpkgs</command>,
-or change the default by replacing the symlink in
+<para>If you want <command>nix-env</command> to use the expressions in
+<replaceable>/my/sources</replaceable>, use <command>nix-env -f
+<replaceable>/my/sources</replaceable>/nixpkgs</command>, or change
+the default by adding a symlink in
 <filename>~/.nix-defexpr</filename>:
 
 <screen>
-$ rm -f ~/.nix-defexpr/channels
 $ ln -s <replaceable>/my/sources</replaceable>/nixpkgs ~/.nix-defexpr/nixpkgs
 </screen>
 
-</para>
+You may want to delete the symlink
+<filename>~/.nix-defexpr/channels_root</filename> to prevent root’s
+NixOS channel from clashing with your own tree.</para>
 
+<!-- FIXME: not sure what this means.
 <para>You should not pass the base directory
 <filename><replaceable>/my/sources</replaceable></filename>
 to <command>nix-env</command>, as it will break after interpreting expressions
 in <filename>nixos/</filename> as packages.</para>
+-->
 
 </section>
 
