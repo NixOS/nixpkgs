@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fpic";
 
   meta = {
+    description = "ATSC A/52 stream decoder";
     homepage = http://liba52.sourceforge.net/;
   };
 }

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cipher-des";
-  version = "0.0.4";
-  sha256 = "18xpc7v0xyh0qb7p03ail1lyh376h1vg000xn22b5shpgp5kxiqq";
+  version = "0.0.6";
+  sha256 = "1isazxa2nr1y13y0danfk7wghy34rfpn3f43rw714nk2xk6vrwc5";
   buildDepends = [ byteable cryptoCipherTypes securemem ];
   testDepends = [
     byteable cryptoCipherTests cryptoCipherTypes QuickCheck

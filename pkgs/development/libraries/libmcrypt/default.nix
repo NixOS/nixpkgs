@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     [ "--disable-posix-threads" ];
 
   meta = {
-    description = "MCrypt is a replacement for the old crypt() package and crypt(1) command, with extensions.";
+    description = "Replacement for the old crypt() package and crypt(1) command, with extensions";
     homepage = http://mcrypt.sourceforge.net;
     license = "GPL";
   };

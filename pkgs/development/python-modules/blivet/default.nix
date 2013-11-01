@@ -36,7 +36,9 @@ in buildPythonPackage rec {
       c libudev = "${udev}/lib/libudev.so.1"
     }' blivet/pyudev.py
   '' else ''
-    sed -i -e '/^somajor *=/s/=.*/= ${toString udevSoMajor}/p' \
+    sed -i \
+      -e '/^somajor *=/s/=.*/= ${toString udevSoMajor}/p' \
+      -e 's|common =.*|& + ["/lib/x86_64-linux-gnu", "/lib/i686-linux-gnu"]|' \
       blivet/pyudev.py
   '');
 
@@ -51,5 +53,6 @@ in buildPythonPackage rec {
     homepage = "https://fedoraproject.org/wiki/Blivet";
     description = "Module for management of a system's storage configuration";
     license = [ "GPLv2+" "LGPLv2.1+" ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

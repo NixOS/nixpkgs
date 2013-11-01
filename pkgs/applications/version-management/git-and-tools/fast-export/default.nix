@@ -5,7 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "git://repo.or.cz/fast-export.git";
-    rev = "refs/heads/master";
+    rev = "aaccfba";
+    sha256 = "c9d1498e31d32b8271c1e651175794718611f93b4843dea569d831005de0a750";
   };
 
   buildInputs = [mercurial.python mercurial makeWrapper subversion];
@@ -19,7 +20,6 @@ stdenv.mkDerivation {
     sed -i "s@/usr/bin/env.*@$(type -p python)@" *.py
     l=$out/libexec/git-fast-export
     mkdir -p $out/{bin,doc/git-fast-export} $l
-    mv *.txt $out/doc/git-fast-export
     sed -i "s@ROOT=.*@ROOT=$l@" *.sh
     mv *.sh $out/bin
     mv *.py $l

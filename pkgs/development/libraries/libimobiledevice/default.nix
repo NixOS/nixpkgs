@@ -2,7 +2,7 @@
   libtasn1, libplist, readline }:
 
 stdenv.mkDerivation rec {
-  name = "libimobiledevice-1.0.6";
+  name = "libimobiledevice-1.0.7";
 
   nativeBuildInputs = [ python libplist.swig pkgconfig ];
   buildInputs = [ readline ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${name}.tar.bz2";
-    sha256 = "0r5gjprrnwgad5zsidn41w01gihramagcpl8cwi540qiwq43svqi";
+    sha256 = "15jznqc52yfwkbw19hgv3r1qd4gcymakbfkyizmr6v4n0sn27n0f";
   };
 
   meta = {

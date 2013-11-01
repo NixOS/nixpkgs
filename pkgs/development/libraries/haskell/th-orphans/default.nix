@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "th-orphans";
-  version = "0.7.0.1";
-  sha256 = "19lfq2m7c6n2z8gz4n57wc92x5x5rkgv4chbfq7w4n531qya4bgr";
+  version = "0.8";
+  sha256 = "0kzzcicn6pggvvblhbrs3vh0bf71izlb99lb0f5qww7ymi4smldr";
   buildDepends = [ thLift ];
   meta = {
     description = "Orphan instances for TH datatypes";

@@ -159,7 +159,7 @@ rec {
 
   # Debian.
   debian = [
-    ftp://ftp.au.debian.org/debian/
+    #ftp://ftp.au.debian.org/debian/
     ftp://ftp.de.debian.org/debian/
     ftp://ftp.es.debian.org/debian/
     ftp://ftp.fr.debian.org/debian/
@@ -269,6 +269,102 @@ rec {
     ftp://mirrors.kernel.org/metalab/
     ftp://ftp.gwdg.de/pub/linux/metalab/
     ftp://ftp.xemacs.org/sites/metalab.unc.edu/
+  ];
+
+  # CRAN mirrors (from http://cran.r-project.org/mirrors.html)
+  cran = [
+    http://cran.r-project.org/
+    http://cran.rstudio.com/
+    http://mirror.fcaglp.unlp.edu.ar/CRAN/
+    http://r.mirror.mendoza-conicet.gob.ar/
+    http://cran.csiro.au/
+    http://cran.ms.unimelb.edu.au/
+    http://cran.at.r-project.org/
+    http://www.freestatistics.org/cran/
+    http://cran-r.c3sl.ufpr.br/
+    http://cran.fiocruz.br/
+    http://www.vps.fmvz.usp.br/CRAN/
+    http://brieger.esalq.usp.br/CRAN/
+    http://cran.stat.sfu.ca/
+    http://mirror.its.dal.ca/cran/
+    http://probability.ca/cran/
+    http://cran.skazkaforyou.com/
+    http://cran.parentingamerica.com/
+    http://dirichlet.mat.puc.cl/
+    http://ftp.ctex.org/mirrors/CRAN/
+    http://mirror.bjtu.edu.cn/cran
+    http://cran.dataguru.cn/
+    http://mirrors.ustc.edu.cn/CRAN/
+    http://mirrors.xmu.edu.cn/CRAN/
+    http://www.laqee.unal.edu.co/CRAN/
+    http://www.icesi.edu.co/CRAN/
+    http://mirrors.dotsrc.org/cran/
+    http://cran.espol.edu.ec/
+    http://cran.univ-lyon1.fr/
+    http://mirror.ibcp.fr/pub/CRAN/
+    http://ftp.igh.cnrs.fr/pub/CRAN/
+    http://cran.irsn.fr/
+    http://cran.univ-paris1.fr/
+    http://mirrors.softliste.de/cran/
+    http://cran.r-mirror.de/
+    http://ftp5.gwdg.de/pub/misc/cran/
+    http://cran.cc.uoc.gr/
+    http://cran.rapporter.net/
+    http://ftp.iitm.ac.in/cran/
+    http://cran.repo.bppt.go.id/
+    http://cran.um.ac.ir/
+    http://ftp.heanet.ie/mirrors/cran.r-project.org/
+    http://cran.mirror.garr.it/mirrors/CRAN/
+    http://cran.stat.unipd.it/
+    http://dssm.unipa.it/CRAN/
+    http://essrc.hyogo-u.ac.jp/cran/
+    http://cran.md.tsukuba.ac.jp/
+    http://cran.ism.ac.jp/
+    http://cran.nexr.com/
+    http://biostat.cau.ac.kr/CRAN/
+    http://cran.itam.mx/
+    http://www.est.colpos.mx/R-mirror/
+    http://cran.xl-mirror.nl/
+    http://cran-mirror.cs.uu.nl/
+    http://cran.stat.auckland.ac.nz/
+    http://cran.uib.no/
+    http://cran.stat.upd.edu.ph/
+    http://r.meteo.uni.wroc.pl/
+    http://cran.dcc.fc.up.pt/
+    http://cran.gis-lab.info/
+    http://cran.stat.nus.edu.sg/
+    http://cran.fyxm.net/
+    http://r.adu.org.za/
+    http://cran.mirror.ac.za/
+    http://cran.es.r-project.org/
+    http://ftp.sunet.se/pub/lang/CRAN/
+    http://stat.ethz.ch/CRAN/
+    http://cran.cs.pu.edu.tw/
+    http://cran.csie.ntu.edu.tw/
+    http://mirrors.psu.ac.th/pub/cran/
+    http://cran.pau.edu.tr/
+    http://www.stats.bris.ac.uk/R/
+    http://cran.ma.imperial.ac.uk/
+    http://star-www.st-andrews.ac.uk/cran/
+    http://cran.cnr.berkeley.edu/
+    http://cran.stat.ucla.edu/
+    http://streaming.stat.iastate.edu/CRAN/
+    http://ftp.ussg.iu.edu/CRAN/
+    http://rweb.quant.ku.edu/cran/
+    http://watson.nci.nih.gov/cran_mirror/
+    http://cran.mtu.edu/
+    http://cran.wustl.edu/
+    http://cran.case.edu/
+    http://ftp.osuosl.org/pub/cran/
+    http://lib.stat.cmu.edu/R/CRAN/
+    http://cran.mirrors.hoobly.com/
+    http://mirrors.nics.utk.edu/cran/
+    http://cran.revolutionanalytics.com/
+    http://cran.fhcrc.org/
+    http://cran.cs.wwu.edu/
+    http://camoruco.ing.uc.edu.ve/cran/
+    http://cran.vinastat.com/
+    http://lib.stat.cmu.edu/
   ];
 
 }

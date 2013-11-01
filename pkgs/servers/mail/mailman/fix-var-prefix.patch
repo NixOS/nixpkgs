@@ -1,0 +1,33 @@
+diff -ubr mailman-2.1.16-orig/contrib/redhat_fhs.patch mailman-2.1.16/contrib/redhat_fhs.patch
+--- mailman-2.1.16-orig/contrib/redhat_fhs.patch	2013-10-21 14:55:48.797631434 +0200
++++ mailman-2.1.16/contrib/redhat_fhs.patch	2013-10-21 14:56:42.534310378 +0200
+@@ -197,7 +197,7 @@
+ +	    else true; \
+ +	    fi; \
+ +	done
+- 	chmod o-r $(DESTDIR)$(var_prefix)/archives/private
++ 	chmod o-r $(prefix)$(var_prefix)/archives/private
+  	@for d in $(ARCH_INDEP_DIRS); \
+  	do \
+ Only in mailman-2.1.5.FHS: Makefile.in~
+diff -ubr mailman-2.1.16-orig/Makefile.in mailman-2.1.16/Makefile.in
+--- mailman-2.1.16-orig/Makefile.in	2013-10-21 14:55:48.798631519 +0200
++++ mailman-2.1.16/Makefile.in	2013-10-21 14:56:42.562313220 +0200
+@@ -87,7 +87,7 @@
+ 	@echo "Creating architecture independent directories..."
+ 	@for d in $(VAR_DIRS); \
+ 	do \
+-	    dir=$(DESTDIR)$(var_prefix)/$$d; \
++	    dir=$(prefix)$(var_prefix)/$$d; \
+ 	    if test ! -d $$dir; then \
+ 		echo "Creating directory hierarchy $$dir"; \
+ 		$(srcdir)/mkinstalldirs $$dir; \
+@@ -96,7 +96,7 @@
+ 	    else true; \
+ 	    fi; \
+ 	done
+-	chmod o-r $(DESTDIR)$(var_prefix)/archives/private
++	chmod o-r $(prefix)$(var_prefix)/archives/private
+ 	@for d in $(ARCH_INDEP_DIRS); \
+ 	do \
+ 	    dir=$(DESTDIR)$(prefix)/$$d; \

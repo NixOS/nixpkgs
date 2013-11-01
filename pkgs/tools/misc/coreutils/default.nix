@@ -6,8 +6,11 @@
 assert aclSupport -> acl != null;
 assert selinuxSupport -> libselinux != null && libsepol != null;
 
+
+with { inherit (stdenv.lib) optional optionals optionalString optionalAttrs; };
+
 let
-  self = stdenv.mkDerivation rec {
+  self = stdenv.mkDerivation (rec {
     name = "coreutils-8.21";
 
     src = fetchurl {
@@ -17,16 +20,14 @@ let
 
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
-      ++ stdenv.lib.optional aclSupport acl
-      ++ stdenv.lib.optional selinuxSupport libselinux
-      ++ stdenv.lib.optional selinuxSupport libsepol;
+      ++ optional aclSupport acl
+      ++ optionals selinuxSupport [ libselinux libsepol ];
 
     crossAttrs = {
       buildInputs = [ gmp ]
-        ++ stdenv.lib.optional aclSupport acl.crossDrv
-        ++ stdenv.lib.optional selinuxSupport libselinux.crossDrv
-        ++ stdenv.lib.optional selinuxSupport libsepol.crossDrv
-        ++ stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
+        ++ optional aclSupport acl.crossDrv
+        ++ optionals selinuxSupport [ libselinux.crossDrv libsepol.crossDrv ]
+        ++ optional (stdenv.gccCross.libc ? libiconv)
           stdenv.gccCross.libc.libiconv.crossDrv;
 
       buildPhase = ''
@@ -57,7 +58,7 @@ let
 
     enableParallelBuilding = true;
 
-    NIX_LDFLAGS = stdenv.lib.optionalString selinuxSupport "-lsepol";
+    NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
 
     meta = {
       homepage = http://www.gnu.org/software/coreutils/;
@@ -74,6 +75,8 @@ let
 
       maintainers = [ ];
     };
-  };
+  } // optionalAttrs stdenv.isDarwin {
+    makeFlags = "CFLAGS=-D_FORTIFY_SOURCE=0";
+  });
 in
   self

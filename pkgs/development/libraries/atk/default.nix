@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib gobjectIntrospection /*ToDo: why propagate*/ ];
 
   meta = {
-    description = "ATK, the accessibility toolkit";
+    description = "Accessibility toolkit";
 
     longDescription = ''
       ATK is the Accessibility Toolkit.  It provides a set of generic

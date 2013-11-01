@@ -1,12 +1,12 @@
 { fetchurl, stdenv, db4, boost, gmp, mpfr, miniupnpc, qt4, unzip }:
 
 stdenv.mkDerivation rec {
-  version = "0.0.2";
+  version = "0.8.3-1";
   name = "freicoin-${version}";
 
   src = fetchurl {
     url = "https://github.com/freicoin/freicoin/archive/v${version}.zip";
-    sha256 = "09izmm85rb64d5hd0hz9hkfvv3qag55sb3mdyp8z4103icqwd6d7";
+    sha256 = "0v3mh8a96nnb86mkyaylyjj7qfdrl7i9gvybh7f8w2hrl9paszfh";
   };
 
   # I think that openssl and zlib are required, but come through other

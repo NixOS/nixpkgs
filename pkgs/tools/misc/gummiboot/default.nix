@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, gnu_efi, unzip, pkgconfig, utillinux, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
+{ stdenv, fetchurl, gnu-efi, unzip, pkgconfig, utillinux, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
 
 stdenv.mkDerivation rec {
-  name = "gummiboot-23";
+  name = "gummiboot-38";
 
-  buildInputs = [ unzip pkgconfig utillinux libxslt docbook_xsl docbook_xml_dtd_42 ];
+  buildInputs = [ gnu-efi pkgconfig libxslt utillinux ];
 
-  patches = [ ./no-usr.patch ];
-
-  buildFlags = [ "GNU_EFI=${gnu_efi}" ];
-
-  makeFlags = [ "PREFIX=$(out)" ];
+  # Sigh, gummiboot should be able to find this in buildInputs
+  configureFlags = [
+    "--with-efi-includedir=${gnu-efi}/include"
+    "--with-efi-libdir=${gnu-efi}/lib"
+    "--with-efi-ldsdir=${gnu-efi}/lib"
+  ];
 
   src = fetchurl {
-    url = "http://cgit.freedesktop.org/gummiboot/snapshot/${name}.zip";
-    sha256 = "1lmfk4k52ha00ppna5g7h51vhd27i9fipf5k7mc2d9jkm2480z4j";
+    url = http://pkgs.fedoraproject.org/repo/pkgs/gummiboot/gummiboot-38.tar.xz/0504791387e1998bf2075728c237f27e/gummiboot-38.tar.xz;
+    sha256 = "1aid2a29ym8dqldxpcihnrls7vrr9ijbla3dad0r8qwkca43d4lm";
   };
 
   meta = {

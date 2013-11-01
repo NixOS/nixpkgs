@@ -24,5 +24,6 @@ in buildPythonPackage rec {
     description = "NixOS storage manager/partitioner";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.aszlig ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

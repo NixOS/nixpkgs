@@ -5,7 +5,7 @@
 
     <title>Nixpkgs Manual</title>
 
-    <subtitle>Draft (Version <xi:include href="../VERSION"
+    <subtitle>Draft (Version <xi:include href="../.version"
     parse="text" />)</subtitle>
 
     <author>

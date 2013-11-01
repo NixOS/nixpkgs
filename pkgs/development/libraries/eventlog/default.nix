@@ -9,7 +9,15 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "A new API to format and send structured log messages.";
+    description = "Syslog event logger library";
+    longDescription = ''
+      The EventLog library aims to be a replacement of the simple syslog() API
+      provided on UNIX systems. The major difference between EventLog and
+      syslog is that EventLog tries to add structure to messages.
+
+      Where you had a simple non-structrured string in syslog() you have a
+      combination of description and tag/value pairs.
+    '';
     homepage = "http://www.balabit.com/support/community/products/";
     license = "BSD";
   };

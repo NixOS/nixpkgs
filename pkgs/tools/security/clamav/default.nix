@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.clamav.net;
-    description = "an open source (GPL) antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats.";
+    description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2;
     maintainers = [ maintainers.phreedom ];
     platforms = platforms.linux;

@@ -11,15 +11,16 @@ let
     sha256 = "1swwfyzaj3l40yh9np3x4fcracgs79nwryc85sxbdakx8wwxs2xb";
   };
 
-  version = "0.6.1";
+  version = "0.7.1";
 
 in
 stdenv.mkDerivation rec {
   name = "filegive-${version}";
 
   src = fetchurl {
-    url = "http://viric.name/cgi-bin/filegive/tarball/${name}.tar.gz";
-    sha256 = "11rjw906nr73kysm9l84yg443rxzh22l934hir7892h02924i4c4";
+    url = "http://viric.name/cgi-bin/filegive/tarball/${name}.tar.gz?uuid=v${version}";
+    name = "${name}.tar.gz";
+    sha256 = "14yyif6q89ihn28kliszaf19vywjg9f7192q1ak8823da1svbq8a";
   };
 
   buildInputs = [ go ];

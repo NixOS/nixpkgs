@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   makeFlags = "QT_PLUGIN_PATH=" + pysideShiboken + "/lib/generatorrunner";
 
   meta = {
-    description = "LGPL-licensed Python bindings for the Qt cross-platform application and UI framework.";
+    description = "LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
     license = stdenv.lib.licenses.lgpl21;
     homepage = "http://www.pyside.org";
     maintainers = [ stdenv.lib.maintainers.chaoflow ];

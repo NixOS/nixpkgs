@@ -2,7 +2,7 @@
 
 let
   pname = "networkmanagement";
-  version = "0.9.0.4";
+  version = "0.9.0.9";
   name = "${pname}-${version}";
 in
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://kde/unstable/${pname}/${version}/src/${name}.tar.bz2";
-    sha256 = "0mp2jai6f2qpywjwgvxcl1nh27idgy740vwiahfamq8w2y90a3aj";
+    sha256 = "1jiij9iz8v9mgcq811svmlyfvmvkazpclkf4yk7193m4y8yn19yn";
   };
 
   buildInputs = [ kdelibs kde_workspace networkmanager ];

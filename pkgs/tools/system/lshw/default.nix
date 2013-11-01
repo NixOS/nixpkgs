@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://ezix.org/project/wiki/HardwareLiSter;
-    description = "A small tool to provide detailed information on the hardware configuration of the machine.";
+    description = "Provide detailed information on the hardware configuration of the machine";
     license = licenses.gpl2;
     maintainers = [ maintainers.phreedom ];
     platforms = platforms.linux;

@@ -1,0 +1,6 @@
+#! @shell@ -e
+
+chrootenvDest=/run/chrootenv/@name@
+
+# Enter the LFS chroot environment
+chroot $chrootenvDest /usr/bin/env -i PS1="$PS1" TERM="$TERM" DISPLAY="$DISPLAY" HOME="/root" PATH="/bin:/sbin" /bin/bash --login

@@ -1,0 +1,268 @@
+/* Copied from http://bakefile.sourceforge.net/, which appears
+   licensed under the GNU GPL. */
+
+
+/***************************************************************************
+                             Basic headers and text:
+ ***************************************************************************/
+
+body
+{
+    font-family: "Nimbus Sans L", sans-serif;
+    background: white;
+    margin: 2em 1em 2em 1em;
+}
+
+h1, h2, h3, h4
+{
+    color: #005aa0;
+}
+
+h1 /* title */
+{
+    font-size: 200%;
+}
+
+h2 /* chapters, appendices, subtitle */
+{
+    font-size: 180%;
+}
+
+/* Extra space between chapters, appendices. */
+div.chapter > div.titlepage h2, div.appendix > div.titlepage h2 
+{ 
+    margin-top: 1.5em;
+}
+
+div.section > div.titlepage h2 /* sections */
+{
+    font-size: 150%;
+    margin-top: 1.5em;
+}
+
+h3 /* subsections */
+{
+    font-size: 125%;
+}
+
+div.simplesect h2
+{
+    font-size: 110%;
+}
+
+div.appendix h3
+{
+    font-size: 150%;
+    margin-top: 1.5em;
+}
+
+div.refnamediv h2, div.refsynopsisdiv h2, div.refsection h2 /* refentry parts */
+{
+    margin-top: 1.4em;
+    font-size: 125%;
+}
+
+div.refsection h3
+{
+    font-size: 110%;
+}
+
+
+/***************************************************************************
+                               Examples:
+ ***************************************************************************/
+
+div.example
+{
+    border: 1px solid #b0b0b0;
+    padding: 6px 6px;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    background: #f4f4f8;
+    border-radius: 0.4em;
+    box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
+}
+
+div.example p.title
+{
+    margin-top: 0em;
+}
+
+div.example pre
+{
+    box-shadow: none;
+}
+
+
+/***************************************************************************
+                            Screen dumps:
+ ***************************************************************************/
+
+pre.screen, pre.programlisting
+{
+    border: 1px solid #b0b0b0;
+    padding: 3px 3px;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    color: #600000;
+    background: #f4f4f8;
+    font-family: monospace;
+    border-radius: 0.4em;
+    box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
+}
+
+div.example pre.programlisting
+{
+    border: 0px;
+    padding: 0 0;
+    margin: 0 0 0 0;
+}
+
+
+/***************************************************************************
+                               Notes, warnings etc:
+ ***************************************************************************/
+
+.note, .warning
+{
+    border: 1px solid #b0b0b0;
+    padding: 3px 3px;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    margin-bottom: 1em;
+    padding: 0.3em 0.3em 0.3em 0.3em;
+    background: #fffff5;
+    border-radius: 0.4em;
+    box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
+}
+
+div.note, div.warning
+{
+    font-style: italic;
+}
+
+div.note h3, div.warning h3
+{
+    color: red;
+    font-size: 100%;
+    padding-right: 0.5em;
+    display: inline;
+}
+
+div.note p, div.warning p
+{
+    margin-bottom: 0em;
+}
+
+div.note h3 + p, div.warning h3 + p
+{
+    display: inline;
+}
+
+div.note h3
+{
+    color: blue;
+    font-size: 100%;
+}
+
+div.navfooter *
+{
+    font-size: 90%;
+}
+
+
+/***************************************************************************
+                        Links colors and highlighting: 
+ ***************************************************************************/
+
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:link { color: #0048b3; }
+a:visited { color: #002a6a; }
+
+
+/***************************************************************************
+                              Table of contents:
+ ***************************************************************************/
+
+div.toc
+{
+    font-size: 90%;
+}
+
+div.toc dl
+{
+    margin-top: 0em;
+    margin-bottom: 0em;
+}
+
+
+/***************************************************************************
+                               Special elements:
+ ***************************************************************************/
+
+tt, code
+{
+    color: #400000;
+}
+
+.term
+{
+    font-weight: bold;
+    
+}
+
+div.variablelist dd p, div.glosslist dd p
+{
+    margin-top: 0em;
+}
+
+div.variablelist dd, div.glosslist dd
+{
+    margin-left: 1.5em;
+}
+
+div.glosslist dt
+{
+    font-style: italic;
+}
+
+.varname
+{
+    color: #400000;
+}
+
+span.command strong
+{
+    font-weight: normal;
+    color: #400000;
+}
+
+div.calloutlist table
+{
+    box-shadow: none;
+}
+
+table
+{
+    border-collapse: collapse;
+    box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
+}
+
+table.simplelist
+{
+    text-align: left;
+    color: #005aa0;
+    border: 0;
+    padding: 5px;
+    background: #fffff5;
+    font-weight: normal;
+    font-style: italic;
+    box-shadow: none;
+    margin-bottom: 1em;
+}
+
+div.affiliation
+{
+    font-style: italic;
+}

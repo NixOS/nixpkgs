@@ -1,0 +1,100 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.011
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.011
+Problem:    Cannot find out if "acl" and "xpm" features are supported.
+Solution:   Add "acl" and "xpm" to the list of features. (Ken Takata)
+Files:	    src/eval.c, src/version.c
+
+
+*** ../vim-7.4.010/src/eval.c	2013-08-30 16:00:04.000000000 +0200
+--- src/eval.c	2013-08-30 16:34:12.000000000 +0200
+***************
+*** 12135,12140 ****
+--- 12135,12143 ----
+  #ifndef CASE_INSENSITIVE_FILENAME
+  	"fname_case",
+  #endif
++ #ifdef HAVE_ACL
++ 	"acl",
++ #endif
+  #ifdef FEAT_ARABIC
+  	"arabic",
+  #endif
+***************
+*** 12538,12544 ****
+  	"xfontset",
+  #endif
+  #ifdef FEAT_XPM_W32
+! 	"xpm_w32",
+  #endif
+  #ifdef USE_XSMP
+  	"xsmp",
+--- 12541,12552 ----
+  	"xfontset",
+  #endif
+  #ifdef FEAT_XPM_W32
+! 	"xpm",
+! 	"xpm_w32",	/* for backward compatibility */
+! #else
+! # if defined(HAVE_XPM)
+! 	"xpm",
+! # endif
+  #endif
+  #ifdef USE_XSMP
+  	"xsmp",
+*** ../vim-7.4.010/src/version.c	2013-08-30 16:00:04.000000000 +0200
+--- src/version.c	2013-08-30 16:34:37.000000000 +0200
+***************
+*** 60,65 ****
+--- 60,70 ----
+  
+  static char *(features[]) =
+  {
++ #ifdef HAVE_ACL
++ 	"+acl",
++ #else
++ 	"-acl",
++ #endif
+  #ifdef AMIGA		/* only for Amiga systems */
+  # ifdef FEAT_ARP
+  	"+ARP",
+***************
+*** 721,726 ****
+--- 726,737 ----
+  # else
+  	"-xpm_w32",
+  # endif
++ #else
++ # ifdef HAVE_XPM
++ 	"+xpm",
++ # else
++ 	"-xpm",
++ # endif
+  #endif
+  	NULL
+  };
+*** ../vim-7.4.010/src/version.c	2013-08-30 16:00:04.000000000 +0200
+--- src/version.c	2013-08-30 16:34:37.000000000 +0200
+***************
+*** 729,730 ****
+--- 740,743 ----
+  {   /* Add new patch number below this line */
++ /**/
++     11,
+  /**/
+
+-- 
+hundred-and-one symptoms of being an internet addict:
+141. You'd rather go to http://www.weather.com/ than look out your window.
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

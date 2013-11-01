@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monad-control";
-  version = "0.3.2.1";
-  sha256 = "17wfdg3a2kkx1jwh7gfgbyx4351b420krsf8syb8l9xrl9gdz5a3";
+  version = "0.3.2.2";
+  sha256 = "1wwcx2k0nzmjqxf8d8wasnhvdx5q3nxkcyq7vbprkfy85sj7ivxc";
   buildDepends = [
     baseUnicodeSymbols transformers transformersBase
   ];

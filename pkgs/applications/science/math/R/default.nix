@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.0.1";
+  name = "R-3.0.2";
 
   src = fetchurl {
-    url = "http://ftp5.gwdg.de/pub/misc/cran/src/base/R-3/${name}.tar.gz";
-    sha256 = "0d3iv382bsyz6ad5fk382x7sy3qzgpqvd0fw26r0648lyf54i45g";
+    url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
+    sha256 = "0jq2vk6bgksbvgmdjvv7vfj6llp091d0nhl5j825aya4c2nhavlm";
   };
 
   buildInputs = [ blas bzip2 gfortran liblapack libX11 libXmu libXt
@@ -55,9 +55,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = "http://www.r-project.org/";
-    description = "a free software environment for statistical computing and graphics";
+    description = "Free software environment for statistical computing and graphics";
     license = stdenv.lib.licenses.gpl2Plus;
 
     longDescription = ''

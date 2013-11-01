@@ -4,8 +4,8 @@ let
 
   # Obtained from http://www.linux-usb.org/usb.ids.bz2.
   usbids = fetchurl {
-    url = http://tarballs.nixos.org/usb.ids.20120920.bz2;
-    sha256 = "0sz860g7grf6kx22p49s6j8h85c69ymcw16a8110klzfl9hl9hli";
+    url = http://tarballs.nixos.org/usb.ids.20130821.bz2;
+    sha256 = "0x7mf4h5h5wjzhygfr4lc8yz0cwm7mahxrnp5nkxcmawmyxwsg53";
   };
 
 in
@@ -20,8 +20,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig libusb1 ];
 
-  # currently up-to-date
-  #preBuild = "bunzip2 < ${usbids} > usb.ids";
+  preBuild = "bunzip2 < ${usbids} > usb.ids";
+
+  postInstall =
+    ''
+      rm $out/sbin/update-usbids.sh
+      substituteInPlace $out/bin/lsusb.py \
+        --replace /usr/share/usb.ids $out/share/usb.ids
+    '';
 
   meta = {
     homepage = http://www.linux-usb.org/;

@@ -14,6 +14,6 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   
   meta = {
-    description = "Usenet NZB downloader, par2 repairer and auto extracting server.";
+    description = "Usenet NZB downloader, par2 repairer and auto extracting server";
   };
 }

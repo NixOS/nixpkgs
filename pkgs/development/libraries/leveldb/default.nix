@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://code.google.com/p/leveldb/";
-    description = "A fast and lightweight key/value database library by Google.";
+    description = "Fast and lightweight key/value database library by Google";
     license = "BSD";
   };
 }

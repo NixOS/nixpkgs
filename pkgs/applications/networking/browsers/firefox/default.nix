@@ -3,8 +3,8 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo ? null
-, useSystemCairo ? false
+, cairo, gstreamer, gst_plugins_base
+, debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
   # binaries may not be distributed without permission from the
@@ -14,14 +14,13 @@
 }:
 
 assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
-assert useSystemCairo -> cairo != null;
 
 let optional = stdenv.lib.optional;
 in rec {
 
-  firefoxVersion = "23.0.1";
+  firefoxVersion = "25.0";
 
-  xulVersion = "23.0.1"; # this attribute is used by other packages
+  xulVersion = "25.0"; # this attribute is used by other packages
 
 
   src = fetchurl {
@@ -29,15 +28,15 @@ in rec {
         # It is better to use this url for official releases, to take load off Mozilla's ftp server.
         "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
         # Fall back to this url for versions not available at releases.mozilla.org.
-        "ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
+        "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
     ];
-    sha1 = "66361fcvyl9liyh41gvgysiim90wsywk";
+    sha1 = "854722e283659d2b6b2eacd38f757b3c5b63a448";
   };
 
   commonConfigureFlags =
     [ "--enable-optimize"
       #"--enable-profiling"
-      "--disable-debug"
+      (if debugBuild then "--enable-debug" else "--disable-debug")
       "--enable-strip"
       "--with-system-jpeg"
       "--with-system-zlib"
@@ -52,12 +51,13 @@ in rec {
       "--enable-system-hunspell"
       "--enable-system-pixman"
       "--enable-system-sqlite"
+      "--enable-system-cairo"
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
       "--disable-installer"
       "--disable-updater"
-    ] ++ optional useSystemCairo "--enable-system-cairo";
+    ];
 
 
   xulrunner = stdenv.mkDerivation rec {
@@ -72,8 +72,9 @@ in rec {
         alsaLib nspr nss libnotify xlibs.pixman yasm mesa
         xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
         xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
-        hunspell libevent libstartup_notification libvpx
-      ] ++ optional useSystemCairo cairo;
+        hunspell libevent libstartup_notification libvpx cairo
+        gstreamer gst_plugins_base
+      ];
 
     configureFlags =
       [ "--enable-application=xulrunner"
@@ -81,8 +82,6 @@ in rec {
       ] ++ commonConfigureFlags;
 
     enableParallelBuilding = true;
-
-    patches = optional useSystemCairo ./system-cairo.patch;
 
     preConfigure =
       ''
@@ -139,8 +138,9 @@ in rec {
       [ pkgconfig libpng gtk perl zip libIDL libjpeg zlib bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr nss libnotify
         xlibs.pixman yasm mesa sqlite file unzip pysqlite
-        hunspell libevent libstartup_notification libvpx
-      ] ++ optional useSystemCairo cairo;
+        hunspell libevent libstartup_notification libvpx cairo
+        gstreamer gst_plugins_base
+      ];
 
     patches = [
       ./disable-reporter.patch # fixes "search box not working when built on xulrunner"

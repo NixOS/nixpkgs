@@ -1,0 +1,71 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.008
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.008
+Problem:    New regexp engine can't be interrupted.
+Solution:   Check for CTRL-C pressed. (Yasuhiro Matsumoto)
+Files:	    src/regexp_nfa.c, src/regexp.c
+
+
+*** ../vim-7.4.007/src/regexp_nfa.c	2013-08-14 14:18:37.000000000 +0200
+--- src/regexp_nfa.c	2013-08-25 16:55:56.000000000 +0200
+***************
+*** 5089,5094 ****
+--- 5089,5100 ----
+  	return FALSE;
+      }
+  #endif
++     /* Some patterns may take a long time to match, especially when using
++      * recursive_regmatch(). Allow interrupting them with CTRL-C. */
++     fast_breakcheck();
++     if (got_int)
++ 	return FALSE;
++ 
+      nfa_match = FALSE;
+  
+      /* Allocate memory for the lists of nodes. */
+*** ../vim-7.4.007/src/regexp.c	2013-08-01 18:31:30.000000000 +0200
+--- src/regexp.c	2013-08-25 16:57:35.000000000 +0200
+***************
+*** 4311,4318 ****
+     */
+    for (;;)
+    {
+!     /* Some patterns may cause a long time to match, even though they are not
+!      * illegal.  E.g., "\([a-z]\+\)\+Q".  Allow breaking them with CTRL-C. */
+      fast_breakcheck();
+  
+  #ifdef DEBUG
+--- 4311,4318 ----
+     */
+    for (;;)
+    {
+!     /* Some patterns may take a long time to match, e.g., "\([a-z]\+\)\+Q".
+!      * Allow interrupting them with CTRL-C. */
+      fast_breakcheck();
+  
+  #ifdef DEBUG
+*** ../vim-7.4.007/src/version.c	2013-08-22 14:14:23.000000000 +0200
+--- src/version.c	2013-08-25 16:57:51.000000000 +0200
+***************
+*** 729,730 ****
+--- 729,732 ----
+  {   /* Add new patch number below this line */
++ /**/
++     8,
+  /**/
+
+-- 
+hundred-and-one symptoms of being an internet addict:
+124. You begin conversations with, "Who is your internet service provider?"
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

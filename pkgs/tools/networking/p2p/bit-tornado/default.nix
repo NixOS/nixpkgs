@@ -19,6 +19,6 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Bittorrent client with IPv6 support.";
+    description = "Bittorrent client with IPv6 support";
   };
 }

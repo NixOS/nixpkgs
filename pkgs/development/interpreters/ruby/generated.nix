@@ -24,6 +24,7 @@ g: # Get dependencies from patched gems
     childprocess = g.childprocess_0_3_9;
     chronic = g.chronic_0_10_1;
     coderay = g.coderay_1_0_9;
+    cucumber = g.cucumber_1_3_8;
     daemons = g.daemons_1_1_9;
     diff_lcs = g.diff_lcs_1_1_3;
     dimensions = g.dimensions_1_2_0;
@@ -42,6 +43,7 @@ g: # Get dependencies from patched gems
     foreman = g.foreman_0_63_0;
     gettext = g.gettext_3_0_0;
     gh = g.gh_0_12_0;
+    gherkin = g.gherkin_2_12_1;
     highline = g.highline_1_6_19;
     hike = g.hike_1_2_3;
     hoe = g.hoe_3_1_0;
@@ -64,6 +66,7 @@ g: # Get dependencies from patched gems
     minitar = g.minitar_0_5_3;
     minitest = g.minitest_4_7_5;
     multi_json = g.multi_json_1_7_9;
+    multi_test = g.multi_test_0_0_2;
     multipart_post = g.multipart_post_1_2_0;
     net_http_digest_auth = g.net_http_digest_auth_1_4;
     net_http_persistent = g.net_http_persistent_2_9;
@@ -94,6 +97,7 @@ g: # Get dependencies from patched gems
     rjb = g.rjb_1_4_8;
     rkelly_remix = g.rkelly_remix_0_0_4;
     rmail = g.rmail_1_0_0;
+    rmail_sup = g.rmail_sup_1_0_1;
     rspec = g.rspec_2_11_0;
     rspec_core = g.rspec_core_2_11_1;
     rspec_expectations = g.rspec_expectations_2_11_3;
@@ -112,6 +116,7 @@ g: # Get dependencies from patched gems
     systemu = g.systemu_2_5_2;
     taskjuggler = g.taskjuggler_3_5_0;
     term_ansicolor = g.term_ansicolor_1_2_2;
+    terminal_notifier = g.terminal_notifier_1_5_1;
     text = g.text_1_2_3;
     thin = g.thin_1_5_1;
     thor = g.thor_0_18_1;
@@ -125,6 +130,7 @@ g: # Get dependencies from patched gems
     tzinfo = g.tzinfo_0_3_37;
     unf = g.unf_0_1_2;
     unf_ext = g.unf_ext_0_0_6;
+    unicode = g.unicode_0_4_4;
     uuid = g.uuid_2_3_7;
     uuidtools = g.uuidtools_2_1_4;
     webrobots = g.webrobots_0_1_1;
@@ -134,7 +140,7 @@ g: # Get dependencies from patched gems
     xml_simple = g.xml_simple_1_1_1;
     yajl_ruby = g.yajl_ruby_1_1_0;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''fakes3'' ''foreman'' ''gettext'' ''iconv'' ''jsduck'' ''lockfile'' ''mechanize'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''thin'' ''travis'' ''trollop'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''cucumber'' ''fakes3'' ''foreman'' ''gettext'' ''iconv'' ''jsduck'' ''lockfile'' ''mechanize'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''thin'' ''travis'' ''trollop'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ];
   gems = {
     ZenTest_4_9_3 = {
       basename = ''ZenTest'';
@@ -429,6 +435,17 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [ g.ffi_1_9_0 ];
       sha256 = ''0jbz2ix7ff9ry8717lhcq9w8j8yd45akw48giwgdqccay5mlph7d'';
     };
+    chronic_0_9_1 = {
+      basename = ''chronic'';
+      meta = {
+        description = ''Natural language date/time parsing.'';
+        homepage = ''http://github.com/mojombo/chronic'';
+        longDescription = ''Chronic is a natural language date/time parser written in pure Ruby.'';
+      };
+      name = ''chronic-0.9.1'';
+      requiredGems = [  ];
+      sha256 = ''0kspaxpfy7yvyk1lvpx31w852qfj8wb9z04mcj5bzi70ljb9awqk'';
+    };
     chronic_0_10_1 = {
       basename = ''chronic'';
       meta = {
@@ -450,6 +467,17 @@ for those one-off tasks, with a language that's a joy to use.
       name = ''coderay-1.0.9'';
       requiredGems = [  ];
       sha256 = ''1pbjsvd6r2daxd6aicp19fnb1j5z7fxadflsm1h0r33cy3vi7iy8'';
+    };
+    cucumber_1_3_8 = {
+      basename = ''cucumber'';
+      meta = {
+        description = ''cucumber-1.3.8'';
+        homepage = ''http://cukes.info'';
+        longDescription = ''Behaviour Driven Development with elegance and joy'';
+      };
+      name = ''cucumber-1.3.8'';
+      requiredGems = [ g.builder_3_2_2 g.diff_lcs_1_2_4 g.gherkin_2_12_1 g.multi_json_1_7_9 g.multi_test_0_0_2 ];
+      sha256 = ''0b4igj1vxlcwky11nkrrgg57chbc0n5gmv984dld5s0f1ilkx1ma'';
     };
     daemons_1_1_9 = {
       basename = ''daemons'';
@@ -486,6 +514,28 @@ is the MIT license.'';
       name = ''diff-lcs-1.1.3'';
       requiredGems = [  ];
       sha256 = ''15wqs3md9slif6ag43vp6gw63r3a2zdqiyfapnnzkb7amgg930pv'';
+    };
+    diff_lcs_1_2_4 = {
+      basename = ''diff_lcs'';
+      meta = {
+        description = ''Diff::LCS computes the difference between two Enumerable sequences using the McIlroy-Hunt longest common subsequence (LCS) algorithm'';
+        homepage = ''http://diff-lcs.rubyforge.org/'';
+        longDescription = ''Diff::LCS computes the difference between two Enumerable sequences using the
+McIlroy-Hunt longest common subsequence (LCS) algorithm. It includes utilities
+to create a simple HTML diff output format and a standard diff-like tool.
+
+This is release 1.2.4, fixing a bug introduced after diff-lcs 1.1.3 that did
+not properly prune common sequences at the beginning of a comparison set.
+Thanks to Paul Kunysch for fixing this issue.
+
+Coincident with the release of diff-lcs 1.2.3, we reported an issue with
+Rubinius in 1.9 mode
+({rubinius/rubinius#2268}[https://github.com/rubinius/rubinius/issues/2268]).
+We are happy to report that this issue has been resolved.'';
+      };
+      name = ''diff-lcs-1.2.4'';
+      requiredGems = [  ];
+      sha256 = ''09xbffjg639y8n43zp88ki0m489vv2c86znmfib2fg1di6svi1xd'';
     };
     dimensions_1_2_0 = {
       basename = ''dimensions'';
@@ -698,6 +748,17 @@ So you can use GNU gettext tools for maintaining.
       name = ''gh-0.12.0'';
       requiredGems = [ g.faraday_0_8_8 g.backports_3_3_3 g.multi_json_1_7_9 g.addressable_2_3_5 g.net_http_persistent_2_9 g.net_http_pipeline_1_0_1 ];
       sha256 = ''180jmg6rwilzcbzvyg74q27zpr09pv6pw3cfcjxr0bcklv203q3n'';
+    };
+    gherkin_2_12_1 = {
+      basename = ''gherkin'';
+      meta = {
+        description = ''gherkin-2.12.1'';
+        homepage = ''http://github.com/cucumber/gherkin'';
+        longDescription = ''A fast Gherkin lexer/parser based on the Ragel State Machine Compiler.'';
+      };
+      name = ''gherkin-2.12.1'';
+      requiredGems = [ g.multi_json_1_7_9 ];
+      sha256 = ''07nzchdvkkd35m9k7d9k8j72jm3imv56ccn734mxa5klv1xx2d45'';
     };
     highline_1_6_19 = {
       basename = ''highline'';
@@ -1082,6 +1143,17 @@ extract-method refactorings still apply.'';
       name = ''multi_json-1.7.9'';
       requiredGems = [  ];
       sha256 = ''1q13ldcc8shlfisy90k19zrar87208gs3za6jmr78p11ip21picx'';
+    };
+    multi_test_0_0_2 = {
+      basename = ''multi_test'';
+      meta = {
+        description = ''multi-test-0.0.2'';
+        homepage = ''http://cukes.info'';
+        longDescription = ''Wafter-thin gem to help control rogue test/unit/autorun requires'';
+      };
+      name = ''multi_test-0.0.2'';
+      requiredGems = [  ];
+      sha256 = ''0y8i0v0awc87laicqz1348k54z6wsyf141xqd7gh2bjgm9pc9pkr'';
     };
     multipart_post_1_2_0 = {
       basename = ''multipart_post'';
@@ -1553,6 +1625,20 @@ in JSDuck.
       requiredGems = [  ];
       sha256 = ''0nsg7yda1gdwa96j4hlrp2s0m06vrhcc4zy5mbq7gxmlmwf9yixp'';
     };
+    rmail_sup_1_0_1 = {
+      basename = ''rmail_sup'';
+      meta = {
+        description = ''A MIME mail parsing and generation library.'';
+        homepage = ''http://supmua.org'';
+        longDescription = ''    RMail is a lightweight mail library containing various utility classes and
+    modules that allow ruby scripts to parse, modify, and generate MIME mail
+    messages.
+'';
+      };
+      name = ''rmail-sup-1.0.1'';
+      requiredGems = [  ];
+      sha256 = ''1xswk101s560lxqaax3plqh8vjx7jjspnggdwb3q80m358f92q9g'';
+    };
     rspec_2_11_0 = {
       basename = ''rspec'';
       meta = {
@@ -1774,6 +1860,16 @@ management.
       requiredGems = [ g.tins_0_9_0 ];
       sha256 = ''1b41q1q6mqcgzq9fhzhmjvfg5sfs5v7gkb8z57r4hajcp89lflxr'';
     };
+    terminal_notifier_1_5_1 = {
+      basename = ''terminal_notifier'';
+      meta = {
+        description = ''Send User Notifications on Mac OS X 10.8 or higher.'';
+        homepage = ''https://github.com/alloy/terminal-notifier'';
+      };
+      name = ''terminal-notifier-1.5.1'';
+      requiredGems = [  ];
+      sha256 = ''1vvdfj83bsa2rglwbqmk11yghivsywl6ka76zb51c3xm7gdd768k'';
+    };
     text_1_2_3 = {
       basename = ''text'';
       meta = {
@@ -1921,6 +2017,17 @@ to Ruby/JRuby.
       name = ''unf_ext-0.0.6'';
       requiredGems = [  ];
       sha256 = ''07zbmkzcid6pzdqgla3456ipfdka7j1v4hsx1iaa8rbnllqbmkdg'';
+    };
+    unicode_0_4_4 = {
+      basename = ''unicode'';
+      meta = {
+        description = ''Unicode normalization library.'';
+        homepage = ''http://www.yoshidam.net/Ruby.html#unicode'';
+        longDescription = ''Unicode normalization library.'';
+      };
+      name = ''unicode-0.4.4'';
+      requiredGems = [  ];
+      sha256 = ''0la9dyxj7pr57g5727gj1h5c6h5kpbjdjpiv2vqi5gw5iglg0yqi'';
     };
     uuid_2_3_7 = {
       basename = ''uuid'';

@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, freetype, fontconfig }:
+{ stdenv, fetchurl, freetype, fontconfig, openssl }:
 
 assert stdenv.lib.elem stdenv.system [ "i686-linux" "x86_64-linux" ];
 
 stdenv.mkDerivation rec {
-  name = "phantomjs-1.9.1";
+  name = "phantomjs-1.9.2";
 
   # I chose to use the binary build for now.
   # The source version is quite nasty to compile
@@ -13,22 +13,23 @@ stdenv.mkDerivation rec {
   src = if stdenv.system == "i686-linux" then
           fetchurl {
             url = "http://phantomjs.googlecode.com/files/${name}-linux-i686.tar.bz2";
-            sha256 = "1r4ssx6v0ah18jy3vjswhki2i21r45qbs1jzh4x672wdc9lxz2p6";
+            sha256 = "1nywb9xhcfjark6zfjlnrljc08r5185vv25vfcc65jzla8hy75qp";
           }
         else # x86_64-linux
           fetchurl {
             url = "http://phantomjs.googlecode.com/files/${name}-linux-x86_64.tar.bz2";
-            sha256 = "1l7hlhspzw3zzsgz9cq0a3j26giynjicvb6y96fj3ipkn4shznnn";
+            sha256 = "1xsjx4j6rwkq27y4iqdn0ai4yrq70a3g9309blywki0g976phccg";
           };
 
   buildPhase = ''
     patchelf \
       --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-      --set-rpath ${freetype}/lib:${fontconfig}/lib:${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib \
+      --set-rpath "${freetype}/lib:${fontconfig}/lib:${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib:${openssl}/lib" \
       bin/phantomjs
   '';
 
-  dontStrip = true;
+  dontPatchELF = true;
+  dontStrip    = true;
 
   installPhase = ''
     mkdir -p $out/share/doc/phantomjs

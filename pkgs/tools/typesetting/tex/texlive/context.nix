@@ -11,8 +11,8 @@ rec {
   doCopy = fullDepEntry (''
     mkdir -p $out/share/
 
-    mkdir -p $out/texmf
-    cp -r * $out/texmf
+    mkdir -p $out/texmf-dist
+    cp -r * $out/texmf-dist
 
     ln -s $out/texmf* $out/share/
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];

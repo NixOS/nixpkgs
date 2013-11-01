@@ -86,9 +86,6 @@ with stdenv.lib;
   ''}
   BCMA_HOST_PCI y
 
-  # Some settings to make sure that fbcondecor works - in particular,
-  # disable tileblitting and the drivers that need it.
-
   # Enable various FB devices.
   FB y
   FB_EFI y
@@ -169,6 +166,9 @@ with stdenv.lib;
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   DEVKMEM n # Disable /dev/kmem
   CC_STACKPROTECTOR y # Detect buffer overflows on the stack
+  ${optionalString (versionAtLeast version "3.12") ''
+    USER_NS y # Support for user namespaces
+  ''}
 
   # Misc. options.
   8139TOO_8129 y
@@ -242,6 +242,8 @@ with stdenv.lib;
     CGROUP_MEM_RES_CTLR_SWAP y
   ''}
   DEVPTS_MULTIPLE_INSTANCES y
+  BLK_DEV_THROTTLING y
+  CFQ_GROUP_IOSCHED y
 
   # Enable staging drivers.  These are somewhat experimental, but
   # they generally don't hurt.

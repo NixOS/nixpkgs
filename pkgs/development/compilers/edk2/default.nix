@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, libuuid, pythonFull, iasl }:
+{ stdenv, fetchgit, libuuid, pythonFull, iasl }:
 
 let
 
@@ -10,12 +10,12 @@ else
   throw "Unsupported architecture";
 
 edk2 = stdenv.mkDerivation {
-  name = "edk2-2013-03-19";
+  name = "edk2-2013-10-09";
   
-  src = fetchsvn {
-    url = https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2;
-    rev = "14211";
-    sha256 = "1rhrv7cyazb1d4gw3s8fv0c245iankvb9pqx6nngbkkxkcswvnw7";
+  src = fetchgit {
+    url = git://github.com/tianocore/edk2;
+    rev = "5bcb62a4098c9bde9be6af0833a025adc768e08d";
+    sha256 = "3e2958877061bf6bbfb28b150743d7244486929c1c320bdb1ff2586774aa042a";
   };
 
   buildInputs = [ libuuid pythonFull ];

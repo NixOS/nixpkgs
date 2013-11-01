@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "SIPE plugin for Pidgin IM.";
+    description = "SIPE plugin for Pidgin IM";
     homepage = http://sipe.sourceforge.net/;
     license = "GPLv2";
   };

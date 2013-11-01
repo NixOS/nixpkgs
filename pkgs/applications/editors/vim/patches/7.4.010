@@ -1,0 +1,79 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.010
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.010 (after 7.4.006)
+Problem:    Crash with invalid argument to mkdir().
+Solution:   Check for empty string. (lcd47)
+Files:	    src/eval.c
+
+
+*** ../vim-7.4.009/src/eval.c	2013-08-22 12:06:50.000000000 +0200
+--- src/eval.c	2013-08-30 15:47:47.000000000 +0200
+***************
+*** 14292,14309 ****
+  	return;
+  
+      dir = get_tv_string_buf(&argvars[0], buf);
+!     if (*gettail(dir) == NUL)
+! 	/* remove trailing slashes */
+! 	*gettail_sep(dir) = NUL;
+! 
+!     if (argvars[1].v_type != VAR_UNKNOWN)
+      {
+! 	if (argvars[2].v_type != VAR_UNKNOWN)
+! 	    prot = get_tv_number_chk(&argvars[2], NULL);
+! 	if (prot != -1 && STRCMP(get_tv_string(&argvars[1]), "p") == 0)
+! 	    mkdir_recurse(dir, prot);
+      }
+-     rettv->vval.v_number = prot == -1 ? FAIL : vim_mkdir_emsg(dir, prot);
+  }
+  #endif
+  
+--- 14292,14314 ----
+  	return;
+  
+      dir = get_tv_string_buf(&argvars[0], buf);
+!     if (*dir == NUL)
+! 	rettv->vval.v_number = FAIL;
+!     else
+      {
+! 	if (*gettail(dir) == NUL)
+! 	    /* remove trailing slashes */
+! 	    *gettail_sep(dir) = NUL;
+! 
+! 	if (argvars[1].v_type != VAR_UNKNOWN)
+! 	{
+! 	    if (argvars[2].v_type != VAR_UNKNOWN)
+! 		prot = get_tv_number_chk(&argvars[2], NULL);
+! 	    if (prot != -1 && STRCMP(get_tv_string(&argvars[1]), "p") == 0)
+! 		mkdir_recurse(dir, prot);
+! 	}
+! 	rettv->vval.v_number = prot == -1 ? FAIL : vim_mkdir_emsg(dir, prot);
+      }
+  }
+  #endif
+  
+*** ../vim-7.4.009/src/version.c	2013-08-25 17:46:05.000000000 +0200
+--- src/version.c	2013-08-30 15:48:37.000000000 +0200
+***************
+*** 729,730 ****
+--- 729,732 ----
+  {   /* Add new patch number below this line */
++ /**/
++     10,
+  /**/
+
+-- 
+I wish there was a knob on the TV to turn up the intelligence.
+There's a knob called "brightness", but it doesn't seem to work. 
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

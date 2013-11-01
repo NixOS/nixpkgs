@@ -4,12 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "active";
-  version = "0.1.0.6";
-  sha256 = "0hh52hkmma4lxfv3gj7x23cwx8v6wd1cm9hblvhzhylxk8dyl5m7";
+  version = "0.1.0.8";
+  sha256 = "1q2zrx1i5j04c9bss7c19nm6lqasmwxyfzkh49my7yaik95k7bw9";
   buildDepends = [ newtype semigroupoids semigroups vectorSpace ];
   testDepends = [
     newtype QuickCheck semigroupoids semigroups vectorSpace
   ];
+  jailbreak = true;
   meta = {
     description = "Abstractions for animation";
     license = self.stdenv.lib.licenses.bsd3;

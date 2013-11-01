@@ -1,6 +1,6 @@
-{ cabal, binary, blazeHtml, blazeMarkup, citeprocHs, cmdargs
-, cryptohash, dataDefault, deepseq, filepath, fsnotify, httpConduit
-, httpTypes, HUnit, lrucache, mtl, network, pandoc, parsec
+{ cabal, binary, blazeHtml, blazeMarkup, cmdargs, cryptohash
+, dataDefault, deepseq, filepath, fsnotify, httpConduit, httpTypes
+, HUnit, lrucache, mtl, network, pandoc, pandocCiteproc, parsec
 , QuickCheck, random, regexBase, regexTdfa, snapCore, snapServer
 , systemFilepath, tagsoup, testFramework, testFrameworkHunit
 , testFrameworkQuickcheck2, text, time
@@ -8,27 +8,24 @@
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "4.3.3.0";
-  sha256 = "11zfz55a7dr5l7xzknphqninyrb2pw2qmrs7v7ajq2gvbl0lf37n";
+  version = "4.4.1.2";
+  sha256 = "0rbl0gl5ds63mv8cbcwb8aj0vic9padqs3zrdxr2ny70md1v9m9y";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    binary blazeHtml blazeMarkup citeprocHs cmdargs cryptohash
-    dataDefault deepseq filepath fsnotify httpConduit httpTypes
-    lrucache mtl network pandoc parsec random regexBase regexTdfa
-    snapCore snapServer systemFilepath tagsoup text time
+    binary blazeHtml blazeMarkup cmdargs cryptohash dataDefault deepseq
+    filepath fsnotify httpConduit httpTypes lrucache mtl network pandoc
+    pandocCiteproc parsec random regexBase regexTdfa snapCore
+    snapServer systemFilepath tagsoup text time
   ];
   testDepends = [
-    binary blazeHtml blazeMarkup citeprocHs cmdargs cryptohash
-    dataDefault deepseq filepath fsnotify httpConduit httpTypes HUnit
-    lrucache mtl network pandoc parsec QuickCheck random regexBase
-    regexTdfa snapCore snapServer systemFilepath tagsoup testFramework
+    binary blazeHtml blazeMarkup cmdargs cryptohash dataDefault deepseq
+    filepath fsnotify httpConduit httpTypes HUnit lrucache mtl network
+    pandoc pandocCiteproc parsec QuickCheck random regexBase regexTdfa
+    snapCore snapServer systemFilepath tagsoup testFramework
     testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
   doCheck = false;
-  patchPhase = ''
-    sed -i -e 's|cryptohash.*,|cryptohash,|' hakyll.cabal
-  '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";

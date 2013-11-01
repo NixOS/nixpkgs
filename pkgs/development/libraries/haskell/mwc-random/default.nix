@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "mwc-random";
-  version = "0.12.0.1";
-  sha256 = "1sq4yxi231ka8rzwsihqziibs7amvl27ycr018wymm3yz36vsy7c";
+  version = "0.13.1.0";
+  sha256 = "16g6b1pphr4p36nn5qjj62iwf47rq8kfmpjgfvd35r3cz9qqb8cb";
   buildDepends = [ primitive time vector ];
   testDepends = [
     HUnit QuickCheck statistics testFramework testFrameworkHunit

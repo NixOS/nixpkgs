@@ -2,14 +2,14 @@
 
 let
   name    = "wxmaxima";
-  version = "13.04.1";
+  version = "13.04.2";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/wxMaxima/${version}/wxMaxima-${version}.tar.gz";
-    sha256 = "0irp1m9vr50ym7wfj1c1vbrzd2pip1vmvn9ykqsdf04afkkwkran";
+    sha256 = "1sylvr0kfdzxxc3qsb0c6ff3lg0bzm1ib5xh78wjgzykbnvjsd99";
   };
 
   buildInputs = [wxGTK maxima makeWrapper];
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Cross platform GUI for the computer algebra system Maxima.";
+    description = "Cross platform GUI for the computer algebra system Maxima";
     license = "GPL2";
     homepage = http://wxmaxima.sourceforge.net;
     platforms = stdenv.lib.platforms.linux;

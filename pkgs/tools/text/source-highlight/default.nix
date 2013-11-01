@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = {
-    description = "GNU Source-Highlight, source code renderer with syntax highlighting";
+    description = "source code renderer with syntax highlighting";
     homepage = "http://www.gnu.org/software/src-highlite/";
     license = "GPLv3+";
     maintainers = [ ];

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "0.9.8.0";
+  version = "0.9.8.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/0.9/NetworkManager-${version}.tar.xz";
-    sha256 = "0sq9yvln0yjff1sgk483m98ca2x2sqk5vh4kmn382k9msvgbqrn3";
+    sha256 = "168dv290mc19szgv1l108i8gyha47wmyr41jlzwqvvibynmg17sc";
   };
 
   preConfigure = ''
@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
       
       # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
       substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
+
+      # As NixOS doesn't seem to handle systemd Aliases, we just rename the dispatcher service file
+      mv $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
     '';
 
   meta = with stdenv.lib; {

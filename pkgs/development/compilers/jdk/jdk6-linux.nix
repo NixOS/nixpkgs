@@ -6,6 +6,7 @@
 , xlibs ? null
 , installjdk ? true
 , pluginSupport ? true
+, installjce ? false
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -24,6 +25,15 @@ let
     else
       abort "jdk requires i686-linux or x86_64 linux";
 
+  jce =
+    if installjce then
+      requireFile {
+        name = "jce_policy-6.zip";
+        url = http://www.oracle.com/technetwork/java/javase/downloads/jce-6-download-429243.html;
+        sha256 = "0qljzfxbikm8br5k7rkamibp1vkyjrf6blbxpx6hn4k46f62bhnh";
+      }
+    else
+      null;
 in
 
 stdenv.mkDerivation {
@@ -65,7 +75,7 @@ stdenv.mkDerivation {
     [stdenv.gcc.libc] ++
     (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt] else []);
 
-  inherit swingSupport pluginSupport architecture;
+  inherit swingSupport pluginSupport architecture jce;
   inherit (xlibs) libX11;
 
   mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";

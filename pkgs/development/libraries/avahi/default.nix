@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Avahi, an mDNS/DNS-SD implementation";
+    description = "mDNS/DNS-SD implementation";
     homepage    = http://avahi.org;
     license     = licenses.lgpl2Plus;
     platforms   = platforms.unix;

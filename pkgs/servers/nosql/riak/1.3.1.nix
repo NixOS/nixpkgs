@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, erlang }:
+{ stdenv, fetchurl, unzip, erlangR15B03 }:
 
 let
   srcs = {
@@ -15,7 +15,7 @@ in
 stdenv.mkDerivation rec {
   name = "riak-1.3.1";
 
-  buildInputs = [unzip erlang];
+  buildInputs = [unzip erlangR15B03];
 
   src = srcs.riak;
 

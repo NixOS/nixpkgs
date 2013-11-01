@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl
+{ stdenv, lib, fetchurl, lame, mplayer, pulseaudio, portaudio
 , python, pyqt4, pythonPackages
 # This little flag adds a huge number of dependencies, but we assume that
 # everyone wants Anki to draw plots with statistics by default.
@@ -9,16 +9,16 @@ let
 in
 
 stdenv.mkDerivation rec {
-    name = "anki-2.0.3";
+    name = "anki-2.0.12";
     src = fetchurl {
       url = "http://ankisrs.net/download/mirror/${name}.tgz";
-      sha256 = "f40ee4ef29c91101cf9978ce7bd4c513f13ca7c77497a3fb50b8128adf3a5178";
+      sha256 = "1pccws3rgfpyxdx5xph5x72c4a46is0alfz73icn9ppgjdizzipr";
     };
 
-    pythonPath = [ pyqt4 py.pysqlite py.sqlalchemy ]
+    pythonPath = [ pyqt4 py.pysqlite py.sqlalchemy py.pyaudio ]
               ++ lib.optional plotsSupport py.matplotlib;
 
-    buildInputs = [ python py.wrapPython ];
+    buildInputs = [ python py.wrapPython lame mplayer pulseaudio ];
 
     preConfigure = ''
       substituteInPlace anki \
@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
     '';
 
     postInstall = ''
+      mkdir -p "$out/lib/${python.libPrefix}/site-packages"
+      ln -s $out/share/anki/* $out/lib/${python.libPrefix}/site-packages/
+      export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       wrapPythonPrograms
     '';
 
@@ -63,6 +66,6 @@ stdenv.mkDerivation rec {
         * even practicing guitar chords!
       '';
       license = "GPLv3";
-      platforms = stdenv.lib.platforms.all;
+      platforms = stdenv.lib.platforms.mesaPlatforms;
     };
 }

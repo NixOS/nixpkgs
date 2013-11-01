@@ -26,15 +26,15 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "An interactive theorem prover based on Higher-Order Logic.";
+    description = "Interactive theorem prover based on Higher-Order Logic";
     longDescription = ''
-HOL Light is a computer program to help users prove interesting mathematical
-theorems completely formally in Higher-Order Logic.  It sets a very exacting
-standard of correctness, but provides a number of automated tools and
-pre-proved mathematical theorems (e.g., about arithmetic, basic set theory and
-real analysis) to save the user work.  It is also fully programmable, so users
-can extend it with new theorems and inference rules without compromising its
-soundness.
+      HOL Light is a computer program to help users prove interesting
+      mathematical theorems completely formally in Higher-Order Logic.  It sets
+      a very exacting standard of correctness, but provides a number of
+      automated tools and pre-proved mathematical theorems (e.g., about
+      arithmetic, basic set theory and real analysis) to save the user work.
+      It is also fully programmable, so users can extend it with new theorems
+      and inference rules without compromising its soundness.
     '';
     homepage = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
     license = stdenv.lib.licenses.bsd2;

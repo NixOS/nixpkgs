@@ -18,6 +18,6 @@ rec {
       
   name = "codeville-0.8.0";
   meta = {
-    description = "Codeville - RCS with powerful merge.";
+    description = "RCS with powerful merge";
   };
 }

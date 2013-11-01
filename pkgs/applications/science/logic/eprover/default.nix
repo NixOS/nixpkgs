@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="eprover";
-    version="1.7";
+    version="1.8";
     name="${baseName}-${version}";
-    hash="1prkgjpg8lajcylz9nj2hfjxl3l42cqbfvilg30z9b5br14l36rh";
-    url="http://www4.in.tum.de/~schulz/WORK/E_DOWNLOAD/V_1.7/E.tgz";
-    sha256="1prkgjpg8lajcylz9nj2hfjxl3l42cqbfvilg30z9b5br14l36rh";
+    hash="0bl4dr7k6simwdvdyxhnjkiz4nm5y0nr8bfhc34zk0360i9m6sk3";
+    url="http://www4.in.tum.de/~schulz/WORK/E_DOWNLOAD/V_1.8/E.tgz";
+    sha256="0bl4dr7k6simwdvdyxhnjkiz4nm5y0nr8bfhc34zk0360i9m6sk3";
   };
 in
 stdenv.mkDerivation {

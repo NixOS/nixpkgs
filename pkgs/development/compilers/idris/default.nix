@@ -1,20 +1,24 @@
-{ cabal, binary, Cabal, filepath, gmp, happy, haskeline
-, languageJava, libffi, llvmGeneral, mtl, parsec, split, text
-, transformers, vector, vectorBinaryInstances, boehmgc
+{ cabal, ansiTerminal, ansiWlPprint, binary, boehmgc, Cabal
+, filepath, gmp, happy, haskeline, languageJava, libffi
+, llvmGeneral, llvmGeneralPure, mtl, parsec, parsers, split, text
+, time, transformers, trifecta, unorderedContainers, utf8String
+, vector, vectorBinaryInstances
 }:
 
 cabal.mkDerivation (self: {
   pname = "idris";
-  version = "0.9.9";
-  sha256 = "0wwssgpiyn7akyfrpi1khvqxx1k8753kk7151zvvymz0zkks643m";
+  version = "0.9.9.3";
+  sha256 = "1l19xx0xbcwlnnh2w0rmri7wwixffzfrafpbji64nwyx1awz4iab";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    binary Cabal filepath haskeline languageJava libffi llvmGeneral mtl
-    parsec split text transformers vector vectorBinaryInstances
+    ansiTerminal ansiWlPprint binary Cabal filepath haskeline
+    languageJava libffi llvmGeneral llvmGeneralPure mtl parsec parsers
+    split text time transformers trifecta unorderedContainers
+    utf8String vector vectorBinaryInstances
   ];
   buildTools = [ happy ];
-  extraLibraries = [ gmp boehmgc ];
+  extraLibraries = [ boehmgc gmp ];
   meta = {
     homepage = "http://www.idris-lang.org/";
     description = "Functional Programming Language with Dependent Types";

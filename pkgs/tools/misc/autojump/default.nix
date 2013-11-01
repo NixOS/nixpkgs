@@ -1,7 +1,7 @@
 { fetchurl, stdenv, python, bash }:
 
 let 
-  version = "21.5.8";
+  version = "21.6.9";
 in
   stdenv.mkDerivation rec {
     name = "autojump-${version}";
@@ -9,7 +9,7 @@ in
     src = fetchurl {
       url = "http://github.com/joelthelion/autojump/archive/release-v${version}.tar.gz";
       name = "autojump-${version}.tar.gz";
-      sha256 = "07jf5pa9xwmbswsc0h6law9f5qwczsj25w7h034s379imid5h62f";
+      sha256 = "0js6jp9l83zxhd9bn8hjn4yf8gydnldrlmafgvlg3rd4i1v82649";
     };
 
     buildInputs = [ python bash ];
@@ -19,18 +19,17 @@ in
       # don't check shell support (we're running with bash anyway)
       sed -i -e 150,153d install.sh
 
-      bash ./install.sh -d $out
+      bash ./install.sh -d $out -p ""
+      chmod +x $out/etc/profile.d/*
 
       mkdir -p "$out/etc/bash_completion.d"
       cp -v $out/etc/profile.d/autojump.bash "$out/etc/bash_completion.d"
-      mkdir -p $out/bin
-      ln -s $out/usr/local/bin/autojump $out/bin/j
 
       # FIXME: What's the right place for `autojump.zsh'?
     '';
 
     meta = {
-      description = "Autojump, a `cd' command that learns";
+      description = "A `cd' command that learns";
       longDescription = ''
         One of the most used shell commands is “cd”.  A quick survey
         among my friends revealed that between 10 and 20% of all

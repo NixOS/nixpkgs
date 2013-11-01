@@ -1,0 +1,53 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.023
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.023
+Problem:    Compiler warning on 64 bit windows.
+Solution:   Add type cast. (Mike Williams)
+Files:	    src/edit.c
+
+
+*** ../vim-7.4.022/src/edit.c	2013-09-05 13:50:49.000000000 +0200
+--- src/edit.c	2013-09-06 17:32:55.000000000 +0200
+***************
+*** 5189,5195 ****
+  	    mb_ptr_back(line, p);
+  	    while (vim_isfilec(PTR2CHAR(p)) && p >= line)
+  		mb_ptr_back(line, p);
+! 	    startcol = p - line;
+  
+  	    compl_col += ++startcol;
+  	    compl_length = (int)curs_col - startcol;
+--- 5189,5195 ----
+  	    mb_ptr_back(line, p);
+  	    while (vim_isfilec(PTR2CHAR(p)) && p >= line)
+  		mb_ptr_back(line, p);
+! 	    startcol = (int)(p - line);
+  
+  	    compl_col += ++startcol;
+  	    compl_length = (int)curs_col - startcol;
+*** ../vim-7.4.022/src/version.c	2013-09-05 21:41:35.000000000 +0200
+--- src/version.c	2013-09-06 17:33:41.000000000 +0200
+***************
+*** 740,741 ****
+--- 740,743 ----
+  {   /* Add new patch number below this line */
++ /**/
++     23,
+  /**/
+
+-- 
+Wizards had always known that the act of observation changed the thing that
+was observed, and sometimes forgot that it also changed the observer too.
+			Terry Pratchett  -  Interesting times
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

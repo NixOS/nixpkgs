@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, libiconv }:
+{ stdenv, fetchurl, libiconvOrEmpty }:
+
+with { inherit (stdenv.lib) optionals optionalAttrs; };
 
 stdenv.mkDerivation (rec {
   name = "gettext-0.18.1.1";
-  
+
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
     sha256 = "1sa3ch12qxa4h3ya6hkz119yclcccmincl9j20dhrdx5mykp3b4k";
@@ -11,7 +13,7 @@ stdenv.mkDerivation (rec {
   patches = [ ./no-gets.patch ];
 
   configureFlags = [ "--disable-csharp" ]
-     ++ (stdenv.lib.optionals stdenv.isCygwin
+     ++ (optionals stdenv.isCygwin
           [ # We have a static libiconv, so we can only build the static lib.
             "--disable-shared" "--enable-static"
 
@@ -30,12 +32,12 @@ stdenv.mkDerivation (rec {
     fi
   '';
 
-  buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
-  
+  buildInputs = libiconvOrEmpty;
+
   enableParallelBuilding = true;
-      
+
   crossAttrs = {
-    buildInputs = stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
+    buildInputs = optional (stdenv.gccCross.libc ? libiconv)
       stdenv.gccCross.libc.libiconv.crossDrv;
     # Gettext fails to guess the cross compiler
     configureFlags = "CXX=${stdenv.cross.config}-g++";
@@ -70,9 +72,11 @@ stdenv.mkDerivation (rec {
   };
 }
 
-//
+// optionalAttrs stdenv.isDarwin {
+  makeFlags = "CFLAGS=-D_FORTIFY_SOURCE=0";
+}
 
-stdenv.lib.optionalAttrs stdenv.isCygwin {
+// optionalAttrs stdenv.isCygwin {
   patchPhase =
    # Make sure `error.c' gets compiled and is part of `libgettextlib.la'.
    # This fixes:

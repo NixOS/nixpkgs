@@ -1,11 +1,11 @@
 { cabal, aeson, async, blazeBuilder, bloomfilter, bup
-, caseInsensitive, clientsession, cryptoApi, curl, dataDefault
-, dataenc, DAV, dbus, dlist, dns, editDistance
+, caseInsensitive, clientsession, cryptoApi, cryptohash, curl
+, dataDefault, dataenc, DAV, dbus, dlist, dns, editDistance
 , extensibleExceptions, feed, filepath, git, gnupg1, gnutls, hamlet
 , hinotify, hS3, hslogger, HTTP, httpConduit, httpTypes, HUnit
 , IfElse, json, lsof, MissingH, MonadCatchIOTransformers
 , monadControl, mtl, network, networkInfo, networkMulticast
-, networkProtocolXmpp, openssh, QuickCheck, random, regexTdfa
+, networkProtocolXmpp, openssh, perl, QuickCheck, random, regexTdfa
 , rsync, SafeSemaphore, SHA, stm, text, time, transformers
 , unixCompat, utf8String, uuid, wai, waiLogger, warp, which
 , xmlConduit, xmlTypes, yesod, yesodCore, yesodDefault, yesodForm
@@ -14,22 +14,22 @@
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "4.20130827";
-  sha256 = "07kfp0d2wg3p8s0v2100r4giw5ay1il5j15lrah43fk2rrszgm5z";
+  version = "4.20131024";
+  sha256 = "1a4mrx8zr5znhcy2cszv5ri9avqj7lcn467nmaj172f00vn4fd5x";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     aeson async blazeBuilder bloomfilter caseInsensitive clientsession
-    cryptoApi dataDefault dataenc DAV dbus dlist dns editDistance
-    extensibleExceptions feed filepath gnutls hamlet hinotify hS3
-    hslogger HTTP httpConduit httpTypes HUnit IfElse json MissingH
-    MonadCatchIOTransformers monadControl mtl network networkInfo
-    networkMulticast networkProtocolXmpp QuickCheck random regexTdfa
-    SafeSemaphore SHA stm text time transformers unixCompat utf8String
-    uuid wai waiLogger warp xmlConduit xmlTypes yesod yesodCore
-    yesodDefault yesodForm yesodStatic
+    cryptoApi cryptohash dataDefault dataenc DAV dbus dlist dns
+    editDistance extensibleExceptions feed filepath gnutls hamlet
+    hinotify hS3 hslogger HTTP httpConduit httpTypes HUnit IfElse json
+    MissingH MonadCatchIOTransformers monadControl mtl network
+    networkInfo networkMulticast networkProtocolXmpp QuickCheck random
+    regexTdfa SafeSemaphore SHA stm text time transformers unixCompat
+    utf8String uuid wai waiLogger warp xmlConduit xmlTypes yesod
+    yesodCore yesodDefault yesodForm yesodStatic
   ];
-  buildTools = [ bup curl git gnupg1 lsof openssh rsync which ];
+  buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
   configureFlags = "-fS3
                     -fWebDAV
                     -fInotify
@@ -42,7 +42,7 @@ cabal.mkDerivation (self: {
                     -fProduction
                     -fTDFA";
   preConfigure = "patchShebangs .";
-  installPhase = "make PREFIX=$out CABAL=./Setup docs install";
+  installPhase = "./Setup install";
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP/tmp"
     mkdir "$HOME"

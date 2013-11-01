@@ -34,7 +34,7 @@ in stdenv.mkDerivation {
 
   meta = {
     homepage = "http://minetest.net/";
-    description = "Minetest is an infinite-world block sandbox game.";
+    description = "Infinite-world block sandbox game";
     license = "LGPLv2.1+";
   };
 }

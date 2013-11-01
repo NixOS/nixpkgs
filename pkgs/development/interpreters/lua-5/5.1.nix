@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, readline}:
+{ stdenv, fetchurl, readline }:
 
 let
   dsoPatch = fetchurl {
@@ -20,20 +20,20 @@ stdenv.mkDerivation rec {
   patches = [ dsoPatch ];
 
   configurePhase = ''
-    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-O2 -fPIC" LDLAGS="-fPIC" )
-    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.5.1" INSTALL_DATA='cp -d' )
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC" LDLAGS="-fPIC" )
+    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.5.1 liblua.so.5.1.5" INSTALL_DATA='cp -d' )
   '';
 
   postInstall = ''
     mkdir -p "$out/share/doc/lua" "$out/lib/pkgconfig"
-    mv "etc/lua.pc" "$out/lib/pkgconfig/"
+    sed <"etc/lua.pc" >"$out/lib/pkgconfig/lua.pc" -e "s|^prefix=.*|prefix=$out|"
     mv "doc/"*.{gif,png,css,html} "$out/share/doc/lua/"
     rmdir $out/{share,lib}/lua/5.1 $out/{share,lib}/lua
   '';
 
   meta = {
     homepage = "http://www.lua.org";
-    description = "Lua is a powerful, fast, lightweight, embeddable scripting language.";
+    description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data
       description constructs based on associative arrays and extensible

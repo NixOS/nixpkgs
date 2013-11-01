@@ -23,6 +23,8 @@ stdenv.mkDerivation {
     substituteInPlace configure --replace /bin/stty "$(type -tP stty)"
     sed -e '1i\#include <tclInt.h>' -i exp_inter.c
     export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
+  '' + stdenv.lib.optionalString stdenv.isFreeBSD ''
+    ln -s libexpect.so.1 libexpect545.so
   '';
 
   configureFlags = [

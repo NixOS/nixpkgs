@@ -1,7 +1,8 @@
 { stdenv, coreutils, fetchurl, python, dropbox }:
 
 stdenv.mkDerivation {
-  name = "dropbox-cli";
+  # 1.6.0 because it's the only version mentioned in the script
+  name = "dropbox-cli-1.6.0";
 
   src = fetchurl {
     # Note: dropbox doesn't version this file. Annoying.
@@ -29,7 +30,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://dropbox.com;
-    description = "Command line client for the dropbox daemon.";
+    description = "Command line client for the dropbox daemon";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
     # NOTE: Dropbox itself only works on linux, so this is ok.

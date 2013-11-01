@@ -16,6 +16,6 @@ rec {
       
   name = "aria-" + version;
   meta = {
-    description = "aria - multiprotocol DL manager";
+    description = "Multiprotocol download manager";
   };
 }

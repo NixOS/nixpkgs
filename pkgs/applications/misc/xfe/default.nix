@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "X File Explorer (Xfe) is an MS-Explorer like file manager for X.";
+    description = "X File Explorer (Xfe) is an MS-Explorer like file manager for X";
     longDescription = ''
       X File Explorer (Xfe) is an MS-Explorer like file manager for X.
       It is based on the popular, but discontinued, X Win Commander, which was developed by Maxim Baranov.
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "http://sourceforge.net/projects/xfe/";
     license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.bbenoist ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }

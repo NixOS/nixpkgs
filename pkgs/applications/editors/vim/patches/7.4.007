@@ -1,0 +1,95 @@
+To: vim_dev@googlegroups.com
+Subject: Patch 7.4.007
+Fcc: outbox
+From: Bram Moolenaar <Bram@moolenaar.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+------------
+
+Patch 7.4.007
+Problem:    Creating a preview window on startup leaves the screen layout in a
+	    messed up state. (Marius Gedminas)
+Solution:   Don't change firstwin. (Christian Brabandt)
+Files:	    src/main.c
+
+
+*** ../vim-7.4.006/src/main.c	2013-07-03 12:36:49.000000000 +0200
+--- src/main.c	2013-08-22 14:02:39.000000000 +0200
+***************
+*** 2727,2732 ****
+--- 2727,2733 ----
+      int		arg_idx;		/* index in argument list */
+      int		i;
+      int		advance = TRUE;
++     win_T	*win;
+  
+  # ifdef FEAT_AUTOCMD
+      /*
+***************
+*** 2816,2839 ****
+  # ifdef FEAT_AUTOCMD
+      --autocmd_no_enter;
+  # endif
+  #if defined(FEAT_WINDOWS) && defined(FEAT_QUICKFIX)
+!     /*
+!      * Avoid making a preview window the current window.
+!      */
+!     if (firstwin->w_p_pvw)
+      {
+!        win_T   *win;
+! 
+!        for (win = firstwin; win != NULL; win = win->w_next)
+!            if (!win->w_p_pvw)
+!            {
+!                firstwin = win;
+!                break;
+!            }
+      }
+  #endif
+!     /* make the first window the current window */
+!     win_enter(firstwin, FALSE);
+  
+  # ifdef FEAT_AUTOCMD
+      --autocmd_no_leave;
+--- 2817,2838 ----
+  # ifdef FEAT_AUTOCMD
+      --autocmd_no_enter;
+  # endif
++ 
++     /* make the first window the current window */
++     win = firstwin;
+  #if defined(FEAT_WINDOWS) && defined(FEAT_QUICKFIX)
+!     /* Avoid making a preview window the current window. */
+!     while (win->w_p_pvw)
+      {
+! 	win = win->w_next;
+! 	if (win == NULL)
+! 	{
+! 	    win = firstwin;
+! 	    break;
+! 	}
+      }
+  #endif
+!     win_enter(win, FALSE);
+  
+  # ifdef FEAT_AUTOCMD
+      --autocmd_no_leave;
+*** ../vim-7.4.006/src/version.c	2013-08-22 12:06:50.000000000 +0200
+--- src/version.c	2013-08-22 14:04:11.000000000 +0200
+***************
+*** 729,730 ****
+--- 729,732 ----
+  {   /* Add new patch number below this line */
++ /**/
++     7,
+  /**/
+
+-- 
+hundred-and-one symptoms of being an internet addict:
+105. When someone asks you for your address, you tell them your URL.
+
+ /// Bram Moolenaar -- Bram@Moolenaar.net -- http://www.Moolenaar.net   \\\
+///        sponsor Vim, vote for features -- http://www.Vim.org/sponsor/ \\\
+\\\  an exciting new programming language -- http://www.Zimbu.org        ///
+ \\\            help me help AIDS victims -- http://ICCF-Holland.org    ///

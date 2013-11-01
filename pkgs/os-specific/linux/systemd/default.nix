@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
 , glib, kbd, libxslt, coreutils, libgcrypt, sysvtools, docbook_xsl
+, kexectools
 }:
 
 assert stdenv.isLinux;
@@ -17,16 +18,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" "libudev" ];
 
   patches =
-    [ ./0001-Make-systemctl-daemon-reexec-do-the-right-thing-on-N.patch
-      ./0002-Ignore-duplicate-paths-in-systemctl-start.patch
-      ./0003-Start-device-units-for-uninitialised-encrypted-devic.patch
-      ./0004-Set-switch-to-configuration-hints-for-some-units.patch
-      ./0005-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
-      ./0006-Don-t-call-plymouth-quit.patch
-      ./0007-Ignore-IPv6-link-local-addresses.patch
-      ./0008-Don-t-try-to-unmount-nix-or-nix-store.patch
-      ./0009-Start-ctrl-alt-del.target-irreversibly.patch
-    ] ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
+    [ # These are all changes between upstream and
+      # https://github.com/edolstra/systemd/tree/nixos-v203.
+      ./fixes.patch
+    ]
+    ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus.libs kmod xz pam acl
@@ -52,7 +48,7 @@ stdenv.mkDerivation rec {
     ''
       # FIXME: patch this in systemd properly (and send upstream).
       # FIXME: use sulogin from util-linux once updated.
-      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.m4.in src/journal/cat.c; do
+      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.m4.in src/journal/cat.c src/core/shutdown.c; do
         test -e $i
         substituteInPlace $i \
           --replace /bin/mount ${utillinux.bin}/bin/mount \
@@ -62,7 +58,8 @@ stdenv.mkDerivation rec {
           --replace /sbin/fsck ${utillinux.bin}/sbin/fsck \
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
-          --replace /sbin/sulogin ${sysvtools}/sbin/sulogin
+          --replace /sbin/sulogin ${sysvtools}/sbin/sulogin \
+          --replace /sbin/kexec ${kexectools}/sbin/kexec
       done
 
       substituteInPlace src/journal/catalog.c \

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, SDL_ttf, SDL_image, mesa, lua5_1, automake, autoconf }:
+{ stdenv, fetchurl, SDL, SDL_ttf, SDL_image, mesa, libpng, lua5, automake, autoconf }:
 
 stdenv.mkDerivation rec {
   name = "gravit-0.5.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lyw0skrkb04s16vgz7ggswjrdxk1h23v5s85s09gjxzjp1xd3xp";
   };
 
-  buildInputs = [mesa SDL SDL_ttf SDL_image lua5_1 automake autoconf];
+  buildInputs = [mesa SDL SDL_ttf SDL_image lua5 automake autoconf libpng];
 
   preConfigure = "sh autogen.sh";
 

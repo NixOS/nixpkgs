@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python, curl, python, makeWrapper, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc}:
+{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python, curl,
+  python, makeWrapper, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte}:
 
 with stdenv.lib;
 
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
       distutils_extra simplejson readline glance cheetah lockfile httplib2
       # !!! should libvirt be a build-time dependency?  Note that
       # libxml2Python is a dependency of libvirt.py. 
-      libvirt libxml2Python urlgrabber virtinst pyGtkGlade pythonDBus gnome_python gtkvnc
+      libvirt libxml2Python urlgrabber virtinst pyGtkGlade pythonDBus gnome_python
+      gtkvnc vte
     ];
 
   buildInputs =
@@ -78,7 +80,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://virt-manager.org;
-    description = "The 'Virtual Machine Manager' application (virt-manager for short package name) is a desktop user interface for managing virtual machines.";
+    description = "Desktop user interface for managing virtual machines";
+    longDescription = ''
+      The virt-manager application is a desktop user interface for managing
+      virtual machines through libvirt. It primarily targets KVM VMs, but also
+      manages Xen and LXC (linux containers).
+    '';
     license = "GPLv2";
     maintainers = with stdenv.lib.maintainers; [qknight];
   };

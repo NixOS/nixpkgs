@@ -1,18 +1,16 @@
 { stdenv, fetchurl, pkgconfig, udev, utillinux, coreutils }:
 
 let
-  v = "2.02.98";
+  v = "2.02.100";
 in
 
 stdenv.mkDerivation {
   name = "lvm2-${v}";
 
   src = fetchurl {
-    url = "ftp://sources.redhat.com/pub/lvm2/old/LVM2.${v}.tgz";
-    sha256 = "0r6q6z8ip6q5qgkzng0saljassp4912k6i21ra10vq7pzrc0l0vi";
+    url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${v}.tgz";
+    md5 = "9629cf5728544d7e637cafde1f73d777";
   };
-
-  patches = [ ./assume-uevent-generated.patch ];
 
   configureFlags =
     "--disable-readline --enable-udev_rules --enable-udev_sync --enable-pkgconfig --enable-applib";
@@ -24,7 +22,11 @@ stdenv.mkDerivation {
       substituteInPlace scripts/lvmdump.sh \
         --replace /usr/bin/tr ${coreutils}/bin/tr
       substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-        --replace /usr/sbin/lvm $out/sbin/lvm
+        --replace /usr/sbin/lvm $out/sbin/lvm \
+        --replace /usr/bin/udevadm ${udev}/bin/udevadm
+
+      sed -i /DEFAULT_SYS_DIR/d Makefile.in
+      sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
     '';
 
   #patches = [ ./purity.patch ];
@@ -39,6 +41,11 @@ stdenv.mkDerivation {
     ''
       substituteInPlace $out/lib/udev/rules.d/13-dm-disk.rules \
         --replace $out/sbin/blkid ${utillinux}/sbin/blkid
+
+      # Systemd stuff
+      mkdir -p $out/etc/systemd/system $out/lib/systemd/system-generators
+      cp scripts/blk_availability_systemd_red_hat.service $out/etc/systemd/system
+      cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
     '';
 
   meta = {

@@ -14,10 +14,10 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
-    mkdir -p $out/texmf/fonts/opentype
+    mkdir -p $out/texmf-dist/fonts/opentype
     mkdir -p $out/share/fonts/opentype
 
-    cp *.{OTF,otf} $out/texmf/fonts/opentype/lmmath-regular.otf
+    cp *.{OTF,otf} $out/texmf-dist/fonts/opentype/lmmath-regular.otf
     cp *.{OTF,otf} $out/share/fonts/opentype/lmmath-regular.otf
 
     ln -s $out/texmf* $out/share/

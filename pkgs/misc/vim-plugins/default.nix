@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python, cmake, vim, perl, ruby, unzip }:
+{ fetchurl, stdenv, python, cmake, vim, perl, ruby, unzip, which }:
 
 /*
 About Vim and plugins
@@ -90,14 +90,13 @@ let vimHelpTags = ''
     installPhase = ''
       target=$out/vim-plugins/$path
       ensureDir $out/vim-plugins
-      ls -l
       cp -r . $target
       ${vimHelpTags}
       vimHelpTags $target
     '';
   });
 
-in
+in rec
 
 {
 
@@ -198,6 +197,23 @@ in
     };
   };
 
+  ipython = simpleDerivation {
+    name = "vim-ipython-ff8f88f3fe518851a91dc88aaa5a75f8f352a960";
+    src = fetchurl {
+      url    = "https://github.com/ivanov/vim-ipython/archive/ff8f88f3fe518851a91dc88aaa5a75f8f352a960.tar.gz";
+      sha256 = "0hlx526dm8amrvh41kwnmgvvdzs6sh5yc5sfq4nk1zjkfcp1ah5j";
+    };
+    path = "ipython";
+    meta = with stdenv.lib; {
+      description = "A two-way integration between vim and iPython";
+      homepage    = https://github.com/ivanov/vim-ipython;
+      repositories.git = https://github.com/ivanov/vim-ipython.git;
+      license     = licenses.publicDomain;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
+
   taglist = simpleDerivation {
     name = "vim-taglist-4.6";
     meta = with stdenv.lib; {
@@ -250,5 +266,62 @@ in
     };
     path = "xdebug";
     postInstall = false;
+  };
+
+  vimshell = simpleDerivation rec {
+    version = "9.2";
+    name = "vimshell-${version}";
+
+    meta = with stdenv.lib; {
+      description = "An extreme shell that doesn't depend on external shells and is written completely in Vim script";
+      homepage    = https://github.com/Shougo/vimshell.vim;
+      repositories.git = https://github.com/Shougo/vimshell.vim.git;
+      license     = licenses.gpl3;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+
+    src = fetchurl {
+      url    = "https://github.com/Shougo/vimshell.vim/archive/ver.${version}.tar.gz";
+      sha256 = "1pbwxdhpv6pr09b6hwkgy7grpmpwlqpsgsawl38r40q6yib8zb4a";
+    };
+
+    buildInputs = [ vimproc ];
+
+    preBuild = ''
+      sed -ie '1 i\
+      set runtimepath+=${vimproc}/vim-plugins/vimproc\
+      ' autoload/vimshell.vim
+    '';
+
+    path = "vimshell";
+  };
+
+  vimproc = simpleDerivation rec {
+    version = "5cf4c6bfe9bf0649159b5648d736d54c96e99b3e";
+    name    = "vimproc-${version}";
+
+    meta = with stdenv.lib; {
+      description = "An asynchronous execution library for Vim";
+      homepage    = https://github.com/Shougo/vimproc.vim;
+      repositories.git = https://github.com/Shougo/vimproc.vim.git;
+      license     = licenses.gpl3;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+
+    src = fetchurl {
+      url    = "${meta.homepage}/archive/${version}.tar.gz";
+      sha256 = "0f76mc7v3656sf9syaq1rxzk3dqz6i5w190wgj15sjjnapzd956p";
+    };
+
+    buildInputs = [ which ];
+
+    buildPhase = ''
+      sed -i 's/vimproc_mac\.so/vimproc_unix\.so/' autoload/vimproc.vim
+      make -f make_unix.mak
+    '';
+
+    path = "vimproc";
   };
 }

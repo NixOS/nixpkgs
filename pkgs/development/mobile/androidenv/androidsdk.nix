@@ -8,16 +8,16 @@
 {platformVersions, abiVersions, useGoogleAPIs}:
 
 stdenv.mkDerivation {
-  name = "android-sdk-22.05";
+  name = "android-sdk-22.2";
   
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz;
-      md5 = "8201b10c21510f082c54f58a9bb082c8";
+      url = http://dl.google.com/android/android-sdk_r22.2-linux.tgz;
+      md5 = "2a3776839e823ba9acb7a87a3fe26e02";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = http://dl.google.com/android/android-sdk_r22.0.5-macosx.zip;
-      md5 = "94f3cbe896c332b94ee0408ae610a4b8";
+      url = http://dl.google.com/android/android-sdk_r22.2-macosx.zip;
+      md5 = "9dfef6404e2f842c433073796aed8b7d";
     }
     else throw "platform not ${stdenv.system} supported!";
   

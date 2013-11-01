@@ -41,7 +41,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Planet Venus is an awesome ‘river of news’ feed reader. It downloads news feeds published by web sites and aggregates their content together into a single combined feed, latest news first.";
+    description = "News feed reader";
+    longDescription = ''
+      Planet Venus is an awesome ‘river of news’ feed reader. It downloads news
+      feeds published by web sites and aggregates their content together into a
+      single combined feed, latest news first.
+    '';
     homepage = "http://intertwingly.net/code/venus/docs/index.html";
     license = stdenv.lib.licenses.psfl;
     platforms = stdenv.lib.platforms.all;

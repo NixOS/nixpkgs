@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "crypto-cipher-tests";
-  version = "0.0.4";
-  sha256 = "1c725zj94d6n33wldyzlm1qd32a0ais0w221ykpgs49rrd6hrpbh";
+  version = "0.0.11";
+  sha256 = "19wqignlq90qwpam01hnmmrxaxh5lkax9l1l6rlbi4a07nvp1dnz";
   buildDepends = [
     byteable cryptoCipherTypes HUnit mtl QuickCheck securemem
     testFramework testFrameworkHunit testFrameworkQuickcheck2

@@ -1,23 +1,23 @@
 { cabal, base64Bytestring, blazeBuilder, blazeHtml, blazeMarkup
 , cereal, cryptoApi, cryptoConduit, cryptohashCryptoapi, fileEmbed
 , hspec, httpDate, httpTypes, mimeTypes, network, systemFileio
-, systemFilepath, text, time, transformers, unixCompat, wai
-, waiTest
+, systemFilepath, text, time, transformers, unixCompat
+, unorderedContainers, wai, waiTest, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "wai-app-static";
-  version = "1.3.1.4";
-  sha256 = "1457643xkigqnacg1fw25jp9kjqiy55d22ll8fml07bxs37hlr63";
+  version = "1.3.3";
+  sha256 = "0lsqfvlh65rggp9z6m5gyx8gv0wk3b44jrk57s8yj2bh74pbr64f";
   buildDepends = [
     base64Bytestring blazeBuilder blazeHtml blazeMarkup cereal
     cryptoApi cryptoConduit cryptohashCryptoapi fileEmbed httpDate
     httpTypes mimeTypes systemFileio systemFilepath text time
-    transformers unixCompat wai
+    transformers unixCompat unorderedContainers wai zlib
   ];
   testDepends = [
     hspec httpDate httpTypes mimeTypes network text time transformers
-    unixCompat wai waiTest
+    unixCompat wai waiTest zlib
   ];
   meta = {
     homepage = "http://www.yesodweb.com/book/web-application-interface";

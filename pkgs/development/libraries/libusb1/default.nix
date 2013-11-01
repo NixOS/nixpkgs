@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs = stdenv.lib.optional (stdenv.isLinux) udev;
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+
   meta = {
     homepage = http://www.libusb.org;
     description = "User-space USB library";

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cipher-camellia";
-  version = "0.0.1";
-  sha256 = "11narl4h77v7317hdqy8zxhym3k7xrmw97yfwh0vr8k1y5dkiqh3";
+  version = "0.0.2";
+  sha256 = "19z2mi1rvp8fsqjdbmrm1hdlxmx61yr55fyknmmn945qrlvx234d";
   buildDepends = [ byteable cryptoCipherTypes securemem vector ];
   testDepends = [
     byteable cryptoCipherTests cryptoCipherTypes QuickCheck

@@ -30,7 +30,6 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4session    = callPackage ./core/xfce4-session.nix { };
   xfce4settings   = callPackage ./core/xfce4-settings.nix { };
   xfce4_power_manager = callPackage ./core/xfce4-power-manager.nix { };
-  xfceutils       = null; # removed in 4.10
   xfconf          = callPackage ./core/xfconf.nix { };
   xfdesktop       = callPackage ./core/xfdesktop.nix { };
   xfwm4           = callPackage ./core/xfwm4.nix { };

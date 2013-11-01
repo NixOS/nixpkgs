@@ -58,7 +58,7 @@ in stdenv.mkDerivation {
   '';
   
   meta = {
-    description = "TinyXML is a simple, small, C++ XML parser that can be easily integrating into other programs.";
+    description = "Simple, small, C++ XML parser that can be easily integrating into other programs";
     homepage = "http://www.grinninglizard.com/tinyxml/index.html";
     license = "free-non-copyleft";
   };

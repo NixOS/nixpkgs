@@ -1,58 +1,63 @@
-x@{builderDefsPackage
-  , freeglut, freealut, mesa, libICE, libjpeg, openal, openscenegraph, plib
-  , libSM, libunwind, libX11, xproto, libXext, xextproto, libXi, inputproto
-  , libXmu, libXt, simgear, zlib, boost, cmake, libpng
-  , ...}:
-builderDefsPackage
-(a :
-let
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
-    [];
+{ stdenv, fetchurl
+, freeglut, freealut, mesa, libICE, libjpeg, openal, openscenegraph, plib
+, libSM, libunwind, libX11, xproto, libXext, xextproto, libXi, inputproto
+, libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
+, makeDesktopItem
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="flightgear";
-    version="2.10.0";
-    name="${baseName}-${version}";
-    extension="tar.bz2";
-    url="http://ftp.linux.kiev.ua/pub/fgfs/Source/${name}.${extension}";
-    hash="0pq5nwyxwp8ar5rr0jh8p04bv0i9i841m374jwd748csnsn28zh6";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  version = "2.12.0";
+  name = "flightgear-${version}";
+
+  src = fetchurl {
+    url = "http://ftp.linux.kiev.ua/pub/fgfs/Source/${name}.tar.bz2";
+    sha256 = "0h9ka4pa2njxbvy5jlmnsjy5ynzms504ygqn7hd80g3c58drsjc4";
   };
 
-  datasrc = a.fetchurl {
-    url = "http://ftp.igh.cnrs.fr/pub/flightgear/ftp/Shared/FlightGear-data-2.0.0.tar.bz2";
-    sha256 = "0kvmvh5qycbpdjx12l20cbhljwimmcgww2dg4lkc2sky0kg14ic1";
+  datasrc = fetchurl {
+    url = "http://ftp.igh.cnrs.fr/pub/flightgear/ftp/Shared/FlightGear-data-${version}.tar.bz";
+    sha256 = "0qjvcj2cz7ypa91v95lws44fg8c1p0pazv24ljkai2m2r0jgsv8k";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  # Of all the files in the source and data archives, there doesn't seem to be
+  # a decent icon :-)
+  iconsrc = fetchurl {
+    url = "http://wiki.flightgear.org/images/6/62/FlightGear_logo.png";
+    sha256 = "1ikz413jia55vfnmx8iwrlxvx8p16ggm81mbrj66wam3q7s2dm5p";
+  };
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doCmake" "doMakeInstall" "deployData"];
+  desktopItem = makeDesktopItem {
+    name = "flightgear";
+    exec = "fgfs";
+    icon = "${iconsrc}";
+    comment = "FlightGear Flight Simulator";
+    desktopName = "FlightGear";
+    genericName = "Flight simulator";
+    categories = "Game;Simulation";
+  };
 
-  deployData = a.fullDepEntry ''
+  buildInputs = [
+    freeglut freealut mesa libICE libjpeg openal openscenegraph plib
+    libSM libunwind libX11 xproto libXext xextproto libXi inputproto
+    libXmu libXt simgear zlib boost cmake libpng udev fltk13 apr
+  ];
+
+  preConfigure = ''
+    export cmakeFlagsArray=(-DFG_DATA_DIR="$out/share/FlightGear/")
+  '';
+
+  postInstall = ''
     mkdir -p "$out/share/FlightGear"
-    cd "$out/share/FlightGear"
-    tar xvf ${datasrc}
-  '' ["minInit" "defEnsureDir"];
+    tar xvf "${datasrc}" -C "$out/share/FlightGear/" --strip-components=1
 
-  meta = {
-    description = "A flight simulator";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    #platforms = a.lib.platforms.linux;
-    license = a.lib.licenses.gpl2;
-  };
-  passthru = {
-  };
-}) x
+    mkdir -p "$out/share/applications/"
+    cp "${desktopItem}"/share/applications/* "$out/share/applications/"
+  '';
 
+  meta = with stdenv.lib; {
+    description = "Flight simulator";
+    maintainers = with maintainers; [ raskin ];
+    #platforms = platforms.linux; # disabled from hydra because it's so big
+    license = licenses.gpl2;
+  };
+}

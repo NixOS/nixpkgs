@@ -76,8 +76,6 @@ rec {
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
-      linux;
     license = a.lib.licenses.gpl2;
     homepage="http://oneteam.im";
   };

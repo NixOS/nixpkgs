@@ -1,0 +1,78 @@
+<refentry xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<refmeta>
+  <refentrytitle><command>nixos-install</command></refentrytitle>
+  <manvolnum>8</manvolnum>
+  <refmiscinfo class="source">NixOS</refmiscinfo>
+  <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
+</refmeta>
+
+<refnamediv>
+  <refname><command>nixos-install</command></refname>
+  <refpurpose>install NixOS</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+  <cmdsynopsis>
+    <command>nixos-install</command>
+  </cmdsynopsis>
+</refsynopsisdiv>
+
+
+<refsection><title>Description</title>
+
+<para>This command installs NixOS in the file system mounted on
+<filename>/mnt</filename>, based on the NixOS configuration specified
+in <filename>/mnt/etc/nixos/configuration.nix</filename>.  It performs
+the following steps:
+
+<itemizedlist>
+
+  <listitem><para>It copies Nix and its dependencies to
+  <filename>/mnt/nix/store</filename>.</para></listitem>
+
+  <listitem><para>It runs Nix in <filename>/mnt</filename> to build
+  the NixOS configuration specified in
+  <filename>/mnt/etc/nixos/configuration.nix</filename>.</para></listitem>
+
+  <listitem><para>It installs the GRUB boot loader on the device
+  specified in the option <option>boot.loader.grub.device</option>,
+  and generates a GRUB configuration file that boots into the NixOS
+  configuration just installed.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>This command is idempotent: if it is interrupted or fails due to
+a temporary problem (e.g. a network issue), you can safely re-run
+it.</para>
+
+</refsection>
+
+
+<refsection><title>Examples</title>
+
+<para>A typical NixOS installation is done by creating and mounting a
+file system on <filename>/mnt</filename>, generating a NixOS
+configuration in
+<filename>/mnt/etc/nixos/configuration.nix</filename>, and running
+<command>nixos-install</command>.  For instance, if we want to install
+NixOS on an <literal>ext4</literal> file system created in
+<filename>/dev/sda1</filename>:
+
+<screen>
+$ mkfs.ext4 /dev/sda1
+$ mount /dev/sda1 /mnt
+$ nixos-generate-config --root /mnt
+$ # edit /mnt/etc/nixos/configuration.nix
+$ nixos-install
+</screen>
+
+</para>
+
+</refsection>
+
+</refentry>

@@ -1,17 +1,20 @@
-{ cabal, binary, blazeHtml, blazeMarkup, cmdargs, filepath, hjsmin
-, indents, mtl, pandoc, parsec, transformers, unionFind, uniplate
+{ cabal, aeson, aesonPretty, binary, blazeHtml, blazeMarkup
+, cmdargs, filepath, HTF, indents, languageEcmascript, mtl, pandoc
+, parsec, text, transformers, unionFind, uniplate
 }:
 
 cabal.mkDerivation (self: {
   pname = "Elm";
-  version = "0.9.0.2";
-  sha256 = "0yr395wsj0spi6h9d6lm5hvdryybpf8i1qpv4gz9dk0bwlyc8iwh";
+  version = "0.10.0.1";
+  sha256 = "1r7z2fw9v6ngr9w4lmj1l6sc78rmxvqkqlxv4a9yc5jm80k3ar0i";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    binary blazeHtml blazeMarkup cmdargs filepath hjsmin indents mtl
-    pandoc parsec transformers unionFind uniplate
+    aeson aesonPretty binary blazeHtml blazeMarkup cmdargs filepath
+    indents languageEcmascript mtl pandoc parsec text transformers
+    unionFind uniplate
   ];
+  testDepends = [ HTF ];
   doCheck = false;
   meta = {
     homepage = "http://elm-lang.org";

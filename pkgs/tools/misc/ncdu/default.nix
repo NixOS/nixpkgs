@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = {
-    description = "An ncurses disk usage analyzer.";
+    description = "Ncurses disk usage analyzer";
     homepage = http://dev.yorhel.nl/ncdu;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;

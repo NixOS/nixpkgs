@@ -7,7 +7,7 @@
 let
   pn = "network-manager-applet";
   major = "0.9";
-  version = "${major}.8.2";
+  version = networkmanager.version;
 in
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pn}/${major}/${name}.tar.xz";
-    sha256 = "1ixd19b7ap29lz9lq4mmlq9lqsmnisix1a33hrxrl68wjx1wfh55";
+    sha256 = "130rdin3wh9vlwhscbgh3lsssi89p5n4maws4y3l9ja720llk27n";
   };
 
   buildInputs = [

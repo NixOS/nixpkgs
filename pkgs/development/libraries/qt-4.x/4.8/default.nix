@@ -1,10 +1,7 @@
-{ stdenv, fetchurl, substituteAll
-, libXrender, libXinerama, libXcursor, libXmu , libXv, libXext
-, libXfixes, libXrandr, libSM, freetype, fontconfig
-, zlib, libjpeg, libpng, libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
-, libtiff, glib, icu
-, mysql, postgresql, sqlite
-, perl, coreutils, libXi
+{ stdenv, fetchurl, substituteAll, libXrender, libXinerama, libXcursor, libXmu, libXv, libXext
+, libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
+, libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
+, libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst_plugins_base
 , buildWebkit ? stdenv.isLinux
 , flashplayerFix ? false, gdk_pixbuf
@@ -40,6 +37,11 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
     sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i mkspecs/*/*.conf
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # remove impure reference to /usr/lib/libstdc++.6.dylib
+    # there might be more references, but this is the only one I could find
+    substituteInPlace tools/macdeployqt/tests/tst_deployment_mac.cpp \
+      --replace /usr/lib/libstdc++.6.dylib "${stdenv.gcc}/lib/libstdc++.6.dylib"
   '';
 
   patches =

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "crypto-cipher-types";
-  version = "0.0.4";
-  sha256 = "0ipwplw1mn6amjxk2i5sksxvfsnf2fv8rnrgyncl21mp1gbnq7h0";
+  version = "0.0.9";
+  sha256 = "03qa1i1kj07pfrxsi7fiaqnnd0vi94jd4jfswbmnm4gp1nvzcwr0";
   buildDepends = [ byteable securemem ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-crypto-cipher";

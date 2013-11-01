@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
-  
+
   src = fetchurl_gnome {
     project = "libgnome";
     major = "2"; minor = "32"; patchlevel = "1";

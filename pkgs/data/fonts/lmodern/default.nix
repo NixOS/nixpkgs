@@ -9,10 +9,10 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    mkdir -p $out/texmf/
+    mkdir -p $out/texmf-dist/
     mkdir -p $out/share/fonts/
 
-    cp -r ./* $out/texmf/
+    cp -r ./* $out/texmf-dist/
     cp -r fonts/{opentype,type1} $out/share/fonts/
 
     ln -s $out/texmf* $out/share/

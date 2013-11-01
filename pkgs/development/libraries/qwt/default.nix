@@ -17,4 +17,13 @@ stdenv.mkDerivation rec {
     '';
 
   configurePhase = ''qmake INSTALLBASE=$out -after doc.path=$out/share/doc/${name} -r'';
+
+  meta = with stdenv.lib; {
+    description = "Qt widgets for technical applications";
+    homepage = http://qwt.sourceforge.net/;
+    # LGPL 2.1 plus a few exceptions (more liberal)
+    license = "Qwt License, Version 1.0";
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+  };
 }
