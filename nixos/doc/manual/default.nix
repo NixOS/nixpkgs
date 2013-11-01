@@ -1,6 +1,4 @@
-{ pkgs, options
-, revision ? "master"
-}:
+{ pkgs, options, version, revision }:
 
 with pkgs.lib;
 
@@ -60,6 +58,7 @@ in rec {
     buildCommand = ''
       ln -s $sources/*.xml . # */
       ln -s ${optionsDocBook} options-db.xml
+      echo "${version}" > version
 
       # Check the validity of the manual sources.
       xmllint --noout --nonet --xinclude --noxincludenode \
