@@ -1,17 +1,15 @@
 # Definitions related to run-time type checking.  Used in particular
 # to type-check NixOS configurations.
 
-let lib = import ./default.nix; in
-
 with import ./lists.nix;
 with import ./attrsets.nix;
 with import ./options.nix;
 with import ./trivial.nix;
+with import ./strings.nix;
 
 rec {
 
   isType = type: x: (x._type or "") == type;
-  hasType = x: isAttrs x && x ? _type;
   typeOf = x: x._type or "";
 
   setType = typeName: value: value // {
@@ -19,207 +17,193 @@ rec {
   };
 
 
-  # name (name of the type)
-  # check (check the config value. Before returning false it should trace the bad value eg using traceValIfNot)
-  # merge (default merge function)
-  # iter (iterate on all elements contained in this type)
-  # fold (fold all elements contained in this type)
-  # hasOptions (boolean: whatever this option contains an option set)
-  # delayOnGlobalEval (boolean: should properties go through the evaluation of this option)
-  # docPath (path concatenated to the option name contained in the option set)
   isOptionType = isType "option-type";
   mkOptionType =
-    { name
-    , check ? (x: true)
-    , merge ? mergeDefaultOption
-    # Handle complex structure types.
-    , iter ? (f: path: v: f path v)
-    , fold ? (op: nul: v: op v nul)
-    , docPath ? lib.id
-    # If the type can contains option sets.
-    , hasOptions ? false
-    , delayOnGlobalEval ? false
+    { # Human-readable representation of the type.
+      name
+    , # Function applied to each definition that should return true if
+      # its type-correct, false otherwise.
+      check ? (x: true)
+    , # Merge a list of definitions together into a single value.
+      # This function is called with two arguments: the location of
+      # the option in the configuration as a list of strings
+      # (e.g. ["boot" "loader "grub" "enable"]), and a list of
+      # definition values and locations (e.g. [ { file = "/foo.nix";
+      # value = 1; } { file = "/bar.nix"; value = 2 } ]).
+      merge ? mergeDefaultOption
+    , # Return a flat list of sub-options.  Used to generate
+      # documentation.
+      getSubOptions ? prefix: {}
     }:
-
     { _type = "option-type";
-      inherit name check merge iter fold docPath hasOptions delayOnGlobalEval;
+      inherit name check merge getSubOptions;
     };
 
 
   types = rec {
 
+    unspecified = mkOptionType {
+      name = "unspecified";
+    };
+
     bool = mkOptionType {
       name = "boolean";
-      check = lib.traceValIfNot builtins.isBool;
-      merge = fold lib.or false;
+      check = builtins.isBool;
+      merge = loc: fold (x: y: x.value || y) false;
     };
 
     int = mkOptionType {
       name = "integer";
-      check = lib.traceValIfNot builtins.isInt;
+      check = builtins.isInt;
+      merge = mergeOneOption;
     };
 
-    string = mkOptionType {
+    str = mkOptionType {
       name = "string";
-      check = lib.traceValIfNot builtins.isString;
-      merge = lib.concatStrings;
+      check = builtins.isString;
+      merge = mergeOneOption;
     };
 
-    # Like ‘string’, but add newlines between every value.  Useful for
-    # configuration file contents.
-    lines = mkOptionType {
+    # Merge multiple definitions by concatenating them (with the given
+    # separator between the values).
+    separatedString = sep: mkOptionType {
       name = "string";
-      check = lib.traceValIfNot builtins.isString;
-      merge = lib.concatStringsSep "\n";
+      check = builtins.isString;
+      merge = loc: defs: concatStringsSep sep (getValues defs);
     };
 
-    envVar = mkOptionType {
-      name = "environment variable";
-      inherit (string) check;
-      merge = lib.concatStringsSep ":";
-    };
+    lines = separatedString "\n";
+    commas = separatedString ",";
+    envVar = separatedString ":";
+
+    # Deprecated; should not be used because it quietly concatenates
+    # strings, which is usually not what you want.
+    string = separatedString "";
 
     attrs = mkOptionType {
       name = "attribute set";
-      check = lib.traceValIfNot isAttrs;
-      merge = fold lib.mergeAttrs {};
+      check = isAttrs;
+      merge = loc: fold (def: mergeAttrs def.value) {};
     };
 
     # derivation is a reserved keyword.
     package = mkOptionType {
       name = "derivation";
-      check = lib.traceValIfNot isDerivation;
+      check = isDerivation;
+      merge = mergeOneOption;
     };
 
     path = mkOptionType {
       name = "path";
       # Hacky: there is no ‘isPath’ primop.
-      check = lib.traceValIfNot (x: builtins.unsafeDiscardStringContext (builtins.substring 0 1 (toString x)) == "/");
+      check = x: builtins.unsafeDiscardStringContext (builtins.substring 0 1 (toString x)) == "/";
+      merge = mergeOneOption;
     };
 
     # drop this in the future:
-    list = builtins.trace "types.list is deprecated, use types.listOf instead" types.listOf;
+    list = builtins.trace "`types.list' is deprecated; use `types.listOf' instead" types.listOf;
 
-    listOf = elemType: mkOptionType { 
+    listOf = elemType: mkOptionType {
       name = "list of ${elemType.name}s";
-      check = value: lib.traceValIfNot isList value && all elemType.check value;
-      merge = concatLists;
-      iter = f: path: list: map (elemType.iter f (path + ".*")) list;
-      fold = op: nul: list: lib.fold (e: l: elemType.fold op l e) nul list;
-      docPath = path: elemType.docPath (path + ".*");
-      inherit (elemType) hasOptions;
-
-      # You cannot define multiple configurations of one entity, therefore
-      # no reason justify to delay properties inside list elements.
-      delayOnGlobalEval = false;
+      check = value: isList value && all elemType.check value;
+      merge = loc: defs:
+        concatLists (imap (n: def: imap (m: def':
+          elemType.merge (loc ++ ["[${toString n}-${toString m}]"])
+            [{ inherit (def) file; value = def'; }]) def.value) defs);
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
     };
 
     attrsOf = elemType: mkOptionType {
       name = "attribute set of ${elemType.name}s";
-      check = x: lib.traceValIfNot isAttrs x
-        && all elemType.check (lib.attrValues x); 
-      merge = lib.zipAttrsWith (name: elemType.merge);
-      iter = f: path: set: lib.mapAttrs (name: elemType.iter f (path + "." + name)) set;
-      fold = op: nul: set: fold (e: l: elemType.fold op l e) nul (lib.attrValues set);
-      docPath = path: elemType.docPath (path + ".<name>");
-      inherit (elemType) hasOptions delayOnGlobalEval;
+      check = x: isAttrs x && all elemType.check (attrValues x);
+      merge = loc: defs:
+        zipAttrsWith (name: elemType.merge (loc ++ [name]))
+          # Push down position info.
+          (map (def: listToAttrs (mapAttrsToList (n: def':
+            { name = n; value = { inherit (def) file; value = def'; }; }) def.value)) defs);
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
     };
 
     # List or attribute set of ...
     loaOf = elemType:
       let
         convertIfList = defIdx: def:
-          if isList def then
-            listToAttrs (
-              flip imap def (elemIdx: elem:
-                nameValuePair "unnamed-${toString defIdx}.${toString elemIdx}" elem))
+          if isList def.value then
+            { inherit (def) file;
+              value = listToAttrs (
+                imap (elemIdx: elem:
+                  { name = "unnamed-${toString defIdx}.${toString elemIdx}";
+                    value = elem;
+                  }) def.value);
+            }
           else
             def;
         listOnly = listOf elemType;
         attrOnly = attrsOf elemType;
-
       in mkOptionType {
         name = "list or attribute set of ${elemType.name}s";
         check = x:
           if isList x       then listOnly.check x
           else if isAttrs x then attrOnly.check x
-          else lib.traceValIfNot (x: false) x;
-        ## The merge function returns an attribute set
-        merge = defs:
-          attrOnly.merge (imap convertIfList defs);
-        iter = f: path: def:
-          if isList def       then listOnly.iter f path def
-          else if isAttrs def then attrOnly.iter f path def
-          else throw "Unexpected value";
-        fold = op: nul: def:
-          if isList def       then listOnly.fold op nul def
-          else if isAttrs def then attrOnly.fold op nul def
-          else throw "Unexpected value";
-
-        docPath = path: elemType.docPath (path + ".<name?>");
-        inherit (elemType) hasOptions delayOnGlobalEval;
-      }
-    ;
+          else false;
+        merge = loc: defs: attrOnly.merge loc (imap convertIfList defs);
+        getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
+      };
 
     uniq = elemType: mkOptionType {
-      inherit (elemType) name check iter fold docPath hasOptions;
-      merge = list:
-        if length list == 1 then
-          head list
-        else
-          throw "Multiple definitions of ${elemType.name}. Only one is allowed for this option.";
-    };
-
-    none = elemType: mkOptionType {
-      inherit (elemType) name check iter fold docPath hasOptions;
-      merge = list:
-        throw "No definitions are allowed for this option.";
+      inherit (elemType) name check;
+      merge = mergeOneOption;
+      getSubOptions = elemType.getSubOptions;
     };
 
     nullOr = elemType: mkOptionType {
-      inherit (elemType) name merge docPath hasOptions;
+      name = "null or ${elemType.name}";
       check = x: builtins.isNull x || elemType.check x;
-      iter = f: path: v: if v == null then v else elemType.iter f path v;
-      fold = op: nul: v: if v == null then nul else elemType.fold op nul v;
+      merge = loc: defs:
+        let nrNulls = count (def: isNull def.value) defs; in
+        if nrNulls == length defs then null
+        else if nrNulls != 0 then
+          throw "The option `${showOption loc}' is defined both null and not null, in ${showFiles (getFiles defs)}."
+        else elemType.merge loc defs;
+      getSubOptions = elemType.getSubOptions;
     };
 
     functionTo = elemType: mkOptionType {
       name = "function that evaluates to a(n) ${elemType.name}";
-      check = lib.traceValIfNot builtins.isFunction;
-      merge = fns:
-        args: elemType.merge (map (fn: fn args) fns);
-      # These are guesses, I don't fully understand iter, fold, delayOnGlobalEval
-      iter = f: path: v:
-        args: elemType.iter f path (v args);
-      fold = op: nul: v:
-        args: elemType.fold op nul (v args);
-      inherit (elemType) delayOnGlobalEval;
-      hasOptions = false;
+      check = builtins.isFunction;
+      merge = loc: defs:
+        fnArgs: elemType.merge loc (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs);
+      getSubOptions = elemType.getSubOptions;
     };
 
-    # usually used with listOf, attrsOf, loaOf like this:
-    # users = mkOption {
-    #   type = loaOf optionSet;
-    #
-    #   # you can omit the list if there is one element only
-    #   options = [ {
-    #     name = mkOption {
-    #       description = "name of the user"
-    #       ...
-    #     };
-    #     # more options here
-    #   } { more options } ];
-    # }
-    # TODO: !!! document passing options as an argument to optionSet,
-    # deprecate the current approach.
+    submodule = opts:
+      let
+        opts' = toList opts;
+        inherit (import ./modules.nix) evalModules;
+      in
+      mkOptionType rec {
+        name = "submodule";
+        check = x: isAttrs x || builtins.isFunction x;
+        merge = loc: defs:
+          let
+            coerce = def: if builtins.isFunction def then def else { config = def; };
+            modules = opts' ++ map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
+          in (evalModules { inherit modules; args.name = last loc; prefix = loc; }).config;
+        getSubOptions = prefix: (evalModules
+          { modules = opts'; inherit prefix;
+            # FIXME: hack to get shit to evaluate.
+            args = { name = ""; }; }).options;
+      };
+
+    # Obsolete alternative to configOf.  It takes its option
+    # declarations from the ‘options’ attribute of containing option
+    # declaration.
     optionSet = mkOptionType {
-      name = "option set";
-      # merge is done in "options.nix > addOptionMakeUp > handleOptionSets"
-      merge = lib.id;
-      check = x: isAttrs x || builtins.isFunction x;
-      hasOptions = true;
-      delayOnGlobalEval = true;
+      name = /* builtins.trace "types.optionSet is deprecated; use types.submodule instead" */ "option set";
     };
+
+    # Augment the given type with an additional type check function.
+    addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
   };
 

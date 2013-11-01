@@ -25,6 +25,6 @@ in
         ";
       }];
     };
-    environment.x11Packages = [ pkgs.openbox ];
+    environment.systemPackages = [ pkgs.openbox ];
   };
 }

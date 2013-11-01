@@ -75,7 +75,7 @@ let
     {
       cfgText = if cfg.rsaCertFile == null then ""
         else ''
-        sslEnable=YES
+        ssl_enable=YES
         rsa_cert_file=${cfg.rsaCertFile}
       '';
 

@@ -2,13 +2,25 @@
 
 with pkgs.lib;
 
-rec {
+let
+
+  checkService = v:
+    let assertValueOneOf = name: values: attr:
+          let val = getAttr name attr;
+          in optional ( hasAttr name attr && !elem val values) "Systemd service field `${name}' cannot have value `${val}'.";
+        checkType = assertValueOneOf "Type" ["simple" "forking" "oneshot" "dbus" "notify" "idle"];
+        checkRestart = assertValueOneOf "Restart" ["no" "on-success" "on-failure" "on-abort" "always"];
+        errors = concatMap (c: c v) [checkType checkRestart];
+    in if errors == [] then true
+       else builtins.trace (concatStringsSep "\n" errors) false;
+
+in rec {
 
   unitOptions = {
 
     enable = mkOption {
       default = true;
-      types = types.bool;
+      type = types.bool;
       description = ''
         If set to false, this unit will be a symlink to
         /dev/null. This is primarily useful to prevent specific
@@ -19,13 +31,13 @@ rec {
 
     description = mkOption {
       default = "";
-      types = types.uniq types.string;
+      type = types.str;
       description = "Description of this unit used in systemd messages and progress indicators.";
     };
 
     requires = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         Start the specified units when this unit is started, and stop
         this unit when the specified units are stopped or fail.
@@ -34,7 +46,7 @@ rec {
 
     wants = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         Start the specified units when this unit is started.
       '';
@@ -42,7 +54,7 @@ rec {
 
     after = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         If the specified units are started at the same time as
         this unit, delay this unit until they have started.
@@ -51,7 +63,7 @@ rec {
 
     before = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         If the specified units are started at the same time as
         this unit, delay them until this unit has started.
@@ -60,7 +72,7 @@ rec {
 
     bindsTo = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         Like ‘requires’, but in addition, if the specified units
         unexpectedly disappear, this unit will be stopped as well.
@@ -69,7 +81,7 @@ rec {
 
     partOf = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         If the specified units are stopped or restarted, then this
         unit is stopped or restarted as well.
@@ -78,7 +90,7 @@ rec {
 
     conflicts = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = ''
         If the specified units are started, then this unit is stopped
         and vice versa.
@@ -87,13 +99,13 @@ rec {
 
     requiredBy = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = "Units that require (i.e. depend on and need to go down with) this unit.";
     };
 
     wantedBy = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       description = "Units that want (i.e. depend on) this unit.";
     };
 
@@ -147,33 +159,23 @@ rec {
         { StartLimitInterval = 10;
           RestartSec = 5;
         };
-      type = types.attrs;
+      type = types.addCheck types.attrs checkService;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Service]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.service</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
-
-      check = v:
-        let assertValueOneOf = name: values: attr:
-              let val = getAttr name attr;
-              in optional ( hasAttr name attr && !elem val values) "${name} ${val} not known to systemd";
-            checkType = assertValueOneOf "Type" ["simple" "forking" "oneshot" "dbus" "notify" "idle"];
-            checkRestart = assertValueOneOf "Restart" ["no" "on-success" "on-failure" "on-abort" "always"];
-            errors = concatMap (c: c v) [checkType checkRestart];
-        in if errors == [] then true
-           else builtins.trace (concatStringsSep "\n" errors) false;
     };
 
     script = mkOption {
-      type = types.uniq types.string;
+      type = types.str;
       default = "";
       description = "Shell commands executed as the service's main process.";
     };
 
     scriptArgs = mkOption {
-      type = types.uniq types.string;
+      type = types.str;
       default = "";
       description = "Arguments passed to the main process script.";
     };
@@ -230,7 +232,7 @@ rec {
     };
 
     startAt = mkOption {
-      type = types.uniq types.string;
+      type = types.str;
       default = "";
       example = "Sun 14:00:00";
       description = ''
@@ -250,7 +252,7 @@ rec {
 
     listenStreams = mkOption {
       default = [];
-      types = types.listOf types.string;
+      type = types.listOf types.string;
       example = [ "0.0.0.0:993" "/run/my-socket" ];
       description = ''
         For each item in this list, a <literal>ListenStream</literal>
@@ -296,13 +298,13 @@ rec {
 
     what = mkOption {
       example = "/dev/sda1";
-      type = types.uniq types.string;
+      type = types.str;
       description = "Absolute path of device node, file or other resource. (Mandatory)";
     };
 
     where = mkOption {
       example = "/mnt";
-      type = types.uniq types.string;
+      type = types.str;
       description = ''
         Absolute path of a directory of the mount point.
         Will be created if it doesn't exist. (Mandatory)
@@ -312,15 +314,14 @@ rec {
     type = mkOption {
       default = "";
       example = "ext4";
-      type = types.uniq types.string;
+      type = types.str;
       description = "File system type.";
     };
 
     options = mkOption {
       default = "";
       example = "noatime";
-      type = types.string;
-      merge = concatStringsSep ",";
+      type = types.commas;
       description = "Options used to mount the file system.";
     };
 
@@ -341,7 +342,7 @@ rec {
 
     where = mkOption {
       example = "/mnt";
-      type = types.uniq types.string;
+      type = types.str;
       description = ''
         Absolute path of a directory of the mount point.
         Will be created if it doesn't exist. (Mandatory)

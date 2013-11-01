@@ -12,14 +12,19 @@ let
     options = {
 
       name = mkOption {
-        type = with types; uniq string;
+        type = types.str;
         description = "The name of the user account. If undefined, the name of the attribute set will be used.";
       };
 
       description = mkOption {
-        type = with types; uniq string;
+        type = types.str;
         default = "";
-        description = "A short description of the user account.";
+        example = "Alice Q. User";
+        description = ''
+          A short description of the user account, typically the
+          user's full name.  This is actually the “GECOS” or “comment”
+          field in <filename>/etc/passwd</filename>.
+        '';
       };
 
       uid = mkOption {
@@ -29,25 +34,25 @@ let
       };
 
       group = mkOption {
-        type = with types; uniq string;
+        type = types.str;
         default = "nogroup";
         description = "The user's primary group.";
       };
 
       extraGroups = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         description = "The user's auxiliary groups.";
       };
 
       home = mkOption {
-        type = with types; uniq string;
+        type = types.str;
         default = "/var/empty";
         description = "The user's home directory.";
       };
 
       shell = mkOption {
-        type = with types; uniq string;
+        type = types.str;
         default = "/run/current-system/sw/sbin/nologin";
         description = "The path to the user's shell.";
       };
@@ -65,9 +70,15 @@ let
       };
 
       password = mkOption {
-        type = with types; uniq (nullOr string);
+        type = with types; uniq (nullOr str);
         default = null;
-        description = "The user's password. If undefined, no password is set for the user.  Warning: do not set confidential information here because this data would be readable by all.  This option should only be used for public account such as guest.";
+        description = ''
+          The user's password. If undefined, no password is set for
+          the user.  Warning: do not set confidential information here
+          because it is world-readable in the Nix store.  This option
+          should only be used for public accounts such as
+          <literal>guest</literal>.
+        '';
       };
 
       isSystemUser = mkOption {
@@ -79,11 +90,11 @@ let
       createUser = mkOption {
         type = types.bool;
         default = true;
-        description = "
+        description = ''
           Indicates if the user should be created automatically as a local user.
           Set this to false if the user for instance is an LDAP user. NixOS will
           then not modify any of the basic properties for the user account.
-        ";
+        '';
       };
 
       isAlias = mkOption {
@@ -107,7 +118,7 @@ let
     options = {
 
       name = mkOption {
-        type = with types; uniq string;
+        type = types.str;
         description = "The name of the group. If undefined, the name of the attribute set will be used.";
       };
 
@@ -149,13 +160,12 @@ in
       example = {
         alice = {
           uid = 1234;
-          description = "Alice";
+          description = "Alice Q. User";
           home = "/home/alice";
           createHome = true;
           group = "users";
           extraGroups = ["wheel"];
           shell = "/bin/sh";
-          password = "foobar";
         };
       };
       description = ''

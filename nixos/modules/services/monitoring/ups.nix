@@ -15,7 +15,7 @@ let
       # This can be infered from the UPS model by looking at
       # /nix/store/nut/share/driver.list
       driver = mkOption {
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Specify the program to run to talk to this UPS.  apcsmart,
           bestups, and sec are some examples.
@@ -23,7 +23,7 @@ let
       };
 
       port = mkOption {
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           The serial port to which your UPS is connected.  /dev/ttyS0 is
           usually the first port on Linux boxes, for example.
@@ -115,7 +115,7 @@ in
       # This option is not used yet.
       mode = mkOption {
         default = "standalone";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           The MODE determines which part of the NUT is to be started, and
           which configuration files must be modified.
@@ -142,7 +142,7 @@ in
 
       schedulerRules = mkOption {
         example = "/etc/nixos/upssched.conf";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           File which contains the rules to handle UPS events.
         '';

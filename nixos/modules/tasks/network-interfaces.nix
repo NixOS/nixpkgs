@@ -14,14 +14,14 @@ let
 
       name = mkOption {
         example = "eth0";
-        type = types.string;
+        type = types.str;
         description = "Name of the interface.";
       };
 
       ipAddress = mkOption {
         default = null;
         example = "10.0.0.1";
-        type = types.nullOr types.string;
+        type = types.nullOr (types.str);
         description = ''
           IP address of the interface.  Leave empty to configure the
           interface using DHCP.
@@ -41,7 +41,7 @@ let
       subnetMask = mkOption {
         default = "";
         example = "255.255.255.0";
-        type = types.string;
+        type = types.str;
         description = ''
           Subnet mask of the interface, specified as a bitmask.
           This is deprecated; use <option>prefixLength</option>
@@ -52,7 +52,7 @@ let
       macAddress = mkOption {
         default = null;
         example = "00:11:22:33:44:55";
-        type = types.nullOr types.string;
+        type = types.nullOr (types.str);
         description = ''
           MAC address of the interface. Leave empty to use the default.
         '';
@@ -72,7 +72,7 @@ let
 
       virtualOwner = mkOption {
         default = "root";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           In case of a virtual device, the user who owns it.
         '';
@@ -220,8 +220,8 @@ in
     };
 
     networking.useDHCP = mkOption {
+      type = types.bool;
       default = true;
-      merge = mergeEnableOption;
       description = ''
         Whether to use DHCP to obtain an IP address and other
         configuration for all network interfaces that are not manually
@@ -427,7 +427,7 @@ in
 
     # Set the host and domain names in the activation script.  Don't
     # clear it if it's not configured in the NixOS configuration,
-    # since it may have been set by dhclient in the meantime.
+    # since it may have been set by dhcpcd in the meantime.
     system.activationScripts.hostname =
       optionalString (config.networking.hostName != "") ''
         hostname "${config.networking.hostName}"

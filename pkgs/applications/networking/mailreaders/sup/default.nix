@@ -1,9 +1,10 @@
 { stdenv, fetchurl, ruby, rake, rubygems, makeWrapper, ncursesw_sup
-, xapian_ruby, gpgme, libiconvOrEmpty, rmail, mime_types, chronic, trollop
-, lockfile, gettext, iconv, locale, text, highline }:
+, xapian_ruby, gpgme, libiconvOrEmpty, mime_types, chronic, trollop, lockfile
+, gettext, iconv, locale, text, highline, rmail_sup, unicode, gnupg, which }:
 
-stdenv.mkDerivation {
-  name = "sup-896ab66c0263e5ce0fa45857fb08e0fb78fcb6bd";
+stdenv.mkDerivation rec {
+  version = "f27661b1656ae1f0d28fd89595b5a16f268d8d3d";
+  name    = "sup-${version}";
   
   meta = {
     homepage = http://supmua.org;
@@ -16,8 +17,8 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   src = fetchurl {
-    url = "https://github.com/sup-heliotrope/sup/archive/896ab66c0263e5ce0fa45857fb08e0fb78fcb6bd.tar.gz";
-    sha256 = "0sknf4ha13m2478fa27qnm43bcn59g6qbd8f2nmv64k2zs7xnwmk";
+    url    = "https://github.com/sup-heliotrope/sup/archive/${version}.tar.gz";
+    sha256 = "08fxf1knji3260d0mrp86x6yayp43iq7kc5rfay3hga8i2sckdia";
   };
 
   buildInputs =
@@ -26,8 +27,6 @@ stdenv.mkDerivation {
 
   buildPhase = "rake gem";
 
-  # TODO: Move gem dependencies out
-
   installPhase = ''
     export HOME=$TMP/home; mkdir -pv "$HOME"
 
@@ -35,16 +34,17 @@ stdenv.mkDerivation {
     GEM_PATH="$GEM_PATH:${chronic}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${gettext}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${gpgme}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${highline}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${iconv}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${locale}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${lockfile}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${mime_types}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${ncursesw_sup}/${ruby.gemPath}"
-    GEM_PATH="$GEM_PATH:${rmail}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${rmail_sup}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${text}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${trollop}/${ruby.gemPath}"
+    GEM_PATH="$GEM_PATH:${unicode}/${ruby.gemPath}"
     GEM_PATH="$GEM_PATH:${xapian_ruby}/${ruby.gemPath}"
-    GEM_PATH="$GEM_PATH:${highline}/${ruby.gemPath}"
 
     # Don't install some dependencies -- we have already installed
     # the dependencies but gem doesn't acknowledge this
@@ -52,8 +52,13 @@ stdenv.mkDerivation {
         --bindir "$out/bin" --no-rdoc --no-ri pkg/sup-999.gem \
         --ignore-dependencies
 
+    # specify ruby interpreter explicitly
+    sed -i '1 s|^.*$|#!${ruby}/bin/ruby|' bin/sup-sync-back-maildir
+
+    cp bin/sup-sync-back-maildir "$out"/bin
+
     for prog in $out/bin/*; do
-      wrapProgram "$prog" --prefix GEM_PATH : "$GEM_PATH"
+      wrapProgram "$prog" --prefix GEM_PATH : "$GEM_PATH" --prefix PATH : "${gnupg}/bin:${which}/bin"
     done
 
     for prog in $out/gems/*/bin/*; do
@@ -61,4 +66,3 @@ stdenv.mkDerivation {
     done
   '';
 }
-

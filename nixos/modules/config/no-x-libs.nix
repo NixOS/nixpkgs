@@ -1,10 +1,12 @@
 { config, pkgs, ... }:
 
+with pkgs.lib;
+
 {
   options = {
-    environment.noXlibs = pkgs.lib.mkOption {
+    environment.noXlibs = mkOption {
+      type = types.bool;
       default = false;
-      example = true;
       description = ''
         Switch off the options in the default configuration that require X libraries.
         Currently this includes: ssh X11 forwarding, dbus, fonts.enableCoreFonts,
@@ -13,7 +15,7 @@
     };
   };
 
-  config = pkgs.lib.mkIf config.environment.noXlibs {
+  config = mkIf config.environment.noXlibs {
     programs.ssh.setXAuthLocation = false;
     fonts = {
       enableCoreFonts = false;

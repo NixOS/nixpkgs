@@ -33,6 +33,11 @@ let
         description = "The name of the effective user for the Zope process.";
       };
 
+      clientHome = mkOption {
+        default = "/var/lib/zope2/${name}";
+        type = types.string;
+        description = "Home directory of zope2 instance.";
+      };
       extra = mkOption {
         default =
           ''
@@ -152,7 +157,7 @@ in
               ''
               %define INSTANCEHOME ${env}
               instancehome $INSTANCEHOME
-              %define CLIENTHOME /var/lib/zope2/${name}
+              %define CLIENTHOME ${opts.clientHome}/${opts.name}
               clienthome $CLIENTHOME
 
               debug-mode off
@@ -162,8 +167,8 @@ in
               zserver-threads ${toString opts.threads}
               effective-user ${opts.user}
 
-              pid-filename /var/lib/zope2/${name}/pid
-              lock-filename /var/lib/zope2/${name}/lock
+              pid-filename ${opts.clientHome}/${opts.name}/pid
+              lock-filename ${opts.clientHome}/${opts.name}/lock
               python-check-interval 1000
               enable-product-installation off
 
@@ -221,7 +226,7 @@ in
               exec ${ctlScript} "$@"
               '';
           in {
-            description = "zope2 ${name} instance";
+            #description = "${name} instance";
             after = [ "network.target" ];  # with RelStorage also add "postgresql.service"
             wantedBy = [ "multi-user.target" ];
             path = opts.packages;
@@ -233,8 +238,9 @@ in
               chown ${opts.user} /var/log/zope2/${name}.log
               chown ${opts.user} /var/log/zope2/${name}-Z2.log
 
-              mkdir -p /var/lib/zope2/${name}/filestorage /var/lib/zope2/${name}/blobstorage
-              chown ${opts.user} /var/lib/zope2/${name} -R
+              mkdir -p ${opts.clientHome}/filestorage ${opts.clientHome}/blobstorage
+              mkdir -p ${opts.clientHome}/${opts.name}
+              chown ${opts.user} ${opts.clientHome} -R
 
               ${ctl} adduser admin admin
               '';

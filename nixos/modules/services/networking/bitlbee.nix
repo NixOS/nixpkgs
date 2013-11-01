@@ -64,7 +64,7 @@ in
 
       authMode = mkOption {
         default = "Open";
-        check = authModeCheck;
+        type = types.addCheck types.str authModeCheck;
         description = ''
           The following authentication modes are available:
             Open -- Accept connections from anyone, use NickServ for user authentication.

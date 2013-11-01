@@ -14,7 +14,7 @@ let
     '';
 
   requiredPackages =
-    [ config.environment.nix
+    [ config.nix.package
       pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
@@ -60,6 +60,7 @@ in
     environment = {
 
       systemPackages = mkOption {
+        type = types.listOf types.path;
         default = [];
         example = "[ pkgs.icecat3 pkgs.thunderbird ]";
         description = ''
@@ -74,6 +75,7 @@ in
       };
 
       pathsToLink = mkOption {
+        type = types.listOf types.str;
         # Note: We need `/lib' to be among `pathsToLink' for NSS modules
         # to work.
         default = [];
@@ -122,7 +124,7 @@ in
       postBuild =
         ''
           if [ -x $out/bin/update-mime-database -a -w $out/share/mime/packages ]; then
-              $out/bin/update-mime-database -V $out/share/mime
+              XDG_DATA_DIRS=$out/share $out/bin/update-mime-database -V $out/share/mime > /dev/null
           fi
 
           if [ -x $out/bin/gtk-update-icon-cache -a -f $out/share/icons/hicolor/index.theme ]; then

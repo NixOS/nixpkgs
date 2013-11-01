@@ -36,23 +36,15 @@
                                select="attr[@name = 'description']/string/@value" />
                </para>
 
-               <para>
-                 <emphasis>Default:</emphasis>
-                 <xsl:text> </xsl:text>
-                 <xsl:choose>
-                   <xsl:when test="attr[@name = 'default']">
-                     <literal>
-                       <xsl:apply-templates select="attr[@name = 'default']" />
-                     </literal>
-                   </xsl:when>
-                   <xsl:otherwise>
-                     none
-                   </xsl:otherwise>
-                 </xsl:choose>
-               </para>
+               <xsl:if test="attr[@name = 'default']">
+                 <para>
+                   <emphasis>Default:</emphasis>
+                   <xsl:text> </xsl:text>
+                   <xsl:apply-templates select="attr[@name = 'default']" mode="top" />
+                 </para>
+               </xsl:if>
 
                <xsl:if test="attr[@name = 'example']">
-
                  <para>
                    <emphasis>Example:</emphasis>
                    <xsl:text> </xsl:text>
@@ -61,9 +53,7 @@
                        <programlisting><xsl:value-of select="attr[@name = 'example']/attrs/attr[@name = 'text']/string/@value" /></programlisting>
                      </xsl:when>
                      <xsl:otherwise>
-                       <literal>
-                         <xsl:apply-templates select="attr[@name = 'example']" />
-                       </literal>
+                       <xsl:apply-templates select="attr[@name = 'example']" mode="top" />
                      </xsl:otherwise>
                    </xsl:choose>
                  </para>
@@ -94,9 +84,34 @@
   </xsl:template>
 
 
+  <xsl:template match="*" mode="top">
+    <xsl:choose>
+      <xsl:when test="string[contains(@value, '&#010;')]">
+<programlisting>
+<xsl:text>''
+</xsl:text><xsl:value-of select='str:replace(string/@value, "${", "&apos;&apos;${")' /><xsl:text>''</xsl:text></programlisting>
+      </xsl:when>
+      <xsl:otherwise>
+        <literal><xsl:apply-templates /></literal>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+
+  <xsl:template match="null">
+    <xsl:text>null</xsl:text>
+  </xsl:template>
+
+
   <xsl:template match="string">
-    <!-- !!! escaping -->
-    <xsl:text>"</xsl:text><xsl:value-of select="str:replace(str:replace(str:replace(@value, '\', '\\'), '&quot;', '\&quot;'), '&#010;', '\n')" /><xsl:text>"</xsl:text>
+    <xsl:choose>
+      <xsl:when test="(contains(@value, '&quot;') or contains(@value, '\')) and not(contains(@value, '&#010;'))">
+        <xsl:text>''</xsl:text><xsl:value-of select='str:replace(@value, "${", "&apos;&apos;${")' /><xsl:text>''</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>"</xsl:text><xsl:value-of select="str:replace(str:replace(str:replace(str:replace(@value, '\', '\\'), '&quot;', '\&quot;'), '&#010;', '\n'), '$', '\$')" /><xsl:text>"</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 
@@ -142,14 +157,7 @@
 
 
   <xsl:template match="derivation">
-    <xsl:choose>
-      <xsl:when test="attr[@name = 'url']/string/@value">
-        <replaceable>(download of <xsl:value-of select="attr[@name = 'url']/string/@value" />)</replaceable>
-      </xsl:when>
-      <xsl:otherwise>
-        <replaceable>(build of <xsl:value-of select="attr[@name = 'name']/string/@value" />)</replaceable>
-      </xsl:otherwise>
-    </xsl:choose>
+    <replaceable>(build of <xsl:value-of select="attr[@name = 'name']/string/@value" />)</replaceable>
   </xsl:template>
 
   <xsl:template match="attr[@name = 'declarations' or @name = 'definitions']">

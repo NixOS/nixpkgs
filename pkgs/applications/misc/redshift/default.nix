@@ -1,6 +1,6 @@
 { fetchurl, stdenv, libX11, libXrandr, libXxf86vm, libxcb, pkgconfig, python
 , randrproto, xcbutil, xf86vidmodeproto, autoconf, automake, gettext, glib
-, GConf, dbus, dbus_glib, makeWrapper, gtk, pygtk, pyxdg }:
+, GConf, dbus, dbus_glib, makeWrapper, gtk, pygtk, pyxdg, geoclue }:
 
 stdenv.mkDerivation rec {
   version = "1.8";
@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libX11 libXrandr libXxf86vm libxcb pkgconfig python randrproto xcbutil
     xf86vidmodeproto autoconf automake gettext glib GConf dbus dbus_glib
-    makeWrapper gtk pygtk pyxdg
-    # TODO: 
-    # geoclue
+    makeWrapper gtk pygtk pyxdg geoclue
   ];
 
   preConfigure = ''

@@ -273,7 +273,7 @@ in
 
   config = {
 
-    boot.loader.grub.device = mkOverride 50 "/dev/vda";
+    boot.loader.grub.device = mkVMOverride "/dev/vda";
 
     boot.initrd.supportedFilesystems = optional cfg.writableStore "unionfs-fuse";
 
@@ -329,7 +329,7 @@ in
     boot.postBootCommands =
       ''
         if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
-          ${config.environment.nix}/bin/nix-store --load-db < ''${BASH_REMATCH[1]}
+          ${config.nix.package}/bin/nix-store --load-db < ''${BASH_REMATCH[1]}
         fi
       '';
 
@@ -337,13 +337,13 @@ in
 
     virtualisation.qemu.options = [ "-vga std" "-usbdevice tablet" ];
 
-    # Mount the host filesystem via 9P, and bind-mount the Nix store of
-    # the host into our own filesystem.  We use mkOverride to allow this
-    # module to be applied to "normal" NixOS system configuration, where
-    # the regular value for the `fileSystems' attribute should be
-    # disregarded for the purpose of building a VM test image (since
-    # those filesystems don't exist in the VM).
-    fileSystems = mkOverride 10
+    # Mount the host filesystem via 9P, and bind-mount the Nix store
+    # of the host into our own filesystem.  We use mkVMOverride to
+    # allow this module to be applied to "normal" NixOS system
+    # configuration, where the regular value for the `fileSystems'
+    # attribute should be disregarded for the purpose of building a VM
+    # test image (since those filesystems don't exist in the VM).
+    fileSystems = mkVMOverride
       { "/".device = "/dev/vda";
         "/nix/store" =
           { device = "store";
@@ -371,7 +371,8 @@ in
           };
       };
 
-    swapDevices = mkOverride 50 [ ];
+    swapDevices = mkVMOverride [ ];
+    boot.initrd.luks.devices = mkVMOverride [];
 
     # Don't run ntpd in the guest.  It should get the correct time from KVM.
     services.ntp.enable = false;
@@ -385,10 +386,10 @@ in
 
     # When building a regular system configuration, override whatever
     # video driver the host uses.
-    services.xserver.videoDriver = mkOverride 50 null;
-    services.xserver.videoDrivers = mkOverride 50 [ "vesa" ];
-    services.xserver.defaultDepth = mkOverride 50 0;
-    services.xserver.resolutions = mkOverride 50 [ { x = 1024; y = 768; } ];
+    services.xserver.videoDriver = mkVMOverride null;
+    services.xserver.videoDrivers = mkVMOverride [ "vesa" ];
+    services.xserver.defaultDepth = mkVMOverride 0;
+    services.xserver.resolutions = mkVMOverride [ { x = 1024; y = 768; } ];
     services.xserver.monitorSection =
       ''
         # Set a higher refresh rate so that resolutions > 800x600 work.
@@ -397,7 +398,7 @@ in
       '';
 
     # Wireless won't work in the VM.
-    networking.wireless.enable = mkOverride 50 false;
+    networking.wireless.enable = mkVMOverride false;
 
     system.requiredKernelConfig = with config.lib.kernelConfig;
       [ (isEnabled "VIRTIO_BLK")

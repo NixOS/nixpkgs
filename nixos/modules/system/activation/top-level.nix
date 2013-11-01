@@ -80,9 +80,9 @@ let
 
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
-  # kernel, the Upstart services, the init scripts, etc.) as well as a
-  # script `switch-to-configuration' that activates the configuration
-  # and makes it bootable.
+  # kernel, systemd units, init scripts, etc.) as well as a script
+  # `switch-to-configuration' that activates the configuration and
+  # makes it bootable.
   system = pkgs.stdenv.mkDerivation {
     name = "nixos-${config.system.nixosVersion}";
     preferLocalBuild = true;
@@ -92,22 +92,12 @@ let
     systemd = config.systemd.package;
 
     inherit children;
-    kernelParams =
-      config.boot.kernelParams ++ config.boot.extraKernelParams;
+    kernelParams = config.boot.kernelParams;
     installBootLoader =
       config.system.build.installBootLoader
       or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
     activationScript = config.system.activationScripts.script;
     nixosVersion = config.system.nixosVersion;
-
-    jobs = map (j: j.name) (attrValues config.jobs);
-
-    # Pass the names of all Upstart tasks to the activation script.
-    tasks = attrValues (mapAttrs (n: v: if v.task then ["[${v.name}]=1"] else []) config.jobs);
-
-    # Pass the names of all Upstart jobs that shouldn't be restarted
-    # to the activation script.
-    noRestartIfChanged = attrValues (mapAttrs (n: v: if v.restartIfChanged then [] else ["[${v.name}]=1"]) config.jobs);
 
     configurationName = config.boot.loader.grub.configurationName;
 
@@ -155,13 +145,14 @@ in
     system.boot.loader.kernelFile = mkOption {
       internal = true;
       default = pkgs.stdenv.platform.kernelTarget;
-      type = types.uniq types.string;
+      type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.
       '';
     };
 
     system.copySystemConfiguration = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         If enabled, copies the NixOS configuration file
@@ -172,9 +163,9 @@ in
     };
 
     system.extraSystemBuilderCmds = mkOption {
+      type = types.lines;
       internal = true;
       default = "";
-      merge = concatStringsSep "\n";
       description = ''
         This code will be added to the builder creating the system store path.
       '';

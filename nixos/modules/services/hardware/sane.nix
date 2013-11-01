@@ -2,6 +2,12 @@
 
 with pkgs.lib;
 
+let
+
+  pkg = if config.hardware.sane.snapshot then pkgs.saneBackendsGit else pkgs.saneBackends;
+
+in
+
 {
 
   ###### interface
@@ -9,11 +15,13 @@ with pkgs.lib;
   options = {
 
     hardware.sane.enable = mkOption {
+      type = types.bool;
       default = false;
       description = "Enable support for SANE scanners.";
     };
 
     hardware.sane.snapshot = mkOption {
+      type = types.bool;
       default = false;
       description = "Use a development snapshot of SANE scanner drivers.";
     };
@@ -23,18 +31,13 @@ with pkgs.lib;
 
   ###### implementation
 
-    config = let pkg = if config.hardware.sane.snapshot
-                          then pkgs.saneBackendsGit
-                          else pkgs.saneBackends;
-      in mkIf config.hardware.sane.enable {
-           environment.systemPackages = [ pkg ];
-           services.udev.packages = [ pkg ];
-           
-           users.extraGroups = singleton {
-             name = "scanner";
-             gid = config.ids.gids.scanner;
-           };
+  config = mkIf config.hardware.sane.enable {
 
-      };
+    environment.systemPackages = [ pkg ];
+    services.udev.packages = [ pkg ];
+
+    users.extraGroups."scanner".gid = config.ids.gids.scanner;
+
+  };
 
 }

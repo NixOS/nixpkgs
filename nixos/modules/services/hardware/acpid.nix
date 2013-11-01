@@ -66,21 +66,25 @@ in
     services.acpid = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to enable the ACPI daemon.";
       };
 
       powerEventCommands = mkOption {
+        type = types.lines;
         default = "";
         description = "Shell commands to execute on a button/power.* event.";
       };
 
       lidEventCommands = mkOption {
+        type = types.lines;
         default = "";
         description = "Shell commands to execute on a button/lid.* event.";
       };
 
       acEventCommands = mkOption {
+        type = types.lines;
         default = "";
         description = "Shell commands to execute on an ac_adapter.* event.";
       };

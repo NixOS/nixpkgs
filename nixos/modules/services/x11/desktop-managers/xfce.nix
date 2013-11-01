@@ -13,8 +13,8 @@ in
   options = {
 
     services.xserver.desktopManager.xfce.enable = mkOption {
+      type = types.bool;
       default = false;
-      example = true;
       description = "Enable the Xfce desktop environment.";
     };
 
@@ -60,7 +60,6 @@ in
         pkgs.xfce.xfce4session
         pkgs.xfce.xfce4settings
         pkgs.xfce.xfce4mixer
-        pkgs.xfce.xfceutils
         pkgs.xfce.xfconf
         pkgs.xfce.xfdesktop
         pkgs.xfce.xfwm4

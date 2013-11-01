@@ -19,6 +19,7 @@ in
     services.nscd = {
 
       enable = mkOption {
+        type = types.bool;
         default = true;
         description = "Whether to enable the Name Service Cache Daemon.";
       };

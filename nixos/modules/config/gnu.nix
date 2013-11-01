@@ -5,6 +5,7 @@ with pkgs.lib;
 {
   options = {
     gnu = mkOption {
+      type = types.bool;
       default = false;
       description =
         '' When enabled, GNU software is chosen by default whenever a there is

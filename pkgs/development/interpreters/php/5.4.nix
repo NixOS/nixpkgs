@@ -58,6 +58,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         buildInputs = [ libxml2 ];
       };
 
+      pcntl = {
+        configureFlags = [ "--enable-pcntl" ];
+      };
+
       readline = {
         configureFlags = ["--with-readline=${readline}"];
         buildInputs = [ readline ];
@@ -188,6 +192,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     socketsSupport = config.php.sockets or true;
     curlSupport = config.php.curl or true;
     gettextSupport = config.php.gettext or true;
+    pcntlSupport = config.php.pcntl or true;
     postgresqlSupport = config.php.postgresql or true;
     readlineSupport = config.php.readline or true;
     sqliteSupport = config.php.sqlite or true;

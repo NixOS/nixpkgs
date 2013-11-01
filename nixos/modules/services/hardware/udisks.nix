@@ -13,6 +13,7 @@ with pkgs.lib;
     services.udisks = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable Udisks, a DBus service that allows

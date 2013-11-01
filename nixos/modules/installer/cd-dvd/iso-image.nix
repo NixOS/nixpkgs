@@ -298,12 +298,12 @@ in
       ''
         # After booting, register the contents of the Nix store on the
         # CD in the Nix database in the tmpfs.
-        ${config.environment.nix}/bin/nix-store --load-db < /nix/store/nix-path-registration
+        ${config.nix.package}/bin/nix-store --load-db < /nix/store/nix-path-registration
 
         # nixos-rebuild also requires a "system" profile and an
         # /etc/NIXOS tag.
         touch /etc/NIXOS
-        ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+        ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
       '';
 
     # Add vfat support to the initrd to enable people to copy the

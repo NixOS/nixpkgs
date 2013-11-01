@@ -53,9 +53,9 @@ in
           '';
         };
 
-	socksListenAddressFaster = mkOption {
+        socksListenAddressFaster = mkOption {
           default = "127.0.0.1:9063";
-	  description = ''
+          description = ''
             Same as socksListenAddress but uses weaker circuit isolation to provide
             performance suitable for a web browser.
           '';
@@ -227,10 +227,12 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.client.enable || cfg.relay.enable) (
-  mkAssert (cfg.relay.enable -> !(cfg.relay.isBridge && cfg.relay.isExit)) "
-    Can't be both an exit and a bridge relay at the same time
-  " {
+  config = mkIf (cfg.client.enable || cfg.relay.enable) {
+
+    assertions = singleton
+      { assertion = cfg.relay.enable -> !(cfg.relay.isBridge && cfg.relay.isExit);
+        message = "Can't be both an exit and a bridge relay at the same time";
+      };
 
     users.extraUsers = singleton
       { name = torUser;
@@ -270,7 +272,7 @@ in
       ''
       + optionalString cfg.client.enable  ''
         SOCKSPort ${cfg.client.socksListenAddress} IsolateDestAddr
-	SOCKSPort ${cfg.client.socksListenAddressFaster}
+        SOCKSPort ${cfg.client.socksListenAddressFaster}
         ${opt "SocksPolicy" cfg.client.socksPolicy}
       ''
       + optionalString cfg.relay.enable ''
@@ -316,6 +318,6 @@ in
         # Extra config goes here
       '';
 
-  });
+  };
 
 }

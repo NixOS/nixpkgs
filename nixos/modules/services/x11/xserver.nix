@@ -108,17 +108,6 @@ let
       ''; # */
   };
 
-
-  checkAgent = mkAssert (!(cfg.startOpenSSHAgent && cfg.startGnuPGAgent))
-    ''
-      The OpenSSH agent and GnuPG agent cannot be started both.
-      Choose between `startOpenSSHAgent' and `startGnuPGAgent'.
-    '';
-
-  checkPolkit = mkAssert config.security.polkit.enable
-    "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
-
-
 in
 
 {
@@ -137,6 +126,7 @@ in
     services.xserver = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the X server.
@@ -144,6 +134,7 @@ in
       };
 
       autorun = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to start the X server automatically.
@@ -151,6 +142,7 @@ in
       };
 
       exportConfiguration = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to symlink the X server configuration under
@@ -159,6 +151,7 @@ in
       };
 
       enableTCP = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to allow the X server to accept TCP connections.
@@ -166,12 +159,14 @@ in
       };
 
       modules = mkOption {
+        type = types.listOf types.path;
         default = [];
         example = [ pkgs.xf86_input_wacom ];
         description = "Packages to be added to the module search path of the X server.";
       };
 
       resolutions = mkOption {
+        type = types.listOf types.attrs;
         default = [];
         example = [ { x = 1600; y = 1200; } { x = 1024; y = 786; } ];
         description = ''
@@ -182,6 +177,7 @@ in
       };
 
       videoDriver = mkOption {
+        type = types.nullOr types.str;
         default = null;
         example = "i810";
         description = ''
@@ -192,6 +188,7 @@ in
       };
 
       videoDrivers = mkOption {
+        type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
         default = [ "ati" "cirrus" "intel" "vesa" "vmware" ];
         example = [ "vesa" ];
@@ -203,8 +200,8 @@ in
       };
 
       vaapiDrivers = mkOption {
+        type = types.listOf types.path;
         default = [ ];
-        defaultText = "[ pkgs.vaapiIntel pkgs.vaapiVdpau ]";
         example = "[ pkgs.vaapiIntel pkgs.vaapiVdpau ]";
         description = ''
           Packages providing libva acceleration drivers.
@@ -212,6 +209,7 @@ in
       };
 
       driSupport = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to enable accelerated OpenGL rendering through the
@@ -220,6 +218,7 @@ in
       };
 
       driSupport32Bit = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           On 64-bit systems, whether to support Direct Rendering for
@@ -230,6 +229,7 @@ in
       };
 
       s3tcSupport = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Make S3TC(S3 Texture Compression) via libtxc_dxtn available
@@ -241,6 +241,7 @@ in
       };
 
       startOpenSSHAgent = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to start the OpenSSH agent when you log in.  The OpenSSH agent
@@ -251,6 +252,7 @@ in
       };
 
       startGnuPGAgent = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to start the GnuPG agent when you log in.  The GnuPG agent
@@ -261,6 +263,7 @@ in
       };
 
       layout = mkOption {
+        type = types.str;
         default = "us";
         description = ''
           Keyboard layout.
@@ -268,6 +271,7 @@ in
       };
 
       xkbModel = mkOption {
+        type = types.str;
         default = "pc104";
         example = "presario";
         description = ''
@@ -276,6 +280,7 @@ in
       };
 
       xkbOptions = mkOption {
+        type = types.str;
         default = "terminate:ctrl_alt_bksp";
         example = "grp:caps_toggle, grp_led:scroll";
         description = ''
@@ -284,6 +289,7 @@ in
       };
 
       xkbVariant = mkOption {
+        type = types.str;
         default = "";
         example = "colemak";
         description = ''
@@ -292,6 +298,7 @@ in
       };
 
       config = mkOption {
+        type = types.lines;
         description = ''
           The contents of the configuration file of the X server
           (<filename>xorg.conf</filename>).
@@ -299,12 +306,14 @@ in
       };
 
       deviceSection = mkOption {
+        type = types.lines;
         default = "";
         example = "VideoRAM 131072";
         description = "Contents of the first Device section of the X server configuration file.";
       };
 
       screenSection = mkOption {
+        type = types.lines;
         default = "";
         example = ''
           Option "RandRRotation" "on"
@@ -313,6 +322,7 @@ in
       };
 
       monitorSection = mkOption {
+        type = types.lines;
         default = "";
         example = "HorizSync 28-49";
         description = "Contents of the first Monitor section of the X server configuration file.";
@@ -334,6 +344,7 @@ in
       };
 
       moduleSection = mkOption {
+        type = types.lines;
         default = "";
         example =
           ''
@@ -344,6 +355,7 @@ in
       };
 
       serverLayoutSection = mkOption {
+        type = types.lines;
         default = "";
         example =
           ''
@@ -353,36 +365,40 @@ in
       };
 
       extraDisplaySettings = mkOption {
+        type = types.lines;
         default = "";
         example = "Virtual 2048 2048";
         description = "Lines to be added to every Display subsection of the Screen section.";
       };
 
       defaultDepth = mkOption {
+        type = types.int;
         default = 0;
         example = 8;
         description = "Default colour depth.";
       };
 
       useXFS = mkOption {
+        # FIXME: what's the type of this option?
         default = false;
         example = "unix/:7100";
         description = "Determines how to connect to the X Font Server.";
       };
 
       tty = mkOption {
+        type = types.int;
         default = 7;
-        example = 9;
         description = "Virtual console for the X server.";
       };
 
       display = mkOption {
+        type = types.int;
         default = 0;
-        example = 1;
         description = "Display number for the X server.";
       };
 
       virtualScreen = mkOption {
+        type = types.nullOr types.attrs;
         default = null;
         example = { x = 2048; y = 2048; };
         description = ''
@@ -392,22 +408,26 @@ in
 
     };
 
-    environment.x11Packages = mkOption {
-      default = [];
-      type = types.listOf types.package;
-      description = ''
-        List of packages added to the system when the X server is
-        activated (<option>services.xserver.enable</option>).
-      '';
-    };
-
   };
 
 
 
   ###### implementation
 
-  config = mkIf cfg.enable (checkAgent (checkPolkit {
+  config = mkIf cfg.enable {
+
+    assertions =
+      [ { assertion = !(cfg.startOpenSSHAgent && cfg.startGnuPGAgent);
+          message =
+            ''
+              The OpenSSH agent and GnuPG agent cannot be started both.
+              Choose between `startOpenSSHAgent' and `startGnuPGAgent'.
+            '';
+        }
+        { assertion = config.security.polkit.enable;
+          message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
+        }
+      ];
 
     boot.extraModulePackages =
       optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++
@@ -450,7 +470,7 @@ in
           }
       ]);
 
-    environment.x11Packages =
+    environment.systemPackages =
       [ xorg.xorgserver
         xorg.xrandr
         xorg.xrdb
@@ -470,8 +490,6 @@ in
       ++ optional (elem "nvidiaLegacy304" driverNames) kernelPackages.nvidia_x11_legacy304
       ++ optional (elem "virtualbox" driverNames) xorg.xrefresh
       ++ optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
-
-    environment.systemPackages = config.environment.x11Packages;
 
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
@@ -653,7 +671,7 @@ in
         ${xrandrMonitorSections}
       '';
 
-  }));
+  };
 
 }
 

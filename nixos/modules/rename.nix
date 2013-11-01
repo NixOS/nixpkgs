@@ -32,7 +32,6 @@ let
     zipAttrsWith (n: v:
       if tail v != [] then
         if n == "_type" then (head v)
-        else if n == "extraConfigs" then concatLists v
         else if n == "warnings" then concatLists v
         else if n == "description" || n == "apply" then
           abort "Cannot rename an option to multiple options."
@@ -55,12 +54,7 @@ let
             inherit visible;
           });
         }
-        { options = setTo (mkOption {
-            extraConfigs =
-              let externalDefs = (fromOf options).definitions; in
-              if externalDefs == [] then []
-              else map (def: def.value) (define externalDefs);
-          });
+        { config = setTo (mkIf (fromOf options).isDefined (define (mkMerge (fromOf options).definitions)));
         }
       ];
 
@@ -75,10 +69,9 @@ let
 
 in zipModules ([]
 
-# usage example:
-# ++ alias [ "services" "xserver" "slim" "theme" ] [ "services" "xserver" "displayManager" "slim" "theme" ]
-++ obsolete [ "environment" "extraPackages" ] [ "environment" "systemPackages" ]
+++ obsolete [ "environment" "x11Packages" ] [ "environment" "systemPackages" ]
 ++ obsolete [ "environment" "enableBashCompletion" ] [ "programs" "bash" "enableCompletion" ]
+++ obsolete [ "environment" "nix" ] [ "nix" "package" ]
 
 ++ obsolete [ "security" "extraSetuidPrograms" ] [ "security" "setuidPrograms" ]
 ++ obsolete [ "networking" "enableWLAN" ] [ "networking" "wireless" "enable" ]
@@ -98,6 +91,7 @@ in zipModules ([]
 ++ obsolete [ "boot" "grubSplashImage" ] [ "boot" "loader" "grub" "splashImage" ]
 
 ++ obsolete [ "boot" "initrd" "extraKernelModules" ] [ "boot" "initrd" "kernelModules" ]
+++ obsolete [ "boot" "extraKernelParams" ] [ "boot" "kernelParams" ]
 
 # OpenSSH
 ++ obsolete [ "services" "sshd" "ports" ] [ "services" "openssh" "ports" ]

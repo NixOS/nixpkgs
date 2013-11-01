@@ -90,4 +90,6 @@ rec {
   svn2git_kde = callPackage ./svn2git-kde { };
 
   darcsToGit = callPackage ./darcs-to-git { };
+
+  gitflow = callPackage ./gitflow { };
 }

@@ -8,9 +8,9 @@ with pkgs.lib;
   options = {
 
     powerManagement.cpuFreqGovernor = mkOption {
-      default = "";
+      type = types.nullOr types.str;
+      default = null;
       example = "ondemand";
-      type = types.uniq types.string;
       description = ''
         Configure the governor used to regulate the frequence of the
         available CPUs. By default, the kernel configures the
@@ -23,7 +23,7 @@ with pkgs.lib;
 
   ###### implementation
 
-  config = mkIf (config.powerManagement.cpuFreqGovernor != "") {
+  config = mkIf (config.powerManagement.cpuFreqGovernor != null) {
 
     environment.systemPackages = [ pkgs.cpufrequtils ];
 

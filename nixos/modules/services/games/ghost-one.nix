@@ -21,7 +21,8 @@ in
 
       language = mkOption {
         default = "English";
-        check = lang: elem lang [ "English" "Spanish" "Russian" "Serbian" "Turkish" ];
+        type = types.addCheck types.str
+          (lang: elem lang [ "English" "Spanish" "Russian" "Serbian" "Turkish" ]);
         description = "The language of bot messages: English, Spanish, Russian, Serbian or Turkish.";
       };
 

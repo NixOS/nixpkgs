@@ -153,7 +153,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     HUnit        = self.HUnit_1_2_5_2;
     mtl          = self.mtl_2_1_2;
     network      = self.network_2_4_2_0;
-    OpenGL       = self.OpenGL_2_8_0_0;
+    OpenGL       = self.OpenGL_2_9_1_0;
     OpenGLRaw    = self.OpenGLRaw_1_4_0_0;
     parallel     = self.parallel_3_2_0_3;
     parsec       = self.parsec_3_1_3;
@@ -659,7 +659,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix { cabal = self.cabal.override { Cabal = null; }; };
-  Cabal_1_18_1_1 = callPackage ../development/libraries/haskell/Cabal/1.18.1.1.nix {
+  Cabal_1_18_1_2 = callPackage ../development/libraries/haskell/Cabal/1.18.1.2.nix {
     cabal = self.cabal.override { Cabal = null; };
     deepseq = self.deepseq_1_3_0_1;
   };
@@ -1074,10 +1074,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
 
-  gloss = callPackage ../development/libraries/haskell/gloss {
-    OpenGL = self.OpenGL_2_6_0_1;
-    GLUT   = self.GLUT_2_3_1_0;
-  };
+  gloss = callPackage ../development/libraries/haskell/gloss {};
 
   glpkHs = callPackage ../development/libraries/haskell/glpk-hs {};
 
@@ -1098,7 +1095,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     OpenGL = self.OpenGL_2_8_0_0;
   };
   GLUT_2_5_0_1 = callPackage ../development/libraries/haskell/GLUT/2.5.0.1.nix {
-    OpenGL = self.OpenGL_2_9_0_0;
+    OpenGL = self.OpenGL_2_9_0_1;
   };
   GLUT = self.GLUT_2_5_0_1;
 
@@ -1259,7 +1256,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
 
-  hslua = callPackage ../development/libraries/haskell/hslua {};
+  hslua = callPackage ../development/libraries/haskell/hslua {
+    lua = pkgs.lua5_1;
+  };
 
   HSH = callPackage ../development/libraries/haskell/HSH {};
 
@@ -1608,8 +1607,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   OpenGL_2_4_0_2 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.2.nix {};
   OpenGL_2_6_0_1 = callPackage ../development/libraries/haskell/OpenGL/2.6.0.1.nix {};
   OpenGL_2_8_0_0 = callPackage ../development/libraries/haskell/OpenGL/2.8.0.0.nix {};
-  OpenGL_2_9_0_0 = callPackage ../development/libraries/haskell/OpenGL/2.9.0.0.nix {};
-  OpenGL = self.OpenGL_2_9_0_0;
+  OpenGL_2_9_0_1 = callPackage ../development/libraries/haskell/OpenGL/2.9.1.0.nix {};
+  OpenGL = self.OpenGL_2_9_1_0;
 
   OpenGLRaw_1_3_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.3.0.0.nix {};
   OpenGLRaw_1_4_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.4.0.0.nix {};
@@ -1651,7 +1650,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   parsec3 = self.parsec_3_1_3;
   parsec  = self.parsec3;
 
-  parsers = callPackage ../development/libraries/haskell/parsers {};
+  parsers_0_9 = callPackage ../development/libraries/haskell/parsers/0.9.nix {};
+  parsers_0_10 = callPackage ../development/libraries/haskell/parsers/0.10.nix {};
+  parsers = self.parsers_0_10;
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
@@ -2117,7 +2118,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   transformersCompat = callPackage ../development/libraries/haskell/transformers-compat {};
 
-  trifecta = callPackage ../development/libraries/haskell/trifecta {};
+  trifecta_1_1 = callPackage ../development/libraries/haskell/trifecta/1.1.nix {
+    parsers = self.parsers_0_9;
+  };
+  trifecta_1_2 = callPackage ../development/libraries/haskell/trifecta/1.2.nix {};
+  trifecta = self.trifecta_1_2;
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
 
@@ -2443,7 +2448,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   darcs = callPackage ../applications/version-management/darcs {};
 
-  idris_plain = callPackage ../development/compilers/idris {};
+  idris_plain = callPackage ../development/compilers/idris {
+    parsers = self.parsers_0_9;
+    trifecta = self.trifecta_1_1;
+  };
 
   idris = callPackage ../development/compilers/idris/wrapper.nix {};
 
@@ -2476,7 +2484,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix {};
   cabalInstall_1_18_0_2 = callPackage ../tools/package-management/cabal-install/1.18.0.2.nix {
-    Cabal = self.Cabal_1_18_1_1;
+    Cabal = self.Cabal_1_18_1_2;
   };
   cabalInstall = self.cabalInstall_1_18_0_2;
 

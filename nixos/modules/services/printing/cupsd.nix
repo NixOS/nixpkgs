@@ -49,6 +49,7 @@ in
     services.printing = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable printing support through the CUPS daemon.
@@ -56,6 +57,8 @@ in
       };
 
       bindirCmds = mkOption {
+        type = types.lines;
+        internal = true;
         default = "";
         description = ''
           Additional commands executed while creating the directory
@@ -64,6 +67,7 @@ in
       };
 
       cupsdConf = mkOption {
+        type = types.lines;
         default = "";
         example =
           ''
@@ -77,13 +81,16 @@ in
       };
 
       drivers = mkOption {
-        example = [ pkgs.splix ];
+        type = types.listOf types.path;
+        example = literalExample "[ pkgs.splix ]";
         description = ''
-          CUPS drivers (CUPS, gs and samba are added unconditionally).
+          CUPS drivers to use. Drivers provided by CUPS, Ghostscript
+          and Samba are added unconditionally.
         '';
       };
 
       tempDir = mkOption {
+        type = types.path;
         default = "/tmp";
         example = "/tmp/cups";
         description = ''

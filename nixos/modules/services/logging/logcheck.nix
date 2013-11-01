@@ -52,7 +52,7 @@ let
 
   levelOption = mkOption {
     default = "server";
-    type = types.uniq types.string;
+    type = types.str;
     description = ''
       Set the logcheck level. Either "workstation", "server", or "paranoid".
     '';
@@ -63,7 +63,7 @@ let
 
     regex = mkOption {
       default = "";
-      type = types.uniq types.string;
+      type = types.str;
       description = ''
         Regex specifying which log lines to ignore.
       '';
@@ -73,7 +73,7 @@ let
   ignoreCronOptions = {
     user = mkOption {
       default = "root";
-      type = types.uniq types.string;
+      type = types.str;
       description = ''
         User that runs the cronjob.
       '';
@@ -81,7 +81,7 @@ let
 
     cmdline = mkOption {
       default = "";
-      type = types.uniq types.string;
+      type = types.str;
       description = ''
         Command line for the cron job. Will be turned into a regex for the logcheck ignore rule.
       '';
@@ -89,7 +89,7 @@ let
 
     timeArgs = mkOption {
       default = null;
-      type = types.nullOr (types.uniq types.string);
+      type = types.nullOr (types.str);
       example = "02 06 * * *";
       description = ''
         "min hr dom mon dow" crontab time args, to auto-create a cronjob too.
@@ -112,7 +112,7 @@ in
 
       user = mkOption {
         default = "logcheck";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Username for the logcheck user.
         '';
@@ -121,7 +121,7 @@ in
       timeOfDay = mkOption {
         default = "*";
         example = "6";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Time of day to run logcheck. A logcheck will be scheduled at xx:02 each day.
           Leave default (*) to run every hour. Of course when nothing special was logged,
@@ -132,7 +132,7 @@ in
       mailTo = mkOption {
         default = "root";
         example = "you@domain.com";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Email address to send reports to.
         '';
@@ -140,7 +140,7 @@ in
 
       level = mkOption {
         default = "server";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Set the logcheck level. Either "workstation", "server", or "paranoid".
         '';

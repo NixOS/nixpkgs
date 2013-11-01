@@ -150,12 +150,12 @@
   ./services/networking/cntlm.nix
   ./services/networking/chrony.nix
   ./services/networking/ddclient.nix
-  #./services/networking/dhclient.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dhcpd.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/ejabberd.nix
   ./services/networking/firewall.nix
+  ./services/networking/haproxy.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/flashpolicyd.nix
   ./services/networking/freenet.nix
@@ -276,7 +276,7 @@
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
   ./virtualisation/libvirtd.nix
-  ./virtualisation/nova.nix
+  #./virtualisation/nova.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/xen-dom0.nix
 ]

@@ -74,7 +74,7 @@ let cfg = config.services.xserver.synaptics; in
         example = ''
           Option "RTCornerButton" "2"
           Option "RBCornerButton" "3"
-		'';
+        '';
         description = ''
           Additional options for synaptics touchpad driver.
         '';

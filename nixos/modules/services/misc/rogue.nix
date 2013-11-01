@@ -17,6 +17,7 @@ in
   options = {
 
     services.rogue.enable = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Whether to enable the Rogue game on one of the virtual
@@ -25,6 +26,7 @@ in
     };
 
     services.rogue.tty = mkOption {
+      type = types.str;
       default = "tty9";
       description = ''
         Virtual console on which to run Rogue.

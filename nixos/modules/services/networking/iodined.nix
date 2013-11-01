@@ -32,21 +32,21 @@ in
       };
 
       ip = mkOption {
-        type = types.uniq types.string;
+        type = types.str;
         default = "";
         description = "Assigned ip address or ip range";
         example = "172.16.10.1/24";
       };
 
       domain = mkOption {
-        type = types.uniq types.string;
+        type = types.str;
         default = "";
         description = "Domain or subdomain of which nameservers point to us";
         example = "tunnel.mydomain.com";
       };
 
       extraConfig = mkOption {
-        type = types.uniq types.string;
+        type = types.str;
         default = "";
         description = "Additional command line parameters";
         example = "-P mysecurepassword -l 192.168.1.10 -p 23";

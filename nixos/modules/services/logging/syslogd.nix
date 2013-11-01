@@ -46,7 +46,7 @@ in
       };
 
       tty = mkOption {
-        type = types.uniq types.string;
+        type = types.str;
         default = "tty10";
         description = ''
           The tty device on which syslogd will print important log
@@ -55,7 +55,7 @@ in
       };
 
       defaultConfig = mkOption {
-        type = types.string;
+        type = types.lines;
         default = defaultConf;
         description = ''
           The default <filename>syslog.conf</filename> file configures a
@@ -73,7 +73,7 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.string;
+        type = types.lines;
         default = "";
         example = "news.* -/var/log/news";
         description = ''

@@ -102,7 +102,7 @@ in
 
       document-root = mkOption {
         default = "/srv/www";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Document-root of the web server. Must be readable by the "lighttpd" user.
         '';

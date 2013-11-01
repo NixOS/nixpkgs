@@ -17,6 +17,7 @@ in
 
     security.pam.usb = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Enable USB login for all login systems that support it.  For

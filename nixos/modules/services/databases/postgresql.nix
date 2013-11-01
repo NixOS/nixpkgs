@@ -46,6 +46,7 @@ in
     services.postgresql = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to run PostgreSQL.
@@ -53,6 +54,7 @@ in
       };
 
       package = mkOption {
+        type = types.path;
         example = literalExample "pkgs.postgresql92";
         description = ''
           PostgreSQL package to use.
@@ -60,6 +62,7 @@ in
       };
 
       port = mkOption {
+        type = types.int;
         default = "5432";
         description = ''
           Port for PostgreSQL.
@@ -67,6 +70,7 @@ in
       };
 
       dataDir = mkOption {
+        type = types.path;
         default = "/var/db/postgresql";
         description = ''
           Data directory for PostgreSQL.
@@ -74,6 +78,7 @@ in
       };
 
       authentication = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Defines how users authenticate themselves to the server.
@@ -81,6 +86,7 @@ in
       };
 
       identMap = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Defines the mapping from system users to database users.
@@ -88,14 +94,15 @@ in
       };
 
       initialScript = mkOption {
-        default = null;
         type = types.nullOr types.path;
+        default = null;
         description = ''
           A file containing SQL statements to execute on first startup.
         '';
       };
 
       enableTCPIP = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to run PostgreSQL with -i flag to enable TCP/IP connections.
@@ -103,8 +110,9 @@ in
       };
 
       extraPlugins = mkOption {
+        type = types.listOf types.path;
         default = [];
-        example = "pkgs.postgis"; # of course don't use a string here!
+        example = literalExample "pkgs.postgis";
         description = ''
           When this list contains elements a new store path is created.
           PostgreSQL and the elments are symlinked into it. Then pg_config,
@@ -118,15 +126,16 @@ in
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = "Additional text to be appended to <filename>postgresql.conf</filename>.";
       };
 
       recoveryConfig = mkOption {
+        type = types.nullOr types.lines;
         default = null;
-        type = types.nullOr types.string;
         description = ''
-          Values to put into recovery.conf file.
+          Contents of the <filename>recovery.conf</filename> file.
         '';
       };
     };

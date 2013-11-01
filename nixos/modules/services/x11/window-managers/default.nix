@@ -24,6 +24,7 @@ in
     services.xserver.windowManager = {
 
       session = mkOption {
+        internal = true;
         default = [];
         example = [{
           name = "wmii";
@@ -40,10 +41,10 @@ in
       };
 
       default = mkOption {
+        type = types.str;
         default = "none";
         example = "wmii";
         description = "Default window manager loaded if none have been chosen.";
-        merge = mergeOneOption;
         apply = defaultWM:
           if any (w: w.name == defaultWM) cfg.session then
             defaultWM

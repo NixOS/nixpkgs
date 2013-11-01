@@ -27,7 +27,7 @@
 
     webserver =
       { config, pkgs, ... }:
-      { fileSystems = pkgs.lib.mkOverride 50
+      { fileSystems = pkgs.lib.mkVMOverride
           [ { mountPoint = "/repos";
               device = "storage:/repos";
               fsType = "nfs";

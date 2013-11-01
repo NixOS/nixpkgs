@@ -50,7 +50,7 @@ in
       };
 
       hostName = mkOption {
-        type = types.uniq types.string;
+        type = types.str;
         description = ''Host name advertised on the LAN.'';
       };
 

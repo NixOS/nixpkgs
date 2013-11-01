@@ -6,7 +6,7 @@ let
 
   client =
     { config, pkgs, ... }:
-    { fileSystems = pkgs.lib.mkOverride 50
+    { fileSystems = pkgs.lib.mkVMOverride
         [ { mountPoint = "/data";
             device = "server:${if version == 4 then "/" else "/data"}";
             fsType = "nfs";

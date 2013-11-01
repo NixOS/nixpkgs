@@ -5,6 +5,7 @@ with pkgs.lib;
 {
   options = {
     security.rngd.enable = mkOption {
+      type = types.bool;
       default = true;
       description = ''
         Whether to enable the rng daemon, which adds entropy from

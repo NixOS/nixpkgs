@@ -19,6 +19,7 @@ in
   options = {
 
     networking.nat.enable = mkOption {
+      type = types.bool;
       default = false;
       description =
         ''
@@ -27,6 +28,7 @@ in
     };
 
     networking.nat.internalIPs = mkOption {
+      type = types.listOf types.str;
       example = [ "192.168.1.0/24" ] ;
       description =
         ''
@@ -34,12 +36,10 @@ in
           coming from these networks and destined for the external
           interface will be rewritten.
         '';
-      # Backward compatibility: this used to be a single range instead
-      # of a list.
-      apply = x: if isList x then x else [x];
     };
 
     networking.nat.externalInterface = mkOption {
+      type = types.str;
       example = "eth1";
       description =
         ''
@@ -48,7 +48,8 @@ in
     };
 
     networking.nat.externalIP = mkOption {
-      default = "";
+      type = types.nullOr types.str;
+      default = null;
       example = "203.0.113.123";
       description =
         ''
@@ -86,7 +87,7 @@ in
             ''
             iptables -t nat -A POSTROUTING \
               -s ${network} -o ${cfg.externalInterface} \
-              ${if cfg.externalIP == ""
+              ${if cfg.externalIP == null
                 then "-j MASQUERADE"
                 else "-j SNAT --to-source ${cfg.externalIP}"}
             ''

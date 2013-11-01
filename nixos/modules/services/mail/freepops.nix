@@ -35,7 +35,7 @@ in
 
       bind = mkOption {
         default = "0.0.0.0";
-        type = with types; uniq string;
+        type = types.str;
         description = ''
           Bind over an IPv4 address instead of any.
         '';
@@ -44,7 +44,7 @@ in
       logFile = mkOption {
         default = "/var/log/freepopsd";
         example = "syslog";
-        type = with types; uniq string;
+        type = types.str;
         description = ''
           Filename of the log file or syslog to rely on the logging daemon.
         '';
@@ -53,7 +53,7 @@ in
       suid = {
         user = mkOption {
           default = "nobody";
-          type = with types; uniq string;
+          type = types.str;
           description = ''
             User name under which freepopsd will be after binding the port.
           '';
@@ -61,7 +61,7 @@ in
 
         group = mkOption {
           default = "nogroup";
-          type = with types; uniq string;
+          type = types.str;
           description = ''
             Group under which freepopsd will be after binding the port.
           '';

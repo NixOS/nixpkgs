@@ -15,6 +15,7 @@ with pkgs.lib;
     security.apparmor = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Enable AppArmor application security system. Enable only if
@@ -23,8 +24,8 @@ with pkgs.lib;
       };
 
       profiles = mkOption {
+        type = types.listOf types.path;
         default = [];
-        merge = mergeListOption;
         description = ''
           List of file names of AppArmor profiles.
         '';

@@ -1402,6 +1402,36 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  faker = buildPythonPackage rec {
+    name = "faker-0.0.4";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/F/Faker/Faker-0.0.4.tar.gz;
+      sha256 = "09q5jna3j8di0gw5yjx0dvlndkrk2x9vvqzwyfsvg3nlp8h38js1";
+    };
+    buildInputs = [ nose ];
+    meta = with stdenv.lib; {
+      description = "A Python library for generating fake user data.";
+      homepage    = http://pypi.python.org/pypi/Faker;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
+
+  fake_factory = buildPythonPackage rec {
+    name = "fake-factory-0.2";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/f/fake-factory/fake-factory-0.2.tar.gz;
+      sha256 = "0qdmk8p4anrj9mf95dh9v7bkhv1pz69hvhlw380kj4iz7b44b6zn";
+    };
+    meta = with stdenv.lib; {
+      description = "A Python package that generates fake data for you.";
+      homepage    = https://pypi.python.org/pypi/fake-factory;
+      license     = licenses.mit;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
 
   fabric = buildPythonPackage rec {
     name = "fabric-1.6.1";
@@ -1821,6 +1851,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     src = fetchgit {
       inherit rev;
       url = "https://github.com/Pylons/substanced.git";
+      sha256 = "eded6468563328af37a07aeb88ef81ed78ccaff2ab687cac34ad2b36e19abcb4";
     };
 
     buildInputs = [ mock ];
@@ -4022,7 +4053,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = "https://github.com/paramiko/paramiko/";
       description = "Native Python SSHv2 protocol library";
       license = stdenv.lib.licenses.lgpl21Plus;
-      maintainer = [ stdenv.lib.maintainers.aszlig ];
+      maintainers = [ stdenv.lib.maintainers.aszlig ];
 
       longDescription = ''
         This is a library for making SSH2 connections (client or server).
@@ -5205,6 +5236,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
 
+  pywebkitgtk = stdenv.mkDerivation rec {
+    name = "pywebkitgtk-${version}";
+    version = "1.1.8";
+
+    src = fetchurl {
+      url = "http://pywebkitgtk.googlecode.com/files/${name}.tar.bz2";
+      sha256 = "1svlwyl61rvbqbcbalkg6pbf38yjyv7qkq9sx4x35yk69lscaac2";
+    };
+
+    buildInputs = with pkgs; [
+      pkgconfig python gtk2 pygtk libxml2 libxslt libsoup webkit_gtk2 icu
+    ];
+
+    meta = {
+      homepage = "https://code.google.com/p/pywebkitgtk/";
+      description = "Python bindings for the WebKit GTK+ port";
+      license = stdenv.lib.licenses.lgpl2Plus;
+    };
+  };
+
+
   pyxattr = buildPythonPackage (rec {
     name = "pyxattr-0.5.1";
 
@@ -5654,6 +5706,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = http://sigal.saimon.org/en/latest/index.html;
       license = licenses.mit;
       maintainers = [ maintainers.iElectric ];
+    };
+  };
+
+  sympy = buildPythonPackage rec {
+    name = "sympy-0.7.3";
+
+    src = fetchurl {
+      url    = "https://github.com/sympy/sympy/releases/download/${name}/${name}.tar.gz";
+      sha256 = "081g9gs2d1d41ipn8zr034d98cnrxvc4zsmihqmfwzirwzpcii5x";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A Python library for symbolic mathematics";
+      homepage    = http://www.sympy.org/;
+      license     = "free";
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
     };
   };
 

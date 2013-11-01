@@ -40,10 +40,12 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.openfire.enable (
-  mkAssert (!(config.services.openfire.usePostgreSQL -> config.services.postgresql.enable)) "
-    openfire assertion failed
-  " {
+  config = mkIf config.services.openfire.enable {
+
+    assertions = singleton
+      { assertion = !(config.services.openfire.usePostgreSQL -> config.services.postgresql.enable);
+        message = "OpenFire assertion failed.";
+      };
 
     jobs.openfire =
       { description = "OpenFire XMPP server";
@@ -65,6 +67,6 @@ in
           ''; # */
       };
 
-  });
+  };
 
 }

@@ -40,7 +40,7 @@ let
       [X-*-Greeter]
       HiddenUsers=root,nixbld1,nixbld2,nixbld3,nixbld4,nixbld5,nixbld6,nixbld7,nixbld8,nixbld9,nixbld10
       PluginsLogin=${kdebase_workspace}/lib/kde4/kgreet_classic.so
-      ${optionalString (cfg.themeDirectory != "")
+      ${optionalString (cfg.themeDirectory != null)
       ''
         UseTheme=true
         Theme=${cfg.themeDirectory}
@@ -78,6 +78,7 @@ in
     services.xserver.displayManager.kdm = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the KDE display manager.
@@ -85,6 +86,7 @@ in
       };
 
       enableXDMCP = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable XDMCP, which allows remote logins.
@@ -92,7 +94,8 @@ in
       };
 
       themeDirectory = mkOption {
-        default = "";
+        type = types.nullOr types.str;
+        default = null;
         description = ''
           The path to a KDM theme directory. This theme
           will be used by the KDM greeter.
@@ -100,6 +103,7 @@ in
       };
 
       setupScript = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           The path to a KDM setup script. This script is run as root just
@@ -109,6 +113,7 @@ in
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Options appended to <filename>kdmrc</filename>, the
@@ -128,7 +133,7 @@ in
     services.xserver.displayManager.slim.enable = false;
 
     services.xserver.displayManager.job =
-      { execCmd = mkFixStrictness
+      { execCmd =
           ''
             mkdir -m 0755 -p /var/lib/kdm
             chown kdm /var/lib/kdm

@@ -9,6 +9,7 @@ with pkgs.lib;
     fonts = {
 
       enableFontConfig = mkOption { # !!! should be enableFontconfig
+        type = types.bool;
         default = true;
         description = ''
           If enabled, a Fontconfig configuration file will be built

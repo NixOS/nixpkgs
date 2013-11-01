@@ -16,6 +16,7 @@ in
 
     # NSS modules.  Hacky!
     system.nssModules = mkOption {
+      type = types.listOf types.path;
       internal = true;
       default = [];
       description = ''
@@ -23,7 +24,6 @@ in
         several DNS resolution methods to be specified via
         <filename>/etc/nsswitch.conf</filename>.
       '';
-      merge = mergeListOption;
       apply = list:
         {
           inherit list;

@@ -30,14 +30,14 @@ in
     services.xserver.windowManager = {
       session = [{
         name = "i3";
-        start = "
+        start = ''
           ${pkgs.i3}/bin/i3 ${optionalString (cfg.configFile != null)
             "-c \"${cfg.configFile}\""
           } &
           waitPID=$!
-        ";
+        '';
       }];
     };
-    environment.x11Packages = [ pkgs.i3 ];
+    environment.systemPackages = [ pkgs.i3 ];
   };
 }

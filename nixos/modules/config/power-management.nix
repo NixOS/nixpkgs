@@ -17,6 +17,7 @@ in
     powerManagement = {
 
       enable = mkOption {
+        type = types.bool;
         default = true;
         description =
           ''
@@ -26,11 +27,13 @@ in
       };
 
       resumeCommands = mkOption {
+        type = types.lines;
         default = "";
         description = "Commands executed after the system resumes from suspend-to-RAM.";
       };
 
       powerUpCommands = mkOption {
+        type = types.lines;
         default = "";
         example = "${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda";
         description =
@@ -42,6 +45,7 @@ in
       };
 
       powerDownCommands = mkOption {
+        type = types.lines;
         default = "";
         example = "${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda";
         description =

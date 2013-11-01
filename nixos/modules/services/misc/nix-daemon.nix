@@ -6,7 +6,7 @@ let
 
   cfg = config.nix;
 
-  inherit (config.environment) nix;
+  nix = cfg.package;
 
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
@@ -55,19 +55,20 @@ in
 
   options = {
 
-    environment.nix = mkOption {
-      default = pkgs.nix;
-      merge = mergeOneOption;
-      description = ''
-        This option specifies the Nix package instance to use throughout the system.
-      '';
-    };
-
     nix = {
 
+      package = mkOption {
+        type = types.path;
+        default = pkgs.nix;
+        description = ''
+          This option specifies the Nix package instance to use throughout the system.
+        '';
+      };
+
       maxJobs = mkOption {
+        type = types.int;
         default = 1;
-        example = 2;
+        example = 64;
         description = "
           This option defines the maximum number of jobs that Nix will try
           to build in parallel.  The default is 1.  You should generally
@@ -77,8 +78,8 @@ in
       };
 
       useChroot = mkOption {
+        type = types.bool;
         default = false;
-        example = true;
         description = "
           If set, Nix will perform builds in a chroot-environment that it
           will set up automatically for each build.  This prevents
@@ -88,6 +89,7 @@ in
       };
 
       chrootDirs = mkOption {
+        type = types.listOf types.str;
         default = [];
         example = [ "/dev" "/proc" ];
         description =
@@ -98,15 +100,17 @@ in
       };
 
       extraOptions = mkOption {
+        type = types.lines;
         default = "";
-        example = "
+        example = ''
           gc-keep-outputs = true
           gc-keep-derivations = true
-        ";
+        '';
         description = "Additional text appended to <filename>nix.conf</filename>.";
       };
 
       distributedBuilds = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to distribute builds to the machines listed in
@@ -115,22 +119,25 @@ in
       };
 
       daemonNiceLevel = mkOption {
+        type = types.int;
         default = 0;
-        description = "
+        description = ''
           Nix daemon process priority. This priority propagates to build processes.
           0 is the default Unix process priority, 20 is the lowest.
-        ";
+        '';
       };
 
       daemonIONiceLevel = mkOption {
+        type = types.int;
         default = 0;
-        description = "
+        description = ''
           Nix daemon process I/O priority. This priority propagates to build processes.
           0 is the default Unix process I/O priority, 7 is the lowest.
-        ";
+        '';
       };
 
       buildMachines = mkOption {
+        type = types.listOf types.attrs;
         default = [];
         example = [
           { hostName = "voila.labs.cs.uu.nl";
@@ -160,7 +167,7 @@ in
           user name to be used for the SSH connection
           (<varname>sshUser</varname>), the Nix system type
           (<varname>system</varname>, e.g.,
-          <literal>\"i686-linux\"</literal>), the maximum number of
+          <literal>"i686-linux"</literal>), the maximum number of
           jobs to be run in parallel on that machine
           (<varname>maxJobs</varname>), the path to the SSH private
           key to be used to connect (<varname>sshKey</varname>), a
@@ -176,24 +183,26 @@ in
       };
 
       proxy = mkOption {
+        type = types.str;
         default = "";
-        description = "
+        description = ''
           This option specifies the proxy to use for fetchurl. The real effect
           is just exporting http_proxy, https_proxy and ftp_proxy with that
           value.
-        ";
+        '';
         example = "http://127.0.0.1:3128";
       };
 
       # Environment variables for running Nix.
       envVars = mkOption {
+        type = types.attrs;
         internal = true;
         default = {};
-        type = types.attrs;
         description = "Environment variables used by Nix.";
       };
 
       nrBuildUsers = mkOption {
+        type = types.int;
         default = 10;
         description = ''
           Number of <literal>nixbld</literal> user accounts created to
@@ -204,6 +213,7 @@ in
       };
 
       readOnlyStore = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           If set, NixOS will enforce the immutability of the Nix store
@@ -214,8 +224,8 @@ in
       };
 
       binaryCaches = mkOption {
+        type = types.listOf types.str;
         default = [ http://cache.nixos.org/ ];
-        type = types.listOf types.string;
         description = ''
           List of binary cache URLs used to obtain pre-built binaries
           of Nix packages.
@@ -223,9 +233,9 @@ in
       };
 
       trustedBinaryCaches = mkOption {
+        type = types.listOf types.str;
         default = [ ];
         example = [ http://hydra.nixos.org/ ];
-        type = types.listOf types.string;
         description = ''
           List of binary cache URLs that non-root users can use (in
           addition to those specified using
@@ -302,7 +312,7 @@ in
       }
 
       // optionalAttrs cfg.distributedBuilds {
-        NIX_BUILD_HOOK = "${config.environment.nix}/libexec/nix/build-remote.pl";
+        NIX_BUILD_HOOK = "${nix}/libexec/nix/build-remote.pl";
         NIX_REMOTE_SYSTEMS = "/etc/nix/machines";
         NIX_CURRENT_LOAD = "/run/nix/current-load";
       }

@@ -1,5 +1,6 @@
 { nixpkgs ? { outPath = ./..; revCount = 5678; shortRev = "gfedcba"; }
 , officialRelease ? false
+, stableBranch ? false
 }:
 
 let
@@ -17,7 +18,7 @@ let
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
-    inherit officialRelease;
+    inherit officialRelease stableBranch;
     nixpkgs = nixpkgsSrc;
   });
 
@@ -37,13 +38,13 @@ in rec {
     constituents =
       let all = x: [ x.x86_64-linux x.i686-linux ]; in
       [ nixos.channel
-        nixos.manual
+        (all nixos.manual)
 
         (all nixos.iso_minimal)
         (all nixos.iso_graphical)
         (all nixos.ova)
 
-        (all nixos.tests.efi-installer.simple)
+        #(all nixos.tests.efi-installer.simple)
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.installer.grub1)

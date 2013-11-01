@@ -65,7 +65,7 @@ in
       device = mkOption {
         default = "";
         example = "/dev/hda";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           The device on which the GRUB boot loader will be installed.
           The special value <literal>nodev</literal> means that a GRUB
@@ -78,7 +78,7 @@ in
       devices = mkOption {
         default = [];
         example = [ "/dev/hda" ];
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         description = ''
           The devices on which the boot loader, GRUB, will be
           installed. Can be used instead of <literal>device</literal> to
@@ -89,7 +89,7 @@ in
       configurationName = mkOption {
         default = "";
         example = "Stable 2.6.21";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           GRUB entry name instead of default.
         '';
@@ -156,7 +156,7 @@ in
       extraFiles = mkOption {
         default = {};
         example = literalExample ''
-          { "memtest.bin" = "${pkgs.memtest86plus}/memtest.bin"; }
+          { "memtest.bin" = "''${pkgs.memtest86plus}/memtest.bin"; }
         '';
         description = ''
           A set of files to be copied to <filename>/boot</filename>.
@@ -236,7 +236,7 @@ in
 
       system.build.installBootLoader =
         if cfg.devices == [] then
-          throw "You must set the ‘boot.loader.grub.device’ option to make the system bootable."
+          throw "You must set the option ‘boot.loader.grub.device’ to make the system bootable."
         else
           "PERL5LIB=${makePerlPath [ pkgs.perlPackages.XMLLibXML pkgs.perlPackages.XMLSAX ]} " +
           "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
@@ -247,7 +247,7 @@ in
       # set at once.
       system.boot.loader.id = "grub";
 
-      environment.systemPackages = [ grub ];
+      environment.systemPackages = optional (grub != null) grub;
 
       boot.loader.grub.extraPrepareConfig =
         concatStrings (mapAttrsToList (n: v: ''

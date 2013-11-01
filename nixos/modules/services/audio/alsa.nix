@@ -20,14 +20,15 @@ in
     sound = {
 
       enable = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to enable ALSA sound.
         '';
-        merge = mergeEnableOption;
       };
 
       enableOSSEmulation = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to enable ALSA OSS emulation (with certain cards sound mixing may not work!).

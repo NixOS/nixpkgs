@@ -1408,6 +1408,8 @@ let
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
 
+  ngrok = callPackage ../tools/misc/ngrok { };
+
   mpack = callPackage ../tools/networking/mpack { };
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
@@ -1594,6 +1596,8 @@ let
   pngtoico = callPackage ../tools/graphics/pngtoico {
     libpng = libpng12;
   };
+
+  pngquant = callPackage ../tools/graphics/pngquant { };
 
   podiff = callPackage ../tools/text/podiff { };
 
@@ -4125,6 +4129,10 @@ let
 
   geoclue = callPackage ../development/libraries/geoclue {};
 
+  geoclue2 = callPackage ../development/libraries/geoclue/2.0.nix {
+    libsoup = libsoup_2_40;
+  };
+
   geoip = builderDefsPackage ../development/libraries/geoip {
     inherit zlib;
   };
@@ -4969,6 +4977,7 @@ let
   libsodium = callPackage ../development/libraries/libsodium { };
 
   libsoup = callPackage ../development/libraries/libsoup { };
+  libsoup_2_40 = callPackage ../development/libraries/libsoup/2.40.nix { };
 
   libssh = callPackage ../development/libraries/libssh { };
 
@@ -5177,6 +5186,10 @@ let
 
   minmay = callPackage ../development/libraries/minmay { };
 
+  miro = callPackage ../applications/video/miro {
+    inherit (pythonPackages) pywebkitgtk pysqlite pycurl mutagen;
+  };
+
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
   mlt = callPackage ../development/libraries/mlt {
@@ -5384,6 +5397,8 @@ let
   };
 
   portaudioSVN = callPackage ../development/libraries/portaudio/svn-head.nix { };
+
+  portmidi = callPackage ../development/libraries/portmidi {};
 
   prison = callPackage ../development/libraries/prison { };
 
@@ -5714,8 +5729,7 @@ let
       inherit (gnome) gtkdoc libsoup;
       inherit pkgconfig libtool intltool autoconf automake gperf bison flex
         libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
-        which libproxy geoclue enchant python ruby perl
-        mesa xlibs;
+        which libproxy geoclue enchant python ruby perl mesa xlibs;
       inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
     };
 
@@ -5725,8 +5739,7 @@ let
       inherit (gnome) gtkdoc libsoup;
       inherit pkgconfig libtool intltool autoconf automake gperf bison flex
         libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
-        which libproxy geoclue enchant python ruby perl
-        mesa xlibs;
+        which libproxy geoclue enchant python ruby perl mesa xlibs;
       inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
     };
 
@@ -6254,6 +6267,8 @@ let
     inherit xmpppy python makeWrapper fetchcvs;
   };
 
+  qpid-cpp = callPackage ../servers/amqp/qpid-cpp { };
+
   rabbitmq_server = callPackage ../servers/amqp/rabbitmq-server { };
 
   radius = callPackage ../servers/radius { };
@@ -6571,7 +6586,7 @@ let
   # config options you need (e.g. by overriding extraConfig). See list of options here:
   # https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options
   linux_3_2_grsecurity = lowPrio (lib.overrideDerivation (linux_3_2.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_2_9_1_3_2_51 ];
+    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_2_9_1_3_2_52 ];
   })) (args: {
     # Install gcc plugins. These are needed for compiling dependant packages.
     postInstall = ''
@@ -7747,6 +7762,8 @@ let
 
   goldendict = callPackage ../applications/misc/goldendict { };
 
+  google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
+
   gpicview = callPackage ../applications/graphics/gpicview { };
 
   grass = import ../applications/misc/grass {
@@ -8259,6 +8276,10 @@ let
 
   mirage = callPackage ../applications/graphics/mirage {};
 
+  mixxx = callPackage ../applications/audio/mixxx {
+    inherit (vamp) vampSDK;
+  };
+
   mmex = callPackage ../applications/office/mmex { };
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
@@ -8351,23 +8372,18 @@ let
 
   smplayer = callPackage ../applications/video/smplayer { };
 
-  sup = callPackage ../applications/networking/mailreaders/sup {
-    ruby = ruby19;
+  sup = with rubyLibs; callPackage ../applications/networking/mailreaders/sup {
+    ruby = ruby19.override {
+      cursesSupport = true;
+    };
 
-    chronic = rubyLibs.chronic;
-    gettext = rubyLibs.gettext;
-    gpgme = ruby_gpgme;
-    highline = rubyLibs.highline;
-    iconv = rubyLibs.iconv;
-    locale = rubyLibs.locale;
-    lockfile = rubyLibs.lockfile;
-    mime_types = rubyLibs.mime_types;
+    inherit gettext highline iconv locale lockfile mime_types rmail_sup text
+      trollop unicode xapian_ruby which;
+
+    chronic      = chronic_0_9_1;
+    gpgme        = ruby_gpgme;
     ncursesw_sup = ruby_ncursesw_sup;
-    rake = rubyLibs.rake_10_1_0;
-    rmail = rubyLibs.rmail;
-    text = rubyLibs.text;
-    trollop = rubyLibs.trollop;
-    xapian_ruby = rubyLibs.xapian_ruby;
+    rake         = rake_10_1_0;
   };
 
   msmtp = callPackage ../applications/networking/msmtp { };
@@ -9263,6 +9279,8 @@ let
 
   quake3game = callPackage ../games/quake3/game { };
 
+  quantumminigolf = callPackage ../games/quantumminigolf {};
+
   racer = callPackage ../games/racer { };
 
   residualvm = callPackage ../games/residualvm {
@@ -9517,6 +9535,8 @@ let
 
       konversation = callPackage ../applications/networking/irc/konversation { };
 
+      kvirc = callPackage ../applications/networking/irc/kvirc { };
+
       krename = callPackage ../applications/misc/krename { };
 
       krusader = callPackage ../applications/misc/krusader { };
@@ -9579,6 +9599,7 @@ let
       xf86vidmodeproto;
     inherit (gnome) GConf;
     inherit (pythonPackages) pyxdg;
+    geoclue = geoclue2;
   };
 
   oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { };
@@ -9959,10 +9980,13 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
+  nixUnstable = nixStable;
+  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
+  */
 
   nixops = callPackage ../tools/package-management/nixops { };
 
@@ -10212,6 +10236,10 @@ let
    patoline = PatolineEnv ocamlPackages_4_00_1;
 
   znc = callPackage ../applications/networking/znc { };
+
+  zncModules = recurseIntoAttrs (
+    callPackage ../applications/networking/znc/modules.nix { }
+  );
 
   zsnes = callPackage_i686 ../misc/emulators/zsnes { };
 

@@ -15,6 +15,7 @@ in
   options = {
 
     networking.extraHosts = pkgs.lib.mkOption {
+      type = types.lines;
       default = "";
       example = "192.168.0.1 lanlocalhost";
       description = ''
@@ -23,6 +24,7 @@ in
     };
 
     networking.dnsSingleRequest = pkgs.lib.mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Recent versions of glibc will issue both ipv4 (A) and ipv6 (AAAA)

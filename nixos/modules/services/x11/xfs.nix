@@ -17,6 +17,7 @@ in
     services.xfs = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to enable the X Font Server.";
       };
@@ -28,10 +29,12 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.xfs.enable (
-  mkAssert config.fonts.enableFontDir "
-    Please enable fontDir (fonts.enableFontDir) to use xfs.
-  " {
+  config = mkIf config.services.xfs.enable {
+
+    assertions = singleton
+      { assertion = config.fonts.enableFontDir;
+        message = "Please enable fonts.enableFontDir to use the X Font Server.";
+      };
 
     jobs.xfs =
       { description = "X Font Server";
@@ -41,6 +44,6 @@ in
         exec = "${pkgs.xorg.xfs}/bin/xfs -config ${configFile}";
       };
 
-  });
+  };
 
 }

@@ -1,4 +1,6 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 {
 
@@ -6,9 +8,9 @@
 
   options = {
 
-    hardware.enableAllFirmware = pkgs.lib.mkOption {
+    hardware.enableAllFirmware = mkOption {
       default = false;
-      type = pkgs.lib.types.bool;
+      type = types.bool;
       description = ''
         Turn on this option if you want to enable all the firmware shipped with Debian/Ubuntu.
       '';
@@ -19,7 +21,7 @@
 
   ###### implementation
 
-  config = pkgs.lib.mkIf config.hardware.enableAllFirmware {
+  config = mkIf config.hardware.enableAllFirmware {
     hardware.firmware = [ "${pkgs.firmwareLinuxNonfree}/lib/firmware" ];
   };
 

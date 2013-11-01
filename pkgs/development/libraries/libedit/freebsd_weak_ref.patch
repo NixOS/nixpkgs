@@ -1,0 +1,20 @@
+--- libedit-20110709-3.0/src/vi.c.old	2011-07-11 18:21:16.000000000 +0000
++++ libedit-20110709-3.0/src/vi.c	2011-07-11 18:24:29.000000000 +0000
+@@ -918,7 +918,7 @@
+  * NB: posix implies that we should enter insert mode, however
+  * this is against historical precedent...
+  */
+-#ifdef __weak_reference
++#if defined(__weak_reference) && defined(__NetBSD__)
+ __weakref_visible char *my_get_alias_text(const char *)
+     __weak_reference(get_alias_text);
+ #endif
+@@ -926,7 +926,7 @@
+ /*ARGSUSED*/
+ vi_alias(EditLine *el, Int c)
+ {
+-#ifdef __weak_reference
++#if defined(__weak_reference) && defined(__NetBSD__)
+ 	char alias_name[3];
+ 	char *alias_text;
+ 

@@ -24,17 +24,18 @@ in
     services.xserver.desktopManager = {
 
       session = mkOption {
+        internal = true;
         default = [];
         example = singleton
           { name = "kde";
             bgSupport = true;
             start = "...";
           };
-        description = "
+        description = ''
           Internal option used to add some common line to desktop manager
           scripts before forwarding the value to the
           <varname>displayManager</varname>.
-        ";
+        '';
         apply = list: {
           list = map (d: d // {
             manage = "desktop";
@@ -50,10 +51,10 @@ in
       };
 
       default = mkOption {
+        type = types.str;
         default = "";
         example = "none";
         description = "Default desktop manager loaded if none have been chosen.";
-        merge = mergeOneOption;
         apply = defaultDM:
           if defaultDM == "" && cfg.session.list != [] then
             (head cfg.session.list).name
@@ -69,7 +70,7 @@ in
 
   config = {
     services.xserver.displayManager.session = cfg.session.list;
-    environment.x11Packages =
+    environment.systemPackages =
       mkIf cfg.session.needBGPackages [ pkgs.feh ];
   };
 }

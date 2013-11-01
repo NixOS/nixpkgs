@@ -43,7 +43,7 @@ in
       postBootCommands = mkOption {
         default = "";
         example = "rm -f /var/log/messages";
-        type = types.string;
+        type = types.lines;
         description = ''
           Shell commands to be executed just before systemd is started.
         '';
@@ -52,7 +52,7 @@ in
       devSize = mkOption {
         default = "5%";
         example = "32m";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
           for the accepted syntax.
@@ -62,7 +62,7 @@ in
       devShmSize = mkOption {
         default = "50%";
         example = "256m";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Size limit for the /dev/shm tmpfs. Look at mount(8), tmpfs size option,
           for the accepted syntax.
@@ -72,7 +72,7 @@ in
       runSize = mkOption {
         default = "25%";
         example = "256m";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
           for the accepted syntax.
@@ -80,10 +80,10 @@ in
       };
 
       cleanTmpDir = mkOption {
+        type = types.bool;
         default = false;
-        example = true;
         description = ''
-          Delete all files in /tmp/ during boot.
+          Whether to delete all files in <filename>/tmp</filename> during boot.
         '';
       };
 

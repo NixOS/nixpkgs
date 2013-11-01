@@ -16,13 +16,15 @@ let
       system.nixosRevision = config.system.nixosRevision;
     };
 
+  eval = evalModules {
+    modules = [ versionModule ] ++ baseModules;
+    args = (removeAttrs extraArgs ["config" "options"]) // { modules = [ ]; };
+  };
+
   manual = import ../../../doc/manual {
     inherit pkgs;
     revision = config.system.nixosRevision;
-    options = (fixMergeModules ([ versionModule ] ++ baseModules)
-      (removeAttrs extraArgs ["config" "options"]) // {
-        modules = [ ];
-      }).options;
+    options = eval.options;
   };
 
   entry = "${manual.manual}/share/doc/nixos/manual.html";
@@ -51,14 +53,15 @@ in
   options = {
 
     services.nixosManual.enable = mkOption {
-      default = true;
       type = types.bool;
+      default = true;
       description = ''
         Whether to build the NixOS manual pages.
       '';
     };
 
     services.nixosManual.showManual = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Whether to show the NixOS manual on one of the virtual
@@ -74,6 +77,7 @@ in
     };
 
     services.nixosManual.browser = mkOption {
+      type = types.path;
       default = "${pkgs.w3m}/bin/w3m";
       description = ''
         Browser used to show the manual.

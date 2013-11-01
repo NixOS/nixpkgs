@@ -36,6 +36,7 @@ with pkgs.lib;
     };
 
     boot.blacklistedKernelModules = mkOption {
+      type = types.listOf types.str;
       default = [];
       example = [ "cirrusfb" "i2c_piix4" ];
       description = ''

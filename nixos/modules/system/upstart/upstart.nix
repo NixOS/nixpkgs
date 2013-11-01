@@ -104,33 +104,34 @@ let
 
     name = mkOption {
       # !!! The type should ensure that this could be a filename.
-      type = types.string;
+      type = types.str;
       example = "sshd";
       description = ''
-        Name of the Upstart job.
+        Name of the job, mapped to the systemd unit
+        <literal><replaceable>name</replaceable>.service</literal>.
       '';
     };
 
     startOn = mkOption {
-      # !!! Re-enable this once we're on Upstart >= 0.6.
-      #type = types.string;
+      #type = types.str;
       default = "";
       description = ''
-        The Upstart event that triggers this job to be started.
-        If empty, the job will not start automatically.
+        The Upstart event that triggers this job to be started.  Some
+        are mapped to systemd dependencies; otherwise you will get a
+        warning.  If empty, the job will not start automatically.
       '';
     };
 
     stopOn = mkOption {
-      type = types.string;
+      type = types.str;
       default = "starting shutdown";
       description = ''
-        The Upstart event that triggers this job to be stopped.
+        Ignored; this was the Upstart event that triggers this job to be stopped.
       '';
     };
 
     postStart = mkOption {
-      type = types.string;
+      type = types.lines;
       default = "";
       description = ''
         Shell commands executed after the job is started (i.e. after
@@ -140,17 +141,17 @@ let
     };
 
     preStop = mkOption {
-      type = types.string;
+      type = types.lines;
       default = "";
       description = ''
         Shell commands executed before the job is stopped
-        (i.e. before Upstart kills the job's main process).  This can
+        (i.e. before systemd kills the job's main process).  This can
         be used to cleanly shut down a daemon.
       '';
     };
 
     postStop = mkOption {
-      type = types.string;
+      type = types.lines;
       default = "";
       description = ''
         Shell commands executed after the job has stopped
@@ -159,7 +160,7 @@ let
     };
 
     exec = mkOption {
-      type = types.string;
+      type = types.str;
       default = "";
       description = ''
         Command to start the job's main process.  If empty, the
@@ -189,10 +190,10 @@ let
     };
 
     daemonType = mkOption {
-      type = types.string;
+      type = types.str;
       default = "none";
       description = ''
-        Determines how Upstart detects when a daemon should be
+        Determines how systemd detects when a daemon should be
         considered “running”.  The value <literal>none</literal> means
         that the daemon is considered ready immediately.  The value
         <literal>fork</literal> means that the daemon will fork once.
@@ -203,8 +204,7 @@ let
     };
 
     setuid = mkOption {
-      type = types.string;
-      check = userExists;
+      type = types.addCheck types.str userExists;
       default = "";
       description = ''
         Run the daemon as a different user.
@@ -212,8 +212,7 @@ let
     };
 
     setgid = mkOption {
-      type = types.string;
-      check = groupExists;
+      type = types.addCheck types.str groupExists;
       default = "";
       description = ''
         Run the daemon as a different group.
@@ -246,7 +245,7 @@ let
     config = {
 
       # The default name is the name extracted from the attribute path.
-      name = mkDefaultValue name;
+      name = mkDefault name;
 
     };
 
@@ -263,8 +262,13 @@ in
     jobs = mkOption {
       default = {};
       description = ''
-        This option defines the system jobs started and managed by the
-        Upstart daemon.
+        This option is a legacy method to define system services,
+        dating from the era where NixOS used Upstart instead of
+        systemd.  You should use <option>systemd.services</option>
+        instead.  Services defined using <option>jobs</option> are
+        mapped automatically to <option>systemd.services</option>, but
+        may not work perfectly; in particular, most
+        <option>startOn</option> conditions are not supported.
       '';
       type = types.loaOf types.optionSet;
       options = [ jobOptions upstartJob ];

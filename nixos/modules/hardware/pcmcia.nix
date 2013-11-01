@@ -18,16 +18,16 @@ in
 
     hardware.pcmcia = {
       enable = mkOption {
+        type = types.bool;
         default = false;
-        merge = mergeEnableOption;
         description = ''
           Enable this option to support PCMCIA card.
         '';
       };
 
       firmware = mkOption {
+        type = types.listOf types.path;
         default = [];
-        merge = mergeListOption;
         description = ''
           List of firmware used to handle specific PCMCIA card.
         '';
@@ -36,7 +36,7 @@ in
       config = mkOption {
         default = null;
         description = ''
-          Path to the configuration file which map the memory, irq
+          Path to the configuration file which maps the memory, IRQs
           and ports used by the PCMCIA hardware.
         '';
       };

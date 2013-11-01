@@ -39,7 +39,7 @@ in
       };
 
       netbios_hostname = mkOption {
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           The hostname of your machine.
         '';

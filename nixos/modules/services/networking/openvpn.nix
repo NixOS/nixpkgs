@@ -75,53 +75,53 @@ in
     services.openvpn.servers = mkOption {
       default = {};
 
-      example = {
+      example = literalExample ''
+        {
+          server = {
+            config = '''
+              # Simplest server configuration: http://openvpn.net/index.php/documentation/miscellaneous/static-key-mini-howto.html.
+              # server :
+              dev tun
+              ifconfig 10.8.0.1 10.8.0.2
+              secret /root/static.key
+            ''';
+            up = "ip route add ...";
+            down = "ip route del ...";
+          };
 
-        server = {
-          config = ''
-            # Simplest server configuration: http://openvpn.net/index.php/documentation/miscellaneous/static-key-mini-howto.html.
-            # server :
-            dev tun
-            ifconfig 10.8.0.1 10.8.0.2
-            secret /root/static.key
-          '';
-          up = "ip route add ...";
-          down = "ip route del ...";
-        };
-
-        client = {
-          config = ''
-            client
-            remote vpn.example.org
-            dev tun
-            proto tcp-client
-            port 8080
-            ca /root/.vpn/ca.crt
-            cert /root/.vpn/alice.crt
-            key /root/.vpn/alice.key
-          '';
-          up = "echo nameserver $nameserver | ${pkgs.openresolv}/sbin/resolvconf -m 0 -a $dev";
-          down = "${pkgs.openresolv}/sbin/resolvconf -d $dev";
-        };
-
-      };
+          client = {
+            config = '''
+              client
+              remote vpn.example.org
+              dev tun
+              proto tcp-client
+              port 8080
+              ca /root/.vpn/ca.crt
+              cert /root/.vpn/alice.crt
+              key /root/.vpn/alice.key
+            ''';
+            up = "echo nameserver $nameserver | ''${pkgs.openresolv}/sbin/resolvconf -m 0 -a $dev";
+            down = "''${pkgs.openresolv}/sbin/resolvconf -d $dev";
+          };
+        }
+      '';
 
       description = ''
-        Each attribute of this option defines an Upstart job to run an
-        OpenVPN instance.  These can be OpenVPN servers or clients.
-        The name of each Upstart job is
-        <literal>openvpn-</literal><replaceable>name</replaceable>,
+        Each attribute of this option defines a systemd service that
+        runs an OpenVPN instance.  These can be OpenVPN servers or
+        clients.  The name of each systemd service is
+        <literal>openvpn-<replaceable>name</replaceable>.service</literal>,
         where <replaceable>name</replaceable> is the corresponding
         attribute name.
       '';
 
       type = types.attrsOf types.optionSet;
 
-      options =  {
+      options = {
 
         config = mkOption {
-          type = types.string;
-            description = ''
+          type = types.lines;
+          description = ''
             Configuration of this OpenVPN instance.  See
             <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
             for details.
@@ -130,7 +130,7 @@ in
 
         up = mkOption {
           default = "";
-          type = types.string;
+          type = types.lines;
           description = ''
             Shell commands executed when the instance is starting.
           '';
@@ -138,7 +138,7 @@ in
 
         down = mkOption {
           default = "";
-          type = types.string;
+          type = types.lines;
           description = ''
             Shell commands executed when the instance is shutting down.
           '';

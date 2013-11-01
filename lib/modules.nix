@@ -1,379 +1,312 @@
-# NixOS module handling.
-
-let lib = import ./default.nix; in
-
-with { inherit (builtins) head; };
-with import ./trivial.nix;
 with import ./lists.nix;
-with import ./misc.nix;
+with import ./trivial.nix;
 with import ./attrsets.nix;
 with import ./options.nix;
-with import ./properties.nix;
+with import ./debug.nix;
+with import ./types.nix;
 
 rec {
 
-  # Unfortunately this can also be a string.
-  isPath = x: !(
-     builtins.isFunction x
-  || builtins.isAttrs x
-  || builtins.isInt x
-  || builtins.isBool x
-  || builtins.isList x
-  );
-
-
-  importIfPath = path:
-    if isPath path then
-      import path
-    else
-      path;
-
-
-  applyIfFunction = f: arg:
-    if builtins.isFunction f then
-      f arg
-    else
-      f;
-
-
-  isModule = m:
-       (m ? config && isAttrs m.config && ! isOption m.config)
-    || (m ? options && isAttrs m.options && ! isOption m.options);
-
-
-  # Convert module to a set which has imports / options and config
-  # attributes.
-  unifyModuleSyntax = m:
+  /* Evaluate a set of modules.  The result is a set of two
+     attributes: ‘options’: the nested set of all option declarations,
+     and ‘config’: the nested set of all option values. */
+  evalModules = { modules, prefix ? [], args ? {}, check ? true }:
     let
-      delayedModule = delayProperties m;
+      args' = args // result;
+      closed = closeModules modules args';
+      # Note: the list of modules is reversed to maintain backward
+      # compatibility with the old module system.  Not sure if this is
+      # the most sensible policy.
+      options = mergeModules prefix (reverseList closed);
+      # Traverse options and extract the option values into the final
+      # config set.  At the same time, check whether all option
+      # definitions have matching declarations.
+      config = yieldConfig prefix options;
+      yieldConfig = prefix: set:
+        let res = removeAttrs (mapAttrs (n: v:
+          if isOption v then v.value
+          else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
+        in
+        if check && set ? _definedNames then
+          fold (m: res:
+            fold (name: res:
+              if hasAttr name set then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
+              res m.names)
+            res set._definedNames
+        else
+          res;
+      result = { inherit options config; };
+    in result;
 
-      getImports =
-        toList (rmProperties (delayedModule.require or []));
-      getImportedPaths = filter isPath getImports;
-      getImportedSets = filter (x: !isPath x) getImports;
-
-      getConfig =
-        removeAttrs delayedModule ["require" "key" "imports"];
-
+  /* Close a set of modules under the ‘imports’ relation. */
+  closeModules = modules: args:
+    let
+      toClosureList = file: parentKey: imap (n: x:
+        if isAttrs x || builtins.isFunction x then
+          unifyModuleSyntax file "${parentKey}:anon-${toString n}" (applyIfFunction x args)
+        else
+          unifyModuleSyntax (toString x) (toString x) (applyIfFunction (import x) args));
     in
-      if isModule m then
-        { key = "<unknown location>"; } // m
+      builtins.genericClosure {
+        startSet = toClosureList unknownModule "" modules;
+        operator = m: toClosureList m.file m.key m.imports;
+      };
+
+  /* Massage a module into canonical form, that is, a set consisting
+     of ‘options’, ‘config’ and ‘imports’ attributes. */
+  unifyModuleSyntax = file: key: m:
+    if m ? config || m ? options then
+      let badAttrs = removeAttrs m ["imports" "options" "config" "key" "_file"]; in
+      if badAttrs != {} then
+        throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'."
       else
-        { key = "<unknown location>";
-          imports = (m.imports or []) ++ getImportedPaths;
-          config = getConfig;
-        } // (
-          if getImportedSets != [] then
-            assert length getImportedSets == 1;
-            { options = head getImportedSets; }
+        { file = m._file or file;
+          key = toString m.key or key;
+          imports = m.imports or [];
+          options = m.options or {};
+          config = m.config or {};
+        }
+    else
+      { file = m._file or file;
+        key = toString m.key or key;
+        imports = m.require or [] ++ m.imports or [];
+        options = {};
+        config = removeAttrs m ["key" "_file" "require" "imports"];
+      };
+
+  applyIfFunction = f: arg: if builtins.isFunction f then f arg else f;
+
+  /* Merge a list of modules.  This will recurse over the option
+     declarations in all modules, combining them into a single set.
+     At the same time, for each option declaration, it will merge the
+     corresponding option definitions in all machines, returning them
+     in the ‘value’ attribute of each option. */
+  mergeModules = prefix: modules:
+    mergeModules' prefix modules
+      (concatMap (m: map (config: { inherit (m) file; inherit config; }) (pushDownProperties m.config)) modules);
+
+  mergeModules' = prefix: options: configs:
+    listToAttrs (map (name: {
+      # We're descending into attribute ‘name’.
+      inherit name;
+      value =
+        let
+          loc = prefix ++ [name];
+          # Get all submodules that declare ‘name’.
+          decls = concatLists (map (m:
+            if hasAttr name m.options
+              then [ { inherit (m) file; options = getAttr name m.options; } ]
+              else []
+            ) options);
+          # Get all submodules that define ‘name’.
+          defns = concatLists (map (m:
+            if hasAttr name m.config
+              then map (config: { inherit (m) file; inherit config; })
+                (pushDownProperties (getAttr name m.config))
+              else []
+            ) configs);
+          nrOptions = count (m: isOption m.options) decls;
+          # Process mkMerge and mkIf properties.
+          defns' = concatMap (m:
+            if hasAttr name m.config
+              then map (m': { inherit (m) file; value = m'; }) (dischargeProperties (getAttr name m.config))
+              else []
+            ) configs;
+        in
+          if nrOptions == length decls then
+            let opt = fixupOptionType loc (mergeOptionDecls loc decls);
+            in evalOptionValue loc opt defns'
+          else if nrOptions != 0 then
+            let
+              firstOption = findFirst (m: isOption m.options) "" decls;
+              firstNonOption = findFirst (m: !isOption m.options) "" decls;
+            in
+              throw "The option `${showOption loc}' in `${firstOption.file}' is a prefix of options in `${firstNonOption.file}'."
           else
-            {}
-        );
+            mergeModules' loc decls defns;
+    }) (concatMap (m: attrNames m.options) options))
+    // { _definedNames = map (m: { inherit (m) file; names = attrNames m.config; }) configs; };
 
-
-  unifyOptionModule = {key ? "<unknown location>"}: name: index: m: (args:
-    let
-      module = lib.applyIfFunction m args;
-      key_ = rec {
-        file = key;
-        option = name;
-        number = index;
-        outPath = key;
-      };
-    in if lib.isModule module then
-      { key = key_; } // module
-    else
-      { key = key_; options = module; }
-  );
-
-
-  moduleClosure = initModules: args:
-    let
-      moduleImport = origin: index: m:
-        let m' = applyIfFunction (importIfPath m) args;
-        in (unifyModuleSyntax m') // {
-          # used by generic closure to avoid duplicated imports.
-          key =
-            if isPath m then m
-            else m'.key or (newModuleName origin index);
-        };
-
-      getImports = m: m.imports or [];
-
-      newModuleName = origin: index:
-        "${origin.key}:<import-${toString index}>";
-
-      topLevel = {
-        key = "<top-level>";
-      };
-
-    in
-      (lazyGenericClosure {
-        startSet = imap (moduleImport topLevel) initModules;
-        operator = m: imap (moduleImport m) (getImports m);
-      });
-
-
-  moduleApply = funs: module:
-    lib.mapAttrs (name: value:
-      if builtins.hasAttr name funs then
-        let fun = lib.getAttr name funs; in
-        fun value
+  /* Merge multiple option declarations into a single declaration.  In
+     general, there should be only one declaration of each option.
+     The exception is the ‘options’ attribute, which specifies
+     sub-options.  These can be specified multiple times to allow one
+     module to add sub-options to an option declared somewhere else
+     (e.g. multiple modules define sub-options for ‘fileSystems’). */
+  mergeOptionDecls = loc: opts:
+    fold (opt: res:
+      if opt.options ? default && res ? default ||
+         opt.options ? example && res ? example ||
+         opt.options ? description && res ? description ||
+         opt.options ? apply && res ? apply ||
+         opt.options ? type && res ? type
+      then
+        throw "The option `${showOption loc}' in `${opt.file}' is already declared in ${showFiles res.declarations}."
       else
-        value
-    ) module;
+        opt.options // res //
+          { declarations = [opt.file] ++ res.declarations;
+            options = if opt.options ? options then [(toList opt.options.options ++ res.options)] else [];
+          }
+    ) { inherit loc; declarations = []; options = []; } opts;
 
-
-  # Handle mkMerge function left behind after a delay property.
-  moduleFlattenMerge = module:
-    if module ? config &&
-       isProperty module.config &&
-       isMerge module.config.property
-    then
-      (map (cfg: { key = module.key; config = cfg; }) module.config.content)
-      ++ [ (module // { config = {}; }) ]
-    else
-      [ module ];
-
-
-  # Handle mkMerge attributes which are left behind by previous delay
-  # properties and convert them into a list of modules. Delay properties
-  # inside the config attribute of a module and create a second module if a
-  # mkMerge attribute was left behind.
-  #
-  # Module -> [ Module ]
-  delayModule = module:
-    map (moduleApply { config = delayProperties; }) (moduleFlattenMerge module);
-
-
-  evalDefinitions = opt: values:
-    if opt.type.delayOnGlobalEval or false then
-      map (delayPropertiesWithIter opt.type.iter opt.name)
-        (evalLocalProperties values)
-    else
-      evalProperties values;
-
-
-  selectModule = name: m:
-    { inherit (m) key;
-    } // (
-      if m ? options && builtins.hasAttr name m.options then
-        { options = lib.getAttr name m.options; }
-      else {}
-    ) // (
-      if m ? config && builtins.hasAttr name m.config then
-        { config = lib.getAttr name m.config; }
-      else {}
-    );
-
-  filterModules = name: modules:
-    filter (m: m ? config || m ? options) (
-      map (selectModule name) modules
-    );
-
-
-  modulesNames = modules:
-    lib.concatMap (m: []
-    ++ optionals (m ? options) (lib.attrNames m.options)
-    ++ optionals (m ? config) (lib.attrNames m.config)
-    ) modules;
-
-
-  moduleZip = funs: modules:
-    lib.mapAttrs (name: fun:
-      fun (catAttrs name modules)
-    ) funs;
-
-
-  moduleMerge = path: modules_:
+  /* Merge all the definitions of an option to produce the final
+     config value. */
+  evalOptionValue = loc: opt: defs:
     let
-      addName = name:
-        if path == "" then name else path + "." + name;
+      # Process mkOverride properties, adding in the default
+      # value specified in the option declaration (if any).
+      defsFinal = filterOverrides
+        ((if opt ? default then [{ file = head opt.declarations; value = mkOptionDefault opt.default; }] else []) ++ defs);
+      files = map (def: def.file) defsFinal;
+      # Type-check the remaining definitions, and merge them if
+      # possible.
+      merged =
+        if defsFinal == [] then
+          throw "The option `${showOption loc}' is used but not defined."
+        else
+          fold (def: res:
+            if opt.type.check def.value then res
+            else throw "The option value `${showOption loc}' in `${def.file}' is not a ${opt.type.name}.")
+            (opt.type.merge loc defsFinal) defsFinal;
+      # Finally, apply the ‘apply’ function to the merged
+      # value.  This allows options to yield a value computed
+      # from the definitions.
+      value = (opt.apply or id) merged;
+    in opt //
+      { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
+        definitions = map (def: def.value) defsFinal;
+        isDefined = defsFinal != [];
+        inherit files;
+      };
 
-      modules = concatLists (map delayModule modules_);
+  /* Given a config set, expand mkMerge properties, and push down the
+     mkIf properties into the children.  The result is a list of
+     config sets that do not have properties at top-level.  For
+     example,
 
-      modulesOf = name: filterModules name modules;
-      declarationsOf = name: filter (m: m ? options) (modulesOf name);
-      definitionsOf  = name: filter (m: m ? config ) (modulesOf name);
+       mkMerge [ { boot = set1; } (mkIf cond { boot = set2; services = set3; }) ]
 
-      recurseInto = name:
-        moduleMerge (addName name) (modulesOf name);
+     is transformed into
 
-      recurseForOption = name: modules: args:
-        moduleMerge name (
-          moduleClosure modules args
-        );
+       [ { boot = set1; } { boot = mkIf cond set2; services mkIf cond set3; } ].
 
-      errorSource = modules:
-        "The error may come from the following files:\n" + (
-          lib.concatStringsSep "\n" (
-            map (m:
-              if m ? key then toString m.key else "<unknown location>"
-            ) modules
-          )
-        );
+     This transform is the critical step that allows mkIf conditions
+     to refer to the full configuration without creating an infinite
+     recursion.
+  */
+  pushDownProperties = cfg:
+    if cfg._type or "" == "merge" then
+      concatMap pushDownProperties cfg.contents
+    else if cfg._type or "" == "if" then
+      map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
+    else if cfg._type or "" == "override" then
+      map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+    else
+      [ cfg ];
 
-      eol = "\n";
+  /* Given a config value, expand mkMerge properties, and discharge
+     any mkIf conditions.  That is, this is the place where mkIf
+     conditions are actually evaluated.  The result is a list of
+     config values.  For example, ‘mkIf false x’ yields ‘[]’,
+     ‘mkIf true x’ yields ‘[x]’, and
 
-      allNames = modulesNames modules;
+       mkMerge [ 1 (mkIf true 2) (mkIf true (mkIf false 3)) ]
 
-      getResults = m:
-        let fetchResult = s: mapAttrs (n: v: v.result) s; in {
-          options = fetchResult m.options;
-          config = fetchResult m.config;
-        };
-
-      endRecursion =  { options = {}; config = {}; };
-
-    in if modules == [] then endRecursion else
-      getResults (fix (crossResults: moduleZip {
-        options = lib.zipWithNames allNames (name: values: rec {
-          config = lib.getAttr name crossResults.config;
-
-          declarations = declarationsOf name;
-          declarationSources =
-            map (m: {
-              source = m.key;
-            }) declarations;
-
-          hasOptions = values != [];
-          isOption = any lib.isOption values;
-
-          decls = # add location to sub-module options.
-            map (m:
-              mapSubOptions
-                (unifyOptionModule {inherit (m) key;} name)
-                m.options
-            ) declarations;
-
-          decl =
-            lib.addErrorContext "${eol
-              }while enhancing option `${addName name}':${eol
-              }${errorSource declarations}${eol
-            }" (
-              addOptionMakeUp
-                { name = addName name; recurseInto = recurseForOption; }
-                (mergeOptionDecls decls)
-            );
-
-          value = decl // (with config; {
-            inherit (config) isNotDefined;
-            isDefined = ! isNotDefined;
-            declarations = declarationSources;
-            definitions = definitionSources;
-            config = strictResult;
-          });
-
-          recurse = (recurseInto name).options;
-
-          result =
-            if isOption then value
-            else if !hasOptions then {}
-            else if all isAttrs values then recurse
-            else
-              throw "${eol
-                }Unexpected type where option declarations are expected.${eol
-                }${errorSource declarations}${eol
-              }";
-
-        });
-
-        config = lib.zipWithNames allNames (name: values_: rec {
-          option = lib.getAttr name crossResults.options;
-
-          definitions = definitionsOf name;
-          definitionSources =
-            map (m: {
-              source = m.key;
-              value = m.config;
-            }) definitions;
-
-          values = values_ ++
-            optionals (option.isOption && option.decl ? extraConfigs)
-              option.decl.extraConfigs;
-
-          defs = evalDefinitions option.decl values;
-
-          isNotDefined = defs == [];
-
-          value =
-            lib.addErrorContext "${eol
-              }while evaluating the option `${addName name}':${eol
-              }${errorSource (modulesOf name)}${eol
-            }" (
-              let opt = option.decl; in
-              opt.apply (
-                if isNotDefined then
-                  opt.default or (throw "Option `${addName name}' not defined and does not have a default value.")
-                else opt.merge defs
-              )
-            );
-
-          strictResult = builtins.tryEval (builtins.toXML value);
-
-          recurse = (recurseInto name).config;
-
-          configIsAnOption = v: isOption (rmProperties v);
-          errConfigIsAnOption =
-            let badModules = filter (m: configIsAnOption m.config) definitions; in
-            "${eol
-              }Option ${addName name} is defined in the configuration section.${eol
-              }${errorSource badModules}${eol
-            }";
-
-          errDefinedWithoutDeclaration =
-            let badModules = definitions; in
-            "${eol
-              }Option '${addName name}' defined without option declaration.${eol
-              }${errorSource badModules}${eol
-            }";
-
-          result =
-            if option.isOption then value
-            else if !option.hasOptions then throw errDefinedWithoutDeclaration
-            else if any configIsAnOption values then throw errConfigIsAnOption
-            else if all isAttrs values then recurse
-            # plain value during the traversal
-            else throw errDefinedWithoutDeclaration;
-
-        });
-      } modules));
-
-
-  fixMergeModules = initModules: {...}@args:
-    lib.fix (result:
-      # This trick avoids an infinite loop because names of attribute
-      # are know and it is not required to evaluate the result of
-      # moduleMerge to know which attributes are present as arguments.
-      let module = { inherit (result) options config; }; in
-      moduleMerge "" (
-        moduleClosure initModules (module // args)
-      )
-    );
-
-
-  # Visit all definitions to raise errors related to undeclared options.
-  checkModule = path: {config, options, ...}@m:
-    let
-      eol = "\n";
-      addName = name:
-        if path == "" then name else path + "." + name;
-    in
-    if lib.isOption options then
-      if options ? options then
-        options.type.fold
-          (cfg: res: res && checkModule (options.type.docPath path) cfg._args)
-          true config
+     yields ‘[ 1 2 ]’.
+  */
+  dischargeProperties = def:
+    if def._type or "" == "merge" then
+      concatMap dischargeProperties def.contents
+    else if def._type or "" == "if" then
+      if def.condition then
+        dischargeProperties def.content
       else
-        true
-    else if isAttrs options && lib.attrNames m.options != [] then
-      all (name:
-        lib.addErrorContext "${eol
-          }while checking the attribute `${addName name}':${eol
-        }" (checkModule (addName name) (selectModule name m))
-      ) (lib.attrNames m.config)
+        [ ]
     else
-      builtins.trace "try to evaluate config ${lib.showVal config}."
-      false;
+      [ def ];
+
+  /* Given a list of config values, process the mkOverride properties,
+     that is, return the values that have the highest (that is,
+     numerically lowest) priority, and strip the mkOverride
+     properties.  For example,
+
+       [ { file = "/1"; value = mkOverride 10 "a"; }
+         { file = "/2"; value = mkOverride 20 "b"; }
+         { file = "/3"; value = "z"; }
+         { file = "/4"; value = mkOverride 10 "d"; }
+       ]
+
+     yields
+
+       [ { file = "/1"; value = "a"; }
+         { file = "/4"; value = "d"; }
+       ]
+
+     Note that "z" has the default priority 100.
+  */
+  filterOverrides = defs:
+    let
+      defaultPrio = 100;
+      getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPrio;
+      min = x: y: if builtins.lessThan x y then x else y;
+      highestPrio = fold (def: prio: min (getPrio def) prio) 9999 defs;
+      strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
+    in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
+
+  /* Hack for backward compatibility: convert options of type
+     optionSet to configOf.  FIXME: remove eventually. */
+  fixupOptionType = loc: opt:
+    let
+      options' = opt.options or
+        (throw "Option `${showOption loc'}' has type optionSet but has no option attribute.");
+      coerce = x:
+        if builtins.isFunction x then x
+        else { config, ... }: { options = x; };
+      options = map coerce (flatten options');
+      f = tp:
+        if tp.name == "option set" then types.submodule options
+        else if tp.name == "attribute set of option sets" then types.attrsOf (types.submodule options)
+        else if tp.name == "list or attribute set of option sets" then types.loaOf (types.submodule options)
+        else if tp.name == "list of option sets" then types.listOf (types.submodule options)
+        else if tp.name == "null or option set" then types.nullOr (types.submodule options)
+        else tp;
+    in opt // { type = f (opt.type or types.unspecified); };
+
+
+  /* Properties. */
+
+  mkIf = condition: content:
+    { _type = "if";
+      inherit condition content;
+    };
+
+  mkAssert = assertion: message: content:
+    mkIf
+      (if assertion then true else throw "\nFailed assertion: ${message}")
+      content;
+
+  mkMerge = contents:
+    { _type = "merge";
+      inherit contents;
+    };
+
+  mkOverride = priority: content:
+    { _type = "override";
+      inherit priority content;
+    };
+
+  mkOptionDefault = mkOverride 1001; # priority of option defaults
+  mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
+  mkForce = mkOverride 50;
+  mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+
+  mkFixStrictness = id; # obsolete, no-op
+
+  # FIXME: Add mkOrder back in. It's not currently used anywhere in
+  # NixOS, but it should be useful.
+
+
+  /* Compatibility. */
+  fixMergeModules = modules: args: evalModules { inherit modules args; check = false; };
 
 }

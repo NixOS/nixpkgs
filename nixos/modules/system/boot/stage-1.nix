@@ -229,51 +229,53 @@ in
   options = {
 
     boot.resumeDevice = mkOption {
-      default = "";
-      example = "0:0";
-      description = "
-        Device for manual resume attempt during boot. Looks like
-        major:minor. ls -l /dev/SWAP_PARTION shows them.
-      ";
+      type = types.nullOr types.str;
+      default = null;
+      example = "8:2";
+      description = ''
+        Device for manual resume attempt during boot, specified using
+        the device's major and minor number as
+        <literal><replaceable>major</replaceable>:<replaceable>minor</replaceable></literal>.
+      '';
     };
 
     boot.initrd.checkJournalingFS = mkOption {
       default = true;
       type = types.bool;
       description = ''
-        Whether to run fsck on journaling filesystems such as ext3.
+        Whether to run <command>fsck</command> on journaling filesystems such as ext3.
       '';
     };
 
     boot.initrd.mdadmConf = mkOption {
       default = "";
-      type = with types; string;
+      type = types.lines;
       description = ''
-        Contents of /etc/mdadm.conf at initrd.
+        Contents of <filename>/etc/mdadm.conf</filename> in stage 1.
       '';
     };
 
     boot.initrd.preLVMCommands = mkOption {
       default = "";
-      type = with types; string;
+      type = types.lines;
       description = ''
-        Shell commands to be executed immediately before lvm discovery.
+        Shell commands to be executed immediately before LVM discovery.
       '';
     };
 
     boot.initrd.postDeviceCommands = mkOption {
       default = "";
-      type = with types; string;
+      type = types.lines;
       description = ''
         Shell commands to be executed immediately after stage 1 of the
         boot has loaded kernel modules and created device nodes in
-        /dev.
+        <filename>/dev</filename>.
       '';
     };
 
     boot.initrd.postMountCommands = mkOption {
       default = "";
-      type = with types; string;
+      type = types.lines;
       description = ''
         Shell commands to be executed immediately after the stage 1
         filesystems have been mounted.
@@ -283,7 +285,7 @@ in
     boot.initrd.extraUtilsCommands = mkOption {
       internal = true;
       default = "";
-      type = with types; string;
+      type = types.lines;
       description = ''
         Shell commands to be executed in the builder of the
         extra-utils derivation.  This can be used to provide
@@ -294,7 +296,7 @@ in
     boot.initrd.extraUtilsCommandsTest = mkOption {
       internal = true;
       default = "";
-      type = with types; string;
+      type = types.lines;
       description = ''
         Shell commands to be executed in the builder of the
         extra-utils derivation after patchelf has done its
@@ -304,12 +306,10 @@ in
     };
 
     boot.initrd.compressor = mkOption {
+      internal = true;
       default = "gzip -9";
-
-      type = types.string;
-
-      description = "The compressor to use on the initrd";
-
+      type = types.str;
+      description = "The compressor to use on the initrd image.";
       example = "xz";
     };
 

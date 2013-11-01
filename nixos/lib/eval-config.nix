@@ -7,23 +7,20 @@
 , baseModules ? import ../modules/module-list.nix
 , extraArgs ? {}
 , modules
+, check ? true
 }:
 
 let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system; in
 
 rec {
 
-  # These are the NixOS modules that constitute the system configuration.
-  configComponents = modules ++ baseModules;
-
   # Merge the option definitions in all modules, forming the full
-  # system configuration.  It's not checked for undeclared options.
-  systemModule =
-    pkgs.lib.fixMergeModules configComponents extraArgs;
-
-  optionDefinitions = systemModule.config;
-  optionDeclarations = systemModule.options;
-  inherit (systemModule) options;
+  # system configuration.
+  inherit (pkgs.lib.evalModules {
+    modules = modules ++ baseModules;
+    args = extraArgs;
+    check = check && options.environment.checkConfigurationOptions.value;
+  }) config options;
 
   # These are the extra arguments passed to every module.  In
   # particular, Nixpkgs is passed through the "pkgs" argument.
@@ -56,16 +53,12 @@ rec {
           # define nixpkgs.config, so it's pointless to evaluate them.
           baseModules = [ ../modules/misc/nixpkgs.nix ];
           pkgs = import ./nixpkgs.nix { system = system_; config = {}; };
-        }).optionDefinitions.nixpkgs;
+          check = false;
+        }).config.nixpkgs;
       in
       {
         inherit system;
         inherit (nixpkgsOptions) config;
       });
 
-  # Optionally check wether all config values have corresponding
-  # option declarations.
-  config =
-    assert optionDefinitions.environment.checkConfigurationOptions -> pkgs.lib.checkModule "" systemModule;
-    systemModule.config;
 }

@@ -17,18 +17,21 @@ in
   options = {
 
     services.atd.enable = mkOption {
+      type = types.bool;
       default = false;
       description = ''
-        Whether to enable the `at' daemon, a command scheduler.
+        Whether to enable the <command>at</command> daemon, a command scheduler.
       '';
     };
 
     services.atd.allowEveryone = mkOption {
+      type = types.bool;
       default = false;
       description = ''
-        Whether to make /var/spool/at{jobs,spool} writeable
-        by everyone (and sticky).  This is normally not needed since
-        the `at' commands are setuid/setgid `atd'.
+        Whether to make <filename>/var/spool/at{jobs,spool}</filename>
+        writeable by everyone (and sticky).  This is normally not
+        needed since the <command>at</command> commands are
+        setuid/setgid <literal>atd</literal>.
      '';
     };
 

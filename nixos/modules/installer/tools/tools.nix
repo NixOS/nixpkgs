@@ -22,10 +22,10 @@ let
     src = ./nixos-install.sh;
 
     inherit (pkgs) perl pathsFromGraph;
-    nix = config.environment.nix;
+    nix = config.nix.package;
 
     nixClosure = pkgs.runCommand "closure"
-      { exportReferencesGraph = ["refs" config.environment.nix]; }
+      { exportReferencesGraph = ["refs" config.nix.package]; }
       "cp refs $out";
   };
 
@@ -52,6 +52,7 @@ let
     inherit (config.system) nixosVersion nixosCodeName;
   };
 
+  /*
   nixos-gui = pkgs.xulrunnerWrapper {
     launcher = "nixos-gui";
     application = pkgs.stdenv.mkDerivation {
@@ -71,10 +72,12 @@ let
       };
     };
   };
+  */
 
 in
 
 {
+  /*
   options = {
 
     installer.enableGraphicalTools = pkgs.lib.mkOption {
@@ -87,6 +90,7 @@ in
     };
 
   };
+  */
 
   config = {
     environment.systemPackages =
@@ -96,10 +100,10 @@ in
         nixos-generate-config
         nixos-option
         nixos-version
-      ] ++ pkgs.lib.optional cfg.enableGraphicalTools nixos-gui;
+      ];
 
     system.build = {
-      inherit nixos-install nixos-generate-config nixos-option;
+      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild;
     };
   };
 }

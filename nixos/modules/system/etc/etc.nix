@@ -32,13 +32,14 @@ in
     environment.etc = mkOption {
       type = types.loaOf types.optionSet;
       default = {};
-      example =
+      example = literalExample ''
         { hosts =
             { source = "/nix/store/.../etc/dir/file.conf.example";
               mode = "0440";
             };
           "default/useradd".text = "GROUP=100 ...";
-        };
+        }
+      '';
       description = ''
         Set of files that have to be linked in <filename>/etc</filename>.
       '';
@@ -56,6 +57,7 @@ in
             };
 
             target = mkOption {
+              type = types.str;
               description = ''
                 Name of symlink (relative to
                 <filename>/etc</filename>).  Defaults to the attribute
@@ -65,16 +67,17 @@ in
 
             text = mkOption {
               default = null;
-              type = types.nullOr types.string;
+              type = types.nullOr types.lines;
               description = "Text of the file.";
             };
 
             source = mkOption {
-              types = types.path;
+              type = types.path;
               description = "Path of the source file.";
             };
 
             mode = mkOption {
+              type = types.str;
               default = "symlink";
               example = "0600";
               description = ''

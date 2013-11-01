@@ -13,11 +13,13 @@ in
   options = {
 
     security.polkit.enable = mkOption {
+      type = types.bool;
       default = true;
       description = "Whether to enable PolKit.";
     };
 
     security.polkit.permissions = mkOption {
+      type = types.lines;
       default = "";
       example =
         ''
@@ -49,6 +51,7 @@ in
     };
 
     security.polkit.adminIdentities = mkOption {
+      type = types.str;
       default = "unix-user:0;unix-group:wheel";
       example = "";
       description =
