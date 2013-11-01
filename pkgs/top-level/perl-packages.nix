@@ -7623,7 +7623,7 @@ rec {
   };
 
   Switch = buildPerlPackage rec {
-    name = "Switch";
+    name = "Switch-2.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RG/RGARCIA/Switch-2.16.tar.gz";
       sha256 = "1n7rgp1q3zwglv1pka3bnhq5g41334lwc53g31w6g44my8kqz31h";
