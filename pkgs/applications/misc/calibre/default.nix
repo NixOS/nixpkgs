@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/calibre/${name}.tar.xz";
-    sha256 = "1883fcf679d4a9c2c94adec94cbb0cdf1b110007bf3e4b7dacd7ef552c11902b";
+    sha256 = "0awh24n5bvypmiylngmz0w0126yz1jxlrjfy9b4w5aflg7vgr0qq";
   };
 
   inherit python;
