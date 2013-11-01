@@ -24,7 +24,7 @@ rec {
       
   name = "dmtx-" + version;
   meta = {
-    description = "DataMatrix (2D bar code) processing tools.";
+    description = "DataMatrix (2D bar code) processing tools";
     maintainers = [args.lib.maintainers.raskin];
     platforms = args.lib.platforms.linux;
   };

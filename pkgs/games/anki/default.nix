@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
         * even practicing guitar chords!
       '';
       license = "GPLv3";
-      platforms = stdenv.lib.platforms.all;
+      platforms = stdenv.lib.platforms.mesaPlatforms;
     };
 }

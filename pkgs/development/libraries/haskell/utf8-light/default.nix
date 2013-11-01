@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "utf8-light";
-  version = "0.4.0.1";
-  sha256 = "1y2vfxjgq8r90bpaxhha0s837vklpwdj4cj3h61bimc0lcx22905";
+  version = "0.4.2";
+  sha256 = "0rwyc5z331yfnm4hpx0sph6i1zvkd1z10vvglhnp0vc9wy644k0q";
   meta = {
     description = "Unicode";
     license = self.stdenv.lib.licenses.bsd3;

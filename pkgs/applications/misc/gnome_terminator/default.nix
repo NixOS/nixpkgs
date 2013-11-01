@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Gnome terminal emulator with support for tiling and tabs.";
+    description = "Gnome terminal emulator with support for tiling and tabs";
     homepage = http://www.tenshu.net/p/terminator.html;
     license = "GPLv2";
   };

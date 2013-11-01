@@ -1,18 +1,32 @@
-{ fetchurl, stdenv,
-  libX11, libXrandr, libXxf86vm, libxcb, pkgconfig, python,
-  randrproto, xcbutil, xf86vidmodeproto }:
+{ fetchurl, stdenv, libX11, libXrandr, libXxf86vm, libxcb, pkgconfig, python
+, randrproto, xcbutil, xf86vidmodeproto, autoconf, automake, gettext, glib
+, GConf, dbus, dbus_glib, makeWrapper, gtk, pygtk, pyxdg, geoclue }:
 
 stdenv.mkDerivation rec {
-  pname = "redshift";
-  version = "1.7";
-  name = "${pname}-${version}";
+  version = "1.8";
+  name = "redshift-${version}";
   src = fetchurl {
-    url = "http://launchpad.net/${pname}/trunk/${version}/+download/${pname}-${version}.tar.bz2";
-    sha256 = "1j0hs0vnlic90cf4bryn11n4ani1x2s5l8z6ll3fmrlw98ykrylv";
+    url = "https://github.com/jonls/redshift/archive/v${version}.tar.gz";
+    sha256 = "1srj2dwy32h71iqikb4ysv5ipclym80i9lys2ns8vjmclg7hj3vi";
   };
 
-  buildInputs = [ libX11 libXrandr libXxf86vm libxcb pkgconfig python
-                  randrproto xcbutil xf86vidmodeproto ];
+  buildInputs = [
+    libX11 libXrandr libXxf86vm libxcb pkgconfig python randrproto xcbutil
+    xf86vidmodeproto autoconf automake gettext glib GConf dbus dbus_glib
+    makeWrapper gtk pygtk pyxdg geoclue
+  ];
+
+  preConfigure = ''
+    ./bootstrap
+  '';
+
+  preInstall = ''
+    substituteInPlace src/redshift-gtk/redshift-gtk python --replace "/usr/bin/env python" "${python}/bin/${python.executable}"
+  '';
+
+  postInstall = ''
+    wrapProgram "$out/bin/redshift-gtk" --prefix PYTHONPATH : $PYTHONPATH:${pygtk}/lib/${python.libPrefix}/site-packages/gtk-2.0:${pyxdg}/lib/${python.libPrefix}/site-packages/pyxdg:$out/lib/${python.libPrefix}/site-packages
+  '';
 
   meta = {
     description = "changes the color temperature of your screen gradually";

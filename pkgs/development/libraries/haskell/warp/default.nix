@@ -1,13 +1,13 @@
 { cabal, blazeBuilder, blazeBuilderConduit, caseInsensitive
-, conduit, hashable, hspec, httpAttoparsec, httpTypes, HUnit
+, conduit, hashable, hspec, HTTP, httpAttoparsec, httpTypes, HUnit
 , liftedBase, network, networkConduit, QuickCheck, simpleSendfile
 , transformers, unixCompat, void, wai
 }:
 
 cabal.mkDerivation (self: {
   pname = "warp";
-  version = "1.3.9.2";
-  sha256 = "0l4iq7dl7iv9sf0bj52g577x9i84miscfr27b2vm8g8n6306jr77";
+  version = "1.3.10.1";
+  sha256 = "1pi2x0gi4r6qy151a9gmfq223yiy53j7prj2pyn00cprr0m4mk2v";
   buildDepends = [
     blazeBuilder blazeBuilderConduit caseInsensitive conduit hashable
     httpAttoparsec httpTypes liftedBase network networkConduit
@@ -15,7 +15,7 @@ cabal.mkDerivation (self: {
   ];
   testDepends = [
     blazeBuilder blazeBuilderConduit caseInsensitive conduit hashable
-    hspec httpAttoparsec httpTypes HUnit liftedBase network
+    hspec HTTP httpAttoparsec httpTypes HUnit liftedBase network
     networkConduit QuickCheck simpleSendfile transformers unixCompat
     void wai
   ];

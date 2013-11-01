@@ -1,0 +1,3 @@
+url http://sysd.org/stas/node/35
+ensure_choice
+version '.*-([0-9a-z.]+)[.]tar[.].*' '\1'

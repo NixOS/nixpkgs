@@ -1,18 +1,13 @@
-{ cabal, comonad, profunctors, semigroupoidExtras, semigroupoids
-, tagged, transformers
-}:
+{ cabal, profunctors }:
 
 cabal.mkDerivation (self: {
   pname = "profunctor-extras";
-  version = "3.3.3.1";
-  sha256 = "16naa6ksgwy6fh8vwflcc9s0rpamn886as8qhjqrkpjlc8s83h7g";
-  buildDepends = [
-    comonad profunctors semigroupoidExtras semigroupoids tagged
-    transformers
-  ];
+  version = "4.0";
+  sha256 = "10j458liqlyz5s9gkg95c6aq7ap5fa7d8pc7hygy71nn87pm2g4a";
+  buildDepends = [ profunctors ];
   meta = {
     homepage = "http://github.com/ekmett/profunctor-extras/";
-    description = "Profunctor extras";
+    description = "This package has been absorbed into profunctors 4.0";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };

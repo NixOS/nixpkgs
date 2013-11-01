@@ -3,12 +3,12 @@
 , pythonPackages, cacert, cmake, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.1";
+  version = "0.4.2";
   name = "weechat-${version}";
 
   src = fetchurl {
     url = "http://weechat.org/files/src/${name}.tar.gz";
-    sha256 = "0gsn0mp921j7jpvrxc74h0gs0bn0w808j2zqghm1w7xbjw9hl49w";
+    sha256 = "03ypji34kb5yrxqyn8dbrjm3j00pc8v7wfsip7d3l63nyx79df9v";
   };
 
   buildInputs = 
@@ -18,17 +18,16 @@ stdenv.mkDerivation rec {
     ];
 
   postInstall = ''
-       wrapProgram "$out/bin/weechat-curses" \
+       wrapProgram "$out/bin/weechat" \
          --prefix PYTHONPATH : "$PYTHONPATH" \
          --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages"
   '';
 
   meta = {
-    homepage = http://http://www.weechat.org/;
+    homepage = http://www.weechat.org/;
     description = "A fast, light and extensible chat client";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    maintainers = with stdenv.lib.maintainers; [ garbas the-kenny ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
-

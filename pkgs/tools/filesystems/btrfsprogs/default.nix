@@ -13,6 +13,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib libuuid acl attr e2fsprogs lzo ];
 
+  # for btrfs to get the rpath to libgcc_s, needed for pthread_cancel to work
+  NIX_CFLAGS_LINK = "-lgcc_s";
+
   postPatch = ''
     cp ${./btrfs-set-received-uuid.c} btrfs-set-received-uuid.c
   '';

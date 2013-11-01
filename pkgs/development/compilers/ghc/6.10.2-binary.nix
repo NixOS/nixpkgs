@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
      ''
       mkdir "$TMP/bin"
       for i in strip; do
-        echo '#!/bin/sh' >> "$TMP/bin/$i"
+        echo '#! ${stdenv.shell}' > "$TMP/bin/$i"
         chmod +x "$TMP/bin/$i"
-        PATH="$TMP/bin:$PATH"
       done
+      PATH="$TMP/bin:$PATH"
      '' +
     # On Linux, use patchelf to modify the executables so that they can
     # find editline/gmp.

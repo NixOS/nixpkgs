@@ -10,4 +10,8 @@ stdenv.mkDerivation {
   patches = [./config.patch ./laylex.patch];
   buildInputs = [x11 imake gccmakedep libXmu libXpm libXp bison flex];
   propagatedBuildInputs = [x11 libXmu];
+
+  meta = {
+    description = "3D widget set based on the Athena Widget set";
+  };
 }

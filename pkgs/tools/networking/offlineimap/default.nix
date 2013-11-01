@@ -18,7 +18,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "OfflineImap synchronizes emails between two repositories, so that you can read the same mailbox from multiple computers.";
+    description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
     license = pkgs.lib.licenses.gpl2Plus;
     maintainers = [ pkgs.lib.maintainers.garbas ];

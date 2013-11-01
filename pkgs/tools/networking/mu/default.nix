@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "A collection of utilties for indexing and searching Maildirs";
     license = "GPLv3+";
     homepage = "http://www.djcbsoftware.nl/code/mu/";
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.mesaPlatforms;
     maintainers = with stdenv.lib.maintainers; [ antono the-kenny ];
   };
 }

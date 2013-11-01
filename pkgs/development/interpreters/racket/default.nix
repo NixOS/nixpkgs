@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A programming language derived from Scheme (formerly called PLT Scheme).";
+    description = "Programming language derived from Scheme (formerly called PLT Scheme)";
     longDescription = ''
       Racket (formerly called PLT Scheme) is a programming language derived
       from Scheme. The Racket project has four primary components: the

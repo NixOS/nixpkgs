@@ -1,14 +1,16 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchgit, autoreconfHook }:
 stdenv.mkDerivation rec {
   pname = "torsocks";
   name = "${pname}-${version}";
-  version = "1.2";
+  version = "1.3";
   
-  src = fetchurl {
-    url = "http://${pname}.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1m0is5q24sf7jjlkl0icfkdc0m53nbkg0q72s57p48yp4hv7v9dy";
+  src = fetchgit {
+    url = meta.repositories.git;
+    rev = "refs/tags/${version}";
+    sha256 = "1cqplb36fkdb81kzf48xlxclf64wnp8r56x1gjayax1h6x4aal1w";
   };
 
+  buildInputs = [ autoreconfHook ];
   preConfigure = ''
       export configureFlags="$configureFlags --libdir=$out/lib"
   '';
@@ -16,6 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "use socks-friendly applications with Tor";
     homepage = http://code.google.com/p/torsocks/;
+    repositories.git = https://git.torproject.org/torsocks.git;
     license = "GPLv2";
   };
 }

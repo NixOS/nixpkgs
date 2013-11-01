@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-      description = "Complete set of free CAD tools and portable libraries for VLSI design.";
+      description = "Complete set of free CAD tools and portable libraries for VLSI design";
       homepage = http://www-asim.lip6.fr/recherche/alliance/;
   };
 }

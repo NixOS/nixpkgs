@@ -1,4 +1,27 @@
 { fetchurl, stdenv, python
+
+, enableStandardFeatures ? false
+, sourceHighlight ? null
+, highlight ? null
+, pygments ? null
+, graphviz ? null
+, tetex ? null
+, dblatexFull ? null
+, libxslt ? null
+, w3m ? null
+, lynx ? null
+, imagemagick ? null
+, lilypond ? null
+, libxml2 ? null
+, docbook_xml_dtd_45 ? null
+, docbook5_xsl ? null
+, docbook_xsl ? null
+, fop ? null
+# TODO: Package this:
+#, epubcheck ? null
+, gnused ? null
+, coreutils ? null
+
 , unzip ? null
 # filters
 , enableDitaaFilter ? false, jre ? null
@@ -11,6 +34,28 @@
 , enableDeckjsBackend ? false
 , enableOdfBackend ? false
 }:
+
+assert enableStandardFeatures ->
+  sourceHighlight != null &&
+  highlight != null &&
+  pygments != null &&
+  graphviz != null &&
+  tetex != null &&
+  dblatexFull != null &&
+  libxslt != null &&
+  w3m != null &&
+  lynx != null &&
+  imagemagick != null &&
+  lilypond != null &&
+  libxml2 != null &&
+  docbook_xml_dtd_45 != null &&
+  docbook5_xsl != null &&
+  docbook_xsl != null &&
+  fop != null &&
+# TODO: Package this:
+#  epubcheck != null &&
+  gnused != null &&
+  coreutils != null;
 
 # filters
 assert (enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter || enableAafigureFilter) -> unzip != null;
@@ -49,7 +94,7 @@ let
     sha256 = "0h4bql1nb4y4fmg2yvlpfjhvy22ln8jsaxdr10f8bfcg5lr0zkxs";
   };
 
-  # latest commit in master branch as per 2013-09-22
+  # there are no archives or tags, using latest commit in master branch as per 2013-09-22
   matplotlibFilterSrc = let commit = "75f0d009629f93f33fab04b83faca20cc35dd358"; in fetchurl rec {
     name = "mplw-${commit}.tar.gz";
     url = "https://api.github.com/repos/lvv/mplw/tarball/${commit}";
@@ -151,11 +196,48 @@ stdenv.mkDerivation rec {
     # the odp backend already has that fix. Copy it here until fixed upstream.
     sed -i "s|'/etc/asciidoc/backends/odt/asciidoc.ott'|os.path.dirname(__file__),'asciidoc.ott'|" \
         "$out/etc/asciidoc/backends/odt/a2x-backend.py"
+  '' + optionalString enableStandardFeatures ''
+    sed -e "s|dot|${graphviz}/bin/dot|g" \
+        -e "s|neato|${graphviz}/bin/neato|g" \
+        -e "s|twopi|${graphviz}/bin/circo|g" \
+        -e "s|circo|${graphviz}/bin/circo|g" \
+        -e "s|fdp|${graphviz}/bin/fdp|g" \
+        -i "filters/graphviz/graphviz2png.py"
+
+    sed -e "s|run('latex|run('${tetex}/bin/latex|g" \
+        -e "s|cmd = 'dvipng'|cmd = '${tetex}/bin/dvipng'|g" \
+        -i "filters/latex/latex2png.py"
+
+    sed -e "s|run('abc2ly|run('${lilypond}/bin/abc2ly|g" \
+        -e "s|run('lilypond|run('${lilypond}/bin/lilypond|g" \
+        -e "s|run('convert|run('${imagemagick}/bin/convert|g" \
+        -i "filters/music/music2png.py"
+
+    sed -e 's|filter="source-highlight|filter="${sourceHighlight}/bin/source-highlight|' \
+        -e 's|filter="highlight|filter="${highlight}/bin/highlight|' \
+        -e 's|filter="pygmentize|filter="${pygments}/bin/pygmentize|' \
+        -i "filters/source/source-highlight-filter.conf"
+
+    # ENV is custom environment passed to programs that a2x invokes. Here we
+    # use it to work around an impurity in the tetex package; tetex tools
+    # cannot find their neighbours (e.g. pdflatex doesn't find mktextfm).
+    # We can remove PATH= when those impurities are fixed.
+    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook5_xsl}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${tetex}/bin:${coreutils}/bin:${gnused}/bin')|" \
+        -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
+        -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt}/bin/xsltproc'|" \
+        -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
+        -e "s|^FOP =.*|FOP = '${fop}/bin/fop'|" \
+        -e "s|^W3M =.*|W3M = '${w3m}/bin/w3m'|" \
+        -e "s|^LYNX =.*|LYNX = '${lynx}/bin/lynx'|" \
+        -e "s|^XMLLINT =.*|XMLLINT = '${libxml2}/bin/xmllint'|" \
+        -e "s|^EPUBCHECK =.*|EPUBCHECK = 'nixpkgs_is_missing_epubcheck'|" \
+        -i a2x.py
   '' + ''
     for n in $(find "$out" . -name \*.py); do
       sed -i -e "s,^#![[:space:]]*.*/bin/env python,#!${python}/bin/python,g" "$n"
       chmod +x "$n"
     done
+
     sed -i -e "s,/etc/vim,,g" Makefile.in
   '';
 

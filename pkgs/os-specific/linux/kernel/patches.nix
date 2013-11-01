@@ -131,12 +131,14 @@ rec {
       patch = ./mips-ext3-n32.patch;
     };
 
-  grsecurity_2_9_1_3_2_51 =
-    { name = "grsecurity-2.9.1-3.2.51";
+  grsecurity_2_9_1_3_2_52 =
+    { name = "grsecurity-2.9.1-3.2.52";
       patch = fetchurl {
-        url = http://grsecurity.net/stable/grsecurity-2.9.1-3.2.51-201309101928.patch;
-        sha256 = "90f9ddc74d56f4525b8faa8505a95f45c23a2e763c7519ba5ae953069a51aca2";
+        url = http://grsecurity.net/stable/grsecurity-2.9.1-3.2.52-201310271550.patch;
+        sha256 = "08y4y323y2lfvdj67gmg3ca8gaf3snhr3pyrmgvj877avaz0475m";
       };
+      # The grsec kernel patch seems to include the apparmor patches as of 2.9.1-3.2.52
+      features.apparmor = true;
     };
 
 }

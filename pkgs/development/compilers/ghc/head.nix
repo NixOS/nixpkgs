@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ghc, perl, gmp, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "7.7.20130816";
+  version = "7.7.20130828";
   name = "ghc-${version}";
 
   src = fetchurl {
     url = "http://darcs.haskell.org/ghcBuilder/uploads/tn23/${name}-src.tar.bz2";
-    sha256 = "0w636gfjn3xigrlj31z4hy9kv44svyifsqcshrq95qxijx396j5m";
+    sha256 = "180nkd77kz3mv4g7yq8ipx34p5q8k714l0z2527y49lghy118jzv";
   };
 
   buildInputs = [ ghc perl gmp ncurses ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     echo "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
+    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '';
 
   configureFlags = "--with-gcc=${stdenv.gcc}/bin/gcc";

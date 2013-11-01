@@ -97,6 +97,7 @@ g: # Get dependencies from patched gems
     rjb = g.rjb_1_4_8;
     rkelly_remix = g.rkelly_remix_0_0_4;
     rmail = g.rmail_1_0_0;
+    rmail_sup = g.rmail_sup_1_0_1;
     rspec = g.rspec_2_11_0;
     rspec_core = g.rspec_core_2_11_1;
     rspec_expectations = g.rspec_expectations_2_11_3;
@@ -129,6 +130,7 @@ g: # Get dependencies from patched gems
     tzinfo = g.tzinfo_0_3_37;
     unf = g.unf_0_1_2;
     unf_ext = g.unf_ext_0_0_6;
+    unicode = g.unicode_0_4_4;
     uuid = g.uuid_2_3_7;
     uuidtools = g.uuidtools_2_1_4;
     webrobots = g.webrobots_0_1_1;
@@ -432,6 +434,17 @@ for those one-off tasks, with a language that's a joy to use.
       name = ''childprocess-0.3.9'';
       requiredGems = [ g.ffi_1_9_0 ];
       sha256 = ''0jbz2ix7ff9ry8717lhcq9w8j8yd45akw48giwgdqccay5mlph7d'';
+    };
+    chronic_0_9_1 = {
+      basename = ''chronic'';
+      meta = {
+        description = ''Natural language date/time parsing.'';
+        homepage = ''http://github.com/mojombo/chronic'';
+        longDescription = ''Chronic is a natural language date/time parser written in pure Ruby.'';
+      };
+      name = ''chronic-0.9.1'';
+      requiredGems = [  ];
+      sha256 = ''0kspaxpfy7yvyk1lvpx31w852qfj8wb9z04mcj5bzi70ljb9awqk'';
     };
     chronic_0_10_1 = {
       basename = ''chronic'';
@@ -1612,6 +1625,20 @@ in JSDuck.
       requiredGems = [  ];
       sha256 = ''0nsg7yda1gdwa96j4hlrp2s0m06vrhcc4zy5mbq7gxmlmwf9yixp'';
     };
+    rmail_sup_1_0_1 = {
+      basename = ''rmail_sup'';
+      meta = {
+        description = ''A MIME mail parsing and generation library.'';
+        homepage = ''http://supmua.org'';
+        longDescription = ''    RMail is a lightweight mail library containing various utility classes and
+    modules that allow ruby scripts to parse, modify, and generate MIME mail
+    messages.
+'';
+      };
+      name = ''rmail-sup-1.0.1'';
+      requiredGems = [  ];
+      sha256 = ''1xswk101s560lxqaax3plqh8vjx7jjspnggdwb3q80m358f92q9g'';
+    };
     rspec_2_11_0 = {
       basename = ''rspec'';
       meta = {
@@ -1990,6 +2017,17 @@ to Ruby/JRuby.
       name = ''unf_ext-0.0.6'';
       requiredGems = [  ];
       sha256 = ''07zbmkzcid6pzdqgla3456ipfdka7j1v4hsx1iaa8rbnllqbmkdg'';
+    };
+    unicode_0_4_4 = {
+      basename = ''unicode'';
+      meta = {
+        description = ''Unicode normalization library.'';
+        homepage = ''http://www.yoshidam.net/Ruby.html#unicode'';
+        longDescription = ''Unicode normalization library.'';
+      };
+      name = ''unicode-0.4.4'';
+      requiredGems = [  ];
+      sha256 = ''0la9dyxj7pr57g5727gj1h5c6h5kpbjdjpiv2vqi5gw5iglg0yqi'';
     };
     uuid_2_3_7 = {
       basename = ''uuid'';

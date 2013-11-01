@@ -1,19 +1,18 @@
-{ cabal, ansiTerminal, ansiWlPprint, extensibleExceptions, hostname
-, random, regexPosix, time, xml
+{ cabal, ansiTerminal, ansiWlPprint, hostname, random, regexPosix
+, time, xml
 }:
 
 cabal.mkDerivation (self: {
   pname = "test-framework";
-  version = "0.8";
-  sha256 = "1w895nq357zpc4v6vr5nbszyrw7cpsjq5bj38vdd10bfpjjmijcl";
+  version = "0.8.0.3";
+  sha256 = "136nw5dapsz3jrnw1pdfkjgplxigpr2mrf6i85154vx342zvw5ar";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    ansiTerminal ansiWlPprint extensibleExceptions hostname random
-    regexPosix time xml
+    ansiTerminal ansiWlPprint hostname random regexPosix time xml
   ];
   meta = {
-    homepage = "http://batterseapower.github.com/test-framework/";
+    homepage = "https://batterseapower.github.io/test-framework/";
     description = "Framework for running and organising tests, with HUnit and QuickCheck support";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

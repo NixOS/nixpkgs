@@ -9,7 +9,7 @@ in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.4.18";
+  version = "5.4.20";
 
   name = "php-${version}";
 
@@ -56,6 +56,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
           #"--with-iconv-dir=${libiconv}"
           ];
         buildInputs = [ libxml2 ];
+      };
+
+      pcntl = {
+        configureFlags = [ "--enable-pcntl" ];
       };
 
       readline = {
@@ -188,6 +192,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     socketsSupport = config.php.sockets or true;
     curlSupport = config.php.curl or true;
     gettextSupport = config.php.gettext or true;
+    pcntlSupport = config.php.pcntl or true;
     postgresqlSupport = config.php.postgresql or true;
     readlineSupport = config.php.readline or true;
     sqliteSupport = config.php.sqlite or true;
@@ -230,7 +235,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       "http://nl1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
       "http://se1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
     ];
-    sha256 = "1ncizy992nfy3i3lzns7qcinj5376d840hchaqs5jlfn2nz0k50x";
+    sha256 = "1qarcxj46rzkmql3w2dln0hxzs349ph31fxcslizxch1ig7l43nd";
     name = "php-${version}.tar.bz2";
   };
 

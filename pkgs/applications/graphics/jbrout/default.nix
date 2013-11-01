@@ -34,5 +34,6 @@ buildPythonPackage {
   meta = {
     homepage = "http://code.google.com/p/jbrout";
     description = "jBrout is a photo manager";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

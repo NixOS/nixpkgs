@@ -1,0 +1,62 @@
+<book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <info>
+
+    <title>NixOS Manual</title>
+
+    <author>
+      <personname>
+        <firstname>Eelco</firstname>
+        <surname>Dolstra</surname>
+      </personname>
+    </author>
+
+    <author>
+      <personname>
+        <firstname>Nicolas</firstname>
+        <surname>Pierron</surname>
+      </personname>
+    </author>
+
+    <copyright>
+      <year>2007-2013</year>
+      <holder>Eelco Dolstra</holder>
+    </copyright>
+
+  </info>
+
+
+  <preface>
+    <title>Preface</title>
+
+    <para>This manual describes how to install, use and extend NixOS,
+    a Linux distribution based on the purely functional package
+    management system Nix.</para>
+
+    <para>If you encounter problems, please report them on the
+    <literal
+    xlink:href="http://lists.science.uu.nl/mailman/listinfo/nix-dev">nix-dev@lists.science.uu.nl</literal>
+    mailing list or on the <link
+    xlink:href="irc://irc.freenode.net/#nixos">
+    <literal>#nixos</literal> channel on Freenode</link>.  Bugs should
+    be reported in <link
+    xlink:href="https://github.com/NixOS/nixpkgs/issues">NixOS’ GitHub
+    issue tracker</link>.</para>
+
+  </preface>
+
+
+  <xi:include href="installation.xml" />
+  <xi:include href="configuration.xml" />
+  <xi:include href="running.xml" />
+  <!-- <xi:include href="userconfiguration.xml" /> -->
+  <xi:include href="troubleshooting.xml" />
+  <xi:include href="development.xml" />
+  <chapter xml:id="ch-options">
+    <title>List of options</title>
+    <xi:include href="options-db.xml" />
+  </chapter>
+
+</book>

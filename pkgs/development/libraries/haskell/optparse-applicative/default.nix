@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "optparse-applicative";
-  version = "0.5.2.1";
-  sha256 = "0w4mk851mx8dch8lnck0g82asmzrsc47xrf34jygh0f6v4kbj40i";
+  version = "0.7.0.2";
+  sha256 = "1pq620236x8fch9nkq4g4vganbzksnwj8z1bb80c2mwvf6sbg5ci";
   buildDepends = [ transformers ];
   testDepends = [
     HUnit testFramework testFrameworkHunit testFrameworkThPrime

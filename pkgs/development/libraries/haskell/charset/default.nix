@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "charset";
-  version = "0.3.5";
-  sha256 = "0842jdqg7hipgkvax3p4cb2y3znsgcmbj9nfrg2448dg2nanlhsn";
+  version = "0.3.5.1";
+  sha256 = "0bf9s5r2j9bkwmjxzvj5c2c7bhnf5gyh2kkx67lmy8xqalfxgmwn";
   buildDepends = [ semigroups unorderedContainers ];
   meta = {
     homepage = "http://github.com/ekmett/charset";

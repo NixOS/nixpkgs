@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://libmemcached.org;
-    description = "libMemcached is an open source C/C++ client library and tools for the memcached server.";
+    description = "Open source C/C++ client library and tools for the memcached server";
     license = "BSD";
   };
 }

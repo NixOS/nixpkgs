@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "MLton is an open-source, whole-program, optimizing Standard ML compiler.";
+    description = "Open-source, whole-program, optimizing Standard ML compiler";
     longDescription = ''
       MLton is an open source, whole-program optimizing compiler for the Standard ML programming language.
       MLton aims to produce fast executables, and to encourage rapid prototyping and modular programming

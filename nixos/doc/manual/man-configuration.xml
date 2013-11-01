@@ -1,0 +1,38 @@
+<refentry xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude">
+  
+<refmeta>
+  <refentrytitle><filename>configuration.nix</filename></refentrytitle>
+  <manvolnum>5</manvolnum>
+  <refmiscinfo class="source">NixOS</refmiscinfo>
+  <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
+</refmeta>
+
+<refnamediv>
+  <refname><filename>configuration.nix</filename></refname>
+  <refpurpose>NixOS system configuration specification</refpurpose>
+</refnamediv>
+
+
+<refsection><title>Description</title>
+
+<para>The file <filename>/etc/nixos/configuration.nix</filename>
+contains the declarative specification of your NixOS system
+configuration.  The command <command>nixos-rebuild</command> takes
+this file and realises the system configuration specified
+therein.</para>
+
+</refsection>
+
+
+<refsection><title>Options</title>
+
+<para>You can use the following options in
+<filename>configuration.nix</filename>.</para>
+
+<xi:include href="options-db.xml" />
+
+</refsection>
+  
+</refentry>

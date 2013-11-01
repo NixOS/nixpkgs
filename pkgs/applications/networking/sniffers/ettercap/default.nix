@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "Ettercap is a comprehensive suite for man in the middle attacks.";
+    description = "Comprehensive suite for man in the middle attacks";
     homepage = http://ettercap.github.io/ettercap/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

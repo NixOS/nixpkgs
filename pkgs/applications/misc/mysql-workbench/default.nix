@@ -66,7 +66,7 @@ exec 19> $FIFOCTL
   '';
 
   meta = with stdenv.lib; {
-    description = "A MySQL visual database modeling, administration and querying tool.";
+    description = "Visual MySQL database modeling, administration and querying tool";
     longDescription = ''
       MySQL Workbench is a modeling tool that allows you to design
       and generate MySQL databases graphically. It also has administration

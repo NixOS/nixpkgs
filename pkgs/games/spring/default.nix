@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://springrts.com/;
-    description = "A powerful real-time strategy(RTS) game engine";
+    description = "A powerful real-time strategy (RTS) game engine";
     license = licenses.gpl2;
     maintainers = [ maintainers.phreedom maintainers.qknight ];
-    platforms = platforms.unix;
+    platforms = platforms.mesaPlatforms;
   };
 }

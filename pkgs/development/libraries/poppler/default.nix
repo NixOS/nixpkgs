@@ -54,7 +54,6 @@ let
     };
   } merge ]); # poppler_drv
 
-in rec {
   /* We always use cairo in poppler, so we always depend on glib,
      so we always build the glib wrapper (~350kB).
      We also always build the cpp wrapper (<100kB).
@@ -69,4 +68,5 @@ in rec {
     NIX_LDFLAGS = "-lpoppler";
     postConfigure = "cd qt4";
   };
-}
+
+in { inherit poppler_glib poppler_qt4; } // poppler_glib

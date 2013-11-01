@@ -267,11 +267,11 @@ in
   };
 
 
-  "coverage-3.6" = self.buildPythonPackage {
-    name = "coverage-3.6";
+  "coverage-3.7" = self.buildPythonPackage {
+    name = "coverage-3.7";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/c/coverage/coverage-3.6.tar.gz";
-        md5 = "67d4e393f4c6a5ffc18605409d2aa1ac";
+        url = "https://pypi.python.org/packages/source/c/coverage/coverage-3.7.tar.gz";
+        md5 = "055d82e6849d882ec6cf2ae1faca8e56";
     };
     doCheck = true;
     buildInputs = [  ];
@@ -283,26 +283,6 @@ in
         '';
       homepage = "http://nedbatchelder.com/code/coverage";
       license = "BSD";
-    };
-  };
-
-
-  "Products.ExternalMethod-2.13.0" = self.buildPythonPackage {
-    name = "Products.ExternalMethod-2.13.0";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/P/Products.ExternalMethod/Products.ExternalMethod-2.13.0.zip";
-        md5 = "15ba953ef6cb632eb571977651252ea6";
-    };
-    doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."AccessControl-3.0.8" self."Acquisition-2.13.8" self."ExtensionClass-2.13.2" self."Persistence-2.13.2" self.setuptools self."ZODB3-3.10.5" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
-    meta = {
-      description = ''
-        This package provides support for external Python methods within a Zope 2 environment.
-        '';
-      homepage = "http://pypi.python.org/pypi/Products.ExternalMethod";
-      license = "ZPL 2.1";
     };
   };
 
@@ -343,28 +323,6 @@ in
         '';
       homepage = "http://code.google.com/p/dexterity";
       license = "LGPL";
-    };
-  };
-
-
-  "plone.recipe.zope2instance" = self."plone.recipe.zope2instance-4.2.13";
-
-  "plone.recipe.zope2instance-4.2.13" = self.buildPythonPackage {
-    name = "plone.recipe.zope2instance-4.2.13";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.recipe.zope2instance/plone.recipe.zope2instance-4.2.13.zip";
-        md5 = "1ff990a15e77a92a7339b5092bfb9cc3";
-    };
-    doCheck = false;
-    buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."mailinglogger-3.7.0" self.setuptools self."zc.buildout-1.7.1" self."zc.recipe.egg-1.3.2" self."ZODB3-3.10.5" self."Zope2-2.13.21" ];
-    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-    meta = {
-      description = ''
-        Buildout recipe for creating a Zope 2 instance
-        '';
-      homepage = "http://pypi.python.org/pypi/plone.recipe.zope2instance";
-      license = "ZPL 2.1";
     };
   };
 
@@ -897,21 +855,23 @@ in
   };
 
 
-  "zope.schema-4.3.2" = self.buildPythonPackage {
-    name = "zope.schema-4.3.2";
+  "plone.recipe.zope2instance" = self."plone.recipe.zope2instance-4.2.13";
+
+  "plone.recipe.zope2instance-4.2.13" = self.buildPythonPackage {
+    name = "plone.recipe.zope2instance-4.2.13";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/z/zope.schema/zope.schema-4.3.2.zip";
-        md5 = "b63df4a3035f29113f8130c8ae28bb13";
+        url = "https://pypi.python.org/packages/source/p/plone.recipe.zope2instance/plone.recipe.zope2instance-4.2.13.zip";
+        md5 = "1ff990a15e77a92a7339b5092bfb9cc3";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self.setuptools self."zope.event-4.0.2" self."zope.interface-4.0.5" ];
+    propagatedBuildInputs = [ self."mailinglogger-3.7.0" self.setuptools self."zc.buildout-1.7.1" self."zc.recipe.egg-1.3.2" self."ZODB3-3.10.5" self."Zope2-2.13.21" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
     meta = {
       description = ''
-        zope.interface extension for defining data schemas
+        Buildout recipe for creating a Zope 2 instance
         '';
-      homepage = "http://pypi.python.org/pypi/zope.schema";
+      homepage = "http://pypi.python.org/pypi/plone.recipe.zope2instance";
       license = "ZPL 2.1";
     };
   };
@@ -1821,22 +1781,22 @@ in
   };
 
 
-  "plone.indexer-1.0.2" = self.buildPythonPackage {
-    name = "plone.indexer-1.0.2";
+  "zope.schema-4.3.2" = self.buildPythonPackage {
+    name = "zope.schema-4.3.2";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.indexer/plone.indexer-1.0.2.zip";
-        md5 = "538aeee1f9db78bc8c85ae1bcb0153ed";
+        url = "https://pypi.python.org/packages/source/z/zope.schema/zope.schema-4.3.2.zip";
+        md5 = "b63df4a3035f29113f8130c8ae28bb13";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    propagatedBuildInputs = [ self.setuptools self."zope.event-4.0.2" self."zope.interface-4.0.5" ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
     meta = {
       description = ''
-        Hooks to facilitate managing custom index values in Zope 2/CMF applications
+        zope.interface extension for defining data schemas
         '';
-      homepage = "http://pypi.python.org/pypi/plone.indexer";
-      license = "BSD";
+      homepage = "http://pypi.python.org/pypi/zope.schema";
+      license = "ZPL 2.1";
     };
   };
 
@@ -2023,22 +1983,22 @@ in
   };
 
 
-  "Products.MIMETools-2.13.0" = self.buildPythonPackage {
-    name = "Products.MIMETools-2.13.0";
+  "plone.locking-2.0.4" = self.buildPythonPackage {
+    name = "plone.locking-2.0.4";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/P/Products.MIMETools/Products.MIMETools-2.13.0.zip";
-        md5 = "ad5372fc1190599a19493db0864448ec";
+        url = "https://pypi.python.org/packages/source/p/plone.locking/plone.locking-2.0.4.zip";
+        md5 = "a7f8b8db78f57272d351d7fe0d067eb2";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."DocumentTemplate-2.13.2" self.setuptools ];
-    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
+    propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."Products.CMFCore-2.2.7" self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.21" ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        MIMETools provides the &lt;!--#mime--&gt; tag for DocumentTemplate.
+        webdav locking support
         '';
-      homepage = "http://pypi.python.org/pypi/Products.MIMETools";
-      license = "ZPL 2.1";
+      homepage = "http://pypi.python.org/pypi/plone.locking";
+      license = "GPL version 2";
     };
   };
 
@@ -2303,11 +2263,11 @@ in
   };
 
 
-  "cssselect-0.8" = self.buildPythonPackage {
-    name = "cssselect-0.8";
+  "cssselect-0.9" = self.buildPythonPackage {
+    name = "cssselect-0.9";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/c/cssselect/cssselect-0.8.tar.gz";
-        md5 = "c4683e050351abcbbd5990b01f5344e2";
+        url = "https://pypi.python.org/packages/source/c/cssselect/cssselect-0.9.tar.gz";
+        md5 = "3aba1e431787da957a9cd1e2c2e0bf1c";
     };
     doCheck = false;
     buildInputs = [  ];
@@ -2583,6 +2543,28 @@ in
   };
 
 
+  "psycopg2" = self."psycopg2-2.5.1";
+
+  "psycopg2-2.5.1" = self.buildPythonPackage {
+    name = "psycopg2-2.5.1";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.5.1.tar.gz";
+        md5 = "1b433f83d50d1bc61e09026e906d84c7";
+    };
+    doCheck = false;
+    buildInputs = [  ];
+    propagatedBuildInputs = [  ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
+    meta = {
+      description = ''
+        Python-PostgreSQL Database Adapter
+        '';
+      homepage = "http://initd.org/psycopg/";
+      license = "GPL with exceptions or ZPL";
+    };
+  };
+
+
   "plone.rfc822-1.1" = self.buildPythonPackage {
     name = "plone.rfc822-1.1";
     src = fetchurl {
@@ -2699,6 +2681,28 @@ in
         '';
       homepage = "http://pypi.python.org/pypi/zope.browserresource/";
       license = "UNKNOWN";
+    };
+  };
+
+
+  "RelStorage" = self."RelStorage-1.5.1";
+
+  "RelStorage-1.5.1" = self.buildPythonPackage {
+    name = "RelStorage-1.5.1";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/R/RelStorage/RelStorage-1.5.1.tar.gz";
+        md5 = "2454211d086ac02a4af10f7292e260ec";
+    };
+    doCheck = false;
+    buildInputs = [  ];
+    propagatedBuildInputs = [ self."zc.lockfile-1.0.2" self."ZODB3-3.10.5" self."zope.interface-3.6.7" ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
+    meta = {
+      description = ''
+        A backend for ZODB that stores pickles in a relational database.
+        '';
+      homepage = "http://pypi.python.org/pypi/RelStorage";
+      license = "ZPL 2.1";
     };
   };
 
@@ -2985,22 +2989,22 @@ in
   };
 
 
-  "plone.locking-2.0.4" = self.buildPythonPackage {
-    name = "plone.locking-2.0.4";
+  "Products.MIMETools-2.13.0" = self.buildPythonPackage {
+    name = "Products.MIMETools-2.13.0";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.locking/plone.locking-2.0.4.zip";
-        md5 = "a7f8b8db78f57272d351d7fe0d067eb2";
+        url = "https://pypi.python.org/packages/source/P/Products.MIMETools/Products.MIMETools-2.13.0.zip";
+        md5 = "ad5372fc1190599a19493db0864448ec";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self."Acquisition-2.13.8" self."DateTime-3.0.3" self."Products.CMFCore-2.2.7" self.setuptools self."ZODB3-3.10.5" self."zope.annotation-3.5.0" self."zope.component__zcml-3.9.5" self."zope.i18nmessageid-3.5.3" self."zope.interface-3.6.7" self."zope.schema-4.2.2" self."zope.viewlet-3.7.2" self."Zope2-2.13.21" ];
-    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    propagatedBuildInputs = [ self."DocumentTemplate-2.13.2" self.setuptools ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
     meta = {
       description = ''
-        webdav locking support
+        MIMETools provides the &lt;!--#mime--&gt; tag for DocumentTemplate.
         '';
-      homepage = "http://pypi.python.org/pypi/plone.locking";
-      license = "GPL version 2";
+      homepage = "http://pypi.python.org/pypi/Products.MIMETools";
+      license = "ZPL 2.1";
     };
   };
 
@@ -3365,22 +3369,22 @@ in
   };
 
 
-  "plone.app.textfield-1.2.2" = self.buildPythonPackage {
-    name = "plone.app.textfield-1.2.2";
+  "Products.ExternalMethod-2.13.0" = self.buildPythonPackage {
+    name = "Products.ExternalMethod-2.13.0";
     src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/plone.app.textfield/plone.app.textfield-1.2.2.zip";
-        md5 = "f832887a40826d6f68c48b48f071fb9c";
+        url = "https://pypi.python.org/packages/source/P/Products.ExternalMethod/Products.ExternalMethod-2.13.0.zip";
+        md5 = "15ba953ef6cb632eb571977651252ea6";
     };
     doCheck = false;
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
+    propagatedBuildInputs = [ self."AccessControl-3.0.8" self."Acquisition-2.13.8" self."ExtensionClass-2.13.2" self."Persistence-2.13.2" self.setuptools self."ZODB3-3.10.5" ];
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {
       description = ''
-        Text field with MIME type support
+        This package provides support for external Python methods within a Zope 2 environment.
         '';
-      homepage = "http://pypi.python.org/pypi/plone.app.textfield";
-      license = "GPL";
+      homepage = "http://pypi.python.org/pypi/Products.ExternalMethod";
+      license = "ZPL 2.1";
     };
   };
 
@@ -3681,6 +3685,26 @@ in
         '';
       homepage = "http://pypi.python.org/pypi/five.globalrequest";
       license = "ZPL";
+    };
+  };
+
+
+  "plone.indexer-1.0.2" = self.buildPythonPackage {
+    name = "plone.indexer-1.0.2";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/p/plone.indexer/plone.indexer-1.0.2.zip";
+        md5 = "538aeee1f9db78bc8c85ae1bcb0153ed";
+    };
+    doCheck = false;
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self."Products.CMFCore-2.2.7" self.setuptools self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    meta = {
+      description = ''
+        Hooks to facilitate managing custom index values in Zope 2/CMF applications
+        '';
+      homepage = "http://pypi.python.org/pypi/plone.indexer";
+      license = "BSD";
     };
   };
 
@@ -4012,7 +4036,7 @@ in
         md5 = "bf0a04fcf8b2cdcaa13b04324cefb53d";
     };
     doCheck = true;
-    buildInputs = [ self."nose-1.3.0" self."unittest2-0.5.1" self."pyquery-1.2.4" self."WSGIProxy2-0.3" self."PasteDeploy-1.5.0" self."mock-1.0.1" self."coverage-3.6" pkgs.unzip ];
+    buildInputs = [ self."nose-1.3.0" self."unittest2-0.5.1" self."pyquery-1.2.6" self."WSGIProxy2-0.3" self."PasteDeploy-1.5.0" self."mock-1.0.1" self."coverage-3.7" pkgs.unzip ];
     propagatedBuildInputs = [ self."beautifulsoup4-4.3.2" self."six-1.4.1" self."waitress-0.8.7" self."WebOb-1.2.3" ];
     installCommand = ''easy_install --always-unzip --prefix="$out" .'';
     meta = {
@@ -4365,6 +4389,46 @@ in
   };
 
 
+  "plone.app.textfield-1.2.2" = self.buildPythonPackage {
+    name = "plone.app.textfield-1.2.2";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/p/plone.app.textfield/plone.app.textfield-1.2.2.zip";
+        md5 = "f832887a40826d6f68c48b48f071fb9c";
+    };
+    doCheck = false;
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self.setuptools self."ZODB3-3.10.5" self."zope.component__zcml-3.9.5" self."zope.interface-3.6.7" self."zope.schema-4.2.2" ];
+    installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
+    meta = {
+      description = ''
+        Text field with MIME type support
+        '';
+      homepage = "http://pypi.python.org/pypi/plone.app.textfield";
+      license = "GPL";
+    };
+  };
+
+
+  "pyquery-1.2.6" = self.buildPythonPackage {
+    name = "pyquery-1.2.6";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/p/pyquery/pyquery-1.2.6.zip";
+        md5 = "af51aa835f24eef06175c48dc1218029";
+    };
+    doCheck = true;
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ self."cssselect-0.9" self."lxml-3.2.3" ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
+    meta = {
+      description = ''
+        A jquery-like library for python
+        '';
+      homepage = "https://github.com/gawel/pyquery";
+      license = "BSD";
+    };
+  };
+
+
   "zope.event-3.5.2" = self.buildPythonPackage {
     name = "zope.event-3.5.2";
     src = fetchurl {
@@ -4381,26 +4445,6 @@ in
         '';
       homepage = "http://pypi.python.org/pypi/zope.event";
       license = "ZPL 2.1";
-    };
-  };
-
-
-  "pyquery-1.2.4" = self.buildPythonPackage {
-    name = "pyquery-1.2.4";
-    src = fetchurl {
-        url = "https://pypi.python.org/packages/source/p/pyquery/pyquery-1.2.4.tar.gz";
-        md5 = "268f08258738d21bc1920d7522f2a63b";
-    };
-    doCheck = true;
-    buildInputs = [  ];
-    propagatedBuildInputs = [ self."cssselect-0.8" self."lxml-3.2.3" ];
-    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
-    meta = {
-      description = ''
-        A jquery-like library for python
-        '';
-      homepage = "https://github.com/gawel/pyquery";
-      license = "BSD";
     };
   };
 

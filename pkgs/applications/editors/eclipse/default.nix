@@ -32,8 +32,9 @@ let
 
         # Patch binaries.
         interpreter=$(echo ${stdenv.glibc}/lib/ld-linux*.so.2)
+        libCairo=$out/eclipse/libcairo-swt.so
         patchelf --set-interpreter $interpreter $out/eclipse/eclipse
-        patchelf --set-rpath ${freetype}/lib:${fontconfig}/lib:${libX11}/lib:${libXrender}/lib:${zlib}/lib $out/eclipse/libcairo-swt.so
+        [ -f $libCairo ] && patchelf --set-rpath ${freetype}/lib:${fontconfig}/lib:${libX11}/lib:${libXrender}/lib:${zlib}/lib $libCairo
 
         # Create wrapper script.  Pass -configuration to store
         # settings in ~/.eclipse/org.eclipse.platform_<version> rather
@@ -205,4 +206,20 @@ in {
         };
     };
   };
+
+  eclipse_sdk_431 = buildEclipse {
+    name = "eclipse-sdk-4.3.1";
+    description = "Eclipse Classic";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = http://download.eclipse.org/eclipse/downloads/drops4/R-4.3.1-201309111000/eclipse-SDK-4.3.1-linux-gtk-x86_64.tar.gz;
+          sha256 = "0ncm56ylwxw9z8rk8ccgva68c2yr9yrf1kcr1zkgw6p87xh1yczd";
+        };
+      "i686-linux" = fetchurl {
+          url = http://download.eclipse.org/eclipse/downloads/drops4/R-4.3.1-201309111000/eclipse-SDK-4.3.1-linux-gtk.tar.gz;
+          sha256 = "1zxsh838khny7mvl01h28xna6xdh01yi4mvls28zj22v0340lgsg";
+        };
+    };
+  };
+
 }

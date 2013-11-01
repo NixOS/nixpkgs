@@ -47,7 +47,7 @@ rec {
   '' ["defEnsureDir" "prepareBuild"];
       
   meta = {
-    description = "A light-weight scripting library";
+    description = "Light-weight scripting library";
     maintainers = with a.lib.maintainers;
     [
       raskin

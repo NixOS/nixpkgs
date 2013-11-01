@@ -37,6 +37,11 @@ else
   jrePath=$out/jre
 fi
 
+if test -n "$jce"; then
+  unzip $jce
+  cp -v jce/*.jar $jrePath/lib/security
+fi
+
 rpath=$rpath${rpath:+:}$jrePath/lib/$architecture/jli
 
 # set all the dynamic linkers

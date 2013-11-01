@@ -1,7 +1,7 @@
 { monolithic ? true # build monolithic Quassel
 , daemon ? false # build Quassel daemon
 , client ? false # build Quassel client
-, withKDE ? true # enable KDE integration
+, withKDE ? stdenv.isLinux # enable KDE integration
 , ssl ? true # enable SSL support
 , previews ? false # enable webpage previews on hovering over URLs
 , stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon }:

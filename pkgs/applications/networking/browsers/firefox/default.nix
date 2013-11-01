@@ -4,6 +4,7 @@
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base
+, debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
   # binaries may not be distributed without permission from the
@@ -17,9 +18,9 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 let optional = stdenv.lib.optional;
 in rec {
 
-  firefoxVersion = "24.0";
+  firefoxVersion = "25.0";
 
-  xulVersion = "24.0"; # this attribute is used by other packages
+  xulVersion = "25.0"; # this attribute is used by other packages
 
 
   src = fetchurl {
@@ -27,15 +28,15 @@ in rec {
         # It is better to use this url for official releases, to take load off Mozilla's ftp server.
         "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
         # Fall back to this url for versions not available at releases.mozilla.org.
-        "ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
+        "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
     ];
-    sha1 = "8scch0gr59j86vp9c1v0yx6mq1pkwcvg";
+    sha1 = "854722e283659d2b6b2eacd38f757b3c5b63a448";
   };
 
   commonConfigureFlags =
     [ "--enable-optimize"
       #"--enable-profiling"
-      "--disable-debug"
+      (if debugBuild then "--enable-debug" else "--disable-debug")
       "--enable-strip"
       "--with-system-jpeg"
       "--with-system-zlib"

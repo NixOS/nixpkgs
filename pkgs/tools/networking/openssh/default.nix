@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.openssh.org/;
     description = "An implementation of the SSH protocol";
     license = "bsd";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = stdenv.lib.maintainers.eelco;
   };
 }

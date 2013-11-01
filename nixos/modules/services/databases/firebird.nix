@@ -1,0 +1,162 @@
+{ config, pkgs, ... }:
+
+# TODO: This may file may need additional review, eg which configuartions to
+# expose to the user.
+#
+# I only used it to access some simple databases.
+
+# test:
+# isql, then type the following commands:
+# CREATE DATABASE '/var/db/firebird/data/test.fdb' USER 'SYSDBA' PASSWORD 'masterkey';
+# CONNECT '/var/db/firebird/data/test.fdb' USER 'SYSDBA' PASSWORD 'masterkey';
+# CREATE TABLE test ( text varchar(100) );
+# DROP DATABASE;
+#
+# Be careful, virtuoso-opensource also provides a different isql command !
+
+# There are at least two ways to run firebird. superserver has been choosen
+# however there are no strong reasons to prefer this or the other one AFAIK
+# Eg superserver is said to be most efficiently using resources according to
+# http://www.firebirdsql.org/manual/qsg25-classic-or-super.html
+
+with pkgs.lib;
+
+let
+
+  cfg = config.services.firebird;
+
+  firebird = cfg.package;
+
+  dataDir = "${cfg.baseDir}/data";
+  systemDir = "${cfg.baseDir}/system";
+
+in
+
+{
+
+  ###### interface
+
+  options = {
+
+    services.firebird = {
+
+      enable = mkOption {
+        default = false;
+        description = ''
+          Whether to enable the Firebird super server.
+        '';
+      };
+
+      package = mkOption {
+        default = pkgs.firebirdSuper;
+        /*
+          Example: <code>package = pkgs.firebirdSuper.override { icu =
+            pkgs.icu; };</code> which is not recommended for compatibility
+            reasons. See comments at the firebirdSuper derivation
+        */
+
+        description = ''
+          Which firebird derivation to use.
+        '';
+      };
+
+      port = mkOption {
+        default = "3050";
+        description = ''
+          Port Firebird uses.
+        '';
+      };
+
+      user = mkOption {
+        default = "firebird";
+        description = ''
+          User account under which firebird runs.
+        '';
+      };
+
+      baseDir = mkOption {
+        default = "/var/db/firebird"; # ubuntu is using /var/lib/firebird/2.1/data/.. ?
+        description = ''
+          Location containing data/ and system/ directories.
+          data/ stores the databases, system/ stores the password database security2.fdb.
+        '';
+      };
+
+    };
+
+  };
+
+
+  ###### implementation
+
+  config = mkIf config.services.firebird.enable {
+
+    environment.systemPackages = [cfg.package];
+
+    systemd.services.firebird =
+      { description = "Firebird Super-Server";
+
+        wantedBy = [ "multi-user.target" ];
+
+        # TODO: moving security2.fdb into the data directory works, maybe there
+        # is a better way
+        preStart =
+          ''
+            mkdir -m 0700 -p \
+              "${dataDir}" \
+              "${systemDir}" \
+              /var/log/firebird
+
+            if ! test -e "${systemDir}/security2.fdb"; then
+                cp ${firebird}/security2.fdb "${systemDir}"
+            fi
+
+            chown -R ${cfg.user} "${dataDir}" "${systemDir}" /var/log/firebird
+            chmod -R 700         "${dataDir}" "${systemDir}" /var/log/firebird
+          '';
+
+        serviceConfig.PermissionsStartOnly = true; # preStart must be run as root
+        serviceConfig.User = cfg.user;
+        serviceConfig.ExecStart = ''${firebird}/bin/fbserver -d'';
+
+        # TODO think about shutdown
+      };
+
+    environment.etc."firebird/firebird.msg".source = "${firebird}/firebird.msg";
+
+    # think about this again - and eventually make it an option
+    environment.etc."firebird/firebird.conf".text = ''
+      # RootDirectory = Restrict ${dataDir}
+      DatabaseAccess = Restrict ${dataDir}
+      ExternalFileAccess = Restrict ${dataDir}
+      # what is this? is None allowed?
+      UdfAccess = None
+      # "Native" =  traditional interbase/firebird, "mixed" is windows only
+      Authentication = Native
+
+      # defaults to -1 on non Win32
+      #MaxUnflushedWrites = 100
+      #MaxUnflushedWriteTime = 100
+
+      # show trace if trouble occurs (does this require debug build?)
+      # BugcheckAbort = 0
+      # ConnectionTimeout = 180
+
+      #RemoteServiceName = gds_db
+      RemoteServicePort = ${cfg.port}
+
+      # randomly choose port for server Event Notification
+      #RemoteAuxPort = 0
+      # rsetrict connections to a network card:
+      #RemoteBindAddress =
+      # there are some additional settings which should be reviewed
+    '';
+
+    users.extraUsers.firebird = {
+      description = "Firebird server user";
+      group = "firebird";
+      uid = config.ids.uids.firebird;
+    };
+
+  };
+}

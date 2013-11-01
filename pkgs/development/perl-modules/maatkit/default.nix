@@ -25,7 +25,15 @@ buildPerlPackage rec {
   '' ;
 
   meta = {
-    description = "Maatkit makes MySQL easier and safer to manage. It provides simple, predictable ways to do things you cannot otherwise do.";
+    description = "Database toolkit";
+    longDescription = ''
+      You can use Maatkit to prove replication is working correctly, fix
+      corrupted data, automate repetitive tasks, speed up your servers, and
+      much more.
+
+      In addition to MySQL, there is support for PostgreSQL, Memcached, and a
+      growing variety of other databases and technologies.
+    '';
     license = "GPLv2+";
     homepage = http://www.maatkit.org/;
   };

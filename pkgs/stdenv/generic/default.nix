@@ -14,7 +14,7 @@ else
 
 let
 
-  lib = import ../../lib;
+  lib = import ../../../lib;
 
   allowUnfree = config.allowUnfree or true && builtins.getEnv "HYDRA_DISALLOW_UNFREE" != "1";
 
@@ -49,7 +49,7 @@ let
         # Add a utility function to produce derivations that use this
         # stdenv and its shell.
         mkDerivation = attrs:
-          if !allowUnfree && (let l = attrs.meta.license or ""; in l == "unfree" || l == "unfree-redistributable") then
+          if !allowUnfree && (let l = lib.lists.toList attrs.meta.license or []; in lib.lists.elem "unfree" l || lib.lists.elem "unfree-redistributable" l) then
             throw "package ‘${attrs.name}’ has an unfree license, refusing to evaluate"
           else
             lib.addPassthru (derivation (

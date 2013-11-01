@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "http://fox-toolkit.org";
     license = "LGPLv3";
     maintainers = [ stdenv.lib.maintainers.bbenoist ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }

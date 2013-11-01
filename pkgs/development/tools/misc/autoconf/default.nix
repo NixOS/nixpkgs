@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/autoconf/;
-    description = "GNU Autoconf, a part of the GNU Build System";
+    description = "Part of the GNU Build System";
 
     longDescription = ''
       GNU Autoconf is an extensible package of M4 macros that produce

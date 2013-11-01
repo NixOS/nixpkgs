@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   postInstall = "rm $out/share/icons/hicolor/icon-theme.cache";
 
   meta = {
-    description = "A GTK2 small and ligthweight IDE.";
+    description = "Small and lightweight IDE";
     longDescription = ''
       Geany is a small and lightweight Integrated Development Environment.
       It was developed to provide a small and fast IDE, which has only a few dependencies from other packages.

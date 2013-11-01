@@ -1,14 +1,10 @@
-{ cabal, deepseq, extensibleExceptions, List, text, transformers
-, utf8String
-}:
+{ cabal, deepseq, List, text, transformers, utf8String }:
 
 cabal.mkDerivation (self: {
   pname = "hexpat";
-  version = "0.20.3";
-  sha256 = "13dh0cvcmp6yi4nncsn6q9pkisld9xvz6j4xabng5ax67vdgdvrs";
-  buildDepends = [
-    deepseq extensibleExceptions List text transformers utf8String
-  ];
+  version = "0.20.4";
+  sha256 = "09ixvwgrr1046v806d23ngdhc8xqkf0yadzlbwxcy228ka13xwdw";
+  buildDepends = [ deepseq List text transformers utf8String ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/Hexpat/";
     description = "XML parser/formatter based on expat";

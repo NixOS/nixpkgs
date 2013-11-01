@@ -15,7 +15,12 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A development tool to help programmers write Java code that adheres to a coding standard. By default it supports the Sun Code Conventions, but is highly configurable." ;
+    description = "Checks Java source against a coding standard";
+    longDescription = ''
+      checkstyle is a development tool to help programmers write Java code that
+      adheres to a coding standard. By default it supports the Sun Code
+      Conventions, but is highly configurable.
+    '';
     homepage = http://checkstyle.sourceforge.net/;
   };
 }

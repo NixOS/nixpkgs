@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "cowsay reimplemention for ponies.";
+    description = "Cowsay reimplemention for ponies";
     homepage = http://terse.tk/ponysay/;
     license = "GPLv3";
     maintainers = with stdenv.lib.maintainers; [ bodil ];

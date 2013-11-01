@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "symbol";
-  version = "0.1.4";
-  sha256 = "00318syprv1ixfbr4v7xq86z10f0psxk0b8kaxvawvacm8hp61bn";
+  version = "0.2.0";
+  sha256 = "13vr6j3wkxbdbd27xklnidfkpkjwl0kldf69z470bm5indvaaxfd";
   buildDepends = [ deepseq syb ];
   jailbreak = true;
   meta = {

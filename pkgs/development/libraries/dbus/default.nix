@@ -77,7 +77,8 @@ let
   });
 
 
-in rec {
+  attrs = rec {
+  # If you change much fix indentation
 
   # This package has been split because most applications only need dbus.lib
   # which serves as an interface to a *system-wide* daemon,
@@ -114,4 +115,5 @@ in rec {
   docs = dbus_drv "docs" "doc" {
     postInstall = ''rm -r "$out/lib"'';
   };
-}
+};
+in attrs.libs // attrs

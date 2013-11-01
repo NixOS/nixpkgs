@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   makeFlags = "PREFIX=\${out}";
 
   meta = {
-    description = "identifies duplicate files residing within specified directories.";
+    description = "Identifies duplicate files residing within specified directories";
     longDescription = ''
       FDUPES uses md5sums and then a byte by byte comparison to finde duplicate
       files within a set of directories.

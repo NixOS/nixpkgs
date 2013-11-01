@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Insert dummy pseudo Latin text for emacs.";
+    description = "Insert dummy pseudo Latin text for Emacs";
     homepage = http://www.emacswiki.org/emacs/LoremIpsum;
     license = "GPLv2+";
 

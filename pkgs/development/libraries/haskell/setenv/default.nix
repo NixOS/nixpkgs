@@ -1,10 +1,9 @@
-{ cabal, hspec, QuickCheck }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "setenv";
-  version = "0.1.0";
-  sha256 = "04w42bpfbrs5crjp19zzi9dg61xpz4wvmjs2vc7q7qxblyhdfdsy";
-  testDepends = [ hspec QuickCheck ];
+  version = "0.1.1";
+  sha256 = "1j0fj8nrx9z90kghasxjx5jycz9y9xdi7mrxmgnsc14csa65rhb8";
   doCheck = false;
   meta = {
     description = "A cross-platform library for setting environment variables";

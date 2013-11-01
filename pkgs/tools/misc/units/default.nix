@@ -8,6 +8,6 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "Unit conversion tool.";
+    description = "Unit conversion tool";
   };
 }

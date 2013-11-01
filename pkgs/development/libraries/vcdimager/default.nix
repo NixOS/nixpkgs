@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.gnu.org/software/vcdimager/;
-    description = "GNU VCDImager is a full-featured mastering suite for authoring, disassembling and analyzing Video CDs and Super Video CDs.";
+    description = "Full-featured mastering suite for authoring, disassembling and analyzing Video CDs and Super Video CDs";
     platforms = stdenv.lib.platforms.gnu; # random choice
   };
 }

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.gnu.org/software/automake/;
-    description = "GNU Automake, a GNU standard-compliant makefile generator";
+    description = "GNU standard-compliant makefile generator";
 
     longDescription = ''
       GNU Automake is a tool for automatically generating

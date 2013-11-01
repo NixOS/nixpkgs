@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An elisp implementation of clientside XML-RPC.";
+    description = "Elisp implementation of clientside XML-RPC";
     homepage = https://launchpad.net/xml-rpc-el;
     license = "GPLv3+";
 

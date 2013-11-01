@@ -78,19 +78,29 @@ args : with args;
       "FileUsage       = 3\n ";
  };
  sqlite = rec {
-    deriv = stdenv.mkDerivation {
-      name = "sqlite-connector-odbc-3.51.12";
+    deriv = let version = "0.995"; in
+    stdenv.mkDerivation {
+      name = "sqlite-connector-odbc-${version}";
+
       src = fetchurl {
-        url = http://www.ch-werner.de/sqliteodbc/sqliteodbc-0.70.tar.gz;
-        sha256 = "0ysyqdqkxqcqxrxgi15cbrzia9z6yalim5c88faad85bwanx4db8";
+        url = "http://www.ch-werner.de/sqliteodbc/sqliteodbc-${version}.tar.gz";
+        sha256 = "1r97fw6xy5w2f8c0ii7blfqfi6salvd3k8wnxpx9wqc1gxk8jnyy";
       };
+
+      buildInputs = [ sqlite ];
+
       configureFlags = "--with-sqlite3=${sqlite} --with-odbc=${unixODBC}";
-      postInstall = ''mkdir lib; mv $out/* lib; mv lib $out'';
-      buildInputs = [libtool zlib sqlite];
+
+      postInstall = ''
+        mkdir -p  $out/lib
+      '';
+
       meta = { 
-        description = "sqlite odbc connector, install using configuration.nix";
-        homepage = http://www.ch-werner.de/sqliteodbc/html/index.html;
-        license = "BSD";
+        description = "ODBC driver for SQLite";
+        homepage = http://www.ch-werner.de/sqliteodbc;
+        license = stdenv.lib.licenses.bsd2;
+        platforms = stdenv.lib.platforms.linux;
+        maintainers = with stdenv.lib.maintainers; [ vlstill ];
       };
     };
     ini =

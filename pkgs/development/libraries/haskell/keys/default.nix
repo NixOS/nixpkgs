@@ -1,14 +1,11 @@
-{ cabal, comonadsFd, comonadTransformers, free, semigroupoids
-, semigroups, transformers
-}:
+{ cabal, comonad, free, semigroupoids, semigroups, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "keys";
-  version = "3.0.3";
-  sha256 = "1fqw0745pj8pzjjlrbg85gdr3acm7gpip5052m9wcz997949ca3r";
+  version = "3.10";
+  sha256 = "1s2xkzvaqk507wrgabpxli8g8n83arflmdhxq40f7qkvyflhhmyh";
   buildDepends = [
-    comonadsFd comonadTransformers free semigroupoids semigroups
-    transformers
+    comonad free semigroupoids semigroups transformers
   ];
   meta = {
     homepage = "http://github.com/ekmett/keys/";

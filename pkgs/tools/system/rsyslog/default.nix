@@ -14,9 +14,8 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.rsyslog.com/";
-    description = "Rsyslog is an enhanced syslogd. It can be used as a drop-in replacement for stock sysklogd.";
+    description = "Enhanced syslog implementation";
     license = "GPLv3";
-
     platforms = stdenv.lib.platforms.linux;
   };
 }

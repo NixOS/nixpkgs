@@ -14,8 +14,8 @@ rec {
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
     mkdir -p $out/share/
-    mkdir -p $out/texmf/tex/generic/pgf
-    cp -r * $out/texmf/tex/generic/pgf
+    mkdir -p $out/texmf-dist/tex/generic/pgf
+    cp -r * $out/texmf-dist/tex/generic/pgf
     ln -s $out/texmf* $out/share/
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
 

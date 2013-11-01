@@ -1,0 +1,469 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<title>Installing NixOS</title>
+
+
+<!--===============================================================-->
+
+<section>
+
+<title>Obtaining NixOS</title>
+
+<para>NixOS ISO images can be downloaded from the <link
+xlink:href="http://nixos.org/nixos/download.html">NixOS
+homepage</link>.  These can be burned onto a CD.  It is also possible
+to copy them onto a USB stick and install NixOS from there.  For
+details, see the <link
+xlink:href="https://nixos.org/wiki/Installing_NixOS_from_a_USB_stick">NixOS
+Wiki</link>.</para>
+
+<para>As an alternative to installing NixOS yourself, you can get a
+running NixOS system through several other means:
+
+<itemizedlist>
+  <listitem>
+    <para>Using virtual appliances in Open Virtualization Format (OVF)
+    that can be imported into VirtualBox.  These are available from
+    the <link xlink:href="http://nixos.org/nixos/download.html">NixOS
+    homepage</link>.</para>
+  </listitem>
+  <listitem>
+    <para>Using AMIs for Amazon’s EC2.  To find one for your region
+    and instance type, please refer to the <link
+    xlink:href="https://github.com/NixOS/nixops/blob/master/nix/ec2-amis.nix">list
+    of most recent AMIs</link>.</para>
+  </listitem>
+  <listitem>
+    <para>Using NixOps, the NixOS-based cloud deployment tool, which
+    allows you to provision VirtualBox and EC2 NixOS instances from
+    declarative specifications.  Check out the <link
+    xlink:href="https://github.com/NixOS/nixops">NixOps
+    homepage</link> for details.</para>
+  </listitem>
+</itemizedlist>
+
+</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section>
+
+<title>Installation</title>
+
+<orderedlist>
+
+  <listitem><para>Boot from the CD.</para></listitem>
+
+  <listitem><para>The CD contains a basic NixOS installation.  (It
+  also contains Memtest86+, useful if you want to test new hardware.)
+  When it’s finished booting, it should have detected most of your
+  hardware and brought up networking (check
+  <command>ifconfig</command>).  Networking is necessary for the
+  installer, since it will download lots of stuff (such as source
+  tarballs or Nixpkgs channel binaries).  It’s best if you have a DHCP
+  server on your network.  Otherwise configure networking manually
+  using <command>ifconfig</command>.</para></listitem>
+
+  <listitem><para>The NixOS manual is available on virtual console 8
+  (press Alt+F8 to access).</para></listitem>
+
+  <listitem><para>Login as <literal>root</literal> and the empty
+  password.</para></listitem>
+
+  <listitem><para>If you downloaded the graphical ISO image, you can
+  run <command>start display-manager</command> to start KDE.</para></listitem>
+
+  <listitem><para>The NixOS installer doesn’t do any partitioning or
+  formatting yet, so you need to that yourself.  Use the following
+  commands:
+
+  <itemizedlist>
+
+    <listitem><para>For partitioning:
+    <command>fdisk</command>.</para></listitem>
+
+    <listitem><para>For initialising Ext4 partitions:
+    <command>mkfs.ext4</command>.  It is recommended that you assign a
+    unique symbolic label to the file system using the option
+    <option>-L <replaceable>label</replaceable></option>, since this
+    makes the file system configuration independent from device
+    changes.  For example:
+
+<screen>
+$ mkfs.ext4 -L nixos /dev/sda1</screen>
+
+    </para></listitem>
+
+    <listitem><para>For creating swap partitions:
+    <command>mkswap</command>.  Again it’s recommended to assign a
+    label to the swap partition: <option>-L
+    <replaceable>label</replaceable></option>.</para></listitem>
+
+    <listitem><para>For creating LVM volumes, the LVM commands, e.g.,
+
+<screen>
+$ pvcreate /dev/sda1 /dev/sdb1
+$ vgcreate MyVolGroup /dev/sda1 /dev/sdb1
+$ lvcreate --size 2G --name bigdisk MyVolGroup
+$ lvcreate --size 1G --name smalldisk MyVolGroup</screen>
+
+    </para></listitem>
+
+    <listitem><para>For creating software RAID devices, use
+    <command>mdadm</command>.</para></listitem>
+
+  </itemizedlist>
+
+  </para></listitem>
+
+  <listitem><para>Mount the target file system on which NixOS should
+  be installed on <filename>/mnt</filename>, e.g.
+
+<screen>
+$ mount /dev/disk/by-label/nixos /mnt
+</screen>
+
+  </para></listitem>
+
+  <listitem><para>If your machine has a limited amount of memory, you
+  may want to activate swap devices now (<command>swapon
+  <replaceable>device</replaceable></command>).  The installer (or
+  rather, the build actions that it may spawn) may need quite a bit of
+  RAM, depending on your configuration.</para></listitem>
+
+  <listitem>
+
+    <para>You now need to create a file
+    <filename>/mnt/etc/nixos/configuration.nix</filename> that
+    specifies the intended configuration of the system.  This is
+    because NixOS has a <emphasis>declarative</emphasis> configuration
+    model: you create or edit a description of the desired
+    configuration of your system, and then NixOS takes care of making
+    it happen.  The syntax of the NixOS configuration file is
+    described in <xref linkend="sec-configuration-syntax"/>, while a
+    list of available configuration options appears in <xref
+    linkend="ch-options"/>.  A minimal example is shown in <xref
+    linkend="ex-config"/>.</para>
+
+    <para>The command <command>nixos-generate-config</command> can
+    generate an initial configuration file for you:
+
+<screen>
+$ nixos-generate-config --root /mnt</screen>
+
+    You should then edit
+    <filename>/mnt/etc/nixos/configuration.nix</filename> to suit your
+    needs:
+
+<screen>
+$ nano /mnt/etc/nixos/configuration.nix
+</screen>
+
+    The <command>vim</command> text editor is also available.</para>
+
+    <para>You <emphasis>must</emphasis> set the option
+    <option>boot.loader.grub.device</option> to specify on which disk
+    the GRUB boot loader is to be installed.  Without it, NixOS cannot
+    boot.</para>
+
+    <para>Another critical option is <option>fileSystems</option>,
+    specifying the file systems that need to be mounted by NixOS.
+    However, you typically don’t need to set it yourself, because
+    <command>nixos-generate-config</command> sets it automatically in
+    <filename>/mnt/etc/nixos/hardware-configuration.nix</filename>
+    from your currently mounted file systems.  (The configuration file
+    <filename>hardware-configuration.nix</filename> is included from
+    <filename>configuration.nix</filename> and will be overwritten by
+    future invocations of <command>nixos-generate-config</command>;
+    thus, you generally should not modify it.)</para>
+
+    <note><para>Depending on your hardware configuration or type of
+    file system, you may need to set the option
+    <option>boot.initrd.kernelModules</option> to include the kernel
+    modules that are necessary for mounting the root file system,
+    otherwise the installed system will not be able to boot.  (If this
+    happens, boot from the CD again, mount the target file system on
+    <filename>/mnt</filename>, fix
+    <filename>/mnt/etc/nixos/configuration.nix</filename> and rerun
+    <filename>nixos-install</filename>.)  In most cases,
+    <command>nixos-generate-config</command> will figure out the
+    required modules.</para></note>
+
+    <para>Examples of real-world NixOS configuration files can be
+    found at <link
+    xlink:href="https://nixos.org/repos/nix/configurations/trunk/"/>.</para>
+
+  </listitem>
+
+  <listitem><para>Do the installation:
+
+<screen>
+$ nixos-install</screen>
+
+    Cross fingers.  If this fails due to a temporary problem (such as
+    a network issue while downloading binaries from the NixOS binary
+    cache), you can just re-run <command>nixos-install</command>.
+    Otherwise, fix your <filename>configuration.nix</filename> and
+    then re-run <command>nixos-install</command>.</para></listitem>
+
+  <listitem><para>If everything went well:
+
+<screen>
+$ reboot</screen>
+
+  </para></listitem>
+
+  <listitem>
+
+    <para>You should now be able to boot into the installed NixOS.
+    The GRUB boot menu shows a list of <emphasis>available
+    configurations</emphasis> (initially just one).  Every time you
+    change the NixOS configuration (see <xref
+    linkend="sec-changing-config" />), a new item appears in the menu.
+    This allows you to easily roll back to another configuration if
+    something goes wrong.</para>
+
+    <para>You should log in and change the <literal>root</literal>
+    password with <command>passwd</command>.</para>
+
+    <para>You’ll probably want to create some user accounts as well,
+    which can be done with <command>useradd</command>:
+
+<screen>
+$ useradd -c 'Eelco Dolstra' -m eelco
+$ passwd eelco</screen>
+
+    </para>
+
+    <para>You may also want to install some software.  For instance,
+
+<screen>
+$ nix-env -qa \*</screen>
+
+    shows what packages are available, and
+
+<screen>
+$ nix-env -i w3m</screen>
+
+    install the <literal>w3m</literal> browser.</para>
+
+  </listitem>
+
+</orderedlist>
+
+<para>To summarise, <xref linkend="ex-install-sequence" /> shows a
+typical sequence of commands for installing NixOS on an empty hard
+drive (here <filename>/dev/sda</filename>).  <xref linkend="ex-config"
+/> shows a corresponding configuration Nix expression.</para>
+
+<example xml:id='ex-install-sequence'><title>Commands for installing NixOS on <filename>/dev/sda</filename></title>
+<screen>
+$ fdisk /dev/sda # <lineannotation>(or whatever device you want to install on)</lineannotation>
+$ mkfs.ext4 -L nixos /dev/sda1
+$ mkswap -L swap /dev/sda2
+$ swapon /dev/sda2
+$ mount /dev/disk/by-label/nixos /mnt
+$ nixos-generate-config --root /mnt
+$ nano /mnt/etc/nixos/configuration.nix
+$ nixos-install
+$ reboot</screen>
+</example>
+
+<example xml:id='ex-config'><title>NixOS configuration</title>
+<screen>
+{ config, pkgs, ... }:
+
+{
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
+
+  boot.loader.grub.device = "/dev/sda";
+
+  # Note: setting fileSystems is generally not
+  # necessary, since nixos-generate-config figures them out
+  # automatically in hardware-configuration.nix.
+  #fileSystems."/".device = "/dev/disk/by-label/nixos";
+
+  # Enable the OpenSSH server.
+  services.sshd.enable = true;
+}</screen>
+</example>
+
+</section>
+
+
+
+<!--===============================================================-->
+
+<section xml:id="sec-changing-config">
+
+<title>Changing the configuration</title>
+
+<para>The file <filename>/etc/nixos/configuration.nix</filename>
+contains the current configuration of your machine.  Whenever you’ve
+changed something to that file, you should do
+
+<screen>
+$ nixos-rebuild switch</screen>
+
+to build the new configuration, make it the default configuration for
+booting, and try to realise the configuration in the running system
+(e.g., by restarting system services).</para>
+
+<warning><para>These commands must be executed as root, so you should
+either run them from a root shell or by prefixing them with
+<literal>sudo -i</literal>.</para></warning>
+
+<para>You can also do
+
+<screen>
+$ nixos-rebuild test</screen>
+
+to build the configuration and switch the running system to it, but
+without making it the boot default.  So if (say) the configuration
+locks up your machine, you can just reboot to get back to a working
+configuration.</para>
+
+<para>There is also
+
+<screen>
+$ nixos-rebuild boot</screen>
+
+to build the configuration and make it the boot default, but not
+switch to it now (so it will only take effect after the next
+reboot).</para>
+
+<para>You can make your configuration show up in a different submenu
+of the GRUB 2 boot screen by giving it a different <emphasis>profile
+name</emphasis>, e.g.
+
+<screen>
+$ nixos-rebuild switch -p test </screen>
+
+which causes the new configuration (and previous ones created using
+<literal>-p test</literal>) to show up in the GRUB submenu “NixOS -
+Profile 'test'”.  This can be useful to separate test configurations
+from “stable” configurations.</para>
+
+<para>Finally, you can do
+
+<screen>
+$ nixos-rebuild build</screen>
+
+to build the configuration but nothing more.  This is useful to see
+whether everything compiles cleanly.</para>
+
+<para>If you have a machine that supports hardware virtualisation, you
+can also test the new configuration in a sandbox by building and
+running a QEMU <emphasis>virtual machine</emphasis> that contains the
+desired configuration.  Just do
+
+<screen>
+$ nixos-rebuild build-vm
+$ ./result/bin/run-*-vm
+</screen>
+
+The VM does not have use any data from your host system, so your
+existing user accounts and home directories will not be
+available.</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section xml:id="sec-upgrading">
+
+<title>Upgrading NixOS</title>
+
+<para>The best way to keep your NixOS installation up to date is to
+use one of the NixOS <emphasis>channels</emphasis>.  A channel is a
+Nix mechanism for distributing Nix expressions and associated
+binaries.  The NixOS channels are updated automatically from NixOS’s
+Git repository after certain tests have passed and all packages have
+been built.  These channels are:
+
+<itemizedlist>
+  <listitem>
+    <para>Stable channels, such as <literal
+    xlink:href="http://nixos.org/channels/nixos-13.10">nixos-13.10</literal>.
+    These only get conservative bug fixes and package upgrades.  For
+    instance, a channel update may cause the Linux kernel on your
+    system to be upgraded from 3.4.66 to 3.4.67 (a minor bug fix), but
+    not from 3.4.<replaceable>x</replaceable> to
+    3.11.<replaceable>x</replaceable> (a major change that has the
+    potential to break things).  Stable channels are generally
+    maintained until the next stable branch is created.</para>
+  </listitem>
+  <listitem>
+    <para>The unstable channel, <literal
+    xlink:href="http://nixos.org/channels/nixos-unstable">nixos-unstable</literal>.
+    This corresponds to NixOS’s main development branch, and may thus
+    see radical changes between channel updates.  It’s not recommended
+    for production systems.</para>
+  </listitem>
+</itemizedlist>
+
+To see what channels are available, go to <link
+xlink:href="http://nixos.org/channels"/>.  (Note that the URIs of the
+various channels redirect to a directory that contains the channel’s
+latest version and includes ISO images and VirtualBox
+appliances.)</para>
+
+<para>When you first install NixOS, you’re automatically subscribed to
+the NixOS channel that corresponds to your installation source.   For
+instance, if you installed from a 13.10 ISO, you will be subscribed to
+the <literal>nixos-13.10</literal> channel.  To see which NixOS
+channel you’re subscribed to, run the following as root:
+
+<screen>
+$ nix-channel --list | grep nixos
+nixos https://nixos.org/channels/nixos-unstable
+</screen>
+
+To switch to a different NixOS channel, do
+
+<screen>
+$ nix-channel --add http://nixos.org/channels/<replaceable>channel-name</replaceable> nixos
+</screen>
+
+(Be sure to include the <literal>nixos</literal> parameter at the
+end.)  For instance, to use the NixOS 13.10 stable channel:
+
+<screen>
+$ nix-channel --add http://nixos.org/channels/nixos-13.10 nixos
+</screen>
+
+But it you want to live on the bleeding edge:
+
+<screen>
+$ nix-channel --add http://nixos.org/channels/nixos-unstable nixos
+</screen>
+
+</para>
+
+<para>You can then upgrade NixOS to the latest version in your chosen
+channel by running
+
+<screen>
+$ nixos-rebuild switch --upgrade
+</screen>
+
+which is equivalent to the more verbose <literal>nix-channel --update
+nixos; nixos-rebuild switch</literal>.</para>
+
+<warning><para>It is generally safe to switch back and forth between
+channels.  The only exception is that a newer NixOS may also have a
+newer Nix version, which may involve an upgrade of Nix’s database
+schema.  This cannot be undone easily, so in that case you will not be
+able to go back to your original channel.</para></warning>
+
+</section>
+
+</chapter>

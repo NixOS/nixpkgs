@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.analog.cx/";
     license = "GPL";
-    description = "a powerful tool to generate web server statistics";
+    description = "Powerful tool to generate web server statistics";
     maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux;
   };

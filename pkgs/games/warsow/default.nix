@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath $cur_rpath:${mesa}/lib $p
   '';
   meta = {
-    description = "A multiplayer FPS designed for competitive gaming.";
+    description = "Multiplayer FPS game designed for competitive gaming";
     longDescription = ''
       Set in a futuristic cartoon-like world where rocketlauncher-wielding
       pigs and lasergun-carrying cyberpunks roam the streets, Warsow is a

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://github.com/sam-github/libnet;
-    description = "Libnet provides a portable framework for low-level network packet construction.";
+    description = "Portable framework for low-level network packet construction";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
   };

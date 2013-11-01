@@ -21,7 +21,12 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://www.torproject.org/torbutton/;
-    description = "the component in Tor Browser Bundle that takes care of application-level security and privacy concerns in Firefox. To keep you safe, Torbutton disables many types of active content.";
+    description = "Part of the Tor Browser Bundle";
+    longDescription = ''
+      The component in Tor Browser Bundle that takes care of application-level
+      security and privacy concerns in Firefox. To keep you safe, Torbutton
+      disables many types of active content.
+    '';
     license = licenses.mit;
     maintainers = [ maintainers.phreedom ];
     platforms = platforms.linux;

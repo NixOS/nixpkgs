@@ -105,4 +105,6 @@
 , "connect-jade-static"
 , "plist-native"
 , "x509"
+, "owl-deepcopy"
+, "meat"
 ]

@@ -1,0 +1,1515 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="ch-configuration">
+
+<title>Configuring NixOS</title>
+
+<para>This chapter describes how to configure various aspects of a
+NixOS machine through the configuration file
+<filename>/etc/nixos/configuration.nix</filename>.  As described in
+<xref linkend="sec-changing-config" />, changes to this file only take
+effect after you run <command>nixos-rebuild</command>.</para>
+
+
+<!--===============================================================-->
+
+<section xml:id="sec-configuration-syntax"><title>Configuration syntax</title>
+
+<section><title>The basics</title>
+
+<para>The NixOS configuration file
+<filename>/etc/nixos/configuration.nix</filename> is actually a
+<emphasis>Nix expression</emphasis>, which is the Nix package
+manager’s purely functional language for describing how to build
+packages and configurations.  This means you have all the expressive
+power of that language at your disposal, including the ability to
+abstract over common patterns, which is very useful when managing
+complex systems.  The syntax and semantics of the Nix language are
+fully described in the <link
+xlink:href="http://nixos.org/nix/manual/#chap-writing-nix-expressions">Nix
+manual</link>, but here we give a short overview of the most important
+constructs useful in NixOS configuration files.</para>
+
+<para>The NixOS configuration file generally looks like this:
+
+<programlisting>
+{ config, pkgs, ... }:
+
+{ <replaceable>option definitions</replaceable>
+}
+</programlisting>
+
+The first line (<literal>{ config, pkgs, ... }:</literal>) denotes
+that this is actually a function that takes at least the two arguments
+ <varname>config</varname> and <varname>pkgs</varname>.  (These are
+explained later.)  The function returns a <emphasis>set</emphasis> of
+option definitions (<literal>{ <replaceable>...</replaceable> }</literal>).  These definitions have the
+form <literal><replaceable>name</replaceable> =
+<replaceable>value</replaceable></literal>, where
+<replaceable>name</replaceable> is the name of an option and
+<replaceable>value</replaceable> is its value.  For example,
+
+<programlisting>
+{ config, pkgs, ... }:
+
+{ services.httpd.enable = true;
+  services.httpd.adminAddr = "alice@example.org";
+  services.httpd.documentRoot = "/webroot";
+}
+</programlisting>
+
+defines a configuration with three option definitions that together
+enable the Apache HTTP Server with <filename>/webroot</filename> as
+the document root.</para>
+
+<para>Sets can be nested, and in fact dots in option names are
+shorthand for defining a set containing another set.  For instance,
+<option>services.httpd.enable</option> defines a set named
+<varname>services</varname> that contains a set named
+<varname>httpd</varname>, which in turn contains an option definition
+named <varname>enable</varname> with value <literal>true</literal>.
+This means that the example above can also be written as:
+
+<programlisting>
+{ config, pkgs, ... }:
+
+{ services = {
+    httpd = {
+      enable = true;
+      adminAddr = "alice@example.org";
+      documentRoot = "/webroot";
+    };
+  };
+}
+</programlisting>
+
+which may be more convenient if you have lots of option definitions
+that share the same prefix (such as
+<literal>services.httpd</literal>).</para>
+
+<para>NixOS checks your option definitions for correctness.  For
+instance, if you try to define an option that doesn’t exist (that is,
+doesn’t have a corresponding <emphasis>option declaration</emphasis>),
+<command>nixos-rebuild</command> will give an error like:
+<screen>
+The option `services.httpd.enabl' defined in `/etc/nixos/configuration.nix' does not exist.
+</screen>
+Likewise, values in option definitions must have a correct type.  For
+instance, <option>services.httpd.enable</option> must be a Boolean
+(<literal>true</literal> or <literal>false</literal>).  Trying to give
+it a value of another type, such as a string, will cause an error:
+<screen>
+The option value `services.httpd.enable' in `/etc/nixos/configuration.nix' is not a boolean.
+</screen>
+
+</para>
+
+<para>Options have various types of values.  The most important are:
+
+<variablelist>
+  <varlistentry>
+    <term>Strings</term>
+    <listitem>
+      <para>Strings are enclosed in double quotes, e.g.
+
+<programlisting>
+networking.hostName = "dexter";
+</programlisting>
+
+      Special characters can be escaped by prefixing them with a
+      backslash (e.g. <literal>\"</literal>).</para>
+
+      <para>Multi-line strings can be enclosed in <emphasis>double
+      single quotes</emphasis>, e.g.
+
+<programlisting>
+networking.extraHosts =
+  ''
+    127.0.0.2 other-localhost
+    10.0.0.1 server
+  '';
+</programlisting>
+
+      The main difference is that preceding whitespace is
+      automatically stripped from each line, and that characters like
+      <literal>"</literal> and <literal>\</literal> are not special
+      (making it more convenient for including things like shell
+      code).</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Booleans</term>
+    <listitem>
+      <para>These can be <literal>true</literal> or
+      <literal>false</literal>, e.g.
+
+<programlisting>
+networking.firewall.enable = true;
+networking.firewall.allowPing = false;
+</programlisting>
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Integers</term>
+    <listitem>
+      <para>For example,
+
+<programlisting>
+boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60;
+</programlisting>
+
+      (Note that here the attribute name
+      <literal>net.ipv4.tcp_keepalive_time</literal> is enclosed in
+      quotes to prevent it from being interpreted as a set named
+      <literal>net</literal> containing a set named
+      <literal>ipv4</literal>, and so on.  This is because it’s not a
+      NixOS option but the literal name of a Linux kernel
+      setting.)</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Sets</term>
+    <listitem>
+      <para>Sets were introduced above.  They are name/value pairs
+      enclosed in braces, as in the option definition
+
+<programlisting>
+fileSystems."/boot" =
+  { device = "/dev/sda1";
+    fsType = "ext4";
+    options = "rw,data=ordered,relatime";
+  };
+</programlisting>
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Lists</term>
+    <listitem>
+      <para>The important thing to note about lists is that list
+      elements are separated by whitespace, like this:
+
+<programlisting>
+boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
+</programlisting>
+
+      List elements can be any other type, e.g. sets:
+
+<programlisting>
+swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
+</programlisting>
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Packages</term>
+    <listitem>
+      <para>Usually, the packages you need are already part of the Nix
+      Packages collection, which is a set that can be accessed through
+      the function argument <varname>pkgs</varname>.  Typical uses:
+
+<programlisting>
+environment.systemPackages =
+  [ pkgs.thunderbird
+    pkgs.emacs
+  ];
+
+postgresql.package = pkgs.postgresql90;
+</programlisting>
+
+      The latter option definition changes the default PostgreSQL
+      package used by NixOS’s PostgreSQL service to 9.0.  For more
+      information on packages, including how to add new ones, see
+      <xref linkend="sec-custom-packages"/>.</para>
+    </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</para>
+
+</section>
+
+
+<section><title>Abstractions</title>
+
+<para>If you find yourself repeating yourself over and over, it’s time
+to abstract.  Take, for instance, this Apache HTTP Server configuration:
+
+<programlisting>
+{
+  services.httpd.virtualHosts =
+    [ { hostName = "example.org";
+        documentRoot = "/webroot";
+        adminAddr = "alice@example.org";
+        enableUserDir = true;
+      }
+      { hostName = "example.org";
+        documentRoot = "/webroot";
+        adminAddr = "alice@example.org";
+        enableUserDir = true;
+        enableSSL = true;
+        sslServerCert = "/root/ssl-example-org.crt";
+        sslServerKey = "/root/ssl-example-org.key";
+      }
+    ];
+}
+</programlisting>
+
+It defines two virtual hosts with nearly identical configuration; the
+only difference is that the second one has SSL enabled.  To prevent
+this duplication, we can use a <literal>let</literal>:
+
+<programlisting>
+let
+  exampleOrgCommon =
+    { hostName = "example.org";
+      documentRoot = "/webroot";
+      adminAddr = "alice@example.org";
+      enableUserDir = true;
+    };
+in
+{
+  services.httpd.virtualHosts =
+    [ exampleOrgCommon
+      (exampleOrgCommon // {
+        enableSSL = true;
+        sslServerCert = "/root/ssl-example-org.crt";
+        sslServerKey = "/root/ssl-example-org.key";
+      })
+    ];
+}
+</programlisting>
+
+The <literal>let exampleOrgCommon =
+<replaceable>...</replaceable></literal> defines a variable named
+<literal>exampleOrgCommon</literal>.  The <literal>//</literal>
+operator merges two attribute sets, so the configuration of the second
+virtual host is the set <literal>exampleOrgCommon</literal> extended
+with the SSL options.</para>
+
+<para>You can write a <literal>let</literal> wherever an expression is
+allowed.  Thus, you also could have written:
+
+<programlisting>
+{
+  services.httpd.virtualHosts =
+    let exampleOrgCommon = <replaceable>...</replaceable>; in
+    [ exampleOrgCommon
+      (exampleOrgCommon // { <replaceable>...</replaceable> })
+    ];
+}
+</programlisting>
+
+but not <literal>{ let exampleOrgCommon =
+<replaceable>...</replaceable>; in <replaceable>...</replaceable>;
+}</literal> since attributes (as opposed to attribute values) are not
+expressions.</para>
+
+<para><emphasis>Functions</emphasis> provide another method of
+abstraction.  For instance, suppose that we want to generate lots of
+different virtual hosts, all with identical configuration except for
+the host name.  This can be done as follows:
+
+<programlisting>
+{
+  services.httpd.virtualHosts =
+    let
+      makeVirtualHost = name:
+        { hostName = name;
+          documentRoot = "/webroot";
+          adminAddr = "alice@example.org";
+        };
+    in
+      [ (makeVirtualHost "example.org")
+        (makeVirtualHost "example.com")
+        (makeVirtualHost "example.gov")
+        (makeVirtualHost "example.nl")
+      ];
+}
+</programlisting>
+
+Here, <varname>makeVirtualHost</varname> is a function that takes a
+single argument <literal>name</literal> and returns the configuration
+for a virtual host.  That function is then called for several names to
+produce the list of virtual host configurations.</para>
+
+<para>We can further improve on this by using the function
+<varname>map</varname>, which applies another function to every
+element in a list:
+
+<programlisting>
+{
+  services.httpd.virtualHosts =
+    let
+      makeVirtualHost = <replaceable>...</replaceable>;
+    in map makeVirtualHost
+      [ "example.org" "example.com" "example.gov" "example.nl" ];
+}
+</programlisting>
+
+(The function <literal>map</literal> is called a
+<emphasis>higher-order function</emphasis> because it takes another
+function as an argument.)</para>
+
+<para>What if you need more than one argument, for instance, if we
+want to use a different <literal>documentRoot</literal> for each
+virtual host?  Then we can make <varname>makeVirtualHost</varname> a
+function that takes a <emphasis>set</emphasis> as its argument, like this:
+
+<programlisting>
+{
+  services.httpd.virtualHosts =
+    let
+      makeVirtualHost = { name, root }:
+        { hostName = name;
+          documentRoot = root;
+          adminAddr = "alice@example.org";
+        };
+    in map makeVirtualHost
+      [ { name = "example.org"; root = "/sites/example.org"; }
+        { name = "example.com"; root = "/sites/example.com"; }
+        { name = "example.gov"; root = "/sites/example.gov"; }
+        { name = "example.nl"; root = "/sites/example.nl"; }
+      ];
+}
+</programlisting>
+
+But in this case (where every root is a subdirectory of
+<filename>/sites</filename> named after the virtual host), it would
+have been shorter to define <varname>makeVirtualHost</varname> as
+<programlisting>
+makeVirtualHost = name:
+  { hostName = name;
+    documentRoot = "/sites/${name}";
+    adminAddr = "alice@example.org";
+  };
+</programlisting>
+
+Here, the construct
+<literal>${<replaceable>...</replaceable>}</literal> allows the result
+of an expression to be spliced into a string.</para>
+
+</section>
+
+
+<section><title>Modularity</title>
+
+<para>The NixOS configuration mechanism is modular.  If your
+<filename>configuration.nix</filename> becomes too big, you can split
+it into multiple files.  Likewise, if you have multiple NixOS
+configurations (e.g. for different computers) with some commonality,
+you can move the common configuration into a shared file.</para>
+
+<para>Modules have exactly the same syntax as
+<filename>configuration.nix</filename>.  In fact,
+<filename>configuration.nix</filename> is itself a module.  You can
+use other modules by including them from
+<filename>configuration.nix</filename>, e.g.:
+
+<programlisting>
+{ config, pkgs, ... }:
+
+{ imports = [ ./vpn.nix ./kde.nix ];
+  services.httpd.enable = true;
+  environment.systemPackages = [ pkgs.emacs ];
+  <replaceable>...</replaceable>
+}
+</programlisting>
+
+Here, we include two modules from the same directory,
+<filename>vpn.nix</filename> and <filename>kde.nix</filename>.  The
+latter might look like this:
+
+<programlisting>
+{ config, pkgs, ... }:
+
+{ services.xserver.enable = true;
+  services.xserver.displayManager.kdm.enable = true;
+  services.xserver.desktopManager.kde4.enable = true;
+  environment.systemPackages = [ pkgs.kde4.kscreensaver ];
+}
+</programlisting>
+
+Note that both <filename>configuration.nix</filename> and
+<filename>kde.nix</filename> define the option
+<option>environment.systemPackages</option>.  When multiple modules
+define an option, NixOS will try to <emphasis>merge</emphasis> the
+definitions.  In the case of
+<option>environment.systemPackages</option>, that’s easy: the lists of
+packages can simply be concatenated.  For other types of options, a
+merge may not be possible: for instance, if two modules define
+<option>services.httpd.adminAddr</option>,
+<command>nixos-rebuild</command> will give an error:
+
+<screen>
+The unique option `services.httpd.adminAddr' is defined multiple times, in `/etc/nixos/httpd.nix' and `/etc/nixos/configuration.nix'.
+</screen>
+
+When that happens, it’s possible to force one definition take
+precedence over the others:
+
+<programlisting>
+services.httpd.adminAddr = pkgs.lib.mkForce "bob@example.org";
+</programlisting>
+
+</para>
+
+<para>When using multiple modules, you may need to access
+configuration values defined in other modules.  This is what the
+<varname>config</varname> function argument is for: it contains the
+complete, merged system configuration.  That is,
+<varname>config</varname> is the result of combining the
+configurations returned by every module<footnote><para>If you’re
+wondering how it’s possible that the (indirect)
+<emphasis>result</emphasis> of a function is passed as an
+<emphasis>input</emphasis> to that same function: that’s because Nix
+is a “lazy” language — it only computes values when they are needed.
+This works as long as no individual configuration value depends on
+itself.</para></footnote>.  For example, here is a module that adds
+some packages to <option>environment.systemPackages</option> only if
+<option>services.xserver.enable</option> is set to
+<literal>true</literal> somewhere else:
+
+<programlisting>
+{ config, pkgs, ... }:
+
+{ environment.systemPackages =
+    if config.services.xserver.enable then
+      [ pkgs.firefox
+        pkgs.thunderbird
+      ]
+    else
+      [ ];
+}
+</programlisting>
+
+</para>
+
+<para>With multiple modules, it may not be obvious what the final
+value of a configuration option is.  The command
+<option>nixos-option</option> allows you to find out:
+
+<screen>
+$ nixos-option services.xserver.enable
+true
+
+$ nixos-option boot.kernelModules
+[ "tun" "ipv6" "loop" <replaceable>...</replaceable> ]
+</screen>
+
+Interactive exploration of the configuration is possible using
+<command
+xlink:href="https://github.com/edolstra/nix-repl">nix-repl</command>,
+a read-eval-print loop for Nix expressions.  It’s not installed by
+default; run <literal>nix-env -i nix-repl</literal> to get it.  A
+typical use:
+
+<screen>
+$ nix-repl '&lt;nixos>'
+
+nix-repl> config.networking.hostName
+"mandark"
+
+nix-repl> map (x: x.hostName) config.services.httpd.virtualHosts
+[ "example.org" "example.gov" ]
+</screen>
+
+</para>
+
+</section>
+
+
+<section><title>Syntax summary</title>
+
+<para>Below is a summary of the most important syntactic constructs in
+the Nix expression language.  It’s not complete.  In particular, there
+are many other built-in functions.  See the <link
+xlink:href="http://nixos.org/nix/manual/#chap-writing-nix-expressions">Nix
+manual</link> for the rest.</para>
+
+<informaltable frame='none'>
+  <tgroup cols='2'>
+    <colspec colname='c1' rowsep='1' colsep='1' />
+    <colspec colname='c2' rowsep='1' />
+    <thead>
+      <row>
+        <entry>Example</entry>
+        <entry>Description</entry>
+      </row>
+    </thead>
+    <tbody>
+
+      <row>
+        <entry namest="c1" nameend="c2"><emphasis>Basic values</emphasis></entry>
+      </row>
+      <row>
+        <entry><literal>"Hello world"</literal></entry>
+        <entry>A string</entry>
+      </row>
+      <row>
+        <entry><literal>"${pkgs.bash}/bin/sh"</literal></entry>
+        <entry>A string containing an expression (expands to <literal>"/nix/store/<replaceable>hash</replaceable>-bash-<replaceable>version</replaceable>/bin/sh"</literal>)</entry>
+      </row>
+      <row>
+        <entry><literal>true</literal>, <literal>false</literal></entry>
+        <entry>Booleans</entry>
+      </row>
+      <row>
+        <entry><literal>123</literal></entry>
+        <entry>An integer</entry>
+      </row>
+      <row>
+        <entry><literal>./foo.png</literal></entry>
+        <entry>A path (relative to the containing Nix expression)</entry>
+      </row>
+
+      <row>
+        <entry namest="c1" nameend="c2"><emphasis>Compound values</emphasis></entry>
+      </row>
+      <row>
+        <entry><literal>{ x = 1; y = 2; }</literal></entry>
+        <entry>An set with attributes names <literal>x</literal> and <literal>y</literal></entry>
+      </row>
+      <row>
+        <entry><literal>{ foo.bar = 1; }</literal></entry>
+        <entry>A nested set, equivalent to <literal>{ foo = { bar = 1; }; }</literal></entry>
+      </row>
+      <row>
+        <entry><literal>rec { x = "bla"; y = x + "bar"; }</literal></entry>
+        <entry>A recursive set, equivalent to <literal>{ x = "foo"; y = "foobar"; }</literal></entry>
+      </row>
+      <row>
+        <entry><literal>[ "foo" "bar" ]</literal></entry>
+        <entry>A list with two elements</entry>
+      </row>
+
+      <row>
+        <entry namest="c1" nameend="c2"><emphasis>Operators</emphasis></entry>
+      </row>
+      <row>
+        <entry><literal>"foo" + "bar"</literal></entry>
+        <entry>String concatenation</entry>
+      </row>
+      <row>
+        <entry><literal>1 + 2</literal></entry>
+        <entry>Integer addition</entry>
+      </row>
+      <row>
+        <entry><literal>"foo" == "f" + "oo"</literal></entry>
+        <entry>Equality test (evaluates to <literal>true</literal>)</entry>
+      </row>
+      <row>
+        <entry><literal>"foo" != "bar"</literal></entry>
+        <entry>Inequality test (evaluates to <literal>true</literal>)</entry>
+      </row>
+      <row>
+        <entry><literal>!true</literal></entry>
+        <entry>Boolean negation</entry>
+      </row>
+      <row>
+        <entry><literal>{ x = 1; y = 2; }.x</literal></entry>
+        <entry>Attribute selection (evaluates to <literal>1</literal>)</entry>
+      </row>
+      <row>
+        <entry><literal>{ x = 1; y = 2; }.z or 3</literal></entry>
+        <entry>Attribute selection with default (evaluates to <literal>3</literal>)</entry>
+      </row>
+      <row>
+        <entry><literal>{ x = 1; y = 2; } // { z = 3; }</literal></entry>
+        <entry>Merge two sets (attributes in the right-hand set taking precedence)</entry>
+      </row>
+
+      <row>
+        <entry namest="c1" nameend="c2"><emphasis>Control structures</emphasis></entry>
+      </row>
+      <row>
+        <entry><literal>if 1 + 1 == 2 then "yes!" else "no!"</literal></entry>
+        <entry>Conditional expression</entry>
+      </row>
+      <row>
+        <entry><literal>assert 1 + 1 == 2; "yes!"</literal></entry>
+        <entry>Assertion check (evaluates to <literal>"yes!"</literal>)</entry>
+      </row>
+      <row>
+        <entry><literal>let x = "foo"; y = "bar"; in x + y</literal></entry>
+        <entry>Variable definition</entry>
+      </row>
+      <row>
+        <entry><literal>with pkgs.lib; head [ 1 2 3 ]</literal></entry>
+        <entry>Add all attributes from the given set to the scope
+        (evaluates to <literal>1</literal>)</entry>
+      </row>
+
+      <row>
+        <entry namest="c1" nameend="c2"><emphasis>Functions (lambdas)</emphasis></entry>
+      </row>
+      <row>
+        <entry><literal>x: x + 1</literal></entry>
+        <entry>A function that expects an integer and returns it increased by 1</entry>
+      </row>
+      <row>
+        <entry><literal>(x: x + 1) 100</literal></entry>
+        <entry>A function call (evaluates to 101)</entry>
+      </row>
+      <row>
+        <entry><literal>let inc = x: x + 1; in inc (inc (inc 100))</literal></entry>
+        <entry>A function bound to a variable and subsequently called by name (evaluates to 103)</entry>
+      </row>
+      <row>
+        <entry><literal>{ x, y }: x + y</literal></entry>
+        <entry>A function that expects a set with required attributes
+        <literal>x</literal> and <literal>y</literal> and concatenates
+        them</entry>
+      </row>
+      <row>
+        <entry><literal>{ x, y ? "bar" }: x + y</literal></entry>
+        <entry>A function that expects a set with required attribute
+        <literal>x</literal> and optional <literal>y</literal>, using
+        <literal>"bar"</literal> as default value for
+        <literal>y</literal></entry>
+      </row>
+      <row>
+        <entry><literal>{ x, y, ... }: x + y</literal></entry>
+        <entry>A function that expects a set with required attributes
+        <literal>x</literal> and <literal>y</literal> and ignores any
+        other attributes</entry>
+      </row>
+      <row>
+        <entry><literal>{ x, y } @ args: x + y</literal></entry>
+        <entry>A function that expects a set with required attributes
+        <literal>x</literal> and <literal>y</literal>, and binds the
+        whole set to <literal>args</literal></entry>
+      </row>
+
+      <row>
+        <entry namest="c1" nameend="c2"><emphasis>Built-in functions</emphasis></entry>
+      </row>
+      <row>
+        <entry><literal>import ./foo.nix</literal></entry>
+        <entry>Load and return Nix expression in given file</entry>
+      </row>
+      <row>
+        <entry><literal>map (x: x + x) [ 1 2 3 ]</literal></entry>
+        <entry>Apply a function to every element of a list (evaluates to <literal>[ 2 4 6 ]</literal>)</entry>
+      </row>
+      <!--
+      <row>
+        <entry><literal>throw "Urgh"</literal></entry>
+        <entry>Raise an error condition</entry>
+      </row>
+      -->
+
+    </tbody>
+  </tgroup>
+</informaltable>
+
+</section>
+
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>Package management</title>
+
+<para>This section describes how to add additional packages to your
+system.  NixOS has two distinct styles of package management:
+
+<itemizedlist>
+
+  <listitem><para><emphasis>Declarative</emphasis>, where you declare
+  what packages you want in your
+  <filename>configuration.nix</filename>.  Every time you run
+  <command>nixos-rebuild</command>, NixOS will ensure that you get a
+  consistent set of binaries corresponding to your
+  specification.</para></listitem>
+
+  <listitem><para><emphasis>Ad hoc</emphasis>, where you install,
+  upgrade and uninstall packages via the <command>nix-env</command>
+  command.  This style allows mixing packages from different Nixpkgs
+  versions.  It’s the only choice for non-root
+  users.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>The next two sections describe these two styles.</para>
+
+
+<section><title>Declarative package management</title>
+
+<para>With declarative package management, you specify which packages
+you want on your system by setting the option
+<option>environment.systemPackages</option>.  For instance, adding the
+following line to <filename>configuration.nix</filename> enables the
+Mozilla Thunderbird email application:
+
+<programlisting>
+environment.systemPackages = [ pkgs.thunderbird ];
+</programlisting>
+
+The effect of this specification is that the Thunderbird package from
+Nixpkgs will be built or downloaded as part of the system when you run
+<command>nixos-rebuild switch</command>.</para>
+
+<para>You can get a list of the available packages as follows:
+<screen>
+$ nix-env -qaP '*' --description
+nixos.pkgs.firefox   firefox-23.0   Mozilla Firefox - the browser, reloaded
+<replaceable>...</replaceable>
+</screen>
+
+The first column in the output is the <emphasis>attribute
+name</emphasis>, such as
+<literal>nixos.pkgs.thunderbird</literal>. (The
+<literal>nixos</literal> prefix allows distinguishing between
+different channels that you might have.)</para>
+
+<para>To “uninstall” a package, simply remove it from
+<option>environment.systemPackages</option> and run
+<command>nixos-rebuild switch</command>.</para>
+
+
+<section xml:id="sec-customising-packages"><title>Customising packages</title>
+
+<para>Some packages in Nixpkgs have options to enable or disable
+optional functionality or change other aspects of the package.  For
+instance, the Firefox wrapper package (which provides Firefox with a
+set of plugins such as the Adobe Flash player) has an option to enable
+the Google Talk plugin.  It can be set in
+<filename>configuration.nix</filename> as follows:
+
+<filename>
+nixpkgs.config.firefox.enableGoogleTalkPlugin = true;
+</filename>
+</para>
+
+<warning><para>Unfortunately, Nixpkgs currently lacks a way to query
+available configuration options.</para></warning>
+
+<para>Apart from high-level options, it’s possible to tweak a package
+in almost arbitrary ways, such as changing or disabling dependencies
+of a package.  For instance, the Emacs package in Nixpkgs by default
+has a dependency on GTK+ 2.  If you want to build it against GTK+ 3,
+you can specify that as follows:
+
+<programlisting>
+environment.systemPackages = [ (pkgs.emacs.override { gtk = pkgs.gtk3; }) ];
+</programlisting>
+
+The function <varname>override</varname> performs the call to the Nix
+function that produces Emacs, with the original arguments amended by
+the set of arguments specified by you.  So here the function argument
+<varname>gtk</varname> gets the value <literal>pkgs.gtk3</literal>,
+causing Emacs to depend on GTK+ 3.  (The parentheses are necessary
+because in Nix, function application binds more weakly than list
+construction, so without them,
+<literal>environment.systemPackages</literal> would be a list with two
+elements.)</para>
+
+<para>Even greater customisation is possible using the function
+<varname>overrideDerivation</varname>.  While the
+<varname>override</varname> mechanism above overrides the arguments of
+a package function, <varname>overrideDerivation</varname> allows
+changing the <emphasis>result</emphasis> of the function.  This
+permits changing any aspect of the package, such as the source code.
+For instance, if you want to override the source code of Emacs, you
+can say:
+
+<programlisting>
+environment.systemPackages =
+  [ (pkgs.lib.overrideDerivation pkgs.emacs (attrs: {
+      name = "emacs-25.0-pre";
+      src = /path/to/my/emacs/tree;
+    }))
+  ];
+</programlisting>
+
+Here, <varname>overrideDerivation</varname> takes the Nix derivation
+specified by <varname>pkgs.emacs</varname> and produces a new
+derivation in which the original’s <literal>name</literal> and
+<literal>src</literal> attribute have been replaced by the given
+values.  The original attributes are accessible via
+<varname>attrs</varname>.</para>
+
+<para>The overrides shown above are not global.  They do not affect
+the original package; other packages in Nixpkgs continue to depend on
+the original rather than the customised package.  This means that if
+another package in your system depends on the original package, you
+end up with two instances of the package.  If you want to have
+everything depend on your customised instance, you can apply a
+<emphasis>global</emphasis> override as follows:
+
+<screen>
+nixpkgs.config.packageOverrides = pkgs:
+  { emacs = pkgs.emacs.override { gtk = pkgs.gtk3; };
+  };
+</screen>
+
+The effect of this definition is essentially equivalent to modifying
+the <literal>emacs</literal> attribute in the Nixpkgs source tree.
+Any package in Nixpkgs that depends on <literal>emacs</literal> will
+be passed your customised instance.  (However, the value
+<literal>pkgs.emacs</literal> in
+<varname>nixpkgs.config.packageOverrides</varname> refers to the
+original rather than overriden instance, to prevent an infinite
+recursion.)</para>
+
+</section>
+
+<section xml:id="sec-custom-packages"><title>Adding custom packages</title>
+
+<para>It’s possible that a package you need is not available in NixOS.
+In that case, you can do two things.  First, you can clone the Nixpkgs
+repository, add the package to your clone, and (optionally) submit a
+patch or pull request to have it accepted into the main Nixpkgs
+repository.  This is described in detail in the <link
+xlink:href="http://nixos.org/nixpkgs/manual">Nixpkgs manual</link>.
+In short, you clone Nixpkgs:
+
+<screen>
+$ git clone git://github.com/NixOS/nixpkgs.git
+$ cd nixpkgs
+</screen>
+
+Then you write and test the package as described in the Nixpkgs
+manual.  Finally, you add it to
+<literal>environment.systemPackages</literal>, e.g.
+
+<programlisting>
+environment.systemPackages = [ pkgs.my-package ];
+</programlisting>
+
+and you run <command>nixos-rebuild</command>, specifying your own
+Nixpkgs tree:
+
+<screen>
+$ nixos-rebuild switch -I nixpkgs=/path/to/my/nixpkgs</screen>
+
+</para>
+
+<para>The second possibility is to add the package outside of the
+Nixpkgs tree.  For instance, here is how you specify a build of the
+<link xlink:href="http://www.gnu.org/software/hello/">GNU Hello</link>
+package directly in <filename>configuration.nix</filename>:
+
+<programlisting>
+environment.systemPackages =
+  let
+    my-hello = with pkgs; stdenv.mkDerivation rec {
+      name = "hello-2.8";
+      src = fetchurl {
+        url = "mirror://gnu/hello/${name}.tar.gz";
+        sha256 = "0wqd8sjmxfskrflaxywc7gqw7sfawrfvdxd9skxawzfgyy0pzdz6";
+      };
+    };
+  in
+  [ my-hello ];
+</programlisting>
+
+Of course, you can also move the definition of
+<literal>my-hello</literal> into a separate Nix expression, e.g.
+<programlisting>
+environment.systemPackages = [ (import ./my-hello.nix) ];
+</programlisting>
+where <filename>my-hello.nix</filename> contains:
+<programlisting>
+with &lt;nixpkgs> {}; # bring all of Nixpkgs into scope
+
+stdenv.mkDerivation rec {
+  name = "hello-2.8";
+  src = fetchurl {
+    url = "mirror://gnu/hello/${name}.tar.gz";
+    sha256 = "0wqd8sjmxfskrflaxywc7gqw7sfawrfvdxd9skxawzfgyy0pzdz6";
+  };
+}
+</programlisting>
+
+This allows testing the package easily:
+<screen>
+$ nix-build my-hello.nix
+$ ./result/bin/hello
+Hello, world!
+</screen>
+
+</para>
+
+</section>
+
+</section>
+
+
+<section><title>Ad hoc package management</title>
+
+<para>With the command <command>nix-env</command>, you can install and
+uninstall packages from the command line.  For instance, to install
+Mozilla Thunderbird:
+
+<screen>
+$ nix-env -iA nixos.pkgs.thunderbird</screen>
+
+If you invoke this as root, the package is installed in the Nix
+profile <filename>/nix/var/nix/profiles/default</filename> and visible
+to all users of the system; otherwise, the package ends up in
+<filename>/nix/var/nix/profiles/per-user/<replaceable>username</replaceable>/profile</filename>
+and is not visible to other users.  The <option>-A</option> flag
+specifies the package by its attribute name; without it, the package
+is installed by matching against its package name
+(e.g. <literal>thunderbird</literal>).  The latter is slower because
+it requires matching against all available Nix packages, and is
+ambiguous if there are multiple matching packages.</para>
+
+<para>Packages come from the NixOS channel.  You typically upgrade a
+package by updating to the latest version of the NixOS channel:
+<screen>
+$ nix-channel --update nixos
+</screen>
+and then running <literal>nix-env -i</literal> again.  Other packages
+in the profile are <emphasis>not</emphasis> affected; this is the
+crucial difference with the declarative style of package management,
+where running <command>nixos-rebuild switch</command> causes all
+packages to be updated to their current versions in the NixOS channel.
+You can however upgrade all packages for which there is a newer
+version by doing:
+<screen>
+$ nix-env -u '*'
+</screen>
+</para>
+
+<para>A package can be uninstalled using the <option>-e</option>
+flag:
+<screen>
+$ nix-env -e thunderbird
+</screen>
+</para>
+
+<para>Finally, you can roll back an undesirable
+<command>nix-env</command> action:
+<screen>
+$ nix-env --rollback
+</screen>
+</para>
+
+<para><command>nix-env</command> has many more flags.  For details,
+see the
+<citerefentry><refentrytitle>nix-env</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+manpage or the Nix manual.</para>
+
+</section>
+
+
+</section>
+
+
+<!--===============================================================-->
+
+<section xml:id="sec-user-management"><title>User management</title>
+
+<para>NixOS supports both declarative and imperative styles of user
+management.  In the declarative style, users are specified in
+<filename>configuration.nix</filename>.  For instance, the following
+states that a user account named <literal>alice</literal> shall exist:
+
+<programlisting>
+users.extraUsers.alice =
+  { createHome = true;
+    home = "/home/alice";
+    description = "Alice Foobar";
+    extraGroups = [ "wheel" ];
+    isSystemUser = false;
+    useDefaultShell = true;
+    openssh.authorizedKeys.keys = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
+  };
+</programlisting>
+
+Note that <literal>alice</literal> is a member of the
+<literal>wheel</literal> group, which allows her to use
+<command>sudo</command> to execute commands as
+<literal>root</literal>.  Also note the SSH public key that allows
+remote logins with the corresponding private key.  Users created in
+this way do not have a password by default, so they cannot log in via
+mechanisms that require a password.  However, you can use the
+<command>passwd</command> program to set a password, which is retained
+across invocations of <command>nixos-rebuild</command>.</para>
+
+<para>A user ID (uid) is assigned automatically.  You can also specify
+a uid manually by adding
+
+<programlisting>
+    uid = 1000;
+</programlisting>
+
+to the user specification.</para>
+
+<para>Groups can be specified similarly.  The following states that a
+group named <literal>students</literal> shall exist:
+
+<programlisting>
+users.extraGroups.students.gid = 1000;
+</programlisting>
+
+As with users, the group ID (gid) is optional and will be assigned
+automatically if it’s missing.</para>
+
+<warning><para>Currently declarative user management is not perfect:
+<command>nixos-rebuild</command> does not know how to realise certain
+configuration changes.  This includes removing a user or group, and
+removing group membership from a user.</para></warning>
+
+<para>In the imperative style, users and groups are managed by
+commands such as <command>useradd</command>,
+<command>groupmod</command> and so on.  For instance, to create a user
+account named <literal>alice</literal>:
+
+<screen>
+$ useradd -m alice</screen>
+
+The flag <option>-m</option> causes the creation of a home directory
+for the new user, which is generally what you want.  The user does not
+have an initial password and therefore cannot log in.  A password can
+be set using the <command>passwd</command> utility:
+
+<screen>
+$ passwd alice
+Enter new UNIX password: ***
+Retype new UNIX password: ***
+</screen>
+
+A user can be deleted using <command>userdel</command>:
+
+<screen>
+$ userdel -r alice</screen>
+
+The flag <option>-r</option> deletes the user’s home directory.
+Accounts can be modified using <command>usermod</command>.  Unix
+groups can be managed using <command>groupadd</command>,
+<command>groupmod</command> and <command>groupdel</command>.</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>File systems</title>
+
+<para>You can define file systems using the
+<option>fileSystems</option> configuration option.  For instance, the
+following definition causes NixOS to mount the Ext4 file system on
+device <filename>/dev/disk/by-label/data</filename> onto the mount
+point <filename>/data</filename>:
+
+<programlisting>
+fileSystems."/data" =
+  { device = "/dev/disk/by-label/data";
+    fsType = "ext4";
+  };
+</programlisting>
+
+Mount points are created automatically if they don’t already exist.
+For <option>device</option>, it’s best to use the topology-independent
+device aliases in <filename>/dev/disk/by-label</filename> and
+<filename>/dev/disk/by-uuid</filename>, as these don’t change if the
+topology changes (e.g. if a disk is moved to another IDE
+controller).</para>
+
+<para>You can usually omit the file system type
+(<option>fsType</option>), since <command>mount</command> can usually
+detect the type and load the necessary kernel module automatically.
+However, if the file system is needed at early boot (in the initial
+ramdisk) and is not <literal>ext2</literal>, <literal>ext3</literal>
+or <literal>ext4</literal>, then it’s best to specify
+<option>fsType</option> to ensure that the kernel module is
+available.</para>
+
+<section><title>LUKS-encrypted file systems</title>
+
+<para>NixOS supports file systems that are encrypted using
+<emphasis>LUKS</emphasis> (Linux Unified Key Setup).  For example,
+here is how you create an encrypted Ext4 file system on the device
+<filename>/dev/sda2</filename>:
+
+<screen>
+$ cryptsetup luksFormat /dev/sda2
+
+WARNING!
+========
+This will overwrite data on /dev/sda2 irrevocably.
+
+Are you sure? (Type uppercase yes): YES
+Enter LUKS passphrase: ***
+Verify passphrase: ***
+
+$ cryptsetup luksOpen /dev/sda2 crypted
+Enter passphrase for /dev/sda2: ***
+
+$ mkfs.ext4 /dev/mapper/crypted
+</screen>
+
+To ensure that this file system is automatically mounted at boot time
+as <filename>/</filename>, add the following to
+<filename>configuration.nix</filename>:
+
+<programlisting>
+boot.initrd.luks.devices = [ { device = "/dev/sda2"; name = "crypted"; } ];
+fileSystems."/".device = "/dev/mapper/crypted";
+</programlisting>
+
+</para>
+
+</section>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>X Window System</title>
+
+<para>The X Window System (X11) provides the basis of NixOS’ graphical
+user interface.  It can be enabled as follows:
+<programlisting>
+services.xserver.enable = true;
+</programlisting>
+The X server will automatically detect and use the appropriate video
+driver from a set of X.org drivers (such as <literal>vesa</literal>
+and <literal>intel</literal>).  You can also specify a driver
+manually, e.g.
+<programlisting>
+services.xserver.videoDrivers = [ "r128" ];
+</programlisting>
+to enable X.org’s <literal>xf86-video-r128</literal> driver.</para>
+
+<para>You also need to enable at least one desktop or window manager.
+Otherwise, you can only log into a plain undecorated
+<command>xterm</command> window.  Thus you should pick one or more of
+the following lines:
+<programlisting>
+services.xserver.desktopManager.kde4.enable = true;
+services.xserver.desktopManager.xfce.enable = true;
+services.xserver.windowManager.xmonad.enable = true;
+services.xserver.windowManager.twm.enable = true;
+services.xserver.windowManager.icewm.enable = true;
+</programlisting>
+</para>
+
+<para>NixOS’s default <emphasis>display manager</emphasis> (the
+program that provides a graphical login prompt and manages the X
+server) is SLiM.  You can select KDE’s <command>kdm</command> instead:
+<programlisting>
+services.xserver.displayManager.kdm.enable = true;
+</programlisting>
+</para>
+
+<para>The X server is started automatically at boot time.  If you
+don’t want this to happen, you can set:
+<programlisting>
+services.xserver.autorun = false;
+</programlisting>
+The X server can then be started manually:
+<screen>
+$ systemctl start display-manager.service
+</screen>
+</para>
+
+
+<section><title>NVIDIA graphics cards</title>
+
+<para>NVIDIA provides a proprietary driver for its graphics cards that
+has better 3D performance than the X.org drivers.  It is not enabled
+by default because it’s not free software.  You can enable it as follows:
+<programlisting>
+services.xserver.videoDrivers = [ "nvidia" ];
+</programlisting>
+You may need to reboot after enabling this driver to prevent a clash
+with other kernel modules.</para>
+
+<para>On 64-bit systems, if you want full acceleration for 32-bit
+programs such as Wine, you should also set the following:
+<programlisting>
+service.xserver.driSupport32Bit = true;
+</programlisting>
+</para>
+
+</section>
+
+
+<section><title>Touchpads</title>
+
+<para>Support for Synaptics touchpads (found in many laptops such as
+the Dell Latitude series) can be enabled as follows:
+<programlisting>
+services.xserver.synaptics.enable = true;
+</programlisting>
+The driver has many options (see <xref linkend="ch-options"/>).  For
+instance, the following enables two-finger scrolling:
+<programlisting>
+services.xserver.synaptics.twoFingerScroll = true;
+</programlisting>
+</para>
+
+</section>
+
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>Networking</title>
+
+<section><title>Secure shell access</title>
+
+<para>Secure shell (SSH) access to your machine can be enabled by
+setting:
+
+<programlisting>
+services.openssh.enable = true;
+</programlisting>
+
+By default, root logins using a password are disallowed.  They can be
+disabled entirely by setting
+<literal>services.openssh.permitRootLogin</literal> to
+<literal>"no"</literal>.</para>
+
+<para>You can declaratively specify authorised RSA/DSA public keys for
+a user as follows:
+
+<!-- FIXME: this might not work if the user is unmanaged. -->
+<programlisting>
+users.extraUsers.alice.openssh.authorizedKeys.keys =
+  [ "ssh-dss AAAAB3NzaC1kc3MAAACBAPIkGWVEt4..." ];
+</programlisting>
+
+</para>
+
+</section>
+
+
+<section><title>IPv4 configuration</title>
+
+<para>By default, NixOS uses DHCP (specifically,
+<command>dhcpcd</command>) to automatically configure network
+interfaces.  However, you can configure an interface manually as
+follows:
+
+<programlisting>
+networking.interfaces.eth0 = { ipAddress = "192.168.1.2"; prefixLength = 24; };
+</programlisting>
+
+(The network prefix can also be specified using the option
+<literal>subnetMask</literal>,
+e.g. <literal>"255.255.255.0"</literal>, but this is deprecated.)
+Typically you’ll also want to set a default gateway and set of name
+servers:
+
+<programlisting>
+networking.defaultGateway = "192.168.1.1";
+networking.nameservers = [ "8.8.8.8" ];
+</programlisting>
+
+</para>
+
+<note><para>Statically configured interfaces are set up by the systemd
+service
+<replaceable>interface-name</replaceable><literal>-cfg.service</literal>.
+The default gateway and name server configuration is performed by
+<literal>network-setup.service</literal>.</para></note>
+
+<para>The host name is set using <option>networking.hostName</option>:
+
+<programlisting>
+networking.hostName = "cartman";
+</programlisting>
+
+The default host name is <literal>nixos</literal>.  Set it to the
+empty string (<literal>""</literal>) to allow the DHCP server to
+provide the host name.</para>
+
+</section>
+
+
+<section><title>IPv6 configuration</title>
+
+<para>IPv6 is enabled by default.  Stateless address autoconfiguration
+is used to automatically assign IPv6 addresses to all interfaces.  You
+can disable IPv6 support globally by setting:
+
+<programlisting>
+networking.enableIPv6 = false;
+</programlisting>
+
+</para>
+
+</section>
+
+
+<section><title>Firewall</title>
+
+<para>NixOS has a simple stateful firewall that blocks incoming
+connections and other unexpected packets.  The firewall applies to
+both IPv4 and IPv6 traffic.  It can be enabled as follows:
+
+<programlisting>
+networking.firewall.enable = true;
+</programlisting>
+
+You can open specific TCP ports to the outside world:
+
+<programlisting>
+networking.firewall.allowedTCPPorts = [ 80 443 ];
+</programlisting>
+
+Note that TCP port 22 (ssh) is opened automatically if the SSH daemon
+is enabled (<option>services.openssh.enable = true</option>).  UDP
+ports can be opened through
+<option>networking.firewall.allowedUDPPorts</option>.  Also of
+interest is
+
+<programlisting>
+networking.firewall.allowPing = true;
+</programlisting>
+
+to allow the machine to respond to ping requests.  (ICMPv6 pings are
+always allowed.)</para>
+
+</section>
+
+
+<section><title>Wireless networks</title>
+
+<para>
+NixOS will start wpa_supplicant for you if you enable this setting:
+
+<programlisting>
+networking.wireless.enable = true;
+</programlisting>
+
+NixOS currently does not generate wpa_supplicant's
+configuration file, <literal>/etc/wpa_supplicant.conf</literal>. You should edit this file
+yourself to define wireless networks, WPA keys and so on (see
+wpa_supplicant.conf(5)).
+</para>
+
+<para>
+If you are using WPA2 the <command>wpa_passphrase</command> tool might be useful
+to generate the <literal>wpa_supplicant.conf</literal>.
+
+<screen>
+$ wpa_passphrase ESSID PSK > /etc/wpa_supplicant.conf</screen>
+
+After you have edited the <literal>wpa_supplicant.conf</literal>,
+you need to restart the wpa_supplicant service.
+
+<screen>
+$ systemctl restart wpa_supplicant.service</screen>
+</para>
+
+
+</section>
+
+
+<section><title>Ad-hoc configuration</title>
+
+<para>You can use <option>networking.localCommands</option> to specify
+shell commands to be run at the end of
+<literal>network-setup.service</literal>.  This is useful for doing
+network configuration not covered by the existing NixOS modules.  For
+instance, to statically configure an IPv6 address:
+
+<programlisting>
+networking.localCommands =
+  ''
+    ip -6 addr add 2001:610:685:1::1/64 dev eth0
+  '';
+</programlisting>
+
+</para>
+
+</section>
+
+
+<!-- TODO: OpenVPN, NAT -->
+
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>Linux kernel</title>
+
+<para>You can override the Linux kernel and associated packages using
+the option <option>boot.kernelPackages</option>.  For instance, this
+selects the Linux 3.10 kernel:
+<programlisting>
+boot.kernelPackages = pkgs.linuxPackages_3_10;
+</programlisting>
+Note that this not only replaces the kernel, but also packages that
+are specific to the kernel version, such as the NVIDIA video drivers.
+This ensures that driver packages are consistent with the
+kernel.</para>
+
+<para>The default Linux kernel configuration should be fine for most
+users.  You can see the configuration of your current kernel in
+<filename>/run/booted-system/kernel-modules/config</filename>.  If you
+want to change the kernel configuration, you can use the
+<option>packageOverrides</option> feature (see <xref
+linkend="sec-customising-packages" />).  For instance, to enable
+support for the kernel debugger KGDB:
+
+<programlisting>
+nixpkgs.config.packageOverrides = pkgs:
+  { linux_3_4 = pkgs.linux_3_4.override {
+      extraConfig =
+        ''
+          KGDB y
+        '';
+    };
+  };
+</programlisting>
+
+<varname>extraConfig</varname> takes a list of Linux kernel
+configuration options, one per line.  The name of the option should
+not include the prefix <literal>CONFIG_</literal>.  The option value
+is typically <literal>y</literal>, <literal>n</literal> or
+<literal>m</literal> (to build something as a kernel module).</para>
+
+<para>Kernel modules for hardware devices are generally loaded
+automatically by <command>udev</command>.  You can force a module to
+be loaded via <option>boot.kernelModules</option>, e.g.
+<programlisting>
+boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
+</programlisting>
+If the module is required early during the boot (e.g. to mount the
+root file system), you can use
+<option>boot.initrd.extraKernelModules</option>:
+<programlisting>
+boot.initrd.extraKernelModules = [ "cifs" ];
+</programlisting>
+This causes the specified modules and their dependencies to be added
+to the initial ramdark.</para>
+
+<para>Kernel runtime parameters can be set through
+<option>boot.kernel.sysctl</option>, e.g.
+<programlisting>
+boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 120;
+</programlisting>
+sets the kernel’s TCP keepalive time to 120 seconds.  To see the
+available parameters, run <command>sysctl -a</command>.</para>
+
+</section>
+
+
+<!-- Apache; libvirtd virtualisation -->
+
+
+</chapter>

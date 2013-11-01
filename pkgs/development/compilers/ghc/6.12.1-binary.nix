@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
      ''
       mkdir "$TMP/bin"
       for i in strip; do
-        echo '#!/bin/sh' >> "$TMP/bin/$i"
+        echo '#! ${stdenv.shell}' > "$TMP/bin/$i"
         chmod +x "$TMP/bin/$i"
-        PATH="$TMP/bin:$PATH"
       done
+      PATH="$TMP/bin:$PATH"
      '' +
     # We have to patch the GMP paths for the integer-gmp package.
      ''

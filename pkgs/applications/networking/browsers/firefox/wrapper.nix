@@ -1,4 +1,4 @@
-{ stdenv, browser, makeDesktopItem, makeWrapper, plugins, libs, gtk_modules
+{ stdenv, lib, browser, makeDesktopItem, makeWrapper, plugins, libs, gtk_modules
 , browserName, desktopName, nameSuffix, icon
 }:
 
@@ -50,8 +50,7 @@ stdenv.mkDerivation {
     description =
       browser.meta.description
       + " (with plugins: "
-      + (let lib = import ../../../../lib;
-        in lib.concatStrings (lib.intersperse ", " (map (x: x.name) plugins)))
+      + lib.concatStrings (lib.intersperse ", " (map (x: x.name) plugins))
       + ")";
   };
 }
