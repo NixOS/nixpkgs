@@ -21,8 +21,8 @@ fi;
 # Pipe the "p" character into Subversion to force it to accept the
 # server's certificate.  This is perfectly safe: we don't care
 # whether the server is being spoofed --- only the cryptographic
-# hash of the output matters.
-echo 'p' | svn export ${ignoreExternals:+--ignore-externals} \
+# hash of the output matters. Pass in extra p's to handle redirects.
+printf 'p\np\np\n' | svn export ${ignoreExternals:+--ignore-externals} \
     -r "$rev" "$url" "$out"
 
 stopNest
