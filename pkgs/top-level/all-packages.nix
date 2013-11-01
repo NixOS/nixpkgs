@@ -5400,7 +5400,9 @@ let
 
   podofo = callPackage ../development/libraries/podofo { };
 
-  polkit = callPackage ../development/libraries/polkit { };
+  polkit = callPackage ../development/libraries/polkit {
+    spidermonkey = spidermonkey_185;
+  };
 
   polkit_qt_1 = callPackage ../development/libraries/polkit-qt-1 { };
 
