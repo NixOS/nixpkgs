@@ -258,6 +258,22 @@ in
         fi
       '';
 
+    # Print a reminder for users to set a root password.
+    environment.interactiveShellInit =
+      ''
+        if [ "$UID" = 0 ]; then
+            read _l < /etc/shadow
+            if [ "''${_l:0:6}" = root:: ]; then
+                cat >&2 <<EOF
+        [1;31mWarning:[0m Your root account has a null password, allowing local users
+        to login as root.  Please set a non-null password using \`passwd', or
+        disable password-based root logins using \`passwd -l'.
+        EOF
+            fi
+            unset _l
+        fi
+      '';
+
     system.activationScripts.users = stringAfter [ "groups" ]
       ''
         echo "updating users..."
