@@ -32,6 +32,12 @@ with pkgs.lib;
   # in the Nix store on the CD.
   isoImage.storeContents = [ pkgs.stdenv pkgs.busybox ];
 
+  # EFI booting
+  isoImage.makeEfiBootable = true;
+
   # Add Memtest86+ to the CD.
   boot.loader.grub.memtest86 = true;
+
+  # Get a console as soon as the initrd loads fbcon on EFI boot
+  boot.initrd.kernelModules = [ "fbcon" ];
 }

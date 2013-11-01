@@ -12,7 +12,7 @@ let
     (import ../lib/eval-config.nix {
       inherit system;
       modules =
-        [ ../modules/installer/cd-dvd/installation-cd-efi.nix
+        [ ../modules/installer/cd-dvd/installation-cd-minimal.nix
           ../modules/testing/test-instrumentation.nix
           { key = "serial";
 

@@ -143,15 +143,6 @@ in rec {
     inherit system;
   });
 
-  # A variant with efi booting support. Once cd-minimal has a newer kernel,
-  # this should be enabled by default.
-  iso_efi = forAllSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-efi.nix;
-    type = "efi";
-    maintainers = [ "shlevy" ];
-    inherit system;
-  });
-
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forAllSystems (system:
