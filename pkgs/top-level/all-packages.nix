@@ -617,6 +617,7 @@ let
     inherit (haskellPackages) pandoc;
     par2Support = (config.bup.par2Support or false);
   };
+  bupLatest = bup.override { version = "latest"; };
 
   atool = callPackage ../tools/archivers/atool { };
 
