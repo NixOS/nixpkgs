@@ -40,7 +40,7 @@ in
       };
 
       dates = mkOption {
-        default = "*:0,15,30,45";
+        default = "*:0/15";
         type = types.string;
         description = ''
           Specification (in the format described by
@@ -167,7 +167,7 @@ in
         serviceConfig.User = "${cfg.user}";
         serviceConfig.Group = "${cfg.group}";
         environment.OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
-        startOn = cfg.dates;
+        startAt = cfg.dates;
       };
 
   };
