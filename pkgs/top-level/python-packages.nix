@@ -187,21 +187,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   afew = buildPythonPackage rec {
-    rev = "6bb3915636aaf86f046a017ffffd9a4ef395e199";
+    rev = "d5d0ddeae0c5758a3f6cf5de77913804d88e906a";
     name = "afew-1.0_${rev}";
 
     src = fetchurl {
       url = "https://github.com/teythoon/afew/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "74926d9ddfa69534cfbd08a82f0acccab2c649558062654d5d2ff2999d201384";
+      sha256 = "0al7hz994sh0yrpixqafr25acglvniq4zsbs9aj89zr7yzq1g1j0";
     };
 
-    propagatedBuildInputs = [ pythonPackages.notmuch pkgs.dbacl ];
+    buildInputs = [ pkgs.dbacl ];
 
-    # error: invalid command 'test'
+    propagatedBuildInputs = [
+      pythonPackages.notmuch
+      pythonPackages.subprocess32
+      pythonPackages.chardet
+    ];
+
     doCheck = false;
 
     postInstall = ''
+      substituteInPlace afew/DBACL.py "'dbacl'" "'${pkgs.dbacl}/bin/dbacl'"
       wrapProgram $out/bin/afew \
         --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib
     '';
@@ -289,13 +295,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   alot = buildPythonPackage rec {
-    rev = "0711cf8efaf1a4cca24617c3406210a415006457";
-    name = "alot-0.3.4_${rev}";
+    rev = "fa10bfc2de105da819c8e11e913a44c3c1ac60a4";
+    name = "alot-0.3.5_${rev}";
 
     src = fetchurl {
       url = "https://github.com/pazz/alot/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "1rxkx9cjajsv9x1dl4xp1r3vr0kb66sglxaqzjiwaknqzahmmji5";
+      sha256 = "0zd4jiwxqb7m672xkr5jcqkfpk9jx1kmkllyvjjvswkgjjqdrhax";
     };
 
     # error: invalid command 'test'
@@ -5935,6 +5941,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "A system for controlling process state under UNIX";
       homepage = http://supervisord.org/;
+    };
+  };
+
+  subprocess32 = buildPythonPackage rec {
+    name = "subprocess32-3.2.5rc1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/subprocess32/${name}.tar.gz";
+      md5 = "f5f46106368be6336b54af95d048fea9";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = "https://pypi.python.org/pypi/subprocess32";
+      description = "Backport of the subprocess module from Python 3.2.5 for use on 2.x.";
+      maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
 
