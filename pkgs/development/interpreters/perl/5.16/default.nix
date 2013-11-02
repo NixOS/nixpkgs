@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch
     ]
-    ++ stdenv.lib.optional stdenv.isDarwin ./no-libutil.patch;
+    ++ stdenv.lib.optionals stdenv.isDarwin [ ./cpp-precomp.patch ./no-libutil.patch ] ;
 
   # Build a thread-safe Perl with a dynamic libperls.o.  We need the
   # "installstyle" option to ensure that modules are put under
