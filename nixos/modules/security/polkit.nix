@@ -95,6 +95,12 @@ in
         # configuration.
         ${pkgs.procps}/bin/pkill -INT -u root -x polkitd
       '';
+
+    users.extraUsers.polkituser = {
+      description = "PolKit daemon";
+      uid = config.ids.uids.polkituser;
+    };
+
   };
 
 }
