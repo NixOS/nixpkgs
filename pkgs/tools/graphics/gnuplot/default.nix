@@ -24,15 +24,19 @@ stdenv.mkDerivation rec {
     sha256 = "1xd7gqdhlk7k1p9yyqf9vkk811nadc7m4si0q3nb6cpv4pxglpyz";
   };
 
+  withX = libX11 != null && !stdenv.isDarwin;
+
   buildInputs =
-    [ zlib gd texinfo readline emacs lua texLive libX11 libXt libXpm libXaw
+    [ zlib gd texinfo readline lua texLive
       pango cairo pkgconfig makeWrapper ]
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ emacs ]
+    ++ stdenv.lib.optionals withX              [ libX11 libXpm libXt libXaw ]
     # compiling with wxGTK causes a malloc (double free) error on darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) wxGTK;
 
-  configureFlags = if libX11 != null then ["--with-x"] else ["--without-x"];
+  configureFlags = if withX then ["--with-x"] else ["--without-x"];
 
-  postInstall = stdenv.lib.optionalString (libX11 != null) ''
+  postInstall = stdenv.lib.optionalString withX ''
     wrapProgram $out/bin/gnuplot \
        --prefix PATH : '${gnused}/bin' \
        --prefix PATH : '${coreutils}/bin' \
