@@ -206,8 +206,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     doCheck = false;
 
+    preConfigure = ''
+      substituteInPlace afew/DBACL.py --replace "'dbacl'" "'${pkgs.dbacl}/bin/dbacl'"
+    '';
+
     postInstall = ''
-      substituteInPlace afew/DBACL.py "'dbacl'" "'${pkgs.dbacl}/bin/dbacl'"
       wrapProgram $out/bin/afew \
         --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib
     '';
