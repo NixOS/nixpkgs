@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/redshift-gtk" --prefix PYTHONPATH : $PYTHONPATH:${pygtk}/lib/${python.libPrefix}/site-packages/gtk-2.0:${pyxdg}/lib/${python.libPrefix}/site-packages/pyxdg:$out/lib/${python.libPrefix}/site-packages
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "changes the color temperature of your screen gradually";
     longDescription = ''
       The color temperature is set according to the position of the
@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
       '';
     license = "GPLv3+";
     homepage = "http://jonls.dk/redshift";
+    platforms = platforms.linux;
   }; 
 }
