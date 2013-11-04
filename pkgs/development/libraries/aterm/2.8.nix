@@ -1,9 +1,9 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 let
   isMingw = stdenv ? cross && stdenv.cross.config == "i686-pc-mingw32" ;
 in
-stdenv.mkDerivation ( {
+stdenv.mkDerivation {
   name = "aterm-2.8";
 
   src = fetchurl {
@@ -23,9 +23,13 @@ stdenv.mkDerivation ( {
   # feel too serious to just ignore.
   doCheck = true;
 
+  dontStrip = isMingw;
+
   meta = {
     homepage = http://www.cwi.nl/htbin/sen1/twiki/bin/view/SEN1/ATerm;
     license = "LGPL";
     description = "Library for manipulation of term data structures in C";
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    maintainers = stdenv.lib.maintainers.eelco;
   };
-} // ( if isMingw then { dontStrip = true; } else {}) )
+}
