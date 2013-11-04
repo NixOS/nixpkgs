@@ -46,7 +46,6 @@
   ./programs/bash/command-not-found.nix
   ./programs/blcr.nix
   ./programs/environment.nix
-  ./programs/gurobi.nix
   ./programs/info.nix
   ./programs/shadow.nix
   ./programs/shell.nix
@@ -120,7 +119,6 @@
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
   ./services/misc/gpsd.nix
-  ./services/misc/gurobi.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
