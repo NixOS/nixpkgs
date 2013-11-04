@@ -2290,7 +2290,7 @@ let
     cross = assert crossSystem != null; crossSystem;
   };
 
-  gcc44_realCross = lib.addMetaAttrs { platforms = []; }
+  gcc44_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.4) {
       inherit stdenv fetchurl texinfo gmp mpfr /* ppl cloogppl */ noSysDirs
           gettext which;
@@ -2339,7 +2339,7 @@ let
 
   gcc47 = gcc47_real;
 
-  gcc45_realCross = lib.addMetaAttrs { platforms = []; }
+  gcc45_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.5) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
         ppl cloogppl gettext which noSysDirs;
@@ -2351,7 +2351,7 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
-  gcc46_realCross = lib.addMetaAttrs { platforms = []; }
+  gcc46_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.6) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
         cloog ppl gettext which noSysDirs;
@@ -2363,7 +2363,7 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
-  gcc47_realCross = lib.addMetaAttrs { platforms = []; }
+  gcc47_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.7) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
         cloog ppl gettext which noSysDirs;
@@ -2384,7 +2384,7 @@ let
                    if isMingw then windows.mingw_headers1 else null;
     in
       wrapGCCCross {
-      gcc = forceNativeDrv (lib.addMetaAttrs { platforms = []; } (
+      gcc = forceNativeDrv (lib.addMetaAttrs { hydraPlatforms = []; } (
         gcc_realCross.override {
           crossStageStatic = true;
           langCC = false;

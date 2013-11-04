@@ -64,7 +64,8 @@ rec {
       raskin
       jcumming
     ];
-    #platforms = a.lib.platforms.linux;
+    platforms = a.lib.platforms.linux;
+    hydraPlatforms = [];
     license = a.lib.licenses.gpl2Plus;
   };
   passthru = {

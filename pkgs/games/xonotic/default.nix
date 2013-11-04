@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.xonotic.org;
     license = with stdenv.lib.licenses; gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    #platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
   };
 }

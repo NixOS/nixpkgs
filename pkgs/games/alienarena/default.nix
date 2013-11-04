@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     # Engine is under GPLv2, everything else is under
     license = [ "unfree-redistributable" ];
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    #platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
   };
 }

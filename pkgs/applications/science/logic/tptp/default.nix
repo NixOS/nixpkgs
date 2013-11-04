@@ -74,8 +74,7 @@ rec {
     # A GiB of data. Installation is unpacking and editing a few files.
     # No sense in letting Hydra build it.
     # Also, it is unclear what is covered by "verbatim" - we will edit configs
-    platforms = with a.lib.platforms;
-      [];
+    hydraPlatforms = [];
     license = "verbatim-redistribution";
   };
   passthru = {

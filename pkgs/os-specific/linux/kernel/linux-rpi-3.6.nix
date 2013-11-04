@@ -15,5 +15,5 @@ in import ./generic.nix (args // rec {
 
   features.iwlwifi = true;
 
-  extraMeta.platforms = [];
+  extraMeta.hydraPlatforms = [];
 })
