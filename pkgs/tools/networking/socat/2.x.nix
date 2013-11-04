@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "socat-1.7.2.2";
+  name = "socat-2.0.0-b6";
 
   src = fetchurl {
     url = "http://www.dest-unreach.org/socat/download/${name}.tar.bz2";
-    sha256 = "0g4miazc9w3gxbk5vvw228jp3qxn775jspkgqv5hjf2d3bqpl5ls";
+    sha256 = "03n70v7ygsl4ji7rwvyv8f70d3q32jnas26j29amkf3fm4agnhvz";
   };
 
   buildInputs = [ openssl ];
