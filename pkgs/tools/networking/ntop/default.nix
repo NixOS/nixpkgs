@@ -19,11 +19,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Traffic analysis with NetFlow and sFlow support";
-
     license = "GLPv3+";
-
     homepage = http://www.ntop.org/products/ntop/;
-
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }

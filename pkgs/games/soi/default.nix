@@ -46,6 +46,7 @@ rec {
     platforms = with a.lib.platforms;
       linux;
     license = "free-noncopyleft";
+    broken = true;
   };
   passthru = {
     updateInfo = {

@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = "nonfree";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true;
   };
 }

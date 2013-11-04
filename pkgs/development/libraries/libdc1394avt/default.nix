@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = "LGPLv2.1+";
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }
