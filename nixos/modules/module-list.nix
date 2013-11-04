@@ -55,6 +55,7 @@
   ./programs/venus.nix
   ./programs/wvdial.nix
   ./programs/zsh/zsh.nix
+  ./programs/screen.nix
   ./rename.nix
   ./security/apparmor.nix
   ./security/apparmor-suid.nix
