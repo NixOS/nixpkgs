@@ -15,10 +15,11 @@ assert alsaSupport -> alsaLib != null;
 assert pulseaudioSupport -> pulseaudio != null;
 
 let
+  # force enable-static, to workaround this bug:
+  # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
   configureFlagsFun = attrs: ''
-        --disable-oss --disable-video-x11-xme
-        --disable-x11-shared --disable-alsa-shared --enable-rpath --disable-pulseaudio-shared
-        --disable-osmesa-shared --enable-static
+        --enable-static --disable-oss --disable-x11-shared
+        --disable-pulseaudio-shared --disable-alsa-shared
         ${if alsaSupport then "--with-alsa-prefix=${attrs.alsaLib}/lib" else ""}
       '';
 in
