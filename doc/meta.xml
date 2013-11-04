@@ -118,6 +118,15 @@ interpretation:</para>
     package).</para></listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><varname>broken</varname></term>
+    <listitem><para>If set to <literal>true</literal>, the package is
+    marked as “broken”, meaning that it won’t show up in
+    <literal>nix-env -qa</literal>, and cannot be built or installed.
+    Sush packages should be removed from Nixpkgs eventually unless
+    they are fixed.</para></listitem>
+  </varlistentry>
+
 </variablelist>
 
 

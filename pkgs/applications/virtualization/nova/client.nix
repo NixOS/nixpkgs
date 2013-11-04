@@ -16,5 +16,6 @@ pythonPackages.buildPythonPackage rec {
   meta = {
     homepage = https://github.com/rackspace/python-novaclient;
     description = "Client library and command line tool for the OpenStack Nova API";
+    broken = true;
   };
 }
