@@ -8,11 +8,14 @@ let
 
   queuelen = if cfg.queuelen == null then "" else "-q ${toString cfg.queuelen}";
 
+  # Duplicate code, also found in cron.nix. Needs deduplication.
   systemCronJobs =
     ''
       SHELL=${pkgs.bash}/bin/bash
       PATH=${config.system.path}/bin:${config.system.path}/sbin
-      MAILTO="${config.services.cron.mailto}"
+      ${optionalString (config.services.cron.mailto != null) ''
+        MAILTO="${config.services.cron.mailto}"
+      ''}
       NIX_CONF_DIR=/etc/nix
       ${pkgs.lib.concatStrings (map (job: job + "\n") config.services.cron.systemCronJobs)}
     '';
