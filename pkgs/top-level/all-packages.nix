@@ -7334,7 +7334,7 @@ let
 
   abook = callPackage ../applications/misc/abook { };
 
-  adobeReader = callPackage_i686 ../applications/misc/adobe-reader { };
+  adobe-reader = callPackage_i686 ../applications/misc/adobe-reader { };
 
   aewan = callPackage ../applications/editors/aewan { };
 
@@ -10240,9 +10240,9 @@ let
        LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${gcc.gcc}/lib
        export LD_LIBRARY_PATH
     '';
-   };
+  };
 
-   patoline = PatolineEnv ocamlPackages_4_00_1;
+  patoline = PatolineEnv ocamlPackages_4_00_1;
 
   znc = callPackage ../applications/networking/znc { };
 
@@ -10263,5 +10263,10 @@ let
   httrack = callPackage ../tools/backup/httrack { };
 
   mg = callPackage ../applications/editors/mg { };
+
+
+  # Attributes for backward compatibility.
+  adobeReader = adobe-reader;
+
 
 }; in pkgs
