@@ -6820,7 +6820,7 @@ let
   linuxPackages_3_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_11 linuxPackages_3_11);
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   # Update this when adding a new version!
-  linuxPackages_latest = pkgs.linuxPackages_3_11;
+  linuxPackages_latest = pkgs.linuxPackages_3_12;
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
