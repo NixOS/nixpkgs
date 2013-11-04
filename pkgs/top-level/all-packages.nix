@@ -2565,20 +2565,6 @@ let
 
   gcj = gcj45;
 
-  gcj44 = wrapGCC (gcc44.gcc.override {
-    name = "gcj";
-    langJava = true;
-    langFortran = false;
-    langCC = true;
-    langC = false;
-    profiledCompiler = false;
-    inherit zip unzip zlib boehmgc gettext pkgconfig;
-    inherit gtk;
-    inherit (gnome) libart_lgpl;
-    inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
-      libXrandr xproto renderproto xextproto inputproto randrproto;
-  });
-
   gcj45 = wrapGCC (gcc45.gcc.override {
     name = "gcj";
     langJava = true;
@@ -2671,18 +2657,6 @@ let
     profiledCompiler = false;
     enableMultilib = false;
   });
-
-  # Not officially supported version for ghdl
-  ghdl_gcc44 = lowPrio (wrapGCC (import ../development/compilers/gcc/4.4 {
-    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat gettext which
-      ppl cloogppl;
-    name = "ghdl";
-    langVhdl = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-    enableMultilib = false;
-  }));
 
   gcl = builderDefsPackage ../development/compilers/gcl {
     inherit mpfr m4 binutils fetchcvs emacs zlib which
