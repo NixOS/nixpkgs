@@ -21,8 +21,7 @@ stdenv.mkDerivation {
 
   patches =
     [ ./version-test.patch ]
-    ++ optional (!libsOnly && versionAtLeast kernelDev.version "3.11") ./nvidia-drivers-linux-3.11-incremental.patch
-    ;
+    ++ optional (!libsOnly && versionAtLeast kernelDev.version "3.11") ./nvidia-drivers-linux-3.11-incremental.patch;
 
   src =
     if stdenv.system == "i686-linux" then
@@ -58,5 +57,7 @@ stdenv.mkDerivation {
     homepage = http://www.nvidia.com/object/unix.html;
     description = "X.org driver and kernel module for NVIDIA graphics cards";
     license = stdenv.lib.licenses.unfreeRedistributable;
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
   };
 }

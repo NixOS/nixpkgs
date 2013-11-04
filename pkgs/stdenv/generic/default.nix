@@ -55,6 +55,8 @@ let
             throw "package ‘${attrs.name}’ has an unfree license, refusing to evaluate"
           else if !allowBroken && attrs.meta.broken or false then
             throw "you can't use package ‘${attrs.name}’ because it has been marked as broken"
+          else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
+            throw "the package ‘${attrs.name}’ is not supported on ‘${result.system}’"
           else
             lib.addPassthru (derivation (
               (removeAttrs attrs ["meta" "passthru" "crossAttrs"])

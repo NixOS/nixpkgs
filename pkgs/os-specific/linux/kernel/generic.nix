@@ -40,9 +40,6 @@
 , ...
 }:
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-  || stdenv.isArm || stdenv.system == "mips64el-linux";
-
 assert stdenv.platform.name == "sheevaplug" -> stdenv.platform.uboot != null;
 
 let
