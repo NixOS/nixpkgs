@@ -33,7 +33,7 @@ cabal.mkDerivation (self: {
   meta = {
     description = "FFI binding to the CUDA interface for programming NVIDIA GPUs";
     license = self.stdenv.lib.licenses.bsd3;
-    hydraPlatforms = [];
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
