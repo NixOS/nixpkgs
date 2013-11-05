@@ -3,14 +3,14 @@
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
 }:
 
-let version = "1.1.2"; in
+let version = "1.1.4"; in
 
 stdenv.mkDerivation {
   name = "libvirt-${version}";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/libvirt-${version}.tar.gz";
-    md5 = "1835bbfa492099bce12e2934870e5611";
+    sha256 = "13yr9g1dk1bzzlm9h93kmavncyg6svjv3rjrv43ccl3sc37za42r";
   };
 
   buildInputs =
@@ -18,9 +18,6 @@ stdenv.mkDerivation {
       utillinux udev libpciaccess gettext libtasn1 libgcrypt yajl makeWrapper
       libcap_ng
     ];
-
-  # see http://www.mail-archive.com/libvir-list@redhat.com/msg83693.html
-  patches = [ ./securtyfs_userns.patch ];
 
   preConfigure =
     ''
