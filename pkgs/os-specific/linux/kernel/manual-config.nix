@@ -1,8 +1,8 @@
 { stdenv, runCommand, nettools, bc, perl, kmod, writeTextFile }:
 
-with stdenv.lib;
-
 let
+  inherit (stdenv.lib)
+    hasAttr getAttr optionalAttrs optional optionalString maintainers platforms;
 
   # Function to parse the config file into a nix expression
   readConfig = configFile:
@@ -169,6 +169,6 @@ stdenv.mkDerivation {
     maintainers = [
       maintainers.shlevy
     ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }
