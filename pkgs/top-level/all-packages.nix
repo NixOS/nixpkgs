@@ -2670,8 +2670,7 @@ let
     inherit fetchurl stdenv;
   });
 
-  # gccgo46 does not work. I set 4.7 then.
-  gccgo = gccgo47;
+  gccgo = gccgo48;
 
   gccgo47 = wrapGCC (gcc47_real.gcc.override {
     name = "gccgo";
