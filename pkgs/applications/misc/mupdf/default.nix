@@ -10,8 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig zlib freetype libjpeg jbig2dec openjpeg libX11 libXext ];
 
+  enableParallelBuilding = true;
+
   preBuild = ''
-    export makeFlags="prefix=$out"
+    export makeFlags="prefix=$out build=release"
     export NIX_CFLAGS_COMPILE=" $NIX_CFLAGS_COMPILE -I$(echo ${openjpeg}/include/openjpeg-*) "
   '';
 
