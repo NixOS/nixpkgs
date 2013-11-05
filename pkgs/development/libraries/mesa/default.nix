@@ -98,7 +98,8 @@ stdenv.mkDerivation {
     ;
 
   enableParallelBuilding = true;
-  doCheck = true;
+  #doCheck = true; # https://bugs.freedesktop.org/show_bug.cgi?id=67672
+  # TODO: best fix this before merging >=9.2 to master
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
   # ToDo: probably not all .la files are completely fixed, but it shouldn't matter
