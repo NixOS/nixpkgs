@@ -21,7 +21,7 @@ let
     level=WARN
   '';
 
-  polkitConf = ''
+  /*
     [network-manager]
     Identity=unix-group:networkmanager
     Action=org.freedesktop.NetworkManager.*
@@ -35,6 +35,17 @@ let
     ResultAny=yes
     ResultInactive=no
     ResultActive=yes
+  */
+  polkitConf = ''
+    polkit.addRule(function(action, subject) {
+      if (
+        subject.isInGroup("networkmanager")
+        && subject.active
+        && (action.id.indexOf("org.freedesktop.NetworkManager.") == 0
+            || action.id.indexOf("org.freedesktop.ModemManager.")  == 0
+        ))
+          { return polkit.Result.YES; }
+    });
   '';
 
   ipUpScript = writeScript "01nixos-ip-up" ''
@@ -179,7 +190,7 @@ in {
       systemctl restart NetworkManager
     '';
 
-    security.polkit.permissions = polkitConf;
+    security.polkit.extraConfig = polkitConf;
 
     # openvpn plugin has only dbus interface
     services.dbus.packages = cfg.packages ++ [

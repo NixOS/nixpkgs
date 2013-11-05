@@ -8,11 +8,11 @@ assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
-  name = "gtk+-2.24.21";
+  name = "gtk+-2.24.22";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.xz";
-    sha256 = "1qyw73pr9ryqhir2h1kbx3vm70km4dg2fxrgkrdlpv0rvlb94bih";
+    sha256 = "0zxf810znlk80j230rbr0xscx3gm71jmf2bdiamg76rqzglvc55i";
   };
 
   enableParallelBuilding = true;
