@@ -2680,6 +2680,13 @@ let
     langGo = true;
   });
 
+  gccgo48 = wrapGCC (gcc48_real.gcc.override {
+    name = "gccgo";
+    langCC = true; #required for go.
+    langC = true;
+    langGo = true;
+  });
+
   ghdl = wrapGCC (import ../development/compilers/gcc/4.3 {
     inherit stdenv fetchurl gmp mpfr noSysDirs gnat;
     texinfo = texinfo4;
