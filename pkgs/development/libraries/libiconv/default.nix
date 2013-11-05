@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
 
     # This library is not needed on GNU platforms.
-    platforms = [ "i686-cygwin" ];
+    hydraPlatforms = stdenv.lib.platforms.cygwin ++ stdenv.lib.platforms.darwin ++ stdenv.lib.platforms.freebsd;
   };
 }

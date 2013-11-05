@@ -19,7 +19,7 @@ stdenv.mkDerivation (rec {
     homepage = http://xmlsoft.org/XSLT/;
     description = "A C library and tools to do XSL transformations";
     license = "bsd";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 } // (if !stdenv.isFreeBSD then {} else {

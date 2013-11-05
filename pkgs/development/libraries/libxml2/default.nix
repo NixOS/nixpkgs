@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = http://xmlsoft.org/;
     description = "An XML parsing library for C";
     license = "bsd";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

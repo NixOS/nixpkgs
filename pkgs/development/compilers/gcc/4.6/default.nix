@@ -462,7 +462,7 @@ stdenv.mkDerivation ({
     # Volunteers needed for the {Cyg,Dar}win ports of *PPL.
     # gnatboot is not available out of linux platforms, so we disable the darwin build
     # for the gnat (ada compiler).
-    platforms = stdenv.lib.platforms.linux ++ optionals (langAda == false && libelf == null) [ "i686-darwin" ];
+    platforms = stdenv.lib.platforms.linux ++ optionals (langAda == false) stdenv.lib.platforms.darwin;
   };
 }
 
