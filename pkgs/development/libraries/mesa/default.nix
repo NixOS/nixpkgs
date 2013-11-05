@@ -23,7 +23,7 @@ else
 */
 
 let
-  version = "9.2.1";
+  version = "9.2.2";
   # this is the default search path for DRI drivers (note: X server introduces an overriding env var)
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "1l56zlma7ijhczdqanwv3ssrd36j07pp2996bsq9z7kpnmm7xd78";
+    sha256 = "0gbacnnacv4x8q27s8my4qhf2xq8q4nyhbs9y9688win4csm12n7";
   };
 
   prePatch = "patchShebangs .";
