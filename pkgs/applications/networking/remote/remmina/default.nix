@@ -18,6 +18,8 @@ stdenv.mkDerivation {
 
   cmakeFlags = "-DWITH_VTE=OFF -DWITH_TELEPATHY=OFF -DWITH_AVAHI=OFF";
 
+  patches = [ ./lgthread.patch ];
+
   postInstall = ''
     wrapProgram $out/bin/remmina --prefix LD_LIBRARY_PATH : "${libX11}/lib"
   '';
