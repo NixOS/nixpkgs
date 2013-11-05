@@ -3534,6 +3534,20 @@ rec {
     propagatedBuildInputs = [ TestScript ];
   };
 
+  FinanceQuote = buildPerlPackage {
+    name = "Finance-Quote-1.18";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/E/EC/ECOCODE/Finance-Quote-1.18.tar.gz;
+      sha256 = "4240faabe0646defd4ec76ca9e111977b9e8060eaec41adeb284eb422a428393";
+    };
+    propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP ];
+    meta = {
+      homepage = http://finance-quote.sourceforge.net/;
+      description = "Get stock and mutual fund quotes from various exchanges";
+      license = "gpl";
+    };
+  };
+
   FontAFM = buildPerlPackage rec {
     name = "Font-AFM-1.20";
     src = fetchurl {
@@ -3800,6 +3814,15 @@ rec {
     buildInputs = [ pkgs.unzip ];
   };
 
+  HTMLElementExtended = buildPerlPackage {
+    name = "HTML-Element-Extended-1.18";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MS/MSISK/HTML-Element-Extended-1.18.tar.gz;
+      sha256 = "f3ef1af108f27fef15ebec66479f251ce08aa49bd00b0462c9c80c86b4b6b32b";
+    };
+    propagatedBuildInputs = [ HTMLTree ];
+  };
+
   HTMLFromANSI = buildPerlPackage {
     name = "HTML-FromANSI-2.03";
     src = fetchurl {
@@ -3892,6 +3915,15 @@ rec {
       sha256 = "0xb5zj67y2sjid9bs3yfm81rgi91fmn38wy1ryngssw6vd92ijh2";
     };
     propagatedBuildInputs = [HTMLParser];
+  };
+
+  HTMLTableExtract = buildPerlPackage {
+    name = "HTML-TableExtract-2.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MS/MSISK/HTML-TableExtract-2.11.tar.gz;
+      sha256 = "1861d55a2aa1728ef56ea2d08d630b9a008456f1106994e4e49e76f56e4955ee";
+    };
+    propagatedBuildInputs = [ HTMLElementExtended HTMLParser ];
   };
 
   HTMLTagset = buildPerlPackage rec {
