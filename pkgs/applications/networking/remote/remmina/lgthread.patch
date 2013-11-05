@@ -1,0 +1,16 @@
+Fix [undefined reference to `g_thread_init'] as suggested by
+http://ragnermagalhaes.blogspot.ru/2007/09/undefined-reference-to-gthreadinit.html
+
+diff -ru FreeRDP-Remmina-356c033.orig/remmina/CMakeLists.txt FreeRDP-Remmina-356c033/remmina/CMakeLists.txt
+--- FreeRDP-Remmina-356c033.orig/remmina/CMakeLists.txt	2013-11-05 12:43:27.660276912 +0400
++++ FreeRDP-Remmina-356c033/remmina/CMakeLists.txt	2013-11-05 12:53:39.607018349 +0400
+@@ -132,6 +132,8 @@
+ 	endif()
+ endif()
+ 
++set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lgthread-2.0" )
++
+ add_subdirectory(po)
+ add_subdirectory(icons)
+ add_subdirectory(desktop)
+
