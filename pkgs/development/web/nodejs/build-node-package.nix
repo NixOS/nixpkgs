@@ -11,6 +11,11 @@ let
     tar xf ${nodejs.src}
     mv *node* $out
   '';
+
+  peerDeps = listToAttrs (concatMap (dep: map (name: {
+    inherit name;
+    value = dep;
+  }) (filter (nm: !(elem nm (args.passthru.names or []))) dep.names)) (peerDependencies));
 in
 stdenv.mkDerivation ({
   unpackPhase = "true";
@@ -21,9 +26,9 @@ stdenv.mkDerivation ({
     ${concatStrings (concatMap (dep: map (name: ''
       ln -sv ${dep}/lib/node_modules/${name} node_modules/
     '') dep.names) deps)}
-    ${concatStrings (concatMap (dep: map (name: ''
+    ${concatStrings (mapAttrsToList (name: dep: ''
       ln -sv ${dep}/lib/node_modules/${name} node_modules/
-    '') dep.names) peerDependencies)}
+    '') peerDeps)}
     export HOME=$(pwd)
     runHook postConfigure
   '';
@@ -51,9 +56,9 @@ stdenv.mkDerivation ({
         done
       fi
     '') args.passthru.names)}
-    ${concatStrings (concatMap (dep: map (name: ''
+    ${concatStrings (mapAttrsToList (name: dep: ''
       mv node_modules/${name} $out/lib/node_modules
-    '') dep.names) peerDependencies)}
+    '') peerDeps)}
     mv node_modules/.bin $out/lib/node_modules 2>/dev/null || true
     mv node_modules $out/.dependent-node-modules
     if [ -d "$out/lib/node_modules/.bin" ]; then
