@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     parted gtk glib intltool gettext libuuid pkgconfig gtkmm libxml2
   ];
 
+  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
+
   meta = {
     description = "Graphical disk partitioning tool";
     homepage = http://gparted.sourceforge.net;
