@@ -1,8 +1,21 @@
 { stdenv, fetchurl, cmake, pkgconfig, makeWrapper
 , glib, gtk, gettext, libxkbfile, libgnome_keyring, libX11
-, freerdp, libssh, libgcrypt, gnutls }:
+, freerdp, libssh, libgcrypt, gnutls, makeDesktopItem }:
 
-let version = "1.0.0"; in
+let
+  version = "1.0.0";
+  
+  desktopItem = makeDesktopItem {
+    name = "remmina";
+    desktopName = "Remmina";
+    genericName = "Remmina Remote Desktop Client";
+    exec = "remmina";
+    icon = "remmina";
+    comment = "Connect to remote desktops";
+    categories = "GTK;GNOME;X-GNOME-NetworkSettings;Network;";
+  };
+
+in
 
 stdenv.mkDerivation {
   name = "remmina-${version}";
@@ -21,6 +34,10 @@ stdenv.mkDerivation {
   patches = [ ./lgthread.patch ];
 
   postInstall = ''
+    mkdir -pv $out/share/applications
+    mkdir -pv $out/share/icons
+    cp ${desktopItem}/share/applications/* $out/share/applications
+    cp -r $out/share/remmina/icons/* $out/share/icons
     wrapProgram $out/bin/remmina --prefix LD_LIBRARY_PATH : "${libX11}/lib"
   '';
 
