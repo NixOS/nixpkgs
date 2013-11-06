@@ -2908,6 +2908,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+
+  ipaddr = buildPythonPackage {
+    name = "ipaddr-2.1.7";
+    src = fetchurl {
+      url = "http://ipaddr-py.googlecode.com/files/ipaddr-2.1.7.tar.gz";
+      md5 = "71a2be9f1d528d9a945ef555de312685";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      description = "Google's IP address manipulation library";
+      homepage = http://code.google.com/p/ipaddr-py/;
+      license = pkgs.lib.licenses.asl20;
+    };
+  };
+
   ipdb = buildPythonPackage {
     name = "ipdb-0.7";
     src = fetchurl {
