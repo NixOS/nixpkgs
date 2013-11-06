@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     homepage = "http://launchpad.net/intltool/";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     inherit (s) version;
   };
 }
