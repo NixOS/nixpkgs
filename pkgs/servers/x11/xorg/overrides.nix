@@ -188,7 +188,6 @@ in
     patches =
       [ ./xorgserver-dri-path.patch
         ./xorgserver-xkbcomp-path.patch
-        ./xorgserver-cve-2013-4396.patch
       ];
     buildInputs = attrs.buildInputs ++ [ xtrans ];
     propagatedBuildInputs =
