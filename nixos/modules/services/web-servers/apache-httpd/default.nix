@@ -582,6 +582,12 @@ in
   ###### implementation
 
   config = mkIf config.services.httpd.enable {
+  
+    assertions = [ { assertion = mainCfg.enableSSL == true
+                               -> mainCfg.sslServerCert != null && mainCfg.sslServerCert != ""
+                                    && mainCfg.sslServerKey != null && mainCfg.sslServerKey != "";
+                     message = "SSL is enabled for HTTPD, but sslServerCert and/or sslServerKey haven't been specified."; }
+                 ];
 
     users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") singleton
       { name = "wwwrun";
