@@ -4,7 +4,7 @@ with pkgs.lib;
 
 let
   cfg = config.services.nginx;
-  nginx = pkgs.nginx.override { fullWebDAV = cfg.fullWebDAV; };
+  nginx = cfg.package;
   configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     daemon off;
@@ -19,6 +19,13 @@ in
         default = false;
         description = "
           Enable the nginx Web Server.
+        ";
+      };
+
+      package = mkOption {
+        default = pkgs.nginx;
+        description = "
+          Nginx package to use.
         ";
       };
 
@@ -46,10 +53,6 @@ in
         description = "Group account under which nginx runs.";
       };
 
-      fullWebDAV = mkOption {
-        default = false;
-        description = "Compile in a third party module providing full WebDAV support";
-      };
     };
 
   };
