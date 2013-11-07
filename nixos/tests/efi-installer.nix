@@ -38,7 +38,6 @@ let
   config = builtins.toFile "configuration.nix" ''
     { pkgs, ... }: {
       imports = [ ./hardware-configuration.nix <nixos/modules/testing/test-instrumentation.nix> ];
-      boot.kernelPackages = pkgs.linuxPackages_3_10;
       boot.loader.grub.enable = false;
       boot.loader.efi.canTouchEfiVariables = true;
       boot.loader.gummiboot.enable = true;
