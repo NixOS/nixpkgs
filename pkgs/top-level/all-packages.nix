@@ -3236,12 +3236,14 @@ let
 
   pythonFull = python27Full;
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
-    extraLibs = lib.attrValues python26.modules;
+    extraLibs = [];
+    postBuild = "";
     python = python26;
     inherit (python26Packages) recursivePthLoader;
   };
   python27Full = callPackage ../development/interpreters/python/wrapper.nix {
-    extraLibs = lib.attrValues python27.modules;
+    extraLibs = [];
+    postBuild = "";
     python = python27;
     inherit (python27Packages) recursivePthLoader;
   };
