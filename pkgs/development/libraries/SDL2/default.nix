@@ -15,10 +15,8 @@ assert alsaSupport -> alsaLib != null;
 assert pulseaudioSupport -> pulseaudio != null;
 
 let
-  # force enable-static, to workaround this bug:
-  # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
   configureFlagsFun = attrs: ''
-        --enable-static --disable-oss --disable-x11-shared
+        --disable-oss --disable-x11-shared
         --disable-pulseaudio-shared --disable-alsa-shared
         ${if alsaSupport then "--with-alsa-prefix=${attrs.alsaLib}/lib" else ""}
       '';
@@ -39,6 +37,9 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional openglSupport [ mesa ] ++
     stdenv.lib.optional alsaSupport alsaLib;
 
+  # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
+  dontDisableStatic = true;
+
   # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
   # we must arrange to add it to its RPATH; however, `patchelf' seems
   # to fail at doing this, hence `--disable-pulseaudio-shared'.
@@ -48,10 +49,17 @@ stdenv.mkDerivation rec {
       configureFlags = configureFlagsFun { alsaLib = alsaLib.crossDrv; };
   };
 
+  postInstall = ''
+    rm $out/lib/*.a
+  '';
+
   passthru = {inherit openglSupport;};
 
   meta = {
     description = "A cross-platform multimedia library";
     homepage = http://www.libsdl.org/;
+    license = stdenv.lib.licenses.zlib;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.page ];
   };
 }
