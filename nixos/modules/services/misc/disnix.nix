@@ -15,6 +15,7 @@ let
     enablePostgreSQLDatabase = config.services.postgresql.enable;
     enableSubversionRepository = config.services.svnserve.enable;
     enableTomcatWebApplication = config.services.tomcat.enable;
+    enableMongoDatabase = config.services.mongodb.enable;
   });
 in
 
@@ -125,17 +126,18 @@ in
             ++ optional config.services.httpd.enable "httpd.service"
             ++ optional config.services.mysql.enable "mysql.service"
             ++ optional config.services.tomcat.enable "tomcat.service"
-            ++ optional config.services.svnserve.enable "svnserve.service";
+            ++ optional config.services.svnserve.enable "svnserve.service"
+            ++ optional config.services.mongodb.enable "mongodb.service";
 
           restartIfChanged = false;
           
-          path = [ pkgs.nix pkgs.disnix ];
-        
-          script =
-          ''
-            export HOME=/root
-            disnix-service --dysnomia-modules-dir=${dysnomia}/libexec/dysnomia
-          '';
+          path = [ pkgs.nix pkgs.disnix pkgs.dysnomia ];
+          
+          environment = {
+            HOME = "/root";
+          };
+
+          exec = "disnix-service";
         };
     } // optionalAttrs cfg.publishAvahi {
       disnixAvahi =
