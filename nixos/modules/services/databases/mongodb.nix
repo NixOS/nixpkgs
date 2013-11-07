@@ -90,8 +90,9 @@ in
 
   config = mkIf config.services.mongodb.enable {
 
-    users.extraUsers = singleton
-      { name = cfg.user;
+    users.extraUsers.mongodb = mkIf (cfg.user == "mongodb")
+      { name = "mongodb";
+        uid = config.ids.uids.mongodb;
         description = "MongoDB server user";
       };
 
