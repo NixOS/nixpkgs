@@ -88,6 +88,9 @@ let
       nopriv_user=vsftpd
       secure_chroot_dir=/var/empty
       syslog_enable=YES
+      ${optionalString (pkgs.stdenv.system == "x86_64-linux") ''
+        seccomp_sandbox=NO
+      ''}
     '';
 
 in
