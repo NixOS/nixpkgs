@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = http://milkytracker.org;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = [ maintainers.zoomulator ];
+    maintainers = [ stdenv.lib.maintainers.zoomulator ];
   };
 }
