@@ -15,6 +15,7 @@ let
     PYTHONPATH = "${pkgs.python27Packages.carbon}/lib/python2.7/site-packages";
     GRAPHITE_ROOT = dataDir;
     GRAPHITE_CONF_DIR = "/etc/graphite/";
+    GRAPHITE_STORAGE_DIR = dataDir;
   };
 
 in {
