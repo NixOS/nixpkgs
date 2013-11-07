@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, alsaLib, SDL, automake, autoconf, perl}:
+{ stdenv, fetchurl, SDL, alsaLib, autoconf, automake, jackaudio, perl
+, zlib, zziplib
+}:
 
 stdenv.mkDerivation rec {
   version = "0.90.85";
@@ -20,30 +22,21 @@ stdenv.mkDerivation rec {
     sha256 = "0gwd4zslbd8kih80k4v7n2c65kvm2cq3kl6d7y33z1l007vzyvf6";
   };
 
-  preConfigure = ''
-   patch ./src/tracker/sdl/SDL_Main.cpp < ${fix_64bit_patch}
-   patch < ${no_zzip_patch}
+  patchPhase = ''
+    patch ./src/tracker/sdl/SDL_Main.cpp < ${fix_64bit_patch}
+    patch < ${no_zzip_patch}
+    patch ./src/compression/DecompressorGZIP.cpp < ${./decompressor_gzip.patch}
   '';
 
-  # There's a zlib version included with milkytracker,
-  # but there's no makefiles for it. I've only included
-  # the header here, but it fails at link-time with
-  # several 'undefined reference' errors, which simply
-  # means it can't find the definitions, e.g. compiled
-  # zlib.
-  # There's bug reports on other package systems although
-  # unfortunately still unresolved.
-  # https://bugs.archlinux.org/task/31324
-  # http://lists.freebsd.org/pipermail/freebsd-ports/2013-March/082180.html
   preBuild=''
-    export CPATH="`pwd`/src/compression/zlib/generic"
+    export CPATH=${zlib}/lib
   '';
 
-  buildInputs = [ alsaLib SDL automake autoconf perl];
+  buildInputs = [ SDL alsaLib autoconf automake jackaudio perl zlib zziplib ];
 
   meta = {
     description = "Music tracker application, similar to Fasttracker II.";
     homepage = http://milkytracker.org;
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 }
