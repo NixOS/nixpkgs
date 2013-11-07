@@ -107,10 +107,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     ignoreCollisions = false;
   };
 
-  ghcWithPackagesOld = pkgs : callPackage ../development/compilers/ghc/with-packages-old.nix {
-    ghc = ghc; # refers to ghcPlain
-    packages = pkgs self;
-  };
+  ghcWithPackagesOld = pkgs : (self.ghcWithPackages pkgs).override { ignoreCollisions = true; };
 
   # This is the Cabal builder, the function we use to build most Haskell
   # packages. It isn't the Cabal library, which is spelled "Cabal".
