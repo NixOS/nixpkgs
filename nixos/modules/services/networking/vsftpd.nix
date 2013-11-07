@@ -83,10 +83,11 @@ let
       ${optionalString (cfg.userlistFile != null) ''
         userlist_file=${cfg.userlistFile}
       ''}
-      background=NO
+      background=YES
       listen=YES
       nopriv_user=vsftpd
       secure_chroot_dir=/var/empty
+      syslog_enable=YES
     '';
 
 in
@@ -185,6 +186,7 @@ in
 
         serviceConfig.ExecStart = "@${vsftpd}/sbin/vsftpd vsftpd ${configFile}";
         serviceConfig.Restart = "always";
+        serviceConfig.Type = "forking";
       };
 
   };
