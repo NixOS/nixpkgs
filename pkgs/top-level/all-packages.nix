@@ -8859,6 +8859,17 @@ let
 
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
 
+  qvim = lowPrio (callPackage ../applications/editors/vim/qvim.nix {
+    inherit (pkgs) fetchgit stdenv ncurses pkgconfig gettext
+      composableDerivation lib config python perl tcl ruby qt4;
+    inherit (pkgs.xlibs) libX11 libXext libSM libXpm libXt libXaw libXau libXmu
+      libICE;
+
+    features = "huge"; # one of  tiny, small, normal, big or huge
+    lua = pkgs.lua5;
+    flags = [ "python" "X11" ]; # only flag "X11" by now
+  });
+
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
   virtmanager = callPackage ../applications/virtualization/virt-manager {
     inherit (gnome) gnome_python;
