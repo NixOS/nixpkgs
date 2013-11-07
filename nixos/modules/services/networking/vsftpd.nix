@@ -24,6 +24,7 @@ let
     cfgText = "${vsftpdName}=${if getAttr nixosName cfg then "YES" else "NO"}";
 
     nixosOption = {
+      type = types.bool;
       name = nixosName;
       value = mkOption {
         inherit description default;
@@ -33,27 +34,26 @@ let
   };
 
   optionDescription = [
-
     (yesNoOption "anonymousUser" "anonymous_enable" false ''
-     Whether to enable the anonymous FTP user.
+      Whether to enable the anonymous FTP user.
     '')
     (yesNoOption "localUsers" "local_enable" false ''
-     Whether to enable FTP for local users.
+      Whether to enable FTP for local users.
     '')
     (yesNoOption "writeEnable" "write_enable" false ''
-    Whether any write activity is permitted to users.
+      Whether any write activity is permitted to users.
     '')
     (yesNoOption "anonymousUploadEnable" "anon_upload_enable" false ''
-    Whether any uploads are permitted to anonymous users.
+      Whether any uploads are permitted to anonymous users.
     '')
     (yesNoOption "anonymousMkdirEnable" "anon_mkdir_write_enable" false ''
-    Whether any uploads are permitted to anonymous users.
+      Whether any uploads are permitted to anonymous users.
     '')
     (yesNoOption "chrootlocalUser" "chroot_local_user" false ''
-    Whether local users are confined to their home directory.
+      Whether local users are confined to their home directory.
     '')
     (yesNoOption "userlistEnable" "userlist_enable" false ''
-    Whether users are included.
+      Whether users are included.
     '')
     (yesNoOption "userlistDeny" "userlist_deny" false ''
       Specifies whether <option>userlistFile</option> is a list of user
@@ -61,35 +61,33 @@ let
       The default <literal>false</literal> means whitelist/allow.
     '')
     (yesNoOption "forceLocalLoginsSSL" "force_local_logins_ssl" false ''
-    Only applies if <option>sslEnable</option> is true. Non anonymous (local) users
-    must use a secure SSL connection to send a password.
+      Only applies if <option>sslEnable</option> is true. Non anonymous (local) users
+      must use a secure SSL connection to send a password.
     '')
     (yesNoOption "forceLocalDataSSL" "force_local_data_ssl" false ''
-    Only applies if <option>sslEnable</option> is true. Non anonymous (local) users
-    must use a secure SSL connection for sending/receiving data on data connection.
+      Only applies if <option>sslEnable</option> is true. Non anonymous (local) users
+      must use a secure SSL connection for sending/receiving data on data connection.
     '')
     (yesNoOption "ssl_tlsv1" "ssl_tlsv1" true  '' '')
     (yesNoOption "ssl_sslv2" "ssl_sslv2" false '' '')
     (yesNoOption "ssl_sslv3" "ssl_sslv3" false '' '')
+  ];
 
-    {
-      cfgText = if cfg.rsaCertFile == null then ""
-        else ''
+  configFile = pkgs.writeText "vsftpd.conf"
+    ''
+      ${concatMapStrings (x: "${x.cfgText}\n") optionDescription}
+      ${optionalString (cfg.rsaCertFile != null) ''
         ssl_enable=YES
         rsa_cert_file=${cfg.rsaCertFile}
-      '';
-
-      nixosOption = {
-        name = "rsaCertFile";
-        value = mkOption {
-          default = null;
-          description = ''
-            rsa certificate file.
-          '';
-        };
-      };
-    }
-    ];
+      ''}
+      ${optionalString (cfg.userlistFile != null) ''
+        userlist_file=${cfg.userlistFile}
+      ''}
+      background=NO
+      listen=YES
+      nopriv_user=vsftpd
+      secure_chroot_dir=/var/empty
+    '';
 
 in
 
@@ -108,10 +106,7 @@ in
 
       userlist = mkOption {
         default = [];
-
-        description = ''
-          See <option>userlistFile</option>.
-        '';
+        description = "See <option>userlistFile</option>.";
       };
 
       userlistFile = mkOption {
@@ -127,13 +122,20 @@ in
       };
 
       anonymousUserHome = mkOption {
+        type = types.path;
         default = "/home/ftp/";
-	description = ''
-	  Directory to consider the HOME of the anonymous user.
-	'';
+        description = ''
+          Directory to consider the HOME of the anonymous user.
+        '';
       };
 
-    } // (listToAttrs (catAttrs "nixosOption" optionDescription)) ;
+      rsaCertFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = "RSA certificate file.";
+      };
+
+    } // (listToAttrs (catAttrs "nixosOption" optionDescription));
 
   };
 
@@ -142,14 +144,12 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [
-      {
-        assertion =
+    assertions = singleton
+      { assertion =
               (cfg.forceLocalLoginsSSL -> cfg.rsaCertFile != null)
           &&  (cfg.forceLocalDataSSL -> cfg.rsaCertFile != null);
         message = "vsftpd: If forceLocalLoginsSSL or forceLocalDataSSL is true then a rsaCertFile must be provided!";
-      }
-    ];
+      };
 
     users.extraUsers =
       [ { name = "vsftpd";
@@ -157,7 +157,7 @@ in
           description = "VSFTPD user";
           home = "/homeless-shelter";
         }
-      ] ++ pkgs.lib.optional cfg.anonymousUser
+      ] ++ optional cfg.anonymousUser
         { name = "ftp";
           uid = config.ids.uids.ftp;
           group = "ftp";
@@ -165,41 +165,26 @@ in
           home = cfg.anonymousUserHome;
         };
 
-    users.extraGroups = singleton
-      { name = "ftp";
-        gid = config.ids.gids.ftp;
-      };
+    users.extraGroups.ftp.gid = config.ids.gids.ftp;
 
     # If you really have to access root via FTP use mkOverride or userlistDeny
     # = false and whitelist root
     services.vsftpd.userlist = if cfg.userlistDeny then ["root"] else [];
 
-    environment.etc."vsftpd.conf".text =
-      concatMapStrings (x: "${x.cfgText}\n") optionDescription
-      + ''
-      ${if cfg.userlistFile == null then ""
-        else "userlist_file=${cfg.userlistFile}"}
-      background=NO
-      listen=YES
-      nopriv_user=vsftpd
-      secure_chroot_dir=/var/empty
-    '';
+    systemd.services.vsftpd =
+      { description = "Vsftpd Server";
 
-    jobs.vsftpd =
-      { description = "vsftpd server";
-
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+        wantedBy = [ "multi-user.target" ];
 
         preStart =
-          ''
-            ${if cfg.anonymousUser then ''
+          optionalString cfg.anonymousUser
+            ''
               mkdir -p -m 555 ${cfg.anonymousUserHome}
               chown -R ftp:ftp ${cfg.anonymousUserHome}
-            '' else ""}
-          '';
+            '';
 
-        exec = "${vsftpd}/sbin/vsftpd /etc/vsftpd.conf";
+        serviceConfig.ExecStart = "@${vsftpd}/sbin/vsftpd vsftpd ${configFile}";
+        serviceConfig.Restart = "always";
       };
 
   };
