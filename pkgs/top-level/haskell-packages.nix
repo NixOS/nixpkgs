@@ -664,7 +664,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal_1_18_1_2 = callPackage ../development/libraries/haskell/Cabal/1.18.1.2.nix {
     cabal = self.cabal.override { Cabal = null; };
-    deepseq = self.deepseq_1_3_0_1;
+    deepseq = self.deepseq_1_3_0_2;
   };
   Cabal = null; # core package in GHC
 
@@ -858,7 +858,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   deepseq_1_1_0_0 = callPackage ../development/libraries/haskell/deepseq/1.1.0.0.nix {};
   deepseq_1_1_0_2 = callPackage ../development/libraries/haskell/deepseq/1.1.0.2.nix {};
   deepseq_1_2_0_1 = callPackage ../development/libraries/haskell/deepseq/1.2.0.1.nix {};
-  deepseq_1_3_0_1 = callPackage ../development/libraries/haskell/deepseq/1.3.0.1.nix {};
+  deepseq_1_3_0_2 = callPackage ../development/libraries/haskell/deepseq/1.3.0.2.nix {};
   deepseq = null; # a core package in recent GHCs
 
   deepseqTh = callPackage ../development/libraries/haskell/deepseq-th {};
