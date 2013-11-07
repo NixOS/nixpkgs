@@ -300,6 +300,8 @@ rec {
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
 
+  mkStrict = builtins.trace "`mkStrict' is obsolete; use `mkOverride 10' instead." (mkOverride 10);
+
   mkFixStrictness = id; # obsolete, no-op
 
   # FIXME: Add mkOrder back in. It's not currently used anywhere in
