@@ -158,7 +158,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     network      = self.network_2_4_2_0;
     OpenGL       = self.OpenGL_2_9_1_0;
     OpenGLRaw    = self.OpenGLRaw_1_4_0_0;
-    parallel     = self.parallel_3_2_0_3;
+    parallel     = self.parallel_3_2_0_4;
     parsec       = self.parsec_3_1_3;
     QuickCheck   = self.QuickCheck_2_6;
     random       = self.random_1_0_1_1;
@@ -1639,7 +1639,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   parallel_3_1_0_1 = callPackage ../development/libraries/haskell/parallel/3.1.0.1.nix {};
   parallel_3_2_0_2 = callPackage ../development/libraries/haskell/parallel/3.2.0.2.nix {};
   parallel_3_2_0_3 = callPackage ../development/libraries/haskell/parallel/3.2.0.3.nix {};
-  parallel = self.parallel_3_2_0_3;
+  parallel_3_2_0_4 = callPackage ../development/libraries/haskell/parallel/3.2.0.4.nix {};
+  parallel = self.parallel_3_2_0_4;
 
   parallelIo = callPackage ../development/libraries/haskell/parallel-io {};
 
