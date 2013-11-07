@@ -1914,7 +1914,7 @@ let
   unoconv = callPackage ../tools/text/unoconv { };
 
   upx = callPackage ../tools/compression/upx { };
- 
+
   urlview = callPackage ../applications/misc/urlview {};
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
@@ -9280,8 +9280,8 @@ let
 
   racer = callPackage ../games/racer { };
 
-  residualvm = callPackage ../games/residualvm { 
-    openglSupport = mesaSupported; 
+  residualvm = callPackage ../games/residualvm {
+    openglSupport = mesaSupported;
   };
 
   rigsofrods = callPackage ../games/rigsofrods {
