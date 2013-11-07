@@ -185,7 +185,7 @@ f.write(
     '''.format(args.region, ami_id, instance_type))
 f.close()
 
-test_depl = deployment.create_deployment(db)
+test_depl = db.create_deployment()
 test_depl.auto_response = "y"
 test_depl.name = "ebs-creator-test"
 test_depl.nix_exprs = [os.path.abspath("./ebs-test.nix")]
