@@ -1,4 +1,4 @@
-{ stdenv, ghc, packages, buildEnv, makeWrapper }:
+{ stdenv, ghc, packages, buildEnv, makeWrapper, ignoreCollisions ? false }:
 
 assert packages != [];
 
@@ -12,6 +12,7 @@ in
 buildEnv {
   name = "haskell-env-${ghc.name}";
   paths = stdenv.lib.filter isHaskellPkg (stdenv.lib.closePropagation packages) ++ [ghc];
+  inherit ignoreCollisions;
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 

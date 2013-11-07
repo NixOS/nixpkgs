@@ -102,8 +102,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   # argument to this function.
 
   ghcWithPackages = pkgs : callPackage ../development/compilers/ghc/with-packages.nix {
-    ghc = ghc; # refers to ghcPlain
+    ghc = ghc;                  # refers to ghcPlain
     packages = pkgs self;
+    ignoreCollisions = false;
   };
 
   ghcWithPackagesOld = pkgs : callPackage ../development/compilers/ghc/with-packages-old.nix {
