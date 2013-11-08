@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
 
-  patches = [ ./locale_archive.patch ];
+  patches = [ ./locale_archive.patch ./gcmrekey.patch ];
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ] ++
     (if withKerberos then [ kerberos ] else [])
