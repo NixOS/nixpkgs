@@ -91,6 +91,7 @@
   ./services/databases/virtuoso.nix
   ./services/games/ghost-one.nix
   ./services/hardware/acpid.nix
+  ./services/hardware/amd-hybrid-graphics.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
