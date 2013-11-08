@@ -17,27 +17,17 @@ let
       #! ${pkgs.stdenv.shell}
       export XKB_BINDIR=${pkgs.xorg.xkbcomp}/bin
       export XORG_DRI_DRIVER_PATH=${pkgs.mesa}/lib/dri
-      exec ${pkgs.xorg.xorgserver}/bin/Xvfb "$@" -xkbdir "${pkgs.xkeyboard_config}/etc/X11/xkb"
+      exec ${pkgs.xorg.xorgserver}/bin/Xvfb "$@" -xkbdir ${pkgs.xkeyboard_config}/etc/X11/xkb
     '';
 
-  # ‘xinetd’ is insanely braindamaged in that it sends stderr to
-  # stdout.  Thus requires just about any xinetd program to be
-  # wrapped to redirect its stderr.  Sigh.
-  x11vncWrapper = pkgs.writeScriptBin "x11vnc-wrapper"
-    ''
-      #! ${pkgs.stdenv.shell}
-      export PATH=${makeSearchPath "bin" [ xvfbWrapper pkgs.gawk pkgs.which pkgs.openssl pkgs.xorg.xauth pkgs.nettools pkgs.shadow pkgs.procps pkgs.utillinux pkgs.bash ]}:$PATH
-      export FD_GEOM=1024x786x24
-      exec ${pkgs.x11vnc}/bin/x11vnc -inetd -display WAIT:1024x786:cmd=FINDCREATEDISPLAY-Xvfb.xdmcp -unixpw -ssl SAVE 2> /var/log/x11vnc.log
-    '';
-
-in 
+in
 
 {
 
   config = {
-  
+
     services.xserver.enable = true;
+    services.xserver.videoDrivers = [];
 
     # Enable KDM.  Any display manager will do as long as it supports XDMCP.
     services.xserver.displayManager.kdm.enable = true;
@@ -52,13 +42,38 @@ in
         Xaccess=${pkgs.writeText "Xaccess" "localhost"}
       '';
 
-    services.xinetd.enable = true;
-    services.xinetd.services = singleton
-      { name = "x11vnc";
-        port = 5900;
-        unlisted = true;
-        user = "root";
-        server = "${x11vncWrapper}/bin/x11vnc-wrapper";
+    networking.firewall.allowedTCPPorts = [ 5900 ];
+
+    systemd.sockets.terminal-server =
+      { description = "Terminal Server Socket";
+        wantedBy = [ "sockets.target" ];
+        before = [ "multi-user.target" ];
+        socketConfig.Accept = true;
+        socketConfig.ListenStream = 5900;
+      };
+
+    systemd.services."terminal-server@" =
+      { description = "Terminal Server";
+
+        path =
+          [ xvfbWrapper pkgs.gawk pkgs.which pkgs.openssl pkgs.xorg.xauth
+            pkgs.nettools pkgs.shadow pkgs.procps pkgs.utillinux pkgs.bash
+          ];
+
+        environment.FD_GEOM = "1024x786x24";
+        environment.FD_XDMCP_IF = "127.0.0.1";
+        #environment.FIND_DISPLAY_OUTPUT = "/tmp/foo"; # to debug the "find display" script
+
+        serviceConfig =
+          { StandardInput = "socket";
+            StandardOutput = "socket";
+            StandardError = "journal";
+            ExecStart = "@${pkgs.x11vnc}/bin/x11vnc x11vnc -inetd -display WAIT:1024x786:cmd=FINDCREATEDISPLAY-Xvfb.xdmcp -unixpw -ssl SAVE";
+            # Don't kill the X server when the user quits the VNC
+            # connection.  FIXME: the X server should run in a
+            # separate systemd session.
+            KillMode = "process";
+          };
       };
 
   };
