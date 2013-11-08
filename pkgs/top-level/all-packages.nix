@@ -8876,8 +8876,6 @@ let
     features = "huge"; # one of  tiny, small, normal, big or huge
     lua = pkgs.lua5;
     flags = [ "python" "X11" ]; # only flag "X11" by now
-
-    inherit stdenvAdapters gccApple;
   });
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
