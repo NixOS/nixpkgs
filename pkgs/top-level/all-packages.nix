@@ -8869,6 +8869,8 @@ let
     inherit (pkgs.xlibs) libX11 libXext libSM libXpm libXt libXaw libXau libXmu
       libICE;
 
+    inherit (pkgs) stdenvAdapters gccApple;
+
     features = "huge"; # one of  tiny, small, normal, big or huge
     lua = pkgs.lua5;
     flags = [ "python" "X11" ]; # only flag "X11" by now
