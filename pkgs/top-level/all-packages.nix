@@ -8515,6 +8515,8 @@ let
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
+  qbittorrent = callPackage ../applications/networking/p2p/qbittorrent { };
+
   qemu = callPackage ../applications/virtualization/qemu { };
 
   qemuImage = callPackage ../applications/virtualization/qemu/linux-img { };
