@@ -19,7 +19,8 @@ composableDerivation {
       sha256 = "1qa3xl1b9gqw66p71h53l7ibs4y3zfyj553jss70ybxaxchbhi5b";
     };
 
-    # FIXME: adopt Darwin fixes from vim/default.nix
+    # FIXME: adopt Darwin fixes from vim/default.nix, then chage meta.platforms.linux
+    # to meta.platforms.unix
     preConfigure = assert (! stdenv.isDarwin); "";
 
     configureFlags = [ "--with-vim-name=qvim" "--enable-gui=qt" "--with-features=${args.features}" ];
@@ -108,7 +109,7 @@ composableDerivation {
     description = "The most popular clone of the VI editor (Qt GUI fork)";
     homepage    = https://bitbucket.org/equalsraf/vim-qt/wiki/Home;
     maintainers = with maintainers; [ smironov ];
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 })
 
