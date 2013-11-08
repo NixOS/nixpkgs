@@ -6429,6 +6429,8 @@ let
 
   restund = callPackage ../servers/restund {};
 
+  rethinkdb = callPackage ../servers/nosql/rethinkdb { };
+
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
       HTTPDate MailDKIM LWP IOSocketSSL;
