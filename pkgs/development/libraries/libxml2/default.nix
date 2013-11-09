@@ -3,14 +3,12 @@
 assert pythonSupport -> python != null;
 
 stdenv.mkDerivation rec {
-  name = "libxml2-2.9.0";
+  name = "libxml2-2.9.1";
 
   src = fetchurl {
     url = "ftp://xmlsoft.org/libxml2/${name}.tar.gz";
-    sha256 = "10ib8bpar2pl68aqksfinvfmqknwnk7i35ibq6yjl8dpb0cxj9dd";
+    sha256 = "1nqgd1qqmg0cg09mch78m2ac9klj9n87blilx4kymi7jcv5n8g7x";
   };
-
-  patches = [ ./pthread-once-init.patch ];
 
   configureFlags = stdenv.lib.optionalString pythonSupport "--with-python=${python}";
 
