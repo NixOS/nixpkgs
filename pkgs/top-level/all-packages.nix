@@ -3007,7 +3007,9 @@ let
     inherit makeWrapper clisp;
   };
 
-  scala = callPackage ../development/compilers/scala { };
+  scala_2_9 = callPackage ../development/compilers/scala/2.9.nix { };
+  scala_2_10 = callPackage ../development/compilers/scala { };
+  scala = scala_2_10;
 
   sdcc = callPackage ../development/compilers/sdcc {
     boost = boost149; # sdcc 3.2.0 fails to build with boost 1.53
