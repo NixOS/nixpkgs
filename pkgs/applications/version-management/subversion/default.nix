@@ -67,6 +67,9 @@ stdenv.mkDerivation rec {
         make install
         cd -
     fi
+
+    mkdir -p $out/share/bash-completion/completions
+    cp tools/client-side/bash_completion $out/share/bash-completion/completions/subversion
   '';
 
   inherit perlBindings pythonBindings;
