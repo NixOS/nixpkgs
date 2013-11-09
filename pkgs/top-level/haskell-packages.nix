@@ -1929,6 +1929,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
 
+  rethinkdb = callPackage ../development/libraries/haskell/rethinkdb {};
+
   rfc5051 = callPackage ../development/libraries/haskell/rfc5051 {};
 
   rosezipper = callPackage ../development/libraries/haskell/rosezipper {};
