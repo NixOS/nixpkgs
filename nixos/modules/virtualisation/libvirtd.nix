@@ -82,8 +82,11 @@ in
             mkdir -p /var/log/libvirt/qemu -m 755
             rm -f /var/run/libvirtd.pid
 
-            mkdir -p /var/lib/libvirt -m 700
-            mkdir -p /var/lib/libvirt/dnsmasq -m 700
+            mkdir -p /var/lib/libvirt
+            mkdir -p /var/lib/libvirt/dnsmasq
+
+            chmod 755 /var/lib/libvirt
+            chmod 755 /var/lib/libvirt/dnsmasq
 
             # Libvirt unfortunately writes mutable state (such as
             # runtime changes to VM, network or filter configurations)
