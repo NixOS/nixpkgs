@@ -5478,6 +5478,35 @@ let
     docs = true;
     demos = true;
     examples = true;
+    developerBuild = true;
+  };
+
+  qt4SDK = qtcreator.override {
+    sdkBuild = true;
+    qtLib = qt48Full;
+  };
+
+  qt5 = callPackage ../development/libraries/qt-5 {
+    mesa = mesa_noglu;
+    cups = if stdenv.isLinux then cups else null;
+    # GNOME dependencies are not used unless gtkStyle == true
+    inherit (gnome) libgnomeui GConf gnome_vfs;
+  };
+
+  qt5Full = qt5.override {
+    buildDocs = true;
+    buildExamples = true;
+    buildTests = true;
+    developerBuild = true;
+  };
+
+  qt5SDK = qtcreator.override {
+    sdkBuild = true;
+    qtLib = qt5Full;
+  };
+
+  qtcreator = callPackage ../development/qtcreator {
+    qtLib = qt48.override { developerBuild = true; };
   };
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
@@ -5742,7 +5771,7 @@ let
 
   vtk = callPackage ../development/libraries/vtk { };
 
-  vtkWithQt4 = vtk.override { useQt4 = true; };
+  vtkWithQt4 = vtk.override { qtLib = qt4; };
 
   vxl = callPackage ../development/libraries/vxl {
     libpng = libpng12;
@@ -8570,8 +8599,6 @@ let
   qsampler = callPackage ../applications/audio/qsampler { };
 
   qsynth = callPackage ../applications/audio/qsynth { };
-
-  qtcreator = callPackage ../development/qtcreator { };
 
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
