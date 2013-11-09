@@ -1,13 +1,13 @@
-{ cabal, ansiTerminal, mtl, optparseApplicative, regexPosix, stm
-, tagged
+{ cabal, ansiTerminal, deepseq, mtl, optparseApplicative
+, regexPosix, stm, tagged
 }:
 
 cabal.mkDerivation (self: {
   pname = "tasty";
-  version = "0.4";
-  sha256 = "1gcaam49nm6fx0i2hlf1zih4rxzfgnsl4xiwnqifhz9m15n5laxq";
+  version = "0.4.0.1";
+  sha256 = "04nnjg04520lvjm8h2ma0ihm4bz6p0ppk445i8gmn82ixwan76h0";
   buildDepends = [
-    ansiTerminal mtl optparseApplicative regexPosix stm tagged
+    ansiTerminal deepseq mtl optparseApplicative regexPosix stm tagged
   ];
   meta = {
     description = "Modern and extensible testing framework";
