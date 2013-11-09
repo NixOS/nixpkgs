@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, ncurses, asciidoc, xmlto, docbook_xsl }:
+{ stdenv, fetchurl, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
-  name = "tig-1.1";
+  name = "tig-1.2.1";
   src = fetchurl {
     url = "http://jonas.nitro.dk/tig/releases/${name}.tar.gz";
-    md5 = "adeb797a8320962eeb345a615257cbac";
+    sha256 = "0i19lc6dd3vdpkdd8q07xii2c4mcpiwmg55av81jyhx0y82x425p";
   };
   buildInputs = [ncurses asciidoc xmlto docbook_xsl];
+  preConfigure = ''
+    export XML_CATALOG_FILES='${docbook_xsl}/xml/xsl/docbook/catalog.xml ${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml'
+  '';
   installPhase = ''
     make install
     make install-doc
