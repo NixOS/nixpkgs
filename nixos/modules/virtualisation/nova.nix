@@ -113,7 +113,7 @@ in
     jobs.nova_objectstore =
       { name = "nova-objectstore";
 
-        description = "Nova simple object store service";
+        description = "Nova Simple Object Store Service";
 
         startOn = "ip-up";
 
@@ -129,7 +129,7 @@ in
     jobs.nova_scheduler =
       { name = "nova-scheduler";
 
-        description = "Nova scheduler service";
+        description = "Nova Scheduler Service";
 
         startOn = "ip-up";
 
@@ -140,7 +140,7 @@ in
     jobs.nova_compute =
       { name = "nova-compute";
 
-        description = "Nova compute service";
+        description = "Nova Compute Service";
 
         startOn = "ip-up";
 
@@ -157,7 +157,7 @@ in
     jobs.nova_network =
       { name = "nova-network";
 
-        description = "Nova network service";
+        description = "Nova Network Service";
 
         startOn = "ip-up";
 

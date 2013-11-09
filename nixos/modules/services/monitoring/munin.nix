@@ -182,7 +182,7 @@ in
   }) (mkIf nodeCfg.enable {
 
     systemd.services.munin-node = {
-      description = "Munin node, the agent process";
+      description = "Munin Node";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.munin ];

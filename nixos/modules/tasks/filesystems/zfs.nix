@@ -76,7 +76,7 @@ in
     };
 
     systemd.services."zfs-mount" = {
-      description = "Mount zfs volumes";
+      description = "Mount ZFS Volumes";
       after = [ "zpool-import.service" ];
       wantedBy = [ "local-fs.target" ];
       serviceConfig = {

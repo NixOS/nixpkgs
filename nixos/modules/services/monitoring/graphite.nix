@@ -172,7 +172,7 @@ in {
     ];
 
     systemd.services.carbonCache = mkIf cfg.carbon.enableCache {
-      description = "Graphite data storage backend";
+      description = "Graphite Data Storage Backend";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
       environment = carbonEnv;
@@ -190,7 +190,7 @@ in {
     };
 
     systemd.services.carbonAggregator = mkIf cfg.carbon.enableAggregator {
-      description = "Carbon data aggregator";
+      description = "Carbon Data Aggregator";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
       environment = carbonEnv;
@@ -201,7 +201,7 @@ in {
     };
 
     systemd.services.carbonRelay = mkIf cfg.carbon.enableRelay {
-      description = "Carbon data relay";
+      description = "Carbon Data Relay";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
       environment = carbonEnv;
@@ -212,7 +212,7 @@ in {
     };
 
     systemd.services.graphiteWeb = mkIf cfg.web.enable {
-      description = "Graphite web interface";
+      description = "Graphite Web Interface";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
       environment = {
