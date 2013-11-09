@@ -1,6 +1,6 @@
 # this package was called gimp-print in the past
 { fetchurl, stdenv, pkgconfig, composableDerivation, cups
-, libtiff, libpng, openssl, gimp }:
+, libtiff, libpng, makeWrapper, openssl, gimp }:
 
 let
    version = "5.2.9";
@@ -16,7 +16,7 @@ composableDerivation.composableDerivation {} {
   };
 
   # gimp, gui is still not working (TODO)
-  buildInputs = [ openssl pkgconfig ];
+  buildInputs = [ makeWrapper openssl pkgconfig ];
 
   configureFlags = ["--enable-static-genppd"];
   NIX_CFLAGS_COMPILE="-include stdio.h";
@@ -37,6 +37,9 @@ composableDerivation.composableDerivation {} {
 
   installPhase = ''
     eval "make install $installArgs"
+    mkdir -p $out/lib/cups
+    ln -s $out/filter $out/lib/cups/
+    wrapProgram $out/filter/rastertogutenprint.5.2 --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
   meta = { 
