@@ -1815,6 +1815,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   protocolBuffers = callPackage ../development/libraries/haskell/protocol-buffers {};
 
+  protocolBuffersDescriptor = callPackage ../development/libraries/haskell/protocol-buffers-descriptor {};
+
   PSQueue = callPackage ../development/libraries/haskell/PSQueue {};
 
   publicsuffixlist = callPackage ../development/libraries/haskell/publicsuffixlist {};
