@@ -1813,6 +1813,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     fgl = self.fgl_5_4_2_4;
   };
 
+  protocolBuffers = callPackage ../development/libraries/haskell/protocol-buffers {};
+
   PSQueue = callPackage ../development/libraries/haskell/PSQueue {};
 
   publicsuffixlist = callPackage ../development/libraries/haskell/publicsuffixlist {};
