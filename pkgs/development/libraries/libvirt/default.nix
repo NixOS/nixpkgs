@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
+, dnsmasq
 }:
 
 let version = "1.1.4"; in
@@ -21,7 +22,7 @@ stdenv.mkDerivation {
 
   preConfigure =
     ''
-      PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${udev}/sbin:$PATH
+      PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${udev}/sbin:${dnsmasq}/bin:$PATH
       patchShebangs . # fixes /usr/bin/python references
     '';
 
