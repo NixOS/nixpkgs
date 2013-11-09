@@ -9,10 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0rsivyxnp9nfngf83fiy4v58s5mgdhcjz75nv5nyhxwxnjq35d25";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://vimgadgets.sourceforge.net/libunibreak/;
     description = "A library implementing a line breaking algorithm as described in Unicode 6.0.0 Standard";
-    license = "ZLIB";
-    maintainer = [ stdenv.lib.maintainers.coroa ];
+    license = licenses.zlib;
+    platforms = platforms.unix;
+    maintainer = [ maintainers.coroa ];
   };
 }
