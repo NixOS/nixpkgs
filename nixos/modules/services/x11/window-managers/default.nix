@@ -17,6 +17,7 @@ in
       ./xmonad.nix
       ./i3.nix
       ./xbmc.nix
+      ./herbstluftwm.nix
     ];
 
   options = {
