@@ -141,7 +141,7 @@
       tape = 25;
       video = 26;
       dialout = 27;
-      polkituser = 28;
+      #polkituser = 28; # currently unused, polkitd doesn't need a group
       utmp = 29;
       davfs2 = 31;
       privoxy = 32;
