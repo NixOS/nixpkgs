@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, hotplugSupport ? true, libusb ? null, libv4l ? null, pkgconfig ? null , gt68xxFirmware ? null , snapscanFirmware ? null }:
+{ stdenv, fetchurl, hotplugSupport ? true, libusb ? null, libv4l ? null
+, pkgconfig ? null, gt68xxFirmware ? null, snapscanFirmware ? null
+}:
 
 assert hotplugSupport -> (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux");
 

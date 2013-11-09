@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, fetchgit, hotplugSupport ? true, libusb ? null, gt68xxFirmware ? null, snapscanFirmware ? null }:
+{ stdenv, fetchurl, fetchgit, hotplugSupport ? true, libusb ? null
+, gt68xxFirmware ? null, snapscanFirmware ? null
+}:
 let
   firmware = gt68xxFirmware { inherit fetchurl; };
 in
