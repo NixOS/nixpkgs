@@ -25,10 +25,11 @@ stdenv.mkDerivation {
       --replace "/usr/share" "$out/share"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An e-book reader for Linux";
     homepage = http://www.fbreader.org/;
-    license = "GPL";
-    maintainer = [ stdenv.lib.maintainers.coroa ];
+    license = licenses.gpl3;
+    platforms = platforms.linux; # possibly also on unix general
+    maintainer = [ maintainers.coroa ];
   }; 
 }
