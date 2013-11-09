@@ -1,23 +1,20 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl }:
+
+# at runtime, need jre or jdk
 
 stdenv.mkDerivation rec {
-  name = "scala-2.10.3";
+  name = "scala-2.9.2";
 
   src = fetchurl {
-    url = "http://www.scala-lang.org/files/archive/${name}.tgz";
-    sha256 = "16ac935wydrxrvijv4ldnz4vl2xk8yb3yzb9bsi3nb9sic7fxl95";
+    url = "http://www.scala-lang.org/downloads/distrib/files/${name}.tgz";
+    sha256 = "0s1shpzw2hyz7bwxdqq19rcrzbpq4d7b0kvdvjvhy7h05x496b46";
   };
-
-  buildInputs = [ jre makeWrapper ] ;
 
   installPhase = ''
     mkdir -p $out
     rm bin/*.bat
+    rm lib/scalacheck.jar
     mv * $out
-
-    for p in $(ls $out/bin/) ; do
-      wrapProgram $out/bin/$p --prefix PATH ":" ${jre}/bin ;
-    done
   '';
 
   meta = {
