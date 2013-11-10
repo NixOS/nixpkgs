@@ -7901,7 +7901,7 @@ let
     lcms = lcms2;
   };
 
-  gimp = gimp_2_6;
+  gimp = gimp_2_8;
 
   gimpPlugins = recurseIntoAttrs (import ../applications/graphics/gimp/plugins {
     inherit pkgs gimp;
