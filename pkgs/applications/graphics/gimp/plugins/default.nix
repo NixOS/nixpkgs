@@ -170,9 +170,9 @@ rec {
   # this is more than a gimp plugin !
   # either load the raw image with gimp (and the import dialog will popup)
   # or use the binary
-  ufraw = pluginDerivation {
-    name = "ufraw-0.15";
-    buildInputs = [pkgs.lcms gimp] ++ gimp.nativeBuildInputs;
+  ufraw = pluginDerivation rec {
+    name = "ufraw-0.19.2";
+    buildInputs = [pkgs.gtkimageview pkgs.lcms gimp] ++ gimp.nativeBuildInputs;
       # --enable-mime - install mime files, see README for more information
       # --enable-extras - build extra (dcraw, nikon-curve) executables
       # --enable-dst-correction - enable DST correction for file timestamps.
@@ -184,8 +184,8 @@ rec {
     configureFlags = "--enable-extras --enable-dst-correction --enable-contrast";
 
     src = fetchurl {
-      url = mirror://sourceforge/ufraw/ufraw-0.15.tar.gz;
-      sha256 = "0cf3csksjkyl91zxhjnn74vc31l14nm6n1i02s76xdvvkk9ics8k";
+      url = "mirror://sourceforge/ufraw/${name}.tar.gz";
+      sha256 = "1lxba7pb3vcsq94dwapg9bk9mb3ww6r3pvvcyb0ah5gh2sgzxgkk";
     };
     installPhase = "
       installPlugins ufraw-gimp
