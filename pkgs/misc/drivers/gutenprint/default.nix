@@ -40,6 +40,7 @@ composableDerivation.composableDerivation {} {
     mkdir -p $out/lib/cups
     ln -s $out/filter $out/lib/cups/
     wrapProgram $out/filter/rastertogutenprint.5.2 --prefix LD_LIBRARY_PATH : $out/lib
+    wrapProgram $out/sbin/cups-genppd.5.2 --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
   meta = { 
