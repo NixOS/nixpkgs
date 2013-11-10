@@ -6567,6 +6567,8 @@ let
 
   latencytop = callPackage ../os-specific/linux/latencytop { };
 
+  ldm = callPackage ../os-specific/linux/ldm { };
+
   libaio = callPackage ../os-specific/linux/libaio { };
 
   libatasmart = callPackage ../os-specific/linux/libatasmart { };
