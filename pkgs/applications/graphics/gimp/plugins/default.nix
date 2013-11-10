@@ -68,18 +68,18 @@ rec {
     };
   };
 
-  fourier = pluginDerivation {
+  fourier = pluginDerivation rec {
     /* menu:
        Filters/Generic/FFT Forward
        Filters/Generic/FFT Inverse
     */
-    name = "fourier-0.3.3";
-    buildInputs = [ gimp pkgs.fftwSinglePrec  pkgconfig glib] ++ gimp.nativeBuildInputs;
+    name = "fourier-0.4.1";
+    buildInputs = [ gimp pkgs.fftw  pkgconfig glib] ++ gimp.nativeBuildInputs;
     postInstall = "fail";
     installPhase = "installPlugins fourier";
     src = fetchurl {
-      url = http://people.via.ecp.fr/~remi/soft/gimp/fourier-0.3.3.tar.gz;
-      sha256 = "0xxgp0lrjxsj54sgygi31c7q41jkqzn0v18qyznrviv8r099v29p";
+      url = "http://registry.gimp.org/files/${name}.tar.gz";
+      sha256 = "1pr3y3zl9w8xs1circdrxpr98myz9m8wfzy022al79z4pdanwvs1";
     };
   };
 
