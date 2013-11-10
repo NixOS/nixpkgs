@@ -41,10 +41,11 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/remmina --prefix LD_LIBRARY_PATH : "${libX11}/lib"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     license = "GPLv2";
     homepage = "http://remmina.sourceforge.net/";
     description = "Remmina is a remote desktop client written in GTK+";
     maintainers = [];
+    platforms = platforms.linux;
   };
 }
