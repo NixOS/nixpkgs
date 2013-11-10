@@ -143,21 +143,23 @@ rec {
     installPhase = "installPlugins src/gimp-lqr-plugin";
   };
 
-  # this is more than a gimp plugin !
-  # it can be made to compile the gimp plugin only though..
   gmic =
-  let imagemagick = pkgs.imagemagickBig; # maybe the non big version is enough?
-  in pluginDerivation {
-      name = "gmic-1.3.2.0";
-      buildInputs = [ imagemagick pkgconfig gimp pkgs.fftwSinglePrec ] ++ gimp.nativeBuildInputs;
+  let
+    imagemagick = pkgs.imagemagickBig; # maybe the non big version is enough?
+    fftw = pkgs.fftw.override {pthreads = true;};
+  in pluginDerivation rec {
+      name = "gmic-1.5.7.2";
+      buildInputs = [imagemagick pkgconfig fftw gimp] ++ gimp.nativeBuildInputs;
       src = fetchurl {
-        url = mirror://sourceforge/gmic/gmic_1.3.2.0.tar.gz;
-        sha256 = "0mxq664vzzc2l6k6sqm9syp34mihhi262i6fixk1g12lmc28797h";
+        url = mirror://sourceforge/gmic/gmic_1.5.7.2.tar.gz;
+        sha256 = "1cpbxb3p2c8bcv2cbr150whapzjc7w09i3jza0z9x3xj8c0vdyv1";
       };
       preConfigure = ''
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${imagemagick}/include/ImageMagick"
       '';
-      installPhase = "installPlugins src/gmic4gimp";
+      sourceRoot = "${name}/src";
+      buildPhase = "make gimp";
+      installPhase = "installPlugins gmic_gimp";
       meta = { 
         description = "script language for image processing which comes with its open-source interpreter";
         homepage = http://gmic.sourceforge.net/repository.shtml;
