@@ -2627,6 +2627,26 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+  fs = buildPythonPackage rec {
+    name = "fs-0.4.0";
+
+    src = fetchurl {
+      url    = "https://pyfilesystem.googlecode.com/files/fs-0.4.0.tar.gz";
+      sha256 = "1fk7ilwd01qgj4anw9k1vjp0amxswzzxbp6bk4nncp7210cxp3vz";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Filesystem abstraction";
+      homepage    = http://pypi.python.org/pypi/fs;
+      license     = licenses.bsd3;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+
+    # Fails: "error: invalid command 'test'"
+    doCheck = false;
+  };
+
   fuse = buildPythonPackage (rec {
     baseName = "fuse";
     version = "0.2.1";
@@ -2787,6 +2807,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  goobook = buildPythonPackage rec {
+    name = "goobook-1.5";
+
+    src = fetchurl {
+      url    = "https://pypi.python.org/packages/source/g/goobook/${name}.tar.gz";
+      sha256 = "05vpriy391l5i05ckl5ja5bswqyvl3rwrbmks9pi46w1813j7p5z";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Search your google contacts from the command-line or mutt.";
+      homepage    = "https://pypi.python.org/pypi/goobook";
+      license     = licenses.gpl3;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+
+    propagatedBuildInputs = [ distribute gdata hcs_utils keyring simplejson ];
+  };
 
   greenlet = buildPythonPackage rec {
     name = "greenlet-0.3.1";
@@ -2822,6 +2860,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = http://code.google.com/p/gyp;
       license = stdenv.lib.licenses.bsd3;
       description = "Generate Your Projects";
+    };
+  };
+
+  hcs_utils = buildPythonPackage rec {
+    name = "hcs_utils-1.3";
+
+    src = fetchurl {
+      url    = "https://pypi.python.org/packages/source/h/hcs_utils/hcs_utils-1.3.tar.gz";
+      sha256 = "0mcjfc0ssil86i74dg323z7mikkw1xazqyr92347x1y33zyffgxh";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Library collecting some useful snippets";
+      homepage    = https://pypi.python.org/pypi/hcs_utils/1.3;
+      license     = licenses.isc;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
     };
   };
 
@@ -3055,6 +3110,25 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  keyring = buildPythonPackage rec {
+    name = "keyring-3.2";
+
+    src = fetchurl {
+      url    = "https://pypi.python.org/packages/source/k/keyring/${name}.zip";
+      sha256 = "1flccphpyrb8y8dra2fq2s2v3fg615d77kjjmzl0gmiidabkkdqf";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Store and access your passwords safely";
+      homepage    = "https://pypi.python.org/pypi/keyring";
+      license     = licenses.psfl;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+
+    buildInputs =
+      [ pkgs.unzip fs gdata python_keyczar mock pyasn1 pycrypto pytest ];
+  };
 
   pylast = buildPythonPackage rec {
     name = "pylast-${version}";
@@ -4990,6 +5064,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+  python_keyczar = buildPythonPackage rec {
+    name = "python-keyczar-0.71c";
+
+    src = fetchurl {
+      url    = "https://pypi.python.org/packages/source/p/python-keyczar/${name}.tar.gz";
+      sha256 = "18mhiwqq6vp65ykmi8x3i5l3gvrvrrr8z2kv11z1rpixmyr7sw1p";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Toolkit for safe and simple cryptography";
+      homepage    = https://pypi.python.org/pypi/python-keyczar;
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+
+    buildInputs = [ pyasn1 pycrypto ];
+  };
 
   pyudev = buildPythonPackage rec {
     name = "pyudev-${version}";
