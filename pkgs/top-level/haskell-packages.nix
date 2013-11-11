@@ -1733,6 +1733,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   projectTemplate = callPackage ../development/libraries/haskell/project-template {};
 
+  processConduit = callPackage ../development/libraries/haskell/process-conduit {};
+
   processExtras = callPackage ../development/libraries/haskell/process-extras {};
 
   processLeksah = callPackage ../development/libraries/haskell/leksah/process-leksah.nix {};
