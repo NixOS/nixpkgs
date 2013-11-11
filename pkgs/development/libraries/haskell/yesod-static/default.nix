@@ -24,6 +24,7 @@ cabal.mkDerivation (self: {
     systemFilepath text transformers unixCompat unorderedContainers wai
     waiAppStatic waiTest yesodCore yesodTest
   ];
+  doCheck = false;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Static file serving subsite for Yesod Web Framework";
