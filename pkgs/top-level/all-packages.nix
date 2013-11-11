@@ -1043,6 +1043,8 @@ let
 
   gt5 = callPackage ../tools/system/gt5 { };
 
+  gtest = callPackage ../development/libraries/gtest {};
+
   gtkdatabox = callPackage ../development/libraries/gtkdatabox {};
 
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
