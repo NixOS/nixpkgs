@@ -3880,7 +3880,8 @@ let
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
   boost153 = callPackage ../development/libraries/boost/1.53.nix { };
   boost154 = callPackage ../development/libraries/boost/1.54.nix { };
-  boost = boost154;
+  boost155 = callPackage ../development/libraries/boost/1.55.nix { };
+  boost = boost155;
 
   boostHeaders = callPackage ../development/libraries/boost/header-only-wrapper.nix { };
 
