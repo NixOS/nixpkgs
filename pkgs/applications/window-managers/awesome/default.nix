@@ -1,9 +1,9 @@
-{stdenv, fetchurl, cmake, gperf, imagemagick, pkgconfig, lua
+{ stdenv, fetchurl, cmake, gperf, imagemagick, pkgconfig, lua
 , glib, cairo, pango, imlib2, libxcb, libxdg_basedir, xcbutil
 , xcbutilimage, xcbutilkeysyms, xcbutilwm, libpthreadstubs, libXau
 , libXdmcp, pixman, doxygen
 , libstartup_notification, libev, asciidoc, xmlto, dbus, docbook_xsl
-, docbook_xml_dtd_45, libxslt, coreutils}:
+, docbook_xml_dtd_45, libxslt, coreutils, which }:
 
 let
   version = "3.4.13";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake gperf imagemagick pkgconfig lua glib cairo pango
     imlib2 libxcb libxdg_basedir xcbutil xcbutilimage xcbutilkeysyms xcbutilwm
     libstartup_notification libev libpthreadstubs libXau libXdmcp pixman doxygen
-    asciidoc xmlto dbus docbook_xsl docbook_xml_dtd_45 libxslt ];
+    asciidoc xmlto dbus docbook_xsl docbook_xml_dtd_45 libxslt which ];
 
   # We use coreutils for 'env', that will allow then finding 'bash' or 'zsh' in
   # the awesome lua code. I prefered that instead of adding 'bash' or 'zsh' as
