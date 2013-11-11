@@ -1,24 +1,28 @@
 { cabal, base64Bytestring, cereal, conduit, cryptoConduit
-, cryptohashCryptoapi, dataDefault, fileEmbed, hspec, httpTypes
+, cryptohashCryptoapi, dataDefault, fileEmbed, filepath, hjsmin
+, hspec, httpTypes, HUnit, mimeTypes, processConduit, resourcet
 , shakespeareCss, systemFileio, systemFilepath, text, transformers
-, unixCompat, wai, waiAppStatic, yesodCore
+, unixCompat, unorderedContainers, wai, waiAppStatic, waiTest
+, yesodCore, yesodTest
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-static";
-  version = "1.2.0.1";
-  sha256 = "1ij0j1m9j6l63rl4zdfik36a3sb3k0zpqjg85sgis6wdqr18gsi5";
+  version = "1.2.1";
+  sha256 = "0vsmsdyi0nx111mkyf1wkkl2i07l40gcjzrm9dbks7k4pfajxqjx";
   buildDepends = [
     base64Bytestring cereal conduit cryptoConduit cryptohashCryptoapi
-    dataDefault fileEmbed httpTypes shakespeareCss systemFileio
-    systemFilepath text transformers unixCompat wai waiAppStatic
+    dataDefault fileEmbed filepath hjsmin httpTypes mimeTypes
+    processConduit resourcet shakespeareCss systemFileio systemFilepath
+    text transformers unixCompat unorderedContainers wai waiAppStatic
     yesodCore
   ];
   testDepends = [
     base64Bytestring cereal conduit cryptoConduit cryptohashCryptoapi
-    dataDefault fileEmbed hspec httpTypes shakespeareCss systemFileio
-    systemFilepath text transformers unixCompat wai waiAppStatic
-    yesodCore
+    dataDefault fileEmbed filepath hjsmin hspec httpTypes HUnit
+    mimeTypes processConduit resourcet shakespeareCss systemFileio
+    systemFilepath text transformers unixCompat unorderedContainers wai
+    waiAppStatic waiTest yesodCore yesodTest
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";
