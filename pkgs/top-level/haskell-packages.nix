@@ -899,6 +899,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   dimensionalTf = callPackage ../development/libraries/haskell/dimensional-tf {};
 
+  directSqlite = callPackage ../development/libraries/haskell/direct-sqlite {};
+
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
   distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
