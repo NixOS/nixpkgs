@@ -40,8 +40,5 @@ stdenv.mkDerivation (rec {
   # this is a pair of ugly hacks to make python stuff install into the right place
   preInstall = ''substituteInPlace python/libxml2mod.la --replace "${python}" "$out"'';
   installFlags = ''pythondir="$(out)/lib/${python.libPrefix}/site-packages"'';
-
-} // stdenv.lib.optionalAttrs (!pythonSupport) {
-  configureFlags = "--with-python=no"; # otherwise build impurity bites us
 })
 
