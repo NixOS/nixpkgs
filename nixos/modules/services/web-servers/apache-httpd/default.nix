@@ -260,7 +260,7 @@ let
 
     '' else ""}
 
-    ${if cfg.globalRedirect != null then ''
+    ${if cfg.globalRedirect != null && cfg.globalRedirect != "" then ''
       RedirectPermanent / ${cfg.globalRedirect}
     '' else ""}
 
