@@ -33,7 +33,7 @@ with pkgs.lib;
     system.defaultChannel = mkOption {
       internal = true;
       type = types.str;
-      default = https://nixos.org/channels/nixos-13.10;
+      default = https://nixos.org/channels/nixos-unstable;
       description = "Default NixOS channel to which the root user is subscribed.";
     };
 
