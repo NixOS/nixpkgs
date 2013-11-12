@@ -84,6 +84,7 @@
 , "grunt-contrib-cssmin"
 , "grunt-contrib-uglify"
 , "grunt-karma"
+, "grunt-bower-task"
 , "grunt-sed"
 , "karma"
 , "karma-mocha"
