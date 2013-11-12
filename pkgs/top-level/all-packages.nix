@@ -7705,6 +7705,8 @@ let
 
     notmuch = lowPrio (callPackage ../applications/networking/mailreaders/notmuch { });
 
+    offlineimap = callPackage ../applications/editors/emacs-modes/offlineimap {};
+
     # This is usually a newer version of Org-Mode than that found in GNU Emacs, so
     # we want it to have higher precedence.
     org = hiPrio (callPackage ../applications/editors/emacs-modes/org { texinfo = texinfo5; });
