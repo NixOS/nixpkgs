@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pem";
-  version = "0.2.0";
-  sha256 = "1hmsyavqzjx1chbn4a8vf0r2wz2fg0xl9cxgja4ap04si3qr458v";
+  version = "0.2.1";
+  sha256 = "05ln372ad89993v07q108l9al8jgjpzardpl02pziwwacdcj1j17";
   buildDepends = [ base64Bytestring mtl ];
   testDepends = [
     HUnit QuickCheck testFramework testFrameworkHunit
