@@ -111,7 +111,7 @@ in
         // optionalAttrs (config.services.tomcat.enable) { tomcatPort = 8080; }
         // optionalAttrs (config.services.svnserve.enable) { svnBaseDir = config.services.svnserve.svnBaseDir; }
         // optionalAttrs (cfg.publishInfrastructure.enableAuthentication) (
-          optionalAttrs (config.services.mysql.enable) { mysqlUsername = "root"; mysqlPassword = builtins.readFile config.services.mysql.rootPassword; })
+          optionalAttrs (config.services.mysql.enable) { mysqlUsername = "root"; mysqlPassword = readFile config.services.mysql.rootPassword; })
         )
     ;
 
@@ -152,7 +152,7 @@ in
               ${concatMapStrings (infrastructureAttrName:
                 let infrastructureAttrValue = getAttr infrastructureAttrName (cfg.infrastructure);
                 in
-                if builtins.isInt infrastructureAttrValue then
+                if isInt infrastructureAttrValue then
                 ''${infrastructureAttrName}=${toString infrastructureAttrValue} \
                 ''
                 else

@@ -19,7 +19,7 @@ let
 
   knownHostsFile = pkgs.writeText "ssh_known_hosts" (
     flip concatMapStrings knownHosts (h:
-      "${concatStringsSep "," h.hostNames} ${builtins.readFile h.publicKeyFile}"
+      "${concatStringsSep "," h.hostNames} ${readFile h.publicKeyFile}"
     )
   );
 
@@ -59,7 +59,7 @@ let
       mode = "0444";
       source = pkgs.writeText "${u.name}-authorized_keys" ''
         ${concatStringsSep "\n" u.openssh.authorizedKeys.keys}
-        ${concatMapStrings (f: builtins.readFile f + "\n") u.openssh.authorizedKeys.keyFiles}
+        ${concatMapStrings (f: readFile f + "\n") u.openssh.authorizedKeys.keyFiles}
       '';
     };
     usersWithKeys = attrValues (flip filterAttrs config.users.extraUsers (n: u:

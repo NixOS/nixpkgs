@@ -1,7 +1,7 @@
 # Operations on attribute sets.
 
 with {
-  inherit (builtins) head tail isString;
+  inherit (builtins) head tail;
   inherit (import ./trivial.nix) or;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
@@ -100,7 +100,7 @@ rec {
          (AttrSet -> Bool) -> AttrSet -> AttrSet
 
      Example:
-       collect builtins.isList { a = { b = ["b"]; }; c = [1]; }
+       collect isList { a = { b = ["b"]; }; c = [1]; }
        => [["b"] [1]]
 
        collect (x: x ? outPath)

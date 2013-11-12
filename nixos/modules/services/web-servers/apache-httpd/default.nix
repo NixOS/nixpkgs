@@ -17,8 +17,8 @@ let
   getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
 
   extraModules = attrByPath ["extraModules"] [] mainCfg;
-  extraForeignModules = filter builtins.isAttrs extraModules;
-  extraApacheModules = filter (x: !(builtins.isAttrs x)) extraModules; # I'd prefer using builtins.isString here, but doesn't exist yet
+  extraForeignModules = filter isAttrs extraModules;
+  extraApacheModules = filter isString extraModules;
 
 
   makeServerInfo = cfg: {
