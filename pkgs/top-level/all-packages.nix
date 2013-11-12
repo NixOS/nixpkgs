@@ -1409,6 +1409,8 @@ let
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
 
+  newsbeuter-dev = callPackage ../applications/networking/feedreaders/newsbeuter/dev.nix { };
+
   ngrok = callPackage ../tools/misc/ngrok { };
 
   mpack = callPackage ../tools/networking/mpack { };
@@ -4574,7 +4576,9 @@ let
 
   json_glib = callPackage ../development/libraries/json-glib { };
 
-  json_c = callPackage ../development/libraries/json-c { };
+  json-c-0-9 = callPackage ../development/libraries/json-c { };
+  json-c-0-11 = callPackage ../development/libraries/json-c/0.11.nix { };
+  json_c = json-c-0-9;
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
 
