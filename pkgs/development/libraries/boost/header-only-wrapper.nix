@@ -8,10 +8,7 @@ in
 stdenv.mkDerivation {
   name = "boost-headers-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/boost/${pkgid}.tar.bz2";
-    sha256 = "07df925k56pbz3gvhxpx54aij34qd40a7sxw4im11brnwdyr4zh4";
-  };
+  src = boost.src;
 
   phases = [ "installPhase" ];
 
