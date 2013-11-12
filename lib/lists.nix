@@ -10,7 +10,7 @@ let
 
 in rec {
 
-  inherit (builtins) head tail length isList elemAt;
+  inherit (builtins) head tail length isList elemAt concatLists filter elem;
 
 
   # Create a list consisting of a single element.  `singleton x' is
@@ -58,10 +58,6 @@ in rec {
     in imap' 0;
 
 
-  # Concatenate a list of lists.
-  concatLists = builtins.concatLists or (fold (x: y: x ++ y) []);
-
-
   # Map and concatenate the result.
   concatMap = f: list: concatLists (map f list);
 
@@ -75,22 +71,8 @@ in rec {
     else [x];
 
 
-  # Filter a list using a predicate; that is, return a list containing
-  # every element from `list' for which `pred' returns true.
-  filter =
-    builtins.filter or
-    (pred: list:
-      fold (x: y: if pred x then [x] ++ y else y) [] list);
-
-
   # Remove elements equal to 'e' from a list.  Useful for buildInputs.
   remove = e: filter (x: x != e);
-
-
-  # Return true if `list' has an element `x'.
-  elem =
-    builtins.elem or
-    (x: list: fold (a: bs: x == a || bs) false list);
 
 
   # Find the sole element in the list matching the specified

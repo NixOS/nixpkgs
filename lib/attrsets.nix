@@ -20,7 +20,7 @@ rec {
     let attr = head attrPath;
     in
       if attrPath == [] then e
-      else if builtins ? hasAttr && hasAttr attr e
+      else if hasAttr attr e
       then attrByPath (tail attrPath) default (getAttr attr e)
       else default;
 
@@ -110,7 +110,7 @@ rec {
   collect = pred: attrs:
     if pred attrs then
       [ attrs ]
-    else if builtins.isAttrs attrs then
+    else if isAttrs attrs then
       concatMap (collect pred) (attrValues attrs)
     else
       [];
