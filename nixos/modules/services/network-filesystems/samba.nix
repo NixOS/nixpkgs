@@ -57,7 +57,7 @@ let
   nssModulesPath = config.system.nssModules.path;
 
   daemonService = appName: args:
-    { description = "Samba Service daemon ${appName}";
+    { description = "Samba Service Daemon ${appName}";
 
       wantedBy = [ "samba.target" ];
       partOf = [ "samba.target" ];
@@ -211,7 +211,7 @@ in
 
         systemd = {
           targets.samba = {
-            description = "Samba server";
+            description = "Samba Server";
             requires = [ "samba-setup.service" ];
             after = [ "samba-setup.service" "network.target" ];
             wantedBy = [ "multi-user.target" ];
@@ -222,7 +222,7 @@ in
             "samba-smbd" = daemonService "smbd" "-F";
             "samba-winbindd" = daemonService "winbindd" "-F";
             "samba-setup" = {
-              description = "Samba setup task";
+              description = "Samba Setup Task";
               script = setupScript;
               unitConfig.RequiresMountsFor = "/home/smbd /var/samba /var/log/samba";
             };

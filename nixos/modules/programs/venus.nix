@@ -161,7 +161,7 @@ in
       '';
 
     systemd.services.venus =
-      { description = "Planet Venus, an awesome ‘river of news’ feed reader";
+      { description = "Planet Venus Feed Reader";
         path  = [ pkgs.venus ];
         script = "exec venus-planet ${configFile}";
         serviceConfig.User = "${cfg.user}";

@@ -131,7 +131,7 @@ in {
       users.extraGroups.pulse.gid = gid;
 
       systemd.services.pulseaudio = {
-        description = "PulseAudio system-wide server";
+        description = "PulseAudio System-Wide Server";
         wantedBy = [ "sound.target" ];
         before = [ "sound.target" ];
         path = [ cfg.package ];
