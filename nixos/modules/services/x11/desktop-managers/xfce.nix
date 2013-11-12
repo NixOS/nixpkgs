@@ -72,6 +72,7 @@ in
         pkgs.xfce.thunar_volman
         pkgs.xfce.gvfs
         pkgs.xfce.xfce4_appfinder
+        pkgs.xfce.tumbler
       ]
       ++ optional config.powerManagement.enable pkgs.xfce.xfce4_power_manager;
 
