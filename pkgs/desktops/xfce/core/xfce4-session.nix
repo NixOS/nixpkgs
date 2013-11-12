@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
       polkit
     ];
 
+  preBuild = ''
+    sed '/^PATH=/d'        -i scripts/xflock4
+    sed '/^export PATH$/d' -i scripts/xflock4
+  '';
+
   configureFlags = [ "--with-xsession-prefix=$(out)" ];
 
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
