@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   name = "rabbitmq-server-${version}";
 
-  version = "3.0.3";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "http://www.rabbitmq.com/releases/rabbitmq-server/v${version}/${name}.tar.gz";
-    sha256 = "07mp57xvszdrlgw8rgn9r9dpa6vdqdjk7f1dyh6a9sdg8s9fby38";
+    sha256 = "0j9yx64sdgkv0h20zjs65aa2ag6wwv50i6hd3x69m0cc6shzcc0f";
   };
 
   buildInputs =
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       patchShebangs .
     '';
 
-  installFlags = "TARGET_DIR=$(out)/libexec/rabbitmq SBIN_DIR=$(out)/sbin MAN_DIR=$(out)/share/man";
+  installFlags = "TARGET_DIR=$(out)/libexec/rabbitmq SBIN_DIR=$(out)/sbin MAN_DIR=$(out)/share/man DOC_INSTALL_DIR=$(out)/doc";
 
   preInstall =
     ''
