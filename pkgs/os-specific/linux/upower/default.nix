@@ -19,15 +19,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  configureFlags =
-    [ "--with-backend=linux" "--localstatedir=/var" ]
-    ++ stdenv.lib.optional useSystemd
-    [ "--enable-systemd"
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-      "--with-systemdutildir=$(out)/lib/systemd/system-sleep"
-      "--with-udevrulesdir=$(out)/lib/udev/rules.d"
-    ];
-
   preConfigure =
     ''
       substituteInPlace src/linux/up-backend.c \
@@ -36,6 +27,17 @@ stdenv.mkDerivation rec {
       substituteInPlace src/notify-upower.sh \
         --replace /usr/bin/dbus-send ${dbus_tools}/bin/dbus-send
     '';
+
+  configureFlags =
+    [ "--with-backend=linux" "--localstatedir=/var"
+      "--enable-deprecated" # needed for Xfce (Nov 2013)
+    ]
+    ++ stdenv.lib.optional useSystemd
+    [ "--enable-systemd"
+      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+      "--with-systemdutildir=$(out)/lib/systemd/system-sleep"
+      "--with-udevrulesdir=$(out)/lib/udev/rules.d"
+    ];
 
   NIX_CFLAGS_LINK = "-lgcc_s";
 
