@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
       libstartup_notification
     ];
 
+  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
+
   enableParallelBuilding = true;
 
   meta = {
