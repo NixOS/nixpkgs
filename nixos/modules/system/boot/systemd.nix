@@ -348,14 +348,14 @@ let
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
-            mkdir -p $out/${name2}.wants
-            ln -sfn ../${name} $out/${name2}.wants/
+            mkdir -p $out/'${name2}.wants'
+            ln -sfn '../${name}' $out/'${name2}.wants'/
           '') unit.wantedBy) cfg.units)}
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
-            mkdir -p $out/${name2}.requires
-            ln -sfn ../${name} $out/${name2}.requires/
+            mkdir -p $out/'${name2}.requires'
+            ln -sfn '../${name}' $out/'${name2}.requires'/
           '') unit.requiredBy) cfg.units)}
 
       ln -s ${cfg.defaultUnit} $out/default.target
