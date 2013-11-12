@@ -8693,6 +8693,10 @@ let
     libpng = libpng12;
   };
 
+  smartdeblur = callPackage ../applications/graphics/smartdeblur {
+    fftw = fftw.override {pthreads = true;};
+  };
+
   sndBase = lowPrio (builderDefsPackage (import ../applications/audio/snd) {
     inherit fetchurl stdenv stringsWithDeps lib fftw;
     inherit pkgconfig gmp gettext;
