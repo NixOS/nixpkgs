@@ -3136,8 +3136,7 @@ let
 
   erlangR14B04 = callPackage ../development/interpreters/erlang/R14B04.nix { };
   erlangR15B03 = callPackage ../development/interpreters/erlang/R15B03.nix { };
-  erlangR16B01 = callPackage ../development/interpreters/erlang/R16B01.nix { };
-  erlang = erlangR16B01;
+  erlang = callPackage ../development/interpreters/erlang/default.nix { };
 
   rebar = callPackage ../development/tools/build-managers/rebar { };
 
