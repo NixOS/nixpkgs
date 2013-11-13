@@ -8,7 +8,7 @@
 # SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", MODE:="0666", SYMLINK+="stlinkv2_%n"
 
 stdenv.mkDerivation {
-  name = "stlink-git20130306";
+  name = "stlink-20130306";
 
   src = fetchgit {
     url = git://github.com/texane/stlink.git;
