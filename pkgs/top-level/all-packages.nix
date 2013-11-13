@@ -4580,6 +4580,10 @@ let
     libpng = libpng12;
   };
 
+  lgi = callPackage ../development/libraries/lgi {
+    lua = lua5_1;
+  };
+
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
   libaacs = callPackage ../development/libraries/libaacs { };
@@ -5820,6 +5824,8 @@ let
   Xaw3d = callPackage ../development/libraries/Xaw3d { };
 
   xbase = callPackage ../development/libraries/xbase { };
+
+  xcb-util-cursor = callPackage ../development/libraries/xcb-util-cursor { };
 
   xineLib = callPackage ../development/libraries/xine-lib { };
 
@@ -7388,10 +7394,15 @@ let
 
   avxsynth = callPackage ../applications/video/avxsynth { };
 
-  awesome = callPackage ../applications/window-managers/awesome {
+  awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
     lua = lua5;
     cairo = cairo.override { xcbSupport = true; };
   };
+  awesome-3-5 = callPackage ../applications/window-managers/awesome {
+    lua   = lua5_1;
+    cairo = cairo.override { xcbSupport = true; };
+  };
+  awesome = awesome-3-5;
 
   baresip = callPackage ../applications/networking/instant-messengers/baresip {};
 
