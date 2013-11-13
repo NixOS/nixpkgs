@@ -10,7 +10,7 @@ with stdenv.lib;
 
 let
 
-  versionNumber = "319.60";
+  versionNumber = "331.20";
 
 in
 
@@ -19,20 +19,16 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
 
-  patches =
-    [ ./version-test.patch ]
-    ++ optional (!libsOnly && versionAtLeast kernelDev.version "3.11") ./nvidia-drivers-linux-3.11-incremental.patch;
-
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "0kjidkwd2b5aik74663mxk3ffq4a3fmaybq2aq1lcbfhvvh49j6j";
+        sha256 = "0icpmfsppnsvk7vj0fshi3ry4s1wix435s2c8wwak47765fv1mks";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "0fhrxcfsw2jaycnz9gr04c9w585wydx8kpm6rjjbw19wkf8hlq3z";
+        sha256 = "02503dis3ngraqv7174a4pay2x08hp697n9q74rpjjclf5k74ax1";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
