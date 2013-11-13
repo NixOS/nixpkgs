@@ -10,7 +10,7 @@ let
   rev = "f106056095049c2c748c2a2797e5353295240e04";
 in
 stdenv.mkDerivation {
-  name = "uboot-guruplug-0.0pre${rev}";
+  name = "uboot-guruplug-0.0-pre-${stdenv.lib.strings.substring 0 7 rev}";
 
   src = fetchgit {
     url = "git://git.denx.de/u-boot-marvell.git";
