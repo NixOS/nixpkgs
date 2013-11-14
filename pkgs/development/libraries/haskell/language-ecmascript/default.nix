@@ -4,6 +4,7 @@
 }:
 
 cabal.mkDerivation (self: {
+  doCheck = false;
   pname = "language-ecmascript";
   version = "0.15.2";
   sha256 = "1iszs9f2jryddcz36a6anfyfxpwjhzn49xjqvnd5m6rjdq6y403w";
