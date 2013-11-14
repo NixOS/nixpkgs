@@ -276,6 +276,13 @@ in
         ";
       };
 
+      extraInit = mkOption {
+        default = "";
+        description = "
+          Extra lines to be added verbatim to the preStart postfix script.
+        ";
+      };
+
       sslCert = mkOption {
         default = "";
         description = "SSL certificate to use.";
@@ -392,6 +399,7 @@ in
             ${pkgs.postfix}/sbin/postmap -c /var/postfix/conf /var/postfix/conf/virtual
 
             ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
+            ${cfg.extraInit}
           '';
 
         preStop = ''
