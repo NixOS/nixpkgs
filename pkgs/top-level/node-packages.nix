@@ -18,7 +18,7 @@ rec {
       cd unpack
       unpackFile ${src}
       mv */ package 2>/dev/null || true
-      sed -i -e "s/: \"latest\"/: \"*\"/" -e "s/: \"git\(\+\(ssh\|http\|https\)\)\?\:\/\/[^\"]*\"/: \"*\"/" package/package.json
+      sed -i -e "s/:\s*\"latest\"/:  *\"*\"/" -e "s/:\s*\"git\(\+\(ssh\|http\|https\)\)\?\:\/\/[^\"]*\"/: \"*\"/" package/package.json
       mv * $out
     '';
 
