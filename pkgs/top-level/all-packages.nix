@@ -3235,7 +3235,7 @@ let
     libX11 = xlibs.libX11;
   };
 
-  pypy = callPackage ../development/interpreters/pypy/2.1 { };
+  pypy = callPackage ../development/interpreters/pypy/2.2 { };
 
   pythonFull = python27Full;
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
