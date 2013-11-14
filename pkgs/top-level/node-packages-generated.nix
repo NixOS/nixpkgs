@@ -4906,6 +4906,30 @@
     ];
     passthru.names = [ "hawk" ];
   };
+  by-spec."hipache"."*" =
+    self.by-version."hipache"."0.2.4";
+  by-version."hipache"."0.2.4" = lib.makeOverridable self.buildNodePackage {
+    name = "hipache-0.2.4";
+    src = [
+      (self.patchSource fetchurl {
+        url = "http://registry.npmjs.org/hipache/-/hipache-0.2.4.tgz";
+        sha1 = "1d6a06bf88cac084b5fcd01959392c8b4889ec65";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."hipache" or []);
+    deps = [
+      self.by-version."read-installed"."0.2.2"
+      self.by-version."http-proxy"."0.10.0"
+      self.by-version."redis"."0.8.6"
+      self.by-version."lru-cache"."2.2.4"
+      self.by-version."optimist"."0.3.7"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "hipache" ];
+  };
+  "hipache" = self.by-version."hipache"."0.2.4";
   by-spec."hiredis"."*" =
     self.by-version."hiredis"."0.1.15";
   by-version."hiredis"."0.1.15" = lib.makeOverridable self.buildNodePackage {
@@ -5116,6 +5140,29 @@
     peerDependencies = [
     ];
     passthru.names = [ "http-auth" ];
+  };
+  by-spec."http-proxy"."git://github.com/samalba/node-http-proxy" =
+    self.by-version."http-proxy"."0.10.0";
+  by-version."http-proxy"."0.10.0" = lib.makeOverridable self.buildNodePackage {
+    name = "http-proxy-0.10.0";
+    src = [
+      (fetchgit {
+        url = "git://github.com/samalba/node-http-proxy";
+        rev = "5a5a41081165435867b4e5d3a2a269d099d21c56";
+        sha256 = "ea865a91272903ed8506aa572e6a2b58f83f78e9da52f265c732d85a4f7b4380";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."http-proxy" or []);
+    deps = [
+      self.by-version."colors"."0.6.2"
+      self.by-version."optimist"."0.3.7"
+      self.by-version."pkginfo"."0.2.3"
+      self.by-version."utile"."0.1.7"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "http-proxy" ];
   };
   by-spec."http-proxy"."~0.10" =
     self.by-version."http-proxy"."0.10.3";
@@ -9499,6 +9546,28 @@
     self.by-version."read"."1.0.5";
   by-spec."read"."~1.0.4" =
     self.by-version."read"."1.0.5";
+  by-spec."read-installed"."0.2.2" =
+    self.by-version."read-installed"."0.2.2";
+  by-version."read-installed"."0.2.2" = lib.makeOverridable self.buildNodePackage {
+    name = "read-installed-0.2.2";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/read-installed/-/read-installed-0.2.2.tgz";
+        sha1 = "f570ac84fb29c75f16faa3940a8c1e602c8eecab";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."read-installed" or []);
+    deps = [
+      self.by-version."semver"."2.2.1"
+      self.by-version."slide"."1.1.5"
+      self.by-version."read-package-json"."1.1.4"
+      self.by-version."graceful-fs"."1.2.3"
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "read-installed" ];
+  };
   by-spec."read-installed"."~0.2.2" =
     self.by-version."read-installed"."0.2.4";
   by-version."read-installed"."0.2.4" = lib.makeOverridable self.buildNodePackage {
@@ -9673,6 +9742,24 @@
       (fetchurl {
         url = "http://registry.npmjs.org/redis/-/redis-0.7.3.tgz";
         sha1 = "ee57b7a44d25ec1594e44365d8165fa7d1d4811a";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."redis" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "redis" ];
+  };
+  by-spec."redis"."0.8.x" =
+    self.by-version."redis"."0.8.6";
+  by-version."redis"."0.8.6" = lib.makeOverridable self.buildNodePackage {
+    name = "redis-0.8.6";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/redis/-/redis-0.8.6.tgz";
+        sha1 = "a7ae8f0d6fad24bdeaffe28158d6cd1f1c9d30b8";
       })
     ];
     buildInputs =

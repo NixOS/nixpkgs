@@ -108,4 +108,5 @@
 , "x509"
 , "owl-deepcopy"
 , "meat"
+, "hipache"
 ]
