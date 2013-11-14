@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://www.imagemagick.org/;
     description = "A software suite to create, edit, compose, or convert bitmap images";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ [ "x86_64-darwin" ];
     maintainers = with maintainers; [ the-kenny ];
   };
 }
