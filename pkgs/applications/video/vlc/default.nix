@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "http://download.videolan.org/pub/videolan/vlc/${version}/${name}.tar.xz";
-    sha256 = "1xs1zsjip6ljqyy5jlqf14ncda4pjx166bqvjqgcyskq66m7s5yj";
+    sha256 = "14mrcswz5mz976dmplbrdm3mkwjrksspvkignhbnbvrrp77r571k";
   };
 
   buildInputs =
