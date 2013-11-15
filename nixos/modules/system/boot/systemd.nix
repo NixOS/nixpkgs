@@ -518,7 +518,7 @@ in
 
     services.logind.extraConfig = mkOption {
       default = "";
-      type = types.str;
+      type = types.lines;
       example = "HandleLidSwitch=ignore";
       description = ''
         Extra config options for systemd-logind. See man logind.conf for
