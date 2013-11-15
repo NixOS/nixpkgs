@@ -2048,6 +2048,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   tastyAntXml = callPackage ../development/libraries/haskell/tasty-ant-xml {};
 
+  tastyHspec = callPackage ../development/libraries/haskell/tasty-hspec {};
+
   tastyHunit = callPackage ../development/libraries/haskell/tasty-hunit {};
 
   tastySmallcheck = callPackage ../development/libraries/haskell/tasty-smallcheck {};
