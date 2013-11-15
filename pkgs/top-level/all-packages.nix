@@ -4177,27 +4177,6 @@ let
 
   glfw = callPackage ../development/libraries/glfw { };
 
-  glibc213 = (callPackage ../development/libraries/glibc/2.13 {
-    kernelHeaders = linuxHeaders;
-    installLocales = config.glibc.locales or false;
-    machHeaders = null;
-    hurdHeaders = null;
-    gccCross = null;
-  }) // (if crossSystem != null then { crossDrv = glibc213Cross; } else {});
-
-  glibc213Cross = forceNativeDrv (makeOverridable (import ../development/libraries/glibc/2.13)
-    (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
-     in {
-       inherit stdenv fetchurl;
-       gccCross = gccCrossStageStatic;
-       kernelHeaders = if crossGNU then gnu.hurdHeaders else linuxHeadersCross;
-       installLocales = config.glibc.locales or false;
-     }
-     // lib.optionalAttrs crossGNU {
-        inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
-        inherit fetchgit;
-      }));
-
   glibc = callPackage ../development/libraries/glibc/2.18 {
     kernelHeaders = linuxHeaders;
     installLocales = config.glibc.locales or false;
