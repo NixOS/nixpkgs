@@ -2058,6 +2058,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   tastySmallcheck = callPackage ../development/libraries/haskell/tasty-smallcheck {};
 
+  tastyTh = callPackage ../development/libraries/haskell/tasty-th {};
+
   templateDefault = callPackage ../development/libraries/haskell/template-default {};
 
   temporary = callPackage ../development/libraries/haskell/temporary {};
