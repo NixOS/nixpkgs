@@ -2250,6 +2250,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   };
   WebBitsHtml = self.WebBitsHtml_1_0_2;
 
+  webRoutes = callPackage ../development/libraries/haskell/web-routes {};
+
+  webRoutesBoomerang = callPackage ../development/libraries/haskell/web-routes-boomerang {};
+
   CouchDB = callPackage ../development/libraries/haskell/CouchDB {};
 
   wlPprint = callPackage ../development/libraries/haskell/wl-pprint {};
