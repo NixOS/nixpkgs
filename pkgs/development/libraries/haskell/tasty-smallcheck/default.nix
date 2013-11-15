@@ -10,5 +10,6 @@ cabal.mkDerivation (self: {
     description = "SmallCheck support for the Tasty test framework";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
 })
