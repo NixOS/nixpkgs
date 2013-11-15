@@ -13,7 +13,7 @@ cross:
 
 let
 
-  version = "2.17";
+  version = "2.18";
 
 in
 
@@ -44,9 +44,6 @@ stdenv.mkDerivation ({
       /* Don't use /etc/ld.so.cache, for non-NixOS systems.  */
       ./dont-use-system-ld-so-cache.patch
 
-      /* Without this patch many KDE binaries crash. */
-      ./glibc-elf-localscope.patch
-
       /* Add blowfish password hashing support.  This is needed for
          compatibility with old NixOS installations (since NixOS used
          to default to blowfish). */
@@ -56,12 +53,6 @@ stdenv.mkDerivation ({
          rfc3484_sort: Assertion `src->results[i].native == -1 ||
          src->results[i].native == a2_native' failed." crashes. */
       ./glibc-rh739743.patch
-
-      /* Fix buffer overrun in regexp matcher. */
-      ./cve-2013-0242.patch
-
-      /* Fix stack overflow in getaddrinfo with many results. */
-      ./cve-2013-1914.patch
     ];
 
   postPatch = ''
@@ -145,7 +136,7 @@ stdenv.mkDerivation ({
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.gz";
-      sha256 = "0ym3zk9ii64279wgw7pw9xkbxczy2ci7ka6mnfs05rhlainhicm3";
+      sha256 = "0d3pnh6kg5r48ga5rg4lhwlc1062brr6fiqs4j23327gzssjgry8";
     };
 
   # Remove absolute paths from `configure' & co.; build out-of-tree.
