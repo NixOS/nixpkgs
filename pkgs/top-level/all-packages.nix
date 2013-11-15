@@ -7589,6 +7589,7 @@ let
     # TODO: these packages don't build on Darwin.
     gconf = null /* if stdenv.isDarwin then null else gnome.GConf */;
     librsvg = null /* if stdenv.isDarwin then null else librsvg */;
+    texinfo = texinfo4;
   };
 
   emacs24 = callPackage ../applications/editors/emacs-24 {
