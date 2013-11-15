@@ -3174,6 +3174,8 @@ let
      lua = lua5;
   };
 
+  luajit = callPackage ../development/interpreters/luajit {};
+
   lush2 = callPackage ../development/interpreters/lush {};
 
   maude = callPackage ../development/interpreters/maude { };
