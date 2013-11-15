@@ -5,7 +5,7 @@ stdenv.mkDerivation rec{
     name = "LuaJIT-${version}";
 
     src = fetchurl {
-        url="http://luajit.org/download/LuaJIT-2.0.2.tar.gz";
+        url="http://luajit.org/download/${name}.tar.gz";
         sha256="0f3cykihfdn3gi6na9p0xjd4jnv26z18m441n5vyg42q9abh4ln0";
     };
 
