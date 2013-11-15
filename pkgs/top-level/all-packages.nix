@@ -5257,6 +5257,8 @@ let
 
   mythes = callPackage ../development/libraries/mythes { };
 
+  nanomsg = callPackage ../development/libraries/nanomsg { };
+
   ncurses_5_4 = makeOverridable (import ../development/libraries/ncurses/5_4.nix) {
     inherit fetchurl;
     unicode = system != "i686-cygwin";
