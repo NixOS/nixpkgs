@@ -5517,6 +5517,44 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  robotframework-ride = buildPythonPackage rec {
+    version = "1.2.2";
+    name = "robotframework-ride-${version}";
+
+    src = fetchurl {
+      url = "https://robotframework-ride.googlecode.com/files/${name}.tar.gz";
+      sha256 = "1yfvl0hdjjkwk90w3f3i23dxxk3yiyv4pbvnp4l7yd6cmxsia8f3";
+    };
+
+    propagatedBuildInputs = [ pygments wxPython modules.sqlite3 ];
+
+    # Stop copying (read-only) permission bits from the nix store into $HOME,
+    # because that leads to this:
+    #   IOError: [Errno 13] Permission denied: '/home/bfo/.robotframework/ride/settings.cfg'
+    postPatch = ''
+      sed -i "s|shutil\.copy(|shutil.copyfile(|" src/robotide/preferences/settings.py
+    '';
+
+    # ride_postinstall.py checks that needed deps are installed and creates a
+    # desktop shortcut. We don't really need it and it clutters up bin/ so
+    # remove it.
+    postInstall = ''
+      rm -f "$out/bin/ride_postinstall.py"
+    '';
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Light-weight and intuitive editor for Robot Framework test case files";
+      homepage = https://code.google.com/p/robotframework-ride/;
+      license = licenses.asl20;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   rope = buildPythonPackage rec {
     version = "0.9.4";
     name = "rope-${version}";
