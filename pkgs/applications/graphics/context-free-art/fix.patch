@@ -1,0 +1,23 @@
+diff -Naur a/Makefile b/Makefile
+--- a/Makefile	2013-11-15 18:34:13.549117569 +0100
++++ b/Makefile	2013-11-15 18:34:26.022423584 +0100
+@@ -23,7 +23,7 @@
+ # Library directories for FFmpeg and libpng
+ #
+ 
+-LIB_DIRS = $(FFMPEG_DIR)/lib /usr/local/lib
++LIB_DIRS = $(FFMPEG_DIR)/lib ${libpng}/lib
+ 
+ #
+ # Sources and Objects
+diff -Naur a/src-common/cfdg.l b/src-common/cfdg.l
+--- a/src-common/cfdg.l	2013-11-15 18:52:30.278780349 +0100
++++ b/src-common/cfdg.l	2013-11-15 18:53:04.503611752 +0100
+@@ -30,6 +30,7 @@
+ 
+ %{
+     #define YY_NO_UNISTD_H
++    #include <stdio.h>
+     #include "builder.h"
+     #include "scanner.h"
+     #include "astexpression.h"

@@ -7519,6 +7519,10 @@ let
     desktopName = "Conkeror";
   };
 
+  context_free = callPackage ../applications/graphics/context-free-art {
+    ffmpeg = ffmpeg_1;
+  };
+
   cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
     inherit cmake patchelf;
     imagemagick = imagemagick;
