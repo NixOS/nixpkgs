@@ -5494,6 +5494,29 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+
+  robotframework = buildPythonPackage rec {
+    version = "2.8.1";
+    name = "robotframework-${version}";
+
+    src = fetchurl {
+      url = "https://robotframework.googlecode.com/files/${name}.tar.gz";
+      sha256 = "04zwjri1j5py3fpbhy1xlc18bhbmdm2gbd58fwa2jnhmrha5dgnw";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Generic test automation framework";
+      homepage = http://robotframework.org/;
+      license = licenses.asl20;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   rope = buildPythonPackage rec {
     version = "0.9.4";
     name = "rope-${version}";
