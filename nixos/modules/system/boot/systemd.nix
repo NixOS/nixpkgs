@@ -486,6 +486,16 @@ in
       '';
     };
 
+    systemd.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "DefaultLimitCORE=infinity";
+      description = ''
+        Extra config options for systemd. See man systemd-system.conf for
+        available options.
+      '';
+    };
+
     services.journald.console = mkOption {
       default = "";
       type = types.str;
@@ -555,6 +565,7 @@ in
     environment.etc."systemd/system.conf".text =
       ''
         [Manager]
+        ${config.systemd.extraConfig}
       '';
 
     environment.etc."systemd/journald.conf".text =
