@@ -23,7 +23,7 @@ else
 */
 
 let
-  version = "9.2.2";
+  version = "9.2.3";
   # this is the default search path for DRI drivers (note: X server introduces an overriding env var)
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "0gbacnnacv4x8q27s8my4qhf2xq8q4nyhbs9y9688win4csm12n7";
+    sha256 = "0p8p35bwvrifc3v4z4wplxrs49h2qwzhcpsfjkkinfckkw6lqvg0";
   };
 
   prePatch = "patchShebangs .";
@@ -67,6 +67,7 @@ stdenv.mkDerivation {
     "--enable-gallium-llvm" "--with-llvm-shared-libs"
     "--enable-xa" # used in vmware driver
     "--enable-gles1" "--enable-gles2"
+    "--enable-vdpau"
 
     "--with-dri-drivers=i965,r200,radeon"
     ("--with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast"
@@ -79,7 +80,6 @@ stdenv.mkDerivation {
       "--enable-osmesa"
       "--enable-openvg" "--enable-gallium-egl" # not needed for EGL in Gallium, but OpenVG might be useful
       #"--enable-xvmc" # tests segfault with 9.1.{1,2,3}
-      "--enable-vdpau"
       #"--enable-opencl" # ToDo: opencl seems to need libclc for clover
     ];
 
@@ -91,8 +91,8 @@ stdenv.mkDerivation {
   buildInputs = with xorg; [
     autoconf automake libtool intltool expat libxml2Python llvm
     libXfixes glproto dri2proto libX11 libXext libxcb libXt
-    libffi wayland
-  ] ++ optionals enableExtraFeatures [ /*libXvMC*/ libvdpau ]
+    libffi wayland libvdpau
+  ] ++ optionals enableExtraFeatures [ /*libXvMC*/ ]
     ++ optional stdenv.isLinux udev
     ++ optional enableR600LlvmCompiler libelf
     ;
@@ -107,24 +107,24 @@ stdenv.mkDerivation {
     mv -t "$drivers/lib/" \
   '' + optionalString enableExtraFeatures ''
       `#$out/lib/libXvMC*` \
-      $out/lib/vdpau \
       $out/lib/libOSMesa* \
       $out/lib/gbm $out/lib/libgbm* \
       $out/lib/gallium-pipe \
   '' + ''
       $out/lib/libdricore* \
       $out/lib/libgallium* \
+      $out/lib/vdpau \
       $out/lib/libxatracker*
 
   '' + /* now fix references in .la files */ ''
     sed "/^libdir=/s,$out,$drivers," -i \
   '' + optionalString enableExtraFeatures ''
       `#$drivers/lib/libXvMC*.la` \
-      $drivers/lib/vdpau/*.la \
       $drivers/lib/libOSMesa*.la \
       $drivers/lib/gallium-pipe/*.la \
   '' + ''
       $drivers/lib/libgallium.la \
+      $drivers/lib/vdpau/*.la \
       $drivers/lib/libdricore*.la
 
     sed "s,$out\(/lib/\(libdricore[0-9\.]*\|libgallium\).la\),$drivers\1,g" \
