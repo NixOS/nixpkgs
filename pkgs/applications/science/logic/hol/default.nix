@@ -1,4 +1,5 @@
-{stdenv, fetchurl, polyml, graphviz, experimentalKernel ? true}:
+{stdenv, fetchurl, polyml, graphviz, fontconfig, liberation_ttf,
+ experimentalKernel ? true}:
 
 let
   pname = "hol4";
@@ -15,9 +16,18 @@ stdenv.mkDerivation {
     sha256 = "5ce4c1e37301dbc38772694e98f1c7eabf69255908de204b280d8b2b1709e9d0";
   };
 
-  buildInputs = [polyml graphviz];
+  buildInputs = [polyml graphviz fontconfig liberation_ttf];
 
   buildCommand = ''
+
+    mkdir chroot-fontconfig
+    cat ${fontconfig}/etc/fonts/fonts.conf > chroot-fontconfig/fonts.conf
+    sed -e 's@</fontconfig>@@' -i chroot-fontconfig/fonts.conf
+    echo "<dir>${liberation_ttf}</dir>" >> chroot-fontconfig/fonts.conf
+    echo "</fontconfig>" >> chroot-fontconfig/fonts.conf
+
+    export FONTCONFIG_FILE=$(pwd)/chroot-fontconfig/fonts.conf
+
     mkdir -p "$out/src"
     cd  "$out/src"
 
@@ -28,7 +38,10 @@ stdenv.mkDerivation {
       --replace "\"/bin/mv\"" "\"mv\"" \
       --replace "\"/bin/cp\"" "\"cp\""
 
-    substituteInPlace tools/buildutils.sml --replace "\"/usr/bin/dot\"" "\"dot\""
+    for f in tools/buildutils.sml help/src-sml/DOT;
+    do
+      substituteInPlace $f --replace "\"/usr/bin/dot\"" "\"${graphviz}/bin/dot\""
+    done
 
     #sed -ie "/compute/,999 d" tools/build-sequence # for testing
 
