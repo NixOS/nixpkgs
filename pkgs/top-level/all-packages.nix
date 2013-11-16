@@ -3540,6 +3540,8 @@ let
 
   ddd = callPackage ../development/tools/misc/ddd { };
 
+  dispcalgui = callPackage ../tools/graphics/dispcalgui { };
+
   distcc = callPackage ../development/tools/misc/distcc { };
 
   # distccWrapper: wrapper that works as gcc or g++
@@ -8447,6 +8449,10 @@ let
   mupdf = callPackage ../applications/misc/mupdf { };
 
   mypaint = callPackage ../applications/graphics/mypaint { };
+  mypaintGit = (mypaint.override { version = "git"; }).deepOverride {
+    pythonPackages = pythonPackages // { pygobject3 = pythonPackages.pygobject3.override { version = "git"; }; };
+    gtk = gtk3;
+  };
 
   mythtv = callPackage ../applications/video/mythtv { };
 
