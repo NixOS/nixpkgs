@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig thunar intltool exo gtk udev libxfce4ui libxfce4util xfconf ];
   enableParallelBuilding = true;
 
+  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
+
   meta = {
     homepage = http://foo-projects.org/~benny/projects/thunar-archive-plugin/;
     description = "The Thunar Archive Plugin allows you to create and extract archive files using the file context menus in the Thunar file manager";

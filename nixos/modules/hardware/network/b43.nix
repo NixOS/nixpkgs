@@ -1,4 +1,6 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let kernelVersion = config.boot.kernelPackages.kernel.version; in
 
@@ -8,9 +10,9 @@ let kernelVersion = config.boot.kernelPackages.kernel.version; in
 
   options = {
 
-    networking.enableB43Firmware = pkgs.lib.mkOption {
+    networking.enableB43Firmware = mkOption {
       default = false;
-      type = pkgs.lib.types.bool;
+      type = types.bool;
       description = ''
         Turn on this option if you want firmware for the NICs supported by the b43 module.
       '';
@@ -21,11 +23,11 @@ let kernelVersion = config.boot.kernelPackages.kernel.version; in
 
   ###### implementation
 
-  config = pkgs.lib.mkIf config.networking.enableB43Firmware {
-    assertions = [ {
-      assertion = builtins.lessThan 0 (builtins.compareVersions kernelVersion "3.2");
-      message = "b43 firmware for kernels older than 3.2 not packaged yet!";
-    } ];
+  config = mkIf config.networking.enableB43Firmware {
+    assertions = singleton
+      { assertion = lessThan 0 (builtins.compareVersions kernelVersion "3.2");
+        message = "b43 firmware for kernels older than 3.2 not packaged yet!";
+      };
     hardware.firmware = [ pkgs.b43Firmware_5_1_138 ];
   };
 

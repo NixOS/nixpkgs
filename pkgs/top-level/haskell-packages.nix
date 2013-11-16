@@ -102,9 +102,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   # argument to this function.
 
   ghcWithPackages = pkgs : callPackage ../development/compilers/ghc/with-packages.nix {
-    ghc = ghc; # refers to ghcPlain
+    ghc = ghc;                  # refers to ghcPlain
     packages = pkgs self;
+    ignoreCollisions = false;
   };
+
+  ghcWithPackagesOld = pkgs : (self.ghcWithPackages pkgs).override { ignoreCollisions = true; };
 
   # This is the Cabal builder, the function we use to build most Haskell
   # packages. It isn't the Cabal library, which is spelled "Cabal".
@@ -155,7 +158,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     network      = self.network_2_4_2_0;
     OpenGL       = self.OpenGL_2_9_1_0;
     OpenGLRaw    = self.OpenGLRaw_1_4_0_0;
-    parallel     = self.parallel_3_2_0_3;
+    parallel     = self.parallel_3_2_0_4;
     parsec       = self.parsec_3_1_3;
     QuickCheck   = self.QuickCheck_2_6;
     random       = self.random_1_0_1_1;
@@ -659,10 +662,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix { cabal = self.cabal.override { Cabal = null; }; };
-  Cabal_1_18_1_2 = callPackage ../development/libraries/haskell/Cabal/1.18.1.2.nix {
-    cabal = self.cabal.override { Cabal = null; };
-    deepseq = self.deepseq_1_3_0_1;
-  };
+  Cabal_1_18_1_2 = callPackage ../development/libraries/haskell/Cabal/1.18.1.2.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal = null; # core package in GHC
 
   cabalFileTh = callPackage ../development/libraries/haskell/cabal-file-th {};
@@ -757,6 +757,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   connection = callPackage ../development/libraries/haskell/connection {};
 
   constraints = callPackage ../development/libraries/haskell/constraints {};
+
+  controlMonadLoop = callPackage ../development/libraries/haskell/control-monad-loop {};
 
   convertible = callPackage ../development/libraries/haskell/convertible {};
 
@@ -855,7 +857,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   deepseq_1_1_0_0 = callPackage ../development/libraries/haskell/deepseq/1.1.0.0.nix {};
   deepseq_1_1_0_2 = callPackage ../development/libraries/haskell/deepseq/1.1.0.2.nix {};
   deepseq_1_2_0_1 = callPackage ../development/libraries/haskell/deepseq/1.2.0.1.nix {};
-  deepseq_1_3_0_1 = callPackage ../development/libraries/haskell/deepseq/1.3.0.1.nix {};
+  deepseq_1_3_0_2 = callPackage ../development/libraries/haskell/deepseq/1.3.0.2.nix {};
   deepseq = null; # a core package in recent GHCs
 
   deepseqTh = callPackage ../development/libraries/haskell/deepseq-th {};
@@ -896,6 +898,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   dimensional = callPackage ../development/libraries/haskell/dimensional {};
 
   dimensionalTf = callPackage ../development/libraries/haskell/dimensional-tf {};
+
+  directSqlite = callPackage ../development/libraries/haskell/direct-sqlite {};
 
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
@@ -1636,7 +1640,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   parallel_3_1_0_1 = callPackage ../development/libraries/haskell/parallel/3.1.0.1.nix {};
   parallel_3_2_0_2 = callPackage ../development/libraries/haskell/parallel/3.2.0.2.nix {};
   parallel_3_2_0_3 = callPackage ../development/libraries/haskell/parallel/3.2.0.3.nix {};
-  parallel = self.parallel_3_2_0_3;
+  parallel_3_2_0_4 = callPackage ../development/libraries/haskell/parallel/3.2.0.4.nix {};
+  parallel = self.parallel_3_2_0_4;
 
   parallelIo = callPackage ../development/libraries/haskell/parallel-io {};
 
@@ -1651,8 +1656,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   parsec  = self.parsec3;
 
   parsers_0_9 = callPackage ../development/libraries/haskell/parsers/0.9.nix {};
-  parsers_0_10 = callPackage ../development/libraries/haskell/parsers/0.10.nix {};
-  parsers = self.parsers_0_10;
+  parsers_0_10_1_1 = callPackage ../development/libraries/haskell/parsers/0.10.1.1.nix {};
+  parsers = self.parsers_0_10_1_1;
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
@@ -1729,6 +1734,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   profunctorExtras = callPackage ../development/libraries/haskell/profunctor-extras {};
 
   projectTemplate = callPackage ../development/libraries/haskell/project-template {};
+
+  processConduit = callPackage ../development/libraries/haskell/process-conduit {};
 
   processExtras = callPackage ../development/libraries/haskell/process-extras {};
 

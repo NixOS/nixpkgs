@@ -348,14 +348,14 @@ let
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
-            mkdir -p $out/${name2}.wants
-            ln -sfn ../${name} $out/${name2}.wants/
+            mkdir -p $out/'${name2}.wants'
+            ln -sfn '../${name}' $out/'${name2}.wants'/
           '') unit.wantedBy) cfg.units)}
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
-            mkdir -p $out/${name2}.requires
-            ln -sfn ../${name} $out/${name2}.requires/
+            mkdir -p $out/'${name2}.requires'
+            ln -sfn '../${name}' $out/'${name2}.requires'/
           '') unit.requiredBy) cfg.units)}
 
       ln -s ${cfg.defaultUnit} $out/default.target
@@ -486,6 +486,16 @@ in
       '';
     };
 
+    systemd.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "DefaultLimitCORE=infinity";
+      description = ''
+        Extra config options for systemd. See man systemd-system.conf for
+        available options.
+      '';
+    };
+
     services.journald.console = mkOption {
       default = "";
       type = types.str;
@@ -518,7 +528,7 @@ in
 
     services.logind.extraConfig = mkOption {
       default = "";
-      type = types.str;
+      type = types.lines;
       example = "HandleLidSwitch=ignore";
       description = ''
         Extra config options for systemd-logind. See man logind.conf for
@@ -555,6 +565,7 @@ in
     environment.etc."systemd/system.conf".text =
       ''
         [Manager]
+        ${config.systemd.extraConfig}
       '';
 
     environment.etc."systemd/journald.conf".text =

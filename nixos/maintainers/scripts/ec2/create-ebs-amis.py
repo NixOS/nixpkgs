@@ -16,7 +16,7 @@ parser.add_argument('--hvm', dest='hvm', action='store_true', help='Create HVM i
 parser.add_argument('--key', dest='key_name', action='store_true', help='Keypair used for HVM instance creation', default="rob")
 args = parser.parse_args()
 
-instance_type = "cc1.4xlarge" if args.hvm else "m1.small"
+instance_type = "m3.xlarge" if args.hvm else "m1.small"
 ebs_size = 8 if args.hvm else 20
 
 
@@ -72,7 +72,8 @@ print >> sys.stderr, "NixOS version is {0}".format(version)
 m.upload_file("./amazon-base-config.nix", "/mnt/etc/nixos/configuration.nix")
 m.run_command("nixos-install")
 if args.hvm:
-    m.run_command('cp /mnt/nix/store/*-grub-0.97*/lib/grub/i386-pc/* /mnt/boot/grub')
+    m.run_command('nix-env -iA nixos.pkgs.grub')
+    m.run_command('cp /nix/store/*-grub-0.97*/lib/grub/i386-pc/* /mnt/boot/grub')
     m.run_command('sed -i "s|hd0|hd0,0|" /mnt/boot/grub/menu.lst')
     m.run_command('echo "(hd1) /dev/xvdg" > device.map')
     m.run_command('echo -e "root (hd1,0)\nsetup (hd1)" | grub --device-map=device.map --batch')
@@ -98,7 +99,7 @@ def check():
 m.connect()
 volume = m._conn.get_all_volumes([], filters={'attachment.instance-id': m.resource_id, 'attachment.device': "/dev/sdg"})[0]
 if args.hvm:
-    instance = m._conn.run_instances( image_id="ami-6a9e4503"
+    instance = m._conn.run_instances( image_id="ami-5f491f36"
                                     , instance_type=instance_type
                                     , key_name=args.key_name
                                     , placement=m.zone
@@ -185,7 +186,7 @@ f.write(
     '''.format(args.region, ami_id, instance_type))
 f.close()
 
-test_depl = deployment.create_deployment(db)
+test_depl = db.create_deployment()
 test_depl.auto_response = "y"
 test_depl.name = "ebs-creator-test"
 test_depl.nix_exprs = [os.path.abspath("./ebs-test.nix")]

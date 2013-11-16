@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     maintainers = [ stdenv.lib.maintainers.urkud ];
     # Tries to install gwenhywfar plugin, thus `make install` fails
-    platforms = [];
+    hydraPlatforms = [];
   };
 }

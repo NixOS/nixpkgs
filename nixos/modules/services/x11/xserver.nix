@@ -343,6 +343,18 @@ in
         '';
       };
 
+      serverFlagsSection = mkOption {
+        default = "";
+        example =
+          ''
+          Option "BlankTime" "0"
+          Option "StandbyTime" "0"
+          Option "SuspendTime" "0"
+          Option "OffTime" "0"
+          '';
+        description = "Contents of the ServerFlags section of the X server configuration file.";
+      };
+
       moduleSection = mkOption {
         type = types.lines;
         default = "";
@@ -586,6 +598,7 @@ in
       ''
         Section "ServerFlags"
           Option "AllowMouseOpenFail" "on"
+          ${cfg.serverFlagsSection}
         EndSection
 
         Section "Module"

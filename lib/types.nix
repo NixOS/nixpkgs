@@ -48,19 +48,19 @@ rec {
 
     bool = mkOptionType {
       name = "boolean";
-      check = builtins.isBool;
+      check = isBool;
       merge = loc: fold (x: y: x.value || y) false;
     };
 
     int = mkOptionType {
       name = "integer";
-      check = builtins.isInt;
+      check = isInt;
       merge = mergeOneOption;
     };
 
     str = mkOptionType {
       name = "string";
-      check = builtins.isString;
+      check = isString;
       merge = mergeOneOption;
     };
 
@@ -68,7 +68,7 @@ rec {
     # separator between the values).
     separatedString = sep: mkOptionType {
       name = "string";
-      check = builtins.isString;
+      check = isString;
       merge = loc: defs: concatStringsSep sep (getValues defs);
     };
 
@@ -170,7 +170,7 @@ rec {
 
     functionTo = elemType: mkOptionType {
       name = "function that evaluates to a(n) ${elemType.name}";
-      check = builtins.isFunction;
+      check = isFunction;
       merge = loc: defs:
         fnArgs: elemType.merge loc (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs);
       getSubOptions = elemType.getSubOptions;
@@ -183,10 +183,10 @@ rec {
       in
       mkOptionType rec {
         name = "submodule";
-        check = x: isAttrs x || builtins.isFunction x;
+        check = x: isAttrs x || isFunction x;
         merge = loc: defs:
           let
-            coerce = def: if builtins.isFunction def then def else { config = def; };
+            coerce = def: if isFunction def then def else { config = def; };
             modules = opts' ++ map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
           in (evalModules { inherit modules; args.name = last loc; prefix = loc; }).config;
         getSubOptions = prefix: (evalModules

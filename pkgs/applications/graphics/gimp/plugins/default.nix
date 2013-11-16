@@ -68,18 +68,18 @@ rec {
     };
   };
 
-  fourier = pluginDerivation {
+  fourier = pluginDerivation rec {
     /* menu:
        Filters/Generic/FFT Forward
        Filters/Generic/FFT Inverse
     */
-    name = "fourier-0.3.3";
-    buildInputs = [ gimp pkgs.fftwSinglePrec  pkgconfig glib] ++ gimp.nativeBuildInputs;
+    name = "fourier-0.4.1";
+    buildInputs = [ gimp pkgs.fftw  pkgconfig glib] ++ gimp.nativeBuildInputs;
     postInstall = "fail";
     installPhase = "installPlugins fourier";
     src = fetchurl {
-      url = http://people.via.ecp.fr/~remi/soft/gimp/fourier-0.3.3.tar.gz;
-      sha256 = "0xxgp0lrjxsj54sgygi31c7q41jkqzn0v18qyznrviv8r099v29p";
+      url = "http://registry.gimp.org/files/${name}.tar.gz";
+      sha256 = "1pr3y3zl9w8xs1circdrxpr98myz9m8wfzy022al79z4pdanwvs1";
     };
   };
 
@@ -110,6 +110,9 @@ rec {
       url = mirror://sourceforge/gimp-texturize/texturize-2.1_src.tgz;
       sha256 = "0cdjq25g3yfxx6bzx6nid21kq659s1vl9id4wxyjs2dhcv229cg3";
     };
+    patchPhase = ''
+      sed -i '/.*gimpimage_pdb.h.*/ d' src/*.c*
+    '';
     installPhase = "installPlugins src/texturize";
   };
 
@@ -140,21 +143,23 @@ rec {
     installPhase = "installPlugins src/gimp-lqr-plugin";
   };
 
-  # this is more than a gimp plugin !
-  # it can be made to compile the gimp plugin only though..
   gmic =
-  let imagemagick = pkgs.imagemagickBig; # maybe the non big version is enough?
-  in pluginDerivation {
-      name = "gmic-1.3.2.0";
-      buildInputs = [ imagemagick pkgconfig gimp pkgs.fftwSinglePrec ] ++ gimp.nativeBuildInputs;
+  let
+    imagemagick = pkgs.imagemagickBig; # maybe the non big version is enough?
+    fftw = pkgs.fftw.override {pthreads = true;};
+  in pluginDerivation rec {
+      name = "gmic-1.5.7.2";
+      buildInputs = [imagemagick pkgconfig fftw gimp] ++ gimp.nativeBuildInputs;
       src = fetchurl {
-        url = mirror://sourceforge/gmic/gmic_1.3.2.0.tar.gz;
-        sha256 = "0mxq664vzzc2l6k6sqm9syp34mihhi262i6fixk1g12lmc28797h";
+        url = mirror://sourceforge/gmic/gmic_1.5.7.2.tar.gz;
+        sha256 = "1cpbxb3p2c8bcv2cbr150whapzjc7w09i3jza0z9x3xj8c0vdyv1";
       };
       preConfigure = ''
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${imagemagick}/include/ImageMagick"
       '';
-      installPhase = "installPlugins src/gmic4gimp";
+      sourceRoot = "${name}/src";
+      buildPhase = "make gimp";
+      installPhase = "installPlugins gmic_gimp";
       meta = { 
         description = "script language for image processing which comes with its open-source interpreter";
         homepage = http://gmic.sourceforge.net/repository.shtml;
@@ -170,9 +175,9 @@ rec {
   # this is more than a gimp plugin !
   # either load the raw image with gimp (and the import dialog will popup)
   # or use the binary
-  ufraw = pluginDerivation {
-    name = "ufraw-0.15";
-    buildInputs = [pkgs.lcms gimp] ++ gimp.nativeBuildInputs;
+  ufraw = pluginDerivation rec {
+    name = "ufraw-0.19.2";
+    buildInputs = [pkgs.gtkimageview pkgs.lcms gimp] ++ gimp.nativeBuildInputs;
       # --enable-mime - install mime files, see README for more information
       # --enable-extras - build extra (dcraw, nikon-curve) executables
       # --enable-dst-correction - enable DST correction for file timestamps.
@@ -184,8 +189,8 @@ rec {
     configureFlags = "--enable-extras --enable-dst-correction --enable-contrast";
 
     src = fetchurl {
-      url = mirror://sourceforge/ufraw/ufraw-0.15.tar.gz;
-      sha256 = "0cf3csksjkyl91zxhjnn74vc31l14nm6n1i02s76xdvvkk9ics8k";
+      url = "mirror://sourceforge/ufraw/${name}.tar.gz";
+      sha256 = "1lxba7pb3vcsq94dwapg9bk9mb3ww6r3pvvcyb0ah5gh2sgzxgkk";
     };
     installPhase = "
       installPlugins ufraw-gimp

@@ -62,7 +62,7 @@ in
       homepage = http://www.zabbix.com/;
       license = "GPL";
       maintainers = [ stdenv.lib.maintainers.eelco ];
-      platforms = stdenv.lib.platforms.all;
+      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     };
   };
 

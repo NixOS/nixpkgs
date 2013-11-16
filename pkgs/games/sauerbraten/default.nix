@@ -66,7 +66,7 @@ rec {
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
+    hydraPlatforms =
       # raskin: tested amd64-linux;
       # not setting platforms because it is 0.5+ GiB of game data
       [];

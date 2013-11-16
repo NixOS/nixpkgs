@@ -3,14 +3,16 @@
 
 assert par2Support -> par2cmdline != null;
 
+let rev = "96c6fa2a70425fff1e73d2e0945f8e242411ab58"; in
+
 with stdenv.lib;
 
 stdenv.mkDerivation {
-  name = "bup-0.25-rc1-107-g96c6fa2";
+  name = "bup-0.25-rc1-107-${stdenv.lib.strings.substring 0 7 rev}";
 
   src = fetchgit {
     url = "https://github.com/bup/bup.git";
-    rev = "96c6fa2a70425fff1e73d2e0945f8e242411ab58";
+    inherit rev;
     sha256 = "0d9hgyh1g5qcpdvnqv3a5zy67x79yx9qx557rxrnxyzqckp9v75n";
   };
 

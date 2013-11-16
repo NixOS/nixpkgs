@@ -16,5 +16,6 @@ stdenv.mkDerivation {
     license = "MIT";
     maintainers = [args.lib.maintainers.marcweber];
     platforms = args.lib.platforms.linux;
+    broken = true;
   };
 }

@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "thyme";
-  version = "0.3.0.1";
-  sha256 = "086i8cadq2s894157s1bh3zhd9zb9apr7w39gnydywzgkx47478h";
+  version = "0.3.0.3";
+  sha256 = "187q8ag6ypbvlikynanzyv8c3hskprcz6xf3p3fjraalp95p86ay";
   buildDepends = [
     attoparsec deepseq lens QuickCheck random text time transformers
     vector vectorSpace

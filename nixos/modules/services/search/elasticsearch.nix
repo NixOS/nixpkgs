@@ -91,7 +91,7 @@ in {
         target = "elasticsearch/logging.yml"; }
     ];
 
-    systemd.services.elasticsearch = mkIf cfg.enable {
+    systemd.services.elasticsearch = {
       description = "Elasticsearch daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];

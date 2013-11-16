@@ -40,7 +40,7 @@ in
       };
 
       dates = mkOption {
-        default = "*:0,15,30,45";
+        default = "*:0/15";
         type = types.string;
         description = ''
           Specification (in the format described by
@@ -161,13 +161,13 @@ in
       '';
 
     systemd.services.venus =
-      { description = "Planet Venus, an awesome ‘river of news’ feed reader";
+      { description = "Planet Venus Feed Reader";
         path  = [ pkgs.venus ];
         script = "exec venus-planet ${configFile}";
         serviceConfig.User = "${cfg.user}";
         serviceConfig.Group = "${cfg.group}";
         environment.OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
-        startOn = cfg.dates;
+        startAt = cfg.dates;
       };
 
   };

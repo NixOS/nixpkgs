@@ -187,19 +187,28 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   afew = buildPythonPackage rec {
-    rev = "6bb3915636aaf86f046a017ffffd9a4ef395e199";
+    rev = "d5d0ddeae0c5758a3f6cf5de77913804d88e906a";
     name = "afew-1.0_${rev}";
 
     src = fetchurl {
       url = "https://github.com/teythoon/afew/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "74926d9ddfa69534cfbd08a82f0acccab2c649558062654d5d2ff2999d201384";
+      sha256 = "0al7hz994sh0yrpixqafr25acglvniq4zsbs9aj89zr7yzq1g1j0";
     };
 
-    propagatedBuildInputs = [ pythonPackages.notmuch pkgs.dbacl ];
+    buildInputs = [ pkgs.dbacl ];
 
-    # error: invalid command 'test'
+    propagatedBuildInputs = [
+      pythonPackages.notmuch
+      pythonPackages.subprocess32
+      pythonPackages.chardet
+    ];
+
     doCheck = false;
+
+    preConfigure = ''
+      substituteInPlace afew/DBACL.py --replace "'dbacl'" "'${pkgs.dbacl}/bin/dbacl'"
+    '';
 
     postInstall = ''
       wrapProgram $out/bin/afew \
@@ -289,13 +298,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   alot = buildPythonPackage rec {
-    rev = "0711cf8efaf1a4cca24617c3406210a415006457";
-    name = "alot-0.3.4_${rev}";
+    rev = "fa10bfc2de105da819c8e11e913a44c3c1ac60a4";
+    name = "alot-0.3.5_${rev}";
 
     src = fetchurl {
       url = "https://github.com/pazz/alot/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "1rxkx9cjajsv9x1dl4xp1r3vr0kb66sglxaqzjiwaknqzahmmji5";
+      sha256 = "0zd4jiwxqb7m672xkr5jcqkfpk9jx1kmkllyvjjvswkgjjqdrhax";
     };
 
     # error: invalid command 'test'
@@ -2899,6 +2908,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+
+  ipaddr = buildPythonPackage {
+    name = "ipaddr-2.1.7";
+    src = fetchurl {
+      url = "http://ipaddr-py.googlecode.com/files/ipaddr-2.1.7.tar.gz";
+      md5 = "71a2be9f1d528d9a945ef555de312685";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      description = "Google's IP address manipulation library";
+      homepage = http://code.google.com/p/ipaddr-py/;
+      license = pkgs.lib.licenses.asl20;
+    };
+  };
+
   ipdb = buildPythonPackage {
     name = "ipdb-0.7";
     src = fetchurl {
@@ -3439,6 +3466,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = http://code.google.com/p/pymox/;
       description = "A mock object framework for Python.";
     };
+  };
+
+
+  mpmath = buildPythonPackage rec {
+    name = "mpmath-0.17";
+
+    src = fetchurl {
+      url    = "https://mpmath.googlecode.com/files/${name}.tar.gz";
+      sha256 = "1blgzwq4irzaf8abb4z0d2r48903n9zxf51fhnv3gv09bgxjqzxh";
+    };
+
+    meta = with stdenv.lib; {
+      homepage    = http://mpmath.googlecode.com;
+      description = "A pure-Python library for multiprecision floating arithmetic";
+      license     = licenses.bsd3;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
   };
 
 
@@ -5446,6 +5494,67 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+
+  robotframework = buildPythonPackage rec {
+    version = "2.8.1";
+    name = "robotframework-${version}";
+
+    src = fetchurl {
+      url = "https://robotframework.googlecode.com/files/${name}.tar.gz";
+      sha256 = "04zwjri1j5py3fpbhy1xlc18bhbmdm2gbd58fwa2jnhmrha5dgnw";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Generic test automation framework";
+      homepage = http://robotframework.org/;
+      license = licenses.asl20;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
+  robotframework-ride = buildPythonPackage rec {
+    version = "1.2.2";
+    name = "robotframework-ride-${version}";
+
+    src = fetchurl {
+      url = "https://robotframework-ride.googlecode.com/files/${name}.tar.gz";
+      sha256 = "1yfvl0hdjjkwk90w3f3i23dxxk3yiyv4pbvnp4l7yd6cmxsia8f3";
+    };
+
+    propagatedBuildInputs = [ pygments wxPython modules.sqlite3 ];
+
+    # Stop copying (read-only) permission bits from the nix store into $HOME,
+    # because that leads to this:
+    #   IOError: [Errno 13] Permission denied: '/home/bfo/.robotframework/ride/settings.cfg'
+    postPatch = ''
+      sed -i "s|shutil\.copy(|shutil.copyfile(|" src/robotide/preferences/settings.py
+    '';
+
+    # ride_postinstall.py checks that needed deps are installed and creates a
+    # desktop shortcut. We don't really need it and it clutters up bin/ so
+    # remove it.
+    postInstall = ''
+      rm -f "$out/bin/ride_postinstall.py"
+    '';
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Light-weight and intuitive editor for Robot Framework test case files";
+      homepage = https://code.google.com/p/robotframework-ride/;
+      license = licenses.asl20;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   rope = buildPythonPackage rec {
     version = "0.9.4";
     name = "rope-${version}";
@@ -5935,6 +6044,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "A system for controlling process state under UNIX";
       homepage = http://supervisord.org/;
+    };
+  };
+
+  subprocess32 = buildPythonPackage rec {
+    name = "subprocess32-3.2.5rc1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/subprocess32/${name}.tar.gz";
+      md5 = "f5f46106368be6336b54af95d048fea9";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = "https://pypi.python.org/pypi/subprocess32";
+      description = "Backport of the subprocess module from Python 3.2.5 for use on 2.x.";
+      maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
 

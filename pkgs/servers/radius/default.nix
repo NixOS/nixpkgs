@@ -29,5 +29,7 @@ stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.bjg ];
     platforms = stdenv.lib.platforms.all;
+
+    broken = true;
   };
 }

@@ -42,7 +42,7 @@ rec {
   closeModules = modules: args:
     let
       toClosureList = file: parentKey: imap (n: x:
-        if isAttrs x || builtins.isFunction x then
+        if isAttrs x || isFunction x then
           unifyModuleSyntax file "${parentKey}:anon-${toString n}" (applyIfFunction x args)
         else
           unifyModuleSyntax (toString x) (toString x) (applyIfFunction (import x) args));
@@ -74,7 +74,7 @@ rec {
         config = removeAttrs m ["key" "_file" "require" "imports"];
       };
 
-  applyIfFunction = f: arg: if builtins.isFunction f then f arg else f;
+  applyIfFunction = f: arg: if isFunction f then f arg else f;
 
   /* Merge a list of modules.  This will recurse over the option
      declarations in all modules, combining them into a single set.
@@ -260,7 +260,7 @@ rec {
       options' = opt.options or
         (throw "Option `${showOption loc'}' has type optionSet but has no option attribute.");
       coerce = x:
-        if builtins.isFunction x then x
+        if isFunction x then x
         else { config, ... }: { options = x; };
       options = map coerce (flatten options');
       f = tp:

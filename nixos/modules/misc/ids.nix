@@ -106,6 +106,7 @@
       firebird = 95;
       redis = 96;
       haproxy = 97;
+      mongodb = 98;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 

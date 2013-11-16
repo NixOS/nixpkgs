@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
     homepage = http://support.amd.com/us/gpudownload/Pages/index.aspx;
     license = "unfree";
     maintainers = [stdenv.lib.maintainers.marcweber];
-    #platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
+    hydraPlatforms = [];
   };
 
   # moved assertions here because the name is evaluated when the NixOS manual is generated

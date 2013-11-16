@@ -46,6 +46,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
+    broken = true;
   };
   passthru = {
     updateInfo = {

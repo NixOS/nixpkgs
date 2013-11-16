@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, saneBackends, saneFrontends, libX11, gtk, pkgconfig, libpng, libusb ? null }:
+{ stdenv, fetchurl, saneBackends, saneFrontends, libX11, gtk, pkgconfig, libpng
+, libusb ? null
+, gimpSupport ? false, gimp_2_8 ? null
+}:
+
+assert gimpSupport -> gimp_2_8 != null;
 
 stdenv.mkDerivation rec {
   name = "xsane-0.998";
@@ -12,8 +17,9 @@ stdenv.mkDerivation rec {
     sed -e '/SANE_CAP_ALWAYS_SETTABLE/d' -i src/xsane-back-gtk.c
   '';
 
-  buildInputs = [libpng saneBackends saneFrontends libX11 gtk pkgconfig ] ++
-	(if libusb != null then [libusb] else []);
+  buildInputs = [libpng saneBackends saneFrontends libX11 gtk pkgconfig ]
+    ++ (if libusb != null then [libusb] else [])
+    ++ stdenv.lib.optional gimpSupport gimp_2_8;
 
   meta = {
     homepage = http://www.sane-project.org/;

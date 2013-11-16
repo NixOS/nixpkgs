@@ -188,6 +188,20 @@ in
       options = [ groupOpts ];
     };
 
+    security.initialRootPassword = mkOption {
+      type = types.str;
+      default = "";
+      example = "!";
+      description = ''
+        The (hashed) password for the root account set on initial
+        installation.  The empty string denotes that root can login
+        locally without a password (but not via remote services such
+        as SSH, or indirectly via <command>su</command> or
+        <command>sudo</command>).  The string <literal>!</literal>
+        prevents root from logging in using a password.
+      '';
+    };
+
   };
 
 
@@ -240,7 +254,23 @@ in
             # Can't use useradd, since it complains that it doesn't know us
             # (bootstrap problem!).
             echo "root:x:0:0:System administrator:$rootHome:${config.users.defaultUserShell}" >> /etc/passwd
-            echo "root::::::::" >> /etc/shadow
+            echo "root:${config.security.initialRootPassword}:::::::" >> /etc/shadow
+        fi
+      '';
+
+    # Print a reminder for users to set a root password.
+    environment.interactiveShellInit =
+      ''
+        if [ "$UID" = 0 ]; then
+            read _l < /etc/shadow
+            if [ "''${_l:0:6}" = root:: ]; then
+                cat >&2 <<EOF
+        [1;31mWarning:[0m Your root account has a null password, allowing local users
+        to login as root.  Please set a non-null password using \`passwd', or
+        disable password-based root logins using \`passwd -l'.
+        EOF
+            fi
+            unset _l
         fi
       '';
 

@@ -176,6 +176,6 @@ stdenv.mkDerivation rec {
     description = "A cross-platform application framework for C++";
     license     = "GPL/LGPL";
     maintainers = with maintainers; [ lovek323 phreedom sander urkud ];
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
   };
 }

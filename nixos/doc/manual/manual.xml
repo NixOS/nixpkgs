@@ -5,6 +5,7 @@
   <info>
 
     <title>NixOS Manual</title>
+    <subtitle>Version <xi:include href="version" parse="text" /></subtitle>
 
     <author>
       <personname>

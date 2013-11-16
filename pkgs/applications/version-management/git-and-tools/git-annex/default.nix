@@ -14,8 +14,8 @@
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "4.20131024";
-  sha256 = "1a4mrx8zr5znhcy2cszv5ri9avqj7lcn467nmaj172f00vn4fd5x";
+  version = "4.20131106";
+  sha256 = "019k3zhbc3wjg8isndw6hkgrr3h3qxrbfydv7m6zpgv2khjyhfh0";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [

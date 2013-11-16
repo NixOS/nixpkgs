@@ -7,7 +7,8 @@ inherit (builtins) add sub lessThan length;
 in
 
 rec {
-  inherit (builtins) stringLength substring head tail;
+
+  inherit (builtins) stringLength substring head tail isString;
 
 
   # Concatenate a list of strings.

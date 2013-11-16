@@ -1,14 +1,16 @@
 # General list operations.
-let
 
-  inherit (import ./trivial.nix) deepSeq;
+with import ./trivial.nix;
+
+let
 
   inc = builtins.add 1;
 
   dec = n: builtins.sub n 1;
 
 in rec {
-  inherit (builtins) head tail length isList add sub lessThan elemAt;
+
+  inherit (builtins) head tail length isList elemAt concatLists filter elem;
 
 
   # Create a list consisting of a single element.  `singleton x' is
@@ -55,10 +57,6 @@ in rec {
           else [ (f (inc n) (elemAt list n)) ] ++ imap' (inc n);
     in imap' 0;
 
-    
-  # Concatenate a list of lists.
-  concatLists = builtins.concatLists or (fold (x: y: x ++ y) []);
-
 
   # Map and concatenate the result.
   concatMap = f: list: concatLists (map f list);
@@ -72,23 +70,9 @@ in rec {
     then fold (x: y: (flatten x) ++ y) [] x
     else [x];
 
-    
-  # Filter a list using a predicate; that is, return a list containing
-  # every element from `list' for which `pred' returns true.
-  filter =
-    builtins.filter or
-    (pred: list:
-      fold (x: y: if pred x then [x] ++ y else y) [] list);
 
-    
   # Remove elements equal to 'e' from a list.  Useful for buildInputs.
   remove = e: filter (x: x != e);
-
-  
-  # Return true if `list' has an element `x'.
-  elem =
-    builtins.elem or
-    (x: list: fold (a: bs: x == a || bs) false list);
 
 
   # Find the sole element in the list matching the specified
@@ -106,7 +90,7 @@ in rec {
   findFirst = pred: default: list:
     let found = filter pred list;
     in if found == [] then default else head found;
-       
+
 
   # Return true iff function `pred' returns true for at least element
   # of `list'.
@@ -136,16 +120,16 @@ in rec {
   # If argument is a list, return it; else, wrap it in a singleton
   # list.  If you're using this, you should almost certainly
   # reconsider if there isn't a more "well-typed" approach.
-  toList = x: if builtins.isList x then x else [x];
+  toList = x: if isList x then x else [x];
 
-    
+
   # Return a list of integers from `first' up to and including `last'.
   range = first: last:
-    if builtins.lessThan last first
+    if lessThan last first
     then []
-    else [first] ++ range (builtins.add first 1) last;
+    else [first] ++ range (add first 1) last;
 
-    
+
   # Partition the elements of a list in two lists, `right' and
   # `wrong', depending on the evaluation of a predicate.
   partition = pred:
@@ -160,7 +144,7 @@ in rec {
     let
       len1 = length fst;
       len2 = length snd;
-      len = if builtins.lessThan len1 len2 then len1 else len2;
+      len = if lessThan len1 len2 then len1 else len2;
       zipListsWith' = n:
         if n != len then
           [ (f (elemAt fst n) (elemAt snd n)) ]
@@ -207,7 +191,7 @@ in rec {
           [ (elemAt list n) ] ++ take' (inc n);
     in take' 0;
 
-    
+
   # Remove the first (at most) N elements of a list.
   drop = count: list:
     let
@@ -219,7 +203,8 @@ in rec {
           drop' (dec n) ++ [ (elemAt list n) ];
     in drop' (dec len);
 
-    
+
+  # Return the last element of a list.
   last = list:
     assert list != []; elemAt list (dec (length list));
 
@@ -237,5 +222,7 @@ in rec {
         else [];
     in zipTwoLists' 0;
 
+
   deepSeqList = xs: y: if any (x: deepSeq x false) xs then y else y;
+
 }

@@ -2,8 +2,8 @@
 , libtoxcore, pkgconfig }:
 
 let
-  version = "75d356e52a";
-  date = "20131011";
+  version = "5570b7c98aa";
+  date = "20131112";
 in
 stdenv.mkDerivation rec {
   name = "toxic-${date}-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/Tox/toxic/tarball/${version}";
     name = "${name}.tar.gz";
-    sha256 = "14wyvms8l07sl88g8y6g2jv95sq7cnhbaqf4n32xxilch8rymq47";
+    sha256 = "02jfdp10qcw4w62qpra59m9yzzk7a3k2nypkbq5q7ydksbqlx8sj";
   };
 
   preConfigure = ''

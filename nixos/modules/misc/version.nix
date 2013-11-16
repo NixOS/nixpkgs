@@ -33,7 +33,7 @@ with pkgs.lib;
     system.defaultChannel = mkOption {
       internal = true;
       type = types.str;
-      default = https://nixos.org/channels/nixos-13.10;
+      default = https://nixos.org/channels/nixos-unstable;
       description = "Default NixOS channel to which the root user is subscribed.";
     };
 
@@ -53,7 +53,7 @@ with pkgs.lib;
       mkDefault (if pathExists fn then readFile fn else "master");
 
     # Note: code names must only increase in alphabetical order.
-    system.nixosCodeName = "Aardvark";
+    system.nixosCodeName = "Baboon";
 
     # Generate /etc/os-release.  See
     # http://0pointer.de/public/systemd-man/os-release.html for the

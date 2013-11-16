@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     cp -v dist/build/libwxc.so.${self.version} $out/lib/libwxc.so
   '';
   patches = [ ./fix-bogus-pointer-assignment.patch ];
+  noHaddock = true;
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell C++ wrapper";

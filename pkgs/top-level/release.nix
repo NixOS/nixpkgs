@@ -116,7 +116,6 @@ let
       gcc34 = linux;
       gcc42 = linux;
       gcc44 = linux;
-      gcj44 = linux;
       ghdl = linux;
       ghostscript = linux;
       ghostscriptX = linux;
@@ -141,7 +140,6 @@ let
       gphoto2 = linux;
       gpm = linux;
       gprolog = linux;
-      gpsbabel = all;
       gpscorrelate = linux;
       gpsd = linux;
       gqview = gtkSupported;
@@ -213,7 +211,6 @@ let
       mysql = linux;
       mysql51 = linux;
       mysql55 = linux;
-      namazu = all;
       nano = allBut "i686-cygwin";
       ncat = linux;
       netcat = all;

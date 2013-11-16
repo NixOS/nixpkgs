@@ -15,7 +15,7 @@ let
   toOption = x:
     if x == true then "true"
     else if x == false then "false"
-    else if builtins.isInt x then toString x
+    else if isInt x then toString x
     else toString ''\"${x}\"'';
 
   # All lines in settings.json end with a ',' (comma), except for the last

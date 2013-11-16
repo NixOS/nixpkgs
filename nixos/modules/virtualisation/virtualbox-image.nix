@@ -107,4 +107,9 @@ with pkgs.lib;
   boot.loader.grub.device = "/dev/sda";
 
   services.virtualbox.enable = true;
+
+  # Prevent logging in as root without a password.  For NixOps, we
+  # don't need this because the user can login via SSH, and for the
+  # demo images, there is a demo user account that can sudo to root.
+  security.initialRootPassword = "!";
 }

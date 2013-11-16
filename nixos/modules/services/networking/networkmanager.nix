@@ -55,15 +55,19 @@ let
     fi
   '';
 
+  ns = xs: writeText "nameservers" (
+    concatStrings (map (s: "nameserver ${s}\n") xs)
+  );
+
   overrideNameserversScript = writeScript "02overridedns" ''
     #!/bin/sh
-    ${optionalString cfg.overrideNameservers "${gnused}/bin/sed -i '/nameserver /d' /etc/resolv.conf"}
-    ${concatStrings (map (s: ''
-      ${optionalString cfg.appendNameservers
-        "${gnused}/bin/sed -i '/nameserver ${s}/d' /etc/resolv.conf"
-      }
-      echo 'nameserver ${s}' >> /etc/resolv.conf
-    '') config.networking.nameservers)}
+    tmp=`${coreutils}/bin/mktemp`
+    ${gnused}/bin/sed '/nameserver /d' /etc/resolv.conf > $tmp
+    ${gnugrep}/bin/grep 'nameserver ' /etc/resolv.conf | \
+      ${gnugrep}/bin/grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
+    ${optionalString (cfg.appendNameservers != []) "${coreutils}/bin/cat $tmp $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf"}
+    ${optionalString (cfg.insertNameservers != []) "${coreutils}/bin/cat $tmp ${ns cfg.insertNameservers} $tmp.ns > /etc/resolv.conf"}
+    ${coreutils}/bin/rm -f $tmp $tmp.ns
   '';
 
 in {
@@ -95,23 +99,21 @@ in {
         apply = list: [ networkmanager modemmanager wpa_supplicant ] ++ list;
       };
 
-      overrideNameservers = mkOption {
-        default = false;
+      appendNameservers = mkOption {
+        type = types.listOf types.string;
+        default = [];
         description = ''
-          If enabled, any nameservers received by DHCP or configured in
-          NetworkManager will be replaced by the nameservers configured
-          in the <literal>networking.nameservers</literal> option. This
-          option overrides the <literal>appendNameservers</literal> option
-          if both are enabled.
+          A list of name servers that should be appended
+          to the ones configured in NetworkManager or received by DHCP.
         '';
       };
 
-      appendNameservers = mkOption {
-        default = false;
+      insertNameservers = mkOption {
+        type = types.listOf types.string;
+        default = [];
         description = ''
-          If enabled, the name servers configured in the
-          <literal>networking.nameservers</literal> option will be appended
-          to the ones configured in NetworkManager or received by DHCP.
+          A list of name servers that should be inserted before
+          the ones configured in NetworkManager or received by DHCP.
         '';
       };
 
@@ -144,7 +146,7 @@ in {
       { source = "${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
         target = "NetworkManager/VPN/nm-openconnect-service.name";
       }
-    ] ++ pkgs.lib.optional (cfg.overrideNameservers || cfg.appendNameservers)
+    ] ++ pkgs.lib.optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
            };

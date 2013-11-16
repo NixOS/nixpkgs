@@ -60,6 +60,7 @@
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       prettyShow = self.prettyShow_1_2;
       bmp = self.bmp_1_2_2_1;
+      Cabal_1_18_1_2 = self.Cabal_1_18_1_2.override { deepseq = self.deepseq_1_3_0_2; };
     };
 
   ghc703Prefs =
@@ -71,6 +72,7 @@
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       prettyShow = self.prettyShow_1_2;
       bmp = self.bmp_1_2_2_1;
+      Cabal_1_18_1_2 = self.Cabal_1_18_1_2.override { deepseq = self.deepseq_1_3_0_2; };
     };
 
   ghc702Prefs = ghc701Prefs;
@@ -84,6 +86,7 @@
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       prettyShow = self.prettyShow_1_2;
       bmp = self.bmp_1_2_2_1;
+      Cabal_1_18_1_2 = self.Cabal_1_18_1_2.override { deepseq = self.deepseq_1_3_0_2; };
     };
 
   ghc6123Prefs = ghc6122Prefs;

@@ -8,16 +8,16 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "pciutils-3.2.0";
+  name = "pciutils-3.2.1"; # with database from 2013-11-10
 
   src = fetchurl {
     url = "mirror://kernel/software/utils/pciutils/${name}.tar.bz2";
-    sha256 = "0d9as9jzjjg5c1nwf58z1y1i7rf9fqxmww1civckhcvcn0xr85mq";
+    sha256 = "1pnwwc4sq0q7zz3mw2rsrc9j5rxwpdvxirqjmxcd0brf0hcjpm8j";
   };
 
   buildInputs = [ pkgconfig zlib kmod which ];
 
-  preBuild = "bunzip2 < ${pciids} > pci.ids";
+  #preBuild = "bunzip2 < ${pciids} > pci.ids";
 
   makeFlags = "SHARED=yes PREFIX=\${out}";
 

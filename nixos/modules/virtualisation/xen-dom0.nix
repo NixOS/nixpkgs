@@ -107,7 +107,7 @@ in
       '';
 
     jobs.xend =
-      { description = "Xen control daemon";
+      { description = "Xen Control Daemon";
 
         startOn = "stopped udevtrigger";
 

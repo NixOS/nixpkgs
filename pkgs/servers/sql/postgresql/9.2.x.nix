@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "world" ];
 
+  patches = [ ./disable-resolve_symlinks.patch ];
+
   installTargets = [ "install-world" ];
 
   LC_ALL = "C";

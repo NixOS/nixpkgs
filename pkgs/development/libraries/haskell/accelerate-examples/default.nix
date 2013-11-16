@@ -23,7 +23,7 @@ cabal.mkDerivation (self: {
     homepage = "https://github.com/AccelerateHS/accelerate-examples";
     description = "Examples using the Accelerate library";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.none;
+    platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

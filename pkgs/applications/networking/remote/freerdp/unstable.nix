@@ -25,7 +25,7 @@ assert printerSupport -> cups != null;
 let rev = "ec6effcb1e7759551cf31f5b18d768afc67db97d"; in
 
 stdenv.mkDerivation rec {
-  name = "freerdp-1.1pre${rev}";
+  name = "freerdp-1.1pre-${stdenv.lib.strings.substring 0 7 rev}";
 
   src = fetchgit {
     url = git://github.com/FreeRDP/FreeRDP.git;

@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, hotplugSupport ? true, libusb ? null, libv4l ? null, pkgconfig ? null , gt68xxFirmware ? null }:
+{ stdenv, fetchurl, hotplugSupport ? true, libusb ? null, libv4l ? null
+, pkgconfig ? null, gt68xxFirmware ? null, snapscanFirmware ? null
+}:
 
 assert hotplugSupport -> (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux");
 
@@ -36,6 +38,9 @@ stdenv.mkDerivation rec {
     if gt68xxFirmware != null then
       "mkdir -p \${out}/share/sane/gt68xx ; ln -s " + firmware.fw +
       " \${out}/share/sane/gt68xx/" + firmware.name
+    else if snapscanFirmware != null then
+      "mkdir -p \${out}/share/sane/snapscan ; ln -s " + snapscanFirmware +
+      " \${out}/share/sane/snapscan/your-firmwarefile.bin"
     else "";
 
   meta = {

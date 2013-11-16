@@ -43,8 +43,7 @@ rec {
     [
       raskin
     ];
-    platforms = with a.lib.platforms;
-      [];
+    hydraPlatforms = [];
     # There are multiple claims that the font is GPL, 
     # so I include the package; but I cannot find the
     # original source, so use it on your own risk

@@ -1,11 +1,11 @@
-{ cabal, binary, deepseq, filepath, hashable, random, time
-, transformers, unorderedContainers, utf8String
+{ cabal, binary, deepseq, filepath, hashable, QuickCheck, random
+, time, transformers, unorderedContainers, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "shake";
-  version = "0.10.8";
-  sha256 = "15r392b18nis9p0ys95kbj79hki19wid2gyrpy0z9zm2l5d1m3ya";
+  version = "0.10.9";
+  sha256 = "08czcf0pkchq558kjkfpz7vf5pn1dbqk8mb9fnivnphy963sf6sr";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -13,12 +13,11 @@ cabal.mkDerivation (self: {
     unorderedContainers utf8String
   ];
   testDepends = [
-    binary deepseq filepath hashable random time transformers
-    unorderedContainers utf8String
+    binary deepseq filepath hashable QuickCheck random time
+    transformers unorderedContainers utf8String
   ];
-  doCheck = false;
   meta = {
-    homepage = "http://community.haskell.org/~ndm/shake/";
+    homepage = "https://github.com/ndmitchell/shake";
     description = "Build system library, like Make, but more accurate dependencies";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

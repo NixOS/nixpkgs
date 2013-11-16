@@ -69,7 +69,8 @@ stdenv.mkDerivation {
     homepage = http://oilrush-game.com/;
     license = "unfree";
     #maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    #platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
   };
 
 }

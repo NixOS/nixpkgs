@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/fdisk/;
 
-    maintainers = [ ];
-    #platforms = stdenv.lib.platforms.linux; # was failing for long without anyone complaining
+    platforms = stdenv.lib.platforms.linux;
   };
 }

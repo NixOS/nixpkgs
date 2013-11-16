@@ -35,5 +35,5 @@ buildPerlPackage rec {
   # (e.g. "database is locked(5) at dbdimp.c line 402 at t/07busy.t").
   doCheck = false;
 
-  meta.platforms = stdenv.lib.platforms.linux;
+  meta.platforms = stdenv.lib.platforms.unix;
 }

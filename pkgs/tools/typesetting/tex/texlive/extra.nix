@@ -19,6 +19,6 @@ rec {
     maintainers = [ args.lib.maintainers.raskin ];
 
     # Actually, arch-independent.. 
-    platforms = [] ;
+    hydraPlatforms = [];
   };
 }
