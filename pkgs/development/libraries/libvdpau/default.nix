@@ -1,17 +1,17 @@
 { stdenv, fetchurl, pkgconfig, xlibs }:
 
 stdenv.mkDerivation rec {
-  name = "libvdpau-0.6";
+  name = "libvdpau-0.7";
 
   src = fetchurl {
     url = "http://people.freedesktop.org/~aplattner/vdpau/${name}.tar.gz";
-    sha256 = "0x9dwxzw0ilsy88kqlih3170z1zfrrsx1dr9jbwbn0cbkpnbwmcv";
+    sha256 = "1q5wx6fmqg2iiw57wxwh5vv4yszqs4nlvlzhzdn9vig8gi30ip14";
   };
 
   buildInputs = with xlibs; [ pkgconfig dri2proto libXext ];
 
   propagatedBuildInputs = [ xlibs.libX11 ];
-  
+
   configureFlags = stdenv.lib.optional stdenv.isDarwin [ "--build=x86_64" ];
 
   meta = {
