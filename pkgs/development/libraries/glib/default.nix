@@ -33,7 +33,7 @@ let
   '';
 
   ver_maj = "2.38";
-  ver_min = "0";
+  ver_min = "2";
 in
 with { inherit (stdenv.lib) optionalString; };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "0cpzqadqk6z6bmb79p04pykxc8x57rvshh33414cnk41bvgaf4vm";
+    sha256 = "0d2px8m77603s5pm3md4bcm5d0ksbcsb6ik1w52hjslnq1a9hsh5";
   };
 
   # configure script looks for d-bus but it is (probably) only needed for tests
