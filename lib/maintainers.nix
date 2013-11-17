@@ -63,5 +63,6 @@
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
   zef = "Zef Hemel <zef@zef.me>";
+  zimbatm = "zimbatm <zimbatm@zimbatm.com>";
   zoomulator = "Kim Simmons <zoomulator@gmail.com>";
 }
