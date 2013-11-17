@@ -4492,7 +4492,6 @@ let
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
   harfbuzz = callPackage ../development/libraries/harfbuzz {
-    icu = null;
     graphite2 = null;
   };
 

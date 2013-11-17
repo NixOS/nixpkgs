@@ -1,19 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, glib, freetype,
-  icu ? null, graphite2 ? null, libintlOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, glib, freetype, cairo, icu
+, graphite2 ? null, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
-  name = "harfbuzz-0.9.12";
+  name = "harfbuzz-0.9.24";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/harfbuzz/release/${name}.tar.bz2";
-    sha256 = "19cx5y2m20rp7z5j7mwqfb4ph2g8lrri69zim44x362y4w5gfly6";
+    sha256 = "08i46xx92hvz2br2d9hdxjgi0g5jglwf5bdfsandxb0qlgc5vwpd";
   };
 
-  buildInputs = [ pkgconfig glib freetype ]
+  buildInputs = [ pkgconfig glib freetype cairo icu ] # recommended by upstream
     ++ libintlOrEmpty;
   propagatedBuildInputs = []
-    ++ (stdenv.lib.optionals (icu != null) [icu])
-    ++ (stdenv.lib.optionals (graphite2 != null) [graphite2])
+    ++ stdenv.lib.optional (graphite2 != null) graphite2
     ;
 
   meta = {
