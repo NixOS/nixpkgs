@@ -1,4 +1,4 @@
-{ callPackage, self, stdenv, gettext, gvfs, overrides ? {} }:
+{ callPackage, self, stdenv, gettext, gvfs, libunique, overrides ? {} }:
 {
   __overrides = overrides;
 
@@ -67,7 +67,7 @@
   startup_notification = callPackage ./platform/startup-notification { };
 
   # Required for nautilus
-  libunique = callPackage ./platform/libunique { };
+  inherit (libunique);
 
   gtkglext = callPackage ./platform/gtkglext { };
 
