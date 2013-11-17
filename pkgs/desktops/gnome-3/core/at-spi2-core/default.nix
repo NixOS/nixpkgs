@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   versionMajor = "2.10";
-  versionMinor = "0";
+  versionMinor = "2";
   moduleName   = "at-spi2-core";
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "1ns44yibdgcwzwri7sr075hfs5rh5lgxkh71247a0822az3mahcn";
+    sha256 = "1qfxlbmbaihgmqgkxnywnji9wkbvn8pvbv20x5glv3jc9zw5innk";
   };
 
   buildInputs = [
