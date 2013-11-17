@@ -3,14 +3,14 @@
 
 let
   ver_maj = "2.30";
-  ver_min = "0";
+  ver_min = "1";
 in
 stdenv.mkDerivation rec {
   name = "gdk-pixbuf-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/${ver_maj}/${name}.tar.xz";
-    sha256 = "0n56rbi1acpi8skj8zdhzkm4yv0jq5rzii9n8jhq64k24l2n0wsa";
+    sha256 = "0c4dxsnpqc46liqjlh3w2qmrzv0b89ksn15z2f9h13362lg3n9m3";
   };
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
