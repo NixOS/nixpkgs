@@ -551,6 +551,8 @@ let
 
   ditaa = callPackage ../tools/graphics/ditaa { };
 
+  direnv = callPackage ../tools/misc/direnv { };
+
   dlx = callPackage ../misc/emulators/dlx { };
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
