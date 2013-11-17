@@ -31,7 +31,7 @@ rec {
 
   gsettings_desktop_schemas = lib.lowPrio (callPackage ./core/gsettings-desktop-schemas { });
 
-  gvfs = callPackage ./core/gvfs { };
+  gvfs = pkgs.gvfs.override { gnome = pkgs.gnome3; };
 
   libcroco = callPackage ./core/libcroco {};
 

@@ -1,4 +1,4 @@
-{ callPackage, self, stdenv, gettext, overrides ? {} }:
+{ callPackage, self, stdenv, gettext, gvfs, overrides ? {} }:
 {
   __overrides = overrides;
 
@@ -79,7 +79,7 @@
 
   libgweather = callPackage ./desktop/libgweather { };
 
-  gvfs = callPackage ./desktop/gvfs { };
+  gvfs = gvfs.override { gnome = self; };
 
   libgnomekbd = callPackage ./desktop/libgnomekbd { };
 
