@@ -311,8 +311,6 @@ let
         '';
     };
 
-  nixosUnits = mapAttrsToList makeUnit cfg.units;
-
   units = pkgs.runCommand "units" { preferLocalBuild = true; }
     ''
       mkdir -p $out
@@ -338,7 +336,7 @@ let
         done
       done
 
-      for i in ${toString nixosUnits}; do
+      for i in ${toString (mapAttrsToList (n: v: v.unit) cfg.units)}; do
         ln -s $i/* $out/
       done
 
@@ -387,32 +385,41 @@ in
       description = "Definition of systemd units.";
       default = {};
       type = types.attrsOf types.optionSet;
-      options = {
-        text = mkOption {
-          type = types.str;
-          description = "Text of this systemd unit.";
+      options = { name, config, ... }:
+        { options = {
+            text = mkOption {
+              type = types.str;
+              description = "Text of this systemd unit.";
+            };
+            enable = mkOption {
+              default = true;
+              type = types.bool;
+              description = ''
+                If set to false, this unit will be a symlink to
+                /dev/null. This is primarily useful to prevent specific
+                template instances (e.g. <literal>serial-getty@ttyS0</literal>)
+                from being started.
+              '';
+            };
+            requiredBy = mkOption {
+              default = [];
+              type = types.listOf types.string;
+              description = "Units that require (i.e. depend on and need to go down with) this unit.";
+            };
+            wantedBy = mkOption {
+              default = [];
+              type = types.listOf types.string;
+              description = "Units that want (i.e. depend on) this unit.";
+            };
+            unit = mkOption {
+              internal = true;
+              description = "The generated unit.";
+            };
+          };
+          config = {
+            unit = makeUnit name config;
+          };
         };
-        enable = mkOption {
-          default = true;
-          type = types.bool;
-          description = ''
-            If set to false, this unit will be a symlink to
-            /dev/null. This is primarily useful to prevent specific
-            template instances (e.g. <literal>serial-getty@ttyS0</literal>)
-            from being started.
-          '';
-        };
-        requiredBy = mkOption {
-          default = [];
-          type = types.listOf types.string;
-          description = "Units that require (i.e. depend on and need to go down with) this unit.";
-        };
-        wantedBy = mkOption {
-          default = [];
-          type = types.listOf types.string;
-          description = "Units that want (i.e. depend on) this unit.";
-        };
-      };
     };
 
     systemd.packages = mkOption {
