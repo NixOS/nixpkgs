@@ -7922,6 +7922,8 @@ let
     gtksharp = gtksharp1;
   };
 
+  fuze = callPackage ../applications/networking/instant-messengers/fuze {};
+
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
   gimp_2_6 = callPackage ../applications/graphics/gimp {
