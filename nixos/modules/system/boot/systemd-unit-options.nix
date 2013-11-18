@@ -14,6 +14,16 @@ let
     in if errors == [] then true
        else builtins.trace (concatStringsSep "\n" errors) false;
 
+  unitOption = mkOptionType {
+    name = "systemd option";
+    merge = loc: defs:
+      let defs' = getValues defs;
+      in
+        if isList (head defs')
+        then concatLists defs'
+        else mergeOneOption loc defs;
+  };
+
 in rec {
 
   unitOptions = {
@@ -112,7 +122,7 @@ in rec {
     unitConfig = mkOption {
       default = {};
       example = { RequiresMountsFor = "/data"; };
-      type = types.attrs;
+      type = types.attrsOf unitOption;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Unit]</literal> section of the unit.  See
@@ -137,7 +147,7 @@ in rec {
 
     environment = mkOption {
       default = {};
-      type = types.attrs;
+      type = types.attrs; # FIXME
       example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
       description = "Environment variables passed to the service's processes.";
     };
@@ -159,7 +169,7 @@ in rec {
         { StartLimitInterval = 10;
           RestartSec = 5;
         };
-      type = types.addCheck types.attrs checkService;
+      type = types.addCheck (types.attrsOf unitOption) checkService;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Service]</literal> section of the unit.  See
@@ -263,7 +273,7 @@ in rec {
     socketConfig = mkOption {
       default = {};
       example = { ListenStream = "/run/my-socket"; };
-      type = types.attrs;
+      type = types.attrsOf unitOption;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Socket]</literal> section of the unit.  See
@@ -280,7 +290,7 @@ in rec {
     timerConfig = mkOption {
       default = {};
       example = { OnCalendar = "Sun 14:00:00"; Unit = "foo.service"; };
-      type = types.attrs;
+      type = types.attrsOf unitOption;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Timer]</literal> section of the unit.  See
@@ -328,7 +338,7 @@ in rec {
     mountConfig = mkOption {
       default = {};
       example = { DirectoryMode = "0775"; };
-      type = types.attrs;
+      type = types.attrsOf unitOption;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Mount]</literal> section of the unit.  See
@@ -352,7 +362,7 @@ in rec {
     automountConfig = mkOption {
       default = {};
       example = { DirectoryMode = "0775"; };
-      type = types.attrs;
+      type = types.attrsOf unitOption;
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Automount]</literal> section of the unit.  See
