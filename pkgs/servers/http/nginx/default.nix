@@ -1,6 +1,15 @@
-{ stdenv, fetchurl, fetchgit, openssl, zlib, pcre, libxml2, libxslt, expat, fullWebDAV ? false, syslog ? false }:
+{ stdenv, fetchurl, fetchgit, openssl, zlib, pcre, libxml2, libxslt, expat
+, rtmp ? false
+, fullWebDAV ? false
+, syslog ? false}:
 
 let
+  rtmp-ext = fetchgit {
+    url = git://github.com/arut/nginx-dav-rtmp-module.git;
+    rev = "1cfb7aeb582789f3b15a03da5b662d1811e2a3f1";
+    sha256 = "1dvpq1fg4rslnl05z8jc39sgnvh3akam9qxfl033akpczq1bh8nq";
+  };
+
   dav-ext = fetchgit {
     url = git://github.com/arut/nginx-dav-ext-module.git;
     rev = "54cebc1f21fc13391aae692c6cce672fa7986f9d";
@@ -35,7 +44,8 @@ stdenv.mkDerivation rec {
     "--with-http_secure_link_module"
     # Install destination problems
     # "--with-http_perl_module"
-  ] ++ stdenv.lib.optional fullWebDAV "--add-module=${dav-ext}"
+  ] ++ stdenv.lib.optional fullWebDAV "--add-module=${rtmp-ext}"
+    ++ stdenv.lib.optional fullWebDAV "--add-module=${dav-ext}"
     ++ stdenv.lib.optional syslog "--add-module=${syslog-ext}";
 
   preConfigure = ''
