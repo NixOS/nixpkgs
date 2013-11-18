@@ -160,16 +160,43 @@ let
   };
 
   serviceConfig = { name, config, ... }: {
-    config = {
-      # Default path for systemd services.  Should be quite minimal.
-      path =
-        [ pkgs.coreutils
-          pkgs.findutils
-          pkgs.gnugrep
-          pkgs.gnused
-          systemd
-        ];
-    };
+    config = mkMerge
+      [ { # Default path for systemd services.  Should be quite minimal.
+          path =
+            [ pkgs.coreutils
+              pkgs.findutils
+              pkgs.gnugrep
+              pkgs.gnused
+              systemd
+            ];
+          environment.PATH = config.path;
+          environment.LD_LIBRARY_PATH = "";
+        }
+        (mkIf (config.preStart != "")
+          { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.preStart}
+            '';
+          })
+        (mkIf (config.script != "")
+          { serviceConfig.ExecStart = makeJobScript "${name}-start" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.script}
+            '' + " " + config.scriptArgs;
+          })
+        (mkIf (config.postStart != "")
+          { serviceConfig.ExecStartPost = makeJobScript "${name}-post-start" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.postStart}
+            '';
+          })
+        (mkIf (config.postStop != "")
+          { serviceConfig.ExecStopPost = makeJobScript "${name}-post-stop" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.postStop}
+            '';
+          })
+      ];
   };
 
   mountConfig = { name, config, ... }: {
@@ -223,41 +250,10 @@ let
           ${attrsToSection def.unitConfig}
 
           [Service]
-          Environment=PATH=${def.path}
-          Environment=LD_LIBRARY_PATH=
           ${let env = cfg.globalEnvironment // def.environment;
             in concatMapStrings (n: "Environment=\"${n}=${getAttr n env}\"\n") (attrNames env)}
           ${optionalString (!def.restartIfChanged) "X-RestartIfChanged=false"}
           ${optionalString (!def.stopIfChanged) "X-StopIfChanged=false"}
-
-          ${optionalString (def.preStart != "") ''
-            ExecStartPre=${makeJobScript "${name}-pre-start" ''
-              #! ${pkgs.stdenv.shell} -e
-              ${def.preStart}
-            ''}
-          ''}
-
-          ${optionalString (def.script != "") ''
-            ExecStart=${makeJobScript "${name}-start" ''
-              #! ${pkgs.stdenv.shell} -e
-              ${def.script}
-            ''} ${def.scriptArgs}
-          ''}
-
-          ${optionalString (def.postStart != "") ''
-            ExecStartPost=${makeJobScript "${name}-post-start" ''
-              #! ${pkgs.stdenv.shell} -e
-              ${def.postStart}
-            ''}
-          ''}
-
-          ${optionalString (def.postStop != "") ''
-            ExecStopPost=${makeJobScript "${name}-post-stop" ''
-              #! ${pkgs.stdenv.shell} -e
-              ${def.postStop}
-            ''}
-          ''}
-
           ${attrsToSection def.serviceConfig}
         '';
     };
