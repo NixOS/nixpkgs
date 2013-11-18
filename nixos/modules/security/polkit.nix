@@ -33,9 +33,9 @@ in
     };
 
     security.polkit.adminIdentities = mkOption {
-      type = types.str;
-      default = "unix-user:0;unix-group:wheel";
-      example = "";
+      type = types.listOf types.str;
+      default = [ "unix-user:0" "unix-group:wheel" ];
+      example = [ "unix-user:alice" "unix-group:admin" ];
       description =
         ''
           Specifies which users are considered “administrators”, for those
@@ -62,7 +62,7 @@ in
     environment.etc."polkit-1/rules.d/10-nixos.rules".text =
       ''
         polkit.addAdminRule(function(action, subject) {
-          return ["${cfg.adminIdentities}"];
+          return [${concatStringsSep ", " (map (i: "\"${i}\"") cfg.adminIdentities)}];
         });
 
         ${cfg.extraConfig}
