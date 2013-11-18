@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, sqlite, curl, pkgconfig, libxml2, stfl, json-c-0-11, ncurses
+{ stdenv, fetchgit, sqlite, curl, pkgconfig, libxml2, stfl, json-c-0-11, ncurses
 , gettext, libiconvOrEmpty, makeWrapper, perl }:
 
 stdenv.mkDerivation rec {
-  name = "newsbeuter-dev-20131103";
+  name = "newsbeuter-dev-20131118";
 
-  src = fetchurl {
-    url    = "https://github.com/akrennmair/newsbeuter/archive/8abefa3efb5e6d70c32bac9e068248e98616d6ec.tar.gz";
-    sha256 = "1pfkr4adm7rxwq44hpxwblw6gg8vd0frsi6szvhmzkpn5qmnpwpg";
+  src = fetchgit {
+    url = "https://github.com/akrennmair/newsbeuter.git";
+    rev = "18b73f7d44a99a698d4878fe7d226f55842132c2";
   };
 
   buildInputs
