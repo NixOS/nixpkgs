@@ -5104,7 +5104,8 @@ let
 
   libwmf = callPackage ../development/libraries/libwmf { };
 
-  libwnck = callPackage ../development/libraries/libwnck { };
+  libwnck = libwnck2;
+  libwnck2 = callPackage ../development/libraries/libwnck { };
   libwnck3 = callPackage ../development/libraries/libwnck/3.x.nix { };
 
   libwpd = callPackage ../development/libraries/libwpd { };
