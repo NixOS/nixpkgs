@@ -5,9 +5,9 @@
 
 let
   rtmp-ext = fetchgit {
-    url = git://github.com/arut/nginx-dav-rtmp-module.git;
+    url = git://github.com/arut/nginx-rtmp-module.git;
     rev = "1cfb7aeb582789f3b15a03da5b662d1811e2a3f1";
-    sha256 = "1dvpq1fg4rslnl05z8jc39sgnvh3akam9qxfl033akpczq1bh8nq";
+    sha256 = "03ikfd2l8mzsjwx896l07rdrw5jn7jjfdiyl572yb9jfrnk48fwi";
   };
 
   dav-ext = fetchgit {
@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
     sha256 = "116yfy0k65mwxdkld0w7c3gly77jdqlvga5hpbsw79i3r62kh4mf";
   };
 
-  buildInputs = [ openssl zlib pcre libxml2 libxslt ] ++ stdenv.lib.optional fullWebDAV expat;
+  buildInputs = [ openssl zlib pcre libxml2 libxslt
+    ] ++ stdenv.lib.optional fullWebDAV expat;
 
   patches = if syslog then [ "${syslog-ext}/syslog_1.4.0.patch" ] else [];
 
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     "--with-http_secure_link_module"
     # Install destination problems
     # "--with-http_perl_module"
-  ] ++ stdenv.lib.optional fullWebDAV "--add-module=${rtmp-ext}"
+  ] ++ stdenv.lib.optional rtmp "--add-module=${rtmp-ext}"
     ++ stdenv.lib.optional fullWebDAV "--add-module=${dav-ext}"
     ++ stdenv.lib.optional syslog "--add-module=${syslog-ext}";
 
