@@ -47,7 +47,7 @@ in rec {
 
     requires = mkOption {
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = ''
         Start the specified units when this unit is started, and stop
         this unit when the specified units are stopped or fail.
@@ -56,7 +56,7 @@ in rec {
 
     wants = mkOption {
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = ''
         Start the specified units when this unit is started.
       '';
@@ -64,7 +64,7 @@ in rec {
 
     after = mkOption {
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = ''
         If the specified units are started at the same time as
         this unit, delay this unit until they have started.
@@ -73,7 +73,7 @@ in rec {
 
     before = mkOption {
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = ''
         If the specified units are started at the same time as
         this unit, delay them until this unit has started.
@@ -82,7 +82,7 @@ in rec {
 
     bindsTo = mkOption {
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = ''
         Like ‘requires’, but in addition, if the specified units
         unexpectedly disappear, this unit will be stopped as well.
@@ -91,7 +91,7 @@ in rec {
 
     partOf = mkOption {
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = ''
         If the specified units are stopped or restarted, then this
         unit is stopped or restarted as well.
@@ -100,7 +100,7 @@ in rec {
 
     conflicts = mkOption {
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = ''
         If the specified units are started, then this unit is stopped
         and vice versa.
@@ -109,13 +109,13 @@ in rec {
 
     requiredBy = mkOption {
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = "Units that require (i.e. depend on and need to go down with) this unit.";
     };
 
     wantedBy = mkOption {
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = "Units that want (i.e. depend on) this unit.";
     };
 
@@ -179,7 +179,7 @@ in rec {
     };
 
     script = mkOption {
-      type = types.str;
+      type = types.lines;
       default = "";
       description = "Shell commands executed as the service's main process.";
     };
@@ -191,7 +191,7 @@ in rec {
     };
 
     preStart = mkOption {
-      type = types.string;
+      type = types.lines;
       default = "";
       description = ''
         Shell commands executed before the service's main process
@@ -200,7 +200,7 @@ in rec {
     };
 
     postStart = mkOption {
-      type = types.string;
+      type = types.lines;
       default = "";
       description = ''
         Shell commands executed after the service's main process
@@ -209,7 +209,7 @@ in rec {
     };
 
     postStop = mkOption {
-      type = types.string;
+      type = types.lines;
       default = "";
       description = ''
         Shell commands executed after the service's main process
@@ -262,7 +262,7 @@ in rec {
 
     listenStreams = mkOption {
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       example = [ "0.0.0.0:993" "/run/my-socket" ];
       description = ''
         For each item in this list, a <literal>ListenStream</literal>
