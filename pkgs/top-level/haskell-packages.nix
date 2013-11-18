@@ -1371,7 +1371,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   languageCQuote = callPackage ../development/libraries/haskell/language-c-quote {};
 
-  languageEcmascript = callPackage ../development/libraries/haskell/language-ecmascript {};
+  languageEcmascript = callPackage ../development/libraries/haskell/language-ecmascript {
+    QuickCheck = with self; QuickCheck_2_5_1_1;
+  };
 
   languageJava = callPackage ../development/libraries/haskell/language-java {};
 
