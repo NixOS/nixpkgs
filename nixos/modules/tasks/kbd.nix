@@ -55,9 +55,9 @@ in
       { description = "Setup Virtual Console";
         wantedBy = [ "sysinit.target" "multi-user.target" ];
         before = [ "sysinit.target" "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
         unitConfig =
           { DefaultDependencies = "no";
-            Conflicts = "shutdown.target";
             ConditionPathExists = "/dev/tty1";
           };
         serviceConfig =

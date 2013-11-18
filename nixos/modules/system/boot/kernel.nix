@@ -230,10 +230,8 @@ in
       { description = "Load Kernel Modules";
         wantedBy = [ "sysinit.target" "multi-user.target" ];
         before = [ "sysinit.target" "shutdown.target" ];
-        unitConfig =
-          { DefaultDependencies = "no";
-            Conflicts = "shutdown.target";
-          };
+        conflicts = [ "shutdown.target" ];
+        unitConfig.DefaultDependencies = "no";
         serviceConfig =
           { Type = "oneshot";
             RemainAfterExit = true;
