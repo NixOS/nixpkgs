@@ -58,18 +58,15 @@ in
     # The polkit daemon reads action/rule files
     environment.pathsToLink = [ "/share/polkit-1" ];
 
-    # PolKit rules for NixOS
-    environment.etc = [ {
-      source = pkgs.writeText "10-nixos.conf"
-        ''
-          polkit.addAdminRule(function(action, subject) {
-            return ["${cfg.adminIdentities}"];
-          });
+    # PolKit rules for NixOS.
+    environment.etc."polkit-1/rules.d/10-nixos.rules".text =
+      ''
+        polkit.addAdminRule(function(action, subject) {
+          return ["${cfg.adminIdentities}"];
+        });
 
-          ${cfg.extraConfig}
-        ''; #TODO: validation on compilation (at least against typos)
-      target = "polkit-1/rules.d/10-nixos.conf";
-    } ];
+        ${cfg.extraConfig}
+      ''; #TODO: validation on compilation (at least against typos)
 
     services.dbus.packages = [ pkgs.polkit ];
 
