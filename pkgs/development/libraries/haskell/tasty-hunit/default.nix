@@ -9,5 +9,6 @@ cabal.mkDerivation (self: {
     description = "HUnit support for the Tasty test framework";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
 })

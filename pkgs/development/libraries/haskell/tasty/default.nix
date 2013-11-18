@@ -13,5 +13,6 @@ cabal.mkDerivation (self: {
     description = "Modern and extensible testing framework";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
 })

@@ -14,6 +14,8 @@ cabal.mkDerivation (self: {
     dataDefaultClass Diff filepath HUnit mtl parsec QuickCheck
     testFramework testFrameworkHunit testFrameworkQuickcheck2
   ];
+  jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://github.com/jswebtools/language-ecmascript";
     description = "JavaScript parser and pretty-printer library";
