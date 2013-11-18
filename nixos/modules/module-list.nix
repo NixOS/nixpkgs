@@ -274,6 +274,7 @@
   ./tasks/network-interfaces.nix
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
+  ./testing/service-runner.nix
   ./virtualisation/libvirtd.nix
   #./virtualisation/nova.nix
   ./virtualisation/virtualbox-guest.nix
