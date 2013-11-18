@@ -2046,9 +2046,19 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   tasty = callPackage ../development/libraries/haskell/tasty {};
 
+  tastyAntXml = callPackage ../development/libraries/haskell/tasty-ant-xml {};
+
+  tastyGolden = callPackage ../development/libraries/haskell/tasty-golden {};
+
+  tastyHspec = callPackage ../development/libraries/haskell/tasty-hspec {};
+
   tastyHunit = callPackage ../development/libraries/haskell/tasty-hunit {};
 
+  tastyQuickcheck = callPackage ../development/libraries/haskell/tasty-quickcheck {};
+
   tastySmallcheck = callPackage ../development/libraries/haskell/tasty-smallcheck {};
+
+  tastyTh = callPackage ../development/libraries/haskell/tasty-th {};
 
   templateDefault = callPackage ../development/libraries/haskell/template-default {};
 
