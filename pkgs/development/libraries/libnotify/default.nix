@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   ver_maj = "0.7";
-  ver_min = "5";
+  ver_min = "6";
   name = "libnotify-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libnotify/${ver_maj}/${name}.tar.xz";
-    sha256 = "0lmnzy16vdjs9vlgdm0b7wfyi1nh526hv2dpb7vxb92bhx3wny23";
+    sha256 = "0dyq8zgjnnzcah31axnx6afb21kl7bks1gvrg4hjh3nk02j1rxhf";
   };
   src_m4 = fetchurl {
     url = "mirror://gentoo/distfiles/introspection-20110205.m4.tar.bz2";
