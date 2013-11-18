@@ -2,6 +2,7 @@
 , libjpeg, curl, libX11, libXmu, libXv, libXtst, qt4, mesa, zlib
 , gnome, libidn, rtmpdump, c-ares, openldap, makeWrapper, cacert
 }:
+assert stdenv.system == "x86_64-linux";
 let
   curl_custom =
     stdenv.lib.overrideDerivation curl (args: { 
