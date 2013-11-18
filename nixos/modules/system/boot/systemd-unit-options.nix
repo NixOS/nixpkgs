@@ -17,11 +17,13 @@ let
   unitOption = mkOptionType {
     name = "systemd option";
     merge = loc: defs:
-      let defs' = getValues defs;
+      let
+        defs' = filterOverrides defs;
+        defs'' = getValues defs';
       in
-        if isList (head defs')
-        then concatLists defs'
-        else mergeOneOption loc defs;
+        if isList (head defs'')
+        then concatLists defs''
+        else mergeOneOption loc defs';
   };
 
 in rec {
