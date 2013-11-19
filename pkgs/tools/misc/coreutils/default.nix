@@ -79,11 +79,10 @@ let
 
       maintainers = [ ];
     };
+  } // stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux" || stdenv.isSunOS) {
+    FORCE_UNSAFE_CONFIGURE = 1;
   } // optionalAttrs stdenv.isDarwin {
     makeFlags = "CFLAGS=-D_FORTIFY_SOURCE=0";
   });
 in
   self
-  // stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux" || stdenv.isSunOS) {
-    FORCE_UNSAFE_CONFIGURE = 1;
-  }
