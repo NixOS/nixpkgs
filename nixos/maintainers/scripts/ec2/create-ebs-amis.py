@@ -67,7 +67,7 @@ m.run_command("mkdir -p /mnt/etc/nixos")
 m.run_command("nix-channel --add http://nixos.org/channels/nixos-unstable")
 m.run_command("nix-channel --update")
 m.run_command("nixos-rebuild switch")
-version = m.run_command("nixos-version", capture_stdout=True).replace('"', '').rstrip()
+version = m.run_command("nixos-version", capture_stdout=True).split(' ')[0]
 print >> sys.stderr, "NixOS version is {0}".format(version)
 m.upload_file("./amazon-base-config.nix", "/mnt/etc/nixos/configuration.nix")
 m.run_command("nixos-install")
