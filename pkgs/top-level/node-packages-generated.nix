@@ -3383,7 +3383,7 @@
   by-version."everyauth"."0.4.5" = lib.makeOverridable self.buildNodePackage {
     name = "everyauth-0.4.5";
     src = [
-      (fetchurl {
+      (self.patchSource fetchurl {
         url = "http://registry.npmjs.org/everyauth/-/everyauth-0.4.5.tgz";
         sha1 = "282d358439d91c30fb4aa2320dc362edac7dd189";
       })
@@ -8424,13 +8424,13 @@
     passthru.names = [ "npm-user-validate" ];
   };
   by-spec."npm2nix"."*" =
-    self.by-version."npm2nix"."5.3.0";
-  by-version."npm2nix"."5.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "npm2nix-5.3.0";
+    self.by-version."npm2nix"."5.3.1";
+  by-version."npm2nix"."5.3.1" = lib.makeOverridable self.buildNodePackage {
+    name = "npm2nix-5.3.1";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/npm2nix/-/npm2nix-5.3.0.tgz";
-        sha1 = "ff5d66824033dd8815cc74c661ea30956eba2664";
+        url = "http://registry.npmjs.org/npm2nix/-/npm2nix-5.3.1.tgz";
+        sha1 = "f1a334e794e4faba821629d84c4d3d3555b6a15d";
       })
     ];
     buildInputs =
@@ -8449,7 +8449,7 @@
     ];
     passthru.names = [ "npm2nix" ];
   };
-  "npm2nix" = self.by-version."npm2nix"."5.3.0";
+  "npm2nix" = self.by-version."npm2nix"."5.3.1";
   by-spec."npmconf"."0.0.24" =
     self.by-version."npmconf"."0.0.24";
   by-version."npmconf"."0.0.24" = lib.makeOverridable self.buildNodePackage {
