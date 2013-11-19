@@ -22,11 +22,6 @@
       rm -f "$out/bin/$prg"
       makeWrapper "${python}/bin/$prg" "$out/bin/$prg" --set PYTHONHOME "$out"
     done
-
-    if [ -f ${python}/nix-support/setup-hook ]; then
-        mkdir -p $out/nix-support/
-        ln -sv ${python}/nix-support/setup-hook $out/nix-support
-    fi
   '' + postBuild;
 }) // {
   inherit python;
