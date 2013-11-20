@@ -1,13 +1,12 @@
-{ stdenv, fetchgit, SDL }:
+{ stdenv, fetchurl, SDL }:
 
 stdenv.mkDerivation rec {
   name = "linuxconsoletools-${version}";
-  version = "1.4.3";
+  version = "1.4.6";
 
-  src = fetchgit {
-    url = "git://linuxconsole.git.sourceforge.net/gitroot/linuxconsole/linuxconsole";
-    rev = "dac2cae0e5795ddc27b76a92767dd9e07a10621e";
-    sha256 = "350b008e614923dbd548fcaaf2842b39433acdcf595e2ce8aaf1599f076d331d";
+  src = fetchurl {
+    url = "mirror://sourceforge/linuxconsole/${name}.tar.bz2";
+    sha256 = "0035yhjbjdis5wqmbdz67xq61065x7vrx5mb7kb1rhrx3ag43wcf";
   };
 
   buildInputs = [ SDL ];
