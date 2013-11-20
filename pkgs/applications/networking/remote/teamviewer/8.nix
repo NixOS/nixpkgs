@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, libX11, libXtst, libXext, libXdamage, libXfixes, wine, makeWrapper, libXau
+{ stdenv, fetchurl, libX11, libXtst, libXext, libXdamage, libXfixes, wineUnstable, makeWrapper, libXau
 , bash, patchelf }:
 
 let
-  topath = "${wine}/bin";
+  topath = "${wineUnstable}/bin";
 
   toldpath = stdenv.lib.concatStringsSep ":" (map (x: "${x}/lib") 
-    [ stdenv.gcc.gcc libX11 libXtst libXext libXdamage libXfixes wine ]);
+    [ stdenv.gcc.gcc libX11 libXtst libXext libXdamage libXfixes wineUnstable ]);
 in
 stdenv.mkDerivation {
   name = "teamviewer-8.0.17147";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     #!${bash}/bin/sh
     export LD_LIBRARY_PATH=${toldpath}\''${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}
     export PATH=${topath}\''${PATH:+:\$PATH}
-    $out/share/teamviewer8/tv_bin/script/teamviewer
+    $out/share/teamviewer8/tv_bin/script/teamviewer "\$@"
     EOF
     chmod +x $out/bin/teamviewer
 
