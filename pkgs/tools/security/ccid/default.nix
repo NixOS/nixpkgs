@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pcsclite, pkgconfig, libusb1, perl }:
 stdenv.mkDerivation rec {
-  name = "ccid-1.4.9";
+  name = "ccid-1.4.13";
 
   src = fetchurl {
-    url = "https://alioth.debian.org/frs/download.php/3866/${name}.tar.bz2";
-    sha256 = "1dj0cw4js4ab678l94rf9p8a8gppkf1hm66qhmq5ajra6r5nv3m9";
+    url = "http://pkgs.fedoraproject.org/repo/pkgs/pcsc-lite-ccid/ccid-1.4.13.tar.bz2/89c167a873df1f8bc0dc907ce209e5ff/ccid-1.4.13.tar.bz2";
+    sha256 = "1w0mxb5qzps9x2fcggv958mwgwmvfxxj4nspxs67fa7qg7r6yxar";
   };
 
   patchPhase = ''
