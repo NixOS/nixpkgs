@@ -536,6 +536,17 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [  ];
       sha256 = ''1pbjsvd6r2daxd6aicp19fnb1j5z7fxadflsm1h0r33cy3vi7iy8'';
     };
+    coderay_1_1_0 = {
+      basename = ''coderay'';
+      meta = {
+        description = ''Fast syntax highlighting for selected languages.'';
+        homepage = ''http://coderay.rubychan.de'';
+        longDescription = ''Fast and easy syntax highlighting for selected languages, written in Ruby. Comes with RedCloth integration and LOC counter.'';
+      };
+      name = ''coderay-1.1.0'';
+      requiredGems = [  ];
+      sha256 = ''059wkzlap2jlkhg460pkwc1ay4v4clsmg1bp4vfzjzkgwdckr52s'';
+    };
     coffee_rails_4_0_1 = {
       basename = ''coffee_rails'';
       meta = {
