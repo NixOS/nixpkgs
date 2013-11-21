@@ -123,6 +123,7 @@ g: # Get dependencies from patched gems
     right_http_connection = g.right_http_connection_1_4_0;
     rjb = g.rjb_1_4_8;
     rkelly_remix = g.rkelly_remix_0_0_4;
+    rmagick = g.rmagick_2_13_2;
     rmail = g.rmail_1_0_0;
     rmail_sup = g.rmail_sup_1_0_1;
     rspec = g.rspec_2_11_0;
@@ -2100,6 +2101,17 @@ in JSDuck.
       name = ''rkelly-remix-0.0.4'';
       requiredGems = [  ];
       sha256 = ''1w6yr5n3b8yd0rsba9q3zyxr0n2hbpkz4v2k1qx6j1ywvl9rc2c1'';
+    };
+    rmagick_2_13_2 = {
+      basename = ''rmagick'';
+      meta = {
+        description = ''Ruby binding to ImageMagick'';
+        homepage = ''http://rubyforge.org/projects/rmagick'';
+        longDescription = ''RMagick is an interface between Ruby and ImageMagick.'';
+      };
+      name = ''rmagick-2.13.2'';
+      requiredGems = [  ];
+      sha256 = ''1fw5rs5yqi5ayh44d18gjq68chiz14byx01h33c8jvkdxz3b9wz4'';
     };
     rmail_1_0_0 = {
       basename = ''rmail'';
