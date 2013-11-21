@@ -8454,6 +8454,12 @@ let
     jackSupport = config.mumble.jackSupport or false;
   };
 
+  murmur = callPackage ../applications/networking/mumble/murmur.nix { 
+    avahi = avahi.override {
+      withLibdnssdCompat = true;
+    };
+  };
+
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
 
   ruby_gpgme = callPackage ../development/libraries/ruby_gpgme {
