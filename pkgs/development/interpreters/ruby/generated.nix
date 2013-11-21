@@ -110,6 +110,7 @@ g: # Get dependencies from patched gems
     rake = g.rake_10_1_0;
     rb_fsevent = g.rb_fsevent_0_9_3;
     rb_inotify = g.rb_inotify_0_9_2;
+    rb_kqueue = g.rb_kqueue_0_2_0;
     rdiscount = g.rdiscount_2_1_6;
     redcarpet = g.redcarpet_2_3_0;
     redis = g.redis_3_0_5;
@@ -859,6 +860,17 @@ using TCP/IP, especially if custom protocols are required.'';
       name = ''ffi-1.9.0'';
       requiredGems = [  ];
       sha256 = ''0rnh9yyfzcpdmi8m7giyd21lgqj00afgxvgbx41hsi2ls1ghfwvy'';
+    };
+    ffi_1_9_3 = {
+      basename = ''ffi'';
+      meta = {
+        description = ''Ruby FFI'';
+        homepage = ''http://wiki.github.com/ffi/ffi'';
+        longDescription = ''Ruby FFI library'';
+      };
+      name = ''ffi-1.9.3'';
+      requiredGems = [  ];
+      sha256 = ''0873h6jp3v65mll7av9bxlzp9m9l1cc66j0krg0llchwbh4pv5sp'';
     };
     file_tail_1_0_12 = {
       basename = ''file_tail'';
@@ -1828,6 +1840,17 @@ request helpers feature.'';
       name = ''rb-inotify-0.9.2'';
       requiredGems = [ g.ffi_1_9_3 ];
       sha256 = ''0752fhgfrx370b2jnhxzs8sjv2l8yrnwqj337kx9v100igd1c7iv'';
+    };
+    rb_kqueue_0_2_0 = {
+      basename = ''rb_kqueue'';
+      meta = {
+        description = ''A Ruby wrapper for BSD's kqueue, using FFI'';
+        homepage = ''http://github.com/mat813/rb-kqueue'';
+        longDescription = ''A Ruby wrapper for BSD's kqueue, using FFI'';
+      };
+      name = ''rb-kqueue-0.2.0'';
+      requiredGems = [ g.ffi_1_9_3 ];
+      sha256 = ''1f2wimhq93a1zy2fbyj7iyh7hvzmzwn3pzhkwb3npy4mj1df83n3'';
     };
     rdiscount_2_1_6 = {
       basename = ''rdiscount'';
