@@ -1,17 +1,17 @@
-{ cabal, bifunctors, deepseq, liftedBase, monadControl, mtl
-, profunctors, random, semigroups, tagged, time, vectorSpace
+{ cabal, deepseq, parallel, random, semigroups, time, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "netwire";
-  version = "4.0.7";
-  sha256 = "035jz7j19c7n4za9xi8vj6yl9m2b2v6d53mp711gf8609wv0cx0c";
+  version = "5.0.0";
+  sha256 = "1wxrckc8i86xiiyk8msa6qrhfjx4h34ry1nxh9rdcd5cy03kalks";
+  isLibrary = true;
+  isExecutable = true;
   buildDepends = [
-    bifunctors deepseq liftedBase monadControl mtl profunctors random
-    semigroups tagged time vectorSpace
+    deepseq parallel random semigroups time transformers
   ];
   meta = {
-    description = "Flexible wire arrows for FRP";
+    description = "Functional reactive programming library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
