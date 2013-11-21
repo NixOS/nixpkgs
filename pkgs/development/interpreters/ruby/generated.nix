@@ -70,6 +70,7 @@ g: # Get dependencies from patched gems
     json_pure = g.json_pure_1_8_0;
     launchy = g.launchy_2_3_0;
     liquid = g.liquid_2_5_4;
+    listen = g.listen_2_2_0;
     locale = g.locale_2_0_8;
     lockfile = g.lockfile_2_1_0;
     macaddr = g.macaddr_1_6_1;
@@ -106,6 +107,7 @@ g: # Get dependencies from patched gems
     railties = g.railties_4_0_0;
     rake = g.rake_10_1_0;
     rb_fsevent = g.rb_fsevent_0_9_3;
+    rb_inotify = g.rb_inotify_0_9_2;
     rdiscount = g.rdiscount_2_1_6;
     redcarpet = g.redcarpet_2_3_0;
     redis = g.redis_3_0_5;
@@ -1154,6 +1156,17 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [ g.rb_fsevent_0_9_3 g.rb_inotify_0_9_2 g.rb_kqueue_0_2_0 ];
       sha256 = ''1p1rqz26ixx0fzc0hy3psq2bb3pwkv9awixv76zkaaqj1czabzbs'';
     };
+    listen_2_2_0 = {
+      basename = ''listen'';
+      meta = {
+        description = ''Listen to file modifications'';
+        homepage = ''https://github.com/guard/listen'';
+        longDescription = ''The Listen gem listens to file modifications and notifies you about the changes. Works everywhere!'';
+      };
+      name = ''listen-2.2.0'';
+      requiredGems = [ g.celluloid_0_15_2 g.rb_fsevent_0_9_3 g.rb_inotify_0_9_2 ];
+      sha256 = ''1fm6cp5d4xbd5wdd0d804m3p2cc5rjrr5yzqzzh1ndzgbs94sv5c'';
+    };
     locale_2_0_8 = {
       basename = ''locale'';
       meta = {
@@ -1780,6 +1793,17 @@ request helpers feature.'';
       name = ''rb-fsevent-0.9.3'';
       requiredGems = [  ];
       sha256 = ''0bdnxwdxj4r1kdxfi5nszbsb126njrr81p912g64xxs2bgxd1bp1'';
+    };
+    rb_inotify_0_9_2 = {
+      basename = ''rb_inotify'';
+      meta = {
+        description = ''A Ruby wrapper for Linux's inotify, using FFI'';
+        homepage = ''http://github.com/nex3/rb-inotify'';
+        longDescription = ''A Ruby wrapper for Linux's inotify, using FFI'';
+      };
+      name = ''rb-inotify-0.9.2'';
+      requiredGems = [ g.ffi_1_9_3 ];
+      sha256 = ''0752fhgfrx370b2jnhxzs8sjv2l8yrnwqj337kx9v100igd1c7iv'';
     };
     rdiscount_2_1_6 = {
       basename = ''rdiscount'';
