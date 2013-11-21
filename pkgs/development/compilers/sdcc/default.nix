@@ -1,12 +1,12 @@
 { stdenv, fetchurl, bison, flex, boost, gputils ? null }:
 
 stdenv.mkDerivation rec {
-  version = "3.2.0";
+  version = "3.3.0";
   name = "sdcc-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sdcc/sdcc-src-${version}.tar.bz2";
-    sha256 = "15gdl04kqpvmwvvplss5nmp3bz8rhz48dhb0wmb2v9v9sn7qj01d";
+    sha256 = "1pj4hssvq34vbryvxc2jpp2b14cgxp695ygwiax6b7l2kvr62gw7";
   };
 
   # TODO: remove this comment when gputils != null is tested
