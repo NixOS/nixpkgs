@@ -73,6 +73,7 @@ g: # Get dependencies from patched gems
     listen = g.listen_2_2_0;
     locale = g.locale_2_0_8;
     lockfile = g.lockfile_2_1_0;
+    lumberjack = g.lumberjack_1_0_4;
     macaddr = g.macaddr_1_6_1;
     maruku = g.maruku_0_6_1;
     mail = g.mail_2_5_4;
@@ -1189,6 +1190,17 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       name = ''lockfile-2.1.0'';
       requiredGems = [  ];
       sha256 = ''1yfpz9k0crb7q7y5bcaavf2jzbc170dj84hqz13qp75rj7bl3qhf'';
+    };
+    lumberjack_1_0_4 = {
+      basename = ''lumberjack'';
+      meta = {
+        description = ''A simple, powerful, and very fast logging utility that can be a drop in replacement for Logger or ActiveSupport::BufferedLogger.'';
+        homepage = ''http://github.com/bdurand/lumberjack'';
+        longDescription = ''A simple, powerful, and very fast logging utility that can be a drop in replacement for Logger or ActiveSupport::BufferedLogger. Provides support for automatically rolling log files even with multiple processes writing the same log file.'';
+      };
+      name = ''lumberjack-1.0.4'';
+      requiredGems = [  ];
+      sha256 = ''1mj6m12hnmkvzl4w2yh04ak3z45pwksj6ra7v30za8snw9kg919d'';
     };
     macaddr_1_6_1 = {
       basename = ''macaddr'';
