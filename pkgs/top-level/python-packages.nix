@@ -126,9 +126,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit python buildPythonPackage pygobject pycairo;
   };
 
-  # A patched version of buildout, useful for buildout based development on Nix
-  zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
-
   # packages defined here
 
   aafigure = buildPythonPackage rec {
@@ -725,7 +722,26 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   buildout = zc_buildout;
   buildout152 = zc_buildout152;
 
+  # A patched version of buildout, useful for buildout based development on Nix
+  zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
+
   zc_buildout = zc_buildout171;
+  zc_buildout2 = zc_buildout221;
+  zc_buildout221 = buildPythonPackage rec {
+    name = "zc.buildout-2.2.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zc.buildout/${name}.tar.gz";
+      md5 = "476a06eed08506925c700109119b6e41";
+    };
+
+   meta = {
+      homepage = "http://www.buildout.org";
+      description = "A software build and configuration system";
+      license = pkgs.lib.licenses.zpt21;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+    };
+  };
   zc_buildout171 = buildPythonPackage rec {
     name = "zc.buildout-1.7.1";
 
