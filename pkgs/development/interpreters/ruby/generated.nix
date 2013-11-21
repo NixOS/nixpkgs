@@ -30,6 +30,7 @@ g: # Get dependencies from patched gems
     coffee_script = g.coffee_script_2_2_0;
     coffee_script_source = g.coffee_script_source_1_6_3;
     colorator = g.colorator_0_1;
+    commander = g.commander_4_1_5;
     cucumber = g.cucumber_1_3_8;
     daemons = g.daemons_1_1_9;
     diff_lcs = g.diff_lcs_1_1_3;
@@ -41,6 +42,7 @@ g: # Get dependencies from patched gems
     ethon = g.ethon_0_6_1;
     eventmachine = g.eventmachine_1_0_3;
     eventmachine_tail = g.eventmachine_tail_0_6_4;
+    excon = g.excon_0_25_3;
     execjs = g.execjs_2_0_2;
     fakes3 = g.fakes3_0_1_5;
     faraday = g.faraday_0_8_8;
@@ -568,6 +570,17 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [  ];
       sha256 = ''09zp15hyd9wlbgf1kmrf4rnry8cpvh1h9fj7afarlqcy4hrfdpvs'';
     };
+    commander_4_1_5 = {
+      basename = ''commander'';
+      meta = {
+        description = ''The complete solution for Ruby command-line executables'';
+        homepage = ''http://visionmedia.github.com/commander'';
+        longDescription = ''The complete solution for Ruby command-line executables. Commander bridges the gap between other terminal related libraries you know and love (OptionParser, HighLine), while providing many new features, and an elegant API.'';
+      };
+      name = ''commander-4.1.5'';
+      requiredGems = [ g.highline_1_6_20 ];
+      sha256 = ''040x2gjpl55g64kh5f9nby0870hnzx8cd7clxg771z0wjs7nzalc'';
+    };
     cucumber_1_3_8 = {
       basename = ''cucumber'';
       meta = {
@@ -749,6 +762,17 @@ using TCP/IP, especially if custom protocols are required.'';
       requiredGems = [ g.eventmachine_1_0_3 ];
       sha256 = ''1pvlb34vdzd81kf9f3xyibb4f55xjqm7lqqy28dgyci5cyv50y61'';
     };
+    excon_0_25_3 = {
+      basename = ''excon'';
+      meta = {
+        description = ''speed, persistence, http(s)'';
+        homepage = ''https://github.com/geemus/excon'';
+        longDescription = ''EXtended http(s) CONnections'';
+      };
+      name = ''excon-0.25.3'';
+      requiredGems = [  ];
+      sha256 = ''1d552jhvrpmnzrg3di88397l07ngrz04s2al17klpam6crxqw2b2'';
+    };
     execjs_2_0_2 = {
       basename = ''execjs'';
       meta = {
@@ -885,6 +909,21 @@ minutes of work.
       name = ''highline-1.6.19'';
       requiredGems = [  ];
       sha256 = ''0gylnz2cdaswgszgl8x2qx0c87md4246r1i0blgm3nqvgd4hlsxd'';
+    };
+    highline_1_6_20 = {
+      basename = ''highline'';
+      meta = {
+        description = ''HighLine is a high-level command-line IO library.'';
+        homepage = ''http://highline.rubyforge.org'';
+        longDescription = ''A high-level IO library that provides validation, type conversion, and more for
+command-line interfaces. HighLine also includes a complete menu system that can
+crank out anything from simple list selection to complete shells with just
+minutes of work.
+'';
+      };
+      name = ''highline-1.6.20'';
+      requiredGems = [  ];
+      sha256 = ''0gk7mpw2r5lv60vr4hb0090wbnqh0fsbyrrcvxiqk7hyhxdz08iv'';
     };
     highline_1_6_2 = {
       basename = ''highline'';
