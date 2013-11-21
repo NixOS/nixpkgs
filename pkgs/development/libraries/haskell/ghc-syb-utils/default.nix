@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ghc-syb-utils";
-  version = "0.2.1.1";
-  sha256 = "1fwlzqbkjn592jh01nccn99iii6047fg9f3hh255586nzngihh1l";
+  version = "0.2.1.2";
+  sha256 = "12k6a782gv06gmi6dvskzv4ihz54izhqslwa9cgilhsihw557i9p";
   buildDepends = [ syb ];
   meta = {
     homepage = "http://github.com/nominolo/ghc-syb";
