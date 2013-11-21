@@ -142,6 +142,7 @@ g: # Get dependencies from patched gems
     slop = g.slop_3_4_6;
     sprockets = g.sprockets_2_10_0;
     sprockets_rails = g.sprockets_rails_2_0_1;
+    syntax = g.syntax_1_0_0;
     syslog_protocol = g.syslog_protocol_0_9_2;
     systemu = g.systemu_2_5_2;
     taskjuggler = g.taskjuggler_3_5_0;
@@ -2363,6 +2364,15 @@ interpreters.'';
       name = ''sprockets-rails-2.0.1'';
       requiredGems = [ g.sprockets_2_10_0 g.actionpack_4_0_0 g.activesupport_4_0_0 ];
       sha256 = ''170llk1qsvzhhslmasqk4hp5lrv9ibwy44q32yg6kn9s7sh0c1wy'';
+    };
+    syntax_1_0_0 = {
+      basename = ''syntax'';
+      meta = {
+        description = ''Syntax is Ruby library for performing simple syntax highlighting.'';
+      };
+      name = ''syntax-1.0.0'';
+      requiredGems = [  ];
+      sha256 = ''1z93kkhdq55vq3fg9wljhm591cj59qis58dk97l09b8bfxi2ypk0'';
     };
     syslog_protocol_0_9_2 = {
       basename = ''syslog_protocol'';
