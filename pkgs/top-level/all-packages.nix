@@ -3805,6 +3805,8 @@ let
 
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
+  vagrant = callPackage ../development/tools/vagrant { };
+
   gdb = callPackage ../development/tools/misc/gdb {
     hurd = gnu.hurdCross;
     inherit (gnu) mig;
