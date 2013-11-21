@@ -2257,6 +2257,16 @@ Originally written by Daiki Ueno. Converted to a RubyGem by Geoffrey Grosenbach'
       requiredGems = [  ];
       sha256 = ''1khf6d903agnwd8965f5f8b353rzmfvygxp53z1199rqzw8h46q2'';
     };
+    rubyzip_1_1_0 = {
+      basename = ''rubyzip'';
+      meta = {
+        description = ''rubyzip is a ruby module for reading and writing zip files'';
+        homepage = ''http://github.com/rubyzip/rubyzip'';
+      };
+      name = ''rubyzip-1.1.0'';
+      requiredGems = [  ];
+      sha256 = ''0kxpcs047fb52lz0imp6vl3hr5khqpk0jfbr2knfbp612ynzyzcl'';
+    };
     safe_yaml_0_9_7 = {
       basename = ''safe_yaml'';
       meta = {
