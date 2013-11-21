@@ -6,8 +6,8 @@ rec {
   };
 
   texmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2013.20130918.orig.tar.xz;
-    sha256 = "0h7x49zsd2gs8fr28f4h04dv5m8p2mpgqxk2vvl5xlf4wwxxbm2p";
+    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2013.20131112.orig.tar.xz;
+    sha256 = "1zak95xh35bnzr3hjrjaxg0yisyw8g3xcym0ywsspc4dxpn1qgk1";
   };
 
   langTexmfSrc = fetchurl {
@@ -133,4 +133,3 @@ rec {
     platforms   = platforms.unix;
   };
 }
-
