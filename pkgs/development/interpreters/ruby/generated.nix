@@ -47,6 +47,7 @@ g: # Get dependencies from patched gems
     fakes3 = g.fakes3_0_1_5;
     faraday = g.faraday_0_8_8;
     faraday_middleware = g.faraday_middleware_0_9_0;
+    fast_stemmer = g.fast_stemmer_1_0_2;
     ffi = g.ffi_1_9_0;
     file_tail = g.file_tail_1_0_12;
     foreman = g.foreman_0_63_0;
@@ -825,6 +826,17 @@ using TCP/IP, especially if custom protocols are required.'';
       name = ''faraday_middleware-0.9.0'';
       requiredGems = [ g.faraday_0_8_8 ];
       sha256 = ''1kwvi2sdxd6j764a7q5iir73dw2v6816zx3l8cgfv0wr2m47icq2'';
+    };
+    fast_stemmer_1_0_2 = {
+      basename = ''fast_stemmer'';
+      meta = {
+        description = ''Fast Porter stemmer based on a C version of algorithm'';
+        homepage = ''http://github.com/romanbsd/fast-stemmer'';
+        longDescription = ''Fast Porter stemmer based on a C version of algorithm'';
+      };
+      name = ''fast-stemmer-1.0.2'';
+      requiredGems = [  ];
+      sha256 = ''0688clyk4xxh3kdb18vi089k90mca8ji5fwaknh3da5wrzcrzanh'';
     };
     ffi_1_9_0 = {
       basename = ''ffi'';
