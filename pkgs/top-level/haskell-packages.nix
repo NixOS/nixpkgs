@@ -1769,6 +1769,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   QuickCheck2 = self.QuickCheck_2_6;
   QuickCheck  = self.QuickCheck2;
 
+  quickcheckInstances = callPackage ../development/libraries/haskell/quickcheck-instances {};
+
   quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {};
 
   qrencode = callPackage ../development/libraries/haskell/qrencode {
