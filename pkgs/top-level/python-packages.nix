@@ -2128,13 +2128,15 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
-  django = buildPythonPackage rec {
+  django = django_1_6;
+  
+  django_1_6 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.4.1";
+    version = "1.6";
 
     src = fetchurl {
-      url = "http://www.djangoproject.com/m/releases/1.4/${name}.tar.gz";
-      sha256 = "16s0anvpaccbqmdrhl71z73k0dy2sl166nnc2fbd5lshlgmj13ad";
+      url = "http://www.djangoproject.com/m/releases/1.6/${name}.tar.gz";
+      sha256 = "165bd5wmv2an9h365d12k0112z0l375dxsy7dlxa7r8kyg4gvnfk";
     };
 
     # error: invalid command 'test'
@@ -2146,6 +2148,41 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  django_1_5 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.5.5";
+
+    src = fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.5/${name}.tar.gz";
+      sha256 = "07fp8ycx76q2nz96mxld1svvpfsrivjgpql0mr20r7gwzcfrrrka";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
+  django_1_4 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.4.10";
+
+    src = fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.4/${name}.tar.gz";
+      sha256 = "1pi9mi14f19xlp29j2c8dz8rs749c1m41d9j1i0b3nlz0cy0h7rx";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
 
   django_1_3 = buildPythonPackage rec {
     name = "Django-1.3.7";
