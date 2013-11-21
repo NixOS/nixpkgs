@@ -10301,6 +10301,8 @@ let
 
   yafc = callPackage ../applications/networking/yafc { };
 
+  yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
+
   myEnvFun = import ../misc/my-env {
     inherit substituteAll pkgs;
     inherit (stdenv) mkDerivation;
