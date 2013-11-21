@@ -21,6 +21,7 @@ g: # Get dependencies from patched gems
     builder = g.builder_3_2_2;
     buildr = g.buildr_1_4_12;
     bundler = g.bundler_1_3_5;
+    celluloid = g.celluloid_0_15_2;
     childprocess = g.childprocess_0_3_9;
     chronic = g.chronic_0_10_1;
     coderay = g.coderay_1_0_9;
@@ -132,6 +133,7 @@ g: # Get dependencies from patched gems
     thor = g.thor_0_18_1;
     thread_safe = g.thread_safe_0_1_3;
     tilt = g.tilt_1_4_1;
+    timers = g.timers_1_1_0;
     tins = g.tins_0_9_0;
     travis = g.travis_1_5_3;
     treetop = g.treetop_1_4_15;
@@ -446,6 +448,17 @@ for those one-off tasks, with a language that's a joy to use.
       name = ''bundler-1.3.5'';
       requiredGems = [  ];
       sha256 = ''1r7zx8qfwzr3pbgrjbsml7z5qgscwyyv33x2jzhz6adqyx3r1f08'';
+    };
+    celluloid_0_15_2 = {
+      basename = ''celluloid'';
+      meta = {
+        description = ''Actor-based concurrent object framework for Ruby'';
+        homepage = ''https://github.com/celluloid/celluloid'';
+        longDescription = ''Celluloid enables people to build concurrent programs out of concurrent objects just as easily as they build sequential programs out of sequential objects'';
+      };
+      name = ''celluloid-0.15.2'';
+      requiredGems = [ g.timers_1_1_0 ];
+      sha256 = ''0lpa97m7f4p5hgzaaa47y1d5c78n8pp4xd8qb0sn5llqd0klkd9b'';
     };
     childprocess_0_3_9 = {
       basename = ''childprocess'';
@@ -2163,6 +2176,17 @@ management.
       name = ''tilt-1.4.1'';
       requiredGems = [  ];
       sha256 = ''00sr3yy7sbqaq7cb2d2kpycajxqf1b1wr1yy33z4bnzmqii0b0ir'';
+    };
+    timers_1_1_0 = {
+      basename = ''timers'';
+      meta = {
+        description = ''Schedule procs to run after a certain time, or at periodic intervals, using any API that accepts a timeout'';
+        homepage = ''https://github.com/tarcieri/timers'';
+        longDescription = ''Pure Ruby one-shot and periodic timers'';
+      };
+      name = ''timers-1.1.0'';
+      requiredGems = [  ];
+      sha256 = ''0x3vnkxy3bg9f6v1nhkfqkajr19glrzkmqd5a1wy8hrylx8rdfrv'';
     };
     tins_0_9_0 = {
       basename = ''tins'';
