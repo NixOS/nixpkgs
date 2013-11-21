@@ -51,6 +51,7 @@ g: # Get dependencies from patched gems
     ffi = g.ffi_1_9_0;
     file_tail = g.file_tail_1_0_12;
     foreman = g.foreman_0_63_0;
+    formatador = g.formatador_0_2_4;
     gettext = g.gettext_3_0_0;
     gh = g.gh_0_12_0;
     gherkin = g.gherkin_2_12_1;
@@ -870,6 +871,17 @@ using TCP/IP, especially if custom protocols are required.'';
       name = ''foreman-0.63.0'';
       requiredGems = [ g.thor_0_18_1 g.dotenv_0_9_0 ];
       sha256 = ''0yqyjix9jm4iwyc4f3wc32vxr28rpjcw1c9ni5brs4s2a24inzlk'';
+    };
+    formatador_0_2_4 = {
+      basename = ''formatador'';
+      meta = {
+        description = ''Ruby STDOUT text formatting'';
+        homepage = ''http://github.com/geemus/formatador'';
+        longDescription = ''STDOUT text formatting'';
+      };
+      name = ''formatador-0.2.4'';
+      requiredGems = [  ];
+      sha256 = ''0pgmk1h6i6m3cslnfyjqld06a4c2xbbvmngxg2axddf39xwz6f12'';
     };
     gettext_3_0_0 = {
       basename = ''gettext'';
