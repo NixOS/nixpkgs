@@ -1750,6 +1750,17 @@ augments 'require' to find and load matching files.'';
       requiredGems = [ g.coderay_1_0_9 g.slop_3_4_6 g.method_source_0_8_2 ];
       sha256 = ''141slzb62zfzdhrygqjmrzh68s3vzrb4mwyipy2lhps5q4b46y9s'';
     };
+    pry_0_9_12_3 = {
+      basename = ''pry'';
+      meta = {
+        description = ''An IRB alternative and runtime developer console'';
+        homepage = ''http://pry.github.com'';
+        longDescription = ''An IRB alternative and runtime developer console'';
+      };
+      name = ''pry-0.9.12.3'';
+      requiredGems = [ g.coderay_1_1_0 g.slop_3_4_7 g.method_source_0_8_2 ];
+      sha256 = ''1dn80vnyq1l6192sg3p29d0yz6rswnsl8rn3lkf75c86a2qqxpy3'';
+    };
     pusher_client_0_3_1 = {
       basename = ''pusher_client'';
       meta = {
@@ -2355,6 +2366,17 @@ interpreters.'';
       name = ''slop-3.4.6'';
       requiredGems = [  ];
       sha256 = ''0fdp3nkljjs2d5yhgjzcqi0f6xq67byfbrayg5aj7r76rsw0hmal'';
+    };
+    slop_3_4_7 = {
+      basename = ''slop'';
+      meta = {
+        description = ''Simple Lightweight Option Parsing'';
+        homepage = ''http://github.com/leejarvis/slop'';
+        longDescription = ''A simple DSL for gathering options and parsing the command line'';
+      };
+      name = ''slop-3.4.7'';
+      requiredGems = [  ];
+      sha256 = ''1x3dwljqvkzj314rwn2bxgim9xvgwnfipzg5g0kwwxfn90fpv2sn'';
     };
     sprockets_2_10_0 = {
       basename = ''sprockets'';
