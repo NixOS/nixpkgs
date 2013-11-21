@@ -1096,6 +1096,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   gloss = callPackage ../development/libraries/haskell/gloss {};
 
+  glossAccelerate = callPackage ../development/libraries/haskell/gloss-accelerate {};
+
   glpkHs = callPackage ../development/libraries/haskell/glpk-hs {};
 
   GLURaw_1_3_0_0 = callPackage ../development/libraries/haskell/GLURaw/1.3.0.0.nix {};
