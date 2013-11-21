@@ -118,6 +118,7 @@ g: # Get dependencies from patched gems
     remote_syslog = g.remote_syslog_1_6_14;
     resque = g.resque_1_25_1;
     resque_web = g.resque_web_0_0_3;
+    rest_client = g.rest_client_1_6_7;
     right_aws = g.right_aws_3_1_0;
     right_http_connection = g.right_http_connection_1_4_0;
     rjb = g.rjb_1_4_8;
@@ -1334,6 +1335,43 @@ and added by the users of MIME::Types.'';
       requiredGems = [  ];
       sha256 = ''0hd6hpl05jyx3siznk70z46bmrzwmcyrr24yfaqg6nar35zw8bgf'';
     };
+    mime_types_2_0 = {
+      basename = ''mime_types'';
+      meta = {
+        description = ''The mime-types library provides a library and registry for information about MIME content type definitions'';
+        homepage = ''http://mime-types.rubyforge.org/'';
+        longDescription = ''The mime-types library provides a library and registry for information about
+MIME content type definitions. It can be used to determine defined filename
+extensions for MIME types, or to use filename extensions to look up the likely
+MIME type definitions.
+
+MIME content types are used in MIME-compliant communications, as in e-mail or
+HTTP traffic, to indicate the type of content which is transmitted. The
+mime-types library provides the ability for detailed information about MIME
+entities (provided as an enumerable collection of MIME::Type objects) to be
+determined and used programmatically. There are many types defined by RFCs and
+vendors, so the list is long but by definition incomplete; don't hesitate to to
+add additional type definitions (see Contributing.rdoc). The primary sources
+for MIME type definitions found in mime-types is the IANA collection of
+registrations (see below for the link), RFCs, and W3C recommendations.
+
+The mime-types library uses semantic versioning. This is release 2.0; there are
+incompatible changes in the API provided by mime-types, mostly around registry
+initialization (see History.rdoc for full details), and the removal of support
+for Ruby 1.8 interpreters.
+
+mime-types (previously called MIME::Types for Ruby) was originally based on
+MIME::Types for Perl by Mark Overmeer, copyright 2001 - 2009. It is built to
+conform to the MIME types of RFCs 2045 and 2231. It tracks the {IANA
+registry}[http://www.iana.org/assignments/media-types/]
+({ftp}[ftp://ftp.iana.org/assignments/media-types]) with some unofficial types
+added from the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp]
+and added by the users of mime-types.'';
+      };
+      name = ''mime-types-2.0'';
+      requiredGems = [  ];
+      sha256 = ''1q1s22l3mm0am2f7n9qjqp8zl0smr9zlqr2ywwyfjkid2sj3prfk'';
+    };
     mini_portile_0_5_1 = {
       basename = ''mini_portile'';
       meta = {
@@ -1947,6 +1985,17 @@ multiple, different applications.
       name = ''resque-web-0.0.3'';
       requiredGems = [ g.resque_1_25_1 g.twitter_bootstrap_rails_2_2_8 g.jquery_rails_3_0_4 g.sass_rails_4_0_1 g.coffee_rails_4_0_1 ];
       sha256 = ''1v4g0zrlq9n0pkhdiwxqcmis5p8hpxm475vchldk63mi1vy4fvr2'';
+    };
+    rest_client_1_6_7 = {
+      basename = ''rest_client'';
+      meta = {
+        description = ''Simple HTTP and REST client for Ruby, inspired by microframework syntax for specifying actions.'';
+        homepage = ''http://github.com/archiloque/rest-client'';
+        longDescription = ''A simple HTTP and REST client for Ruby, inspired by the Sinatra microframework style of specifying actions: get, put, post, delete.'';
+      };
+      name = ''rest-client-1.6.7'';
+      requiredGems = [ g.mime_types_2_0 ];
+      sha256 = ''0nn7zalgidz2yj0iqh3xvzh626krm2al79dfiij19jdhp0rk8853'';
     };
     right_aws_3_1_0 = {
       basename = ''right_aws'';
