@@ -62,6 +62,7 @@ g: # Get dependencies from patched gems
     http_cookie = g.http_cookie_1_0_1;
     i18n = g.i18n_0_6_5;
     iconv = g.iconv_1_0_3;
+    jekyll = g.jekyll_1_3_0;
     jquery_rails = g.jquery_rails_3_0_4;
     jruby_pageant = g.jruby_pageant_1_1_1;
     jsduck = g.jsduck_5_1_0;
@@ -1043,6 +1044,17 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       name = ''iconv-1.0.3'';
       requiredGems = [  ];
       sha256 = ''1nhjn07h2fqivdj6xqzi2x2kzh28vigx8z3q5fv2cqn9aqmbdacl'';
+    };
+    jekyll_1_3_0 = {
+      basename = ''jekyll'';
+      meta = {
+        description = ''A simple, blog aware, static site generator.'';
+        homepage = ''http://github.com/mojombo/jekyll'';
+        longDescription = ''Jekyll is a simple, blog aware, static site generator.'';
+      };
+      name = ''jekyll-1.3.0'';
+      requiredGems = [ g.liquid_2_5_4 g.classifier_1_3_3 g.listen_1_3_1 g.maruku_0_6_1 g.pygments_rb_0_5_4 g.commander_4_1_5 g.safe_yaml_0_9_7 g.colorator_0_1 g.redcarpet_2_3_0 ];
+      sha256 = ''0hq9sdyivfifba0d4d7g113jbd3jwm8jpdc9i09mv0nfhdcbc3k4'';
     };
     jquery_rails_3_0_4 = {
       basename = ''jquery_rails'';
