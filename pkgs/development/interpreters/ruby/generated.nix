@@ -100,6 +100,7 @@ g: # Get dependencies from patched gems
     papertrail_cli = g.papertrail_cli_0_9_3;
     parallel = g.parallel_0_7_1;
     polyglot = g.polyglot_0_3_3;
+    posix_spawn = g.posix_spawn_0_3_6;
     pry = g.pry_0_9_12_2;
     pusher_client = g.pusher_client_0_3_1;
     rack = g.rack_1_5_2;
@@ -1652,6 +1653,17 @@ augments 'require' to find and load matching files.'';
       name = ''polyglot-0.3.3'';
       requiredGems = [  ];
       sha256 = ''082zmail2h3cxd9z1wnibhk6aj4sb1f3zzwra6kg9bp51kx2c00v'';
+    };
+    posix_spawn_0_3_6 = {
+      basename = ''posix_spawn'';
+      meta = {
+        description = ''posix_spawnp(2) for ruby'';
+        homepage = ''http://github.com/rtomayko/posix-spawn'';
+        longDescription = ''posix-spawn uses posix_spawnp(2) for faster process spawning'';
+      };
+      name = ''posix-spawn-0.3.6'';
+      requiredGems = [  ];
+      sha256 = ''0f2mqka8024yz55iw8wbihvmakwqnbrdr4a1ffl3x2zi104yvb43'';
     };
     pry_0_9_12_2 = {
       basename = ''pry'';
