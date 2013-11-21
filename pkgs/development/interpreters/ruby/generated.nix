@@ -29,6 +29,7 @@ g: # Get dependencies from patched gems
     coffee_rails = g.coffee_rails_4_0_1;
     coffee_script = g.coffee_script_2_2_0;
     coffee_script_source = g.coffee_script_source_1_6_3;
+    colorator = g.colorator_0_1;
     cucumber = g.cucumber_1_3_8;
     daemons = g.daemons_1_1_9;
     diff_lcs = g.diff_lcs_1_1_3;
@@ -555,6 +556,17 @@ for those one-off tasks, with a language that's a joy to use.
       name = ''coffee-script-source-1.6.3'';
       requiredGems = [  ];
       sha256 = ''0p33h0rdj1n8xhm2d5hzqbb8br6wn4rx0gk4hyhc6rxkaxsy79b4'';
+    };
+    colorator_0_1 = {
+      basename = ''colorator'';
+      meta = {
+        description = ''String core extensions for terminal coloring.'';
+        homepage = ''https://github.com/octopress/colorator'';
+        longDescription = ''Colorize your text in the terminal.'';
+      };
+      name = ''colorator-0.1'';
+      requiredGems = [  ];
+      sha256 = ''09zp15hyd9wlbgf1kmrf4rnry8cpvh1h9fj7afarlqcy4hrfdpvs'';
     };
     cucumber_1_3_8 = {
       basename = ''cucumber'';
