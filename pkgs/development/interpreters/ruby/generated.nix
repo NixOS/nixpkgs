@@ -1163,6 +1163,17 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [ g.addressable_2_3_5 ];
       sha256 = ''0ckvs40f29ancs0ki12pqb94k380cz41b4gbjplm85ly6kd57sph'';
     };
+    launchy_2_4_0 = {
+      basename = ''launchy'';
+      meta = {
+        description = ''Launchy is helper class for launching cross-platform applications in a fire and forget manner.'';
+        homepage = ''http://github.com/copiousfreetime/launchy'';
+        longDescription = ''Launchy is helper class for launching cross-platform applications in a fire and forget manner. There are application concepts (browser, email client, etc) that are common across all platforms, and they may be launched differently on each platform. Launchy is here to make a common approach to launching external application from within ruby programs.'';
+      };
+      name = ''launchy-2.4.0'';
+      requiredGems = [ g.addressable_2_3_5 ];
+      sha256 = ''0vxc3m4sjxyjjzw2rmsginf9nbxfyv7hhxshmn6kxkvcpjxx5di0'';
+    };
     liquid_2_5_4 = {
       basename = ''liquid'';
       meta = {
