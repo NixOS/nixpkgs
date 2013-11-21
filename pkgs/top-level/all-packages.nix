@@ -1019,6 +1019,8 @@ let
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
+  grafx2 = callPackage ../applications/graphics/grafx2 {};
+
   graphviz = callPackage ../tools/graphics/graphviz { };
 
   /* Readded by Michael Raskin. There are programs in the wild
