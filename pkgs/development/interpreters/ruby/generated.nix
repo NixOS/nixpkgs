@@ -55,6 +55,7 @@ g: # Get dependencies from patched gems
     gettext = g.gettext_3_0_0;
     gh = g.gh_0_12_0;
     gherkin = g.gherkin_2_12_1;
+    guard = g.guard_2_2_4;
     highline = g.highline_1_6_19;
     hike = g.hike_1_2_3;
     hoe = g.hoe_3_1_0;
@@ -67,9 +68,11 @@ g: # Get dependencies from patched gems
     json = g.json_1_8_0;
     json_pure = g.json_pure_1_8_0;
     launchy = g.launchy_2_3_0;
+    liquid = g.liquid_2_5_4;
     locale = g.locale_2_0_8;
     lockfile = g.lockfile_2_1_0;
     macaddr = g.macaddr_1_6_1;
+    maruku = g.maruku_0_6_1;
     mail = g.mail_2_5_4;
     mechanize = g.mechanize_2_7_2;
     method_source = g.method_source_0_8_2;
@@ -103,6 +106,7 @@ g: # Get dependencies from patched gems
     rake = g.rake_10_1_0;
     rb_fsevent = g.rb_fsevent_0_9_3;
     rdiscount = g.rdiscount_2_1_6;
+    redcarpet = g.redcarpet_2_3_0;
     redis = g.redis_3_0_5;
     redis_namespace = g.redis_namespace_1_3_1;
     remote_syslog = g.remote_syslog_1_6_14;
@@ -121,6 +125,7 @@ g: # Get dependencies from patched gems
     ruby_hmac = g.ruby_hmac_0_4_0;
     rubyforge = g.rubyforge_2_0_4;
     rubyzip = g.rubyzip_0_9_9;
+    safe_yaml = g.safe_yaml_0_9_7;
     sass = g.sass_3_2_12;
     sass_rails = g.sass_rails_4_0_1;
     selenium_webdriver = g.selenium_webdriver_2_35_1;
@@ -919,6 +924,17 @@ So you can use GNU gettext tools for maintaining.
       requiredGems = [ g.multi_json_1_7_9 ];
       sha256 = ''07nzchdvkkd35m9k7d9k8j72jm3imv56ccn734mxa5klv1xx2d45'';
     };
+    guard_2_2_4 = {
+      basename = ''guard'';
+      meta = {
+        description = ''Guard keeps an eye on your file modifications'';
+        homepage = ''http://guardgem.org'';
+        longDescription = ''Guard is a command line tool to easily handle events on file system modifications.'';
+      };
+      name = ''guard-2.2.4'';
+      requiredGems = [ g.thor_0_18_1 g.listen_2_2_0 g.pry_0_9_12_3 g.lumberjack_1_0_4 g.formatador_0_2_4 ];
+      sha256 = ''0z427rkcpzy82g21cgq7i5sn1vxn8hm8j4d78kj9vlaqgilcybhq'';
+    };
     highline_1_6_19 = {
       basename = ''highline'';
       meta = {
@@ -1105,6 +1121,27 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [ g.addressable_2_3_5 ];
       sha256 = ''0ckvs40f29ancs0ki12pqb94k380cz41b4gbjplm85ly6kd57sph'';
     };
+    liquid_2_5_4 = {
+      basename = ''liquid'';
+      meta = {
+        description = ''A secure, non-evaling end user template engine with aesthetic markup.'';
+        homepage = ''http://www.liquidmarkup.org'';
+      };
+      name = ''liquid-2.5.4'';
+      requiredGems = [  ];
+      sha256 = ''0adb1fz20jwcyx1ia133426i59mrrz9iq9lpcmzq6jx0dlaa4amv'';
+    };
+    listen_1_3_1 = {
+      basename = ''listen'';
+      meta = {
+        description = ''Listen to file modifications'';
+        homepage = ''https://github.com/guard/listen'';
+        longDescription = ''The Listen gem listens to file modifications and notifies you about the changes. Works everywhere!'';
+      };
+      name = ''listen-1.3.1'';
+      requiredGems = [ g.rb_fsevent_0_9_3 g.rb_inotify_0_9_2 g.rb_kqueue_0_2_0 ];
+      sha256 = ''1p1rqz26ixx0fzc0hy3psq2bb3pwkv9awixv76zkaaqj1czabzbs'';
+    };
     locale_2_0_8 = {
       basename = ''locale'';
       meta = {
@@ -1149,6 +1186,20 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       name = ''mail-2.5.4'';
       requiredGems = [ g.mime_types_1_25 g.treetop_1_4_15 ];
       sha256 = ''0z15ksb8blcppchv03g34844f7xgf36ckp484qjj2886ig1qara4'';
+    };
+    maruku_0_6_1 = {
+      basename = ''maruku'';
+      meta = {
+        description = ''Maruku is a Markdown-superset interpreter written in Ruby.'';
+        homepage = ''http://github.com/bhollis/maruku'';
+        longDescription = ''Maruku is a Markdown interpreter in Ruby.
+	It features native export to HTML and PDF (via Latex). The
+	output is really beautiful!
+	'';
+      };
+      name = ''maruku-0.6.1'';
+      requiredGems = [ g.syntax_1_0_0 ];
+      sha256 = ''01xc4l480k79jbicr0j37d9bmd4dsnrjh5hwdrh2djvy06l77ngz'';
     };
     mechanize_2_7_2 = {
       basename = ''mechanize'';
@@ -1587,6 +1638,17 @@ augments 'require' to find and load matching files.'';
       requiredGems = [ g.websocket_1_0_7 g.ruby_hmac_0_4_0 ];
       sha256 = ''1mxqy960iln065fypk1ww3xgv7q396fpl6v0rp7ipls6aj86j970'';
     };
+    pygments_rb_0_5_4 = {
+      basename = ''pygments_rb'';
+      meta = {
+        description = ''pygments wrapper for ruby'';
+        homepage = ''http://github.com/tmm1/pygments.rb'';
+        longDescription = ''pygments.rb exposes the pygments syntax highlighter to Ruby'';
+      };
+      name = ''pygments.rb-0.5.4'';
+      requiredGems = [ g.yajl_ruby_1_1_0 g.posix_spawn_0_3_6 ];
+      sha256 = ''0ryl0f0zp0rffaggd978cmrkzsmf83x452fcinw6p705xdk4zbvl'';
+    };
     rack_1_5_2 = {
       basename = ''rack'';
       meta = {
@@ -1716,6 +1778,17 @@ request helpers feature.'';
       name = ''rdiscount-2.1.6'';
       requiredGems = [  ];
       sha256 = ''180ln9gwxn0cyflg0i1viv7jyalmjqvqr34cb65xsmmsz1nz55q2'';
+    };
+    redcarpet_2_3_0 = {
+      basename = ''redcarpet'';
+      meta = {
+        description = ''Markdown that smells nice'';
+        homepage = ''http://github.com/vmg/redcarpet'';
+        longDescription = ''A fast, safe and extensible Markdown to (X)HTML parser'';
+      };
+      name = ''redcarpet-2.3.0'';
+      requiredGems = [  ];
+      sha256 = ''1fghh7n9kz6n6bdhgix5s8lyj5sw6q44zizf4mdgz5xsgwqcr6sw'';
     };
     redis_3_0_5 = {
       basename = ''redis'';
@@ -2005,6 +2078,17 @@ Originally written by Daiki Ueno. Converted to a RubyGem by Geoffrey Grosenbach'
       name = ''rubyzip-0.9.9'';
       requiredGems = [  ];
       sha256 = ''1khf6d903agnwd8965f5f8b353rzmfvygxp53z1199rqzw8h46q2'';
+    };
+    safe_yaml_0_9_7 = {
+      basename = ''safe_yaml'';
+      meta = {
+        description = ''SameYAML provides an alternative implementation of YAML.load suitable for accepting user input in Ruby applications.'';
+        homepage = ''http://dtao.github.com/safe_yaml/'';
+        longDescription = ''Parse YAML safely, without that pesky arbitrary object deserialization vulnerability'';
+      };
+      name = ''safe_yaml-0.9.7'';
+      requiredGems = [  ];
+      sha256 = ''0y34vpak8gim18rq02rgd144jsvk5is4xni16wm3shbhivzqb4hk'';
     };
     sass_3_2_10 = {
       basename = ''sass'';
