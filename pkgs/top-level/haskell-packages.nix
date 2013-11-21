@@ -945,6 +945,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   editline_0_2_1_1 = callPackage ../development/libraries/haskell/editline/0.2.1.1.nix {};
   editline = self.editline_0_2_1_1;
 
+  ekg = callPackage ../development/libraries/haskell/ekg {};
+
   elerea = callPackage ../development/libraries/haskell/elerea {};
 
   Elm = callPackage ../development/compilers/elm/elm.nix {};
