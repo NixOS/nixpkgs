@@ -4319,11 +4319,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-2.1.0";
+    name = "Pillow-2.2.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pillow/${name}.zip";
-      md5 = "ec630d8ae15d4a3c4ae7b7efdeac8200";
+      md5 = "d1d20d3db5d1ab312da0951ff061e6bf";
     };
 
     buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.unzip pkgs.zlib pkgs.libtiff pkgs.libwebp ];
