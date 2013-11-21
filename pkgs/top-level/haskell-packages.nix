@@ -1994,6 +1994,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
+  socketActivation = callPackage ../development/libraries/haskell/socket-activation {};
+
   split_0_2_1_1 = callPackage ../development/libraries/haskell/split/0.2.1.1.nix {};
   split_0_2_2 = callPackage ../development/libraries/haskell/split/0.2.2.nix {};
   split = self.split_0_2_2;
