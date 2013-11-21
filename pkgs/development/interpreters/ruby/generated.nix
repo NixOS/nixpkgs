@@ -24,6 +24,7 @@ g: # Get dependencies from patched gems
     celluloid = g.celluloid_0_15_2;
     childprocess = g.childprocess_0_3_9;
     chronic = g.chronic_0_10_1;
+    classifier = g.classifier_1_3_3;
     coderay = g.coderay_1_0_9;
     coffee_rails = g.coffee_rails_4_0_1;
     coffee_script = g.coffee_script_2_2_0;
@@ -481,6 +482,18 @@ for those one-off tasks, with a language that's a joy to use.
       name = ''chronic-0.9.1'';
       requiredGems = [  ];
       sha256 = ''0kspaxpfy7yvyk1lvpx31w852qfj8wb9z04mcj5bzi70ljb9awqk'';
+    };
+    classifier_1_3_3 = {
+      basename = ''classifier'';
+      meta = {
+        description = ''A general classifier module to allow Bayesian and other types of classifications.'';
+        homepage = ''http://classifier.rufy.com/'';
+        longDescription = ''   A general classifier module to allow Bayesian and other types of classifications.
+'';
+      };
+      name = ''classifier-1.3.3'';
+      requiredGems = [ g.fast_stemmer_1_0_2 ];
+      sha256 = ''1kq1cd8fq6wvyxbjy3r6ya3d3sk3rcp1b560xlqvflpsirm47r9g'';
     };
     chronic_0_10_1 = {
       basename = ''chronic'';
