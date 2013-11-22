@@ -3768,6 +3768,8 @@ let
     buildc2xml = false;
   };
 
+  smc = callPackage ../tools/misc/smc { };
+
   sparse = callPackage ../development/tools/analysis/sparse { };
 
   speedtest_cli = callPackage ../tools/networking/speedtest-cli { };
