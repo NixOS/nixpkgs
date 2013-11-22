@@ -8,12 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  name = "spyder-2.1.13.1";
+  name = "spyder-2.2.5";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://spyderlib.googlecode.com/files/${name}.zip";
-    sha256 = "1sg88shvw6k2v5428k13mah4pyqng43856rzr6ypz5qgwn0677ya";
+    sha256 = "1bxc5qs2bqc21s6kxljsfxnmwgrgnyjfr9mkwzg9njpqsran3bp2";
   };
 
   buildInputs = [ unzip ];
