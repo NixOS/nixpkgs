@@ -159,6 +159,13 @@ in
     ];
   };
 
+  xf86videonv = attrs: attrs // {
+    patches = [( args.fetchurl {
+      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-nv/patch/?id=fc78fe98222b0204b8a2872a529763d6fe5048da;
+      sha256 = "0ikbnz6048ygs1qahb6ylnxkyjhfjcqr2gm9bk95ca90v57j7i0f";
+    })];
+  };
+
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
   };
