@@ -3,7 +3,7 @@
 let
 
   makeTuxonicePatch = { version, kernelVersion, sha256,
-    url ? "http://tuxonice.net/files/tuxonice-${version}-for-${kernelVersion}.patch.bz2" }:
+    url ? "http://tuxonice.nigelcunningham.com.au/downloads/all/tuxonice-for-linux-${kernelVersion}-${version}.patch.bz2" }:
     { name = "tuxonice-${kernelVersion}";
       patch = stdenv.mkDerivation {
         name = "tuxonice-${version}-for-${kernelVersion}.patch";
@@ -116,6 +116,13 @@ rec {
     { name = "mips-ext3-n32";
       patch = ./mips-ext3-n32.patch;
     };
+
+  tuxonice_3_10 = makeTuxonicePatch {
+    version = "2013-11-07";
+    kernelVersion = "3.10.18";
+    sha256 = "00b1rqgd4yr206dxp4mcymr56ymbjcjfa4m82pxw73khj032qw3j";
+  };
+
 
   grsecurity_2_9_1_3_2_52 =
     { name = "grsecurity-2.9.1-3.2.52";

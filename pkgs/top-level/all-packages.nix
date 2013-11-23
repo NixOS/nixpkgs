@@ -6730,6 +6730,15 @@ let
       ];
   };
 
+  linux_3_10_tuxonice = linux_3_10.override (attrs: {
+    kernelPatches = attrs.kernelPatches ++ [
+      kernelPatches.tuxonice_3_10
+    ];
+    extraConfig = ''
+      TOI_CORE y
+    '';
+  });
+
   linux_3_11 = makeOverridable (import ../os-specific/linux/kernel/linux-3.11.nix) {
     inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
     kernelPatches =
@@ -6872,6 +6881,7 @@ let
   linuxPackages_3_4_apparmor = linuxPackagesFor pkgs.linux_3_4_apparmor linuxPackages_3_4_apparmor;
   linuxPackages_3_6_rpi = linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi;
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
+  linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_11 linuxPackages_3_11);
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   # Update this when adding a new version!
