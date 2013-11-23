@@ -1,11 +1,11 @@
 { fetchurl, stdenv, pkgconfig, perl, withPNG ? true, libpng, glib /*just passthru*/ }:
 
 stdenv.mkDerivation rec {
-  name = "pixman-0.32.2";
+  name = "pixman-0.32.4";
 
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.gz";
-    sha256 = "0kas43iw0wxw22z6gafsx15f8p73x991gw35asnah2myqw43x7pn";
+    sha256 = "113ycngcssbrps217dyajq96hm9xghsfch82h14yffla1r1fviw0";
   };
 
   nativeBuildInputs = [ pkgconfig perl ];
