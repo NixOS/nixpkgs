@@ -57,10 +57,12 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     optional stdenv.isDarwin "--disable-compile-warnings"
-    ++ optional stdenv.isSunOS "--disable-modular-tests";
+    ++ optional stdenv.isSunOS ["--disable-modular-tests" "--with-libiconv"];
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"
     + optionalString stdenv.isSunOS " -DBSD_COMP";
+
+  patches = stdenv.lib.optional stdenv.isSunOS [./patch-gio_glocalfile.c];
 
   enableParallelBuilding = true;
 
