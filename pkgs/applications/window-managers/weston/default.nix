@@ -12,11 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "1isvh66irrz707r69495767n5yxp07dvy0xx6mj1mbj1n4s1657p";
   };
 
-  buildInputs = [ pkgconfig wayland mesa libxkbcommon
-    cairo libxcb libXcursor x11 udev libdrm mtdev
-    libjpeg pam /*autoconf automake libtool*/ ];
-
-  #preConfigure = "autoreconf -vfi";
+  buildInputs = [
+    pkgconfig wayland mesa libxkbcommon
+    cairo libxcb libXcursor x11 udev libdrm mtdev libjpeg pam
+  ];
 
   NIX_CFLAGS_COMPILE = "-I${libdrm}/include/libdrm";
 
