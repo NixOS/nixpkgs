@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     scons prefix=$out install
+    sed -i -e 's|/usr/bin/env python2.7|${python}/bin/python|' $out/bin/mypaint
     wrapProgram $out/bin/mypaint --prefix PYTHONPATH : $PYTHONPATH
   '';
 
