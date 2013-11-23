@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "autoreconf -fi";
 
-  configureFlags = stdenv.lib.optional stdenv.isSunOS "--disable-modular-tests";
-
+  configureFlags = stdenv.lib.optional stdenv.isSunOS ["--disable-modular-tests" "--with-libiconv"];
+  patches        = stdenv.lib.optional stdenv.isSunOS [./patch-gio_glocalfile.c];
   CPPFLAGS = stdenv.lib.optionalString stdenv.isSunOS "-DBSD_COMP";
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-lintl";
