@@ -9199,7 +9199,9 @@ let
 
   zathura = zathuraCollection.zathuraWrapper;
 
-  girara = callPackage ../applications/misc/girara { };
+  girara = callPackage ../applications/misc/girara {
+    gtk = gtk3;
+  };
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
