@@ -1,0 +1,22 @@
+--- glusterfs-3.4.1/xlators/storage/posix/src/posix.c 2013-09-27 12:32:00.000000000 +0000
++++ glusterfs-3.4.1/xlators/storage/posix/src/posix.c 2013-11-19 00:26:18.291432887 +0000
+@@ -3756,9 +3756,9 @@
+                 }
+
+                 if (skip_dirs) {
+-                        if (DT_ISDIR (entry->d_type)) {
++                        /*if (DT_ISDIR (entry->d_type)) {
+                                 continue;
+-                        } else if (hpath) {
++                        } else*/ if (hpath) {
+                                 strcpy (&hpath[len+1],entry->d_name);
+                                 ret = lstat (hpath, &stbuf);
+                                 if (!ret && S_ISDIR (stbuf.st_mode))
+@@ -3785,7 +3785,7 @@
+                 }
+                 this_entry->d_off = telldir (dir);
+                 this_entry->d_ino = entry->d_ino;
+-                this_entry->d_type = entry->d_type;
++                //this_entry->d_type = entry->d_type;
+
+                 list_add_tail (&this_entry->list, &entries->list);
