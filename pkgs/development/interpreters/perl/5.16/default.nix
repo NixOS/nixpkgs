@@ -75,8 +75,12 @@ stdenv.mkDerivation rec {
   '' + optionalString stdenv.isFreeBSD ''
     cpan/CPANPLUS/t/04_CPANPLUS-Module.t \
     cpan/CPANPLUS/t/20_CPANPLUS-Dist-MM.t \
-  '' + stdenv.lib.optionalString stdenv.isSunOS ''
+  '' + stdenv.lib.optionalString stdenv.isSunOS
+      # locale needs some work...
+      # exec-bit only passes when /tmp is not mounted on tmpfs
+  ''
     lib/locale.t \
+    t/porting/exec-bit.t \
   '' + " ";
 
   postPatch = optionalString (!stdenv.isDarwin) /* this failed on Darwin, no idea why */ ''
