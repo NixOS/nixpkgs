@@ -9012,11 +9012,7 @@ let
     gnutls = gnutls32;
   };
 
-  weston = callPackage ../applications/window-managers/weston {
-    cairo = cairo.override {
-      glSupport = true;
-    };
-  };
+  weston = callPackage ../applications/window-managers/weston { };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
 
