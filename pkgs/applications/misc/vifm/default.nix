@@ -2,14 +2,14 @@
 
 let
   name = "vifm-${version}";
-  version = "0.7.5";
+  version = "0.7.6";
 
 in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url="mirror://sourceforge/project/vifm/vifm/${name}.tar.bz2";
-    sha256 ="1r1d92zrff94rfx011dw2qsgdwd2ksqlz15la74d6h7sfcsnyd01";
+    sha256 ="03v50hmgfvrci5fz31zmklmp6ix7qpqnhvm6639wbk3g5mcrh5w6";
   };
 
   #phaseNames = ["doConfigure" "doMakeInstall"];
