@@ -160,16 +160,43 @@ let
   };
 
   serviceConfig = { name, config, ... }: {
-    config = {
-      # Default path for systemd services.  Should be quite minimal.
-      path =
-        [ pkgs.coreutils
-          pkgs.findutils
-          pkgs.gnugrep
-          pkgs.gnused
-          systemd
-        ];
-    };
+    config = mkMerge
+      [ { # Default path for systemd services.  Should be quite minimal.
+          path =
+            [ pkgs.coreutils
+              pkgs.findutils
+              pkgs.gnugrep
+              pkgs.gnused
+              systemd
+            ];
+          environment.PATH = config.path;
+          environment.LD_LIBRARY_PATH = "";
+        }
+        (mkIf (config.preStart != "")
+          { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.preStart}
+            '';
+          })
+        (mkIf (config.script != "")
+          { serviceConfig.ExecStart = makeJobScript "${name}-start" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.script}
+            '' + " " + config.scriptArgs;
+          })
+        (mkIf (config.postStart != "")
+          { serviceConfig.ExecStartPost = makeJobScript "${name}-post-start" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.postStart}
+            '';
+          })
+        (mkIf (config.postStop != "")
+          { serviceConfig.ExecStopPost = makeJobScript "${name}-post-stop" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.postStop}
+            '';
+          })
+      ];
   };
 
   mountConfig = { name, config, ... }: {
@@ -223,41 +250,10 @@ let
           ${attrsToSection def.unitConfig}
 
           [Service]
-          Environment=PATH=${def.path}
-          Environment=LD_LIBRARY_PATH=
           ${let env = cfg.globalEnvironment // def.environment;
             in concatMapStrings (n: "Environment=\"${n}=${getAttr n env}\"\n") (attrNames env)}
           ${optionalString (!def.restartIfChanged) "X-RestartIfChanged=false"}
           ${optionalString (!def.stopIfChanged) "X-StopIfChanged=false"}
-
-          ${optionalString (def.preStart != "") ''
-            ExecStartPre=${makeJobScript "${name}-pre-start" ''
-              #! ${pkgs.stdenv.shell} -e
-              ${def.preStart}
-            ''}
-          ''}
-
-          ${optionalString (def.script != "") ''
-            ExecStart=${makeJobScript "${name}-start" ''
-              #! ${pkgs.stdenv.shell} -e
-              ${def.script}
-            ''} ${def.scriptArgs}
-          ''}
-
-          ${optionalString (def.postStart != "") ''
-            ExecStartPost=${makeJobScript "${name}-post-start" ''
-              #! ${pkgs.stdenv.shell} -e
-              ${def.postStart}
-            ''}
-          ''}
-
-          ${optionalString (def.postStop != "") ''
-            ExecStopPost=${makeJobScript "${name}-post-stop" ''
-              #! ${pkgs.stdenv.shell} -e
-              ${def.postStop}
-            ''}
-          ''}
-
           ${attrsToSection def.serviceConfig}
         '';
     };
@@ -311,8 +307,6 @@ let
         '';
     };
 
-  nixosUnits = mapAttrsToList makeUnit cfg.units;
-
   units = pkgs.runCommand "units" { preferLocalBuild = true; }
     ''
       mkdir -p $out
@@ -338,7 +332,7 @@ let
         done
       done
 
-      for i in ${toString nixosUnits}; do
+      for i in ${toString (mapAttrsToList (n: v: v.unit) cfg.units)}; do
         ln -s $i/* $out/
       done
 
@@ -387,32 +381,41 @@ in
       description = "Definition of systemd units.";
       default = {};
       type = types.attrsOf types.optionSet;
-      options = {
-        text = mkOption {
-          type = types.str;
-          description = "Text of this systemd unit.";
+      options = { name, config, ... }:
+        { options = {
+            text = mkOption {
+              type = types.str;
+              description = "Text of this systemd unit.";
+            };
+            enable = mkOption {
+              default = true;
+              type = types.bool;
+              description = ''
+                If set to false, this unit will be a symlink to
+                /dev/null. This is primarily useful to prevent specific
+                template instances (e.g. <literal>serial-getty@ttyS0</literal>)
+                from being started.
+              '';
+            };
+            requiredBy = mkOption {
+              default = [];
+              type = types.listOf types.string;
+              description = "Units that require (i.e. depend on and need to go down with) this unit.";
+            };
+            wantedBy = mkOption {
+              default = [];
+              type = types.listOf types.string;
+              description = "Units that want (i.e. depend on) this unit.";
+            };
+            unit = mkOption {
+              internal = true;
+              description = "The generated unit.";
+            };
+          };
+          config = {
+            unit = makeUnit name config;
+          };
         };
-        enable = mkOption {
-          default = true;
-          type = types.bool;
-          description = ''
-            If set to false, this unit will be a symlink to
-            /dev/null. This is primarily useful to prevent specific
-            template instances (e.g. <literal>serial-getty@ttyS0</literal>)
-            from being started.
-          '';
-        };
-        requiredBy = mkOption {
-          default = [];
-          type = types.listOf types.string;
-          description = "Units that require (i.e. depend on and need to go down with) this unit.";
-        };
-        wantedBy = mkOption {
-          default = [];
-          type = types.listOf types.string;
-          description = "Units that want (i.e. depend on) this unit.";
-        };
-      };
     };
 
     systemd.packages = mkOption {

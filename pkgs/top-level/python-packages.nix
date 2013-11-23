@@ -126,9 +126,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit python buildPythonPackage pygobject pycairo;
   };
 
-  # A patched version of buildout, useful for buildout based development on Nix
-  zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
-
   # packages defined here
 
   aafigure = buildPythonPackage rec {
@@ -725,7 +722,26 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   buildout = zc_buildout;
   buildout152 = zc_buildout152;
 
+  # A patched version of buildout, useful for buildout based development on Nix
+  zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
+
   zc_buildout = zc_buildout171;
+  zc_buildout2 = zc_buildout221;
+  zc_buildout221 = buildPythonPackage rec {
+    name = "zc.buildout-2.2.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zc.buildout/${name}.tar.gz";
+      md5 = "476a06eed08506925c700109119b6e41";
+    };
+
+   meta = {
+      homepage = "http://www.buildout.org";
+      description = "A software build and configuration system";
+      license = pkgs.lib.licenses.zpt21;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+    };
+  };
   zc_buildout171 = buildPythonPackage rec {
     name = "zc.buildout-1.7.1";
 
@@ -2128,13 +2144,15 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
-  django = buildPythonPackage rec {
+  django = django_1_6;
+  
+  django_1_6 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.4.1";
+    version = "1.6";
 
     src = fetchurl {
-      url = "http://www.djangoproject.com/m/releases/1.4/${name}.tar.gz";
-      sha256 = "16s0anvpaccbqmdrhl71z73k0dy2sl166nnc2fbd5lshlgmj13ad";
+      url = "http://www.djangoproject.com/m/releases/1.6/${name}.tar.gz";
+      sha256 = "165bd5wmv2an9h365d12k0112z0l375dxsy7dlxa7r8kyg4gvnfk";
     };
 
     # error: invalid command 'test'
@@ -2146,6 +2164,41 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  django_1_5 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.5.5";
+
+    src = fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.5/${name}.tar.gz";
+      sha256 = "07fp8ycx76q2nz96mxld1svvpfsrivjgpql0mr20r7gwzcfrrrka";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
+  django_1_4 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.4.10";
+
+    src = fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.4/${name}.tar.gz";
+      sha256 = "1pi9mi14f19xlp29j2c8dz8rs749c1m41d9j1i0b3nlz0cy0h7rx";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
 
   django_1_3 = buildPythonPackage rec {
     name = "Django-1.3.7";
@@ -4266,11 +4319,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-2.1.0";
+    name = "Pillow-2.2.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pillow/${name}.zip";
-      md5 = "ec630d8ae15d4a3c4ae7b7efdeac8200";
+      md5 = "d1d20d3db5d1ab312da0951ff061e6bf";
     };
 
     buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.unzip pkgs.zlib pkgs.libtiff pkgs.libwebp ];

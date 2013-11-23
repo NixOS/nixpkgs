@@ -1,26 +1,20 @@
-{ stdenv, fetchurl, libX11, libXtst, libXext, libXdamage, libXfixes, wine, makeWrapper
-, bash }:
+{ stdenv, fetchurl, libX11, libXtst, libXext, libXdamage, libXfixes, wineUnstable, makeWrapper, libXau
+, bash, patchelf }:
 
-# Work in progress.
-
-# It doesn't want to start unless teamviewerd is running as root.
-# I haven't tried to make the daemon run.
-
-assert stdenv.system == "i686-linux";
 let
-  topath = "${wine}/bin";
+  topath = "${wineUnstable}/bin";
 
   toldpath = stdenv.lib.concatStringsSep ":" (map (x: "${x}/lib") 
-    [ stdenv.gcc.gcc libX11 libXtst libXext libXdamage libXfixes wine ]);
+    [ stdenv.gcc.gcc libX11 libXtst libXext libXdamage libXfixes wineUnstable ]);
 in
 stdenv.mkDerivation {
   name = "teamviewer-8.0.17147";
   src = fetchurl {
     url = "http://download.teamviewer.com/download/teamviewer_linux_x64.deb";
-    sha256 = "01iynk954pphl5mq4avs843xyzvdfzng1lpsy7skgwvw0k9cx5ab";
+    sha256 = "0s5m15f99rdmspzwx3gb9mqd6jx1bgfm0d6rfd01k9rf7gi7qk0k";
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper patchelf ];
 
   unpackPhase = ''
     ar x $src
@@ -36,9 +30,13 @@ stdenv.mkDerivation {
     #!${bash}/bin/sh
     export LD_LIBRARY_PATH=${toldpath}\''${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}
     export PATH=${topath}\''${PATH:+:\$PATH}
-    $out/share/teamviewer8/tv_bin/script/teamviewer
+    $out/share/teamviewer8/tv_bin/script/teamviewer "\$@"
     EOF
     chmod +x $out/bin/teamviewer
+
+    patchelf --set-rpath "${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXext}/lib:${libXau}/lib:${libXdamage}/lib:${libXfixes}/lib" $out/share/teamviewer8/tv_bin/teamviewerd
+    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" $out/share/teamviewer8/tv_bin/teamviewerd
+    ln -s $out/share/teamviewer8/tv_bin/teamviewerd $out/bin/
   '';
 
   meta = {

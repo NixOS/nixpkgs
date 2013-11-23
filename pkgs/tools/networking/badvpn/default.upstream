@@ -1,0 +1,3 @@
+url http://gc.codehum.com/p/badvpn/downloads/list
+version_link '[.]tar[.][a-z0-9]+$'
+process 'gc.codehum.com//' ''

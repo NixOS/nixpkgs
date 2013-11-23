@@ -541,6 +541,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ansiWlPprint = callPackage ../development/libraries/haskell/ansi-wl-pprint {};
 
+  ariadne = callPackage ../development/libraries/haskell/ariadne {
+    Cabal = self.Cabal_1_18_1_2;
+  };
+
   arithmoi = callPackage ../development/libraries/haskell/arithmoi {};
 
   arrows = callPackage ../development/libraries/haskell/arrows {};
@@ -588,6 +592,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   benchpress = callPackage ../development/libraries/haskell/benchpress {};
 
+  bert = callPackage ../development/libraries/haskell/bert {};
+
   bifunctors = callPackage ../development/libraries/haskell/bifunctors {};
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
@@ -595,6 +601,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   binary_0_6_0_0 = callPackage ../development/libraries/haskell/binary/0.6.0.0.nix {};
   binary_0_7_1_0 = callPackage ../development/libraries/haskell/binary/0.7.1.0.nix {};
   binary = self.binary_0_7_1_0;
+
+  binaryConduit = callPackage ../development/libraries/haskell/binary-conduit {};
 
   binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
 
@@ -895,6 +903,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   digestiveFunctorsSnap = callPackage ../development/libraries/haskell/digestive-functors-snap {};
 
+  digits = callPackage ../development/libraries/haskell/digits {};
+
   dimensional = callPackage ../development/libraries/haskell/dimensional {};
 
   dimensionalTf = callPackage ../development/libraries/haskell/dimensional-tf {};
@@ -957,6 +967,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   either = callPackage ../development/libraries/haskell/either {};
 
+  EitherT = callPackage ../development/libraries/haskell/EitherT {};
+
   esqueleto = callPackage ../development/libraries/haskell/esqueleto {};
 
   exceptionMtl = callPackage ../development/libraries/haskell/exception-mtl {};
@@ -995,6 +1007,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   feed = callPackage ../development/libraries/haskell/feed {};
 
   fileEmbed = callPackage ../development/libraries/haskell/file-embed {};
+
+  filemanip = callPackage ../development/libraries/haskell/filemanip {};
 
   flexibleDefaults = callPackage ../development/libraries/haskell/flexible-defaults {};
 
@@ -1156,6 +1170,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     mpi = pkgs.openmpi;
   };
 
+  haskellNames = callPackage ../development/libraries/haskell/haskell-names {};
+
+  haskellPackages = callPackage ../development/libraries/haskell/haskell-packages {};
+
   haskellSrc_1_0_1_3 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.3.nix {};
   haskellSrc_1_0_1_4 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.4.nix {};
   haskellSrc_1_0_1_5 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.5.nix {};
@@ -1170,6 +1188,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   hastache = callPackage ../development/libraries/haskell/hastache {};
 
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
+
+  hseCpp = callPackage ../development/libraries/haskell/hse-cpp {};
 
   HTF = callPackage ../development/libraries/haskell/HTF {};
 
@@ -1769,6 +1789,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   QuickCheck2 = self.QuickCheck_2_6;
   QuickCheck  = self.QuickCheck2;
 
+  quickcheckAssertions = callPackage ../development/libraries/haskell/quickcheck-assertions {};
+
+  quickcheckInstances = callPackage ../development/libraries/haskell/quickcheck-instances {};
+
   quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {};
 
   qrencode = callPackage ../development/libraries/haskell/qrencode {
@@ -1994,6 +2018,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
+  socketActivation = callPackage ../development/libraries/haskell/socket-activation {};
+
   split_0_2_1_1 = callPackage ../development/libraries/haskell/split/0.2.1.1.nix {};
   split_0_2_2 = callPackage ../development/libraries/haskell/split/0.2.2.nix {};
   split = self.split_0_2_2;
@@ -2046,9 +2072,19 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   tasty = callPackage ../development/libraries/haskell/tasty {};
 
+  tastyAntXml = callPackage ../development/libraries/haskell/tasty-ant-xml {};
+
+  tastyGolden = callPackage ../development/libraries/haskell/tasty-golden {};
+
+  tastyHspec = callPackage ../development/libraries/haskell/tasty-hspec {};
+
   tastyHunit = callPackage ../development/libraries/haskell/tasty-hunit {};
 
+  tastyQuickcheck = callPackage ../development/libraries/haskell/tasty-quickcheck {};
+
   tastySmallcheck = callPackage ../development/libraries/haskell/tasty-smallcheck {};
+
+  tastyTh = callPackage ../development/libraries/haskell/tasty-th {};
 
   templateDefault = callPackage ../development/libraries/haskell/template-default {};
 
@@ -2125,6 +2161,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   transformersCompat = callPackage ../development/libraries/haskell/transformers-compat {};
 
+  traverseWithClass = callPackage ../development/libraries/haskell/traverse-with-class {};
+
   trifecta_1_1 = callPackage ../development/libraries/haskell/trifecta/1.1.nix {
     parsers = self.parsers_0_9;
   };
@@ -2132,6 +2170,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   trifecta = self.trifecta_1_2;
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
+
+  typeEq = callPackage ../development/libraries/haskell/type-eq {};
 
   typeEquality = callPackage ../development/libraries/haskell/type-equality {};
 
@@ -2249,6 +2289,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     WebBits = self.WebBits_2_0;
   };
   WebBitsHtml = self.WebBitsHtml_1_0_2;
+
+  webRoutes = callPackage ../development/libraries/haskell/web-routes {};
+
+  webRoutesBoomerang = callPackage ../development/libraries/haskell/web-routes-boomerang {};
 
   CouchDB = callPackage ../development/libraries/haskell/CouchDB {};
 

@@ -517,6 +517,8 @@ let
 
   babeld = callPackage ../tools/networking/babeld { };
 
+  badvpn = callPackage ../tools/networking/badvpn {};
+
   banner = callPackage ../games/banner {};
 
   barcode = callPackage ../tools/graphics/barcode {};
@@ -550,6 +552,8 @@ let
   catdoc = callPackage ../tools/text/catdoc { };
 
   ditaa = callPackage ../tools/graphics/ditaa { };
+
+  direnv = callPackage ../tools/misc/direnv { };
 
   dlx = callPackage ../misc/emulators/dlx { };
 
@@ -1408,6 +1412,8 @@ let
   networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
+
+  newsbeuter-dev = callPackage ../applications/networking/feedreaders/newsbeuter/dev.nix { };
 
   ngrok = callPackage ../tools/misc/ngrok { };
 
@@ -3317,6 +3323,8 @@ let
 
   scsh = callPackage ../development/interpreters/scsh { };
 
+  scheme48 = callPackage ../development/interpreters/scheme48 { };
+
   spidermonkey = callPackage ../development/interpreters/spidermonkey { };
   spidermonkey_1_8_0rc1 = callPackage ../development/interpreters/spidermonkey/1.8.0-rc1.nix { };
   spidermonkey_185 = callPackage ../development/interpreters/spidermonkey/185-1.0.0.nix { };
@@ -3759,6 +3767,8 @@ let
     buildllvmsparse = false;
     buildc2xml = false;
   };
+
+  smc = callPackage ../tools/misc/smc { };
 
   sparse = callPackage ../development/tools/analysis/sparse { };
 
@@ -4573,7 +4583,9 @@ let
 
   json_glib = callPackage ../development/libraries/json-glib { };
 
-  json_c = callPackage ../development/libraries/json-c { };
+  json-c-0-9 = callPackage ../development/libraries/json-c { };
+  json-c-0-11 = callPackage ../development/libraries/json-c/0.11.nix { };
+  json_c = json-c-0-9;
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
 
@@ -4601,6 +4613,10 @@ let
 
   leptonica = callPackage ../development/libraries/leptonica {
     libpng = libpng12;
+  };
+
+  lgi = callPackage ../development/libraries/lgi {
+    lua = lua5_1;
   };
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
@@ -5846,6 +5862,8 @@ let
   Xaw3d = callPackage ../development/libraries/Xaw3d { };
 
   xbase = callPackage ../development/libraries/xbase { };
+
+  xcb-util-cursor = callPackage ../development/libraries/xcb-util-cursor { };
 
   xineLib = callPackage ../development/libraries/xine-lib { };
 
@@ -7412,10 +7430,15 @@ let
 
   avxsynth = callPackage ../applications/video/avxsynth { };
 
-  awesome = callPackage ../applications/window-managers/awesome {
+  awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
     lua = lua5;
     cairo = cairo.override { xcbSupport = true; };
   };
+  awesome-3-5 = callPackage ../applications/window-managers/awesome {
+    lua   = lua5_1;
+    cairo = cairo.override { xcbSupport = true; };
+  };
+  awesome = awesome-3-5;
 
   baresip = callPackage ../applications/networking/instant-messengers/baresip {};
 
@@ -7913,6 +7936,8 @@ let
     inherit (gnome) libgnome libgnomeui;
     gtksharp = gtksharp1;
   };
+
+  fuze = callPackage ../applications/networking/instant-messengers/fuze {};
 
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
@@ -10279,6 +10304,8 @@ let
   };
 
   yafc = callPackage ../applications/networking/yafc { };
+
+  yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
   myEnvFun = import ../misc/my-env {
     inherit substituteAll pkgs;
