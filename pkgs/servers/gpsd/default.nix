@@ -1,27 +1,60 @@
-{ fetchurl, stdenv, pythonPackages, pkgconfig, dbus, dbus_glib
+{ fetchurl, stdenv, scons, pythonFull, pkgconfig, dbus, dbus_glib
 , ncurses, libX11, libXt, libXpm, libXaw, libXext, makeWrapper
 , libusb1, docbook_xml_dtd_412, docbook_xsl, bc
-, libxslt, xmlto, gpsdUser ? "gpsd" }:
+, libxslt, xmlto, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
+}:
+
+# TODO: the 'xgps' program doesn't work: "ImportError: No module named gobject"
+# TODO: put the X11 deps behind a guiSupport parameter for headless support
 
 stdenv.mkDerivation rec {
-  name = "gpsd-2.95";
+  name = "gpsd-3.10";
 
   src = fetchurl {
-    url = "http://download.berlios.de/gpsd/${name}.tar.gz";
-    sha256 = "1bjhyjg561kwp6zc2wg58njdvpnsj5yaa2slz8g3ga1176jl68w3";
+    url = "http://download-mirror.savannah.gnu.org/releases/gpsd/${name}.tar.gz";
+    sha256 = "0823hl5zgwnbgm0fq3i4z34lv76cpj0k6m0zjiygiyrxrz0w4vvh";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig docbook_xml_dtd_412 docbook_xsl
-    xmlto bc pythonPackages.wrapPython ];
+  nativeBuildInputs = [
+    scons makeWrapper pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
+    pythonFull
+  ];
 
-  pythonPath = [ pythonPackages.curses ];
+  buildInputs = [
+    pythonFull dbus dbus_glib ncurses libX11 libXt libXpm libXaw libXext
+    libxslt libusb1
+  ];
 
-  buildInputs = [ pythonPackages.python dbus dbus_glib ncurses libX11 libXt
-    libXpm libXaw libXext libxslt libusb1 ];
+  patches = [
+    ./0001-Import-LD_LIBRARY_PATH-to-allow-running-scons-check-.patch
+    ./0002-Import-XML_CATALOG_FILES-to-be-able-to-validate-the-.patch
+  ];
 
-  configureFlags = "--enable-static --enable-dbus --enable-gpsd-user=${gpsdUser}";
+  # - leapfetch=no disables going online at build time to fetch leap-seconds
+  #   info. See <gpsd-src>/build.txt for more info.
+  # - chrpath=no stops the build from using 'chrpath' (which we don't have).
+  #   'chrpath' is used to be able to run the tests from the source tree, but
+  #   we use $LD_LIBRARY_PATH instead.
+  buildPhase = ''
+    mkdir -p "$out"
+    sed -e "s|python_lib_dir = .*|python_lib_dir = \"$out/lib/${pythonFull.python.libPrefix}/site-packages\"|" -i SConstruct
+    scons prefix="$out" leapfetch=no gpsd_user=${gpsdUser} gpsd_group=${gpsdGroup} \
+        systemd=yes udevdir="$out/lib/udev" chrpath=no
+  '';
 
   doCheck = true;
+
+  checkPhase = ''
+    export LD_LIBRARY_PATH="$PWD"
+    scons check
+  '';
+
+  # TODO: the udev rules file and the hotplug script need fixes to work on NixOS
+  installPhase = ''
+    scons install
+    mkdir -p "$out/lib/udev/rules.d"
+    scons udev-install
+  '';
 
   postInstall = "wrapPythonPrograms";
 

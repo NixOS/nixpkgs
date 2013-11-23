@@ -1,0 +1,28 @@
+From aed93b6ada5b9b76b85d11d9bad732ca005295af Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Sat, 15 Mar 2014 15:08:01 +0100
+Subject: [PATCH 2/2] Import XML_CATALOG_FILES to be able to validate the
+ manual
+
+In nixos/nixpkgs, 'xmlto' depends on $XML_CATALOG_FILES to be able to
+validate XML documents. Because without it, it'll try to go online to
+download DTD's and builders don't have network access...
+---
+ SConstruct | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/SConstruct b/SConstruct
+index 86b94bc..a0b3d25 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -216,6 +216,7 @@ import_env = (
+     'STAGING_DIR',     # Required by the OpenWRT and CeroWrt builds.
+     'STAGING_PREFIX',  # Required by the OpenWRT and CeroWrt builds.
+     'LD_LIBRARY_PATH', # Allows running 'scons check' without 'chrpath'
++    'XML_CATALOG_FILES', # Enables validating the manual with 'xmlto' using nix build system
+     )
+ envs = {}
+ for var in import_env:
+-- 
+1.9.0
+
