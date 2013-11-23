@@ -12,10 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL SDL_image SDL_ttf libpng zlib lua5 pkgconfig ];
 
-  buildPhase = ''
-    cd src
-    make
-  '';
+  preBuild = "cd src";
 
   installPhase = ''
     mkdir -p "$out"
