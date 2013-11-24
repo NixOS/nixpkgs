@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   name = "ruby-${version}";
   
   src = fetchurl {
-    url = "ftp://ftp.ruby-lang.org/pub/ruby/1.8/${name}.tar.gz";
+    url = "http://cache.ruby-lang.org/pub/ruby/1.8/${name}.tar.gz";
     sha256 = "0g2dsn8lmiqwqsp13ryzi97qxr7742v5l7v506x6wq9aiwpk42p6";
   };
 
