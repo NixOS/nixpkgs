@@ -3968,11 +3968,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   nwdiag = buildPythonPackage rec {
-    name = "nwdiag-0.9.4";
+    name = "nwdiag-1.0.0";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/n/nwdiag/${name}.tar.gz";
-      md5 = "199b22f66ec3012c3999177d376a3842";
+      md5 = "d81581a028840f8f7362ab21bf73e941";
     };
 
     buildInputs = [ pep8 nose unittest2 docutils ];
