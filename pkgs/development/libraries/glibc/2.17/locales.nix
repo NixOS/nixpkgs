@@ -40,7 +40,7 @@ in
     installPhase =
       ''
         mkdir -p "$out/lib/locale"
-        cp -v "$TMPDIR/nix/store/"*"/lib/locale/locale-archive" "$out/lib/locale"
+        cp -v $TMPDIR/"$(dirname $(readlink -f $(type -p localedef)))/../lib/locale/locale-archive" "$out/lib/locale"
       '';
 
     meta.description = "Locale information for the GNU C Library";
