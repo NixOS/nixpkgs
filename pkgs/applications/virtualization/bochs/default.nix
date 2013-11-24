@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://bochs.sourceforge.net/;
     license = "LGPL";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
