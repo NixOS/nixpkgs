@@ -588,6 +588,8 @@ let
 
   bacula = callPackage ../tools/backup/bacula { };
 
+  beanstalkd = callPackage ../servers/beanstalkd { };
+
   bgs = callPackage ../tools/X11/bgs { };
 
   bibtextools = callPackage ../tools/typesetting/bibtex-tools {
