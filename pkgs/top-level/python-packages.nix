@@ -573,16 +573,16 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   blockdiag = buildPythonPackage rec {
-    name = "blockdiag-1.2.4";
+    name = "blockdiag-1.3.2";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/b/blockdiag/${name}.tar.gz";
-      md5 = "244334f60cc10b0cb73b5df5279bcdd1";
+      md5 = "602a8750f312eeee84d6d138055dfae7";
     };
 
     buildInputs = [ pep8 nose unittest2 docutils ];
 
-    propagatedBuildInputs = [ pil webcolors funcparserlib ];
+    propagatedBuildInputs = [ pillow webcolors funcparserlib ];
 
     # One test fails:
     #   ...
