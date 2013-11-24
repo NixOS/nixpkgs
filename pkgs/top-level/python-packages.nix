@@ -4882,11 +4882,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pyodbc = buildPythonPackage rec {
-    name = "pyodbc-3.0.6";
+    name = "pyodbc-3.0.7";
 
     src = fetchurl {
       url = "https://pyodbc.googlecode.com/files/${name}.zip";
-      sha256 = "0v9nymllw5zq5294rqp8ip3l0g6l3l3mljwhxn5jajyzxlnz39z5";
+      sha256 = "0ldkm8xws91j7zbvpqb413hvdz8r66bslr451q3qc0xi8cnmydfq";
     };
 
     buildInputs = [ pkgs.unzip pkgs.libiodbc ];
