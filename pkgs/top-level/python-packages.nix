@@ -159,18 +159,19 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   actdiag = buildPythonPackage rec {
-    name = "actdiag-0.4.3";
+    name = "actdiag-0.5.1";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/a/actdiag/${name}.tar.gz";
-      md5 = "428aaab849f04668fa12388b964a56ea";
+      md5 = "171c47bc1f70e5fadfffd9df0c3157be";
     };
 
     buildInputs = [ pep8 nose unittest2 docutils ];
 
     propagatedBuildInputs = [ blockdiag ];
 
-    # One test fails, because of missing simple.diag input file
+    # One test fails:
+    #   UnicodeEncodeError: 'ascii' codec can't encode character u'\u3042' in position 0: ordinal not in range(128)
     doCheck = false;
 
     meta = with stdenv.lib; {
