@@ -4501,9 +4501,7 @@ let
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
-  harfbuzz = callPackage ../development/libraries/harfbuzz {
-    graphite2 = null;
-  };
+  harfbuzz = callPackage ../development/libraries/harfbuzz { };
 
   hawknl = callPackage ../development/libraries/hawknl { };
 
@@ -10196,7 +10194,7 @@ let
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
     harfbuzz = harfbuzz.override {
-      inherit icu graphite2;
+      withIcu = true; withGraphite2 = true;
     };
   };
 
