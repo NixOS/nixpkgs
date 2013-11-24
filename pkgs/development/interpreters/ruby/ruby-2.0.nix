@@ -30,11 +30,19 @@ stdenv.mkDerivation rec {
     ++ (op zlibSupport zlib)
     ++ (op opensslSupport openssl)
     ++ (op gdbmSupport gdbm)
-    ++ (op yamlSupport libyaml);
+    ++ (op yamlSupport libyaml)
+    # Looks like ruby fails to build on darwin without readline even if curses
+    # support is not enabled, so add readline to the build inputs if curses
+    # support is disabled (if it's enabled, we already have it) and we're
+    # running on darwin
+    ++ (op (!cursesSupport && stdenv.isDarwin) readline);
 
   enableParallelBuilding = true;
     
-  configureFlags = ["--enable-shared" ];
+  configureFlags = ["--enable-shared" ]
+    # on darwin, we have /usr/include/tk.h -- so the configure script detects
+    # that tk is installed
+    ++ ( if stdenv.isDarwin then [ "--with-out-ext=tk " ] else [ ]);
 
   installFlags = stdenv.lib.optionalString docSupport "install-doc";
   # Bundler tries to create this directory
