@@ -32,8 +32,7 @@ stdenv.mkDerivation {
     description = "Controls AlienFX lighting";
     homepage = "https://github.com/tibz/alienfx";
     maintainers = [stdenv.lib.maintainers.tomberek];
-    # Has only been tested on M11x
-    platforms = [ "x86_64-linux" ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 
