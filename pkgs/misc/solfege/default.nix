@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "solfege-3.22.0";
+  name = "solfege-3.22.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/solfege/${name}.tar.gz";
-    sha256 = "10klrhdb1n67xd4bndk6z6idyf0pvwz7hcdg9ibalms7ywl3b23x";
+    sha256 = "1r4g93ka7i8jh5glii5nza0zq0wy4sw0gfzpvkcrhj9yr1h0jsp4";
   };
 
   buildInputs = [ pkgconfig python pygtk gettext texinfo
