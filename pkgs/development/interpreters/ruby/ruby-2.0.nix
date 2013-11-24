@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   
   src = fetchurl {
     url = "http://cache.ruby-lang.org/pub/ruby/2.0/${name}.tar.bz2";
-    sha256 = "0pr9jf01cfap93xcngyd5zpns67ffjsgaxkm0qr1r464rj9d7066";
+    sha256 = "3de4e4d9aff4682fa4f8ed2b70bd0d746fae17452fc3d3a8e8f505ead9105ad9";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   passthru = rec {
     majorVersion = "2.0";
     minorVersion = "0";
-    patchLevel = "0";
+    patchLevel = "353";
     libPath = "lib/ruby/${majorVersion}";
     gemPath = "lib/ruby/gems/${majorVersion}";
   };
