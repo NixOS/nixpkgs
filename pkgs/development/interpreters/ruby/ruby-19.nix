@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   name = "ruby-${version}";
   
   src = fetchurl {
-    url = "ftp://ftp.ruby-lang.org/pub/ruby/1.9/${name}.tar.bz2";
+    url = "http://cache.ruby-lang.org/pub/ruby/1.9/${name}.tar.bz2";
     sha256 = "0w1avj8qfskvkgvrjxxc1cxjm14bf1v60ipvcl5q3zpn9k14k2cx";
   };
 
