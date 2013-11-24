@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
           --set GDK_PIXBUF_MODULE_FILE "$out/gdk-pixbuf.loaders"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Ear training program";
     homepage = http://www.solfege.org/;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ bjornfor ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
   };
 }
