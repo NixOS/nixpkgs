@@ -4,6 +4,12 @@
 , syslog ? false}:
 
 let
+  version = "1.4.4";
+  mainSrc = fetchurl {
+    url = "http://nginx.org/download/nginx-${version}.tar.gz";
+    sha256 = "1f82845mpgmhvm151fhn2cnqjggw9w7cvsqbva9rb320wmc9m63w";
+  };
+
   rtmp-ext = fetchgit {
     url = git://github.com/arut/nginx-rtmp-module.git;
     rev = "1cfb7aeb582789f3b15a03da5b662d1811e2a3f1";
@@ -13,7 +19,7 @@ let
   dav-ext = fetchgit {
     url = git://github.com/arut/nginx-dav-ext-module.git;
     rev = "54cebc1f21fc13391aae692c6cce672fa7986f9d";
-    sha256 = "1f82845mpgmhvm151fhn2cnqjggw9w7cvsqbva9rb320wmc9m63w";
+    sha256 = "1dvpq1fg5rslnl05z8jc39sgnvh3akam9qxfl033akpczq1bh8nq";
   };
 
   syslog-ext = fetchgit {
@@ -24,12 +30,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "nginx-${meta.version}";
-
-  src = fetchurl {
-    url = "http://nginx.org/download/${name}.tar.gz";
-    sha256 = "116yfy0k65mwxdkld0w7c3gly77jdqlvga5hpbsw79i3r62kh4mf";
-  };
+  name = "nginx-${version}";
+  src = mainSrc;
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt
     ] ++ stdenv.lib.optional fullWebDAV expat;
@@ -61,6 +63,6 @@ stdenv.mkDerivation rec {
     description = "A reverse proxy and lightweight webserver";
     maintainers = [ stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.all;
-    version = "1.4.4";
+    inherit version;
   };
 }
