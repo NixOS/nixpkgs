@@ -13,7 +13,7 @@ let
   dav-ext = fetchgit {
     url = git://github.com/arut/nginx-dav-ext-module.git;
     rev = "54cebc1f21fc13391aae692c6cce672fa7986f9d";
-    sha256 = "1dvpq1fg5rslnl05z8jc39sgnvh3akam9qxfl033akpczq1bh8nq";
+    sha256 = "1f82845mpgmhvm151fhn2cnqjggw9w7cvsqbva9rb320wmc9m63w";
   };
 
   syslog-ext = fetchgit {
@@ -61,6 +61,6 @@ stdenv.mkDerivation rec {
     description = "A reverse proxy and lightweight webserver";
     maintainers = [ stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.all;
-    version = "1.4.3";
+    version = "1.4.4";
   };
 }
