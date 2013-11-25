@@ -1,5 +1,5 @@
 { cabal, filepath, libXrandr, mtl, parsec, regexCompat, stm, time
-, utf8String, X11, X11Xft, wirelesstools
+, utf8String, wirelesstools, X11, X11Xft
 }:
 
 cabal.mkDerivation (self: {
