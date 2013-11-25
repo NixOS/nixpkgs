@@ -10141,6 +10141,8 @@ let
     inherit (pythonPackages) pexpect paramiko;
   };
 
+  robomongo = callPackage ../applications/misc/robomongo { };
+
   opkg = callPackage ../tools/package-management/opkg { };
 
   pgadmin = callPackage ../applications/misc/pgadmin { };
