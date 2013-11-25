@@ -3,12 +3,12 @@ let
   s = # Generated upstream information
   rec {
     baseName="slimerjs";
-    version="git-2013-10-31";
+    version="git-2013-11-25";
     name="${baseName}-${version}";
-    hash="643a9d2f97f238bbd9debb17c010946d507a3b740079d9398939e7fdd70256b9";
+    hash="8c9c518085760a681e3d112ef638473861c1ab2abf9d31043fe365c5d96d3c40";
     url="https://github.com/laurentj/slimerjs";
-    rev="fdeb7364d3e29b47391ed0651176c1aedcb5277f";
-    sha256="643a9d2f97f238bbd9debb17c010946d507a3b740079d9398939e7fdd70256b9";
+    rev="fab60f799eb24a8ba1cad42841d4148181acb72e";
+    sha256="8c9c518085760a681e3d112ef638473861c1ab2abf9d31043fe365c5d96d3c40";
   };
   buildInputs = [
     unzip zip
