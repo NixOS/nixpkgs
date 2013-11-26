@@ -9015,7 +9015,9 @@ let
 
   vorbisTools = callPackage ../applications/audio/vorbis-tools { };
 
-  vue = callPackage ../applications/misc/vue {};
+  vue = callPackage ../applications/misc/vue {
+    jre = oraclejre;
+  };
 
   vwm = callPackage ../applications/window-managers/vwm { };
 
