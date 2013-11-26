@@ -1,16 +1,18 @@
-{ cabal, arithmoi, circlePacking, colour, dataDefault, diagramsCore
-, diagramsLib, forceLayout, HUnit, lens, MonadRandom, mtl
-, QuickCheck, split, testFramework, testFrameworkHunit
-, testFrameworkQuickcheck2, vectorSpace
+{ cabal, arithmoi, circlePacking, colour, dataDefault
+, dataDefaultClass, diagramsCore, diagramsLib, forceLayout, HUnit
+, lens, MonadRandom, mtl, parsec, QuickCheck, semigroups, split
+, testFramework, testFrameworkHunit, testFrameworkQuickcheck2, text
+, vectorSpace, vectorSpacePoints
 }:
 
 cabal.mkDerivation (self: {
   pname = "diagrams-contrib";
-  version = "0.7";
-  sha256 = "0dcj4rjvpgf0lmxgv50f8cpi6adkbfnsa4z4ay8khawhnn4af5ac";
+  version = "1.0";
+  sha256 = "1jmv8z1xz0vqv8hjhymh2za265897fl3m0p6y5s2gy0mqy6d5z25";
   buildDepends = [
-    arithmoi circlePacking colour dataDefault diagramsCore diagramsLib
-    forceLayout lens MonadRandom mtl split vectorSpace
+    arithmoi circlePacking colour dataDefault dataDefaultClass
+    diagramsCore diagramsLib forceLayout lens MonadRandom mtl parsec
+    semigroups split text vectorSpace vectorSpacePoints
   ];
   testDepends = [
     diagramsLib HUnit QuickCheck testFramework testFrameworkHunit
