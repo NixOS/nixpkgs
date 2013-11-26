@@ -49,6 +49,9 @@ postInstall() {
     # This file, that should not remain in the glibc derivation,
     # may have not been created during the preInstall
     rm -f $out/lib/libgcc_s.so.1
+
+    # Get rid of more unnecessary stuff.
+    rm -rf $out/var $out/sbin/sln
 }
 
 genericBuild
