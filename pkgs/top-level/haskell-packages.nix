@@ -1950,6 +1950,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   stateref = callPackage ../development/libraries/haskell/stateref {};
 
+  statestack = callPackage ../development/libraries/haskell/statestack {};
+
   StateVar = callPackage ../development/libraries/haskell/StateVar {};
 
   statistics = callPackage ../development/libraries/haskell/statistics {};
