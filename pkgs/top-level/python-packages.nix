@@ -4524,6 +4524,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   protobuf = buildPythonPackage rec {
     inherit (pkgs.protobuf) name src;
 
+    buildPhase = ''
+      python setup.py build
+    '';
+
     propagatedBuildInputs = [pkgs.protobuf];
     sourceRoot = "${name}/python";
 
