@@ -2479,6 +2479,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hasktags = callPackage ../development/tools/haskell/hasktags {};
 
+  hdevtools = callPackage ../development/tools/haskell/hdevtools {};
+
   hlint = callPackage ../development/tools/haskell/hlint {
     haskellSrcExts = self.haskellSrcExts_1_14_0;
   };
