@@ -174,7 +174,6 @@ let
               systemd
             ];
           environment.PATH = config.path;
-          environment.LD_LIBRARY_PATH = "";
         }
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
