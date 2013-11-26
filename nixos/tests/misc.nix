@@ -59,6 +59,12 @@
       subtest "override-env-var", sub {
           $machine->succeed('[ "$EDITOR" = emacs ]');
       };
+
+      # Test whether hostname (and by extension nss_myhostname) works.
+      subtest "hostname", sub {
+          $machine->succeed('[ "`hostname`" = machine ]');
+          $machine->succeed('[ "`hostname -s`" = machine ]');
+      };
     '';
 
 }
