@@ -145,4 +145,9 @@ rec {
       # The grsec kernel patch seems to include the apparmor patches as of 3.0-3.12.1
       features.apparmor = true;
     };
+
+  grsec_path =
+    { name = "grsec-path";
+      patch = ./grsec-path.patch;
+    };
 }
