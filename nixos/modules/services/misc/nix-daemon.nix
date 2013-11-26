@@ -279,6 +279,7 @@ in
       { description = "Nix Daemon Socket";
         wantedBy = [ "sockets.target" ];
         before = [ "multi-user.target" ];
+        unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket/";
         socketConfig.ListenStream = "/nix/var/nix/daemon-socket/socket";
       };
 
@@ -289,6 +290,8 @@ in
           ++ optionals cfg.distributedBuilds [ pkgs.openssh pkgs.gzip ];
 
         environment = cfg.envVars // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; };
+
+        unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket/";
 
         serviceConfig =
           { ExecStart = "@${nix}/bin/nix-daemon nix-daemon --daemon";

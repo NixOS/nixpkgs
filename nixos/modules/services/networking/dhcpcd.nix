@@ -114,6 +114,8 @@ in
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 
+        unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd.pid";

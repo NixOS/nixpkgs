@@ -231,7 +231,10 @@ in
         wantedBy = [ "sysinit.target" "multi-user.target" ];
         before = [ "sysinit.target" "shutdown.target" ];
         conflicts = [ "shutdown.target" ];
-        unitConfig.DefaultDependencies = "no";
+        unitConfig =
+          { DefaultDependencies = false;
+            ConditionCapability = "CAP_SYS_MODULE";
+          };
         serviceConfig =
           { Type = "oneshot";
             RemainAfterExit = true;
