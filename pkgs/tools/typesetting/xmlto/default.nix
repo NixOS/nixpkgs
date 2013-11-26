@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = https://fedorahosted.org/xmlto/;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.unix ;
   };
 }
