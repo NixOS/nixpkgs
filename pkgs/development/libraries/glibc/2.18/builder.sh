@@ -19,7 +19,7 @@ postInstall() {
     if test -n "$installLocales"; then
         make -j${NIX_BUILD_CORES:-1} -l${NIX_BUILD_CORES:-1} localedata/install-locales
     fi
-    
+
     test -f $out/etc/ld.so.cache && rm $out/etc/ld.so.cache
 
     # FIXME: Use `test -n $linuxHeaders' when `kernelHeaders' has been
@@ -27,19 +27,19 @@ postInstall() {
     if test -z "$hurdHeaders"; then
         # Include the Linux kernel headers in Glibc, except the `scsi'
         # subdirectory, which Glibc provides itself.
-	(cd $out/include && \
-	 ln -sv $(ls -d $kernelHeaders/include/* | grep -v 'scsi$') .)
+        (cd $out/include && \
+         ln -sv $(ls -d $kernelHeaders/include/* | grep -v 'scsi$') .)
     fi
 
     if test -f "$out/lib/libhurduser.so"; then
-	# libc.so, libhurduser.so, and libmachuser.so depend on each
-	# other, so add them to libc.so (a RUNPATH on libc.so.0.3
-	# would be ignored by the cross-linker.)
-	echo "adding \`libhurduser.so' and \`libmachuser.so' to the \`libc.so' linker script..."
-	sed -i "$out/lib/libc.so" \
-	    -e"s|\(libc\.so\.[^ ]\+\>\)|\1 $out/lib/libhurduser.so $out/lib/libmachuser.so|g"
+        # libc.so, libhurduser.so, and libmachuser.so depend on each
+        # other, so add them to libc.so (a RUNPATH on libc.so.0.3
+        # would be ignored by the cross-linker.)
+        echo "adding \`libhurduser.so' and \`libmachuser.so' to the \`libc.so' linker script..."
+        sed -i "$out/lib/libc.so" \
+            -e"s|\(libc\.so\.[^ ]\+\>\)|\1 $out/lib/libhurduser.so $out/lib/libmachuser.so|g"
     fi
-	
+
     # Fix for NIXOS-54 (ldd not working on x86_64).  Make a symlink
     # "lib64" to "lib".
     if test -n "$is64bit"; then
