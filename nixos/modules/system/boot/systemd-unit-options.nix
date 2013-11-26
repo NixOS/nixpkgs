@@ -210,6 +210,14 @@ in rec {
       '';
     };
 
+    preStop = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Shell commands executed to stop the service.
+      '';
+    };
+
     postStop = mkOption {
       type = types.lines;
       default = "";
