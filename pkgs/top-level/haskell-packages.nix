@@ -1352,6 +1352,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   ieee754 = callPackage ../development/libraries/haskell/ieee754 {};
 
   indents = callPackage ../development/libraries/haskell/indents {};
+  
+  indexed = callPackage ../development/libraries/haskell/indexed {};
+
+  indexedFree = callPackage ../development/libraries/haskell/indexed-free {};
 
   instantGenerics = callPackage ../development/libraries/haskell/instant-generics {};
 
