@@ -145,7 +145,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf (!config.boot.isContainer) {
 
     system.build = { inherit kernel; };
 

@@ -604,13 +604,6 @@ in
         mkdir -p /var/log/journal
         chmod 0755 /var/log/journal
 
-        # Regenerate the hardware database /var/lib/udev/hwdb.bin
-        # whenever systemd changes.
-        if [ ! -e /var/lib/udev/prev-systemd -o "$(readlink /var/lib/udev/prev-systemd)" != ${systemd} ]; then
-          echo "regenerating udev hardware database..."
-          ${systemd}/bin/udevadm hwdb --update && ln -sfn ${systemd} /var/lib/udev/prev-systemd
-        fi
-
         # Make all journals readable to users in the wheel and adm
         # groups, in addition to those in the systemd-journal group.
         # Users can always read their own journals.
