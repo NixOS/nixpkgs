@@ -742,6 +742,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   cmdtheline = callPackage ../development/libraries/haskell/cmdtheline {};
 
+  CodecImageDevIL = callPackage ../development/libraries/haskell/codec-image-devil {};
+
   colorizeHaskell = callPackage ../development/libraries/haskell/colorize-haskell {};
 
   colour = callPackage ../development/libraries/haskell/colour {};
