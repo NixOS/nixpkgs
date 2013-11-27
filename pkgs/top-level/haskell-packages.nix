@@ -1029,6 +1029,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
 
+  foldl = callPackage ../development/libraries/haskell/foldl {};
+
   forceLayout = callPackage ../development/libraries/haskell/force-layout {};
 
   free = callPackage ../development/libraries/haskell/free {};
