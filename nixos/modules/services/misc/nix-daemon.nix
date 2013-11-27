@@ -334,10 +334,8 @@ in
       ''
         # Set up secure multi-user builds: non-root users build through the
         # Nix daemon.
-        if test "$USER" != root; then
+        if [ "$USER" != root -o ! -w /nix/var/nix/db ]; then
             export NIX_REMOTE=daemon
-        else
-            export NIX_REMOTE=
         fi
       '';
 
