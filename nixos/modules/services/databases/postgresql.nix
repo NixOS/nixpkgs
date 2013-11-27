@@ -30,6 +30,7 @@ let
       hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
       ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
       log_destination = 'stderr'
+      port = ${toString cfg.port}
       ${cfg.extraConfig}
     '';
 
@@ -63,9 +64,9 @@ in
 
       port = mkOption {
         type = types.int;
-        default = "5432";
+        default = 5432;
         description = ''
-          Port for PostgreSQL.
+          The port on which PostgreSQL listens.
         '';
       };
 
@@ -105,7 +106,9 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to run PostgreSQL with -i flag to enable TCP/IP connections.
+          Whether PostgreSQL should listen on all network interfaces.
+          If disabled, the database can only be accessed via its Unix
+          domain socket or via TCP connections to localhost.
         '';
       };
 
