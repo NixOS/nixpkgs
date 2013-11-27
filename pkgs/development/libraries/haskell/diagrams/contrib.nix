@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     diagramsLib HUnit QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams/";
     description = "Collection of user contributions to diagrams EDSL";
