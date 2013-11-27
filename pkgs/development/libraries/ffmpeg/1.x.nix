@@ -13,7 +13,7 @@
 , dc1394Support ? false, libdc1394 ? null
 , x11grabSupport ? false, libXext ? null, libXfixes ? null
 , playSupport ? true, SDL ? null
-, freetypeSupport ? true, freetype ? null
+, freetypeSupport ? true, freetype ? null, fontconfig ? null
 }:
 
 assert speexSupport -> speex != null;
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional dc1394Support "--enable-libdc1394"
     ++ stdenv.lib.optional x11grabSupport "--enable-x11grab"
     ++ stdenv.lib.optional playSupport "--enable-ffplay"
-    ++ stdenv.lib.optional freetypeSupport "--enable-libfreetype";
+    ++ stdenv.lib.optional freetypeSupport "--enable-libfreetype --enable-fontconfig";
 
   buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib texinfo perl ]
     ++ stdenv.lib.optional mp3Support lame
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional dc1394Support libdc1394
     ++ stdenv.lib.optionals x11grabSupport [ libXext libXfixes ]
     ++ stdenv.lib.optional playSupport SDL
-    ++ stdenv.lib.optional freetypeSupport freetype;
+    ++ stdenv.lib.optionals freetypeSupport [ freetype fontconfig ];
 
   enableParallelBuilding = true;
 
