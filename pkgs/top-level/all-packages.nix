@@ -1214,6 +1214,8 @@ let
     self = pkgs.nodePackages;
   });
 
+  ldapvi = callPackage ../tools/misc/ldapvi { };
+
   ldns = callPackage ../development/libraries/ldns { };
 
   lftp = callPackage ../tools/networking/lftp { };
