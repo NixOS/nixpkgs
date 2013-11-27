@@ -109,4 +109,5 @@
 , "owl-deepcopy"
 , "meat"
 , "hipache"
+, "posix"
 ]
