@@ -6485,6 +6485,8 @@ let
 
   atop = callPackage ../os-specific/linux/atop { };
 
+  audit = callPackage ../os-specific/linux/audit { };
+
   b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
 
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
