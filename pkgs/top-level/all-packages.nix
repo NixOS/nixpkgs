@@ -7044,6 +7044,8 @@ let
 
   sepolgen = callPackage ../os-specific/linux/sepolgen { };
 
+  setools = callPackage ../os-specific/linux/setools { };
+
   shadow = callPackage ../os-specific/linux/shadow { };
 
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) { };
