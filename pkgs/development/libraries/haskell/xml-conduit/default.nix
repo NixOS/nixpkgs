@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-conduit";
-  version = "1.1.0.7";
-  sha256 = "04yg2mif9s3hsm5c18mf6rmw22j8prs8a1272fz25vzxzljfs2r9";
+  version = "1.1.0.8";
+  sha256 = "06if4mbrbcsjhk7hj3616fhgfh0rlsj95jblsbxq2drb4bn56r39";
   buildDepends = [
     attoparsec attoparsecConduit blazeBuilder blazeBuilderConduit
     blazeHtml blazeMarkup conduit dataDefault deepseq failure

@@ -23,7 +23,15 @@ in
       default = "";
       example =
         ''
-          TODO
+          /* Log authorization checks. */
+          polkit.addRule(function(action, subject) {
+            polkit.log("user " +  subject.user + " is attempting action " + action.id + " from PID " + subject.pid);
+          });
+
+          /* Allow any local user to do anything (dangerous!). */
+          polkit.addRule(function(action, subject) {
+            if (subject.local) return "yes";
+          });
         '';
       description =
         ''
@@ -33,9 +41,9 @@ in
     };
 
     security.polkit.adminIdentities = mkOption {
-      type = types.str;
-      default = "unix-user:0;unix-group:wheel";
-      example = "";
+      type = types.listOf types.str;
+      default = [ "unix-user:0" "unix-group:wheel" ];
+      example = [ "unix-user:alice" "unix-group:admin" ];
       description =
         ''
           Specifies which users are considered “administrators”, for those
@@ -58,18 +66,15 @@ in
     # The polkit daemon reads action/rule files
     environment.pathsToLink = [ "/share/polkit-1" ];
 
-    # PolKit rules for NixOS
-    environment.etc = [ {
-      source = pkgs.writeText "10-nixos.conf"
-        ''
-          polkit.addAdminRule(function(action, subject) {
-            return ["${cfg.adminIdentities}"];
-          });
+    # PolKit rules for NixOS.
+    environment.etc."polkit-1/rules.d/10-nixos.rules".text =
+      ''
+        polkit.addAdminRule(function(action, subject) {
+          return [${concatStringsSep ", " (map (i: "\"${i}\"") cfg.adminIdentities)}];
+        });
 
-          ${cfg.extraConfig}
-        ''; #TODO: validation on compilation (at least against typos)
-      target = "polkit-1/rules.d/10-nixos.conf";
-    } ];
+        ${cfg.extraConfig}
+      ''; #TODO: validation on compilation (at least against typos)
 
     services.dbus.packages = [ pkgs.polkit ];
 

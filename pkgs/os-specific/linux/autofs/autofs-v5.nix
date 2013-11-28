@@ -4,17 +4,17 @@ let
   baseURL = mirror://kernel/linux/daemons/autofs/v5;
 in
 stdenv.mkDerivation {
-  name = "autofs-5.0.5";
+  name = "autofs-5.0.8";
 
   src = fetchurl {
-    url = "${baseURL}/autofs-5.0.5.tar.bz2";
-    sha256 = "00k0k3jkbr29gn1wnzqjyc9iqq5bwjyip1isc79wf51wph0kxiv8";
+    url = "${baseURL}/autofs-5.0.8.tar.bz2";
+    sha256 = "0zczihrqdamj43401v2pczf7zi94f8qk20gc6l92nxmpak3443if";
   };
 
   patches = import ./patches-v5.nix fetchurl;
 
   preConfigure = ''
-    configureFlags="--with-path=$PATH"
+    configureFlags="--disable-move-mount --with-path=$PATH"
     export MOUNT=/var/run/current-system/sw/bin/mount
     export UMOUNT=/var/run/current-system/sw/bin/umount
     export MODPROBE=/var/run/current-system/sw/sbin/modprobe

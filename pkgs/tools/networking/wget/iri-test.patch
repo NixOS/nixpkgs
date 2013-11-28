@@ -1,0 +1,12 @@
+diff -r --unified a/wget-1.14/tests/run-px b/wget-1.14/tests/run-px
+--- a/tests/run-px	2012-06-16 11:58:11.000000000 +0100
++++ b/tests/run-px	2013-11-02 14:06:14.000000000 +0000
+@@ -48,7 +48,7 @@
+     'Test-idn-robots-utf8.px',
+     'Test-iri.px',
+     'Test-iri-percent.px',
+-    'Test-iri-disabled.px',
++    #'Test-iri-disabled.px',
+     'Test-iri-forced-remote.px',
+     'Test-iri-list.px',
+     'Test-k.px',

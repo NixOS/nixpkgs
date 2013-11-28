@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "stringsearch";
-  version = "0.3.6.4";
-  sha256 = "16g0x0n8x3bg3mij7w3r5m3h2i2dn3bd298n14iccdwhfnlzm91b";
+  version = "0.3.6.5";
+  sha256 = "1mjvb1qr4fkxv5qvq4jfswa3dcj3dwzvwx7dbp2wqw8zand41lsq";
   meta = {
     homepage = "https://bitbucket.org/dafis/stringsearch";
     description = "Fast searching, splitting and replacing of ByteStrings";

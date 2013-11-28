@@ -6,8 +6,8 @@ stdenv.mkDerivation {
   name = "cpufrequtils-008";
 
   src = fetchurl {
-    url = http://ftp.be.debian.org/pub/linux/utils/kernel/cpufreq/cpufrequtils-008.tar.gz;
-    md5 = "52d3e09e47ffef634833f7fab168eccf";
+    url = "http://ftp.be.debian.org/pub/linux/utils/kernel/cpufreq/${name}.tar.gz";
+    sha256 = "127i38d4w1hv2dzdy756gmbhq25q3k34nqb2s0xlhsfhhdqs0lq0";
   };
 
   patchPhase = ''

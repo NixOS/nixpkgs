@@ -142,10 +142,12 @@ init_submodules(){
     git submodule status |
     while read l; do
         # checkout each submodule
-        local hash=$(echo $l | sed 's,^-\([0-9a-f]*\) \(.*\)$,\1,');
-        local dir=$(echo $l | sed 's,^-\([0-9a-f]*\) \(.*\)$,\2,');
-        local url=$(sed -n "\,$dir, { :loop; n; s,^.*url = ,,; T loop; p; q }" .git/config);
-
+        local hash=$(echo $l | awk '{print substr($1,2)}');
+        local dir=$(echo $l | awk '{print $2}');
+        local name=$(
+            git config -f .gitmodules --get-regexp submodule\.[^.]*\.path |
+            sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
+        local url=$(git config -f .gitmodules --get ${name}.url);
         clone "$dir" "$url" "$hash" "";
     done;
 }

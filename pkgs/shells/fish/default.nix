@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoconf, ncurses, which, groff, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "fish-2.0.0";
+  name = "fish-2.1.0";
 
   src = fetchurl {
-    url = http://fishshell.com/files/2.0.0/fish-2.0.0.tar.gz;
-    sha1 = "2d28553e2ff975f8e5fed6b266f7a940493b6636";
+    url = http://fishshell.com/files/2.1.0/fish-2.1.0.tar.gz;
+    sha1 = "b1764cba540055cb8e2a96a7ea4c844b04a32522";
   };
 
   nativeBuildInputs = [ autoconf ];
@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     homepage = http://fishshell.com/;
     license = licenses.gpl2;
     platforms = platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.ocharles ];
   };
 }

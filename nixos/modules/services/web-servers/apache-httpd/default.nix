@@ -628,10 +628,10 @@ in
         preStart =
           ''
             mkdir -m 0750 -p ${mainCfg.stateDir}
-            chown root.${mainCfg.group} ${mainCfg.stateDir}
+            [ $(id -u) != 0 ] || chown root.${mainCfg.group} ${mainCfg.stateDir}
             ${optionalString version24 ''
               mkdir -m 0750 -p "${mainCfg.stateDir}/runtime"
-              chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
+              [ $(id -u) != 0 ] || chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
             ''}
             mkdir -m 0700 -p ${mainCfg.logDir}
 
@@ -659,6 +659,7 @@ in
         serviceConfig.ExecStart = "@${httpd}/bin/httpd httpd -f ${httpdConf}";
         serviceConfig.ExecStop = "${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop";
         serviceConfig.Type = "forking";
+        serviceConfig.PIDFile = "${mainCfg.stateDir}/httpd.pid";
         serviceConfig.Restart = "always";
       };
 

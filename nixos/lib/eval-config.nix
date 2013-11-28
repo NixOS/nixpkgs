@@ -8,6 +8,7 @@
 , extraArgs ? {}
 , modules
 , check ? true
+, prefix ? []
 }:
 
 let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system; in
@@ -17,6 +18,7 @@ rec {
   # Merge the option definitions in all modules, forming the full
   # system configuration.
   inherit (pkgs.lib.evalModules {
+    inherit prefix;
     modules = modules ++ baseModules;
     args = extraArgs;
     check = check && options.environment.checkConfigurationOptions.value;
@@ -48,7 +50,7 @@ rec {
       let
         system = if nixpkgsOptions.system != "" then nixpkgsOptions.system else system_;
         nixpkgsOptions = (import ./eval-config.nix {
-          inherit system extraArgs modules;
+          inherit system extraArgs modules prefix;
           # For efficiency, leave out most NixOS modules; they don't
           # define nixpkgs.config, so it's pointless to evaluate them.
           baseModules = [ ../modules/misc/nixpkgs.nix ];

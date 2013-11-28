@@ -652,6 +652,37 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
     </listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><varname>systemd.units.<replaceable>unit-name</replaceable>.unit</varname></term>
+    <listitem>
+      <para>This builds the unit with the specified name.  Note that
+      since unit names contain dots
+      (e.g. <literal>httpd.service</literal>), you need to put them
+      between quotes, like this:
+
+<screen>
+$ nix-build -A 'config.systemd.units."httpd.service".unit'
+</screen>
+
+      You can also test individual units, without rebuilding the whole
+      system, by putting them in
+      <filename>/run/systemd/system</filename>:
+
+<screen>
+$ cp $(nix-build -A 'config.systemd.units."httpd.service".unit')/httpd.service \
+    /run/systemd/system/tmp-httpd.service
+$ systemctl daemon-reload
+$ systemctl start tmp-httpd.service
+</screen>
+
+      Note that the unit must not have the same name as any unit in
+      <filename>/etc/systemd/system</filename> since those take
+      precedence over <filename>/run/systemd/system</filename>.
+      That’s why the unit is installed as
+      <filename>tmp-httpd.service</filename> here.</para>
+    </listitem>
+  </varlistentry>
+
 </variablelist>
 
 </para>

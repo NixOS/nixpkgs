@@ -1,22 +1,23 @@
 { cabal, accelerate, accelerateCuda, accelerateFft, accelerateIo
-, attoparsec, bmp, bytestringLexing, cereal, cmdargs, criterion
-, cuda, deepseq, fclabels, filepath, gloss, hashtables, mtl
-, mwcRandom, pgm, QuickCheck, random, repa, repaIo, testFramework
-, testFrameworkQuickcheck2, vector, vectorAlgorithms
+, attoparsec, bmp, bytestringLexing, cereal, criterion, ekg
+, fclabels, filepath, gloss, glossAccelerate, glossRasterAccelerate
+, HUnit, mwcRandom, primitive, QuickCheck, random, repa, repaIo
+, testFramework, testFrameworkHunit, testFrameworkQuickcheck2
+, vector, vectorAlgorithms
 }:
 
 cabal.mkDerivation (self: {
   pname = "accelerate-examples";
-  version = "0.13.0.0";
-  sha256 = "18f8p47sf10zn678540qzzf5pl18w9f068s83lpz4lk0r5gf4lzx";
+  version = "0.14.0.0";
+  sha256 = "01hxww3ypjlcfimkvf7gxl2g7msad2yw1d6m0h4kkfqvpx84nfwr";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     accelerate accelerateCuda accelerateFft accelerateIo attoparsec bmp
-    bytestringLexing cereal cmdargs criterion cuda deepseq fclabels
-    filepath gloss hashtables mtl mwcRandom pgm QuickCheck random repa
-    repaIo testFramework testFrameworkQuickcheck2 vector
-    vectorAlgorithms
+    bytestringLexing cereal criterion ekg fclabels filepath gloss
+    glossAccelerate glossRasterAccelerate HUnit mwcRandom primitive
+    QuickCheck random repa repaIo testFramework testFrameworkHunit
+    testFrameworkQuickcheck2 vector vectorAlgorithms
   ];
   configureFlags = "-f-opencl";
   meta = {

@@ -2,14 +2,14 @@
 
 cabal.mkDerivation (self: {
   pname = "hslua";
-  version = "0.3.8";
-  sha256 = "1yb23cyb3wj70z8lvk6w2sn13kc17v53fd8m587kb4fpqzpdz44d";
+  version = "0.3.9";
+  sha256 = "0rs9hfc1k7wihgvp6vizccwppv5nd9mszp7a2y7pwjrprapwj07c";
   buildDepends = [ mtl ];
   pkgconfigDepends = [ lua ];
   configureFlags = "-fsystem-lua";
   meta = {
     description = "A Lua language interpreter embedding in Haskell";
-    license = self.stdenv.lib.licenses.bsd3;
+    license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
   };
 })

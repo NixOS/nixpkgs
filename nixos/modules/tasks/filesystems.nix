@@ -81,6 +81,7 @@ in
   options = {
 
     fileSystems = mkOption {
+      default = {};
       example = {
         "/".device = "/dev/hda1";
         "/data" = {

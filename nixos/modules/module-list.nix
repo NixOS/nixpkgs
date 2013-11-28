@@ -91,6 +91,7 @@
   ./services/databases/virtuoso.nix
   ./services/games/ghost-one.nix
   ./services/hardware/acpid.nix
+  ./services/hardware/amd-hybrid-graphics.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
@@ -246,11 +247,11 @@
   ./system/boot/kexec.nix
   ./system/boot/loader/efi.nix
   ./system/boot/loader/generations-dir/generations-dir.nix
-  ./system/boot/loader/gummiboot/gummiboot.nix
-  ./system/boot/loader/raspberrypi/raspberrypi.nix
   ./system/boot/loader/grub/grub.nix
   ./system/boot/loader/grub/memtest.nix
+  ./system/boot/loader/gummiboot/gummiboot.nix
   ./system/boot/loader/init-script/init-script.nix
+  ./system/boot/loader/raspberrypi/raspberrypi.nix
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/shutdown.nix
@@ -274,6 +275,8 @@
   ./tasks/network-interfaces.nix
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
+  ./testing/service-runner.nix
+  ./virtualisation/containers.nix
   ./virtualisation/libvirtd.nix
   #./virtualisation/nova.nix
   ./virtualisation/virtualbox-guest.nix

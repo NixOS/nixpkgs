@@ -1,11 +1,13 @@
 { stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
-
+let
+  ver = "2.24";
+in
 stdenv.mkDerivation rec {
-  name = "util-linux-2.22.2";
+  name = "util-linux-${ver}";
 
   src = fetchurl {
-    url = "http://www.kernel.org/pub/linux/utils/util-linux/v2.22/${name}.tar.bz2";
-    sha256 = "0vf3ifb45gr4cd27pmmxk8y5b3r0920mv16fv0vfwz5705xa2qvl";
+    url = "http://www.kernel.org/pub/linux/utils/util-linux/v${ver}/${name}.tar.bz2";
+    sha256 = "1nfnymj03rdcxjb677a9qq1zirppr8csh32cb85qm23x5xndi6v3";
   };
 
   crossAttrs = {

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ListLike";
-  version = "4.0.0";
-  sha256 = "13dw8pkj8dwxb81gbcm7gn221zyr3ck9s9s1iv7v1b69chv0zyxk";
+  version = "4.0.1";
+  sha256 = "1ny6h3f1l0gigyv2rs24s7w158vsflrdx4i9v1al4910cxh56awv";
   buildDepends = [ text vector ];
   testDepends = [ HUnit QuickCheck random text vector ];
   meta = {

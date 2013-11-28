@@ -533,6 +533,8 @@ let
 
   bmon = callPackage ../tools/misc/bmon { };
 
+  bochs = callPackage ../applications/virtualization/bochs { };
+
   boomerang = callPackage ../development/tools/boomerang {
     stdenv = overrideGCC stdenv gcc47;
   };
@@ -587,6 +589,8 @@ let
   autossh = callPackage ../tools/networking/autossh { };
 
   bacula = callPackage ../tools/backup/bacula { };
+
+  beanstalkd = callPackage ../servers/beanstalkd { };
 
   bgs = callPackage ../tools/X11/bgs { };
 
@@ -1211,6 +1215,8 @@ let
     neededNatives = [python] ++ lib.optional (lib.elem system lib.platforms.linux) utillinux;
     self = pkgs.nodePackages;
   });
+
+  ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldns = callPackage ../development/libraries/ldns { };
 
@@ -3435,6 +3441,8 @@ let
 
   automake113x = callPackage ../development/tools/misc/automake/automake-1.13.x.nix { };
 
+  automake114x = callPackage ../development/tools/misc/automake/automake-1.14.x.nix { };
+
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
@@ -3767,6 +3775,8 @@ let
     buildllvmsparse = false;
     buildc2xml = false;
   };
+
+  smc = callPackage ../tools/misc/smc { };
 
   sparse = callPackage ../development/tools/analysis/sparse { };
 
@@ -4612,6 +4622,10 @@ let
 
   leptonica = callPackage ../development/libraries/leptonica {
     libpng = libpng12;
+  };
+
+  lgi = callPackage ../development/libraries/lgi {
+    lua = lua5_1;
   };
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
@@ -5857,6 +5871,8 @@ let
 
   xbase = callPackage ../development/libraries/xbase { };
 
+  xcb-util-cursor = callPackage ../development/libraries/xcb-util-cursor { };
+
   xineLib = callPackage ../development/libraries/xine-lib { };
 
   xautolock = callPackage ../misc/screensavers/xautolock { };
@@ -6450,6 +6466,8 @@ let
 
   acpitool = callPackage ../os-specific/linux/acpitool { };
 
+  alienfx = callPackage ../os-specific/linux/alienfx { };
+
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
 
   alsaPlugins = callPackage ../os-specific/linux/alsa-plugins {
@@ -6722,6 +6740,15 @@ let
       ];
   };
 
+  linux_3_10_tuxonice = linux_3_10.override (attrs: {
+    kernelPatches = attrs.kernelPatches ++ [
+      kernelPatches.tuxonice_3_10
+    ];
+    extraConfig = ''
+      TOI_CORE y
+    '';
+  });
+
   linux_3_11 = makeOverridable (import ../os-specific/linux/kernel/linux-3.11.nix) {
     inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
     kernelPatches =
@@ -6864,6 +6891,7 @@ let
   linuxPackages_3_4_apparmor = linuxPackagesFor pkgs.linux_3_4_apparmor linuxPackages_3_4_apparmor;
   linuxPackages_3_6_rpi = linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi;
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
+  linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_11 linuxPackages_3_11);
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   # Update this when adding a new version!
@@ -7422,10 +7450,15 @@ let
 
   avxsynth = callPackage ../applications/video/avxsynth { };
 
-  awesome = callPackage ../applications/window-managers/awesome {
+  awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
     lua = lua5;
     cairo = cairo.override { xcbSupport = true; };
   };
+  awesome-3-5 = callPackage ../applications/window-managers/awesome {
+    lua   = lua5_1;
+    cairo = cairo.override { xcbSupport = true; };
+  };
+  awesome = awesome-3-5;
 
   baresip = callPackage ../applications/networking/instant-messengers/baresip {};
 
@@ -7923,6 +7956,8 @@ let
     inherit (gnome) libgnome libgnomeui;
     gtksharp = gtksharp1;
   };
+
+  fuze = callPackage ../applications/networking/instant-messengers/fuze {};
 
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
@@ -8984,7 +9019,9 @@ let
 
   vorbisTools = callPackage ../applications/audio/vorbis-tools { };
 
-  vue = callPackage ../applications/misc/vue {};
+  vue = callPackage ../applications/misc/vue {
+    jre = oraclejre;
+  };
 
   vwm = callPackage ../applications/window-managers/vwm { };
 
@@ -9184,7 +9221,9 @@ let
 
   zathura = zathuraCollection.zathuraWrapper;
 
-  girara = callPackage ../applications/misc/girara { };
+  girara = callPackage ../applications/misc/girara {
+    gtk = gtk3;
+  };
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
@@ -10289,6 +10328,8 @@ let
   };
 
   yafc = callPackage ../applications/networking/yafc { };
+
+  yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
   myEnvFun = import ../misc/my-env {
     inherit substituteAll pkgs;
