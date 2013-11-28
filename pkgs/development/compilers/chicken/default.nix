@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "chicken-4.8.1";
+  name = "chicken-4.8.2";
 
   meta = {
     homepage = http://www.call-cc.org/;
@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = http://code.call-cc.org/dev-snapshots/2013/01/04/chicken-4.8.1.tar.gz;
-    md5 = "bd758ec7abeaeb4f4c92c290fb5f3db7";
+    url = http://code.call-cc.org/dev-snapshots/2013/08/08/chicken-4.8.2.tar.gz;
+    sha1 = "762cd246b3089fa206bbf74679172b1f5f90c812";
   };
 
   buildFlags = "PLATFORM=linux PREFIX=$(out) VARDIR=$(out)/var/lib";
