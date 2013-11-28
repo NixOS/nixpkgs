@@ -12,6 +12,12 @@ let
     url = "http://code.call-cc.org/dev-snapshots/2013/08/08/chicken-4.8.2.tar.gz";
     sha256 = "01g7h0664342nl536mnri4c72kwj4z40vmv1250xfndlr218qdqg";
   };
+  platform = with stdenv;
+    if isDarwin then "osx"
+    else if isCygwin then "cygwin"
+    else if isBSD then "bsd"
+    else if isSunOS then "solaris"
+    else "linux";               # Should be a sane default
 in
 stdenv.mkDerivation {
   name = "chicken-${version}";
@@ -20,8 +26,8 @@ stdenv.mkDerivation {
     then srcDev
     else srcRelease;
 
-  buildFlags = "PLATFORM=linux PREFIX=$(out) VARDIR=$(out)/var/lib";
-  installFlags = "PLATFORM=linux PREFIX=$(out) VARDIR=$(out)/var/lib";
+  buildFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
+  installFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
 
   meta = {
     homepage = http://www.call-cc.org/;
