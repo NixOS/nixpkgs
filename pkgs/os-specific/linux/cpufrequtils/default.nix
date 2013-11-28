@@ -2,7 +2,7 @@
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "cpufrequtils-008";
 
   src = fetchurl {
