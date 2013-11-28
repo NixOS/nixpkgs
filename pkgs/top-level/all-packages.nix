@@ -533,6 +533,8 @@ let
 
   bmon = callPackage ../tools/misc/bmon { };
 
+  bochs = callPackage ../applications/virtualization/bochs { };
+
   boomerang = callPackage ../development/tools/boomerang {
     stdenv = overrideGCC stdenv gcc47;
   };
