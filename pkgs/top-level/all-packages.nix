@@ -9476,6 +9476,8 @@ let
 
   tennix = callPackage ../games/tennix { };
 
+  tintin = callPackage ../games/tintin { };
+
   tpm = callPackage ../games/thePenguinMachine { };
 
   tremulous = callPackage ../games/tremulous { };
