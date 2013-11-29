@@ -13,7 +13,7 @@ let
     sha256 = "01g7h0664342nl536mnri4c72kwj4z40vmv1250xfndlr218qdqg";
   };
   platform = with stdenv;
-    if isDarwin then "osx"
+    if isDarwin then "macosx"
     else if isCygwin then "cygwin"
     else if isBSD then "bsd"
     else if isSunOS then "solaris"
