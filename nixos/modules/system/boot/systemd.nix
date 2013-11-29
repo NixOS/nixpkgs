@@ -534,6 +534,16 @@ in
       '';
     };
 
+    services.journald.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "Storage=volatile";
+      description = ''
+        Extra config options for systemd-journald. See man journald.conf
+        for available options.
+      '';
+    };
+
     services.logind.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -585,6 +595,7 @@ in
           ForwardToConsole=yes
           TTYPath=${config.services.journald.console}
         ''}
+        ${config.services.journald.extraConfig}
       '';
 
     environment.etc."systemd/logind.conf".text =
