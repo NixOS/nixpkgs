@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, nspr, perl, python, readline, zip }:
+{ stdenv, fetchurl, pkgconfig, nspr, perl, python, zip }:
 
 stdenv.mkDerivation rec {
   version = "185-1.0.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nspr ];
 
-  buildInputs = [ pkgconfig perl python readline zip ];
+  buildInputs = [ pkgconfig perl python zip ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
 
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   # hack around a make problem, see https://github.com/NixOS/nixpkgs/issues/1279#issuecomment-29547393
   preBuild = "touch -- {.,shell,jsapi-tests}/{-lpthread,-ldl}";
+
+  enableParallelBuilding = true;
 
   doCheck = true;
   preCheck = "rm jit-test/tests/sunspider/check-date-format-tofte.js"; # https://bugzil.la/600522
