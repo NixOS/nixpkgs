@@ -1,0 +1,186 @@
+From 88fcac23027d35b2dc4b7dd337d1028c55f68ecc Mon Sep 17 00:00:00 2001
+From: Roelof Wobben <rwobben@hotmail.com>
+Date: Fri, 29 Nov 2013 19:01:24 +0100
+Subject: [PATCH 1/3] fix
+
+---
+ Makefile.am         |  2 +-
+ configure.ac        |  1 +
+ m4/introspection.m4 | 89 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 91 insertions(+), 1 deletion(-)
+ create mode 100644 m4/introspection.m4
+
+diff --git a/Makefile.am b/Makefile.am
+index 8957ede..0d82657 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -16,7 +16,7 @@ cjstest_files_with_tests =
+ TEST_PROGS =
+ check_PROGRAMS = $(TEST_PROGS)
+ INTROSPECTION_GIRS =
+-ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS}
++ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -Im4
+ 
+ gjsjsdir = @gjsjsdir@
+ gjsoverridedir = $(gjsjsdir)/overrides
+diff --git a/configure.ac b/configure.ac
+index a1433c8..fa208c1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -11,6 +11,7 @@ AC_INIT([cjs], pkg_version, [http://bugzilla.gnome.org/enter_bug.cgi?product=cjs
+ AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip])
+ AC_CONFIG_SRCDIR([cjs/console.c])
+ AC_CONFIG_HEADER([config.h])
++AC_CONFIG_MACRO_DIR([m4])
+ 
+ GETTEXT_PACKAGE=cjs
+ AC_SUBST([GETTEXT_PACKAGE])
+diff --git a/m4/introspection.m4 b/m4/introspection.m4
+new file mode 100644
+index 0000000..35ab79e
+--- /dev/null
++++ b/m4/introspection.m4
+@@ -0,0 +1,89 @@
++dnl -*- mode: autoconf -*-
++dnl Copyright 2009 Johan Dahlin
++dnl
++dnl This file is free software; the author(s) gives unlimited
++dnl permission to copy and/or distribute it, with or without
++dnl modifications, as long as this notice is preserved.
++dnl
++
++# serial 1
++
++m4_define([_GOBJECT_INTROSPECTION_CHECK_INTERNAL],
++[
++    AC_BEFORE([AC_PROG_LIBTOOL],[$0])dnl setup libtool first
++    AC_BEFORE([AM_PROG_LIBTOOL],[$0])dnl setup libtool first
++    AC_BEFORE([LT_INIT],[$0])dnl setup libtool first
++
++    dnl enable/disable introspection
++    m4_if([$2], [require],
++    [dnl
++        enable_introspection=yes
++    ],[dnl
++        AC_ARG_ENABLE(introspection,
++                  AS_HELP_STRING([--enable-introspection[=@<:@no/auto/yes@:>@]],
++                                 [Enable introspection for this build]),,
++                                 [enable_introspection=auto])
++    ])dnl
++
++    AC_MSG_CHECKING([for gobject-introspection])
++
++    dnl presence/version checking
++    AS_CASE([$enable_introspection],
++    [no], [dnl
++        found_introspection="no (disabled, use --enable-introspection to enable)"
++    ],dnl
++    [yes],[dnl
++        PKG_CHECK_EXISTS([gobject-introspection-1.0],,
++                         AC_MSG_ERROR([gobject-introspection-1.0 is not installed]))
++        PKG_CHECK_EXISTS([gobject-introspection-1.0 >= $1],
++                         found_introspection=yes,
++                         AC_MSG_ERROR([You need to have gobject-introspection >= $1 installed to build AC_PACKAGE_NAME]))
++    ],dnl
++    [auto],[dnl
++        PKG_CHECK_EXISTS([gobject-introspection-1.0 >= $1], found_introspection=yes, found_introspection=no)
++    ],dnl
++    [dnl
++        AC_MSG_ERROR([invalid argument passed to --enable-introspection, should be one of @<:@no/auto/yes@:>@])
++    ])dnl
++
++    AC_MSG_RESULT([$found_introspection])
++
++    INTROSPECTION_SCANNER=
++    INTROSPECTION_COMPILER=
++    INTROSPECTION_GENERATE=
++    INTROSPECTION_GIRDIR=
++    INTROSPECTION_TYPELIBDIR=
++    if test "x$found_introspection" = "xyes"; then
++       INTROSPECTION_SCANNER=`$PKG_CONFIG --variable=g_ir_scanner gobject-introspection-1.0`
++       INTROSPECTION_COMPILER=`$PKG_CONFIG --variable=g_ir_compiler gobject-introspection-1.0`
++       INTROSPECTION_GENERATE=`$PKG_CONFIG --variable=g_ir_generate gobject-introspection-1.0`
++       INTROSPECTION_GIRDIR=`$PKG_CONFIG --variable=girdir gobject-introspection-1.0`
++       INTROSPECTION_TYPELIBDIR="$($PKG_CONFIG --variable=typelibdir gobject-introspection-1.0)"
++    fi
++    AC_SUBST(INTROSPECTION_SCANNER)
++    AC_SUBST(INTROSPECTION_COMPILER)
++    AC_SUBST(INTROSPECTION_GENERATE)
++    AC_SUBST(INTROSPECTION_GIRDIR)
++    AC_SUBST(INTROSPECTION_TYPELIBDIR)
++
++    AM_CONDITIONAL(HAVE_INTROSPECTION, test "x$found_introspection" = "xyes")
++])
++
++
++dnl Usage:
++dnl   GOBJECT_INTROSPECTION_CHECK([minimum-g-i-version])
++
++AC_DEFUN([GOBJECT_INTROSPECTION_CHECK],
++[
++  _GOBJECT_INTROSPECTION_CHECK_INTERNAL([$1])
++])
++
++dnl Usage:
++dnl   GOBJECT_INTROSPECTION_REQUIRE([minimum-g-i-version])
++
++
++AC_DEFUN([GOBJECT_INTROSPECTION_REQUIRE],
++[
++  _GOBJECT_INTROSPECTION_CHECK_INTERNAL([$1], [require])
++])
++
+-- 
+1.8.4.3
+
+
+From e6bbed9baa1eb95abe8fd2655a266295cdf70914 Mon Sep 17 00:00:00 2001
+From: Roelof Wobben <rwobben@hotmail.com>
+Date: Fri, 29 Nov 2013 19:06:21 +0100
+Subject: [PATCH 2/3] test2
+
+---
+ configure.ac | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index fa208c1..efd6a29 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -119,8 +119,6 @@ else
+ fi
+ CFLAGS="$save_CFLAGS"
+ 
+-GOBJECT_INTROSPECTION_REQUIRE([1.32.0])
+-
+ common_packages="gmodule-2.0 gthread-2.0 gio-2.0 >= glib_required_version mozjs185"
+ gjs_packages="gobject-introspection-1.0 libffi $common_packages"
+ gjs_cairo_gobject_packages="cairo-gobject $common_packages"
+-- 
+1.8.4.3
+
+
+From 4286d5d73b5c66af48de062c637e37d5580d2be4 Mon Sep 17 00:00:00 2001
+From: Roelof Wobben <rwobben@hotmail.com>
+Date: Fri, 29 Nov 2013 19:31:55 +0100
+Subject: [PATCH 3/3] test3
+
+---
+ configure.ac | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index efd6a29..4f415ae 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -128,7 +128,6 @@ gjs_gdbus_packages="gobject-2.0 >= glib_required_version gio-2.0"
+ # gjs-tests links against everything
+ gjstests_packages="$gjstests_packages $gjs_packages"
+ 
+-PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= glib_required_version])
+ PKG_CHECK_MODULES([GJS], [$gjs_packages])
+ # Prefer cairo-gobject if we have it
+ PKG_CHECK_MODULES([GJS_CAIRO], [$gjs_cairo_gobject_packages], have_cairo_gobject=yes, have_cairo_gobject=no)
+-- 
+1.8.4.3
+
