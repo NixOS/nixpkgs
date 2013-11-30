@@ -1,0 +1,24 @@
+From cf9d3296fa1077474415e248c43e3acdebef46af Mon Sep 17 00:00:00 2001
+From: Roelof Wobben <rwobben@hotmail.com>
+Date: Sat, 30 Nov 2013 17:02:27 +0100
+Subject: [PATCH] fix
+
+---
+ configure.ac | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configure.ac b/configure.ac
+index 4b34c01..34ab7f5 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -11,6 +11,7 @@ AC_INIT([cjs], pkg_version, [http://bugzilla.gnome.org/enter_bug.cgi?product=cjs
+ AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip])
+ AC_CONFIG_SRCDIR([cjs/console.c])
+ AC_CONFIG_HEADER([config.h])
++AC_CONFIG_MACRO_DIR([m4])
+  
+ GETTEXT_PACKAGE=cjs
+ AC_SUBST([GETTEXT_PACKAGE])
+-- 
+1.8.4.3
+
