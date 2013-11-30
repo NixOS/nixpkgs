@@ -1,4 +1,4 @@
-{ stdenv, autoreconfHook, fetchurl }:
+{ stdenv, autoreconfHook, fetchurl, pkgconfig, gobjectIntrospection, glib }:
 
 stdenv.mkDerivation rec {
   name = "cjs";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "16iazd5h2z27v9jxs4a8imwls5c1c690wk7i05r5ds3c3r4nrsig";
   };
 
-  buildInputs = [ autoreconfHook ];
+  buildInputs = [ autoreconfHook pkgconfig gobjectIntrospection glib];
   
   patches = [./fix_configure_ac_gobject.patch]; 
   
