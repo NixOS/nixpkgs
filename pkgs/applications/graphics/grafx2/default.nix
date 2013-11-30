@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   preInstall = '' mkdir -p "$out" '';
 
+  installPhase = ''make install prefix="$out"'';
+
   meta = {
     description = "GrafX2 is a bitmap paint program inspired by the Amiga programs Deluxe Paint and Brilliance.";
     homepage = http://code.google.co/p/grafx2/;
