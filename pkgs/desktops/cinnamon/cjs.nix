@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, python
-, dbus_glib, cairo, spidermonkey_185 }:
+, dbus_glib, cairo, spidermonkey_185, gobjectIntrospection}:
 
 stdenv.mkDerivation rec {
   name = "cjs";
@@ -13,10 +13,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig autoreconfHook python
     dbus_glib cairo spidermonkey_185
+    gobjectIntrospection
   ];
 
-  patches = [ ./fix_configure_ac_gobject.patch]; 
-  
   preBuild = "patchShebangs ./scripts";
 
   meta = {
