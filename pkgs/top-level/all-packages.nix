@@ -9523,6 +9523,8 @@ let
 
 
   ### DESKTOP ENVIRONMENTS
+  
+  cjs = callPackage ../desktops/cinnamon/cjs { } ;
 
   enlightenment = callPackage ../desktops/enlightenment { };
 
