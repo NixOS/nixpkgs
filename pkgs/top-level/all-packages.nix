@@ -8581,6 +8581,8 @@ let
 
   paraview = callPackage ../applications/graphics/paraview { };
 
+  pencil = callPackage ../applications/graphics/pencil { };
+
   petrifoo = callPackage ../applications/audio/petrifoo {
     inherit (gnome) libgnomecanvas;
   };
