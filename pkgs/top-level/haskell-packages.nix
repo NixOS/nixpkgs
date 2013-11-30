@@ -1910,6 +1910,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   SafeSemaphore = callPackage ../development/libraries/haskell/SafeSemaphore {};
 
+  scientific = callPackage ../development/libraries/haskell/scientific {};
+
   scotty = callPackage ../development/libraries/haskell/scotty {};
 
   securemem = callPackage ../development/libraries/haskell/securemem {};
