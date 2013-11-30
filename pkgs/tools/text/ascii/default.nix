@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "ascii-${version}";
-  version = "3.12";
+  version = "3.14";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/ascii/${name}.tar.gz";
-    sha256 = "17jhmmdbhzzaai0lr5aslg0nmqchq1ygdxwd8pgl7qn2jnxhc6ci";
+    sha256 = "1ldwi4cs2d36r1fv3j13cfa8h2pc4yayq5qii91758qqwfzky3kz";
   };
 
   prePatch = ''
-    sed -i -e 's|$(DESTDIR)/usr|$(out)|g' Makefile
+    sed -i -e "s|^PREFIX = .*|PREFIX = $out|" Makefile
   '';
 
   preInstall = ''
