@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
     mkdir -vp "$out/bin" "$out/share/man/man1"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Interactive ASCII name and synonym chart";
     homepage = "http://www.catb.org/~esr/ascii/";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
   };
 }
