@@ -6496,6 +6496,8 @@ let
 
   atop = callPackage ../os-specific/linux/atop { };
 
+  audit = callPackage ../os-specific/linux/audit { };
+
   b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
 
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
@@ -7059,6 +7061,8 @@ let
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
   sepolgen = callPackage ../os-specific/linux/sepolgen { };
+
+  setools = callPackage ../os-specific/linux/setools { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
