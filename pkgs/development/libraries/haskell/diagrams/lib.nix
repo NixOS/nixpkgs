@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-lib";
-  version = "1.0";
-  sha256 = "0afrk9y7h5g9cqds9b7b0jvz4xylaxyj3q9aj5415ldwwzdf6cc8";
+  version = "1.0.0.1";
+  sha256 = "1ilkc8dh1ma0wwmzgy6x3a6q6bwlw7dfv3mb24a5ny4i3wgvsnv8";
   buildDepends = [
     active colour dataDefaultClass diagramsCore filepath fingertree
     intervals lens MemoTrie monoidExtras NumInstances
