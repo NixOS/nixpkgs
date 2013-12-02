@@ -9577,7 +9577,7 @@ let
   ### DESKTOP ENVIRONMENTS
   
    cinnamon = recurseIntoAttrs {
-    cjs = callPackage ../desktops/cinnamon/cinnamon-translations.nix { };
+    cinnamon-translations  = callPackage ../desktops/cinnamon/cinnamon-translations.nix { };
     }; 
 
   enlightenment = callPackage ../desktops/enlightenment { };
