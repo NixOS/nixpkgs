@@ -8491,11 +8491,12 @@ let
       cursesSupport = true;
     };
 
-    inherit gettext highline iconv locale lockfile mime_types rmail_sup text
-      trollop unicode xapian_ruby which;
+    inherit gettext highline iconv locale lockfile rmail_sup
+      text trollop unicode xapian_ruby which;
 
     chronic      = chronic_0_9_1;
     gpgme        = ruby_gpgme;
+    mime_types   = mime_types_1_25;
     ncursesw_sup = ruby_ncursesw_sup;
     rake         = rake_10_1_0;
   };
