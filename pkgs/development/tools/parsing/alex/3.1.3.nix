@@ -1,13 +1,13 @@
-{ cabal, perl, QuickCheck }:
+{ cabal, happy, perl, QuickCheck }:
 
 cabal.mkDerivation (self: {
   pname = "alex";
-  version = "3.1.2";
-  sha256 = "0v8y6s9gwfk3cda6cpdl0n6vljmjbpnrdi3n93q41x24bhjyn50x";
+  version = "3.1.3";
+  sha256 = "14hajxpqb6va5mclp2k682bgw9sbmd372vw41kq5aq815bkschcd";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ QuickCheck ];
-  buildTools = [ perl ];
+  buildTools = [ happy perl ];
   meta = {
     homepage = "http://www.haskell.org/alex/";
     description = "Alex is a tool for generating lexical analysers in Haskell";
