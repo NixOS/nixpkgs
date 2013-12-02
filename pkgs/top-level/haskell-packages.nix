@@ -1358,7 +1358,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   ieee754 = callPackage ../development/libraries/haskell/ieee754 {};
 
   indents = callPackage ../development/libraries/haskell/indents {};
-  
+
   indexed = callPackage ../development/libraries/haskell/indexed {};
 
   indexedFree = callPackage ../development/libraries/haskell/indexed-free {};
@@ -1443,6 +1443,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
 
   libxmlSax = callPackage ../development/libraries/haskell/libxml-sax {};
+
+  liftedAsync = callPackage ../development/libraries/haskell/lifted-async {};
 
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
