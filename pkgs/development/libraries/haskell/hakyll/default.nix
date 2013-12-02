@@ -25,6 +25,9 @@ cabal.mkDerivation (self: {
     snapCore snapServer systemFilepath tagsoup testFramework
     testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
+  patchPhase = ''
+    sed -i -e 's|pandoc-citeproc.*,|pandoc-citeproc,|' hakyll.cabal
+  '';
   doCheck = false;
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
