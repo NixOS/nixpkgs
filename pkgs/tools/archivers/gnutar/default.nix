@@ -1,11 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gnutar-1.27";
+  name = "gnutar-${version}";
+  version = "1.27.1";
 
   src = fetchurl {
-    url = "mirror://gnu/tar/tar-1.27.tar.bz2";
-    sha256 = "0yrwmx2f721ahpnki4fnzvnmrd3md3bq417icb4wrjky7k3caf12";
+    url = "mirror://gnu/tar/tar-${version}.tar.bz2";
+    sha256 = "1iip0fk0wqhxb0jcwphz43r4fxkx1y7mznnhmlvr618jhp7b63wv";
   };
 
   # May have some issues with root compilation because the bootstrap tool
