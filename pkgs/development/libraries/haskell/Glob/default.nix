@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.7.2";
   sha256 = "1x4gh7z9jx9hdkjwsc31yyjssw6i7ziixhjrxr9b8zkijk1b4r5i";
   buildDepends = [ dlist filepath transformers ];
+  jailbreak = true;
   meta = {
     homepage = "http://iki.fi/matti.niemenmaa/glob/";
     description = "Globbing library";
