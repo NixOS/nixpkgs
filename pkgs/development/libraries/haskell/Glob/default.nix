@@ -2,10 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "Glob";
-  version = "0.7.2";
-  sha256 = "1x4gh7z9jx9hdkjwsc31yyjssw6i7ziixhjrxr9b8zkijk1b4r5i";
+  version = "0.7.3";
+  sha256 = "0yl0wxbd03dv0hfr2aqwm9f3xnhjkdicymqv3nmhjjslqq3a59zd";
   buildDepends = [ dlist filepath transformers ];
-  jailbreak = true;
   meta = {
     homepage = "http://iki.fi/matti.niemenmaa/glob/";
     description = "Globbing library";
