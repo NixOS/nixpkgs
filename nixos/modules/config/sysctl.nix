@@ -46,7 +46,10 @@ in
         before = [ "sysinit.target" "shutdown.target" ];
         wantedBy = [ "sysinit.target" "multi-user.target" ];
         restartTriggers = [ config.environment.etc."sysctl.d/nixos.conf".source ];
-        unitConfig.DefaultDependencies = false; # needed to prevent a cycle
+        unitConfig = {
+          DefaultDependencies = false; # needed to prevent a cycle
+          ConditionPathIsReadWrite = "/proc/sys/"; # prevent systemd-sysctl in containers
+        };
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;

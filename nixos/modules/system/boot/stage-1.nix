@@ -328,7 +328,7 @@ in
 
   };
 
-  config = {
+  config = mkIf (!config.boot.isContainer) {
 
     assertions = singleton
       { assertion = any (fs: fs.mountPoint == "/") (attrValues config.fileSystems);

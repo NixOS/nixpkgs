@@ -25,9 +25,9 @@ let
     else if stdenv.system == "i686-linux" then "ld-linux.so.2"
     else throw "Dropbox client for: ${stdenv.system} not supported!";
 
-  version = "2.4.3";
-  sha256 = if stdenv.system == "x86_64-linux" then "0g8iqgc18qbw8fvdjf0fhbal34rvwr5izrf5acfzqjg99dgih81r"
-    else if stdenv.system == "i686-linux" then "1nhmk319whj6cil6wg9hrfln9bxin3fnf6sxb0zg2ycfpnnqi0la"
+  version = "2.4.7";
+  sha256 = if stdenv.system == "x86_64-linux" then "08fh0zx9q83dvivnbx5zr1cwb69ihhlx9mkbd3ikynk1wd8df8n8"
+    else if stdenv.system == "i686-linux" then "0rhblpahg2axglpi8iavsglffw83rj71qy113wj2dh6q72124j2h"
     else throw "Dropbox client for: ${stdenv.system} not supported!";
 
   # relative location where the dropbox libraries are stored

@@ -3,13 +3,19 @@
 rec {
   inherit (pkgs) stdenv;
 
-  zathura_core = callPackage ./core { };
+  zathura_core = callPackage ./core {
+    gtk = pkgs.gtk3;
+  };
 
   zathura_pdf_poppler = callPackage ./pdf-poppler { };
 
-  zathura_djvu = callPackage ./djvu { };
+  zathura_djvu = callPackage ./djvu {
+    gtk = pkgs.gtk3;
+  };
 
-  zathura_ps = callPackage ./ps { };
+  zathura_ps = callPackage ./ps {
+    gtk = pkgs.gtk3;
+  };
 
   zathuraWrapper = stdenv.mkDerivation {
 

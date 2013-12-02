@@ -149,7 +149,7 @@ in
       ''
         LogLevel info
 
-        SystemGroup root
+        SystemGroup root wheel
 
         Listen localhost:631
         Listen /var/run/cups/cups.sock

@@ -20,6 +20,8 @@ in
 stdenv.mkDerivation ({
   unpackPhase = "true";
 
+  inherit src;
+
   configurePhase = ''
     runHook preConfigure
     mkdir node_modules
@@ -35,7 +37,7 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    npm --registry http://www.example.com --nodedir=${sources} install ${concatStringsSep " " src} ${npmFlags}
+    npm --registry http://www.example.com --nodedir=${sources} install $src ${npmFlags}
     runHook postBuild
   '';
 

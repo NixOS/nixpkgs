@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskell-names";
-  version = "0.3.1";
-  sha256 = "134rxpsgki1disb24gvj1bq5xi4491k9ihb5pjhab78w4m7b99gn";
+  version = "0.3.2.1";
+  sha256 = "1ddixm37y1wkqsrs4cxvnmjczapwq1n67xg5rhkj0k7d04c8agha";
   buildDepends = [
     aeson Cabal dataLens dataLensTemplate filepath haskellPackages
     haskellSrcExts hseCpp mtl tagged transformers traverseWithClass

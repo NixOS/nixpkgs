@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty-hunit";
-  version = "0.2";
-  sha256 = "1476ac3rsaag9rfgglzs65wqlkzm09xzdz47ksyj3a4c6ajba1kw";
+  version = "0.4.1";
+  sha256 = "1ns4lbqjkgfgl00jg4sw2jz3r189z4k5fzwbii3g1bnskn28fapa";
   buildDepends = [ HUnit mtl tasty ];
   meta = {
     description = "HUnit support for the Tasty test framework";

@@ -170,7 +170,6 @@ let
               systemd
             ];
           environment.PATH = config.path;
-          environment.LD_LIBRARY_PATH = "";
         }
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
@@ -188,6 +187,12 @@ let
           { serviceConfig.ExecStartPost = makeJobScript "${name}-post-start" ''
               #! ${pkgs.stdenv.shell} -e
               ${config.postStart}
+            '';
+          })
+        (mkIf (config.preStop != "")
+          { serviceConfig.ExecStop = makeJobScript "${name}-pre-stop" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.preStop}
             '';
           })
         (mkIf (config.postStop != "")
@@ -529,6 +534,16 @@ in
       '';
     };
 
+    services.journald.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "Storage=volatile";
+      description = ''
+        Extra config options for systemd-journald. See man journald.conf
+        for available options.
+      '';
+    };
+
     services.logind.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -580,6 +595,7 @@ in
           ForwardToConsole=yes
           TTYPath=${config.services.journald.console}
         ''}
+        ${config.services.journald.extraConfig}
       '';
 
     environment.etc."systemd/logind.conf".text =
@@ -598,13 +614,6 @@ in
         mkdir -m 0755 -p /var/lib/udev
         mkdir -p /var/log/journal
         chmod 0755 /var/log/journal
-
-        # Regenerate the hardware database /var/lib/udev/hwdb.bin
-        # whenever systemd changes.
-        if [ ! -e /var/lib/udev/prev-systemd -o "$(readlink /var/lib/udev/prev-systemd)" != ${systemd} ]; then
-          echo "regenerating udev hardware database..."
-          ${systemd}/bin/udevadm hwdb --update && ln -sfn ${systemd} /var/lib/udev/prev-systemd
-        fi
 
         # Make all journals readable to users in the wheel and adm
         # groups, in addition to those in the systemd-journal group.

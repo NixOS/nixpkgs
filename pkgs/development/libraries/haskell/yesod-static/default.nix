@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-static";
-  version = "1.2.1";
-  sha256 = "0vsmsdyi0nx111mkyf1wkkl2i07l40gcjzrm9dbks7k4pfajxqjx";
+  version = "1.2.1.1";
+  sha256 = "009p6hq6hwmvji40yqv97v1sfwdfh44pasp68cxw05czhcwwcacv";
   buildDepends = [
     base64Bytestring cereal conduit cryptoConduit cryptohashCryptoapi
     dataDefault fileEmbed filepath hjsmin httpTypes mimeTypes

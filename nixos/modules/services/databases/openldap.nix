@@ -26,6 +26,16 @@ in
         ";
       };
 
+      user = mkOption {
+        default = "openldap";
+        description = "User account under which slapd runs.";
+      };
+
+      group = mkOption {
+        default = "openldap";
+        description = "Group account under which slapd runs.";
+      };
+
       extraConfig = mkOption {
         default = "";
         description = "
@@ -49,10 +59,23 @@ in
       after = [ "network.target" ];
       preStart = ''
         mkdir -p /var/run/slapd
+        chown -R ${cfg.user}:${cfg.group} /var/run/slapd
+        mkdir -p /var/db/openldap
+        chown -R ${cfg.user}:${cfg.group} /var/db/openldap
       '';
-      serviceConfig.ExecStart = "${openldap}/libexec/slapd -d 0 -f ${configFile}";
+      serviceConfig.ExecStart = "${openldap}/libexec/slapd -u openldap -g openldap -d 0 -f ${configFile}";
     };
 
-  };
+    users.extraUsers = optionalAttrs (cfg.user == "openldap") (singleton
+      { name = "openldap";
+        group = "openldap";
+        uid = config.ids.uids.openldap;
+      });
 
+    users.extraGroups = optionalAttrs (cfg.group == "openldap") (singleton
+      { name = "openldap";
+        gid = config.ids.gids.openldap;
+     });
+
+  };
 }

@@ -31,6 +31,8 @@ with pkgs.lib;
 
         task = true;
 
+        unitConfig.ConditionPathIsReadWrite = "/sys/class/scsi_host";
+
         script = ''
           shopt -s nullglob
           for x in /sys/class/scsi_host/host*/link_power_management_policy; do
