@@ -1,9 +1,12 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, python
-, dbus_glib, cairo, spidermonkey_185, gobjectIntrospection}:
+, dbus_glib, cairo, spidermonkey_185, gobjectIntrospection
+}:
 
-stdenv.mkDerivation rec {
-  name = "cjs";
+let
   version="2.0.0";
+in
+stdenv.mkDerivation rec {
+  name = "cjs-${version}";
 
   src = fetchurl {
     url = "http://github.com/linuxmint/cjs/archive/${version}.tar.gz";
