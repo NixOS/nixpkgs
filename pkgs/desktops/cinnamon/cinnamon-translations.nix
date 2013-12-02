@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
       mkdir -pv $out/usr/share/cinnamon/locale
-      cp -Rp mo-export/* $out/usr/share/cinnamon/locale/
+      cp -av mo-export/* $out/usr/share/cinnamon/locale/
     '';
 
   meta = {
