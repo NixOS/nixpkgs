@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ HDBC mtl time utf8String ];
   extraLibraries = [ odbc ];
-  noHaddock = true; # Haddocks currently fail to build
+  noHaddock = true;
   meta = {
     homepage = "https://github.com/hdbc/hdbc-odbc";
     description = "ODBC driver for HDBC";
