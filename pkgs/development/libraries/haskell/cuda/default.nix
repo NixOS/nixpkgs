@@ -34,6 +34,7 @@ cabal.mkDerivation (self: {
     homepage = "https://github.com/tmcdonell/cuda";
     description = "FFI binding to the CUDA interface for programming NVIDIA GPUs";
     license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
     hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
