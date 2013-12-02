@@ -98,6 +98,7 @@ let
     systemd = config.systemd.package;
 
     inherit children;
+    kernelParams = config.boot.kernelParams;
     installBootLoader =
       config.system.build.installBootLoader
       or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
