@@ -9526,6 +9526,10 @@ let
 
   cinnamon = recurseIntoAttrs {
     cjs = callPackage ../desktops/cinnamon/cjs.nix { };
+
+    cinnamon-desktop = callPackage ../desktops/cinnamon/cinnamon-desktop.nix {
+      inherit (gnome3) gnome_common;
+    };
   };
 
   enlightenment = callPackage ../desktops/enlightenment { };
