@@ -156,6 +156,7 @@
     , extraPrefs ? (x : {})
     , profExplicit ? false, profDefault ? false
     , modifyPrio ? lowPrio
+    , extraArgs ? {}
     } :
       import ./haskell-packages.nix {
         inherit pkgs newScope modifyPrio;
@@ -164,7 +165,7 @@
         enableLibraryProfiling =
           if profExplicit then profDefault
                           else config.cabal.libraryProfiling or profDefault;
-        ghc = callPackage ghcPath { ghc = ghcBinary; };
+        ghc = callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs);
       });
 
   defaultVersionPrioFun =
@@ -331,6 +332,10 @@
     packages { ghcPath = ../development/compilers/ghc/head.nix;
                ghcBinary = ghc742Binary;
                prefFun = ghcHEADPrefs;
+               extraArgs = {
+                 happy = pkgs.haskellPackages.happy_1_19_2;
+                 alex = pkgs.haskellPackages.alex_3_1_3;
+               };
              };
 
 }
