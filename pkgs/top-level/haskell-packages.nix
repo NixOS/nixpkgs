@@ -1734,6 +1734,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   pipesParse = callPackage ../development/libraries/haskell/pipes-parse {};
 
+  pipesPostgresqlSimple = callPackage ../development/libraries/haskell/pipes-postgresql-simple {};
+
   pipesSafe = callPackage ../development/libraries/haskell/pipes-safe {};
 
   pipesZlib = callPackage ../development/libraries/haskell/pipes-zlib {};
