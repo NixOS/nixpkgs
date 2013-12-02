@@ -29,6 +29,7 @@ let
 
   systemBuilder =
     let
+      kernelParams = fold (x: y: x + " " + y ) "" config.boot.kernelParams;
       kernelPath = "${config.boot.kernelPackages.kernel}/" +
         "${config.system.boot.loader.kernelFile}";
     in ''
@@ -46,7 +47,7 @@ let
         ln -s ${kernelPath} $out/kernel
         ln -s ${config.system.modulesTree} $out/kernel-modules
 
-        echo -n "$kernelParams" > $out/kernel-params
+        echo -n ${kernelParams} > $out/kernel-params
 
         ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
 
