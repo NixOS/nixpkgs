@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, ruby, rake, rubygems, makeWrapper, ncursesw_sup
+{ stdenv, fetchgit, ruby, rake, rubygems, makeWrapper, ncursesw_sup
 , xapian_ruby, gpgme, libiconvOrEmpty, mime_types, chronic, trollop, lockfile
 , gettext, iconv, locale, text, highline, rmail_sup, unicode, gnupg, which }:
 
 stdenv.mkDerivation rec {
-  version = "f27661b1656ae1f0d28fd89595b5a16f268d8d3d";
+  version = "20131130";
   name    = "sup-${version}";
   
   meta = {
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  src = fetchurl {
-    url    = "https://github.com/sup-heliotrope/sup/archive/${version}.tar.gz";
-    sha256 = "08fxf1knji3260d0mrp86x6yayp43iq7kc5rfay3hga8i2sckdia";
+  src = fetchgit {
+    url = git://github.com/sup-heliotrope/sup.git;
+    rev = "a5a1e39034204ac4b05c9171a71164712690b010";
   };
 
   buildInputs =
