@@ -1125,7 +1125,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     OpenGL = self.OpenGL_2_8_0_0;
   };
   GLUT_2_5_0_1 = callPackage ../development/libraries/haskell/GLUT/2.5.0.1.nix {
-    OpenGL = self.OpenGL_2_9_0_1;
+    OpenGL = self.OpenGL_2_9_1_0;
   };
   GLUT = self.GLUT_2_5_0_1;
 
@@ -1650,7 +1650,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   OpenGL_2_4_0_2 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.2.nix {};
   OpenGL_2_6_0_1 = callPackage ../development/libraries/haskell/OpenGL/2.6.0.1.nix {};
   OpenGL_2_8_0_0 = callPackage ../development/libraries/haskell/OpenGL/2.8.0.0.nix {};
-  OpenGL_2_9_0_1 = callPackage ../development/libraries/haskell/OpenGL/2.9.1.0.nix {};
+  OpenGL_2_9_1_0 = callPackage ../development/libraries/haskell/OpenGL/2.9.1.0.nix {};
   OpenGL = self.OpenGL_2_9_1_0;
 
   OpenGLRaw_1_3_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.3.0.0.nix {};
