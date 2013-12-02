@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gtk2hs-buildtools";
-  version = "0.12.5.0";
-  sha256 = "1pm1ifwy37xk0xkyqqwwaxi0wqwgr7vl1sazwgalsw46qmagwv0b";
+  version = "0.12.5.1";
+  sha256 = "1zjm7y38089b57q3csgq7ydfm104ffhvsycszddkj0cgfgafshfm";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ filepath random ];
