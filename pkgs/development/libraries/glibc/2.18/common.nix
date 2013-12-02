@@ -53,6 +53,12 @@ stdenv.mkDerivation ({
          rfc3484_sort: Assertion `src->results[i].native == -1 ||
          src->results[i].native == a2_native' failed." crashes. */
       ./glibc-rh739743.patch
+
+      ./cve-2012-4412+4424.patch
+      ./cve-2013-4237.patch
+      ./cve-2013-4332.patch
+      ./cve-2013-4458.patch
+      ./cve-2013-4788.patch
     ];
 
   postPatch = ''
