@@ -9575,6 +9575,12 @@ let
 
   ### DESKTOP ENVIRONMENTS
 
+  cinnamon = recurseIntoAttrs {
+    cjs = callPackage ../desktops/cinnamon/cjs.nix { };
+    cinnamon-desktop = callPackage ../desktops/cinnamon/cinnamon-desktop.nix{
+      inherit(gnome) gnome_common ; };
+ };  
+
   enlightenment = callPackage ../desktops/enlightenment { };
 
   e17 = recurseIntoAttrs (
