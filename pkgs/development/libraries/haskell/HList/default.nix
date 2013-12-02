@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ mtl ];
   testDepends = [ cmdargs doctest filepath hspec lens mtl syb ];
   buildTools = [ diffutils ];
+  doCheck = false;
   meta = {
     description = "Heterogeneous lists";
     license = self.stdenv.lib.licenses.mit;
