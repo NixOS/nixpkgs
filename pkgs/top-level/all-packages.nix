@@ -2734,20 +2734,20 @@ let
   # Current Haskell Platform: 2013.2.0.0
   haskellPlatform = haskellPackages.haskellPlatform;
 
-  haskellPackages_ghc6104             =                   haskell.packages_ghc6104;
-  haskellPackages_ghc6121             =                   haskell.packages_ghc6121;
-  haskellPackages_ghc6122             =                   haskell.packages_ghc6122;
-  haskellPackages_ghc6123             =                   haskell.packages_ghc6123;
-  haskellPackages_ghc701              =                   haskell.packages_ghc701;
-  haskellPackages_ghc702              =                   haskell.packages_ghc702;
-  haskellPackages_ghc703              =                   haskell.packages_ghc703;
-  haskellPackages_ghc704              =                   haskell.packages_ghc704;
-  haskellPackages_ghc721              =                   haskell.packages_ghc721;
-  haskellPackages_ghc722              =                   haskell.packages_ghc722;
-  haskellPackages_ghc741              =                   haskell.packages_ghc741;
-  haskellPackages_ghc742              =                   haskell.packages_ghc742;
-  haskellPackages_ghc761              =                   haskell.packages_ghc761;
-  haskellPackages_ghc762              =                   haskell.packages_ghc762;
+  haskellPackages_ghc6104 = haskell.packages_ghc6104;
+  haskellPackages_ghc6121 = haskell.packages_ghc6121;
+  haskellPackages_ghc6122 = haskell.packages_ghc6122;
+  haskellPackages_ghc6123 = haskell.packages_ghc6123;
+  haskellPackages_ghc701  = haskell.packages_ghc701;
+  haskellPackages_ghc702  = haskell.packages_ghc702;
+  haskellPackages_ghc703  = haskell.packages_ghc703;
+  haskellPackages_ghc704  = haskell.packages_ghc704;
+  haskellPackages_ghc721  = haskell.packages_ghc721;
+  haskellPackages_ghc722  = haskell.packages_ghc722;
+  haskellPackages_ghc741  = haskell.packages_ghc741;
+  haskellPackages_ghc742  = haskell.packages_ghc742;
+  haskellPackages_ghc761  = haskell.packages_ghc761;
+  haskellPackages_ghc762  = haskell.packages_ghc762;
   # For the default version, we build profiling versions of the libraries, too.
   # The following three lines achieve that: the first two make Hydra build explicit
   # profiling and non-profiling versions; the final respects the user-configured
@@ -2756,7 +2756,7 @@ let
   haskellPackages_ghc763_profiling    = recurseIntoAttrs (haskell.packages_ghc763.profiling);
   haskellPackages_ghc763              = recurseIntoAttrs (haskell.packages_ghc763.highPrio);
   # Reasonably current HEAD snapshot.
-  haskellPackages_ghcHEAD             =                   haskell.packages_ghcHEAD;
+  haskellPackages_ghcHEAD = haskell.packages_ghcHEAD;
 
   haxe = callPackage ../development/compilers/haxe { };
 
