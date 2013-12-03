@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/sup-heliotrope/sup.git;
     rev = "a5a1e39034204ac4b05c9171a71164712690b010";
+    sha256 = "0w2w7dcif1ri1qq81csz7gj45rqd9z7hjd6x29awibybyyqyvj5s";
   };
 
   buildInputs =
