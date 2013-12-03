@@ -685,14 +685,14 @@ patchShebangs() {
                 echo "unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)"
                 exit 1
             fi
-            newPath="$(command -v "$arg0")"
+            newPath="$(command -v "$arg0" || true)"
         else
             if [ "$oldPath" = "" ]; then
                 # If no interpreter is specified linux will use /bin/sh. Set
                 # oldpath="/bin/sh" so that we get /nix/store/.../sh.
                 oldPath="/bin/sh"
             fi
-            newPath="$(command -v "$(basename "$oldPath")")"
+            newPath="$(command -v "$(basename "$oldPath")" || true)"
             args="$arg0 $args"
         fi
 
