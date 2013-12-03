@@ -874,9 +874,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   deepseqTh = callPackage ../development/libraries/haskell/deepseq-th {};
 
-  derive = callPackage ../development/libraries/haskell/derive {
-    haskellSrcExts = self.haskellSrcExts_1_14_0;
-  };
+  derive = callPackage ../development/libraries/haskell/derive {};
 
   dependentMap = callPackage ../development/libraries/haskell/dependent-map {};
 
@@ -1191,9 +1189,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   haskellSrc_1_0_1_5 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.5.nix {};
   haskellSrc = self.haskellSrc_1_0_1_5;
 
-  haskellSrcExts_1_13_5 = callPackage ../development/libraries/haskell/haskell-src-exts/1.13.5.nix {};
-  haskellSrcExts_1_14_0 = callPackage ../development/libraries/haskell/haskell-src-exts/1.14.0.nix {};
-  haskellSrcExts = self.haskellSrcExts_1_14_0;
+  haskellSrcExts = callPackage ../development/libraries/haskell/haskell-src-exts {};
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
@@ -1271,9 +1267,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hoauth = callPackage ../development/libraries/haskell/hoauth {};
 
-  hoogle = callPackage ../development/libraries/haskell/hoogle {
-    haskellSrcExts = self.haskellSrcExts_1_14_0;
-  };
+  hoogle = callPackage ../development/libraries/haskell/hoogle {};
 
   hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
 
@@ -1992,9 +1986,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   strptime = callPackage ../development/libraries/haskell/strptime {};
 
-  stylishHaskell = callPackage ../development/libraries/haskell/stylish-haskell {
-    haskellSrcExts = self.haskellSrcExts_1_14_0;
-  };
+  stylishHaskell = callPackage ../development/libraries/haskell/stylish-haskell {};
 
   syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
   syb_0_3 = callPackage ../development/libraries/haskell/syb/0.3.nix {};
@@ -2507,9 +2499,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hdevtools = callPackage ../development/tools/haskell/hdevtools {};
 
-  hlint = callPackage ../development/tools/haskell/hlint {
-    haskellSrcExts = self.haskellSrcExts_1_14_0;
-  };
+  hlint = callPackage ../development/tools/haskell/hlint {};
 
   hslogger = callPackage ../development/tools/haskell/hslogger {};
 
