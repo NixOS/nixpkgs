@@ -145,7 +145,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     async        = self.async_2_0_1_4;
     attoparsec   = self.attoparsec_0_10_4_0;
     caseInsensitive = self.caseInsensitive_1_1_0_1;
-    cgi          = self.cgi_3001_1_7_5;
+    cgi          = self.cgi_3001_1_8_4;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_5_0_2;
     GLURaw       = self.GLURaw_1_4_0_0;
