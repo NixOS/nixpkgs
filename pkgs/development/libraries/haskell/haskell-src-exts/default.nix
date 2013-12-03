@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
   ];
   buildTools = [ happy ];
   doCheck = false;
+  preConfigure = "runhaskell Setup.hs clean";
   meta = {
     homepage = "https://github.com/haskell-suite/haskell-src-exts";
     description = "Manipulating Haskell source: abstract syntax, lexer, parser, and pretty-printer";
