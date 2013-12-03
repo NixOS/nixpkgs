@@ -169,7 +169,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     stm          = self.stm_2_4_2;
     syb          = self.syb_0_4_1;
     text         = self.text_0_11_3_1;
-    transformers = null;                        # this has become a core package in GHC 7.7
+    transformers = self.transformers_0_3_0_0;   # this has become a core package in GHC 7.7
     unorderedContainers = self.unorderedContainers_0_2_3_3;
     vector       = self.vector_0_10_9_1;
     xhtml        = self.xhtml_3000_2_1;
@@ -2179,7 +2179,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   tlsExtra = callPackage ../development/libraries/haskell/tls-extra {};
 
   transformers_0_2_2_0 = callPackage ../development/libraries/haskell/transformers/0.2.2.0.nix {};
-  transformers_0_3_0_0 = callPackage ../development/libraries/haskell/transformers/0.3.0.0.nix {};
+  transformers_0_3_0_0 = if (pkgs.stdenv.lib.versionOlder ghc.version "7.7") then
+     (callPackage ../development/libraries/haskell/transformers/0.3.0.0.nix {}) else null;
   transformers = self.transformers_0_3_0_0;
 
   transformersBase = callPackage ../development/libraries/haskell/transformers-base {};
