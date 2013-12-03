@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.15.2";
+  name = "notmuch-0.16";
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "03cwylm0y9xld0hn753v0hn62f96nagdmzxv8jlz8vdbh9iszs56";
+    sha256 = "0i7k85lfp9l0grmq7cvai2f3pw15jcrhcp96mmamr15y2pn2syg7";
   };
 
   buildInputs = [ bash emacs gdb glib gmime gnupg pkgconfig talloc xapian ];

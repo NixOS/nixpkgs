@@ -1,11 +1,14 @@
 { stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils }:
 
+let
+  version = "0.11.2";
+in
 stdenv.mkDerivation {
-  name = "elixir-0.10.1";
+  name = "elixir-${version}";
 
   src = fetchurl {
-    url = "https://github.com/elixir-lang/elixir/archive/v0.10.1.tar.gz";
-    sha256 = "0gfr2bz3mw7ag9z2wb2g22n2vlyrp8dwy78fj9zi52kzl5w3vc3w";
+    url = "https://github.com/elixir-lang/elixir/archive/v${version}.tar.gz";
+    sha256 = "0rgx33q013c5y2jjwd4l93pzd3v3fha8xdsrhpl9c9wb7yprjc5x";
   };
 
   buildInputs = [ erlang rebar makeWrapper ];
@@ -34,11 +37,11 @@ stdenv.mkDerivation {
     description = "A functional, meta-programming aware language built on top of the Erlang VM";
 
     longDescription = ''
-      Elixir is a functional, meta-programming
-      aware language built on top of the Erlang VM. It is a dynamic
-      language with flexible syntax and macro support that leverages
-      Erlang's abilities to build concurrent, distributed and
-      fault-tolerant applications with hot code upgrades.p
+      Elixir is a functional, meta-programming aware language built on
+      top of the Erlang VM. It is a dynamic language with flexible
+      syntax and macro support that leverages Erlang's abilities to
+      build concurrent, distributed and fault-tolerant applications
+      with hot code upgrades.
     '';
 
     license = licenses.epl10;

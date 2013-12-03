@@ -8,7 +8,7 @@ buildPerlPackage {
     sha256 = "f22ac7b0ec78e310d7b88a1cf636e5c00360b2ed9c087f231b3522ef3e6295f2";
   };
 
-  buildInputs = [ perlPackages.IOSocketSSL ];
+  buildInputs = [ perlPackages.IOSocketSSL perlPackages.DigestSHA1 ];
 
   patches = [ ./ddclient-foreground.patch ];
 

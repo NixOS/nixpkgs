@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0yqllj3nv9p3vqbdm6j4nvpjcwf1y19rq8sd966nrbd2qvvxfq8p";
   };
 
+  patches = stdenv.lib.optional stdenv.isDarwin ./iri-test.patch;
+
   preConfigure = stdenv.lib.optionalString doCheck
     '' for i in "doc/texi2pod.pl" "tests/run-px" "util/rmold.pl"
        do

@@ -1,12 +1,12 @@
 { fetchurl, stdenv, kernelDev, onlyHeaders ? false }:
 
 stdenv.mkDerivation rec {
-  pname = "cryptodev-linux-1.5";
+  pname = "cryptodev-linux-1.6";
   name = "${pname}-${kernelDev.version}";
 
   src = fetchurl {
     url = "http://download.gna.org/cryptodev-linux/${pname}.tar.gz";
-    sha256 = "13hybl5p0ck0vgi2gxmiwa2810gcfk78kdy17ai8nczj8il15mn0";
+    sha256 = "0bryzdb4xz3fp2q00a0mlqkj629md825lnlh4gjwmy51irf45wbm";
   };
 
   buildPhase = if !onlyHeaders then ''

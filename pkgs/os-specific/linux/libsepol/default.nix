@@ -2,16 +2,22 @@
 
 stdenv.mkDerivation rec {
   name = "libsepol-${version}";
-  version = "2.1.8";
-  se_release = "20120924";
+  version = "2.2";
+  se_release = "20131030";
   se_url = "${meta.homepage}/releases";
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libsepol-${version}.tar.gz";
-    sha256 = "1w38q3lmha5m9aps9w844i51yw4b8q1vhpng2kdywn2n8cpdvvk3";
+    sha256 = "03zw6clp00cmi49x8iq8svhrp91jrcw0093zpnyhan190rqb593p";
   };
 
   preBuild = '' makeFlags="$makeFlags PREFIX=$out DESTDIR=$out" '';
+
+  # TODO: Figure out why the build incorrectly links libsepol.so
+  postInstall = ''
+    rm $out/lib/libsepol.so
+    ln -s libsepol.so.1 $out/lib/libsepol.so
+  '';
 
   passthru = { inherit se_release se_url meta; };
 

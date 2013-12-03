@@ -1,6 +1,21 @@
-{ stdenv, fetchurl, fetchgit, openssl, zlib, pcre, libxml2, libxslt, expat, fullWebDAV ? false, syslog ? false }:
+{ stdenv, fetchurl, fetchgit, openssl, zlib, pcre, libxml2, libxslt, expat
+, rtmp ? false
+, fullWebDAV ? false
+, syslog ? false}:
 
 let
+  version = "1.4.4";
+  mainSrc = fetchurl {
+    url = "http://nginx.org/download/nginx-${version}.tar.gz";
+    sha256 = "1f82845mpgmhvm151fhn2cnqjggw9w7cvsqbva9rb320wmc9m63w";
+  };
+
+  rtmp-ext = fetchgit {
+    url = git://github.com/arut/nginx-rtmp-module.git;
+    rev = "1cfb7aeb582789f3b15a03da5b662d1811e2a3f1";
+    sha256 = "03ikfd2l8mzsjwx896l07rdrw5jn7jjfdiyl572yb9jfrnk48fwi";
+  };
+
   dav-ext = fetchgit {
     url = git://github.com/arut/nginx-dav-ext-module.git;
     rev = "54cebc1f21fc13391aae692c6cce672fa7986f9d";
@@ -15,14 +30,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "nginx-${meta.version}";
+  name = "nginx-${version}";
+  src = mainSrc;
 
-  src = fetchurl {
-    url = "http://nginx.org/download/${name}.tar.gz";
-    sha256 = "116yfy0k65mwxdkld0w7c3gly77jdqlvga5hpbsw79i3r62kh4mf";
-  };
-
-  buildInputs = [ openssl zlib pcre libxml2 libxslt ] ++ stdenv.lib.optional fullWebDAV expat;
+  buildInputs = [ openssl zlib pcre libxml2 libxslt
+    ] ++ stdenv.lib.optional fullWebDAV expat;
 
   patches = if syslog then [ "${syslog-ext}/syslog_1.4.0.patch" ] else [];
 
@@ -35,7 +47,8 @@ stdenv.mkDerivation rec {
     "--with-http_secure_link_module"
     # Install destination problems
     # "--with-http_perl_module"
-  ] ++ stdenv.lib.optional fullWebDAV "--add-module=${dav-ext}"
+  ] ++ stdenv.lib.optional rtmp "--add-module=${rtmp-ext}"
+    ++ stdenv.lib.optional fullWebDAV "--add-module=${dav-ext}"
     ++ stdenv.lib.optional syslog "--add-module=${syslog-ext}";
 
   preConfigure = ''
@@ -50,6 +63,6 @@ stdenv.mkDerivation rec {
     description = "A reverse proxy and lightweight webserver";
     maintainers = [ stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.all;
-    version = "1.4.3";
+    inherit version;
   };
 }

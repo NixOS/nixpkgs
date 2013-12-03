@@ -8,8 +8,7 @@
 
 { stdenv, fetchurl, allLocales ? true, locales ? ["en_US.UTF-8/UTF-8"] }:
 
-let build = import ./common.nix;
-in
+let build = import ./common.nix; in
   build null {
     name = "glibc-locales";
 
@@ -40,7 +39,7 @@ in
     installPhase =
       ''
         mkdir -p "$out/lib/locale"
-        cp -v "$TMPDIR/nix/store/"*"/lib/locale/locale-archive" "$out/lib/locale"
+        cp -v "$TMPDIR/$NIX_STORE/"*"/lib/locale/locale-archive" "$out/lib/locale"
       '';
 
     meta.description = "Locale information for the GNU C Library";

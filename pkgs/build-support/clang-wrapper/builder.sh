@@ -58,11 +58,14 @@ fi
 doSubstitute() {
     local src=$1
     local dst=$2
+    local uselibcxx=
+    if test -n "$libcxx" && echo $dst | fgrep ++; then uselibcxx=$libcxx; fi
     # Can't use substitute() here, because replace may not have been
     # built yet (in the bootstrap).
     sed \
         -e "s^@out@^$out^g" \
         -e "s^@shell@^$shell^g" \
+        -e "s^@libcxx@^$uselibcxx^g" \
         -e "s^@clang@^$clang^g" \
         -e "s^@clangProg@^$clangProg^g" \
         -e "s^@binutils@^$binutils^g" \

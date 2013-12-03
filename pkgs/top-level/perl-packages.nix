@@ -1925,10 +1925,14 @@ rec {
   };
 
   DateManip = buildPerlPackage {
-    name = "DateManip-5.54";
+    name = "Date-Manip-6.41";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-5.54.tar.gz;
-      sha256 = "0ap2jgqx7yvjsyph9zsvadsih41cj991j3jwgz5261sq7q74y7xn";
+      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.41.tar.gz;
+      sha256 = "f7f654d8a85836bfbb248e21dd2ad39e592aa259f247bf77ef791ff19360de09";
+    };
+    propagatedBuildInputs = [ TestInter ];
+    meta = {
+      description = "Date manipulation routines";
     };
   };
 
@@ -8597,6 +8601,18 @@ rec {
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Text/${name}.tar.gz";
       sha256 = "0lr76wrsj8wcxrq4wi8z1640w4dmdbkznp06q744rg3g0bd238d5";
+    };
+  };
+
+  TestInter = buildPerlPackage {
+    name = "Test-Inter-1.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SB/SBECK/Test-Inter-1.05.tar.gz;
+      sha256 = "bda95ef503f1c1b39a5cd1ea686d18a67a63b56a8eb458f0614fc2acc51f7988";
+    };
+    meta = {
+      description = "Framework for more readable interactive test scripts";
+      license = "perl";
     };
   };
 

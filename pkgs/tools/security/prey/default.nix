@@ -10,6 +10,7 @@ let
   modulesSrc = fetchgit {
     url = "git://github.com/prey/prey-bash-client-modules.git";
     rev = "aba260ef110834cb2e92923a31f50c15970639ee";
+    sha256 = "9cb1ad813d052a0a3e3bbdd329a8711ae3272e340379489511f7dd578d911e30";
   };
 in stdenv.mkDerivation rec {
   name = "prey-bash-client-${version}";

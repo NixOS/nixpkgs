@@ -110,6 +110,7 @@ in
 
         exec = "acpid --confdir ${acpiConfDir}";
 
+        unitConfig.ConditionVirtualization = "!systemd-nspawn";
         unitConfig.ConditionPathExists = [ "/proc/acpi" ];
       };
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, unzip, SDL, libjpeg, zlib, libvorbis, curl }:
 
 stdenv.mkDerivation rec {
-  name = "xonotic-0.5.0";
+  name = "xonotic-0.7.0";
 
   src = fetchurl {
     url = "http://dl.xonotic.org/${name}.zip";
-    sha256 = "03vkbddffnz6ws3gkwc3qvi6icfsyiqq0dqw2vw5hj2kidm25rsq";
+    sha256 = "21a5fb5493c269cd3843789cb8598f952d4196e8bc71804b9bd5808b646542c6";
   };
 
   # Commented out things needed to build cl-release because of errors.

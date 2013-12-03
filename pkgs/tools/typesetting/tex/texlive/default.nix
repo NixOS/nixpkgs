@@ -6,13 +6,13 @@ rec {
   };
 
   texmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2013.20130918.orig.tar.xz;
-    sha256 = "0h7x49zsd2gs8fr28f4h04dv5m8p2mpgqxk2vvl5xlf4wwxxbm2p";
+    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2013.20131112.orig.tar.xz;
+    sha256 = "1zak95xh35bnzr3hjrjaxg0yisyw8g3xcym0ywsspc4dxpn1qgk1";
   };
 
   langTexmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-lang/texlive-lang_2013.20131010.orig.tar.xz;
-    sha256 = "17wfd2qmyafv74ac3ssy9aga12g09l2q0r1p19fb4vvs0wrkwzbz";
+    url = mirror://debian/pool/main/t/texlive-lang/texlive-lang_2013.20131112.orig.tar.xz;
+    sha256 = "003rj7pv38lgmggya2nbzcyfdx5d4wa7h1h4xh7iivsxja7z4m1d";
   };
 
   setupHook = ./setup-hook.sh;
@@ -133,4 +133,3 @@ rec {
     platforms   = platforms.unix;
   };
 }
-

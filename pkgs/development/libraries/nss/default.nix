@@ -11,17 +11,17 @@ let
 
   secLoadPatch = fetchurl {
     name = "security_load.patch";
-    urls = http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.1-1/85_security_load.patch;
+    urls = http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.3-1/85_security_load.patch;
     sha256 = "041c6v4cxwsy14qr5m9qs0gkv3w24g632cwpz27kacxpa886r1ds";
   };
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.15.2";
+  version = "3.15.3";
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_15_2_RTM/src/${name}.tar.gz";
-    sha1 = "2d900c296bf11deabbf833ebd6ecdea549c97a5f";
+    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_15_3_RTM/src/${name}.tar.gz";
+    sha1 = "1d0f6707eda35f6c7be92fe2b0537dc090a8f203";
   };
 
   buildInputs = [ nspr perl zlib sqlite ];

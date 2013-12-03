@@ -43,8 +43,5 @@ stdenv.mkDerivation rec {
 
     license = "GPLv2+";
     homepage = https://fedorahosted.org/xmlto/;
-
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

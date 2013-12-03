@@ -1,10 +1,12 @@
-{ cabal, fclabels, hashable, hashtables }:
+{ cabal, fclabels, hashable, hashtables, unorderedContainers }:
 
 cabal.mkDerivation (self: {
   pname = "accelerate";
-  version = "0.13.0.5";
-  sha256 = "1vqkv3k0w1zy0111a786npf3hypbcg675lbdkv2cf3zx5hqcnn6j";
-  buildDepends = [ fclabels hashable hashtables ];
+  version = "0.14.0.0";
+  sha256 = "0b6mnv5l2vrbljak2yx9akpsyqc0qg1il54w0rlfm29fgqknlhjh";
+  buildDepends = [
+    fclabels hashable hashtables unorderedContainers
+  ];
   jailbreak = true;
   meta = {
     homepage = "https://github.com/AccelerateHS/accelerate/";
