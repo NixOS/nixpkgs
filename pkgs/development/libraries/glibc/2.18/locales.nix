@@ -9,38 +9,39 @@
 { stdenv, fetchurl, allLocales ? true, locales ? ["en_US.UTF-8/UTF-8"] }:
 
 let build = import ./common.nix; in
-  build null {
-    name = "glibc-locales";
 
-    inherit fetchurl stdenv;
-    installLocales = true;
+build null {
+  name = "glibc-locales";
 
-    builder = ./locales-builder.sh;
+  inherit fetchurl stdenv;
+  installLocales = true;
 
-    # Awful hack: `localedef' doesn't allow the path to `locale-archive'
-    # to be overriden, but you *can* specify a prefix, i.e. it will use
-    # <prefix>/<path-to-glibc>/lib/locale/locale-archive.  So we use
-    # $TMPDIR as a prefix, meaning that the locale-archive is placed in
-    # $TMPDIR/nix/store/...-glibc-.../lib/locale/locale-archive.
-    buildPhase =
-      ''
-        mkdir -p $TMPDIR/"$(dirname $(readlink -f $(type -p localedef)))/../lib/locale"
+  builder = ./locales-builder.sh;
 
-        # Hack to allow building of the locales (needed since glibc-2.12)
-        sed -i -e "s,^LOCALEDEF=.*,LOCALEDEF=localedef --prefix=$TMPDIR," -e \
-            /library-path/d ../glibc-2*/localedata/Makefile
-        ${if allLocales then "" else
-            "echo SUPPORTED-LOCALES=\"${toString locales}\" > ../glibc-2*/localedata/SUPPORTED"}
+  # Awful hack: `localedef' doesn't allow the path to `locale-archive'
+  # to be overriden, but you *can* specify a prefix, i.e. it will use
+  # <prefix>/<path-to-glibc>/lib/locale/locale-archive.  So we use
+  # $TMPDIR as a prefix, meaning that the locale-archive is placed in
+  # $TMPDIR/nix/store/...-glibc-.../lib/locale/locale-archive.
+  buildPhase =
+    ''
+      mkdir -p $TMPDIR/"$(dirname $(readlink -f $(type -p localedef)))/../lib/locale"
 
-        make localedata/install-locales \
-            localedir=$out/lib/locale \
-      '';
+      # Hack to allow building of the locales (needed since glibc-2.12)
+      sed -i -e "s,^LOCALEDEF=.*,LOCALEDEF=localedef --prefix=$TMPDIR," -e \
+          /library-path/d ../glibc-2*/localedata/Makefile
+      ${if allLocales then "" else
+          "echo SUPPORTED-LOCALES=\"${toString locales}\" > ../glibc-2*/localedata/SUPPORTED"}
 
-    installPhase =
-      ''
-        mkdir -p "$out/lib/locale"
-        cp -v "$TMPDIR/$NIX_STORE/"*"/lib/locale/locale-archive" "$out/lib/locale"
-      '';
+      make localedata/install-locales \
+          localedir=$out/lib/locale \
+    '';
 
-    meta.description = "Locale information for the GNU C Library";
-  }
+  installPhase =
+    ''
+      mkdir -p "$out/lib/locale"
+      cp -v "$TMPDIR/$NIX_STORE/"*"/lib/locale/locale-archive" "$out/lib/locale"
+    '';
+
+  meta.description = "Locale information for the GNU C Library";
+}
