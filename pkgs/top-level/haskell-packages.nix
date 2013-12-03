@@ -155,7 +155,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     HTTP         = self.HTTP_4000_2_9;
     HUnit        = self.HUnit_1_2_5_2;
     mtl          = self.mtl_2_1_2;
-    network      = self.network_2_4_2_0;
+    network      = self.network_2_4_2_1;
     OpenGL       = self.OpenGL_2_9_1_0;
     OpenGLRaw    = self.OpenGLRaw_1_4_0_0;
     parallel     = self.parallel_3_2_0_4;
@@ -1600,8 +1600,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   network_2_3_0_13 = callPackage ../development/libraries/haskell/network/2.3.0.13.nix {};
   network_2_3_1_0 = callPackage ../development/libraries/haskell/network/2.3.1.0.nix {};
   network_2_4_1_2 = callPackage ../development/libraries/haskell/network/2.4.1.2.nix {};
-  network_2_4_2_0 = callPackage ../development/libraries/haskell/network/2.4.2.0.nix {};
-  network = self.network_2_4_2_0;
+  network_2_4_2_1 = callPackage ../development/libraries/haskell/network/2.4.2.1.nix {};
+  network = self.network_2_4_2_1;
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
   networkConduitTls = callPackage ../development/libraries/haskell/network-conduit-tls {};
