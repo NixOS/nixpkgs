@@ -147,7 +147,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     caseInsensitive = self.caseInsensitive_1_1_0_1;
     cgi          = self.cgi_3001_1_7_5;
     fgl          = self.fgl_5_4_2_4;
-    GLUT         = self.GLUT_2_5_0_1;
+    GLUT         = self.GLUT_2_5_0_2;
     GLURaw       = self.GLURaw_1_4_0_0;
     haskellSrc   = self.haskellSrc_1_0_1_5;
     hashable     = self.hashable_1_2_1_0;
@@ -1124,7 +1124,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   GLUT_2_4_0_0 = callPackage ../development/libraries/haskell/GLUT/2.4.0.0.nix {
     OpenGL = self.OpenGL_2_8_0_0;
   };
-  GLUT_2_5_0_1 = callPackage ../development/libraries/haskell/GLUT/2.5.0.1.nix {
+  GLUT_2_5_0_2 = callPackage ../development/libraries/haskell/GLUT/2.5.0.2.nix {
     OpenGL = self.OpenGL_2_9_1_0;
   };
   GLUT = self.GLUT_2_5_0_1;

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "GLUT";
-  version = "2.5.0.1";
-  sha256 = "0f0bz64j7fxa0np8w53n51ri5m0pkwyc1kv7pvdnx02h181gl6l0";
+  version = "2.5.0.2";
+  sha256 = "0v6lwxn9karmym4fzd0hramcj86sb4wgiyqn47hmcg1dd1fsnhb5";
   buildDepends = [ OpenGL OpenGLRaw ];
   extraLibraries = [ freeglut libICE libSM libXi libXmu mesa ];
   meta = {
