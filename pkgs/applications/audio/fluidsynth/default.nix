@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, glib, jackaudio, libsndfile, pkgconfig
-, pulseaudio }:
+, pulseaudio, cmake }:
 
 stdenv.mkDerivation  rec {
   name = "fluidsynth-${version}";
@@ -20,7 +20,7 @@ stdenv.mkDerivation  rec {
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin
     "-framework CoreAudio";
 
-  buildInputs = [ glib libsndfile pkgconfig ]
+  buildInputs = [ cmake glib libsndfile pkgconfig ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ alsaLib pulseaudio jackaudio ];
 
   meta = with stdenv.lib; {
