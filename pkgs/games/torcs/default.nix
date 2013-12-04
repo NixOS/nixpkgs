@@ -3,11 +3,11 @@ libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, libvorbis,
 libpng, zlib, bash }:
 
 stdenv.mkDerivation rec {
-  name = "torcs-1.3.2";
+  name = "torcs-1.3.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/torcs/${name}.tar.bz2";
-    sha256 = "0171ixhnd9cs8jkwa5awrxklfgyykcbc9m8270b8cw30lsx7qhp1";
+    sha256 = "170ff98smkkv1sk4nbz9w0alhmmbr32djmgbc08lcfhf0lj2ni38";
   };
 
   patchPhase = ''
