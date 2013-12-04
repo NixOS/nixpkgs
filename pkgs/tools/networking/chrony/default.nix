@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ readline ] ++ stdenv.lib.optional stdenv.isLinux libcap;
 
+  configureFlags = [ "--sysconfdir=\$(out)/etc" "--chronyvardir=\$(out)/var/lib/chrony" ];
+
   meta = with stdenv.lib; {
     description = "Sets your computer's clock from time servers on the Net";
     homepage = "http://chrony.tuxfamily.org/";
