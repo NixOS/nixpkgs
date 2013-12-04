@@ -4114,6 +4114,11 @@ let
     texinfo = texinfo5;
   };
 
+  ffmpeg_2 = callPackage ../development/libraries/ffmpeg/2.x.nix {
+    vpxSupport = !stdenv.isMips;
+    texinfo = texinfo5;
+  };
+
   ffms = callPackage ../development/libraries/ffms { };
 
   fftw = callPackage ../development/libraries/fftw {
