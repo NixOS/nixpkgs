@@ -4,11 +4,11 @@
 , libxslt, xmlto, gpsdUser ? "gpsd" }:
 
 stdenv.mkDerivation rec {
-  name = "gpsd-2.95";
+  name = "gpsd-3.10";
 
   src = fetchurl {
     url = "http://download.berlios.de/gpsd/${name}.tar.gz";
-    sha256 = "1bjhyjg561kwp6zc2wg58njdvpnsj5yaa2slz8g3ga1176jl68w3";
+    sha256 = "10sqhg4x7hb4vnpq5dnhg62vb5nb3dmqqnbhwjrj5kx7n63jw4h4";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig docbook_xml_dtd_412 docbook_xsl
