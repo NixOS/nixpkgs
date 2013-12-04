@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4 }:
+{ stdenv, fetchurl, cmake, qt4, doxygen }:
 stdenv.mkDerivation rec {
 
   name = "vidalia-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mw3wnlh18rj20qjv7jxjk3a8mf75p5wzv358qfs3sm3lqgd68qm";
   };
 
-  buildInputs = [ cmake qt4 ];
+  buildInputs = [ cmake qt4 doxygen ];
 
   meta = with stdenv.lib; {
     homepage = https://www.torproject.org/projects/vidalia.html.en;
