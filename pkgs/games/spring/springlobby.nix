@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, wxGTK, openal, pkgconfig, curl, libtorrentRasterbar, libpng, libX11
-, gettext, bash, gawk, boost}:
+, gettext, bash, gawk, boost, libnotify, gtk, doxygen }:
 stdenv.mkDerivation rec {
 
   name = "springlobby-${version}";
@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "0a5pnd15rlvbkvnz2s0axy3i7m2jlrk91kjpwflnrcqlf42c2rk9";
   };
 
-  buildInputs = [ cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar boost libpng libX11 ];
+  buildInputs = [
+    cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar boost libpng libX11
+    libnotify gtk doxygen
+  ];
 
   prePatch = ''
     substituteInPlace tools/regen_config_header.sh --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
