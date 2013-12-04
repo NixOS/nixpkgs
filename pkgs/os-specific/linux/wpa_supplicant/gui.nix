@@ -37,6 +37,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Qt-based GUI for wpa_supplicant";
-    inherit (qt4.meta) platforms;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

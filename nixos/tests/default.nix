@@ -16,6 +16,7 @@ with import ../lib/testing.nix { inherit system minimal; };
   kde4 = makeTest (import ./kde4.nix);
   #kexec = makeTest (import ./kexec.nix);
   login = makeTest (import ./login.nix {});
+  logstash = makeTest (import ./logstash.nix);
   latestKernel.login = makeTest (import ./login.nix ({ config, pkgs, ... }: { boot.kernelPackages = pkgs.linuxPackages_latest; }));
   misc = makeTest (import ./misc.nix);
   #mpich = makeTest (import ./mpich.nix);

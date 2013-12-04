@@ -106,6 +106,8 @@
       firebird = 95;
       redis = 96;
       haproxy = 97;
+      mongodb = 98;
+      openldap = 99;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -140,7 +142,7 @@
       tape = 25;
       video = 26;
       dialout = 27;
-      polkituser = 28;
+      #polkituser = 28; # currently unused, polkitd doesn't need a group
       utmp = 29;
       davfs2 = 31;
       privoxy = 32;
@@ -193,6 +195,7 @@
       amule = 90;
       minidlna = 91;
       haproxy = 92;
+      openldap = 93;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 

@@ -2,11 +2,11 @@
 , gettext, libiconvOrEmpty, makeWrapper, perl }:
 
 stdenv.mkDerivation rec {
-  name = "newsbeuter-2.6";
+  name = "newsbeuter-2.7";
 
   src = fetchurl {
     url = "http://www.newsbeuter.org/downloads/${name}.tar.gz";
-    sha256 = "1hywz5206k0ykjklkjvnfy9fm4jfv9phz8dkzzwhfcjvqv9zv29i";
+    sha256 = "0flhzzlbdirjmrq738gmcxqqnifg3kb7plcwqcxshpizmjkhswp6";
   };
 
   buildInputs

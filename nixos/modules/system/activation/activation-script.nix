@@ -71,7 +71,7 @@ in
 
             ${
               let
-                set' = mapAttrs (n: v: if builtins.isString v then noDepEntry v else v) set;
+                set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
                 withHeadlines = addAttributeName set';
               in textClosureMap id (withHeadlines) (attrNames withHeadlines)
             }

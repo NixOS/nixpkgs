@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     description = "A squad-based tactical strategy game in the tradition of X-Com";
     license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric];
-    #platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
   };
 }

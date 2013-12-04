@@ -136,5 +136,6 @@ stdenv.mkDerivation {
     description = "Xen hypervisor and management tools for Dom0";
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.eelco ];
+    broken = true;
   };
 }

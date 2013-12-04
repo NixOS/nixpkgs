@@ -118,6 +118,56 @@ interpretation:</para>
     package).</para></listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term><varname>platforms</varname></term>
+    <listitem><para>The list of Nix platform types on which the
+    package is supported.  If this attribute is set, the package will
+    refuse to build, and won’t show up in <literal>nix-env
+    -qa</literal> output, on any platform not listed
+    here.  An example is:
+
+<programlisting>
+meta.platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+</programlisting>
+
+    The set <varname>lib.platforms</varname> defines various common
+    lists of platforms types, so it’s more typical to write:
+
+<programlisting>
+meta.platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+</programlisting>
+
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>hydraPlatforms</varname></term>
+    <listitem><para>The list of Nix platform types for which the Hydra
+    instance at <literal>hydra.nixos.org</literal> should build the
+    package.  (Hydra is the Nix-based continuous build system.)  It
+    defaults to the value of <varname>meta.platforms</varname>.  Thus,
+    the only reason to set <varname>meta.hydraPlatforms</varname> is
+    if you want <literal>hydra.nixos.org</literal> to build the
+    package on a subset of <varname>meta.platforms</varname>, or not
+    at all, e.g.
+
+<programlisting>
+meta.platforms = stdenv.lib.platforms.linux;
+meta.hydraPlatforms = [];
+</programlisting>
+
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>broken</varname></term>
+    <listitem><para>If set to <literal>true</literal>, the package is
+    marked as “broken”, meaning that it won’t show up in
+    <literal>nix-env -qa</literal>, and cannot be built or installed.
+    Sush packages should be removed from Nixpkgs eventually unless
+    they are fixed.</para></listitem>
+  </varlistentry>
+
 </variablelist>
 
 

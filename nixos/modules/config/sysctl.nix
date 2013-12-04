@@ -6,7 +6,7 @@ let
 
   sysctlOption = mkOptionType {
     name = "sysctl option value";
-    check = x: builtins.isBool x || builtins.isString x || builtins.isInt x;
+    check = x: isBool x || isString x || isInt x;
     merge = args: defs: (last defs).value; # FIXME: hacky way to allow overriding in configuration.nix.
   };
 
@@ -46,7 +46,10 @@ in
         before = [ "sysinit.target" "shutdown.target" ];
         wantedBy = [ "sysinit.target" "multi-user.target" ];
         restartTriggers = [ config.environment.etc."sysctl.d/nixos.conf".source ];
-        unitConfig.DefaultDependencies = false; # needed to prevent a cycle
+        unitConfig = {
+          DefaultDependencies = false; # needed to prevent a cycle
+          ConditionPathIsReadWrite = "/proc/sys/"; # prevent systemd-sysctl in containers
+        };
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;

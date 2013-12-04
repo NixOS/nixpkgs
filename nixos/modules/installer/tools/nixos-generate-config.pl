@@ -386,9 +386,6 @@ if ($showHardwareConfig) {
   boot.loader.grub.enable = false;
   boot.loader.gummiboot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  # !!! Remove this when nixos is on 3.10 or greater by default
-  # EFI booting requires kernel >= 3.10
-  boot.kernelPackages = pkgs.linuxPackages_3_10;
 EOF
         } else {
             $bootLoaderConfig = <<EOF;

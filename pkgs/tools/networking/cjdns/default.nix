@@ -4,7 +4,7 @@ let
   rev = "f7b02ac0cc";
 in
 stdenv.mkDerivation {
-  name = "cjdns-git-20130620-${rev}";
+  name = "cjdns-git-20130620-${stdenv.lib.strings.substring 0 7 rev}";
 
   src = fetchgit {
     url = "https://github.com/cjdelisle/cjdns.git";

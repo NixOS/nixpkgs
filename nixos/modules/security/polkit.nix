@@ -18,42 +18,32 @@ in
       description = "Whether to enable PolKit.";
     };
 
-    security.polkit.permissions = mkOption {
+    security.polkit.extraConfig = mkOption {
       type = types.lines;
       default = "";
       example =
         ''
-          [Disallow Users To Suspend]
-          Identity=unix-group:users
-          Action=org.freedesktop.upower.*
-          ResultAny=no
-          ResultInactive=no
-          ResultActive=no
+          /* Log authorization checks. */
+          polkit.addRule(function(action, subject) {
+            polkit.log("user " +  subject.user + " is attempting action " + action.id + " from PID " + subject.pid);
+          });
 
-          [Allow Anybody To Eject Disks]
-          Identity=unix-user:*
-          Action=org.freedesktop.udisks.drive-eject
-          ResultAny=yes
-          ResultInactive=yes
-          ResultActive=yes
-
-          [Allow Alice To Mount Filesystems After Admin Authentication]
-          Identity=unix-user:alice
-          Action=org.freedesktop.udisks.filesystem-mount
-          ResultAny=auth_admin
-          ResultInactive=auth_admin
-          ResultActive=auth_admin
+          /* Allow any local user to do anything (dangerous!). */
+          polkit.addRule(function(action, subject) {
+            if (subject.local) return "yes";
+          });
         '';
       description =
         ''
-          Allows the default permissions of privileged actions to be overridden.
+          Any polkit rules to be added to config (in JavaScript ;-). See:
+          http://www.freedesktop.org/software/polkit/docs/latest/polkit.8.html#polkit-rules
         '';
     };
 
     security.polkit.adminIdentities = mkOption {
-      type = types.str;
-      default = "unix-user:0;unix-group:wheel";
-      example = "";
+      type = types.listOf types.str;
+      default = [ "unix-user:0" "unix-group:wheel" ];
+      example = [ "unix-user:alice" "unix-group:admin" ];
       description =
         ''
           Specifies which users are considered “administrators”, for those
@@ -71,29 +61,20 @@ in
 
     environment.systemPackages = [ pkgs.polkit ];
 
-    # The polkit daemon reads action files
-    environment.pathsToLink = [ "/share/polkit-1/actions" ];
+    systemd.packages = [ pkgs.polkit ];
 
-    environment.etc =
-      [ # No idea what the "null backend" is, but it seems to need this.
-        { source = "${pkgs.polkit}/etc/polkit-1/nullbackend.conf.d";
-          target = "polkit-1/nullbackend.conf.d";
-        }
+    # The polkit daemon reads action/rule files
+    environment.pathsToLink = [ "/share/polkit-1" ];
 
-        # This file determines what users are considered
-        # "administrators".
-        { source = pkgs.writeText "10-nixos.conf"
-            ''
-              [Configuration]
-              AdminIdentities=${cfg.adminIdentities}
-            '';
-          target = "polkit-1/localauthority.conf.d/10-nixos.conf";
-        }
+    # PolKit rules for NixOS.
+    environment.etc."polkit-1/rules.d/10-nixos.rules".text =
+      ''
+        polkit.addAdminRule(function(action, subject) {
+          return [${concatStringsSep ", " (map (i: "\"${i}\"") cfg.adminIdentities)}];
+        });
 
-        { source = pkgs.writeText "org.nixos.pkla" cfg.permissions;
-          target = "polkit-1/localauthority/10-vendor.d/org.nixos.pkla";
-        }
-      ];
+        ${cfg.extraConfig}
+      ''; #TODO: validation on compilation (at least against typos)
 
     services.dbus.packages = [ pkgs.polkit ];
 
@@ -101,24 +82,31 @@ in
 
     security.setuidPrograms = [ "pkexec" ];
 
-    security.setuidOwners = singleton
+    security.setuidOwners = [
       { program = "polkit-agent-helper-1";
         owner = "root";
         group = "root";
         setuid = true;
-        source = "${pkgs.polkit}/libexec/polkit-1/polkit-agent-helper-1";
-      };
+        source = "${pkgs.polkit}/lib/polkit-1/polkit-agent-helper-1";
+      }
+    ];
 
     system.activationScripts.polkit =
       ''
-        mkdir -p /var/lib/polkit-1/localauthority
-        chmod 700 /var/lib/polkit-1{/localauthority,}
+        # Probably no more needed, clean up
+        rm -rf /var/lib/{polkit-1,PolicyKit}
 
         # Force polkitd to be restarted so that it reloads its
         # configuration.
         ${pkgs.procps}/bin/pkill -INT -u root -x polkitd
       '';
 
+    users.extraUsers.polkituser = {
+      description = "PolKit daemon";
+      uid = config.ids.uids.polkituser;
+    };
+
   };
 
 }
+

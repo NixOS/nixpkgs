@@ -270,6 +270,8 @@ in
             before = [ "network.target" ];
             wantedBy = [ "network.target" ];
 
+            unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+
             path = [ pkgs.iproute ];
 
             serviceConfig.Type = "oneshot";

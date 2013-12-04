@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     description = "Add-on for the OGRE, aimed to render atmospheric effects";
     homepage = http://code.google.com/p/caelum/;
     license = "LGPLv2.1+";
+    broken = true;
   };
 }

@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     homepage = "http://github.com/robeverest/cufft";
     description = "Haskell bindings for the CUFFT library";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.none;
+    platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

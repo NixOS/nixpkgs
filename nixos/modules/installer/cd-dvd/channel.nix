@@ -11,7 +11,7 @@ let
   # CD.  These are installed into the "nixos" channel of the root
   # user, as expected by nixos-rebuild/nixos-install.
   channelSources = pkgs.runCommand "nixos-${config.system.nixosVersion}"
-    { expr = builtins.readFile ../../../lib/channel-expr.nix; }
+    { expr = readFile ../../../lib/channel-expr.nix; }
     ''
       mkdir -p $out/nixos
       cp -prd ${pkgs.path} $out/nixos/nixpkgs

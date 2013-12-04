@@ -16,18 +16,17 @@ assert pulseaudioSupport -> pulseaudio != null;
 
 let
   configureFlagsFun = attrs: ''
-        --disable-oss --disable-video-x11-xme
-        --disable-x11-shared --disable-alsa-shared --enable-rpath --disable-pulseaudio-shared
-        --disable-osmesa-shared --enable-static
+        --disable-oss --disable-x11-shared
+        --disable-pulseaudio-shared --disable-alsa-shared
         ${if alsaSupport then "--with-alsa-prefix=${attrs.alsaLib}/lib" else ""}
       '';
 in
 stdenv.mkDerivation rec {
-  name = "SDL2-2.0.0";
+  name = "SDL2-2.0.1";
 
   src = fetchurl {
     url = "http://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "0y3in99brki7vc2mb4c0w39v70mf4h341mblhh8nmq4h7lawhskg";
+    sha256 = "1w1jcz7hilk4fl8wlhiwvd1licg8lwy0brqz05562xv7l81fkrqa";
   };
 
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
@@ -38,6 +37,9 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional openglSupport [ mesa ] ++
     stdenv.lib.optional alsaSupport alsaLib;
 
+  # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
+  dontDisableStatic = true;
+
   # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
   # we must arrange to add it to its RPATH; however, `patchelf' seems
   # to fail at doing this, hence `--disable-pulseaudio-shared'.
@@ -47,10 +49,17 @@ stdenv.mkDerivation rec {
       configureFlags = configureFlagsFun { alsaLib = alsaLib.crossDrv; };
   };
 
+  postInstall = ''
+    rm $out/lib/*.a
+  '';
+
   passthru = {inherit openglSupport;};
 
   meta = {
     description = "A cross-platform multimedia library";
     homepage = http://www.libsdl.org/;
+    license = stdenv.lib.licenses.zlib;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.page ];
   };
 }

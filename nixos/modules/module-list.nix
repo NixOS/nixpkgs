@@ -46,7 +46,6 @@
   ./programs/bash/command-not-found.nix
   ./programs/blcr.nix
   ./programs/environment.nix
-  ./programs/gurobi.nix
   ./programs/info.nix
   ./programs/shadow.nix
   ./programs/shell.nix
@@ -55,6 +54,7 @@
   ./programs/venus.nix
   ./programs/wvdial.nix
   ./programs/zsh/zsh.nix
+  ./programs/screen.nix
   ./rename.nix
   ./security/apparmor.nix
   ./security/apparmor-suid.nix
@@ -91,6 +91,7 @@
   ./services/databases/virtuoso.nix
   ./services/games/ghost-one.nix
   ./services/hardware/acpid.nix
+  ./services/hardware/amd-hybrid-graphics.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
@@ -119,7 +120,6 @@
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
   ./services/misc/gpsd.nix
-  ./services/misc/gurobi.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
@@ -247,11 +247,11 @@
   ./system/boot/kexec.nix
   ./system/boot/loader/efi.nix
   ./system/boot/loader/generations-dir/generations-dir.nix
-  ./system/boot/loader/gummiboot/gummiboot.nix
-  ./system/boot/loader/raspberrypi/raspberrypi.nix
   ./system/boot/loader/grub/grub.nix
   ./system/boot/loader/grub/memtest.nix
+  ./system/boot/loader/gummiboot/gummiboot.nix
   ./system/boot/loader/init-script/init-script.nix
+  ./system/boot/loader/raspberrypi/raspberrypi.nix
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/shutdown.nix
@@ -275,8 +275,10 @@
   ./tasks/network-interfaces.nix
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
+  ./testing/service-runner.nix
+  ./virtualisation/containers.nix
   ./virtualisation/libvirtd.nix
   #./virtualisation/nova.nix
   ./virtualisation/virtualbox-guest.nix
-  ./virtualisation/xen-dom0.nix
+  #./virtualisation/xen-dom0.nix
 ]

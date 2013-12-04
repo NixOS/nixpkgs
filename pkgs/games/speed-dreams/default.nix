@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = http://speed-dreams.sourceforge.net/;
     license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric raskin];
-    #platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
   };
 }

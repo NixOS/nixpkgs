@@ -119,14 +119,12 @@ rec {
 
   # May fail as much as it wishes, we will catch the error.
   processPackage = attrSet:
-    if attrSet ? recurseForDerivations && attrSet.recurseForDerivations then
+    if attrSet.recurseForDerivations or false then
       packagesWithMetaPlatform attrSet
-    else if attrSet ? recurseForRelease && attrSet.recurseForRelease then
+    else if attrSet.recurseForRelease or false then
       packagesWithMetaPlatform attrSet
     else
-      if attrSet ? meta && attrSet.meta ? platforms
-        then attrSet.meta.platforms
-        else [];
+      attrSet.meta.hydraPlatforms or (attrSet.meta.platforms or []);
 
 
   /* Common platform groups on which to test packages. */

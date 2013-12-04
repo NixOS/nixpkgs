@@ -1,8 +1,8 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation {
-  name = "libestr-0.1.4";
+  name = "libestr-0.1.9";
   src = fetchurl {
-    url = http://libestr.adiscon.com/files/download/libestr-0.1.4.tar.gz;
-    sha256 = "1qw5vqryawdm434l9ql3r160ap2f5mmp7b6pciac7qli62y0a2z3";
+    url = http://libestr.adiscon.com/files/download/libestr-0.1.9.tar.gz;
+    sha256 = "06km9mlw5qq4aa7503l81d0qcghzl0n3lh0z41r1xjpa04nnwb42";
   };
 }

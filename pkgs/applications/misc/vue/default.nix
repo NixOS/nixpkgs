@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="vue";
-    version="3.1.2";
+    version="3.2.2";
     name="${baseName}-${version}";
-    url="http://releases.atech.tufts.edu/vue/v${version}/VUE_3_1_2.zip";
-    hash="0ga98gnp4qhcrb31cb8j0mwbrh6ym6hr4k5y4blxvyfff9c0vq47";
+    url="releases.atech.tufts.edu/jenkins/job/VUE/64/deployedArtifacts/download/artifact.2";
+    hash="0sb1kgan8fvph2cqfxk3906cwx5wy83zni2vlz4zzi6yg4zvfxld";
   };
 in
 rec {
@@ -30,9 +30,8 @@ rec {
   phaseNames = ["doDeploy"];
 
   doDeploy = a.fullDepEntry ''
-    unzip ${src}
     mkdir -p "$out"/{share/vue,bin}
-    cp VUE.jar "$out/share/vue/vue.jar"
+    cp ${src} "$out/share/vue/vue.jar"
     echo '#!${a.stdenv.shell}' >> "$out/bin/vue" 
     echo '${a.jre}/bin/java -jar "'"$out/share/vue/vue.jar"'" "$@"' >> "$out/bin/vue" 
     chmod a+x "$out/bin/vue"

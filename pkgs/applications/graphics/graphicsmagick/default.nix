@@ -2,14 +2,14 @@
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz
 , libX11}:
 
-let version = "1.3.13"; in
+let version = "1.3.18"; in
 
 stdenv.mkDerivation {
   name = "graphicsmagick-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "08lgjvhvhw3by5h4kfpl7072dbvkcpsajy5f6izq69cv61vadqs5";
+    sha256 = "1axh4j2jr3l92dan15b2nmx9da4l7i0rcz9b5bvfd4q742zfwj7x";
   };
 
   configureFlags = "--enable-shared";

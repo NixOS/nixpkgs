@@ -1,9 +1,8 @@
 #! /bin/sh -e
 
-nixos=$(nix-instantiate --find-file nixos)
 export NIXOS_CONFIG=$(dirname $(readlink -f $0))/amazon-base-config.nix
 
-version=$(nix-instantiate --eval-only '<nixos>' -A config.system.nixosVersion | sed s/'"'//g)
+version=$(nix-instantiate --eval-only '<nixpkgs/nixos>' -A config.system.nixosVersion | sed s/'"'//g)
 echo "NixOS version is $version"
 
 buildAndUploadFor() {
@@ -11,13 +10,13 @@ buildAndUploadFor() {
     arch="$2"
 
     echo "building $system image..."
-    nix-build '<nixos>' \
+    nix-build '<nixpkgs/nixos>' \
         -A config.system.build.amazonImage --argstr system "$system" -o ec2-ami
 
     ec2-bundle-image -i ./ec2-ami/nixos.img --user "$AWS_ACCOUNT" --arch "$arch" \
         -c "$EC2_CERT" -k "$EC2_PRIVATE_KEY"
 
-    for region in eu-west-1 us-east-1 us-west-1 us-west-2; do
+    for region in eu-west-1; do
         echo "uploading $system image for $region..."
 
         name=nixos-$version-$arch-s3

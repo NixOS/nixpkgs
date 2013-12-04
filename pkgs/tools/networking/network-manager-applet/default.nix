@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
     ''CFLAGS=-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile_broadband_provider_info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''
   ];
 
+  preFixup = ''
+    rm $out/share/glib-2.0/schemas/gschemas.compiled'';
+
   postInstall = ''
     mkdir -p $out/etc/NetworkManager/VPN
     ln -s ${networkmanager_openvpn}/etc/NetworkManager/VPN/nm-openvpn-service.name $out/etc/NetworkManager/VPN/nm-openvpn-service.name

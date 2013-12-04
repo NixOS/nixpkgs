@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, guile, ncurses }:
+{ fetchurl, stdenv, guile, ncurses, libffi }:
 
 stdenv.mkDerivation rec {
   name = "guile-ncurses-1.3";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0chvfjrlmg99db98ra9vzwjmbypqx7d4ssm8q0kvzi0n0p9irszi";
   };
 
-  buildInputs = [ guile ncurses ];
+  buildInputs = [ guile ncurses libffi ];
 
   preConfigure =
     '' configureFlags="$configureFlags --with-guilesitedir=$out/share/guile/site" '';

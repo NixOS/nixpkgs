@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     homepage = http://dev.gentoo.org/~spock/projects/uvesafb/;
     license = "BSD";
     platforms = [ "i686-linux" "x86_64-linux" ];
+    broken = true;
   };
 }
 

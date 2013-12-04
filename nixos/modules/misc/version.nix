@@ -53,7 +53,7 @@ with pkgs.lib;
       mkDefault (if pathExists fn then readFile fn else "master");
 
     # Note: code names must only increase in alphabetical order.
-    system.nixosCodeName = "Aardvark";
+    system.nixosCodeName = "Baboon";
 
     # Generate /etc/os-release.  See
     # http://0pointer.de/public/systemd-man/os-release.html for the

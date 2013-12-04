@@ -108,5 +108,7 @@ stdenv.mkDerivation rec {
 
     # Restrict to GNU systems for now.
     platforms = stdenv.lib.platforms.gnu;
+
+    broken = true;
   };
 }

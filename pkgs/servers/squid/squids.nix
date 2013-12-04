@@ -22,10 +22,10 @@ rec {
   };
 
   squid31 = squid30.merge {
-    name = "squid-3.1.15";
+    name = "squid-3.1.23";
     src = args.fetchurl {
-      url = http://www.squid-cache.org/Versions/v3/3.1/squid-3.1.15.tar.bz2;
-      sha256 = "1300f44dd4783697bacc262a7a9b32dbc9f550367fe82b70262864fdff715a35";
+      url = http://www.squid-cache.org/Versions/v3/3.1/squid-3.1.23.tar.bz2;
+      sha256 = "13g4y0gg48xnlzrvpymb08gh25xi50y383faapkxws7i7v94305s";
     };
   };
 

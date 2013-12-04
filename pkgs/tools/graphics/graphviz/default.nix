@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       interfaces for other technical domains.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = with stdenv.lib.maintainers; [ simons bjornfor ];
   };
 }

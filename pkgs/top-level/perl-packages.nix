@@ -1925,10 +1925,14 @@ rec {
   };
 
   DateManip = buildPerlPackage {
-    name = "DateManip-5.54";
+    name = "Date-Manip-6.41";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-5.54.tar.gz;
-      sha256 = "0ap2jgqx7yvjsyph9zsvadsih41cj991j3jwgz5261sq7q74y7xn";
+      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.41.tar.gz;
+      sha256 = "f7f654d8a85836bfbb248e21dd2ad39e592aa259f247bf77ef791ff19360de09";
+    };
+    propagatedBuildInputs = [ TestInter ];
+    meta = {
+      description = "Date manipulation routines";
     };
   };
 
@@ -3534,6 +3538,20 @@ rec {
     propagatedBuildInputs = [ TestScript ];
   };
 
+  FinanceQuote = buildPerlPackage {
+    name = "Finance-Quote-1.18";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/E/EC/ECOCODE/Finance-Quote-1.18.tar.gz;
+      sha256 = "4240faabe0646defd4ec76ca9e111977b9e8060eaec41adeb284eb422a428393";
+    };
+    propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP ];
+    meta = {
+      homepage = http://finance-quote.sourceforge.net/;
+      description = "Get stock and mutual fund quotes from various exchanges";
+      license = "gpl";
+    };
+  };
+
   FontAFM = buildPerlPackage rec {
     name = "Font-AFM-1.20";
     src = fetchurl {
@@ -3800,6 +3818,15 @@ rec {
     buildInputs = [ pkgs.unzip ];
   };
 
+  HTMLElementExtended = buildPerlPackage {
+    name = "HTML-Element-Extended-1.18";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MS/MSISK/HTML-Element-Extended-1.18.tar.gz;
+      sha256 = "f3ef1af108f27fef15ebec66479f251ce08aa49bd00b0462c9c80c86b4b6b32b";
+    };
+    propagatedBuildInputs = [ HTMLTree ];
+  };
+
   HTMLFromANSI = buildPerlPackage {
     name = "HTML-FromANSI-2.03";
     src = fetchurl {
@@ -3892,6 +3919,15 @@ rec {
       sha256 = "0xb5zj67y2sjid9bs3yfm81rgi91fmn38wy1ryngssw6vd92ijh2";
     };
     propagatedBuildInputs = [HTMLParser];
+  };
+
+  HTMLTableExtract = buildPerlPackage {
+    name = "HTML-TableExtract-2.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MS/MSISK/HTML-TableExtract-2.11.tar.gz;
+      sha256 = "1861d55a2aa1728ef56ea2d08d630b9a008456f1106994e4e49e76f56e4955ee";
+    };
+    propagatedBuildInputs = [ HTMLElementExtended HTMLParser ];
   };
 
   HTMLTagset = buildPerlPackage rec {
@@ -7591,7 +7627,7 @@ rec {
   };
 
   Switch = buildPerlPackage rec {
-    name = "Switch";
+    name = "Switch-2.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RG/RGARCIA/Switch-2.16.tar.gz";
       sha256 = "1n7rgp1q3zwglv1pka3bnhq5g41334lwc53g31w6g44my8kqz31h";
@@ -8565,6 +8601,18 @@ rec {
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Text/${name}.tar.gz";
       sha256 = "0lr76wrsj8wcxrq4wi8z1640w4dmdbkznp06q744rg3g0bd238d5";
+    };
+  };
+
+  TestInter = buildPerlPackage {
+    name = "Test-Inter-1.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SB/SBECK/Test-Inter-1.05.tar.gz;
+      sha256 = "bda95ef503f1c1b39a5cd1ea686d18a67a63b56a8eb458f0614fc2acc51f7988";
+    };
+    meta = {
+      description = "Framework for more readable interactive test scripts";
+      license = "perl";
     };
   };
 

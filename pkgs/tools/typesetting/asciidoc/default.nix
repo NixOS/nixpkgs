@@ -128,11 +128,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "asciidoc-8.6.8";
+  name = "asciidoc-8.6.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/asciidoc/${name}.tar.gz";
-    sha256 = "ffb67f59dccaf6f15db72fcd04fdf21a2f9b703d31f94fcd0c49a424a9fcfbc4";
+    sha256 = "1w71nk527lq504njmaf0vzr93pgahkgzzxzglrq6bay8cw2rvnvq";
   };
 
   buildInputs = [ python unzip ];
@@ -257,7 +257,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.methods.co.nz/asciidoc/";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ [ "x86_64-darwin" ];
     maintainers = [ maintainers.bjornfor ];
   };
 }

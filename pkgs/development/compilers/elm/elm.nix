@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Elm";
-  version = "0.10.0.1";
-  sha256 = "1r7z2fw9v6ngr9w4lmj1l6sc78rmxvqkqlxv4a9yc5jm80k3ar0i";
+  version = "0.10.0.2";
+  sha256 = "08aqz9lf754ygdwvjf4bs5ivnjyjx9rd43vrbzp0p4d3if6w6avz";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

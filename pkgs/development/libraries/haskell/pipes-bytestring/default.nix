@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-bytestring";
-  version = "1.0.1";
-  sha256 = "0zk2n9mly1mjh1zb3z33gab362abgh8c0mw88mmwnlfszq97hcz7";
+  version = "1.0.2";
+  sha256 = "09wzmi3xh9n69xsxw0ik4qf2ld1vksca88ggknqbzbnjxq82jjrr";
   buildDepends = [ pipes pipesParse transformers ];
   meta = {
     description = "ByteString support for pipes";

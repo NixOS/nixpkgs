@@ -10,7 +10,7 @@ let
     inherit buildPhase;
     inherit installPhase;
 
-    meta.platforms = stdenv.lib.platforms.unix;
+    meta = a.meta // { platforms = stdenv.lib.platforms.unix; };
     passthru.module_name = module_name;
   });
 
@@ -30,7 +30,7 @@ in rec {
       description = "Push notification service module for ZNC";
       homepage = https://github.com/jreese/znc-push;
       repositories.git = https://github.com/jreese/znc-push.git;
-      license = stdenv.lib.license.mit;
+      license = stdenv.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.offline ];
     };
   };

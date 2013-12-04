@@ -62,6 +62,8 @@ in {
         ExecStart = "${pkgs.dd-agent}/bin/dd-agent foreground";
         User = "dd-agent";
         Group = "dd-agent";
+        Restart = "always";
+        RestartSec = 2;
       };
       restartTriggers = [ pkgs.dd-agent datadog_conf ];
     };
@@ -76,6 +78,8 @@ in {
         Group = "dd-agent";
         Type = "forking";
         PIDFile = "/tmp/dogstatsd.pid";
+        Restart = "always";
+        RestartSec = 2;
       };
       restartTriggers = [ pkgs.dd-agent datadog_conf ];
     };

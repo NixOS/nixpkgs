@@ -148,7 +148,7 @@ in
     #   wall: cannot get tty name: Inappropriate ioctl for device
     # The message still gets through.
     systemd.services.apcupsd = {
-      description = "APC UPS daemon";
+      description = "APC UPS Daemon";
       wantedBy = [ "multi-user.target" ];
       preStart = "mkdir -p /run/apcupsd/";
       serviceConfig = {
@@ -172,7 +172,7 @@ in
       before = [ "final.target" ];
       wantedBy = [ "shutdown.target" ];
       unitConfig = {
-        Description = "APC UPS killpower";
+        Description = "APC UPS Kill Power";
         ConditionPathExists = "/run/apcupsd/powerfail";
         DefaultDependencies = "no";
       };

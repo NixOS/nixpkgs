@@ -3,7 +3,7 @@
 let
 
   makeTuxonicePatch = { version, kernelVersion, sha256,
-    url ? "http://tuxonice.net/files/tuxonice-${version}-for-${kernelVersion}.patch.bz2" }:
+    url ? "http://tuxonice.nigelcunningham.com.au/downloads/all/tuxonice-for-linux-${kernelVersion}-${version}.patch.bz2" }:
     { name = "tuxonice-${kernelVersion}";
       patch = stdenv.mkDerivation {
         name = "tuxonice-${version}-for-${kernelVersion}.patch";
@@ -68,20 +68,6 @@ rec {
       features.secPermPatch = true;
     };
 
-  aufs3_0 = rec {
-    name = "aufs3.0";
-    version = "3.0.20121210";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "0627c706d69778f5c74be982f28c746153b8cdf7";
-      sha256 = "7008ff64f5adc2b3a30fcbb090bcbfaac61b778af38493b6144fc7d768a6514d";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
   aufs3_2 = rec {
     name = "aufs3.2";
     version = "3.2.20121210";
@@ -131,14 +117,37 @@ rec {
       patch = ./mips-ext3-n32.patch;
     };
 
-  grsecurity_2_9_1_3_2_52 =
-    { name = "grsecurity-2.9.1-3.2.52";
+  tuxonice_3_10 = makeTuxonicePatch {
+    version = "2013-11-07";
+    kernelVersion = "3.10.18";
+    sha256 = "00b1rqgd4yr206dxp4mcymr56ymbjcjfa4m82pxw73khj032qw3j";
+  };
+
+
+  grsecurity_3_0_3_2_52 =
+    { name = "grsecurity-3.0-3.2.52";
       patch = fetchurl {
-        url = http://grsecurity.net/stable/grsecurity-2.9.1-3.2.52-201310271550.patch;
-        sha256 = "08y4y323y2lfvdj67gmg3ca8gaf3snhr3pyrmgvj877avaz0475m";
+        url = https://grsecurity.net/stable/grsecurity-3.0-3.2.52-201311261307.patch;
+        sha256 = "1zmzgjpbq90q2w3yl3dgdc79qan7qkh5w6g3y3nvzr6ww6jl8hqw";
       };
-      # The grsec kernel patch seems to include the apparmor patches as of 2.9.1-3.2.52
+      features.grsecurity = true;
+      # The grsec kernel patch seems to include the apparmor patches as of 3.0-3.2.52
       features.apparmor = true;
     };
 
+  grsecurity_3_0_3_12_1 =
+    { name = "grsecurity-3.0-3.12.1";
+      patch = fetchurl {
+        url = https://grsecurity.net/test/grsecurity-3.0-3.12.1-201311261309.patch;
+        sha256 = "129q740m2iivc4i9a465lvzcph9gxlivxzg2p9dsi7c136p42mdz";
+      };
+      features.grsecurity = true;
+      # The grsec kernel patch seems to include the apparmor patches as of 3.0-3.12.1
+      features.apparmor = true;
+    };
+
+  grsec_path =
+    { name = "grsec-path";
+      patch = ./grsec-path.patch;
+    };
 }

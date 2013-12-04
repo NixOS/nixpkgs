@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   rev = "6a3a855b48a3db64821d1cf8a91c5ee2815a2b2d";
-  name = "dunst-${rev}";
+  name = "dunst-0-${stdenv.lib.strings.substring 0 7 rev}";
 
   # 1.0.0 release doesn't include 100% CPU fix
   # https://github.com/knopwob/dunst/issues/98

@@ -48,6 +48,6 @@ pythonPackages.buildPythonPackage {
     description = "A program that scans log files for repeated failing login attempts and bans IP addresses";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ eelco lovek323 ];
-    platforms   = platforms.unix;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
 }

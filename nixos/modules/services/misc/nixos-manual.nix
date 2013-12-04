@@ -23,6 +23,7 @@ let
 
   manual = import ../../../doc/manual {
     inherit pkgs;
+    version = config.system.nixosVersion;
     revision = config.system.nixosRevision;
     options = eval.options;
   };

@@ -114,5 +114,6 @@ stdenv.mkDerivation {
   passthru = {
     inherit gtk version;
     isFirefox3Like = true;
+    broken = true;
   };
 }

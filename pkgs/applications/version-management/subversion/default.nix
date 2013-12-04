@@ -67,6 +67,9 @@ stdenv.mkDerivation rec {
         make install
         cd -
     fi
+
+    mkdir -p $out/share/bash-completion/completions
+    cp tools/client-side/bash_completion $out/share/bash-completion/completions/subversion
   '';
 
   inherit perlBindings pythonBindings;
@@ -77,6 +80,6 @@ stdenv.mkDerivation rec {
     description = "A version control system intended to be a compelling replacement for CVS in the open source community";
     homepage = http://subversion.apache.org/;
     maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

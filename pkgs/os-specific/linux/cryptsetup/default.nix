@@ -5,11 +5,11 @@
 assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
-  name = "cryptsetup-1.5.1";
+  name = "cryptsetup-1.6.2";
 
   src = fetchurl {
     url = "http://cryptsetup.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "0dib3nw6ifd7d7hr9k4iyaha3hz0pkzairqa38l3fndkr9w3zlhn";
+    sha256 = "16hh7v8bsqy0i1wlaj03kwqjv3liffkvg06lk75lng9hk00kywhm";
   };
 
   configureFlags = [ "--enable-cryptsetup-reencrypt" ]

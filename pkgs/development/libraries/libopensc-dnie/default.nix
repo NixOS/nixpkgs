@@ -1,12 +1,10 @@
-{stdenv, fetchurl, writeScript, patchelf, glib, opensc, openssl, openct, libtool, pcsclite,
-zlib}:
-
-# Version 1.4.6-2 works only with opensc 0.11.7
-assert opensc.name == "opensc-0.11.7";
+{ stdenv, fetchurl, writeScript, patchelf, glib, opensc, openssl, openct
+, libtool, pcsclite, zlib
+}:
 
 stdenv.mkDerivation rec {
   name = "libopensc-dnie-1.4.6-2";
-  
+
   src = if stdenv.system == "i686-linux" then (fetchurl {
       url = http://www.dnielectronico.es/descargas/PKCS11_para_Sistemas_Unix/1.4.6.Ubuntu_Jaunty_32/Ubuntu_Jaunty_opensc-dnie_1.4.6-2_i386.deb.tar;
       sha256 = "1i6r9ahjr0rkcxjfzkg2rrib1rjsjd5raxswvvfiya98q8rlv39i";
@@ -26,14 +24,14 @@ stdenv.mkDerivation rec {
 
     RPATH=${glib}/lib:${opensc}/lib:${openssl}/lib:${openct}/lib:${libtool}/lib:${pcsclite}/lib:${stdenv.gcc.libc}/lib:${zlib}/lib
 
-    for a in usr/lib/*.so*; do
+    for a in "usr/lib/"*.so*; do
         if ! test -L $a; then
             patchelf --set-rpath $RPATH $a
         fi
     done
 
-    sed -i s,/usr,$out, usr/lib/pkgconfig/*
-   
+    sed -i s,/usr,$out, "usr/lib/pkgconfig/"*
+
     mkdir -p $out
     cp -R usr/lib $out
     cp -R usr/share $out
@@ -50,5 +48,6 @@ stdenv.mkDerivation rec {
     license = "nonfree";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true;
   };
 }

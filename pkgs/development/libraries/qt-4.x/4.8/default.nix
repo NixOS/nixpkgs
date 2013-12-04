@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
     sha256 = "0f51dbgn1dcck8pqimls2qyf1pfmsmyknh767cvw87c3d218ywpb";
   };
 
+  # The version property must be kept because it will be included into the QtSDK package name
+  version = vers;
+
   prePatch = ''
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
@@ -173,6 +176,6 @@ stdenv.mkDerivation rec {
     description = "A cross-platform application framework for C++";
     license     = "GPL/LGPL";
     maintainers = with maintainers; [ lovek323 phreedom sander urkud ];
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
   };
 }

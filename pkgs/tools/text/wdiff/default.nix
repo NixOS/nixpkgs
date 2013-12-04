@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "GNU wdiff, comparing files on a word by word basis";
     license = "GPLv3+";
     maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

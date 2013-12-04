@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pam }:
+{ stdenv, fetchurl, ncurses, pam ? null }:
 
 stdenv.mkDerivation rec {
   name = "screen-4.0.3";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s|/usr/local|/non-existent|g" -e "s|/usr|/non-existent|g" configure Makefile.in */Makefile.in
   '';
 
-  buildInputs = [ ncurses pam ];
+  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam;
 
   doCheck = true;
 

@@ -23,7 +23,7 @@ assert mercurialSupport -> (mercurial != null);
 
 let
   name = "ikiwiki";
-  version = "3.20130518";
+  version = "3.20130904.1";
 
   lib = stdenv.lib;
 in
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}_${version}.tar.gz";
-    sha256 = "00mmxxlbzv6bz3cz3746r5lqwby6liwsg7m3jfba8258y52w13qp";
+    sha256 = "1nxycsz49y6801lbrvazzg7qc9q2vpr2ny1sba26f9gwc00c650h";
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate

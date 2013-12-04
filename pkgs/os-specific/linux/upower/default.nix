@@ -6,11 +6,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "upower-0.9.19";
+  name = "upower-0.9.23";
 
   src = fetchurl {
     url = "http://upower.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "053yahks5c7nwdxwx8q6nqp3mxbqldmc844mzyvc3ws9635zmisl";
+    sha256 = "06wqhab2mn0j4biiwh7mn4kxbxnfnzjkxvhpgvnlpaz9m2q54cj3";
   };
 
   buildInputs =
@@ -18,14 +18,6 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional useSystemd systemd;
 
   nativeBuildInputs = [ pkgconfig ];
-
-  configureFlags =
-    [ "--with-backend=linux" "--localstatedir=/var" ]
-    ++ stdenv.lib.optional useSystemd
-    [ "--enable-systemd"
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-      "--with-systemdutildir=$(out)/lib/systemd/system-sleep"
-    ];
 
   preConfigure =
     ''
@@ -35,6 +27,17 @@ stdenv.mkDerivation rec {
       substituteInPlace src/notify-upower.sh \
         --replace /usr/bin/dbus-send ${dbus_tools}/bin/dbus-send
     '';
+
+  configureFlags =
+    [ "--with-backend=linux" "--localstatedir=/var"
+      "--enable-deprecated" # needed for Xfce (Nov 2013)
+    ]
+    ++ stdenv.lib.optional useSystemd
+    [ "--enable-systemd"
+      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+      "--with-systemdutildir=$(out)/lib/systemd/system-sleep"
+      "--with-udevrulesdir=$(out)/lib/udev/rules.d"
+    ];
 
   NIX_CFLAGS_LINK = "-lgcc_s";
 

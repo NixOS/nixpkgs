@@ -13,6 +13,7 @@
 , dc1394Support ? false, libdc1394 ? null
 , x11grabSupport ? false, libXext ? null, libXfixes ? null
 , playSupport ? true, SDL ? null
+, freetypeSupport ? true, freetype ? null, fontconfig ? null
 }:
 
 assert speexSupport -> speex != null;
@@ -27,6 +28,7 @@ assert vaapiSupport -> libva != null;
 assert faacSupport -> faac != null;
 assert x11grabSupport -> libXext != null && libXfixes != null;
 assert playSupport -> SDL != null;
+assert freetypeSupport -> freetype != null;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-1.2.3";
@@ -59,7 +61,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree"
     ++ stdenv.lib.optional dc1394Support "--enable-libdc1394"
     ++ stdenv.lib.optional x11grabSupport "--enable-x11grab"
-    ++ stdenv.lib.optional playSupport "--enable-ffplay";
+    ++ stdenv.lib.optional playSupport "--enable-ffplay"
+    ++ stdenv.lib.optional freetypeSupport "--enable-libfreetype --enable-fontconfig";
 
   buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib texinfo perl ]
     ++ stdenv.lib.optional mp3Support lame
@@ -75,7 +78,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional faacSupport faac
     ++ stdenv.lib.optional dc1394Support libdc1394
     ++ stdenv.lib.optionals x11grabSupport [ libXext libXfixes ]
-    ++ stdenv.lib.optional playSupport SDL;
+    ++ stdenv.lib.optional playSupport SDL
+    ++ stdenv.lib.optionals freetypeSupport [ freetype fontconfig ];
 
   enableParallelBuilding = true;
 

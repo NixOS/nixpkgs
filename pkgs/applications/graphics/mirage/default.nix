@@ -17,6 +17,10 @@ buildPythonPackage rec {
 
     buildInputs = [ stdenv libX11 gettext ];
 
+    patchPhase = ''
+      sed -i "s@/usr/local/share/locale@$out/share/locale@" mirage.py
+    '';
+
     pythonPath = [ pygtk pil ];
 
     meta = {

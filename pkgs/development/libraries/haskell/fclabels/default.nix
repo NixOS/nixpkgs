@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "fclabels";
-  version = "2.0.0.2";
-  sha256 = "1c706v10g4av7jxiw3x4n1hg9h7sbwcnrj676b1q0rcb3pd32kz6";
+  version = "2.0.0.5";
+  sha256 = "1xg0bvk6m981v05j3jp35hyclfilnic1q83kla8zlbnmdpqljqdb";
   buildDepends = [ mtl transformers ];
   meta = {
     homepage = "https://github.com/sebastiaanvisser/fclabels";

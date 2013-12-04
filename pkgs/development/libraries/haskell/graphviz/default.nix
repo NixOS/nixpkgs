@@ -15,7 +15,7 @@ cabal.mkDerivation (self: {
     transformers wlPprintText
   ];
   patchPhase = ''
-    sed -i -e 's|polyparse.*,|polyparse,|' graphviz.cabal
+    sed -i -e 's|polyparse.*,|polyparse,|' -e 's|dlist ==.*|dlist|' graphviz.cabal
   '';
   doCheck = false;
   meta = {

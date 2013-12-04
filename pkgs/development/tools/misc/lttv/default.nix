@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, gtk2, popt, babeltrace }:
 
 stdenv.mkDerivation rec {
-  name = "lttv-1.5-beta1";
+  name = "lttv-1.5";
 
   src = fetchurl {
     url = "http://lttng.org/files/packages/${name}.tar.bz2";
-    sha256 = "0cz69q189wndwpvic0l6wvzl1nsfqadbrigaaxgzij72r7n89sfc";
+    sha256 = "1faldxnh9dld5k0vxckwpqw241ya1r2zv286l6rpgqr500zqw7r1";
   };
 
   buildInputs = [ pkgconfig glib gtk2 popt babeltrace ];

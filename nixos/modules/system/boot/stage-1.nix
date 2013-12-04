@@ -328,7 +328,12 @@ in
 
   };
 
-  config = {
+  config = mkIf (!config.boot.isContainer) {
+
+    assertions = singleton
+      { assertion = any (fs: fs.mountPoint == "/") (attrValues config.fileSystems);
+        message = "The ‘fileSystems’ option does not specify your root file system.";
+      };
 
     system.build.bootStage1 = bootStage1;
     system.build.initialRamdisk = initialRamdisk;

@@ -57,6 +57,13 @@ let cfg = config.services.xserver.synaptics; in
         description = "Whether to enable tap buttons.";
       };
 
+      buttonsMap = mkOption {
+        default = [1 2 3];
+        example = [1 3 2];
+        description = "Remap touchpad buttons.";
+        apply = map toString;
+      };
+
       palmDetect = mkOption {
         default = false;
         example = true;
@@ -104,10 +111,13 @@ let cfg = config.services.xserver.synaptics; in
           Option "MinSpeed" "${cfg.minSpeed}"
           Option "MaxSpeed" "${cfg.maxSpeed}"
           Option "AccelFactor" "${cfg.accelFactor}"
-          Option "TapButton1" "${if cfg.tapButtons then "1" else "0"}"
-          Option "TapButton2" "${if cfg.tapButtons then "2" else "0"}"
-          Option "TapButton3" "${if cfg.tapButtons then "3" else "0"}"
           ${if cfg.tapButtons then "" else ''Option "MaxTapTime" "0"''}
+          Option "TapButton1" "${builtins.elemAt cfg.buttonsMap 0}"
+          Option "TapButton2" "${builtins.elemAt cfg.buttonsMap 1}"
+          Option "TapButton3" "${builtins.elemAt cfg.buttonsMap 2}"
+          Option "ClickFinger1" "${builtins.elemAt cfg.buttonsMap 0}"
+          Option "ClickFinger2" "${builtins.elemAt cfg.buttonsMap 1}"
+          Option "ClickFinger3" "${builtins.elemAt cfg.buttonsMap 2}"
           Option "VertTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
           Option "HorizTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
           Option "VertEdgeScroll" "${if cfg.vertEdgeScroll then "1" else "0"}"

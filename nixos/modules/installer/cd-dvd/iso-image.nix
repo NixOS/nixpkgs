@@ -44,31 +44,29 @@ let
 
 
   # The efi boot image
+  efiDir = pkgs.runCommand "efi-directory" {} ''
+    mkdir -p $out/efi/boot
+    cp -v ${pkgs.gummiboot}/lib/gummiboot/gummiboot${targetArch}.efi $out/efi/boot/boot${targetArch}.efi
+    mkdir -p $out/loader/entries
+    echo "title NixOS LiveCD" > $out/loader/entries/nixos-livecd.conf
+    echo "linux /boot/bzImage" >> $out/loader/entries/nixos-livecd.conf
+    echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd.conf
+    echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> $out/loader/entries/nixos-livecd.conf
+    echo "default nixos-livecd" > $out/loader/loader.conf
+    echo "timeout 5" >> $out/loader/loader.conf
+  '';
+
   efiImg = pkgs.runCommand "efi-image_eltorito" { buildInputs = [ pkgs.mtools ]; }
     ''
       #Let's hope 10M is enough
       dd bs=2048 count=5120 if=/dev/zero of="$out"
       ${pkgs.dosfstools}/sbin/mkfs.vfat "$out"
-      mmd -i "$out" efi
-      mmd -i "$out" efi/boot
-      mmd -i "$out" efi/nixos
-      mmd -i "$out" loader
-      mmd -i "$out" loader/entries
+      mcopy -svi "$out" ${efiDir}/* ::
+      mmd -i "$out" boot
       mcopy -v -i "$out" \
-        ${pkgs.gummiboot}/lib/gummiboot/gummiboot${targetArch}.efi \
-        ::efi/boot/boot${targetArch}.efi
+        ${config.boot.kernelPackages.kernel}/bzImage ::boot/bzImage
       mcopy -v -i "$out" \
-        ${config.boot.kernelPackages.kernel}/bzImage ::bzImage
-      mcopy -v -i "$out" \
-        ${config.system.build.initialRamdisk}/initrd ::efi/nixos/initrd
-      echo "title NixOS LiveCD" > boot-params
-      echo "linux /bzImage" >> boot-params
-      echo "initrd /efi/nixos/initrd" >> boot-params
-      echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> boot-params
-      mcopy -v -i "$out" boot-params ::loader/entries/nixos-livecd.conf
-      echo "default nixos-livecd" > boot-params
-      echo "timeout 5" >> boot-params
-      mcopy -v -i "$out" boot-params ::loader/loader.conf
+        ${config.system.build.initialRamdisk}/initrd ::boot/initrd
     '';
 
   targetArch = if pkgs.stdenv.isi686 then
@@ -262,6 +260,12 @@ in
       ] ++ optionals config.isoImage.makeEfiBootable [
         { source = efiImg;
           target = "/boot/efi.img";
+        }
+        { source = "${efiDir}/efi";
+          target = "/efi";
+        }
+        { source = "${efiDir}/loader";
+          target = "/loader";
         }
       ] ++ mapAttrsToList (n: v: { source = v; target = "/boot/${n}"; }) config.boot.loader.grub.extraFiles;
 

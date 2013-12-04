@@ -145,7 +145,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf (!config.boot.isContainer) {
 
     system.build = { inherit kernel; };
 
@@ -230,9 +230,10 @@ in
       { description = "Load Kernel Modules";
         wantedBy = [ "sysinit.target" "multi-user.target" ];
         before = [ "sysinit.target" "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
         unitConfig =
-          { DefaultDependencies = "no";
-            Conflicts = "shutdown.target";
+          { DefaultDependencies = false;
+            ConditionCapability = "CAP_SYS_MODULE";
           };
         serviceConfig =
           { Type = "oneshot";

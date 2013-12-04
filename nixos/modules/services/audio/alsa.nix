@@ -55,6 +55,7 @@ in
       { description = "Store Sound Card State";
         wantedBy = [ "multi-user.target" ];
         unitConfig.RequiresMountsFor = "/var/lib/alsa";
+        unitConfig.ConditionVirtualization = "!systemd-nspawn";
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
