@@ -1,11 +1,11 @@
 {stdenv, fetchurl, eventlog, pkgconfig, libestr, libee, json_c, libuuid, zlib, gnutls}:
 
 stdenv.mkDerivation {
-  name = "rsyslog-7.2.6";
+  name = "rsyslog-7.2.7";
 
   src = fetchurl {
-    url = http://www.rsyslog.com/files/download/rsyslog/rsyslog-7.2.6.tar.gz;
-    sha256 = "19a5c60816ebce6c86468eb8c5fe1c4cc1febf23c9167ce59d2327fe5e047ed9";
+    url = http://www.rsyslog.com/files/download/rsyslog/rsyslog-7.2.7.tar.gz;
+    sha256 = "0vgrbbklsvnwcy0m0kbxcj5lhpn2k9bsv0lh0vnyn6hc2hx56cs8";
   };
 
   buildInputs = [pkgconfig libestr libee json_c libuuid zlib gnutls];
