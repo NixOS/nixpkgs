@@ -1,4 +1,4 @@
-{stdenv, fetchurl, autoconf, automake, zlib, pcre, w3m}:
+{ stdenv, fetchurl, autoreconfHook, zlib, pcre, w3m, man }:
 
 stdenv.mkDerivation {
   name = "privoxy-3.0.21";
@@ -8,10 +8,13 @@ stdenv.mkDerivation {
     sha256 = "1f6xb7aa47p90c26vqaw74y6drs9gpnhxsgby3mx0awdjh0ydisy";
   };
 
-  buildInputs = [automake autoconf zlib pcre w3m];
+  buildInputs = [ autoreconfHook zlib pcre w3m man ];
 
-  preConfigure = ''
-    autoheader
-    autoconf
-  '';
+  meta = with stdenv.lib; {
+    homepage = http://www.privoxy.org/;
+    description = "Non-caching web proxy with advanced filtering capabilities";
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    maintainers = [ maintainers.phreedom ];
+  };
 }

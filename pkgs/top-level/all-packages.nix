@@ -1868,9 +1868,7 @@ let
 
   sitecopy = callPackage ../tools/networking/sitecopy { };
 
-  privoxy = callPackage ../tools/networking/privoxy {
-    autoconf = autoconf213;
-  };
+  privoxy = callPackage ../tools/networking/privoxy { };
 
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
