@@ -1,5 +1,5 @@
 { stdenv, fetchurl, qt4, boost, speechd, protobuf, libsndfile,
- speex, libopus, avahi, pkgconfig
+ speex, libopus, avahi, pkgconfig,
 jackSupport ? false, 
 jackaudio ? null }:
 
