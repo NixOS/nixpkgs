@@ -9709,14 +9709,16 @@ let
 
       quassel = callPackage ../applications/networking/irc/quassel { };
 
-      quasselDaemon = appendToName "daemon" (self.quassel.override {
+      quasselDaemon = (self.quassel.override {
         monolithic = false;
         daemon = true;
+        tag = "-daemon";
       });
 
-      quasselClient = appendToName "client" (self.quassel.override {
+      quasselClient = (self.quassel.override {
         monolithic = false;
         client = true;
+        tag = "-client";
       });
 
       rekonq = callPackage ../applications/networking/browsers/rekonq { };
