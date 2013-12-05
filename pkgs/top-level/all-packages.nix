@@ -3597,6 +3597,8 @@ let
 
   doxygen_gui = callPackage ../development/tools/documentation/doxygen { };
 
+  drush = callPackage ../development/tools/misc/drush { };
+
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
 
   elfutils = callPackage ../development/tools/misc/elfutils { };
