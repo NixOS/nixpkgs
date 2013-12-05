@@ -140,6 +140,15 @@ in {
     };
   };
 
+  pt = buildDict {
+    shortName = "pt-0.50-1";
+    fullName = "Portuguese";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/pt/aspell-pt-0.50-1.tar.bz2;
+      sha256 = "07xzlnxxzadqsapng29p2gdwj0bijv10wpjnqlwzmkxnx6fxzkcy";
+    };
+  };
+
   ru = buildDict {
     shortName = "ru-0.99f7-1";
     fullName = "Russian";
