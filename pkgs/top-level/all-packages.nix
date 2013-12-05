@@ -2979,6 +2979,8 @@ let
 
     ocaml_react = callPackage ../development/ocaml-modules/react { };
 
+    ocamlsdl= callPackage ../development/ocaml-modules/ocamlsdl { };
+
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
 
     ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
