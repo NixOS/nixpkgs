@@ -4,6 +4,7 @@
 , enableLibraryProfiling ? false
 , enableSharedLibraries ? false
 , enableSharedExecutables ? false
+, enableStaticLibraries ? true
 , enableCheckPhase ? stdenv.lib.versionOlder "7.4" ghc.version
 }:
 
@@ -24,6 +25,9 @@ assert enableSharedExecutables -> versionOlder "7.4" ghc.version;
 
 # Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
 assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
+
+# Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
+assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
 {
   mkDerivation =
@@ -128,6 +132,10 @@ assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
             # and run any regression test suites the package might have
             doCheck = enableCheckPhase;
 
+            # pass the '--enable-library-vanilla' flag to cabal in the
+            # configure stage to enable building shared libraries
+            inherit enableStaticLibraries;
+
             # pass the '--enable-shared' flag to cabal in the configure
             # stage to enable building shared libraries
             inherit enableSharedLibraries;
@@ -140,6 +148,7 @@ assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
               (enableFeature self.enableSplitObjs "split-objs")
               (enableFeature enableLibraryProfiling "library-profiling")
               (enableFeature self.enableSharedLibraries "shared")
+              (optional (versionOlder "7" ghc.version) (enableFeature self.enableStaticLibraries "library-vanilla"))
               (optional (versionOlder "7.4" ghc.version) (enableFeature self.enableSharedExecutables "executable-dynamic"))
               (optional (versionOlder "7" ghc.version) (enableFeature self.doCheck "tests"))
             ];

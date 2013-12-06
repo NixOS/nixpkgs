@@ -63,6 +63,7 @@
 , enableSharedLibraries ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
 , enableSharedExecutables ? pkgs.stdenv.lib.versionOlder "7.7" ghc.version
 , enableCheckPhase ? pkgs.stdenv.lib.versionOlder "7.4" ghc.version
+, enableStaticLibraries ? true
 }:
 
 # We redefine callPackage to take into account the new scope. The optional
@@ -113,10 +114,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   # packages. It isn't the Cabal library, which is spelled "Cabal".
 
   cabal = callPackage ../build-support/cabal {
-    inherit enableLibraryProfiling;
-    inherit enableSharedLibraries;
-    inherit enableSharedExecutables;
-    inherit enableCheckPhase;
+    inherit enableLibraryProfiling enableCheckPhase
+      enableStaticLibraries enableSharedLibraries enableSharedExecutables;
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
   };
 
