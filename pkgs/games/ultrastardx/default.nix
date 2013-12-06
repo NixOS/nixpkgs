@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   # I even do a trick on lib/lib64 for libgcc, that I expect it will work.
   preBuild = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${SDL}/lib -rpath ${SDL_image}/lib -rpath ${libpng}/lib -rpath ${freetype}/lib -rpath ${portaudio}/lib -rpath ${ffmpeg}/lib -rpath ${zlib}/lib -rpath ${sqlite}/lib -rpath ${libX11}/lib -rpath ${pcre}/lib -rpath ${stdenv.gcc.gcc}/lib64 -rpath ${stdenv.gcc.gcc}/lib"
+
+    sed -i 414,424d Makefile
   '';
 
   # dlopened libgcc requires the rpath not to be shrinked
