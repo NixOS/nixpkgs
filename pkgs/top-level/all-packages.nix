@@ -4109,6 +4109,10 @@ let
       else stdenv;
   };
 
+  ffmpeg_0_6 = callPackage ../development/libraries/ffmpeg/0.6.nix {
+    vpxSupport = !stdenv.isMips;
+  };
+
   ffmpeg_0_6_90 = callPackage ../development/libraries/ffmpeg/0.6.90.nix {
     vpxSupport = !stdenv.isMips;
   };
@@ -9530,6 +9534,7 @@ let
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
   ultrastardx = callPackage ../games/ultrastardx {
+    ffmpeg = ffmpeg_0_6;
     lua = lua5;
   };
 
