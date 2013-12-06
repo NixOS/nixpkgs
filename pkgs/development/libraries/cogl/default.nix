@@ -3,10 +3,10 @@
 , pangoSupport ? true, pango, cairo }:
 
 stdenv.mkDerivation rec {
-  name = "cogl-1.8.2";
+  name = "cogl-1.9.6";
 
   src = fetchurl {
-    url = mirror://gnome/sources/cogl/1.8/cogl-1.8.2.tar.xz;
+    url = mirror://gnome/sources/cogl/1.9/cogl-1.9.6.tar.xz;
     sha256 = "1ix87hz3qxqysqwx58wbc46lzchlmfs08fjzbf3l6mmsqj8gs9pc";
   };
 
