@@ -9586,17 +9586,16 @@ let
 
 
   ### DESKTOP ENVIRONMENTS
-  
-   cinnamon = recurseIntoAttrs {
-    cinnamon-translations  = callPackage ../desktops/cinnamon/cinnamon-translations.nix { };
-    }; 
 
-  cinnamon = recurseIntoAttrs {
+  cinnamon = recurseIntoAttrs rec {
+    callPackage = newScope pkgs.cinnamon;
+    inherit (gnome3) gnome_common;
+
+    cinnamon-desktop = callPackage ../desktops/cinnamon/cinnamon-desktop.nix { };
+
+    cinnamon-translations = callPackage ../desktops/cinnamon/cinnamon-translations.nix { };
+
     cjs = callPackage ../desktops/cinnamon/cjs.nix { };
-
-    cinnamon-desktop = callPackage ../desktops/cinnamon/cinnamon-desktop.nix {
-      inherit (gnome3) gnome_common;
-    };
   };
 
   enlightenment = callPackage ../desktops/enlightenment { };
