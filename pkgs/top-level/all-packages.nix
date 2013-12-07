@@ -9576,12 +9576,6 @@ let
 
   ### DESKTOP ENVIRONMENTS
 
-  cinnamon = recurseIntoAttrs rec{
-    callPackage=pkgs.newScope pkgs.cinnamon;
-    inherit (gnome3) gnome_common ; 
-    gnome_menus = callPackage ../desktops/cinnamon/gnome-menus.nix { } ;
- };
-
   enlightenment = callPackage ../desktops/enlightenment { };
 
   e17 = recurseIntoAttrs (
