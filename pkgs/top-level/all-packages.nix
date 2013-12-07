@@ -8646,6 +8646,8 @@ let
     inherit (pkgs.kde4) kdelibs;
   };
 
+  opusfile = callPackage ../applications/audio/opusfile { };
+
   opusTools = callPackage ../applications/audio/opus-tools { };
 
   pan = callPackage ../applications/networking/newsreaders/pan {
