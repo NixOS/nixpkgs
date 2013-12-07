@@ -2,11 +2,11 @@
 , libjpeg, netpbm}:
 
 stdenv.mkDerivation rec {
-  name = "xplanet-1.2.2";
+  name = "xplanet-1.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/xplanet/${name}.tar.gz";
-    sha256 = "1jnkrly9njkibxqbg5im4pq9cqjzwmki6jzd318dvlfmnicqr3vg";
+    sha256 = "0hml2v228wi2r61m1pgka7h96rl92b6apk0iigm62miyp4mp9ys4";
   };
 
   buildInputs = [ pkgconfig freetype pango libpng libtiff giflib libjpeg netpbm ];
