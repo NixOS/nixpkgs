@@ -51,7 +51,10 @@ in
 
       hostName = mkOption {
         type = types.str;
-        description = ''Host name advertised on the LAN.'';
+        description = ''
+          Host name advertised on the LAN. If not set, avahi will use the value
+          of config.networking.hostName.
+        '';
       };
 
       browseDomains = mkOption {
