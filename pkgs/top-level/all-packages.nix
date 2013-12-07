@@ -535,9 +535,7 @@ let
 
   bochs = callPackage ../applications/virtualization/bochs { };
 
-  boomerang = callPackage ../development/tools/boomerang {
-    stdenv = overrideGCC stdenv gcc47;
-  };
+  boomerang = callPackage ../development/tools/boomerang { };
 
   bootchart = callPackage ../tools/system/bootchart { };
 
@@ -1064,7 +1062,7 @@ let
 
   gtmess = callPackage ../applications/networking/instant-messengers/gtmess { };
 
-  gummiboot = callPackage ../tools/misc/gummiboot { stdenv = overrideGCC stdenv gcc47; };
+  gummiboot = callPackage ../tools/misc/gummiboot { };
 
   gupnp = callPackage ../development/libraries/gupnp {
     inherit (gnome) libsoup;
@@ -2249,7 +2247,7 @@ let
   clangUnwrapped = callPackage ../development/compilers/llvm/clang.nix {
     stdenv = if stdenv.isDarwin
       then stdenvAdapters.overrideGCC stdenv gccApple
-      else stdenvAdapters.overrideGCC stdenv gcc47;
+      else stdenv;
   };
 
   clang = wrapClang clangUnwrapped;
@@ -4411,9 +4409,7 @@ let
 
   gnet = callPackage ../development/libraries/gnet { };
 
-  gnu-efi = callPackage ../development/libraries/gnu-efi {
-    stdenv = overrideGCC stdenv gcc47;
-  };
+  gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
   gnutls = callPackage ../development/libraries/gnutls {
     guileBindings = config.gnutls.guile or true;
