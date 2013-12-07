@@ -669,7 +669,7 @@ patchShebangs() {
     local newInterpreterLine
 
     for f in $(find "$dir" -type f -perm +0100); do
-        if [ $(head -1 "$f" | head -c +2) != '#!' ]; then
+        if [ "$(head -1 "$f" | head -c +2)" != '#!' ]; then
             # missing shebang => not a script
             continue
         fi
