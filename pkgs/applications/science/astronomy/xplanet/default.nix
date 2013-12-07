@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig freetype pango libpng libtiff giflib libjpeg netpbm ];
 
+  patches = [ ./giflib.patch ];
+
   meta = {
     description = "Renders an image of the earth or other planets into the X root window";
     homepage = http://xplanet.sourceforge.net;
