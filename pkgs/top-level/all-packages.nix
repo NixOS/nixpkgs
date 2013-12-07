@@ -5341,9 +5341,7 @@ let
     includeTools = true;
   };
 
-  ntrack = callPackage ../development/libraries/ntrack {
-    libnl = libnl_3_2_19;
-  };
+  ntrack = callPackage ../development/libraries/ntrack { };
 
   ode = builderDefsPackage (import ../development/libraries/ode) { };
 
