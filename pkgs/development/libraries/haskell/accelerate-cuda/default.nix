@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     description = "Accelerate backend for NVIDIA GPUs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

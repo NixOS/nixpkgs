@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, ghc, perl, gmp, ncurses }:
+{ stdenv, fetchurl, ghc, perl, gmp, ncurses, happy, alex }:
 
 stdenv.mkDerivation rec {
-  version = "7.7.20130828";
+  version = "7.7.20131202";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "http://darcs.haskell.org/ghcBuilder/uploads/tn23/${name}-src.tar.bz2";
-    sha256 = "180nkd77kz3mv4g7yq8ipx34p5q8k714l0z2527y49lghy118jzv";
+    url = "http://cryp.to/${name}.tar.xz";
+    sha256 = "1gnp5c3x7dbaz7s2yvkw2fmvqh5by2gpp0zlcyj8p2gv13gxi2cb";
   };
 
-  buildInputs = [ ghc perl gmp ncurses ];
+  buildInputs = [ ghc perl gmp ncurses happy alex ];
 
   enableParallelBuilding = true;
 

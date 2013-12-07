@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network";
-  version = "2.4.2.0";
-  sha256 = "1v6iwww8xym0sr2593ri0aa6gcs6n2975fi9gaz9n7rizbqm88qs";
+  version = "2.4.2.1";
+  sha256 = "1rm8zlpy6738wxagk1xmlvawn807cd4xf2fn0hgjqj12scviz60p";
   buildDepends = [ parsec ];
   testDepends = [
     HUnit testFramework testFrameworkHunit testFrameworkQuickcheck2

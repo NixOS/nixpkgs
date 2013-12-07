@@ -2,11 +2,11 @@
 stdenv.mkDerivation rec {
 
   name = "polipo-${version}";
-  version = "1.0.4";
+  version = "1.0.4.1";
 
   src = fetchurl {
     url = "http://freehaven.net/~chrisd/polipo/${name}.tar.gz";
-    sha256 = "0dh4kjj6vfb75nxv7q3y2kvxsq8cwrd8svsrypa810jln8x8lign";
+    sha256 = "1ykwkyvmdw6fsaj2hc40971pkwf60hvi9c43whijim00qvgbyvwd";
   };
 
   buildInputs = [ texinfo ];

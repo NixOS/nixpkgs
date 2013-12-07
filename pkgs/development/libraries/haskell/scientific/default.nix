@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "1x3c8z1d7nhr1z5dlbs60pxfrgclfbwjhrkpvr0jnz0fpy2m9x5r";
   buildDepends = [ deepseq hashable text ];
   testDepends = [ smallcheck tasty tastySmallcheck text ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/basvandijk/scientific";
     description = "Arbitrary-precision floating-point numbers represented using scientific notation";
@@ -15,5 +16,4 @@ cabal.mkDerivation (self: {
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
-  doCheck = false;
 })

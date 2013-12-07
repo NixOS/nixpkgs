@@ -7,11 +7,11 @@
 assert qt4Support -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "avahi-0.6.30";
+  name = "avahi-0.6.31";
 
   src = fetchurl {
     url = "${meta.homepage}/download/${name}.tar.gz";
-    sha256 = "07zzaxs81rbrfhj0rnq616c3j37f3g84dn7d4q3h5l1r4dn33r7r";
+    sha256 = "0j5b5ld6bjyh3qhd2nw0jb84znq0wqai7fsrdzg7bpg24jdp2wl3";
   };
 
   patches = [ ./no-mkdir-localstatedir.patch ];
@@ -35,6 +35,13 @@ stdenv.mkDerivation rec {
     sed -i '20 i\
     #define __APPLE_USE_RFC_2292' \
     avahi-core/socket.c
+  '';
+
+  postInstall = ''
+    # Maintain compat for mdnsresponder and howl
+    ${if withLibdnssdCompat then "ln -s avahi-compat-libdns_sd/dns_sd.h $out/include/dns_sd.h" else ""}
+    ln -s avahi-compat-howl $out/include/howl
+    ln -s avahi-compat-howl.pc $out/lib/pkgconfig/howl.pc
   '';
 
   meta = with stdenv.lib; {
