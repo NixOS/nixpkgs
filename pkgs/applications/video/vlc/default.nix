@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xz, bzip2, perl, xlibs, libdvdnav, libbluray
 , zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
-, pkgconfig, dbus, fribidi, qt4, freefont_ttf
+, pkgconfig, dbus, fribidi, qt4, freefont_ttf, libebml, libmatroska
 , libvorbis, libtheora, speex, lua5, libgcrypt, libupnp
 , libcaca, pulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, udev, gnutls, avahi, libcddb, jackaudio, SDL, SDL_image
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       udev gnutls avahi libcddb jackaudio SDL SDL_image libmtp unzip taglib
       libkate libtiger libv4l samba liboggz libass libdvbpsi libva
       xlibs.xlibs xlibs.libXv xlibs.libXvMC xlibs.libXpm xlibs.xcbutilkeysyms
-      libdc1394 libraw1394 libopus
+      libdc1394 libraw1394 libopus libebml libmatroska
     ];
 
   nativeBuildInputs = [ pkgconfig ];
