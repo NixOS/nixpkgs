@@ -19,8 +19,12 @@ stdenv.mkDerivation (rec {
   };
 
   configureFlags = ''
-    --with-shared --includedir=''${out}/include --without-debug
+    --with-shared --without-debug
     ${if unicode then "--enable-widec" else ""}${if cxx then "" else "--without-cxx-binding"}
+  '';
+
+  preConfigure = ''
+    export configureFlags="$configureFlags --includedir=$out/include"
   '';
 
   selfNativeBuildInput = true;
