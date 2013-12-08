@@ -2923,6 +2923,7 @@ let
 
     camlimages = callPackage ../development/ocaml-modules/camlimages {
       libpng = libpng12;
+      giflib = giflib_4_1;
     };
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
@@ -4329,6 +4330,7 @@ let
   glsurf = callPackage ../applications/science/math/glsurf {
     inherit (ocamlPackages) lablgl findlib camlimages ocaml_mysql mlgmp;
     libpng = libpng12;
+    giflib = giflib_4_1;
   };
 
   gmime = callPackage ../development/libraries/gmime { };
@@ -7458,7 +7460,9 @@ let
 
   arora = callPackage ../applications/networking/browsers/arora { };
 
-  aseprite = callPackage ../applications/editors/aseprite { };
+  aseprite = callPackage ../applications/editors/aseprite {
+    giflib = giflib_4_1;
+  };
 
   audacious = callPackage ../applications/audio/audacious { };
 
@@ -10338,6 +10342,7 @@ let
 
   vice = callPackage ../misc/emulators/vice {
     libX11 = xlibs.libX11;
+    giflib = giflib_4_1;
   };
 
   viewnior = callPackage ../applications/graphics/viewnior { };
