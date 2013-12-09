@@ -42,6 +42,7 @@ assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
           x : (removeAttrs x internalAttrs) // {
                 buildInputs           = filter (y : ! (y == null)) x.buildInputs;
                 propagatedBuildInputs = filter (y : ! (y == null)) x.propagatedBuildInputs;
+                propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
                 doCheck               = enableCheckPhase && x.doCheck;
               };
 
@@ -91,6 +92,10 @@ assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
             # we make sure that propagatedBuildInputs is defined, so that we don't
             # have to check for its existence
             propagatedBuildInputs = if self.isLibrary then self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends else [];
+
+            # By default, also propagate all dependencies to the user environment. This is required, otherwise packages would be broken, because
+            # GHC also needs all dependencies to be available.
+            propagatedUserEnvPkgs = if self.isLibrary then self.buildDepends else [];
 
             # library directories that have to be added to the Cabal files
             extraLibDirs = [];
