@@ -1771,7 +1771,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
-  prettyShow = callPackage ../development/libraries/haskell/pretty-show {};
+  prettyShow = callPackage ../development/libraries/haskell/pretty-show {
+    happy = self.happy_1_19_2;
+  };
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
