@@ -1,14 +1,14 @@
-{ cabal, blazeBuilder, byteorder, caseInsensitive, dateCache
-, doctest, fastLogger, httpTypes, network, wai, waiTest
+{ cabal, blazeBuilder, byteorder, caseInsensitive, doctest
+, fastLogger, httpTypes, network, unixTime, wai, waiTest
 }:
 
 cabal.mkDerivation (self: {
   pname = "wai-logger";
-  version = "0.3.2";
-  sha256 = "0las9jb8cxdsyh1mnrhx48yfbjw5f2x4hhmivhmhzb6qgxnbvma9";
+  version = "2.0.1";
+  sha256 = "1v8n7m314a12421gn10i8vz3nk9sak635dq4nq389sij8w1ihjkw";
   buildDepends = [
-    blazeBuilder byteorder caseInsensitive dateCache fastLogger
-    httpTypes network wai
+    blazeBuilder byteorder caseInsensitive fastLogger httpTypes network
+    unixTime wai
   ];
   testDepends = [ doctest waiTest ];
   meta = {
