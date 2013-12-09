@@ -992,6 +992,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   fileLocation = callPackage ../development/libraries/haskell/file-location {};
 
+  extensibleEffects = callPackage ../development/libraries/haskell/extensible-effects {};
+
   extensibleExceptions_0_1_1_0 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.0.nix {};
   extensibleExceptions_0_1_1_2 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.2.nix {};
   extensibleExceptions_0_1_1_3 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.3.nix {};
