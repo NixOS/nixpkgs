@@ -22,10 +22,6 @@ stdenv.mkDerivation {
     xkeyboard_config libxkbfile libX11 libXrandr libXext
   ];
 
-  postInstall  = ''
-     ${glib}/bin/glib-compile-schemas $out/share/glib-2.0/schemas/
-  '';
-
   meta = {
     homepage = "http://cinnamon.linuxmint.com";
     description = "Library and data for various Cinnamon modules";
