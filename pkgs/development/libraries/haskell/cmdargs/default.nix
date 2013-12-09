@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath transformers ];
+  patchPhase = "touch cmdargs.cabal";
   meta = {
     homepage = "http://community.haskell.org/~ndm/cmdargs/";
     description = "Command line argument processing";
