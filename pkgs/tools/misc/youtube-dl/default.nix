@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://rg3.github.com/youtube-dl/";
+    repositories.git = https://github.com/rg3/youtube-dl.git;
     description = "Command-line tool to download videos from YouTube.com and other sites";
 
     platforms = with stdenv.lib.platforms; linux ++ darwin;
