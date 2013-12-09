@@ -1222,6 +1222,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   httpAttoparsec = callPackage ../development/libraries/haskell/http-attoparsec {};
 
+  httpClient = callPackage ../development/libraries/haskell/http-client {};
+
+  httpClientConduit = callPackage ../development/libraries/haskell/http-client-conduit {};
+
+  httpClientMultipart = callPackage ../development/libraries/haskell/http-client-multipart {};
+
+  httpClientTls = callPackage ../development/libraries/haskell/http-client-tls {};
+
   httpReverseProxy = callPackage ../development/libraries/haskell/http-reverse-proxy {};
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
