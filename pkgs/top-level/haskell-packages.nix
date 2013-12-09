@@ -1361,6 +1361,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   intervals = callPackage ../development/libraries/haskell/intervals {};
 
+  IntervalMap = callPackage ../development/libraries/haskell/IntervalMap {};
+
   ioChoice = callPackage ../development/libraries/haskell/io-choice {};
 
   IORefCAS = callPackage ../development/libraries/haskell/IORefCAS {};
