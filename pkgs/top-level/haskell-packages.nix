@@ -966,6 +966,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   erf = callPackage ../development/libraries/haskell/erf {};
 
+  errorcallEqInstance = callPackage ../development/libraries/haskell/errorcall-eq-instance {};
+
   errors = callPackage ../development/libraries/haskell/errors {};
 
   either = callPackage ../development/libraries/haskell/either {};
