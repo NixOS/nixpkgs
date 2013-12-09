@@ -1,14 +1,19 @@
 { stdenv, fetchurl, fixedPoint ? false }:
 
+let
+  version = "1.1";
+in
 stdenv.mkDerivation rec {
-  name = "libopus-1.0.2";
-  
+  name = "libopus-${version}";
+
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/opus/opus-1.0.2.tar.gz";
-    sha256 = "12npbkrcwvh3fl9l18cwrxwg269cg2j6j7876cc9q0axxvdmwqfs";
+    url = "http://downloads.xiph.org/releases/opus/opus-${version}.tar.gz";
+    sha256 = "158xprn2086arvdib3vbbygz7z6jqkw2nci7nlywzzwallap0wmr";
   };
 
   configureFlags = stdenv.lib.optionalString fixedPoint "--enable-fixed-point";
+
+  doCheck = true;
 
   meta = {
     description = "Open, royalty-free, highly versatile audio codec";

@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "springlobby-${version}";
-  version = "0.176";
+  version = "0.180";
 
   src = fetchurl {
     url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
-    sha256 = "0a5pnd15rlvbkvnz2s0axy3i7m2jlrk91kjpwflnrcqlf42c2rk9";
+    sha256 = "0v2pwrwiwiggyl95rcyfj3pdlwsss5vcmnyzd40r9swb9gyi55na";
   };
 
   buildInputs = [

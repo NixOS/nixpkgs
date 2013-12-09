@@ -1,7 +1,7 @@
 { monolithic ? true # build monolithic amule
 , daemon ? false # build amule daemon
 , httpServer ? false # build web interface for the daemon
-, client ? false # build amule remote gui 
+, client ? false # build amule remote gui
 , fetchurl, stdenv, zlib, wxGTK, perl, cryptopp, libupnp, gettext, libpng ? null
 , pkgconfig, makeWrapper }:
 
@@ -10,7 +10,7 @@ with stdenv;
 let
   # Enable/Disable Feature
   edf = enabled: flag: if enabled then "--enable-" + flag else "--disable-" + flag;
-in 
+in
 mkDerivation rec {
   name = "aMule-2.3.1";
 

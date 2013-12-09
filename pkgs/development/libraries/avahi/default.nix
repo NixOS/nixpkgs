@@ -37,6 +37,13 @@ stdenv.mkDerivation rec {
     avahi-core/socket.c
   '';
 
+  postInstall = ''
+    # Maintain compat for mdnsresponder and howl
+    ${if withLibdnssdCompat then "ln -s avahi-compat-libdns_sd/dns_sd.h $out/include/dns_sd.h" else ""}
+    ln -s avahi-compat-howl $out/include/howl
+    ln -s avahi-compat-howl.pc $out/lib/pkgconfig/howl.pc
+  '';
+
   meta = with stdenv.lib; {
     description = "mDNS/DNS-SD implementation";
     homepage    = http://avahi.org;

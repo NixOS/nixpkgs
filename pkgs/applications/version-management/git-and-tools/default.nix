@@ -83,7 +83,7 @@ rec {
   };
 
   svn2git = import ./svn2git {
-    inherit stdenv fetchgit ruby makeWrapper;
+    inherit stdenv fetchurl ruby makeWrapper;
     git = gitSVN;
   };
 

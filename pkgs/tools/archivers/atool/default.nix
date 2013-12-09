@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.nongnu.org/atool;
     description = "Archive command line helper";
-    platforms = stdenv.lib.platforms.all;
+    hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }
-

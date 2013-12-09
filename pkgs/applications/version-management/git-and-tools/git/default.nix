@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.8.4.3";
+  version = "1.8.5.1";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
-    sha256 = "08fbdxh2cjd4hffm0nydwysh5zh6nrssbi9x01yy0n2y8rqzly0a";
+    sha256 = "0i7fz0b79f3algs68m15wg4bq99ayg1crpy66cqylxq3mzbw8n8m";
   };
 
   patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ];
@@ -141,6 +141,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ simons the-kenny ];
   };
 }
