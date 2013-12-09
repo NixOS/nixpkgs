@@ -107,6 +107,7 @@ in
             # while still being used by the virtual machine. So update the
             # emulator path on each startup to something valid (re-scan $PATH).
             for file in /etc/libvirt/qemu/*.xml; do
+                test -f "$file" || continue
                 # get (old) emulator path from config file
                 emulator=$(grep "^[[:space:]]*<emulator>" "$file" | sed 's,^[[:space:]]*<emulator>\(.*\)</emulator>.*,\1,')
                 # get a (definitely) working emulator path by re-scanning $PATH
