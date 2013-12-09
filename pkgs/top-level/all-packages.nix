@@ -8492,7 +8492,7 @@ let
     jackSupport = config.mumble.jackSupport or false;
   };
 
-  murmur = callPackage ../applications/networking/mumble/murmur.nix { 
+  murmur = callPackage ../applications/networking/mumble/murmur.nix {
     avahi = avahi.override {
       withLibdnssdCompat = true;
     };
@@ -9599,10 +9599,10 @@ let
 
 
   ### DESKTOP ENVIRONMENTS
-  
+
    cinnamon = recurseIntoAttrs {
     cinnamon-translations  = callPackage ../desktops/cinnamon/cinnamon-translations.nix { };
-    }; 
+    };
 
   enlightenment = callPackage ../desktops/enlightenment { };
 
