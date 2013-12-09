@@ -86,9 +86,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3 lua5 perl ];
 
-  postConfigure = ''
-    patchShebangs TOOLS
-  '';
 
 # There are almost no need of "configure flags", but some libraries
 # weren't detected; see the TODO comments below
@@ -99,6 +96,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     python3 ${waf} configure --prefix=$out
+    patchShebangs TOOLS
   '';
 
   buildPhase = ''
