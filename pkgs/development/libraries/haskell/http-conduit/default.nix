@@ -1,31 +1,30 @@
 { cabal, asn1Data, base64Bytestring, blazeBuilder
 , blazeBuilderConduit, caseInsensitive, certificate, conduit
-, cookie, cprngAes, dataDefault, deepseq, failure, filepath, hspec
-, httpTypes, HUnit, liftedBase, mimeTypes, monadControl, mtl
-, network, networkConduit, publicsuffixlist, random, regexCompat
-, resourcet, socks, text, time, tls, tlsExtra, transformers
-, transformersBase, utf8String, void, wai, warp, zlibConduit
+, connection, cookie, cprngAes, dataDefault, deepseq, failure
+, filepath, hspec, httpClient, httpClientConduit
+, httpClientMultipart, httpClientTls, httpTypes, HUnit, liftedBase
+, mimeTypes, monadControl, mtl, network, networkConduit
+, publicsuffixlist, random, regexCompat, resourcet, socks, text
+, time, tls, tlsExtra, transformers, transformersBase, utf8String
+, void, wai, warp, warpTls, zlibConduit
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "1.9.5.2";
-  sha256 = "0andx8ggcwcd39z10yh5j0rmn7ypypgfzaaibbbh2rhp5v28932b";
+  version = "2.0.0.1";
+  sha256 = "1xkq11yylh4mdx8ml69h17fldmfpxclriw1kl0j44vddqdryn6zd";
   buildDepends = [
-    asn1Data base64Bytestring blazeBuilder blazeBuilderConduit
-    caseInsensitive certificate conduit cookie cprngAes dataDefault
-    deepseq failure filepath httpTypes liftedBase mimeTypes
-    monadControl mtl network publicsuffixlist random regexCompat
-    resourcet socks text time tls tlsExtra transformers
-    transformersBase utf8String void zlibConduit
+    conduit httpClient httpClientConduit httpClientTls httpTypes
+    liftedBase resourcet transformers
   ];
   testDepends = [
     asn1Data base64Bytestring blazeBuilder blazeBuilderConduit
-    caseInsensitive certificate conduit cookie cprngAes dataDefault
-    deepseq failure filepath hspec httpTypes HUnit liftedBase mimeTypes
+    caseInsensitive certificate conduit connection cookie cprngAes
+    dataDefault deepseq failure filepath hspec httpClient
+    httpClientMultipart httpTypes HUnit liftedBase mimeTypes
     monadControl mtl network networkConduit publicsuffixlist random
     regexCompat resourcet socks text time tls tlsExtra transformers
-    transformersBase utf8String void wai warp zlibConduit
+    transformersBase utf8String void wai warp warpTls zlibConduit
   ];
   meta = {
     homepage = "http://www.yesodweb.com/book/http-conduit";
