@@ -19,6 +19,7 @@ cabal.mkDerivation (self: {
     liftedBase network networkConduit QuickCheck simpleSendfile time
     transformers unixCompat void wai
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/yesodweb/wai";
     description = "A fast, light-weight web server for WAI applications";
