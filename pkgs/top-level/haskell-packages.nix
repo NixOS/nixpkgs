@@ -167,7 +167,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     split        = self.split_0_2_2;
     stm          = self.stm_2_4_2;
     syb          = self.syb_0_4_1;
-    text         = self.text_0_11_3_1;
+    text         = self.text_1_0_0_0;
     transformers = self.transformers_0_3_0_0;   # this has become a core package in GHC 7.7
     unorderedContainers = self.unorderedContainers_0_2_3_3;
     vector       = self.vector_0_10_9_1;
@@ -2155,7 +2155,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   text_0_11_2_0 = callPackage ../development/libraries/haskell/text/0.11.2.0.nix {};
   text_0_11_2_3 = callPackage ../development/libraries/haskell/text/0.11.2.3.nix {};
   text_0_11_3_1 = callPackage ../development/libraries/haskell/text/0.11.3.1.nix {};
-  text = self.text_0_11_3_1;
+  text_1_0_0_0 = callPackage ../development/libraries/haskell/text/1.0.0.0.nix {};
+  text = self.text_1_0_0_0;
 
   textFormat = callPackage ../development/libraries/haskell/text-format {};
 
