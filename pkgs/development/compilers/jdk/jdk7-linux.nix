@@ -1,6 +1,7 @@
 { swingSupport ? true
 , stdenv
 , requireFile
+, unzip
 , xlibs ? null
 , installjdk ? true
 , pluginSupport ? true
@@ -53,6 +54,8 @@ stdenv.mkDerivation {
       }
     else
       abort "jdk requires i686-linux or x86_64 linux";
+
+  buildInputs = if installjce then [ unzip ] else [];
 
   installPhase = ''
     cd ..
