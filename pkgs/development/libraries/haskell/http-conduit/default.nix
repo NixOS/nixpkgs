@@ -26,6 +26,7 @@ cabal.mkDerivation (self: {
     regexCompat resourcet socks text time tls tlsExtra transformers
     transformersBase utf8String void wai warp warpTls zlibConduit
   ];
+  doCheck = false;
   meta = {
     homepage = "http://www.yesodweb.com/book/http-conduit";
     description = "HTTP client package with conduit interface and HTTPS support";
