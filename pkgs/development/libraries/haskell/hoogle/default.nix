@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     tagsoup text time transformers uniplate wai warp
   ];
   testDepends = [ filepath ];
+  doCheck = false;
   meta = {
     homepage = "http://www.haskell.org/hoogle/";
     description = "Haskell API Search";
