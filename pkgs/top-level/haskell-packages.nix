@@ -1172,6 +1172,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hashtables = callPackage ../development/libraries/haskell/hashtables {};
 
+  haskelldb = callPackage ../development/libraries/haskell/haskelldb {};
+
   haskeline = callPackage ../development/libraries/haskell/haskeline {};
 
   haskelineClass = callPackage ../development/libraries/haskell/haskeline-class {};
