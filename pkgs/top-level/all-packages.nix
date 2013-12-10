@@ -9614,6 +9614,8 @@ let
     callPackage = newScope pkgs.cinnamon;
     inherit (gnome3) gnome_common;
 
+    cinnamon-session = callPackage ../desktops/cinnamon/cinnamon-session.nix{ } ;
+
     cinnamon-desktop = callPackage ../desktops/cinnamon/cinnamon-desktop.nix { };
 
     cinnamon-translations = callPackage ../desktops/cinnamon/cinnamon-translations.nix { };
