@@ -8580,6 +8580,25 @@
     passthru.names = [ "node-inspector" ];
   };
   "node-inspector" = self.by-version."node-inspector"."0.6.2";
+  by-spec."node-protobuf"."*" =
+    self.by-version."node-protobuf"."1.0.9";
+  by-version."node-protobuf"."1.0.9" = lib.makeOverridable self.buildNodePackage {
+    name = "node-protobuf-1.0.9";
+    src = [
+      (fetchurl {
+        url = "http://registry.npmjs.org/node-protobuf/-/node-protobuf-1.0.9.tgz";
+        sha1 = "6b2e7682bb65e01a10e19179f8e162ac9a66a6e6";
+      })
+    ];
+    buildInputs =
+      (self.nativeDeps."node-protobuf" or []);
+    deps = [
+    ];
+    peerDependencies = [
+    ];
+    passthru.names = [ "node-protobuf" ];
+  };
+  "node-protobuf" = self.by-version."node-protobuf"."1.0.9";
   by-spec."node-swt".">=0.1.1" =
     self.by-version."node-swt"."0.1.1";
   by-version."node-swt"."0.1.1" = lib.makeOverridable self.buildNodePackage {
