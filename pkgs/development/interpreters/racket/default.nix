@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sed -e 's@</fontconfig>@@' -i chroot-fontconfig/fonts.conf
     echo "<dir>${liberation_ttf}</dir>" >> chroot-fontconfig/fonts.conf
     echo "</fontconfig>" >> chroot-fontconfig/fonts.conf
-   
+
     export FONTCONFIG_FILE=$(pwd)/chroot-fontconfig/fonts.conf
 
     cd src
@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" ];
+
+  NIX_LDFLAGS = "-lgcc_s";
 
   postInstall = ''
     for p in $(ls $out/bin/) ; do
