@@ -1,11 +1,15 @@
 { stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm, libpng, cairo }:
 
+let
+  ver_maj = "2.34";
+  ver_min = "0";
+in
 stdenv.mkDerivation rec {
-  name = "pangomm-2.28.4";
+  name = "pangomm-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = mirror://gnome/sources/pangomm/2.28/pangomm-2.28.4.tar.xz;
-    sha256 = "10kcdpg080m393f1vz0km41kd3483fkyabprm59gvjwklxkcp3bp";
+    url = "mirror://gnome/sources/pangomm/${ver_maj}/${name}.tar.xz";
+    sha256 = "0hcyvv7c5zmivprdam6cp111i6hn2y5jsxzk00m6j9pncbzvp0hf";
   };
 
   nativeBuildInputs = [ pkgconfig ];
