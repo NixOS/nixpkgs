@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     failure hspec httpTypes monadControl network text time transformers
     zlib zlibBindings
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/snoyberg/http-client";
     description = "An HTTP client engine, intended as a base layer for more user-friendly packages";
