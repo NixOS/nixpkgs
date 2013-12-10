@@ -16,7 +16,9 @@
 , coreutils ? null }:
 
 assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
-
+let
+  withX = libX11 != null && !aquaterm;
+in
 stdenv.mkDerivation rec {
   name = "gnuplot-4.6.3";
 
@@ -25,8 +27,6 @@ stdenv.mkDerivation rec {
     sha256 = "1xd7gqdhlk7k1p9yyqf9vkk811nadc7m4si0q3nb6cpv4pxglpyz";
   };
 
-  withX = libX11 != null && !aquaterm;
-
   buildInputs =
     [ zlib gd texinfo readline emacs lua texLive
       pango cairo pkgconfig makeWrapper ]
@@ -34,7 +34,10 @@ stdenv.mkDerivation rec {
     # compiling with wxGTK causes a malloc (double free) error on darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) wxGTK;
 
-  configureFlags = if withX then ["--with-x"] else ["--without-x"];
+  configureFlags =
+    (if withX then ["--with-x"] else ["--without-x"])
+    ++ (if aquaterm then ["--with-aquaterm"] else ["--without-aquaterm"])
+    ;
 
   postInstall = stdenv.lib.optionalString withX ''
     wrapProgram $out/bin/gnuplot \
