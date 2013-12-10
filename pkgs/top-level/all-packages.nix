@@ -4126,7 +4126,7 @@ let
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
-  ffmpeg = callPackage ../development/libraries/ffmpeg {
+  ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
     vpxSupport = !stdenv.isMips;
 
     stdenv = if stdenv.isDarwin
@@ -4151,6 +4151,8 @@ let
     vpxSupport = !stdenv.isMips;
     texinfo = texinfo5;
   };
+
+  ffmpeg = ffmpeg_0_10;
 
   ffms = callPackage ../development/libraries/ffms { };
 
