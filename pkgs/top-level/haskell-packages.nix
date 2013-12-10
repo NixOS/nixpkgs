@@ -175,7 +175,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     zlib         = self.zlib_0_5_4_1;
     cabalInstall = self.cabalInstall_1_18_0_2;
     alex         = self.alex_3_1_3;
-    haddock      = self.haddock_2_13_2;
+    haddock      = self.haddock_2_13_2_1;
     happy        = self.happy_1_19_2;
     primitive    = self.primitive_0_5_1_0;      # semi-official, but specified
   };
