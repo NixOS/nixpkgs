@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python, pkgconfig, popt, intltool, dbus_glib
 , libX11, xextproto, libSM, libICE, libXtst, libXi }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   versionMajor = "2.10";
   versionMinor = "2";
   moduleName   = "at-spi2-core";
@@ -20,3 +20,8 @@ stdenv.mkDerivation rec {
   # ToDo: on non-NixOS we create a symlink from there?
   configureFlags = "--with-dbus-daemondir=/run/current-system/sw/bin/";
 }
+  // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    NIX_LDFLAGS = "-lintl";
+  }
+)
+
