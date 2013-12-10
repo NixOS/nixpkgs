@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "glade";
-  version = "0.12.1";
-  sha256 = "114gdjz6bzfzqm71j17yb5mq96wcvjdv7ig3k4x4d9mdp97w8990";
+  version = "0.12.5.0";
+  sha256 = "0dbl7y5rdwzcham16iym9cikfyaphzr1rqcsni9ab6s2368a1vkr";
   buildDepends = [ glib gtk ];
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ libc pkgconfig ];

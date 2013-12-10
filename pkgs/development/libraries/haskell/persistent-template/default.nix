@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "persistent-template";
-  version = "1.2.0.4";
-  sha256 = "0lhqv4mcai9r5mzj5h6fsd1hd8mv1458id0rb6q157192gywxhzf";
+  version = "1.2.0.6";
+  sha256 = "1vkrxf2dabk9z0igfbvb2ib2bxcxi5af2vpxllv74cbjz9r6ip3s";
   buildDepends = [
     aeson monadControl monadLogger persistent text transformers
   ];

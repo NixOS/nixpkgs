@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vault";
-  version = "0.3.0.2";
-  sha256 = "1m9vanwzlw61fbdcy7qvv2prmbax5y9dsl52dldcf5zr7vip2hpb";
+  version = "0.3.0.3";
+  sha256 = "0wpj73jbwgcva1hfjc0bpf9l3lfc3iwdz70m29dh1785wvzxhsh5";
   buildDepends = [ hashable unorderedContainers ];
   jailbreak = true;
   meta = {

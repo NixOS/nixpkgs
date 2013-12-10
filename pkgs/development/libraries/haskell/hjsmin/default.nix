@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hjsmin";
-  version = "0.1.4.3";
-  sha256 = "1jhpqfvwvzik41i4mi9fr9w1jlrlc1lj2illlbbwg7r3fwr5hnnl";
+  version = "0.1.4.4";
+  sha256 = "0hzh2xbv9x013s1lhmgapjd0qx8v7n09rjlfxd9b1h5min00k048";
   buildDepends = [ blazeBuilder languageJavascript text ];
   testDepends = [
     blazeBuilder Cabal HUnit languageJavascript QuickCheck

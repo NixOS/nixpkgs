@@ -1,17 +1,18 @@
-{ cabal, caseInsensitive, httpConduit, httpTypes, lens, liftedBase
-, mtl, network, optparseApplicative, resourcet, transformers
-, xmlConduit, xmlHamlet
+{ cabal, caseInsensitive, httpClient, httpConduit, httpTypes, lens
+, liftedBase, mtl, network, optparseApplicative, resourcet
+, transformers, xmlConduit, xmlHamlet
 }:
 
 cabal.mkDerivation (self: {
   pname = "DAV";
-  version = "0.4.1";
-  sha256 = "0bcrnlixrzvbdvw7ffv2xl2d0k0w71jf0i5ayf97ymxly8ii8s0c";
+  version = "0.5";
+  sha256 = "1yda3w8rr8p7jnpjpbjafis7xi01wmd1fwrq4fprzpfgghcjidhq";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    caseInsensitive httpConduit httpTypes lens liftedBase mtl network
-    optparseApplicative resourcet transformers xmlConduit xmlHamlet
+    caseInsensitive httpClient httpConduit httpTypes lens liftedBase
+    mtl network optparseApplicative resourcet transformers xmlConduit
+    xmlHamlet
   ];
   meta = {
     homepage = "http://floss.scru.org/hDAV";
