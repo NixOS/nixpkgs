@@ -2,12 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "cmdargs";
-  version = "0.10.6";
-  sha256 = "1ckzznza8nqidwq7vd6jlxkjgb7xd4rvqi7gm8ca9laj0cvwkclw";
+  version = "0.10.7";
+  sha256 = "0mhsj27vynilpmwxgdpb3r383rksrqs9ix15zl2xbhc95a815pfl";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath transformers ];
-  patchPhase = "touch cmdargs.cabal";
   meta = {
     homepage = "http://community.haskell.org/~ndm/cmdargs/";
     description = "Command line argument processing";
