@@ -17,6 +17,7 @@ cabal.mkDerivation (self: {
     blazeBuilder conduit hspec httpConduit httpTypes liftedBase network
     networkConduit transformers wai warp
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/fpco/http-reverse-proxy";
     description = "Reverse proxy HTTP requests, either over raw sockets or with WAI";
