@@ -9,5 +9,6 @@ cabal.mkDerivation (self: {
     description = "Extras to interface Gloss and Accelerate";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

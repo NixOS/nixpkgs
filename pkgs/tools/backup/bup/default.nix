@@ -55,7 +55,6 @@ stdenv.mkDerivation {
       Capable of doing *fast* incremental backups of virtual machine images.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }
