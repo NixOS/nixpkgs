@@ -1,0 +1,12 @@
+diff -ubr happy-1.18.6-orig/Setup.lhs happy-1.18.6/Setup.lhs
+--- happy-1.18.6-orig/Setup.lhs	2013-04-19 14:17:10.865999210 +0200
++++ happy-1.18.6/Setup.lhs	2013-04-19 14:17:15.285214809 +0200
+@@ -25,7 +25,7 @@
+ -- hack to turn cpp-style '# 27 "GenericTemplate.hs"' into 
+ -- '{-# LINE 27 "GenericTemplate.hs" #-}'.
+ crazy_perl_regexp =
+- "s/^#\\s+(\\d+)\\s+(\"[^\"]*\")/{-# LINE \\1 \\2 #-}/g;s/\\$(Id:.*)\\$/\\1/g"
++ "s/^#\\s+(\\d+)\\s+(\"[^\"]*\").*/{-# LINE \\1 \\2 #-}/g;s/\\$(Id:.*)\\$/\\1/g"
+ 
+ myPostBuild _ flags _ lbi = do
+   let runProgram p = rawSystemProgramConf (buildVerbose flags) p (withPrograms lbi)

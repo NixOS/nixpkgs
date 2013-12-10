@@ -8,7 +8,7 @@ let
      <http://mail.python.org/pipermail/python-bugs-list/2006-September/035362.html>,
      but this is left as an exercise to the reader.
      So disable them for now.  */
-  cxx = stdenv.system != "i686-solaris";
+  cxx = !stdenv.isSunOS;
 in
 stdenv.mkDerivation (rec {
   name = "ncurses-5.9";
@@ -18,9 +18,15 @@ stdenv.mkDerivation (rec {
     sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   };
 
+  patches = [ ./patch-ac ];
+
   configureFlags = ''
-    --with-shared --includedir=''${out}/include --without-debug
+    --with-shared --without-debug
     ${if unicode then "--enable-widec" else ""}${if cxx then "" else "--without-cxx-binding"}
+  '';
+
+  preConfigure = ''
+    export configureFlags="$configureFlags --includedir=$out/include"
   '';
 
   selfNativeBuildInput = true;
@@ -46,6 +52,7 @@ stdenv.mkDerivation (rec {
         ln -svf lib''${lib}w.so.5 $out/lib/lib$lib.so.5
       fi
     done;
+    ln -svf . $out/include/ncursesw
   '' else "";
 
   meta = {

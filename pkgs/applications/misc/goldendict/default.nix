@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     cd ${name}-src
     tar xf ${src}
   '';
-  patches = [ ./goldendict-paths.diff ];
+  patches = [ ./goldendict-paths.diff ./gcc47.patch ];
   patchFlags = "-p 0";
   configurePhase = ''
     qmake

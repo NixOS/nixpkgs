@@ -36,6 +36,7 @@ stdenv.mkDerivation {
   gnatWrapper = ./gnat-wrapper.sh;
   gnatlinkWrapper = ./gnatlink-wrapper.sh;
   ldWrapper = ./ld-wrapper.sh;
+  ldSolarisWrapper = ./ld-solaris-wrapper.sh;
   utils = ./utils.sh;
   addFlags = ./add-flags;
   

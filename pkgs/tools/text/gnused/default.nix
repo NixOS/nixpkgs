@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gnused-4.2.1";
+  name = "gnused-4.2.2";
 
   src = fetchurl {
-    url = mirror://gnu/sed/sed-4.2.1.tar.gz;
-    sha256 = "0q1hzjvr6pzhaagidg7pj76k1fzz5nl15np7p72w9zcpw0f58ww7";
+    url = mirror://gnu/sed/sed-4.2.2.tar.bz2;
+    sha256 = "f048d1838da284c8bc9753e4506b85a1e0cc1ea8999d36f6995bcb9460cddbd7";
   };
 
   meta = {

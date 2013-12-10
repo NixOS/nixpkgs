@@ -289,6 +289,9 @@ stripDirs() {
 
     if [ -n "${dirs}" ]; then
         header "stripping (with flags $stripFlags) in $dirs"
+        for dir in $dirs; do
+          test -L "$dir" || chmod -R +rw "$dir"
+        done
         find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
         stopNest
     fi
@@ -540,11 +543,15 @@ patchPhase() {
             *.bz2)
                 uncompress="bzip2 -d"
                 ;;
+            *.xz)
+                uncompress="xz -d"
+                ;;
             *.lzma)
                 uncompress="lzma -d"
                 ;;
         esac
-        $uncompress < $i | patch ${patchFlags:--p1}
+        # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
+        $uncompress < $i 2>&1 | patch ${patchFlags:--p1}
         stopNest
     done
 
@@ -638,7 +645,7 @@ patchELF() {
         find "$prefix" \( \
             \( -type f -a -name "*.so*" \) -o \
             \( -type f -a -perm +0100 \) \
-            \) -print -exec patchelf --shrink-rpath {} \;
+            \) -print -exec patchelf --shrink-rpath '{}' \;
     fi
     stopNest
 }
@@ -648,20 +655,57 @@ patchShebangs() {
     # Rewrite all script interpreter file names (`#! /path') under the
     # specified  directory tree to paths found in $PATH.  E.g.,
     # /bin/sh will be rewritten to /nix/store/<hash>-some-bash/bin/sh.
+    # /usr/bin/env gets special treatment so that ".../bin/env python" is
+    # rewritten to /nix/store/<hash>/bin/python.
     # Interpreters that are already in the store are left untouched.
     header "patching script interpreter paths"
     local dir="$1"
     local f
+    local oldPath
+    local newPath
+    local arg0
+    local args
+    local oldInterpreterLine
+    local newInterpreterLine
+
     for f in $(find "$dir" -type f -perm +0100); do
-        local oldPath=$(sed -ne '1 s,^#![ ]*\([^ ]*\).*$,\1,p' "$f")
+        if [ "$(head -1 "$f" | head -c +2)" != '#!' ]; then
+            # missing shebang => not a script
+            continue
+        fi
+
+        oldInterpreterLine=$(head -1 "$f" | tail -c +3)
+        read oldPath arg0 args <<< "$oldInterpreterLine"
+
+        if $(echo "$oldPath" | grep -q "/bin/env$"); then
+            # Check for unsupported 'env' functionality:
+            # - options: something starting with a '-'
+            # - environment variables: foo=bar
+            if $(echo "$arg0" | grep -q -- "^-.*\|.*=.*"); then
+                echo "unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)"
+                exit 1
+            fi
+            newPath="$(command -v "$arg0" || true)"
+        else
+            if [ "$oldPath" = "" ]; then
+                # If no interpreter is specified linux will use /bin/sh. Set
+                # oldpath="/bin/sh" so that we get /nix/store/.../sh.
+                oldPath="/bin/sh"
+            fi
+            newPath="$(command -v "$(basename "$oldPath")" || true)"
+            args="$arg0 $args"
+        fi
+
+        newInterpreterLine="$newPath $args"
+
         if [ -n "$oldPath" -a "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]; then
-            local newPath=$(type -P $(basename $oldPath) || true)
             if [ -n "$newPath" -a "$newPath" != "$oldPath" ]; then
-                echo "$f: interpreter changed from $oldPath to $newPath"
-                sed -i -e "1 s,$oldPath,$newPath," "$f"
+                echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
+                sed -i -e "1 s|.*|#\!$newInterpreterLine|" "$f"
             fi
         fi
     done
+
     stopNest
 }
 
@@ -707,14 +751,20 @@ fixupPhase() {
     fi
 
     if [ -z "$dontGzipMan" ]; then
+        echo "gzipping man pages"
         GLOBIGNORE=.:..:*.gz:*.bz2
-        for f in $out/share/man/*/* $out/share/man/*/*/*; do
-            if [ -f $f ]; then
-                if gzip -c $f > $f.gz; then
-                    rm $f
+        for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
+            if [ -f "$f" -a ! -L "$f" ]; then
+                if gzip -c "$f" > "$f".gz; then
+                    rm "$f"
                 else
-                    rm $f.gz
+                    rm "$f".gz
                 fi
+            fi
+        done
+        for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
+            if [ -L "$f" -a -f `readlink -f "$f"`.gz ]; then
+              ln -sf `readlink "$f"`.gz "$f"
             fi
         done
         unset GLOBIGNORE
@@ -742,23 +792,23 @@ fixupPhase() {
     fi
 
     if [ -n "$propagatedBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
+        mkdir -p "$prefix/nix-support"
+        echo "$propagatedBuildInputs" > "$prefix/nix-support/propagated-build-inputs"
     fi
 
     if [ -n "$propagatedNativeBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
+        mkdir -p "$prefix/nix-support"
+        echo "$propagatedNativeBuildInputs" > "$prefix/nix-support/propagated-native-build-inputs"
     fi
 
     if [ -n "$propagatedUserEnvPkgs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedUserEnvPkgs" > "$out/nix-support/propagated-user-env-packages"
+        mkdir -p "$prefix/nix-support"
+        echo "$propagatedUserEnvPkgs" > "$prefix/nix-support/propagated-user-env-packages"
     fi
 
     if [ -n "$setupHook" ]; then
-        mkdir -p "$out/nix-support"
-        substituteAll "$setupHook" "$out/nix-support/setup-hook"
+        mkdir -p "$prefix/nix-support"
+        substituteAll "$setupHook" "$prefix/nix-support/setup-hook"
     fi
 
     runHook postFixup
@@ -843,9 +893,16 @@ genericBuild() {
         showPhaseHeader "$curPhase"
         dumpVars
 
-        # Evaluate the variable named $curPhase if it exists, otherwise the
-        # function named $curPhase.
-        eval "${!curPhase:-$curPhase}"
+        if [ "$curPhase" = fixupPhase ]; then
+          for pref in ${outputs:-out}; do
+            echo "fixup on \$$pref"
+            prefix=${!pref} eval "${!curPhase:-$curPhase}"
+          done
+        else
+          # Evaluate the variable named $curPhase if it exists, otherwise the
+          # function named $curPhase.
+          eval "${!curPhase:-$curPhase}"
+        fi
 
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
@@ -861,6 +918,10 @@ genericBuild() {
 
     stopNest
 }
+
+for i in "${postHooks[@]}"; do
+    $i
+done
 
 
 # Execute the post-hook.

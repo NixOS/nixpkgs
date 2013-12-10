@@ -36,7 +36,7 @@ let
           for a in *.x; do
             touch `basename $a .x`.1
           done
-          popd; make ) 
+          popd; make )
       '';
 
       postInstall = ''
@@ -80,3 +80,6 @@ let
   });
 in
   self
+  // stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux" || stdenv.isSunOS) {
+    FORCE_UNSAFE_CONFIGURE = 1;
+  }

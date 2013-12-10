@@ -1004,6 +1004,7 @@ let
   gnuplot = callPackage ../tools/graphics/gnuplot {
     texLive = null;
     lua = null;
+    texinfo = texinfo4; # build errors with gnuplot-4.6.3
 
     # use gccApple to compile on darwin, seems to resolve a malloc error
     stdenv = if stdenv.isDarwin
@@ -2255,7 +2256,7 @@ let
       clang = build;
       stdenv = clangStdenv;
       libc = glibc;
-      binutils = binutils_gold;
+      binutils = binutils;
       shell = bash;
       inherit libcxx coreutils zlib;
       nativeTools = false;
@@ -2289,7 +2290,7 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc46;
+  gcc = gcc48;
 
   gcc33 = wrapGCC (import ../development/compilers/gcc/3.3 {
     inherit fetchurl stdenv noSysDirs;
@@ -2310,12 +2311,14 @@ let
   });
 
   gcc43 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.3) {
-    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
+    inherit stdenv fetchurl gmp mpfr noSysDirs;
+    texinfo = texinfo4;
     profiledCompiler = true;
   }));
 
   gcc43_realCross = makeOverridable (import ../development/compilers/gcc/4.3) {
-    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
+    inherit stdenv fetchurl gmp mpfr noSysDirs;
+    texinfo = texinfo4;
     binutilsCross = binutilsCross;
     libcCross = libcCross;
     profiledCompiler = false;
@@ -2326,8 +2329,9 @@ let
 
   gcc44_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.4) {
-      inherit stdenv fetchurl texinfo gmp mpfr /* ppl cloogppl */ noSysDirs
+      inherit stdenv fetchurl gmp mpfr /* ppl cloogppl */ noSysDirs
           gettext which;
+      texinfo = texinfo4;
       binutilsCross = binutilsCross;
       libcCross = libcCross;
       profiledCompiler = false;
@@ -2373,10 +2377,13 @@ let
 
   gcc47 = gcc47_real;
 
+  gcc48 = gcc48_real;
+
   gcc45_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.5) {
-      inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
+      inherit fetchurl stdenv gmp mpfr mpc libelf zlib
         ppl cloogppl gettext which noSysDirs;
+      texinfo = texinfo4;
       binutilsCross = binutilsCross;
       libcCross = libcCross;
       profiledCompiler = false;
@@ -2457,15 +2464,17 @@ let
   };
 
   gcc44 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.4) {
-    inherit fetchurl stdenv texinfo gmp mpfr /* ppl cloogppl */
+    inherit fetchurl stdenv gmp mpfr /* ppl cloogppl */
       gettext which noSysDirs;
+    texinfo = texinfo4;
     profiledCompiler = true;
   }));
 
   gcc45_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.5) {
-    inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib perl
+    inherit fetchurl stdenv gmp mpfr mpc libelf zlib perl
       ppl cloogppl
       gettext which noSysDirs;
+    texinfo = texinfo4;
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
     profiledCompiler = !stdenv.isArm;
@@ -2521,6 +2530,7 @@ let
 
   gcc47_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.7 {
     inherit noSysDirs;
+    texinfo = texinfo4;
     # I'm not sure if profiling with enableParallelBuilding helps a lot.
     # We can enable it back some day. This makes the *gcc* builds faster now.
     profiledCompiler = false;
@@ -2537,6 +2547,32 @@ let
   }));
 
   gcc47_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.7 {
+    stripped = false;
+    texinfo = texinfo4;
+    inherit noSysDirs;
+    cross = null;
+    libcCross = null;
+    binutilsCross = null;
+  }));
+
+  gcc48_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.8 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
+    # and host != build), `cross' must be null but the cross-libc must still
+    # be passed.
+    cross = null;
+    libcCross = if crossSystem != null then libcCross else null;
+    libpthreadCross =
+      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+      then gnu.libpthreadCross
+      else null;
+  }));
+
+  gcc48_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.8 {
     stripped = false;
 
     inherit noSysDirs;
@@ -2555,17 +2591,9 @@ let
       stdenv = allStdenvs.stdenvNative;
     });
 
-  gfortran = gfortran46;
+  gfortran = gfortran48;
 
-  gfortran42 = wrapGCC (gcc42.gcc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    inherit gmp mpfr;
-  });
-
-  gfortran43 = wrapGCC (gcc43.gcc.override {
+  gfortran48 = wrapGCC (gcc48.gcc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -2573,51 +2601,13 @@ let
     profiledCompiler = false;
   });
 
-  gfortran44 = wrapGCC (gcc44.gcc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
+  gcj = gcj48;
 
-  gfortran45 = wrapGCC (gcc45_real.gcc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
-
-  gfortran46 = wrapGCC (gcc46_real.gcc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
-
-  gcj = gcj45;
-
-  gcj45 = wrapGCC (gcc45.gcc.override {
+  gcj48 = wrapGCC (gcc48.gcc.override {
     name = "gcj";
     langJava = true;
     langFortran = false;
-    langCC = true;
-    langC = false;
-    profiledCompiler = false;
-    inherit zip unzip zlib boehmgc gettext pkgconfig perl;
-    inherit gtk;
-    inherit (gnome) libart_lgpl;
-    inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
-      libXrandr xproto renderproto xextproto inputproto randrproto;
-  });
-
-  gcj46 = wrapGCC (gcc46.gcc.override {
-    name = "gcj";
-    langJava = true;
-    langFortran = false;
-    langCC = true;
+    langCC = false;
     langC = false;
     profiledCompiler = false;
     inherit zip unzip zlib boehmgc gettext pkgconfig perl;
@@ -2683,7 +2673,8 @@ let
   });
 
   ghdl = wrapGCC (import ../development/compilers/gcc/4.3 {
-    inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat;
+    inherit stdenv fetchurl gmp mpfr noSysDirs gnat;
+    texinfo = texinfo4;
     name = "ghdl";
     langVhdl = true;
     langCC = false;
@@ -2841,7 +2832,6 @@ let
 
   julia = callPackage ../development/compilers/julia {
     liblapack = liblapack.override {shared = true;};
-    mpfr = mpfr_3_1_2;
     fftw = fftw.override {pthreads = true;};
     fftwSinglePrec = fftwSinglePrec.override {pthreads = true;};
   };
@@ -3476,9 +3466,9 @@ let
     deterministic = true;
   });
 
-  binutils_gold = lowPrio (callPackage ../development/tools/misc/binutils {
+  binutils_nogold = lowPrio (callPackage ../development/tools/misc/binutils {
     inherit noSysDirs;
-    gold = true;
+    gold = false;
   });
 
   binutilsCross = lowPrio (forceNativeDrv (import ../development/tools/misc/binutils {
@@ -3488,8 +3478,8 @@ let
   }));
 
   bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
-  bison3 = lowPrio (callPackage ../development/tools/parsing/bison/3.x.nix { });
-  bison = bison2;
+  bison3 = callPackage ../development/tools/parsing/bison/3.x.nix { };
+  bison = bison3;
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     inherit (pythonPackages) twisted jinja2 sqlalchemy sqlalchemy_migrate;
@@ -3626,19 +3616,11 @@ let
 
   checkstyle = callPackage ../development/tools/analysis/checkstyle { };
 
-  flex = flex2535;
-
-  flex2535 = callPackage ../development/tools/parsing/flex/flex-2.5.35.nix { };
-
-  flex2534 = callPackage ../development/tools/parsing/flex/flex-2.5.34.nix { };
-
-  flex2533 = callPackage ../development/tools/parsing/flex/flex-2.5.33.nix { };
-
-  # Note: 2.5.4a is much older than 2.5.35 but happens first when sorting
-  # alphabetically, hence the low priority.
-  flex254a = lowPrio (import ../development/tools/parsing/flex/flex-2.5.4a.nix {
-    inherit fetchurl stdenv yacc;
-  });
+  flex = callPackage ../development/tools/parsing/flex {
+    # Break infinite recursion: bison's test suite needs flex, so we
+    # use an untested bison build to build flex first.
+    yacc = bison.override { flex = null; };
+  };
 
   m4 = gnum4;
 
@@ -3820,9 +3802,9 @@ let
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
-  texinfo49 = callPackage ../development/tools/misc/texinfo/4.9.nix { };
-  texinfo5 = callPackage ../development/tools/misc/texinfo/5.1.nix { };
-  texinfo = texinfo413;
+  texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
+  texinfo4 = texinfo413;
+  texinfo = texinfo5;
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
@@ -4346,15 +4328,17 @@ let
   gmm = callPackage ../development/libraries/gmm { };
 
   gmp = gmp5;
+  gmp5 = gmp51;
 
   gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
   # The GHC bootstrap binaries link against libgmp.so.3, which is in GMP 4.x.
   gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { };
 
-  gmp5 = callPackage ../development/libraries/gmp/5.0.5.nix { };
+  gmp51 = callPackage ../development/libraries/gmp/5.1.x.nix { };
 
-  gmp51 = callPackage ../development/libraries/gmp/5.1.1.nix { };
+  #GMP ex-satellite, so better keep it near gmp
+  mpfr = callPackage ../development/libraries/mpfr/default.nix { };
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
@@ -4375,10 +4359,6 @@ let
 
   gperftools = callPackage ../development/libraries/gperftools { };
 
-  #GMP ex-satellite, so better keep it near gmp
-  mpfr = callPackage ../development/libraries/mpfr { };
-  mpfr_3_1_2 = callPackage ../development/libraries/mpfr/3.1.2.nix { };
-
   gst_all = {
     inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
     gstPluginsBase = pkgs.gst_plugins_base;
@@ -4388,7 +4368,9 @@ let
     gstFfmpeg = pkgs.gst_ffmpeg;
   };
 
-  gstreamer = callPackage ../development/libraries/gstreamer/gstreamer {};
+  gstreamer = callPackage ../development/libraries/gstreamer/gstreamer {
+    bison = bison2;
+  };
 
   gst_plugins_base = callPackage ../development/libraries/gstreamer/gst-plugins-base {};
 
@@ -5297,7 +5279,9 @@ let
 
   mtdev = callPackage ../development/libraries/mtdev { };
 
-  mu = callPackage ../tools/networking/mu { };
+  mu = callPackage ../tools/networking/mu {
+    texinfo = texinfo4;
+  };
 
   muparser = callPackage ../development/libraries/muparser { };
 
@@ -5680,6 +5664,7 @@ let
 
   slibGuile = callPackage ../development/libraries/slib {
     scheme = guile_1_8;
+    texinfo = texinfo4; # otherwise erros: must be after `@defun' to use `@defunx'
   };
 
   smpeg = callPackage ../development/libraries/smpeg { };
@@ -7719,6 +7704,7 @@ let
     # TODO: these packages don't build on Darwin.
     gconf = null /* if stdenv.isDarwin then null else gnome.GConf */;
     librsvg = null /* if stdenv.isDarwin then null else librsvg */;
+    texinfo = texinfo4;
   };
 
   emacs24 = callPackage ../applications/editors/emacs-24 {
@@ -10243,7 +10229,8 @@ let
     inherit fetchurl stdenv;
     inherit cups ghostscript glibc patchelf;
     gcc = import ../development/compilers/gcc/4.4 {
-      inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gettext which;
+      inherit stdenv fetchurl gmp mpfr noSysDirs gettext which;
+      texinfo = texinfo4;
       profiledCompiler = true;
     };
   };
@@ -10369,8 +10356,12 @@ let
   VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
 
   # Wine cannot be built in 64-bit; use a 32-bit build instead.
-  wineStable = callPackage_i686 ../misc/emulators/wine/stable.nix { };
-  wineUnstable = lowPrio (callPackage_i686 ../misc/emulators/wine/unstable.nix { });
+  wineStable = callPackage_i686 ../misc/emulators/wine/stable.nix {
+    bison = bison2;
+  };
+  wineUnstable = lowPrio (callPackage_i686 ../misc/emulators/wine/unstable.nix {
+    bison = bison2;
+  });
   wine = wineStable;
 
   # winetricks is a shell script with no binary components. Safe to just use the current platforms
@@ -10427,9 +10418,7 @@ let
     callPackage ../applications/networking/znc/modules.nix { }
   );
 
-  zsnes = callPackage_i686 ../misc/emulators/zsnes {
-    libpng = libpng12;
-  };
+  zsnes = callPackage_i686 ../misc/emulators/zsnes { };
 
   misc = import ../misc/misc.nix { inherit pkgs stdenv; };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, groff, cmake, python, libffi, binutils_gold }:
+{ stdenv, fetchurl, perl, groff, cmake, python, libffi, binutils }:
 
 let version = "3.3"; in
 
@@ -24,8 +24,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_BINUTILS_INCDIR=${binutils_gold}/include"
-  ] ++ lib.optional (!isDarwin) [ "-DBUILD_SHARED_LIBS=ON" ];
+    "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
+    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=R600" # for mesa
+  ] ++ lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
 
   enableParallelBuilding = true;
 

@@ -57,6 +57,11 @@ stdenv.mkDerivation ({
          src->results[i].native == a2_native' failed." crashes. */
       ./glibc-rh739743.patch
 
+      /* The command "getconf CS_PATH" returns the default search path
+         "/bin:/usr/bin", which is inappropriate on NixOS machines. This
+         patch extends the search path by "/run/current-system/sw/bin". */
+      ./fix_path_attribute_in_getconf.patch
+
       /* Fix buffer overrun in regexp matcher. */
       ./cve-2013-0242.patch
 

@@ -62,5 +62,6 @@ rec {
     if stdenvType == "powerpc-linux" then /* stdenvLinux */ stdenvNative else
     if stdenvType == "i686-mingw" then stdenvMinGW else
     if stdenvType == "x86_64-darwin" then stdenvNix else
+    if stdenvType == "x86_64-solaris" then stdenvNix else
     stdenvNative;
 }

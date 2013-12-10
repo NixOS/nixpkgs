@@ -1,11 +1,11 @@
 { stdenv, fetchurl, m4, cxx ? true }:
 
 stdenv.mkDerivation rec {
-  name = "gmp-5.1.1";
+  name = "gmp-5.1.3";
 
-  src = fetchurl {
+  src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
     urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
-    sha256 = "1bdgf04k2i12pfivxgjq68iarz3ngix9hpzbmkgijrdk92gpgm50";
+    sha256 = "0q5i39pxrasgn9qdxzpfbwhh11ph80p57x6hf48m74261d97j83m";
   };
 
   nativeBuildInputs = [ m4 ];
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     # (x86), except on Solaris where some tests crash with "Memory fault".
     # See <http://hydra.nixos.org/build/2760931>, for instance.
     (stdenv.lib.optional (!stdenv.isSunOS) "--enable-fat")
-    ++ (if cxx then [ "--enable-cxx" ] else [ "--disable-cxx" ]);
+    ++ (if cxx then [ "--enable-cxx" ] else [ "--disable-cxx" ])
+    ++ (if stdenv.is64bit then [ "--with-pic" ] else []);
 
   doCheck = true;
 

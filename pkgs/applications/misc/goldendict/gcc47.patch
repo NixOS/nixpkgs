@@ -1,0 +1,40 @@
+From b00d081da20b9a6b257573c6b23a6bc640c4dab1 Mon Sep 17 00:00:00 2001
+From: Michael Palimaka <kensington@gentoo.org>
+Date: Fri, 20 Jul 2012 03:27:38 +1000
+Subject: [PATCH] Fix build with GCC 4.7 by adding missing includes.
+
+---
+ processwrapper.cc                       | 4 ++++
+ qtsingleapplication/src/qtlocalpeer.cpp | 1 +
+ 2 files changed, 5 insertions(+)
+
+diff --git processwrapper.cc processwrapper.cc
+index f7f3f19..86b985d 100644
+--- processwrapper.cc
++++ processwrapper.cc
+@@ -2,6 +2,10 @@
+ 
+ #include <QtCore>
+ 
++#if defined(Q_OS_UNIX)
++#include <unistd.h>
++#endif
++
+ #ifdef Q_OS_WIN32
+ 
+ #include <windows.h>
+diff --git qtsingleapplication/src/qtlocalpeer.cpp qtsingleapplication/src/qtlocalpeer.cpp
+index 382d182..506c142 100644
+--- qtsingleapplication/src/qtlocalpeer.cpp
++++ qtsingleapplication/src/qtlocalpeer.cpp
+@@ -50,6 +50,7 @@ static PProcessIdToSessionId pProcessIdToSessionId = 0;
+ #endif
+ #if defined(Q_OS_UNIX)
+ #include <time.h>
++#include <unistd.h>
+ #endif
+ 
+ namespace QtLP_Private {
+-- 
+1.7.11.1
+
