@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-client";
-  version = "0.2.0.1";
-  sha256 = "0iqlq0drylxc9ir362pdbljghh5mxrmqjl51s02381y7jc0mfjs0";
+  version = "0.2.0.2";
+  sha256 = "1b6057yvbcrd01qp9gcmqh27zbla4d5krrsl279hmklkm2fd2zm3";
   buildDepends = [
     base64Bytestring blazeBuilder caseInsensitive cookie dataDefault
     deepseq failure httpTypes network publicsuffixlist text time
