@@ -975,6 +975,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   esqueleto = callPackage ../development/libraries/haskell/esqueleto {};
 
+  exPool = callPackage ../development/libraries/haskell/ex-pool { hashable = self.hashable_1_2_1_0; };
+
   exceptionMtl = callPackage ../development/libraries/haskell/exception-mtl {};
 
   exceptionTransformers = callPackage ../development/libraries/haskell/exception-transformers {};
@@ -991,6 +993,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   filepath = null; # a core package in recent GHCs
 
   fileLocation = callPackage ../development/libraries/haskell/file-location {};
+
+  extensibleEffects = callPackage ../development/libraries/haskell/extensible-effects {};
 
   extensibleExceptions_0_1_1_0 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.0.nix {};
   extensibleExceptions_0_1_1_2 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.2.nix {};
@@ -1169,6 +1173,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
 
   hashtables = callPackage ../development/libraries/haskell/hashtables {};
+
+  haskelldb = callPackage ../development/libraries/haskell/haskelldb {};
 
   haskeline = callPackage ../development/libraries/haskell/haskeline {};
 
@@ -1360,6 +1366,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   instantGenerics = callPackage ../development/libraries/haskell/instant-generics {};
 
   intervals = callPackage ../development/libraries/haskell/intervals {};
+
+  IntervalMap = callPackage ../development/libraries/haskell/IntervalMap {};
 
   ioChoice = callPackage ../development/libraries/haskell/io-choice {};
 

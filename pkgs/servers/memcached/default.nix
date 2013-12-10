@@ -12,6 +12,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A distributed memory object caching system";
+    repositories.git = https://github.com/memcached/memcached.git;
     homepage = http://memcached.org/;
     license = "bsd";
     maintainers = [ stdenv.lib.maintainers.coconnor ];

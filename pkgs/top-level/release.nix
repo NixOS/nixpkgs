@@ -309,7 +309,6 @@ let
       vim = linux;
       vimHugeX = linux;
       VisualBoyAdvance = linux;
-      vlc = linux;
       vncrec = linux;
       vorbisTools = linux;
       vpnc = linux;

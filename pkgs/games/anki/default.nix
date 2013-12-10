@@ -9,10 +9,10 @@ let
 in
 
 stdenv.mkDerivation rec {
-    name = "anki-2.0.12";
+    name = "anki-2.0.18";
     src = fetchurl {
       url = "http://ankisrs.net/download/mirror/${name}.tgz";
-      sha256 = "1pccws3rgfpyxdx5xph5x72c4a46is0alfz73icn9ppgjdizzipr";
+      sha256 = "1hpla3bgg7zh05f1dgycs5j4a01hnim66a8q2qzihf1r5zanr50j";
     };
 
     pythonPath = [ pyqt4 py.pysqlite py.sqlalchemy py.pyaudio ]
@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
         * even practicing guitar chords!
       '';
       license = "GPLv3";
+      maintainers = with stdenv.lib.maintainers; [ the-kenny ];
       platforms = stdenv.lib.platforms.mesaPlatforms;
     };
 }

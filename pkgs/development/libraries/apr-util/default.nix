@@ -9,11 +9,11 @@ assert bdbSupport -> db4 != null;
 assert ldapSupport -> openldap != null;
 
 stdenv.mkDerivation rec {
-  name = "apr-util-1.5.2";
+  name = "apr-util-1.5.3";
 
   src = fetchurl {
     url = "mirror://apache/apr/${name}.tar.bz2";
-    md5 = "89c1348aa79e898d7c34a6206311c9c2";
+    sha256 = "0s1rpqjy5xr03k9s4xrsm5wvhj5286vlkf6jvqayw99yy5sb3vbq";
   };
 
   configureFlags = ''
