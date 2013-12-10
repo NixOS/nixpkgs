@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "06ywjmhdgnwdyfj0qvmabb5bvgrdfyf7dfxm0hzqvkh2i104s7g0";
   buildDepends = [ connection dataDefault httpClient network tls ];
   testDepends = [ hspec httpClient httpTypes ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/snoyberg/http-client";
     description = "http-client backend using the connection package and tls library";
