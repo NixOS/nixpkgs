@@ -5,12 +5,15 @@
 , gssSupport ? false, gss ? null
 , c-aresSupport ? false, c-ares ? null
 , linkStatic ? false
+, cacertSupport ? false, cacert ? null
 }:
 
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
+assert cacertSupport -> cacert != null;
+
 
 stdenv.mkDerivation rec {
   name = "curl-7.38.0";
@@ -43,6 +46,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}"
     ++ stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ]
+    ++ stdenv.lib.optional cacertSupport [ "--with-ca-bundle=${cacert}/etc/ca-bundle.crt" ]
   ;
 
   dontDisableStatic = linkStatic;

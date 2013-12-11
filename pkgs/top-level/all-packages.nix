@@ -928,6 +928,15 @@ let
     scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
   };
 
+  curl_cacert = callPackage ../tools/networking/curl rec {
+    fetchurl = fetchurlBoot;
+    zlibSupport = true;
+    sslSupport = zlibSupport;
+    scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
+    cacertSupport = sslSupport;
+  };
+
+
   curl3 = callPackage ../tools/networking/curl/7.15.nix rec {
     zlibSupport = true;
     sslSupport = zlibSupport;
