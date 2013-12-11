@@ -4415,7 +4415,9 @@ let
 
   gst_plugins_ugly = callPackage ../development/libraries/gstreamer/gst-plugins-ugly {};
 
-  gst_ffmpeg = callPackage ../development/libraries/gstreamer/gst-ffmpeg {};
+  gst_ffmpeg = callPackage ../development/libraries/gstreamer/gst-ffmpeg {
+    ffmpeg = ffmpeg_0_10;
+  };
 
   gst_python = callPackage ../development/libraries/gstreamer/gst-python {};
 
