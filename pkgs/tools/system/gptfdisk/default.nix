@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.rodsbooks.com/gdisk/;
 
-    maintainers = stdenv.lib.maintainers.shlevy;
+    maintainers = [ stdenv.lib.maintainers.shlevy ];
 
     platforms = stdenv.lib.platforms.linux;
   };
