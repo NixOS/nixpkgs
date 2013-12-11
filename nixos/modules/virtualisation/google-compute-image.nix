@@ -121,8 +121,6 @@ with pkgs.lib;
     169.254.169.254 metadata.google.internal metadata
   '';
 
-  users.extraUsers.root.openssh.authorizedKeys.keys = ["ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCt9GBbtWUTDacovm2O6qDw/SsmUmwYBu3k+6kx8/Xv7IJK5uqxhNTBc0MfADBV6EMZVDkaw+rDeRvcDuEzz2r/CP/x1vVDiwWYjyU2uOZEHFKh15W/1qC9fwBIikcbgm+8R33kmpFr9AChP4KWR+4T3jf0AYknZ3pbZ5GPCTWmWeOR4PVhtusDt0/cfWrENrA0mFo37xohn5lFsbrJ5/rMuhWglTuHIQFGwECqbYPvyxDLZxAfqg1Wc1AJAW8xRuJafvPyuxsj+qJu+MfKpAcxSoXDtldPxCFF6e/4j0Ey/kz435fJS/AjSJwmeurOQ/vB+tm2Db1wLWc1669S46Kl rbvermaa@propowerrrr"];
-
   # fetch authorized keys for root user
   systemd.services.fetch-root-authorized-keys =
     { description = "Fetch authorized_keys for root user.";
