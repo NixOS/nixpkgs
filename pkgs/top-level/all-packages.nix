@@ -4152,7 +4152,7 @@ let
     texinfo = texinfo5;
   };
 
-  ffmpeg = ffmpeg_0_10;
+  ffmpeg = ffmpeg_2;
 
   ffms = callPackage ../development/libraries/ffms { };
 
