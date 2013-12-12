@@ -11,7 +11,7 @@ with pkgs.lib;
         { preVM =
             ''
               mkdir $out
-              diskImage=$out/disk.raw
+              diskImage=$out/$diskImageBase
               truncate $diskImage --size 10G
               mv closure xchg/
             '';
@@ -20,11 +20,11 @@ with pkgs.lib;
             ''
               PATH=$PATH:${pkgs.gnutar}/bin:${pkgs.gzip}/bin
               pushd $out
-              tar -Szcf disk.raw.tar.gz disk.raw
-              rm $out/disk.raw
+              tar -Szcf $diskImageBase.tar.gz $diskImageBase
+              rm $out/$diskImageBase
               popd
             '';
-
+          diskImageBase = "nixos-${config.system.nixosVersion}-${pkgs.stdenv.system}.raw";
           buildInputs = [ pkgs.utillinux pkgs.perl ];
           exportReferencesGraph =
             [ "closure" config.system.build.toplevel ];
@@ -121,9 +121,8 @@ with pkgs.lib;
     169.254.169.254 metadata.google.internal metadata
   '';
 
-  # fetch authorized keys for root user
   systemd.services.fetch-root-authorized-keys =
-    { description = "Fetch authorized_keys for root user.";
+    { description = "Fetch authorized_keys for root user";
 
       wantedBy = [ "multi-user.target" ];
       before = [ "sshd.service" ];
