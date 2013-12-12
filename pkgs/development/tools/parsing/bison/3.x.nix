@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 perl ] ++ stdenv.lib.optionals doCheck [ flex ];
   propagatedBuildInputs = [ m4 ];
 
+  # Not every system (looking at you SmartOS) has /bin/sh implemented by Bash
+  preBuild = stdenv.lib.optionalString doCheck ''
+    sed -i -e "s|/bin/sh|$SHELL|g" examples/{test,*/*.test}
+  '';
+
   doCheck = flex != null;
 
   meta = {
