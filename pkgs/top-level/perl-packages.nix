@@ -4008,10 +4008,10 @@ rec {
   };
 
   HTTPBody = buildPerlPackage {
-    name = "HTTP-Body-1.17";
+    name = "HTTP-Body-1.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.17.tar.gz;
-      sha256 = "1476zdcg1cdal3ik6ccwm3rqfgsdac6b63f92wmipvn8lkjdl70k";
+      url = mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.19.tar.gz;
+      sha256 = "0ahhksj0zg6wq6glpjkxdr3byd5riwvq2f5aw21n1jcsl71nll01";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ HTTPMessage ];
