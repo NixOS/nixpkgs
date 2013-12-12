@@ -22,7 +22,7 @@ in
         ${pkgs.herbstluftwm}/bin/herbstluftwm
       ";
     };
-    environment.systemPackages = [pkgs.herbstluftwm];
+    environment.systemPackages = [ pkgs.herbstluftwm ];
   };
 }
 
