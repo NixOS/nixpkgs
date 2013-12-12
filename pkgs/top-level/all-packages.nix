@@ -2791,7 +2791,7 @@ let
 
   go_1_2 = callPackage ../development/compilers/go/1.2.nix { };
 
-  go = go_1_1;
+  go = go_1_2;
 
   gprolog = callPackage ../development/compilers/gprolog { };
 
