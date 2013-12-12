@@ -1128,6 +1128,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   gloss = callPackage ../development/libraries/haskell/gloss {};
 
+  gloss-raster = callPackage ../development/libraries/haskell/gloss-raster {};
+
   glossAccelerate = callPackage ../development/libraries/haskell/gloss-accelerate {};
 
   glossRasterAccelerate = callPackage ../development/libraries/haskell/gloss-raster-accelerate {};
