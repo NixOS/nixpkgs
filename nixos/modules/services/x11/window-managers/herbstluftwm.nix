@@ -11,7 +11,7 @@ in
     services.xserver.windowManager.herbstluftwm.enable = mkOption {
       default = false;
       example = true;
-      description = "Enable the herbstluftwm window manager";
+      description = "Enable the herbstluftwm window manager.";
     };
   };
 
