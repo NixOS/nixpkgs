@@ -9,6 +9,7 @@ in
 {
   options = {
     services.xserver.windowManager.herbstluftwm.enable = mkOption {
+      type = types.bool;
       default = false;
       example = true;
       description = "Enable the herbstluftwm window manager.";
