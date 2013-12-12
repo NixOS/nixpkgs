@@ -48,5 +48,5 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gtk3 libsoup ];
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; # build problems on Hydra
 }
