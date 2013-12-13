@@ -8768,10 +8768,10 @@ rec {
   };
 
   TestVersion = buildPerlPackage {
-    name = "Test-Version-1.002001";
+    name = "Test-Version-1.002004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XE/XENO/Test-Version-1.002001.tar.gz;
-      sha256 = "84e741a1b9196b41130a7ec3f07b94e0e97e7e3f8abfb65e599f2760e01202ad";
+      url = mirror://cpan/authors/id/X/XE/XENO/Test-Version-1.002004.tar.gz;
+      sha256 = "1lvg1p6i159ssk5br5qb3gvrzdg59wchd97z7j44arnlkhfvwhgv";
     };
     buildInputs = [ TestException TestRequires TestTester ];
     propagatedBuildInputs = [ FileFindRulePerl ];
