@@ -7426,10 +7426,10 @@ rec {
   };
 
   StringTruncate = buildPerlPackage {
-    name = "String-Truncate-1.100600";
+    name = "String-Truncate-1.100601";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Truncate-1.100600.tar.gz;
-      sha256 = "e2665f82254a05b2a43c51bb8244661130ad9e052d4d8423b2ce2e9549c0bb5c";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Truncate-1.100601.tar.gz;
+      sha256 = "1mas04qa6sj6x34mid8i6swddcnb3c9zfkgkd72kvz5zip2f4f24";
     };
     propagatedBuildInputs = [ SubExporter SubInstall ];
     meta = {
