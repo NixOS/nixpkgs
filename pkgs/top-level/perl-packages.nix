@@ -107,10 +107,10 @@ rec {
   };
 
   AnyEvent = buildPerlPackage {
-    name = "AnyEvent-7.04";
+    name = "AnyEvent-7.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-7.04.tar.gz;
-      sha256 = "6a9d94fa61c7f5dc515c834eb224dbc6ce4123da8fd5bfa0cf3815f3f3e908b2";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-7.05.tar.gz;
+      sha256 = "0022y5xbn3dn5x0q1kzvx15icf3g1cqqljrfhyriy794a42fply6";
     };
     meta = {
       maintainers = with maintainers; [ ocharles ];
