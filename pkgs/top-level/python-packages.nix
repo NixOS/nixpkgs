@@ -3364,11 +3364,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   manuel = buildPythonPackage rec {
     name = "manuel-${version}";
-    version = "1.6.0";
+    version = "1.6.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/m/manuel/${name}.tar.gz";
-      md5 = "53d6a6905301a20f6095e41d11968fff";
+      sha256 = "1h35ys31zkjd9jssqn9lzwmw8s17ikr4jn2xp5zby1v771ibbbqr";
     };
 
     propagatedBuildInputs = [ six zope_testing ];
