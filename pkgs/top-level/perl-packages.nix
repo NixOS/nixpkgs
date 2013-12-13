@@ -1369,10 +1369,10 @@ rec {
   };
 
   ConfigGeneral = buildPerlPackage {
-    name = "Config-General-2.51";
+    name = "Config-General-2.52";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TL/TLINDEN/Config-General-2.51.tar.gz;
-      sha256 = "1khby072f10jbml0dlh82bg1s91ph8z6xa9bpk0l180q936k1xcg";
+      url = mirror://cpan/authors/id/T/TL/TLINDEN/Config-General-2.52.tar.gz;
+      sha256 = "07rmabdh21ljyc9yy6gpjg4w1y0lzwz8daljf0jv2g521hpdfdwr";
     };
     meta = {
       license = "perl";
