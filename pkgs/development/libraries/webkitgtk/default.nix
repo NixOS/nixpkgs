@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   patches = [ ./webcore-svg-libxml-cflags.patch ];
 
   prePatch = ''
+    patchShebangs Tools/gtk
+
     for i in $(find . -name '*.p[l|m]'); do
       sed -e 's@/usr/bin/gcc@gcc@' -i $i
     done
