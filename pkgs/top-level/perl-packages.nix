@@ -7347,10 +7347,10 @@ rec {
   };
 
   StringFlogger = buildPerlPackage {
-    name = "String-Flogger-1.101243";
+    name = "String-Flogger-1.101244";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Flogger-1.101243.tar.gz;
-      sha256 = "05e3f55198e96d56d27867b81c244d801a5d85e5b19b7acc3352993aefbd29fd";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Flogger-1.101244.tar.gz;
+      sha256 = "0cx3d85sz1dqjvbczpf9wx0i1b05jwbxcg7lpq5qygdkblq85nzd";
     };
     propagatedBuildInputs = [ JSON ParamsUtil SubExporter ];
     meta = {
