@@ -250,10 +250,10 @@ rec {
   autobox = pkgs.perlPackages.Autobox;
 
   Autobox = buildPerlPackage {
-    name = "autobox-2.79";
+    name = "autobox-2.82";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHOCOLATE/autobox-2.79.tar.gz;
-      sha256 = "8acc8c4a69e1bbb05304d0832d483a07258597529072d869b5960193a2ab950f";
+      url = mirror://cpan/authors/id/C/CH/CHOCOLATE/autobox-2.82.tar.gz;
+      sha256 = "0w008z8ych54czr6drmhqrrvikcfhra6ig3v1fhk36apq64p9k1p";
     };
     propagatedBuildInputs = [ ScopeGuard ];
     meta = {
