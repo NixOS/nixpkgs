@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation {
-  name = "lsscsi-0.24";
+  name = "lsscsi-0.27";
 
   src = fetchurl {
-    url = "http://sg.danny.cz/scsi/lsscsi-0.24.tgz";
-    sha256 = "0c718w80vi9a0w48q8xmlnbyqzxfd8lax5dcbqg8gvg4l2zaba2c";
+    url = "http://sg.danny.cz/scsi/lsscsi-0.27.tgz";
+    sha256 = "1d6rl2jwpd6zlqymmp9z4ri5j43d44db2s71j0v0rzs1nbvm90kb";
   };
 
   preConfigure = ''
