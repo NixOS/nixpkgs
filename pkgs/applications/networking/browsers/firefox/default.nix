@@ -143,6 +143,7 @@ rec {
 
     patches = [
       ./disable-reporter.patch # fixes "search box not working when built on xulrunner"
+      ./xpidl.patch
     ];
 
     propagatedBuildInputs = [xulrunner];
