@@ -1,7 +1,8 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
 , glib, kbd, libxslt, coreutils, libgcrypt, sysvtools, docbook_xsl
-, kexectools, python ? null, pythonSupport ? false
+, kexectools, libmicrohttpd
+, python ? null, pythonSupport ? false
 }:
 
 assert stdenv.isLinux;
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus.libs kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt docbook_xsl
+      libmicrohttpd
     ] ++ stdenv.lib.optional pythonSupport python;
 
   configureFlags =
