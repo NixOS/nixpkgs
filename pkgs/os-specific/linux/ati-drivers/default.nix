@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   patchPhase = "patch -p0 < ${./gentoo-patches.patch}";
 
   buildInputs =
-    [ xlibs.libXext xlibs.libX11
+    [ xlibs.libXext xlibs.libX11 xlibs.libXinerama
       xlibs.libXrandr which imake makeWrapper
       patchelf
       unzip
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
       "${xorg.libXrender}/lib"
       "${xorg.libXext}/lib"
       "${xorg.libX11}/lib"
+      "${xorg.libXinerama}/lib"
     ];
 
   # without this some applications like blender don't start, but they start
