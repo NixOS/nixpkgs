@@ -1348,10 +1348,10 @@ rec {
   };
 
   ConfigAny = buildPerlPackage rec {
-    name = "Config-Any-0.23";
+    name = "Config-Any-0.24";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Config/${name}.tar.gz";
-      sha256 = "17k62vdq3wr7m397ginp8525nqmlcjsmlqqpvnnfm3sr5vcxhjgz";
+      sha256 = "06n6jn3q3xhk57icwip0ihzqixxav6sgp6rrb35hahj1z748y3vi";
     };
   };
 
