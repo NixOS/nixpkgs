@@ -7795,10 +7795,10 @@ rec {
   };
 
   TemplateToolkit = buildPerlPackage rec {
-    name = "Template-Toolkit-2.24";
+    name = "Template-Toolkit-2.25";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AB/ABW/Template-Toolkit-2.24.tar.gz;
-      sha256 = "1j01kpsdpwxrwbsz2y1d8xyyliw9l23g0f3jigxvgxs9qal4m0rq";
+      url = mirror://cpan/authors/id/A/AB/ABW/Template-Toolkit-2.25.tar.gz;
+      sha256 = "048yg07j48rix3cly13j5wzms7kd5argviicj0kwykb004xpc8zl";
     };
     propagatedBuildInputs = [ AppConfig ];
     meta = {
