@@ -8895,10 +8895,10 @@ rec {
   };
 
   TimeHiRes = buildPerlPackage rec {
-    name = "Time-HiRes-1.9725";
+    name = "Time-HiRes-1.9726";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Time/${name}.tar.gz";
-      sha256 = "0fr7zkc55kazcjxdkrcjgimic8xpk6imxkckdpjlggjpkggv76f0";
+      sha256 = "17hhd53p72z08l1riwz5f6rch6hngby1pympkla5miznn7cjlrpz";
     };
   };
 
