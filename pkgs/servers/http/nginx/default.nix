@@ -40,11 +40,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-http_ssl_module"
+    "--with-http_spdy_module"
     "--with-http_xslt_module"
     "--with-http_sub_module"
     "--with-http_dav_module"
     "--with-http_gzip_static_module"
     "--with-http_secure_link_module"
+    "--with-ipv6"
     # Install destination problems
     # "--with-http_perl_module"
   ] ++ stdenv.lib.optional rtmp "--add-module=${rtmp-ext}"
