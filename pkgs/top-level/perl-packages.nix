@@ -7072,10 +7072,10 @@ rec {
   };
 
   SetScalar = buildPerlPackage {
-    name = "Set-Scalar-1.25";
+    name = "Set-Scalar-1.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JH/JHI/Set-Scalar-1.25.tar.gz;
-      sha256 = "1kbfy97j4cg0pprk8sgsh1fd505mdffn1jr9qbdmwqma8x4qvv7m";
+      url = mirror://cpan/authors/id/J/JH/JHI/Set-Scalar-1.26.tar.gz;
+      sha256 = "121r9n8lqk081vjzn9ppm4zklz1l0c0v0ab94c05y5vrsn5l0zl8";
     };
     meta = {
       license = "perl";
