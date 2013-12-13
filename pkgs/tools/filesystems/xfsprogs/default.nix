@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libtool, gettext, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "xfsprogs-3.1.8";
+  name = "xfsprogs-3.1.11";
 
   src = fetchurl {
     urls = [ "ftp://oss.sgi.com/projects/xfs/cmd_tars/${name}.tar.gz" "ftp://oss.sgi.com/projects/xfs/previous/${name}.tar.gz" ];
-    sha256 = "1aryr6w76hyc1dznfzk0sc5rlr914rr0zh15vyclj1s86wp9wh3l";
+    sha256 = "1gnnyhy3khl08a24c5y0pyakz6nnwkiw1fc6rb0r1j5mfw0rix5d";
   };
 
   patchPhase = ''
