@@ -5575,6 +5575,8 @@ let
 
   qwt = callPackage ../development/libraries/qwt {};
 
+  rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
+
   readline = readline6;
 
   readline4 = callPackage ../development/libraries/readline/readline4.nix { };
