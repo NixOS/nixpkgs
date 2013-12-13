@@ -1,7 +1,8 @@
 { stdenv, fetchurl, fetchgit, openssl, zlib, pcre, libxml2, libxslt, expat
 , rtmp ? false
 , fullWebDAV ? false
-, syslog ? false}:
+, syslog ? false
+, moreheaders ? false}:
 
 let
   version = "1.4.4";
@@ -27,6 +28,12 @@ let
     rev = "165affd9741f0e30c4c8225da5e487d33832aca3";
     sha256 = "14dkkafjnbapp6jnvrjg9ip46j00cr8pqc2g7374z9aj7hrvdvhs";
   };
+
+  moreheaders-ext = fetchgit {
+    url = https://github.com/agentzh/headers-more-nginx-module.git;
+    rev = "refs/tags/v0.23";
+    sha256 = "12pbjgsxnvcf2ff2i2qdn39q4cm5czlgrng96j8ml4cgxvnbdh39";
+  };
 in
 
 stdenv.mkDerivation rec {
@@ -49,7 +56,8 @@ stdenv.mkDerivation rec {
     # "--with-http_perl_module"
   ] ++ stdenv.lib.optional rtmp "--add-module=${rtmp-ext}"
     ++ stdenv.lib.optional fullWebDAV "--add-module=${dav-ext}"
-    ++ stdenv.lib.optional syslog "--add-module=${syslog-ext}";
+    ++ stdenv.lib.optional syslog "--add-module=${syslog-ext}"
+    ++ stdenv.lib.optional moreheaders "--add-module=${moreheaders-ext}";
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2"
