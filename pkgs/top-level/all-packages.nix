@@ -1893,6 +1893,8 @@ let
 
   tinc = callPackage ../tools/networking/tinc { };
 
+  tmpwatch = callPackage ../tools/misc/tmpwatch  { };
+
   tmux = callPackage ../tools/misc/tmux { };
 
   tor = callPackage ../tools/security/tor { };
