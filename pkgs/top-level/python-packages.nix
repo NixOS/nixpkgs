@@ -96,11 +96,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit python buildPythonPackage;
   };
 
-  pycrypto25 = import ../development/python-modules/pycrypto/2.5.nix {
-    inherit (pkgs) fetchurl stdenv gmp;
-    inherit python buildPythonPackage;
-  };
-
   pygobject = import ../development/python-modules/pygobject {
     inherit (pkgs) stdenv fetchurl pkgconfig glib;
     inherit python;
