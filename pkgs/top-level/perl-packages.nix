@@ -7369,10 +7369,10 @@ rec {
   };
 
   StringFormatter = buildPerlPackage {
-    name = "String-Formatter-0.102082";
+    name = "String-Formatter-0.102084";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Formatter-0.102082.tar.gz;
-      sha256 = "93d787dd8f13832a3683d219e086eaf4eb6c5391e396bfcc364c414423b0051a";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Formatter-0.102084.tar.gz;
+      sha256 = "0mlwm0rirv46gj4h072q8gdync5zxxsxy8p028gdyrhczl942dc3";
     };
     propagatedBuildInputs = [ ParamsUtil SubExporter ];
     meta = {
