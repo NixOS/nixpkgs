@@ -1052,10 +1052,10 @@ rec {
   };
 
   ClassAccessorGrouped = buildPerlPackage {
-    name = "Class-Accessor-Grouped-0.10009";
+    name = "Class-Accessor-Grouped-0.10010";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/Class-Accessor-Grouped-0.10009.tar.gz;
-      sha256 = "1cs6wvng9xxhmrps7qb7ccxswqkqskwj862dp4fqfra14aprlg4c";
+      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/Class-Accessor-Grouped-0.10010.tar.gz;
+      sha256 = "1hlfjfhagsksskv01viq1z14wlr0i4xl3nvznvq1qrnqwqxs4qi1";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ ClassXSAccessor ModuleRuntime SubName ];
