@@ -1543,10 +1543,10 @@ rec {
   };
 
   CPANMetaRequirements = buildPerlPackage {
-    name = "CPAN-Meta-Requirements-2.122";
+    name = "CPAN-Meta-Requirements-2.125";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/CPAN-Meta-Requirements-2.122.tar.gz;
-      sha256 = "1fq2blw9ynja34fm9ck24m3qcpyk0hp25dhxvgs01k7yz64ryffh";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/CPAN-Meta-Requirements-2.125.tar.gz;
+      sha256 = "1d6sryjkk52n4m8h7l0jc4hr9xrq2d02l8clzm48rq1h6j6q49hq";
     };
     buildInputs = [ TestMore ];
     meta = {
