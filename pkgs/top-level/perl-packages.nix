@@ -5935,10 +5935,10 @@ rec {
   };
 
   NetAddrIP = buildPerlPackage rec {
-    name = "NetAddr-IP-4.062";
+    name = "NetAddr-IP-4.071";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKER/${name}.tar.gz";
-      sha256 = "08c037afe314ca2e6369f8aa92eb4b8937f493f977f9f1f35ca396c1de8ed0c6";
+      sha256 = "0m8d8ccygpjhbsv00vjfz8cvkjcn8dws0k4x58vbvnbjdv3yhxb3";
     };
   };
 
