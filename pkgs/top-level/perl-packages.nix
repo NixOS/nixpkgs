@@ -1925,10 +1925,10 @@ rec {
   };
 
   DateManip = buildPerlPackage {
-    name = "Date-Manip-6.41";
+    name = "Date-Manip-6.42";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.41.tar.gz;
-      sha256 = "f7f654d8a85836bfbb248e21dd2ad39e592aa259f247bf77ef791ff19360de09";
+      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.42.tar.gz;
+      sha256 = "18zkdvam3qddv810hgzszk2zxra14whl0fs03ba79babqhbpbzna";
     };
     propagatedBuildInputs = [ TestInter ];
     meta = {
