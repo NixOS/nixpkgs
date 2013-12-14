@@ -27,6 +27,7 @@ cabal.mkDerivation (self: {
   ];
   buildTools = [ alex happy ];
   doCheck = false;
+  jailbreak = true;
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
     description = "Conversion between markup formats";
