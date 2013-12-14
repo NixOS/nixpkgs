@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-core";
-  version = "1.2.6.1";
-  sha256 = "12w8lxkxdwf2pfanz33grciyh4ijn6nzrz4lm478w20y9frmf1nm";
+  version = "1.2.6.2";
+  sha256 = "11q70zc837d0sdwgh8c60pv1x4zki2klamcr5vw5zsjj0qsb9pby";
   buildDepends = [
     aeson attoparsecConduit blazeBuilder blazeHtml blazeMarkup
     caseInsensitive cereal clientsession conduit cookie dataDefault
