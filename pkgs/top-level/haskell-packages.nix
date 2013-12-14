@@ -1828,7 +1828,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   quickcheckInstances = callPackage ../development/libraries/haskell/quickcheck-instances {};
 
-  quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {};
+  quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {
+    HUnit = self.HUnit_1_2_5_2;
+    QuickCheck = self.QuickCheck2;
+  };
 
   qrencode = callPackage ../development/libraries/haskell/qrencode {
     inherit (pkgs) qrencode;
