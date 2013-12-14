@@ -1584,10 +1584,10 @@ rec {
   };
 
   CryptCBC = buildPerlPackage rec {
-    name = "Crypt-CBC-2.30";
+    name = "Crypt-CBC-2.33";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LD/LDS/${name}.tar.gz";
-      sha256 = "0cvigpxvwn18kb5i40jlp5fgijbhncvlh23xdgs1cnhxa17yrgwx";
+      sha256 = "0ig698lmpjz7fslnznxm0609lvlnvf4f3s370082nzycnqhxww3a";
     };
   };
 
