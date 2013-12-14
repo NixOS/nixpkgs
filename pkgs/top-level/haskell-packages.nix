@@ -548,6 +548,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   arrows = callPackage ../development/libraries/haskell/arrows {};
 
+  assertFailure = callPackage ../development/libraries/haskell/assert-failure {};
+
   asn1Data = callPackage ../development/libraries/haskell/asn1-data {};
 
   asn1Types = callPackage ../development/libraries/haskell/asn1-types {};
