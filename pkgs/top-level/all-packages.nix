@@ -8435,6 +8435,8 @@ let
 
   mmex = callPackage ../applications/office/mmex { };
 
+  moc = callPackage ../applications/audio/moc { };
+
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
   monodevelop = callPackage ../applications/editors/monodevelop {
