@@ -8706,10 +8706,10 @@ rec {
   };
 
   TextTable = buildPerlPackage {
-    name = "Text-Table-1.126";
+    name = "Text-Table-1.128";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Table-1.126.tar.gz;
-      sha256 = "18v9ll360q4hlhmpks175da7y8nf6ywygd39archnw3zpn1cv7h1";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Table-1.128.tar.gz;
+      sha256 = "0j9y38y9x9ljjpnvp5clwkfvhnja6vjlnhb8yshv2mmz2h6by70c";
     };
     propagatedBuildInputs = [ TextAligner ];
     meta = {
