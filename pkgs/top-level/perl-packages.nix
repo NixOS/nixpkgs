@@ -1592,10 +1592,10 @@ rec {
   };
 
   CryptDES = buildPerlPackage rec {
-    name = "Crypt-DES-2.05";
+    name = "Crypt-DES-2.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DP/DPARIS/${name}.tar.gz";
-      sha256 = "1w12k1b7868v3ql0yprswlz2qri6ja576k9wlda7b8zf2d0rxgmp";
+      sha256 = "1rypxlhpd1jc0c327aghgl9y6ls47drmpvn0a40b4k3vhfsypc9d";
     };
     buildInputs = [CryptCBC];
   };
