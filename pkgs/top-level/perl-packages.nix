@@ -6716,10 +6716,10 @@ rec {
   };
 
   PodCoverageTrustPod = buildPerlPackage {
-    name = "Pod-Coverage-TrustPod-0.100002";
+    name = "Pod-Coverage-TrustPod-0.100003";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Pod-Coverage-TrustPod-0.100002.tar.gz;
-      sha256 = "2389f8085c16087b10f59f1bd1b9de5d83cca5eb203778a2af1cee897b89bb6e";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Pod-Coverage-TrustPod-0.100003.tar.gz;
+      sha256 = "19lyc5a5hg3pqhw0k5fnd0q4l2mrdq0ck4kw1smjvwkccp24431z";
     };
     propagatedBuildInputs = [ PodCoverage PodEventual ];
     meta = {
