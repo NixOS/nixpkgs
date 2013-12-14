@@ -26,8 +26,8 @@ cabal.mkDerivation (self: {
     testFrameworkQuickcheck2 text
   ];
   buildTools = [ alex happy ];
-  doCheck = false;
   jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
     description = "Conversion between markup formats";
