@@ -44,7 +44,10 @@ cabal.mkDerivation (self: {
                     -fTDFA";
   preConfigure = "patchShebangs .";
   installPhase = "./Setup install";
-  checkPhase = ":";
+  checkPhase = ''
+    export HOME="$NIX_BUILD_TOP/tmp"
+    mkdir "$HOME"
+  '';
   meta = {
     homepage = "http://git-annex.branchable.com/";
     description = "manage files with git, without checking their contents into git";
