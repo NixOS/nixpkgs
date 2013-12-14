@@ -8711,6 +8711,7 @@ rec {
       url = mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Table-1.128.tar.gz;
       sha256 = "0j9y38y9x9ljjpnvp5clwkfvhnja6vjlnhb8yshv2mmz2h6by70c";
     };
+    buildInputs = [ TestPod TestPodCoverage ];
     propagatedBuildInputs = [ TextAligner ];
     meta = {
       homepage = http://www.shlomifish.org/open-source/projects/docmake/;
