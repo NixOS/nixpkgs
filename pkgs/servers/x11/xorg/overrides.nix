@@ -192,10 +192,7 @@ in
       "--with-default-font-path= "  # there were only paths containing "${prefix}",
                                     # and there are no fonts in this package anyway
     ];
-    patches =
-      [ ./xorgserver-dri-path.patch
-        ./xorgserver-xkbcomp-path.patch
-      ];
+    patches = [ ./xorgserver-xkbcomp-path.patch ];
     buildInputs = attrs.buildInputs ++ [ xtrans ];
     propagatedBuildInputs =
       [ args.zlib args.udev args.mesa args.dbus.libs
