@@ -1132,7 +1132,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       description = "Python library for reading and writing collada documents";
       homepage = http://pycollada.github.io/;
       license = "BSD"; # they don't specify which BSD variant
-      platforms = platforms.unix;
+      platforms = with platforms; linux ++ darwin;
       maintainers = [ maintainers.bjornfor ];
     };
   };
