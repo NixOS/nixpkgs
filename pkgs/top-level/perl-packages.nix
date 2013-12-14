@@ -1876,10 +1876,10 @@ rec {
   };
 
   DataUUID = buildPerlPackage rec {
-    name = "Data-UUID-1.218";
+    name = "Data-UUID-1.219";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Data/${name}.tar.gz";
-      sha256 = "1cb4i0j48g5dk2dwzz32myl6wv4ngxqnrkdnixq80pzjcmz1qkpl";
+      sha256 = "0a6s6qwc548c1ldf459i5z55fvxsrdi4rnc57d167wdbdydd6dn7";
     };
   };
 
