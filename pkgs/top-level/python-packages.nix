@@ -1113,6 +1113,30 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  pycollada = buildPythonPackage rec {
+    name = "pycollada-0.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pycollada/${name}.tar.gz";
+      md5 = "5d0f00c035491b945cdccdfd8a698ad2";
+    };
+
+    # pycollada-0.4 needs python-dateutil==1.5
+    buildInputs = [ dateutil_1_5 numpy ];
+
+    # Some tests fail because they refer to test data files that don't exist
+    # (upstream packaging issue)
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Python library for reading and writing collada documents";
+      homepage = http://pycollada.github.io/;
+      license = "BSD"; # they don't specify which BSD variant
+      platforms = platforms.unix;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
   pycparser = buildPythonPackage rec {
     name = "pycparser-2.10";
 
