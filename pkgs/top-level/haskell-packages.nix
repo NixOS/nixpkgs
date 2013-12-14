@@ -964,6 +964,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   enummapset = callPackage ../development/libraries/haskell/enummapset {};
 
+  enummapsetTh = callPackage ../development/libraries/haskell/enummapset-th {};
+
   entropy = callPackage ../development/libraries/haskell/entropy {};
 
   erf = callPackage ../development/libraries/haskell/erf {};
