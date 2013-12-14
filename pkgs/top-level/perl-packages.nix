@@ -1302,10 +1302,10 @@ rec {
   };
 
   CommonSense = buildPerlPackage rec {
-    name = "common-sense-3.6";
+    name = "common-sense-3.72";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ML/MLEHMANN/common-sense-3.6.tar.gz;
-      sha256 = "0nkbp1by0mpvg1x6053fbh9dl8nnswlyfmqp8k2lppd717hw5ql6";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/common-sense-3.72.tar.gz;
+      sha256 = "16q95qrjksyykdn3mfj9vx26kb6c3hg97scmcbd00hfbk332xyd4";
     };
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
