@@ -6380,10 +6380,10 @@ rec {
   };
 
   Parent = buildPerlPackage {
-    name = "parent-0.221";
+    name = "parent-0.228";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/CORION/parent-0.221.tar.gz;
-      sha256 = "17jhscpa5p5szh1173pd6wvh2m05an1l941zqq9jkw9bzgk12hm0";
+      url = mirror://cpan/authors/id/C/CO/CORION/parent-0.228.tar.gz;
+      sha256 = "0w0i02y4z8465z050kml57mvhv7c5gl8w8ivplhr3cms0zbaq87b";
     };
   };
 
