@@ -1,11 +1,11 @@
 { fetchurl, buildPerlPackage, zlib, stdenv }:
 
 buildPerlPackage rec {
-  name = "Compress-Raw-Zlib-2.060";
+  name = "Compress-Raw-Zlib-2.063";
 
   src = fetchurl {
     url = "mirror://cpan/modules/by-module/Compress/${name}.tar.gz";
-    sha256 = "03z2vqcdpysanqnh9m714fs2mcfshzbkd8i11w359h69h5q0kms3";
+    sha256 = "16cn9pq4pngncs3qhlam0yw2l0q7hq4qfdyxp03jaad6ndc4dzp9";
   };
 
   preConfigure = ''
