@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, glib, gstreamer, gst_plugins_base
-, libmad, libdvdread, libmpeg2, libcdio, a52dec }:
+, libmad, libdvdread, libmpeg2, libcdio, a52dec, x264, orc }:
 
 stdenv.mkDerivation rec {
   name = "gst-plugins-ugly-0.10.19";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig glib gstreamer gst_plugins_base libmad libdvdread a52dec ];
+    [ pkgconfig glib gstreamer gst_plugins_base libmad libdvdread a52dec x264 orc ];
 
   enableParallelBuilding = true;
 
