@@ -1,13 +1,13 @@
 { stdenv, fetchurl }:
 
-let version = "1.0.4"; in
+let version = "1.0.10"; in
 
 stdenv.mkDerivation {
   name = "classads-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.cs.wisc.edu/condor/classad/c++/classads-${version}.tar.gz";
-    sha256 = "80b11c6d383891c90e04e403b2f282e91177940c3fe536082899fbfb9e854d24";
+    sha256 = "1czgj53gnfkq3ncwlsrwnr4y91wgz35sbicgkp4npfrajqizxqnd";
   };
 
   configureFlags = ''                                                  
