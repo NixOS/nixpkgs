@@ -24,12 +24,12 @@ cabal.mkDerivation (self: {
     cd ..
     ensureDir "$out/share/emacs"
     mv $pname-$version emacs/site-lisp
-    mv $out/bin/ghc-mod $out/ghc-mod
+    mv $out/bin/ghc-mod $out/bin/.ghc-mod-wrapped
     cat - > $out/bin/ghc-mod <<EOF
     #! ${self.stdenv.shell}
     COMMAND=\$1
     shift
-    eval exec $out/ghc-mod \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.version} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
+    eval exec $out/bin/.ghc-mod-wrapped \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.version} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
     EOF
     chmod +x $out/bin/ghc-mod
   '';
