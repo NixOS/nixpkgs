@@ -1,4 +1,4 @@
-{stdenv, fetchurl} :
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec{
     version = "2.0.2";
@@ -9,8 +9,12 @@ stdenv.mkDerivation rec{
         sha256="0f3cykihfdn3gi6na9p0xjd4jnv26z18m441n5vyg42q9abh4ln0";
     };
 
+    patchPhase = ''
+      substituteInPlace Makefile \
+        --replace ldconfig ${stdenv.glibc}/sbin/ldconfig
+    '';
+
     installPhase = ''
-        mkdir -p $out
         make install PREFIX=$out
     '';
 
