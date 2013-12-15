@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     hashable HTTP httpConduit httpTypes network text time
     unorderedContainers vector
   ];
+  patches = [ ./fix-build.patch ];
   jailbreak = true;
   meta = {
     homepage = "https://github.com/fpco/github";
