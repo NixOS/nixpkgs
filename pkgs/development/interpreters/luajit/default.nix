@@ -9,9 +9,10 @@ stdenv.mkDerivation rec{
         sha256="0f3cykihfdn3gi6na9p0xjd4jnv26z18m441n5vyg42q9abh4ln0";
     };
 
-    patchPhase = ''
+    patchPhase = stdenv.lib.optionalString (stdenv.gcc.libc != null)
+    ''
       substituteInPlace Makefile \
-        --replace ldconfig ${stdenv.glibc}/sbin/ldconfig
+        --replace ldconfig ${stdenv.gcc.libc}/sbin/ldconfig
     '';
 
     installPhase = ''
@@ -22,5 +23,6 @@ stdenv.mkDerivation rec{
         description= "Just-in-time compiler and interpreter for lua 5.1.";
         homepage = http://luajit.org;
         license = stdenv.lib.licenses.mit;
+	platorms = stdenv.lib.platforms.linux;
     };
 }
