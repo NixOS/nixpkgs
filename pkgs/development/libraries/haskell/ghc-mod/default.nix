@@ -17,7 +17,6 @@ cabal.mkDerivation (self: {
     ioChoice syb time transformers
   ];
   buildTools = [ emacs ];
-  doCheck = false;
   postInstall = ''
     cd $out/share/$pname-$version
     make
