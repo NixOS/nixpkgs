@@ -26,7 +26,7 @@ cabal.mkDerivation (self: {
     mv $pname-$version emacs/site-lisp
     mv $out/bin/ghc-mod $out/ghc-mod
     cat - > $out/bin/ghc-mod <<EOF
-    #!/bin/sh
+    #! ${self.stdenv.shell}
     COMMAND=\$1
     shift
     eval exec $out/ghc-mod \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.version} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
