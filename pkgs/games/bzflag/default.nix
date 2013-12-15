@@ -1,11 +1,11 @@
 { fetchurl, stdenv, curl, SDL, mesa, glew, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "bzflag-2.0.16";
+  name = "bzflag-2.4.2";
 
   src = fetchurl {
-    url = mirror://sourceforge/bzflag/bzflag-2.0.16.tar.bz2;
-    sha256 = "13v0ibiyq59j3xf23yf7s8blkmacagl8w48v2580k5bzkswa0vzy";
+    url = mirror://sourceforge/bzflag/bzflag-2.4.2.tar.bz2;
+    sha256 = "04f8c83hfwwh4i74gxqqdbgc2r5hn9ayam986py3jjychhicaysg";
   };
 
   buildInputs = [ curl SDL mesa glew ncurses ];
