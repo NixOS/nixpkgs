@@ -1674,6 +1674,8 @@ let
 
   radvd = callPackage ../tools/networking/radvd { };
 
+  ranger = callPackage ../applications/misc/ranger { };
+
   privateer = callPackage ../games/privateer { };
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
