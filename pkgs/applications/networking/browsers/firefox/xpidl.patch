@@ -1,0 +1,11 @@
+--- mozilla-release/python/mozbuild/mozbuild/backend/recursivemake.py	2013-12-05 08:07:53.000000000 -0800
++++ mozilla-release_1/python/mozbuild/mozbuild/backend/recursivemake.py	2013-12-12 23:38:39.697318563 -0800
+@@ -421,7 +421,7 @@
+     def _handle_idl_manager(self, manager):
+         build_files = self._purge_manifests['xpidl']
+ 
+-        for p in ('Makefile', 'backend.mk', '.deps/.mkdir.done',
++        for p in ('Makefile.in', 'Makefile', 'backend.mk', '.deps/.mkdir.done',
+             'xpt/.mkdir.done'):
+             build_files.add(p)
+ 
