@@ -3209,6 +3209,7 @@ let
 
   love = callPackage ../development/interpreters/love {lua=lua5;};
   love_luajit = callPackage ../development/interpreters/love {lua=luajit;};
+  love_0_9 = callPackage ../development/interpreters/love/0.9.nix { };
 
   lua4 = callPackage ../development/interpreters/lua-4 { };
   lua5_0 = callPackage ../development/interpreters/lua-5/5.0.3.nix { };
