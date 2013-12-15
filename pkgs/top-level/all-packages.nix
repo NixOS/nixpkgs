@@ -8508,6 +8508,13 @@ let
       # !!! should depend on MPlayer
     };
 
+  mpv = callPackage ../applications/video/mpv {
+    ffmpeg = ffmpeg_1;
+    bs2bSupport = true;
+    quviSupport = true;
+    cacaSupport = true;
+  };
+
   mrxvt = callPackage ../applications/misc/mrxvt { };
 
   multisync = callPackage ../applications/misc/multisync {
