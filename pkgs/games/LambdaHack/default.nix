@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "LambdaHack";
-  version = "0.2.10.5";
-  sha256 = "0a10xchhqh61idqb7ycassvy6gmprz9820w0z3r33h1c9sldq1lk";
+  version = "0.2.10.6";
+  sha256 = "19ak0ygw38b51wkm4p10xgdk3h9mh5vvb8c60qhs7cmgzjcph38n";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
