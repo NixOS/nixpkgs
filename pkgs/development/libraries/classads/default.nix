@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, pcre }:
 
 let version = "1.0.10"; in
 
@@ -9,6 +9,8 @@ stdenv.mkDerivation {
     url = "ftp://ftp.cs.wisc.edu/condor/classad/c++/classads-${version}.tar.gz";
     sha256 = "1czgj53gnfkq3ncwlsrwnr4y91wgz35sbicgkp4npfrajqizxqnd";
   };
+
+  buildInputs = [ pcre ];
 
   configureFlags = ''                                                  
     --enable-namespace --enable-flexible-member
