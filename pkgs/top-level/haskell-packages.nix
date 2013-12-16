@@ -151,7 +151,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     haskellSrc   = self.haskellSrc_1_0_1_5;
     hashable     = self.hashable_1_2_1_0;
     html         = self.html_1_0_1_2;
-    HTTP         = self.HTTP_4000_2_9;
+    HTTP         = self.HTTP_4000_2_10;
     HUnit        = self.HUnit_1_2_5_2;
     mtl          = self.mtl_2_1_2;
     network      = self.network_2_4_2_1;
@@ -547,6 +547,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   arithmoi = callPackage ../development/libraries/haskell/arithmoi {};
 
   arrows = callPackage ../development/libraries/haskell/arrows {};
+
+  assertFailure = callPackage ../development/libraries/haskell/assert-failure {};
 
   asn1Data = callPackage ../development/libraries/haskell/asn1-data {};
 
@@ -962,6 +964,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   enummapset = callPackage ../development/libraries/haskell/enummapset {};
 
+  enummapsetTh = callPackage ../development/libraries/haskell/enummapset-th {};
+
   entropy = callPackage ../development/libraries/haskell/entropy {};
 
   erf = callPackage ../development/libraries/haskell/erf {};
@@ -1217,8 +1221,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   HTTP_4000_2_3 = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
   HTTP_4000_2_5 = callPackage ../development/libraries/haskell/HTTP/4000.2.5.nix {};
   HTTP_4000_2_8 = callPackage ../development/libraries/haskell/HTTP/4000.2.8.nix {};
-  HTTP_4000_2_9 = callPackage ../development/libraries/haskell/HTTP/4000.2.9.nix {};
-  HTTP = self.HTTP_4000_2_9;
+  HTTP_4000_2_10 = callPackage ../development/libraries/haskell/HTTP/4000.2.10.nix {};
+  HTTP = self.HTTP_4000_2_10;
 
   httpAttoparsec = callPackage ../development/libraries/haskell/http-attoparsec {};
 
@@ -1532,8 +1536,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   monadLogger = callPackage ../development/libraries/haskell/monad-logger {};
 
   monadPar_0_1_0_3 = callPackage ../development/libraries/haskell/monad-par/0.1.0.3.nix {};
-  monadPar_0_3_4_5 = callPackage ../development/libraries/haskell/monad-par/0.3.4.5.nix {};
-  monadPar = self.monadPar_0_3_4_5;
+  monadPar_0_3_4_6 = callPackage ../development/libraries/haskell/monad-par/0.3.4.6.nix {};
+  monadPar = self.monadPar_0_3_4_6;
 
   monadParExtras = callPackage ../development/libraries/haskell/monad-par-extras {};
 

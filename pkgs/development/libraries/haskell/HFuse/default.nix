@@ -18,7 +18,7 @@ cabal.mkDerivation (self: {
     homepage = "https://github.com/toothbrush/hfuse";
     description = "HFuse is a binding for the Linux FUSE library";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.ghc.meta.platforms;
+    platforms = self.stdenv.lib.platforms.linux;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

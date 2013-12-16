@@ -1,0 +1,13 @@
+diff -ubr github-0.7.2-orig/Github/Private.hs github-0.7.2/Github/Private.hs
+--- github-0.7.2-orig/Github/Private.hs	2013-12-15 19:45:00.611789227 +0100
++++ github-0.7.2/Github/Private.hs	2013-12-15 19:45:46.359954006 +0100
+@@ -104,9 +104,6 @@
+              in Just (Data.List.takeWhile (/= '>') s')
+         else Nothing
+ 
+-doHttps :: Method -> String -> Maybe GithubAuth
+-        -> Maybe (RequestBody (ResourceT IO))
+-        -> IO (Either E.SomeException (Response LBS.ByteString))
+ doHttps reqMethod url auth body = do
+   let reqBody = fromMaybe (RequestBodyBS $ BS.pack "") body
+       reqHeaders = maybe [] getOAuth auth

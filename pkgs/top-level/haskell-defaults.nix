@@ -63,6 +63,10 @@
       prettyShow = self.prettyShow_1_2;
       bmp = self.bmp_1_2_2_1;
       Cabal_1_18_1_2 = self.Cabal_1_18_1_2.override { deepseq = self.deepseq_1_3_0_2; };
+      quickcheckIo = self.quickcheckIo.override {
+        HUnit = self.HUnit_1_2_5_2;
+        QuickCheck = self.QuickCheck2;
+      };
     };
 
   ghc703Prefs =
@@ -75,6 +79,10 @@
       prettyShow = self.prettyShow_1_2;
       bmp = self.bmp_1_2_2_1;
       Cabal_1_18_1_2 = self.Cabal_1_18_1_2.override { deepseq = self.deepseq_1_3_0_2; };
+      quickcheckIo = self.quickcheckIo.override {
+        HUnit = self.HUnit_1_2_5_2;
+        QuickCheck = self.QuickCheck2;
+      };
     };
 
   ghc702Prefs = ghc701Prefs;
@@ -89,6 +97,10 @@
       prettyShow = self.prettyShow_1_2;
       bmp = self.bmp_1_2_2_1;
       Cabal_1_18_1_2 = self.Cabal_1_18_1_2.override { deepseq = self.deepseq_1_3_0_2; };
+      quickcheckIo = self.quickcheckIo.override {
+        HUnit = self.HUnit_1_2_5_2;
+        QuickCheck = self.QuickCheck2;
+      };
     };
 
   ghc6123Prefs = ghc6122Prefs;
@@ -108,6 +120,10 @@
         mtl = self.mtl_2_1_2;
         HTTP = self.HTTP_4000_1_1.override { mtl = self.mtl_2_1_2; };
       };
+      quickcheckIo = self.quickcheckIo.override {
+        HUnit = self.HUnit_1_2_5_2;
+        QuickCheck = self.QuickCheck2;
+      };
     };
 
   ghc6121Prefs =
@@ -126,6 +142,10 @@
         zlib = self.zlib_0_5_3_3;
         mtl = self.mtl_2_1_2;
         HTTP = self.HTTP_4000_1_1.override { mtl = self.mtl_2_1_2; };
+      };
+      quickcheckIo = self.quickcheckIo.override {
+        HUnit = self.HUnit_1_2_5_2;
+        QuickCheck = self.QuickCheck2;
       };
     };
 

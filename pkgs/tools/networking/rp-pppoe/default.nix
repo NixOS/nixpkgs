@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "3.10" a; 
+  version = a.lib.attrByPath ["version"] "3.11" a;
   buildInputs = with a; [
     ppp   
   ];
@@ -10,7 +10,7 @@ in
 rec {
   src = fetchurl {
     url = "http://www.roaringpenguin.com/files/download/rp-pppoe-${version}.tar.gz";
-    sha256 = "1xj9rvsblvv2zi4n1bj8mkk00p1b24ch5hlr1gcc3b4l4m0ag73h";
+    sha256 = "083pfjsb8w7afqgygbvgndwajgwkfmcnqla5vnk4z9yf5zcs98c6";
   };
 
   inherit buildInputs;

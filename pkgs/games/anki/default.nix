@@ -9,10 +9,10 @@ let
 in
 
 stdenv.mkDerivation rec {
-    name = "anki-2.0.18";
+    name = "anki-2.0.20";
     src = fetchurl {
       url = "http://ankisrs.net/download/mirror/${name}.tgz";
-      sha256 = "1hpla3bgg7zh05f1dgycs5j4a01hnim66a8q2qzihf1r5zanr50j";
+      sha256 = "1w274g7as458bfkh86635p04fimvmkn70j8qy9m6nl2xwjaq8nhm";
     };
 
     pythonPath = [ pyqt4 py.pysqlite py.sqlalchemy py.pyaudio ]

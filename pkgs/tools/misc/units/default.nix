@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation {
-  name = "units-1.86";
+  name = "units-2.02";
 
   src = fetchurl {
-    url = mirror://gnu/units/units-1.86.tar.gz;
-    sha256 = "1syc4d3x1wb03hcxnz7rkgapk96biazfk2qqn2wfyx54bq829lhi";
+    url = mirror://gnu/units/units-2.02.tar.gz;
+    sha256 = "16jfji9g1zc99agd5dcinajinhcxr4dgq2lrbc9md69ir5qgld1b";
   };
 
   meta = {

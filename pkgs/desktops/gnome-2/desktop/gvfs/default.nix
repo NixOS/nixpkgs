@@ -3,11 +3,11 @@
 , udev, avahi, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  name = "gvfs-1.14.1";
+  name = "gvfs-1.14.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/1.14/${name}.tar.xz";
-    sha256 = "0af86cd7ee7b6daca144776bdf12f2f30d3e18fdd70b4da58e1a68cea4f6716a";
+    sha256 = "1g4ghyf45jg2ajdkv2d972hbckyjh3d9jdrppai85pl9pk2dmfy3";
   };
 
   buildInputs =

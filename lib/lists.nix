@@ -225,4 +225,5 @@ in rec {
 
   deepSeqList = xs: y: if any (x: deepSeq x false) xs then y else y;
 
+  crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [f];
 }

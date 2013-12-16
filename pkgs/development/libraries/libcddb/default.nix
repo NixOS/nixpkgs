@@ -1,11 +1,11 @@
 {fetchurl, stdenv}:
 
 stdenv.mkDerivation rec {
-  name = "libcddb-1.3.0";
+  name = "libcddb-1.3.2";
   
   src = fetchurl {
     url = "mirror://sourceforge/libcddb/${name}.tar.bz2";
-    sha256 = "1y8bfy12dwm41m1jahayn3v47dm34fmz7m9cjxyh7xcw6fp3lzaf";
+    sha256 = "0fr21a7vprdyy1bq6s99m0x420c9jm5fipsd63pqv8qyfkhhxkim";
   };
 
   meta = {

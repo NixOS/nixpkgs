@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "data-memocombinators";
-  version = "0.5.0";
-  sha256 = "1kh2xj1z68gig8y5fqfwaha0mcd41laa2di9x2hryjwdgzswxy74";
+  version = "0.5.1";
+  sha256 = "1mvfc1xri3kgkx5q7za01bqg1x3bfvbgcffw5vwl6jmq4hh1sd5l";
   buildDepends = [ dataInttrie ];
   meta = {
     homepage = "http://github.com/luqui/data-memocombinators";

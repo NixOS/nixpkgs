@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, mesa, glib, gdk_pixbuf, libXfixes, libXcomposite
 , libXdamage, libintlOrEmpty
-, pangoSupport ? true, pango, cairo }:
+, pangoSupport ? true, pango, cairo, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "cogl-1.8.2";
@@ -12,8 +12,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
+  configureFlags = " --enable-introspection " ; 
+
   propagatedBuildInputs =
-    [ mesa glib gdk_pixbuf libXfixes libXcomposite libXdamage ]
+    [ mesa glib gdk_pixbuf libXfixes libXcomposite libXdamage 
+gobjectIntrospection ]
     ++ libintlOrEmpty;
 
   buildInputs = stdenv.lib.optionals pangoSupport [ pango cairo ];

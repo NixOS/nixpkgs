@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "incrtcl-${version}";
-  version = "3.4b1";
+  version = "3.4.1";
   
   src = fetchurl {
-    url = mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itcl3.4b1.tar.gz;
-    sha256 = "0226vf7vmb7qmk9bcic635d33rm3gr1wqk5rpx6pf00bq3vgr6fw";
+    url = mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itcl3.4.1.tar.gz;
+    sha256 = "0s457j9mn3c1wjj43iwy3zwhyz980jlyqn3s9487da9dwwn86c2k";
   };
 
   buildInputs = [ tcl ];

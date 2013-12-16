@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     stringbuilder syb transformers
   ];
   doCheck = false;
+  noHaddock = self.stdenv.lib.versionOlder self.ghc.version "7.4";
   meta = {
     homepage = "https://github.com/sol/doctest-haskell#readme";
     description = "Test interactive Haskell examples";
