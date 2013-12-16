@@ -642,8 +642,7 @@ let
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
   cfdg = builderDefsPackage ../tools/graphics/cfdg {
-    inherit libpng bison flex;
-    ffmpeg = ffmpeg_1;
+    inherit libpng bison flex ffmpeg;
   };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
