@@ -7537,7 +7537,9 @@ let
   };
   awesome = awesome-3-5;
 
-  baresip = callPackage ../applications/networking/instant-messengers/baresip {};
+  baresip = callPackage ../applications/networking/instant-messengers/baresip {
+    ffmpeg = ffmpeg_1;
+  };
 
   batik = callPackage ../applications/graphics/batik { };
 
