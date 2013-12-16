@@ -12,7 +12,6 @@ cabal.mkDerivation (self: {
     httpTypes HUnit network text transformers wai
   ];
   testDepends = [ hspec wai ];
-  postBuild = ":";
   meta = {
     homepage = "http://www.yesodweb.com/book/web-application-interface";
     description = "Unit test framework (built on HUnit) for WAI applications";
