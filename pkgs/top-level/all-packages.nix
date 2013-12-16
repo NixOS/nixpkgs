@@ -7709,6 +7709,8 @@ let
     patches = config.dwm.patches or [];
   };
 
+  dzen2 = callPackage ../applications/window-managers/dzen2 { };
+
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
