@@ -156,7 +156,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               (optional (versionOlder "7" ghc.version) (enableFeature self.enableStaticLibraries "library-vanilla"))
               (optional (versionOlder "7.4" ghc.version) (enableFeature self.enableSharedExecutables "executable-dynamic"))
               (optional (versionOlder "7" ghc.version) (enableFeature self.doCheck "tests"))
-            ] ++ optional self.enableSharedExecutables "--ghc-option=-optl=-Wl,-rpath=$ORIGIN/../lib/${ghc.ghc.name}/${self.pname}-${self.version}";
+            ];
 
             # GHC needs the locale configured during the Haddock phase.
             LANG = "en_US.UTF-8";
@@ -186,6 +186,10 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                   fi
                 done
               done
+
+              ${optionalString self.enableSharedExecutables ''
+                configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}";
+              ''}
 
               echo "configure flags: $extraConfigureFlags $configureFlags"
               ./Setup configure --verbose --prefix="$out" --libdir='$prefix/lib/$compiler' --libsubdir='$pkgid' $extraConfigureFlags $configureFlags
