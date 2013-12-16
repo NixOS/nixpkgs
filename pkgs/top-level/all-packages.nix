@@ -5436,6 +5436,7 @@ let
 
   openscenegraph = callPackage ../development/libraries/openscenegraph {
     giflib = giflib_4_1;
+    ffmpeg = ffmpeg_0_10;
   };
 
   openssl = callPackage ../development/libraries/openssl {
