@@ -8,10 +8,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/OpenImageIO/oiio/archive/Release-${version}.zip";
-    sha256 = "196iq15waa2yyryiwhf6ynlpqnpknm4cc4azakg01xs70yiphsfl";
+    sha256 = "0v84xna2vp83njxbizlxnindcp2i67xd89kgl9nic1hz6ywlylz6";
   };
 
-  buildInputs = [ 
+  buildInputs = [
     boost cmake ilmbase libjpeg libpng libtiff opencolorio openexr unzip
   ];
 
