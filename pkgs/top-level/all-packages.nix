@@ -392,8 +392,9 @@ let
 
   acct = callPackage ../tools/system/acct { };
 
-  acoustidFingerprinter = callPackage
-    ../tools/audio/acoustid-fingerprinter { };
+  acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
+    ffmpeg = ffmpeg_1;
+  };
 
   actdiag = pythonPackages.actdiag;
 
