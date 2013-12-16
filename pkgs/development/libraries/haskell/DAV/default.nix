@@ -1,16 +1,16 @@
-{ cabal, caseInsensitive, httpClient, httpConduit, httpTypes, lens
-, liftedBase, mtl, network, optparseApplicative, resourcet
+{ cabal, caseInsensitive, httpClient, httpClientTls, httpTypes
+, lens, liftedBase, mtl, network, optparseApplicative, resourcet
 , transformers, xmlConduit, xmlHamlet
 }:
 
 cabal.mkDerivation (self: {
   pname = "DAV";
-  version = "0.5";
-  sha256 = "1yda3w8rr8p7jnpjpbjafis7xi01wmd1fwrq4fprzpfgghcjidhq";
+  version = "0.5.1";
+  sha256 = "12r5hy6g5k5bdf3n84hpq9b90nz6v2v3xwy7prxkvv99iaxf2lsj";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    caseInsensitive httpClient httpConduit httpTypes lens liftedBase
+    caseInsensitive httpClient httpClientTls httpTypes lens liftedBase
     mtl network optparseApplicative resourcet transformers xmlConduit
     xmlHamlet
   ];
