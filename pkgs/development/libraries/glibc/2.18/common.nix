@@ -54,6 +54,8 @@ stdenv.mkDerivation ({
          src->results[i].native == a2_native' failed." crashes. */
       ./glibc-rh739743.patch
 
+      ./scanf.patch
+
       ./cve-2012-4412+4424.patch
       ./cve-2013-4237.patch
       ./cve-2013-4332.patch
