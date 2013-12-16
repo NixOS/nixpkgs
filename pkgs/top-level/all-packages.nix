@@ -2358,7 +2358,7 @@ let
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
-    profiledCompiler = !stdenv.isArm;
+    profiledCompiler = false;
 
     # When building `gcc.crossDrv' (a "Canadian cross", with host == target
     # and host != build), `cross' must be null but the cross-libc must still
