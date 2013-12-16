@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "enummapset-th";
-  version = "0.6.0.0";
-  sha256 = "0d5pb49raxamz6g9w5kgm4papv3wj21xd8zysfvfn19jkwhkd6mn";
+  version = "0.6.0.1";
+  sha256 = "1v12pfj6k8av58sh6siwzspf2dnbcapmrzfpg2p4yz3bdkc70hh8";
   buildDepends = [ deepseq ];
   meta = {
     homepage = "https://github.com/liyang/enummapset-th";
