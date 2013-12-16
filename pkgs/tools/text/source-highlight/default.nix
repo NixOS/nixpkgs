@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ boost ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   doCheck = true;
 
