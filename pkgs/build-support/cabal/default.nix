@@ -108,6 +108,9 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             # build-depends Cabal field
             buildDepends = [];
 
+            # target(s) passed to the cabal build phase as an argument
+            buildTarget = "";
+
             # build-depends Cabal fields stated in test-suite stanzas
             testDepends = [];
 
@@ -208,7 +211,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             buildPhase = ''
               eval "$preBuild"
 
-              ./Setup build
+              ./Setup build ${self.buildTarget}
 
               export GHC_PACKAGE_PATH=$(${ghc.GHCPackages})
               test -n "$noHaddock" || ./Setup haddock
