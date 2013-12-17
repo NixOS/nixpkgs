@@ -27,13 +27,13 @@ let
       sha256 = "5421559aa12b4debffef947f7e1039c22e9dffd87a4aa68445a687a20764ae81";
     };
     opam = fetchurl {
-      url = "https://github.com/OCamlPro/opam/archive/1.0.0.zip";
-      sha256 = "f8d94a91c2b8d110fa5e3b0a87c512a860acbae110654498a164c5c888c40bda";
+      url = "https://github.com/ocaml/opam/archive/1.1.0.zip";
+      sha256 = "38a5edc1428f9e8e0d13e7017c97e1614dd651b75b4c234c80ff22f103d38bf7";
     };
   };
 in
 stdenv.mkDerivation rec {
-  name = "opam-1.0.0";
+  name = "opam-1.1.0";
 
   buildInputs = [unzip curl ncurses ocaml];
 
@@ -48,13 +48,14 @@ stdenv.mkDerivation rec {
     ln -sv ${srcs.cmdliner} $sourceRoot/src_ext/${srcs.cmdliner.name}
   '';
 
-  makeFlags = ["HOME=$(TMPDIR)"];
+  # Dirty, but apparently ocp-build requires a TERM
+  makeFlags = ["TERM=screen"];
 
   doCheck = false;
 
   meta = {
-    maintainers = stdenv.lib.maintainers.orbitz;
-    description = "A package manager for ocaml";
+    maintainers = [stdenv.lib.maintainers.orbitz];
+    description = "A package manager for OCaml";
     platforms   = stdenv.lib.platforms.all;
   };
 }
