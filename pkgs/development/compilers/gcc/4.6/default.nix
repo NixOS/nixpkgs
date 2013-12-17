@@ -99,7 +99,7 @@ let version = "4.6.3";
         withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
         withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
         withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
-      in 
+      in
         (withArch +
         withCpu +
         withAbi +
