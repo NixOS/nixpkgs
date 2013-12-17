@@ -484,11 +484,15 @@ stdenv.mkDerivation ({
   passthru = { inherit langC langCC langAda langFortran langVhdl
       langGo enableMultilib version; };
 
-  /* From gccinstall.info:
-     "parallel make is currently not supported since collisions in profile
-     collecting may occur"
-  */
-  enableParallelBuilding = !profiledCompiler;
+  /* gccinstall.info says that "parallel make is currently not supported since
+     collisions in profile collecting may occur".
+
+     Parallel make of gfortran is disabled because of an apparent race
+     condition concerning the generation of "bconfig.h". Please try and
+     re-enable parallel make for a later release of gfortran to check whether
+     the error has been fixed.
+   */
+     enableParallelBuilding = !profiledCompiler && !langFortran;
 
   meta = {
     homepage = http://gcc.gnu.org/;
