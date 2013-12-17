@@ -530,6 +530,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   alsaCore = callPackage ../development/libraries/haskell/alsa-core {};
 
+  alsaMixer = callPackage ../development/libraries/haskell/alsa-mixer {};
+
   alsaPcm = callPackage ../development/libraries/haskell/alsa-pcm {};
 
   amqp = callPackage ../development/libraries/haskell/amqp {};
