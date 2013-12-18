@@ -1000,6 +1000,29 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
 
+  configshell_fb = buildPythonPackage rec {
+    version = "1.1.fb10";
+    name = "configshell-fb-${version}";
+
+    src = fetchurl {
+      url = "https://github.com/agrover/configshell-fb/archive/v${version}.tar.gz";
+      sha256 = "1dd87xvm98nk3jzybb041gjdahi2z9b53pwqhyxcfj4a91y82ndy";
+    };
+    
+    propagatedBuildInputs = [
+      pyparsing
+      modules.readline
+      urwid
+    ];
+
+    meta = {
+      description = "A Python library for building configuration shells";
+      homepage = "https://github.com/agrover/configshell-fb";
+      platforms = stdenv.lib.platforms.linux;
+    };
+  };
+
+
   construct = buildPythonPackage rec {
     name = "construct-2.5.1";
 
@@ -5797,6 +5820,21 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  rtslib_fb = buildPythonPackage rec {
+    version = "2.1.fb43";
+    name = "rtslib-fb-${version}";
+
+    src = fetchurl {
+      url = "https://github.com/agrover/rtslib-fb/archive/v${version}.tar.gz";
+      sha256 = "1b59vyy12g6rix9l2fxx0hjiq33shkb79v57gwffs57vh74wc53v";
+    };
+
+    meta = {
+      description = "A Python object API for managing the Linux LIO kernel target";
+      homepage = "https://github.com/agrover/rtslib-fb";
+      platforms = stdenv.lib.platforms.linux;
+    };
+  };
 
   seqdiag = buildPythonPackage rec {
     name = "seqdiag-0.9.0";
@@ -6459,6 +6497,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   #
   #   doCheck = false;
   # };
+
+  targetcli_fb = buildPythonPackage rec {
+    version = "2.1.fb33";
+    name = "targetcli-fb-${version}";
+
+    src = fetchurl {
+      url = "https://github.com/agrover/targetcli-fb/archive/v${version}.tar.gz";
+      sha256 = "1zcm0agdpf866020b43fl8zyyyzz6r74mn1sz4xpaa0pinpwjk42";
+    };
+    
+    propagatedBuildInputs = [
+      configshell_fb
+      rtslib_fb
+    ];
+
+    meta = {
+      description = "A command shell for managing the Linux LIO kernel target";
+      homepage = "https://github.com/agrover/targetcli-fb";
+      platforms = stdenv.lib.platforms.linux;
+    };
+  };
 
   taskcoach = buildPythonPackage rec {
     name = "TaskCoach-1.3.22";
