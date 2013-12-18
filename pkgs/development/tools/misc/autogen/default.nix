@@ -1,13 +1,13 @@
 { fetchurl, stdenv, guile, which, libffi }:
 
-let version = "5.17"; in
+let version = "5.18"; in
 
   stdenv.mkDerivation {
     name = "autogen-${version}";
 
     src = fetchurl {
       url = "mirror://gnu/autogen/rel${version}/autogen-${version}.tar.gz";
-      sha256 = "065mg9gfb605wxbsk3inf93528ygcjgg6j8ml51691f6ghj363ff";
+      sha256 = "1h2d3wpzkla42igxyisaqh2nwpq01vwad1wp9671xmm5ahvkw5f7";
     };
 
     buildInputs = [ guile which libffi ];
