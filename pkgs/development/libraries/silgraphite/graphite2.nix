@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, freetype, libXft, pango, fontconfig, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.3";
+  version = "1.2.4";
   name = "graphite2-${version}";
   
   src = fetchurl {
     url = "mirror://sourceforge/silgraphite/graphite2/${name}.tgz";
-    sha256 = "1xgwnd81gm6p293x8paxb3yisnvpj5qnv1dzr7bjdi7b7h00ls7g";
+    sha256 = "00xhv1mp640fr3wmdzwn4yz0g56jd4r9fb7b02mc1g19h0bdbhsb";
   };
 
   buildInputs = [pkgconfig freetype libXft pango fontconfig cmake];
