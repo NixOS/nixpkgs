@@ -1,13 +1,13 @@
 { stdenv, fetchurl, alsaLib }:
 
 stdenv.mkDerivation rec {
-  name = "audiofile-0.3.3";
+  name = "audiofile-0.3.6";
 
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
   src = fetchurl {
     url = "http://audiofile.68k.org/${name}.tar.gz";
-    sha256 = "1qm7z0g1d9rcxi1m87slgdi0rhl94g13dx3d2b05dilghwpgjjgq";
+    sha256 = "0rb927zknk9kmhprd8rdr4azql4gn2dp75a36iazx2xhkbqhvind";
   };
 
   meta = with stdenv.lib; {
