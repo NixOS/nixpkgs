@@ -1,10 +1,10 @@
 {stdenv, fetchurl, gettext, python, xz}:
 
 stdenv.mkDerivation rec {
-  name = "iso-codes-3.40";
+  name = "iso-codes-3.49";
   src = fetchurl {
     url = "http://pkg-isocodes.alioth.debian.org/downloads/${name}.tar.xz";
-    sha256 = "0iph96n8vh4khidxg2zzhmcqnphfzg50agn0lv9cjhmnx0i712pr";
+    sha256 = "1ryk5i467p7xxrbrqynb35ci046yj9k9b4d3hfxzass962lz9q04";
   };
   patchPhase = ''
     for i in `find . -name \*.py`
