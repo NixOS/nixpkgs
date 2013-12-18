@@ -7620,11 +7620,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
-    version = "1.20130313";
+    version = "1.20130808";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_${version}.orig.tar.gz";
-      sha256 = "0rk13a68668gsrv6yqgzqxskffqnlyjar4qav6k5iyrp77amn7qm";
+      sha256 = "0i9fqkahrc16mnxjw8fcr4hwrq3ibfrj2lzzbzzb7v5yk5dlr532";
     };
 
     buildInputs = [ sphinx ];
@@ -7713,11 +7713,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   tracing = buildPythonPackage rec {
-    name = "tracing-0.7";
+    name = "tracing-${version}";
+    version = "0.8";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_0.7.orig.tar.gz";
-      sha256 = "9954a1b0cc6b957d15975b048f929bbdd46766d397a6fa51bf8f6498b9459276";
+      url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_${version}.orig.tar.gz";
+      sha256 = "1l4ybj5rvrrcxf8csyq7qx52izybd502pmx70zxp46gxqm60d2l0";
     };
 
     buildInputs = [ sphinx ];
@@ -7752,11 +7753,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   ttystatus = buildPythonPackage rec {
     name = "ttystatus-${version}";
-    version = "0.22";
+    version = "0.23";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_${version}.orig.tar.gz";
-      sha256 = "1hzv0sbrvgcmafflhvzh7plci0dg7wcjlk39i8kqdasg6rw0ag6f";
+      sha256 = "0ymimviyjyh2iizqilg88g4p26f5vpq1zm3cvg7dr7q4y3gmik8y";
     };
 
     buildInputs = [ sphinx ];
@@ -7773,11 +7774,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   larch = buildPythonPackage rec {
     name = "larch-${version}";
-    version = "1.20130316";
+    version = "1.20131130";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_${version}.orig.tar.gz";
-      sha256 = "1mkvmy0jdzd7dlvdx2a75wsbj5qw1clawcgndx9jwl816a9iy225";
+      sha256 = "1hfanp9l6yc5348i3f5sb8c5s4r43y382hflnbl6cnz4pm8yh5r7";
     };
 
     buildInputs = [ sphinx ];
