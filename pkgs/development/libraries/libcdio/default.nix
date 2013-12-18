@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libcddb, pkgconfig, ncurses, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "libcdio-0.90";
+  name = "libcdio-0.92";
   
   src = fetchurl {
     url = "mirror://gnu/libcdio/${name}.tar.gz";
-    sha256 = "0kpp6gr5sjr30pb9klncc37fhkw0wi6r41d2fmvmw17cbj176zmg";
+    sha256 = "1b9zngn8nnxb1yyngi1kwi73nahp4lsx59j17q1bahzz58svydik";
   };
 
   buildInputs = [ libcddb pkgconfig ncurses help2man ];
