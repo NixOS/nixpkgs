@@ -1,11 +1,11 @@
 { stdenv, fetchurl, getopt, lua, boost }:
         
 stdenv.mkDerivation rec {
-  name = "highlight-3.5";
+  name = "highlight-3.9";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/${name}.tar.bz2";
-    sha256 = "0jpidd2fwn5mbrgzjmh53qvfmqqp6g0mah7i5zsf9bd71ga1lp28";
+    sha256 = "1vysj34zz8gk5yhlzm7g6lbphb8y6zfbd9smfgsgwkyawfargrja";
   };
 
   buildInputs = [ getopt lua boost ];
