@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4, zlib, eigen, openbabel, pkgconfig, mesa, libX11 }:
+{ stdenv, fetchurl, cmake, qt4, zlib, eigen, openbabel, pkgconfig, mesa, libX11, doxygen }:
 
 stdenv.mkDerivation rec {
   name = "avogadro-1.1.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 eigen zlib openbabel mesa libX11 ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig doxygen ];
 
   NIX_CFLAGS_COMPILE = "-include ${mesa}/include/GL/glu.h";
 
