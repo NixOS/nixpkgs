@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "sdparm-1.03";
+  name = "sdparm-1.08";
 
   src = fetchurl {
-    url = http://sg.danny.cz/sg/p/sdparm-1.03.tgz;
-    sha256 = "067bdhq2qc7h7ykf1yv86s9x12zscpqnsdlnr636a0nv0di2wymq";
+    url = http://sg.danny.cz/sg/p/sdparm-1.08.tgz;
+    sha256 = "0msy8anggdand1yr50vg2azcfgks7sbfpnqk7xzw9adi2jj7hsrp";
   };
 
   meta = {

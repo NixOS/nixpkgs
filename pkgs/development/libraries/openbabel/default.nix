@@ -1,11 +1,11 @@
 {stdenv, fetchurl, cmake, zlib, libxml2, eigen, python, cairo, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "openbabel-2.3.1";
+  name = "openbabel-2.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/openbabel/${name}.tar.gz";
-    sha256 = "18yprqsk0fi1ri4fmvpx2ym6gx9fp3by681pl3jffpjqmz4qnbly";
+    sha256 = "122if0jkm71ngd1b0dic8k567b3j2hcikbwnpxgchv5ag5ka5b2f";
   };
 
   # TODO : perl & python bindings;

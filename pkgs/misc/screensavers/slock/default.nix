@@ -1,9 +1,9 @@
 { stdenv, fetchurl, xproto, libX11, libXext }:
 stdenv.mkDerivation rec {
-  name = "slock-1.0";
+  name = "slock-1.1";
   src = fetchurl {
     url = "http://dl.suckless.org/tools/${name}.tar.gz";
-    sha256 = "b4e44ff1660f6f7eb270a0575d6ae1e0fbffcf0cdd96860a1695d57e89ae2df9";
+    sha256 = "1r70s3npmp0nyrfdsxz8cw1i1z8n9phqdlw02wjphv341h3yajp0";
   };
   buildInputs = [ xproto libX11 libXext	];
   installFlags = "DESTDIR=\${out} PREFIX=";

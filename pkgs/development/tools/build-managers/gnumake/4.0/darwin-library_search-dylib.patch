@@ -1,0 +1,17 @@
+Fixed default libpatttern on Darwin, imported from prefix overlay.
+Got merged upstream:
+https://savannah.gnu.org/bugs/?37197
+--- default.c.orig	2009-05-02 12:25:24 +0200
++++ default.c	2009-05-02 12:25:58 +0200
+@@ -509,7 +509,11 @@
+ #ifdef __MSDOS__
+     ".LIBPATTERNS", "lib%.a $(DJDIR)/lib/lib%.a",
+ #else
++#ifdef __APPLE__
++    ".LIBPATTERNS", "lib%.dylib lib%.a",
++#else
+     ".LIBPATTERNS", "lib%.so lib%.a",
++#endif
+ #endif
+ #endif
+ 

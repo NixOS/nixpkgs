@@ -3,11 +3,19 @@
 }:
 
 stdenv.mkDerivation {
-  name = "renpy-6.15.5";
+  name = "renpy-6.16.3";
+
+  meta = {
+    description = "Ren'Py Visual Novel Engine";
+    homepage = "http://renpy.org/";
+    license = "MIT";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
+  };
 
   src = fetchurl {
-    url = "http://www.renpy.org/dl/6.15.5/renpy-6.15.5-source.tar.bz2";
-    sha256 = "1k57dak1yk5iyxripqn2syhwwkh70y00pnnb9i1qf19lmiirxa60";
+    url = "http://www.renpy.org/dl/6.16.3/renpy-6.16.3-source.tar.bz2";
+    sha256 = "0yd7wj85kp0hlaqlrhl40irhkmcng89vcxypyx40pqmk87gjagqn";
   };
 
   buildInputs = [
@@ -34,16 +42,8 @@ stdenv.mkDerivation {
     makeWrapper ${python}/bin/python $out/bin/renpy \
       --set PYTHONPATH $program_PYTHONPATH \
       --set RENPY_BASE $out/share/renpy \
-      --set RENPY_LESS_UPDATES 1 \
       --add-flags "-O $out/share/renpy/renpy.py"
   '';
 
   NIX_CFLAGS_COMPILE = "-I${pygame}/include/${python.libPrefix}";
-
-  meta = {
-    description = "Ren'Py Visual Novel Engine";
-    homepage = "http://renpy.org/";
-    license = "MIT";
-    platforms = stdenv.lib.platforms.linux;
-  };
 }

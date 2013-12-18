@@ -1,19 +1,22 @@
 { fetchgit, stdenv, pkgconfig, libtool, autoconf, automake,
-  curl, ncurses, amdappsdk, amdadlsdk, xorg }:
+  curl, ncurses, amdappsdk, amdadlsdk, xorg, jansson }:
 
 stdenv.mkDerivation rec {
-  version = "2.11.4";
+  version = "3.7.2";
   name = "cgminer-${version}";
 
   src = fetchgit {
     url = "https://github.com/ckolivas/cgminer.git";
-    rev = "96c8ff5f10f2d8f0cf4d1bd889e8eeac2e4aa715";
-    sha256  = "1vf9agy4vw50cap03qig2y65hdrsdy7cknkzyagv89w5xb230r9a";
+    rev = "refs/tags/v3.7.2";
+    sha256  = "0hl71328l19rlclajb6k9xsqybm2ln8g44p788gijpw4laj9yli6";
   };
 
-  buildInputs = [ autoconf automake pkgconfig libtool curl ncurses amdappsdk amdadlsdk xorg.libX11 xorg.libXext xorg.libXinerama ];
+  buildInputs = [
+    autoconf automake pkgconfig libtool curl ncurses amdappsdk amdadlsdk
+    xorg.libX11 xorg.libXext xorg.libXinerama jansson
+  ];
   configureScript = "./autogen.sh";
-  configureFlags = "--enable-scrypt";
+  configureFlags = "--enable-scrypt --enable-opencl";
   NIX_LDFLAGS = "-lgcc_s -lX11 -lXext -lXinerama";
 
   preConfigure = ''
@@ -21,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   postBuild = ''
-    gcc api-example.c -I compat/jansson -o cgminer-api
+    gcc api-example.c -o cgminer-api
   '';
 
   postInstall = ''

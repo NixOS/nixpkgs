@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libuuid, popt, icu, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "gptfdisk-0.8.6";
+  name = "gptfdisk-0.8.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/gptfdisk/${name}.tar.gz";
-    sha256 = "1cj7lribq8f3i4q6463q08bs42pvlzfj0iz2f2cnjn94hiacsya5";
+    sha256 = "16myqa72mp0wyhca8il299h1gd6k6sr7m52qcr97j840wk0fjcac";
   };
 
   buildInputs = [ libuuid popt icu ncurses ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.rodsbooks.com/gdisk/;
 
-    maintainers = stdenv.lib.maintainers.shlevy;
+    maintainers = [ stdenv.lib.maintainers.shlevy ];
 
     platforms = stdenv.lib.platforms.linux;
   };

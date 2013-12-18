@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, gst_plugins_base, gstreamer }:
 
 stdenv.mkDerivation rec {
-  name = "gnonlin-0.10.15";
+  name = "gnonlin-0.10.17";
 
   src = fetchurl {
     urls = [
       "http://gstreamer.freedesktop.org/src/gnonlin/${name}.tar.bz2"
       "mirror://gentoo/distfiles/${name}.tar.bz2"
       ];
-    sha256 = "1yz0i3vzpadz5axwdb310bypl4rm1xy2n6mgajja0w2z6afnrfv0";
+    sha256 = "0dc9kvr6i7sh91cyhzlbx2bchwg84rfa4679ccppzjf0y65dv8p4";
   };
 
   buildInputs = [ gst_plugins_base gstreamer pkgconfig ];

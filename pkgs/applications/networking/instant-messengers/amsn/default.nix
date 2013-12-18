@@ -1,10 +1,10 @@
 {stdenv, fetchurl, which, tcl, tk, x11, libpng, libjpeg, makeWrapper}:
 
 stdenv.mkDerivation {
-  name = "amsn-0.98.4";
+  name = "amsn-0.98.9";
   src = fetchurl {
-    url = mirror://sourceforge/amsn/amsn-0.98.4-src.tar.gz;
-    sha256 = "1kcn1hc6bvgy4svf5l3j5psdrvsmy0p3r33fn7gzcinqdf3xfgqx";
+    url = mirror://sourceforge/amsn/amsn-0.98.9-src.tar.gz;
+    sha256 = "0b8ir7spxnsz8f7kvr9f1k91nsy8cb65q6jv2l55b04fl20x4z7r";
   };
 
   configureFlags = "--with-tcl=${tcl}/lib --with-tk=${tk}/lib --enable-static";

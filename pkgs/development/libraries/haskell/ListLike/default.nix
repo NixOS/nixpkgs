@@ -2,10 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "ListLike";
-  version = "4.0.1";
-  sha256 = "1ny6h3f1l0gigyv2rs24s7w158vsflrdx4i9v1al4910cxh56awv";
+  version = "4.0.2";
+  sha256 = "1ggh8yndnsmccgsl11fia4v2cad0vq3clibgh0311r3c43mwvnah";
   buildDepends = [ text vector ];
   testDepends = [ HUnit QuickCheck random text vector ];
+  jailbreak = true;
   meta = {
     homepage = "http://software.complete.org/listlike";
     description = "Generic support for list-like structures";

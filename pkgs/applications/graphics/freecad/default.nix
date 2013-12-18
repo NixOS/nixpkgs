@@ -1,6 +1,6 @@
-{ fetchurl, stdenv, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts,
-boost, zlib,
-python, swig, gfortran, soqt, libf2c, pyqt4, makeWrapper }:
+{ stdenv, fetchurl, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts
+, boost, zlib, python, swig, gfortran, soqt, libf2c , pyqt4, makeWrapper
+, matplotlib, pycollada }:
 
 stdenv.mkDerivation rec {
   name = "freecad-${version}";
@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost
-    zlib python swig gfortran soqt libf2c pyqt4 makeWrapper ];
+    zlib python swig gfortran soqt libf2c pyqt4 makeWrapper matplotlib
+    pycollada
+  ];
 
   enableParallelBuilding = true;
 

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hspec-expectations";
-  version = "0.3.3";
-  sha256 = "0sg7wkgr9qmwv0bki1q8wvl5jrlsvn0c7sd2qpqp3cccdhwj9c5k";
+  version = "0.5.0.1";
+  sha256 = "0r1yy94q30gp3wyif7qfa22gn3g2lrszwygsy4wknc396fab7mvj";
   buildDepends = [ HUnit ];
   testDepends = [ hspec HUnit markdownUnlit silently ];
   doCheck = false;

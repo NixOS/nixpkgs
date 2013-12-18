@@ -1,4 +1,4 @@
-{ callPackage, callPackageOrig, stdenv, qt48, release ? "4.11.2" }:
+{ callPackage, callPackageOrig, stdenv, qt48, release ? "4.11.4" }:
 
 let
   # Need callPackageOrig to avoid infinite cycle

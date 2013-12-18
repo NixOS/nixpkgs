@@ -12,11 +12,11 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="xdaliclock";
-    version="2.35";
+    version="2.40";
     name="${baseName}-${version}";
     project="${baseName}";
     url="http://www.jwz.org/${project}/${name}.tar.gz";
-    hash="0iybha2d0wqb4wkpw7l1zi3zhw57kqh3y7p4ja1k0fmvrzqc08g7";
+    hash="03i8vwi9vz3gr938wr4miiymwv283mg11wgfaf2jhl6aqbmz4id7";
   };
 in
 rec {

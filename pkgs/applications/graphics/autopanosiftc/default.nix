@@ -1,11 +1,11 @@
 {stdenv, fetchurl, cmake, libpng, libtiff, libjpeg, panotools, libxml2 }:
 
 stdenv.mkDerivation {
-  name = "autopano-sift-C-2.5.0";
+  name = "autopano-sift-C-2.5.1";
 
   src = fetchurl {
-    url = mirror://sourceforge/hugin/autopano-sift-C-2.5.0.tar.gz;
-    sha256 = "0pvkapjg7qdkjg151wjc7islly9ag8fg6bj0g5nbllv981ixjql3";
+    url = mirror://sourceforge/hugin/autopano-sift-C-2.5.1.tar.gz;
+    sha256 = "0dqk8ff82gmy4v5ns5nr9gpzkc1p7c2y8c8fkid102r47wsjk44s";
   };
 
   buildInputs = [ cmake libpng libtiff libjpeg panotools libxml2 ];

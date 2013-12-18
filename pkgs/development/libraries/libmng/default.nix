@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.libmng.com;
     license = "zlib/libpng";
     maintainers = with stdenv.lib.maintainers; [ marcweber urkud ];
-    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }

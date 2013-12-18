@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nmap-5.50";
+  name = "nmap-6.40";
 
   src = fetchurl {
     url = "http://nmap.org/dist/${name}.tar.bz2";
-    sha256 = "aa044113caa47e172c154daed73afc70ffa18d359eb47c22a9ea85ffcb14ffb8";
+    sha256 = "491f77d8b3fb3bb38ba4e3850011fe6fb43bbe197f9382b88cb59fa4e8f7a401";
   };
 
   patches = [ ./zenmap.patch ];
