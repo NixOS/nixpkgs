@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, automoc4, qt4, pulseaudio }:
 
 let
-  v = "4.7.0";
+  v = "4.7.1";
 in
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/phonon/${v}/${name}.tar.xz";
-    sha256 = "1sxrnwm16dxy32xmrqf26762wmbqing1zx8i4vlvzgzvd9xy39ac";
+    sha256 = "0pdpj7xnalr511zx12akxg6smz7x5gybkpliclb5f5dcxqnq1xsg";
   };
 
   buildInputs = [ qt4 pulseaudio ];
