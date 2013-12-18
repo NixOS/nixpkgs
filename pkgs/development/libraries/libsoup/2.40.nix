@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "libsoup-2.44.1";
+  name = "libsoup-2.44.2";
 
   src = fetchurl {
-    url = mirror://gnome/sources/libsoup/2.44/libsoup-2.44.1.tar.xz;
-    sha256 = "07acjwvik3gagcsdjzi85g44ga4pd3nh4ww6722bfzjzvlqw6cn5";
+    url = mirror://gnome/sources/libsoup/2.44/libsoup-2.44.2.tar.xz;
+    sha256 = "1wwqsmi1jvidiqwbdnjl66nmk1yja8w9dxf9cz10zh56fjmvbr77";
   };
 
 
