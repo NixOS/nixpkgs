@@ -27,7 +27,7 @@ let
       sha256 = "5421559aa12b4debffef947f7e1039c22e9dffd87a4aa68445a687a20764ae81";
     };
     opam = fetchurl {
-      url = "https://github.com/OCamlPro/opam/archive/1.1.0.zip";
+      url = "https://github.com/ocaml/opam/archive/1.1.0.zip";
       sha256 = "38a5edc1428f9e8e0d13e7017c97e1614dd651b75b4c234c80ff22f103d38bf7";
     };
   };
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     maintainers = stdenv.lib.maintainers.orbitz;
-    description = "A package manager for ocaml";
+    description = "A package manager for OCaml";
     platforms   = stdenv.lib.platforms.all;
   };
 }
