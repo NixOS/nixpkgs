@@ -1658,7 +1658,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   oeis = callPackage ../development/libraries/haskell/oeis {};
 
-  OpenAL = callPackage ../development/libraries/haskell/OpenAL {};
+  OpenAL = callPackage ../development/libraries/haskell/OpenAL {
+    OpenGL = self.OpenGL_2_9_1_0;
+  };
 
   OpenGL_2_2_1_1 = callPackage ../development/libraries/haskell/OpenGL/2.2.1.1.nix {};
   OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {};
