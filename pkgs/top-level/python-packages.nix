@@ -96,11 +96,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit python buildPythonPackage;
   };
 
-  pycrypto25 = import ../development/python-modules/pycrypto/2.5.nix {
-    inherit (pkgs) fetchurl stdenv gmp;
-    inherit python buildPythonPackage;
-  };
-
   pygobject = import ../development/python-modules/pygobject {
     inherit (pkgs) stdenv fetchurl pkgconfig glib;
     inherit python;
@@ -1115,6 +1110,30 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     meta = {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
+  pycollada = buildPythonPackage rec {
+    name = "pycollada-0.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pycollada/${name}.tar.gz";
+      md5 = "5d0f00c035491b945cdccdfd8a698ad2";
+    };
+
+    # pycollada-0.4 needs python-dateutil==1.5
+    buildInputs = [ dateutil_1_5 numpy ];
+
+    # Some tests fail because they refer to test data files that don't exist
+    # (upstream packaging issue)
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Python library for reading and writing collada documents";
+      homepage = http://pycollada.github.io/;
+      license = "BSD"; # they don't specify which BSD variant
+      platforms = with platforms; linux ++ darwin;
+      maintainers = [ maintainers.bjornfor ];
     };
   };
 
@@ -3369,11 +3388,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   manuel = buildPythonPackage rec {
     name = "manuel-${version}";
-    version = "1.6.0";
+    version = "1.6.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/m/manuel/${name}.tar.gz";
-      md5 = "53d6a6905301a20f6095e41d11968fff";
+      sha256 = "1h35ys31zkjd9jssqn9lzwmw8s17ikr4jn2xp5zby1v771ibbbqr";
     };
 
     propagatedBuildInputs = [ six zope_testing ];
@@ -7601,11 +7620,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
-    version = "1.20130313";
+    version = "1.20130808";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_${version}.orig.tar.gz";
-      sha256 = "0rk13a68668gsrv6yqgzqxskffqnlyjar4qav6k5iyrp77amn7qm";
+      sha256 = "0i9fqkahrc16mnxjw8fcr4hwrq3ibfrj2lzzbzzb7v5yk5dlr532";
     };
 
     buildInputs = [ sphinx ];
@@ -7694,11 +7713,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   tracing = buildPythonPackage rec {
-    name = "tracing-0.7";
+    name = "tracing-${version}";
+    version = "0.8";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_0.7.orig.tar.gz";
-      sha256 = "9954a1b0cc6b957d15975b048f929bbdd46766d397a6fa51bf8f6498b9459276";
+      url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_${version}.orig.tar.gz";
+      sha256 = "1l4ybj5rvrrcxf8csyq7qx52izybd502pmx70zxp46gxqm60d2l0";
     };
 
     buildInputs = [ sphinx ];
@@ -7733,11 +7753,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   ttystatus = buildPythonPackage rec {
     name = "ttystatus-${version}";
-    version = "0.22";
+    version = "0.23";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_${version}.orig.tar.gz";
-      sha256 = "1hzv0sbrvgcmafflhvzh7plci0dg7wcjlk39i8kqdasg6rw0ag6f";
+      sha256 = "0ymimviyjyh2iizqilg88g4p26f5vpq1zm3cvg7dr7q4y3gmik8y";
     };
 
     buildInputs = [ sphinx ];
@@ -7754,11 +7774,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   larch = buildPythonPackage rec {
     name = "larch-${version}";
-    version = "1.20130316";
+    version = "1.20131130";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_${version}.orig.tar.gz";
-      sha256 = "1mkvmy0jdzd7dlvdx2a75wsbj5qw1clawcgndx9jwl816a9iy225";
+      sha256 = "1hfanp9l6yc5348i3f5sb8c5s4r43y382hflnbl6cnz4pm8yh5r7";
     };
 
     buildInputs = [ sphinx ];

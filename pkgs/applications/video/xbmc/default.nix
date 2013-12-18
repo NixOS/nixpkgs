@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper
-, pkgconfig, cmake, gnumake, yasm, python
+, pkgconfig, cmake, gnumake, yasm, pythonFull
 , boost, avahi, libdvdcss, lame
 , gettext, pcre, yajl, fribidi
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
     buildInputs = [
       makeWrapper
-      pkgconfig cmake gnumake yasm python
+      pkgconfig cmake gnumake yasm pythonFull
       boost libmicrohttpd
       gettext pcre yajl fribidi
       openssl gperf tinyxml2 taglib libssh swig jre
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     postInstall = ''
       for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH ":" "${python}/bin" \
+          --prefix PATH ":" "${pythonFull}/bin" \
           --prefix PATH ":" "${glxinfo}/bin" \
           --prefix PATH ":" "${xdpyinfo}/bin" \
           --prefix LD_LIBRARY_PATH ":" "${curl}/lib" \

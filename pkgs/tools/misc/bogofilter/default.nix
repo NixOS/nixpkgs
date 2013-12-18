@@ -1,10 +1,10 @@
 {fetchurl, stdenv, flex, bdb}:
 
 stdenv.mkDerivation rec {
-  name = "bogofilter-1.1.7";
+  name = "bogofilter-1.2.4";
   src = fetchurl {
     url = "mirror://sourceforge/bogofilter/${name}.tar.bz2";
-    sha256 = "0ahi3pxv9v6yjjpfyr0x7fch4c4jdikshrcx86q0j8s2rhv94snm";
+    sha256 = "1d56n2m9inm8gnzm88aa27xl2a7sp7aff3484vmflpqkinjqf0p1";
   };
 
   # FIXME: We would need `pax' as a "propagated build input" (for use

@@ -1,23 +1,9 @@
-diff --git a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_emulation.py
-index 806f92b..5256856 100644
---- a/tools/gyp/pylib/gyp/xcode_emulation.py
-+++ b/tools/gyp/pylib/gyp/xcode_emulation.py
-@@ -224,8 +224,7 @@ class XcodeSettings(object):
- 
-   def _GetSdkVersionInfoItem(self, sdk, infoitem):
-     job = subprocess.Popen(['xcodebuild', '-version', '-sdk', sdk, infoitem],
--                           stdout=subprocess.PIPE,
--                           stderr=subprocess.STDOUT)
-+                           stdout=subprocess.PIPE)
-     out = job.communicate()[0]
-     if job.returncode != 0:
-       sys.stderr.write(out + '\n')
-@@ -234,9 +233,17 @@ class XcodeSettings(object):
- 
-   def _SdkPath(self):
-     sdk_root = self.GetPerTargetSetting('SDKROOT', default='macosx')
-+    if sdk_root.startswith('/'):
-+      return sdk_root
+diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_emulation.py
+--- a/tools/gyp/pylib/gyp/xcode_emulation.py	2013-11-12 21:22:12.000000000 +0100
++++ b/tools/gyp/pylib/gyp/xcode_emulation.py	2013-12-17 11:07:11.000000000 +0100
+@@ -285,8 +285,15 @@
+     if sdk_root.startswith('/'):
+       return sdk_root
      if sdk_root not in XcodeSettings._sdk_path_cache:
 -      XcodeSettings._sdk_path_cache[sdk_root] = self._GetSdkVersionInfoItem(
 -          sdk_root, 'Path')
@@ -29,10 +15,11 @@ index 806f92b..5256856 100644
 +        # the user is probably on a CLT-only system, where there
 +        # is no valid SDK root
 +        XcodeSettings._sdk_path_cache[sdk_root] = None
++
      return XcodeSettings._sdk_path_cache[sdk_root]
  
    def _AppendPlatformVersionMinFlags(self, lst):
-@@ -339,10 +346,11 @@ class XcodeSettings(object):
+@@ -397,10 +404,11 @@
  
      cflags += self._Settings().get('WARNING_CFLAGS', [])
  
@@ -48,7 +35,7 @@ index 806f92b..5256856 100644
  
      self.configname = None
      return cflags
-@@ -572,10 +580,11 @@ class XcodeSettings(object):
+@@ -647,10 +655,11 @@
      for rpath in self._Settings().get('LD_RUNPATH_SEARCH_PATHS', []):
        ldflags.append('-Wl,-rpath,' + rpath)
  
@@ -64,15 +51,15 @@ index 806f92b..5256856 100644
  
      self.configname = None
      return ldflags
-@@ -700,7 +709,10 @@ class XcodeSettings(object):
+@@ -826,7 +835,10 @@
          l = '-l' + m.group(1)
        else:
          l = library
--    return l.replace('$(SDKROOT)', self._SdkPath())
+-    return l.replace('$(SDKROOT)', self._SdkPath(config_name))
 +    if self._SdkPath():
-+      return l.replace('$(SDKROOT)', self._SdkPath())
++      return l.replace('$(SDKROOT)', self._SdkPath(config_name))
 +    else:
 +      return l
  
-   def AdjustLibraries(self, libraries):
+   def AdjustLibraries(self, libraries, config_name=None):
      """Transforms entries like 'Cocoa.framework' in libraries into entries like

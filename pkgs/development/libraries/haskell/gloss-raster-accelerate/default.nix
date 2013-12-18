@@ -9,5 +9,6 @@ cabal.mkDerivation (self: {
     description = "Parallel rendering of raster images using Accelerate";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dash-0.5.6";
+  name = "dash-0.5.7";
   
   src = fetchurl {
     url = "http://gondor.apana.org.au/~herbert/dash/files/${name}.tar.gz";
-    sha256 = "0qnqx14y70ay1mn0w0hrknpll9266pvj0426k8niww9s7fzv89w5";
+    sha256 = "0fafpbpq6jghs0fr392x525dybym9kq1s3kly2679ds526gzm2df";
   };
   
   meta = {

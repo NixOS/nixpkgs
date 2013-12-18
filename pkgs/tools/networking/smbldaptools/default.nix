@@ -1,13 +1,13 @@
 {stdenv, fetchurl, perl, NetLDAP, makeWrapper, CryptSmbHash, DigestSHA1}:
 
 let
-  version = "0.9.7";
+  version = "0.9.10";
 in
 stdenv.mkDerivation {
   name = "smbldap-tools-${version}";
   src = fetchurl {
     url = "http://download.gna.org/smbldap-tools/sources/${version}/smbldap-tools-${version}.tar.gz";
-    sha256 = "0y1k2j5qjxy66yvl36adbp9m1brapiz9ycaisdyy6093xvw1nh7j";
+    sha256 = "19hsvslfs61pk9nhyqdkd68gc95z26kpkmsj10b8zvzlhqmwdvy4";
   };
 
   buildInputs = [ perl NetLDAP makeWrapper CryptSmbHash DigestSHA1 ];

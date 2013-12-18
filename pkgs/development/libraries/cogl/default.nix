@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, mesa, glib, gdk_pixbuf, xorg, libintlOrEmpty
-, pangoSupport ? true, pango, cairo }:
+, pangoSupport ? true, pango, cairo, gobjectIntrospection }:
 
 let
   ver_maj = "1.16";
@@ -15,8 +15,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
+  configureFlags = " --enable-introspection " ;
+
   propagatedBuildInputs = with xorg;
-    [ mesa glib gdk_pixbuf libXfixes libXcomposite libXdamage libXrandr ]
+    [ mesa glib gdk_pixbuf libXfixes libXcomposite libXdamage gobjectIntrospection ]
     ++ libintlOrEmpty;
 
   buildInputs = stdenv.lib.optionals pangoSupport [ pango cairo ];

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, fftw, libsndfile }:
 
 stdenv.mkDerivation rec {
-  name = "libsamplerate-0.1.7";
+  name = "libsamplerate-0.1.8";
 
   src = fetchurl {
     url = "http://www.mega-nerd.com/SRC/${name}.tar.gz";
-    sha256 = "1k3z09b13c0z10mqfn6w48pxsdx569s3wslg0x52q5mzy6gmvvbq";
+    sha256 = "01hw5xjbjavh412y63brcslj5hi9wdgkjd3h9csx5rnm8vglpdck";
   };
 
   buildInputs = [ pkgconfig ];

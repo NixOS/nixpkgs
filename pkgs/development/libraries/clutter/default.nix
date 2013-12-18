@@ -1,5 +1,7 @@
 { stdenv, fetchurl, glib, pkgconfig, mesa, libX11, libXext, libXfixes
-, libXdamage, libXcomposite, libXi, cogl, pango, atk, json_glib }:
+, libXdamage, libXcomposite, libXi, cogl, pango, atk, json_glib, 
+gobjectIntrospection 
+}:
 
 let
   ver_maj = "1.16";
@@ -16,10 +18,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
     [ libX11 mesa libXext libXfixes libXdamage libXcomposite libXi cogl pango
-      atk json_glib
+      atk json_glib gobjectIntrospection
     ];
 
-  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
+  configureFlags = [ "--enable-introspection" ]; # needed by muffin AFAIK
 
   #doCheck = true; # no tests possible without a display
 

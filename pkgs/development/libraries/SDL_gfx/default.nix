@@ -1,11 +1,11 @@
 {stdenv, fetchurl, SDL} :
 
 stdenv.mkDerivation rec {
-  name = "SDL_gfx-2.0.22";
+  name = "SDL_gfx-2.0.25";
 
   src = fetchurl {
     url = "http://www.ferzkopp.net/Software/SDL_gfx-2.0/${name}.tar.gz";
-    sha256 = "1w1bdpyypvqg1nmbjwkqnjhmngvpjmhc0zanwgq7z4pxffzffx8m";
+    sha256 = "1h2rj34dxi5xlwpvm293v2d91gsirhnpzlmnjns9xwkcdg0fsvjm";
   };
 
   buildInputs = [ SDL ] ;

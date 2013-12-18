@@ -1,12 +1,12 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.5.1";
   name = "clojure-binary-${version}";
 
   src = fetchurl {
     url = "http://repo1.maven.org/maven2/org/clojure/clojure/${version}/clojure-${version}.zip";
-    sha256 = "27a5a151d5cc1bc3e52dff47c66111e637fefeb42d9bedfa1284a1a31d080171";
+    sha256 = "1qgiji6ddvv40khp3qb3xfz09g7p4nnsh3pywqglb9f16v534yzy";
   };
 
 

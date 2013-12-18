@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libconfig-${version}";
-  version = "1.4.8";
+  version = "1.4.9";
 
   src = fetchurl {
     url = "http://www.hyperrealm.com/libconfig/${name}.tar.gz";
-    sha256 = "1v817hy9y416i64ly17xdmgrn62qwj225wqakdzqr2j3pygm1c8q";
+    sha256 = "0h9h8xjd36lky2r8jyc6hw085xwpslf0x6wyjvi960g6aa99gj09";
   };
 
   meta = with stdenv.lib; {

@@ -2,14 +2,14 @@
 
 let
   name = "astyle";
-  version = "2.02.1";
+  version = "2.04";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}_${version}_linux.tar.gz";
-    sha256 = "0bece9a32887e51f42c57617cf7c4f9b63d0a386749fe3a094f5525b639ef953";
+    sha256 = "0q3b2579ng01glfwan75zcyvkggixdz9c4i6cgid2664ad47zcvh";
   };
 
   sourceRoot = "astyle/build/gcc";

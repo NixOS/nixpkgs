@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "ii-1.6";
+  name = "ii-1.7";
   
   src = fetchurl {
     url = "http://dl.suckless.org/tools/${name}.tar.gz";
-    sha256 = "0afccbcm7i9lfch5mwzs3l1ax79dg3g6rrw0z8rb7d2kn8wsckvr";
+    sha256 = "176cqwnn6h7w4kbfd66hzqa243l26pqp2b06bii0nmnm0rkaqwis";
   };
 
   installPhase = ''

@@ -1,10 +1,10 @@
 {stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "re2c-0.13.5";
+  name = "re2c-0.13.6";
   src = fetchurl {
-    url = mirror://sourceforge/re2c/re2c/0.13.5/re2c-0.13.5.tar.gz;
-    sha256 = "1336c54b3cacjxg3grxdraq6a00yidr04z90605fhxglk89rbagk";
+    url = mirror://sourceforge/re2c/re2c/0.13.6/re2c-0.13.6.tar.gz;
+    sha256 = "1h3na1zacw3166k6wkdjzjs67frjca9wj07wgfas56c7m8wk0ilf";
   };
 
   meta = {

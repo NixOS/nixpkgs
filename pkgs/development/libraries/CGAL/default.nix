@@ -2,7 +2,7 @@
   }:
 
 stdenv.mkDerivation rec {
-  version = "3.9";
+  version = "4.3";
   name = "cgal-${version}";
   src = fetchurl {
     url = "https://gforge.inria.fr/frs/download.php/29125/CGAL-${version}.tar.gz";

@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libtool, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "global-6.2.2";
+  name = "global-6.2.9";
 
   src = fetchurl {
     url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "0a41d3wc22f05fqi5zpx1r22annsi4whdkjdmw50nidjca1vq5pj";
+    sha256 = "00y38kp0zbpjl9c9phldy7j2ihqc54qn4cdgk0azbjdsv75k3n6q";
   };
 
   buildInputs = [ libtool ncurses ];

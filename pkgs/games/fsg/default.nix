@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     sed -e '
       s@currentProbIndex != 100@0@;
     ' -i MainFrame.cpp
+    sed -re '/ctrans_prob/s/energy\[center][+]energy\[other]/(int)(fmin(energy[center]+energy[other],99))/g' -i Canvas.cpp
   '';
 
   installPhase = ''

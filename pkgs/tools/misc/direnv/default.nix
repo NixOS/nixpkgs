@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     '';
     homepage = http://direnv.net;
     license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.zimbatm ];
   };
 }
