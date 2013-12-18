@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libgpgerror }:
 
 stdenv.mkDerivation (rec {
-  name = "libgcrypt-1.5.3";
+  name = "libgcrypt-1.6.0";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "1lar8y3lh61zl5flljpz540d78g99h4d5idfwrfw8lm3gm737xdw";
+    sha256 = "024plbybsmnxbp39hs92lp6dzvkz2cb70nv69qrwr55d02350bb6";
   };
 
   propagatedBuildInputs = [ libgpgerror ];
