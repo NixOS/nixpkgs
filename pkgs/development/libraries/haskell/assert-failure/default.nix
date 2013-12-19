@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.1";
   sha256 = "1xwd6rhka9gzmldkaw3d7262h51wxw9dwgip39q8pjkvvfs5kwkr";
   buildDepends = [ prettyShow text ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/Mikolaj/assert-failure";
     description = "Syntactic sugar improving 'assert' and 'error'";

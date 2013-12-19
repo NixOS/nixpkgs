@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, imagemagick }:
 
 stdenv.mkDerivation rec {
-  name = "libdmtx-0.7.2";
+  name = "libdmtx-0.7.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/libdmtx/${name}.tar.bz2";
-    sha256 = "0iin2j3ad7ldj32dwc04g28k54iv3lrc5121rgyphm7l9hvigbvk";
+    sha256 = "0xnxx075ycy58n92yfda2z9zgd41h3d4ik5d9l197lzsqim5hb5n";
   };
 
   nativeBuildInputs = [ pkgconfig ];

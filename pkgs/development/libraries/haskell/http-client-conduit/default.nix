@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-client-conduit";
-  version = "0.2.0.0";
-  sha256 = "1pb47mms5qfi185nrz675if4pb7xji97xdqpmyrplqaxqygwih1y";
+  version = "0.2.0.1";
+  sha256 = "0fy9vkxh7hvmp9ijifq8nx6y5y92n6d3s1vdyg53ln65pclc6jn5";
   buildDepends = [ conduit httpClient resourcet transformers ];
   meta = {
     homepage = "https://github.com/snoyberg/http-client";

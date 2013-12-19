@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "quickcheck-instances";
-  version = "0.3.4";
-  sha256 = "10kkjqn530cd4bz5jfnvfvpswk25glyjnmy21qj253db6ja8xns1";
+  version = "0.3.5";
+  sha256 = "1ak55d3yi6ii01921zihn8mk12mws78w05gmhk766kpylhhgni5f";
   buildDepends = [ QuickCheck text time ];
   meta = {
     homepage = "https://github.com/aslatter/qc-instances";

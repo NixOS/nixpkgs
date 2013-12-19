@@ -141,7 +141,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
-    async        = self.async_2_0_1_4;
+    async        = self.async_2_0_1_5;
     attoparsec   = self.attoparsec_0_10_4_0;
     caseInsensitive = self.caseInsensitive_1_1_0_2;
     cgi          = self.cgi_3001_1_8_4;
@@ -560,7 +560,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   async_2_0_1_3 = callPackage ../development/libraries/haskell/async/2.0.1.3.nix {};
   async_2_0_1_4 = callPackage ../development/libraries/haskell/async/2.0.1.4.nix {};
-  async = self.async_2_0_1_4;
+  async_2_0_1_5 = callPackage ../development/libraries/haskell/async/2.0.1.5.nix {};
+  async = self.async_2_0_1_5;
 
   atomicPrimops = callPackage ../development/libraries/haskell/atomic-primops {};
 
@@ -1659,7 +1660,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   oeis = callPackage ../development/libraries/haskell/oeis {};
 
-  OpenAL = callPackage ../development/libraries/haskell/OpenAL {};
+  OpenAL = callPackage ../development/libraries/haskell/OpenAL {
+    OpenGL = self.OpenGL_2_9_1_0;
+  };
 
   OpenGL_2_2_1_1 = callPackage ../development/libraries/haskell/OpenGL/2.2.1.1.nix {};
   OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {};
@@ -1667,7 +1670,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   OpenGL_2_4_0_2 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.2.nix {};
   OpenGL_2_6_0_1 = callPackage ../development/libraries/haskell/OpenGL/2.6.0.1.nix {};
   OpenGL_2_8_0_0 = callPackage ../development/libraries/haskell/OpenGL/2.8.0.0.nix {};
-  OpenGL_2_9_1_0 = callPackage ../development/libraries/haskell/OpenGL/2.9.1.0.nix {};
+  OpenGL_2_9_1_0 = callPackage ../development/libraries/haskell/OpenGL/2.9.1.0.nix {
+    OpenGLRaw = self.OpenGLRaw_1_4_0_0;
+  };
   OpenGL = self.OpenGL_2_9_1_0;
 
   OpenGLRaw_1_3_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.3.0.0.nix {};
@@ -1779,10 +1784,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
   prettyShow_1_2 = callPackage ../development/libraries/haskell/pretty-show/1.2.nix {};
-  prettyShow_1_6_2 = callPackage ../development/libraries/haskell/pretty-show/1.6.2.nix {
+  prettyShow_1_6_3 = callPackage ../development/libraries/haskell/pretty-show/1.6.3.nix {
     happy = self.happy_1_19_2;
   };
-  prettyShow = self.prettyShow_1_6_2;
+  prettyShow = self.prettyShow_1_6_3;
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
 

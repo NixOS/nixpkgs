@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "scientific";
-  version = "0.1.0.0";
-  sha256 = "1x3c8z1d7nhr1z5dlbs60pxfrgclfbwjhrkpvr0jnz0fpy2m9x5r";
+  version = "0.1.0.1";
+  sha256 = "0s401gxwap4xwz9rxypc76rs5w344s3an45295ybf3id6yal5140";
   buildDepends = [ deepseq hashable text ];
   testDepends = [ smallcheck tasty tastySmallcheck text ];
   doCheck = false;
