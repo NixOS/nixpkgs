@@ -3185,10 +3185,10 @@ rec {
   };
 
   ExtUtilsMakeMaker = buildPerlPackage rec{
-    name = "ExtUtils-MakeMaker-6.66";
+    name = "ExtUtils-MakeMaker-6.84";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "1w9pbjajas60a9i29j8h10nz9jf86w7jb197llnfs9fqcf4yvfha";
+      sha256 = "1s3fn1fkm9l6pjhz7dbzsc6nhw1jm2hpf08fqhsqh1h50nj5pv5b";
     };
     propagatedBuildInputs =
       [ ParseCPANMeta version JSONPP CPANMetaYAML CPANMeta
