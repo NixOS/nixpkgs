@@ -3453,10 +3453,10 @@ rec {
   };
 
   FileRemove = buildPerlPackage rec {
-    name = "File-Remove-1.42";
+    name = "File-Remove-1.52";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AD/ADAMK/${name}.tar.gz";
-      sha256 = "2ec2643c4e1a721965ed70ce184b72ae831c82b577420612a59eba8a0ce2a504";
+      sha256 = "1p8bal9qhwkjbghivxn1d5m3qdj2qwm1agrjbmakm6la9dbxqm21";
     };
   };
 
