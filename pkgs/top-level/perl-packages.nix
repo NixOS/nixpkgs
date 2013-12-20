@@ -5001,10 +5001,10 @@ rec {
   };
 
   MIMEBase64 = buildPerlPackage rec {
-    name = "MIME-Base64-3.09";
+    name = "MIME-Base64-3.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
-      sha256 = "1gi2zyxwkkmyng8jawfnbxpsybvybz6h6ryq0wfdljmmjpjbmzzc";
+      sha256 = "1qbcipxij7pv25qhnfdc2lnkqi2cf60frlhlh86gjxslc8kr8nhj";
     };
   };
 
