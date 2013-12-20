@@ -2976,10 +2976,10 @@ rec {
   };
 
   Encode = buildPerlPackage {
-    name = "Encode-2.44";
+    name = "Encode-2.55";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-2.44.tar.gz;
-      sha256 = "c121f9c8ae03e718d1b5d5465d66bb3138af429188735966326656f99a9499c6";
+      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-2.55.tar.gz;
+      sha256 = "0bpnfan0034k644gz6yg9xfddmsqxr2p7vbavijwbxc5k2c2sarz";
     };
   };
 
