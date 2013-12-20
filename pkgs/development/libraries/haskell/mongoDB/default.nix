@@ -1,14 +1,15 @@
-{ cabal, binary, bson, cryptohash, liftedBase, monadControl, mtl
-, network, parsec, random, randomShuffle, text, transformersBase
+{ cabal, binary, bson, cryptohash, hashtables, liftedBase
+, monadControl, mtl, network, parsec, random, randomShuffle, text
+, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "mongoDB";
-  version = "1.4.1.1";
-  sha256 = "1c9980x3i0jgacgz7mx65l5nyp3h83mqp9b52pzxq90lix6xnwhi";
+  version = "1.4.2";
+  sha256 = "15m23q17q8asrsa27mb73ydim1yjrxl06lgf7z8w4r6jy6lk34hf";
   buildDepends = [
-    binary bson cryptohash liftedBase monadControl mtl network parsec
-    random randomShuffle text transformersBase
+    binary bson cryptohash hashtables liftedBase monadControl mtl
+    network parsec random randomShuffle text transformersBase
   ];
   meta = {
     homepage = "http://github.com/selectel/mongodb-haskell";
