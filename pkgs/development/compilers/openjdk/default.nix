@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     sha256 = "15h5nmbw6yn5596ccakqdbs0vd8hmslsfg5sfk8wmjvn31bfmy00";
   };
 
-#  outputs = [ "out" ] ++ stdenv.lib.optionals (! jreOnly) [ "jre" ];
+  #  outputs = [ "out" ] ++ stdenv.lib.optionals (! jreOnly) [ "jre" ];
 
   buildInputs = [
     unzip
@@ -115,6 +115,14 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -av build/*/j2${if jreOnly then "re" else "sdk"}-image/* $out
+
+    # Remove some broken manpages.
+    rm -rf $out/share/man/ja*
+
+    # Remove crap from the installation.
+    rm -rf $out/demo $out/sample
+
+    # Generate certificates.
     pushd $out/${if ! jreOnly then "jre/" else ""}lib/security
     rm cacerts
     perl ${./generate-cacerts.pl} $out/bin/keytool ${cacert}/etc/ca-bundle.crt
