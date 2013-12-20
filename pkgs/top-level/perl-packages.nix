@@ -1570,10 +1570,10 @@ rec {
   };
 
   CPANUploader = buildPerlPackage {
-    name = "CPAN-Uploader-0.103004";
+    name = "CPAN-Uploader-0.103006";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Uploader-0.103004.tar.gz;
-      sha256 = "cfaf6d4ad32a92cdefabb3abaf1f43c7c11aca5afd5561ea6f691065ac396e97";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Uploader-0.103006.tar.gz;
+      sha256 = "1hkbi2j0a9v4577jxfzw586rvpzw0af61qbiggh3dd7j9b183w39";
     };
     propagatedBuildInputs = [ FileHomeDir GetoptLongDescriptive HTTPMessage LWP LWPProtocolhttps TermReadKey ];
     meta = {
