@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     description = "Provides a fast unix command line interface to a variety of popular WWW search engines and other artifacts of power";
     homepage = "http://surfraw.alioth.debian.org";
     maintainers = [];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
