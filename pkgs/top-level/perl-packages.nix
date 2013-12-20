@@ -8408,10 +8408,10 @@ rec {
   };
 
   TestTester = buildPerlPackage {
-    name = "Test-Tester-0.108";
+    name = "Test-Tester-0.109";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FD/FDALY/Test-Tester-0.108.tar.gz;
-      sha256 = "1pby9w41b7z0cgnxpgkh397x7z68855sjg5yda48r6lck3lga62h";
+      url = mirror://cpan/authors/id/F/FD/FDALY/Test-Tester-0.109.tar.gz;
+      sha256 = "0m9n28z09kq455r5nydj1bnr85lvmbfpcbjdkjfbpmfb5xgciiyk";
     };
   };
 
