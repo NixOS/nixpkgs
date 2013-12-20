@@ -5297,15 +5297,7 @@ let
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
-  ncurses_5_4 = makeOverridable (import ../development/libraries/ncurses/5_4.nix) {
-    inherit fetchurl;
-    unicode = system != "i686-cygwin";
-    stdenv = if stdenv.isDarwin
-      then allStdenvs.stdenvNative
-      else stdenv;
-  };
-  ncurses_5_9 = makeOverridable (import ../development/libraries/ncurses) {
-    inherit fetchurl;
+  ncurses = callPackage ../development/libraries/ncurses {
     unicode = system != "i686-cygwin";
     stdenv =
       # On Darwin, NCurses uses `-no-cpp-precomp', which is specific to
@@ -5315,7 +5307,6 @@ let
       then allStdenvs.stdenvNative
       else stdenv;
   };
-  ncurses = ncurses_5_9;
 
   neon = callPackage ../development/libraries/neon {
     compressionSupport = true;
