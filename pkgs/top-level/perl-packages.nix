@@ -5080,10 +5080,10 @@ rec {
   };
 
   ModuleCoreList = buildPerlPackage {
-    name = "Module-CoreList-2.97";
+    name = "Module-CoreList-3.01";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/Module-CoreList-2.97.tar.gz;
-      sha256 = "fa39c487d43088e7010467621f57d8e3f57b72d2bbf711fc509e87a501f35e09";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/Module-CoreList-3.01.tar.gz;
+      sha256 = "10vf18x9qk4hdpwazxq8c0qykals36dxj0bjazqqcbp5xfb4fnyg";
     };
     meta = {
       homepage = http://dev.perl.org/;
