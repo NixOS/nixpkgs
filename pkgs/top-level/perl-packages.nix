@@ -6657,10 +6657,10 @@ rec {
   };
 
   Perl6Junction = buildPerlPackage rec {
-    name = "Perl6-Junction-1.40000";
+    name = "Perl6-Junction-1.60000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CF/CFRANKS/${name}.tar.gz";
-      sha256 = "0sgv8hqrkhx73bcb5jyi8a0b3v5bxqr3aziram1zndx43i1knzp4";
+      sha256 = "0r3in9pyrm6wfrhcvxbq5w1617x8x5537lxj9hdzks4pa7l7a8yh";
     };
   };
 
