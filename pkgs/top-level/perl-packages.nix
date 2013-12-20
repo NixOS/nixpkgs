@@ -2966,10 +2966,10 @@ rec {
   };
 
   EmailValid = buildPerlPackage {
-    name = "Email-Valid-0.179";
+    name = "Email-Valid-1.192";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Valid-0.179.tar.gz;
-      sha256 = "13yfjll63cp1y4xqzdcr1mjhfncn48v6hckk5mvwi47w3ccj934a";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Valid-1.192.tar.gz;
+      sha256 = "0vpqgbr5bj4bvrd7c2fh9hs1mz0m6nfybl2rdn5yb4h67bmxfkbp";
     };
     propagatedBuildInputs = [MailTools NetDNS];
     doCheck = false;
