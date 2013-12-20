@@ -6388,10 +6388,10 @@ rec {
   };
 
   ParseCPANMeta = buildPerlPackage rec {
-    name = "Parse-CPAN-Meta-1.4404";
+    name = "Parse-CPAN-Meta-1.4409";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Parse/${name}.tar.gz";
-      sha256 = "1y4mr5hmkkl405x4v31kx2nmlahpg0c38k8s65vgqc4s28wxafmh";
+      sha256 = "0b7cp78zajmwf4a0968p3b2bb00axkxj3a9nq1rx8cb17hhva819";
     };
     propagatedBuildInputs = [ CPANMetaYAML JSONPP ];
   };
