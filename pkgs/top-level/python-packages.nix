@@ -5360,11 +5360,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pysvn = pkgs.stdenv.mkDerivation {
-    name = "pysvn-1.7.6";
+    name = "pysvn-1.7.8";
 
     src = fetchurl {
-      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.6.tar.gz";
-      sha256 = "0wwb9h3rw2r8hzqya8mv5z8pgjpa6y3i15a3cccdv2mil44289a7";
+      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.8.tar.gz";
+      sha256 = "1qk7af0laby1f79bd07l9p0dxn5xmcmfwlcb9l1hk29zwwq6x4v0";
     };
 
     buildInputs = [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
