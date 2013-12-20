@@ -9307,10 +9307,10 @@ rec {
   };
 
   XMLTwig = buildPerlPackage {
-    name = "XML-Twig-3.32";
+    name = "XML-Twig-3.44";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIROD/XML-Twig-3.32.tar.gz;
-      sha256 = "07zdsfzw9dlrx6ril9clf1jfif09vpf27rz66laja7mvih9izd1v";
+      url = mirror://cpan/authors/id/M/MI/MIROD/XML-Twig-3.44.tar.gz;
+      sha256 = "1fi05ddq4dqpff7xvgsw2rr8p5bah401gmblyb3pvjg225ic2l96";
     };
     propagatedBuildInputs = [XMLParser];
     doCheck = false;  # requires lots of extra packages
