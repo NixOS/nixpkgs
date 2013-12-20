@@ -4162,10 +4162,10 @@ rec {
   };
 
   IOAll = buildPerlPackage {
-    name = "IO-All-0.46";
+    name = "IO-All-0.50";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IN/INGY/IO-All-0.46.tar.gz;
-      sha256 = "0rqv270gi7x4sjicfwf1hiqvicwlj3s0zyi2cxqwrc8q9hs2pdya";
+      url = mirror://cpan/authors/id/I/IN/INGY/IO-All-0.50.tar.gz;
+      sha256 = "13mc913jqqfkaily48cd886x0n6x6zw59c00fmkhqc97xh1kdckc";
     };
     propagatedBuildInputs = [ IOString ];
     meta = {
