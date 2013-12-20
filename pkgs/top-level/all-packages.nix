@@ -4847,6 +4847,8 @@ let
 
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
+  libgcrypt_1_6 = lowPrio (callPackage ../development/libraries/libgcrypt/1.6.nix { });
+
   libgcrypt_git = lowPrio (callPackage ../development/libraries/libgcrypt/git.nix { });
 
   libgdiplus = callPackage ../development/libraries/libgdiplus { };
@@ -8099,7 +8101,7 @@ let
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
 
   gnunet_svn = lowPrio (callPackage ../applications/networking/p2p/gnunet/svn.nix {
-    libgcrypt = libgcrypt_git;
+    libgcrypt = libgcrypt_1_6;
   });
 
   gocr = callPackage ../applications/graphics/gocr { };
