@@ -8048,10 +8048,10 @@ rec {
   };
 
   TestFatal = buildPerlPackage {
-    name = "Test-Fatal-0.010";
+    name = "Test-Fatal-0.013";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Fatal-0.010.tar.gz;
-      sha256 = "01ck4wyrj4nqyr1cz3lcff6g9nryadsflpf85jmsa6vcl2bq8pl0";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Fatal-0.013.tar.gz;
+      sha256 = "1rrndzkjff3bdlzzdsfsd3fhng142la2m74ihkgv17islkp17yq2";
     };
     propagatedBuildInputs = [ TryTiny ];
     meta = {
