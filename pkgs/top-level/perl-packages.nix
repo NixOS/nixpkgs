@@ -1749,10 +1749,10 @@ rec {
   };
 
   DataDump = buildPerlPackage {
-    name = "Data-Dump-1.21";
+    name = "Data-Dump-1.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/Data-Dump-1.21.tar.gz;
-      sha256 = "1fcy6q8p406ag8g50l7znns3kxazfb458l6kw8pbsp4axnkz9ydx";
+      url = mirror://cpan/authors/id/G/GA/GAAS/Data-Dump-1.22.tar.gz;
+      sha256 = "1ciqlwsy1q35s94dry9bjy1pwanbq6b7q4rhxm9z8prgkzbslg2k";
     };
     meta = {
       description = "Pretty printing of data structures";
