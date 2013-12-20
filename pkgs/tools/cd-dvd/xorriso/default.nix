@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libcdio, zlib, bzip2, readline, acl }:
+{ fetchurl, stdenv, libcdio, zlib, bzip2, readline, acl, attr }:
 
 stdenv.mkDerivation rec {
   name = "xorriso-1.3.4";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ libcdio zlib bzip2 readline ]
+  buildInputs = [ libcdio zlib bzip2 readline attr ]
     ++ stdenv.lib.optional stdenv.isLinux acl;
 
   meta = {
