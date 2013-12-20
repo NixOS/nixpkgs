@@ -1,11 +1,11 @@
 { fetchurl, stdenv, perl }:
 
 stdenv.mkDerivation rec {
-  name = "namazu-2.0.20";
+  name = "namazu-2.0.21";
 
   src = fetchurl {
     url = "http://namazu.org/stable/${name}.tar.gz";
-    sha256 = "1czw3l6wmz8887wfjpgds9di8hcg0hsmbc0mc6bkahj8g7lvrnyd";
+    sha256 = "1xvi7hrprdchdpzhg3fvk4yifaakzgydza5c0m50h1yvg6vay62w";
   };
 
   buildInputs = [ perl ];
