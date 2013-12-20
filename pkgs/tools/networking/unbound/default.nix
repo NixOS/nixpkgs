@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, expat, libevent, ldns }:
 
 stdenv.mkDerivation rec {
-  name = "unbound-1.4.13";
+  name = "unbound-1.4.21";
 
   src = fetchurl {
     url = "http://unbound.net/downloads/${name}.tar.gz";
-    sha256 = "04r379gma1ghr9zjc1fmncpw8kka4f0mpcmrzidsp264aqkxriw3";
+    sha256 = "0w09m2rbn688rsk37k5xm3vkk5h2hxhivsr374j7h7vjf9x82bsh";
   };
  
   buildInputs = [openssl expat libevent ldns];
