@@ -1502,10 +1502,10 @@ rec {
   };
 
   CPANChanges = buildPerlPackage {
-    name = "CPAN-Changes-0.23";
+    name = "CPAN-Changes-0.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BR/BRICAS/CPAN-Changes-0.23.tar.gz;
-      sha256 = "445a5c751d047c2a2e20680aa86d8bdab25e52891bac24681e9b4f24e98a347c";
+      url = mirror://cpan/authors/id/B/BR/BRICAS/CPAN-Changes-0.27.tar.gz;
+      sha256 = "14dizyvgzp81hmg0djwnvvkdhqd3bsmms462cj0ai84z221scv1q";
     };
     meta = {
       description = "Read and write Changes files";
