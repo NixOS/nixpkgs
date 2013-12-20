@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, gtk, gettext, bzip2, zlib
-, libjpeg, libtiff, cfitsio, exiv2, lcms, gtkimageview }:
+, libjpeg, libtiff, cfitsio, exiv2, lcms, gtkimageview, lensfun }:
 
 stdenv.mkDerivation rec {
   name = "ufraw-0.19.2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig gtk gtkimageview gettext bzip2 zlib
-      libjpeg libtiff cfitsio exiv2 lcms
+      libjpeg libtiff cfitsio exiv2 lcms lensfun
     ];
 
   meta = {
