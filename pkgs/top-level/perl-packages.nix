@@ -1937,10 +1937,10 @@ rec {
   };
 
   DateTime = buildPerlModule {
-    name = "DateTime-1.03";
+    name = "DateTime-1.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.03.tar.gz;
-      sha256 = "384f97c73da02492d771d6b5c3b37f6b18c2e12f4db3246b1d61ff19c6d6ad6d";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.04.tar.gz;
+      sha256 = "1krnrp8hv0m4v1lxrvwgc3vvcycld21ygvjy5p7vaf5h1jpjzrwz";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ParamsValidate TryTiny ];
