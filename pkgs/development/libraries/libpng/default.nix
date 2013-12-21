@@ -3,8 +3,8 @@
 assert zlib != null;
 
 let
-  version = "1.6.7";
-  sha256 = "0igrw6xzvljd8ddk2qmqz4pav1glqj6naqcrzy7j2056m59wij8k";
+  version = "1.6.8";
+  sha256 = "109h2fcjspd792lvh5q4xnkpsv7rjczmrdl15i4ajx0xbs5kvxr4";
   patch_src = fetchurl {
     url = "mirror://sourceforge/libpng-apng/libpng-1.6.7-apng.patch.gz";
     sha256 = "1g5hmlb9smwl9qv6wb2d7795jqcfrx8g3dhrya5dshrj909jb95k";
