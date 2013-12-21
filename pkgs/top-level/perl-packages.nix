@@ -1884,10 +1884,10 @@ rec {
   };
 
   DataUUIDMT = buildPerlPackage {
-    name = "Data-UUID-MT-1.000";
+    name = "Data-UUID-MT-1.001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Data-UUID-MT-1.000.tar.gz;
-      sha256 = "1bwrxv8fp4arwrmslsb7jlnafs8cww1p5f409d1l5kpyfj2vpsyp";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Data-UUID-MT-1.001.tar.gz;
+      sha256 = "0bb7qibq1c5lhaihxa1sck9pb744p8c7172jgx5zh4c32ac4nk1h";
     };
     buildInputs = [ ListAllUtils ];
     propagatedBuildInputs = [ MathRandomMTAuto ];
