@@ -1,13 +1,13 @@
 { stdenv, fetchurl }:
 
 let
-  version = "5.6.1";
+  version = "5.8.1";
 in
 stdenv.mkDerivation {
   name = "numdiff-${version}";
   src = fetchurl {
     url = "mirror://savannah/numdiff/numdiff-${version}.tar.gz";
-    sha256 = "062byxp9vajj4flg1rqh0r2nwg9yx608mbsj5y25wkrzmkgcq3fx";
+    sha256 = "00zm9955gjsid0daa94sbw69klk0vrnrrh0ihijza99kysnvmblr";
   };
   meta = {
     description = ''
