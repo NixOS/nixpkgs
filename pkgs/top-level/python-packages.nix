@@ -4670,11 +4670,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pygit2 = buildPythonPackage rec {
-    name = "pygit2-0.18.1";
+    name = "pygit2-0.20.0";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/pygit2/${name}.tar.gz";
-      md5 = "8d27f84509a96d6791a6c393ae67d7c8";
+      sha256 = "04132q7bn8k7q7ky7nj3bkza8r9xkzkdpfv462b6rgjsd1x6h340";
     };
 
     preConfigure = ( if stdenv.isDarwin then ''
