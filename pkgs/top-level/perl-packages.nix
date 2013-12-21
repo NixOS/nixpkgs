@@ -3302,10 +3302,10 @@ rec {
   };
 
   Filechdir = buildPerlPackage rec {
-    name = "File-chdir-0.1006";
+    name = "File-chdir-0.1008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
-      sha256 = "b26e91f8b5480544da599412612ff9287007be9703d41c35251f09c5ff19879a";
+      sha256 = "0n8dz80fgk3shfxncyr4aff5hnsd846c5np6d68kc0mxqj2g0flr";
     };
   };
 
