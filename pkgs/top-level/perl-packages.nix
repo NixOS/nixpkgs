@@ -3887,10 +3887,10 @@ rec {
   };
 
   HTMLParser = buildPerlPackage {
-    name = "HTML-Parser-3.69";
+    name = "HTML-Parser-3.71";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/HTML-Parser-3.69.tar.gz;
-      sha256 = "01i4lj37dgwbj9mna756dzzz5lvx7adcnjk9s0hskqq0cn81r2vl";
+      url = mirror://cpan/authors/id/G/GA/GAAS/HTML-Parser-3.71.tar.gz;
+      sha256 = "00nqzdgl7c3jilx7mil19k5jwcw3as14pvkjgxi97zyk94vqp4dy";
     };
     propagatedBuildInputs = [ HTMLTagset ];
     meta = {
