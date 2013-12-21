@@ -6,6 +6,6 @@ source $stdenv/setup
 
 header "exporting $url (rev $rev) into $out"
 
-$fetcher --builder --url "$url" --out "$out" --rev "$rev" ${leaveDotGit:+--leave-dotGit}
+$SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" ${leaveDotGit:+--leave-dotGit}
 
 stopNest
