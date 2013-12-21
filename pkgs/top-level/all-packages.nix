@@ -1884,6 +1884,8 @@ let
 
   tinc = callPackage ../tools/networking/tinc { };
 
+  tinc_1_1 = callPackage ../tools/networking/tinc/1.1-git.nix { };
+
   tmux = callPackage ../tools/misc/tmux { };
 
   tor = callPackage ../tools/security/tor { };
