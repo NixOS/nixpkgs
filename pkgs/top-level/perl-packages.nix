@@ -3955,10 +3955,10 @@ rec {
   };
 
   HTMLTokeParserSimple = buildPerlPackage rec {
-    name = "HTML-TokeParser-Simple-3.15";
+    name = "HTML-TokeParser-Simple-3.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OV/OVID/${name}.tar.gz";
-      sha256 = "0ii1ww17h7wps1lcj7bxrjbisa37f6cvlm0xxpgfq1s6iy06q05b";
+      sha256 = "17aa1v62sp8ycxcicwhankmj4brs6nnfclk9z7mf1rird1f164gd";
     };
     propagatedBuildInputs = [HTMLParser SubOverride];
     buildInputs = [TestPod];
