@@ -5018,10 +5018,10 @@ rec {
   };
 
   MIMETypes = buildPerlPackage {
-    name = "MIME-Types-1.38";
+    name = "MIME-Types-2.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MARKOV/MIME-Types-1.38.tar.gz;
-      sha256 = "12m8cvj80qbwxckj5jildl5zw6p1jincj3m1s77z6lnw3h59rj4l";
+      url = mirror://cpan/authors/id/M/MA/MARKOV/MIME-Types-2.04.tar.gz;
+      sha256 = "13yci99n8kl8p4ac5n5f1j968p7va2phlvfc5qgpnn1d6yfhddi2";
     };
     meta = {
       description = "Definition of MIME types";
