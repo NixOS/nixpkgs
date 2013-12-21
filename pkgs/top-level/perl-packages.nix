@@ -2109,10 +2109,10 @@ rec {
   };
 
   DateTimeTimeZone = buildPerlPackage {
-    name = "DateTime-TimeZone-1.59";
+    name = "DateTime-TimeZone-1.63";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-1.59.tar.gz;
-      sha256 = "b1d50f6abde68671da1db883168ef8d6793a11ba75de02174f42e1dfd16b2522";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-1.63.tar.gz;
+      sha256 = "02a3kyz3cyrag98b1949k19axm03fa5ri82gdc1y4lnxjvjvxkfw";
     };
     buildInputs = [ TestOutput ];
     propagatedBuildInputs = [ ClassLoad ClassSingleton ParamsValidate ];
