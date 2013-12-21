@@ -2430,10 +2430,10 @@ rec {
   };
 
   DevelSymdump = buildPerlPackage rec {
-    name = "Devel-Symdump-2.08";
+    name = "Devel-Symdump-2.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDK/${name}.tar.gz";
-      sha256 = "0qzj68zw1yypk8jw77h0w5sdpdcrp4xcmgfghcfyddjr2aim60x5";
+      sha256 = "0i5m2w8rsmp5lqi1y5y6b6938pidpz9hg92xahrshaddph00358i";
     };
     propagatedBuildInputs = [
       TestPod /* cyclic dependency: TestPodCoverage */
