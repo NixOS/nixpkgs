@@ -1256,6 +1256,8 @@ let
 
   haproxy = callPackage ../tools/networking/haproxy { };
 
+  haproxy_1_5 = callPackage ../tools/networking/haproxy/1.5.nix { };
+
   haveged = callPackage ../tools/security/haveged { };
 
   hardlink = callPackage ../tools/system/hardlink { };
