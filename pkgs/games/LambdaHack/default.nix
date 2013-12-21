@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     hashable keys miniutter mtl prettyShow random stm text transformers
     unorderedContainers zlib
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/kosmikus/LambdaHack";
     description = "A roguelike game engine in early and active development";

@@ -4670,11 +4670,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pygit2 = buildPythonPackage rec {
-    name = "pygit2-0.18.1";
+    name = "pygit2-0.20.0";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/pygit2/${name}.tar.gz";
-      md5 = "8d27f84509a96d6791a6c393ae67d7c8";
+      sha256 = "04132q7bn8k7q7ky7nj3bkza8r9xkzkdpfv462b6rgjsd1x6h340";
     };
 
     preConfigure = ( if stdenv.isDarwin then ''
@@ -5360,11 +5360,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pysvn = pkgs.stdenv.mkDerivation {
-    name = "pysvn-1.7.6";
+    name = "pysvn-1.7.8";
 
     src = fetchurl {
-      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.6.tar.gz";
-      sha256 = "0wwb9h3rw2r8hzqya8mv5z8pgjpa6y3i15a3cccdv2mil44289a7";
+      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.8.tar.gz";
+      sha256 = "1qk7af0laby1f79bd07l9p0dxn5xmcmfwlcb9l1hk29zwwq6x4v0";
     };
 
     buildInputs = [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
@@ -6860,12 +6860,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   webob = buildPythonPackage rec {
-    version = "1.2.3";
+    version = "1.3.1";
     name = "webob-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/W/WebOb/WebOb-${version}.tar.gz";
-      md5 = "11825b7074ba7043e157805e4e6e0f55";
+      md5 = "20918251c5726956ba8fef22d1556177";
     };
 
     propagatedBuildInputs = [ nose modules.ssl ];

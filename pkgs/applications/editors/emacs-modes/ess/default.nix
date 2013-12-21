@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     description = "Emacs Speaks Statistics";
     homepage = "http://ess.r-project.org/";
     license = stdenv.lib.licenses.gpl2Plus;
+    hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }

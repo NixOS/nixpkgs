@@ -790,6 +790,10 @@ let
 
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
+  docbook2odf = callPackage ../tools/typesetting/docbook2odf {
+    inherit (perlPackages) PerlMagick;
+  };
+
   docbook2x = callPackage ../tools/typesetting/docbook2x {
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
     texinfo = texinfo5;
@@ -4840,6 +4844,8 @@ let
 
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
+  libgcrypt_1_6 = lowPrio (callPackage ../development/libraries/libgcrypt/1.6.nix { });
+
   libgcrypt_git = lowPrio (callPackage ../development/libraries/libgcrypt/git.nix { });
 
   libgdiplus = callPackage ../development/libraries/libgdiplus { };
@@ -8101,7 +8107,7 @@ let
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
 
   gnunet_svn = lowPrio (callPackage ../applications/networking/p2p/gnunet/svn.nix {
-    libgcrypt = libgcrypt_git;
+    libgcrypt = libgcrypt_1_6;
   });
 
   gocr = callPackage ../applications/graphics/gocr { };
