@@ -7543,10 +7543,10 @@ rec {
   };
 
   SubInstall = buildPerlPackage {
-    name = "Sub-Install-0.926";
+    name = "Sub-Install-0.927";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Sub-Install-0.926.tar.gz;
-      sha256 = "0gkns6p11j46j6yzacanhbqgd4ws5r0ppg6yivz7cjbq8dk4kcmc";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Sub-Install-0.927.tar.gz;
+      sha256 = "0nmgsdbwi8f474jkyd6w9jfnpav99xp8biydcdri8qri623f6plm";
     };
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
