@@ -6511,10 +6511,10 @@ rec {
   };
 
   PerlTidy = buildPerlPackage rec {
-    name = "Perl-Tidy-20090616";
+    name = "Perl-Tidy-20130922";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHANCOCK/${name}.tar.gz";
-      sha256 = "c7ca21e287d23c769c235f6742fab7b5779b7c7bf58b6a55ba8cdc492e50a118";
+      sha256 = "0qmp6308917lsvms5dbihdj85cnkhy821azc5i6q3p3703qdd375";
     };
   };
 
