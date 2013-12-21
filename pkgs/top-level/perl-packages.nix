@@ -3591,10 +3591,10 @@ rec {
   };
 
   GD = buildPerlPackage rec {
-    name = "GD-2.49";
+    name = "GD-2.50";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LD/LDS/${name}.tar.gz";
-      sha256 = "03wwvhvni22cs7arai7d3wkb2qfa9p20grrb32hdxv41nqxqpihh";
+      sha256 = "1qm8l0z2568byw4zmaqf954y3rm8nzx1nnz6cxnxd3d4cz894lvd";
     };
 
     buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype
