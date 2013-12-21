@@ -3639,10 +3639,10 @@ rec {
   };
 
   GetoptLong = buildPerlPackage rec {
-    name = "Getopt-Long-2.38";
+    name = "Getopt-Long-2.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JV/JV/${name}.tar.gz";
-      sha256 = "0lrsm8vlqhdnkzfvyaiyfivmaar0rirrnwa2v0qk6l130a497mky";
+      sha256 = "12c5pvmx0jxx0mls8qll9ixb1lbacs7p1rwvmciv0dvw3w25dmr7";
     };
   };
 
