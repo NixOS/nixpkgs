@@ -4251,10 +4251,10 @@ rec {
   };
 
   IOSocketInet6 = buildPerlPackage rec {
-    name = "IO-Socket-INET6-2.69";
+    name = "IO-Socket-INET6-2.71";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "accd565643969d905e199e28e60e833213ccc2026c372432df01e49b044c3045";
+      sha256 = "041iv3fdskvk7in73bf7253ah9aiqwxzi4zxfiwkn0jlb7mnqjrl";
     };
     propagatedBuildInputs = [Socket6];
     doCheck = false;
