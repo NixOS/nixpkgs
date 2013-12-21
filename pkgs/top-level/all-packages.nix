@@ -2204,6 +2204,8 @@ let
 
   tinc = callPackage ../tools/networking/tinc { };
 
+  tinc_1_1 = callPackage ../tools/networking/tinc/1.1-git.nix { };
+
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
