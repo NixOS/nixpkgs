@@ -3205,10 +3205,10 @@ rec {
   };
 
   ExtUtilsParseXS = buildPerlPackage rec {
-    name = "ExtUtils-ParseXS-3.18";
+    name = "ExtUtils-ParseXS-3.22";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "0kvbx66vncgk2c72994z31bgh2w3rsrlnx0z7cmxqa7w3hlc4741";
+      sha256 = "03i93xfm9064vg2z70mcfwpnbmciafzrng113vmb8w8g117pvr84";
     };
   };
 
