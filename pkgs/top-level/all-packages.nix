@@ -8519,7 +8519,7 @@ let
     };
 
   mpv = callPackage ../applications/video/mpv {
-    ffmpeg = ffmpeg_1;
+    ffmpeg = ffmpeg_2;
     bs2bSupport = true;
     quviSupport = true;
     cacaSupport = true;
