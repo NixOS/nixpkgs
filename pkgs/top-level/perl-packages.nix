@@ -4346,11 +4346,11 @@ rec {
   };
 
   ImageExifTool = buildPerlPackage rec {
-    name = "Image-ExifTool-8.41";
+    name = "Image-ExifTool-9.27";
 
     src = fetchurl {
       url = "http://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
-      sha256 = "1fdjic0bhbai8zzl3287i9wcs88khiv8qx5slx9n3gzvbnxacvqg";
+      sha256 = "1f37pi7a6fcphp0kkhj7yr9b5c95m2wvy5jcwjq1xdiq74gdi16c";
     };
 
     meta = {
