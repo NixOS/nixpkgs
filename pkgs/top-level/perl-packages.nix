@@ -3852,10 +3852,10 @@ rec {
   };
 
   HTMLFormFu = buildPerlPackage rec {
-    name = "HTML-FormFu-0.09007";
+    name = "HTML-FormFu-0.09010";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/HTML/${name}.tar.gz";
-      sha256 = "1yg9fy6s8f1jscfxf7a9hm91x43cjhk3ijw46z94sw8133h50rvy";
+      sha256 = "08hf6z35yhfd1521ip8x5hpwb7h09k643s9sqf6ddmi9yvqini1k";
     };
     propagatedBuildInputs =
       [ ClassAccessorChained Clone ConfigAny
