@@ -14,8 +14,8 @@
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20131213";
-  sha256 = "0mwslkz0kklp4phlsf8hibh97sabdnigls7hr9725wb0ncfa85yn";
+  version = "5.20131221";
+  sha256 = "1gkb8fc0fjjn0rigajgliqy381pmkpx4ha1rx65dcw15rqnrawb3";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -47,6 +47,8 @@ cabal.mkDerivation (self: {
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP/tmp"
     mkdir "$HOME"
+    cp dist/build/git-annex/git-annex git-annex
+    ./git-annex test
   '';
   meta = {
     homepage = "http://git-annex.branchable.com/";
