@@ -4469,10 +4469,10 @@ rec {
   };
 
   JSONPP = buildPerlPackage rec {
-    name = "JSON-PP-2.27200";
+    name = "JSON-PP-2.27203";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MAKAMAKA/JSON-PP-2.27200.tar.gz;
-      sha256 = "1lv9riws9f72gya2fsp5jvbd1fbzyi8423x38a491ryy9cai2ph3";
+      url = mirror://cpan/authors/id/M/MA/MAKAMAKA/JSON-PP-2.27203.tar.gz;
+      sha256 = "0ljwya1fb4969pckcq2j1g6axgx8qh9yscxbs6qf62qxf8wkj1mp";
     };
     meta = {
       description = "JSON::XS compatible pure-Perl module";
