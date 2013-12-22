@@ -8977,6 +8977,8 @@ let
 
   timidity = callPackage ../tools/misc/timidity { };
 
+  tint2 = callPackage ../applications/misc/tint2 { };
+
   tkcvs = callPackage ../applications/version-management/tkcvs { };
 
   tla = callPackage ../applications/version-management/arch { };
