@@ -4690,10 +4690,10 @@ rec {
   };
 
   LogDispatch = buildPerlPackage {
-    name = "Log-Dispatch-2.39";
+    name = "Log-Dispatch-2.41";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/Log-Dispatch-2.39.tar.gz;
-      sha256 = "1bi2nza0nc66i0ls2zkxi6bbwkh456pl0q8h57mq6skbhbmcwbb8";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/Log-Dispatch-2.41.tar.gz;
+      sha256 = "0vsmlkx2g9lc13pl9v96kn575yszfvd79a236b8v0s1di83gm09z";
     };
     propagatedBuildInputs = [ ClassLoad ParamsValidate ];
     meta = {
