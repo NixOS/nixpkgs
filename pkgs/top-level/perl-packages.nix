@@ -3629,10 +3629,10 @@ rec {
   };
 
   GeoIP = buildPerlPackage rec {
-    name = "Geo-IP-1.39";
+    name = "Geo-IP-1.43";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BORISZ/${name}.tar.gz";
-      sha256 = "1yc0rn67nk4z8aq8d82axhfmgi0l91rkksqbf27ylasrhyb6ykx5";
+      sha256 = "0p7mcn4rzvhrblx72f5a1yg88mqgv6f46mq0rvhhkmkpwckb0yjq";
     };
     makeMakerFlags = "LIBS=-L${pkgs.geoip}/lib INC=-I${pkgs.geoip}/include";
     doCheck = false; # seems to access the network
