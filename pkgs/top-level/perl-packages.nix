@@ -6681,10 +6681,10 @@ rec {
   };
 
   PerlPrereqScanner = buildPerlPackage {
-    name = "Perl-PrereqScanner-1.016";
+    name = "Perl-PrereqScanner-1.018";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Perl-PrereqScanner-1.016.tar.gz;
-      sha256 = "1ab70723f3d036ef91684572beacab40bf99f5ed69922769aa077664c778c474";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Perl-PrereqScanner-1.018.tar.gz;
+      sha256 = "11zkam8svpgcjhjda0ap3afd797a69ndcc64fy3xw0j8v8kxa6hc";
     };
     buildInputs = [ PPI TryTiny ];
     propagatedBuildInputs = [ GetoptLongDescriptive ListMoreUtils ModulePath Moose PPI ParamsUtil StringRewritePrefix namespaceautoclean ];
