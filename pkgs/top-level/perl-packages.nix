@@ -5645,10 +5645,10 @@ rec {
   };
 
   MooseXSetOnce = buildPerlPackage rec {
-    name = "MooseX-SetOnce-0.200001";
+    name = "MooseX-SetOnce-0.200002";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
-      sha256 = "0qa2i45g2zn4r0wg7hba9va68nin5l63gr9l8b5q3hr4cjn97ll6";
+      sha256 = "0ndnl8dj7nh8lvckl6r3jw31d0dmq30qf2pqkgcz0lykzjvhdvfb";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ Moose ];
