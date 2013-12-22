@@ -4847,10 +4847,10 @@ rec {
   };
 
   MailDKIM = buildPerlPackage rec {
-    name = "Mail-DKIM-0.39";
+    name = "Mail-DKIM-0.40";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JA/JASLONG/${name}.tar.gz";
-      sha256 = "b1425a540f514c483e80566fb3decc2c1db4162306f6ae8794cef72a2d73557b";
+      sha256 = "1wd6mab4fp47v1nh85jfxsjmysnyv5mwvfv47cn5m2h2lb1s0piw";
     };
     propagatedBuildInputs = [ CryptOpenSSLRSA NetDNS MailTools ];
     doCheck = false; # tries to access the domain name system
