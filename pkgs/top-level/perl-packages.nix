@@ -8265,10 +8265,10 @@ rec {
   };
 
   TestPod = buildPerlPackage {
-    name = "Test-Pod-1.45";
+    name = "Test-Pod-1.48";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DW/DWHEELER/Test-Pod-1.45.tar.gz;
-      sha256 = "0yv0bglm4b9zfi9l5z6x2dy6pzlh8n5z9yl7py5v6h48mwgk74fk";
+      url = mirror://cpan/authors/id/D/DW/DWHEELER/Test-Pod-1.48.tar.gz;
+      sha256 = "1hmwwhabyng4jrnll926b4ab73r40w3pfchlrvs0yx6kh6kwwy14";
     };
     meta = {
       homepage = http://search.cpan.org/dist/Test-Pod/;
