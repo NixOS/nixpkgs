@@ -6,11 +6,11 @@
 assert gimpSupport -> gimp_2_8 != null;
 
 stdenv.mkDerivation rec {
-  name = "xsane-0.998";
+  name = "xsane-0.999";
 
   src = fetchurl {
     url = "http://www.xsane.org/download/${name}.tar.gz";
-    sha256 = "0vn2cj85ijgp2v2j2h9xpqmg2jwlbxmwyb88kxhjjakqay02ybm3";
+    sha256 = "0jrb918sfb9jw3vmrz0z7np4q55hgsqqffpixs0ir5nwcwzd50jp";
   };
 
   preConfigure = ''
