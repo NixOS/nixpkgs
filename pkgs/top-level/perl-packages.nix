@@ -3857,6 +3857,7 @@ rec {
       url = "mirror://cpan/modules/by-module/HTML/${name}.tar.gz";
       sha256 = "08hf6z35yhfd1521ip8x5hpwb7h09k643s9sqf6ddmi9yvqini1k";
     };
+    buildInputs = [ CGISimple ];
     propagatedBuildInputs =
       [ ClassAccessorChained Clone ConfigAny
         DateCalc ListMoreUtils EmailValid
