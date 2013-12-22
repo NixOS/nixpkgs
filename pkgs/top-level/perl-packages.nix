@@ -4443,10 +4443,10 @@ rec {
   };
 
   JSON = buildPerlPackage {
-    name = "JSON-2.53";
+    name = "JSON-2.90";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MAKAMAKA/JSON-2.53.tar.gz;
-      sha256 = "0rfms17d0pkai26kqyzaylbr5wxcrrhyjkyshq85l41xb0g1iplh";
+      url = mirror://cpan/authors/id/M/MA/MAKAMAKA/JSON-2.90.tar.gz;
+      sha256 = "127yppvr17qik9pkd1vy901hs4l13kg6rhp76jdgcyask35v7nsd";
     };
     meta = {
       description = "JSON (JavaScript Object Notation) encoder/decoder";
