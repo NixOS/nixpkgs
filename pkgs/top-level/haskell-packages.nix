@@ -1554,6 +1554,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   monoidExtras = callPackage ../development/libraries/haskell/monoid-extras {};
 
+  monoidTransformer = callPackage ../development/libraries/haskell/monoid-transformer {};
+
   mongoDB = callPackage ../development/libraries/haskell/mongoDB {};
 
   monoTraversable = callPackage ../development/libraries/haskell/mono-traversable {};
