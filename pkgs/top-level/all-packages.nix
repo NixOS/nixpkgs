@@ -9112,9 +9112,7 @@ let
     inherit (xlibs) libX11;
   };
 
-  vlc = callPackage ../applications/video/vlc {
-    ffmpeg = ffmpeg_1;
-  };
+  vlc = callPackage ../applications/video/vlc { };
 
   vnstat = callPackage ../applications/networking/vnstat { };
 
