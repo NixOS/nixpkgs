@@ -2789,6 +2789,8 @@ let
     else
       callPackage ../development/compilers/go/1.1.nix { };
 
+  go_1_2 = callPackage ../development/compilers/go/1.2.nix { };
+
   go = go_1_1;
 
   gprolog = callPackage ../development/compilers/gprolog { };
