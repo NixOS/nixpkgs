@@ -2281,6 +2281,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   vcsRevision = callPackage ../development/libraries/haskell/vcs-revision {};
 
+  websockets = callPackage ../development/libraries/haskell/websockets {};
+
   Vec = callPackage ../development/libraries/haskell/Vec {};
 
   vect = callPackage ../development/libraries/haskell/vect {};
