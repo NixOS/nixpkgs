@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, sword, qt4, boost, cluceneCore}:
+{stdenv, fetchurl, cmake, sword, qt4, boost, clucene_core}:
 
 stdenv.mkDerivation rec {
 
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure =  ''
-    export CLUCENE_HOME=${cluceneCore};
+    export CLUCENE_HOME=${clucene_core};
     export SWORD_HOME=${sword};
   '';
 
-  buildInputs = [ cmake sword qt4 boost cluceneCore ];
+  buildInputs = [ cmake sword qt4 boost clucene_core ];
 
   cmakeFlags = "-DUSE_QT_WEBKIT=ON -DCMAKE_BUILD_TYPE=Debug";
 

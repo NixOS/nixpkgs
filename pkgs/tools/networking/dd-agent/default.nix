@@ -1,12 +1,12 @@
 { stdenv, fetchurl, python, sysstat, unzip }:
 
 stdenv.mkDerivation rec {
-    version = "3.8.0";
+    version = "4.0.1";
     name = "dd-agent-${version}";
 
     src = fetchurl {
       url = "https://github.com/DataDog/dd-agent/archive/${version}.zip";
-      sha256 = "1mh22rbja07gc7ydn357hlij0dl2rygkqsya9ckynsvmkkzn2gyx";
+      sha256 = "0gybdbjkj7qwnzic03xkypagb30zhm22gp3nkwrdhi8fdmwz3nm1";
     };
 
     buildInputs = [ python unzip ];

@@ -1813,6 +1813,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     fgl = self.fgl_5_4_2_4;
   };
 
+  protocolBuffers = callPackage ../development/libraries/haskell/protocol-buffers {};
+
+  protocolBuffersDescriptor = callPackage ../development/libraries/haskell/protocol-buffers-descriptor {};
+
   PSQueue = callPackage ../development/libraries/haskell/PSQueue {};
 
   publicsuffixlist = callPackage ../development/libraries/haskell/publicsuffixlist {};
@@ -1924,6 +1928,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   resourcePool = callPackage ../development/libraries/haskell/resource-pool {};
 
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
+
+  rethinkdb = callPackage ../development/libraries/haskell/rethinkdb {};
 
   rfc5051 = callPackage ../development/libraries/haskell/rfc5051 {};
 

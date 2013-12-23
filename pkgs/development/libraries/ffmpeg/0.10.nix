@@ -21,13 +21,13 @@ assert vdpauSupport -> libvdpau != null;
 assert faacSupport -> faac != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-0.10";
-  
+  name = "ffmpeg-0.10.10";
+
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "1ybzw6d5axr807141izvm2yf4pa0hc1zcywj89nsn3qsdnknlna3";
+    sha256 = "14fbjhiwv5zg9yh0zk3k9h6id815xrikyz6l2cdl7z4vazbmhq4k";
   };
-  
+
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
   # the resulting library is GPL'ed, so it can only be used in GPL'ed
   # applications.
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional dc1394Support libdc1394;
 
   enableParallelBuilding = true;
-    
+
   crossAttrs = {
     dontSetConfigureCross = true;
     configureFlags = configureFlags ++ [
