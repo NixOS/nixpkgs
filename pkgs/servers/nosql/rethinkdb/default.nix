@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export ALLOW_WARNINGS=1
+    patchShebangs .
   '';
 
   configureFlags = "--lib-path ${gperftools}/lib";
