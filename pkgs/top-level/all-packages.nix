@@ -5256,9 +5256,7 @@ let
   mdds = callPackage ../development/libraries/mdds { };
 
   # failed to build
-  mediastreamer = callPackage ../development/libraries/mediastreamer {
-    ffmpeg = ffmpeg_1;
-  };
+  mediastreamer = callPackage ../development/libraries/mediastreamer { };
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
