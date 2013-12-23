@@ -4399,6 +4399,8 @@ let
   mpfr = callPackage ../development/libraries/mpfr { };
   mpfr_3_1_2 = callPackage ../development/libraries/mpfr/3.1.2.nix { };
 
+  gst_all_1 = callPackage ../development/libraries/gstreamer { };
+
   gst_all = {
     inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
     gstPluginsBase = pkgs.gst_plugins_base;
