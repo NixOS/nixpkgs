@@ -981,6 +981,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   esqueleto = callPackage ../development/libraries/haskell/esqueleto {};
 
+  eventList = callPackage ../development/libraries/haskell/event-list {};
+
   exPool = callPackage ../development/libraries/haskell/ex-pool { hashable = self.hashable_1_2_1_0; };
 
   exceptionMtl = callPackage ../development/libraries/haskell/exception-mtl {};
