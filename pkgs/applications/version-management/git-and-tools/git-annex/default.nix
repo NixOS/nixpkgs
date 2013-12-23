@@ -42,12 +42,13 @@ cabal.mkDerivation (self: {
                     -fDNS
                     -fProduction
                     -fTDFA";
-  preConfigure = "patchShebangs .";
-  installPhase = "./Setup install";
   doCheck = false;
-  checkPhase = ''
+  installPhase = ''
     export HOME="$NIX_BUILD_TOP/tmp"
     mkdir "$HOME"
+    ./Setup install
+  '';
+  checkPhase = ''
     cp dist/build/git-annex/git-annex git-annex
     ./git-annex test
   '';
