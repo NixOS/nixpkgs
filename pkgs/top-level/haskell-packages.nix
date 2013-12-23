@@ -1207,6 +1207,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
+  haskore = callPackage ../development/libraries/haskell/haskore {};
+
   hastache = callPackage ../development/libraries/haskell/hastache {};
 
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
