@@ -392,8 +392,9 @@ let
 
   acct = callPackage ../tools/system/acct { };
 
-  acoustidFingerprinter = callPackage
-    ../tools/audio/acoustid-fingerprinter { };
+  acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
+    ffmpeg = ffmpeg_1;
+  };
 
   actdiag = pythonPackages.actdiag;
 
@@ -612,9 +613,7 @@ let
     inherit unzip;
   };
 
-  bogofilter = callPackage ../tools/misc/bogofilter {
-    bdb = db4;
-  };
+  bogofilter = callPackage ../tools/misc/bogofilter { };
 
   bsdiff = callPackage ../tools/compression/bsdiff { };
 
@@ -643,8 +642,7 @@ let
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
   cfdg = builderDefsPackage ../tools/graphics/cfdg {
-    inherit libpng bison flex;
-    ffmpeg = ffmpeg_1;
+    inherit libpng bison flex ffmpeg;
   };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
@@ -1202,7 +1200,9 @@ let
 
   klavaro = callPackage ../games/klavaro {};
 
-  minidlna = callPackage ../tools/networking/minidlna { };
+  minidlna = callPackage ../tools/networking/minidlna {
+    ffmpeg = ffmpeg_0_10;
+  };
 
   mmv = callPackage ../tools/misc/mmv { };
 
@@ -2789,7 +2789,9 @@ let
     else
       callPackage ../development/compilers/go/1.1.nix { };
 
-  go = go_1_1;
+  go_1_2 = callPackage ../development/compilers/go/1.2.nix { };
+
+  go = go_1_2;
 
   gprolog = callPackage ../development/compilers/gprolog { };
 
@@ -3331,7 +3333,6 @@ let
   regina = callPackage ../development/interpreters/regina {};
 
   renpy = callPackage ../development/interpreters/renpy {
-    ffmpeg = ffmpeg_1;
     wrapPython = pythonPackages.wrapPython;
   };
 
@@ -4019,9 +4020,9 @@ let
 
   clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
 
-  clucene_core = callPackage ../development/libraries/clucene-core { };
+  clucene_core_1 = callPackage ../development/libraries/clucene-core { };
 
-  cluceneCore = clucene_core; # !!! remove this
+  clucene_core = clucene_core_1;
 
   clutter = callPackage ../development/libraries/clutter { };
 
@@ -4054,7 +4055,7 @@ let
 
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl { };
 
-  db4 = db45;
+  db4 = db48;
 
   db44 = callPackage ../development/libraries/db4/db4-4.4.nix { };
 
@@ -4126,20 +4127,20 @@ let
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
-  ffmpeg = callPackage ../development/libraries/ffmpeg {
-    vpxSupport = !stdenv.isMips;
-
-    stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
-      else stdenv;
-  };
-
   ffmpeg_0_6 = callPackage ../development/libraries/ffmpeg/0.6.nix {
     vpxSupport = !stdenv.isMips;
   };
 
   ffmpeg_0_6_90 = callPackage ../development/libraries/ffmpeg/0.6.90.nix {
     vpxSupport = !stdenv.isMips;
+  };
+
+  ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
+    vpxSupport = !stdenv.isMips;
+
+    stdenv = if stdenv.isDarwin
+      then overrideGCC stdenv gccApple
+      else stdenv;
   };
 
   ffmpeg_1 = callPackage ../development/libraries/ffmpeg/1.x.nix {
@@ -4151,6 +4152,8 @@ let
     vpxSupport = !stdenv.isMips;
     texinfo = texinfo5;
   };
+
+  ffmpeg = ffmpeg_2;
 
   ffms = callPackage ../development/libraries/ffms { };
 
@@ -4413,7 +4416,9 @@ let
 
   gst_plugins_ugly = callPackage ../development/libraries/gstreamer/gst-plugins-ugly {};
 
-  gst_ffmpeg = callPackage ../development/libraries/gstreamer/gst-ffmpeg {};
+  gst_ffmpeg = callPackage ../development/libraries/gstreamer/gst-ffmpeg {
+    ffmpeg = ffmpeg_0_10;
+  };
 
   gst_python = callPackage ../development/libraries/gstreamer/gst-python {};
 
@@ -5247,12 +5252,11 @@ let
 
   lzo = callPackage ../development/libraries/lzo { };
 
+  mdds_0_7_1 = callPackage ../development/libraries/mdds/0.7.1.nix { };
   mdds = callPackage ../development/libraries/mdds { };
 
   # failed to build
-  mediastreamer = callPackage ../development/libraries/mediastreamer {
-    ffmpeg = ffmpeg_1;
-  };
+  mediastreamer = callPackage ../development/libraries/mediastreamer { };
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
@@ -5296,9 +5300,7 @@ let
 
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
-  mlt = callPackage ../development/libraries/mlt {
-    ffmpeg = ffmpeg_1;
-  };
+  mlt = callPackage ../development/libraries/mlt { };
 
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
 
@@ -5399,12 +5401,9 @@ let
 
   openct = callPackage ../development/libraries/openct { };
 
-  opencv = callPackage ../development/libraries/opencv {
-    ffmpeg = ffmpeg_0_6_90;
-  };
+  opencv = callPackage ../development/libraries/opencv { };
 
   opencv_2_1 = callPackage ../development/libraries/opencv/2.1.nix {
-    ffmpeg = ffmpeg_0_6_90;
     libpng = libpng12;
   };
 
@@ -5429,6 +5428,7 @@ let
 
   openscenegraph = callPackage ../development/libraries/openscenegraph {
     giflib = giflib_4_1;
+    ffmpeg = ffmpeg_0_10;
   };
 
   openssl = callPackage ../development/libraries/openssl {
@@ -5865,20 +5865,22 @@ let
       inherit gtk2; # for plugins etc. even with gtk3, see Gentoo ebuild
       inherit gtk3 glib atk cairo pango fontconfig freetype;
       inherit (gnome) gtkdoc libsoup;
-      inherit pkgconfig libtool intltool autoconf automake gperf bison flex
+      inherit pkgconfig libtool intltool autoconf automake gperf flex
         libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
         which libproxy geoclue enchant python ruby perl mesa xlibs;
       inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
+      bison = bison2;
     };
 
   webkit_gtk2 =
     builderDefsPackage ../development/libraries/webkit/gtk2.nix {
       inherit gtk2 glib atk cairo pango fontconfig freetype;
       inherit (gnome) gtkdoc libsoup;
-      inherit pkgconfig libtool intltool autoconf automake gperf bison flex
+      inherit pkgconfig libtool intltool autoconf automake gperf flex
         libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
         which libproxy geoclue enchant python ruby perl mesa xlibs;
       inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
+      bison = bison2;
     };
 
   wildmidi = callPackage ../development/libraries/wildmidi { };
@@ -5922,7 +5924,9 @@ let
 
   xcb-util-cursor = callPackage ../development/libraries/xcb-util-cursor { };
 
-  xineLib = callPackage ../development/libraries/xine-lib { };
+  xineLib = callPackage ../development/libraries/xine-lib {
+    ffmpeg = ffmpeg_1;
+  };
 
   xautolock = callPackage ../misc/screensavers/xautolock { };
 
@@ -6296,9 +6300,7 @@ let
 
   mailman = callPackage ../servers/mail/mailman { };
 
-  mediatomb = callPackage ../servers/mediatomb {
-    ffmpeg = ffmpeg_0_6_90;
-  };
+  mediatomb = callPackage ../servers/mediatomb { };
 
   memcached = callPackage ../servers/memcached {};
 
@@ -6425,6 +6427,8 @@ let
   redstore = callPackage ../servers/http/redstore { };
 
   restund = callPackage ../servers/restund {};
+
+  rethinkdb = callPackage ../servers/nosql/rethinkdb { };
 
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
@@ -7497,7 +7501,9 @@ let
 
   audacious = callPackage ../applications/audio/audacious { };
 
-  audacity = callPackage ../applications/audio/audacity { };
+  audacity = callPackage ../applications/audio/audacity {
+    ffmpeg = ffmpeg_0_10;
+  };
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
@@ -7525,7 +7531,9 @@ let
   };
   awesome = awesome-3-5;
 
-  baresip = callPackage ../applications/networking/instant-messengers/baresip {};
+  baresip = callPackage ../applications/networking/instant-messengers/baresip {
+    ffmpeg = ffmpeg_1;
+  };
 
   batik = callPackage ../applications/graphics/batik { };
 
@@ -7542,9 +7550,7 @@ let
 
   bibletime = callPackage ../applications/misc/bibletime { };
 
-  bitcoin = callPackage ../applications/misc/bitcoin {
-    db4 = db48;
-  };
+  bitcoin = callPackage ../applications/misc/bitcoin { };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
     # For some reason, TLS support is broken when using GnuTLS 3.0 (can't
@@ -7935,8 +7941,9 @@ let
       lib flex bison cairo fontconfig
       gdal zlib ncurses gdbm proj pkgconfig swig
       blas liblapack libjpeg libpng mysql unixODBC mesa postgresql python
-      readline sqlite tcl tk libtiff freetype ffmpeg makeWrapper wxGTK;
+      readline sqlite tcl tk libtiff freetype makeWrapper wxGTK;
     fftw = fftwSinglePrec;
+    ffmpeg = ffmpeg_0_10;
     motif = lesstif;
     opendwg = libdwg;
     wxPython = wxPython28;
@@ -8014,13 +8021,13 @@ let
   xfontsel = callPackage ../applications/misc/xfontsel { };
   xlsfonts = callPackage ../applications/misc/xlsfonts { };
 
-  freerdp = callPackage ../applications/networking/remote/freerdp { };
+  freerdp = callPackage ../applications/networking/remote/freerdp {
+    ffmpeg = ffmpeg_1;
+  };
 
   freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix { };
 
-  freicoin = callPackage ../applications/misc/freicoin {
-    db4 = db48;
-  };
+  freicoin = callPackage ../applications/misc/freicoin { };
 
   fspot = callPackage ../applications/graphics/f-spot {
     inherit (gnome) libgnome libgnomeui;
@@ -8362,6 +8369,7 @@ let
     poppler = poppler_0_18;
     clucene_core = clucene_core_2;
     lcms = lcms2;
+    mdds = mdds_0_7_1;
   };
 
   liferea = callPackage ../applications/networking/newsreaders/liferea { };
@@ -8506,9 +8514,7 @@ let
     pulseSupport = config.pulseaudio or false;
   };
 
-  mplayer2 = callPackage ../applications/video/mplayer2 {
-    ffmpeg = ffmpeg_1;
-  };
+  mplayer2 = callPackage ../applications/video/mplayer2 { };
 
   MPlayerPlugin = browser:
     import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
@@ -8519,7 +8525,7 @@ let
     };
 
   mpv = callPackage ../applications/video/mpv {
-    ffmpeg = ffmpeg_1;
+    ffmpeg = ffmpeg_2;
     bs2bSupport = true;
     quviSupport = true;
     cacaSupport = true;
@@ -8641,6 +8647,8 @@ let
   opera = callPackage ../applications/networking/browsers/opera {
     inherit (pkgs.kde4) kdelibs;
   };
+
+  opusfile = callPackage ../applications/audio/opusfile { };
 
   opusTools = callPackage ../applications/audio/opus-tools { };
 
@@ -9100,9 +9108,7 @@ let
     inherit (xlibs) libX11;
   };
 
-  vlc = callPackage ../applications/video/vlc {
-    ffmpeg = ffmpeg_1;
-  };
+  vlc = callPackage ../applications/video/vlc { };
 
   vnstat = callPackage ../applications/networking/vnstat { };
 
@@ -9187,10 +9193,8 @@ let
           ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
          );
-      libs =
-        if cfg.enableQuakeLive or false
-        then with xlibs; [ stdenv.gcc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ]
-        else [ ];
+      libs = [ gstreamer gst_plugins_base ] ++ lib.optionals (cfg.enableQuakeLive or false)
+             (with xlibs; [ stdenv.gcc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ]);
       gtk_modules = [ libcanberra ];
     };
 
@@ -9210,7 +9214,9 @@ let
 
   xbindkeys = callPackage ../tools/X11/xbindkeys { };
 
-  xbmc = callPackage ../applications/video/xbmc { };
+  xbmc = callPackage ../applications/video/xbmc {
+    ffmpeg = ffmpeg_1;
+  };
 
   xca = callPackage ../applications/misc/xca { };
 
@@ -9681,7 +9687,6 @@ let
       eigen = eigen2;
       libotr = libotr_3_2;
       libusb = libusb1;
-      ffmpeg = ffmpeg_1;
       libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.10;
 
@@ -9690,7 +9695,6 @@ let
       eigen = eigen2;
       libotr = libotr_3_2;
       libusb = libusb1;
-      ffmpeg = ffmpeg_1;
       libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.11;
 

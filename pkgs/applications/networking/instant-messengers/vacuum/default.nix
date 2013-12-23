@@ -12,11 +12,11 @@ let
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
-    version="1.2.0";
+    version="1.2.3";
     baseName="vacuum-im";
     name="${baseName}-${version}";
     url="http://vacuum-im.googlecode.com/files/vacuum-${version}.tar.xz";
-    hash="55a2c27aaaf79c7a4de127c22d3845ede35970283d35ee57fd5ceca581b085fc";
+    hash="037k2b2kkp2ywkrshqa0fj18mkd2jq60x4x62kzbrsvb85qcbbxh";
   };
 in
 rec {

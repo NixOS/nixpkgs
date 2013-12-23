@@ -55,11 +55,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "mpv-20130812";
+  name = "mpv-20131222";
 
   src = fetchgit {
     url = "https://github.com/mpv-player/mpv.git";
-    rev = "62925a5c15a76568c155259bafa1361ec139c66b";
+    rev = "e6bea0ec5a";
+    sha256 = "984c7d19b1916b7e5befc370ffb7f6c31e560c64c47090b924a115d00c35a1a8";
   };
 
   buildInputs = with stdenv.lib;
