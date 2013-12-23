@@ -1500,6 +1500,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   mainlandPretty = callPackage ../development/libraries/haskell/mainland-pretty {};
 
+  markovChain = callPackage ../development/libraries/haskell/markov-chain {};
+
   maude = callPackage ../development/libraries/haskell/maude {};
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
