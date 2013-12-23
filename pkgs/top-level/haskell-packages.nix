@@ -1510,6 +1510,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   mersenneRandomPure64 = callPackage ../development/libraries/haskell/mersenne-random-pure64 {};
 
+  midi = callPackage ../development/libraries/haskell/midi {};
+
   minimorph = callPackage ../development/libraries/haskell/minimorph {};
 
   miniutter = callPackage ../development/libraries/haskell/miniutter {};
