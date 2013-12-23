@@ -1391,6 +1391,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ioStorage = callPackage ../development/libraries/haskell/io-storage {};
 
+  ioStreams = callPackage ../development/libraries/haskell/io-streams {
+    network = self.network_2_4_2_1;
+  };
+
   iproute = callPackage ../development/libraries/haskell/iproute {};
 
   irc = callPackage ../development/libraries/haskell/irc {};
@@ -2284,6 +2288,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   vault = callPackage ../development/libraries/haskell/vault {};
 
   vcsRevision = callPackage ../development/libraries/haskell/vcs-revision {};
+
+  websockets = callPackage ../development/libraries/haskell/websockets {};
 
   Vec = callPackage ../development/libraries/haskell/Vec {};
 
