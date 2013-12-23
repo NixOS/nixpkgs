@@ -47,6 +47,7 @@ rec {
       "--enable-system-pixman"
       "--enable-system-sqlite"
       "--enable-system-cairo"
+      "--enable-gstreamer"
       "--enable-startup-notification"
       # "--enable-content-sandbox"            # available since 26.0, but not much info available
       # "--enable-content-sandbox-reporter"   # keeping disabled for now
