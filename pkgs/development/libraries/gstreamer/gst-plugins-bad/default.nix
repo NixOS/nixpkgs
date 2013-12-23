@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, glib, gstreamer, gst_plugins_base
-, libdvdnav, libdvdread }:
+, libdvdnav, libdvdread, orc }:
 
 stdenv.mkDerivation rec {
   name = "gst-plugins-bad-0.10.23";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig glib gstreamer gst_plugins_base libdvdnav libdvdread ];
+    [ pkgconfig glib gstreamer gst_plugins_base libdvdnav libdvdread orc ];
 
   enableParallelBuilding = true;
 

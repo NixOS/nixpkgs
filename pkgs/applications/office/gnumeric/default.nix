@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnumeric-1.12.0";
+  name = "gnumeric-1.12.9";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnumeric/1.12/${name}.tar.xz";
-    sha256 = "037b53d909e5d1454b2afda8c4fb1e7838e260343e36d4e36245f4a5d0e04111";
+    sha256 = "1rv2ifw6rp0iza4fkf3bffvdkyi77dwvzdnvcbpqcyn2kxfsvlsc";
   };
 
   configureFlags = "--disable-component";

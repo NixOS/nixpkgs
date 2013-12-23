@@ -334,7 +334,6 @@ let
   ffado = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ffmpeg = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ffmpeg_0_6_90 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  ffmpeg_1_1 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   fileschanged = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   fio = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   firefox = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

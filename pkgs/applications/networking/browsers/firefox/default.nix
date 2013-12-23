@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base
+, cairo, gstreamer, gst_plugins_base, icu
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
@@ -33,11 +33,7 @@ rec {
   };
 
   commonConfigureFlags =
-    [ "--enable-optimize"
-      #"--enable-profiling"
-      (if debugBuild then "--enable-debug" else "--disable-debug")
-      "--enable-strip"
-      "--with-system-jpeg"
+    [ "--with-system-jpeg"
       "--with-system-zlib"
       "--with-system-bz2"
       "--with-system-nspr"
@@ -45,18 +41,24 @@ rec {
       "--with-system-libevent"
       "--with-system-libvpx"
       "--with-system-png"
-      "--enable-startup-notification"
+      "--with-system-icu"
       "--enable-system-ffi"
       "--enable-system-hunspell"
       "--enable-system-pixman"
       "--enable-system-sqlite"
       "--enable-system-cairo"
+      "--enable-gstreamer"
+      "--enable-startup-notification"
+      # "--enable-content-sandbox"            # available since 26.0, but not much info available
+      # "--enable-content-sandbox-reporter"   # keeping disabled for now
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
       "--disable-installer"
       "--disable-updater"
-    ];
+    ] ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
+                        else [ "--disable-debug" "--enable-release"
+                               "--enable-optimize" "--enable-strip" ]);
 
 
   xulrunner = stdenv.mkDerivation rec {
@@ -72,7 +74,7 @@ rec {
         xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
         xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
         hunspell libevent libstartup_notification libvpx cairo
-        gstreamer gst_plugins_base
+        gstreamer gst_plugins_base icu
       ];
 
     configureFlags =
@@ -138,7 +140,7 @@ rec {
         dbus dbus_glib pango freetype fontconfig alsaLib nspr nss libnotify
         xlibs.pixman yasm mesa sqlite file unzip pysqlite
         hunspell libevent libstartup_notification libvpx cairo
-        gstreamer gst_plugins_base
+        gstreamer gst_plugins_base icu
       ];
 
     patches = [

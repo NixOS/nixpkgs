@@ -5,6 +5,7 @@ rec {
     "node-expat" = [ pkgs.expat ];
     "rbytes" = [ pkgs.openssl ];
     "phantomjs" = [ pkgs.phantomjs ];
+    "node-protobuf" = [ pkgs.protobuf ];
   };
 
   buildNodePackage = import ../development/web/nodejs/build-node-package.nix {
