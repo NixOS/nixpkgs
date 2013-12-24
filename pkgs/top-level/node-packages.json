@@ -110,4 +110,6 @@
 , "meat"
 , "hipache"
 , "posix"
+, "node-protobuf"
+, "rethinkdb"
 ]

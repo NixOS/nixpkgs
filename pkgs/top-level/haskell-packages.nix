@@ -981,6 +981,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   esqueleto = callPackage ../development/libraries/haskell/esqueleto {};
 
+  eventList = callPackage ../development/libraries/haskell/event-list {};
+
   exPool = callPackage ../development/libraries/haskell/ex-pool { hashable = self.hashable_1_2_1_0; };
 
   exceptionMtl = callPackage ../development/libraries/haskell/exception-mtl {};
@@ -1204,6 +1206,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   haskellSrcExts = callPackage ../development/libraries/haskell/haskell-src-exts {};
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
+
+  haskore = callPackage ../development/libraries/haskell/haskore {};
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
 
@@ -1498,6 +1502,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   mainlandPretty = callPackage ../development/libraries/haskell/mainland-pretty {};
 
+  markovChain = callPackage ../development/libraries/haskell/markov-chain {};
+
   maude = callPackage ../development/libraries/haskell/maude {};
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
@@ -1505,6 +1511,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   MemoTrie = callPackage ../development/libraries/haskell/MemoTrie {};
 
   mersenneRandomPure64 = callPackage ../development/libraries/haskell/mersenne-random-pure64 {};
+
+  midi = callPackage ../development/libraries/haskell/midi {};
 
   minimorph = callPackage ../development/libraries/haskell/minimorph {};
 
@@ -1551,6 +1559,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   monadsTf = callPackage ../development/libraries/haskell/monads-tf {};
 
   monoidExtras = callPackage ../development/libraries/haskell/monoid-extras {};
+
+  monoidTransformer = callPackage ../development/libraries/haskell/monoid-transformer {};
 
   mongoDB = callPackage ../development/libraries/haskell/mongoDB {};
 
@@ -1813,6 +1823,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     fgl = self.fgl_5_4_2_4;
   };
 
+  protocolBuffers = callPackage ../development/libraries/haskell/protocol-buffers {};
+
+  protocolBuffersDescriptor = callPackage ../development/libraries/haskell/protocol-buffers-descriptor {};
+
   PSQueue = callPackage ../development/libraries/haskell/PSQueue {};
 
   publicsuffixlist = callPackage ../development/libraries/haskell/publicsuffixlist {};
@@ -1924,6 +1938,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   resourcePool = callPackage ../development/libraries/haskell/resource-pool {};
 
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
+
+  rethinkdb = callPackage ../development/libraries/haskell/rethinkdb {};
 
   rfc5051 = callPackage ../development/libraries/haskell/rfc5051 {};
 
