@@ -3233,10 +3233,10 @@ rec {
   };
 
   ExtUtilsTypemapsDefault = buildPerlModule rec {
-    name = "ExtUtils-Typemaps-Default-1.01";
+    name = "ExtUtils-Typemaps-Default-1.05";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "0k03rr7bmhnn6j0505w9id5apss85yvqnx76hxf3javn3klj1m5z";
+      sha256 = "1phmha0ks95kvzl00r1kgnd5hvg7qb1q9jmzjmw01p5zgs1zbyix";
     };
     propagatedBuildInputs = [ ExtUtilsTypemap ExtUtilsParseXS ];
   };
