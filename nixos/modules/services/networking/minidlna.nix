@@ -55,11 +55,6 @@ in
 
   config = mkIf cfg.enable {
 
-    # Running minidlna only makes sense for serving files to the
-    # outside, so open up the required ports by default.
-    networking.firewall.allowedTCPPorts = [ port ];
-    networking.firewall.allowedUDPPorts = [ 1900 ]; # SSDP
-
     services.minidlna.config =
       ''
         port=${toString port}
