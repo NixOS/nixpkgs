@@ -1,6 +1,7 @@
 # generic builder for Cabal packages
 
 { stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, jailbreakCabal, glibcLocales
+, gnugrep, coreutils
 , enableLibraryProfiling ? false
 , enableSharedLibraries ? false
 , enableSharedExecutables ? false
@@ -188,7 +189,13 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               done
 
               echo "configure flags: $extraConfigureFlags $configureFlags"
-              ./Setup configure --verbose --prefix="$out" --libdir='$prefix/lib/$compiler' --libsubdir='$pkgid' $extraConfigureFlags $configureFlags
+              ./Setup configure --verbose --prefix="$out" --libdir='$prefix/lib/$compiler' \
+                --libsubdir='$pkgid' $extraConfigureFlags $configureFlags 2>&1 \
+                | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
+              if ${gnugrep}/bin/egrep -q '^Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
+                echo >&2 "*** abort because of serious configure-time warning from Cabal"
+                exit 1
+              fi
 
               eval "$postConfigure"
             '';
