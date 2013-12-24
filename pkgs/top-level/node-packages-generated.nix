@@ -10061,11 +10061,11 @@
     passthru.names = [ "npm-user-validate" ];
   };
   full."npm2nix"."*" = lib.makeOverridable self.buildNodePackage {
-    name = "npm2nix-5.1.0";
+    name = "npm2nix-5.1.1";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/npm2nix/-/npm2nix-5.1.0.tgz";
-        sha1 = "a6b21174d57fdc31cf67849ffc72083bcae0e2ed";
+        url = "http://registry.npmjs.org/npm2nix/-/npm2nix-5.1.1.tgz";
+        sha256 = "1zf4sgrxbsnvrd1c8bpqhg7qc47w6bfbcv82bysdp0m8ph6sni1x";
       })
     ];
     buildInputs =
