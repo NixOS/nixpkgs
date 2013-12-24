@@ -41,6 +41,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
 
   gigolo          = callPackage ./applications/gigolo.nix { };
   mousepad        = callPackage ./applications/mousepad.nix { };
+  parole          = callPackage ./applications/parole.nix { };
   ristretto       = callPackage ./applications/ristretto.nix { };
   terminal        = xfce4terminal; # it has changed its name
   xfce4mixer      = callPackage ./applications/xfce4-mixer.nix { };
