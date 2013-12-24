@@ -6,8 +6,8 @@ let
   version = "1.6.8";
   sha256 = "109h2fcjspd792lvh5q4xnkpsv7rjczmrdl15i4ajx0xbs5kvxr4";
   patch_src = fetchurl {
-    url = "mirror://sourceforge/libpng-apng/libpng-1.6.7-apng.patch.gz";
-    sha256 = "1g5hmlb9smwl9qv6wb2d7795jqcfrx8g3dhrya5dshrj909jb95k";
+    url = "mirror://sourceforge/libpng-apng/libpng-${version}-apng.patch.gz";
+    sha256 = "0wysnv0d8h7pyz7gfagnkwra2k7malqga1cn6wbk2l7a8k2r53qi";
   };
   whenPatched = stdenv.lib.optionalString apngSupport;
 
