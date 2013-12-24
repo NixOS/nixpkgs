@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-logger";
-  version = "2.0.1";
-  sha256 = "1v8n7m314a12421gn10i8vz3nk9sak635dq4nq389sij8w1ihjkw";
+  version = "2.0.2";
+  sha256 = "0wpx01sizl17ln1npia1c9hx1ph5qv8zwmikgmv0hkgx7w9bifaa";
   buildDepends = [
     blazeBuilder byteorder caseInsensitive fastLogger httpTypes network
     unixTime wai
