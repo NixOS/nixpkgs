@@ -937,6 +937,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   downloadCurl = callPackage ../development/libraries/haskell/download-curl {};
 
+  DRBG = callPackage ../development/libraries/haskell/DRBG {};
+
   DSH = callPackage ../development/libraries/haskell/DSH {};
 
   dstring = callPackage ../development/libraries/haskell/dstring {};
