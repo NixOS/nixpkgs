@@ -16,10 +16,11 @@
     let src = fetchurl srcAttrs; in pkgs.runCommand src.name {} ''
       mkdir unpack
       cd unpack
-      tar xf ${src}
+      unpackFile ${src}
+      chmod -R +w */
       mv */ package 2>/dev/null || true
-      sed -i -e "s/: \"latest\"/: \"*\"/" package/package.json
-      tar cf $out *
+      sed -i -e "s/:\s*\"latest\"/:  \"*\"/" -e "s/:\s*\"\(https\?\|git\(\+\(ssh\|http\|https\)\)\?\):\/\/[^\"]*\"/: \"*\"/" package/package.json
+      mv */ $out
     '';
 
   /* Put manual packages below here (ideally eventually managed by npm2nix */
