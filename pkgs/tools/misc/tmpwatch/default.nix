@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
     description = "The tmpwatch utility recursively searches through specified directories and removes files which have not been accessed in a specified period of time.";
     licence = "GPLv2";
     maintainers = with stdenv.lib.maintainers; [ vlstill ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }
