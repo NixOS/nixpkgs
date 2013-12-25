@@ -18,9 +18,7 @@ stdenv.mkDerivation {
     cp config.mk.in config.mk
     substituteInPlace "config.mk" \
         --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff}/lib/libtiff.so" \
-        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff}/include" \
-        --replace "TIFFLIB_NEEDS_JPEG = Y" "TIFFLIB_NEEDS_JPEG = N" \
-        --replace "TIFFLIB_NEEDS_Z = Y" "TIFFLIB_NEEDS_Z = N"
+        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff}/include"
   '';
 
   preBuild = ''
