@@ -8,6 +8,8 @@
 , automationSupport ? true, lua ? null 
 , openalSupport ? false, openal ? null
 , alsaSupport ? true, alsaLib ? null
+, pulseaudioSupport ? true, pulseaudio ? null
+, portaudioSupport ? false, portaudio ? null
 }:
 
 assert spellChecking -> (hunspell != null);
@@ -32,6 +34,8 @@ stdenv.mkDerivation rec {
   ++ optional automationSupport lua
   ++ optional openalSupport openal
   ++ optional alsaSupport alsaLib
+  ++ optional pulseaudioSupport pulseaudio
+  ++ optional portaudioSupport portaudio
   ;
 
   NIX_LDFLAGS = "-liconv -lavutil -lavformat -lavcodec -lswscale -lz -lm";
