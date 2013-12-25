@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, ocaml_4_01_0, unzip, ncurses, curl }:
+{ stdenv, fetchgit, fetchurl, ocaml, unzip, ncurses, curl }:
 
 let
   srcs = {
@@ -35,7 +35,7 @@ in
 stdenv.mkDerivation rec {
   name = "opam-1.1.0";
 
-  buildInputs = [unzip curl ncurses ocaml_4_01_0];
+  buildInputs = [unzip curl ncurses ocaml];
 
   src = srcs.opam;
 
