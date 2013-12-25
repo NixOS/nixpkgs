@@ -8082,6 +8082,8 @@ let
     slibGuile = slibGuile.override { scheme = guile_1_8; };
   };
 
+  ideas = recurseIntoAttrs (callPackage ../applications/editors/idea { });
+
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
