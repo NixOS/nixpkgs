@@ -3024,7 +3024,7 @@ let
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
     opam_1_0_0 = callPackage ../development/tools/ocaml/opam/1.0.0.nix { };
-    opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix { ocaml = ocaml_4_01_0; };
+    opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix { };
     opam = opam_1_1;
   };
 
