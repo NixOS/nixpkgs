@@ -6,7 +6,7 @@
 # no introspection by default, it's too big
 
 stdenv.mkDerivation rec {
-  name = "librsvg-2.36.4";
+  name = "librsvg-2.36.4"; # 2.37 needs pango 1.32.6, 2.40 doesn't support gtk2
 
   src = fetchurl {
     url    = "mirror://gnome/sources/librsvg/2.36/${name}.tar.xz";

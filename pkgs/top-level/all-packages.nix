@@ -1018,6 +1018,9 @@ let
       else stdenv;
   };
 
+  # must have AquaTerm installed separately
+  gnuplot_aquaterm = gnuplot.override { aquaterm = true; };
+
   gnused = callPackage ../tools/text/gnused { };
 
   gnutar = callPackage ../tools/archivers/gnutar { };
@@ -4236,7 +4239,7 @@ let
   geoclue = callPackage ../development/libraries/geoclue {};
 
   geoclue2 = callPackage ../development/libraries/geoclue/2.0.nix {
-    libsoup = libsoup_2_40;
+    libsoup = libsoup_2_44;
   };
 
   geoip = builderDefsPackage ../development/libraries/geoip {
@@ -4504,13 +4507,10 @@ let
     glSupport = config.cairo.gl or (stdenv.isLinux &&
       !stdenv.isArm && !stdenv.isMips);
   };
-  cairo_1_12_2 = callPackage ../development/libraries/cairo/1.12.2.nix { };
   cairomm = callPackage ../development/libraries/cairomm { };
 
   pango = callPackage ../development/libraries/pango { };
-  pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix {
-    cairo = cairo_1_12_2;
-  };
+  pangomm = callPackage ../development/libraries/pangomm { };
 
   pangox_compat = callPackage ../development/libraries/pangox-compat { };
 
@@ -4563,10 +4563,7 @@ let
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
-  harfbuzz = callPackage ../development/libraries/harfbuzz {
-    icu = null;
-    graphite2 = null;
-  };
+  harfbuzz = callPackage ../development/libraries/harfbuzz { };
 
   hawknl = callPackage ../development/libraries/hawknl { };
 
@@ -4991,7 +4988,7 @@ let
 
   libmowgli = callPackage ../development/libraries/libmowgli { };
 
-  libmng = callPackage ../development/libraries/libmng { lcms = lcms2; };
+  libmng = callPackage ../development/libraries/libmng { };
 
   libmnl = callPackage ../development/libraries/libmnl { };
 
@@ -5092,7 +5089,7 @@ let
   libsodium = callPackage ../development/libraries/libsodium { };
 
   libsoup = callPackage ../development/libraries/libsoup { };
-  libsoup_2_40 = callPackage ../development/libraries/libsoup/2.40.nix { };
+  libsoup_2_44 = callPackage ../development/libraries/libsoup/2.44.nix { };
 
   libssh = callPackage ../development/libraries/libssh { };
 
@@ -5186,7 +5183,8 @@ let
 
   libwmf = callPackage ../development/libraries/libwmf { };
 
-  libwnck = callPackage ../development/libraries/libwnck { };
+  libwnck = libwnck2;
+  libwnck2 = callPackage ../development/libraries/libwnck { };
   libwnck3 = callPackage ../development/libraries/libwnck/3.x.nix { };
 
   libwpd = callPackage ../development/libraries/libwpd { };
@@ -5889,6 +5887,14 @@ let
       inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
       bison = bison2;
     };
+
+  webkitgtk = callPackage ../development/libraries/webkitgtk {
+    stdenv = overrideGCC stdenv gcc47;
+    libsoup = libsoup_2_44;
+    harfbuzz = harfbuzz.override {
+      withIcu = true;
+    };
+  };
 
   wildmidi = callPackage ../development/libraries/wildmidi { };
 
@@ -9135,11 +9141,7 @@ let
     gnutls = gnutls32;
   };
 
-  weston = callPackage ../applications/window-managers/weston {
-    cairo = cairo.override {
-      glSupport = true;
-    };
-  };
+  weston = callPackage ../applications/window-managers/weston { };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
 
@@ -9658,9 +9660,18 @@ let
 
   ### DESKTOP ENVIRONMENTS
 
-   cinnamon = recurseIntoAttrs {
-    cinnamon-translations  = callPackage ../desktops/cinnamon/cinnamon-translations.nix { };
-    };
+  cinnamon = recurseIntoAttrs rec {
+    callPackage = newScope pkgs.cinnamon;
+    inherit (gnome3) gnome_common;
+
+    cinnamon-session = callPackage ../desktops/cinnamon/cinnamon-session.nix{ } ;
+
+    cinnamon-desktop = callPackage ../desktops/cinnamon/cinnamon-desktop.nix { };
+
+    cinnamon-translations = callPackage ../desktops/cinnamon/cinnamon-translations.nix { };
+
+    cjs = callPackage ../desktops/cinnamon/cjs.nix { };
+  };
 
   enlightenment = callPackage ../desktops/enlightenment { };
 
@@ -10334,7 +10345,7 @@ let
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
     harfbuzz = harfbuzz.override {
-      inherit icu graphite2;
+      withIcu = true; withGraphite2 = true;
     };
   };
 
