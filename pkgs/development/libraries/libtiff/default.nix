@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
       patch -p0 < "$p"
     done
     )
-    patch -p0 < ${patchDir}/*-tiff2pdf-colors.patch
-  '';
+    patch -p0 < ${patchDir}/${if stdenv.isDarwin then "tiff-4.0.3" else "*"}-tiff2pdf-colors.patch
+  ''; # ^ sh on darwin seems not to expand globs in redirects, and I don't want to rebuild all again elsewhere
 
   nativeBuildInputs = [ pkgconfig ];
 
