@@ -1,17 +1,17 @@
 {stdenv, fetchurl
-, libX11, gettext, wxGTK29
+, libX11, gettext, wxGTK
 , libiconv, fontconfig, freetype
 , mesa
 , libass, fftw, ffms
 , ffmpeg, pkgconfig, zlib # Undocumented (?) dependencies
 , spellChecking ? true, hunspell ? null
-, automationSupport ? true, lua5_1 ? null 
+, automationSupport ? true, lua ? null 
 , openalSupport ? false, openal ? null
 , alsaSupport ? true, alsaLib ? null
 }:
 
 assert spellChecking -> (hunspell != null);
-assert automationSupport -> (lua5_1 != null);
+assert automationSupport -> (lua != null);
 assert openalSupport -> (openal != null);
 assert alsaSupport -> (alsaLib != null);
 
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-  [ libX11 gettext wxGTK29 libiconv fontconfig freetype mesa libass fftw ffms ffmpeg pkgconfig zlib ]
+  [ libX11 gettext wxGTK libiconv fontconfig freetype mesa libass fftw ffms ffmpeg pkgconfig zlib ]
   ++ optional spellChecking hunspell
-  ++ optional automationSupport lua5_1
+  ++ optional automationSupport lua
   ++ optional openalSupport openal
   ++ optional alsaSupport alsaLib
   ;
@@ -38,17 +38,15 @@ stdenv.mkDerivation rec {
   
   preConfigure = "cd aegisub"; 
   
+  postInstall = "ln -s $out/bin/aegisub-3.0 $out/bin/aegisub";
+  
   meta = {
     description = "An advanced subtitle editor";
     longDescription = ''
     Aegisub is a free, cross-platform open source tool for creating and modifying subtitles. Aegisub makes it quick and easy to time subtitles to audio, and features many powerful tools for styling them, including a built-in real-time video preview.
     '';
     homepage = http://www.aegisub.org/;
-    license = "BSD"; # The sources are BSD/ISC, but they are linked against GPL'd softwares
+    license = "BSD"; # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd softwares
     platforms = stdenv.lib.platforms.linux;
   };
 }
-
-# TODO: parametrize lua version
-# TODO: parametrize wxGTK version
-
