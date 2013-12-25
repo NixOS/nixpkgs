@@ -400,6 +400,11 @@ let
 
   aefs = callPackage ../tools/filesystems/aefs { };
 
+  aegisub = callPackage ../applications/video/aegisub {
+    wxGTK = wxGTK29;
+    lua = lua5_1; 
+  };
+
   aespipe = callPackage ../tools/security/aespipe { };
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
