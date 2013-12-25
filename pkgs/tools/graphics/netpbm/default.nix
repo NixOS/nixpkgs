@@ -10,6 +10,11 @@ stdenv.mkDerivation {
     sha256 = "0csx6g0ci66nx1a6z0a9dkpfp66mdvcpp5r7g6zrx4jp18r9hzb2";
   };
 
+  postPatch = /* CVE-2005-2471, from Arch */ ''
+    substituteInPlace converter/other/pstopnm.c \
+      --replace '"-DSAFER"' '"-DPARANOIDSAFER"'
+  '';
+
   NIX_CFLAGS_COMPILE = "-fPIC"; # Gentoo adds this on every platform
 
   buildInputs = [ pkgconfig flex zlib perl libpng libjpeg libxml2 makeWrapper libX11 libtiff ];
