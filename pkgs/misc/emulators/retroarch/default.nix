@@ -6,14 +6,6 @@
 stdenv.mkDerivation rec {
   name = "retroarch-0.9.9.7";
 
-  meta = {
-    description = "Modular multi-system game/emulator system";
-    homepage = "http://www.libretro.com/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
-  };
-
   src = fetchgit {
     url = "https://github.com/libretro/RetroArch.git";
     rev = "ea0c4880556e0f9d1fe8253ddc713bc743b00e1b";
@@ -25,5 +17,15 @@ stdenv.mkDerivation rec {
     libXxf86vm libXinerama libXv
   ];
 
-  configureFlags = "--global-config-dir=$(out)/etc";
+  preConfigure = ''
+    configureFlags="--global-config-dir=$out/etc"
+  '';
+ 
+  meta = {
+    description = "Modular multi-system game/emulator system";
+    homepage = "http://www.libretro.com/";
+    license = stdenv.lib.licenses.gpl3Plus;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
+  };
 }
