@@ -34,7 +34,6 @@
       haskellPlatform = self.haskellPlatform_2012_4_0_0;
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
-      bmp = self.bmp_1_2_2_1;
     };
 
   ghc741Prefs =
@@ -42,7 +41,6 @@
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
-      bmp = self.bmp_1_2_2_1;
     };
 
   ghc722Prefs =
@@ -51,7 +49,6 @@
       deepseq = self.deepseq_1_3_0_2;
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
-      bmp = self.bmp_1_2_2_1;
       binary = self.binary_0_6_0_0;
     };
 
@@ -66,7 +63,6 @@
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       prettyShow = self.prettyShow_1_2;
-      bmp = self.bmp_1_2_2_1;
       binary = self.binary_0_6_0_0;
       Cabal_1_18_1_2 = self.Cabal_1_18_1_2.override { deepseq = self.deepseq_1_3_0_2; };
       quickcheckIo = self.quickcheckIo.override {
@@ -84,7 +80,6 @@
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       prettyShow = self.prettyShow_1_2;
-      bmp = self.bmp_1_2_2_1;
       binary = self.binary_0_6_0_0;
       Cabal_1_18_1_2 = self.Cabal_1_18_1_2.override { deepseq = self.deepseq_1_3_0_2; };
       quickcheckIo = self.quickcheckIo.override {
@@ -104,7 +99,6 @@
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       prettyShow = self.prettyShow_1_2;
-      bmp = self.bmp_1_2_2_1;
       binary = self.binary_0_6_0_0;
       Cabal_1_18_1_2 = self.Cabal_1_18_1_2.override { deepseq = self.deepseq_1_3_0_2; };
       quickcheckIo = self.quickcheckIo.override {
@@ -124,7 +118,6 @@
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
-      bmp = self.bmp_1_2_2_1;
       binary = self.binary_0_6_0_0;
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override {
         Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3;
@@ -147,7 +140,6 @@
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
-      bmp = self.bmp_1_2_2_1;
       binary = self.binary_0_6_0_0;
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override {
         Cabal = self.Cabal_1_16_0_3;
@@ -172,7 +164,6 @@
       monadPar = self.monadPar_0_1_0_3;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
-      bmp = self.bmp_1_2_2_1;
       binary = self.binary_0_6_0_0;
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override {
         Cabal = self.Cabal_1_16_0_3;
