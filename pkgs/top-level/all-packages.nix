@@ -8448,15 +8448,7 @@ let
 
   mid2key = callPackage ../applications/audio/mid2key { };
 
-  midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
-    inherit imagemagick intltool python pkgconfig webkit libxml2
-      which gettext makeWrapper file libidn sqlite docutils libnotify
-      vala dbus_glib glib_networking;
-    inherit gtk3 glib;
-    inherit (gnome) gtksourceview;
-    inherit (webkit.passthru.args) libsoup;
-    inherit (xlibs) kbproto xproto libXScrnSaver scrnsaverproto;
-  };
+  midori = callPackage ../applications/networking/browsers/midori { };
 
   midoriWrapper = wrapFirefox
     { browser = midori; browserName = "midori"; desktopName = "Midori";
