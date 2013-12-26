@@ -62,6 +62,7 @@ stdenv.mkDerivation (rec {
       fi
     done;
     ln -svf . $out/include/ncursesw
+    ln -svf ncursesw5-config $out/bin/ncurses5-config
   '' else "";
 
   meta = {
