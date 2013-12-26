@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, intltool, vala, makeWrapper
-, webkitgtk, librsvg, libnotify
+, gtk3, webkitgtk, librsvg, libnotify
 , glib_networking, gsettings_desktop_schemas
 }:
 
@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = ''
-    -DUSE_GTK3=1
+    -DHALF_BRO_INCOM_WEBKIT2=ON
     -DUSE_ZEITGEIST=OFF
   '';
 
   postInstall = ''
     wrapProgram $out/bin/midori \
       --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share"
+      --set XDG_DATA_DIRS "${gtk3}/share:${gsettings_desktop_schemas}/share"
   '';
 }
