@@ -1,17 +1,24 @@
-{ stdenv, fetchgit, pkgconfig, libXcomposite, libXfixes, libXdamage
-, libXrender, libXext }:
+{ stdenv, fetchurl, pkgconfig
+, dbus, libconfig, libdrm, libxml2, mesa, pcre
+, libXcomposite, libXfixes, libXdamage, libXinerama
+, libXrandr, libXrender, libXext }:
+
 stdenv.mkDerivation rec {
-  name = "compton-20120507";
-  src = fetchgit {
-    url = git://github.com/chjj/compton.git;
-    rev = "d52f7a06dbc55d92e061f976730952177edac739";
-    sha256 = "0f7600a841c4c77d181b54bc14cf7d90d0bad25aa5edbade320ca8b9946f14eb";
+
+  name = "compton-0.1_beta2";
+
+  src = fetchurl {
+    url = https://github.com/chjj/compton/releases/download/v0.1_beta2/compton-git-v0.1_beta2-2013-10-21.tar.xz;
+    sha256 = "1mpgn1d98dv66xs2j8gaxjiw26nzwl9a641lrday7h40g3k45g9v";
   };
-  buildInputs = [ pkgconfig libXcomposite libXfixes libXdamage libXrender libXext ];
+
+  buildInputs = [ pkgconfig dbus libconfig libdrm libxml2 mesa pcre
+    libXcomposite libXfixes libXdamage libXinerama libXrandr libXrender libXext ];
   buildFlagsArray = ["CFLAGS=-O3 -fomit-frame-pointer"];
   installFlags = "PREFIX=$(out)";
-  meta = {
-    homepage = http://www.x.org/;
+
+  meta = with stdenv.lib; {
+    homepage = https://github.com/chjj/compton/;
     description = "A fork of XCompMgr, a sample compositing manager for X servers";
     longDescription = ''
       A fork of XCompMgr, which is a  sample compositing manager for X servers
@@ -19,7 +26,7 @@ stdenv.mkDerivation rec {
       basic eye-candy effects. This fork adds additional features, such as additional
       effects, and a fork at a well-defined and proper place.
     '';
-    license = "bsd";
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
   };
 }
