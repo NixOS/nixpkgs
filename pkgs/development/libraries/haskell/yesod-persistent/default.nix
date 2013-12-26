@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-persistent";
-  version = "1.2.2";
-  sha256 = "0pi7r6mf8ikd76cwdpjzb1lf73jc3f0ji3xximmg25q8lwcjygq5";
+  version = "1.2.2.1";
+  sha256 = "0vihd94yh4xipvz193p2fd1sqlbwdj0619l21gpdy307sng50kjn";
   buildDepends = [
     blazeBuilder conduit liftedBase persistent persistentTemplate
     poolConduit resourcet transformers yesodCore
