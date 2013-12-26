@@ -1,12 +1,14 @@
-{ cabal, MonadRandom, mtl, semigroupoids, semigroups, transformers
+{ cabal, monadControl, MonadRandom, mtl, semigroupoids, semigroups
+, transformers, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "either";
-  version = "4.0";
-  sha256 = "07axaq43cqyglndr5az7ns4mvkjmybq6z8s32l1jxc5x7532scwr";
+  version = "4.1";
+  sha256 = "1wddidjqwk283zrydl6xwi0crrrlskayici0fhjyf2abd3lgnnkc";
   buildDepends = [
-    MonadRandom mtl semigroupoids semigroups transformers
+    monadControl MonadRandom mtl semigroupoids semigroups transformers
+    transformersBase
   ];
   meta = {
     homepage = "http://github.com/ekmett/either/";
