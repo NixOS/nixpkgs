@@ -1,13 +1,14 @@
 { cabal, aeson, hspec, monadControl, monadLogger, persistent
-, QuickCheck, text, transformers
+, QuickCheck, text, transformers, unorderedContainers
 }:
 
 cabal.mkDerivation (self: {
   pname = "persistent-template";
-  version = "1.2.0.6";
-  sha256 = "1vkrxf2dabk9z0igfbvb2ib2bxcxi5af2vpxllv74cbjz9r6ip3s";
+  version = "1.3.0";
+  sha256 = "0amg5xncxgpc19yhj3gi7ldw126dy725pxj7kp43lbgggap0yfv9";
   buildDepends = [
     aeson monadControl monadLogger persistent text transformers
+    unorderedContainers
   ];
   testDepends = [ aeson hspec persistent QuickCheck text ];
   meta = {
