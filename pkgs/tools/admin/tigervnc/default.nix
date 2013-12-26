@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     do
       patch -p1 < $a
     done
-    patch -p1 < ../xserver113.patch
     autoreconf -vfi
     ./configure $configureFlags --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx --prefix="$out"
     make TIGERVNC_SRCDIR=`pwd`/../..

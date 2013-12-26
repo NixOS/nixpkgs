@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_BINUTILS_INCDIR=${binutils_gold}/include"
-  ] ++ lib.optional (!isDarwin) [ "-DBUILD_SHARED_LIBS=ON" ];
+    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=R600" # for mesa
+  ] ++ lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
 
   enableParallelBuilding = true;
 

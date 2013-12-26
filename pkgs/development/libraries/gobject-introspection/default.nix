@@ -4,12 +4,16 @@
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
 
+let
+  ver_maj = "1.38";
+  ver_min = "0";
+in
 stdenv.mkDerivation rec {
-  name = "gobject-introspection-1.36.0";
+  name = "gobject-introspection-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gobject-introspection/1.36/${name}.tar.xz";
-    sha256 = "10v3idh489vra7pjn1g8f844nnl6719zgkgq3dv38xcf8afnvrz3";
+    url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
+    sha256 = "0wvxyvgajmms2bb6k3pf1rdpnd79xdxamykzvxzmcyn1ag9yax9m";
   };
 
   buildInputs = [ flex bison glib pkgconfig python ]

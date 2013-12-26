@@ -1,10 +1,13 @@
 { stdenv, fetchurl, pkgconfig, udev }:
 
+let
+  version = "1.0.17";
+in
 stdenv.mkDerivation rec {
-  name = "libusb-1.0.17";
+  name = "libusb-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libusbx/libusbx-1.0.17.tar.bz2";
+    url = "mirror://sourceforge/libusbx/libusbx-${version}.tar.bz2";
     sha256 = "1f25a773x9x5n48a0mcigyk77ay0hkiz6y6bi4588wzf7wn8svw7";
   };
 

@@ -159,6 +159,13 @@ in
     ];
   };
 
+  xf86videonv = attrs: attrs // {
+    patches = [( args.fetchurl {
+      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-nv/patch/?id=fc78fe98222b0204b8a2872a529763d6fe5048da;
+      sha256 = "0ikbnz6048ygs1qahb6ylnxkyjhfjcqr2gm9bk95ca90v57j7i0f";
+    })];
+  };
+
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
   };
@@ -185,11 +192,7 @@ in
       "--with-default-font-path= "  # there were only paths containing "${prefix}",
                                     # and there are no fonts in this package anyway
     ];
-    patches =
-      [ ./xorgserver-dri-path.patch
-        ./xorgserver-xkbcomp-path.patch
-        ./xorgserver-cve-2013-4396.patch
-      ];
+    patches = [ ./xorgserver-xkbcomp-path.patch ];
     buildInputs = attrs.buildInputs ++ [ xtrans ];
     propagatedBuildInputs =
       [ args.zlib args.udev args.mesa args.dbus.libs

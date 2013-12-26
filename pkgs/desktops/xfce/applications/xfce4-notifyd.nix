@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   p_name  = "xfce4-notifyd";
   ver_maj = "0.2";
-  ver_min = "3";
+  ver_min = "4";
 
   src = fetchurl {
     url = "mirror://xfce/src/apps/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0fx6z89rxs6ypb8bb6l1pg8fdbxn995fgs413sbhnaxjkm6gch6x";
+    sha256 = "1l6fpfk0fkizdx7vwbyjdyzzj5i2ng8pf7r8j49nv0cnjhpxczlc";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 

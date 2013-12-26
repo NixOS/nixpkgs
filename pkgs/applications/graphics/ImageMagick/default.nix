@@ -18,14 +18,14 @@
 }:
 
 let
-  version = "6.8.7-5";
+  version = "6.8.7-6";
 in
 stdenv.mkDerivation rec {
   name = "ImageMagick-${version}";
 
   src = fetchurl {
     url = "mirror://imagemagick/${name}.tar.xz";
-    sha256 = "1cn1kg7scs6r7r00qlqirhnmqjnmyczbidab3vgqarw9qszh2ri6";
+    sha256 = "0cbfhk184kxdxz5czyyqxac29mbfiahygjji6k97z6hp8ngnqlvh";
   };
 
   enableParallelBuilding = true;
