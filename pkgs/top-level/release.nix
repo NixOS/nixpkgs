@@ -371,6 +371,10 @@ let
         ghc = ghcSupported;
       };
 
+      haskellPackages_ghc722 = {
+        ghc = ghcSupported;
+      };
+
       haskellPackages_ghc742 = {
         ghc = ghcSupported;
       };
