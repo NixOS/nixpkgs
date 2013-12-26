@@ -9705,6 +9705,8 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde410;
 
+  kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde411 );
+
   kde410 = kdePackagesFor (pkgs.kde410 // {
       boost = boost149;
       eigen = eigen2;
