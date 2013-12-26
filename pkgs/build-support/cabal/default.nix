@@ -141,6 +141,10 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             # and run any regression test suites the package might have
             doCheck = enableCheckPhase;
 
+            # abort the build if the configure phase detects that the package
+            # depends on multiple versions of the same build input
+            strictConfigurePhase = true;
+
             # pass the '--enable-library-vanilla' flag to cabal in the
             # configure stage to enable building shared libraries
             inherit enableStaticLibraries;
@@ -198,11 +202,13 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               echo "configure flags: $extraConfigureFlags $configureFlags"
               ./Setup configure --verbose --prefix="$out" --libdir='$prefix/lib/$compiler' \
                 --libsubdir='$pkgid' $extraConfigureFlags $configureFlags 2>&1 \
+              ${optionalString self.strictConfigurePhase ''
                 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
-              if ${gnugrep}/bin/egrep -q '^Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
-                echo >&2 "*** abort because of serious configure-time warning from Cabal"
-                exit 1
-              fi
+                if ${gnugrep}/bin/egrep -q '^Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
+                  echo >&2 "*** abort because of serious configure-time warning from Cabal"
+                  exit 1
+                fi
+              ''}
 
               eval "$postConfigure"
             '';
