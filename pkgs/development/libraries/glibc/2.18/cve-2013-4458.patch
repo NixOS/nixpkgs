@@ -1,0 +1,50 @@
+commit 7cbcdb3699584db8913ca90f705d6337633ee10f
+Author: Siddhesh Poyarekar <siddhesh@redhat.com>
+Date:   Fri Oct 25 10:22:12 2013 +0530
+
+    Fix stack overflow due to large AF_INET6 requests
+    
+    Resolves #16072 (CVE-2013-4458).
+    
+    This patch fixes another stack overflow in getaddrinfo when it is
+    called with AF_INET6.  The AF_UNSPEC case was fixed as CVE-2013-1914,
+    but the AF_INET6 case went undetected back then.
+
+diff --git a/sysdeps/posix/getaddrinfo.c b/sysdeps/posix/getaddrinfo.c
+index e6ce4cf..8ff74b4 100644
+--- a/sysdeps/posix/getaddrinfo.c
++++ b/sysdeps/posix/getaddrinfo.c
+@@ -197,7 +197,22 @@ gaih_inet_serv (const char *servicename, const struct gaih_typeproto *tp,
+ 				&rc, &herrno, NULL, &localcanon));	      \
+     if (rc != ERANGE || herrno != NETDB_INTERNAL)			      \
+       break;								      \
+-    tmpbuf = extend_alloca (tmpbuf, tmpbuflen, 2 * tmpbuflen);		      \
++    if (!malloc_tmpbuf && __libc_use_alloca (alloca_used + 2 * tmpbuflen))    \
++      tmpbuf = extend_alloca_account (tmpbuf, tmpbuflen, 2 * tmpbuflen,	      \
++				      alloca_used);			      \
++    else								      \
++      {									      \
++	char *newp = realloc (malloc_tmpbuf ? tmpbuf : NULL,		      \
++			      2 * tmpbuflen);				      \
++	if (newp == NULL)						      \
++	  {								      \
++	    result = -EAI_MEMORY;					      \
++	    goto free_and_return;					      \
++	  }								      \
++	tmpbuf = newp;							      \
++	malloc_tmpbuf = true;						      \
++	tmpbuflen = 2 * tmpbuflen;					      \
++      }									      \
+   }									      \
+   if (status == NSS_STATUS_SUCCESS && rc == 0)				      \
+     h = &th;								      \
+@@ -209,7 +224,8 @@ gaih_inet_serv (const char *servicename, const struct gaih_typeproto *tp,
+ 	{								      \
+ 	  __set_h_errno (herrno);					      \
+ 	  _res.options |= old_res_options & RES_USE_INET6;		      \
+-	  return -EAI_SYSTEM;						      \
++	  result = -EAI_SYSTEM;						      \
++	  goto free_and_return;						      \
+ 	}								      \
+       if (herrno == TRY_AGAIN)						      \
+ 	no_data = EAI_AGAIN;						      \
