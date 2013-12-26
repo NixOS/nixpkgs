@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = ''
-    -DUSE_GTK3=1
+    -DHALF_BRO_INCOM_WEBKIT2=ON
     -DUSE_ZEITGEIST=OFF
   '';
 
