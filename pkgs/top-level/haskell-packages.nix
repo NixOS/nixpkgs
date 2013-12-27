@@ -2021,7 +2021,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   StateVar = callPackage ../development/libraries/haskell/StateVar {};
 
-  statistics = callPackage ../development/libraries/haskell/statistics {};
+  statistics = callPackage ../development/libraries/haskell/statistics {
+    binary = self.binary_0_7_1_0;
+  };
 
   statvfs = callPackage ../development/libraries/haskell/statvfs {};
 
