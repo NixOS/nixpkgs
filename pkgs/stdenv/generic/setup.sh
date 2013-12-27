@@ -109,6 +109,8 @@ runHook preHook
 # Check that the pre-hook initialised SHELL.
 if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
 
+# see https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
+makeFlags="${makeFlags} SHELL=${SHELL}"
 
 # Hack: run gcc's setup hook.
 envHooks=()
