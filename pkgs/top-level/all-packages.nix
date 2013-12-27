@@ -10151,6 +10151,8 @@ let
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim { };
 
+  gammu = callPackage ../applications/misc/gammu { };
+
   gensgs = callPackage_i686 ../misc/emulators/gens-gs { };
 
   ghostscript = callPackage ../misc/ghostscript {
