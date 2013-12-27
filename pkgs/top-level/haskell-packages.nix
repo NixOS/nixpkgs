@@ -1522,7 +1522,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   minimorph = callPackage ../development/libraries/haskell/minimorph {};
 
-  miniutter = callPackage ../development/libraries/haskell/miniutter {};
+  miniutter = callPackage ../development/libraries/haskell/miniutter {
+    binary = self.binary_0_7_1_0;
+  };
 
   mimeMail = callPackage ../development/libraries/haskell/mime-mail {};
 
