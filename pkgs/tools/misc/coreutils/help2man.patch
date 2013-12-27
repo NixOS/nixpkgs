@@ -1,0 +1,40 @@
+Although the above man pages depend on src/md5sum.c as a shared
+source, the build of the man pages directly requires their own
+executables to exist.
+
+* man/local.mk (man/sha1sum.1): Change the dependency from
+'src/md5sum' to 'src/sha1sum'.
+(man/sha224sum.1): s/md5sum/sha224sum/
+(man/sha256sum.1): s/md5sum/sha256sum/
+(man/sha384sum.1): s/md5sum/sha384sum/
+(man/sha512sum.1): s/md5sum/sha512sum/
+
+Reported by Pádraig Brady in
+http://lists.gnu.org/archive/html/coreutils/2013-11/msg00006.html
+---
+ man/local.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/man/local.mk b/man/local.mk
+index 266b780..45dbcb9 100644
+--- a/man/local.mk
++++ b/man/local.mk
+@@ -131,11 +131,11 @@ man/rm.1:        src/rm
+ man/rmdir.1:     src/rmdir
+ man/runcon.1:    src/runcon
+ man/seq.1:       src/seq
+-man/sha1sum.1:   src/md5sum
+-man/sha224sum.1: src/md5sum
+-man/sha256sum.1: src/md5sum
+-man/sha384sum.1: src/md5sum
+-man/sha512sum.1: src/md5sum
++man/sha1sum.1:   src/sha1sum
++man/sha224sum.1: src/sha224sum
++man/sha256sum.1: src/sha256sum
++man/sha384sum.1: src/sha384sum
++man/sha512sum.1: src/sha512sum
+ man/shred.1:     src/shred
+ man/shuf.1:      src/shuf
+ man/sleep.1:     src/sleep
+-- 
+1.8.3.1

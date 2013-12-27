@@ -18,6 +18,8 @@ let
       sha256 = "064f512185iysqqcvhnhaf3bfmzrvcgs7n405qsyp99zmfyl9amd";
     };
 
+    patches = [ ./help2man.patch ];
+
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
