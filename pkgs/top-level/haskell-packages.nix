@@ -1211,6 +1211,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
 
+  heredoc = callPackage ../development/libraries/haskell/heredoc {};
+
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
 
   hseCpp = callPackage ../development/libraries/haskell/hse-cpp {};
