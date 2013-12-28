@@ -1945,6 +1945,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   rfc5051 = callPackage ../development/libraries/haskell/rfc5051 {};
 
+  robotsTxt = callPackage ../development/libraries/haskell/robots-txt {};
+
   rosezipper = callPackage ../development/libraries/haskell/rosezipper {};
 
   RSA = callPackage ../development/libraries/haskell/RSA {};
