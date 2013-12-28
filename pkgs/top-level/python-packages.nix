@@ -3451,6 +3451,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     then pkgs.clangStdenv
     else pkgs.stdenv;
 
+  # TODO: refactor to use pythonBuildPackage
   matplotlib = matplotlibStdenv.mkDerivation (rec {
     name = "matplotlib-1.3.1";
 
@@ -3462,13 +3463,16 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     # error: invalid command 'test'
     doCheck = false;
 
-    buildInputs = [ python pkgs.which pkgs.ghostscript distribute ];
+    buildInputs = [ python pkgs.which pkgs.ghostscript ];
 
     propagatedBuildInputs =
       [ dateutil nose numpy pyparsing tornado pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl
         pkgs.tk pkgs.xlibs.libX11 ];
     
-    buildPhase = "${python}/bin/${python.executable} setup.py build";
+    buildPhase = ''
+      sed -i '/use_setuptools/d' setup.py
+      ${python}/bin/${python.executable} setup.py build
+    '';
 
     # The sed expression parses out the python version from an executable with appended characters
     installPhase = ''
