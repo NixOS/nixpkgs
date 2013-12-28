@@ -10,8 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "0y3mfbb5qzcpw3v5qncn69x1hdrrrfirgs82ypi2annhf0g6nxk8";
   };
 
-  # The default rlimits are too low for shared libraries.
-  patches = [ ./more-memory-for-bugpoint.patch ];
+  patches = [
+    ./more-memory-for-bugpoint.patch # The default rlimits are too low for shared libraries.
+    ./no-rule-aarch64.patch # http://llvm.org/bugs/show_bug.cgi?id=16625
+  ];
 
   # libffi was propagated before, but it wasn't even being used, so
   # unless something needs it just an input is fine.
