@@ -69,6 +69,7 @@ stdenv.mkDerivation {
        sha256 = "15k91ihzs6190pnryh4cl0b3c2pjpl9d790mr14x16zq52y7px2d";
      })
     ./time_utc_144.patch
+    ./boost-149-cstdint.patch
   ];
 
   crossAttrs = rec {

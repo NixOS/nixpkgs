@@ -141,7 +141,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
-    async        = self.async_2_0_1_4;
+    async        = self.async_2_0_1_5;
     attoparsec   = self.attoparsec_0_10_4_0;
     caseInsensitive = self.caseInsensitive_1_1_0_2;
     cgi          = self.cgi_3001_1_8_4;
@@ -558,7 +558,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   async_2_0_1_3 = callPackage ../development/libraries/haskell/async/2.0.1.3.nix {};
   async_2_0_1_4 = callPackage ../development/libraries/haskell/async/2.0.1.4.nix {};
-  async = self.async_2_0_1_4;
+  async_2_0_1_5 = callPackage ../development/libraries/haskell/async/2.0.1.5.nix {};
+  async = self.async_2_0_1_5;
 
   atomicPrimops = callPackage ../development/libraries/haskell/atomic-primops {};
 

@@ -1,7 +1,7 @@
-diff -ru glibc-2.17-orig/sunrpc/rpc_main.c glibc-2.17/sunrpc/rpc_main.c
---- glibc-2.17-orig/sunrpc/rpc_main.c	2012-12-25 04:02:13.000000000 +0100
-+++ glibc-2.17/sunrpc/rpc_main.c	2012-12-29 00:21:04.124698455 +0100
-@@ -77,7 +77,7 @@
+diff -ru glibc-2.18-orig/sunrpc/rpc_main.c glibc-2.18/sunrpc/rpc_main.c
+--- glibc-2.18-orig/sunrpc/rpc_main.c	2013-08-11 00:52:55.000000000 +0200
++++ glibc-2.18/sunrpc/rpc_main.c	2013-11-15 12:04:48.041006977 +0100
+@@ -78,7 +78,7 @@
  
  static const char *svcclosetime = "120";
  static int cppDefined;	/* explicit path for C preprocessor */
@@ -10,7 +10,7 @@ diff -ru glibc-2.17-orig/sunrpc/rpc_main.c glibc-2.17/sunrpc/rpc_main.c
  static const char CPPFLAGS[] = "-C";
  static char *pathbuf;
  static int cpp_pid;
-@@ -106,7 +106,6 @@
+@@ -107,7 +107,6 @@
  static void open_output (const char *infile, const char *outfile);
  static void add_warning (void);
  static void clear_args (void);
@@ -18,7 +18,7 @@ diff -ru glibc-2.17-orig/sunrpc/rpc_main.c glibc-2.17/sunrpc/rpc_main.c
  static void open_input (const char *infile, const char *define);
  static int check_nettype (const char *name, const char *list_to_check[]);
  static void c_output (const char *infile, const char *define,
-@@ -318,25 +317,6 @@
+@@ -322,25 +321,6 @@
    argcount = FIXEDARGS;
  }
  
@@ -26,9 +26,9 @@ diff -ru glibc-2.17-orig/sunrpc/rpc_main.c glibc-2.17/sunrpc/rpc_main.c
 -static void
 -find_cpp (void)
 -{
--  struct stat buf;
+-  struct stat64 buf;
 -
--  if (stat (CPP, &buf) == 0)
+-  if (stat64 (CPP, &buf) == 0)
 -    return;
 -
 -  if (cppDefined) /* user specified cpp but it does not exist */
@@ -44,7 +44,7 @@ diff -ru glibc-2.17-orig/sunrpc/rpc_main.c glibc-2.17/sunrpc/rpc_main.c
  /*
   * Open input file with given define for C-preprocessor
   */
-@@ -355,7 +335,6 @@
+@@ -359,7 +339,6 @@
    switch (cpp_pid)
      {
      case 0:

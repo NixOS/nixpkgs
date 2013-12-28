@@ -13,7 +13,7 @@ cross:
 
 let
 
-  version = "2.17";
+  version = "2.18";
 
 in
 
@@ -44,9 +44,6 @@ stdenv.mkDerivation ({
       /* Don't use /etc/ld.so.cache, for non-NixOS systems.  */
       ./dont-use-system-ld-so-cache.patch
 
-      /* Without this patch many KDE binaries crash. */
-      ./glibc-elf-localscope.patch
-
       /* Add blowfish password hashing support.  This is needed for
          compatibility with old NixOS installations (since NixOS used
          to default to blowfish). */
@@ -57,16 +54,19 @@ stdenv.mkDerivation ({
          src->results[i].native == a2_native' failed." crashes. */
       ./glibc-rh739743.patch
 
+      ./scanf.patch
+
       /* The command "getconf CS_PATH" returns the default search path
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
 
-      /* Fix buffer overrun in regexp matcher. */
-      ./cve-2013-0242.patch
 
-      /* Fix stack overflow in getaddrinfo with many results. */
-      ./cve-2013-1914.patch
+      ./cve-2012-4412+4424.patch
+      ./cve-2013-4237.patch
+      ./cve-2013-4332.patch
+      ./cve-2013-4458.patch
+      ./cve-2013-4788.patch
     ];
 
   postPatch = ''
@@ -150,7 +150,7 @@ stdenv.mkDerivation ({
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.gz";
-      sha256 = "0ym3zk9ii64279wgw7pw9xkbxczy2ci7ka6mnfs05rhlainhicm3";
+      sha256 = "0d3pnh6kg5r48ga5rg4lhwlc1062brr6fiqs4j23327gzssjgry8";
     };
 
   # Remove absolute paths from `configure' & co.; build out-of-tree.

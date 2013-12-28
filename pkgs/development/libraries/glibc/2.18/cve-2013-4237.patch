@@ -1,0 +1,302 @@
+commit 91ce40854d0b7f865cf5024ef95a8026b76096f3
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 16 09:38:52 2013 +0200
+
+    CVE-2013-4237, BZ #14699: Buffer overflow in readdir_r
+    
+    	* sysdeps/posix/dirstream.h (struct __dirstream): Add errcode
+    	member.
+    	* sysdeps/posix/opendir.c (__alloc_dir): Initialize errcode
+    	member.
+    	* sysdeps/posix/rewinddir.c (rewinddir): Reset errcode member.
+    	* sysdeps/posix/readdir_r.c (__READDIR_R): Enforce NAME_MAX limit.
+    	Return delayed error code.  Remove GETDENTS_64BIT_ALIGNED
+    	conditional.
+    	* sysdeps/unix/sysv/linux/wordsize-64/readdir_r.c: Do not define
+    	GETDENTS_64BIT_ALIGNED.
+    	* sysdeps/unix/sysv/linux/i386/readdir64_r.c: Likewise.
+    	* manual/filesys.texi (Reading/Closing Directory): Document
+    	ENAMETOOLONG return value of readdir_r.  Recommend readdir more
+    	strongly.
+    	* manual/conf.texi (Limits for Files): Add portability note to
+    	NAME_MAX, PATH_MAX.
+    	(Pathconf): Add portability note for _PC_NAME_MAX, _PC_PATH_MAX.
+
+diff --git a/manual/conf.texi b/manual/conf.texi
+index 7eb8b36..c720063 100644
+--- a/manual/conf.texi
++++ b/manual/conf.texi
+@@ -1149,6 +1149,9 @@ typed ahead as input.  @xref{I/O Queues}.
+ @deftypevr Macro int NAME_MAX
+ The uniform system limit (if any) for the length of a file name component, not
+ including the terminating null character.
++
++@strong{Portability Note:} On some systems, @theglibc{} defines
++@code{NAME_MAX}, but does not actually enforce this limit.
+ @end deftypevr
+ 
+ @comment limits.h
+@@ -1157,6 +1160,9 @@ including the terminating null character.
+ The uniform system limit (if any) for the length of an entire file name (that
+ is, the argument given to system calls such as @code{open}), including the
+ terminating null character.
++
++@strong{Portability Note:} @Theglibc{} does not enforce this limit
++even if @code{PATH_MAX} is defined.
+ @end deftypevr
+ 
+ @cindex limits, pipe buffer size
+@@ -1476,6 +1482,9 @@ Inquire about the value of @code{POSIX_REC_MIN_XFER_SIZE}.
+ Inquire about the value of @code{POSIX_REC_XFER_ALIGN}.
+ @end table
+ 
++@strong{Portability Note:} On some systems, @theglibc{} does not
++enforce @code{_PC_NAME_MAX} or @code{_PC_PATH_MAX} limits.
++
+ @node Utility Limits
+ @section Utility Program Capacity Limits
+ 
+diff --git a/manual/filesys.texi b/manual/filesys.texi
+index 1df9cf2..814c210 100644
+--- a/manual/filesys.texi
++++ b/manual/filesys.texi
+@@ -444,9 +444,9 @@ symbols are declared in the header file @file{dirent.h}.
+ @comment POSIX.1
+ @deftypefun {struct dirent *} readdir (DIR *@var{dirstream})
+ This function reads the next entry from the directory.  It normally
+-returns a pointer to a structure containing information about the file.
+-This structure is statically allocated and can be rewritten by a
+-subsequent call.
++returns a pointer to a structure containing information about the
++file.  This structure is associated with the @var{dirstream} handle
++and can be rewritten by a subsequent call.
+ 
+ @strong{Portability Note:} On some systems @code{readdir} may not
+ return entries for @file{.} and @file{..}, even though these are always
+@@ -461,19 +461,61 @@ conditions are defined for this function:
+ The @var{dirstream} argument is not valid.
+ @end table
+ 
+-@code{readdir} is not thread safe.  Multiple threads using
+-@code{readdir} on the same @var{dirstream} may overwrite the return
+-value.  Use @code{readdir_r} when this is critical.
++To distinguish between an end-of-directory condition or an error, you
++must set @code{errno} to zero before calling @code{readdir}.  To avoid
++entering an infinite loop, you should stop reading from the directory
++after the first error.
++
++In POSIX.1-2008, @code{readdir} is not thread-safe.  In @theglibc{}
++implementation, it is safe to call @code{readdir} concurrently on
++different @var{dirstream}s, but multiple threads accessing the same
++@var{dirstream} result in undefined behavior.  @code{readdir_r} is a
++fully thread-safe alternative, but suffers from poor portability (see
++below).  It is recommended that you use @code{readdir}, with external
++locking if multiple threads access the same @var{dirstream}.
+ @end deftypefun
+ 
+ @comment dirent.h
+ @comment GNU
+ @deftypefun int readdir_r (DIR *@var{dirstream}, struct dirent *@var{entry}, struct dirent **@var{result})
+-This function is the reentrant version of @code{readdir}.  Like
+-@code{readdir} it returns the next entry from the directory.  But to
+-prevent conflicts between simultaneously running threads the result is
+-not stored in statically allocated memory.  Instead the argument
+-@var{entry} points to a place to store the result.
++This function is a version of @code{readdir} which performs internal
++locking.  Like @code{readdir} it returns the next entry from the
++directory.  To prevent conflicts between simultaneously running
++threads the result is stored inside the @var{entry} object.
++
++@strong{Portability Note:} It is recommended to use @code{readdir}
++instead of @code{readdir_r} for the following reasons:
++
++@itemize @bullet
++@item
++On systems which do not define @code{NAME_MAX}, it may not be possible
++to use @code{readdir_r} safely because the caller does not specify the
++length of the buffer for the directory entry.
++
++@item
++On some systems, @code{readdir_r} cannot read directory entries with
++very long names.  If such a name is encountered, @theglibc{}
++implementation of @code{readdir_r} returns with an error code of
++@code{ENAMETOOLONG} after the final directory entry has been read.  On
++other systems, @code{readdir_r} may return successfully, but the
++@code{d_name} member may not be NUL-terminated or may be truncated.
++
++@item
++POSIX-1.2008 does not guarantee that @code{readdir} is thread-safe,
++even when access to the same @var{dirstream} is serialized.  But in
++current implementations (including @theglibc{}), it is safe to call
++@code{readdir} concurrently on different @var{dirstream}s, so there is
++no need to use @code{readdir_r} in most multi-threaded programs.  In
++the rare case that multiple threads need to read from the same
++@var{dirstream}, it is still better to use @code{readdir} and external
++synchronization.
++
++@item
++It is expected that future versions of POSIX will obsolete
++@code{readdir_r} and mandate the level of thread safety for
++@code{readdir} which is provided by @theglibc{} and other
++implementations today.
++@end itemize
+ 
+ Normally @code{readdir_r} returns zero and sets @code{*@var{result}}
+ to @var{entry}.  If there are no more entries in the directory or an
+@@ -481,15 +523,6 @@ error is detected, @code{readdir_r} sets @code{*@var{result}} to a
+ null pointer and returns a nonzero error code, also stored in
+ @code{errno}, as described for @code{readdir}.
+ 
+-@strong{Portability Note:} On some systems @code{readdir_r} may not
+-return a NUL terminated string for the file name, even when there is no
+-@code{d_reclen} field in @code{struct dirent} and the file
+-name is the maximum allowed size.  Modern systems all have the
+-@code{d_reclen} field, and on old systems multi-threading is not
+-critical.  In any case there is no such problem with the @code{readdir}
+-function, so that even on systems without the @code{d_reclen} member one
+-could use multiple threads by using external locking.
+-
+ It is also important to look at the definition of the @code{struct
+ dirent} type.  Simply passing a pointer to an object of this type for
+ the second parameter of @code{readdir_r} might not be enough.  Some
+diff --git a/sysdeps/posix/dirstream.h b/sysdeps/posix/dirstream.h
+index a7a074d..8e8570d 100644
+--- a/sysdeps/posix/dirstream.h
++++ b/sysdeps/posix/dirstream.h
+@@ -39,6 +39,8 @@ struct __dirstream
+ 
+     off_t filepos;		/* Position of next entry to read.  */
+ 
++    int errcode;		/* Delayed error code.  */
++
+     /* Directory block.  */
+     char data[0] __attribute__ ((aligned (__alignof__ (void*))));
+   };
+diff --git a/sysdeps/posix/opendir.c b/sysdeps/posix/opendir.c
+index ddfc3a7..fc05b0f 100644
+--- a/sysdeps/posix/opendir.c
++++ b/sysdeps/posix/opendir.c
+@@ -231,6 +231,7 @@ __alloc_dir (int fd, bool close_fd, int flags, const struct stat64 *statp)
+   dirp->size = 0;
+   dirp->offset = 0;
+   dirp->filepos = 0;
++  dirp->errcode = 0;
+ 
+   return dirp;
+ }
+diff --git a/sysdeps/posix/readdir_r.c b/sysdeps/posix/readdir_r.c
+index b5a8e2e..8ed5c3f 100644
+--- a/sysdeps/posix/readdir_r.c
++++ b/sysdeps/posix/readdir_r.c
+@@ -40,6 +40,7 @@ __READDIR_R (DIR *dirp, DIRENT_TYPE *entry, DIRENT_TYPE **result)
+   DIRENT_TYPE *dp;
+   size_t reclen;
+   const int saved_errno = errno;
++  int ret;
+ 
+   __libc_lock_lock (dirp->lock);
+ 
+@@ -70,10 +71,10 @@ __READDIR_R (DIR *dirp, DIRENT_TYPE *entry, DIRENT_TYPE **result)
+ 		  bytes = 0;
+ 		  __set_errno (saved_errno);
+ 		}
++	      if (bytes < 0)
++		dirp->errcode = errno;
+ 
+ 	      dp = NULL;
+-	      /* Reclen != 0 signals that an error occurred.  */
+-	      reclen = bytes != 0;
+ 	      break;
+ 	    }
+ 	  dirp->size = (size_t) bytes;
+@@ -106,29 +107,46 @@ __READDIR_R (DIR *dirp, DIRENT_TYPE *entry, DIRENT_TYPE **result)
+       dirp->filepos += reclen;
+ #endif
+ 
+-      /* Skip deleted files.  */
++#ifdef NAME_MAX
++      if (reclen > offsetof (DIRENT_TYPE, d_name) + NAME_MAX + 1)
++	{
++	  /* The record is very long.  It could still fit into the
++	     caller-supplied buffer if we can skip padding at the
++	     end.  */
++	  size_t namelen = _D_EXACT_NAMLEN (dp);
++	  if (namelen <= NAME_MAX)
++	    reclen = offsetof (DIRENT_TYPE, d_name) + namelen + 1;
++	  else
++	    {
++	      /* The name is too long.  Ignore this file.  */
++	      dirp->errcode = ENAMETOOLONG;
++	      dp->d_ino = 0;
++	      continue;
++	    }
++	}
++#endif
++
++      /* Skip deleted and ignored files.  */
+     }
+   while (dp->d_ino == 0);
+ 
+   if (dp != NULL)
+     {
+-#ifdef GETDENTS_64BIT_ALIGNED
+-      /* The d_reclen value might include padding which is not part of
+-	 the DIRENT_TYPE data structure.  */
+-      reclen = MIN (reclen,
+-		    offsetof (DIRENT_TYPE, d_name) + sizeof (dp->d_name));
+-#endif
+       *result = memcpy (entry, dp, reclen);
+-#ifdef GETDENTS_64BIT_ALIGNED
++#ifdef _DIRENT_HAVE_D_RECLEN
+       entry->d_reclen = reclen;
+ #endif
++      ret = 0;
+     }
+   else
+-    *result = NULL;
++    {
++      *result = NULL;
++      ret = dirp->errcode;
++    }
+ 
+   __libc_lock_unlock (dirp->lock);
+ 
+-  return dp != NULL ? 0 : reclen ? errno : 0;
++  return ret;
+ }
+ 
+ #ifdef __READDIR_R_ALIAS
+diff --git a/sysdeps/posix/rewinddir.c b/sysdeps/posix/rewinddir.c
+index 2935a8e..d4991ad 100644
+--- a/sysdeps/posix/rewinddir.c
++++ b/sysdeps/posix/rewinddir.c
+@@ -33,6 +33,7 @@ rewinddir (dirp)
+   dirp->filepos = 0;
+   dirp->offset = 0;
+   dirp->size = 0;
++  dirp->errcode = 0;
+ #ifndef NOT_IN_libc
+   __libc_lock_unlock (dirp->lock);
+ #endif
+diff --git a/sysdeps/unix/sysv/linux/i386/readdir64_r.c b/sysdeps/unix/sysv/linux/i386/readdir64_r.c
+index 8ebbcfd..a7d114e 100644
+--- a/sysdeps/unix/sysv/linux/i386/readdir64_r.c
++++ b/sysdeps/unix/sysv/linux/i386/readdir64_r.c
+@@ -18,7 +18,6 @@
+ #define __READDIR_R __readdir64_r
+ #define __GETDENTS __getdents64
+ #define DIRENT_TYPE struct dirent64
+-#define GETDENTS_64BIT_ALIGNED 1
+ 
+ #include <sysdeps/posix/readdir_r.c>
+ 
+diff --git a/sysdeps/unix/sysv/linux/wordsize-64/readdir_r.c b/sysdeps/unix/sysv/linux/wordsize-64/readdir_r.c
+index 5ed8e95..290f2c8 100644
+--- a/sysdeps/unix/sysv/linux/wordsize-64/readdir_r.c
++++ b/sysdeps/unix/sysv/linux/wordsize-64/readdir_r.c
+@@ -1,5 +1,4 @@
+ #define readdir64_r __no_readdir64_r_decl
+-#define GETDENTS_64BIT_ALIGNED 1
+ #include <sysdeps/posix/readdir_r.c>
+ #undef readdir64_r
+ weak_alias (__readdir_r, readdir64_r)

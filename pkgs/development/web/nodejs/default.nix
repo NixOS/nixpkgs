@@ -52,6 +52,6 @@ in stdenv.mkDerivation {
     homepage = http://nodejs.org;
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu maintainers.shlevy ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
