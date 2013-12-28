@@ -2023,7 +2023,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   statistics = callPackage ../development/libraries/haskell/statistics {
     binary = self.binary_0_7_1_0;
-    vectorBinaryInstances = vectorBinaryInstances.override { binary = self.binary_0_7_1_0; };
+    vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_1_0; };
   };
 
   statvfs = callPackage ../development/libraries/haskell/statvfs {};
