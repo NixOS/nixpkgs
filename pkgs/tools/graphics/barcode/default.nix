@@ -9,11 +9,11 @@ let
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
-    version="0.98";
+    version="0.99";
     baseName="barcode";
     name="${baseName}-${version}";
     url="mirror://gnu/${baseName}/${name}.tar.gz";
-    hash="0ddn17a6hz817bchgjxrjg76v64kzl5zlll8x73ply5rg69f2aa2";
+    hash="0r2b2lwg7a9i9ic5spkbnavy1ynrppmrldv46vsl44l1xgriq0vw";
   };
 in
 rec {

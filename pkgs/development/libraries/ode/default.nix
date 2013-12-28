@@ -3,7 +3,7 @@ let
   lib = args.lib;
   fetchurl = args.fetchurl;
 
-  version = lib.attrByPath ["version"] "0.11.1" args; 
+  version = lib.attrByPath ["version"] "0.12" args;
   buildInputs = with args; [
     
   ];
@@ -11,7 +11,7 @@ in
 rec {
   src = fetchurl {
     url = "mirror://sourceforge/opende/ode-${version}.tar.bz2";
-    sha256 = "1883gbsnn7zldrpwfdh6kwj20g627n5bspz3yb2z6lrxdal88y47";
+    sha256 = "0l63ymlkgfp5cb0ggqwm386lxmc3al21nb7a07dd49f789d33ib5";
   };
 
   inherit buildInputs;

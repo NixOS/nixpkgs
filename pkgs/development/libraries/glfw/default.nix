@@ -1,11 +1,11 @@
 { stdenv, fetchurl, mesa, libX11, libXext }:
 
 stdenv.mkDerivation {
-  name = "glfw-2.6";
+  name = "glfw-2.7.9";
 
   src = fetchurl {
-    url = mirror://sourceforge/glfw/glfw-2.6.tar.bz2;
-    sha256 = "1jnz7szax7410qrkiwkvq34sxy11w46ybyqbkaczdyvqas6cm1hv";
+    url = mirror://sourceforge/glfw/glfw-2.7.9.tar.bz2;
+    sha256 = "17c2msdcb7pn3p8f83805h1c216bmdqnbn9hgzr1j8wnwjcpxx6i";
   };
 
   buildInputs = [ mesa libX11 libXext ];

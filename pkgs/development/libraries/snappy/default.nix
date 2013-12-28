@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "snappy-1.1.0";
+  name = "snappy-1.1.1";
   
   src = fetchurl {
     url = "http://snappy.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0q31cx3zkw0apx1fy8z3xlh2lvivssvykqn0vxsgm4xvi32jpa0z";
+    sha256 = "1czscb5i003jg1amw3g1fmasv8crr5g3d922800kll8b3fj097yp";
   };
 
   # -DNDEBUG for speed

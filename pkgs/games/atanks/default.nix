@@ -11,11 +11,11 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="atanks";
-    version="4.7";
+    version="4.9";
     name="${baseName}-${version}";
     project="${baseName}";
     url="mirror://sourceforge/project/${project}/${baseName}/${name}/${name}.tar.gz";
-    hash="0kd98anwb785irv4qm1gqpk2xnh1q0fxnfazkjqpwjvgrliyj2rh";
+    hash="015nwh8jk4k24ci6ilihii8idkyf6g266r4vl50csvykc82slrvd";
   };
 in
 rec {

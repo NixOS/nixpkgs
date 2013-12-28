@@ -1,16 +1,18 @@
-{stdenv, fetchurl, eventlog, pkgconfig, libestr, libee, json_c, libuuid, zlib, gnutls}:
+{stdenv, fetchurl, eventlog, pkgconfig, libestr, libee, json_c, libuuid, zlib, gnutls, libgcrypt, systemd}:
 
 stdenv.mkDerivation {
-  name = "rsyslog-7.2.7";
+  name = "rsyslog-7.4.7";
 
   src = fetchurl {
-    url = http://www.rsyslog.com/files/download/rsyslog/rsyslog-7.2.7.tar.gz;
-    sha256 = "0vgrbbklsvnwcy0m0kbxcj5lhpn2k9bsv0lh0vnyn6hc2hx56cs8";
+    url = http://www.rsyslog.com/files/download/rsyslog/rsyslog-7.4.7.tar.gz;
+    sha256 = "5fc7f930fa748bb6a9d86a3fc831eb1a14107db81b67d79ba8f113cf2776fa21";
   };
 
-  buildInputs = [pkgconfig libestr libee json_c libuuid zlib gnutls];
+  buildInputs = [pkgconfig libestr libee json_c libuuid zlib gnutls libgcrypt systemd];
 
-  configureFlags = "--enable-gnutls";
+  preConfigure = ''
+     export configureFlags="$configureFlags --enable-gnutls --enable-cached-man-pages --enable-imjournal --with-systemdsystemunitdir=$out/etc/systemd/system"
+  '';
 
   meta = {
     homepage = "http://www.rsyslog.com/";

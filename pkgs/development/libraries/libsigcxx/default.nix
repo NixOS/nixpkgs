@@ -1,14 +1,16 @@
 { stdenv, fetchurl, pkgconfig, gnum4 }:
 
 stdenv.mkDerivation rec {
-  name = "libsigc++-2.2.10";
+  name = "libsigc++-2.2.11";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libsigc++/2.2/${name}.tar.xz";
-    sha256 = "8ceb6f2732f5399ef50d5b70f433d49945a12e0900b8f9f43c135866a2e5bf47";
+    sha256 = "0ms93q7r8zznsqkfdj1ds9533f0aqfaw3kdkqv154rzmfigh8d4q";
   };
 
   buildInputs = [ pkgconfig gnum4 ];
+
+  doCheck = true;
 
   meta = {
     homepage = http://libsigc.sourceforge.net/;

@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "timeplot";
-  version = "1.0.22";
-  sha256 = "1dp1prcx3d6a0fr3xrdj6flp27sy7qbng5bbdjgjbb7rq8497if9";
+  version = "1.0.23";
+  sha256 = "0z87yzqv1bjclvyslzpclhrbfm4vcyz0q32jr4kbnfwjk3s8zyi2";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [

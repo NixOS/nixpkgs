@@ -1,12 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, xz
+{ stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11
 , jasper, libintlOrEmpty, gobjectIntrospection }:
 
+let
+  ver_maj = "2.30";
+  ver_min = "2";
+in
 stdenv.mkDerivation rec {
-  name = "gdk-pixbuf-2.28.2";
+  name = "gdk-pixbuf-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdk-pixbuf/2.28/${name}.tar.xz";
-    sha256 = "05s6ksvy1yan6h6zny9n3bmvygcnzma6ljl6i0z9cci2xg116c8q";
+    url = "mirror://gnome/sources/gdk-pixbuf/${ver_maj}/${name}.tar.xz";
+    sha256 = "1gzczsv41h28is4rrxjfyj1qx8ifp23fq2ckh0k099m9fnhbzfna";
   };
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
@@ -19,6 +23,8 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-libjasper --with-x11"
     + stdenv.lib.optionalString (gobjectIntrospection != null) " --enable-introspection=yes"
     ;
+
+  doCheck = false; # broken animation tester
 
   postInstall = "rm -rf $out/share/gtk-doc";
 

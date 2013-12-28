@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
-, sqlite, tcl, tk, x11, openssl, readline, db4, ncurses, gdbm
+, sqlite, tcl, tk, x11, openssl, readline, db45, ncurses, gdbm
 }:
 
 assert zlibSupport -> zlib != null;
@@ -17,7 +17,7 @@ let
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
     md5 = "c6e0420a21d8b23dee8b0195c9b9a125";
   };
-  
+
   patches =
     [ # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
       ./search-path.patch
@@ -34,12 +34,12 @@ let
     [ bzip2 ]
     ++ optional zlibSupport zlib;
 
-    
+
   # Build the basic Python interpreter without modules that have
   # external dependencies.
   python = stdenv.mkDerivation {
     name = "python-${version}";
-    
+
     inherit majorVersion version src patches buildInputs;
 
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
@@ -146,7 +146,7 @@ let
 
     bsddb = buildInternalPythonModule {
       moduleName = "bsddb";
-      deps = [ db4 ];
+      deps = [ db45 ];
     };
 
     crypt = buildInternalPythonModule {
@@ -193,5 +193,5 @@ let
     };
 
   };
-  
+
 in python // { inherit modules; }

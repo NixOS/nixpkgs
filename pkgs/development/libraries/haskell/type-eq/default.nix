@@ -2,10 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "type-eq";
-  version = "0.3";
-  sha256 = "094m8mk4a1iiqgrnqw0yk89rimp5ffj7i4n61nx3lzxqs5mw0kws";
+  version = "0.4";
+  sha256 = "1cvbqxwkiybxbpzr98yl2pnx5w4zrr340z86q40zirgr1f0ch674";
   meta = {
-    homepage = "http://github.com/glehel/type-eq";
+    homepage = "http://github.com/glaebhoerl/type-eq";
     description = "Type equality evidence you can carry around";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

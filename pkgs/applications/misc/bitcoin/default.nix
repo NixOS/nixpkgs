@@ -1,12 +1,12 @@
 { fetchurl, stdenv, openssl, db4, boost, zlib, miniupnpc, qt4 }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.5";
+  version = "0.8.6";
   name = "bitcoin-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/bitcoin/${name}-linux.tar.gz";
-    sha256 = "0qqzwx1lihlrj7r08alsyznjfqvwncfm0nnxi1pcx0jyvq83ym44";
+    sha256 = "036xx06gyrfh65rpdapff3viz1f38vzkj7lnhil6fc0s7pjmsjbk";
   };
 
   buildInputs = [ openssl db4 boost zlib miniupnpc qt4 ];

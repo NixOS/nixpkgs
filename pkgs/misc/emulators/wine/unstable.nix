@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibs, flex, bison, mesa, alsaLib
+{ stdenv, fetchurl, pkgconfig, xlibs, flex, bison, mesa, mesa_noglu, alsaLib
 , ncurses, libpng, libjpeg, lcms, freetype, fontconfig, fontforge
 , libxml2, libxslt, openssl, gnutls, cups, libdrm, makeWrapper
 }:
@@ -7,12 +7,12 @@ assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
 let 
-    version = "1.7.7";
+    version = "1.7.8";
     name = "wine-${version}";
 
     src = fetchurl {
       url = "mirror://sourceforge/wine/${name}.tar.bz2";
-      sha256 = "19xcspll0ljbr2v0y7xy4943pgqalya2zrzndqsl2d7kpyv061hi";
+      sha256 = "010qa6xn0b0161kcmm43yr0bp39iddb6d5i27mpl229shrgpzq9h";
     };
 
     gecko = fetchurl {
@@ -34,7 +34,8 @@ in stdenv.mkDerivation rec {
   inherit version name src;
 
   buildInputs = [
-    xlibs.xlibs flex bison xlibs.libXi mesa
+    pkgconfig
+    xlibs.xlibs flex bison xlibs.libXi mesa mesa_noglu.osmesa
     xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
     xlibs.libXrender xlibs.libXxf86vm xlibs.libXcomposite
     alsaLib ncurses libpng libjpeg lcms fontforge
@@ -45,7 +46,7 @@ in stdenv.mkDerivation rec {
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
   NIX_LDFLAGS = map (path: "-rpath ${path}/lib ") [
-    freetype fontconfig stdenv.gcc.gcc mesa libdrm
+    freetype fontconfig stdenv.gcc.gcc mesa mesa_noglu.osmesa libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
     xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
     openssl gnutls cups

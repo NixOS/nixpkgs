@@ -1,4 +1,4 @@
-{fetchurl, stdenv, flex, bdb}:
+{fetchurl, stdenv, flex, db4}:
 
 stdenv.mkDerivation rec {
   name = "bogofilter-1.2.4";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   # FIXME: We would need `pax' as a "propagated build input" (for use
   # by the `bf_tar' script) but we don't have it currently.
 
-  buildInputs = [ flex bdb ];
+  buildInputs = [ flex db4 ];
 
   meta = {
     homepage = http://bogofilter.sourceforge.net/;
