@@ -7700,11 +7700,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   tornado = buildPythonPackage rec {
-    name = "tornado-2.4";
+    name = "tornado-3.1.1";
+
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/t/tornado/tornado-2.4.tar.gz";
-      md5 = "c738af97c31dd70f41f6726cf0968941";
+      url = "http://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
+      sha256 = "1ipx23ix8hyd88rywmwr7bfdgkvkdac87xq3f9l5vkm0wjzh8n9l";
     };
+
     doCheck = false;
   };
 
