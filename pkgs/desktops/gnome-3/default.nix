@@ -1,14 +1,16 @@
-{ callPackage, lib, self, stdenv, gettext, overrides ? {}, pkgs }:
+{ callPackage, self, pkgs }:
 
 rec {
-  inherit (pkgs) fetchurl_gnome glib gtk3 atk pango;
-  gtk = gtk3;
+  inherit (pkgs) glib gtk2 gtk3 gnome2;
+  gtk = gtk3; # just to be sure
   inherit (pkgs.gnome2) gnome_common ORBit2;
   orbit = ORBit2;
 
-  inherit (lib) lowPrio hiPrio appendToName makeOverridable;
 
-  __overrides = overrides;
+#### Overrides of libraries
+
+  librsvg = pkgs.librsvg.override { inherit gtk2; }; # gtk2 mysteriously needed in librsvg for goffice (commented in Gentoo)
+
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
@@ -31,7 +33,7 @@ rec {
 
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
-  gsettings_desktop_schemas = lib.lowPrio (callPackage ./core/gsettings-desktop-schemas { });
+  gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };
 
   gvfs = pkgs.gvfs.override { gnome = pkgs.gnome3; };
 
@@ -43,16 +45,23 @@ rec {
 
   zenity = callPackage ./core/zenity { };
 
+
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
   gnome_dictionary = callPackage ./desktop/gnome-dictionary { };
 
   gnome_desktop = callPackage ./desktop/gnome-desktop { };
 
+
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
 
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
+
+
+#### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
+
+  goffice = callPackage ./misc/goffice { };
 
 }

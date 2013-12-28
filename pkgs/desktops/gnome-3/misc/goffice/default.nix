@@ -1,6 +1,5 @@
-{ fetchurl, stdenv, pkgconfig, glib, gtk, libglade, bzip2
-, pango, libgsf, libxml2, libart, librsvg, intltool, gettext
-, cairo, gconf, libgnomeui }:
+{ fetchurl, stdenv, pkgconfig, intltool, bzip2, glib, gdk_pixbuf, gtk3
+, libgsf, libxml2, cairo, pango, librsvg, libspectre }:
 
 stdenv.mkDerivation rec {
   name = "goffice-0.10.9";
@@ -10,19 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "0xc82hymhkdglnksd3r7405p39d5ym826rwaa7dfkps5crjwq8cg";
   };
 
-  buildInputs = [
-    pkgconfig libglade bzip2 libart intltool gettext
-    gconf libgnomeui
-  ];
-
-  propagatedBuildInputs = [
-    glib libgsf libxml2 gtk libglade libart librsvg cairo pango
+  propagatedBuildInputs = [ # ToDo lasem library for MathML, opt. introspection?
+    pkgconfig intltool bzip2 glib gdk_pixbuf gtk3
+    libgsf libxml2 cairo pango librsvg libspectre
   ];
 
   doCheck = true;
 
   meta = {
-    description = "GOffice, a Glib/GTK+ set of document centric objects and utilities";
+    description = "A Glib/GTK+ set of document centric objects and utilities";
 
     longDescription = ''
       There are common operations for document centric applications that are
@@ -34,4 +29,5 @@ stdenv.mkDerivation rec {
 
     platforms = stdenv.lib.platforms.gnu;
   };
+  passthru = { inherit meta; };
 }
