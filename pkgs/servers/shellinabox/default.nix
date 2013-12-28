@@ -9,9 +9,10 @@ stdenv.mkDerivation {
   };
   buildInputs = [pam openssl openssh];
 
-  # Disable GSSAPIAuthentication errors as well as correct hardcoded path. Take /usr/games's place. 
+  # Disable GSSAPIAuthentication errors as well as correct hardcoded path. Take /usr/games's place. Also remove 'invalid hostname' checking to allow non-standard ports and other options.
   preConfigure = ''
     substituteInPlace ./shellinabox/service.c --replace "-oGSSAPIAuthentication=no" ""
+    substituteInPlace ./shellinabox/service.c --replace "for (char *h = host; *h; h++) {" "for (char *h = host; *h == 0; h++) {"
     substituteInPlace ./shellinabox/launcher.c --replace "/usr/games" "${openssh}/bin"
     '';
   meta = {
