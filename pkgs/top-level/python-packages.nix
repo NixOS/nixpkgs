@@ -5023,11 +5023,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pyparsing = buildPythonPackage rec {
-    name = "pyparsing-1.5.6";
+    name = "pyparsing-2.0.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyparsing/${name}.tar.gz";
-      md5 = "1e41cb219dae9fc353bd4cd47636b283";
+      sha256 = "1r742rjbagf2i166k2w0r192adfw7l9lnsqz7wh4mflf00zws1q0";
     };
 
     # error: invalid command 'test'
