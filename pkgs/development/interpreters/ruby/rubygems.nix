@@ -18,12 +18,6 @@ rec {
     cat > $out/nix-support/setup-hook <<EOF
     export RUBYOPT=rubygems
     addToSearchPath RUBYLIB $out/lib
-
-    addGemPath() {
-      addToSearchPath GEM_PATH \$1/${ruby.gemPath}
-    }
-
-    envHooks+=(addGemPath)
     EOF'') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
 
   /* doConfigure should be specified separately */

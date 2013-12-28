@@ -46,7 +46,18 @@ stdenv.mkDerivation rec {
 
   installFlags = stdenv.lib.optionalString docSupport "install-doc";
   # Bundler tries to create this directory
-  postInstall = "mkdir -pv $out/${passthru.gemPath}";
+  postInstall = ''
+    # Bundler tries to create this directory
+    mkdir -pv $out/${passthru.gemPath}
+    mkdir -p $out/nix-support
+    cat > $out/nix-support/setup-hook <<EOF
+    addGemPath() {
+      addToSearchPath GEM_PATH \$1/${passthru.gemPath}
+    }
+
+    envHooks+=(addGemPath)
+    EOF
+  '';
 
   meta = {
     license = "Ruby";
