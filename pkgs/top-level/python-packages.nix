@@ -1273,11 +1273,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   dateutil = buildPythonPackage (rec {
-    name = "dateutil-2.1";
+    name = "dateutil-2.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "1vlx0lpsxjxz64pz87csx800cwfqznjyr2y7nk3vhmzhkwzyqi2c";
+      sha256 = "0s74ad6r789810s10dxgvaf48ni6adac2icrdad34zxygqq6bj7f";
     };
 
     propagatedBuildInputs = [ pythonPackages.six ];
@@ -3452,25 +3452,30 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     else pkgs.stdenv;
 
   matplotlib = matplotlibStdenv.mkDerivation (rec {
-    name = "matplotlib-1.2.1";
+    name = "matplotlib-1.3.1";
 
     src = fetchurl {
-      url = "http://downloads.sourceforge.net/matplotlib/${name}.tar.gz";
-      sha256 = "16x2ksdxx5p92v98qngh29hdz1bnqy77fhggbjq30pyqmrr8kqaj";
+      url = "mirror://sourceforge/matplotlib/${name}.tar.gz";
+      sha256 = "0smgpn7lwbn02nbyhawyn0n6r3pb65zk501f21bjgavnjjfnf5pa";
     };
 
     # error: invalid command 'test'
     doCheck = false;
 
-    buildInputs = [ python pkgs.which pkgs.ghostscript ];
+    buildInputs = [ python pkgs.which pkgs.ghostscript distribute ];
 
     propagatedBuildInputs =
-      [ dateutil numpy pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl
+      [ dateutil nose numpy pyparsing tornado pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl
         pkgs.tk pkgs.xlibs.libX11 ];
+    
+    buildPhase = "${python}/bin/${python.executable} setup.py build";
 
-    buildPhase = "python setup.py build";
-
-    installPhase = "python setup.py install --prefix=$out";
+    # The sed expression parses out the python version from an executable with appended characters
+    installPhase = ''
+      SITE="$out/lib/${python.libPrefix}/site-packages"
+      mkdir -p "$SITE"
+      PYTHONPATH="$PYTHONPATH:$SITE" ${python}/bin/${python.executable} setup.py install --prefix=$out
+    '';
 
     meta = with stdenv.lib; {
       description = "python plotting library, making publication quality plots";
@@ -5023,11 +5028,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pyparsing = buildPythonPackage rec {
-    name = "pyparsing-1.5.6";
+    name = "pyparsing-2.0.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyparsing/${name}.tar.gz";
-      md5 = "1e41cb219dae9fc353bd4cd47636b283";
+      sha256 = "1r742rjbagf2i166k2w0r192adfw7l9lnsqz7wh4mflf00zws1q0";
     };
 
     # error: invalid command 'test'
@@ -7700,11 +7705,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   tornado = buildPythonPackage rec {
-    name = "tornado-2.4";
+    name = "tornado-3.1.1";
+
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/t/tornado/tornado-2.4.tar.gz";
-      md5 = "c738af97c31dd70f41f6726cf0968941";
+      url = "http://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
+      sha256 = "1ipx23ix8hyd88rywmwr7bfdgkvkdac87xq3f9l5vkm0wjzh8n9l";
     };
+
     doCheck = false;
   };
 
