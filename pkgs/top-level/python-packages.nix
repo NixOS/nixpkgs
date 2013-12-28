@@ -1273,11 +1273,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   dateutil = buildPythonPackage (rec {
-    name = "dateutil-2.1";
+    name = "dateutil-2.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "1vlx0lpsxjxz64pz87csx800cwfqznjyr2y7nk3vhmzhkwzyqi2c";
+      sha256 = "0s74ad6r789810s10dxgvaf48ni6adac2icrdad34zxygqq6bj7f";
     };
 
     propagatedBuildInputs = [ pythonPackages.six ];
