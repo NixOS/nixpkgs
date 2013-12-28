@@ -9765,6 +9765,10 @@ let
 
       psi = callPackage ../applications/networking/instant-messengers/psi { };
 
+      qtcurve = callPackage ../misc/themes/qtcurve {
+        stdenv = overrideGCC stdenv gcc47;
+      };
+
       quassel = callPackage ../applications/networking/irc/quassel { };
 
       quasselDaemon = (self.quassel.override {
