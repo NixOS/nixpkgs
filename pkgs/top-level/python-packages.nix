@@ -3452,25 +3452,30 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     else pkgs.stdenv;
 
   matplotlib = matplotlibStdenv.mkDerivation (rec {
-    name = "matplotlib-1.2.1";
+    name = "matplotlib-1.3.1";
 
     src = fetchurl {
-      url = "http://downloads.sourceforge.net/matplotlib/${name}.tar.gz";
-      sha256 = "16x2ksdxx5p92v98qngh29hdz1bnqy77fhggbjq30pyqmrr8kqaj";
+      url = "mirror://sourceforge/matplotlib/${name}.tar.gz";
+      sha256 = "0smgpn7lwbn02nbyhawyn0n6r3pb65zk501f21bjgavnjjfnf5pa";
     };
 
     # error: invalid command 'test'
     doCheck = false;
 
-    buildInputs = [ python pkgs.which pkgs.ghostscript ];
+    buildInputs = [ python pkgs.which pkgs.ghostscript distribute ];
 
     propagatedBuildInputs =
-      [ dateutil numpy pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl
+      [ dateutil nose numpy pyparsing tornado pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl
         pkgs.tk pkgs.xlibs.libX11 ];
+    
+    buildPhase = "${python}/bin/${python.executable} setup.py build";
 
-    buildPhase = "python setup.py build";
-
-    installPhase = "python setup.py install --prefix=$out";
+    # The sed expression parses out the python version from an executable with appended characters
+    installPhase = ''
+      SITE="$out/lib/${python.libPrefix}/site-packages"
+      mkdir -p "$SITE"
+      PYTHONPATH="$PYTHONPATH:$SITE" ${python}/bin/${python.executable} setup.py install --prefix=$out
+    '';
 
     meta = with stdenv.lib; {
       description = "python plotting library, making publication quality plots";
