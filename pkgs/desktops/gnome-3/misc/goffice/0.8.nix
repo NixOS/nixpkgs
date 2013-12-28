@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, glib, gtk, libglade, bzip2
 , pango, libgsf, libxml2, libart, intltool, gettext
-, cairo, gconf, libgnomeui, pcre }:
+, cairo, gconf, libgnomeui, pcre, gnome3/*just meta*/ }:
 
 stdenv.mkDerivation rec {
   name = "goffice-0.8.17";
@@ -31,18 +31,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
-    description = "GOffice, a Glib/GTK+ set of document centric objects and utilities";
-
-    longDescription = ''
-      There are common operations for document centric applications that are
-      conceptually simple, but complex to implement fully: plugins, load/save
-      documents, undo/redo.
-    '';
-
-    license = "GPLv2";
-
+  meta = gnome3.goffice.meta // {
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;
   };
 }
