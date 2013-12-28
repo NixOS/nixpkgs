@@ -922,7 +922,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "5f39727415b837abd02651eeb2721749";
     };
 
-    propagatedBuildInputs = [ pythonPackages.stompclient pythonPackages.distribute ];
+    propagatedBuildInputs = [ pythonPackages.stompclient ];
+
+    preConfigure = ''
+      sed -i '/distribute/d' setup.py
+    '';
 
     buildInputs = [ pythonPackages.coverage pythonPackages.sqlalchemy ];
 
@@ -2071,46 +2075,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
-
-  distribute = stdenv.mkDerivation rec {
-    name = "distribute-0.6.34";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/d/distribute/distribute-0.6.34.tar.gz";
-      md5 = "4576ab843a6db5100fb22a72deadf56d";
-    };
-
-    buildInputs = [ python wrapPython offlineDistutils ];
-
-    pythonPath = [ recursivePthLoader ];
-
-    installPhase=''
-      dst="$out/lib/${python.libPrefix}/site-packages"
-      mkdir -p $dst
-      PYTHONPATH="${offlineDistutils}/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-      export PYTHONPATH="$dst:$PYTHONPATH"
-
-      ${python}/bin/${python.executable} setup.py install --prefix="$out"
-
-      eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
-      if [ -e "$eapth" ]; then
-          # move colliding easy_install.pth to specifically named one
-          mv "$eapth" $(dirname "$eapth")/${name}.pth
-      fi
-
-      rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
-
-      wrapPythonPrograms
-    '';
-
-    meta = {
-      description = "Easily download, build, install, upgrade, and uninstall Python packages";
-      homepage = http://packages.python.org/distribute;
-      license = "PSF or ZPL";
-    };
-  };
-
-
   distutils_extra = buildPythonPackage rec {
     name = "distutils-extra-2.26";
 
@@ -2857,6 +2821,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "05vpriy391l5i05ckl5ja5bswqyvl3rwrbmks9pi46w1813j7p5z";
     };
 
+    preConfigure = ''
+      sed -i '/distribute/d' setup.py
+    '';
+
     meta = with stdenv.lib; {
       description = "Search your google contacts from the command-line or mutt.";
       homepage    = "https://pypi.python.org/pypi/goobook";
@@ -2865,7 +2833,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       platforms   = platforms.unix;
     };
 
-    propagatedBuildInputs = [ distribute gdata hcs_utils keyring simplejson ];
+    propagatedBuildInputs = [ gdata hcs_utils keyring simplejson ];
   };
 
   greenlet = buildPythonPackage rec {
