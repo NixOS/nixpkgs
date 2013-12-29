@@ -2347,11 +2347,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   docutils = buildPythonPackage rec {
-    name = "docutils-0.8.1";
+    name = "docutils-0.11";
 
     src = fetchurl {
       url = "mirror://sourceforge/docutils/${name}.tar.gz";
-      sha256 = "0wfz4nxl95jcr2f2mc5gijgighavcghg33plzbz5jyi531jpffss";
+      sha256 = "1jbybs5a396nrjy9m13pgvsxdwaj7jw7nsawkhl4fi1nvxm1dx4s";
     };
 
     # error: invalid command 'test'
@@ -6338,11 +6338,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.1.3";
+    name = "Sphinx-1.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      md5 = "8f55a6d4f87fc6d528120c5d1f983e98";
+      md5 = "8516046aad73fe46dedece4e8e434328";
     };
 
     propagatedBuildInputs = [docutils jinja2 pygments];
@@ -6532,11 +6532,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   subunit = buildPythonPackage rec {
     name = "subunit-${version}";
-    version = "0.0.13";
+    version = "0.0.16";
 
     src = fetchurl {
       url = "https://launchpad.net/subunit/trunk/${version}/+download/python-${name}.tar.gz";
-      sha256 = "0f3xni4z1hbmg4dqxak85ibpf9pajxn6qzw1xj79gwnr8xxb66zj";
+      sha256 = "1ylla1wlmv29vdr76r5kgr7y21bz4ahi3v26mxsys42w90rfkahi";
     };
 
     propagatedBuildInputs = [ testtools ];
@@ -6632,14 +6632,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   testtools = buildPythonPackage rec {
     name = "testtools-${version}";
-    version = "0.9.32";
+    version = "0.9.34";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/t/testtools/${name}.tar.gz";
-      sha256 = "1smgk3y7xfzh5xk5wydb6n5lx4g5i6y4w8ajrdnskx1jqr67wyyq";
+      sha256 = "0s6sn9h26dif2c9sayf875x622kq8jb2f4qbc6if7gwh2sssgicn";
     };
 
-    propagatedBuildInputs = [ pythonPackages.python_mimeparse pythonPackages.extras ];
+    propagatedBuildInputs = [ pythonPackages.python_mimeparse pythonPackages.extras lxml ];
 
     meta = {
       description = "A set of extensions to the Python standard library's unit testing framework";
@@ -7186,11 +7186,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   zconfig = buildPythonPackage rec {
     name = "zconfig-${version}";
-    version = "2.9.3";
+    version = "3.0.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/Z/ZConfig/ZConfig-${version}.tar.gz";
-      md5 = "2c5f73c216140a705be3d9c44b988722";
+      md5 = "60a107c5857c3877368dfe5930559804";
     };
 
     propagatedBuildInputs = [ zope_testrunner ];
@@ -7679,7 +7679,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     buildInputs = [ pkgs.unzip ];
 
-    propagatedBuildInputs = [ subunit zope_interface zope_exceptions zope_testing six ];
+    propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ] ++ optional (!python.is_py3k or false) subunit;
 
     meta = {
       description = "A flexible test runner with layer support";
