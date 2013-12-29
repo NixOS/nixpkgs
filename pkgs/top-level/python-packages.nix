@@ -7053,7 +7053,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     meta = {
       description = "Helper to test WSGI applications";
-      homepage = http://webob.readthedocs.org/en/latest/;
+      homepage = http://webtest.readthedocs.org/en/latest/;
       platforms = stdenv.lib.platforms.all;
     };
   };
