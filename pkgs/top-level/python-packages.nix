@@ -1709,11 +1709,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pyramid_jinja2 = buildPythonPackage rec {
-    name = "pyramid_jinja2-1.6";
+    name = "pyramid_jinja2-1.9";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyramid_jinja2/${name}.zip";
-      md5 = "b7df1ab97f90f39529d27ba6da1f6b1c";
+      md5 = "a6728117cad24749ddb39d2827cd9033";
     };
 
     buildInputs = [ pkgs.unzip webtest ];
@@ -3107,11 +3107,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   jinja2 = buildPythonPackage rec {
-    name = "Jinja2-2.7";
+    name = "Jinja2-2.7.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/J/Jinja2/${name}.tar.gz";
-      sha256 = "0kgsd7h27jl2jpqa1ks88h93z50bsg0yr7qkicqpxbl9s4c1aks7";
+      sha256 = "12scn3zmmj76rzyc0axjzf6dsazyj9xgp0l46q41rjhxm23s1h2w";
     };
 
     propagatedBuildInputs = [ pythonPackages.markupsafe ];
