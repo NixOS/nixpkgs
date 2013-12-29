@@ -4657,10 +4657,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   py = buildPythonPackage rec {
-    name = "py-1.4.13";
+    name = "py-1.4.19";
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/p/py/py-1.4.13.tar.gz";
+      url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
       md5 = "3857dc8309d5f284669b81184253c2bb";
     };
   };
