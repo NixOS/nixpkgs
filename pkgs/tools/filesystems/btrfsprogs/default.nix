@@ -1,10 +1,10 @@
 { stdenv, fetchurl, attr, acl, zlib, libuuid, e2fsprogs, lzo }:
 
 stdenv.mkDerivation rec {
-  name = "btrfs-progs-3.12";
+  name = "btrfs-progs-${version}";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/kernel/people/mason/btrfs-progs/${name}.tar.xz";
+    url = "mirror://kernel/linux/kernel/people/mason/btrfs-progs/btrfs-progs-v${version}.tar.xz";
     sha256 = "1pwcjf9jqdiy8445r1xkazqa07xmapnn0ylyz7yzphci3ib66zh9";
   };
 
@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     homepage = https://btrfs.wiki.kernel.org/;
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
+    version="3.12";
   };
 }
