@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with pythonPackages; 
     [
-      python twisted urwid beautifulsoup wxPython distribute pygobject
+      python twisted urwid beautifulsoup wxPython pygobject
       wokkel pythonDBus pyfeed wrapPython
     ];
 
