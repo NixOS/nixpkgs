@@ -1313,11 +1313,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   decorator = buildPythonPackage rec {
-    name = "decorator-3.3.1";
+    name = "decorator-3.4.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/decorator/${name}.tar.gz";
-      md5 = "a8fc62acd705f487a71bc406e19e0cc6";
+      md5 = "1e8756f719d746e2fc0dd28b41251356";
     };
 
     meta = {
@@ -1723,6 +1723,32 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
       platforms = stdenv.lib.platforms.all;
     };
+  };
+
+
+  pyramid_debugtoolbar = buildPythonPackage rec {
+    name = "pyramid_debugtoolbar-1.0.9";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyramid_debugtoolbar/${name}.tar.gz";
+      sha256 = "1vnzg1qnnyisv7znxg7pasayfyr3nz7rrs5nqr4fmdgwj9q2pyv0";
+    };
+
+    buildInputs = [ ];
+    propagatedBuildInputs = [ pyramid pyramid_mako ];
+  };
+
+
+  pyramid_mako = buildPythonPackage rec {
+    name = "pyramid_mako-0.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyramid_mako/${name}.tar.gz";
+      sha256 = "00811djmsc4rz20kpy2paam05fbx6dmrv2i5jf90f6xp6zw4isy6";
+    };
+
+    buildInputs = [ webtest ];
+    propagatedBuildInputs = [ pyramid Mako ];
   };
 
 
@@ -3342,11 +3368,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   Mako = buildPythonPackage rec {
-    name = "Mako-0.8.1";
+    name = "Mako-0.9.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/M/Mako/${name}.tar.gz";
-      md5 = "96d962464ce6316004af0cc48495d73e";
+      md5 = "fe3f394ef714776d09ec6133923736a7";
     };
 
     buildInputs = [ markupsafe nose ];
@@ -3925,6 +3951,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       description = "A unittest-based testing framework for python that makes writing and running tests easier";
     };
   };
+
+  nose-selecttests = buildPythonPackage rec {
+    version = "0.4";
+    name = "nose-selecttests-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nose/${name}.zip";
+      sha256 = "0lgrfgp3sq8xi8d9grrg0z8jsyk0wl8a3rxw31hb7vdncin5b7n5";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ nose ];
+
+    meta = {
+      description = "Simple nose plugin that enables developers to run subset of collected tests to spare some waiting time for better things";
+    };
+  };
+
 
   nose2 = if isPy26 then null else (buildPythonPackage rec {
     name = "nose2-0.4.5";
@@ -5686,6 +5730,51 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  robotframework-selenium2library = buildPythonPackage rec {
+    version = "1.4.0";
+    name = "robotframework-selenium2library-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/r/robotframework-selenium2library/${name}.tar.gz";
+      sha256 = "1rgzjxrciy74lp9mvdqxiixkma569mc0l0kizpi7lg1zkbr2k1q2";
+    };
+
+    # error: invalid command 'test'
+    #doCheck = false;
+
+    propagatedBuildInputs = [ robotframework selenium docutils decorator ];
+
+    meta = with stdenv.lib; {
+      description = "";
+      homepage = http://robotframework.org/;
+      license = licenses.asl20;
+    };
+  };
+
+
+  robotsuite = buildPythonPackage rec {
+    version = "1.4.2";
+    name = "robotsuite-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/r/robotsuite/${name}.zip";
+      sha256 = "0sw09vrvwv3gzqb6jvhbrz09l6nzzj3i9av34qjddqfwq7cr1bla";
+    };
+
+    # error: invalid command 'test'
+    #doCheck = false;
+
+    buildInputs = [ unittest2 pkgs.unzip ];
+    propagatedBuildInputs = [ robotframework lxml ];
+
+    meta = with stdenv.lib; {
+      description = "Python unittest test suite for Robot Framework";
+      homepage = http://github.com/collective/robotsuite/;
+      license = licenses.gpl3;
+    };
+  };
+
+
   robotframework-ride = buildPythonPackage rec {
     version = "1.2.2";
     name = "robotframework-ride-${version}";
@@ -5885,37 +5974,36 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
-  selenium =
-    buildPythonPackage rec {
-      name = "selenium-2.35.0";
-      src = pkgs.fetchurl {
-        url = "http://pypi.python.org/packages/source/s/selenium/${name}.tar.gz";
-        sha256 = "0c8apd538ji8kmryvcdiz0dndf33mnf8wzpp9k8zmkpmfdfcwnk0";
+  selenium = buildPythonPackage rec {
+    name = "selenium-2.39.0";
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/s/selenium/${name}.tar.gz";
+      sha256 = "1kisndzl9s0vs0a5paqx35hxq28id3xyi1gfsjaixsi6rs0ibhhh";
+    };
+
+    buildInputs = [pkgs.xlibs.libX11];
+
+    # Recompiling x_ignore_nofocus.so as the original one dlopen's libX11.so.6 by some
+    # absolute paths. Replaced by relative path so it is found when used in nix.
+    x_ignore_nofocus =
+      pkgs.fetchsvn {
+        url = http://selenium.googlecode.com/svn/tags/selenium-2.25.0/cpp/linux-specific;
+        rev = 17641;
+        sha256 = "1wif9r6307qhlcp2zbg6n05yvxxn9ppkxh8gpsplcbyh22zi7bcd";
       };
 
-      buildInputs = [pkgs.xlibs.libX11];
-
-      # Recompiling x_ignore_nofocus.so as the original one dlopen's libX11.so.6 by some
-      # absolute paths. Replaced by relative path so it is found when used in nix.
-      x_ignore_nofocus =
-        pkgs.fetchsvn {
-          url = http://selenium.googlecode.com/svn/tags/selenium-2.25.0/cpp/linux-specific;
-          rev = 17641;
-          sha256 = "1wif9r6307qhlcp2zbg6n05yvxxn9ppkxh8gpsplcbyh22zi7bcd";
-        };
-
-      preInstall = ''
-        cp "${x_ignore_nofocus}/"* .
-        sed -i 's|dlopen(library,|dlopen("libX11.so.6",|' x_ignore_nofocus.c
-        gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
-        gcc -shared \
-          -Wl,${if stdenv.isDarwin then "-install_name" else "-soname"},x_ignore_nofocus.so \
-          -o x_ignore_nofocus.so \
-          x_ignore_nofocus.o \
-          ${if stdenv.isDarwin then "-lx11" else ""}
-        cp -v x_ignore_nofocus.so py/selenium/webdriver/firefox/${if pkgs.stdenv.is64bit then "amd64" else "x86"}/
-      '';
-    };
+    preInstall = ''
+      cp "${x_ignore_nofocus}/"* .
+      sed -i 's|dlopen(library,|dlopen("libX11.so.6",|' x_ignore_nofocus.c
+      gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
+      gcc -shared \
+        -Wl,${if stdenv.isDarwin then "-install_name" else "-soname"},x_ignore_nofocus.so \
+        -o x_ignore_nofocus.so \
+        x_ignore_nofocus.o \
+        ${if stdenv.isDarwin then "-lx11" else ""}
+      cp -v x_ignore_nofocus.so py/selenium/webdriver/firefox/${if pkgs.stdenv.is64bit then "amd64" else "x86"}/
+    '';
+  };
 
   setuptoolsDarcs = buildPythonPackage {
     name = "setuptools-darcs-1.2.9";
