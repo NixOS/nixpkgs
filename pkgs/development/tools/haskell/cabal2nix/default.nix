@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ Cabal filepath hackageDb HTTP mtl regexPosix ];
   testDepends = [ doctest ];
+  doCheck = self.stdenv.lib.versionOlder "7.6" self.ghc.version;
   meta = {
     homepage = "http://github.com/NixOS/cabal2nix";
     description = "Convert Cabal files into Nix build instructions";
