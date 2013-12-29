@@ -3957,7 +3957,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     name = "nose-selecttests-${version}";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/n/nose/${name}.zip";
+      url = "http://pypi.python.org/packages/source/n/nose-selecttests/${name}.zip";
       sha256 = "0lgrfgp3sq8xi8d9grrg0z8jsyk0wl8a3rxw31hb7vdncin5b7n5";
     };
 
