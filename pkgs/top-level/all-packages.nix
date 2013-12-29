@@ -2069,6 +2069,8 @@ let
 
   vobcopy = callPackage ../tools/cd-dvd/vobcopy { };
 
+  vobsub2srt = callPackage ../tools/cd-dvd/vobsub2srt { };
+
   vorbisgain = callPackage ../tools/misc/vorbisgain { };
 
   vpnc = callPackage ../tools/networking/vpnc { };
