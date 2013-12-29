@@ -7025,18 +7025,18 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   webtest = buildPythonPackage rec {
-    version = "2.0.3";
+    version = "2.0.11";
     name = "webtest-${version}";
-
+  
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.zip";
-      md5 = "a1266d4db421963fd3deb172c6689e4b";
+      md5 = "e51da21da8815cef07f543d8688effea";
     };
-
-    buildInputs = [ pkgs.unzip ] ++ optionals isPy26 [ pythonPackages.ordereddict ];
 
     # XXX: skipping two tests fails in python2.6
     doCheck = ! isPy26;
+
+    buildInputs = [ pkgs.unzip ] ++ optionals isPy26 [ pythonPackages.ordereddict unittest2 ];
 
     propagatedBuildInputs = [
       nose
@@ -7044,7 +7044,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       six
       beautifulsoup4
       waitress
-      unittest2
       mock
       pyquery
       wsgiproxy2
@@ -7054,7 +7053,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     meta = {
       description = "Helper to test WSGI applications";
-      homepage = http://pythonpaste.org/webtest/;
+      homepage = http://webob.readthedocs.org/en/latest/;
       platforms = stdenv.lib.platforms.all;
     };
   };
