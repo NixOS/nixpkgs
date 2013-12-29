@@ -10,10 +10,11 @@ stdenv.mkDerivation rec {
   buildInputs = with pythonPackages; 
     [
       python twisted urwid beautifulsoup wxPython pygobject
-      wokkel pythonDBus pyfeed wrapPython
+      wokkel pythonDBus pyfeed wrapPython setuptools
     ];
 
   configurePhase = ''
+    sed -i "/use_setuptools/d" setup.py
     sed -e "s@sys.prefix@'$out'@g" -i setup.py
     sed -e "1aexport PATH=\"\$PATH\":\"$out/bin\":\"${pythonPackages.twisted}/bin\"" -i src/sat.sh
     sed -e "1aexport PYTHONPATH=\"\$PYTHONPATHPATH\":\"$PYTHONPATH\":"$out/lib/${python.libPrefix}/site-packages"" -i src/sat.sh
