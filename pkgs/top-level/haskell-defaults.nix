@@ -71,6 +71,9 @@
         HUnit = self.HUnit_1_2_5_2;
         QuickCheck = self.QuickCheck2;
       };
+      hspecExpectations = self.hspecExpectations.override {
+        HUnit = self.HUnit_1_2_5_2;
+      };
     };
 
   ghc703Prefs =
@@ -87,6 +90,9 @@
       quickcheckIo = self.quickcheckIo.override {
         HUnit = self.HUnit_1_2_5_2;
         QuickCheck = self.QuickCheck2;
+      };
+      hspecExpectations = self.hspecExpectations.override {
+        HUnit = self.HUnit_1_2_5_2;
       };
     };
 
@@ -106,6 +112,9 @@
       quickcheckIo = self.quickcheckIo.override {
         HUnit = self.HUnit_1_2_5_2;
         QuickCheck = self.QuickCheck2;
+      };
+      hspecExpectations = self.hspecExpectations.override {
+        HUnit = self.HUnit_1_2_5_2;
       };
     };
 
@@ -130,6 +139,9 @@
         HUnit = self.HUnit_1_2_5_2;
         QuickCheck = self.QuickCheck2;
       };
+      hspecExpectations = self.hspecExpectations.override {
+        HUnit = self.HUnit_1_2_5_2;
+      };
     };
 
   ghc6121Prefs =
@@ -152,6 +164,9 @@
       quickcheckIo = self.quickcheckIo.override {
         HUnit = self.HUnit_1_2_5_2;
         QuickCheck = self.QuickCheck2;
+      };
+      hspecExpectations = self.hspecExpectations.override {
+        HUnit = self.HUnit_1_2_5_2;
       };
     };
 
