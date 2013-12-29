@@ -53,6 +53,13 @@
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       binary = self.binary_0_6_0_0;
       prettyShow = self.prettyShow_1_2;
+      quickcheckIo = self.quickcheckIo.override {
+        HUnit = self.HUnit_1_2_5_2;
+        QuickCheck = self.QuickCheck2;
+      };
+      hspecExpectations = self.hspecExpectations.override {
+        HUnit = self.HUnit_1_2_5_2;
+      };
     };
 
   ghc721Prefs = ghc722Prefs;
