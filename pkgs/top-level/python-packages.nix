@@ -6851,6 +6851,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
            md5 = "a0af5cac92bbbfa0c3b0e99571390e0f";
          };
 
+    preConfigure = ''
+      sed -i 's/unittest2py3k/unittest2/' setup.py
+    '';
+
     meta = {
       description = "A backport of the new features added to the unittest testing framework in Python 2.7";
       homepage = http://pypi.python.org/pypi/unittest2;
