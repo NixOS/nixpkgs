@@ -46,6 +46,7 @@ in {
           -t ${toString cfg.temperature.day}:${toString cfg.temperature.night}
       '';
       environment = { DISPLAY = ":0"; };
+      serviceConfig.Restart = "always";
     };
   };
 }
