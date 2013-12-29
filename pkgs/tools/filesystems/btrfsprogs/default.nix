@@ -1,7 +1,7 @@
 { stdenv, fetchurl, attr, acl, zlib, libuuid, e2fsprogs, lzo }:
 
 stdenv.mkDerivation rec {
-  name = "btrfs-progs-v3.12";
+  name = "btrfs-progs-3.12";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/mason/btrfs-progs/${name}.tar.xz";
