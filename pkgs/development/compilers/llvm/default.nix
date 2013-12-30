@@ -1,17 +1,14 @@
 { stdenv, fetchurl, perl, groff, cmake, python, libffi, binutils_gold }:
 
-let version = "3.3"; in
+let version = "3.4"; in
 
 stdenv.mkDerivation rec {
   name = "llvm-${version}";
 
   src = fetchurl {
     url    = "http://llvm.org/releases/${version}/llvm-${version}.src.tar.gz";
-    sha256 = "0y3mfbb5qzcpw3v5qncn69x1hdrrrfirgs82ypi2annhf0g6nxk8";
+    sha256 = "0a169ba045r4apb9cv6ncrwl83l7yiajnzirkcdlhj1cd4nn3995";
   };
-
-  # The default rlimits are too low for shared libraries.
-  patches = [ ./more-memory-for-bugpoint.patch ];
 
   # libffi was propagated before, but it wasn't even being used, so
   # unless something needs it just an input is fine.
@@ -25,7 +22,6 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_BINUTILS_INCDIR=${binutils_gold}/include"
-    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=R600" # for mesa
   ] ++ lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
 
   enableParallelBuilding = true;
