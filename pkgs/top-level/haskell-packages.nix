@@ -1260,6 +1260,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   happstackLite = callPackage ../development/libraries/haskell/happstack/happstack-lite.nix {};
 
+  happstackFastCGI = callPackage ../development/libraries/haskell/happstack/happstack-fastcgi.nix {};
+
   hashable_1_1_2_5 = callPackage ../development/libraries/haskell/hashable/1.1.2.5.nix {};
   hashable_1_2_1_0 = callPackage ../development/libraries/haskell/hashable/1.2.1.0.nix {};
   hashable = self.hashable_1_2_1_0;
