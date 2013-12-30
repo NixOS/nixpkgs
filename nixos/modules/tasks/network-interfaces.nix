@@ -219,6 +219,45 @@ in
 
     };
 
+    networking.vlans = mkOption {
+      default = { };
+      example = {
+        vlan0 = {
+          id = 3;
+          interface = "enp3s0";
+        };
+        vlan1 = {
+          id = 1;
+          interface = "wlan0";
+        };
+      };
+      description =
+        ''
+          This option allows you to define vlan devices that tag packets
+          on top of a physical interface. The value of this option is an
+          attribute set. Each attribute specifies a vlan, with the name
+          specifying the name of the vlan interface.
+        '';
+
+      type = types.attrsOf types.optionSet;
+
+      options = {
+
+        id = mkOption {
+          example = 1;
+          type = types.int;
+          description = "The vlan identifier";
+        };
+
+        interface = mkOption {
+          example = "enp4s0";
+          type = types.string;
+          description = "The interface the vlan will transmit packets through.";
+        };
+
+      };
+    };
+
     networking.useDHCP = mkOption {
       type = types.bool;
       default = true;
@@ -421,10 +460,32 @@ in
               '';
           };
 
+        createVlanDevice = n: v:
+          let
+            deps = [ "sys-subsystem-net-devices-${v.interface}.device" ];
+          in
+          {
+            description = "Vlan Interface ${n}";
+            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            bindsTo = deps;
+            after = deps;
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute ];
+            script = ''
+              ip link add link "${v.interface}" "${n}" type vlan id "${toString v.id}"
+              ip link set "${n}" up
+            '';
+            postStop = ''
+              ip link delete "${n}"
+            '';
+          };
+
       in listToAttrs (
            map configureInterface interfaces ++
            map createTunDevice (filter (i: i.virtual) interfaces))
          // mapAttrs createBridgeDevice cfg.bridges
+         // mapAttrs createVlanDevice cfg.vlans
          // { "network-setup" = networkSetup; };
 
     # Set the host and domain names in the activation script.  Don't
