@@ -5871,6 +5871,16 @@ let
       else stdenv;
   };
 
+  wxGTK30 = callPackage ../development/libraries/wxGTK-3.0/default.nix {
+    inherit (gnome) GConf;
+    withMesa = lib.elem system lib.platforms.mesaPlatforms;
+
+    # use for Objective-C++ compiler
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
+
   wtk = callPackage ../development/libraries/wtk { };
 
   x264 = callPackage ../development/libraries/x264 { };
