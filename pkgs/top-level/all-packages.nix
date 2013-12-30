@@ -3073,7 +3073,8 @@ let
   # rust = pkgsi686Linux.callPackage ../development/compilers/rust {};
 
   sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
-    inherit makeWrapper clisp;
+    inherit makeWrapper;
+    clisp = clisp_2_44_1;
   };
 
   scala_2_9 = callPackage ../development/compilers/scala/2.9.nix { };
