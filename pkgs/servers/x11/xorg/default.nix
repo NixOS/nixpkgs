@@ -890,11 +890,11 @@ let
   })) // {inherit ;};
 
   libxcb = (stdenv.mkDerivation ((if overrides ? libxcb then overrides.libxcb else x: x) {
-    name = "libxcb-1.9.1";
+    name = "libxcb-1.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/libxcb-1.9.1.tar.bz2;
-      sha256 = "0brn7vw66widc5mw7gynwy8dln3gmzym2fqqyzk6k58bxgs5yjnl";
+      url = http://xcb.freedesktop.org/dist/libxcb-1.10.tar.bz2;
+      sha256 = "1dfmyb1zjx6n0zhr4y40mc1crlmj3bfjjhmn0f30ip9nnq2spncq";
     };
     buildInputs = [pkgconfig libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
   })) // {inherit libxslt libpthreadstubs python libXau xcbproto libXdmcp ;};
@@ -1130,11 +1130,11 @@ let
   })) // {inherit ;};
 
   xcbproto = (stdenv.mkDerivation ((if overrides ? xcbproto then overrides.xcbproto else x: x) {
-    name = "xcb-proto-1.8";
+    name = "xcb-proto-1.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-proto-1.8.tar.bz2;
-      sha256 = "1c11652h9sjynw3scm1pn5z3a6ci888pq7hij8q5n8qrl33icg93";
+      url = http://xcb.freedesktop.org/dist/xcb-proto-1.10.tar.bz2;
+      sha256 = "01dgp802i4ic9wkmpa7g1wm50pp547d3b96jjz2hnxavhpfhvx3y";
     };
     buildInputs = [pkgconfig python ];
   })) // {inherit python ;};
@@ -1280,11 +1280,11 @@ let
   })) // {inherit libX11 xproto libXrandr ;};
 
   xextproto = (stdenv.mkDerivation ((if overrides ? xextproto then overrides.xextproto else x: x) {
-    name = "xextproto-7.2.1";
+    name = "xextproto-7.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xextproto-7.2.1.tar.bz2;
-      sha256 = "06kdanbnprxvgl56l5h0lqj4b0f1fbb1ndha33mv5wvy802v2lvw";
+      url = mirror://xorg/individual/proto/xextproto-7.3.0.tar.bz2;
+      sha256 = "1c2vma9gqgc2v06rfxdiqgwhxmzk2cbmknwf1ng3m76vr0xb5x7k";
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
@@ -1370,11 +1370,11 @@ let
   })) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputsynaptics = (stdenv.mkDerivation ((if overrides ? xf86inputsynaptics then overrides.xf86inputsynaptics else x: x) {
-    name = "xf86-input-synaptics-1.7.1";
+    name = "xf86-input-synaptics-1.7.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.7.1.tar.bz2;
-      sha256 = "13mmpcwp1d69w6c458a4fdqgwl24bpvrnq3zd6833chz1rk2an6v";
+      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.7.2.tar.bz2;
+      sha256 = "1kbx59zhk3kky0hkklsl8n2lm269am8k5xjpikpn51hdbyjpz5b3";
     };
     buildInputs = [pkgconfig inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ];
   })) // {inherit inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ;};
