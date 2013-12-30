@@ -58,6 +58,15 @@ let
         '';
       };
 
+      mtu = mkOption {
+        default = null;
+        example = 9000;
+        type = types.nullOr types.int;
+        description = ''
+          MTU size for packets leaving the interface. Leave empty to use the default.
+        '';
+      };
+
       virtual = mkOption {
         default = false;
         type = types.bool;
@@ -341,6 +350,11 @@ in
                 ''
                   echo "setting MAC address to ${i.macAddress}..."
                   ip link set "${i.name}" address "${i.macAddress}"
+                ''
+              + optionalString (i.mtu != null)
+                ''
+                  echo "setting MTU to ${toString i.mtu}..."
+                  ip link set "${i.name}" mtu "${toString i.mtu}"
                 ''
               + optionalString (i.ipAddress != null)
                 ''
