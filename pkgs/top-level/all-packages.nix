@@ -129,18 +129,16 @@ let
 
 
   # The package compositions.  Yes, this isn't properly indented.
-  pkgsFun = pkgs: __overrides:
+  pkgsFun = pkgs: overrides:
     with helperFunctions;
-    let defaultScope = pkgs // pkgs.xorg; in
-    helperFunctions // rec {
-
-  # `__overrides' is a magic attribute that causes the attributes in
-  # its value to be added to the surrounding `rec'.  We'll remove this
-  # eventually.
-  inherit __overrides pkgs;
+    let defaultScope = pkgs // pkgs.xorg; self = self_ // overrides;
+    self_ = with self; helperFunctions // {
 
   # Make some arguments passed to all-packages.nix available
   inherit system stdenvType platform;
+
+  # Allow callPackage to fill in the pkgs argument
+  inherit pkgs;
 
 
   # We use `callPackage' to be able to omit function arguments that
@@ -6033,7 +6031,7 @@ let
 
   perlPackages = recurseIntoAttrs (import ./perl-packages.nix {
     inherit pkgs;
-    __overrides = (config.perlPackageOverrides or (p: {})) pkgs;
+    overrides = (config.perlPackageOverrides or (p: {})) pkgs;
   });
 
   perl510Packages = import ./perl-packages.nix {
@@ -6041,7 +6039,7 @@ let
       perl = perl510;
       buildPerlPackage = import ../development/perl-modules/generic perl510;
     };
-    __overrides = (config.perl510PackageOverrides or (p: {})) pkgs;
+    overrides = (config.perl510PackageOverrides or (p: {})) pkgs;
   };
 
   perl514Packages = import ./perl-packages.nix {
@@ -6049,7 +6047,7 @@ let
       perl = perl514;
       buildPerlPackage = import ../development/perl-modules/generic perl514;
     };
-    __overrides = (config.perl514PackageOverrides or (p: {})) pkgs;
+    overrides = (config.perl514PackageOverrides or (p: {})) pkgs;
   };
 
   perlXMLParser = perlPackages.XMLParser;
@@ -6177,7 +6175,7 @@ let
 
   rPackages = recurseIntoAttrs (import ./r-packages.nix {
     inherit pkgs;
-    __overrides = (config.rPackageOverrides or (p: {})) pkgs;
+    overrides = (config.rPackageOverrides or (p: {})) pkgs;
   });
 
   ### SERVERS
@@ -10469,4 +10467,4 @@ let
   adobeReader = adobe-reader;
 
 
-}; in pkgs
+}; in self; in pkgs
