@@ -1515,6 +1515,9 @@ let
       etcDir = "/etc/ssh";
       pam = if stdenv.isLinux then pam else null;
     };
+
+  openssh_hpn = lowPrio (pkgs.appendToName "hpn" (openssh.override { hpnSupport = true; }));
+
   openssh_with_kerberos = lowPrio (pkgs.appendToName "with-kerberos" (openssh.override { withKerberos = true; }));
 
   opensp = callPackage ../tools/text/sgml/opensp { };

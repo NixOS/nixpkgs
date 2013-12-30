@@ -10,18 +10,18 @@ assert withKerberos -> kerberos != null;
 let
 
   hpnSrc = fetchurl {
-    url = http://tarballs.nixos.org/openssh-6.1p1-hpn13v14.diff.gz;
-    sha256 = "14das6lim6fxxnx887ssw76ywsbvx3s4q3n43afgh5rgvs4xmnnq";
+    url = mirror://sourceforge/hpnssh/openssh-6.3p1-hpnssh14v2.diff.gz;
+    sha256 = "1jldqjwry9qpxxzb3mikfmmmv90mfb7xkmcfdbvwqac6nl3r7bi3";
   };
 
 in
 
 stdenv.mkDerivation rec {
-  name = "openssh-6.2p2";
+  name = "openssh-6.4p1";
 
   src = fetchurl {
     url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/portable/${name}.tar.gz";
-    sha1 = "c2b4909eba6f5ec6f9f75866c202db47f3b501ba";
+    sha256 = "1lkmi7v83qvpcc04qrrqk4k7mafnmwxkfk1ccsisw51va4bgcc2m";
   };
 
   prePatch = stdenv.lib.optionalString hpnSupport
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
 
-  patches = [ ./locale_archive.patch ./gcmrekey.patch ];
+  patches = [ ./locale_archive.patch ];
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ] ++
     (if withKerberos then [ kerberos ] else [])
