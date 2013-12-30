@@ -9,7 +9,7 @@
 , saslSupport ? false
 , stdenv, fetchurl, apr, aprutil, neon, zlib, sqlite
 , httpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
-, sasl ? null
+, sasl ? null, serf ? null
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib apr aprutil sqlite ]
     ++ stdenv.lib.optional httpSupport neon
+    ++ stdenv.lib.optional httpSupport serf
     ++ stdenv.lib.optional pythonBindings python
     ++ stdenv.lib.optional perlBindings perl
     ++ stdenv.lib.optional saslSupport sasl;
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
     ${if stdenv.isDarwin then "--enable-keychain" else "--disable-keychain"}
     ${if saslSupport then "--enable-sasl --with-sasl=${sasl}" else "--disable-sasl"}
+    ${if httpSupport then "--enable-serf --with-serf=${serf}" else "--disable-serf"}
     --with-zlib=${zlib}
     --with-sqlite=${sqlite}
   '';
