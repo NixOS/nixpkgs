@@ -1,18 +1,18 @@
 { cabal, aeson, aesonPretty, binary, blazeHtml, blazeMarkup
 , cmdargs, filepath, HTF, indents, languageEcmascript, mtl, pandoc
-, parsec, text, transformers, unionFind, uniplate
+, parsec, text, transformers, unionFind, unorderedContainers
 }:
 
 cabal.mkDerivation (self: {
   pname = "Elm";
-  version = "0.10.0.1";
-  sha256 = "1r7z2fw9v6ngr9w4lmj1l6sc78rmxvqkqlxv4a9yc5jm80k3ar0i";
+  version = "0.10.1";
+  sha256 = "1y533vanhrxc14x304ig6q8ch6zih8yqgpfgw4h5vk5fpdmn09a2";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson aesonPretty binary blazeHtml blazeMarkup cmdargs filepath
     indents languageEcmascript mtl pandoc parsec text transformers
-    unionFind uniplate
+    unionFind unorderedContainers
   ];
   testDepends = [ HTF ];
   doCheck = false;

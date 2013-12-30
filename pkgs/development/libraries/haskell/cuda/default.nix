@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cuda";
-  version = "0.5.0.2";
-  sha256 = "1if730wcww5qx5qki1ir0d576wwpwrh00krp1svgdlx2j50rmgq5";
+  version = "0.5.1.1";
+  sha256 = "0bz1pfcxxvq1s47nrwgj9cqmr20p9n3hh2hilih8083hnjjwh40x";
   buildTools = [ c2hs ];
   extraLibraries = [ cudatoolkit nvidia_x11 self.stdenv.gcc ];
   doCheck = false;
@@ -31,9 +31,11 @@ cabal.mkDerivation (self: {
     ./Setup configure --verbose --prefix="$out" $libraryProfiling $extraLibDirs $configureFlags
   '';
   meta = {
+    homepage = "https://github.com/tmcdonell/cuda";
     description = "FFI binding to the CUDA interface for programming NVIDIA GPUs";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.none;
+    platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

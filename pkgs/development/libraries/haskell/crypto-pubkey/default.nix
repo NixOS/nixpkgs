@@ -5,14 +5,15 @@
 
 cabal.mkDerivation (self: {
   pname = "crypto-pubkey";
-  version = "0.2.1";
-  sha256 = "06cb2h9c3r1ycgcw7scc191gbr86qi8pxil07207n5fccq3vpjys";
+  version = "0.2.4";
+  sha256 = "0mdjr6zma2q7r2z9qibp2bwf73bis6zrv7ss62i4pz42kndb9hh4";
   buildDepends = [
     byteable cryptohash cryptoNumbers cryptoPubkeyTypes cryptoRandom
   ];
   testDepends = [
-    byteable cryptohash cryptoNumbers cryptoRandom HUnit QuickCheck
-    testFramework testFrameworkHunit testFrameworkQuickcheck2
+    byteable cryptohash cryptoNumbers cryptoPubkeyTypes cryptoRandom
+    HUnit QuickCheck testFramework testFrameworkHunit
+    testFrameworkQuickcheck2
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-crypto-pubkey";

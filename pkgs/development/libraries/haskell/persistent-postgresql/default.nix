@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "persistent-postgresql";
-  version = "1.2.1";
-  sha256 = "04gl1qdhag60q4j2r61qr1skim1wcyx2vq34j51qk1a62wyqsdrl";
+  version = "1.3.0";
+  sha256 = "1mayfq1z9i46nqgiajkhxx4z3hfy3gl5nzx8d5xlp7s1mliz3qjv";
   buildDepends = [
     aeson blazeBuilder conduit monadControl persistent postgresqlLibpq
     postgresqlSimple text time transformers

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "abstract-par";
-  version = "0.3.1";
-  sha256 = "0qzv520823b07hrr49rnpzayh96m6cjrmb1cn9l0dn80j6k9xayk";
+  version = "0.3.3";
+  sha256 = "0q6qsniw4wks2pw6wzncb1p1j3k6al5njnvm2v5n494hplwqg2i4";
   buildDepends = [ deepseq ];
   meta = {
     homepage = "https://github.com/simonmar/monad-par";

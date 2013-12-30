@@ -13,6 +13,12 @@ cabal.mkDerivation (self: {
     mkdir -p $out/share/man/man1
     mv $out/share/xmonad-*/man/*.1 $out/share/man/man1/
   '';
+
+  patches = [
+    # Patch to make xmonad use XMONAD_{GHC,XMESSAGE} (if available).
+    ./xmonad_ghc_var_0.11.patch
+  ];
+
   meta = {
     homepage = "http://xmonad.org";
     description = "A tiling window manager";

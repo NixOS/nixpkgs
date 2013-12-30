@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "uuagc";
-  version = "0.9.50";
-  sha256 = "0vyydqgmyl590ry63ibwshfpj2w9dd2v0nmr4jqlfw0m0d9ff50j";
+  version = "0.9.50.2";
+  sha256 = "1f587g4lf1gc5j9wd2fzxhjrny0a9axkpj6znxwsiylcpqw39dqs";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath haskellSrcExts mtl uuagcCabal uulib ];

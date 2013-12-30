@@ -1,19 +1,22 @@
 { cabal, dataDefaultClass, Diff, filepath, HUnit, mtl, parsec
 , QuickCheck, testFramework, testFrameworkHunit
-, testFrameworkQuickcheck2, uniplate
+, testFrameworkQuickcheck2, uniplate, wlPprint
 }:
 
 cabal.mkDerivation (self: {
   pname = "language-ecmascript";
-  version = "0.15.2";
-  sha256 = "1iszs9f2jryddcz36a6anfyfxpwjhzn49xjqvnd5m6rjdq6y403w";
+  version = "0.15.4";
+  sha256 = "1drivy75lvrwjx7irdbnnqp7y6mbzbm2pbxy7zzc1nfln6g3k9x7";
   buildDepends = [
-    dataDefaultClass Diff mtl parsec QuickCheck uniplate
+    dataDefaultClass Diff mtl parsec QuickCheck uniplate wlPprint
   ];
   testDepends = [
     dataDefaultClass Diff filepath HUnit mtl parsec QuickCheck
-    testFramework testFrameworkHunit testFrameworkQuickcheck2
+    testFramework testFrameworkHunit testFrameworkQuickcheck2 uniplate
+    wlPprint
   ];
+  jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://github.com/jswebtools/language-ecmascript";
     description = "JavaScript parser and pretty-printer library";

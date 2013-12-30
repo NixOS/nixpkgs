@@ -1,15 +1,16 @@
 { cabal, aeson, attoparsec, caseInsensitive, conduit, dataDefault
-, failure, HTTP, httpConduit, httpTypes, network, text, time
-, unorderedContainers, vector
+, failure, hashable, HTTP, httpConduit, httpTypes, network, text
+, time, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "github";
-  version = "0.7.1";
-  sha256 = "0aipaamd7gn5f79f451v8ifjs5g8b40g9w4kvi1i62imsh0zhh90";
+  version = "0.7.3";
+  sha256 = "0cb7smydndigkcib4y8pbsycsqyzg45g5vrglyq1h245rd4j6s37";
   buildDepends = [
-    aeson attoparsec caseInsensitive conduit dataDefault failure HTTP
-    httpConduit httpTypes network text time unorderedContainers vector
+    aeson attoparsec caseInsensitive conduit dataDefault failure
+    hashable HTTP httpConduit httpTypes network text time
+    unorderedContainers vector
   ];
   jailbreak = true;
   meta = {

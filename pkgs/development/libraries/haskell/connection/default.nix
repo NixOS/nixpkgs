@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "connection";
-  version = "0.1.3";
-  sha256 = "13bwlbga612kc7g3m3rrdzbdv4w0glp4af9r6crwgjsmxgimrgs9";
+  version = "0.1.3.1";
+  sha256 = "1z9vb20466lg7l8z4abfbsdzpix18hswpqcl7s2gv838s2wvd16w";
   buildDepends = [
     certificate cprngAes dataDefault network socks tls tlsExtra
   ];

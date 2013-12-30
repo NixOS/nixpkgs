@@ -2,14 +2,15 @@
 
 cabal.mkDerivation (self: {
   pname = "cufft";
-  version = "0.1.0.1";
-  sha256 = "0j1rsixl48z8xszym9s3rw4pwq4s5bz6inqkfsq726gni0nlm8vx";
+  version = "0.1.0.3";
+  sha256 = "1jj1ixacmhwjcb2syv4fglawpya5vmdhdk2xqrw4wwfxw4wc9ypi";
   buildDepends = [ cuda ];
   buildTools = [ c2hs ];
   meta = {
     homepage = "http://github.com/robeverest/cufft";
     description = "Haskell bindings for the CUFFT library";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.stdenv.lib.platforms.none;
+    platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

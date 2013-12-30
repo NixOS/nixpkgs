@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-routes";
-  version = "1.2.0.1";
-  sha256 = "0pp7g3ccd0swh1j62am1vg9r2gh65jcci5w2n4r42sqzfnql0i8z";
+  version = "1.2.0.5";
+  sha256 = "0150plfdd9x70sc6zzy66lv9vbla7p9bx06yi6vlqkfvzsrx2cx7";
   buildDepends = [ pathPieces text vector ];
   testDepends = [ hspec HUnit pathPieces text ];
   meta = {

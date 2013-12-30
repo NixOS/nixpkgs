@@ -4,13 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "zeromq3-haskell";
-  version = "0.5";
-  sha256 = "16qh3q5rshaxzl79aiivrysl3dhilnd2mw2p45ifgbgv87m277gq";
+  version = "0.5.1";
+  sha256 = "0jmdhs2apmcr3wf5r739gq9qqad59qj82h7qpdk3m4cc2a7djil0";
   buildDepends = [
     async MonadCatchIOTransformers semigroups transformers
   ];
   testDepends = [
-    ansiTerminal checkers MonadCatchIOTransformers QuickCheck
+    ansiTerminal async checkers MonadCatchIOTransformers QuickCheck
     transformers
   ];
   extraLibraries = [ zeromq ];
