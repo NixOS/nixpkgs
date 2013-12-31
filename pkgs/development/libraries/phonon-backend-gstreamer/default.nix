@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake automoc4 pkgconfig ];
 
+  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
+
   meta = {
     homepage = http://phonon.kde.org/;
     description = "GStreamer backend for Phonon";
