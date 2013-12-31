@@ -1016,6 +1016,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   failure = callPackage ../development/libraries/haskell/failure {};
 
+  fastcgi = callPackage ../development/libraries/haskell/fastcgi {};
+
   fastLogger = callPackage ../development/libraries/haskell/fast-logger {};
 
   fclabels = callPackage ../development/libraries/haskell/fclabels {};
