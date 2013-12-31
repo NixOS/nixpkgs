@@ -664,6 +664,8 @@ let
 
   cksfv = callPackage ../tools/networking/cksfv { };
 
+  clementine = callPackage ../applications/audio/clementine { };
+
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
   colord = callPackage ../tools/misc/colord { };
