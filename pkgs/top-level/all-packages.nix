@@ -4184,6 +4184,8 @@ let
 
   ffmpeg = ffmpeg_2;
 
+  ffmpeg_configurable = callPackage ../development/libraries/ffmpeg/configurable.nix { };
+
   ffms = callPackage ../development/libraries/ffms { };
 
   fftw = callPackage ../development/libraries/fftw { };
