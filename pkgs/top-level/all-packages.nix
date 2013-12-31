@@ -8887,12 +8887,10 @@ let
     bdbSupport = true;
     httpServer = false;
     httpSupport = true;
-    sslSupport = true;
     pythonBindings = false;
     perlBindings = false;
     javahlBindings = false;
     saslSupport = false;
-    compressionSupport = true;
     httpd = apacheHttpd;
     sasl = cyrus_sasl;
   };
