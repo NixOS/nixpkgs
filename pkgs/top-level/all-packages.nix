@@ -7571,7 +7571,7 @@ let
 
   emacs24 = callPackage ../applications/editors/emacs-24 {
     # use override to enable additional features
-    libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
+    libXaw = xlibs.libXaw;
     Xaw3d = null;
     gconf = null;
     librsvg = null;
