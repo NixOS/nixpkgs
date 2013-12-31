@@ -2347,6 +2347,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   waiHandlerLaunch = callPackage ../development/libraries/haskell/wai-handler-launch {};
 
+  waiHandlerFastcgi = callPackage ../development/libraries/haskell/wai-handler-fastcgi { inherit (pkgs) fcgi; };
+
   waiLogger = callPackage ../development/libraries/haskell/wai-logger {};
 
   waiTest = callPackage ../development/libraries/haskell/wai-test {};
