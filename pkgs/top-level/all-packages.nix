@@ -2844,8 +2844,6 @@ let
   julia = callPackage ../development/compilers/julia {
     liblapack = liblapack.override {shared = true;};
     mpfr = mpfr_3_1_2;
-    fftw = fftw.override {pthreads = true;};
-    fftwSinglePrec = fftwSinglePrec.override {pthreads = true;};
   };
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
@@ -4112,13 +4110,9 @@ let
 
   ffms = callPackage ../development/libraries/ffms { };
 
-  fftw = callPackage ../development/libraries/fftw {
-    singlePrecision = false;
-  };
-
-  fftwSinglePrec = callPackage ../development/libraries/fftw {
-    singlePrecision = true;
-  };
+  fftw = callPackage ../development/libraries/fftw { };
+  fftwSinglePrec = fftw.override { precision = "single"; };
+  fftwFloat = fftwSinglePrec; # the configure option is just an alias
 
   flann = callPackage ../development/libraries/flann { };
 
@@ -8613,7 +8607,7 @@ let
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
-    fftw = fftw.override {float = true;};
+    fftw = fftwSinglePrec;
   };
 
   rcs = callPackage ../applications/version-management/rcs { };
