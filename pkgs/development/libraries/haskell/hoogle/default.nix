@@ -1,22 +1,22 @@
 { cabal, aeson, binary, blazeBuilder, Cabal, caseInsensitive
 , cmdargs, conduit, deepseq, filepath, haskellSrcExts, httpTypes
-, parsec, random, safe, tagsoup, text, time, transformers, uniplate
-, wai, warp
+, parsec, random, safe, shake, tagsoup, text, time, transformers
+, uniplate, wai, warp
 }:
 
 cabal.mkDerivation (self: {
   pname = "hoogle";
-  version = "4.2.26";
-  sha256 = "07nc58vqdj5x3h6d7z8ilbff0pkqd3r7g789xyaalnh6wjkd7380";
+  version = "4.2.27";
+  sha256 = "0a92bcvgkk58yrsvkfrdk64qc0hhxgkyjpv39nmy8vf10ihg7wqn";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson binary blazeBuilder Cabal caseInsensitive cmdargs conduit
-    deepseq filepath haskellSrcExts httpTypes parsec random safe
+    deepseq filepath haskellSrcExts httpTypes parsec random safe shake
     tagsoup text time transformers uniplate wai warp
   ];
   testDepends = [ filepath ];
-  doCheck = false;
+  testTarget = "--test-option=--no-net";
   meta = {
     homepage = "http://www.haskell.org/hoogle/";
     description = "Haskell API Search";
