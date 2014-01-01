@@ -1,10 +1,12 @@
-{ cabal, lens, newtype, vectorSpace, vectorSpacePoints }:
+{ cabal, dataDefaultClass, lens, vectorSpace, vectorSpacePoints }:
 
 cabal.mkDerivation (self: {
   pname = "force-layout";
-  version = "0.2.0.1";
-  sha256 = "1fvkfgjwsh0cr6ay4djxc8wg0vqfw2vcq3clqjz0zi8zyyjpv8rx";
-  buildDepends = [ lens newtype vectorSpace vectorSpacePoints ];
+  version = "0.3";
+  sha256 = "1v4jgh08ppvfxc8w13wc9iiwk5hh2q9n7m5xb9vl59bmxdx81kai";
+  buildDepends = [
+    dataDefaultClass lens vectorSpace vectorSpacePoints
+  ];
   meta = {
     description = "Simple force-directed layout";
     license = self.stdenv.lib.licenses.bsd3;
