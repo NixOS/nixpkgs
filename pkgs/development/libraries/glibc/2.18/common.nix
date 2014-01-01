@@ -67,6 +67,8 @@ stdenv.mkDerivation ({
       ./cve-2013-4332.patch
       ./cve-2013-4458.patch
       ./cve-2013-4788.patch
+
+      ./strstr-sse42-hack.patch
     ];
 
   postPatch = ''
