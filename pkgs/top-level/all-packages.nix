@@ -84,7 +84,9 @@ let
       if system == "armv6l-linux" then platforms.raspberrypi
       else if system == "armv5tel-linux" then platforms.sheevaplug
       else if system == "mips64el-linux" then platforms.fuloong2f_n32
-      else platforms.pc;
+      else if system == "x86_64-linux" then platforms.pc64
+      else if system == "i686-linux" then platforms.pc32
+      else platforms.pcBase;
 
   platform = if platform_ != null then platform_
     else config.platform or platformAuto;

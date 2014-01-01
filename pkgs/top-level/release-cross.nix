@@ -192,7 +192,7 @@ let
     arch = "i586";
     float = "hard";
     withTLS = true;
-    platform = pkgs.platforms.pc;
+    platform = pkgs.platforms.pc32;
     libc = "glibc";
     openssl.system = "hurd-x86";  # Nix depends on OpenSSL.
   };
