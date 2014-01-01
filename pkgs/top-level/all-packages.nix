@@ -8221,6 +8221,8 @@ let
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
+  ifenslave = callPackage ../os-specific/linux/ifenslave { };
+
   ii = callPackage ../applications/networking/irc/ii { };
 
   ike = callPackage ../applications/ike { };

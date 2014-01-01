@@ -7,6 +7,7 @@ let
   cfg = config.networking;
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
+  hasBonds = cfg.bonds != { };
 
   interfaceOpts = { name, ... }: {
 
@@ -228,6 +229,60 @@ in
 
     };
 
+    networking.bonds = mkOption {
+      default = { };
+      example = {
+        bond0 = {
+          interfaces = [ "eth0" "wlan0" ];
+          miimon = 100;
+          mode = "active-backup";
+        };
+        fatpipe.interfaces = [ "enp4s0f0" "enp4s0f1" "enp5s0f0" "enp5s0f1" ];
+      };
+      description = ''
+        This option allows you to define bond devices that aggregate multiple,
+        underlying networking interfaces together. The value of this option is
+        an attribute set. Each attribute specifies a bond, with the attribute
+        name specifying the name of the bond's network interface
+      '';
+
+      type = types.attrsOf types.optionSet;
+
+      options = {
+
+        interfaces = mkOption {
+          example = [ "enp4s0f0" "enp4s0f1" "wlan0" ];
+          type = types.listOf types.string;
+          description = "The interfaces to bond together";
+        };
+
+        miimon = mkOption {
+          default = null;
+          example = 100;
+          type = types.nullOr types.int;
+          description = ''
+            Miimon is the number of millisecond in between each round of polling
+            by the device driver for failed links. By default polling is not
+            enabled and the driver is trusted to properly detect and handle
+            failure scenarios.
+          '';
+        };
+
+        mode = mkOption {
+          default = null;
+          example = "active-backup";
+          type = types.nullOr types.string;
+          description = ''
+            The mode which the bond will be running. The default mode for
+            the bonding driver is balance-rr, optimizing for throughput.
+            More information about valid modes can be found at
+            https://www.kernel.org/doc/Documentation/networking/bonding.txt
+          '';
+        };
+
+      };
+    };
+
     networking.vlans = mkOption {
       default = { };
       example = {
@@ -284,7 +339,15 @@ in
 
   config = {
 
-    boot.kernelModules = optional cfg.enableIPv6 "ipv6" ++ optional hasVirtuals "tun";
+    boot.kernelModules = [ ]
+      ++ optional cfg.enableIPv6 "ipv6"
+      ++ optional hasVirtuals "tun"
+      ++ optional hasBonds "bonding";
+
+    boot.extraModprobeConfig =
+      # This setting is intentional as it prevents default bond devices
+      # from being created.
+      optionalString hasBonds "options bonding max_bonds=0";
 
     environment.systemPackages =
       [ pkgs.host
@@ -450,6 +513,9 @@ in
             path = [ pkgs.bridge_utils pkgs.iproute ];
             script =
               ''
+                # Remove Dead Interfaces
+                ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+
                 brctl addbr "${n}"
 
                 # Set bridge's hello time to 0 to avoid startup delays.
@@ -474,12 +540,50 @@ in
               '';
           };
 
+        createBondDevice = n: v:
+          let
+            deps = map (i: "sys-subsystem-net-devices-${i}.device") v.interfaces;
+          in
+          { description = "Bond Interface ${n}";
+            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
+            bindsTo = deps;
+            after = deps;
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.ifenslave pkgs.iproute ];
+            script = ''
+              # Remove Dead Interfaces
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+
+              ip link add "${n}" type bond
+
+              # !!! There must be a better way to wait for the interface
+              while [ ! -d /sys/class/net/${n} ]; do sleep 0.1; done;
+
+              # Set the miimon and mode options
+              ${optionalString (v.miimon != null)
+                "echo ${toString v.miimon} > /sys/class/net/${n}/bonding/miimon"}
+              ${optionalString (v.mode != null)
+                "echo \"${v.mode}\" > /sys/class/net/${n}/bonding/mode"}
+
+              # Bring up the bridge and enslave the specified interfaces
+              ip link set "${n}" up
+              ${flip concatMapStrings v.interfaces (i: ''
+                ifenslave "${n}" "${i}"
+              '')}
+            '';
+            postStop = ''
+              ip link set "${n}" down
+              ifenslave -d "${n}"
+              ip link delete "${n}"
+            '';
+          };
+
         createVlanDevice = n: v:
           let
             deps = [ "sys-subsystem-net-devices-${v.interface}.device" ];
           in
-          {
-            description = "Vlan Interface ${n}";
+          { description = "Vlan Interface ${n}";
             wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
             bindsTo = deps;
             after = deps;
@@ -487,6 +591,8 @@ in
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
             script = ''
+              # Remove Dead Interfaces
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add link "${v.interface}" "${n}" type vlan id "${toString v.id}"
               ip link set "${n}" up
             '';
@@ -499,6 +605,7 @@ in
            map configureInterface interfaces ++
            map createTunDevice (filter (i: i.virtual) interfaces))
          // mapAttrs createBridgeDevice cfg.bridges
+         // mapAttrs createBondDevice cfg.bonds
          // mapAttrs createVlanDevice cfg.vlans
          // { "network-setup" = networkSetup; };
 
