@@ -6952,7 +6952,7 @@ let
 
   # A function to build a manually-configured kernel
   linuxManualConfig = import ../os-specific/linux/kernel/manual-config.nix {
-    inherit (pkgs) stdenv runCommand nettools bc perl kmod writeTextFile;
+    inherit (pkgs) stdenv runCommand nettools bc perl kmod writeTextFile ubootChooser;
   };
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
