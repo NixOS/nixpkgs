@@ -1830,6 +1830,8 @@ let
     inherit (pkgsi686Linux.xlibs) libX11;
   };
 
+  sparsehash = callPackage ../development/libraries/sparsehash { };
+
   stardict = callPackage ../applications/misc/stardict/stardict.nix {
     inherit (gnome) libgnomeui scrollkeeper;
   };
