@@ -2,13 +2,13 @@
 , cabextract, unzip, p7zip, gnused, gnugrep, bash } :
 
 stdenv.mkDerivation rec {
-  rev = "1078";
+  rev = "1083";
   name = "winetricks-${rev}";
 
   src = fetchsvn {
     url = "http://winetricks.googlecode.com/svn/trunk";
     inherit rev;
-    sha256 = "0ipvld0r5h6x2pgqkqa82q0w9flx6fn9aha8fd7axf5ji2gzmidm";
+    sha256 = "0zakwn7g2ni6xw92i1y3pngyaxsr93714s4jy11adf7rxdkj0a32";
   };
 
   buildInputs = [ perl which ];
