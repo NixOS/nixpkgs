@@ -48,7 +48,7 @@ let
   ''; };
 
   commonMakeFlags = [
-    "O=$(buildRoot)"
+    "O=$(buildRoot)" "KBUILD_BUILD_VERSION=1-NixOS"
   ];
 
   drvAttrs = config_: platform: kernelPatches: configfile:
@@ -124,7 +124,7 @@ let
         runHook postConfigure
       '';
 
-      buildFlags = [ stdenv.platform.kernelTarget ] ++ optional isModular "modules";
+      buildFlags = [ platform.kernelTarget ] ++ optional isModular "modules";
 
       installFlags = [
         "INSTALLKERNEL=${installkernel}"
@@ -158,6 +158,21 @@ let
               "s|${sourceRoot}|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${sourceRoot.name}|g"
         fi
       '' else null;
+
+      meta = {
+        description =
+          "The Linux kernel" +
+          (if kernelPatches == [] then "" else
+            " (with patches: "
+            + stdenv.lib.concatStrings (stdenv.lib.intersperse ", " (map (x: x.name) kernelPatches))
+            + ")");
+        license = "GPLv2";
+        homepage = http://www.kernel.org/;
+        maintainers = [
+          maintainers.shlevy
+        ];
+        platforms = platforms.linux;
+      };
     };
 in
 
@@ -173,7 +188,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
     "ARCH=${stdenv.platform.kernelArch}"
   ];
 
-  crossAttrs = let cp = stdenv.cross.platform; in {
+  crossAttrs = let cp = stdenv.cross.platform; in
     (drvAttrs crossConfig cp (kernelPatches ++ crossKernelPatches) crossConfigfile) // {
       makeFlags = commonMakeFlags ++ [
         "ARCH=${cp.kernelArch}"
@@ -185,15 +200,5 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
       # can just go into buildInputs (but not nativeBuildInputs since cp.uboot
       # may be different from stdenv.platform.uboot)
       buildInputs = optional (cp.uboot != null) (ubootChooser cp.uboot).crossDrv;
-  };
-
-  meta = {
-    description = "The Linux kernel";
-    license = "GPLv2";
-    homepage = http://www.kernel.org/;
-    maintainers = [
-      maintainers.shlevy
-    ];
-    platforms = platforms.linux;
   };
 })
