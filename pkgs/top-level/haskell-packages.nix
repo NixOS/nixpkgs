@@ -648,7 +648,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   brainfuck = callPackage ../development/libraries/haskell/brainfuck {};
 
-  bson = callPackage ../development/libraries/haskell/bson {};
+  bson = callPackage ../development/libraries/haskell/bson {
+    binary = self.binary_0_7_1_0;
+    dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_1_0; };
+  };
 
   boomerang = callPackage ../development/libraries/haskell/boomerang {};
 
