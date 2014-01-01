@@ -2846,6 +2846,8 @@ let
 
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
+  oraclejre7 = lowPrio (pkgs.oraclejdk7distro false false);
+
   jrePlugin = lowPrio (pkgs.jdkdistro false true);
 
   supportsJDK =
