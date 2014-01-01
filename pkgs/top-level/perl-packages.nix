@@ -2170,6 +2170,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ IOCaptureOutput ];
   };
 
+  DevelSizeMe = buildPerlPackage {
+    name = "Devel-SizeMe-0.19";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TI/TIMB/Devel-SizeMe-0.19.tar.gz;
+      sha256 = "546e31ba83c0bf7cef37b38a462860461850473479d7d4ac6c0dadfb78d54717";
+    };
+    propagatedBuildInputs = [ DBDSQLite DBI DataDumperConcise HTMLParser JSONXS Moo ];
+    meta = {
+      homepage = https://github.com/timbunce/devel-sizeme;
+      description = "Unknown";
+      license = "perl";
+    };
+  };
+
   DBDSQLite = import ../development/perl-modules/DBD-SQLite {
     inherit stdenv fetchurl buildPerlPackage DBI;
     inherit (pkgs) sqlite;
