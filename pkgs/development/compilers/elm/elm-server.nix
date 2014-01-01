@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "elm-server";
-  version = "0.9.0.2";
-  sha256 = "0g362llb7jkwz8xhyhhsc8hz0vj7s7bgfz1az5qfh1cm4h8nynwr";
+  version = "0.10.1";
+  sha256 = "0rh01jm9h9zbslnzy6xg7bin76gdmypannh3ly40azplw9xmf2dn";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
