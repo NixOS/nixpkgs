@@ -823,6 +823,8 @@ let
 
   dvgrab = callPackage ../tools/video/dvgrab { };
 
+  dvtm = callPackage ../tools/misc/dvtm { };
+
   e2fsprogs = callPackage ../tools/filesystems/e2fsprogs { };
 
   easyrsa = callPackage ../tools/networking/easyrsa { };
