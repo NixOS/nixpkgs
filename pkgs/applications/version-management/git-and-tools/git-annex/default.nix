@@ -14,8 +14,8 @@
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20131221";
-  sha256 = "1gkb8fc0fjjn0rigajgliqy381pmkpx4ha1rx65dcw15rqnrawb3";
+  version = "5.20131230";
+  sha256 = "174ywjvgqx9yy2larlsrzxdhxx5arhfwwpf8j9m45h5hwy8nn6ma";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -42,7 +42,6 @@ cabal.mkDerivation (self: {
                     -fDNS
                     -fProduction
                     -fTDFA";
-  doCheck = false;
   installPhase = ''
     export HOME="$NIX_BUILD_TOP/tmp"
     mkdir "$HOME"
