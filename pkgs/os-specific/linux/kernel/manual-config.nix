@@ -70,7 +70,7 @@ let
   installTarget = target: [ (if target == "uImage" then "uinstall" else "install") ];
 
   sourceRoot = stdenv.mkDerivation {
-    name = "linux-${version}-source";
+    name = "linux-source-${version}";
 
     inherit src;
 
