@@ -1,45 +1,16 @@
 { stdenv, runCommand, nettools, bc, perl, kmod, writeTextFile, ubootChooser }:
 
 let
-  inherit (stdenv.lib)
-    hasAttr getAttr optionalAttrs optional optionalString maintainers platforms;
-
-  # Function to parse the config file into a nix expression
-  readConfig = configFile:
-    let
-      configAttrs = import "${runCommand "config.nix" {} ''
-        echo "{" > "$out"
-        while IFS='=' read key val; do
-          [ "x''${key#CONFIG_}" != "x$key" ] || continue
-          no_firstquote="''${val#\"}";
-          echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
-        done < "${configFile}"
-        echo "}" >> $out
-      ''}";
-
-      config = configAttrs // rec {
-        attrName = attr: "CONFIG_" + attr;
-
-        isSet = attr: hasAttr (attrName attr) config;
-
-        getValue = attr: if isSet attr then getAttr (attrName attr) config else null;
-
-        isYes = attr: (isSet attr) && ((getValue attr) == "y");
-
-        isNo = attr: (isSet attr) && ((getValue attr) == "n");
-
-        isModule = attr: (isSet attr) && ((getValue attr) == "m");
-
-        isEnabled = attr: (isModule attr) || (isYes attr);
-
-        isDisabled = attr: (!(isSet attr)) || (isNo attr);
-      };
-    in
-      config;
-
-in
-
-{
+  readConfig = configfile: import (runCommand "config.nix" {} ''
+    echo "{" > "$out"
+    while IFS='=' read key val; do
+      [ "x''${key#CONFIG_}" != "x$key" ] || continue
+      no_firstquote="''${val#\"}";
+      echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
+    done < "${configfile}"
+    echo "}" >> $out
+  '').outPath;
+in {
   # The kernel version
   version,
   # The version of the kernel module directory
@@ -52,12 +23,33 @@ in
   configfile,
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  config ? optionalAttrs allowImportFromDerivation (readConfig configfile),
+  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false
 }:
 
+let config_ = config; in
+
 let
+  inherit (stdenv.lib)
+    hasAttr getAttr optionalAttrs optional optionalString maintainers platforms;
+
+  config = let attrName = attr: "CONFIG_" + attr; in {
+    isSet = attr: hasAttr (attrName attr) config;
+
+    getValue = attr: if config.isSet attr then getAttr (attrName attr) config else null;
+
+    isYes = attr: (config.getValue attr) == "y";
+
+    isNo = attr: (config.getValue attr) == "n";
+
+    isModule = attr: (config.getValue attr) == "m";
+
+    isEnabled = attr: (config.isModule attr) || (config.isYes attr);
+
+    isDisabled = attr: (!(config.isSet attr)) || (config.isNo attr);
+  } // config_;
+
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
     mkdir -p $4
