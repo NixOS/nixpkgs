@@ -84,6 +84,10 @@ let
           sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
       done
       sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
+      # Patch kconfig to print "###" after every question so that
+      # generate-config.pl from the generic builder can answer them.
+      # This only affects oldaskconfig.
+      sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
     '';
 
     installPhase = ''
