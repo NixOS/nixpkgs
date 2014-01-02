@@ -666,6 +666,8 @@ let
 
   cksfv = callPackage ../tools/networking/cksfv { };
 
+  clementine = callPackage ../applications/audio/clementine { };
+
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
   colord = callPackage ../tools/misc/colord { };
@@ -1829,6 +1831,8 @@ let
     inherit (pkgsi686Linux) pam gcc33;
     inherit (pkgsi686Linux.xlibs) libX11;
   };
+
+  sparsehash = callPackage ../development/libraries/sparsehash { };
 
   stardict = callPackage ../applications/misc/stardict/stardict.nix {
     inherit (gnome) libgnomeui scrollkeeper;
