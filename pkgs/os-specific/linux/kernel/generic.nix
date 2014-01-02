@@ -69,18 +69,26 @@ let
         ignoreConfigErrors = true;
 
         kernelConfig = kernelConfigFun configCross;
+
+        inherit (kernel.crossDrv) src patches prePatch preUnpack;
       };
-    buildCommand = ''
+
+    inherit (kernel) src patches prePatch preUnpack;
+
+    buildPhase = ''
+      cd $buildRoot
+
       # Get a basic config file for later refinement with $generateConfig.
-      make -C ${kernel.sourceRoot} O=$PWD $kernelBaseConfig ARCH=$arch
+      make -C ../$sourceRoot O=$PWD $kernelBaseConfig ARCH=$arch
 
       # Create the config file.
       echo "generating kernel configuration..."
       echo "$kernelConfig" > kernel-config
       DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config AUTO_MODULES=$autoModules \
-           SRC=${kernel.sourceRoot} perl -w $generateConfig
-      mv .config $out
+           SRC=../$sourceRoot perl -w $generateConfig
     '';
+
+    installPhase = "mv .config $out";
   };
 
   kernel = linuxManualConfig {

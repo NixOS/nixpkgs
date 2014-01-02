@@ -48,7 +48,7 @@ let
   ''; };
 
   commonMakeFlags = [
-    "O=$(buildRoot)" "KBUILD_BUILD_VERSION=1-NixOS"
+    "O=$(buildRoot)"
   ];
 
   drvAttrs = config_: platform: kernelPatches: configfile:
@@ -73,48 +73,34 @@ let
 
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
-
-      sourceRoot = stdenv.mkDerivation {
-        name = "linux-source-${version}";
-
-        inherit src;
-
-        patches = map (p: p.patch) kernelPatches;
-
-        phases = [ "unpackPhase" "patchPhase" "installPhase" ];
-
-        prePatch = ''
-          for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
-              echo "stripping FHS paths in \`$mf'..."
-              sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
-          done
-
-          sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
-
-          # Patch kconfig to print "###" after every question so that
-          # generate-config.pl from the generic builder can answer them.
-          # This only affects oldaskconfig.
-          sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
-        '';
-
-        installPhase = ''
-          cd ..
-          mv $sourceRoot $out
-        '';
-      };
     in {
       outputs = if isModular then [ "out" "dev" ] else null;
 
       passthru = {
-        inherit version modDirVersion config kernelPatches src;
+        inherit version modDirVersion config kernelPatches;
       };
 
-      inherit sourceRoot;
+      inherit src;
 
-      unpackPhase = ''
+      preUnpack = ''
         mkdir build
         export buildRoot="$(pwd)/build"
-        cd ${sourceRoot}
+      '';
+
+      patches = map (p: p.patch) kernelPatches;
+
+      prePatch = ''
+        for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
+            echo "stripping FHS paths in \`$mf'..."
+            sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
+        done
+
+        sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
+
+        # Patch kconfig to print "###" after every question so that
+        # generate-config.pl from the generic builder can answer them.
+        # This only affects oldaskconfig.
+        sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
       '';
 
       configurePhase = ''
@@ -124,7 +110,7 @@ let
         runHook postConfigure
       '';
 
-      buildFlags = [ platform.kernelTarget ] ++ optional isModular "modules";
+      buildFlags = [ "KBUILD_BUILD_VERSION=1-NixOS" platform.kernelTarget ] ++ optional isModular "modules";
 
       installFlags = [
         "INSTALLKERNEL=${installkernel}"
@@ -141,22 +127,39 @@ let
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
         unlink $out/lib/modules/${modDirVersion}/build
+        unlink $out/lib/modules/${modDirVersion}/source
+
         mkdir -p $dev/lib/modules/${modDirVersion}
-        mv $out/lib/modules/${modDirVersion}/source $dev/lib/modules/${modDirVersion}/source
+        cd ..
+        mv $sourceRoot $dev/lib/modules/${modDirVersion}/source
+        cd $dev/lib/modules/${modDirVersion}/source
+
+        mv $buildRoot/.config $buildRoot/Module.symvers $TMPDIR
+        rm -fR $buildRoot
+        mkdir $buildRoot
+        mv $TMPDIR/.config $TMPDIR/Module.symvers $buildRoot
+        make modules_prepare $makeFlags "''${makeFlagsArray[@]}"
         mv $buildRoot $dev/lib/modules/${modDirVersion}/build
+
+        # !!! No documentation on how much of the source tree must be kept
+        # If/when kernel builds fail due to missing files, you can undelete
+        # them here
+        ls -A | grep -v Makefile | xargs rm -fR
       '' else optionalString installsFirmware ''
         make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
       '');
 
+      # !!! This leaves references to gcc and kmod in $dev
+      # that we might be able to avoid
       postFixup = if isModular then ''
         if [ -z "$dontStrip" ]; then
             find $out -name "*.ko" -print0 | xargs -0 -r ''${crossConfig+$crossConfig-}strip -S
-            # Remove all references to the source directory to avoid unneeded
-            # runtime dependencies
-            find $out -name "*.ko" -print0 | xargs -0 -r sed -i \
-              "s|${sourceRoot}|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${sourceRoot.name}|g"
         fi
+        # !!! Should this be part of stdenv? Also patchELF should take an argument...
+        prefix=$dev
+        patchELF
+        prefix=$out
       '' else null;
 
       meta = {
