@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-extra";
-  version = "2.0.1";
-  sha256 = "0asjd7v1zdbs1rixqanwwn4n5b417gj48nv2qva6pfj09hs5dzhh";
+  version = "2.0.1.2";
+  sha256 = "1afwmahi4cfbpid8vlqdh4xadsv7bz4n6js5a3fmzlf6sv8v1qg2";
   buildDepends = [
     ansiTerminal base64Bytestring blazeBuilder blazeBuilderConduit
     caseInsensitive conduit dataDefault fastLogger httpTypes liftedBase
@@ -19,6 +19,7 @@ cabal.mkDerivation (self: {
     blazeBuilder conduit dataDefault fastLogger hspec httpTypes HUnit
     resourcet text transformers wai waiTest zlib zlibBindings
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/yesodweb/wai";
     description = "Provides some basic WAI handlers and middleware";

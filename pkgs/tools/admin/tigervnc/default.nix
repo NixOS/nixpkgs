@@ -10,8 +10,8 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  # Release version = "1.2.0";
-  revision = 5005;
+  # Release version = "1.3.0";
+  revision = 5129;
   version = "r${toString revision}";
   name = "tigervnc-${version}";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # Release url = "mirror://sourceforge/tigervnc/${version}/${name}.tar.gz";
     url = "https://tigervnc.svn.sourceforge.net/svnroot/tigervnc/trunk";
     rev = revision;
-    sha256 = "2401e0ede9a2d50a37caeb094e5e832d24878749239578f44ae2acd42de01b43";
+    sha256 = "1qszlqr8z16iqkm05gbs0knj4fxc3bb6gjayky1abmf8pjazi0j8";
   };
 
   inherit fontDirectories;

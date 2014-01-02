@@ -1,7 +1,5 @@
 { callPackage, self, stdenv, gettext, gvfs, libunique, overrides ? {} }:
-{
-  __overrides = overrides;
-
+let overridden = set // overrides; set = with overridden; {
   # Backward compatibility.
   gtkdoc = self.gtk_doc;
   startupnotification = self.startup_notification;
@@ -117,4 +115,4 @@
 
   libglademm = callPackage ./bindings/libglademm { };
 
-}
+}; in overridden

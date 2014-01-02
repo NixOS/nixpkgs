@@ -5,15 +5,13 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{pkgs, __overrides}:
+{pkgs, overrides}:
 
-rec {
+let self = _self // overrides; _self = with self; {
 
   inherit (pkgs) buildPerlPackage fetchurl stdenv perl fetchsvn gnused;
 
   inherit (stdenv.lib) maintainers;
-
-  inherit __overrides;
 
   # Helper functions for packages that use Module::Build to build.
   buildPerlModule = { buildInputs ? [], ... } @ args:
@@ -9369,4 +9367,4 @@ rec {
     };
   };
 
-}
+}; in self

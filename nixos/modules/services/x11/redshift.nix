@@ -40,12 +40,14 @@ in {
     systemd.services.redshift = {
       description = "Redshift colour temperature adjuster";
       requires = [ "display-manager.service" ];
+      after = [ "display-manager.service" ];
       script = ''
         ${pkgs.redshift}/bin/redshift \
           -l ${cfg.latitude}:${cfg.longitude} \
           -t ${toString cfg.temperature.day}:${toString cfg.temperature.night}
       '';
       environment = { DISPLAY = ":0"; };
+      serviceConfig.Restart = "always";
     };
   };
 }

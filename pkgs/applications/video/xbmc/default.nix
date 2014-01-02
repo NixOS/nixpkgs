@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, makeWrapper
 , pkgconfig, cmake, gnumake, yasm, pythonFull
-, boost, avahi, libdvdcss, lame
-, gettext, pcre, yajl, fribidi
+, boost, avahi, libdvdcss, lame, autoreconfHook
+, gettext, pcre, yajl, fribidi, which
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre
 , libX11, xproto, inputproto
 , libXt, libXmu, libXext, xextproto
@@ -34,20 +34,20 @@ assert vdpauSupport -> libvdpau != null && ffmpeg.vdpauSupport;
 assert pulseSupport -> pulseaudio != null;
 
 stdenv.mkDerivation rec {
-    name = "xbmc-12.2";
+    name = "xbmc-12.3";
 
     src = fetchurl {
       url = "http://mirrors.xbmc.org/releases/source/${name}.tar.gz";
-      sha256 = "077apkq9sx6wlwkwmiz63w5dcqbbrbjbn6qk9fj2fgaizhs0ccxj";
+      sha256 = "0wyy9rsl11px4mh0fyq75n29905ldiqp8yraz6jxxvrls1hcj59y";
     };
 
     buildInputs = [
       makeWrapper
       pkgconfig cmake gnumake yasm pythonFull
-      boost libmicrohttpd
+      boost libmicrohttpd autoreconfHook
       gettext pcre yajl fribidi
       openssl gperf tinyxml2 taglib libssh swig jre
-      libX11 xproto inputproto
+      libX11 xproto inputproto which
       libXt libXmu libXext xextproto
       libXinerama libXrandr randrproto
       libXtst libXfixes fixesproto
@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
     preConfigure = ''
       substituteInPlace xbmc/linux/LinuxTimezone.cpp \
         --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
+      ./bootstrap
     '';
 
     configureFlags = [

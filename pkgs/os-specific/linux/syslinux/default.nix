@@ -1,11 +1,11 @@
 { stdenv, fetchurl, nasm, perl, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "syslinux-4.06";
+  name = "syslinux-4.07";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/boot/syslinux/4.xx/${name}.tar.bz2";
-    sha256 = "09md61npd5z64rv5s3knl4qsn2bqsn57irm5izk6snf46r77gdyv";
+    sha256 = "0nm0lx45h4c5nxnsr538bvryzvqvj1p1p4vqxzd8nlcv47ja8h0j";
   };
 
   patches = [ ./perl-deps.patch ];

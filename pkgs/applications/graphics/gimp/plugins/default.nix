@@ -146,10 +146,9 @@ rec {
   gmic =
   let
     imagemagick = pkgs.imagemagickBig; # maybe the non big version is enough?
-    fftw = pkgs.fftw.override {pthreads = true;};
   in pluginDerivation rec {
       name = "gmic-1.5.7.2";
-      buildInputs = [imagemagick pkgconfig fftw gimp] ++ gimp.nativeBuildInputs;
+      buildInputs = [imagemagick pkgconfig pkgs.fftw gimp] ++ gimp.nativeBuildInputs;
       src = fetchurl {
         url = mirror://sourceforge/gmic/gmic_1.5.7.2.tar.gz;
         sha256 = "1cpbxb3p2c8bcv2cbr150whapzjc7w09i3jza0z9x3xj8c0vdyv1";
