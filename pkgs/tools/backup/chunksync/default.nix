@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [openssl perl];
 
+  NIX_LDFLAGS = "-lgcc_s";
+
   makeFlags = [
     "DESTDIR=$(out)"
     "PREFIX="
