@@ -14,6 +14,7 @@
 , x11grabSupport ? false, libXext ? null, libXfixes ? null
 , playSupport ? true, SDL ? null
 , freetypeSupport ? true, freetype ? null, fontconfig ? null
+, fdkAACSupport ? false, fdk_aac ? null
 }:
 
 assert speexSupport -> speex != null;
@@ -29,6 +30,7 @@ assert faacSupport -> faac != null;
 assert x11grabSupport -> libXext != null && libXfixes != null;
 assert playSupport -> SDL != null;
 assert freetypeSupport -> freetype != null;
+assert fdkAACSupport -> fdk_aac != null;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-2.1.1";
@@ -62,7 +64,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional dc1394Support "--enable-libdc1394"
     ++ stdenv.lib.optional x11grabSupport "--enable-x11grab"
     ++ stdenv.lib.optional playSupport "--enable-ffplay"
-    ++ stdenv.lib.optional freetypeSupport "--enable-libfreetype --enable-fontconfig";
+    ++ stdenv.lib.optional freetypeSupport "--enable-libfreetype --enable-fontconfig"
+    ++ stdenv.lib.optional fdkAACSupport "--enable-libfdk_aac --enable-nonfree";
 
   buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib texinfo perl ]
     ++ stdenv.lib.optional mp3Support lame
@@ -79,7 +82,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional dc1394Support libdc1394
     ++ stdenv.lib.optionals x11grabSupport [ libXext libXfixes ]
     ++ stdenv.lib.optional playSupport SDL
-    ++ stdenv.lib.optionals freetypeSupport [ freetype fontconfig ];
+    ++ stdenv.lib.optionals freetypeSupport [ freetype fontconfig ]
+    ++ stdenv.lib.optional fdkAACSupport fdk_aac;
 
   enableParallelBuilding = true;
 
@@ -100,5 +104,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.ffmpeg.org/;
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
+    license = if (fdkAACSupport || faacSupport) then stdenv.lib.licenses.unfree else stdenv.lib.licenses.gpl2Plus;
   };
 }
