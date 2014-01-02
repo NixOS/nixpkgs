@@ -913,6 +913,8 @@ let
 
   lprof = callPackage ../tools/graphics/lprof { };
 
+  fdk_aac = callPackage ../development/libraries/fdk-aac { };
+
   flvtool2 = callPackage ../tools/video/flvtool2 { };
 
   fontforge = lowPrio (callPackage ../tools/misc/fontforge { });
