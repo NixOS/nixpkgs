@@ -1,6 +1,9 @@
 { stdenv, fetchurl, pkgconfig, python, yasm
-, gst-plugins-base, bzip2
+, gst-plugins-base, orc, bzip2
+, withSystemLibav ? false, libav ? null
 }:
+
+assert withSystemLibav -> libav != null;
 
 stdenv.mkDerivation rec {
   name = "gst-libav-1.2.2";
@@ -17,9 +20,16 @@ stdenv.mkDerivation rec {
     sha256 = "585eb7971006100ad771a852e07bd2f3e23bcc6eb0b1253a40b5a0e40e4e7418";
   };
 
-  nativeBuildInputs = [ pkgconfig python yasm ];
+  configureFlags = stdenv.lib.optionalString withSystemLibav
+    "--with-system-libav";
 
-  buildInputs = [
-    gst-plugins-base bzip2
-  ];
+  nativeBuildInputs = with stdenv.lib;
+    [ pkgconfig python ]
+    ++ optional (!withSystemLibav) yasm
+    ;
+
+  buildInputs = with stdenv.lib;
+    [ gst-plugins-base orc bzip2 ]
+    ++ optional withSystemLibav libav
+    ;
 }
