@@ -658,6 +658,8 @@ let
 
   chrony = callPackage ../tools/networking/chrony { };
 
+  chunkfs = callPackage ../tools/filesystems/chunkfs { };
+
   chunksync = callPackage ../tools/backup/chunksync { };
 
   cjdns = callPackage ../tools/networking/cjdns { };
