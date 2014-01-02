@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = http://qmmp.ylsoftware.com/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [maintainers.bjornfor];
+    maintainers = [ maintainers.bjornfor ];
     repositories.svn = http://qmmp.googlecode.com/svn/;
   };
 }

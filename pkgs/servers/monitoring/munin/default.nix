@@ -1,5 +1,6 @@
 { stdenv, fetchurl, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
-, python, ruby, openjdk, nettools }:
+, python, ruby, openjdk, nettools
+}:
 
 stdenv.mkDerivation rec {
   version = "2.0.17";

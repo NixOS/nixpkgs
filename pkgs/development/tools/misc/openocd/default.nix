@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libftdi, libusb1 }:
+{ stdenv, fetchurl, libftdi, libusb1 }:
 
 stdenv.mkDerivation rec {
   name = "openocd-${version}";

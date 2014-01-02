@@ -2,7 +2,8 @@
 # Perl modules:
 , EncodeLocale, MathClipper, ExtUtilsXSpp, BoostGeometryUtils
 , MathConvexHullMonotoneChain, MathGeometryVoronoi, MathPlanePath, Moo
-, IOStringy, ClassXSAccessor, Wx, GrowlGNTP, NetDBus }:
+, IOStringy, ClassXSAccessor, Wx, GrowlGNTP, NetDBus
+}:
 
 stdenv.mkDerivation rec {
   version = "0.9.10b";

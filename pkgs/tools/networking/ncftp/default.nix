@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, coreutils}:
+{ stdenv, fetchurl, ncurses, coreutils }:
 
 let version = "3.2.5"; in
 stdenv.mkDerivation {

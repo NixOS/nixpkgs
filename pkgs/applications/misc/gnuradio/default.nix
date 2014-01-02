@@ -18,7 +18,8 @@
 # gr-video-sdl: PAL and NTSC display
 , SDL
 , libusb1, orc, pyopengl
-, makeWrapper }:
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   name = "gnuradio-${version}";

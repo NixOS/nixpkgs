@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl, unzip }:
 
 let baseName = "premake";
   version  = "4.3";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1017rd0wsjfyq2jvpjjhpszaa7kmig6q1nimw76qx3cjz2868lrn";
   };
 
-  buildInputs = [unzip];
+  buildInputs = [ unzip ];
 
   buildPhase = ''
     make -C build/gmake.unix/
@@ -27,6 +27,6 @@ stdenv.mkDerivation {
     description = "A simple build configuration and project generation tool using lua";
     license = stdenv.lib.licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = [maintainers.bjornfor];
+    maintainers = [ maintainers.bjornfor ];
   };
 }

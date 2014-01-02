@@ -1,5 +1,6 @@
 { stdenv, fetchurl, qt4, bison, flex, eigen, boost, mesa, glew, opencsg, cgal
-, mpfr, gmp }:
+, mpfr, gmp
+}:
 
 stdenv.mkDerivation rec {
   version = "2013.06";

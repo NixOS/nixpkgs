@@ -1,5 +1,6 @@
 { stdenv, fetchurl, coreutils, python, duplicity, gawk, gnupg1, bash
-, gnugrep, txt2man, makeWrapper }:
+, gnugrep, txt2man, makeWrapper
+}:
 
 stdenv.mkDerivation {
   name = "duply-1.5.11";
