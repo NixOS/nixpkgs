@@ -9440,6 +9440,8 @@ let
 
   naev = callPackage ../games/naev { };
 
+  nexuiz = callPackage ../games/nexuiz { };
+
   njam = callPackage ../games/njam { };
 
   oilrush = callPackage ../games/oilrush { };
