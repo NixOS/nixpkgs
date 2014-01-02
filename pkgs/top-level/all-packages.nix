@@ -2828,13 +2828,9 @@ let
     else
       let
         openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix {};
-        openjdkStage1 = callPackage ../development/compilers/openjdk {
-          jdk = openjdkBootstrap;
-          ant = pkgs.ant.override { jdk = openjdkBootstrap; };
-        };
       in callPackage ../development/compilers/openjdk {
-        jdk = openjdkStage1;
-        ant = pkgs.ant.override { jdk = openjdkStage1; };
+        jdk = openjdkBootstrap;
+        ant = pkgs.ant.override { jdk = openjdkBootstrap; };
       };
 
   openjre = pkgs.openjdk.override {
