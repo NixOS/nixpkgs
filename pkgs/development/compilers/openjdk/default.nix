@@ -105,9 +105,7 @@ stdenv.mkDerivation rec {
     "UNLIMITED_CRYPTO=1"
   ];
 
-  configurePhase = ''
-    make $makeFlags sanity
-  '';
+  configurePhase = "true";
 
   installPhase = ''
     mkdir -p $out
