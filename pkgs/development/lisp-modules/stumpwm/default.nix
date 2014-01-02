@@ -27,6 +27,8 @@ buildLispPackage rec {
       if [ "$NIX_LISP" = "sbcl" ]; then
         wrapProgram "$out"/bin/stumpwm --set SBCL_HOME "${clwrapper.lisp}/lib/sbcl"
       fi;
+
+      mv $out/lib/common-lisp/stumpwm/contrib/stumpish $out/bin/stumpish
     '';
     postInstall = ''false'';
   };
