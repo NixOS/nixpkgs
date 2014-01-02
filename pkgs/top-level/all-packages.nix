@@ -2833,9 +2833,7 @@ let
         ant = pkgs.ant.override { jdk = openjdkBootstrap; };
       };
 
-  openjre = pkgs.openjdk.override {
-    jreOnly = true;
-  };
+  openjre = pkgs.openjdk.jre;
 
   jdk = if stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
     then pkgs.openjdk
