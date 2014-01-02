@@ -146,6 +146,9 @@ in {
       { source = "${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
         target = "NetworkManager/VPN/nm-openconnect-service.name";
       }
+      { source = "${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
+        target = "NetworkManager/VPN/nm-pptp-service.name";
+      }
     ] ++ pkgs.lib.optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
@@ -155,6 +158,7 @@ in {
         networkmanager_openvpn
         networkmanager_vpnc
         networkmanager_openconnect
+        networkmanager_pptp
         ];
 
     users.extraGroups = singleton {
@@ -199,6 +203,7 @@ in {
         networkmanager_openvpn
         networkmanager_vpnc
         networkmanager_openconnect
+        networkmanager_pptp
         ];
 
     services.udev.packages = cfg.packages;
