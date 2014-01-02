@@ -1,9 +1,9 @@
-{ fetchurl, stdenv, linux, elfutils, latex2html, xmlto, docbook_xml_dtd_412
+{ fetchurl, stdenv, elfutils, latex2html, xmlto, docbook_xml_dtd_412
 , libxml2, docbook_xsl, libxslt, texLive, texLiveExtra, ghostscript, pkgconfig
 , gtkmm, libglademm, boost, perl, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "systemtap-1.2-${linux.version}";
+  name = "systemtap-1.2";
 
   src = fetchurl {
     url = "http://sources.redhat.com/systemtap/ftp/releases/${name}.tar.gz";
