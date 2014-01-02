@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     cp -av build/*/j2${if jreOnly then "re" else "sdk"}-image/* $out
 
     # Remove some broken manpages.
-    rm -rf $out/share/man/ja*
+    rm -rf $out/man/ja*
 
     # Remove crap from the installation.
     rm -rf $out/demo $out/sample
