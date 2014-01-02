@@ -3439,14 +3439,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
-  # not sure if this is the best way to accomplish this -- needed to provide
-  # objective-c compiler on darwin
-  matplotlibStdenv = if stdenv.isDarwin
-    then pkgs.clangStdenv
-    else pkgs.stdenv;
-
-  # TODO: refactor to use pythonBuildPackage
-  matplotlib = matplotlibStdenv.mkDerivation (rec {
+  matplotlib = buildPythonPackage rec {
     name = "matplotlib-1.3.1";
 
     src = fetchurl {
@@ -3454,26 +3447,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "0smgpn7lwbn02nbyhawyn0n6r3pb65zk501f21bjgavnjjfnf5pa";
     };
 
-    # error: invalid command 'test'
-    doCheck = false;
-
-    buildInputs = [ python pkgs.which pkgs.ghostscript ];
+    buildInputs = [ python pkgs.which pkgs.ghostscript ] ++
+        (if stdenv.isDarwin then [ pkgs.clangStdenv ] else [ pkgs.stdenv ]);
 
     propagatedBuildInputs =
-      [ dateutil nose numpy pyparsing tornado pkgs.freetype pkgs.libpng pkgs.pkgconfig pkgs.tcl
-        pkgs.tk pkgs.xlibs.libX11 ];
-    
-    buildPhase = ''
-      sed -i '/use_setuptools/d' setup.py
-      ${python}/bin/${python.executable} setup.py build
-    '';
-
-    # The sed expression parses out the python version from an executable with appended characters
-    installPhase = ''
-      SITE="$out/lib/${python.libPrefix}/site-packages"
-      mkdir -p "$SITE"
-      PYTHONPATH="$PYTHONPATH:$SITE" ${python}/bin/${python.executable} setup.py install --prefix=$out
-    '';
+      [ dateutil nose numpy pyparsing tornado pkgs.freetype pkgs.libpng pkgs.pkgconfig ];
 
     meta = with stdenv.lib; {
       description = "python plotting library, making publication quality plots";
@@ -3481,7 +3459,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
-  });
+  };
 
 
   mccabe = buildPythonPackage (rec {
