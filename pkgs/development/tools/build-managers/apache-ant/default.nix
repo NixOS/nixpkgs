@@ -60,5 +60,6 @@ stdenv.mkDerivation {
     description = "A Java-based build tool";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
