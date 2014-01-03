@@ -3192,11 +3192,7 @@ let
 
   clojure = callPackage ../development/interpreters/clojure { };
 
-  clooj_standalone_binary = callPackage ../development/interpreters/clojure/clooj.nix { };
-
-  clooj_wrapper = callPackage ../development/interpreters/clojure/clooj-wrapper.nix {
-    clooj = clooj_standalone_binary;
-  };
+  clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
   erlangR14B04 = callPackage ../development/interpreters/erlang/R14B04.nix { };
   erlangR15B03 = callPackage ../development/interpreters/erlang/R15B03.nix { };

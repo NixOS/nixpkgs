@@ -162,7 +162,6 @@ let
   clisp = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clisp_2_44_1 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clojure = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  clooj_wrapper = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clucene_core_2 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clutter = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clutter_gtk = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
