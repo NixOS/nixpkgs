@@ -1,11 +1,8 @@
-{ stdenv, fetchurl, unzip, ant, gcj }:
+{ stdenv, fetchurl, unzip, ant, jdk }:
 
 let
   version = "3.7.2";
   date    = "201202080800";
-  isGCJ   = stdenv.lib.strings.substring 0 3 gcj.name == "gcj";
-  javaExec  = if isGCJ then "gij" else "java";
-  javaFlags = if isGCJ then "--cp" else "-cp";
 in
 
 stdenv.mkDerivation rec {
@@ -16,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0swyysbyfmv068x8q1c5jqpwk5zb4xahg17aypx5rwb660f8fpbm";
   };
 
-  buildInputs = [ unzip ant gcj ];
+  buildInputs = [ unzip ant jdk ];
 
   unpackPhase = ''
     mkdir "${name}"
@@ -28,16 +25,16 @@ stdenv.mkDerivation rec {
   buildPhase = "ant build";
 
   installPhase = ''
-    mkdir -pv "$out/lib/java"
-    cp -v *.jar "$out/lib/java"
+    mkdir -pv $out/lib/java
+    cp -v *.jar $out/lib/java
 
-    mkdir -pv "$out/bin"
-    cat > "$out/bin/ecj" <<EOF
-#! /bin/sh
-exec "$(type -P ${javaExec})" ${javaFlags} "$out/lib/java/ecj.jar" org.eclipse.jdt.internal.compiler.batch.Main \$@
-EOF
+    mkdir -pv $out/bin
+    cat > $out/bin/ecj <<EOF
+    #! /bin/sh
+    exec ${jdk.jre}/bin/java -cp $out/lib/java/ecj.jar org.eclipse.jdt.internal.compiler.batch.Main "\$@"
+    EOF
 
-    chmod u+x "$out/bin/ecj"
+    chmod u+x $out/bin/ecj
   '';
 
   meta = {
@@ -54,5 +51,7 @@ EOF
 
     # http://www.eclipse.org/legal/epl-v10.html (free software, copyleft)
     license = "EPLv1.0";
+
+    platforms = stdenv.lib.platforms.linux;
   };
 }
