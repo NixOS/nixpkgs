@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apacheAntOpenJDK, jre }:
+{ stdenv, fetchurl, ant, jdk }:
 
 let
   # The .gitmodules in freenet-official-20130413-eccc9b3198
@@ -14,7 +14,7 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "freenet-official-20130413-eccc9b3198";
+  name = "freenet-20130413-eccc9b3198";
 
   src = fetchurl {
     url = https://github.com/freenet/fred-official/tarball/eccc9b3198;
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     sed '/antcall.*-ext/d' -i build.xml
   '';
 
-  buildInputs = [ apacheAntOpenJDK jre ];
+  buildInputs = [ ant jdk ];
 
   buildPhase = "ant package-only";
 
@@ -41,13 +41,13 @@ stdenv.mkDerivation {
 
     cat <<EOF > $out/bin/freenet
     #!${stdenv.shell}
-    ${jre}/bin/java -cp $out/share/freenet/bcprov.jar:$out/share/freenet/freenet-ext.jar:$out/share/freenet/freenet.jar \\
+    ${jdk.jre}/bin/java -cp $out/share/freenet/bcprov.jar:$out/share/freenet/freenet-ext.jar:$out/share/freenet/freenet.jar \\
       -Xmx1024M freenet.node.NodeStarter
     EOF
     chmod +x $out/bin/freenet
   '';
 
-  meta = { 
+  meta = {
     description = "Decentralised and censorship-resistant network";
     homepage = https://freenetproject.org/;
     license = "GPLv2+";
