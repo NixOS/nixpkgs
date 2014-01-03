@@ -8,7 +8,7 @@
 , antProperties ? []
 , antBuildInputs ? []
 , buildfile ? "build.xml"
-, ant ? pkgs.apacheAntOpenJDK
+, ant ? pkgs.ant
 , jre ? pkgs.openjdk
 , hydraAntLogger ? pkgs.hydraAntLogger
 , ... } @ args:

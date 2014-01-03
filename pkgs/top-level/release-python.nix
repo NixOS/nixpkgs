@@ -59,8 +59,6 @@ let
   antlr = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   antlr3 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   apacheAntGcj = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  apacheAntOpenJDK = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  apacheAntOracleJDK = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   apparmor = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   aqbanking = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   arb = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
