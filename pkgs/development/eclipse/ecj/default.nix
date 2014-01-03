@@ -7,53 +7,52 @@ let
   javaExec  = if isGCJ then "gij" else "java";
   javaFlags = if isGCJ then "--cp" else "-cp";
 in
-  stdenv.mkDerivation rec {
-    name = "ecj-${version}";
 
-    src = fetchurl {
-      url = "http://eclipse.ialto.org/eclipse/downloads/drops/R-${version}-${date}/ecjsrc-${version}.jar";
-      sha256 = "0swyysbyfmv068x8q1c5jqpwk5zb4xahg17aypx5rwb660f8fpbm";
-    };
+stdenv.mkDerivation rec {
+  name = "ecj-${version}";
 
-    buildInputs = [ unzip ant gcj ];
+  src = fetchurl {
+    url = "http://eclipse.ialto.org/eclipse/downloads/drops/R-${version}-${date}/ecjsrc-${version}.jar";
+    sha256 = "0swyysbyfmv068x8q1c5jqpwk5zb4xahg17aypx5rwb660f8fpbm";
+  };
 
-    unpackPhase = ''
-      mkdir "${name}"
-      cd "${name}"
-      unzip "$src"
-    '';
+  buildInputs = [ unzip ant gcj ];
 
-    # Use whatever compiler Ant knows.
-    buildPhase = "ant build";
+  unpackPhase = ''
+    mkdir "${name}"
+    cd "${name}"
+    unzip "$src"
+  '';
 
-    installPhase = ''
-      mkdir -pv "$out/lib/java"
-      cp -v *.jar "$out/lib/java"
+  # Use whatever compiler Ant knows.
+  buildPhase = "ant build";
 
-      mkdir -pv "$out/bin"
-      cat > "$out/bin/ecj" <<EOF
+  installPhase = ''
+    mkdir -pv "$out/lib/java"
+    cp -v *.jar "$out/lib/java"
+
+    mkdir -pv "$out/bin"
+    cat > "$out/bin/ecj" <<EOF
 #! /bin/sh
 exec "$(type -P ${javaExec})" ${javaFlags} "$out/lib/java/ecj.jar" org.eclipse.jdt.internal.compiler.batch.Main \$@
 EOF
 
-      chmod u+x "$out/bin/ecj"
+    chmod u+x "$out/bin/ecj"
+  '';
+
+  meta = {
+    description = "The Eclipse Compiler for Java (ECJ)";
+
+    longDescription = ''
+      ECJ is an incremental Java compiler.  Implemented as an Eclipse
+      builder, it is based on technology evolved from VisualAge for Java
+      compiler.  In particular, it allows users to run and debug code which
+      still contains unresolved errors.
     '';
 
-    meta = {
-      description = "The Eclipse Compiler for Java (ECJ)";
+    homepage = http://www.eclipse.org/jdt/core/index.php;
 
-      longDescription = ''
-        ECJ is an incremental Java compiler.  Implemented as an Eclipse
-        builder, it is based on technology evolved from VisualAge for Java
-        compiler.  In particular, it allows users to run and debug code which
-        still contains unresolved errors.
-      '';
-
-      homepage = http://www.eclipse.org/jdt/core/index.php;
-
-      # http://www.eclipse.org/legal/epl-v10.html (free software, copyleft)
-      license = "EPLv1.0";
-
-      maintainers = [ ];
-    };
-  }
+    # http://www.eclipse.org/legal/epl-v10.html (free software, copyleft)
+    license = "EPLv1.0";
+  };
+}
