@@ -677,7 +677,7 @@ patchShebangs() {
         fi
 
         oldInterpreterLine=$(head -1 "$f" | tail -c +3)
-        read oldPath arg0 args <<< "$oldInterpreterLine"
+        read -r oldPath arg0 args <<< "$oldInterpreterLine"
 
         if $(echo "$oldPath" | grep -q "/bin/env$"); then
             # Check for unsupported 'env' functionality:
@@ -703,7 +703,9 @@ patchShebangs() {
         if [ -n "$oldPath" -a "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]; then
             if [ -n "$newPath" -a "$newPath" != "$oldPath" ]; then
                 echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
-                sed -i -e "1 s|.*|#\!$newInterpreterLine|" "$f"
+                # escape the escape chars so that sed doesn't interpret them
+                escapedInterpreterLine=$(echo "$newInterpreterLine" | sed 's|\\|\\\\|g')
+                sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
             fi
         fi
     done
