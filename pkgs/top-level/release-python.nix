@@ -725,7 +725,6 @@ let
   julia = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   jwm = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   k3d = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  kaffe = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   kde3 = {
     arts = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     kdelibs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
