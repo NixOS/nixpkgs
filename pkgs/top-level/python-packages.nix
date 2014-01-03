@@ -48,11 +48,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit python wrapPython;
   };
 
-  setuptoolsSite = import ../development/python-modules/setuptools/site.nix {
-    inherit (pkgs) stdenv;
-    inherit python setuptools;
-  };
-
   # packages defined elsewhere
 
   blivet = callPackage ../development/python-modules/blivet { };
