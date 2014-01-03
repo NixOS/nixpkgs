@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "crypto-api";
-  version = "0.12.2.2";
-  sha256 = "0qmv8vizrbjs3k2f78r6ykyilps4zp7xxpzdxw7rngh154wqgv1k";
+  version = "0.13";
+  sha256 = "00zw9cymjhsdiy2p4prjvmmy7xnk12qggdpvxrp0hjnwlakfvyb2";
   buildDepends = [ cereal entropy tagged transformers ];
   meta = {
     homepage = "https://github.com/TomMD/crypto-api";
