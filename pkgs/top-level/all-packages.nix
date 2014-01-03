@@ -400,7 +400,7 @@ let
 
   aegisub = callPackage ../applications/video/aegisub {
     wxGTK = wxGTK29;
-    lua = lua5_1; 
+    lua = lua5_1;
   };
 
   aespipe = callPackage ../tools/security/aespipe { };
@@ -4527,14 +4527,6 @@ let
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
-  icedtea = callPackage ../development/libraries/java/icedtea {
-    ant = apacheAntGcj;
-    xerces = xercesJava;
-    xulrunner = icecatXulrunner3;
-    inherit (xlibs) libX11 libXp libXtst libXinerama libXt
-      libXrender xproto;
-  };
-
   icu = callPackage ../development/libraries/icu { };
 
   id3lib = callPackage ../development/libraries/id3lib { };
@@ -5623,7 +5615,7 @@ let
   SDL2_gfx = callPackage ../development/libraries/SDL2_gfx { };
 
   serd = callPackage ../development/libraries/serd {};
-  
+
   serf = callPackage ../development/libraries/serf {};
 
   silgraphite = callPackage ../development/libraries/silgraphite {};
@@ -5890,12 +5882,6 @@ let
 
   xercesc = callPackage ../development/libraries/xercesc {};
 
-  xercesJava = callPackage ../development/libraries/java/xerces {
-    ant   = apacheAntGcj;  # for bootstrap purposes
-    javac = gcj;
-    jvm   = gcj;
-  };
-
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
       freetype fontconfig xlibs.xproto xlibs.libX11 xlibs.libXt
@@ -5986,13 +5972,6 @@ let
 
   v8 = callPackage ../development/libraries/v8 { inherit (pythonPackages) gyp; };
 
-  xalanj = xalanJava;
-  xalanJava = callPackage ../development/libraries/java/xalanj {
-    ant    = apacheAntGcj;  # for bootstrap purposes
-    javac  = gcj;
-    jvm    = gcj;
-    xerces = xercesJava;  };
-
   xmlsec = callPackage ../development/libraries/xmlsec { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
@@ -6002,19 +5981,25 @@ let
 
   jquery_ui = callPackage ../development/libraries/javascript/jquery-ui { };
 
+
   ### DEVELOPMENT / LISP MODULES
 
   asdf = callPackage ../development/lisp-modules/asdf {
     texLive = null;
   };
+
   clwrapperFunction = callPackage ../development/lisp-modules/clwrapper;
-  wrapLisp = lisp: clwrapperFunction {lisp=lisp;};
-  lispPackagesFor = clwrapper: callPackage ../development/lisp-modules/lisp-packages.nix{
+
+  wrapLisp = lisp: clwrapperFunction { inherit lisp; };
+
+  lispPackagesFor = clwrapper: callPackage ../development/lisp-modules/lisp-packages.nix {
     inherit clwrapper;
   };
+
   lispPackagesClisp = lispPackagesFor (wrapLisp clisp);
   lispPackagesSBCL = lispPackagesFor (wrapLisp sbcl);
   lispPackages = recurseIntoAttrs lispPackagesSBCL;
+
 
   ### DEVELOPMENT / PERL MODULES
 
