@@ -57,7 +57,18 @@ let version = "4.8.2";
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
 
+  /* gccinstall.info says that "parallel make is currently not supported since
+     collisions in profile collecting may occur".
+
+     Parallel make of gfortran is disabled because of an apparent race
+     condition concerning the generation of "bconfig.h". Please try and
+     re-enable parallel make for a later release of gfortran to check whether
+     the error has been fixed.
+  */
+    enableParallelBuilding = !profiledCompiler && !langFortran;
+
     patches = []
+      ++ optional enableParallelBuilding ./parallel-bconfig.patch
       ++ optional stdenv.isArm [ ./arm-eabi.patch ]
       ++ optional (cross != null) ./libstdc++-target.patch
       # ++ optional noSysDirs ./no-sys-dirs.patch
@@ -484,15 +495,7 @@ stdenv.mkDerivation ({
   passthru = { inherit langC langCC langAda langFortran langVhdl
       langGo enableMultilib version; };
 
-  /* gccinstall.info says that "parallel make is currently not supported since
-     collisions in profile collecting may occur".
-
-     Parallel make of gfortran is disabled because of an apparent race
-     condition concerning the generation of "bconfig.h". Please try and
-     re-enable parallel make for a later release of gfortran to check whether
-     the error has been fixed.
-   */
-     enableParallelBuilding = !profiledCompiler && !langFortran;
+  inherit enableParallelBuilding;
 
   meta = {
     homepage = http://gcc.gnu.org/;
