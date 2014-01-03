@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, ant }:
+{ fetchgit, stdenv, ant, jdk }:
 
 stdenv.mkDerivation rec {
   name = "hydra-ant-logger-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "01s7m6007rn9107rw5wcgna7i20x6p6kfzl4f79jrvpkjy6kz176";
   };
 
-  buildInputs = [ ant ];
+  buildInputs = [ ant jdk ];
 
   buildPhase = "mkdir lib; ant";
 
