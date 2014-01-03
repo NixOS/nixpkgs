@@ -3192,14 +3192,6 @@ let
 
   clojure = callPackage ../development/interpreters/clojure { };
 
-  clojureUnstable = callPackage ../development/interpreters/clojure { version = "1.5.0-RC1"; };
-
-  clojure_binary = callPackage ../development/interpreters/clojure/binary.nix { };
-
-  clojure_wrapper = callPackage ../development/interpreters/clojure/wrapper.nix {
-    #clojure = clojure_binary;
-  };
-
   clooj_standalone_binary = callPackage ../development/interpreters/clojure/clooj.nix { };
 
   clooj_wrapper = callPackage ../development/interpreters/clojure/clooj-wrapper.nix {
