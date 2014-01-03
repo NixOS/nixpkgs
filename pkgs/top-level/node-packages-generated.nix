@@ -1158,14 +1158,14 @@
     passthru.names = [ "bower-registry-client" ];
   };
   by-spec."bower2nix"."*" =
-    self.by-version."bower2nix"."1.0.0";
-  by-version."bower2nix"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "bower2nix-1.0.0";
+    self.by-version."bower2nix"."1.0.1";
+  by-version."bower2nix"."1.0.1" = lib.makeOverridable self.buildNodePackage {
+    name = "bower2nix-1.0.1";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/bower2nix/-/bower2nix-1.0.0.tgz";
-        name = "bower2nix-1.0.0.tgz";
-        sha1 = "1e0b911221488e5d501f45c2ee1dca6bf5a7091f";
+        url = "http://registry.npmjs.org/bower2nix/-/bower2nix-1.0.1.tgz";
+        name = "bower2nix-1.0.1.tgz";
+        sha1 = "104417d000e525d5e4beb58ee5220e0e07cf378f";
       })
     ];
     buildInputs =
@@ -1179,12 +1179,13 @@
       self.by-version."bower"."1.2.8"
       self.by-version."argparse"."0.1.15"
       self.by-version."clone"."0.1.11"
+      self.by-version."semver"."2.2.1"
     ];
     peerDependencies = [
     ];
     passthru.names = [ "bower2nix" ];
   };
-  "bower2nix" = self.by-version."bower2nix"."1.0.0";
+  "bower2nix" = self.by-version."bower2nix"."1.0.1";
   by-spec."broadway"."0.2.9" =
     self.by-version."broadway"."0.2.9";
   by-version."broadway"."0.2.9" = lib.makeOverridable self.buildNodePackage {
@@ -9787,9 +9788,9 @@
     name = "nopt-1.0.10";
     src = [
       (fetchurl {
-        url = "https://github.com/Filirom1/nopt/tarball/master#pull-request-in-progress";
+        url = "http://registry.npmjs.org/nopt/-/nopt-1.0.10.tgz";
         name = "nopt-1.0.10.tgz";
-        sha256 = "94daa53a0ab7668be12931b7b551c924c913d1efef7f2a05e60704c9b90a7bad";
+        sha1 = "6ddd21bd2a31417b92727dd585f8a6f37608ebee";
       })
     ];
     buildInputs =
@@ -12386,6 +12387,8 @@
   by-spec."semver"."2.x" =
     self.by-version."semver"."2.2.1";
   by-spec."semver".">=2.0.10 <3.0.0" =
+    self.by-version."semver"."2.2.1";
+  by-spec."semver".">=2.2.1 <3" =
     self.by-version."semver"."2.2.1";
   by-spec."semver"."^2.2.1" =
     self.by-version."semver"."2.2.1";
