@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     tar xf ${xorgserver.src}
     cp -R xorg*/* unix/xserver
     pushd unix/xserver
-    for a in $xorgPatches
+    for a in $xorgPatches ../xserver114.patch
     do
       patch -p1 < $a
     done
     autoreconf -vfi
-    ./configure $configureFlags --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx --prefix="$out"
+    ./configure $configureFlags --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx --prefix="$out" --disable-unit-tests
     make TIGERVNC_SRCDIR=`pwd`/../..
     popd
   '';
