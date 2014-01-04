@@ -65,7 +65,7 @@ let version = "4.7.3";
     enableParallelBuilding = !profiledCompiler && !langFortran;
 
     patches = []
-      ++ optional enableParallelBuilding ../4.8/parallel-bconfig.patch
+      ++ optional enableParallelBuilding ./parallel-bconfig-4.7.patch
       ++ optional stdenv.isArm [ ./arm-eabi.patch ]
       ++ optional (cross != null) ./libstdc++-target.patch
       # ++ optional noSysDirs ./no-sys-dirs.patch

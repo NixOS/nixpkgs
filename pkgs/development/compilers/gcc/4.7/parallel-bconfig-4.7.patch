@@ -1,0 +1,30 @@
+diff --git a/gcc/Makefile.in b/gcc/Makefile.in
+index 0f6735a..ba93e9b 100644
+--- a/gcc/Makefile.in
++++ b/gcc/Makefile.in
+@@ -3904,21 +3904,21 @@ build/genflags.o : genflags.c $(RTL_BASE_H) $(OBSTACK_H) $(BCONFIG_H)	\
+   $(SYSTEM_H) coretypes.h $(GTM_H) errors.h $(READ_MD_H) gensupport.h
+ build/gengenrtl.o : gengenrtl.c $(BCONFIG_H) $(SYSTEM_H) rtl.def
+ gengtype-lex.o build/gengtype-lex.o : gengtype-lex.c gengtype.h $(SYSTEM_H)
+-gengtype-lex.o: $(CONFIG_H)
++gengtype-lex.o: $(CONFIG_H) $(BCONFIG_H)
+ build/gengtype-lex.o: $(BCONFIG_H)
+ gengtype-parse.o build/gengtype-parse.o : gengtype-parse.c gengtype.h \
+   $(SYSTEM_H)
+-gengtype-parse.o: $(CONFIG_H)
++gengtype-parse.o: $(CONFIG_H) $(BCONFIG_H)
+ build/gengtype-parse.o: $(BCONFIG_H)
+ gengtype-state.o build/gengtype-state.o: gengtype-state.c $(SYSTEM_H) \
+   gengtype.h errors.h double-int.h version.h $(HASHTAB_H) $(OBSTACK_H) \
+   $(XREGEX_H)
+-gengtype-state.o: $(CONFIG_H)
++gengtype-state.o: $(CONFIG_H) $(BCONFIG_H)
+ build/gengtype-state.o: $(BCONFIG_H)
+ gengtype.o build/gengtype.o : gengtype.c $(SYSTEM_H) gengtype.h 	\
+   rtl.def insn-notes.def errors.h double-int.h version.h $(HASHTAB_H) \
+   $(OBSTACK_H) $(XREGEX_H)
+-gengtype.o: $(CONFIG_H)
++gengtype.o: $(CONFIG_H) $(BCONFIG_H)
+ build/gengtype.o: $(BCONFIG_H)
+ build/genmddeps.o: genmddeps.c $(BCONFIG_H) $(SYSTEM_H) coretypes.h	\
+   errors.h $(READ_MD_H)
