@@ -147,6 +147,7 @@
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
+  ./services/networking/connman.nix
   ./services/networking/cntlm.nix
   ./services/networking/chrony.nix
   ./services/networking/ddclient.nix
