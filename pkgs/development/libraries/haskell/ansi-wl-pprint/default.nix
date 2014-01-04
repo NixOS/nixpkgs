@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ansi-wl-pprint";
-  version = "0.6.6";
-  sha256 = "1zkbiv5cpdgjiyn2nrrha29r84al7jg6647flqmc8riz2nn91zqy";
+  version = "0.6.7.1";
+  sha256 = "1by11bg1bd7z18hqgayk0w76hy5n63kmdl14gainlvfgr9jw506r";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ ansiTerminal ];

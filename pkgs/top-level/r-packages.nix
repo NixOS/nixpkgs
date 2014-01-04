@@ -1,14 +1,12 @@
 /* This file defines the composition for CRAN (R) packages. */
 
-{pkgs, __overrides}:
+{pkgs, overrides}:
 
-rec {
+let self = _self // overrides; _self = with self; {
 
   inherit (pkgs) buildRPackage fetchurl stdenv R;
 
   inherit (stdenv.lib) maintainers;
-
-  inherit __overrides;
 
   abind = buildRPackage rec {
     name = "abind-1.4-0";
@@ -243,4 +241,4 @@ rec {
     };
     propagatedBuildInputs = [ DBI gsubfn proto chron RSQLite RSQLiteExtfuns ];
   };
-}
+}; in self

@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = http://www2.ati.com/drivers/linux/amd-driver-installer-catalyst-13-4-linux-x86.x86_64.zip;
     sha256 = "1914ikdich0kg047bqh89ai5z4dyryj5mlw5i46n90fsfiaxa532";
+    curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux%20x86_64";
   };
 
   patchPhase = "patch -p0 < ${./gentoo-patches.patch}";

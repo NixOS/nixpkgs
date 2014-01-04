@@ -29,10 +29,10 @@ let
       requireFile {
         name = "UnlimitedJCEPolicyJDK7.zip";
         url = http://www.oracle.com/technetwork/java/javase/downloads/jce-7-download-432124.html;
-        sha256 = "0qljzfxbikm8br5k7rkamibp1vkyjrf6blbxpx6hn4k46f62bhnh";
+        sha256 = "7a8d790e7bd9c2f82a83baddfae765797a4a56ea603c9150c87b7cdb7800194d";
       }
     else
-      null;
+      "";
 in
 
 stdenv.mkDerivation {
@@ -93,12 +93,13 @@ stdenv.mkDerivation {
       jrePath=$out/jre
     fi
 
-    if test -n "$jce"; then
-      unzip $jce
-      cp -v jce/*.jar $jrePath/lib/security
+    if test -n "${jce}"; then
+      unzip ${jce}
+      cp -v UnlimitedJCEPolicy/*.jar $jrePath/lib/security
     fi
 
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/jli
+    rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}
 
     # set all the dynamic linkers
     find $out -type f -perm +100 \

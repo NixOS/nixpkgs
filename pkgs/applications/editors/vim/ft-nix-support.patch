@@ -38,7 +38,8 @@ index 0000000..a2f9918
 +  finish
 +endif
 +
-+syn keyword	nixKeyword	let throw inherit import true false null with
++syn keyword	nixKeyword	let in rec assert inherit import true false null with ...
++syn keyword	nixBuiltin	import abort baseNameOf dirOf isNull builtins map removeAttrs throw toString derivation
 +syn keyword	nixConditional	if else then
 +syn keyword     nixBrace        ( ) { } =
 +syn keyword     nixBuiltin         __currentSystem __currentTime __isFunction __getEnv __trace __toPath __pathExists 
@@ -54,6 +55,7 @@ index 0000000..a2f9918
 +syn region nixString         start=+"+ skip=+\\"+ end=+"+ contains=nixStringParam
 +
 +hi def link nixKeyword       Keyword
++hi def link nixBuiltin       Function
 +hi def link nixConditional   Conditional
 +hi def link nixBrace         Special
 +hi def link nixString        String

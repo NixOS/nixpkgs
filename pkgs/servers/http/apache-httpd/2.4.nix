@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     --with-pcre=${pcre}
     --disable-maintainer-mode
     --disable-debugger-mode
+    --enable-mpm=event
     --enable-mods-shared=all
     --enable-mpms-shared=all
     --enable-cern-meta

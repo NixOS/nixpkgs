@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shakespeare";
-  version = "1.2.0.3";
-  sha256 = "1mhycaw8qa4j7q5jing3hbx5vwwa0h4iv41fsx6xibz3y7lpqgmz";
+  version = "1.2.0.4";
+  sha256 = "0pgh4sxy5plhmm55mqbcmicn28vlplk4pasgfnyy5wjaz28n6z97";
   buildDepends = [ parsec systemFileio systemFilepath text time ];
   testDepends = [
     hspec parsec systemFileio systemFilepath text time

@@ -14,7 +14,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://github.com/atnnn/haskell-rethinkdb";
-    description = "RethinkDB is a distributed document store with a powerful query language";
+    description = "RethinkDB driver for Haskell";
     license = self.stdenv.lib.licenses.asl20;
     platforms = self.ghc.meta.platforms;
   };

@@ -602,7 +602,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   binary_0_6_0_0 = callPackage ../development/libraries/haskell/binary/0.6.0.0.nix {};
   binary_0_7_1_0 = callPackage ../development/libraries/haskell/binary/0.7.1.0.nix {};
-  binary = self.binary_0_7_1_0;
+  binary = null;                # core package starting with GHC 7.4.x
 
   binaryConduit = callPackage ../development/libraries/haskell/binary-conduit {};
 
@@ -642,13 +642,16 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   bmp_1_2_2_1 = callPackage ../development/libraries/haskell/bmp/1.2.2.1.nix {};
   bmp_1_2_5_2 = callPackage ../development/libraries/haskell/bmp/1.2.5.2.nix {};
-  bmp = self.bmp_1_2_5_2;
+  bmp = self.bmp_1_2_2_1;       # the latest version needs a very recent 'binary' library
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
   brainfuck = callPackage ../development/libraries/haskell/brainfuck {};
 
-  bson = callPackage ../development/libraries/haskell/bson {};
+  bson = callPackage ../development/libraries/haskell/bson {
+    binary = self.binary_0_7_1_0;
+    dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_1_0; };
+  };
 
   boomerang = callPackage ../development/libraries/haskell/boomerang {};
 
@@ -721,6 +724,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   citeprocHs = callPackage ../development/libraries/haskell/citeproc-hs {};
 
   cipherAes = callPackage ../development/libraries/haskell/cipher-aes {};
+
+  cipherAes128 = callPackage ../development/libraries/haskell/cipher-aes128 {};
 
   cipherBlowfish = callPackage ../development/libraries/haskell/cipher-blowfish {};
 
@@ -935,6 +940,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   downloadCurl = callPackage ../development/libraries/haskell/download-curl {};
 
+  DRBG = callPackage ../development/libraries/haskell/DRBG {};
+
   DSH = callPackage ../development/libraries/haskell/DSH {};
 
   dstring = callPackage ../development/libraries/haskell/dstring {};
@@ -1011,6 +1018,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   extensibleExceptions = null; # a core package in recent GHCs
 
   failure = callPackage ../development/libraries/haskell/failure {};
+
+  fastcgi = callPackage ../development/libraries/haskell/fastcgi {};
 
   fastLogger = callPackage ../development/libraries/haskell/fast-logger {};
 
@@ -1210,6 +1219,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   haskore = callPackage ../development/libraries/haskell/haskore {};
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
+
+  heredoc = callPackage ../development/libraries/haskell/heredoc {};
 
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
 
@@ -1450,6 +1461,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   lens = callPackage ../development/libraries/haskell/lens {};
 
+  lensAeson = callPackage ../development/libraries/haskell/lens-aeson {};
+
   lensDatetime = callPackage ../development/libraries/haskell/lens-datetime {};
 
   lenses = callPackage ../development/libraries/haskell/lenses {};
@@ -1516,7 +1529,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   minimorph = callPackage ../development/libraries/haskell/minimorph {};
 
-  miniutter = callPackage ../development/libraries/haskell/miniutter {};
+  miniutter = callPackage ../development/libraries/haskell/miniutter {
+    binary = self.binary_0_7_1_0;
+  };
 
   mimeMail = callPackage ../development/libraries/haskell/mime-mail {};
 
@@ -1680,6 +1695,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   OpenGL_2_8_0_0 = callPackage ../development/libraries/haskell/OpenGL/2.8.0.0.nix {};
   OpenGL_2_9_1_0 = callPackage ../development/libraries/haskell/OpenGL/2.9.1.0.nix {
     OpenGLRaw = self.OpenGLRaw_1_4_0_0;
+    GLURaw = self.GLURaw_1_4_0_0.override { OpenGLRaw = self.OpenGLRaw_1_4_0_0; };
   };
   OpenGL = self.OpenGL_2_9_1_0;
 
@@ -1790,6 +1806,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   postgresqlSimple = callPackage ../development/libraries/haskell/postgresql-simple {};
 
   ppm = callPackage ../development/libraries/haskell/ppm {};
+
+  prettyclass = callPackage ../development/libraries/haskell/prettyclass {};
 
   prettyShow_1_2 = callPackage ../development/libraries/haskell/pretty-show/1.2.nix {};
   prettyShow_1_6_3 = callPackage ../development/libraries/haskell/pretty-show/1.6.3.nix {
@@ -1943,6 +1961,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   rfc5051 = callPackage ../development/libraries/haskell/rfc5051 {};
 
+  robotsTxt = callPackage ../development/libraries/haskell/robots-txt {};
+
   rosezipper = callPackage ../development/libraries/haskell/rosezipper {};
 
   RSA = callPackage ../development/libraries/haskell/RSA {};
@@ -2009,7 +2029,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   StateVar = callPackage ../development/libraries/haskell/StateVar {};
 
-  statistics = callPackage ../development/libraries/haskell/statistics {};
+  statistics = callPackage ../development/libraries/haskell/statistics {
+    binary = self.binary_0_7_1_0;
+    vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_1_0; };
+  };
 
   statvfs = callPackage ../development/libraries/haskell/statvfs {};
 
@@ -2328,6 +2351,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   waiExtra = callPackage ../development/libraries/haskell/wai-extra {};
 
   waiHandlerLaunch = callPackage ../development/libraries/haskell/wai-handler-launch {};
+
+  waiHandlerFastcgi = callPackage ../development/libraries/haskell/wai-handler-fastcgi { inherit (pkgs) fcgi; };
 
   waiLogger = callPackage ../development/libraries/haskell/wai-logger {};
 

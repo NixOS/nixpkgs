@@ -1,37 +1,33 @@
 { bdbSupport ? false # build support for Berkeley DB repositories
 , httpServer ? false # build Apache DAV module
 , httpSupport ? false # client must support http
-, sslSupport ? false # client must support https
-, compressionSupport ? false # client must support http compression
 , pythonBindings ? false
 , perlBindings ? false
 , javahlBindings ? false
 , saslSupport ? false
-, stdenv, fetchurl, apr, aprutil, neon, zlib, sqlite
+, stdenv, fetchurl, apr, aprutil, zlib, sqlite
 , httpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
-, sasl ? null
+, sasl ? null, serf ? null
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
 assert httpServer -> httpd != null;
 assert pythonBindings -> swig != null && python != null;
 assert javahlBindings -> jdk != null && perl != null;
-assert sslSupport -> neon.sslSupport;
-assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation rec {
 
-  version = "1.7.14";
+  version = "1.8.5";
 
   name = "subversion-${version}";
 
   src = fetchurl {
-    url = "mirror://apache/subversion//${name}.tar.bz2";
-    sha256 = "038jbcpwm083abp0rvk0fhnx65kp9mz1qvzs3f83ig8fxcvqzb64";
+    url = "mirror://apache/subversion/${name}.tar.bz2";
+    sha256 = "0r3mxrrlr1l9s2nh829bf0qmrfaafkq3di6ndr10j76sxkqjnlpx";
   };
 
   buildInputs = [ zlib apr aprutil sqlite ]
-    ++ stdenv.lib.optional httpSupport neon
+    ++ stdenv.lib.optional httpSupport serf
     ++ stdenv.lib.optional pythonBindings python
     ++ stdenv.lib.optional perlBindings perl
     ++ stdenv.lib.optional saslSupport sasl;
@@ -43,6 +39,7 @@ stdenv.mkDerivation rec {
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
     ${if stdenv.isDarwin then "--enable-keychain" else "--disable-keychain"}
     ${if saslSupport then "--enable-sasl --with-sasl=${sasl}" else "--disable-sasl"}
+    ${if httpSupport then "--enable-serf --with-serf=${serf}" else "--disable-serf"}
     --with-zlib=${zlib}
     --with-sqlite=${sqlite}
   '';

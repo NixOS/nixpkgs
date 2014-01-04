@@ -129,18 +129,16 @@ let
 
 
   # The package compositions.  Yes, this isn't properly indented.
-  pkgsFun = pkgs: __overrides:
+  pkgsFun = pkgs: overrides:
     with helperFunctions;
-    let defaultScope = pkgs // pkgs.xorg; in
-    helperFunctions // rec {
-
-  # `__overrides' is a magic attribute that causes the attributes in
-  # its value to be added to the surrounding `rec'.  We'll remove this
-  # eventually.
-  inherit __overrides pkgs;
+    let defaultScope = pkgs // pkgs.xorg; self = self_ // overrides;
+    self_ = with self; helperFunctions // {
 
   # Make some arguments passed to all-packages.nix available
   inherit system stdenvType platform;
+
+  # Allow callPackage to fill in the pkgs argument
+  inherit pkgs;
 
 
   # We use `callPackage' to be able to omit function arguments that
@@ -658,9 +656,15 @@ let
 
   chrony = callPackage ../tools/networking/chrony { };
 
+  chunkfs = callPackage ../tools/filesystems/chunkfs { };
+
+  chunksync = callPackage ../tools/backup/chunksync { };
+
   cjdns = callPackage ../tools/networking/cjdns { };
 
   cksfv = callPackage ../tools/networking/cksfv { };
+
+  clementine = callPackage ../applications/audio/clementine { };
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
@@ -820,6 +824,8 @@ let
   dvdplusrwtools = callPackage ../tools/cd-dvd/dvd+rw-tools { };
 
   dvgrab = callPackage ../tools/video/dvgrab { };
+
+  dvtm = callPackage ../tools/misc/dvtm { };
 
   e2fsprogs = callPackage ../tools/filesystems/e2fsprogs { };
 
@@ -1434,6 +1440,8 @@ let
 
   newsbeuter-dev = callPackage ../applications/networking/feedreaders/newsbeuter/dev.nix { };
 
+  ngrep = callPackage ../tools/networking/ngrep { };
+
   ngrok = callPackage ../tools/misc/ngrok { };
 
   mpack = callPackage ../tools/networking/mpack { };
@@ -1514,6 +1522,9 @@ let
       etcDir = "/etc/ssh";
       pam = if stdenv.isLinux then pam else null;
     };
+
+  openssh_hpn = lowPrio (pkgs.appendToName "hpn" (openssh.override { hpnSupport = true; }));
+
   openssh_with_kerberos = lowPrio (pkgs.appendToName "with-kerberos" (openssh.override { withKerberos = true; }));
 
   opensp = callPackage ../tools/text/sgml/opensp { };
@@ -1821,6 +1832,8 @@ let
     inherit (pkgsi686Linux) pam gcc33;
     inherit (pkgsi686Linux.xlibs) libX11;
   };
+
+  sparsehash = callPackage ../development/libraries/sparsehash { };
 
   stardict = callPackage ../applications/misc/stardict/stardict.nix {
     inherit (gnome) libgnomeui scrollkeeper;
@@ -2838,6 +2851,8 @@ let
 
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
+  oraclejre7 = lowPrio (pkgs.oraclejdk7distro false false);
+
   jrePlugin = lowPrio (pkgs.jdkdistro false true);
 
   supportsJDK =
@@ -2858,8 +2873,6 @@ let
 
   julia = callPackage ../development/compilers/julia {
     liblapack = liblapack.override {shared = true;};
-    fftw = fftw.override {pthreads = true;};
-    fftwSinglePrec = fftwSinglePrec.override {pthreads = true;};
   };
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
@@ -3067,7 +3080,8 @@ let
   # rust = pkgsi686Linux.callPackage ../development/compilers/rust {};
 
   sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
-    inherit makeWrapper clisp;
+    inherit makeWrapper;
+    clisp = clisp_2_44_1;
   };
 
   scala_2_9 = callPackage ../development/compilers/scala/2.9.nix { };
@@ -4151,17 +4165,9 @@ let
 
   ffms = callPackage ../development/libraries/ffms { };
 
-  fftw = callPackage ../development/libraries/fftw {
-    singlePrecision = false;
-  };
-
-  fftwFloat = callPackage ../development/libraries/fftw {
-    float = true;
-  };
-
-  fftwSinglePrec = callPackage ../development/libraries/fftw {
-    singlePrecision = true;
-  };
+  fftw = callPackage ../development/libraries/fftw { };
+  fftwSinglePrec = fftw.override { precision = "single"; };
+  fftwFloat = fftwSinglePrec; # the configure option is just an alias
 
   flann = callPackage ../development/libraries/flann { };
 
@@ -5629,6 +5635,8 @@ let
   SDL2_gfx = callPackage ../development/libraries/SDL2_gfx { };
 
   serd = callPackage ../development/libraries/serd {};
+  
+  serf = callPackage ../development/libraries/serf {};
 
   silgraphite = callPackage ../development/libraries/silgraphite {};
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
@@ -5857,6 +5865,16 @@ let
       else stdenv;
   };
 
+  wxGTK30 = callPackage ../development/libraries/wxGTK-3.0/default.nix {
+    inherit (gnome) GConf;
+    withMesa = lib.elem system lib.platforms.mesaPlatforms;
+
+    # use for Objective-C++ compiler
+    stdenv = if stdenv.isDarwin
+      then clangStdenv
+      else stdenv;
+  };
+
   wtk = callPackage ../development/libraries/wtk { };
 
   x264 = callPackage ../development/libraries/x264 { };
@@ -6017,7 +6035,7 @@ let
 
   perlPackages = recurseIntoAttrs (import ./perl-packages.nix {
     inherit pkgs;
-    __overrides = (config.perlPackageOverrides or (p: {})) pkgs;
+    overrides = (config.perlPackageOverrides or (p: {})) pkgs;
   });
 
   perl510Packages = import ./perl-packages.nix {
@@ -6025,7 +6043,7 @@ let
       perl = perl510;
       buildPerlPackage = import ../development/perl-modules/generic perl510;
     };
-    __overrides = (config.perl510PackageOverrides or (p: {})) pkgs;
+    overrides = (config.perl510PackageOverrides or (p: {})) pkgs;
   };
 
   perl514Packages = import ./perl-packages.nix {
@@ -6033,7 +6051,7 @@ let
       perl = perl514;
       buildPerlPackage = import ../development/perl-modules/generic perl514;
     };
-    __overrides = (config.perl514PackageOverrides or (p: {})) pkgs;
+    overrides = (config.perl514PackageOverrides or (p: {})) pkgs;
   };
 
   perlXMLParser = perlPackages.XMLParser;
@@ -6161,7 +6179,7 @@ let
 
   rPackages = recurseIntoAttrs (import ./r-packages.nix {
     inherit pkgs;
-    __overrides = (config.rPackageOverrides or (p: {})) pkgs;
+    overrides = (config.rPackageOverrides or (p: {})) pkgs;
   });
 
   ### SERVERS
@@ -6341,8 +6359,6 @@ let
   OVMF = callPackage ../applications/virtualization/OVMF { };
 
   postgresql = postgresql92;
-
-  postgresql83 = callPackage ../servers/sql/postgresql/8.3.x.nix { };
 
   postgresql84 = callPackage ../servers/sql/postgresql/8.4.x.nix { };
 
@@ -8203,6 +8219,8 @@ let
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
+  ifenslave = callPackage ../os-specific/linux/ifenslave { };
+
   ii = callPackage ../applications/networking/irc/ii { };
 
   ike = callPackage ../applications/ike { };
@@ -8720,7 +8738,7 @@ let
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
-    fftw = fftw.override {float = true;};
+    fftw = fftwSinglePrec;
   };
 
   rcs = callPackage ../applications/version-management/rcs { };
@@ -8812,9 +8830,7 @@ let
     libpng = libpng12;
   };
 
-  smartdeblur = callPackage ../applications/graphics/smartdeblur {
-    fftw = fftw.override {pthreads = true;};
-  };
+  smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
   sndBase = lowPrio (builderDefsPackage (import ../applications/audio/snd) {
     inherit fetchurl stdenv stringsWithDeps lib fftw;
@@ -8859,12 +8875,10 @@ let
     bdbSupport = true;
     httpServer = false;
     httpSupport = true;
-    sslSupport = true;
     pythonBindings = false;
     perlBindings = false;
     javahlBindings = false;
     saslSupport = false;
-    compressionSupport = true;
     httpd = apacheHttpd;
     sasl = cyrus_sasl;
   };
@@ -8939,6 +8953,8 @@ let
   tig = gitAndTools.tig;
 
   timidity = callPackage ../tools/misc/timidity { };
+
+  tint2 = callPackage ../applications/misc/tint2 { };
 
   tkcvs = callPackage ../applications/version-management/tkcvs { };
 
@@ -9016,7 +9032,7 @@ let
   vimHugeX = vim_configurable;
 
   vim_configurable = callPackage ../applications/editors/vim/configurable.nix {
-    inherit (pkgs) fetchurl stdenv ncurses pkgconfig gettext
+    inherit (pkgs) fetchurl fetchhg stdenv ncurses pkgconfig gettext
       composableDerivation lib config glib gtk python perl tcl ruby;
     inherit (pkgs.xlibs) libX11 libXext libSM libXpm libXt libXaw libXau libXmu
       libICE;
@@ -9420,6 +9436,8 @@ let
 
   naev = callPackage ../games/naev { };
 
+  nexuiz = callPackage ../games/nexuiz { };
+
   njam = callPackage ../games/njam { };
 
   oilrush = callPackage ../games/oilrush { };
@@ -9699,6 +9717,8 @@ let
 
       kbibtex = callPackage ../applications/office/kbibtex { };
 
+      kde_gtk_config = callPackage ../tools/misc/kde-gtk-config { };
+
       kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
 
       kdenlive = callPackage ../applications/video/kdenlive { };
@@ -9748,6 +9768,10 @@ let
       polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
 
       psi = callPackage ../applications/networking/instant-messengers/psi { };
+
+      qtcurve = callPackage ../misc/themes/qtcurve {
+        stdenv = overrideGCC stdenv gcc47;
+      };
 
       quassel = callPackage ../applications/networking/irc/quassel { };
 
@@ -10117,6 +10141,8 @@ let
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim { };
 
+  gammu = callPackage ../applications/misc/gammu { };
+
   gensgs = callPackage_i686 ../misc/emulators/gens-gs { };
 
   ghostscript = callPackage ../misc/ghostscript {
@@ -10453,4 +10479,4 @@ let
   adobeReader = adobe-reader;
 
 
-}; in pkgs
+}; in self; in pkgs

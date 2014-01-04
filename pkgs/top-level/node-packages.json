@@ -112,4 +112,5 @@
 , "posix"
 , "node-protobuf"
 , "rethinkdb"
+, "bower2nix"
 ]

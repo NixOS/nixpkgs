@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pn}/${major}/${name}.tar.xz";
-    sha256 = "130rdin3wh9vlwhscbgh3lsssi89p5n4maws4y3l9ja720llk27n";
+    sha256 = "1sx97cp9nb5p82kg2dl6dmqri7wichpjqchhx7bk77limngby7jq";
   };
 
   buildInputs = [
@@ -32,9 +32,6 @@ stdenv.mkDerivation rec {
   makeFlags = [
     ''CFLAGS=-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile_broadband_provider_info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''
   ];
-
-  preFixup = ''
-    rm $out/share/glib-2.0/schemas/gschemas.compiled'';
 
   postInstall = ''
     mkdir -p $out/etc/NetworkManager/VPN
@@ -62,5 +59,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom urkud rickynils ];
     platforms = platforms.linux;
+
+    # resolve collision between evince and nm-applet for
+    # gschemas.compiled
+    priority = 6;
   };
 }
