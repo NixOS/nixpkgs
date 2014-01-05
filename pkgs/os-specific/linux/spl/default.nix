@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, kernelDev, perl, autoconf, automake, libtool, coreutils, gawk }:
+{ stdenv, fetchurl, kernel, perl, autoconf, automake, libtool, coreutils, gawk }:
 
 stdenv.mkDerivation {
-  name = "spl-0.6.2-${kernelDev.version}";
+  name = "spl-0.6.2-${kernel.version}";
   src = fetchurl {
     url = http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-0.6.2.tar.gz;
     sha256 = "196scl8q0bkkak6m0p1l1fz254cgsizqm73bf9wk3iynamq7qmrw";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   patches = [ ./install_prefix.patch ];
 
-  buildInputs = [ perl kernelDev autoconf automake libtool ];
+  buildInputs = [ perl autoconf automake libtool ];
 
   preConfigure = ''
     ./autogen.sh
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = ''
-     --with-linux=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build
-     --with-linux-obj=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build
+     --with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source
+     --with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
   '';
 
   enableParallelBuilding = true;

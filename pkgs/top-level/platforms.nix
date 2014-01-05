@@ -1,5 +1,5 @@
 rec {
-  pc = {
+  pcBase = {
     name = "pc";
     uboot = null;
     kernelHeadersBaseConfig = "defconfig";
@@ -7,12 +7,17 @@ rec {
     # Build whatever possible as a module, if not stated in the extra config.
     kernelAutoModules = true;
     kernelTarget = "bzImage";
-    # Currently ignored - it should be set according to 'system' once it is
-    # not ignored. This is for stdenv-updates.
-    kernelArch = "i386";
   };
 
-  pc_simplekernel = pc // {
+  pc64 = pcBase // { kernelArch = "x86_64"; };
+
+  pc32 = pcBase // { kernelArch = "i386"; };
+
+  pc32_simplekernel = pc32 // {
+    kernelAutoModules = false;
+  };
+
+  pc64_simplekernel = pc64 // {
     kernelAutoModules = false;
   };
 
