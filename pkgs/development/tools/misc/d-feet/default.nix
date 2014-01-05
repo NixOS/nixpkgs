@@ -39,5 +39,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = https://wiki.gnome.org/action/show/Apps/DFeet;
+    platforms = stdenv.lib.platforms.all;
+    maintainers = with stdenv.lib.maintainers; [ ktosiek ];
   };
 }
