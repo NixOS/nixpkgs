@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernelDev ? null, xlibs, zlib, perl
+{ stdenv, fetchurl, kernel ? null, xlibs, zlib, perl
 , gtk, atk, pango, glib, gdk_pixbuf
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
@@ -8,10 +8,10 @@
 
 with stdenv.lib;
 
-let versionNumber = "304.84"; in
+let versionNumber = "304.117"; in
 
 stdenv.mkDerivation {
-  name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernelDev.version}"}";
+  name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernel.version}"}";
 
   builder = ./builder-legacy304.sh;
 
@@ -19,18 +19,18 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "14hfx3rhf3vf3x3klkhz5qkjrg51r22nqqdzffilcwkxdjfg10j1";
+        sha256 = "16a09iinz3zgrvj8cywyxsy7i8kpan28b814xhfbl88zadyj0hy3";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "1ixxkykl78g874g537apvxalggp3kw0mm5q69rl99jlw6jibbm80";
+        sha256 = "0kzcxfwnp4aw4q53vl57ypc9yck4yj1hfhy8v9wfjlxvi6w6cp0v";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
   inherit versionNumber libsOnly;
 
-  kernel = if libsOnly then null else kernelDev;
+  kernel = if libsOnly then null else kernel.dev;
 
   dontStrip = true;
 

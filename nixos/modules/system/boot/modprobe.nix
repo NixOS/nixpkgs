@@ -66,7 +66,7 @@ with pkgs.lib;
 
   ###### implementation
 
-  config = {
+  config = mkIf (!config.boot.isContainer) {
 
     environment.etc = singleton
       { source = pkgs.writeText "modprobe.conf"

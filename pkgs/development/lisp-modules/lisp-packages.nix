@@ -23,7 +23,7 @@ let lispPackages = rec {
     description = "X11 bindings for Common Lisp";
     deps = [];
     src = pkgs.fetchgit {
-      url = "https://github.com/sharplispers/clx/";
+      url = "https://github.com/sharplispers/clx.git";
       rev = "e2b762ac93d78d6eeca4f36698c8dfd1537ce998";
       sha256 = "0jcrmlaayz7m8ixgriq7id3pdklyk785qvpcxdpcp4aqnfiiqhij";
     };
@@ -64,7 +64,7 @@ let lispPackages = rec {
     description = "A wrapper around Esrap to allow generating Esrap grammars from PEG definitions";
     deps = [alexandria cl-unification esrap iterate];
     src = pkgs.fetchgit {
-      url = "https://github.com/fb08af68/esrap-peg";
+      url = "https://github.com/fb08af68/esrap-peg.git";
       sha256 = "48e616a697aca95e90e55052fdc9a7f96bf29b3208b1b4012fcd3189c2eceeb1";
       rev = ''1f2f21e32e618f71ed664cdc5e7005f8b6b0f7c8'';
       
@@ -92,7 +92,7 @@ let lispPackages = rec {
     description = "A Packrat / Parsing Grammar / TDPL parser for Common Lisp.";
     deps = [alexandria];
     src = pkgs.fetchgit {
-      url = "https://github.com/scymtym/esrap";
+      url = "https://github.com/scymtym/esrap.git";
       sha256 = "c56616ac01be0f69e72902f9fd830a8af2c2fa9018b66747a5da3988ae38817f";
       rev = ''c71933b84e220f21e8a509ec26afe3e3871e2e26'';
       

@@ -4,6 +4,7 @@
 , withKDE ? stdenv.isLinux # enable KDE integration
 , ssl ? true # enable SSL support
 , previews ? false # enable webpage previews on hovering over URLs
+, tag ? "" # tag added to the package name
 , stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon }:
 
 let
@@ -11,12 +12,15 @@ let
 
 in with stdenv; mkDerivation rec {
 
-  name = "quassel-0.9.0";
+  version = "0.9.2";
+  name = "quassel${tag}-${version}";
 
   src = fetchurl {
-    url = "http://quassel-irc.org/pub/${name}.tar.bz2";
-    sha256 = "09v0igjkzan3hllk47w39hkav6v1419vpxn2lfd8473kwdmf0grf";
+    url = "http://quassel-irc.org/pub/quassel-${version}.tar.bz2";
+    sha256 = "1h2kzi4pgfv3qmvhxix9fffdjixs3bsya0i5c18dkh894mh02kgh";
   };
+
+  enableParallelBuilding = true;
 
   buildInputs = [ cmake qt4 ]
     ++ lib.optional withKDE kdelibs

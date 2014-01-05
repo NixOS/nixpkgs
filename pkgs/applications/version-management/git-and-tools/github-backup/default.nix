@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "github-backup";
-  version = "1.20131101";
-  sha256 = "07l8a3xiy65xicxa5v14li6jnj3niwhndm8gd6q4d7aw14yq8wbn";
+  version = "1.20131203";
+  sha256 = "0156g7zbqsp58g8hniqsilyc79sam7plwhn3w56wbzf8m380mwba";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [

@@ -66,12 +66,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "mplayer2-20130130";
+  name = "mplayer2-20130428";
 
   src = fetchgit {
     url = "git://git.mplayer2.org/mplayer2.git";
-    rev = "d3c580156c0b8777ff082426ebd61bb7ffe0c225";
-    sha256 = "1akf2mb2zklz609ks555vjvcs1gw8nwg5kbb9jwra8c4v1dfyhys";
+    rev = "6c87a981baa4972fd71c25dfddea017b5a972e89";
+    sha256 = "b09c1331141dd0939dfa424ae14dc0bdf82c8a72bb32c78e3ad15e3ee1d2c851";
   };
 
   prePatch = ''

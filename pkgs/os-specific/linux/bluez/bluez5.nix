@@ -5,15 +5,15 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.8";
+  name = "bluez-5.12";
    
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "1l33lq1lpg7hy26138ir5dj4gl3mql2qxpj20rjnnwyckc3jk700";
+    sha256 = "0zk183gjsxissq9gma962cyvyqxydai8n6jgslxx0mpk2m7mgvvm";
   };
 
   pythonPath = with pythonPackages;
-    [ pythonDBus pygobject3 recursivePthLoader ];
+    [ pythonDBus pygobject pygobject3 recursivePthLoader ];
 
   buildInputs =
     [ pkgconfig dbus.libs glib libusb alsaLib python pythonPackages.wrapPython

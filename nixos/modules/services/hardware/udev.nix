@@ -209,7 +209,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf (!config.boot.isContainer) {
 
     services.udev.extraRules = nixosRules;
 
@@ -231,9 +231,16 @@ in
 
     boot.extraModprobeConfig = "options firmware_class path=${config.hardware.firmware}";
 
-    system.activationScripts.clearHotplug =
+    system.activationScripts.udevd =
       ''
         echo "" > /proc/sys/kernel/hotplug
+
+        # Regenerate the hardware database /var/lib/udev/hwdb.bin
+        # whenever systemd changes.
+        if [ ! -e /var/lib/udev/prev-systemd -o "$(readlink /var/lib/udev/prev-systemd)" != ${config.systemd.package} ]; then
+          echo "regenerating udev hardware database..."
+          ${config.systemd.package}/bin/udevadm hwdb --update && ln -sfn ${config.systemd.package} /var/lib/udev/prev-systemd
+        fi
       '';
 
   };

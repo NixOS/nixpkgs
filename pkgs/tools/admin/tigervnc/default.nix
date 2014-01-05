@@ -10,8 +10,8 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  # Release version = "1.2.0";
-  revision = 5005;
+  # Release version = "1.3.0";
+  revision = 5129;
   version = "r${toString revision}";
   name = "tigervnc-${version}";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # Release url = "mirror://sourceforge/tigervnc/${version}/${name}.tar.gz";
     url = "https://tigervnc.svn.sourceforge.net/svnroot/tigervnc/trunk";
     rev = revision;
-    sha256 = "2401e0ede9a2d50a37caeb094e5e832d24878749239578f44ae2acd42de01b43";
+    sha256 = "1qszlqr8z16iqkm05gbs0knj4fxc3bb6gjayky1abmf8pjazi0j8";
   };
 
   inherit fontDirectories;
@@ -52,13 +52,12 @@ stdenv.mkDerivation rec {
     tar xf ${xorgserver.src}
     cp -R xorg*/* unix/xserver
     pushd unix/xserver
-    for a in $xorgPatches
+    for a in $xorgPatches ../xserver114.patch
     do
       patch -p1 < $a
     done
-    patch -p1 < ../xserver113.patch
     autoreconf -vfi
-    ./configure $configureFlags --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx --prefix="$out"
+    ./configure $configureFlags --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx --prefix="$out" --disable-unit-tests
     make TIGERVNC_SRCDIR=`pwd`/../..
     popd
   '';

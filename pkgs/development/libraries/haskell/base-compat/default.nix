@@ -1,9 +1,10 @@
-{ cabal, hspec, setenv }:
+{ cabal, errorcallEqInstance, hspec, setenv }:
 
 cabal.mkDerivation (self: {
   pname = "base-compat";
-  version = "0.2.1";
-  sha256 = "1yssx3nww89dmkw8i55bp1vinbczbxhhh0kh4f3b9fyw5ylnai43";
+  version = "0.3.0";
+  sha256 = "0jjj953hr00jj99ld2977al6n6qk67ds9qfzkzwkh5ifgmi6f20i";
+  buildDepends = [ errorcallEqInstance ];
   testDepends = [ hspec setenv ];
   meta = {
     description = "A compatibility layer for base";

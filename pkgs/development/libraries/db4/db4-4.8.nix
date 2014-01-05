@@ -1,13 +1,13 @@
 {stdenv, fetchurl, cxxSupport ? true, compat185 ? true}:
 
 stdenv.mkDerivation {
-  name = "db4-4.8.26";
+  name = "db4-4.8.30";
   
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://download.oracle.com/berkeley-db/db-4.8.26.tar.gz;
-    sha256 = "0hcxh0kb6m0wk3apjhs57p7b171zzn63rg4l3nkcavygg5gx2mgp";
+    url = http://download.oracle.com/berkeley-db/db-4.8.30.tar.gz;
+    sha256 = "0ampbl2f0hb1nix195kz1syrqqxpmvnvnfvphambj7xjrl3iljg0";
   };
   
   configureFlags = [

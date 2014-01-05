@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, libtool, libxml2, cppunit, boost
-, apr, aprutil, db45, expat
+, apr, aprutil, db4, expat
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
        src/main/cpp/socketoutputstream.cpp
   '';
 
-  buildInputs = [autoconf automake libtool libxml2 cppunit boost apr aprutil db45 expat];
+  buildInputs = [autoconf automake libtool libxml2 cppunit boost apr aprutil db4 expat];
 
   meta = {
     homepage = http://logging.apache.org/log4cxx/index.html;

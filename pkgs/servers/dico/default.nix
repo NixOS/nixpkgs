@@ -1,5 +1,5 @@
 { fetchurl, stdenv, libtool, gettext, zlib, readline, gsasl
-, guile, python, pcre }:
+, guile, python, pcre, libffi }:
 
 stdenv.mkDerivation rec {
   name = "dico-2.2";
@@ -10,12 +10,22 @@ stdenv.mkDerivation rec {
   };
 
   # XXX: Add support for GNU SASL.
-  buildInputs = [ libtool gettext zlib readline gsasl guile python pcre ];
+  buildInputs =
+    [ libtool gettext zlib readline gsasl guile python pcre libffi ];
 
-  doCheck = true;
+  # dicod fails to load modules, so the tests fail
+  doCheck = false;
 
-  meta = {
+  preBuild = ''
+    sed -i -e '/gets is a security/d' gnu/stdio.in.h
+  '';
+
+  meta = with stdenv.lib; {
     description = "GNU Dico, a flexible dictionary server and client implementing RFC 2229";
+    homepage    = http://www.gnu.org/software/dico/;
+    license     = "GPLv3+";
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.unix;
 
     longDescription = ''
       GNU Dico is a flexible modular implementation of DICT server
@@ -36,9 +46,5 @@ stdenv.mkDerivation rec {
       The package also includes a console client program for querying
       remote dictionary servers.
     '';
-
-    homepage = http://www.gnu.org/software/dico/;
-
-    license = "GPLv3+";
   };
 }

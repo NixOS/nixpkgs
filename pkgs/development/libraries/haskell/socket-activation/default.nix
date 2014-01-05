@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "socket-activation";
-  version = "0.1.0.0";
-  sha256 = "1w10i9a10lq5gscwm1vf1w7pqkfyx3n108jw8dx4zdqhrh82lmwv";
+  version = "0.1.0.1";
+  sha256 = "109zxc16zlp98ggc99ap7wbzaa40yg34v3abn2nfs0w49dvh1zma";
   buildDepends = [ network transformers ];
   meta = {
     homepage = "https://github.com/sakana/haskell-socket-activation";

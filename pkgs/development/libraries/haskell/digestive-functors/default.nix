@@ -1,15 +1,15 @@
 { cabal, HUnit, mtl, QuickCheck, testFramework, testFrameworkHunit
-, testFrameworkQuickcheck2, text
+, testFrameworkQuickcheck2, text, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "digestive-functors";
-  version = "0.6.1.0";
-  sha256 = "0p38q8xz01vjn1mf718xi5ny3i7z9zd00lnnybmd6zy03laq4a2d";
-  buildDepends = [ mtl text ];
+  version = "0.6.2.0";
+  sha256 = "1d07ws5s34x9sviq7mfkl6fh1rl28r5x1rmgbkcxil5h6gxn5mi7";
+  buildDepends = [ mtl text time ];
   testDepends = [
     HUnit mtl QuickCheck testFramework testFrameworkHunit
-    testFrameworkQuickcheck2 text
+    testFrameworkQuickcheck2 text time
   ];
   jailbreak = true;
   meta = {

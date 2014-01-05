@@ -34,16 +34,24 @@ let
     in ''
       mkdir $out
 
-      if [ ! -f ${kernelPath} ]; then
-        echo "The bootloader cannot find the proper kernel image."
-        echo "(Expecting ${kernelPath})"
-        false
-      fi
+      # Containers don't have their own kernel or initrd.  They boot
+      # directly into stage 2.
+      ${optionalString (!config.boot.isContainer) ''
+        if [ ! -f ${kernelPath} ]; then
+          echo "The bootloader cannot find the proper kernel image."
+          echo "(Expecting ${kernelPath})"
+          false
+        fi
 
-      ln -s ${kernelPath} $out/kernel
-      ln -s ${config.system.modulesTree} $out/kernel-modules
+        ln -s ${kernelPath} $out/kernel
+        ln -s ${config.system.modulesTree} $out/kernel-modules
 
-      ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
+        echo -n "$kernelParams" > $out/kernel-params
+
+        ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
+
+        ln -s ${config.hardware.firmware} $out/firmware
+      ''}
 
       echo "$activationScript" > $out/activate
       substituteInPlace $out/activate --subst-var out
@@ -56,9 +64,7 @@ let
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
       ln -s "$systemd" $out/systemd
-      ln -s ${config.hardware.firmware} $out/firmware
 
-      echo -n "$kernelParams" > $out/kernel-params
       echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosVersion" > $out/nixos-version

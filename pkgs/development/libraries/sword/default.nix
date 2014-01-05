@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, icu, cluceneCore, curl}:
+{stdenv, fetchurl, pkgconfig, icu, clucene_core, curl}:
 
 stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fc71avaxkhx6kckjiflw6j02lpg569b9bzaksq49i1m87awfxmg";
   };
 
-  buildInputs = [ pkgconfig icu cluceneCore curl ];
+  buildInputs = [ pkgconfig icu clucene_core curl ];
 
   # because curl/types.h disappeared since at least curl 7.21.7
   patches = [ ./dont_include_curl_types_h.patch ];
@@ -31,4 +31,3 @@ stdenv.mkDerivation rec {
   };
 
 }
-

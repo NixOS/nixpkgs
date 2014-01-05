@@ -2,7 +2,7 @@
 , xpdf, pil, pyopengl, pygame
 , setuptools, mesa, freeglut }:
 
-let version = "0.10.2";
+let version = "0.10.3";
 in
  stdenv.mkDerivation {
     # This project was formerly known as KeyJNote.
@@ -12,7 +12,7 @@ in
 
     src = fetchurl {
       url = "mirror://sourceforge/impressive/Impressive-${version}.tar.gz";
-      sha256 = "1py36h9085ycxj3qnmqdps0dfghlr5qb2i62l0ynzngn55dgz950";
+      sha256 = "0ppr9bckswpi3gav56dhrk91ibxvqbfhpxmm0zikzpxhdlvnaj5v";
     };
 
     # Note: We need to have `setuptools' in the path to be able to use

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation  rec {
   name = "fluidsynth-${version}";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/fluidsynth/${name}.tar.bz2";
-    sha256 = "1x73a5rsyvfmh1j0484kzgnk251q61g1g2jdja673l8fizi0xd24";
+    sha256 = "00gn93bx4cz9bfwf3a8xyj2by7w23nca4zxf09ll53kzpzglg2yj";
   };
 
   preBuild = stdenv.lib.optionalString stdenv.isDarwin ''

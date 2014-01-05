@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, alsaLib, libglade }:
 
 stdenv.mkDerivation {
-  name = "lingot-0.9.0";
+  name = "lingot-0.9.1";
 
   src = fetchurl {
-    url = mirror://savannah/lingot/lingot-0.9.0.tar.gz;
-    sha256 = "07z129lp8m4sz608q409wb11c639w7cbn497r7bscgg08p6c07xb";
+    url = mirror://savannah/lingot/lingot-0.9.1.tar.gz;
+    sha256 = "0ygras6ndw2fylwxx86ac11pcr2y2bcfvvgiwrh92z6zncx254gc";
   };
 
   buildInputs = [ pkgconfig intltool gtk alsaLib libglade ];

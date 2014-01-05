@@ -10,10 +10,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="celt";
-    version="0.11.1";
+    version="0.11.3";
     name="${baseName}-${version}";
     url="http://downloads.xiph.org/releases/${baseName}/${name}.tar.gz";
-    hash="1gsc3pxydyzzra8w0r6hrrsalm76lrq4lw6bd283qa4bpagmghh1";
+    hash="0dh893wqbh0q4a0x1xyqryykmnhpv7mkblpch019s04a99fq2r3y";
   };
 in
 rec {

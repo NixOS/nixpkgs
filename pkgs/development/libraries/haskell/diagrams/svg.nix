@@ -1,14 +1,14 @@
-{ cabal, blazeSvg, cmdargs, colour, diagramsCore, diagramsLib
-, filepath, monoidExtras, mtl, split, time, vectorSpace
+{ cabal, blazeSvg, colour, diagramsCore, diagramsLib, filepath
+, lens, monoidExtras, mtl, split, time, vectorSpace
 }:
 
 cabal.mkDerivation (self: {
   pname = "diagrams-svg";
-  version = "0.8.0.2";
-  sha256 = "0ahapj040qy74kcj9f786ddd28xysq1wch087wsh8sdfp57z5dbz";
+  version = "1.0";
+  sha256 = "13v1q9d2004k4324b0yxlmwrsanb0mk9pz0gqfxvx9v27sry12sl";
   buildDepends = [
-    blazeSvg cmdargs colour diagramsCore diagramsLib filepath
-    monoidExtras mtl split time vectorSpace
+    blazeSvg colour diagramsCore diagramsLib filepath lens monoidExtras
+    mtl split time vectorSpace
   ];
   meta = {
     homepage = "http://projects.haskell.org/diagrams/";

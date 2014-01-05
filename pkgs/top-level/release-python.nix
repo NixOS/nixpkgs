@@ -334,7 +334,6 @@ let
   ffado = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ffmpeg = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ffmpeg_0_6_90 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  ffmpeg_1_1 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   fileschanged = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   fio = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   firefox = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1083,8 +1082,6 @@ let
     acpi_call = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     atheros = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     ati_drivers_x11 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-    aufs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-    aufs_util = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     bbswitch = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     broadcom_sta = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     cryptodev = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

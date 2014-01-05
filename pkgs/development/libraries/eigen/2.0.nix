@@ -1,7 +1,7 @@
 {stdenv, fetchurl, cmake}:
 
 let
-  v = "2.0.16";
+  v = "2.0.17";
 in
 stdenv.mkDerivation {
   name = "eigen-${v}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "http://bitbucket.org/eigen/eigen/get/${v}.tar.bz2";
     name = "eigen-${v}.tar.bz2";
-    sha256 = "1akcb4g5hvc664gfc6sxb6f6jrm55fgks6017wg0smyvmm6k09v0";
+    sha256 = "0q4ry2pmdb9lvm0g92wi6s6qng3m9q73n5flwbkfcz1nxmbfhmbj";
   };
 
   nativeBuildInputs = [ cmake ];

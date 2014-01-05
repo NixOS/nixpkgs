@@ -1,9 +1,11 @@
 # generic builder for Cabal packages
 
 { stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, jailbreakCabal, glibcLocales
+, gnugrep, coreutils
 , enableLibraryProfiling ? false
 , enableSharedLibraries ? false
 , enableSharedExecutables ? false
+, enableStaticLibraries ? true
 , enableCheckPhase ? stdenv.lib.versionOlder "7.4" ghc.version
 }:
 
@@ -25,6 +27,9 @@ assert enableSharedExecutables -> versionOlder "7.4" ghc.version;
 # Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
 assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
 
+# Our GHC 6.10.x builds do not provide sharable versions of their core libraries.
+assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
+
 {
   mkDerivation =
     args : # arguments for the individual package, can modify the defaults
@@ -42,6 +47,7 @@ assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
           x : (removeAttrs x internalAttrs) // {
                 buildInputs           = filter (y : ! (y == null)) x.buildInputs;
                 propagatedBuildInputs = filter (y : ! (y == null)) x.propagatedBuildInputs;
+                propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
                 doCheck               = enableCheckPhase && x.doCheck;
               };
 
@@ -92,11 +98,18 @@ assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
             # have to check for its existence
             propagatedBuildInputs = if self.isLibrary then self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends else [];
 
+            # By default, also propagate all dependencies to the user environment. This is required, otherwise packages would be broken, because
+            # GHC also needs all dependencies to be available.
+            propagatedUserEnvPkgs = if self.isLibrary then self.buildDepends else [];
+
             # library directories that have to be added to the Cabal files
             extraLibDirs = [];
 
             # build-depends Cabal field
             buildDepends = [];
+
+            # target(s) passed to the cabal build phase as an argument
+            buildTarget = "";
 
             # build-depends Cabal fields stated in test-suite stanzas
             testDepends = [];
@@ -128,6 +141,14 @@ assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
             # and run any regression test suites the package might have
             doCheck = enableCheckPhase;
 
+            # abort the build if the configure phase detects that the package
+            # depends on multiple versions of the same build input
+            strictConfigurePhase = true;
+
+            # pass the '--enable-library-vanilla' flag to cabal in the
+            # configure stage to enable building shared libraries
+            inherit enableStaticLibraries;
+
             # pass the '--enable-shared' flag to cabal in the configure
             # stage to enable building shared libraries
             inherit enableSharedLibraries;
@@ -140,6 +161,7 @@ assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
               (enableFeature self.enableSplitObjs "split-objs")
               (enableFeature enableLibraryProfiling "library-profiling")
               (enableFeature self.enableSharedLibraries "shared")
+              (optional (versionOlder "7" ghc.version) (enableFeature self.enableStaticLibraries "library-vanilla"))
               (optional (versionOlder "7.4" ghc.version) (enableFeature self.enableSharedExecutables "executable-dynamic"))
               (optional (versionOlder "7" ghc.version) (enableFeature self.doCheck "tests"))
             ];
@@ -173,8 +195,20 @@ assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
                 done
               done
 
+              ${optionalString self.enableSharedExecutables ''
+                configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}";
+              ''}
+
               echo "configure flags: $extraConfigureFlags $configureFlags"
-              ./Setup configure --verbose --prefix="$out" --libdir='$prefix/lib/$compiler' --libsubdir='$pkgid' $extraConfigureFlags $configureFlags
+              ./Setup configure --verbose --prefix="$out" --libdir='$prefix/lib/$compiler' \
+                --libsubdir='$pkgid' $extraConfigureFlags $configureFlags 2>&1 \
+              ${optionalString self.strictConfigurePhase ''
+                | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
+                if ${gnugrep}/bin/egrep -q '^Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
+                  echo >&2 "*** abort because of serious configure-time warning from Cabal"
+                  exit 1
+                fi
+              ''}
 
               eval "$postConfigure"
             '';
@@ -183,7 +217,7 @@ assert enableSharedLibraries -> versionOlder "6.12" ghc.version;
             buildPhase = ''
               eval "$preBuild"
 
-              ./Setup build
+              ./Setup build ${self.buildTarget}
 
               export GHC_PACKAGE_PATH=$(${ghc.GHCPackages})
               test -n "$noHaddock" || ./Setup haddock

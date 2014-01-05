@@ -10,10 +10,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="ioping";
-    version="0.4";
+    version="0.7";
     name="${baseName}-${version}";
     url="http://ioping.googlecode.com/files/${name}.tar.gz";
-    hash="064pfjhg2a4hj6ly0wc9z85awiqry55n6wpx8kxzl9qasls0q447";
+    hash="1c0k9gsq7rr9fqh6znn3i196l84zsm44nq3pl1b7grsnnbp2hki3";
   };
 in
 rec {

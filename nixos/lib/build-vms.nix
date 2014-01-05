@@ -68,8 +68,8 @@ rec {
                   # the first interface (i.e. the first network in its
                   # virtualisation.vlans option).
                   networking.extraHosts = flip concatMapStrings machines
-                    (m: let config = (getAttr m nodes).config; in
-                      optionalString (config.networking.primaryIPAddress != "")
+                    (m': let config = (getAttr m' nodes).config; in
+                      optionalString (m.first != m' && config.networking.primaryIPAddress != "")
                         ("${config.networking.primaryIPAddress} " +
                          "${config.networking.hostName}\n"));
 

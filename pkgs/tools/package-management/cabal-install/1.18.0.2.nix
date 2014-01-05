@@ -20,6 +20,9 @@ cabal.mkDerivation (self: {
     mkdir $out/etc
     mv bash-completion $out/etc/bash_completion.d
   '';
+  patchPhase = ''
+    sed -i -e 's|array .*,|array,|' cabal-install.cabal
+  '';
   meta = {
     homepage = "http://www.haskell.org/cabal/";
     description = "The command-line interface for Cabal and Hackage";

@@ -4,11 +4,11 @@
 
 {stdenv, fetchurl, libX11, pkgconfig}:
 stdenv.mkDerivation rec {
-  name = "xlsfonts-1.0.2";
+  name = "xlsfonts-1.0.4";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/${name}.tar.bz2";
-    sha256 = "070iym754g3mf9x6xczl4gdnpvlk6rdyl1ndwhpjl21vg2dm2vnc";
+    sha256 = "1lhcx600z9v65nk93xaxfzi79bm4naynabb52gz1vy1bxj2r25r8";
   };
 
   buildInputs = [libX11 pkgconfig];

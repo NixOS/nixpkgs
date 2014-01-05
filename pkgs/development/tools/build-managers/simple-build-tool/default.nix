@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cat > $out/bin/sbt << EOF
     #!/bin/sh
     SBT_OPTS="-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=384M"
-    ${jre}/bin/java $SBT_OPTS -jar ${src} "\$@"
+    ${jre}/bin/java \$SBT_OPTS -jar ${src} "\$@"
     EOF
     chmod +x $out/bin/sbt
   '';

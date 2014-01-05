@@ -1,7 +1,5 @@
-{ callPackage, self, stdenv, gettext, overrides ? {} }:
-{
-  __overrides = overrides;
-
+{ callPackage, self, stdenv, gettext, gvfs, libunique, overrides ? {} }:
+let overridden = set // overrides; set = with overridden; {
   # Backward compatibility.
   gtkdoc = self.gtk_doc;
   startupnotification = self.startup_notification;
@@ -67,7 +65,7 @@
   startup_notification = callPackage ./platform/startup-notification { };
 
   # Required for nautilus
-  libunique = callPackage ./platform/libunique { };
+  inherit (libunique);
 
   gtkglext = callPackage ./platform/gtkglext { };
 
@@ -79,7 +77,7 @@
 
   libgweather = callPackage ./desktop/libgweather { };
 
-  gvfs = callPackage ./desktop/gvfs { };
+  gvfs = gvfs.override { gnome = self; };
 
   libgnomekbd = callPackage ./desktop/libgnomekbd { };
 
@@ -117,4 +115,4 @@
 
   libglademm = callPackage ./bindings/libglademm { };
 
-}
+}; in overridden

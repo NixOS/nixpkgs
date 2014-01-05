@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "snaplet-acid-state";
-  version = "0.2.5";
-  sha256 = "0qx6as1m0fwb5fkhvl0k71kx65njwq0dk183xi4gmdzhf83hkjbs";
+  version = "0.2.6";
+  sha256 = "005c4x7sh820iar69rany3hv4rlbzpsd4yqd2x2v3jql9z55k4s9";
   buildDepends = [ acidState snap text ];
   meta = {
     homepage = "https://github.com/mightybyte/snaplet-acid-state";

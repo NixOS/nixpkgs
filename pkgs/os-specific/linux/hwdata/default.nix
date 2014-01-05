@@ -1,10 +1,21 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "hwdata-0.172";
-  builder = ./builder.sh;
+  name = "hwdata-0.249";
+
   src = fetchurl {
-    url = ftp://ftp.nluug.nl/pub/os/Linux/distr/debian/pool/main/h/hwdata/hwdata_0.172.orig.tar.gz;
-    md5 = "1c6b7f4dfe489f881702176c5f8e5a2e";
+    url = "https://git.fedorahosted.org/cgit/hwdata.git/snapshot/hwdata-0.249-1.tar.bz2";
+    sha256 = "1ak3h3psg3wk9yk0dqnzdzik3jadzja3ah22vjfmf71p3b5xc8ai";
+  };
+
+  preConfigure = "patchShebangs ./configure";
+
+  configureFlags = "--datadir=$(prefix)/data";
+
+  meta = {
+    homepage = "https://fedorahosted.org/hwdata/";
+    description = "Hardware Database, including Monitors, pci.ids, usb.ids, and video cards";
+    license = "GPLv2";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

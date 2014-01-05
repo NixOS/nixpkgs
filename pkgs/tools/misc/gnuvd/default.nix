@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gnuvd-1.0.10";
+  name = "gnuvd-1.0.12";
 
   src = fetchurl {
-    url = http://www.djcbsoftware.nl/code/gnuvd/gnuvd-1.0.10.tar.gz ;
-    sha256 = "07mlynarcaal74ibbpqrsd982jmw6xfwgvcp9n6191d4h56a000s";
+    url = http://www.djcbsoftware.nl/code/gnuvd/gnuvd-1.0.12.tar.gz ;
+    sha256 = "0mpy76a0pxy62zjiihlzmvl4752hiwxhfs8rm1v5zgdr78acxyxz";
   };
 
   meta = {

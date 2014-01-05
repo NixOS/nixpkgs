@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib, bzip2, openssl, attr, lzo, libgcrypt, e2fsprogs }:
 
 stdenv.mkDerivation rec {
-  name = "dar-2.4.6";
+  name = "dar-2.4.11";
   
   src = fetchurl {
     url = "mirror://sourceforge/dar/${name}.tar.gz";
-    sha256 = "1r83ad32wbdrwxifkw1gdki7z534ggm9hfbmc6jf5lgr5mgkrqbq";
+    sha256 = "0psahvnrkljqg9507dk0vq05w8vilpm98igjrcjkqdirqcfd2py1";
   };
 
   buildInputs = [ zlib bzip2 openssl attr lzo libgcrypt e2fsprogs ];

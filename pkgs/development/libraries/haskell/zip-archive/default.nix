@@ -1,14 +1,12 @@
-{ cabal, binary, digest, filepath, HUnit, mtl, time, utf8String
-, zlib
-}:
+{ cabal, binary, digest, filepath, HUnit, mtl, text, time, zlib }:
 
 cabal.mkDerivation (self: {
   pname = "zip-archive";
-  version = "0.1.4";
-  sha256 = "0ipk8gwa2k8iqg2gg4lbawr8l9sjwhy2p7b8qxazpq0i88dyy3lb";
+  version = "0.2";
+  sha256 = "0d2n8mgfikyjzc4x7qm3vvpmhhf3mva9f0q6p9l1q9b7dlf8vmdv";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ binary digest filepath mtl time utf8String zlib ];
+  buildDepends = [ binary digest filepath mtl text time zlib ];
   testDepends = [ HUnit time ];
   doCheck = false;
   meta = {

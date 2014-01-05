@@ -279,6 +279,7 @@ in
       { description = "Nix Daemon Socket";
         wantedBy = [ "sockets.target" ];
         before = [ "multi-user.target" ];
+        unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket/";
         socketConfig.ListenStream = "/nix/var/nix/daemon-socket/socket";
       };
 
@@ -289,6 +290,8 @@ in
           ++ optionals cfg.distributedBuilds [ pkgs.openssh pkgs.gzip ];
 
         environment = cfg.envVars // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; };
+
+        unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket/";
 
         serviceConfig =
           { ExecStart = "@${nix}/bin/nix-daemon nix-daemon --daemon";
@@ -331,10 +334,8 @@ in
       ''
         # Set up secure multi-user builds: non-root users build through the
         # Nix daemon.
-        if test "$USER" != root; then
+        if [ "$USER" != root -o ! -w /nix/var/nix/db ]; then
             export NIX_REMOTE=daemon
-        else
-            export NIX_REMOTE=
         fi
       '';
 

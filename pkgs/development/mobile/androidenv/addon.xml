@@ -319,7 +319,152 @@ This is the Google TV Add-on for the Android Software Development Kit License Ag
 
 
 August 15, 2011
-   </sdk:license>
+    </sdk:license>
+
+    <sdk:license id="google-gdk-license" type="text">This is an early Sneak Peek of the GDK that is subject to change. Please stay tuned for the full Developer Preview coming soon.
+
+Terms and Conditions
+
+This is the Glass Development Kit License Agreement.
+
+1. Introduction
+
+1.1 The Glass Development Kit (referred to in this License Agreement as the "GDK" and specifically including the Android system files, packaged APIs, and GDK library files, if and when they are made available) is licensed to you subject to the terms of this License Agreement. This License Agreement forms a legally binding contract between you and Google in relation to your use of the GDK.
+
+1.2 &quot;Glass&quot; means Glass devices and the Glass software stack for use on Glass devices.
+
+
+1.3 &quot;Android&quot; means the Android software stack for devices, as made available under the Android Open Source Project, which is located at the following URL: http://source.android.com/, as updated from time to time.
+
+1.4 &quot;Google&quot; means Google Inc., a Delaware corporation with principal place of business at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.
+
+2. Accepting this License Agreement
+
+2.1 In order to use the GDK, you must first agree to this License Agreement. You may not use the GDK if you do not accept this License Agreement.
+
+2.2 By clicking to accept, you hereby agree to the terms of this License Agreement.
+
+2.3 You may not use the GDK and may not accept the License Agreement if you are a person barred from receiving the GDK under the laws of the United States or other countries including the country in which you are resident or from which you use the GDK.
+
+2.4 If you are agreeing to be bound by this License Agreement on behalf of your employer or other entity, you represent and warrant that you have full legal authority to bind your employer or such entity to this License Agreement. If you do not have the requisite authority, you may not accept the License Agreement or use the GDK on behalf of your employer or other entity.
+
+3. GDK License from Google
+
+3.1 Subject to the terms of this License Agreement, Google grants you a limited, worldwide, royalty-free, non-assignable and non-exclusive license to use the GDK solely to develop applications to run on the Glass platform for Glass devices.
+
+3.2 You agree that Google or third parties own all legal right, title and interest in and to the GDK, including any Intellectual Property Rights that subsist in the GDK. &quot;Intellectual Property Rights&quot; means any and all rights under patent law, copyright law, trade secret law, trademark law, and any and all other proprietary rights. Google reserves all rights not expressly granted to you.
+
+3.3 You may not use the GDK for any purpose not expressly permitted by this License Agreement.  Except to the extent required by applicable third party licenses, you may not: (a) copy (except for backup purposes), modify, adapt, redistribute, decompile, reverse engineer, disassemble, or create derivative works of the GDK or any part of the GDK; or (b) load any part of the GDK onto a mobile handset or wearable computing device or any other hardware device except a Glass device personal computer, combine any part of the GDK with other software, or distribute any software or device incorporating a part of the GDK.
+
+3.4 You agree that you will not take any actions that may cause or result in the fragmentation of Glass, including but not limited to distributing, participating in the creation of, or promoting in any way a software development kit derived from the GDK.
+
+3.5 Use, reproduction and distribution of components of the GDK licensed under an open source software license are governed solely by the terms of that open source software license and not this License Agreement.
+
+3.6 You agree that the form and nature of the GDK that Google provides may change without prior notice to you and that future versions of the GDK may be incompatible with applications developed on previous versions of the GDK. You agree that Google may stop (permanently or temporarily) providing the GDK (or any features within the GDK) to you or to users generally at Google's sole discretion, without prior notice to you.
+
+3.7 Nothing in this License Agreement gives you a right to use any of Google's trade names, trademarks, service marks, logos, domain names, or other distinctive brand features.
+
+3.8 You agree that you will not remove, obscure, or alter any proprietary rights notices (including copyright and trademark notices) that may be affixed to or contained within the GDK.
+
+
+3.9 Your use of any Android system files, packaged APIs, or other components of the GDK which are part of the Android Software Development Kit is subject to the terms of the Android Software Development Kit License Agreement located at http://developer.android.com/sdk/terms.html. These terms are hereby incorporated by reference into this License Agreement.
+
+4. Use of the GDK by You
+
+4.1 Google agrees that it obtains no right, title or interest from you (or your licensors) under this License Agreement in or to any software applications that you develop using the GDK, including any intellectual property rights that subsist in those applications.
+
+4.2 You agree to use the GDK and write applications only for purposes that are permitted by (a) this License Agreement, (b) the Glass Platform Developer Policies (located at https://developers.google.com/glass/policies, and hereby incorporated into this License Agreement by reference), and (c) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions (including any laws regarding the export of data or software to and from the United States or other relevant countries).
+
+4.3 You agree that if you use the GDK to develop applications for general public users, you will protect the privacy and legal rights of those users. If the users provide you with user names, passwords, or other login information or personal information, you must make the users aware that the information will be available to your application, and you must provide legally adequate privacy notice and protection for those users. If your application stores personal or sensitive information provided by users, it must do so securely. If the user provides your application with Google Account information, your application may only use that information to access the user's Google Account when, and for the limited purposes for which, the user has given you permission to do so.
+
+4.4 You agree that you will not engage in any activity with the GDK, including the development or distribution of an application, that interferes with, disrupts, damages, or accesses in an unauthorized manner the servers, networks, or other properties or services of any third party including, but not limited to, Google.
+
+4.5 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any data, content, or resources that you create, transmit or display through Glass and/or applications for Glass, and for the consequences of your actions (including any loss or damage which Google may suffer) by doing so.
+
+4.6 You agree that you are solely responsible for (and that Google has no responsibility to you or to any third party for) any breach of your obligations under this License Agreement, any applicable third party contract or Terms of Service, or any applicable law or regulation, and for the consequences (including any loss or damage which Google or any third party may suffer) of any such breach.
+
+
+4.7 The GDK is in development, and your testing and feedback are an important part of the development process. By using the GDK, you acknowledge that implementation of some features are still under development and that you should not rely on the GDK, Glass devices, Glass system software, Google Mirror API, or Glass services having the full functionality of a stable release.
+
+5. Your Developer Credentials
+
+5.1 You agree that you are responsible for maintaining the confidentiality of any developer credentials that may be issued to you by Google or which you may choose yourself and that you will be solely responsible for all applications that are developed under your developer credentials.
+
+6. Privacy and Information
+
+
+6.1 In order to continually innovate and improve the GDK, Google may collect certain usage statistics from the software including but not limited to a unique identifier, associated IP address, version number of the software, and information on which tools and/or services in the GDK are being used and how they are being used. Before any of this information is collected, the GDK will notify you and seek your consent. If you withhold consent, the information will not be collected.
+
+6.2 The data collected is examined in the aggregate to improve the GDK and is maintained in accordance with Google's Privacy Policy.
+
+7. Third Party Applications
+
+7.1 If you use the GDK to run applications developed by a third party or that access data, content or resources provided by a third party, you agree that Google is not responsible for those applications, data, content, or resources. You understand that all data, content or resources which you may access through such third party applications are the sole responsibility of the person from which they originated and that Google is not liable for any loss or damage that you may experience as a result of the use or access of any of those third party applications, data, content, or resources.
+
+7.2 You should be aware the data, content, and resources presented to you through such a third party application may be protected by intellectual property rights which are owned by the providers (or by other persons or companies on their behalf). You may not modify, rent, lease, loan, sell, distribute or create derivative works based on these data, content, or resources (either in whole or in part) unless you have been specifically given permission to do so by the relevant owners.
+
+7.3 You acknowledge that your use of such third party applications, data, content, or resources may be subject to separate terms between you and the relevant third party. In that case, this License Agreement does not affect your legal relationship with these third parties.
+
+8. Using Google APIs
+
+8.1 Google APIs
+
+8.1.1 If you use any API to retrieve data from Google, you acknowledge that the data may be protected by intellectual property rights which are owned by Google or those parties that provide the data (or by other persons or companies on their behalf). Your use of any such API may be subject to additional Terms of Service. You may not modify, rent, lease, loan, sell, distribute or create derivative works based on this data (either in whole or in part) unless allowed by the relevant Terms of Service.
+
+8.1.2 If you use any API to retrieve a user's data from Google, you acknowledge and agree that you shall retrieve data only with the user's explicit consent and only when, and for the limited purposes for which, the user has given you permission to do so.
+
+9. Terminating this License Agreement
+
+9.1 This License Agreement will continue to apply until terminated by either you or Google as set out below.
+
+9.2 If you want to terminate this License Agreement, you may do so by ceasing your use of the GDK and any relevant developer credentials.
+
+9.3 Google may at any time, terminate this License Agreement with you if:
+(A) you have breached any provision of this License Agreement; or
+(B) Google is required to do so by law; or
+(C) the partner with whom Google offered certain parts of GDK (such as APIs) to you has terminated its relationship with Google or ceased to offer certain parts of the GDK to you; or
+(D) Google decides to no longer provide the GDK or certain parts of the GDK to users in the country in which you are resident or from which you use the service, or the provision of the GDK or certain GDK services to you by Google is, in Google's sole discretion, no longer commercially viable.
+
+9.4 When this License Agreement comes to an end, all of the legal rights, obligations and liabilities that you and Google have benefited from, been subject to (or which have accrued over time whilst this License Agreement has been in force) or which are expressed to continue indefinitely, shall be unaffected by this cessation, and the provisions of paragraph 14.7 shall continue to apply to such rights, obligations and liabilities indefinitely.
+
+10. DISCLAIMER OF WARRANTIES
+
+10.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT YOUR USE OF THE GDK IS AT YOUR SOLE RISK AND THAT THE GDK IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTY OF ANY KIND FROM GOOGLE.
+
+10.2 YOUR USE OF THE GDK AND ANY MATERIAL DOWNLOADED OR OTHERWISE OBTAINED THROUGH THE USE OF THE GDK IS AT YOUR OWN DISCRETION AND RISK AND YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR OTHER DEVICE OR LOSS OF DATA THAT RESULTS FROM SUCH USE.
+
+10.3 GOOGLE FURTHER EXPRESSLY DISCLAIMS ALL WARRANTIES AND CONDITIONS OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+
+11. LIMITATION OF LIABILITY
+
+11.1 YOU EXPRESSLY UNDERSTAND AND AGREE THAT GOOGLE, ITS SUBSIDIARIES AND AFFILIATES, AND ITS LICENSORS SHALL NOT BE LIABLE TO YOU UNDER ANY THEORY OF LIABILITY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR EXEMPLARY DAMAGES THAT MAY BE INCURRED BY YOU, INCLUDING ANY LOSS OF DATA, WHETHER OR NOT GOOGLE OR ITS REPRESENTATIVES HAVE BEEN ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY OF ANY SUCH LOSSES ARISING.
+
+12. Indemnification
+
+12.1 To the maximum extent permitted by law, you agree to defend, indemnify and hold harmless Google, its affiliates and their respective directors, officers, employees and agents from and against any and all claims, actions, suits or proceedings, as well as any and all losses, liabilities, damages, costs and expenses (including reasonable attorneys fees) arising out of or accruing from (a) your use of the GDK, (b) any application you develop on the GDK that infringes any copyright, trademark, trade secret, trade dress, patent or other intellectual property right of any person or defames any person or violates their rights of publicity or privacy, and (c) any non-compliance by you with this License Agreement.
+
+13. Changes to the License Agreement
+
+13.1 Google may make changes to the License Agreement as it distributes new versions of the GDK. When these changes are made, Google will make a new version of the License Agreement available on the website where the GDK is made available.
+
+14. General Legal Terms
+
+14.1 This License Agreement constitutes the whole legal agreement between you and Google and governs your use of the GDK (excluding any services which Google may provide to you under a separate written agreement), and completely replaces any prior agreements between you and Google in relation to the GDK.
+
+14.2 You agree that if Google does not exercise or enforce any legal right or remedy which is contained in this License Agreement (or which Google has the benefit of under any applicable law), this will not be taken to be a formal waiver of Google's rights and that those rights or remedies will still be available to Google.
+
+14.3 If any court of law, having the jurisdiction to decide on this matter, rules that any provision of this License Agreement is invalid, then that provision will be removed from this License Agreement without affecting the rest of this License Agreement. The remaining provisions of this License Agreement will continue to be valid and enforceable.
+
+14.4 You acknowledge and agree that each member of the group of companies of which Google is the parent shall be third party beneficiaries to this License Agreement and that such other companies shall be entitled to directly enforce, and rely upon, any provision of this License Agreement that confers a benefit on (or rights in favor of) them. Other than this, no other person or company shall be third party beneficiaries to this License Agreement.
+
+14.5 EXPORT RESTRICTIONS. THE GDK IS SUBJECT TO UNITED STATES EXPORT LAWS AND REGULATIONS. YOU MUST COMPLY WITH ALL DOMESTIC AND INTERNATIONAL EXPORT LAWS AND REGULATIONS THAT APPLY TO THE GDK. THESE LAWS INCLUDE RESTRICTIONS ON DESTINATIONS, END USERS AND END USE.
+
+14.6 The rights granted in this License Agreement may not be assigned or transferred by either you or Google without the prior written approval of the other party. Neither you nor Google shall be permitted to delegate their responsibilities or obligations under this License Agreement without the prior written approval of the other party.
+
+14.7 This License Agreement, and your relationship with Google under this License Agreement, shall be governed by the laws of the State of California without regard to its conflict of laws provisions. You and Google agree to submit to the exclusive jurisdiction of the courts located within the county of Santa Clara, California to resolve any legal matter arising from this License Agreement. Notwithstanding this, you agree that Google shall still be allowed to apply for injunctive remedies (or an equivalent type of urgent legal relief) in any jurisdiction.
+
+November 19, 2013
+    </sdk:license>
 
     <!-- ADD-ONS ....................... -->
 
@@ -708,6 +853,97 @@ August 15, 2011
         <sdk:uses-license ref="android-sdk-license"/>
     </sdk:add-on>
 
+    <sdk:add-on>
+        <!-- Generated at Tue May 14 08:07:47 2013 from git_jb-mr1.1-dev @ 673949 -->
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:description>Android + Google APIs</sdk:description>
+        <sdk:api-level>17</sdk:api-level>
+        <sdk:revision>3</sdk:revision>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.android.future.usb.accessory</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.google.android.media.effects</sdk:name>
+            </sdk:lib>
+        </sdk:libs>
+        <sdk:archives>
+            <sdk:archive arch="any" os="any">
+                <sdk:size>137156978</sdk:size>
+                <sdk:checksum type="sha1">8246f61d24f0408c8e7bc352a1e522b7e2b619ba</sdk:checksum>
+                <sdk:url>google_apis-17_r03.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:add-on>
+
+    <sdk:add-on>
+        <!-- Generated at Thu Sep 19 12:49:30 2013 from git_jb-mr2-dev @ 836888 -->
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:description>Android + Google APIs</sdk:description>
+        <sdk:api-level>18</sdk:api-level>
+        <sdk:revision>3</sdk:revision>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.android.future.usb.accessory</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.google.android.media.effects</sdk:name>
+            </sdk:lib>
+        </sdk:libs>
+        <sdk:archives>
+            <sdk:archive arch="any" os="any">
+                <sdk:size>143149689</sdk:size>
+                <sdk:checksum type="sha1">147bce09c1163edc17194f3db496ec1086fcf965</sdk:checksum>
+                <sdk:url>google_apis-18_r03.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:add-on>
+
+    <sdk:add-on>
+        <!-- Generated at Mon Oct 28 22:29:49 2013 from git_klp-release @ 892118 -->
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-id>google_apis</sdk:name-id>
+        <sdk:name-display>Google APIs</sdk:name-display>
+        <sdk:description>Android + Google APIs</sdk:description>
+        <sdk:api-level>19</sdk:api-level>
+        <sdk:revision>1</sdk:revision>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.maps</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.android.future.usb.accessory</sdk:name>
+            </sdk:lib>
+            <sdk:lib>
+                <sdk:name>com.google.android.media.effects</sdk:name>
+            </sdk:lib>
+        </sdk:libs>
+        <sdk:archives>
+            <sdk:archive arch="any" os="any">
+                <sdk:size>150689239</sdk:size>
+                <sdk:checksum type="sha1">6c530a8318446e4da1e3ab7d2abd154bc493bc5a</sdk:checksum>
+                <sdk:url>google_apis-19_r01.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+        <sdk:uses-license ref="android-sdk-license"/>
+    </sdk:add-on>
+
+
     <!-- GOOGLE TV ADDONS ............. -->
 
     <sdk:add-on>
@@ -750,71 +986,40 @@ August 15, 2011
         <sdk:libs/>
     </sdk:add-on>
 
-    <sdk:add-on>
-        <!-- Generated at Tue May 14 08:07:47 2013 from git_jb-mr1.1-dev @ 673949 -->
-        <sdk:vendor-id>google</sdk:vendor-id>
-        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
-        <sdk:name-id>google_apis</sdk:name-id>
-        <sdk:name-display>Google APIs</sdk:name-display>
-        <sdk:description>Android + Google APIs</sdk:description>
-        <sdk:api-level>17</sdk:api-level>
-        <sdk:revision>3</sdk:revision>
-        <sdk:libs>
-            <sdk:lib>
-                <sdk:name>com.google.android.maps</sdk:name>
-            </sdk:lib>
-            <sdk:lib>
-                <sdk:name>com.android.future.usb.accessory</sdk:name>
-            </sdk:lib>
-            <sdk:lib>
-                <sdk:name>com.google.android.media.effects</sdk:name>
-            </sdk:lib>
-        </sdk:libs>
-        <sdk:archives>
-            <sdk:archive arch="any" os="any">
-                <sdk:size>137156978</sdk:size>
-                <sdk:checksum type="sha1">8246f61d24f0408c8e7bc352a1e522b7e2b619ba</sdk:checksum>
-                <sdk:url>google_apis-17_r03.zip</sdk:url>
-            </sdk:archive>
-        </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
-    </sdk:add-on>
+
+    <!-- GLASS ADDONS ............. -->
 
     <sdk:add-on>
-        <!-- Generated at Mon Aug 12 12:42:05 2013 from git_jb-mr2-dev @ 774058 -->
         <sdk:vendor-id>google</sdk:vendor-id>
         <sdk:vendor-display>Google Inc.</sdk:vendor-display>
-        <sdk:name-id>google_apis</sdk:name-id>
-        <sdk:name-display>Google APIs</sdk:name-display>
-        <sdk:description>Android + Google APIs</sdk:description>
-        <sdk:api-level>18</sdk:api-level>
-        <sdk:revision>2</sdk:revision>
-        <sdk:libs>
-            <sdk:lib>
-                <sdk:name>com.google.android.maps</sdk:name>
-            </sdk:lib>
-            <sdk:lib>
-                <sdk:name>com.android.future.usb.accessory</sdk:name>
-            </sdk:lib>
-            <sdk:lib>
-                <sdk:name>com.google.android.media.effects</sdk:name>
-            </sdk:lib>
-        </sdk:libs>
+        <sdk:name-id>google_gdk</sdk:name-id>
+        <sdk:name-display>Glass Development Kit Sneak Peek</sdk:name-display>
+        <sdk:api-level>15</sdk:api-level>
+        <sdk:revision>01</sdk:revision>
+        <sdk:description>Sneak peek of the Glass Development Kit</sdk:description>
+        <sdk:desc-url>https://developers.google.com/glass/gdk/</sdk:desc-url>
+        <sdk:uses-license ref="google-gdk-license"/>
         <sdk:archives>
-            <sdk:archive arch="any" os="any">
-                <sdk:size>142778022</sdk:size>
-                <sdk:checksum type="sha1">40f2a6a6d6227dadd82cfe0f9783bd4c6bdb29c2</sdk:checksum>
-                <sdk:url>google_apis-18_r02.zip</sdk:url>
+            <sdk:archive os="any">
+                <sdk:size>281839</sdk:size>
+                <sdk:checksum type="sha1">a3c7317fb2fe8a0dfc06828a5aabc457372b82a7</sdk:checksum>
+                <sdk:url>https://dl-ssl.google.com/glass/xe11/google-gdk.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
-        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:libs>
+            <sdk:lib>
+                <sdk:name>com.google.android.glass</sdk:name>
+                <sdk:description>APIs for Google Glass Development Kit Sneak Peek.</sdk:description>
+            </sdk:lib>
+        </sdk:libs>
     </sdk:add-on>
+
 
     <!-- EXTRAS VENDOR=ANDROID ........................ -->
 
     <sdk:extra>
-        <!-- Generated at Tue Jul 23 17:18:50 2013 from git_jb-mr2-ub-dev @ 751786 -->
-        <sdk:revision>18</sdk:revision>
+        <!-- Generated at Wed Oct 30 14:52:38 2013 from git_klp-dev @ 894928 -->
+        <sdk:revision>19</sdk:revision>
         <sdk:vendor-display>Android</sdk:vendor-display>
         <sdk:vendor-id>android</sdk:vendor-id>
         <sdk:name-display>Android Support Library</sdk:name-display>
@@ -822,17 +1027,17 @@ August 15, 2011
         <sdk:old-paths>compatibility</sdk:old-paths>
         <sdk:archives>
             <sdk:archive arch="any" os="any">
-                <sdk:size>4438319</sdk:size>
-                <sdk:checksum type="sha1">bd67b4b8a6bac629f24c8aea75c3619a26d9a568</sdk:checksum>
-                <sdk:url>support_r18.zip</sdk:url>
+                <sdk:size>4905998</sdk:size>
+                <sdk:checksum type="sha1">54b8661595856a08f032d41bb139f375a7609308</sdk:checksum>
+                <sdk:url>support_r19.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
     </sdk:extra>
 
     <sdk:extra>
-        <!-- Generated from git_jb-mr2-ub-dev @ 751786 -->
-        <sdk:revision>2</sdk:revision>
+        <!-- Generated from git_klp-dev @ 894928  -->
+        <sdk:revision>3</sdk:revision>
         <sdk:vendor-display>Android</sdk:vendor-display>
         <sdk:vendor-id>android</sdk:vendor-id>
         <sdk:name-display>Android Support Repository</sdk:name-display>
@@ -840,9 +1045,9 @@ August 15, 2011
         <sdk:path>m2repository</sdk:path>
         <sdk:archives>
             <sdk:archive arch="any" os="any">
-                <sdk:size>3705797</sdk:size>
-                <sdk:checksum type="sha1">c4284e4bf17a1e8bafc96a18de36984022d5a46a</sdk:checksum>
-                <sdk:url>android_m2repository_r02.zip</sdk:url>
+                <sdk:size>6282146</sdk:size>
+                <sdk:checksum type="sha1">db4650f817f1507211ec6186d2d9e72074e6df12</sdk:checksum>
+                <sdk:url>android_m2repository_r03.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>
@@ -855,14 +1060,14 @@ August 15, 2011
         <sdk:vendor-display>Google Inc.</sdk:vendor-display>
         <sdk:name-display>Google Repository</sdk:name-display>
         <sdk:path>m2repository</sdk:path>
-        <sdk:revision>2</sdk:revision>
+        <sdk:revision>4</sdk:revision>
         <sdk:description>Local Maven repository for Google Libraries</sdk:description>
         <sdk:uses-license ref="android-sdk-license"/>
         <sdk:archives>
             <sdk:archive os="any">
-                <sdk:size>2043649</sdk:size>
-                <sdk:checksum type="sha1">f518e0170e84a6bccbadb8a043989cc61f4c37aa</sdk:checksum>
-                <sdk:url>google_m2repository_r02.zip</sdk:url>
+                <sdk:size>3891592</sdk:size>
+                <sdk:checksum type="sha1">c418daafd203a8cb4899d49bd321da83b927586e</sdk:checksum>
+                <sdk:url>google_m2repository_r04.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
     </sdk:extra>
@@ -908,17 +1113,35 @@ August 15, 2011
     <sdk:extra>
         <sdk:vendor-id>google</sdk:vendor-id>
         <sdk:vendor-display>Google Inc.</sdk:vendor-display>
-        <sdk:name-display>Google Play services</sdk:name-display>
-        <sdk:path>google_play_services</sdk:path>
-        <sdk:revision>11</sdk:revision>
-        <sdk:description>Google Play Services client library and sample code</sdk:description>
+        <sdk:name-display>Google Play services for Froyo</sdk:name-display>
+        <sdk:path>google_play_services_froyo</sdk:path>
+        <sdk:revision>12</sdk:revision>
+        <sdk:description>Google Play services client library and sample code</sdk:description>
         <sdk:desc-url>https://developers.google.com/android/google-play-services/index</sdk:desc-url>
         <sdk:uses-license ref="android-sdk-license"/>
         <sdk:archives>
             <sdk:archive os="any">
-                <sdk:size>5265306</sdk:size>
-                <sdk:checksum type="sha1">00851350c55b016bef202700f643f246fb0c24ea</sdk:checksum>
-                <sdk:url>google_play_services_3264130_r11.zip</sdk:url>
+                <sdk:size>5265389</sdk:size>
+                <sdk:checksum type="sha1">92558dbc380bba3d55d0ec181167fb05ce7c79d9</sdk:checksum>
+                <sdk:url>google_play_services_3265130_r12.zip</sdk:url>
+            </sdk:archive>
+        </sdk:archives>
+    </sdk:extra>
+
+    <sdk:extra>
+        <sdk:vendor-id>google</sdk:vendor-id>
+        <sdk:vendor-display>Google Inc.</sdk:vendor-display>
+        <sdk:name-display>Google Play services</sdk:name-display>
+        <sdk:path>google_play_services</sdk:path>
+        <sdk:revision>13</sdk:revision>
+        <sdk:description>Google Play services client library and sample code</sdk:description>
+        <sdk:desc-url>https://developers.google.com/android/google-play-services/index</sdk:desc-url>
+        <sdk:uses-license ref="android-sdk-license"/>
+        <sdk:archives>
+            <sdk:archive os="any">
+                <sdk:size>7958511</sdk:size>
+                <sdk:checksum type="sha1">1be94e8f767616e862f0088ab673e1980a6022c4</sdk:checksum>
+                <sdk:url>google_play_services_4030530_r13.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
     </sdk:extra>
@@ -948,14 +1171,14 @@ August 15, 2011
         <sdk:name-display>Google Play Billing Library</sdk:name-display>
         <sdk:path>play_billing</sdk:path>
         <sdk:old-paths>market_billing</sdk:old-paths>
-        <sdk:revision>4</sdk:revision>
+        <sdk:revision>5</sdk:revision>
         <sdk:description>Google Play Billing files and sample code</sdk:description>
         <sdk:desc-url>http://developer.android.com/google/play/billing/index.html</sdk:desc-url>
         <sdk:archives>
             <sdk:archive os="any">
-                <sdk:size>437084</sdk:size>
-                <sdk:checksum type="sha1">38fdae51dadb6d1e63e177adba3e4d96b751686e</sdk:checksum>
-                <sdk:url>play_billing_r04.zip</sdk:url>
+                <sdk:size>436654</sdk:size>
+                <sdk:checksum type="sha1">bd2ac5ce7127070ac3229003eb69cfb806628ac9</sdk:checksum>
+                <sdk:url>play_billing_r05.zip</sdk:url>
             </sdk:archive>
         </sdk:archives>
         <sdk:uses-license ref="android-sdk-license"/>

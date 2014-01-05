@@ -1,5 +1,6 @@
 { fetchurl, writeScript, ruby, ncurses, sqlite, libxml2, libxslt, libffi
-, zlib, libuuid, gems, jdk, python, stdenv, libiconvOrEmpty }:
+, zlib, libuuid, gems, jdk, python, stdenv, libiconvOrEmpty, imagemagick
+, pkgconfig }:
 
 let
 
@@ -74,6 +75,12 @@ in
     postUnpack = "onetuh";
     buildFlags = ["--with-ffi-dir=${libffi}"];
     NIX_POST_EXTRACT_FILES_HOOK = patchUsrBinEnv;
+  };
+
+  rmagick = {
+    buildInputs = [ imagemagick pkgconfig ];
+
+    NIX_CFLAGS_COMPILE = "-I${imagemagick}/include/ImageMagick-6";
   };
 
   xrefresh_server =

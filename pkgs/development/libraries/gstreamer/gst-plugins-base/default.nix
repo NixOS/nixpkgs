@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, python, gstreamer, xlibs, alsaLib, cdparanoia
-, libogg, libtheora, libvorbis, freetype, pango, liboil, glib, cairo
+, libogg, libtheora, libvorbis, freetype, pango, liboil, glib, cairo, orc
 , libintlOrEmpty
 , # Whether to build no plugins that have external dependencies
   # (except the ALSA plugin).
@@ -18,13 +18,14 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
+
     sed -i 's@/bin/echo@echo@g' configure
     sed -i -e 's/^   /\t/' docs/{libs,plugins}/Makefile.in
   '';
 
   # TODO : v4l, libvisual
   buildInputs =
-    [ pkgconfig glib cairo ]
+    [ pkgconfig glib cairo orc ]
     # can't build alsaLib on darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib
     ++ stdenv.lib.optionals (!minimalDeps)
@@ -37,9 +38,9 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   propagatedBuildInputs = [ gstreamer ];
- 
+
   postInstall = "rm -rf $out/share/gtk-doc";
-  
+
   meta = with stdenv.lib; {
     homepage    = http://gstreamer.freedesktop.org;
     description = "Base plug-ins for GStreamer";
@@ -48,4 +49,3 @@ stdenv.mkDerivation rec {
     platforms   = platforms.unix;
   };
 }
-

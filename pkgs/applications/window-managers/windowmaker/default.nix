@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "windowmaker-${version}";
-  version = "0.95.4";
+  version = "0.95.5";
 
   src = fetchurl {
     url = "http://windowmaker.org/pub/source/release/"
         + "WindowMaker-${version}.tar.gz";
-    sha256 = "0icffqnmkkjjf412m27wljbf9vxb2ry4aiyi2pqmzw3h0pq9gsib";
+    sha256 = "1l3hmx4jzf6vp0zclqx9gsqrlwh4rvqm1g1zr5ha0cp0zmsg89ab";
   };
 
   buildInputs = [ pkgconfig libX11 libXft libXmu ];

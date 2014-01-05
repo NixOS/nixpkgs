@@ -1,11 +1,11 @@
 {stdenv, fetchurl, alsaLib }:
 
 stdenv.mkDerivation {
-  name = "mpg123-1.15.4";
+  name = "mpg123-1.16.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/mpg123/mpg123-1.15.4.tar.bz2;
-    sha256 = "05aizspky9mp1bq2lfrkjzrsnjykl7gkbrhn93xcarj5b2izv1b8";
+    url = mirror://sourceforge/mpg123/mpg123-1.16.0.tar.bz2;
+    sha256 = "1lznnfdvg69a9qbbhvhfc9i86hxdmdqx67lvbkqbh8mmhpip43zh";
   };
 
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin) alsaLib;

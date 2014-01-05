@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, automoc4, kdelibs, taglib, exiv2, podofo, gettext, qt4, phonon }:
 
 stdenv.mkDerivation rec {
-  name = "krename-4.0.4";
+  name = "krename-4.0.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/krename/${name}.tar.bz2";
-    sha256 = "12qhclw1vbg5bv6619qd4408y8d1w26499gcr8gwhgfzk0v83hic";
+    sha256 = "11bdg5vdcs393n0aibhm3jh3wxlk5kz78jhkwf7cj9086qkg9wds";
   };
 
   buildInputs = [ cmake automoc4 kdelibs taglib exiv2 podofo gettext qt4 phonon ];

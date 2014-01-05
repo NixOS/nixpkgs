@@ -14,11 +14,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'';
 
-  meta = { 
+  meta = {
       description = "Extremely fast and small background setter for X";
       license = "MIT";
-      platforms = with stdenv.lib.platforms; all;
-      maintainers = with stdenv.lib.maintainers; [pSub]; 
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      maintainers = with stdenv.lib.maintainers; [pSub];
   };
 }
-

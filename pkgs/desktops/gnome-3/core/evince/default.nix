@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
+  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
+
   configureFlags = [
     "--disable-nautilus" # Do not use nautilus
     "--disable-dbus" # strange compilation error

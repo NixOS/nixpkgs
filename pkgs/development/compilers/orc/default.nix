@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "orc-0.4.17";
+  name = "orc-0.4.18";
 
   src = fetchurl {
     url = "http://code.entropywave.com/download/orc/${name}.tar.gz";
-    sha256 = "1s6psp8phrd1jmxz9j01cksh3q5xrm1bd3z7zqxg5zsrijjcrisg";
+    sha256 = "093a7a495bsy3j6i4wxaxqbqxk6hwg2hdhgvvkabwhlz4nkwilrl";
   };
 
   meta = {

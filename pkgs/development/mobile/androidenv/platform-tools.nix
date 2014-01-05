@@ -1,15 +1,15 @@
 {stdenv, stdenv_32bit, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "android-platform-tools-r18.0.1";
+  name = "android-platform-tools-r19";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = https://dl-ssl.google.com/android/repository/platform-tools_r18.0.1-linux.zip;
-      sha1 = "cf9bdbbaa34da37b59724f914dad907c2c74a387";
+      url = https://dl-ssl.google.com/android/repository/platform-tools_r19-linux.zip;
+      sha1 = "66ee37daf8a2a8f1aa8939ccd4093658e30aa49b";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = https://dl-ssl.google.com/android/repository/platform-tools_r18.0.1-macosx.zip;
-      sha1 = "126325cbb55928c38acbb9c7bb5d9145d94fad56";
+      url = https://dl-ssl.google.com/android/repository/platform-tools_r19-macosx.zip;
+      sha1 = "69af30f488163dfc3da8cef1bb6cc7e8a6df5681";
     }
     else throw "System ${stdenv.system} not supported!";
   

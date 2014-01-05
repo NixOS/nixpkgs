@@ -494,7 +494,7 @@ module writers.</para>
 <variablelist>
 
   <varlistentry>
-    <term><option>etc.environment</option></term>
+    <term><option>environment.etc</option></term>
     <listitem>
       <para>This set defines files in <filename>/etc</filename>.  A
       typical use is:

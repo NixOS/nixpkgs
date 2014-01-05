@@ -8,11 +8,15 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ HDBC mtl time utf8String ];
   extraLibraries = [ odbc ];
+  noHaddock = true;
   meta = {
     homepage = "https://github.com/hdbc/hdbc-odbc";
     description = "ODBC driver for HDBC";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.ocharles
+    ];
   };
 })

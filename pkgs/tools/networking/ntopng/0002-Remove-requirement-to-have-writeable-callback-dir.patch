@@ -1,0 +1,29 @@
+From d77b42003d13e2775be3255a26f380d6ccda8042 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Tue, 3 Dec 2013 21:10:06 +0000
+Subject: [PATCH 2/2] Remove requirement to have writeable callback dir
+
+* ntopng doesn't write anything to the callback dir
+* it seems to be a copy-paste leftover error from data_dir a couple of
+  lines above
+---
+ Ntop.cpp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/Ntop.cpp b/Ntop.cpp
+index 2fb027b..0b4881b 100644
+--- a/Ntop.cpp
++++ b/Ntop.cpp
+@@ -114,8 +114,7 @@ void Ntop::registerPrefs(Prefs *_prefs) {
+   }
+ 
+   if(stat(prefs->get_callbacks_dir(), &statbuf)
+-     || (!(statbuf.st_mode & S_IFDIR)) /* It's not a directory */
+-     || (!(statbuf.st_mode & S_IWRITE)) /* It's not writable    */) {
++     || (!(statbuf.st_mode & S_IFDIR))) { /* It's not a directory */
+     ntop->getTrace()->traceEvent(TRACE_ERROR, "Invalid directory %s specified",
+ 				 prefs->get_callbacks_dir());
+     exit(-1);
+-- 
+1.8.4.3
+

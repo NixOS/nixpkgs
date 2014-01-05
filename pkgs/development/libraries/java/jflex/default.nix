@@ -1,11 +1,11 @@
 {stdenv, fetchurl} :
 
 stdenv.mkDerivation {
-  name = "jflex-1.4.1";
+  name = "jflex-1.4.3";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://jflex.de/jflex-1.4.1.tar.gz;
-    md5 = "9e4be6e826e6b344e84c0434d6fd4b46";
+    url = http://jflex.de/jflex-1.4.3.tar.gz;
+    sha256 = "0sm74sgjvw01fsiqr5q9ipbm8rfyihf6yn00dqymhyc3wmbhr517";
   };
 }

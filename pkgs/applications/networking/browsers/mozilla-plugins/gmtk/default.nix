@@ -1,11 +1,11 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk, GConf, alsaLib }:
 
 stdenv.mkDerivation rec {
-  name = "gmtk-1.0.5";
+  name = "gmtk-1.0.8";
 
   src = fetchurl {
     url = "http://gmtk.googlecode.com/files/${name}.tar.gz";
-    sha256 = "a07130d62719e8c1244f8405dd97445798df5204fc0f3f2f2b669b125114b468";
+    sha256 = "034b02nplb2bp01yn4p19345jh3yibhn4lcxznrzcsmsyj2vlzq0";
   };
 
   buildInputs = [ intltool pkgconfig gtk GConf alsaLib ];

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpng }:
 
 stdenv.mkDerivation rec {
-  name = "icoutils-0.29.1";
+  name = "icoutils-0.31.0";
 
   src = fetchurl {
     url = "mirror://savannah/icoutils/${name}.tar.bz2";
-    sha256 = "180yqv41yc3fi6ggx7azhmaciqzadj0ir87wajigmcpgxkjk6v34";
+    sha256 = "0wdgyfb1clrn3maq84vi4vkwjydy72p5hzk6kb9nb3a19bbxk5d8";
   };
 
   buildInputs = [ libpng ];

@@ -4,12 +4,16 @@
 , libxml2, libxslt, docbook_xsl
 , lightWeight ? true, gnome, samba, makeWrapper }:
 
+let
+  ver_maj = "1.18";
+  version = "${ver_maj}.3";
+in
 stdenv.mkDerivation rec {
-  name = "gvfs-1.14.2";
+  name = "gvfs-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gvfs/1.14/${name}.tar.xz";
-    sha256 = "1g4ghyf45jg2ajdkv2d972hbckyjh3d9jdrppai85pl9pk2dmfy3";
+    url = "mirror://gnome/sources/gvfs/${ver_maj}/${name}.tar.xz";
+    sha256 = "0b27vidnrwh6yb2ga9a1k9qlrz6lrzsaz2hcxqbc1igivhb9g0hx";
   };
 
   nativeBuildInputs = [ pkgconfig intltool libtool ];

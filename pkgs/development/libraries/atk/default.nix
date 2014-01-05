@@ -1,11 +1,15 @@
 { stdenv, fetchurl, pkgconfig, perl, glib, libintlOrEmpty, gobjectIntrospection }:
 
+let
+  ver_maj = "2.10";
+  ver_min = "0";
+in
 stdenv.mkDerivation rec {
-  name = "atk-2.8.0";
+  name = "atk-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/atk/2.8/${name}.tar.xz";
-    sha256 = "1x3dd3hg9l1j9dq70xwph13vxdp6a9wbfcnryryf1wr6c8bij9dj";
+    url = "mirror://gnome/sources/atk/${ver_maj}/${name}.tar.xz";
+    sha256 = "1c2hbg66wfvibsz2ia0ri48yr62751fn950i97c53j3b0fjifsb3";
   };
 
   buildInputs = libintlOrEmpty;
@@ -13,6 +17,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig perl ];
 
   propagatedBuildInputs = [ glib gobjectIntrospection /*ToDo: why propagate*/ ];
+
+  #doCheck = true; # no checks in there (2.10.0)
 
   postInstall = "rm -rf $out/share/gtk-doc";
 

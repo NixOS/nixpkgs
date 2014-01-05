@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   testDepends = [ hspec QuickCheck silently stringbuilder ];
+  noHaddock = self.stdenv.lib.versionOlder self.ghc.version "7.4";
   meta = {
     description = "Literate Haskell support for Markdown";
     license = self.stdenv.lib.licenses.mit;

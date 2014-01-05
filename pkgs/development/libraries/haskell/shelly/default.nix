@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shelly";
-  version = "1.3.1";
-  sha256 = "1psgb1jqw6hqbrp7f217ayabchsn9q4fn2z77lc52r4mlvys13mh";
+  version = "1.3.2";
+  sha256 = "1n6kj9sw6d1nwg7lz1pgmjn8pjxxr76m5sxybv4hacakid3glddh";
   buildDepends = [
     mtl systemFileio systemFilepath text time unixCompat
   ];

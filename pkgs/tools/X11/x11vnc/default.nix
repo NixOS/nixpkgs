@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A VNC server connected to a real X11 screen";
     homepage = http://www.karlrunge.com/x11vnc/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -86,7 +86,7 @@ in
       };
 
       web = mkOption {
-        default = "web, web=checkip.dyndns.com/, web-skip='IP Address'" ;
+        default = "web, web=checkip.dyndns.com/, web-skip='Current IP Address: '" ;
         description = "";
       };
 

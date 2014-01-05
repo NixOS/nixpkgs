@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "pgf-1.10";
+  name = "pgf-1.18";
   
   src = fetchurl {
-    url = mirror://sourceforge/pgf/pgf-1.10.tar.gz;
-    sha256 = "1y605wmjxryphh0y5zgzvdq6xjxb2bjb95j36d4wg1a7n93ksswl";
+    url = mirror://sourceforge/pgf/pgf-1.18.tar.gz;
+    sha256 = "0s6b8rx9yfxcjjg18vx1mphnwbd28fl5lnq0dasjz40pp3ypwdjv";
   };
 
   buildPhase = "true";

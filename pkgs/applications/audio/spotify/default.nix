@@ -67,7 +67,7 @@ stdenv.mkDerivation {
       ln -s $out/spotify-client/spotify $out/bin/spotify
       patchelf \
         --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-        --set-rpath $out/spotify-client/Data:$out/lib:$out/spotify-client:${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib stdenv.gcc.gcc freetype glib pango cairo atk gdk_pixbuf gtk GConf cups sqlite]}:${stdenv.gcc.gcc}/lib64 \
+        --set-rpath $out/spotify-client/Data:$out/lib:$out/spotify-client:${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib stdenv.gcc.gcc freetype glib pango cairo atk gdk_pixbuf gtk GConf cups sqlite xlibs.libXdamage ]}:${stdenv.gcc.gcc}/lib64 \
         $out/spotify-client/spotify
 
       dpkg-deb -x ${qt4webkit} ./
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
       mkdir -p $out/libexec/spotify
       gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\" -fPIC
 
-      wrapProgram $out/bin/spotify --set LD_PRELOAD $preload --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ GConf libpng cups libgcrypt sqlite gst_plugins_base gstreamer]}:$out/lib"
+      wrapProgram $out/bin/spotify --set LD_PRELOAD $preload --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ GConf libpng cups libgcrypt sqlite gst_plugins_base gstreamer xlibs.libXdamage ]}:$out/lib"
 
       # Desktop file
       mkdir -p "$out/share/applications/"

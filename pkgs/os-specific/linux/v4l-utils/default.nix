@@ -4,11 +4,11 @@
 assert withQt4 -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "v4l-utils-0.9.3";
+  name = "v4l-utils-1.0.0";
 
   src = fetchurl {
     url = "http://linuxtv.org/downloads/v4l-utils/${name}.tar.bz2";
-    sha256 = "0gaag38x47wlvmp4j60wgf9ma1rxzfyg7i12zxxxi4m3cpcb0bah";
+    sha256 = "0c2z500ijxr1ldzb4snasfpwi2icp04f8pk7akiqjkp0k4h8iqqx";
   };
 
   buildInputs = [ which ];

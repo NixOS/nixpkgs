@@ -1,14 +1,14 @@
 { stdenv, fetchurl, openldap, readline, db4, openssl, cyrus_sasl, sqlite} :
 
 stdenv.mkDerivation rec {
-  name = "heimdal-1.5.2";
+  name = "heimdal-1.5.3";
 
   src = fetchurl {
     urls = [
       "http://www.h5l.org/dist/src/${name}.tar.gz"
       "http://ftp.pdc.kth.se/pub/heimdal/src/${name}.tar.gz"
     ];
-    sha256 = "22603f282f31173533b939d289f3374258aa1ccccbe51ee088d7568d321279ec";
+    sha256 = "19gypf9vzfrs2bw231qljfl4cqc1riyg0ai0xmm1nd1wngnpphma";
   };
 
   ## ugly, X should be made an option

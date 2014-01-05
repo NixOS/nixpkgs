@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open source MPEG-4 and MPEG-2 AAC encoder";
     homepage = http://www.audiocoding.com/faac.html;
-    license = "LGPL";
+    # Incompatible with GPL. Some changes to the base code, included in faac,
+    # are under LGPL though.
+    license = "unfree";
   };
 }

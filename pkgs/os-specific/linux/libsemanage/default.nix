@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, libsepol, libselinux, ustr, bzip2, bison, flex }:
+{ stdenv, fetchurl, libsepol, libselinux, ustr, bzip2, bison, flex, audit }:
 stdenv.mkDerivation rec {
 
   name = "libsemanage-${version}";
-  version = "2.1.9";
+  version = "2.2";
   inherit (libsepol) se_release se_url;
 
   src = fetchurl {
     url = "${se_url}/${se_release}/libsemanage-${version}.tar.gz";
-    sha256 = "1k1my3n1pj30c5887spykcdk1brgxfpxmrz6frxjyhaijxzx20bg";
+    sha256 = "0xdx0dwcsyw4kv9l6xwdkfg6v7fc9b5y176rkg6n6q0w1zx0pxhi";
   };
 
   makeFlags = "PREFIX=$(out) DESTDIR=$(out)";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fstack-protector-all";
   NIX_CFLAGS_LINK = "-lsepol";
 
-  buildInputs = [ libsepol libselinux ustr bzip2 bison flex ];
+  buildInputs = [ libsepol libselinux ustr bzip2 bison flex audit ];
 
   meta = with stdenv.lib; {
     inherit (libsepol.meta) homepage platforms maintainers;

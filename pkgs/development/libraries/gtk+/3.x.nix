@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, gettext
-, expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, xlibs, x11, gobjectIntrospection
+{ stdenv, fetchurl, pkgconfig, gettext, perl
+, expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
+, xlibs, x11, wayland, libxkbcommon
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 }:
@@ -7,17 +8,23 @@
 assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
+let
+  ver_maj = "3.10";
+  ver_min = "5"; # .6 needs currently unreleased wayland for introspection (wl_proxy_marshal_constructor)
+in
 stdenv.mkDerivation rec {
-  name = "gtk+-3.8.4";
+  name = "gtk+-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/3.8/${name}.tar.xz";
-    sha256 = "1qlj0qdhkp8j5xiris4l4xnx47g4pbk4qnj3nf8rwa82fwb610xh";
+    url = "mirror://gnome/sources/gtk+/${ver_maj}/${name}.tar.xz";
+    sha256 = "1iyc566r61d3jfdiq5knwbssq5bsqsn8hqzdm30vmw6dx3cgd49i";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
+
+  buildInputs = [ wayland libxkbcommon ];
   propagatedBuildInputs = with xlibs; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk ]
     ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor ]

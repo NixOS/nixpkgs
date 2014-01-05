@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "swfmill-0.3.2";
+  name = "swfmill-0.3.3";
 
   src = fetchurl {
     url = "http://swfmill.org/releases/${name}.tar.gz";
-    sha256 = "077agf62q0xz95dxj4cq9avcqwin94vldrpb80iqwjskvkwpz9gy";
+    sha256 = "15mcpql448vvgsbxs7wd0vdk1ln6rdcpnif6i2zjm5l4xng55s7r";
   };
 
   buildInputs = [ pkgconfig libxslt freetype libpng libxml2 ];

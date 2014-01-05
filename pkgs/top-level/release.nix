@@ -309,7 +309,6 @@ let
       vim = linux;
       vimHugeX = linux;
       VisualBoyAdvance = linux;
-      vlc = linux;
       vncrec = linux;
       vorbisTools = linux;
       vpnc = linux;
@@ -369,6 +368,10 @@ let
       };
 
       haskellPackages_ghc704 = {
+        ghc = ghcSupported;
+      };
+
+      haskellPackages_ghc722 = {
         ghc = ghcSupported;
       };
 

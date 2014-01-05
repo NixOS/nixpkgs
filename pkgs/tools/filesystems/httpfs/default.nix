@@ -2,11 +2,11 @@
 , docbook_xml_dtd_45, docbook_xsl , libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "httpfs2-0.1.4";
+  name = "httpfs2-0.1.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/httpfs/httpfs2/${name}.tar.gz";
-    sha256 = "0vlp6i119lz4ybnrd26hvvwms3h5d7x3jly5nzyyfcw24ngvpk7p";
+    sha256 = "1h8ggvhw30n2r6w11n1s458ypggdqx6ldwd61ma4yd7binrlpjq1";
   };
 
   buildInputs =

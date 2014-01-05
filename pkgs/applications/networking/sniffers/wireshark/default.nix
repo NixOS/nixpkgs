@@ -1,25 +1,21 @@
-{ stdenv, fetchurl, perl, pkgconfig, gtk, libpcap, flex, bison
-, gnutls, libgcrypt, glib, zlib, libxml2, libxslt, adns, geoip
-, heimdal, python, lynx, lua5
-, makeDesktopItem
+{ stdenv, fetchurl, pkgconfig, perl, flex, bison, libpcap, libnl, c-ares, gnutls, libgcrypt
+, geoip, heimdal, lua5, gtk, makeDesktopItem
 }:
 
-let version = "1.8.11"; in
+let version = "1.10.3"; in
 
 stdenv.mkDerivation {
   name = "wireshark-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/wireshark/wireshark-${version}.tar.bz2";
-    sha256 = "1nwgizs9z1dalicpp2fd9pqafidy49j0v3d1rml0spfqrkbjpfpw";
+    sha256 = "1329zph63z5mcij9lp111bh6b2w88z3d40gvjld2rjmhmqv1nr61";
   };
 
   buildInputs =
-    [ perl pkgconfig gtk libpcap flex bison gnutls libgcrypt
-      glib zlib libxml2 libxslt adns geoip heimdal python lynx lua5
-    ];
+    [ bison flex perl pkgconfig libpcap lua5 heimdal libgcrypt gnutls geoip libnl c-ares gtk ];
 
-  configureFlags = "--disable-usr-local --with-ssl --enable-threads --enable-packet-editor";
+  configureFlags = "--disable-usr-local --enable-packet-editor --with-ssl";
 
   desktopItem = makeDesktopItem {
     name = "Wireshark";

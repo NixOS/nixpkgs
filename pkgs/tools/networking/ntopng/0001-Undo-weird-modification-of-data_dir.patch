@@ -1,0 +1,24 @@
+From d0c56a14e0432faca1e9438b84e5e4090d293bb9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Tue, 3 Dec 2013 20:42:24 +0000
+Subject: [PATCH 1/2] Undo weird modification of data_dir
+
+---
+ Prefs.cpp | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Prefs.cpp b/Prefs.cpp
+index b4fde5f..ca04ca1 100644
+--- a/Prefs.cpp
++++ b/Prefs.cpp
+@@ -408,7 +408,6 @@ int Prefs::checkOptions() {
+ 			ntop->getTrace()->traceEvent(TRACE_ERROR, "Unable to create log %s", path);
+   }
+ 
+-  free(data_dir); data_dir = strdup(ntop->get_install_dir());
+   docs_dir      = ntop->getValidPath(docs_dir);
+   scripts_dir   = ntop->getValidPath(scripts_dir);
+   callbacks_dir = ntop->getValidPath(callbacks_dir);
+-- 
+1.8.4.3
+

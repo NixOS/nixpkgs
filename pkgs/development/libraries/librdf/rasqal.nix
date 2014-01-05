@@ -1,11 +1,11 @@
 { stdenv, fetchurl, librdf_raptor2, gmp, pkgconfig, pcre, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "rasqal-0.9.30";
+  name = "rasqal-0.9.31";
 
   src = fetchurl {
     url = "http://download.librdf.org/source/${name}.tar.gz";
-    sha256 = "1z8wifq79kivcwpwzmjnjdrbr65zam190gpxhgrvsyfch0yykw5b";
+    sha256 = "1vkzifr488i31vxdnykyf2aq87023vx4bag4d94b1rdhy74l7mr8";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -3,10 +3,10 @@
 let
   ccache =
 stdenv.mkDerivation {
-  name = "ccache-3.1.7";
+  name = "ccache-3.1.9";
   src = fetchurl {
-    url = http://samba.org/ftp/ccache/ccache-3.1.7.tar.gz;
-    sha256 = "04ax6ks49b6rn57hx4v9wbvmsfmw6ipn0wyfqwhh4lzw70flv3r7";
+    url = http://samba.org/ftp/ccache/ccache-3.1.9.tar.gz;
+    sha256 = "0ixlxqv1xyacwgg0k9b4a6by07c7k75y0xbr8dp76jvyada0c9x2";
   };
 
   buildInputs = [ zlib ];

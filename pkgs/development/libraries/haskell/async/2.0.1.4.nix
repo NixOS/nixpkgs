@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1hi40bjwpl65mz7zj0sgh16bp9dwafbm5ysi2q8fzwwq5l0zxpa1";
   buildDepends = [ stm ];
   testDepends = [ HUnit testFramework testFrameworkHunit ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/simonmar/async";
     description = "Run IO operations asynchronously and wait for their results";

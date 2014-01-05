@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskell-src-meta";
-  version = "0.6.0.4";
-  sha256 = "10dixf2abk0canwikf3wdp1ahc51400wxa7x4g59pygv8a3c1c1x";
+  version = "0.6.0.5";
+  sha256 = "1cx3fkhmyhj18b4nm460xrcb1w53qw198gkqb38cjyafr2frlbyh";
   buildDepends = [ haskellSrcExts syb thOrphans uniplate ];
   jailbreak = true;
   meta = {

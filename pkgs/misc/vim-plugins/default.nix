@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python, cmake, vim, perl, ruby, unzip, which }:
+{ fetchurl, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit }:
 
 /*
 About Vim and plugins
@@ -191,6 +191,22 @@ in rec
     meta = with stdenv.lib; {
       description = "Automatically resizes your windows to 80 characters";
       homepage    = https://github.com/justincampbell/vim-eighties;
+      license     = licenses.publicDomain;
+      maintainers = with maintainers; [ lovek323 ];
+      platforms   = platforms.unix;
+    };
+  };
+
+  golang = simpleDerivation {
+    name = "vim-golang-20131127";
+    src = fetchgit {
+      url = "https://github.com/jnwhiteh/vim-golang.git";
+      rev = "832d64e5a813511ed52217aa24f0255c49671bab";
+    };
+    path = "golang";
+    meta = with stdenv.lib; {
+      description = "Vim plugins for Go";
+      homepage    = https://github.com/jnwhiteh/vim-golang;
       license     = licenses.publicDomain;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;

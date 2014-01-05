@@ -6,11 +6,11 @@
 
 
 stdenv.mkDerivation {
-  name = "gromacs-4.5.5";
+  name = "gromacs-4.6.5";
 
   src = fetchurl {
-    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-4.5.5.tar.gz";
-    md5 = "6a87e7cdfb25d81afa9fea073eb28468";
+    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-4.6.5.tar.gz";
+    sha256 = "02ggrplh8fppqib86y3rfk4qm08yddlrb1yjgzl138b3b4qjy957";
   };
 
   buildInputs = [cmake fftw];

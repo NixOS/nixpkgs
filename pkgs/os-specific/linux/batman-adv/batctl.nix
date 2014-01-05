@@ -1,14 +1,14 @@
 {stdenv, fetchurl}:
 
 let
-  ver = "2013.2.0";
+  ver = "2013.4.0";
 in
 stdenv.mkDerivation rec {
   name = "batctl-${ver}";
 
   src = fetchurl {
     url = "http://downloads.open-mesh.org/batman/releases/batman-adv-${ver}/${name}.tar.gz";
-    sha1 = "0ba6520c813c9dd2e59e6205e8ea2e60a0c85f52";
+    sha256 = "0k6b695h38m92a8wn5gvb3z746m3fm0ygv58yyn163adcsvf7sjd";
   };
 
   preBuild = ''

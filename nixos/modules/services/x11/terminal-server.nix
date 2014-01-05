@@ -42,8 +42,6 @@ in
         Xaccess=${pkgs.writeText "Xaccess" "localhost"}
       '';
 
-    networking.firewall.allowedTCPPorts = [ 5900 ];
-
     systemd.sockets.terminal-server =
       { description = "Terminal Server Socket";
         wantedBy = [ "sockets.target" ];

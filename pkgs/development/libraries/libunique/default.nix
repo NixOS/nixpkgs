@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig glib gtk dbus_glib ];
 
   # don't make deprecated usages hard errors
-  preBuildPhases = "preBuild";
   preBuild = ''substituteInPlace unique/dbus/Makefile --replace -Werror ""'';
 
   doCheck = true;

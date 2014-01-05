@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "accelerate-io";
-  version = "0.13.0.2";
-  sha256 = "0lm1kkjs5gbd70k554vi9977v4bxxcxaw39r9wmwxf8nx2qxvshh";
+  version = "0.14.0.0";
+  sha256 = "1vvjmsfaz5xbvvb4x2fym43xvcjv41baxlfhlycgizaca4yw8w9h";
   buildDepends = [ accelerate bmp repa vector ];
   meta = {
     homepage = "https://github.com/AccelerateHS/accelerate-io";

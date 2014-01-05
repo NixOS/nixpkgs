@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pidgin} :
 
 stdenv.mkDerivation {
-  name = "pidgin-msn-pecan-0.1.0";
+  name = "pidgin-msn-pecan-0.1.4";
   src = fetchurl {
-    url = http://msn-pecan.googlecode.com/files/msn-pecan-0.1.0.tar.bz2;
-    sha256 = "06cgkdlv2brv2g5hpx8g8p6j296cnvd29l8fap30i1k0mznbjxf4";
+    url = http://msn-pecan.googlecode.com/files/msn-pecan-0.1.4.tar.bz2;
+    sha256 = "0d43z2ay9is1r2kkc9my8pz0fwdyzv7k19vdmbird18lg7rlbjd2";
   };
 
   meta = {

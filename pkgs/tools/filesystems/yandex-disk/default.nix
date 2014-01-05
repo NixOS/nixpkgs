@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     cp -r -t $out/share usr/share/*
     cp -r -t $out/etc etc/*
 
-    sed -i 's@have@${which}/bin/which >/dev/null 2>&1@' \
+    sed -i 's@have@${which}/bin/which >/dev/null 2>\&1@' \
       $out/etc/bash_completion.d/yandex-disk-completion.bash
 
     ${patchelf}/bin/patchelf \
@@ -49,6 +49,15 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [smironov];
     platforms = ["i686-linux" "x86_64-linux"];
     license = stdenv.lib.licenses.unfree;
+    longDescription = ''
+      Yandex.Disk console client for Linux lets you manage files on Disk without
+      using a window interface or programs that support WebDAV. The advantages
+      of the console client compared to a WebDAV connection:
+       * low system resource requirements;
+       * faster file reading and writing speeds;
+       * faster syncing with Disk's server;
+       * no need to be constantly connected to work with files.
+    '';
   };
 }
 

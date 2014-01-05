@@ -149,7 +149,7 @@ in
       ''
         LogLevel info
 
-        SystemGroup root
+        SystemGroup root wheel
 
         Listen localhost:631
         Listen /var/run/cups/cups.sock
@@ -222,9 +222,6 @@ in
           </Limit>
         </Policy>
       '';
-
-    # Allow CUPS to receive IPP printer announcements via UDP.
-    networking.firewall.allowedUDPPorts = [ 631 ];
 
     security.pam.services.cups = {};
 

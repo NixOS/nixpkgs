@@ -2,12 +2,12 @@
 , avrdude, arduino_core, avrgcclibc }:
 
 buildPythonPackage rec {
-  name = "ino-0.3.5";
+  name = "ino-0.3.6";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/i/ino/${name}.tar.gz";
-    sha256 = "1j2qzcjp6r2an1v431whq9l47s81d5af6ni8j87gv294f53sl1ab";
+    sha256 = "0k6lzfcn55favbj0w4afrvnmwyskf7bgzg9javv2ycvskp35srwv";
   };
 
   # TODO: add avrgcclibc, it must be rebuild with C++ support

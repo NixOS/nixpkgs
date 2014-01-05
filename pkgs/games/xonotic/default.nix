@@ -1,4 +1,11 @@
-{ stdenv, fetchurl, unzip, SDL, libjpeg, zlib, libvorbis, curl }:
+{ stdenv, fetchurl
+, # required for both
+  unzip, libjpeg, zlib, libvorbis, curl
+, # glx
+  libX11, mesa, libXpm, libXext, libXxf86vm, alsaLib
+, # sdl
+  SDL
+}:
 
 stdenv.mkDerivation rec {
   name = "xonotic-0.7.0";
@@ -8,9 +15,14 @@ stdenv.mkDerivation rec {
     sha256 = "21a5fb5493c269cd3843789cb8598f952d4196e8bc71804b9bd5808b646542c6";
   };
 
-  # Commented out things needed to build cl-release because of errors.
-  #buildInputs = [ libX11 libXpm libXext xf86dgaproto libXxf86dga libXxf86vm mesa ];
-  buildInputs = [ unzip SDL libjpeg ];
+  buildInputs = [
+    # required for both
+    unzip libjpeg
+    # glx
+    libX11 mesa libXpm libXext libXxf86vm alsaLib
+    # sdl
+    SDL
+  ];
 
   sourceRoot = "Xonotic/source/darkplaces";
 
@@ -27,7 +39,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     DP_FS_BASEDIR="$out/share/xonotic"
-    #make DP_FS_BASEDIR=$DP_FS_BASEDIR cl-release
+    make DP_FS_BASEDIR=$DP_FS_BASEDIR cl-release
     make DP_FS_BASEDIR=$DP_FS_BASEDIR sdl-release
     make DP_FS_BASEDIR=$DP_FS_BASEDIR sv-release
   '';
@@ -36,9 +48,13 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     cp darkplaces-dedicated "$out/bin/xonotic-dedicated"
     cp darkplaces-sdl "$out/bin/xonotic-sdl"
+    cp darkplaces-glx "$out/bin/xonotic-glx"
     cd ../..
     mkdir -p "$out/share/xonotic"
     mv data "$out/share/xonotic"
+
+    # default to sdl
+    ln -s "$out/bin/xonotic-sdl" "$out/bin/xonotic"
   '';
 
   dontPatchELF = true;

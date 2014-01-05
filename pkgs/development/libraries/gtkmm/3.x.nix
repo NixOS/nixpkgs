@@ -1,16 +1,22 @@
 { stdenv, fetchurl, pkgconfig, gtk3, glibmm, cairomm, pangomm, atkmm }:
 
+let
+  ver_maj = "3.10";
+  ver_min = "1";
+in
 stdenv.mkDerivation rec {
-  name = "gtkmm-3.7.12"; # gnome 3.8 release; stable 3.6 has problems with our new glibc
+  name = "gtkmm-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtkmm/3.7/${name}.tar.xz";
-    sha256 = "05nrilm34gid7kqlq09hcdd7942prn2vbr1qgqvdhgy4x8pvz9p9";
+    url = "mirror://gnome/sources/gtkmm/${ver_maj}/${name}.tar.xz";
+    sha256 = "0f1587pc6x8hn268vqj5zr4dvyisj5zd9zpsfxyfm1pkbjmcv9bg";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ glibmm gtk3 atkmm cairomm pangomm ];
+
+  doCheck = true;
 
   meta = {
     description = "C++ interface to the GTK+ graphical user interface library";
@@ -29,7 +35,7 @@ stdenv.mkDerivation rec {
 
     license = "LGPLv2+";
 
-    maintainers = with stdenv.lib.maintainers; [ raskin urkud ];
+    maintainers = with stdenv.lib.maintainers; [ raskin urkud vcunat ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,10 +1,10 @@
 {stdenv, fetchurl, wxGTK, chmlib}:
 
 stdenv.mkDerivation {
-  name = "xchm-1.18";
+  name = "xchm-1.23";
   src = fetchurl {
-    url = mirror://sourceforge/xchm/xchm-1.18.tar.gz;
-    sha256 = "1wvvyzqbmj3c6i46x4vpxkawjwmmp276r84ifvlzaj5q4b52g5gw";
+    url = mirror://sourceforge/xchm/xchm-1.23.tar.gz;
+    sha256 = "0qn0fyxcrn30ndq2asx31k0qkx3grbm16fb1y580wd2gjmh5r3wg";
   };
   buildInputs = [wxGTK chmlib];
 

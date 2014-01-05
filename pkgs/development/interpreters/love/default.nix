@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, SDL, mesa, openal, lua5
+, SDL, mesa, openal, lua
 , libdevil, freetype, physfs
 , libmodplug, mpg123, libvorbis, libogg
 }:
@@ -12,9 +12,28 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig SDL mesa openal lua5
+    pkgconfig SDL mesa openal lua
     libdevil freetype physfs libmodplug mpg123 libvorbis libogg
   ];
+
+  preConfigure = ''
+    luaoptions="${"''"} lua luajit "
+    for i in lua luajit-; do
+      for j in 5 5.0 5.1 5.2 5.3 5.4; do
+        luaoptions="$luaoptions $i$j "
+      done
+    done
+    luaso="$(echo "${lua}/lib/"lib*.so.*)"
+    luaso="''${luaso##*/lib}"
+    luaso="''${luaso%%.so*}"
+    luaoptions="$luaoptions $luaso"
+    sed -e "s/${"''"} lua lua.*;/$luaoptions;/" -i configure
+
+    luaincdir="$(echo "${lua}/include"/*/ )"
+    test -d "$luaincdir" && {
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$luaincdir"
+    } || true
+  '';
 
   NIX_CFLAGS_COMPILE = ''
     -I${SDL}/include/SDL

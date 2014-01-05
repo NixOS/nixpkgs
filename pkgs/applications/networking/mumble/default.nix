@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, qt4, libvorbis, boost, speechd, protobuf, libsndfile,
- avahi, dbus, libcap, pkgconfig,
+{ stdenv, fetchurl, qt4, boost, speechd, protobuf, libsndfile,
+ speex, libopus, avahi, pkgconfig,
 jackSupport ? false, 
 jackaudio ? null }:
 
@@ -18,16 +18,18 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    qmake CONFIG+=no-g15 CONFIG+=no-update \
-      CONFIG+=no-embed-qt-translations CONFIG+=no-ice \
+    qmake CONFIG+=no-g15 CONFIG+=no-update CONFIG+=no-server \
+      CONFIG+=no-embed-qt-translations CONFIG+=packaged \
+      CONFIG+=bundled-celt CONFIG+=no-bundled-opus \
+      CONFIG+=no-bundled-speex
   '' 
   + stdenv.lib.optionalString jackSupport ''
     CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio
   '';
 
 
-  buildInputs = [ qt4 libvorbis boost speechd protobuf libsndfile avahi dbus
-    libcap pkgconfig ]
+  buildInputs = [ qt4 boost speechd protobuf libsndfile speex
+    libopus avahi pkgconfig ]
     ++ (stdenv.lib.optional jackSupport jackaudio);
 
   installPhase = ''

@@ -3,11 +3,11 @@
 let baseurl = "http://perso.b2b2c.ca/sarrazip/dev"; in
 
 stdenv.mkDerivation rec {
-  name = "boolstuff-0.1.13";
+  name = "boolstuff-0.1.14";
 
   src = fetchurl {
     url = "${baseurl}/${name}.tar.gz";
-    sha256 = "0akwb57lnzq1ak32k6mdxbma2gj0pqhj8y9m6hq79djb9s3mxvmn";
+    sha256 = "1ccn9v3kxz44pv3mr8q0l2i9769jiigw1gfv47ia50mbspwb87r6";
   };
 
   nativeBuildInputs = [ pkgconfig ];

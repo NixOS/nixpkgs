@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, gtk2 }:
 
 stdenv.mkDerivation {
-  name = "mate-themes-1.6.1";
+  name = "mate-themes-1.6.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/1.6/mate-themes-1.6.1.tar.xz";
-    sha256 = "0lm2kvlwj0rpznb0n2g1sh1r6nz0p45i7flbnxivl9gi632wdmfp";
+    url = "http://pub.mate-desktop.org/releases/1.6/mate-themes-1.6.2.tar.xz";
+    sha256 = "145mjdijjvkpjjgqdfwjp30jvvs0qzxlnh15q6mig8df6drg5fn6";
   };
 
   buildInputs = [ pkgconfig intltool iconnamingutils gtk2 ];

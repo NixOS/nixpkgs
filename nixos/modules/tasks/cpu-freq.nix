@@ -33,6 +33,8 @@ with pkgs.lib;
         after = [ "systemd-modules-load.service" ];
         wantedBy = [ "multi-user.target" ];
 
+        unitConfig.ConditionPathIsReadWrite = "/sys/devices/";
+
         path = [ pkgs.cpufrequtils ];
 
         preStart = ''

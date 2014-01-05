@@ -2,7 +2,7 @@
 , pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
 , alsaLib, cairo
-, withX ? true
+, withX ? !stdenv.isDarwin
 }:
 
 assert (libXft != null) -> libpng != null;	# probably a bug

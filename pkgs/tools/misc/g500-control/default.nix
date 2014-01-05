@@ -1,6 +1,6 @@
-{stdenv, fetchurl, coreutils}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "g500-control-0.0.1";
 
   src = fetchurl {
@@ -8,10 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xlg9lpxnk3228k81y1i6jjh4df1p4jh64g54w969g6a6v6dazvb";
   };
 
-  buildInputs = [ coreutils ];
-  
   unpackPhase = ''
-    mkdir -pv g500-control
+    mkdir -p g500-control
     tar -C g500-control/ -xf $src
   '';
 
@@ -21,15 +19,16 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -pv $out/bin/
+    mkdir -p $out/bin/
     cp g500-control $out/bin/
   '';
-  
+
   meta = {
     homepage = http://code.google.com/p/g500-control/;
     description = "Configure Logitech G500's internal profile under Linux";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }
 

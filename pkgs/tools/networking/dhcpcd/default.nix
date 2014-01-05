@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1i7fv1l0n7q1mnia7g0789ch63x5zhwk5gsrwvs78dv2f2kmvcd3";
   };
 
+  patches = [ ./lxc_ro_promote_secondaries.patch ];
+
   configureFlags = "--sysconfdir=/etc";
 
   makeFlags = "PREFIX=\${out}";

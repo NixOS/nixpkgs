@@ -10,6 +10,6 @@ cabal.mkDerivation (self: {
     homepage = "http://www.haskell.org/haskellwiki/ALSA";
     description = "Binding to the ALSA Library API (Exceptions)";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.ghc.meta.platforms;
+    platforms = self.stdenv.lib.platforms.linux;
   };
 })

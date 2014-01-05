@@ -1,15 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, libsigcxx }:
+{ stdenv, fetchurl, pkgconfig, glib, libsigcxx }:
 
+let
+  ver_maj = "2.38";
+  ver_min = "1";
+in
 stdenv.mkDerivation rec {
-  name = "glibmm-2.34.1";
+  name = "glibmm-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glibmm/2.34/${name}.tar.xz";
-    sha256 = "1i4jsvahva2q0mig7kjnpsw0r3fnpybm8b6hzymfm2hpgqnaa9dl";
+    url = "mirror://gnome/sources/glibmm/${ver_maj}/${name}.tar.xz";
+    sha256 = "18n4czi6lh4ncj54apxms18xn9k8pmrp2ba9sxn0sk9w3pp2bja9";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ glib gdk_pixbuf libsigcxx ];
+  propagatedBuildInputs = [ glib libsigcxx ];
+
+  #doCheck = true; # some tests need network
 
   meta = {
     description = "C++ interface to the GLib library";

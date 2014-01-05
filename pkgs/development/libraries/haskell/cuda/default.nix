@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cuda";
-  version = "0.5.1.0";
-  sha256 = "1zsfsz8i05iq54wxj1maj6qqzv4ibr459h47knc7ds1qv4giwzhl";
+  version = "0.5.1.1";
+  sha256 = "0bz1pfcxxvq1s47nrwgj9cqmr20p9n3hh2hilih8083hnjjwh40x";
   buildTools = [ c2hs ];
   extraLibraries = [ cudatoolkit nvidia_x11 self.stdenv.gcc ];
   doCheck = false;
@@ -35,6 +35,7 @@ cabal.mkDerivation (self: {
     description = "FFI binding to the CUDA interface for programming NVIDIA GPUs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -46,16 +46,17 @@ let
 
     prePatch = "patchShebangs .";
 
-    patches = singleton (
-      if versionOlder version "31.0.0.0"
-      then ./sandbox_userns_30.patch
-      else ./sandbox_userns_31.patch
-    );
+    patches = singleton ./sandbox_userns_31.patch;
 
     postPatch = ''
       sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
+    '' + (if versionOlder version "32.0.0.0" then ''
       sed -i -e 's|/usr/bin/gcc|gcc|' third_party/WebKit/Source/core/core.gypi
-    '' + optionalString useOpenSSL ''
+    '' else ''
+      sed -i -e 's|/usr/bin/gcc|gcc|' \
+        third_party/WebKit/Source/build/scripts/scripts.gypi \
+        third_party/WebKit/Source/build/scripts/preprocessor.pm
+    '') + optionalString useOpenSSL ''
       cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
     '';
 

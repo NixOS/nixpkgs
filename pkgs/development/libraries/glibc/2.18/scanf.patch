@@ -1,0 +1,21 @@
+https://sourceware.org/bugzilla/show_bug.cgi?id=15917
+
+commit a4966c6104918ac884ee1131a4ed23c5ad6b4c5a
+Author: Andreas Schwab <schwab@suse.de>
+Date:   Thu Oct 31 12:51:03 2013 +0100
+
+    Fix parsing of 0e+0 as float
+
+diff --git a/stdio-common/vfscanf.c b/stdio-common/vfscanf.c
+index 78dc2fc..e6fa8f3 100644
+--- a/stdio-common/vfscanf.c
++++ b/stdio-common/vfscanf.c
+@@ -1966,6 +1966,8 @@ _IO_vfscanf_internal (_IO_FILE *s, const char *format, _IO_va_list argptr,
+ 		  if (width > 0)
+ 		    --width;
+ 		}
++	      else
++		got_digit = 1;
+ 	    }
+ 
+ 	  while (1)

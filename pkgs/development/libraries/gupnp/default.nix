@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, libxml2, gssdp, libsoup, libuuid }:
  
 stdenv.mkDerivation {
-  name = "gupnp-0.18.1";
+  name = "gupnp-0.18.4";
 
   src = fetchurl {
-    url = mirror://gnome/sources/gupnp/0.18/gupnp-0.18.1.tar.xz;
-    sha256 = "1bn98mw4zicg0a7a2xjr4j93ksnpwkhccii8y8zy08g7x2jg3dhk";
+    url = mirror://gnome/sources/gupnp/0.18/gupnp-0.18.4.tar.xz;
+    sha256 = "18bqmy8r44fnga9wz9inlq6k2s0292bnnql0c0n2j4mj25bpshvb";
   };
 
   propagatedBuildInputs = [ libxml2 libsoup gssdp ];

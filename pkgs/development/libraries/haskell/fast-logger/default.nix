@@ -1,11 +1,10 @@
-{ cabal, blazeBuilder, dateCache, filepath, hspec, text, unixTime
-}:
+{ cabal, blazeBuilder, filepath, hspec, text }:
 
 cabal.mkDerivation (self: {
   pname = "fast-logger";
-  version = "0.3.3";
-  sha256 = "0ya9dn9j2nddpclj00w6jgmiq2xx500sws056fa2s4bdsl8vn5rh";
-  buildDepends = [ blazeBuilder dateCache filepath text unixTime ];
+  version = "2.1.0";
+  sha256 = "116xdk455vlgyj3ck3bpzyavbfwq9asj2hlyjazb8vb1f9byxxkf";
+  buildDepends = [ blazeBuilder filepath text ];
   testDepends = [ hspec ];
   meta = {
     description = "A fast logging system";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl_gnome, glib, pkgconfig }:
+{ stdenv, fetchurl_gnome, glib, pkgconfig, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
@@ -9,8 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "19wlpsbdnm3mq2a6yjpzj0cwrmlkarp2m5x6g63b0r2n7vxaa5mq";
   };
 
+  configureflags= " --with-introspection " ; 
+
   propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig  gobjectIntrospection];
 
   meta = {
     homepage = http://live.gnome.org/JsonGlib;

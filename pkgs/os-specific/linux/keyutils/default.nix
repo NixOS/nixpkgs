@@ -1,18 +1,22 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, gnumake, file }:
 
 stdenv.mkDerivation rec {
-  name = "keyutils-1.2";
+  name = "keyutils-1.5.8";
   
   src = fetchurl {
-    url = http://people.redhat.com/dhowells/keyutils/keyutils-1.2.tar.bz2;
-    sha256 = "0gcv47crbaw6crgn02j1w75mknhnwgkhmfcmwq2qi9iwiwprnv9h";
+    url = "http://people.redhat.com/dhowells/keyutils/${name}.tar.bz2";
+    sha256 = "17419fr7mph8wlhxpqb1bdrghz0db15bmjdgxg1anfgbf9ra6zbc";
   };
 
+  buildInputs = [ file ];
+
   patchPhase = ''
-    sed -i -e "s, /etc, $out/etc," \
+    sed -i -e "s,/usr/bin/make,${gnumake}/bin/make," \
+        -e "s, /etc, $out/etc," \
         -e "s, /bin, $out/bin," \
         -e "s, /sbin, $out/sbin," \
         -e "s, /lib, $out/lib," \
+        -e "s, /lib64, $out/lib64," \
         -e "s,/usr,$out," \
         Makefile
   '';

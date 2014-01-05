@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, gst_plugins_base, aalib, cairo
-, flac, libjpeg, zlib, speex, libpng, libdv, libcaca
-, libiec61883, libavc1394, taglib, pulseaudio
+, flac, libjpeg, zlib, speex, libpng, libdv, libcaca, libvpx
+, libiec61883, libavc1394, taglib, pulseaudio, gdk_pixbuf, orc
 , glib, gstreamer, bzip2
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig glib gstreamer gst_plugins_base libavc1394 libiec61883
       aalib libcaca cairo libdv flac libjpeg libpng pulseaudio speex
-      taglib bzip2
+      taglib bzip2 libvpx gdk_pixbuf orc
     ];
 
   enableParallelBuilding = true;

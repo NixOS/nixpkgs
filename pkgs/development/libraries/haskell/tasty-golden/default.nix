@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty-golden";
-  version = "2.2";
-  sha256 = "0z49w4ksbbih3x0j170pfy93r2d68jw34hdni4s2p43kds52cakb";
+  version = "2.2.0.2";
+  sha256 = "0wy29ybb31g34gjyx95an3azh111crvrrdhbbihjj064xvf6ddmy";
   buildDepends = [
     filepath mtl optparseApplicative tagged tasty temporary
   ];

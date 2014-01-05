@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cereal-conduit";
-  version = "0.7.1";
-  sha256 = "0ry6vc3nkb1lj0p103b8pyd3472hx62s3c7yw3fk8mbjlygxyv43";
+  version = "0.7.2";
+  sha256 = "03jlhpz82a7j7n0351db0h7pkxihik3fv0wgjny7i0vlq7gyqdpl";
   buildDepends = [ cereal conduit transformers ];
   testDepends = [ cereal conduit HUnit mtl resourcet transformers ];
   meta = {

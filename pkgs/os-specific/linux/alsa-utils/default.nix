@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
+    homepage = http://www.alsa-project.org/;
     description = "ALSA, the Advanced Linux Sound Architecture utils";
 
     longDescription = ''
@@ -30,6 +31,6 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    homepage = http://www.alsa-project.org/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

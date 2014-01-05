@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tabular";
-  version = "0.2.2.4";
-  sha256 = "103fqbypsgykv6z29jp1s75pd99vra9sfa70krcnlhbk9kbvdyjk";
+  version = "0.2.2.5";
+  sha256 = "00d1f8yr7kbg30ziv09pb8f4apcvrfb6izb26my1s97kw9ixa740";
   buildDepends = [ csv html mtl ];
   meta = {
     homepage = "http://hub.darcs.net/kowey/tabular";

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libxml2, libxslt, curl }:
 
 stdenv.mkDerivation rec {
-  name = "raptor2-2.0.8"; # 2.0.9 misses a header and so fails liblrdf
+  name = "raptor2-2.0.12"; # 2.0.9 misses a header and so fails liblrdf
 
   src = fetchurl {
     url = "http://download.librdf.org/source/${name}.tar.gz";
-    sha256 = "1mz7cxnfw73saf74c9if06n2mlsvn2rnn67vy7j2mq3wkhy0hcb0";
+    sha256 = "1644a1nnw5k6168v9gjfx1rcbij6ybjximd35a3zhcvyyijmb5di";
   };
 
   buildInputs = [ libxml2 libxslt ];

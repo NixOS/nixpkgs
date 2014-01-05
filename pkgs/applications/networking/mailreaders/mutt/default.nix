@@ -15,21 +15,15 @@ assert sslSupport -> openssl != null;
 assert saslSupport -> cyrus_sasl != null;
 
 let
-  gpgmePatch = fetchurl {
-    # Solution for gpgme >= 1.2: http://dev.mutt.org/trac/ticket/3300
-    url = "http://dev.mutt.org/trac/raw-attachment/ticket/3300/mutt-1.5.21-gpgme-init.patch";
-    sha256 = "1qa1c8gns4q3as1h2lk3x4di2k3hr804ar7xlc6xh9r0zjhzmlk4";
-  };
+  version = "1.5.22";
 in
 stdenv.mkDerivation rec {
-  name = "mutt-1.5.21";
+  name = "mutt-${version}";
   
   src = fetchurl {
     url = "ftp://ftp.mutt.org/mutt/devel/${name}.tar.gz";
-    sha256 = "1864cwz240gh0zy56fb47qqzwyf6ghg01037rb4p2kqgimpg6h91";
+    sha256 = "19zk81spnb0gc8y5mwmcfn33g77wv1xz5bmgic8aan07xn8fislg";
   };
-
-  patches = [ (if gpgmeSupport then gpgmePatch else null) ];
 
   buildInputs = [
     ncurses which perl
@@ -58,8 +52,12 @@ stdenv.mkDerivation rec {
     (if gpgmeSupport then "--enable-gpgme" else "--disable-gpgme")
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
+    description = "A small but very powerful text-based mail client";
     homepage = http://www.mutt.org;
+    license = "GPLv2+";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ the-kenny ];
   };
 }
 

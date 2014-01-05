@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libunibreak-${version}";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/vimgadgets/libunibreak/${version}/${name}.tar.gz";
-    sha256 = "0rsivyxnp9nfngf83fiy4v58s5mgdhcjz75nv5nyhxwxnjq35d25";
+    sha256 = "02657l426bk5d8h42b9ixxy1clc50mx4bzwg02nkdhs09wqw32wn";
   };
 
   meta = with stdenv.lib; {

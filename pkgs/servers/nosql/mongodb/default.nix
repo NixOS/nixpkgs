@@ -1,11 +1,11 @@
 { stdenv, fetchurl, scons, boost, v8, gperftools, pcre, snappy }:
 
-let version = "2.4.5"; in stdenv.mkDerivation rec {
+let version = "2.4.8"; in stdenv.mkDerivation rec {
   name = "mongodb-${version}";
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "01c7lb3jdr51gy7459vg5rg002xxg0mj79vlhy54n50kr31cnxmm";
+    sha256 = "1p6gnharypglfp39halp72fig96fqjhakyy7m76a1prxwpjkqw7x";
   };
 
   nativeBuildInputs = [ scons boost v8 gperftools pcre snappy ];

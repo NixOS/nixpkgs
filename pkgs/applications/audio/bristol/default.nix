@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation  rec {
   name = "bristol-${version}";
-  version = "0.60.10";
+  version = "0.60.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/bristol/${name}.tar.gz";
-    sha256 = "070rn5zdx6vrqmq7w1rrpxig3bxlylbsw82nlmkjnhjrgm6yx753";
+    sha256 = "1fi2m4gmvxdi260821y09lxsimq82yv4k5bbgk3kyc3x1nyhn7vx";
   };
 
   buildInputs = [

@@ -2,14 +2,14 @@
 
 let
   name = "gtk-gnutella";
-  version = "0.97";
+  version = "1.0.0";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.bz2";
-    sha256 = "0l2gdzp517hjk31318djq0sww6kzckzl9rfqvhgspihn874lm9hb";
+    sha256 = "11nri43q99zbxql9wg3pkq98vcgzvbndpzc3a1jlg3lzh7css0hc";
   };
 
   buildInputs = [pkgconfig glib gtk libxml2 bison gettext zlib];

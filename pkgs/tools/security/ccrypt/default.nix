@@ -1,11 +1,11 @@
 {stdenv, fetchurl, perl}:
 
 stdenv.mkDerivation {
-  name = "ccrypt-1.9";
+  name = "ccrypt-1.10";
 
   src = fetchurl {
-    url = mirror://sourceforge/ccrypt/ccrypt-1.9.tar.gz;
-    sha256 = "1bzbfq19jnnlp221kilzxpy0l6w3hk9b1iqjz4haypzlyxswnf35";
+    url = mirror://sourceforge/ccrypt/ccrypt-1.10.tar.gz;
+    sha256 = "184v9676hx2w875cz04rd3a20wrcms33a1zwybvapb0g2yi6vml7";
   };
 
   nativeBuildInputs = [ perl ];

@@ -5,11 +5,11 @@
 stdenv.mkDerivation rec {
 
   name = "apparmor-${version}";
-  version = "2.8.1";
+  version = "2.8.2";
 
   src = fetchurl {
     url = "http://launchpad.net/apparmor/2.8/${version}/+download/${name}.tar.gz";
-    sha256 = "1r0a5k14jbiik28m5gql0f3dbxl252jya7i120rrsbzqqnvw6nw7";
+    sha256 = "1fyjvfkvl0fc7agmz64ck8c965940xvcljrczq1z66sydivkybvl";
   };
 
   buildInputs = [

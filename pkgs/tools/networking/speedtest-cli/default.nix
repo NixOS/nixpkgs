@@ -1,20 +1,13 @@
-{ stdenv, fetchgit, pythonPackages }:
+{ stdenv, fetchurl, pythonPackages }:
 
-stdenv.mkDerivation rec {
-  name = "speedtest-cli-dev";
+pythonPackages.buildPythonPackage rec {
+  name = "speedtest-cli-${version}";
+  version = "0.2.4";
   
-  src = fetchgit {
-    url = "https://github.com/sivel/speedtest-cli.git";
-    rev = "fe0940c5744ebe74ca31ad44e6b181d82a89edab";
-    sha256 = "0iywcmgqi58bhldcf8qn1nr7mihypi5fp9s13d4vqc7797xvb28k";
+  src = fetchurl {
+    url = "https://pypi.python.org/packages/source/s/speedtest-cli/speedtest-cli-${version}.tar.gz";
+    sha256 = "1mz9lx0sdgjz5w3w2lrfh4g7mdyas0ywqfvwh7hwmmpg0fvqiq5q";
   };
-
-  buildInputs = [ pythonPackages.python ];
-
-  installPhase = ''
-      mkdir -p $out/bin
-      cp speedtest-cli $out/bin/
-    '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/sivel/speedtest-cli;

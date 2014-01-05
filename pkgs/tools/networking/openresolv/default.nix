@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "openresolv-3.5.4";
+  name = "openresolv-3.5.6";
 
   src = fetchurl {
     url = "http://roy.marples.name/downloads/openresolv/${name}.tar.bz2";
-    sha256 = "0in40iha4ghk12lr2p65v0by3h0jp7qsdajmj4vm7iis0plzr4db";
+    sha256 = "1n3cw1vbm7mh5d95ykhzdn2mrrf3pm65sp61p8iwydz1gqkp2inv";
   };
 
   configurePhase =

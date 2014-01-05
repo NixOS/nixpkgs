@@ -1,12 +1,12 @@
 { stdenv, fetchurl, libX11, imlib2, giflib }:
 
 stdenv.mkDerivation {
-  name = "sxiv-1.1";
+  name = "sxiv-1.1.1";
 
   src = fetchurl {
-    url = "https://github.com/muennich/sxiv/archive/v1.1.tar.gz";
+    url = "https://github.com/muennich/sxiv/archive/v1.1.1.tar.gz";
     name = "sxiv-1.1.tar.gz";
-    sha256 = "0gsqwa1yacsig7ycjrw0sjyrsa9mynfzzbwm1vp2bgk4s9hb08kx";
+    sha256 = "07r8125xa8d5q71ql71s4i1dx4swy8hypxh2s5h7z2jnn5y9nmih";
   };
 
   buildInputs = [ libX11 imlib2 giflib ];

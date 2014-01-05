@@ -109,4 +109,8 @@
 , "owl-deepcopy"
 , "meat"
 , "hipache"
+, "posix"
+, "node-protobuf"
+, "rethinkdb"
+, "bower2nix"
 ]

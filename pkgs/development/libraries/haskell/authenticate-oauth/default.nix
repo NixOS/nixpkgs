@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "authenticate-oauth";
-  version = "1.4.0.7";
-  sha256 = "1pmkj35rpbhgyjrfdg8j51xn9a420aawkwfg28fpxz7kid0cqw8g";
+  version = "1.4.0.8";
+  sha256 = "1mc36d6lkmqywzsxhzwv4445mmwdz0rr5ibd2a1nbgw5c5jw76fy";
   buildDepends = [
     base64Bytestring blazeBuilder blazeBuilderConduit conduit
     cryptoPubkeyTypes dataDefault httpConduit httpTypes monadControl

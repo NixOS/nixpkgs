@@ -18,14 +18,14 @@
 }:
 
 let
-  version = "6.8.7-5";
+  version = "6.8.7-6";
 in
 stdenv.mkDerivation rec {
   name = "ImageMagick-${version}";
 
   src = fetchurl {
     url = "mirror://imagemagick/${name}.tar.xz";
-    sha256 = "1cn1kg7scs6r7r00qlqirhnmqjnmyczbidab3vgqarw9qszh2ri6";
+    sha256 = "0cbfhk184kxdxz5czyyqxac29mbfiahygjji6k97z6hp8ngnqlvh";
   };
 
   enableParallelBuilding = true;
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       export DVIDecodeDelegate=${tetex}/bin/dvips
     '' else "";
 
-  configureFlags = "" + stdenv.lib.optionalString (ghostscript != null && stdenv.system != "x86_64-darwin") ''
+  configureFlags = "" + stdenv.lib.optionalString (stdenv.system != "x86_64-darwin") ''
     --with-gs-font-dir=${ghostscript}/share/ghostscript/fonts
     --with-gslib
   '' + ''
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs =
     [ bzip2 fontconfig freetype libjpeg libpng libtiff libxml2 zlib librsvg
       libtool jasper libX11
-    ] ++ stdenv.lib.optional (ghostscript != null && stdenv.system != "x86_64-darwin") ghostscript;
+    ] ++ stdenv.lib.optional (stdenv.system != "x86_64-darwin") ghostscript;
 
   buildInputs = [ tetex pkgconfig ];
 

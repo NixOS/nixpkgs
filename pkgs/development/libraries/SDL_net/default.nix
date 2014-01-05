@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL_net";
-  version = "1.2.7";
+  version = "1.2.8";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.libsdl.org/projects/SDL_net/release/${name}.tar.gz";
-    sha256 = "2ce7c84e62ff8117b9f205758bcce68ea603e08bc9d6936ded343735b8b77c53";
+    sha256 = "1d5c9xqlf4s1c01gzv6cxmg0r621pq9kfgxcg3197xw4p25pljjz";
   };
 
   propagatedBuildInputs = [SDL];

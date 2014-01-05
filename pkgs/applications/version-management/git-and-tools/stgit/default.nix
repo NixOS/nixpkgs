@@ -1,14 +1,14 @@
 { stdenv, fetchurl, python, git }:
 
 let
-  name = "stgit-0.15";
+  name = "stgit-0.16";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "http://download.gna.org/stgit/${name}.tar.gz";
-    sha256 = "0kgq9x0i7riwcl1lmmm40z0jiz5agr1kqxm2byv1qsf0q1ny47v9";
+    sha256 = "0hla6401g2kicaakz4awk67yf8fhqbw1shn1p9ma5x6ca29s3w82";
   };
 
   buildInputs = [ python git ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     description = "StGit is a patch manager implemented on top of Git";
     license = "GPL";
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ simons the-kenny ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

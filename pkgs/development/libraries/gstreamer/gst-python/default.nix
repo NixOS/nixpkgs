@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-python-0.10.19";
+  name = "gst-python-0.10.22";
 
   src = fetchurl {
     urls = [
       "${meta.homepage}/src/gst-python/${name}.tar.bz2"
       "mirror://gentoo/distfiles/${name}.tar.bz2"
       ];
-    sha256 = "956f81a8c15daa3f17e688a0dc5a5d18a3118141066952d3b201a6ac0c52b415";
+    sha256 = "0y1i4n5m1diljqr9dsq12anwazrhbs70jziich47gkdwllcza9lg";
   };
 
   buildInputs =

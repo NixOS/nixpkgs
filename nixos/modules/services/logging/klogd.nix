@@ -32,6 +32,8 @@ with pkgs.lib;
 
         path = [ pkgs.sysklogd ];
 
+        unitConfig.ConditionVirtualization = "!systemd-nspawn";
+
         exec =
           "klogd -c 1 -2 -n " +
           "-k $(dirname $(readlink -f /run/booted-system/kernel))/System.map";

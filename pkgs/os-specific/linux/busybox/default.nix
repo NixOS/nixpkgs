@@ -37,15 +37,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.20.2";
+  name = "busybox-1.21.1";
 
   src = fetchurl {
     url = "http://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "10k8kgrprll9hxfm9gc3jl7kkq79g6l2pygn5snqwqg5v80zy4zb";
+    sha256 = "00qk938q90jv14mxmadm8pgs3jymkknc6xicw4512mn85s8y0nyd";
   };
-
-  # Remove this patch after the next busybox update.
-  patches = [ ./include-missing-sys-resource-header.patch ];
 
   configurePhase = ''
     make defconfig

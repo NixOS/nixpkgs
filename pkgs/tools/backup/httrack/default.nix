@@ -1,12 +1,12 @@
 { stdenv, fetchurl, zlib, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "3.47.21";
+  version = "3.47.27";
   name = "httrack-${version}";
 
   src = fetchurl {
     url = "http://mirror.httrack.com/httrack-${version}.tar.gz";
-    sha256 = "1jqw0zx74jpi0svivvqhja3ixcrfkh9sbi9fwfw83jga27bc1sp0";
+    sha256 = "1qgrs9wdqq4v9ywlb1b89i95w4a36y741l49xbpmb7mb7nvbz5kw";
   };
 
   buildInputs = [ zlib openssl ];

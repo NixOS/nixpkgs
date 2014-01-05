@@ -2,12 +2,12 @@
   intltool, gtk_doc, gobjectIntrospection, pkgconfig, libxslt, libgcrypt }:
 
 stdenv.mkDerivation rec {
-  version = "0.15";
+  version = "0.16";
   name = "libsecret-${version}";
 
   src = fetchurl {
     url = "https://git.gnome.org/browse/libsecret/snapshot/libsecret-${version}.zip";
-    sha256 = "088v1z7zbdi8b0779jads7q20x1gx6c4zmrj3q0vysc7a0k16i6k";
+    sha256 = "1yf4zvzfa45wr5bqlh54g3bmd0lgcsa8hnhppa99czca0zj7bkks";
   };
 
   propagatedBuildInputs = [ glib dbus_libs ];

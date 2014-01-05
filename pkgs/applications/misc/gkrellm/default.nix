@@ -1,10 +1,10 @@
 { fetchurl, stdenv, gettext, pkgconfig, glib, gtk, libX11, libSM, libICE }:
 
 stdenv.mkDerivation rec {
-  name = "gkrellm-2.3.4";
+  name = "gkrellm-2.3.5";
   src = fetchurl {
     url = "http://members.dslextreme.com/users/billw/gkrellm/${name}.tar.bz2";
-    sha256 = "0mjg2pxpiqms7d6dvxzxvpa420cakhpjxvrclhq0y8jd2dlv2irl";
+    sha256 = "12rc6zaa7kb60b9744lbrlfkxxfniprm6x0mispv63h4kh75navh";
   };
 
   buildInputs = [gettext pkgconfig glib gtk libX11 libSM libICE];

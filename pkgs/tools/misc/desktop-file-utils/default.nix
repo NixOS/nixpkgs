@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
-  name = "desktop-file-utils-0.16";
+  name = "desktop-file-utils-0.22";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/desktop-file-utils/releases/${name}.tar.bz2";
-    sha256 = "18y9am8n43rrnnldd1cy09ls39xz1gx3qczax2c4cjxayx5vwq3r";
+    url = "http://www.freedesktop.org/software/desktop-file-utils/releases/${name}.tar.xz";
+    sha256 = "1ianvr2a69yjv4rpyv30w7yjsmnsb23crrka5ndqxycj4rkk4dc4";
   };
 
   buildInputs = [ pkgconfig glib ];

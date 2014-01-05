@@ -196,7 +196,8 @@ $ emacs pkgs/top-level/all-packages.nix</screen>
   </listitem>
 
   <listitem>
-    <para>Test whether the package builds:
+    <para>To test whether the package builds, run the following command
+    from the root of the nixpkgs source tree:
 
     <screen>
 $ nix-build -A libfoo</screen>

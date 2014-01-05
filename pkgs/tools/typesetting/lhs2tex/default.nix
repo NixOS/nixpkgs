@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     description = "Preprocessor for typesetting Haskell sources with LaTeX";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.linux;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

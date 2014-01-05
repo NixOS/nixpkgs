@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base
+, cairo, gstreamer, gst_plugins_base, icu
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
@@ -17,9 +17,9 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "25.0.1";
+  firefoxVersion = "26.0";
 
-  xulVersion = "25.0.1"; # this attribute is used by other packages
+  xulVersion = "26.0"; # this attribute is used by other packages
 
 
   src = fetchurl {
@@ -29,15 +29,11 @@ rec {
         # Fall back to this url for versions not available at releases.mozilla.org.
         "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
     ];
-    sha1 = "592ebd242c4839ef0e18707a7e959d8bed2a98f3";
+    sha1 = "f7c6642d6f62aea8d4eced48dd27aba0634edcd5";
   };
 
   commonConfigureFlags =
-    [ "--enable-optimize"
-      #"--enable-profiling"
-      (if debugBuild then "--enable-debug" else "--disable-debug")
-      "--enable-strip"
-      "--with-system-jpeg"
+    [ "--with-system-jpeg"
       "--with-system-zlib"
       "--with-system-bz2"
       "--with-system-nspr"
@@ -45,18 +41,24 @@ rec {
       "--with-system-libevent"
       "--with-system-libvpx"
       "--with-system-png"
-      "--enable-startup-notification"
+      "--with-system-icu"
       "--enable-system-ffi"
       "--enable-system-hunspell"
       "--enable-system-pixman"
       "--enable-system-sqlite"
       "--enable-system-cairo"
+      "--enable-gstreamer"
+      "--enable-startup-notification"
+      # "--enable-content-sandbox"            # available since 26.0, but not much info available
+      # "--enable-content-sandbox-reporter"   # keeping disabled for now
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
       "--disable-installer"
       "--disable-updater"
-    ];
+    ] ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
+                        else [ "--disable-debug" "--enable-release"
+                               "--enable-optimize" "--enable-strip" ]);
 
 
   xulrunner = stdenv.mkDerivation rec {
@@ -72,7 +74,7 @@ rec {
         xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
         xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
         hunspell libevent libstartup_notification libvpx cairo
-        gstreamer gst_plugins_base
+        gstreamer gst_plugins_base icu
       ];
 
     configureFlags =
@@ -138,11 +140,12 @@ rec {
         dbus dbus_glib pango freetype fontconfig alsaLib nspr nss libnotify
         xlibs.pixman yasm mesa sqlite file unzip pysqlite
         hunspell libevent libstartup_notification libvpx cairo
-        gstreamer gst_plugins_base
+        gstreamer gst_plugins_base icu
       ];
 
     patches = [
       ./disable-reporter.patch # fixes "search box not working when built on xulrunner"
+      ./xpidl.patch
     ];
 
     propagatedBuildInputs = [xulrunner];

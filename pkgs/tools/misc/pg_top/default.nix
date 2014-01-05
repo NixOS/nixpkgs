@@ -1,10 +1,10 @@
 {stdenv, fetchurl, ncurses, postgresql}:
 
 stdenv.mkDerivation {
-  name = "pg_top-3.6.2";
+  name = "pg_top-3.7.0";
 
   src = fetchurl {
-    url = http://pgfoundry.org/frs/download.php/1781/pg_top-3.6.2.tar.gz;
+    url = http://pgfoundry.org/frs/download.php/1781/pg_top-3.7.0.tar.gz;
     sha256 = "17xrv0l58rv3an06gkajzw0gg6v810xx6vl137an1iykmhvfh7h2";
   };
 

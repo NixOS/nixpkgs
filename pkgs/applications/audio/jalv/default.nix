@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation  rec {
   name = "jalv-${version}";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "1hq968fhiz86428krqhjl3vlw71bigc9bsfcv97zgvsjh0fh6qa0";
+    sha256 = "132cq347xpa91d9m7nnmpla7gz4xg0njfw7kzwnp0gz172k0klp7";
   };
 
   buildInputs = [

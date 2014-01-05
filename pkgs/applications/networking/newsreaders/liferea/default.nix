@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
     libnotify
   ];
 
+  preFixup = ''
+    rm $out/share/icons/hicolor/icon-theme.cache'';
+
   meta = {
     description = "A GTK-based news feed agregator";
     homepage = http://lzone.de/liferea/;

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gmp, readline }:
 
 stdenv.mkDerivation rec {
-  name = "pari-2.5.4";
+  name = "pari-2.5.5";
 
   src = fetchurl {
     url = "http://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
-    sha256 = "0gpsj5n8d1gyl7nq2y915sscs3d334ryrv8qgjdwqf3cr95f2dwz";
+    sha256 = "058nw1fhggy7idii4f124ami521lv3izvngs9idfz964aks8cvvn";
   };
 
   buildInputs = [gmp readline];

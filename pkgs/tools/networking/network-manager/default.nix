@@ -1,14 +1,14 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
 , udev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
-, libgcrypt, dnsmasq, avahi, bind, perl, substituteAll }:
+, libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "0.9.8.4";
+  version = "0.9.8.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/0.9/NetworkManager-${version}.tar.xz";
-    sha256 = "168dv290mc19szgv1l108i8gyha47wmyr41jlzwqvvibynmg17sc";
+    sha256 = "0mbsl6x3aavdnam8i87p0zz8fvvgi96g199s35wgg5r8rplks2la";
   };
 
   preConfigure = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--with-kernel-firmware-dir=/run/current-system/firmware"
     "--with-session-tracking=systemd" ];
 
-  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz ];
+  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz bluez5 ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = http://projects.gnome.org/NetworkManager/;
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ phreedom urkud rickynils ];
+    maintainers = with maintainers; [ phreedom urkud rickynils iElectric ];
     platforms = platforms.linux;
   };
 }

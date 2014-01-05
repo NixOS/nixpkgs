@@ -44,7 +44,7 @@ in
     boot.loader.grub = {
 
       enable = mkOption {
-        default = true;
+        default = !config.boot.isContainer;
         type = types.bool;
         description = ''
           Whether to enable the GNU GRUB boot loader.

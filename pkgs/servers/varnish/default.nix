@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkgconfig, readline }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.4";
+  version = "3.0.5";
   name = "varnish-${version}";
 
   src = fetchurl {
     url = "http://repo.varnish-cache.org/source/${name}.tar.gz";
-    sha256 = "0y8gml06h3wjiasfqnk7f9wrfrlgx89qz04wz3fjn8knbk5lq12f";
+    sha256 = "1dz2gazqczfzahh2n0aw71i5g9cpn5d98p9gj6ilqlkiqypxcbrh";
   };
 
   buildInputs = [ pcre libxslt groff ncurses pkgconfig readline ];

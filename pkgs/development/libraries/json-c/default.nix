@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
       and parse JSON formatted strings back into the C representation of JSON
       objects.
     '';
-    platforms = platforms.linux;
+    hydraPlatforms = platforms.linux;
   };
 }
