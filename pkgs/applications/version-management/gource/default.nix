@@ -13,6 +13,8 @@ stdenv.mkDerivation {
 
   buildInputs = [glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa];
 
+  NIX_CFLAGS_COMPILE = "-fpermissive"; # fix build with newer gcc versions
+
   meta = {
     homepage = "http://code.google.com/p/gource/";
     description = "software version control visualization tool";
