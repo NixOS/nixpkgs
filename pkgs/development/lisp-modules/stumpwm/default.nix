@@ -19,14 +19,17 @@ buildLispPackage rec {
       ${x.deployConfigScript}
       export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$PWD/"
       ./autogen.sh 
-      configureFlags=" --with-lisp=$NIX_LISP --with-$NIX_LISP=$(which common-lisp.sh) "
+      configureFlags=" --with-lisp=$NIX_LISP --with-$NIX_LISP=$(which common-lisp.sh) --with-contrib-dir=$out/lib/common-lisp/stumpwm/contrib/"
     '';
-    installPhase=x.installPhase + ''
+    installPhase = with pkgs; x.installPhase + ''
       make install 
 
       if [ "$NIX_LISP" = "sbcl" ]; then
         wrapProgram "$out"/bin/stumpwm --set SBCL_HOME "${clwrapper.lisp}/lib/sbcl"
       fi;
+
+      mv $out/lib/common-lisp/stumpwm/contrib/stumpish $out/bin/stumpish
+      wrapProgram "$out"/bin/stumpish --prefix PATH : "${xlibs.xprop}/bin:${coreutils}/bin:${gnugrep}/bin:${gnused}/bin:${rlwrap}/bin:${ncurses}/bin"
     '';
     postInstall = ''false'';
   };
