@@ -70,10 +70,16 @@ let
 
         kernelConfig = kernelConfigFun configCross;
 
-        inherit (kernel.crossDrv) src patches prePatch preUnpack;
+        inherit (kernel.crossDrv) src patches preUnpack;
       };
 
-    inherit (kernel) src patches prePatch preUnpack;
+    prePatch = kernel.prePatch + ''
+      # Patch kconfig to print "###" after every question so that
+      # generate-config.pl from the generic builder can answer them.
+      sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
+    '';
+
+    inherit (kernel) src patches preUnpack;
 
     buildPhase = ''
       cd $buildRoot

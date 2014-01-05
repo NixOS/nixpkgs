@@ -49,6 +49,7 @@ let
 
   commonMakeFlags = [
     "O=$(buildRoot)"
+    "DEPMOD=${kmod}/bin/depmod"
   ];
 
   drvAttrs = config_: platform: kernelPatches: configfile:
@@ -94,13 +95,6 @@ let
             echo "stripping FHS paths in \`$mf'..."
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
-
-        sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
-
-        # Patch kconfig to print "###" after every question so that
-        # generate-config.pl from the generic builder can answer them.
-        # This only affects oldaskconfig.
-        sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
       '';
 
       configurePhase = ''
@@ -142,15 +136,44 @@ let
         mv $buildRoot $dev/lib/modules/${modDirVersion}/build
 
         # !!! No documentation on how much of the source tree must be kept
-        # If/when kernel builds fail due to missing files, you can undelete
-        # them here
+        # If/when kernel builds fail due to missing files, you can add
+        # them here. Note that we may see packages requiring headers
+        # from drivers/ in the future; it adds 50M to keep all of its
+        # headers on 3.10 though.
+
+        chmod +w -R ../source
+        arch=`cd $dev/lib/modules/${modDirVersion}/build/arch; ls`
+
+        # Remove unusued arches
+        mv arch/$arch .
+        rm -fR arch
+        mkdir arch
+        mv $arch arch
+
+        # Remove all driver-specific code (50M of which is headers)
+        rm -fR drivers
+
+        # Keep all headers
+        find .  -type f -name '*.h' -print0 | xargs -0 chmod -w
+
+        # Keep root and arch-specific Makefiles
+        chmod -w Makefile
+        chmod -w arch/$arch/Makefile
+
+        # Keep whole scripts dir
+        chmod -w -R scripts
+
+        # Delete everything not kept
+        find . -type f -perm -u=w -print0 | xargs -0 rm
+
+        # Delete empty directories
         find -empty -type d -delete
       '' else optionalString installsFirmware ''
         make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
       '');
 
-      # !!! This leaves references to gcc and kmod in $dev
+      # !!! This leaves references to gcc in $dev
       # that we might be able to avoid
       postFixup = if isModular then ''
         if [ -z "$dontStrip" ]; then
