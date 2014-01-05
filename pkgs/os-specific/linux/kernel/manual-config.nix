@@ -49,7 +49,6 @@ let
 
   commonMakeFlags = [
     "O=$(buildRoot)"
-    "DEPMOD=${kmod}/bin/depmod"
   ];
 
   drvAttrs = config_: platform: kernelPatches: configfile:
@@ -95,6 +94,7 @@ let
             echo "stripping FHS paths in \`$mf'..."
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
+        sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
       '';
 
       configurePhase = ''
@@ -168,6 +168,9 @@ let
 
         # Delete empty directories
         find -empty -type d -delete
+
+        # Remove reference to kmod
+        sed -i Makefile -e 's|= ${kmod}/sbin/depmod|= depmod|'
       '' else optionalString installsFirmware ''
         make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
