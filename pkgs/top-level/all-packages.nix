@@ -6940,10 +6940,6 @@ let
 
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
 
-  klibc = callPackage ../os-specific/linux/klibc {
-    linuxHeaders = glibc.kernelHeaders;
-  };
-
   klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
   kmod = callPackage ../os-specific/linux/kmod { };
