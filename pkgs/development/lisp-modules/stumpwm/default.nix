@@ -19,7 +19,7 @@ buildLispPackage rec {
       ${x.deployConfigScript}
       export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$PWD/"
       ./autogen.sh 
-      configureFlags=" --with-lisp=$NIX_LISP --with-$NIX_LISP=$(which common-lisp.sh) "
+      configureFlags=" --with-lisp=$NIX_LISP --with-$NIX_LISP=$(which common-lisp.sh) --with-contrib-dir=$out/lib/common-lisp/stumpwm/contrib/"
     '';
     installPhase=x.installPhase + ''
       make install 
