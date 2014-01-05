@@ -1799,6 +1799,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   pop3client = callPackage ../development/libraries/haskell/pop3-client {};
 
+  poppler = callPackage ../development/libraries/haskell/poppler {
+    popplerGlib = pkgs.poppler.poppler_glib;
+    libc = pkgs.stdenv.gcc.libc;
+  };
+
   postgresqlLibpq = callPackage ../development/libraries/haskell/postgresql-libpq {
     inherit (pkgs) postgresql;
   };
