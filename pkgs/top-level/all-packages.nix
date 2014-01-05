@@ -6761,7 +6761,7 @@ let
     inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals (platform.kernelArch == "mips")
+      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
       ];
@@ -6784,7 +6784,7 @@ let
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals (platform.kernelArch == "mips")
+      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -6805,7 +6805,7 @@ let
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals (platform.kernelArch == "mips")
+      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -6817,7 +6817,7 @@ let
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals (platform.kernelArch == "mips")
+      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
