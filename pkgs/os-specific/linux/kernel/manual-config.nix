@@ -144,7 +144,7 @@ let
         # !!! No documentation on how much of the source tree must be kept
         # If/when kernel builds fail due to missing files, you can undelete
         # them here
-        ls -A | grep -v Makefile | xargs rm -fR
+        find -empty -type d -delete
       '' else optionalString installsFirmware ''
         make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"

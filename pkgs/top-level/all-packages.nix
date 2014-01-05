@@ -6707,7 +6707,6 @@ let
     inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs3_2
       ];
   };
 
@@ -6757,7 +6756,6 @@ let
     inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs3_4
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -6831,8 +6829,6 @@ let
   linuxPackagesFor = kernel: self: let callPackage = newScope self; in {
     inherit kernel;
 
-    kernelDev = kernel.dev or kernel;
-
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
@@ -6841,45 +6837,20 @@ let
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
-    aufs =
-      if self.kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs/2.nix { }
-      else if self.kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs/3.nix { }
-      else null;
-
-    aufs_util =
-      if self.kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs-util/2.nix { }
-      else if self.kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs-util/3.nix { }
-      else null;
-
     blcr = callPackage ../os-specific/linux/blcr { };
 
     cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
-    exmap = callPackage ../os-specific/linux/exmap { };
-
     frandom = callPackage ../os-specific/linux/frandom { };
-
-    iscsitarget = callPackage ../os-specific/linux/iscsitarget { };
-
-    iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
 
     lttngModules = callPackage ../os-specific/linux/lttng-modules { };
 
-    atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
-
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
-
-    broadcom_sta6 = callPackage ../os-specific/linux/broadcom-sta-v6/default.nix { };
 
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
-    nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
     nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
     nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };
 
@@ -6889,9 +6860,9 @@ let
 
     wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
 
-    klibc = callPackage ../os-specific/linux/klibc {
-      linuxHeaders = glibc.kernelHeaders;
-    };
+    kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
+
+    klibc = callPackage ../os-specific/linux/klibc { };
 
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
@@ -6905,10 +6876,6 @@ let
     psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
 
     spl = callPackage ../os-specific/linux/spl/default.nix { };
-
-    sysprof = callPackage ../development/tools/profiling/sysprof {
-      inherit (gnome) libglade;
-    };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
@@ -7098,6 +7065,10 @@ let
 
   sysfsutils = callPackage ../os-specific/linux/sysfsutils { };
 
+  sysprof = callPackage ../development/tools/profiling/sysprof {
+    inherit (gnome) libglade;
+  };
+
   # Provided with sysfsutils.
   libsysfs = sysfsutils;
   systool = sysfsutils;
@@ -7113,7 +7084,6 @@ let
   systemtap = callPackage ../development/tools/profiling/systemtap {
     inherit (gnome) libglademm;
   };
-
 
   # In nixos, you can set systemd.package = pkgs.systemd_with_lvm2 to get
   # LVM2 working in systemd.

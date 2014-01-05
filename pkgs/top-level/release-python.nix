@@ -1082,8 +1082,6 @@ let
     acpi_call = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     atheros = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     ati_drivers_x11 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-    aufs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-    aufs_util = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     bbswitch = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     broadcom_sta = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     cryptodev = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

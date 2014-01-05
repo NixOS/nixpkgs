@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, kernelDev, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
+{ stdenv, fetchurl, kernel, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
 
 stdenv.mkDerivation {
-  name = "zfs-0.6.2-${kernelDev.version}";
+  name = "zfs-0.6.2-${kernel.version}";
 
   src = fetchurl {
     url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.2.tar.gz;
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   patches = [ ./mount_zfs_prefix.patch ./nix-build.patch ];
 
-  buildInputs = [ kernelDev spl perl autoconf automake libtool zlib libuuid coreutils ];
+  buildInputs = [ spl perl autoconf automake libtool zlib libuuid coreutils ];
 
   # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_CFLAGS_LINK = "-lgcc_s";
@@ -28,8 +28,8 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = ''
-    --with-linux=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build 
-    --with-linux-obj=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build 
+    --with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source
+    --with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
     --with-spl=${spl}/libexec/spl
   '';
 
