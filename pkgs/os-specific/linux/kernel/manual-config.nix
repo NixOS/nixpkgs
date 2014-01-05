@@ -158,7 +158,7 @@ let
 
         # Keep root and arch-specific Makefiles
         chmod -w Makefile
-        chmod -w arch/$arch/Makefile
+        chmod -w arch/$arch/Makefile*
 
         # Keep whole scripts dir
         chmod -w -R scripts
