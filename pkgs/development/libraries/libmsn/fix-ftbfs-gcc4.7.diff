@@ -1,0 +1,16 @@
+Fix g++ 4.7 build failure
+
+Kudos to Matthias Klose for the patch
+
+Index: libmsn-4.2/msn/util.cpp
+===================================================================
+--- libmsn-4.2.orig/msn/util.cpp	2009-07-22 19:57:10.000000000 +0000
++++ libmsn-4.2/msn/util.cpp	2012-04-16 20:52:18.068767213 +0000
+@@ -25,6 +25,7 @@
+ #include <msn/util.h>
+ #include <sstream>
+ #include <errno.h>
++#include <unistd.h>
+ #include <cctype>
+ #include <fstream>
+ #include <openssl/rand.h>
