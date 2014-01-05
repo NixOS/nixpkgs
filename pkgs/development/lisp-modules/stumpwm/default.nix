@@ -8,7 +8,7 @@ buildLispPackage rec {
     rev = "565ef58f04f59e1667ec1da4087f1a43a32cd67f";
   };
   description = "Tiling window manager for X11";
-  deps = [cl-ppcre clx pkgs.xlibs.xprop];
+  deps = [cl-ppcre clx];
   buildInputs = with pkgs; [texinfo autoconf which makeWrapper];
   meta = {
     maintainers = [nixLib.maintainers.raskin];
@@ -29,7 +29,7 @@ buildLispPackage rec {
       fi;
 
       mv $out/lib/common-lisp/stumpwm/contrib/stumpish $out/bin/stumpish
-      wrapProgram "$out"/bin/stumpish --prefix PATH : "${pkgs.xlibs.xprop}/bin"
+      wrapProgram "$out"/bin/stumpish --prefix PATH : "${pkgs.xlibs.xprop}/bin:${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${pkgs.gnused}/bin:${pkgs.rlwrap}/bin"
     '';
     postInstall = ''false'';
   };
