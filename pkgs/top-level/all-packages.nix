@@ -429,9 +429,9 @@ let
   asymptote = builderDefsPackage ../tools/graphics/asymptote {
     inherit freeglut ghostscriptX imagemagick fftw boehmgc
       mesa ncurses readline gsl libsigsegv python zlib perl
-      texinfo lzma;
+      texinfo xz;
     texLive = texLiveAggregationFun {
-      paths = [ texLive texLiveExtra ];
+      paths = [ texLive texLiveExtra texLiveCMSuper ];
     };
   };
 
