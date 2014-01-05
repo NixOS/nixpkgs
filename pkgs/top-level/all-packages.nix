@@ -6869,6 +6869,9 @@ let
 
     klibc = callPackage ../os-specific/linux/klibc { };
 
+    klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
+
+
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
     */
@@ -6939,8 +6942,6 @@ let
   lm_sensors = callPackage ../os-specific/linux/lm-sensors { };
 
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
-
-  klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
   kmod = callPackage ../os-specific/linux/kmod { };
 
