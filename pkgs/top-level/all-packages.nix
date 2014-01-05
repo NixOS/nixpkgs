@@ -5837,7 +5837,6 @@ let
     };
 
   webkitgtk = callPackage ../development/libraries/webkitgtk {
-    stdenv = overrideGCC stdenv gcc47;
     libsoup = libsoup_2_44;
     harfbuzz = harfbuzz.override {
       withIcu = true;
@@ -9769,9 +9768,7 @@ let
 
       psi = callPackage ../applications/networking/instant-messengers/psi { };
 
-      qtcurve = callPackage ../misc/themes/qtcurve {
-        stdenv = overrideGCC stdenv gcc47;
-      };
+      qtcurve = callPackage ../misc/themes/qtcurve { };
 
       quassel = callPackage ../applications/networking/irc/quassel { };
 
