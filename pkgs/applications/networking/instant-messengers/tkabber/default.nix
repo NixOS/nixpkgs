@@ -10,11 +10,11 @@ let
     (map getTclLibPath tclLibraries);
 
 in stdenv.mkDerivation rec {
-  name = "tkabber-0.11.1";
+  name = "tkabber-1.0";
 
   src = fetchurl {
-    url = "http://files.jabber.ru/tkabber/tkabber-0.11.1.tar.gz";
-    sha256 = "19xv555cm7a2gczdalf9srxm39hmsh0fbidhwxa74a89nqkbf4lv";
+    url = "http://files.jabber.ru/tkabber/${name}.tar.xz";
+    sha256 = "49ee6e897dfe52ebac256531b54955e6b39223f606a9b8ad63a52475389db206";
   };
 
   defaultTheme = "ocean-deep";
