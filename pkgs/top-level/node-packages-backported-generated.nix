@@ -518,11 +518,11 @@
     passthru.names = [ "bower-registry-client" ];
   };
   full."bower2nix".">=2 <3" = lib.makeOverridable self.buildNodePackage {
-    name = "bower2nix-2.0.0";
+    name = "bower2nix-2.0.1";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/bower2nix/-/bower2nix-2.0.0.tgz";
-        sha1 = "27aaeb3681e2707327a7fcfef985faf19b7f7a5e";
+        url = "http://registry.npmjs.org/bower2nix/-/bower2nix-2.0.1.tgz";
+        sha1 = "f800cedca4d89e275913fcecf900e1f1032598cf";
       })
     ];
     buildInputs =
@@ -531,9 +531,6 @@
       self.full."temp"."0.6.0"
       self.full."fs.extra".">=1.2.1 <2"
       self.full."bower-json"."0.4.0"
-      self.full."bower-endpoint-parser"."0.2.1"
-      self.full."bower-logger"."0.2.1"
-      self.full."bower".">=1.2.8 <2"
       self.full."argparse"."0.1.15"
       self.full."clone"."0.1.11"
       self.full."semver".">=2.2.1 <3"
