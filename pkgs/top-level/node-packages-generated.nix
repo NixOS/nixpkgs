@@ -1158,14 +1158,14 @@
     passthru.names = [ "bower-registry-client" ];
   };
   by-spec."bower2nix"."*" =
-    self.by-version."bower2nix"."2.0.0";
-  by-version."bower2nix"."2.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "bower2nix-2.0.0";
+    self.by-version."bower2nix"."2.0.1";
+  by-version."bower2nix"."2.0.1" = lib.makeOverridable self.buildNodePackage {
+    name = "bower2nix-2.0.1";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/bower2nix/-/bower2nix-2.0.0.tgz";
-        name = "bower2nix-2.0.0.tgz";
-        sha1 = "27aaeb3681e2707327a7fcfef985faf19b7f7a5e";
+        url = "http://registry.npmjs.org/bower2nix/-/bower2nix-2.0.1.tgz";
+        name = "bower2nix-2.0.1.tgz";
+        sha1 = "f800cedca4d89e275913fcecf900e1f1032598cf";
       })
     ];
     buildInputs =
@@ -1174,9 +1174,6 @@
       self.by-version."temp"."0.6.0"
       self.by-version."fs.extra"."1.2.1"
       self.by-version."bower-json"."0.4.0"
-      self.by-version."bower-endpoint-parser"."0.2.1"
-      self.by-version."bower-logger"."0.2.1"
-      self.by-version."bower"."1.2.8"
       self.by-version."argparse"."0.1.15"
       self.by-version."clone"."0.1.11"
       self.by-version."semver"."2.2.1"
@@ -1186,7 +1183,7 @@
     ];
     passthru.names = [ "bower2nix" ];
   };
-  "bower2nix" = self.by-version."bower2nix"."2.0.0";
+  "bower2nix" = self.by-version."bower2nix"."2.0.1";
   by-spec."broadway"."0.2.9" =
     self.by-version."broadway"."0.2.9";
   by-version."broadway"."0.2.9" = lib.makeOverridable self.buildNodePackage {
