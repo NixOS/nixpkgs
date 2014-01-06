@@ -282,6 +282,11 @@ let
     vs = vs90wrapper;
   };
 
+  fetchbower = import ../build-support/fetchbower {
+    inherit stdenv git;
+    inherit (nodePackagesBackported) fetch-bower;
+  };
+
   fetchbzr = import ../build-support/fetchbzr {
     inherit stdenv bazaar;
   };
@@ -1204,6 +1209,13 @@ let
     inherit pkgs stdenv nodejs fetchurl;
     neededNatives = [python] ++ lib.optional (lib.elem system lib.platforms.linux) utillinux;
     self = pkgs.nodePackages;
+  });
+
+  nodePackagesBackported = recurseIntoAttrs (import ./node-packages.nix {
+    inherit pkgs stdenv nodejs fetchurl;
+    neededNatives = [python] ++ lib.optional (lib.elem system lib.platforms.linux) utillinux;
+    self = pkgs.nodePackagesBackported;
+    generated = ./node-packages-backported-generated.nix;
   });
 
   ldns = callPackage ../development/libraries/ldns { };
