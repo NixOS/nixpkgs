@@ -1236,11 +1236,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   pytest = buildPythonPackage rec {
-    name = "pytest-2.3.5";
+    name = "pytest-2.5.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytest/${name}.tar.gz";
-      md5 = "18f150e7be96b5fe3c388b0e817b8087";
+      md5 = "4e155a0134e6757b37cc6698c20f3e9f";
     };
 
     propagatedBuildInputs = [ pythonPackages.py ]
@@ -1250,7 +1250,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     meta = with stdenv.lib; {
       maintainers = with maintainers; [ iElectric lovek323 ];
-      platforms   = platforms.unix;
+      platforms = platforms.unix;
     };
   };
 
@@ -2471,11 +2471,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   dulwich = buildPythonPackage rec {
-    name = "dulwich-0.8.1";
+    name = "dulwich-0.8.7";
 
     src = fetchurl {
       url = "http://samba.org/~jelmer/dulwich/${name}.tar.gz";
-      sha256 = "1a1619e9c7e63fe9bdc93356ee893be1016b7ea12ad953f4e1f1f5c0c5056ee8";
+      sha256 = "041qp5v2x8fbwkmws6hwwiny74lavkz723dj8gwbm40b2383d8vv";
     };
 
     buildPhase = "make build";
@@ -4613,11 +4613,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   pip = buildPythonPackage rec {
-    version = "1.4.1";
+    version = "1.5";
     name = "pip-${version}";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pip/pip-${version}.tar.gz";
-      sha256 = "0knhj3c1nqqzxgqin8l0gzy6nzsbcxinyr0cbp1j99hi8xahcyjf";
+      sha256 = "0j700f70mj0brdlvs2cz4a7h4jwmzgymgp8qk1qb3lsm1qd1vy15";
     };
     buildInputs = [ mock scripttest virtualenv nose ];
     # ValueError: Working directory tests not found, or not a directory
@@ -4639,11 +4639,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-2.2.1";
+    name = "Pillow-2.3.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pillow/${name}.zip";
-      md5 = "d1d20d3db5d1ab312da0951ff061e6bf";
+      md5 = "56b6614499aacb7d6b5983c4914daea7";
     };
 
     buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.unzip pkgs.zlib pkgs.libtiff pkgs.libwebp ];
@@ -5748,11 +5748,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pyyaml = buildPythonPackage (rec {
-    name = "PyYAML-3.09";
+    name = "PyYAML-3.10";
 
     src = fetchurl {
-      url = "http://pyyaml.org/download/pyyaml/PyYAML-3.09.zip";
-      sha256 = "204aca8b42dbe90e460794d743dd16182011da85507bfd4f092f9f76e0688040";
+      url = "http://pyyaml.org/download/pyyaml/${name}.zip";
+      sha256 = "1r127fa354ppb667f4acxlzwxixap1jgzjrr790bw8mcpxv2hqaa";
     };
 
     buildInputs = [ pkgs.unzip pkgs.pyrex ];
@@ -6195,15 +6195,15 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   scripttest = buildPythonPackage rec {
-    version = "1.1.1";
+    version = "1.3";
     name = "scripttest-${version}";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/S/ScriptTest/ScriptTest-${version}.tar.gz";
-      md5 = "592ce890764c3f546d35b4d7c40c32ef";
+      url = "http://pypi.python.org/packages/source/s/scripttest/scripttest-${version}.tar.gz";
+      md5 = "1d1c5117ccfc7b5961cae6c1020c0848";
     };
 
-    buildInputs = [ nose ];
+    buildInputs = [ nose pytest ];
 
     meta = {
       description = "A library for testing interactive command-line applications";
@@ -6317,7 +6317,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "93c93725674c0702583a638f5a09c9e4";
     };
 
-    propagatedBuildInputs = [ jinja2 markdown pillow pilkit clint argh ];
+    propagatedBuildInputs = [ jinja2 markdown pillow pilkit clint argh pytest ];
 
     meta = with stdenv.lib; {
       description = "Yet another simple static gallery generator";
@@ -7201,10 +7201,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-1.10";
+    name = "virtualenv-1.11";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
-      md5 = "9745c28256c70c76d36adb3767a00212";
+      md5 = "d1a7cf95b539a861a8215827f387c4eb";
     };
 
     inherit recursivePthLoader;
