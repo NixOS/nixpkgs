@@ -282,6 +282,11 @@ let
     vs = vs90wrapper;
   };
 
+  fetchbower = import ../build-support/fetchbower {
+    inherit stdenv git;
+    inherit (nodePackages) fetch-bower;
+  };
+
   fetchbzr = import ../build-support/fetchbzr {
     inherit stdenv bazaar;
   };
