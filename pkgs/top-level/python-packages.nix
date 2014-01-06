@@ -40,7 +40,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   setuptools = import ../development/python-modules/setuptools {
     inherit (pkgs) stdenv fetchurl;
-    inherit python wrapPython;
+    inherit python wrapPython distutils-cfg;
   };
 
   # packages defined elsewhere
@@ -287,10 +287,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     ];
 
     postInstall = ''
-      ln -s ${pyramid}/bin/pserve $out/bin
       ln -s ${pkgs.bacula}/bin/bconsole $out/bin
-      wrapProgram "$out/bin/pserve" \
-        --suffix PYTHONPATH : "$out/lib/python2.7/site-packages"
     '';
 
     meta = {
@@ -544,7 +541,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
 
     # tests depend on $HOME setting
-    configurePhase = "export HOME=$TMPDIR";
+    preConfigure = "export HOME=$TMPDIR";
 
     propagatedBuildInputs =
       [ pythonPackages.pyyaml
@@ -1238,7 +1235,22 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "4e155a0134e6757b37cc6698c20f3e9f";
     };
 
-    propagatedBuildInputs = [ pythonPackages.py ]
+    preCheck = ''
+      # broken on python3, fixed in master, remove in next release
+      rm doc/en/plugins_index/test_plugins_index.py
+
+      # see https://bitbucket.org/hpk42/pytest/issue/418/test-failures-with-python-275-and-pytest
+      sed -i "/test_unicode/i\    @pytest.mark.xfail" testing/test_assertion.py
+
+      # don't test bash builtins
+      rm testing/test_argcomplete.py
+
+      # yaml test are failing
+      rm doc/en/example/nonpython/test_simple.yml
+
+    '';
+
+    propagatedBuildInputs = [ py ]
       ++ stdenv.lib.optional
         pkgs.config.pythonPackages.pytest.selenium or false
         pythonPackages.selenium;
@@ -1687,14 +1699,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   gtimelog = buildPythonPackage rec {
-    name = "gtimelog-0.8.1";
+    name = "gtimelog-${version}";
+    version = "0.8.1";
+
     src = fetchurl {
-      url = https://launchpad.net/gtimelog/devel/0.8.1/+download/gtimelog-0.8.1.tar.gz;
-      sha256 = "010sbw4rmslf5ifg9bgicn0f6mgsy76v8218xi0jndi9z6pva7y6";
+      url = "https://github.com/gtimelog/gtimelog/archive/${version}.tar.gz";
+      sha256 = "0nwpfv284b26q97mfpagqkqb4n2ilw46cx777qsyi3plnywk1xa0";
     };
+
     propagatedBuildInputs = [ pygtk ];
+
+    checkPhase = ''
+      patchShebangs ./runtests
+      ./runtests
+    '';
+
     meta = with stdenv.lib; {
-      description = "A small Gtk+ app for keeping track of your time. It's main goal is to be as unintrusive as possible.";
+      description = "A small Gtk+ app for keeping track of your time. It's main goal is to be as unintrusive as possible";
       homepage = http://mg.pov.lt/gtimelog/;
       license = licenses.gpl2Plus;
       maintainers = [ maintainers.ocharles ];
@@ -2185,6 +2206,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "0d2if633m3kbiricd5hgn1csccd8xab6lnab1bq9prdr9ks9i8h6";
     };
 
+    preConfigure = ''
+      sed -i "/use_setuptools/d" setup.py
+    '';
+
     buildInputs = [ pkgs.alsaLib pkgs.jackaudio ];
 
     meta = with stdenv.lib; {
@@ -2474,9 +2499,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
 
     buildPhase = "make build";
-    installCommand = ''
-      ${python}/bin/${python.executable} setup.py install --prefix="$out" --root=/ --record="$out/lib/${python.libPrefix}/site-packages/dulwich/list.txt" --single-version-externally-managed
-    '';
 
     # For some reason "python setup.py test" doesn't work with Python 2.6.
     # pretty sure that is about import behaviour.
@@ -3438,9 +3460,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [  ];
     doCheck = false;
-    installCommand = ''
-      easy_install --always-unzip --no-deps --prefix="$out" .
-    '';
 
     meta = {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
@@ -3492,21 +3511,15 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
-  magic = pkgs.stdenv.mkDerivation rec {
-    name = "python-${pkgs.file.name}";
+  magic = buildPythonPackage rec {
+    name = "${pkgs.file.name}";
 
     src = pkgs.file.src;
 
     patches = [ ../tools/misc/file/python.patch ];
     buildInputs = [ python pkgs.file ];
 
-    configurePhase = "cd python";
-
-    buildPhase = "${python}/bin/${python.executable} setup.py build";
-
-    installPhase = ''
-      ${python}/bin/${python.executable} setup.py install --prefix=$out
-    '';
+    preConfigure = "cd python";
 
     meta = {
       description = "A Python wrapper around libmagic";
@@ -3526,7 +3539,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     buildInputs = [ pkgs.swig pkgs.openssl ];
 
-    buildPhase = "${python}/bin/${python.executable} setup.py build_ext --openssl=${pkgs.openssl}";
+    preBuild = "${python}/bin/${python.executable} setup.py build_ext --openssl=${pkgs.openssl}";
 
     doCheck = false; # another test that depends on the network.
 
@@ -4200,19 +4213,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
-  notmuch = pkgs.stdenv.mkDerivation rec {
+  notmuch = buildPythonPackage rec {
     name = "python-${pkgs.notmuch.name}";
 
     src = pkgs.notmuch.src;
 
+    sourceRoot = "${pkgs.notmuch.name}/bindings/python";
+
     buildInputs = [ python pkgs.notmuch ];
-    #propagatedBuildInputs = [ python pkgs.notmuch ];
-
-    configurePhase = "cd bindings/python";
-
-    buildPhase = "python setup.py build";
-
-    installPhase = "python setup.py install --prefix=$out";
 
     meta = {
       description = "A Python wrapper around notmuch";
@@ -4233,12 +4241,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sed -i 's/-faltivec//' numpy/distutils/system_info.py
     '';
 
-    # TODO: add ATLAS=${pkgs.atlas}
-    installCommand = ''
+    preBuild = ''
       export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
-      ${python}/bin/${python.executable} setup.py build --fcompiler="gnu95"
-      ${python}/bin/${python.executable} setup.py install --prefix=$out
     '';
+
+    setupPyBuildFlags = ["--fcompiler='gnu95'"];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -4614,10 +4621,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/p/pip/pip-${version}.tar.gz";
       sha256 = "0j700f70mj0brdlvs2cz4a7h4jwmzgymgp8qk1qb3lsm1qd1vy15";
     };
-    buildInputs = [ mock scripttest virtualenv nose ];
-    # ValueError: Working directory tests not found, or not a directory
-    # see https://github.com/pypa/pip/issues/92
-    doCheck = false;
+    buildInputs = [ mock scripttest virtualenv pytest ];
   };
 
 
@@ -4644,7 +4648,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.unzip pkgs.zlib pkgs.libtiff pkgs.libwebp ];
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
-    configurePhase = ''
+    preConfigure = ''
       sed -i "setup.py" \
           -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
               s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
@@ -4653,7 +4657,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
               s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;'
     '';
 
-    doCheck = true;
+    
 
     meta = {
       homepage = http://python-imaging.github.com/Pillow;
@@ -4764,10 +4768,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   protobuf = buildPythonPackage rec {
     inherit (pkgs.protobuf) name src;
 
-    buildPhase = ''
-      python setup.py build
-    '';
-
     propagatedBuildInputs = [pkgs.protobuf];
     sourceRoot = "${name}/python";
 
@@ -4838,7 +4838,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
-      md5 = "3857dc8309d5f284669b81184253c2bb";
+      md5 = "d2e24b4363d834bf9192247f143435bc";
     };
   };
 
@@ -5189,6 +5189,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     propagatedBuildInputs = [ urlgrabber ];
 
     checkPhase = ''
+      export PYTHONPATH="$PYTHONPATH:."
       ${python}/bin/${python.executable} tests/baseclass.py -vv
     '';
 
@@ -5267,7 +5268,8 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     propagatedBuildInputs = [ pkgs.parted ];
 
     checkPhase = ''
-      ${python}/bin/${python.executable} -m unittest discover -v
+      patchShebangs Makefile
+      make test PYTHON=${python.executable}
     '';
 
     meta = {
@@ -5621,7 +5623,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     # There seems to be no way to pass that path to configure.
     NIX_CFLAGS_COMPILE="-I${pkgs.aprutil}/include/apr-1";
 
-    configurePhase = ''
+    preConfigure = ''
       cd Source
       python setup.py backport
       python setup.py configure \
@@ -6172,15 +6174,15 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     buildInputs = [pkgs.gfortran];
     propagatedBuildInputs = [ numpy ];
 
+    # TODO: add ATLAS=${pkgs.atlas}
+    preConfigure = ''
+      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
+    '';
+
+    setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
+
     # error: invalid command 'test'
     doCheck = false;
-
-    # TODO: add ATLAS=${pkgs.atlas}
-    installCommand = ''
-      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
-      ${python}/bin/${python.executable} setup.py build --fcompiler="gnu95"
-      ${python}/bin/${python.executable} setup.py install --prefix=$out
-    '';
 
     meta = {
       description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
@@ -6573,7 +6575,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
 
     buildInputs = [ mock ];
-    propagatedBuildInputs = [ meld3  ];
+    propagatedBuildInputs = [ meld3 ];
+
+    # failing tests when building under chroot as root user doesn't exist
+    doCheck = false;
 
     meta = {
       description = "A system for controlling process state under UNIX";
@@ -6713,10 +6718,16 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "051dd9de0757714d33c3ecd5ab37b97d";
     };
 
-    buildInputs = [ pytest webob pkgs.imagemagick ];
+    buildInputs = [ pytest webob pkgs.imagemagick nose ];
     propagatedBuildInputs = [ sqlalchemy8 wand ];
 
-    checkPhase = "cd tests && LD_LIBRARY_PATH=${pkgs.imagemagick}/lib py.test";
+    checkPhase = ''
+      cd tests
+      export LD_LIBRARY_PATH=${pkgs.imagemagick}/lib
+      export PYTHONPATH=$PYTHONPATH:../
+      py.test
+      cd ..
+    '';
 
     meta = {
       homepage = https://github.com/crosspop/sqlalchemy-imageattach;
@@ -7816,8 +7827,8 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     propagatedBuildInputs = [ zope_proxy ];
 
     # ignore circular dependency on zope_schema
-    installCommand = ''
-      easy_install --always-unzip --no-deps --prefix="$out" .
+    preBuild = ''
+      sed -i '/zope.schema/d' setup.py
     '';
 
     doCheck = false;
@@ -7870,12 +7881,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "e7e581af8193551831560a736a53cf58";
     };
 
-    propagatedBuildInputs = [ zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
-
-    # ignore circular dependency on zope_location
-    installCommand = ''
-      easy_install  --no-deps --prefix="$out" .
-    '';
+    propagatedBuildInputs = [ zope_location zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
 
     meta = {
         maintainers = [ stdenv.lib.maintainers.goibhniu ];
