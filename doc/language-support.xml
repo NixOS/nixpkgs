@@ -236,7 +236,7 @@ twisted = buildPythonPackage {
 <section><title>Java</title>
 
 <para>Java packages should install JAR files in
-<filename>$out/lib/java</filename>.</para>
+<filename>$out/share/java</filename>.</para>
 
 </section>
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, ant, jdk }:
+{ stdenv, fetchurl, unzip, ant, jdk, makeWrapper }:
 
 let
   version = "3.7.2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0swyysbyfmv068x8q1c5jqpwk5zb4xahg17aypx5rwb660f8fpbm";
   };
 
-  buildInputs = [ unzip ant jdk ];
+  buildInputs = [ unzip ant jdk makeWrapper ];
 
   unpackPhase = ''
     mkdir "${name}"
@@ -25,16 +25,12 @@ stdenv.mkDerivation rec {
   buildPhase = "ant build";
 
   installPhase = ''
-    mkdir -pv $out/lib/java
-    cp -v *.jar $out/lib/java
+    mkdir -pv $out/share/java
+    cp -v *.jar $out/share/java
 
     mkdir -pv $out/bin
-    cat > $out/bin/ecj <<EOF
-    #! /bin/sh
-    exec ${jdk.jre}/bin/java -cp $out/lib/java/ecj.jar org.eclipse.jdt.internal.compiler.batch.Main "\$@"
-    EOF
-
-    chmod u+x $out/bin/ecj
+    makeWrapper ${jdk.jre}/bin/java $out/bin/ecj \
+      --add-flags "-cp $out/share/java/ecj.jar org.eclipse.jdt.internal.compiler.batch.Main"
   '';
 
   meta = {

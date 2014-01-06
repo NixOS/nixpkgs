@@ -385,6 +385,8 @@ let
 
   platforms = import ./platforms.nix;
 
+  setJavaClassPath = makeSetupHook { } ../build-support/setup-hooks/set-java-classpath.sh;
+
 
   ### TOOLS
 
