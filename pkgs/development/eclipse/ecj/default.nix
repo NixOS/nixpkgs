@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
     mkdir -pv $out/bin
     makeWrapper ${jdk.jre}/bin/java $out/bin/ecj \
       --add-flags "-cp $out/share/java/ecj.jar org.eclipse.jdt.internal.compiler.batch.Main"
+
+    # Add a setup hook that causes Ant to use the ECJ.
+    mkdir -p $out/nix-support
+    cat <<EOF > $out/nix-support/setup-hook
+    export NIX_ANT_ARGS="-Dbuild.compiler=org.eclipse.jdt.core.JDTCompilerAdapter \$NIX_ANT_ARGS"
+    EOF
   '';
 
   meta = {
