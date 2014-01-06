@@ -20,10 +20,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   callPackage = pkgs.lib.callPackageWith (pkgs // pythonPackages);
 
-  buildPythonPackage = import ../development/python-modules/generic {
-    inherit (pkgs) lib;
-    inherit python wrapPython setuptools recursivePthLoader offlineDistutils;
-  };
+  # global distutils config used by buildPythonPackage
+  distutils-cfg = callPackage ../development/python-modules/distutils-cfg { };
+
+  buildPythonPackage = callPackage ../development/python-modules/generic { };
 
   wrapPython = pkgs.makeSetupHook
     { deps = pkgs.makeWrapper;
@@ -32,11 +32,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
    ../development/python-modules/generic/wrap.sh;
 
   # specials
-
-  offlineDistutils = import ../development/python-modules/offline-distutils {
-    inherit (pkgs) stdenv;
-    inherit python;
-  };
 
   recursivePthLoader = import ../development/python-modules/recursive-pth-loader {
     inherit (pkgs) stdenv;

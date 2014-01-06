@@ -1,84 +1,95 @@
 /* This function provides a generic Python package builder.  It is
-   intended to work with packages that use `setuptools'
+   intended to work with packages that use `distutils/setuptools'
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, wrapPython, lib, offlineDistutils, recursivePthLoader }:
+{ python, setuptools, wrapPython, lib, recursivePthLoader, distutils-cfg }:
 
-{ name, namePrefix ? python.libPrefix + "-"
+{ name
+
+# by default prefix name with python version name, e.g. "python3.3-"
+, namePrefix ? python.libPrefix + "-"
 
 , buildInputs ? []
 
+# TODO: document
+, distutilsExtraCfg ? ""
+
+# TODO: say what it does
 , propagatedBuildInputs ? []
 
-, # List of packages that should be added to the PYTHONPATH
-  # environment variable in programs built by this function.  Packages
-  # in the standard `propagatedBuildInputs' variable are also added.
-  # The difference is that `pythonPath' is not propagated to the user
-  # environment.  This is preferrable for programs because it doesn't
-  # pollute the user environment.
-  pythonPath ? []
+# passed to "python setup.py install"
+, setupPyInstallFlags ? []
 
-, installCommand ?
-    ''
-      easy_install --always-unzip --prefix="$out" .
-    ''
+# passed to "python setup.py build"
+, setupPyBuildFlags ? []
 
-, preConfigure ? "true"
-
-, buildPhase ? "true"
-
+# enable tests by default
 , doCheck ? true
 
-, checkPhase ?
-    ''
-      runHook preCheck
-      ${python}/bin/${python.executable} setup.py test
-      runHook postCheck
-    ''
+# List of packages that should be added to the PYTHONPATH
+# environment variable in programs built by this function.  Packages
+# in the standard `propagatedBuildInputs' variable are also added.
+# The difference is that `pythonPath' is not propagated to the user
+# environment.  This is preferrable for programs because it doesn't
+# pollute the user environment.
+,  pythonPath ? []
 
-, preInstall ? ""
-, postInstall ? ""
-
-, meta ? {}
+, meta ? {} 
 
 , ... } @ attrs:
 
-# Keep extra attributes from ATTR, e.g., `patchPhase', etc.
+# Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
 python.stdenv.mkDerivation (attrs // {
-  inherit doCheck buildPhase checkPhase;
+  inherit doCheck;
 
   name = namePrefix + name;
 
-  # default to python's platforms and add maintainer(s) to every
-  # package
-  meta = {
-    platforms = python.meta.platforms;
-  } // meta // {
-    maintainers = (meta.maintainers or []) ++ [ lib.maintainers.chaoflow lib.maintainers.iElectric ];
-  };
-
-  # checkPhase after installPhase to run tests on installed packages
-  phases = "unpackPhase patchPhase configurePhase buildPhase installPhase checkPhase fixupPhase distPhase";
-
-  buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
+  buildInputs = [ python wrapPython setuptools (distutils-cfg.override { extraCfg = distutilsExtraCfg; }) ] ++ buildInputs ++ pythonPath;
 
   propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader ];
 
   pythonPath = [ setuptools ] ++ pythonPath;
 
-  preConfigure = ''
+  configurePhase = attrs.configurePhase or ''
+    runHook preConfigure
+
+    # TODO: document
     export DETERMINISTIC_BUILD=1
-    PYTHONPATH="${offlineDistutils}/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-    ${preConfigure}
+
+    # we need to prepend following line to monkeypatch distutils commands
+    sed -i '0,/import distutils/s//import setuptools;import distutils/' setup.py
+    sed -i '0,/from distutils/s//import setuptools;from distutils/' setup.py
+
+
+    runHook postConfigure
   '';
 
-  installPhase = preInstall + ''
+  checkPhase = attrs.checkPhase or ''
+      runHook preCheck
+
+      ${python}/bin/${python.executable} setup.py test -q
+
+      runHook postCheck
+  '';
+
+  buildPhase = attrs.buildPhase or ''
+    runHook preBuild
+
+    ${python}/bin/${python.executable} setup.py build ${lib.concatStringsSep " " setupPyBuildFlags}
+
+    runHook postBuild
+  '';
+
+  installPhase = attrs.installPhase or ''
+    runHook preInstall
+
     mkdir -p "$out/lib/${python.libPrefix}/site-packages"
 
-    echo "installing \`${name}' with \`easy_install'..."
     export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-    ${installCommand}
+
+    ${python}/bin/${python.executable} setup.py install --install-lib=$out/lib/${python.libPrefix}/site-packages \
+                                                        --prefix="$out" ${lib.concatStringsSep " " setupPyInstallFlags}
 
     # A pth file might have been generated to load the package from
     # within its own site-packages, rename this package not to
@@ -94,17 +105,18 @@ python.stdenv.mkDerivation (attrs // {
     # corresponding site.py needs to be included in the PYTHONPATH.
     rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
 
-    ${postInstall}
+    runHook postInstall
   '';
 
   postFixup =
     ''
       wrapPythonPrograms
 
-      # If a user installs a Python package, she probably also wants its
+      # If a user installs a Python package, they probably also wants its
       # dependencies in the user environment (since Python modules don't
       # have something like an RPATH, so the only way to find the
       # dependencies is to have them in the PYTHONPATH variable).
+      # TODO: better docs
       if test -e $out/nix-support/propagated-build-inputs; then
           ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
       fi
@@ -116,4 +128,13 @@ python.stdenv.mkDerivation (attrs // {
         fi
       done
     '';
+
+  meta = {
+    # default to python's platforms
+    platforms = python.meta.platforms;
+  } // meta // {
+    # add extra maintainer(s) to every package
+    maintainers = (meta.maintainers or []) ++ [ lib.maintainers.chaoflow lib.maintainers.iElectric ];
+  };
+
 })
