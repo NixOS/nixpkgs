@@ -517,16 +517,16 @@
     ];
     passthru.names = [ "bower-registry-client" ];
   };
-  full."bower2nix".">=2 <3" = lib.makeOverridable self.buildNodePackage {
-    name = "bower2nix-2.0.1";
+  full."bower2nix".">=3 <4" = lib.makeOverridable self.buildNodePackage {
+    name = "bower2nix-3.0.0";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/bower2nix/-/bower2nix-2.0.1.tgz";
-        sha1 = "f800cedca4d89e275913fcecf900e1f1032598cf";
+        url = "http://registry.npmjs.org/bower2nix/-/bower2nix-3.0.0.tgz";
+        sha1 = "afe3c676baff67b86e06f5514a325be45b317184";
       })
     ];
     buildInputs =
-      (self.nativeDeps."bower2nix".">=2 <3" or []);
+      (self.nativeDeps."bower2nix".">=3 <4" or []);
     deps = [
       self.full."temp"."0.6.0"
       self.full."fs.extra".">=1.2.1 <2"
@@ -540,7 +540,7 @@
     ];
     passthru.names = [ "bower2nix" ];
   };
-  "bower2nix" = self.full."bower2nix".">=2 <3";
+  "bower2nix" = self.full."bower2nix".">=3 <4";
   full."buffers"."~0.1.1" = lib.makeOverridable self.buildNodePackage {
     name = "buffers-0.1.1";
     src = [

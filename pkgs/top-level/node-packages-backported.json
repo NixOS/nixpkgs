@@ -1,4 +1,4 @@
 [
-  { "bower2nix": ">=2 <3" },
+  { "bower2nix": ">=3 <4" },
   { "fetch-bower": ">=2 <3" }
 ]
