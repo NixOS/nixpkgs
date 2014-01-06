@@ -2065,8 +2065,6 @@ let
 
   tkabber = callPackage ../applications/networking/instant-messengers/tkabber { };
 
-  tkabber_plugins = callPackage ../applications/networking/instant-messengers/tkabber-plugins { };
-
   qfsm = callPackage ../applications/science/electronics/qfsm { };
 
   tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix {
