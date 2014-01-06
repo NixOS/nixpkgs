@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       wrapPythonPrograms
     '';
 
-  doCheck = true;
+  doCheck = stdenv.system != "x86_64-darwin";
 
   checkPhase = ''
     ${python}/bin/${python.executable} setup.py test
