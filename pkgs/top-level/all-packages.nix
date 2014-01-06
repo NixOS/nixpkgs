@@ -7773,6 +7773,8 @@ let
 
     gist = callPackage ../applications/editors/emacs-modes/gist { };
 
+    idris = callPackage ../applications/editors/emacs-modes/idris { };
+
     jade = callPackage ../applications/editors/emacs-modes/jade { };
 
     jdee = callPackage ../applications/editors/emacs-modes/jdee {
