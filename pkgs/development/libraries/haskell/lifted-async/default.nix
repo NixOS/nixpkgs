@@ -1,15 +1,14 @@
-{ cabal, async, HUnit, liftedBase, monadControl, mtl, testFramework
-, testFrameworkHunit, testFrameworkTh, transformersBase
+{ cabal, async, HUnit, liftedBase, monadControl, mtl, tasty
+, tastyHunit, tastyTh, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "lifted-async";
-  version = "0.1.0.1";
-  sha256 = "03b89cixfin7ksdjh12g0pfrmgzw9mnx6nyvywv3rjc1sra3b8f0";
+  version = "0.1.1";
+  sha256 = "0hkqiplnvy14m881n4bzamvy1432bxy4k1j4rwl824w5fn2h5i74";
   buildDepends = [ async liftedBase monadControl transformersBase ];
   testDepends = [
-    HUnit liftedBase monadControl mtl testFramework testFrameworkHunit
-    testFrameworkTh
+    async HUnit liftedBase monadControl mtl tasty tastyHunit tastyTh
   ];
   meta = {
     homepage = "https://github.com/maoe/lifted-async";
