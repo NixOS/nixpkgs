@@ -1,0 +1,28 @@
+diff --git a/CHANGES.txt b/CHANGES.txt
+--- a/CHANGES.txt
++++ b/CHANGES.txt
+@@ -3,6 +3,12 @@
+ =======
+ 
+ -----
++2.0.3
++-----
++
++* Issue #131: Fix RuntimeError when constructing an egg fetcher.
++
++-----
+ 2.0.2
+ -----
+ 
+diff --git a/setuptools/dist.py b/setuptools/dist.py
+--- a/setuptools/dist.py
++++ b/setuptools/dist.py
+@@ -295,7 +295,7 @@
+                 'find_links', 'site_dirs', 'index_url', 'optimize',
+                 'site_dirs', 'allow_hosts'
+             )
+-            for key in opts.keys():
++            for key in list(opts):
+                 if key not in keep:
+                     del opts[key]   # don't use any other settings
+             if self.dependency_links:

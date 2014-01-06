@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, wrapPython }:
+{ stdenv, fetchurl, python, wrapPython, distutils-cfg }:
 
 stdenv.mkDerivation rec {
   shortName = "setuptools-${version}";
@@ -11,9 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "09nv5x45y8fgc0kjmmw4gig3hr0is9xlc5rq053vnbmkxr5q5xmi";
   };
 
-  buildInputs = [ python wrapPython ];
+  # see https://bitbucket.org/pypa/setuptools/commits/976b839801a3a181f2e14f305ddbe0b410fa8fc0.patch
+  patches = [ ./fix_python3_egg_fetcher.patch ];
 
-  buildPhase = "${python}/bin/${python.executable} setup.py build --build-base $out";
+  buildInputs = [ python wrapPython distutils-cfg ];
+
+  buildPhase = "${python}/bin/${python.executable} setup.py build";
 
   installPhase =
     ''
