@@ -1,29 +1,6 @@
-{ stdenv
-, fetchurl
-, unzip
-, zip
-, procps
-, coreutils
-, alsaLib
-, ant
-, freetype
-, cups
-, which
-, jdk
-, nettools
-, libX11
-, libXt
-, libXext
-, libXrender
-, libXtst
-, libXi
-, libXinerama
-, libXcursor
-, fontconfig
-, cpio
-, cacert
-, perl
-}:
+{ stdenv, fetchurl, unzip, zip, procps, coreutils, alsaLib, ant, freetype, cups
+, which, jdk, nettools, libX11, libXt, libXext, libXrender, libXtst, libXi, libXinerama
+, libXcursor, fontconfig, cpio, cacert, perl, setJavaClassPath }:
 
 let
 
@@ -54,26 +31,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "jre" ];
 
-  buildInputs = [
-    unzip
-    procps
-    ant
-    which
-    zip
-    cpio
-    nettools
-    alsaLib
-    libX11
-    libXt
-    libXext
-    libXrender
-    libXtst
-    libXi
-    libXinerama
-    libXcursor
-    fontconfig
-    perl
-  ];
+  buildInputs =
+    [ unzip procps ant which zip cpio nettools alsaLib
+      libX11 libXt libXext libXrender libXtst libXi libXinerama libXcursor
+      fontconfig perl
+    ];
 
   NIX_LDFLAGS = "-lfontconfig -lXcursor -lXinerama";
 
@@ -149,6 +111,12 @@ stdenv.mkDerivation rec {
     prefix=$jre stripDirs "$stripDebugList" "''${stripDebugFlags:--S}"
     patchELF $jre
     propagatedNativeBuildInputs+=" $jre"
+
+    # Propagate the setJavaClassPath setup hook from the JRE so that
+    # any package that depends on the JRE has $CLASSPATH set up
+    # properly.
+    mkdir -p $jre/nix-support
+    echo -n "${setJavaClassPath}" > $jre/nix-support/propagated-native-build-inputs
   '';
 
   meta = {
