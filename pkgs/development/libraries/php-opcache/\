@@ -1,0 +1,28 @@
+{stdenv, fetchurl, php, autoconf, automake, libtool, m4 }:
+
+stdenv.mkDerivation rec {
+  name = "php-opcache-7.0.2";
+  
+  src = fetchurl {
+    url = http://pecl.php.net/get/zendopcache-7.0.2.tgz;
+    md5 = "45086010bc4f82f506c08be1c556941b";
+  };
+
+  preConfigure = ''
+    phpize
+
+    sed -i 's,^EXTENSION_DIR.*,'EXTENSION_DIR=$out/lib/php/extensions, configure
+  '';
+
+  configureFlags = [
+    "--with-php-config=${pkgs.php}/bin/php-config"
+  ];
+
+  buildInputs = [ php autoconf automake libtool m4 ];
+
+  meta = {
+    description = "The Zend OPcache provides faster PHP execution through opcode caching and optimization.";
+    homepage = http://pecl.php.net/package/ZendOpcache
+    license = "PHP";
+  };
+}

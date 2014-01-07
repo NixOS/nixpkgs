@@ -3295,6 +3295,7 @@ let
   php5_5 = php.override { version = "5.5.x"; };
   php5_5fpm = php5_4.override { sapi = "fpm"; };
 
+  php_opcache = callPackage ../development/libraries/php-opcache { };
   # use php.apc/xcache/Xdebug instead
   # php_apc = callPackage ../development/libraries/php-apc { };
   # php_xcache = callPackage ../development/libraries/php-xcache { };
