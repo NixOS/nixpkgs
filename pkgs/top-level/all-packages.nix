@@ -3500,11 +3500,7 @@ let
 
   checkstyle = callPackage ../development/tools/analysis/checkstyle { };
 
-  flex = callPackage ../development/tools/parsing/flex {
-    # Break infinite recursion: bison's test suite needs flex, so we
-    # use an untested bison build to build flex first.
-    yacc = bison.override { flex = null; };
-  };
+  flex = callPackage ../development/tools/parsing/flex { };
 
   m4 = gnum4;
 
