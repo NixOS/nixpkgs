@@ -33,7 +33,7 @@ if test "$noSysDirs" = "1"; then
 
         # The path to the Glibc binaries such as `crti.o'.
         glibc_libdir="$(cat $NIX_GCC/nix-support/orig-libc)/lib"
-        
+
     else
         # Hack: support impure environments.
         extraFlags="-isystem /usr/include"
@@ -50,10 +50,10 @@ if test "$noSysDirs" = "1"; then
     # bootstrap compiler are optimized and (optionally) contain
     # debugging information (info "(gccinstall) Building").
     if test -n "$dontStrip"; then
-	extraFlags="-O2 -g $extraFlags"
+        extraFlags="-O2 -g $extraFlags"
     else
-	# Don't pass `-g' at all; this saves space while building.
-	extraFlags="-O2 $extraFlags"
+        # Don't pass `-g' at all; this saves space while building.
+        extraFlags="-O2 $extraFlags"
     fi
 
     EXTRA_FLAGS="$extraFlags"
@@ -213,7 +213,7 @@ postInstall() {
     # previous gcc.
     rm -rf $out/libexec/gcc/*/*/install-tools
     rm -rf $out/lib/gcc/*/*/install-tools
-    
+
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
     # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
