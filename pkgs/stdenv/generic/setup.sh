@@ -614,8 +614,8 @@ buildPhase() {
         return
     fi
 
-    # see https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
-    makeFlags="${makeFlags} SHELL=${SHELL}"
+    # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
+    makeFlags="SHELL=$SHELL $makeFlags"
 
     echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
     make ${makefile:+-f $makefile} \
