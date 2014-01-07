@@ -1,6 +1,9 @@
 {stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull,
-libX11, graphicsmagick, pcre, liblapack, texLive, pkgconfig, mesa, fltk,
-fftw, fftwSinglePrec, zlib, curl, qrupdate }:
+libX11, graphicsmagick, pcre, liblapack, pkgconfig, mesa, fltk,
+fftw, fftwSinglePrec, zlib, curl, qrupdate
+, qt ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
+, suitesparse ? null, gnuplot ? null, openjdk ? null, python ? null
+}:
 
 let
   version = "3.8.0";
@@ -14,7 +17,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
     graphicsmagick pcre liblapack pkgconfig mesa fltk zlib curl
-    fftw fftwSinglePrec qrupdate ];
+    fftw fftwSinglePrec qrupdate ]
+    ++ (stdenv.lib.optional (qt != null) qt)
+    ++ (stdenv.lib.optional (ghostscript != null) ghostscript)
+    ++ (stdenv.lib.optional (llvm != null) llvm)
+    ++ (stdenv.lib.optional (hdf5 != null) hdf5)
+    ++ (stdenv.lib.optional (glpk != null) glpk)
+    ++ (stdenv.lib.optional (suitesparse != null) suitesparse)
+    ++ (stdenv.lib.optional (openjdk != null) openjdk)
+    ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
+    ++ (stdenv.lib.optional (python != null) python)
+    ;
 
   # there is a mysterious sh: command not found
   doCheck = false;
@@ -39,7 +52,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://octave.org/;
     license = "GPLv3+";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [viric raskin];
     platforms = with stdenv.lib.platforms; linux;
   };
 }
