@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Compiler for GObject type system";
     homepage = "http://live.gnome.org/Vala";
-    license = stdenv.lib.licenses.gpl21Plus;
+    license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ antono iyzsong ];
   };
