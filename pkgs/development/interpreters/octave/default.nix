@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care
   postInstall = ''
-    cp test/fntests.log $out/share/octave/${name}-fntests.log
+    cp test/fntests.log $out/share/octave/${name}-fntests.log || true
   '';
 
   passthru = {
