@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0ivqnbhiwd12q8hp3qw6rpsrpw2jg5y2mymk8cn22lsx90dfvprp";
   };
 
+  enableParallelBuilding = true;
+
+  # In stdenv-linux, prevent a dependency on bootstrap-tools.
+  makeFlags = "SHELL=/bin/sh GREP=grep";
+
   meta = {
     homepage = http://www.gnu.org/software/gzip/;
     description = "Gzip, the GNU zip compression program";
