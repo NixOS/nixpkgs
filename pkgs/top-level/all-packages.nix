@@ -2371,8 +2371,6 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
-  gcc45 = gcc45_real;
-
   wrapDeterministicGCCWith = gccWrapper: glibc: baseGCC: gccWrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
     nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
@@ -2403,10 +2401,6 @@ let
       then gnu.libpthreadCross
       else null;
   }));
-
-  gcc46 = gcc46_real;
-
-  gcc48 = gcc48_real;
 
   gcc45_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.5) {
@@ -2498,7 +2492,7 @@ let
     profiledCompiler = true;
   }));
 
-  gcc45_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.5) {
+  gcc45 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.5) {
     inherit fetchurl stdenv gmp mpfr mpc libelf zlib perl
       ppl cloogppl
       gettext which noSysDirs;
@@ -2518,7 +2512,7 @@ let
       else null;
   }));
 
-  gcc46_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
+  gcc46 = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
     inherit noSysDirs;
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:
@@ -2556,7 +2550,7 @@ let
       }))
     else throw "Multilib gcc not supported on ‘${system}’";
 
-  gcc48_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.8 {
+  gcc48 = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.8 {
     inherit noSysDirs;
 
     # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
@@ -2633,7 +2627,7 @@ let
     ppl = null;
   });
 
-  gnat45 = wrapGCC (gcc45_real.gcc.override {
+  gnat45 = wrapGCC (gcc45.gcc.override {
     name = "gnat";
     langCC = false;
     langC = true;
@@ -2646,7 +2640,7 @@ let
     ppl = null;
   });
 
-  gnat46 = wrapGCC (gcc46_real.gcc.override {
+  gnat46 = wrapGCC (gcc46.gcc.override {
     name = "gnat";
     langCC = false;
     langC = true;
@@ -2665,7 +2659,7 @@ let
 
   gccgo = gccgo48;
 
-  gccgo48 = wrapGCC (gcc48_real.gcc.override {
+  gccgo48 = wrapGCC (gcc48.gcc.override {
     name = "gccgo";
     langCC = true; #required for go.
     langC = true;
