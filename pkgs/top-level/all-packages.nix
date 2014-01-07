@@ -6402,6 +6402,7 @@ let
   });
 
   zabbix20 = callPackage ../servers/monitoring/zabbix/2.0.nix { };
+  zabbix22 = callPackage ../servers/monitoring/zabbix/2.2.nix { };
 
 
   ### OS-SPECIFIC
