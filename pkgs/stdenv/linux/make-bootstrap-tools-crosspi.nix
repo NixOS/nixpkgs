@@ -73,7 +73,7 @@ let
   patch = pkgs.patch.crossDrv;
   patchelf = pkgs.patchelf.crossDrv;
   replace = pkgs.replace.crossDrv;
-  gcc = pkgs.gcc47;
+  gcc = pkgs.gcc;
   gmp = pkgs.gmp.crossDrv;
   mpfr = pkgs.mpfr.crossDrv;
   ppl = pkgs.ppl.crossDrv;

@@ -2406,8 +2406,6 @@ let
 
   gcc46 = gcc46_real;
 
-  gcc47 = gcc47_real;
-
   gcc48 = gcc48_real;
 
   gcc45_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
@@ -2435,10 +2433,9 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
-  gcc47_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
-    (makeOverridable (import ../development/compilers/gcc/4.7) {
-      inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
-        cloog ppl gettext which noSysDirs;
+  gcc48_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
+    (callPackage ../development/compilers/gcc/4.8 {
+      inherit noSysDirs;
       binutilsCross = binutilsCross;
       libcCross = libcCross;
       profiledCompiler = false;
@@ -2447,7 +2444,7 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
-  gcc_realCross = gcc47_realCross;
+  gcc_realCross = gcc48_realCross;
 
   gccCrossStageStatic = let
       isMingw = (stdenv.cross.libc == "msvcrt");
@@ -2559,33 +2556,6 @@ let
       }))
     else throw "Multilib gcc not supported on ‘${system}’";
 
-  gcc47_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.7 {
-    inherit noSysDirs;
-    texinfo = texinfo4;
-    # I'm not sure if profiling with enableParallelBuilding helps a lot.
-    # We can enable it back some day. This makes the *gcc* builds faster now.
-    profiledCompiler = false;
-
-    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
-    # and host != build), `cross' must be null but the cross-libc must still
-    # be passed.
-    cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
-    libpthreadCross =
-      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-      then gnu.libpthreadCross
-      else null;
-  }));
-
-  gcc47_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.7 {
-    stripped = false;
-    texinfo = texinfo4;
-    inherit noSysDirs;
-    cross = null;
-    libcCross = null;
-    binutilsCross = null;
-  }));
-
   gcc48_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.8 {
     inherit noSysDirs;
 
@@ -2694,13 +2664,6 @@ let
   });
 
   gccgo = gccgo48;
-
-  gccgo47 = wrapGCC (gcc47_real.gcc.override {
-    name = "gccgo";
-    langCC = true; #required for go.
-    langC = true;
-    langGo = true;
-  });
 
   gccgo48 = wrapGCC (gcc48_real.gcc.override {
     name = "gccgo";
@@ -8602,9 +8565,7 @@ let
 
   ogmtools = callPackage ../applications/video/ogmtools { };
 
-  omxplayer = callPackage ../applications/video/omxplayer {
-    stdenv = overrideGCC stdenv gcc47;
-  };
+  omxplayer = callPackage ../applications/video/omxplayer { };
 
   oneteam = callPackage ../applications/networking/instant-messengers/oneteam {};
 
@@ -9363,9 +9324,7 @@ let
 
   d2x_rebirth = callPackage ../games/d2x-rebirth { };
 
-  eduke32 = callPackage ../games/eduke32 {
-    stdenv = overrideGCC stdenv gcc47;
-  };
+  eduke32 = callPackage ../games/eduke32 { };
 
   egoboo = callPackage ../games/egoboo { };
 
