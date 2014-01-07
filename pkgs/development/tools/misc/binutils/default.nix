@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-static-libgcc";
 
   configureFlags =
-    [ "--enable-deterministic-archives" ]
+    [ "--enable-shared" "--enable-deterministic-archives" ]
     ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
     ++ optional (cross != null) "--target=${cross.config}"
     ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
