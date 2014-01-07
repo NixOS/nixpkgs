@@ -2347,30 +2347,6 @@ let
     profiledCompiler = true;
   }));
 
-  gcc43_realCross = makeOverridable (import ../development/compilers/gcc/4.3) {
-    inherit stdenv fetchurl gmp mpfr noSysDirs;
-    texinfo = texinfo4;
-    binutilsCross = binutilsCross;
-    libcCross = libcCross;
-    profiledCompiler = false;
-    enableMultilib = true;
-    crossStageStatic = false;
-    cross = assert crossSystem != null; crossSystem;
-  };
-
-  gcc44_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
-    (makeOverridable (import ../development/compilers/gcc/4.4) {
-      inherit stdenv fetchurl gmp mpfr /* ppl cloogppl */ noSysDirs
-          gettext which;
-      texinfo = texinfo4;
-      binutilsCross = binutilsCross;
-      libcCross = libcCross;
-      profiledCompiler = false;
-      enableMultilib = false;
-      crossStageStatic = false;
-      cross = assert crossSystem != null; crossSystem;
-    });
-
   wrapDeterministicGCCWith = gccWrapper: glibc: baseGCC: gccWrapper {
     nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
     nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
@@ -2401,31 +2377,6 @@ let
       then gnu.libpthreadCross
       else null;
   }));
-
-  gcc45_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
-    (makeOverridable (import ../development/compilers/gcc/4.5) {
-      inherit fetchurl stdenv gmp mpfr mpc libelf zlib
-        ppl cloogppl gettext which noSysDirs;
-      texinfo = texinfo4;
-      binutilsCross = binutilsCross;
-      libcCross = libcCross;
-      profiledCompiler = false;
-      enableMultilib = false;
-      crossStageStatic = false;
-      cross = assert crossSystem != null; crossSystem;
-    });
-
-  gcc46_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
-    (makeOverridable (import ../development/compilers/gcc/4.6) {
-      inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
-        cloog ppl gettext which noSysDirs;
-      binutilsCross = binutilsCross;
-      libcCross = libcCross;
-      profiledCompiler = false;
-      enableMultilib = false;
-      crossStageStatic = false;
-      cross = assert crossSystem != null; crossSystem;
-    });
 
   gcc48_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (callPackage ../development/compilers/gcc/4.8 {
@@ -2531,16 +2482,6 @@ let
     texinfo = texinfo413;
   }));
 
-  # A non-stripped version of GCC.
-  gcc46_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
-    stripped = false;
-
-    inherit noSysDirs;
-    cross = null;
-    libcCross = null;
-    binutilsCross = null;
-  }));
-
   gcc46_multi =
     if system == "x86_64-linux" then lowPrio (
       wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc46.gcc.override {
@@ -2614,19 +2555,6 @@ let
 
   gnat = gnat45;
 
-  gnat44 = wrapGCC (gcc44.gcc.override {
-    name = "gnat";
-    langCC = false;
-    langC = true;
-    langAda = true;
-    profiledCompiler = false;
-    inherit gnatboot;
-    # We can't use the ppl stuff, because we would have
-    # libstdc++ problems.
-    cloogppl = null;
-    ppl = null;
-  });
-
   gnat45 = wrapGCC (gcc45.gcc.override {
     name = "gnat";
     langCC = false;
@@ -2693,7 +2621,7 @@ let
 
   jhc = callPackage ../development/compilers/jhc {
     inherit (haskellPackages_ghc6123) ghc binary zlib utf8String readline fgl
-    regexCompat HsSyck random;
+      regexCompat HsSyck random;
   };
 
   # Haskell and GHC
