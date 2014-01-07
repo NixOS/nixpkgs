@@ -3283,7 +3283,9 @@ let
     openjdk = null;
     gnuplot = null;
   };
-  octaveFull = (lowPrio (callPackage ../development/interpreters/octave { }));
+  octaveFull = (lowPrio (callPackage ../development/interpreters/octave { 
+    fltk = fltk13;
+  }));
 
   # mercurial (hg) bleeding edge version
   octaveHG = callPackage ../development/interpreters/octave/hg.nix { };
