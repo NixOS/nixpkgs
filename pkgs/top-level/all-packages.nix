@@ -4190,13 +4190,10 @@ let
   };
 
   ffmpeg_2 = callPackage ../development/libraries/ffmpeg/2.x.nix {
-    vpxSupport = !stdenv.isMips;
     texinfo = texinfo5;
   };
 
   ffmpeg = ffmpeg_2;
-
-  ffmpeg_configurable = callPackage ../development/libraries/ffmpeg/configurable.nix { };
 
   ffms = callPackage ../development/libraries/ffms { };
 
