@@ -8,12 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "0ivqnbhiwd12q8hp3qw6rpsrpw2jg5y2mymk8cn22lsx90dfvprp";
   };
 
-  patches = [ ./skip-some-tests.patch ];
-
-  buildInputs = [ less ]; # just for tests
-
-  doCheck = true;
-
   meta = {
     homepage = http://www.gnu.org/software/gzip/;
     description = "Gzip, the GNU zip compression program";
@@ -31,7 +25,5 @@ stdenv.mkDerivation rec {
       '';
 
     license = "GPLv3+";
-
-    maintainers = [ ];
   };
 }
