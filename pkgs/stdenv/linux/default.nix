@@ -268,7 +268,13 @@ rec {
   stdenvLinux = import ../generic rec {
     inherit system config;
 
-    preHook = commonPreHook;
+    preHook =
+      ''
+        # Make "strip" produce deterministic output, by setting
+        # timestamps etc. to a fixed value.
+        commonStripFlags="--enable-deterministic-archives"
+        ${commonPreHook}
+      '';
 
     initialPath =
       ((import ../common-path.nix) {pkgs = stdenvLinuxBoot4Pkgs;})

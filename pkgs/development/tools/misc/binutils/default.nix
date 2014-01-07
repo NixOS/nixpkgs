@@ -1,6 +1,6 @@
 { stdenv, fetchurl, noSysDirs, zlib
 , cross ? null, gold ? true, bison ? null
-, deterministic ? false }:
+}:
 
 let basename = "binutils-2.23.1"; in
 
@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
     # That requires upstream changes for things to work. So we can patch it to
     # get the old behaviour by now.
     ./dtneeded.patch
-  ] ++ optional deterministic ./deterministic.patch;
+
+    # Make binutils output deterministic by default.
+    ./deterministic.patch
+  ];
 
   buildInputs =
     [ zlib ]
@@ -49,13 +52,12 @@ stdenv.mkDerivation rec {
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
   NIX_CFLAGS_COMPILE = "-static-libgcc";
 
-  configureFlags = [ "--disable-werror" ] # needed for dietlibc build
+  configureFlags =
+    [ "--enable-deterministic-archives" ]
     ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
     ++ optional (cross != null) "--target=${cross.config}"
     ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
-    ++ optional deterministic "--enable-deterministic-archives"
-    ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu"
-    ;
+    ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
 
   enableParallelBuilding = true;
 

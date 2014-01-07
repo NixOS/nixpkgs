@@ -291,7 +291,7 @@ stripDirs() {
         for dir in $dirs; do
             test -L "$dir" || chmod -R +rw "$dir"
         done
-        find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
+        find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $commonStripFlags $stripFlags || true
         stopNest
     fi
 }
@@ -759,7 +759,7 @@ fixupPhase() {
         GLOBIGNORE=.:..:*.gz:*.bz2
         for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
             if [ -f "$f" -a ! -L "$f" ]; then
-                if gzip -c "$f" > "$f".gz; then
+                if gzip -c -n "$f" > "$f".gz; then
                     rm "$f"
                 else
                     rm "$f".gz
