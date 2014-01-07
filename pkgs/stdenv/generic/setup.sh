@@ -289,7 +289,7 @@ stripDirs() {
     if [ -n "${dirs}" ]; then
         header "stripping (with flags $stripFlags) in $dirs"
         for dir in $dirs; do
-          test -L "$dir" || chmod -R +rw "$dir"
+            test -L "$dir" || chmod -R +rw "$dir"
         done
         find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
         stopNest
@@ -768,7 +768,7 @@ fixupPhase() {
         done
         for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
             if [ -L "$f" -a -f `readlink -f "$f"`.gz ]; then
-              ln -sf `readlink "$f"`.gz "$f"
+                ln -sf `readlink "$f"`.gz "$f"
             fi
         done
         unset GLOBIGNORE
