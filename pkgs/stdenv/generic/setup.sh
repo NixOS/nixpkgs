@@ -796,23 +796,23 @@ fixupPhase() {
     fi
 
     if [ -n "$propagatedBuildInputs" ]; then
-        mkdir -p "$prefix/nix-support"
-        echo "$propagatedBuildInputs" > "$prefix/nix-support/propagated-build-inputs"
+        mkdir -p "$out/nix-support"
+        echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
     if [ -n "$propagatedNativeBuildInputs" ]; then
-        mkdir -p "$prefix/nix-support"
-        echo "$propagatedNativeBuildInputs" > "$prefix/nix-support/propagated-native-build-inputs"
+        mkdir -p "$out/nix-support"
+        echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
     fi
 
     if [ -n "$propagatedUserEnvPkgs" ]; then
-        mkdir -p "$prefix/nix-support"
-        echo "$propagatedUserEnvPkgs" > "$prefix/nix-support/propagated-user-env-packages"
+        mkdir -p "$out/nix-support"
+        echo "$propagatedUserEnvPkgs" > "$out/nix-support/propagated-user-env-packages"
     fi
 
     if [ -n "$setupHook" ]; then
-        mkdir -p "$prefix/nix-support"
-        substituteAll "$setupHook" "$prefix/nix-support/setup-hook"
+        mkdir -p "$out/nix-support"
+        substituteAll "$setupHook" "$out/nix-support/setup-hook"
     fi
 
     runHook postFixup
@@ -897,16 +897,9 @@ genericBuild() {
         showPhaseHeader "$curPhase"
         dumpVars
 
-        if [ "$curPhase" = fixupPhase ]; then
-          for pref in ${outputs:-out}; do
-            echo "fixup on \$$pref"
-            prefix=${!pref} eval "${!curPhase:-$curPhase}"
-          done
-        else
-          # Evaluate the variable named $curPhase if it exists, otherwise the
-          # function named $curPhase.
-          eval "${!curPhase:-$curPhase}"
-        fi
+        # Evaluate the variable named $curPhase if it exists, otherwise the
+        # function named $curPhase.
+        eval "${!curPhase:-$curPhase}"
 
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
