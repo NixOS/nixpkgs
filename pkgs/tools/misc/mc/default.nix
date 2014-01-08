@@ -2,11 +2,11 @@
 , libX11, libICE, perl, zip, unzip, gettext, slang}:
 
 stdenv.mkDerivation rec {
-  name = "mc-4.8.0";
+  name = "mc-4.8.11";
   
   src = fetchurl {
-    url = http://www.midnight-commander.org/downloads/mc-4.8.0.tar.bz2;
-    sha256 = "dbf077b318c13fc6d465dc67bd43958f067b9ff7e21041975bd14927dfa31b52";
+    url = http://www.midnight-commander.org/downloads/mc-4.8.11.tar.bz2;
+    sha256 = "1yjm6rp9h3491mar7vdw88mgvydmz7zdj97mmjkqyf5bidx4w2hf";
   };
   
   buildInputs = [ pkgconfig perl glib gpm slang zip unzip file gettext libX11 libICE e2fsprogs ];
