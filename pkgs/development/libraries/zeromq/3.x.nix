@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid ];
 
   meta = {
+    branch = "3";
     homepage = "http://www.zeromq.org";
     description = "The Intelligent Transport Layer";
   };
