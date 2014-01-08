@@ -121,6 +121,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit python buildPythonPackage pygobject pycairo;
   };
 
+  sip = import ../development/python-modules/sip {
+    inherit (pkgs) stdenv fetchurl;
+    inherit python;
+  };
+
   # packages defined here
 
   aafigure = buildPythonPackage rec {
