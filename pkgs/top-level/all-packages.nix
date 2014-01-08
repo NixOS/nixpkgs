@@ -6191,7 +6191,7 @@ let
 
   sip = callPackage ../development/python-modules/sip { };
 
-  pyqt4 = callPackage ../development/python-modules/pyqt {
+  pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     stdenv = if stdenv.isDarwin
       then clangStdenv
       else stdenv;
