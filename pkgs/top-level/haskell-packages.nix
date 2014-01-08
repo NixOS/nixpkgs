@@ -767,6 +767,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   concatenative = callPackage ../development/libraries/haskell/concatenative {};
 
+  concreteTyperep = callPackage ../development/libraries/haskell/concreteTyperep {};
+
   conduit = callPackage ../development/libraries/haskell/conduit {};
 
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
@@ -840,6 +842,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   dataAccessorTemplate = callPackage ../development/libraries/haskell/data-accessor/data-accessor-template.nix {};
 
   dataAccessorTransformers = callPackage ../development/libraries/haskell/data-accessor/data-accessor-transformers.nix {};
+
+  dataAccessorMtl = callPackage ../development/libraries/haskell/data-accessor/data-accessor-mtl.nix {};
 
   dataBinaryIeee754 = callPackage ../development/libraries/haskell/data-binary-ieee754 {};
 
@@ -1795,6 +1799,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   pointed = callPackage ../development/libraries/haskell/pointed {};
 
+  pointedlist = callPackage ../development/libraries/haskell/pointedlist {};
+
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
 
   pop3client = callPackage ../development/libraries/haskell/pop3-client {};
@@ -2603,6 +2609,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   leksah = callPackage ../applications/editors/leksah {
     QuickCheck = self.QuickCheck2;
   };
+
+  yi = callPackage ../applications/editors/yi/yi.nix {};
+  
+  yiContrib = callPackage ../applications/editors/yi/yi-contrib.nix {};
 
   xmobar = callPackage ../applications/misc/xmobar {};
 
