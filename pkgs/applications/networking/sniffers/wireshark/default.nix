@@ -2,14 +2,14 @@
 , geoip, heimdal, lua5, gtk, makeDesktopItem
 }:
 
-let version = "1.10.3"; in
+let version = "1.10.5"; in
 
 stdenv.mkDerivation {
   name = "wireshark-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/wireshark/wireshark-${version}.tar.bz2";
-    sha256 = "1329zph63z5mcij9lp111bh6b2w88z3d40gvjld2rjmhmqv1nr61";
+    sha256 = "1xa1l6z8n1gwnyv5mq4zmyr0afy6s0qpl9wqflg3ipbkjpd908d0";
   };
 
   buildInputs =
