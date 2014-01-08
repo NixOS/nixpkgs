@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     binary cryptoApi cryptoPubkeyTypes DRBG pureMD5 QuickCheck SHA
     tagged testFramework testFrameworkQuickcheck2
   ];
+  doCheck = false;
   meta = {
     description = "Implementation of RSA, using the padding schemes of PKCS#1 v2.1.";
     license = self.stdenv.lib.licenses.bsd3;
