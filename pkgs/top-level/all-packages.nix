@@ -6189,7 +6189,7 @@ let
 
   rhpl = callPackage ../development/python-modules/rhpl { };
 
-  sip = callPackage ../development/python-modules/python-sip { };
+  sip = callPackage ../development/python-modules/sip { };
 
   pyqt4 = callPackage ../development/python-modules/pyqt {
     stdenv = if stdenv.isDarwin
