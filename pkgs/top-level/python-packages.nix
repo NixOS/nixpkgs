@@ -8195,7 +8195,29 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       description = "A logging replacement for Python";
       license = pkgs.lib.licenses.bsd3;
     };
- };
+  };
+
+  libvirt = pkgs.stdenv.mkDerivation rec {
+    name = "libvirt-python-${version}";
+    version = "1.2.0";
+
+    src = fetchurl {
+      url = "http://libvirt.org/sources/python/${name}.tar.gz";
+      sha256 = "0azml1yv9iqnpj4sdg1wwsa70q7kb06lv85p63qwyd8vrd0y7rrg";
+    };
+
+    buildInputs = [ python pkgs.pkgconfig pkgs.libvirt lxml ];
+
+    buildPhase = "python setup.py build";
+
+    installPhase = "python setup.py install --prefix=$out";
+
+    meta = {
+      homepage = http://www.libvirt.org/;
+      description = "libvirt Python bindings";
+      license = "LGPLv2";
+    };
+  };
 
 # python2.7 specific eggs
 } // pkgs.lib.optionalAttrs (python.majorVersion == "2.7") {
