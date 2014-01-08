@@ -3285,6 +3285,7 @@ let
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave { 
     fltk = fltk13;
+    qt = qt4;
   }));
 
   # mercurial (hg) bleeding edge version
