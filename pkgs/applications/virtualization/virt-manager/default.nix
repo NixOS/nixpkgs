@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python, curl,
+{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl,
   python, makeWrapper, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte}:
 
 with stdenv.lib;
@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
       paste_deploy m2crypto ipy boto_1_9 twisted sqlalchemy_migrate
       distutils_extra simplejson readline glance cheetah lockfile httplib2
       # !!! should libvirt be a build-time dependency?  Note that
-      # libxml2Python is a dependency of libvirt.py. 
+      # libxml2Python is a dependency of libvirt.py.
       libvirt libxml2Python urlgrabber virtinst pyGtkGlade pythonDBus gnome_python
       gtkvnc vte
     ];
 
   buildInputs =
-    [ pythonPackages.python 
+    [ pythonPackages.python
       pythonPackages.wrapPython
       pythonPackages.mox
       pythonPackages.urlgrabber
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ] ++ pythonPath;
 
   buildPhase = "make";
-  
+
   nativeBuildInputs = [ makeWrapper pythonPackages.wrapPython ];
 
   # patch the runner script in order to make wrapPythonPrograms work and run the program using a syscall
