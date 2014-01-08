@@ -57,6 +57,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   blivet = callPackage ../development/python-modules/blivet { };
 
+  dbus = import ../development/python-modules/dbus {
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus dbus_glib dbus_tools;
+    inherit python;
+  };
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
@@ -119,6 +124,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit (pkgs) fetchurl stdenv pkgconfig gtk;
     inherit (pkgs.gnome) libglade;
     inherit python buildPythonPackage pygobject pycairo;
+  };
+
+  pyqt4 = import ../development/python-modules/pyqt/4.x.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig qt4 makeWrapper;
+    inherit (pkgs.xorg) lndir;
+    inherit python sip;
+    pythonDBus = dbus;
   };
 
   sip = import ../development/python-modules/sip {
