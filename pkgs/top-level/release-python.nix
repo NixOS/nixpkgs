@@ -1697,8 +1697,6 @@ let
   v8 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vacuum = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vala = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  vala15 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  vala16 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   valgrind = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   valkyrie = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vde2 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
