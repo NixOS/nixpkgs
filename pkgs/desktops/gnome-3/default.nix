@@ -56,6 +56,8 @@ rec {
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
+  file-roller = callPackage ./desktop/file-roller { };
+
   gnome_dictionary = callPackage ./desktop/gnome-dictionary { };
 
   gnome_desktop = callPackage ./desktop/gnome-desktop { };
