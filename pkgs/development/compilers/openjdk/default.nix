@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
 
     ln -s $out/lib/openjdk/bin $out/bin
     ln -s $jre/lib/openjdk/jre/bin $jre/bin
-  '';
+  ''; # */
 
   # FIXME: this is unnecessary once the multiple-outputs branch is merged.
   preFixup = ''
@@ -117,6 +117,12 @@ stdenv.mkDerivation rec {
     # properly.
     mkdir -p $jre/nix-support
     echo -n "${setJavaClassPath}" > $jre/nix-support/propagated-native-build-inputs
+
+    # Set JAVA_HOME automatically.
+    mkdir -p $out/nix-support
+    cat <<EOF > $out/nix-support/setup-hook
+    if [ -n "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+    EOF
   '';
 
   meta = {
