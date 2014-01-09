@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "3.1.4";
   sha256 = "0milmi4q5jdcmmwjqa4lcs1vcw5frkrlrxc8q17lkas3p2m10kh5";
   buildDepends = [ mtl text ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.cs.uu.nl/~daan/parsec.html";
     description = "Monadic parser combinators";
