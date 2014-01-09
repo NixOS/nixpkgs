@@ -39,6 +39,8 @@ rec {
 
   gvfs = pkgs.gvfs.override { gnome = pkgs.gnome3; };
 
+  eog = callPackage ./core/eog { };
+
   libcroco = callPackage ./core/libcroco {};
 
   libpeas = callPackage ./core/libpeas {};
