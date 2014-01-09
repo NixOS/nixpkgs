@@ -1,11 +1,10 @@
 { cabal, alex, binary, Cabal, cautiousFile, concreteTyperep
 , dataAccessor, dataAccessorMtl, dataAccessorTemplate, derive, Diff
-, dlist, dyre, filepath, fingertree, ghcPaths, hashable, hint
-, HUnit, mtl, parsec, pointedlist, pureMD5, QuickCheck, random
-, regexBase, regexTdfa, split, testFramework, testFrameworkHunit
-, time, uniplate, unixCompat, unorderedContainers, utf8String, vty
-, pango, gtk, gio, glib, cairo
-, xdgBasedir
+, dlist, dyre, filepath, fingertree, ghcPaths, glib, gtk, hashable
+, hint, HUnit, mtl, pango, parsec, pointedlist, pureMD5, QuickCheck
+, random, regexBase, regexTdfa, split, testFramework
+, testFrameworkHunit, time, uniplate, unixCompat
+, unorderedContainers, utf8String, vty, xdgBasedir
 }:
 
 cabal.mkDerivation (self: {
@@ -17,22 +16,22 @@ cabal.mkDerivation (self: {
   buildDepends = [
     binary Cabal cautiousFile concreteTyperep dataAccessor
     dataAccessorMtl dataAccessorTemplate derive Diff dlist dyre
-    filepath fingertree ghcPaths hashable hint mtl parsec pointedlist
-    pureMD5 QuickCheck random regexBase regexTdfa split time uniplate
-    unixCompat unorderedContainers utf8String vty xdgBasedir pango gtk
-    gio glib cairo
+    filepath fingertree ghcPaths glib gtk hashable hint mtl pango
+    parsec pointedlist pureMD5 QuickCheck random regexBase regexTdfa
+    split time uniplate unixCompat unorderedContainers utf8String vty
+    xdgBasedir
   ];
   testDepends = [
     filepath HUnit QuickCheck testFramework testFrameworkHunit
   ];
   buildTools = [ alex ];
+  configureFlags = "-fpango";
+  jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://haskell.org/haskellwiki/Yi";
     description = "The Haskell-Scriptable Editor";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
   };
-  configureFlags="-fpango";
-  jailbreak=true;
-  doCheck=false; # Tests fail in version on hackage because files are missing
 })
