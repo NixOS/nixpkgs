@@ -33,6 +33,8 @@ rec {
 
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
+  gnome_themes_standard = callPackage ./core/gnome-themes-standard { };
+
   gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };
 
   gvfs = pkgs.gvfs.override { gnome = pkgs.gnome3; };

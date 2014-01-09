@@ -9826,7 +9826,7 @@ let
 
   gtk-engine-murrine = callPackage ../misc/themes/gtk2/gtk-engine-murrine { };
 
-  gnome_themes_standard = callPackage ../misc/themes/gnome-themes-standard { };
+  gnome_themes_standard = gnome3.gnome_themes_standard;
 
   mate-icon-theme = callPackage ../misc/themes/mate-icon-theme { };
 
