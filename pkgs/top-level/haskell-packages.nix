@@ -2611,7 +2611,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   };
 
   yi = callPackage ../applications/editors/yi/yi.nix {};
-  
+
   yiContrib = callPackage ../applications/editors/yi/yi-contrib.nix {};
 
   xmobar = callPackage ../applications/misc/xmobar {};
