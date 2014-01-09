@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ln -s libsepol.so.1 $out/lib/libsepol.so
   '';
 
-  passthru = { inherit se_release se_url meta; };
+  passthru = { inherit se_release se_url; };
 
   meta = with stdenv.lib; {
     homepage = http://userspace.selinuxproject.org;
