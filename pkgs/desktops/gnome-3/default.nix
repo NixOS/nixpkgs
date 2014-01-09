@@ -56,6 +56,7 @@ rec {
 
   gnome_desktop = callPackage ./desktop/gnome-desktop { };
 
+  gtksourceview = callPackage ./desktop/gtksourceview { };
 
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
