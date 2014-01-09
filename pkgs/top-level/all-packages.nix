@@ -9903,6 +9903,8 @@ let
 
   weka = callPackage ../applications/science/math/weka { };
 
+  yad = callPackage ../tools/misc/yad { };
+
   yacas = callPackage ../applications/science/math/yacas { };
 
   speedcrunch = callPackage ../applications/science/math/speedcrunch {
