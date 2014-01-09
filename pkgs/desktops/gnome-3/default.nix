@@ -47,6 +47,8 @@ rec {
 
   libgweather = callPackage ./core/libgweather { };
 
+  nautilus = callPackage ./core/nautilus { };
+
   vte = callPackage ./core/vte { };
 
   zenity = callPackage ./core/zenity { };

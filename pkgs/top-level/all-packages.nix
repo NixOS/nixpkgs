@@ -876,6 +876,8 @@ let
 
   evtest = callPackage ../applications/misc/evtest { };
 
+  exempi = callPackage ../development/libraries/exempi { };
+
   exif = callPackage ../tools/graphics/exif { };
 
   exiftags = callPackage ../tools/graphics/exiftags { };
