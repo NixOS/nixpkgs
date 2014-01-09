@@ -36,17 +36,40 @@ stdenv.mkDerivation {
 
       ANT_HOME=$out/lib/ant
 
+      # Find the JDK by looking for javac.  As a fall-back, find the
+      # JRE by looking for java.  The latter allows just the JRE to be
+      # used with (say) ECJ as the compiler.  Finally, allow the GNU
+      # JVM.
       if [ -z "\$JAVA_HOME" ]; then
-          if ! JAVACCMD="\$(type -p javac)"; then
-              echo "\$0: cannot find the Java SDK" >&2
+          for i in javac java gij; do
+              if p="\$(type -p \$i)"; then
+                  export JAVA_HOME="\$(dirname \$(dirname \$(readlink -f \$p)))"
+                  break
+              fi
+          done
+          if [ -z "\$JAVA_HOME" ]; then
+              echo "\$0: cannot find the JDK or JRE" >&2
               exit 1
           fi
-          export JAVA_HOME="\$(dirname \$(dirname \$(readlink -f \$JAVACCMD)))"
       fi
 
-      LOCALCLASSPATH="\$ANT_HOME/lib/ant-launcher.jar:\$JAVA_HOME/lib/tools.jar\''${LOCALCLASSPATH:+:}\$LOCALCLASSPATH"
+      if [ -z \$NIX_JVM ]; then
+          if [ -e \$JAVA_HOME/bin/java ]; then
+              NIX_JVM=\$JAVA_HOME/bin/java
+          elif [ -e \$JAVA_HOME/bin/gij ]; then
+              NIX_JVM=\$JAVA_HOME/bin/gij
+          else
+              NIX_JVM=java
+          fi
+      fi
 
-      exec "\$JAVA_HOME/bin/java" \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" \
+      LOCALCLASSPATH="\$ANT_HOME/lib/ant-launcher.jar\''${LOCALCLASSPATH:+:}\$LOCALCLASSPATH"
+
+      if [ -e \$JAVA_HOME/lib/tools.jar ]; then
+          LOCALCLASSPATH="\$JAVA_HOME/lib/tools.jar\''${LOCALCLASSPATH:+:}\$LOCALCLASSPATH"
+      fi
+
+      exec \$NIX_JVM \$NIX_ANT_OPTS \$ANT_OPTS -classpath "\$LOCALCLASSPATH" \
           -Dant.home=\$ANT_HOME -Dant.library.dir="\$ANT_LIB" \
           org.apache.tools.ant.launch.Launcher \$NIX_ANT_ARGS \$ANT_ARGS \
           -cp "\$CLASSPATH" "\$@"
