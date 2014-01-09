@@ -4544,6 +4544,8 @@ let
 
   gtkspell = callPackage ../development/libraries/gtkspell { };
 
+  gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
+
   gts = callPackage ../development/libraries/gts { };
 
   gvfs = callPackage ../development/libraries/gvfs { };
