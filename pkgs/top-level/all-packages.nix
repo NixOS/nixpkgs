@@ -3444,11 +3444,6 @@ let
 
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
 
-  apacheAntGcj = callPackage ../development/tools/build-managers/apache-ant/from-source.nix {
-    # must be either pre-built or built with GCJ *alone*
-    gcj = gcj.gcc; # use the raw GCJ, which has ${gcj}/lib/jvm
-  };
-
   astyle = callPackage ../development/tools/misc/astyle { };
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
@@ -5558,7 +5553,6 @@ let
   redland = pkgs.librdf_redland;
 
   rhino = callPackage ../development/libraries/java/rhino {
-    ant = apacheAntGcj;
     javac = gcj;
     jvm = gcj;
   };

@@ -81,6 +81,28 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://ant.apache.org/;
     description = "A Java-based build tool";
+
+    longDescription = ''
+      Apache Ant is a Java-based build tool.  In theory, it is kind of like
+      Make, but without Make's wrinkles.
+
+      Why another build tool when there is already make, gnumake, nmake, jam,
+      and others? Because all those tools have limitations that Ant's
+      original author couldn't live with when developing software across
+      multiple platforms.  Make-like tools are inherently shell-based -- they
+      evaluate a set of dependencies, then execute commands not unlike what
+      you would issue in a shell.  This means that you can easily extend
+      these tools by using or writing any program for the OS that you are
+      working on.  However, this also means that you limit yourself to the
+      OS, or at least the OS type such as Unix, that you are working on.
+
+      Ant is different.  Instead of a model where it is extended with
+      shell-based commands, Ant is extended using Java classes.  Instead of
+      writing shell commands, the configuration files are XML-based, calling
+      out a target tree where various tasks get executed.  Each task is run
+      by an object that implements a particular Task interface.
+    '';
+
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.all;
