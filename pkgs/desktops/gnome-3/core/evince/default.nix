@@ -1,17 +1,17 @@
 { fetchurl, stdenv, pkgconfig, intltool, perl, perlXMLParser, libxml2
 , glib, gtk3, pango, atk, gdk_pixbuf, shared_mime_info
 , itstool, gnome_icon_theme, libgnome_keyring, gsettings_desktop_schemas
-, poppler, ghostscriptX, djvulibre, libspectre
+, poppler, ghostscriptX, djvulibre, libspectre, libsecret
 , makeWrapper #, python /*just for tests*/
 , recentListSize ? null # 5 is not enough, allow passing a different number
 }:
 
 stdenv.mkDerivation rec {
-  name = "evince-3.6.1";
+  name = "evince-3.11.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evince/3.6/${name}.tar.xz";
-    sha256 = "1da1pij030dh8mb0pr0jnyszgsbjnh8lc17rj5ii52j3kmbv51qv";
+    url = "mirror://gnome/sources/evince/3.11/${name}.tar.xz";
+    sha256 = "0qflxvvvqn1khyk93isjhp6v719pvmn3vpfxnrsh63f1a6h0j5r8";
   };
 
   buildInputs = [
@@ -19,8 +19,9 @@ stdenv.mkDerivation rec {
     glib gtk3 pango atk gdk_pixbuf
     itstool gnome_icon_theme libgnome_keyring gsettings_desktop_schemas
     poppler ghostscriptX djvulibre libspectre
-    makeWrapper
+    makeWrapper libsecret
   ];
+
 
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     # by `g_file_info_get_content_type ()'.
     wrapProgram "$out/bin/evince" \
       --prefix XDG_DATA_DIRS : "${shared_mime_info}/share:$out/share"
-  '' + gsettings_desktop_schemas.doCompileSchemas;
+  '';
   doCheck = false; # would need pythonPackages.dogTail, which is missing
 
   meta = {
