@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildPhase = "mkdir lib; ant";
 
   installPhase = ''
-    mkdir -p $out/lib/java
-    cp -v *.jar $out/lib/java
+    mkdir -p $out/share/java
+    cp -v *.jar $out/share/java
   '';
 }
