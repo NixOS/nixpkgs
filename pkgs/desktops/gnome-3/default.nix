@@ -41,6 +41,8 @@ rec {
 
   libcroco = callPackage ./core/libcroco {};
 
+  libpeas = callPackage ./core/libpeas {};
+
   libgweather = callPackage ./core/libgweather { };
 
   vte = callPackage ./core/vte { };
