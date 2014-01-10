@@ -8045,6 +8045,8 @@ let
     python = python27;
   };
 
+  inherit (gnome3) gitg;
+
   giv = callPackage ../applications/graphics/giv {
     pcre = pcre.override { unicodeSupport = true; };
   };
