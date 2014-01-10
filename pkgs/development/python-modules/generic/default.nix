@@ -35,7 +35,7 @@
 # pollute the user environment.
 ,  pythonPath ? []
 
-, meta ? {} 
+, meta ? {}
 
 , ... } @ attrs:
 
