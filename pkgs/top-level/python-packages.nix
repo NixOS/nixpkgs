@@ -1249,11 +1249,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   darcsver = buildPythonPackage (rec {
-    name = "darcsver-1.7.2";
+    name = "darcsver-1.7.4";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/darcsver/${name}.tar.gz";
-      md5 = "94ca7e8c9ea0f69c0f3fc6f9fc88f65a";
+      sha256 = "1yb1c3jxqvy4r3qiwvnb86qi5plw6018h15r3yk5ji3nk54qdcb6";
     };
 
     buildInputs = [ pythonPackages.mock ];
