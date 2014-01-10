@@ -3,7 +3,7 @@
 , libmodplug, mpeg2dec, mpg123 
 , openjpeg, libopus, librsvg
 , timidity, libvdpau, wayland
-, libwebp, xvidcore
+, libwebp, xvidcore, gnutls
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     libmodplug mpeg2dec mpg123 
     openjpeg libopus librsvg
     timidity libvdpau wayland
-    libwebp xvidcore
+    libwebp xvidcore gnutls
   ];
 }
