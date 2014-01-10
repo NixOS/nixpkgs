@@ -7222,11 +7222,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   zfec = buildPythonPackage (rec {
-    name = "zfec-1.4.7";
+    name = "zfec-1.4.24";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zfec/${name}.tar.gz";
-      sha256 = "3335c9054f45e2c59188400e892634b68761b29d06f3cafe525c60484902d379";
+      sha256 = "1ks94zlpy7n8sb8380gf90gx85qy0p9073wi1wngg6mccxp9xsg3";
     };
 
     buildInputs = [ setuptoolsDarcs ];
