@@ -4,7 +4,7 @@
 stdenv.mkDerivation rec {
 
   versionMajor = "3.2";
-  versionMinor = "5";
+  versionMinor = "6";
   moduleName   = "GConf";
 
   origName = "${moduleName}-${versionMajor}.${versionMinor}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${origName}.tar.xz";
-    sha256 = "1ijqks0jxc4dyfxg4vnbqds4aj6miyahlsmlqlkf2bi1798akpjd";
+    sha256 = "0k3q9nh53yhc9qxf1zaicz4sk8p3kzq4ndjdsgpaa2db0ccbj4hr";
   };
 
   buildInputs = [ libxml2 polkit gtk orbit ];
