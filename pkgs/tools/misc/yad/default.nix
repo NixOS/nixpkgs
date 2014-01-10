@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
+  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
+
   meta = {
     homepage = "http://code.google.com/p/yad/";
     description = "Yad (yet another dialog) is a GUI dialog tool for shell scripts";
