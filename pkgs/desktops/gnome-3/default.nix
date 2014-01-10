@@ -47,7 +47,7 @@ rec {
 
   libpeas = callPackage ./core/libpeas {};
 
-  libgweather = callPackage ./core/libgweather { };
+  libgweather = callPackage ./core/libgweather { libsoup = pkgs.libsoup_2_44; };
 
   nautilus = callPackage ./core/nautilus { };
 
