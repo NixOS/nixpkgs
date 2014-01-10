@@ -3,14 +3,14 @@
 
 with stdenv.lib;
 
-let version = "0.9.1"; in
+let version = "0.9.5"; in
 
 stdenv.mkDerivation rec {
   name = "virt-manager-${version}";
 
   src = fetchurl {
     url = "http://virt-manager.et.redhat.com/download/sources/virt-manager/virt-manager-${version}.tar.gz";
-    sha256 = "15e064167ba5ff84ce6fc8790081d61890430f2967f89886a84095a23e40094a";
+    sha256 = "0gc06cdbq6c2a06l939516lvjii7lr0wng90kqgl1i5q5wlgnajx";
   };
 
   pythonPath = with pythonPackages;
