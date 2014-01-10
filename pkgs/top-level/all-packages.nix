@@ -1744,6 +1744,8 @@ let
 
   rdiff_backup = callPackage ../tools/backup/rdiff-backup { };
 
+  rdmd = callPackage ../development/compilers/rdmd { };
+
   ripmime = callPackage ../tools/networking/ripmime {};
 
   rmlint = callPackage ../tools/misc/rmlint {};
