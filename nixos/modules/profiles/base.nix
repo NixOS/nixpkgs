@@ -22,6 +22,7 @@
     pkgs.sshfsFuse
     pkgs.socat
     pkgs.screen
+    pkgs.wget
 
     # Hardware-related tools.
     pkgs.sdparm
