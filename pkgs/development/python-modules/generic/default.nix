@@ -54,13 +54,16 @@ python.stdenv.mkDerivation (attrs // {
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
 
-    # TODO: document
+    # patch python interpreter to write null timestamps when compiling python files
+    # with following var we tell python to activate the patch so that python doesn't
+    # try to update them when we freeze timestamps in nix store
     export DETERMINISTIC_BUILD=1
 
-    # we need to prepend following line to monkeypatch distutils commands
+    # prepend following line to import setuptools before distutils
+    # this way we make sure setuptools monkeypatches distutils commands
+    # this way setuptools provides extra helpers such as "python setup.py test"
     sed -i '0,/import distutils/s//import setuptools;import distutils/' setup.py
     sed -i '0,/from distutils/s//import setuptools;from distutils/' setup.py
-
 
     runHook postConfigure
   '';
