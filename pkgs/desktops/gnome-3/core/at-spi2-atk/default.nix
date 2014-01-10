@@ -14,4 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python pkgconfig popt atk libX11 libICE xlibs.libXtst libXi
                   intltool dbus_glib at_spi2_core libSM ];
+
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+  };
 }

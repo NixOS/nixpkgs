@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
   doCheck = false; # would need pythonPackages.dogTail, which is missing
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.gnome.org/projects/evince/;
     description = "GNOME's document viewer";
 
@@ -61,5 +61,6 @@ stdenv.mkDerivation rec {
     '';
 
     license = "GPLv2+";
+    platforms = platforms.linux;
   };
 }

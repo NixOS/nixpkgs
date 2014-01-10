@@ -23,4 +23,8 @@ stdenv.mkDerivation rec {
     "--with-pkcs11-config=$$out/etc/pkcs11/" # installation directories
     "--with-pkcs11-modules=$$out/lib/pkcs11/"
   ];
+
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+  };
 }
