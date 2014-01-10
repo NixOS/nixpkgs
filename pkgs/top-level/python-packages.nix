@@ -5225,11 +5225,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pymacs = pkgs.stdenv.mkDerivation rec {
-    version = "v0.25";
+    version = "0.25";
     name = "Pymacs-${version}";
 
     src = fetchurl {
-      url = "https://github.com/pinard/Pymacs/tarball/${version}";
+      url = "https://github.com/pinard/Pymacs/tarball/v${version}";
       name = "${name}.tar.gz";
       sha256 = "1hmy76c5igm95rqbld7gvk0az24smvc8hplfwx2f5rhn6frj3p2i";
     };
