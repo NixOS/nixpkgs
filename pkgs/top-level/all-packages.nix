@@ -5741,6 +5741,8 @@ let
     inherit (pythonPackages) pyparsing;
   };
 
+  spice_gtk = callPackage ../development/libraries/spice-gtk { };
+
   spice_protocol = callPackage ../development/libraries/spice-protocol { };
 
   sratom = callPackage ../development/libraries/audio/sratom { };

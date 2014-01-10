@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl,
-  python, makeWrapper, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte}:
+{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl, python
+, makeWrapper, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte
+, spiceSupport ? true, spice_gtk
+}:
 
 with stdenv.lib;
 
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
       # libxml2Python is a dependency of libvirt.py.
       libvirt libxml2Python urlgrabber virtinst pyGtkGlade pythonDBus gnome_python
       gtkvnc vte
-    ];
+    ] ++ optional spiceSupport spice_gtk;
 
   buildInputs =
     [ pythonPackages.python
