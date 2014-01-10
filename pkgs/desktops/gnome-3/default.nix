@@ -66,9 +66,6 @@ rec {
 
   gtksourceview = callPackage ./desktop/gtksourceview { };
 
-  # Removed from recent GNOME releases, but still required
-  scrollkeeper = callPackage ./desktop/scrollkeeper { };
-
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
 
