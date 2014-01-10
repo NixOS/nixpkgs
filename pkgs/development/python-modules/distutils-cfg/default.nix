@@ -16,7 +16,7 @@ let
     ${extraCfg}
   '';
 in stdenv.mkDerivation {
-  name = "distutils.cfg-python${python.version}";
+  name = "${python.libPrefix}-distutils.cfg";
 
   buildInputs = [ python ];
 
