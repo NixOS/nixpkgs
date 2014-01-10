@@ -4,15 +4,12 @@ stdenv.mkDerivation rec {
   shortName = "setuptools-${version}";
   name = "${python.executable}-${shortName}";
 
-  version = "2.0.2";
+  version = "2.1";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/s/setuptools/${shortName}.tar.gz";
-    sha256 = "09nv5x45y8fgc0kjmmw4gig3hr0is9xlc5rq053vnbmkxr5q5xmi";
+    sha256 = "1m8qjvj5bfbphdags5s6pgmvk3xnw509lgdlq9whkq5a9mgxf8m7";
   };
-
-  # see https://bitbucket.org/pypa/setuptools/commits/976b839801a3a181f2e14f305ddbe0b410fa8fc0.patch
-  patches = [ ./fix_python3_egg_fetcher.patch ];
 
   buildInputs = [ python wrapPython distutils-cfg ];
 
