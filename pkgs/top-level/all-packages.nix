@@ -802,6 +802,8 @@ let
 
   disper = callPackage ../tools/misc/disper { };
 
+  dmd = callPackage ../development/compilers/dmd { };
+
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
   docbook2odf = callPackage ../tools/typesetting/docbook2odf {
