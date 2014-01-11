@@ -5329,11 +5329,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pysqlite = buildPythonPackage (rec {
-    name = "pysqlite-2.5.5";
+    name = "pysqlite-2.6.3";
 
     src = fetchurl {
-      url = "http://pysqlite.googlecode.com/files/${name}.tar.gz";
-      sha256 = "ef7ca7f44893790e1a7084b10ea083770e138689406fddc7076d12d6bff4d44f";
+      url = "https://pypi.python.org/packages/source/p/pysqlite/${name}.tar.gz";
+      sha256 = "13djzgnbi71znjjyaw4nybg6smilgszcid646j5qav7mdchkb77y";
     };
 
     # Since the `.egg' file is zipped, the `NEEDED' of the `.so' files
