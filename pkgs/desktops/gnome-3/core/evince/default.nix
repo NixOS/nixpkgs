@@ -1,23 +1,21 @@
 { fetchurl, stdenv, pkgconfig, intltool, perl, perlXMLParser, libxml2
-, glib, gtk3, pango, atk, gdk_pixbuf, shared_mime_info
-, itstool, gnome_icon_theme, libgnome_keyring, gsettings_desktop_schemas
-, poppler, ghostscriptX, djvulibre, libspectre, libsecret
-, makeWrapper #, python /*just for tests*/
-, recentListSize ? null # 5 is not enough, allow passing a different number
+, glib, gtk3, pango, atk, gdk_pixbuf, shared_mime_info, itstool, gnome3
+, poppler, ghostscriptX, djvulibre, libspectre, libsecret , makeWrapper
+, librsvg, recentListSize ? null # 5 is not enough, allow passing a different number
 }:
 
 stdenv.mkDerivation rec {
-  name = "evince-3.11.1";
+  name = "evince-3.10.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evince/3.11/${name}.tar.xz";
-    sha256 = "0qflxvvvqn1khyk93isjhp6v719pvmn3vpfxnrsh63f1a6h0j5r8";
+    url = "mirror://gnome/sources/evince/3.10/${name}.tar.xz";
+    sha256 = "1bz9ypsvlfw1vgs7i5glba1h1n6c90f0d1g64linhg6xjcxcq3dk";
   };
 
   buildInputs = [
     pkgconfig intltool perl perlXMLParser libxml2
     glib gtk3 pango atk gdk_pixbuf
-    itstool gnome_icon_theme libgnome_keyring gsettings_desktop_schemas
+    itstool gnome3.gnome_icon_theme gnome3.libgnome_keyring gnome3.gsettings_desktop_schemas
     poppler ghostscriptX djvulibre libspectre
     makeWrapper libsecret
   ];
@@ -45,7 +43,8 @@ stdenv.mkDerivation rec {
     # Tell Glib/GIO about the MIME info directory, which is used
     # by `g_file_info_get_content_type ()'.
     wrapProgram "$out/bin/evince" \
-      --prefix XDG_DATA_DIRS : "${shared_mime_info}/share:$out/share"
+      --set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf/loaders.cache \
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome_icon_theme}/share:${gnome3.gsettings_desktop_schemas}/share:${shared_mime_info}/share:$out/share"
   '';
   doCheck = false; # would need pythonPackages.dogTail, which is missing
 
