@@ -57,6 +57,8 @@ rec {
 
   libgweather = callPackage ./core/libgweather { };
 
+  libzapojit = callPackage ./core/libzapojit { };
+
   nautilus = callPackage ./core/nautilus { };
 
   rest = callPackage ./core/rest { };
