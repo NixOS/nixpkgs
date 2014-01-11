@@ -7,15 +7,16 @@
 
 { name
 
-# by default prefix name with python version name, e.g. "python3.3-"
+# by default prefix `name` e.g. "python3.3-${name}"
 , namePrefix ? python.libPrefix + "-"
 
 , buildInputs ? []
 
-# TODO: document
+# pass extra information to the distutils global configuration (think as global setup.cfg)
 , distutilsExtraCfg ? ""
 
-# TODO: say what it does
+# propagate build dependencies so in case we have A -> B -> C,
+# C can import propagated packages by A
 , propagatedBuildInputs ? []
 
 # passed to "python setup.py install"
@@ -71,6 +72,7 @@ python.stdenv.mkDerivation (attrs // {
   checkPhase = attrs.checkPhase or ''
       runHook preCheck
 
+      # reduce output to only dots, if a test fails error output will include verbose info
       ${python}/bin/${python.executable} setup.py test -q
 
       runHook postCheck
@@ -91,8 +93,17 @@ python.stdenv.mkDerivation (attrs // {
 
     export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
 
-    ${python}/bin/${python.executable} setup.py install --install-lib=$out/lib/${python.libPrefix}/site-packages \
-                                                        --prefix="$out" ${lib.concatStringsSep " " setupPyInstallFlags}
+    ${python}/bin/${python.executable} setup.py install \
+      # sometimes packages specify where files should be installed outside the usual
+      # python lib prefix, we override that back so all infrastructure (setup hooks)
+      # work as expected
+      --install-lib=$out/lib/${python.libPrefix}/site-packages \
+      # instruct setuptools not to use eggs but fallback to plan package install
+      # this also reduces one .pth file in the chain, but the main reason is to
+      # force install process to install only scripts for the package we are
+      # installing (otherwise it will install scripts also for dependencies)
+      --old-and-unmanageable \
+      --prefix="$out" ${lib.concatStringsSep " " setupPyInstallFlags}
 
     # A pth file might have been generated to load the package from
     # within its own site-packages, rename this package not to
@@ -116,14 +127,14 @@ python.stdenv.mkDerivation (attrs // {
       wrapPythonPrograms
 
       # If a user installs a Python package, they probably also wants its
-      # dependencies in the user environment (since Python modules don't
-      # have something like an RPATH, so the only way to find the
+      # dependencies in the user environment profile (only way to find the
       # dependencies is to have them in the PYTHONPATH variable).
-      # TODO: better docs
+      # Allows you to do: $ PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages python
       if test -e $out/nix-support/propagated-build-inputs; then
           ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
       fi
 
+      # TODO: document
       createBuildInputsPth build-inputs "$buildInputStrings"
       for inputsfile in propagated-build-inputs propagated-native-build-inputs; do
         if test -e $out/nix-support/$inputsfile; then
@@ -135,9 +146,9 @@ python.stdenv.mkDerivation (attrs // {
   meta = {
     # default to python's platforms
     platforms = python.meta.platforms;
-  } // meta // {
+  } // meta // with lib.maintainers; {
     # add extra maintainer(s) to every package
-    maintainers = (meta.maintainers or []) ++ [ lib.maintainers.chaoflow lib.maintainers.iElectric ];
+    maintainers = (meta.maintainers or []) ++ [ chaoflow iElectric ];
   };
 
 })
