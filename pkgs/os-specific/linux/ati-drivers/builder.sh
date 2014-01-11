@@ -8,7 +8,8 @@ die(){ echo $@; exit 1; }
 
 # custom unpack:
 unzip $src
-run_file=$(echo amd-driver-installer-*)
+# run_file=$(echo amd-driver-installer-*)
+run_file=$(echo amd-catalyst-*_64.run)
 sh $run_file --extract .
 
 eval "$patchPhase"
@@ -183,13 +184,16 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
 
 }
 
-{ # build samples
+
+if [ -n "$BUILD_SAMPLES" ]; then
+  # build samples
   mkdir -p $out/bin
 
   mkdir -p samples
   cd samples
   tar xfz ../common/usr/src/ati/fglrx_sample_source.tgz
 
+  eval "$patchPhaseSamples"
 
   ( # build and install fgl_glxgears
     cd fgl_glxgears; 
@@ -224,7 +228,7 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
 
   rm -fr $out/lib/modules/fglrx # don't think those .a files are needed. They cause failure of the mod
 
-}
+fi
 
 for p in $extraDRIlibs; do
   for lib in $p/lib/*.so*; do

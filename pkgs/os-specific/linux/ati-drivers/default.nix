@@ -14,29 +14,35 @@
 # workaround (TODO)
 
 # The gentoo ebuild contains much more magic..
+# gentoo portage usually is a great resource to find patches :)
 
 # http://wiki.cchtml.com/index.php/Main_Page
 
 # There is one issue left:
 # /usr/lib/dri/fglrx_dri.so must point to /run/opengl-driver/lib/fglrx_dri.so
 
+# You eventually have to blacklist radeon module (?)
+
 assert stdenv.system == "x86_64-linux";
 
-
 stdenv.mkDerivation {
-  name = "ati-drivers-13.4-${kernel.version}";
+  name = "ati-drivers-13.12-${kernel.version}";
 
   builder = ./builder.sh;
 
   inherit libXxf86vm xf86vidmodeproto;
 
   src = fetchurl {
-    url = http://www2.ati.com/drivers/linux/amd-driver-installer-catalyst-13-4-linux-x86.x86_64.zip;
-    sha256 = "1914ikdich0kg047bqh89ai5z4dyryj5mlw5i46n90fsfiaxa532";
-    curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux%20x86_64";
+    url = file:///tmp/amd-catalyst-13.12-linux-x86.x86_64.zip;
+    sha256 = "024033f4847d1c2a182fc44e0b3df29b2d133e24aeaba390f4504a8f3361a0ca";
   };
 
-  patchPhase = "patch -p0 < ${./gentoo-patches.patch}";
+  # most patches are taken from gentoo
+  patchPhase = "patch -p1 < ${./gentoo-patches.patch}";
+  patchPhaseSamples = "patch -p2 < ${./patch-samples.patch}";
+
+  # they don't build (haven't had time to fix all compilation issues), maybe gentoo has patches
+  BUILD_SAMPLES = true;
 
   buildInputs =
     [ xlibs.libXext xlibs.libX11 xlibs.libXinerama
