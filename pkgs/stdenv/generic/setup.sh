@@ -575,7 +575,7 @@ configurePhase() {
     fi
 
     if [ -z "$dontFixLibtool" ]; then
-        for i in $(find . -name "ltmain.sh"); do
+        find . -iname "ltmain.sh" | while read i; do
             echo "fixing libtool script $i"
             fixLibtool $i
         done
@@ -670,7 +670,7 @@ patchShebangs() {
     local oldInterpreterLine
     local newInterpreterLine
 
-    for f in $(find "$dir" -type f -perm +0100); do
+    find "$dir" -type f -perm +0100 | while read f; do
         if [ "$(head -1 "$f" | head -c +2)" != '#!' ]; then
             # missing shebang => not a script
             continue
