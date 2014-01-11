@@ -878,6 +878,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   DAV = callPackage ../development/libraries/haskell/DAV {};
 
+  dbmigrations = callPackage ../development/libraries/haskell/dbmigrations {};
+
   dbus = callPackage ../development/libraries/haskell/dbus {};
 
   deepseq_1_1_0_0 = callPackage ../development/libraries/haskell/deepseq/1.1.0.0.nix {};
@@ -2454,6 +2456,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
 
   yaml = callPackage ../development/libraries/haskell/yaml {};
+
+  yamlLight = callPackage ../development/libraries/haskell/yaml-light {};
 
   yap = callPackage ../development/libraries/haskell/yap {};
 
