@@ -158,7 +158,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     OpenGL       = self.OpenGL_2_9_1_0;
     OpenGLRaw    = self.OpenGLRaw_1_4_0_0;
     parallel     = self.parallel_3_2_0_4;
-    parsec       = self.parsec_3_1_4;
+    parsec       = self.parsec_3_1_5;
     QuickCheck   = self.QuickCheck_2_6;
     random       = self.random_1_0_1_1;
     regexBase    = self.regexBase_0_93_2;
@@ -1740,9 +1740,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   parsec_3_1_1   = callPackage ../development/libraries/haskell/parsec/3.1.1.nix {};
   parsec_3_1_2   = callPackage ../development/libraries/haskell/parsec/3.1.2.nix {};
   parsec_3_1_3   = callPackage ../development/libraries/haskell/parsec/3.1.3.nix {};
-  parsec_3_1_4   = callPackage ../development/libraries/haskell/parsec/3.1.4.nix {};
+  parsec_3_1_5   = callPackage ../development/libraries/haskell/parsec/3.1.5.nix {};
   parsec2 = self.parsec_2_1_0_1;
-  parsec3 = self.parsec_3_1_4;
+  parsec3 = self.parsec_3_1_5;
   parsec  = self.parsec3;
 
   parsers_0_9 = callPackage ../development/libraries/haskell/parsers/0.9.nix {};

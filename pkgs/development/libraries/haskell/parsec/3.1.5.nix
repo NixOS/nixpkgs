@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "parsec";
-  version = "3.1.4";
-  sha256 = "0milmi4q5jdcmmwjqa4lcs1vcw5frkrlrxc8q17lkas3p2m10kh5";
+  version = "3.1.5";
+  sha256 = "1f1wg4qxp1ss2160sa3vbqff18fabwhqjkyfj4sgyfmwf9fj8wn5";
   buildDepends = [ mtl text ];
   jailbreak = true;
   meta = {
