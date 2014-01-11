@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "connmanui-b838e640eddb83d296fb6d146ce756066d37c43b";
   src = fetchgit {
     url = "git://github.com/tbursztyka/connman-ui.git";
-    rev = "973879df2c4a556e5f49d808a88a6a5faba78c73";
-    sha256 = "11ps52dn0ws978vv00yrymfvv534v1i9qqx5w93191qjcpjrwj6y";
+    rev = "e4a8ddcca0870eb2ece5a7e3ea0296de9c86e5b2";
+    sha256 = "0rml52v81s7hr0g6qbj5bamli08kn66hay84qicx8sy8679wg443";
   };
 
   buildInputs = [ autoconf automake libtool glib gtk3 dbus pkgconfig file intltool connman ];
