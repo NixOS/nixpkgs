@@ -26,6 +26,8 @@ rec {
 
   gcr = callPackage ./core/gcr { }; # ToDo: tests fail
 
+  gdm = callPackage ./core/gdm { };
+
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };
 
   gnome-menus = callPackage ./core/gnome-menus { };
