@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gupnp, pkgconfig }:
 
 stdenv.mkDerivation {
-  name = "gupnp-av";
+  name = "gupnp-av-0.12.4";
   version = "0.12.4";
   src = fetchurl {
     url = mirror://gnome/sources/gupnp-av/0.12/gupnp-av-0.12.4.tar.xz;

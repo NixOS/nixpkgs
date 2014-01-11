@@ -4,7 +4,7 @@
 , intltool, python }:
 
 stdenv.mkDerivation {
-  name = "libsoup";
+  name = "libsoup-2.45";
   version = "2.45";
 
   src = fetchurl {

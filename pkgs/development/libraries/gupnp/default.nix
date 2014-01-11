@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, glib, libxml2, gssdp, libsoup, libuuid }:
  
 stdenv.mkDerivation {
-  name = "gupnp";
+  name = "gupnp-0.20.9";
   version = "0.20.9";
 
   src = fetchurl {
