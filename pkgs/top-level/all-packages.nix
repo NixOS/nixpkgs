@@ -1206,6 +1206,8 @@ let
 
   logstash = callPackage ../tools/misc/logstash { };
 
+  kippo = callPackage ../servers/kippo { };
+
   klavaro = callPackage ../games/klavaro {};
 
   minidlna = callPackage ../tools/networking/minidlna {
