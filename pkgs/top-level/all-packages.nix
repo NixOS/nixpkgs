@@ -1872,6 +1872,8 @@ let
     boost = boost149;
   };
 
+  spaceFM = callPackage ../applications/misc/spacefm { };
+
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
   sshfsFuse = callPackage ../tools/filesystems/sshfs-fuse { };
