@@ -23,7 +23,7 @@ else
 */
 
 let
-  version = "10.0.1";
+  version = "10.0.2";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "0w1jh8pl4gbzazigsqc5pzc076gckb7b9xgw2w633jlrjn7qdprw";
+    sha256 = "0zkayy6gl0nwgqg11ga95vl4z0hldcz1b77qzzc1agm5vziah0j5";
   };
 
   prePatch = "patchShebangs .";
