@@ -1,17 +1,18 @@
 { stdenv, fetchurl, glib, libxml2, pkgconfig
 , gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking
-, libintlOrEmpty }:
+, libintlOrEmpty
+, intltool, python }:
 
 stdenv.mkDerivation {
-  name = "libsoup-2.38.1";
+  name = "libsoup";
+  version = "2.45";
 
   src = fetchurl {
-    url = mirror://gnome/sources/libsoup/2.38/libsoup-2.38.1.tar.xz;
-    sha256 = "16iza4y8pmc4sn90iid88fgminvgcqypy3s2qnmzkzm5qwzr5f3i";
+    url = mirror://gnome/sources/libsoup/2.45/libsoup-2.45.3.tar.xz;
+    sha256 = "04ma47hcrrbjp90r8jjn686cngnbgac24wgarpwwzlpg66wighva";
   };
 
-
-  buildInputs = libintlOrEmpty;
+  buildInputs = libintlOrEmpty ++ [ intltool python ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 ]
     ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring sqlite ];

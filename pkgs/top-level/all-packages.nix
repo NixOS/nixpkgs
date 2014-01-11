@@ -1101,10 +1101,12 @@ let
     inherit (gnome) libsoup;
   };
 
+  gupnp_av = callPackage ../development/libraries/gupnp-av {};
+
   gupnp_igd = callPackage ../development/libraries/gupnp-igd {};
 
   gupnptools = callPackage ../tools/networking/gupnp-tools {
-    inherit (gnome) libsoup libglade gnomeicontheme;
+#    inherit (gnome) libsoup libglade gnomeicontheme;
   };
 
   gvpe = builderDefsPackage ../tools/networking/gvpe {
