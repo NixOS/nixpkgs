@@ -142,7 +142,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
     async        = self.async_2_0_1_5;
-    attoparsec   = self.attoparsec_0_10_4_0;
+    attoparsec   = self.attoparsec_0_11_1_0;
     caseInsensitive = self.caseInsensitive_1_1_0_2;
     cgi          = self.cgi_3001_1_8_4;
     fgl          = self.fgl_5_4_2_4;
@@ -566,6 +566,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   attempt = callPackage ../development/libraries/haskell/attempt {};
 
   attoparsec_0_10_4_0 = callPackage ../development/libraries/haskell/attoparsec/0.10.4.0.nix {};
+  attoparsec_0_11_1_0 = callPackage ../development/libraries/haskell/attoparsec/0.11.1.0.nix {};
   attoparsec = self.attoparsec_0_10_4_0;
 
   attoparsecBinary = callPackage ../development/libraries/haskell/attoparsec-binary {};
