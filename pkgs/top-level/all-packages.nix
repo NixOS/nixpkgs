@@ -1666,6 +1666,8 @@ let
 
   prey-bash-client = callPackage ../tools/security/prey { };
 
+  projectm = callPackage ../applications/audio/projectm { };
+
   proxychains = callPackage ../tools/networking/proxychains { };
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
