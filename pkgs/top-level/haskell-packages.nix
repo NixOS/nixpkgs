@@ -577,6 +577,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   attoparsecEnumerator = callPackage ../development/libraries/haskell/attoparsec-enumerator {};
 
+  aws = callPackage ../development/libraries/haskell/aws {};
+
   authenticate = callPackage ../development/libraries/haskell/authenticate {};
 
   authenticateOauth = callPackage ../development/libraries/haskell/authenticate-oauth {};
