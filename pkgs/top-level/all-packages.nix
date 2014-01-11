@@ -8854,17 +8854,7 @@ let
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
-  sndBase = lowPrio (builderDefsPackage (import ../applications/audio/snd) {
-    inherit fetchurl stdenv stringsWithDeps lib fftw;
-    inherit pkgconfig gmp gettext;
-    inherit (xlibs) libXpm libX11;
-    inherit gtk glib;
-  });
-
-  snd = sndBase.passthru.function {
-    inherit mesa libtool jackaudio alsaLib;
-    guile = guile_1_8;
-  };
+  snd = callPackage ../applications/audio/snd { };
 
   shntool = callPackage ../applications/audio/shntool { };
 
