@@ -1378,6 +1378,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   httpDate = callPackage ../development/libraries/haskell/http-date {};
 
+  httpStreams = callPackage ../development/libraries/haskell/http-streams {};
+
   httpTypes = callPackage ../development/libraries/haskell/http-types {};
 
   HUnit_1_2_0_3 = callPackage ../development/libraries/haskell/HUnit/1.2.0.3.nix {};
@@ -1723,6 +1725,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   OpenGLRaw_1_3_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.3.0.0.nix {};
   OpenGLRaw_1_4_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.4.0.0.nix {};
   OpenGLRaw = self.OpenGLRaw_1_4_0_0;
+
+  opensslStreams = callPackage ../development/libraries/haskell/openssl-streams {};
 
   operational = callPackage ../development/libraries/haskell/operational {};
 
