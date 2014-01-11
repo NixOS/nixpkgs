@@ -8337,6 +8337,8 @@ let
 
   lastwatch = callPackage ../applications/audio/lastwatch { };
 
+  lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
+
   lbdb = callPackage ../tools/misc/lbdb { };
 
   lci = callPackage ../applications/science/logic/lci {};
