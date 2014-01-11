@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, python, yasm
 , gst-plugins-base, orc, bzip2
-, withSystemLibav ? false, libav ? null
+, withSystemLibav ? true, libav ? null
 }:
 
 assert withSystemLibav -> libav != null;
