@@ -47,6 +47,8 @@ rec {
 
   libgee = callPackage ./core/libgee { };
 
+  libgxps = callPackage ./core/libgxps { };
+
   libpeas = callPackage ./core/libpeas {};
 
   libgweather = callPackage ./core/libgweather { libsoup = pkgs.libsoup_2_44; };
@@ -79,4 +81,5 @@ rec {
   gitg = callPackage ./misc/gitg { };
 
   libgit2-glib = callPackage ./misc/libgit2-glib { automake = pkgs.automake111x; };
+
 }
