@@ -1,34 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, yasm, zlib, bzip2, alsaLib, texinfo, perl
-, mp3Support ? true, lame ? null
-, speexSupport ? true, speex ? null
-, theoraSupport ? true, libtheora ? null
-, vorbisSupport ? true, libvorbis ? null
-, vpxSupport ? false, libvpx ? null
-, x264Support ? true, x264 ? null
-, xvidSupport ? true, xvidcore ? null
-, opusSupport ? true, libopus ? null
-, vdpauSupport ? true, libvdpau ? null
-, vaapiSupport ? true, libva ? null
-, faacSupport ? false, faac ? null
-, dc1394Support ? false, libdc1394 ? null
-, x11grabSupport ? false, libXext ? null, libXfixes ? null
-, playSupport ? true, SDL ? null
-, freetypeSupport ? true, freetype ? null, fontconfig ? null
+{ stdenv, fetchurl, config, pkgconfig, yasm, zlib, bzip2, alsaLib, texinfo, perl
+, lame, speex, libtheora, libvorbis, libvpx, x264, xvidcore, libopus
+, libvdpau, libva, faac, libdc1394, libXext, libXfixes, SDL
+, freetype, fontconfig, fdk_aac
 }:
-
-assert speexSupport -> speex != null;
-assert theoraSupport -> libtheora != null;
-assert vorbisSupport -> libvorbis != null;
-assert vpxSupport -> libvpx != null;
-assert x264Support -> x264 != null;
-assert xvidSupport -> xvidcore != null;
-assert opusSupport -> libopus != null;
-assert vdpauSupport -> libvdpau != null;
-assert vaapiSupport -> libva != null;
-assert faacSupport -> faac != null;
-assert x11grabSupport -> libXext != null && libXfixes != null;
-assert playSupport -> SDL != null;
-assert freetypeSupport -> freetype != null;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-2.1.1";
@@ -37,6 +11,23 @@ stdenv.mkDerivation rec {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
     sha256 = "1qnspbpwa6cflsb6mkm84ay4nfx60ism6d7lgvnasidck9dmxydy";
   };
+
+  mp3Support = config.ffmpeg.mp3 or true;
+  speexSupport = config.ffmpeg.speex or true;
+  theoraSupport = config.ffmpeg.theora or true;
+  vorbisSupport = config.ffmpeg.vorbis or true;
+  vpxSupport = config.ffmpeg.vpx or false;
+  x264Support = config.ffmpeg.x264 or true;
+  xvidSupport = config.ffmpeg.xvid or true;
+  opusSupport = config.ffmpeg.opus or true;
+  vdpauSupport = config.ffmpeg.vdpau or true;
+  vaapiSupport = config.ffmpeg.vaapi or true;
+  faacSupport = config.ffmpeg.faac or false;
+  fdkAACSupport = config.ffmpeg.fdk or false;
+  dc1394Support = config.ffmpeg.dc1394 or false;
+  x11grabSupport = config.ffmpeg.x11grab or false;
+  playSupport = config.ffmpeg.play or true;
+  freetypeSupport = config.ffmpeg.freetype or true;
 
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
   # the resulting library is GPL'ed, so it can only be used in GPL'ed
@@ -62,7 +53,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional dc1394Support "--enable-libdc1394"
     ++ stdenv.lib.optional x11grabSupport "--enable-x11grab"
     ++ stdenv.lib.optional playSupport "--enable-ffplay"
-    ++ stdenv.lib.optional freetypeSupport "--enable-libfreetype --enable-fontconfig";
+    ++ stdenv.lib.optional freetypeSupport "--enable-libfreetype --enable-fontconfig"
+    ++ stdenv.lib.optional fdkAACSupport "--enable-libfdk_aac --enable-nonfree";
 
   buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib texinfo perl ]
     ++ stdenv.lib.optional mp3Support lame
@@ -79,7 +71,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional dc1394Support libdc1394
     ++ stdenv.lib.optionals x11grabSupport [ libXext libXfixes ]
     ++ stdenv.lib.optional playSupport SDL
-    ++ stdenv.lib.optionals freetypeSupport [ freetype fontconfig ];
+    ++ stdenv.lib.optionals freetypeSupport [ freetype fontconfig ]
+    ++ stdenv.lib.optional fdkAACSupport fdk_aac;
 
   enableParallelBuilding = true;
 
@@ -100,5 +93,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.ffmpeg.org/;
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
+    license = if (fdkAACSupport || faacSupport) then stdenv.lib.licenses.unfree else stdenv.lib.licenses.gpl2Plus;
   };
 }

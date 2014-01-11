@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.rhythm.cx/~steve/devel/tcptrack/; # dead link
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = [maintainers.bjornfor];
+    maintainers = [ maintainers.bjornfor ];
   };
 }

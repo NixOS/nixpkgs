@@ -1,10 +1,10 @@
 { stdenv, fetchurl, which, autoconf, automake, flex, yacc,
-  kernelDev, glibc, ncurses, perl, krb5 }:
+  kernel, glibc, ncurses, perl, krb5 }:
 
 assert stdenv.isLinux;
 
 stdenv.mkDerivation {
-  name = "openafs-1.6.1-${kernelDev.version}";
+  name = "openafs-1.6.1-${kernel.version}";
 
   src = fetchurl {
     url = http://www.openafs.org/dl/openafs/1.6.1/openafs-1.6.1-src.tar.bz2;
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ autoconf automake flex yacc ncurses perl which ];
 
   preConfigure = ''
-    ln -s ${kernelDev}/lib/modules/*/build $TMP/linux
+    ln -s ${kernel.dev}/lib/modules/*/build $TMP/linux
 
     patchShebangs .
     for i in `grep -l -R '/usr/\(include\|src\)' .`; do

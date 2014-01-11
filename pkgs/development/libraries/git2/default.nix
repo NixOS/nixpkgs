@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1iyncz8fqazw683dxjls3lf5pw3f5ma8kachkvjz7dsq57wxllbj";
   };
 
+  cmakeFlags = "-DTHREADSAFE=ON";
+
   nativeBuildInputs = [ cmake python ];
   buildInputs = [ zlib ];
 

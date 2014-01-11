@@ -11,6 +11,9 @@ cabal.mkDerivation (self: {
     cereal conduit cryptoApi cryptocipher cryptohashCryptoapi hspec
     skein transformers
   ];
+  patchPhase = ''
+    sed -i -e 's|crypto-api >=.*|crypto-api|' crypto-conduit.cabal
+  '';
   jailbreak = true;
   doCheck = false;
   meta = {

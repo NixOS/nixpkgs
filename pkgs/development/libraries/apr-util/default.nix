@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apr, expat
+{ stdenv, fetchurl, makeWrapper, apr, expat, gnused
 , sslSupport ? true, openssl
 , bdbSupport ? false, db4
 , ldapSupport ? true, openldap
@@ -7,6 +7,10 @@
 assert sslSupport -> openssl != null;
 assert bdbSupport -> db4 != null;
 assert ldapSupport -> openldap != null;
+
+let
+  optional = stdenv.lib.optional;
+in
 
 stdenv.mkDerivation rec {
   name = "apr-util-1.5.3";
@@ -24,7 +28,15 @@ stdenv.mkDerivation rec {
     ${stdenv.lib.optionalString ldapSupport "--with-ldap"}
   '';
 
-  propagatedBuildInputs = stdenv.lib.optional ldapSupport openldap;
+  propagatedBuildInputs = [ makeWrapper apr expat ]
+    ++ optional sslSupport openssl
+    ++ optional bdbSupport db4
+    ++ optional ldapSupport openldap;
+
+  # Give apr1 access to sed for runtime invocations
+  postInstall = ''
+    wrapProgram $out/bin/apu-1-config --prefix PATH : "${gnused}/bin"
+  '';
 
   enableParallelBuilding = true;
 

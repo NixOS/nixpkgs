@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernelDev, xlibs, which, imake
+{ stdenv, fetchurl, kernel, xlibs, which, imake
 , mesa # for fgl_glxgears
 , libXxf86vm, xf86vidmodeproto # for fglrx_gamma
 , xorg, makeWrapper, glibc, patchelf
@@ -22,9 +22,9 @@
 
 assert stdenv.system == "x86_64-linux";
 
-stdenv.mkDerivation rec {
-  name = "ati-drivers-${version}-${kernel.version}";
-  version = "13.4";
+
+stdenv.mkDerivation {
+  name = "ati-drivers-13.4-${kernel.version}";
 
   builder = ./builder.sh;
 
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = http://www2.ati.com/drivers/linux/amd-driver-installer-catalyst-13-4-linux-x86.x86_64.zip;
     sha256 = "1914ikdich0kg047bqh89ai5z4dyryj5mlw5i46n90fsfiaxa532";
+    curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux%20x86_64";
   };
 
   patchPhase = "patch -p0 < ${./gentoo-patches.patch}";
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
       mesa
     ];
 
-  kernel = kernelDev;
+  kernel = kernel.dev;
 
   inherit glibc /* glibc only used for setting interpreter */;
 
@@ -71,6 +72,7 @@ stdenv.mkDerivation rec {
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
+    broken = true;
   };
 
   # moved assertions here because the name is evaluated when the NixOS manual is generated

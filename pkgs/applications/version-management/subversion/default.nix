@@ -1,13 +1,11 @@
 { bdbSupport ? false # build support for Berkeley DB repositories
 , httpServer ? false # build Apache DAV module
 , httpSupport ? false # client must support http
-, sslSupport ? false # client must support https
-, compressionSupport ? false # client must support http compression
 , pythonBindings ? false
 , perlBindings ? false
 , javahlBindings ? false
 , saslSupport ? false
-, stdenv, fetchurl, apr, aprutil, neon, zlib, sqlite
+, stdenv, fetchurl, apr, aprutil, zlib, sqlite
 , httpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
 , sasl ? null, serf ? null
 }:
@@ -16,8 +14,6 @@ assert bdbSupport -> aprutil.bdbSupport;
 assert httpServer -> httpd != null;
 assert pythonBindings -> swig != null && python != null;
 assert javahlBindings -> jdk != null && perl != null;
-assert sslSupport -> neon.sslSupport;
-assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation rec {
 
@@ -31,7 +27,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib apr aprutil sqlite ]
-    ++ stdenv.lib.optional httpSupport neon
     ++ stdenv.lib.optional httpSupport serf
     ++ stdenv.lib.optional pythonBindings python
     ++ stdenv.lib.optional perlBindings perl

@@ -1,14 +1,14 @@
-{stdenv, fetchurl, curl}:
+{stdenv, fetchurl, curl, libgcrypt}:
 
 stdenv.mkDerivation rec {
-  name = "libmicrohttpd-0.9.24";
+  name = "libmicrohttpd-0.9.33";
 
   src = fetchurl {
     url = "mirror://gnu/libmicrohttpd/${name}.tar.gz";
-    sha256 = "0cp2ac6wbk493zslbvbmb5z96h18k496f9id8d2ji7hbdrwzfk6h";
+    sha256 = "0nfm3h7mfb03hf4kfyap8dr35shm6sppsq6da03853sljy27wn6r";
   };
 
-  buildInputs = [ curl ];
+  buildInputs = [ curl libgcrypt ];
 
   preCheck =
     # Since `localhost' can't be resolved in a chroot, work around it.

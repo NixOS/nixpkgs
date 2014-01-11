@@ -83,7 +83,7 @@ let
   isl = pkgs.isl.crossDrv;
   mpc = pkgs.mpc.crossDrv;
   binutils = pkgs.binutils.crossDrv;
-  klibc = pkgs.klibc.crossDrv;
+  klibc = pkgs.linuxPackages.klibc.crossDrv;
 
 in
 

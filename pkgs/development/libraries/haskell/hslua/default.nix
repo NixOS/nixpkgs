@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hslua";
-  version = "0.3.9";
-  sha256 = "0rs9hfc1k7wihgvp6vizccwppv5nd9mszp7a2y7pwjrprapwj07c";
+  version = "0.3.10";
+  sha256 = "1d79sp9xmzbq74jk7kj81j0z4vm813fkkxkpbyzg07x649i6q0v2";
   buildDepends = [ mtl ];
   pkgconfigDepends = [ lua ];
   configureFlags = "-fsystem-lua";

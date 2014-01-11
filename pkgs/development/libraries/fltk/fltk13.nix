@@ -3,13 +3,13 @@
 
 let inherit (composableDerivation) edf; in
 
-let version = "1.3.0"; in
+let version = "1.3.2"; in
 composableDerivation.composableDerivation {} {
   name = "fltk-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.easysw.com/pub/fltk/${version}/fltk-${version}-source.tar.gz";
-    sha256 = "075j6ljx4dfg9rnkardn24y0f26ylpakm0yylg6a9kllha07c1lr";
+    url = "http://fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
+    sha256 = "1974brlk723095vf8z72kazq1cbqr9a51kq6b0xda6zkjkgl8q0p";
   };
 
   propagatedBuildInputs = [ x11 inputproto libXi freeglut ];

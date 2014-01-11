@@ -9,9 +9,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ nasm SDL zlib libpng ncurses mesa ];
-  
+
   preConfigure = ''
     cd src
+
+    sed -i "/^STRIP/d" configure
     
     # Fix for undefined strncasecmp()
     echo '#include <strings.h>' > tmp.cpp 

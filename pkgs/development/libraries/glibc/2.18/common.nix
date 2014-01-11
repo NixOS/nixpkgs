@@ -61,7 +61,9 @@ stdenv.mkDerivation ({
       ./cve-2013-4332.patch
       ./cve-2013-4458.patch
       ./cve-2013-4788.patch
-    ];
+    ]
+      # the problem only seems to affect i686, so avoid re-hash x86_64 ATM
+      ++ stdenv.lib.optional stdenv.isi686 ./strstr-sse42-hack.patch;
 
   postPatch = ''
     # Needed for glibc to build with the gnumake 3.82
