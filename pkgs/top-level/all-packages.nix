@@ -8922,7 +8922,7 @@ let
 
   tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
-      pycryptopp pysqlite darcsver setuptoolsTrial setuptoolsDarcs
+      pycryptopp sqlite3 darcsver setuptoolsTrial setuptoolsDarcs
       numpy pyasn1 mock;
   };
 
