@@ -3948,6 +3948,8 @@ let
 
   aalib = callPackage ../development/libraries/aalib { };
 
+  accountservice = callPackage ../development/libraries/accountservice { };
+
   acl = callPackage ../development/libraries/acl { };
 
   activemq = callPackage ../development/libraries/apache-activemq { };
