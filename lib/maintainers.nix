@@ -36,6 +36,7 @@
   lovek323 = "Jason O'Conal <jason@oconal.id.au>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
+  matejc = "Matej Cotman <cotman.matej@gmail.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   ocharles = "Oliver Charles <ollie@ocharles.org.uk>";

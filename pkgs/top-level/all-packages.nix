@@ -685,6 +685,10 @@ let
 
   conspy = callPackage ../os-specific/linux/conspy {};
 
+  connman = callPackage ../tools/networking/connman { };
+
+  connmanui = callPackage ../tools/networking/connmanui { };
+
   convertlit = callPackage ../tools/text/convertlit { };
 
   collectd = callPackage ../tools/system/collectd { };
