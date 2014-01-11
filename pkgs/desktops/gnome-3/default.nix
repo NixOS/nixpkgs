@@ -10,7 +10,7 @@ rec {
 #### Overrides of libraries
 
   librsvg = pkgs.librsvg.override { inherit gtk2; }; # gtk2 mysteriously needed in librsvg for goffice (commented in Gentoo)
-
+  libsoup = pkgs.libsoup_2_44;
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
@@ -33,6 +33,8 @@ rec {
   gnome_keyring = callPackage ./core/gnome-keyring { };
   libgnome_keyring = callPackage ./core/libgnome-keyring { };
 
+  gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
+
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
   gnome_themes_standard = callPackage ./core/gnome-themes-standard { };
@@ -53,9 +55,11 @@ rec {
 
   libqmi = callPackage ./core/libqmi {};
 
-  libgweather = callPackage ./core/libgweather { libsoup = pkgs.libsoup_2_44; };
+  libgweather = callPackage ./core/libgweather { };
 
   nautilus = callPackage ./core/nautilus { };
+
+  rest = callPackage ./core/rest { };
 
   vte = callPackage ./core/vte { };
 
