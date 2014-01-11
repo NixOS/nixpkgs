@@ -54,7 +54,7 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    mv $out/bin/miro.real $out/bin/miro
+    mv "$out/bin/miro.real" "$out/bin/miro"
   '';
 
   buildInputs = [
