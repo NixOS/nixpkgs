@@ -35,6 +35,8 @@ rec {
 
   gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
 
+  gnome_session = callPackage ./core/gnome-session { };
+
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
   gnome_themes_standard = callPackage ./core/gnome-themes-standard { };
