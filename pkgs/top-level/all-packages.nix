@@ -1955,6 +1955,8 @@ let
 
   torbutton = callPackage ../tools/security/torbutton { };
 
+  torbrowser = callPackage ../tools/security/tor/torbrowser.nix { };
+
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
   trickle = callPackage ../tools/networking/trickle {};
