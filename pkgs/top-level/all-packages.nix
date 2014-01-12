@@ -84,7 +84,9 @@ let
       if system == "armv6l-linux" then platforms.raspberrypi
       else if system == "armv5tel-linux" then platforms.sheevaplug
       else if system == "mips64el-linux" then platforms.fuloong2f_n32
-      else platforms.pc;
+      else if system == "x86_64-linux" then platforms.pc64
+      else if system == "i686-linux" then platforms.pc32
+      else platforms.pcBase;
 
   platform = if platform_ != null then platform_
     else config.platform or platformAuto;
@@ -278,6 +280,11 @@ let
 
   vsenv = callPackage ../build-support/vsenv {
     vs = vs90wrapper;
+  };
+
+  fetchbower = import ../build-support/fetchbower {
+    inherit stdenv git;
+    inherit (nodePackages) fetch-bower;
   };
 
   fetchbzr = import ../build-support/fetchbzr {
@@ -676,6 +683,10 @@ let
 
   conspy = callPackage ../os-specific/linux/conspy {};
 
+  connman = callPackage ../tools/networking/connman { };
+
+  connmanui = callPackage ../tools/networking/connmanui { };
+
   convertlit = callPackage ../tools/text/convertlit { };
 
   collectd = callPackage ../tools/system/collectd { };
@@ -793,6 +804,8 @@ let
 
   disper = callPackage ../tools/misc/disper { };
 
+  dmd = callPackage ../development/compilers/dmd { };
+
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
   docbook2odf = callPackage ../tools/typesetting/docbook2odf {
@@ -867,6 +880,8 @@ let
 
   evtest = callPackage ../applications/misc/evtest { };
 
+  exempi = callPackage ../development/libraries/exempi { };
+
   exif = callPackage ../tools/graphics/exif { };
 
   exiftags = callPackage ../tools/graphics/exiftags { };
@@ -908,6 +923,8 @@ let
   libbsd = callPackage ../development/libraries/libbsd { };
 
   lprof = callPackage ../tools/graphics/lprof { };
+
+  fdk_aac = callPackage ../development/libraries/fdk-aac { };
 
   flvtool2 = callPackage ../tools/video/flvtool2 { };
 
@@ -1229,11 +1246,11 @@ let
 
   nodejs = callPackage ../development/web/nodejs {};
 
-  nodePackages = recurseIntoAttrs (import ./node-packages.nix {
+  nodePackages = import ./node-packages.nix {
     inherit pkgs stdenv nodejs fetchurl fetchgit;
     neededNatives = [python] ++ lib.optional (lib.elem system lib.platforms.linux) utillinux;
     self = pkgs.nodePackages;
-  });
+  };
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
@@ -1656,6 +1673,8 @@ let
 
   prey-bash-client = callPackage ../tools/security/prey { };
 
+  projectm = callPackage ../applications/audio/projectm { };
+
   proxychains = callPackage ../tools/networking/proxychains { };
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
@@ -1729,6 +1748,8 @@ let
   reptyr = callPackage ../os-specific/linux/reptyr {};
 
   rdiff_backup = callPackage ../tools/backup/rdiff-backup { };
+
+  rdmd = callPackage ../development/compilers/rdmd { };
 
   ripmime = callPackage ../tools/networking/ripmime {};
 
@@ -1853,6 +1874,8 @@ let
     # Boost 1.54 causes the "test_regexranges" test to fail
     boost = boost149;
   };
+
+  spaceFM = callPackage ../applications/misc/spacefm { };
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
@@ -2967,13 +2990,7 @@ let
 
   urweb = callPackage ../development/compilers/urweb { };
 
-  vala = vala19;
-
-  vala15 = callPackage ../development/compilers/vala/15.2.nix { };
-
-  vala16 = callPackage ../development/compilers/vala/16.1.nix { };
-
-  vala19 = callPackage ../development/compilers/vala/default.nix { };
+  vala = callPackage ../development/compilers/vala/default.nix { };
 
   visualcpp = callPackage ../development/compilers/visual-c++ { };
 
@@ -3106,7 +3123,19 @@ let
 
   octave = callPackage ../development/interpreters/octave {
     fltk = fltk13;
+    qt = null;
+    ghostscript = null;
+    llvm = null;
+    hdf5 = null;
+    glpk = null;
+    suitesparse = null;
+    openjdk = null;
+    gnuplot = null;
   };
+  octaveFull = (lowPrio (callPackage ../development/interpreters/octave { 
+    fltk = fltk13;
+    qt = qt4;
+  }));
 
   # mercurial (hg) bleeding edge version
   octaveHG = callPackage ../development/interpreters/octave/hg.nix { };
@@ -3227,6 +3256,11 @@ let
   spidermonkey = callPackage ../development/interpreters/spidermonkey { };
   spidermonkey_1_8_0rc1 = callPackage ../development/interpreters/spidermonkey/1.8.0-rc1.nix { };
   spidermonkey_185 = callPackage ../development/interpreters/spidermonkey/185-1.0.0.nix { };
+
+  supercollider = callPackage ../development/interpreters/supercollider {
+    qt = qt4;
+    fftw = fftwSinglePrec;
+  };
 
   sysPerl = callPackage ../development/interpreters/perl/sys-perl { };
 
@@ -3441,6 +3475,11 @@ let
   libcxx = callPackage ../development/libraries/libc++ { stdenv = pkgs.clangStdenv; };
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
+
+  dfeet = callPackage ../development/tools/misc/d-feet {
+    inherit (pythonPackages) pep8;
+    inherit (gnome3) gnome_icon_theme;
+  };
 
   ddd = callPackage ../development/tools/misc/ddd { };
 
@@ -3731,6 +3770,8 @@ let
 
   aalib = callPackage ../development/libraries/aalib { };
 
+  accountservice = callPackage ../development/libraries/accountservice { };
+
   acl = callPackage ../development/libraries/acl { };
 
   activemq = callPackage ../development/libraries/apache-activemq { };
@@ -3993,7 +4034,6 @@ let
   };
 
   ffmpeg_2 = callPackage ../development/libraries/ffmpeg/2.x.nix {
-    vpxSupport = !stdenv.isMips;
     texinfo = texinfo5;
   };
 
@@ -4195,6 +4235,8 @@ let
 
   gperftools = callPackage ../development/libraries/gperftools { };
 
+  gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer { });
+
   gst_all = {
     inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
     gstPluginsBase = pkgs.gst_plugins_base;
@@ -4204,31 +4246,31 @@ let
     gstFfmpeg = pkgs.gst_ffmpeg;
   };
 
-  gstreamer = callPackage ../development/libraries/gstreamer/gstreamer {
+  gstreamer = callPackage ../development/libraries/gstreamer/legacy/gstreamer {
     bison = bison2;
   };
 
-  gst_plugins_base = callPackage ../development/libraries/gstreamer/gst-plugins-base {};
+  gst_plugins_base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {};
 
-  gst_plugins_good = callPackage ../development/libraries/gstreamer/gst-plugins-good {};
+  gst_plugins_good = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-good {};
 
-  gst_plugins_bad = callPackage ../development/libraries/gstreamer/gst-plugins-bad {};
+  gst_plugins_bad = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-bad {};
 
-  gst_plugins_ugly = callPackage ../development/libraries/gstreamer/gst-plugins-ugly {};
+  gst_plugins_ugly = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-ugly {};
 
-  gst_ffmpeg = callPackage ../development/libraries/gstreamer/gst-ffmpeg {
+  gst_ffmpeg = callPackage ../development/libraries/gstreamer/legacy/gst-ffmpeg {
     ffmpeg = ffmpeg_0_10;
   };
 
-  gst_python = callPackage ../development/libraries/gstreamer/gst-python {};
+  gst_python = callPackage ../development/libraries/gstreamer/legacy/gst-python {};
 
-  gnonlin = callPackage ../development/libraries/gstreamer/gnonlin {};
+  gnonlin = callPackage ../development/libraries/gstreamer/legacy/gnonlin {};
 
   gusb = callPackage ../development/libraries/gusb {
     inherit (gnome) gtkdoc;
   };
 
-  qt_gstreamer = callPackage ../development/libraries/gstreamer/qt-gstreamer {};
+  qt_gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
 
   gnet = callPackage ../development/libraries/gnet { };
 
@@ -4339,6 +4381,8 @@ let
   };
 
   gtkspell = callPackage ../development/libraries/gtkspell { };
+
+  gtkspell3 = callPackage ../development/libraries/gtkspell/3.nix { };
 
   gts = callPackage ../development/libraries/gts { };
 
@@ -5522,6 +5566,8 @@ let
     inherit (pythonPackages) pyparsing;
   };
 
+  spice_gtk = callPackage ../development/libraries/spice-gtk { };
+
   spice_protocol = callPackage ../development/libraries/spice-protocol { };
 
   sratom = callPackage ../development/libraries/audio/sratom { };
@@ -5975,9 +6021,9 @@ let
 
   rhpl = callPackage ../development/python-modules/rhpl { };
 
-  sip = callPackage ../development/python-modules/python-sip { };
+  sip = callPackage ../development/python-modules/sip { };
 
-  pyqt4 = callPackage ../development/python-modules/pyqt {
+  pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     stdenv = if stdenv.isDarwin
       then clangStdenv
       else stdenv;
@@ -6305,6 +6351,7 @@ let
   });
 
   zabbix20 = callPackage ../servers/monitoring/zabbix/2.0.nix { };
+  zabbix22 = callPackage ../servers/monitoring/zabbix/2.2.nix { };
 
 
   ### OS-SPECIFIC
@@ -6524,10 +6571,9 @@ let
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
-    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs3_2
       ];
   };
 
@@ -6574,11 +6620,10 @@ let
   });
 
   linux_3_4 = makeOverridable (import ../os-specific/linux/kernel/linux-3.4.nix) {
-    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs3_4
-      ] ++ lib.optionals (platform.kernelArch == "mips")
+      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
       ];
@@ -6593,15 +6638,15 @@ let
   });
 
   linux_3_6_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi-3.6.nix) {
-    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
   };
 
   linux_3_10 = makeOverridable (import ../os-specific/linux/kernel/linux-3.10.nix) {
-    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals (platform.kernelArch == "mips")
+      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -6618,11 +6663,11 @@ let
   });
 
   linux_3_11 = makeOverridable (import ../os-specific/linux/kernel/linux-3.11.nix) {
-    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals (platform.kernelArch == "mips")
+      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -6630,11 +6675,11 @@ let
   };
 
   linux_3_12 = makeOverridable (import ../os-specific/linux/kernel/linux-3.12.nix) {
-    inherit fetchurl stdenv perl mktemp bc kmod ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals (platform.kernelArch == "mips")
+      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -6651,8 +6696,6 @@ let
   linuxPackagesFor = kernel: self: let callPackage = newScope self; in {
     inherit kernel;
 
-    kernelDev = kernel.dev or kernel;
-
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
@@ -6661,45 +6704,20 @@ let
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
-    aufs =
-      if self.kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs/2.nix { }
-      else if self.kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs/3.nix { }
-      else null;
-
-    aufs_util =
-      if self.kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs-util/2.nix { }
-      else if self.kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs-util/3.nix { }
-      else null;
-
     blcr = callPackage ../os-specific/linux/blcr { };
 
     cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
-    exmap = callPackage ../os-specific/linux/exmap { };
-
     frandom = callPackage ../os-specific/linux/frandom { };
-
-    iscsitarget = callPackage ../os-specific/linux/iscsitarget { };
-
-    iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
 
     lttngModules = callPackage ../os-specific/linux/lttng-modules { };
 
-    atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
-
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
-
-    broadcom_sta6 = callPackage ../os-specific/linux/broadcom-sta-v6/default.nix { };
 
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
-    nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
     nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
     nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };
 
@@ -6709,9 +6727,12 @@ let
 
     wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
 
-    klibc = callPackage ../os-specific/linux/klibc {
-      linuxHeaders = glibc.kernelHeaders;
-    };
+    kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
+
+    klibc = callPackage ../os-specific/linux/klibc { };
+
+    klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
+
 
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
@@ -6725,15 +6746,6 @@ let
     psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
 
     spl = callPackage ../os-specific/linux/spl/default.nix { };
-
-    sysprof = callPackage ../development/tools/profiling/sysprof {
-      inherit (gnome) libglade;
-    };
-
-    systemtap = callPackage ../development/tools/profiling/systemtap {
-      linux = self.kernelDev;
-      inherit (gnome) libglademm;
-    };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
@@ -6772,7 +6784,7 @@ let
 
   # A function to build a manually-configured kernel
   linuxManualConfig = import ../os-specific/linux/kernel/manual-config.nix {
-    inherit (pkgs) stdenv runCommand nettools bc perl kmod writeTextFile;
+    inherit (pkgs) stdenv runCommand nettools bc perl kmod writeTextFile ubootChooser;
   };
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
@@ -6792,12 +6804,6 @@ let
   lm_sensors = callPackage ../os-specific/linux/lm-sensors { };
 
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
-
-  klibc = callPackage ../os-specific/linux/klibc {
-    linuxHeaders = glibc.kernelHeaders;
-  };
-
-  klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
   kmod = callPackage ../os-specific/linux/kmod { };
 
@@ -6923,6 +6929,10 @@ let
 
   sysfsutils = callPackage ../os-specific/linux/sysfsutils { };
 
+  sysprof = callPackage ../development/tools/profiling/sysprof {
+    inherit (gnome) libglade;
+  };
+
   # Provided with sysfsutils.
   libsysfs = sysfsutils;
   systool = sysfsutils;
@@ -6934,6 +6944,10 @@ let
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
   systemd = callPackage ../os-specific/linux/systemd { };
+
+  systemtap = callPackage ../development/tools/profiling/systemtap {
+    inherit (gnome) libglademm;
+  };
 
   # In nixos, you can set systemd.package = pkgs.systemd_with_lvm2 to get
   # LVM2 working in systemd.
@@ -7617,6 +7631,8 @@ let
 
     gist = callPackage ../applications/editors/emacs-modes/gist { };
 
+    idris = callPackage ../applications/editors/emacs-modes/idris { };
+
     jade = callPackage ../applications/editors/emacs-modes/jade { };
 
     jdee = callPackage ../applications/editors/emacs-modes/jdee {
@@ -7869,6 +7885,8 @@ let
   gitRepo = callPackage ../applications/version-management/git-repo {
     python = python27;
   };
+
+  inherit (gnome3) gitg;
 
   giv = callPackage ../applications/graphics/giv {
     pcre = pcre.override { unicodeSupport = true; };
@@ -8159,6 +8177,8 @@ let
   caps = callPackage ../applications/audio/caps { };
 
   lastwatch = callPackage ../applications/audio/lastwatch { };
+
+  lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
 
   lbdb = callPackage ../tools/misc/lbdb { };
 
@@ -8665,17 +8685,7 @@ let
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
-  sndBase = lowPrio (builderDefsPackage (import ../applications/audio/snd) {
-    inherit fetchurl stdenv stringsWithDeps lib fftw;
-    inherit pkgconfig gmp gettext;
-    inherit (xlibs) libXpm libX11;
-    inherit gtk glib;
-  });
-
-  snd = sndBase.passthru.function {
-    inherit mesa libtool jackaudio alsaLib;
-    guile = guile_1_8;
-  };
+  snd = callPackage ../applications/audio/snd { };
 
   shntool = callPackage ../applications/audio/shntool { };
 
@@ -8743,7 +8753,7 @@ let
 
   tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
-      pycryptopp pysqlite darcsver setuptoolsTrial setuptoolsDarcs
+      pycryptopp sqlite3 darcsver setuptoolsTrial setuptoolsDarcs
       numpy pyasn1 mock;
   };
 
@@ -9649,7 +9659,7 @@ let
 
   gtk-engine-murrine = callPackage ../misc/themes/gtk2/gtk-engine-murrine { };
 
-  gnome_themes_standard = callPackage ../misc/themes/gnome-themes-standard { };
+  gnome_themes_standard = gnome3.gnome_themes_standard;
 
   mate-icon-theme = callPackage ../misc/themes/mate-icon-theme { };
 
@@ -9899,6 +9909,8 @@ let
 
   weka = callPackage ../applications/science/math/weka { };
 
+  yad = callPackage ../tools/misc/yad { };
+
   yacas = callPackage ../applications/science/math/yacas { };
 
   speedcrunch = callPackage ../applications/science/math/speedcrunch {
@@ -10023,13 +10035,10 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
-  nixUnstable = nixStable;
-  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
-  */
 
   nixops = callPackage ../tools/package-management/nixops { };
 

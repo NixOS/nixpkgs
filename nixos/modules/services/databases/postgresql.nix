@@ -82,7 +82,11 @@ in
         type = types.lines;
         default = "";
         description = ''
-          Defines how users authenticate themselves to the server.
+          Defines how users authenticate themselves to the server. By
+          default, "trust" access to local users will always be granted
+          along with any other custom options. If you do not want this,
+          set this option using "pkgs.lib.mkForce" to override this
+          behaviour.
         '';
       };
 

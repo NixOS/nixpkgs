@@ -40,6 +40,6 @@ stdenv.mkDerivation {
     description = "HTTP client library based on APR";
     license = stdenv.lib.licenses.asl20 ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

@@ -197,6 +197,7 @@
       minidlna = 91;
       haproxy = 92;
       openldap = 93;
+      connman = 94;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 

@@ -18,24 +18,6 @@ let
       };
     };
 
-  makeAufs3StandalonePatch = {version, rev, sha256}:
-
-    stdenv.mkDerivation {
-      name = "aufs3-standalone-${version}.patch";
-
-      src = fetchgit {
-        url = git://aufs.git.sourceforge.net/gitroot/aufs/aufs3-standalone.git;
-        inherit sha256 rev;
-      };
-
-      phases = [ "unpackPhase" "installPhase" ];
-
-      # Instructions from http://aufs.git.sourceforge.net/git/gitweb.cgi?p=aufs/aufs3-standalone.git;a=blob;f=Documentation/filesystems/aufs/README;h=b8cf077635b323d1b454266366f05f476bbd09cb;hb=1067b9d8d64d23c70d905c9cd3c90a669e39c4d4
-      installPhase = ''
-        cat aufs3-base.patch aufs3-proc_map.patch aufs3-standalone.patch > $out
-      '';
-    };
-
   makeAppArmorPatch = {apparmor, version}:
     stdenv.mkDerivation {
       name = "apparmor-${version}.patch";
@@ -67,34 +49,6 @@ rec {
       patch = ./sec_perm-2.6.24.patch;
       features.secPermPatch = true;
     };
-
-  aufs3_2 = rec {
-    name = "aufs3.2";
-    version = "3.2.20121210";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "0bf50c3b82f98e2ddc4c9ba0657f28ebfa8d15cb";
-      sha256 = "bc4b65cb77c62744db251da98488fdf4962f14a144c045cea6cbbbd42718ff89";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
-  aufs3_4 = rec {
-    name = "aufs3.4";
-    version = "3.4.20121210";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "2faacd9baffb37df3b9062cc554353eebe68df1e";
-      sha256 = "3ecf97468f5e85970d9fd2bfc61e38c7f5ae2c6dde0045d5a17de085c411d452";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
 
   no_xsave =
     { name = "no-xsave";

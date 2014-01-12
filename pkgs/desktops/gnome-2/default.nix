@@ -107,8 +107,6 @@ let overridden = set // overrides; set = with overridden; {
 
   gtksourceview = callPackage ./desktop/gtksourceview { };
 
-  nautilus = callPackage ./desktop/nautilus { };
-
   gnome_icon_theme = callPackage ./desktop/gnome-icon-theme { };
 
   vte = callPackage ./desktop/vte { };

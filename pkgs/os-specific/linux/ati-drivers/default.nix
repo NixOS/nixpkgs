@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernelDev, xlibs, which, imake
+{ stdenv, fetchurl, kernel, xlibs, which, imake
 , mesa # for fgl_glxgears
 , libXxf86vm, xf86vidmodeproto # for fglrx_gamma
 , xorg, makeWrapper, glibc, patchelf
@@ -22,9 +22,9 @@
 
 assert stdenv.system == "x86_64-linux";
 
-stdenv.mkDerivation rec {
-  name = "ati-drivers-${version}-${kernel.version}";
-  version = "13.4";
+
+stdenv.mkDerivation {
+  name = "ati-drivers-13.4-${kernel.version}";
 
   builder = ./builder.sh;
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       mesa
     ];
 
-  kernel = kernelDev;
+  kernel = kernel.dev;
 
   inherit glibc /* glibc only used for setting interpreter */;
 
@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
+    broken = true;
   };
 
   # moved assertions here because the name is evaluated when the NixOS manual is generated

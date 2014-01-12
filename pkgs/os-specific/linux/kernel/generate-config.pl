@@ -11,6 +11,9 @@
 
 use strict;
 use IPC::Open2;
+use Cwd;
+
+my $wd = getcwd;
 
 my $debug = $ENV{'DEBUG'};
 my $autoModules = $ENV{'AUTO_MODULES'};
@@ -36,7 +39,7 @@ close ANSWERS;
 sub runConfig {
 
     # Run `make config'.
-    my $pid = open2(\*IN, \*OUT, "make config SHELL=bash ARCH=$ENV{ARCH}");
+    my $pid = open2(\*IN, \*OUT, "make -C $ENV{SRC} O=$wd config SHELL=bash ARCH=$ENV{ARCH}");
 
     # Parse the output, look for questions and then send an
     # appropriate answer.

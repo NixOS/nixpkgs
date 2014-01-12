@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ mtl ];
   buildTools = [ perl ];
+  patchPhase = "sed -i -e '/^import Data.Monoid/d' Setup.lhs";
   meta = {
     homepage = "http://www.haskell.org/happy/";
     description = "Happy is a parser generator for Haskell";

@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, kernelDev }:
+{ stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-2.3.0";
-  name = "${pname}-${kernelDev.version}";
+  name = "${pname}-${kernel.version}";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-modules/${pname}.tar.bz2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [ ./lttng-fix-build-error-on-linux-3.2.patch ];
 
   preConfigure = ''
-    export KERNELDIR="${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build"
+    export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     export INSTALL_MOD_PATH="$out"
   '';
 

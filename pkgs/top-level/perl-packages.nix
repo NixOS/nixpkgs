@@ -6185,9 +6185,9 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetSNMP = buildPerlPackage rec {
-    name = "Net-SNMP-v6.0.1";
+    name = "Net-SNMP-6.0.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DT/DTOWN/${name}.tar.gz";
+      url = "mirror://cpan/authors/id/D/DT/DTOWN/Net-SNMP-v6.0.1.tar.gz";
       sha256 = "0hdpn1cw52x8cw24m9ayzpf4rwarm0khygn1sv3wvwxkrg0pphql";
     };
     doCheck = false; # The test suite fails, see https://rt.cpan.org/Public/Bug/Display.html?id=85799
@@ -7590,7 +7590,7 @@ let self = _self // overrides; _self = with self; {
   };
 
   SVK = buildPerlPackage {
-    name = "SVK-v2.0.2";
+    name = "SVK-2.0.2";
     src = fetchurl {
       url = mirror://cpan/authors/id/C/CL/CLKAO/SVK-v2.0.2.tar.gz;
       sha256 = "0c4m2q7cvzwh9kk1nc1vd8lkxx2kss5nd4k20dpkal4c7735jns0";
@@ -8680,9 +8680,9 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextRecordParser = buildPerlPackage rec {
-    name = "Text-RecordParser-v1.5.0";
+    name = "Text-RecordParser-1.5.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KC/KCLARK/${name}.tar.gz";
+      url = "mirror://cpan/authors/id/K/KC/KCLARK/Text-RecordParser-v1.5.0.tar.gz";
       sha256 = "0zlwpayjnpjani3v3hgi77207i3n5fppcxww20chdldx98dkj7jm";
     };
 
@@ -8743,7 +8743,7 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestTrap = buildPerlPackage {
-    name = "Test-Trap-v0.2.2";
+    name = "Test-Trap-0.2.2";
     src = fetchurl {
       url = mirror://cpan/authors/id/E/EB/EBHANSSEN/Test-Trap-v0.2.2.tar.gz;
       sha256 = "1ci5ag9pm850ww55n2929skvw3avy6xcrwmmi2yyn0hifxx9dybs";

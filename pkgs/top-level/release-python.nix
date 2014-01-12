@@ -1081,8 +1081,6 @@ let
     acpi_call = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     atheros = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     ati_drivers_x11 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-    aufs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-    aufs_util = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     bbswitch = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     broadcom_sta = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     cryptodev = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1698,8 +1696,6 @@ let
   v8 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vacuum = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vala = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  vala15 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  vala16 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   valgrind = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   valkyrie = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vde2 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
