@@ -1963,6 +1963,8 @@ let
 
   ttysnoop = callPackage ../os-specific/linux/ttysnoop {};
 
+  tun2socks = callPackage ../tools/security/tun2socks { };
+
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
   txt2man = callPackage ../tools/misc/txt2man { };
