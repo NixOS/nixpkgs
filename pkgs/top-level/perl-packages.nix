@@ -5294,6 +5294,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Mojolicious = buildPerlPackage {
+    name = "Mojolicious-4.63";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SR/SRI/Mojolicious-4.63.tar.gz;
+      sha256 = "f20f77e86fc560dac1c958e765ed64242dcf6343939ed605b45f2bbe2596d5e9";
+    };
+    meta = {
+      homepage = http://mojolicio.us;
+      description = "Real-time web framework";
+      license = "artistic_2";
+    };
+  };
+
   Moo = buildPerlPackage {
     name = "Moo-1.000007";
     src = fetchurl {
