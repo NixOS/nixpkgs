@@ -3799,6 +3799,10 @@ let
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
+  node_webkit = callPackage ../development/tools/node-webkit {
+    gconf = pkgs.gnome.GConf;
+  };
+
   noweb = callPackage ../development/tools/literate-programming/noweb { };
 
   omake = callPackage ../development/tools/ocaml/omake { };
