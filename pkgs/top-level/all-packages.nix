@@ -8711,6 +8711,8 @@ let
 
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
+  stp = callPackage ../applications/science/logic/stp {};
+
   stumpwm = lispPackages.stumpwm;
 
   sublime = callPackage ../applications/editors/sublime { };
