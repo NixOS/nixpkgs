@@ -48,6 +48,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4notifyd    = callPackage ./applications/xfce4-notifyd.nix { };
   xfce4taskmanager= callPackage ./applications/xfce4-taskmanager.nix { };
   xfce4terminal   = callPackage ./applications/terminal.nix { };
+  xfce4screenshooter   = callPackage ./applications/xfce4-screenshooter.nix { };
 
   #### ART                  from "mirror://xfce/src/art/${p_name}/${ver_maj}/${name}.tar.bz2"
 
