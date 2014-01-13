@@ -114,4 +114,5 @@
 , "rethinkdb"
 , "bower2nix"
 , "fetch-bower"
+, "titanium"
 ]
