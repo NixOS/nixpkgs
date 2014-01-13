@@ -1235,6 +1235,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hseCpp = callPackage ../development/libraries/haskell/hse-cpp {};
 
+  hsimport = callPackage ../development/libraries/haskell/hsimport {};
+
   HTF = callPackage ../development/libraries/haskell/HTF {};
 
   HTTP_4000_0_6 = callPackage ../development/libraries/haskell/HTTP/4000.0.6.nix {};
