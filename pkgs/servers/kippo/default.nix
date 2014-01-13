@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
         Default port is 2222. Recommend using something like this for port redirection to default SSH port:
         networking.firewall.extraCommands = '''
         iptables -t nat -A PREROUTING -i IN_IFACE -p tcp --dport 22 -j REDIRECT --to-port 2222''' '';
-      license = "bsd-3";
+      license = self.stdenv.lib.licenses.bsd3;
       platforms = pkgs.stdenv.lib.platforms.linux;
       maintainers = pkgs.stdenv.lib.maintainers.tomberek;
     };
