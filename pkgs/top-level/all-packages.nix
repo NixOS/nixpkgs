@@ -392,6 +392,8 @@ let
 
   platforms = import ./platforms.nix;
 
+  setJavaClassPath = makeSetupHook { } ../build-support/setup-hooks/set-java-classpath.sh;
+
 
   ### TOOLS
 
@@ -407,7 +409,7 @@ let
 
   aegisub = callPackage ../applications/video/aegisub {
     wxGTK = wxGTK29;
-    lua = lua5_1; 
+    lua = lua5_1;
   };
 
   aespipe = callPackage ../tools/security/aespipe { };
@@ -2856,19 +2858,12 @@ let
       callPackage ../development/compilers/openjdk-darwin { }
     else
       let
-        openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix {};
-        openjdkStage1 = callPackage ../development/compilers/openjdk {
-          jdk = openjdkBootstrap;
-          ant = pkgs.ant.override { jdk = openjdkBootstrap; };
-        };
+        openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix { };
       in callPackage ../development/compilers/openjdk {
-        jdk = openjdkStage1;
-        ant = pkgs.ant.override { jdk = openjdkStage1; };
+        jdk = openjdkBootstrap;
       };
 
-  openjre = pkgs.openjdk.override {
-    jreOnly = true;
-  };
+  openjre = pkgs.openjdk.jre;
 
   jdk = if stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
     then pkgs.openjdk
@@ -3222,19 +3217,7 @@ let
 
   clojure = callPackage ../development/interpreters/clojure { };
 
-  clojureUnstable = callPackage ../development/interpreters/clojure { version = "1.5.0-RC1"; };
-
-  clojure_binary = callPackage ../development/interpreters/clojure/binary.nix { };
-
-  clojure_wrapper = callPackage ../development/interpreters/clojure/wrapper.nix {
-    #clojure = clojure_binary;
-  };
-
-  clooj_standalone_binary = callPackage ../development/interpreters/clojure/clooj.nix { };
-
-  clooj_wrapper = callPackage ../development/interpreters/clojure/clooj-wrapper.nix {
-    clooj = clooj_standalone_binary;
-  };
+  clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
   erlangR14B04 = callPackage ../development/interpreters/erlang/R14B04.nix { };
   erlangR15B03 = callPackage ../development/interpreters/erlang/R15B03.nix { };
@@ -3259,8 +3242,6 @@ let
   j = callPackage ../development/interpreters/j {};
 
   jmeter = callPackage ../applications/networking/jmeter {};
-
-  kaffe = callPackage ../development/interpreters/kaffe { };
 
   kona = callPackage ../development/interpreters/kona {};
 
@@ -3505,14 +3486,6 @@ let
   ant = apacheAnt;
 
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
-
-  apacheAntOpenJDK = apacheAnt.override { jdk = openjdk; };
-  apacheAntOracleJDK = ant.override { jdk = pkgs.oraclejdk; };
-
-  apacheAntGcj = callPackage ../development/tools/build-managers/apache-ant/from-source.nix {
-    # must be either pre-built or built with GCJ *alone*
-    gcj = gcj.gcc; # use the raw GCJ, which has ${gcj}/lib/jvm
-  };
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
@@ -4604,14 +4577,6 @@ let
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
-  icedtea = callPackage ../development/libraries/java/icedtea {
-    ant = apacheAntGcj;
-    xerces = xercesJava;
-    xulrunner = icecatXulrunner3;
-    inherit (xlibs) libX11 libXp libXtst libXinerama libXt
-      libXrender xproto;
-  };
-
   icu = callPackage ../development/libraries/icu { };
 
   id3lib = callPackage ../development/libraries/id3lib { };
@@ -5641,7 +5606,6 @@ let
   redland = pkgs.librdf_redland;
 
   rhino = callPackage ../development/libraries/java/rhino {
-    ant = apacheAntGcj;
     javac = gcj;
     jvm = gcj;
   };
@@ -5700,7 +5664,7 @@ let
   SDL2_gfx = callPackage ../development/libraries/SDL2_gfx { };
 
   serd = callPackage ../development/libraries/serd {};
-  
+
   serf = callPackage ../development/libraries/serf {};
 
   silgraphite = callPackage ../development/libraries/silgraphite {};
@@ -5969,12 +5933,6 @@ let
 
   xercesc = callPackage ../development/libraries/xercesc {};
 
-  xercesJava = callPackage ../development/libraries/java/xerces {
-    ant   = apacheAntGcj;  # for bootstrap purposes
-    javac = gcj;
-    jvm   = gcj;
-  };
-
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
       freetype fontconfig xlibs.xproto xlibs.libX11 xlibs.libXt
@@ -6065,13 +6023,6 @@ let
 
   v8 = callPackage ../development/libraries/v8 { inherit (pythonPackages) gyp; };
 
-  xalanj = xalanJava;
-  xalanJava = callPackage ../development/libraries/java/xalanj {
-    ant    = apacheAntGcj;  # for bootstrap purposes
-    javac  = gcj;
-    jvm    = gcj;
-    xerces = xercesJava;  };
-
   xmlsec = callPackage ../development/libraries/xmlsec { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
@@ -6081,19 +6032,25 @@ let
 
   jquery_ui = callPackage ../development/libraries/javascript/jquery-ui { };
 
+
   ### DEVELOPMENT / LISP MODULES
 
   asdf = callPackage ../development/lisp-modules/asdf {
     texLive = null;
   };
+
   clwrapperFunction = callPackage ../development/lisp-modules/clwrapper;
-  wrapLisp = lisp: clwrapperFunction {lisp=lisp;};
-  lispPackagesFor = clwrapper: callPackage ../development/lisp-modules/lisp-packages.nix{
+
+  wrapLisp = lisp: clwrapperFunction { inherit lisp; };
+
+  lispPackagesFor = clwrapper: callPackage ../development/lisp-modules/lisp-packages.nix {
     inherit clwrapper;
   };
+
   lispPackagesClisp = lispPackagesFor (wrapLisp clisp);
   lispPackagesSBCL = lispPackagesFor (wrapLisp sbcl);
   lispPackages = recurseIntoAttrs lispPackagesSBCL;
+
 
   ### DEVELOPMENT / PERL MODULES
 

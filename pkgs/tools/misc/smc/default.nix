@@ -14,16 +14,16 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/smc"
     mkdir -p "$out/share/smc/lib"
     mkdir -p "$out/share/icons"
-    mkdir -p "$out/lib/java"
+    mkdir -p "$out/share/java"
 
-    cp bin/Smc.jar "$out/lib/java/"
+    cp bin/Smc.jar "$out/share/java/"
     cp -r examples/ docs/ tools/ README.txt LICENSE.txt "$out/share/smc/"
     cp -r lib/* "$out/share/smc/lib/"
     cp misc/smc.ico "$out/share/icons/"
 
     cat > "$out/bin/smc" << EOF
     #!${stdenv.shell}
-    ${jre}/bin/java -jar "$out/lib/java/Smc.jar" "\$@"
+    ${jre}/bin/java -jar "$out/share/java/Smc.jar" "\$@"
     EOF
     chmod a+x "$out/bin/smc"
   '';
