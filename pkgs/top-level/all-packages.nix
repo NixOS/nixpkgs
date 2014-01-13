@@ -3245,7 +3245,7 @@ let
   lua5_0 = callPackage ../development/interpreters/lua-5/5.0.3.nix { };
   lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix { };
   lua5_2 = callPackage ../development/interpreters/lua-5/5.2.nix { };
-  lua5_2_compat = callPackage ../development/interpreters/lua-5/5.2.nix { 
+  lua5_2_compat = callPackage ../development/interpreters/lua-5/5.2.nix {
     compat = true;
   };
   lua5 = lua5_1;
@@ -3271,7 +3271,7 @@ let
     openjdk = null;
     gnuplot = null;
   };
-  octaveFull = (lowPrio (callPackage ../development/interpreters/octave { 
+  octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     fltk = fltk13;
     qt = qt4;
   }));
