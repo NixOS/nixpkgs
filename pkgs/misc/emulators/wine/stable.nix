@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
     license = "LGPL";
     inherit version;
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
-    maintainers = [stdenv.lib.maintainers.raskin stdenv.lib.maintainers.simons];
+    maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
   };
 }

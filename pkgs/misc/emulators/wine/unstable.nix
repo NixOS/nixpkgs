@@ -6,7 +6,7 @@
 assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
-let 
+let
     version = "1.7.10";
     name = "wine-${version}";
 
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
     license = "LGPL";
     inherit version;
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
-    maintainers = [stdenv.lib.maintainers.raskin stdenv.lib.maintainers.simons];
+    maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
   };
 }
