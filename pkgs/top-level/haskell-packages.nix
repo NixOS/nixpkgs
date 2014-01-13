@@ -1005,7 +1005,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   eventList = callPackage ../development/libraries/haskell/event-list {};
 
-  exPool = callPackage ../development/libraries/haskell/ex-pool { hashable = self.hashable_1_2_1_0; };
+  exPool = callPackage ../development/libraries/haskell/ex-pool { };
 
   exceptionMtl = callPackage ../development/libraries/haskell/exception-mtl {};
 
