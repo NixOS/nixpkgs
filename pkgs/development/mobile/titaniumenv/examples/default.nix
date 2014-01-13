@@ -12,7 +12,8 @@ rec {
     pkgs = import nixpkgs { inherit system; };
   in
     import ./kitchensink {
-      inherit (pkgs) fetchgit titaniumenv;
+      inherit (pkgs) fetchgit;
+      titaniumenv = titaniumenv.override { inherit xcodeVersion; };
       target = "android";
     });
   
