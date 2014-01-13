@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildPhase = "ant jar";
 
   installPhase = ''
-    mkdir -p $out/share/java $out/bin/java
+    mkdir -p $out/share/java $out/bin
     install -t $out/share/java clojure.jar
     makeWrapper ${jdk.jre}/bin/java $out/bin/clojure --add-flags "-cp $out/share/java/clojure.jar clojure.main"
   '';
