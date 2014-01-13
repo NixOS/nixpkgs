@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "io-streams";
-  version = "1.1.3.0";
-  sha256 = "1vw9znmnl9syfgr3rplf7fa57qgmjgf8n1kh3ffiqkgrdpif6p9c";
+  version = "1.1.4.0";
+  sha256 = "0fkys15ih3ld4l5rqjlsmhdkf9w3xnhj6hbbahazx7pj0xsv1hyh";
   buildDepends = [
     attoparsec blazeBuilder network primitive text time transformers
     vector zlibBindings
@@ -18,11 +18,11 @@ cabal.mkDerivation (self: {
     testFrameworkQuickcheck2 text time transformers vector zlib
     zlibBindings
   ];
+  configureFlags = "-fNoInteractiveTests";
   meta = {
     description = "Simple, composable, and easy-to-use stream I/O";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
-  configureFlags = "-fNoInteractiveTests";
 })
