@@ -1,25 +1,33 @@
 diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_emulation.py
---- a/tools/gyp/pylib/gyp/xcode_emulation.py	2013-11-12 21:22:12.000000000 +0100
-+++ b/tools/gyp/pylib/gyp/xcode_emulation.py	2013-12-17 11:07:11.000000000 +0100
-@@ -285,8 +285,15 @@
-     if sdk_root.startswith('/'):
-       return sdk_root
+--- a/tools/gyp/pylib/gyp/xcode_emulation.py	2013-12-19 00:49:45.000000000 +0100
++++ b/tools/gyp/pylib/gyp/xcode_emulation.py	2014-01-13 13:46:19.000000000 +0100
+@@ -295,11 +295,20 @@
+ 
+   def _XcodeSdkPath(self, sdk_root):
      if sdk_root not in XcodeSettings._sdk_path_cache:
--      XcodeSettings._sdk_path_cache[sdk_root] = self._GetSdkVersionInfoItem(
--          sdk_root, 'Path')
-+      try:
-+        XcodeSettings._sdk_path_cache[sdk_root] = self._GetSdkVersionInfoItem(
-+            sdk_root, 'Path')
-+      except:
-+        # if this fails it's because xcodebuild failed, which means
-+        # the user is probably on a CLT-only system, where there
-+        # is no valid SDK root
-+        XcodeSettings._sdk_path_cache[sdk_root] = None
+-      sdk_path = self._GetSdkVersionInfoItem(sdk_root, 'Path')
+-      XcodeSettings._sdk_path_cache[sdk_root] = sdk_path
+-      if sdk_root:
+-        XcodeSettings._sdk_root_cache[sdk_path] = sdk_root
+-    return XcodeSettings._sdk_path_cache[sdk_root]
++        try:
++            sdk_path = self._GetSdkVersionInfoItem(sdk_root, 'Path')
++            XcodeSettings._sdk_path_cache[sdk_root] = sdk_path
++            
++            if sdk_root:
++                XcodeSettings._sdk_root_cache[sdk_path] = sdk_root
++        except:
++            # if this fails it's because xcodebuild failed, which means
++            # the user is probably on a CLT-only system, where there
++            # is no valid SDK root
++            XcodeSettings._sdk_path_cache[sdk_root] = None
 +
-     return XcodeSettings._sdk_path_cache[sdk_root]
++    return None;
++    #return XcodeSettings._sdk_path_cache[sdk_root]
  
    def _AppendPlatformVersionMinFlags(self, lst):
-@@ -397,10 +404,11 @@
+     self._Appendf(lst, 'MACOSX_DEPLOYMENT_TARGET', '-mmacosx-version-min=%s')
+@@ -409,10 +418,11 @@
  
      cflags += self._Settings().get('WARNING_CFLAGS', [])
  
@@ -35,7 +43,7 @@ diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_
  
      self.configname = None
      return cflags
-@@ -647,10 +655,11 @@
+@@ -659,10 +669,11 @@
      for rpath in self._Settings().get('LD_RUNPATH_SEARCH_PATHS', []):
        ldflags.append('-Wl,-rpath,' + rpath)
  
@@ -51,7 +59,7 @@ diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_
  
      self.configname = None
      return ldflags
-@@ -826,7 +835,10 @@
+@@ -843,7 +854,10 @@
          l = '-l' + m.group(1)
        else:
          l = library
@@ -63,3 +71,25 @@ diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_
  
    def AdjustLibraries(self, libraries, config_name=None):
      """Transforms entries like 'Cocoa.framework' in libraries into entries like
+@@ -956,12 +970,15 @@
+     # Since the value returned by this function is only used when ARCHS is not
+     # set, then on iOS we return "i386", as the default xcode project generator
+     # does not set ARCHS if it is not set in the .gyp file.
+-    if self.isIOS:
+-      return 'i386'
+-    version, build = self._XcodeVersion()
+-    if version >= '0500':
+-      return 'x86_64'
+-    return 'i386'
++    try:
++        if self.isIOS:
++          return 'i386'
++        version, build = self._XcodeVersion()
++        if version >= '0500':
++          return 'x86_64'
++        return 'i386'
++    except:
++        return 'x86_64'
+ 
+ class MacPrefixHeader(object):
+   """A class that helps with emulating Xcode's GCC_PREFIX_HEADER feature.

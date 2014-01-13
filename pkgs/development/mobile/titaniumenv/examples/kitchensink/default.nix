@@ -6,8 +6,8 @@ titaniumenv.buildApp {
   appId = "com.appcelerator.kitchensink";
   src = fetchgit {
     url = https://github.com/appcelerator/KitchenSink.git;
-    rev = "b68757ef6639e3da564e21038dc9c1aee1f80907";
-    sha256 = "17yabdkl0p6pf2a2lcgw1kid2smwc8rnpx0i9fa4avj6930cbh5i";
+    rev = "d9f39950c0137a1dd67c925ef9e8046a9f0644ff";
+    sha256 = "0aj42ac262hw9n9blzhfibg61kkbp3wky69rp2yhd11vwjlcq1qc";
   };
   
   inherit target androidPlatformVersions;
@@ -18,7 +18,7 @@ titaniumenv.buildApp {
   androidKeyStorePassword = "foobar";*/
   
   /*release = true;
-  iosKeyFile = /Users/sander/Downloads/profile.mobileprovision;
+  iosMobileProvisioningProfile = /Users/sander/Downloads/profile.mobileprovision;
   iosCertificateName = "My Company";
   iosCertificate = /Users/sander/Downloads/c.p12;
   iosCertificatePassword = "";*/

@@ -57,6 +57,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   blivet = callPackage ../development/python-modules/blivet { };
 
+  dbus = import ../development/python-modules/dbus {
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus dbus_glib dbus_tools;
+    inherit python;
+  };
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
@@ -119,6 +124,18 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit (pkgs) fetchurl stdenv pkgconfig gtk;
     inherit (pkgs.gnome) libglade;
     inherit python buildPythonPackage pygobject pycairo;
+  };
+
+  pyqt4 = import ../development/python-modules/pyqt/4.x.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig qt4 makeWrapper;
+    inherit (pkgs.xorg) lndir;
+    inherit python sip;
+    pythonDBus = dbus;
+  };
+
+  sip = import ../development/python-modules/sip {
+    inherit (pkgs) stdenv fetchurl;
+    inherit python;
   };
 
   # packages defined here
@@ -8178,7 +8195,29 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       description = "A logging replacement for Python";
       license = pkgs.lib.licenses.bsd3;
     };
- };
+  };
+
+  libvirt = pkgs.stdenv.mkDerivation rec {
+    name = "libvirt-python-${version}";
+    version = "1.2.0";
+
+    src = fetchurl {
+      url = "http://libvirt.org/sources/python/${name}.tar.gz";
+      sha256 = "0azml1yv9iqnpj4sdg1wwsa70q7kb06lv85p63qwyd8vrd0y7rrg";
+    };
+
+    buildInputs = [ python pkgs.pkgconfig pkgs.libvirt lxml ];
+
+    buildPhase = "python setup.py build";
+
+    installPhase = "python setup.py install --prefix=$out";
+
+    meta = {
+      homepage = http://www.libvirt.org/;
+      description = "libvirt Python bindings";
+      license = "LGPLv2";
+    };
+  };
 
 # python2.7 specific eggs
 } // pkgs.lib.optionalAttrs (python.majorVersion == "2.7") {

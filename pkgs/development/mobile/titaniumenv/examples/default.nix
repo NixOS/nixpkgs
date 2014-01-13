@@ -1,42 +1,53 @@
 { nixpkgs ? <nixpkgs>
-, system ? builtins.currentSystem
-, version ? "3.1"
+, systems ? [ "x86_64-linux" "x86_64-darwin" ]
+, xcodeVersion ? "5.0"
 }:
 
 let
-  pkgs = import nixpkgs { inherit system; };
-  pkgs_darwin_x86_64 = import nixpkgs { system = "x86_64-darwin"; };
-  versionString = pkgs.stdenv.lib.replaceChars [ "." ] [ "_" ] version;
+  pkgs = import nixpkgs {};
 in
 rec {
-  kitchensink_android = import ./kitchensink {
-    inherit (pkgs) fetchgit;
-    titaniumenv = builtins.getAttr "titaniumenv_${versionString}" pkgs;
-    target = "android";
-  };
+  kitchensink_android = pkgs.lib.genAttrs systems (system:
+  let
+    pkgs = import nixpkgs { inherit system; };
+  in
+    import ./kitchensink {
+      inherit (pkgs) fetchgit;
+      titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion; };
+      target = "android";
+    });
   
-  kitchensink_iphone = import ./kitchensink {
-    inherit (pkgs_darwin_x86_64) fetchgit;
-    titaniumenv = builtins.getAttr "titaniumenv_${versionString}" pkgs_darwin_x86_64;
-    target = "iphone";
-  };
+  emulate_kitchensink = pkgs.lib.genAttrs systems (system:
+  let
+    pkgs = import nixpkgs { inherit system; };
+  in
+    import ./emulate-kitchensink {
+      inherit (pkgs) androidenv;
+      kitchensink = builtins.getAttr system kitchensink_android;
+    });
   
-  emulate_kitchensink = import ./emulate-kitchensink {
-    inherit (pkgs.titaniumenv) androidenv;
-    kitchensink = kitchensink_android;
-  };
+} // (if builtins.elem "x86_64-darwin" systems then 
+  let
+    pkgs = import nixpkgs { system = "x86_64-darwin"; };
+  in
+  rec {
+    kitchensink_iphone = import ./kitchensink {
+      inherit (pkgs) fetchgit;
+      titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion; };
+      target = "iphone";
+    };
+
+    simulate_kitchensink_iphone = import ./simulate-kitchensink {
+      inherit (pkgs) stdenv;
+      xcodeenv = pkgs.xcodeenv.override { version = xcodeVersion; };
+      kitchensink = kitchensink_iphone;
+      device = "iPhone";
+    };
   
-  simulate_kitchensink_iphone = import ./simulate-kitchensink {
-    inherit (pkgs_darwin_x86_64) stdenv;
-    inherit (pkgs_darwin_x86_64.titaniumenv) xcodeenv;
-    kitchensink = kitchensink_iphone;
-    device = "iPhone";
-  };
-  
-  simulate_kitchensink_ipad = import ./simulate-kitchensink {
-    inherit (pkgs_darwin_x86_64) stdenv;
-    inherit (pkgs_darwin_x86_64.titaniumenv) xcodeenv;
-    kitchensink = kitchensink_iphone;
-    device = "iPad";
-  };
-}
+    simulate_kitchensink_ipad = import ./simulate-kitchensink {
+      inherit (pkgs) stdenv;
+      xcodeenv = pkgs.xcodeenv.override { version = xcodeVersion; };
+      kitchensink = kitchensink_iphone;
+      device = "iPad";
+    };
+} else {})

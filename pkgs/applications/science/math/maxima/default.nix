@@ -2,7 +2,7 @@
 
 let
   name    = "maxima";
-  version = "5.31.3";
+  version = "5.32.1";
 
   searchPath =
     stdenv.lib.makeSearchPath "bin"
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "1g959569plywqaxxp488ylblgkirqg24arwa93dplfxi4h7fc4km";
+    sha256 = "0krxha1jckgw5s52bjasf7bnkcnq81qyi2k1bcglgqzfp79b44gw";
   };
 
   buildInputs = [sbcl texinfo perl makeWrapper];

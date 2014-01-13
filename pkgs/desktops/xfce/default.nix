@@ -41,12 +41,14 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
 
   gigolo          = callPackage ./applications/gigolo.nix { };
   mousepad        = callPackage ./applications/mousepad.nix { };
+  parole          = callPackage ./applications/parole.nix { };
   ristretto       = callPackage ./applications/ristretto.nix { };
   terminal        = xfce4terminal; # it has changed its name
   xfce4mixer      = callPackage ./applications/xfce4-mixer.nix { };
   xfce4notifyd    = callPackage ./applications/xfce4-notifyd.nix { };
   xfce4taskmanager= callPackage ./applications/xfce4-taskmanager.nix { };
   xfce4terminal   = callPackage ./applications/terminal.nix { };
+  xfce4screenshooter   = callPackage ./applications/xfce4-screenshooter.nix { };
 
   #### ART                  from "mirror://xfce/src/art/${p_name}/${ver_maj}/${name}.tar.bz2"
 

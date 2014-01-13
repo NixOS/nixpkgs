@@ -1,19 +1,13 @@
-{pkgs, pkgs_i686, version ? "3.1"}:
+{pkgs, pkgs_i686, xcodeVersion ? "5.0"}:
 
-let
-  titaniumexpr = if version == "2.1" then
-    ./titaniumsdk-2.1.nix
-  else if version == "3.1" then
-    ./titaniumsdk.nix
-  else
-    throw "Unknown Titanium SDK version: ${version}";
-in
 rec {
   androidenv = pkgs.androidenv;
 
-  xcodeenv = if pkgs.stdenv.system == "x86_64-darwin" then pkgs.xcodeenv else null;
+  xcodeenv = if pkgs.stdenv.system == "x86_64-darwin" then pkgs.xcodeenv.override {
+    version = xcodeVersion;
+  } else null;
   
-  titaniumsdk = import titaniumexpr {
+  titaniumsdk = import ./titaniumsdk.nix {
     inherit (pkgs) stdenv fetchurl unzip makeWrapper python jdk;
   };
   

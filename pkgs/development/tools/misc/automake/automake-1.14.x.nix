@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, autoconf, makeWrapper, doCheck ? false }:
 
 stdenv.mkDerivation rec {
-  name = "automake-1.14";
+  name = "automake-1.14.1";
 
   src = fetchurl {
     url = "mirror://gnu/automake/${name}.tar.xz";
-    sha256 = "0nc0zqq8j336kamizzd86wb19vhbwywv5avcjh3cyx230xfqy671";
+    sha256 = "0s86rzdayj1licgj35q0mnynv5xa8f4p32m36blc5jk9id5z1d59";
   };
 
   buildInputs = [ perl autoconf ];

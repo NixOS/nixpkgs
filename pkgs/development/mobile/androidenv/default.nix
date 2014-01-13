@@ -52,6 +52,18 @@ rec {
     alsaLib_32bit = pkgs_i686.alsaLib;
   };
   
+  androidsdk_2_2 = androidsdk {
+    platformVersions = [ "8" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
+  androidsdk_4_0 = androidsdk {
+    platformVersions = [ "15" ];
+    abiVersions = [ "armeabi-v7a" ];
+    useGoogleAPIs = true;
+  };
+  
   androidsdk_4_1 = androidsdk {
     platformVersions = [ "16" ];
     abiVersions = [ "armeabi-v7a" ];

@@ -15,12 +15,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper];
 
-  configurePhase = ''./configure --disable-dependency-tracking --prefix=$out --datadir=$out/share/maude TECLA_LIBS="-ltecla -lncursesw" CFLAGS="-O3" CXXFLAGS="-O3"'';
+  preConfigure = ''
+    configureFlagsArray=(
+      --datadir=$out/share/maude
+      TECLA_LIBS="-ltecla -lncursesw"
+      CFLAGS="-O3" CXXFLAGS="-O3"
+    )
+  '';
 
   doCheck = true;
 
-  postInstall =
-  ''
+  postInstall = ''
     for n in "$out/bin/"*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
     mkdir -p $out/share/maude
     cp ${fullMaude} $out/share/maude/full-maude.maude
@@ -41,7 +46,7 @@ stdenv.mkDerivation rec {
       rewriting logic computation.
     '';
 
-    platforms = stdenv.lib.platforms.all;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libvirt, libxml2Python, curl,
-  python, makeWrapper, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte}:
+{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl, python
+, makeWrapper, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte
+, spiceSupport ? true, spice_gtk
+}:
 
 with stdenv.lib;
 
-let version = "0.9.1"; in
+let version = "0.9.5"; in
 
 stdenv.mkDerivation rec {
   name = "virt-manager-${version}";
 
   src = fetchurl {
     url = "http://virt-manager.et.redhat.com/download/sources/virt-manager/virt-manager-${version}.tar.gz";
-    sha256 = "15e064167ba5ff84ce6fc8790081d61890430f2967f89886a84095a23e40094a";
+    sha256 = "0gc06cdbq6c2a06l939516lvjii7lr0wng90kqgl1i5q5wlgnajx";
   };
 
   pythonPath = with pythonPackages;
@@ -18,13 +20,13 @@ stdenv.mkDerivation rec {
       paste_deploy m2crypto ipy boto_1_9 twisted sqlalchemy_migrate
       distutils_extra simplejson readline glance cheetah lockfile httplib2
       # !!! should libvirt be a build-time dependency?  Note that
-      # libxml2Python is a dependency of libvirt.py. 
+      # libxml2Python is a dependency of libvirt.py.
       libvirt libxml2Python urlgrabber virtinst pyGtkGlade pythonDBus gnome_python
       gtkvnc vte
-    ];
+    ] ++ optional spiceSupport spice_gtk;
 
   buildInputs =
-    [ pythonPackages.python 
+    [ pythonPackages.python
       pythonPackages.wrapPython
       pythonPackages.mox
       pythonPackages.urlgrabber
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
     ] ++ pythonPath;
 
   buildPhase = "make";
-  
+
   nativeBuildInputs = [ makeWrapper pythonPackages.wrapPython ];
 
   # patch the runner script in order to make wrapPythonPrograms work and run the program using a syscall

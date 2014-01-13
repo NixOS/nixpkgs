@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnutar ];
 
   installPhase = ''
-    mkdir -p $out/lib/java $out/bin
+    mkdir -p $out/share/java $out/bin
     tar -xzf $src
-    cp -r compiler.jar $out/lib/java/
+    cp -r compiler.jar $out/share/java/
     echo "#!${bash}/bin/bash" > $out/bin/closure-compiler
-    echo "${jre}/bin/java -jar $out/lib/java/compiler.jar \"\$@\"" >> $out/bin/closure-compiler
+    echo "${jre}/bin/java -jar $out/share/java/compiler.jar \"\$@\"" >> $out/bin/closure-compiler
     chmod +x $out/bin/closure-compiler
   '';
 
