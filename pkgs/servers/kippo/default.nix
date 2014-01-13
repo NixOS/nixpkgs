@@ -1,6 +1,29 @@
 # This is the installation portion of kippo.
-# Use the services.kippo options to properly configure
-# or manually copy the proper filesystems to /var/lib/kippo.
+# This is somewhat jumbled together. There is no "easy_install" for kippo,
+# and there isn't a way to regenerate the twistd plugin cache.
+#
+# Use the services.kippo options to properly configure if on NixOS.
+# On other platforms there is a problem with hardcoded paths.
+# Your best bet is to change kippo source to customise
+# or manually copy the proper filesystems.
+# At a minimum the following are required in  /var/lib/kippo:
+#     honeyfs/
+#     fs.pickle
+#     data/
+#     txtcmds/
+#
+# There is also benefit in preparing /var/log/kippo
+#     tty/
+#     dl/
+#
+# Most of these files need read/write permissions.
+#
+# Read only files: kippo.tac and kippo.cfg
+#
+# Execution may look like this:
+# twistd -y kippo.tac --syslog --pidfile=kippo.pid
+#
+# Use this package at your own risk.
 
 {stdenv, pkgs, config, fetchurl, ... }:
 
@@ -35,7 +58,7 @@ stdenv.mkDerivation rec {
         Default port is 2222. Recommend using something like this for port redirection to default SSH port:
         networking.firewall.extraCommands = '''
         iptables -t nat -A PREROUTING -i IN_IFACE -p tcp --dport 22 -j REDIRECT --to-port 2222''' '';
-      license = self.stdenv.lib.licenses.bsd3;
+      license = stdenv.lib.licenses.bsd3;
       platforms = pkgs.stdenv.lib.platforms.linux;
       maintainers = pkgs.stdenv.lib.maintainers.tomberek;
     };

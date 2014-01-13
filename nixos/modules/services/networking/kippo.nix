@@ -1,6 +1,11 @@
 # NixOS module for kippo honeypot ssh server
-# This is somewhat jumbled together. There is no "easy_install" for kippo,
-# and there isn't a way to regenerate the twistd plugin cache.
+# See all the options for configuration details.
+#
+# Default port is 2222. Recommend using something like this for port redirection to default SSH port:
+# networking.firewall.extraCommands = ''
+#      iptables -t nat -A PREROUTING -i IN_IFACE -p tcp --dport 22 -j REDIRECT --to-port 2222'';
+#
+# Lastly: use this service at your own risk. I am working on a way to run this inside a VM.
 { pkgs, config, ... }:
 with pkgs.lib;
 let
