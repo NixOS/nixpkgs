@@ -4375,7 +4375,7 @@ let
 
   gmp5 = callPackage ../development/libraries/gmp/5.0.5.nix { };
 
-  gmp51 = callPackage ../development/libraries/gmp/5.1.1.nix { };
+  gmp51 = callPackage ../development/libraries/gmp/5.1.3.nix { };
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
