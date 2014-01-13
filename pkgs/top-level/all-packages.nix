@@ -2903,11 +2903,14 @@ let
 
   lessc = callPackage ../development/compilers/lessc { };
 
-  llvm = callPackage ../development/compilers/llvm {
+  llvm = llvm_33; # deprecated, depend on llvm_* directly
+  llvm_34 = callPackage ../development/compilers/llvm {
+    version = "3.4";
     stdenv = if stdenv.isDarwin
       then stdenvAdapters.overrideGCC stdenv gccApple
       else stdenv;
   };
+  llvm_33 = llvm_34.override { version = "3.3"; };
 
   mentorToolchains = recurseIntoAttrs (
     callPackage_i686 ../development/compilers/mentor {}
