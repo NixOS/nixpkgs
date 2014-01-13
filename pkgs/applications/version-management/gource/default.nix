@@ -1,14 +1,14 @@
 { stdenv, fetchurl, SDL, ftgl, pkgconfig, libpng, libjpeg, pcre, SDL_image, glew, mesa }:
 
 let
-  name = "gource-0.37";
+  name = "gource-0.40";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "http://gource.googlecode.com/files/${name}.tar.gz";
-    sha256 = "03kd9nn65cl1p2jgn6pvpxmvnfscz3c8jqds90fsc0z37ij2iiyn";
+    sha256 = "04nirh07xjslqsph557as4s50nlf91bi6v2l7vmbifmkdf90m2cw";
   };
 
   buildInputs = [glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa];
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
       by several third party tools for CVS repositories.
     '';
 
-    platforms = stdenv.lib.platforms.gnu;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
