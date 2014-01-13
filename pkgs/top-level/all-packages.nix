@@ -697,6 +697,8 @@ let
 
   cowsay = callPackage ../tools/misc/cowsay { };
 
+  cpuminer = callPackage ../tools/misc/cpuminer { };
+
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
