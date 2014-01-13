@@ -483,7 +483,7 @@ let
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
-  titaniumenv = import ../development/mobile/titaniumenv {
+  titaniumenv = callPackage ../development/mobile/titaniumenv {
     inherit pkgs;
     pkgs_i686 = pkgsi686Linux;
   };

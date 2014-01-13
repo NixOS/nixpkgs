@@ -1,5 +1,6 @@
 { nixpkgs ? <nixpkgs>
 , systems ? [ "x86_64-linux" "x86_64-darwin" ]
+, xcodeVersion ? "5.0"
 }:
 
 let
@@ -21,7 +22,7 @@ rec {
   in
     import ./emulate-kitchensink {
       inherit (pkgs.titaniumenv) androidenv;
-      kitchensink = kitchensink_android;
+      kitchensink = builtins.getAttr system kitchensink_android;
     });
   
 } // (if builtins.elem "x86_64-darwin" systems then 
@@ -30,20 +31,21 @@ rec {
   in
   rec {
     kitchensink_iphone = import ./kitchensink {
-      inherit (pkgs) fetchgit titaniumenv;
+      inherit (pkgs) fetchgit;
+      titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion; };
       target = "iphone";
     };
 
     simulate_kitchensink_iphone = import ./simulate-kitchensink {
       inherit (pkgs) stdenv;
-      inherit (pkgs.titaniumenv) xcodeenv;
+      xcodeenv = pkgs.xcodeenv.override { version = xcodeVersion; };
       kitchensink = kitchensink_iphone;
       device = "iPhone";
     };
   
     simulate_kitchensink_ipad = import ./simulate-kitchensink {
       inherit (pkgs) stdenv;
-      inherit (pkgs.titaniumenv) xcodeenv;
+      xcodeenv = pkgs.xcodeenv.override { version = xcodeVersion; };
       kitchensink = kitchensink_iphone;
       device = "iPad";
     };
