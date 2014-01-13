@@ -13,7 +13,7 @@ rec {
   in
     import ./kitchensink {
       inherit (pkgs) fetchgit;
-      titaniumenv = titaniumenv.override { inherit xcodeVersion; };
+      titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion; };
       target = "android";
     });
   
@@ -22,7 +22,7 @@ rec {
     pkgs = import nixpkgs { inherit system; };
   in
     import ./emulate-kitchensink {
-      inherit (pkgs.titaniumenv) androidenv;
+      inherit (pkgs) androidenv;
       kitchensink = builtins.getAttr system kitchensink_android;
     });
   
