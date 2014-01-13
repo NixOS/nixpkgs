@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
     # Set JAVA_HOME automatically.
     mkdir -p $out/nix-support
     cat <<EOF > $out/nix-support/setup-hook
-    if [ -n "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+    if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out/lib/openjdk; fi
     EOF
   '';
 
