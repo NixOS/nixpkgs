@@ -524,6 +524,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   aeson = callPackage ../development/libraries/haskell/aeson {};
 
+  aesonLens = callPackage ../development/libraries/haskell/aeson-lens {};
+
   aesonPretty = callPackage ../development/libraries/haskell/aeson-pretty {};
 
   alternativeIo = callPackage ../development/libraries/haskell/alternative-io {};
@@ -916,6 +918,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   };
 
   digestiveFunctors = callPackage ../development/libraries/haskell/digestive-functors {};
+
+  digestiveFunctorsAeson = callPackage ../development/libraries/haskell/digestive-functors-aeson {};
 
   digestiveFunctorsHeist = callPackage ../development/libraries/haskell/digestive-functors-heist {};
 
