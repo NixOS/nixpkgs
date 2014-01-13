@@ -18,7 +18,7 @@ titaniumenv.buildApp {
   androidKeyStorePassword = "foobar";*/
   
   /*release = true;
-  iosKeyFile = /Users/sander/Downloads/profile.mobileprovision;
+  iosMobileProvisioningProfile = /Users/sander/Downloads/profile.mobileprovision;
   iosCertificateName = "My Company";
   iosCertificate = /Users/sander/Downloads/c.p12;
   iosCertificatePassword = "";*/
