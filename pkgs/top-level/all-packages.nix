@@ -2437,11 +2437,14 @@ let
     profiledCompiler = true;
   }));
 
-  gcc45 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.5) {
+  gcc45 = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.5 {
     inherit fetchurl stdenv gmp mpfr mpc libelf zlib perl
-      ppl cloogppl
       gettext which noSysDirs;
     texinfo = texinfo4;
+
+    ppl = null;
+    cloogppl = null;
+
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
     profiledCompiler = !stdenv.isArm;
@@ -2459,6 +2462,9 @@ let
 
   gcc46 = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
     inherit noSysDirs;
+
+    ppl = null;
+    cloog = null;
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
