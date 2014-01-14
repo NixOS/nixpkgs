@@ -2,12 +2,12 @@
 , python, ruby, openjdk, nettools }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.17";
+  version = "2.0.19";
   name = "munin-${version}";
 
   src = fetchurl {
     url = "https://github.com/munin-monitoring/munin/archive/${version}.tar.gz";
-    sha256 = "0xfml2r6nssn3lcfqcf3yshxfijyrf9frnhdp83mg6raaznlhx1z";
+    sha256 = "10y9kmygd27mygvfkvn01dirb8glna9jzh140dcbci7yz7rrhdqh";
   };
 
   buildInputs = [ 
