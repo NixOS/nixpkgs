@@ -1411,6 +1411,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   instantGenerics = callPackage ../development/libraries/haskell/instant-generics {};
 
+  interlude = callPackage ../development/libraries/haskell/interlude {};
+
   intervals = callPackage ../development/libraries/haskell/intervals {};
 
   IntervalMap = callPackage ../development/libraries/haskell/IntervalMap {};
