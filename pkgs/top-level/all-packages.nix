@@ -2908,7 +2908,7 @@ let
 
   lessc = callPackage ../development/compilers/lessc { };
 
-  llvm = llvm_33; # deprecated, depend on llvm_* directly
+  llvm = llvm_33;
   llvm_34 = callPackage ../development/compilers/llvm {
     version = "3.4";
     stdenv = if stdenv.isDarwin
