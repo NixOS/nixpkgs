@@ -3,12 +3,13 @@
 , libintlOrEmpty
 , intltool, python }:
 
-stdenv.mkDerivation {
-  name = "libsoup-2.45";
-  version = "2.45";
+stdenv.mkDerivation rec {
+  name = "libsoup-${version}";
+  majorVersion = "2.45";
+  version = "${majorVersion}.3";
 
   src = fetchurl {
-    url = mirror://gnome/sources/libsoup/2.45/libsoup-2.45.3.tar.xz;
+    url = "mirror://gnome/sources/libsoup/${majorVersion}/libsoup-${version}.tar.xz";
     sha256 = "04ma47hcrrbjp90r8jjn686cngnbgac24wgarpwwzlpg66wighva";
   };
 

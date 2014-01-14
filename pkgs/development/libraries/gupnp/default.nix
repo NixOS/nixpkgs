@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, libxml2, gssdp, libsoup, libuuid }:
  
-stdenv.mkDerivation {
-  name = "gupnp-0.20.9";
-  version = "0.20.9";
-
+stdenv.mkDerivation rec {
+  name = "gupnp-${version}";
+  majorVersion = "0.20";
+  version = "${majorVersion}.9";
   src = fetchurl {
-    url = mirror://gnome/sources/gupnp/0.20/gupnp-0.20.9.tar.xz;
+    url = "mirror://gnome/sources/gupnp/${majorVersion}/gupnp-${version}.tar.xz";
     sha256 = "0vicydn3f72x1rqql7857ans85mg7dfap7n7h8xrfyb9whxhlrb1";
   };
 

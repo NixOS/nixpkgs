@@ -1,9 +1,11 @@
 {fetchurl, stdenv, gupnp, gssdp, pkgconfig, gtk3, libuuid, intltool, gupnp_av, gnome3, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "gupnp-tools-0.6";
+  name = "gupnp-tools-${version}";
+  majorVersion = "0.8";
+  version = "${majorVersion}.8";
   src = fetchurl {
-    url = mirror://gnome/sources/gupnp-tools/0.8/gupnp-tools-0.8.8.tar.xz;
+    url = "mirror://gnome/sources/gupnp-tools/${majorVersion}/gupnp-tools-${version}.tar.xz";
     sha256 = "160dgh9pmlb85qfavwqz46lqawpshs8514bx2b57f9rbiny8kbij";
   };
 
