@@ -59,13 +59,8 @@ let version = "4.8.2";
 
   /* gccinstall.info says that "parallel make is currently not supported since
      collisions in profile collecting may occur".
-
-     Parallel make of gfortran is disabled because of an apparent race
-     condition concerning the generation of "bconfig.h". Please try and
-     re-enable parallel make for a later release of gfortran to check whether
-     the error has been fixed.
   */
-    enableParallelBuilding = !profiledCompiler && !langFortran;
+    enableParallelBuilding = !profiledCompiler;
 
     patches = []
       ++ optional enableParallelBuilding ./parallel-bconfig.patch
