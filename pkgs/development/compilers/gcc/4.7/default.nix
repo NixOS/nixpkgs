@@ -54,8 +54,9 @@ let version = "4.7.3";
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
 
-    patches = []
-      ++ optional stdenv.isArm [ ./arm-eabi.patch ]
+    patches = [
+      ./build-race.patch
+    ] ++ optional stdenv.isArm [ ./arm-eabi.patch ]
       ++ optional (cross != null) ./libstdc++-target.patch
       # ++ optional noSysDirs ./no-sys-dirs.patch
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
