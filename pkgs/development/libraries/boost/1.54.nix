@@ -1,4 +1,5 @@
 { stdenv, fetchurl, icu, expat, zlib, bzip2, python
+, toolset ? null
 , enableRelease ? true
 , enableDebug ? false
 , enableSingleThreaded ? false
@@ -35,6 +36,8 @@ let
              "cflags=-fexceptions"
            else
              "";
+
+  withToolset = stdenv.lib.optionalString (toolset != null) " --with-toolset=${toolset}";
 in
 
 stdenv.mkDerivation {
@@ -59,15 +62,15 @@ stdenv.mkDerivation {
   buildInputs = [icu expat zlib bzip2 python];
 
   configureScript = "./bootstrap.sh";
-  configureFlags = "--with-icu=${icu} --with-python=${python}/bin/python";
+  configureFlags = "--with-icu=${icu} --with-python=${python}/bin/python" + withToolset;
 
-  buildPhase = "./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${layout} variant=${variant} threading=${threading} link=${link} ${cflags} install";
+  buildPhase = "${stdenv.lib.optionalString (toolset == "clang") "unset NIX_ENFORCE_PURITY; "}./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${layout} variant=${variant} threading=${threading} link=${link} ${cflags} install${withToolset}";
 
   # normal install does not install bjam, this is a separate step
   installPhase = ''
     cd tools/build/v2
-    sh bootstrap.sh
-    ./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${layout} variant=${variant} threading=${threading} link=${link} ${cflags} install
+    sh bootstrap.sh${withToolset}
+    ./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${layout} variant=${variant} threading=${threading} link=${link} ${cflags} install${withToolset}
   '';
 
   crossAttrs = rec {
