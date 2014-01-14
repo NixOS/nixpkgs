@@ -288,9 +288,6 @@ stripDirs() {
 
     if [ -n "${dirs}" ]; then
         header "stripping (with flags $stripFlags) in $dirs"
-        for dir in $dirs; do
-            test -L "$dir" || chmod -R +rw "$dir"
-        done
         find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $commonStripFlags $stripFlags || true
         stopNest
     fi
@@ -734,6 +731,9 @@ installPhase() {
 # propagated-build-inputs.  It should rarely be overriden.
 fixupPhase() {
     runHook preFixup
+
+    # Make sure everything is writable so "strip" et al. work.
+    chmod -R u+w "$prefix"
 
     # Put man/doc/info under $out/share.
     forceShare=${forceShare:=man doc info}
