@@ -4843,8 +4843,6 @@ let
 
   libgcrypt_1_6 = lowPrio (callPackage ../development/libraries/libgcrypt/1.6.nix { });
 
-  libgcrypt_git = lowPrio (callPackage ../development/libraries/libgcrypt/git.nix { });
-
   libgdiplus = callPackage ../development/libraries/libgdiplus { };
 
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
@@ -8084,7 +8082,9 @@ let
     inherit (gnome3) goffice gnome_icon_theme;
   };
 
-  gnunet = callPackage ../applications/networking/p2p/gnunet { };
+  gnunet = callPackage ../applications/networking/p2p/gnunet {
+    libgcrypt = libgcrypt_1_6;
+  };
 
   gnunet_svn = lowPrio (callPackage ../applications/networking/p2p/gnunet/svn.nix {
     libgcrypt = libgcrypt_1_6;
