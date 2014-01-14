@@ -2299,7 +2299,7 @@ let
 
   clang = wrapClang clangUnwrapped;
 
-  libcxxLLVM = callPackage ../development/compilers/llvm { stdenv = libcxxStdenv; };
+  libcxxLLVM = callPackage ../development/compilers/llvm { stdenv = libcxxStdenv; version="3.3"; };
   clangSelf = clangWrapSelf (callPackage ../development/compilers/llvm/clang.nix {
      stdenv = libcxxStdenv;
      llvm = libcxxLLVM;
