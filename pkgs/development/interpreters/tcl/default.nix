@@ -1,11 +1,11 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "tcl-8.5.7";
+  name = "tcl-8.5.15";
 
   src = fetchurl {
-    url = mirror://sourceforge/tcl/tcl8.5.7-src.tar.gz;
-    sha256 = "1wk67qq12bdbaqsi6cxwj6ra8nc8ph1na9rh808kfk6hm18qvlk7";
+    url = mirror://sourceforge/tcl/tcl8.5.15-src.tar.gz;
+    sha256 = "0kl8lbfwy4v4q4461wjmva95h0pgiprykislpw4nnpkrc7jalkpj";
   };
 
   preConfigure = "cd unix";
