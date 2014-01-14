@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     description = "A Qt application to control the JACK sound server daemon";
     homepage = http://qjackctl.sourceforge.net/;
     license = "GPL";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
