@@ -3366,7 +3366,9 @@ let
 
   racket = callPackage ../development/interpreters/racket { };
 
-  regina = callPackage ../development/interpreters/regina {};
+  rascal = callPackage ../development/interpreters/rascal { };
+
+  regina = callPackage ../development/interpreters/regina { };
 
   renpy = callPackage ../development/interpreters/renpy {
     wrapPython = pythonPackages.wrapPython;
