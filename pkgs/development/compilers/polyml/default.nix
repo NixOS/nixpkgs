@@ -1,15 +1,11 @@
 {stdenv, fetchurl}:
 
-let
-  version = "5.4.1";
-in
-
 stdenv.mkDerivation {
-  name = "polyml-${version}";
+  name = "polyml-5.5.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/polyml/polyml.${version}.tar.gz";
-    sha256 = "514d1d07be487b783d4dfa29dbd550b3396640579ce135a9eb5a61f08e7f9cac";
+    url = "mirror://sourceforge/polyml/polyml.5.5.1.tar.gz";
+    sha256 = "16i0ir5mydl7381aijihkll19khp3z8dq0g2ja6k0pcbpkd0k06g";
   };
 
   meta = {
