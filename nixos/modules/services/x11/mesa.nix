@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.mesa.enable = mkOption {
-      description = "Whether this configuration requires mesa";
+      description = "Whether this configuration requires mesa.";
       type = types.bool;
       default = false;
       internal = true;

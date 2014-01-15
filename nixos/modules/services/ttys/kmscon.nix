@@ -9,19 +9,25 @@ in {
   options = {
     services.kmscon = {
       enable = mkOption {
-        description = "Use kmscon as the virtual console instead of gettys";
+        description = ''
+          Use kmscon as the virtual console instead of gettys.
+          kmscon is a kms/dri-based userspace virtual terminal implementation.
+          It supports a richer feature set than the standard linux console VT,
+          including full unicode support, and when the video card supports drm
+          should be much faster.
+        '';
         type = types.bool;
         default = false;
       };
 
       hwRender = mkOption {
-        description = "Whether to use 3D hardware acceleration to render the console";
+        description = "Whether to use 3D hardware acceleration to render the console.";
         type = types.bool;
         default = false;
       };
 
       extraConfig = mkOption {
-        description = "Extra contents of the kmscon.conf file";
+        description = "Extra contents of the kmscon.conf file.";
         type = types.lines;
         default = "";
         example = "font-size=14";
