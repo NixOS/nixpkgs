@@ -1,4 +1,4 @@
-{stdenv, fetchurl, eventlog, pkgconfig, glib}:
+{ stdenv, fetchurl, eventlog, pkgconfig, glib, python }:
 
 stdenv.mkDerivation {
   name = "syslog-ng-3.5.3";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1l3424qn9bf9z742pqba8x3dj7g729asimmhlizv1rvjlaxa2jd3";
   };
 
-  buildInputs = [eventlog pkgconfig glib];
+  buildInputs = [ eventlog pkgconfig glib python ];
   configureFlags = "--enable-dynamic-linking";
 
   meta = {

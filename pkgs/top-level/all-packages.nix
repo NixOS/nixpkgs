@@ -577,6 +577,7 @@ let
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
 
   syslogng = callPackage ../tools/system/syslog-ng { };
+
   rsyslog = callPackage ../tools/system/rsyslog { };
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
