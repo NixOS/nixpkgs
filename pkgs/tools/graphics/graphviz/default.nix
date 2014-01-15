@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
     ] ++ stdenv.lib.optionals (xlibs != null) [ xlibs.xlibs xlibs.libXrender ]
     ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") gettext;
 
-  patches = [ ./fix-broken-memcp-signature.patch ];
-
   CPPFLAGS = stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") "-I${cairo}/include/cairo";
 
   configureFlags =
