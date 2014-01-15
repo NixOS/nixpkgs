@@ -23,6 +23,8 @@ stdenv.mkDerivation {
   inherit src;
   
   buildInputs = [ jdk ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
+  
+  JAVA_HOME = jdk;
 
   buildPhase = ''
     export HOME=$TMPDIR
