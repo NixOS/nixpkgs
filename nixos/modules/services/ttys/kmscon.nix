@@ -58,6 +58,8 @@ in {
       TTYReset=yes
       TTYVHangup=yes
       TTYVTDisallocate=yes
+
+      X-RestartIfChanged=false
     '';
 
     systemd.units."autovt@.service".linkTarget = "${config.systemd.units."kmsconvt@.service".unit}/kmsconvt@.service";
