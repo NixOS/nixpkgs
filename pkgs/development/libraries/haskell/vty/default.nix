@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     utf8String vector
   ];
   doCheck = false;
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/coreyoconnor/vty";
     description = "A simple terminal UI library";
