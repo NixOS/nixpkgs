@@ -2215,9 +2215,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   terminalProgressBar = callPackage ../development/libraries/haskell/terminal-progress-bar {};
 
-  terminfo = callPackage ../development/libraries/haskell/terminfo {
-    inherit (pkgs) ncurses;
-  };
+  terminfo_0_3_2_6 = callPackage ../development/libraries/haskell/terminfo/0.3.2.6.nix { inherit (pkgs) ncurses; };
+  terminfo_0_4_0_0 = callPackage ../development/libraries/haskell/terminfo/0.4.0.0.nix { inherit (pkgs) ncurses; };
+  terminfo = self.terminfo_0_4_0_0;
 
   testFramework = callPackage ../development/libraries/haskell/test-framework {};
 
