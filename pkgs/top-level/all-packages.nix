@@ -5103,6 +5103,8 @@ let
 
   libtoxcore = callPackage ../development/libraries/libtoxcore { };
 
+  libtsm = callPackage ../development/libraries/libtsm { };
+
   libtunepimp = callPackage ../development/libraries/libtunepimp { };
 
   libtxc_dxtn = callPackage ../development/libraries/libtxc_dxtn { };
@@ -6667,6 +6669,8 @@ let
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
   kbd = callPackage ../os-specific/linux/kbd { };
+
+  kmscon = callPackage ../os-specific/linux/kmscon { };
 
   latencytop = callPackage ../os-specific/linux/latencytop { };
 
