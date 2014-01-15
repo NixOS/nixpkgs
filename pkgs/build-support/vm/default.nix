@@ -766,8 +766,20 @@ rec {
         url = mirror://fedora/linux/releases/8/Everything/i386/os/repodata/primary.xml.gz;
         sha256 = "0kwf0jcp63pygpvgvwl4w58pph24xbcy6db6fnq2f3ly5myhz53n";
       };
-      urlPrefix = mirror://fedora/linux/releases/8/Everything/i386/os;
+      urlPrefix = http://archives.fedoraproject.org/pub/archive/fedora/linux/releases/8/Everything/i386/os;
       packages = commonFedoraPackages;
+    };
+
+    fedora8x86_64 = {
+      name = "fedora-8-x86_64";
+      fullName = "Fedora 8 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/8/Everything/x86_64/os/repodata/primary.xml.gz;
+        sha256 = "11bfmpy3nz82zzmj5lfravvzlw514v4718adi4b06ps9zv3zpy8r";
+      };
+      urlPrefix = http://archives.fedoraproject.org/pub/archive/fedora/linux/releases/8/Everything/x86_64/os;
+      packages = commonFedoraPackages;
+      archs = ["noarch" "x86_64"];
     };
 
     fedora9i386 = {
