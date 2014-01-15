@@ -1210,7 +1210,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   haskelldb = callPackage ../development/libraries/haskell/haskelldb {};
 
-  haskeline = callPackage ../development/libraries/haskell/haskeline {};
+  haskeline_0_7_1_1 = callPackage ../development/libraries/haskell/haskeline/0.7.1.1.nix {};
+  haskeline_0_7_1_2 = callPackage ../development/libraries/haskell/haskeline/0.7.1.2.nix {};
+  haskeline = self.haskeline_0_7_1_2;
 
   haskelineClass = callPackage ../development/libraries/haskell/haskeline-class {};
 
