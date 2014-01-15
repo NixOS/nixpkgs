@@ -2417,6 +2417,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   websockets = callPackage ../development/libraries/haskell/websockets {};
 
+  websocketsSnap = callPackage ../development/libraries/haskell/websockets-snap {};
+
   CouchDB = callPackage ../development/libraries/haskell/CouchDB {};
 
   wlPprint = callPackage ../development/libraries/haskell/wl-pprint {};
