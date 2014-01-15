@@ -22,7 +22,7 @@ let
     virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
   };
 
-  driverNames = config.services.mesa.vidoeDrivers;
+  driverNames = config.services.mesa.videoDrivers;
 
   drivers = flip map driverNames
     (name: { inherit name; driverName = name; } //
