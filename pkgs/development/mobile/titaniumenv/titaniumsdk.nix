@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     import os, sys
     
     os.environ['PYTHONPATH'] = '$(echo ${python.modules.sqlite3}/lib/python*/site-packages)'
-    os.environ['JAVA_HOME'] = '${jdk}'
+    os.environ['JAVA_HOME'] = '${if stdenv.system == "x86_64-darwin" then jdk else "${jdk}/lib/openjdk"}'
     
     os.execv('$(pwd)/.builder.py', sys.argv)
     EOF
