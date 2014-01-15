@@ -1,19 +1,21 @@
 { stdenv, fetchurl, pkgconfig, perl, flex, bison, libpcap, libnl, c-ares, gnutls, libgcrypt
-, geoip, heimdal, lua5, gtk, makeDesktopItem
+, geoip, heimdal, lua5, gtk, makeDesktopItem, qt5
 }:
 
-let version = "1.10.5"; in
+let version = "1.11.2"; in
 
 stdenv.mkDerivation {
   name = "wireshark-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/wireshark/wireshark-${version}.tar.bz2";
-    sha256 = "1xa1l6z8n1gwnyv5mq4zmyr0afy6s0qpl9wqflg3ipbkjpd908d0";
+    sha256 = "077hjnmqn44s8dx3pc38bxps5liicjnhzrnf6ky2x60m2cp7ngr3";
   };
 
-  buildInputs =
-    [ bison flex perl pkgconfig libpcap lua5 heimdal libgcrypt gnutls geoip libnl c-ares gtk ];
+  buildInputs = [
+    bison flex perl pkgconfig libpcap lua5 heimdal libgcrypt gnutls
+    geoip libnl c-ares gtk qt5
+  ];
 
   configureFlags = "--disable-usr-local --enable-packet-editor --with-ssl";
 
@@ -30,7 +32,7 @@ stdenv.mkDerivation {
   postInstall = ''
     mkdir -p "$out"/share/applications/
     mkdir -p "$out"/share/icons/
-    cp "$desktopItem"/share/applications/* "$out"/share/applications/
+    cp "$desktopItem/share/applications/"* "$out/share/applications/"
     cp image/wsicon.svg "$out"/share/icons/wireshark.svg
   '';
 
