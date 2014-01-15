@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, icu, expat, zlib, bzip2, python
+{ stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames
 , toolset ? null
 , enableRelease ? true
 , enableDebug ? false
@@ -59,7 +59,9 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [icu expat zlib bzip2 python];
+  buildInputs =
+    [ icu expat zlib bzip2 python ]
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   configureScript = "./bootstrap.sh";
   configureFlags = "--with-icu=${icu} --with-python=${python}/bin/python" + withToolset;
