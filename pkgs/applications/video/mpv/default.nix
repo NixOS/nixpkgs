@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, freetype, pkgconfig, freefont_ttf, ffmpeg, libass
-, lua5, perl, libpthreadstubs
+, lua5, perl, libpthreadstubs, openssl
 , python3, docutils, which
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null, libXxf86vm ? null
 , xineramaSupport ? true, libXinerama ? null
@@ -50,21 +50,22 @@ let
   waf = fetchurl {
     url = https://waf.googlecode.com/files/waf-1.7.13;
     sha256 = "03cc750049350ee01cdbc584b70924e333fcc17ba4a2d04648dab1535538a873";
-};
+  };
+
+  version = "0.3.2";
 
 in
 
 stdenv.mkDerivation rec {
-  name = "mpv-20131222";
+  name = "mpv-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/mpv-player/mpv.git";
-    rev = "e6bea0ec5a";
-    sha256 = "984c7d19b1916b7e5befc370ffb7f6c31e560c64c47090b924a115d00c35a1a8";
+  src = fetchurl {
+    url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
+    sha256 = "1vzdhzry2adyp2yh2dmy1qznqhnzar7g24rhi0vv624jgd20qax2";
   };
 
   buildInputs = with stdenv.lib;
-    [ waf freetype pkgconfig ffmpeg libass docutils which libpthreadstubs ]
+    [ waf freetype pkgconfig ffmpeg libass docutils which libpthreadstubs openssl ]
     ++ optionals x11Support [ libX11 libXext mesa libXxf86vm ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
