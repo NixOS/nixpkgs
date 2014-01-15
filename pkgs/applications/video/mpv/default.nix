@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, freetype, pkgconfig, freefont_ttf, ffmpeg, libass
-, lua5, perl, libpthreadstubs, openssl
+, lua5, perl, libpthreadstubs
 , python3, docutils, which
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null, libXxf86vm ? null
 , xineramaSupport ? true, libXinerama ? null
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-    [ waf freetype pkgconfig ffmpeg libass docutils which libpthreadstubs openssl ]
+    [ waf freetype pkgconfig ffmpeg libass docutils which libpthreadstubs ]
     ++ optionals x11Support [ libX11 libXext mesa libXxf86vm ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
