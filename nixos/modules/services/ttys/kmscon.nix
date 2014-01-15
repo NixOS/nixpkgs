@@ -60,5 +60,7 @@ in {
       drm
       hwaccel
     '';
+
+    services.mesa.enable = mkIf cfg.hwRender true;
   };
 }

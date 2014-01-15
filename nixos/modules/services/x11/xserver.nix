@@ -22,8 +22,7 @@ let
     virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
   };
 
-  driverNames =
-    optional (cfg.videoDriver != null) cfg.videoDriver ++ cfg.videoDrivers;
+  driverNames = config.services.mesa.vidoeDrivers;
 
   drivers = flip map driverNames
     (name: { inherit name; driverName = name; } //
@@ -182,19 +181,7 @@ in
         description = ''
           The name of the video driver for your graphics card.  This
           option is obsolete; please set the
-          <option>videoDrivers</option> instead.
-        '';
-      };
-
-      videoDrivers = mkOption {
-        type = types.listOf types.str;
-        # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "ati" "cirrus" "intel" "vesa" "vmware" ];
-        example = [ "vesa" ];
-        description = ''
-          The names of the video drivers that the X server should
-          support.  The X server will try all of the drivers listed
-          here until it finds one that supports your video card.
+          <option>services.mesa.videoDrivers</option> instead.
         '';
       };
 
@@ -204,38 +191,6 @@ in
         example = "[ pkgs.vaapiIntel pkgs.vaapiVdpau ]";
         description = ''
           Packages providing libva acceleration drivers.
-        '';
-      };
-
-      driSupport = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to enable accelerated OpenGL rendering through the
-          Direct Rendering Interface (DRI).
-        '';
-      };
-
-      driSupport32Bit = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          On 64-bit systems, whether to support Direct Rendering for
-          32-bit applications (such as Wine).  This is currently only
-          supported for the <literal>nvidia</literal> driver and for
-          <literal>mesa</literal>.
-        '';
-      };
-
-      s3tcSupport = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Make S3TC(S3 Texture Compression) via libtxc_dxtn available
-          to OpenGL drivers. It is essential for many games to work
-          with FOSS GPU drivers.
-
-          Using this library may require a patent license depending on your location.
         '';
       };
 
@@ -426,6 +381,8 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    services.mesa.enable = true;
+    services.mesa.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 
     assertions =
       [ { assertion = !(cfg.startOpenSSHAgent && cfg.startGnuPGAgent);
@@ -440,21 +397,6 @@ in
         }
       ];
 
-    boot.extraModulePackages =
-      optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++
-      optional (elem "nvidiaLegacy173" driverNames) kernelPackages.nvidia_x11_legacy173 ++
-      optional (elem "nvidiaLegacy304" driverNames) kernelPackages.nvidia_x11_legacy304 ++
-      optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions ++
-      optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
-
-    boot.blacklistedKernelModules =
-      optionals (elem "nvidia" driverNames) [ "nouveau" "nvidiafb" ];
-
-    environment.variables.LD_LIBRARY_PATH =
-      [ "/run/opengl-driver/lib" "/run/opengl-driver-32/lib" ]
-      ++ pkgs.lib.optional cfg.s3tcSupport "${pkgs.libtxc_dxtn}/lib"
-      ++ pkgs.lib.optional (cfg.s3tcSupport && cfg.driSupport32Bit) "${pkgs_i686.libtxc_dxtn}/lib";
-
     environment.etc =
       (optionals cfg.exportConfiguration
         [ { source = "${configFile}";
@@ -464,21 +406,7 @@ in
           { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
             target = "X11/xkb";
           }
-        ])
-      ++ (optionals (elem "ati_unfree" driverNames) [
-
-          # according toiive on #ati you don't need the pcs, it is like registry... keeps old stuff to make your
-          # life harder ;) Still it seems to be required
-          { source = "${kernelPackages.ati_drivers_x11}/etc/ati";
-            target = "ati";
-          }
-      ])
-      ++ (optionals (elem "nvidia" driverNames) [
-
-          { source = "${kernelPackages.nvidia_x11}/lib/vendors/nvidia.icd";
-            target = "OpenCL/vendors/nvidia.icd";
-          }
-      ]);
+        ]);
 
     environment.systemPackages =
       [ xorg.xorgserver
@@ -529,34 +457,6 @@ in
 
         preStart =
           ''
-            rm -f /run/opengl-driver{,-32}
-            ${optionalString (!cfg.driSupport32Bit) "ln -sf opengl-driver /run/opengl-driver-32"}
-
-            ${# !!! The OpenGL driver depends on what's detected at runtime.
-              if elem "nvidia" driverNames then
-                ''
-                  ln -sf ${kernelPackages.nvidia_x11} /run/opengl-driver
-                  ${optionalString cfg.driSupport32Bit
-                    "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11.override { libsOnly = true; kernel = null; } } /run/opengl-driver-32"}
-                ''
-              else if elem "nvidiaLegacy173" driverNames then
-                "ln -sf ${kernelPackages.nvidia_x11_legacy173} /run/opengl-driver"
-              else if elem "nvidiaLegacy304" driverNames then
-                ''
-                  ln -sf ${kernelPackages.nvidia_x11_legacy304} /run/opengl-driver
-                  ${optionalString cfg.driSupport32Bit
-                    "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11_legacy304.override { libsOnly = true; kernel = null; } } /run/opengl-driver-32"}
-                ''
-              else if elem "ati_unfree" driverNames then
-                "ln -sf ${kernelPackages.ati_drivers_x11} /run/opengl-driver"
-              else
-                ''
-                  ${optionalString cfg.driSupport "ln -sf ${pkgs.mesa_drivers} /run/opengl-driver"}
-                  ${optionalString cfg.driSupport32Bit
-                    "ln -sf ${pkgs_i686.mesa_drivers} /run/opengl-driver-32"}
-                ''
-            }
-
             ${cfg.displayManager.job.preStart}
 
             rm -f /tmp/.X0-lock
