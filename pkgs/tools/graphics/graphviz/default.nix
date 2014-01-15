@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "graphviz-2.28.0";
+  name = "graphviz-2.36.0";
 
   src = fetchurl {
     url = "http://www.graphviz.org/pub/graphviz/ARCHIVE/${name}.tar.gz";
-    sha256 = "0xpwg99cd8sp0c6r8klsmc66h1pday64kmnr4v6f9jkqqmrpkank";
+    sha256 = "0qb30z5sxlbjni732ndad3j4x7l36vsxpxn4fmf5fn7ivvc6dz9p";
   };
 
   buildInputs =
