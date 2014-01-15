@@ -1,4 +1,16 @@
-{ stdenv, fetchurl, libtsm, systemd, libxkbcommon, libdrm, mesa, pango, pixman, pkgconfig }:
+{ stdenv
+, fetchurl
+, libtsm
+, systemd
+, libxkbcommon
+, libdrm
+, mesa
+, pango
+, pixman
+, pkgconfig
+, docbook_xsl
+, libxslt
+}:
 
 stdenv.mkDerivation rec {
   name = "kmscon-8";
@@ -8,7 +20,18 @@ stdenv.mkDerivation rec {
     sha256 = "0axfwrp3c8f4gb67ap2sqnkn75idpiw09s35wwn6kgagvhf1rc0a";
   };
 
-  buildInputs = [ libtsm systemd libxkbcommon libdrm mesa pango pixman pkgconfig ];
+  buildInputs = [
+    libtsm
+    systemd
+    libxkbcommon
+    libdrm
+    mesa
+    pango
+    pixman
+    pkgconfig
+    docbook_xsl
+    libxslt
+  ];
 
   configureFlags = [
     "--enable-multi-seat"
