@@ -8046,6 +8046,7 @@ let
     slibGuile = slibGuile.override { scheme = guile_1_8; };
     goffice = goffice_0_8;
   };
+
   goffice_0_8 = callPackage ../desktops/gnome-3/misc/goffice/0.8.nix {
     inherit (gnome2) libglade libgnomeui;
     gconf = gnome2.GConf;
