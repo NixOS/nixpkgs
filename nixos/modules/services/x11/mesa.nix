@@ -1,6 +1,6 @@
 { config, pkgs, pkgs_i686, ... }:
 let
-  inherit (pkgs.lib) mkOption types mkIf optional optionals elem optionalString;
+  inherit (pkgs.lib) mkOption types mkIf optional optionals elem optionalString optionalAttrs;
 
   cfg = config.services.mesa;
 
@@ -107,18 +107,11 @@ in {
     boot.blacklistedKernelModules =
       optionals (elem "nvidia" cfg.videoDrivers) [ "nouveau" "nvidiafb" ];
 
-    environment.etc =  (optional (elem "ati_unfree" cfg.videoDrivers) [
-          # according toiive on #ati you don't need the pcs, it is like registry... keeps old stuff to make your
-          # life harder ;) Still it seems to be required
-          { source = "${kernelPackages.ati_drivers_x11}/etc/ati";
-            target = "ati";
-          }
-      ])
-      ++ (optional (elem "nvidia" cfg.videoDrivers) [
-
-          { source = "${kernelPackages.nvidia_x11}/lib/vendors/nvidia.icd";
-            target = "OpenCL/vendors/nvidia.icd";
-          }
-      ]);
+    environment.etc =  (optionalAttrs (elem "ati_unfree" cfg.videoDrivers) {
+        "ati".source = "${kernelPackages.ati_drivers_x11}/etc/ati";
+      })
+      // (optionalAttrs (elem "nvidia" cfg.videoDrivers) {
+        "OpenCL/vendors/nvidia.icd".source = "${kernelPackages.nvidia_x11}/lib/vendors/nvidia.icd";
+      });
   };
 }
