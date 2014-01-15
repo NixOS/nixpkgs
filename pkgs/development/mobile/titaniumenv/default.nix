@@ -12,7 +12,7 @@ rec {
   };
   
   buildApp = import ./build-app.nix {
-    inherit (pkgs) stdenv;
+    inherit (pkgs) stdenv jdk;
     inherit (androidenv) androidsdk;
     inherit (xcodeenv) xcodewrapper;
     inherit titaniumsdk;

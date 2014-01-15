@@ -1,4 +1,4 @@
-{stdenv, androidsdk, titaniumsdk, xcodewrapper}:
+{stdenv, androidsdk, titaniumsdk, xcodewrapper, jdk}:
 { appId, name, appName ? null, src, target, androidPlatformVersions ? [ "8" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ]
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
 , iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosDistribute ? false
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
   inherit src;
   
-  buildInputs = [] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
+  buildInputs = [ jdk ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
 
   buildPhase = ''
     export HOME=$TMPDIR
