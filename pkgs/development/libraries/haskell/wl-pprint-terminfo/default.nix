@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     nats semigroups terminfo text transformers wlPprintExtras
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ekmett/wl-pprint-terminfo/";
     description = "A color pretty printer with terminfo support";
