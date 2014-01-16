@@ -1,11 +1,11 @@
-{stdenv, androidsdk, titaniumsdk, xcodewrapper}:
+{stdenv, androidsdk, titaniumsdk, xcodewrapper, jdk}:
 { appId, name, appName ? null, src, target, androidPlatformVersions ? [ "8" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ]
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosKeyFile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosDistribute ? false
+, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosDistribute ? false
 }:
 
 assert (release && target == "android") -> androidKeyStore != null && androidKeyAlias != null && androidKeyStorePassword != null;
-assert (release && target == "iphone") -> iosKeyFile != null && iosCertificateName != null && iosCertificate != null && iosCertificatePassword != null;
+assert (release && target == "iphone") -> iosMobileProvisioningProfile != null && iosCertificateName != null && iosCertificate != null && iosCertificatePassword != null;
 
 let
   androidsdkComposition = androidsdk {
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
   inherit src;
   
-  buildInputs = [] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
-
+  buildInputs = [ jdk ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
+  
   buildPhase = ''
     export HOME=$TMPDIR
 
@@ -46,17 +46,17 @@ stdenv.mkDerivation {
             security unlock-keychain -p "" $keychainName
             security import ${iosCertificate} -k $keychainName -P "${iosCertificatePassword}" -A
 
-            provisioningId=$(grep UUID -A1 -a ${iosKeyFile} | grep -o "[-A-Z0-9]\{36\}")
+            provisioningId=$(grep UUID -A1 -a ${iosMobileProvisioningProfile} | grep -o "[-A-Z0-9]\{36\}")
    
             # Ensure that the requested provisioning profile can be found
             
             if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision" ]
             then
                 mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
-                cp ${iosKeyFile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
+                cp ${iosMobileProvisioningProfile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
             fi
             
-            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py distribute 6.0 $(pwd) ${appId} "${_appName}" "$provisioningId" "${iosCertificateName}" $out universal "$HOME/Library/Keychains/$keychainName"
+            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py distribute 7.0 $(pwd) ${appId} "${_appName}" "$provisioningId" "${iosCertificateName}" $out universal "$HOME/Library/Keychains/$keychainName"
             
             # Remove our generated keychain
             
@@ -74,17 +74,17 @@ stdenv.mkDerivation {
                 security unlock-keychain -p "" $keychainName
                 security import ${iosCertificate} -k $keychainName -P "${iosCertificatePassword}" -A
 
-                provisioningId=$(grep UUID -A1 -a ${iosKeyFile} | grep -o "[-A-Z0-9]\{36\}")
+                provisioningId=$(grep UUID -A1 -a ${iosMobileProvisioningProfile} | grep -o "[-A-Z0-9]\{36\}")
    
                 # Ensure that the requested provisioning profile can be found
             
                 if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision" ]
                 then
                     mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
-                    cp ${iosKeyFile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
+                    cp ${iosMobileProvisioningProfile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
                 fi
             
-                ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py adhoc 6.0 $(pwd) ${appId} "${_appName}" "$provisioningId" "${iosCertificateName}" universal "$HOME/Library/Keychains/$keychainName"
+                ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py adhoc 7.0 $(pwd) ${appId} "${_appName}" "$provisioningId" "${iosCertificateName}" universal "$HOME/Library/Keychains/$keychainName"
             
                 # Remove our generated keychain
             
@@ -99,7 +99,7 @@ stdenv.mkDerivation {
             
             cp -av * $out
             cd $out
-            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py build 6.0 $(pwd) ${appId} "${_appName}" universal
+            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py build 7.0 $(pwd) ${appId} "${_appName}" universal
           ''
 
       else throw "Target: ${target} is not supported!"}

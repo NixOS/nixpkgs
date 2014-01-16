@@ -57,6 +57,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   blivet = callPackage ../development/python-modules/blivet { };
 
+  dbus = import ../development/python-modules/dbus {
+    inherit (pkgs) stdenv fetchurl pkgconfig dbus dbus_glib dbus_tools;
+    inherit python;
+  };
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
@@ -119,6 +124,18 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit (pkgs) fetchurl stdenv pkgconfig gtk;
     inherit (pkgs.gnome) libglade;
     inherit python buildPythonPackage pygobject pycairo;
+  };
+
+  pyqt4 = import ../development/python-modules/pyqt/4.x.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig qt4 makeWrapper;
+    inherit (pkgs.xorg) lndir;
+    inherit python sip;
+    pythonDBus = dbus;
+  };
+
+  sip = import ../development/python-modules/sip {
+    inherit (pkgs) stdenv fetchurl;
+    inherit python;
   };
 
   # packages defined here
@@ -1249,11 +1266,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   darcsver = buildPythonPackage (rec {
-    name = "darcsver-1.7.2";
+    name = "darcsver-1.7.4";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/darcsver/${name}.tar.gz";
-      md5 = "94ca7e8c9ea0f69c0f3fc6f9fc88f65a";
+      sha256 = "1yb1c3jxqvy4r3qiwvnb86qi5plw6018h15r3yk5ji3nk54qdcb6";
     };
 
     buildInputs = [ pythonPackages.mock ];
@@ -4765,11 +4782,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pycryptopp = buildPythonPackage (rec {
-    name = "pycryptopp-0.5.29";
+    name = "pycryptopp-0.6.0.1206569328141510525648634803928199668821045408958";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pycryptopp/${name}.tar.gz";
-      sha256 = "d504775b73d30fb05a3237f83c4e9e1ff3312cbba90a4a23e6cbb7d32219502b";
+      sha256 = "0n90h1yg7bfvlbhnc54xb6dbqm286ykaksyg04kxlhyjgf8mhq8i";
     };
 
     # Prefer crypto++ library from the Nix store over the one that's included
@@ -5225,11 +5242,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pymacs = pkgs.stdenv.mkDerivation rec {
-    version = "v0.25";
+    version = "0.25";
     name = "Pymacs-${version}";
 
     src = fetchurl {
-      url = "https://github.com/pinard/Pymacs/tarball/${version}";
+      url = "https://github.com/pinard/Pymacs/tarball/v${version}";
       name = "${name}.tar.gz";
       sha256 = "1hmy76c5igm95rqbld7gvk0az24smvc8hplfwx2f5rhn6frj3p2i";
     };
@@ -5329,11 +5346,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pysqlite = buildPythonPackage (rec {
-    name = "pysqlite-2.5.5";
+    name = "pysqlite-2.6.3";
 
     src = fetchurl {
-      url = "http://pysqlite.googlecode.com/files/${name}.tar.gz";
-      sha256 = "ef7ca7f44893790e1a7084b10ea083770e138689406fddc7076d12d6bff4d44f";
+      url = "https://pypi.python.org/packages/source/p/pysqlite/${name}.tar.gz";
+      sha256 = "13djzgnbi71znjjyaw4nybg6smilgszcid646j5qav7mdchkb77y";
     };
 
     # Since the `.egg' file is zipped, the `NEEDED' of the `.so' files
@@ -6784,11 +6801,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   twisted = buildPythonPackage rec {
-    name = "twisted-10.2.0";
+    name = "twisted-13.2.0";
 
     src = fetchurl {
-      url = http://tmrc.mit.edu/mirror/twisted/Twisted/10.2/Twisted-10.2.0.tar.bz2;
-      sha256 = "110c30z622jn14yany1sxfaqj5qx20n9rc9zqacxlwma30fdcbjn";
+      url = "https://pypi.python.org/packages/source/T/Twisted/Twisted-13.2.0.tar.bz2";
+      sha256 = "1wrcqv5lvgwk2aq83qb2s2ng2vx14hbjjk2gc30cg6h1iiipal89";
     };
 
     propagatedBuildInputs = [ zope_interface ];
@@ -6809,7 +6826,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
         and licensed under the MIT license.
       '';
 
-      license = "MIT";
+      license = pkgs.lib.licenses.mit;
 
       maintainers = [ ];
     };
@@ -7222,11 +7239,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   zfec = buildPythonPackage (rec {
-    name = "zfec-1.4.7";
+    name = "zfec-1.4.24";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zfec/${name}.tar.gz";
-      sha256 = "3335c9054f45e2c59188400e892634b68761b29d06f3cafe525c60484902d379";
+      sha256 = "1ks94zlpy7n8sb8380gf90gx85qy0p9073wi1wngg6mccxp9xsg3";
     };
 
     buildInputs = [ setuptoolsDarcs ];
@@ -8178,7 +8195,29 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       description = "A logging replacement for Python";
       license = pkgs.lib.licenses.bsd3;
     };
- };
+  };
+
+  libvirt = pkgs.stdenv.mkDerivation rec {
+    name = "libvirt-python-${version}";
+    version = "1.2.0";
+
+    src = fetchurl {
+      url = "http://libvirt.org/sources/python/${name}.tar.gz";
+      sha256 = "0azml1yv9iqnpj4sdg1wwsa70q7kb06lv85p63qwyd8vrd0y7rrg";
+    };
+
+    buildInputs = [ python pkgs.pkgconfig pkgs.libvirt lxml ];
+
+    buildPhase = "python setup.py build";
+
+    installPhase = "python setup.py install --prefix=$out";
+
+    meta = {
+      homepage = http://www.libvirt.org/;
+      description = "libvirt Python bindings";
+      license = "LGPLv2";
+    };
+  };
 
 # python2.7 specific eggs
 } // pkgs.lib.optionalAttrs (python.majorVersion == "2.7") {

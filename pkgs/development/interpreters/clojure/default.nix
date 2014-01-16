@@ -1,30 +1,27 @@
-{stdenv, fetchurl, unzip, ant, version ? "1.4.0" }:
+{ stdenv, fetchurl, unzip, ant, jdk, makeWrapper }:
 
-let 
-  src_hashes = {
-    "1.4.0" = "27a5a151d5cc1bc3e52dff47c66111e637fefeb42d9bedfa1284a1a31d080171";
-    "1.5.0-RC1" = "111jm0nxkvqr1vrwcpvr70v5paasp8msrj5h8zm1c144c8zc1vln";
-  };
-in 
+let version = "1.5.1"; in
+
 stdenv.mkDerivation {
   name = "clojure-${version}";
 
   src = fetchurl {
     url = "http://repo1.maven.org/maven2/org/clojure/clojure/${version}/clojure-${version}.zip";
-    sha256 = (builtins.getAttr version src_hashes); 
+    sha256 = "1qgiji6ddvv40khp3qb3xfz09g7p4nnsh3pywqglb9f16v534yzy";
   };
 
-  buildInputs = [ unzip ant ];
+  buildInputs = [ unzip ant jdk makeWrapper ];
 
   buildPhase = "ant jar";
 
-  installPhase = "
-    mkdir -p $out/lib/java
-    install -t $out/lib/java clojure.jar
-  ";
+  installPhase = ''
+    mkdir -p $out/share/java $out/bin
+    install -t $out/share/java clojure.jar
+    makeWrapper ${jdk.jre}/bin/java $out/bin/clojure --add-flags "-cp $out/share/java/clojure.jar clojure.main"
+  '';
 
   meta = {
-    description = "a Lisp dialect for the JVM";
+    description = "A Lisp dialect for the JVM";
     homepage = http://clojure.org/;
     license = stdenv.lib.licenses.bsd3;
     longDescription = ''

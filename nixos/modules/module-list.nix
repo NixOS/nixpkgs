@@ -147,6 +147,7 @@
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
+  ./services/networking/connman.nix
   ./services/networking/cntlm.nix
   ./services/networking/chrony.nix
   ./services/networking/ddclient.nix
@@ -167,6 +168,7 @@
   ./services/networking/ifplugd.nix
   ./services/networking/iodined.nix
   ./services/networking/ircd-hybrid/default.nix
+  ./services/networking/kippo.nix
   ./services/networking/minidlna.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
@@ -212,6 +214,7 @@
   ./services/torrent/transmission.nix
   ./services/ttys/gpm.nix
   ./services/ttys/agetty.nix
+  ./services/ttys/kmscon.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/default.nix
@@ -230,6 +233,7 @@
   ./services/x11/hardware/multitouch.nix
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
+  ./services/x11/mesa.nix
   ./services/x11/window-managers/awesome.nix
   #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix

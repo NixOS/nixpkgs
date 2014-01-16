@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pandoc-citeproc";
-  version = "0.2";
-  sha256 = "0ghdkzml2rcvjf1wlpsa6ih117x56qlb3ajpbwnpwm3y4wm0jm2d";
+  version = "0.3.0.1";
+  sha256 = "1w8ljf0mc5a3bqv0hymg2daafkrlzdzar23l4yqakjr21n75nvlx";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -16,7 +16,7 @@ cabal.mkDerivation (self: {
     temporary texmath text time vector yaml
   ];
   testDepends = [
-    aeson aesonPretty filepath pandoc pandocTypes temporary text yaml
+    aeson filepath pandoc pandocTypes temporary text yaml
   ];
   doCheck = false;
   meta = {

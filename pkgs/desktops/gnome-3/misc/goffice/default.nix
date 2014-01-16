@@ -29,5 +29,4 @@ stdenv.mkDerivation rec {
 
     platforms = stdenv.lib.platforms.gnu;
   };
-  passthru = { inherit meta; };
 }

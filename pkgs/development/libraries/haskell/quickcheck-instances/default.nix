@@ -1,10 +1,12 @@
-{ cabal, QuickCheck, text, time }:
+{ cabal, hashable, QuickCheck, text, time, unorderedContainers }:
 
 cabal.mkDerivation (self: {
   pname = "quickcheck-instances";
-  version = "0.3.5";
-  sha256 = "1ak55d3yi6ii01921zihn8mk12mws78w05gmhk766kpylhhgni5f";
-  buildDepends = [ QuickCheck text time ];
+  version = "0.3.6";
+  sha256 = "1vaqwsdgi2mirplzg66zysc1ivjjr0qxyiibsh6j771hxs9qk2pr";
+  buildDepends = [
+    hashable QuickCheck text time unorderedContainers
+  ];
   meta = {
     homepage = "https://github.com/aslatter/qc-instances";
     description = "Common quickcheck instances";

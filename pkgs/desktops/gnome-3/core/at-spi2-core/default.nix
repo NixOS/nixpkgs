@@ -19,6 +19,10 @@ stdenv.mkDerivation (rec {
 
   # ToDo: on non-NixOS we create a symlink from there?
   configureFlags = "--with-dbus-daemondir=/run/current-system/sw/bin/";
+
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+  };
 }
   // stdenv.lib.optionalAttrs stdenv.isDarwin {
     NIX_LDFLAGS = "-lintl";

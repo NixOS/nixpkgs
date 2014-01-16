@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk, libgnomeui, libofx
 , libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant, gettext, libbonoboui
 , intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper, libglade
-, libgsf, libart_lgpl, perlPackages
+, libgsf, libart_lgpl, perlPackages, libxslt, webkit
 }:
 
 /* If you experience GConf errors when running GnuCash on NixOS, see
@@ -10,18 +10,18 @@
  */
 
 stdenv.mkDerivation rec {
-  name = "gnucash-2.4.13";
+  name = "gnucash-2.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "0j4m00a3r1hcrhkfjkx3sgi2r4id4wrc639i4s00j35rx80540pn";
+    sha256 = "1gzzk9dndb5c2rxi8yf5dsaair47axwz4nxx87y80wryxvqanxd8";
   };
 
   buildInputs = [
     pkgconfig libxml2 gconf glib gtk libgnomeui libgtkhtml gtkhtml
     libgnomeprint goffice enchant gettext intltool perl guile slibGuile
     swig isocodes bzip2 makeWrapper libofx libglade libgsf libart_lgpl
-    perlPackages.DateManip perlPackages.FinanceQuote
+    perlPackages.DateManip perlPackages.FinanceQuote libxslt webkit
   ];
 
   configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx";
