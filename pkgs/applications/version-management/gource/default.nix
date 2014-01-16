@@ -1,17 +1,18 @@
-{ stdenv, fetchurl, SDL, ftgl, pkgconfig, libpng, libjpeg, pcre, SDL_image, glew, mesa }:
+{ stdenv, fetchurl, SDL, ftgl, pkgconfig, libpng, libjpeg, pcre
+, SDL_image, glew, mesa, boostHeaders
+}:
 
-let
+stdenv.mkDerivation rec {
   name = "gource-0.40";
-in
-stdenv.mkDerivation {
-  inherit name;
 
   src = fetchurl {
     url = "http://gource.googlecode.com/files/${name}.tar.gz";
     sha256 = "04nirh07xjslqsph557as4s50nlf91bi6v2l7vmbifmkdf90m2cw";
   };
 
-  buildInputs = [glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa];
+  buildInputs = [
+    glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa boostHeaders
+  ];
 
   meta = {
     homepage = "http://code.google.com/p/gource/";
@@ -29,7 +30,6 @@ stdenv.mkDerivation {
       by several third party tools for CVS repositories.
     '';
 
-    hydraPlatforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    broken = true;
   };
 }
