@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "websockets-snap";
-  version = "0.8.2.0";
-  sha256 = "0z6my5l1rm39prnhpvgg7z3q57y29ai3wddw1yfadrdsx8qra67s";
+  version = "0.8.2.1";
+  sha256 = "13q1vrrcka91w9yad3jw1w68hp59n851hkn9a3hylw0cqs7008az";
   buildDepends = [
     blazeBuilder enumerator ioStreams mtl snapCore snapServer
     websockets
