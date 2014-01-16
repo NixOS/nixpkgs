@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  name = "sip-4.15.4";
+  name = "sip-4.14.7"; # kde410.pykde4 doesn't build with 4.15
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/sip/${name}/${name}.tar.gz";
-    sha256 = "0a12lmqkf342yg42ygnjm1fyldcx9pzhy7z68p4ms4ydfcl78jsr";
+    sha256 = "1dv1sdwfmnq481v80k2951amzs9s87d4qhk0hpwrhb1sllh92rh5";
   };
 
   configurePhase = stdenv.lib.optionalString stdenv.isDarwin ''

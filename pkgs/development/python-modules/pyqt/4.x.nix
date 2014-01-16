@@ -1,11 +1,13 @@
 { stdenv, fetchurl, python, sip, qt4, pythonDBus, pkgconfig, lndir, makeWrapper }:
 
-stdenv.mkDerivation rec {
-  name = "PyQt-x11-gpl-4.10.3";
+let version = "4.10.2"; # kde410.pykde4 doesn't build with 4.10.3
+in
+stdenv.mkDerivation {
+  name = "PyQt-x11-gpl-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/PyQt4/PyQt-4.10.3/PyQt-x11-gpl-4.10.3.tar.gz";
-    sha256 = "0c7nifx3w0b9w1k0g9dvav1rv1lvd7awmq0zkqn3n8clyfzbw4x7";
+    url = "mirror://sourceforge/pyqt/PyQt4/PyQt-${version}/PyQt-x11-gpl-${version}.tar.gz";
+    sha256 = "1zp69caqq195ymp911d0cka8619q78hzmfxvj7c51w2y53zg4z3l";
   };
 
   configurePhase = ''
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
     for i in $out/bin/*; do
       wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
     done
-  ''; # */
+  '';
 
   enableParallelBuilding = true;
 
