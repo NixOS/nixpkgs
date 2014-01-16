@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig
-    xlibs.xlibs flex bison xlibs.libXi mesa mesa_noglu.osmesa
+    xlibs.xlibs flex bison xlibs.libXi mesa
     xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
     xlibs.libXrender xlibs.libXxf86vm xlibs.libXcomposite
     alsaLib ncurses libpng libjpeg lcms2 fontforge
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
   NIX_LDFLAGS = map (path: "-rpath ${path}/lib ") [
-    freetype fontconfig stdenv.gcc.gcc mesa mesa_noglu.osmesa libdrm
+    freetype fontconfig stdenv.gcc.gcc mesa libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
     xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
     openssl gnutls cups

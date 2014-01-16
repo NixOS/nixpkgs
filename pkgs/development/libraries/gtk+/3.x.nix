@@ -12,7 +12,6 @@ let
   ver_min = "8";
 in
 stdenv.mkDerivation rec {
-  name = "gtk+-3.8.4";
   name = "gtk+-${ver_maj}.${ver_min}";
 
   src = fetchurl {
