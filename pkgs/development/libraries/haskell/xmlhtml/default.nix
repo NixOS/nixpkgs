@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xmlhtml";
-  version = "0.2.3";
-  sha256 = "0yg56rj8ylnaawqx3h54g0dlayql87h40anbp7lccnl70pzbk6c7";
+  version = "0.2.3.1";
+  sha256 = "138nryn68f58cvg971qw7vw0kprsw5g39j3fmf0bz83sg4g98nmd";
   buildDepends = [
     blazeBuilder blazeHtml blazeMarkup parsec text unorderedContainers
   ];
