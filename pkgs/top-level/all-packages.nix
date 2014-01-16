@@ -8953,6 +8953,8 @@ let
 
   tla = callPackage ../applications/version-management/arch { };
 
+  todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
+
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
     wrapPython = pythonPackages.wrapPython;
   };
