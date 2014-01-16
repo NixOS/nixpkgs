@@ -21,5 +21,7 @@ stdenv.mkDerivation rec {
     description = "ROOT - A data analysis framework";
     homepage = http://root.cern.ch/drupal/;
     platforms = stdenv.lib.platforms.mesaPlatforms;
+    maintainers = [ stdenv.lib.maintainers.sprock ];
+    license = stdenv.lib.license.lgpl21;
   };
 }
