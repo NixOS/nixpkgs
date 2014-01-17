@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     description = "Application that lets you record streaming mp3 to your hard drive";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with stdenv.maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ the-kenny ];
   };
 }
