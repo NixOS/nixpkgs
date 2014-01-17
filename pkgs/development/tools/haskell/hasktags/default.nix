@@ -2,12 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "hasktags";
-  version = "0.68.4";
-  sha256 = "1s4zblyklrq3grcvr6fp26jby6z61g3n1fpivmh69lh38axk7316";
+  version = "0.68.5";
+  sha256 = "0yr7icaww5kiczmi64n2ypkwabs4yl8wl2kf67zmgclp12kqik81";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ filepath HUnit interlude json ];
-  testDepends = [ filepath HUnit json ];
   meta = {
     homepage = "http://github.com/MarcWeber/hasktags";
     description = "Produces ctags \"tags\" and etags \"TAGS\" files for Haskell programs";
