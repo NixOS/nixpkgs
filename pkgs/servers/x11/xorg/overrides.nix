@@ -148,6 +148,10 @@ in
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
+  xf86inputmouse = attrs: attrs // {
+    installFlags = "sdkdir=\${out}/include/xorg";
+  };
+
   xf86inputjoystick = attrs: attrs // {
     installFlags = "sdkdir=\${out}/include/xorg";
   };

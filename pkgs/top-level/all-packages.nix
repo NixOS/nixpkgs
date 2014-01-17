@@ -7103,10 +7103,7 @@ let
     inherit (xorg) fontsproto renderproto utilmacros xorgserver;
   };
 
-  xf86_video_nouveau = callPackage ../os-specific/linux/xf86-video-nouveau {
-    inherit (xorg) xorgserver xproto fontsproto xf86driproto renderproto
-      videoproto utilmacros;
-  };
+  xf86_video_nouveau = xorg.xf86videonouveau;
 
   xmoto = builderDefsPackage (import ../games/xmoto) {
     inherit chipmunk sqlite curl zlib bzip2 libjpeg libpng
