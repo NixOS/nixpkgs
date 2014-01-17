@@ -733,7 +733,7 @@ fixupPhase() {
     runHook preFixup
 
     # Make sure everything is writable so "strip" et al. work.
-    chmod -R u+w "$prefix"
+    if [ -e "$prefix" ]; then chmod -R u+w "$prefix"; fi
 
     # Put man/doc/info under $out/share.
     forceShare=${forceShare:=man doc info}
