@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "io-2011.09.12";
+  name = "io-2013.12.04";
   src = fetchurl {
-    url = http://github.com/stevedekorte/io/tarball/2011.09.12;
-    name = "io-2011.09.12.tar.gz";
-    sha256 = "14nhk5vkk74pbf36jsfaxqh2ihi5d7jby79yf1ibbax319xbjk3v";
+    url = http://github.com/stevedekorte/io/tarball/2013.12.04;
+    name = "io-2013.12.04.tar.gz";
+    sha256 = "0kvwr32xdpcr32rnv301xr5l89185dsisbj4v465m68isas0gjm5";
   };
 
   buildInputs = [
