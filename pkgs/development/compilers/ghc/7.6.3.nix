@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ghc perl gmp ncurses ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # the same errors as 7.6.1
 
   buildMK = ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
