@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, perl, flex, bison, libpcap, libnl, c-ares
-, gnutls, libgcrypt, geoip, heimdal, lua5, gtk3, makeDesktopItem
+, gnutls, libgcrypt, geoip, heimdal, lua5, gtk, makeDesktopItem, python
 }:
 
 let version = "1.11.2"; in
@@ -14,10 +14,10 @@ stdenv.mkDerivation {
 
   buildInputs = [
     bison flex perl pkgconfig libpcap lua5 heimdal libgcrypt gnutls
-    geoip libnl c-ares gtk3
+    geoip libnl c-ares gtk python
   ];
 
-  configureFlags = "--disable-usr-local --disable-silent-rules --with-gtk3 --without-qt --with-ssl";
+  configureFlags = "--disable-usr-local --disable-silent-rules --with-gtk2 --without-gtk3 --without-qt --with-ssl";
 
   desktopItem = makeDesktopItem {
     name = "Wireshark";
@@ -35,6 +35,8 @@ stdenv.mkDerivation {
     cp "$desktopItem/share/applications/"* "$out/share/applications/"
     cp image/wsicon.svg "$out"/share/icons/wireshark.svg
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://www.wireshark.org/;
