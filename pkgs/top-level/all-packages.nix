@@ -10296,6 +10296,8 @@ let
 
   splix = callPackage ../misc/cups/drivers/splix { };
 
+  streamripper = callPackage ../applications/audio/streamripper { };
+
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tex4ht = callPackage ../tools/typesetting/tex/tex4ht { };
