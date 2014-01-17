@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, perl, flex, bison, libpcap, libnl, c-ares, gnutls, libgcrypt
-, geoip, heimdal, lua5, gtk, makeDesktopItem, qt5
+{ stdenv, fetchurl, pkgconfig, perl, flex, bison, libpcap, libnl, c-ares
+, gnutls, libgcrypt, geoip, heimdal, lua5, gtk3, makeDesktopItem
 }:
 
 let version = "1.11.2"; in
@@ -14,10 +14,10 @@ stdenv.mkDerivation {
 
   buildInputs = [
     bison flex perl pkgconfig libpcap lua5 heimdal libgcrypt gnutls
-    geoip libnl c-ares gtk qt5
+    geoip libnl c-ares gtk3
   ];
 
-  configureFlags = "--disable-usr-local --enable-packet-editor --with-ssl";
+  configureFlags = "--disable-usr-local --disable-silent-rules --with-gtk3 --without-qt --with-ssl";
 
   desktopItem = makeDesktopItem {
     name = "Wireshark";
