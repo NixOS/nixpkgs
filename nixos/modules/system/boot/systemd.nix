@@ -11,16 +11,19 @@ let
   systemd = cfg.package;
 
   makeUnit = name: unit:
-    pkgs.runCommand "unit" ({ preferLocalBuild = true; } // optionalAttrs (unit.linkTarget == null) { inherit (unit) text; })
-      (if !unit.enable then  ''
+    pkgs.runCommand "unit" { preferLocalBuild = true; inherit (unit) text; }
+      ((if !unit.enable then  ''
         mkdir -p $out
         ln -s /dev/null $out/${name}
       '' else if unit.linkTarget != null then ''
         mkdir -p $out
         ln -s ${unit.linkTarget} $out/${name}
-      '' else ''
+      '' else if unit.text != null then ''
         mkdir -p $out
         echo -n "$text" > $out/${name}
+      '' else "") + optionalString (unit.extraConfig != {}) ''
+        mkdir -p $out/${name}.d
+        ${concatStringsSep "\n" (mapAttrsToList (n: v: "echo -n \"${v}\" > $out/${name}.d/${n}") unit.extraConfig)}
       '');
 
   upstreamUnits =
@@ -392,7 +395,8 @@ in
       options = { name, config, ... }:
         { options = {
             text = mkOption {
-              type = types.str;
+              type = types.nullOr types.str;
+              default = null;
               description = "Text of this systemd unit.";
             };
             enable = mkOption {
@@ -423,6 +427,17 @@ in
               default = null;
               description = "The file to symlink this target to.";
               type = types.nullOr types.path;
+            };
+            extraConfig = mkOption {
+              default = {};
+              example = { "foo@1.conf" = "X-RestartIfChanged=false"; };
+              type = types.attrsOf types.lines;
+              description = ''
+                Extra files to be appended to the configuration for the unit.
+                This can be used to override configuration for a unit provided
+                by systemd or another package, or to override only a single instance
+                of a template unit.
+              '';
             };
           };
           config = {
