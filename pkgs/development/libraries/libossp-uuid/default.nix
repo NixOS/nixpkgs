@@ -12,7 +12,8 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.ossp.org/pkg/lib/uuid/;
-    description =
+    description = "OSSP uuid ISO-C and C++ shared library";
+    longDescription =
       ''
         OSSP uuid is a ISO-C:1999 application programming interface
         (API) and corresponding command line interface (CLI) for the
