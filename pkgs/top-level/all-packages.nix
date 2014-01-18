@@ -1278,7 +1278,7 @@ let
 
   logrotate = callPackage ../tools/system/logrotate { };
 
-  logstalgica = callPackage ../tools/graphics/logstalgica {};
+  logstalgia = callPackage ../tools/graphics/logstalgia {};
 
   lout = callPackage ../tools/typesetting/lout { };
 
