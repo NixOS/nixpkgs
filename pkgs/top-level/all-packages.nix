@@ -4364,6 +4364,8 @@ let
       '' # */
       ;
 
+  glm = callPackage ../development/libraries/glm { };
+
   glpk = callPackage ../development/libraries/glpk { };
 
   glsurf = callPackage ../applications/science/math/glsurf {
