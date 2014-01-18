@@ -126,7 +126,7 @@ let
       glibcLocales = linux;
       glxinfo = linux;
       gnash = linux;
-      gnat44 = linux;
+      gnat = linux;
       gnugrep = all;
       gnum4 = all;
       gnumake = all;

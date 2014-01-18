@@ -55,7 +55,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   ghdl = linux;
   glibc = linux;
   glibcLocales = linux;
-  gnat44 = linux;
+  gnat = linux;
   gnugrep = all;
   gnum4 = all;
   gnumake = all;
