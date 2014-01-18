@@ -11,13 +11,16 @@ let
   systemd = cfg.package;
 
   makeUnit = name: unit:
-    pkgs.runCommand "unit" { inherit (unit) text; preferLocalBuild = true; }
-      (if unit.enable then  ''
-        mkdir -p $out
-        echo -n "$text" > $out/${name}
-      '' else ''
+    pkgs.runCommand "unit" ({ preferLocalBuild = true; } // optionalAttrs (unit.linkTarget == null) { inherit (unit) text; })
+      (if !unit.enable then  ''
         mkdir -p $out
         ln -s /dev/null $out/${name}
+      '' else if unit.linkTarget != null then ''
+        mkdir -p $out
+        ln -s ${unit.linkTarget} $out/${name}
+      '' else ''
+        mkdir -p $out
+        echo -n "$text" > $out/${name}
       '');
 
   upstreamUnits =
@@ -338,7 +341,7 @@ let
       done
 
       for i in ${toString (mapAttrsToList (n: v: v.unit) cfg.units)}; do
-        ln -s $i/* $out/
+        ln -fs $i/* $out/
       done
 
       for i in ${toString cfg.packages}; do
@@ -362,7 +365,7 @@ let
       ln -s rescue.target $out/kbrequest.target
 
       mkdir -p $out/getty.target.wants/
-      ln -s ../getty@tty1.service $out/getty.target.wants/
+      ln -s ../autovt@tty1.service $out/getty.target.wants/
 
       ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
             ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
@@ -415,6 +418,11 @@ in
             unit = mkOption {
               internal = true;
               description = "The generated unit.";
+            };
+            linkTarget = mkOption {
+              default = null;
+              description = "The file to symlink this target to.";
+              type = types.nullOr types.path;
             };
           };
           config = {

@@ -1,29 +1,32 @@
-{ stdenv, fetchurl, gmp, readline, openssl, libjpeg, unixODBC, zlib,
-   libXinerama, libXft, libXpm, libSM, libXt, freetype, pkgconfig,
-   fontconfig }:
+{ stdenv, fetchurl, gmp, readline, openssl, libjpeg, unixODBC, zlib
+, libXinerama, libXft, libXpm, libSM, libXt, freetype, pkgconfig
+, fontconfig
+}:
 
 let
-  version = "6.4.1";
+  version = "6.6.1";
 in
 stdenv.mkDerivation {
   name = "swi-prolog-${version}";
 
   src = fetchurl {
     url = "http://www.swi-prolog.org/download/stable/src/pl-${version}.tar.gz";
-    sha256 = "1szqqwypqfd0qr3sk0qlip1ar22kpqgba6b44klmr1aag0lrahs8";
+    sha256 = "033b7z60jd1907p9idaa3xzbid2aadhqcdwsa2g9c1c7q8fj1gy8";
   };
 
-  buildInputs = [gmp readline openssl libjpeg unixODBC libXinerama
-    libXft libXpm libSM libXt zlib freetype pkgconfig fontconfig];
+  buildInputs = [ gmp readline openssl libjpeg unixODBC libXinerama
+    libXft libXpm libSM libXt zlib freetype pkgconfig fontconfig ];
+
   configureFlags = "--with-world --enable-gmp --enable-shared";
-  makeFlags = "world";
+
+  buildFlags = "world";
 
   meta = {
     homepage = http://www.swi-prolog.org/;
     description = "A Prolog compiler and interpreter";
     license = "LGPL";
 
-    platforms = stdenv.lib.platforms.unix;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

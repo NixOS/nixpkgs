@@ -6,17 +6,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.12.0";
+  version = "2.12.1";
   name = "flightgear-${version}";
 
   src = fetchurl {
     url = "http://ftp.linux.kiev.ua/pub/fgfs/Source/${name}.tar.bz2";
-    sha256 = "0h9ka4pa2njxbvy5jlmnsjy5ynzms504ygqn7hd80g3c58drsjc4";
+    sha256 = "1wj0a9k9pq404lylmv7v5f05vmrqd8fwj61kr78vldf44n44gixw";
   };
 
   datasrc = fetchurl {
-    url = "http://ftp.igh.cnrs.fr/pub/flightgear/ftp/Shared/FlightGear-data-${version}.tar.bz";
-    sha256 = "0qjvcj2cz7ypa91v95lws44fg8c1p0pazv24ljkai2m2r0jgsv8k";
+    url = "http://ftp.igh.cnrs.fr/pub/flightgear/ftp/Shared/FlightGear-${version}-data.tar.bz2";
+    sha256 = "0hlsvzz12pyzw3mb4xsv4iwblrbf7d27mdprll64kr7p1h9qlmkl";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Flight simulator";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin the-kenny ];
     platforms = platforms.linux;
     hydraPlatforms = []; # disabled from hydra because it's so big
     license = licenses.gpl2;

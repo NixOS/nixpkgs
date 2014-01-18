@@ -1,17 +1,18 @@
-{ stdenv, fetchurl, SDL, ftgl, pkgconfig, libpng, libjpeg, pcre, SDL_image, glew, mesa }:
+{ stdenv, fetchurl, SDL, ftgl, pkgconfig, libpng, libjpeg, pcre
+, SDL_image, glew, mesa, boostHeaders
+}:
 
-let
-  name = "gource-0.37";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "gource-0.40";
 
   src = fetchurl {
     url = "http://gource.googlecode.com/files/${name}.tar.gz";
-    sha256 = "03kd9nn65cl1p2jgn6pvpxmvnfscz3c8jqds90fsc0z37ij2iiyn";
+    sha256 = "04nirh07xjslqsph557as4s50nlf91bi6v2l7vmbifmkdf90m2cw";
   };
 
-  buildInputs = [glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa];
+  buildInputs = [
+    glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa boostHeaders
+  ];
 
   NIX_CFLAGS_COMPILE = "-fpermissive"; # fix build with newer gcc versions
 
@@ -31,7 +32,6 @@ stdenv.mkDerivation {
       by several third party tools for CVS repositories.
     '';
 
-    platforms = stdenv.lib.platforms.gnu;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    broken = true;
   };
 }

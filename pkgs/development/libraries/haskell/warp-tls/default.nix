@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "warp-tls";
-  version = "2.0.0.1";
-  sha256 = "1hwzwlqmq1nkxmp3zjplnkrh80v0awbrb2fwzd4ndyla8akgia1p";
+  version = "2.0.1";
+  sha256 = "0qz02awxrfqmmckias21dh0irmf44vamv24jjjrbb6bjxbr4ldd0";
   buildDepends = [
     certificate conduit cprngAes cryptocipher cryptoRandomApi network
     networkConduit pem tls tlsExtra transformers wai warp

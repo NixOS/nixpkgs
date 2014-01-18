@@ -57,9 +57,13 @@ sub link {
         open MODE, "<$_.mode";
         my $mode = <MODE>; chomp $mode;
         close MODE;
-        copy "$static/$fn", "$target.tmp" or warn;
-        chmod oct($mode), "$target.tmp" or warn;
-        rename "$target.tmp", $target or warn;
+        if ($mode eq "direct-symlink") {
+            atomicSymlink readlink("$static/$fn"), $target or warn;
+        } else {
+            copy "$static/$fn", "$target.tmp" or warn;
+            chmod oct($mode), "$target.tmp" or warn;
+            rename "$target.tmp", $target or warn;
+        }
     } elsif (-l "$_") {
         atomicSymlink "$static/$fn", $target or warn;
     }

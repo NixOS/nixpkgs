@@ -109,6 +109,7 @@
       mongodb = 98;
       openldap = 99;
       memcached = 100;
+      cgminer = 101;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 

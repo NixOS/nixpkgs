@@ -1,19 +1,24 @@
-{ stdenv, fetchurl, perl, groff, cmake, python, libffi, binutils }:
+{ stdenv, fetchurl, perl, groff, cmake, python, libffi, binutils, version }:
 
-let version = "3.3"; in
+with { inherit (stdenv.lib) optional; };
+
+assert version == "3.4" || version == "3.3";
 
 stdenv.mkDerivation rec {
   name = "llvm-${version}";
 
   src = fetchurl {
     url    = "http://llvm.org/releases/${version}/llvm-${version}.src.tar.gz";
-    sha256 = "0y3mfbb5qzcpw3v5qncn69x1hdrrrfirgs82ypi2annhf0g6nxk8";
+    sha256 =
+      if version == "3.4" then "0a169ba045r4apb9cv6ncrwl83l7yiajnzirkcdlhj1cd4nn3995"
+        else       /*3.3*/     "0y3mfbb5qzcpw3v5qncn69x1hdrrrfirgs82ypi2annhf0g6nxk8";
   };
 
-  patches = [
-    ./more-memory-for-bugpoint.patch # The default rlimits are too low for shared libraries.
-    ./no-rule-aarch64.patch # http://llvm.org/bugs/show_bug.cgi?id=16625
-  ];
+  patches =
+  	# The default rlimits in 3.3 are too low for shared libraries.
+    optional (version == "3.3") ./more-memory-for-bugpoint.patch
+    ++ [ ./no-rule-aarch64.patch ] # http://llvm.org/bugs/show_bug.cgi?id=16625
+  ;
 
   # libffi was propagated before, but it wasn't even being used, so
   # unless something needs it just an input is fine.
@@ -27,8 +32,9 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
-    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=R600" # for mesa
-  ] ++ lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
+  ]
+    ++ optional (version == "3.3") "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=R600" # for mesa
+    ++ optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
 
   enableParallelBuilding = true;
 

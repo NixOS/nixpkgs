@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, fixDarwinDylibNames }:
 
 let
 
@@ -13,6 +13,10 @@ stdenv.mkDerivation {
       + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
     sha256 = "14l0kl17nirc34frcybzg0snknaks23abhdxkmsqg3k9sil5wk9g";
   };
+
+  # FIXME: This fixes dylib references in the dylibs themselves, but
+  # not in the programs in $out/bin.
+  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   postUnpack = ''
     sourceRoot=''${sourceRoot}/source
