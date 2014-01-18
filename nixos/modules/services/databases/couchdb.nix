@@ -10,7 +10,7 @@ let
       [couchdb]
       database_dir = ${cfg.databaseDir}
       uri_file = ${cfg.uriFile}
-      view_index_dir = ${cfg. viewIndexDir}
+      view_index_dir = ${cfg.viewIndexDir}
 
       [httpd]
       port = ${toString cfg.port}
@@ -197,7 +197,6 @@ in
         Group = cfg.group;
         Type = "forking";
         ExecStart = "${cfg.package}/bin/couchdb -b -o /dev/null -e /dev/null -p ${cfg.pidFile} -a ${configFile} -a ${configExtraFile} -a ${cfg.customConfigFile}";
-        #ExecStart = "${cfg.package}/bin/couchdb -b -o /dev/null -e /dev/null -p ${cfg.pidFile} -a ${configFile} -a ${configExtraFile} -a ${cfg.customConfigFile}";
         ExecStop = "${cfg.package}/bin/couchdb -d";
       };
     };
