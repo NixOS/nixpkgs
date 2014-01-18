@@ -5,13 +5,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl_gnome {
     project = "gtkmm";
-    major = "2"; minor = "24"; patchlevel = "2"; extension = "xz";
-    sha256 = "0gcm91sc1a05c56kzh74l370ggj0zz8nmmjvjaaxgmhdq8lpl369";
+    major = "2"; minor = "24"; patchlevel = "4"; extension = "xz";
+    sha256 = "1vpmjqv0aqb1ds0xi6nigxnhlr0c74090xzi15b92amlzkrjyfj4";
   };
 
   nativeBuildInputs = [pkgconfig];
 
   propagatedBuildInputs = [ glibmm gtk atkmm cairomm pangomm ];
+
+  doCheck = true;
 
   meta = {
     description = "C++ interface to the GTK+ graphical user interface library";
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
 
     license = "LGPLv2+";
 
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = with stdenv.lib.maintainers; [ raskin vcunat ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
