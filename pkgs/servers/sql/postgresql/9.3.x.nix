@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.postgresql.org/;
     description = "A powerful, open source object-relational database system";
-    license = "bsd";
+    license = stdenv.lib.licenses.bsd;
   };
 }
