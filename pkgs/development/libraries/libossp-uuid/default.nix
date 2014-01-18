@@ -34,6 +34,6 @@ stdenv.mkDerivation {
         short lifetime and to reliably identifying very persistent
         objects across a network.
       '';
-    license = "bsd2";
+    license = stdenv.lib.licenses.bsd2;
   };
 }
