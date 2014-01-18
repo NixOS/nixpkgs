@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, groff, cmake, python, libffi, binutils, version }:
 
-with { inherit (stdenv.lib) optional; };
+with { inherit (stdenv.lib) optional optionals; };
 
 assert version == "3.4" || version == "3.3";
 
@@ -14,11 +14,10 @@ stdenv.mkDerivation rec {
         else       /*3.3*/     "0y3mfbb5qzcpw3v5qncn69x1hdrrrfirgs82ypi2annhf0g6nxk8";
   };
 
-  patches =
-  	# The default rlimits in 3.3 are too low for shared libraries.
-    optional (version == "3.3") ./more-memory-for-bugpoint.patch
-    ++ [ ./no-rule-aarch64.patch ] # http://llvm.org/bugs/show_bug.cgi?id=16625
-  ;
+  patches = optionals (version == "3.3") [
+    ./more-memory-for-bugpoint.patch # The default rlimits in 3.3 are too low for shared libraries.
+    ./no-rule-aarch64.patch          # http://llvm.org/bugs/show_bug.cgi?id=16625
+  ];
 
   # libffi was propagated before, but it wasn't even being used, so
   # unless something needs it just an input is fine.
