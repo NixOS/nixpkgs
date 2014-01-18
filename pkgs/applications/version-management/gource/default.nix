@@ -1,5 +1,5 @@
 { stdenv, fetchurl, SDL, ftgl, pkgconfig, libpng, libjpeg, pcre
-, SDL_image, glew, mesa, boostHeaders
+, SDL_image, glew, mesa, boost, glm
 }:
 
 stdenv.mkDerivation rec {
@@ -11,14 +11,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa boostHeaders
+    glew SDL ftgl pkgconfig libpng libjpeg pcre SDL_image mesa boost glm
   ];
+
+  configureFlags = "--with-boost-libdir=${boost}/lib";
 
   meta = {
     homepage = "http://code.google.com/p/gource/";
     description = "software version control visualization tool";
     license = stdenv.lib.licenses.gpl3Plus;
-
     longDescription = ''
       Software projects are displayed by Gource as an animated tree with
       the root directory of the project at its centre. Directories
@@ -29,7 +30,6 @@ stdenv.mkDerivation rec {
       Mercurial and Bazaar and SVN. Gource can also parse logs produced
       by several third party tools for CVS repositories.
     '';
-
-    broken = true;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
