@@ -167,7 +167,6 @@ in
         fi
         if ! test -e ${cfg.uriFile}; then
           mkdir -p `dirname ${cfg.uriFile}`;
-          touch ${cfg.uriFile};
         fi
         if ! test -e ${cfg.logFile}; then
           mkdir -p `dirname ${cfg.logFile}`;
@@ -183,8 +182,8 @@ in
         if ! test -e ${cfg.viewIndexDir}; then
           mkdir -p ${cfg.viewIndexDir};
         fi
-        chown ${cfg.user}:${cfg.group} ${cfg.pidFile}
-        chown ${cfg.user}:${cfg.group} ${cfg.uriFile}
+        chown ${cfg.user}:${cfg.group} `dirname ${cfg.pidFile}`
+        chown ${cfg.user}:${cfg.group} `dirname ${cfg.uriFile}`
         chown ${cfg.user}:${cfg.group} ${cfg.logFile}
         chown ${cfg.user}:${cfg.group} ${cfg.customConfigFile}
         chown ${cfg.user}:${cfg.group} ${cfg.databaseDir}
