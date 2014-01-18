@@ -53,6 +53,14 @@ in
         type = types.bool;
       };
 
+      default = mkOption {
+        default = true;
+        description = ''
+          Make Bash the default <option>users.defaultUserShell</option>.
+        '';
+        type = types.bool;
+      };
+
       shellAliases = mkOption {
         default = config.environment.shellAliases // { which = "type -P"; };
         description = ''
@@ -196,7 +204,7 @@ in
     # Configuration for readline in bash.
     environment.etc."inputrc".source = ./inputrc;
 
-    users.defaultUserShell = mkDefault "/run/current-system/sw/bin/bash";
+    users.defaultUserShell = mkIf cfg.default (mkDefault "/run/current-system/sw/bin/bash");
 
     environment.pathsToLink = optionals cfg.enableCompletion [
       "/etc/bash_completion.d"
