@@ -6600,6 +6600,8 @@ let
     python = pythonFull;
   };
 
+  libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
+
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
     then (utillinux // {
