@@ -6393,6 +6393,8 @@ let
 
   postgresql92 = callPackage ../servers/sql/postgresql/9.2.x.nix { };
 
+  postgresql93 = callPackage ../servers/sql/postgresql/9.3.x.nix { };
+
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
