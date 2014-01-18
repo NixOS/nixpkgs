@@ -6395,6 +6395,8 @@ let
 
   postgresql92 = callPackage ../servers/sql/postgresql/9.2.x.nix { };
 
+  postgresql93 = callPackage ../servers/sql/postgresql/9.3.x.nix { };
+
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
@@ -6599,6 +6601,8 @@ let
     # dstat color output
     python = pythonFull;
   };
+
+  libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
