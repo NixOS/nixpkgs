@@ -3,11 +3,11 @@ libsamplerate, libsndfile, pkgconfig, pulseaudio, qt4 }:
 
 stdenv.mkDerivation  rec {
   name = "lmms-${version}";
-  version = "0.4.10";
+  version = "0.4.15";
 
   src = fetchurl {
     url = "mirror://sourceforge/lmms/${name}.tar.bz2";
-    sha256 = "035cqmxcbr9ipnicdv5l7h05q2hqbavxkbaxyq06ppnv2y7fxwrb";
+    sha256 = "02q2gbsqwk3hf9kvzz58a5bxmlb4cfr2mzy41wdvbxxdm2pcl101";
   };
 
   buildInputs = [ SDL alsaLib cmake fftw jackaudio libogg
