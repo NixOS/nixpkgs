@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, boost, cmake, fftwSinglePrec, fltk
+{ stdenv, fetchurl, alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk
 , jackaudio, libsndfile, mesa, minixml, pkgconfig, zlib
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [
-    alsaLib boost fftwSinglePrec fltk jackaudio libsndfile mesa
+    alsaLib boost cairo fftwSinglePrec fltk jackaudio libsndfile mesa
     minixml zlib
   ];
 
