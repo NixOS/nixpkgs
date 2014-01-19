@@ -2271,6 +2271,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   # pass it explicitly in rare circumstances.
   time = null;
 
+  timezoneOlson = callPackage ../development/libraries/haskell/timezone-olson {};
+
+  timezoneSeries = callPackage ../development/libraries/haskell/timezone-series {};
+
   timeCompat = callPackage ../development/libraries/haskell/time-compat {};
 
   tls = callPackage ../development/libraries/haskell/tls {};
