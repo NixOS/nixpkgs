@@ -22,12 +22,12 @@ stdenv.mkDerivation {
   '';
 
   # Modify the snapshot compiler so that is can be executed
-  preBuild = ''
+  preBuild = if stdenv.isLinux then ''
     make x86_64-unknown-linux-gnu/stage0/bin/rustc
     patchelf --interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
              --set-rpath ${stdenv.gcc.gcc}/lib/ \
              x86_64-unknown-linux-gnu/stage0/bin/rustc
-  '';
+  '' else null;
 
   # rustc requires cc
   postInstall = ''
