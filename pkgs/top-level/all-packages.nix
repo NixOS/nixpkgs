@@ -5220,6 +5220,8 @@ let
     ccrtp = ccrtp_1_8;
   };
 
+  libwacom = callPackage ../development/libraries/libwacom { };
+
   lightning = callPackage ../development/libraries/lightning { };
 
   lirc = callPackage ../development/libraries/lirc { };
