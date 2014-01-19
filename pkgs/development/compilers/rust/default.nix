@@ -1,6 +1,23 @@
 {stdenv, fetchurl, which, file, perl, curl, python27, makeWrapper}:
 
-let snapshotName = "rust-stage0-2014-01-05-a6d3e57-linux-x86_64-aa8fbbacdb1d8a078f3a3fe3478dcbc506bd4090.tar.bz2"; in
+with if stdenv.system == "i686-linux" then {
+  platform = "linux-i386";
+  snapshot = "03e60be1f1b90dddd15f3597bc45ec8d9626b35d";
+  snapshot_sha = "1v1l082gj7d2d4p53xgsxz2k965jcgqhw4cyxmjxc6yh5fw0idx6";
+  target = "i386-unknown-linux-gnu";
+} else if stdenv.system == "x86_64-linux" then {
+  platform = "linux-x86_64";
+  snapshot = "aa8fbbacdb1d8a078f3a3fe3478dcbc506bd4090";
+  snapshot_sha = "17inc23jpznqp0vnskvznm74mm24c1nffhz2bkadhvp2ww0vpjjx";
+  target = "x86_64-unknown-linux-gnu";
+} else if stdenv.system == "x86_64-darwin" then {
+  platform = "macos-x86_64";
+  snapshot = "ec746585cb20d1f9edffec74f6ff8be6e93a75f7";
+  snapshot_sha = "0r8f8x3x8jb1hm40pbgj4i9ll2y5dgjgvj24qg7mp4crbqcqhkd2";
+} else {};
+let snapshotDate = "2014-01-05";
+    snapshotRev = "a6d3e57";
+    snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2"; in
 stdenv.mkDerivation {
   name = "rust-0.9";
 
@@ -12,7 +29,7 @@ stdenv.mkDerivation {
   # We need rust to build rust. If we don't provide it, configure will try to download it
   snapshot = fetchurl {
     url = "http://static.rust-lang.org/stage0-snapshots/${snapshotName}";
-    sha256 = "17inc23jpznqp0vnskvznm74mm24c1nffhz2bkadhvp2ww0vpjjx";
+    sha256 = snapshot_sha;
   };
 
   # Put the snapshot where it is expected
@@ -23,10 +40,10 @@ stdenv.mkDerivation {
 
   # Modify the snapshot compiler so that is can be executed
   preBuild = if stdenv.isLinux then ''
-    make x86_64-unknown-linux-gnu/stage0/bin/rustc
-    patchelf --interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
+    make ${target}/stage0/bin/rustc
+    patchelf --interpreter ${stdenv.glibc}/lib/${stdenv.gcc.dynamicLinker} \
              --set-rpath ${stdenv.gcc.gcc}/lib/ \
-             x86_64-unknown-linux-gnu/stage0/bin/rustc
+             ${target}/stage0/bin/rustc
   '' else null;
 
   # rustc requires cc
