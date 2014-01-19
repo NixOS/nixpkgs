@@ -5,11 +5,11 @@ assert stdenv ? glibc;
 
 stdenv.mkDerivation  rec {
   name = "yoshimi-${version}";
-  version = "0.060.12";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/yoshimi/${name}.tar.bz2";
-    sha256 = "14javywkw6af9z9c7jr06rzdgzncyaz2ab6f0v0k6bgdndlcgslc";
+    sha256 = "0rb0q0bqsaaj3imdjgfaigj1kbjqkx1gm91nh2mdgy9i09rygsbv";
   };
 
   buildInputs = [ alsaLib boost fftwSinglePrec fltk jackaudio libsndfile mesa
