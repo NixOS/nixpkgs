@@ -1,5 +1,6 @@
 { stdenv, fetchurl, alsaLib, boost, cmake, fftwSinglePrec, fltk
-, jackaudio, libsndfile, mesa, minixml, pkgconfig, zlib }:
+, jackaudio, libsndfile, mesa, minixml, pkgconfig, zlib
+}:
 
 assert stdenv ? glibc;
 
@@ -12,8 +13,11 @@ stdenv.mkDerivation  rec {
     sha256 = "0rb0q0bqsaaj3imdjgfaigj1kbjqkx1gm91nh2mdgy9i09rygsbv";
   };
 
-  buildInputs = [ alsaLib boost fftwSinglePrec fltk jackaudio libsndfile mesa
-    minixml zlib ];
+  buildInputs = [
+    alsaLib boost fftwSinglePrec fltk jackaudio libsndfile mesa
+    minixml zlib
+  ];
+
   nativeBuildInputs = [ cmake pkgconfig ];
 
   preConfigure = "cd src";
