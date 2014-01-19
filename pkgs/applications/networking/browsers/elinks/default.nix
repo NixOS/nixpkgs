@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     ''
       --enable-finger --enable-html-highlight
       --with-perl --with-python --enable-gopher --enable-cgi --enable-bittorrent
+      --with-spidermonkey=${spidermonkey}
       --enable-nntp --with-openssl=${openssl}
     '' + stdenv.lib.optionalString enableGuile " --with-guile";
 
