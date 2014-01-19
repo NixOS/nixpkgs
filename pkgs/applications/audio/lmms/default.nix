@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, SDL, alsaLib, cmake, fftw, jackaudio, libogg,
-libsamplerate, libsndfile, pkgconfig, pulseaudio, qt4 }:
+{ stdenv, fetchurl, SDL, alsaLib, cmake, fftwSinglePrec, jackaudio, libogg
+, libsamplerate, libsndfile, pkgconfig, pulseaudio, qt4
+}:
 
 stdenv.mkDerivation  rec {
   name = "lmms-${version}";
@@ -10,8 +11,10 @@ stdenv.mkDerivation  rec {
     sha256 = "02q2gbsqwk3hf9kvzz58a5bxmlb4cfr2mzy41wdvbxxdm2pcl101";
   };
 
-  buildInputs = [ SDL alsaLib cmake fftw jackaudio libogg
-    libsamplerate libsndfile pkgconfig pulseaudio qt4 ];
+  buildInputs = [
+    SDL alsaLib cmake fftwSinglePrec jackaudio libogg libsamplerate
+    libsndfile pkgconfig pulseaudio qt4
+  ];
 
   meta = with stdenv.lib; {
     description = "Linux MultiMedia Studio";
