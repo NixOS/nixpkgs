@@ -1,5 +1,6 @@
 { stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
 , docbook_xml_xslt, pkgconfig, luajit
+, gzip, bzip2, xz
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt pkgconfig luajit
   ];
+
+  postPatch = ''
+    sed -e 's|"gzip"|"${gzip}/bin/gzip"|' \
+        -e 's|"bzip2"|"${bzip2}/bin/bzip2"|' \
+        -e 's|"xz"|"${xz}/bin/xz"|' \
+        -i ui-snapshot.c
+  '';
 
   # Give cgit a git source tree and pass configuration parameters (as make
   # variables).
