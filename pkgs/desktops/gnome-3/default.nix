@@ -24,6 +24,8 @@ rec {
 
   gconf = callPackage ./core/gconf { };
 
+  geocode_glib = callPackage ./core/geocode-glib { };
+
   gcr = callPackage ./core/gcr { }; # ToDo: tests fail
 
   gdm = callPackage ./core/gdm { };
