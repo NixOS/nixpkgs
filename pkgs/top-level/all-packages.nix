@@ -3743,7 +3743,9 @@ let
 
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
-  xxdiff = callPackage ../development/tools/misc/xxdiff { };
+  xxdiff = callPackage ../development/tools/misc/xxdiff {
+    bison = bison2;
+  };
 
   yacc = bison;
 
@@ -5378,6 +5380,7 @@ let
     cups = if stdenv.isLinux then cups else null;
     # GNOME dependencies are not used unless gtkStyle == true
     inherit (gnome) libgnomeui GConf gnome_vfs;
+    bison = bison2; # error: too few arguments to function 'int yylex(...
   };
 
   qt5Full = qt5.override {
