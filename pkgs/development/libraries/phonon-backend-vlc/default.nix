@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xz, qt4, vlc, automoc4, cmake, phonon }:
+{ stdenv, fetchurl, xz, qt4, vlc, automoc4, cmake, pkgconfig, phonon }:
 
 let
   pname = "phonon-backend-vlc";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "1rhzc3d188l6ygxgfxwikscj71pyy0nchzikvkkq465r9ajavdgd";
   };
 
-  nativeBuildInputs = [ cmake automoc4 xz ];
+  nativeBuildInputs = [ cmake pkgconfig automoc4 xz ];
 
   buildInputs = [ qt4 vlc_ phonon ];
 
