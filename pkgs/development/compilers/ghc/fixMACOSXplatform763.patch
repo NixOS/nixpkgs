@@ -1,0 +1,16 @@
+diff -Naur a/configure b/configure
+--- a/configure	2013-04-19 00:47:00.000000000 +0200
++++ b/configure	2014-01-10 11:50:13.000000000 +0100
+@@ -4840,9 +4840,9 @@
+   fi
+ fi
+ 
+-
+-
+-
++MACOSX_DEPLOYMENT_VERSION=10.9
++FP_MACOSX_DEPLOYMENT_TARGET=10.9
++MACOSX_DEPLOYMENT_SDK=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${MACOSX_DEPLOYMENT_VERSION}.sdk
+ 
+ 
+ 

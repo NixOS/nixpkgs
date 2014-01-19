@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/gmp/${name}.tar.bz2";
     sha256 = "0x8prpqi9amfcmi7r4zrza609ai9529pjaq0h4aw51i867064qck";
   };
-
+  patches = [ ./darwinPlatform432.patch ];
   nativeBuildInputs = [ m4 ];
 
   # Prevent the build system from using sub-architecture-specific
@@ -16,10 +16,17 @@ stdenv.mkDerivation rec {
   # This is not a problem for Apple machines, which are all alike.  In
   # addition, `configfsf.guess' would return `i386-apple-darwin10.2.0' on
   # `x86_64-darwin', leading to a 32-bit ABI build, which is undesirable.
+  patchPlatformBuild = if !stdenv.isDarwin then "$ac_cv_build" else ''"x86_64-apple-darwin13.0.0"'';
+  patchPlatformHost = if !stdenv.isDarwin then "$ac_cv_host" else ''"x86_64-apple-darwin13.0.0"'';
+
   preConfigure =
     if !stdenv.isDarwin
     then "ln -sf configfsf.guess config.guess"
-    else ''echo "Darwin host is `./config.guess`."'';
+    else ''
+      substituteInPlace configure --replace "/usr/bin/" ""
+      substituteInPlace configure --subst-var patchPlatformBuild --subst-var patchPlatformHost
+      echo "Darwin host is `./config.guess`."'';
+     
 
   configureFlags = if cxx then "--enable-cxx" else "--disable-cxx";
 

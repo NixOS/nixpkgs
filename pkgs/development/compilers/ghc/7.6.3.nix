@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     url = "http://haskell.org/ghc/dist/${version}/${name}-src.tar.bz2";
     sha256 = "1669m8k9q72rpd2mzs0bh2q6lcwqiwd1ax3vrard1dgn64yq4hxx";
   };
-
+  patches = [ ./fixMACOSXplatform763.patch ];
   buildInputs = [ ghc perl gmp ncurses ];
 
   enableParallelBuilding = true;
@@ -19,10 +19,14 @@ stdenv.mkDerivation rec {
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
   '';
 
-  preConfigure = ''
+  preConfigure = if !stdenv.isDarwin then ''
     echo "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
+  ''
+  else ''   
+    echo "${buildMK}" > mk/build.mk
+    sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '';
 
   configureFlags = "--with-gcc=${stdenv.gcc}/bin/gcc";
