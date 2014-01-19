@@ -35,6 +35,7 @@
   ktosiek = "Tomasz Kontusz <tomasz.kontusz@gmail.com>";
   lovek323 = "Jason O'Conal <jason@oconal.id.au>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
+  madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   matejc = "Matej Cotman <cotman.matej@gmail.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
