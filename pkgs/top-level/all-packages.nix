@@ -1833,6 +1833,8 @@ let
 
   silc_server = callPackage ../servers/silc-server { };
 
+  silver-searcher = callPackage ../tools/text/silver-searcher { };
+
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   slimrat = callPackage ../tools/networking/slimrat {
