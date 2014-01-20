@@ -13,10 +13,11 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = {
+    homepage = http://fricas.sourceforge.net/;
     description = "Fricas CAS";
-    homepage    = http://fricas.sourceforge.net/;
+    license = stdenv.lib.licenses.bsd3;
+
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = stdenv.lib.maintainers.sprock;
-    platforms   = stdenv.lib.platforms.linux;
-    license     = stdenv.lib.license.bsd3;
   };
 }
