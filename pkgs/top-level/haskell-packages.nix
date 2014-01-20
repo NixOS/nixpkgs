@@ -800,6 +800,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   cookie = callPackage ../development/libraries/haskell/cookie {};
 
+  coroutineObject = callPackage ../development/libraries/haskell/coroutine-object {};
+
   cprngAes = callPackage ../development/libraries/haskell/cprng-aes {};
 
   criterion = callPackage ../development/libraries/haskell/criterion {};
@@ -1324,6 +1326,18 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
 
   hoauth = callPackage ../development/libraries/haskell/hoauth {};
+
+  hoodle = callPackage ../applications/graphics/hoodle {};
+
+  hoodleBuilder = callPackage ../development/libraries/haskell/hoodle-builder {};
+
+  hoodleCore = callPackage ../development/libraries/haskell/hoodle-core {}; 
+
+  hoodleParser = callPackage ../development/libraries/haskell/hoodle-parser {}; 
+
+  hoodleRender = callPackage ../development/libraries/haskell/hoodle-render {}; 
+
+  hoodleTypes = callPackage ../development/libraries/haskell/hoodle-types {}; 
 
   hoogle = callPackage ../development/libraries/haskell/hoogle {};
 
@@ -2292,6 +2306,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   transformersCompat = callPackage ../development/libraries/haskell/transformers-compat {};
 
+  transformersFree = callPackage ../development/libraries/haskell/transformers-free {};
+
   traverseWithClass = callPackage ../development/libraries/haskell/traverse-with-class {};
 
   trifecta_1_1 = callPackage ../development/libraries/haskell/trifecta/1.1.nix {
@@ -2301,6 +2317,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   trifecta = self.trifecta_1_2;
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
+
+  TypeCompose = callPackage ../development/libraries/haskell/TypeCompose {};
 
   typeEq = callPackage ../development/libraries/haskell/type-eq {};
 
@@ -2480,6 +2498,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   xmlhtml = callPackage ../development/libraries/haskell/xmlhtml {};
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
+
+  xournalParser = callPackage ../development/libraries/haskell/xournal-parser {};
+
+  xournalTypes = callPackage ../development/libraries/haskell/xournal-types {};
 
   xtest = callPackage ../development/libraries/haskell/xtest {};
 
