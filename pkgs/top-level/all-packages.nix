@@ -2851,11 +2851,14 @@ let
     else
       let
         openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix { };
-      in callPackage ../development/compilers/openjdk {
+      in (callPackage ../development/compilers/openjdk {
         jdk = openjdkBootstrap;
-      };
+      }) // { outputs = [ "out" ]; };
 
-  openjre = pkgs.openjdk.jre;
+  # FIXME: Need a way to set per-output meta attributes.
+  openjre = (lib.setName "openjre-${lib.getVersion pkgs.openjdk.jre}" (lib.addMetaAttrs
+    { description = "The open-source Java Runtime Environment"; }
+    pkgs.openjdk.jre)) // { outputs = [ "jre" ]; };
 
   jdk = if stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
     then pkgs.openjdk
