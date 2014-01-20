@@ -7713,8 +7713,9 @@ let
   keepassx = callPackage ../applications/misc/keepassx { };
 
   inherit (gnome3) evince;
+  evolution_data_server = gnome3.evolution_data_server;
+
   keepass = callPackage ../applications/misc/keepass { };
-  evolution_data_server = newScope (gnome) ../servers/evolution-data-server { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay {
     fltk = fltk20;

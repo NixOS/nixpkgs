@@ -24,6 +24,8 @@ rec {
 
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
+  evolution_data_server = callPackage ./core/evolution-data-server { };
+
   gconf = callPackage ./core/gconf { };
 
   geocode_glib = callPackage ./core/geocode-glib { };
