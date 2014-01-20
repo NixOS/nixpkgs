@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   patches = [ ./cmake.patch ];
   patchFlags = "-p0";
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = "http://root.cern.ch/drupal/";
     description = "A data analysis framework";
