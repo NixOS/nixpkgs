@@ -58,6 +58,7 @@
   shlevy = "Shea Levy <shea@shealevy.com>";
   simons = "Peter Simons <simons@cryp.to>";
   smironov = "Sergey Mironov <ierton@gmail.com>";
+  sprock = "Roger Mason <rmason@mun.ca>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
