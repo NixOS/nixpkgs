@@ -32,6 +32,8 @@ rec {
 
   gdm = callPackage ./core/gdm { };
 
+  gjs = callPackage ./core/gjs { };
+
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };
 
   gnome-menus = callPackage ./core/gnome-menus { };

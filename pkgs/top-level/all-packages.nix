@@ -3403,6 +3403,7 @@ let
   spidermonkey = callPackage ../development/interpreters/spidermonkey { };
   spidermonkey_1_8_0rc1 = callPackage ../development/interpreters/spidermonkey/1.8.0-rc1.nix { };
   spidermonkey_185 = callPackage ../development/interpreters/spidermonkey/185-1.0.0.nix { };
+  spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.0.nix { };
 
   supercollider = callPackage ../development/interpreters/supercollider {
     qt = qt4;
