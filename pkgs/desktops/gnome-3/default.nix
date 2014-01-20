@@ -61,6 +61,8 @@ rec {
 
   libgee = callPackage ./core/libgee { };
 
+  libgdata = callPackage ./core/libgdata { };
+
   libgxps = callPackage ./core/libgxps { };
 
   libpeas = callPackage ./core/libpeas {};

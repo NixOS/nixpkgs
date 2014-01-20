@@ -1266,6 +1266,8 @@ let
 
   libestr = callPackage ../development/libraries/libestr { };
 
+  liboauth = callPackage ../development/libraries/liboauth { };
+
   libtirpc = callPackage ../development/libraries/ti-rpc { };
 
   libshout = callPackage ../development/libraries/libshout { };
@@ -4615,8 +4617,7 @@ let
 
   libgadu = callPackage ../development/libraries/libgadu { };
 
-  libgdata = (newScope gnome) ../development/libraries/libgdata {};
-  libgdata_0_6 = (newScope gnome) ../development/libraries/libgdata/0.6.nix {};
+  libgdata = gnome3.libgdata;
 
   libgig = callPackage ../development/libraries/libgig { };
 
