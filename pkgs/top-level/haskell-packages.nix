@@ -2219,6 +2219,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   tastyQuickcheck = callPackage ../development/libraries/haskell/tasty-quickcheck {};
 
+  tastyRerun = callPackage ../development/libraries/haskell/tasty-rerun {};
+
   tastySmallcheck = callPackage ../development/libraries/haskell/tasty-smallcheck {};
 
   tastyTh = callPackage ../development/libraries/haskell/tasty-th {};
