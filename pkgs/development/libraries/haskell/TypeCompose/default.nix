@@ -4,7 +4,6 @@ cabal.mkDerivation (self: {
   pname = "TypeCompose";
   version = "0.9.9";
   sha256 = "0i89r1yaglkcc1fdhn0m4hws5rqcpmkg32ddznch7a3rz1l9gqwg";
-  buildDepends = [ ];
   meta = {
     homepage = "https://github.com/conal/TypeCompose";
     description = "Type composition classes & instances";
