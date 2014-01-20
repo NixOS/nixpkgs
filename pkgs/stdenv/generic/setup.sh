@@ -768,7 +768,7 @@ fixupPhase() {
         done
         for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
             if [ -L "$f" -a -f `readlink -f "$f"`.gz ]; then
-                ln -sf `readlink "$f"`.gz "$f"
+                ln -sf `readlink "$f"`.gz "$f".gz && rm "$f"
             fi
         done
         unset GLOBIGNORE
