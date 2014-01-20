@@ -9851,25 +9851,6 @@ let
 
   ### SCIENCE
 
-  celestia = callPackage ../applications/science/astronomy/celestia {
-    lua = lua5_1;
-    inherit (xlibs) libXmu;
-    inherit (pkgs.gnome) gtkglext;
-  };
-
-  xplanet = callPackage ../applications/science/astronomy/xplanet { };
-
-  gravit = callPackage ../applications/science/astronomy/gravit { };
-
-  spyder = callPackage ../applications/science/spyder {
-    inherit (pythonPackages) pyflakes rope sphinx numpy scipy matplotlib; # recommended
-    inherit (pythonPackages) ipython pep8; # optional
-    inherit pylint;
-  };
-
-  stellarium = callPackage ../applications/science/astronomy/stellarium { };
-
-
   ### SCIENCE/GEOMETRY
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
@@ -10058,6 +10039,8 @@ let
 
   eukleides = callPackage ../applications/science/math/eukleides { };
 
+  fricas = callPackage ../applications/science/math/fricas { };
+
   gap = callPackage ../applications/science/math/gap { };
 
   maxima = callPackage ../applications/science/math/maxima { };
@@ -10103,14 +10086,33 @@ let
 
   boinc = callPackage ../applications/science/misc/boinc { };
 
+  celestia = callPackage ../applications/science/astronomy/celestia {
+    lua = lua5_1;
+    inherit (xlibs) libXmu;
+    inherit (pkgs.gnome) gtkglext;
+  };
+
+  gravit = callPackage ../applications/science/astronomy/gravit { };
+
   golly = callPackage ../applications/science/misc/golly { };
 
+  root = callPackage ../applications/science/misc/root { };
+
   simgrid = callPackage ../applications/science/misc/simgrid { };
+
+  spyder = callPackage ../applications/science/spyder {
+    inherit (pythonPackages) pyflakes rope sphinx numpy scipy matplotlib; # recommended
+    inherit (pythonPackages) ipython pep8; # optional
+    inherit pylint;
+  };
+
+  stellarium = callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip { };
 
   vite = callPackage ../applications/science/misc/vite { };
 
+  xplanet = callPackage ../applications/science/astronomy/xplanet { };
 
   ### MISC
 
