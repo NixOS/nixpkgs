@@ -1193,6 +1193,7 @@ let
   ised = callPackage ../tools/misc/ised {};
 
   isl = callPackage ../development/libraries/isl { };
+  isl_0_12 = callPackage ../development/libraries/isl/0.12.2.nix { };
 
   isync = callPackage ../tools/networking/isync { };
 
@@ -2298,18 +2299,10 @@ let
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
-  clangUnwrapped = callPackage ../development/compilers/llvm/clang.nix {
-    stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideGCC stdenv gccApple
-      else stdenvAdapters.overrideGCC stdenv gcc47;
-  };
+  clang = wrapClang llvmFull;
 
-  clang = wrapClang clangUnwrapped;
-
-  libcxxLLVM = callPackage ../development/compilers/llvm { stdenv = libcxxStdenv; version="3.3"; };
-  clangSelf = clangWrapSelf (callPackage ../development/compilers/llvm/clang.nix {
+  llvmFullSelf = clangWrapSelf (llvmFull.override {
      stdenv = libcxxStdenv;
-     llvm = libcxxLLVM;
   });
 
   clangWrapSelf = build: (import ../build-support/clang-wrapper) {
@@ -2325,7 +2318,7 @@ let
 
   #Use this instead of stdenv to build with clang
   clangStdenv = lowPrio (stdenvAdapters.overrideGCC stdenv clang);
-  libcxxStdenv = stdenvAdapters.overrideGCC stdenv (clangWrapSelf clangUnwrapped);
+  libcxxStdenv = stdenvAdapters.overrideGCC stdenv (clangWrapSelf llvmFull);
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -2918,6 +2911,10 @@ let
       else stdenv;
   };
   llvm_33 = llvm_34.override { version = "3.3"; };
+  llvmFull = callPackage ../development/compilers/llvm/full.nix {
+    stdenv = stdenvAdapters.overrideGCC stdenv gcc47;
+    isl = isl_0_12;
+  };
 
   mentorToolchains = recurseIntoAttrs (
     callPackage_i686 ../development/compilers/mentor {}
@@ -3170,9 +3167,9 @@ let
   };
 
   wrapClangWith = clangWrapper: glibc: baseClang: clangWrapper {
-    nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
-    nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
-    nativePrefix = if stdenv ? gcc then stdenv.gcc.nativePrefix else "";
+    nativeTools = stdenv.gcc.nativeTools or false;
+    nativeLibc = stdenv.gcc.nativeLibc or false;
+    nativePrefix = stdenv.gcc.nativePrefix or "";
     clang = baseClang;
     libc = glibc;
     shell = bash;
@@ -3620,6 +3617,7 @@ let
   csslint = callPackage ../development/web/csslint { };
 
   libcxx = callPackage ../development/libraries/libc++ { stdenv = pkgs.clangStdenv; };
+  libcxxabi = callPackage ../development/libraries/libc++abi { stdenv = pkgs.clangStdenv; };
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
@@ -4131,7 +4129,7 @@ let
 
   dssi = callPackage ../development/libraries/dssi {};
 
-  dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix { };
+  dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix { llvm = llvmFull; stdenv = overrideGCC stdenv gcc47; };
 
   dxflib = callPackage ../development/libraries/dxflib {};
 

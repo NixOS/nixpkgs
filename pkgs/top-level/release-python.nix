@@ -153,7 +153,6 @@ let
   cinepaint = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ciopfs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clang = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  clangUnwrapped = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clanlib = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   classpath = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clearsilver = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
