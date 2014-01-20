@@ -5,11 +5,11 @@
 assert enableGuile -> guile != null;
 
 stdenv.mkDerivation rec {
-  name = "elinks-0.12pre5";
+  name = "elinks-0.12pre6";
 
   src = fetchurl {
-    url = http://elinks.or.cz/download/elinks-0.12pre5.tar.bz2;
-    sha256 = "1li4vlbq8wvnigxlkzb15490y90jg6y9yzzrqpqcz2h965w5869d";
+    url = http://elinks.or.cz/download/elinks-0.12pre6.tar.bz2;
+    sha256 = "1nnakbi01g7yd3zqwprchh5yp45br8086b0kbbpmnclabcvlcdiq";
   };
 
   patches = [ ./gc-init.patch ];
