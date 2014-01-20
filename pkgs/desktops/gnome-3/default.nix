@@ -69,6 +69,8 @@ rec {
 
   libzapojit = callPackage ./core/libzapojit { };
 
+  mutter = callPackage ./core/mutter { };
+
   nautilus = callPackage ./core/nautilus { };
 
   rest = callPackage ./core/rest { };
