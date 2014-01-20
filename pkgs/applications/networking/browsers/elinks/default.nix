@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, ncurses, x11, bzip2, zlib, openssl
 , spidermonkey, gpm
-, enableGuile ? true, guile ? null
+, enableGuile ? false, guile ? null   # Incompatible licenses, LGPLv3 - GPLv2
 , enablePython ? false, python ? null
 }:
 
@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Full-featured text-mode web browser";
     homepage = http://elinks.or.cz;
+    license = "GPLv2";
   };
 }
