@@ -1,10 +1,11 @@
 { stdenv, fetchurl, cmake, mesa, libX11, gfortran, libXpm, libXft, libXext, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "root_v5.34.14";
+  name = "root-${version}";
+  version = "5.34.14";
 
   src = fetchurl {
-    url = "ftp://root.cern.ch/root/${name}.source.tar.gz";
+    url = "ftp://root.cern.ch/root/root_v${version}.source.tar.gz";
     sha256 = "d5347ba1b614eb083cf08050b784d66a93c125ed89938708da1adb33323dee2b";
   };
 
@@ -17,8 +18,8 @@ stdenv.mkDerivation rec {
   patchFlags = "-p0";
 
   meta = {
+    homepage = "http://root.cern.ch/drupal/";
     description = "A data analysis framework";
-    #maintainers = [ stdenv.lib.maintainers.urkud ];
     platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }
