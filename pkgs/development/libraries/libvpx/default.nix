@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     [ "--disable-install-srcs" "--disable-install-docs" "--disable-examples"
       "--enable-vp8" "--enable-runtime-cpu-detect" "--enable-pic" ]
     # --enable-shared is only supported on ELF
-    ++ stdenv.lib.optional (!stdenv.isDarwin) "--enable-shared";
+    ++ stdenv.lib.optional (!stdenv.isDarwin) "--disable-static --enable-shared";
 
   installPhase = ''
     make quiet=false DIST_DIR=$out install
