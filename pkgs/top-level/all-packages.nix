@@ -9985,7 +9985,8 @@ let
 
   emacs = emacs24;
   emacsPackages = emacs24Packages;
-  emacsMelpa = emacs24Melpa;
+  emacsPackagesNg = emacs24PackagesNg;
+  emacsMelpa = emacs24PackagesNg; # for backward compatibility
 
   emacs24 = callPackage ../applications/editors/emacs-24 {
     # use override to enable additional features
@@ -10173,14 +10174,25 @@ let
 
   emacs24Packages = recurseIntoAttrs (emacsPackagesGen emacs24 pkgs.emacs24Packages);
 
-  emacsMelpaGen = emacs: import ./emacs-packages.nix {
-    inherit stdenv pkgs fetchurl fetchgit fetchFromGitHub emacs texinfo;
+  emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
+    overrides = (config.emacsPackageOverrides or (p: {})) pkgs;
+
+    inherit lib stdenv fetchurl fetchgit fetchFromGitHub emacs;
+
+    trivialBuild = import ../build-support/emacs/trivial.nix {
+      inherit lib stdenv emacs texinfo;
+    };
+
+    melpaBuild = import ../build-support/emacs/melpa.nix {
+      inherit lib stdenv fetchurl emacs texinfo;
+    };
+
     external = {
       inherit (haskellngPackages) ghc-mod structured-haskell-mode;
     };
   };
 
-  emacs24Melpa = emacsMelpaGen emacs24;
+  emacs24PackagesNg = emacsPackagesNgGen emacs24;
 
   inherit (gnome3) empathy;
 

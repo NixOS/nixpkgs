@@ -1,27 +1,37 @@
-{ pkgs, stdenv, fetchurl, fetchFromGitHub, fetchgit
-, emacs, texinfo
-
-# non-emacs packages
-, external
-}:
-
 # package.el-based emacs packages
-
-## init.el
+#
+## add this at the start your init.el:
 # (require 'package)
-# (setq package-archives nil
-#       package-user-dir "~/.nix-profile/share/emacs/site-lisp/elpa")
+#
+# ;; optional. makes unpure packages archives unavailable
+# (setq package-archives nil)
+#
+# (add-to-list 'package-directory-list "/run/current-system/sw/share/emacs/site-lisp/elpa")
+#
+# ;; optional. use this if you install emacs packages to user profiles (with nix-env)
+# (add-to-list 'package-directory-list "~/.nix-profile/share/emacs/site-lisp/elpa")
+#
 # (package-initialize)
 
-with stdenv.lib.licences;
+{ overrides
 
-let
-  melpaBuild = import ../build-support/emacs/melpa.nix {
-    inherit stdenv fetchurl emacs texinfo;
-  };
-in
+, lib, stdenv, fetchurl, fetchgit, fetchFromGitHub
 
-rec {
+, emacs
+, trivialBuild
+, melpaBuild
+
+, external
+}@args:
+
+with lib.licences;
+
+let self = _self // overrides;
+    callPackage = lib.callPackageWith (self // removeAttrs args ["overrides" "external"]);
+    _self = with self; {
+
+  ## START HERE
+
   ac-haskell-process = melpaBuild rec {
     pname   = "ac-haskell-process";
     version = "0.5";
@@ -100,7 +110,7 @@ rec {
       description = "Auto-complete extension for Emacs";
       homepage = http://cx4a.org/software/auto-complete/;
       license = gpl3Plus;
-      platforms = stdenv.lib.platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -709,7 +719,7 @@ rec {
       rev    = "4cb2ced1eda5167ce774e04657d2cd077b63c706";
       sha256 = "003sihp7irm0qqba778dx0gf8xhkxd1xk7ig5kgkryvl2jyirk28";
     };
-    postPatch = stdenv.lib.optionalString (!stdenv.isLinux) ''
+    postPatch = lib.optionalString (!stdenv.isLinux) ''
       rm weechat-sauron.el weechat-secrets.el
     '';
     packageRequires = [ s ];
@@ -727,4 +737,5 @@ rec {
     };
     meta = { licence = gpl3Plus; };
   };
-}
+
+}; in self
