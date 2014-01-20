@@ -1,8 +1,11 @@
-{ stdenv, fetchurl, python, perl, ncurses, x11, bzip2, zlib, openssl
+{ stdenv, fetchurl, perl, ncurses, x11, bzip2, zlib, openssl
 , spidermonkey, gpm
-, enableGuile ? true, guile ? null }:
+, enableGuile ? true, guile ? null
+, enablePython ? false, python ? null
+}:
 
 assert enableGuile -> guile != null;
+assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   name = "elinks-0.12pre6";
@@ -14,16 +17,18 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gc-init.patch ];
 
-  buildInputs = [ python perl ncurses x11 bzip2 zlib openssl spidermonkey gpm ]
-    ++ stdenv.lib.optional enableGuile guile;
+  buildInputs = [ perl ncurses x11 bzip2 zlib openssl spidermonkey gpm ]
+    ++ stdenv.lib.optional enableGuile guile
+    ++ stdenv.lib.optional enablePython python;
 
   configureFlags =
     ''
       --enable-finger --enable-html-highlight
-      --with-perl --with-python --enable-gopher --enable-cgi --enable-bittorrent
+      --with-perl --enable-gopher --enable-cgi --enable-bittorrent
       --with-spidermonkey=${spidermonkey}
       --enable-nntp --with-openssl=${openssl}
-    '' + stdenv.lib.optionalString enableGuile " --with-guile";
+    '' + stdenv.lib.optionalString enableGuile " --with-guile"
+    + stdenv.lib.optionalString enablePython " --with-python";
 
   crossAttrs = {
     propagatedBuildInputs = [ ncurses.crossDrv zlib.crossDrv openssl.crossDrv ];
