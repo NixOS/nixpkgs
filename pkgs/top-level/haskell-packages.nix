@@ -522,7 +522,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   abstractPar = callPackage ../development/libraries/haskell/abstract-par {};
 
-  aeson = callPackage ../development/libraries/haskell/aeson {};
+  aeson_0_6_2_1 = callPackage ../development/libraries/haskell/aeson/0.6.2.1.nix {};
+  aeson_0_7_0_0 = callPackage ../development/libraries/haskell/aeson/0.7.0.0.nix {};
+  aeson = self.aeson_0_6_2_1;
 
   aesonLens = callPackage ../development/libraries/haskell/aeson-lens {};
 
