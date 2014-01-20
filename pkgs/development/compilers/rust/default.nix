@@ -1,5 +1,19 @@
 {stdenv, fetchurl, which, file, perl, curl, python27, makeWrapper}:
 
+/* Rust's build process has a few quirks :
+
+- It requires some patched in llvm that haven't landed upstream, so it
+  compiles its own llvm. This might change in the future, so at some
+  point we may be able to switch to nix's llvm.
+
+- The Rust compiler is written is Rust, so it requires a bootstrap
+  compiler, which is downloaded during the build. To make the build
+  pure, we download it ourself before and put it where it is
+  expected. Once the language is stable (1.0) , we might want to
+  switch it to use nix's packaged rust compiler.
+
+*/
+
 with if stdenv.system == "i686-linux" then {
   platform = "linux-i386";
   snapshot = "03e60be1f1b90dddd15f3597bc45ec8d9626b35d";
@@ -38,6 +52,14 @@ stdenv.mkDerivation {
     ln -s $snapshot $sourceRoot/dl/${snapshotName}
   '';
 
+  # The compiler requires cc, so we patch the source to tell it where to find it
+  patches = [ ./hardcode_paths.patch ];
+  postPatch = ''
+    substituteInPlace src/librustc/back/link.rs \
+      --subst-var-by "gccPath" ${stdenv.gcc}/bin/cc \
+      --subst-var-by "binutilsPath" ${stdenv.gcc.binutils}/bin/ar
+  '';
+
   # Modify the snapshot compiler so that is can be executed
   preBuild = if stdenv.isLinux then ''
     make ${target}/stage0/bin/rustc
@@ -45,13 +67,6 @@ stdenv.mkDerivation {
              --set-rpath ${stdenv.gcc.gcc}/lib/ \
              ${target}/stage0/bin/rustc
   '' else null;
-
-  # rustc requires cc
-  postInstall = ''
-    for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : "${stdenv.gcc}/bin"
-    done
-  '';
 
   buildInputs = [ which file perl curl python27 makeWrapper ];
   enableParallelBuilding = true;
