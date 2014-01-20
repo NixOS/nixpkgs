@@ -143,7 +143,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     inherit (self) cabal ghc;
     async        = self.async_2_0_1_5;
     attoparsec   = self.attoparsec_0_11_1_0;
-    caseInsensitive = self.caseInsensitive_1_1_0_2;
+    caseInsensitive = self.caseInsensitive_1_1_0_3;
     cgi          = self.cgi_3001_1_8_4;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_5_0_2;
@@ -176,7 +176,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     cabalInstall = self.cabalInstall_1_18_0_2;
     alex         = self.alex_3_1_3;
     haddock      = self.haddock_2_13_2_1;
-    happy        = self.happy_1_19_2;
+    happy        = self.happy_1_19_3;
     primitive    = self.primitive_0_5_1_0;      # semi-official, but specified
   };
 
@@ -522,7 +522,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   abstractPar = callPackage ../development/libraries/haskell/abstract-par {};
 
-  aeson = callPackage ../development/libraries/haskell/aeson {};
+  aeson_0_6_2_1 = callPackage ../development/libraries/haskell/aeson/0.6.2.1.nix {};
+  aeson_0_7_0_0 = callPackage ../development/libraries/haskell/aeson/0.7.0.0.nix {};
+  aeson = self.aeson_0_6_2_1;
 
   aesonLens = callPackage ../development/libraries/haskell/aeson-lens {};
 
@@ -699,8 +701,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cassava = callPackage ../development/libraries/haskell/cassava {};
 
   caseInsensitive_1_0_0_1 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.1.nix {};
-  caseInsensitive_1_1_0_2 = callPackage ../development/libraries/haskell/case-insensitive/1.1.0.2.nix {};
-  caseInsensitive = self.caseInsensitive_1_1_0_2;
+  caseInsensitive_1_1_0_3 = callPackage ../development/libraries/haskell/case-insensitive/1.1.0.3.nix {};
+  caseInsensitive = self.caseInsensitive_1_1_0_3;
 
   cautiousFile = callPackage ../development/libraries/haskell/cautious-file {};
 
@@ -799,6 +801,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   converge = callPackage ../development/libraries/haskell/converge {};
 
   cookie = callPackage ../development/libraries/haskell/cookie {};
+
+  coroutineObject = callPackage ../development/libraries/haskell/coroutine-object {};
 
   cprngAes = callPackage ../development/libraries/haskell/cprng-aes {};
 
@@ -1005,7 +1009,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   eventList = callPackage ../development/libraries/haskell/event-list {};
 
-  exPool = callPackage ../development/libraries/haskell/ex-pool { hashable = self.hashable_1_2_1_0; };
+  exPool = callPackage ../development/libraries/haskell/ex-pool { };
 
   exceptionMtl = callPackage ../development/libraries/haskell/exception-mtl {};
 
@@ -1324,6 +1328,18 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
 
   hoauth = callPackage ../development/libraries/haskell/hoauth {};
+
+  hoodle = callPackage ../applications/graphics/hoodle {};
+
+  hoodleBuilder = callPackage ../development/libraries/haskell/hoodle-builder {};
+
+  hoodleCore = callPackage ../development/libraries/haskell/hoodle-core {}; 
+
+  hoodleParser = callPackage ../development/libraries/haskell/hoodle-parser {}; 
+
+  hoodleRender = callPackage ../development/libraries/haskell/hoodle-render {}; 
+
+  hoodleTypes = callPackage ../development/libraries/haskell/hoodle-types {}; 
 
   hoogle = callPackage ../development/libraries/haskell/hoogle {};
 
@@ -2205,6 +2221,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   tastyQuickcheck = callPackage ../development/libraries/haskell/tasty-quickcheck {};
 
+  tastyRerun = callPackage ../development/libraries/haskell/tasty-rerun {};
+
   tastySmallcheck = callPackage ../development/libraries/haskell/tasty-smallcheck {};
 
   tastyTh = callPackage ../development/libraries/haskell/tasty-th {};
@@ -2265,11 +2283,17 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   thyme = callPackage ../development/libraries/haskell/thyme {};
 
+  threepennyGui = callPackage ../development/libraries/haskell/threepenny-gui {};
+
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
   time_1_4_1 = callPackage ../development/libraries/haskell/time/1.4.1.nix {};
   # time is in the core package set. It should only be necessary to
   # pass it explicitly in rare circumstances.
   time = null;
+
+  timezoneOlson = callPackage ../development/libraries/haskell/timezone-olson {};
+
+  timezoneSeries = callPackage ../development/libraries/haskell/timezone-series {};
 
   timeCompat = callPackage ../development/libraries/haskell/time-compat {};
 
@@ -2286,6 +2310,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   transformersCompat = callPackage ../development/libraries/haskell/transformers-compat {};
 
+  transformersFree = callPackage ../development/libraries/haskell/transformers-free {};
+
   traverseWithClass = callPackage ../development/libraries/haskell/traverse-with-class {};
 
   trifecta_1_1 = callPackage ../development/libraries/haskell/trifecta/1.1.nix {
@@ -2295,6 +2321,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   trifecta = self.trifecta_1_2;
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
+
+  TypeCompose = callPackage ../development/libraries/haskell/TypeCompose {};
 
   typeEq = callPackage ../development/libraries/haskell/type-eq {};
 
@@ -2475,6 +2503,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
 
+  xournalParser = callPackage ../development/libraries/haskell/xournal-parser {};
+
+  xournalTypes = callPackage ../development/libraries/haskell/xournal-types {};
+
   xtest = callPackage ../development/libraries/haskell/xtest {};
 
   xssSanitize = callPackage ../development/libraries/haskell/xss-sanitize {};
@@ -2602,7 +2634,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   happy_1_18_10 = callPackage ../development/tools/parsing/happy/1.18.10.nix {};
   happy_1_18_11 = callPackage ../development/tools/parsing/happy/1.18.11.nix {};
   happy_1_19_2 = callPackage ../development/tools/parsing/happy/1.19.2.nix {};
-  happy = self.happy_1_19_2;
+  happy_1_19_3 = callPackage ../development/tools/parsing/happy/1.19.3.nix {};
+  happy = self.happy_1_19_3;
 
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 

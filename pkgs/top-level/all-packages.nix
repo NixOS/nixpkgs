@@ -1192,6 +1192,7 @@ let
   ised = callPackage ../tools/misc/ised {};
 
   isl = callPackage ../development/libraries/isl { };
+  isl_0_12 = callPackage ../development/libraries/isl/0.12.2.nix { };
 
   isync = callPackage ../tools/networking/isync { };
 
@@ -1277,7 +1278,7 @@ let
 
   logrotate = callPackage ../tools/system/logrotate { };
 
-  logstalgica = callPackage ../tools/graphics/logstalgica {};
+  logstalgia = callPackage ../tools/graphics/logstalgia {};
 
   lout = callPackage ../tools/typesetting/lout { };
 
@@ -1832,6 +1833,8 @@ let
 
   silc_server = callPackage ../servers/silc-server { };
 
+  silver-searcher = callPackage ../tools/text/silver-searcher { };
+
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   slimrat = callPackage ../tools/networking/slimrat {
@@ -2295,19 +2298,11 @@ let
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
-  clangUnwrapped = callPackage ../development/compilers/llvm/clang.nix {
-    stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideGCC stdenv gccApple
-      else stdenv;
-  };
+  clang = wrapClang llvmFull;
 
-  clang = wrapClang clangUnwrapped;
+  llvmFullSelf = clangWrapSelf (llvmFull.override {
 
-  libcxxLLVM = callPackage ../development/compilers/llvm { stdenv = libcxxStdenv; version="3.3"; };
-
-  clangSelf = clangWrapSelf (callPackage ../development/compilers/llvm/clang.nix {
      stdenv = libcxxStdenv;
-     llvm = libcxxLLVM;
   });
 
   clangWrapSelf = build: (import ../build-support/clang-wrapper) {
@@ -2323,8 +2318,7 @@ let
 
   #Use this instead of stdenv to build with clang
   clangStdenv = lowPrio (stdenvAdapters.overrideGCC stdenv clang);
-
-  libcxxStdenv = stdenvAdapters.overrideGCC stdenv (clangWrapSelf clangUnwrapped);
+  libcxxStdenv = stdenvAdapters.overrideGCC stdenv (clangWrapSelf llvmFull);
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -2713,11 +2707,14 @@ let
     else
       let
         openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix { };
-      in callPackage ../development/compilers/openjdk {
+      in (callPackage ../development/compilers/openjdk {
         jdk = openjdkBootstrap;
-      };
+      }) // { outputs = [ "out" ]; };
 
-  openjre = pkgs.openjdk.jre;
+  # FIXME: Need a way to set per-output meta attributes.
+  openjre = (lib.setName "openjre-${lib.getVersion pkgs.openjdk.jre}" (lib.addMetaAttrs
+    { description = "The open-source Java Runtime Environment"; }
+    pkgs.openjdk.jre)) // { outputs = [ "jre" ]; };
 
   jdk = if stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
     then pkgs.openjdk
@@ -2764,7 +2761,7 @@ let
 
   lessc = callPackage ../development/compilers/lessc { };
 
-  llvm = llvm_33; # deprecated, depend on llvm_* directly
+  llvm = llvm_33;
   llvm_34 = callPackage ../development/compilers/llvm {
     version = "3.4";
     stdenv = if stdenv.isDarwin
@@ -2772,6 +2769,9 @@ let
       else stdenv;
   };
   llvm_33 = llvm_34.override { version = "3.3"; };
+  llvmFull = callPackage ../development/compilers/llvm/full.nix {
+    isl = isl_0_12;
+  };
 
   mentorToolchains = recurseIntoAttrs (
     callPackage_i686 ../development/compilers/mentor {}
@@ -2951,8 +2951,7 @@ let
 
   roadsend = callPackage ../development/compilers/roadsend { };
 
-  # TODO: the corresponding nix file is missing
-  # rust = pkgsi686Linux.callPackage ../development/compilers/rust {};
+  rust = callPackage ../development/compilers/rust {};
 
   sbcl = builderDefsPackage (import ../development/compilers/sbcl) {
     inherit makeWrapper;
@@ -3016,9 +3015,9 @@ let
   };
 
   wrapClangWith = clangWrapper: glibc: baseClang: clangWrapper {
-    nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
-    nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
-    nativePrefix = if stdenv ? gcc then stdenv.gcc.nativePrefix else "";
+    nativeTools = stdenv.gcc.nativeTools or false;
+    nativeLibc = stdenv.gcc.nativeLibc or false;
+    nativePrefix = stdenv.gcc.nativePrefix or "";
     clang = baseClang;
     libc = glibc;
     shell = bash;
@@ -3252,6 +3251,7 @@ let
   spidermonkey = callPackage ../development/interpreters/spidermonkey { };
   spidermonkey_1_8_0rc1 = callPackage ../development/interpreters/spidermonkey/1.8.0-rc1.nix { };
   spidermonkey_185 = callPackage ../development/interpreters/spidermonkey/185-1.0.0.nix { };
+  spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.0.nix { };
 
   supercollider = callPackage ../development/interpreters/supercollider {
     qt = qt4;
@@ -3461,6 +3461,7 @@ let
   csslint = callPackage ../development/web/csslint { };
 
   libcxx = callPackage ../development/libraries/libc++ { stdenv = pkgs.clangStdenv; };
+  libcxxabi = callPackage ../development/libraries/libc++abi { stdenv = pkgs.clangStdenv; };
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
@@ -3960,7 +3961,7 @@ let
 
   dssi = callPackage ../development/libraries/dssi {};
 
-  dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix { };
+  dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix { llvm = llvmFull; };
 
   dxflib = callPackage ../development/libraries/dxflib {};
 
@@ -4193,6 +4194,8 @@ let
         cp -rsf $glibc64/include $out
       '' # */
       ;
+
+  glm = callPackage ../development/libraries/glm { };
 
   glpk = callPackage ../development/libraries/glpk { };
 
@@ -5044,6 +5047,8 @@ let
   libzrtpcpp_1_6 = callPackage ../development/libraries/libzrtpcpp/1.6.nix {
     ccrtp = ccrtp_1_8;
   };
+
+  libwacom = callPackage ../development/libraries/libwacom { };
 
   lightning = callPackage ../development/libraries/lightning { };
 
@@ -6224,6 +6229,8 @@ let
 
   postgresql92 = callPackage ../servers/sql/postgresql/9.2.x.nix { };
 
+  postgresql93 = callPackage ../servers/sql/postgresql/9.3.x.nix { };
+
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
@@ -6428,6 +6435,8 @@ let
     # dstat color output
     python = pythonFull;
   };
+
+  libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
@@ -6663,6 +6672,18 @@ let
       ];
   };
 
+  linux_3_13 = makeOverridable (import ../os-specific/linux/kernel/linux-3.13.nix) {
+    inherit fetchurl stdenv perl linuxManualConfig;
+    kernelPatches =
+      [
+        kernelPatches.sec_perm_2_6_24
+      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
@@ -6752,8 +6773,9 @@ let
   linuxPackages_3_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_11 linuxPackages_3_11);
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   linuxPackages_3_12_grsecurity = linuxPackagesFor pkgs.linux_3_12_grsecurity linuxPackages_3_12_grsecurity;
+  linuxPackages_3_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_13 linuxPackages_3_13);
   # Update this when adding a new version!
-  linuxPackages_latest = pkgs.linuxPackages_3_12;
+  linuxPackages_latest = pkgs.linuxPackages_3_13;
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
@@ -9653,25 +9675,6 @@ let
 
   ### SCIENCE
 
-  celestia = callPackage ../applications/science/astronomy/celestia {
-    lua = lua5_1;
-    inherit (xlibs) libXmu;
-    inherit (pkgs.gnome) gtkglext;
-  };
-
-  xplanet = callPackage ../applications/science/astronomy/xplanet { };
-
-  gravit = callPackage ../applications/science/astronomy/gravit { };
-
-  spyder = callPackage ../applications/science/spyder {
-    inherit (pythonPackages) pyflakes rope sphinx numpy scipy matplotlib; # recommended
-    inherit (pythonPackages) ipython pep8; # optional
-    inherit pylint;
-  };
-
-  stellarium = callPackage ../applications/science/astronomy/stellarium { };
-
-
   ### SCIENCE/GEOMETRY
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
@@ -9860,6 +9863,8 @@ let
 
   eukleides = callPackage ../applications/science/math/eukleides { };
 
+  fricas = callPackage ../applications/science/math/fricas { };
+
   gap = callPackage ../applications/science/math/gap { };
 
   maxima = callPackage ../applications/science/math/maxima { };
@@ -9905,14 +9910,33 @@ let
 
   boinc = callPackage ../applications/science/misc/boinc { };
 
+  celestia = callPackage ../applications/science/astronomy/celestia {
+    lua = lua5_1;
+    inherit (xlibs) libXmu;
+    inherit (pkgs.gnome) gtkglext;
+  };
+
+  gravit = callPackage ../applications/science/astronomy/gravit { };
+
   golly = callPackage ../applications/science/misc/golly { };
 
+  root = callPackage ../applications/science/misc/root { };
+
   simgrid = callPackage ../applications/science/misc/simgrid { };
+
+  spyder = callPackage ../applications/science/spyder {
+    inherit (pythonPackages) pyflakes rope sphinx numpy scipy matplotlib; # recommended
+    inherit (pythonPackages) ipython pep8; # optional
+    inherit pylint;
+  };
+
+  stellarium = callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip { };
 
   vite = callPackage ../applications/science/misc/vite { };
 
+  xplanet = callPackage ../applications/science/astronomy/xplanet { };
 
   ### MISC
 

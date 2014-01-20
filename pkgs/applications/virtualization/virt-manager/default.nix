@@ -41,10 +41,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper pythonPackages.wrapPython ];
 
-  # patch the runner script in order to make wrapPythonPrograms work and run the program using a syscall
-  # example code: /etc/nixos/nixpkgs/pkgs/development/interpreters/spidermonkey/1.8.0-rc1.nix
-  customRunner = ./custom_runner.py;
-
   # TODO
   # virt-manager     -> import gtk.glade -> No module named glade --> fixed by removing 'pygtk' and by only using pyGtkGlade
   #                  -> import gconf     -> ImportError: No module named gconf
@@ -62,21 +58,13 @@ stdenv.mkDerivation rec {
 # -> fixed by http://nixos.org/wiki/Solve_GConf_errors_when_running_GNOME_applications & a restart
   # virt-manager-tui -> ImportError: No module named newt_syrup.dialogscreen
 
-  patchPhase = ''
-    cat ${customRunner} > src/virt-manager.in
-    substituteInPlace "src/virt-manager.in" --replace "THE_CUSTOM_PATH" "$out"
-    substituteInPlace "src/virt-manager.in" --replace "THE_CUSTOM_PROGRAM" "virt-manager"
-    substituteInPlace "src/virt-manager.in" --replace "PYTHON_EXECUTABLE_PATH" "${python}/bin/python"
-
-    cat ${customRunner} > src/virt-manager-tui.in
-    substituteInPlace "src/virt-manager-tui.in" --replace "THE_CUSTOM_PATH" "$out"
-    substituteInPlace "src/virt-manager-tui.in" --replace "THE_CUSTOM_PROGRAM" "virt-manager-tui"
-    substituteInPlace "src/virt-manager-tui.in" --replace "PYTHON_EXECUTABLE_PATH" "${python}/bin/python"
-  '';
-
-  # /etc/nixos/nixpkgs/pkgs/development/python-modules/generic/wrap.sh
   installPhase = ''
     make install
+
+    # A hack, but the most reliable method so far
+    echo "#!/usr/bin/env python" | cat - src/virt-manager.py > $out/bin/virt-manager
+    echo "#!/usr/bin/env python" | cat - src/virt-manager-tui.py > $out/bin/virt-manager-tui
+
     wrapPythonPrograms
   '';
 

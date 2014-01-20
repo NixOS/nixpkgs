@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ lovek323 raskin shlevy viric ];
+    maintainers = with maintainers; [ lovek323 raskin viric ];
     platforms   = platforms.all;
   };
 }

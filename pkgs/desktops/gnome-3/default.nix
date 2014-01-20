@@ -18,15 +18,21 @@ rec {
 
   at_spi2_core = callPackage ./core/at-spi2-core { };
 
+  caribou = callPackage ./core/caribou { };
+
   dconf = callPackage ./core/dconf { };
 
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
   gconf = callPackage ./core/gconf { };
 
+  geocode_glib = callPackage ./core/geocode-glib { };
+
   gcr = callPackage ./core/gcr { }; # ToDo: tests fail
 
   gdm = callPackage ./core/gdm { };
+
+  gjs = callPackage ./core/gjs { };
 
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };
 
@@ -38,6 +44,8 @@ rec {
   gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
 
   gnome_session = callPackage ./core/gnome-session { };
+
+  gnome_settings_daemon = callPackage ./core/gnome-settings-daemon { };
 
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
@@ -62,6 +70,8 @@ rec {
   libgweather = callPackage ./core/libgweather { };
 
   libzapojit = callPackage ./core/libzapojit { };
+
+  mutter = callPackage ./core/mutter { };
 
   nautilus = callPackage ./core/nautilus { };
 
