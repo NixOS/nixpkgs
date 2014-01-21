@@ -54,7 +54,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ pcre zlib libffi ] ++ libiconvOrEmpty ++ libintlOrEmpty;
 
   preConfigure = "autoreconf -fi";
-  configureFlags = "--with-pcre=system --disable-fam";
+
+  configureFlags = stdenv.lib.optional stdenv.isSunOS "--disable-modular-tests";
+
+  CPPFLAGS = stdenv.lib.optionalString stdenv.isSunOS "-DBSD_COMP";
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-lintl";
 

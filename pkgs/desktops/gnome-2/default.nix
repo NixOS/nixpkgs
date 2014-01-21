@@ -1,4 +1,4 @@
-{ callPackage, self, stdenv, gettext, gvfs, libunique, overrides ? {} }:
+{ callPackage, self, stdenv, gettext, gvfs, libunique, bison2, overrides ? {} }:
 let overridden = set // overrides; set = with overridden; {
   # Backward compatibility.
   gtkdoc = self.gtk_doc;
@@ -19,7 +19,9 @@ let overridden = set // overrides; set = with overridden; {
 
   libglade = callPackage ./platform/libglade { };
 
-  libgnomeprint = callPackage ./platform/libgnomeprint { };
+  libgnomeprint = callPackage ./platform/libgnomeprint {
+    bison = bison2;
+  };
 
   libgnomeprintui = callPackage ./platform/libgnomeprintui { };
 

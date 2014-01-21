@@ -1,7 +1,7 @@
 { monolithic ? true # build monolithic amule
 , daemon ? false # build amule daemon
 , httpServer ? false # build web interface for the daemon
-, client ? false # build amule remote gui 
+, client ? false # build amule remote gui
 , fetchurl, stdenv, zlib, wxGTK, perl, cryptopp, libupnp, gettext, libpng ? null
 , pkgconfig, makeWrapper }:
 
@@ -10,18 +10,20 @@ with stdenv;
 let
   # Enable/Disable Feature
   edf = enabled: flag: if enabled then "--enable-" + flag else "--disable-" + flag;
-in 
+in
 mkDerivation rec {
   name = "aMule-2.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/amule/${name}.tar.bz2";
-    sha256 = "17g6xh6k7rqy2sjp9l4m7h4in96cqwk5gfgg4fhlymzc6jfa3vfj";
+    url = "mirror://sourceforge/amule/${name}.tar.xz";
+    sha256 = "0hvpx3c005nvxsfand5bwfxxiq3mv0mpykajfm2lkygjh1rw2383";
   };
 
   buildInputs =
     [ zlib wxGTK perl cryptopp libupnp gettext pkgconfig makeWrapper ]
     ++ lib.optional httpServer libpng;
+
+  patches = [ ./gcc47.patch ]; # from Gentoo
 
   configureFlags = ''
     --with-crypto-prefix=${cryptopp}

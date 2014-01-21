@@ -65,6 +65,8 @@ stdenv.mkDerivation {
     )
   '';
 
+  installPhase = ''make DESTDIR="$out" MKDIR_P="mkdir -p" install'';
+
   enableParallelBuilding = true;
 
   meta = {

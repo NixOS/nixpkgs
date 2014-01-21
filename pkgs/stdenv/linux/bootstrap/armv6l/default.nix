@@ -1,11 +1,7 @@
-{
-  sh = ../armv5tel/sh;
-  bzip2 = ../armv5tel/bzip2;
-  mkdir = ../armv5tel/mkdir;
-  cpio = ../armv5tel/cpio;
-  ln = ../armv5tel/ln;
-  curl = ../armv5tel/curl.bz2;
+# Use the static tools for armv5tel-linux.
+(import ../armv5tel) //
 
+{
   bootstrapTools = {
     # Built from make-bootstrap-tools-crosspi.nix
     # nixpkgs rev eb0422e4c1263a65a9b2b954fe10a1e03d67db3e

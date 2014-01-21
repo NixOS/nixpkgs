@@ -1,41 +1,43 @@
-diff -ru -x '*~' cmake-2.8.5-orig/Modules/Platform/Linux.cmake cmake-2.8.5/Modules/Platform/Linux.cmake
---- cmake-2.8.5-orig/Modules/Platform/Linux.cmake	2011-07-08 14:21:44.000000000 +0200
-+++ cmake-2.8.5/Modules/Platform/Linux.cmake	2011-07-21 19:45:00.000000000 +0200
-@@ -36,13 +36,13 @@
+diff --git a/Modules/Platform/Linux.cmake b/Modules/Platform/Linux.cmake
+index fe8e003..378512c 100644
+--- a/Modules/Platform/Linux.cmake
++++ b/Modules/Platform/Linux.cmake
+@@ -36,13 +36,13 @@ else()
    # checking the platform every time.  This option is advanced enough
    # that only package maintainers should need to adjust it.  They are
    # capable of providing a setting on the command line.
--  IF(EXISTS "/etc/debian_version")
--    SET(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
+-  if(EXISTS "/etc/debian_version")
+-    set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
 -      "Install .so files without execute permission.")
--  ELSE(EXISTS "/etc/debian_version")
-+  #IF(EXISTS "/etc/debian_version")
-+  #  SET(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
-+  #    "Install .so files without execute permission.")
-+  #ELSE(EXISTS "/etc/debian_version")
-     SET(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
+-  else()
++  # if(EXISTS "/etc/debian_version")
++  #   set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
++  #     "Install .so files without execute permission.")
++  # else()
+     set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
        "Install .so files without execute permission.")
--  ENDIF(EXISTS "/etc/debian_version")
-+  #ENDIF(EXISTS "/etc/debian_version")
- ENDIF(DEFINED CMAKE_INSTALL_SO_NO_EXE)
+-  endif()
++  # endif()
+ endif()
  
  # Match multiarch library directory names.
-@@ -52,6 +52,6 @@
+@@ -52,6 +52,6 @@ include(Platform/UnixPaths)
  
  # Debian has lib64 paths only for compatibility so they should not be
  # searched.
--IF(EXISTS "/etc/debian_version")
--  SET_PROPERTY(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
--ENDIF(EXISTS "/etc/debian_version")
-+#IF(EXISTS "/etc/debian_version")
-+#  SET_PROPERTY(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
-+#ENDIF(EXISTS "/etc/debian_version")
-diff -ru -x '*~' cmake-2.8.5-orig/Modules/Platform/UnixPaths.cmake cmake-2.8.5/Modules/Platform/UnixPaths.cmake
---- cmake-2.8.5-orig/Modules/Platform/UnixPaths.cmake	2011-07-08 14:21:44.000000000 +0200
-+++ cmake-2.8.5/Modules/Platform/UnixPaths.cmake	2011-07-21 19:50:52.000000000 +0200
-@@ -33,55 +33,18 @@
+-if(EXISTS "/etc/debian_version")
+-  set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
+-endif()
++# if(EXISTS "/etc/debian_version")
++#  set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
++#endif()
+diff --git a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
+index ccb2663..39834e6 100644
+--- a/Modules/Platform/UnixPaths.cmake
++++ b/Modules/Platform/UnixPaths.cmake
+@@ -33,55 +33,18 @@ get_filename_component(_CMAKE_INSTALL_DIR "${_CMAKE_INSTALL_DIR}" PATH)
  # search types.
- LIST(APPEND CMAKE_SYSTEM_PREFIX_PATH
+ list(APPEND CMAKE_SYSTEM_PREFIX_PATH
    # Standard
 -  /usr/local /usr /
 -
@@ -47,7 +49,7 @@ diff -ru -x '*~' cmake-2.8.5-orig/Modules/Platform/UnixPaths.cmake cmake-2.8.5/M
 -  )
 -
 -# List common include file locations not under the common prefixes.
--LIST(APPEND CMAKE_SYSTEM_INCLUDE_PATH
+-list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
 -  # Windows API on Cygwin
 -  /usr/include/w32api
 -
@@ -56,11 +58,11 @@ diff -ru -x '*~' cmake-2.8.5-orig/Modules/Platform/UnixPaths.cmake cmake-2.8.5/M
 -
 -  # Other
 -  /usr/pkg/include
--  /opt/csw/include /opt/include  
+-  /opt/csw/include /opt/include
 -  /usr/openwin/include
 -  )
 -
--LIST(APPEND CMAKE_SYSTEM_LIBRARY_PATH
+-list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
 -  # Windows API on Cygwin
 -  /usr/lib/w32api
 -
@@ -69,25 +71,25 @@ diff -ru -x '*~' cmake-2.8.5-orig/Modules/Platform/UnixPaths.cmake cmake-2.8.5/M
 -
 -  # Other
 -  /usr/pkg/lib
--  /opt/csw/lib /opt/lib 
+-  /opt/csw/lib /opt/lib
 -  /usr/openwin/lib
 -  )
 -
--LIST(APPEND CMAKE_SYSTEM_PROGRAM_PATH
+-list(APPEND CMAKE_SYSTEM_PROGRAM_PATH
 -  /usr/pkg/bin
 +  "@glibc@"
    )
  
- LIST(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
+ list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
 -  /lib /usr/lib /usr/lib32 /usr/lib64
 +  "@glibc@/lib"
    )
  
- LIST(APPEND CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
+ list(APPEND CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
 -  /usr/include
 +  "@glibc@/include"
    )
- LIST(APPEND CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
+ list(APPEND CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
 -  /usr/include
 +  "@glibc@/include"
    )

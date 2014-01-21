@@ -26,7 +26,7 @@ stdenv.mkDerivation {
       ln -sv ${gyp}/bin/gyp build/gyp/gyp
     '';
 
-    nativeBuildInputs = stdenv.lib.optional (system == "i686-linux") which;
+    nativeBuildInputs = [ which ];
     buildInputs = [ readline python ];
 
     buildFlags = [
@@ -34,6 +34,9 @@ stdenv.mkDerivation {
       "console=readline"
       "${arch}.release"
     ];
+
+    # http://code.google.com/p/v8/issues/detail?id=2149
+    NIX_CFLAGS_COMPILE = "-Wno-unused-local-typedefs -Wno-aggressive-loop-optimizations";
 
     enableParallelBuilding = true;
 

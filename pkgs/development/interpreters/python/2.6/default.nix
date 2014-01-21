@@ -45,7 +45,7 @@ let
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
     LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
 
-    configureFlags = "--enable-shared --with-threads --enable-unicode --with-wctype-functions";
+    configureFlags = "--enable-shared --with-threads --enable-unicode";
 
     preConfigure =
       ''
