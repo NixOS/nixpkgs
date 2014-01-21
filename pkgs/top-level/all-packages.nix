@@ -9860,7 +9860,9 @@ let
 
   ecm = callPackage ../applications/science/math/ecm { };
 
-  eukleides = callPackage ../applications/science/math/eukleides { };
+  eukleides = callPackage ../applications/science/math/eukleides {
+    texinfo = texinfo4;
+  };
 
   fricas = callPackage ../applications/science/math/fricas { };
 
