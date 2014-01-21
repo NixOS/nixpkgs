@@ -1,27 +1,20 @@
-{ stdenv, fetchurl, perl, groff, cmake, python, libffi, binutils, version }:
-
-with { inherit (stdenv.lib) optional optionals; };
-
-assert version == "3.4" || version == "3.3";
-
-stdenv.mkDerivation rec {
+{ stdenv, fetchurl, perl, groff, cmake, python, libffi, binutils }:
+let
+  version = "3.3";
+in stdenv.mkDerivation rec {
   name = "llvm-${version}";
 
   src = fetchurl {
-    url    = "http://llvm.org/releases/${version}/llvm-${version}.src.tar.gz";
-    sha256 =
-      if version == "3.4" then "0a169ba045r4apb9cv6ncrwl83l7yiajnzirkcdlhj1cd4nn3995"
-        else       /*3.3*/     "0y3mfbb5qzcpw3v5qncn69x1hdrrrfirgs82ypi2annhf0g6nxk8";
+    url = "http://llvm.org/releases/${version}/llvm-${version}.src.tar.gz";
+    sha256 = "0y3mfbb5qzcpw3v5qncn69x1hdrrrfirgs82ypi2annhf0g6nxk8";
   };
 
-  patches = optionals (version == "3.3") [
+  patches = [
     ./more-memory-for-bugpoint.patch # The default rlimits in 3.3 are too low for shared libraries.
     ./no-rule-aarch64.patch          # http://llvm.org/bugs/show_bug.cgi?id=16625
   ];
 
-  # libffi was propagated before, but it wasn't even being used, so
-  # unless something needs it just an input is fine.
-  buildInputs = [ perl groff cmake python libffi ]; # ToDo: polly, libc++; enable cxx11?
+  buildInputs = [ perl groff cmake python libffi ];
 
   # hacky fix: created binaries need to be run before installation
   preBuild = let LD = if stdenv.isDarwin then "DYLD" else "LD";
@@ -31,9 +24,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
-  ]
-    ++ optional (version == "3.3") "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=R600" # for mesa
-    ++ optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
+    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=R600" # for mesa
+  ] ++ stdenv.lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
 
   enableParallelBuilding = true;
 

@@ -2298,12 +2298,9 @@ let
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
-  clang = wrapClang llvmFull;
+  clang = wrapClang llvmPackages.clang;
 
-  llvmFullSelf = clangWrapSelf (llvmFull.override {
-
-     stdenv = libcxxStdenv;
-  });
+  clangSelf = clangWrapSelf llvmPackagesSelf.clang;
 
   clangWrapSelf = build: (import ../build-support/clang-wrapper) {
     clang = build;
@@ -2318,7 +2315,7 @@ let
 
   #Use this instead of stdenv to build with clang
   clangStdenv = lowPrio (stdenvAdapters.overrideGCC stdenv clang);
-  libcxxStdenv = stdenvAdapters.overrideGCC stdenv (clangWrapSelf llvmFull);
+  libcxxStdenv = stdenvAdapters.overrideGCC stdenv (clangWrapSelf llvmPackages.clang);
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -2751,6 +2748,7 @@ let
 
   julia = callPackage ../development/compilers/julia {
     liblapack = liblapack.override {shared = true;};
+    llvm = llvm_33;
   };
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
@@ -2761,17 +2759,14 @@ let
 
   lessc = callPackage ../development/compilers/lessc { };
 
-  llvm = llvm_33;
-  llvm_34 = callPackage ../development/compilers/llvm {
-    version = "3.4";
+  llvm = llvmPackages.llvm;
+  llvm_33 = callPackage ../development/compilers/llvm/3.3/llvm.nix {
     stdenv = if stdenv.isDarwin
       then stdenvAdapters.overrideGCC stdenv gccApple
       else stdenv;
   };
-  llvm_33 = llvm_34.override { version = "3.3"; };
-  llvmFull = callPackage ../development/compilers/llvm/full.nix {
-    isl = isl_0_12;
-  };
+  llvmPackages = recurseIntoAttrs (import ../development/compilers/llvm/3.4 { inherit newScope stdenv fetchurl; isl = isl_0_12; });
+  llvmPackagesSelf = recurseIntoAttrs (import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; });
 
   mentorToolchains = recurseIntoAttrs (
     callPackage_i686 ../development/compilers/mentor {}
@@ -3961,7 +3956,7 @@ let
 
   dssi = callPackage ../development/libraries/dssi {};
 
-  dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix { llvm = llvmFull; };
+  dragonegg = llvmPackages.dragonegg;
 
   dxflib = callPackage ../development/libraries/dxflib {};
 
@@ -5084,7 +5079,7 @@ let
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
-  mesa_original = callPackage ../development/libraries/mesa { };
+  mesa_original = callPackage ../development/libraries/mesa { llvm = llvm_33; };
   mesa_noglu = if stdenv.isDarwin
     then darwinX11AndOpenGL // { driverLink = mesa_noglu; }
     else mesa_original;
