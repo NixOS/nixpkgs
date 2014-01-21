@@ -9,7 +9,6 @@ rec {
 
 #### Overrides of libraries
 
-  librsvg = pkgs.librsvg.override { inherit gtk2; }; # gtk2 mysteriously needed in librsvg for goffice (commented in Gentoo)
   libsoup = pkgs.libsoup_2_44;
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
@@ -41,6 +40,7 @@ rec {
   gnome-menus = callPackage ./core/gnome-menus { };
 
   gnome_keyring = callPackage ./core/gnome-keyring { };
+
   libgnome_keyring = callPackage ./core/libgnome-keyring { };
 
   gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
