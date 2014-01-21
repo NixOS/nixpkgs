@@ -306,9 +306,7 @@ stdenv.mkDerivation ({
       ''}
     '';
 
-  # 'iant' at #go-nuts@freenode, gccgo maintainer, said that
-  # they have a bug in 4.7.1 if adding "--disable-static"
-  dontDisableStatic = langGo || staticCompiler;
+  dontDisableStatic = true;
 
   configureFlags = "
     ${if stdenv.isSunOS then
@@ -339,6 +337,7 @@ stdenv.mkDerivation ({
     --disable-libstdcxx-pch
     --without-included-gettext
     --with-system-zlib
+    --enable-static
     --enable-languages=${
       concatStrings (intersperse ","
         (  optional langC        "c"
