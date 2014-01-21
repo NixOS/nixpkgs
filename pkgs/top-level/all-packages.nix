@@ -1304,6 +1304,8 @@ let
 
   maildrop = callPackage ../tools/networking/maildrop { };
 
+  mailpile = callPackage ../applications/networking/mailreaders/mailpile { };
+
   mailutils = callPackage ../tools/networking/mailutils {
     guile = guile_1_8;
   };
