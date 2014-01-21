@@ -2766,7 +2766,7 @@ let
       else stdenv;
   };
   llvmPackages = recurseIntoAttrs (import ../development/compilers/llvm/3.4 { inherit newScope stdenv fetchurl; isl = isl_0_12; });
-  llvmPackagesSelf = recurseIntoAttrs (import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; });
+  llvmPackagesSelf = import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; };
 
   mentorToolchains = recurseIntoAttrs (
     callPackage_i686 ../development/compilers/mentor {}
