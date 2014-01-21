@@ -512,6 +512,22 @@ let self = _self // overrides;
     meta = { licence = gpl3Plus; };
   };
 
+  ido-ubiquitous = melpaBuild rec {
+    pname   = "ido-ubiquitous";
+    version = "2.17";
+    src = fetchFromGitHub {
+      owner  = "DarwinAwardWinner";
+      repo   = pname;
+      rev    = "323e4cddc05d5a4546c1b64132b2b1e9f8896452";
+      sha256 = "0wdjz3cqzrxhrk68g5gyvc9j2rb6f4yw00xbjgw9ldwlhmkwy5ja";
+    };
+    meta = {
+      description = "Does what you expected ido-everywhere to do in Emacs";
+      homepage = https://github.com/DarwinAwardWinner/ido-ubiquitous/;
+      license = gpl3Plus;
+    };
+  };
+
   idris-mode = melpaBuild rec {
     pname   = "idris-mode";
     version = "0.9.15";
