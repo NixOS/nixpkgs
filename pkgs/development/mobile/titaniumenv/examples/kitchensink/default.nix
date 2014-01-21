@@ -27,9 +27,8 @@ let
 in
 titaniumenv.buildApp {
   name = "KitchenSink-${target}-${if release then "release" else "debug"}";
-  appName = "KitchenSink";
-  appId = if rename then newBundleId else "com.appcelerator.kitchensink";
   src = if rename then renamedSrc else src;
+  tiVersion = "3.1.4.GA";
   
   inherit target androidPlatformVersions release;
   

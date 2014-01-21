@@ -72,5 +72,7 @@ stdenv.mkDerivation {
   '' + stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") ''
     # 'ditto' utility is needed to copy stuff to the Xcode organizer. Dirty, but this allows it to work.
     sed -i -e "s|ditto|/usr/bin/ditto|g" $out/mobilesdk/osx/*/iphone/builder.py
+    
+    sed -i -e "s|--xcode|--xcode '+process.env['NIX_TITANIUM_WORKAROUND']+'|" $out/mobilesdk/osx/*/iphone/cli/commands/_build.js
   '';
 }
