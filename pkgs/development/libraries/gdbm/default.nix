@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gdbm-1.10";
+  name = "gdbm-1.11";
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/${name}.tar.gz";
-    sha256 = "0h9lfzdjc2yl849y0byg51h6xfjg0y7vg9jnsw3gpfwlbd617y13";
+    sha256 = "1hz3jgh3pd4qzp6jy0l8pd8x01g9abw7csnrlnj1a2sxy122z4cd";
   };
 
   doCheck = true;
