@@ -1,5 +1,6 @@
 { fetchurl, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
-, pango, cogl, clutter }:
+, pango, cogl, clutter, libstartup_notification, libcanberra, zenity, libcanberra_gtk3
+, libtool }:
 
 
 stdenv.mkDerivation rec {
@@ -13,9 +14,12 @@ stdenv.mkDerivation rec {
   # fatal error: gio/gunixfdlist.h: No such file or directory
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
 
+  configureFlags = "--with-x --disable-static --enable-shape --enable-sm --enable-startup-notification --enable-xsync --enable-verbose-mode --with-libcanberra"; 
+
   buildInputs = with gnome3;
     [ pkgconfig intltool glib gobjectIntrospection gtk gsettings_desktop_schemas upower
-      gnome_desktop cairo pango cogl clutter zenity ];
+      gnome_desktop cairo pango cogl clutter zenity libstartup_notification libcanberra
+      libcanberra_gtk3 zenity libtool ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
