@@ -21,11 +21,11 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
-    "-DGCC_INSTALL_PREFIX=${stdenv.gcc.gcc}"
-    "-DC_INCLUDE_DIRS=${stdenv.gcc.libc}/include/"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-DCLANG_PATH_TO_LLVM_BUILD=${llvm}"
-  ];
+  ] ++
+  (stdenv.lib.optional (stdenv.gcc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.gcc.libc}/include") ++
+  (stdenv.lib.optional (stdenv.gcc.gcc != null) "-DGCC_INSTALL_PREFIX=${stdenv.gcc.gcc}");
 
   passthru.gcc = stdenv.gcc.gcc;
 
