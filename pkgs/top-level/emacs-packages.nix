@@ -171,6 +171,22 @@ let self = _self // overrides;
     meta = { licence = gpl3Plus; };
   };
 
+  browse-kill-ring = melpaBuild rec {
+    pname   = "browse-kill-ring";
+    version = "20140104";
+    src = fetchFromGitHub {
+      owner  = pname;
+      repo   = pname;
+      rev    = "f81ca5f14479fa9e938f89bf8f6baa3c4bdfb755";
+      sha256 = "149g4qs5dqy6yzdj5smb39id5f72bz64qfv5bjf3ssvhwl2rfba8";
+    };
+    meta = {
+      description = "Interactively insert items from Emacs kill-ring";
+      homepage = https://github.com/browse-kill-ring/browse-kill-ring/;
+      license = gpl2Plus;
+    };
+  };
+
   change-inner = melpaBuild rec {
     pname   = "change-inner";
     version = "20130208";
