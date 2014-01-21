@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, dbus_glib, glib, python, pkgconfig, libxslt }:
+{ stdenv, fetchurl, dbus_glib, glib, python, pkgconfig, libxslt
+, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "telepathy-glib-0.22.0";
@@ -8,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mqrq2azw70rm50vy21acfnzn8mmh0w7dxh87mwr1lyk0jn1n232";
   };
 
-  propagatedBuildInputs = [dbus_glib glib python];
+  propagatedBuildInputs = [dbus_glib glib python gobjectIntrospection];
 
   buildInputs = [pkgconfig libxslt];
 
