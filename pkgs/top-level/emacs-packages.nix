@@ -70,6 +70,29 @@ let self = _self // overrides;
     meta = { licence = gpl3Plus; };
   };
 
+  agda2-mode = with external; trivialBuild {
+    pname = "agda-mode";
+    version = Agda.version;
+
+    phases = [ "buildPhase" "installPhase" ];
+
+    # already byte-compiled by Agda builder
+    buildPhase = ''
+      agda=`${Agda}/bin/agda-mode locate`
+      cp `dirname $agda`/*.el* .
+    '';
+
+    meta = {
+      description = "Agda2-mode for Emacs extracted from Agda package";
+      longDescription = ''
+        Wrapper packages that liberates init.el from `agda-mode locate` magic.
+        Simply add this to user profile or systemPackages and do `(require 'agda2)` in init.el.
+      '';
+      homepage = Agda.meta.homepage;
+      license = Agda.meta.license;
+    };
+  };
+
   async = melpaBuild rec {
     pname   = "async";
     version = "1.2";

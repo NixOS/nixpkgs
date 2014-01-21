@@ -10188,7 +10188,7 @@ let
     };
 
     external = {
-      inherit (haskellngPackages) ghc-mod structured-haskell-mode;
+      inherit (haskellngPackages) ghc-mod structured-haskell-mode Agda;
     };
   };
 
