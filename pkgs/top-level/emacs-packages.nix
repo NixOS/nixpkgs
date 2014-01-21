@@ -593,6 +593,8 @@ let self = _self // overrides;
     meta = { licence = gpl3Plus; };
   };
 
+  nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {};
+
   org-plus-contrib = melpaBuild rec {
     pname   = "org-plus-contrib";
     version = "20141020";
