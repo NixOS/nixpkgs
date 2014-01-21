@@ -2238,6 +2238,10 @@ let
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
+  zfstools = callPackage ../tools/filesystems/zfstools {
+    zfs = linuxPackages.zfs;
+  };
+
   zile = callPackage ../applications/editors/zile { };
 
   zip = callPackage ../tools/archivers/zip { };
