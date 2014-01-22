@@ -18,7 +18,7 @@ with if stdenv.system == "i686-linux" then {
   platform = "linux-i386";
   snapshot = "03e60be1f1b90dddd15f3597bc45ec8d9626b35d";
   snapshot_sha = "1v1l082gj7d2d4p53xgsxz2k965jcgqhw4cyxmjxc6yh5fw0idx6";
-  target = "i386-unknown-linux-gnu";
+  target = "i686-unknown-linux-gnu";
 } else if stdenv.system == "x86_64-linux" then {
   platform = "linux-x86_64";
   snapshot = "aa8fbbacdb1d8a078f3a3fe3478dcbc506bd4090";
