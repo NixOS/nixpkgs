@@ -97,7 +97,7 @@ let
     installPhase = "mv .config $out";
   };
 
-  kernel = buildLinux {
+  kernel_nofp = buildLinux {
     inherit version modDirVersion src kernelPatches;
 
     configfile = configfile.nativeDrv or configfile;
@@ -109,6 +109,17 @@ let
     crossConfig = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };
 
+  # Combine the `features' attribute sets of all the kernel patches.
+  fullFeatures = lib.fold (x: y: (x.features or {}) // y) features kernelPatches;
+
+  # We add `features' to `passthru', so that derivations overriden by
+  # lib.overrideDerivation also keep the `features' attr.
+  kernel = kernel_nofp // {
+    passthru = kernel_nofp.passthru // {
+      features = fullFeatures;
+    };
+  };
+
   configWithPlatform = kernelPlatform:
     import ./common-config.nix { inherit stdenv version kernelPlatform extraConfig; };
 
@@ -116,9 +127,7 @@ let
   configCross = configWithPlatform stdenv.cross.platform;
 
   passthru = {
-    # Combine the `features' attribute sets of all the kernel patches.
-    features = lib.fold (x: y: (x.features or {}) // y) features kernelPatches;
-
+    features = fullFeatures;
     meta = kernel.meta // extraMeta;
   };
 
