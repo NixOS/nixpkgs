@@ -94,16 +94,20 @@ python.stdenv.mkDerivation (attrs // {
     export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
 
     ${python}/bin/${python.executable} setup.py install \
-      # sometimes packages specify where files should be installed outside the usual
-      # python lib prefix, we override that back so all infrastructure (setup hooks)
-      # work as expected
       --install-lib=$out/lib/${python.libPrefix}/site-packages \
-      # instruct setuptools not to use eggs but fallback to plan package install
-      # this also reduces one .pth file in the chain, but the main reason is to
-      # force install process to install only scripts for the package we are
-      # installing (otherwise it will install scripts also for dependencies)
       --old-and-unmanageable \
       --prefix="$out" ${lib.concatStringsSep " " setupPyInstallFlags}
+
+    # --install-lib:
+    # sometimes packages specify where files should be installed outside the usual
+    # python lib prefix, we override that back so all infrastructure (setup hooks)
+    # work as expected
+
+    # --old-and-unmanagable:
+    # instruct setuptools not to use eggs but fallback to plan package install 
+    # this also reduces one .pth file in the chain, but the main reason is to
+    # force install process to install only scripts for the package we are
+    # installing (otherwise it will install scripts also for dependencies)
 
     # A pth file might have been generated to load the package from
     # within its own site-packages, rename this package not to
