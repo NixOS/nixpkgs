@@ -143,10 +143,10 @@ python.stdenv.mkDerivation (attrs // {
       done
     '';
 
-  meta = {
+  meta = with lib.maintainers; {
     # default to python's platforms
     platforms = python.meta.platforms;
-  } // meta // with lib.maintainers; {
+  } // meta // {
     # add extra maintainer(s) to every package
     maintainers = (meta.maintainers or []) ++ [ chaoflow iElectric ];
   };
