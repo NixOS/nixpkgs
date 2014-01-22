@@ -6085,6 +6085,36 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  spambayes = buildPythonPackage rec {
+    name = "spambayes-1.1a6";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/spambayes/${name}.tar.gz";
+      sha256 = "0lqhn2v0avgwxmk4dq9lkwr2g39ls2p6x8hqk5w07wd462cjsx8l";
+    };
+
+    propagatedBuildInputs = [ pydns lockfile ];
+
+    meta = with stdenv.lib; {
+      description = "Statistical anti-spam filter, initially based on the work of Paul Graham";
+      homepage = http://spambayes.sourceforge.net/;
+    };
+  };
+
+  pydns = buildPythonPackage rec {
+    name = "pydns-2.3.6";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pydns/${name}.tar.gz";
+      sha256 = "0qnv7i9824nb5h9psj0rwzjyprwgfiwh5s5raa9avbqazy5hv5pi";
+    };
+
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+    };
+  };
+
   sympy = buildPythonPackage rec {
     name = "sympy-0.7.3";
 

@@ -5,12 +5,12 @@ buildPythonPackage rec {
 
   src = fetchgit {
     url = "https://github.com/pagekite/Mailpile.git";
-    rev = "59b96150822780138ab3567502952caadbc1d73e";
-    sha256 = "2edf82cbe6d3f17ba776fb5a70caa553f646db30ce207ab957038d845a9677e1";
+    rev = "cbb3bbf1f1da653124e63e11a51a6864dcb534a0";
+    sha256 = "1m2qkhcygidxqnnj2ajsxv8y5wjyp5il3919sl3vyl47gx02xa8j";
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    pillow jinja2 pythonPackages."lxml-2.3.6" python.modules.readline or null];
+    pillow jinja2 spambayes pythonPackages."lxml-2.3.6" python.modules.readline or null];
 
   meta = with stdenv.lib; {
     description = "A modern, fast web-mail client with user-friendly encryption and privacy features";
