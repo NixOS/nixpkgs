@@ -6550,7 +6550,7 @@ let
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
-    inherit fetchurl stdenv perl linuxManualConfig;
+    inherit fetchurl stdenv perl buildLinux;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
       ];
@@ -6599,7 +6599,7 @@ let
   });
 
   linux_3_4 = makeOverridable (import ../os-specific/linux/kernel/linux-3.4.nix) {
-    inherit fetchurl stdenv perl linuxManualConfig;
+    inherit fetchurl stdenv perl buildLinux;
     kernelPatches =
       [ kernelPatches.sec_perm_2_6_24
       ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -6617,11 +6617,11 @@ let
   });
 
   linux_3_6_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi-3.6.nix) {
-    inherit fetchurl stdenv perl linuxManualConfig;
+    inherit fetchurl stdenv perl buildLinux;
   };
 
   linux_3_10 = makeOverridable (import ../os-specific/linux/kernel/linux-3.10.nix) {
-    inherit fetchurl stdenv perl linuxManualConfig;
+    inherit fetchurl stdenv perl buildLinux;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
@@ -6642,7 +6642,7 @@ let
   });
 
   linux_3_11 = makeOverridable (import ../os-specific/linux/kernel/linux-3.11.nix) {
-    inherit fetchurl stdenv perl linuxManualConfig;
+    inherit fetchurl stdenv perl buildLinux;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
@@ -6654,7 +6654,7 @@ let
   };
 
   linux_3_12 = makeOverridable (import ../os-specific/linux/kernel/linux-3.12.nix) {
-    inherit fetchurl stdenv perl linuxManualConfig;
+    inherit fetchurl stdenv perl buildLinux;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
@@ -6666,7 +6666,7 @@ let
   };
 
   linux_3_13 = makeOverridable (import ../os-specific/linux/kernel/linux-3.13.nix) {
-    inherit fetchurl stdenv perl linuxManualConfig;
+    inherit fetchurl stdenv perl buildLinux;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
@@ -6775,7 +6775,8 @@ let
   linuxPackages = linuxPackages_3_10;
 
   # A function to build a manually-configured kernel
-  linuxManualConfig = import ../os-specific/linux/kernel/manual-config.nix {
+  linuxManualConfig = builtins.trace "linuxManualConfig is now called buildLinux" pkgs.buildLinux;
+  buildLinux = import ../os-specific/linux/kernel/manual-config.nix {
     inherit (pkgs) stdenv runCommand nettools bc perl kmod writeTextFile ubootChooser;
   };
 

@@ -5,7 +5,7 @@ let
     (map (builtins.getAttr "configLine") config.system.requiredKernelConfig))
   );
 
-  origKernel = pkgs.linuxManualConfig {
+  origKernel = pkgs.buildLinux {
     inherit (pkgs.linux) src version;
     inherit configfile;
     allowImportFromDerivation = true;

@@ -1,4 +1,4 @@
-{ stdenv, perl, linuxManualConfig
+{ stdenv, perl, buildLinux
 
 , # The kernel source tarball.
   src
@@ -97,7 +97,7 @@ let
     installPhase = "mv .config $out";
   };
 
-  kernel = linuxManualConfig {
+  kernel = buildLinux {
     inherit version modDirVersion src kernelPatches;
 
     configfile = configfile.nativeDrv or configfile;
