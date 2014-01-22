@@ -1,0 +1,80 @@
+## 85_security_load.patch by Mike Hommey <glandium@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Load modules from $ORIGIN/nss.
+
+Index: nss/nss/cmd/shlibsign/shlibsign.c
+===================================================================
+--- nss.orig/nss/cmd/shlibsign/shlibsign.c	2013-08-05 14:40:31.041657554 +0900
++++ nss/nss/cmd/shlibsign/shlibsign.c	2013-08-05 14:40:31.033657739 +0900
+@@ -851,6 +851,8 @@
+     libname = PR_GetLibraryName(NULL, "softokn3");
+     assert(libname != NULL);
+     lib = PR_LoadLibrary(libname);
++    if (!lib)
++        lib = PR_LoadLibrary("/usr/lib/nss/libsoftokn3.so");
+     assert(lib != NULL);
+     PR_FreeLibraryName(libname);
+ 
+Index: nss/nss/lib/pk11wrap/pk11load.c
+===================================================================
+--- nss.orig/nss/lib/pk11wrap/pk11load.c	2013-08-05 14:40:31.041657554 +0900
++++ nss/nss/lib/pk11wrap/pk11load.c	2013-08-05 14:40:31.033657739 +0900
+@@ -406,6 +406,13 @@
+ 	 * unload the library if anything goes wrong from here on out...
+ 	 */
+ 	library = PR_LoadLibrary(mod->dllName);
++	if ((library == NULL) &&
++	    !rindex(mod->dllName, PR_GetDirectorySeparator())) {
++            library = PORT_LoadLibraryFromOrigin(my_shlib_name,
++                                      (PRFuncPtr) &softoken_LoadDSO,
++                                      mod->dllName);
++	}
++
+ 	mod->library = (void *)library;
+ 
+ 	if (library == NULL) {
+Index: nss/nss/lib/util/secload.c
+===================================================================
+--- nss.orig/nss/lib/util/secload.c	2013-08-05 14:40:31.041657554 +0900
++++ nss/nss/lib/util/secload.c	2013-08-05 14:40:31.033657739 +0900
+@@ -69,9 +69,14 @@
+ 
+     /* Remove the trailing filename from referencePath and add the new one */
+     c = strrchr(referencePath, PR_GetDirectorySeparator());
++    if (!c) { /* referencePath doesn't contain a / means that dladdr gave us argv[0]
++               * and program was called from $PATH. Hack to get libs from /usr/lib */
++        referencePath = "/usr/lib/";
++        c = &referencePath[8]; /* last / */
++    }
+     if (c) {
+         size_t referencePathSize = 1 + c - referencePath;
+-        fullName = (char*) PORT_Alloc(strlen(name) + referencePathSize + 1);
++        fullName = (char*) PORT_Alloc(strlen(name) + referencePathSize + 5);
+         if (fullName) {
+             memcpy(fullName, referencePath, referencePathSize);
+             strcpy(fullName + referencePathSize, name); 
+@@ -81,6 +86,12 @@
+ #endif
+             libSpec.type = PR_LibSpec_Pathname;
+             libSpec.value.pathname = fullName;
++            if ((referencePathSize >= 4) &&
++                (strncmp(fullName + referencePathSize - 4, "bin", 3) == 0)) {
++                memcpy(fullName + referencePathSize -4, "lib", 3);
++            }
++            strcpy(fullName + referencePathSize, "nss/");
++            strcpy(fullName + referencePathSize + 4, name);
+             dlh = PR_LoadLibraryWithFlags(libSpec, PR_LD_NOW | PR_LD_LOCAL
+ #ifdef PR_LD_ALT_SEARCH_PATH
+             /* allow library's dependencies to be found in the same directory
+@@ -88,6 +99,10 @@
+                                           | PR_LD_ALT_SEARCH_PATH 
+ #endif
+                                           );
++            if (! dlh) {
++                strcpy(fullName + referencePathSize, name);
++                dlh = PR_LoadLibraryWithFlags(libSpec, PR_LD_NOW | PR_LD_LOCAL);
++            }
+             PORT_Free(fullName);
+         }
+     }
