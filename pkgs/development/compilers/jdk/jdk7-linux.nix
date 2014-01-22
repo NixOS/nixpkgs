@@ -36,7 +36,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  patchversion = 51;
+  patchversion = "51";
 
   name =
     if installjdk then "jdk-1.7.0_${patchversion}" else "jre-1.7.0_${patchversion}";
