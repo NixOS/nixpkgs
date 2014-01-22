@@ -1239,15 +1239,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       # broken on python3, fixed in master, remove in next release
       rm doc/en/plugins_index/test_plugins_index.py
 
-      # see https://bitbucket.org/hpk42/pytest/issue/418/test-failures-with-python-275-and-pytest
-      sed -i "/test_unicode/i\    @pytest.mark.xfail" testing/test_assertion.py
-
       # don't test bash builtins
       rm testing/test_argcomplete.py
 
       # yaml test are failing
       rm doc/en/example/nonpython/test_simple.yml
-
     '';
 
     propagatedBuildInputs = [ py ]
