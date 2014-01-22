@@ -64,7 +64,7 @@ stdenv.mkDerivation {
   preBuild = if stdenv.isLinux then ''
     make ${target}/stage0/bin/rustc
     patchelf --interpreter ${stdenv.glibc}/lib/${stdenv.gcc.dynamicLinker} \
-             --set-rpath ${stdenv.gcc.gcc}/lib/ \
+             --set-rpath ${stdenv.gcc.gcc}/lib/:${stdenv.gcc.gcc}/lib64/ \
              ${target}/stage0/bin/rustc
   '' else null;
 
