@@ -121,7 +121,7 @@ let
 
     meta = kernel.meta // extraMeta;
 
-    passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
+    passthru = kernel.passthru // (removeAttrs passthru [ "passthru" "meta" ]);
   };
 
   nativeDrv = lib.addPassthru kernel.nativeDrv passthru;
