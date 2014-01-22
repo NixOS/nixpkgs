@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
       homepage = http://www.datadoghq.com;
 
-      maintainers = [ stdenv.lib.maintainers.shlevy stdenv.lib.maintainers.iElectric ];
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
 
       license = stdenv.lib.licenses.bsd3;
 

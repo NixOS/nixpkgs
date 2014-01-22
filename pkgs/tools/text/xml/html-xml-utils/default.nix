@@ -15,6 +15,5 @@ stdenv.mkDerivation rec {
     description = "Utilities for manipulating HTML and XML files";
     homepage = http://www.w3.org/Tools/HTML-XML-utils/;
     license = "free-non-copyleft";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }

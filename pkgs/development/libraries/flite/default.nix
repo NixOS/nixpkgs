@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     description = "A small, fast run-time speech synthesis engine";
     homepage = http://www.speech.cs.cmu.edu/flite/index.html; 
     license = "free-non-copyleft";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }
 

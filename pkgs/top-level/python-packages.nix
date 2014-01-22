@@ -1076,7 +1076,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       description = "Code coverage measurement for python";
       homepage = http://nedbatchelder.com/code/coverage/;
       license = pkgs.lib.licenses.bsd3;
-      maintainers = [ stdenv.lib.maintainers.shlevy ];
     };
   };
 
