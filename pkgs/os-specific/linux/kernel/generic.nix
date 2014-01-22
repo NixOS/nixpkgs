@@ -120,6 +120,8 @@ let
     features = lib.fold (x: y: (x.features or {}) // y) features kernelPatches;
 
     meta = kernel.meta // extraMeta;
+
+    passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
   };
 
   nativeDrv = lib.addPassthru kernel.nativeDrv passthru;
