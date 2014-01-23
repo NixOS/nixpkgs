@@ -1,4 +1,4 @@
-Nixpkgs is a collection of packages for [Nix](hhttp://nixos.org/nix/) package
+Nixpkgs is a collection of packages for [Nix](http://nixos.org/nix/) package
 manager. Nixpkgs also includes [NixOS](http://nixos.org/nixos/) linux distribution source code.
 
 * [NixOS installation instructions](http://nixos.org/nixos/manual/#idm139984689550080)
