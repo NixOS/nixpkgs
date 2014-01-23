@@ -3,8 +3,11 @@
 , glib_networking, gsettings_desktop_schemas
 }:
 
+let
+  version = "0.5.7";
+in
 stdenv.mkDerivation rec {
-  name = "midori-0.5.6";
+  name = "midori-${version}";
 
   meta = {
     description = "Lightweight WebKitGTK+ web browser";
@@ -15,8 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "${meta.homepage}/downloads/midori_0.5.6_all_.tar.bz2";
-    sha256 = "0jpj8cw0dzamzylzslayamjhv0is0xd99dyaql4nyxrkk5fipgn5";
+    url = "${meta.homepage}/downloads/midori_${version}_all_.tar.bz2";
+    sha256 = "0k8bppicgzm97g5x8ahvpw9wvg2f1mq093qp8biwr858m0mbnx98";
   };
 
   buildInputs = [
