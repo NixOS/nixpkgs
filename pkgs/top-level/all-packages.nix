@@ -7708,6 +7708,7 @@ let
   evopedia = callPackage ../applications/misc/evopedia { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
+  keepassx_2 = callPackage ../applications/misc/keepassx/2.0alpha5.nix { };
 
   inherit (gnome3) evince;
   evolution_data_server = gnome3.evolution_data_server;
