@@ -8621,6 +8621,8 @@ let
 
   sbagen = callPackage ../applications/misc/sbagen { };
 
+  scite = callPackage ../applications/editors/scite { };
+
   scribus = callPackage ../applications/office/scribus {
     inherit (gnome) libart_lgpl;
   };
