@@ -4,7 +4,7 @@ let
   version = "1.0.17";
 in
 stdenv.mkDerivation rec {
-  name = "libusb-${version}";
+  name = "libusbx-${version}"; # it's a fork of original libusb1; should be mostly compatible
 
   src = fetchurl {
     url = "mirror://sourceforge/libusbx/libusbx-${version}.tar.bz2";
