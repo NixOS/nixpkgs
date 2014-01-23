@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, makeDesktopItem, makeWrapper
+{ stdenv, fetchurl, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXext, libXrender, zlib
 , glib, gtk, libXtst, jre
 }:
@@ -23,7 +23,7 @@ let
         categories = "Application;Development;";
       };
 
-      buildInputs = [ makeWrapper patchelf ];
+      buildInputs = [ makeWrapper ];
 
       buildCommand = ''
         # Unpack tarball.

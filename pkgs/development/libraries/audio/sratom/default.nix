@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sratom-${version}";
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = fetchurl {
     url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "16i5snknl9frz638mgr58lp11ap1xmkbrkb3l6f0ad8ddqpcjm3i";
+    sha256 = "1q4044md8nmqah8ay5mf4lgdl6x0sfa4cjqyqk9da8nqzvs2j37s";
   };
 
   buildInputs = [ lv2 pkgconfig python serd sord ];

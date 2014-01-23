@@ -290,7 +290,7 @@ rec {
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = attrs.args;
     origBuilder = attrs.builder;
-    QEMU_OPTS = "-m ${toString (attrs.memSize or 512)}";
+    QEMU_OPTS = "${attrs.QEMU_OPTS or ""} -m ${toString (attrs.memSize or 512)}";
   });
 
 
@@ -766,8 +766,20 @@ rec {
         url = mirror://fedora/linux/releases/8/Everything/i386/os/repodata/primary.xml.gz;
         sha256 = "0kwf0jcp63pygpvgvwl4w58pph24xbcy6db6fnq2f3ly5myhz53n";
       };
-      urlPrefix = mirror://fedora/linux/releases/8/Everything/i386/os;
+      urlPrefix = http://archives.fedoraproject.org/pub/archive/fedora/linux/releases/8/Everything/i386/os;
       packages = commonFedoraPackages;
+    };
+
+    fedora8x86_64 = {
+      name = "fedora-8-x86_64";
+      fullName = "Fedora 8 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/8/Everything/x86_64/os/repodata/primary.xml.gz;
+        sha256 = "11bfmpy3nz82zzmj5lfravvzlw514v4718adi4b06ps9zv3zpy8r";
+      };
+      urlPrefix = http://archives.fedoraproject.org/pub/archive/fedora/linux/releases/8/Everything/x86_64/os;
+      packages = commonFedoraPackages;
+      archs = ["noarch" "x86_64"];
     };
 
     fedora9i386 = {
@@ -964,6 +976,32 @@ rec {
       unifiedSystemDir = true;
     };
 
+    fedora20i386 = {
+      name = "fedora-20-i386";
+      fullName = "Fedora 20 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/20/Everything/i386/os/repodata/ae9c6ae73a12a64227e6b8e7b2d7e1c2a9515bd9c82f2af006c838e7a445dcb9-primary.xml.gz;
+        sha256 = "1ffw8njfff680vq2lby8v5dm3af2w7bv5rxqwqkl59hj7bknm75f";
+      };
+      urlPrefix = mirror://fedora/linux/releases/20/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora20x86_64 = {
+      name = "fedora-20-x86_64";
+      fullName = "Fedora 20 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/20/Everything/x86_64/os/repodata/d7777ea6ec66e1c86c3fe1900adf5bf8d877fb77dd06e439bd76bbbec4e82094-primary.xml.gz;
+        sha256 = "1510x32bxfvnplwy81nxfzxpgn7qbgghm4717xnciqb6xjk7wxyp";
+      };
+      urlPrefix = mirror://fedora/linux/releases/20/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
     opensuse103i386 = {
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
@@ -1024,26 +1062,26 @@ rec {
       packages = commonOpenSUSEPackages;
     };
 
-    centos64i386 = {
-      name = "centos-6.4-i386";
-      fullName = "CentOS 6.4 (i386)";
+    centos65i386 = {
+      name = "centos-6.5-i386";
+      fullName = "CentOS 6.5 (i386)";
       packagesList = fetchurl {
-        url = http://mirror.centos.org/centos/6.4/os/i386/repodata/87aa4c4e19f9a3ec93e3d820f1ea6b6ece8810cb45f117a16354465e57a1b50d-primary.xml.gz;
-        sha256 = "03dml5bmwijlcfhigwa5rc88ikkfdgmg286qwf9yr8zr3574ral7";
+        url = http://mirror.centos.org/centos/6.5/os/i386/repodata/a89f27cc7d3cea431f3bd605a1e9309c32d5d409abc1b51a7b5c71c05f18a0c2-primary.xml.gz;
+        sha256 = "1hm031gw0wawgcdbbhdb17adaclw63ls21fn7cgl7siwgp62g7x8";
       };
-      urlPrefix = http://mirror.centos.org/centos/6.4/os/i386/ ;
+      urlPrefix = http://mirror.centos.org/centos/6.5/os/i386/ ;
       archs = ["noarch" "i386"];
       packages = commonCentOSPackages;
     };
 
-    centos64x86_64 = {
-      name = "centos-6.4-x86_64";
-      fullName = "CentOS 6.4 (x86_64)";
+    centos65x86_64 = {
+      name = "centos-6.5-x86_64";
+      fullName = "CentOS 6.5 (x86_64)";
       packagesList = fetchurl {
-        url = http://mirror.centos.org/centos/6.4/os/x86_64/repodata/4d4030b92f010f466eb4f004312b9f532b9e85e60c5e6421e8b429c180ac1efe-primary.xml.gz;
-        sha256 = "1zhymj0c2adlx0hn8phcws2rwaskkwmk217hnip4c3q15ywk0h2d";
+        url = http://mirror.centos.org/centos/6.5/os/x86_64/repodata/3353e378f5cb4bb6c3b3dd2ca266c6d68a1e29c36cf99f76aea3d8e158626024-primary.xml.gz;
+        sha256 = "0930c9cf3n53mrv9zybcqclix2nnqrka4b6xng1vcjybymwf6lrk";
       };
-      urlPrefix = http://mirror.centos.org/centos/6.4/os/x86_64/ ;
+      urlPrefix = http://mirror.centos.org/centos/6.5/os/x86_64/ ;
       archs = ["noarch" "x86_64"];
       packages = commonCentOSPackages;
     };

@@ -34,6 +34,8 @@
       haskellPlatform = self.haskellPlatform_2012_4_0_0;
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      haskeline = self.haskeline_0_7_1_1;
+      terminfo = self.terminfo_0_3_2_6;
     };
 
   ghc741Prefs =
@@ -41,6 +43,8 @@
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      haskeline = self.haskeline_0_7_1_1;
+      terminfo = self.terminfo_0_3_2_6;
     };
 
   ghc722Prefs =
@@ -60,6 +64,8 @@
       hspecExpectations = self.hspecExpectations.override {
         HUnit = self.HUnit_1_2_5_2;
       };
+      haskeline = self.haskeline_0_7_1_1;
+      terminfo = self.terminfo_0_3_2_6;
     };
 
   ghc721Prefs = ghc722Prefs;
@@ -82,6 +88,8 @@
       hspecExpectations = self.hspecExpectations.override {
         HUnit = self.HUnit_1_2_5_2;
       };
+      haskeline = self.haskeline_0_7_1_1;
+      terminfo = self.terminfo_0_3_2_6;
     };
 
   ghc703Prefs =
@@ -102,6 +110,8 @@
       hspecExpectations = self.hspecExpectations.override {
         HUnit = self.HUnit_1_2_5_2;
       };
+      haskeline = self.haskeline_0_7_1_1;
+      terminfo = self.terminfo_0_3_2_6;
     };
 
   ghc702Prefs = ghc701Prefs;
@@ -124,6 +134,8 @@
       hspecExpectations = self.hspecExpectations.override {
         HUnit = self.HUnit_1_2_5_2;
       };
+      haskeline = self.haskeline_0_7_1_1;
+      terminfo = self.terminfo_0_3_2_6;
     };
 
   ghc6123Prefs = ghc6122Prefs;
@@ -150,6 +162,8 @@
       hspecExpectations = self.hspecExpectations.override {
         HUnit = self.HUnit_1_2_5_2;
       };
+      haskeline = self.haskeline_0_7_1_1;
+      terminfo = self.terminfo_0_3_2_6;
     };
 
   ghc6121Prefs =
@@ -176,6 +190,8 @@
       hspecExpectations = self.hspecExpectations.override {
         HUnit = self.HUnit_1_2_5_2;
       };
+      haskeline = self.haskeline_0_7_1_1;
+      terminfo = self.terminfo_0_3_2_6;
     };
 
   ghc6104Prefs =
@@ -196,6 +212,8 @@
         mtl = self.mtl_2_1_2;
         HTTP = self.HTTP_4000_1_1.override { mtl = self.mtl_2_1_2; };
       };
+      haskeline = self.haskeline_0_7_1_1;
+      terminfo = self.terminfo_0_3_2_6;
     };
 
   # Abstraction for Haskell packages collections

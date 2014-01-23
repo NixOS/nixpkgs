@@ -11,8 +11,8 @@
     sha256 = "0d0kgy160pyg472ka43gxk7n09pqhhs9nd93jyxrp9qsyllfc425";
   };
   stable = {
-    version = "31.0.1650.57";
-    url = "http://commondatastorage.googleapis.com/chromium-browser-official/chromium-31.0.1650.57.tar.xz";
-    sha256 = "1xv7frf47hhvqm6f3n2l308yfrs4d8ri70q6pndx7hslhyiixzl9";
+    version = "32.0.1700.77";
+    url = "http://commondatastorage.googleapis.com/chromium-browser-official/chromium-32.0.1700.77.tar.xz";
+    sha256 = "1mwqa5k32d168swpw0bdcnhglxwcqdsx766fq0iz22h3hd4ccdwa";
   };
 }

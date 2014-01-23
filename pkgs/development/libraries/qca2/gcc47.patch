@@ -1,0 +1,12 @@
+# Thanks to http://lists.pld-linux.org/mailman/pipermail/pld-cvs-commit/Week-of-Mon-20120917/347917.html
+--- qca-2.0.3/src/botantools/botan/botan/secmem.h.orig 2007-04-19 23:26:13.000000000 +0200
++++ qca-2.0.3/src/botantools/botan/botan/secmem.h  2012-09-16 23:28:43.767480490 +0200
+@@ -214,7 +214,7 @@
+ 
+       SecureVector(u32bit n = 0) { MemoryRegion<T>::init(true, n); }
+       SecureVector(const T in[], u32bit n)
+-         { MemoryRegion<T>::init(true); set(in, n); }
++         { MemoryRegion<T>::init(true); this->set(in, n); }
+       SecureVector(const MemoryRegion<T>& in)
+          { MemoryRegion<T>::init(true); set(in); }
+       SecureVector(const MemoryRegion<T>& in1, const MemoryRegion<T>& in2)

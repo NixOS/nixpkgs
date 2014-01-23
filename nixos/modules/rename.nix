@@ -113,6 +113,11 @@ in zipModules ([]
 # !!! this hardcodes bash, could we detect from config which shell is actually used?
 ++ obsolete [ "environment" "promptInit" ] [ "programs" "bash" "promptInit" ]
 
+++ obsolete [ "services" "xserver" "driSupport" ] [ "services" "mesa" "driSupport" ]
+++ obsolete [ "services" "xserver" "driSupport32Bit" ] [ "services" "mesa" "driSupport32Bit" ]
+++ obsolete [ "services" "xserver" "s3tcSupport" ] [ "services" "mesa" "s3tcSupport" ]
+++ obsolete [ "services" "xserver" "videoDrivers" ] [ "services" "mesa" "videoDrivers" ]
+
 # Options that are obsolete and have no replacement.
 ++ obsolete' [ "boot" "loader" "grub" "bootDevice" ]
 ++ obsolete' [ "boot" "initrd" "luks" "enable" ]

@@ -1,12 +1,13 @@
-{ fetchurl, stdenv, unzip }:
+{ requireFile, stdenv, unzip }:
 
 stdenv.mkDerivation rec {
-  version = "4.0";
+  version = "6.0";
   name = "amdadl-sdk-${version}";
 
-  src = fetchurl {
-    url = "http://download2-developer.amd.com/amd/GPU/zip/ADL_SDK_${version}.zip";
-    sha256 = "4265ee2f265b69cc39b61e10f79741c1d799f4edb71dce14a7d88509fbec0efa";
+  src = requireFile {
+    name = "ADL_SDK_6.0.zip";
+    url = http://developer.amd.com/tools-and-sdks/graphics-development/display-library-adl-sdk/;
+    sha256 = "429f4fd1edebb030d6366f4e0a877cf105e4383f7dd2ccf54e5aef8f2e4242c9";
   };
 
   buildInputs = [ unzip ];
@@ -15,6 +16,10 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ''
     unzip $src
+  '';
+
+  patchPhase = ''
+    sed -i -e '/include/a \#include <wchar.h>' include/adl_structures.h || die
   '';
 
   buildPhase = ''

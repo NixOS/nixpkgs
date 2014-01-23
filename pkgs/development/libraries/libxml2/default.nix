@@ -41,7 +41,7 @@ stdenv.mkDerivation (rec {
   preInstall = ''substituteInPlace python/libxml2mod.la --replace "${python}" "$out"'';
   installFlags = ''pythondir="$(out)/lib/${python.libPrefix}/site-packages"'';
 
-} // stdenv.lib.optionalAttrs (!pythonSupport && stdenv.isFreeBSD) {
+} // stdenv.lib.optionalAttrs (!pythonSupport) {
   configureFlags = "--with-python=no"; # otherwise build impurity bites us
 })
 

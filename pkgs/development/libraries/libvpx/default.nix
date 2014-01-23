@@ -1,13 +1,13 @@
 {stdenv, fetchurl, bash, yasm, which, perl}:
 
-let version = "1.2.0";
+let version = "1.3.0";
 in
 stdenv.mkDerivation rec {
   name = "libvpx-" + version;
 
   src = fetchurl { # sadly, there's no official tarball for this release
-    url = "ftp://ftp.archlinux.org/other/libvpx/libvpx-${version}.tar.xz";
-    sha256 = "02k9ylswgr2hvjqmg422fa9ggym0g94gzwb14nnckly698rvjc50";
+    url = "http://webm.googlecode.com/files/libvpx-v1.3.0.tar.bz2";
+    sha1 = "191b95817aede8c136cc3f3745fb1b8c50e6d5dc";
   };
 
   patchPhase = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     [ "--disable-install-srcs" "--disable-install-docs" "--disable-examples"
       "--enable-vp8" "--enable-runtime-cpu-detect" "--enable-pic" ]
     # --enable-shared is only supported on ELF
-    ++ stdenv.lib.optional (!stdenv.isDarwin) "--enable-shared";
+    ++ stdenv.lib.optional (!stdenv.isDarwin) "--disable-static --enable-shared";
 
   installPhase = ''
     make quiet=false DIST_DIR=$out install

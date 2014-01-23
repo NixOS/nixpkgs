@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "13miyas47bmijmadm68cbvb21n4s156gjafz7kfx9brk9djfkh0q";
   };
 
+  patchPhase = ''
+    sed -i -e "s|/tmp/make.log|$TMPDIR/make.log|g" src/Pl2Wam/check_boot
+  '';
+
   preConfigure = ''
     cd src
     configureFlagsArray=(

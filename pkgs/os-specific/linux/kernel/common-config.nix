@@ -63,7 +63,9 @@ with stdenv.lib;
 
   # Networking options.
   IP_PNP n
+  ${optionalString (versionOlder version "3.13") ''
   IPV6_PRIVACY y
+  ''}
   NETFILTER_ADVANCED y
   IP_VS_PROTO_TCP y
   IP_VS_PROTO_UDP y
@@ -176,7 +178,7 @@ with stdenv.lib;
   AIC79XX_DEBUG_ENABLE n
   AIC7XXX_DEBUG_ENABLE n
   AIC94XX_DEBUG n
-  ${optionalString (versionAtLeast version "3.3") ''
+  ${optionalString (versionAtLeast version "3.3" && versionOlder version "3.13") ''
     AUDIT_LOGINUID_IMMUTABLE y
   ''}
   B43_PCMCIA y

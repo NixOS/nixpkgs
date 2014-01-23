@@ -35,6 +35,7 @@
   ktosiek = "Tomasz Kontusz <tomasz.kontusz@gmail.com>";
   lovek323 = "Jason O'Conal <jason@oconal.id.au>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
+  madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   matejc = "Matej Cotman <cotman.matej@gmail.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
@@ -57,6 +58,7 @@
   shlevy = "Shea Levy <shea@shealevy.com>";
   simons = "Peter Simons <simons@cryp.to>";
   smironov = "Sergey Mironov <ierton@gmail.com>";
+  sprock = "Roger Mason <rmason@mun.ca>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";

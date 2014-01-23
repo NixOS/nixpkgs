@@ -9,7 +9,6 @@ rec {
 
 #### Overrides of libraries
 
-  librsvg = pkgs.librsvg.override { inherit gtk2; }; # gtk2 mysteriously needed in librsvg for goffice (commented in Gentoo)
   libsoup = pkgs.libsoup_2_44;
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
@@ -18,26 +17,37 @@ rec {
 
   at_spi2_core = callPackage ./core/at-spi2-core { };
 
+  caribou = callPackage ./core/caribou { };
+
   dconf = callPackage ./core/dconf { };
 
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
+  evolution_data_server = callPackage ./core/evolution-data-server { };
+
   gconf = callPackage ./core/gconf { };
+
+  geocode_glib = callPackage ./core/geocode-glib { };
 
   gcr = callPackage ./core/gcr { }; # ToDo: tests fail
 
   gdm = callPackage ./core/gdm { };
+
+  gjs = callPackage ./core/gjs { };
 
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };
 
   gnome-menus = callPackage ./core/gnome-menus { };
 
   gnome_keyring = callPackage ./core/gnome-keyring { };
+
   libgnome_keyring = callPackage ./core/libgnome-keyring { };
 
   gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
 
   gnome_session = callPackage ./core/gnome-session { };
+
+  gnome_settings_daemon = callPackage ./core/gnome-settings-daemon { };
 
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
@@ -53,6 +63,8 @@ rec {
 
   libgee = callPackage ./core/libgee { };
 
+  libgdata = callPackage ./core/libgdata { };
+
   libgxps = callPackage ./core/libgxps { };
 
   libpeas = callPackage ./core/libpeas {};
@@ -62,6 +74,8 @@ rec {
   libgweather = callPackage ./core/libgweather { };
 
   libzapojit = callPackage ./core/libzapojit { };
+
+  mutter = callPackage ./core/mutter { };
 
   nautilus = callPackage ./core/nautilus { };
 

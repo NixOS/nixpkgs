@@ -23,6 +23,8 @@ stdenv.mkDerivation {
   buildPhase = "python setup.py install --prefix=$out --install-data=$out/share --install-lib=$(toPythonPath $out) --symlink-scons -O1";
   installPhase = "for n in $out/bin/*-${version}; do wrapProgram $n --suffix PYTHONPATH ':' \"$(toPythonPath $out)\"; done";
 
+  pythonPath = [];
+
   meta = {
     homepage = "http://scons.org/";
     description = "An improved, cross-platform substitute for Make";

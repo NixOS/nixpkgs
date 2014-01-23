@@ -16,7 +16,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.bluez.org/;
 
     licenses = stdenv.lib.licenses.gpl2;
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }

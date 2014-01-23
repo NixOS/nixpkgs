@@ -27,11 +27,13 @@ stdenv.mkDerivation rec {
     optional zlibSupport zlib ++
     optional gssSupport gss ++
     optional c-aresSupport c-ares ++
-    optional sslSupport openssl;
+    optional sslSupport openssl ++
+    optional scpSupport libssh2;
 
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
   '';
+
   configureFlags = [
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
@@ -67,9 +69,10 @@ stdenv.mkDerivation rec {
     inherit sslSupport openssl;
   };
 
-  meta = {
-    homepage = "http://curl.haxx.se/";
+  meta = with stdenv.lib; {
     description = "A command line tool for transferring files with URL syntax";
-    platforms = stdenv.lib.platforms.all;
+    homepage    = http://curl.haxx.se/;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.all;
   };
 }

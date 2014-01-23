@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
+{ stdenv, fetchgit, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
 , python, ruby, openjdk, nettools
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.17";
+  version = "2.0.19";
   name = "munin-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/munin-monitoring/munin/archive/${version}.tar.gz";
-    sha256 = "0xfml2r6nssn3lcfqcf3yshxfijyrf9frnhdp83mg6raaznlhx1z";
+  src = fetchgit {
+    url = "git://github.com/munin-monitoring/munin.git";
+    rev = "refs/tags/${version}";
+    sha256 = "0027rrdrmcql68b475jlxnfgkijbfngynkjpdii6fgaszswqz3ay";
   };
 
   buildInputs = [ 
@@ -68,7 +69,8 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     substituteInPlace "Makefile" \
-      --replace "/bin/pwd" "pwd"
+      --replace "/bin/pwd" "pwd" \
+      --replace "HTMLOld.3pm" "HTMLOld.3"
 
     # munin checks at build time if user/group exists, unpure
     sed -i '/CHECKUSER/d' Makefile

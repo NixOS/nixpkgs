@@ -4,16 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "crypto-conduit";
-  version = "0.5.2.1";
-  sha256 = "1i9m4pzy4ib9n941zlh398idmxcjak2496c4c73i8bmikryahl8p";
+  version = "0.5.2.2";
+  sha256 = "1969jys4za3m818jvnfcsv5hpc50bcvkrmy9lxr8fz854q01vhk2";
   buildDepends = [ cereal conduit cryptoApi transformers ];
   testDepends = [
     cereal conduit cryptoApi cryptocipher cryptohashCryptoapi hspec
     skein transformers
   ];
-  patchPhase = ''
-    sed -i -e 's|crypto-api >=.*|crypto-api|' crypto-conduit.cabal
-  '';
   jailbreak = true;
   doCheck = false;
   meta = {

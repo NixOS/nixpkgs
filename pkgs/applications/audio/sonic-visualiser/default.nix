@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
     url = "http://code.soundsoftware.ac.uk/attachments/download/194/${name}.tar.gz";
     sha256 = "00igf7j6s8xfyxnlkbqma0yby9pknxqzy8cmh0aw95ix80cw56fq";
   };
+  patches = [(fetchurl {
+    url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-sound/sonic-visualiser/files/sonic-visualiser-1.9-gcc47.patch;
+    sha256 = "0dhh111crvjvhcjqp7j9jqnvs8zmd6xrcirmzqrrnca1h0vbpkay";
+    name = "gcc47.patch";
+  })];
 
   buildInputs =
     [ libsndfile qt4 fftw /* should be fftw3f ??*/ bzip2 librdf rubberband

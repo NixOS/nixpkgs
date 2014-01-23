@@ -1,0 +1,11 @@
+--- perl-5.16.2/hints/solaris_2.sh.orig	2013-02-14 19:29:49.453988140 +0000
++++ perl-5.16.2/hints/solaris_2.sh	2013-02-14 19:30:31.681631019 +0000
+@@ -568,7 +568,7 @@
+ #		    ccflags="$ccflags -Wa,`getconf XBS5_LP64_OFF64_CFLAGS 2>/dev/null`"
+ #		fi
+ 		ldflags="$ldflags -m64"
+-		lddlflags="$lddlflags -G -m64"
++		lddlflags="$lddlflags -shared -m64"
+ 		;;
+ 	    *)
+ 		getconfccflags="`getconf XBS5_LP64_OFF64_CFLAGS 2>/dev/null`"

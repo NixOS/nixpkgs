@@ -1,11 +1,11 @@
 { stdenv, fetchurl, unicodeSupport ? true, cplusplusSupport ? true }:
 
 stdenv.mkDerivation rec {
-  name = "pcre-8.31";
+  name = "pcre-8.34";
 
   src = fetchurl {
     url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
-    sha256 = "5778a02535473c7ee7838ea598c19f451e63cf5eec0bf0307a688301c9078c3c";
+    sha256 = "0gsqmsp0q0n3q0ba32gkjvgcsdy6nwidqa7sbxkbw817zzhkl15n";
   };
 
   # The compiler on Darwin crashes with an internal error while building the
@@ -13,11 +13,14 @@ stdenv.mkDerivation rec {
   # problem. In case we ever update the Darwin GCC version, the exception for
   # that platform ought to be removed.
   configureFlags = ''
+    --enable-jit
     ${if unicodeSupport then "--enable-unicode-properties" else ""}
     ${if !cplusplusSupport then "--disable-cpp" else ""}
   '' + stdenv.lib.optionalString stdenv.isDarwin "CXXFLAGS=-O0";
 
-  doCheck = !stdenv.isCygwin;                   # XXX: test failure on Cygwin
+  doCheck = with stdenv; !(isCygwin || isFreeBSD);
+    # XXX: test failure on Cygwin
+    # we are running out of stack on both freeBSDs on Hydra
 
   meta = {
     homepage = "http://www.pcre.org/";

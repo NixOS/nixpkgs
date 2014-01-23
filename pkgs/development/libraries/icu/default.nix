@@ -1,20 +1,22 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, fixDarwinDylibNames }:
 
 let
 
   pname = "icu4c";
-  ver_maj = "52";
-  ver_min = "1";
-  version = "${ver_maj}.${ver_min}";
+  version = "52.1";
 in
-
 stdenv.mkDerivation {
   name = pname + "-" + version;
 
   src = fetchurl {
-    url = "http://download.icu-project.org/files/icu4c/${version}/icu4c-${ver_maj}_${ver_min}-src.tgz";
+    url = "http://download.icu-project.org/files/${pname}/${version}/${pname}-"
+      + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
     sha256 = "14l0kl17nirc34frcybzg0snknaks23abhdxkmsqg3k9sil5wk9g";
   };
+
+  # FIXME: This fixes dylib references in the dylibs themselves, but
+  # not in the programs in $out/bin.
+  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   postUnpack = ''
     sourceRoot=''${sourceRoot}/source

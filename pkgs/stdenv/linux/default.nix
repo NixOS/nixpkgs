@@ -7,7 +7,7 @@
 # The function defaults are for easy testing.
 { system ? builtins.currentSystem
 , allPackages ? import ../../top-level/all-packages.nix
-, platform ? null, config }:
+, platform ? null, config ? {} }:
 
 rec {
 
@@ -17,7 +17,7 @@ rec {
     else if system == "powerpc-linux" then import ./bootstrap/powerpc
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel
     else if system == "armv6l-linux" then import ./bootstrap/armv6l
-    else if system == "armv7l-linux" then import ./bootstrap/armv5tel
+    else if system == "armv7l-linux" then import ./bootstrap/armv6l
     else if system == "mips64el-linux" then import ./bootstrap/loongson2f
     else abort "unsupported platform for the pure Linux stdenv";
 
@@ -58,7 +58,8 @@ rec {
     builder = bootstrapFiles.sh;
 
     args =
-      if (system == "armv5tel-linux" || system == "armv6l-linux")
+      if system == "armv5tel-linux" || system == "armv6l-linux" 
+        || system == "armv7l-linux"
       then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
       else [ ./scripts/unpack-bootstrap-tools.sh ];
 
@@ -165,12 +166,14 @@ rec {
     bootStdenv = stdenvLinuxBoot1;
   };
 
+  binutils1 = stdenvLinuxBoot1Pkgs.binutils.override { gold = false; };
 
-  # 3) 2nd stdenv that we will use to build only the glibc.
+
+  # 3) 2nd stdenv that we will use to build only Glibc.
   stdenvLinuxBoot2 = stdenvBootFun {
     gcc = wrapGCC {
       libc = bootstrapGlibc;
-      binutils = stdenvLinuxBoot1Pkgs.binutils;
+      binutils = binutils1;
       coreutils = bootstrapTools;
     };
     overrides = pkgs: {
@@ -181,7 +184,7 @@ rec {
 
 
   # 4) These are the packages that we can build with the 2nd
-  #    stdenv.  We only need Glibc (in step 5).
+  #    stdenv.
   stdenvLinuxBoot2Pkgs = allPackages {
     inherit system platform;
     bootStdenv = stdenvLinuxBoot2;
@@ -193,12 +196,12 @@ rec {
   stdenvLinuxGlibc = stdenvLinuxBoot2Pkgs.glibc;
 
 
-  # 6) Construct a third stdenv identical to the 2nd, except that
-  #    this one uses the Glibc built in step 3.  It still uses
-  #    the recent binutils and rest of the bootstrap tools, including GCC.
+  # 6) Construct a third stdenv identical to the 2nd, except that this
+  #    one uses the Glibc built in step 5.  It still uses the recent
+  #    binutils and rest of the bootstrap tools, including GCC.
   stdenvLinuxBoot3 = stdenvBootFun {
     gcc = wrapGCC {
-      binutils = stdenvLinuxBoot1Pkgs.binutils;
+      binutils = binutils1;
       coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
     };
@@ -215,6 +218,9 @@ rec {
       cloog = pkgs.cloog.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       ppl = pkgs.ppl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
     };
+    extraAttrs = {
+      glibc = stdenvLinuxGlibc;   # Required by gcc47 build
+    };
     inherit fetchurl;
   };
 
@@ -227,12 +233,11 @@ rec {
 
 
   # 8) Construct a fourth stdenv identical to the second, except that
-  #    this one uses the dynamically linked GCC and Binutils from step
-  #    5.  The other tools (e.g. coreutils) are still from the
-  #    bootstrap tools.
+  #    this one uses the new GCC from step 7.  The other tools
+  #    (e.g. coreutils) are still from the bootstrap tools.
   stdenvLinuxBoot4 = stdenvBootFun {
     gcc = wrapGCC rec {
-      inherit (stdenvLinuxBoot3Pkgs) binutils;
+      binutils = binutils1;
       coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
       gcc = stdenvLinuxBoot3Pkgs.gcc.gcc;
@@ -254,9 +259,9 @@ rec {
   };
 
 
-  # 10) Construct the final stdenv.  It uses the Glibc, GCC and
-  #     Binutils built above, and adds in dynamically linked versions
-  #     of all other tools.
+  # 10) Construct the final stdenv.  It uses the Glibc and GCC, and
+  #     adds in a new binutils that doesn't depend on bootstrap-tools,
+  #     as well as dynamically linked versions of all other tools.
   #
   #     When updating stdenvLinux, make sure that the result has no
   #     dependency (`nix-store -qR') on bootstrapTools or the
@@ -264,15 +269,20 @@ rec {
   stdenvLinux = import ../generic rec {
     inherit system config;
 
-    preHook = commonPreHook;
+    preHook =
+      ''
+        # Make "strip" produce deterministic output, by setting
+        # timestamps etc. to a fixed value.
+        commonStripFlags="--enable-deterministic-archives"
+        ${commonPreHook}
+      '';
 
     initialPath =
       ((import ../common-path.nix) {pkgs = stdenvLinuxBoot4Pkgs;})
       ++ [stdenvLinuxBoot4Pkgs.patchelf];
 
     gcc = wrapGCC rec {
-      inherit (stdenvLinuxBoot3Pkgs) binutils;
-      inherit (stdenvLinuxBoot4Pkgs) coreutils;
+      inherit (stdenvLinuxBoot4Pkgs) binutils coreutils;
       libc = stdenvLinuxGlibc;
       gcc = stdenvLinuxBoot4.gcc.gcc;
       shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";

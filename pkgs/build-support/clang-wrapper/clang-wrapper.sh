@@ -76,11 +76,12 @@ if test "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_STORE"; then
         n=$((n + 1))
     done
     params=("${rest[@]}")
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE --sysroot=/var/empty"
 fi
 
 if test -n "@libcxx@"; then
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem@libcxx@/include/c++/v1 -stdlib=libc++"
-    NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L@libcxx@/lib -stdlib=libc++ -lc++abi"
+    NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L@libcxx@/lib -stdlib=libc++ -L@libcxxabi@/lib -lc++abi"
 fi
 
 # Add the flags for the C compiler proper.
@@ -136,13 +137,6 @@ fi
 if test -n "$NIX_CLANG_WRAPPER_EXEC_HOOK"; then
     source "$NIX_CLANG_WRAPPER_EXEC_HOOK"
 fi
-
-# We nuke LD_LIBRARY_PATH here, because clang dynamically links to LLVM.
-# Unfortunately, when such clang is used to build LLVM again, it can get in
-# trouble temporarily binding to the build-directory versions of the libraries
-# (the buildsystem sets LD_LIBRARY_PATH).  That is very undesirable and can
-# cause mysterious failures.
-LD_LIBRARY_PATH=
 
 # Call the real `clang'.  Filter out warnings from stderr about unused
 # `-B' flags, since they confuse some programs.  Deep bash magic to

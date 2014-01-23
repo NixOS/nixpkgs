@@ -1,7 +1,7 @@
 { stdenv, fetchurl, config, pkgconfig, yasm, zlib, bzip2, alsaLib, texinfo, perl
 , lame, speex, libtheora, libvorbis, libvpx, x264, xvidcore, libopus
 , libvdpau, libva, faac, libdc1394, libXext, libXfixes, SDL
-, freetype, fontconfig, fdk_aac
+, freetype, fontconfig, fdk_aac, gnutls
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   speexSupport = config.ffmpeg.speex or true;
   theoraSupport = config.ffmpeg.theora or true;
   vorbisSupport = config.ffmpeg.vorbis or true;
-  vpxSupport = config.ffmpeg.vpx or false;
+  vpxSupport = config.ffmpeg.vpx or true;
   x264Support = config.ffmpeg.x264 or true;
   xvidSupport = config.ffmpeg.xvid or true;
   opusSupport = config.ffmpeg.opus or true;
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   x11grabSupport = config.ffmpeg.x11grab or false;
   playSupport = config.ffmpeg.play or true;
   freetypeSupport = config.ffmpeg.freetype or true;
+  gnutlsSupport = config.ffmpeg.gnutls or true;
 
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
   # the resulting library is GPL'ed, so it can only be used in GPL'ed
@@ -54,7 +55,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional x11grabSupport "--enable-x11grab"
     ++ stdenv.lib.optional playSupport "--enable-ffplay"
     ++ stdenv.lib.optional freetypeSupport "--enable-libfreetype --enable-fontconfig"
-    ++ stdenv.lib.optional fdkAACSupport "--enable-libfdk_aac --enable-nonfree";
+    ++ stdenv.lib.optional fdkAACSupport "--enable-libfdk_aac --enable-nonfree"
+    ++ stdenv.lib.optional gnutlsSupport "--enable-gnutls";
 
   buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib texinfo perl ]
     ++ stdenv.lib.optional mp3Support lame
@@ -72,7 +74,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals x11grabSupport [ libXext libXfixes ]
     ++ stdenv.lib.optional playSupport SDL
     ++ stdenv.lib.optionals freetypeSupport [ freetype fontconfig ]
-    ++ stdenv.lib.optional fdkAACSupport fdk_aac;
+    ++ stdenv.lib.optional fdkAACSupport fdk_aac
+    ++ stdenv.lib.optional gnutlsSupport gnutls;
 
   enableParallelBuilding = true;
 
