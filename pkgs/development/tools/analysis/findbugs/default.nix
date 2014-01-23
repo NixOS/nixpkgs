@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "findbugs-2.0.3";
@@ -13,9 +13,25 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    mkdir -p $out
-    cp -prd bin lib plugin doc $out/
-    rm $out/bin/*.bat
+    d=$out/libexec/findbugs
+    mkdir -p $d $out/bin $out/nix-support
+
+    cp -prd bin lib plugin doc $d/
+    rm $d/bin/*.bat
+    for i in $d/bin/*; do
+      if [ -f $i ]; then ln -s $i $out/bin/; fi
+    done
+
+    # Get rid of unnecessary JARs.
+    rm $d/lib/ant.jar
+
+    # Make some JARs findable.
+    mkdir -p $out/share/java
+    ln -s $d/lib/{findbugs.jar,findbugs-ant.jar} $out/share/java/
+
+    cat <<EOF > $out/nix-support/setup-hook
+    export FINDBUGS_HOME=$d
+    EOF
   '';
 
   meta = {
