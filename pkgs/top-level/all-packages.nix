@@ -5703,6 +5703,7 @@ let
     harfbuzz = harfbuzz.override {
       withIcu = true;
     };
+    gst-plugins-base = gst_all_1.gst-plugins-base;
   };
 
   wildmidi = callPackage ../development/libraries/wildmidi { };
