@@ -31,3 +31,6 @@ fi
 if test -n "@coreutils@"; then
     addToSearchPath PATH @coreutils@/bin
 fi
+
+: ${CXX:=clang++}
+export CXX
