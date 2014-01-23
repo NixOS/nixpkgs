@@ -2719,8 +2719,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   lhs2tex = callPackage ../tools/typesetting/lhs2tex {};
 
-  myhasktags = callPackage ../tools/misc/myhasktags {};
-
   packunused = callPackage ../development/tools/haskell/packunused {};
 
   splot = callPackage ../development/tools/haskell/splot {};

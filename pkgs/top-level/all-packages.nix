@@ -10138,7 +10138,7 @@ let
 
   sourceAndTags = import ../misc/source-and-tags {
     inherit pkgs stdenv unzip lib ctags;
-    hasktags = haskellPackages.myhasktags;
+    hasktags = haskellPackages.hasktags;
   };
 
   splix = callPackage ../misc/cups/drivers/splix { };
