@@ -84,6 +84,12 @@ stdenv.mkDerivation {
               do
                   chmod 755 "$i"
               done
+              
+              # Simulate a login
+              mkdir -p $HOME/.titanium
+              cat > $HOME/.titanium/auth_session.json <<EOF
+              { "loggedIn": true }
+              EOF
             
               # Set the SDK to our copy
               titanium --config-file $TMPDIR/config.json config sdk.defaultInstallLocation $TMPDIR/titaniumsdk
