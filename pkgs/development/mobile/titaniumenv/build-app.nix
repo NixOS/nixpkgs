@@ -37,18 +37,18 @@ stdenv.mkDerivation {
     EOF
     
     echo "{}" > $TMPDIR/config.json
-    titanium --config-file $TMPDIR/config.json config sdk.defaultInstallLocation ${titaniumsdk}
+    titanium --config-file $TMPDIR/config.json --no-colors config sdk.defaultInstallLocation ${titaniumsdk}
 
     mkdir -p $out
     
     ${if target == "android" then
         ''
-          titanium config --config-file $TMPDIR/config.json android.sdkPath ${androidsdkComposition}/libexec/android-sdk-*
+          titanium config --config-file $TMPDIR/config.json --no-colors android.sdkPath ${androidsdkComposition}/libexec/android-sdk-*
           
           ${if release then
-            ''titanium build --config-file $TMPDIR/config.json --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --password ${androidKeyStorePassword} --output-dir $out''
+            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --password ${androidKeyStorePassword} --output-dir $out''
           else
-            ''titanium build --config-file $TMPDIR/config.json --force --platform android --target emulator --build-only --output $out''}
+            ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only --output $out''}
         ''
       else if target == "iphone" then
         ''
@@ -92,10 +92,10 @@ stdenv.mkDerivation {
               EOF
             
               # Set the SDK to our copy
-              titanium --config-file $TMPDIR/config.json config sdk.defaultInstallLocation $TMPDIR/titaniumsdk
+              titanium --config-file $TMPDIR/config.json --no-colors config sdk.defaultInstallLocation $TMPDIR/titaniumsdk
             
               # Do the actual build
-              titanium build --config-file $TMPDIR/config.json --force --platform ios --target dist-adhoc --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName --device-family universal --output-dir $out
+              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target dist-adhoc --pp-uuid $provisioningId --distribution-name "${iosCertificateName}" --keychain $HOME/Library/Keychains/$keychainName --device-family universal --output-dir $out
             
               # Remove our generated keychain
             
@@ -111,7 +111,7 @@ stdenv.mkDerivation {
               cp -av * $out
               cd $out
             
-              titanium build --config-file $TMPDIR/config.json --force --platform ios --target simulator --build-only --device-family universal --output-dir $out
+              titanium build --config-file $TMPDIR/config.json --force --no-colors --platform ios --target simulator --build-only --device-family universal --output-dir $out
           ''}
         ''
 
