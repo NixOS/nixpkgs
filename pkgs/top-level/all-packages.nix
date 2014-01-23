@@ -3109,7 +3109,9 @@ let
 
   lush2 = callPackage ../development/interpreters/lush {};
 
-  maude = callPackage ../development/interpreters/maude { };
+  maude = callPackage ../development/interpreters/maude {
+    bison = bison2;
+  };
 
   octave = callPackage ../development/interpreters/octave {
     fltk = fltk13;
