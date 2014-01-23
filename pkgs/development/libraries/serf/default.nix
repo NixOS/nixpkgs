@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     scons PREFIX="$out" OPENSSL="${openssl}" ZLIB="${zlib}" APR="$(echo "${apr}"/bin/*-config)" \
-        APU="$(echo "${aprutil}"/bin/*-config)" GSSAPI="${krb5}" CC="${stdenv.gcc}/bin/gcc" 
+        APU="$(echo "${aprutil}"/bin/*-config)" GSSAPI="${krb5}" CC="${stdenv.gcc}/bin/gcc"
   '';
 
   installPhase = ''
@@ -40,6 +40,6 @@ stdenv.mkDerivation {
     description = "HTTP client library based on APR";
     license = stdenv.lib.licenses.asl20 ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }
