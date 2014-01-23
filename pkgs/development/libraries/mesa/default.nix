@@ -93,7 +93,7 @@ stdenv.mkDerivation {
     ;
 
   enableParallelBuilding = true;
-  #doCheck = true; # https://bugs.freedesktop.org/show_bug.cgi?id=67672,
+  doCheck = true; # https://bugs.freedesktop.org/show_bug.cgi?id=67672,
     #tests for 10.* fail to link due to some RTTI problem
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM;
