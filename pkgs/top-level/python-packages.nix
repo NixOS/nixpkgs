@@ -7846,12 +7846,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   libarchive = buildPythonPackage rec {
-    version = "3.0.4-5";
+    version = "3.1.2-1";
     name = "libarchive-${version}";
 
     src = fetchurl {
       url = "http://python-libarchive.googlecode.com/files/python-libarchive-${version}.tar.gz";
-      sha256 = "141yx9ym8gvybn67mw0lmgafzsd79rmd9l77lk0k6m2fzclqx1j5";
+      sha256 = "0j4ibc4mvq64ljya9max8832jafi04jciff9ia9qy0xhhlwkcx8x";
     };
 
     propagatedBuildInputs = [ pkgs.libarchive ];
