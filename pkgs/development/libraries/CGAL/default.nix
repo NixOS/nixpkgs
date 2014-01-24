@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "4.3";
   name = "cgal-${version}";
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/29125/CGAL-${version}.tar.gz";
-    sha256 = "193vjhzlf7f2kw6dbg5yw8v0izdvmnrylqzqhw92vml7jjnr8494";
+    url = "https://gforge.inria.fr/frs/download.php/32995/CGAL-${version}.tar.xz";
+    sha256 = "015vw57dmy43bf63mg3916cgcsbv9dahwv24bnmiajyanj2mhiyc";
   };
 
   buildInputs = [cmake boost gmp mpfr ];
