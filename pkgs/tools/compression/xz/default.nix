@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
          bzip2.
       '';
 
-    licenses = [ "GPLv2+" "LGPLv2.1+" ];
+    license = [ "GPLv2+" "LGPLv2.1+" ];
     maintainers = with stdenv.lib.maintainers; [ sander ];
     platforms = stdenv.lib.platforms.all;
   };

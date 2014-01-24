@@ -4368,7 +4368,7 @@ let self = _self // overrides; _self = with self; {
         Sigma/Foveon and Sony.
       '';
 
-      licenses = [ "GPLv1+" /* or */ "Artistic" ];
+      license = [ "GPLv1+" /* or */ "Artistic" ];
 
       maintainers = [ ];
       platforms = stdenv.lib.platforms.unix;
