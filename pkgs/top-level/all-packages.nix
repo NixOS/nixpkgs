@@ -6369,6 +6369,7 @@ let
 
   apparmor = callPackage ../os-specific/linux/apparmor {
     inherit (perlPackages) LocaleGettext TermReadKey RpcXML;
+    bison = bison2;
   };
 
   atop = callPackage ../os-specific/linux/atop { };
@@ -7518,6 +7519,8 @@ let
       ghostscript jasper xz;
     inherit (xlibs) libX11;
   };
+
+  docker = callPackage ../applications/virtualization/docker { };
 
   doodle = callPackage ../applications/search/doodle { };
 
