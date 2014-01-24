@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://goodies.xfce.org/projects/applications/xfce4-screenshooter;
     description = "Xfce screenshooter";
     license = "GPLv2+";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
