@@ -26,7 +26,7 @@ Section "Device"
     VendorName "NVIDIA Corporation"
     Option "NoLogo" "true"
     Option "UseEDID" "false"
-    Option "ConnectedMonitor" "CRT-0"
+    Option "UseDisplayDevice" "none"
 EndSection
 
 Section "Screen"
