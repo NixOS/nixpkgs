@@ -26,6 +26,10 @@ cabal.mkDerivation (self: {
     testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
   doCheck = false;
+  patchPhase = ''
+    sed -i -e 's|blaze-markup.*,|blaze-markup,|' -e 's|blaze-html.*,|blaze-html,|' \
+      -e 's|pandoc-citeproc.*,|pandoc-citeproc,|' hakyll.cabal
+  '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";
