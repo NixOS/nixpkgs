@@ -3,6 +3,7 @@
 rec {
   inherit (pkgs) glib gtk2 gtk3 gnome2;
   gtk = gtk3; # just to be sure
+  libcanberra = pkgs.libcanberra_gtk3; # just to be sure
   inherit (pkgs.gnome2) gnome_common ORBit2;
   orbit = ORBit2;
 
