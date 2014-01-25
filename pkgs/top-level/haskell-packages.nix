@@ -1769,6 +1769,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   pathPieces = callPackage ../development/libraries/haskell/path-pieces {};
 
+  patience = callPackage ../development/libraries/haskell/patience {};
+
   pandoc = callPackage ../development/libraries/haskell/pandoc {};
 
   pandocCiteproc = callPackage ../development/libraries/haskell/pandoc-citeproc {};
