@@ -3794,7 +3794,7 @@ let self = _self // overrides; _self = with self; {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
     };
-  };  
+  };
 
   HeapFibonacci = buildPerlPackage {
     name = "Heap-Fibonacci-0.80";
@@ -3871,18 +3871,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLFormHandler = buildPerlPackage {
-    name = "HTML-FormHandler-0.40025";
+    name = "HTML-FormHandler-0.40055";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GS/GSHANK/HTML-FormHandler-0.40025.tar.gz;
-      sha256 = "0fp8qcbkr19qn1859rpn3ca3b7w1jjyprwlj82dnvfi3b5jf8507";
+      url = mirror://cpan/authors/id/G/GS/GSHANK/HTML-FormHandler-0.40055.tar.gz;
+      sha256 = "47e3cf69e2475cba86356eda340e6622df0525e2d0aa2343aef9f924f13d86cd";
     };
     buildInputs = [ FileShareDirInstall PadWalker TestDifferences TestException TestMemoryCycle ];
-    propagatedBuildInputs = [ aliased ClassLoad DataClone DateTime DateTimeFormatStrptime EmailValid FileShareDir JSON HTMLTree Moose MooseXGetopt MooseXTypes MooseXTypesCommon MooseXTypesLoadableClass namespaceautoclean SubExporter SubName TryTiny ];
+    propagatedBuildInputs = [ ClassLoad DataClone DateTime DateTimeFormatStrptime EmailValid FileShareDir HTMLTree JSON ListAllUtils Moose MooseXGetopt MooseXTypes MooseXTypesCommon MooseXTypesLoadableClass SubExporter SubName TryTiny aliased namespaceautoclean ];
     meta = {
       description = "HTML forms using Moose";
-      license = "perl5";
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
+      license = "perl";
     };
   };
 
@@ -5724,7 +5724,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ Moose MooseXTypes ];
-    meta = { 
+    meta = {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
     };
