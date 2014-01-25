@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ''
       mkdir -p $out/bin
       makeWrapper ${jdk}/bin/java $out/bin/rascal \
-        --add-flags "-Djava.home=$JAVA_HOME -jar ${src}" \
+        --add-flags "-jar ${src}" \
     '';
 
   meta = {
