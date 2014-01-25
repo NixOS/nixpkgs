@@ -7523,6 +7523,8 @@ let
     inherit (xlibs) libX11;
   };
 
+  dogecoin = callPackage ../applications/misc/dogecoin { };
+
   doodle = callPackage ../applications/search/doodle { };
 
   dunst = callPackage ../applications/misc/dunst { };
