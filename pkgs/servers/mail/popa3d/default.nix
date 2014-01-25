@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.openwall.com/popa3d/";
-    description = "tiny POP3 daemon with security as the primary goal";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    description = "Tiny POP3 daemon with security as the primary goal";
   };
 }
