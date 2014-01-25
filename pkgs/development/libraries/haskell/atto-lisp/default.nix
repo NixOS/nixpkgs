@@ -1,11 +1,16 @@
-{ cabal, attoparsec, blazeBuilder, blazeTextual, deepseq, text }:
+{ cabal, attoparsec, blazeBuilder, blazeTextual, deepseq, HUnit
+, testFramework, testFrameworkHunit, text
+}:
 
 cabal.mkDerivation (self: {
   pname = "atto-lisp";
-  version = "0.2.1.1";
-  sha256 = "089chx4g880fbs7gh1mcvfx2xgbqdi1dxdjax6vbw8xiqgw4pzac";
+  version = "0.2.1.2";
+  sha256 = "0xl5b0gblab3v2sfaxvx3z96660r9xp1m2n3ri6aph3kldbpkfcg";
   buildDepends = [
     attoparsec blazeBuilder blazeTextual deepseq text
+  ];
+  testDepends = [
+    attoparsec HUnit testFramework testFrameworkHunit text
   ];
   jailbreak = true;
   meta = {
