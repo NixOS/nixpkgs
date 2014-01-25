@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libsigsegv }:
+{ stdenv, fetchurl, libsigsegv, readline }:
 
 stdenv.mkDerivation rec {
   name = "gawk-4.1.0";
@@ -12,9 +12,10 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
 
-  buildInputs = [ libsigsegv ];
+  buildInputs = [ libsigsegv readline ];
 
-  configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ];
+  configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}"
+                     "--with-readline=${readline}" ];
 
   meta = {
     homepage = http://www.gnu.org/software/gawk/;
