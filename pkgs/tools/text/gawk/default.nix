@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libsigsegv }:
+{ stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false }:
 
 stdenv.mkDerivation rec {
   name = "gawk-4.1.0";
@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
 
-  buildInputs = [ libsigsegv ];
+  buildInputs = [ libsigsegv ]
+    ++ stdenv.lib.optional readlineSupport readline;
 
-  configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ];
+  configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ]
+    ++ stdenv.lib.optional readlineSupport "--with-readline=${readline}"
+      # only darwin where reported, seems OK on non-chrooted Fedora (don't rebuild stdenv)
+    ++ stdenv.lib.optional (!readlineSupport && stdenv.isDarwin) "--without-readline";
 
   meta = {
     homepage = http://www.gnu.org/software/gawk/;

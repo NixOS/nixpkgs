@@ -974,7 +974,8 @@ let
 
   g500-control = callPackage ../tools/misc/g500-control { };
 
-  gawk = callPackage ../tools/text/gawk { };
+  gawk = lowPrio (callPackage ../tools/text/gawk { });
+  gawkInteractive = gawk.override { readlineSupport = true; };
 
   gdmap = callPackage ../tools/system/gdmap { };
 
