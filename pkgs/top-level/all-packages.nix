@@ -5835,6 +5835,8 @@ let
 
   junit = callPackage ../development/libraries/java/junit { };
 
+  junixsocket = callPackage ../development/libraries/java/junixsocket { };
+
   jzmq = callPackage ../development/libraries/java/jzmq { };
 
   lucene = callPackage ../development/libraries/java/lucene { };
