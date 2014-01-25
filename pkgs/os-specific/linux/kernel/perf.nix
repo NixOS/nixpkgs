@@ -12,6 +12,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     cd tools/perf
     sed -i s,/usr/include/elfutils,$elfutils/include/elfutils, Makefile
+    patch -p1 < ${./perf.diff}
     [ -f bash_completion ] && sed -i 's,^have perf,_have perf,' bash_completion
     export makeFlags="DESTDIR=$out $makeFlags"
   '';
