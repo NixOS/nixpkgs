@@ -1,17 +1,17 @@
-{ cabal, attoparsec, blazeBuilder, bytedump, cryptohash, HUnit, mtl
-, parsec, QuickCheck, random, systemFileio, systemFilepath
+{ cabal, attoparsec, bytedump, cryptohash, HUnit, mtl, parsec
+, patience, QuickCheck, random, systemFileio, systemFilepath
 , testFramework, testFrameworkQuickcheck2, time, vector, zlib
 , zlibBindings
 }:
 
 cabal.mkDerivation (self: {
   pname = "hit";
-  version = "0.5.0";
-  sha256 = "05v49l3k8gwn922d5b5xrzdrakh6bw02bp8hd8yc8163jyazk2vx";
+  version = "0.5.2";
+  sha256 = "05f5xm23049ngvsch9cp2snyknk3qknx1jlb42zi0nbv8f1hymnn";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    attoparsec blazeBuilder cryptohash mtl parsec random systemFileio
+    attoparsec cryptohash mtl parsec patience random systemFileio
     systemFilepath time vector zlib zlibBindings
   ];
   testDepends = [
