@@ -9947,6 +9947,8 @@ let
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
+  beep = callPackage ../misc/beep { };
+
   cups = callPackage ../misc/cups { libusb = libusb1; };
 
   cups_pdf_filter = callPackage ../misc/cups/pdf-filter.nix { };
