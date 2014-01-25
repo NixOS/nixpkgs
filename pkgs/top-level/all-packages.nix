@@ -5036,6 +5036,8 @@ let
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
   libyamlcpp03 = callPackage ../development/libraries/libyaml-cpp/0.3.x.nix { };
 
+  libyubikey = callPackage ../development/libraries/libyubikey {};
+
   libzip = callPackage ../development/libraries/libzip { };
 
   libzrtpcpp = callPackage ../development/libraries/libzrtpcpp { };
