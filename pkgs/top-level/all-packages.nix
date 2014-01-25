@@ -9119,6 +9119,8 @@ let
 
   qgis = callPackage ../applications/misc/qgis {};
 
+  ykpers = callPackage ../applications/misc/ykpers {};
+
   yoshimi = callPackage ../applications/audio/yoshimi {
     fltk = fltk13;
   };
