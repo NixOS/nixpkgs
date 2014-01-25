@@ -17,6 +17,7 @@ cabal.mkDerivation (self: {
   ];
   testDepends = [ HUnit parsec zlib ];
   doCheck = false;
+  jailbreak = true;
   meta = {
     homepage = "http://happstack.com";
     description = "Web related tools and services";
