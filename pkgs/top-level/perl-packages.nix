@@ -4829,6 +4829,10 @@ let self = _self // overrides; _self = with self; {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    # Tests require network connectivity
+    # https://rt.cpan.org/Public/Bug/Display.html?id=63966 is the bug upstream,
+    # which doesn't look like it will get fixed anytime soon.
+    doCheck = false;
   };
 
   LWPxParanoidAgent = buildPerlPackage rec {
