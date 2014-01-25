@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip, zip, procps, coreutils, alsaLib, ant, freetype, cups
-, which, jdk, nettools, libX11, libXt, libXext, libXrender, libXtst, libXi, libXinerama
-, libXcursor, fontconfig, cpio, cacert, perl, setJavaClassPath }:
+, which, jdk, nettools, xorg
+, fontconfig, cpio, cacert, perl, setJavaClassPath }:
 
 let
 
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ unzip procps ant which zip cpio nettools alsaLib
-      libX11 libXt libXext libXrender libXtst libXi libXinerama libXcursor
+      xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
+      xorg.libXi xorg.libXinerama xorg.libXcursor xorg.lndir
       fontconfig perl
     ];
 
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
       openjdk/{jdk,corba}/make/common/shared/Defs-utils.gmk
   '';
 
-  patches = [ ./cppflags-include-fix.patch ];
+  patches = [ ./cppflags-include-fix.patch ./fix-java-home.patch ];
 
   NIX_NO_SELF_RPATH = true;
 
@@ -80,6 +81,9 @@ stdenv.mkDerivation rec {
     mv $out/lib/openjdk/include $out/include
     mv $out/lib/openjdk/man $out/share/man
 
+    # jni.h expects jni_md.h to be in the header search path.
+    ln -s $out/include/linux/*_md.h $out/include/
+
     # Remove some broken manpages.
     rm -rf $out/share/man/ja*
 
@@ -88,10 +92,15 @@ stdenv.mkDerivation rec {
 
     # Move the JRE to a separate output.
     mv $out/lib/openjdk/jre $jre/lib/openjdk/
-    ln -s $jre/lib/openjdk/jre $out/lib/openjdk/jre
+    mkdir $out/lib/openjdk/jre
+    lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
+
+    rm -rf $out/lib/openjdk/jre/bin
+    ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
 
     # Remove duplicate binaries.
     for i in $(cd $out/lib/openjdk/bin && echo *); do
+      if [ "$i" = java ]; then continue; fi
       if cmp -s $out/lib/openjdk/bin/$i $jre/lib/openjdk/jre/bin/$i; then
         ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
       fi
