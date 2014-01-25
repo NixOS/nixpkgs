@@ -548,6 +548,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ariadne = callPackage ../development/libraries/haskell/ariadne {
     Cabal = self.Cabal_1_18_1_2;
+    haskellPackages = self.haskellPackages.override {
+      Cabal = self.Cabal_1_18_1_2;
+    };
+    haskellNames = self.haskellNames.override {
+      Cabal = self.Cabal_1_18_1_2;
+      haskellPackages = self.haskellPackages.override {
+        Cabal = self.Cabal_1_18_1_2;
+      };
+    };
   };
 
   arithmoi = callPackage ../development/libraries/haskell/arithmoi {};
@@ -613,7 +622,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   binary_0_7_1_0 = callPackage ../development/libraries/haskell/binary/0.7.1.0.nix {};
   binary = null;                # core package starting with GHC 7.4.x
 
-  binaryConduit = callPackage ../development/libraries/haskell/binary-conduit {};
+  binaryConduit = callPackage ../development/libraries/haskell/binary-conduit {
+    binary = self.binary_0_7_1_0;
+  };
 
   binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
 
@@ -1333,13 +1344,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hoodleBuilder = callPackage ../development/libraries/haskell/hoodle-builder {};
 
-  hoodleCore = callPackage ../development/libraries/haskell/hoodle-core {}; 
+  hoodleCore = callPackage ../development/libraries/haskell/hoodle-core {};
 
-  hoodleParser = callPackage ../development/libraries/haskell/hoodle-parser {}; 
+  hoodleParser = callPackage ../development/libraries/haskell/hoodle-parser {};
 
-  hoodleRender = callPackage ../development/libraries/haskell/hoodle-render {}; 
+  hoodleRender = callPackage ../development/libraries/haskell/hoodle-render {};
 
-  hoodleTypes = callPackage ../development/libraries/haskell/hoodle-types {}; 
+  hoodleTypes = callPackage ../development/libraries/haskell/hoodle-types {};
 
   hoogle = callPackage ../development/libraries/haskell/hoogle {};
 
