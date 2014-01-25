@@ -11,6 +11,9 @@ cabal.mkDerivation (self: {
     blazeBuilder blazeMarkup HUnit QuickCheck testFramework
     testFrameworkHunit testFrameworkQuickcheck2 text
   ];
+  patchPhase = ''
+    sed -i -e 's|blaze-markup.*>=.*,|blaze-markup,|' blaze-html.cabal
+  '';
   meta = {
     homepage = "http://jaspervdj.be/blaze";
     description = "A blazingly fast HTML combinator library for Haskell";
