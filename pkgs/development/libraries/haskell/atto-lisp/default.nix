@@ -4,10 +4,10 @@ cabal.mkDerivation (self: {
   pname = "atto-lisp";
   version = "0.2.1.1";
   sha256 = "089chx4g880fbs7gh1mcvfx2xgbqdi1dxdjax6vbw8xiqgw4pzac";
-  jailbreak = true;
   buildDepends = [
     attoparsec blazeBuilder blazeTextual deepseq text
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/nominolo/atto-lisp";
     description = "Efficient parsing and serialisation of S-Expressions";
