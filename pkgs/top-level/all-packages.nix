@@ -3563,6 +3563,8 @@ let
 
   hyenae = callPackage ../tools/networking/hyenae { };
 
+  ibus = callPackage ../development/libraries/ibus { };
+
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils {
     inherit (perlPackages) XMLSimple;
   };
