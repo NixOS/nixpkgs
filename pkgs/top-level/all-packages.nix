@@ -6373,6 +6373,7 @@ let
 
   apparmor = callPackage ../os-specific/linux/apparmor {
     inherit (perlPackages) LocaleGettext TermReadKey RpcXML;
+    bison = bison2;
   };
 
   atop = callPackage ../os-specific/linux/atop { };
