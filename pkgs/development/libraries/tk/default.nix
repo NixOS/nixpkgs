@@ -7,6 +7,8 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/tcl/tk8.5.15-src.tar.gz";
     sha256 = "0grj0k0hljvwiz913pafqibz18fzk9xjxf0nzqrd9zdls036fp41";
   };
+
+  patches = [ ./different-prefix-with-tcl.patch ];
   
   postInstall = ''
     ln -s $out/bin/wish* $out/bin/wish
