@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
      substituteInPlace "configure" \
        --replace "/sbin/sysctl" "${procps}/sbin/sysctl"
      substituteInPlace "src/nm-openconnect-service.c" \
-       --replace "/sbin/openconnect" "${openconnect}/sbin/openconnect" \
+       --replace "/usr/sbin/openconnect" "${openconnect}/sbin/openconnect" \
        --replace "/sbin/modprobe" "${module_init_tools}/sbin/modprobe"
   '';
 
