@@ -5,7 +5,7 @@ with pkgs.lib;
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = { name, device, keyFile, keyFileSize, allowDiscards, ... }: ''
+  openCommand = { name, device, keyFile, keyFileSize, allowDiscards, yubikey, ... }: ''
     # Wait for luksRoot to appear, e.g. if on a usb drive.
     # XXX: copied and adapted from stage-1-init.sh - should be
     # available as a function.
@@ -31,9 +31,141 @@ let
     fi
     ''}
 
+    ${optionalString (luks.yubikeySupport && (yubikey != null)) ''
+    mkdir -p ${yubikey.challenge.mountPoint}
+    mount -t ${yubikey.challenge.fsType} ${toString yubikey.challenge.device} ${yubikey.challenge.mountPoint}
+    response="$(ykchalresp -${toString yubikey.yubikeySlot} "`cat ${yubikey.challenge.mountPoint}${yubikey.challenge.file}`" 2>/dev/null || true)"
+    if [ -z "$response" ]; then
+        echo -n "waiting 10 seconds for yubikey to appear..."
+        for try in $(seq 10); do
+            sleep 1
+            response="$(ykchalresp -${toString yubikey.yubikeySlot} "`cat ${yubikey.challenge.mountPoint}${yubikey.challenge.file}`" 2>/dev/null || true)"
+            if [ ! -z "$response" ]; then break; fi
+            echo -n .
+        done
+        echo "ok"
+    fi
+
+    ${optionalString yubikey.twoFactor ''
+    if [ ! -z "$response" ]; then
+        echo -n "Enter two-factor passphrase: "
+        read -s passphrase
+        current_key="$passphrase$response"
+    fi
+    ''}
+
+    ${optionalString (!yubikey.twoFactor) ''
+    if [ ! -z "$response" ]; then
+        current_key="$response"
+    fi
+    ''}
+    ''}
+
     # open luksRoot and scan for logical volumes
+    ${optionalString ((!luks.yubikeySupport) || (yubikey == null)) ''
     cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
       ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"}
+    ''}
+
+    ${optionalString (luks.yubikeySupport && (yubikey != null)) ''
+    if [ -z "$response" ]; then
+        cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
+          ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"}
+    else
+        echo $current_key | cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} --key-file=-
+
+        if [ $? != "0" ]; then
+            for try in $(seq 3); do
+
+                ${optionalString (!yubikey.twoFactor) ''
+                sleep 1
+                ''}
+
+                ${optionalString yubikey.twoFactor ''
+                echo -n "Enter two-factor passphrase: "
+                read -s passphrase
+                current_key="$passphrase$response"
+                ''}
+
+                echo $current_key | cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} --key-file=-
+                if [ $? == "0" ]; then break; fi
+                echo -n .
+            done
+        fi
+
+        mkdir -p ${yubikey.ramfsMountPoint}
+        # A ramfs is used here to ensure that the file used to update
+        # the key slot with cryptsetup will never get swapped out.
+        # Warning: Do NOT replace with tmpfs!
+        mount -t ramfs none ${yubikey.ramfsMountPoint}
+
+        update_failed=false
+        old_challenge=$(cat ${yubikey.challenge.mountPoint}${yubikey.challenge.file})
+
+        new_challenge=$(uuidgen)
+        if [ $? != "0" ]; then
+            for try in $(seq 10); do
+                sleep 1
+                new_challenge=$(uuidgen)
+                if [ $? == "0" ]; then break; fi
+                if [ $try -eq 10 ]; then update_failed=true; fi
+            done
+        fi
+
+        if [ "$update_failed" == false ]; then
+            echo $new_challenge > ${yubikey.challenge.mountPoint}${yubikey.challenge.file}
+            response="$(ykchalresp -${toString yubikey.yubikeySlot} "`cat ${yubikey.challenge.mountPoint}${yubikey.challenge.file}`" 2>/dev/null || true)"
+            if [ -z "$response" ]; then
+                echo -n "waiting 10 seconds for yubikey to appear..."
+                for try in $(seq 10); do
+                    sleep 1
+                    response="$(ykchalresp -${toString yubikey.yubikeySlot} "`cat ${yubikey.challenge.mountPoint}${yubikey.challenge.file}`" 2>/dev/null || true)"
+                    if [ ! -z "$response" ]; then break; fi
+                    echo -n .
+                done
+                echo "ok";
+            fi
+
+            if [ ! -z "$response" ]; then
+                ${optionalString yubikey.twoFactor ''
+                new_key="$passphrase$response"
+                ''}
+
+                ${optionalString (!yubikey.twoFactor) ''
+                new_key="$response"
+                ''}
+
+                echo $new_key > ${yubikey.ramfsMountPoint}/new_key
+
+                echo $current_key | cryptsetup luksChangeKey ${device} --key-file=- --key-slot ${toString yubikey.luksKeySlot} ${yubikey.ramfsMountPoint}/new_key
+                if [ $? != "0" ]; then
+                    for try in $(seq 10); do
+                        sleep 1
+                        echo $current_key | cryptsetup luksChangeKey ${device} --key-file=- --key-slot ${toString yubikey.luksKeySlot} ${yubikey.ramfsMountPoint}/new_key
+                        if [ $? == "0" ]; then break; fi
+                        if [ $try -eq 10 ]; then update_failed=true; fi
+                    done
+
+                fi
+
+                rm -f ${yubikey.ramfsMountPoint}/new_key
+
+                if [ "$update_failed" == true ]; then
+                    echo $old_challenge > ${yubikey.challenge.mountPoint}${yubikey.challenge.file}
+                    echo "Warning: Could not update luks header with new key for ${device}, old challenge restored!"
+                fi
+            else
+              echo $old_challenge > ${yubikey.challenge.mountPoint}${yubikey.challenge.file}
+              echo "Warning: No yubikey present to challenge for ${device}, old challenge restored!"
+            fi
+        else
+            echo "Warning: New challenge could not be obtained for ${device}, old challenge persists!"
+        fi
+
+        umount ${yubikey.ramfsMountPoint}
+        umount ${yubikey.challenge.mountPoint}
+    fi
+    ''}
   '';
 
   isPreLVM = f: f.preLVM;
@@ -139,10 +271,77 @@ in
           '';
         };
 
-      };
+        yubikey = mkOption {
+          default = null;
+          type = types.nullOr types.optionSet;
+          description = "TODO";
 
+          options = {
+            twoFactor = mkOption {
+              default = false;
+              type = types.bool;
+              description = "TODO";
+            };
+
+            yubikeySlot = mkOption {
+              default = 2;
+              type = types.int;
+              description = "TODO";
+            };
+
+            luksKeySlot = mkOption {
+              default = 1;
+              type = types.int;
+              description = "TODO";
+            };
+
+            challenge = mkOption {
+              type = types.optionSet;
+              description = "TODO";
+
+              options = {
+                device = mkOption {
+                  default = /dev/sda1;
+                  type = types.path;
+                  description = "TODO";
+                };
+
+                fsType = mkOption {
+                  default = "vfat";
+                  type = types.string;
+                  description = "TODO";
+                };
+
+                mountPoint = mkOption {
+                  default = "/crypt-challenge";
+                  type = types.string;
+                  description = "TODO";
+                };
+
+                file = mkOption {
+                  default = "/crypt-challenge";
+                  type = types.string;
+                  description = "TODO";
+                };
+              };
+            };
+
+            ramfsMountPoint = mkOption {
+              default = "/crypt-update";
+              type = types.string;
+              description = "TODO";
+            };
+          };
+        };
+
+      };
     };
 
+    boot.initrd.luks.yubikeySupport = mkOption {
+      default = false;
+      type = types.bool;
+      description = "TODO";
+    };
   };
 
   config = mkIf (luks.devices != []) {
@@ -162,10 +361,27 @@ in
         cp -pdvn $lib $out/lib
         cp -pvn $(readlink -f $lib) $out/lib
       done
+      ${optionalString luks.yubikeySupport ''
+      cp -pdv ${pkgs.utillinux}/bin/uuidgen $out/bin
+      for lib in $(ldd $out/bin/uuidgen |grep '=>' |grep /nix/store/ |cut -d' ' -f3); do
+        cp -pdvn $lib $out/lib
+        cp -pvn $(readlink -f $lib) $out/lib
+      done
+
+      cp -pdv ${pkgs.ykpers}/bin/ykchalresp $out/bin
+      for lib in $(ldd $out/bin/ykchalresp |grep '=>' |grep /nix/store/ |cut -d' ' -f3); do
+        cp -pdvn $lib $out/lib
+        cp -pvn $(readlink -f $lib) $out/lib
+      done
+      ''}
     '';
 
     boot.initrd.extraUtilsCommandsTest = ''
       $out/bin/cryptsetup --version
+      ${optionalString luks.yubikeySupport ''
+        $out/bin/uuidgen --version
+        $out/bin/ykchalresp -V
+      ''}
     '';
 
     boot.initrd.preLVMCommands = concatMapStrings openCommand preLVM;
