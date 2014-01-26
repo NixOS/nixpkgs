@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, groff, cmake, python, libffi }:
+{ stdenv, fetchurl, perl, groff, cmake, python, libffi, binutils }:
 
 let version = "3.2"; in
 
@@ -21,7 +21,11 @@ stdenv.mkDerivation {
   # created binaries need to be run before installation... I coudn't find a better way
   preBuild = ''export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:"`pwd`/lib'';
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
+  ];
 
   enableParallelBuilding = true;
   #doCheck = true; # tests are broken, don't know why
@@ -30,7 +34,7 @@ stdenv.mkDerivation {
     homepage = http://llvm.org/;
     description = "Collection of modular and reusable compiler and toolchain technologies";
     license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [viric shlevy raskin];
+    maintainers = with stdenv.lib.maintainers; [viric shlevy raskin vlstill];
     platforms = with stdenv.lib.platforms; all;
   };
 }

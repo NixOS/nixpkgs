@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, groff, cmake, python }:
+{ stdenv, fetchurl, perl, groff, cmake, python, binutils }:
 
 let version = "3.1"; in
 
@@ -12,7 +12,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl groff cmake python ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
+  ];
 
   enableParallelBuilding = true;
 
@@ -20,7 +23,7 @@ stdenv.mkDerivation {
     homepage = http://llvm.org/;
     description = "Collection of modular and reusable compiler and toolchain technologies";
     license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [viric shlevy raskin];
+    maintainers = with stdenv.lib.maintainers; [viric shlevy raskin vlstill];
     platforms = with stdenv.lib.platforms; all;
   };
 }
