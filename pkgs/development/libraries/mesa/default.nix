@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, flex, bison, autoreconfHook
 , python, libxml2Python, file, expat, makedepend
 , libdrm, xorg, wayland, udev, llvm, libffi
-, libvdpau, libelf, ncurses
+, libvdpau, libelf
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
 , enableExtraFeatures ? false # not maintained
 }:
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
   buildInputs = with xorg; [
     autoreconfHook intltool expat libxml2Python llvm
     libXfixes glproto dri2proto libX11 libXext libxcb libXt
-    libffi wayland libvdpau libelf ncurses
+    libffi wayland libvdpau libelf
   ] ++ optionals enableExtraFeatures [ /*libXvMC*/ ]
     ++ optional stdenv.isLinux udev
     ;

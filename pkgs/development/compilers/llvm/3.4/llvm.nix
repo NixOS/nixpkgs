@@ -25,7 +25,9 @@ in stdenv.mkDerivation rec {
     mv compiler-rt-${version} $sourceRoot/projects/compiler-rt
   '';
 
-  buildInputs = [ perl groff cmake libxml2 python libffi valgrind ncurses ];
+  propagatedBuildInputs = [ ncurses ]; # linked against it, e.g. mesa needs it now, too
+
+  buildInputs = [ perl groff cmake libxml2 python libffi valgrind ];
 
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
