@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "4.4.3.1";
-  sha256 = "0k301mzy8sagrxdzkhz006j1i1zmsx9iy5ais9gif3gxj2sd3b2a";
+  version = "4.4.3.2";
+  sha256 = "1n597q4pbdka7g06524j0zvjcjpv7fgf6mga1a0kfr012sf9cqz9";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -25,10 +25,11 @@ cabal.mkDerivation (self: {
     snapCore snapServer systemFilepath tagsoup testFramework
     testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
-  patchPhase = ''
-    sed -i -e 's|pandoc-citeproc >=.*,|pandoc-citeproc,|' hakyll.cabal
-  '';
   doCheck = false;
+  patchPhase = ''
+    sed -i -e 's|blaze-markup.*,|blaze-markup,|' -e 's|blaze-html.*,|blaze-html,|' \
+      -e 's|pandoc-citeproc.*,|pandoc-citeproc,|' hakyll.cabal
+  '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";

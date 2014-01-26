@@ -1,0 +1,11 @@
+--- pianobooster-src-0.6.4b/src/CMakeLists.txt.orig	2013-04-06 10:48:02.469532914 -0700
++++ pianobooster-src-0.6.4b/src/CMakeLists.txt	2013-04-06 10:48:12.989532445 -0700
+@@ -203,8 +203,6 @@
+         ${PIANOBOOSTER_UI_HDRS} )
+ ENDIF(WIN32)
+ 
+-SET_TARGET_PROPERTIES(pianobooster PROPERTIES LINK_FLAGS "-mwindows")
+-
+ IF (USE_PCH)
+ ADD_PRECOMPILED_HEADER( pianobooster ${CMAKE_CURRENT_SOURCE_DIR}/precompile/precompile.h )
+ ENDIF (USE_PCH)

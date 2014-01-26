@@ -2,7 +2,7 @@
 , pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
 , alsaLib, cairo
-, withX ? !stdenv.isDarwin
+, withX ? !stdenv.isDarwin, withGTK ? true
 }:
 
 assert (libXft != null) -> libpng != null;	# probably a bug
@@ -27,11 +27,13 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin cairo;
 
   configureFlags =
-    ( if withX then 
+    ( if withX && withGTK then
         [ "--with-x-toolkit=gtk" "--with-xft"]
+      else (if withX then
+        [ "--with-x-toolkit=lucid" "--with-xft" ]
       else
         [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
-          "--with-gif=no" "--with-tiff=no" ] )
+          "--with-gif=no" "--with-tiff=no" ] ) )
     # On NixOS, help Emacs find `crt*.o'.
     ++ stdenv.lib.optional (stdenv ? glibc)
          [ "--with-crt-dir=${stdenv.glibc}/lib" ];

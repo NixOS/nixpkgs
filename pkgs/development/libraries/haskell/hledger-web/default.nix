@@ -21,6 +21,9 @@ cabal.mkDerivation (self: {
   ];
   testDepends = [ hspec yesod yesodTest ];
   doCheck = false;
+  patchPhase = ''
+    sed -i -e 's|blaze-html.*0.7|blaze-html|' -e 's|blaze-markup.*0.7|blaze-markup|' hledger-web.cabal
+  '';
   meta = {
     homepage = "http://hledger.org";
     description = "A web interface for the hledger accounting tool";

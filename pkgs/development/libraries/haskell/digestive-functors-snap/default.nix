@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "digestive-functors-snap";
-  version = "0.6.0.1";
-  sha256 = "0y26fqhjb78mv6rzp3x6cbxrq4dqh2dzd81wd5sgsm079j5frjj7";
+  version = "0.6.1.0";
+  sha256 = "07xb8jr70j03kggk55p3zzp07y7amzm7f8hdzry4vff7yx41rxhr";
   buildDepends = [ digestiveFunctors filepath mtl snapCore text ];
   meta = {
     homepage = "http://github.com/jaspervdj/digestive-functors";

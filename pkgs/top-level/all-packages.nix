@@ -3109,7 +3109,9 @@ let
 
   lush2 = callPackage ../development/interpreters/lush {};
 
-  maude = callPackage ../development/interpreters/maude { };
+  maude = callPackage ../development/interpreters/maude {
+    bison = bison2;
+  };
 
   octave = callPackage ../development/interpreters/octave {
     fltk = fltk13;
@@ -3560,6 +3562,8 @@ let
   };
 
   hyenae = callPackage ../tools/networking/hyenae { };
+
+  ibus = callPackage ../development/libraries/ibus { };
 
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils {
     inherit (perlPackages) XMLSimple;
@@ -5833,6 +5837,8 @@ let
 
   junit = callPackage ../development/libraries/java/junit { };
 
+  junixsocket = callPackage ../development/libraries/java/junixsocket { };
+
   jzmq = callPackage ../development/libraries/java/jzmq { };
 
   lucene = callPackage ../development/libraries/java/lucene { };
@@ -6367,6 +6373,7 @@ let
 
   apparmor = callPackage ../os-specific/linux/apparmor {
     inherit (perlPackages) LocaleGettext TermReadKey RpcXML;
+    bison = bison2;
   };
 
   atop = callPackage ../os-specific/linux/atop { };
@@ -7567,7 +7574,7 @@ let
 
   emacs24 = callPackage ../applications/editors/emacs-24 {
     # use override to enable additional features
-    libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
+    libXaw = xlibs.libXaw;
     Xaw3d = null;
     gconf = null;
     librsvg = null;
@@ -8706,6 +8713,8 @@ let
   };
 
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
+
+  stp = callPackage ../applications/science/logic/stp {};
 
   stumpwm = lispPackages.stumpwm;
 
@@ -9943,6 +9952,8 @@ let
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
+  beep = callPackage ../misc/beep { };
+
   cups = callPackage ../misc/cups { libusb = libusb1; };
 
   cups_pdf_filter = callPackage ../misc/cups/pdf-filter.nix { };
@@ -10139,7 +10150,7 @@ let
 
   sourceAndTags = import ../misc/source-and-tags {
     inherit pkgs stdenv unzip lib ctags;
-    hasktags = haskellPackages.myhasktags;
+    hasktags = haskellPackages.hasktags;
   };
 
   splix = callPackage ../misc/cups/drivers/splix { };

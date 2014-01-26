@@ -5,8 +5,8 @@ buildPythonPackage rec {
 
   src = fetchgit {
     url = "https://github.com/pagekite/Mailpile.git";
-    rev = "cbb3bbf1f1da653124e63e11a51a6864dcb534a0";
-    sha256 = "1m2qkhcygidxqnnj2ajsxv8y5wjyp5il3919sl3vyl47gx02xa8j";
+    rev = "695a25061a5220d4f0fd6ec3de4ccd9ae4c05a92";
+    sha256 = "0il9idfpnzb1a5cg3p9zrd6fnw2dhrqr6c3gzq1m06snw8jx9fpc";
   };
 
   propagatedBuildInputs = with pythonPackages; [
