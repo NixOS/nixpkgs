@@ -48,6 +48,8 @@ rec {
 
   gnome_session = callPackage ./core/gnome-session { };
 
+  gnome_shell = callPackage ./core/gnome-shell { };
+
   gnome_settings_daemon = callPackage ./core/gnome-settings-daemon { };
 
   gnome_terminal = callPackage ./core/gnome-terminal { };
