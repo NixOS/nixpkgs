@@ -17,11 +17,15 @@ stdenv.mkDerivation rec {
     patch -p1 < ${ ./mumble-jack-support.patch }
   '';
 
+  # The speechd is disabled because of the issues in speech dispatcher
+  # https://github.com/NixOS/nixpkgs/issues/1287
+
   configurePhase = ''
     qmake CONFIG+=no-g15 CONFIG+=no-update CONFIG+=no-server \
       CONFIG+=no-embed-qt-translations CONFIG+=packaged \
       CONFIG+=bundled-celt CONFIG+=no-bundled-opus \
-      CONFIG+=no-bundled-speex
+      CONFIG+=no-bundled-speex \
+      CONFIG+=no-speechd
   '' 
   + stdenv.lib.optionalString jackSupport ''
     CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio
