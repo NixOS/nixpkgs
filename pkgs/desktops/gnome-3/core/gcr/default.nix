@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnupg, p11_kit, glib
-, libgcrypt, libtasn1, dbus_glib, gtk, pango, gdk_pixbuf, atk }:
+, libgcrypt, libtasn1, dbus_glib, gtk, pango, gdk_pixbuf, atk
+, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "gcr-3.10.1";
@@ -10,11 +11,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig intltool gnupg p11_kit glib
+    pkgconfig intltool gnupg p11_kit glib gobjectIntrospection
     libgcrypt libtasn1 dbus_glib gtk pango gdk_pixbuf atk
   ];
-
-  configureFlags = [ "--disable-introspection" ];
 
   #doCheck = true;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, python, glib, intltool, pkgconfig
+{ stdenv, fetchurl, makeWrapper, python, intltool, pkgconfig
 , gnome3, dbus, libnotify, isocodes, gobjectIntrospection, wayland }:
 
 stdenv.mkDerivation rec {
@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "1v4a9xv2k26g6ggk4282ynfvh68j2r5hg1cdpvnryfa8c2pkdaq2";
   };
 
-  configureFlags = "--disable-gconf --enable-dconf --disable-memconf --enable-ui --enable-python-library";
+  configureFlags = "--enable-dconf --disable-memconf --enable-ui --enable-python-library";
 
   buildInputs = [
-    makeWrapper python glib wayland
+    makeWrapper python gnome3.glib wayland
     intltool pkgconfig gnome3.gtk2
     gnome3.gtk3 dbus gnome3.dconf gnome3.gconf
     libnotify isocodes gobjectIntrospection
@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
   preBuild = "patchShebangs ./scripts";
 
   postInstall  = ''
-    #${glib}/bin/glib-compile-schemas $out/share/glib-2.0/schemas/
-    
     for f in "$out"/bin/*; do
       wrapProgram "$f" --prefix XDG_DATA_DIRS : "$out/share"
     done
