@@ -2304,6 +2304,18 @@ let
 
   clang = wrapClang llvmPackages.clang;
 
+  clang_34 = wrapClang llvmPackages.clang;
+  clang_33 = wrapClang (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
+  clang_32 = wrapClang (clangUnwrapped llvm_32 ../development/compilers/llvm/3.2/clang.nix);
+  clang_31 = wrapClang (clangUnwrapped llvm_31 ../development/compilers/llvm/3.1/clang.nix);
+
+  clangUnwrapped = llvm: pkg: callPackage pkg {
+      stdenv = if stdenv.isDarwin
+         then stdenvAdapters.overrideGCC stdenv gccApple
+         else stdenvAdapters.overrideGCC stdenv gcc48;
+      llvm = llvm;
+  };
+
   clangSelf = clangWrapSelf llvmPackagesSelf.clang;
 
   clangWrapSelf = build: (import ../build-support/clang-wrapper) {
@@ -2764,11 +2776,18 @@ let
   lessc = callPackage ../development/compilers/lessc { };
 
   llvm = llvmPackages.llvm;
-  llvm_33 = callPackage ../development/compilers/llvm/3.3/llvm.nix {
+
+  llvm_34 = llvmPackages.llvm;
+  llvm_33 = llvm_v ../development/compilers/llvm/3.3/llvm.nix;
+  llvm_32 = llvm_v ../development/compilers/llvm/3.2;
+  llvm_31 = llvm_v ../development/compilers/llvm/3.1;
+
+  llvm_v = path: callPackage path {
     stdenv = if stdenv.isDarwin
       then stdenvAdapters.overrideGCC stdenv gccApple
       else stdenv;
   };
+
   llvmPackages = recurseIntoAttrs (import ../development/compilers/llvm/3.4 { inherit newScope stdenv fetchurl; isl = isl_0_12; });
   llvmPackagesSelf = import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; };
 
