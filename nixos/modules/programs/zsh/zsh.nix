@@ -35,6 +35,14 @@ in
         type = types.bool;
       };
 
+      default = mkOption {
+        default = false;
+        description = ''
+          Make Zsh the default <option>users.defaultUserShell</option>.
+        '';
+        type = types.bool;
+      };
+
       shellAliases = mkOption {
         default = config.environment.shellAliases;
         description = ''
@@ -167,7 +175,7 @@ in
 
     environment.systemPackages = [ pkgs.zsh ];
 
-    users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
+    users.defaultUserShell = mkIf cfg.default (mkDefault "/run/current-system/sw/bin/zsh");
 
     environment.shells =
       [ "/run/current-system/sw/bin/zsh"
