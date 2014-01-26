@@ -20,7 +20,7 @@ in
         l  = "ls -alh";
       };
 
-    environment.shellInit =
+    environment.loginShellInit =
       ''
         # Set up the per-user profile.
         mkdir -m 0755 -p $NIX_USER_PROFILE_DIR
