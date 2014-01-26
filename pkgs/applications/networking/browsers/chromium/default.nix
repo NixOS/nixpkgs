@@ -40,6 +40,8 @@ let
       inherit url sha256;
     };
 
+    buildInputs = [ python ]; # cannot patch shebangs otherwise
+
     phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
     opensslPatches = optional useOpenSSL openssl.patches;
