@@ -2,7 +2,7 @@
 , deepseq, filepath, gmp, happy, haskeline, languageJava, mtl
 , network, parsers, split, text, time, transformers, trifecta
 , unorderedContainers, utf8String, vector, vectorBinaryInstances
-, xml
+, xml, llvmGeneral, libffi
 }:
 
 cabal.mkDerivation (self: {
@@ -15,10 +15,11 @@ cabal.mkDerivation (self: {
     ansiTerminal ansiWlPprint binary Cabal deepseq filepath haskeline
     languageJava mtl network parsers split text time transformers
     trifecta unorderedContainers utf8String vector
-    vectorBinaryInstances xml
+    vectorBinaryInstances xml llvmGeneral
   ];
   buildTools = [ happy ];
-  extraLibraries = [ boehmgc gmp ];
+  extraLibraries = [ boehmgc gmp libffi ];
+  configureFlags = [ "-f" "llvm" "-f" "gmp" "-f" "ffi" ];
   meta = {
     homepage = "http://www.idris-lang.org/";
     description = "Functional Programming Language with Dependent Types";
