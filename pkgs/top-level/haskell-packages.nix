@@ -1550,7 +1550,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
 
   llvmGeneral = callPackage ../development/libraries/haskell/llvm-general {
-    llvmConfig = pkgs.llvm;
+    # !!! llvm-general pre-release supports 3.4...
+    llvmConfig = pkgs.llvm_33;
   };
 
   llvmGeneralPure = callPackage ../development/libraries/haskell/llvm-general-pure {};
