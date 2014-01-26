@@ -55,7 +55,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "autoreconf -fi";
 
-  configureFlags = stdenv.lib.optional stdenv.isSunOS "--disable-modular-tests";
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-compile-warnings" ++
+                   stdenv.lib.optional stdenv.isSunOS "--disable-modular-tests";
 
   CPPFLAGS = stdenv.lib.optionalString stdenv.isSunOS "-DBSD_COMP";
 
