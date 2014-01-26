@@ -1,6 +1,9 @@
 { stdenv, fetchurl, perl, groff, llvm, cmake }:
 
-let version = "3.1"; in
+let
+  version = "3.1";
+  gccReal = if (stdenv.gcc.gcc or null) == null then stdenv.gcc else stdenv.gcc.gcc;
+in
 
 stdenv.mkDerivation {
   name = "clang-${version}";
@@ -14,6 +17,7 @@ stdenv.mkDerivation {
     "-DCLANG_PATH_TO_LLVM_BUILD=${llvm}"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_TARGETS_TO_BUILD=all"
+    "-DGCC_INSTALL_PREFIX=${gccReal}"
   ] ++ stdenv.lib.optionals (stdenv.gcc.libc != null) [
     "-DC_INCLUDE_DIRS=${stdenv.gcc.libc}/include/"
   ];
@@ -31,7 +35,7 @@ stdenv.mkDerivation {
     homepage = http://clang.llvm.org/;
     description = "A C language family frontend for LLVM";
     license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [viric shlevy];
+    maintainers = with stdenv.lib.maintainers; [viric shlevy vlstill];
     platforms = with stdenv.lib.platforms; all;
   };
 }
