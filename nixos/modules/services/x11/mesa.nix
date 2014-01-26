@@ -83,6 +83,8 @@ in {
           ''
         else if elem "ati_unfree" cfg.videoDrivers then
           "ln -sf ${kernelPackages.ati_drivers_x11} /run/opengl-driver"
+        else if elem "virtualbox" cfg.videoDrivers then
+          "ln -sf ${kernelPackages.virtualboxGuestAdditions} /run/opengl-driver"
         else
           ''
             ${optionalString cfg.driSupport "ln -sf ${pkgs.mesa_drivers} /run/opengl-driver"}

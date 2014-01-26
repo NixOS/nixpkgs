@@ -75,7 +75,7 @@ stdenv.mkDerivation {
 
     for i in lib/VBoxOGL*.so
     do
-        patchelf --set-rpath $out/lib:${dbus}/lib $i
+        patchelf --set-rpath ${dbus}/lib:${libX11}/lib:${libXcomposite}/lib:${libXdamage}/lib:${libXfixes}/lib:${libXext}/lib:$out/lib $i
     done
 
     # Remove references to /usr from various scripts and files
