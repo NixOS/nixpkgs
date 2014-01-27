@@ -1037,6 +1037,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   executablePath = callPackage ../development/libraries/haskell/executable-path {};
 
   fay = callPackage ../development/libraries/haskell/fay {};
+  fayBase = callPackage ../development/libraries/haskell/fay-base {};
 
   filepath_1_3_0_0 = callPackage ../development/libraries/haskell/filepath {};
   filepath = null; # a core package in recent GHCs
