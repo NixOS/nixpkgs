@@ -1,12 +1,12 @@
 { stdenv, fetchurl, lib }:
 let
-  version = "3.0.5";
+  version = "3.0.6";
   baseName = "siege";
 in stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
   src = fetchurl {
     url = "http://www.joedog.org/pub/siege/${name}.tar.gz";
-    sha256 = "16faa6kappg23bdriyiy3ym94rmddpvw8cl8xgv5nxq2v17n4gi8";
+    sha256 = "0nwcj2s804z7yd20pa0cl010m0qgf22a02305i9jwxynwdj9kdvq";
   };
   meta = {
     description = "HTTP load tester";
