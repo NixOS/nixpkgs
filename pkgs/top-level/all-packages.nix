@@ -7547,6 +7547,8 @@ let
     inherit (xlibs) libX11;
   };
 
+  docker = callPackage ../applications/virtualization/docker { };
+
   doodle = callPackage ../applications/search/doodle { };
 
   dunst = callPackage ../applications/misc/dunst { };
