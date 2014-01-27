@@ -1434,6 +1434,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hxtUnicode = callPackage ../development/libraries/haskell/hxt-unicode {};
 
+  iCalendar = callPackage ../development/libraries/haskell/iCalendar {};
+
   idna = callPackage ../development/libraries/haskell/idna {};
 
   IfElse = callPackage ../development/libraries/haskell/IfElse {};
@@ -1585,6 +1587,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   mersenneRandomPure64 = callPackage ../development/libraries/haskell/mersenne-random-pure64 {};
 
   midi = callPackage ../development/libraries/haskell/midi {};
+
+  mime = callPackage ../development/libraries/haskell/mime {};
 
   minimorph = callPackage ../development/libraries/haskell/minimorph {};
 
