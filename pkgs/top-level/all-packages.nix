@@ -3776,6 +3776,8 @@ let
 
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
+  xmlindent = callPackage ../development/web/xmlindent {};
+
   xxdiff = callPackage ../development/tools/misc/xxdiff {
     bison = bison2;
   };
