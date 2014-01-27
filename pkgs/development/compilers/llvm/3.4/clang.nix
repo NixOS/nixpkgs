@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     (cd llvm-${version} && patch -Np1 -i ${./llvm-separate-build.patch})
   '';
 
-  patches = [ ./clang-separate-build.patch ];
+  patches = [ ./clang-separate-build.patch ./clang-purity.patch ];
 
   buildInputs = [ cmake libedit libxml2 ];
 
