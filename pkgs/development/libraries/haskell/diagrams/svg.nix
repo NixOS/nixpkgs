@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     blazeMarkup blazeSvg colour diagramsCore diagramsLib filepath
     hashable lens monoidExtras mtl split time vectorSpace
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams/";
     description = "SVG backend for diagrams drawing EDSL";
