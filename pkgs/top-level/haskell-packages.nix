@@ -1036,6 +1036,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   executablePath = callPackage ../development/libraries/haskell/executable-path {};
 
+  fay = callPackage ../development/libraries/haskell/fay {};
+  fayBase = callPackage ../development/libraries/haskell/fay-base {};
+
   filepath_1_3_0_0 = callPackage ../development/libraries/haskell/filepath {};
   filepath = null; # a core package in recent GHCs
 
@@ -2178,6 +2181,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
   socketActivation = callPackage ../development/libraries/haskell/socket-activation {};
+
+  sourcemap = callPackage ../development/libraries/haskell/sourcemap {};
 
   split_0_2_1_1 = callPackage ../development/libraries/haskell/split/0.2.1.1.nix {};
   split_0_2_2 = callPackage ../development/libraries/haskell/split/0.2.2.nix {};
