@@ -7,14 +7,14 @@
 , x86Only ? false
 }:
 
-let n = "qemu-1.5.2"; in
+let n = "qemu-1.5.3"; in
 
 stdenv.mkDerivation rec {
   name = n + (if x86Only then "-x86-only" else "");
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/${n}.tar.bz2";
-    sha256 = "0l52jwlxmwp9g3jpq0g7ix9dq4qgh46nd2h58lh47f0a35yi8qgn";
+    sha256 = "00d6w97a4spr2g70c388fwcxpqnwl6b3i095ikmw8d14x35lqdir";
   };
 
   buildInputs =
