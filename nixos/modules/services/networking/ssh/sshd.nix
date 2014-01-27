@@ -23,6 +23,50 @@ let
     )
   );
 
+  configFile = pkgs.writeText "sshd_config"
+    ''
+      PidFile /run/sshd.pid
+
+      Protocol 2
+
+      UsePAM yes
+
+      AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
+      ${concatMapStrings (port: ''
+        Port ${toString port}
+      '') cfg.ports}
+
+      ${optionalString cfgc.setXAuthLocation ''
+          XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
+      ''}
+
+      ${if cfg.forwardX11 then ''
+        X11Forwarding yes
+      '' else ''
+        X11Forwarding no
+      ''}
+
+      ${optionalString cfg.allowSFTP ''
+        Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
+      ''}
+
+      PermitRootLogin ${cfg.permitRootLogin}
+      GatewayPorts ${cfg.gatewayPorts}
+      PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
+      ChallengeResponseAuthentication ${if cfg.challengeResponseAuthentication then "yes" else "no"}
+
+      PrintMotd no # handled by pam_motd
+
+      AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
+
+      ${flip concatMapStrings cfg.hostKeys (k: ''
+        HostKey ${k.path}
+      '')}
+
+      ${cfg.extraConfig}
+    '';
+
+
   userOptions = {
 
     openssh.authorizedKeys = {
@@ -274,7 +318,7 @@ in
         serviceConfig =
           { ExecStart =
               "${pkgs.openssh}/sbin/sshd " +
-              "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
+              "-f ${configFile}";
             Restart = "always";
             Type = "forking";
             KillMode = "process";
@@ -292,47 +336,6 @@ in
 
     services.openssh.authorizedKeysFiles =
       [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
-
-    services.openssh.extraConfig =
-      ''
-        PidFile /run/sshd.pid
-
-        Protocol 2
-
-        UsePAM yes
-
-        AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
-        ${concatMapStrings (port: ''
-          Port ${toString port}
-        '') cfg.ports}
-
-        ${optionalString cfgc.setXAuthLocation ''
-            XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-        ''}
-
-        ${if cfg.forwardX11 then ''
-          X11Forwarding yes
-        '' else ''
-          X11Forwarding no
-        ''}
-
-        ${optionalString cfg.allowSFTP ''
-          Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
-        ''}
-
-        PermitRootLogin ${cfg.permitRootLogin}
-        GatewayPorts ${cfg.gatewayPorts}
-        PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
-        ChallengeResponseAuthentication ${if cfg.challengeResponseAuthentication then "yes" else "no"}
-
-        PrintMotd no # handled by pam_motd
-
-        AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
-
-        ${flip concatMapStrings cfg.hostKeys (k: ''
-          HostKey ${k.path}
-        '')}
-      '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
                     message = "cannot enable X11 forwarding without setting xauth location";}];
