@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     homepage = http://clang.llvm.org/;
     description = "A C language family frontend for LLVM";
     license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [viric shlevy];
+    maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; all;
   };
 }

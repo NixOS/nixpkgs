@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     homepage = http://llvm.org/;
     description = "Collection of modular and reusable compiler and toolchain technologies";
     license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [viric shlevy raskin vlstill];
+    maintainers = with stdenv.lib.maintainers; [viric raskin vlstill];
     platforms = with stdenv.lib.platforms; all;
   };
 }
