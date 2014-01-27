@@ -567,6 +567,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   asn1Data = callPackage ../development/libraries/haskell/asn1-data {};
 
+  asn1Encoding = callPackage ../development/libraries/haskell/asn1-encoding {};
+
+  asn1Parse = callPackage ../development/libraries/haskell/asn1-parse {};
+
   asn1Types = callPackage ../development/libraries/haskell/asn1-types {};
 
   AspectAG = callPackage ../development/libraries/haskell/AspectAG {};
@@ -2501,6 +2505,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   };
 
   wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {};
+
+  x509 = callPackage ../development/libraries/haskell/x509 {};
+
+  x509Store = callPackage ../development/libraries/haskell/x509-store {};
+
+  x509System = callPackage ../development/libraries/haskell/x509-system {};
+
+  x509Validation = callPackage ../development/libraries/haskell/x509-validation {};
 
   X11 = callPackage ../development/libraries/haskell/X11 {};
 
