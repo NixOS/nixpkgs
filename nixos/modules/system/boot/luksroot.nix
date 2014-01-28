@@ -53,7 +53,7 @@ let
     }
 
     drop() {
-        local c=$1
+        local c="$1"
         shift
         if [ -e "$1" ]; then
             cat "$1" | ( dd of=/dev/null bs="$c" count=1 2>/dev/null ; dd 2>/dev/null )
@@ -286,48 +286,57 @@ in
         yubikey = mkOption {
           default = null;
           type = types.nullOr types.optionSet;
-          description = "TODO";
+          description = ''
+            The options to use for this LUKS device in Yubikey-PBA.
+            If null (the default), Yubikey-PBA will be disabled for this device.
+          '';
 
           options = {
             twoFactor = mkOption {
-              default = false;
+              default = true;
               type = types.bool;
-              description = "TODO";
+              description = "Whether to use a passphrase and a Yubikey (true), or only a Yubikey (false)";
             };
 
             slot = mkOption {
               default = 2;
               type = types.int;
-              description = "TODO";
+              description = "Which slot on the Yubikey to challenge";
             };
 
             storage = mkOption {
               type = types.optionSet;
-              description = "TODO";
+              description = "Options related to the authentication record";
 
               options = {
                 device = mkOption {
                   default = /dev/sda1;
                   type = types.path;
-                  description = "TODO";
+                  description = ''
+                    An unencrypted device that will temporarily be mounted in stage-1.
+                    Must contain the authentication record for this LUKS device.
+                  '';
                 };
 
                 fsType = mkOption {
                   default = "vfat";
                   type = types.string;
-                  description = "TODO";
+                  description = "The filesystem of the unencrypted device";
                 };
 
                 mountPoint = mkOption {
                   default = "/crypt-storage";
                   type = types.string;
-                  description = "TODO";
+                  description = "Path where the unencrypted device will be mounted in stage-1";
                 };
 
                 path = mkOption {
                   default = "/crypt-storage/default";
                   type = types.string;
-                  description = "TODO";
+                  description = ''
+                    Absolute path of the authentication record on the unencrypted device with
+                    that device's root directory as "/".
+                  '';
                 };
               };
             };
@@ -340,7 +349,11 @@ in
     boot.initrd.luks.yubikeySupport = mkOption {
       default = false;
       type = types.bool;
-      description = "TODO";
+      description = ''
+            Enables support for authenticating with a Yubikey on LUKS devices.
+            See the NixOS wiki for information on how to properly setup a LUKS device
+            and a Yubikey to work with this feature.
+          '';
     };
   };
 
