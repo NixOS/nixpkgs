@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, gobjectIntrospection, spidermonkey_17 }:
+{ fetchurl, stdenv, pkgconfig, gnome3, gobjectIntrospection, spidermonkey_17, pango }:
 
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with gnome3;
-    [ gobjectIntrospection pkgconfig glib  ];
+    [ gobjectIntrospection pkgconfig glib pango ];
 
   propagatedBuildInputs = [ spidermonkey_17 ];
 

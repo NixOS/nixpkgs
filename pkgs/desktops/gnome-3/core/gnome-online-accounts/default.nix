@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "gnome-online-accounts-3.10.2";
 
   src = fetchurl {
-    url = "http://ftp.acc.umu.se/pub/GNOME/core/3.10/3.10.2/sources/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-online-accounts/3.10/${name}.tar.xz";
     sha256 = "15qvw40dmi886491s3abpidsm2lx65fhglhj99bvcdskhk0ih90b";
   };
 

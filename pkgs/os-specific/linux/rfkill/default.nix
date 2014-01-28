@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "rfkill-0.4";
-  
+  name = "rfkill-0.5";
+
   src = fetchurl {
-    url = "http://wireless.kernel.org/download/rfkill/${name}.tar.bz2";
-    sha256 = "1hb884vgyldci648azbx17w83gzynn0svrmfjgh3c2jzga1f846a";
+    url = "mirror://kernel/software/network/rfkill/${name}.tar.bz2";
+    sha256 = "01zs7p9kd92pxgcgwl5w46h3iyx4acfg6m1j5fgnflsaa350q5iy";
   };
 
   makeFlags = "PREFIX=$(out)";

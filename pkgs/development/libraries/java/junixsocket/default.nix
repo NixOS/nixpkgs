@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       sed -i 's|/usr/bin/||' build.xml
+      substituteInPlace src/main/org/newsclub/net/unix/NativeUnixSocketConfig.java \
+        --replace /opt/newsclub/lib-native $out/lib
     '';
 
   buildPhase = "ant";

@@ -1,0 +1,137 @@
+diff -Naur clang-3.2.src-orig/lib/Driver/ToolChains.cpp clang-3.2.src/lib/Driver/ToolChains.cpp
+--- clang-3.2.src-orig/lib/Driver/ToolChains.cpp	2012-12-16 10:59:27.000000000 -0500
++++ clang-3.2.src/lib/Driver/ToolChains.cpp	2013-01-22 14:16:55.787547681 -0500
+@@ -2153,16 +2153,6 @@
+       addPathIfExists(LibPath + "/../" + GCCTriple.str() + "/lib", Paths);
+     }
+   }
+-  addPathIfExists(SysRoot + "/lib/" + MultiarchTriple, Paths);
+-  addPathIfExists(SysRoot + "/lib/../" + Multilib, Paths);
+-  addPathIfExists(SysRoot + "/usr/lib/" + MultiarchTriple, Paths);
+-  addPathIfExists(SysRoot + "/usr/lib/../" + Multilib, Paths);
+-
+-  // Try walking via the GCC triple path in case of multiarch GCC
+-  // installations with strange symlinks.
+-  if (GCCInstallation.isValid())
+-    addPathIfExists(SysRoot + "/usr/lib/" + GCCInstallation.getTriple().str() +
+-                    "/../../" + Multilib, Paths);
+ 
+   // Add the non-multilib suffixed paths (if potentially different).
+   if (GCCInstallation.isValid()) {
+@@ -2176,8 +2166,6 @@
+       addPathIfExists(LibPath, Paths);
+     }
+   }
+-  addPathIfExists(SysRoot + "/lib", Paths);
+-  addPathIfExists(SysRoot + "/usr/lib", Paths);
+ }
+ 
+ bool Linux::HasNativeLLVMSupport() const {
+@@ -2228,9 +2216,6 @@
+   if (DriverArgs.hasArg(options::OPT_nostdinc))
+     return;
+ 
+-  if (!DriverArgs.hasArg(options::OPT_nostdlibinc))
+-    addSystemInclude(DriverArgs, CC1Args, D.SysRoot + "/usr/local/include");
+-
+   if (!DriverArgs.hasArg(options::OPT_nobuiltininc)) {
+     llvm::sys::Path P(D.ResourceDir);
+     P.appendComponent("include");
+@@ -2295,24 +2280,6 @@
+     "/usr/include/powerpc64-linux-gnu"
+   };
+   ArrayRef<StringRef> MultiarchIncludeDirs;
+-  if (getTriple().getArch() == llvm::Triple::x86_64) {
+-    MultiarchIncludeDirs = X86_64MultiarchIncludeDirs;
+-  } else if (getTriple().getArch() == llvm::Triple::x86) {
+-    MultiarchIncludeDirs = X86MultiarchIncludeDirs;
+-  } else if (getTriple().getArch() == llvm::Triple::arm) {
+-    if (getTriple().getEnvironment() == llvm::Triple::GNUEABIHF)
+-      MultiarchIncludeDirs = ARMHFMultiarchIncludeDirs;
+-    else
+-      MultiarchIncludeDirs = ARMMultiarchIncludeDirs;
+-  } else if (getTriple().getArch() == llvm::Triple::mips) {
+-    MultiarchIncludeDirs = MIPSMultiarchIncludeDirs;
+-  } else if (getTriple().getArch() == llvm::Triple::mipsel) {
+-    MultiarchIncludeDirs = MIPSELMultiarchIncludeDirs;
+-  } else if (getTriple().getArch() == llvm::Triple::ppc) {
+-    MultiarchIncludeDirs = PPCMultiarchIncludeDirs;
+-  } else if (getTriple().getArch() == llvm::Triple::ppc64) {
+-    MultiarchIncludeDirs = PPC64MultiarchIncludeDirs;
+-  }
+   for (ArrayRef<StringRef>::iterator I = MultiarchIncludeDirs.begin(),
+                                      E = MultiarchIncludeDirs.end();
+        I != E; ++I) {
+@@ -2324,13 +2291,6 @@
+ 
+   if (getTriple().getOS() == llvm::Triple::RTEMS)
+     return;
+-
+-  // Add an include of '/include' directly. This isn't provided by default by
+-  // system GCCs, but is often used with cross-compiling GCCs, and harmless to
+-  // add even when Clang is acting as-if it were a system compiler.
+-  addExternCSystemInclude(DriverArgs, CC1Args, D.SysRoot + "/include");
+-
+-  addExternCSystemInclude(DriverArgs, CC1Args, D.SysRoot + "/usr/include");
+ }
+ 
+ /// \brief Helper to add the thre variant paths for a libstdc++ installation.
+diff -Naur clang-3.2.src-orig/lib/Driver/Tools.cpp clang-3.2.src/lib/Driver/Tools.cpp
+--- clang-3.2.src-orig/lib/Driver/Tools.cpp	2012-11-21 02:56:23.000000000 -0500
++++ clang-3.2.src/lib/Driver/Tools.cpp	2013-01-22 14:24:37.167212186 -0500
+@@ -5972,34 +5972,6 @@
+       ToolChain.getArch() == llvm::Triple::thumb ||
+       (!Args.hasArg(options::OPT_static) &&
+        !Args.hasArg(options::OPT_shared))) {
+-    CmdArgs.push_back("-dynamic-linker");
+-    if (isAndroid)
+-      CmdArgs.push_back("/system/bin/linker");
+-    else if (ToolChain.getArch() == llvm::Triple::x86)
+-      CmdArgs.push_back("/lib/ld-linux.so.2");
+-    else if (ToolChain.getArch() == llvm::Triple::arm ||
+-             ToolChain.getArch() == llvm::Triple::thumb) {
+-      if (ToolChain.getTriple().getEnvironment() == llvm::Triple::GNUEABIHF)
+-        CmdArgs.push_back("/lib/ld-linux-armhf.so.3");
+-      else
+-        CmdArgs.push_back("/lib/ld-linux.so.3");
+-    }
+-    else if (ToolChain.getArch() == llvm::Triple::mips ||
+-             ToolChain.getArch() == llvm::Triple::mipsel)
+-      CmdArgs.push_back("/lib/ld.so.1");
+-    else if (ToolChain.getArch() == llvm::Triple::mips64 ||
+-             ToolChain.getArch() == llvm::Triple::mips64el) {
+-      if (hasMipsN32ABIArg(Args))
+-        CmdArgs.push_back("/lib32/ld.so.1");
+-      else
+-        CmdArgs.push_back("/lib64/ld.so.1");
+-    }
+-    else if (ToolChain.getArch() == llvm::Triple::ppc)
+-      CmdArgs.push_back("/lib/ld.so.1");
+-    else if (ToolChain.getArch() == llvm::Triple::ppc64)
+-      CmdArgs.push_back("/lib64/ld64.so.1");
+-    else
+-      CmdArgs.push_back("/lib64/ld-linux-x86-64.so.2");
+   }
+ 
+   CmdArgs.push_back("-o");
+diff -Naur clang-3.2.src-orig/lib/Frontend/InitHeaderSearch.cpp clang-3.2.src/lib/Frontend/InitHeaderSearch.cpp
+--- clang-3.2.src-orig/lib/Frontend/InitHeaderSearch.cpp	2012-10-24 12:19:39.000000000 -0400
++++ clang-3.2.src/lib/Frontend/InitHeaderSearch.cpp	2013-01-22 14:20:32.803925775 -0500
+@@ -221,8 +221,6 @@
+     case llvm::Triple::Bitrig:
+       break;
+     default:
+-      // FIXME: temporary hack: hard-coded paths.
+-      AddPath("/usr/local/include", System, true, false, false);
+       break;
+     }
+   }
+@@ -330,8 +328,6 @@
+     break;
+   }
+ 
+-  if ( os != llvm::Triple::RTEMS )
+-    AddPath("/usr/include", System, false, false, false);
+ }
+ 
+ void InitHeaderSearch::

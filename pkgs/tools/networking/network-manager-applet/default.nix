@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, networkmanager, GConf
-, libnotify, libsecret, dbus_glib, polkit, isocodes, libgnome_keyring, gnome_keyring
+{ stdenv, fetchurl, intltool, pkgconfig, libglade, networkmanager, gnome3
+, libnotify, libsecret, dbus_glib, polkit, isocodes, libgnome_keyring 
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
 , makeWrapper, networkmanager_openvpn, networkmanager_vpnc
 , networkmanager_openconnect, udev, hicolor_icon_theme }:
@@ -19,15 +19,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gtk libglade networkmanager libnotify libsecret dbus_glib
-    polkit isocodes makeWrapper udev GConf libgnome_keyring
+    gnome3.gtk libglade networkmanager libnotify libsecret dbus_glib
+    polkit isocodes makeWrapper udev gnome3.gconf gnome3.libgnome_keyring
   ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
-  propagatedUserEnvPkgs = [ GConf gnome_keyring hicolor_icon_theme ];
-
-  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
+  propagatedUserEnvPkgs = [ gnome3.gconf gnome3.gnome_keyring hicolor_icon_theme ];
 
   makeFlags = [
     ''CFLAGS=-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile_broadband_provider_info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''
@@ -50,7 +48,7 @@ stdenv.mkDerivation rec {
       --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:$out/share" \
       --set GCONF_CONFIG_SOURCE "xml::~/.gconf" \
-      --prefix PATH ":" "${GConf}/bin"
+      --prefix PATH ":" "${gnome3.gconf}/bin"
   '';
 
   meta = with stdenv.lib; {
