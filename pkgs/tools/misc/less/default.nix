@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.greenwoodsoftware.com/less/;
     description = "A more advanced file pager than ‘more’";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }
