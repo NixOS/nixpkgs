@@ -95,7 +95,15 @@ stdenv.mkDerivation {
     
     ${stdenv.lib.optionalString (app != null) ''
       # Install the App through the debugger
-      ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port install ${app}/*.apk
+      
+      if [ -d "${app}" ]
+      then
+          appPath="$(echo ${app}/*.apk)"
+      else
+          appPath="${app}"
+      fi
+      
+      ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port install "$appPath"
     
       # Start the application
       ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/.${activity}
