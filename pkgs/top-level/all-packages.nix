@@ -3126,6 +3126,8 @@ let
   };
   lua5 = lua5_1;
 
+  lua5_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {};
+
   luarocks = callPackage ../development/tools/misc/luarocks {
      lua = lua5;
   };
