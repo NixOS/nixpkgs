@@ -20,4 +20,9 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ libpcap libX11 gtk pkgconfig openssl python pygtk makeWrapper pysqlite ];
+
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+    maintainers = maintainers.mornfall;
+  };
 }

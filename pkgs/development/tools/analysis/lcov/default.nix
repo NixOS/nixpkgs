@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "LCOV, a code coverage tool that enhances GNU gcov";
 
     longDescription =
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = http://ltp.sourceforge.net/coverage/lcov.php;
     license = "GPLv2+";
 
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ maintainers.mornfall ];
+    platforms = platforms.all;
   };
 }
