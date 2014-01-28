@@ -14,5 +14,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Dict protocol server and client";
+    maintainers = with stdenv.lib.maintainers; mornfall;
   };
 }

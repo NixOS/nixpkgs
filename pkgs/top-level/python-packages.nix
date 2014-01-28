@@ -65,6 +65,9 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
+    qtconsoleSupport = !pkgs.stdenv.isDarwin; # qt is not supported on darwin
+    pylabQtSupport = !pkgs.stdenv.isDarwin;
+    pylabSupport = !pkgs.stdenv.isDarwin; # cups is not supported on darwin
   };
 
   ipythonLight = lowPrio (import ../shells/ipython {

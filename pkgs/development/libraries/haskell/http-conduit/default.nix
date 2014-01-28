@@ -5,14 +5,14 @@
 , httpClientMultipart, httpClientTls, httpTypes, HUnit, liftedBase
 , mimeTypes, monadControl, mtl, network, networkConduit
 , publicsuffixlist, random, regexCompat, resourcet, socks, text
-, time, tls, tlsExtra, transformers, transformersBase, utf8String
-, void, wai, warp, warpTls, zlibConduit
+, time, transformers, transformersBase, utf8String, void, wai, warp
+, warpTls, zlibConduit
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "2.0.0.3";
-  sha256 = "1s3nyc3wwpqildhmkv5fps2a0552yrnwcqjv4bxcvg581k5sj42i";
+  version = "2.0.0.4";
+  sha256 = "0902sklwfb9gr1yqxp15qa4qqik75jv6pl0nfh2s4vq65sh4gndq";
   buildDepends = [
     conduit httpClient httpClientConduit httpClientTls httpTypes
     liftedBase resourcet transformers
@@ -23,8 +23,8 @@ cabal.mkDerivation (self: {
     dataDefault deepseq failure filepath hspec httpClient
     httpClientMultipart httpTypes HUnit liftedBase mimeTypes
     monadControl mtl network networkConduit publicsuffixlist random
-    regexCompat resourcet socks text time tls tlsExtra transformers
-    transformersBase utf8String void wai warp warpTls zlibConduit
+    regexCompat resourcet socks text time transformers transformersBase
+    utf8String void wai warp warpTls zlibConduit
   ];
   doCheck = false;
   meta = {
