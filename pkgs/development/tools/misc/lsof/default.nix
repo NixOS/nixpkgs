@@ -28,5 +28,6 @@ stdenv.mkDerivation {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
+    maintainers = stdenv.lib.maintainers.mornfall;
   };
 }

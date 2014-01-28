@@ -18,4 +18,9 @@ stdenv.mkDerivation rec {
         -e s,@INSTALL@,$out/share/photivo, \
         -i Sources/ptSettings.cpp
   '';
+
+  meta = with stdenv.lib; {
+      platforms = platforms.linux;
+      maintainers = maintainers.mornfall;
+  };
 }
