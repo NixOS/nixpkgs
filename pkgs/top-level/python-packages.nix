@@ -4293,6 +4293,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+  osc = buildPythonPackage (rec {
+    name = "osc-0.133+git";
+
+    src = fetchgit {
+      url = git://gitorious.org/opensuse/osc.git;
+      rev = "6cd541967ee2fca0b89e81470f18b97a3ffc23ce";
+      sha256 = "a39ce0e321e40e9758bf7b9128d316c71b35b80eabc84f13df492083bb6f1cc6";
+    };
+
+    buildPhase = "python setup.py build";
+    doCheck = false;
+    postInstall = "ln -s $out/bin/osc-wrapper.py $out/bin/osc";
+
+    propagatedBuildInputs = [ pythonPackages.m2crypto ];
+
+  });
+
   pandas = buildPythonPackage rec {
     name = "pandas-0.12.0";
 
