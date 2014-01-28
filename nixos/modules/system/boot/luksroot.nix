@@ -31,140 +31,148 @@ let
     fi
     ''}
 
-    ${optionalString (luks.yubikeySupport && (yubikey != null)) ''
-    mkdir -p ${yubikey.challenge.mountPoint}
-    mount -t ${yubikey.challenge.fsType} ${toString yubikey.challenge.device} ${yubikey.challenge.mountPoint}
-    response="$(ykchalresp -${toString yubikey.yubikeySlot} "`cat ${yubikey.challenge.mountPoint}${yubikey.challenge.file}`" 2>/dev/null || true)"
-    if [ -z "$response" ]; then
-        echo -n "waiting 10 seconds for yubikey to appear..."
-        for try in $(seq 10); do
-            sleep 1
-            response="$(ykchalresp -${toString yubikey.yubikeySlot} "`cat ${yubikey.challenge.mountPoint}${yubikey.challenge.file}`" 2>/dev/null || true)"
-            if [ ! -z "$response" ]; then break; fi
-            echo -n .
-        done
-        echo "ok"
-    fi
-
-    ${optionalString yubikey.twoFactor ''
-    if [ ! -z "$response" ]; then
-        echo -n "Enter two-factor passphrase: "
-        read -s passphrase
-        current_key="$passphrase$response"
-    fi
-    ''}
-
-    ${optionalString (!yubikey.twoFactor) ''
-    if [ ! -z "$response" ]; then
-        current_key="$response"
-    fi
-    ''}
-    ''}
-
-    # open luksRoot and scan for logical volumes
-    ${optionalString ((!luks.yubikeySupport) || (yubikey == null)) ''
-    cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
-      ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"}
-    ''}
-
-    ${optionalString (luks.yubikeySupport && (yubikey != null)) ''
-    if [ -z "$response" ]; then
+    open_normally() {
         cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
           ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"}
-    else
-        echo $current_key | cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} --key-file=-
+    }
 
-        if [ $? != "0" ]; then
-            for try in $(seq 3); do
+    ${optionalString (luks.yubikeySupport && (yubikey != null)) ''
 
-                ${optionalString (!yubikey.twoFactor) ''
-                sleep 1
-                ''}
+    rbtohex() {
+        od -An -vtx1 | tr -d ' \n'
+    }
 
-                ${optionalString yubikey.twoFactor ''
-                echo -n "Enter two-factor passphrase: "
-                read -s passphrase
-                current_key="$passphrase$response"
-                ''}
+    hextorb() {
+        tr '[:lower:]' '[:upper:]' | sed -e 's|\([0-9A-F]\{2\}\)|\\\\\\x\1|gI' | xargs printf
+    }
 
-                echo $current_key | cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} --key-file=-
-                if [ $? == "0" ]; then break; fi
-                echo -n .
-            done
+    take() {
+        local c="$1"
+        shift
+        head -c $c "$@"
+    }
+
+    drop() {
+        local c=$1
+        shift
+        if [ -e "$1" ]; then
+            cat "$1" | ( dd of=/dev/null bs="$c" count=1 2>/dev/null ; dd 2>/dev/null )
+        else
+            ( dd of=/dev/null bs="$c" count=1 2>/dev/null ; dd 2>/dev/null )
+        fi
+    }
+
+    open_yubikey() {
+
+        mkdir -p ${yubikey.storage.mountPoint}
+        mount -t ${yubikey.storage.fsType} ${toString yubikey.storage.device} ${yubikey.storage.mountPoint}
+
+        local uuid_r
+        uuid_r="$(take 16 ${yubikey.storage.mountPoint}${yubikey.storage.path} | rbtohex)"
+
+        local uuid_luks
+        uuid_luks="$(cryptsetup luksUUID ${device} | take 36 | tr -d '-')"
+
+        local k_user
+        local challenge
+        local k_blob
+        local aes_blob_decrypted
+        local checksum_correct
+        local checksum
+
+        for try in $(seq 3); do
+
+            ${optionalString yubikey.twoFactor ''
+            echo -n "Enter two-factor passphrase: "
+            read -s k_user
+            ''}
+
+            challenge="$(echo -n $k_user$uuid_r$uuid_luks | openssl-wrap dgst -binary -sha1 | rbtohex)"
+
+            k_blob="$(ykchalresp -${toString yubikey.slot} -x $challenge 2>/dev/null)"
+
+            aes_blob_decrypted="$(drop 16 ${yubikey.storage.mountPoint}${yubikey.storage.path} | openssl-wrap enc -d -aes-256-ctr -K $k_blob -iv $uuid_r | rbtohex)"
+
+            checksum="$(echo -n $aes_blob_decrypted | hextorb | drop 84 | rbtohex)"
+            if [ "$(echo -n $aes_blob_decrypted | hextorb | take 84 | openssl-wrap dgst -binary -sha512 | rbtohex)" == "$checksum" ]; then
+                 checksum_correct=1
+                 break
+            else
+                 checksum_correct=0
+                 echo "Authentication failed!"
+            fi
+        done
+
+        if [ "$checksum_correct" != "1" ]; then
+            umount ${yubikey.storage.mountPoint}
+            echo "Maximum authentication errors reached"
+            exit 1
         fi
 
-        mkdir -p ${yubikey.ramfsMountPoint}
-        # A ramfs is used here to ensure that the file used to update
-        # the key slot with cryptsetup will never get swapped out.
-        # Warning: Do NOT replace with tmpfs!
-        mount -t ramfs none ${yubikey.ramfsMountPoint}
+        local k_yubi
+        k_yubi="$(echo -n $aes_blob_decrypted | hextorb | take 20 | rbtohex)"
+
+        local k_luks
+        k_luks="$(echo -n $aes_blob_decrypted | hextorb | drop 20 | take 64 | rbtohex)"
+
+        echo -n "$k_luks" | hextorb | cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} --key-file=-
 
         update_failed=false
-        old_challenge=$(cat ${yubikey.challenge.mountPoint}${yubikey.challenge.file})
 
-        new_challenge=$(uuidgen)
+        local new_uuid_r
+        new_uuid_r="$(uuidgen)"
         if [ $? != "0" ]; then
             for try in $(seq 10); do
                 sleep 1
-                new_challenge=$(uuidgen)
+                new_uuid_r="$(uuidgen)"
                 if [ $? == "0" ]; then break; fi
                 if [ $try -eq 10 ]; then update_failed=true; fi
             done
         fi
 
         if [ "$update_failed" == false ]; then
-            echo $new_challenge > ${yubikey.challenge.mountPoint}${yubikey.challenge.file}
-            response="$(ykchalresp -${toString yubikey.yubikeySlot} "`cat ${yubikey.challenge.mountPoint}${yubikey.challenge.file}`" 2>/dev/null || true)"
-            if [ -z "$response" ]; then
-                echo -n "waiting 10 seconds for yubikey to appear..."
-                for try in $(seq 10); do
-                    sleep 1
-                    response="$(ykchalresp -${toString yubikey.yubikeySlot} "`cat ${yubikey.challenge.mountPoint}${yubikey.challenge.file}`" 2>/dev/null || true)"
-                    if [ ! -z "$response" ]; then break; fi
-                    echo -n .
-                done
-                echo "ok";
-            fi
+            new_uuid_r="$(echo -n $new_uuid_r | take 36 | tr -d '-')"
 
-            if [ ! -z "$response" ]; then
-                ${optionalString yubikey.twoFactor ''
-                new_key="$passphrase$response"
-                ''}
+            local new_challenge
+            new_challenge="$(echo -n $k_user$new_uuid_r$uuid_luks | openssl-wrap dgst -binary -sha1 | rbtohex)"
 
-                ${optionalString (!yubikey.twoFactor) ''
-                new_key="$response"
-                ''}
+            local new_k_blob
+            new_k_blob="$(echo -n $new_challenge | hextorb | openssl-wrap dgst -binary -sha1 -mac HMAC -macopt hexkey:$k_yubi | rbtohex)"
 
-                echo $new_key > ${yubikey.ramfsMountPoint}/new_key
-
-                echo $current_key | cryptsetup luksChangeKey ${device} --key-file=- --key-slot ${toString yubikey.luksKeySlot} ${yubikey.ramfsMountPoint}/new_key
-                if [ $? != "0" ]; then
-                    for try in $(seq 10); do
-                        sleep 1
-                        echo $current_key | cryptsetup luksChangeKey ${device} --key-file=- --key-slot ${toString yubikey.luksKeySlot} ${yubikey.ramfsMountPoint}/new_key
-                        if [ $? == "0" ]; then break; fi
-                        if [ $try -eq 10 ]; then update_failed=true; fi
-                    done
-
-                fi
-
-                rm -f ${yubikey.ramfsMountPoint}/new_key
-
-                if [ "$update_failed" == true ]; then
-                    echo $old_challenge > ${yubikey.challenge.mountPoint}${yubikey.challenge.file}
-                    echo "Warning: Could not update luks header with new key for ${device}, old challenge restored!"
-                fi
-            else
-              echo $old_challenge > ${yubikey.challenge.mountPoint}${yubikey.challenge.file}
-              echo "Warning: No yubikey present to challenge for ${device}, old challenge restored!"
-            fi
+            echo -n "$new_uuid_r" | hextorb > ${yubikey.storage.mountPoint}${yubikey.storage.path}
+            echo -n "$k_yubi$k_luks$checksum" | hextorb | openssl-wrap enc -e -aes-256-ctr -K "$new_k_blob" -iv "$new_uuid_r" >> ${yubikey.storage.mountPoint}${yubikey.storage.path}
         else
-            echo "Warning: New challenge could not be obtained for ${device}, old challenge persists!"
+            echo "Warning: Could not obtain new UUID, current challenge persists!"
         fi
 
-        umount ${yubikey.ramfsMountPoint}
-        umount ${yubikey.challenge.mountPoint}
+        umount ${yubikey.storage.mountPoint}
+    }
+
+    ykinfo -v
+    yubikey_missing="$(ykinfo -v 1>/dev/null 2>&1)$?"
+    if [ "$yubikey_missing" != "0" ]; then
+        echo -n "waiting 10 seconds for yubikey to appear..."
+        for try in $(seq 10); do
+            sleep 1
+            ykinfo -v
+            yubikey_missing="$(ykinfo -v 1>/dev/null 2>&1)$?"
+            if [ "$yubikey_missing" == "0" ]; then break; fi
+            echo -n .
+        done
+        echo "ok"
     fi
+
+    if [ "$yubikey_missing" != "0" ]; then
+        echo "no yubikey found, falling back to non-yubikey open procedure"
+        open_normally
+    else
+        open_yubikey
+    fi
+    ''}
+
+    # open luksRoot and scan for logical volumes
+    ${optionalString ((!luks.yubikeySupport) || (yubikey == null)) ''
+    open_normally
     ''}
   '';
 
@@ -283,19 +291,13 @@ in
               description = "TODO";
             };
 
-            yubikeySlot = mkOption {
+            slot = mkOption {
               default = 2;
               type = types.int;
               description = "TODO";
             };
 
-            luksKeySlot = mkOption {
-              default = 1;
-              type = types.int;
-              description = "TODO";
-            };
-
-            challenge = mkOption {
+            storage = mkOption {
               type = types.optionSet;
               description = "TODO";
 
@@ -313,23 +315,17 @@ in
                 };
 
                 mountPoint = mkOption {
-                  default = "/crypt-challenge";
+                  default = "/crypt-storage";
                   type = types.string;
                   description = "TODO";
                 };
 
-                file = mkOption {
-                  default = "/crypt-challenge";
+                path = mkOption {
+                  default = "/crypt-storage/default";
                   type = types.string;
                   description = "TODO";
                 };
               };
-            };
-
-            ramfsMountPoint = mkOption {
-              default = "/crypt-update";
-              type = types.string;
-              description = "TODO";
             };
           };
         };
@@ -361,6 +357,7 @@ in
         cp -pdvn $lib $out/lib
         cp -pvn $(readlink -f $lib) $out/lib
       done
+
       ${optionalString luks.yubikeySupport ''
       cp -pdv ${pkgs.utillinux}/bin/uuidgen $out/bin
       for lib in $(ldd $out/bin/uuidgen |grep '=>' |grep /nix/store/ |cut -d' ' -f3); do
@@ -373,6 +370,26 @@ in
         cp -pdvn $lib $out/lib
         cp -pvn $(readlink -f $lib) $out/lib
       done
+
+      cp -pdv ${pkgs.ykpers}/bin/ykinfo $out/bin
+      for lib in $(ldd $out/bin/ykinfo |grep '=>' |grep /nix/store/ |cut -d' ' -f3); do
+        cp -pdvn $lib $out/lib
+        cp -pvn $(readlink -f $lib) $out/lib
+      done
+
+      cp -pdv ${pkgs.openssl}/bin/openssl $out/bin
+      for lib in $(ldd $out/bin/openssl |grep '=>' |grep /nix/store/ |cut -d' ' -f3); do
+        cp -pdvn $lib $out/lib
+        cp -pvn $(readlink -f $lib) $out/lib
+      done
+
+      mkdir -p $out/etc/ssl
+      cp -pdv ${pkgs.openssl}/etc/ssl/openssl.cnf $out/etc/ssl
+
+      cat > $out/bin/openssl-wrap <<EOF
+#!$out/bin/sh
+EOF
+      chmod +x $out/bin/openssl-wrap
       ''}
     '';
 
@@ -381,6 +398,13 @@ in
       ${optionalString luks.yubikeySupport ''
         $out/bin/uuidgen --version
         $out/bin/ykchalresp -V
+        $out/bin/ykinfo -V
+        cat > $out/bin/openssl-wrap <<EOF
+#!$out/bin/sh
+export OPENSSL_CONF=$out/etc/ssl/openssl.cnf
+$out/bin/openssl "\$@"
+EOF
+        $out/bin/openssl-wrap version
       ''}
     '';
 
