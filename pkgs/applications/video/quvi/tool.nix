@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "quvi-${version}";
-  version="0.9.4";
+  version="0.9.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/quvi/quvi-${version}.tar.xz";
-    sha256 = "047rrwnnp72624z2px5nzn5wxi5fyckkddh2pj8j5xs6kdim429m";
+    sha256 = "1h52s265rp3af16dvq1xlscp2926jqap2l4ah94vrfchv6m1hffb";
   };
 
   buildInputs = [ pkgconfig lua5 curl quvi_scripts libquvi glib makeWrapper ];
