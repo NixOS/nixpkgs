@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.4";
-  name    = "grc_${version}";
+  name    = "grc-${version}";
 
   src = fetchurl {
-    url    = "http://korpus.juls.savba.sk/~garabik/software/grc/${name}.tar.gz";
+    url    = "http://korpus.juls.savba.sk/~garabik/software/grc/grc_${version}.tar.gz";
     sha256 = "1l7lskxfjk32kkv4aaqw5qcxvh972nab3x2jzy67m1aa0zpcbzdv";
   };
 

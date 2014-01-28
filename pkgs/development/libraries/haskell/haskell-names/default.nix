@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     hseCpp mtl prettyShow tagged tasty tastyGolden traverseWithClass
     uniplate utf8String
   ];
+  doCheck = false;
   meta = {
     homepage = "http://documentup.com/haskell-suite/haskell-names";
     description = "Name resolution library for Haskell";

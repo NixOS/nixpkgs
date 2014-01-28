@@ -35,22 +35,25 @@ let
       "";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+  patchversion = "51";
+
   name =
-    if installjdk then "jdk-1.7.0_45" else "jre-1.7.0_45";
+    if installjdk then "jdk-1.7.0_${patchversion}" else "jre-1.7.0_${patchversion}";
 
   src =
     if stdenv.system == "i686-linux" then
       requireFile {
-        name = "jdk-7u45-linux-i586.tar.gz";
+        name = "jdk-7u${patchversion}-linux-i586.tar.gz";
         url = http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html;
-        sha256 = "1q0nw2rwmavcrssyigq76p1h00hm8kd3rhb5bdv7rbdcs0jxrjsa";
+        sha256 = "1ks2zyx88bxdjcbdgg40mh1i9a83ll9ymxr79rplfvj48ig9d8mk";
       }
     else if stdenv.system == "x86_64-linux" then
+
       requireFile {
-        name = "jdk-7u45-linux-x64.tar.gz";
+        name = "jdk-7u${patchversion}-linux-x64.tar.gz";
         url = http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html;
-        sha256 = "06jbz536zycqkdpc7zriay0jidmj9nriqva60afsgpv93kcf9spj";
+        sha256 = "0p7mfjj8fxlghvhcqhwgrifzb32b9y143yw962zk02bfycz7qdkp";
       }
     else
       abort "jdk requires i686-linux or x86_64 linux";

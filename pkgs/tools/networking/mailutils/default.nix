@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       message handling system.
     '';
 
-    licenses = [ "LGPLv3+" /* libraries */  "GPLv3+" /* tools */ ];
+    license = [ "LGPLv3+" /* libraries */  "GPLv3+" /* tools */ ];
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
 

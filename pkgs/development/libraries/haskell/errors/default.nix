@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "errors";
-  version = "1.4.4";
-  sha256 = "1mhh5xna5nppqg8aw93iil7nsnpx5j6r21a12bx4mmip8nzr6480";
+  version = "1.4.5";
+  sha256 = "16m4psk1150319bd2hrswpp2h90l1hhh7w13arfhy4ylh8vscm4q";
   buildDepends = [ either safe transformers ];
   jailbreak = true;
   meta = {

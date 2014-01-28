@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://isync.sourceforge.net/;
     description = "Free IMAP and MailDir mailbox synchronizer";
-    licenses = [ "GPLv2+" ];
+    license = [ "GPLv2+" ];
 
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.linux;

@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib
+{ stdenv, fetchurl, pkgconfig, intltool, glib, gobjectIntrospection
   # just for passthru
 , gtk3, gsettings_desktop_schemas }:
 
 stdenv.mkDerivation rec {
 
-  versionMajor = "3.6";
+  versionMajor = "3.10";
   versionMinor = "1";
   moduleName   = "gsettings-desktop-schemas";
 
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "1rk71q2rky9nzy0zb5jsvxa62vhg7dk65kdgdifq8s761797ga6r";
+    sha256 = "04b8wy10l6pzs5928gnzaia73dz5fjlcdy39xi3mf50ajv27h8s5";
   };
 
-  buildInputs = [ glib ];
+  buildInputs = [ glib gobjectIntrospection ];
 
   nativeBuildInputs = [ pkgconfig intltool ];
 

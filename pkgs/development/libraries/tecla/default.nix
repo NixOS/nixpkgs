@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "tecla-1.6.1";
+  name = "tecla-1.6.2";
 
   src = fetchurl {
     url = "http://www.astro.caltech.edu/~mcs/tecla/lib${name}.tar.gz";
-    sha256 = "18crv6q5f9g0cg6ry5h9dsa10inhpslklrv20h70f58lpm3jknr1";
+    sha256 = "1f5p1v9ac5r1f6pjzwacb4yf8m6z19rv77p76j7fix34hd9dnqcc";
   };
 
   configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "Tecla command-line editing library";
     license = "as-is";
 
-    platforms = stdenv.lib.platforms.all;
+    hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

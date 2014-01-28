@@ -31,7 +31,5 @@ stdenv.mkDerivation rec {
     description = "The xorg driver for nouveau-driven video cards";
 
     license = "gplv2";
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }

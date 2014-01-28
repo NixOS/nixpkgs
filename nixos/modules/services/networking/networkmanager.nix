@@ -130,6 +130,8 @@ in {
       message = "You can not use networking.networkmanager with services.networking.wireless";
     }];
 
+    boot.kernelModules = [ "ppp_mppe" ]; # Needed for most (all?) PPTP VPN connections.
+
     environment.etc = [
       { source = ipUpScript;
         target = "NetworkManager/dispatcher.d/01nixos-ip-up";

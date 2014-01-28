@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     Cabal deepseq mtl parallel parsec QuickCheck random terminfo
     utf8String vector
   ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "https://github.com/coreyoconnor/vty";

@@ -4,13 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "exceptions";
-  version = "0.3.2";
-  sha256 = "0c1d78wm8is9kyv26drbx3f1sq2bfcq5m6wfw2qzwgalb3z2kxlw";
+  version = "0.3.3";
+  sha256 = "1gng8zvsljm6xrb5gy501f1dl47z171wkic8bsivhn4rgp9lby9l";
   buildDepends = [ mtl transformers ];
   testDepends = [
     mtl QuickCheck testFramework testFrameworkQuickcheck2 transformers
   ];
-  doCheck = false;
   meta = {
     homepage = "http://github.com/ekmett/exceptions/";
     description = "Extensible optionally-pure exceptions";

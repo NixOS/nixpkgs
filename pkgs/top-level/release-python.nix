@@ -59,8 +59,6 @@ let
   antlr = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   antlr3 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   apacheAntGcj = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  apacheAntOpenJDK = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  apacheAntOracleJDK = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   apparmor = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   aqbanking = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   arb = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -155,15 +153,12 @@ let
   cinepaint = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ciopfs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clang = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  clangUnwrapped = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clanlib = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   classpath = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clearsilver = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clisp = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clisp_2_44_1 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clojure = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  clojure_wrapper = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  clooj_wrapper = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clucene_core_2 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clutter = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   clutter_gtk = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -371,7 +366,6 @@ let
   gajim = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gav = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gcj = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  gcj46 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gcl = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gdb = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gdbCross = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -676,7 +670,6 @@ let
   icecat3Wrapper = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   icecat3Xul = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   icecatXulrunner3 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  icedtea = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   icewm = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   idutils = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ikiwiki = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -725,7 +718,6 @@ let
   julia = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   jwm = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   k3d = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  kaffe = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   kde3 = {
     arts = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     kdelibs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1697,8 +1689,6 @@ let
   v8 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vacuum = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vala = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  vala15 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  vala16 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   valgrind = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   valkyrie = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vde2 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1762,7 +1752,6 @@ let
   x11vnc = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   x2vnc = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   x2x = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  xalanJava = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xaos = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xapianBindings = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xapianBindings10 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1781,7 +1770,6 @@ let
   xdaliclock = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xdotool = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xen = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  xercesJava = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xf86_input_mtrack = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xf86_input_multitouch = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xf86_input_wacom = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

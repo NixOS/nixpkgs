@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, pkgconfig, popt, intltool, dbus_glib
-, libX11, xextproto, libSM, libICE, libXtst, libXi }:
+, libX11, xextproto, libSM, libICE, libXtst, libXi, gobjectIntrospection }:
 
 stdenv.mkDerivation (rec {
   versionMajor = "2.10";
@@ -15,10 +15,15 @@ stdenv.mkDerivation (rec {
   buildInputs = [
     python pkgconfig popt  intltool dbus_glib
     libX11 xextproto libSM libICE libXtst libXi
+    gobjectIntrospection
   ];
 
   # ToDo: on non-NixOS we create a symlink from there?
   configureFlags = "--with-dbus-daemondir=/run/current-system/sw/bin/";
+
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+  };
 }
   // stdenv.lib.optionalAttrs stdenv.isDarwin {
     NIX_LDFLAGS = "-lintl";

@@ -319,6 +319,7 @@ in {
               "mkfs.ext3 -L nixos /dev/sda2",
               "mount LABEL=nixos /mnt",
           );
+
         '';
       fileSystems = rootFS;
       grubVersion = 1;

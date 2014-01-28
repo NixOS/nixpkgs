@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HTF";
-  version = "0.11.0.1";
-  sha256 = "0c4z76rsmdck60p7p2ypxx0d0r7k2vcb9viqp2yalyxzaaj7a9f5";
+  version = "0.11.1.0";
+  sha256 = "0prijzy852fkr8z58rhba6jvrb27b6lyz2jdgqb7r1jrnkhqmhpq";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

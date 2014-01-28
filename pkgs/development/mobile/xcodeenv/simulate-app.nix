@@ -1,7 +1,7 @@
 {stdenv, xcodewrapper}:
 { name, appName ? null, app
 , device ? "iPhone", baseDir ? ""
-, sdkVersion ? "6.1"
+, sdkVersion ? "7.0"
 }:
 
 let

@@ -11,4 +11,8 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";
 
   buildInputs = [ pkgconfig libxml2 glib ];
+
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+  };
 }

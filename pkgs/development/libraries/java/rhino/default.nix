@@ -9,48 +9,49 @@ let
     sha256 = "1pb08d9j81d0wz5wj31idz198iwhqb7mch872n08jh1354rjlqwk";
   };
 in
-  stdenv.mkDerivation {
-    name = "rhino-${version}";
 
-    src = fetchurl {
-      url = "ftp://ftp.mozilla.org/pub/mozilla.org/js/rhino1_7R2.zip";
-      sha256 = "1p32hkghi6bkc3cf2dcqyaw5cjj7403mykcp0fy8f5bsnv0pszv7";
-    };
+stdenv.mkDerivation {
+  name = "rhino-${version}";
 
-    patches = [ ./gcj-type-mismatch.patch ];
+  src = fetchurl {
+    url = "ftp://ftp.mozilla.org/pub/mozilla.org/js/rhino1_7R2.zip";
+    sha256 = "1p32hkghi6bkc3cf2dcqyaw5cjj7403mykcp0fy8f5bsnv0pszv7";
+  };
 
-    preConfigure =
-      '' find -name \*.jar -or -name \*.class -exec rm -v {} \;
+  patches = [ ./gcj-type-mismatch.patch ];
 
-         # The build process tries to download it by itself.
-         mkdir -p "build/tmp-xbean"
-         ln -sv "${xbeans}" "build/tmp-xbean/xbean.zip"
+  preConfigure =
+    ''
+      find -name \*.jar -or -name \*.class -exec rm -v {} \;
+
+      # The build process tries to download it by itself.
+      mkdir -p "build/tmp-xbean"
+      ln -sv "${xbeans}" "build/tmp-xbean/xbean.zip"
+    '';
+
+  buildInputs = [ unzip ant javac jvm ];
+
+  buildPhase = "ant ${options} jar";
+  doCheck    = false;
+
+  # FIXME: Install javadoc as well.
+  installPhase =
+    ''
+      mkdir -p "$out/share/java"
+      cp -v *.jar "$out/share/java"
+    '';
+
+  meta = {
+    description = "Mozilla Rhino: JavaScript for Java";
+
+    longDescription =
+      '' Rhino is an open-source implementation of JavaScript written
+         entirely in Java.  It is typically embedded into Java applications
+         to provide scripting to end users.
       '';
 
-    buildInputs = [ unzip ant javac jvm ];
+    homepage = http://www.mozilla.org/rhino/;
 
-    buildPhase = "ant ${options} jar";
-    doCheck    = false;
-
-    # FIXME: Install javadoc as well.
-    installPhase =
-      '' mkdir -p "$out/lib/java"
-         cp -v *.jar "$out/lib/java"
-      '';
-
-    meta = {
-      description = "Mozilla Rhino: JavaScript for Java";
-
-      longDescription =
-        '' Rhino is an open-source implementation of JavaScript written
-           entirely in Java.  It is typically embedded into Java applications
-           to provide scripting to end users.
-        '';
-
-      homepage = http://www.mozilla.org/rhino/;
-
-      licenses = [ "MPLv1.1" /* or */ "GPLv2+" ];
-
-      maintainers = [ ];
-    };
-  }
+    license = [ "MPLv1.1" /* or */ "GPLv2+" ];
+  };
+}

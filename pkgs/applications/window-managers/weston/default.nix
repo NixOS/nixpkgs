@@ -1,20 +1,20 @@
 { stdenv, fetchurl, pkgconfig, wayland, mesa, libxkbcommon
 , cairo, libxcb, libXcursor, x11, udev, libdrm, mtdev
-, libjpeg, pam, autoconf, automake, libtool }:
+, libjpeg, pam, autoconf, automake, libtool, dbus }:
 
-let version = "1.3.1"; in
+let version = "1.4.0"; in
 
 stdenv.mkDerivation rec {
   name = "weston-${version}";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "1isvh66irrz707r69495767n5yxp07dvy0xx6mj1mbj1n4s1657p";
+    sha256 = "0r7dz72ys9p3f697ajgmihkar2da36bnjna6yanb3kg9k2fk38kl";
   };
 
   buildInputs = [
     pkgconfig wayland mesa libxkbcommon
-    cairo libxcb libXcursor x11 udev libdrm mtdev libjpeg pam
+    cairo libxcb libXcursor x11 udev libdrm mtdev libjpeg pam dbus.libs
   ];
 
   NIX_CFLAGS_COMPILE = "-I${libdrm}/include/libdrm";

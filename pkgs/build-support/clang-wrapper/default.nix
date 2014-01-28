@@ -34,6 +34,9 @@ stdenv.mkDerivation {
   addFlags = ./add-flags;
   
   inherit nativeTools nativeLibc nativePrefix clang clangVersion libcxx;
+
+  libcxxabi = libcxx.abi or null;
+
   gcc = clang.gcc;
   libc = if nativeLibc then null else libc;
   binutils = if nativeTools then null else binutils;

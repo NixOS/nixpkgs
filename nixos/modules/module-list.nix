@@ -116,6 +116,7 @@
   ./services/mail/spamassassin.nix
   ./services/misc/autofs.nix
   ./services/misc/cgminer.nix
+  ./services/misc/dictd.nix
   ./services/misc/disnix.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
@@ -147,6 +148,7 @@
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
+  ./services/networking/connman.nix
   ./services/networking/cntlm.nix
   ./services/networking/chrony.nix
   ./services/networking/ddclient.nix
@@ -167,6 +169,7 @@
   ./services/networking/ifplugd.nix
   ./services/networking/iodined.nix
   ./services/networking/ircd-hybrid/default.nix
+  ./services/networking/kippo.nix
   ./services/networking/minidlna.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
@@ -199,6 +202,7 @@
   ./services/scheduling/fcron.nix
   ./services/search/elasticsearch.nix
   ./services/security/clamav.nix
+  ./services/security/haveged.nix
   ./services/security/fprot.nix
   ./services/security/frandom.nix
   ./services/security/tor.nix
@@ -212,6 +216,7 @@
   ./services/torrent/transmission.nix
   ./services/ttys/gpm.nix
   ./services/ttys/agetty.nix
+  ./services/ttys/kmscon.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/default.nix
@@ -230,6 +235,7 @@
   ./services/x11/hardware/multitouch.nix
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
+  ./services/x11/mesa.nix
   ./services/x11/window-managers/awesome.nix
   #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix

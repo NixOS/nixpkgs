@@ -4,11 +4,11 @@
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "gnunet-0.9.5a";
+  name = "gnunet-0.10.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${name}.tar.gz";
-    sha256 = "1mxy1ikv44fia3cybpmiw298x5371a2qh8hr7pi55yg1xqbhfq0x";
+    sha256 = "0zqpc47kywhjrpphl0palz849khv00ra2gjrfkysp6p0gfsbvd0i";
   };
 
   buildInputs = [

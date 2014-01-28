@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   meta = {
       description = "A sandbox-building game";
       homepage = http://www.minecraft.net;
-      maintainers = [ stdenv.lib.maintainers.page stdenv.lib.maintainers.shlevy ];
+      maintainers = [ stdenv.lib.maintainers.page ];
       license = "unfree-redistributable";
   };
 }

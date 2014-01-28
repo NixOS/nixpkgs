@@ -145,7 +145,7 @@ stdenv.mkDerivation rec {
 
   postInstall = if buildDocs then "make docs&&make install_docs" else "";
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; # often fails on Hydra, as well as qt4
 
   meta = {
     homepage = http://qt-project.org;

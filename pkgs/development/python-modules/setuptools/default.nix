@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       wrapPythonPrograms
     '';
 
-  doCheck = true;
+  doCheck = stdenv.system != "x86_64-darwin";
 
   checkPhase = ''
     ${python}/bin/${python.executable} setup.py test
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = http://pypi.python.org/pypi/setuptools;
-    licenses = [ "PSF" "ZPL" ];
+    license = [ "PSF" "ZPL" ];
     platforms = platforms.all;
   };    
 }

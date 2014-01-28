@@ -113,4 +113,6 @@
 , "node-protobuf"
 , "rethinkdb"
 , "bower2nix"
+, "fetch-bower"
+, { "titanium": "3.2.0" }
 ]

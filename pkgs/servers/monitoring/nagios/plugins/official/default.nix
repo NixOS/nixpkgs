@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "nagios-plugins-1.4.10";
 
   src = fetchurl {
-    url = https://www.nagios-plugins.org/download/nagios-plugins-1.4.10.tar.gz;
+    url = https://www.monitoring-plugins.org/download/nagios-plugins-1.4.10.tar.gz;
     sha256 = "0vm7sjiygxbfc5vbsi1g0dakpvynfzi86fhqx4yxd61brn0g8ghr";
   };
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation {
   buildInputs = [openssh]; # !!! make openssh a runtime dependency only
 
   meta = {
-    description = "Official plugins for Nagios";
-    homepage = http://www.nagios.org/;
+    description = "Plugins for Nagios";
+    homepage = http://www.monitoring-plugins.org;
     license = "GPL";
   };
 }

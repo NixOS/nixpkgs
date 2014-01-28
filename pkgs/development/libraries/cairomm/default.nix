@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://cairographics.org/;
 
-    licenses = [ "LGPLv2+" "MPLv1" ];
+    license = [ "LGPLv2+" "MPLv1" ];
   };
 }

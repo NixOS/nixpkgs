@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "encoding";
-  version = "0.6.7.2";
-  sha256 = "0b1z5824vdkcc51bd1vgcbaniw3fv9dmd5qczjc89b5lhrl7qq0d";
+  version = "0.7";
+  sha256 = "1h6yki4d3912sr8nsk1cff2pdvzw8ys6xnzi97b5ay1f8i28bmi5";
   buildDepends = [
     binary extensibleExceptions HaXml mtl regexCompat
   ];

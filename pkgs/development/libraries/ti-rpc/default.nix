@@ -1,12 +1,14 @@
-{ fetchurl, stdenv }:
+{ fetchurl, stdenv, krb5 }:
 
 stdenv.mkDerivation rec {
-  name = "libtirpc-0.2.3";
+  name = "libtirpc-0.2.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/libtirpc/${name}.tar.bz2";
-    sha256 = "0g4jd8da0kfxz5lv1x5v7f3mfxw53cck8g2zz4llrjmlj42flaag";
+    sha256 = "18a337wa4amf0k21wnimp3yzs5l3cxqndz4x3x8bm993zhfy5hs5";
   };
+
+  buildInputs = [ krb5 ];
 
   # http://www.sourcemage.org/projects/grimoire/repository/revisions/d6344b6a3a94b88ed67925a474de5930803acfbf
   preConfigure = ''
@@ -36,8 +38,5 @@ stdenv.mkDerivation rec {
        already supports IPv6.  So, the FreeBSD release 5.2.1 TI-RPC has
        been ported to replace the SunRPC of the glibc.
     '';
-
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

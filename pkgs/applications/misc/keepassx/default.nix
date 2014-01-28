@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     qmake PREFIX=$out 
   '';
 
+  patches = [ ./random.patch ];
+
   buildInputs = [ bzip2 qt4 libX11 xextproto libXtst ];
 
   meta = {

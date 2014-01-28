@@ -4,11 +4,10 @@
 
 cabal.mkDerivation (self: {
   pname = "scientific";
-  version = "0.1.0.1";
-  sha256 = "0s401gxwap4xwz9rxypc76rs5w344s3an45295ybf3id6yal5140";
+  version = "0.2.0.1";
+  sha256 = "0xwxds884pqywjbc4j6qkx27nbi64sihig8ps9v884sk08021wrp";
   buildDepends = [ deepseq hashable text ];
   testDepends = [ smallcheck tasty tastySmallcheck text ];
-  doCheck = false;
   meta = {
     homepage = "https://github.com/basvandijk/scientific";
     description = "Arbitrary-precision floating-point numbers represented using scientific notation";

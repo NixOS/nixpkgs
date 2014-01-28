@@ -12,9 +12,9 @@ stdenv.mkDerivation {
     sha256 = "1baxwpdvak6nalr943g22z67r1d3fbibbkqvkvvar9xlvrs9gv20";
   };
   
-  configureFlags = if sslSupport then "--with-ssl" else "";
+  configureFlags = if sslSupport then "--with-ssl=${openssl}" else "";
   
-  buildInputs = [ ncurses gzip ] ++ stdenv.lib.optional sslSupport openssl;
+  buildInputs = [ ncurses gzip ];
   nativeBuildInputs = [ ncurses ];
 
   crossAttrs = {

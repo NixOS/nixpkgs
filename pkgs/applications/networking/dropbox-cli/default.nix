@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     # Note: dropbox doesn't version this file. Annoying.
     url = "https://linux.dropbox.com/packages/dropbox.py";
-    sha256 = "0p1pg8bw6mlhqi5k8y3pgs7byg0kfvq57s53sh188lb5sxvlg7yz";
+    sha256 = "0505k0xrhbmsv7g5phxxnz5wbff6m5gdsqyxkhd95wdi9d71c43c";
   };
 
   buildInputs = [ coreutils python ];

@@ -5,11 +5,11 @@
 assert enableMagnet -> lua5 != null;
 
 stdenv.mkDerivation rec {
-  name = "lighttpd-1.4.33";
+  name = "lighttpd-1.4.34";
 
   src = fetchurl {
     url = "http://download.lighttpd.net/lighttpd/releases-1.4.x/${name}.tar.xz";
-    sha256 = "0331671snhhf48qb43mfb6l85v2rc3ryd3qvz56s8z454gfax1i8";
+    sha256 = "1dzgz3gkfyn97s4dm896yjanlhqzzsz38dhjdgla06xgynca1hdl";
   };
 
   buildInputs = [ pkgconfig pcre libxml2 zlib attr bzip2 which file openssl ]

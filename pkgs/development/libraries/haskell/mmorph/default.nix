@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "mmorph";
-  version = "1.0.0";
-  sha256 = "10r8frcn6ar56n1vxy8rkys8j52f8xkqan8qxqanka1150k6khqk";
+  version = "1.0.2";
+  sha256 = "0d0nn5x7f3yyck10znqa13iihkshq04xgg1d9bn1nvl7kjzicjwh";
   buildDepends = [ transformers ];
   meta = {
     description = "Monad morphisms";

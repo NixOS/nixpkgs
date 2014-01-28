@@ -54,7 +54,7 @@ let
 
      buildInputs = [ libtool pkgconfig libxml2 ];
   };
-  
+
   # doesn't work with srcs versioning
   libmspub = stdenv.mkDerivation rec {
      version = "0.0.6";
@@ -66,8 +66,8 @@ let
      };
 
      configureFlags = "--disable-werror";
- 
-     buildInputs = [ zlib libwpd libwpg pkgconfig boost icu ];  
+
+     buildInputs = [ zlib libwpd libwpg pkgconfig boost icu ];
   };
 
   # doesn't exist in srcs
@@ -82,7 +82,7 @@ let
 
      configureFlags = "--with-boost=${boost}";
 
-     buildInputs = [ boost mdds pkgconfig ];  
+     buildInputs = [ boost mdds pkgconfig ];
   };
 
   fetchThirdParty = {name, md5}: fetchurl {
@@ -224,8 +224,8 @@ stdenv.mkDerivation rec {
     "--disable-kde"
     "--disable-postgresql-sdbc"
     "--with-package-format=native"
-    "--with-jdk-home=${jdk}"
-    "--with-ant-home=${ant}"
+    "--with-jdk-home=${jdk}/lib/openjdk"
+    "--with-ant-home=${ant}/lib/ant"
     "--without-afms"
     "--without-fonts"
     "--without-myspell-dicts"
