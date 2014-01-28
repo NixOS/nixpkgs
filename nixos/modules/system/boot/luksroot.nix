@@ -148,21 +148,25 @@ let
         umount ${yubikey.storage.mountPoint}
     }
 
-    ykinfo -v
-    yubikey_missing="$(ykinfo -v 1>/dev/null 2>&1)$?"
-    if [ "$yubikey_missing" != "0" ]; then
+    yubikey_missing=true
+    ykinfo -v 1>/dev/null 2>&1
+    if [ $? != "0" ]; then
         echo -n "waiting 10 seconds for yubikey to appear..."
         for try in $(seq 10); do
             sleep 1
-            ykinfo -v
-            yubikey_missing="$(ykinfo -v 1>/dev/null 2>&1)$?"
-            if [ "$yubikey_missing" == "0" ]; then break; fi
+            ykinfo -v 1>/dev/null 2>&1
+            if [ $? == "0" ]; then
+                yubikey_missing=false
+                break
+            fi
             echo -n .
         done
         echo "ok"
+    else
+        yubikey_missing=false
     fi
 
-    if [ "$yubikey_missing" != "0" ]; then
+    if [ "$yubikey_missing" == true ]; then
         echo "no yubikey found, falling back to non-yubikey open procedure"
         open_normally
     else
