@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "3.10.1";
-  sha256 = "0xjjld1ra1a0a739ia8swgbpw7r72hv0bs9akbqr9wyw8qdzibnh";
+  version = "3.10.2";
+  sha256 = "0hdj75sg8r1m2jdpfh81zdcwbhp6mb7xipp6q57pv6n90xc6dnxw";
   buildDepends = [
     bifunctors comonad contravariant distributive filepath
     genericDeriving hashable MonadCatchIOTransformers mtl parallel
