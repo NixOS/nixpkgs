@@ -68,7 +68,7 @@ let
         mount -t ${yubikey.storage.fsType} ${toString yubikey.storage.device} ${yubikey.storage.mountPoint}
 
         local uuid_r
-        uuid_r="$(take 16 ${yubikey.storage.mountPoint}${yubikey.storage.path} | rbtohex)"
+        uuid_r="$(take 32 ${yubikey.storage.mountPoint}${yubikey.storage.path})"
 
         local uuid_luks
         uuid_luks="$(cryptsetup luksUUID ${device} | take 36 | tr -d '-')"
@@ -91,9 +91,9 @@ let
 
             k_blob="$(ykchalresp -${toString yubikey.slot} -x $challenge 2>/dev/null)"
 
-            aes_blob_decrypted="$(drop 16 ${yubikey.storage.mountPoint}${yubikey.storage.path} | openssl-wrap enc -d -aes-256-ctr -K $k_blob -iv $uuid_r | rbtohex)"
+            aes_blob_decrypted="$(drop 32 ${yubikey.storage.mountPoint}${yubikey.storage.path} | hextorb | openssl-wrap enc -d -aes-256-ctr -K $k_blob -iv $uuid_r | rbtohex)"
 
-            checksum="$(echo -n $aes_blob_decrypted | hextorb | drop 84 | rbtohex)"
+            checksum="$(echo -n $aes_blob_decrypted | drop 168)"
             if [ "$(echo -n $aes_blob_decrypted | hextorb | take 84 | openssl-wrap dgst -binary -sha512 | rbtohex)" == "$checksum" ]; then
                  checksum_correct=1
                  break
@@ -110,10 +110,10 @@ let
         fi
 
         local k_yubi
-        k_yubi="$(echo -n $aes_blob_decrypted | hextorb | take 20 | rbtohex)"
+        k_yubi="$(echo -n $aes_blob_decrypted | take 40)"
 
         local k_luks
-        k_luks="$(echo -n $aes_blob_decrypted | hextorb | drop 20 | take 64 | rbtohex)"
+        k_luks="$(echo -n $aes_blob_decrypted | drop 40 | take 128)"
 
         echo -n "$k_luks" | hextorb | cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} --key-file=-
 
@@ -139,8 +139,8 @@ let
             local new_k_blob
             new_k_blob="$(echo -n $new_challenge | hextorb | openssl-wrap dgst -binary -sha1 -mac HMAC -macopt hexkey:$k_yubi | rbtohex)"
 
-            echo -n "$new_uuid_r" | hextorb > ${yubikey.storage.mountPoint}${yubikey.storage.path}
-            echo -n "$k_yubi$k_luks$checksum" | hextorb | openssl-wrap enc -e -aes-256-ctr -K "$new_k_blob" -iv "$new_uuid_r" >> ${yubikey.storage.mountPoint}${yubikey.storage.path}
+            echo -n "$new_uuid_r" > ${yubikey.storage.mountPoint}${yubikey.storage.path}
+            echo -n "$k_yubi$k_luks$checksum" | hextorb | openssl-wrap enc -e -aes-256-ctr -K "$new_k_blob" -iv "$new_uuid_r" | rbtohex >> ${yubikey.storage.mountPoint}${yubikey.storage.path}
         else
             echo "Warning: Could not obtain new UUID, current challenge persists!"
         fi
