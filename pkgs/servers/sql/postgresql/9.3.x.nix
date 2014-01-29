@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, readline }:
+{ stdenv, fetchurl, zlib, readline, libossp_uuid }:
 
 let version = "9.3.2"; in
 
@@ -10,11 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "700da51a71857e092f6af1c85fcd86b46d7d5cd2f2ba343cafb1f206c20232d7";
   };
 
-  buildInputs = [ zlib readline ];
+  buildInputs = [ zlib readline libossp_uuid ];
 
   enableParallelBuilding = true;
 
   makeFlags = [ "world" ];
+
+  configureFlags =
+    ''
+      --with-ossp-uuid
+    '';
 
   patches = [ ./disable-resolve_symlinks.patch ];
 
