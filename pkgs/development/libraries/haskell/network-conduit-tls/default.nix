@@ -1,17 +1,17 @@
 { cabal, aeson, certificate, conduit, connection, cprngAes
 , cryptoApi, cryptoRandomApi, dataDefault, HUnit, monadControl, mtl
 , network, networkConduit, pem, systemFileio, systemFilepath, tls
-, tlsExtra, transformers
+, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "network-conduit-tls";
-  version = "1.0.3";
-  sha256 = "0l8h9pfrrqzkf45cp5r8kxpzc2fi6m01s4zkrh0d226rbps3gmvc";
+  version = "1.0.4.1";
+  sha256 = "1l79v4ippyfw6pl4h3vqswh79vcif80phf6kq5fr4xmv3b6nbc06";
   buildDepends = [
     aeson certificate conduit connection cprngAes cryptoApi
     cryptoRandomApi dataDefault monadControl network networkConduit pem
-    systemFileio systemFilepath tls tlsExtra transformers
+    systemFileio systemFilepath tls transformers
   ];
   testDepends = [ conduit connection HUnit mtl networkConduit ];
   meta = {
