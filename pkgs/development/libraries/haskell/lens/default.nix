@@ -23,6 +23,9 @@ cabal.mkDerivation (self: {
     testFrameworkHunit testFrameworkQuickcheck2 testFrameworkTh text
     transformers unorderedContainers vector
   ];
+  patchPhase = ''
+    sed -i lens.cabal -e 's|MonadCatchIO-transformers >=.*,|MonadCatchIO-transformers,|'
+  '';
   doCheck = false;
   meta = {
     homepage = "http://github.com/ekmett/lens/";
