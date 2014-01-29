@@ -6666,10 +6666,10 @@ let
     };
   })) (args: grsecurityOverrider args));
 
-  linux_3_12_grsecurity = lowPrio (lib.overrideDerivation (linux_3_12.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_12_8 kernelPatches.grsec_path ];
+  linux_3_13_grsecurity = lowPrio (lib.overrideDerivation (linux_3_13.override (args: {
+    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_13_2 kernelPatches.grsec_path ];
     argsOverride = {
-      modDirVersion = "${linux_3_12.modDirVersion}-grsec";
+      modDirVersion = "${linux_3_13.modDirVersion}-grsec";
     };
   })) (args: grsecurityOverrider args));
 
@@ -6854,7 +6854,7 @@ let
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_11 linuxPackages_3_11);
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
-  linuxPackages_3_12_grsecurity = linuxPackagesFor pkgs.linux_3_12_grsecurity linuxPackages_3_12_grsecurity;
+  linuxPackages_3_13_grsecurity = linuxPackagesFor pkgs.linux_3_13_grsecurity linuxPackages_3_13_grsecurity;
   linuxPackages_3_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_13 linuxPackages_3_13);
   # Update this when adding a new version!
   linuxPackages_latest = pkgs.linuxPackages_3_13;
