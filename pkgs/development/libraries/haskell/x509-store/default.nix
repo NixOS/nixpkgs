@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "x509-store";
-  version = "1.4.3";
-  sha256 = "1px5r5y4vaxx479d4av333g1sc03mz1aalpvwwkbi5bwnxydvf01";
+  version = "1.4.4";
+  sha256 = "0i3hfrddr0wpfl75a76a1j24az08z4x7ya8l5qcdk7c1lr2c2bw8";
   buildDepends = [
     asn1Encoding asn1Types cryptoPubkeyTypes filepath mtl pem time x509
   ];
