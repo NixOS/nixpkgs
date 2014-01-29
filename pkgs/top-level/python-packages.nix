@@ -4296,11 +4296,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.12.0";
+    name = "paramiko-1.12.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/paramiko/${name}.tar.gz";
-      md5 = "4187f77b1a5a313c899993930e30c321";
+      md5 = "ae4544dc0a1419b141342af89fcf0dd9";
     };
 
     propagatedBuildInputs = [ pycrypto ecdsa ];
