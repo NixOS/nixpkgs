@@ -2330,8 +2330,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   tls = callPackage ../development/libraries/haskell/tls {};
 
-  tlsExtra = callPackage ../development/libraries/haskell/tls-extra {};
-
   transformers_0_2_2_0 = callPackage ../development/libraries/haskell/transformers/0.2.2.0.nix {};
   transformers_0_3_0_0 = if (pkgs.stdenv.lib.versionOlder ghc.version "7.7") then
      (callPackage ../development/libraries/haskell/transformers/0.3.0.0.nix {}) else null;
@@ -2574,7 +2572,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
 
-  yesodPlatform = callPackage ../development/libraries/haskell/yesod-platform {};
+  yesodPlatform = callPackage ../development/libraries/haskell/yesod-platform {
+    tlsExtra = null;            # obsolete package, now part of tls
+  };
 
   yesodRoutes = callPackage ../development/libraries/haskell/yesod-routes {};
 
