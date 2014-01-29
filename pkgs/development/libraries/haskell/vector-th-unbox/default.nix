@@ -1,10 +1,11 @@
-{ cabal, vector }:
+{ cabal, dataDefault, vector }:
 
 cabal.mkDerivation (self: {
   pname = "vector-th-unbox";
-  version = "0.2.0.1";
-  sha256 = "1q01yk6cyjxbdnmq31d5mfac09hbql43d7xiw1snc96nmkklfpjv";
+  version = "0.2.0.2";
+  sha256 = "1c8xy0rcl8il9ssclqshwi8dd2xx6bl1rfhrfm9h7wklw64db9xp";
   buildDepends = [ vector ];
+  testDepends = [ dataDefault vector ];
   meta = {
     description = "Deriver for Data.Vector.Unboxed using Template Haskell";
     license = self.stdenv.lib.licenses.bsd3;
