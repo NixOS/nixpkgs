@@ -1888,6 +1888,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
+  pqueue = callPackage ../development/libraries/haskell/pqueue {};
+
   prettyclass = callPackage ../development/libraries/haskell/prettyclass {};
 
   prettyShow_1_2 = callPackage ../development/libraries/haskell/pretty-show/1.2.nix {};
