@@ -13,7 +13,7 @@ let
   ver_min = "6";
 in
 stdenv.mkDerivation rec {
-  name = "gtk+-${ver_maj}.${ver_min}";
+  name = "gtk+3-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/${name}.tar.xz";
