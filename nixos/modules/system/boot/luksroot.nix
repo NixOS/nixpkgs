@@ -68,39 +68,69 @@ let
         mount -t ${yubikey.storage.fsType} ${toString yubikey.storage.device} ${yubikey.storage.mountPoint}
 
         local uuid_r
-        uuid_r="$(take 32 ${yubikey.storage.mountPoint}${yubikey.storage.path})"
-
-        local uuid_luks
-        uuid_luks="$(cryptsetup luksUUID ${device} | take 36 | tr -d '-')"
-
         local k_user
         local challenge
         local k_blob
         local aes_blob_decrypted
         local checksum_correct
         local checksum
+        local uuid_luks
+        local user_record
+
+        uuid_luks="$(cryptsetup luksUUID ${device} | take 36 | tr -d '-')"
+
+        ${optionalString (!yubikey.multiUser) ''
+        user_record="$(cat ${yubikey.storage.mountPoint}${yubikey.storage.path})"
+        uuid_r="$(echo -n $user_record | take 32)"
+        ''}
 
         for try in $(seq 3); do
+
+            ${optionalString yubikey.multiUser ''
+            local user_id
+            echo -n "Enter user id: "
+            read -s user_id
+            echo
+            ''}
 
             ${optionalString yubikey.twoFactor ''
             echo -n "Enter two-factor passphrase: "
             read -s k_user
+            echo
             ''}
 
-            challenge="$(echo -n $k_user$uuid_r$uuid_luks | openssl-wrap dgst -binary -sha1 | rbtohex)"
+            ${optionalString yubikey.multiUser ''
+            local user_id_hash
+            user_id_hash="$(echo -n $user_id | openssl-wrap dgst -binary -sha512 | rbtohex)"
 
-            k_blob="$(ykchalresp -${toString yubikey.slot} -x $challenge 2>/dev/null)"
+            user_record="$(sed -n -e /^$user_id_hash[^$]*$/p ${yubikey.storage.mountPoint}${yubikey.storage.path} | tr -d '\n')"
 
-            aes_blob_decrypted="$(drop 32 ${yubikey.storage.mountPoint}${yubikey.storage.path} | hextorb | openssl-wrap enc -d -aes-256-ctr -K $k_blob -iv $uuid_r | rbtohex)"
+            if [ ! -z "$user_record" ]; then
+                user_record="$(echo -n $user_record | drop 128)"
+                uuid_r="$(echo -n $user_record | take 32)"
+            ''}
 
-            checksum="$(echo -n $aes_blob_decrypted | drop 168)"
-            if [ "$(echo -n $aes_blob_decrypted | hextorb | take 84 | openssl-wrap dgst -binary -sha512 | rbtohex)" == "$checksum" ]; then
-                 checksum_correct=1
-                 break
+                challenge="$(echo -n $k_user$uuid_r$uuid_luks | openssl-wrap dgst -binary -sha1 | rbtohex)"
+
+                k_blob="$(ykchalresp -${toString yubikey.slot} -x $challenge 2>/dev/null)"
+
+                aes_blob_decrypted="$(echo -n $user_record | drop 32 | hextorb | openssl-wrap enc -d -aes-256-ctr -K $k_blob -iv $uuid_r | rbtohex)"
+
+                checksum="$(echo -n $aes_blob_decrypted | drop 168)"
+                if [ "$(echo -n $aes_blob_decrypted | hextorb | take 84 | openssl-wrap dgst -binary -sha512 | rbtohex)" == "$checksum" ]; then
+                    checksum_correct=1
+                    break
+                else
+                    checksum_correct=0
+                    echo "Authentication failed!"
+                fi
+
+            ${optionalString yubikey.multiUser ''
             else
-                 checksum_correct=0
-                 echo "Authentication failed!"
+                checksum_correct=0
+                echo "Authentication failed!"
             fi
+            ''}
         done
 
         if [ "$checksum_correct" != "1" ]; then
@@ -139,8 +169,16 @@ let
             local new_k_blob
             new_k_blob="$(echo -n $new_challenge | hextorb | openssl-wrap dgst -binary -sha1 -mac HMAC -macopt hexkey:$k_yubi | rbtohex)"
 
-            echo -n "$new_uuid_r" > ${yubikey.storage.mountPoint}${yubikey.storage.path}
-            echo -n "$k_yubi$k_luks$checksum" | hextorb | openssl-wrap enc -e -aes-256-ctr -K "$new_k_blob" -iv "$new_uuid_r" | rbtohex >> ${yubikey.storage.mountPoint}${yubikey.storage.path}
+            local new_aes_blob
+            new_aes_blob=$(echo -n "$k_yubi$k_luks$checksum" | hextorb | openssl-wrap enc -e -aes-256-ctr -K "$new_k_blob" -iv "$new_uuid_r" | rbtohex)
+
+            ${optionalString yubikey.multiUser ''
+            sed -i -e "s|^$user_id_hash$user_record|$user_id_hash$new_uuid_r$new_aes_blob|1"
+            ''}
+
+            ${optionalString (!yubikey.multiUser) ''
+            echo -n "$new_uuid_r$new_aes_blob" > ${yubikey.storage.mountPoint}${yubikey.storage.path}
+            ''}
         else
             echo "Warning: Could not obtain new UUID, current challenge persists!"
         fi
@@ -296,6 +334,12 @@ in
               default = true;
               type = types.bool;
               description = "Whether to use a passphrase and a Yubikey (true), or only a Yubikey (false)";
+            };
+
+            multiUser = mkOption {
+              default = false;
+              type = types.bool;
+              description = "Whether to allow multiple users to authenticate with a Yubikey";
             };
 
             slot = mkOption {
