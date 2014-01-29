@@ -2572,10 +2572,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
 
-  yesodPlatform = callPackage ../development/libraries/haskell/yesod-platform {
-    tlsExtra = null;            # obsolete package, now part of tls
-  };
-
   yesodRoutes = callPackage ../development/libraries/haskell/yesod-routes {};
 
   yesodStatic = callPackage ../development/libraries/haskell/yesod-static {};
