@@ -2939,6 +2939,8 @@ let
 
     ocaml_typeconv = callPackage ../development/ocaml-modules/typeconv { };
 
+    ocaml_typeconv_3_0_5 = callPackage ../development/ocaml-modules/typeconv/3.0.5.nix { };
+
     ocaml_sexplib = callPackage ../development/ocaml-modules/sexplib { };
 
     ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
