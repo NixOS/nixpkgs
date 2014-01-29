@@ -413,36 +413,23 @@ in
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''
       cp -pdv ${pkgs.cryptsetup}/sbin/cryptsetup $out/bin
-      # XXX: do we have a function that does this?
-      for lib in $(ldd $out/bin/cryptsetup |grep '=>' |grep /nix/store/ |cut -d' ' -f3); do
-        cp -pdvn $lib $out/lib
-        cp -pvn $(readlink -f $lib) $out/lib
-      done
+
+      cp -pdv ${pkgs.libgcrypt}/lib/libgcrypt*.so.* $out/lib
+      cp -pdv ${pkgs.libgpgerror}/lib/libgpg-error*.so.* $out/lib
+      cp -pdv ${pkgs.cryptsetup}/lib/libcryptsetup*.so.* $out/lib
+      cp -pdv ${pkgs.popt}/lib/libpopt*.so.* $out/lib
 
       ${optionalString luks.yubikeySupport ''
       cp -pdv ${pkgs.utillinux}/bin/uuidgen $out/bin
-      for lib in $(ldd $out/bin/uuidgen |grep '=>' |grep /nix/store/ |cut -d' ' -f3); do
-        cp -pdvn $lib $out/lib
-        cp -pvn $(readlink -f $lib) $out/lib
-      done
-
       cp -pdv ${pkgs.ykpers}/bin/ykchalresp $out/bin
-      for lib in $(ldd $out/bin/ykchalresp |grep '=>' |grep /nix/store/ |cut -d' ' -f3); do
-        cp -pdvn $lib $out/lib
-        cp -pvn $(readlink -f $lib) $out/lib
-      done
-
       cp -pdv ${pkgs.ykpers}/bin/ykinfo $out/bin
-      for lib in $(ldd $out/bin/ykinfo |grep '=>' |grep /nix/store/ |cut -d' ' -f3); do
-        cp -pdvn $lib $out/lib
-        cp -pvn $(readlink -f $lib) $out/lib
-      done
-
       cp -pdv ${pkgs.openssl}/bin/openssl $out/bin
-      for lib in $(ldd $out/bin/openssl |grep '=>' |grep /nix/store/ |cut -d' ' -f3); do
-        cp -pdvn $lib $out/lib
-        cp -pvn $(readlink -f $lib) $out/lib
-      done
+
+      cp -pdv ${pkgs.libusb1}/lib/libusb*.so.* $out/lib
+      cp -pdv ${pkgs.ykpers}/lib/libykpers*.so.* $out/lib
+      cp -pdv ${pkgs.libyubikey}/lib/libyubikey*.so.* $out/lib
+      cp -pdv ${pkgs.openssl}/lib/libssl*.so.* $out/lib
+      cp -pdv ${pkgs.openssl}/lib/libcrypto*.so.* $out/lib
 
       mkdir -p $out/etc/ssl
       cp -pdv ${pkgs.openssl}/etc/ssl/openssl.cnf $out/etc/ssl
