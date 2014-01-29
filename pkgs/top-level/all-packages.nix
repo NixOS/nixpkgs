@@ -1619,6 +1619,8 @@ let
 
   briss = callPackage ../tools/graphics/briss { };
 
+  bully = callPackage ../tools/networking/bully { };
+
   pdnsd = callPackage ../tools/networking/pdnsd { };
 
   pg_top = callPackage ../tools/misc/pg_top { };
