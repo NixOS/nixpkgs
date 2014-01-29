@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
       }
     else throw "cudatoolkit does not support platform ${stdenv.system}";
 
+  outputs = [ "out" "sdk" ];
+
   buildInputs = [ perl ];
 
   runtimeDependencies = [
@@ -30,6 +32,7 @@ stdenv.mkDerivation rec {
     sh $src --keep --noexec
     cd pkg/run_files
     sh cuda-linux64-rel-5.5.22-16488124.run --keep --noexec
+    sh cuda-samples-linux-5.5.22-16488124.run --keep --noexec
     cd pkg
   '';
 
@@ -44,8 +47,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir $out
+    mkdir $out $sdk
     perl ./install-linux.pl --prefix="$out"
+    perl ./install-sdk-linux.pl --prefix="$sdk" --cudaprefix="$out"
   '';
 
   meta = {
