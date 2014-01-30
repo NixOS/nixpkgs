@@ -91,6 +91,11 @@ rec {
 
     #installFlags = "SKIP_GRE_REGISTRATION=1";
 
+    preInstall = ''
+      # The following is needed for startup cache creation on grsecurity kernels
+      paxmark m ../objdir/dist/bin/xpcshell
+    '';
+
     postInstall = ''
       # Fix run-mozilla.sh search
       libDir=$(cd $out/lib && ls -d xulrunner-[0-9]*)
@@ -109,6 +114,10 @@ rec {
       for i in $out/lib/$libDir/*.so; do
           patchelf --set-rpath "$(patchelf --print-rpath "$i"):$out/lib/$libDir" $i || true
       done
+
+      # For grsecurity kernels
+      paxmark m $out/lib/$libDir/{plugin-container,xulrunner}
+
       for i in $out/lib/$libDir/{plugin-container,xulrunner,xulrunner-stub}; do
           wrapProgram $i --prefix LD_LIBRARY_PATH ':' "$out/lib/$libDir"
       done
