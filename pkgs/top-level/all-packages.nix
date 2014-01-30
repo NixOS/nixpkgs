@@ -3372,8 +3372,6 @@ let
 
   automake = automake112x;
 
-  automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
-
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
 
   automake112x = callPackage ../development/tools/misc/automake/automake-1.12.x.nix { };
@@ -6344,8 +6342,7 @@ let
     inherit fetchurl fetchgit stdenv pkgconfig intltool freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa_drivers
       dbus libuuid openssl gperf m4
-      autoconf libtool xmlto asciidoc udev flex bison python mtdev pixman;
-    automake = automake110x;
+      autoconf automake libtool xmlto asciidoc udev flex bison python mtdev pixman;
     mesa = mesa_noglu;
   });
 
