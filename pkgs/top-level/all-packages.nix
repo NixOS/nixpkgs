@@ -4583,6 +4583,8 @@ let
 
   inherit (gnome3) libcroco;
 
+  libcangjie = callPackage ../development/libraries/libcangjie { };
+
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
   libcue = callPackage ../development/libraries/libcue { };
