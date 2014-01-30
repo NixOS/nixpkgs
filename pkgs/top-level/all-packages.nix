@@ -4120,9 +4120,7 @@ let
 
   geoclue = callPackage ../development/libraries/geoclue {};
 
-  geoclue2 = callPackage ../development/libraries/geoclue/2.0.nix {
-    libsoup = libsoup_2_44;
-  };
+  geoclue2 = callPackage ../development/libraries/geoclue/2.0.nix {};
 
   geoip = builderDefsPackage ../development/libraries/geoip {
     inherit zlib;
@@ -4928,7 +4926,6 @@ let
   libsodium = callPackage ../development/libraries/libsodium { };
 
   libsoup = callPackage ../development/libraries/libsoup { };
-  libsoup_2_44 = callPackage ../development/libraries/libsoup/2.44.nix { };
 
   libssh = callPackage ../development/libraries/libssh { };
 
@@ -5734,7 +5731,6 @@ let
     };
 
   webkitgtk = callPackage ../development/libraries/webkitgtk {
-    libsoup = libsoup_2_44;
     harfbuzz = harfbuzz.override {
       withIcu = true;
     };
