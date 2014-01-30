@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.gcc.libc glib libxml2 libav_0_8 ffmpeg_0_6 libxslt mesa_noglu xlibs.libXxf86vm alsaLib fontconfig freetype gnome.pango gnome.gtk cairo atk gdk_pixbuf] ++
+    [stdenv.gcc.libc glib libxml2 libav_0_8 ffmpeg_0_6 libxslt mesa_noglu xlibs.libXxf86vm] ++
     (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt xlibs.libXrender stdenv.gcc.gcc] else []);
 
   passthru.mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
