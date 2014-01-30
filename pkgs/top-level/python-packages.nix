@@ -65,6 +65,9 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
+    qtconsoleSupport = !pkgs.stdenv.isDarwin; # qt is not supported on darwin
+    pylabQtSupport = !pkgs.stdenv.isDarwin;
+    pylabSupport = !pkgs.stdenv.isDarwin; # cups is not supported on darwin
   };
 
   ipythonLight = lowPrio (import ../shells/ipython {
@@ -4293,11 +4296,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.12.0";
+    name = "paramiko-1.12.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/paramiko/${name}.tar.gz";
-      md5 = "4187f77b1a5a313c899993930e30c321";
+      md5 = "ae4544dc0a1419b141342af89fcf0dd9";
     };
 
     propagatedBuildInputs = [ pycrypto ecdsa ];

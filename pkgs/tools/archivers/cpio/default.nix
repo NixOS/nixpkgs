@@ -8,10 +8,11 @@ stdenv.mkDerivation {
     sha256 = "bb820bfd96e74fc6ce43104f06fe733178517e7f5d1cdee553773e8eff7d5bbd";
   };
 
-  patches = [ ./no-gets.patch ];
+  patches = [ ./no-gets.patch ] ++ stdenv.lib.optional stdenv.isDarwin ./darwin-fix.patch;
 
   meta = {
     homepage = http://www.gnu.org/software/cpio/;
     description = "A program to create or extract from cpio archives";
+    platforms = stdenv.lib.platforms.all;
   };
 }

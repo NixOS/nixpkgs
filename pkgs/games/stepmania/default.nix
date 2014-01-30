@@ -23,4 +23,9 @@ stdenv.mkDerivation rec {
     echo "exec $out/stepmania" >> $out/bin/stepmania
     chmod +x $out/bin/stepmania
   '';
+
+  meta = with stdenv.lib; {
+      platforms = platforms.linux;
+      maintainers = maintainers.mornfall;
+  };
 }

@@ -61,7 +61,7 @@ my @attrs = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
 my @modulePackages = ();
-my @imports = ("<nixos/modules/installer/scan/not-detected.nix>");
+my @imports = ("<nixpkgs/nixos/modules/installer/scan/not-detected.nix>");
 
 
 sub debug {

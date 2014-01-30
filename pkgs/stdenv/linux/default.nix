@@ -296,12 +296,13 @@ rec {
     extraAttrs = {
       inherit (stdenvLinuxBoot3Pkgs) glibc;
       inherit platform bootstrapTools;
-      shellPackage = stdenvLinuxBoot4Pkgs.bash; 
+      shellPackage = stdenvLinuxBoot4Pkgs.bash;
     };
 
     overrides = pkgs: {
       inherit gcc;
-      inherit (stdenvLinuxBoot3Pkgs) binutils glibc;
+      inherit (stdenvLinuxBoot3Pkgs) glibc;
+      inherit (stdenvLinuxBoot4Pkgs) binutils;
       inherit (stdenvLinuxBoot4Pkgs)
         gzip bzip2 xz bash coreutils diffutils findutils gawk
         gnumake gnused gnutar gnugrep gnupatch patchelf

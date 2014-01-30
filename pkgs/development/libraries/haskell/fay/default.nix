@@ -1,22 +1,22 @@
 { cabal, aeson, attoparsec, Cabal, cpphs, dataDefault, filepath
 , ghcPaths, haskellNames, haskellPackages, haskellSrcExts, HUnit
 , languageEcmascript, mtl, optparseApplicative, prettyShow, safe
-, sourcemap, split, syb, testFramework, testFrameworkHunit
-, testFrameworkTh, text, time, uniplate, unorderedContainers
-, utf8String, vector
+, scientific, sourcemap, split, syb, testFramework
+, testFrameworkHunit, testFrameworkTh, text, time, uniplate
+, unorderedContainers, utf8String, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "fay";
-  version = "0.18.1.3";
-  sha256 = "1m747l2555w1jkdwh8b851mxvngiy7l7sbkwvm2il6k5ygcz5gbv";
+  version = "0.19.0.1";
+  sha256 = "036z4wz7vziaczhx1ysbm7d2302n2sb6l1z48py8spai5awkbvh0";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson attoparsec Cabal cpphs dataDefault filepath ghcPaths
     haskellNames haskellPackages haskellSrcExts HUnit
     languageEcmascript mtl optparseApplicative prettyShow safe
-    sourcemap split syb testFramework testFrameworkHunit
+    scientific sourcemap split syb testFramework testFrameworkHunit
     testFrameworkTh text time uniplate unorderedContainers utf8String
     vector
   ];

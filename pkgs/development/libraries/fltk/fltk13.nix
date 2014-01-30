@@ -1,5 +1,8 @@
 { composableDerivation, fetchurl, pkgconfig, x11, inputproto, libXi
-, freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng }:
+, freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng
+
+, automake, autoconf, libtool
+}:
 
 let inherit (composableDerivation) edf; in
 
@@ -14,7 +17,12 @@ composableDerivation.composableDerivation {} {
 
   propagatedBuildInputs = [ x11 inputproto libXi freeglut ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  enableParallelBilding = true;
+
+  nativeBuildInputs = [
+    pkgconfig
+    automake autoconf libtool # only required because of patch
+  ];
 
   flags =
     # this could be tidied up (?).. eg why does it require freeglut without glSupport?
@@ -46,4 +54,11 @@ composableDerivation.composableDerivation {} {
     description = "A C++ cross-platform light-weight GUI library binding";
     homepage = http://www.fltk.org;
   };
+
+  patches = [
+    # https://bugs.archlinux.org/task/36186
+    (fetchurl {
+    url = "https://bugs.archlinux.org/task/36186?getfile=10750";
+    sha256 = "1hpb1i87nc3zw6mgpgf3bfv557ci930bsn6rwlhaif51nlqd2wbj";
+  }) ];
 }
