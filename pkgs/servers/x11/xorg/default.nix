@@ -1830,11 +1830,11 @@ let
   })) // {inherit inputproto libX11 libXaw xproto libXt ;};
 
   xkeyboardconfig = (stdenv.mkDerivation ((if overrides ? xkeyboardconfig then overrides.xkeyboardconfig else x: x) {
-    name = "xkeyboard-config-2.8";
+    name = "xkeyboard-config-2.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.8.tar.bz2;
-      sha256 = "1bkq415qw4r3dl139mqgal9v585x7kh3km6z1lraz2j8im3ga72f";
+      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.11.tar.bz2;
+      sha256 = "0xkdyyi759hzls42hp4j3q2lc35n4j6b2g44ilx5qarci5h584p7";
     };
     buildInputs = [pkgconfig libX11 xproto ];
   })) // {inherit libX11 xproto ;};

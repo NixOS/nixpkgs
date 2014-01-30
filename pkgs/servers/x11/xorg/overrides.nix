@@ -131,7 +131,7 @@ in
     postInstall =
       ''
         mkdir -p $out/share
-        ln -sfn ${args.xkeyboard_config}/etc/X11 $out/share/X11
+        ln -sfn ${xorg.xkeyboardconfig}/etc/X11 $out/share/X11
       '';
   };
 

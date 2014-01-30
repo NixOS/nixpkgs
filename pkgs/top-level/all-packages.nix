@@ -6343,7 +6343,7 @@ let
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit fetchurl fetchgit stdenv pkgconfig intltool freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa_drivers
-      xkeyboard_config dbus libuuid openssl gperf m4
+      dbus libuuid openssl gperf m4
       autoconf libtool xmlto asciidoc udev flex bison python mtdev pixman;
     automake = automake110x;
     mesa = mesa_noglu;
@@ -7281,7 +7281,7 @@ let
 
   xhtml1 = callPackage ../data/sgml+xml/schemas/xml-dtd/xhtml1 { };
 
-  xkeyboard_config = callPackage ../data/misc/xkeyboard-config { };
+  xkeyboard_config = xorg.xkeyboardconfig;
 
 
   ### APPLICATIONS
