@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-client-tls";
-  version = "0.2.0.2";
-  sha256 = "0v5730rssddc28f1q6ndkcjrfz8r5a1wmxk1azpmdxlq6nh4i9q9";
+  version = "0.2.0.3";
+  sha256 = "0v8zbwlvdmkap5qbw9aw75krvw8j4q90fn301al13azzgjp71gmb";
   buildDepends = [ connection dataDefault httpClient network tls ];
   testDepends = [ hspec httpClient httpTypes ];
   doCheck = false;
