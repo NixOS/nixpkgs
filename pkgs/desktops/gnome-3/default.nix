@@ -8,10 +8,6 @@ rec {
   orbit = ORBit2;
 
 
-#### Overrides of libraries
-
-  libsoup = pkgs.libsoup_2_44;
-
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
   at_spi2_atk = callPackage ./core/at-spi2-atk { };
