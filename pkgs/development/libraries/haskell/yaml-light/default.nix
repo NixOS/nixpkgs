@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yaml-light";
-  version = "0.1";
-  sha256 = "1p1swas1nhmnkj82msglacgqa5xwg18vya6jirb2a2ywny8r80rx";
+  version = "0.1.4";
+  sha256 = "05pxkqp91l275n48p1aqijzh34vvzi7cx2nls879b95fz2dr8lhk";
   buildDepends = [ HsSyck ];
   meta = {
     description = "A light-weight wrapper with utility functions around HsSyck";

@@ -5,11 +5,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ounit-1.1.2";
+  name = "ounit-2.0.0";
 
   src = fetchurl {
-    url = http://forge.ocamlcore.org/frs/download.php/886/ounit-1.1.2.tar.gz;
-    sha256 = "e6bc1b0cdbb5b5552d85bee653e23aafe20bb97fd7cd229c867d01ff999888e3";
+    url = http://forge.ocamlcore.org/frs/download.php/886/ounit-2.0.0.tar.gz;
+    sha256 = "1qw8k2czy0bxhsf25kfpgywhpqmg7bi57rmyhlnmbddmvc61pg76";
   };
 
   buildInputs = [ocaml findlib];

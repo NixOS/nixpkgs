@@ -5,17 +5,18 @@
 , hinotify, hS3, hslogger, HTTP, httpConduit, httpTypes, IfElse
 , json, lsof, MissingH, MonadCatchIOTransformers, monadControl, mtl
 , network, networkConduit, networkInfo, networkMulticast
-, networkProtocolXmpp, openssh, perl, QuickCheck, random, regexTdfa
-, rsync, SafeSemaphore, SHA, stm, tasty, tastyHunit
-, tastyQuickcheck, text, time, transformers, unixCompat, utf8String
-, uuid, wai, waiLogger, warp, which, xmlConduit, xmlTypes, yesod
-, yesodCore, yesodDefault, yesodForm, yesodStatic
+, networkProtocolXmpp, openssh, optparseApplicative, perl
+, QuickCheck, random, regexTdfa, rsync, SafeSemaphore, SHA, stm
+, tasty, tastyHunit, tastyQuickcheck, tastyRerun, text, time
+, transformers, unixCompat, utf8String, uuid, wai, waiLogger, warp
+, which, xmlConduit, xmlTypes, yesod, yesodCore, yesodDefault
+, yesodForm, yesodStatic
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20140108";
-  sha256 = "17j1avmg66lda52p93689n4mas46rfbjdvss1rvmdh10cj7hg8jy";
+  version = "5.20140129";
+  sha256 = "0m1n3m16gvd0693i5xq5adki0hd0wdn7p5vqjxkqnc3imx9f11ng";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -25,10 +26,11 @@ cabal.mkDerivation (self: {
     hinotify hS3 hslogger HTTP httpConduit httpTypes IfElse json
     MissingH MonadCatchIOTransformers monadControl mtl network
     networkConduit networkInfo networkMulticast networkProtocolXmpp
-    QuickCheck random regexTdfa SafeSemaphore SHA stm tasty tastyHunit
-    tastyQuickcheck text time transformers unixCompat utf8String uuid
-    wai waiLogger warp xmlConduit xmlTypes yesod yesodCore yesodDefault
-    yesodForm yesodStatic
+    optparseApplicative QuickCheck random regexTdfa SafeSemaphore SHA
+    stm tasty tastyHunit tastyQuickcheck tastyRerun text time
+    transformers unixCompat utf8String uuid wai waiLogger warp
+    xmlConduit xmlTypes yesod yesodCore yesodDefault yesodForm
+    yesodStatic
   ];
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
   configureFlags = "-fS3

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mda-lv2-${version}";
-  version = "1.0.0";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "1dbgvpz9qvlwsfkq9c0dx45bm223wwrzgiddlyln1agpns3qbf0f";
+    sha256 = "0hh40c5d2m0k5gb3vw031l6lqn59dg804an3mkmhkc7qv4gc6xm4";
   };
 
   buildInputs = [ fftwSinglePrec lv2 pkgconfig python ];

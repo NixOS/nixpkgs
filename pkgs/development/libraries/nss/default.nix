@@ -9,12 +9,6 @@ let
     sha256 = "1k1m8lsgqwxx251943hks1dd13hz1adpqqb0hxwn011by5vmi201";
   };
 
-  secLoadPatch = fetchurl {
-    name = "security_load.patch";
-    urls = http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.3.1-1/85_security_load.patch;
-    sha256 = "041c6v4cxwsy14qr5m9qs0gkv3w24g632cwpz27kacxpa886r1ds";
-  };
-
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
   version = "3.15.3.1";
@@ -32,7 +26,8 @@ in stdenv.mkDerivation rec {
 
   patches =
     [ ./nss-3.15-gentoo-fixups.patch
-      secLoadPatch
+      # from http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
+      ./85_security_load.patch
       ./nix_secload_fixup.patch
     ];
 

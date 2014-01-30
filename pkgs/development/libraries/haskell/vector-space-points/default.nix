@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vector-space-points";
-  version = "0.1.2.1";
-  sha256 = "0prbmk48xdr2gbxqpv0g89xz5v3k9wps9v2gymkh32jag2lgzi66";
+  version = "0.1.3";
+  sha256 = "0bk2zrccf5bxh14dzhhv89mr755j801ziqyxgv69ksdyxh8hx2qg";
   buildDepends = [ newtype vectorSpace ];
   meta = {
     description = "A type for points, as distinct from vectors";

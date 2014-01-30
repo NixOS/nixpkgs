@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   speexSupport = config.ffmpeg.speex or true;
   theoraSupport = config.ffmpeg.theora or true;
   vorbisSupport = config.ffmpeg.vorbis or true;
-  vpxSupport = config.ffmpeg.vpx or false;
+  vpxSupport = config.ffmpeg.vpx or true;
   x264Support = config.ffmpeg.x264 or true;
   xvidSupport = config.ffmpeg.xvid or true;
   opusSupport = config.ffmpeg.opus or true;

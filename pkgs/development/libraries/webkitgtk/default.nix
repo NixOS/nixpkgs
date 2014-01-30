@@ -2,10 +2,11 @@
 , pkgconfig, which, gettext, gobjectIntrospection
 , gtk2, gtk3, wayland, libwebp, enchant
 , libxml2, libsoup, libsecret, libxslt, harfbuzz
+, gst-plugins-base
 }:
 
 stdenv.mkDerivation rec {
-  name = "webkitgtk-2.2.3";
+  name = "webkitgtk-2.2.4";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "01a69v0aw3bv2zkx6jzk71r3pjlf2xfhxavjnma89kmd78qb7g4l";
+    sha256 = "0x2d9hds5yazwdakkhrh3dk5qxscb169imi056q2qq53zhdyw6jy";
   };
 
   patches = [ ./webcore-svg-libxml-cflags.patch ];
@@ -32,7 +33,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-geolocation"
-    "--disable-video"              # TODO: gsteramer-1.0
     "--enable-introspection"
   ];
 
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk2 wayland libwebp enchant
     libxml2 libsecret libxslt harfbuzz
+    gst-plugins-base
   ];
 
   propagatedBuildInputs = [ gtk3 libsoup ];

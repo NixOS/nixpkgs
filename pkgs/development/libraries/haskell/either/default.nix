@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     monadControl MonadRandom mtl semigroupoids semigroups transformers
     transformersBase
   ];
+  noHaddock = self.stdenv.lib.versionOlder self.ghc.version "7.6";
   meta = {
     homepage = "http://github.com/ekmett/either/";
     description = "An either monad transformer";

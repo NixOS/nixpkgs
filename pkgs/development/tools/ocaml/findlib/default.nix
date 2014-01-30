@@ -5,11 +5,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ocaml-findlib-1.3.3";
+  name = "ocaml-findlib-1.4";
 
   src = fetchurl {
-    url = http://download.camlcity.org/download/findlib-1.3.3.tar.gz;
-    sha256 = "981f5c67118a2be015efa79f3af3cb0063376b93123b5d695e7cb5c586b1d45c";
+    url = http://download.camlcity.org/download/findlib-1.4.tar.gz;
+    sha256 = "1y5xy6crldyh8pl9ca2cj31igbjfkicr9zqkq9p1fccxszjnah3f";
   };
 
   buildInputs = [m4 ncurses ocaml];

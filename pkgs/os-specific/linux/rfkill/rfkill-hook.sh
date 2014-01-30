@@ -10,8 +10,8 @@ if [ -z "$RFKILL_STATE" ]; then
   exit 1
 fi
 
-if [ -x /var/run/current-system/etc/rfkill.hook ]; then
-  exec /var/run/current-system/etc/rfkill.hook
+if [ -x /run/current-system/etc/rfkill.hook ]; then
+  exec /run/current-system/etc/rfkill.hook
 elif [ ! -z "$RFKILL_HOOK" ]; then
   exec $RFKILL_HOOK
 else

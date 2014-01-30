@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pspp-0.8.1";
+  name = "pspp-0.8.2";
 
   src = fetchurl {
     url = "mirror://gnu/pspp/${name}.tar.gz";
-    sha256 = "0qhxsdbwxd3cn1shc13wxvx2lg32lp4z6sz24kv3jz7p5xfi8j7x";
+    sha256 = "1w7h3dglgx0jlq1wb605b8pgfsk2vr1q2q2rj7bsajh9ihbcsixr";
   };
 
   buildInputs = [ libxml2 readline zlib perl cairo gtk gsl pkgconfig

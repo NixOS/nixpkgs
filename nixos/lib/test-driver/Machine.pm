@@ -495,6 +495,8 @@ sub waitForX {
     my ($self, $regexp) = @_;
     $self->nest("waiting for the X11 server", sub {
         retry sub {
+            my ($status, $out) = $self->execute("journalctl -bu systemd-logind | grep Linked");
+            return 0 if $status != 0;
             my ($status, $out) = $self->execute("xwininfo -root > /dev/null 2>&1");
             return 1 if $status == 0;
         }

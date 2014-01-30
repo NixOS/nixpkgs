@@ -109,7 +109,6 @@ runHook preHook
 # Check that the pre-hook initialised SHELL.
 if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
 
-
 # Hack: run gcc's setup hook.
 envHooks=()
 crossEnvHooks=()
@@ -289,7 +288,7 @@ stripDirs() {
 
     if [ -n "${dirs}" ]; then
         header "stripping (with flags $stripFlags) in $dirs"
-        find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
+        find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $commonStripFlags $stripFlags || true
         stopNest
     fi
 }
@@ -540,11 +539,15 @@ patchPhase() {
             *.bz2)
                 uncompress="bzip2 -d"
                 ;;
+            *.xz)
+                uncompress="xz -d"
+                ;;
             *.lzma)
                 uncompress="lzma -d"
                 ;;
         esac
-        $uncompress < $i | patch ${patchFlags:--p1}
+        # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
+        $uncompress < $i 2>&1 | patch ${patchFlags:--p1}
         stopNest
     done
 
@@ -569,7 +572,7 @@ configurePhase() {
     fi
 
     if [ -z "$dontFixLibtool" ]; then
-        for i in $(find . -name "ltmain.sh"); do
+        find . -iname "ltmain.sh" | while read i; do
             echo "fixing libtool script $i"
             fixLibtool $i
         done
@@ -608,6 +611,9 @@ buildPhase() {
         return
     fi
 
+    # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
+    makeFlags="SHELL=$SHELL $makeFlags"
+
     echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
     make ${makefile:+-f $makefile} \
         ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}} \
@@ -638,7 +644,7 @@ patchELF() {
         find "$prefix" \( \
             \( -type f -a -name "*.so*" \) -o \
             \( -type f -a -perm +0100 \) \
-            \) -print -exec patchelf --shrink-rpath {} \;
+            \) -print -exec patchelf --shrink-rpath '{}' \;
     fi
     stopNest
 }
@@ -648,20 +654,59 @@ patchShebangs() {
     # Rewrite all script interpreter file names (`#! /path') under the
     # specified  directory tree to paths found in $PATH.  E.g.,
     # /bin/sh will be rewritten to /nix/store/<hash>-some-bash/bin/sh.
+    # /usr/bin/env gets special treatment so that ".../bin/env python" is
+    # rewritten to /nix/store/<hash>/bin/python.
     # Interpreters that are already in the store are left untouched.
     header "patching script interpreter paths"
     local dir="$1"
     local f
-    for f in $(find "$dir" -type f -perm +0100); do
-        local oldPath=$(sed -ne '1 s,^#![ ]*\([^ ]*\).*$,\1,p' "$f")
+    local oldPath
+    local newPath
+    local arg0
+    local args
+    local oldInterpreterLine
+    local newInterpreterLine
+
+    find "$dir" -type f -perm +0100 | while read f; do
+        if [ "$(head -1 "$f" | head -c +2)" != '#!' ]; then
+            # missing shebang => not a script
+            continue
+        fi
+
+        oldInterpreterLine=$(head -1 "$f" | tail -c +3)
+        read -r oldPath arg0 args <<< "$oldInterpreterLine"
+
+        if $(echo "$oldPath" | grep -q "/bin/env$"); then
+            # Check for unsupported 'env' functionality:
+            # - options: something starting with a '-'
+            # - environment variables: foo=bar
+            if $(echo "$arg0" | grep -q -- "^-.*\|.*=.*"); then
+                echo "unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)"
+                exit 1
+            fi
+            newPath="$(command -v "$arg0" || true)"
+        else
+            if [ "$oldPath" = "" ]; then
+                # If no interpreter is specified linux will use /bin/sh. Set
+                # oldpath="/bin/sh" so that we get /nix/store/.../sh.
+                oldPath="/bin/sh"
+            fi
+            newPath="$(command -v "$(basename "$oldPath")" || true)"
+            args="$arg0 $args"
+        fi
+
+        newInterpreterLine="$newPath $args"
+
         if [ -n "$oldPath" -a "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]; then
-            local newPath=$(type -P $(basename $oldPath) || true)
             if [ -n "$newPath" -a "$newPath" != "$oldPath" ]; then
-                echo "$f: interpreter changed from $oldPath to $newPath"
-                sed -i -e "1 s,$oldPath,$newPath," "$f"
+                echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
+                # escape the escape chars so that sed doesn't interpret them
+                escapedInterpreterLine=$(echo "$newInterpreterLine" | sed 's|\\|\\\\|g')
+                sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
             fi
         fi
     done
+
     stopNest
 }
 
@@ -687,6 +732,9 @@ installPhase() {
 fixupPhase() {
     runHook preFixup
 
+    # Make sure everything is writable so "strip" et al. work.
+    if [ -e "$prefix" ]; then chmod -R u+w "$prefix"; fi
+
     # Put man/doc/info under $out/share.
     forceShare=${forceShare:=man doc info}
     if [ -n "$forceShare" ]; then
@@ -707,14 +755,20 @@ fixupPhase() {
     fi
 
     if [ -z "$dontGzipMan" ]; then
+        echo "gzipping man pages"
         GLOBIGNORE=.:..:*.gz:*.bz2
-        for f in $out/share/man/*/* $out/share/man/*/*/*; do
-            if [ -f $f ]; then
-                if gzip -c $f > $f.gz; then
-                    rm $f
+        for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
+            if [ -f "$f" -a ! -L "$f" ]; then
+                if gzip -c -n "$f" > "$f".gz; then
+                    rm "$f"
                 else
-                    rm $f.gz
+                    rm "$f".gz
                 fi
+            fi
+        done
+        for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
+            if [ -L "$f" -a -f `readlink -f "$f"`.gz ]; then
+                ln -sf `readlink "$f"`.gz "$f".gz && rm "$f"
             fi
         done
         unset GLOBIGNORE
@@ -863,7 +917,8 @@ genericBuild() {
 }
 
 
-# Execute the post-hook.
+# Execute the post-hooks.
+for i in "${postHooks[@]}"; do $i; done
 runHook postHook
 
 

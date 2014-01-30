@@ -1,18 +1,18 @@
 { fetchurl, stdenv, which, pkgconfig, libxcb, xcbutilkeysyms, xcbutil,
   xcbutilwm, libstartup_notification, libX11, pcre, libev, yajl,
-  libXcursor, coreutils, perl, pango }:
+  xcb-util-cursor, coreutils, perl, pango }:
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
-  version = "4.6";
+  version = "4.7.2";
 
   src = fetchurl {
     url = "http://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "1qand44hjqz84f2xzd0mmyk9vpsm7iwz6446s4ivdj6f86213lpm";
+    sha256 = "14zkn5jgm0b7ablvxcxh9gdzq6mjdd6i1kl9dbmifl2a6rg5dr3g";
   };
 
   buildInputs = [ which pkgconfig libxcb xcbutilkeysyms xcbutil xcbutilwm
-    libstartup_notification libX11 pcre libev yajl libXcursor perl pango ];
+    libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango ];
 
   patchPhase = ''
     patchShebangs .

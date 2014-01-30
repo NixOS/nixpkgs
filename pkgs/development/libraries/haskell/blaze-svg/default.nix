@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.3.3.0";
   sha256 = "1wi4nc73ic3qmbx6v9fniacwcz2nlvmp5snn144fdiwb22klfn5f";
   buildDepends = [ blazeMarkup mtl ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/deepakjois/blaze-svg";
     description = "SVG combinator library";

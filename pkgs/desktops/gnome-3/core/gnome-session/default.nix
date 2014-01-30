@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, gnome3, glib, dbus_glib, json_glib, upower
-, libxslt, intltool, makeWrapper }:
+, libxslt, intltool, makeWrapper, systemd }:
 
 
 stdenv.mkDerivation rec {
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1k59yss7r748nvr0cdjrqmx0zy26b93rfn66lsdg9fz60x77087n";
   };
 
+  configureFlags = "--enable-systemd";
+
   buildInputs = with gnome3;
     [ pkgconfig glib gnome_desktop gtk dbus_glib json_glib libxslt 
-      gsettings_desktop_schemas upower intltool gconf makeWrapper ];
-
-  # TODO: dbus, gnome-shell, gnome-settings-daemon
+      gsettings_desktop_schemas upower intltool gconf makeWrapper systemd ];
 
   postInstall = ''
     wrapProgram "$out/bin/gnome-session" \

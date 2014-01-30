@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "4.4.3.0";
-  sha256 = "1ngjzqgyhdfkzikyg6cicqdb6cpw2bbfr4g73vgmzlg8spy1cyg5";
+  version = "4.4.3.2";
+  sha256 = "1n597q4pbdka7g06524j0zvjcjpv7fgf6mga1a0kfr012sf9cqz9";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -27,7 +27,8 @@ cabal.mkDerivation (self: {
   ];
   doCheck = false;
   patchPhase = ''
-    sed -i -e 's|pandoc-citeproc >=.*,|pandoc-citeproc,|' hakyll.cabal
+    sed -i -e 's|blaze-markup.*,|blaze-markup,|' -e 's|blaze-html.*,|blaze-html,|' \
+      -e 's|pandoc-citeproc.*,|pandoc-citeproc,|' hakyll.cabal
   '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";

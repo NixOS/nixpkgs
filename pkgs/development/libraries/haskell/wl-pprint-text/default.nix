@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wl-pprint-text";
-  version = "1.1.0.1";
-  sha256 = "1rb5jmryxzcn6j8xalvsgwr61d1qzmsjyfp3iiq10n565bja70za";
+  version = "1.1.0.2";
+  sha256 = "0wbfqp38as2qpn66sq4hvl3hzvj66v301cz9rmgnx2i62r0a3s81";
   buildDepends = [ text ];
   meta = {
     description = "A Wadler/Leijen Pretty Printer for Text values";

@@ -69,8 +69,8 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://python.org";
-    description = "a high-level dynamically-typed programming language";
+    homepage = http://python.org;
+    description = "A high-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that
       is used in a wide variety of application domains. Some of its key
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
       high level dynamic data types.
     '';
     license = stdenv.lib.licenses.psfl;
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ simons chaoflow ];
   };
 }

@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.rpm.org/;
     license = "GPLv2";
     description = "The RPM Package Manager";
+    maintainers = stdenv.lib.maintainers.mornfall;
   };
 }

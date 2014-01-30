@@ -2170,6 +2170,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ IOCaptureOutput ];
   };
 
+  DevelSizeMe = buildPerlPackage {
+    name = "Devel-SizeMe-0.19";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TI/TIMB/Devel-SizeMe-0.19.tar.gz;
+      sha256 = "546e31ba83c0bf7cef37b38a462860461850473479d7d4ac6c0dadfb78d54717";
+    };
+    propagatedBuildInputs = [ DBDSQLite DBI DataDumperConcise HTMLParser JSONXS Moo ];
+    meta = {
+      homepage = https://github.com/timbunce/devel-sizeme;
+      description = "Unknown";
+      license = "perl";
+    };
+  };
+
   DBDSQLite = import ../development/perl-modules/DBD-SQLite {
     inherit stdenv fetchurl buildPerlPackage DBI;
     inherit (pkgs) sqlite;
@@ -3794,7 +3808,7 @@ let self = _self // overrides; _self = with self; {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
     };
-  };  
+  };
 
   HeapFibonacci = buildPerlPackage {
     name = "Heap-Fibonacci-0.80";
@@ -3871,18 +3885,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLFormHandler = buildPerlPackage {
-    name = "HTML-FormHandler-0.40025";
+    name = "HTML-FormHandler-0.40055";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GS/GSHANK/HTML-FormHandler-0.40025.tar.gz;
-      sha256 = "0fp8qcbkr19qn1859rpn3ca3b7w1jjyprwlj82dnvfi3b5jf8507";
+      url = mirror://cpan/authors/id/G/GS/GSHANK/HTML-FormHandler-0.40055.tar.gz;
+      sha256 = "47e3cf69e2475cba86356eda340e6622df0525e2d0aa2343aef9f924f13d86cd";
     };
     buildInputs = [ FileShareDirInstall PadWalker TestDifferences TestException TestMemoryCycle ];
-    propagatedBuildInputs = [ aliased ClassLoad DataClone DateTime DateTimeFormatStrptime EmailValid FileShareDir JSON HTMLTree Moose MooseXGetopt MooseXTypes MooseXTypesCommon MooseXTypesLoadableClass namespaceautoclean SubExporter SubName TryTiny ];
+    propagatedBuildInputs = [ ClassLoad DataClone DateTime DateTimeFormatStrptime EmailValid FileShareDir HTMLTree JSON ListAllUtils Moose MooseXGetopt MooseXTypes MooseXTypesCommon MooseXTypesLoadableClass SubExporter SubName TryTiny aliased namespaceautoclean ];
     meta = {
       description = "HTML forms using Moose";
-      license = "perl5";
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
+      license = "perl";
     };
   };
 
@@ -4368,7 +4382,7 @@ let self = _self // overrides; _self = with self; {
         Sigma/Foveon and Sony.
       '';
 
-      licenses = [ "GPLv1+" /* or */ "Artistic" ];
+      license = [ "GPLv1+" /* or */ "Artistic" ];
 
       maintainers = [ ];
       platforms = stdenv.lib.platforms.unix;
@@ -4829,6 +4843,10 @@ let self = _self // overrides; _self = with self; {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
     };
+    # Tests require network connectivity
+    # https://rt.cpan.org/Public/Bug/Display.html?id=63966 is the bug upstream,
+    # which doesn't look like it will get fixed anytime soon.
+    doCheck = false;
   };
 
   LWPxParanoidAgent = buildPerlPackage rec {
@@ -5273,6 +5291,19 @@ let self = _self // overrides; _self = with self; {
     meta = {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
+    };
+  };
+
+  Mojolicious = buildPerlPackage {
+    name = "Mojolicious-4.63";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SR/SRI/Mojolicious-4.63.tar.gz;
+      sha256 = "f20f77e86fc560dac1c958e765ed64242dcf6343939ed605b45f2bbe2596d5e9";
+    };
+    meta = {
+      homepage = http://mojolicio.us;
+      description = "Real-time web framework";
+      license = "artistic_2";
     };
   };
 
@@ -5724,7 +5755,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ Moose MooseXTypes ];
-    meta = { 
+    meta = {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
     };

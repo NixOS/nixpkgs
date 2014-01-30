@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./dont-create-localstatedir-during-install.patch ];
 
+  # fix build with newer gcc versions
+  preConfigure = ''substituteInPlace configure --replace "-Werror" "" '';
+
   configureFlags = ''
     --sysconfdir=/etc --localstatedir=/var
     --with-kernel-headers=${linuxHeaders}/include

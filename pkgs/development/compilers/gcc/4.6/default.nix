@@ -434,7 +434,7 @@ stdenv.mkDerivation ({
   passthru = { inherit langC langCC langAda langFortran langVhdl
       langGo version; };
 
-  enableParallelBuilding = !langAda;
+  enableParallelBuilding = false;
 
   inherit (stdenv) is64bit;
 

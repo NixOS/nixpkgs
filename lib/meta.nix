@@ -14,7 +14,7 @@ rec {
        addMetaAttrs {description = "Bla blah";} somePkg
   */
   addMetaAttrs = newAttrs: drv:
-    drv // { meta = (if drv ? meta then drv.meta else {}) // newAttrs; };
+    drv // { meta = (drv.meta or {}) // newAttrs; };
 
 
   /* Change the symbolic name of a package for presentation purposes
@@ -51,7 +51,7 @@ rec {
 
   /* Apply lowPrio to an attrset with derivations
   */
-  lowPrioSet = set: mapDerivationAttrset lowPrio set; 
+  lowPrioSet = set: mapDerivationAttrset lowPrio set;
 
 
   /* Increase the nix-env priority of the package, i.e., this
@@ -63,5 +63,5 @@ rec {
   /* Apply hiPrio to an attrset with derivations
   */
   hiPrioSet = set: mapDerivationAttrset hiPrio set;
-  
+
 }

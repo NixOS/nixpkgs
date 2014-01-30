@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv3+";
 
-    platforms = with platforms; linux ++ cygwin;
+    platforms = with platforms; linux ++ cygwin ++ darwin;
     maintainers = with maintainers; [ pierron ];
   };
 }

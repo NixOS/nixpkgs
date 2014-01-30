@@ -116,6 +116,7 @@
   ./services/mail/spamassassin.nix
   ./services/misc/autofs.nix
   ./services/misc/cgminer.nix
+  ./services/misc/dictd.nix
   ./services/misc/disnix.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
@@ -201,6 +202,7 @@
   ./services/scheduling/fcron.nix
   ./services/search/elasticsearch.nix
   ./services/security/clamav.nix
+  ./services/security/haveged.nix
   ./services/security/fprot.nix
   ./services/security/frandom.nix
   ./services/security/tor.nix

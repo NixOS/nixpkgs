@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mv Sublime* $out/sublime
     ln -s $out/sublime/sublime_text $out/bin/sublime
+    ln -s $out/sublime/sublime_text $out/bin/sublime2
 
     echo ${libPath}
     patchelf \

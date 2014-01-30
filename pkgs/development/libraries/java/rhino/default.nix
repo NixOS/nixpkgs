@@ -52,6 +52,6 @@ stdenv.mkDerivation {
 
     homepage = http://www.mozilla.org/rhino/;
 
-    licenses = [ "MPLv1.1" /* or */ "GPLv2+" ];
+    license = [ "MPLv1.1" /* or */ "GPLv2+" ];
   };
 }

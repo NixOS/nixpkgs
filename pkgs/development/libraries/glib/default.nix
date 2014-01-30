@@ -35,7 +35,7 @@ let
   ver_maj = "2.38";
   ver_min = "2";
 in
-with { inherit (stdenv.lib) optionalString; };
+with { inherit (stdenv.lib) optional optionalString; };
 
 stdenv.mkDerivation rec {
   name = "glib-${ver_maj}.${ver_min}";
@@ -54,7 +54,12 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ pcre zlib libffi ] ++ libiconvOrEmpty ++ libintlOrEmpty;
 
   preConfigure = "autoreconf -fi";
-  configureFlags = "--with-pcre=system --disable-fam";
+
+  configureFlags =
+    optional stdenv.isDarwin "--disable-compile-warnings"
+    ++ optional stdenv.isSunOS "--disable-modular-tests";
+
+  CPPFLAGS = optionalString stdenv.isSunOS "-DBSD_COMP";
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-lintl";
 

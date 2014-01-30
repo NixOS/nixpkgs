@@ -1,6 +1,7 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
 , udev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
-, libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll }:
+, libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll
+, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     "--with-kernel-firmware-dir=/run/current-system/firmware"
     "--with-session-tracking=systemd" ];
 
-  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz bluez5 ];
+  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz bluez5 gobjectIntrospection ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 

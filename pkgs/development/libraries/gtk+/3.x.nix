@@ -10,27 +10,27 @@ assert cupsSupport -> cups != null;
 
 let
   ver_maj = "3.10";
-  ver_min = "5"; # .6 needs currently unreleased wayland for introspection (wl_proxy_marshal_constructor)
+  ver_min = "6";
 in
 stdenv.mkDerivation rec {
   name = "gtk+-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/${name}.tar.xz";
-    sha256 = "1iyc566r61d3jfdiq5knwbssq5bsqsn8hqzdm30vmw6dx3cgd49i";
+    sha256 = "12i6n2vijglqgc7z5migllhpygg65fqzfgrsknimwynbqmzwa91w";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
-  buildInputs = [ wayland libxkbcommon ];
+  buildInputs = [ libxkbcommon ];
   propagatedBuildInputs = with xlibs; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk ]
-    ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor ]
+    ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor wayland ]
     ++ optional stdenv.isDarwin x11
-    ++ stdenv.lib.optional xineramaSupport libXinerama
-    ++ stdenv.lib.optionals cupsSupport [ cups ];
+    ++ optional xineramaSupport libXinerama
+    ++ optional cupsSupport cups;
 
   postInstall = "rm -rf $out/share/gtk-doc";
 

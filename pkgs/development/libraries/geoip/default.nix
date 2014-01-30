@@ -1,5 +1,5 @@
-a :  
-let 
+a :
+let
   s = import ./src-for-default.nix;
   buildInputs = with a; [
     zlib
@@ -14,8 +14,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall"];
-  goSrcDir = "cd GeoIP-*/";
-      
+
   meta = {
     description = "Geolocation API";
     maintainers = [
