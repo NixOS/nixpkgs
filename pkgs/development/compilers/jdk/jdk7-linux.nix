@@ -6,6 +6,19 @@
 , installjdk ? true
 , pluginSupport ? true
 , installjce ? false
+, glib
+, libxml2
+, libav_0_8
+, ffmpeg_0_6
+, libxslt
+, mesa_noglu
+, freetype
+, fontconfig
+, gnome
+, cairo
+, alsaLib
+, atk
+, gdk_pixbuf
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -87,7 +100,7 @@ stdenv.mkDerivation rec {
     # construct the rpath
     rpath=
     for i in $libraries; do
-        rpath=$rpath''${rpath:+:}$i/lib
+        rpath=$rpath''${rpath:+:}$i/lib''${rpath:+:}$i/lib64
     done
 
     if test -z "$installjdk"; then
@@ -102,6 +115,8 @@ stdenv.mkDerivation rec {
     fi
 
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/jli
+    rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/server
+    rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/xawt
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}
 
     # set all the dynamic linkers
@@ -128,8 +143,8 @@ stdenv.mkDerivation rec {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.gcc.libc] ++
-    (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt] else []);
+    [stdenv.gcc.libc glib libxml2 libav_0_8 ffmpeg_0_6 libxslt mesa_noglu xlibs.libXxf86vm alsaLib fontconfig freetype gnome.pango gnome.gtk cairo atk gdk_pixbuf] ++
+    (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt xlibs.libXrender stdenv.gcc.gcc] else []);
 
   passthru.mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
 
