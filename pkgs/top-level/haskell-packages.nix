@@ -542,6 +542,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   amqp = callPackage ../development/libraries/haskell/amqp {};
 
+  annotatedWlPprint = callPackage ../development/libraries/haskell/annotated-wl-pprint {};
+
   appar = callPackage ../development/libraries/haskell/appar {};
 
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
