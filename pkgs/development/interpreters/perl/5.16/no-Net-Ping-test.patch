@@ -1,0 +1,864 @@
+diff -Naur a/dist/Net-Ping/t/100_load.t b/dist/Net-Ping/t/100_load.t
+--- a/dist/Net-Ping/t/100_load.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/100_load.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,12 +0,0 @@
+-use strict;
+-
+-BEGIN {
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-}
+-
+-use Test::More tests => 1;
+-# Just make sure everything compiles
+-BEGIN {use_ok 'Net::Ping'};
+diff -Naur a/dist/Net-Ping/t/110_icmp_inst.t b/dist/Net-Ping/t/110_icmp_inst.t
+--- a/dist/Net-Ping/t/110_icmp_inst.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/110_icmp_inst.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,32 +0,0 @@
+-# Test to make sure object can be instantiated for icmp protocol.
+-# Root access is required to actually perform icmp testing.
+-
+-use strict;
+-
+-BEGIN {
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-}
+-
+-use Test::More tests => 2;
+-BEGIN {use_ok('Net::Ping')};
+-
+-SKIP: {
+-  skip "icmp ping requires root privileges.", 1
+-    if ($> and $^O ne 'VMS' and $^O ne 'cygwin')
+-      or ($^O eq 'MSWin32'
+-	  and !IsAdminUser())
+-	or ($^O eq 'VMS'
+-	    and (`write sys\$output f\$privilege("SYSPRV")` =~ m/FALSE/));
+-  my $p = new Net::Ping "icmp";
+-  isa_ok($p, 'Net::Ping', 'object can be instantiated for icmp protocol');
+-}
+-
+-sub IsAdminUser {
+-  return unless $^O eq 'MSWin32';
+-  return unless eval { require Win32 };
+-  return unless defined &Win32::IsAdminUser;
+-  return Win32::IsAdminUser();
+-}
+diff -Naur a/dist/Net-Ping/t/120_udp_inst.t b/dist/Net-Ping/t/120_udp_inst.t
+--- a/dist/Net-Ping/t/120_udp_inst.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/120_udp_inst.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,21 +0,0 @@
+-# Test to make sure object can be instantiated for udp protocol.
+-# I do not know of any servers that support udp echo anymore.
+-
+-use strict;
+-
+-BEGIN {
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-  unless (getservbyname('echo', 'udp')) {
+-    print "1..0 \# Skip: no echo port\n";
+-    exit;
+-  }
+-}
+-
+-use Test::More tests => 2;
+-BEGIN {use_ok 'Net::Ping'};
+-
+-my $p = new Net::Ping "udp";
+-isa_ok($p, 'Net::Ping', 'object can be instantiated for udp protocol');
+diff -Naur a/dist/Net-Ping/t/130_tcp_inst.t b/dist/Net-Ping/t/130_tcp_inst.t
+--- a/dist/Net-Ping/t/130_tcp_inst.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/130_tcp_inst.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,20 +0,0 @@
+-# Test to make sure object can be instantiated for tcp protocol.
+-
+-use strict;
+-
+-BEGIN {
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-  unless (getservbyname('echo', 'tcp')) {
+-    print "1..0 \# Skip: no echo port\n";
+-    exit;
+-  }
+-}
+-
+-use Test::More tests => 2;
+-BEGIN {use_ok 'Net::Ping'};
+-
+-my $p = new Net::Ping "tcp";
+-isa_ok($p, 'Net::Ping', 'object can be instantiated for tcp protocol');
+diff -Naur a/dist/Net-Ping/t/140_stream_inst.t b/dist/Net-Ping/t/140_stream_inst.t
+--- a/dist/Net-Ping/t/140_stream_inst.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/140_stream_inst.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,20 +0,0 @@
+-# Test to make sure object can be instantiated for stream protocol.
+-
+-use strict;
+-
+-BEGIN {
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-  unless (getservbyname('echo', 'tcp')) {
+-    print "1..0 \# Skip: no echo port\n";
+-    exit;
+-  }
+-}
+-
+-use Test::More tests => 2;
+-BEGIN {use_ok 'Net::Ping'};
+-
+-my $p = new Net::Ping "stream";
+-isa_ok($p, 'Net::Ping', 'object can be instantiated for stream protocol');
+diff -Naur a/dist/Net-Ping/t/150_syn_inst.t b/dist/Net-Ping/t/150_syn_inst.t
+--- a/dist/Net-Ping/t/150_syn_inst.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/150_syn_inst.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,21 +0,0 @@
+-# Test to make sure object can be instantiated for syn protocol.
+-
+-use strict;
+-
+-BEGIN {
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-  unless (getservbyname('echo', 'tcp')) {
+-    print "1..0 \# Skip: no echo port\n";
+-    exit;
+-  }
+-}
+-
+-
+-use Test::More tests => 2;
+-BEGIN {use_ok 'Net::Ping'};
+-
+-my $p = new Net::Ping "syn";
+-isa_ok($p, 'Net::Ping', 'object can be instantiated for syn protocol');
+diff -Naur a/dist/Net-Ping/t/190_alarm.t b/dist/Net-Ping/t/190_alarm.t
+--- a/dist/Net-Ping/t/190_alarm.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/190_alarm.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,53 +0,0 @@
+-# Test to make sure alarm / SIGALM does not interfere
+-# with Net::Ping.  (This test was derived to ensure
+-# compatibility with the "spamassassin" utility.)
+-# Based on code written by radu@netsoft.ro (Radu Greab).
+-
+-BEGIN {
+-  if ($ENV{PERL_CORE}) {
+-    unless ($ENV{PERL_TEST_Net_Ping}) {
+-      print "1..0 \# Skip: network dependent test\n";
+-        exit;
+-    }
+-  } 
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-  unless (eval {alarm 0; 1;}) {
+-    print "1..0 \# Skip: alarm borks on $^O $^X $] ?\n";
+-    exit;
+-  }
+-  unless (getservbyname('echo', 'tcp')) {
+-    print "1..0 \# Skip: no echo port\n";
+-    exit;
+-  }
+-}
+-
+-use strict;
+-use Test::More tests => 6;
+-BEGIN {use_ok 'Net::Ping'};
+-
+-eval {
+-  my $timeout = 11;
+-
+-  pass('In eval');
+-  local $SIG{ALRM} = sub { die "alarm works" };
+-  pass('SIGALRM can be set on this platform');
+-  alarm $timeout;
+-  pass('alarm() can be set on this platform');
+-
+-  my $start = time;
+-  while (1) {
+-    my $ping = Net::Ping->new("tcp", 2);
+-    # It does not matter if alive or not
+-    $ping->ping("127.0.0.1");
+-    $ping->ping("172.29.249.249");
+-    die "alarm failed" if time > $start + $timeout + 1;
+-  }
+-};
+-pass('Got out of "infinite loop" okay');
+-
+-like($@, qr/alarm works/, 'Make sure it died for a good excuse');
+-
+-alarm 0; # Reset alarm
+diff -Naur a/dist/Net-Ping/t/200_ping_tcp.t b/dist/Net-Ping/t/200_ping_tcp.t
+--- a/dist/Net-Ping/t/200_ping_tcp.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/200_ping_tcp.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,57 +0,0 @@
+-use strict;
+-
+-BEGIN {
+-  if ($ENV{PERL_CORE}) {
+-    unless ($ENV{PERL_TEST_Net_Ping}) {
+-      print "1..0 # Skip: network dependent test\n";
+-        exit;
+-    }
+-  }
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-  unless (getservbyname('echo', 'tcp')) {
+-    print "1..0 \# Skip: no echo port\n";
+-    exit;
+-  }
+-}
+-
+-# Remote network test using tcp protocol.
+-#
+-# NOTE:
+-#   Network connectivity will be required for all tests to pass.
+-#   Firewalls may also cause some tests to fail, so test it
+-#   on a clear network.  If you know you do not have a direct
+-#   connection to remote networks, but you still want the tests
+-#   to pass, use the following:
+-#
+-# $ PERL_CORE=1 make test
+-
+-use Test::More tests => 13;
+-BEGIN {use_ok('Net::Ping');}
+-
+-my $p = new Net::Ping "tcp",9;
+-
+-isa_ok($p, 'Net::Ping', 'new() worked');
+-
+-isnt($p->ping("localhost"), 0, 'Test on the default port');
+-
+-# Change to use the more common web port.
+-# This will pull from /etc/services on UNIX.
+-# (Make sure getservbyname works in scalar context.)
+-isnt($p->{port_num} = (getservbyname("http", "tcp") || 80), undef);
+-
+-isnt($p->ping("localhost"), 0, 'Test localhost on the web port');
+-
+-# Hopefully this is never a routeable host
+-is($p->ping("172.29.249.249"), 0, "Can't reach 172.29.249.249");
+-
+-# Test a few remote servers
+-# Hopefully they are up when the tests are run.
+-
+-foreach (qw(www.geocities.com ftp.geocities.com
+-	    www.freeservers.com ftp.freeservers.com
+-	    yahoo.com www.yahoo.com www.about.com)) {
+-    isnt($p->ping($_), 0, "Can ping $_");
+-}
+diff -Naur a/dist/Net-Ping/t/250_ping_hires.t b/dist/Net-Ping/t/250_ping_hires.t
+--- a/dist/Net-Ping/t/250_ping_hires.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/250_ping_hires.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,52 +0,0 @@
+-# Test to make sure hires feature works.
+-
+-use strict;
+-
+-BEGIN {
+-  if ($ENV{PERL_CORE}) {
+-    unless ($ENV{PERL_TEST_Net_Ping}) {
+-      print "1..0 # Skip: network dependent test\n";
+-        exit;
+-    }
+-  }
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-  unless (eval "require Time::HiRes") {
+-    print "1..0 \# Skip: no Time::HiRes\n";
+-    exit;
+-  }
+-  unless (getservbyname('echo', 'tcp')) {
+-    print "1..0 \# Skip: no echo port\n";
+-    exit;
+-  }
+-}
+-
+-use Test::More tests => 8;
+-BEGIN {use_ok('Net::Ping');}
+-
+-my $p = new Net::Ping "tcp";
+-
+-isa_ok($p, 'Net::Ping', 'new() worked');
+-
+-is($Net::Ping::hires, 0, 'Default is to not use Time::HiRes');
+-
+-$p -> hires();
+-isnt($Net::Ping::hires, 0, 'Enabled hires');
+-
+-$p -> hires(0);
+-is($Net::Ping::hires, 0, 'Make sure disable works');
+-
+-$p -> hires(1);
+-isnt($Net::Ping::hires, 0, 'Enable hires again');
+-
+-# Test on the default port
+-my ($ret, $duration) = $p -> ping("localhost");
+-
+-isnt($ret, 0, 'localhost should always be reachable');
+-
+-# It is extremely likely that the duration contains a decimal
+-# point if Time::HiRes is functioning properly, except when it
+-# is fast enough to be "0", or slow enough to be exactly "1".
+-like($duration, qr/\.|^[01]$/, 'returned duration is valid');
+diff -Naur a/dist/Net-Ping/t/300_ping_stream.t b/dist/Net-Ping/t/300_ping_stream.t
+--- a/dist/Net-Ping/t/300_ping_stream.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/300_ping_stream.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,71 +0,0 @@
+-use strict; 
+-BEGIN {
+-  if ($ENV{PERL_CORE}) {
+-    unless ($ENV{PERL_TEST_Net_Ping}) {
+-      print "1..0 # Skip: network dependent test\n";
+-        exit;
+-    }
+-  }
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-  if (my $port = getservbyname('echo', 'tcp')) {
+-    socket(*ECHO, &Socket::PF_INET(), &Socket::SOCK_STREAM(), (getprotobyname 'tcp')[2]);
+-    unless (connect(*ECHO, scalar &Socket::sockaddr_in($port, &Socket::inet_aton("localhost")))) {
+-      print "1..0 \# Skip: loopback tcp echo service is off ($!)\n";
+-      exit;
+-    }
+-    close (*ECHO);
+-  } else {
+-    print "1..0 \# Skip: no echo port\n";
+-    exit;
+-  }
+-}
+-
+-# Test of stream protocol using loopback interface.
+-#
+-# NOTE:
+-#   The echo service must be enabled on localhost
+-#   to really test the stream protocol ping.  See
+-#   the end of this document on how to enable it.
+-
+-use Test::More tests => 22;
+-use Net::Ping;
+-
+-my $p = new Net::Ping "stream";
+-
+-# new() worked?
+-isa_ok($p, 'Net::Ping', 'new() worked');
+-
+-is($p->ping("localhost"), 1, 'Attempt to connect to the echo port');
+-
+-for (1..20) {
+-  select (undef,undef,undef,0.1);
+-  is($p->ping("localhost"), 1, 'Try several pings while it is connected');
+-}
+-
+-__END__
+-
+-A simple xinetd configuration to enable the echo service can easily be made.
+-Just create the following file before restarting xinetd:
+-
+-/etc/xinetd.d/echo:
+-
+-# description: An echo server.
+-service echo
+-{
+-        type            = INTERNAL
+-        id              = echo-stream
+-        socket_type     = stream
+-        protocol        = tcp
+-        user            = root
+-        wait            = no
+-        disable         = no
+-}
+-
+-
+-Or if you are using inetd, before restarting, add
+-this line to your /etc/inetd.conf:
+-
+-echo   stream  tcp     nowait  root    internal
+diff -Naur a/dist/Net-Ping/t/400_ping_syn.t b/dist/Net-Ping/t/400_ping_syn.t
+--- a/dist/Net-Ping/t/400_ping_syn.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/400_ping_syn.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,93 +0,0 @@
+-use strict;
+-
+-BEGIN {
+-  if ($ENV{PERL_CORE}) {
+-    unless ($ENV{PERL_TEST_Net_Ping}) {
+-      print "1..0 # Skip: network dependent test\n";
+-        exit;
+-    }
+-  }
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-  unless (getservbyname('echo', 'tcp')) {
+-    print "1..0 \# Skip: no echo port\n";
+-    exit;
+-  }
+-  unless (getservbyname('http', 'tcp')) {
+-    print "1..0 \# Skip: no http port\n";
+-    exit;
+-  }
+-}
+-
+-# Remote network test using syn protocol.
+-#
+-# NOTE:
+-#   Network connectivity will be required for all tests to pass.
+-#   Firewalls may also cause some tests to fail, so test it
+-#   on a clear network.  If you know you do not have a direct
+-#   connection to remote networks, but you still want the tests
+-#   to pass, use the following:
+-#
+-# $ PERL_CORE=1 make test
+-
+-# Try a few remote servers
+-my %webs;
+-BEGIN {
+-  %webs = (
+-  # Hopefully this is never a routeable host
+-  "172.29.249.249" => 0,
+-
+-  # Hopefully all these web ports are open
+-  "www.geocities.com." => 1,
+-  "www.freeservers.com." => 1,
+-  "yahoo.com." => 1,
+-  "www.yahoo.com." => 1,
+-  "www.about.com." => 1,
+-  "www.microsoft.com." => 1,
+-  "127.0.0.1" => 1,
+-);
+-}
+-
+-use Test::More tests => 3 + 2 * keys %webs;
+-
+-BEGIN {use_ok('Net::Ping')};
+-
+-my $can_alarm = eval {alarm 0; 1;};
+-
+-sub Alarm {
+-  alarm(shift) if $can_alarm;
+-}
+-
+-Alarm(50);
+-$SIG{ALRM} = sub {
+-  fail('Alarm timed out');
+-  die "TIMED OUT!";
+-};
+-
+-my $p = new Net::Ping "syn", 10;
+-
+-isa_ok($p, 'Net::Ping', 'new() worked');
+-
+-# Change to use the more common web port.
+-# (Make sure getservbyname works in scalar context.)
+-cmp_ok(($p->{port_num} = getservbyname("http", "tcp")), '>', 0, 'valid port');
+-
+-foreach my $host (keys %webs) {
+-  # ping() does dns resolution and
+-  # only sends the SYN at this point
+-  Alarm(50); # (Plenty for a DNS lookup)
+-  is($p->ping($host), 1, "Can reach $host $p->{bad}->{$host}");
+-}
+-
+-Alarm(20);
+-while (my $host = $p->ack()) {
+-  is($webs{$host}, 1, "supposed to be up: http://$host/");
+-  delete $webs{$host};
+-}
+-
+-Alarm(0);
+-foreach my $host (keys %webs) {
+-  is($webs{$host}, 0, "supposed to be down: http://$host/ [" . ($p->{bad}->{$host} || "") . "]");
+-}
+diff -Naur a/dist/Net-Ping/t/410_syn_host.t b/dist/Net-Ping/t/410_syn_host.t
+--- a/dist/Net-Ping/t/410_syn_host.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/410_syn_host.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,97 +0,0 @@
+-# Same as 400_ping_syn.t but testing ack( $host ) instead of ack( ).
+-use strict;
+-
+-BEGIN {
+-  if ($ENV{PERL_CORE}) {
+-    unless ($ENV{PERL_TEST_Net_Ping}) {
+-      print "1..0 # Skip: network dependent test\n";
+-        exit;
+-    }
+-  }
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-  unless (getservbyname('echo', 'tcp')) {
+-    print "1..0 \# Skip: no echo port\n";
+-    exit;
+-  }
+-  unless (getservbyname('http', 'tcp')) {
+-    print "1..0 \# Skip: no http port\n";
+-    exit;
+-  }
+-}
+-
+-# Remote network test using syn protocol.
+-#
+-# NOTE:
+-#   Network connectivity will be required for all tests to pass.
+-#   Firewalls may also cause some tests to fail, so test it
+-#   on a clear network.  If you know you do not have a direct
+-#   connection to remote networks, but you still want the tests
+-#   to pass, use the following:
+-#
+-# $ PERL_CORE=1 make test
+-
+-# Try a few remote servers
+-my %webs;
+-BEGIN {
+-  %webs = (
+-  # Hopefully this is never a routeable host
+-  "172.29.249.249" => 0,
+-
+-  # Hopefully all these web ports are open
+-  "www.geocities.com." => 1,
+-  "www.freeservers.com." => 1,
+-  "yahoo.com." => 1,
+-  "www.yahoo.com." => 1,
+-  "www.about.com." => 1,
+-  "www.microsoft.com." => 1,
+-  "127.0.0.1" => 1,
+-);
+-}
+-
+-use Test::More tests => 3 + 2 * keys %webs;
+-
+-BEGIN {use_ok('Net::Ping')};
+-
+-my $can_alarm = eval {alarm 0; 1;};
+-
+-sub Alarm {
+-  alarm(shift) if $can_alarm;
+-}
+-
+-Alarm(50);
+-$SIG{ALRM} = sub {
+-  fail('Alarm timed out');
+-  die "TIMED OUT!";
+-};
+-
+-my $p = new Net::Ping "syn", 10;
+-
+-isa_ok($p, 'Net::Ping', 'new() worked');
+-
+-# Change to use the more common web port.
+-# (Make sure getservbyname works in scalar context.)
+-cmp_ok(($p->{port_num} = getservbyname("http", "tcp")), '>', 0, 'vaid port');
+-
+-foreach my $host (keys %webs) {
+-  # ping() does dns resolution and
+-  # only sends the SYN at this point
+-  Alarm(50); # (Plenty for a DNS lookup)
+-  is($p->ping($host), 1, "Can reach $host $p->{bad}->{$host}");
+-}
+-
+-Alarm(20);
+-foreach my $host (sort keys %webs) {
+-  my $on = $p->ack($host);
+-  if ($on) {
+-    is($webs{$host}, 1, "supposed to be up: http://$host/");
+-  } else {   
+-    is($webs{$host}, 0, "supposed to be down: http://$host/ [" . ($p->{bad}->{$host} || "") . "]");
+-  }
+-  delete $webs{$host};
+-  Alarm(20);
+-}
+-
+-Alarm(0);
+diff -Naur a/dist/Net-Ping/t/450_service.t b/dist/Net-Ping/t/450_service.t
+--- a/dist/Net-Ping/t/450_service.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/450_service.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,166 +0,0 @@
+-# Testing service_check method using tcp and syn protocols.
+-
+-BEGIN {
+-  unless (eval "require IO::Socket") {
+-    print "1..0 \# Skip: no IO::Socket\n";
+-    exit;
+-  }
+-  unless (getservbyname('echo', 'tcp')) {
+-    print "1..0 \# Skip: no echo port\n";
+-    exit;
+-  }
+-}
+-
+-use strict;
+-use Test::More tests => 26;
+-BEGIN {use_ok('Net::Ping')};
+-
+-# I'm lazy so I'll just use IO::Socket
+-# for the TCP Server stuff instead of doing
+-# all that direct socket() junk manually.
+-
+-my $sock1 = new IO::Socket::INET
+-  LocalAddr => "127.0.0.1",
+-  Proto => "tcp",
+-  Listen => 8,
+-  or warn "bind: $!";
+-
+-isa_ok($sock1, 'IO::Socket::INET',
+-       'Start a TCP listen server on ephemeral port');
+-
+-# Start listening on another ephemeral port
+-my $sock2 = new IO::Socket::INET
+-  LocalAddr => "127.0.0.1",
+-  Proto => "tcp",
+-  Listen => 8,
+-  or warn "bind: $!";
+-
+-isa_ok($sock2, 'IO::Socket::INET',
+-       'Start a second TCP listen server on ephemeral port');
+-
+-my $port1 = $sock1->sockport;
+-cmp_ok($port1, '>', 0);
+-
+-my $port2 = $sock2->sockport;
+-cmp_ok($port2, '>', 0);
+-
+-# 
+-isnt($port1, $port2, 'Make sure the servers are listening on different ports');
+-
+-$sock2->close;
+-
+-# This is how it should be:
+-# 127.0.0.1:$port1 - service ON
+-# 127.0.0.1:$port2 - service OFF
+-
+-#####
+-# First, we test using the "tcp" protocol.
+-# (2 seconds should be long enough to connect to loopback.)
+-my $p = new Net::Ping "tcp", 2;
+-
+-isa_ok($p, 'Net::Ping', 'new() worked');
+-
+-# Disable service checking
+-$p->service_check(0);
+-
+-# Try on the first port
+-$p->{port_num} = $port1;
+-
+-is($p->ping("127.0.0.1"), 1, 'first port is reachable');
+-
+-# Try on the other port
+-$p->{port_num} = $port2;
+-
+-{
+-    local $TODO;
+-    $TODO = "Believed not to work on $^O" if $^O eq 'hpux';
+-    is($p->ping("127.0.0.1"), 1, 'second port is reachable');
+-}
+-
+-# Enable service checking
+-$p->service_check(1);
+-
+-# Try on the first port
+-$p->{port_num} = $port1;
+-
+-is($p->ping("127.0.0.1"), 1, 'first service is on');
+-
+-# Try on the other port
+-$p->{port_num} = $port2;
+-
+-isnt($p->ping("127.0.0.1"), 2, 'second service is off');
+-
+-# test 11 just finished.
+-
+-#####
+-# Lastly, we test using the "syn" protocol.
+-$p = new Net::Ping "syn", 2;
+-
+-isa_ok($p, 'Net::Ping', 'new() worked');
+-
+-# Disable service checking
+-$p->service_check(0);
+-
+-# Try on the first port
+-$p->{port_num} = $port1;
+-
+-is($p->ping("127.0.0.1"), 1, "send SYN to first port") or diag ("ERRNO: $!");
+-
+-is($p->ack(), '127.0.0.1', 'IP should be reachable');
+-is($p->ack(), undef, 'No more sockets');
+-
+-###
+-# Get a fresh object
+-$p = new Net::Ping "syn", 2;
+-
+-isa_ok($p, 'Net::Ping', 'new() worked');
+-
+-# Disable service checking
+-$p->service_check(0);
+-
+-# Try on the other port
+-$p->{port_num} = $port2;
+-
+-is($p->ping("127.0.0.1"), 1, "send SYN to second port") or diag ("ERRNO: $!");
+-
+-{
+-    local $TODO;
+-    $TODO = "Believed not to work on $^O" if $^O eq 'hpux' || $^O eq 'MSWin32';
+-    is($p->ack(), '127.0.0.1', 'IP should be reachable');
+-}
+-is($p->ack(), undef, 'No more sockets');
+-
+-
+-###
+-# Get a fresh object
+-$p = new Net::Ping "syn", 2;
+-
+-isa_ok($p, 'Net::Ping', 'new() worked');
+-
+-# Enable service checking
+-$p->service_check(1);
+-
+-# Try on the first port
+-$p->{port_num} = $port1;
+-
+-is($p->ping("127.0.0.1"), 1, "send SYN to first port") or diag ("ERRNO: $!");
+-
+-is($p->ack(), '127.0.0.1', 'IP should be reachable');
+-is($p->ack(), undef, 'No more sockets');
+-
+-
+-###
+-# Get a fresh object
+-$p = new Net::Ping "syn", 2;
+-
+-isa_ok($p, 'Net::Ping', 'new() worked');
+-
+-# Enable service checking
+-$p->service_check(1);
+-
+-# Try on the other port
+-$p->{port_num} = $port2;
+-
+-is($p->ping("127.0.0.1"), 1, "send SYN to second port") or diag ("ERRNO: $!");
+-
+-is($p->ack(), undef, 'No sockets should have service on');
+diff -Naur a/dist/Net-Ping/t/500_ping_icmp.t b/dist/Net-Ping/t/500_ping_icmp.t
+--- a/dist/Net-Ping/t/500_ping_icmp.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/500_ping_icmp.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,32 +0,0 @@
+-# Test to perform icmp protocol testing.
+-# Root access is required.
+-
+-use strict;
+-
+-BEGIN {
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-}
+-
+-use Test::More tests => 2;
+-BEGIN {use_ok('Net::Ping')};
+-
+-SKIP: {
+-  skip "icmp ping requires root privileges.", 1
+-    if ($> and $^O ne 'VMS' and $^O ne 'cygwin')
+-      or ($^O eq 'MSWin32'
+-	  and !IsAdminUser())
+-	or ($^O eq 'VMS'
+-	    and (`write sys\$output f\$privilege("SYSPRV")` =~ m/FALSE/));
+-  my $p = new Net::Ping "icmp";
+-  is($p->ping("127.0.0.1"), 1);
+-}
+-
+-sub IsAdminUser {
+-  return unless $^O eq 'MSWin32' or $^O eq "cygwin";
+-  return unless eval { require Win32 };
+-  return unless defined &Win32::IsAdminUser;
+-  return Win32::IsAdminUser();
+-}
+diff -Naur a/dist/Net-Ping/t/510_ping_udp.t b/dist/Net-Ping/t/510_ping_udp.t
+--- a/dist/Net-Ping/t/510_ping_udp.t	2013-03-04 16:16:22.000000001 +0100
++++ b/dist/Net-Ping/t/510_ping_udp.t	1970-01-01 01:00:00.000000000 +0100
+@@ -1,32 +0,0 @@
+-# Test to perform udp protocol testing.
+-
+-use strict;
+-
+-sub isWindowsVista {
+-   return unless $^O eq 'MSWin32' or $^O eq "cygwin";
+-   return unless eval { require Win32 };
+-   return unless defined &Win32::GetOSName;
+-   return Win32::GetOSName() eq "WinVista";
+-}
+-
+-BEGIN {
+-  unless (eval "require Socket") {
+-    print "1..0 \# Skip: no Socket\n";
+-    exit;
+-  }
+-  unless (getservbyname('echo', 'udp')) {
+-    print "1..0 \# Skip: no udp echo port\n";
+-    exit;
+-  }
+-
+-  if(isWindowsVista()) {
+-    print "1..0 \# Skip: udp ping blocked by Vista's default settings\n";
+-    exit;
+-  }
+-}
+-
+-use Test::More tests => 2;
+-BEGIN {use_ok('Net::Ping')};
+-
+-my $p = new Net::Ping "udp";
+-is($p->ping("127.0.0.1"), 1);
+diff -Naur a/MANIFEST b/MANIFEST
+--- a/MANIFEST	2013-03-04 16:16:21.000000001 +0100
++++ b/MANIFEST	2014-01-30 01:55:02.000000001 +0100
+@@ -3379,21 +3379,6 @@
+ dist/Module-CoreList/t/pod.t			Module::CoreList tests
+ dist/Net-Ping/Changes			Net::Ping
+ dist/Net-Ping/lib/Net/Ping.pm		Hello, anybody home?
+-dist/Net-Ping/t/100_load.t		Ping Net::Ping
+-dist/Net-Ping/t/110_icmp_inst.t		Ping Net::Ping
+-dist/Net-Ping/t/120_udp_inst.t		Ping Net::Ping
+-dist/Net-Ping/t/130_tcp_inst.t		Ping Net::Ping
+-dist/Net-Ping/t/140_stream_inst.t	Ping Net::Ping
+-dist/Net-Ping/t/150_syn_inst.t		Ping Net::Ping
+-dist/Net-Ping/t/190_alarm.t		Ping Net::Ping
+-dist/Net-Ping/t/200_ping_tcp.t		Ping Net::Ping
+-dist/Net-Ping/t/250_ping_hires.t	Ping Net::Ping
+-dist/Net-Ping/t/300_ping_stream.t	Ping Net::Ping
+-dist/Net-Ping/t/400_ping_syn.t		Ping Net::Ping
+-dist/Net-Ping/t/410_syn_host.t		Ping Net::Ping
+-dist/Net-Ping/t/450_service.t		Ping Net::Ping
+-dist/Net-Ping/t/500_ping_icmp.t		Ping Net::Ping
+-dist/Net-Ping/t/510_ping_udp.t		Ping Net::Ping
+ dist/Safe/Changes		Changes for Safe.pm
+ dist/Safe/Makefile.PL		Makefile.PL for Safe.pm
+ dist/Safe/MANIFEST		MANIFEST for Safe.pm
