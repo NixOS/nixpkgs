@@ -306,7 +306,7 @@ let self = _self // overrides; _self = with self; {
 
   BerkeleyDB = import ../development/perl-modules/BerkeleyDB {
     inherit buildPerlPackage fetchurl;
-    inherit (pkgs) db4;
+    inherit (pkgs) db;
   };
 
   BHooksEndOfScope = buildPerlPackage {
@@ -2201,7 +2201,7 @@ let self = _self // overrides; _self = with self; {
 
   DBFile = import ../development/perl-modules/DB_File {
     inherit fetchurl buildPerlPackage;
-    inherit (pkgs) db4;
+    inherit (pkgs) db;
   };
 
   DBI = buildPerlPackage {

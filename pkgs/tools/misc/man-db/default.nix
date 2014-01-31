@@ -1,4 +1,4 @@
-{stdenv, fetchurl, db4, groff}:
+{stdenv, fetchurl, db, groff}:
  
 stdenv.mkDerivation {
   name = "man-db-2.5.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "178w1fk23ffh8vabj29cn0yyg5ps7bwy1zrrrcsw8aypbh3sfjy3";
   };
   
-  buildInputs = [db4 groff];
+  buildInputs = [db groff];
   
   configureFlags = ''
     --disable-setuid

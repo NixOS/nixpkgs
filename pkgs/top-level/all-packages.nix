@@ -1795,9 +1795,7 @@ let
     inherit ppp;
   };
 
-  rpm = callPackage ../tools/package-management/rpm {
-    db4 = db45;
-  };
+  rpm = callPackage ../tools/package-management/rpm { };
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
 
@@ -6378,7 +6376,7 @@ let
 
   squids = recurseIntoAttrs( import ../servers/squid/squids.nix {
     inherit fetchurl stdenv perl lib composableDerivation
-      openldap pam db4 cyrus_sasl kerberos libcap expat libxml2 libtool
+      openldap pam db cyrus_sasl kerberos libcap expat libxml2 libtool
       openssl;
   });
   squid = squids.squid31; # has ipv6 support
@@ -6956,9 +6954,7 @@ let
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
-  pam_ccreds = callPackage ../os-specific/linux/pam_ccreds {
-    db = db4;
-  };
+  pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
 
   pam_console = callPackage ../os-specific/linux/pam_console {
     libtool = libtool_1_5;

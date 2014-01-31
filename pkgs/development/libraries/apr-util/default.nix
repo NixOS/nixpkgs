@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, apr, expat, gnused
 , sslSupport ? true, openssl
-, bdbSupport ? false, db4
+, bdbSupport ? false, db
 , ldapSupport ? true, openldap
 }:
 
 assert sslSupport -> openssl != null;
-assert bdbSupport -> db4 != null;
+assert bdbSupport -> db != null;
 assert ldapSupport -> openldap != null;
 
 let
@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
     --with-apr=${apr} --with-expat=${expat}
     --with-crypto
     ${stdenv.lib.optionalString sslSupport "--with-openssl=${openssl}"}
-    ${stdenv.lib.optionalString bdbSupport "--with-berkeley-db=${db4}"}
+    ${stdenv.lib.optionalString bdbSupport "--with-berkeley-db=${db}"}
     ${stdenv.lib.optionalString ldapSupport "--with-ldap"}
   '';
 
   propagatedBuildInputs = [ makeWrapper apr expat ]
     ++ optional sslSupport openssl
-    ++ optional bdbSupport db4
+    ++ optional bdbSupport db
     ++ optional ldapSupport openldap;
 
   # Give apr1 access to sed for runtime invocations

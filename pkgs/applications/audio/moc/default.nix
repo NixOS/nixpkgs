@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pkgconfig, alsaLib, flac, libmad, speex, ffmpeg_0_10, libvorbis, mpc, libsndfile, jackaudio, db4, libmodplug, timidity, libid3tag, libtool }:
+{ stdenv, fetchurl, ncurses, pkgconfig, alsaLib, flac, libmad, speex, ffmpeg_0_10, libvorbis, mpc, libsndfile, jackaudio, db, libmodplug, timidity, libid3tag, libtool }:
 
 stdenv.mkDerivation rec {
   name = "moc-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = "./configure prefix=$out";
 
-  buildInputs = [ ncurses pkgconfig alsaLib flac libmad speex ffmpeg_0_10 libvorbis mpc libsndfile jackaudio db4 libmodplug timidity libid3tag libtool ];
+  buildInputs = [ ncurses pkgconfig alsaLib flac libmad speex ffmpeg_0_10 libvorbis mpc libsndfile jackaudio db libmodplug timidity libid3tag libtool ];
 
   meta = {
     description = "MOC (music on console) is a console audio player for LINUX/UNIX designed to be powerful and easy to use.";

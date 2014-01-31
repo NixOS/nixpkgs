@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, zlib, bzip2, libgcrypt, gdbm, gperf, tdb, gnutls, db4
+{ fetchurl, stdenv, zlib, bzip2, libgcrypt, gdbm, gperf, tdb, gnutls, db
 , libuuid, lzo, pkgconfig, guile }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ zlib bzip2 lzo
       libgcrypt
-      gdbm db4 tdb
+      gdbm db tdb
       gnutls libuuid
       guile
     ];

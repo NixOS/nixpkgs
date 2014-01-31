@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, openssl, db4, boost, zlib, miniupnpc, qt4 }:
+{ fetchurl, stdenv, openssl, db, boost, zlib, miniupnpc, qt4 }:
 
 stdenv.mkDerivation rec {
   version = "0.8.6";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "036xx06gyrfh65rpdapff3viz1f38vzkj7lnhil6fc0s7pjmsjbk";
   };
 
-  buildInputs = [ openssl db4 boost zlib miniupnpc qt4 ];
+  buildInputs = [ openssl db boost zlib miniupnpc qt4 ];
 
   configurePhase = ''
     cd src
