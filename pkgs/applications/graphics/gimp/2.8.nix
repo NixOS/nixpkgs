@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, babl, gegl, gtk, glib, gdk_pixbuf
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, libtiff
 , webkit, libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, jasper
-, python, pygtk, libart_lgpl, libexif, gettext, xlibs }:
+, python, pygtk, libart_lgpl, libexif, gettext, xlibs, wrapPython }:
 
 stdenv.mkDerivation rec {
   name = "gimp-2.8.10";
@@ -16,7 +16,12 @@ stdenv.mkDerivation rec {
       freetype fontconfig lcms libpng libjpeg poppler libtiff webkit
       libmng librsvg libwmf zlib libzip ghostscript aalib jasper
       python pygtk libart_lgpl libexif gettext xlibs.libXpm
+      wrapPython
     ];
+
+  pythonPath = [ pygtk ];
+
+  postInstall = ''wrapPythonPrograms'';
 
   passthru = { inherit gtk; }; # probably its a good idea to use the same gtk in plugins ?
 
