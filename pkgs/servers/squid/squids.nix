@@ -35,7 +35,7 @@ rec {
       url = "http://www.squid-cache.org/Versions/v3/3.2/${name}.tar.bz2";
       sha256 = "0dafqv00dr3nyrm9k47d6r7gv2r3f9hjd1ykl3kkvjca11r4n54j";
     };
-    buildInputs = [openldap pam db4 cyrus_sasl libcap expat libxml2
+    buildInputs = [openldap pam db cyrus_sasl libcap expat libxml2
       libtool openssl];
   };
 

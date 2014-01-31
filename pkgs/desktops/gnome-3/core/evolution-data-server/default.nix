@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, gnome3, python, intltool, libsoup, libxml2, libsecret
-, p11_kit, db4, nspr, nss, libical, gperf }:
+, p11_kit, db, nspr, nss, libical, gperf }:
 
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with gnome3;
     [ pkgconfig glib python intltool libsoup libxml2 gtk gnome_online_accounts libsecret
-      gcr p11_kit db4 nspr nss libgweather libical libgdata gperf ];
+      gcr p11_kit db nspr nss libgweather libical libgdata gperf ];
 
   # uoa irrelevant for now
   configureFlags = "--disable-uoa --with-nspr-includes=${nspr}/include/nspr --with-nss-includes=${nss}/include/nss";

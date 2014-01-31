@@ -1,4 +1,4 @@
-{buildPerlPackage, fetchurl, db4}:
+{buildPerlPackage, fetchurl, db}:
 
 buildPerlPackage rec {
   name = "BerkeleyDB-0.54";
@@ -9,7 +9,7 @@ buildPerlPackage rec {
   };
 
   preConfigure = ''
-    echo "LIB = ${db4}/lib" > config.in
-    echo "INCLUDE = ${db4}/include" >> config.in
+    echo "LIB = ${db}/lib" > config.in
+    echo "INCLUDE = ${db}/include" >> config.in
   '';
 }
