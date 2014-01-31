@@ -9770,6 +9770,8 @@ let
 
   ### SCIENCE/MATH
 
+  arpack = callPackage ../development/libraries/science/math/arpack { };
+
   atlas = callPackage ../development/libraries/science/math/atlas {
     # The build process measures CPU capabilities and optimizes the
     # library to perform best on that particular machine. That is a
