@@ -8384,6 +8384,7 @@ let
     avahi = avahi.override {
       withLibdnssdCompat = true;
     };
+    iceSupport = config.murmur.iceSupport or true;
   };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
