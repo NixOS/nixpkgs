@@ -4,7 +4,7 @@ let
   result = withPak (mkPak pak128);
 
   ver_1 = "112";
-  ver_2 = "1";
+  ver_2 = "3";
   ver_h2 = "${ver_1}-${ver_2}";
 
   # "pakset" of objects, images, text, music, etc.
@@ -23,7 +23,7 @@ let
   };
   pak64 = fetchurl {
     url = "mirror://sourceforge/simutrans/pak64/${ver_h2}/simupak64-${ver_h2}.zip";
-    sha256 = "1197rl2534wx9wdafarlr42qjw6pyghz4bynq2g68pi10h8csypw";
+    sha256 = "1ng963n2gvnwmsj73iy3gp9i5iqf5g6qk1gh1jnfm86gnjrsrq4m";
   };
   pak128 = fetchurl {
     url = "mirror://sourceforge/simutrans/pak128/pak128%20for%20${ver_1}/pak128-2.2.0--${ver_1}.0.zip";
@@ -44,7 +44,7 @@ let
 
     src = fetchurl {
       url = "mirror://sourceforge/simutrans/simutrans/${ver_h2}/simutrans-src-${ver_h2}.zip";
-      sha256 = "1xrxpd5m2dc9bk8w21smfj28r41ji1qaihjwkwrifgz6rhg19l5c";
+      sha256 = "0jdq2krfj3qsh8dks9ixsdvpyjq9yi80p58b0xjpsn35mkbxxaca";
     };
     sourceRoot = ".";
 
