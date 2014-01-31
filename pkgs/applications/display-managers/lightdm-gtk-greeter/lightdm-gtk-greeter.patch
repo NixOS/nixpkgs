@@ -1,13 +1,13 @@
-=== modified file 'src/lightdm-gtk-greeter.c'
---- src/lightdm-gtk-greeter.c	2013-02-09 23:20:39 +0000
-+++ src/lightdm-gtk-greeter.c	2013-03-29 12:21:34 +0000
-@@ -1273,7 +1273,7 @@
-     gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (session_combo), renderer, TRUE);
-     gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (session_combo), renderer, "text", 0);
-     model = gtk_combo_box_get_model (session_combo);
+diff --git a/src/lightdm-gtk-greeter.c b/src/lightdm-gtk-greeter.c
+index cc5f9e1..d615dc1 100644
+--- a/src/lightdm-gtk-greeter.c
++++ b/src/lightdm-gtk-greeter.c
+@@ -1716,7 +1716,7 @@ main (int argc, char **argv)
+     gtk_container_add (GTK_CONTAINER (menuitem), image);
+     gtk_widget_show (GTK_WIDGET (menuitem));
+     
 -    items = lightdm_get_sessions ();
 +    items = lightdm_get_sessions (greeter);
+     GSList *sessions = NULL;
      for (item = items; item; item = item->next)
      {
-         LightDMSession *session = item->data;
-
