@@ -5,6 +5,7 @@ with pkgs.lib;
 let
 
   nssModulesPath = config.system.nssModules.path;
+  cfg = config.services.nscd;
 
   inherit (pkgs.lib) singleton;
 
@@ -24,6 +25,12 @@ in
         description = "Whether to enable the Name Service Cache Daemon.";
       };
 
+      config = mkOption {
+        type = types.lines;
+        default = builtins.readFile ./nscd.conf;
+        description = "Configuration to use for Name Service Cache Daemon.";
+      };
+
     };
 
   };
@@ -31,7 +38,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.nscd.enable {
+  config = mkIf cfg.enable {
 
     users.extraUsers = singleton
       { name = "nscd";
@@ -56,7 +63,7 @@ in
         restartTriggers = [ config.environment.etc.hosts.source ];
 
         serviceConfig =
-          { ExecStart = "@${pkgs.glibc}/sbin/nscd nscd -f ${./nscd.conf}";
+          { ExecStart = "@${pkgs.glibc}/sbin/nscd nscd -f ${pkgs.writeText "nscd.conf" cfg.config}";
             Type = "forking";
             PIDFile = "/run/nscd/nscd.pid";
             Restart = "always";
