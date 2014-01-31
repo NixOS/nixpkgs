@@ -3969,6 +3969,10 @@ let
 
   db48 = callPackage ../development/libraries/db4/db4-4.8.nix { };
 
+  db5 = db53;
+
+  db53 = callPackage ../development/libraries/db/db-5.3.nix { };
+
   dbus = callPackage ../development/libraries/dbus { };
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
@@ -8275,6 +8279,8 @@ let
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
+  mcpp = callPackage ../development/compilers/mcpp { };
+
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
 
   meld = callPackage ../applications/version-management/meld {
@@ -8403,12 +8409,14 @@ let
       withLibdnssdCompat = true;
     };
     jackSupport = config.mumble.jackSupport or false;
+    speechdSupport = config.mumble.speechdSupport or false;
   };
 
   murmur = callPackage ../applications/networking/mumble/murmur.nix {
     avahi = avahi.override {
       withLibdnssdCompat = true;
     };
+    iceSupport = config.murmur.iceSupport or true;
   };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
@@ -9166,6 +9174,8 @@ let
       import ../applications/misc/zathura { inherit callPackage pkgs fetchurl; });
 
   zathura = zathuraCollection.zathuraWrapper;
+
+  zeroc_ice = callPackage ../development/libraries/zeroc-ice { };
 
   girara = callPackage ../applications/misc/girara {
     gtk = gtk3;
