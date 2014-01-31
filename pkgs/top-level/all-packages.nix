@@ -8371,6 +8371,7 @@ let
       withLibdnssdCompat = true;
     };
     jackSupport = config.mumble.jackSupport or false;
+    speechdSupport = config.mumble.speechdSupport or false;
   };
 
   murmur = callPackage ../applications/networking/mumble/murmur.nix {
