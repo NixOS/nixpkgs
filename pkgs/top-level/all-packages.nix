@@ -8247,6 +8247,8 @@ let
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
+  mcpp = callPackage ../development/compilers/mcpp { };
+
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
 
   meld = callPackage ../applications/version-management/meld {
