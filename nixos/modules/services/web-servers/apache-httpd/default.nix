@@ -628,8 +628,8 @@ in
           ++ concatMap (svc: svc.extraServerPath) allSubservices;
 
         environment =
-          (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices))
-          // optionalAttrs enablePHP { PHPRC = phpIni; };
+          optionalAttrs enablePHP { PHPRC = phpIni; }
+          // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
 
         preStart =
           ''
