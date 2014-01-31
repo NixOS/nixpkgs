@@ -2,19 +2,19 @@
 , intltool, x11, libxklavier, libgcrypt, dbus/*for tests*/ }:
 
 let
-  ver_branch = "1.8";
-  version = "1.7.0";
+  ver_branch = "1.9";
+  version = "1.9.6";
 in
 stdenv.mkDerivation rec {
   name = "lightdm-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.xz";
-    sha256 = "0nwwjgc9xvwili6714ag88wsrf0lr5hv1i6z9f0xvin4ym18cbs5";
+    sha256 = "12ix45xpcvwb4158bmvxgxk0h26wxik9k75jpaflay46s1bd8sxf";
   };
 
   patches = [ ./lightdm.patch ];
-  patchFlags = "-p0";
+  patchFlags = "-p1";
 
   buildInputs = [
     pkgconfig pam libxcb glib libXdmcp itstool libxml2 intltool libxklavier libgcrypt
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://launchpad.net/lightdm;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.ocharles ];
   };
 }
