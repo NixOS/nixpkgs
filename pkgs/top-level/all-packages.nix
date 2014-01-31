@@ -9136,6 +9136,8 @@ let
 
   zathura = zathuraCollection.zathuraWrapper;
 
+  zeroc_ice = callPackage ../development/libraries/zeroc-ice { };
+
   girara = callPackage ../applications/misc/girara {
     gtk = gtk3;
   };
