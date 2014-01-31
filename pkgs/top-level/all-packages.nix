@@ -2688,6 +2688,7 @@ let
   hiphopvm = callPackage ../development/interpreters/hiphopvm {
     libevent = libevent14;
     boost = boost149;
+    stdenv = overrideGCC stdenv gcc48;
   };
 
   falcon = builderDefsPackage (import ../development/interpreters/falcon) {
@@ -4223,6 +4224,8 @@ let
       ;
 
   glm = callPackage ../development/libraries/glm { };
+
+  glog = callPackage ../development/libraries/glog { };
 
   glpk = callPackage ../development/libraries/glpk { };
 
