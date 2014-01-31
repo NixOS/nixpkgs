@@ -2903,17 +2903,25 @@ let
 
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
+    ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
+
     ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
     ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
 
     ocaml_http = callPackage ../development/ocaml-modules/http { };
 
+    ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
+
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
+
+    ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
     ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
 
     ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
+
+    ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
 
     ocaml_pcre = callPackage ../development/ocaml-modules/pcre {
       inherit pcre;
