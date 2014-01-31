@@ -3997,19 +3997,18 @@ let
 
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl { };
 
+  # Make bdb5 the default as it is the last release under the custom
+  # bsd-like license
+  db = db5;
   db4 = db48;
-
-  db44 = callPackage ../development/libraries/db4/db4-4.4.nix { };
-
-  db45 = callPackage ../development/libraries/db4/db4-4.5.nix { };
-
-  db47 = callPackage ../development/libraries/db4/db4-4.7.nix { };
-
-  db48 = callPackage ../development/libraries/db4/db4-4.8.nix { };
-
+  db44 = callPackage ../development/libraries/db/db-4.4.nix { };
+  db45 = callPackage ../development/libraries/db/db-4.5.nix { };
+  db47 = callPackage ../development/libraries/db/db-4.7.nix { };
+  db48 = callPackage ../development/libraries/db/db-4.8.nix { };
   db5 = db53;
-
   db53 = callPackage ../development/libraries/db/db-5.3.nix { };
+  db6 = db60;
+  db60 = callPackage ../development/libraries/db/db-6.0.nix { };
 
   dbus = callPackage ../development/libraries/dbus { };
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
