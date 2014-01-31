@@ -6816,7 +6816,7 @@ let
   linuxPackages = linuxPackages_3_10;
 
   # A function to build a manually-configured kernel
-  linuxManualConfig = builtins.trace "linuxManualConfig is now called buildLinux" pkgs.buildLinux;
+  linuxManualConfig = pkgs.buildLinux;
   buildLinux = import ../os-specific/linux/kernel/manual-config.nix {
     inherit (pkgs) stdenv runCommand nettools bc perl kmod writeTextFile ubootChooser;
   };
