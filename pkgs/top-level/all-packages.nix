@@ -3940,6 +3940,10 @@ let
 
   db48 = callPackage ../development/libraries/db4/db4-4.8.nix { };
 
+  db5 = db53;
+
+  db53 = callPackage ../development/libraries/db/db-5.3.nix { };
+
   dbus = callPackage ../development/libraries/dbus { };
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
