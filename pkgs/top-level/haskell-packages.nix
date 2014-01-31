@@ -1445,6 +1445,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hxtUnicode = callPackage ../development/libraries/haskell/hxt-unicode {};
 
+  hybridVectors = callPackage ../development/libraries/haskell/hybrid-vectors {};
+
   iCalendar = callPackage ../development/libraries/haskell/iCalendar {};
 
   idna = callPackage ../development/libraries/haskell/idna {};
@@ -2108,6 +2110,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   socks = callPackage ../development/libraries/haskell/socks {};
 
+  sparse = callPackage ../development/libraries/haskell/sparse {
+    testFrameworkQuickcheck2 = self.testFrameworkQuickcheck2.override {
+      QuickCheck = self.QuickCheck_2_5_1_1;
+    };
+  };
+
   srcloc = callPackage ../development/libraries/haskell/srcloc {};
 
   stateref = callPackage ../development/libraries/haskell/stateref {};
@@ -2426,6 +2434,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   vector = self.vector_0_10_9_1;
 
   vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
+  vectorAlgorithms_0_5_4_2 = callPackage ../development/libraries/haskell/vector-algorithms/0.5.4.2.nix {};
 
   vectorBinaryInstances = callPackage ../development/libraries/haskell/vector-binary-instances {};
 
