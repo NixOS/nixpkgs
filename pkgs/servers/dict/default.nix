@@ -1,22 +1,19 @@
-{ stdenv, fetchurl, which, bison, flex, libmaa, zlib, libtool }:
+{ stdenv, fetchurl, which, bison, flex }:
 
-stdenv.mkDerivation rec {
-  version = "1.12.1";
-  name = "dictd-${version}";
+stdenv.mkDerivation {
+  name = "dictd-1.9.15";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dict/dictd-${version}.tar.gz";
-    sha256 = "0min6v60b6z5mrymyjfwzx8nv6rdm8pd8phlwl6v2jl5vkngcdx2";
+    url = mirror://sourceforge/dict/dictd-1.9.15.tar.gz;
+    sha256 = "0p41yf72l0igmshz6vxy3hm51z25600vrnb9j2jpgws4c03fqnac";
   };
 
-  buildInputs = [ flex bison which libmaa zlib libtool ];
-
-  patchPhase = "patch -p0 < ${./buildfix.diff}";
+  buildInputs = [ flex bison which ];
+  
   configureFlags = "--datadir=/var/run/current-system/share/dictd";
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Dict protocol server and client";
-    maintainers = maintainers.mornfall;
-    platforms = platforms.linux;
+    maintainers = with stdenv.lib.maintainers; mornfall;
   };
 }

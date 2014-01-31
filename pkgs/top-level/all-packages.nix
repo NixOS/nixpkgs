@@ -6107,9 +6107,7 @@ let
 
   dico = callPackage ../servers/dico { };
 
-  dict = callPackage ../servers/dict {
-      libmaa = callPackage ../servers/dict/libmaa.nix {};
-  };
+  dict = callPackage ../servers/dict { };
 
   dictdDBs = recurseIntoAttrs (import ../servers/dict/dictd-db.nix {
     inherit builderDefs;
