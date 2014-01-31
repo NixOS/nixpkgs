@@ -899,6 +899,8 @@ let
 
   fakeroot = callPackage ../tools/system/fakeroot { };
 
+  fakechroot = callPackage ../tools/system/fakechroot { };
+
   fcitx = callPackage ../tools/inputmethods/fcitx { };
 
   fcron = callPackage ../tools/system/fcron { };
