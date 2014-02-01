@@ -1,12 +1,13 @@
 { stdenv, fetchurl, glib, libxml2, pkgconfig
-, gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking
+, gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
 , libintlOrEmpty
 , intltool, python }:
-
-stdenv.mkDerivation rec {
-  name = "libsoup-${version}";
+let
   majorVersion = "2.45";
   version = "${majorVersion}.3";
+in
+stdenv.mkDerivation {
+  name = "libsoup-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libsoup/${majorVersion}/libsoup-${version}.tar.xz";
@@ -15,11 +16,11 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     patchShebangs libsoup/
-    '';
+  '';
 
   buildInputs = libintlOrEmpty ++ [ intltool python ];
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ glib libxml2 ]
+  propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
     ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring sqlite ];
   passthru.propagatedUserEnvPackages = [ glib_networking ];
 
