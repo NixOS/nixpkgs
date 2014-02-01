@@ -1418,6 +1418,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  dpkt = buildPythonPackage rec {
+    name = "dpkt-1.8";
+
+    src = fetchurl {
+      url = "https://dpkt.googlecode.com/files/${name}.tar.gz";
+      sha256 = "01q5prynymaqyfsfi2296xncicdpid2hs3yyasim8iigvkwy4vf5";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Fast, simple packet creation / parsing, with definitions for the basic TCP/IP protocols";
+      homepage = https://code.google.com/p/dpkt/;
+      license = licenses.bsd3;
+      maintainers = [ maintainers.bjornfor ];
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+
   evdev = buildPythonPackage rec {
     version = "0.3.2";
     name = "evdev-${version}";
