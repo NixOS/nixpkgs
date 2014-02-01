@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python, pkgconfig }:
 
 stdenv.mkDerivation {
-  name = "cython-0.16";
+  name = "cython-0.20";
 
   src = fetchurl {
-    url = http://www.cython.org/release/Cython-0.16.tar.gz;
-    sha256 = "1yz6jwv25xx5mbr2nm4l7mi65gvpm63dzi3vrw73p51wbpy525lp";
+    url = http://www.cython.org/release/Cython-0.20.tar.gz;
+    sha256 = "1a3m7zhw8mdyr95fwx7n1scrz82drr433i99dzm1n9dxi0cx2qah";
   };
 
   buildPhase = "python setup.py build --build-base $out";
