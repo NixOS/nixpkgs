@@ -3490,6 +3490,8 @@ let
 
   csslint = callPackage ../development/web/csslint { };
 
+  xmlindent = callPackage ../development/web/xmlindent {};
+
   libcxx = callPackage ../development/libraries/libc++ { stdenv = pkgs.clangStdenv; };
   libcxxabi = callPackage ../development/libraries/libc++abi { stdenv = pkgs.clangStdenv; };
 
