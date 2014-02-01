@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [ python pkgconfig ];
 
   meta = {
-    description = "An interpreter to help writing C extensions for Python";
+    description = "An interpreter to help writing C extensions for Python 2";
     platforms = stdenv.lib.platforms.all;
   };
 }
