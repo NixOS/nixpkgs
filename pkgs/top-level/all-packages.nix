@@ -532,6 +532,8 @@ let
 
   bc = callPackage ../tools/misc/bc { };
 
+  bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
+
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
   bfr = callPackage ../tools/misc/bfr { };
