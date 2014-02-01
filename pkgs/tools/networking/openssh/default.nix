@@ -73,5 +73,6 @@ stdenv.mkDerivation rec {
     license = "bsd";
     platforms = platforms.unix;
     maintainers = with maintainers; [ eelco ];
+    broken = hpnSupport; # cf. https://github.com/NixOS/nixpkgs/pull/1640
   };
 }
