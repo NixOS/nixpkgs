@@ -6,7 +6,7 @@ rec {
   libcanberra = pkgs.libcanberra_gtk3; # just to be sure
   inherit (pkgs.gnome2) gnome_common ORBit2;
   orbit = ORBit2;
-
+  inherit (pkgs) libsoup;
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
