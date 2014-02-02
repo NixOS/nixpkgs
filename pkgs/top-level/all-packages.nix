@@ -4042,7 +4042,11 @@ let
 
   farsight2 = callPackage ../development/libraries/farsight2 { };
 
-  farstream = callPackage ../development/libraries/farstream { };
+  farstream = callPackage ../development/libraries/farstream { 
+    inherit (gst_all_1)
+      gstreamer gst-plugins-base gst-python gst-plugins-good gst-plugins-bad
+      gst-libav;
+  };
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
