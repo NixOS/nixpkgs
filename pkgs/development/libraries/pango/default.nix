@@ -1,23 +1,27 @@
-{ stdenv, fetchurl, pkgconfig, gettext, x11, glib, cairo, libpng, harfbuzz, fontconfig
-, libintlOrEmpty, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, x11, glib, cairo, libpng, harfbuzz
+, fontconfig, freetype, libintlOrEmpty, gobjectIntrospection
+}:
 
+let
+  ver_maj = "1.36";
+  ver_min = "1";
+in
 stdenv.mkDerivation rec {
-  name = "pango-1.32.5"; #.6 and higher need a not-yet-stable fontconfig (!)
+  name = "pango-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pango/1.32/${name}.tar.xz";
-    sha256 = "08aqis6j8nd1lb4f2h4h9d9kjvp54iwf8zvqzss0qn4v7nfcjyvx";
+    url = "mirror://gnome/sources/pango/${ver_maj}/${name}.tar.xz";
+    sha256 = "1y2r1v4m8g4afggjd1siz0ri175p64myz9d2ks58grlrvhfbbr22";
   };
 
-  buildInputs = [ gobjectIntrospection ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ gettext fontconfig ];
-
-
   nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gobjectIntrospection ];
 
-  propagatedBuildInputs = [ x11 glib cairo libpng harfbuzz ] ++ libintlOrEmpty;
+  propagatedBuildInputs = [ x11 glib cairo libpng fontconfig freetype harfbuzz ] ++ libintlOrEmpty;
 
   enableParallelBuilding = true;
+
+  doCheck = true;
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
