@@ -6,13 +6,13 @@ rec {
   };
 
   texmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2013.20131219.orig.tar.xz;
-    sha256 = "1kcfw6n9rv3wznyqkvkad60p1zljbn1cw2jhajzcrn8m39y0ad3x";
+    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2013.20140123.orig.tar.xz;
+    sha256 = "1lwvqryfykz0d9pcjkhq1qh7dlcb6lsvjp7fizl18ji6166159iw";
   };
 
   langTexmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-lang/texlive-lang_2013.20131219.orig.tar.xz;
-    sha256 = "139hb91ks62q56dnnrzhcxmm2wpz0b40ka7smaqgw86r002albb0";
+    url = mirror://debian/pool/main/t/texlive-lang/texlive-lang_2013.20140123.orig.tar.xz;
+    sha256 = "1smzkg31msn9ci7fc69xq5klhxab00z8bcxmz5daqzcal8ak3d2d";
   };
 
   passthru = { inherit texmfSrc langTexmfSrc; };
