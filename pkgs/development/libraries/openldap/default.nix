@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.openldap.org/";
     description = "An open source implementation of the Lightweight Directory Access Protocol";
+    maintainers = stdenv.lib.maintainers.mornfall;
   };
 }

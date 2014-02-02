@@ -5,6 +5,7 @@
 
 buildPythonPackage rec {
   name = "xpra-0.9.5";
+  namePrefix = "";
 
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.bz2";

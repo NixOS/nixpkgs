@@ -7,16 +7,16 @@
 , network, networkConduit, networkInfo, networkMulticast
 , networkProtocolXmpp, openssh, optparseApplicative, perl
 , QuickCheck, random, regexTdfa, rsync, SafeSemaphore, SHA, stm
-, tasty, tastyHunit, tastyQuickcheck, text, time, transformers
-, unixCompat, utf8String, uuid, wai, waiLogger, warp, which
-, xmlConduit, xmlTypes, yesod, yesodCore, yesodDefault, yesodForm
-, yesodStatic
+, tasty, tastyHunit, tastyQuickcheck, tastyRerun, text, time
+, transformers, unixCompat, utf8String, uuid, wai, waiLogger, warp
+, which, xmlConduit, xmlTypes, yesod, yesodCore, yesodDefault
+, yesodForm, yesodStatic
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20140127";
-  sha256 = "0aqqnv0faiva9vf0nb0d8xsd659y8cyrnyy6mfjdqjqdw8wha3yr";
+  version = "5.20140129";
+  sha256 = "0m1n3m16gvd0693i5xq5adki0hd0wdn7p5vqjxkqnc3imx9f11ng";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -27,9 +27,10 @@ cabal.mkDerivation (self: {
     MissingH MonadCatchIOTransformers monadControl mtl network
     networkConduit networkInfo networkMulticast networkProtocolXmpp
     optparseApplicative QuickCheck random regexTdfa SafeSemaphore SHA
-    stm tasty tastyHunit tastyQuickcheck text time transformers
-    unixCompat utf8String uuid wai waiLogger warp xmlConduit xmlTypes
-    yesod yesodCore yesodDefault yesodForm yesodStatic
+    stm tasty tastyHunit tastyQuickcheck tastyRerun text time
+    transformers unixCompat utf8String uuid wai waiLogger warp
+    xmlConduit xmlTypes yesod yesodCore yesodDefault yesodForm
+    yesodStatic
   ];
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
   configureFlags = "-fS3

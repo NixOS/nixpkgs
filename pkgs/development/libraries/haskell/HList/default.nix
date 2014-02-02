@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HList";
-  version = "0.3.0.1";
-  sha256 = "03mp99pb8whh3whyffyj8wbld8lv8i930dyjdpyfwiaj13x05iy4";
+  version = "0.3.1.0";
+  sha256 = "1cq7l7cv62jf47s75ycsgxg75kkrgnnrpb6y22cskc97hkfsnjmk";
   buildDepends = [ mtl ];
   testDepends = [ cmdargs doctest filepath hspec lens mtl syb ];
   buildTools = [ diffutils ];

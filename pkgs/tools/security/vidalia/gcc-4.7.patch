@@ -1,0 +1,12 @@
+diff -ru vidalia-0.3.1_orig/src/vidalia/plugin/PluginEngine.cpp vidalia-0.3.1/src/vidalia/plugin/PluginEngine.cpp
+--- vidalia-0.3.1_orig/src/vidalia/plugin/PluginEngine.cpp	2012-08-08 18:02:01.901732270 +0200
++++ vidalia-0.3.1/src/vidalia/plugin/PluginEngine.cpp	2012-08-08 18:03:26.241677875 +0200
+@@ -20,6 +20,8 @@
+ 
+ #include "Vidalia.h"
+ 
++#include <unistd.h>
++
+ PluginEngine::PluginEngine(QObject *parent)
+   : QScriptEngine(parent)
+ {

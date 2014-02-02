@@ -1,13 +1,14 @@
-{ cabal, certificate, cprngAes, dataDefault, network, socks, tls
-, tlsExtra
+{ cabal, cprngAes, dataDefaultClass, network, socks, tls, x509
+, x509Store, x509System, x509Validation
 }:
 
 cabal.mkDerivation (self: {
   pname = "connection";
-  version = "0.1.3.1";
-  sha256 = "1z9vb20466lg7l8z4abfbsdzpix18hswpqcl7s2gv838s2wvd16w";
+  version = "0.2.0";
+  sha256 = "17fzkgrjavmcxhdjj7agkx16jwpf6ql31nw1ni8gczkbp7azd0kp";
   buildDepends = [
-    certificate cprngAes dataDefault network socks tls tlsExtra
+    cprngAes dataDefaultClass network socks tls x509 x509Store
+    x509System x509Validation
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-connection";

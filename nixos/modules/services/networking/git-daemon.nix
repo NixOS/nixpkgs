@@ -101,7 +101,7 @@ in
       name = "git-daemon";
       startOn = "ip-up";
       exec = "${pkgs.git}/bin/git daemon --reuseaddr "
-        + (optionalString (cfg.basePath != "") "--basepath=${cfg.basePath} ")
+        + (optionalString (cfg.basePath != "") "--base-path=${cfg.basePath} ")
         + (optionalString (cfg.listenAddress != "") "--listen=${cfg.listenAddress} ")
         + "--port=${toString cfg.port} --user=${gitUser} --group=${gitUser} ${cfg.options} "
         + "--verbose " + (optionalString cfg.exportAll "--export-all")  + concatStringsSep " " cfg.repositories;

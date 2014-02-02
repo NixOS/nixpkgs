@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "sourcemap";
-  version = "0.1.2.0";
-  sha256 = "040j2k1cwzlq5pybs6cg7wmf0x5i22zdidv2xvzdvgi5v7gf6kp1";
+  version = "0.1.3.0";
+  sha256 = "1flfsjs2z2zjzqwvmc2vcibvxh19s89ah4s560xr2s5mhdqwbkk5";
   buildDepends = [
     aeson attoparsec text unorderedContainers utf8String
   ];
