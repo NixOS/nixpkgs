@@ -4590,7 +4590,7 @@ let
   libcddb = callPackage ../development/libraries/libcddb { };
 
   libcdio = callPackage ../development/libraries/libcdio { };
-  libcdio082 = callPackage ../development/libraries/libcdio/0.8.2.nix { };
+  libcdio082 = callPackage ../development/libraries/libcdio/0.82.nix { };
 
   libcdr = callPackage ../development/libraries/libcdr { lcms = lcms2; };
 
