@@ -1702,6 +1702,8 @@ let
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
+  pycangjie = callPackage ../development/python-modules/pycangjie { };
+
   pydb = callPackage ../development/tools/pydb { };
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
