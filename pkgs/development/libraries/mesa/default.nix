@@ -23,8 +23,8 @@ else
 */
 
 let
-  version = "10.0.2";
-  # this is the default search path for DRI drivers
+  version = "9.2.5";
+  # this is the default search path for DRI drivers (note: X server no longer introduces an overriding env var)
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
 with { inherit (stdenv.lib) optional optionals optionalString; };
@@ -34,15 +34,15 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "0zkayy6gl0nwgqg11ga95vl4z0hldcz1b77qzzc1agm5vziah0j5";
+    sha256 = "1w3bxclgwl2hwyxk3za7dbdakb8jsya7afck35cz0v8pxppvjsml";
   };
 
   prePatch = "patchShebangs .";
 
   patches = [
     ./static-gallium.patch
-   # TODO: revive ./dricore-gallium.patch when it gets ported (from Ubuntu),
-   #  as it saved ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
+    ./dricore-gallium.patch
+    ./werror-wundef.patch
   ];
 
   # Change the search path for EGL drivers from $drivers/* to driverLink
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
     "--enable-osmesa" # used by wine
 
     "--with-dri-drivers=i965,r200,radeon"
-    ("--with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast,radeonsi")
+    "--with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast,radeonsi"
     "--with-egl-platforms=x11,wayland,drm" "--enable-gbm" "--enable-shared-glapi"
   ]
     ++ optional enableTextureFloats "--enable-texture-float"
@@ -94,7 +94,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
   #doCheck = true; # https://bugs.freedesktop.org/show_bug.cgi?id=67672,
-    #tests for 10.* fail to link due to some RTTI problem
+    # also, 10.* links bad due to some RTTI problem
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM;
   #   also move libOSMesa to $osmesa, as it's relatively big

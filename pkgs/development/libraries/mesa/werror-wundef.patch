@@ -1,0 +1,12 @@
+diff -rupN Mesa-9.2.0-orig/include/GL/gl.h Mesa-9.2.0/include/GL/gl.h
+--- Mesa-9.2.0-orig/include/GL/gl.h	2013-08-14 03:34:42.000000000 +0200
++++ Mesa-9.2.0/include/GL/gl.h	2013-09-24 19:34:58.319140812 +0200
+@@ -2088,7 +2088,7 @@ typedef void (APIENTRYP PFNGLMULTITEXCOO
+ 
+ 
+ 
+-#if GL_ARB_shader_objects
++#if defined(GL_ARB_shaders_objects) && GL_ARB_shader_objects
+ 
+ #ifndef GL_MESA_shader_debug
+ #define GL_MESA_shader_debug 1
