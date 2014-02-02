@@ -1861,6 +1861,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   pipesNetwork = callPackage ../development/libraries/haskell/pipes-network {};
 
+  pipesGroup = callPackage ../development/libraries/haskell/pipes-group {};
+
   pipesParse = callPackage ../development/libraries/haskell/pipes-parse {};
 
   pipesPostgresqlSimple = callPackage ../development/libraries/haskell/pipes-postgresql-simple {};
