@@ -27,8 +27,10 @@ cabal.mkDerivation (self: {
   ];
   doCheck = false;
   patchPhase = ''
-    sed -i -e 's|blaze-markup.*,|blaze-markup,|' -e 's|blaze-html.*,|blaze-html,|' \
-      -e 's|pandoc-citeproc.*,|pandoc-citeproc,|' hakyll.cabal
+    sed -i -e 's|blaze-markup.*,|blaze-markup,|' \
+      -e 's|blaze-html.*,|blaze-html,|' \
+      -e 's|pandoc-citeproc.*,|pandoc-citeproc,|' \
+      -e 's|regex-tdfa.*,|regex-tdfa,|' hakyll.cabal
   '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
