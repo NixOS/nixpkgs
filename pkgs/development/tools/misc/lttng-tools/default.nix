@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, popt, libuuid, liburcu, lttngUst }:
+{ stdenv, fetchurl, popt, libuuid, liburcu, lttngUst, kmod }:
 
 stdenv.mkDerivation rec {
   name = "lttng-tools-2.3.0";
@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ popt libuuid liburcu lttngUst ];
 
-  patches = [ ./lttng-change-modprobe-path-from-sbin-modprobe-to-modprobe.patch ];
+  prePatch = ''
+    sed -e "s|/sbin/modprobe|${kmod}/sbin/modprobe|g" \
+        -i src/bin/lttng-sessiond/modprobe.c
+  '';
 
   meta = with stdenv.lib; {
     description = "Tracing tools (kernel + user space) for Linux";
