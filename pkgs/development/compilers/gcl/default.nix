@@ -28,6 +28,8 @@ rec {
   inherit buildInputs;
   configureFlags = [
     "--enable-ansi"
+    "--enable-dynsysbfd"
+    "--disable-statsysbfd"
   ];
 
   # Upstream bug submitted - http://savannah.gnu.org/bugs/index.php?30371
