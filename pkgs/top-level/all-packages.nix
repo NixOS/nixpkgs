@@ -4590,6 +4590,7 @@ let
   libcddb = callPackage ../development/libraries/libcddb { };
 
   libcdio = callPackage ../development/libraries/libcdio { };
+  libcdio082 = callPackage ../development/libraries/libcdio/0.8.2.nix { };
 
   libcdr = callPackage ../development/libraries/libcdr { lcms = lcms2; };
 
@@ -7339,6 +7340,7 @@ let
 
   abcde = callPackage ../applications/audio/abcde {
     inherit (perlPackages) DigestSHA MusicBrainz MusicBrainzDiscID;
+    libcdio = libcdio082;
   };
 
   abiword = callPackage ../applications/office/abiword {
