@@ -2019,8 +2019,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   regexPosix_0_95_2 = callPackage ../development/libraries/haskell/regex-posix/0.95.2.nix {};
   regexPosix = self.regexPosix_0_95_2;
 
-  regexTDFA = callPackage ../development/libraries/haskell/regex-tdfa {};
-  regexTdfa = self.regexTDFA;
+  regexTdfa = callPackage ../development/libraries/haskell/regex-tdfa {};
 
   regexTdfaText = callPackage ../development/libraries/haskell/regex-tdfa-text {};
 
