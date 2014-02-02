@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  #doCheck = true; # testiter fails to find fontconfig configuration
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
