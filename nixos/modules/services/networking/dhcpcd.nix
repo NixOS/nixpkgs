@@ -106,7 +106,6 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "network.target" ];
-        after = [ "systemd-udev-settle.service" ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
