@@ -196,7 +196,8 @@
   ./services/networking/wicd.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xinetd.nix
-  ./services/printing/cupsd.nix
+  # ./services/printing/cupsd.nix
+  ./services/printing/cupsd-1.6.nix
   ./services/scheduling/atd.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
