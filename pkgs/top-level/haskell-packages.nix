@@ -2353,7 +2353,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     parsers = self.parsers_0_9;
   };
   trifecta_1_2 = callPackage ../development/libraries/haskell/trifecta/1.2.nix {};
-  trifecta = self.trifecta_1_2;
+  trifecta_1_4 = callPackage ../development/libraries/haskell/trifecta/1.4.nix {};
+  trifecta = self.trifecta_1_4;
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
 
