@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-cairo";
-  version = "1.0.1";
-  sha256 = "16h1xz5amn0yd3h9rss0skaq08k1cy91cncxb9ky020s0wcix9fm";
+  version = "1.0.1.1";
+  sha256 = "0mjc24sir0mm1kqhkk26mfbz90kc71hdylral4bjymxs6fpx7crh";
   buildDepends = [
     cairo colour dataDefaultClass diagramsCore diagramsLib filepath
     hashable lens mtl split statestack time
