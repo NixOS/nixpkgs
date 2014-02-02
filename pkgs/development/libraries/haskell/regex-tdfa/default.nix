@@ -2,10 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "regex-tdfa";
-  version = "1.1.8";
-  sha256 = "1m75xh5bwmmgg5f757dc126kv47yfqqnz9fzj1hc80p6jpzs573x";
+  version = "1.2.0";
+  sha256 = "00gl9sx3hzd83lp38jlcj7wvzrda8kww7njwlm1way73m8aar0pw";
   buildDepends = [ mtl parsec regexBase ];
-  patches = [ ./fix-build-with-array5.patch ];
   meta = {
     homepage = "http://hackage.haskell.org/package/regex-tdfa";
     description = "Replaces/Enhances Text.Regex";
