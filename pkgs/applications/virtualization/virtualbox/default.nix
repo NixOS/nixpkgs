@@ -11,7 +11,7 @@ with stdenv.lib;
 
 let
 
-  version = "4.2.18"; # changes ./guest-additions as well
+  version = "4.3.6"; # changes ./guest-additions as well
 
   forEachModule = action: ''
     for mod in \
@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "9dbddf393b029c549249f627d12040c1d257972bc09292969b8819a31ab78d74";
+    sha256 = "09xvrk5g14q71lmprcdaci6fks6yilpq99scxslzn1hb5viy2iy5";
   };
 
   buildInputs =

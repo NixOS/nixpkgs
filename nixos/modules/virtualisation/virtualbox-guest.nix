@@ -38,6 +38,8 @@ optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
 
     boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
 
+    boot.kernelModules = [ "vboxsf" ];
+
     users.extraGroups.vboxsf.gid = config.ids.gids.vboxsf;
 
     systemd.services.virtualbox =
