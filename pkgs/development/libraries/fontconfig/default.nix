@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, freetype, expat }:
 
 stdenv.mkDerivation rec {
-  name = "fontconfig-2.10.2";
+  name = "fontconfig-2.11.0";
 
   src = fetchurl {
     url = "http://fontconfig.org/release/${name}.tar.bz2";
-    sha256 = "0llraqw86jmw4vzv7inskp3xxm2gc64my08iwq5mzncgfdbfza4f";
+    sha256 = "0rx4q7wcrz4lkpgcmqkwkp49v1fm0yxl0f35jn75dj1vy3v0w3nb";
   };
 
   infinality_patch = with freetype.infinality; if useInfinality
