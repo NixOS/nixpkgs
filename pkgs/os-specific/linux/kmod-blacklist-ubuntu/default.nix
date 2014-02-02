@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, gnugrep, findutils }:
 let
   version = "3ubuntu1"; # Saucy
 in
@@ -16,9 +16,14 @@ stdenv.mkDerivation {
       echo "''\n''\n## file: "`basename "$f"`"''\n''\n" >> "$out"/modprobe.conf
       cat "$f" >> "$out"/modprobe.conf
     done
-  '';
 
-  #TODO: iwlwifi.conf has some strange references
+    substituteInPlace "$out"/modprobe.conf \
+      --replace /sbin/lsmod /run/booted-system/sw/bin/lsmod \
+      --replace /sbin/rmmod /run/booted-system/sw/sbin/rmmod \
+      --replace /sbin/modprobe /run/booted-system/sw/sbin/modprobe \
+      --replace " grep " " ${gnugrep}/bin/grep " \
+      --replace " xargs " " ${findutils}/bin/xargs "
+  '';
 
   meta = {
     homepage = http://packages.ubuntu.com/source/saucy/kmod;
