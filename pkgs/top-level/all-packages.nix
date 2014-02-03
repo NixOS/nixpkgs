@@ -7738,6 +7738,7 @@ let
     prologMode = callPackage ../applications/editors/emacs-modes/prolog { };
 
     proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral {
+      texinfo = texinfo4 ;
       texLive = pkgs.texLiveAggregationFun {
         paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
       };
