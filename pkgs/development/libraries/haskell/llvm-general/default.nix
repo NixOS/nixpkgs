@@ -15,7 +15,7 @@ cabal.mkDerivation (self: {
     HUnit llvmGeneralPure mtl QuickCheck testFramework
     testFrameworkHunit testFrameworkQuickcheck2
   ];
-  buildTools = [ llvmConfig ncurses zlib ];
+  buildTools = [ llvmConfig ];
   doCheck = false;
   meta = {
     description = "General purpose LLVM bindings";
