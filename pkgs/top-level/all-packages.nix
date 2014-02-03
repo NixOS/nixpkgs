@@ -4447,7 +4447,7 @@ let
 
   hsqldb = callPackage ../development/libraries/java/hsqldb { };
 
-  http_parser = callPackage ../development/libraries/http-parser { inherit (pythonPackages) gyp; };
+  http-parser = callPackage ../development/libraries/http-parser { inherit (pythonPackages) gyp; };
 
   hunspell = callPackage ../development/libraries/hunspell { };
 
