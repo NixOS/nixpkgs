@@ -435,6 +435,8 @@ let
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
+  arp-scan = callPackage ../tools/misc/arp-scan { };
+
   ascii = callPackage ../tools/text/ascii { };
 
   asymptote = builderDefsPackage ../tools/graphics/asymptote {
