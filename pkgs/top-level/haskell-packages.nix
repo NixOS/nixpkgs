@@ -271,7 +271,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     GLUT         = self.GLUT_2_1_2_1;
     haskellSrc   = self.haskellSrc_1_0_1_5;
     html         = self.html_1_0_1_2;
-    HTTP         = self.HTTP_4000_2_3;
+    HTTP         = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
     HUnit        = self.HUnit_1_2_4_2;
     mtl          = self.mtl_2_1_1;
     network      = self.network_2_3_0_13;
@@ -319,7 +319,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     syb          = self.syb_0_3_3;
     xhtml        = self.xhtml_3000_2_0_4;
     zlib         = self.zlib_0_5_3_1;
-    HTTP         = self.HTTP_4000_1_2;
+    HTTP         = callPackage ../development/libraries/haskell/HTTP/4000.1.2.nix {};
     deepseq      = self.deepseq_1_1_0_2;
     text         = self.text_0_11_1_5;
     transformers = self.transformers_0_2_2_0;
@@ -354,7 +354,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     syb          = self.syb_0_3;
     xhtml        = self.xhtml_3000_2_0_1;
     zlib         = self.zlib_0_5_3_1;
-    HTTP         = self.HTTP_4000_1_1;
+    HTTP         = callPackage ../development/libraries/haskell/HTTP/4000.1.1.nix {}; 
     deepseq      = self.deepseq_1_1_0_2;
     text         = self.text_0_11_0_6;
     transformers = self.transformers_0_2_2_0;
@@ -389,7 +389,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     syb          = self.syb_0_3;
     xhtml        = self.xhtml_3000_2_0_1;
     zlib         = self.zlib_0_5_3_1;
-    HTTP         = self.HTTP_4000_1_1;
+    HTTP         = callPackage ../development/libraries/haskell/HTTP/4000.1.1.nix {}; 
     deepseq      = self.deepseq_1_1_0_2;
     text         = self.text_0_11_0_5;
     transformers = self.transformers_0_2_2_0;
@@ -424,7 +424,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     stm          = self.stm_2_1_2_1;
     xhtml        = self.xhtml_3000_2_0_1;
     zlib         = self.zlib_0_5_2_0;
-    HTTP         = self.HTTP_4000_0_9;
+    HTTP         = callPackage ../development/libraries/haskell/HTTP/4000.0.9.nix {};
     deepseq      = self.deepseq_1_1_0_0;
     cabalInstall = self.cabalInstall_0_8_2;
     alex         = self.alex_2_3_3;
@@ -448,7 +448,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     alex         = self.alex_2_3_2;
     cgi          = self.cgi_3001_1_7_2;
     QuickCheck   = self.QuickCheck_2_1_1_1;
-    HTTP         = self.HTTP_4000_0_9;
+    HTTP         = callPackage ../development/libraries/haskell/HTTP/4000.0.9.nix {}; 
     HUnit        = self.HUnit_1_2_2_1;
     network      = self.network_2_2_1_7;
     parallel     = self.parallel_2_2_0_1;
@@ -488,7 +488,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     stm          = self.stm_2_1_1_2;
     xhtml        = self.xhtml_3000_2_0_1;
     zlib         = self.zlib_0_5_0_0;
-    HTTP         = self.HTTP_4000_0_6;
+    HTTP         = callPackage ../development/libraries/haskell/HTTP/4000.0.6.nix {};
     cabalInstall = self.cabalInstall_0_6_2;
     alex         = self.alex_2_3_1;
     happy        = self.happy_1_18_4;
@@ -1277,13 +1277,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   HTF = callPackage ../development/libraries/haskell/HTF {};
 
-  HTTP_4000_0_6 = callPackage ../development/libraries/haskell/HTTP/4000.0.6.nix {};
-  HTTP_4000_0_9 = callPackage ../development/libraries/haskell/HTTP/4000.0.9.nix {};
-  HTTP_4000_1_1 = callPackage ../development/libraries/haskell/HTTP/4000.1.1.nix {};
-  HTTP_4000_1_2 = callPackage ../development/libraries/haskell/HTTP/4000.1.2.nix {};
-  HTTP_4000_2_1 = callPackage ../development/libraries/haskell/HTTP/4000.2.1.nix {};
-  HTTP_4000_2_2 = callPackage ../development/libraries/haskell/HTTP/4000.2.2.nix {};
-  HTTP_4000_2_3 = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
   HTTP_4000_2_5 = callPackage ../development/libraries/haskell/HTTP/4000.2.5.nix {};
   HTTP_4000_2_8 = callPackage ../development/libraries/haskell/HTTP/4000.2.8.nix {};
   HTTP_4000_2_10 = callPackage ../development/libraries/haskell/HTTP/4000.2.10.nix {};

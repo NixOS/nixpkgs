@@ -153,7 +153,7 @@
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override {
         Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3;
         mtl = self.mtl_2_1_2;
-        HTTP = self.HTTP_4000_1_1.override { mtl = self.mtl_2_1_2; };
+        HTTP = (self.haskellPlatformArgs_2010_2_0_0 self).HTTP.override { mtl = self.mtl_2_1_2; };
       };
       quickcheckIo = self.quickcheckIo.override {
         HUnit = self.HUnit_1_2_5_2;
@@ -181,7 +181,7 @@
         Cabal = self.Cabal_1_16_0_3;
         zlib = self.zlib_0_5_3_3;
         mtl = self.mtl_2_1_2;
-        HTTP = self.HTTP_4000_1_1.override { mtl = self.mtl_2_1_2; };
+        HTTP = (self.haskellPlatformArgs_2010_1_0_0 self).HTTP.override { mtl = self.mtl_2_1_2; };
       };
       quickcheckIo = self.quickcheckIo.override {
         HUnit = self.HUnit_1_2_5_2;
@@ -210,7 +210,7 @@
         Cabal = self.Cabal_1_16_0_3;
         zlib = self.zlib_0_5_3_3;
         mtl = self.mtl_2_1_2;
-        HTTP = self.HTTP_4000_1_1.override { mtl = self.mtl_2_1_2; };
+        HTTP = (self.haskellPlatformArgs_2009_2_0_2 self).HTTP.override { mtl = self.mtl_2_1_2; };
       };
       haskeline = self.haskeline_0_7_1_1;
       terminfo = self.terminfo_0_3_2_6;
