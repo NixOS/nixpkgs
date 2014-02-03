@@ -1566,10 +1566,18 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
 
+  # Needed for idris for now
+  llvmGeneral_3_3 = callPackage ../development/libraries/haskell/llvm-general/3.3.nix {
+    llvmConfig = pkgs.llvm_33;
+    llvmGeneralPure = self.llvmGeneralPure_3_3;
+  };
+
   llvmGeneral = callPackage ../development/libraries/haskell/llvm-general {
     llvmConfig = pkgs.llvm;
     inherit (pkgs) zlib ncurses;
   };
+
+  llvmGeneralPure_3_3 = callPackage ../development/libraries/haskell/llvm-general-pure/3.3.nix { };
 
   llvmGeneralPure = callPackage ../development/libraries/haskell/llvm-general-pure {};
 
@@ -2713,6 +2721,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   idris_plain = callPackage ../development/compilers/idris {
     parsers = self.parsers_0_9;
     trifecta = self.trifecta_1_1;
+    llvmGeneral = self.llvmGeneral_3_3;
+    llvmGeneralPure = self.llvmGeneralPure_3_3;
   };
 
   idris = callPackage ../development/compilers/idris/wrapper.nix {};
