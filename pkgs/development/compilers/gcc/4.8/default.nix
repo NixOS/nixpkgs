@@ -63,7 +63,6 @@ let version = "4.8.2";
     enableParallelBuilding = !profiledCompiler;
 
     patches = []
-      ++ optional stdenv.isArm ./arm-eabi.patch
       ++ optional enableParallelBuilding ./parallel-bconfig.patch
       ++ optional (cross != null) ./libstdc++-target.patch
       # ++ optional noSysDirs ./no-sys-dirs.patch
