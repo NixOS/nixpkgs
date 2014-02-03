@@ -3206,7 +3206,9 @@ let
 
   polyml = callPackage ../development/compilers/polyml { };
 
-  pure = callPackage ../development/interpreters/pure {};
+  pure = callPackage ../development/interpreters/pure {
+    llvm = llvm_33 ;
+  };
 
   python3 = hiPrio (callPackage ../development/interpreters/python/3.3 { });
   python33 = callPackage ../development/interpreters/python/3.3 { };
