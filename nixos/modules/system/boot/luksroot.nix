@@ -39,27 +39,11 @@ let
     ${optionalString (luks.yubikeySupport && (yubikey != null)) ''
 
     rbtohex() {
-        od -An -vtx1 | tr -d ' \n'
+        ( od -An -vtx1 | tr -d ' \n' )
     }
 
     hextorb() {
-        tr '[:lower:]' '[:upper:]' | sed -e 's|\([0-9A-F]\{2\}\)|\\\\\\x\1|gI' | xargs printf
-    }
-
-    take() {
-        local c="$1"
-        shift
-        head -c $c "$@"
-    }
-
-    drop() {
-        local c="$1"
-        shift
-        if [ -e "$1" ]; then
-            cat "$1" | ( dd of=/dev/null bs="$c" count=1 2>/dev/null ; dd 2>/dev/null )
-        else
-            ( dd of=/dev/null bs="$c" count=1 2>/dev/null ; dd 2>/dev/null )
-        fi
+        ( tr '[:lower:]' '[:upper:]' | sed -e 's/\([0-9A-F]\{2\}\)/\\\\\\x\1/gI'| xargs printf )
     }
 
     open_yubikey() {
@@ -70,28 +54,13 @@ let
         local uuid_r
         local k_user
         local challenge
-        local k_blob
-        local aes_blob_decrypted
-        local checksum_correct
-        local checksum
-        local uuid_luks
-        local user_record
+        local opened
 
-        uuid_luks="$(cryptsetup luksUUID ${device} | take 36 | tr -d '-')"
+        sleep 1
 
-        ${optionalString (!yubikey.multiUser) ''
-        user_record="$(cat ${yubikey.storage.mountPoint}${yubikey.storage.path})"
-        uuid_r="$(echo -n $user_record | take 32)"
-        ''}
+        uuid_r="$(cat ${yubikey.storage.mountPoint}${yubikey.storage.path})"
 
         for try in $(seq 3); do
-
-            ${optionalString yubikey.multiUser ''
-            local user_id
-            echo -n "Enter user id: "
-            read -s user_id
-            echo
-            ''}
 
             ${optionalString yubikey.twoFactor ''
             echo -n "Enter two-factor passphrase: "
@@ -99,53 +68,26 @@ let
             echo
             ''}
 
-            ${optionalString yubikey.multiUser ''
-            local user_id_hash
-            user_id_hash="$(echo -n $user_id | openssl-wrap dgst -binary -sha512 | rbtohex)"
+            challenge="$(echo -n $k_user$uuid_r | openssl-wrap dgst -binary -sha512 | rbtohex)"
 
-            user_record="$(sed -n -e /^$user_id_hash[^$]*$/p ${yubikey.storage.mountPoint}${yubikey.storage.path} | tr -d '\n')"
+            k_luks="$(ykchalresp -${toString yubikey.slot} -x $challenge 2>/dev/null)"
 
-            if [ ! -z "$user_record" ]; then
-                user_record="$(echo -n $user_record | drop 128)"
-                uuid_r="$(echo -n $user_record | take 32)"
-            ''}
+            echo -n "$k_luks" | hextorb | cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} --key-file=-
 
-                challenge="$(echo -n $k_user$uuid_r$uuid_luks | openssl-wrap dgst -binary -sha1 | rbtohex)"
-
-                k_blob="$(ykchalresp -${toString yubikey.slot} -x $challenge 2>/dev/null)"
-
-                aes_blob_decrypted="$(echo -n $user_record | drop 32 | hextorb | openssl-wrap enc -d -aes-256-ctr -K $k_blob -iv $uuid_r | rbtohex)"
-
-                checksum="$(echo -n $aes_blob_decrypted | drop 168)"
-                if [ "$(echo -n $aes_blob_decrypted | hextorb | take 84 | openssl-wrap dgst -binary -sha512 | rbtohex)" == "$checksum" ]; then
-                    checksum_correct=1
-                    break
-                else
-                    checksum_correct=0
-                    echo "Authentication failed!"
-                fi
-
-            ${optionalString yubikey.multiUser ''
+            if [ $? == "0" ]; then
+                opened=true
+                break
             else
-                checksum_correct=0
+                opened=false
                 echo "Authentication failed!"
             fi
-            ''}
         done
 
-        if [ "$checksum_correct" != "1" ]; then
+        if [ "$opened" == false ]; then
             umount ${yubikey.storage.mountPoint}
             echo "Maximum authentication errors reached"
             exit 1
         fi
-
-        local k_yubi
-        k_yubi="$(echo -n $aes_blob_decrypted | take 40)"
-
-        local k_luks
-        k_luks="$(echo -n $aes_blob_decrypted | drop 40 | take 128)"
-
-        echo -n "$k_luks" | hextorb | cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} --key-file=-
 
         update_failed=false
 
@@ -161,24 +103,32 @@ let
         fi
 
         if [ "$update_failed" == false ]; then
-            new_uuid_r="$(echo -n $new_uuid_r | take 36 | tr -d '-')"
+            new_uuid_r="$(echo -n $new_uuid_r | head -c 36 | tr -d '-')"
 
             local new_challenge
-            new_challenge="$(echo -n $k_user$new_uuid_r$uuid_luks | openssl-wrap dgst -binary -sha1 | rbtohex)"
+            new_challenge="$(echo -n $k_user$new_uuid_r | openssl-wrap dgst -binary -sha512 | rbtohex)"
 
-            local new_k_blob
-            new_k_blob="$(echo -n $new_challenge | hextorb | openssl-wrap dgst -binary -sha1 -mac HMAC -macopt hexkey:$k_yubi | rbtohex)"
+            local new_k_luks
+            new_k_luks="$(ykchalresp -${toString yubikey.slot} -x $new_challenge 2>/dev/null)"
 
-            local new_aes_blob
-            new_aes_blob=$(echo -n "$k_yubi$k_luks$checksum" | hextorb | openssl-wrap enc -e -aes-256-ctr -K "$new_k_blob" -iv "$new_uuid_r" | rbtohex)
+            mkdir -p ${yubikey.ramfsMountPoint}
+            # A ramfs is used here to ensure that the file used to update
+            # the key slot with cryptsetup will never get swapped out.
+            # Warning: Do NOT replace with tmpfs!
+            mount -t ramfs none ${yubikey.ramfsMountPoint}
 
-            ${optionalString yubikey.multiUser ''
-            sed -i -e "s|^$user_id_hash$user_record|$user_id_hash$new_uuid_r$new_aes_blob|1"
-            ''}
+            echo -n "$new_k_luks" | hextorb > ${yubikey.ramfsMountPoint}/new_key
+            echo -n "$k_luks" | cryptsetup luksChangeKey ${device} --key-file=- ${yubikey.ramfsMountPoint}/new_key
 
-            ${optionalString (!yubikey.multiUser) ''
-            echo -n "$new_uuid_r$new_aes_blob" > ${yubikey.storage.mountPoint}${yubikey.storage.path}
-            ''}
+            if [ $? == "0" ]; then
+                echo -n "$new_uuid_r" > ${yubikey.storage.mountPoint}${yubikey.storage.path}
+            else
+                echo "Warning: Could not update LUKS key, current challenge persists!"
+            fi
+
+            rm -f ${yubikey.ramfsMountPoint}/new_key
+            umount ${yubikey.ramfsMountPoint}
+            rm -rf ${yubikey.ramfsMountPoint}
         else
             echo "Warning: Could not obtain new UUID, current challenge persists!"
         fi
@@ -336,21 +286,21 @@ in
               description = "Whether to use a passphrase and a Yubikey (true), or only a Yubikey (false)";
             };
 
-            multiUser = mkOption {
-              default = false;
-              type = types.bool;
-              description = "Whether to allow multiple users to authenticate with a Yubikey";
-            };
-
             slot = mkOption {
               default = 2;
               type = types.int;
               description = "Which slot on the Yubikey to challenge";
             };
 
+            ramfsMountPoint = mkOption {
+              default = "/crypt-ramfs";
+              type = types.string;
+              description = "Path where the ramfs used to update the LUKS key will be mounted in stage-1";
+            };
+
             storage = mkOption {
               type = types.optionSet;
-              description = "Options related to the authentication record";
+              description = "Options related to the storing the random UUID";
 
               options = {
                 device = mkOption {
@@ -358,7 +308,7 @@ in
                   type = types.path;
                   description = ''
                     An unencrypted device that will temporarily be mounted in stage-1.
-                    Must contain the authentication record for this LUKS device.
+                    Must contain the current random UUID to create the challenge for this LUKS device.
                   '';
                 };
 
@@ -378,7 +328,7 @@ in
                   default = "/crypt-storage/default";
                   type = types.string;
                   description = ''
-                    Absolute path of the authentication record on the unencrypted device with
+                    Absolute path of the random UUID on the unencrypted device with
                     that device's root directory as "/".
                   '';
                 };
