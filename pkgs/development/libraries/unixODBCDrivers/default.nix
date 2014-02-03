@@ -91,8 +91,11 @@ args : with args;
 
       configureFlags = "--with-sqlite3=${sqlite} --with-odbc=${unixODBC}";
 
+      # move libraries to $out/lib where they're expected to be
       postInstall = ''
-        mkdir -p  $out/lib
+        mkdir -p "$out/lib"
+        mv "$out"/*.so "$out/lib"
+        mv "$out"/*.la "$out/lib"
       '';
 
       meta = { 
