@@ -2798,7 +2798,13 @@ let
       else stdenv;
   };
 
-  llvmPackages = recurseIntoAttrs (import ../development/compilers/llvm/3.4 { inherit newScope stdenv fetchurl; isl = isl_0_12; });
+  llvmPackages = recurseIntoAttrs (import ../development/compilers/llvm/3.4 {
+    inherit newScope fetchurl;
+    isl = isl_0_12;
+    stdenv = if stdenv.isDarwin
+      then stdenvAdapters.overrideGCC stdenv gccApple
+      else stdenv;
+  });
   llvmPackagesSelf = import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; };
 
   mentorToolchains = recurseIntoAttrs (
