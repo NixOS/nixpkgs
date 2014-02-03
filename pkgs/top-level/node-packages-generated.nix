@@ -4,7 +4,7 @@
   by-spec."CSSselect"."0.x" =
     self.by-version."CSSselect"."0.4.0";
   by-version."CSSselect"."0.4.0" = lib.makeOverridable self.buildNodePackage {
-    name = "CSSselect-0.4.0";
+    name = "node-CSSselect-0.4.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/CSSselect/-/CSSselect-0.4.0.tgz";
@@ -27,7 +27,7 @@
   by-spec."CSSwhat"."0.4" =
     self.by-version."CSSwhat"."0.4.1";
   by-version."CSSwhat"."0.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "CSSwhat-0.4.1";
+    name = "node-CSSwhat-0.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/CSSwhat/-/CSSwhat-0.4.1.tgz";
@@ -46,7 +46,7 @@
   by-spec."StringScanner"."~0.0.3" =
     self.by-version."StringScanner"."0.0.3";
   by-version."StringScanner"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "StringScanner-0.0.3";
+    name = "node-StringScanner-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/StringScanner/-/StringScanner-0.0.3.tgz";
@@ -65,7 +65,7 @@
   by-spec."abbrev"."1" =
     self.by-version."abbrev"."1.0.4";
   by-version."abbrev"."1.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "abbrev-1.0.4";
+    name = "node-abbrev-1.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/abbrev/-/abbrev-1.0.4.tgz";
@@ -88,7 +88,7 @@
   by-spec."active-x-obfuscator"."0.0.1" =
     self.by-version."active-x-obfuscator"."0.0.1";
   by-version."active-x-obfuscator"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "active-x-obfuscator-0.0.1";
+    name = "node-active-x-obfuscator-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/active-x-obfuscator/-/active-x-obfuscator-0.0.1.tgz";
@@ -108,7 +108,7 @@
   by-spec."addressparser"."~0.2.0" =
     self.by-version."addressparser"."0.2.0";
   by-version."addressparser"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "addressparser-0.2.0";
+    name = "node-addressparser-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/addressparser/-/addressparser-0.2.0.tgz";
@@ -127,7 +127,7 @@
   by-spec."adm-zip"."0.2.1" =
     self.by-version."adm-zip"."0.2.1";
   by-version."adm-zip"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "adm-zip-0.2.1";
+    name = "node-adm-zip-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/adm-zip/-/adm-zip-0.2.1.tgz";
@@ -146,7 +146,7 @@
   by-spec."adm-zip"."~0.4.3" =
     self.by-version."adm-zip"."0.4.3";
   by-version."adm-zip"."0.4.3" = lib.makeOverridable self.buildNodePackage {
-    name = "adm-zip-0.4.3";
+    name = "node-adm-zip-0.4.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/adm-zip/-/adm-zip-0.4.3.tgz";
@@ -165,7 +165,7 @@
   by-spec."almond"."*" =
     self.by-version."almond"."0.2.9";
   by-version."almond"."0.2.9" = lib.makeOverridable self.buildNodePackage {
-    name = "almond-0.2.9";
+    name = "node-almond-0.2.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/almond/-/almond-0.2.9.tgz";
@@ -185,7 +185,7 @@
   by-spec."amdefine"."*" =
     self.by-version."amdefine"."0.1.0";
   by-version."amdefine"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "amdefine-0.1.0";
+    name = "node-amdefine-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/amdefine/-/amdefine-0.1.0.tgz";
@@ -226,7 +226,7 @@
   by-spec."ansi-remover"."*" =
     self.by-version."ansi-remover"."0.0.2";
   by-version."ansi-remover"."0.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "ansi-remover-0.0.2";
+    name = "node-ansi-remover-0.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ansi-remover/-/ansi-remover-0.0.2.tgz";
@@ -246,7 +246,7 @@
   by-spec."ansi-styles"."~0.1.0" =
     self.by-version."ansi-styles"."0.1.2";
   by-version."ansi-styles"."0.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "ansi-styles-0.1.2";
+    name = "node-ansi-styles-0.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ansi-styles/-/ansi-styles-0.1.2.tgz";
@@ -265,7 +265,7 @@
   by-spec."ansi-styles"."~0.2.0" =
     self.by-version."ansi-styles"."0.2.0";
   by-version."ansi-styles"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "ansi-styles-0.2.0";
+    name = "node-ansi-styles-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ansi-styles/-/ansi-styles-0.2.0.tgz";
@@ -284,7 +284,7 @@
   by-spec."ansi-styles"."~1.0.0" =
     self.by-version."ansi-styles"."1.0.0";
   by-version."ansi-styles"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "ansi-styles-1.0.0";
+    name = "node-ansi-styles-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ansi-styles/-/ansi-styles-1.0.0.tgz";
@@ -303,7 +303,7 @@
   by-spec."ansicolors"."~0.2.1" =
     self.by-version."ansicolors"."0.2.1";
   by-version."ansicolors"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "ansicolors-0.2.1";
+    name = "node-ansicolors-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ansicolors/-/ansicolors-0.2.1.tgz";
@@ -322,7 +322,7 @@
   by-spec."ansicolors"."~0.3.2" =
     self.by-version."ansicolors"."0.3.2";
   by-version."ansicolors"."0.3.2" = lib.makeOverridable self.buildNodePackage {
-    name = "ansicolors-0.3.2";
+    name = "node-ansicolors-0.3.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ansicolors/-/ansicolors-0.3.2.tgz";
@@ -341,7 +341,7 @@
   by-spec."ansistyles"."~0.1.3" =
     self.by-version."ansistyles"."0.1.3";
   by-version."ansistyles"."0.1.3" = lib.makeOverridable self.buildNodePackage {
-    name = "ansistyles-0.1.3";
+    name = "node-ansistyles-0.1.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ansistyles/-/ansistyles-0.1.3.tgz";
@@ -360,7 +360,7 @@
   by-spec."apparatus".">= 0.0.6" =
     self.by-version."apparatus"."0.0.8";
   by-version."apparatus"."0.0.8" = lib.makeOverridable self.buildNodePackage {
-    name = "apparatus-0.0.8";
+    name = "node-apparatus-0.0.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/apparatus/-/apparatus-0.0.8.tgz";
@@ -380,7 +380,7 @@
   by-spec."archiver"."~0.5.2" =
     self.by-version."archiver"."0.5.2";
   by-version."archiver"."0.5.2" = lib.makeOverridable self.buildNodePackage {
-    name = "archiver-0.5.2";
+    name = "node-archiver-0.5.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/archiver/-/archiver-0.5.2.tgz";
@@ -404,7 +404,7 @@
   by-spec."archy"."0" =
     self.by-version."archy"."0.0.2";
   by-version."archy"."0.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "archy-0.0.2";
+    name = "node-archy-0.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/archy/-/archy-0.0.2.tgz";
@@ -425,7 +425,7 @@
   by-spec."argparse"."0.1.15" =
     self.by-version."argparse"."0.1.15";
   by-version."argparse"."0.1.15" = lib.makeOverridable self.buildNodePackage {
-    name = "argparse-0.1.15";
+    name = "node-argparse-0.1.15";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/argparse/-/argparse-0.1.15.tgz";
@@ -448,7 +448,7 @@
   by-spec."ascli"."*" =
     self.by-version."ascli"."0.3.0";
   by-version."ascli"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "ascli-0.3.0";
+    name = "node-ascli-0.3.0";
     src = [
       (self.patchSource fetchurl {
         url = "http://registry.npmjs.org/ascli/-/ascli-0.3.0.tgz";
@@ -469,7 +469,7 @@
   by-spec."asn1"."0.1.11" =
     self.by-version."asn1"."0.1.11";
   by-version."asn1"."0.1.11" = lib.makeOverridable self.buildNodePackage {
-    name = "asn1-0.1.11";
+    name = "node-asn1-0.1.11";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/asn1/-/asn1-0.1.11.tgz";
@@ -488,7 +488,7 @@
   by-spec."assert"."*" =
     self.by-version."assert"."1.1.0";
   by-version."assert"."1.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "assert-1.1.0";
+    name = "node-assert-1.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/assert/-/assert-1.1.0.tgz";
@@ -509,7 +509,7 @@
   by-spec."assert-plus"."0.1.2" =
     self.by-version."assert-plus"."0.1.2";
   by-version."assert-plus"."0.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "assert-plus-0.1.2";
+    name = "node-assert-plus-0.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/assert-plus/-/assert-plus-0.1.2.tgz";
@@ -528,7 +528,7 @@
   by-spec."assertion-error"."1.0.0" =
     self.by-version."assertion-error"."1.0.0";
   by-version."assertion-error"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "assertion-error-1.0.0";
+    name = "node-assertion-error-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/assertion-error/-/assertion-error-1.0.0.tgz";
@@ -547,7 +547,7 @@
   by-spec."async"."*" =
     self.by-version."async"."0.2.10";
   by-version."async"."0.2.10" = lib.makeOverridable self.buildNodePackage {
-    name = "async-0.2.10";
+    name = "node-async-0.2.10";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/async/-/async-0.2.10.tgz";
@@ -567,7 +567,7 @@
   by-spec."async"."0.1.15" =
     self.by-version."async"."0.1.15";
   by-version."async"."0.1.15" = lib.makeOverridable self.buildNodePackage {
-    name = "async-0.1.15";
+    name = "node-async-0.1.15";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/async/-/async-0.1.15.tgz";
@@ -586,7 +586,7 @@
   by-spec."async"."0.1.22" =
     self.by-version."async"."0.1.22";
   by-version."async"."0.1.22" = lib.makeOverridable self.buildNodePackage {
-    name = "async-0.1.22";
+    name = "node-async-0.1.22";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/async/-/async-0.1.22.tgz";
@@ -607,7 +607,7 @@
   by-spec."async"."0.2.9" =
     self.by-version."async"."0.2.9";
   by-version."async"."0.2.9" = lib.makeOverridable self.buildNodePackage {
-    name = "async-0.2.9";
+    name = "node-async-0.2.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/async/-/async-0.2.9.tgz";
@@ -638,7 +638,7 @@
   by-spec."aws-sdk"."*" =
     self.by-version."aws-sdk"."2.0.0-rc9";
   by-version."aws-sdk"."2.0.0-rc9" = lib.makeOverridable self.buildNodePackage {
-    name = "aws-sdk-2.0.0-rc9";
+    name = "node-aws-sdk-2.0.0-rc9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/aws-sdk/-/aws-sdk-2.0.0-rc9.tgz";
@@ -660,7 +660,7 @@
   by-spec."aws-sdk".">=1.2.0 <2" =
     self.by-version."aws-sdk"."1.18.0";
   by-version."aws-sdk"."1.18.0" = lib.makeOverridable self.buildNodePackage {
-    name = "aws-sdk-1.18.0";
+    name = "node-aws-sdk-1.18.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/aws-sdk/-/aws-sdk-1.18.0.tgz";
@@ -681,7 +681,7 @@
   by-spec."aws-sign"."~0.2.0" =
     self.by-version."aws-sign"."0.2.0";
   by-version."aws-sign"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "aws-sign-0.2.0";
+    name = "node-aws-sign-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/aws-sign/-/aws-sign-0.2.0.tgz";
@@ -700,7 +700,7 @@
   by-spec."aws-sign"."~0.3.0" =
     self.by-version."aws-sign"."0.3.0";
   by-version."aws-sign"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "aws-sign-0.3.0";
+    name = "node-aws-sign-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/aws-sign/-/aws-sign-0.3.0.tgz";
@@ -719,7 +719,7 @@
   by-spec."aws-sign2"."~0.5.0" =
     self.by-version."aws-sign2"."0.5.0";
   by-version."aws-sign2"."0.5.0" = lib.makeOverridable self.buildNodePackage {
-    name = "aws-sign2-0.5.0";
+    name = "node-aws-sign2-0.5.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/aws-sign2/-/aws-sign2-0.5.0.tgz";
@@ -738,7 +738,7 @@
   by-spec."backbone"."*" =
     self.by-version."backbone"."1.1.0";
   by-version."backbone"."1.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "backbone-1.1.0";
+    name = "node-backbone-1.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/backbone/-/backbone-1.1.0.tgz";
@@ -759,7 +759,7 @@
   by-spec."backoff"."2.1.0" =
     self.by-version."backoff"."2.1.0";
   by-version."backoff"."2.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "backoff-2.1.0";
+    name = "node-backoff-2.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/backoff/-/backoff-2.1.0.tgz";
@@ -778,7 +778,7 @@
   by-spec."base64id"."0.1.0" =
     self.by-version."base64id"."0.1.0";
   by-version."base64id"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "base64id-0.1.0";
+    name = "node-base64id-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/base64id/-/base64id-0.1.0.tgz";
@@ -797,7 +797,7 @@
   by-spec."batch"."0.5.0" =
     self.by-version."batch"."0.5.0";
   by-version."batch"."0.5.0" = lib.makeOverridable self.buildNodePackage {
-    name = "batch-0.5.0";
+    name = "node-batch-0.5.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/batch/-/batch-0.5.0.tgz";
@@ -816,7 +816,7 @@
   by-spec."bcrypt"."*" =
     self.by-version."bcrypt"."0.7.7";
   by-version."bcrypt"."0.7.7" = lib.makeOverridable self.buildNodePackage {
-    name = "bcrypt-0.7.7";
+    name = "node-bcrypt-0.7.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bcrypt/-/bcrypt-0.7.7.tgz";
@@ -837,7 +837,7 @@
   by-spec."binary"."~0.3.0" =
     self.by-version."binary"."0.3.0";
   by-version."binary"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "binary-0.3.0";
+    name = "node-binary-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/binary/-/binary-0.3.0.tgz";
@@ -858,7 +858,7 @@
   by-spec."bindings"."*" =
     self.by-version."bindings"."1.1.1";
   by-version."bindings"."1.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "bindings-1.1.1";
+    name = "node-bindings-1.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bindings/-/bindings-1.1.1.tgz";
@@ -877,7 +877,7 @@
   by-spec."bindings"."1.0.0" =
     self.by-version."bindings"."1.0.0";
   by-version."bindings"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "bindings-1.0.0";
+    name = "node-bindings-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bindings/-/bindings-1.0.0.tgz";
@@ -896,7 +896,7 @@
   by-spec."block-stream"."*" =
     self.by-version."block-stream"."0.0.7";
   by-version."block-stream"."0.0.7" = lib.makeOverridable self.buildNodePackage {
-    name = "block-stream-0.0.7";
+    name = "node-block-stream-0.0.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/block-stream/-/block-stream-0.0.7.tgz";
@@ -918,7 +918,7 @@
   by-spec."blueimp-md5"."~1.1.0" =
     self.by-version."blueimp-md5"."1.1.0";
   by-version."blueimp-md5"."1.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "blueimp-md5-1.1.0";
+    name = "node-blueimp-md5-1.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/blueimp-md5/-/blueimp-md5-1.1.0.tgz";
@@ -937,7 +937,7 @@
   by-spec."boom"."0.3.x" =
     self.by-version."boom"."0.3.8";
   by-version."boom"."0.3.8" = lib.makeOverridable self.buildNodePackage {
-    name = "boom-0.3.8";
+    name = "node-boom-0.3.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/boom/-/boom-0.3.8.tgz";
@@ -957,7 +957,7 @@
   by-spec."boom"."0.4.x" =
     self.by-version."boom"."0.4.2";
   by-version."boom"."0.4.2" = lib.makeOverridable self.buildNodePackage {
-    name = "boom-0.4.2";
+    name = "node-boom-0.4.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/boom/-/boom-0.4.2.tgz";
@@ -1041,7 +1041,7 @@
   by-spec."bower-config"."~0.4.3" =
     self.by-version."bower-config"."0.4.5";
   by-version."bower-config"."0.4.5" = lib.makeOverridable self.buildNodePackage {
-    name = "bower-config-0.4.5";
+    name = "node-bower-config-0.4.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bower-config/-/bower-config-0.4.5.tgz";
@@ -1064,7 +1064,7 @@
   by-spec."bower-config"."~0.5.0" =
     self.by-version."bower-config"."0.5.0";
   by-version."bower-config"."0.5.0" = lib.makeOverridable self.buildNodePackage {
-    name = "bower-config-0.5.0";
+    name = "node-bower-config-0.5.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bower-config/-/bower-config-0.5.0.tgz";
@@ -1087,7 +1087,7 @@
   by-spec."bower-endpoint-parser"."0.2.1" =
     self.by-version."bower-endpoint-parser"."0.2.1";
   by-version."bower-endpoint-parser"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "bower-endpoint-parser-0.2.1";
+    name = "node-bower-endpoint-parser-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bower-endpoint-parser/-/bower-endpoint-parser-0.2.1.tgz";
@@ -1108,7 +1108,7 @@
   by-spec."bower-json"."0.4.0" =
     self.by-version."bower-json"."0.4.0";
   by-version."bower-json"."0.4.0" = lib.makeOverridable self.buildNodePackage {
-    name = "bower-json-0.4.0";
+    name = "node-bower-json-0.4.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bower-json/-/bower-json-0.4.0.tgz";
@@ -1132,7 +1132,7 @@
   by-spec."bower-logger"."0.2.1" =
     self.by-version."bower-logger"."0.2.1";
   by-version."bower-logger"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "bower-logger-0.2.1";
+    name = "node-bower-logger-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bower-logger/-/bower-logger-0.2.1.tgz";
@@ -1151,7 +1151,7 @@
   by-spec."bower-logger"."~0.2.1" =
     self.by-version."bower-logger"."0.2.2";
   by-version."bower-logger"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "bower-logger-0.2.2";
+    name = "node-bower-logger-0.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bower-logger/-/bower-logger-0.2.2.tgz";
@@ -1170,7 +1170,7 @@
   by-spec."bower-registry-client"."~0.1.4" =
     self.by-version."bower-registry-client"."0.1.6";
   by-version."bower-registry-client"."0.1.6" = lib.makeOverridable self.buildNodePackage {
-    name = "bower-registry-client-0.1.6";
+    name = "node-bower-registry-client-0.1.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bower-registry-client/-/bower-registry-client-0.1.6.tgz";
@@ -1224,7 +1224,7 @@
   by-spec."broadway"."0.2.9" =
     self.by-version."broadway"."0.2.9";
   by-version."broadway"."0.2.9" = lib.makeOverridable self.buildNodePackage {
-    name = "broadway-0.2.9";
+    name = "node-broadway-0.2.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/broadway/-/broadway-0.2.9.tgz";
@@ -1250,7 +1250,7 @@
   by-spec."browserchannel"."*" =
     self.by-version."browserchannel"."1.0.8";
   by-version."browserchannel"."1.0.8" = lib.makeOverridable self.buildNodePackage {
-    name = "browserchannel-1.0.8";
+    name = "node-browserchannel-1.0.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/browserchannel/-/browserchannel-1.0.8.tgz";
@@ -1273,7 +1273,7 @@
   by-spec."bson"."0.1.8" =
     self.by-version."bson"."0.1.8";
   by-version."bson"."0.1.8" = lib.makeOverridable self.buildNodePackage {
-    name = "bson-0.1.8";
+    name = "node-bson-0.1.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bson/-/bson-0.1.8.tgz";
@@ -1292,7 +1292,7 @@
   by-spec."bson"."0.2.2" =
     self.by-version."bson"."0.2.2";
   by-version."bson"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "bson-0.2.2";
+    name = "node-bson-0.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bson/-/bson-0.2.2.tgz";
@@ -1311,7 +1311,7 @@
   by-spec."bson"."0.2.5" =
     self.by-version."bson"."0.2.5";
   by-version."bson"."0.2.5" = lib.makeOverridable self.buildNodePackage {
-    name = "bson-0.2.5";
+    name = "node-bson-0.2.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bson/-/bson-0.2.5.tgz";
@@ -1330,7 +1330,7 @@
   by-spec."buffer-crc32"."0.1.1" =
     self.by-version."buffer-crc32"."0.1.1";
   by-version."buffer-crc32"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "buffer-crc32-0.1.1";
+    name = "node-buffer-crc32-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.1.1.tgz";
@@ -1349,7 +1349,7 @@
   by-spec."buffer-crc32"."0.2.1" =
     self.by-version."buffer-crc32"."0.2.1";
   by-version."buffer-crc32"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "buffer-crc32-0.2.1";
+    name = "node-buffer-crc32-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.2.1.tgz";
@@ -1370,7 +1370,7 @@
   by-spec."buffers"."~0.1.1" =
     self.by-version."buffers"."0.1.1";
   by-version."buffers"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "buffers-0.1.1";
+    name = "node-buffers-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/buffers/-/buffers-0.1.1.tgz";
@@ -1389,7 +1389,7 @@
   by-spec."buffertools"."*" =
     self.by-version."buffertools"."2.0.1";
   by-version."buffertools"."2.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "buffertools-2.0.1";
+    name = "node-buffertools-2.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/buffertools/-/buffertools-2.0.1.tgz";
@@ -1409,7 +1409,7 @@
   by-spec."buffertools".">=1.1.1 <2.0.0" =
     self.by-version."buffertools"."1.1.1";
   by-version."buffertools"."1.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "buffertools-1.1.1";
+    name = "node-buffertools-1.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/buffertools/-/buffertools-1.1.1.tgz";
@@ -1449,7 +1449,7 @@
   by-spec."bytebuffer".">=2.2 <3" =
     self.by-version."bytebuffer"."2.3.1";
   by-version."bytebuffer"."2.3.1" = lib.makeOverridable self.buildNodePackage {
-    name = "bytebuffer-2.3.1";
+    name = "node-bytebuffer-2.3.1";
     src = [
       (self.patchSource fetchurl {
         url = "http://registry.npmjs.org/bytebuffer/-/bytebuffer-2.3.1.tgz";
@@ -1469,7 +1469,7 @@
   by-spec."bytes"."0.1.0" =
     self.by-version."bytes"."0.1.0";
   by-version."bytes"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "bytes-0.1.0";
+    name = "node-bytes-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bytes/-/bytes-0.1.0.tgz";
@@ -1488,7 +1488,7 @@
   by-spec."bytes"."0.2.0" =
     self.by-version."bytes"."0.2.0";
   by-version."bytes"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "bytes-0.2.0";
+    name = "node-bytes-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bytes/-/bytes-0.2.0.tgz";
@@ -1507,7 +1507,7 @@
   by-spec."bytes"."0.2.1" =
     self.by-version."bytes"."0.2.1";
   by-version."bytes"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "bytes-0.2.1";
+    name = "node-bytes-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/bytes/-/bytes-0.2.1.tgz";
@@ -1549,7 +1549,7 @@
   by-spec."chai"."*" =
     self.by-version."chai"."1.9.0";
   by-version."chai"."1.9.0" = lib.makeOverridable self.buildNodePackage {
-    name = "chai-1.9.0";
+    name = "node-chai-1.9.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/chai/-/chai-1.9.0.tgz";
@@ -1571,7 +1571,7 @@
   by-spec."chainsaw"."~0.1.0" =
     self.by-version."chainsaw"."0.1.0";
   by-version."chainsaw"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "chainsaw-0.1.0";
+    name = "node-chainsaw-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/chainsaw/-/chainsaw-0.1.0.tgz";
@@ -1591,7 +1591,7 @@
   by-spec."chalk"."~0.1.1" =
     self.by-version."chalk"."0.1.1";
   by-version."chalk"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "chalk-0.1.1";
+    name = "node-chalk-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/chalk/-/chalk-0.1.1.tgz";
@@ -1612,7 +1612,7 @@
   by-spec."chalk"."~0.2.0" =
     self.by-version."chalk"."0.2.1";
   by-version."chalk"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "chalk-0.2.1";
+    name = "node-chalk-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/chalk/-/chalk-0.2.1.tgz";
@@ -1635,7 +1635,7 @@
   by-spec."chalk"."~0.3.0" =
     self.by-version."chalk"."0.3.0";
   by-version."chalk"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "chalk-0.3.0";
+    name = "node-chalk-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/chalk/-/chalk-0.3.0.tgz";
@@ -1656,7 +1656,7 @@
   by-spec."chalk"."~0.4.0" =
     self.by-version."chalk"."0.4.0";
   by-version."chalk"."0.4.0" = lib.makeOverridable self.buildNodePackage {
-    name = "chalk-0.4.0";
+    name = "node-chalk-0.4.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/chalk/-/chalk-0.4.0.tgz";
@@ -1678,7 +1678,7 @@
   by-spec."character-parser"."1.2.0" =
     self.by-version."character-parser"."1.2.0";
   by-version."character-parser"."1.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "character-parser-1.2.0";
+    name = "node-character-parser-1.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/character-parser/-/character-parser-1.2.0.tgz";
@@ -1697,7 +1697,7 @@
   by-spec."cheerio"."~0.12.0" =
     self.by-version."cheerio"."0.12.4";
   by-version."cheerio"."0.12.4" = lib.makeOverridable self.buildNodePackage {
-    name = "cheerio-0.12.4";
+    name = "node-cheerio-0.12.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cheerio/-/cheerio-0.12.4.tgz";
@@ -1720,7 +1720,7 @@
   by-spec."cheerio"."~0.13.0" =
     self.by-version."cheerio"."0.13.1";
   by-version."cheerio"."0.13.1" = lib.makeOverridable self.buildNodePackage {
-    name = "cheerio-0.13.1";
+    name = "node-cheerio-0.13.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cheerio/-/cheerio-0.13.1.tgz";
@@ -1743,7 +1743,7 @@
   by-spec."cheerio-select"."*" =
     self.by-version."cheerio-select"."0.0.3";
   by-version."cheerio-select"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "cheerio-select-0.0.3";
+    name = "node-cheerio-select-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cheerio-select/-/cheerio-select-0.0.3.tgz";
@@ -1763,7 +1763,7 @@
   by-spec."child-process-close"."~0.1.1" =
     self.by-version."child-process-close"."0.1.1";
   by-version."child-process-close"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "child-process-close-0.1.1";
+    name = "node-child-process-close-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/child-process-close/-/child-process-close-0.1.1.tgz";
@@ -1782,7 +1782,7 @@
   by-spec."chmodr"."~0.1.0" =
     self.by-version."chmodr"."0.1.0";
   by-version."chmodr"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "chmodr-0.1.0";
+    name = "node-chmodr-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/chmodr/-/chmodr-0.1.0.tgz";
@@ -1801,7 +1801,7 @@
   by-spec."chokidar"."~0.8.0" =
     self.by-version."chokidar"."0.8.1";
   by-version."chokidar"."0.8.1" = lib.makeOverridable self.buildNodePackage {
-    name = "chokidar-0.8.1";
+    name = "node-chokidar-0.8.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/chokidar/-/chokidar-0.8.1.tgz";
@@ -1820,7 +1820,7 @@
   by-spec."chownr"."0" =
     self.by-version."chownr"."0.0.1";
   by-version."chownr"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "chownr-0.0.1";
+    name = "node-chownr-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/chownr/-/chownr-0.0.1.tgz";
@@ -1839,7 +1839,7 @@
   by-spec."class-extend"."~0.1.0" =
     self.by-version."class-extend"."0.1.1";
   by-version."class-extend"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "class-extend-0.1.1";
+    name = "node-class-extend-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/class-extend/-/class-extend-0.1.1.tgz";
@@ -1881,7 +1881,7 @@
   by-spec."cli"."0.4.x" =
     self.by-version."cli"."0.4.5";
   by-version."cli"."0.4.5" = lib.makeOverridable self.buildNodePackage {
-    name = "cli-0.4.5";
+    name = "node-cli-0.4.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cli/-/cli-0.4.5.tgz";
@@ -1901,7 +1901,7 @@
   by-spec."cli-color"."~0.2.2" =
     self.by-version."cli-color"."0.2.3";
   by-version."cli-color"."0.2.3" = lib.makeOverridable self.buildNodePackage {
-    name = "cli-color-0.2.3";
+    name = "node-cli-color-0.2.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cli-color/-/cli-color-0.2.3.tgz";
@@ -1922,7 +1922,7 @@
   by-spec."cliff"."0.1.8" =
     self.by-version."cliff"."0.1.8";
   by-version."cliff"."0.1.8" = lib.makeOverridable self.buildNodePackage {
-    name = "cliff-0.1.8";
+    name = "node-cliff-0.1.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cliff/-/cliff-0.1.8.tgz";
@@ -1944,7 +1944,7 @@
   by-spec."clone"."0.1.11" =
     self.by-version."clone"."0.1.11";
   by-version."clone"."0.1.11" = lib.makeOverridable self.buildNodePackage {
-    name = "clone-0.1.11";
+    name = "node-clone-0.1.11";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/clone/-/clone-0.1.11.tgz";
@@ -1963,7 +1963,7 @@
   by-spec."clone"."0.1.5" =
     self.by-version."clone"."0.1.5";
   by-version."clone"."0.1.5" = lib.makeOverridable self.buildNodePackage {
-    name = "clone-0.1.5";
+    name = "node-clone-0.1.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/clone/-/clone-0.1.5.tgz";
@@ -1982,7 +1982,7 @@
   by-spec."clone"."0.1.6" =
     self.by-version."clone"."0.1.6";
   by-version."clone"."0.1.6" = lib.makeOverridable self.buildNodePackage {
-    name = "clone-0.1.6";
+    name = "node-clone-0.1.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/clone/-/clone-0.1.6.tgz";
@@ -2001,7 +2001,7 @@
   by-spec."cmd-shim"."~1.1.1" =
     self.by-version."cmd-shim"."1.1.1";
   by-version."cmd-shim"."1.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "cmd-shim-1.1.1";
+    name = "node-cmd-shim-1.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cmd-shim/-/cmd-shim-1.1.1.tgz";
@@ -2108,7 +2108,7 @@
   by-spec."color"."~0.5.0" =
     self.by-version."color"."0.5.0";
   by-version."color"."0.5.0" = lib.makeOverridable self.buildNodePackage {
-    name = "color-0.5.0";
+    name = "node-color-0.5.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/color/-/color-0.5.0.tgz";
@@ -2129,7 +2129,7 @@
   by-spec."color-convert"."0.2.x" =
     self.by-version."color-convert"."0.2.1";
   by-version."color-convert"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "color-convert-0.2.1";
+    name = "node-color-convert-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/color-convert/-/color-convert-0.2.1.tgz";
@@ -2148,7 +2148,7 @@
   by-spec."color-string"."0.1.x" =
     self.by-version."color-string"."0.1.2";
   by-version."color-string"."0.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "color-string-0.1.2";
+    name = "node-color-string-0.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/color-string/-/color-string-0.1.2.tgz";
@@ -2168,7 +2168,7 @@
   by-spec."colors"."0.5.x" =
     self.by-version."colors"."0.5.1";
   by-version."colors"."0.5.1" = lib.makeOverridable self.buildNodePackage {
-    name = "colors-0.5.1";
+    name = "node-colors-0.5.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/colors/-/colors-0.5.1.tgz";
@@ -2187,7 +2187,7 @@
   by-spec."colors"."0.6.x" =
     self.by-version."colors"."0.6.2";
   by-version."colors"."0.6.2" = lib.makeOverridable self.buildNodePackage {
-    name = "colors-0.6.2";
+    name = "node-colors-0.6.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/colors/-/colors-0.6.2.tgz";
@@ -2212,7 +2212,7 @@
   by-spec."colour"."*" =
     self.by-version."colour"."0.7.1";
   by-version."colour"."0.7.1" = lib.makeOverridable self.buildNodePackage {
-    name = "colour-0.7.1";
+    name = "node-colour-0.7.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/colour/-/colour-0.7.1.tgz";
@@ -2231,7 +2231,7 @@
   by-spec."columnify"."0.1.2" =
     self.by-version."columnify"."0.1.2";
   by-version."columnify"."0.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "columnify-0.1.2";
+    name = "node-columnify-0.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/columnify/-/columnify-0.1.2.tgz";
@@ -2250,7 +2250,7 @@
   by-spec."combined-stream"."~0.0.4" =
     self.by-version."combined-stream"."0.0.4";
   by-version."combined-stream"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "combined-stream-0.0.4";
+    name = "node-combined-stream-0.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/combined-stream/-/combined-stream-0.0.4.tgz";
@@ -2270,7 +2270,7 @@
   by-spec."commander"."*" =
     self.by-version."commander"."2.1.0";
   by-version."commander"."2.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "commander-2.1.0";
+    name = "node-commander-2.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/commander/-/commander-2.1.0.tgz";
@@ -2289,7 +2289,7 @@
   by-spec."commander"."0.6.1" =
     self.by-version."commander"."0.6.1";
   by-version."commander"."0.6.1" = lib.makeOverridable self.buildNodePackage {
-    name = "commander-0.6.1";
+    name = "node-commander-0.6.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/commander/-/commander-0.6.1.tgz";
@@ -2308,7 +2308,7 @@
   by-spec."commander"."1.3.2" =
     self.by-version."commander"."1.3.2";
   by-version."commander"."1.3.2" = lib.makeOverridable self.buildNodePackage {
-    name = "commander-1.3.2";
+    name = "node-commander-1.3.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/commander/-/commander-1.3.2.tgz";
@@ -2328,7 +2328,7 @@
   by-spec."commander"."2.0.0" =
     self.by-version."commander"."2.0.0";
   by-version."commander"."2.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "commander-2.0.0";
+    name = "node-commander-2.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/commander/-/commander-2.0.0.tgz";
@@ -2353,7 +2353,7 @@
   by-spec."config"."0.4.15" =
     self.by-version."config"."0.4.15";
   by-version."config"."0.4.15" = lib.makeOverridable self.buildNodePackage {
-    name = "config-0.4.15";
+    name = "node-config-0.4.15";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/config/-/config-0.4.15.tgz";
@@ -2375,7 +2375,7 @@
   by-spec."config-chain"."~1.1.1" =
     self.by-version."config-chain"."1.1.8";
   by-version."config-chain"."1.1.8" = lib.makeOverridable self.buildNodePackage {
-    name = "config-chain-1.1.8";
+    name = "node-config-chain-1.1.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/config-chain/-/config-chain-1.1.8.tgz";
@@ -2398,7 +2398,7 @@
   by-spec."configstore"."~0.1.0" =
     self.by-version."configstore"."0.1.7";
   by-version."configstore"."0.1.7" = lib.makeOverridable self.buildNodePackage {
-    name = "configstore-0.1.7";
+    name = "node-configstore-0.1.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/configstore/-/configstore-0.1.7.tgz";
@@ -2422,7 +2422,7 @@
   by-spec."connect"."1.x" =
     self.by-version."connect"."1.9.2";
   by-version."connect"."1.9.2" = lib.makeOverridable self.buildNodePackage {
-    name = "connect-1.9.2";
+    name = "node-connect-1.9.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/connect/-/connect-1.9.2.tgz";
@@ -2444,7 +2444,7 @@
   by-spec."connect"."2.11.0" =
     self.by-version."connect"."2.11.0";
   by-version."connect"."2.11.0" = lib.makeOverridable self.buildNodePackage {
-    name = "connect-2.11.0";
+    name = "node-connect-2.11.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/connect/-/connect-2.11.0.tgz";
@@ -2477,7 +2477,7 @@
   by-spec."connect"."2.12.0" =
     self.by-version."connect"."2.12.0";
   by-version."connect"."2.12.0" = lib.makeOverridable self.buildNodePackage {
-    name = "connect-2.12.0";
+    name = "node-connect-2.12.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/connect/-/connect-2.12.0.tgz";
@@ -2511,7 +2511,7 @@
   by-spec."connect"."2.3.x" =
     self.by-version."connect"."2.3.9";
   by-version."connect"."2.3.9" = lib.makeOverridable self.buildNodePackage {
-    name = "connect-2.3.9";
+    name = "node-connect-2.3.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/connect/-/connect-2.3.9.tgz";
@@ -2538,7 +2538,7 @@
   by-spec."connect"."2.7.5" =
     self.by-version."connect"."2.7.5";
   by-version."connect"."2.7.5" = lib.makeOverridable self.buildNodePackage {
-    name = "connect-2.7.5";
+    name = "node-connect-2.7.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/connect/-/connect-2.7.5.tgz";
@@ -2567,7 +2567,7 @@
   by-spec."connect"."2.7.6" =
     self.by-version."connect"."2.7.6";
   by-version."connect"."2.7.6" = lib.makeOverridable self.buildNodePackage {
-    name = "connect-2.7.6";
+    name = "node-connect-2.7.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/connect/-/connect-2.7.6.tgz";
@@ -2600,7 +2600,7 @@
   by-spec."connect-flash"."*" =
     self.by-version."connect-flash"."0.1.1";
   by-version."connect-flash"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "connect-flash-0.1.1";
+    name = "node-connect-flash-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/connect-flash/-/connect-flash-0.1.1.tgz";
@@ -2620,7 +2620,7 @@
   by-spec."connect-flash"."0.1.0" =
     self.by-version."connect-flash"."0.1.0";
   by-version."connect-flash"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "connect-flash-0.1.0";
+    name = "node-connect-flash-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/connect-flash/-/connect-flash-0.1.0.tgz";
@@ -2639,7 +2639,7 @@
   by-spec."connect-jade-static"."*" =
     self.by-version."connect-jade-static"."0.1.3";
   by-version."connect-jade-static"."0.1.3" = lib.makeOverridable self.buildNodePackage {
-    name = "connect-jade-static-0.1.3";
+    name = "node-connect-jade-static-0.1.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/connect-jade-static/-/connect-jade-static-0.1.3.tgz";
@@ -2660,7 +2660,7 @@
   by-spec."connect-mongo"."*" =
     self.by-version."connect-mongo"."0.4.0";
   by-version."connect-mongo"."0.4.0" = lib.makeOverridable self.buildNodePackage {
-    name = "connect-mongo-0.4.0";
+    name = "node-connect-mongo-0.4.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/connect-mongo/-/connect-mongo-0.4.0.tgz";
@@ -2681,7 +2681,7 @@
   by-spec."connection-parse"."0.0.x" =
     self.by-version."connection-parse"."0.0.7";
   by-version."connection-parse"."0.0.7" = lib.makeOverridable self.buildNodePackage {
-    name = "connection-parse-0.0.7";
+    name = "node-connection-parse-0.0.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/connection-parse/-/connection-parse-0.0.7.tgz";
@@ -2700,7 +2700,7 @@
   by-spec."console-browserify"."0.1.x" =
     self.by-version."console-browserify"."0.1.6";
   by-version."console-browserify"."0.1.6" = lib.makeOverridable self.buildNodePackage {
-    name = "console-browserify-0.1.6";
+    name = "node-console-browserify-0.1.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/console-browserify/-/console-browserify-0.1.6.tgz";
@@ -2719,7 +2719,7 @@
   by-spec."constantinople"."~1.0.1" =
     self.by-version."constantinople"."1.0.2";
   by-version."constantinople"."1.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "constantinople-1.0.2";
+    name = "node-constantinople-1.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/constantinople/-/constantinople-1.0.2.tgz";
@@ -2741,7 +2741,7 @@
   by-spec."cookie"."0.0.4" =
     self.by-version."cookie"."0.0.4";
   by-version."cookie"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "cookie-0.0.4";
+    name = "node-cookie-0.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cookie/-/cookie-0.0.4.tgz";
@@ -2760,7 +2760,7 @@
   by-spec."cookie"."0.0.5" =
     self.by-version."cookie"."0.0.5";
   by-version."cookie"."0.0.5" = lib.makeOverridable self.buildNodePackage {
-    name = "cookie-0.0.5";
+    name = "node-cookie-0.0.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cookie/-/cookie-0.0.5.tgz";
@@ -2779,7 +2779,7 @@
   by-spec."cookie"."0.1.0" =
     self.by-version."cookie"."0.1.0";
   by-version."cookie"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "cookie-0.1.0";
+    name = "node-cookie-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cookie/-/cookie-0.1.0.tgz";
@@ -2798,7 +2798,7 @@
   by-spec."cookie-jar"."~0.2.0" =
     self.by-version."cookie-jar"."0.2.0";
   by-version."cookie-jar"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "cookie-jar-0.2.0";
+    name = "node-cookie-jar-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cookie-jar/-/cookie-jar-0.2.0.tgz";
@@ -2817,7 +2817,7 @@
   by-spec."cookie-jar"."~0.3.0" =
     self.by-version."cookie-jar"."0.3.0";
   by-version."cookie-jar"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "cookie-jar-0.3.0";
+    name = "node-cookie-jar-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cookie-jar/-/cookie-jar-0.3.0.tgz";
@@ -2836,7 +2836,7 @@
   by-spec."cookie-signature"."1.0.0" =
     self.by-version."cookie-signature"."1.0.0";
   by-version."cookie-signature"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "cookie-signature-1.0.0";
+    name = "node-cookie-signature-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.0.tgz";
@@ -2855,7 +2855,7 @@
   by-spec."cookie-signature"."1.0.1" =
     self.by-version."cookie-signature"."1.0.1";
   by-version."cookie-signature"."1.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "cookie-signature-1.0.1";
+    name = "node-cookie-signature-1.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.1.tgz";
@@ -2874,7 +2874,7 @@
   by-spec."cookiejar"."1.3.0" =
     self.by-version."cookiejar"."1.3.0";
   by-version."cookiejar"."1.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "cookiejar-1.3.0";
+    name = "node-cookiejar-1.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cookiejar/-/cookiejar-1.3.0.tgz";
@@ -2893,7 +2893,7 @@
   by-spec."cookies".">= 0.2.2" =
     self.by-version."cookies"."0.4.0";
   by-version."cookies"."0.4.0" = lib.makeOverridable self.buildNodePackage {
-    name = "cookies-0.4.0";
+    name = "node-cookies-0.4.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cookies/-/cookies-0.4.0.tgz";
@@ -2913,7 +2913,7 @@
   by-spec."core-util-is"."~1.0.0" =
     self.by-version."core-util-is"."1.0.1";
   by-version."core-util-is"."1.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "core-util-is-1.0.1";
+    name = "node-core-util-is-1.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/core-util-is/-/core-util-is-1.0.1.tgz";
@@ -2932,7 +2932,7 @@
   by-spec."couch-login"."~0.1.15" =
     self.by-version."couch-login"."0.1.20";
   by-version."couch-login"."0.1.20" = lib.makeOverridable self.buildNodePackage {
-    name = "couch-login-0.1.20";
+    name = "node-couch-login-0.1.20";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/couch-login/-/couch-login-0.1.20.tgz";
@@ -2978,7 +2978,7 @@
   by-spec."crc"."0.2.0" =
     self.by-version."crc"."0.2.0";
   by-version."crc"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "crc-0.2.0";
+    name = "node-crc-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/crc/-/crc-0.2.0.tgz";
@@ -2997,7 +2997,7 @@
   by-spec."crossroads"."~0.12.0" =
     self.by-version."crossroads"."0.12.0";
   by-version."crossroads"."0.12.0" = lib.makeOverridable self.buildNodePackage {
-    name = "crossroads-0.12.0";
+    name = "node-crossroads-0.12.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/crossroads/-/crossroads-0.12.0.tgz";
@@ -3017,7 +3017,7 @@
   by-spec."cryptiles"."0.1.x" =
     self.by-version."cryptiles"."0.1.3";
   by-version."cryptiles"."0.1.3" = lib.makeOverridable self.buildNodePackage {
-    name = "cryptiles-0.1.3";
+    name = "node-cryptiles-0.1.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cryptiles/-/cryptiles-0.1.3.tgz";
@@ -3037,7 +3037,7 @@
   by-spec."cryptiles"."0.2.x" =
     self.by-version."cryptiles"."0.2.2";
   by-version."cryptiles"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "cryptiles-0.2.2";
+    name = "node-cryptiles-0.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cryptiles/-/cryptiles-0.2.2.tgz";
@@ -3057,7 +3057,7 @@
   by-spec."crypto"."0.0.3" =
     self.by-version."crypto"."0.0.3";
   by-version."crypto"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "crypto-0.0.3";
+    name = "node-crypto-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/crypto/-/crypto-0.0.3.tgz";
@@ -3076,7 +3076,7 @@
   by-spec."css"."~1.0.8" =
     self.by-version."css"."1.0.8";
   by-version."css"."1.0.8" = lib.makeOverridable self.buildNodePackage {
-    name = "css-1.0.8";
+    name = "node-css-1.0.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/css/-/css-1.0.8.tgz";
@@ -3097,7 +3097,7 @@
   by-spec."css-parse"."1.0.4" =
     self.by-version."css-parse"."1.0.4";
   by-version."css-parse"."1.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "css-parse-1.0.4";
+    name = "node-css-parse-1.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/css-parse/-/css-parse-1.0.4.tgz";
@@ -3116,7 +3116,7 @@
   by-spec."css-parse"."1.7.x" =
     self.by-version."css-parse"."1.7.0";
   by-version."css-parse"."1.7.0" = lib.makeOverridable self.buildNodePackage {
-    name = "css-parse-1.7.0";
+    name = "node-css-parse-1.7.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/css-parse/-/css-parse-1.7.0.tgz";
@@ -3135,7 +3135,7 @@
   by-spec."css-stringify"."1.0.5" =
     self.by-version."css-stringify"."1.0.5";
   by-version."css-stringify"."1.0.5" = lib.makeOverridable self.buildNodePackage {
-    name = "css-stringify-1.0.5";
+    name = "node-css-stringify-1.0.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/css-stringify/-/css-stringify-1.0.5.tgz";
@@ -3154,7 +3154,7 @@
   by-spec."cssom"."0.2.x" =
     self.by-version."cssom"."0.2.5";
   by-version."cssom"."0.2.5" = lib.makeOverridable self.buildNodePackage {
-    name = "cssom-0.2.5";
+    name = "node-cssom-0.2.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cssom/-/cssom-0.2.5.tgz";
@@ -3173,7 +3173,7 @@
   by-spec."ctype"."0.5.0" =
     self.by-version."ctype"."0.5.0";
   by-version."ctype"."0.5.0" = lib.makeOverridable self.buildNodePackage {
-    name = "ctype-0.5.0";
+    name = "node-ctype-0.5.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ctype/-/ctype-0.5.0.tgz";
@@ -3192,7 +3192,7 @@
   by-spec."ctype"."0.5.2" =
     self.by-version."ctype"."0.5.2";
   by-version."ctype"."0.5.2" = lib.makeOverridable self.buildNodePackage {
-    name = "ctype-0.5.2";
+    name = "node-ctype-0.5.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ctype/-/ctype-0.5.2.tgz";
@@ -3211,7 +3211,7 @@
   by-spec."cycle"."1.0.x" =
     self.by-version."cycle"."1.0.3";
   by-version."cycle"."1.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "cycle-1.0.3";
+    name = "node-cycle-1.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/cycle/-/cycle-1.0.3.tgz";
@@ -3230,7 +3230,7 @@
   by-spec."dargs"."~0.1.0" =
     self.by-version."dargs"."0.1.0";
   by-version."dargs"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "dargs-0.1.0";
+    name = "node-dargs-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/dargs/-/dargs-0.1.0.tgz";
@@ -3249,7 +3249,7 @@
   by-spec."dateformat"."1.0.2-1.2.3" =
     self.by-version."dateformat"."1.0.2-1.2.3";
   by-version."dateformat"."1.0.2-1.2.3" = lib.makeOverridable self.buildNodePackage {
-    name = "dateformat-1.0.2-1.2.3";
+    name = "node-dateformat-1.0.2-1.2.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/dateformat/-/dateformat-1.0.2-1.2.3.tgz";
@@ -3268,7 +3268,7 @@
   by-spec."dateformat"."~1.0.6" =
     self.by-version."dateformat"."1.0.7-1.2.3";
   by-version."dateformat"."1.0.7-1.2.3" = lib.makeOverridable self.buildNodePackage {
-    name = "dateformat-1.0.7-1.2.3";
+    name = "node-dateformat-1.0.7-1.2.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/dateformat/-/dateformat-1.0.7-1.2.3.tgz";
@@ -3287,7 +3287,7 @@
   by-spec."debug"."*" =
     self.by-version."debug"."0.7.4";
   by-version."debug"."0.7.4" = lib.makeOverridable self.buildNodePackage {
-    name = "debug-0.7.4";
+    name = "node-debug-0.7.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/debug/-/debug-0.7.4.tgz";
@@ -3306,7 +3306,7 @@
   by-spec."debug"."0.5.0" =
     self.by-version."debug"."0.5.0";
   by-version."debug"."0.5.0" = lib.makeOverridable self.buildNodePackage {
-    name = "debug-0.5.0";
+    name = "node-debug-0.5.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/debug/-/debug-0.5.0.tgz";
@@ -3335,7 +3335,7 @@
   by-spec."debuglog"."0.0.2" =
     self.by-version."debuglog"."0.0.2";
   by-version."debuglog"."0.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "debuglog-0.0.2";
+    name = "node-debuglog-0.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/debuglog/-/debuglog-0.0.2.tgz";
@@ -3354,7 +3354,7 @@
   by-spec."decompress"."~0.1.5" =
     self.by-version."decompress"."0.1.6";
   by-version."decompress"."0.1.6" = lib.makeOverridable self.buildNodePackage {
-    name = "decompress-0.1.6";
+    name = "node-decompress-0.1.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/decompress/-/decompress-0.1.6.tgz";
@@ -3405,7 +3405,7 @@
   by-spec."deep-eql"."0.1.3" =
     self.by-version."deep-eql"."0.1.3";
   by-version."deep-eql"."0.1.3" = lib.makeOverridable self.buildNodePackage {
-    name = "deep-eql-0.1.3";
+    name = "node-deep-eql-0.1.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/deep-eql/-/deep-eql-0.1.3.tgz";
@@ -3425,7 +3425,7 @@
   by-spec."deep-equal"."*" =
     self.by-version."deep-equal"."0.2.1";
   by-version."deep-equal"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "deep-equal-0.2.1";
+    name = "node-deep-equal-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/deep-equal/-/deep-equal-0.2.1.tgz";
@@ -3444,7 +3444,7 @@
   by-spec."deep-equal"."0.0.0" =
     self.by-version."deep-equal"."0.0.0";
   by-version."deep-equal"."0.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "deep-equal-0.0.0";
+    name = "node-deep-equal-0.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/deep-equal/-/deep-equal-0.0.0.tgz";
@@ -3463,7 +3463,7 @@
   by-spec."deep-extend"."~0.2.5" =
     self.by-version."deep-extend"."0.2.8";
   by-version."deep-extend"."0.2.8" = lib.makeOverridable self.buildNodePackage {
-    name = "deep-extend-0.2.8";
+    name = "node-deep-extend-0.2.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/deep-extend/-/deep-extend-0.2.8.tgz";
@@ -3484,7 +3484,7 @@
   by-spec."delayed-stream"."0.0.5" =
     self.by-version."delayed-stream"."0.0.5";
   by-version."delayed-stream"."0.0.5" = lib.makeOverridable self.buildNodePackage {
-    name = "delayed-stream-0.0.5";
+    name = "node-delayed-stream-0.0.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/delayed-stream/-/delayed-stream-0.0.5.tgz";
@@ -3503,7 +3503,7 @@
   by-spec."di"."~0.0.1" =
     self.by-version."di"."0.0.1";
   by-version."di"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "di-0.0.1";
+    name = "node-di-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/di/-/di-0.0.1.tgz";
@@ -3522,7 +3522,7 @@
   by-spec."diff"."1.0.7" =
     self.by-version."diff"."1.0.7";
   by-version."diff"."1.0.7" = lib.makeOverridable self.buildNodePackage {
-    name = "diff-1.0.7";
+    name = "node-diff-1.0.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/diff/-/diff-1.0.7.tgz";
@@ -3541,7 +3541,7 @@
   by-spec."diff"."~1.0.3" =
     self.by-version."diff"."1.0.8";
   by-version."diff"."1.0.8" = lib.makeOverridable self.buildNodePackage {
-    name = "diff-1.0.8";
+    name = "node-diff-1.0.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/diff/-/diff-1.0.8.tgz";
@@ -3564,7 +3564,7 @@
   by-spec."director"."1.1.10" =
     self.by-version."director"."1.1.10";
   by-version."director"."1.1.10" = lib.makeOverridable self.buildNodePackage {
-    name = "director-1.1.10";
+    name = "node-director-1.1.10";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/director/-/director-1.1.10.tgz";
@@ -3583,7 +3583,7 @@
   by-spec."dkim-signer"."~0.1.0" =
     self.by-version."dkim-signer"."0.1.0";
   by-version."dkim-signer"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "dkim-signer-0.1.0";
+    name = "node-dkim-signer-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/dkim-signer/-/dkim-signer-0.1.0.tgz";
@@ -3604,7 +3604,7 @@
   by-spec."domelementtype"."1" =
     self.by-version."domelementtype"."1.1.1";
   by-version."domelementtype"."1.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "domelementtype-1.1.1";
+    name = "node-domelementtype-1.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/domelementtype/-/domelementtype-1.1.1.tgz";
@@ -3623,7 +3623,7 @@
   by-spec."domhandler"."2.0" =
     self.by-version."domhandler"."2.0.3";
   by-version."domhandler"."2.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "domhandler-2.0.3";
+    name = "node-domhandler-2.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/domhandler/-/domhandler-2.0.3.tgz";
@@ -3643,7 +3643,7 @@
   by-spec."domhandler"."2.1" =
     self.by-version."domhandler"."2.1.0";
   by-version."domhandler"."2.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "domhandler-2.1.0";
+    name = "node-domhandler-2.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/domhandler/-/domhandler-2.1.0.tgz";
@@ -3663,7 +3663,7 @@
   by-spec."domhandler"."2.2" =
     self.by-version."domhandler"."2.2.0";
   by-version."domhandler"."2.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "domhandler-2.2.0";
+    name = "node-domhandler-2.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/domhandler/-/domhandler-2.2.0.tgz";
@@ -3683,7 +3683,7 @@
   by-spec."domutils"."1.1" =
     self.by-version."domutils"."1.1.6";
   by-version."domutils"."1.1.6" = lib.makeOverridable self.buildNodePackage {
-    name = "domutils-1.1.6";
+    name = "node-domutils-1.1.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/domutils/-/domutils-1.1.6.tgz";
@@ -3703,7 +3703,7 @@
   by-spec."domutils"."1.3" =
     self.by-version."domutils"."1.3.0";
   by-version."domutils"."1.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "domutils-1.3.0";
+    name = "node-domutils-1.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/domutils/-/domutils-1.3.0.tgz";
@@ -3723,7 +3723,7 @@
   by-spec."download"."~0.1.6" =
     self.by-version."download"."0.1.10";
   by-version."download"."0.1.10" = lib.makeOverridable self.buildNodePackage {
-    name = "download-0.1.10";
+    name = "node-download-0.1.10";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/download/-/download-0.1.10.tgz";
@@ -3768,7 +3768,7 @@
   by-spec."dtrace-provider"."0.2.8" =
     self.by-version."dtrace-provider"."0.2.8";
   by-version."dtrace-provider"."0.2.8" = lib.makeOverridable self.buildNodePackage {
-    name = "dtrace-provider-0.2.8";
+    name = "node-dtrace-provider-0.2.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/dtrace-provider/-/dtrace-provider-0.2.8.tgz";
@@ -3787,7 +3787,7 @@
   by-spec."duplexer"."~0.1.1" =
     self.by-version."duplexer"."0.1.1";
   by-version."duplexer"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "duplexer-0.1.1";
+    name = "node-duplexer-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/duplexer/-/duplexer-0.1.1.tgz";
@@ -3806,7 +3806,7 @@
   by-spec."each-async"."~0.1.1" =
     self.by-version."each-async"."0.1.1";
   by-version."each-async"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "each-async-0.1.1";
+    name = "node-each-async-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/each-async/-/each-async-0.1.1.tgz";
@@ -3825,7 +3825,7 @@
   by-spec."editor"."0.0.5" =
     self.by-version."editor"."0.0.5";
   by-version."editor"."0.0.5" = lib.makeOverridable self.buildNodePackage {
-    name = "editor-0.0.5";
+    name = "node-editor-0.0.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/editor/-/editor-0.0.5.tgz";
@@ -3844,7 +3844,7 @@
   by-spec."ejs"."0.8.3" =
     self.by-version."ejs"."0.8.3";
   by-version."ejs"."0.8.3" = lib.makeOverridable self.buildNodePackage {
-    name = "ejs-0.8.3";
+    name = "node-ejs-0.8.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ejs/-/ejs-0.8.3.tgz";
@@ -3863,7 +3863,7 @@
   by-spec."emitter-component"."0.0.6" =
     self.by-version."emitter-component"."0.0.6";
   by-version."emitter-component"."0.0.6" = lib.makeOverridable self.buildNodePackage {
-    name = "emitter-component-0.0.6";
+    name = "node-emitter-component-0.0.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/emitter-component/-/emitter-component-0.0.6.tgz";
@@ -3882,7 +3882,7 @@
   by-spec."emitter-component"."1.0.0" =
     self.by-version."emitter-component"."1.0.0";
   by-version."emitter-component"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "emitter-component-1.0.0";
+    name = "node-emitter-component-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/emitter-component/-/emitter-component-1.0.0.tgz";
@@ -3901,7 +3901,7 @@
   by-spec."encoding"."~0.1" =
     self.by-version."encoding"."0.1.7";
   by-version."encoding"."0.1.7" = lib.makeOverridable self.buildNodePackage {
-    name = "encoding-0.1.7";
+    name = "node-encoding-0.1.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/encoding/-/encoding-0.1.7.tgz";
@@ -3921,7 +3921,7 @@
   by-spec."entities"."0.x" =
     self.by-version."entities"."0.3.0";
   by-version."entities"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "entities-0.3.0";
+    name = "node-entities-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/entities/-/entities-0.3.0.tgz";
@@ -3940,7 +3940,7 @@
   by-spec."es5-ext"."~0.9.2" =
     self.by-version."es5-ext"."0.9.2";
   by-version."es5-ext"."0.9.2" = lib.makeOverridable self.buildNodePackage {
-    name = "es5-ext-0.9.2";
+    name = "node-es5-ext-0.9.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/es5-ext/-/es5-ext-0.9.2.tgz";
@@ -3959,7 +3959,7 @@
   by-spec."escape-html"."*" =
     self.by-version."escape-html"."1.0.1";
   by-version."escape-html"."1.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "escape-html-1.0.1";
+    name = "node-escape-html-1.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/escape-html/-/escape-html-1.0.1.tgz";
@@ -4074,7 +4074,7 @@
   by-spec."estraverse"."*" =
     self.by-version."estraverse"."1.5.0";
   by-version."estraverse"."1.5.0" = lib.makeOverridable self.buildNodePackage {
-    name = "estraverse-1.5.0";
+    name = "node-estraverse-1.5.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/estraverse/-/estraverse-1.5.0.tgz";
@@ -4093,7 +4093,7 @@
   by-spec."estraverse"."~0.0.4" =
     self.by-version."estraverse"."0.0.4";
   by-version."estraverse"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "estraverse-0.0.4";
+    name = "node-estraverse-0.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/estraverse/-/estraverse-0.0.4.tgz";
@@ -4114,7 +4114,7 @@
   by-spec."esutils"."~1.0.0" =
     self.by-version."esutils"."1.0.0";
   by-version."esutils"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "esutils-1.0.0";
+    name = "node-esutils-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/esutils/-/esutils-1.0.0.tgz";
@@ -4133,7 +4133,7 @@
   by-spec."event-emitter"."~0.2.2" =
     self.by-version."event-emitter"."0.2.2";
   by-version."event-emitter"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "event-emitter-0.2.2";
+    name = "node-event-emitter-0.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/event-emitter/-/event-emitter-0.2.2.tgz";
@@ -4153,7 +4153,7 @@
   by-spec."event-stream"."~0.5" =
     self.by-version."event-stream"."0.5.3";
   by-version."event-stream"."0.5.3" = lib.makeOverridable self.buildNodePackage {
-    name = "event-stream-0.5.3";
+    name = "node-event-stream-0.5.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/event-stream/-/event-stream-0.5.3.tgz";
@@ -4173,7 +4173,7 @@
   by-spec."eventemitter2"."0.4.12" =
     self.by-version."eventemitter2"."0.4.12";
   by-version."eventemitter2"."0.4.12" = lib.makeOverridable self.buildNodePackage {
-    name = "eventemitter2-0.4.12";
+    name = "node-eventemitter2-0.4.12";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/eventemitter2/-/eventemitter2-0.4.12.tgz";
@@ -4192,7 +4192,7 @@
   by-spec."eventemitter2"."~0.4.11" =
     self.by-version."eventemitter2"."0.4.13";
   by-version."eventemitter2"."0.4.13" = lib.makeOverridable self.buildNodePackage {
-    name = "eventemitter2-0.4.13";
+    name = "node-eventemitter2-0.4.13";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/eventemitter2/-/eventemitter2-0.4.13.tgz";
@@ -4213,7 +4213,7 @@
   by-spec."events.node".">= 0.4.0" =
     self.by-version."events.node"."0.4.9";
   by-version."events.node"."0.4.9" = lib.makeOverridable self.buildNodePackage {
-    name = "events.node-0.4.9";
+    name = "node-events.node-0.4.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/events.node/-/events.node-0.4.9.tgz";
@@ -4232,7 +4232,7 @@
   by-spec."everyauth"."0.4.5" =
     self.by-version."everyauth"."0.4.5";
   by-version."everyauth"."0.4.5" = lib.makeOverridable self.buildNodePackage {
-    name = "everyauth-0.4.5";
+    name = "node-everyauth-0.4.5";
     src = [
       (self.patchSource fetchurl {
         url = "http://registry.npmjs.org/everyauth/-/everyauth-0.4.5.tgz";
@@ -4260,7 +4260,7 @@
   by-spec."exit"."~0.1.1" =
     self.by-version."exit"."0.1.2";
   by-version."exit"."0.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "exit-0.1.2";
+    name = "node-exit-0.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/exit/-/exit-0.1.2.tgz";
@@ -4430,7 +4430,7 @@
   by-spec."express-form"."*" =
     self.by-version."express-form"."0.10.1";
   by-version."express-form"."0.10.1" = lib.makeOverridable self.buildNodePackage {
-    name = "express-form-0.10.1";
+    name = "node-express-form-0.10.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/express-form/-/express-form-0.10.1.tgz";
@@ -4454,7 +4454,7 @@
   by-spec."express-partials"."0.0.6" =
     self.by-version."express-partials"."0.0.6";
   by-version."express-partials"."0.0.6" = lib.makeOverridable self.buildNodePackage {
-    name = "express-partials-0.0.6";
+    name = "node-express-partials-0.0.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/express-partials/-/express-partials-0.0.6.tgz";
@@ -4473,7 +4473,7 @@
   by-spec."extend"."*" =
     self.by-version."extend"."1.2.1";
   by-version."extend"."1.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "extend-1.2.1";
+    name = "node-extend-1.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/extend/-/extend-1.2.1.tgz";
@@ -4493,7 +4493,7 @@
   by-spec."extract-opts"."~2.2.0" =
     self.by-version."extract-opts"."2.2.0";
   by-version."extract-opts"."2.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "extract-opts-2.2.0";
+    name = "node-extract-opts-2.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/extract-opts/-/extract-opts-2.2.0.tgz";
@@ -4513,7 +4513,7 @@
   by-spec."extsprintf"."1.0.0" =
     self.by-version."extsprintf"."1.0.0";
   by-version."extsprintf"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "extsprintf-1.0.0";
+    name = "node-extsprintf-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/extsprintf/-/extsprintf-1.0.0.tgz";
@@ -4532,7 +4532,7 @@
   by-spec."extsprintf"."1.0.2" =
     self.by-version."extsprintf"."1.0.2";
   by-version."extsprintf"."1.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "extsprintf-1.0.2";
+    name = "node-extsprintf-1.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/extsprintf/-/extsprintf-1.0.2.tgz";
@@ -4551,7 +4551,7 @@
   by-spec."eyes"."0.1.x" =
     self.by-version."eyes"."0.1.8";
   by-version."eyes"."0.1.8" = lib.makeOverridable self.buildNodePackage {
-    name = "eyes-0.1.8";
+    name = "node-eyes-0.1.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/eyes/-/eyes-0.1.8.tgz";
@@ -4572,7 +4572,7 @@
   by-spec."faye-websocket"."*" =
     self.by-version."faye-websocket"."0.7.2";
   by-version."faye-websocket"."0.7.2" = lib.makeOverridable self.buildNodePackage {
-    name = "faye-websocket-0.7.2";
+    name = "node-faye-websocket-0.7.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/faye-websocket/-/faye-websocket-0.7.2.tgz";
@@ -4593,7 +4593,7 @@
   by-spec."faye-websocket"."0.7.0" =
     self.by-version."faye-websocket"."0.7.0";
   by-version."faye-websocket"."0.7.0" = lib.makeOverridable self.buildNodePackage {
-    name = "faye-websocket-0.7.0";
+    name = "node-faye-websocket-0.7.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/faye-websocket/-/faye-websocket-0.7.0.tgz";
@@ -4639,7 +4639,7 @@
   by-spec."fields"."~0.1.11" =
     self.by-version."fields"."0.1.12";
   by-version."fields"."0.1.12" = lib.makeOverridable self.buildNodePackage {
-    name = "fields-0.1.12";
+    name = "node-fields-0.1.12";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/fields/-/fields-0.1.12.tgz";
@@ -4661,7 +4661,7 @@
   by-spec."file-utils"."~0.1.1" =
     self.by-version."file-utils"."0.1.5";
   by-version."file-utils"."0.1.5" = lib.makeOverridable self.buildNodePackage {
-    name = "file-utils-0.1.5";
+    name = "node-file-utils-0.1.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/file-utils/-/file-utils-0.1.5.tgz";
@@ -4689,7 +4689,7 @@
   by-spec."fileset"."0.1.x" =
     self.by-version."fileset"."0.1.5";
   by-version."fileset"."0.1.5" = lib.makeOverridable self.buildNodePackage {
-    name = "fileset-0.1.5";
+    name = "node-fileset-0.1.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/fileset/-/fileset-0.1.5.tgz";
@@ -4710,7 +4710,7 @@
   by-spec."findit".">=1.1.0 <2.0.0" =
     self.by-version."findit"."1.1.0";
   by-version."findit"."1.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "findit-1.1.0";
+    name = "node-findit-1.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/findit/-/findit-1.1.0.tgz";
@@ -4750,7 +4750,7 @@
   by-spec."findup-sync"."~0.1.0" =
     self.by-version."findup-sync"."0.1.2";
   by-version."findup-sync"."0.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "findup-sync-0.1.2";
+    name = "node-findup-sync-0.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/findup-sync/-/findup-sync-0.1.2.tgz";
@@ -4799,7 +4799,7 @@
   by-spec."follow-redirects"."0.0.3" =
     self.by-version."follow-redirects"."0.0.3";
   by-version."follow-redirects"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "follow-redirects-0.0.3";
+    name = "node-follow-redirects-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/follow-redirects/-/follow-redirects-0.0.3.tgz";
@@ -4819,7 +4819,7 @@
   by-spec."forEachAsync"."~2.2" =
     self.by-version."forEachAsync"."2.2.1";
   by-version."forEachAsync"."2.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "forEachAsync-2.2.1";
+    name = "node-forEachAsync-2.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/forEachAsync/-/forEachAsync-2.2.1.tgz";
@@ -4871,7 +4871,7 @@
   by-spec."forever-agent"."~0.2.0" =
     self.by-version."forever-agent"."0.2.0";
   by-version."forever-agent"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "forever-agent-0.2.0";
+    name = "node-forever-agent-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/forever-agent/-/forever-agent-0.2.0.tgz";
@@ -4890,7 +4890,7 @@
   by-spec."forever-agent"."~0.5.0" =
     self.by-version."forever-agent"."0.5.0";
   by-version."forever-agent"."0.5.0" = lib.makeOverridable self.buildNodePackage {
-    name = "forever-agent-0.5.0";
+    name = "node-forever-agent-0.5.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/forever-agent/-/forever-agent-0.5.0.tgz";
@@ -4909,7 +4909,7 @@
   by-spec."forever-monitor"."*" =
     self.by-version."forever-monitor"."1.2.3";
   by-version."forever-monitor"."1.2.3" = lib.makeOverridable self.buildNodePackage {
-    name = "forever-monitor-1.2.3";
+    name = "node-forever-monitor-1.2.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/forever-monitor/-/forever-monitor-1.2.3.tgz";
@@ -4935,7 +4935,7 @@
   by-spec."forever-monitor"."1.1.0" =
     self.by-version."forever-monitor"."1.1.0";
   by-version."forever-monitor"."1.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "forever-monitor-1.1.0";
+    name = "node-forever-monitor-1.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/forever-monitor/-/forever-monitor-1.1.0.tgz";
@@ -4962,7 +4962,7 @@
   by-spec."form-data"."~0.0.3" =
     self.by-version."form-data"."0.0.10";
   by-version."form-data"."0.0.10" = lib.makeOverridable self.buildNodePackage {
-    name = "form-data-0.0.10";
+    name = "node-form-data-0.0.10";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/form-data/-/form-data-0.0.10.tgz";
@@ -4984,7 +4984,7 @@
   by-spec."form-data"."~0.1.0" =
     self.by-version."form-data"."0.1.2";
   by-version."form-data"."0.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "form-data-0.1.2";
+    name = "node-form-data-0.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/form-data/-/form-data-0.1.2.tgz";
@@ -5006,7 +5006,7 @@
   by-spec."formidable"."1.0.11" =
     self.by-version."formidable"."1.0.11";
   by-version."formidable"."1.0.11" = lib.makeOverridable self.buildNodePackage {
-    name = "formidable-1.0.11";
+    name = "node-formidable-1.0.11";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/formidable/-/formidable-1.0.11.tgz";
@@ -5025,7 +5025,7 @@
   by-spec."formidable"."1.0.13" =
     self.by-version."formidable"."1.0.13";
   by-version."formidable"."1.0.13" = lib.makeOverridable self.buildNodePackage {
-    name = "formidable-1.0.13";
+    name = "node-formidable-1.0.13";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/formidable/-/formidable-1.0.13.tgz";
@@ -5044,7 +5044,7 @@
   by-spec."formidable"."1.0.14" =
     self.by-version."formidable"."1.0.14";
   by-version."formidable"."1.0.14" = lib.makeOverridable self.buildNodePackage {
-    name = "formidable-1.0.14";
+    name = "node-formidable-1.0.14";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/formidable/-/formidable-1.0.14.tgz";
@@ -5063,7 +5063,7 @@
   by-spec."formidable"."1.0.9" =
     self.by-version."formidable"."1.0.9";
   by-version."formidable"."1.0.9" = lib.makeOverridable self.buildNodePackage {
-    name = "formidable-1.0.9";
+    name = "node-formidable-1.0.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/formidable/-/formidable-1.0.9.tgz";
@@ -5084,7 +5084,7 @@
   by-spec."fresh"."0.1.0" =
     self.by-version."fresh"."0.1.0";
   by-version."fresh"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "fresh-0.1.0";
+    name = "node-fresh-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/fresh/-/fresh-0.1.0.tgz";
@@ -5103,7 +5103,7 @@
   by-spec."fresh"."0.2.0" =
     self.by-version."fresh"."0.2.0";
   by-version."fresh"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "fresh-0.2.0";
+    name = "node-fresh-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/fresh/-/fresh-0.2.0.tgz";
@@ -5122,7 +5122,7 @@
   by-spec."fresh"."~0.2.1" =
     self.by-version."fresh"."0.2.1";
   by-version."fresh"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "fresh-0.2.1";
+    name = "node-fresh-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/fresh/-/fresh-0.2.1.tgz";
@@ -5141,7 +5141,7 @@
   by-spec."fs-extra"."~0.6.1" =
     self.by-version."fs-extra"."0.6.4";
   by-version."fs-extra"."0.6.4" = lib.makeOverridable self.buildNodePackage {
-    name = "fs-extra-0.6.4";
+    name = "node-fs-extra-0.6.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/fs-extra/-/fs-extra-0.6.4.tgz";
@@ -5164,7 +5164,7 @@
   by-spec."fs-walk"."*" =
     self.by-version."fs-walk"."0.0.1";
   by-version."fs-walk"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "fs-walk-0.0.1";
+    name = "node-fs-walk-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/fs-walk/-/fs-walk-0.0.1.tgz";
@@ -5185,7 +5185,7 @@
   by-spec."fs.extra".">=1.2.0 <2.0.0" =
     self.by-version."fs.extra"."1.2.1";
   by-version."fs.extra"."1.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "fs.extra-1.2.1";
+    name = "node-fs.extra-1.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/fs.extra/-/fs.extra-1.2.1.tgz";
@@ -5209,7 +5209,7 @@
   by-spec."fstream"."0" =
     self.by-version."fstream"."0.1.25";
   by-version."fstream"."0.1.25" = lib.makeOverridable self.buildNodePackage {
-    name = "fstream-0.1.25";
+    name = "node-fstream-0.1.25";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/fstream/-/fstream-0.1.25.tgz";
@@ -5240,7 +5240,7 @@
   by-spec."fstream-ignore"."~0.0.5" =
     self.by-version."fstream-ignore"."0.0.7";
   by-version."fstream-ignore"."0.0.7" = lib.makeOverridable self.buildNodePackage {
-    name = "fstream-ignore-0.0.7";
+    name = "node-fstream-ignore-0.0.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/fstream-ignore/-/fstream-ignore-0.0.7.tgz";
@@ -5264,7 +5264,7 @@
   by-spec."fstream-npm"."~0.1.6" =
     self.by-version."fstream-npm"."0.1.6";
   by-version."fstream-npm"."0.1.6" = lib.makeOverridable self.buildNodePackage {
-    name = "fstream-npm-0.1.6";
+    name = "node-fstream-npm-0.1.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/fstream-npm/-/fstream-npm-0.1.6.tgz";
@@ -5285,7 +5285,7 @@
   by-spec."generator-angular"."*" =
     self.by-version."generator-angular"."0.7.1";
   by-version."generator-angular"."0.7.1" = lib.makeOverridable self.buildNodePackage {
-    name = "generator-angular-0.7.1";
+    name = "node-generator-angular-0.7.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/generator-angular/-/generator-angular-0.7.1.tgz";
@@ -5310,7 +5310,7 @@
   by-spec."generator-karma"."~0.6.0" =
     self.by-version."generator-karma"."0.6.0";
   by-version."generator-karma"."0.6.0" = lib.makeOverridable self.buildNodePackage {
-    name = "generator-karma-0.6.0";
+    name = "node-generator-karma-0.6.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/generator-karma/-/generator-karma-0.6.0.tgz";
@@ -5331,7 +5331,7 @@
   by-spec."generator-mocha".">=0.1.0" =
     self.by-version."generator-mocha"."0.1.3";
   by-version."generator-mocha"."0.1.3" = lib.makeOverridable self.buildNodePackage {
-    name = "generator-mocha-0.1.3";
+    name = "node-generator-mocha-0.1.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/generator-mocha/-/generator-mocha-0.1.3.tgz";
@@ -5352,7 +5352,7 @@
   by-spec."generator-webapp"."*" =
     self.by-version."generator-webapp"."0.4.7";
   by-version."generator-webapp"."0.4.7" = lib.makeOverridable self.buildNodePackage {
-    name = "generator-webapp-0.4.7";
+    name = "node-generator-webapp-0.4.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/generator-webapp/-/generator-webapp-0.4.7.tgz";
@@ -5397,7 +5397,7 @@
   by-spec."getobject"."~0.1.0" =
     self.by-version."getobject"."0.1.0";
   by-version."getobject"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "getobject-0.1.0";
+    name = "node-getobject-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/getobject/-/getobject-0.1.0.tgz";
@@ -5416,7 +5416,7 @@
   by-spec."github-flavored-markdown".">= 0.0.1" =
     self.by-version."github-flavored-markdown"."1.0.1";
   by-version."github-flavored-markdown"."1.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "github-flavored-markdown-1.0.1";
+    name = "node-github-flavored-markdown-1.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/github-flavored-markdown/-/github-flavored-markdown-1.0.1.tgz";
@@ -5435,7 +5435,7 @@
   by-spec."github-url-from-git"."1.1.1" =
     self.by-version."github-url-from-git"."1.1.1";
   by-version."github-url-from-git"."1.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "github-url-from-git-1.1.1";
+    name = "node-github-url-from-git-1.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/github-url-from-git/-/github-url-from-git-1.1.1.tgz";
@@ -5456,7 +5456,7 @@
   by-spec."github-url-from-username-repo"."0.0.2" =
     self.by-version."github-url-from-username-repo"."0.0.2";
   by-version."github-url-from-username-repo"."0.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "github-url-from-username-repo-0.0.2";
+    name = "node-github-url-from-username-repo-0.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/github-url-from-username-repo/-/github-url-from-username-repo-0.0.2.tgz";
@@ -5475,7 +5475,7 @@
   by-spec."glob"."3" =
     self.by-version."glob"."3.2.8";
   by-version."glob"."3.2.8" = lib.makeOverridable self.buildNodePackage {
-    name = "glob-3.2.8";
+    name = "node-glob-3.2.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/glob/-/glob-3.2.8.tgz";
@@ -5496,7 +5496,7 @@
   by-spec."glob"."3.2.3" =
     self.by-version."glob"."3.2.3";
   by-version."glob"."3.2.3" = lib.makeOverridable self.buildNodePackage {
-    name = "glob-3.2.3";
+    name = "node-glob-3.2.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/glob/-/glob-3.2.3.tgz";
@@ -5526,7 +5526,7 @@
   by-spec."glob"."~3.1.21" =
     self.by-version."glob"."3.1.21";
   by-version."glob"."3.1.21" = lib.makeOverridable self.buildNodePackage {
-    name = "glob-3.1.21";
+    name = "node-glob-3.1.21";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/glob/-/glob-3.1.21.tgz";
@@ -5556,7 +5556,7 @@
   by-spec."graceful-fs"."2" =
     self.by-version."graceful-fs"."2.0.1";
   by-version."graceful-fs"."2.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "graceful-fs-2.0.1";
+    name = "node-graceful-fs-2.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/graceful-fs/-/graceful-fs-2.0.1.tgz";
@@ -5575,7 +5575,7 @@
   by-spec."graceful-fs"."~1" =
     self.by-version."graceful-fs"."1.2.3";
   by-version."graceful-fs"."1.2.3" = lib.makeOverridable self.buildNodePackage {
-    name = "graceful-fs-1.2.3";
+    name = "node-graceful-fs-1.2.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/graceful-fs/-/graceful-fs-1.2.3.tgz";
@@ -5594,7 +5594,7 @@
   by-spec."graceful-fs"."~1.1" =
     self.by-version."graceful-fs"."1.1.14";
   by-version."graceful-fs"."1.1.14" = lib.makeOverridable self.buildNodePackage {
-    name = "graceful-fs-1.1.14";
+    name = "node-graceful-fs-1.1.14";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/graceful-fs/-/graceful-fs-1.1.14.tgz";
@@ -5621,7 +5621,7 @@
   by-spec."gridfs-stream"."*" =
     self.by-version."gridfs-stream"."0.4.1";
   by-version."gridfs-stream"."0.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "gridfs-stream-0.4.1";
+    name = "node-gridfs-stream-0.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/gridfs-stream/-/gridfs-stream-0.4.1.tgz";
@@ -5641,7 +5641,7 @@
   by-spec."growl"."1.7.x" =
     self.by-version."growl"."1.7.0";
   by-version."growl"."1.7.0" = lib.makeOverridable self.buildNodePackage {
-    name = "growl-1.7.0";
+    name = "node-growl-1.7.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/growl/-/growl-1.7.0.tgz";
@@ -5660,7 +5660,7 @@
   by-spec."grunt"."0.4.x" =
     self.by-version."grunt"."0.4.2";
   by-version."grunt"."0.4.2" = lib.makeOverridable self.buildNodePackage {
-    name = "grunt-0.4.2";
+    name = "node-grunt-0.4.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/grunt/-/grunt-0.4.2.tgz";
@@ -5703,7 +5703,7 @@
   by-spec."grunt-bower-task"."*" =
     self.by-version."grunt-bower-task"."0.3.4";
   by-version."grunt-bower-task"."0.3.4" = lib.makeOverridable self.buildNodePackage {
-    name = "grunt-bower-task-0.3.4";
+    name = "node-grunt-bower-task-0.3.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/grunt-bower-task/-/grunt-bower-task-0.3.4.tgz";
@@ -5754,7 +5754,7 @@
   by-spec."grunt-contrib-cssmin"."*" =
     self.by-version."grunt-contrib-cssmin"."0.7.0";
   by-version."grunt-contrib-cssmin"."0.7.0" = lib.makeOverridable self.buildNodePackage {
-    name = "grunt-contrib-cssmin-0.7.0";
+    name = "node-grunt-contrib-cssmin-0.7.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/grunt-contrib-cssmin/-/grunt-contrib-cssmin-0.7.0.tgz";
@@ -5777,7 +5777,7 @@
   by-spec."grunt-contrib-jshint"."*" =
     self.by-version."grunt-contrib-jshint"."0.8.0";
   by-version."grunt-contrib-jshint"."0.8.0" = lib.makeOverridable self.buildNodePackage {
-    name = "grunt-contrib-jshint-0.8.0";
+    name = "node-grunt-contrib-jshint-0.8.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/grunt-contrib-jshint/-/grunt-contrib-jshint-0.8.0.tgz";
@@ -5799,7 +5799,7 @@
   by-spec."grunt-contrib-less"."*" =
     self.by-version."grunt-contrib-less"."0.9.0";
   by-version."grunt-contrib-less"."0.9.0" = lib.makeOverridable self.buildNodePackage {
-    name = "grunt-contrib-less-0.9.0";
+    name = "node-grunt-contrib-less-0.9.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/grunt-contrib-less/-/grunt-contrib-less-0.9.0.tgz";
@@ -5823,7 +5823,7 @@
   by-spec."grunt-contrib-requirejs"."*" =
     self.by-version."grunt-contrib-requirejs"."0.4.1";
   by-version."grunt-contrib-requirejs"."0.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "grunt-contrib-requirejs-0.4.1";
+    name = "node-grunt-contrib-requirejs-0.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/grunt-contrib-requirejs/-/grunt-contrib-requirejs-0.4.1.tgz";
@@ -5845,7 +5845,7 @@
   by-spec."grunt-contrib-uglify"."*" =
     self.by-version."grunt-contrib-uglify"."0.3.2";
   by-version."grunt-contrib-uglify"."0.3.2" = lib.makeOverridable self.buildNodePackage {
-    name = "grunt-contrib-uglify-0.3.2";
+    name = "node-grunt-contrib-uglify-0.3.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/grunt-contrib-uglify/-/grunt-contrib-uglify-0.3.2.tgz";
@@ -5869,7 +5869,7 @@
   by-spec."grunt-karma"."*" =
     self.by-version."grunt-karma"."0.7.2";
   by-version."grunt-karma"."0.7.2" = lib.makeOverridable self.buildNodePackage {
-    name = "grunt-karma-0.7.2";
+    name = "node-grunt-karma-0.7.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/grunt-karma/-/grunt-karma-0.7.2.tgz";
@@ -5892,7 +5892,7 @@
   by-spec."grunt-lib-contrib"."~0.6.0" =
     self.by-version."grunt-lib-contrib"."0.6.1";
   by-version."grunt-lib-contrib"."0.6.1" = lib.makeOverridable self.buildNodePackage {
-    name = "grunt-lib-contrib-0.6.1";
+    name = "node-grunt-lib-contrib-0.6.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/grunt-lib-contrib/-/grunt-lib-contrib-0.6.1.tgz";
@@ -5914,7 +5914,7 @@
   by-spec."grunt-sed"."*" =
     self.by-version."grunt-sed"."0.1.1";
   by-version."grunt-sed"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "grunt-sed-0.1.1";
+    name = "node-grunt-sed-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/grunt-sed/-/grunt-sed-0.1.1.tgz";
@@ -5961,7 +5961,7 @@
   by-spec."gzippo"."*" =
     self.by-version."gzippo"."0.2.0";
   by-version."gzippo"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "gzippo-0.2.0";
+    name = "node-gzippo-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/gzippo/-/gzippo-0.2.0.tgz";
@@ -6026,7 +6026,7 @@
   by-spec."has-color"."~0.1.0" =
     self.by-version."has-color"."0.1.3";
   by-version."has-color"."0.1.3" = lib.makeOverridable self.buildNodePackage {
-    name = "has-color-0.1.3";
+    name = "node-has-color-0.1.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/has-color/-/has-color-0.1.3.tgz";
@@ -6045,7 +6045,7 @@
   by-spec."hasher"."~1.2.0" =
     self.by-version."hasher"."1.2.0";
   by-version."hasher"."1.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "hasher-1.2.0";
+    name = "node-hasher-1.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/hasher/-/hasher-1.2.0.tgz";
@@ -6065,7 +6065,7 @@
   by-spec."hashring"."1.0.1" =
     self.by-version."hashring"."1.0.1";
   by-version."hashring"."1.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "hashring-1.0.1";
+    name = "node-hashring-1.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/hashring/-/hashring-1.0.1.tgz";
@@ -6086,7 +6086,7 @@
   by-spec."hat"."*" =
     self.by-version."hat"."0.0.3";
   by-version."hat"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "hat-0.0.3";
+    name = "node-hat-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/hat/-/hat-0.0.3.tgz";
@@ -6105,7 +6105,7 @@
   by-spec."hawk"."~0.10.0" =
     self.by-version."hawk"."0.10.2";
   by-version."hawk"."0.10.2" = lib.makeOverridable self.buildNodePackage {
-    name = "hawk-0.10.2";
+    name = "node-hawk-0.10.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/hawk/-/hawk-0.10.2.tgz";
@@ -6130,7 +6130,7 @@
   by-spec."hawk"."~1.0.0" =
     self.by-version."hawk"."1.0.0";
   by-version."hawk"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "hawk-1.0.0";
+    name = "node-hawk-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/hawk/-/hawk-1.0.0.tgz";
@@ -6197,7 +6197,7 @@
   by-spec."hiredis"."*" =
     self.by-version."hiredis"."0.1.16";
   by-version."hiredis"."0.1.16" = lib.makeOverridable self.buildNodePackage {
-    name = "hiredis-0.1.16";
+    name = "node-hiredis-0.1.16";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/hiredis/-/hiredis-0.1.16.tgz";
@@ -6217,7 +6217,7 @@
   by-spec."hoek"."0.7.x" =
     self.by-version."hoek"."0.7.6";
   by-version."hoek"."0.7.6" = lib.makeOverridable self.buildNodePackage {
-    name = "hoek-0.7.6";
+    name = "node-hoek-0.7.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/hoek/-/hoek-0.7.6.tgz";
@@ -6236,7 +6236,7 @@
   by-spec."hoek"."0.9.x" =
     self.by-version."hoek"."0.9.1";
   by-version."hoek"."0.9.1" = lib.makeOverridable self.buildNodePackage {
-    name = "hoek-0.9.1";
+    name = "node-hoek-0.9.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/hoek/-/hoek-0.9.1.tgz";
@@ -6255,7 +6255,7 @@
   by-spec."hooker"."~0.2.3" =
     self.by-version."hooker"."0.2.3";
   by-version."hooker"."0.2.3" = lib.makeOverridable self.buildNodePackage {
-    name = "hooker-0.2.3";
+    name = "node-hooker-0.2.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/hooker/-/hooker-0.2.3.tgz";
@@ -6274,7 +6274,7 @@
   by-spec."hooks"."0.2.1" =
     self.by-version."hooks"."0.2.1";
   by-version."hooks"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "hooks-0.2.1";
+    name = "node-hooks-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/hooks/-/hooks-0.2.1.tgz";
@@ -6293,7 +6293,7 @@
   by-spec."htmlparser2"."3.1.4" =
     self.by-version."htmlparser2"."3.1.4";
   by-version."htmlparser2"."3.1.4" = lib.makeOverridable self.buildNodePackage {
-    name = "htmlparser2-3.1.4";
+    name = "node-htmlparser2-3.1.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/htmlparser2/-/htmlparser2-3.1.4.tgz";
@@ -6316,7 +6316,7 @@
   by-spec."htmlparser2"."3.3.x" =
     self.by-version."htmlparser2"."3.3.0";
   by-version."htmlparser2"."3.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "htmlparser2-3.3.0";
+    name = "node-htmlparser2-3.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/htmlparser2/-/htmlparser2-3.3.0.tgz";
@@ -6339,7 +6339,7 @@
   by-spec."htmlparser2"."~3.4.0" =
     self.by-version."htmlparser2"."3.4.0";
   by-version."htmlparser2"."3.4.0" = lib.makeOverridable self.buildNodePackage {
-    name = "htmlparser2-3.4.0";
+    name = "node-htmlparser2-3.4.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/htmlparser2/-/htmlparser2-3.4.0.tgz";
@@ -6362,7 +6362,7 @@
   by-spec."http-auth"."2.0.7" =
     self.by-version."http-auth"."2.0.7";
   by-version."http-auth"."2.0.7" = lib.makeOverridable self.buildNodePackage {
-    name = "http-auth-2.0.7";
+    name = "node-http-auth-2.0.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/http-auth/-/http-auth-2.0.7.tgz";
@@ -6429,7 +6429,7 @@
   by-spec."http-signature"."0.9.11" =
     self.by-version."http-signature"."0.9.11";
   by-version."http-signature"."0.9.11" = lib.makeOverridable self.buildNodePackage {
-    name = "http-signature-0.9.11";
+    name = "node-http-signature-0.9.11";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/http-signature/-/http-signature-0.9.11.tgz";
@@ -6451,7 +6451,7 @@
   by-spec."http-signature"."~0.10.0" =
     self.by-version."http-signature"."0.10.0";
   by-version."http-signature"."0.10.0" = lib.makeOverridable self.buildNodePackage {
-    name = "http-signature-0.10.0";
+    name = "node-http-signature-0.10.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/http-signature/-/http-signature-0.10.0.tgz";
@@ -6473,7 +6473,7 @@
   by-spec."humanize"."~0.0.9" =
     self.by-version."humanize"."0.0.9";
   by-version."humanize"."0.0.9" = lib.makeOverridable self.buildNodePackage {
-    name = "humanize-0.0.9";
+    name = "node-humanize-0.0.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/humanize/-/humanize-0.0.9.tgz";
@@ -6492,7 +6492,7 @@
   by-spec."i"."0.3.x" =
     self.by-version."i"."0.3.2";
   by-version."i"."0.3.2" = lib.makeOverridable self.buildNodePackage {
-    name = "i-0.3.2";
+    name = "node-i-0.3.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/i/-/i-0.3.2.tgz";
@@ -6511,7 +6511,7 @@
   by-spec."i18next"."*" =
     self.by-version."i18next"."1.7.1";
   by-version."i18next"."1.7.1" = lib.makeOverridable self.buildNodePackage {
-    name = "i18next-1.7.1";
+    name = "node-i18next-1.7.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/i18next/-/i18next-1.7.1.tgz";
@@ -6558,7 +6558,7 @@
   by-spec."iconv-lite"."~0.2.10" =
     self.by-version."iconv-lite"."0.2.11";
   by-version."iconv-lite"."0.2.11" = lib.makeOverridable self.buildNodePackage {
-    name = "iconv-lite-0.2.11";
+    name = "node-iconv-lite-0.2.11";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/iconv-lite/-/iconv-lite-0.2.11.tgz";
@@ -6579,7 +6579,7 @@
   by-spec."inherits"."1" =
     self.by-version."inherits"."1.0.0";
   by-version."inherits"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "inherits-1.0.0";
+    name = "node-inherits-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/inherits/-/inherits-1.0.0.tgz";
@@ -6600,7 +6600,7 @@
   by-spec."inherits"."2" =
     self.by-version."inherits"."2.0.1";
   by-version."inherits"."2.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "inherits-2.0.1";
+    name = "node-inherits-2.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz";
@@ -6625,7 +6625,7 @@
   by-spec."ini"."1" =
     self.by-version."ini"."1.1.0";
   by-version."ini"."1.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "ini-1.1.0";
+    name = "node-ini-1.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ini/-/ini-1.1.0.tgz";
@@ -6648,7 +6648,7 @@
   by-spec."init-package-json"."0.0.14" =
     self.by-version."init-package-json"."0.0.14";
   by-version."init-package-json"."0.0.14" = lib.makeOverridable self.buildNodePackage {
-    name = "init-package-json-0.0.14";
+    name = "node-init-package-json-0.0.14";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/init-package-json/-/init-package-json-0.0.14.tgz";
@@ -6672,7 +6672,7 @@
   by-spec."inquirer"."~0.2.4" =
     self.by-version."inquirer"."0.2.5";
   by-version."inquirer"."0.2.5" = lib.makeOverridable self.buildNodePackage {
-    name = "inquirer-0.2.5";
+    name = "node-inquirer-0.2.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/inquirer/-/inquirer-0.2.5.tgz";
@@ -6695,7 +6695,7 @@
   by-spec."inquirer"."~0.3.0" =
     self.by-version."inquirer"."0.3.5";
   by-version."inquirer"."0.3.5" = lib.makeOverridable self.buildNodePackage {
-    name = "inquirer-0.3.5";
+    name = "node-inquirer-0.3.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/inquirer/-/inquirer-0.3.5.tgz";
@@ -6720,7 +6720,7 @@
   by-spec."inquirer"."~0.4.0" =
     self.by-version."inquirer"."0.4.0";
   by-version."inquirer"."0.4.0" = lib.makeOverridable self.buildNodePackage {
-    name = "inquirer-0.4.0";
+    name = "node-inquirer-0.4.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/inquirer/-/inquirer-0.4.0.tgz";
@@ -6744,7 +6744,7 @@
   by-spec."insight"."~0.3.0" =
     self.by-version."insight"."0.3.0";
   by-version."insight"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "insight-0.3.0";
+    name = "node-insight-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/insight/-/insight-0.3.0.tgz";
@@ -6769,7 +6769,7 @@
   by-spec."intersect"."~0.0.3" =
     self.by-version."intersect"."0.0.3";
   by-version."intersect"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "intersect-0.0.3";
+    name = "node-intersect-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/intersect/-/intersect-0.0.3.tgz";
@@ -6788,7 +6788,7 @@
   by-spec."ironhorse"."*" =
     self.by-version."ironhorse"."0.0.9";
   by-version."ironhorse"."0.0.9" = lib.makeOverridable self.buildNodePackage {
-    name = "ironhorse-0.0.9";
+    name = "node-ironhorse-0.0.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ironhorse/-/ironhorse-0.0.9.tgz";
@@ -6824,7 +6824,7 @@
   by-spec."is-promise"."~1" =
     self.by-version."is-promise"."1.0.0";
   by-version."is-promise"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "is-promise-1.0.0";
+    name = "node-is-promise-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/is-promise/-/is-promise-1.0.0.tgz";
@@ -6843,7 +6843,7 @@
   by-spec."isbinaryfile"."~0.1.8" =
     self.by-version."isbinaryfile"."0.1.9";
   by-version."isbinaryfile"."0.1.9" = lib.makeOverridable self.buildNodePackage {
-    name = "isbinaryfile-0.1.9";
+    name = "node-isbinaryfile-0.1.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/isbinaryfile/-/isbinaryfile-0.1.9.tgz";
@@ -6864,7 +6864,7 @@
   by-spec."isbinaryfile"."~2.0.0" =
     self.by-version."isbinaryfile"."2.0.1";
   by-version."isbinaryfile"."2.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "isbinaryfile-2.0.1";
+    name = "node-isbinaryfile-2.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/isbinaryfile/-/isbinaryfile-2.0.1.tgz";
@@ -7063,7 +7063,7 @@
   by-spec."jedediah"."~0.1.0" =
     self.by-version."jedediah"."0.1.1";
   by-version."jedediah"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "jedediah-0.1.1";
+    name = "node-jedediah-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/jedediah/-/jedediah-0.1.1.tgz";
@@ -7104,7 +7104,7 @@
   by-spec."js-yaml"."0.3.x" =
     self.by-version."js-yaml"."0.3.7";
   by-version."js-yaml"."0.3.7" = lib.makeOverridable self.buildNodePackage {
-    name = "js-yaml-0.3.7";
+    name = "node-js-yaml-0.3.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/js-yaml/-/js-yaml-0.3.7.tgz";
@@ -7237,7 +7237,7 @@
   by-spec."json-schema"."0.2.2" =
     self.by-version."json-schema"."0.2.2";
   by-version."json-schema"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "json-schema-0.2.2";
+    name = "node-json-schema-0.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/json-schema/-/json-schema-0.2.2.tgz";
@@ -7256,7 +7256,7 @@
   by-spec."json-stringify-safe"."~3.0.0" =
     self.by-version."json-stringify-safe"."3.0.0";
   by-version."json-stringify-safe"."3.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "json-stringify-safe-3.0.0";
+    name = "node-json-stringify-safe-3.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-3.0.0.tgz";
@@ -7275,7 +7275,7 @@
   by-spec."json-stringify-safe"."~5.0.0" =
     self.by-version."json-stringify-safe"."5.0.0";
   by-version."json-stringify-safe"."5.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "json-stringify-safe-5.0.0";
+    name = "node-json-stringify-safe-5.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.0.tgz";
@@ -7294,7 +7294,7 @@
   by-spec."jsonfile"."~1.0.1" =
     self.by-version."jsonfile"."1.0.1";
   by-version."jsonfile"."1.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "jsonfile-1.0.1";
+    name = "node-jsonfile-1.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/jsonfile/-/jsonfile-1.0.1.tgz";
@@ -7333,7 +7333,7 @@
   by-spec."jsprim"."0.3.0" =
     self.by-version."jsprim"."0.3.0";
   by-version."jsprim"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "jsprim-0.3.0";
+    name = "node-jsprim-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/jsprim/-/jsprim-0.3.0.tgz";
@@ -7355,7 +7355,7 @@
   by-spec."junk"."~0.2.0" =
     self.by-version."junk"."0.2.2";
   by-version."junk"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "junk-0.2.2";
+    name = "node-junk-0.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/junk/-/junk-0.2.2.tgz";
@@ -7420,7 +7420,7 @@
   by-spec."karma-chrome-launcher"."*" =
     self.by-version."karma-chrome-launcher"."0.1.2";
   by-version."karma-chrome-launcher"."0.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "karma-chrome-launcher-0.1.2";
+    name = "node-karma-chrome-launcher-0.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/karma-chrome-launcher/-/karma-chrome-launcher-0.1.2.tgz";
@@ -7441,7 +7441,7 @@
   by-spec."karma-coverage"."*" =
     self.by-version."karma-coverage"."0.1.5";
   by-version."karma-coverage"."0.1.5" = lib.makeOverridable self.buildNodePackage {
-    name = "karma-coverage-0.1.5";
+    name = "node-karma-coverage-0.1.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/karma-coverage/-/karma-coverage-0.1.5.tgz";
@@ -7465,7 +7465,7 @@
   by-spec."karma-junit-reporter"."*" =
     self.by-version."karma-junit-reporter"."0.2.1";
   by-version."karma-junit-reporter"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "karma-junit-reporter-0.2.1";
+    name = "node-karma-junit-reporter-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/karma-junit-reporter/-/karma-junit-reporter-0.2.1.tgz";
@@ -7487,7 +7487,7 @@
   by-spec."karma-mocha"."*" =
     self.by-version."karma-mocha"."0.1.1";
   by-version."karma-mocha"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "karma-mocha-0.1.1";
+    name = "node-karma-mocha-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/karma-mocha/-/karma-mocha-0.1.1.tgz";
@@ -7509,7 +7509,7 @@
   by-spec."karma-requirejs"."*" =
     self.by-version."karma-requirejs"."0.2.1";
   by-version."karma-requirejs"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "karma-requirejs-0.2.1";
+    name = "node-karma-requirejs-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/karma-requirejs/-/karma-requirejs-0.2.1.tgz";
@@ -7531,7 +7531,7 @@
   by-spec."karma-sauce-launcher"."*" =
     self.by-version."karma-sauce-launcher"."0.2.0";
   by-version."karma-sauce-launcher"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "karma-sauce-launcher-0.2.0";
+    name = "node-karma-sauce-launcher-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/karma-sauce-launcher/-/karma-sauce-launcher-0.2.0.tgz";
@@ -7556,7 +7556,7 @@
   by-spec."keen.io"."~0.0.4" =
     self.by-version."keen.io"."0.0.4";
   by-version."keen.io"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "keen.io-0.0.4";
+    name = "node-keen.io-0.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/keen.io/-/keen.io-0.0.4.tgz";
@@ -7577,7 +7577,7 @@
   by-spec."keep-alive-agent"."0.0.1" =
     self.by-version."keep-alive-agent"."0.0.1";
   by-version."keep-alive-agent"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "keep-alive-agent-0.0.1";
+    name = "node-keep-alive-agent-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/keep-alive-agent/-/keep-alive-agent-0.0.1.tgz";
@@ -7596,7 +7596,7 @@
   by-spec."kerberos"."0.0.3" =
     self.by-version."kerberos"."0.0.3";
   by-version."kerberos"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "kerberos-0.0.3";
+    name = "node-kerberos-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/kerberos/-/kerberos-0.0.3.tgz";
@@ -7615,7 +7615,7 @@
   by-spec."kew"."~0.1.7" =
     self.by-version."kew"."0.1.7";
   by-version."kew"."0.1.7" = lib.makeOverridable self.buildNodePackage {
-    name = "kew-0.1.7";
+    name = "node-kew-0.1.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/kew/-/kew-0.1.7.tgz";
@@ -7634,7 +7634,7 @@
   by-spec."keygrip"."~1.0.0" =
     self.by-version."keygrip"."1.0.0";
   by-version."keygrip"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "keygrip-1.0.0";
+    name = "node-keygrip-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/keygrip/-/keygrip-1.0.0.tgz";
@@ -7653,7 +7653,7 @@
   by-spec."keypress"."0.1.x" =
     self.by-version."keypress"."0.1.0";
   by-version."keypress"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "keypress-0.1.0";
+    name = "node-keypress-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/keypress/-/keypress-0.1.0.tgz";
@@ -7674,7 +7674,7 @@
   by-spec."knockout"."~3.0.0" =
     self.by-version."knockout"."3.0.0";
   by-version."knockout"."3.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "knockout-3.0.0";
+    name = "node-knockout-3.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/knockout/-/knockout-3.0.0.tgz";
@@ -7693,7 +7693,7 @@
   by-spec."knox"."*" =
     self.by-version."knox"."0.8.8";
   by-version."knox"."0.8.8" = lib.makeOverridable self.buildNodePackage {
-    name = "knox-0.8.8";
+    name = "node-knox-0.8.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/knox/-/knox-0.8.8.tgz";
@@ -7717,7 +7717,7 @@
   by-spec."kue"."*" =
     self.by-version."kue"."0.7.4";
   by-version."kue"."0.7.4" = lib.makeOverridable self.buildNodePackage {
-    name = "kue-0.7.4";
+    name = "node-kue-0.7.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/kue/-/kue-0.7.4.tgz";
@@ -7743,7 +7743,7 @@
   by-spec."lazy"."~1.0.11" =
     self.by-version."lazy"."1.0.11";
   by-version."lazy"."1.0.11" = lib.makeOverridable self.buildNodePackage {
-    name = "lazy-1.0.11";
+    name = "node-lazy-1.0.11";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lazy/-/lazy-1.0.11.tgz";
@@ -7762,7 +7762,7 @@
   by-spec."lazystream"."~0.1.0" =
     self.by-version."lazystream"."0.1.0";
   by-version."lazystream"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "lazystream-0.1.0";
+    name = "node-lazystream-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lazystream/-/lazystream-0.1.0.tgz";
@@ -7782,7 +7782,7 @@
   by-spec."lcov-parse"."0.0.4" =
     self.by-version."lcov-parse"."0.0.4";
   by-version."lcov-parse"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "lcov-parse-0.0.4";
+    name = "node-lcov-parse-0.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lcov-parse/-/lcov-parse-0.0.4.tgz";
@@ -7846,7 +7846,7 @@
   by-spec."libxmljs"."~0.8.1" =
     self.by-version."libxmljs"."0.8.1";
   by-version."libxmljs"."0.8.1" = lib.makeOverridable self.buildNodePackage {
-    name = "libxmljs-0.8.1";
+    name = "node-libxmljs-0.8.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/libxmljs/-/libxmljs-0.8.1.tgz";
@@ -7866,7 +7866,7 @@
   by-spec."libyaml"."*" =
     self.by-version."libyaml"."0.2.2";
   by-version."libyaml"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "libyaml-0.2.2";
+    name = "node-libyaml-0.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/libyaml/-/libyaml-0.2.2.tgz";
@@ -7886,7 +7886,7 @@
   by-spec."lockfile"."~0.4.0" =
     self.by-version."lockfile"."0.4.2";
   by-version."lockfile"."0.4.2" = lib.makeOverridable self.buildNodePackage {
-    name = "lockfile-0.4.2";
+    name = "node-lockfile-0.4.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lockfile/-/lockfile-0.4.2.tgz";
@@ -7905,7 +7905,7 @@
   by-spec."lodash"."~0.10.0" =
     self.by-version."lodash"."0.10.0";
   by-version."lodash"."0.10.0" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash-0.10.0";
+    name = "node-lodash-0.10.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash/-/lodash-0.10.0.tgz";
@@ -7924,7 +7924,7 @@
   by-spec."lodash"."~0.9.2" =
     self.by-version."lodash"."0.9.2";
   by-version."lodash"."0.9.2" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash-0.9.2";
+    name = "node-lodash-0.9.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash/-/lodash-0.9.2.tgz";
@@ -7943,7 +7943,7 @@
   by-spec."lodash"."~1.0.1" =
     self.by-version."lodash"."1.0.1";
   by-version."lodash"."1.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash-1.0.1";
+    name = "node-lodash-1.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash/-/lodash-1.0.1.tgz";
@@ -7962,7 +7962,7 @@
   by-spec."lodash"."~1.2.1" =
     self.by-version."lodash"."1.2.1";
   by-version."lodash"."1.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash-1.2.1";
+    name = "node-lodash-1.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash/-/lodash-1.2.1.tgz";
@@ -7981,7 +7981,7 @@
   by-spec."lodash"."~1.3.0" =
     self.by-version."lodash"."1.3.1";
   by-version."lodash"."1.3.1" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash-1.3.1";
+    name = "node-lodash-1.3.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash/-/lodash-1.3.1.tgz";
@@ -8002,7 +8002,7 @@
   by-spec."lodash"."~2.1.0" =
     self.by-version."lodash"."2.1.0";
   by-version."lodash"."2.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash-2.1.0";
+    name = "node-lodash-2.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash/-/lodash-2.1.0.tgz";
@@ -8021,7 +8021,7 @@
   by-spec."lodash"."~2.2.1" =
     self.by-version."lodash"."2.2.1";
   by-version."lodash"."2.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash-2.2.1";
+    name = "node-lodash-2.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash/-/lodash-2.2.1.tgz";
@@ -8040,7 +8040,7 @@
   by-spec."lodash"."~2.4.1" =
     self.by-version."lodash"."2.4.1";
   by-version."lodash"."2.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash-2.4.1";
+    name = "node-lodash-2.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash/-/lodash-2.4.1.tgz";
@@ -8059,7 +8059,7 @@
   by-spec."lodash._isnative"."~2.4.1" =
     self.by-version."lodash._isnative"."2.4.1";
   by-version."lodash._isnative"."2.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash._isnative-2.4.1";
+    name = "node-lodash._isnative-2.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash._isnative/-/lodash._isnative-2.4.1.tgz";
@@ -8078,7 +8078,7 @@
   by-spec."lodash._objecttypes"."~2.4.1" =
     self.by-version."lodash._objecttypes"."2.4.1";
   by-version."lodash._objecttypes"."2.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash._objecttypes-2.4.1";
+    name = "node-lodash._objecttypes-2.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash._objecttypes/-/lodash._objecttypes-2.4.1.tgz";
@@ -8097,7 +8097,7 @@
   by-spec."lodash._shimkeys"."~2.4.1" =
     self.by-version."lodash._shimkeys"."2.4.1";
   by-version."lodash._shimkeys"."2.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash._shimkeys-2.4.1";
+    name = "node-lodash._shimkeys-2.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash._shimkeys/-/lodash._shimkeys-2.4.1.tgz";
@@ -8117,7 +8117,7 @@
   by-spec."lodash.defaults"."~2.4.1" =
     self.by-version."lodash.defaults"."2.4.1";
   by-version."lodash.defaults"."2.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash.defaults-2.4.1";
+    name = "node-lodash.defaults-2.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash.defaults/-/lodash.defaults-2.4.1.tgz";
@@ -8138,7 +8138,7 @@
   by-spec."lodash.isobject"."~2.4.1" =
     self.by-version."lodash.isobject"."2.4.1";
   by-version."lodash.isobject"."2.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash.isobject-2.4.1";
+    name = "node-lodash.isobject-2.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash.isobject/-/lodash.isobject-2.4.1.tgz";
@@ -8158,7 +8158,7 @@
   by-spec."lodash.keys"."~2.4.1" =
     self.by-version."lodash.keys"."2.4.1";
   by-version."lodash.keys"."2.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "lodash.keys-2.4.1";
+    name = "node-lodash.keys-2.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lodash.keys/-/lodash.keys-2.4.1.tgz";
@@ -8180,7 +8180,7 @@
   by-spec."log-driver"."1.2.1" =
     self.by-version."log-driver"."1.2.1";
   by-version."log-driver"."1.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "log-driver-1.2.1";
+    name = "node-log-driver-1.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/log-driver/-/log-driver-1.2.1.tgz";
@@ -8199,7 +8199,7 @@
   by-spec."log4js"."~0.6.3" =
     self.by-version."log4js"."0.6.9";
   by-version."log4js"."0.6.9" = lib.makeOverridable self.buildNodePackage {
-    name = "log4js-0.6.9";
+    name = "node-log4js-0.6.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/log4js/-/log4js-0.6.9.tgz";
@@ -8221,7 +8221,7 @@
   by-spec."long"."*" =
     self.by-version."long"."1.1.2";
   by-version."long"."1.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "long-1.1.2";
+    name = "node-long-1.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/long/-/long-1.1.2.tgz";
@@ -8240,7 +8240,7 @@
   by-spec."longjohn"."~0.2.2" =
     self.by-version."longjohn"."0.2.2";
   by-version."longjohn"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "longjohn-0.2.2";
+    name = "node-longjohn-0.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/longjohn/-/longjohn-0.2.2.tgz";
@@ -8259,7 +8259,7 @@
   by-spec."lru-cache"."2" =
     self.by-version."lru-cache"."2.5.0";
   by-version."lru-cache"."2.5.0" = lib.makeOverridable self.buildNodePackage {
-    name = "lru-cache-2.5.0";
+    name = "node-lru-cache-2.5.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.5.0.tgz";
@@ -8278,7 +8278,7 @@
   by-spec."lru-cache"."2.2.0" =
     self.by-version."lru-cache"."2.2.0";
   by-version."lru-cache"."2.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "lru-cache-2.2.0";
+    name = "node-lru-cache-2.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.2.0.tgz";
@@ -8297,7 +8297,7 @@
   by-spec."lru-cache"."2.2.x" =
     self.by-version."lru-cache"."2.2.4";
   by-version."lru-cache"."2.2.4" = lib.makeOverridable self.buildNodePackage {
-    name = "lru-cache-2.2.4";
+    name = "node-lru-cache-2.2.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.2.4.tgz";
@@ -8316,7 +8316,7 @@
   by-spec."lru-cache"."2.3.0" =
     self.by-version."lru-cache"."2.3.0";
   by-version."lru-cache"."2.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "lru-cache-2.3.0";
+    name = "node-lru-cache-2.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.3.0.tgz";
@@ -8335,7 +8335,7 @@
   by-spec."lru-cache"."~1.0.2" =
     self.by-version."lru-cache"."1.0.6";
   by-version."lru-cache"."1.0.6" = lib.makeOverridable self.buildNodePackage {
-    name = "lru-cache-1.0.6";
+    name = "node-lru-cache-1.0.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lru-cache/-/lru-cache-1.0.6.tgz";
@@ -8354,7 +8354,7 @@
   by-spec."lru-cache"."~2.3.0" =
     self.by-version."lru-cache"."2.3.1";
   by-version."lru-cache"."2.3.1" = lib.makeOverridable self.buildNodePackage {
-    name = "lru-cache-2.3.1";
+    name = "node-lru-cache-2.3.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lru-cache/-/lru-cache-2.3.1.tgz";
@@ -8375,7 +8375,7 @@
   by-spec."lsmod"."0.0.2" =
     self.by-version."lsmod"."0.0.2";
   by-version."lsmod"."0.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "lsmod-0.0.2";
+    name = "node-lsmod-0.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/lsmod/-/lsmod-0.0.2.tgz";
@@ -8394,7 +8394,7 @@
   by-spec."mailcomposer".">= 0.1.27" =
     self.by-version."mailcomposer"."0.2.8";
   by-version."mailcomposer"."0.2.8" = lib.makeOverridable self.buildNodePackage {
-    name = "mailcomposer-0.2.8";
+    name = "node-mailcomposer-0.2.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mailcomposer/-/mailcomposer-0.2.8.tgz";
@@ -8445,7 +8445,7 @@
   by-spec."memoizee"."~0.2.5" =
     self.by-version."memoizee"."0.2.6";
   by-version."memoizee"."0.2.6" = lib.makeOverridable self.buildNodePackage {
-    name = "memoizee-0.2.6";
+    name = "node-memoizee-0.2.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/memoizee/-/memoizee-0.2.6.tgz";
@@ -8467,7 +8467,7 @@
   by-spec."merge-descriptors"."0.0.1" =
     self.by-version."merge-descriptors"."0.0.1";
   by-version."merge-descriptors"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "merge-descriptors-0.0.1";
+    name = "node-merge-descriptors-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/merge-descriptors/-/merge-descriptors-0.0.1.tgz";
@@ -8486,7 +8486,7 @@
   by-spec."methods"."0.0.1" =
     self.by-version."methods"."0.0.1";
   by-version."methods"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "methods-0.0.1";
+    name = "node-methods-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/methods/-/methods-0.0.1.tgz";
@@ -8505,7 +8505,7 @@
   by-spec."methods"."0.1.0" =
     self.by-version."methods"."0.1.0";
   by-version."methods"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "methods-0.1.0";
+    name = "node-methods-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/methods/-/methods-0.1.0.tgz";
@@ -8524,7 +8524,7 @@
   by-spec."mime"."*" =
     self.by-version."mime"."1.2.11";
   by-version."mime"."1.2.11" = lib.makeOverridable self.buildNodePackage {
-    name = "mime-1.2.11";
+    name = "node-mime-1.2.11";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mime/-/mime-1.2.11.tgz";
@@ -8543,7 +8543,7 @@
   by-spec."mime"."1.2.4" =
     self.by-version."mime"."1.2.4";
   by-version."mime"."1.2.4" = lib.makeOverridable self.buildNodePackage {
-    name = "mime-1.2.4";
+    name = "node-mime-1.2.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mime/-/mime-1.2.4.tgz";
@@ -8562,7 +8562,7 @@
   by-spec."mime"."1.2.5" =
     self.by-version."mime"."1.2.5";
   by-version."mime"."1.2.5" = lib.makeOverridable self.buildNodePackage {
-    name = "mime-1.2.5";
+    name = "node-mime-1.2.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mime/-/mime-1.2.5.tgz";
@@ -8581,7 +8581,7 @@
   by-spec."mime"."1.2.6" =
     self.by-version."mime"."1.2.6";
   by-version."mime"."1.2.6" = lib.makeOverridable self.buildNodePackage {
-    name = "mime-1.2.6";
+    name = "node-mime-1.2.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mime/-/mime-1.2.6.tgz";
@@ -8600,7 +8600,7 @@
   by-spec."mime"."1.2.9" =
     self.by-version."mime"."1.2.9";
   by-version."mime"."1.2.9" = lib.makeOverridable self.buildNodePackage {
-    name = "mime-1.2.9";
+    name = "node-mime-1.2.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mime/-/mime-1.2.9.tgz";
@@ -8631,7 +8631,7 @@
   by-spec."mimelib"."~0.2.14" =
     self.by-version."mimelib"."0.2.14";
   by-version."mimelib"."0.2.14" = lib.makeOverridable self.buildNodePackage {
-    name = "mimelib-0.2.14";
+    name = "node-mimelib-0.2.14";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mimelib/-/mimelib-0.2.14.tgz";
@@ -8652,7 +8652,7 @@
   by-spec."minimatch"."0" =
     self.by-version."minimatch"."0.2.14";
   by-version."minimatch"."0.2.14" = lib.makeOverridable self.buildNodePackage {
-    name = "minimatch-0.2.14";
+    name = "node-minimatch-0.2.14";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/minimatch/-/minimatch-0.2.14.tgz";
@@ -8673,7 +8673,7 @@
   by-spec."minimatch"."0.0.x" =
     self.by-version."minimatch"."0.0.5";
   by-version."minimatch"."0.0.5" = lib.makeOverridable self.buildNodePackage {
-    name = "minimatch-0.0.5";
+    name = "node-minimatch-0.0.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/minimatch/-/minimatch-0.0.5.tgz";
@@ -8713,7 +8713,7 @@
   by-spec."minimist"."~0.0.1" =
     self.by-version."minimist"."0.0.5";
   by-version."minimist"."0.0.5" = lib.makeOverridable self.buildNodePackage {
-    name = "minimist-0.0.5";
+    name = "node-minimist-0.0.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/minimist/-/minimist-0.0.5.tgz";
@@ -8732,7 +8732,7 @@
   by-spec."ministyle"."~0.1.3" =
     self.by-version."ministyle"."0.1.3";
   by-version."ministyle"."0.1.3" = lib.makeOverridable self.buildNodePackage {
-    name = "ministyle-0.1.3";
+    name = "node-ministyle-0.1.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ministyle/-/ministyle-0.1.3.tgz";
@@ -8751,7 +8751,7 @@
   by-spec."miniwrite"."~0.1.3" =
     self.by-version."miniwrite"."0.1.3";
   by-version."miniwrite"."0.1.3" = lib.makeOverridable self.buildNodePackage {
-    name = "miniwrite-0.1.3";
+    name = "node-miniwrite-0.1.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/miniwrite/-/miniwrite-0.1.3.tgz";
@@ -8771,7 +8771,7 @@
   by-spec."mkdirp"."*" =
     self.by-version."mkdirp"."0.3.5";
   by-version."mkdirp"."0.3.5" = lib.makeOverridable self.buildNodePackage {
-    name = "mkdirp-0.3.5";
+    name = "node-mkdirp-0.3.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.5.tgz";
@@ -8795,7 +8795,7 @@
   by-spec."mkdirp"."0.3.0" =
     self.by-version."mkdirp"."0.3.0";
   by-version."mkdirp"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "mkdirp-0.3.0";
+    name = "node-mkdirp-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.0.tgz";
@@ -8826,7 +8826,7 @@
   by-spec."mkpath"."~0.1.0" =
     self.by-version."mkpath"."0.1.0";
   by-version."mkpath"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "mkpath-0.1.0";
+    name = "node-mkpath-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mkpath/-/mkpath-0.1.0.tgz";
@@ -8872,7 +8872,7 @@
   by-spec."mocha-unfunk-reporter"."*" =
     self.by-version."mocha-unfunk-reporter"."0.4.0";
   by-version."mocha-unfunk-reporter"."0.4.0" = lib.makeOverridable self.buildNodePackage {
-    name = "mocha-unfunk-reporter-0.4.0";
+    name = "node-mocha-unfunk-reporter-0.4.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mocha-unfunk-reporter/-/mocha-unfunk-reporter-0.4.0.tgz";
@@ -8896,7 +8896,7 @@
   by-spec."moment"."2.1.0" =
     self.by-version."moment"."2.1.0";
   by-version."moment"."2.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "moment-2.1.0";
+    name = "node-moment-2.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/moment/-/moment-2.1.0.tgz";
@@ -8915,7 +8915,7 @@
   by-spec."moment"."~2.4.0" =
     self.by-version."moment"."2.4.0";
   by-version."moment"."2.4.0" = lib.makeOverridable self.buildNodePackage {
-    name = "moment-2.4.0";
+    name = "node-moment-2.4.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/moment/-/moment-2.4.0.tgz";
@@ -8934,7 +8934,7 @@
   by-spec."moment"."~2.5.0" =
     self.by-version."moment"."2.5.1";
   by-version."moment"."2.5.1" = lib.makeOverridable self.buildNodePackage {
-    name = "moment-2.5.1";
+    name = "node-moment-2.5.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/moment/-/moment-2.5.1.tgz";
@@ -8953,7 +8953,7 @@
   by-spec."mongodb"."*" =
     self.by-version."mongodb"."1.4.0-rc5";
   by-version."mongodb"."1.4.0-rc5" = lib.makeOverridable self.buildNodePackage {
-    name = "mongodb-1.4.0-rc5";
+    name = "node-mongodb-1.4.0-rc5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mongodb/-/mongodb-1.4.0-rc5.tgz";
@@ -8975,7 +8975,7 @@
   by-spec."mongodb"."1.2.14" =
     self.by-version."mongodb"."1.2.14";
   by-version."mongodb"."1.2.14" = lib.makeOverridable self.buildNodePackage {
-    name = "mongodb-1.2.14";
+    name = "node-mongodb-1.2.14";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mongodb/-/mongodb-1.2.14.tgz";
@@ -8995,7 +8995,7 @@
   by-spec."mongodb"."1.3.19" =
     self.by-version."mongodb"."1.3.19";
   by-version."mongodb"."1.3.19" = lib.makeOverridable self.buildNodePackage {
-    name = "mongodb-1.3.19";
+    name = "node-mongodb-1.3.19";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mongodb/-/mongodb-1.3.19.tgz";
@@ -9016,7 +9016,7 @@
   by-spec."mongodb"."1.3.23" =
     self.by-version."mongodb"."1.3.23";
   by-version."mongodb"."1.3.23" = lib.makeOverridable self.buildNodePackage {
-    name = "mongodb-1.3.23";
+    name = "node-mongodb-1.3.23";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mongodb/-/mongodb-1.3.23.tgz";
@@ -9039,7 +9039,7 @@
   by-spec."mongoose"."*" =
     self.by-version."mongoose"."3.8.6";
   by-version."mongoose"."3.8.6" = lib.makeOverridable self.buildNodePackage {
-    name = "mongoose-3.8.6";
+    name = "node-mongoose-3.8.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mongoose/-/mongoose-3.8.6.tgz";
@@ -9067,7 +9067,7 @@
   by-spec."mongoose"."3.6.7" =
     self.by-version."mongoose"."3.6.7";
   by-version."mongoose"."3.6.7" = lib.makeOverridable self.buildNodePackage {
-    name = "mongoose-3.6.7";
+    name = "node-mongoose-3.6.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mongoose/-/mongoose-3.6.7.tgz";
@@ -9093,7 +9093,7 @@
   by-spec."mongoose"."3.6.x" =
     self.by-version."mongoose"."3.6.20";
   by-version."mongoose"."3.6.20" = lib.makeOverridable self.buildNodePackage {
-    name = "mongoose-3.6.20";
+    name = "node-mongoose-3.6.20";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mongoose/-/mongoose-3.6.20.tgz";
@@ -9121,7 +9121,7 @@
   by-spec."mongoose-lifecycle"."1.0.0" =
     self.by-version."mongoose-lifecycle"."1.0.0";
   by-version."mongoose-lifecycle"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "mongoose-lifecycle-1.0.0";
+    name = "node-mongoose-lifecycle-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mongoose-lifecycle/-/mongoose-lifecycle-1.0.0.tgz";
@@ -9140,7 +9140,7 @@
   by-spec."mongoose-schema-extend"."*" =
     self.by-version."mongoose-schema-extend"."0.1.7";
   by-version."mongoose-schema-extend"."0.1.7" = lib.makeOverridable self.buildNodePackage {
-    name = "mongoose-schema-extend-0.1.7";
+    name = "node-mongoose-schema-extend-0.1.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mongoose-schema-extend/-/mongoose-schema-extend-0.1.7.tgz";
@@ -9161,7 +9161,7 @@
   by-spec."monocle"."1.1.50" =
     self.by-version."monocle"."1.1.50";
   by-version."monocle"."1.1.50" = lib.makeOverridable self.buildNodePackage {
-    name = "monocle-1.1.50";
+    name = "node-monocle-1.1.50";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/monocle/-/monocle-1.1.50.tgz";
@@ -9181,7 +9181,7 @@
   by-spec."monocle"."1.1.51" =
     self.by-version."monocle"."1.1.51";
   by-version."monocle"."1.1.51" = lib.makeOverridable self.buildNodePackage {
-    name = "monocle-1.1.51";
+    name = "node-monocle-1.1.51";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/monocle/-/monocle-1.1.51.tgz";
@@ -9201,7 +9201,7 @@
   by-spec."mout"."~0.6.0" =
     self.by-version."mout"."0.6.0";
   by-version."mout"."0.6.0" = lib.makeOverridable self.buildNodePackage {
-    name = "mout-0.6.0";
+    name = "node-mout-0.6.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mout/-/mout-0.6.0.tgz";
@@ -9220,7 +9220,7 @@
   by-spec."mout"."~0.7.0" =
     self.by-version."mout"."0.7.1";
   by-version."mout"."0.7.1" = lib.makeOverridable self.buildNodePackage {
-    name = "mout-0.7.1";
+    name = "node-mout-0.7.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mout/-/mout-0.7.1.tgz";
@@ -9239,7 +9239,7 @@
   by-spec."mpath"."0.1.1" =
     self.by-version."mpath"."0.1.1";
   by-version."mpath"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "mpath-0.1.1";
+    name = "node-mpath-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mpath/-/mpath-0.1.1.tgz";
@@ -9258,7 +9258,7 @@
   by-spec."mpromise"."0.2.1" =
     self.by-version."mpromise"."0.2.1";
   by-version."mpromise"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "mpromise-0.2.1";
+    name = "node-mpromise-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mpromise/-/mpromise-0.2.1.tgz";
@@ -9278,7 +9278,7 @@
   by-spec."mpromise"."0.4.3" =
     self.by-version."mpromise"."0.4.3";
   by-version."mpromise"."0.4.3" = lib.makeOverridable self.buildNodePackage {
-    name = "mpromise-0.4.3";
+    name = "node-mpromise-0.4.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mpromise/-/mpromise-0.4.3.tgz";
@@ -9297,7 +9297,7 @@
   by-spec."mquery"."0.5.2" =
     self.by-version."mquery"."0.5.2";
   by-version."mquery"."0.5.2" = lib.makeOverridable self.buildNodePackage {
-    name = "mquery-0.5.2";
+    name = "node-mquery-0.5.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mquery/-/mquery-0.5.2.tgz";
@@ -9319,7 +9319,7 @@
   by-spec."ms"."0.1.0" =
     self.by-version."ms"."0.1.0";
   by-version."ms"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "ms-0.1.0";
+    name = "node-ms-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ms/-/ms-0.1.0.tgz";
@@ -9357,7 +9357,7 @@
   by-spec."multiparty"."2.2.0" =
     self.by-version."multiparty"."2.2.0";
   by-version."multiparty"."2.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "multiparty-2.2.0";
+    name = "node-multiparty-2.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/multiparty/-/multiparty-2.2.0.tgz";
@@ -9378,7 +9378,7 @@
   by-spec."muri"."0.3.1" =
     self.by-version."muri"."0.3.1";
   by-version."muri"."0.3.1" = lib.makeOverridable self.buildNodePackage {
-    name = "muri-0.3.1";
+    name = "node-muri-0.3.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/muri/-/muri-0.3.1.tgz";
@@ -9397,7 +9397,7 @@
   by-spec."mute-stream"."0.0.3" =
     self.by-version."mute-stream"."0.0.3";
   by-version."mute-stream"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "mute-stream-0.0.3";
+    name = "node-mute-stream-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mute-stream/-/mute-stream-0.0.3.tgz";
@@ -9416,7 +9416,7 @@
   by-spec."mute-stream"."0.0.4" =
     self.by-version."mute-stream"."0.0.4";
   by-version."mute-stream"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "mute-stream-0.0.4";
+    name = "node-mute-stream-0.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mute-stream/-/mute-stream-0.0.4.tgz";
@@ -9437,7 +9437,7 @@
   by-spec."mv"."0.0.5" =
     self.by-version."mv"."0.0.5";
   by-version."mv"."0.0.5" = lib.makeOverridable self.buildNodePackage {
-    name = "mv-0.0.5";
+    name = "node-mv-0.0.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/mv/-/mv-0.0.5.tgz";
@@ -9456,7 +9456,7 @@
   by-spec."nan"."~0.3.0" =
     self.by-version."nan"."0.3.2";
   by-version."nan"."0.3.2" = lib.makeOverridable self.buildNodePackage {
-    name = "nan-0.3.2";
+    name = "node-nan-0.3.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/nan/-/nan-0.3.2.tgz";
@@ -9475,7 +9475,7 @@
   by-spec."nan"."~0.6.0" =
     self.by-version."nan"."0.6.0";
   by-version."nan"."0.6.0" = lib.makeOverridable self.buildNodePackage {
-    name = "nan-0.6.0";
+    name = "node-nan-0.6.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/nan/-/nan-0.6.0.tgz";
@@ -9494,7 +9494,7 @@
   by-spec."natural"."0.1.17" =
     self.by-version."natural"."0.1.17";
   by-version."natural"."0.1.17" = lib.makeOverridable self.buildNodePackage {
-    name = "natural-0.1.17";
+    name = "node-natural-0.1.17";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/natural/-/natural-0.1.17.tgz";
@@ -9516,7 +9516,7 @@
   by-spec."nconf"."*" =
     self.by-version."nconf"."0.6.9";
   by-version."nconf"."0.6.9" = lib.makeOverridable self.buildNodePackage {
-    name = "nconf-0.6.9";
+    name = "node-nconf-0.6.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/nconf/-/nconf-0.6.9.tgz";
@@ -9585,7 +9585,7 @@
   by-spec."negotiator"."0.2.5" =
     self.by-version."negotiator"."0.2.5";
   by-version."negotiator"."0.2.5" = lib.makeOverridable self.buildNodePackage {
-    name = "negotiator-0.2.5";
+    name = "node-negotiator-0.2.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/negotiator/-/negotiator-0.2.5.tgz";
@@ -9604,7 +9604,7 @@
   by-spec."negotiator"."0.3.0" =
     self.by-version."negotiator"."0.3.0";
   by-version."negotiator"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "negotiator-0.3.0";
+    name = "node-negotiator-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/negotiator/-/negotiator-0.3.0.tgz";
@@ -9623,7 +9623,7 @@
   by-spec."net-ping"."1.1.7" =
     self.by-version."net-ping"."1.1.7";
   by-version."net-ping"."1.1.7" = lib.makeOverridable self.buildNodePackage {
-    name = "net-ping-1.1.7";
+    name = "node-net-ping-1.1.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/net-ping/-/net-ping-1.1.7.tgz";
@@ -9643,7 +9643,7 @@
   by-spec."next-tick"."0.1.x" =
     self.by-version."next-tick"."0.1.0";
   by-version."next-tick"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "next-tick-0.1.0";
+    name = "node-next-tick-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/next-tick/-/next-tick-0.1.0.tgz";
@@ -9662,7 +9662,7 @@
   by-spec."nib"."0.5.0" =
     self.by-version."nib"."0.5.0";
   by-version."nib"."0.5.0" = lib.makeOverridable self.buildNodePackage {
-    name = "nib-0.5.0";
+    name = "node-nib-0.5.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/nib/-/nib-0.5.0.tgz";
@@ -9702,7 +9702,7 @@
   by-spec."node-appc"."0.2.0" =
     self.by-version."node-appc"."0.2.0";
   by-version."node-appc"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "node-appc-0.2.0";
+    name = "node-node-appc-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/node-appc/-/node-appc-0.2.0.tgz";
@@ -9736,7 +9736,7 @@
   by-spec."node-expat"."*" =
     self.by-version."node-expat"."2.1.4";
   by-version."node-expat"."2.1.4" = lib.makeOverridable self.buildNodePackage {
-    name = "node-expat-2.1.4";
+    name = "node-node-expat-2.1.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/node-expat/-/node-expat-2.1.4.tgz";
@@ -9819,7 +9819,7 @@
   by-spec."node-protobuf"."*" =
     self.by-version."node-protobuf"."1.0.10";
   by-version."node-protobuf"."1.0.10" = lib.makeOverridable self.buildNodePackage {
-    name = "node-protobuf-1.0.10";
+    name = "node-node-protobuf-1.0.10";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/node-protobuf/-/node-protobuf-1.0.10.tgz";
@@ -9839,7 +9839,7 @@
   by-spec."node-swt".">=0.1.1" =
     self.by-version."node-swt"."0.1.1";
   by-version."node-swt"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "node-swt-0.1.1";
+    name = "node-node-swt-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/node-swt/-/node-swt-0.1.1.tgz";
@@ -9858,7 +9858,7 @@
   by-spec."node-syslog"."1.1.7" =
     self.by-version."node-syslog"."1.1.7";
   by-version."node-syslog"."1.1.7" = lib.makeOverridable self.buildNodePackage {
-    name = "node-syslog-1.1.7";
+    name = "node-node-syslog-1.1.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/node-syslog/-/node-syslog-1.1.7.tgz";
@@ -9877,7 +9877,7 @@
   by-spec."node-uptime"."https://github.com/fzaninotto/uptime/tarball/1c65756575f90f563a752e2a22892ba2981c79b7" =
     self.by-version."node-uptime"."3.2.0";
   by-version."node-uptime"."3.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "node-uptime-3.2.0";
+    name = "node-node-uptime-3.2.0";
     src = [
       (fetchurl {
         url = "https://github.com/fzaninotto/uptime/tarball/1c65756575f90f563a752e2a22892ba2981c79b7";
@@ -9911,7 +9911,7 @@
   by-spec."node-uuid"."*" =
     self.by-version."node-uuid"."1.4.1";
   by-version."node-uuid"."1.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "node-uuid-1.4.1";
+    name = "node-node-uuid-1.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/node-uuid/-/node-uuid-1.4.1.tgz";
@@ -9931,7 +9931,7 @@
   by-spec."node-uuid"."1.3.3" =
     self.by-version."node-uuid"."1.3.3";
   by-version."node-uuid"."1.3.3" = lib.makeOverridable self.buildNodePackage {
-    name = "node-uuid-1.3.3";
+    name = "node-node-uuid-1.3.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/node-uuid/-/node-uuid-1.3.3.tgz";
@@ -9950,7 +9950,7 @@
   by-spec."node-uuid"."1.4.0" =
     self.by-version."node-uuid"."1.4.0";
   by-version."node-uuid"."1.4.0" = lib.makeOverridable self.buildNodePackage {
-    name = "node-uuid-1.4.0";
+    name = "node-node-uuid-1.4.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/node-uuid/-/node-uuid-1.4.0.tgz";
@@ -9975,7 +9975,7 @@
   by-spec."node-wsfederation".">=0.1.1" =
     self.by-version."node-wsfederation"."0.1.1";
   by-version."node-wsfederation"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "node-wsfederation-0.1.1";
+    name = "node-node-wsfederation-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/node-wsfederation/-/node-wsfederation-0.1.1.tgz";
@@ -9995,7 +9995,7 @@
   by-spec."node.extend"."1.0.0" =
     self.by-version."node.extend"."1.0.0";
   by-version."node.extend"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "node.extend-1.0.0";
+    name = "node-node.extend-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/node.extend/-/node.extend-1.0.0.tgz";
@@ -10058,7 +10058,7 @@
   by-spec."nomnom"."1.6.x" =
     self.by-version."nomnom"."1.6.2";
   by-version."nomnom"."1.6.2" = lib.makeOverridable self.buildNodePackage {
-    name = "nomnom-1.6.2";
+    name = "node-nomnom-1.6.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/nomnom/-/nomnom-1.6.2.tgz";
@@ -10147,7 +10147,7 @@
   by-spec."normalize-package-data"."~0.2.7" =
     self.by-version."normalize-package-data"."0.2.8";
   by-version."normalize-package-data"."0.2.8" = lib.makeOverridable self.buildNodePackage {
-    name = "normalize-package-data-0.2.8";
+    name = "node-normalize-package-data-0.2.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/normalize-package-data/-/normalize-package-data-0.2.8.tgz";
@@ -10236,7 +10236,7 @@
   by-spec."npm-registry-client"."0.2.27" =
     self.by-version."npm-registry-client"."0.2.27";
   by-version."npm-registry-client"."0.2.27" = lib.makeOverridable self.buildNodePackage {
-    name = "npm-registry-client-0.2.27";
+    name = "node-npm-registry-client-0.2.27";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/npm-registry-client/-/npm-registry-client-0.2.27.tgz";
@@ -10265,7 +10265,7 @@
   by-spec."npm-registry-client"."~0.3.3" =
     self.by-version."npm-registry-client"."0.3.5";
   by-version."npm-registry-client"."0.3.5" = lib.makeOverridable self.buildNodePackage {
-    name = "npm-registry-client-0.3.5";
+    name = "node-npm-registry-client-0.3.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/npm-registry-client/-/npm-registry-client-0.3.5.tgz";
@@ -10296,7 +10296,7 @@
   by-spec."npm-user-validate"."0.0.3" =
     self.by-version."npm-user-validate"."0.0.3";
   by-version."npm-user-validate"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "npm-user-validate-0.0.3";
+    name = "node-npm-user-validate-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/npm-user-validate/-/npm-user-validate-0.0.3.tgz";
@@ -10313,14 +10313,14 @@
     passthru.names = [ "npm-user-validate" ];
   };
   by-spec."npm2nix"."*" =
-    self.by-version."npm2nix"."5.4.2";
-  by-version."npm2nix"."5.4.2" = lib.makeOverridable self.buildNodePackage {
-    name = "npm2nix-5.4.2";
+    self.by-version."npm2nix"."5.5.0";
+  by-version."npm2nix"."5.5.0" = lib.makeOverridable self.buildNodePackage {
+    name = "npm2nix-5.5.0";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/npm2nix/-/npm2nix-5.4.2.tgz";
-        name = "npm2nix-5.4.2.tgz";
-        sha1 = "03184775d310c75117c82303eecb50f6b26f93d0";
+        url = "http://registry.npmjs.org/npm2nix/-/npm2nix-5.5.0.tgz";
+        name = "npm2nix-5.5.0.tgz";
+        sha1 = "79729928cc4d2f4e765797491eeb4ced2b1d9e9e";
       })
     ];
     buildInputs =
@@ -10339,11 +10339,11 @@
     ];
     passthru.names = [ "npm2nix" ];
   };
-  "npm2nix" = self.by-version."npm2nix"."5.4.2";
+  "npm2nix" = self.by-version."npm2nix"."5.5.0";
   by-spec."npmconf"."0.0.24" =
     self.by-version."npmconf"."0.0.24";
   by-version."npmconf"."0.0.24" = lib.makeOverridable self.buildNodePackage {
-    name = "npmconf-0.0.24";
+    name = "node-npmconf-0.0.24";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/npmconf/-/npmconf-0.0.24.tgz";
@@ -10370,7 +10370,7 @@
   by-spec."npmconf"."0.1.1" =
     self.by-version."npmconf"."0.1.1";
   by-version."npmconf"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "npmconf-0.1.1";
+    name = "node-npmconf-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/npmconf/-/npmconf-0.1.1.tgz";
@@ -10397,7 +10397,7 @@
   by-spec."npmconf"."~0.1.12" =
     self.by-version."npmconf"."0.1.12";
   by-version."npmconf"."0.1.12" = lib.makeOverridable self.buildNodePackage {
-    name = "npmconf-0.1.12";
+    name = "node-npmconf-0.1.12";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/npmconf/-/npmconf-0.1.12.tgz";
@@ -10426,7 +10426,7 @@
   by-spec."npmlog"."*" =
     self.by-version."npmlog"."0.0.6";
   by-version."npmlog"."0.0.6" = lib.makeOverridable self.buildNodePackage {
-    name = "npmlog-0.0.6";
+    name = "node-npmlog-0.0.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/npmlog/-/npmlog-0.0.6.tgz";
@@ -10450,7 +10450,7 @@
   by-spec."nssocket"."~0.5.1" =
     self.by-version."nssocket"."0.5.1";
   by-version."nssocket"."0.5.1" = lib.makeOverridable self.buildNodePackage {
-    name = "nssocket-0.5.1";
+    name = "node-nssocket-0.5.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/nssocket/-/nssocket-0.5.1.tgz";
@@ -10471,7 +10471,7 @@
   by-spec."oauth"."https://github.com/ciaranj/node-oauth/tarball/master" =
     self.by-version."oauth"."0.9.11";
   by-version."oauth"."0.9.11" = lib.makeOverridable self.buildNodePackage {
-    name = "oauth-0.9.11";
+    name = "node-oauth-0.9.11";
     src = [
       (fetchurl {
         url = "https://github.com/ciaranj/node-oauth/tarball/master";
@@ -10490,7 +10490,7 @@
   by-spec."oauth-sign"."~0.2.0" =
     self.by-version."oauth-sign"."0.2.0";
   by-version."oauth-sign"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "oauth-sign-0.2.0";
+    name = "node-oauth-sign-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/oauth-sign/-/oauth-sign-0.2.0.tgz";
@@ -10509,7 +10509,7 @@
   by-spec."oauth-sign"."~0.3.0" =
     self.by-version."oauth-sign"."0.3.0";
   by-version."oauth-sign"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "oauth-sign-0.3.0";
+    name = "node-oauth-sign-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/oauth-sign/-/oauth-sign-0.3.0.tgz";
@@ -10528,7 +10528,7 @@
   by-spec."object-additions".">= 0.5.0" =
     self.by-version."object-additions"."0.5.1";
   by-version."object-additions"."0.5.1" = lib.makeOverridable self.buildNodePackage {
-    name = "object-additions-0.5.1";
+    name = "node-object-additions-0.5.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/object-additions/-/object-additions-0.5.1.tgz";
@@ -10547,7 +10547,7 @@
   by-spec."object-keys"."~0.4.0" =
     self.by-version."object-keys"."0.4.0";
   by-version."object-keys"."0.4.0" = lib.makeOverridable self.buildNodePackage {
-    name = "object-keys-0.4.0";
+    name = "node-object-keys-0.4.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/object-keys/-/object-keys-0.4.0.tgz";
@@ -10566,7 +10566,7 @@
   by-spec."once"."1.1.1" =
     self.by-version."once"."1.1.1";
   by-version."once"."1.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "once-1.1.1";
+    name = "node-once-1.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/once/-/once-1.1.1.tgz";
@@ -10587,7 +10587,7 @@
   by-spec."once"."~1.3.0" =
     self.by-version."once"."1.3.0";
   by-version."once"."1.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "once-1.3.0";
+    name = "node-once-1.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/once/-/once-1.3.0.tgz";
@@ -10606,7 +10606,7 @@
   by-spec."open"."0.0.2" =
     self.by-version."open"."0.0.2";
   by-version."open"."0.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "open-0.0.2";
+    name = "node-open-0.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/open/-/open-0.0.2.tgz";
@@ -10625,7 +10625,7 @@
   by-spec."open"."0.0.4" =
     self.by-version."open"."0.0.4";
   by-version."open"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "open-0.0.4";
+    name = "node-open-0.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/open/-/open-0.0.4.tgz";
@@ -10665,7 +10665,7 @@
   by-spec."openid".">=0.2.0" =
     self.by-version."openid"."0.5.5";
   by-version."openid"."0.5.5" = lib.makeOverridable self.buildNodePackage {
-    name = "openid-0.5.5";
+    name = "node-openid-0.5.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/openid/-/openid-0.5.5.tgz";
@@ -10684,7 +10684,7 @@
   by-spec."optimist"."*" =
     self.by-version."optimist"."0.6.0";
   by-version."optimist"."0.6.0" = lib.makeOverridable self.buildNodePackage {
-    name = "optimist-0.6.0";
+    name = "node-optimist-0.6.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/optimist/-/optimist-0.6.0.tgz";
@@ -10706,7 +10706,7 @@
   by-spec."optimist"."0.2" =
     self.by-version."optimist"."0.2.8";
   by-version."optimist"."0.2.8" = lib.makeOverridable self.buildNodePackage {
-    name = "optimist-0.2.8";
+    name = "node-optimist-0.2.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/optimist/-/optimist-0.2.8.tgz";
@@ -10726,7 +10726,7 @@
   by-spec."optimist"."0.3.x" =
     self.by-version."optimist"."0.3.7";
   by-version."optimist"."0.3.7" = lib.makeOverridable self.buildNodePackage {
-    name = "optimist-0.3.7";
+    name = "node-optimist-0.3.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/optimist/-/optimist-0.3.7.tgz";
@@ -10758,7 +10758,7 @@
   by-spec."options".">=0.0.5" =
     self.by-version."options"."0.0.5";
   by-version."options"."0.0.5" = lib.makeOverridable self.buildNodePackage {
-    name = "options-0.0.5";
+    name = "node-options-0.0.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/options/-/options-0.0.5.tgz";
@@ -10777,7 +10777,7 @@
   by-spec."optjs"."*" =
     self.by-version."optjs"."3.2.1-boom";
   by-version."optjs"."3.2.1-boom" = lib.makeOverridable self.buildNodePackage {
-    name = "optjs-3.2.1-boom";
+    name = "node-optjs-3.2.1-boom";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/optjs/-/optjs-3.2.1-boom.tgz";
@@ -10796,7 +10796,7 @@
   by-spec."optparse"."*" =
     self.by-version."optparse"."1.0.5";
   by-version."optparse"."1.0.5" = lib.makeOverridable self.buildNodePackage {
-    name = "optparse-1.0.5";
+    name = "node-optparse-1.0.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/optparse/-/optparse-1.0.5.tgz";
@@ -10818,7 +10818,7 @@
   by-spec."osenv"."0" =
     self.by-version."osenv"."0.0.3";
   by-version."osenv"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "osenv-0.0.3";
+    name = "node-osenv-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/osenv/-/osenv-0.0.3.tgz";
@@ -10839,7 +10839,7 @@
   by-spec."owl-deepcopy"."*" =
     self.by-version."owl-deepcopy"."0.0.2";
   by-version."owl-deepcopy"."0.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "owl-deepcopy-0.0.2";
+    name = "node-owl-deepcopy-0.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/owl-deepcopy/-/owl-deepcopy-0.0.2.tgz";
@@ -10861,7 +10861,7 @@
   by-spec."p-throttler"."~0.0.1" =
     self.by-version."p-throttler"."0.0.1";
   by-version."p-throttler"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "p-throttler-0.0.1";
+    name = "node-p-throttler-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/p-throttler/-/p-throttler-0.0.1.tgz";
@@ -10881,7 +10881,7 @@
   by-spec."passport"."*" =
     self.by-version."passport"."0.2.0";
   by-version."passport"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "passport-0.2.0";
+    name = "node-passport-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/passport/-/passport-0.2.0.tgz";
@@ -10903,7 +10903,7 @@
   by-spec."passport"."~0.1.1" =
     self.by-version."passport"."0.1.18";
   by-version."passport"."0.1.18" = lib.makeOverridable self.buildNodePackage {
-    name = "passport-0.1.18";
+    name = "node-passport-0.1.18";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/passport/-/passport-0.1.18.tgz";
@@ -10928,7 +10928,7 @@
   by-spec."passport-http"."*" =
     self.by-version."passport-http"."0.2.2";
   by-version."passport-http"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "passport-http-0.2.2";
+    name = "node-passport-http-0.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/passport-http/-/passport-http-0.2.2.tgz";
@@ -10950,7 +10950,7 @@
   by-spec."passport-local"."*" =
     self.by-version."passport-local"."0.1.6";
   by-version."passport-local"."0.1.6" = lib.makeOverridable self.buildNodePackage {
-    name = "passport-local-0.1.6";
+    name = "node-passport-local-0.1.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/passport-local/-/passport-local-0.1.6.tgz";
@@ -10974,7 +10974,7 @@
   by-spec."passport-strategy"."1.x.x" =
     self.by-version."passport-strategy"."1.0.0";
   by-version."passport-strategy"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "passport-strategy-1.0.0";
+    name = "node-passport-strategy-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/passport-strategy/-/passport-strategy-1.0.0.tgz";
@@ -10993,7 +10993,7 @@
   by-spec."path-is-inside"."~1.0.0" =
     self.by-version."path-is-inside"."1.0.0";
   by-version."path-is-inside"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "path-is-inside-1.0.0";
+    name = "node-path-is-inside-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/path-is-inside/-/path-is-inside-1.0.0.tgz";
@@ -11012,7 +11012,7 @@
   by-spec."pause"."0.0.1" =
     self.by-version."pause"."0.0.1";
   by-version."pause"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "pause-0.0.1";
+    name = "node-pause-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/pause/-/pause-0.0.1.tgz";
@@ -11057,7 +11057,7 @@
   by-spec."pkginfo"."0.2.x" =
     self.by-version."pkginfo"."0.2.3";
   by-version."pkginfo"."0.2.3" = lib.makeOverridable self.buildNodePackage {
-    name = "pkginfo-0.2.3";
+    name = "node-pkginfo-0.2.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/pkginfo/-/pkginfo-0.2.3.tgz";
@@ -11076,7 +11076,7 @@
   by-spec."pkginfo"."0.3.0" =
     self.by-version."pkginfo"."0.3.0";
   by-version."pkginfo"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "pkginfo-0.3.0";
+    name = "node-pkginfo-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/pkginfo/-/pkginfo-0.3.0.tgz";
@@ -11099,7 +11099,7 @@
   by-spec."plist-native"."*" =
     self.by-version."plist-native"."0.2.2";
   by-version."plist-native"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "plist-native-0.2.2";
+    name = "node-plist-native-0.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/plist-native/-/plist-native-0.2.2.tgz";
@@ -11120,7 +11120,7 @@
   by-spec."policyfile"."0.0.4" =
     self.by-version."policyfile"."0.0.4";
   by-version."policyfile"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "policyfile-0.0.4";
+    name = "node-policyfile-0.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/policyfile/-/policyfile-0.0.4.tgz";
@@ -11139,7 +11139,7 @@
   by-spec."posix"."*" =
     self.by-version."posix"."1.0.3";
   by-version."posix"."1.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "posix-1.0.3";
+    name = "node-posix-1.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/posix/-/posix-1.0.3.tgz";
@@ -11159,7 +11159,7 @@
   by-spec."posix-getopt"."1.0.0" =
     self.by-version."posix-getopt"."1.0.0";
   by-version."posix-getopt"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "posix-getopt-1.0.0";
+    name = "node-posix-getopt-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/posix-getopt/-/posix-getopt-1.0.0.tgz";
@@ -11178,7 +11178,7 @@
   by-spec."promise"."~2.0" =
     self.by-version."promise"."2.0.0";
   by-version."promise"."2.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "promise-2.0.0";
+    name = "node-promise-2.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/promise/-/promise-2.0.0.tgz";
@@ -11198,7 +11198,7 @@
   by-spec."prompt"."0.2.11" =
     self.by-version."prompt"."0.2.11";
   by-version."prompt"."0.2.11" = lib.makeOverridable self.buildNodePackage {
-    name = "prompt-0.2.11";
+    name = "node-prompt-0.2.11";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/prompt/-/prompt-0.2.11.tgz";
@@ -11222,7 +11222,7 @@
   by-spec."promptly"."~0.2.0" =
     self.by-version."promptly"."0.2.0";
   by-version."promptly"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "promptly-0.2.0";
+    name = "node-promptly-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/promptly/-/promptly-0.2.0.tgz";
@@ -11242,7 +11242,7 @@
   by-spec."promzard"."~0.2.0" =
     self.by-version."promzard"."0.2.1";
   by-version."promzard"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "promzard-0.2.1";
+    name = "node-promzard-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/promzard/-/promzard-0.2.1.tgz";
@@ -11262,7 +11262,7 @@
   by-spec."proto-list"."~1.2.1" =
     self.by-version."proto-list"."1.2.2";
   by-version."proto-list"."1.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "proto-list-1.2.2";
+    name = "node-proto-list-1.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/proto-list/-/proto-list-1.2.2.tgz";
@@ -11302,7 +11302,7 @@
   by-spec."ps-tree"."0.0.x" =
     self.by-version."ps-tree"."0.0.3";
   by-version."ps-tree"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "ps-tree-0.0.3";
+    name = "node-ps-tree-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ps-tree/-/ps-tree-0.0.3.tgz";
@@ -11322,7 +11322,7 @@
   by-spec."punycode".">=0.2.0" =
     self.by-version."punycode"."1.2.3";
   by-version."punycode"."1.2.3" = lib.makeOverridable self.buildNodePackage {
-    name = "punycode-1.2.3";
+    name = "node-punycode-1.2.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/punycode/-/punycode-1.2.3.tgz";
@@ -11343,7 +11343,7 @@
   by-spec."q".">= 0.0.1" =
     self.by-version."q"."1.0.0";
   by-version."q"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "q-1.0.0";
+    name = "node-q-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/q/-/q-1.0.0.tgz";
@@ -11362,7 +11362,7 @@
   by-spec."q"."~0.9.2" =
     self.by-version."q"."0.9.7";
   by-version."q"."0.9.7" = lib.makeOverridable self.buildNodePackage {
-    name = "q-0.9.7";
+    name = "node-q-0.9.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/q/-/q-0.9.7.tgz";
@@ -11387,7 +11387,7 @@
   by-spec."qs"."0.4.2" =
     self.by-version."qs"."0.4.2";
   by-version."qs"."0.4.2" = lib.makeOverridable self.buildNodePackage {
-    name = "qs-0.4.2";
+    name = "node-qs-0.4.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/qs/-/qs-0.4.2.tgz";
@@ -11408,7 +11408,7 @@
   by-spec."qs"."0.5.1" =
     self.by-version."qs"."0.5.1";
   by-version."qs"."0.5.1" = lib.makeOverridable self.buildNodePackage {
-    name = "qs-0.5.1";
+    name = "node-qs-0.5.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/qs/-/qs-0.5.1.tgz";
@@ -11427,7 +11427,7 @@
   by-spec."qs"."0.5.2" =
     self.by-version."qs"."0.5.2";
   by-version."qs"."0.5.2" = lib.makeOverridable self.buildNodePackage {
-    name = "qs-0.5.2";
+    name = "node-qs-0.5.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/qs/-/qs-0.5.2.tgz";
@@ -11446,7 +11446,7 @@
   by-spec."qs"."0.5.5" =
     self.by-version."qs"."0.5.5";
   by-version."qs"."0.5.5" = lib.makeOverridable self.buildNodePackage {
-    name = "qs-0.5.5";
+    name = "node-qs-0.5.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/qs/-/qs-0.5.5.tgz";
@@ -11465,7 +11465,7 @@
   by-spec."qs"."0.6.5" =
     self.by-version."qs"."0.6.5";
   by-version."qs"."0.6.5" = lib.makeOverridable self.buildNodePackage {
-    name = "qs-0.6.5";
+    name = "node-qs-0.6.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/qs/-/qs-0.6.5.tgz";
@@ -11484,7 +11484,7 @@
   by-spec."qs"."0.6.6" =
     self.by-version."qs"."0.6.6";
   by-version."qs"."0.6.6" = lib.makeOverridable self.buildNodePackage {
-    name = "qs-0.6.6";
+    name = "node-qs-0.6.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/qs/-/qs-0.6.6.tgz";
@@ -11505,7 +11505,7 @@
   by-spec."qs"."~0.5.0" =
     self.by-version."qs"."0.5.6";
   by-version."qs"."0.5.6" = lib.makeOverridable self.buildNodePackage {
-    name = "qs-0.5.6";
+    name = "node-qs-0.5.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/qs/-/qs-0.5.6.tgz";
@@ -11528,7 +11528,7 @@
   by-spec."rai"."~0.1" =
     self.by-version."rai"."0.1.9";
   by-version."rai"."0.1.9" = lib.makeOverridable self.buildNodePackage {
-    name = "rai-0.1.9";
+    name = "node-rai-0.1.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/rai/-/rai-0.1.9.tgz";
@@ -11547,7 +11547,7 @@
   by-spec."range-parser"."0.0.4" =
     self.by-version."range-parser"."0.0.4";
   by-version."range-parser"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "range-parser-0.0.4";
+    name = "node-range-parser-0.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/range-parser/-/range-parser-0.0.4.tgz";
@@ -11566,7 +11566,7 @@
   by-spec."range-parser"."~1.0.0" =
     self.by-version."range-parser"."1.0.0";
   by-version."range-parser"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "range-parser-1.0.0";
+    name = "node-range-parser-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/range-parser/-/range-parser-1.0.0.tgz";
@@ -11585,7 +11585,7 @@
   by-spec."raven"."~0.6.0" =
     self.by-version."raven"."0.6.1";
   by-version."raven"."0.6.1" = lib.makeOverridable self.buildNodePackage {
-    name = "raven-0.6.1";
+    name = "node-raven-0.6.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/raven/-/raven-0.6.1.tgz";
@@ -11608,7 +11608,7 @@
   by-spec."raw-body"."0.0.3" =
     self.by-version."raw-body"."0.0.3";
   by-version."raw-body"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "raw-body-0.0.3";
+    name = "node-raw-body-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/raw-body/-/raw-body-0.0.3.tgz";
@@ -11627,7 +11627,7 @@
   by-spec."raw-body"."1.1.2" =
     self.by-version."raw-body"."1.1.2";
   by-version."raw-body"."1.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "raw-body-1.1.2";
+    name = "node-raw-body-1.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/raw-body/-/raw-body-1.1.2.tgz";
@@ -11647,7 +11647,7 @@
   by-spec."raw-socket"."*" =
     self.by-version."raw-socket"."1.2.2";
   by-version."raw-socket"."1.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "raw-socket-1.2.2";
+    name = "node-raw-socket-1.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/raw-socket/-/raw-socket-1.2.2.tgz";
@@ -11666,7 +11666,7 @@
   by-spec."rbytes"."*" =
     self.by-version."rbytes"."1.0.0";
   by-version."rbytes"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "rbytes-1.0.0";
+    name = "node-rbytes-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/rbytes/-/rbytes-1.0.0.tgz";
@@ -11710,7 +11710,7 @@
   by-spec."read"."1" =
     self.by-version."read"."1.0.5";
   by-version."read"."1.0.5" = lib.makeOverridable self.buildNodePackage {
-    name = "read-1.0.5";
+    name = "node-read-1.0.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/read/-/read-1.0.5.tgz";
@@ -11736,7 +11736,7 @@
   by-spec."read-installed"."0.2.2" =
     self.by-version."read-installed"."0.2.2";
   by-version."read-installed"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "read-installed-0.2.2";
+    name = "node-read-installed-0.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/read-installed/-/read-installed-0.2.2.tgz";
@@ -11759,7 +11759,7 @@
   by-spec."read-installed"."~0.2.2" =
     self.by-version."read-installed"."0.2.5";
   by-version."read-installed"."0.2.5" = lib.makeOverridable self.buildNodePackage {
-    name = "read-installed-0.2.5";
+    name = "node-read-installed-0.2.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/read-installed/-/read-installed-0.2.5.tgz";
@@ -11782,7 +11782,7 @@
   by-spec."read-package-json"."1" =
     self.by-version."read-package-json"."1.1.6";
   by-version."read-package-json"."1.1.6" = lib.makeOverridable self.buildNodePackage {
-    name = "read-package-json-1.1.6";
+    name = "node-read-package-json-1.1.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/read-package-json/-/read-package-json-1.1.6.tgz";
@@ -11807,7 +11807,7 @@
   by-spec."readable-stream"."1.0" =
     self.by-version."readable-stream"."1.0.25";
   by-version."readable-stream"."1.0.25" = lib.makeOverridable self.buildNodePackage {
-    name = "readable-stream-1.0.25";
+    name = "node-readable-stream-1.0.25";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/readable-stream/-/readable-stream-1.0.25.tgz";
@@ -11827,7 +11827,7 @@
   by-spec."readable-stream"."1.1" =
     self.by-version."readable-stream"."1.1.10";
   by-version."readable-stream"."1.1.10" = lib.makeOverridable self.buildNodePackage {
-    name = "readable-stream-1.1.10";
+    name = "node-readable-stream-1.1.10";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/readable-stream/-/readable-stream-1.1.10.tgz";
@@ -11859,7 +11859,7 @@
   by-spec."readdirp"."~0.2.3" =
     self.by-version."readdirp"."0.2.5";
   by-version."readdirp"."0.2.5" = lib.makeOverridable self.buildNodePackage {
-    name = "readdirp-0.2.5";
+    name = "node-readdirp-0.2.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/readdirp/-/readdirp-0.2.5.tgz";
@@ -11879,7 +11879,7 @@
   by-spec."redeyed"."~0.4.0" =
     self.by-version."redeyed"."0.4.2";
   by-version."redeyed"."0.4.2" = lib.makeOverridable self.buildNodePackage {
-    name = "redeyed-0.4.2";
+    name = "node-redeyed-0.4.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/redeyed/-/redeyed-0.4.2.tgz";
@@ -11899,7 +11899,7 @@
   by-spec."redis"."*" =
     self.by-version."redis"."0.10.0";
   by-version."redis"."0.10.0" = lib.makeOverridable self.buildNodePackage {
-    name = "redis-0.10.0";
+    name = "node-redis-0.10.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/redis/-/redis-0.10.0.tgz";
@@ -11919,7 +11919,7 @@
   by-spec."redis"."0.7.2" =
     self.by-version."redis"."0.7.2";
   by-version."redis"."0.7.2" = lib.makeOverridable self.buildNodePackage {
-    name = "redis-0.7.2";
+    name = "node-redis-0.7.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/redis/-/redis-0.7.2.tgz";
@@ -11939,7 +11939,7 @@
   by-spec."redis"."0.7.3" =
     self.by-version."redis"."0.7.3";
   by-version."redis"."0.7.3" = lib.makeOverridable self.buildNodePackage {
-    name = "redis-0.7.3";
+    name = "node-redis-0.7.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/redis/-/redis-0.7.3.tgz";
@@ -11958,7 +11958,7 @@
   by-spec."redis"."0.8.x" =
     self.by-version."redis"."0.8.6";
   by-version."redis"."0.8.6" = lib.makeOverridable self.buildNodePackage {
-    name = "redis-0.8.6";
+    name = "node-redis-0.8.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/redis/-/redis-0.8.6.tgz";
@@ -11979,7 +11979,7 @@
   by-spec."reds"."~0.2.4" =
     self.by-version."reds"."0.2.4";
   by-version."reds"."0.2.4" = lib.makeOverridable self.buildNodePackage {
-    name = "reds-0.2.4";
+    name = "node-reds-0.2.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/reds/-/reds-0.2.4.tgz";
@@ -12000,7 +12000,7 @@
   by-spec."reduce-component"."1.0.1" =
     self.by-version."reduce-component"."1.0.1";
   by-version."reduce-component"."1.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "reduce-component-1.0.1";
+    name = "node-reduce-component-1.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/reduce-component/-/reduce-component-1.0.1.tgz";
@@ -12019,7 +12019,7 @@
   by-spec."regexp-clone"."0.0.1" =
     self.by-version."regexp-clone"."0.0.1";
   by-version."regexp-clone"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "regexp-clone-0.0.1";
+    name = "node-regexp-clone-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/regexp-clone/-/regexp-clone-0.0.1.tgz";
@@ -12060,7 +12060,7 @@
   by-spec."request"."2" =
     self.by-version."request"."2.33.0";
   by-version."request"."2.33.0" = lib.makeOverridable self.buildNodePackage {
-    name = "request-2.33.0";
+    name = "node-request-2.33.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/request/-/request-2.33.0.tgz";
@@ -12095,7 +12095,7 @@
   by-spec."request"."2.16.2" =
     self.by-version."request"."2.16.2";
   by-version."request"."2.16.2" = lib.makeOverridable self.buildNodePackage {
-    name = "request-2.16.2";
+    name = "node-request-2.16.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/request/-/request-2.16.2.tgz";
@@ -12125,7 +12125,7 @@
   by-spec."request"."2.16.x" =
     self.by-version."request"."2.16.6";
   by-version."request"."2.16.6" = lib.makeOverridable self.buildNodePackage {
-    name = "request-2.16.6";
+    name = "node-request-2.16.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/request/-/request-2.16.6.tgz";
@@ -12155,7 +12155,7 @@
   by-spec."request"."2.9.x" =
     self.by-version."request"."2.9.203";
   by-version."request"."2.9.203" = lib.makeOverridable self.buildNodePackage {
-    name = "request-2.9.203";
+    name = "node-request-2.9.203";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/request/-/request-2.9.203.tgz";
@@ -12178,7 +12178,7 @@
   by-spec."request"."~2.25.0" =
     self.by-version."request"."2.25.0";
   by-version."request"."2.25.0" = lib.makeOverridable self.buildNodePackage {
-    name = "request-2.25.0";
+    name = "node-request-2.25.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/request/-/request-2.25.0.tgz";
@@ -12209,7 +12209,7 @@
   by-spec."request"."~2.27.0" =
     self.by-version."request"."2.27.0";
   by-version."request"."2.27.0" = lib.makeOverridable self.buildNodePackage {
-    name = "request-2.27.0";
+    name = "node-request-2.27.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/request/-/request-2.27.0.tgz";
@@ -12240,7 +12240,7 @@
   by-spec."request"."~2.30.0" =
     self.by-version."request"."2.30.0";
   by-version."request"."2.30.0" = lib.makeOverridable self.buildNodePackage {
-    name = "request-2.30.0";
+    name = "node-request-2.30.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/request/-/request-2.30.0.tgz";
@@ -12271,7 +12271,7 @@
   by-spec."request"."~2.31.0" =
     self.by-version."request"."2.31.0";
   by-version."request"."2.31.0" = lib.makeOverridable self.buildNodePackage {
-    name = "request-2.31.0";
+    name = "node-request-2.31.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/request/-/request-2.31.0.tgz";
@@ -12304,7 +12304,7 @@
   by-spec."request-progress"."~0.3.0" =
     self.by-version."request-progress"."0.3.1";
   by-version."request-progress"."0.3.1" = lib.makeOverridable self.buildNodePackage {
-    name = "request-progress-0.3.1";
+    name = "node-request-progress-0.3.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/request-progress/-/request-progress-0.3.1.tgz";
@@ -12324,7 +12324,7 @@
   by-spec."request-replay"."~0.2.0" =
     self.by-version."request-replay"."0.2.0";
   by-version."request-replay"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "request-replay-0.2.0";
+    name = "node-request-replay-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/request-replay/-/request-replay-0.2.0.tgz";
@@ -12365,7 +12365,7 @@
   by-spec."resolve"."0.5.x" =
     self.by-version."resolve"."0.5.1";
   by-version."resolve"."0.5.1" = lib.makeOverridable self.buildNodePackage {
-    name = "resolve-0.5.1";
+    name = "node-resolve-0.5.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/resolve/-/resolve-0.5.1.tgz";
@@ -12384,7 +12384,7 @@
   by-spec."resolve"."0.6.x" =
     self.by-version."resolve"."0.6.1";
   by-version."resolve"."0.6.1" = lib.makeOverridable self.buildNodePackage {
-    name = "resolve-0.6.1";
+    name = "node-resolve-0.6.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/resolve/-/resolve-0.6.1.tgz";
@@ -12403,7 +12403,7 @@
   by-spec."resolve"."~0.3.1" =
     self.by-version."resolve"."0.3.1";
   by-version."resolve"."0.3.1" = lib.makeOverridable self.buildNodePackage {
-    name = "resolve-0.3.1";
+    name = "node-resolve-0.3.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/resolve/-/resolve-0.3.1.tgz";
@@ -12458,7 +12458,7 @@
   by-spec."rethinkdb"."*" =
     self.by-version."rethinkdb"."1.11.0-4";
   by-version."rethinkdb"."1.11.0-4" = lib.makeOverridable self.buildNodePackage {
-    name = "rethinkdb-1.11.0-4";
+    name = "node-rethinkdb-1.11.0-4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/rethinkdb/-/rethinkdb-1.11.0-4.tgz";
@@ -12479,7 +12479,7 @@
   by-spec."retry"."0.6.0" =
     self.by-version."retry"."0.6.0";
   by-version."retry"."0.6.0" = lib.makeOverridable self.buildNodePackage {
-    name = "retry-0.6.0";
+    name = "node-retry-0.6.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/retry/-/retry-0.6.0.tgz";
@@ -12500,7 +12500,7 @@
   by-spec."revalidator"."0.1.x" =
     self.by-version."revalidator"."0.1.6";
   by-version."revalidator"."0.1.6" = lib.makeOverridable self.buildNodePackage {
-    name = "revalidator-0.1.6";
+    name = "node-revalidator-0.1.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/revalidator/-/revalidator-0.1.6.tgz";
@@ -12519,7 +12519,7 @@
   by-spec."rimraf"."1.x.x" =
     self.by-version."rimraf"."1.0.9";
   by-version."rimraf"."1.0.9" = lib.makeOverridable self.buildNodePackage {
-    name = "rimraf-1.0.9";
+    name = "node-rimraf-1.0.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/rimraf/-/rimraf-1.0.9.tgz";
@@ -12561,7 +12561,7 @@
   by-spec."rimraf"."~2.0.2" =
     self.by-version."rimraf"."2.0.3";
   by-version."rimraf"."2.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "rimraf-2.0.3";
+    name = "node-rimraf-2.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/rimraf/-/rimraf-2.0.3.tgz";
@@ -12583,7 +12583,7 @@
   by-spec."rimraf"."~2.1.4" =
     self.by-version."rimraf"."2.1.4";
   by-version."rimraf"."2.1.4" = lib.makeOverridable self.buildNodePackage {
-    name = "rimraf-2.1.4";
+    name = "node-rimraf-2.1.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/rimraf/-/rimraf-2.1.4.tgz";
@@ -12637,7 +12637,7 @@
   by-spec."sauce-connect-launcher"."~0.2.2" =
     self.by-version."sauce-connect-launcher"."0.2.2";
   by-version."sauce-connect-launcher"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "sauce-connect-launcher-0.2.2";
+    name = "node-sauce-connect-launcher-0.2.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sauce-connect-launcher/-/sauce-connect-launcher-0.2.2.tgz";
@@ -12659,7 +12659,7 @@
   by-spec."saucelabs"."~0.1.0" =
     self.by-version."saucelabs"."0.1.1";
   by-version."saucelabs"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "saucelabs-0.1.1";
+    name = "node-saucelabs-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/saucelabs/-/saucelabs-0.1.1.tgz";
@@ -12678,7 +12678,7 @@
   by-spec."sax"."0.5.x" =
     self.by-version."sax"."0.5.8";
   by-version."sax"."0.5.8" = lib.makeOverridable self.buildNodePackage {
-    name = "sax-0.5.8";
+    name = "node-sax-0.5.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sax/-/sax-0.5.8.tgz";
@@ -12697,7 +12697,7 @@
   by-spec."sax".">=0.4.2" =
     self.by-version."sax"."0.6.0";
   by-version."sax"."0.6.0" = lib.makeOverridable self.buildNodePackage {
-    name = "sax-0.6.0";
+    name = "node-sax-0.6.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sax/-/sax-0.6.0.tgz";
@@ -12716,7 +12716,7 @@
   by-spec."selenium-webdriver"."*" =
     self.by-version."selenium-webdriver"."2.39.0";
   by-version."selenium-webdriver"."2.39.0" = lib.makeOverridable self.buildNodePackage {
-    name = "selenium-webdriver-2.39.0";
+    name = "node-selenium-webdriver-2.39.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/selenium-webdriver/-/selenium-webdriver-2.39.0.tgz";
@@ -12848,7 +12848,7 @@
   by-spec."send"."*" =
     self.by-version."send"."0.2.0";
   by-version."send"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "send-0.2.0";
+    name = "node-send-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/send/-/send-0.2.0.tgz";
@@ -12871,7 +12871,7 @@
   by-spec."send"."0.0.3" =
     self.by-version."send"."0.0.3";
   by-version."send"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "send-0.0.3";
+    name = "node-send-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/send/-/send-0.0.3.tgz";
@@ -12894,7 +12894,7 @@
   by-spec."send"."0.1.0" =
     self.by-version."send"."0.1.0";
   by-version."send"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "send-0.1.0";
+    name = "node-send-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/send/-/send-0.1.0.tgz";
@@ -12917,7 +12917,7 @@
   by-spec."send"."0.1.4" =
     self.by-version."send"."0.1.4";
   by-version."send"."0.1.4" = lib.makeOverridable self.buildNodePackage {
-    name = "send-0.1.4";
+    name = "node-send-0.1.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/send/-/send-0.1.4.tgz";
@@ -12940,7 +12940,7 @@
   by-spec."sequence"."*" =
     self.by-version."sequence"."3.0.0";
   by-version."sequence"."3.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "sequence-3.0.0";
+    name = "node-sequence-3.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sequence/-/sequence-3.0.0.tgz";
@@ -12959,7 +12959,7 @@
   by-spec."sequence"."2.x" =
     self.by-version."sequence"."2.2.1";
   by-version."sequence"."2.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "sequence-2.2.1";
+    name = "node-sequence-2.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sequence/-/sequence-2.2.1.tgz";
@@ -12978,7 +12978,7 @@
   by-spec."sha"."~1.2.1" =
     self.by-version."sha"."1.2.3";
   by-version."sha"."1.2.3" = lib.makeOverridable self.buildNodePackage {
-    name = "sha-1.2.3";
+    name = "node-sha-1.2.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sha/-/sha-1.2.3.tgz";
@@ -13039,7 +13039,7 @@
   by-spec."should"."*" =
     self.by-version."should"."3.1.2";
   by-version."should"."3.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "should-3.1.2";
+    name = "node-should-3.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/should/-/should-3.1.2.tgz";
@@ -13059,7 +13059,7 @@
   by-spec."sigmund"."~1.0.0" =
     self.by-version."sigmund"."1.0.0";
   by-version."sigmund"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "sigmund-1.0.0";
+    name = "node-sigmund-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sigmund/-/sigmund-1.0.0.tgz";
@@ -13078,7 +13078,7 @@
   by-spec."signals"."<2.0" =
     self.by-version."signals"."1.0.0";
   by-version."signals"."1.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "signals-1.0.0";
+    name = "node-signals-1.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/signals/-/signals-1.0.0.tgz";
@@ -13101,7 +13101,7 @@
   by-spec."simple-lru-cache"."0.0.x" =
     self.by-version."simple-lru-cache"."0.0.1";
   by-version."simple-lru-cache"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "simple-lru-cache-0.0.1";
+    name = "node-simple-lru-cache-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/simple-lru-cache/-/simple-lru-cache-0.0.1.tgz";
@@ -13120,7 +13120,7 @@
   by-spec."simplesmtp".">= 0.1.22" =
     self.by-version."simplesmtp"."0.3.20";
   by-version."simplesmtp"."0.3.20" = lib.makeOverridable self.buildNodePackage {
-    name = "simplesmtp-0.3.20";
+    name = "node-simplesmtp-0.3.20";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/simplesmtp/-/simplesmtp-0.3.20.tgz";
@@ -13141,7 +13141,7 @@
   by-spec."sliced"."0.0.3" =
     self.by-version."sliced"."0.0.3";
   by-version."sliced"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "sliced-0.0.3";
+    name = "node-sliced-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sliced/-/sliced-0.0.3.tgz";
@@ -13160,7 +13160,7 @@
   by-spec."sliced"."0.0.4" =
     self.by-version."sliced"."0.0.4";
   by-version."sliced"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "sliced-0.0.4";
+    name = "node-sliced-0.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sliced/-/sliced-0.0.4.tgz";
@@ -13179,7 +13179,7 @@
   by-spec."sliced"."0.0.5" =
     self.by-version."sliced"."0.0.5";
   by-version."sliced"."0.0.5" = lib.makeOverridable self.buildNodePackage {
-    name = "sliced-0.0.5";
+    name = "node-sliced-0.0.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sliced/-/sliced-0.0.5.tgz";
@@ -13198,7 +13198,7 @@
   by-spec."slide"."~1.1.3" =
     self.by-version."slide"."1.1.5";
   by-version."slide"."1.1.5" = lib.makeOverridable self.buildNodePackage {
-    name = "slide-1.1.5";
+    name = "node-slide-1.1.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/slide/-/slide-1.1.5.tgz";
@@ -13246,7 +13246,7 @@
   by-spec."smartdc-auth"."1.0.1" =
     self.by-version."smartdc-auth"."1.0.1";
   by-version."smartdc-auth"."1.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "smartdc-auth-1.0.1";
+    name = "node-smartdc-auth-1.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/smartdc-auth/-/smartdc-auth-1.0.1.tgz";
@@ -13270,7 +13270,7 @@
   by-spec."sntp"."0.1.x" =
     self.by-version."sntp"."0.1.4";
   by-version."sntp"."0.1.4" = lib.makeOverridable self.buildNodePackage {
-    name = "sntp-0.1.4";
+    name = "node-sntp-0.1.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sntp/-/sntp-0.1.4.tgz";
@@ -13290,7 +13290,7 @@
   by-spec."sntp"."0.2.x" =
     self.by-version."sntp"."0.2.4";
   by-version."sntp"."0.2.4" = lib.makeOverridable self.buildNodePackage {
-    name = "sntp-0.2.4";
+    name = "node-sntp-0.2.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sntp/-/sntp-0.2.4.tgz";
@@ -13310,7 +13310,7 @@
   by-spec."socket.io"."0.9.14" =
     self.by-version."socket.io"."0.9.14";
   by-version."socket.io"."0.9.14" = lib.makeOverridable self.buildNodePackage {
-    name = "socket.io-0.9.14";
+    name = "node-socket.io-0.9.14";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/socket.io/-/socket.io-0.9.14.tgz";
@@ -13333,7 +13333,7 @@
   by-spec."socket.io"."0.9.16" =
     self.by-version."socket.io"."0.9.16";
   by-version."socket.io"."0.9.16" = lib.makeOverridable self.buildNodePackage {
-    name = "socket.io-0.9.16";
+    name = "node-socket.io-0.9.16";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/socket.io/-/socket.io-0.9.16.tgz";
@@ -13360,7 +13360,7 @@
   by-spec."socket.io-client"."0.9.11" =
     self.by-version."socket.io-client"."0.9.11";
   by-version."socket.io-client"."0.9.11" = lib.makeOverridable self.buildNodePackage {
-    name = "socket.io-client-0.9.11";
+    name = "node-socket.io-client-0.9.11";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/socket.io-client/-/socket.io-client-0.9.11.tgz";
@@ -13383,7 +13383,7 @@
   by-spec."socket.io-client"."0.9.16" =
     self.by-version."socket.io-client"."0.9.16";
   by-version."socket.io-client"."0.9.16" = lib.makeOverridable self.buildNodePackage {
-    name = "socket.io-client-0.9.16";
+    name = "node-socket.io-client-0.9.16";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/socket.io-client/-/socket.io-client-0.9.16.tgz";
@@ -13406,7 +13406,7 @@
   by-spec."sockjs"."*" =
     self.by-version."sockjs"."0.3.8";
   by-version."sockjs"."0.3.8" = lib.makeOverridable self.buildNodePackage {
-    name = "sockjs-0.3.8";
+    name = "node-sockjs-0.3.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sockjs/-/sockjs-0.3.8.tgz";
@@ -13428,7 +13428,7 @@
   by-spec."source-map"."*" =
     self.by-version."source-map"."0.1.31";
   by-version."source-map"."0.1.31" = lib.makeOverridable self.buildNodePackage {
-    name = "source-map-0.1.31";
+    name = "node-source-map-0.1.31";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/source-map/-/source-map-0.1.31.tgz";
@@ -13459,7 +13459,7 @@
   by-spec."spdy"."1.7.1" =
     self.by-version."spdy"."1.7.1";
   by-version."spdy"."1.7.1" = lib.makeOverridable self.buildNodePackage {
-    name = "spdy-1.7.1";
+    name = "node-spdy-1.7.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/spdy/-/spdy-1.7.1.tgz";
@@ -13478,7 +13478,7 @@
   by-spec."sprintf"."~0.1.2" =
     self.by-version."sprintf"."0.1.3";
   by-version."sprintf"."0.1.3" = lib.makeOverridable self.buildNodePackage {
-    name = "sprintf-0.1.3";
+    name = "node-sprintf-0.1.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sprintf/-/sprintf-0.1.3.tgz";
@@ -13520,7 +13520,7 @@
   by-spec."ssh2"."~0.2.16" =
     self.by-version."ssh2"."0.2.17";
   by-version."ssh2"."0.2.17" = lib.makeOverridable self.buildNodePackage {
-    name = "ssh2-0.2.17";
+    name = "node-ssh2-0.2.17";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/ssh2/-/ssh2-0.2.17.tgz";
@@ -13541,7 +13541,7 @@
   by-spec."stack-trace"."0.0.7" =
     self.by-version."stack-trace"."0.0.7";
   by-version."stack-trace"."0.0.7" = lib.makeOverridable self.buildNodePackage {
-    name = "stack-trace-0.0.7";
+    name = "node-stack-trace-0.0.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/stack-trace/-/stack-trace-0.0.7.tgz";
@@ -13560,7 +13560,7 @@
   by-spec."stack-trace"."0.0.x" =
     self.by-version."stack-trace"."0.0.8";
   by-version."stack-trace"."0.0.8" = lib.makeOverridable self.buildNodePackage {
-    name = "stack-trace-0.0.8";
+    name = "node-stack-trace-0.0.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/stack-trace/-/stack-trace-0.0.8.tgz";
@@ -13602,7 +13602,7 @@
   by-spec."stream-combiner"."~0.0.2" =
     self.by-version."stream-combiner"."0.0.4";
   by-version."stream-combiner"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "stream-combiner-0.0.4";
+    name = "node-stream-combiner-0.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/stream-combiner/-/stream-combiner-0.0.4.tgz";
@@ -13622,7 +13622,7 @@
   by-spec."stream-counter"."~0.1.0" =
     self.by-version."stream-counter"."0.1.0";
   by-version."stream-counter"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "stream-counter-0.1.0";
+    name = "node-stream-counter-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/stream-counter/-/stream-counter-0.1.0.tgz";
@@ -13642,7 +13642,7 @@
   by-spec."stream-counter"."~0.2.0" =
     self.by-version."stream-counter"."0.2.0";
   by-version."stream-counter"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "stream-counter-0.2.0";
+    name = "node-stream-counter-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/stream-counter/-/stream-counter-0.2.0.tgz";
@@ -13662,7 +13662,7 @@
   by-spec."stream-splitter-transform"."*" =
     self.by-version."stream-splitter-transform"."0.0.4";
   by-version."stream-splitter-transform"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "stream-splitter-transform-0.0.4";
+    name = "node-stream-splitter-transform-0.0.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/stream-splitter-transform/-/stream-splitter-transform-0.0.4.tgz";
@@ -13683,7 +13683,7 @@
   by-spec."streamsearch"."0.1.2" =
     self.by-version."streamsearch"."0.1.2";
   by-version."streamsearch"."0.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "streamsearch-0.1.2";
+    name = "node-streamsearch-0.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/streamsearch/-/streamsearch-0.1.2.tgz";
@@ -13702,7 +13702,7 @@
   by-spec."string"."1.6.1" =
     self.by-version."string"."1.6.1";
   by-version."string"."1.6.1" = lib.makeOverridable self.buildNodePackage {
-    name = "string-1.6.1";
+    name = "node-string-1.6.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/string/-/string-1.6.1.tgz";
@@ -13721,7 +13721,7 @@
   by-spec."string_decoder"."~0.10.x" =
     self.by-version."string_decoder"."0.10.25";
   by-version."string_decoder"."0.10.25" = lib.makeOverridable self.buildNodePackage {
-    name = "string_decoder-0.10.25";
+    name = "node-string_decoder-0.10.25";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/string_decoder/-/string_decoder-0.10.25.tgz";
@@ -13740,7 +13740,7 @@
   by-spec."stringify-object"."~0.1.4" =
     self.by-version."stringify-object"."0.1.8";
   by-version."stringify-object"."0.1.8" = lib.makeOverridable self.buildNodePackage {
-    name = "stringify-object-0.1.8";
+    name = "node-stringify-object-0.1.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/stringify-object/-/stringify-object-0.1.8.tgz";
@@ -13778,7 +13778,7 @@
   by-spec."strong-data-uri"."~0.1.0" =
     self.by-version."strong-data-uri"."0.1.1";
   by-version."strong-data-uri"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "strong-data-uri-0.1.1";
+    name = "node-strong-data-uri-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/strong-data-uri/-/strong-data-uri-0.1.1.tgz";
@@ -13845,7 +13845,7 @@
   by-spec."sudo-block"."~0.2.0" =
     self.by-version."sudo-block"."0.2.1";
   by-version."sudo-block"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "sudo-block-0.2.1";
+    name = "node-sudo-block-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sudo-block/-/sudo-block-0.2.1.tgz";
@@ -13865,7 +13865,7 @@
   by-spec."sudo-block"."~0.3.0" =
     self.by-version."sudo-block"."0.3.0";
   by-version."sudo-block"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "sudo-block-0.3.0";
+    name = "node-sudo-block-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sudo-block/-/sudo-block-0.3.0.tgz";
@@ -13885,7 +13885,7 @@
   by-spec."superagent"."0.16.0" =
     self.by-version."superagent"."0.16.0";
   by-version."superagent"."0.16.0" = lib.makeOverridable self.buildNodePackage {
-    name = "superagent-0.16.0";
+    name = "node-superagent-0.16.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/superagent/-/superagent-0.16.0.tgz";
@@ -13912,7 +13912,7 @@
   by-spec."superagent"."~0.13.0" =
     self.by-version."superagent"."0.13.0";
   by-version."superagent"."0.13.0" = lib.makeOverridable self.buildNodePackage {
-    name = "superagent-0.13.0";
+    name = "node-superagent-0.13.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/superagent/-/superagent-0.13.0.tgz";
@@ -13939,7 +13939,7 @@
   by-spec."supertest"."*" =
     self.by-version."supertest"."0.9.0";
   by-version."supertest"."0.9.0" = lib.makeOverridable self.buildNodePackage {
-    name = "supertest-0.9.0";
+    name = "node-supertest-0.9.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/supertest/-/supertest-0.9.0.tgz";
@@ -13961,7 +13961,7 @@
   by-spec."swig"."0.14.x" =
     self.by-version."swig"."0.14.0";
   by-version."swig"."0.14.0" = lib.makeOverridable self.buildNodePackage {
-    name = "swig-0.14.0";
+    name = "node-swig-0.14.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/swig/-/swig-0.14.0.tgz";
@@ -13982,7 +13982,7 @@
   by-spec."sylvester".">= 0.0.12" =
     self.by-version."sylvester"."0.0.21";
   by-version."sylvester"."0.0.21" = lib.makeOverridable self.buildNodePackage {
-    name = "sylvester-0.0.21";
+    name = "node-sylvester-0.0.21";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/sylvester/-/sylvester-0.0.21.tgz";
@@ -14003,7 +14003,7 @@
   by-spec."tar"."*" =
     self.by-version."tar"."0.1.19";
   by-version."tar"."0.1.19" = lib.makeOverridable self.buildNodePackage {
-    name = "tar-0.1.19";
+    name = "node-tar-0.1.19";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/tar/-/tar-0.1.19.tgz";
@@ -14028,7 +14028,7 @@
   by-spec."tar"."0.1.17" =
     self.by-version."tar"."0.1.17";
   by-version."tar"."0.1.17" = lib.makeOverridable self.buildNodePackage {
-    name = "tar-0.1.17";
+    name = "node-tar-0.1.17";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/tar/-/tar-0.1.17.tgz";
@@ -14056,7 +14056,7 @@
   by-spec."temp"."*" =
     self.by-version."temp"."0.6.0";
   by-version."temp"."0.6.0" = lib.makeOverridable self.buildNodePackage {
-    name = "temp-0.6.0";
+    name = "node-temp-0.6.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/temp/-/temp-0.6.0.tgz";
@@ -14082,7 +14082,7 @@
   by-spec."tempfile"."~0.1.2" =
     self.by-version."tempfile"."0.1.2";
   by-version."tempfile"."0.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "tempfile-0.1.2";
+    name = "node-tempfile-0.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/tempfile/-/tempfile-0.1.2.tgz";
@@ -14102,7 +14102,7 @@
   by-spec."text-table"."~0.1.1" =
     self.by-version."text-table"."0.1.1";
   by-version."text-table"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "text-table-0.1.1";
+    name = "node-text-table-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/text-table/-/text-table-0.1.1.tgz";
@@ -14121,7 +14121,7 @@
   by-spec."text-table"."~0.2.0" =
     self.by-version."text-table"."0.2.0";
   by-version."text-table"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "text-table-0.2.0";
+    name = "node-text-table-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/text-table/-/text-table-0.2.0.tgz";
@@ -14140,7 +14140,7 @@
   by-spec."throttleit"."~0.0.2" =
     self.by-version."throttleit"."0.0.2";
   by-version."throttleit"."0.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "throttleit-0.0.2";
+    name = "node-throttleit-0.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/throttleit/-/throttleit-0.0.2.tgz";
@@ -14159,7 +14159,7 @@
   by-spec."through"."~2.3.4" =
     self.by-version."through"."2.3.4";
   by-version."through"."2.3.4" = lib.makeOverridable self.buildNodePackage {
-    name = "through-2.3.4";
+    name = "node-through-2.3.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/through/-/through-2.3.4.tgz";
@@ -14178,7 +14178,7 @@
   by-spec."through2"."~0.4.0" =
     self.by-version."through2"."0.4.1";
   by-version."through2"."0.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "through2-0.4.1";
+    name = "node-through2-0.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/through2/-/through2-0.4.1.tgz";
@@ -14199,7 +14199,7 @@
   by-spec."timespan"."~2.3.0" =
     self.by-version."timespan"."2.3.0";
   by-version."timespan"."2.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "timespan-2.3.0";
+    name = "node-timespan-2.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/timespan/-/timespan-2.3.0.tgz";
@@ -14218,7 +14218,7 @@
   by-spec."timezone"."*" =
     self.by-version."timezone"."0.0.23";
   by-version."timezone"."0.0.23" = lib.makeOverridable self.buildNodePackage {
-    name = "timezone-0.0.23";
+    name = "node-timezone-0.0.23";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/timezone/-/timezone-0.0.23.tgz";
@@ -14238,7 +14238,7 @@
   by-spec."tinycolor"."0.x" =
     self.by-version."tinycolor"."0.0.1";
   by-version."tinycolor"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "tinycolor-0.0.1";
+    name = "node-tinycolor-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/tinycolor/-/tinycolor-0.0.1.tgz";
@@ -14292,7 +14292,7 @@
   by-spec."tmp"."~0.0.20" =
     self.by-version."tmp"."0.0.23";
   by-version."tmp"."0.0.23" = lib.makeOverridable self.buildNodePackage {
-    name = "tmp-0.0.23";
+    name = "node-tmp-0.0.23";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/tmp/-/tmp-0.0.23.tgz";
@@ -14311,7 +14311,7 @@
   by-spec."touch"."0.0.2" =
     self.by-version."touch"."0.0.2";
   by-version."touch"."0.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "touch-0.0.2";
+    name = "node-touch-0.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/touch/-/touch-0.0.2.tgz";
@@ -14331,7 +14331,7 @@
   by-spec."tough-cookie".">=0.12.0" =
     self.by-version."tough-cookie"."0.12.1";
   by-version."tough-cookie"."0.12.1" = lib.makeOverridable self.buildNodePackage {
-    name = "tough-cookie-0.12.1";
+    name = "node-tough-cookie-0.12.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/tough-cookie/-/tough-cookie-0.12.1.tgz";
@@ -14351,7 +14351,7 @@
   by-spec."tough-cookie"."~0.9.15" =
     self.by-version."tough-cookie"."0.9.15";
   by-version."tough-cookie"."0.9.15" = lib.makeOverridable self.buildNodePackage {
-    name = "tough-cookie-0.9.15";
+    name = "node-tough-cookie-0.9.15";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/tough-cookie/-/tough-cookie-0.9.15.tgz";
@@ -14371,7 +14371,7 @@
   by-spec."transformers"."2.1.0" =
     self.by-version."transformers"."2.1.0";
   by-version."transformers"."2.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "transformers-2.1.0";
+    name = "node-transformers-2.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/transformers/-/transformers-2.1.0.tgz";
@@ -14393,7 +14393,7 @@
   by-spec."traverse".">=0.3.0 <0.4" =
     self.by-version."traverse"."0.3.9";
   by-version."traverse"."0.3.9" = lib.makeOverridable self.buildNodePackage {
-    name = "traverse-0.3.9";
+    name = "node-traverse-0.3.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/traverse/-/traverse-0.3.9.tgz";
@@ -14412,7 +14412,7 @@
   by-spec."truncate"."~1.0.2" =
     self.by-version."truncate"."1.0.2";
   by-version."truncate"."1.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "truncate-1.0.2";
+    name = "node-truncate-1.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/truncate/-/truncate-1.0.2.tgz";
@@ -14431,7 +14431,7 @@
   by-spec."tunnel-agent"."~0.2.0" =
     self.by-version."tunnel-agent"."0.2.0";
   by-version."tunnel-agent"."0.2.0" = lib.makeOverridable self.buildNodePackage {
-    name = "tunnel-agent-0.2.0";
+    name = "node-tunnel-agent-0.2.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.2.0.tgz";
@@ -14450,7 +14450,7 @@
   by-spec."tunnel-agent"."~0.3.0" =
     self.by-version."tunnel-agent"."0.3.0";
   by-version."tunnel-agent"."0.3.0" = lib.makeOverridable self.buildNodePackage {
-    name = "tunnel-agent-0.3.0";
+    name = "node-tunnel-agent-0.3.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.3.0.tgz";
@@ -14469,7 +14469,7 @@
   by-spec."type-detect"."0.1.1" =
     self.by-version."type-detect"."0.1.1";
   by-version."type-detect"."0.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "type-detect-0.1.1";
+    name = "node-type-detect-0.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/type-detect/-/type-detect-0.1.1.tgz";
@@ -14488,7 +14488,7 @@
   by-spec."typechecker"."~2.0.1" =
     self.by-version."typechecker"."2.0.8";
   by-version."typechecker"."2.0.8" = lib.makeOverridable self.buildNodePackage {
-    name = "typechecker-2.0.8";
+    name = "node-typechecker-2.0.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/typechecker/-/typechecker-2.0.8.tgz";
@@ -14617,7 +14617,7 @@
   by-spec."uglify-to-browserify"."~1.0.0" =
     self.by-version."uglify-to-browserify"."1.0.1";
   by-version."uglify-to-browserify"."1.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "uglify-to-browserify-1.0.1";
+    name = "node-uglify-to-browserify-1.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/uglify-to-browserify/-/uglify-to-browserify-1.0.1.tgz";
@@ -14636,7 +14636,7 @@
   by-spec."uid-number"."0" =
     self.by-version."uid-number"."0.0.3";
   by-version."uid-number"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "uid-number-0.0.3";
+    name = "node-uid-number-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/uid-number/-/uid-number-0.0.3.tgz";
@@ -14655,7 +14655,7 @@
   by-spec."uid2"."0.0.3" =
     self.by-version."uid2"."0.0.3";
   by-version."uid2"."0.0.3" = lib.makeOverridable self.buildNodePackage {
-    name = "uid2-0.0.3";
+    name = "node-uid2-0.0.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/uid2/-/uid2-0.0.3.tgz";
@@ -14674,7 +14674,7 @@
   by-spec."underscore"."*" =
     self.by-version."underscore"."1.5.2";
   by-version."underscore"."1.5.2" = lib.makeOverridable self.buildNodePackage {
-    name = "underscore-1.5.2";
+    name = "node-underscore-1.5.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/underscore/-/underscore-1.5.2.tgz";
@@ -14694,7 +14694,7 @@
   by-spec."underscore"."1.4.x" =
     self.by-version."underscore"."1.4.4";
   by-version."underscore"."1.4.4" = lib.makeOverridable self.buildNodePackage {
-    name = "underscore-1.4.4";
+    name = "node-underscore-1.4.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/underscore/-/underscore-1.4.4.tgz";
@@ -14731,7 +14731,7 @@
   by-spec."underscore.string"."~2.2.1" =
     self.by-version."underscore.string"."2.2.1";
   by-version."underscore.string"."2.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "underscore.string-2.2.1";
+    name = "node-underscore.string-2.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/underscore.string/-/underscore.string-2.2.1.tgz";
@@ -14750,7 +14750,7 @@
   by-spec."underscore.string"."~2.3.1" =
     self.by-version."underscore.string"."2.3.3";
   by-version."underscore.string"."2.3.3" = lib.makeOverridable self.buildNodePackage {
-    name = "underscore.string-2.3.3";
+    name = "node-underscore.string-2.3.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/underscore.string/-/underscore.string-2.3.3.tgz";
@@ -14771,7 +14771,7 @@
   by-spec."unfunk-diff"."~0.0.1" =
     self.by-version."unfunk-diff"."0.0.2";
   by-version."unfunk-diff"."0.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "unfunk-diff-0.0.2";
+    name = "node-unfunk-diff-0.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/unfunk-diff/-/unfunk-diff-0.0.2.tgz";
@@ -14843,7 +14843,7 @@
   by-spec."update-notifier"."~0.1.3" =
     self.by-version."update-notifier"."0.1.7";
   by-version."update-notifier"."0.1.7" = lib.makeOverridable self.buildNodePackage {
-    name = "update-notifier-0.1.7";
+    name = "node-update-notifier-0.1.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/update-notifier/-/update-notifier-0.1.7.tgz";
@@ -14868,7 +14868,7 @@
   by-spec."useragent"."~2.0.4" =
     self.by-version."useragent"."2.0.7";
   by-version."useragent"."2.0.7" = lib.makeOverridable self.buildNodePackage {
-    name = "useragent-2.0.7";
+    name = "node-useragent-2.0.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/useragent/-/useragent-2.0.7.tgz";
@@ -14888,7 +14888,7 @@
   by-spec."util"."0.10.2" =
     self.by-version."util"."0.10.2";
   by-version."util"."0.10.2" = lib.makeOverridable self.buildNodePackage {
-    name = "util-0.10.2";
+    name = "node-util-0.10.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/util/-/util-0.10.2.tgz";
@@ -14908,7 +14908,7 @@
   by-spec."util"."0.4.9" =
     self.by-version."util"."0.4.9";
   by-version."util"."0.4.9" = lib.makeOverridable self.buildNodePackage {
-    name = "util-0.4.9";
+    name = "node-util-0.4.9";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/util/-/util-0.4.9.tgz";
@@ -14928,7 +14928,7 @@
   by-spec."utile"."0.1.x" =
     self.by-version."utile"."0.1.7";
   by-version."utile"."0.1.7" = lib.makeOverridable self.buildNodePackage {
-    name = "utile-0.1.7";
+    name = "node-utile-0.1.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/utile/-/utile-0.1.7.tgz";
@@ -14953,7 +14953,7 @@
   by-spec."utile"."0.2.1" =
     self.by-version."utile"."0.2.1";
   by-version."utile"."0.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "utile-0.2.1";
+    name = "node-utile-0.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/utile/-/utile-0.2.1.tgz";
@@ -14984,7 +14984,7 @@
   by-spec."uuid"."1.4.1" =
     self.by-version."uuid"."1.4.1";
   by-version."uuid"."1.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "uuid-1.4.1";
+    name = "node-uuid-1.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/uuid/-/uuid-1.4.1.tgz";
@@ -15005,7 +15005,7 @@
   by-spec."validator"."0.4.x" =
     self.by-version."validator"."0.4.28";
   by-version."validator"."0.4.28" = lib.makeOverridable self.buildNodePackage {
-    name = "validator-0.4.28";
+    name = "node-validator-0.4.28";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/validator/-/validator-0.4.28.tgz";
@@ -15024,7 +15024,7 @@
   by-spec."vargs"."~0.1.0" =
     self.by-version."vargs"."0.1.0";
   by-version."vargs"."0.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "vargs-0.1.0";
+    name = "node-vargs-0.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/vargs/-/vargs-0.1.0.tgz";
@@ -15043,7 +15043,7 @@
   by-spec."vasync"."1.3.3" =
     self.by-version."vasync"."1.3.3";
   by-version."vasync"."1.3.3" = lib.makeOverridable self.buildNodePackage {
-    name = "vasync-1.3.3";
+    name = "node-vasync-1.3.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/vasync/-/vasync-1.3.3.tgz";
@@ -15064,7 +15064,7 @@
   by-spec."verror"."1.1.0" =
     self.by-version."verror"."1.1.0";
   by-version."verror"."1.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "verror-1.1.0";
+    name = "node-verror-1.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/verror/-/verror-1.1.0.tgz";
@@ -15084,7 +15084,7 @@
   by-spec."verror"."1.3.3" =
     self.by-version."verror"."1.3.3";
   by-version."verror"."1.3.3" = lib.makeOverridable self.buildNodePackage {
-    name = "verror-1.3.3";
+    name = "node-verror-1.3.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/verror/-/verror-1.3.3.tgz";
@@ -15104,7 +15104,7 @@
   by-spec."verror"."1.3.6" =
     self.by-version."verror"."1.3.6";
   by-version."verror"."1.3.6" = lib.makeOverridable self.buildNodePackage {
-    name = "verror-1.3.6";
+    name = "node-verror-1.3.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/verror/-/verror-1.3.6.tgz";
@@ -15124,7 +15124,7 @@
   by-spec."view-helpers"."*" =
     self.by-version."view-helpers"."0.1.4";
   by-version."view-helpers"."0.1.4" = lib.makeOverridable self.buildNodePackage {
-    name = "view-helpers-0.1.4";
+    name = "node-view-helpers-0.1.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/view-helpers/-/view-helpers-0.1.4.tgz";
@@ -15165,7 +15165,7 @@
   by-spec."walk"."*" =
     self.by-version."walk"."2.3.1";
   by-version."walk"."2.3.1" = lib.makeOverridable self.buildNodePackage {
-    name = "walk-2.3.1";
+    name = "node-walk-2.3.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/walk/-/walk-2.3.1.tgz";
@@ -15186,7 +15186,7 @@
   by-spec."walk"."~2.2.1" =
     self.by-version."walk"."2.2.1";
   by-version."walk"."2.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "walk-2.2.1";
+    name = "node-walk-2.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/walk/-/walk-2.2.1.tgz";
@@ -15206,7 +15206,7 @@
   by-spec."watch"."0.5.x" =
     self.by-version."watch"."0.5.1";
   by-version."watch"."0.5.1" = lib.makeOverridable self.buildNodePackage {
-    name = "watch-0.5.1";
+    name = "node-watch-0.5.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/watch/-/watch-0.5.1.tgz";
@@ -15225,7 +15225,7 @@
   by-spec."watch"."~0.8.0" =
     self.by-version."watch"."0.8.0";
   by-version."watch"."0.8.0" = lib.makeOverridable self.buildNodePackage {
-    name = "watch-0.8.0";
+    name = "node-watch-0.8.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/watch/-/watch-0.8.0.tgz";
@@ -15297,7 +15297,7 @@
   by-spec."websocket-driver".">=0.3.0" =
     self.by-version."websocket-driver"."0.3.2";
   by-version."websocket-driver"."0.3.2" = lib.makeOverridable self.buildNodePackage {
-    name = "websocket-driver-0.3.2";
+    name = "node-websocket-driver-0.3.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/websocket-driver/-/websocket-driver-0.3.2.tgz";
@@ -15318,7 +15318,7 @@
   by-spec."when"."~2.2.1" =
     self.by-version."when"."2.2.1";
   by-version."when"."2.2.1" = lib.makeOverridable self.buildNodePackage {
-    name = "when-2.2.1";
+    name = "node-when-2.2.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/when/-/when-2.2.1.tgz";
@@ -15383,7 +15383,7 @@
   by-spec."winston"."*" =
     self.by-version."winston"."0.7.2";
   by-version."winston"."0.7.2" = lib.makeOverridable self.buildNodePackage {
-    name = "winston-0.7.2";
+    name = "node-winston-0.7.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/winston/-/winston-0.7.2.tgz";
@@ -15410,7 +15410,7 @@
   by-spec."winston"."0.6.2" =
     self.by-version."winston"."0.6.2";
   by-version."winston"."0.6.2" = lib.makeOverridable self.buildNodePackage {
-    name = "winston-0.6.2";
+    name = "node-winston-0.6.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/winston/-/winston-0.6.2.tgz";
@@ -15442,7 +15442,7 @@
   by-spec."wiredep"."~0.4.2" =
     self.by-version."wiredep"."0.4.2";
   by-version."wiredep"."0.4.2" = lib.makeOverridable self.buildNodePackage {
-    name = "wiredep-0.4.2";
+    name = "node-wiredep-0.4.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/wiredep/-/wiredep-0.4.2.tgz";
@@ -15463,7 +15463,7 @@
   by-spec."with"."~1.1.0" =
     self.by-version."with"."1.1.1";
   by-version."with"."1.1.1" = lib.makeOverridable self.buildNodePackage {
-    name = "with-1.1.1";
+    name = "node-with-1.1.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/with/-/with-1.1.1.tgz";
@@ -15483,7 +15483,7 @@
   by-spec."with"."~2.0.0" =
     self.by-version."with"."2.0.0";
   by-version."with"."2.0.0" = lib.makeOverridable self.buildNodePackage {
-    name = "with-2.0.0";
+    name = "node-with-2.0.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/with/-/with-2.0.0.tgz";
@@ -15503,7 +15503,7 @@
   by-spec."wordwrap"."0.0.x" =
     self.by-version."wordwrap"."0.0.2";
   by-version."wordwrap"."0.0.2" = lib.makeOverridable self.buildNodePackage {
-    name = "wordwrap-0.0.2";
+    name = "node-wordwrap-0.0.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/wordwrap/-/wordwrap-0.0.2.tgz";
@@ -15526,7 +15526,7 @@
   by-spec."wrench"."~1.4.3" =
     self.by-version."wrench"."1.4.4";
   by-version."wrench"."1.4.4" = lib.makeOverridable self.buildNodePackage {
-    name = "wrench-1.4.4";
+    name = "node-wrench-1.4.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/wrench/-/wrench-1.4.4.tgz";
@@ -15545,7 +15545,7 @@
   by-spec."wrench"."~1.5.0" =
     self.by-version."wrench"."1.5.6";
   by-version."wrench"."1.5.6" = lib.makeOverridable self.buildNodePackage {
-    name = "wrench-1.5.6";
+    name = "node-wrench-1.5.6";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/wrench/-/wrench-1.5.6.tgz";
@@ -15589,7 +15589,7 @@
   by-spec."wu"."*" =
     self.by-version."wu"."0.1.8";
   by-version."wu"."0.1.8" = lib.makeOverridable self.buildNodePackage {
-    name = "wu-0.1.8";
+    name = "node-wu-0.1.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/wu/-/wu-0.1.8.tgz";
@@ -15609,7 +15609,7 @@
   by-spec."x509"."*" =
     self.by-version."x509"."0.0.7";
   by-version."x509"."0.0.7" = lib.makeOverridable self.buildNodePackage {
-    name = "x509-0.0.7";
+    name = "node-x509-0.0.7";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/x509/-/x509-0.0.7.tgz";
@@ -15629,7 +15629,7 @@
   by-spec."xml2js"."0.2.4" =
     self.by-version."xml2js"."0.2.4";
   by-version."xml2js"."0.2.4" = lib.makeOverridable self.buildNodePackage {
-    name = "xml2js-0.2.4";
+    name = "node-xml2js-0.2.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/xml2js/-/xml2js-0.2.4.tgz";
@@ -15649,7 +15649,7 @@
   by-spec."xml2js"."0.2.x" =
     self.by-version."xml2js"."0.2.8";
   by-version."xml2js"."0.2.8" = lib.makeOverridable self.buildNodePackage {
-    name = "xml2js-0.2.8";
+    name = "node-xml2js-0.2.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/xml2js/-/xml2js-0.2.8.tgz";
@@ -15669,7 +15669,7 @@
   by-spec."xml2js".">= 0.0.1" =
     self.by-version."xml2js"."0.4.1";
   by-version."xml2js"."0.4.1" = lib.makeOverridable self.buildNodePackage {
-    name = "xml2js-0.4.1";
+    name = "node-xml2js-0.4.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/xml2js/-/xml2js-0.4.1.tgz";
@@ -15692,7 +15692,7 @@
   by-spec."xmlbuilder"."0.4.2" =
     self.by-version."xmlbuilder"."0.4.2";
   by-version."xmlbuilder"."0.4.2" = lib.makeOverridable self.buildNodePackage {
-    name = "xmlbuilder-0.4.2";
+    name = "node-xmlbuilder-0.4.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/xmlbuilder/-/xmlbuilder-0.4.2.tgz";
@@ -15711,7 +15711,7 @@
   by-spec."xmlbuilder".">=0.4.2" =
     self.by-version."xmlbuilder"."2.1.0";
   by-version."xmlbuilder"."2.1.0" = lib.makeOverridable self.buildNodePackage {
-    name = "xmlbuilder-2.1.0";
+    name = "node-xmlbuilder-2.1.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/xmlbuilder/-/xmlbuilder-2.1.0.tgz";
@@ -15731,7 +15731,7 @@
   by-spec."xmldom"."~0.1.16" =
     self.by-version."xmldom"."0.1.19";
   by-version."xmldom"."0.1.19" = lib.makeOverridable self.buildNodePackage {
-    name = "xmldom-0.1.19";
+    name = "node-xmldom-0.1.19";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/xmldom/-/xmldom-0.1.19.tgz";
@@ -15750,7 +15750,7 @@
   by-spec."xmlhttprequest"."1.4.2" =
     self.by-version."xmlhttprequest"."1.4.2";
   by-version."xmlhttprequest"."1.4.2" = lib.makeOverridable self.buildNodePackage {
-    name = "xmlhttprequest-1.4.2";
+    name = "node-xmlhttprequest-1.4.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/xmlhttprequest/-/xmlhttprequest-1.4.2.tgz";
@@ -15769,7 +15769,7 @@
   by-spec."xoauth2"."~0.1" =
     self.by-version."xoauth2"."0.1.8";
   by-version."xoauth2"."0.1.8" = lib.makeOverridable self.buildNodePackage {
-    name = "xoauth2-0.1.8";
+    name = "node-xoauth2-0.1.8";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/xoauth2/-/xoauth2-0.1.8.tgz";
@@ -15788,7 +15788,7 @@
   by-spec."xtend"."~2.1.1" =
     self.by-version."xtend"."2.1.2";
   by-version."xtend"."2.1.2" = lib.makeOverridable self.buildNodePackage {
-    name = "xtend-2.1.2";
+    name = "node-xtend-2.1.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/xtend/-/xtend-2.1.2.tgz";
@@ -15808,7 +15808,7 @@
   by-spec."yaml"."0.2.3" =
     self.by-version."yaml"."0.2.3";
   by-version."yaml"."0.2.3" = lib.makeOverridable self.buildNodePackage {
-    name = "yaml-0.2.3";
+    name = "node-yaml-0.2.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/yaml/-/yaml-0.2.3.tgz";
@@ -15827,7 +15827,7 @@
   by-spec."yeoman-generator"."~0.13.0" =
     self.by-version."yeoman-generator"."0.13.4";
   by-version."yeoman-generator"."0.13.4" = lib.makeOverridable self.buildNodePackage {
-    name = "yeoman-generator-0.13.4";
+    name = "node-yeoman-generator-0.13.4";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/yeoman-generator/-/yeoman-generator-0.13.4.tgz";
@@ -15866,7 +15866,7 @@
   by-spec."yeoman-generator"."~0.14.0" =
     self.by-version."yeoman-generator"."0.14.2";
   by-version."yeoman-generator"."0.14.2" = lib.makeOverridable self.buildNodePackage {
-    name = "yeoman-generator-0.14.2";
+    name = "node-yeoman-generator-0.14.2";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/yeoman-generator/-/yeoman-generator-0.14.2.tgz";
@@ -15906,7 +15906,7 @@
   by-spec."yeoman-generator"."~0.16.0" =
     self.by-version."yeoman-generator"."0.16.0";
   by-version."yeoman-generator"."0.16.0" = lib.makeOverridable self.buildNodePackage {
-    name = "yeoman-generator-0.16.0";
+    name = "node-yeoman-generator-0.16.0";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/yeoman-generator/-/yeoman-generator-0.16.0.tgz";
@@ -15984,7 +15984,7 @@
   by-spec."zeparser"."0.0.5" =
     self.by-version."zeparser"."0.0.5";
   by-version."zeparser"."0.0.5" = lib.makeOverridable self.buildNodePackage {
-    name = "zeparser-0.0.5";
+    name = "node-zeparser-0.0.5";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/zeparser/-/zeparser-0.0.5.tgz";
@@ -16003,7 +16003,7 @@
   by-spec."zip-stream"."~0.1.0" =
     self.by-version."zip-stream"."0.1.3";
   by-version."zip-stream"."0.1.3" = lib.makeOverridable self.buildNodePackage {
-    name = "zip-stream-0.1.3";
+    name = "node-zip-stream-0.1.3";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/zip-stream/-/zip-stream-0.1.3.tgz";
@@ -16024,7 +16024,7 @@
   by-spec."zlib-browserify"."0.0.1" =
     self.by-version."zlib-browserify"."0.0.1";
   by-version."zlib-browserify"."0.0.1" = lib.makeOverridable self.buildNodePackage {
-    name = "zlib-browserify-0.0.1";
+    name = "node-zlib-browserify-0.0.1";
     src = [
       (fetchurl {
         url = "http://registry.npmjs.org/zlib-browserify/-/zlib-browserify-0.0.1.tgz";
