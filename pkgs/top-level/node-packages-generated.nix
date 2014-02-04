@@ -7864,14 +7864,14 @@
     passthru.names = [ "libxmljs" ];
   };
   by-spec."libyaml"."*" =
-    self.by-version."libyaml"."0.2.2";
-  by-version."libyaml"."0.2.2" = lib.makeOverridable self.buildNodePackage {
-    name = "node-libyaml-0.2.2";
+    self.by-version."libyaml"."0.2.3";
+  by-version."libyaml"."0.2.3" = lib.makeOverridable self.buildNodePackage {
+    name = "node-libyaml-0.2.3";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/libyaml/-/libyaml-0.2.2.tgz";
-        name = "libyaml-0.2.2.tgz";
-        sha1 = "a22d5f699911b6b622d6dc323fb62320c877c9c8";
+        url = "http://registry.npmjs.org/libyaml/-/libyaml-0.2.3.tgz";
+        name = "libyaml-0.2.3.tgz";
+        sha1 = "c07e7fefcad6e09218ebf9ff814bbd520172add6";
       })
     ];
     buildInputs =
@@ -7882,7 +7882,7 @@
     ];
     passthru.names = [ "libyaml" ];
   };
-  "libyaml" = self.by-version."libyaml"."0.2.2";
+  "libyaml" = self.by-version."libyaml"."0.2.3";
   by-spec."lockfile"."~0.4.0" =
     self.by-version."lockfile"."0.4.2";
   by-version."lockfile"."0.4.2" = lib.makeOverridable self.buildNodePackage {
@@ -9679,14 +9679,14 @@
     passthru.names = [ "nib" ];
   };
   by-spec."nijs"."*" =
-    self.by-version."nijs"."0.0.12";
-  by-version."nijs"."0.0.12" = lib.makeOverridable self.buildNodePackage {
-    name = "nijs-0.0.12";
+    self.by-version."nijs"."0.0.13";
+  by-version."nijs"."0.0.13" = lib.makeOverridable self.buildNodePackage {
+    name = "nijs-0.0.13";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/nijs/-/nijs-0.0.12.tgz";
-        name = "nijs-0.0.12.tgz";
-        sha1 = "23bb40746b409e8556f9a4fe97ca314410a685df";
+        url = "http://registry.npmjs.org/nijs/-/nijs-0.0.13.tgz";
+        name = "nijs-0.0.13.tgz";
+        sha1 = "c092af70f2008f9852725230e138106feee69c7b";
       })
     ];
     buildInputs =
@@ -9698,7 +9698,7 @@
     ];
     passthru.names = [ "nijs" ];
   };
-  "nijs" = self.by-version."nijs"."0.0.12";
+  "nijs" = self.by-version."nijs"."0.0.13";
   by-spec."node-appc"."0.2.0" =
     self.by-version."node-appc"."0.2.0";
   by-version."node-appc"."0.2.0" = lib.makeOverridable self.buildNodePackage {
