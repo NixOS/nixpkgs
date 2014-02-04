@@ -9686,7 +9686,7 @@
       (fetchurl {
         url = "http://registry.npmjs.org/nijs/-/nijs-0.0.13.tgz";
         name = "nijs-0.0.13.tgz";
-        sha1 = "c092af70f2008f9852725230e138106feee69c7b";
+        sha1 = "31396055a3cc19ed5b7438c8e6811b9a20f27cfc";
       })
     ];
     buildInputs =
@@ -12607,14 +12607,14 @@
   by-spec."rimraf"."~2.2.5" =
     self.by-version."rimraf"."2.2.6";
   by-spec."s3http"."*" =
-    self.by-version."s3http"."0.0.4";
-  by-version."s3http"."0.0.4" = lib.makeOverridable self.buildNodePackage {
-    name = "s3http-0.0.4";
+    self.by-version."s3http"."0.0.5";
+  by-version."s3http"."0.0.5" = lib.makeOverridable self.buildNodePackage {
+    name = "s3http-0.0.5";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/s3http/-/s3http-0.0.4.tgz";
-        name = "s3http-0.0.4.tgz";
-        sha1 = "e7cc4b7e9f9bacaa7ee3a5af81917fd0ca8ce8da";
+        url = "http://registry.npmjs.org/s3http/-/s3http-0.0.5.tgz";
+        name = "s3http-0.0.5.tgz";
+        sha1 = "c8fa1fffb8258ce68adf75df73f90fbb6f23d198";
       })
     ];
     buildInputs =
@@ -12633,7 +12633,7 @@
     ];
     passthru.names = [ "s3http" ];
   };
-  "s3http" = self.by-version."s3http"."0.0.4";
+  "s3http" = self.by-version."s3http"."0.0.5";
   by-spec."sauce-connect-launcher"."~0.2.2" =
     self.by-version."sauce-connect-launcher"."0.2.2";
   by-version."sauce-connect-launcher"."0.2.2" = lib.makeOverridable self.buildNodePackage {
