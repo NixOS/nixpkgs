@@ -562,6 +562,8 @@ let
 
   catdoc = callPackage ../tools/text/catdoc { };
 
+  ccnet = callPackage ../tools/networking/ccnet { };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   direnv = callPackage ../tools/misc/direnv { };
@@ -4943,6 +4945,8 @@ let
 
   librsync = callPackage ../development/libraries/librsync { };
 
+  libsearpc = callPackage ../development/libraries/libsearpc { };
+
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
   libsigcxx12 = callPackage ../development/libraries/libsigcxx/1.2.nix { };
@@ -5100,6 +5104,8 @@ let
   libyubikey = callPackage ../development/libraries/libyubikey {};
 
   libzip = callPackage ../development/libraries/libzip { };
+
+  libzdb = callPackage ../development/libraries/libzdb { };
 
   libzrtpcpp = callPackage ../development/libraries/libzrtpcpp { };
   libzrtpcpp_1_6 = callPackage ../development/libraries/libzrtpcpp/1.6.nix {
@@ -8706,6 +8712,8 @@ let
     inherit (gnome) libart_lgpl;
   };
 
+  seafileClient = callPackage ../applications/networking/seafile-client { };
+
   seeks = callPackage ../tools/networking/p2p/seeks {
     opencv = opencv_2_1;
   };
@@ -10226,6 +10234,8 @@ let
   };
 
   saneFrontends = callPackage ../applications/graphics/sane/frontends.nix { };
+
+  seafileShared = callPackage ../misc/seafile-shared { };
 
   slock = callPackage ../misc/screensavers/slock { };
 
