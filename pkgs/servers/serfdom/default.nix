@@ -62,7 +62,7 @@ let
     lib.concatStrings
       (map (desc:
             let
-              fetched = fetchgit { url = "https://"+desc.dir+"/"+desc.name;
+              fetched = fetchgit { url = "https://${desc.dir}/${desc.name}";
                                    inherit (desc) rev sha256; };
             in ''
               mkdir -p $GOPATH/src/${desc.dir}
