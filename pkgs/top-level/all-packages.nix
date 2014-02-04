@@ -6888,6 +6888,8 @@ let
 
   kmod = callPackage ../os-specific/linux/kmod { };
 
+  kmod-blacklist-ubuntu = callPackage ../os-specific/linux/kmod-blacklist-ubuntu { };
+
   kvm = qemu_kvm;
 
   libcap = callPackage ../os-specific/linux/libcap { };
