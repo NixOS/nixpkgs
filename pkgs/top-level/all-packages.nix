@@ -6344,6 +6344,8 @@ let
     libunwind = null;
   });
 
+  serfdom = callPackage ../servers/serfdom { };
+
   shishi = callPackage ../servers/shishi { };
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
