@@ -112,49 +112,49 @@ let
           (attrs.passthru or {}));
 
       # Utility flags to test the type of platform.
-      isDarwin = result.system == "x86_64-darwin";
-      isLinux = result.system == "i686-linux"
-             || result.system == "x86_64-linux"
-             || result.system == "powerpc-linux"
-             || result.system == "armv5tel-linux"
-             || result.system == "armv6l-linux"
-             || result.system == "armv7l-linux"
-             || result.system == "mips64el-linux";
-      isGNU = result.system == "i686-gnu";      # GNU/Hurd
-      isGlibc = isGNU                           # useful for `stdenvNative'
+      isDarwin = system == "x86_64-darwin";
+      isLinux = system == "i686-linux"
+             || system == "x86_64-linux"
+             || system == "powerpc-linux"
+             || system == "armv5tel-linux"
+             || system == "armv6l-linux"
+             || system == "armv7l-linux"
+             || system == "mips64el-linux";
+      isGNU = system == "i686-gnu"; # GNU/Hurd
+      isGlibc = isGNU # useful for `stdenvNative'
              || isLinux
-             || result.system == "x86_64-kfreebsd-gnu";
-      isSunOS = result.system == "i686-solaris"
-             || result.system == "x86_64-solaris";
-      isCygwin = result.system == "i686-cygwin";
-      isFreeBSD = result.system == "i686-freebsd"
-             || result.system == "x86_64-freebsd";
-      isOpenBSD = result.system == "i686-openbsd"
-             || result.system == "x86_64-openbsd";
-      isBSD = result.system == "i686-freebsd"
-             || result.system == "x86_64-freebsd"
-             || result.system == "i686-openbsd"
-             || result.system == "x86_64-openbsd";
-      isi686 = result.system == "i686-linux"
-             || result.system == "i686-gnu"
-             || result.system == "i686-freebsd"
-             || result.system == "i686-openbsd"
-             || result.system == "i386-sunos";
-      isx86_64 = result.system == "x86_64-linux"
-             || result.system == "x86_64-darwin"
-             || result.system == "x86_64-freebsd"
-             || result.system == "x86_64-openbsd"
-             || result.system == "x86_64-solaris";
-      is64bit = result.system == "x86_64-linux"
-              || result.system == "x86_64-darwin"
-              || result.system == "x86_64-freebsd"
-              || result.system == "x86_64-openbsd"
-              || result.system == "x86_64-solaris";
-      isMips = result.system == "mips-linux"
-              || result.system == "mips64el-linux";
-      isArm = result.system == "armv5tel-linux"
-           || result.system == "armv6l-linux"
-           || result.system == "armv7l-linux";
+             || system == "x86_64-kfreebsd-gnu";
+      isSunOS = system == "i686-solaris"
+             || system == "x86_64-solaris";
+      isCygwin = system == "i686-cygwin";
+      isFreeBSD = system == "i686-freebsd"
+              || system == "x86_64-freebsd";
+      isOpenBSD = system == "i686-openbsd"
+              || system == "x86_64-openbsd";
+      isBSD = system == "i686-freebsd"
+           || system == "x86_64-freebsd"
+           || system == "i686-openbsd"
+           || system == "x86_64-openbsd";
+      isi686 = system == "i686-linux"
+            || system == "i686-gnu"
+            || system == "i686-freebsd"
+            || system == "i686-openbsd"
+            || system == "i386-sunos";
+      isx86_64 = system == "x86_64-linux"
+              || system == "x86_64-darwin"
+              || system == "x86_64-freebsd"
+              || system == "x86_64-openbsd"
+              || system == "x86_64-solaris";
+      is64bit = system == "x86_64-linux"
+             || system == "x86_64-darwin"
+             || system == "x86_64-freebsd"
+             || system == "x86_64-openbsd"
+             || system == "x86_64-solaris";
+      isMips = system == "mips-linux"
+            || system == "mips64el-linux";
+      isArm = system == "armv5tel-linux"
+           || system == "armv6l-linux"
+           || system == "armv7l-linux";
 
       # For convenience, bring in the library functions in lib/ so
       # packages don't have to do that themselves.
