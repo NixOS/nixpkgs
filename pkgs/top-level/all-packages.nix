@@ -782,12 +782,7 @@ let
 
   despotify = callPackage ../development/libraries/despotify { };
 
-  dev86 = callPackage ../development/compilers/dev86 {
-    /* Using GNU Make 3.82 leads to this:
-         make[4]: *** No rule to make target `__ldivmod.o)'
-       So use 3.81.  */
-    stdenv = overrideInStdenv stdenv [gnumake381];
-  };
+  dev86 = callPackage ../development/compilers/dev86 { };
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
