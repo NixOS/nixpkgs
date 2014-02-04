@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, readline }:
+{ stdenv, fetchurl, zlib, readline, less }:
 
 let version = "9.2.6"; in
 
@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
   makeFlags = [ "world" ];
 
   patches = [ ./disable-resolve_symlinks.patch ];
+
+  prePatch = ''
+    sed -e 's|#define DEFAULT_PAGER.*|#define DEFAULT_PAGER "${less}/bin/less"|' \
+        -i src/bin/psql/print.h
+  '';
 
   installTargets = [ "install-world" ];
 
