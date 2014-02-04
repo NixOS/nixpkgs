@@ -4180,7 +4180,9 @@ let
 
   glew = callPackage ../development/libraries/glew { };
 
-  glfw = callPackage ../development/libraries/glfw { };
+  glfw = glfw3;
+  glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
+  glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
 
   glibc = callPackage ../development/libraries/glibc/2.18 {
     kernelHeaders = linuxHeaders;
