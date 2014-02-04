@@ -1,28 +1,32 @@
-{ stdenv, fetchbzr }:
+{ stdenv, fetchurl, gnugrep, findutils }:
+let
+  version = "3ubuntu1"; # Saucy
+in
+stdenv.mkDerivation {
+  name = "kmod-blacklist-${version}";
 
-stdenv.mkDerivation rec {
-  name = "blacklist-ubuntu-${builtins.toString src.revision}"; # Saucy
-
-  src = fetchbzr {
-    url = meta.homepage;
-    sha256 = "0ci4b5dxzirc27zvgpr3s0pa78gjmfjwprmvyplxhwxb765la9v9";
-    revision = 13;
+  src = fetchurl {
+    url = "http://archive.ubuntu.com/ubuntu/pool/main/k/kmod/kmod_9-${version}.debian.tar.gz";
+    sha256 = "0h6h0zw2490iqj9xa2sz4309jyfmcc50jdvkhxa1nw90npxglp67";
   };
-
-  unpackPhase = "true";
 
   installPhase = ''
     mkdir "$out"
-    for f in "$src"/debian/modprobe.d/*.conf; do
+    for f in modprobe.d/*.conf; do
       echo "''\n''\n## file: "`basename "$f"`"''\n''\n" >> "$out"/modprobe.conf
       cat "$f" >> "$out"/modprobe.conf
     done
+
+    substituteInPlace "$out"/modprobe.conf \
+      --replace /sbin/lsmod /run/booted-system/sw/bin/lsmod \
+      --replace /sbin/rmmod /run/booted-system/sw/sbin/rmmod \
+      --replace /sbin/modprobe /run/booted-system/sw/sbin/modprobe \
+      --replace " grep " " ${gnugrep}/bin/grep " \
+      --replace " xargs " " ${findutils}/bin/xargs "
   '';
 
-  #TODO: iwlwifi.conf has some strange references
-
   meta = {
-    homepage = https://code.launchpad.net/~ubuntu-branches/ubuntu/saucy/kmod/saucy;
+    homepage = http://packages.ubuntu.com/source/saucy/kmod;
     description = "Linux kernel module blacklists from Ubuntu";
   };
 }
