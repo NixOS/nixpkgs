@@ -22,11 +22,11 @@
     <fontconfig>
       <xsl:copy-of select="child::node()[name() != 'dir' and name() != 'cachedir' and name() != 'include']" />
 
-      <include ignore_missing="yes" xml:space="preserve">/etc/fonts/conf.d</include>
-      <include xml:space="preserve"><xsl:value-of select="$fontconfig" />/etc/fonts/conf.d</include>
+      <include ignore_missing="yes">/etc/fonts/conf.d</include>
+      <include><xsl:value-of select="$fontconfig" />/etc/fonts/conf.d</include>
 
-      <cachedir xml:space="preserve">/var/cache/fontconfig</cachedir>
-      <cachedir xml:space="preserve">~/.fontconfig</cachedir>
+      <cachedir>/var/cache/fontconfig</cachedir>
+      <cachedir>~/.fontconfig</cachedir>
 
       <xsl:for-each select="str:tokenize($fontDirectories)">
         <dir><xsl:value-of select="." /></dir>
