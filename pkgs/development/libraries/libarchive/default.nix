@@ -5,7 +5,10 @@ stdenv.mkDerivation rec {
   name = "libarchive-3.1.2";
 
   src = fetchurl {
-    url = "${meta.homepage}/downloads/${name}.tar.gz";
+    urls = [
+      "http://pkgs.fedoraproject.org/repo/pkgs/libarchive/libarchive-3.1.2.tar.gz/efad5a503f66329bb9d2f4308b5de98a/${name}.tar.gz"
+      "${meta.homepage}/downloads/${name}.tar.gz"
+    ];
     sha256 = "0pixqnrcf35dnqgv0lp7qlcw7k13620qkhgxr288v7p4iz6ym1zb";
   };
 

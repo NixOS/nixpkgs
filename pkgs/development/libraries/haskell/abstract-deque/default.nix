@@ -1,11 +1,15 @@
-{ cabal, HUnit, random, testFramework, testFrameworkHunit }:
+{ cabal, HUnit, random, testFramework, testFrameworkHunit, time }:
 
 cabal.mkDerivation (self: {
   pname = "abstract-deque";
-  version = "0.2.2";
-  sha256 = "12g4y3j59nkjw9ja247m8ydhj6a033lzfbqkp4a5slrqdxfdlvyb";
-  buildDepends = [ HUnit random testFramework testFrameworkHunit ];
-  testDepends = [ HUnit random testFramework testFrameworkHunit ];
+  version = "0.2.2.1";
+  sha256 = "0saf7j8fdqqk9msxrfja22zx8v0ibzrqx3v9l07g5n84yh4ydbdx";
+  buildDepends = [
+    HUnit random testFramework testFrameworkHunit time
+  ];
+  testDepends = [
+    HUnit random testFramework testFrameworkHunit time
+  ];
   doCheck = false;
   meta = {
     homepage = "https://github.com/rrnewton/haskell-lockfree-queue/wiki";

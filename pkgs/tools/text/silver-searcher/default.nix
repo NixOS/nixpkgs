@@ -1,14 +1,16 @@
 {stdenv, fetchgit, autoreconfHook, pkgconfig, pcre, zlib, lzma}:
 
-let release = "0.18.1"; in
+let release = "0.19.2"; in
 stdenv.mkDerivation {
   name = "silver-searcher-${release}";
 
   src = fetchgit {
     url = "https://github.com/ggreer/the_silver_searcher.git";
     rev = "refs/tags/${release}";
-    sha256 = "bf2c8f3c68895e0ee00d373c1d87201e806b413bb28373ee168e375f2a095ec5";
+    sha256 = "b6993e077f650eb0976cbc924640665fa9b2499a899ecba5a6cad5cf9addfdff";
   };
+
+  NIX_LDFLAGS = "-lgcc_s";
 
   buildInputs = [ autoreconfHook pkgconfig pcre zlib lzma ];
 

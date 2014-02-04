@@ -12,4 +12,6 @@ rec {
   gst-plugins-ugly = callPackage ./ugly { inherit gst-plugins-base; };
 
   gst-libav = callPackage ./libav { inherit gst-plugins-base; };
+
+  gst-python = callPackage ./python { inherit gst-plugins-base gstreamer; };
 }

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "API to access display driver functionality for ATI graphics cards";
     homepage = http://developer.amd.com/tools/graphics-development/display-library-adl-sdk/;
-    license = licenses.amdadl;
+    license = licenses.unfree;
     maintainers = [ maintainers.offline ];
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];

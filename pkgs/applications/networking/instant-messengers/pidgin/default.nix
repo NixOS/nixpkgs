@@ -21,10 +21,10 @@
 } :
 
 stdenv.mkDerivation rec {
-  name = "pidgin-2.10.7";
+  name = "pidgin-2.10.9";
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/${name}.tar.bz2";
-    sha256 = "14piyx4xpc3l8286x4nh5pna2wfyn9cv0qa29br1q3d2xja2k8zb";
+    sha256 = "06gka47myl9f5x0flkq74ml75akkf28rx9sl8pm3wqkzazc2wdnw";
   };
 
   inherit nss ncurses;
@@ -51,8 +51,10 @@ stdenv.mkDerivation rec {
   configureFlags="--with-nspr-includes=${nspr}/include/nspr --with-nspr-libs=${nspr}/lib --with-nss-includes=${nss}/include/nss --with-nss-libs=${nss}/lib --with-ncurses-headers=${ncurses}/include --disable-meanwhile --disable-nm --disable-tcl"
   + (lib.optionalString (gnutls != null) " --enable-gnutls=yes --enable-nss=no")
   ;
-  meta = {
+  meta = with stdenv.lib; {
     description = "Pidgin IM - XMPP(Jabber), AIM/ICQ, IRC, SIP etc client";
     homepage = http://pidgin.im;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

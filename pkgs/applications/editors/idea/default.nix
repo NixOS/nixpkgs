@@ -61,43 +61,23 @@ let
 
 in {
 
-  idea_community_1301 = buildIdea {
-    name = "idea-IC-133.331";
+  idea_community_1302 = buildIdea {
+    name = "idea-IC-133.696";
     description = "IntelliJ IDEA 13 Community Edition";
     license = stdenv.lib.licenses.asl20.shortName;
     src = fetchurl {
-      url = http://download-ln.jetbrains.com/idea/ideaIC-13.0.1.tar.gz;
-      sha256 = "6f268bb1dbe61ed0274fd2ea9b4b7403f50da11bdde208bcfc8c391d235d7c02";
+      url = http://download-ln.jetbrains.com/idea/ideaIC-13.0.2.tar.gz;
+      sha256 = "a776878c2dba877761b74d2886d006f64eec3c9694dbd1578380287a9c8cbd53";
     };
   };
 
-  idea_ultimate_1301 = buildIdea {
-    name = "idea-IU-133.331";
+  idea_ultimate_1302 = buildIdea {
+    name = "idea-IU-133.696";
     description = "IntelliJ IDEA 13 Ultimate Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = http://download-ln.jetbrains.com/idea/ideaIU-13.0.1.tar.gz;
-      sha256 = "d3638d97b719773459d5027ba096b52695325b241cbf5e31e535165a5f19849d";
-    };
-  };
-
-  idea_community_13 = buildIdea {
-    name = "idea-IC-133.193";
-    description = "IntelliJ IDEA 13 Community Edition";
-    license = stdenv.lib.licenses.asl20.shortName;
-    src = fetchurl {
-      url = http://download-ln.jetbrains.com/idea/ideaIC-13.tar.gz;
-      sha256 = "5cd88b8effc5e4e55d999df1cec6f54c53b5adf0b88e49400b3a185bef7db13a";
-    };
-  };
-
-  idea_ultimate_13 = buildIdea {
-    name = "idea-IU-133.193";
-    description = "IntelliJ IDEA 13 Ultimate Edition";
-    license = stdenv.lib.licenses.unfree;
-    src = fetchurl {
-      url = http://download-ln.jetbrains.com/idea/ideaIU-13.tar.gz;
-      sha256 = "211a782654d04f2fe5fce9084043edfb8355a7bc4dc41fee7dc79cfe604d4654";
+      url = http://download-ln.jetbrains.com/idea/ideaIU-13.0.2.tar.gz;
+      sha256 = "7ba9499ecc82029470712d6ead520db1e2cf520e4f86d382cbdea1d0052712d0";
     };
   };
 

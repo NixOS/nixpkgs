@@ -35,4 +35,22 @@ stdenv.mkDerivation {
     ] ++ stdenv.lib.optionals enableX11 [
       "--enable-x11"
     ];
+
+  meta = with stdenv.lib; {
+    description = "Graphics and input library designed with embedded systems in mind";
+    longDescription = ''
+      DirectFB is a thin library that provides hardware graphics acceleration,
+      input device handling and abstraction, integrated windowing system with
+      support for translucent windows and multiple display layers, not only on
+      top of the Linux Framebuffer Device. It is a complete hardware
+      abstraction layer with software fallbacks for every graphics operation
+      that is not supported by the underlying hardware. DirectFB adds graphical
+      power to embedded systems and sets a new standard for graphics under
+      Linux.
+    '';
+    homepage = http://directfb.org/;
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+  };
 }
