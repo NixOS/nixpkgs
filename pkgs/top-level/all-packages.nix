@@ -4948,6 +4948,8 @@ let
 
   libpcap = callPackage ../development/libraries/libpcap { };
 
+  libpipeline = callPackage ../development/libraries/libpipeline { };
+
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = libpng.override { apngSupport = true; };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
