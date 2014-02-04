@@ -101,7 +101,7 @@ in
     meta = {
       description = "Serf is a service discovery and orchestration tool that is decentralized, highly available, and fault tolerant";
       homepage = http://www.serfdom.io/;
-      license = licenses.mpl20;
+      license = stdenv.lib.licenses.mpl20;
       platforms = stdenv.lib.platforms.linux;
     };
   }
