@@ -2,8 +2,7 @@
    a new stdenv with different behaviour, e.g. using a different C
    compiler. */
 
-{dietlibc, fetchurl, runCommand}:
-
+pkgs:
 
 rec {
 
@@ -57,13 +56,13 @@ rec {
 
         NIX_GCC = import ../build-support/gcc-wrapper {
           inherit stdenv;
-          libc = dietlibc;
+          libc = pkgs.dietlibc;
           inherit (stdenv.gcc) gcc binutils nativeTools nativePrefix;
           nativeLibc = false;
         };
       });
       isDietLibC = true;
-    } // {inherit fetchurl;};
+    };
 
 
   # Return a modified stdenv that uses klibc to create small
@@ -80,7 +79,7 @@ rec {
         configureFlags =
           args.configureFlags or "" + " --disable-shared"; # brrr...
 
-        NIX_GCC = runCommand "klibc-wrapper" {} ''
+        NIX_GCC = pkgs.runCommand "klibc-wrapper" {} ''
           mkdir -p $out/bin
           ln -s ${klibc}/bin/klcc $out/bin/gcc
           ln -s ${klibc}/bin/klcc $out/bin/cc
@@ -90,7 +89,7 @@ rec {
       });
       isKlibc = true;
       isStatic = true;
-    } // {inherit fetchurl;};
+    };
 
 
   # Return a modified stdenv that tries to build statically linked
@@ -103,7 +102,7 @@ rec {
           + " --disable-shared"; # brrr...
       });
       isStatic = true;
-    } // {inherit fetchurl;};
+    };
 
 
   # Return a modified stdenv that builds static libraries instead of
@@ -115,7 +114,7 @@ rec {
           toString args.configureFlags or ""
           + " --enable-static --disable-shared";
       });
-    } // {inherit fetchurl;};
+    };
 
 
   # Return a modified stdenv that adds a cross compiler to the
@@ -277,7 +276,7 @@ rec {
   */
   replaceMaintainersField = stdenv: pkgs: maintainers: stdenv //
     { mkDerivation = args:
-        pkgs.lib.recursiveUpdate
+        stdenv.lib.recursiveUpdate
           (stdenv.mkDerivation args)
           { meta.maintainers = maintainers; };
     };
@@ -353,5 +352,18 @@ rec {
         NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -g -O0";
       });
     };
+
+
+  /* Modify a stdenv so that it used the Gold linker. */
+  useGoldLinker = stdenv:
+    let
+      binutils = stdenv.gcc.binutils;
+      binutils' = pkgs.runCommand "${binutils.name}-gold" { }
+        ''
+          mkdir -p $out/bin
+          ln -s ${binutils}/bin/* $out/bin/
+          ln -sfn ${binutils}/bin/ld.gold $out/bin/ld
+        ''; # */
+    in overrideGCC stdenv (stdenv.gcc.override { binutils = binutils'; });
 
 }

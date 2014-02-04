@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   name =
     (if name != "" then name else gccName + "-wrapper") +
     (if gcc != null && gccVersion != "" then "-" + gccVersion else "");
-  
+
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;
   gccWrapper = ./gcc-wrapper.sh;
@@ -39,13 +39,13 @@ stdenv.mkDerivation {
   ldSolarisWrapper = ./ld-solaris-wrapper.sh;
   utils = ./utils.sh;
   addFlags = ./add-flags;
-  
+
   inherit nativeTools nativeLibc nativePrefix gcc;
   libc = if nativeLibc then null else libc;
   binutils = if nativeTools then null else binutils;
   # The wrapper scripts use 'cat', so we may need coreutils
   coreutils = if nativeTools then null else coreutils;
-  
+
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;
   langFortran = if nativeTools then false else gcc ? langFortran;
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
        if stdenv.lib.hasSuffix "pc-gnu" stdenv.cross.config then "ld.so.1" else
        abort "don't know the name of the dynamic linker for this platform");
   };
-  
+
   meta =
     let gcc_ = if gcc != null then gcc else {}; in
     (if gcc_ ? meta then removeAttrs gcc.meta ["priority"] else {}) //

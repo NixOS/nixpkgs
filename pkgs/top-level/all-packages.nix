@@ -97,7 +97,7 @@ let
     (import ../build-support/trivial-builders.nix { inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
 
   stdenvAdapters =
-    import ../stdenv/adapters.nix { inherit (pkgs) dietlibc fetchurl runCommand; };
+    import ../stdenv/adapters.nix pkgs;
 
 
   # Allow packages to be overriden globally via the `packageOverrides'
@@ -3060,9 +3060,9 @@ let
     inherit stdenv coreutils zlib;
   };
 
-  wrapClang = wrapClangWith (import ../build-support/clang-wrapper) glibc;
+  wrapClang = wrapClangWith (makeOverridable (import ../build-support/clang-wrapper)) glibc;
 
-  wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
+  wrapGCC = wrapGCCWith (makeOverridable (import ../build-support/gcc-wrapper)) glibc;
 
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
