@@ -1,11 +1,11 @@
 { stdenv, fetchurl, xz, zlib, pkgconfig, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "kmod-15";
+  name = "kmod-16";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/kmod/${name}.tar.xz";
-    sha256 = "17nasn7kpbmbcgyfn9lh50k00bg6qmccxrhzd2m4d6wjw6khxvz8";
+    sha256 = "63412efab37c70459ccef167556965c93fd4f56af5986cd3750542a684c613c5";
   };
 
   # Disable xz/zlib support to prevent needing them in the initrd.

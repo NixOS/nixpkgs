@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, lib }:
-let
-  version = "3.0.5";
-  baseName = "siege";
-in stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
+{ stdenv, fetchurl }:
+
+stdenv.mkDerivation rec {
+  name = "siege-3.0.6";
+
   src = fetchurl {
     url = "http://www.joedog.org/pub/siege/${name}.tar.gz";
-    sha256 = "16faa6kappg23bdriyiy3ym94rmddpvw8cl8xgv5nxq2v17n4gi8";
+    sha256 = "0nwcj2s804z7yd20pa0cl010m0qgf22a02305i9jwxynwdj9kdvq";
   };
-  meta = {
-    description = "HTTP load tester";
-    maintainers = with lib.maintainers; [ ocharles raskin ];
-    platforms = with lib.platforms; linux;
-    license = with lib.licenses; gpl2Plus;
-  };
+
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+
+  meta = with stdenv.lib; {
+    description = "HTTP load tester";
+    maintainers = with maintainers; [ ocharles raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+  };
 }

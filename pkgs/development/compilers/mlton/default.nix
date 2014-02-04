@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp }:
+{ stdenv, fetchurl, patchelf, gmp }:
 
 let
   version = "20130715";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = name;
 
-  buildInputs = [ gmp ];
+  buildInputs = [ patchelf gmp ];
 
   makeFlags = [ "all-no-docs" ];
 
@@ -54,6 +54,15 @@ stdenv.mkDerivation rec {
     chmod u+x $(pwd)/../usr/bin/mllex
     chmod u+x $(pwd)/../usr/bin/mlyacc
     chmod u+x $(pwd)/../usr/bin/mlton
+
+    # So the builder runs the binary compiler with gmp.
+    export LD_LIBRARY_PATH=${gmp}/lib:$LD_LIBRARY_PATH
+
+    # Patch ELF interpreter.
+    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $(pwd)/../usr/lib/mlton/mlton-compile
+    for e in mllex mlyacc ; do
+      patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $(pwd)/../usr/bin/$e
+    done
   '';
 
   doCheck = true;

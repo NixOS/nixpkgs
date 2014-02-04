@@ -1,7 +1,7 @@
 diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_emulation.py
---- a/tools/gyp/pylib/gyp/xcode_emulation.py	2013-12-19 00:49:45.000000000 +0100
-+++ b/tools/gyp/pylib/gyp/xcode_emulation.py	2014-01-13 13:46:19.000000000 +0100
-@@ -295,11 +295,20 @@
+--- a/tools/gyp/pylib/gyp/xcode_emulation.py	2014-01-23 06:05:51.000000000 +0100
++++ b/tools/gyp/pylib/gyp/xcode_emulation.py	2014-02-04 17:49:48.000000000 +0100
+@@ -302,10 +302,17 @@
  
    def _XcodeSdkPath(self, sdk_root):
      if sdk_root not in XcodeSettings._sdk_path_cache:
@@ -9,87 +9,85 @@ diff -Naur a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_
 -      XcodeSettings._sdk_path_cache[sdk_root] = sdk_path
 -      if sdk_root:
 -        XcodeSettings._sdk_root_cache[sdk_path] = sdk_root
--    return XcodeSettings._sdk_path_cache[sdk_root]
-+        try:
-+            sdk_path = self._GetSdkVersionInfoItem(sdk_root, 'Path')
-+            XcodeSettings._sdk_path_cache[sdk_root] = sdk_path
-+            
-+            if sdk_root:
-+                XcodeSettings._sdk_root_cache[sdk_path] = sdk_root
-+        except:
-+            # if this fails it's because xcodebuild failed, which means
-+            # the user is probably on a CLT-only system, where there
-+            # is no valid SDK root
-+            XcodeSettings._sdk_path_cache[sdk_root] = None
-+
-+    return None;
-+    #return XcodeSettings._sdk_path_cache[sdk_root]
++      try:
++        sdk_path = self._GetSdkVersionInfoItem(sdk_root, 'Path')
++        XcodeSettings._sdk_path_cache[sdk_root] = sdk_path
++        if sdk_root:
++          XcodeSettings._sdk_root_cache[sdk_path] = sdk_root
++      except:
++        # if this fails it's because xcodebuild failed, which means
++        # the user is probably on a CLT-only system, where there
++        # is no valid SDK root
++        XcodeSettings._sdk_path_cache[sdk_root] = None
++        
+     return XcodeSettings._sdk_path_cache[sdk_root]
  
    def _AppendPlatformVersionMinFlags(self, lst):
-     self._Appendf(lst, 'MACOSX_DEPLOYMENT_TARGET', '-mmacosx-version-min=%s')
-@@ -409,10 +418,11 @@
- 
-     cflags += self._Settings().get('WARNING_CFLAGS', [])
- 
+@@ -420,10 +427,12 @@
+       framework_root = sdk_root
+     else:
+       framework_root = ''
 -    config = self.spec['configurations'][self.configname]
 -    framework_dirs = config.get('mac_framework_dirs', [])
 -    for directory in framework_dirs:
--      cflags.append('-F' + directory.replace('$(SDKROOT)', sdk_root))
+-      cflags.append('-F' + directory.replace('$(SDKROOT)', framework_root))
++    
 +    if 'SDKROOT' in self._Settings():
 +      config = self.spec['configurations'][self.configname]
 +      framework_dirs = config.get('mac_framework_dirs', [])
 +      for directory in framework_dirs:
-+        cflags.append('-F' + directory.replace('$(SDKROOT)', sdk_root))
++        cflags.append('-F' + directory.replace('$(SDKROOT)', framework_root))
  
      self.configname = None
      return cflags
-@@ -659,10 +669,11 @@
-     for rpath in self._Settings().get('LD_RUNPATH_SEARCH_PATHS', []):
-       ldflags.append('-Wl,-rpath,' + rpath)
- 
+@@ -673,10 +682,12 @@
+     sdk_root = self._SdkPath()
+     if not sdk_root:
+       sdk_root = ''
 -    config = self.spec['configurations'][self.configname]
 -    framework_dirs = config.get('mac_framework_dirs', [])
 -    for directory in framework_dirs:
--      ldflags.append('-F' + directory.replace('$(SDKROOT)', self._SdkPath()))
+-      ldflags.append('-F' + directory.replace('$(SDKROOT)', sdk_root))
++    
 +    if 'SDKROOT' in self._Settings():
 +      config = self.spec['configurations'][self.configname]
 +      framework_dirs = config.get('mac_framework_dirs', [])
 +      for directory in framework_dirs:
-+        ldflags.append('-F' + directory.replace('$(SDKROOT)', self._SdkPath()))
++        ldflags.append('-F' + directory.replace('$(SDKROOT)', sdk_root))
  
      self.configname = None
      return ldflags
-@@ -843,7 +854,10 @@
-         l = '-l' + m.group(1)
-       else:
-         l = library
--    return l.replace('$(SDKROOT)', self._SdkPath(config_name))
+@@ -863,7 +874,11 @@
+     sdk_root = self._SdkPath(config_name)
+     if not sdk_root:
+       sdk_root = ''
+-    return l.replace('$(SDKROOT)', sdk_root)
++    
 +    if self._SdkPath():
-+      return l.replace('$(SDKROOT)', self._SdkPath(config_name))
++      return l.replace('$(SDKROOT)', sdk_root)
 +    else:
 +      return l
  
    def AdjustLibraries(self, libraries, config_name=None):
      """Transforms entries like 'Cocoa.framework' in libraries into entries like
-@@ -956,12 +970,15 @@
+@@ -1018,12 +1033,16 @@
      # Since the value returned by this function is only used when ARCHS is not
      # set, then on iOS we return "i386", as the default xcode project generator
      # does not set ARCHS if it is not set in the .gyp file.
 -    if self.isIOS:
--      return 'i386'
++    
++    try:
++      if self.isIOS:
++        return 'i386'
++      version, build = self._XcodeVersion()
++      if version >= '0500':
++        return 'x86_64'
+       return 'i386'
 -    version, build = self._XcodeVersion()
 -    if version >= '0500':
--      return 'x86_64'
--    return 'i386'
-+    try:
-+        if self.isIOS:
-+          return 'i386'
-+        version, build = self._XcodeVersion()
-+        if version >= '0500':
-+          return 'x86_64'
-+        return 'i386'
 +    except:
-+        return 'x86_64'
+       return 'x86_64'
+-    return 'i386'
  
  class MacPrefixHeader(object):
    """A class that helps with emulating Xcode's GCC_PREFIX_HEADER feature.

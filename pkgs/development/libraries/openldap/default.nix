@@ -1,11 +1,11 @@
 {stdenv, fetchurl, openssl, cyrus_sasl, db4, groff}:
 
 stdenv.mkDerivation rec {
-  name = "openldap-2.4.35";
+  name = "openldap-2.4.38";
 
   src = fetchurl {
     url = "ftp://ftp.nl.uu.net/pub/unix/db/openldap/openldap-release/${name}.tgz";
-    sha256 = "1swy3rly6y0asikp862sigmab8gcll6scb65ln10vps7q5s0640n";
+    sha256 = "1l8zng86alhcmmmw09r1c4dzl7yvk6dy5fq9zia96pgck4srl848";
   };
 
   buildInputs = [ openssl cyrus_sasl db4 groff ];

@@ -27,6 +27,9 @@ stdenv.mkDerivation {
   (stdenv.lib.optional (stdenv.gcc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.gcc.libc}/include") ++
   (stdenv.lib.optional (stdenv.gcc.gcc != null) "-DGCC_INSTALL_PREFIX=${stdenv.gcc.gcc}");
 
+  # Clang expects to find LLVMgold in its own prefix
+  postInstall = "ln -sv ${llvm}/lib/LLVMgold.so $out/lib";
+
   passthru.gcc = stdenv.gcc.gcc;
 
   enableParallelBuilding = true;

@@ -435,6 +435,8 @@ let
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
+  arp-scan = callPackage ../tools/misc/arp-scan { };
+
   ascii = callPackage ../tools/text/ascii { };
 
   asymptote = builderDefsPackage ../tools/graphics/asymptote {
@@ -1251,11 +1253,11 @@ let
 
   nodejs = callPackage ../development/web/nodejs {};
 
-  nodePackages = import ./node-packages.nix {
+  nodePackages = recurseIntoAttrs (import ./node-packages.nix {
     inherit pkgs stdenv nodejs fetchurl fetchgit;
     neededNatives = [python] ++ lib.optional (lib.elem system lib.platforms.linux) utillinux;
     self = pkgs.nodePackages;
-  };
+  });
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
@@ -1702,6 +1704,8 @@ let
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
+  pycangjie = callPackage ../development/python-modules/pycangjie { };
+
   pydb = callPackage ../development/tools/pydb { };
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
@@ -1737,8 +1741,6 @@ let
   recutils = callPackage ../tools/misc/recutils { };
 
   recoll = callPackage ../applications/search/recoll { };
-
-  refind = callPackage ../tools/misc/refind { };
 
   reiser4progs = callPackage ../tools/filesystems/reiser4progs { };
 
@@ -2796,7 +2798,13 @@ let
       else stdenv;
   };
 
-  llvmPackages = recurseIntoAttrs (import ../development/compilers/llvm/3.4 { inherit newScope stdenv fetchurl; isl = isl_0_12; });
+  llvmPackages = recurseIntoAttrs (import ../development/compilers/llvm/3.4 {
+    inherit newScope fetchurl;
+    isl = isl_0_12;
+    stdenv = if stdenv.isDarwin
+      then stdenvAdapters.overrideGCC stdenv gccApple
+      else stdenv;
+  });
   llvmPackagesSelf = import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; };
 
   mentorToolchains = recurseIntoAttrs (
@@ -2959,6 +2967,7 @@ let
   ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
   ocamlPackages_4_00_1 = mkOcamlPackages ocaml_4_00_1 pkgs.ocamlPackages_4_00_1;
   ocamlPackages_4_01_0 = mkOcamlPackages ocaml_4_01_0 pkgs.ocamlPackages_4_01_0;
+  ocamlPackages_latest = ocamlPackages_4_01_0;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
@@ -3201,7 +3210,9 @@ let
 
   polyml = callPackage ../development/compilers/polyml { };
 
-  pure = callPackage ../development/interpreters/pure {};
+  pure = callPackage ../development/interpreters/pure {
+    llvm = llvm_33 ;
+  };
 
   python3 = hiPrio (callPackage ../development/interpreters/python/3.3 { });
   python33 = callPackage ../development/interpreters/python/3.3 { };
@@ -4038,7 +4049,11 @@ let
 
   farsight2 = callPackage ../development/libraries/farsight2 { };
 
-  farstream = callPackage ../development/libraries/farstream { };
+  farstream = callPackage ../development/libraries/farstream {
+    inherit (gst_all_1)
+      gstreamer gst-plugins-base gst-python gst-plugins-good gst-plugins-bad
+      gst-libav;
+  };
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
@@ -4436,7 +4451,7 @@ let
 
   hsqldb = callPackage ../development/libraries/java/hsqldb { };
 
-  http_parser = callPackage ../development/libraries/http-parser { inherit (pythonPackages) gyp; };
+  http-parser = callPackage ../development/libraries/http-parser { inherit (pythonPackages) gyp; };
 
   hunspell = callPackage ../development/libraries/hunspell { };
 
@@ -4581,6 +4596,7 @@ let
   libcddb = callPackage ../development/libraries/libcddb { };
 
   libcdio = callPackage ../development/libraries/libcdio { };
+  libcdio082 = callPackage ../development/libraries/libcdio/0.82.nix { };
 
   libcdr = callPackage ../development/libraries/libcdr { lcms = lcms2; };
 
@@ -6850,6 +6866,8 @@ let
 
   kmod = callPackage ../os-specific/linux/kmod { };
 
+  kmod-blacklist-ubuntu = callPackage ../os-specific/linux/kmod-blacklist-ubuntu { };
+
   kvm = qemu_kvm;
 
   libcap = callPackage ../os-specific/linux/libcap { };
@@ -7324,6 +7342,7 @@ let
 
   abcde = callPackage ../applications/audio/abcde {
     inherit (perlPackages) DigestSHA MusicBrainz MusicBrainzDiscID;
+    libcdio = libcdio082;
   };
 
   abiword = callPackage ../applications/office/abiword {
@@ -7719,6 +7738,7 @@ let
     prologMode = callPackage ../applications/editors/emacs-modes/prolog { };
 
     proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral {
+      texinfo = texinfo4 ;
       texLive = pkgs.texLiveAggregationFun {
         paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
       };
@@ -8766,7 +8786,7 @@ let
   stumpwm = lispPackages.stumpwm;
 
   sublime = callPackage ../applications/editors/sublime { };
-  
+
   sublime3 = lowPrio (callPackage ../applications/editors/sublime3 { });
 
   subversion = callPackage ../applications/version-management/subversion/default.nix {

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
-  version = "1.10.6";
+  version = "1.11.1";
 
   src = fetchurl {
     url = "https://github.com/github/hub/archive/v${version}.tar.gz";
-    sha256 = "0vfl1iq1927in81vd7zvp7yqqzay7pciyj87s83qfxrqyjpxn609";
+    sha256 = "09wqxxzgrgcx6p3n3bhrb5ka3194qfwnli5j3frv37448hx6wd4n";
   };
 
   buildInputs = [ rake makeWrapper ];

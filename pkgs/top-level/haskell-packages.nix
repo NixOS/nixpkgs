@@ -146,7 +146,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     caseInsensitive = self.caseInsensitive_1_1_0_3;
     cgi          = self.cgi_3001_1_8_4;
     fgl          = self.fgl_5_4_2_4;
-    GLUT         = self.GLUT_2_5_0_2;
+    GLUT         = self.GLUT_2_5_1_0;
     GLURaw       = self.GLURaw_1_4_0_0;
     haskellSrc   = self.haskellSrc_1_0_1_5;
     hashable     = self.hashable_1_2_1_0;
@@ -525,7 +525,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   adjunctions = callPackage ../development/libraries/haskell/adjunctions {};
 
   aeson_0_6_2_1 = callPackage ../development/libraries/haskell/aeson/0.6.2.1.nix {};
-  aeson_0_7_0_0 = callPackage ../development/libraries/haskell/aeson/0.7.0.0.nix {};
+  aeson_0_7_0_0 = callPackage ../development/libraries/haskell/aeson/0.7.0.0.nix {
+    attoparsec = self.attoparsec_0_11_1_0;
+  };
   aeson = self.aeson_0_6_2_1;
 
   aesonLens = callPackage ../development/libraries/haskell/aeson-lens {};
@@ -1188,10 +1190,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   GLUT_2_4_0_0 = callPackage ../development/libraries/haskell/GLUT/2.4.0.0.nix {
     OpenGL = self.OpenGL_2_8_0_0;
   };
-  GLUT_2_5_0_2 = callPackage ../development/libraries/haskell/GLUT/2.5.0.2.nix {
+  GLUT_2_5_1_0 = callPackage ../development/libraries/haskell/GLUT/2.5.1.0.nix {
     OpenGL = self.OpenGL_2_9_1_0;
   };
-  GLUT = self.GLUT_2_5_0_1;
+  GLUT = self.GLUT_2_5_1_0;
 
   gnuidn = callPackage ../development/libraries/haskell/gnuidn {};
 
@@ -1530,7 +1532,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
-  lens = callPackage ../development/libraries/haskell/lens {};
+  lens_3_10_2 = callPackage ../development/libraries/haskell/lens/3.10.2.nix {};
+  lens_4_0 = callPackage ../development/libraries/haskell/lens/4.0.nix {};
+  lens = self.lens_3_10_2;
 
   lensAeson = callPackage ../development/libraries/haskell/lens-aeson {};
 
@@ -1562,12 +1566,20 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
 
-  llvmGeneral = callPackage ../development/libraries/haskell/llvm-general {
-    # !!! llvm-general pre-release supports 3.4...
+  # Needed for idris for now
+  llvmGeneral_3_3 = callPackage ../development/libraries/haskell/llvm-general/3.3.nix {
     llvmConfig = pkgs.llvm_33;
+    llvmGeneralPure = self.llvmGeneralPure_3_3;
   };
 
-  llvmGeneralPure = callPackage ../development/libraries/haskell/llvm-general-pure {};
+  llvmGeneral = callPackage ../development/libraries/haskell/llvm-general/3.4.nix {
+    llvmConfig = pkgs.llvm;
+    inherit (pkgs) zlib ncurses;
+  };
+
+  llvmGeneralPure_3_3 = callPackage ../development/libraries/haskell/llvm-general-pure/3.3.nix { };
+
+  llvmGeneralPure = callPackage ../development/libraries/haskell/llvm-general-pure/3.4.nix {};
 
   lrucache = callPackage ../development/libraries/haskell/lrucache {};
 
@@ -1861,6 +1873,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   pipesNetwork = callPackage ../development/libraries/haskell/pipes-network {};
 
+  pipesGroup = callPackage ../development/libraries/haskell/pipes-group {};
+
   pipesParse = callPackage ../development/libraries/haskell/pipes-parse {};
 
   pipesPostgresqlSimple = callPackage ../development/libraries/haskell/pipes-postgresql-simple {};
@@ -2017,8 +2031,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   regexPosix_0_95_2 = callPackage ../development/libraries/haskell/regex-posix/0.95.2.nix {};
   regexPosix = self.regexPosix_0_95_2;
 
-  regexTDFA = callPackage ../development/libraries/haskell/regex-tdfa {};
-  regexTdfa = self.regexTDFA;
+  regexTdfa = callPackage ../development/libraries/haskell/regex-tdfa {};
 
   regexTdfaText = callPackage ../development/libraries/haskell/regex-tdfa-text {};
 
@@ -2351,7 +2364,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     parsers = self.parsers_0_9;
   };
   trifecta_1_2 = callPackage ../development/libraries/haskell/trifecta/1.2.nix {};
-  trifecta = self.trifecta_1_2;
+  trifecta_1_4 = callPackage ../development/libraries/haskell/trifecta/1.4.nix {};
+  trifecta = self.trifecta_1_4;
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
 
@@ -2707,6 +2721,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   idris_plain = callPackage ../development/compilers/idris {
     parsers = self.parsers_0_9;
     trifecta = self.trifecta_1_1;
+    llvmGeneral = self.llvmGeneral_3_3;
+    llvmGeneralPure = self.llvmGeneralPure_3_3;
   };
 
   idris = callPackage ../development/compilers/idris/wrapper.nix {};

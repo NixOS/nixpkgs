@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     export makeFlags="prefix=$out"
     # not sure about this line
     sed -i 's@/etc/ppp/peers@$out/etc/ppp/peers@' Makefile.in
+
+    sed -e '1i#include <unistd.h>' -i $(find . -name '*.cc')
   '';
 
   meta = {

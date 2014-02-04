@@ -238,7 +238,7 @@ in {
               "mkfs.ext3 -L nixos /dev/vda3",
               "mount LABEL=nixos /mnt",
               "mkfs.ext3 -L boot /dev/vda1",
-              "mkdir /mnt/boot",
+              "mkdir -p /mnt/boot",
               "mount LABEL=boot /mnt/boot",
           );
         '';

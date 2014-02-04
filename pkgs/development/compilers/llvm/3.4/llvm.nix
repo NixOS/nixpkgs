@@ -10,6 +10,7 @@
 , valgrind
 , ncurses
 , version
+, zlib
 }:
 
 let
@@ -25,9 +26,9 @@ in stdenv.mkDerivation rec {
     mv compiler-rt-${version} $sourceRoot/projects/compiler-rt
   '';
 
-  propagatedBuildInputs = [ ncurses ]; # linked against it, e.g. mesa needs it now, too
+  buildInputs = [ perl groff cmake libxml2 python libffi ncurses ] ++ stdenv.lib.optional stdenv.isLinux valgrind;
 
-  buildInputs = [ perl groff cmake libxml2 python libffi valgrind ];
+  propagatedBuildInputs = [ ncurses zlib ];
 
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
@@ -52,6 +53,6 @@ in stdenv.mkDerivation rec {
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ shlevy lovek323 raskin viric ];
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.all;
   };
 }

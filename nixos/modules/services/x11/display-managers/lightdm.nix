@@ -55,8 +55,8 @@ let
     ''
       [LightDM]
       greeter-user = ${config.users.extraUsers.lightdm.name}
-      xgreeters-directory = ${cfg.greeter.package}
-      xsessions-directory = ${dmcfg.session.desktops}
+      greeters-directory = ${cfg.greeter.package}
+      sessions-directory = ${dmcfg.session.desktops}
 
       [SeatDefaults]
       xserver-command = ${xserverWrapper}

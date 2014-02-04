@@ -2,8 +2,8 @@
 , libconfig, pkgconfig }:
 
 let
-  version = "18c98eb";
-  date = "20131112";
+  version = "dbe256cc82";
+  date = "20140203";
 in
 stdenv.mkDerivation rec {
   name = "tox-core-${date}-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/irungentoo/ProjectTox-Core/tarball/${version}";
     name = "${name}.tar.gz";
-    sha256 = "1g69fz9aspzsrlzlk6fpmjyyhb38v8mmp25nszlbra17n3f209yh";
+    sha256 = "0mqbwwqbm15p16ya8nlij23fgbafjdmnc44nm2vh47m8pyb119lc";
   };
 
   preConfigure = ''
