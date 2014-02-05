@@ -2347,7 +2347,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   timeCompat = callPackage ../development/libraries/haskell/time-compat {};
 
-  tls = callPackage ../development/libraries/haskell/tls {};
+  tls = callPackage ../development/libraries/haskell/tls/1.2.x.nix {};
+
+  tls_1_1_x = callPackage ../development/libraries/haskell/tls/1.1.x.nix {};
+
+  tlsExtra = callPackage ../development/libraries/haskell/tls-extra {
+    tls = self.tls_1_1_x;
+  };
 
   transformers_0_2_2_0 = callPackage ../development/libraries/haskell/transformers/0.2.2.0.nix {};
   transformers_0_3_0_0 = if (pkgs.stdenv.lib.versionOlder ghc.version "7.7") then
