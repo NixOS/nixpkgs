@@ -231,8 +231,17 @@ rec {
      programs like lcov to produce pretty-printed reports.
   */
   addCoverageInstrumentation = stdenv:
-    addAttrsToDerivation
-      {
+    # Object files instrumented with coverage analysis write runtime
+    # coverage data to <path>/<object>.gcda, where <path> is the
+    # location where gcc originally created the object file.  That
+    # would be /tmp/nix-build-<something>, which will be long gone by
+    # the time we run the program.  Furthermore, the <object>.gcno
+    # files created at compile time are also written there.  And to
+    # make nice coverage reports with lcov, we need the source code.
+    # So we have to use the `keepBuildTree' adapter as well.
+    let stdenv' = cleanupBuildTree (keepBuildTree stdenv); in
+    { mkDerivation = args: stdenv'.mkDerivation (args // {
+        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -O0 --coverage";
         postUnpack =
           ''
             # This is an uberhack to prevent libtool from removing gcno
@@ -242,21 +251,9 @@ rec {
             for i in $(find -name ltmain.sh); do
                 substituteInPlace $i --replace '*.$objext)' '*.$objext | *.gcno)'
             done
-
-            export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -O0 --coverage"
-          '';
-      }
-
-      # Object files instrumented with coverage analysis write
-      # runtime coverage data to <path>/<object>.gcda, where <path>
-      # is the location where gcc originally created the object
-      # file.  That would be /tmp/nix-build-<something>, which will
-      # be long gone by the time we run the program.  Furthermore,
-      # the <object>.gcno files created at compile time are also
-      # written there.  And to make nice coverage reports with lcov,
-      # we need the source code.  So we have to use the
-      # `keepBuildTree' adapter as well.
-      (cleanupBuildTree (keepBuildTree stdenv));
+          '' + args.postUnpack or "";
+      });
+    };
 
 
   /* Replace the meta.maintainers field of a derivation.  This is useful
