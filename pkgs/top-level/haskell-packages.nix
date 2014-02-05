@@ -520,6 +520,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   abstractDeque = callPackage ../development/libraries/haskell/abstract-deque {};
 
+  abstractDequeTests = callPackage ../development/libraries/haskell/abstract-deque-tests {};
+
   abstractPar = callPackage ../development/libraries/haskell/abstract-par {};
 
   adjunctions = callPackage ../development/libraries/haskell/adjunctions {};
