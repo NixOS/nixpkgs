@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --replace "which" "type -p"
   '';
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; # occasionally missing generated files on Hydra
 
   meta = with stdenv.lib; {
     homepage = http://springrts.com/;
