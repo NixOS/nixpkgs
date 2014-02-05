@@ -7,6 +7,24 @@ let
   ids = config.ids;
   cfg = config.users;
 
+  passwordDescription = ''
+    The options <literal>hashedPassword</literal>,
+    <literal>password</literal> and <literal>passwordFile</literal>
+    controls what password is set for the user.
+    <literal>hashedPassword</literal> overrides both
+    <literal>password</literal> and <literal>passwordFile</literal>.
+    <literal>password</literal> overrides <literal>passwordFile</literal>.
+    If none of these three options are set, no password is assigned to
+    the user, and the user will not be able to do password logins.
+    If the option <literal>users.mutableUsers</literal> is true, the
+    password defined in one of the three options will only be set when
+    the user is created for the first time. After that, you are free to
+    change the password with the ordinary user management commands. If
+    <literal>users.mutableUsers</literal> is false, you cannot change
+    user passwords, they will always be set according to the password
+    options.
+  '';
+
   userOpts = { name, config, ... }: {
 
     options = {
@@ -76,24 +94,24 @@ let
         '';
       };
 
+      hashedPassword = mkOption {
+        type = with types; uniq (nullOr str);
+        default = null;
+        description = ''
+          Specifies the (hashed) password for the user.
+          ${passwordDescription}
+        '';
+      };
+
       password = mkOption {
         type = with types; uniq (nullOr str);
         default = null;
         description = ''
-          The user's password. If undefined, no password is set for
-          the user.  Warning: do not set confidential information here
-          because it is world-readable in the Nix store.  This option
-          should only be used for public accounts such as
-          <literal>guest</literal>.
-          The option <literal>password</literal> overrides
-          <literal>passwordFile</literal>, if both are specified.
-          If none of the options <literal>password</literal> or
-          <literal>passwordFile</literal> are specified, the user account will
-          be locked for password logins. This is the default behavior except
-          for the root account, which has an empty password by default. If you
-          want to lock the root account for password logins, set
-          <literal>users.extraUsers.root.password</literal> to
-          <literal>null</literal>.
+          Specifies the (clear text) password for the user.
+          Warning: do not set confidential information here
+          because it is world-readable in the Nix store. This option
+          should only be used for public accounts.
+          ${passwordDescription}
         '';
       };
 
@@ -105,8 +123,7 @@ let
           file is read on each system activation. The file should contain
           exactly one line, which should be the password in an encrypted form
           that is suitable for the <literal>chpasswd -e</literal> command.
-          See the <literal>password</literal> for more details on how passwords
-          are assigned.
+          ${passwordDescription}
         '';
       };
 
@@ -297,6 +314,26 @@ in
       options = [ groupOpts ];
     };
 
+    security.initialRootPassword = mkOption {
+      type = types.str;
+      default = "";
+      example = "!";
+      description = ''
+        The (hashed) password for the root account set on initial
+        installation. The empty string denotes that root can login
+        locally without a password (but not via remote services such
+        as SSH, or indirectly via <command>su</command> or
+        <command>sudo</command>). The string <literal>!</literal>
+        prevents root from logging in using a password.
+        Note, setting this option sets
+        <literal>users.extraUsers.root.hashedPassword</literal>.
+        Note, if <literal>users.mutableUsers</literal> is false
+        you cannot change the root password manually, so in that case
+        the name of this option is a bit misleading, since it will define
+        the root password beyond the user initialisation phase.
+      '';
+    };
+
   };
 
 
@@ -311,7 +348,7 @@ in
         home = "/root";
         shell = cfg.defaultUserShell;
         group = "root";
-        password = mkDefault "";
+        hashedPassword = config.security.initialRootPassword;
       };
       nobody = {
         uid = ids.uids.nobody;
@@ -351,17 +388,21 @@ in
             test "$(getent shadow '${u.name}' | cut -d: -f2)" != "x" && setpw=no
           ''}
           if [ "$setpw" == "yes" ]; then
-            ${if u.password == ""
+            ${if !(isNull u.hashedPassword)
+              then ''
+                echo "${u.name}:${u.hashedPassword}" | \
+                  ${pkgs.shadow}/sbin/chpasswd -e''
+              else if u.password == ""
               then "passwd -d '${u.name}' &>/dev/null"
-              else if (isNull u.password && isNull u.passwordFile)
-              then "passwd -l '${u.name}' &>/dev/null"
               else if !(isNull u.password)
               then ''
                 echo "${u.name}:${u.password}" | ${pkgs.shadow}/sbin/chpasswd''
-              else ''
+              else if !(isNull u.passwordFile)
+              then ''
                 echo -n "${u.name}:" | cat - "${u.passwordFile}" | \
                   ${pkgs.shadow}/sbin/chpasswd -e
               ''
+              else "passwd -l '${u.name}' &>/dev/null"
             }
           fi
         '';
