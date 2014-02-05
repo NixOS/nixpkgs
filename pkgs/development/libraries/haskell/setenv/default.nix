@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "setenv";
-  version = "0.1.1";
-  sha256 = "1j0fj8nrx9z90kghasxjx5jycz9y9xdi7mrxmgnsc14csa65rhb8";
+  version = "0.1.1.1";
+  sha256 = "0azkvsvk9i1979rn45zryqyirvjhj9b32nnz1m30aasbs2q8f393";
   doCheck = false;
   meta = {
     description = "A cross-platform library for setting environment variables";
