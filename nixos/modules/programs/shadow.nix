@@ -58,7 +58,8 @@ in
 
   config = {
 
-    environment.systemPackages = [ pkgs.shadow ];
+    environment.systemPackages =
+      pkgs.lib.optional config.users.mutableUsers pkgs.shadow;
 
     environment.etc =
       [ { # /etc/login.defs: global configuration for pwdutils.  You
