@@ -144,14 +144,14 @@
     passthru.names = [ "adm-zip" ];
   };
   by-spec."adm-zip"."~0.4.3" =
-    self.by-version."adm-zip"."0.4.3";
-  by-version."adm-zip"."0.4.3" = lib.makeOverridable self.buildNodePackage {
-    name = "node-adm-zip-0.4.3";
+    self.by-version."adm-zip"."0.4.4";
+  by-version."adm-zip"."0.4.4" = lib.makeOverridable self.buildNodePackage {
+    name = "node-adm-zip-0.4.4";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/adm-zip/-/adm-zip-0.4.3.tgz";
-        name = "adm-zip-0.4.3.tgz";
-        sha1 = "28d6a3809abb7845a0ffa38f9fff455c2c6f6f6c";
+        url = "http://registry.npmjs.org/adm-zip/-/adm-zip-0.4.4.tgz";
+        name = "adm-zip-0.4.4.tgz";
+        sha1 = "a61ed5ae6905c3aea58b3a657d25033091052736";
       })
     ];
     buildInputs =
@@ -3365,7 +3365,7 @@
     buildInputs =
       (self.nativeDeps."decompress" or []);
     deps = [
-      self.by-version."adm-zip"."0.4.3"
+      self.by-version."adm-zip"."0.4.4"
       self.by-version."mkdirp"."0.3.5"
       self.by-version."mout"."0.6.0"
       self.by-version."rimraf"."2.2.6"
@@ -4888,14 +4888,14 @@
     passthru.names = [ "forever-agent" ];
   };
   by-spec."forever-agent"."~0.5.0" =
-    self.by-version."forever-agent"."0.5.0";
-  by-version."forever-agent"."0.5.0" = lib.makeOverridable self.buildNodePackage {
-    name = "node-forever-agent-0.5.0";
+    self.by-version."forever-agent"."0.5.2";
+  by-version."forever-agent"."0.5.2" = lib.makeOverridable self.buildNodePackage {
+    name = "node-forever-agent-0.5.2";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/forever-agent/-/forever-agent-0.5.0.tgz";
-        name = "forever-agent-0.5.0.tgz";
-        sha1 = "0c1647a74f3af12d76a07a99490ade7c7249c8f0";
+        url = "http://registry.npmjs.org/forever-agent/-/forever-agent-0.5.2.tgz";
+        name = "forever-agent-0.5.2.tgz";
+        sha1 = "6d0e09c4921f94a27f63d3b49c5feff1ea4c5130";
       })
     ];
     buildInputs =
@@ -5884,7 +5884,7 @@
     ];
     peerDependencies = [
       self.by-version."grunt"."0.4.2"
-      self.by-version."karma"."0.11.13"
+      self.by-version."karma"."0.11.14"
     ];
     passthru.names = [ "grunt-karma" ];
   };
@@ -7372,14 +7372,14 @@
     passthru.names = [ "junk" ];
   };
   by-spec."karma"."*" =
-    self.by-version."karma"."0.11.13";
-  by-version."karma"."0.11.13" = lib.makeOverridable self.buildNodePackage {
-    name = "karma-0.11.13";
+    self.by-version."karma"."0.11.14";
+  by-version."karma"."0.11.14" = lib.makeOverridable self.buildNodePackage {
+    name = "karma-0.11.14";
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/karma/-/karma-0.11.13.tgz";
-        name = "karma-0.11.13.tgz";
-        sha1 = "f63da4f9d14669c6b3d2d9feb7f4406c4cd004c0";
+        url = "http://registry.npmjs.org/karma/-/karma-0.11.14.tgz";
+        name = "karma-0.11.14.tgz";
+        sha1 = "2f6f81611bfe62e588d4e1d63c14f3928971a77c";
       })
     ];
     buildInputs =
@@ -7408,15 +7408,15 @@
     ];
     passthru.names = [ "karma" ];
   };
-  "karma" = self.by-version."karma"."0.11.13";
+  "karma" = self.by-version."karma"."0.11.14";
   by-spec."karma".">=0.11.11" =
-    self.by-version."karma"."0.11.13";
+    self.by-version."karma"."0.11.14";
   by-spec."karma".">=0.9" =
-    self.by-version."karma"."0.11.13";
+    self.by-version."karma"."0.11.14";
   by-spec."karma".">=0.9.3" =
-    self.by-version."karma"."0.11.13";
+    self.by-version."karma"."0.11.14";
   by-spec."karma"."~0.11.0" =
-    self.by-version."karma"."0.11.13";
+    self.by-version."karma"."0.11.14";
   by-spec."karma-chrome-launcher"."*" =
     self.by-version."karma-chrome-launcher"."0.1.2";
   by-version."karma-chrome-launcher"."0.1.2" = lib.makeOverridable self.buildNodePackage {
@@ -7433,7 +7433,7 @@
     deps = [
     ];
     peerDependencies = [
-      self.by-version."karma"."0.11.13"
+      self.by-version."karma"."0.11.14"
     ];
     passthru.names = [ "karma-chrome-launcher" ];
   };
@@ -7457,7 +7457,7 @@
       self.by-version."dateformat"."1.0.7-1.2.3"
     ];
     peerDependencies = [
-      self.by-version."karma"."0.11.13"
+      self.by-version."karma"."0.11.14"
     ];
     passthru.names = [ "karma-coverage" ];
   };
@@ -7479,7 +7479,7 @@
       self.by-version."xmlbuilder"."0.4.2"
     ];
     peerDependencies = [
-      self.by-version."karma"."0.11.13"
+      self.by-version."karma"."0.11.14"
     ];
     passthru.names = [ "karma-junit-reporter" ];
   };
@@ -7500,7 +7500,7 @@
     deps = [
     ];
     peerDependencies = [
-      self.by-version."karma"."0.11.13"
+      self.by-version."karma"."0.11.14"
       self.by-version."mocha"."1.17.1"
     ];
     passthru.names = [ "karma-mocha" ];
@@ -7522,7 +7522,7 @@
     deps = [
     ];
     peerDependencies = [
-      self.by-version."karma"."0.11.13"
+      self.by-version."karma"."0.11.14"
       self.by-version."requirejs"."2.1.10"
     ];
     passthru.names = [ "karma-requirejs" ];
@@ -7548,7 +7548,7 @@
       self.by-version."saucelabs"."0.1.1"
     ];
     peerDependencies = [
-      self.by-version."karma"."0.11.13"
+      self.by-version."karma"."0.11.14"
     ];
     passthru.names = [ "karma-sauce-launcher" ];
   };
@@ -9686,7 +9686,7 @@
       (fetchurl {
         url = "http://registry.npmjs.org/nijs/-/nijs-0.0.13.tgz";
         name = "nijs-0.0.13.tgz";
-        sha1 = "31396055a3cc19ed5b7438c8e6811b9a20f27cfc";
+        sha1 = "eba11ace22e3ff73a9dc526b2b955c2e04472572";
       })
     ];
     buildInputs =
@@ -9713,7 +9713,7 @@
     buildInputs =
       (self.nativeDeps."node-appc" or []);
     deps = [
-      self.by-version."adm-zip"."0.4.3"
+      self.by-version."adm-zip"."0.4.4"
       self.by-version."async"."0.2.10"
       self.by-version."colors"."0.6.2"
       self.by-version."diff"."1.0.8"
@@ -12073,7 +12073,7 @@
     deps = [
       self.by-version."qs"."0.6.6"
       self.by-version."json-stringify-safe"."5.0.0"
-      self.by-version."forever-agent"."0.5.0"
+      self.by-version."forever-agent"."0.5.2"
       self.by-version."node-uuid"."1.4.1"
       self.by-version."mime"."1.2.11"
       self.by-version."tough-cookie"."0.12.1"
@@ -12191,7 +12191,7 @@
     deps = [
       self.by-version."qs"."0.6.6"
       self.by-version."json-stringify-safe"."5.0.0"
-      self.by-version."forever-agent"."0.5.0"
+      self.by-version."forever-agent"."0.5.2"
       self.by-version."tunnel-agent"."0.3.0"
       self.by-version."http-signature"."0.10.0"
       self.by-version."hawk"."1.0.0"
@@ -12222,7 +12222,7 @@
     deps = [
       self.by-version."qs"."0.6.6"
       self.by-version."json-stringify-safe"."5.0.0"
-      self.by-version."forever-agent"."0.5.0"
+      self.by-version."forever-agent"."0.5.2"
       self.by-version."tunnel-agent"."0.3.0"
       self.by-version."http-signature"."0.10.0"
       self.by-version."hawk"."1.0.0"
@@ -12253,7 +12253,7 @@
     deps = [
       self.by-version."qs"."0.6.6"
       self.by-version."json-stringify-safe"."5.0.0"
-      self.by-version."forever-agent"."0.5.0"
+      self.by-version."forever-agent"."0.5.2"
       self.by-version."node-uuid"."1.4.1"
       self.by-version."mime"."1.2.11"
       self.by-version."tough-cookie"."0.9.15"
@@ -12284,7 +12284,7 @@
     deps = [
       self.by-version."qs"."0.6.6"
       self.by-version."json-stringify-safe"."5.0.0"
-      self.by-version."forever-agent"."0.5.0"
+      self.by-version."forever-agent"."0.5.2"
       self.by-version."node-uuid"."1.4.1"
       self.by-version."mime"."1.2.11"
       self.by-version."tough-cookie"."0.9.15"
@@ -12650,7 +12650,7 @@
     deps = [
       self.by-version."lodash"."1.3.1"
       self.by-version."async"."0.2.10"
-      self.by-version."adm-zip"."0.4.3"
+      self.by-version."adm-zip"."0.4.4"
     ];
     peerDependencies = [
     ];
@@ -15281,7 +15281,7 @@
     buildInputs =
       (self.nativeDeps."webdrvr" or []);
     deps = [
-      self.by-version."adm-zip"."0.4.3"
+      self.by-version."adm-zip"."0.4.4"
       self.by-version."kew"."0.1.7"
       self.by-version."mkdirp"."0.3.5"
       self.by-version."npmconf"."0.1.12"
