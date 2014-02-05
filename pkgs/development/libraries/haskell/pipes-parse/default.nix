@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-parse";
-  version = "3.0.0";
-  sha256 = "07ycdnx24qlysbf78sgfl2g8rfsrxnaiq1rimc4656in4cmcjn9g";
+  version = "3.0.1";
+  sha256 = "0f262p8mfcpvs3f3myy6bll9v61rfgrfdy2scdzf7vvx0h0lrpj7";
   buildDepends = [ pipes transformers ];
   meta = {
     description = "Parsing infrastructure for the pipes ecosystem";
