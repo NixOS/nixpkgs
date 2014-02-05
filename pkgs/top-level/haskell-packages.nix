@@ -1574,7 +1574,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   llvmGeneral = callPackage ../development/libraries/haskell/llvm-general/3.4.nix {
     llvmConfig = pkgs.llvm;
-    inherit (pkgs) zlib ncurses;
   };
 
   llvmGeneralPure_3_3 = callPackage ../development/libraries/haskell/llvm-general-pure/3.3.nix { };
