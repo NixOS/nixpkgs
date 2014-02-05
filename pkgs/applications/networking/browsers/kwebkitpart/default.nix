@@ -1,12 +1,13 @@
 { stdenv, fetchgit, kdelibs }:
 
 stdenv.mkDerivation rec {
-  name = "kwebkitpart-1.3.2";
+  name = "kwebkitpart-${version}";
+  version = "1.3.3";
 
   src = fetchgit {
     url = git://anongit.kde.org/kwebkitpart;
-    rev = "292f32fda933b2ead5a61ff1ec457f839fad5c85";
-    sha256 = "1b2jar9b1yb3gy9fnq8dn2n4z8lffb6pfrj9jc4rjzv5b3rwh1ak";
+    rev = "refs/tags/v${version}";
+    sha256 = "0kszffgg3zpf319lmzlmdba5gq8kdr5xwb69xwy4s2abc9nvwvbi";
   };
 
   buildInputs = [ kdelibs ];
