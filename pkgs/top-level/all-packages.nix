@@ -8712,7 +8712,7 @@ let
     inherit (gnome) libart_lgpl;
   };
 
-  seafileClient = callPackage ../applications/networking/seafile-client { };
+  seafile-client = callPackage ../applications/networking/seafile-client { };
 
   seeks = callPackage ../tools/networking/p2p/seeks {
     opencv = opencv_2_1;
@@ -10235,7 +10235,7 @@ let
 
   saneFrontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
-  seafileShared = callPackage ../misc/seafile-shared { };
+  seafile-shared = callPackage ../misc/seafile-shared { };
 
   slock = callPackage ../misc/screensavers/slock { };
 
