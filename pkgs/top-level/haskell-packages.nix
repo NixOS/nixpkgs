@@ -2146,6 +2146,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   stringCombinators = callPackage ../development/libraries/haskell/string-combinators {};
 
+  stringConversions = callPackage ../development/libraries/haskell/string-conversions {};
+
   stringprep = callPackage ../development/libraries/haskell/stringprep {};
 
   stringQq = callPackage ../development/libraries/haskell/string-qq {};
