@@ -3,7 +3,7 @@ postPhases+=" coverageReportPhase"
 coverageReportPhase() {
     lcov --directory . --capture --output-file app.info
     set -o noglob
-    lcov --remove app.info $lcovFilter > app2.info
+    lcov --remove app.info ${lcovFilter:-"/nix/store/*"} > app2.info
     set +o noglob
     mv app2.info app.info
 
