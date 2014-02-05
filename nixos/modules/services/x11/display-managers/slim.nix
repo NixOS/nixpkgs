@@ -5,7 +5,10 @@ with pkgs.lib;
 let
 
   dmcfg = config.services.xserver.displayManager;
+
   cfg = dmcfg.slim;
+  
+  slimPackage = cfg.package;
 
   slimConfig = pkgs.writeText "slim.cfg"
     ''
@@ -32,7 +35,7 @@ let
           ln -s * default
         '';
       };
-    in if cfg.theme == null then "${pkgs.slim}/share/slim/themes" else unpackedTheme;
+    in if cfg.theme == null then "${slimPackage}/share/slim/themes" else unpackedTheme;
 
 in
 
@@ -79,6 +82,22 @@ in
           the focus is placed on the password.
         '';
       };
+      
+      package = mkOption {
+        type = types.package;
+        default = pkgs.slim;
+        description = ''
+          Configure slim package.
+        '';
+        example = ''
+          pkgs.slim.override { 
+            theme = pkgs.fetchurl {
+              url = http://download.berlios.de/slim/slim-wave.tar.gz;
+              sha256 = "0ndr419i5myzcylvxb89m9grl2xyq6fbnyc3lkd711mzlmnnfxdy";
+            }; 
+          };
+        '';
+      };
 
       autoLogin = mkOption {
         type = types.bool;
@@ -106,7 +125,7 @@ in
           { SLIM_CFGFILE = slimConfig;
             SLIM_THEMESDIR = slimThemesDir;
           };
-        execCmd = "exec ${pkgs.slim}/bin/slim";
+        execCmd = "exec ${slimPackage}/bin/slim";
       };
 
     # Allow null passwords so that the user can login as root on the
@@ -116,7 +135,7 @@ in
     # Allow slimlock to work.
     security.pam.services.slimlock = {};
 
-    environment.systemPackages = [ pkgs.slim ];
+    environment.systemPackages = [ slimPackage ];
 
   };
 
