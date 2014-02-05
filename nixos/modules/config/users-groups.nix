@@ -163,6 +163,8 @@ let
         type = with types; listOf string;
         default = [];
         description = ''
+          The user names of the group members, added to the
+          <literal>/etc/group</literal> file.
         '';
       };
 
