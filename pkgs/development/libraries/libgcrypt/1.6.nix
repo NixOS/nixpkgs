@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libgpgerror, transfig, ghostscript, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "libgcrypt-1.6.0";
+  name = "libgcrypt-1.6.1";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "024plbybsmnxbp39hs92lp6dzvkz2cb70nv69qrwr55d02350bb6";
+    sha256 = "0w10vhpj1r5nq7qm6jp21p1v1vhf37701cw8yilygzzqd7mfzhx1";
   };
 
   nativeBuildInputs = [ transfig ghostscript texinfo ];
