@@ -131,6 +131,15 @@ if ! mountpoint -q /run; then
     mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
 fi
 
+# Create a ramfs on /run/keys to hold secrets that shouldn't
+# be written to disk (generally used for nixops, harmless
+# elsehwere)
+if ! mountpoint -q /run/keys; then
+    rm -rf /run/keys
+    mkdir -m 0700 /run/keys
+    mount -t ramfs none /run/keys
+fi
+
 mkdir -m 0755 -p /run/lock
 
 
