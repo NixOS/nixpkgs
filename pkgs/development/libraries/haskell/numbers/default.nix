@@ -2,13 +2,13 @@
 
 cabal.mkDerivation (self: {
   pname = "numbers";
-  version = "3000.2.0.0";
-  sha256 = "035qc7dgh4nd661z4mm742v8y7xqdyyp0r0vkinxiifciqb1fkbm";
+  version = "3000.2.0.1";
+  sha256 = "10z1bi5qbc81z5xx2v1ylwcpmcfl1ci7lxrswkgi0dd1wi8havbk";
   testDepends = [
     QuickCheck testFramework testFrameworkQuickcheck2
   ];
   meta = {
-    homepage = "https://github.com/DanBurton/numbers#readme";
+    homepage = "https://github.com/jwiegley/numbers#readme";
     description = "Various number types";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
