@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    [ ./lcov-except-unreach.patch ]
+    [ ./lcov-except-unreach.patch ./no-warn-missing.patch ]
     ++ stdenv.lib.optional stdenv.isFreeBSD ./freebsd-install.patch;
 
   preBuild = ''

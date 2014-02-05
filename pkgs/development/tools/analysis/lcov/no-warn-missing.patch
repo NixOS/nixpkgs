@@ -1,0 +1,54 @@
+http://ltp.cvs.sourceforge.net/viewvc/ltp/utils/analysis/lcov/bin/geninfo?view=log
+
+--- a/bin/geninfo	2013/01/10 09:02:32	1.119
++++ b/bin/geninfo	2013/02/22 14:09:08	1.120
+@@ -864,7 +864,6 @@
+ 	my $source;		# gcov source header information
+ 	my $object;		# gcov object header information
+ 	my @matches;		# List of absolute paths matching filename
+-	my @unprocessed;	# List of unprocessed source code files
+ 	my $base_dir;		# Base directory for current file
+ 	my @tmp_links;		# Temporary links to be cleaned up
+ 	my @result;
+@@ -1060,7 +1059,6 @@
+ 
+ 	# Traverse the list of generated .gcov files and combine them into a
+ 	# single .info file
+-	@unprocessed = keys(%{$instr});
+ 	foreach $gcov_file (sort(@gcov_list))
+ 	{
+ 		my $i;
+@@ -1143,16 +1141,6 @@
+ 						\@matches, \@gcov_content);
+ 		}
+ 
+-		# Remove processed file from list
+-		for ($index = scalar(@unprocessed) - 1; $index >= 0; $index--)
+-		{
+-			if ($unprocessed[$index] eq $source_filename)
+-			{
+-				splice(@unprocessed, $index, 1);
+-				last;
+-			}
+-		}
+-
+ 		# Skip external files if requested
+ 		if (!$opt_external) {
+ 			if (is_external($source_filename)) {
+@@ -1297,16 +1285,6 @@
+ 		unlink($gcov_file);
+ 	}
+ 
+-	# Check for files which show up in the graph file but were never
+-	# processed
+-	if (@unprocessed && @gcov_list)
+-	{
+-		foreach (@unprocessed)
+-		{
+-			warn("WARNING: no data found for $_\n");
+-		}
+-	}
+-
+ 	if (!($output_filename && ($output_filename eq "-")))
+ 	{
+ 		close(INFO_HANDLE);
