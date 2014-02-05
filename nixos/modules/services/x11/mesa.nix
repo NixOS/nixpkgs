@@ -61,13 +61,18 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = pkgs.lib.singleton {
+      assertion = cfg.driSupport32Bit -> pkgs.stdenv.isx86_64;
+      message = "Option driSupport32Bit only makes sens on a 64-bit system.";
+    };
+
     system.activationScripts.setup-opengl.deps = [];
     system.activationScripts.setup-opengl.text = ''
       rm -f /run/opengl-driver{,-32}
-      ${optionalString (!cfg.driSupport32Bit) "ln -sf opengl-driver /run/opengl-driver-32"}
-
-      ${# !!! The OpenGL driver depends on what's detected at runtime.
-        if elem "nvidia" cfg.videoDrivers then
+      ${optionalString (pkgs.stdenv.isi686) "ln -sf opengl-driver /run/opengl-driver-32"}
+    ''
+      #TODO:  The OpenGL driver should depend on what's detected at runtime.
+     +( if elem "nvidia" cfg.videoDrivers then
           ''
             ln -sf ${kernelPackages.nvidia_x11} /run/opengl-driver
             ${optionalString cfg.driSupport32Bit
@@ -89,8 +94,7 @@ in {
             ${optionalString cfg.driSupport32Bit
               "ln -sf ${pkgs_i686.mesa_drivers} /run/opengl-driver-32"}
           ''
-      }
-    '';
+      );
 
     environment.variables.LD_LIBRARY_PATH =
       [ "/run/opengl-driver/lib" "/run/opengl-driver-32/lib" ]
