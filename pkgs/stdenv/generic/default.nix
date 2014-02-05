@@ -87,10 +87,10 @@ let
               userHook = config.stdenv.userHook or null;
 
               # Inputs built by the cross compiler.
-              buildInputs = lib.optionals (crossConfig != null) buildInputs ++ extraBuildInputs;
+              buildInputs = lib.optionals (crossConfig != null) (buildInputs ++ extraBuildInputs);
               propagatedBuildInputs = lib.optionals (crossConfig != null) propagatedBuildInputs;
               # Inputs built by the usual native compiler.
-              nativeBuildInputs = nativeBuildInputs ++ lib.optionals (crossConfig == null) buildInputs;
+              nativeBuildInputs = nativeBuildInputs ++ lib.optionals (crossConfig == null) (buildInputs ++ extraBuildInputs);
               propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
                 lib.optionals (crossConfig == null) propagatedBuildInputs;
           }))) (
