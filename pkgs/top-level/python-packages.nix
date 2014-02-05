@@ -5388,6 +5388,21 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  pysphere = buildPythonPackage rec {
+    name = "pysphere-0.1.8";
+
+    src = fetchurl {
+      url = "http://pysphere.googlecode.com/files/${name}.zip";
+      md5 = "c57cba33626ac4b1e3d1974923d59232";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+    meta = {
+      homepage    = "https://code.google.com/p/pysphere/";
+      license     = "BSD";
+      description = "Python API for interaction with the VMWare vSphere";
+    };
+  };
 
   pysqlite = buildPythonPackage (rec {
     name = "pysqlite-2.6.3";
