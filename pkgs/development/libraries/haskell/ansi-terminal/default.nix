@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ansi-terminal";
-  version = "0.6.1";
-  sha256 = "0ncghc0z2xkfn1hfvyl0haf4mia9lhjbiqda11nxkqqfxdyklb2j";
+  version = "0.6.1.1";
+  sha256 = "06pdcpp2z7wk9mkr5lzwk64lqhj09c7l1ah4s3vz7zwrdzfaccwi";
   isLibrary = true;
   isExecutable = true;
   meta = {
