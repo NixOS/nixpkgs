@@ -523,9 +523,9 @@ in
         preStart =
           ''
             rm -f /run/opengl-driver{,-32}
-            ${optionalString (!cfg.driSupport32Bit) "ln -sf opengl-driver /run/opengl-driver-32"}
+            ${optionalString (pkgs.stdenv.isi686) "ln -sf opengl-driver /run/opengl-driver-32"}
 
-            ${# !!! The OpenGL driver depends on what's detected at runtime.
+            ${#TODO:  The OpenGL driver should depend on what's detected at runtime.
               if elem "nvidia" driverNames then
                 ''
                   ln -sf ${kernelPackages.nvidia_x11} /run/opengl-driver
