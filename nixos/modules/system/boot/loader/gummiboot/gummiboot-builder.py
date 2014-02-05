@@ -74,8 +74,8 @@ def remove_old_entries(gens):
     slice_end = -1 * len(".conf")
     known_paths = []
     for gen in gens:
-        known_paths.append copy_from_profile(gen, "kernel", True)
-        known_paths.append copy_from_profile(gen, "initrd", True)
+        known_paths.append(copy_from_profile(gen, "kernel", True))
+        known_paths.append(copy_from_profile(gen, "initrd", True))
     for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos-generation-[1-9]*.conf"):
         try:
             gen = int(path[slice_start:slice_end])
