@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk, gtk3 }:
 
 stdenv.mkDerivation rec {
   p_name  = "gtk-xfce-engine";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   #TODO: gtk3
-  buildInputs = [ pkgconfig intltool gtk ];
+  buildInputs = [ pkgconfig intltool gtk gtk3 ];
 
   meta = {
     homepage = http://www.xfce.org/;
