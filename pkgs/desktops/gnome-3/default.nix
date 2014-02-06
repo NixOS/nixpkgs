@@ -32,6 +32,8 @@ rec {
 
   gjs = callPackage ./core/gjs { };
 
+  gnome_control_center = callPackage ./core/gnome-control-center { };
+
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };
 
   gnome-menus = callPackage ./core/gnome-menus { };
