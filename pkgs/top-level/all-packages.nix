@@ -4323,7 +4323,8 @@ let
 
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
-  gnutls = callPackage ../development/libraries/gnutls {
+  gnutls = gnutls32;
+  gnutls31 = callPackage ../development/libraries/gnutls {
     guileBindings = config.gnutls.guile or true;
   };
 
