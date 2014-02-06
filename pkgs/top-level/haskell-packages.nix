@@ -2080,6 +2080,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   scotty = callPackage ../development/libraries/haskell/scotty {};
 
+  scottyHastache = callPackage ../development/libraries/haskell/scotty-hastache {};
+
   securemem = callPackage ../development/libraries/haskell/securemem {};
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
