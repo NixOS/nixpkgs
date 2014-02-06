@@ -1489,6 +1489,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ivor = callPackage ../development/libraries/haskell/ivor {};
 
+  ixdopp = callPackage ../development/libraries/haskell/ixdopp {
+    preprocessorTools = self.preprocessorTools_0_1_3;
+  };
+
   ixShapable = callPackage ../development/libraries/haskell/ix-shapable {};
 
   JuicyPixels = callPackage ../development/libraries/haskell/JuicyPixels {};
