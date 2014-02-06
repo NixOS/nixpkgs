@@ -8093,6 +8093,8 @@ let
 
   gv = callPackage ../applications/misc/gv { };
 
+  guvcview = callPackage ../os-specific/linux/guvcview { };
+
   hello = callPackage ../applications/misc/hello/ex-2 { };
 
   herbstluftwm = callPackage ../applications/window-managers/herbstluftwm { };
