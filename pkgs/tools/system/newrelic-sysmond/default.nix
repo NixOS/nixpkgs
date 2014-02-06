@@ -1,11 +1,11 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, patchelf }:
 
 stdenv.mkDerivation rec {
   name = "newrelic-sysmond-1.3.1.437";
   meta = {
     description = "New Relic system monitor daemon";
     homepage    = "https://newrelic.com";
-    license     = "unfree-redistributable";
+    license     = stdenv.lib.licenses.unfree;
   };
   src = fetchurl {
     url    = "http://download.newrelic.com/server_monitor/release/${name}-linux.tar.gz";
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   daemonexe = "${name}-linux/daemon/nrsysmond." + arch;
 
   libPath = stdenv.lib.makeLibraryPath [ stdenv.gcc.libc ];
+  buildInputs = [ patchelf ];
 
   unpackPhase = ''tar zxf $src'';
 
