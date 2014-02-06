@@ -2480,6 +2480,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   waiLogger = callPackage ../development/libraries/haskell/wai-logger {};
 
+  waiMiddlewareStatic = callPackage ../development/libraries/haskell/wai-middleware-static {};
+
   waiTest = callPackage ../development/libraries/haskell/wai-test {};
 
   warp = callPackage ../development/libraries/haskell/warp {};
