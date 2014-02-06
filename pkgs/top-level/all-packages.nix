@@ -588,6 +588,8 @@ let
 
   rsyslog = callPackage ../tools/system/rsyslog { };
 
+  newrelic_sysmond = callPackage ../tools/system/newrelic-sysmond { };
+
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
   mcelog = callPackage ../os-specific/linux/mcelog { };
