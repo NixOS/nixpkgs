@@ -1449,6 +1449,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hxtUnicode = callPackage ../development/libraries/haskell/hxt-unicode {};
 
+  hybridVectors = callPackage ../development/libraries/haskell/hybrid-vectors {};
+
   iCalendar = callPackage ../development/libraries/haskell/iCalendar {};
 
   idna = callPackage ../development/libraries/haskell/idna {};
@@ -2127,6 +2129,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
 
   socks = callPackage ../development/libraries/haskell/socks {};
+
+  sparse = callPackage ../development/libraries/haskell/sparse {
+    lens = self.lens_4_0_1;
+    linear = self.linear.override { lens = self.lens_4_0_1; };
+  };
 
   srcloc = callPackage ../development/libraries/haskell/srcloc {};
 
