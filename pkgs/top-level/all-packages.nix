@@ -2018,6 +2018,8 @@ let
 
   vboot_reference = callPackage ../tools/system/vboot_reference { };
 
+  vcsh = callPackage ../applications/version-management/vcsh { };
+
   verilog = callPackage ../applications/science/electronics/verilog {};
 
   vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
