@@ -5641,6 +5641,8 @@ let
 
   stlink = callPackage ../development/tools/misc/stlink { };
 
+  steghide = callPackage ../tools/security/steghide {};
+
   stepmania = callPackage ../games/stepmania {};
 
   stlport = callPackage ../development/libraries/stlport { };
