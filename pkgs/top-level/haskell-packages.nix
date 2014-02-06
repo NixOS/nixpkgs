@@ -2349,7 +2349,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   timeCompat = callPackage ../development/libraries/haskell/time-compat {};
 
   tls_1_1_5 = callPackage ../development/libraries/haskell/tls/1.1.5.nix {};
-  tls_1_2_2 = callPackage ../development/libraries/haskell/tls/1.1.5.nix {};
+  tls_1_2_2 = callPackage ../development/libraries/haskell/tls/1.2.2.nix {};
   tls = self.tls_1_2_2;
 
   tlsExtra = callPackage ../development/libraries/haskell/tls-extra {
