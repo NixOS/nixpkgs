@@ -220,7 +220,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
               ./Setup build ${self.buildTarget}
 
               export GHC_PACKAGE_PATH=$(${ghc.GHCPackages})
-              test -n "$noHaddock" || ./Setup haddock
+              test -n "$noHaddock" || ./Setup haddock --html --hoogle
 
               eval "$postBuild"
             '';
