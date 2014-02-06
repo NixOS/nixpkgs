@@ -12,6 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "1lkys703z4yxfgzarmgas5ccvn6m254w9wvm7s8v0zkj81z7m9nz";
   };
 
+  patches = [(fetchurl {
+    url = "http://anonscm.debian.org/viewvc/pkg-gnutls/packages/gnutls26/trunk/"
+      + "debian/patches/21_sanitycheck.diff?revision=1777&view=co";
+    sha256 = "0k18a7q6irmgjzp647bd18zccjpsr82n2s9arpamnkakgnny4ks9";
+    name = "CVE-2013-2116.patch";
+  })];
+
   configurePhase = ''
     ./configure --prefix="$out"                                 \
       --disable-dependency-tracking --enable-fast-install       \
