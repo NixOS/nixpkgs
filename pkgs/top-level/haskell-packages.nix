@@ -1560,7 +1560,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
-  linear = callPackage ../development/libraries/haskell/linear {};
+  linear = callPackage ../development/libraries/haskell/linear {
+    lens = self.lens_4_0_1;
+  };
 
   List = callPackage ../development/libraries/haskell/List {};
 
