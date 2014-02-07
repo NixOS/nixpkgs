@@ -18,6 +18,9 @@ cabal.mkDerivation (self: {
     QuickCheck semigroups simpleReflect testFramework
     testFrameworkQuickcheck2 testFrameworkTh transformers vector
   ];
+  patchPhase = ''
+    sed -i -e 's|vector-algorithms >=.*|vector-algorithms|' -e 's|QuickCheck.*,|QuickCheck,|' sparse.cabal
+  '';
   doCheck = false;
   meta = {
     homepage = "http://github.com/ekmett/sparse";
