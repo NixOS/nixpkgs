@@ -1,4 +1,4 @@
-{ cabal, aeson, bifunctors, comonad, constraints, contravariant
+{ cabal, cpphs, aeson_0_7_0_0, bifunctors, comonad, constraints, contravariant
 , deepseq, distributive, doctest, exceptions, filepath
 , genericDeriving, hashable, hlint, HUnit, mtl, nats, parallel
 , primitive, profunctors, QuickCheck, reflection, scientific
@@ -13,10 +13,10 @@ cabal.mkDerivation (self: {
   version = "4.0";
   sha256 = "1mrpbwnj1k2my71lm0ajxsx5r44sz372gfxn78vz4182yv3bmla1";
   buildDepends = [
-    aeson bifunctors comonad constraints contravariant distributive
-    exceptions filepath hashable mtl parallel primitive profunctors
-    reflection scientific semigroupoids semigroups split tagged text
-    transformers transformersCompat unorderedContainers utf8String
+    aeson_0_7_0_0 bifunctors comonad constraints contravariant cpphs
+    distributive exceptions filepath hashable mtl parallel primitive
+    profunctors reflection scientific semigroupoids semigroups split tagged
+    text transformers transformersCompat unorderedContainers utf8String
     vector void zlib
   ];
   testDepends = [
