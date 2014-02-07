@@ -2280,6 +2280,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     libc = pkgs.stdenv.gcc.libc;
   };
 
+  SVGFonts = callPackage ../development/libraries/haskell/SVGFonts {};
+
   symbol = callPackage ../development/libraries/haskell/symbol {};
 
   systemFilepath = callPackage ../development/libraries/haskell/system-filepath {};
