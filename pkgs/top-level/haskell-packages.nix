@@ -2120,6 +2120,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   snapletAcidState = callPackage ../development/libraries/haskell/snaplet-acid-state {};
 
+  snapBlaze = callPackage ../development/libraries/haskell/snap-blaze/default.nix {};
+
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
 
   snapLoaderDynamic = callPackage ../development/libraries/haskell/snap/loader-dynamic.nix {};
@@ -2226,6 +2228,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   split_0_2_1_1 = callPackage ../development/libraries/haskell/split/0.2.1.1.nix {};
   split_0_2_2 = callPackage ../development/libraries/haskell/split/0.2.2.nix {};
   split = self.split_0_2_2;
+
+  sqliteSimple = callPackage ../development/libraries/haskell/sqlite-simple/default.nix {};
 
   stbImage = callPackage ../development/libraries/haskell/stb-image {};
 
