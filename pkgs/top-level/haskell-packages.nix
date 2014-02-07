@@ -749,6 +749,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   Chart = callPackage ../development/libraries/haskell/Chart {};
   ChartCairo = callPackage ../development/libraries/haskell/Chart-cairo {};
+  ChartDiagrams = callPackage ../development/libraries/haskell/Chart-diagrams {};
   ChartGtk = callPackage ../development/libraries/haskell/Chart-gtk {};
 
   ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
