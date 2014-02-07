@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, python, intltool, pkgconfig
-, gnome3, dbus, libnotify, isocodes, gobjectIntrospection, wayland }:
+, gnome3, atk, pygobject3, dbus, libnotify, isocodes, gobjectIntrospection, wayland }:
 
 stdenv.mkDerivation rec {
   name = "ibus-${version}";
@@ -21,9 +21,12 @@ stdenv.mkDerivation rec {
 
   preBuild = "patchShebangs ./scripts";
 
-  postInstall  = ''
+  postInstall = ''
     for f in "$out"/bin/*; do
-      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$out/share"
+      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$out/share" \
+                       --prefix PYTHONPATH : "$(toPythonPath ${pygobject3})" \
+                       --prefix LD_LIBRARY_PATH : "${gnome3.gtk3}/lib:${atk}/lib:$out/lib" \
+                       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0"
     done
   '';
 
