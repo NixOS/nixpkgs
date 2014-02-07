@@ -1,5 +1,5 @@
 { fetchurl, stdenv, zlib, lzo, libtasn1, nettle
-, guileBindings, guile, pkgconfig }:
+, guileBindings, guile, pkgconfig, perl }:
 
 assert guileBindings -> guile != null;
 
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   })];
 
   configurePhase = ''
+    patchShebangs .
+
     ./configure --prefix="$out"                                 \
       --disable-dependency-tracking --enable-fast-install       \
       --with-lzo --with-libtasn1-prefix="${libtasn1}"		\
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
         else ""}
   '';
 
-  buildInputs = [ zlib lzo libtasn1 pkgconfig ]
+  buildInputs = [ zlib lzo libtasn1 pkgconfig perl ]
     ++ stdenv.lib.optional guileBindings guile;
 
   propagatedBuildInputs = [ nettle ];
