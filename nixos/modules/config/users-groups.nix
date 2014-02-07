@@ -252,6 +252,17 @@ let
     mv -f $1.tmp $1
   '';
 
+  idsAreUnique = set: idAttr: !(fold (name: args@{ dup, acc }:
+    let
+      id = builtins.toString (builtins.getAttr idAttr (builtins.getAttr name set));
+      exists = builtins.hasAttr id acc;
+      newAcc = acc // (builtins.listToAttrs [ { name = id; value = true; } ]);
+    in if dup then args else if exists
+      then builtins.trace "Duplicate ${idAttr} ${id}" { dup = true; acc = null; }
+      else { dup = false; acc = newAcc; }
+    ) { dup = false; acc = {}; } (builtins.attrNames set)).dup;
+  uidsAreUnique = idsAreUnique cfg.extraUsers "uid";
+  gidsAreUnique = idsAreUnique cfg.extraGroups "gid";
 in
 
 {
@@ -279,6 +290,14 @@ in
         this option is true, the initial password for a user will be set
         according to <literal>users.extraUsers</literal>, but existing passwords
         will not be changed.
+      '';
+    };
+
+    users.enforceIdUniqueness = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to require that no two users/groups share the same uid/gid.
       '';
     };
 
@@ -431,6 +450,8 @@ in
 
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
+
+    assertions = [ { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique); message = "uids and gids must be unique!"; } ];
 
   };
 
