@@ -132,6 +132,11 @@ let
     ++ optionals cfg.enableEmergencyMode [
       "emergency.target"
       "emergency.service"
+    ]
+
+    ++ optionals config.services.journald.enableHttpGateway [
+      "systemd-journal-gatewayd.socket"
+      "systemd-journal-gatewayd.service"
     ];
 
   upstreamWants =
@@ -372,6 +377,10 @@ let
 
       ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
             ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
+
+      ${ optionalString config.services.journald.enableHttpGateway ''
+      ln -s ../systemd-journal-gatewayd.service $out/multi-user-target.wants/
+      ''}
     ''; # */
 
 in
@@ -567,6 +576,14 @@ in
       '';
     };
 
+    services.journald.enableHttpGateway = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Enable journal http gateway
+      '';
+    };
+
     services.logind.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -673,6 +690,8 @@ in
       };
 
     users.extraGroups.systemd-journal.gid = config.ids.gids.systemd-journal;
+    users.extraUsers.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
+    users.extraGroups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.timers =
