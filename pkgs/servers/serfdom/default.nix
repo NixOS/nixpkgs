@@ -1,7 +1,6 @@
 { stdenv, fetchurl, fetchgit, go, lib }:
 
 let
-  inherit (builtins) attrNames listToAttrs getAttr;
   goDeps = [
     {
       dir    = "github.com/hashicorp";
