@@ -1491,6 +1491,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ivor = callPackage ../development/libraries/haskell/ivor {};
 
+  ixdopp = callPackage ../development/libraries/haskell/ixdopp {
+    preprocessorTools = self.preprocessorTools_0_1_3;
+  };
+
   ixShapable = callPackage ../development/libraries/haskell/ix-shapable {};
 
   JuicyPixels = callPackage ../development/libraries/haskell/JuicyPixels {};
@@ -1914,6 +1918,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
   pqueue = callPackage ../development/libraries/haskell/pqueue {};
+
+  preprocessorTools_0_1_3 = callPackage ../development/libraries/haskell/preprocessor-tools/0.1.3.nix {};
+
+  preprocessorTools_1_0_1 = callPackage ../development/libraries/haskell/preprocessor-tools/1.0.1.nix {};
+
+  preprocessorTools = self.preprocessorTools_1_0_1;
 
   prettyclass = callPackage ../development/libraries/haskell/prettyclass {};
 
