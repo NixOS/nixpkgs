@@ -126,6 +126,12 @@ stdenv.mkDerivation rec {
 
     find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
 
+    # HACK: For some reason, appending atk to the global patchelf rpath paths causes:
+    #   java: relocation error: java: symbol , version GLIBC_2.2.5 not defined in file libc.so.6 with link time reference
+    # Because only libglass.so needs atk, we put it only in it's rpath.
+    # This seems to work fine.
+    patchelf --set-rpath "$rpath:${atk}/lib" $out/jre/lib/${architecture}/libglass.so
+
     if test -z "$pluginSupport"; then
       rm -f $out/bin/javaws
       if test -n "$installjdk"; then
@@ -143,7 +149,7 @@ stdenv.mkDerivation rec {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.gcc.libc glib libxml2 libav_0_8 ffmpeg_0_6 libxslt mesa_noglu xlibs.libXxf86vm] ++
+    [stdenv.gcc.libc glib libxml2 libav_0_8 ffmpeg_0_6 libxslt mesa_noglu xlibs.libXxf86vm alsaLib fontconfig freetype gnome.pango gnome.gtk cairo gdk_pixbuf] ++
     (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt xlibs.libXrender stdenv.gcc.gcc] else []);
 
   passthru.mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
