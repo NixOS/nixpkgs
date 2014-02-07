@@ -92,10 +92,11 @@ in
       cp bin/serf $out/bin
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "Serf is a service discovery and orchestration tool that is decentralized, highly available, and fault tolerant";
       homepage = http://www.serfdom.io/;
-      license = stdenv.lib.licenses.mpl20;
-      platforms = stdenv.lib.platforms.linux;
+      license = licenses.mpl20;
+      maintainers = [ maintainers.msackman ];
+      platforms = platforms.linux;
     };
   }
