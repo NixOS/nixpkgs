@@ -1535,7 +1535,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
   lens_3_10_2 = callPackage ../development/libraries/haskell/lens/3.10.2.nix {};
-  lens_4_0 = callPackage ../development/libraries/haskell/lens/4.0.nix {};
+  lens_4_0_1 = callPackage ../development/libraries/haskell/lens/4.0.1.nix {
+    aeson = self.aeson_0_7_0_0;
+  };
   lens = self.lens_3_10_2;
 
   lensAeson = callPackage ../development/libraries/haskell/lens-aeson {};
