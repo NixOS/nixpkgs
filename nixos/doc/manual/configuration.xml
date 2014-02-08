@@ -1025,7 +1025,6 @@ users.extraUsers.alice =
     home = "/home/alice";
     description = "Alice Foobar";
     extraGroups = [ "wheel" ];
-    isSystemUser = false;
     useDefaultShell = true;
     openssh.authorizedKeys.keys = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
   };

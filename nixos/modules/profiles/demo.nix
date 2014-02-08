@@ -11,6 +11,6 @@
       createHome = true;
       useDefaultShell = true;
       password = "demo";
-      isSystemUser = false;
+      uid = 1000;
     };
 }
