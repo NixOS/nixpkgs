@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
-      install -Dm644 wqy-microhei.ttc $out/share/fonts
+      install -Dm644 wqy-microhei.ttc $out/share/fonts/wqy-microhei.ttc
     '';
 
   meta = {
