@@ -30,6 +30,7 @@
   ./hardware/network/ralink.nix
   ./hardware/network/rtl8192c.nix
   ./hardware/pcmcia.nix
+  ./hardware/video/bumblebee.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
