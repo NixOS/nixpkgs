@@ -132,7 +132,7 @@ rec {
             { inherit (def) file;
               value = listToAttrs (
                 imap (elemIdx: elem:
-                  { name = "unnamed-${toString defIdx}.${toString elemIdx}";
+                  { name = "${elem.name or "unnamed"}-${toString defIdx}.${toString elemIdx}";
                     value = elem;
                   }) def.value);
             }
