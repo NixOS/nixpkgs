@@ -19,6 +19,7 @@ in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
+    curlOpts = "--user-agent 'Mozilla/5.0'";
     sha256 = sourceInfo.hash;
   };
 
