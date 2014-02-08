@@ -13,4 +13,4 @@ import ./generic.nix (args // rec {
   features.needsCifsUtils = true;
   features.canDisableNetfilterConntrackHelpers = true;
   features.netfilterRPFilter = true;
-})
+} // (args.argsOverride or {}))

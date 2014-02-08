@@ -9,4 +9,4 @@ import ./generic.nix (args // rec {
   };
 
   features.iwlwifi = true;
-})
+} // (args.argsOverride or {}))
