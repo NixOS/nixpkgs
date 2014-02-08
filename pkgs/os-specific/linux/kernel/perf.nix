@@ -4,6 +4,9 @@
 
 assert withGtk -> gtk != null;
 
+let optionalString = stdenv.lib.optionalString;
+    versionOlder = stdenv.lib.versionOlder;
+in
 stdenv.mkDerivation {
   name = "perf-linux-${kernel.version}";
 
@@ -12,7 +15,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     cd tools/perf
     sed -i s,/usr/include/elfutils,$elfutils/include/elfutils, Makefile
-    patch -p1 < ${./perf.diff}
+    ${optionalString (versionOlder kernel.version "3.13") "patch -p1 < ${./perf.diff}"}
     [ -f bash_completion ] && sed -i 's,^have perf,_have perf,' bash_completion
     export makeFlags="DESTDIR=$out $makeFlags"
   '';
