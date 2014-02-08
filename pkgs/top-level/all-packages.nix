@@ -2794,7 +2794,8 @@ let
 
   lessc = callPackage ../development/compilers/lessc { };
 
-  llvm = llvmPackages.llvm;
+  llvm = if stdenv.isDarwin then llvm_33 # until someone solves build problems with _34
+    else llvmPackages.llvm;
 
   llvm_34 = llvmPackages.llvm;
   llvm_33 = llvm_v ../development/compilers/llvm/3.3/llvm.nix;
