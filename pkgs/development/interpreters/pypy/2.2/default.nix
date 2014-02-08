@@ -87,7 +87,7 @@ let
       homepage = "http://pypy.org/";
       description = "PyPy is a fast, compliant alternative implementation of the Python language (2.7.3)";
       license = licenses.mit;
-      platforms = platforms.all;
+      platforms = platforms.linux;
       maintainers = with maintainers; [ iElectric ];
     };
   };
