@@ -2809,7 +2809,7 @@ let
     inherit newScope fetchurl;
     isl = isl_0_12;
     stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideGCC stdenv gccApple
+      then stdenvAdapters.overrideGCC stdenv gcc48
       else stdenv;
   });
   llvmPackagesSelf = import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; };
