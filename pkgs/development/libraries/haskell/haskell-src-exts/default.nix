@@ -4,15 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "haskell-src-exts";
-  version = "1.14.0";
-  sha256 = "070khsw56xwyrclamv5wckj9na2xbzibv702xx52ik2wbs21dr0d";
+  version = "1.14.0.1";
+  sha256 = "1bsqjj4hy8mqprs44yfy1c96678w9q708yc40g5ygqfyhg0hd29s";
   buildDepends = [ cpphs ];
   testDepends = [
     filepath smallcheck tasty tastyHunit tastySmallcheck
   ];
   buildTools = [ happy ];
   doCheck = false;
-  preConfigure = "runhaskell Setup.hs clean";
   meta = {
     homepage = "https://github.com/haskell-suite/haskell-src-exts";
     description = "Manipulating Haskell source: abstract syntax, lexer, parser, and pretty-printer";

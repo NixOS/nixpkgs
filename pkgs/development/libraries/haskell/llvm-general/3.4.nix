@@ -1,7 +1,6 @@
 { cabal, HUnit, llvmConfig, llvmGeneralPure, mtl, parsec
 , QuickCheck, setenv, testFramework, testFrameworkHunit
 , testFrameworkQuickcheck2, transformers, utf8String
-, ncurses, zlib
 }:
 
 cabal.mkDerivation (self: {

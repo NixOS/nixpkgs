@@ -58,7 +58,8 @@ in
 
   config = {
 
-    environment.systemPackages = [ pkgs.shadow ];
+    environment.systemPackages =
+      pkgs.lib.optional config.users.mutableUsers pkgs.shadow;
 
     environment.etc =
       [ { # /etc/login.defs: global configuration for pwdutils.  You
@@ -94,6 +95,8 @@ in
         groupmems = { rootOK = true; };
         groupdel = { rootOK = true; };
         login = { startSession = true; allowNullPassword = true; showMotd = true; updateWtmp = true; };
+        chpasswd = { rootOK = true; };
+        chgpasswd = { rootOK = true; };
       };
 
     security.setuidPrograms = [ "passwd" "chfn" "su" "newgrp" ];

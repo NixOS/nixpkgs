@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     [ intltool pkgconfig ibus gtk glib gsettings_desktop_schemas libnotify gnome_desktop
       lcms2 libXtst libxkbfile pulseaudio libcanberra_gtk3 upower colord libgweather
       polkit geocode_glib geoclue2 librsvg xf86_input_wacom udev libwacom libxslt
-      libtool docbook_xsl docbook_xsl_ns makeWrapper ];
+      libtool docbook_xsl docbook_xsl_ns makeWrapper gnome_themes_standard ];
 
   postInstall = ''
     wrapProgram "$out/libexec/gnome-settings-daemon-localeexec" \

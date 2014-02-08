@@ -24,6 +24,8 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "terminfo" ];
 
+  patches = [ ./rxvt-unicode-9.06-font-width.patch ];
+
   preConfigure =
     ''
       mkdir -p $terminfo/share/terminfo

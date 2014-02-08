@@ -97,7 +97,7 @@ let
     (import ../build-support/trivial-builders.nix { inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
 
   stdenvAdapters =
-    import ../stdenv/adapters.nix { inherit (pkgs) dietlibc fetchurl runCommand; };
+    import ../stdenv/adapters.nix pkgs;
 
 
   # Allow packages to be overriden globally via the `packageOverrides'
@@ -395,6 +395,12 @@ let
   setJavaClassPath = makeSetupHook { } ../build-support/setup-hooks/set-java-classpath.sh;
 
   fixDarwinDylibNames = makeSetupHook { } ../build-support/setup-hooks/fix-darwin-dylib-names.sh;
+
+  enableCoverageInstrumentation = makeSetupHook { } ../build-support/setup-hooks/enable-coverage-instrumentation.sh;
+
+  makeCoverageAnalysisReport = makeSetupHook
+    { deps = [ pkgs.lcov pkgs.enableCoverageInstrumentation ]; }
+    ../build-support/setup-hooks/make-coverage-analysis-report.sh;
 
 
   ### TOOLS
@@ -782,12 +788,7 @@ let
 
   despotify = callPackage ../development/libraries/despotify { };
 
-  dev86 = callPackage ../development/compilers/dev86 {
-    /* Using GNU Make 3.82 leads to this:
-         make[4]: *** No rule to make target `__ldivmod.o)'
-       So use 3.81.  */
-    stdenv = overrideInStdenv stdenv [gnumake381];
-  };
+  dev86 = callPackage ../development/compilers/dev86 { };
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
@@ -897,6 +898,8 @@ let
   fail2ban = callPackage ../tools/security/fail2ban { };
 
   fakeroot = callPackage ../tools/system/fakeroot { };
+
+  fakechroot = callPackage ../tools/system/fakechroot { };
 
   fcitx = callPackage ../tools/inputmethods/fcitx { };
 
@@ -1734,7 +1737,9 @@ let
 
   privateer = callPackage ../games/privateer { };
 
-  rtmpdump = callPackage ../tools/video/rtmpdump { };
+  rtmpdump = callPackage ../tools/video/rtmpdump {
+    gnutls = gnutls31; # gnutls32: undefined reference to gnutls_calc_dh_{key,secret}
+  };
 
   reaverwps = callPackage ../tools/networking/reaver-wps {};
 
@@ -2014,6 +2019,8 @@ let
   vde2 = callPackage ../tools/networking/vde2 { };
 
   vboot_reference = callPackage ../tools/system/vboot_reference { };
+
+  vcsh = callPackage ../applications/version-management/vcsh { };
 
   verilog = callPackage ../applications/science/electronics/verilog {};
 
@@ -3060,9 +3067,9 @@ let
     inherit stdenv coreutils zlib;
   };
 
-  wrapClang = wrapClangWith (import ../build-support/clang-wrapper) glibc;
+  wrapClang = wrapClangWith (makeOverridable (import ../build-support/clang-wrapper)) glibc;
 
-  wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
+  wrapGCC = wrapGCCWith (makeOverridable (import ../build-support/gcc-wrapper)) glibc;
 
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
@@ -4173,7 +4180,9 @@ let
 
   glew = callPackage ../development/libraries/glew { };
 
-  glfw = callPackage ../development/libraries/glfw { };
+  glfw = glfw3;
+  glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
+  glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
 
   glibc = callPackage ../development/libraries/glibc/2.18 {
     kernelHeaders = linuxHeaders;
@@ -4320,7 +4329,8 @@ let
 
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
-  gnutls = callPackage ../development/libraries/gnutls {
+  gnutls = gnutls32;
+  gnutls31 = callPackage ../development/libraries/gnutls {
     guileBindings = config.gnutls.guile or true;
   };
 
@@ -4606,7 +4616,9 @@ let
 
   libchamplain_0_6 = callPackage ../development/libraries/libchamplain/0.6.nix {};
 
-  libchop = callPackage ../development/libraries/libchop { };
+  libchop = callPackage ../development/libraries/libchop {
+    gnutls = gnutls31;
+  };
 
   libcm = callPackage ../development/libraries/libcm { };
 
@@ -5637,6 +5649,8 @@ let
   };
 
   stlink = callPackage ../development/tools/misc/stlink { };
+
+  steghide = callPackage ../tools/security/steghide {};
 
   stepmania = callPackage ../games/stepmania {};
 
@@ -7921,11 +7935,6 @@ let
 
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
-  gimp_2_6 = callPackage ../applications/graphics/gimp {
-    inherit (gnome) libart_lgpl;
-    libpng = libpng12;
-  };
-
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
     inherit (gnome) libart_lgpl;
     webkit = null;
@@ -8085,6 +8094,8 @@ let
   guitone = callPackage ../applications/version-management/guitone { };
 
   gv = callPackage ../applications/misc/gv { };
+
+  guvcview = callPackage ../os-specific/linux/guvcview { };
 
   hello = callPackage ../applications/misc/hello/ex-2 { };
 
@@ -9580,9 +9591,11 @@ let
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
 
-  kde4 = recurseIntoAttrs pkgs.kde410;
+  kde4 = recurseIntoAttrs pkgs.kde411;
 
-  kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde411 );
+# kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde412 );
+
+  kde4_prev = recurseIntoAttrs pkgs.kde410;
 
   kde410 = kdePackagesFor (pkgs.kde410 // {
       boost = boost149;
