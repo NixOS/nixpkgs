@@ -4378,7 +4378,8 @@ let
     stdenv = overrideGCC stdenv gcc47;
   };
 
-  gnutls = callPackage ../development/libraries/gnutls {
+  gnutls = gnutls31;
+  gnutls31 = callPackage ../development/libraries/gnutls {
     guileBindings = config.gnutls.guile or true;
   };
 
