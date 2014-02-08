@@ -899,6 +899,8 @@ let
 
   fakeroot = callPackage ../tools/system/fakeroot { };
 
+  fakechroot = callPackage ../tools/system/fakechroot { };
+
   fcitx = callPackage ../tools/inputmethods/fcitx { };
 
   fcron = callPackage ../tools/system/fcron { };
@@ -2015,6 +2017,8 @@ let
   vde2 = callPackage ../tools/networking/vde2 { };
 
   vboot_reference = callPackage ../tools/system/vboot_reference { };
+
+  vcsh = callPackage ../applications/version-management/vcsh { };
 
   verilog = callPackage ../applications/science/electronics/verilog {};
 
@@ -4176,7 +4180,9 @@ let
 
   glew = callPackage ../development/libraries/glew { };
 
-  glfw = callPackage ../development/libraries/glfw { };
+  glfw = glfw3;
+  glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
+  glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
 
   glibc = callPackage ../development/libraries/glibc/2.18 {
     kernelHeaders = linuxHeaders;
@@ -4323,7 +4329,8 @@ let
 
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
-  gnutls = callPackage ../development/libraries/gnutls {
+  gnutls = gnutls32;
+  gnutls31 = callPackage ../development/libraries/gnutls {
     guileBindings = config.gnutls.guile or true;
   };
 
@@ -5640,6 +5647,8 @@ let
   };
 
   stlink = callPackage ../development/tools/misc/stlink { };
+
+  steghide = callPackage ../tools/security/steghide {};
 
   stepmania = callPackage ../games/stepmania {};
 
@@ -7928,11 +7937,6 @@ let
 
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
-  gimp_2_6 = callPackage ../applications/graphics/gimp {
-    inherit (gnome) libart_lgpl;
-    libpng = libpng12;
-  };
-
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
     inherit (gnome) libart_lgpl;
     webkit = null;
@@ -8092,6 +8096,8 @@ let
   guitone = callPackage ../applications/version-management/guitone { };
 
   gv = callPackage ../applications/misc/gv { };
+
+  guvcview = callPackage ../os-specific/linux/guvcview { };
 
   hello = callPackage ../applications/misc/hello/ex-2 { };
 

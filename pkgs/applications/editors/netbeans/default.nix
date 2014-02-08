@@ -11,10 +11,10 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "netbeans-7.2";
+  name = "netbeans-7.4";
   src = fetchurl {
-    url = http://download.netbeans.org/netbeans/7.2/final/zip/netbeans-7.2-201207171143-ml.zip;
-    sha256 = "18ya1w291hdnc35vb12yqnai82wmqm7351wn82fax12kzha5fmci";
+    url = http://download.netbeans.org/netbeans/7.4/final/zip/netbeans-7.4-201310111528.zip;
+    sha256 = "0nrnghnsdix5cmp86xi1gmvarhjk2k8mlbld3dfa9impm8gpv6mx";
   };
   buildCommand = ''
     # Unpack and copy the stuff
@@ -25,7 +25,9 @@ stdenv.mkDerivation {
     # Create a wrapper capable of starting it
     mkdir -p $out/bin
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
-      --prefix PATH : ${jdk}/bin:${which}/bin
+      --prefix PATH : ${jdk}/bin:${which}/bin \
+      --prefix JAVA_HOME : ${jdk}/lib/openjdk \
+      --add-flags "--jdkhome ${jdk}/lib/openjdk"
       
     # Create desktop item, so we can pick it from the KDE/GNOME menu
     mkdir -p $out/share/applications

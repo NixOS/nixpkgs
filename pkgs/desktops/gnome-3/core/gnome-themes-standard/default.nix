@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool gtk3 librsvg pkgconfig pango atk gtk2 gdk_pixbuf ];
 
   preConfigure = ''
-    cat ${gdk_pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache ${librsvg}/lib/gdk-pixbuf/loaders.cache > loaders.cache
-    export GDK_PIXBUF_MODULE_FILE=`readlink -e loaders.cache`
+    mkdir -p $out/lib/gdk-pixbuf/
+    cat ${gdk_pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache ${librsvg}/lib/gdk-pixbuf/loaders.cache > $out/lib/gdk-pixbuf/loaders.cache
+    export GDK_PIXBUF_MODULE_FILE=`readlink -e $out/lib/gdk-pixbuf/loaders.cache`
   '';
 
   meta = with stdenv.lib; {

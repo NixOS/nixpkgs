@@ -17,6 +17,7 @@ cabal.mkDerivation (self: {
     binary doctest filepath HUnit lens simpleReflect testFramework
     testFrameworkHunit
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/ekmett/linear/";
     description = "Linear Algebra";
