@@ -116,6 +116,7 @@ rec {
       for i in $out/lib/$libDir/{plugin-container,xulrunner,xulrunner-stub}; do
           wrapProgram $i --prefix LD_LIBRARY_PATH ':' "$out/lib/$libDir"
       done
+
       rm -f $out/bin/run-mozilla.sh
     ''; # */
 
