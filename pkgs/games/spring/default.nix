@@ -14,23 +14,24 @@ stdenv.mkDerivation rec {
     sha256 = "1axyqkxgv3a0zg0afzlc7j3lyi412zd551j317ci41yqz2qzf0px";
   };
 
-  buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL
-    xlibs.libX11 xlibs.libXcursor mesa glew asciidoc libxslt docbook_xsl curl ]
+  cmakeFlags = ["-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON"
+                "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON"
+                "-DPREFER_STATIC_LIBS=OFF"];
+
+  buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL glibc
+    xlibs.libX11 xlibs.libXcursor mesa glew asciidoc libxslt docbook_xsl curl
+    docbook_xsl_ns ]
     ++ stdenv.lib.optional withAI jdk
     ++ stdenv.lib.optional withAI python;
 
-  prePatch = ''
-    substituteInPlace cont/base/make_gamedata_arch.sh --replace "#!/bin/sh" "#!${stdenv.shell}/bin/sh" \
-      --replace "which" "type -p"
-  '';
-
+  # reported upstream http://springrts.com/mantis/view.php?id=4305
   #enableParallelBuilding = true; # occasionally missing generated files on Hydra
 
   meta = with stdenv.lib; {
     homepage = http://springrts.com/;
     description = "A powerful real-time strategy (RTS) game engine";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom maintainers.qknight ];
+    maintainers = [ maintainers.phreedom maintainers.qknight maintainers.iElectric ];
     platforms = platforms.mesaPlatforms;
   };
 }
