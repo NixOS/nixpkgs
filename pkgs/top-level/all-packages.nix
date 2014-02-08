@@ -1282,6 +1282,8 @@ let
 
   libshout = callPackage ../development/libraries/libshout { };
 
+  libqmi = callPackage ../development/libraries/libqmi { };
+
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
   logcheck = callPackage ../tools/system/logcheck {
