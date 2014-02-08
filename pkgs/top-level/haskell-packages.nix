@@ -1216,6 +1216,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     libc = pkgs.stdenv.gcc.libc;
   };
 
+  gtkTraymanager = callPackage ../development/libraries/haskell/gtk-traymanager {};
+
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
   groups = callPackage ../development/libraries/haskell/groups {};
