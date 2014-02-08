@@ -1284,6 +1284,8 @@ let
 
   libqmi = callPackage ../development/libraries/libqmi { };
 
+  libmbim = callPackage ../development/libraries/libmbim { };
+
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
   logcheck = callPackage ../tools/system/logcheck {
