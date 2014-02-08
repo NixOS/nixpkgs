@@ -684,6 +684,8 @@ let
 
   colord = callPackage ../tools/misc/colord { };
 
+  colord-gtk = callPackage ../tools/misc/colord-gtk { };
+
   colordiff = callPackage ../tools/text/colordiff { };
 
   connect = callPackage ../tools/networking/connect { };
