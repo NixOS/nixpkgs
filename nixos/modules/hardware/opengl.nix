@@ -2,19 +2,19 @@
 let
   inherit (pkgs.lib) mkOption types mkIf optional optionals elem optionalString optionalAttrs;
 
-  cfg = config.services.mesa;
+  cfg = config.hardware.opengl;
 
   kernelPackages = config.boot.kernelPackages;
 in {
   options = {
-    services.mesa.enable = mkOption {
-      description = "Whether this configuration requires mesa.";
+    hardware.opengl.enable = mkOption {
+      description = "Whether this configuration requires opengl.";
       type = types.bool;
       default = false;
       internal = true;
     };
 
-    services.mesa.driSupport = mkOption {
+    hardware.opengl.driSupport = mkOption {
       type = types.bool;
       default = true;
       description = ''
@@ -23,18 +23,18 @@ in {
       '';
     };
 
-    services.mesa.driSupport32Bit = mkOption {
+    hardware.opengl.driSupport32Bit = mkOption {
       type = types.bool;
       default = false;
       description = ''
         On 64-bit systems, whether to support Direct Rendering for
         32-bit applications (such as Wine).  This is currently only
         supported for the <literal>nvidia</literal> driver and for
-        <literal>mesa</literal>.
+        <literal>Mesa</literal>.
       '';
     };
 
-    services.mesa.s3tcSupport = mkOption {
+    hardware.opengl.s3tcSupport = mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -47,15 +47,15 @@ in {
     };
 
 
-    services.mesa.videoDrivers = mkOption {
+    hardware.opengl.videoDrivers = mkOption {
       type = types.listOf types.str;
       # !!! We'd like "nv" here, but it segfaults the X server.
       default = [ "ati" "cirrus" "intel" "vesa" "vmware" ];
       example = [ "vesa" ];
       description = ''
-        The names of the video drivers that the mesa should
-        support.  Mesa will try all of the drivers listed
-        here until it finds one that supports your video card.
+        The names of the opengl video drivers the configuration
+        supports. They will be tried in order until one that
+        supports your card is found.
       '';
     };
   };

@@ -73,6 +73,6 @@ in {
       hwaccel
     '';
 
-    services.mesa.enable = mkIf cfg.hwRender true;
+    hardware.opengl.enable = mkIf cfg.hwRender true;
   };
 }
