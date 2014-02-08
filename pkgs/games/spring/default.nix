@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, cmake, lzma, boost, libdevil, zlib, p7zip
+{ stdenv, fetchurl, cmake, lzma, boost, libdevil, zlib, p7zip, glibc
 , openal, libvorbis, glew, freetype, xlibs, SDL, mesa, binutils
-, asciidoc, libxslt, docbook_xsl, curl
+, asciidoc, libxslt, docbook_xsl, docbook_xsl_ns, curl
 , jdk ? null, python ? null
 , withAI ? true # support for AI Interfaces and Skirmish AIs
 }:
+
 stdenv.mkDerivation rec {
 
   name = "spring-${version}";
