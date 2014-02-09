@@ -1508,6 +1508,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   json = callPackage ../development/libraries/haskell/json {};
 
+  jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {
+    aeson = self.aeson_0_7_0_0;
+    lens = self.lens_4_0_1;
+  };
+
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
   kansasLava = callPackage ../development/libraries/haskell/kansas-lava {};
