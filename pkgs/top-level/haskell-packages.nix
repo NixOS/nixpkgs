@@ -944,6 +944,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   Diff = callPackage ../development/libraries/haskell/Diff {};
 
+  diff3 = callPackage ../development/libraries/haskell/diff3 {};
+
   digest = callPackage ../development/libraries/haskell/digest {
     inherit (pkgs) zlib;
   };
