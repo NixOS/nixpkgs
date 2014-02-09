@@ -9044,8 +9044,8 @@ let
   };
 
   weechat = callPackage ../applications/networking/irc/weechat {
-    # weechat crashes on /exit when using gnutls 3.1.x. gnutls 3.2.x works.
-    gnutls = gnutls32;
+    # weechat doesn't exit with gnutls32. Use 3.1 for now.
+    gnutls = gnutls31;
   };
 
   weston = callPackage ../applications/window-managers/weston { };
