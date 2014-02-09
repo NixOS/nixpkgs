@@ -1167,6 +1167,11 @@ let
 
   iasl = callPackage ../development/compilers/iasl { };
 
+  ibus_chewing = callPackage ../development/libraries/ibus-chewing {
+    inherit (xlibs);
+    gconf = gnome.GConf;
+  };
+
   icecast = callPackage ../servers/icecast { };
 
   icoutils = callPackage ../tools/graphics/icoutils { };
