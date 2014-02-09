@@ -32,12 +32,44 @@ in
           Parameters added to the Memtest86+ command line. As of memtest86+ 5.01
           the following list of (apparently undocumented) parameters are
           accepted:
-            console=... -- set up a serial console.
-            btrace      -- enable boot trace.
-            maxcpus=... -- limit number of CPUs.
-            onepass     -- run one pass and exit if there are no errors.
-            tstlist=... -- list of tests to run.
-            cpumask=... -- set a CPU mask, to select CPUs to use for testing.
+
+          <itemizedlist>
+
+          <listitem>
+            <para><literal>console=...</literal>, set up a serial console.
+            Examples:
+            <literal>console=ttyS0</literal>,
+            <literal>console=ttyS0,9600</literal> or
+            <literal>console=ttyS0,115200n8</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>btrace</literal>, enable boot trace.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>maxcpus=N</literal>, limit number of CPUs.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>onepass</literal>, run one pass and exit if there
+            are no errors.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>tstlist=...</literal>, list of tests to run.
+            Example: <literal>0,1,2</literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>cpumask=...</literal>, set a CPU mask, to select CPUs
+            to use for testing.</para>
+          </listitem>
+
+          </itemizedlist>
+
+          This list of command line options was obtained by reading the
+          Memtest86+ source code.
         '';
       };
 
