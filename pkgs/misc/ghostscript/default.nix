@@ -3,7 +3,9 @@
 , libiconvOrEmpty
 , x11Support ? false, x11 ? null
 , cupsSupport ? false, cups ? null
-, gnuFork ? true
+
+, versionedDerivation
+, version ? "9.06"
 }:
 
 assert x11Support -> x11 != null;
@@ -29,27 +31,67 @@ let
     maintainers = [ stdenv.lib.maintainers.viric ];
   };
 
-  gnuForkSrc = rec {
+in
+
+versionedDerivation "ghostscript" version {
+  "gnu-fork-9.04.x" = rec {
+    # !? fails to build, did I make a mistake?
+
     name = "ghostscript-9.04.1";
     src = fetchurl {
       url = "mirror://gnu/ghostscript/gnu-${name}.tar.bz2";
       sha256 = "0zqa6ggbkdqiszsywgrra4ij0sddlmrfa50bx2mh568qid4ga0a2";
     };
 
-    meta = meta_common;
+    configureFlags =
+      [ (if cupsSupport then "--enable-cups --with-install-cups" else "--disable-cups")
+      ];
+
     patches = [ ./purity.patch ];
+    meta = meta_common;
   };
 
-  mainlineSrc = rec {
+  "9.06" = rec {
+    # This still contains raster for cups  (eg gstopxl, gstoraster)
     name = "ghostscript-9.06";
+
     src = fetchurl {
       url = "http://downloads.ghostscript.com/public/${name}.tar.bz2";
       sha256 = "014f10rxn4ihvcr1frby4szd1jvkrwvmdhnbivpp55c9fssx3b05";
     };
+    configureFlags =
+      [ (if cupsSupport then "--enable-cups --with-install-cups" else "--disable-cups")
+      ];
+
+    preConfigure = ''
+      rm -R libpng jpeg lcms{,2} tiff freetype jbig2dec expat openjpeg
+
+      substituteInPlace base/unix-aux.mak --replace "INCLUDE=/usr/include" "INCLUDE=/no-such-path"
+      sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@" -i base/unix-aux.mak
+    '';
+
     meta = meta_common // {
       homepage = "http://www.ghostscript.com/";
       description = "GPL Ghostscript, a PostScript interpreter";
     };
+
+  };
+
+  "9.10" = rec {
+    # This no longer contains raster for cups, should be contained in cups-filters now?
+
+    name = "ghostscript-9.10";
+    src = fetchurl {
+      url = "http://downloads.ghostscript.com/public/${name}.tar.bz2";
+      sha256 = "106mglk77dhdra1m0ddnmaq645xj1aj45qvlh8izv3xx4cdrv3bc";
+    };
+
+
+    # enableParallelBuilding = true; # set to false?
+
+    configureFlags =
+      [ (if cupsSupport then "--enable-cups" else "--disable-cups")
+      ];
 
     preConfigure = ''
       rm -R libpng jpeg lcms{,2} tiff freetype jbig2dec expat openjpeg
@@ -58,14 +100,13 @@ let
       sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@" -i base/unix-aux.mak
     '';
     patches = [];
+
+    meta = meta_common // {
+      homepage = "http://www.ghostscript.com/";
+      description = "GPL Ghostscript, a PostScript interpreter";
+    };
   };
-
-  variant = if gnuFork then gnuForkSrc else mainlineSrc;
-
-in
-
-stdenv.mkDerivation rec {
-  inherit (variant) name src meta;
+} {
 
   fonts = [
     (fetchurl {
@@ -95,7 +136,12 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS =
     "-lz -rpath${ if stdenv.isDarwin then " " else "="}${freetype}/lib";
 
-  patches = variant.patches ++ [ ./urw-font-files.patch ];
+  patches = [ ./urw-font-files.patch ];
+
+  configureFlags =
+    [ "--with-system-libtiff"
+      (if x11Support then "--with-x" else "--without-x")
+    ];
 
   preConfigure = ''
     # "ijs" is impure: it contains symlinks to /usr/share/automake etc.!
@@ -103,13 +149,7 @@ stdenv.mkDerivation rec {
 
     # Don't install stuff in the Cups store path.
     makeFlagsArray=(CUPSSERVERBIN=$out/lib/cups CUPSSERVERROOT=$out/etc/cups CUPSDATA=$out/share/cups)
-  '' + stdenv.lib.optionalString (variant ? preConfigure) variant.preConfigure;
-
-  configureFlags =
-    [ "--with-system-libtiff"
-      (if x11Support then "--with-x" else "--without-x")
-      (if cupsSupport then "--enable-cups --with-install-cups" else "--disable-cups")
-    ];
+  '';
 
   doCheck = true;
 

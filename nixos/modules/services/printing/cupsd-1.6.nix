@@ -1,5 +1,30 @@
 { config, pkgs, ... }:
 
+/* Major changes compared to 1.5.4:
+   cups.conf has been split into cups.conf and cups-files.conf
+   See conf.c
+
+   Default filter chain is PDF ? when did this change happen?
+
+  filters have been split into extra package => cupsFilters.
+  They build but cause collisions
+
+  TODO: 
+    I've moved all settings to cups-files.conf but didn't check which new
+    options exist and should be set.
+
+    Adding USB printers only works when allowing access to the USB device:
+
+    chmod 777 /dev/bus/usb/002/003  The 002 003 numbers can be determined by
+    lsusb easily
+
+    Printing the CUPS test page doesn't work yet (fix filters, in which way?)
+
+  Note: 1.7 does only contain small changes such as compressing print files
+  when sending them over the network - so probably upgrading version
+  will just work
+*/
+
 with pkgs.lib;
 
 let
@@ -7,6 +32,8 @@ let
   cfg = config.services.printing;
 
   inherit (cfg) cupsPackages;
+
+  gutenprintPackageList = optional (cfg.gutenprintPackage != null) cfg.gutenprintPackage;
 
   additionalBackends = pkgs.runCommand "additional-cups-backends" { }
     ''
@@ -37,6 +64,7 @@ let
     paths = cfg.drivers;
     pathsToLink = [ "/lib/cups" "/share/cups" "/bin" ];
     postBuild = cfg.bindirCmds;
+    ignoreCollisions = true;
   };
 
 in
@@ -49,7 +77,6 @@ in
     services.printing = {
 
       enable = mkOption {
-        type = types.bool;
         default = false;
         description = ''
           Whether to enable printing support through the CUPS daemon.
@@ -57,8 +84,6 @@ in
       };
 
       bindirCmds = mkOption {
-        type = types.lines;
-        internal = true;
         default = "";
         description = ''
           Additional commands executed while creating the directory
@@ -67,7 +92,6 @@ in
       };
 
       cupsdConf = mkOption {
-        type = types.lines;
         default = "";
         example =
           ''
@@ -80,11 +104,32 @@ in
         '';
       };
 
+      cupsFilesConf = mkOption {
+        default = "";
+        example =
+          ''
+          ServerRoot /etc/cups
+          '';
+        description = ''
+          The contents of the configuration file of the CUPS daemon
+          (<filename>cups-files.conf</filename>).
+        '';
+      };
+
+      gutenprintPackage = mkOption {
+        default = null;
+        description = ''
+          Enable gutenprint by setting this options to config.services.printing.cupsPackages.gutenprint(CVS).
+          Unless this setting is null (default) gutenprint.ppds will be symlinked to /run/current-system/sw/ppds/.
+          When installing a new printer in cupsd web interface select the matching ppd file.
+        '';
+      };
+
       cupsPackages = mkOption {
         # cups is a dependency of quite a lot of packages, same applies to ghostscript
         # So it might be a good idea to allow overriding anything easily
         default =
-          let cups = pkgs.cups.override { version = "1.5.4"; }; in
+          let cups = pkgs.cups.override { version = "1.7.x"; }; in
 
           # include this cups
           { inherit cups; }
@@ -93,9 +138,8 @@ in
           # the dependency chain
           // (mapAttrs (name: value: value.deepOverride {
                inherit cups;
-               # newer version do no longer contain some files
-               ghostscript = pkgs.ghostscriptMainline_9_06;
-             }) { inherit (pkgs) cups_pdf_filter samba splix ghostscript gutenprint gutenprintCVS; });
+               ghostscript = pkgs.ghostscriptMainline_9_10;
+             }) { inherit (pkgs) cupsFilters cups_pdf_filter samba splix ghostscript gutenprint gutenprintCVS; });
 
         description = ''
           A attrset containing all cups related derivations to be used to build
@@ -104,16 +148,14 @@ in
       };
 
       drivers = mkOption {
-        type = types.listOf types.path;
-        example = literalExample "[ pkgs.splix ]";
+        example = [ config.services.printing.cupsPackages.splix ];
         description = ''
-          CUPS drivers to use. Drivers provided by CUPS, Ghostscript
-          and Samba are added unconditionally.
+          CUPS drivers (CUPS, gs and samba are added unconditionally).
+          gutenprint see <option>gutenprintPackage</option>
         '';
       };
 
       tempDir = mkOption {
-        type = types.path;
         default = "/tmp";
         example = "/tmp/cups";
         description = ''
@@ -136,7 +178,7 @@ in
         description = "CUPS printing services";
       };
 
-    environment.systemPackages = [ cupsPackages.cups ];
+    environment.systemPackages = [ cupsPackages.cups ] ++ gutenprintPackageList;
 
     services.dbus.packages = [ cupsPackages.cups ];
 
@@ -161,22 +203,23 @@ in
             mkdir -m 0755 -p ${cfg.tempDir}
           '';
 
-        serviceConfig.Type = "forking";
-        serviceConfig.ExecStart = "@${cupsPackages.cups}/sbin/cupsd cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf}";
+        # serviceConfig.Type = "forking";
+        serviceConfig.ExecStart = 
+          let cupsdConf = pkgs.writeText "cupsd.conf" cfg.cupsdConf;
+              cupsFilesConf = pkgs.writeText "cups-files.conf" cfg.cupsFilesConf;
+          in "@${cupsPackages.cups}/sbin/cupsd cupsd -f -c ${cupsdConf} -s ${cupsFilesConf}";
       };
 
     services.printing.drivers =
-      [ cupsPackages.cups cupsPackages.cups_pdf_filter cupsPackages.ghostscript additionalBackends pkgs.perl pkgs.coreutils pkgs.gnused ];
+      [ cupsPackages.cups
+        cupsPackages.cupsFilters
+        # cupsPackages.cups_pdf_filter # does not compile ..
+        cupsPackages.ghostscript additionalBackends pkgs.perl pkgs.coreutils pkgs.gnused
+      ] ++ gutenprintPackageList;
 
-    # Set LogLevel to debug2 to get most useful information
-    services.printing.cupsdConf =
+    services.printing.cupsFilesConf =
       ''
-        LogLevel info
-
-        SystemGroup root wheel
-
-        Listen localhost:631
-        Listen /var/run/cups/cups.sock
+        SystemGroup root
 
         # Note: we can't use ${cupsPackages.cups}/etc/cups as the ServerRoot, since
         # CUPS will write in the ServerRoot when e.g. adding new printers
@@ -185,8 +228,6 @@ in
 
         ServerBin ${bindir}/lib/cups
         DataDir ${bindir}/share/cups
-
-        SetEnv PATH ${bindir}/lib/cups/filter:${bindir}/bin:${bindir}/sbin
 
         AccessLog syslog
         ErrorLog syslog
@@ -200,6 +241,21 @@ in
         # these programs to run as `lp' as well.
         User cups
         Group lp
+      '';
+
+    # Set LogLevel to debug2 to get most useful information
+    services.printing.cupsdConf =
+      ''
+        # See AccessLog in cups-files.conf
+        LogLevel debug3
+
+        Listen localhost:631
+        Listen /var/run/cups/cups.sock
+
+        SetEnv PATH ${bindir}/lib/cups/filter:${bindir}/bin:${bindir}/sbin
+
+        AccessLogLevel all
+
 
         Browsing On
         BrowseOrder allow,deny
@@ -247,7 +303,8 @@ in
         </Policy>
       '';
 
-    security.pam.services.cups = {};
+    # Allow CUPS to receive IPP printer announcements via UDP.
+    networking.firewall.allowedUDPPorts = [ 631 ];
 
   };
 }
