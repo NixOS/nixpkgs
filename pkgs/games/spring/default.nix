@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, cmake, lzma, boost, libdevil, zlib, p7zip, glibc
+{ stdenv, fetchurl, cmake, lzma, boost, libdevil, zlib, p7zip
 , openal, libvorbis, glew, freetype, xlibs, SDL, mesa, binutils
-, asciidoc, libxslt, docbook_xsl, docbook_xsl_ns, curl
+, asciidoc, libxslt, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
 , jdk ? null, python ? null
 , withAI ? true # support for AI Interfaces and Skirmish AIs
 }:
@@ -17,16 +17,21 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = ["-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON"
                 "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON"
-                "-DPREFER_STATIC_LIBS=OFF"];
+                "-DPREFER_STATIC_LIBS:BOOL=OFF"];
 
-  buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL glibc
-    xlibs.libX11 xlibs.libXcursor mesa glew asciidoc libxslt docbook_xsl curl
+  buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL stdenv.glibc 
+    xlibs.libX11 xlibs.libXcursor mesa glew asciidoc libxslt docbook_xsl curl makeWrapper
     docbook_xsl_ns ]
     ++ stdenv.lib.optional withAI jdk
     ++ stdenv.lib.optional withAI python;
 
   # reported upstream http://springrts.com/mantis/view.php?id=4305
   #enableParallelBuilding = true; # occasionally missing generated files on Hydra
+
+  postInstall = ''
+    wrapProgram "$out/bin/spring" \
+      --prefix LD_LIBRARY_PATH : "${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib"
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://springrts.com/;
