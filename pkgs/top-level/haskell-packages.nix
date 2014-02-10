@@ -1218,6 +1218,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     libc = pkgs.stdenv.gcc.libc;
   };
 
+  gtkTraymanager = callPackage ../development/libraries/haskell/gtk-traymanager {};
+
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
   groups = callPackage ../development/libraries/haskell/groups {};
@@ -2775,6 +2777,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   leksah = callPackage ../applications/editors/leksah {
     QuickCheck = self.QuickCheck2;
   };
+
+  taffybar = callPackage ../applications/misc/taffybar {};
 
   yi = callPackage ../applications/editors/yi/yi.nix {};
 
