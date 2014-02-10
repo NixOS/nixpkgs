@@ -1,14 +1,12 @@
-{ cabal, aeson, digestiveFunctors, HUnit, lens, lensAeson, mtl
-, safe, tasty, tastyHunit, text, vector
+{ cabal, aeson, digestiveFunctors, HUnit, lens, mtl, safe, tasty
+, tastyHunit, text, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "digestive-functors-aeson";
-  version = "1.1.4";
-  sha256 = "1rca25zycmz4al5izq8j7h3cggvb4844g3gj3a1686yy38k5rfvn";
-  buildDepends = [
-    aeson digestiveFunctors lens lensAeson safe text vector
-  ];
+  version = "1.1.5";
+  sha256 = "1mxi8zbv3hxy2crj6h6p1a885k8rd0fqhmwq7l7w7d7d73h8bmm3";
+  buildDepends = [ aeson digestiveFunctors lens safe text vector ];
   testDepends = [
     aeson digestiveFunctors HUnit mtl tasty tastyHunit text
   ];
