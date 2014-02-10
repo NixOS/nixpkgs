@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "4.0.1";
-  sha256 = "1dm4gdpyd7kndf3zaikjqa1gkc7y7wzfnyhhk3xyhjxa5hn5rj75";
+  version = "4.0.2";
+  sha256 = "0j5lmyd7myaaz71kxwznr10wz5ww3j6faiik4hjvd74v658i34r5";
   buildDepends = [
     aeson bifunctors comonad constraints contravariant distributive
     exceptions filepath hashable mtl parallel primitive profunctors

@@ -1514,7 +1514,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {
     aeson = self.aeson_0_7_0_1;
-    lens = self.lens_4_0_1;
+    lens = self.lens_4_0_2;
   };
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
@@ -1550,7 +1550,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
   lens_3_10_2 = callPackage ../development/libraries/haskell/lens/3.10.2.nix {};
-  lens_4_0_1 = callPackage ../development/libraries/haskell/lens/4.0.1.nix {
+  lens_4_0_2 = callPackage ../development/libraries/haskell/lens/4.0.2.nix {
     aeson = self.aeson_0_7_0_1;
   };
   lens = self.lens_3_10_2;
@@ -1576,7 +1576,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
   linear = callPackage ../development/libraries/haskell/linear {
-    lens = self.lens_4_0_1;
+    lens = self.lens_4_0_2;
   };
 
   List = callPackage ../development/libraries/haskell/List {};
@@ -2152,8 +2152,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   socks = callPackage ../development/libraries/haskell/socks {};
 
   sparse = callPackage ../development/libraries/haskell/sparse {
-    lens = self.lens_4_0_1;
-    linear = self.linear.override { lens = self.lens_4_0_1; };
+    lens = self.lens_4_0_2;
+    linear = self.linear.override { lens = self.lens_4_0_2; };
   };
 
   srcloc = callPackage ../development/libraries/haskell/srcloc {};
