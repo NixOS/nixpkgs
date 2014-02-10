@@ -403,24 +403,21 @@ in
       let
         mkhomeUsers = filterAttrs (n: u: u.createHome) cfg.extraUsers;
         setpwUsers = filterAttrs (n: u: u.createUser) cfg.extraUsers;
+        pwFile = u: if !(isNull u.hashedPassword)
+          then pkgs.writeTextFile { name = "password-file"; text = u.hashedPassword; }
+          else if !(isNull u.password)
+          then pkgs.runCommand "password-file" { pw = u.password; } ''
+            echo -n "$pw" | ${pkgs.mkpasswd}/bin/mkpasswd -s > $out
+          '' else u.passwordFile;
         setpw = n: u: ''
           setpw=yes
           ${optionalString cfg.mutableUsers ''
             test "$(getent shadow '${u.name}' | cut -d: -f2)" != "x" && setpw=no
           ''}
           if [ "$setpw" == "yes" ]; then
-            ${if !(isNull u.hashedPassword)
+            ${if !(isNull (pwFile u))
               then ''
-                echo '${u.name}:${u.hashedPassword}' | \
-                  ${pkgs.shadow}/sbin/chpasswd -e''
-              else if u.password == ""
-              then "passwd -d '${u.name}' &>/dev/null"
-              else if !(isNull u.password)
-              then ''
-                echo '${u.name}:${u.password}' | ${pkgs.shadow}/sbin/chpasswd''
-              else if !(isNull u.passwordFile)
-              then ''
-                echo -n "${u.name}:" | cat - "${u.passwordFile}" | \
+                echo -n "${u.name}:" | cat - "${pwFile u}" | \
                   ${pkgs.shadow}/sbin/chpasswd -e
               ''
               else "passwd -l '${u.name}' &>/dev/null"
