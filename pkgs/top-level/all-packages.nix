@@ -1169,7 +1169,7 @@ let
 
   ibus_chewing = callPackage ../development/libraries/ibus-chewing {
     inherit (xlibs);
-    gconf = gnome.GConf;
+    gconf = gnome3.gconf;
   };
 
   icecast = callPackage ../servers/icecast { };
