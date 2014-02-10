@@ -1588,18 +1588,18 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
 
   # Needed for idris for now
-  llvmGeneral_3_3 = callPackage ../development/libraries/haskell/llvm-general/3.3.nix {
+  llvmGeneral_3_3_8_2 = callPackage ../development/libraries/haskell/llvm-general/3.3.8.2.nix {
     llvmConfig = pkgs.llvm_33;
-    llvmGeneralPure = self.llvmGeneralPure_3_3;
+    llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;
   };
-  llvmGeneral_3_4 = callPackage ../development/libraries/haskell/llvm-general/3.4.nix {
+  llvmGeneral_3_4_1_0 = callPackage ../development/libraries/haskell/llvm-general/3.4.1.0.nix {
     llvmConfig = pkgs.llvm;
   };
-  llvmGeneral = self.llvmGeneral_3_4;
+  llvmGeneral = self.llvmGeneral_3_4_1_0;
 
-  llvmGeneralPure_3_3 = callPackage ../development/libraries/haskell/llvm-general-pure/3.3.nix { };
-  llvmGeneralPure_3_4 = callPackage ../development/libraries/haskell/llvm-general-pure/3.4.nix {};
-  llvmGeneralPure = self.llvmGeneralPure_3_4;
+  llvmGeneralPure_3_3_8_2 = callPackage ../development/libraries/haskell/llvm-general-pure/3.3.8.2.nix { };
+  llvmGeneralPure_3_4_1_0 = callPackage ../development/libraries/haskell/llvm-general-pure/3.4.1.0.nix {};
+  llvmGeneralPure = self.llvmGeneralPure_3_4_1_0;
 
   lrucache = callPackage ../development/libraries/haskell/lrucache {};
 
@@ -2766,8 +2766,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   idris_plain = callPackage ../development/compilers/idris {
     parsers = self.parsers_0_9;
     trifecta = self.trifecta_1_1;
-    llvmGeneral = self.llvmGeneral_3_3;
-    llvmGeneralPure = self.llvmGeneralPure_3_3;
+    llvmGeneral = self.llvmGeneral_3_3_8_2;
+    llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;
   };
 
   idris = callPackage ../development/compilers/idris/wrapper.nix {};
