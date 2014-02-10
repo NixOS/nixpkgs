@@ -144,7 +144,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     async        = self.async_2_0_1_5;
     attoparsec   = self.attoparsec_0_11_1_0;
     caseInsensitive = self.caseInsensitive_1_1_0_3;
-    cgi          = self.cgi_3001_1_8_4;
+    cgi          = self.cgi_3001_1_8_5;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_5_1_0;
     GLURaw       = self.GLURaw_1_4_0_0;
@@ -742,8 +742,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cgi_3001_1_7_3 = callPackage ../development/libraries/haskell/cgi/3001.1.7.3.nix {};
   cgi_3001_1_7_4 = callPackage ../development/libraries/haskell/cgi/3001.1.7.4.nix {};
   cgi_3001_1_7_5 = callPackage ../development/libraries/haskell/cgi/3001.1.7.5.nix {};
-  cgi_3001_1_8_4 = callPackage ../development/libraries/haskell/cgi/3001.1.8.4.nix {};
-  cgi = self.cgi_3001_1_8_4;
+  cgi_3001_1_8_5 = callPackage ../development/libraries/haskell/cgi/3001.1.8.5.nix {};
+  cgi = self.cgi_3001_1_8_5;
 
   charset = callPackage ../development/libraries/haskell/charset {};
 

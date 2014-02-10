@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cgi";
-  version = "3001.1.8.4";
-  sha256 = "1h0ynrrda18g5pn1sw2n94rhhp3k39nb7wmx53b52dhxkp2izlgn";
+  version = "3001.1.8.5";
+  sha256 = "0ffvn9ki5yq2zc65afmy04353v4s66lajc7y563fhj2kz5ib5ks6";
   buildDepends = [ MonadCatchIOMtl mtl network parsec xhtml ];
   meta = {
     homepage = "http://andersk.mit.edu/haskell/cgi/";
