@@ -14,6 +14,7 @@ with import ../lib/testing.nix { inherit system minimal; };
   efi-installer = makeTests (import ./efi-installer.nix);
   gnome3 = makeTest (import ./gnome3.nix);
   ipv6 = makeTest (import ./ipv6.nix);
+  jenkins = makeTest (import ./jenkins.nix);
   kde4 = makeTest (import ./kde4.nix);
   #kexec = makeTest (import ./kexec.nix);
   login = makeTest (import ./login.nix {});
