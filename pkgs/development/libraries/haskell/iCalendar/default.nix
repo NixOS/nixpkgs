@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "iCalendar";
-  version = "0.3.0.1";
-  sha256 = "0d51rb46vcpb05vsqqmk3w7rymybl3vz8cqs0pw088a52kiy4xc3";
+  version = "0.4";
+  sha256 = "1wjgrgm4m21fic7a83k5jql4jxknk7mhh3shhrgb2kvxrj0bfw8b";
   buildDepends = [
     base64Bytestring caseInsensitive dataDefault mime mtl network
     parsec text time
