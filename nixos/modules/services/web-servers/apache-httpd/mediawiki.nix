@@ -93,6 +93,10 @@ let
         ensureDir $out
         cp -r * $out
         cp ${mediawikiConfig} $out/LocalSettings.php
+        sed -i 's|/bin/bash|${pkgs.stdenv.shell}|' \
+          $out/maintenance/fuzz-tester.php \
+          $out/bin/ulimit.sh \
+          $out/includes/GlobalFunctions.php
       '';
   };
 
@@ -290,6 +294,7 @@ in
             echo COMMIT
           ) | ${pkgs.postgresql}/bin/psql -U "${config.dbUser}" "${config.dbName}"
       fi
+      ${php}/bin/php ${mediawikiRoot}/maintenance/update.php
     '');
 
   robotsEntries = optionalString (config.articleUrlPrefix != "")

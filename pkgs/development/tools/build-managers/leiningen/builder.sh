@@ -19,5 +19,5 @@ chmod -v 755 $out_bin
 patchShebangs $out
 
 wrapProgram $out_bin \
-    --prefix PATH ":" ${rlwrap}/bin \
+    --prefix PATH ":" "${rlwrap}/bin:${coreutils}/bin:${findutils}/bin" \
     --set LEIN_GPG ${gnupg}/bin/gpg

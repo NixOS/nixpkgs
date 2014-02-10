@@ -70,8 +70,6 @@ rec {
 
   libpeas = callPackage ./core/libpeas {};
 
-  libqmi = callPackage ./core/libqmi {};
-
   libgweather = callPackage ./core/libgweather { };
 
   libzapojit = callPackage ./core/libzapojit { };

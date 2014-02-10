@@ -1,0 +1,10 @@
+--- a/src/settings.cpp	2013-12-02 10:09:19.000000000 +0000
++++ b/src/settings.cpp-new	2014-02-10 11:39:48.265628767 +0000
+@@ -498,6 +498,7 @@
+ 
+ wxString Settings::AutoFindUnitSync(wxPathList pl) const
+ {
++	pl.AddEnvList( _T( "SPRING_LIB_DIRS" ) );
+ 	wxString retpath = pl.FindValidPath( _T( "unitsync" ) + GetLibExtension() );
+ 	if ( retpath.IsEmpty() )
+ 		retpath = pl.FindValidPath( _T( "libunitsync" ) + GetLibExtension() );

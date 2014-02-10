@@ -81,6 +81,8 @@ stdenv.mkDerivation rec {
        echo "\$GST_PLUGIN_PATH set to \`$GST_PLUGIN_PATH'"
     '';
 
+  postConfigure = "echo '#define nullptr NULL' >> gnashconfig.h";
+
   # Make sure `gtk-gnash' gets `libXext' in its `RPATH'.
   NIX_LDFLAGS="-lX11 -lXext";
 

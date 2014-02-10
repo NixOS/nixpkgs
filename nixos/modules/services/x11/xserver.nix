@@ -22,7 +22,7 @@ let
     virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
   };
 
-  driverNames = config.services.mesa.videoDrivers;
+  driverNames = config.hardware.opengl.videoDrivers;
 
   drivers = flip map driverNames
     (name: { inherit name; driverName = name; } //
@@ -181,7 +181,7 @@ in
         description = ''
           The name of the video driver for your graphics card.  This
           option is obsolete; please set the
-          <option>services.mesa.videoDrivers</option> instead.
+          <option>hardware.opengl.videoDrivers</option> instead.
         '';
       };
 
@@ -381,8 +381,8 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    services.mesa.enable = true;
-    services.mesa.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
+    hardware.opengl.enable = true;
+    hardware.opengl.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 
     assertions =
       [ { assertion = !(cfg.startOpenSSHAgent && cfg.startGnuPGAgent);

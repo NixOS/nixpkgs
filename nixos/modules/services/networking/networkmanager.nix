@@ -31,7 +31,7 @@ let
 
     [modem-manager]
     Identity=unix-group:networkmanager
-    Action=org.freedesktop.ModemManager.*
+    Action=org.freedesktop.ModemManager*
     ResultAny=yes
     ResultInactive=no
     ResultActive=yes
@@ -42,7 +42,7 @@ let
         subject.isInGroup("networkmanager")
         && subject.active
         && (action.id.indexOf("org.freedesktop.NetworkManager.") == 0
-            || action.id.indexOf("org.freedesktop.ModemManager.")  == 0
+            || action.id.indexOf("org.freedesktop.ModemManager")  == 0
         ))
           { return polkit.Result.YES; }
     });
@@ -161,6 +161,7 @@ in {
         networkmanager_vpnc
         networkmanager_openconnect
         networkmanager_pptp
+        modemmanager
         ];
 
     users.extraGroups = singleton {
@@ -177,7 +178,7 @@ in {
       description = "NetworkManager initialisation";
       wantedBy = [ "network.target" ];
       partOf = [ "NetworkManager.service" ];
-      wants = [ "NetworkManager.service" ];
+      wants = [ "ModemManager.service" ];
       before = [ "NetworkManager.service" ];
       script = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
@@ -206,6 +207,7 @@ in {
         networkmanager_vpnc
         networkmanager_openconnect
         networkmanager_pptp
+        modemmanager
         ];
 
     services.udev.packages = cfg.packages;

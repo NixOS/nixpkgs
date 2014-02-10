@@ -5,17 +5,17 @@
 let
 
   nssPEM = fetchurl {
-    url = http://dev.gentoo.org/~anarchy/patches/nss-3.15-pem-support-20130617.patch.xz;
-    sha256 = "1k1m8lsgqwxx251943hks1dd13hz1adpqqb0hxwn011by5vmi201";
+    url = http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz;
+    sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.15.3.1";
+  version = "3.15.4";
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_15_3_1_RTM/src/${name}.tar.gz";
-    sha1 = "4e0f81a1f770447dc5440201a579151b601463e2";
+    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_15_4_RTM/src/${name}.tar.gz";
+    sha1 = "c164fac83fcbaff010786767e2a858ca23a89a5b";
   };
 
   buildInputs = [ nspr perl zlib sqlite ];

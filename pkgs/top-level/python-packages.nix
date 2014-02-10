@@ -417,6 +417,19 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
 
+  async = buildPythonPackage rec {
+    name = "async-0.6.1";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    buildInputs = [ pkgs.zlib ];
+    doCheck = false;
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/async/${name}.tar.gz";
+      sha256 = "1lfmjm8apy9qpnpbq8g641fd01qxh9jlya5g2d6z60vf8p04rla1";
+    };
+  };
+
   argparse = buildPythonPackage (rec {
     name = "argparse-1.2.1";
 
@@ -794,6 +807,17 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
+
+  bunch = buildPythonPackage (rec {
+    name = "bunch-1.0.1";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/bunch/${name}.tar.gz";
+      sha256 = "1akalx2pd1fjlvrq69plvcx783ppslvikqdm93z2sdybq07pmish";
+    };
+    doCheck = false;
+  });
 
 
   carrot = buildPythonPackage rec {
@@ -1555,6 +1579,33 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     buildInputs = [ fudge nose ];
   };
 
+  fedora_cert = buildPythonPackage (rec {
+    name = "fedora-cert-0.5.9.2";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://fedorahosted.org/releases/f/e/fedora-packager/fedora-packager-0.5.9.2.tar.bz2";
+      sha256 = "105swvzshgn3g6bjwk67xd8pslnhpxwa63mdsw6cl4c7cjp2blx9";
+    };
+    installCommand = "make install";
+    propagatedBuildInputs = [ python_fedora ];
+    postInstall = "mv $out/bin/fedpkg $out/bin/fedora-cert-fedpkg";
+    doCheck = false;
+  });
+
+  fedpkg = buildPythonPackage (rec {
+    name = "fedpkg-1.14";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://fedorahosted.org/releases/f/e/fedpkg/fedpkg-1.14.tar.bz2";
+      sha256 = "0rj60525f2sv34g5llafnkmpvbwrfbmfajxjc14ldwzymp8clc02";
+    };
+
+    patches = [ ../development/python-modules/fedpkg-buildfix.diff ];
+    propagatedBuildInputs = [ rpkg offtrac urlgrabber fedora_cert ];
+  });
+
   fudge = buildPythonPackage rec {
     name = "fudge-0.9.4";
     src = fetchurl {
@@ -1582,6 +1633,31 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  gitdb = buildPythonPackage rec {
+    name = "gitdb-0.5.4";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+    doCheck = false;
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gitdb/${name}.tar.gz";
+      sha256 = "10rpmmlln59aq44cd5vkb77hslak5pa1rbmigg6ski5f1nn2spfy";
+    };
+
+    propagatedBuildInputs = [ smmap async ];
+  };
+
+  GitPython = buildPythonPackage rec {
+    name = "GitPython-0.3.2";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/G/GitPython/GitPython-0.3.2.RC1.tar.gz";
+      sha256 = "1q4lc2ps12l517mmrxc8iq6gxyhj6d77bnk1p7mxf38d99l8crzx";
+    };
+
+    buildInputs = [ nose ];
+    propagatedBuildInputs = [ gitdb ];
+  };
 
   googlecl = buildPythonPackage rec {
     version = "0.9.14";
@@ -1618,6 +1694,22 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       platforms = platforms.unix;
     };
   };
+
+  koji = buildPythonPackage (rec {
+    name = "koji-1.8";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://fedorahosted.org/released/koji/koji-1.8.0.tar.bz2";
+      sha256 = "10dph209h4jgajb5jmbjhqy4z4hd22i7s2d93vm3ikdf01i8iwf1";
+    };
+
+    buildPhase = ":";
+    installCommand = "make install DESTDIR=$out/ && cp -R $out/nix/store/*/* $out/ && rm -rf $out/nix";
+    doCheck = false;
+    propagatedBuildInputs = [ pythonPackages.pycurl ];
+
+  });
 
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.1";
@@ -3227,6 +3319,16 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       [ pkgs.unzip fs gdata python_keyczar mock pyasn1 pycrypto pytest ];
   };
 
+  kitchen = buildPythonPackage (rec {
+    name = "kitchen-1.1.1";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/k/kitchen/kitchen-1.1.1.tar.gz";
+      sha256 = "0ki840hjk1q19w6icv0dj2jxb00966nwy9b1jib0dgdspj00yrr5";
+    };
+  });
+
   pylast = buildPythonPackage rec {
     name = "pylast-${version}";
     version = "0.5.11";
@@ -4229,6 +4331,17 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+  offtrac = buildPythonPackage rec {
+    name = "offtrac-0.1.0";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/o/offtrac/${name}.tar.gz";
+      sha256 = "06vd010pa1z7lyfj1na30iqzffr4kzj2k2sba09spik7drlvvl56";
+    };
+    doCheck = false;
+  };
+
   # optfunc = buildPythonPackage ( rec {
   #   name = "optfunc-git";
   #
@@ -4291,6 +4404,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
       maintainers = [ ];
     };
+  });
+
+  osc = buildPythonPackage (rec {
+    name = "osc-0.133+git";
+
+    src = fetchgit {
+      url = git://gitorious.org/opensuse/osc.git;
+      rev = "6cd541967ee2fca0b89e81470f18b97a3ffc23ce";
+      sha256 = "a39ce0e321e40e9758bf7b9128d316c71b35b80eabc84f13df492083bb6f1cc6";
+    };
+
+    buildPhase = "python setup.py build";
+    doCheck = false;
+    postInstall = "ln -s $out/bin/osc-wrapper.py $out/bin/osc";
+
+    propagatedBuildInputs = [ pythonPackages.m2crypto ];
+
   });
 
   pandas = buildPythonPackage rec {
@@ -5171,6 +5301,18 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+  python_fedora = buildPythonPackage (rec {
+    name = "python-fedora-0.3.32.3";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://fedorahosted.org/releases/p/y/python-fedora/python-fedora-0.3.32.3.tar.gz";
+      sha256 = "0qwmbid4pkdj6z9gwa43fzs97fr6ci2h2vj1hyk0gp0vqim4kv4l";
+    };
+    propagatedBuildInputs = [ kitchen requests bunch ];
+    doCheck = false;
+  });
+
   python_keyczar = buildPythonPackage rec {
     name = "python-keyczar-0.71c";
 
@@ -5940,6 +6082,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = http://routes.groovie.org/;
     };
   };
+
+  rpkg = buildPythonPackage (rec {
+    name = "rpkg-1.14";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://fedorahosted.org/releases/r/p/rpkg/rpkg-1.14.tar.gz";
+      sha256 = "0d053hdjz87aym1sfm6c4cxmzmy5g0gkrmrczly86skj957r77a7";
+    };
+
+    patches = [ ../development/python-modules/rpkg-buildfix.diff ];
+
+    # buildPhase = "python setup.py build";
+    # doCheck = false;
+    propagatedBuildInputs = [ pycurl koji GitPython pkgs.git
+                              pkgs.rpm pkgs.pyopenssl ];
+
+  });
 
   rtslib_fb = buildPythonPackage rec {
     version = "2.1.fb43";
@@ -6806,6 +6966,15 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   #   };
   # };
 
+  smmap = buildPythonPackage rec {
+    name = "smmap-0.8.2";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/smmap/${name}.tar.gz";
+      sha256 = "0vrdgr6npmajrv658fv8bij7zgm5jmz2yxkbv8kmbv25q1f9b8ny";
+    };
+  };
 
   trac = buildPythonPackage {
     name = "trac-1.0.1";

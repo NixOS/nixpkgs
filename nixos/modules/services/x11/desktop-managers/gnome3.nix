@@ -52,6 +52,7 @@ in {
         gnome3.gnome_terminal
         gnome3.gnome_icon_theme
         gnome3.gnome_themes_standard
+        gnome3.gnome_control_center
       ];
   };
 

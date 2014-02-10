@@ -1,7 +1,8 @@
 { kde, kdelibs, qimageblitz, libdbusmenu_qt, xorg, shared_desktop_ontologies,
   lm_sensors, pciutils, libraw1394, libusb, libxklavier, python, libqalculate,
   xkeyboard_config, kdepimlibs, pam, boost, gpsd, prison, akonadi,
-  libjpeg, pkgconfig, libXft, libXxf86misc, kactivities, qjson, networkmanager
+  libjpeg, pkgconfig, libXft, libXxf86misc, kactivities, qjson, networkmanager,
+  fetchurl
 }:
 
 kde {
@@ -16,6 +17,12 @@ kde {
       libusb python libqalculate kdepimlibs pam prison akonadi qjson networkmanager
       kactivities
     ];
+
+  patches = [(fetchurl {
+    url = "https://git.reviewboard.kde.org/r/111261/diff/raw/";
+    sha256 = "0g8qjna1s0imz7801k4iy2ap5z81izi4bncvks7z3n9agji4zf40";
+    name = "CVE-2013-4132.patch";
+  })];
 
   nativeBuildInputs = [ pkgconfig ];
 

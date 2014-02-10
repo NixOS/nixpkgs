@@ -36,7 +36,7 @@ with pkgs.lib;
   isoImage.makeEfiBootable = true;
 
   # Add Memtest86+ to the CD.
-  boot.loader.grub.memtest86 = true;
+  boot.loader.grub.memtest86.enable = true;
 
   # Get a console as soon as the initrd loads fbcon on EFI boot
   boot.initrd.kernelModules = [ "fbcon" ];

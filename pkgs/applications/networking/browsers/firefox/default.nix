@@ -17,9 +17,9 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "26.0";
+  firefoxVersion = "27.0";
 
-  xulVersion = "26.0"; # this attribute is used by other packages
+  xulVersion = "27.0"; # this attribute is used by other packages
 
 
   src = fetchurl {
@@ -29,7 +29,7 @@ rec {
         # Fall back to this url for versions not available at releases.mozilla.org.
         "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
     ];
-    sha1 = "f7c6642d6f62aea8d4eced48dd27aba0634edcd5";
+    sha1 = "ec2031385237e30be829817ac79caa8e80cc2a14";
   };
 
   commonConfigureFlags =
@@ -116,6 +116,7 @@ rec {
       for i in $out/lib/$libDir/{plugin-container,xulrunner,xulrunner-stub}; do
           wrapProgram $i --prefix LD_LIBRARY_PATH ':' "$out/lib/$libDir"
       done
+
       rm -f $out/bin/run-mozilla.sh
     ''; # */
 
@@ -162,13 +163,20 @@ rec {
       "SYSTEM_LIBXUL=1"
     ];
 
-    # Hack to work around make's idea of -lbz2 dependency
+    # Because preConfigure runs configure from a subdirectory.
+    configureScript = "../configure";
+
     preConfigure =
       ''
+        # Hack to work around make's idea of -lbz2 dependency
         find . -name Makefile.in -execdir sed -i '{}' -e '1ivpath %.so ${
           stdenv.lib.concatStringsSep ":"
             (map (s : s + "/lib") (buildInputs ++ [stdenv.gcc.libc]))
         }' ';'
+
+        # Building directly in the main source directory is not allowed.
+        mkdir obj_dir
+        cd obj_dir
       '';
 
     postInstall =

@@ -944,6 +944,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   Diff = callPackage ../development/libraries/haskell/Diff {};
 
+  diff3 = callPackage ../development/libraries/haskell/diff3 {};
+
   digest = callPackage ../development/libraries/haskell/digest {
     inherit (pkgs) zlib;
   };
@@ -1215,6 +1217,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     inherit (pkgs.gnome) gtksourceview;
     libc = pkgs.stdenv.gcc.libc;
   };
+
+  gtkTraymanager = callPackage ../development/libraries/haskell/gtk-traymanager {};
 
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
@@ -1507,6 +1511,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   };
 
   json = callPackage ../development/libraries/haskell/json {};
+
+  jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {
+    aeson = self.aeson_0_7_0_0;
+    lens = self.lens_4_0_1;
+  };
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
@@ -2768,6 +2777,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   leksah = callPackage ../applications/editors/leksah {
     QuickCheck = self.QuickCheck2;
   };
+
+  taffybar = callPackage ../applications/misc/taffybar {};
 
   yi = callPackage ../applications/editors/yi/yi.nix {};
 

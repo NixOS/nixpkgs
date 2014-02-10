@@ -684,6 +684,8 @@ let
 
   colord = callPackage ../tools/misc/colord { };
 
+  colord-gtk = callPackage ../tools/misc/colord-gtk { };
+
   colordiff = callPackage ../tools/text/colordiff { };
 
   connect = callPackage ../tools/networking/connect { };
@@ -1279,6 +1281,10 @@ let
   libtirpc = callPackage ../development/libraries/ti-rpc { };
 
   libshout = callPackage ../development/libraries/libshout { };
+
+  libqmi = callPackage ../development/libraries/libqmi { };
+
+  libmbim = callPackage ../development/libraries/libmbim { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
@@ -2792,7 +2798,8 @@ let
 
   lessc = callPackage ../development/compilers/lessc { };
 
-  llvm = llvmPackages.llvm;
+  llvm = if stdenv.isDarwin then llvm_33 # until someone solves build problems with _34
+    else llvmPackages.llvm;
 
   llvm_34 = llvmPackages.llvm;
   llvm_33 = llvm_v ../development/compilers/llvm/3.3/llvm.nix;
@@ -2809,7 +2816,7 @@ let
     inherit newScope fetchurl;
     isl = isl_0_12;
     stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideGCC stdenv gccApple
+      then stdenvAdapters.overrideGCC stdenv gcc48
       else stdenv;
   });
   llvmPackagesSelf = import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; };
@@ -6655,13 +6662,17 @@ let
   # config options you need (e.g. by overriding extraConfig). See list of options here:
   # https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options
   linux_3_2_grsecurity = lowPrio (lib.overrideDerivation (linux_3_2.override (args: {
-    modDirVersion = "${linux_3_2.version}-grsec";
     kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_2_54 kernelPatches.grsec_path ];
+    argsOverride = {
+      modDirVersion = "${linux_3_2.modDirVersion}-grsec";
+    };
   })) (args: grsecurityOverrider args));
 
-  linux_3_12_grsecurity = lowPrio (lib.overrideDerivation (linux_3_12.override (args: {
-    modDirVersion = "${linux_3_12.version}-grsec";
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_12_8 kernelPatches.grsec_path ];
+  linux_3_13_grsecurity = lowPrio (lib.overrideDerivation (linux_3_13.override (args: {
+    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_13_2 kernelPatches.grsec_path ];
+    argsOverride = {
+      modDirVersion = "${linux_3_13.modDirVersion}-grsec";
+    };
   })) (args: grsecurityOverrider args));
 
   linux_3_2_apparmor = lowPrio (linux_3_2.override {
@@ -6845,7 +6856,7 @@ let
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_11 linuxPackages_3_11);
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
-  linuxPackages_3_12_grsecurity = linuxPackagesFor pkgs.linux_3_12_grsecurity linuxPackages_3_12_grsecurity;
+  linuxPackages_3_13_grsecurity = linuxPackagesFor pkgs.linux_3_13_grsecurity linuxPackages_3_13_grsecurity;
   linuxPackages_3_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_13 linuxPackages_3_13);
   # Update this when adding a new version!
   linuxPackages_latest = pkgs.linuxPackages_3_13;
@@ -8103,7 +8114,7 @@ let
 
   hexedit = callPackage ../applications/editors/hexedit { };
 
-  hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
+  hipchat = callPackage_i686 ../applications/networking/instant-messengers/hipchat { };
 
   homebank = callPackage ../applications/office/homebank { };
 
@@ -9027,8 +9038,8 @@ let
   };
 
   weechat = callPackage ../applications/networking/irc/weechat {
-    # weechat crashes on /exit when using gnutls 3.1.x. gnutls 3.2.x works.
-    gnutls = gnutls32;
+    # weechat doesn't exit with gnutls32. Use 3.1 for now.
+    gnutls = gnutls31;
   };
 
   weston = callPackage ../applications/window-managers/weston { };
