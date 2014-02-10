@@ -527,7 +527,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   adjunctions = callPackage ../development/libraries/haskell/adjunctions {};
 
   aeson_0_6_2_1 = callPackage ../development/libraries/haskell/aeson/0.6.2.1.nix {};
-  aeson_0_7_0_0 = callPackage ../development/libraries/haskell/aeson/0.7.0.0.nix {
+  aeson_0_7_0_1 = callPackage ../development/libraries/haskell/aeson/0.7.0.1.nix {
     attoparsec = self.attoparsec_0_11_1_0;
   };
   aeson = self.aeson_0_6_2_1;
@@ -1513,7 +1513,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   json = callPackage ../development/libraries/haskell/json {};
 
   jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {
-    aeson = self.aeson_0_7_0_0;
+    aeson = self.aeson_0_7_0_1;
     lens = self.lens_4_0_1;
   };
 
@@ -1551,7 +1551,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   lens_3_10_2 = callPackage ../development/libraries/haskell/lens/3.10.2.nix {};
   lens_4_0_1 = callPackage ../development/libraries/haskell/lens/4.0.1.nix {
-    aeson = self.aeson_0_7_0_0;
+    aeson = self.aeson_0_7_0_1;
   };
   lens = self.lens_3_10_2;
 
