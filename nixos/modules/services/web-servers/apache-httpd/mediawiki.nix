@@ -93,6 +93,10 @@ let
         ensureDir $out
         cp -r * $out
         cp ${mediawikiConfig} $out/LocalSettings.php
+        sed -i 's|/bin/bash|${pkgs.stdenv.shell}|' \
+          $out/maintenance/fuzz-tester.php \
+          $out/bin/ulimit.sh \
+          $out/includes/GlobalFunctions.php
       '';
   };
 
