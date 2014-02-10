@@ -290,6 +290,7 @@ in
             echo COMMIT
           ) | ${pkgs.postgresql}/bin/psql -U "${config.dbUser}" "${config.dbName}"
       fi
+      ${php}/bin/php ${mediawikiRoot}/maintenance/update.php
     '');
 
   robotsEntries = optionalString (config.articleUrlPrefix != "")
