@@ -411,13 +411,13 @@ in
           if [ "$setpw" == "yes" ]; then
             ${if !(isNull u.hashedPassword)
               then ''
-                echo "${u.name}:${u.hashedPassword}" | \
+                echo '${u.name}:${u.hashedPassword}' | \
                   ${pkgs.shadow}/sbin/chpasswd -e''
               else if u.password == ""
               then "passwd -d '${u.name}' &>/dev/null"
               else if !(isNull u.password)
               then ''
-                echo "${u.name}:${u.password}" | ${pkgs.shadow}/sbin/chpasswd''
+                echo '${u.name}:${u.password}' | ${pkgs.shadow}/sbin/chpasswd''
               else if !(isNull u.passwordFile)
               then ''
                 echo -n "${u.name}:" | cat - "${u.passwordFile}" | \
