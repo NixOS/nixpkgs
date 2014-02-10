@@ -84,4 +84,6 @@ stdenv.mkDerivation {
        if stdenv.system == "mips64el-linux" then "ld.so.1" else
        abort "don't know the name of the dynamic linker for this platform")
     else "";
+
+  preferLocalBuild = true;
 }

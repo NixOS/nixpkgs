@@ -39,4 +39,6 @@ stdenv.mkDerivation {
     chmod +x $PROG
     done
   '';
+
+  preferLocalBuild = true;
 }
