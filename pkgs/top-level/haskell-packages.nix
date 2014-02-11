@@ -2135,6 +2135,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   smtpMail = callPackage ../development/libraries/haskell/smtp-mail {};
 
+  smtpsGmail = callPackage ../development/libraries/haskell/smtps-gmail {};
+
   snap = callPackage ../development/libraries/haskell/snap/snap.nix {};
 
   snapletAcidState = callPackage ../development/libraries/haskell/snaplet-acid-state {};
