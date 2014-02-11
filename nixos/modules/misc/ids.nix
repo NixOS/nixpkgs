@@ -111,6 +111,7 @@
       memcached = 100;
       cgminer = 101;
       munin = 102;
+      logcheck = 103;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
