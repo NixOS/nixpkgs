@@ -4935,7 +4935,9 @@ let
 
   libosip_3 = callPackage ../development/libraries/osip/3.nix {};
 
-  libotr = callPackage ../development/libraries/libotr { };
+  libotr = callPackage ../development/libraries/libotr {
+    libgcrypt = libgcrypt_1_6;
+  };
 
   libotr_3_2 = callPackage ../development/libraries/libotr/3.2.nix { };
 
