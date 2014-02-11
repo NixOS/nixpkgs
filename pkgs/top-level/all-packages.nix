@@ -3155,6 +3155,8 @@ let
 
   lua5_sockets = callPackage ../development/interpreters/lua-5/sockets.nix {};
 
+  lua5_filesystem = callPackage ../development/interpreters/lua-5/filesystem.nix {};
+
   luarocks = callPackage ../development/tools/misc/luarocks {
      lua = lua5;
   };
@@ -8330,6 +8332,13 @@ let
   linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
   lmms = callPackage ../applications/audio/lmms { };
+
+  luakit = callPackage ../applications/networking/browsers/luakit {};
+  luakitWrapper = wrapFirefox { 
+    browser = luakit; 
+    browserName = "luakit"; 
+    desktopName = "Luakit";
+  }; 
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
