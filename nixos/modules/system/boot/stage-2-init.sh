@@ -136,7 +136,8 @@ fi
 # elsehwere)
 if ! mountpoint -q /run/keys; then
     rm -rf /run/keys
-    mkdir -m 0700 /run/keys
+    mkdir -m 0750 /run/keys
+    chown root:keys /run/keys
     mount -t ramfs none /run/keys
 fi
 

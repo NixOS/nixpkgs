@@ -201,6 +201,7 @@
       openldap = 93;
       connman = 94;
       munin = 95;
+      keys = 96;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 
