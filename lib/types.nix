@@ -176,7 +176,7 @@ rec {
       getSubOptions = elemType.getSubOptions;
     };
 
-    submodule = opts:
+    submoduleWithExtraArgs = extraArgs: opts:
       let
         opts' = toList opts;
         inherit (import ./modules.nix) evalModules;
@@ -188,12 +188,15 @@ rec {
           let
             coerce = def: if isFunction def then def else { config = def; };
             modules = opts' ++ map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
-          in (evalModules { inherit modules; args.name = last loc; prefix = loc; }).config;
+            args = extraArgs // { name = last loc; };
+          in (evalModules { inherit modules args; prefix = loc; }).config;
         getSubOptions = prefix: (evalModules
           { modules = opts'; inherit prefix;
             # FIXME: hack to get shit to evaluate.
-            args = { name = ""; }; }).options;
+            args = extraArgs // { name = ""; }; }).options;
       };
+
+    submodule = submoduleWithExtraArgs {};
 
     nixosSubmodule = nixos: args: mkOptionType rec {
       name = "submodule containing a NixOS config";
