@@ -15,6 +15,7 @@ with pkgs.lib;
     };
 
     systemd.containers = mkOption {
+      # !!! Should probably use nixosSubmodule here
       type = types.attrsOf (types.submodule (
         { config, options, name, ... }:
         {

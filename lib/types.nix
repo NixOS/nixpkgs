@@ -195,6 +195,25 @@ rec {
             args = { name = ""; }; }).options;
       };
 
+    nixosSubmodule = nixos: args: mkOptionType rec {
+      name = "submodule containing a NixOS config";
+      check = x: isAttrs x || isFunction x;
+      merge = loc: defs:
+        let
+          coerce = def: if isFunction def then def else { config = def; };
+        in (import (nixos + "/lib/eval-config.nix") (args // {
+          modules = (args.modules or []) ++
+            map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
+
+          prefix = loc;
+        })).config;
+      getSubOptions = prefix: (import (nixos + "/lib/eval-config.nix") (args // {
+        modules = (args.modules or []);
+
+        inherit prefix;
+      })).options;
+    };
+
     # Obsolete alternative to configOf.  It takes its option
     # declarations from the ‘options’ attribute of containing option
     # declaration.
