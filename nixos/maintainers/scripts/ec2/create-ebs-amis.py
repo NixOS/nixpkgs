@@ -203,7 +203,7 @@ f = open("{0}.{1}.ami-id".format(args.region, image_type), "w")
 f.write("{0}".format(ami_id))
 f.close()
 
-for dest in [ 'us-east-1', 'us-west-1', 'us-west-2', 'eu-west-1']:
+for dest in [ 'us-east-1', 'us-west-1', 'us-west-2', 'eu-west-1', 'ap-southeast-1', 'ap-southeast-2', 'ap-northeast-1', 'sa-east-1']:
     if args.region != dest:
         print >> sys.stderr, "copying image from region {0} to {1}".format(args.region, dest)
         conn = boto.ec2.connect_to_region(dest)
