@@ -12,7 +12,7 @@ rec {
      and ‘config’: the nested set of all option values. */
   evalModules = { modules, prefix ? [], args ? {}, check ? true }:
     let
-      args' = args // result;
+      args' = args // { lib = import ./.; } // result;
       closed = closeModules modules args';
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
