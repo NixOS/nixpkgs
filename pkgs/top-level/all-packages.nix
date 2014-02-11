@@ -4295,6 +4295,8 @@ let
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
 
+  google-gflags = callPackage ../development/libraries/google-gflags { };
+
   gperftools = callPackage ../development/libraries/gperftools { };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer { });
