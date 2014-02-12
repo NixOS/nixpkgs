@@ -721,12 +721,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   botocore = buildPythonPackage rec {
-    version = "0.13.1";
+    version = "0.33.0";
     name = "botocore-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "192kxgw76b22zmk5mxjkij5rskibb9jfaggvpznzy3ggsgja7yy8";
+      md5 = "6743c73a2e148abaa9c487a6e2ee53a3";
     };
 
     propagatedBuildInputs =
