@@ -57,12 +57,14 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       mkdir -p $out/lib/NetworkManager
-      
+
       # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
       substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
 
-      # As NixOS doesn't seem to handle systemd Aliases, we just rename the dispatcher service file
-      mv $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
+      # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
+      # aliases ourselves.
+      ln -s $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
+      ln -s $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
     '';
 
   meta = with stdenv.lib; {
