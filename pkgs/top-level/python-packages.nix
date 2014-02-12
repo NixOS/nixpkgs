@@ -3300,11 +3300,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.0.2";
+    name = "jmespath-0.2.1";
 
     src = fetchurl {
-      url = "https://github.com/boto/jmespath/archive/0.0.2.tar.gz";
-      sha256 = "0wr1gq3gdyn3n21pvj62csdm095512zxd10gkg5ai1vvxh0mbn3r";
+      url = "https://pypi.python.org/packages/source/j/jmespath/jmespath-0.2.1.tar.gz";
+      md5 = "7800775aa12c6303f9ad597b6a8fa03c";
     };
 
     propagatedBuildInputs = [ ply ];
