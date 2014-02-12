@@ -89,7 +89,7 @@ in {
           to change network settings to this group.
         '';
       };
-  
+
       packages = mkOption {
         type = types.listOf types.path;
         default = [ ];
@@ -178,7 +178,7 @@ in {
       description = "NetworkManager initialisation";
       wantedBy = [ "network.target" ];
       partOf = [ "NetworkManager.service" ];
-      wants = [ "ModemManager.service" ];
+      wants = [ "ModemManager.service" "NetworkManager.service" ];
       before = [ "NetworkManager.service" ];
       script = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
