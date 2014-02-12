@@ -8,10 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gi1yxqph8xx869ichpzzxvx6y50wda5hi77lrpacdma4f0aq0i8";
   };
 
-  installPhase =
-    ''
-      install -Dm644 wqy-microhei.ttc $out/share/fonts/wqy-microhei.ttc
-    '';
+  installPhase = ''install -Dm644 wqy-microhei.ttc $out/share/fonts/wqy-microhei.ttc'';
 
   meta = {
     description = "A (mainly) Chinese Unicode font";
