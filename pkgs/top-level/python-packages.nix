@@ -461,6 +461,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+  bcdoc = buildPythonPackage rec {
+    name = "bcdoc-0.12.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/bcdoc/bcdoc-0.12.1.tar.gz";
+      md5 = "7c8617347c294ea4d36ec73fb5b2c26e";
+    };
+
+    buildInputs = [ pythonPackages.docutils pythonPackages.six ];
+
+    meta = {
+      homepage = https://github.com/botocore/bcdoc;
+      license = "Apache License 2.0";
+      description = "ReST document generation tools for botocore";
+    };
+  };
+
   beautifulsoup = buildPythonPackage (rec {
     name = "beautifulsoup-3.2.1";
 
