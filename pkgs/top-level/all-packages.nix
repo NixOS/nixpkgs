@@ -10370,6 +10370,17 @@ let
     { browser = vimprobable2; browserName = "vimprobable2"; desktopName = "Vimprobable2";
     };
 
+  vimb = callPackage ../applications/networking/browsers/vimb {
+    inherit (gnome) libsoup;
+    webkit = webkit_gtk2;
+  };
+
+  vimbWrapper = wrapFirefox {
+    browser = vimb;
+    browserName = "vimb";
+    desktopName = "Vimb";
+  };
+
   VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
 
   # Wine cannot be built in 64-bit; use a 32-bit build instead.
