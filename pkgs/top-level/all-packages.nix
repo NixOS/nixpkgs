@@ -8148,6 +8148,8 @@ let
     inherit (xorg) libxkbfile;
     cairo = cairo.override { xcbSupport = true; };
   };
+  
+  i3minator = callPackage ../tools/misc/i3minator { };
 
   i3status = callPackage ../applications/window-managers/i3/status.nix { };
 
