@@ -7791,6 +7791,8 @@ let
 
     sunriseCommander = callPackage ../applications/editors/emacs-modes/sunrise-commander { };
 
+    writeGood = callPackage ../applications/editors/emacs-modes/writegood { };
+
     xmlRpc = callPackage ../applications/editors/emacs-modes/xml-rpc { };
   };
 
