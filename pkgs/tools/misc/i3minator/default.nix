@@ -24,7 +24,7 @@ in buildPythonPackage rec {
 
   propagatedBuildInputs = [ pythonPackages.pyyaml i3-py ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "i3 project manager similar to tmuxinator";
     longDescription = ''
       A simple "workspace manager" for i3. It allows to quickly
@@ -33,5 +33,8 @@ in buildPythonPackage rec {
     '';
     homepage = https://github.com/carlesso/i3minator;
     license = "WTFPL"; # http://sam.zoy.org/wtfpl/
+    maintainers = with maintainers; [ iElectric ];
+    platforms = stdenv.lib.platforms.linux;
   };
+
 }
