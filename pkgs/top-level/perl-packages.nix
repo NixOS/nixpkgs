@@ -7787,6 +7787,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TemplatePluginIOAll = buildPerlPackage {
+    name = "Template-Plugin-IO-All-0.01";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/X/XE/XERN/Template-Plugin-IO-All-0.01.tar.gz;
+      sha256 = "1f7445422a21932e09bbef935766e0af6b7cceb088e9d8e030cd7a84bcdc5ee4";
+    };
+    propagatedBuildInputs = [ IOAll TemplateToolkit ];
+    meta = {
+      maintainers = with maintainers; [ eelco ];
+      description = "Perl Template Toolkit Plugin for IO::All";
+      license = "perl";
+    };
+  };
+
   TemplatePluginJavaScript = buildPerlPackage {
     name = "Template-Plugin-JavaScript-0.02";
     src = fetchurl {
