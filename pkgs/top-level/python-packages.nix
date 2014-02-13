@@ -5923,12 +5923,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   robotframework = buildPythonPackage rec {
-    version = "2.8.1";
+    version = "2.8.4";
     name = "robotframework-${version}";
 
     src = fetchurl {
-      url = "https://robotframework.googlecode.com/files/${name}.tar.gz";
-      sha256 = "04zwjri1j5py3fpbhy1xlc18bhbmdm2gbd58fwa2jnhmrha5dgnw";
+      url = "https://pypi.python.org/packages/source/r/robotframework/${name}.tar.gz";
+      sha256 = "0rxk135c1051cwv45219ib3faqvi5rl50l98ncb83c7qxy92jg2n";
     };
 
     # error: invalid command 'test'
