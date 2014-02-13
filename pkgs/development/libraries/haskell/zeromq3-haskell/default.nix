@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "zeromq3-haskell";
-  version = "0.5.1";
-  sha256 = "0jmdhs2apmcr3wf5r739gq9qqad59qj82h7qpdk3m4cc2a7djil0";
+  version = "0.5.2";
+  sha256 = "1ky92qwyk27qsxnvaj0mc9yyhk7g19ry2nq55666ayahc899z213";
   buildDepends = [
     async MonadCatchIOTransformers semigroups transformers
   ];
@@ -13,7 +13,7 @@ cabal.mkDerivation (self: {
     ansiTerminal async checkers MonadCatchIOTransformers QuickCheck
     transformers
   ];
-  extraLibraries = [ zeromq ];
+  pkgconfigDepends = [ zeromq ];
   doCheck = false;
   meta = {
     homepage = "http://github.com/twittner/zeromq-haskell/";
