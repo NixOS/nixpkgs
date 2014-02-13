@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.16.13";
   
   src = fetchurl {
-    url = "http://libtorrent.googlecode.com/files/${name}.tar.gz";
+    url = mirror://sourceforge/libtorrent/libtorrent-rasterbar-0.16.13.tar.gz;
     sha256 = "1sr788hhip6pgfb842110nl36hqdc1vz2s9n5vzypm0jy7qklmvm";
   };
 
