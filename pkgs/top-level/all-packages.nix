@@ -9626,7 +9626,7 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde411;
 
-# kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde412 );
+  kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde412 );
 
   kde4_prev = recurseIntoAttrs pkgs.kde410;
 
@@ -9645,6 +9645,12 @@ let
       libusb = libusb1;
       libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.11;
+
+ kde412 = kdePackagesFor (pkgs.kde412 // {
+      eigen = eigen2;
+      libusb = libusb1;
+      libcanberra = libcanberra_kde;
+    }) ../desktops/kde-4.12;
 
   kdePackagesFor = self: dir:
     let callPackageOrig = callPackage; in
