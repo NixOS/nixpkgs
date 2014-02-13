@@ -177,16 +177,13 @@ in {
     systemd.services."networkmanager-init" = {
       description = "NetworkManager initialisation";
       wantedBy = [ "network.target" ];
-      partOf = [ "NetworkManager.service" ];
-      wants = [ "ModemManager.service" "NetworkManager.service" ];
+      wants = [ "NetworkManager.service" ];
       before = [ "NetworkManager.service" ];
       script = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
         mkdir -m 755 -p ${stateDirs}
       '';
-      serviceConfig = {
-        Type = "oneshot";
-      };
+      serviceConfig.Type = "oneshot";
     };
 
     # Turn off NixOS' network management
