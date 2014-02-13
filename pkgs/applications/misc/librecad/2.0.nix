@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, qt4, muparser, which, boost}:
+{ stdenv, fetchurl, qt4, muparser, which, boost, pkgconfig }:
 
 stdenv.mkDerivation {
-  name = "librecad-2.0.0beta1";
+  name = "librecad-2.0.2";
 
   src = fetchurl {
-    url = https://github.com/LibreCAD/LibreCAD/tarball/2.0.0beta1;
-    name = "librecad-2.0.0beta1.tar.gz";
-    sha256 = "8bf969b79be115f3b3ff72cc030a4c21fe93164dd0cb19ddfb78a7d66b8bc770";
+    url = https://github.com/LibreCAD/LibreCAD/tarball/2.0.2;
+    name = "librecad-2.0.2.tar.gz";
+    sha256 = "0a5rs1h4n74d4bnrj91ij6y6wzc8d6nbrg9lfwjx8icjjl6hqikm";
   };
 
   patchPhase = ''
@@ -25,12 +25,14 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ qt4 muparser which boost ];
+  nativeBuildInputs = [ pkgconfig ];
 
   enableParallelBuilding = true;
 
   meta = {
     description = "A 2D CAD package based upon Qt";
     homepage = http://librecad.org;
+    repositories.git = git://github.com/LibreCAD/LibreCAD.git;
     license = "GPLv2";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
