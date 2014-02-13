@@ -6888,6 +6888,8 @@ let
 
   libsemanage = callPackage ../os-specific/linux/libsemanage { };
 
+  libraw = callPackage ../development/libraries/libraw { };
+
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
   libsexy = callPackage ../development/libraries/libsexy { };
