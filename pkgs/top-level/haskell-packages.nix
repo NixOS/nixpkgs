@@ -954,7 +954,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   digestiveFunctors = callPackage ../development/libraries/haskell/digestive-functors {};
 
-  digestiveFunctorsAeson = callPackage ../development/libraries/haskell/digestive-functors-aeson {};
+  digestiveFunctorsAeson = callPackage ../development/libraries/haskell/digestive-functors-aeson {
+    aeson = self.aeson_0_7_0_1;
+    lens = self.lens_4_0_3;
+  };
 
   digestiveFunctorsHeist = callPackage ../development/libraries/haskell/digestive-functors-heist {};
 
