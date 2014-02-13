@@ -190,7 +190,7 @@ in
                 mkdir -m 0700 -p ${cfg.dataDir}
                 if [ "$(id -u)" = 0 ]; then
                   chown -R postgres ${cfg.dataDir}
-                  su -s ${pkgs.stdenv.shell} postgres -c 'initdb -U root'
+                  su -s ${pkgs.stdenv.shell} postgres -c initdb
                 else
                   # For non-root operation.
                   initdb
