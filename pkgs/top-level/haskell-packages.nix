@@ -749,6 +749,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   Chart = callPackage ../development/libraries/haskell/Chart {};
   ChartCairo = callPackage ../development/libraries/haskell/Chart-cairo {};
+  ChartDiagrams = callPackage ../development/libraries/haskell/Chart-diagrams {};
   ChartGtk = callPackage ../development/libraries/haskell/Chart-gtk {};
 
   ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
@@ -940,6 +941,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   diagramsCore = callPackage ../development/libraries/haskell/diagrams/core.nix {};
   diagramsContrib = callPackage ../development/libraries/haskell/diagrams/contrib.nix {};
   diagramsLib = callPackage ../development/libraries/haskell/diagrams/lib.nix {};
+  diagramsPostscript = callPackage ../development/libraries/haskell/diagrams/postscript.nix {};
   diagramsSvg = callPackage ../development/libraries/haskell/diagrams/svg.nix {};
 
   Diff = callPackage ../development/libraries/haskell/Diff {};
@@ -2279,6 +2281,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   svgcairo = callPackage ../development/libraries/haskell/svgcairo {
     libc = pkgs.stdenv.gcc.libc;
   };
+
+  SVGFonts = callPackage ../development/libraries/haskell/SVGFonts {};
 
   symbol = callPackage ../development/libraries/haskell/symbol {};
 
