@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "sqlite-simple";
-  version = "0.4.5.0";
-  sha256 = "0y4w8rj46lawz3hbi8dz80fbvxxgzj85094dxkwvpzgrf33py4y4";
+  version = "0.4.5.1";
+  sha256 = "0mmj6vk3yjvrbsggc5pyba5iprzvfhlsq1jfradpazgfc998j0ry";
   buildDepends = [
     attoparsec blazeBuilder blazeTextual directSqlite text time
     transformers
