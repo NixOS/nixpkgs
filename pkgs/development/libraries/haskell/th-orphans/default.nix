@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "th-orphans";
-  version = "0.8";
-  sha256 = "0kzzcicn6pggvvblhbrs3vh0bf71izlb99lb0f5qww7ymi4smldr";
+  version = "0.8.1";
+  sha256 = "1glf1zkiip18l0qdy3856ag7ksbxzd11dzdyq00qrz87kck5y58w";
   buildDepends = [ thLift ];
   jailbreak = true;
   meta = {
