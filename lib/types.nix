@@ -124,17 +124,6 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
     };
 
-    heterogeneousAttrsOf = elemTypeFn: mkOptionType {
-      name = "attribute set of values of many types, including ${(elemTypeFn "<name>").name}";
-      check = x: isAttrs x && all (name: (elemTypeFn name).check (getAttr name x)) (attrNames x);
-      merge = loc: defs:
-        zipAttrsWith (name: (elemTypeFn name).merge (loc ++ [name]))
-          # Push down position info.
-          (map (def: listToAttrs (mapAttrsToList (n: def':
-            { name = n; value = { inherit (def) file; value = def'; }; }) def.value)) defs);
-      getSubOptions = prefix: (elemTypeFn "<name>").getSubOptions (prefix ++ ["<name>"]);
-    };
-
     # List or attribute set of ...
     loaOf = elemType:
       let
@@ -208,6 +197,25 @@ rec {
       };
 
     submodule = submoduleWithExtraArgs {};
+
+    nixosSubmodule = nixos: args: mkOptionType rec {
+      name = "submodule containing a NixOS config";
+      check = x: isAttrs x || isFunction x;
+      merge = loc: defs:
+        let
+          coerce = def: if isFunction def then def else { config = def; };
+        in (import (nixos + "/lib/eval-config.nix") (args // {
+          modules = (args.modules or []) ++
+            map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
+
+          prefix = loc;
+        })).config;
+      getSubOptions = prefix: (import (nixos + "/lib/eval-config.nix") (args // {
+        modules = (args.modules or []);
+
+        inherit prefix;
+      })).options;
+    };
 
     # Obsolete alternative to configOf.  It takes its option
     # declarations from the ‘options’ attribute of containing option
