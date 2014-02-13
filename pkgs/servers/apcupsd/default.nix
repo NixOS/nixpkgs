@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apcupsd";
-  name = "${pname}-3.14.10";
+  name = "${pname}-3.14.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "0ci0xyg1hzj8lnmm3vxfsvgpb3wdgh1ii3gb8jgdxyqnk7nba1q7";
+    sha256 = "0wrb8vdc872f1x0gw21b5c81h0vxvsc7yks5qzbq2j3hkbl2vixd";
   };
 
   buildInputs = [ pkgconfig utillinux man ] ++ stdenv.lib.optional enableCgiScripts gd;
