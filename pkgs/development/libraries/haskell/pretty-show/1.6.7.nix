@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pretty-show";
-  version = "1.6.5";
-  sha256 = "0yn20gh2xwzvfwb9fdzxqqbbb6vvd4rlv5ancw4vc8p2kgfhwxf3";
+  version = "1.6.7";
+  sha256 = "16qjp6cl3hyir5bchnncq95bp7nw5cpp5kd5mszkjjhzw1jj9srz";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath haskellLexer ];

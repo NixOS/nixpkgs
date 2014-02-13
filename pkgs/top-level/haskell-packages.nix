@@ -1937,10 +1937,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   prettyclass = callPackage ../development/libraries/haskell/prettyclass {};
 
   prettyShow_1_2 = callPackage ../development/libraries/haskell/pretty-show/1.2.nix {};
-  prettyShow_1_6_5 = callPackage ../development/libraries/haskell/pretty-show/1.6.5.nix {
+  prettyShow_1_6_7 = callPackage ../development/libraries/haskell/pretty-show/1.6.7.nix {
     happy = self.happy_1_19_2;
   };
-  prettyShow = self.prettyShow_1_6_5;
+  prettyShow = self.prettyShow_1_6_7;
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
