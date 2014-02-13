@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
 , udev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
 , libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll
-, gobjectIntrospection }:
+, gobjectIntrospection, modemmanager }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
@@ -33,9 +33,11 @@ stdenv.mkDerivation rec {
     "--with-crypto=gnutls" "--disable-more-warnings"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-kernel-firmware-dir=/run/current-system/firmware"
-    "--with-session-tracking=systemd" ];
+    "--with-session-tracking=systemd"
+    "--with-modem-manager-1"
+  ];
 
-  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz bluez5 gobjectIntrospection ];
+  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz bluez5 gobjectIntrospection modemmanager ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 
