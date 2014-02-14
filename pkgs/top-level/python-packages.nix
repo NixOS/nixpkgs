@@ -7197,6 +7197,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "A full-featured console (xterm et al.) user interface library";
       homepage = http://excess.org/urwid;
+      repositories.git = git://github.com/wardi/urwid.git;
       license = pkgs.lib.licenses.lgpl21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
