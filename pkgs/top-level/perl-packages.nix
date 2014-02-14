@@ -9266,10 +9266,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLLibXSLT = buildPerlPackage rec {
-    name = "XML-LibXSLT-1.70";
+    name = "XML-LibXSLT-1.87";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/XML/${name}.tar.gz";
-      sha256 = "0x8lqlxr6xhgwwa6zj4shrwrqlgbgs0piripc1fsnw4z1yl2gf9p";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "18kxa51a0prr8dx0w7q7wa8gdgalswzqa24sjkxmgs0f9yhcixz1";
     };
     buildInputs = [ pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [ XMLLibXML ];
