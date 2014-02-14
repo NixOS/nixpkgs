@@ -3558,6 +3558,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "4240faabe0646defd4ec76ca9e111977b9e8060eaec41adeb284eb422a428393";
     };
     propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP ];
+    patches = [ ../development/perl-modules/finance-quote-yahoo.patch ];
     meta = {
       homepage = http://finance-quote.sourceforge.net/;
       description = "Get stock and mutual fund quotes from various exchanges";
