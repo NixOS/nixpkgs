@@ -54,6 +54,7 @@ in {
       description = "Redshift colour temperature adjuster";
       requires = [ "display-manager.service" ];
       after = [ "display-manager.service" ];
+      wantedBy = [ "graphical.target" ];
       serviceConfig.ExecStart = ''
         ${pkgs.redshift}/bin/redshift \
           -l ${cfg.latitude}:${cfg.longitude} \
