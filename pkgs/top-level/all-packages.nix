@@ -4197,7 +4197,7 @@ let
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
 
-  glibc = callPackage ../development/libraries/glibc/2.18 {
+  glibc = callPackage ../development/libraries/glibc/2.19 {
     kernelHeaders = linuxHeaders;
     installLocales = config.glibc.locales or false;
     machHeaders = null;
@@ -4205,13 +4205,13 @@ let
     gccCross = null;
   };
 
-  glibc_memusage = callPackage ../development/libraries/glibc/2.18 {
+  glibc_memusage = callPackage ../development/libraries/glibc/2.19 {
     kernelHeaders = linuxHeaders;
     installLocales = false;
     withGd = true;
   };
 
-  glibcCross = forceNativeDrv (makeOverridable (import ../development/libraries/glibc/2.18)
+  glibcCross = forceNativeDrv (makeOverridable (import ../development/libraries/glibc/2.19)
     (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
      in {
        inherit stdenv fetchurl;
@@ -4240,9 +4240,9 @@ let
     installLocales = config.glibc.locales or false;
   };
 
-  glibcLocales = callPackage ../development/libraries/glibc/2.18/locales.nix { };
+  glibcLocales = callPackage ../development/libraries/glibc/2.19/locales.nix { };
 
-  glibcInfo = callPackage ../development/libraries/glibc/2.18/info.nix { };
+  glibcInfo = callPackage ../development/libraries/glibc/2.19/info.nix { };
 
   glibc_multi =
     runCommand "${glibc.name}-multi"
