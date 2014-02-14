@@ -9020,10 +9020,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   UNIVERSALrequire = buildPerlPackage {
-    name = "UNIVERSAL-require-0.11";
+    name = "UNIVERSAL-require-0.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSCHWERN/UNIVERSAL-require-0.11.tar.gz;
-      sha256 = "1rh7i3gva4m96m31g6yfhlqcabszhghbb3k3qwxbgx3mkf5s6x6i";
+      url = mirror://cpan/authors/id/N/NE/NEILB/UNIVERSAL-require-0.16.tar.gz;
+      sha256 = "0fbx3f39lvck3n4ksqwji5m1hfdagx25jk5kg2h0gkb01jwz3za2";
     };
   };
 
