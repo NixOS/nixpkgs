@@ -8079,10 +8079,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestFailWarnings = buildPerlPackage {
-    name = "Test-FailWarnings-0.005";
+    name = "Test-FailWarnings-0.008";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-FailWarnings-0.005.tar.gz;
-      sha256 = "014f909e6c171f77b811139c49c1dca9d0f1e2d1c41b5dca332b6b55b3eb0b4e";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-FailWarnings-0.008.tar.gz;
+      sha256 = "0vx9chcp5x8m0chq574p9fnfckh5gl94j7904rh9v17n568fyd6s";
     };
     buildInputs = [ CaptureTiny ];
     meta = {
