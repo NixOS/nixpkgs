@@ -9406,10 +9406,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   YAMLLibYAML = buildPerlPackage rec {
-    name = "YAML-LibYAML-0.38";
+    name = "YAML-LibYAML-0.41";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/YAML/${name}.tar.gz";
-      sha256 = "eb98f304d14f6557b07adfa24da16e00cfa54a9d9484b6e898e35f919c5eb7ba";
+      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
+      sha256 = "1kj506lpg3fhqq0726p6y2h7pk24l6xihfyhqqsf8gd6lckl8rcs";
     };
   };
 
