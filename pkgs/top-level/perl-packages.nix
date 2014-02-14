@@ -8768,10 +8768,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextTabularDisplay = buildPerlPackage rec {
-    name = "Text-TabularDisplay-1.22";
+    name = "Text-TabularDisplay-1.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DARREN/${name}.tar.gz";
-      sha256 = "05r3jvdf8av16hgy0i3wnc581ski08q1bnllq5cq1fnc7h2nm1c7";
+      sha256 = "0sbyfdiln6q2g66mv64alayfcqnqg17kihdzgpslxdsn14vpvjq5";
     };
     propagatedBuildInputs = [TextAligner];
   };
