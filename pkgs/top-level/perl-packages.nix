@@ -9372,10 +9372,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   YAML = buildPerlPackage {
-    name = "YAML-0.84";
+    name = "YAML-0.90";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSTROUT/YAML-0.84.tar.gz;
-      sha256 = "03349n2z32gwjqiq7l3g57avvphl2rw3lmwc8i5cl9hmfw51yd8a";
+      url = mirror://cpan/authors/id/I/IN/INGY/YAML-0.90.tar.gz;
+      sha256 = "0kfsmhv1lmqw2g1038azpxkfb91valwkh4i4gfjvqrj2wsr2hzhq";
     };
     meta = {
       homepage = https://github.com/ingydotnet/yaml-pm/tree;
