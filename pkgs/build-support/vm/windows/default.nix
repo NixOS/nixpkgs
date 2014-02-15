@@ -11,7 +11,6 @@ let
   base = import ./install {
     isoFile = winISO;
     productKey = "XXX";
-    sshPublicKey = "${snakeOilSSH}/key.pub";
   };
 
   maybeKvm64 = lib.optional (stdenv.system == "x86_64-linux") "-cpu kvm64";
@@ -32,14 +31,6 @@ let
   modulesClosure = lib.overrideDerivation vmTools.modulesClosure (o: {
     rootModules = o.rootModules ++ lib.singleton "virtio_net";
   });
-
-  snakeOilSSH = stdenv.mkDerivation {
-    name = "snakeoil-ssh-cygwin";
-    buildCommand = ''
-      ensureDir "$out"
-      ${openssh}/bin/ssh-keygen -t ecdsa -f "$out/key" -N ""
-    '';
-  };
 
   controllerQemuArgs = cmd: let
     preInitScript = writeScript "preinit.sh" ''
@@ -108,7 +99,7 @@ let
 
       ${samba}/sbin/nmbd -D
       ${samba}/sbin/smbd -D
-      ${coreutils}/bin/cp -L "${snakeOilSSH}/key" /ssh.key
+      ${coreutils}/bin/cp -L "${base.sshKey}" /ssh.key
       ${coreutils}/bin/chmod 600 /ssh.key
 
       echo -n "Waiting for Windows VM to become ready"

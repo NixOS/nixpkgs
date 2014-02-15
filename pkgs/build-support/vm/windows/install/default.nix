@@ -1,16 +1,15 @@
 { isoFile
 , productKey
-, sshPublicKey
 }:
 
 let
-  inherit (import <nixpkgs> {}) lib runCommand;
+  inherit (import <nixpkgs> {}) lib stdenv runCommand openssh;
 
   bootstrapAfterLogin = runCommand "bootstrap.sh" {} ''
     cat > "$out" <<EOF
     mkdir -p ~/.ssh
     cat > ~/.ssh/authorized_keys <<PUBKEY
-    $(cat "${sshPublicKey}")
+    $(cat "${cygwinSshKey}/key.pub")
     PUBKEY
     ssh-host-config -y -c 'binmode ntsec' -w dummy
     cygrunsrv -S sshd
@@ -20,6 +19,14 @@ let
     mount -o bind /cygdrives/s /nix/store
     EOF
   '';
+
+  cygwinSshKey = stdenv.mkDerivation {
+    name = "snakeoil-ssh-cygwin";
+    buildCommand = ''
+      ensureDir "$out"
+      ${openssh}/bin/ssh-keygen -t ecdsa -f "$out/key" -N ""
+    '';
+  };
 
   packages = [ "openssh" ];
 
@@ -36,4 +43,6 @@ in {
     cygwinPackages = packages;
     inherit productKey;
   };
+
+  sshKey = "${cygwinSshKey}/key";
 }
