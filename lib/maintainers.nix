@@ -34,6 +34,7 @@
   jcumming = "Jack Cummings <jack@mudshark.org>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   ktosiek = "Tomasz Kontusz <tomasz.kontusz@gmail.com>";
+  lethalman = "Luca Bruno <lucabru@src.gnome.org>";
   linquize = "Linquize <linquize@yahoo.com.hk>";
   lovek323 = "Jason O'Conal <jason@oconal.id.au>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
