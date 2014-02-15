@@ -7447,6 +7447,8 @@ let
   };
   awesome = awesome-3-5;
 
+  inherit (gnome3) baobab;
+
   baresip = callPackage ../applications/networking/instant-messengers/baresip {
     ffmpeg = ffmpeg_1;
   };

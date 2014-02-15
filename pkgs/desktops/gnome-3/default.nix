@@ -14,6 +14,8 @@ rec {
 
   at_spi2_core = callPackage ./core/at-spi2-core { };
 
+  baobab = callPackage ./core/baobab { };
+
   caribou = callPackage ./core/caribou { };
 
   dconf = callPackage ./core/dconf { };
