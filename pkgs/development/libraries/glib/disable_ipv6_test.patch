@@ -1,0 +1,16 @@
+--- gio/tests/socket.c.orig	2014-02-17 13:32:00.939718839 +0000
++++ gio/tests/socket.c	2014-02-17 13:32:08.891718988 +0000
+@@ -980,11 +980,12 @@
+ 
+   g_test_add_func ("/socket/ipv4_sync", test_ipv4_sync);
+   g_test_add_func ("/socket/ipv4_async", test_ipv4_async);
+-  g_test_add_func ("/socket/ipv6_sync", test_ipv6_sync);
++/*  g_test_add_func ("/socket/ipv6_sync", test_ipv6_sync);
+   g_test_add_func ("/socket/ipv6_async", test_ipv6_async);
+ #if defined (IPPROTO_IPV6) && defined (IPV6_V6ONLY)
+   g_test_add_func ("/socket/ipv6_v4mapped", test_ipv6_v4mapped);
+ #endif
++  */
+   g_test_add_func ("/socket/close_graceful", test_close_graceful);
+   g_test_add_func ("/socket/timed_wait", test_timed_wait);
+   g_test_add_func ("/socket/address", test_sockaddr);
