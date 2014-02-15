@@ -8,7 +8,7 @@ let
 
   cygPkgList = fetchurl {
     url = "${mirror}/x86_64/setup.ini";
-    sha256 = "0d54pli0gnm3010w9iq2bar3r2sc4syyblg62q75inc2cq341bi3";
+    sha256 = "19vfm7zr8kcp1algmggk8vsilkccycx22mdf0ynfl6lcmp6dkfsz";
   };
 
   makeCygwinClosure = { packages, packageList }: let
