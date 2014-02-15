@@ -148,6 +148,8 @@ let
     QEMU_VDE_SOCKET="$(pwd)/vde.ctl"
     MONITOR_SOCKET="$(pwd)/monitor"
     ${vde2}/bin/vde_switch -s "$QEMU_VDE_SOCKET" &
+    echo 'alive?' | ${socat}/bin/socat - \
+      UNIX-CONNECT:$QEMU_VDE_SOCKET/ctl,retry=20
   '';
 
   vmExec = if installMode then ''
