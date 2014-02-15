@@ -8,189 +8,10 @@ with import <nixpkgs/nixos/lib/build-vms.nix> {
 let
   winISO = /path/to/iso/XXX;
 
-  bootstrapAfterLogin = runCommand "bootstrap.sh" {} ''
-    cat > "$out" <<EOF
-    mkdir -p ~/.ssh
-    cat > ~/.ssh/authorized_keys <<PUBKEY
-    $(cat "${snakeOilSSH}/key.pub")
-    PUBKEY
-    ssh-host-config -y -c 'binmode ntsec' -w dummy
-    cygrunsrv -S sshd
-
-    net use S: '\\192.168.0.2\nixstore'
-    mkdir -p /nix/store
-    mount -o bind /cygdrives/s /nix/store
-    EOF
-  '';
-
-  productKey = "XXX";
-
-  unattended = /* productKey: */ let
-    installCygwin = [ "openssh" ];
-    cygwinRoot = "C:\\cygwin";
-    afterSetup = [
-      "E:\\setup.exe"
-      "-L -n -q"
-      "-l E:\\"
-      "-R ${cygwinRoot}"
-      "-C base"
-    ] ++ map (p: "-P ${p}") installCygwin;
-    runCygShell = args: "${cygwinRoot}\\bin\\bash -l ${args}";
-  in writeText "winnt.sif" ''
-    [Data]
-    AutoPartition = 1
-    AutomaticUpdates = 0
-    MsDosInitiated = 0
-    UnattendedInstall = Yes
-
-    [Unattended]
-    DUDisable = Yes
-    DriverSigningPolicy = Ignore
-    Hibernation = No
-    OemPreinstall = No
-    OemSkipEula = Yes
-    Repartition = Yes
-    TargetPath = \WINDOWS
-    UnattendMode = FullUnattended
-    UnattendSwitch = Yes
-    WaitForReboot = No
-
-    [GuiUnattended]
-    AdminPassword = "nopasswd"
-    AutoLogon = Yes
-    AutoLogonCount = 1
-    OEMSkipRegional = 1
-    OemSkipWelcome = 1
-    ServerWelcome = No
-    TimeZone = 85
-
-    [UserData]
-    ComputerName = "cygwin"
-    FullName = "cygwin"
-    OrgName = ""
-    ProductKey = "${productKey}"
-
-    [Networking]
-    InstallDefaultComponents = Yes
-
-    [Identification]
-    JoinWorkgroup = cygwin
-
-    [NetAdapters]
-    PrimaryAdapter = params.PrimaryAdapter
-
-    [params.PrimaryAdapter]
-    InfID = *
-
-    [params.MS_MSClient]
-
-    [NetProtocols]
-    MS_TCPIP = params.MS_TCPIP
-
-    [params.MS_TCPIP]
-    AdapterSections=params.MS_TCPIP.PrimaryAdapter
-
-    [params.MS_TCPIP.PrimaryAdapter]
-    DHCP = No
-    IPAddress = 192.168.0.1
-    SpecificTo = PrimaryAdapter
-    SubnetMask = 255.255.255.0
-    WINS = No
-
-    ; Turn off all components
-    [Components]
-    ${lib.concatMapStrings (comp: "${comp} = Off\n") [
-      "AccessOpt" "Appsrv_console" "Aspnet" "BitsServerExtensionsISAPI"
-      "BitsServerExtensionsManager" "Calc" "Certsrv" "Certsrv_client"
-      "Certsrv_server" "Charmap" "Chat" "Clipbook" "Cluster" "Complusnetwork"
-      "Deskpaper" "Dialer" "Dtcnetwork" "Fax" "Fp_extensions" "Fp_vdir_deploy"
-      "Freecell" "Hearts" "Hypertrm" "IEAccess" "IEHardenAdmin" "IEHardenUser"
-      "Iis_asp" "Iis_common" "Iis_ftp" "Iis_inetmgr" "Iis_internetdataconnector"
-      "Iis_nntp" "Iis_serversideincludes" "Iis_smtp" "Iis_webdav" "Iis_www"
-      "Indexsrv_system" "Inetprint" "Licenseserver" "Media_clips" "Media_utopia"
-      "Minesweeper" "Mousepoint" "Msmq_ADIntegrated" "Msmq_Core"
-      "Msmq_HTTPSupport" "Msmq_LocalStorage" "Msmq_MQDSService"
-      "Msmq_RoutingSupport" "Msmq_TriggersService" "Msnexplr" "Mswordpad"
-      "Netcis" "Netoc" "OEAccess" "Objectpkg" "Paint" "Pinball" "Pop3Admin"
-      "Pop3Service" "Pop3Srv" "Rec" "Reminst" "Rootautoupdate" "Rstorage" "SCW"
-      "Sakit_web" "Solitaire" "Spider" "TSWebClient" "Templates"
-      "TerminalServer" "UDDIAdmin" "UDDIDatabase" "UDDIWeb" "Vol" "WMAccess"
-      "WMPOCM" "WbemMSI" "Wms" "Wms_admin_asp" "Wms_admin_mmc" "Wms_isapi"
-      "Wms_server" "Zonegames"
-    ]}
-
-    [WindowsFirewall]
-    Profiles = WindowsFirewall.TurnOffFirewall
-
-    [WindowsFirewall.TurnOffFirewall]
-    Mode = 0
-
-    [SetupParams]
-    UserExecute = "${lib.concatStringsSep " " afterSetup}"
-
-    [GuiRunOnce]
-    Command0 = "${cygwinRoot}\bin\bash -l E:\bootstrap.sh"
-  '';
-
-  floppyImg = stdenv.mkDerivation {
-    name = "unattended-floppy.img";
-    buildCommand = ''
-      dd if=/dev/zero of="$out" count=1440 bs=1024
-      ${dosfstools}/sbin/mkfs.msdos "$out"
-      ${mtools}/bin/mcopy -i "$out" "${unattended}" ::winnt.sif
-      ${mtools}/bin/mcopy -i "$out" "${snakeOilSSH}/key.pub" ::ssh.pub
-    '';
-  };
-
-  qemuCommandWindows = ''
-    ${vmTools.qemuProg} \
-      ${lib.optionalString (stdenv.system == "x86_64-linux") "-cpu kvm64"} \
-      -nographic -no-reboot \
-      -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
-      -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
-      -drive file=$diskImage,if=virtio,cache=writeback,werror=report \
-      $QEMU_OPTS
-  '';
-
-  cygwinMirror = "http://ftp.gwdg.de/pub/linux/sources.redhat.com/cygwin";
-
-  cygPkgList = fetchurl {
-    url = "${cygwinMirror}/x86_64/setup.ini";
-    sha256 = "0d54pli0gnm3010w9iq2bar3r2sc4syyblg62q75inc2cq341bi3";
-  };
-
-  makeCygwinClosure = { packages, packageList }: let
-    expr = import (runCommand "cygwin.nix" { buildInputs = [ python ]; } ''
-      python ${./mkclosure.py} "${packages}" ${toString packageList} > "$out"
-    '');
-    gen = { url, md5 }: {
-      source = fetchurl {
-        url = "${cygwinMirror}/${url}";
-        inherit md5;
-      };
-      target = url;
-    };
-  in map gen expr;
-
-  cygiso = import <nixpkgs/nixos/lib/make-iso9660-image.nix> {
-    inherit (pkgs) stdenv perl cdrkit pathsFromGraph;
-    contents = [
-      { source = bootstrapAfterLogin;
-        target = "bootstrap.sh";
-      }
-      { source = fetchurl {
-          url = "http://cygwin.com/setup-x86_64.exe";
-          sha256 = "1bjmq9h1p6mmiqp6f1kvmg94jbsdi1pxfa07a5l497zzv9dsfivm";
-        };
-        target = "setup.exe";
-      }
-      { source = cygPkgList;
-        target = "setup.ini";
-      }
-    ] ++ makeCygwinClosure {
-      packages = cygPkgList;
-      packageList = [ "openssh" ];
-    };
+  base = import ./install {
+    isoFile = winISO;
+    productKey = "XXX";
+    sshPublicKey = "${snakeOilSSH}/key.pub";
   };
 
   maybeKvm64 = lib.optional (stdenv.system == "x86_64-linux") "-cpu kvm64";
@@ -199,10 +20,10 @@ let
     "-monitor unix:$MONITOR_SOCKET,server,nowait"
     "-nographic"
     "-boot order=c,once=d"
-    "-drive file=${floppyImg},readonly,index=0,if=floppy"
+    "-drive file=${base.floppy},readonly,index=0,if=floppy"
     "-drive file=winvm.img,index=0,media=disk"
     "-drive file=${winISO},index=1,media=cdrom"
-    "-drive file=${cygiso}/iso/cd.iso,index=2,media=cdrom"
+    "-drive file=${base.iso}/iso/cd.iso,index=2,media=cdrom"
     "-net nic,vlan=0,macaddr=52:54:00:12:01:01"
     "-net vde,vlan=0,sock=$QEMU_VDE_SOCKET"
     "-rtc base=2010-01-01,clock=vm"
