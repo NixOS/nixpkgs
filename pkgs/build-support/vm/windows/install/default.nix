@@ -12,11 +12,8 @@ let
     $(cat "${cygwinSshKey}/key.pub")
     PUBKEY
     ssh-host-config -y -c 'binmode ntsec' -w dummy
-
-    net use S: '\\192.168.0.2\nixstore'
-    mkdir -p /nix/store
-    echo "/cygdrives/s /nix/store none bind 0 0" >> /etc/fstab
-    shutdown -s now
+    cygrunsrv -S sshd
+    shutdown -s 5
     EOF
   '';
 
