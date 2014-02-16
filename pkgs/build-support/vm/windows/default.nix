@@ -16,18 +16,28 @@ let
     ];
   });
 
-  runAndSuspend = runInVM "winvm.img" {
-    command = lib.concatStringsSep " && " [
-      "net config server /autodisconnect:-1"
-      "net use S: '\\\\192.168.0.2\\nixstore' /persistent:yes"
-      "net use X: '\\\\192.168.0.2\\xchg' /persistent:yes"
-      "mkdir -p /nix/store"
-      "mount -o bind /cygdrive/s /nix/store"
-      "echo /cygdrive/s /nix/store none bind 0 0 >> /etc/fstab"
-      "mkdir -p /tmp/xchg"
-      "mount -o bind /cygdrive/x /tmp/xchg"
-      "echo /cygdrive/x /tmp/xchg none bind 0 0 >> /etc/fstab"
+  runAndSuspend = let
+    drives = {
+      s = {
+        source = "nixstore";
+        target = "/nix/store";
+      };
+      x = {
+        source = "xchg";
+        target = "/tmp/xchg";
+      };
+    };
+
+    genDriveCmds = letter: { source, target }: [
+      "net use ${letter}: '\\\\192.168.0.2\\${source}' /persistent:yes"
+      "mkdir -p '${target}'"
+      "mount -o bind '/cygdrive/${letter}' '${target}'"
+      "echo '/cygdrive/${letter} ${target} none bind 0 0' >> /etc/fstab"
     ];
+  in runInVM "winvm.img" {
+    command = lib.concatStringsSep " && " ([
+      "net config server /autodisconnect:-1"
+    ] ++ lib.concatLists (lib.mapAttrsToList genDriveCmds drives));
     suspendTo = "state.gz";
   };
 
