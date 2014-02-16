@@ -46,6 +46,7 @@ in {
     environment.systemPackages =
       [ gnome3.evince
         gnome3.eog
+        gnome3.dconf
         pkgs.ibus
         gnome3.gnome_shell
         gnome3.gnome_settings_daemon
@@ -55,5 +56,7 @@ in {
         gnome3.gnome_control_center
       ];
   };
+
+  environment.variables.GIO_EXTRA_MODULES = "${gnome3.dconf}/lib/gio/modules";
 
 }
