@@ -84,6 +84,8 @@ rec {
 
   vte = callPackage ./core/vte { };
 
+  yelp = callPackage ./core/yelp { };
+
   yelp_xsl = callPackage ./core/yelp-xsl { };
 
   zenity = callPackage ./core/zenity { };
