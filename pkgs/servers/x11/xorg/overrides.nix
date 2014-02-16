@@ -197,7 +197,16 @@ in
   };
 
   xkeyboardconfig = attrs: attrs // {
+    #TODO: resurrect patches for US_intl and Esperanto?
+
     buildInputs = attrs.buildInputs ++ [args.intltool];
+
+    # 1: compatibility for X11/xkb location
+    # 2: I think pkgconfig/ is supposed to be in /lib/
+    postInstall = ''
+      ln -s share "$out/etc"
+      mkdir "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
+    '';
   };
 
   xmodmap = attrs: attrs // {
