@@ -52,10 +52,7 @@ let
       -o trans=virtio,version=9p2000.L,msize=262144,cache=loose \
       xchg /fs/xchg
 
-    cat > /fs/etc/passwd <<PASSWD
-    root:x:0:0::/root:/bin/false
-    nobody:x:65534:65534::/var/empty:/bin/false
-    PASSWD
+    echo root:x:0:0::/root:/bin/false > /fs/etc/passwd
 
     set +e
     chroot /fs $command $out
@@ -96,6 +93,7 @@ let
     [global]
     security = user
     map to guest = Bad User
+    guest account = root
     workgroup = cygwin
     netbios name = controller
     server string = %h
@@ -105,12 +103,12 @@ let
 
     [nixstore]
     path = /nix/store
-    read only = no
+    writable = yes
     guest ok = yes
 
     [xchg]
     path = /xchg
-    read only = no
+    writable = yes
     guest ok = yes
     CONFIG
 
