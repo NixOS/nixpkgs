@@ -3558,7 +3558,9 @@ let
     inherit python pil makeWrapper;
   };
 
-  doxygen = lowPrio (doxygen_gui.override { qt4 = null; });
+  doxygen = callPackage ../development/tools/documentation/doxygen {
+      qt4 = null;
+  };
 
   /* XXX: The LaTeX output with Doxygen 1.8.0 makes LaTeX barf.
      See <https://bugzilla.gnome.org/show_bug.cgi?id=670973>.  */
@@ -3566,7 +3568,7 @@ let
     qt4 = null;
   };
 
-  doxygen_gui = callPackage ../development/tools/documentation/doxygen { };
+  doxygen_gui = lowPrio (doxygen.override { inherit qt4; });
 
   drush = callPackage ../development/tools/misc/drush { };
 
