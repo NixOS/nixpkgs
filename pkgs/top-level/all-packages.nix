@@ -7632,8 +7632,6 @@ let
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
-  dvswitch = callPackage ../applications/video/dvswitch { };
-
   dwb = callPackage ../applications/networking/browsers/dwb { };
 
   dwm = callPackage ../applications/window-managers/dwm {
