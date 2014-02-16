@@ -17,6 +17,13 @@ let
   });
 
   runAndSuspend = runInVM "winvm.img" {
+    command = lib.concatStringsSep "; " [
+      "set -e"
+      "net config server /autodisconnect:-1"
+      "net use S: '\\\\192.168.0.2\\nixstore' /persistent:yes"
+      "mkdir -p /nix/store"
+      "mount -o bind /cygdrive/s /nix/store"
+    ];
     suspendTo = "state.gz";
   };
 
