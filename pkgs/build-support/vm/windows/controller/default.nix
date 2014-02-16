@@ -57,6 +57,8 @@ let
     };
   };
 
+  shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
+
   initScript = writeScript "init.sh" (''
     #!${stdenv.shell}
     ${coreutils}/bin/mkdir -p /etc/samba /etc/samba/private /var/lib/samba
@@ -104,7 +106,7 @@ let
       -o StrictHostKeyChecking=no \
       -i /ssh.key \
       -l Administrator \
-      192.168.0.1 -- "${command}"
+      192.168.0.1 -- ${shellEscape command}
 
     ${busybox}/sbin/poweroff -f
   ''));
