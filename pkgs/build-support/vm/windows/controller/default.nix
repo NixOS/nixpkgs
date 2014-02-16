@@ -172,7 +172,9 @@ let
   });
 
   preVM = ''
+    (set; declare -p) > saved-env
     XCHG_DIR="$(${coreutils}/bin/mktemp -d nix-vm.XXXXXXXXXX --tmpdir)"
+    ${coreutils}/bin/mv saved-env "$XCHG_DIR/"
     QEMU_VDE_SOCKET="$(pwd)/vde.ctl"
     MONITOR_SOCKET="$(pwd)/monitor"
     ${vde2}/bin/vde_switch -s "$QEMU_VDE_SOCKET" &
