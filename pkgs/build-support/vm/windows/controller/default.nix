@@ -128,12 +128,10 @@ let
       -i /ssh.key \
       -l Administrator \
       192.168.0.1 -- ${shellEscape command}
-
-    ${lib.optionalString (suspendTo != null) ''
+  '') + lib.optionalString (suspendTo != null) ''
     ${coreutils}/bin/touch /xchg/suspend_now
     ${loopForever}
-    ''}
-  ''));
+  '');
 
   kernelAppend = lib.concatStringsSep " " [
     "panic=1"
@@ -175,6 +173,9 @@ let
     (set; declare -p) > saved-env
     XCHG_DIR="$(${coreutils}/bin/mktemp -d nix-vm.XXXXXXXXXX --tmpdir)"
     ${coreutils}/bin/mv saved-env "$XCHG_DIR/"
+
+    eval "$preVM"
+
     QEMU_VDE_SOCKET="$(pwd)/vde.ctl"
     MONITOR_SOCKET="$(pwd)/monitor"
     ${vde2}/bin/vde_switch -s "$QEMU_VDE_SOCKET" &
@@ -190,7 +191,9 @@ let
   '' else ''
     ${vmTools.qemuProg} ${cygwinQemuArgs} &
     ${vmTools.qemuProg} ${controllerQemuArgs}${bgBoth}
-  '' + lib.optionalString (suspendTo != null) ''
+  '';
+
+  postVM = if suspendTo != null then ''
     while ! test -e "$XCHG_DIR/suspend_now"; do sleep 1; done
     ${socat}/bin/socat - UNIX-CONNECT:$MONITOR_SOCKET <<CMD
     stop
@@ -199,10 +202,25 @@ let
     quit
     CMD
     wait %-
+
+    eval "$postVM"
+    exit 0
+  '' else if installMode then ''
+    eval "$postVM"
+    exit 0
+  '' else ''
+    if ! test -e "$XCHG_DIR/in-vm-exit"; then
+      echo "Virtual machine didn't produce an exit code."
+      exit 1
+    fi
+
+    eval "$postVM"
+    exit $(< "$XCHG_DIR/in-vm-exit")
   '';
 
 in writeScript "run-cygwin-vm.sh" ''
   #!${stdenv.shell} -e
   ${preVM}
   ${vmExec}
+  ${postVM}
 ''
