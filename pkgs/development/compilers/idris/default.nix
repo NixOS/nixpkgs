@@ -1,21 +1,23 @@
-{ cabal, ansiTerminal, ansiWlPprint, binary, boehmgc, Cabal
-, deepseq, filepath, gmp, happy, haskeline, languageJava, libffi
-, llvmGeneral, llvmGeneralPure, mtl, network, parsers, split, text
-, time, transformers, trifecta, unorderedContainers, utf8String
-, vector, vectorBinaryInstances, xml
+{ cabal, annotatedWlPprint, ansiTerminal, ansiWlPprint, binary
+, boehmgc, Cabal, deepseq, filepath, gmp, happy, haskeline
+, languageJava, libffi, llvmGeneral, llvmGeneralPure, mtl, network
+, parsers, split, text, time, transformers, trifecta
+, unorderedContainers, utf8String, vector, vectorBinaryInstances
+, xml, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "idris";
-  version = "0.9.10.1";
-  sha256 = "194gbpk8fy64maj9lcwj9hkbndc3287bh9mz2jm09vd11i23iyg1";
-  isLibrary = false;
+  version = "0.9.11.2";
+  sha256 = "16xgiygn0j3kl3l36lnv6wz422nz2bvn3lk86xkdfvwjpv4630yn";
+  isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    ansiTerminal ansiWlPprint binary Cabal deepseq filepath haskeline
-    languageJava libffi llvmGeneral llvmGeneralPure mtl network parsers
-    split text time transformers trifecta unorderedContainers
-    utf8String vector vectorBinaryInstances xml
+    annotatedWlPprint ansiTerminal ansiWlPprint binary Cabal deepseq
+    filepath haskeline languageJava libffi llvmGeneral llvmGeneralPure
+    mtl network parsers split text time transformers trifecta
+    unorderedContainers utf8String vector vectorBinaryInstances xml
+    zlib
   ];
   buildTools = [ happy ];
   extraLibraries = [ boehmgc gmp ];

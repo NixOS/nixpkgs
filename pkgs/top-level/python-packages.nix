@@ -461,6 +461,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+  bcdoc = buildPythonPackage rec {
+    name = "bcdoc-0.12.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/bcdoc/bcdoc-0.12.1.tar.gz";
+      md5 = "7c8617347c294ea4d36ec73fb5b2c26e";
+    };
+
+    buildInputs = [ pythonPackages.docutils pythonPackages.six ];
+
+    meta = {
+      homepage = https://github.com/botocore/bcdoc;
+      license = "Apache License 2.0";
+      description = "ReST document generation tools for botocore";
+    };
+  };
+
   beautifulsoup = buildPythonPackage (rec {
     name = "beautifulsoup-3.2.1";
 
@@ -704,12 +721,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   botocore = buildPythonPackage rec {
-    version = "0.13.1";
+    version = "0.33.0";
     name = "botocore-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "192kxgw76b22zmk5mxjkij5rskibb9jfaggvpznzy3ggsgja7yy8";
+      md5 = "6743c73a2e148abaa9c487a6e2ee53a3";
     };
 
     propagatedBuildInputs =
@@ -3283,11 +3300,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.0.2";
+    name = "jmespath-0.2.1";
 
     src = fetchurl {
-      url = "https://github.com/boto/jmespath/archive/0.0.2.tar.gz";
-      sha256 = "0wr1gq3gdyn3n21pvj62csdm095512zxd10gkg5ai1vvxh0mbn3r";
+      url = "https://pypi.python.org/packages/source/j/jmespath/jmespath-0.2.1.tar.gz";
+      md5 = "7800775aa12c6303f9ad597b6a8fa03c";
     };
 
     propagatedBuildInputs = [ ply ];
@@ -5906,12 +5923,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   robotframework = buildPythonPackage rec {
-    version = "2.8.1";
+    version = "2.8.4";
     name = "robotframework-${version}";
 
     src = fetchurl {
-      url = "https://robotframework.googlecode.com/files/${name}.tar.gz";
-      sha256 = "04zwjri1j5py3fpbhy1xlc18bhbmdm2gbd58fwa2jnhmrha5dgnw";
+      url = "https://pypi.python.org/packages/source/r/robotframework/${name}.tar.gz";
+      sha256 = "0rxk135c1051cwv45219ib3faqvi5rl50l98ncb83c7qxy92jg2n";
     };
 
     # error: invalid command 'test'
@@ -5928,12 +5945,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   robotframework-selenium2library = buildPythonPackage rec {
-    version = "1.4.0";
+    version = "1.5.0";
     name = "robotframework-selenium2library-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/r/robotframework-selenium2library/${name}.tar.gz";
-      sha256 = "1rgzjxrciy74lp9mvdqxiixkma569mc0l0kizpi7lg1zkbr2k1q2";
+      sha256 = "0hjmar9766jqfpbckac8zncyal546vm059wnkbn33f68djdcnwz1";
     };
 
     # error: invalid command 'test'
@@ -5973,22 +5990,15 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   robotframework-ride = buildPythonPackage rec {
-    version = "1.2.2";
+    version = "1.2.3";
     name = "robotframework-ride-${version}";
 
     src = fetchurl {
       url = "https://robotframework-ride.googlecode.com/files/${name}.tar.gz";
-      sha256 = "1yfvl0hdjjkwk90w3f3i23dxxk3yiyv4pbvnp4l7yd6cmxsia8f3";
+      sha256 = "1lf5f4x80f7d983bmkx12sxcizzii21kghs8kf63a1mj022a5x5j";
     };
 
     propagatedBuildInputs = [ pygments wxPython modules.sqlite3 ];
-
-    # Stop copying (read-only) permission bits from the nix store into $HOME,
-    # because that leads to this:
-    #   IOError: [Errno 13] Permission denied: '/home/bfo/.robotframework/ride/settings.cfg'
-    postPatch = ''
-      sed -i "s|shutil\.copy(|shutil.copyfile(|" src/robotide/preferences/settings.py
-    '';
 
     # ride_postinstall.py checks that needed deps are installed and creates a
     # desktop shortcut. We don't really need it and it clutters up bin/ so
@@ -6100,6 +6110,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
                               pkgs.rpm pkgs.pyopenssl ];
 
   });
+
+  rsa = buildPythonPackage rec {
+    name = "rsa-3.1.2";
+
+    src = fetchurl {
+      url = "https://bitbucket.org/sybren/python-rsa/get/version-3.1.2.tar.bz2";
+      sha256 = "0ag2q4gaapi74x47q74xhcjzs4b7r2bb6zrj2an4sz5d3yd06cgf";
+    };
+
+    buildInputs = [ pythonPackages.pyasn1 ];
+
+    meta = {
+      homepage = http://stuvel.eu/rsa;
+      license = "Apache License 2.0";
+      description = "A pure-Python RSA implementation";
+    };
+  };
 
   rtslib_fb = buildPythonPackage rec {
     version = "2.1.fb43";
@@ -7170,6 +7197,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "A full-featured console (xterm et al.) user interface library";
       homepage = http://excess.org/urwid;
+      repositories.git = git://github.com/wardi/urwid.git;
       license = pkgs.lib.licenses.lgpl21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };

@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , bzip2
-, db4
+, db
 , gdbm
 , libX11, xproto
 , ncurses
@@ -20,7 +20,7 @@ let
   version = "${majorVersion}.5";
 
   buildInputs = filter (p: p != null) [
-    zlib bzip2 gdbm sqlite db4 readline ncurses openssl tcl tk libX11 xproto
+    zlib bzip2 gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
   ];
 in
 stdenv.mkDerivation {
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
   passthru = {
     zlibSupport = zlib != null;
     sqliteSupport = sqlite != null;
-    db4Support = db4 != null;
+    dbSupport = db != null;
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);

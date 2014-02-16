@@ -26,6 +26,7 @@ stdenv.mkDerivation {
     sed -i -e '/mpd_mediaplayer/d' \
            -e '/encryption_ng/d'   \
            -e '/encryption_ng_simlite/d' Plugins.cmake
+    patch -p1 < ${./cmake.patch}
   '';
 
   NIX_LDFLAGS="-lX11";

@@ -144,7 +144,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     async        = self.async_2_0_1_5;
     attoparsec   = self.attoparsec_0_11_1_0;
     caseInsensitive = self.caseInsensitive_1_1_0_3;
-    cgi          = self.cgi_3001_1_8_4;
+    cgi          = self.cgi_3001_1_8_5;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_5_1_0;
     GLURaw       = self.GLURaw_1_4_0_0;
@@ -527,7 +527,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   adjunctions = callPackage ../development/libraries/haskell/adjunctions {};
 
   aeson_0_6_2_1 = callPackage ../development/libraries/haskell/aeson/0.6.2.1.nix {};
-  aeson_0_7_0_0 = callPackage ../development/libraries/haskell/aeson/0.7.0.0.nix {
+  aeson_0_7_0_1 = callPackage ../development/libraries/haskell/aeson/0.7.0.1.nix {
     attoparsec = self.attoparsec_0_11_1_0;
   };
   aeson = self.aeson_0_6_2_1;
@@ -742,13 +742,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cgi_3001_1_7_3 = callPackage ../development/libraries/haskell/cgi/3001.1.7.3.nix {};
   cgi_3001_1_7_4 = callPackage ../development/libraries/haskell/cgi/3001.1.7.4.nix {};
   cgi_3001_1_7_5 = callPackage ../development/libraries/haskell/cgi/3001.1.7.5.nix {};
-  cgi_3001_1_8_4 = callPackage ../development/libraries/haskell/cgi/3001.1.8.4.nix {};
-  cgi = self.cgi_3001_1_8_4;
+  cgi_3001_1_8_5 = callPackage ../development/libraries/haskell/cgi/3001.1.8.5.nix {};
+  cgi = self.cgi_3001_1_8_5;
 
   charset = callPackage ../development/libraries/haskell/charset {};
 
   Chart = callPackage ../development/libraries/haskell/Chart {};
   ChartCairo = callPackage ../development/libraries/haskell/Chart-cairo {};
+  ChartDiagrams = callPackage ../development/libraries/haskell/Chart-diagrams {};
   ChartGtk = callPackage ../development/libraries/haskell/Chart-gtk {};
 
   ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
@@ -940,6 +941,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   diagramsCore = callPackage ../development/libraries/haskell/diagrams/core.nix {};
   diagramsContrib = callPackage ../development/libraries/haskell/diagrams/contrib.nix {};
   diagramsLib = callPackage ../development/libraries/haskell/diagrams/lib.nix {};
+  diagramsPostscript = callPackage ../development/libraries/haskell/diagrams/postscript.nix {};
   diagramsSvg = callPackage ../development/libraries/haskell/diagrams/svg.nix {};
 
   Diff = callPackage ../development/libraries/haskell/Diff {};
@@ -952,7 +954,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   digestiveFunctors = callPackage ../development/libraries/haskell/digestive-functors {};
 
-  digestiveFunctorsAeson = callPackage ../development/libraries/haskell/digestive-functors-aeson {};
+  digestiveFunctorsAeson = callPackage ../development/libraries/haskell/digestive-functors-aeson {
+    aeson = self.aeson_0_7_0_1;
+    lens = self.lens_4_0_3;
+  };
 
   digestiveFunctorsHeist = callPackage ../development/libraries/haskell/digestive-functors-heist {};
 
@@ -1473,6 +1478,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   interlude = callPackage ../development/libraries/haskell/interlude {};
 
+  interpolatedstringPerl6 = callPackage ../development/libraries/haskell/interpolatedstring-perl6 {};
+
   intervals = callPackage ../development/libraries/haskell/intervals {};
 
   IntervalMap = callPackage ../development/libraries/haskell/IntervalMap {};
@@ -1513,8 +1520,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   json = callPackage ../development/libraries/haskell/json {};
 
   jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {
-    aeson = self.aeson_0_7_0_0;
-    lens = self.lens_4_0_1;
+    aeson = self.aeson_0_7_0_1;
+    lens = self.lens_4_0_3;
   };
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
@@ -1550,8 +1557,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
   lens_3_10_2 = callPackage ../development/libraries/haskell/lens/3.10.2.nix {};
-  lens_4_0_1 = callPackage ../development/libraries/haskell/lens/4.0.1.nix {
-    aeson = self.aeson_0_7_0_0;
+  lens_4_0_3 = callPackage ../development/libraries/haskell/lens/4.0.3.nix {
+    aeson = self.aeson_0_7_0_1;
   };
   lens = self.lens_3_10_2;
 
@@ -1576,7 +1583,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
   linear = callPackage ../development/libraries/haskell/linear {
-    lens = self.lens_4_0_1;
+    lens = self.lens_4_0_3;
   };
 
   List = callPackage ../development/libraries/haskell/List {};
@@ -1588,18 +1595,18 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
 
   # Needed for idris for now
-  llvmGeneral_3_3 = callPackage ../development/libraries/haskell/llvm-general/3.3.nix {
+  llvmGeneral_3_3_8_2 = callPackage ../development/libraries/haskell/llvm-general/3.3.8.2.nix {
     llvmConfig = pkgs.llvm_33;
-    llvmGeneralPure = self.llvmGeneralPure_3_3;
+    llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;
   };
-  llvmGeneral_3_4 = callPackage ../development/libraries/haskell/llvm-general/3.4.nix {
+  llvmGeneral_3_4_1_0 = callPackage ../development/libraries/haskell/llvm-general/3.4.1.0.nix {
     llvmConfig = pkgs.llvm;
   };
-  llvmGeneral = self.llvmGeneral_3_4;
+  llvmGeneral = self.llvmGeneral_3_4_1_0;
 
-  llvmGeneralPure_3_3 = callPackage ../development/libraries/haskell/llvm-general-pure/3.3.nix { };
-  llvmGeneralPure_3_4 = callPackage ../development/libraries/haskell/llvm-general-pure/3.4.nix {};
-  llvmGeneralPure = self.llvmGeneralPure_3_4;
+  llvmGeneralPure_3_3_8_2 = callPackage ../development/libraries/haskell/llvm-general-pure/3.3.8.2.nix { };
+  llvmGeneralPure_3_4_1_0 = callPackage ../development/libraries/haskell/llvm-general-pure/3.4.1.0.nix {};
+  llvmGeneralPure = self.llvmGeneralPure_3_4_1_0;
 
   lrucache = callPackage ../development/libraries/haskell/lrucache {};
 
@@ -1852,8 +1859,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   parsec  = self.parsec3;
 
   parsers_0_9 = callPackage ../development/libraries/haskell/parsers/0.9.nix {};
-  parsers_0_10_2 = callPackage ../development/libraries/haskell/parsers/0.10.2.nix {};
-  parsers = self.parsers_0_10_2;
+  parsers_0_10_3 = callPackage ../development/libraries/haskell/parsers/0.10.3.nix {};
+  parsers = self.parsers_0_10_3;
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
@@ -1937,10 +1944,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   prettyclass = callPackage ../development/libraries/haskell/prettyclass {};
 
   prettyShow_1_2 = callPackage ../development/libraries/haskell/pretty-show/1.2.nix {};
-  prettyShow_1_6_5 = callPackage ../development/libraries/haskell/pretty-show/1.6.5.nix {
+  prettyShow_1_6_7 = callPackage ../development/libraries/haskell/pretty-show/1.6.7.nix {
     happy = self.happy_1_19_2;
   };
-  prettyShow = self.prettyShow_1_6_5;
+  prettyShow = self.prettyShow_1_6_7;
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
@@ -2135,6 +2142,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   smtpMail = callPackage ../development/libraries/haskell/smtp-mail {};
 
+  smtpsGmail = callPackage ../development/libraries/haskell/smtps-gmail {};
+
   snap = callPackage ../development/libraries/haskell/snap/snap.nix {};
 
   snapletAcidState = callPackage ../development/libraries/haskell/snaplet-acid-state {};
@@ -2152,8 +2161,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   socks = callPackage ../development/libraries/haskell/socks {};
 
   sparse = callPackage ../development/libraries/haskell/sparse {
-    lens = self.lens_4_0_1;
-    linear = self.linear.override { lens = self.lens_4_0_1; };
+    lens = self.lens_4_0_3;
+    linear = self.linear.override { lens = self.lens_4_0_3; };
   };
 
   srcloc = callPackage ../development/libraries/haskell/srcloc {};
@@ -2277,6 +2286,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   svgcairo = callPackage ../development/libraries/haskell/svgcairo {
     libc = pkgs.stdenv.gcc.libc;
   };
+
+  SVGFonts = callPackage ../development/libraries/haskell/SVGFonts {};
 
   symbol = callPackage ../development/libraries/haskell/symbol {};
 
@@ -2679,8 +2690,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   zlibEnum = callPackage ../development/libraries/haskell/zlib-enum {};
 
-  Zwaluw = callPackage ../development/libraries/haskell/Zwaluw {};
-
   # Compilers.
 
   AgdaExecutable = callPackage ../development/compilers/Agda-executable {};
@@ -2768,8 +2777,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   idris_plain = callPackage ../development/compilers/idris {
     parsers = self.parsers_0_9;
     trifecta = self.trifecta_1_1;
-    llvmGeneral = self.llvmGeneral_3_3;
-    llvmGeneralPure = self.llvmGeneralPure_3_3;
+    llvmGeneral = self.llvmGeneral_3_3_8_2;
+    llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;
   };
 
   idris = callPackage ../development/compilers/idris/wrapper.nix {};

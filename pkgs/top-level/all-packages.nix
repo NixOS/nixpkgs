@@ -1795,9 +1795,7 @@ let
     inherit ppp;
   };
 
-  rpm = callPackage ../tools/package-management/rpm {
-    db4 = db45;
-  };
+  rpm = callPackage ../tools/package-management/rpm { };
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
 
@@ -3233,7 +3231,9 @@ let
   python32 = callPackage ../development/interpreters/python/3.2 { };
 
   python = python27;
-  python26 = callPackage ../development/interpreters/python/2.6 { };
+  python26 = callPackage ../development/interpreters/python/2.6 {
+    db = db44;
+  };
   python27 = callPackage ../development/interpreters/python/2.7 {
     libX11 = xlibs.libX11;
   };
@@ -3683,7 +3683,11 @@ let
 
   peg = callPackage ../development/tools/parsing/peg { };
 
-  phantomjs = callPackage ../development/tools/phantomjs { };
+  phantomjs = callPackage ../development/tools/phantomjs {
+    stdenv = if stdenv.isDarwin
+      then overrideGCC stdenv gccApple
+      else stdenv;
+  };
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
@@ -3991,19 +3995,18 @@ let
 
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl { };
 
+  # Make bdb5 the default as it is the last release under the custom
+  # bsd-like license
+  db = db5;
   db4 = db48;
-
-  db44 = callPackage ../development/libraries/db4/db4-4.4.nix { };
-
-  db45 = callPackage ../development/libraries/db4/db4-4.5.nix { };
-
-  db47 = callPackage ../development/libraries/db4/db4-4.7.nix { };
-
-  db48 = callPackage ../development/libraries/db4/db4-4.8.nix { };
-
+  db44 = callPackage ../development/libraries/db/db-4.4.nix { };
+  db45 = callPackage ../development/libraries/db/db-4.5.nix { };
+  db47 = callPackage ../development/libraries/db/db-4.7.nix { };
+  db48 = callPackage ../development/libraries/db/db-4.8.nix { };
   db5 = db53;
-
   db53 = callPackage ../development/libraries/db/db-5.3.nix { };
+  db6 = db60;
+  db60 = callPackage ../development/libraries/db/db-6.0.nix { };
 
   dbus = callPackage ../development/libraries/dbus { };
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
@@ -4292,6 +4295,8 @@ let
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
+
+  google-gflags = callPackage ../development/libraries/google-gflags { };
 
   gperftools = callPackage ../development/libraries/gperftools { };
 
@@ -4931,7 +4936,9 @@ let
 
   libosip_3 = callPackage ../development/libraries/osip/3.nix {};
 
-  libotr = callPackage ../development/libraries/libotr { };
+  libotr = callPackage ../development/libraries/libotr {
+    libgcrypt = libgcrypt_1_6;
+  };
 
   libotr_3_2 = callPackage ../development/libraries/libotr/3.2.nix { };
 
@@ -4940,6 +4947,8 @@ let
   libpar2 = callPackage ../development/libraries/libpar2 { };
 
   libpcap = callPackage ../development/libraries/libpcap { };
+
+  libpipeline = callPackage ../development/libraries/libpipeline { };
 
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = libpng.override { apngSupport = true; };
@@ -6369,7 +6378,7 @@ let
 
   squids = recurseIntoAttrs( import ../servers/squid/squids.nix {
     inherit fetchurl stdenv perl lib composableDerivation
-      openldap pam db4 cyrus_sasl kerberos libcap expat libxml2 libtool
+      openldap pam db cyrus_sasl kerberos libcap expat libxml2 libtool
       openssl;
   });
   squid = squids.squid31; # has ipv6 support
@@ -6669,7 +6678,7 @@ let
   })) (args: grsecurityOverrider args));
 
   linux_3_13_grsecurity = lowPrio (lib.overrideDerivation (linux_3_13.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_13_2 kernelPatches.grsec_path ];
+    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_13_3 kernelPatches.grsec_path ];
     argsOverride = {
       modDirVersion = "${linux_3_13.modDirVersion}-grsec";
     };
@@ -6877,6 +6886,8 @@ let
 
   libsemanage = callPackage ../os-specific/linux/libsemanage { };
 
+  libraw = callPackage ../development/libraries/libraw { };
+
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
   libsexy = callPackage ../development/libraries/libsexy { };
@@ -6944,9 +6955,7 @@ let
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
-  pam_ccreds = callPackage ../os-specific/linux/pam_ccreds {
-    db = db4;
-  };
+  pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
 
   pam_console = callPackage ../os-specific/linux/pam_console {
     libtool = libtool_1_5;
@@ -7433,6 +7442,8 @@ let
   };
   awesome = awesome-3-5;
 
+  inherit (gnome3) baobab;
+
   baresip = callPackage ../applications/networking/instant-messengers/baresip {
     ffmpeg = ffmpeg_1;
   };
@@ -7617,8 +7628,6 @@ let
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
-  dvswitch = callPackage ../applications/video/dvswitch { };
-
   dwb = callPackage ../applications/networking/browsers/dwb { };
 
   dwm = callPackage ../applications/window-managers/dwm {
@@ -7780,6 +7789,8 @@ let
     scalaMode = callPackage ../applications/editors/emacs-modes/scala-mode { };
 
     sunriseCommander = callPackage ../applications/editors/emacs-modes/sunrise-commander { };
+
+    writeGood = callPackage ../applications/editors/emacs-modes/writegood { };
 
     xmlRpc = callPackage ../applications/editors/emacs-modes/xml-rpc { };
   };
@@ -8132,6 +8143,8 @@ let
     inherit (xorg) libxkbfile;
     cairo = cairo.override { xcbSupport = true; };
   };
+  
+  i3minator = callPackage ../tools/misc/i3minator { };
 
   i3status = callPackage ../applications/window-managers/i3/status.nix { };
 
@@ -8717,6 +8730,8 @@ let
   };
 
   sbagen = callPackage ../applications/misc/sbagen { };
+
+  scite = callPackage ../applications/editors/scite { };
 
   scribus = callPackage ../applications/office/scribus {
     inherit (gnome) libart_lgpl;
@@ -9604,7 +9619,7 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde411;
 
-# kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde412 );
+  kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde412 );
 
   kde4_prev = recurseIntoAttrs pkgs.kde410;
 
@@ -9623,6 +9638,12 @@ let
       libusb = libusb1;
       libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.11;
+
+ kde412 = kdePackagesFor (pkgs.kde412 // {
+      eigen = eigen2;
+      libusb = libusb1;
+      libcanberra = libcanberra_kde;
+    }) ../desktops/kde-4.12;
 
   kdePackagesFor = self: dir:
     let callPackageOrig = callPackage; in
@@ -10349,6 +10370,17 @@ let
   vimprobable2Wrapper = wrapFirefox
     { browser = vimprobable2; browserName = "vimprobable2"; desktopName = "Vimprobable2";
     };
+
+  vimb = callPackage ../applications/networking/browsers/vimb {
+    inherit (gnome) libsoup;
+    webkit = webkit_gtk2;
+  };
+
+  vimbWrapper = wrapFirefox {
+    browser = vimb;
+    browserName = "vimb";
+    desktopName = "Vimb";
+  };
 
   VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
 

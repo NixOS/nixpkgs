@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
-, sqlite, tcl, tk, x11, openssl, readline, db45, ncurses, gdbm
+, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm
 }:
 
 assert zlibSupport -> zlib != null;
@@ -146,7 +146,7 @@ let
 
     bsddb = buildInternalPythonModule {
       moduleName = "bsddb";
-      deps = [ db45 ];
+      deps = [ db ];
     };
 
     crypt = buildInternalPythonModule {

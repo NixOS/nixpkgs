@@ -1,0 +1,122 @@
+diff -rupN NVIDIA-Linux-x86_64-331.38.orig/kernel/nv-acpi.c NVIDIA-Linux-x86_64-331.38/kernel/nv-acpi.c
+--- NVIDIA-Linux-x86_64-331.38.orig/kernel/nv-acpi.c	2014-01-25 09:39:47.126966926 +0100
++++ NVIDIA-Linux-x86_64-331.38/kernel/nv-acpi.c	2014-01-26 09:59:45.853427603 +0100
+@@ -303,7 +303,10 @@ static int nv_acpi_remove(struct acpi_de
+ 
+     if (pNvAcpiObject->notify_handler_installed)
+     {
++#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 13, 0)
++ /* beginning with 3.13, acpi_remove_notify_handler() waits for events to finish */
+         NV_ACPI_OS_WAIT_EVENTS_COMPLETE();
++#endif
+ 
+         // remove event notifier
+         status = acpi_remove_notify_handler(device->handle, ACPI_DEVICE_NOTIFY, nv_acpi_event);
+@@ -1076,10 +1079,17 @@ RM_STATUS NV_API_CALL nv_acpi_dsm_method
+     NvU8 argument3[4]; /* For all DSM sub functions, input size is 4 */
+     NvU32 data_size;
+     acpi_handle dev_handle  = NULL;
++#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 13, 0)
+ #ifdef DEVICE_ACPI_HANDLE
+     nv_linux_state_t *nvl = NV_GET_NVL_FROM_NV_STATE(nv); 
+     dev_handle = DEVICE_ACPI_HANDLE(&nvl->dev->dev);
+ #endif
++#else
++#ifdef ACPI_HANDLE
++    nv_linux_state_t *nvl = NV_GET_NVL_FROM_NV_STATE(nv); 
++    dev_handle = ACPI_HANDLE(&nvl->dev->dev);
++#endif
++#endif
+ 
+     if (!dev_handle)
+         return RM_ERR_NOT_SUPPORTED;
+@@ -1179,12 +1189,21 @@ RM_STATUS NV_API_CALL nv_acpi_ddc_method
+     NvU32 i;
+     acpi_handle dev_handle  = NULL;
+     acpi_handle lcd_dev_handle  = NULL;
++#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 13, 0)
+ #ifdef DEVICE_ACPI_HANDLE
+     nv_linux_state_t *nvl = NV_GET_NVL_FROM_NV_STATE(nv); 
+     dev_handle = DEVICE_ACPI_HANDLE(&nvl->dev->dev);
+ #else
+         return RM_ERR_NOT_SUPPORTED;
+ #endif
++#else
++#ifdef ACPI_HANDLE
++    nv_linux_state_t *nvl = NV_GET_NVL_FROM_NV_STATE(nv); 
++    dev_handle = ACPI_HANDLE(&nvl->dev->dev);
++#else
++        return RM_ERR_NOT_SUPPORTED;
++#endif
++#endif
+     if (!dev_handle)
+         return RM_ERR_INVALID_ARGUMENT;
+ 
+@@ -1294,12 +1313,21 @@ RM_STATUS NV_API_CALL nv_acpi_rom_method
+     struct acpi_object_list input = { 2, rom_arg };
+     acpi_handle dev_handle  = NULL;
+     uint32_t offset, length;
++#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 13, 0)
+ #ifdef DEVICE_ACPI_HANDLE
+     nv_linux_state_t *nvl = NV_GET_NVL_FROM_NV_STATE(nv); 
+-    dev_handle = DEVICE_ACPI_HANDLE(&nvl->dev->dev);
++    dev_handle = ACPI_DEVICE_HANDLE(&nvl->dev->dev);
+ #else
+     return RM_ERR_NOT_SUPPORTED;
+ #endif
++#else
++#ifdef ACPI_HANDLE
++    nv_linux_state_t *nvl = NV_GET_NVL_FROM_NV_STATE(nv); 
++    dev_handle = ACPI_HANDLE(&nvl->dev->dev);
++#else
++    return RM_ERR_NOT_SUPPORTED;
++#endif
++#endif
+ 
+     if (!dev_handle)
+         return RM_ERR_INVALID_ARGUMENT;
+@@ -1364,12 +1392,21 @@ RM_STATUS NV_API_CALL nv_acpi_dod_method
+     union acpi_object *dod;
+     acpi_handle dev_handle = NULL;
+     NvU32 i, count = (*pSize / sizeof(NvU32));
++#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 13, 0)
+ #ifdef DEVICE_ACPI_HANDLE
+     nv_linux_state_t *nvl = NV_GET_NVL_FROM_NV_STATE(nv);
+     dev_handle = DEVICE_ACPI_HANDLE(&nvl->dev->dev);
+ #else
+     return RM_ERR_NOT_SUPPORTED;
+ #endif
++#else
++#ifdef ACPI_HANDLE
++    nv_linux_state_t *nvl = NV_GET_NVL_FROM_NV_STATE(nv);
++    dev_handle = ACPI_HANDLE(&nvl->dev->dev);
++#else
++    return RM_ERR_NOT_SUPPORTED;
++#endif
++#endif
+ 
+     if (!dev_handle)
+         return RM_ERR_INVALID_ARGUMENT;
+diff -rupN NVIDIA-Linux-x86_64-331.38.orig/kernel/uvm/nvidia_uvm_linux.h NVIDIA-Linux-x86_64-331.38/kernel/uvm/nvidia_uvm_linux.h
+--- NVIDIA-Linux-x86_64-331.38.orig/kernel/uvm/nvidia_uvm_linux.h	2014-01-25 09:39:47.172966925 +0100
++++ NVIDIA-Linux-x86_64-331.38/kernel/uvm/nvidia_uvm_linux.h	2014-01-25 09:46:40.572999245 +0100
+@@ -405,11 +405,17 @@ typedef void irqreturn_t;
+ // not require the RCU's read lock on current->cred.
+ //
+ //
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 5, 0)
++#define NV_KUID_TO_UID(value) (__kuid_val(value))
++#else
++#define NV_KUID_TO_UID(value) (value)
++#endif
++
+ #if defined(NV_TASK_STRUCT_HAS_CRED)
+ #define NV_CURRENT_EUID() \
+-    (((typeof(*current->cred) __force __kernel *)current->cred)->euid)
++        NV_KUID_TO_UID(((typeof(*current->cred) __force __kernel *)current->cred)->euid)
+ #else
+-#define NV_CURRENT_EUID() (current->euid)
++#define NV_CURRENT_EUID() NV_KUID_TO_UID(current->euid)
+ #endif
+ 
+ #define NV_ATOMIC_SET(data,val)         atomic_set(&(data), (val))

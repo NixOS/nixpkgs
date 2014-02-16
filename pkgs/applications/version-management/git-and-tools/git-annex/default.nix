@@ -15,8 +15,8 @@
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20140129";
-  sha256 = "0m1n3m16gvd0693i5xq5adki0hd0wdn7p5vqjxkqnc3imx9f11ng";
+  version = "5.20140210";
+  sha256 = "0l5fny743v27yv7spppms64qca0mizh776b6wv8wca0wmcbc6j88";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -53,6 +53,7 @@ cabal.mkDerivation (self: {
     cp dist/build/git-annex/git-annex git-annex
     ./git-annex test
   '';
+  propagatedUserEnvPkgs = [git lsof];
   meta = {
     homepage = "http://git-annex.branchable.com/";
     description = "manage files with git, without checking their contents into git";

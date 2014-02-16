@@ -1,4 +1,4 @@
-{fetchurl, buildPerlPackage, db4}:
+{fetchurl, buildPerlPackage, db}:
 
 buildPerlPackage rec {
   name = "DB_File-1.831";
@@ -12,8 +12,8 @@ buildPerlPackage rec {
     cat > config.in <<EOF
     PREFIX = size_t
     HASH = u_int32_t
-    LIB = ${db4}/lib
-    INCLUDE = ${db4}/include
+    LIB = ${db}/lib
+    INCLUDE = ${db}/include
     EOF
   '';
 

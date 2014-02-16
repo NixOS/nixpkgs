@@ -23,7 +23,7 @@ new file mode 100644
 index 0000000..a2f9918
 --- /dev/null
 +++ b/runtime/syntax/nix.vim
-@@ -0,0 +1,42 @@
+@@ -0,0 +1,47 @@
 +" Vim syntax file
 +" Language:	nix
 +" Maintainer:	Marc Weber <marco-oweber@gmx.de>
@@ -68,3 +68,8 @@ index 0000000..a2f9918
 +hi def link nixFuncArg     Identifier
 +
 +let b:current_syntax = "nix"
++
++" scan backwards to find begining of multiline statements
++syn sync ccomment nixMultiLineComment minlines=10 maxlines=500
++syn sync ccomment nixStringIndented minlines=10 maxlines=500
++syn sync ccomment nixString maxlines=10

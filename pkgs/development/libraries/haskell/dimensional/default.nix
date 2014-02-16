@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dimensional";
-  version = "0.12.2";
-  sha256 = "0b5w9g3xn74b7z4bcsfcijnj54r8cwbbd8129q61c3nhng1f896a";
+  version = "0.13";
+  sha256 = "1nj8h79iq7pirqlj8iw1p782nm05xgym3469x7hlzaz3ig9nwgrg";
   buildDepends = [ numtype time ];
   meta = {
     homepage = "http://dimensional.googlecode.com/";

@@ -9,6 +9,7 @@ let
     user ${cfg.user} ${cfg.group};
     daemon off;
     ${cfg.config}
+    ${cfg.appendConfig}
   '';
 in
 
@@ -34,6 +35,19 @@ in
         description = "
           Verbatim nginx.conf configuration.
         ";
+      };
+
+      appendConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Configuration lines appended to the generated Nginx
+          configuration file. Commonly used by different modules
+          providing http snippets. <option>appendConfig</option>
+          can be specified more than once and it's value will be
+          concatenated (contrary to <option>config</option> which
+          can be set only once).
+        '';
       };
 
       stateDir = mkOption {

@@ -91,6 +91,7 @@ let
       ${optionalString (pkgs.stdenv.system == "x86_64-linux") ''
         seccomp_sandbox=NO
       ''}
+      anon_umask=${cfg.anonymousUmask}
     '';
 
 in
@@ -137,6 +138,13 @@ in
         type = types.nullOr types.path;
         default = null;
         description = "RSA certificate file.";
+      };
+
+      anonymousUmask = mkOption {
+        type = types.string;
+        default = "077";
+        example = "002";
+        description = "Anonymous write umask.";
       };
 
     } // (listToAttrs (catAttrs "nixosOption" optionDescription));

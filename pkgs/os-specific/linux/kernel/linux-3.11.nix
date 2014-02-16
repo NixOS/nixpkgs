@@ -2,6 +2,7 @@
 
 import ./generic.nix (args // rec {
   version = "3.11.10";
+  extraMeta.branch = "3.11";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";

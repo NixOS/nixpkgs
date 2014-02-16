@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ mtl parsec syb ];
   meta = {
     homepage = "http://www.eecs.harvard.edu/~tov/pubs/haskell-session-types/";
-    description = "Extending Haskell's syntax using a custom preprocessor";
+    description = "A framework for extending Haskell's syntax via quick-and-dirty preprocessors";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };

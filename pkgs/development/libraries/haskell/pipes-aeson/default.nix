@@ -1,13 +1,14 @@
-{ cabal, aeson, attoparsec, pipes, pipesAttoparsec, pipesParse
-, transformers
+{ cabal, aeson, attoparsec, pipes, pipesAttoparsec, pipesBytestring
+, pipesParse, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "pipes-aeson";
-  version = "0.2.1";
-  sha256 = "19zrbk9jbls8zsnhx8bm9dzd7rxvf98bpjkr3k9ggmx2g5p08mgz";
+  version = "0.3.0";
+  sha256 = "1kckdllw5xnh8z92gjw5swyxp9km879wqfly7af3iirwhickk4vn";
   buildDepends = [
-    aeson attoparsec pipes pipesAttoparsec pipesParse transformers
+    aeson attoparsec pipes pipesAttoparsec pipesBytestring pipesParse
+    transformers
   ];
   meta = {
     homepage = "https://github.com/k0001/pipes-aeson";

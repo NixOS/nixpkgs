@@ -1,12 +1,15 @@
-{ cabal, base16Bytestring, directSqlite, HUnit, text, time
-, transformers
+{ cabal, attoparsec, base16Bytestring, blazeBuilder, blazeTextual
+, directSqlite, HUnit, text, time, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "sqlite-simple";
-  version = "0.4.4.0";
-  sha256 = "09vgy3hji0bjb3bwxwkwhmgf50q442dqr3d86g5l5s3xiw3hca0r";
-  buildDepends = [ directSqlite text time transformers ];
+  version = "0.4.5.1";
+  sha256 = "0mmj6vk3yjvrbsggc5pyba5iprzvfhlsq1jfradpazgfc998j0ry";
+  buildDepends = [
+    attoparsec blazeBuilder blazeTextual directSqlite text time
+    transformers
+  ];
   testDepends = [ base16Bytestring directSqlite HUnit text time ];
   meta = {
     homepage = "http://github.com/nurpax/sqlite-simple";

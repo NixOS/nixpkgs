@@ -1,0 +1,12 @@
+diff -ru freecad-0.13.1830.orig/CMakeLists.txt freecad-0.13.1830/CMakeLists.txt
+--- freecad-0.13.1830.orig/CMakeLists.txt       2013-02-02 18:09:17.000000000 +0100
++++ freecad-0.13.1830/CMakeLists.txt    2014-02-15 10:16:00.939725500 +0100
+@@ -321,7 +321,7 @@
+         foreach(it ${moc_files})
+             get_filename_component(it ${it} ABSOLUTE)
+             QT4_MAKE_OUTPUT_FILE(${it} moc_ cpp outfile)
+-            QT4_CREATE_MOC_COMMAND(${it} ${outfile} "${moc_flags}" "${moc_options}")
++            QT4_CREATE_MOC_COMMAND(${it} ${outfile} "${moc_flags}" "${moc_options}" "")
+             set(${outfiles} ${${outfiles}} ${outfile})
+             add_file_dependencies(${it} ${outfile})
+         endforeach(it)

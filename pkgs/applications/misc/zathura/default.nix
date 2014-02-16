@@ -33,6 +33,8 @@ rec {
 
     builder = ./builder.sh;
 
+    preferLocalBuild = true;
+
     meta = {
       homepage = http://pwmt.org/projects/zathura/;
       description = "A highly customizable and functional PDF viewer";
