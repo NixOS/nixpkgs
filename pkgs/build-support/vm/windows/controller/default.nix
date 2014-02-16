@@ -67,6 +67,19 @@ let
 
   initScript = writeScript "init.sh" (''
     #!${stdenv.shell}
+    ${coreutils}/bin/cp -L "${sshKey}" /ssh.key
+    ${coreutils}/bin/chmod 600 /ssh.key
+  '' + (if installMode then ''
+    echo -n "Waiting for Windows installation to finish..."
+    while ! ${netcat}/bin/netcat -z 192.168.0.1 22; do
+      echo -n .
+      # Print a dot every 10 seconds only to shorten line length.
+      ${coreutils}/bin/sleep 10
+    done
+    echo " success."
+    # Loop forever, because this VM is going to be killed.
+    ${loopForever}
+  '' else ''
     ${coreutils}/bin/mkdir -p /etc/samba /etc/samba/private /var/lib/samba
     ${coreutils}/bin/cat > /etc/samba/smb.conf <<CONFIG
     [global]
@@ -92,19 +105,6 @@ let
 
     ${samba}/sbin/nmbd -D
     ${samba}/sbin/smbd -D
-    ${coreutils}/bin/cp -L "${sshKey}" /ssh.key
-    ${coreutils}/bin/chmod 600 /ssh.key
-  '' + (if installMode then ''
-    echo -n "Waiting for Windows installation to finish..."
-    while ! ${netcat}/bin/netcat -z 192.168.0.1 22; do
-      echo -n .
-      # Print a dot every 10 seconds only to shorten line length.
-      ${coreutils}/bin/sleep 10
-    done
-    echo " success."
-    # Loop forever, because this VM is going to be killed.
-    ${loopForever}
-  '' else ''
     echo -n "Waiting for Windows VM to become available..."
     while ! ${netcat}/bin/netcat -z 192.168.0.1 22; do
       echo -n .
