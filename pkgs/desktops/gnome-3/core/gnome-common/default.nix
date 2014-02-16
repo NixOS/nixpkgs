@@ -8,5 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "aed69474a671e046523827f73ba5e936d57235b661db97900db7356e1e03b0a3";
   };
 
+  patches = [(fetchurl {
+    url = "https://bug697543.bugzilla-attachments.gnome.org/attachment.cgi?id=240935";
+    sha256 = "17abp7czfzirjm7qsn2czd03hdv9kbyhk3lkjxg2xsf5fky7z7jl";
+  })];
+
   propagatedBuildInputs = [ which ]; # autogen.sh which is using gnome_common tends to require which
 }
