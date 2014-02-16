@@ -36,12 +36,16 @@ let
     ifconfig lo up
     ifconfig eth0 up 192.168.0.2
 
-    mkdir -p /nix/store /etc /var/run /var/log
+    mkdir -p /xchg /nix/store /etc /var/run /var/log
 
     cat > /etc/passwd <<PASSWD
     root:x:0:0::/root:/bin/false
     nobody:x:65534:65534::/var/empty:/bin/false
     PASSWD
+
+    mount -t 9p \
+      -o trans=virtio,version=9p2000.L,msize=262144,cache=loose \
+      xchg /xchg
 
     mount -t 9p \
       -o trans=virtio,version=9p2000.L,msize=262144,cache=loose \
@@ -58,6 +62,8 @@ let
   };
 
   shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
+
+  loopForever = "while :; do ${coreutils}/bin/sleep 1; done";
 
   initScript = writeScript "init.sh" (''
     #!${stdenv.shell}
@@ -77,6 +83,11 @@ let
     path = /nix/store
     read only = no
     guest ok = yes
+
+    [xchg]
+    path = /xchg
+    read only = no
+    guest ok = yes
     CONFIG
 
     ${samba}/sbin/nmbd -D
@@ -92,7 +103,7 @@ let
     done
     echo " success."
     # Loop forever, because this VM is going to be killed.
-    while :; do ${coreutils}/bin/sleep 1; done
+    ${loopForever}
   '' else ''
     echo -n "Waiting for Windows VM to become available..."
     while ! ${netcat}/bin/netcat -z 192.168.0.1 22; do
@@ -108,6 +119,10 @@ let
       -l Administrator \
       192.168.0.1 -- ${shellEscape command}
 
+    ${lib.optionalString (suspendTo != null) ''
+    ${coreutils}/bin/touch /xchg/suspend_now
+    ${loopForever}
+    ''}
     ${busybox}/sbin/poweroff -f
   ''));
 
@@ -123,6 +138,7 @@ let
     "-nographic"
     "-no-reboot"
     "-virtfs local,path=/nix/store,security_model=none,mount_tag=store"
+    "-virtfs local,path=$XCHG_DIR,security_model=none,mount_tag=xchg"
     "-kernel ${modulesClosure.kernel}/bzImage"
     "-initrd ${initrd}/initrd"
     "-append \"${kernelAppend}\""
@@ -147,6 +163,7 @@ let
   });
 
   preVM = ''
+    XCHG_DIR="$(${coreutils}/bin/mktemp -d nix-vm.XXXXXXXXXX --tmpdir)"
     QEMU_VDE_SOCKET="$(pwd)/vde.ctl"
     MONITOR_SOCKET="$(pwd)/monitor"
     ${vde2}/bin/vde_switch -s "$QEMU_VDE_SOCKET" &
@@ -154,20 +171,23 @@ let
       UNIX-CONNECT:$QEMU_VDE_SOCKET/ctl,retry=20
   '';
 
+  bgBoth = lib.optionalString (suspendTo != null) " &";
+
   vmExec = if installMode then ''
     ${vmTools.qemuProg} ${controllerQemuArgs} &
-    ${vmTools.qemuProg} ${cygwinQemuArgs}
+    ${vmTools.qemuProg} ${cygwinQemuArgs}${bgBoth}
   '' else ''
     ${vmTools.qemuProg} ${cygwinQemuArgs} &
-    ${vmTools.qemuProg} ${controllerQemuArgs}
+    ${vmTools.qemuProg} ${controllerQemuArgs}${bgBoth}
   '' + lib.optionalString (suspendTo != null) ''
+    while ! test -e "$XCHG_DIR/suspend_now"; do sleep 1; done
     ${socat}/bin/socat - UNIX-CONNECT:$MONITOR_SOCKET <<CMD
     stop
     migrate_set_speed 4095m
     migrate "exec:${gzip}/bin/gzip -c > '${suspendTo}'"
     quit
     CMD
-    wait %%
+    wait %-
   '';
 
 in writeScript "run-cygwin-vm.sh" ''

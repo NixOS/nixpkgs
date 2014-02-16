@@ -21,8 +21,11 @@ let
       "set -e"
       "net config server /autodisconnect:-1"
       "net use S: '\\\\192.168.0.2\\nixstore' /persistent:yes"
+      "net use X: '\\\\192.168.0.2\\xchg' /persistent:yes"
       "mkdir -p /nix/store"
       "mount -o bind /cygdrive/s /nix/store"
+      "mkdir -p /tmp/xchg"
+      "mount -o bind /cygdrive/x /tmp/xchg"
     ];
     suspendTo = "state.gz";
   };
