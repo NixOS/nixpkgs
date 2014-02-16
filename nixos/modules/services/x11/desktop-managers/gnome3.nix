@@ -43,6 +43,7 @@ in {
         '';
       };
 
+    environment.variables.GIO_EXTRA_MODULES = "${gnome3.dconf}/lib/gio/modules";
     environment.systemPackages =
       [ gnome3.evince
         gnome3.eog
@@ -57,6 +58,5 @@ in {
       ];
   };
 
-  environment.variables.GIO_EXTRA_MODULES = "${gnome3.dconf}/lib/gio/modules";
 
 }
