@@ -4,7 +4,7 @@ rec {
   inherit (pkgs) glib gtk2 gtk3 gnome2;
   gtk = gtk3; # just to be sure
   libcanberra = pkgs.libcanberra_gtk3; # just to be sure
-  inherit (pkgs.gnome2) gnome_common ORBit2;
+  inherit (pkgs.gnome2) ORBit2;
   orbit = ORBit2;
   inherit (pkgs) libsoup;
 
@@ -35,6 +35,8 @@ rec {
   gjs = callPackage ./core/gjs { };
 
   gnome_control_center = callPackage ./core/gnome-control-center { };
+
+  gnome_common = callPackage ./core/gnome-common { };
 
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };
 
