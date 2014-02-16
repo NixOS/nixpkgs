@@ -3231,7 +3231,9 @@ let
   python32 = callPackage ../development/interpreters/python/3.2 { };
 
   python = python27;
-  python26 = callPackage ../development/interpreters/python/2.6 { };
+  python26 = callPackage ../development/interpreters/python/2.6 {
+    db = db44;
+  };
   python27 = callPackage ../development/interpreters/python/2.7 {
     libX11 = xlibs.libX11;
   };
