@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, x11, imlib2, libjpeg, libpng, giblib
+{ stdenv, makeWrapper, fetchurl, x11, imlib2, libjpeg, libpng, giblib
 , libXinerama, curl }:
 
 stdenv.mkDerivation rec {
@@ -9,10 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "1wlhfbglzc1jzsh80s4s1fawclgzyjy2105ffzx2mw9s0c1xds5l";
   };
 
-  buildInputs = [x11 imlib2 giblib libjpeg libpng libXinerama curl ];
+  buildInputs = [makeWrapper x11 imlib2 giblib libjpeg libpng libXinerama curl ];
 
   preBuild = ''
     makeFlags="PREFIX=$out"
+  '';
+
+  postInstall = ''
+    wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg}/bin"
   '';
 
   meta = {
