@@ -60,11 +60,39 @@ let
     inherit command;
   };
 
-  runFromSuspended = command: stdenv.mkDerivation {
-    name = "cygwin-vm-run";
-    buildCommand = ''
-      ${resumeAndRun command}
-    '';
-  };
+  builder = ''
+    source /tmp/xchg/saved-env 2> /dev/null || true
+    export NIX_STORE=/nix/store
+    export NIX_BUILD_TOP=/tmp
+    export TMPDIR=/tmp
+    export PATH=/empty
+    cd "$NIX_BUILD_TOP"
+    exec $origBuilder $origArgs
+  '';
 
-in runFromSuspended "uname -a"
+in {
+  runInWindowsVM = drv: let
+    newDrv = drv.override {
+      stdenv = drv.stdenv.override {
+        shell = "/bin/sh";
+      };
+    };
+  in lib.overrideDerivation drv (attrs: {
+    requiredSystemFeatures = [ "kvm" ];
+    buildur = "${stdenv.shell}";
+    args = ["-e" (resumeAndRun builder)];
+    origArgs = attrs.args;
+    origBuilder = if attrs.builder == attrs.stdenv.shell
+                  then "/bin/sh"
+                  else attrs.builder;
+
+    postHook = ''
+      PATH=/usr/bin:/bin:/usr/sbin:/sbin
+      SHELL=/bin/sh
+      eval "$origPostHook"
+    '';
+
+    origPostHook = attrs.postHook or "";
+    fixupPhase = ":";
+  });
+}
