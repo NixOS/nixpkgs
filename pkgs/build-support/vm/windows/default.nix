@@ -23,8 +23,10 @@ let
       "net use X: '\\\\192.168.0.2\\xchg' /persistent:yes"
       "mkdir -p /nix/store"
       "mount -o bind /cygdrive/s /nix/store"
+      "echo /cygdrive/s /nix/store none bind 0 0 >> /etc/fstab"
       "mkdir -p /tmp/xchg"
       "mount -o bind /cygdrive/x /tmp/xchg"
+      "echo /cygdrive/x /tmp/xchg none bind 0 0 >> /etc/fstab"
     ];
     suspendTo = "state.gz";
   };
