@@ -9234,6 +9234,8 @@ let
 
   yate = callPackage ../applications/misc/yate { };
 
+  inherit (gnome3) yelp;
+
   qgis = callPackage ../applications/misc/qgis {};
 
   ykpers = callPackage ../applications/misc/ykpers {};
