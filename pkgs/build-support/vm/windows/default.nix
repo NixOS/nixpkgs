@@ -17,8 +17,7 @@ let
   });
 
   runAndSuspend = runInVM "winvm.img" {
-    command = lib.concatStringsSep "; " [
-      "set -e"
+    command = lib.concatStringsSep " && " [
       "net config server /autodisconnect:-1"
       "net use S: '\\\\192.168.0.2\\nixstore' /persistent:yes"
       "net use X: '\\\\192.168.0.2\\xchg' /persistent:yes"
