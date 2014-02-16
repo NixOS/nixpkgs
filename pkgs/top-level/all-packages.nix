@@ -3232,7 +3232,7 @@ let
 
   python = python27;
   python26 = callPackage ../development/interpreters/python/2.6 {
-    db = db44;
+    db = db47;
   };
   python27 = callPackage ../development/interpreters/python/2.7 {
     libX11 = xlibs.libX11;
