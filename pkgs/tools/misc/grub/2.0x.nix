@@ -1,11 +1,12 @@
-{ fetchurl, stdenv, flex, bison, gettext, ncurses, libusb, freetype, qemu
-, devicemapper, EFIsupport ? false }:
+{ fetchurl, fetchgit, stdenv, autogen, flex, bison, python, autoconf, automake, gettext, ncurses, libusb, freetype, qemu
+, devicemapper, linuxPackages, EFIsupport ? false }:
 
 let
 
   prefix = "grub${if EFIsupport then "-efi" else ""}";
 
   version = "2.00";
+  revision = "bc8a613";
 
   unifont_bdf = fetchurl {
     url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
@@ -15,15 +16,16 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${prefix}-${version}";
+  name = "${prefix}-${version}.${toString revision}";
 
-  src = fetchurl {
-    url = "mirror://gnu/grub/grub-${version}.tar.xz";
-    sha256 = "0n64hpmsccvicagvr0c6v0kgp2yw0kgnd3jvsyd26cnwgs7c6kkq";
+  src = fetchgit {
+    url = "http://git.savannah.gnu.org/r/grub.git/";
+    rev = "bc8a6137b23292771d8b1a9bd0b32288c3d94e7d";
+    sha256 = "10z3nyngplzmp7267w4cqwwrh986jfd5rq9mm2yyp68nabk1s806";
   };
 
-  nativeBuildInputs = [ flex bison ];
-  buildInputs = [ ncurses libusb freetype gettext devicemapper ]
+  nativeBuildInputs = [ autogen flex bison python autoconf automake ];
+  buildInputs = [ ncurses libusb freetype gettext devicemapper linuxPackages.zfs ]
     ++ stdenv.lib.optional doCheck qemu;
 
   preConfigure =
@@ -43,14 +45,11 @@ stdenv.mkDerivation rec {
        # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
        sed -i "tests/util/grub-shell.in" \
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
-
-       # Fix for building on Glibc 2.16.  Won't be needed once the
-       # gnulib in grub is updated.
-       sed -i '/gets is a security hole/d' grub-core/gnulib/stdio.in.h
     '';
 
   prePatch =
-    '' gunzip < "${unifont_bdf}" > "unifont.bdf"
+    '' sh autogen.sh
+       gunzip < "${unifont_bdf}" > "unifont.bdf"
        sed -i "configure" \
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
@@ -62,7 +61,8 @@ stdenv.mkDerivation rec {
                else if stdenv.system == "x86_64-linux" then "x86_64"
                else throw "unsupported EFI firmware architecture";
     in
-      stdenv.lib.optionals EFIsupport
+       [ "--enable-libzfs" ] ++ 
+       stdenv.lib.optionals EFIsupport
         [ "--with-platform=efi" "--target=${arch}" "--program-prefix=" ];
 
   doCheck = false;
