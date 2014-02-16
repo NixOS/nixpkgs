@@ -8,8 +8,7 @@
 
 let
   inherit (import <nixpkgs> {}) lib stdenv writeScript vmTools makeInitrd;
-  inherit (import <nixpkgs> {}) samba vde2 busybox openssh;
-  inherit (import <nixpkgs> {}) socat netcat coreutils gzip;
+  inherit (import <nixpkgs> {}) samba vde2 openssh socat netcat coreutils gzip;
 
   preInitScript = writeScript "preinit.sh" ''
     #!${vmTools.initrdUtils}/bin/ash -e
@@ -26,7 +25,9 @@ let
       insmod $i
     done
 
-    mkdir -p /tmp /dev
+    mkdir -p /dev /fs
+
+    mount -t tmpfs none /dev
     mknod /dev/null    c 1 3
     mknod /dev/zero    c 1 5
     mknod /dev/random  c 1 8
@@ -36,22 +37,31 @@ let
     ifconfig lo up
     ifconfig eth0 up 192.168.0.2
 
-    mkdir -p /xchg /nix/store /etc /var/run /var/log
+    mount -t tmpfs none /fs
+    mkdir -p /fs/nix/store /fs/xchg /fs/dev /fs/sys /fs/proc /fs/etc /fs/tmp
 
-    cat > /etc/passwd <<PASSWD
+    mount -o bind /dev /fs/dev
+    mount -t sysfs none /fs/sys
+    mount -t proc none /fs/proc
+
+    mount -t 9p \
+      -o trans=virtio,version=9p2000.L,msize=262144,cache=loose \
+      store /fs/nix/store
+
+    mount -t 9p \
+      -o trans=virtio,version=9p2000.L,msize=262144,cache=loose \
+      xchg /fs/xchg
+
+    cat > /fs/etc/passwd <<PASSWD
     root:x:0:0::/root:/bin/false
     nobody:x:65534:65534::/var/empty:/bin/false
     PASSWD
 
-    mount -t 9p \
-      -o trans=virtio,version=9p2000.L,msize=262144,cache=loose \
-      xchg /xchg
+    set +e
+    chroot /fs $command $out
+    echo $? > /fs/xchg/in-vm-exit
 
-    mount -t 9p \
-      -o trans=virtio,version=9p2000.L,msize=262144,cache=loose \
-      store /nix/store
-
-    exec "$command"
+    poweroff -f
   '';
 
   initrd = makeInitrd {
@@ -80,7 +90,8 @@ let
     # Loop forever, because this VM is going to be killed.
     ${loopForever}
   '' else ''
-    ${coreutils}/bin/mkdir -p /etc/samba /etc/samba/private /var/lib/samba
+    ${coreutils}/bin/mkdir -p /etc/samba /etc/samba/private \
+                              /var/lib/samba /var/log /var/run
     ${coreutils}/bin/cat > /etc/samba/smb.conf <<CONFIG
     [global]
     security = user
@@ -105,6 +116,7 @@ let
 
     ${samba}/sbin/nmbd -D
     ${samba}/sbin/smbd -D
+
     echo -n "Waiting for Windows VM to become available..."
     while ! ${netcat}/bin/netcat -z 192.168.0.1 22; do
       echo -n .
@@ -123,7 +135,6 @@ let
     ${coreutils}/bin/touch /xchg/suspend_now
     ${loopForever}
     ''}
-    ${busybox}/sbin/poweroff -f
   ''));
 
   kernelAppend = lib.concatStringsSep " " [
