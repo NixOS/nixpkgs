@@ -2,11 +2,11 @@
 , python, alsaLib, jackaudio }:
 
 stdenv.mkDerivation rec {
-  name = "aubio-0.3.2";
+  name = "aubio-0.4.0";
 
   src = fetchurl {
-    url = "http://aubio.org/pub/${name}.tar.gz";
-    sha256 = "1k8j2m8wdpa54hvrqy6nqfcx42x6nwa77hi3ym0n22k192q8f4yw";
+    url = "http://aubio.org/pub/${name}.tar.bz2";
+    sha256 = "18ik5nn8n984f0wnrwdfhc06b8blqgm9b2hrm7hc9m0rr039mpj9";
   };
 
   buildInputs =
