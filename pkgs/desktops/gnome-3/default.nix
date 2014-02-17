@@ -90,6 +90,8 @@ rec {
 
   yelp_xsl = callPackage ./core/yelp-xsl { };
 
+  yelp_tools = callPackage ./core/yelp-tools { };
+
   zenity = callPackage ./core/zenity { };
 
 
