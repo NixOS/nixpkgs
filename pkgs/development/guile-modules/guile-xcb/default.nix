@@ -12,13 +12,8 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    name = "guile-xcb-1.3.tar.gz";
-    sha256 = "1gna9h3536s880p4bd9n2jyh2a8igwya6x7v3vfx19f4rppmai60";
-
-    urls = [
-     "http://www.markwitmer.com/dist/guile-xcb-1.3.tar.gz"
-     "https://github.com/mwitmer/guile-xcb/archive/1.3.tar.gz"
-    ];
+    url = "http://www.markwitmer.com/dist/guile-xcb-1.3.tar.gz";
+    sha256 = "04dvbqdrrs67490gn4gkq9zk8mqy3mkls2818ha4p0ckhh0pm149";
   };
 
   buildInputs = [ pkgconfig guile texinfo ];
