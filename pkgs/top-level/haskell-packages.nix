@@ -2371,6 +2371,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   textIcu = callPackage ../development/libraries/haskell/text-icu {};
 
+  textStreamDecode = callPackage ../development/libraries/haskell/text-stream-decode {};
+
   thespian = callPackage ../development/libraries/haskell/thespian {};
 
   thExtras = callPackage ../development/libraries/haskell/th-extras {};
