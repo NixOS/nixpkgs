@@ -754,6 +754,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   checkers = callPackage ../development/libraries/haskell/checkers {};
 
+  chunkedData = callPackage ../development/libraries/haskell/chunked-data {};
+
   citeprocHs = callPackage ../development/libraries/haskell/citeproc-hs {};
 
   cipherAes = callPackage ../development/libraries/haskell/cipher-aes {};
