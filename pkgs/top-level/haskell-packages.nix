@@ -1019,6 +1019,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
 
+  enclosedExceptions = callPackage ../development/libraries/haskell/enclosed-exceptions {};
+
   encoding = callPackage ../development/libraries/haskell/encoding {};
 
   enumerator = callPackage ../development/libraries/haskell/enumerator {};
