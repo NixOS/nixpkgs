@@ -60,6 +60,8 @@ rec {
 
   gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };
 
+  gucharmap = callPackage ./core/gucharmap { };
+
   gvfs = pkgs.gvfs.override { gnome = pkgs.gnome3; };
 
   eog = callPackage ./core/eog { };
@@ -89,6 +91,8 @@ rec {
   yelp = callPackage ./core/yelp { };
 
   yelp_xsl = callPackage ./core/yelp-xsl { };
+
+  yelp_tools = callPackage ./core/yelp-tools { };
 
   zenity = callPackage ./core/zenity { };
 
