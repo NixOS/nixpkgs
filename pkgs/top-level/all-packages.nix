@@ -6578,6 +6578,8 @@ let
 
   gpm = callPackage ../servers/gpm { };
 
+  gradm = callPackage ../os-specific/linux/gradm { };
+
   hdparm = callPackage ../os-specific/linux/hdparm { };
 
   hibernate = callPackage ../os-specific/linux/hibernate { };
