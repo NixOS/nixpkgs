@@ -7880,6 +7880,8 @@ let
 
   gtimelog = pythonPackages.gtimelog;
 
+  inherit (gnome3) gucharmap;
+  
   guitarix = callPackage ../applications/audio/guitarix {
     fftw = fftwSinglePrec;
   };
