@@ -194,7 +194,7 @@ rec {
 
      is transformed into
 
-       [ { boot = set1; } { boot = mkIf cond set2; services mkIf cond set3; } ].
+       [ { boot = set1; } { boot = mkIf cond set2; services = mkIf cond set3; } ].
 
      This transform is the critical step that allows mkIf conditions
      to refer to the full configuration without creating an infinite
