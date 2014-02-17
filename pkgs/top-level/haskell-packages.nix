@@ -2793,6 +2793,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     QuickCheck = self.QuickCheck2;
   };
 
+  nc-indicators = callPackage ../applications/misc/nc-indicators {};
+
   taffybar = callPackage ../applications/misc/taffybar {};
 
   yi = callPackage ../applications/editors/yi/yi.nix {};
