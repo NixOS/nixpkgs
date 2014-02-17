@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which }:
+{ stdenv, fetchurl, which, autoconf, automake }:
 
 stdenv.mkDerivation rec {
   name = "gnome-common-3.10.0";
@@ -13,5 +13,5 @@ stdenv.mkDerivation rec {
     sha256 = "17abp7czfzirjm7qsn2czd03hdv9kbyhk3lkjxg2xsf5fky7z7jl";
   })];
 
-  propagatedBuildInputs = [ which ]; # autogen.sh which is using gnome_common tends to require which
+  propagatedBuildInputs = [ which autoconf automake ]; # autogen.sh which is using gnome_common tends to require which
 }
