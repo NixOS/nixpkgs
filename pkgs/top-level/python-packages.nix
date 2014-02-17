@@ -344,6 +344,31 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  ansible = buildPythonPackage rec {
+    name = "ansible-1.4.5";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/a/ansible/${name}.tar.gz";
+      md5 = "87d3d679e695d10cee35a204e04eb6a8";
+    };
+
+    propagatedBuildInputs = [paramiko jinja2 pyyaml];
+
+    installCommand = ''
+      export ANSIBLE_LIBRARY="$out/share/ansible";
+      ${python}/bin/${python.executable} setup.py install --prefix="$out"
+    '';
+
+    postInstall = ''wrapProgram "$out/bin/ansible" --set ANSIBLE_LIBRARY "$out/share/ansible"'';
+
+    doCheck = false;
+
+    meta = {
+      homepage = "https://pypi.python.org/pypi/ansible/";
+      description = "Radically simple IT automation";
+    };
+  };
+
 
   anyjson = buildPythonPackage rec {
     name = "anyjson-0.3.1";
