@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, python, pygtk, vte, gettext, intltool, makeWrapper }:
+{ stdenv, fetchurl, python, pygtk, notify, keybinder, vte, gettext, intltool
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   name = "gnome-terminator-${version}";
@@ -9,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1xykpx10g2zssx0ss6351ca6vmmma7zwxxhjz0fg28ps4dq88cci";
   };
   
-  buildInputs = [ python pygtk vte gettext intltool makeWrapper ];
+  buildInputs = [
+    python pygtk notify keybinder vte gettext intltool makeWrapper
+  ];
 
   installPhase = ''
     python setup.py --without-icon-cache install --prefix="$out"

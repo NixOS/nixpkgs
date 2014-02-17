@@ -8109,6 +8109,7 @@ let
 
   gnome_terminator = callPackage ../applications/misc/gnome_terminator {
     vte = gnome.vte.override { pythonSupport = true; };
+    inherit (pythonPackages) notify;
   };
 
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
