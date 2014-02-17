@@ -6988,6 +6988,8 @@ let
 
   paxctl = callPackage ../os-specific/linux/paxctl { };
 
+  pax-utils = callPackage ../os-specific/linux/pax-utils { };
+
   pcmciaUtils = callPackage ../os-specific/linux/pcmciautils {
     firmware = config.pcmciaUtils.firmware or [];
     config = config.pcmciaUtils.config or null;
