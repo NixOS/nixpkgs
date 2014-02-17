@@ -6986,6 +6986,8 @@ let
 
   pam_usb = callPackage ../os-specific/linux/pam_usb { };
 
+  paxctl = callPackage ../os-specific/linux/paxctl { };
+
   pcmciaUtils = callPackage ../os-specific/linux/pcmciautils {
     firmware = config.pcmciaUtils.firmware or [];
     config = config.pcmciaUtils.config or null;
