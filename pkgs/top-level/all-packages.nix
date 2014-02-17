@@ -8107,11 +8107,6 @@ let
     inherit (gnome) GConf;
   };
 
-  gnome_terminator = callPackage ../applications/misc/gnome_terminator {
-    vte = gnome.vte.override { pythonSupport = true; };
-    inherit (pythonPackages) notify;
-  };
-
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
 
   google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin {
@@ -8911,6 +8906,11 @@ let
   telepathy_rakia = callPackage ../applications/networking/instant-messengers/telepathy/rakia { };
 
   telepathy_salut = callPackage ../applications/networking/instant-messengers/telepathy/salut {};
+
+  terminator = callPackage ../applications/misc/terminator {
+    vte = gnome.vte.override { pythonSupport = true; };
+    inherit (pythonPackages) notify;
+  };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
 
