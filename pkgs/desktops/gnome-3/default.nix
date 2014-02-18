@@ -119,6 +119,6 @@ rec {
 
   gitg = callPackage ./misc/gitg { };
 
-  libgit2-glib = callPackage ./misc/libgit2-glib { automake = pkgs.automake111x; };
+  libgit2-glib = callPackage ./misc/libgit2-glib { };
 
 }
