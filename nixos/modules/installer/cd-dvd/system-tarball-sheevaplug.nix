@@ -138,7 +138,6 @@ in
   };
 
   # Setting vesa, we don't get the nvidia driver, which can't work in arm.
-  services.xserver.videoDriver = "vesa";
   hardware.opengl.videoDrivers = [ "vesa" ];
   services.nixosManual.enable = false;
 
