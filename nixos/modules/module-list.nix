@@ -61,6 +61,7 @@
   ./security/apparmor.nix
   ./security/apparmor-suid.nix
   ./security/ca.nix
+  ./security/duosec.nix
   ./security/pam.nix
   ./security/pam_usb.nix
   ./security/polkit.nix
