@@ -131,7 +131,7 @@ rec {
       sLen = stringLength s;
       lastSearch = sub sLen sepLen;
       startWithSep = startAt:
-        substring startAt sepLen s == sep;
+        eqStrings (substring startAt sepLen s) sep;
 
       recurse = index: startAt:
         let cutUntil = i: [(substring startAt (sub i startAt) s)]; in
