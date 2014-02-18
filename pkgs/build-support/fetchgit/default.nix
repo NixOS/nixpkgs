@@ -23,6 +23,8 @@
    server admins start using the new version?
 */
 
+assert md5 != "" || sha256 != "";
+
 stdenv.mkDerivation {
   name = "git-export";
   builder = ./builder.sh;
