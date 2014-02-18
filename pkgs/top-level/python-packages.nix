@@ -359,7 +359,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       ${python}/bin/${python.executable} setup.py install --prefix="$out"
     '';
 
-    postInstall = ''wrapProgram "$out/bin/ansible" --set ANSIBLE_LIBRARY "$out/share/ansible"'';
+    postInstall = ''
+      wrapProgram "$out/bin/ansible" --set ANSIBLE_LIBRARY "$out/share/ansible";
+      wrapProgram "$out/bin/ansible-doc" --set ANSIBLE_LIBRARY "$out/share/ansible";
+      wrapProgram "$out/bin/ansible-galaxy" --set ANSIBLE_LIBRARY "$out/share/ansible";
+      wrapProgram "$out/bin/ansible-playbook" --set ANSIBLE_LIBRARY "$out/share/ansible";
+      wrapProgram "$out/bin/ansible-pull" --set ANSIBLE_LIBRARY "$out/share/ansible";
+    '';
 
     doCheck = false;
 
