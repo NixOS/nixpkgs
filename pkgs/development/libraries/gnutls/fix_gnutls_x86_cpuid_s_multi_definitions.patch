@@ -1,0 +1,59 @@
+From 54768ca1cd9049bbd1c695696ef3c8595c6052db Mon Sep 17 00:00:00 2001
+From: Nikos Mavrogiannopoulos <nmav@redhat.com>
+Date: Mon, 10 Feb 2014 10:43:52 +0100
+Subject: [PATCH] do not redefine the _gnutls_x86_cpuid_s symbol
+
+---
+ lib/accelerated/x86/aes-cbc-x86-aesni.c |    2 --
+ lib/accelerated/x86/aes-cbc-x86-ssse3.c |    2 --
+ lib/accelerated/x86/x86.h               |    3 ++-
+ 3 files changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/lib/accelerated/x86/aes-cbc-x86-aesni.c b/lib/accelerated/x86/aes-cbc-x86-aesni.c
+index 6d4526f..1a2681f 100644
+--- a/lib/accelerated/x86/aes-cbc-x86-aesni.c
++++ b/lib/accelerated/x86/aes-cbc-x86-aesni.c
+@@ -39,8 +39,6 @@ struct aes_ctx {
+ 	int enc;
+ };
+ 
+-unsigned int _gnutls_x86_cpuid_s[4];
+-
+ static int
+ aes_cipher_init(gnutls_cipher_algorithm_t algorithm, void **_ctx, int enc)
+ {
+diff --git a/lib/accelerated/x86/aes-cbc-x86-ssse3.c b/lib/accelerated/x86/aes-cbc-x86-ssse3.c
+index ff24578..2b2440a 100644
+--- a/lib/accelerated/x86/aes-cbc-x86-ssse3.c
++++ b/lib/accelerated/x86/aes-cbc-x86-ssse3.c
+@@ -39,8 +39,6 @@ struct aes_ctx {
+ 	int enc;
+ };
+ 
+-unsigned int _gnutls_x86_cpuid_s[4];
+-
+ static int
+ aes_cipher_init(gnutls_cipher_algorithm_t algorithm, void **_ctx, int enc)
+ {
+diff --git a/lib/accelerated/x86/x86.h b/lib/accelerated/x86/x86.h
+index ae04d32..03fc8de 100644
+--- a/lib/accelerated/x86/x86.h
++++ b/lib/accelerated/x86/x86.h
+@@ -22,6 +22,8 @@
+ 
+ #include <config.h>
+ 
++extern unsigned int _gnutls_x86_cpuid_s[4];
++
+ #if defined(ASM_X86)
+ 
+ void gnutls_cpuid(unsigned int func, unsigned int *ax, unsigned int *bx,
+@@ -43,5 +45,4 @@ unsigned int gnutls_have_cpuid(void);
+  (nettle_hash_digest_func *) digest_func	\
+ } 
+ 
+-
+ #endif
+-- 
+1.7.1
+

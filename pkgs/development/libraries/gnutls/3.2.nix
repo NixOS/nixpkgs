@@ -70,4 +70,15 @@ stdenv.mkDerivation (rec {
 (stdenv.lib.optionalAttrs stdenv.isFreeBSD {
   # FreeBSD doesn't have <alloca.h>, and Gnulib's `alloca' module isn't used.
   patches = [ ./guile-gnulib-includes.patch ];
-}))
+})
+
+//
+
+(stdenv.lib.optionalAttrs stdenv.isDarwin {
+  # multiple definitions of '_gnutls_x86_cpuid_s' cause linker to fail.
+  # the patch is: https://www.gitorious.org/gnutls/gnutls/commit/54768ca1cd9049bbd1c695696ef3c8595c6052db
+  # discussion: http://osdir.com/ml/gnutls-devel-gnu/2014-02/msg00012.html
+  patches = [ ./fix_gnutls_x86_cpuid_s_multi_definitions.patch ];
+})
+
+)
