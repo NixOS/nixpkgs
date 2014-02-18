@@ -3053,10 +3053,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExceptionClass = buildPerlPackage rec {
-    name = "Exception-Class-1.30";
+    name = "Exception-Class-1.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "54e256fdb317c1736c2c257fa63d5b87cfb382870711b24937c36eb5171b3154";
+      sha256 = "1p6f20fi82mr5bz7d2c7nqh0322r8n2kszfw37c77g8b1b4r72w3";
     };
     propagatedBuildInputs = [ ClassDataInheritable DevelStackTrace ];
   };
