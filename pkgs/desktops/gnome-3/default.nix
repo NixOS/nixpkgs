@@ -20,6 +20,8 @@ rec {
 
   dconf = callPackage ./core/dconf { };
 
+  epiphany = callPackage ./core/epiphany { };
+
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
   evolution_data_server = callPackage ./core/evolution-data-server { };

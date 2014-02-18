@@ -7814,6 +7814,8 @@ let
 
   epdfview = callPackage ../applications/misc/epdfview { };
 
+  inherit (gnome3) epiphany;
+
   espeak = callPackage ../applications/audio/espeak { };
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
