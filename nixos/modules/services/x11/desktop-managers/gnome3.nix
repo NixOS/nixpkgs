@@ -34,7 +34,7 @@ in {
           export GTK_DATA_PREFIX=${config.system.path}
 
           # find theme engines
-          export GTK_PATH=${config.system.path}/lib/gtk-3.0:{config.system.path}/lib/gtk-2.0
+          export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
 
           export XDG_MENU_PREFIX=gnome
 
