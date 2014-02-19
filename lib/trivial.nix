@@ -47,4 +47,7 @@ rec {
     readFile ../.version
     + (if pathExists suffixFile then readFile suffixFile else "pre-git");
 
+  # Whether we're being called by nix-shell.  This is useful to  
+  inNixShell = builtins.getEnv "IN_NIX_SHELL" == "1";
+
 }
