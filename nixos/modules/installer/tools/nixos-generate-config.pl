@@ -305,7 +305,15 @@ EOF
   fileSystems.\"$mountPoint\" =
     { device = \"$device\";
       fsType = \"$fsType\";
-      options = \"${\join ",", uniq(@extraOptions, @superOptions, @mountOptions)}\";
+EOF
+
+    if (scalar @extraOptions > 0) {
+      $fileSystems .= <<EOF;
+      options = \"${\join ",", uniq(@extraOptions)}\";
+EOF
+    }
+
+    $fileSystems .= <<EOF;
     };
 
 EOF
