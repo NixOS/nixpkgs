@@ -48,6 +48,7 @@ in {
       [ gnome3.evince
         gnome3.eog
         gnome3.dconf
+        gnome3.vino
         pkgs.ibus
         gnome3.gnome_shell
         gnome3.gnome_settings_daemon

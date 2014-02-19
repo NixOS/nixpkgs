@@ -92,6 +92,8 @@ rec {
 
   vte = callPackage ./core/vte { };
 
+  vino = callPackage ./core/vino { };
+
   yelp = callPackage ./core/yelp { };
 
   yelp_xsl = callPackage ./core/yelp-xsl { };
