@@ -41,4 +41,10 @@ rec {
     pathExists readFile isBool isFunction
     isInt add sub lessThan;
 
+  # Return the Nixpkgs version number.
+  nixpkgsVersion =
+    let suffixFile = ../.version-suffix; in
+    readFile ../.version
+    + (if pathExists suffixFile then readFile suffixFile else "pre-git");
+
 }
