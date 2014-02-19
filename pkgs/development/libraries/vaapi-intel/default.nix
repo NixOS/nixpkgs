@@ -2,11 +2,11 @@
 , intelgen4asm }:
 
 stdenv.mkDerivation rec {
-  name = "libva-intel-driver-1.2.2";
+  name = "libva-intel-driver-1.0.20";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver/${name}.tar.bz2";
-    sha256 = "0i3h9g8flnxf8gmag65xkvz7rib51dvx841ym3am5v3p51w79i0r";
+    sha256 = "1jfl8909j3a3in6m8b5bx3dn7pzr8a1sw3sk4vzm7h3j2dkgpzhj";
   };
 
   buildInputs = [ pkgconfig libdrm libva libX11 ];
