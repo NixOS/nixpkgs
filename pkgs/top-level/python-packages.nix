@@ -7104,11 +7104,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   twisted = buildPythonPackage rec {
-    name = "twisted-13.2.0";
+    # NOTE: When updating please check if new versions still cause issues
+    # to packages like carbon (http://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
 
+    name = "Twisted-11.1.0";
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/T/Twisted/Twisted-13.2.0.tar.bz2";
-      sha256 = "1wrcqv5lvgwk2aq83qb2s2ng2vx14hbjjk2gc30cg6h1iiipal89";
+      url = "https://pypi.python.org/packages/source/T/Twisted/${name}.tar.bz2";
+      sha256 = "05agfp17cndhv2w0p559lvknl7nv0xqkg10apc47fm53m8llbfvz";
     };
 
     propagatedBuildInputs = [ zope_interface ];
@@ -8251,30 +8253,30 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   whisper = buildPythonPackage rec {
     name = "whisper-${version}";
-    version = "0.9.10";
+    version = "0.9.12";
 
-    src = fetchurl rec {
-      url = "https://launchpad.net/graphite/0.9/${version}/+download/${name}.tar.gz";
-      sha256 = "1zy4z4hrbiqj4ipcv2m9197hf03d4xphllqav9w4c8i6fn8zmd9n";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/w/whisper/${name}.tar.gz";
+      md5 = "5fac757cc4822ab0678dbe0d781d904e";
     };
 
     # error: invalid command 'test'
     doCheck = false;
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://graphite.wikidot.com/;
       description = "Fixed size round-robin style database";
-      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      maintainers = with maintainers; [ rickynils offline ];
     };
   };
 
   carbon = buildPythonPackage rec {
     name = "carbon-${version}";
-    version = "0.9.10";
+    version = "0.9.12";
 
-    src = fetchurl rec {
-      url = "https://launchpad.net/graphite/0.9/${version}/+download/${name}.tar.gz";
-      sha256 = "0wjhd87pvpcpvaj3wql2d92g8lpp33iwmxdkp7npic5mjl2y0dsg";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/carbon/${name}.tar.gz";
+      md5 = "66967d5a622fd29973838fcd10eb34f3";
     };
 
     propagatedBuildInputs = [ whisper txamqp zope_interface twisted ];
@@ -8282,10 +8284,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     # error: invalid command 'test'
     doCheck = false;
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://graphite.wikidot.com/;
       description = "Backend data caching and persistence daemon for Graphite";
-      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      maintainers = with maintainers; [ rickynils offline ];
     };
   };
 
@@ -8326,11 +8328,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   graphite_web = buildPythonPackage rec {
     name = "graphite-web-${version}";
-    version = "0.9.11";
+    version = "0.9.12";
 
     src = fetchurl rec {
       url = "https://pypi.python.org/packages/source/g/graphite-web/${name}.tar.gz";
-      md5 = "1499b5dded3d1054d598760fd450a6f9";
+      md5 = "8edbb61f1ffe11c181bd2cb9ec977c72";
     };
 
     propagatedBuildInputs = [ django_1_3 django_tagging modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
@@ -8350,10 +8352,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     # error: invalid command 'test'
     doCheck = false;
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://graphite.wikidot.com/;
       description = "Enterprise scalable realtime graphing";
-      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      maintainers = with maintainers; [ rickynils offline ];
     };
   };
 
