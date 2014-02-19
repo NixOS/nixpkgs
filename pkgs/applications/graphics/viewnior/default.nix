@@ -2,17 +2,21 @@
 , intltool, gettext, shared_mime_info, glib, gdk_pixbuf, perl}:
 
 stdenv.mkDerivation rec {
-  name = "viewnior-1.3";
+  name = "viewnior-1.4";
 
   src = fetchurl {
-    url = "http://cloud.github.com/downloads/xsisqox/Viewnior/${name}.tar.gz";
-    sha256 = "46c97c1a85361519b42fe008cfb8911e66f709f3a3a988c11047ab3726889f10";
+    url = "https://www.dropbox.com/s/zytq0suabesv933/${name}.tar.gz";
+    sha256 = "0vv1133phgfzm92md6bbccmcvfiqb4kz28z1572c0qj971yz457a";
   };
 
   buildInputs =
     [ pkgconfig gtk2 libpng exiv2 lcms intltool gettext
       shared_mime_info glib gdk_pixbuf perl
     ];
+
+  preFixup = ''
+    rm $out/share/icons/*/icon-theme.cache
+  '';
 
   meta = {
     description = "Viewnior is a fast and simple image viewer for GNU/Linux";
