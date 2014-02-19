@@ -8344,7 +8344,9 @@ let
     libosip = libosip_3;
   };
 
-  linuxsampler = callPackage ../applications/audio/linuxsampler { };
+  linuxsampler = callPackage ../applications/audio/linuxsampler {
+    bison = bison2;
+  };
 
   lmms = callPackage ../applications/audio/lmms { };
 
