@@ -530,7 +530,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   aeson_0_7_0_1 = callPackage ../development/libraries/haskell/aeson/0.7.0.1.nix {
     blazeBuilder = if (pkgs.stdenv.lib.versionOlder ghc.version "7.6") then self.blazeBuilder else null;
   };
-  aeson = self.aeson_0_6_2_1;
+  aeson = self.aeson_0_7_0_1;
 
   aesonLens = callPackage ../development/libraries/haskell/aeson-lens {};
 
@@ -941,12 +941,24 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   dice = callPackage ../development/libraries/haskell/dice {};
 
   diagrams = callPackage ../development/libraries/haskell/diagrams/diagrams.nix {};
-  diagramsCairo = callPackage ../development/libraries/haskell/diagrams/cairo.nix {};
-  diagramsCore = callPackage ../development/libraries/haskell/diagrams/core.nix {};
-  diagramsContrib = callPackage ../development/libraries/haskell/diagrams/contrib.nix {};
-  diagramsLib = callPackage ../development/libraries/haskell/diagrams/lib.nix {};
-  diagramsPostscript = callPackage ../development/libraries/haskell/diagrams/postscript.nix {};
-  diagramsSvg = callPackage ../development/libraries/haskell/diagrams/svg.nix {};
+  diagramsCairo = callPackage ../development/libraries/haskell/diagrams/cairo.nix {
+    lens = self.lens_3_10_2;
+  };
+  diagramsCore = callPackage ../development/libraries/haskell/diagrams/core.nix {
+    lens = self.lens_3_10_2;
+  };
+  diagramsContrib = callPackage ../development/libraries/haskell/diagrams/contrib.nix {
+    lens = self.lens_3_10_2;
+  };
+  diagramsLib = callPackage ../development/libraries/haskell/diagrams/lib.nix {
+    lens = self.lens_3_10_2;
+  };
+  diagramsPostscript = callPackage ../development/libraries/haskell/diagrams/postscript.nix {
+     lens = self.lens_3_10_2;
+  };
+  diagramsSvg = callPackage ../development/libraries/haskell/diagrams/svg.nix {
+    lens = self.lens_3_10_2;
+  };
 
   Diff = callPackage ../development/libraries/haskell/Diff {};
 
@@ -958,10 +970,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   digestiveFunctors = callPackage ../development/libraries/haskell/digestive-functors {};
 
-  digestiveFunctorsAeson = callPackage ../development/libraries/haskell/digestive-functors-aeson {
-    aeson = self.aeson_0_7_0_1;
-    lens = self.lens_4_0_4;
-  };
+  digestiveFunctorsAeson = callPackage ../development/libraries/haskell/digestive-functors-aeson {};
 
   digestiveFunctorsHeist = callPackage ../development/libraries/haskell/digestive-functors-heist {};
 
@@ -1116,7 +1125,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   foldl = callPackage ../development/libraries/haskell/foldl {};
 
-  forceLayout = callPackage ../development/libraries/haskell/force-layout {};
+  forceLayout = callPackage ../development/libraries/haskell/force-layout {
+    lens = self.lens_3_10_2;
+  };
 
   free = callPackage ../development/libraries/haskell/free {};
 
@@ -1432,9 +1443,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
 
-  hspecExpectationsLens = callPackage ../development/libraries/haskell/hspec-expectations-lens {
-    lens = self.lens_4_0_4;
-  };
+  hspecExpectationsLens = callPackage ../development/libraries/haskell/hspec-expectations-lens {};
 
   hspecMeta = callPackage ../development/libraries/haskell/hspec-meta {};
 
@@ -1535,10 +1544,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   json = callPackage ../development/libraries/haskell/json {};
 
-  jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {
-    aeson = self.aeson_0_7_0_1;
-    lens = self.lens_4_0_4;
-  };
+  jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {};
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
@@ -1573,10 +1579,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
   lens_3_10_2 = callPackage ../development/libraries/haskell/lens/3.10.2.nix {};
-  lens_4_0_4 = callPackage ../development/libraries/haskell/lens/4.0.4.nix {
-    aeson = self.aeson_0_7_0_1;
-  };
-  lens = self.lens_3_10_2;
+  lens_4_0_4 = callPackage ../development/libraries/haskell/lens/4.0.4.nix {};
+  lens = self.lens_4_0_4;
 
   lensAeson = callPackage ../development/libraries/haskell/lens-aeson {};
 
@@ -1588,9 +1592,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     libffi = pkgs.libffi;
   };
 
-  libjenkins = callPackage ../development/libraries/haskell/libjenkins {
-    lens = self.lens_4_0_4;
-  };
+  libjenkins = callPackage ../development/libraries/haskell/libjenkins {};
 
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
@@ -1602,9 +1604,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
-  linear = callPackage ../development/libraries/haskell/linear {
-    lens = self.lens_4_0_4;
-  };
+  linear = callPackage ../development/libraries/haskell/linear {};
 
   List = callPackage ../development/libraries/haskell/List {};
 
@@ -2182,10 +2182,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   socks = callPackage ../development/libraries/haskell/socks {};
 
-  sparse = callPackage ../development/libraries/haskell/sparse {
-    lens = self.lens_4_0_4;
-    linear = self.linear.override { lens = self.lens_4_0_4; };
-  };
+  sparse = callPackage ../development/libraries/haskell/sparse {};
 
   srcloc = callPackage ../development/libraries/haskell/srcloc {};
 
