@@ -49,6 +49,11 @@ in {
         gnome3.eog
         gnome3.dconf
         gnome3.vino
+        gnome3.epiphany
+        gnome3.baobab
+        gnome3.gucharmap
+        gnome3.nautilus
+        gnome3.yelp
         pkgs.ibus
         gnome3.gnome_shell
         gnome3.gnome_settings_daemon
