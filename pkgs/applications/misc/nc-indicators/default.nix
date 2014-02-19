@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ attoparsec gtk hflags lens pipes stm ];
   meta = {
-    homepage = "https://github.com/nilcons/nc-indicators";
+    homepage = "https://github.com/nilcons/nc-indicators/issues";
     description = "CPU load and memory usage indicators for i3bar";
     license = self.stdenv.lib.licenses.asl20;
     platforms = self.ghc.meta.platforms;
