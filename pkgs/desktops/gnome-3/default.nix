@@ -42,6 +42,8 @@ rec {
 
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };
 
+  gnome_icon_theme_symbolic = callPackage ./core/gnome-icon-theme-symbolic { };
+
   gnome-menus = callPackage ./core/gnome-menus { };
 
   gnome_keyring = callPackage ./core/gnome-keyring { };
