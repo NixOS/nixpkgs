@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, gettext, perl, python, autoconf, automake, libtool
-, libiconvOrEmpty, libintlOrEmpty, zlib, libffi, pcre, libelf, dbus }:
+{ stdenv, fetchurl, pkgconfig, gettext, perl, python
+, autoconf, automake, libtool, libxml2
+, libiconvOrEmpty, libintlOrEmpty, zlib, libffi
+, pcre, libelf, tzdata, pkgs }:
 
 # TODO:
 # * Add gio-module-fam
@@ -34,59 +36,86 @@ let
 
   ver_maj = "2.38";
   ver_min = "2";
-in
-with { inherit (stdenv.lib) optional optionalString; };
-
-stdenv.mkDerivation rec {
   name = "glib-${ver_maj}.${ver_min}";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "0d2px8m77603s5pm3md4bcm5d0ksbcsb6ik1w52hjslnq1a9hsh5";
-  };
+  glib_recipe =
+    with { inherit (stdenv.lib) optional optionalString; };
+    rec {
+      inherit name;
 
-  # configure script looks for d-bus but it is (probably) only needed for tests
-  buildInputs = [ libelf ];
+      src = fetchurl {
+        url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
+        sha256 = "0d2px8m77603s5pm3md4bcm5d0ksbcsb6ik1w52hjslnq1a9hsh5";
+      };
 
-  # I don't know why the autotools are needed now, even without modifying configure scripts
-  nativeBuildInputs = [ pkgconfig gettext perl python ] ++ [ autoconf automake libtool ];
+      buildInputs = [ libelf ];
 
-  propagatedBuildInputs = [ pcre zlib libffi ] ++ libiconvOrEmpty ++ libintlOrEmpty;
+      # I don't know why the autotools are needed now, even without modifying configure scripts
+      nativeBuildInputs = [ pkgconfig gettext perl python ] ++ [ autoconf automake libtool ];
 
-  preConfigure = "autoreconf -fi";
+      propagatedBuildInputs = [ pcre zlib libffi ] ++ libiconvOrEmpty ++ libintlOrEmpty;
 
-  configureFlags =
-    optional stdenv.isDarwin "--disable-compile-warnings"
-    ++ optional stdenv.isSunOS "--disable-modular-tests";
+      preConfigure = "autoreconf -fi";
 
-  CPPFLAGS = optionalString stdenv.isSunOS "-DBSD_COMP";
+      configureFlags =
+        optional stdenv.isDarwin "--disable-compile-warnings"
+        ++ optional stdenv.isSunOS "--disable-modular-tests";
 
-  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-lintl";
+      CPPFLAGS = optionalString stdenv.isSunOS "-DBSD_COMP";
 
-  enableParallelBuilding = true;
+      NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-lintl";
 
-  doCheck = false; # ToDo: fix the remaining problems, so we have checked glib by default
-  LD_LIBRARY_PATH = optionalString doCheck "${stdenv.gcc.gcc}/lib";
+      enableParallelBuilding = true;
 
-  postInstall = ''rm -rvf $out/share/gtk-doc'';
+      postInstall = ''rm -rvf $out/share/gtk-doc'';
 
-  passthru = {
-     gioModuleDir = "lib/gio/modules";
-     inherit flattenInclude;
-  };
+      passthru = {
+         gioModuleDir = "lib/gio/modules";
+         inherit flattenInclude;
+      };
 
-  meta = with stdenv.lib; {
-    description = "GLib, a C library of programming buildings blocks";
-    homepage    = http://www.gtk.org/;
-    license     = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ lovek323 raskin urkud ];
-    platforms   = platforms.unix;
+      meta = with stdenv.lib; {
+        description = "GLib, a C library of programming buildings blocks";
+        homepage    = http://www.gtk.org/;
+        license     = licenses.lgpl2Plus;
+        maintainers = with maintainers; [ lovek323 raskin urkud ];
+        platforms   = platforms.unix;
 
-    longDescription = ''
-      GLib provides the core application building blocks for libraries
-      and applications written in C.  It provides the core object
-      system used in GNOME, the main loop implementation, and a large
-      set of utility functions for strings and common data structures.
+        longDescription = ''
+          GLib provides the core application building blocks for libraries
+          and applications written in C.  It provides the core object
+          system used in GNOME, the main loop implementation, and a large
+          set of utility functions for strings and common data structures.
+        '';
+      };
+    };
+
+  # glib tests rely on desktop-file-utils and shared-mime-info, but
+  # desktop-file-utils and shared-mime-info depend upon glib.
+  # We build a glib without doing make check to break the cycle.
+  glib_bootstrap = stdenv.mkDerivation glib_recipe;
+  dfu_bootstrap = pkgs.desktop_file_utils.override { glib = glib_bootstrap; };
+  smi_bootstrap = pkgs.shared_mime_info.override { glib = glib_bootstrap; };
+
+in
+
+stdenv.mkDerivation (glib_recipe // {
+  # libxml2 needed for xmllint in the tests
+  buildInputs = [ tzdata libxml2 dfu_bootstrap smi_bootstrap ] ++ glib_recipe.buildInputs;
+
+  preCheck =
+    # libgcc_s.so.1 must be installed for pthread_cancel to work
+    # also point to the glib/.libs path
+    '' export LD_LIBRARY_PATH="$(dirname $(echo ${stdenv.gcc.gcc}/lib*/libgcc_s.so)):$NIX_BUILD_TOP/${name}/glib/.libs:$LD_LIBRARY_PATH"
+       export TZDIR=${tzdata}/share/zoneinfo
+       export XDG_CACHE_HOME=$TMP
+       export XDG_RUNTIME_HOME=$TMP
+       export HOME=$TMP
+       export XDG_DATA_DIRS=${dfu_bootstrap}/share:${smi_bootstrap}/share:$XDG_DATA_DIRS
     '';
-  };
-}
+
+  doCheck = true;
+
+  patches = [ ./disable_ipv6_test.patch ];
+  patchFlags = "-p0";
+})
