@@ -1,5 +1,5 @@
 { stdenv, fetchurl, bash, autoconf, automake, libtool, pkgconfig, libcangjie
-, sqlite, python3, cython3
+, sqlite, python, cython
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    autoconf automake libtool pkgconfig libcangjie sqlite python3 cython3
+    autoconf automake libtool pkgconfig libcangjie sqlite python cython
   ];
 
   preConfigure = ''
