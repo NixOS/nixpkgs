@@ -7816,6 +7816,8 @@ let
   emacs23Packages = emacsPackages emacs23 pkgs.emacs23Packages;
   emacs24Packages = recurseIntoAttrs (emacsPackages emacs24 pkgs.emacs24Packages);
 
+  inherit (gnome3) empathy;
+
   epdfview = callPackage ../applications/misc/epdfview { };
 
   inherit (gnome3) epiphany;

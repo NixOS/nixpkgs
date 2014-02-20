@@ -20,6 +20,8 @@ rec {
 
   dconf = callPackage ./core/dconf { };
 
+  empathy = callPackage ./core/empathy { };
+
   epiphany = callPackage ./core/epiphany { };
 
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
