@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
-, glib, kbd, libxslt, coreutils, libgcrypt, sysvtools, docbook_xsl
-, kexectools, libmicrohttpd
+, glib, kbd, libxslt, coreutils, libgcrypt, docbook_xsl
+, kexectools, libmicrohttpd, bash, glibc, autoreconfHook
 , python ? null, pythonSupport ? false
 }:
 
@@ -10,35 +10,39 @@ assert stdenv.isLinux;
 assert pythonSupport -> python != null;
 
 stdenv.mkDerivation rec {
-  version = "203";
+  version = "211";
   name = "systemd-${version}";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "07gvn3rpski8sh1nz16npjf2bvj0spsjdwc5px9685g2pi6kxcb1";
+    sha256 = "0j36a4z6gqa0laxf3admd1w1mb8fdbnh3zvz1zgzl3hgdzzw2y7j";
   };
 
-  patches =
-    [ # These are all changes between upstream and
-      # https://github.com/edolstra/systemd/tree/nixos-v203.
-      ./fixes.patch
-      ./fix_console_in_containers.patch
-    ]
+  patches = [ ./fix_console_in_containers.patch ]
     ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus.libs kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt docbook_xsl
-      libmicrohttpd
+      libmicrohttpd autoreconfHook
     ] ++ stdenv.lib.optional pythonSupport python;
+
+  propagatedBuildInputs = [ bash coreutils utillinux kbd glibc ];
+
+  # Systemd attempts to use the gold linker instead of plain ld
+  # This does not work with nix as gold is not properly patched to handle
+  # all link time dependencies in the nix store
+  # FIXME: When gold can be used with nix
+  preAutoreconf = "sed -i 's/-Wl,-fuse-ld=gold//' configure.ac";
 
   configureFlags =
     [ "--localstatedir=/var"
-      "--sysconfdir=/etc"
+      "--sysconfdir=$(out)/etc"
       "--with-rootprefix=$(out)"
       "--with-kbd-loadkeys=${kbd}/bin/loadkeys"
       "--with-kbd-setfont=${kbd}/bin/setfont"
       "--with-rootprefix=$(out)"
+      "--with-sysvinit-path=$(out)/etc/init.d"
       "--with-dbusinterfacedir=$(out)/share/dbus-1/interfaces"
       "--with-dbuspolicydir=$(out)/etc/dbus-1/system.d"
       "--with-dbussystemservicedir=$(out)/share/dbus-1/system-services"
@@ -50,10 +54,11 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       # FIXME: patch this in systemd properly (and send upstream).
-      # FIXME: use sulogin from util-linux once updated.
-      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.m4.in src/journal/cat.c src/core/shutdown.c; do
+      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/systemd-readahead-drop.service units/rescue.service.m4.in src/journal/cat.c src/core/shutdown.c src/dbus1-generator/dbus1-generator.c src/hostname/org.freedesktop.hostname1.service src/kernel-install/* src/locale/*.service src/nspawn/nspawn.c; do
         test -e $i
         substituteInPlace $i \
+          --replace /bin/bash ${bash}/bin/bash \
+          --replace /bin/getent ${glibc}/bin/getent \
           --replace /bin/mount ${utillinux}/bin/mount \
           --replace /bin/umount ${utillinux}/bin/umount \
           --replace /sbin/swapon ${utillinux}/sbin/swapon \
@@ -61,8 +66,10 @@ stdenv.mkDerivation rec {
           --replace /sbin/fsck ${utillinux}/sbin/fsck \
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
-          --replace /sbin/sulogin ${sysvtools}/sbin/sulogin \
-          --replace /sbin/kexec ${kexectools}/sbin/kexec
+          --replace /sbin/sulogin ${utillinux}/sbin/sulogin \
+          --replace /sbin/kexec ${kexectools}/sbin/kexec \
+          --replace /bin/false ${coreutils}/bin/false \
+          --replace /bin/rm ${coreutils}/bin/rm
       done
 
       substituteInPlace src/journal/catalog.c \
@@ -79,7 +86,7 @@ stdenv.mkDerivation rec {
 
       # Work around our kernel headers being too old.  FIXME: remove
       # this after the next stdenv update.
-      "-DFS_NOCOW_FL=0x00800000"
+      #"-DFS_NOCOW_FL=0x00800000"
 
       # Set the release_agent on /sys/fs/cgroup/systemd to the
       # currently running systemd (/run/current-system/systemd) so
@@ -94,7 +101,7 @@ stdenv.mkDerivation rec {
   # /var is mounted.
   makeFlags = "hwdb_bin=/var/lib/udev/hwdb.bin";
 
-  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc sysvinitdir=$(TMPDIR)/etc/init.d";
+  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc";
 
   # Get rid of configuration-specific data.
   postInstall =
@@ -126,7 +133,7 @@ stdenv.mkDerivation rec {
   # in a backwards-incompatible way.  If the interface version of two
   # systemd builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
-  passthru.interfaceVersion = 2;
+  passthru.interfaceVersion = 3;
 
   passthru.headers = stdenv.mkDerivation {
     name = "systemd-headers-${version}";
@@ -141,10 +148,10 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.freedesktop.org/wiki/Software/systemd";
     description = "A system and service manager for Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.simons ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ eelco simons ];
   };
 }
