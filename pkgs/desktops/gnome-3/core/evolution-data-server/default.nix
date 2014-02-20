@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   configureFlags = ["--disable-uoa" "--with-nspr-includes=${nspr}/include/nspr" "--with-nss-includes=${nss}/include/nss"]
                    ++ stdenv.lib.optional valaSupport "--enable-vala-bindings";
 
+  installFlags = "gsettingsschemadir=\${out}/share/evolution-data-server/glib-2.0/schemas/";
+
   meta = with stdenv.lib; {
     platforms = platforms.linux;
   };
