@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     colour dataDefaultClass lens mtl operational time
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/timbod7/haskell-chart/wiki";
     description = "A library for generating 2D Charts and Plots";
