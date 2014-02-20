@@ -3309,6 +3309,8 @@ let
 
   scheme48 = callPackage ../development/interpreters/scheme48 { };
 
+  spark = callPackage ../applications/networking/cluster/spark { };
+
   spidermonkey = callPackage ../development/interpreters/spidermonkey { };
   spidermonkey_1_8_0rc1 = callPackage ../development/interpreters/spidermonkey/1.8.0-rc1.nix { };
   spidermonkey_185 = callPackage ../development/interpreters/spidermonkey/185-1.0.0.nix { };
