@@ -45,14 +45,11 @@ stdenv.mkDerivation {
     
     ${if target == "android" then
         ''
-          cat $TMPDIR/config.json
-          
           titanium config --config-file $TMPDIR/config.json --no-colors android.sdkPath ${androidsdkComposition}/libexec/android-sdk-*
           
           ${if release then
             ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target dist-playstore --keystore ${androidKeyStore} --alias ${androidKeyAlias} --password ${androidKeyStorePassword} --output-dir $out''
           else
-            # /run/current-system/sw/bin/strace -f -y 
             ''titanium build --config-file $TMPDIR/config.json --no-colors --force --platform android --target emulator --build-only --output $out''}
         ''
       else if target == "iphone" then
