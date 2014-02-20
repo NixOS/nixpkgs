@@ -6504,6 +6504,8 @@ let
 
   checkpolicy = callPackage ../os-specific/linux/checkpolicy { };
 
+  checksec = callPackage ../os-specific/linux/checksec { };
+
   cifs_utils = callPackage ../os-specific/linux/cifs-utils { };
 
   conky = callPackage ../os-specific/linux/conky { };
