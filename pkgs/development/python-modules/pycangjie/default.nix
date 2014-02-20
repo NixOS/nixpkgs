@@ -1,27 +1,23 @@
-{ stdenv, fetchurl, bash, autoconf, automake, libtool, pkgconfig, libcangjie
-, sqlite, python, cython
-}:
+{ stdenv, fetchurl, file, libtool, pkgconfig, libcangjie, sqlite, python, cython }:
 
 stdenv.mkDerivation rec {
   name = "pycangjie-${version}";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "https://github.com/Cangjians/pycangjie/archive/v${version}.tar.gz";
-    sha256 = "1wx0m0chcpgxhj6cdxrwyi8hq05xlbap1ifs0wzb6nkglir0sb4j";
+    url = "http://cangjians.github.io/downloads/pycangjie/cangjie-${version}.tar.xz";
+    sha256 = "0vxcr302467lb99j9j9xdw8fh4dm78gydfcgvjjqby40xh9i4fcp";
   };
 
   buildInputs = [
-    autoconf automake libtool pkgconfig libcangjie sqlite python cython
+    file libtool pkgconfig libcangjie sqlite python cython
   ];
 
   preConfigure = ''
-    find . -name '*.sh' -exec sed -e 's@#!/bin/bash@${bash}/bin/bash@' -i '{}' ';'
+    sed -i 's@/usr/bin/file@${file}/bin/file@' configure
     sed -i 's@/usr@${libcangjie}@' tests/__init__.py
   '';
-
-  configureScript = "./autogen.sh";
 
   doCheck = true;
 
