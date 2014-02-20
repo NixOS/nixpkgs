@@ -15,4 +15,3 @@ stdenv.mkDerivation rec {
     homepage = "http://lxappearance.sourceforce.net/";
   };
 }
-
