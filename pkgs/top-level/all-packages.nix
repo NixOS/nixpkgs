@@ -9213,13 +9213,19 @@ let
 
   wordnet = callPackage ../applications/misc/wordnet { };
 
-  wrapChromium = browser: wrapBrowser {
-    inherit browser;
+  wrapChromium = browser: let
+    cfg = stdenv.lib.attrByPath [ browser.packageName ] {} config;
+    pepperPlugins = [];
+    pepperFlags = toString (map (x: x.pepperFlags) pepperPlugins);
     browserName = browser.packageName;
-    desktopName = "Chromium";
-    icon = "${browser}/share/icons/hicolor/48x48/apps/${browser.packageName}.png";
-    binPath = "${browser}/${browser.binPath}";
-  };
+  in
+    wrapBrowser {
+      inherit browser browserName;
+      desktopName = "Chromium";
+      icon = "${browser}/share/icons/hicolor/48x48/apps/${browserName}.png";
+      binPath = "${browser}/${browser.binPath}";
+      extraFlags = pepperFlags;
+    };
 
   wrapFirefox =
     { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? ""
