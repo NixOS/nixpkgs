@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, girara, gettext, docutils, file, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, gtk, girara, gettext, docutils, file, makeWrapper, zathura_icon }:
 
 stdenv.mkDerivation rec {
   version = "0.2.7";
@@ -21,7 +21,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "RSTTOMAN=${docutils}/bin/rst2man.py" "VERBOSE=1" ];
 
   postInstall = ''
-    wrapProgram "$out/bin/zathura" --prefix PATH ":" "${file}/bin"
+    wrapProgram "$out/bin/zathura" \
+      --prefix PATH ":" "${file}/bin" \
+      --prefix XDG_CONFIG_DIRS ":" "$out/etc"
+
+    mkdir -pv $out/etc
+    echo "set window-icon ${zathura_icon}" > $out/etc/zathurarc
   '';
 
   meta = {
