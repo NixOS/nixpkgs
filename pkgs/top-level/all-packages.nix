@@ -2711,6 +2711,8 @@ let
     inherit cmake;
   };
 
+  dsharp = callPackage ../development/compilers/dsharp {};
+
   fsharp = callPackage ../development/compilers/fsharp {};
 
   go_1_0 = callPackage ../development/compilers/go { };
