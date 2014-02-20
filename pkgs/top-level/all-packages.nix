@@ -8711,6 +8711,8 @@ let
 
   pdftk = callPackage ../tools/typesetting/pdftk { };
 
+  pepperflash = callPackage ../applications/networking/browsers/chromium/pepperflash.nix { };
+
   pianobar = callPackage ../applications/audio/pianobar { };
 
   pianobooster = callPackage ../applications/audio/pianobooster { };
@@ -9221,6 +9223,8 @@ let
     pepperPlugins = ([]
       ++ lib.optional (cfg.enablePepperPDF or false)
         (libpdf.override { inherit channel; })
+      ++ lib.optional (cfg.enablePepperFlash or false)
+        (pepperflash.override { inherit channel; })
     );
     pepperFlags = toString (map (x: x.pepperFlags) pepperPlugins);
     browserName = browser.packageName;
