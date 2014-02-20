@@ -1,13 +1,15 @@
 { cabal, blazeBuilder, blazeHtml, blazeMarkup, failure, hspec
-, HUnit, parsec, shakespeare, text
+, HUnit, parsec, shakespeare, systemFileio, systemFilepath, text
+, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "hamlet";
-  version = "1.1.7.7";
-  sha256 = "1qwx0gn367gp2a4kb1q3xc23addjyawr9gvs7bzv8vfx5xnkxglx";
+  version = "1.1.8";
+  sha256 = "093igcaycg2d29ncj9l8qbzi21drynjk8kvqfl70zqvgsm8nai7x";
   buildDepends = [
-    blazeBuilder blazeHtml blazeMarkup failure parsec shakespeare text
+    blazeBuilder blazeHtml blazeMarkup failure parsec shakespeare
+    systemFileio systemFilepath text time
   ];
   testDepends = [ blazeHtml blazeMarkup hspec HUnit parsec text ];
   meta = {

@@ -27,7 +27,7 @@ in
   config = {
 
     services.xserver.enable = true;
-    services.xserver.videoDrivers = [];
+    hardware.opengl.videoDrivers = [];
 
     # Enable KDM.  Any display manager will do as long as it supports XDMCP.
     services.xserver.displayManager.kdm.enable = true;

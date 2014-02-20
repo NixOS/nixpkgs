@@ -3053,10 +3053,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExceptionClass = buildPerlPackage rec {
-    name = "Exception-Class-1.30";
+    name = "Exception-Class-1.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "54e256fdb317c1736c2c257fa63d5b87cfb382870711b24937c36eb5171b3154";
+      sha256 = "1p6f20fi82mr5bz7d2c7nqh0322r8n2kszfw37c77g8b1b4r72w3";
     };
     propagatedBuildInputs = [ ClassDataInheritable DevelStackTrace ];
   };
@@ -3552,13 +3552,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   FinanceQuote = buildPerlPackage {
-    name = "Finance-Quote-1.18";
+    name = "Finance-Quote-1.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EC/ECOCODE/Finance-Quote-1.18.tar.gz;
-      sha256 = "4240faabe0646defd4ec76ca9e111977b9e8060eaec41adeb284eb422a428393";
+      url = mirror://sourceforge/finance-quote/1.19/Finance-Quote-1.19.tar.gz;
+      sha256 = "0z1dqxw4by7rkwm113qp2mlhl5r0znr22kzinvr1p82svn0zvm2d";
     };
-    propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP ];
-    patches = [ ../development/perl-modules/finance-quote-yahoo.patch ];
+    propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP DateCalc JSON ];
     meta = {
       homepage = http://finance-quote.sourceforge.net/;
       description = "Get stock and mutual fund quotes from various exchanges";

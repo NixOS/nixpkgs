@@ -112,6 +112,7 @@
       cgminer = 101;
       munin = 102;
       logcheck = 103;
+      nix-ssh = 104;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 

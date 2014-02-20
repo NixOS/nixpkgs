@@ -82,7 +82,7 @@ rec {
         "--disable-javaxpcom"
       ] ++ commonConfigureFlags;
 
-    enableParallelBuilding = true;
+    #enableParallelBuilding = true; # cf. https://github.com/NixOS/nixpkgs/pull/1699#issuecomment-35196282
 
     preConfigure =
       ''

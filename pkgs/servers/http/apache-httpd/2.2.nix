@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Apache HTTPD, the world's most popular web server";
+    branch      = "2.2";
     homepage    = http://httpd.apache.org/;
     license     = stdenv.lib.licenses.asl20;
     platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

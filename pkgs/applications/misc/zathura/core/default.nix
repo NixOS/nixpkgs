@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, gtk, girara, gettext, docutils, file, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.6";
+  version = "0.2.7";
   name = "zathura-core-${version}";
 
   src = fetchurl {
     url = "http://pwmt.org/projects/zathura/download/zathura-${version}.tar.gz";
-    sha1 = "d84878388969d523027a1661f49fd29638bd460b";
+    sha256 = "ef43be7705612937d095bfbe719a03503bf7e45493ea9409cb43a45cf96f0daf";
   };
 
   buildInputs = [ pkgconfig file gtk girara gettext makeWrapper ];

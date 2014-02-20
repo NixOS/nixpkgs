@@ -15,5 +15,5 @@ with pkgs.lib;
 
   # Add some more video drivers to give X11 a shot at working in
   # VMware and QEMU.
-  services.xserver.videoDrivers = mkOverride 40 [ "virtualbox" "vmware" "cirrus" "vesa" ];
+  hardware.opengl.videoDrivers = mkOverride 40 [ "virtualbox" "vmware" "cirrus" "vesa" ];
 }

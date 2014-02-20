@@ -1,14 +1,15 @@
 { cabal, hspec, liftedBase, mmorph, monadControl, mtl, QuickCheck
-, resourcet, text, transformers, transformersBase, void
+, resourcet, text, textStreamDecode, transformers, transformersBase
+, void
 }:
 
 cabal.mkDerivation (self: {
   pname = "conduit";
-  version = "1.0.13.1";
-  sha256 = "0kxfck6d72fdnymf2rj6m7h97svq1d2fq1ss5mlhsrks5fflia9y";
+  version = "1.0.15";
+  sha256 = "1ciys2b7a6n5k0ld66wpjxnrs5ys5dvg9n5k8282bc5zsd54mb59";
   buildDepends = [
-    liftedBase mmorph monadControl mtl resourcet text transformers
-    transformersBase void
+    liftedBase mmorph monadControl mtl resourcet text textStreamDecode
+    transformers transformersBase void
   ];
   testDepends = [
     hspec mtl QuickCheck resourcet text transformers void

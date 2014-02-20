@@ -527,9 +527,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   adjunctions = callPackage ../development/libraries/haskell/adjunctions {};
 
   aeson_0_6_2_1 = callPackage ../development/libraries/haskell/aeson/0.6.2.1.nix {};
-  aeson_0_7_0_1 = callPackage ../development/libraries/haskell/aeson/0.7.0.1.nix {
-    attoparsec = self.attoparsec_0_11_1_0;
-  };
+  aeson_0_7_0_1 = callPackage ../development/libraries/haskell/aeson/0.7.0.1.nix {};
   aeson = self.aeson_0_6_2_1;
 
   aesonLens = callPackage ../development/libraries/haskell/aeson-lens {};
@@ -756,6 +754,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   checkers = callPackage ../development/libraries/haskell/checkers {};
 
+  chunkedData = callPackage ../development/libraries/haskell/chunked-data {};
+
   citeprocHs = callPackage ../development/libraries/haskell/citeproc-hs {};
 
   cipherAes = callPackage ../development/libraries/haskell/cipher-aes {};
@@ -805,6 +805,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   concreteTyperep = callPackage ../development/libraries/haskell/concreteTyperep {};
 
   conduit = callPackage ../development/libraries/haskell/conduit {};
+
+  conduitCombinators = callPackage ../development/libraries/haskell/conduit-combinators {};
 
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
 
@@ -1016,6 +1018,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   elmServer = callPackage ../development/compilers/elm/elm-server.nix {};
 
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
+
+  enclosedExceptions = callPackage ../development/libraries/haskell/enclosed-exceptions {};
 
   encoding = callPackage ../development/libraries/haskell/encoding {};
 
@@ -2367,6 +2371,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   textIcu = callPackage ../development/libraries/haskell/text-icu {};
 
+  textStreamDecode = callPackage ../development/libraries/haskell/text-stream-decode {};
+
   thespian = callPackage ../development/libraries/haskell/thespian {};
 
   thExtras = callPackage ../development/libraries/haskell/th-extras {};
@@ -2786,6 +2792,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   leksah = callPackage ../applications/editors/leksah {
     QuickCheck = self.QuickCheck2;
   };
+
+  nc-indicators = callPackage ../applications/misc/nc-indicators {};
 
   taffybar = callPackage ../applications/misc/taffybar {};
 

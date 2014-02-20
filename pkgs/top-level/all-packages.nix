@@ -3232,7 +3232,7 @@ let
 
   python = python27;
   python26 = callPackage ../development/interpreters/python/2.6 {
-    db = db44;
+    db = db47;
   };
   python27 = callPackage ../development/interpreters/python/2.7 {
     libX11 = xlibs.libX11;
@@ -3768,6 +3768,8 @@ let
   swftools = callPackage ../tools/video/swftools { };
 
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
+
+  teensy-loader = callPackage ../development/tools/misc/teensy { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
@@ -4544,6 +4546,12 @@ let
   libjson = callPackage ../development/libraries/libjson { };
 
   judy = callPackage ../development/libraries/judy { };
+
+  keybinder = callPackage ../development/libraries/keybinder {
+    inherit (gnome2) gnome_common;
+    automake = automake111x;
+    lua = lua5_1;
+  };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
 
@@ -6493,6 +6501,8 @@ let
 
   checkpolicy = callPackage ../os-specific/linux/checkpolicy { };
 
+  checksec = callPackage ../os-specific/linux/checksec { };
+
   cifs_utils = callPackage ../os-specific/linux/cifs-utils { };
 
   conky = callPackage ../os-specific/linux/conky { };
@@ -6671,7 +6681,7 @@ let
   # config options you need (e.g. by overriding extraConfig). See list of options here:
   # https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options
   linux_3_2_grsecurity = lowPrio (lib.overrideDerivation (linux_3_2.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_2_54 kernelPatches.grsec_path ];
+    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_2_55 kernelPatches.grsec_path ];
     argsOverride = {
       modDirVersion = "${linux_3_2.modDirVersion}-grsec";
     };
@@ -7800,6 +7810,8 @@ let
 
   epdfview = callPackage ../applications/misc/epdfview { };
 
+  inherit (gnome3) epiphany;
+
   espeak = callPackage ../applications/audio/espeak { };
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
@@ -7874,6 +7886,8 @@ let
 
   gtimelog = pythonPackages.gtimelog;
 
+  inherit (gnome3) gucharmap;
+  
   guitarix = callPackage ../applications/audio/guitarix {
     fftw = fftwSinglePrec;
   };
@@ -8091,10 +8105,6 @@ let
 
   gmtk = callPackage ../applications/networking/browsers/mozilla-plugins/gmtk {
     inherit (gnome) GConf;
-  };
-
-  gnome_terminator = callPackage ../applications/misc/gnome_terminator {
-    vte = gnome.vte.override { pythonSupport = true; };
   };
 
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
@@ -8330,7 +8340,9 @@ let
     libosip = libosip_3;
   };
 
-  linuxsampler = callPackage ../applications/audio/linuxsampler { };
+  linuxsampler = callPackage ../applications/audio/linuxsampler {
+    bison = bison2;
+  };
 
   lmms = callPackage ../applications/audio/lmms { };
 
@@ -8897,6 +8909,11 @@ let
 
   telepathy_salut = callPackage ../applications/networking/instant-messengers/telepathy/salut {};
 
+  terminator = callPackage ../applications/misc/terminator {
+    vte = gnome.vte.override { pythonSupport = true; };
+    inherit (pythonPackages) notify;
+  };
+
   tesseract = callPackage ../applications/graphics/tesseract { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
@@ -9227,6 +9244,8 @@ let
   };
 
   yate = callPackage ../applications/misc/yate { };
+
+  inherit (gnome3) yelp;
 
   qgis = callPackage ../applications/misc/qgis {};
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pam }:
+{ stdenv, fetchurl, pam, qrencode }:
 
 stdenv.mkDerivation rec {
   name = "google-authenticator-1.0";
@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pam ];
+
+  preConfigure = ''
+    sed -i 's|libqrencode.so.3|${qrencode}/lib/libqrencode.so.3|' google-authenticator.c
+  '';
 
   installPhase = ''
     ensureDir $out/bin $out/lib/security
