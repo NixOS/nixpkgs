@@ -7,20 +7,15 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  version = "203";
+  version = "209";
   name = "systemd-${version}";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "07gvn3rpski8sh1nz16npjf2bvj0spsjdwc5px9685g2pi6kxcb1";
+    sha256 = "061xn982xb2ssa8p9a5fb6phnhwhymj2wl4h5cznx16dmlkfzbac";
   };
 
-  patches =
-    [ # These are all changes between upstream and
-      # https://github.com/edolstra/systemd/tree/nixos-v203.
-      ./fixes.patch
-    ]
-    ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
+  patches = stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus.libs kmod xz pam acl
@@ -29,7 +24,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--localstatedir=/var"
-      "--sysconfdir=/etc"
+      "--sysconfdir=$(out)/etc"
       "--with-rootprefix=$(out)"
       "--with-kbd-loadkeys=${kbd}/bin/loadkeys"
       "--with-kbd-setfont=${kbd}/bin/setfont"
@@ -121,7 +116,7 @@ stdenv.mkDerivation rec {
   # in a backwards-incompatible way.  If the interface version of two
   # systemd builds is the same, then we can switch between them at
   # runtime; otherwise we can't and we need to reboot.
-  passthru.interfaceVersion = 2;
+  passthru.interfaceVersion = 3;
 
   passthru.headers = stdenv.mkDerivation {
     name = "systemd-headers-${version}";
