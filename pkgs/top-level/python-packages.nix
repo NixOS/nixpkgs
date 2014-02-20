@@ -8527,11 +8527,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   libvirt = pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
-    version = "1.2.0";
+    version = "1.2.1";
 
     src = fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "0azml1yv9iqnpj4sdg1wwsa70q7kb06lv85p63qwyd8vrd0y7rrg";
+      sha256 = "0ip2h2nklynvcz4kahlvqlhh6k6xhmym7mkvxqbhfz8mddh5irdw";
     };
 
     buildInputs = [ python pkgs.pkgconfig pkgs.libvirt lxml ];
@@ -8543,7 +8543,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = http://www.libvirt.org/;
       description = "libvirt Python bindings";
-      license = "LGPLv2";
+      license = pkgs.lib.license.lgpl2;
     };
   };
 
