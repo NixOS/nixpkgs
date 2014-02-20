@@ -3136,6 +3136,10 @@ let
 
   jmeter = callPackage ../applications/networking/jmeter {};
 
+  davmail = callPackage ../applications/networking/davmail {};
+
+  lxappearance = callPackage ../applications/misc/lxappearance {};
+
   kona = callPackage ../development/interpreters/kona {};
 
   love = callPackage ../development/interpreters/love {lua=lua5;};

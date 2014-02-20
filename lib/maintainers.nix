@@ -28,6 +28,7 @@
   garbas = "Rok Garbas <rok@garbas.si>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   guibert = "David Guibert <david.guibert@gmail.com>";
+  hinton = "Tom Hinton <t@larkery.com>";
   ianwookim = "Ian-Woo Kim <ianwookim@gmail.com>";
   iElectric = "Domen Kozar <domen@dev.si>";
   iyzsong = "Song Wenwu <iyzsong@gmail.com>";
