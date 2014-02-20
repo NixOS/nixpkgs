@@ -5005,6 +5005,8 @@ let
 
   libpcap = callPackage ../development/libraries/libpcap { };
 
+  libpdf = callPackage ../applications/networking/browsers/chromium/libpdf.nix { };
+
   libpipeline = callPackage ../development/libraries/libpipeline { };
 
   libpng = callPackage ../development/libraries/libpng { };
@@ -9216,7 +9218,10 @@ let
   wrapChromium = browser: let
     channel = browser.channel;
     cfg = stdenv.lib.attrByPath [ browser.packageName ] {} config;
-    pepperPlugins = [];
+    pepperPlugins = ([]
+      ++ lib.optional (cfg.enablePepperPDF or false)
+        (libpdf.override { inherit channel; })
+    );
     pepperFlags = toString (map (x: x.pepperFlags) pepperPlugins);
     browserName = browser.packageName;
   in
