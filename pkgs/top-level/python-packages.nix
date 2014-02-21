@@ -1719,6 +1719,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  # TODO: this shouldn't use a buildPythonPackage
   koji = buildPythonPackage (rec {
     name = "koji-1.8";
     meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
@@ -1728,8 +1729,9 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "10dph209h4jgajb5jmbjhqy4z4hd22i7s2d93vm3ikdf01i8iwf1";
     };
 
+    configurePhase = ":";
     buildPhase = ":";
-    installCommand = "make install DESTDIR=$out/ && cp -R $out/nix/store/*/* $out/ && rm -rf $out/nix";
+    installPhase = "make install DESTDIR=$out/ && cp -R $out/nix/store/*/* $out/ && rm -rf $out/nix";
     doCheck = false;
     propagatedBuildInputs = [ pythonPackages.pycurl ];
 
@@ -1748,12 +1750,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   paver = buildPythonPackage rec {
-    version = "1.2.1";
+    version = "1.2.2";
     name    = "Paver-${version}";
 
     src = fetchurl {
       url    = "https://pypi.python.org/packages/source/P/Paver/Paver-${version}.tar.gz";
-      sha256 = "1b1023jks1gi1rwphdy3y2zx7dh4bvwk2050kclp95j7xym1ya0y";
+      sha256 = "0lix9d33ndb3yk56sm1zlj80fbmxp0w60yk0d9pr2xqxiwi88sqy";
     };
 
     buildInputs = [ cogapp mock virtualenv ];
@@ -4235,6 +4237,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     preConfigure = ''
       sed -i 's/-faltivec//' numpy/distutils/system_info.py
+      sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     '';
 
     preBuild = ''
@@ -5307,14 +5310,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   python_fedora = buildPythonPackage (rec {
-    name = "python-fedora-0.3.32.3";
+    name = "python-fedora-0.3.33";
     meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
 
     src = fetchurl {
-      url = "https://fedorahosted.org/releases/p/y/python-fedora/python-fedora-0.3.32.3.tar.gz";
-      sha256 = "0qwmbid4pkdj6z9gwa43fzs97fr6ci2h2vj1hyk0gp0vqim4kv4l";
+      url = "https://fedorahosted.org/releases/p/y/python-fedora/${name}.tar.gz";
+      sha256 = "1g05bh7d5d0gzrlnhpnca7jpqbgs2rgnlzzbvzzxmdbmlkqi3mws";
     };
-    propagatedBuildInputs = [ kitchen requests bunch ];
+    propagatedBuildInputs = [ kitchen requests bunch paver ];
     doCheck = false;
   });
 

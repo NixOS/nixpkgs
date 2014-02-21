@@ -29,6 +29,11 @@ buildPythonPackage {
      })
   ];       
 
+  preConfigure = ''
+    # TODO: for now don't a apply gdist overrides, will be needed for shipping icons, gtk, etc
+    sed -i /distclass/d setup.py
+  '';
+
   sourceRoot = "quodlibet-${version}";
   postUnpack = ''
     # the patch searches for plugins in directory ../plugins

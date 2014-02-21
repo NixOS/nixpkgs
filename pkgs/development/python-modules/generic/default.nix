@@ -72,8 +72,7 @@ python.stdenv.mkDerivation (attrs // {
   checkPhase = attrs.checkPhase or ''
       runHook preCheck
 
-      # reduce output to only dots, if a test fails error output will include verbose info
-      ${python}/bin/${python.executable} setup.py test -q
+      ${python}/bin/${python.executable} setup.py test
 
       runHook postCheck
   '';
