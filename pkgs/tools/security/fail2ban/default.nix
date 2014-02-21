@@ -39,10 +39,6 @@ pythonPackages.buildPythonPackage {
 
   doCheck = false;
 
-  installCommand = ''
-    python setup.py install --prefix=$out
-  '';
-
   meta = with stdenv.lib; {
     homepage    = http://www.fail2ban.org/;
     description = "A program that scans log files for repeated failing login attempts and bans IP addresses";

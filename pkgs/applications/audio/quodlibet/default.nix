@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonPackage, mutagen, pygtk, pygobject
+{ stdenv, fetchurl, python, buildPythonPackage, mutagen, pygtk, pygobject, intltool
 , pythonDBus, gst_python, withGstPlugins ? false, gst_plugins_base ? null
 , gst_plugins_good ? null, gst_plugins_ugly ? null, gst_plugins_bad ? null }:
 
@@ -29,6 +29,11 @@ buildPythonPackage {
      })
   ];       
 
+  preConfigure = ''
+    # TODO: for now don't a apply gdist overrides, will be needed for shipping icons, gtk, etc
+    sed -i /distclass/d setup.py
+  '';
+
   sourceRoot = "quodlibet-${version}";
   postUnpack = ''
     # the patch searches for plugins in directory ../plugins
@@ -42,7 +47,7 @@ buildPythonPackage {
   ];
 
   propagatedBuildInputs = [
-    mutagen pygtk pygobject pythonDBus gst_python
+    mutagen pygtk pygobject pythonDBus gst_python intltool
   ];
 
   postInstall = stdenv.lib.optionalString withGstPlugins ''
