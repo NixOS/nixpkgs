@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, avahi, boost fftw, gettext, glib, glibmm, gtk
-, gtkmm, intltool, jackaudio, ladspaH, librdf, libsndfile lv2 
-, pkgconfig, python
-}:
+{ stdenv, fetchurl, avahi, boost, fftw, gettext, glib, glibmm, gtk
+, gtkmm, intltool, jackaudio, ladspaH, librdf, libsndfile, lv2 
+, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
   name = "guitarix-${version}";
