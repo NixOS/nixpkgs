@@ -6,13 +6,13 @@
     sha256 = "1jm9cr1qqfqd82fy3f1q4d0qg94vsrzyq8dbn4hrxyzqbjc4sclg";
   };
   beta = {
-    version = "33.0.1750.115";
-    url = "http://commondatastorage.googleapis.com/chromium-browser-official/chromium-33.0.1750.115.tar.xz";
-    sha256 = "1whr5vz8w8h9la219ah1bcsa5r84jby306w12gfzlsbk9czxchrp";
+    version = "33.0.1750.117";
+    url = "http://commondatastorage.googleapis.com/chromium-browser-official/chromium-33.0.1750.117.tar.xz";
+    sha256 = "0nyaqrxz8kcnppcya68qpr47fw4d959p4l63kqzvd9ifdqfgk18f";
   };
   stable = {
-    version = "33.0.1750.115";
-    url = "http://commondatastorage.googleapis.com/chromium-browser-official/chromium-33.0.1750.115.tar.xz";
-    sha256 = "1whr5vz8w8h9la219ah1bcsa5r84jby306w12gfzlsbk9czxchrp";
+    version = "33.0.1750.117";
+    url = "http://commondatastorage.googleapis.com/chromium-browser-official/chromium-33.0.1750.117.tar.xz";
+    sha256 = "0nyaqrxz8kcnppcya68qpr47fw4d959p4l63kqzvd9ifdqfgk18f";
   };
 }
