@@ -1594,7 +1594,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     buildInputs = [ fudge nose ];
   };
 
-  fedora_cert = buildPythonPackage (rec {
+  fedora_cert = stdenv.mkDerivation (rec {
     name = "fedora-cert-0.5.9.2";
     meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
 
@@ -1602,10 +1602,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "https://fedorahosted.org/releases/f/e/fedora-packager/fedora-packager-0.5.9.2.tar.bz2";
       sha256 = "105swvzshgn3g6bjwk67xd8pslnhpxwa63mdsw6cl4c7cjp2blx9";
     };
-    installCommand = "make install";
-    propagatedBuildInputs = [ python_fedora ];
+
+    propagatedBuildInputs = [ python python_fedora wrapPython ];
     postInstall = "mv $out/bin/fedpkg $out/bin/fedora-cert-fedpkg";
     doCheck = false;
+
+    postFixup = "wrapPythonPrograms";
   });
 
   fedpkg = buildPythonPackage (rec {
@@ -6176,6 +6178,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     # TODO: add ATLAS=${pkgs.atlas}
     preConfigure = ''
       export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
+      sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     '';
 
     setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
