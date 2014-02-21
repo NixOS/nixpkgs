@@ -29,7 +29,7 @@ rec {
         # Fall back to this url for versions not available at releases.mozilla.org.
         "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
     ];
-    sha256 = "197icqnk3mpizb8c2iz86gfw3kh7x4x3szzd6s3f43x9hmyyafvh";
+    sha256 = "13qd53yf8dn9m03p4x5ml9h3mys60nba5nz82lcvaq7ycp1pl1bn";
   };
 
   commonConfigureFlags =
