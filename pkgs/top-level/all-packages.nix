@@ -2121,6 +2121,8 @@ let
 
   xarchive = callPackage ../tools/archivers/xarchive { };
 
+  xarchiver = callPackage ../tools/archivers/xarchiver { };
+
   unarj = callPackage ../tools/archivers/unarj { };
 
   unshield = callPackage ../tools/archivers/unshield { };
