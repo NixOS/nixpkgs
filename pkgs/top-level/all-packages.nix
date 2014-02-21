@@ -3974,6 +3974,8 @@ let
 
   clutter = callPackage ../development/libraries/clutter { };
 
+  clutter-gst = callPackage ../development/libraries/clutter-gst { };
+
   clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
   clutter_gtk_0_10 = callPackage ../development/libraries/clutter-gtk/0.10.8.nix { };
 
@@ -7817,6 +7819,8 @@ let
 
   emacs23Packages = emacsPackages emacs23 pkgs.emacs23Packages;
   emacs24Packages = recurseIntoAttrs (emacsPackages emacs24 pkgs.emacs24Packages);
+
+  inherit (gnome3) empathy;
 
   epdfview = callPackage ../applications/misc/epdfview { };
 

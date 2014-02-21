@@ -20,6 +20,8 @@ rec {
 
   dconf = callPackage ./core/dconf { };
 
+  empathy = callPackage ./core/empathy { };
+
   epiphany = callPackage ./core/epiphany { };
 
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
@@ -49,6 +51,8 @@ rec {
   gnome_keyring = callPackage ./core/gnome-keyring { };
 
   libgnome_keyring = callPackage ./core/libgnome-keyring { };
+
+  folks = callPackage ./core/folks { };
 
   gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
 
