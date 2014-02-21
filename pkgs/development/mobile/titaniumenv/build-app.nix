@@ -126,7 +126,7 @@ stdenv.mkDerivation {
     ${if target == "android" && release then ""
       else
         if target == "android" then
-          ''cp $(ls build/android/bin/*.apk | grep -v '\-unsigned.apk') $out''
+          ''cp "$(ls build/android/bin/*.apk | grep -v '\-unsigned.apk')" $out''
         else if target == "iphone" && release then
            ''
              cp -av build/iphone/build/* $out
