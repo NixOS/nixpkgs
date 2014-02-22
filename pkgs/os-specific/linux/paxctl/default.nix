@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     "MANDIR=share/man/man1"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tool for controlling PaX flags on a per binary basis";
     homepage    = "https://pax.grsecurity.net";
-    license     = stdenv.lib.licenses.gpl2;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = licenses.gpl2;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice wizeman ];
   };
 }

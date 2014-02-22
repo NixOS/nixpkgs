@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A suite of tools for PaX/grsecurity";
     homepage    = "http://dev.gentoo.org/~vapier/dist/";
-    license     = stdenv.lib.licenses.gpl2;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = licenses.gpl2;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice wizeman ];
   };
 }
