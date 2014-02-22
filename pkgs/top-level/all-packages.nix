@@ -8973,6 +8973,8 @@ let
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
+  twmn = callPackage ../applications/misc/twmn { };
+
   twinkle = callPackage ../applications/networking/instant-messengers/twinkle {
     ccrtp = ccrtp_1_8;
     libzrtpcpp = libzrtpcpp_1_6;
