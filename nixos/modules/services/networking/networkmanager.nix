@@ -70,6 +70,13 @@ let
     ${coreutils}/bin/rm -f $tmp $tmp.ns
   '';
 
+  nscdScript = writeScript "03nscd" ''
+    #!/bin/sh
+    if test "$2" = "up"; then
+      ${config.systemd.package}/bin/systemctl --quiet try-restart nscd.service
+    fi
+  '';
+
 in {
 
   ###### interface
@@ -135,6 +142,9 @@ in {
     environment.etc = [
       { source = ipUpScript;
         target = "NetworkManager/dispatcher.d/01nixos-ip-up";
+      }
+      { source = nscdScript;
+        target = "NetworkManager/dispatcher.d/03nscd";
       }
       { source = configFile;
         target = "NetworkManager/NetworkManager.conf";
