@@ -1083,6 +1083,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   fastLogger = callPackage ../development/libraries/haskell/fast-logger {};
 
+  fb = callPackage ../development/libraries/haskell/fb {};
+
   fclabels = callPackage ../development/libraries/haskell/fclabels {};
 
   FerryCore = callPackage ../development/libraries/haskell/FerryCore {};
