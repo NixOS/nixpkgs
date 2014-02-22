@@ -8541,6 +8541,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = https://github.com/asciimoo/searx;
       description = "A privacy-respecting, hackable metasearch engine.";
       license = stdenv.lib.licenses.agpl3Plus;
+      maintainers = [ stdenv.lib.maintainers.matejc ];
     };
   };
 
@@ -8558,6 +8559,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       description = "GRequests allows you to use Requests with Gevent to make asyncronous HTTP Requests easily.";
       homepage = https://github.com/kennethreitz/grequests;
       license = "bsd";
+      maintainers = [ stdenv.lib.maintainers.matejc ];
     };
   };
 
@@ -8575,6 +8577,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       description = "Adds i18n/l10n support to Flask applications";
       homepage = https://github.com/mitsuhiko/flask-babel;
       license = "bsd";
+      maintainers = [ stdenv.lib.maintainers.matejc ];
     };
   };
 
@@ -8590,6 +8593,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       description = "implements a lazy string for python useful for use with gettext";
       homepage = https://github.com/mitsuhiko/speaklater;
       license = "bsd";
+      maintainers = [ stdenv.lib.maintainers.matejc ];
     };
   };
 
