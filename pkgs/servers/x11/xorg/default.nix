@@ -1180,11 +1180,11 @@ let
   })) // {inherit gperf m4 libxcb xproto ;};
 
   xcbutilwm = (stdenv.mkDerivation ((if overrides ? xcbutilwm then overrides.xcbutilwm else x: x) {
-    name = "xcb-util-wm-0.4.0";
+    name = "xcb-util-wm-0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-util-wm-0.4.0.tar.bz2;
-      sha256 = "07zmlaaqkasihmkfwcac4wclb8zws915inz57y3kr3frywc7ryb6";
+      url = http://xcb.freedesktop.org/dist/xcb-util-wm-0.4.1.tar.bz2;
+      sha256 = "0gra7hfyxajic4mjd63cpqvd20si53j1q3rbdlkqkahfciwq3gr8";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
   })) // {inherit gperf m4 libxcb xproto ;};
