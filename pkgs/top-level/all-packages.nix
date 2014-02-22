@@ -153,15 +153,16 @@ let
 
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
-  forceSystem = system: (import ./all-packages.nix) {
+  forceSystem = system: kernel: (import ./all-packages.nix) {
     inherit system;
+    platform = platform // { kernelArch = kernel; };
     inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config
-      crossSystem platform;
+      crossSystem;
   };
 
 
   # Used by wine, firefox with debugging version of Flash, ...
-  pkgsi686Linux = forceSystem "i686-linux";
+  pkgsi686Linux = forceSystem "i686-linux" "i386";
 
   callPackage_i686 = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg);
 
