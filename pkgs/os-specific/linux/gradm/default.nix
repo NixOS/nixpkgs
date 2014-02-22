@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "3.0-201401291757";
 
   src  = fetchurl {
-    url    = "http://grsecurity.net/stable/${name}-${version}.tar.gz";
+    url    = "http://grsecurity.net/stable/${name}.tar.gz";
     sha256 = "19p7kaqbvf41scc63n69b5v5xzpw3mbf5zy691rply8hdm7736cw";
   };
 
