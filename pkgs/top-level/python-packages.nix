@@ -4915,11 +4915,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   Babel = buildPythonPackage (rec {
-    name = "Babel-0.9.6";
+    name = "Babel-1.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/B/Babel/${name}.tar.gz";
-      sha256 = "4a3a085ecf1fcd2736573538ffa114f1f4331b3bbbdd69381e6e172c49c9750f";
+      sha256 = "0bnin777lc53nxd1hp3apq410jj5wx92n08h7h4izpl4f4sx00lz";
     };
 
     buildInputs = [ pytz ];
@@ -8523,6 +8523,73 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = http://www.libvirt.org/;
       description = "libvirt Python bindings";
       license = "LGPLv2";
+    };
+  };
+
+  searx = buildPythonPackage rec {
+    name = "searx-${version}";
+    version = "0.2.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/searx/${name}.tar.gz";
+      sha256 = "19hxjg3vhq7fygcvfhsr3i40c8kbi7i76ym9cv2s03b3zijd38w0";
+    };
+
+    propagatedBuildInputs = [ pyyaml lxml grequests flaskbabel flask requests gevent speaklater Babel pytz ];
+
+    meta = {
+      homepage = https://github.com/asciimoo/searx;
+      description = "A privacy-respecting, hackable metasearch engine.";
+      license = stdenv.lib.licenses.agpl3Plus;
+    };
+  };
+
+  grequests = buildPythonPackage rec {
+    name = "grequests-0.2.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/grequests/${name}.tar.gz";
+      sha256 = "0lafzax5igbh8y4x0krizr573wjsxz7bhvwygiah6qwrzv83kv5c";
+    };
+
+    buildInputs = [ requests gevent ];
+
+    meta = {
+      description = "GRequests allows you to use Requests with Gevent to make asyncronous HTTP Requests easily.";
+      homepage = https://github.com/kennethreitz/grequests;
+      license = "bsd";
+    };
+  };
+
+  flaskbabel = buildPythonPackage rec {
+    name = "Flask-Babel-0.9";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/F/Flask-Babel/${name}.tar.gz";
+      sha256 = "0k7vk4k54y55ma0nx2k5s0phfqbriwslhy5shh3b0d046q7ibzaa";
+    };
+
+    buildInputs = [ flask jinja2 speaklater Babel pytz ];
+
+    meta = {
+      description = "Adds i18n/l10n support to Flask applications";
+      homepage = https://github.com/mitsuhiko/flask-babel;
+      license = "bsd";
+    };
+  };
+
+  speaklater = buildPythonPackage rec {
+    name = "speaklater-1.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/speaklater/${name}.tar.gz";
+      sha256 = "1ab5dbfzzgz6cnz4xlwx79gz83id4bhiw67k1cgqrlzfs0va7zjr";
+    };
+
+    meta = {
+      description = "implements a lazy string for python useful for use with gettext";
+      homepage = https://github.com/mitsuhiko/speaklater;
+      license = "bsd";
     };
   };
 
