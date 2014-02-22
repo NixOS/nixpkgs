@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.7";
 
   src = fetchurl {
-    url = "http://dev.gentoo.org/~vapier/dist/${name}-${version}.tar.xz";
+    url = "http://dev.gentoo.org/~vapier/dist/${name}.tar.xz";
     sha256 = "111vmwn0ikrmy3s0w3rzpbzwrphawljrmcjya0isg5yam7lwxi0s";
   };
 
