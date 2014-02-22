@@ -6585,6 +6585,8 @@ let
 
   gpm = callPackage ../servers/gpm { };
 
+  gradm = callPackage ../os-specific/linux/gradm { };
+
   hdparm = callPackage ../os-specific/linux/hdparm { };
 
   hibernate = callPackage ../os-specific/linux/hibernate { };
@@ -6990,6 +6992,10 @@ let
   pam_ssh_agent_auth = callPackage ../os-specific/linux/pam_ssh_agent_auth { };
 
   pam_usb = callPackage ../os-specific/linux/pam_usb { };
+
+  paxctl = callPackage ../os-specific/linux/paxctl { };
+
+  pax-utils = callPackage ../os-specific/linux/pax-utils { };
 
   pcmciaUtils = callPackage ../os-specific/linux/pcmciautils {
     firmware = config.pcmciaUtils.firmware or [];
