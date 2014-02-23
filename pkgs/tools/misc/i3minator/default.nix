@@ -15,11 +15,11 @@ let
   };
 in buildPythonPackage rec {
   name = "i3minator-${version}";
-  version = "0.0.3";
+  version = "0.0.4";
 
   src = fetchurl {
-    url = "https://github.com/carlesso/i3minator/archive/v${version}.tar.gz";
-    sha256 = "0ksb0frrhq10k5rjzk72kj5rjzak1irr9q4x4f22w2vylxq19xxa";
+    url = "https://github.com/carlesso/i3minator/archive/${version}.tar.gz";
+    sha256 = "11dn062788kwfs8k2ry4v8zr2gn40r6lsw770s9g2gvhl5n469dw";
   };
 
   propagatedBuildInputs = [ pythonPackages.pyyaml i3-py ];
