@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     description = "An interface to banking tasks, file formats and country information";
     homepage = "http://www2.aquamaniac.de/sites/download/packages.php?package=03&showall=1";
     hydraPlatforms = [];
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ goibhniu urkud ];
     platforms = platforms.linux;
   };
