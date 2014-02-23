@@ -2,7 +2,7 @@
 
 let
   baseName = "bbswitch";
-  version = "0.7";
+  version = "0.8";
   name = "${baseName}-${version}-${kernel.version}";
 
 in
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/Bumblebee-Project/${baseName}/archive/v${version}.tar.gz";
-    sha256 = "0na6gfnvmp5fjbm430ms342hmrsbr6cf78n6hldqb8js2ry3f8dw";
+    sha256 = "0xql1nv8dafnrcg54f3jsi3ny3cd2ca9iv73pxpgxd2gfczvvjkn";
   };
 
   preBuild = ''
