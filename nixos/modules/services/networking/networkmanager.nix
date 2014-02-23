@@ -73,7 +73,7 @@ let
   nscdScript = writeScript "03nscd" ''
     #!/bin/sh
     if test "$2" = "up"; then
-      ${config.systemd.package}/bin/systemctl --quiet try-restart nscd.service
+      ${config.systemd.package}/bin/systemctl --quiet reload nscd.service
     fi
   '';
 
