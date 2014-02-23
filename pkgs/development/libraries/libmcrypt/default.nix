@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Replacement for the old crypt() package and crypt(1) command, with extensions";
     homepage = http://mcrypt.sourceforge.net;
-    license = "GPL";
+    license = "GPLv2.1";
+    maintainers = [stdenv.lib.maintainers.marcweber];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

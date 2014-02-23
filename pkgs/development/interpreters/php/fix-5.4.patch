@@ -66,3 +66,4 @@ diff -ru php-5.4.14/configure php-5.4.14-new/configure
  
    if test -z "$GETTEXT_DIR"; then
      { { $as_echo "$as_me:$LINENO: error: Cannot locate header file libintl.h" >&5
+
