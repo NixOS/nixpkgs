@@ -7425,7 +7425,6 @@ let
 
   ardour3 =  lowPrio (callPackage ../applications/audio/ardour/ardour3.nix {
     inherit (gnome) libgnomecanvas libgnomecanvasmm;
-    boost = boost149;
   });
 
   arora = callPackage ../applications/networking/browsers/arora { };
