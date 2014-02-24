@@ -7,7 +7,6 @@ with pkgs.lib;
 let
   memtest86 = pkgs.memtest86plus;
   cfg = config.boot.loader.grub.memtest86;
-  params = concatStringsSep " " cfg.params;
 in
 
 {
@@ -82,7 +81,7 @@ in
       if config.boot.loader.grub.version == 2 then
         ''
           menuentry "Memtest86+" {
-            linux16 @bootRoot@/memtest.bin ${params}
+            linux16 @bootRoot@/memtest.bin ${toString cfg.params}
           }
         ''
       else

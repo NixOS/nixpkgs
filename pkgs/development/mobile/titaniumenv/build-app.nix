@@ -1,4 +1,4 @@
-{stdenv, androidsdk, titaniumsdk, titanium, xcodewrapper, jdk, python}:
+{stdenv, androidsdk, titaniumsdk, titanium, xcodewrapper, jdk, python, which}:
 { name, src, target, androidPlatformVersions ? [ "8" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
 , iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
   inherit src;
   
-  buildInputs = [ titanium jdk python ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
+  buildInputs = [ titanium jdk python which ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
   
   buildPhase = ''
     export HOME=$TMPDIR
@@ -38,7 +38,9 @@ stdenv.mkDerivation {
     
     echo "{}" > $TMPDIR/config.json
     titanium --config-file $TMPDIR/config.json --no-colors config sdk.defaultInstallLocation ${titaniumsdk}
-
+    
+    titanium --config-file $TMPDIR/config.json --no-colors config paths.modules ${titaniumsdk}
+    
     mkdir -p $out
     
     ${if target == "android" then
@@ -124,7 +126,7 @@ stdenv.mkDerivation {
     ${if target == "android" && release then ""
       else
         if target == "android" then
-          ''cp $(ls build/android/bin/*.apk | grep -v '\-unsigned.apk') $out''
+          ''cp "$(ls build/android/bin/*.apk | grep -v '\-unsigned.apk')" $out''
         else if target == "iphone" && release then
            ''
              cp -av build/iphone/build/* $out

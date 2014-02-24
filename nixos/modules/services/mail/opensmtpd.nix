@@ -79,5 +79,10 @@ in {
       preStart = "mkdir -p /var/spool";
       serviceConfig.ExecStart = "${opensmtpd}/sbin/smtpd -d -f ${conf} ${args}";
     };
+
+    environment.systemPackages = [ (pkgs.runCommand "opensmtpd-sendmail" {} ''
+      mkdir -p $out/bin
+      ln -s ${opensmtpd}/sbin/smtpctl $out/bin/sendmail
+    '') ];
   };
 }

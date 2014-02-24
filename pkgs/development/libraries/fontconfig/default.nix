@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
       }
     else null;
 
-  buildInputs = [ pkgconfig freetype expat ];
+  propagatedBuildInputs = [ freetype ];
+  buildInputs = [ pkgconfig expat ];
 
   configureFlags = "--sysconfdir=/etc --with-cache-dir=/var/cache/fontconfig --disable-docs --with-default-fonts=";
 
@@ -38,10 +39,11 @@ stdenv.mkDerivation rec {
     cd "$out/etc/fonts" && tar xvf ${infinality_patch}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library for font customization and configuration";
     homepage = http://fontconfig.org/;
-    license = "bsd";
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.bsd2; # custom but very bsd-like
+    platforms = platforms.all;
+    maintainers = [ maintainers.vcunat ];
   };
 }

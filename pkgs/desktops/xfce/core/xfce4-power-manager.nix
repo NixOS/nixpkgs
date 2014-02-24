@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   brightness_patch = fetchurl {
     url = "http://git.xfce.org/xfce/xfce4-power-manager/patch/?id=05d12e12596512f7a31d3cdb4845a69dc2d4c611";
-    sha256 = "0rbldvjwpj93hx59xrmvbdql1pgkbqzjh4vp6gkavn4z6sv535v8";
+    sha256 = "1y8520s0s4d7x1abdwsm5qig4vgm3np7hhagfbdwd5ymiz5nn9mw";
   };
 
   name = "${p_name}-${ver_maj}.${ver_min}";

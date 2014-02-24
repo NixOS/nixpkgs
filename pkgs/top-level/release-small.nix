@@ -22,8 +22,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   aterm25 = all;
   aterm28 = all;
   autoconf = all;
-  automake110x = all;
-  automake111x = all;
+  automake = all;
   avahi = allBut "i686-cygwin";  # Cygwin builds fail
   bash = all;
   bashInteractive = all;

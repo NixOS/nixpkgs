@@ -6,17 +6,16 @@
 , perl, pkgconfig, python, serd, sord, sratom, suil }:
 
 let
-  # Ardour 3.0 tag
-  rev = "79db9422";
+  tag = "3.5.357";
 in
 
-stdenv.mkDerivation {
-  name = "ardour-3.0";
+stdenv.mkDerivation rec {
+  name = "ardour-${tag}";
 
   src = fetchgit {
     url = git://git.ardour.org/ardour/ardour.git;
-    inherit rev;
-    sha256 = "cdbe4ca6d4b639fcd66a3d1cf9c2816b4755655c9d81bdd2417263f413aa7096";
+    rev = "refs/tags/${tag}";
+    sha256 = "1e026fb9a6ad4179d52c4b578cc3861bdfd3629b9e7b7a7341d431c7d3692c42";
   };
 
   buildInputs = 
@@ -28,13 +27,16 @@ stdenv.mkDerivation {
     ];
 
   patchPhase = ''
-    printf '#include "ardour/svn_revision.h"\nnamespace ARDOUR { const char* svn_revision = \"${rev}\"; }\n' > libs/ardour/svn_revision.cc
+    # The funny revision number is from `git describe rev`
+    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-gce4d125\"; }\n' > libs/ardour/revision.cc
+    # Note the different version number
+    sed -i '33i rev = \"3.5-357-gce4d125\"' wscript
+    sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
     sed -e 's|^#!/usr/bin/perl.*$|#!${perl}/bin/perl|g' -i tools/fmt-bindings
     sed -e 's|^#!/usr/bin/env.*$|#!${perl}/bin/perl|g' -i tools/*.pl
-    sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
   '';
 
-  configurePhase = "python waf configure --prefix=$out";
+  configurePhase = "python waf configure --optimize --prefix=$out";
 
   buildPhase = "python waf";
 
@@ -43,7 +45,7 @@ stdenv.mkDerivation {
   installPhase = ''
     python waf install
     mkdir -pv $out/gtk2/engines
-    mv $out/lib/ardour3/libclearlooks.so $out/gtk2/engines/
+    cp build/libs/clearlooks-newer/libclearlooks.so $out/gtk2/engines/
     wrapProgram $out/bin/ardour3 --prefix GTK_PATH : $out/gtk2
   '';
 

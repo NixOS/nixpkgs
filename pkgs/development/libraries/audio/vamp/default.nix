@@ -6,21 +6,21 @@
 rec {
 
   vampSDK = stdenv.mkDerivation {
-    name = "vamp-sdk-2.2.1";
+    name = "vamp-sdk-2.5";
 
     src = fetchurl {
-      url = mirror://sourceforge/vamp/vamp-plugin-sdk-2.2.1.tar.gz;
-      sha256 = "09iw6gv8aqq5v322fhi872mrhjp0a2w63966g0mks4vhh84q252p";
+      url = http://code.soundsoftware.ac.uk/attachments/download/690/vamp-plugin-sdk-2.5.tar.gz;
+      sha256 = "178kfgq08cmgdzv7g8dwyjp4adwx8q04riimncq4nqkm8ng9ywbv";
     };
 
-    buildInputs = [pkgconfig libsndfile];
+    buildInputs = [ pkgconfig libsndfile ];
 
-    meta = { 
+    meta = with stdenv.lib; {
       description = "Audio processing plugin system for plugins that extract descriptive information from audio data";
       homepage = http://sourceforge.net/projects/vamp;
-      license = "BSD";
-      maintainers = [ stdenv.lib.maintainers.marcweber ];
-      platforms = stdenv.lib.platforms.linux;
+      license = licenses.bsd3;
+      maintainers = [ maintainers.goibhniu maintainers.marcweber ];
+      platforms = platforms.linux;
     };
   };
 

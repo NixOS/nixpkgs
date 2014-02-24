@@ -1,6 +1,7 @@
 { nixpkgs ? <nixpkgs>
 , systems ? [ "x86_64-linux" "x86_64-darwin" ]
 , xcodeVersion ? "5.0"
+, tiVersion ? "3.2.1.GA"
 , rename ? false
 , newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? ""
 }:
@@ -15,7 +16,8 @@ rec {
   in
   import ./kitchensink {
     inherit (pkgs) fetchgit;
-    titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion; };
+    titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion tiVersion; };
+    inherit tiVersion;
     target = "android";
   });
   
@@ -25,7 +27,8 @@ rec {
   in
   import ./kitchensink {
     inherit (pkgs) fetchgit;
-    titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion; };
+    titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion tiVersion; };
+    inherit tiVersion;
     target = "android";
     release = true;
   });
@@ -55,7 +58,8 @@ rec {
   rec {
   kitchensink_ios_development = import ./kitchensink {
     inherit (pkgs) fetchgit;
-    titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion; };
+    titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion tiVersion; };
+    inherit tiVersion;
     target = "iphone";
   };
 
@@ -79,8 +83,9 @@ rec {
   {
     kitchensink_ipa = import ./kitchensink {
       inherit (pkgs) stdenv fetchgit;
-      titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion; };
+      titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion tiVersion; };
       target = "iphone";
+      inherit tiVersion;
       release = true;
       rename = true;
       inherit newBundleId iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword;

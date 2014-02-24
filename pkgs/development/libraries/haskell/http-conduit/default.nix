@@ -1,30 +1,23 @@
-{ cabal, asn1Data, base64Bytestring, blazeBuilder
-, blazeBuilderConduit, caseInsensitive, certificate, conduit
-, connection, cookie, cprngAes, dataDefaultClass, deepseq, failure
-, filepath, hspec, httpClient, httpClientConduit
+{ cabal, blazeBuilder, caseInsensitive, conduit, connection, cookie
+, dataDefaultClass, hspec, httpClient, httpClientConduit
 , httpClientMultipart, httpClientTls, httpTypes, HUnit, liftedBase
-, mimeTypes, monadControl, mtl, network, networkConduit
-, publicsuffixlist, random, regexCompat, resourcet, socks, text
-, time, transformers, transformersBase, utf8String, void, wai, warp
-, warpTls, zlibConduit
+, network, networkConduit, resourcet, text, time, transformers
+, utf8String, wai, warp, warpTls
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "2.0.0.5";
-  sha256 = "1vgfg2jgr7gavfbys33rd2l0dxyqk7ig7v357jhy8imxsm0xykp9";
+  version = "2.0.0.7";
+  sha256 = "0rizmshpypllfbmipbrad7hkrs2asx0ijfhr53w3pj58w6h80m0i";
   buildDepends = [
     conduit httpClient httpClientConduit httpClientTls httpTypes
     liftedBase resourcet transformers
   ];
   testDepends = [
-    asn1Data base64Bytestring blazeBuilder blazeBuilderConduit
-    caseInsensitive certificate conduit connection cookie cprngAes
-    dataDefaultClass deepseq failure filepath hspec httpClient
-    httpClientMultipart httpTypes HUnit liftedBase mimeTypes
-    monadControl mtl network networkConduit publicsuffixlist random
-    regexCompat resourcet socks text time transformers transformersBase
-    utf8String void wai warp warpTls zlibConduit
+    blazeBuilder caseInsensitive conduit connection cookie
+    dataDefaultClass hspec httpClient httpClientMultipart httpTypes
+    HUnit liftedBase network networkConduit text time transformers
+    utf8String wai warp warpTls
   ];
   doCheck = false;
   meta = {

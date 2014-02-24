@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--enable-call";
 
+  installFlags = "gsettingsschemadir=\${out}/share/telepathy/logger/glib-2.0/schemas/";
+
   meta = {
     description = "Logger service for Telepathy framework";
     homepage = http://telepathy.freedesktop.org/wiki/Logger ;

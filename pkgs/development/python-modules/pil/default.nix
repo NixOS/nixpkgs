@@ -14,16 +14,15 @@ buildPythonPackage {
 
   doCheck = true;
 
-  configurePhase = ''
+  preConfigure = ''
     sed -i "setup.py" \
         -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = libinclude("${freetype}")|g ;
             s|^JPEG_ROOT =.*$|JPEG_ROOT = libinclude("${libjpeg}")|g ;
             s|^ZLIB_ROOT =.*$|ZLIB_ROOT = libinclude("${zlib}")|g ;'
   '';
 
-  buildPhase   = "python setup.py build_ext -i";
   checkPhase   = "python selftest.py";
-  #installPhase = "python setup.py install --prefix=$out";
+  buildPhase   = "python setup.py build_ext -i";
 
   meta = {
     homepage = http://www.pythonware.com/products/pil/;

@@ -9,17 +9,7 @@ buildPythonPackage rec {
     sha256 = "0g0ayql5b9mkjam8hym6zyg6bv77lbh66rv1fyvgqb17kfc1xkpj";
   };
 
-  buildInputs = [ python gmp ];
-
-  buildPhase =
-    ''
-      python ./setup.py build_ext --library-dirs=${gmp}/lib
-    '';
-
-#  installPhase =
-#    ''
-#      python ./setup.py install --prefix=$out
-#    '';
+  buildInputs = [ gmp ];
 
   meta = {
     homepage = "http://www.pycrypto.org/";

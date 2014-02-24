@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "man-pages-3.54";
+  name = "man-pages-3.60";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/${name}.tar.xz";
-    sha256 = "0rb75dl9hh4v2s95bcssy12j8qrbd2dmlzry68gphyxk5c7yipbl";
+    sha256 = "0h4wzjcrz1hqbzwn1g0q11byzss7l4f1ynj7vzgbxar7z10gr5b6";
   };
 
   preBuild =
