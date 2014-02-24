@@ -3441,11 +3441,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   logilab_common = buildPythonPackage rec {
-    name = "logilab-common-0.58.2";
+    name = "logilab-common-0.61.0";
 
     src = fetchurl {
       url = "http://download.logilab.org/pub/common/${name}.tar.gz";
-      sha256 = "0qfdyj2is0scpnkgpnqm12lh4yl27617l0irlilhk25cpgbbfbf9";
+      sha256 = "09apsrcvjliawbxmfrmi1l8hlbaj87mb7n4lrlivy5maxs6yg4hd";
     };
 
     propagatedBuildInputs = [ unittest2 ];
