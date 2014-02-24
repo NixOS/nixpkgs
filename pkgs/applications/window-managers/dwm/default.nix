@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   prePatch = ''sed -i "s@/usr/local@$out@" config.mk'';
 
   # Allow users set their own list of patches
-  patches = [ ./confnotify-6.0.patch ] ++ patches;
+  inherit patches;
 
   buildPhase = " make ";
  
