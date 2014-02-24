@@ -960,7 +960,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   digestiveFunctorsAeson = callPackage ../development/libraries/haskell/digestive-functors-aeson {
     aeson = self.aeson_0_7_0_1;
-    lens = self.lens_4_0_3;
+    lens = self.lens_4_0_4;
   };
 
   digestiveFunctorsHeist = callPackage ../development/libraries/haskell/digestive-functors-heist {};
@@ -1531,7 +1531,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {
     aeson = self.aeson_0_7_0_1;
-    lens = self.lens_4_0_3;
+    lens = self.lens_4_0_4;
   };
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
@@ -1567,7 +1567,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
   lens_3_10_2 = callPackage ../development/libraries/haskell/lens/3.10.2.nix {};
-  lens_4_0_3 = callPackage ../development/libraries/haskell/lens/4.0.3.nix {
+  lens_4_0_4 = callPackage ../development/libraries/haskell/lens/4.0.4.nix {
     aeson = self.aeson_0_7_0_1;
   };
   lens = self.lens_3_10_2;
@@ -1593,7 +1593,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
   linear = callPackage ../development/libraries/haskell/linear {
-    lens = self.lens_4_0_3;
+    lens = self.lens_4_0_4;
   };
 
   List = callPackage ../development/libraries/haskell/List {};
@@ -2171,8 +2171,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   socks = callPackage ../development/libraries/haskell/socks {};
 
   sparse = callPackage ../development/libraries/haskell/sparse {
-    lens = self.lens_4_0_3;
-    linear = self.linear.override { lens = self.lens_4_0_3; };
+    lens = self.lens_4_0_4;
+    linear = self.linear.override { lens = self.lens_4_0_4; };
   };
 
   srcloc = callPackage ../development/libraries/haskell/srcloc {};
