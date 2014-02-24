@@ -1138,6 +1138,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ghcEvents = callPackage ../development/libraries/haskell/ghc-events {};
 
+  ghcEventsAnalyze = callPackage ../development/tools/haskell/ghc-events-analyze {};
+
   ghcHeapView = callPackage ../development/libraries/haskell/ghc-heap-view {
     cabal = self.cabal.override { enableLibraryProfiling = false; }; # pkg cannot be built with profiling enabled
   };
