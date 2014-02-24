@@ -55,7 +55,7 @@ with pkgs.lib;
                   modules =
                     let extraConfig =
                       { boot.isContainer = true;
-                        security.initialRootPassword = "!";
+                        security.initialRootPassword = mkDefault "!";
                         networking.hostName = mkDefault name;
                       };
                     in [ extraConfig config.config ];
