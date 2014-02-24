@@ -4658,7 +4658,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
               s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;'
     '';
 
-    
+
 
     meta = {
       homepage = http://python-imaging.github.com/Pillow;
