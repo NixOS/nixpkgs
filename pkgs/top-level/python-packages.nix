@@ -1740,11 +1740,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   logilab_astng = buildPythonPackage rec {
-    name = "logilab-astng-0.24.1";
+    name = "logilab-astng-0.24.3";
 
     src = fetchurl {
       url = "http://download.logilab.org/pub/astng/${name}.tar.gz";
-      sha256 = "00qxaxsax80sknwv25xl1r49lc4gbhkxs1kjywji4ad8y1npax0s";
+      sha256 = "0np4wpxyha7013vkkrdy54dvnil67gzi871lg60z8lap0l5h67wn";
     };
 
     propagatedBuildInputs = [ logilab_common ];
