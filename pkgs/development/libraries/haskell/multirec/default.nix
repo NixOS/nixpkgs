@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "multirec";
-  version = "0.7.3";
-  sha256 = "0k1wbjsvkl08nwjikflc8yyalk654mf8bvi1rhm28i4na52myi5y";
+  version = "0.7.4";
+  sha256 = "01mligrin7fp3fnnwgv8nrww5938ryghgyw9xyw153a615ryj8i9";
   meta = {
     homepage = "http://www.cs.uu.nl/wiki/GenericProgramming/Multirec";
     description = "Generic programming for families of recursive datatypes";
