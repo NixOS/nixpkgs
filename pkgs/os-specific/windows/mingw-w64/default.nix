@@ -13,7 +13,7 @@ stdenv.mkDerivation (rec {
 } //
 (if onlyHeaders then {
   name = name + "-headers";
-  preConfingure = ''
+  preConfigure = ''
     cd mingw-w64-headers
   '';
   configureFlags = "--without-crt --host=x86_64-w64-mingw32";
