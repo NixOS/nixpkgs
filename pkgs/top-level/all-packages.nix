@@ -7191,6 +7191,10 @@ let
       onlyHeaders = true;
     };
 
+    mingw_w64_pthreads = callPackage ../os-specific/windows/mingw-w64 {
+      onlyPthreads = true;
+    };
+
     pthreads = callPackage ../os-specific/windows/pthread-w32 {
       mingw_headers = mingw_headers3;
     };

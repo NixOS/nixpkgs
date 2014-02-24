@@ -1,4 +1,7 @@
-{stdenv, fetchurl, binutilsCross ? null, gccCross ? null, onlyHeaders ? false}:
+{ stdenv, fetchurl, binutilsCross ? null, gccCross ? null
+, onlyHeaders ? false
+, onlyPthreads ? false
+}:
 
 let
   name = "mingw-w64-3.1.0";
@@ -17,6 +20,11 @@ stdenv.mkDerivation (rec {
     cd mingw-w64-headers
   '';
   configureFlags = "--without-crt --host=x86_64-w64-mingw32";
+} else if onlyPthreads then {
+  name = name + "-pthreads";
+  preConfigure = ''
+    cd mingw-w64-libraries/winpthreads
+  '';
 } else {
   buildInputs = [ gccCross binutilsCross ];
 
