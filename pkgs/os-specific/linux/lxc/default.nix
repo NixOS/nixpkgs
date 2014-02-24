@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "lxc-1.0.0.beta4";
+  name = "lxc-1.0.0";
 
   src = fetchurl {
     url = "http://github.com/lxc/lxc/archive/${name}.tar.gz";
-    sha256 = "174grvh5086pmbaladp5ivy2azlm7q9v5xwgc5yww2mggx99w41j";
+    sha256 = "1dv78xd7mdb50x8dgjvnv2v6sdj2xv2vvar7y402ll2wh8ixmi91";
   };
 
   buildInputs = [ libcap apparmor perl docbook2x gnutls autoreconfHook pkgconfig ];
