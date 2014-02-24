@@ -17,29 +17,3 @@ for i in docs/images/*.gif
 do
     install $i $out/share/doc/$name/images
 done
-
-# Refactoring "runme" script
-
-cat << 'EOF' >> run-8086tiny
-#!/bin/sh
-
-# Setting vars: $1 = bios file, $2 = floppy image, $3= harddisk image
-if [ $# -ne 2 -a $# -ne 3 ]; then
-   echo "Usage: $0 <bios file> <floppy image> [harddisk image]"
-   exit 1
-fi
-
-bios="$1"
-floppy="$2"
-hdimage="$3"
-
-clear
-stty cbreak raw -echo min 0
-8086tiny $bios $floppy $hdimage
-stty cooked echo
-
-EOF
-
-patchShebangs run-8086tiny
-install run-8086tiny $out/bin
-
