@@ -78,8 +78,9 @@
   ./services/backup/bacula.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
-  ./services/backup/sitecopy-backup.nix
   ./services/backup/rsnapshot.nix
+  ./services/backup/sitecopy-backup.nix
+  ./services/backup/tarsnap.nix
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
   ./services/databases/couchdb.nix
