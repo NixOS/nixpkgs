@@ -6294,6 +6294,8 @@ let
 
   #monetdb = callPackage ../servers/sql/monetdb { };
 
+  mariadb = callPackage ../servers/sql/mariadb {};
+
   mongodb = callPackage ../servers/nosql/mongodb { };
 
   riak = callPackage ../servers/nosql/riak/1.3.1.nix { };
