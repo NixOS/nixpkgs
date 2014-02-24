@@ -21,12 +21,11 @@ cabal.mkDerivation (self: {
     aeson conduit dataDefault hspec httpConduit HUnit liftedBase
     monadControl QuickCheck text time transformers
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/meteficha/fb";
     description = "Bindings to Facebook's API";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
-  # The tests require Facebook API keys
-  doCheck = false;
 })
