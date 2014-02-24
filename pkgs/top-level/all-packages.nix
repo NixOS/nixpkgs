@@ -1970,6 +1970,8 @@ let
 
   tinc = callPackage ../tools/networking/tinc { };
 
+  tiny8086 = callPackage ../applications/virtualization/8086tiny { };
+
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
 
   tmux = callPackage ../tools/misc/tmux { };
