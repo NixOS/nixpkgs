@@ -126,7 +126,7 @@ in
         </Directory>
       ''}
 
-      Alias ${config.urlPrefix} ${mediawikiRoot}
+      ${optionalString (config.urlPrefix != "") "Alias ${config.urlPrefix} ${mediawikiRoot}"}
 
       <Directory ${mediawikiRoot}>
           Order allow,deny
@@ -138,6 +138,8 @@ in
         Alias ${config.articleUrlPrefix} ${mediawikiRoot}/index.php
       ''}
     '';
+
+  documentRoot = if config.urlPrefix == "" then mediawikiRoot else null;
 
   enablePHP = true;
 
