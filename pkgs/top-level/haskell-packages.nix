@@ -1430,6 +1430,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
 
+  hspecExpectationsLens = callPackage ../development/libraries/haskell/hspec-expectations-lens {
+    lens = self.lens_4_0_4;
+  };
+
   hspecMeta = callPackage ../development/libraries/haskell/hspec-meta {};
 
   hstatsd = callPackage ../development/libraries/haskell/hstatsd {};
