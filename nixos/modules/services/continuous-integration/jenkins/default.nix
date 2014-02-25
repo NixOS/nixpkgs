@@ -61,7 +61,7 @@ in {
     users.jenkins.enable = true;
 
     systemd.services.jenkins = {
-      description = "jenkins continuous integration server";
+      description = "Jenkins Continuous Integration Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
@@ -76,11 +76,11 @@ in {
       '';
 
       postStart = ''
-        until ${pkgs.curl}/bin/curl -L localhost:${toString cfg.port} ; do
+        until ${pkgs.curl}/bin/curl -s -L localhost:${toString cfg.port} ; do
           sleep 10
         done
         while true ; do
-          index=`${pkgs.curl}/bin/curl -L localhost:${toString cfg.port}`
+          index=`${pkgs.curl}/bin/curl -s -L localhost:${toString cfg.port}`
           if [[ !("$index" =~ 'Please wait while Jenkins is restarting' ||
                   "$index" =~ 'Please wait while Jenkins is getting ready to work') ]]; then
             exit 0
