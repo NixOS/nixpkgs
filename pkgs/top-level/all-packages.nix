@@ -616,6 +616,15 @@ let
 
   bgs = callPackage ../tools/X11/bgs { };
 
+  biber = callPackage ../tools/typesetting/biber {
+    inherit (perlPackages)
+      autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
+      DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
+      ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
+      ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
+      UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter;
+  };
+
   bibtextools = callPackage ../tools/typesetting/bibtex-tools {
     inherit (strategoPackages016) strategoxt sdf;
   };
