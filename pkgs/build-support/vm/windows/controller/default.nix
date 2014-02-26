@@ -1,3 +1,7 @@
+{ stdenv, writeScript, vmTools, makeInitrd
+, samba, vde2, openssh, socat, netcat, coreutils, gzip
+}:
+
 { sshKey
 , qemuArgs ? []
 , command ? "sync"
@@ -6,10 +10,9 @@
 , installMode ? false
 }:
 
-let
-  inherit (import <nixpkgs> {}) lib stdenv writeScript vmTools makeInitrd;
-  inherit (import <nixpkgs> {}) samba vde2 openssh socat netcat coreutils gzip;
+with stdenv.lib;
 
+let
   preInitScript = writeScript "preinit.sh" ''
     #!${vmTools.initrdUtils}/bin/ash -e
     export PATH=${vmTools.initrdUtils}/bin
@@ -62,13 +65,13 @@ let
   '';
 
   initrd = makeInitrd {
-    contents = lib.singleton {
+    contents = singleton {
       object = preInitScript;
       symlink = "/init";
     };
   };
 
-  shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
+  shellEscape = x: "'${replaceChars ["'"] [("'\\'" + "'")] x}'";
 
   loopForever = "while :; do ${coreutils}/bin/sleep 1; done";
 
@@ -128,12 +131,12 @@ let
       -i /ssh.key \
       -l Administrator \
       192.168.0.1 -- ${shellEscape command}
-  '') + lib.optionalString (suspendTo != null) ''
+  '') + optionalString (suspendTo != null) ''
     ${coreutils}/bin/touch /xchg/suspend_now
     ${loopForever}
   '');
 
-  kernelAppend = lib.concatStringsSep " " [
+  kernelAppend = concatStringsSep " " [
     "panic=1"
     "loglevel=4"
     "console=tty1"
@@ -141,7 +144,7 @@ let
     "command=${initScript}"
   ];
 
-  controllerQemuArgs = lib.concatStringsSep " " (maybeKvm64 ++ [
+  controllerQemuArgs = concatStringsSep " " (maybeKvm64 ++ [
     "-nographic"
     "-no-reboot"
     "-virtfs local,path=/nix/store,security_model=none,mount_tag=store"
@@ -153,20 +156,20 @@ let
     "-net vde,vlan=0,sock=$QEMU_VDE_SOCKET"
   ]);
 
-  maybeKvm64 = lib.optional (stdenv.system == "x86_64-linux") "-cpu kvm64";
+  maybeKvm64 = optional (stdenv.system == "x86_64-linux") "-cpu kvm64";
 
-  cygwinQemuArgs = lib.concatStringsSep " " (maybeKvm64 ++ [
+  cygwinQemuArgs = concatStringsSep " " (maybeKvm64 ++ [
     "-monitor unix:$MONITOR_SOCKET,server,nowait"
     "-nographic"
     "-net nic,vlan=0,macaddr=52:54:00:12:01:01"
     "-net vde,vlan=0,sock=$QEMU_VDE_SOCKET"
     "-rtc base=2010-01-01,clock=vm"
-  ] ++ qemuArgs ++ lib.optionals (resumeFrom != null) [
+  ] ++ qemuArgs ++ optionals (resumeFrom != null) [
     "-incoming 'exec: ${gzip}/bin/gzip -c -d \"${resumeFrom}\"'"
   ]);
 
-  modulesClosure = lib.overrideDerivation vmTools.modulesClosure (o: {
-    rootModules = o.rootModules ++ lib.singleton "virtio_net";
+  modulesClosure = overrideDerivation vmTools.modulesClosure (o: {
+    rootModules = o.rootModules ++ singleton "virtio_net";
   });
 
   preVM = ''
@@ -183,7 +186,7 @@ let
       UNIX-CONNECT:$QEMU_VDE_SOCKET/ctl,retry=20
   '';
 
-  bgBoth = lib.optionalString (suspendTo != null) " &";
+  bgBoth = optionalString (suspendTo != null) " &";
 
   vmExec = if installMode then ''
     ${vmTools.qemuProg} ${controllerQemuArgs} &

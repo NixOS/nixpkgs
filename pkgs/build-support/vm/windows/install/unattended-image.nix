@@ -1,3 +1,5 @@
+{ stdenv, writeText, dosfstools, mtools }:
+
 { productKey
 , shExecAfterwards ? "E:\\bootstrap.sh"
 , cygwinRoot ? "C:\\cygwin"
@@ -7,8 +9,6 @@
 }:
 
 let
-  inherit (import <nixpkgs> {}) lib stdenv writeText dosfstools mtools;
-
   afterSetup = [
     cygwinSetup
     "-L -n -q"
@@ -80,7 +80,7 @@ let
 
     ; Turn off all components
     [Components]
-    ${lib.concatMapStrings (comp: "${comp} = Off\n") [
+    ${stdenv.lib.concatMapStrings (comp: "${comp} = Off\n") [
       "AccessOpt" "Appsrv_console" "Aspnet" "BitsServerExtensionsISAPI"
       "BitsServerExtensionsManager" "Calc" "Certsrv" "Certsrv_client"
       "Certsrv_server" "Charmap" "Chat" "Clipbook" "Cluster" "Complusnetwork"
@@ -107,7 +107,7 @@ let
     Mode = 0
 
     [SetupParams]
-    UserExecute = "${lib.concatStringsSep " " afterSetup}"
+    UserExecute = "${stdenv.lib.concatStringsSep " " afterSetup}"
 
     [GuiRunOnce]
     Command0 = "${cygwinRoot}\bin\bash -l ${shExecAfterwards}"

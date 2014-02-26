@@ -1,5 +1,11 @@
+pkgs:
+
 let
-  inherit (import <nixpkgs> {}) lib stdenv;
+  bootstrapper = import ./bootstrap.nix {
+    inherit (pkgs) stdenv vmTools writeScript writeText runCommand makeInitrd;
+    inherit (pkgs) coreutils dosfstools gzip mtools netcat openssh qemu samba;
+    inherit (pkgs) socat vde2 fetchurl python perl cdrkit pathsFromGraph;
+  };
 
   builder = ''
     source /tmp/xchg/saved-env 2> /dev/null || true
@@ -18,11 +24,11 @@ in {
         shell = "/bin/sh";
       };
     };
-  in lib.overrideDerivation drv (attrs: let
-    bootstrap = import ./bootstrap.nix attrs.windowsImage;
+  in pkgs.lib.overrideDerivation drv (attrs: let
+    bootstrap = bootstrapper attrs.windowsImage;
   in {
     requiredSystemFeatures = [ "kvm" ];
-    buildur = "${stdenv.shell}";
+    buildur = "${pkgs.stdenv.shell}";
     args = ["-e" (bootstrap.resumeAndRun builder)];
     windowsImage = bootstrap.suspendedVM;
     origArgs = attrs.args;

@@ -1,10 +1,12 @@
+{ stdenv, runCommand, openssh, qemu, controller, mkCygwinImage
+, writeText, dosfstools, mtools
+}:
+
 { isoFile
 , productKey
 }:
 
 let
-  inherit (import <nixpkgs> {}) lib stdenv runCommand openssh qemu;
-
   bootstrapAfterLogin = runCommand "bootstrap.sh" {} ''
     cat > "$out" <<EOF
     mkdir -p ~/.ssh
@@ -29,20 +31,24 @@ let
 
   packages = [ "openssh" "shutdown" ];
 
-  instfloppy = import ./unattended-image.nix {
+  floppyCreator = import ./unattended-image.nix {
+    inherit stdenv writeText dosfstools mtools;
+  };
+
+  instfloppy = floppyCreator {
     cygwinPackages = packages;
     inherit productKey;
   };
 
-  cygiso = import ../cygwin-iso {
+  cygiso = mkCygwinImage {
     inherit packages;
-    extraContents = lib.singleton {
+    extraContents = stdenv.lib.singleton {
       source = bootstrapAfterLogin;
       target = "bootstrap.sh";
     };
   };
 
-  installController = import ../controller {
+  installController = controller {
     inherit sshKey;
     installMode = true;
     qemuArgs = [

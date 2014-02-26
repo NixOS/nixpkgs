@@ -1,11 +1,11 @@
+{ stdenv, fetchurl, runCommand, python, perl, cdrkit, pathsFromGraph }:
+
 { packages ? []
 , mirror ? "http://ftp.gwdg.de/pub/linux/sources.redhat.com/cygwin"
 , extraContents ? []
 }:
 
 let
-  inherit (import <nixpkgs> {}) fetchurl runCommand python;
-
   cygPkgList = fetchurl {
     url = "${mirror}/x86_64/setup.ini";
     sha256 = "19vfm7zr8kcp1algmggk8vsilkccycx22mdf0ynfl6lcmp6dkfsz";

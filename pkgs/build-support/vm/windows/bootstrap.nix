@@ -1,13 +1,32 @@
+{ stdenv, fetchurl, vmTools, writeScript, writeText, runCommand, makeInitrd
+, python, perl, coreutils, dosfstools, gzip, mtools, netcat, openssh, qemu
+, samba, socat, vde2, cdrkit, pathsFromGraph
+}:
+
 { isoFile, productKey }:
 
+with stdenv.lib;
+
 let
-  inherit (import <nixpkgs> {}) lib stdenv qemu;
+  controller = import ./controller {
+    inherit stdenv writeScript vmTools makeInitrd;
+    inherit samba vde2 openssh socat netcat coreutils gzip;
+  };
+
+  mkCygwinImage = import ./cygwin-iso {
+    inherit stdenv fetchurl runCommand python perl cdrkit pathsFromGraph;
+  };
+
+  installer = import ./install {
+    inherit controller mkCygwinImage;
+    inherit stdenv runCommand openssh qemu writeText dosfstools mtools;
+  };
 in rec {
-  installedVM = import ./install {
+  installedVM = installer {
     inherit isoFile productKey;
   };
 
-  runInVM = img: attrs: import ./controller (attrs // {
+  runInVM = img: attrs: controller (attrs // {
     inherit (installedVM) sshKey;
     qemuArgs = attrs.qemuArgs or [] ++ [
       "-boot order=c"
@@ -34,9 +53,9 @@ in rec {
       "echo '/cygdrive/${letter} ${target} none bind 0 0' >> /etc/fstab"
     ];
   in runInVM "winvm.img" {
-    command = lib.concatStringsSep " && " ([
+    command = concatStringsSep " && " ([
       "net config server /autodisconnect:-1"
-    ] ++ lib.concatLists (lib.mapAttrsToList genDriveCmds drives));
+    ] ++ concatLists (mapAttrsToList genDriveCmds drives));
     suspendTo = "state.gz";
   };
 
@@ -55,7 +74,7 @@ in rec {
 
   resumeAndRun = command: runInVM "${suspendedVM}/disk.img" {
     resumeFrom = "${suspendedVM}/state.gz";
-    qemuArgs = lib.singleton "-snapshot";
+    qemuArgs = singleton "-snapshot";
     inherit command;
   };
 }
