@@ -6,9 +6,12 @@
 }:
 
 let
-  cygPkgList = fetchurl {
+  cygPkgList = if stdenv.is64bit then fetchurl {
     url = "${mirror}/x86_64/setup.ini";
-    sha256 = "19vfm7zr8kcp1algmggk8vsilkccycx22mdf0ynfl6lcmp6dkfsz";
+    sha256 = "142f8zyfwgi6s2djxv3z5wn0ysl94pxwa79z8rjfqz4kvnpgz120";
+  } else fetchurl {
+    url = "${mirror}/x86/setup.ini";
+    sha256 = "1v596lln2iip5h7wxjnig5rflzvqa21zzd2iyhx07zs28q5h76i9";
   };
 
   makeCygwinClosure = { packages, packageList }: let
