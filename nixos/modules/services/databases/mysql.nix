@@ -8,6 +8,10 @@ let
 
   mysql = cfg.package;
 
+  is55 = mysql.mysqlVersion == "5.5";
+
+  mysqldDir = if is55 then "${mysql}/bin" else "${mysql}/libexec";
+
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
   mysqldOptions =
@@ -19,7 +23,7 @@ let
     [mysqld]
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
-    ${optionalString (cfg.replication.role == "slave")
+    ${optionalString (cfg.replication.role == "slave" && !is55)
     ''
       master-host = ${cfg.replication.masterHost}
       master-user = ${cfg.replication.masterUser}
@@ -47,7 +51,8 @@ in
       };
 
       package = mkOption {
-        default = pkgs.mysql;
+        type = types.package;
+        example = literalExample "pkgs.mysql";
         description = "
           Which MySQL derivation to use.
         ";
@@ -176,7 +181,7 @@ in
             chown -R ${cfg.user} ${cfg.pidDir}
           '';
 
-        serviceConfig.ExecStart = "${mysql}/libexec/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
+        serviceConfig.ExecStart = "${mysqldDir}/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
 
         postStart =
           ''
@@ -215,6 +220,16 @@ in
                         ) | ${mysql}/bin/mysql -u root -N
                     fi
                   '') cfg.initialDatabases}
+
+                ${optionalString (cfg.replication.role == "slave" && is55)
+                  ''
+                    # Set up the replication master
+
+                    ( echo "stop slave;"
+                      echo "change master to master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
+                      echo "start slave;"
+                    ) | ${mysql}/bin/mysql -u root -N
+                  ''}
 
                 ${optionalString (cfg.initialScript != null)
                   ''

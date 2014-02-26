@@ -124,6 +124,8 @@ in zipModules ([]
 ++ obsolete [ "services" "mesa" "s3tcSupport" ] [ "hardware" "opengl" "s3tcSupport" ]
 ++ obsolete [ "services" "mesa" "videoDrivers" ] [ "hardware" "opengl" "videoDrivers" ]
 
+++ obsolete [ "services" "mysql55" ] [ "services" "mysql" ]
+
 # Options that are obsolete and have no replacement.
 ++ obsolete' [ "boot" "loader" "grub" "bootDevice" ]
 ++ obsolete' [ "boot" "initrd" "luks" "enable" ]

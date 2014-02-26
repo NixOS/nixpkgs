@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.mysqlVersion = "5.5";
+
   meta = {
     description = "An enhanced, drop-in replacement for MySQL";
     homepage    = https://mariadb.org/;

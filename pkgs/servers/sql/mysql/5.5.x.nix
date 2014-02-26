@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     rm -rf $out/mysql-test $out/sql-bench
   '';
 
+  passthru.mysqlVersion = "5.5";
+
   meta = {
     homepage = http://www.mysql.com/;
     description = "The world's most popular open source database";
