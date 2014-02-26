@@ -87,7 +87,6 @@
   ./services/databases/mongodb.nix
   ./services/databases/redis.nix
   ./services/databases/mysql.nix
-  ./services/databases/mysql55.nix
   ./services/databases/openldap.nix
   ./services/databases/postgresql.nix
   ./services/databases/virtuoso.nix
