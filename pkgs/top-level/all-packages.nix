@@ -430,6 +430,8 @@ let
 
   analog = callPackage ../tools/admin/analog {};
 
+  apt-offline = callPackage ../tools/misc/apt-offline { };
+
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   arandr = callPackage ../tools/X11/arandr { };
