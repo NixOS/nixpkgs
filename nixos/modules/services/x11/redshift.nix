@@ -14,24 +14,37 @@ in {
 
     services.redshift.latitude = mkOption {
       description = "Your current latitude";
-      type = types.string;
+      type = types.uniq types.string;
     };
 
     services.redshift.longitude = mkOption {
       description = "Your current longitude";
-      type = types.string;
+      type = types.uniq types.string;
     };
 
     services.redshift.temperature = {
       day = mkOption {
         description = "Colour temperature to use during day time";
         default = 5500;
-        type = types.int;
+        type = types.uniq types.int;
       };
       night = mkOption {
         description = "Colour temperature to use during night time";
         default = 3700;
-        type = types.int;
+        type = types.uniq types.int;
+      };
+    };
+
+    services.redshift.brightness = {
+      day = mkOption {
+        description = "Screen brightness to apply during the day (between 0.1 and 1.0)";
+        default = "1";
+        type = types.uniq types.string;
+      };
+      night = mkOption {
+        description = "Screen brightness to apply during the night (between 0.1 and 1.0)";
+        default = "1";
+        type = types.uniq types.string;
       };
     };
   };
@@ -41,10 +54,12 @@ in {
       description = "Redshift colour temperature adjuster";
       requires = [ "display-manager.service" ];
       after = [ "display-manager.service" ];
-      script = ''
+      wantedBy = [ "graphical.target" ];
+      serviceConfig.ExecStart = ''
         ${pkgs.redshift}/bin/redshift \
           -l ${cfg.latitude}:${cfg.longitude} \
-          -t ${toString cfg.temperature.day}:${toString cfg.temperature.night}
+          -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
+          -b ${toString cfg.brightness.day}:${toString cfg.brightness.night}
       '';
       environment = { DISPLAY = ":0"; };
       serviceConfig.Restart = "always";

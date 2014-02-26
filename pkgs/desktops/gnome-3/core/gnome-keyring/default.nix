@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus, libgcrypt, libtasn1, pam, python, glib, libxslt
-, intltool, pango, gcr, gdk_pixbuf, atk, p11_kit
+, intltool, pango, gcr, gdk_pixbuf, atk, p11_kit, makeWrapper
 , docbook_xsl_ns, docbook_xsl, gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with gnome3; [
     dbus libgcrypt pam python gtk3 gconf libgnome_keyring
-    pango gcr gdk_pixbuf atk p11_kit
+    pango gcr gdk_pixbuf atk p11_kit makeWrapper
   ];
 
   propagatedBuildInputs = [ glib libtasn1 libxslt ];
@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
     "--with-pkcs11-config=$$out/etc/pkcs11/" # installation directories
     "--with-pkcs11-modules=$$out/lib/pkcs11/"
   ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/gnome-keyring" \
+      --prefix XDG_DATA_DIRS : "${glib}/share:$out/share"
+    wrapProgram "$out/bin/gnome-keyring-daemon" \
+      --prefix XDG_DATA_DIRS : "${glib}/share:$out/share"
+  '';
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

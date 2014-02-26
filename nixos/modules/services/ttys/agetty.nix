@@ -28,6 +28,17 @@ with pkgs.lib;
         '';
       };
 
+      serialSpeed = mkOption {
+        type = types.listOf types.int;
+        default = [ 115200 57600 38400 9600 ];
+        example = [ 38400 9600 ];
+        description = ''
+            Bitrates to allow for agetty's listening on serial ports. Listing more
+            bitrates gives more interoperability but at the cost of long delays
+            for getting a sync on the line.
+        '';
+      };
+
     };
 
   };
@@ -78,8 +89,9 @@ with pkgs.lib;
         X-RestartIfChanged=false
       '';
     
-    systemd.units."serial-getty@.service".text =
-      ''
+    systemd.units."serial-getty@.service".text = let
+        speeds = with pkgs.lib; concatStringsSep "," (map toString config.services.mingetty.serialSpeed);
+      in ''
         [Unit]
         Description=Serial Getty on %I
         Documentation=man:agetty(8) man:systemd-getty-generator(8)
@@ -95,7 +107,7 @@ with pkgs.lib;
         [Service]
         Environment=TERM=linux
         Environment=LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive
-        ExecStart=@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login %I 115200,57600,38400,9600
+        ExecStart=@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login %I ${speeds}
         Type=idle
         Restart=always
         RestartSec=0

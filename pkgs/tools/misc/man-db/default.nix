@@ -1,32 +1,23 @@
-{stdenv, fetchurl, db4, groff}:
+{ stdenv, fetchurl, pkgconfig, libpipeline, db, groff }:
  
-stdenv.mkDerivation {
-  name = "man-db-2.5.1";
+stdenv.mkDerivation rec {
+  name = "man-db-2.6.6";
   
   src = fetchurl {
-    url = mirror://savannah/man-db/man-db-2.5.1.tar.gz;
-    sha256 = "178w1fk23ffh8vabj29cn0yyg5ps7bwy1zrrrcsw8aypbh3sfjy3";
+    url = "mirror://savannah/man-db/${name}.tar.xz";
+    sha256 = "1hv6byj6sg6cp3jyf08gbmdm4pwhvd5hzmb94xl0w7prin6hzabx";
   };
   
-  buildInputs = [db4 groff];
+  buildInputs = [ pkgconfig libpipeline db groff ];
   
   configureFlags = ''
     --disable-setuid
-    --with-nroff=${groff}/bin/nroff
-    --with-tbl=${groff}/bin/tbl
-    --with-eqn=${groff}/bin/eqn
-    --with-neqn=${groff}/bin/neqn
   '';
 
-  troff = "${groff}/bin/troff";
-  
-  patches = [
-    # Search in "share/man" relative to each path in $PATH (in addition to "man").
-    ./share.patch
-  ];
-
-  meta = {
-    homepage = http://www.nongnu.org/man-db/;
+  meta = with stdenv.lib; {
+    homepage = "http://man-db.nongnu.org";
     description = "An implementation of the standard Unix documentation system accessed using the man command";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

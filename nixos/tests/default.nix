@@ -12,6 +12,7 @@ with import ../lib/testing.nix { inherit system minimal; };
   firewall = makeTest (import ./firewall.nix);
   installer = makeTests (import ./installer.nix);
   efi-installer = makeTests (import ./efi-installer.nix);
+  gnome3 = makeTest (import ./gnome3.nix);
   ipv6 = makeTest (import ./ipv6.nix);
   kde4 = makeTest (import ./kde4.nix);
   #kexec = makeTest (import ./kexec.nix);

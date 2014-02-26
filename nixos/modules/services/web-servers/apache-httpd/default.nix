@@ -63,6 +63,7 @@ let
           enablePHP = false;
           phpOptions = "";
           options = {};
+          documentRoot = null;
         };
         res = defaults // svcFunction { inherit config pkgs serverInfo php; };
       in res;
@@ -188,7 +189,11 @@ let
 
     subservices = callSubservices serverInfo cfg.extraSubservices;
 
-    documentRoot = if cfg.documentRoot != null then cfg.documentRoot else
+    maybeDocumentRoot = fold (svc: acc:
+      if acc == null then svc.documentRoot else assert svc.documentRoot == null; acc
+    ) null ([ cfg ] ++ subservices);
+
+    documentRoot = if maybeDocumentRoot != null then maybeDocumentRoot else
       pkgs.runCommand "empty" {} "ensureDir $out";
 
     documentRootConf = ''
@@ -240,7 +245,7 @@ let
 
     ${robotsConf}
 
-    ${if isMainServer || cfg.documentRoot != null then documentRootConf else ""}
+    ${if isMainServer || maybeDocumentRoot != null then documentRootConf else ""}
 
     ${if cfg.enableUserDir then ''
 

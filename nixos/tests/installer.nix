@@ -238,7 +238,7 @@ in {
               "mkfs.ext3 -L nixos /dev/vda3",
               "mount LABEL=nixos /mnt",
               "mkfs.ext3 -L boot /dev/vda1",
-              "mkdir /mnt/boot",
+              "mkdir -p /mnt/boot",
               "mount LABEL=boot /mnt/boot",
           );
         '';
@@ -252,9 +252,9 @@ in {
         ''
           $machine->succeed(
               "parted /dev/vda mklabel msdos",
-              "parted /dev/vda -- mkpart primary 1M 2048M", # first PV
+              "parted /dev/vda -- mkpart primary 1M 2048M", # PV1
               "parted /dev/vda -- set 1 lvm on",
-              "parted /dev/vda -- mkpart primary 2048M -1s", # second PV
+              "parted /dev/vda -- mkpart primary 2048M -1s", # PV2
               "parted /dev/vda -- set 2 lvm on",
               "udevadm settle",
               "pvcreate /dev/vda1 /dev/vda2",

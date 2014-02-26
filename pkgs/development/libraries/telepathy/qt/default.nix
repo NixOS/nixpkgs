@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig python libxslt ];
   propagatedBuildInputs = [ qt4 dbus_glib telepathy_farstream telepathy_glib pythonDBus ];
+  patches = [ ./cmake-2.8.12.diff ./farstream-0.2.diff ];
   preBuild = ''
     NIX_CFLAGS_COMPILE+=" `pkg-config --cflags dbus-glib-1`"
   '';

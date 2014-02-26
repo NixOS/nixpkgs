@@ -2,27 +2,25 @@
 
 { stdenv, fetchurl, alsaLib, bzip2, fftw, jackaudio, libX11, liblo
 , libmad, libogg, librdf, librdf_raptor, librdf_rasqal, libsamplerate
-, libsndfile, makeWrapper, pkgconfig, pulseaudio, qt4, redland
-, rubberband, vampSDK 
+, libsndfile, pkgconfig, pulseaudio, qt5, redland
+, rubberband, serd, sord, vampSDK
 }:
 
 stdenv.mkDerivation rec {
   name = "sonic-visualiser-${version}";
-  version = "1.9";
+  version = "2.3";
 
   src = fetchurl {
-    url = "http://code.soundsoftware.ac.uk/attachments/download/194/${name}.tar.gz";
-    sha256 = "00igf7j6s8xfyxnlkbqma0yby9pknxqzy8cmh0aw95ix80cw56fq";
+
+    url = "http://code.soundsoftware.ac.uk/attachments/download/918/${name}.tar.gz";
+    sha256 = "1f06w2rin4r2mbi00bg3nmqdi2xdy9vq4jcmfanxzj3ld66ik40c";
   };
-  patches = [(fetchurl {
-    url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-sound/sonic-visualiser/files/sonic-visualiser-1.9-gcc47.patch;
-    sha256 = "0dhh111crvjvhcjqp7j9jqnvs8zmd6xrcirmzqrrnca1h0vbpkay";
-    name = "gcc47.patch";
-  })];
 
   buildInputs =
-    [ libsndfile qt4 fftw /* should be fftw3f ??*/ bzip2 librdf rubberband
+    [ libsndfile qt5 fftw /* should be fftw3f ??*/ bzip2 librdf rubberband
       libsamplerate vampSDK alsaLib librdf_raptor librdf_rasqal redland
+      serd
+      sord
       pkgconfig
       # optional
       jackaudio
@@ -33,11 +31,10 @@ stdenv.mkDerivation rec {
       # fishsound
       liblo
       libX11
-      makeWrapper
     ];
 
   buildPhase = ''
-    for i in sonic-visualiser svapp svcore svgui; 
+    for i in sonic-visualiser svapp svcore svgui;
       do cd $i && qmake -makefile PREFIX=$out && cd ..;
     done
     make
@@ -45,19 +42,15 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/{bin,share/sonic-visualiser}
-    cp sonic-visualiser/sonic-visualiser $out/bin
-    cp -r sonic-visualiser/samples $out/share/sonic-visualiser/samples
-    wrapProgram $out/bin/sonic-visualiser --prefix LD_LIBRARY_PATH : ${libX11}/lib
+    cp sonic-visualiser $out/bin/
+    cp -r samples $out/share/sonic-visualiser/
   '';
 
-  meta = { 
+  meta = with stdenv.lib; {
     description = "View and analyse contents of music audio files";
     homepage = http://www.sonicvisualiser.org/;
-    license = "GPLv2";
-    maintainers = 
-      [ stdenv.lib.maintainers.marcweber 
-        stdenv.lib.maintainers.goibhniu 
-      ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.goibhniu maintainers.marcweber ];
+    platforms = platforms.linux;
   };
 }

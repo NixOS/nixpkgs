@@ -11,6 +11,8 @@
 
 rec {
 
+  lib = import ../../../lib;
+
   bootstrapFiles =
     if system == "i686-linux" then import ./bootstrap/i686
     else if system == "x86_64-linux" then import ./bootstrap/x86_64
@@ -134,9 +136,9 @@ rec {
 
   # A helper function to call gcc-wrapper.
   wrapGCC =
-    {gcc ? bootstrapTools, libc, binutils, coreutils, shell ? "", name ? "bootstrap-gcc-wrapper"}:
+    { gcc ? bootstrapTools, libc, binutils, coreutils, shell ? "", name ? "bootstrap-gcc-wrapper" }:
 
-    import ../../build-support/gcc-wrapper {
+    lib.makeOverridable (import ../../build-support/gcc-wrapper) {
       nativeTools = false;
       nativeLibc = false;
       inherit gcc binutils coreutils libc shell name;

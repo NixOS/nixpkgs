@@ -1,9 +1,11 @@
-{ callPackage, callPackageOrig, stdenv, qt48, release ? "4.11.4" }:
+{ callPackage, callPackageOrig, stdenv, qt48, release ? "4.11.5" }:
 
 let
+  branch = "4.11";
+
   # Need callPackageOrig to avoid infinite cycle
   kde = callPackageOrig ./kde-package {
-    inherit release ignoreList extraSubpkgs callPackage;
+    inherit release branch ignoreList extraSubpkgs callPackage;
   };
 
   # The list of igored individual modules
@@ -36,7 +38,7 @@ kde.modules // kde.individual //
   full = stdenv.lib.attrValues kde.modules;
 
   l10n = callPackage ./l10n {
-    inherit release;
+    inherit release branch;
     inherit (kde.manifest) stable;
   };
 }

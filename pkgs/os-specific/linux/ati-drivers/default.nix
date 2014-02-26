@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://www2.ati.com/drivers/linux/amd-catalyst-13.12-linux-x86.x86_64.zip;
-    sha256 = "1jm0c4rqyjjhyj8a7axf4hz16bcvy8yhnkn45wc2l73xhks36h02";
+    sha256 = "1c3fn328340by4qn99dgfj8c2q34fxdb2alcak0vnyc6bw7l5sms";
     curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux%20x86_64";
   };
 

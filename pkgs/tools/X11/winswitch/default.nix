@@ -29,12 +29,10 @@ let
       }' winswitch/util/distro_packaging_util.py
     '';
 
-    buildPhase = ''
-      python setup.py build
-    '';
-
-    installCommand = ''
-      PREFIX="$out" python ./setup.py install --prefix="$out"
+    preInstall = ''
+      # see https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix
+      python setup.py install_data --install-dir=$out --root=$out
+      sed -i '/data_files = data_files/d' setup.py
     '';
 
     doCheck = false;

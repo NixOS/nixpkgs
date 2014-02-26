@@ -1,0 +1,57 @@
+<appendix xmlns="http://docbook.org/ns/docbook"
+          xml:id="ch-release-notes">
+
+<title>Release notes</title>
+
+<!--==================================================================-->
+
+<section xml:id="sec-release-14.02">
+
+<title>Release 14.02 (“Baboon”, 2014/02/??)</title>
+
+<para>This is the second stable release branch of NixOS.  The main
+enhancements are the following:
+
+<itemizedlist>
+
+  <listitem><para>Installation on UEFI systems is now supported.  See
+  <xref linkend="sec-uefi-installation"/> for
+  details.</para></listitem>
+
+  <listitem><para>NixOS is now based on Glibc 2.18 and GCC
+  4.8.</para></listitem>
+
+  <listitem><para>The mysql55 service has been merged into the
+  mysql service, which no longer sets a default for the 'package
+  option.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+<para>When upgrading from a previous release, please be aware of the
+following incompatible changes:
+
+<itemizedlist>
+
+  <listitem><para>The option
+  <option>boot.loader.grub.memtest86</option> has been renamed to
+  <option>boot.loader.grub.memtest86.enable</option>.</para></listitem>
+
+</itemizedlist>
+
+</para>
+
+</section>
+
+<!--==================================================================-->
+
+<section xml:id="sec-release-13.10">
+
+<title>Release 13.10 (“Aardvark”, 2013/10/31)</title>
+
+<para>This is the first stable release branch of NixOS.</para>
+
+</section>
+
+</appendix>

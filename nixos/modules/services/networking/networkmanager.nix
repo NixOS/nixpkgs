@@ -31,7 +31,7 @@ let
 
     [modem-manager]
     Identity=unix-group:networkmanager
-    Action=org.freedesktop.ModemManager.*
+    Action=org.freedesktop.ModemManager*
     ResultAny=yes
     ResultInactive=no
     ResultActive=yes
@@ -42,7 +42,7 @@ let
         subject.isInGroup("networkmanager")
         && subject.active
         && (action.id.indexOf("org.freedesktop.NetworkManager.") == 0
-            || action.id.indexOf("org.freedesktop.ModemManager.")  == 0
+            || action.id.indexOf("org.freedesktop.ModemManager")  == 0
         ))
           { return polkit.Result.YES; }
     });
@@ -89,7 +89,7 @@ in {
           to change network settings to this group.
         '';
       };
-  
+
       packages = mkOption {
         type = types.listOf types.path;
         default = [ ];
@@ -161,6 +161,7 @@ in {
         networkmanager_vpnc
         networkmanager_openconnect
         networkmanager_pptp
+        modemmanager
         ];
 
     users.extraGroups = singleton {
@@ -176,16 +177,13 @@ in {
     systemd.services."networkmanager-init" = {
       description = "NetworkManager initialisation";
       wantedBy = [ "network.target" ];
-      partOf = [ "NetworkManager.service" ];
       wants = [ "NetworkManager.service" ];
       before = [ "NetworkManager.service" ];
       script = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
         mkdir -m 755 -p ${stateDirs}
       '';
-      serviceConfig = {
-        Type = "oneshot";
-      };
+      serviceConfig.Type = "oneshot";
     };
 
     # Turn off NixOS' network management
@@ -206,6 +204,7 @@ in {
         networkmanager_vpnc
         networkmanager_openconnect
         networkmanager_pptp
+        modemmanager
         ];
 
     services.udev.packages = cfg.packages;

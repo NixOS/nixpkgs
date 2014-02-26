@@ -306,7 +306,7 @@ let self = _self // overrides; _self = with self; {
 
   BerkeleyDB = import ../development/perl-modules/BerkeleyDB {
     inherit buildPerlPackage fetchurl;
-    inherit (pkgs) db4;
+    inherit (pkgs) db;
   };
 
   BHooksEndOfScope = buildPerlPackage {
@@ -1289,10 +1289,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Clone = buildPerlPackage {
-    name = "Clone-0.34";
+    name = "Clone-0.36";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GARU/Clone-0.34.tar.gz;
-      sha256 = "0qk32i2ncmn7wm2dbjpwhwa4js079bgfs4ayb90mnxjhwq5358ix";
+      url = mirror://cpan/authors/id/G/GA/GARU/Clone-0.36.tar.gz;
+      sha256 = "1i90l24l46dyadmdz82klyh3y1lhfn75wjjpfmgl1kbr4plgdph3";
     };
     meta = {
       description = "Recursively copy Perl datatypes";
@@ -1430,10 +1430,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ConvertASN1 = buildPerlPackage rec {
-    name = "Convert-ASN1-0.22";
+    name = "Convert-ASN1-0.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GB/GBARR/Convert-ASN1-0.22.tar.gz";
-      sha256 = "1vpny8smwl23rai1kxngi5i31jhp6s6cdls19gjhcwsxf76daqxy";
+      url = "mirror://cpan/authors/id/G/GB/GBARR/Convert-ASN1-0.26.tar.gz";
+      sha256 = "188wpjnp4j2m1l1zzw9ak9ymiba1g7hzysf8mc6bsdnhl0pvdf2x";
     };
   };
 
@@ -1936,10 +1936,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateTime = buildPerlModule {
-    name = "DateTime-1.04";
+    name = "DateTime-1.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.04.tar.gz;
-      sha256 = "1krnrp8hv0m4v1lxrvwgc3vvcycld21ygvjy5p7vaf5h1jpjzrwz";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.07.tar.gz;
+      sha256 = "1cm4zsgzz4phigak0nb48l661vkqhz93kfbb9jd83d1hq74myq31";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ParamsValidate TryTiny ];
@@ -2201,7 +2201,7 @@ let self = _self // overrides; _self = with self; {
 
   DBFile = import ../development/perl-modules/DB_File {
     inherit fetchurl buildPerlPackage;
-    inherit (pkgs) db4;
+    inherit (pkgs) db;
   };
 
   DBI = buildPerlPackage {
@@ -2369,10 +2369,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelFindPerl = buildPerlPackage {
-    name = "Devel-FindPerl-0.006";
+    name = "Devel-FindPerl-0.012";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/Devel-FindPerl-0.006.tar.gz;
-      sha256 = "60d5a0fd6880e5cfda381159acd3dbbc21c1121dc44c94ecd323ad5a148e03ff";
+      url = mirror://cpan/authors/id/L/LE/LEONT/Devel-FindPerl-0.012.tar.gz;
+      sha256 = "075p340m4pi761sjc3l0ymfsdwy4rrq48sqj38cyy80vg9scljh2";
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ ExtUtilsConfig ];
@@ -3053,10 +3053,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExceptionClass = buildPerlPackage rec {
-    name = "Exception-Class-1.30";
+    name = "Exception-Class-1.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "54e256fdb317c1736c2c257fa63d5b87cfb382870711b24937c36eb5171b3154";
+      sha256 = "1p6f20fi82mr5bz7d2c7nqh0322r8n2kszfw37c77g8b1b4r72w3";
     };
     propagatedBuildInputs = [ ClassDataInheritable DevelStackTrace ];
   };
@@ -3552,12 +3552,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   FinanceQuote = buildPerlPackage {
-    name = "Finance-Quote-1.18";
+    name = "Finance-Quote-1.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EC/ECOCODE/Finance-Quote-1.18.tar.gz;
-      sha256 = "4240faabe0646defd4ec76ca9e111977b9e8060eaec41adeb284eb422a428393";
+      url = mirror://sourceforge/finance-quote/1.19/Finance-Quote-1.19.tar.gz;
+      sha256 = "0z1dqxw4by7rkwm113qp2mlhl5r0znr22kzinvr1p82svn0zvm2d";
     };
-    propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP ];
+    propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP DateCalc JSON ];
     meta = {
       homepage = http://finance-quote.sourceforge.net/;
       description = "Get stock and mutual fund quotes from various exchanges";
@@ -7787,6 +7787,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TemplatePluginIOAll = buildPerlPackage {
+    name = "Template-Plugin-IO-All-0.01";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/X/XE/XERN/Template-Plugin-IO-All-0.01.tar.gz;
+      sha256 = "1f7445422a21932e09bbef935766e0af6b7cceb088e9d8e030cd7a84bcdc5ee4";
+    };
+    propagatedBuildInputs = [ IOAll TemplateToolkit ];
+    meta = {
+      maintainers = with maintainers; [ eelco ];
+      description = "Perl Template Toolkit Plugin for IO::All";
+      license = "perl";
+    };
+  };
+
   TemplatePluginJavaScript = buildPerlPackage {
     name = "Template-Plugin-JavaScript-0.02";
     src = fetchurl {
@@ -8064,10 +8078,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestFailWarnings = buildPerlPackage {
-    name = "Test-FailWarnings-0.005";
+    name = "Test-FailWarnings-0.008";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-FailWarnings-0.005.tar.gz;
-      sha256 = "014f909e6c171f77b811139c49c1dca9d0f1e2d1c41b5dca332b6b55b3eb0b4e";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-FailWarnings-0.008.tar.gz;
+      sha256 = "0vx9chcp5x8m0chq574p9fnfckh5gl94j7904rh9v17n568fyd6s";
     };
     buildInputs = [ CaptureTiny ];
     meta = {
@@ -8753,10 +8767,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextTabularDisplay = buildPerlPackage rec {
-    name = "Text-TabularDisplay-1.22";
+    name = "Text-TabularDisplay-1.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DARREN/${name}.tar.gz";
-      sha256 = "05r3jvdf8av16hgy0i3wnc581ski08q1bnllq5cq1fnc7h2nm1c7";
+      sha256 = "0sbyfdiln6q2g66mv64alayfcqnqg17kihdzgpslxdsn14vpvjq5";
     };
     propagatedBuildInputs = [TextAligner];
   };
@@ -9005,10 +9019,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   UNIVERSALrequire = buildPerlPackage {
-    name = "UNIVERSAL-require-0.11";
+    name = "UNIVERSAL-require-0.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSCHWERN/UNIVERSAL-require-0.11.tar.gz;
-      sha256 = "1rh7i3gva4m96m31g6yfhlqcabszhghbb3k3qwxbgx3mkf5s6x6i";
+      url = mirror://cpan/authors/id/N/NE/NEILB/UNIVERSAL-require-0.16.tar.gz;
+      sha256 = "0fbx3f39lvck3n4ksqwji5m1hfdagx25jk5kg2h0gkb01jwz3za2";
     };
   };
 
@@ -9251,10 +9265,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLLibXSLT = buildPerlPackage rec {
-    name = "XML-LibXSLT-1.70";
+    name = "XML-LibXSLT-1.87";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/XML/${name}.tar.gz";
-      sha256 = "0x8lqlxr6xhgwwa6zj4shrwrqlgbgs0piripc1fsnw4z1yl2gf9p";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "18kxa51a0prr8dx0w7q7wa8gdgalswzqa24sjkxmgs0f9yhcixz1";
     };
     buildInputs = [ pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [ XMLLibXML ];
@@ -9357,10 +9371,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   YAML = buildPerlPackage {
-    name = "YAML-0.84";
+    name = "YAML-0.90";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSTROUT/YAML-0.84.tar.gz;
-      sha256 = "03349n2z32gwjqiq7l3g57avvphl2rw3lmwc8i5cl9hmfw51yd8a";
+      url = mirror://cpan/authors/id/I/IN/INGY/YAML-0.90.tar.gz;
+      sha256 = "0kfsmhv1lmqw2g1038azpxkfb91valwkh4i4gfjvqrj2wsr2hzhq";
     };
     meta = {
       homepage = https://github.com/ingydotnet/yaml-pm/tree;
@@ -9391,10 +9405,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   YAMLLibYAML = buildPerlPackage rec {
-    name = "YAML-LibYAML-0.38";
+    name = "YAML-LibYAML-0.41";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/YAML/${name}.tar.gz";
-      sha256 = "eb98f304d14f6557b07adfa24da16e00cfa54a9d9484b6e898e35f919c5eb7ba";
+      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
+      sha256 = "1kj506lpg3fhqq0726p6y2h7pk24l6xihfyhqqsf8gd6lckl8rcs";
     };
   };
 

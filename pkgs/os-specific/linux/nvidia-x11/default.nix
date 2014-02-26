@@ -8,9 +8,11 @@
 
 with stdenv.lib;
 
+assert (!libsOnly) -> kernel != null;
+
 let
 
-  versionNumber = "331.20";
+  versionNumber = "331.38";
 
 in
 
@@ -19,16 +21,18 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
 
+  patches = optional (kernel ? version && versionAtLeast kernel.version "3.13") ./kernel-3.13.patch ;
+
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "0icpmfsppnsvk7vj0fshi3ry4s1wix435s2c8wwak47765fv1mks";
+        sha256 = "1x1b70lnw2ipwlyff7czxqrgz8yyq87djzgmgs9p3lmczy7lsvir";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "02503dis3ngraqv7174a4pay2x08hp697n9q74rpjjclf5k74ax1";
+        sha256 = "1ljafiqnyhj355mjp3r8wmb806xm6mbrn0x1dfgqh5pv9imhszhp";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
@@ -49,11 +53,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  meta = {
+  meta = with stdenv.lib.meta; {
     homepage = http://www.nvidia.com/object/unix.html;
     description = "X.org driver and kernel module for NVIDIA graphics cards";
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    platforms = stdenv.lib.platforms.linux;
-    hydraPlatforms = [];
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.vcunat ];
   };
 }

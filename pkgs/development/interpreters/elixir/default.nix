@@ -1,29 +1,30 @@
 { stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils }:
 
 let
-  version = "0.12.0";
+  version = "0.12.4";
 in
 stdenv.mkDerivation {
   name = "elixir-${version}";
 
   src = fetchurl {
     url = "https://github.com/elixir-lang/elixir/archive/v${version}.tar.gz";
-    sha256 = "0cir2y36zljwphiqyz8xmq7qq0f094jmfy3qwk3wdm05c05nqnc8";
+    sha256 = "0f9jbijby8alwn9yv1fncr2yn0pghdqsvixkdcd6s8yvjyhylm1l";
   };
 
   buildInputs = [ erlang rebar makeWrapper ];
 
   preBuild = ''
-    substituteInPlace rebar \
-      --replace "/usr/bin/env escript" ${erlang}/bin/escript
+    # The build process uses ./rebar. Link it to the nixpkgs rebar
+    rm -v rebar
+    ln -s ${rebar}/bin/rebar rebar
+
     substituteInPlace Makefile \
-      --replace '$(shell echo `pwd`/rebar)' ${rebar}/bin/rebar \
       --replace "/usr/local" $out
   '';
 
   postFixup = ''
-    # Elixirs binaries are shell scripts which run erl. This adds some
-    # stuff to PATH so the scripts run without problems.
+    # Elixir binaries are shell scripts which run erl. Add some stuff
+    # to PATH so the scripts can run without problems.
 
     for f in $out/bin/*
     do

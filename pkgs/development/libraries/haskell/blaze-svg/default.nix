@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "blaze-svg";
-  version = "0.3.3.0";
-  sha256 = "1wi4nc73ic3qmbx6v9fniacwcz2nlvmp5snn144fdiwb22klfn5f";
+  version = "0.3.3.1";
+  sha256 = "00i0apyklvmkr4w30d4r86gcg86h35sc3ncvqax70827126cdmsj";
   buildDepends = [ blazeMarkup mtl ];
   jailbreak = true;
   meta = {

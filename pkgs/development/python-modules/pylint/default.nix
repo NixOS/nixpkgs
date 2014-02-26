@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "pylint-0.26.0";
+  name = "pylint-0.28.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://download.logilab.org/pub/pylint/${name}.tar.gz";
-    sha256 = "1mg1ywpj0klklv63s2hwn5xwxi3wfwgnyz9d4pz32hzb53azq835";
+    sha256 = "1077hs8zpl1q5yc6wcg645nfqc4pwbdk8vjcv0qrldbb87f3yv7a";
   };
 
   propagatedBuildInputs = [ pythonPackages.logilab_astng ];

@@ -128,6 +128,17 @@ in
         '';
     };
 
+    networking.firewall.allowedTCPPortRanges = mkOption {
+      default = [];
+      example = [ { from = 8999; to = 9003; } ];
+      type = types.listOf (types.attrsOf types.int);
+      description =
+        ''
+          A range of TCP ports on which incoming connections are
+          accepted.
+        '';
+    };
+
     networking.firewall.allowedUDPPorts = mkOption {
       default = [];
       example = [ 53 ];
@@ -135,6 +146,16 @@ in
       description =
         ''
           List of open UDP ports.
+        '';
+    };
+
+    networking.firewall.allowedUDPPortRanges = mkOption {
+      default = [];
+      example = [ { from = 60000; to = 61000; } ];
+      type = types.listOf (types.attrsOf types.int);
+      description =
+        ''
+          Range of open UDP ports.
         '';
     };
 
@@ -322,12 +343,30 @@ in
               ) cfg.allowedTCPPorts
             }
 
+            # Accept connections to the allowed TCP port ranges.
+            ${concatMapStrings (rangeAttr:
+                let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
+                ''
+                  ip46tables -A nixos-fw -p tcp --dport ${range} -j nixos-fw-accept
+                ''
+              ) cfg.allowedTCPPortRanges
+            }
+
             # Accept packets on the allowed UDP ports.
             ${concatMapStrings (port:
                 ''
                   ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept
                 ''
               ) cfg.allowedUDPPorts
+            }
+
+            # Accept packets on the allowed UDP port ranges.
+            ${concatMapStrings (rangeAttr:
+                let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
+                ''
+                  ip46tables -A nixos-fw -p udp --dport ${range} -j nixos-fw-accept
+                ''
+              ) cfg.allowedUDPPortRanges
             }
 
             # Accept IPv4 multicast.  Not a big security risk since

@@ -645,6 +645,8 @@ in
       '';
 
     # Target for ‘charon send-keys’ to hook into.
+    users.extraGroups.keys.gid = config.ids.gids.keys;
+
     systemd.targets.keys =
       { description = "Security Keys";
       };

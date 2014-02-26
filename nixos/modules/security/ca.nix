@@ -10,11 +10,6 @@ with pkgs.lib;
       [ { source = "${pkgs.cacert}/etc/ca-bundle.crt";
           target = "ssl/certs/ca-bundle.crt";
         }
-
-        # Backward compatibility; may remove at some point.
-        { source = "${pkgs.cacert}/etc/ca-bundle.crt";
-          target = "ca-bundle.crt";
-        }
       ];
 
     environment.variables.OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";

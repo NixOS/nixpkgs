@@ -39,11 +39,14 @@ let
       7z a -tzip $out/$name/lib/snappy-java-1.0.5.jar .
 
       mkdir -p $out/bin
+
+      jdk=${jdk}/lib/openjdk
+
       makeWrapper $out/$name/bin/idea.sh $out/bin/idea \
         --prefix PATH : ${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin \
         --prefix LD_RUN_PATH : ${stdenv.gcc.gcc}/lib/ \
-        --prefix JDK_HOME : ${jdk} \
-        --prefix IDEA_JDK : ${jdk}
+        --prefix JDK_HOME : $jdk \
+        --prefix IDEA_JDK : $jdk
 
         mkdir -p $out/share/applications
         cp ${ideaItem}/share/applications/* $out/share/applications

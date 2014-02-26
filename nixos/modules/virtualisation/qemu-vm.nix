@@ -386,8 +386,7 @@ in
 
     # When building a regular system configuration, override whatever
     # video driver the host uses.
-    services.xserver.videoDriver = mkVMOverride null;
-    services.xserver.videoDrivers = mkVMOverride [ "vesa" ];
+    hardware.opengl.videoDrivers = mkVMOverride [ "vesa" ];
     services.xserver.defaultDepth = mkVMOverride 0;
     services.xserver.resolutions = mkVMOverride [ { x = 1024; y = 768; } ];
     services.xserver.monitorSection =

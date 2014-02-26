@@ -208,12 +208,13 @@ in
         mapAttrsToList writeIgnoreRule cfg.ignore
         ++ mapAttrsToList writeIgnoreCronRule cfg.ignoreCron;
 
-    users.extraUsers = singleton
-      { name = cfg.user;
+    users.extraUsers = optionalAttrs (cfg.user == "logcheck") (singleton
+      { name = "logcheck";
+        uid = config.ids.uids.logcheck;
         shell = "/bin/sh";
         description = "Logcheck user account";
         extraGroups = cfg.extraGroups;
-      };
+      });
 
     system.activationScripts.logcheck = ''
       mkdir -m 700 -p /var/{lib,lock}/logcheck

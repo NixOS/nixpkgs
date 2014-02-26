@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network-protocol-xmpp";
-  version = "0.4.5";
-  sha256 = "1phnd9nygpc8gmyriwaqjnvygxi5zg4nx2i1m3vwwxql221420gg";
+  version = "0.4.6";
+  sha256 = "0xmafjz11v2dlbyg2ny90ycz315s23yprdpxz3l06igjxw6h3v6n";
   buildDepends = [
     gnuidn gnutls gsasl libxmlSax monadsTf network text transformers
     xmlTypes

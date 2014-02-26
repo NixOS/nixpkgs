@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, freetype, fontconfig, openssl }:
+{ stdenv, fetchurl, freetype, fontconfig, openssl, unzip }:
 
-assert stdenv.lib.elem stdenv.system [ "i686-linux" "x86_64-linux" ];
+assert stdenv.lib.elem stdenv.system [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
 
 stdenv.mkDerivation rec {
   name = "phantomjs-1.9.7";
@@ -15,13 +15,21 @@ stdenv.mkDerivation rec {
             url = "https://bitbucket.org/ariya/phantomjs/downloads/${name}-linux-i686.tar.bz2";
             sha256 = "1ffd5544wnkww5cgwsims4bk4bymvm6pm19p32nbhwabxqhbnj9a";
           }
-        else # x86_64-linux
-          fetchurl {
-            url = "https://bitbucket.org/ariya/phantomjs/downloads/${name}-linux-x86_64.tar.bz2";
-            sha256 = "06mhvj8rx298j0mrijw48zfm28hqgy81vdr1vv0jp4ncxbvijfs7";
-          };
+        else
+          if stdenv.system == "x86_64-linux" then
+            fetchurl {
+              url = "https://bitbucket.org/ariya/phantomjs/downloads/${name}-linux-x86_64.tar.bz2";
+              sha256 = "06mhvj8rx298j0mrijw48zfm28hqgy81vdr1vv0jp4ncxbvijfs7";
+            }
+          else # x86_64-darwin
+            fetchurl {
+              url = "https://bitbucket.org/ariya/phantomjs/downloads/${name}-macosx.zip";
+              sha256 = "0vsagvx181gnypi6kgmxp4br6hnvd81vyy3cbz5pxccdys7iywvj";
+            };
 
-  buildPhase = ''
+  buildInputs = if stdenv.isDarwin then [ unzip ] else [];
+
+  buildPhase = if stdenv.isDarwin then "" else ''
     patchelf \
       --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
       --set-rpath "${freetype}/lib:${fontconfig}/lib:${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib:${openssl}/lib" \
@@ -55,6 +63,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = ["i686-linux" "x86_64-linux" ];
+    platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

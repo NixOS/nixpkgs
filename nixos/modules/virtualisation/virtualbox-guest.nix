@@ -52,7 +52,7 @@ optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
         serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/sbin/VBoxService VBoxService --foreground";
       };
 
-    services.xserver.videoDrivers = mkOverride 50 [ "virtualbox" ];
+    hardware.opengl.videoDrivers = mkOverride 50 [ "virtualbox" ];
 
     services.xserver.config =
       ''

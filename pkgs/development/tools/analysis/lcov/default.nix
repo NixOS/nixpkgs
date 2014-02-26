@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    (stdenv.lib.optional stdenv.isFreeBSD ./freebsd-install.patch);
+    [ ./lcov-except-unreach.patch ./no-warn-missing.patch ]
+    ++ stdenv.lib.optional stdenv.isFreeBSD ./freebsd-install.patch;
 
   preBuild = ''
     makeFlagsArray=(PREFIX=$out BIN_DIR=$out/bin MAN_DIR=$out/share/man)

@@ -3,7 +3,7 @@
 
 let
   pn = "konversation";
-  v = "1.4";
+  v = "1.5";
 in
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/${pn}/${v}/src/${name}.tar.xz";
-    sha256 = "030vsbb18dlzsnjl3fzyd1m9wvvksiyc1lm45abi4q6x4xd60knv";
+    sha256 = "0vsl34kiar7kbsgncycwd7f66f493fip6d635qlprqn1gqhycb9q";
   };
 
   buildInputs = [ cmake qt4 perl gettext libXScrnSaver kdelibs kdepimlibs

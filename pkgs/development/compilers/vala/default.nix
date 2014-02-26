@@ -4,8 +4,8 @@
 
 let
   major = "0.23";
-  minor = "1";
-  sha256 = "1m8f2d01r4jqp266mk29qsl68lzh7c258cqd5zzbpbryxszlzdfj";
+  minor = "2";
+  sha256 = "0g22ss9qbm3fqhx4fxhsyfmdc5g1hgdw4dz9d37f4489kl0qf8pl";
 in
 stdenv.mkDerivation rec {
   name = "vala-${major}.${minor}";

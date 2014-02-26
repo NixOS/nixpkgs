@@ -10,14 +10,15 @@ assert cupsSupport -> cups != null;
 
 let
   ver_maj = "3.10";
-  ver_min = "6";
+  ver_min = "7";
+  version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
-  name = "gtk+-${ver_maj}.${ver_min}";
+  name = "gtk+3-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/${ver_maj}/${name}.tar.xz";
-    sha256 = "12i6n2vijglqgc7z5migllhpygg65fqzfgrsknimwynbqmzwa91w";
+    url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
+    sha256 = "09wlsim4immrws0fyvpk03sspsljcsgybrwp73scycah70axxsdp";
   };
 
   enableParallelBuilding = true;

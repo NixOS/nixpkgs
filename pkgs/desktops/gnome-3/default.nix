@@ -4,7 +4,7 @@ rec {
   inherit (pkgs) glib gtk2 gtk3 gnome2;
   gtk = gtk3; # just to be sure
   libcanberra = pkgs.libcanberra_gtk3; # just to be sure
-  inherit (pkgs.gnome2) gnome_common ORBit2;
+  inherit (pkgs.gnome2) ORBit2;
   orbit = ORBit2;
   inherit (pkgs) libsoup;
 
@@ -14,9 +14,15 @@ rec {
 
   at_spi2_core = callPackage ./core/at-spi2-core { };
 
+  baobab = callPackage ./core/baobab { };
+
   caribou = callPackage ./core/caribou { };
 
   dconf = callPackage ./core/dconf { };
+
+  empathy = callPackage ./core/empathy { };
+
+  epiphany = callPackage ./core/epiphany { };
 
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
@@ -32,13 +38,21 @@ rec {
 
   gjs = callPackage ./core/gjs { };
 
+  gnome_control_center = callPackage ./core/gnome-control-center { };
+
+  gnome_common = callPackage ./core/gnome-common { };
+
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };
+
+  gnome_icon_theme_symbolic = callPackage ./core/gnome-icon-theme-symbolic { };
 
   gnome-menus = callPackage ./core/gnome-menus { };
 
   gnome_keyring = callPackage ./core/gnome-keyring { };
 
   libgnome_keyring = callPackage ./core/libgnome-keyring { };
+
+  folks = callPackage ./core/folks { };
 
   gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
 
@@ -54,6 +68,8 @@ rec {
 
   gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };
 
+  gucharmap = callPackage ./core/gucharmap { };
+
   gvfs = pkgs.gvfs.override { gnome = pkgs.gnome3; };
 
   eog = callPackage ./core/eog { };
@@ -68,8 +84,6 @@ rec {
 
   libpeas = callPackage ./core/libpeas {};
 
-  libqmi = callPackage ./core/libqmi {};
-
   libgweather = callPackage ./core/libgweather { };
 
   libzapojit = callPackage ./core/libzapojit { };
@@ -81,6 +95,14 @@ rec {
   rest = callPackage ./core/rest { };
 
   vte = callPackage ./core/vte { };
+
+  vino = callPackage ./core/vino { };
+
+  yelp = callPackage ./core/yelp { };
+
+  yelp_xsl = callPackage ./core/yelp-xsl { };
+
+  yelp_tools = callPackage ./core/yelp-tools { };
 
   zenity = callPackage ./core/zenity { };
 
@@ -105,6 +127,6 @@ rec {
 
   gitg = callPackage ./misc/gitg { };
 
-  libgit2-glib = callPackage ./misc/libgit2-glib { automake = pkgs.automake111x; };
+  libgit2-glib = callPackage ./misc/libgit2-glib { };
 
 }

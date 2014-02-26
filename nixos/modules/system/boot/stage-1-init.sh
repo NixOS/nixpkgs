@@ -320,6 +320,10 @@ while read -u 3 mountPoint; do
         echo -n "waiting for device $device to appear..."
         for try in $(seq 1 20); do
             sleep 1
+            # also re-try lvm activation now that new block devices might have appeared
+            lvm vgchange -ay
+            # and tell udev to create nodes for the new LVs
+            udevadm trigger --action=add
             if test -e $device; then break; fi
             echo -n "."
         done

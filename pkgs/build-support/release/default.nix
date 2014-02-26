@@ -27,7 +27,7 @@ rec {
     } // args);
 
   coverageAnalysis = args: nixBuild (
-    { inherit lcov;
+    { inherit lcov enableCoverageInstrumentation makeCoverageAnalysisReport;
       doCoverageAnalysis = true;
     } // args);
 

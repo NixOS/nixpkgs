@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shakespeare-text";
-  version = "1.0.0.10";
-  sha256 = "0az3l70syb7ch5fb4i0nlibgh7wcrzqnqmlp1w5h68s796g5rjlb";
+  version = "1.0.2";
+  sha256 = "0vhk5g5pm3gz8gzr7cbvkp920x4lmb9pkb9k6yhlj8wfb93bg93q";
   buildDepends = [ shakespeare text ];
   testDepends = [ hspec HUnit text ];
   meta = {

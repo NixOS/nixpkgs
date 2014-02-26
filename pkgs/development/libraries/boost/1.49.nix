@@ -57,7 +57,12 @@ stdenv.mkDerivation {
   };
 
   # See <http://svn.boost.org/trac/boost/ticket/4688>.
-  patches = [ ./boost_filesystem_post_1_49_0.patch ./time_utc.patch ./boost-149-cstdint.patch ] ++ (stdenv.lib.optional stdenv.isDarwin ./boost-149-darwin.patch );
+  patches = [
+    ./CVE-2013-0252.patch # https://svn.boost.org/trac/boost/ticket/7743
+    ./boost_filesystem_post_1_49_0.patch
+    ./time_utc.patch
+    ./boost-149-cstdint.patch
+  ] ++ (stdenv.lib.optional stdenv.isDarwin ./boost-149-darwin.patch );
 
   enableParallelBuilding = true;
 

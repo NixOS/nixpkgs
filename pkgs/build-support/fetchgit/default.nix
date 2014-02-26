@@ -23,6 +23,8 @@
    server admins start using the new version?
 */
 
+assert md5 != "" || sha256 != "";
+
 stdenv.mkDerivation {
   name = "git-export";
   builder = ./builder.sh;
@@ -44,5 +46,7 @@ stdenv.mkDerivation {
     # by definition pure.
     "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
     ];
+
+  preferLocalBuild = true;
 }
 

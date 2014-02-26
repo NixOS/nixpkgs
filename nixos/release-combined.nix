@@ -44,7 +44,7 @@ in rec {
         (all nixos.iso_graphical)
         (all nixos.ova)
 
-        #(all nixos.tests.efi-installer.simple)
+        (all nixos.tests.efi-installer.simple)
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.installer.grub1)
@@ -61,6 +61,7 @@ in rec {
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
         (all nixos.tests.xfce)
+        (all nixos.tests.gnome3)
 
         nixpkgs.tarball
         (all nixpkgs.emacs)

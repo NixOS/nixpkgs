@@ -295,7 +295,7 @@ $ reboot</screen>
 }</screen>
 </example>
 
-<section>
+<section xml:id="sec-uefi-installation">
 
 <title>UEFI Installation</title>
 
@@ -305,14 +305,15 @@ changes:
 
 <itemizedlist>
   <listitem>
-    <para>You should boot the livecd in UEFI mode (consult your specific
-    hardware's documentation for instructions how).</para>
+    <para>You should boot the live CD in UEFI mode (consult your
+    specific hardware's documentation for instructions).</para>
   </listitem>
   <listitem>
-    <para>Instead of <command>fdisk</command>, you should use <command>
-    gdisk</command> to partition your disks. You will need to have a
-    separate partition for <filename>/boot</filename> with partition code
-    EF00, and it should be formatted with a vfat filesystem.</para>
+    <para>Instead of <command>fdisk</command>, you should use
+    <command>gdisk</command> to partition your disks. You will need to
+    have a separate partition for <filename>/boot</filename> with
+    partition code EF00, and it should be formatted as a
+    <literal>vfat</literal> filesystem.</para>
   </listitem>
   <listitem>
     <para>You must set <option>boot.loader.gummiboot.enable</option> to
@@ -327,8 +328,8 @@ changes:
     as well.</para>
   </listitem>
   <listitem>
-    <para>To see console messages during early boot, put <literal>"fbcon"</literal>
-    in your <option>boot.initrd.kernelModules</option></para>
+    <para>To see console messages during early boot, add <literal>"fbcon"</literal>
+    to your <option>boot.initrd.kernelModules</option>.</para>
   </listitem>
 </itemizedlist>
 </para>

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpio, zlib, bzip2, file, elfutils, nspr, nss, popt, db4, xz }:
+{ stdenv, fetchurl, cpio, zlib, bzip2, file, elfutils, nspr, nss, popt, db4, xz, python }:
 
 stdenv.mkDerivation rec {
   name = "rpm-4.7.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha1 = "07b90f653775329ea726ce0005c4c82f56167ca0";
   };
 
-  buildInputs = [ cpio zlib bzip2 file nspr nss popt db4 xz ];
+  buildInputs = [ cpio zlib bzip2 file nspr nss popt db4 xz python ];
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_LINK = "-L${elfutils}/lib";
   
-  configureFlags = "--with-external-db --without-lua";
+  configureFlags = "--with-external-db --without-lua --enable-python";
 
   meta = {
     homepage = http://www.rpm.org/;

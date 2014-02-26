@@ -20,7 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "1nb8ljrbrp1zga083g3b633xi3izxxm4jipw1qgial1x16mqc0hz";
   };
 
-  patches = [ ./lightdm-gtk-greeter.patch ];
+  patches = [
+    ./lightdm-gtk-greeter.patch
+    (fetchurl { # CVE-2014-0979, https://bugs.launchpad.net/lightdm-gtk-greeter/+bug/1266449
+      url = "https://launchpadlibrarian.net/161796033/07_fix-NULL-username.patch";
+      sha256 = "1sqkhsz1z10k6vlmlrqrfx452lznv30885fmnzc73p2zxdlw9q1a";
+    })
+  ];
   patchFlags = "-p1";
 
   buildInputs = [ pkgconfig lightdm intltool ]

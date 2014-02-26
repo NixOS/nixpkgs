@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "xmlstarlet-1.0.2";
+  name = "xmlstarlet-1.5.0";
   
   src = fetchurl {
     url = "mirror://sourceforge/xmlstar/${name}.tar.gz";
-    sha256 = "07a5c3fhqpvyy07pggl3ky7ahvlcpsmppy71x4h4albvanfbpjwj";
+    sha256 = "1fmvqvzrzyfcg53j39sdz01v7klzyhd011m3y9br54525q2fvd27";
   };
 
   buildInputs = [ pkgconfig libxml2 libxslt ];

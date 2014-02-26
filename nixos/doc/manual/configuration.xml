@@ -1025,7 +1025,6 @@ users.extraUsers.alice =
     home = "/home/alice";
     description = "Alice Foobar";
     extraGroups = [ "wheel" ];
-    isSystemUser = false;
     useDefaultShell = true;
     openssh.authorizedKeys.keys = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
   };
@@ -1184,7 +1183,7 @@ driver from a set of X.org drivers (such as <literal>vesa</literal>
 and <literal>intel</literal>).  You can also specify a driver
 manually, e.g.
 <programlisting>
-services.xserver.videoDrivers = [ "r128" ];
+hardware.opengl.videoDrivers = [ "r128" ];
 </programlisting>
 to enable X.org’s <literal>xf86-video-r128</literal> driver.</para>
 
@@ -1227,7 +1226,7 @@ $ systemctl start display-manager.service
 has better 3D performance than the X.org drivers.  It is not enabled
 by default because it’s not free software.  You can enable it as follows:
 <programlisting>
-services.xserver.videoDrivers = [ "nvidia" ];
+hardware.opengl.videoDrivers = [ "nvidia" ];
 </programlisting>
 You may need to reboot after enabling this driver to prevent a clash
 with other kernel modules.</para>

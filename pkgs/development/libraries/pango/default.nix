@@ -2,7 +2,7 @@
 , libintlOrEmpty, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  name = "pango-1.32.5"; #.6 and higher need a not-yet-stable fontconfig (!)
+  name = "pango-1.32.5"; #.6 and higher need fontconfig-2.11.* which is troublesome
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/1.32/${name}.tar.xz";
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
   postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {

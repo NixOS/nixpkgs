@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, cabal, swiProlog, mtl, syb, makeWrapper, rlwrap, tk }:
+{ stdenv, fetchurl, cabal, swiProlog, either, mtl, syb
+, glibcLocales, makeWrapper, rlwrap, tk }:
 
 let
-  fname = "pakcs-1.11.2";
+  fname = "pakcs-1.11.3";
 
   fsrc = fetchurl {
     url = "http://www.informatik.uni-kiel.de/~pakcs/download/${fname}-src.tar.gz";
-    sha256 = "1x23kn91v44my4rd8j3247pj8i2myz82rzgbq07asi1x21bpvvmy";
+    sha256 = "006bq6cmycq2f4xb3zmnmxyngj64hppk3a083hy0qzj7gl77zvfw";
   };
 
 in
@@ -29,12 +30,12 @@ stdenv.mkDerivation rec {
     sourceRoot = "${name}/frontend/curry-frontend";
     isLibrary = true;
     isExecutable = true;
-    buildDepends = [ mtl syb curryBase ];
+    buildDepends = [ either mtl syb curryBase ];
   });
 
   src = fsrc;
 
-  buildInputs = [ swiProlog makeWrapper rlwrap tk ];
+  buildInputs = [ swiProlog makeWrapper glibcLocales rlwrap tk ];
 
   patches = [ ./adjust-buildsystem.patch ];
 
@@ -48,6 +49,10 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
+    # Some comments in files are in UTF-8, so include the locale needed by GHC runtime.
+    export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
+    export LC_ALL=en_US.UTF-8
+
     # Set up link to cymake, which has been built already.
     ensureDir bin/.local
     ln -s ${curryFront}/bin/cymake bin/.local/
@@ -64,10 +69,6 @@ stdenv.mkDerivation rec {
 
     # Fixing PAKCSHOME and related paths.
     sed -i 's@PAKCSHOME=/tmp/.*@PAKCSHOME='$out/pakcs'@' $out/pakcs/bin/{pakcs,makecurrycgi,parsecurry,.makesavedstate}
-
-    # Fix symbolic links into the tmp build dir.
-    ln -s ../currytools/CASS/cass $out/pakcs/bin/cass
-    ln -s ../currytools/currydoc/CurryDoc $out/pakcs/bin/currydoc
 
     # The Prolog sources must be rebuilt in their final directory,
     # to switch the embedded references to the tmp build directory.
