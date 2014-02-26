@@ -5984,6 +5984,23 @@ rec {
     };
   });
 
+  pyro3 = buildPythonPackage (rec {
+    name = "Pyro-3.16";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/P/Pyro/${name}.tar.gz";
+      md5 = "59d4d3f4a8786776c9d7f9051b8f1a69";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Distributed object middleware for Python (IPC/RPC)";
+      homepage = http://pythonhosted.org/Pyro/;
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  });
+
   pyrss2gen = buildPythonPackage (rec {
     name = "PyRSS2Gen-1.0.0";
 

@@ -1694,6 +1694,12 @@ let
 
   openobex = callPackage ../tools/bluetooth/openobex { };
 
+  openopc = callPackage ../tools/misc/openopc {
+    pythonFull = python27Full.override {
+      extraLibs = [ python27Packages.pyro3 ];
+    };
+  };
+
   openresolv = callPackage ../tools/networking/openresolv { };
 
   opensc = callPackage ../tools/security/opensc { };
