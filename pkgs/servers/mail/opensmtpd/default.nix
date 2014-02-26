@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, libevent, zlib, openssl, db4, bison, pam }:
+{ stdenv, fetchurl, libevent, zlib, openssl, db, bison, pam }:
 
 stdenv.mkDerivation rec {
   name = "opensmtpd-${version}";
   version = "201307151923p1";
 
-  buildInputs = [ libevent zlib openssl db4 bison pam ];
+  buildInputs = [ libevent zlib openssl db bison pam ];
 
   src = fetchurl {
     url = "http://www.opensmtpd.org/archives/${name}.tar.gz";

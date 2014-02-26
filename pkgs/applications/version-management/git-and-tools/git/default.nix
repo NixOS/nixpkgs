@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.8.5.4";
+  version = "1.9.0";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
-    sha256 = "062z4j4hfhfdlvkxs2mzarsyvbqvfy4kv8j5h4c75ymb5yp8iklk";
+    sha256 = "10lq71vrg1zbqm923wb0p36ily6y5x057f2bryk4wqkdqgyrfc6y";
   };
 
   patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ];
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
       mkdir -p $out/etc/bash_completion.d
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/etc/bash_completion.d/
 
-      # grep is a runtime dependence, need to patch so that it's found
+      # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
           --replace ' grep' ' ${gnugrep}/bin/grep' \
           --replace ' egrep' ' ${gnugrep}/bin/egrep'
@@ -77,7 +77,7 @@ stdenv.mkDerivation {
              -e 's|	perl -e|	${perl}/bin/perl -e|g' \
              $out/libexec/git-core/{git-am,git-submodule}
 
-      # gzip (and optionally bzip2, xz, zip) are a runtime dependencies for
+      # gzip (and optionally bzip2, xz, zip) are runtime dependencies for
       # gitweb.cgi, need to patch so that it's found
       sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
           $out/share/gitweb/gitweb.cgi

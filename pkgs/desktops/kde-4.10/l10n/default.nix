@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kdelibs, gettext, release, stable }:
+{ stdenv, fetchurl, kdelibs, gettext, release, branch, stable }:
 
 let
 
@@ -22,6 +22,7 @@ let
 
       meta = {
         description = "KDE translation for ${lang}";
+        inherit branch;
         license = "GPL";
         platforms = stdenv.lib.platforms.linux;
         inherit (kdelibs.meta) maintainers homepage;

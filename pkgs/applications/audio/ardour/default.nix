@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
       Also read "The importance of Paying Something" on their homepage, please!
     '';
     homepage = http://ardour.org/;
+    branch  = "2";
     license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;

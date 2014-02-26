@@ -6,7 +6,7 @@
 
 { stdenv, fetchurl, pam, python3, tcsh, libxslt, perl, ArchiveZip
 , CompressZlib, zlib, libjpeg, expat, pkgconfigUpstream, freetype, libwpd
-, libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
+, libxml2, db, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, libXext, libX11, libXtst, libXi, cups
 , libXinerama, openssl, gperf, cppunit, GConf, ORBit2, poppler
@@ -248,7 +248,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
-      CompressZlib cppunit cups curl db4 dbus_glib expat file flex fontconfig
+      CompressZlib cppunit cups curl db dbus_glib expat file flex fontconfig
       freetype GConf getopt gnome_vfs gperf gst_plugins_base gstreamer gtk
       hunspell icu jdk kde4.kdelibs lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11

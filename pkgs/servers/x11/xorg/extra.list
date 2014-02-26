@@ -1,9 +1,9 @@
 http://xcb.freedesktop.org/dist/libpthread-stubs-0.3.tar.bz2
-http://xcb.freedesktop.org/dist/libxcb-1.9.1.tar.bz2
-http://xcb.freedesktop.org/dist/xcb-proto-1.8.tar.bz2
+http://xcb.freedesktop.org/dist/libxcb-1.10.tar.bz2
+http://xcb.freedesktop.org/dist/xcb-proto-1.10.tar.bz2
 http://xcb.freedesktop.org/dist/xcb-util-0.3.9.tar.bz2
 http://xcb.freedesktop.org/dist/xcb-util-image-0.3.9.tar.bz2
 http://xcb.freedesktop.org/dist/xcb-util-keysyms-0.3.9.tar.bz2
 http://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.8.tar.bz2
-http://xcb.freedesktop.org/dist/xcb-util-wm-0.3.9.tar.bz2
+http://xcb.freedesktop.org/dist/xcb-util-wm-0.4.1.tar.bz2
 http://xorg.freedesktop.org/releases/individual/util/util-macros-1.17.tar.bz2

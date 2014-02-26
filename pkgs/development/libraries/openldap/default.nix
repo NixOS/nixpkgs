@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, cyrus_sasl, db4, groff}:
+{stdenv, fetchurl, openssl, cyrus_sasl, db, groff}:
 
 stdenv.mkDerivation rec {
   name = "openldap-2.4.38";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l8zng86alhcmmmw09r1c4dzl7yvk6dy5fq9zia96pgck4srl848";
   };
 
-  buildInputs = [ openssl cyrus_sasl db4 groff ];
+  buildInputs = [ openssl cyrus_sasl db groff ];
 
   configureFlags =
     [ "--enable-overlays"

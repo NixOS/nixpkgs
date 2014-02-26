@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
-, sqlite, tcl, tk, x11, openssl, readline, db45, ncurses, gdbm
+, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm
 }:
 
 assert zlibSupport -> zlib != null;
@@ -9,13 +9,12 @@ with stdenv.lib;
 let
 
   majorVersion = "2.6";
-  version = "${majorVersion}.8";
+  version = "${majorVersion}.9";
 
-  # http://www.python.org/download/releases/2.6.8/
-  # md5 taken from webpage, python 2.6 will receive security fixes until Oct 2013
+  # python 2.6 will receive security fixes until Oct 2013
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    md5 = "c6e0420a21d8b23dee8b0195c9b9a125";
+    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
+    sha256 = "0hbfs2691b60c7arbysbzr0w9528d5pl8a4x7mq5psh6a2cvprya";
   };
 
   patches =
@@ -146,7 +145,7 @@ let
 
     bsddb = buildInternalPythonModule {
       moduleName = "bsddb";
-      deps = [ db45 ];
+      deps = [ db ];
     };
 
     crypt = buildInternalPythonModule {

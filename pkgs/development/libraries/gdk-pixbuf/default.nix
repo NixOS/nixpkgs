@@ -3,14 +3,14 @@
 
 let
   ver_maj = "2.30";
-  ver_min = "2";
+  ver_min = "4";
 in
 stdenv.mkDerivation rec {
   name = "gdk-pixbuf-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/${ver_maj}/${name}.tar.xz";
-    sha256 = "1gzczsv41h28is4rrxjfyj1qx8ifp23fq2ckh0k099m9fnhbzfna";
+    sha256 = "0ldhpdalbyi6q5k1dz498i9hqcsd51yxq0f91ck9p0h4v38blfx1";
   };
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     + stdenv.lib.optionalString (gobjectIntrospection != null) " --enable-introspection=yes"
     ;
 
-  doCheck = false; # broken animation tester
+  doCheck = true;
 
   postInstall = "rm -rf $out/share/gtk-doc";
 

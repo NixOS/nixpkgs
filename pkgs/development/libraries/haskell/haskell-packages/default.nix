@@ -1,13 +1,13 @@
-{ cabal, aeson, Cabal, deepseq, EitherT, filepath, haskellSrcExts
+{ cabal, aeson, Cabal, deepseq, either, filepath, haskellSrcExts
 , hseCpp, mtl, optparseApplicative, tagged
 }:
 
 cabal.mkDerivation (self: {
   pname = "haskell-packages";
-  version = "0.2.3.3";
-  sha256 = "1i3x392dwryhw6k02bd2r9wn9iwwmcqzjhk7gx5lx1vhyb470qr2";
+  version = "0.2.3.4";
+  sha256 = "0qj5n1yc481n5c8gi5dgk22pxj58gf7z30621spr7gwlv001sk1y";
   buildDepends = [
-    aeson Cabal deepseq EitherT filepath haskellSrcExts hseCpp mtl
+    aeson Cabal deepseq either filepath haskellSrcExts hseCpp mtl
     optparseApplicative tagged
   ];
   meta = {

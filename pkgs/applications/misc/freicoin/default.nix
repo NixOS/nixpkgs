@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, db4, boost, gmp, mpfr, miniupnpc, qt4, unzip }:
+{ fetchurl, stdenv, db, boost, gmp, mpfr, miniupnpc, qt4, unzip }:
 
 stdenv.mkDerivation rec {
   version = "0.8.3-1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # I think that openssl and zlib are required, but come through other
   # packages
-  buildInputs = [ db4 boost gmp mpfr miniupnpc qt4 unzip ];
+  buildInputs = [ db boost gmp mpfr miniupnpc qt4 unzip ];
 
   configurePhase = "qmake";
 

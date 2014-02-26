@@ -1,11 +1,11 @@
 { fetchurl, stdenv, pkgconfig, clutter, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "clutter-gtk-1.0.4";
+  name = "clutter-gtk-1.4.4";
 
   src = fetchurl {
-    url = mirror://gnome/sources/clutter-gtk/1.0/clutter-gtk-1.0.4.tar.xz;
-    sha256 = "0kj6vsvaqxx6vqqk9acc8b0p40klrpwlf2wsjkams1kxxcpzsh87";
+    url = "mirror://gnome/sources/clutter-gtk/1.4/${name}.tar.xz";
+    sha256 = "bc3108594a01a08bb6d9b538afe995e4fd78634a8356064ee8137d87aad51b2e";
   };
 
   propagatedBuildInputs = [ clutter gtk3 ];

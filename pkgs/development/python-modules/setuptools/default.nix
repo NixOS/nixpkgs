@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, python, wrapPython }:
+{ stdenv, fetchurl, python, wrapPython, distutils-cfg }:
 
 stdenv.mkDerivation rec {
   shortName = "setuptools-${version}";
   name = "${python.executable}-${shortName}";
 
-  version = "2.0.2";
+  version = "2.1";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/s/setuptools/${shortName}.tar.gz";
-    sha256 = "09nv5x45y8fgc0kjmmw4gig3hr0is9xlc5rq053vnbmkxr5q5xmi";
+    sha256 = "1m8qjvj5bfbphdags5s6pgmvk3xnw509lgdlq9whkq5a9mgxf8m7";
   };
 
-  buildInputs = [ python wrapPython ];
+  buildInputs = [ python wrapPython distutils-cfg ];
 
-  buildPhase = "${python}/bin/${python.executable} setup.py build --build-base $out";
+  buildPhase = "${python}/bin/${python.executable} setup.py build";
 
   installPhase =
     ''

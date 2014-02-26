@@ -369,7 +369,7 @@ in
         home = "/root";
         shell = cfg.defaultUserShell;
         group = "root";
-        hashedPassword = config.security.initialRootPassword;
+        hashedPassword = mkDefault config.security.initialRootPassword;
       };
       nobody = {
         uid = ids.uids.nobody;

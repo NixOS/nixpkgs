@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "x509";
-  version = "1.4.7";
-  sha256 = "0bm5sijahpih2c6scz3y32904wzvmllgslg9d547cksbgy7lyx1h";
+  version = "1.4.9";
+  sha256 = "0yrlkmrc0ygki61wlfvavvrm5aklircrj5w1nbvjlimrc4j8vq9g";
   buildDepends = [
     asn1Encoding asn1Parse asn1Types cryptohash cryptoPubkeyTypes
     filepath mtl pem time

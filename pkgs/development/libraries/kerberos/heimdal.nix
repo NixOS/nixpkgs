@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openldap, readline, db4, openssl, cyrus_sasl, sqlite} :
+{ stdenv, fetchurl, openldap, readline, db, openssl, cyrus_sasl, sqlite} :
 
 stdenv.mkDerivation rec {
   name = "heimdal-1.5.3";
@@ -23,5 +23,5 @@ stdenv.mkDerivation rec {
     rmdir $out/libexec
   '';
 
-  propagatedBuildInputs = [ readline db4 openssl openldap cyrus_sasl sqlite];
+  propagatedBuildInputs = [ readline db openssl openldap cyrus_sasl sqlite];
 }

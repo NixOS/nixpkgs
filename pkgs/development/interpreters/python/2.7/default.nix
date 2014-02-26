@@ -1,5 +1,5 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
-, sqlite, tcl, tk, x11, openssl, readline, db4, ncurses, gdbm, libX11 }:
+, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, libX11 }:
 
 assert zlibSupport -> zlib != null;
 
@@ -8,11 +8,11 @@ with stdenv.lib;
 let
 
   majorVersion = "2.7";
-  version = "${majorVersion}.5";
+  version = "${majorVersion}.6";
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    sha256 = "0nc091f19sllibvxm6n3qw5pflcphkwwxmz43q26lqafhra7airv";
+    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
+    sha256 = "18gnpyh071dxa0rv3silrz92jw9qpblswzwv4gzqcwxzz20qxmhz";
   };
 
   patches =
@@ -156,7 +156,7 @@ let
 
     bsddb = buildInternalPythonModule {
       moduleName = "bsddb";
-      deps = [ db4 ];
+      deps = [ db ];
     };
 
     curses = buildInternalPythonModule {

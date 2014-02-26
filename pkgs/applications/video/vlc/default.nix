@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchurl {
     url = "http://download.videolan.org/pub/videolan/vlc/${version}/${name}.tar.xz";
-    sha256 = "1i4fzjv2x8mzx0bg52mgh1rrlircmb81jr58z90blbmww4mq36r1";
+    sha256 = "04d1lr7lxrq2767rjy4j0wr3sirx5sf1s9wdl3p4x500r7z64dp0";
   };
 
   buildInputs =
@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     description = "Cross-platform media player and streaming server";
     homepage = http://www.videolan.org/vlc/;
     platforms = platforms.linux;
+    license = licenses.lgpl21Plus;
   };
 }

@@ -55,9 +55,12 @@
   <!-- <xi:include href="userconfiguration.xml" /> -->
   <xi:include href="troubleshooting.xml" />
   <xi:include href="development.xml" />
-  <chapter xml:id="ch-options">
+
+  <xi:include href="release-notes.xml" />
+
+  <appendix xml:id="ch-options">
     <title>List of options</title>
     <xi:include href="options-db.xml" />
-  </chapter>
+  </appendix>
 
 </book>

@@ -1,19 +1,20 @@
 { cabal, aeson, binary, blazeBuilder, Cabal, caseInsensitive
 , cmdargs, conduit, deepseq, filepath, haskellSrcExts, httpTypes
-, parsec, random, safe, shake, tagsoup, text, time, transformers
-, uniplate, wai, warp
+, parsec, QuickCheck, random, safe, shake, tagsoup, text, time
+, transformers, uniplate, vector, vectorAlgorithms, wai, warp
 }:
 
 cabal.mkDerivation (self: {
   pname = "hoogle";
-  version = "4.2.28";
-  sha256 = "0dd8qsspbcb76ld9v61x2jjsyxakrasww69gzzprb4dxzm58lsid";
+  version = "4.2.29";
+  sha256 = "0w4fgf0qvd5zsa7dk99vcbr2pnyyg1hl3k0zwvp5v26v1lfijzil";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson binary blazeBuilder Cabal caseInsensitive cmdargs conduit
-    deepseq filepath haskellSrcExts httpTypes parsec random safe shake
-    tagsoup text time transformers uniplate wai warp
+    deepseq filepath haskellSrcExts httpTypes parsec QuickCheck random
+    safe shake tagsoup text time transformers uniplate vector
+    vectorAlgorithms wai warp
   ];
   testDepends = [ filepath ];
   testTarget = "--test-option=--no-net";

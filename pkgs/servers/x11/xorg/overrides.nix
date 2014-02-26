@@ -131,7 +131,7 @@ in
     postInstall =
       ''
         mkdir -p $out/share
-        ln -sfn ${args.xkeyboard_config}/etc/X11 $out/share/X11
+        ln -sfn ${xorg.xkeyboardconfig}/etc/X11 $out/share/X11
       '';
   };
 
@@ -145,6 +145,10 @@ in
 
   xf86inputevdev = attrs: attrs // {
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
+    installFlags = "sdkdir=\${out}/include/xorg";
+  };
+
+  xf86inputmouse = attrs: attrs // {
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
@@ -174,6 +178,10 @@ in
 
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
+    patches = [( args.fetchurl {
+      url = https://projects.archlinux.org/svntogit/packages.git/plain/trunk/xatracker-v2-fixes.patch?h=packages/xf86-video-vmware;
+      sha256 = "1k5a3zf2bzmw84di31b8zfy51n2mqrr01xjfy5nw7395qv5r5cvs";
+    })];
   };
 
   xdriinfo = attrs: attrs // {
@@ -189,7 +197,16 @@ in
   };
 
   xkeyboardconfig = attrs: attrs // {
+    #TODO: resurrect patches for US_intl and Esperanto?
+
     buildInputs = attrs.buildInputs ++ [args.intltool];
+
+    # 1: compatibility for X11/xkb location
+    # 2: I think pkgconfig/ is supposed to be in /lib/
+    postInstall = ''
+      ln -s share "$out/etc"
+      mkdir "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
+    '';
   };
 
   xmodmap = attrs: attrs // {

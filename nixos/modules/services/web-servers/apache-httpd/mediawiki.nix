@@ -126,7 +126,7 @@ in
         </Directory>
       ''}
 
-      Alias ${config.urlPrefix} ${mediawikiRoot}
+      ${optionalString (config.urlPrefix != "") "Alias ${config.urlPrefix} ${mediawikiRoot}"}
 
       <Directory ${mediawikiRoot}>
           Order allow,deny
@@ -137,7 +137,16 @@ in
       ${optionalString (config.articleUrlPrefix != "") ''
         Alias ${config.articleUrlPrefix} ${mediawikiRoot}/index.php
       ''}
+
+      RewriteEngine On
+      RewriteCond ${mediawikiRoot}/$0 !-f
+      RewriteCond ${mediawikiRoot}/$0 !-d
+      RewriteRule ^(.*)$ ${mediawikiRoot}/index.php [L]
+
+      RewriteRule ^/*$ ${mediawikiRoot}/index.php [L] # For syntax hilighter: */
     '';
+
+  documentRoot = if config.urlPrefix == "" then mediawikiRoot else null;
 
   enablePHP = true;
 

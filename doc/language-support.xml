@@ -108,7 +108,7 @@ a <varname>preConfigure</varname> hook to generate a configuration
 file used by <filename>Makefile.PL</filename>:
 
 <programlisting>
-{buildPerlPackage, fetchurl, db4}:
+{buildPerlPackage, fetchurl, db}:
 
 buildPerlPackage rec {
   name = "BerkeleyDB-0.36";
@@ -119,8 +119,8 @@ buildPerlPackage rec {
   };
 
   preConfigure = ''
-    echo "LIB = ${db4}/lib" > config.in
-    echo "INCLUDE = ${db4}/include" >> config.in
+    echo "LIB = ${db}/lib" > config.in
+    echo "INCLUDE = ${db}/include" >> config.in
   '';
 }
 </programlisting>

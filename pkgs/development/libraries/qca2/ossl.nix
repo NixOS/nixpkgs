@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchsvn, qt4, qca2, openssl, which}:
+{stdenv, fetchurl, fetchgit, qt4, qca2, openssl, which}:
 
 stdenv.mkDerivation rec {
   version = "2.0.0-beta3";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
   };
   # SVN version has stabilized and has a lot of fixes for fresh OpenSSL
   # Take the main source from there
-  svn_src = fetchsvn {
-    url = svn://anonsvn.kde.org/home/kde/trunk/kdesupport/qca/plugins/qca-ossl ; 
-    rev = 1115936;
-    sha256 =  "ef2c0307e8834e1e7cb23b6fea1cc22486328a37186301a6c11161b1c93d834b";
+  git_src = fetchgit {
+    url = git://anongit.kde.org/qca;
+    rev = "0a8b9db6613f2282fe492ff454412f502a6be410";
+    sha256 =  "1ebb97092f21b9152c6dda56cb33795bea4e83c82800848e800ddaaaf23a31e1";
   };
   buildInputs = [ qt4 qca2 openssl ];
   nativeBuildInputs = [ which ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags="--no-separate-debug-info --with-qca=${qca2}
     --with-openssl-inc=${openssl}/include --with-openssl-lib=${openssl}/lib";
   preConfigure=''
-    cp ${svn_src}/qca-ossl.cpp .
+    cp ${git_src}/plugins/qca-ossl/qca-ossl.cpp .
 
     configureFlags="$configureFlags --plugins-path=$out/lib/qt4/plugins"
   '';

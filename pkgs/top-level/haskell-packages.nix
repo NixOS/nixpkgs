@@ -151,7 +151,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     haskellSrc   = self.haskellSrc_1_0_1_5;
     hashable     = self.hashable_1_2_1_0;
     html         = self.html_1_0_1_2;
-    HTTP         = self.HTTP_4000_2_10;
+    HTTP         = self.HTTP_4000_2_11;
     HUnit        = self.HUnit_1_2_5_2;
     mtl          = self.mtl_2_1_2;
     network      = self.network_2_4_2_2;
@@ -177,7 +177,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     alex         = self.alex_3_1_3;
     haddock      = self.haddock_2_13_2_1;
     happy        = self.happy_1_19_3;
-    primitive    = self.primitive_0_5_1_0;      # semi-official, but specified
+    primitive    = self.primitive_0_5_2_1;      # semi-official, but specified
   };
 
   haskellPlatformArgs_2013_2_0_0 = self : {
@@ -528,7 +528,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   aeson_0_6_2_1 = callPackage ../development/libraries/haskell/aeson/0.6.2.1.nix {};
   aeson_0_7_0_1 = callPackage ../development/libraries/haskell/aeson/0.7.0.1.nix {
-    attoparsec = self.attoparsec_0_11_1_0;
+    blazeBuilder = if (pkgs.stdenv.lib.versionOlder ghc.version "7.6") then self.blazeBuilder else null;
   };
   aeson = self.aeson_0_6_2_1;
 
@@ -756,6 +756,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   checkers = callPackage ../development/libraries/haskell/checkers {};
 
+  chunkedData = callPackage ../development/libraries/haskell/chunked-data {};
+
   citeprocHs = callPackage ../development/libraries/haskell/citeproc-hs {};
 
   cipherAes = callPackage ../development/libraries/haskell/cipher-aes {};
@@ -805,6 +807,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   concreteTyperep = callPackage ../development/libraries/haskell/concreteTyperep {};
 
   conduit = callPackage ../development/libraries/haskell/conduit {};
+
+  conduitCombinators = callPackage ../development/libraries/haskell/conduit-combinators {};
 
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
 
@@ -956,7 +960,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   digestiveFunctorsAeson = callPackage ../development/libraries/haskell/digestive-functors-aeson {
     aeson = self.aeson_0_7_0_1;
-    lens = self.lens_4_0_3;
+    lens = self.lens_4_0_4;
   };
 
   digestiveFunctorsHeist = callPackage ../development/libraries/haskell/digestive-functors-heist {};
@@ -1016,6 +1020,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   elmServer = callPackage ../development/compilers/elm/elm-server.nix {};
 
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
+
+  enclosedExceptions = callPackage ../development/libraries/haskell/enclosed-exceptions {};
 
   encoding = callPackage ../development/libraries/haskell/encoding {};
 
@@ -1077,6 +1083,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   fastLogger = callPackage ../development/libraries/haskell/fast-logger {};
 
+  fb = callPackage ../development/libraries/haskell/fb {};
+
   fclabels = callPackage ../development/libraries/haskell/fclabels {};
 
   FerryCore = callPackage ../development/libraries/haskell/FerryCore {};
@@ -1129,6 +1137,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   ghcCore = callPackage ../development/libraries/haskell/ghc-core {};
 
   ghcEvents = callPackage ../development/libraries/haskell/ghc-events {};
+
+  ghcEventsAnalyze = callPackage ../development/tools/haskell/ghc-events-analyze {};
 
   ghcHeapView = callPackage ../development/libraries/haskell/ghc-heap-view {
     cabal = self.cabal.override { enableLibraryProfiling = false; }; # pkg cannot be built with profiling enabled
@@ -1299,8 +1309,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   HTTP_4000_2_3 = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
   HTTP_4000_2_5 = callPackage ../development/libraries/haskell/HTTP/4000.2.5.nix {};
   HTTP_4000_2_8 = callPackage ../development/libraries/haskell/HTTP/4000.2.8.nix {};
-  HTTP_4000_2_10 = callPackage ../development/libraries/haskell/HTTP/4000.2.10.nix {};
-  HTTP = self.HTTP_4000_2_10;
+  HTTP_4000_2_11 = callPackage ../development/libraries/haskell/HTTP/4000.2.11.nix {};
+  HTTP = self.HTTP_4000_2_11;
 
   httpAttoparsec = callPackage ../development/libraries/haskell/http-attoparsec {};
 
@@ -1420,6 +1430,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
 
+  hspecExpectationsLens = callPackage ../development/libraries/haskell/hspec-expectations-lens {
+    lens = self.lens_4_0_4;
+  };
+
   hspecMeta = callPackage ../development/libraries/haskell/hspec-meta {};
 
   hstatsd = callPackage ../development/libraries/haskell/hstatsd {};
@@ -1521,7 +1535,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   jsonAssertions = callPackage ../development/libraries/haskell/json-assertions {
     aeson = self.aeson_0_7_0_1;
-    lens = self.lens_4_0_3;
+    lens = self.lens_4_0_4;
   };
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
@@ -1557,7 +1571,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
   lens_3_10_2 = callPackage ../development/libraries/haskell/lens/3.10.2.nix {};
-  lens_4_0_3 = callPackage ../development/libraries/haskell/lens/4.0.3.nix {
+  lens_4_0_4 = callPackage ../development/libraries/haskell/lens/4.0.4.nix {
     aeson = self.aeson_0_7_0_1;
   };
   lens = self.lens_3_10_2;
@@ -1572,6 +1586,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     libffi = pkgs.libffi;
   };
 
+  libjenkins = callPackage ../development/libraries/haskell/libjenkins {
+    lens = self.lens_4_0_4;
+  };
+
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
@@ -1583,7 +1601,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
   linear = callPackage ../development/libraries/haskell/linear {
-    lens = self.lens_4_0_3;
+    lens = self.lens_4_0_4;
   };
 
   List = callPackage ../development/libraries/haskell/List {};
@@ -1952,8 +1970,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
-  primitive_0_5_1_0 = callPackage ../development/libraries/haskell/primitive/0.5.1.0.nix   {};
-  primitive = self.primitive_0_5_1_0;
+  primitive_0_5_2_1 = callPackage ../development/libraries/haskell/primitive/0.5.2.1.nix   {};
+  primitive = self.primitive_0_5_0_1;
 
   profunctors = callPackage ../development/libraries/haskell/profunctors {};
 
@@ -2161,8 +2179,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   socks = callPackage ../development/libraries/haskell/socks {};
 
   sparse = callPackage ../development/libraries/haskell/sparse {
-    lens = self.lens_4_0_3;
-    linear = self.linear.override { lens = self.lens_4_0_3; };
+    lens = self.lens_4_0_4;
+    linear = self.linear.override { lens = self.lens_4_0_4; };
   };
 
   srcloc = callPackage ../development/libraries/haskell/srcloc {};
@@ -2366,6 +2384,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   textFormat = callPackage ../development/libraries/haskell/text-format {};
 
   textIcu = callPackage ../development/libraries/haskell/text-icu {};
+
+  textStreamDecode = callPackage ../development/libraries/haskell/text-stream-decode {};
 
   thespian = callPackage ../development/libraries/haskell/thespian {};
 
@@ -2786,6 +2806,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   leksah = callPackage ../applications/editors/leksah {
     QuickCheck = self.QuickCheck2;
   };
+
+  nc-indicators = callPackage ../applications/misc/nc-indicators {};
 
   taffybar = callPackage ../applications/misc/taffybar {};
 

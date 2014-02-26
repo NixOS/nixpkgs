@@ -65,6 +65,10 @@ releaseTools.sourceTarball rec {
     header "checking eval-release.nix"
     nix-instantiate --eval-only --strict --show-trace ./maintainers/scripts/eval-release.nix > /dev/null
     stopNest
+
+    header "checking find-tarballs.nix"
+    nix-instantiate --eval-only --strict --show-trace ./maintainers/scripts/find-tarballs.nix > /dev/null
+    stopNest
   '';
 
   distPhase = ''

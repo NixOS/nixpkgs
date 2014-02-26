@@ -1,4 +1,4 @@
-{pkgs, pkgs_i686, xcodeVersion ? "5.0"}:
+{pkgs, pkgs_i686, xcodeVersion ? "5.0", tiVersion ? "3.2.1.GA"}:
 
 let
   # We have to use Oracle's JDK. On Darwin, just simply expose the host system's
@@ -27,12 +27,17 @@ rec {
     version = xcodeVersion;
   } else null;
   
-  titaniumsdk = import ./titaniumsdk.nix {
-    inherit (pkgs) stdenv fetchurl unzip makeWrapper python jdk;
-  };
+  titaniumsdk = let
+    titaniumSdkFile = if tiVersion == "3.1.4.GA" then ./titaniumsdk-3.1.nix
+      else if tiVersion == "3.2.1.GA" then ./titaniumsdk-3.2.nix
+      else throw "Titanium version not supported: "+tiVersion;
+    in
+    import titaniumSdkFile {
+      inherit (pkgs) stdenv fetchurl unzip makeWrapper python jdk;
+    };
   
   buildApp = import ./build-app.nix {
-    inherit (pkgs) stdenv python;
+    inherit (pkgs) stdenv python which;
     jdk = if pkgs.stdenv.isLinux then pkgs.oraclejdk7
       else if pkgs.stdenv.isDarwin then jdkWrapper
       else throw "Platform not supported: ${pkgs.stdenv.system}";

@@ -8,6 +8,8 @@
 
 with stdenv.lib;
 
+assert (!libsOnly) -> kernel != null;
+
 let
 
   versionNumber = "331.38";
@@ -19,7 +21,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
 
-  patches = optional (versionAtLeast kernel.version "3.13") ./kernel-3.13.patch ;
+  patches = optional (kernel ? version && versionAtLeast kernel.version "3.13") ./kernel-3.13.patch ;
 
   src =
     if stdenv.system == "i686-linux" then
@@ -51,11 +53,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  meta = {
+  meta = with stdenv.lib.meta; {
     homepage = http://www.nvidia.com/object/unix.html;
     description = "X.org driver and kernel module for NVIDIA graphics cards";
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    platforms = stdenv.lib.platforms.linux;
-    hydraPlatforms = [];
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.vcunat ];
   };
 }
