@@ -56,7 +56,7 @@ let
             inherit visible;
           });
         }
-        { config = setTo (mkIf (fromOf options).isDefined (define (mkMerge (fromOf options).definitions)));
+        { config = setTo (mkMerge (if (fromOf options).isDefined then [ (define (mkMerge (fromOf options).definitions)) ] else []));
         }
       ];
 
