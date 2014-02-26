@@ -1,14 +1,14 @@
 { stdenv, fetchurl, python, zip }:
 
 let
-  version = "2014.02.19.1";
+  version = "2014.02.26";
 in
 stdenv.mkDerivation rec {
   name = "youtube-dl-${version}";
 
   src = fetchurl {
     url = "http://youtube-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "0bilardg46xikw4gl4n50bg9wrmarmnzhrhhwhdcyrx0p0idl4fn";
+    sha256 = "069p3iyh96xc7y9ixzl4v5smq8i6d4gnhyy2yyzphjlfnpvwhb7j";
   };
 
   buildInputs = [ python ];
