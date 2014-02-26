@@ -1237,6 +1237,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
+  graphWrapper = callPackage ../development/libraries/haskell/graph-wrapper {};
+
   groups = callPackage ../development/libraries/haskell/groups {};
 
   groupoids = callPackage ../development/libraries/haskell/groupoids {};
