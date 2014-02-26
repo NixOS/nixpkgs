@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "offline APT package manager";
-    license = licences.gpl3;
+    license = licenses.gpl3;
     maintainers = [ maintainers.falsifian ];
   };
 }
