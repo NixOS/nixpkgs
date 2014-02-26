@@ -21,6 +21,10 @@ enhancements are the following:
   <listitem><para>NixOS is now based on Glibc 2.18 and GCC
   4.8.</para></listitem>
 
+  <listitem><para>The mysql55 service has been merged into the
+  mysql service, which no longer sets a default for the 'package
+  option.</para></listitem>
+
 </itemizedlist>
 
 </para>
