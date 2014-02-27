@@ -3914,6 +3914,9 @@ let
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
   texinfo4 = texinfo413;
   texinfo = texinfo5;
+  texinfoInteractive = appendToName "interactive" (
+    texinfo.override { interactive = true; }
+  );
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
