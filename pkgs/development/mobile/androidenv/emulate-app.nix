@@ -2,9 +2,9 @@
 { name, app ? null
 , platformVersion ? "8", abiVersion ? "armeabi-v7a", useGoogleAPIs ? false
 , enableGPU ? false, extraAVDFiles ? []
-, package ? null, activity ? null}:
-
-assert app != null -> package != null && activity != null;
+, package ? null, activity ? null
+, avdHomeDir ? null
+}:
 
 let
   androidsdkComposition = androidsdk {
@@ -28,8 +28,12 @@ stdenv.mkDerivation {
         export TMPDIR=/tmp
     fi
     
-    # Store the virtual devices somewhere else, instead of polluting a user's HOME directory
-    export ANDROID_SDK_HOME=$(mktemp -d $TMPDIR/nix-android-vm-XXXX)
+    ${if avdHomeDir == null then ''
+      # Store the virtual devices somewhere else, instead of polluting a user's HOME directory
+      export ANDROID_SDK_HOME=$(mktemp -d $TMPDIR/nix-android-vm-XXXX)
+    '' else ''
+      export ANDROID_SDK_HOME=${avdHomeDir}
+    ''}
     
     # We have to look for a free TCP port
     
@@ -106,7 +110,9 @@ stdenv.mkDerivation {
       ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port install "$appPath"
     
       # Start the application
-      ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/.${activity}
+      ${stdenv.lib.optionalString (package != null && activity != null) ''
+          ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/${activity}
+      ''}
     ''}
     EOF
     chmod +x $out/bin/run-test-emulator
