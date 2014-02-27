@@ -39,7 +39,7 @@ in
       };
 
       package = mkOption {
-        type = types.path;
+        type = types.package;
         default = pkgs.couchdb;
         example = literalExample "pkgs.couchdb";
         description = ''
@@ -65,7 +65,7 @@ in
       };
 
       pidFile = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/run/couchdb/couchdb.pid";
         description = ''
           pid file.
@@ -75,7 +75,7 @@ in
       # couchdb options: http://docs.couchdb.org/en/latest/config/index.html
 
       databaseDir = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/lib/couchdb";
         description = ''
           Specifies location of CouchDB database files (*.couch named). This
@@ -85,7 +85,7 @@ in
       };
 
       uriFile = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/run/couchdb/couchdb.uri";
         description = ''
           This file contains the full URI that can be used to access this
@@ -97,7 +97,7 @@ in
       };
 
       viewIndexDir = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/lib/couchdb";
         description = ''
           Specifies location of CouchDB view index files. This location should
@@ -123,7 +123,7 @@ in
       };
 
       logFile = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/log/couchdb.log";
         description = ''
           Specifies the location of file for logging output.
