@@ -10,7 +10,6 @@ with import ./strings.nix;
 rec {
 
   isType = type: x: (x._type or "") == type;
-  typeOf = x: x._type or "";
 
   setType = typeName: value: value // {
     _type = typeName;
