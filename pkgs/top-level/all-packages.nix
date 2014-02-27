@@ -1225,6 +1225,8 @@ let
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
   jwhois = callPackage ../tools/networking/jwhois { };
+ 
+  kazam = callPackage ../applications/video/kazam { };
 
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
