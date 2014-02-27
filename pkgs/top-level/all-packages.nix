@@ -3736,6 +3736,8 @@ let
     jre = jdk;
   };
 
+  seleniumServer = callPackage ../development/tools/selenium/server { };
+
   scons = callPackage ../development/tools/build-managers/scons { };
 
   simpleBuildTool = callPackage ../development/tools/build-managers/simple-build-tool { };
