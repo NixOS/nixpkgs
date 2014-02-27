@@ -130,12 +130,13 @@ in
         RewriteEngine On
         RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
         RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
-        RewriteRule ^(.*)$ %{DOCUMENT_ROOT}/${if config.articleUrlPrefix == ""
+        RewriteRule ${if config.enableUploads
+          then "!^/images"
+          else "^.*\$"
+        } %{DOCUMENT_ROOT}/${if config.articleUrlPrefix == ""
           then ""
           else "${config.articleUrlPrefix}/"
         }index.php [L]
-
-        RewriteRule ^/*$ ${mediawikiRoot}/index.php [L] # For syntax hilighter: */
       ''}
 
       <Directory ${mediawikiRoot}>
