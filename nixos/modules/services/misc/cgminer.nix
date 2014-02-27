@@ -42,6 +42,7 @@ in
       package = mkOption {
         default = pkgs.cgminer;
         description = "Which cgminer derivation to use.";
+        type = types.package;
       };
 
       user = mkOption {

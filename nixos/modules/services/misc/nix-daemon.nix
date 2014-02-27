@@ -58,7 +58,7 @@ in
     nix = {
 
       package = mkOption {
-        type = types.path;
+        type = types.package;
         default = pkgs.nix;
         description = ''
           This option specifies the Nix package instance to use throughout the system.

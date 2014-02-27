@@ -419,7 +419,7 @@ in
       };
 
       package = mkOption {
-        type = types.path;
+        type = types.package;
         default = pkgs.apacheHttpd.override { mpm = mainCfg.multiProcessingModule; };
         example = "pkgs.apacheHttpd_2_4";
         description = ''
