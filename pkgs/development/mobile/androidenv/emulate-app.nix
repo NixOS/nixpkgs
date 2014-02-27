@@ -106,7 +106,7 @@ stdenv.mkDerivation {
     ${stdenv.lib.optionalString (app != null) ''
       # Install the App through the debugger, if it has not been installed yet
       
-      if [ -z "${package}" ] || [ "$(adb -s emulator-$port shell 'pm list packages | grep -x package:${package}')" = "" ]
+      if [ -z "${package}" ] || [ "$(adb -s emulator-$port shell pm list packages | grep package:${package})" = "" ]
       then
           if [ -d "${app}" ]
           then
