@@ -131,19 +131,10 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.string;
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration. Overrides any other cofiguration.
-        '';
-      };
-
-      customConfigFile = mkOption {
-        type = types.string;
-        default = "/var/lib/couchdb/custom.ini";
-        description = ''
-          Custom configuration file. File needs to be readable and writable
-          from couchdb user/group.
         '';
       };
     };
@@ -162,30 +153,15 @@ in
 
       preStart =
         ''
-        if ! test -e ${cfg.pidFile}; then
-          mkdir -p `dirname ${cfg.pidFile}`;
-        fi
-        if ! test -e ${cfg.uriFile}; then
-          mkdir -p `dirname ${cfg.uriFile}`;
-        fi
-        if ! test -e ${cfg.logFile}; then
-          mkdir -p `dirname ${cfg.logFile}`;
-          touch ${cfg.logFile};
-        fi
-        if ! test -e ${cfg.customConfigFile}; then
-          mkdir -p `dirname ${cfg.customConfigFile}`;
-          touch ${cfg.customConfigFile};
-        fi
-        if ! test -e ${cfg.databaseDir}; then
-          mkdir -p ${cfg.databaseDir};
-        fi
-        if ! test -e ${cfg.viewIndexDir}; then
-          mkdir -p ${cfg.viewIndexDir};
-        fi
+        mkdir -p `dirname ${cfg.pidFile}`;
+        mkdir -p `dirname ${cfg.uriFile}`;
+        mkdir -p `dirname ${cfg.logFile}`;
+        touch ${cfg.logFile};
+        mkdir -p ${cfg.databaseDir};
+        mkdir -p ${cfg.viewIndexDir};
         chown ${cfg.user}:${cfg.group} `dirname ${cfg.pidFile}`
         chown ${cfg.user}:${cfg.group} `dirname ${cfg.uriFile}`
         chown ${cfg.user}:${cfg.group} ${cfg.logFile}
-        chown ${cfg.user}:${cfg.group} ${cfg.customConfigFile}
         chown ${cfg.user}:${cfg.group} ${cfg.databaseDir}
         chown ${cfg.user}:${cfg.group} ${cfg.viewIndexDir}
         '';
@@ -195,7 +171,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         Type = "forking";
-        ExecStart = "${cfg.package}/bin/couchdb -b -o /dev/null -e /dev/null -p ${cfg.pidFile} -a ${configFile} -a ${configExtraFile} -a ${cfg.customConfigFile}";
+        ExecStart = "${cfg.package}/bin/couchdb -b -o /dev/null -e /dev/null -p ${cfg.pidFile} -a ${configFile} -a ${configExtraFile}";
         ExecStop = "${cfg.package}/bin/couchdb -d";
       };
     };

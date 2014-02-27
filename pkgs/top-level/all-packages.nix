@@ -6175,6 +6175,8 @@ let
 
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_185;
+    python = python27;
+    sphinx = python27Packages.sphinx;
   };
 
   dico = callPackage ../servers/dico { };
