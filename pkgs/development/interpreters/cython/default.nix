@@ -8,9 +8,9 @@ stdenv.mkDerivation {
     sha256 = "1a3m7zhw8mdyr95fwx7n1scrz82drr433i99dzm1n9dxi0cx2qah";
   };
 
-  buildPhase = "python setup.py build --build-base $out";
+  buildPhase = "${python.executable} setup.py build --build-base $out";
 
-  installPhase = "python setup.py install --prefix=$out";
+  installPhase = "${python.executable} setup.py install --prefix=$out";
 
   buildInputs = [ python pkgconfig ];
 

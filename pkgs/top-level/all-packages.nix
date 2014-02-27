@@ -2360,8 +2360,10 @@ let
 
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
 
-  cython = callPackage ../development/interpreters/cython/2 { };
-  cython3 = callPackage ../development/interpreters/cython/3 { };
+  cython = callPackage ../development/interpreters/cython { };
+  cython3 = callPackage ../development/interpreters/cython {
+    python = python3;
+  };
 
   dylan = callPackage ../development/compilers/gwydion-dylan {
     dylan = callPackage ../development/compilers/gwydion-dylan/binary.nix {  };
