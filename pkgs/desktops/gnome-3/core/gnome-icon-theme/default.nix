@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xinbgkkvlhazj887ajcl13i7kdc1wcca02jwxzvjrvchjsp4m66";
   };
 
+  setupHook = ./setup-hook.sh;
+
   nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk ];
 
   meta = with stdenv.lib; {
