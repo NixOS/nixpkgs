@@ -6835,6 +6835,8 @@ let
 
     frandom = callPackage ../os-specific/linux/frandom { };
 
+    ktap = callPackage ../os-specific/linux/ktap { };
+
     lttngModules = callPackage ../os-specific/linux/lttng-modules { };
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
