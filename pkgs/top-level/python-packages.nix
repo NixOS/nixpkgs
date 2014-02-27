@@ -1122,6 +1122,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     propagatedBuildInputs = [ pythonPackages.coverage ];
   };
 
+  cython = buildPythonPackage rec {
+    name = "Cython-0.20.1";
+  
+    src = fetchurl {
+      url = "http://www.cython.org/release/${name}.tar.gz";
+      sha256 = "0v3nc9z5ynnnjdgcgkyy5g9wazmkjv53nnpjal1v3mr199s6799i";
+    };
+  
+    setupPyBuildFlags = ["--build-base=$out"];
+  
+    buildInputs = [ pkgs.pkgconfig ];
+  
+    meta = {
+      description = "An interpreter to help writing C extensions for Python 2";
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
   cryptacular = buildPythonPackage rec {
     name = "cryptacular-1.4.1";
 

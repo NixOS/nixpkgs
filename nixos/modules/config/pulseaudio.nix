@@ -77,7 +77,7 @@ in {
       };
 
       package = mkOption {
-        type = types.path;
+        type = types.package;
         default = pulseaudio;
         example = literalExample "pulseaudio.override { jackaudioSupport = true; }";
         description = ''

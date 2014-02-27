@@ -1,7 +1,7 @@
 Nixpkgs is a collection of packages for [Nix](http://nixos.org/nix/) package
 manager. Nixpkgs also includes [NixOS](http://nixos.org/nixos/) linux distribution source code.
 
-* [NixOS installation instructions](http://nixos.org/nixos/manual/#idm139984689550080)
+* [NixOS installation instructions](http://nixos.org/nixos/manual/#installing-nixos)
 * [Manual (How to write packages for Nix)](http://nixos.org/nixpkgs/manual/)
 * [Manual (NixOS)](http://nixos.org/nixos/manual/)
 * [Continuous build](http://hydra.nixos.org/jobset/nixos/trunk-combined)

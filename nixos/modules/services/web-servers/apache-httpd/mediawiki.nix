@@ -126,7 +126,18 @@ in
         </Directory>
       ''}
 
-      ${optionalString (config.urlPrefix != "") "Alias ${config.urlPrefix} ${mediawikiRoot}"}
+      ${if config.urlPrefix != "" then "Alias ${config.urlPrefix} ${mediawikiRoot}" else ''
+        RewriteEngine On
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+        RewriteRule ${if config.enableUploads
+          then "!^/images"
+          else "^.*\$"
+        } %{DOCUMENT_ROOT}/${if config.articleUrlPrefix == ""
+          then ""
+          else "${config.articleUrlPrefix}/"
+        }index.php [L]
+      ''}
 
       <Directory ${mediawikiRoot}>
           Order allow,deny
@@ -137,13 +148,6 @@ in
       ${optionalString (config.articleUrlPrefix != "") ''
         Alias ${config.articleUrlPrefix} ${mediawikiRoot}/index.php
       ''}
-
-      RewriteEngine On
-      RewriteCond ${mediawikiRoot}/$0 !-f
-      RewriteCond ${mediawikiRoot}/$0 !-d
-      RewriteRule ^(.*)$ ${mediawikiRoot}/index.php [L]
-
-      RewriteRule ^/*$ ${mediawikiRoot}/index.php [L] # For syntax hilighter: */
     '';
 
   documentRoot = if config.urlPrefix == "" then mediawikiRoot else null;
