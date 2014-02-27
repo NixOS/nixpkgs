@@ -70,6 +70,8 @@ fi
 
 if test "$dontSetConfigureCross" != "1"; then
     configureFlags="$configureFlags --build=$system --host=$crossConfig"
+    # This is because -print-prog-name tries to search FHS paths.
+    configureFlags="$configureFlags LD=$crossConfig-ld"
 fi
 # Disabling the tests when cross compiling, as usually the tests are meant for
 # native compilations.
