@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.7";
 
   src = fetchurl {
-    url = "https://pax.grsecurity.net/${name}.tar.bz2";
+    url = "http://pax.grsecurity.net/${name}.tar.bz2";
     sha256 = "1j6dg6wd1v7na5i4xj8zmbff0mdqdnw6cvqy0rsbz5anra27f1zp";
   };
 
