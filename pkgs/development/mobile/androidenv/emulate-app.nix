@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     
     cat > $out/bin/run-test-emulator << "EOF"
-    #!/bin/sh -e
+    #! ${stdenv.shell} -e
     
     # We need a TMPDIR
     if [ "$TMPDIR" = "" ]
@@ -32,7 +32,8 @@ stdenv.mkDerivation {
       # Store the virtual devices somewhere else, instead of polluting a user's HOME directory
       export ANDROID_SDK_HOME=$(mktemp -d $TMPDIR/nix-android-vm-XXXX)
     '' else ''
-      export ANDROID_SDK_HOME=${avdHomeDir}
+      mkdir -p "${avdHomeDir}"
+      export ANDROID_SDK_HOME="${avdHomeDir}"
     ''}
     
     # We have to look for a free TCP port
@@ -58,17 +59,22 @@ stdenv.mkDerivation {
     
     export ANDROID_SERIAL="emulator-$port"
     
-    # Create a virtual android device
-    yes "" | ${androidsdkComposition}/libexec/android-sdk-*/tools/android create avd -n device -t ${if useGoogleAPIs then "'Google Inc.:Google APIs:"+platformVersion+"'" else "android-"+platformVersion} $NIX_ANDROID_AVD_FLAGS
+    # Create a virtual android device for testing if it does not exists
     
-    ${stdenv.lib.optionalString enableGPU ''
-      # Enable GPU acceleration
-      echo "hw.gpu.enabled=yes" >> $ANDROID_SDK_HOME/.android/avd/device.avd/config.ini
-    ''}
+    if [ "$(android list avd | grep 'Name: device')" = "" ]
+    then
+        # Create a virtual android device
+        yes "" | ${androidsdkComposition}/libexec/android-sdk-*/tools/android create avd -n device -t ${if useGoogleAPIs then "'Google Inc.:Google APIs:"+platformVersion+"'" else "android-"+platformVersion} $NIX_ANDROID_AVD_FLAGS
     
-    ${stdenv.lib.concatMapStrings (extraAVDFile: ''
-      ln -sf ${extraAVDFile} $ANDROID_SDK_HOME/.android/avd/device.avd
-    '') extraAVDFiles}
+        ${stdenv.lib.optionalString enableGPU ''
+          # Enable GPU acceleration
+          echo "hw.gpu.enabled=yes" >> $ANDROID_SDK_HOME/.android/avd/device.avd/config.ini
+        ''}
+    
+        ${stdenv.lib.concatMapStrings (extraAVDFile: ''
+          ln -sf ${extraAVDFile} $ANDROID_SDK_HOME/.android/avd/device.avd
+        '') extraAVDFiles}
+    fi
     
     # Launch the emulator
     ${androidsdkComposition}/libexec/android-sdk-*/tools/emulator -avd device -no-boot-anim -port $port $NIX_ANDROID_EMULATOR_FLAGS &
@@ -98,16 +104,19 @@ stdenv.mkDerivation {
     echo "ready" >&2
     
     ${stdenv.lib.optionalString (app != null) ''
-      # Install the App through the debugger
+      # Install the App through the debugger, if it has not been installed yet
       
-      if [ -d "${app}" ]
+      if [ -z "${package}" ] || [ "$(adb -s emulator-$port shell 'pm list packages | grep -x package:${package}')" = "" ]
       then
-          appPath="$(echo ${app}/*.apk)"
-      else
-          appPath="${app}"
+          if [ -d "${app}" ]
+          then
+              appPath="$(echo ${app}/*.apk)"
+          else
+              appPath="${app}"
+          fi
+          
+          ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port install "$appPath"
       fi
-      
-      ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port install "$appPath"
     
       # Start the application
       ${stdenv.lib.optionalString (package != null && activity != null) ''
