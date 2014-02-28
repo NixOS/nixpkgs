@@ -2267,6 +2267,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   show = callPackage ../development/libraries/haskell/show {};
 
+  singletons = callPackage ../development/libraries/haskell/singletons {};
+
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
   socketActivation = callPackage ../development/libraries/haskell/socket-activation {};
@@ -2390,6 +2392,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   textStreamDecode = callPackage ../development/libraries/haskell/text-stream-decode {};
 
   thespian = callPackage ../development/libraries/haskell/thespian {};
+
+  thDesugar = callPackage ../development/libraries/haskell/th-desugar {};
 
   thExtras = callPackage ../development/libraries/haskell/th-extras {};
 
