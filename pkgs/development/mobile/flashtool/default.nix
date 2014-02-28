@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.flashtool.net/";
     description = "S1 flashing software for Sony phones from X10 to Xperia Z Ultra";
+    license = stdenv.lib.license.unfreeRedistributableFirmware;
 
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = stdenv.lib.platforms.none;
