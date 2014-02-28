@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, vala, intltool, libgit2, pkgconfig, gtk3, glib
 , json_glib, webkitgtk,  makeWrapper, libpeas, bash, gobjectIntrospection
-, gnome3, gtkspell3, shared_mime_info, libgee, libgit2-glib }:
+, gnome3, gtkspell3, shared_mime_info, libgee, libgit2-glib, librsvg }:
 
 # TODO: icons and theme still does not work
 # use packaged gnome3.gnome_icon_theme_symbolic 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
                             gnome3.gnome_themes_standard ];
 
   buildInputs = [ vala intltool libgit2 pkgconfig gtk3 glib json_glib webkitgtk libgee libpeas
-                  libgit2-glib gtkspell3 gnome3.gsettings_desktop_schemas gnome3.gtksourceview
+                  libgit2-glib gtkspell3 gnome3.gsettings_desktop_schemas gnome3.gtksourceview librsvg
                   gobjectIntrospection makeWrapper gnome3.gnome_icon_theme_symbolic gnome3.gnome_icon_theme ];
 
   postInstall = ''

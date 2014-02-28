@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "49366acdd3c3ef9a74f63eb09920803c4c9df83056acbf8a7899e7890a9fb196";
   };
 
-  propagatedUserEnvPkgs = [ librsvg gdk_pixbuf gnome3.gnome_themes_standard
+  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard
                             gnome3.gnome_icon_theme hicolor_icon_theme
                             gnome_online_accounts shared_mime_info
                             gnome3.gnome_icon_theme_symbolic ];
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
                   libxml2 libxslt icu file makeWrapper
                   telepathy_glib clutter_gtk clutter-gst cogl
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base
-                  gcr libsecret pulseaudio gnome3.yelp_xsl
+                  gcr libsecret pulseaudio gnome3.yelp_xsl gdk_pixbuf
                   libnotify clutter libsoup gnutls libgee p11_kit
                   libcanberra_gtk3 telepathy_farstream farstream
-                  gnome3.gsettings_desktop_schemas file libtool ];
+                  gnome3.gsettings_desktop_schemas file libtool librsvg ];
 
   NIX_CFLAGS_COMPILE = [ "-I${dbus_glib}/include/dbus-1.0"
                          "-I${dbus_libs}/include/dbus-1.0"
