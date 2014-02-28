@@ -23,4 +23,6 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [ glib ];
+
+  setupHook = ./setup-hook.sh;
 }

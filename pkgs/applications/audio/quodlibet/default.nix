@@ -52,13 +52,8 @@ buildPythonPackage {
 
   postInstall = stdenv.lib.optionalString withGstPlugins ''
     # Wrap quodlibet so it finds the GStreamer plug-ins
-    wrapProgram "$out/bin/quodlibet" --prefix                                 \
-      GST_PLUGIN_PATH ":"                                                     \
-      ${ stdenv.lib.concatStringsSep ":"
-         (map (s: s+"/lib/gstreamer-0.10")
-           (stdenv.lib.filter (s: s != null) [
-             gst_plugins_base gst_plugins_good gst_plugins_ugly gst_plugins_bad
-           ])) }
+    wrapProgram "$out/bin/quodlibet" --prefix \
+      GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"                                                     \
   '';
 
   meta = {
