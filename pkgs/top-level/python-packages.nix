@@ -4940,7 +4940,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "0bnin777lc53nxd1hp3apq410jj5wx92n08h7h4izpl4f4sx00lz";
     };
 
-    buildInputs = [ pytz ];
+    propagatedBuildInputs = [ pytz ];
 
     meta = {
       homepage = http://babel.edgewall.org;
@@ -5674,11 +5674,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pytz = buildPythonPackage rec {
-    name = "pytz-2012c";
+    name = "pytz-2013.9";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytz/${name}.tar.bz2";
-      md5 = "660e0cee7f6c419ca2665db460f65131";
+      md5 = "ec7076947a46a8a3cb33cbf2983a562c";
     };
 
     meta = {
