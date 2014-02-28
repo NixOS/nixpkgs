@@ -925,6 +925,11 @@ let
 
   fio = callPackage ../tools/system/fio { };
 
+  flashtool = callPackage_i686 ../development/mobile/flashtool {
+    androidsdk = pkgs.pkgsi686Linux.androidsdk_4_1;
+    inherit (pkgs.pkgsi686Linux.xlibs) libXtst;
+  };
+
   flpsed = callPackage ../applications/editors/flpsed { };
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
