@@ -3574,12 +3574,6 @@ let
 
   doxygen = lowPrio (doxygen_gui.override { qt4 = null; });
 
-  /* XXX: The LaTeX output with Doxygen 1.8.0 makes LaTeX barf.
-     See <https://bugzilla.gnome.org/show_bug.cgi?id=670973>.  */
-  doxygen_1_7 = callPackage ../development/tools/documentation/doxygen/1.7.nix {
-    qt4 = null;
-  };
-
   doxygen_gui = callPackage ../development/tools/documentation/doxygen { };
 
   drush = callPackage ../development/tools/misc/drush { };
