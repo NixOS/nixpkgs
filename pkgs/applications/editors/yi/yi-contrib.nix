@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yi-contrib";
-  version = "0.7.0";
-  sha256 = "12x9ps5yrszr8dlj15kmsm9myq3gzd9x9nacvl3x6cq91wk53mzj";
+  version = "0.7.1";
+  sha256 = "0915ikck01kc5npbvywd9r7azylqrhfymzc72rf4iaghz4w939li";
   buildDepends = [ dataAccessor filepath mtl split yi ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/Yi";
