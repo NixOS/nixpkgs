@@ -14,19 +14,19 @@ stdenv.mkDerivation rec
   buildInputs = [ pkgconfig cmake qt4 seafile-shared makeWrapper ];
 
   builder = writeScript "${name}-builder.sh" ''
-  source $stdenv/setup
+    source $stdenv/setup
 
-  tar xvfz $src
-  cd seafile-client-*
+    tar xvfz $src
+    cd seafile-client-*
 
-  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_SKIP_BUILD_RPATH=ON -DCMAKE_INSTALL_PREFIX="$out" .
-  make -j1
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_SKIP_BUILD_RPATH=ON -DCMAKE_INSTALL_PREFIX="$out" .
+    make -j1
 
-  make install
+    make install
 
-  wrapProgram $out/bin/seafile-applet \
-    --suffix PATH : ${ccnet}/bin:${seafile-shared}/bin
-  '';
+    wrapProgram $out/bin/seafile-applet \
+      --suffix PATH : ${ccnet}/bin:${seafile-shared}/bin
+    '';
 
   meta =
   {
