@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     "--with-dhcpcd=no"
     "--with-iptables=${iptables}/sbin/iptables"
     "--with-udev-dir=\${out}/lib/udev"
-    "--with-resolvconf=${openresolv}/sbin/openresolv"
+    "--with-resolvconf=${openresolv}/sbin/resolvconf"
     "--sysconfdir=/etc" "--localstatedir=/var"
     "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
     "--with-crypto=gnutls" "--disable-more-warnings"
