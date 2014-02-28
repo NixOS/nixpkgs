@@ -1638,6 +1638,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   logict = callPackage ../development/libraries/haskell/logict {};
 
+  lushtags = callPackage ../development/libraries/haskell/lushtags {};
+
   maccatcher = callPackage ../development/libraries/haskell/maccatcher {};
 
   markdownUnlit = callPackage ../development/libraries/haskell/markdown-unlit {};
