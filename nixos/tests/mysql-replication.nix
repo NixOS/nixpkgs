@@ -12,11 +12,11 @@ in
       {
         services.mysql.enable = true;
         services.mysql.package = pkgs.mysql;
-	services.mysql.replication.role = "master";
-	services.mysql.initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
-	services.mysql.initialScript = pkgs.writeText "initmysql"
+        services.mysql.replication.role = "master";
+        services.mysql.initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
+        services.mysql.initialScript = pkgs.writeText "initmysql"
         ''
-	  create user '${replicateUser}'@'%' identified by '${replicatePassword}';
+          create user '${replicateUser}'@'%' identified by '${replicatePassword}';
           grant replication slave on *.* to '${replicateUser}'@'%';
         '';
       };
@@ -26,11 +26,11 @@ in
 
       {
         services.mysql.enable = true;
-	services.mysql.replication.role = "slave";
-	services.mysql.replication.serverId = 2;
-	services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
-	services.mysql.replication.masterUser = replicateUser;
-	services.mysql.replication.masterPassword = replicatePassword;
+        services.mysql.replication.role = "slave";
+        services.mysql.replication.serverId = 2;
+        services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
+        services.mysql.replication.masterUser = replicateUser;
+        services.mysql.replication.masterPassword = replicatePassword;
       };
 
     slave2 =
@@ -38,11 +38,11 @@ in
 
       {
         services.mysql.enable = true;
-	services.mysql.replication.role = "slave";
-	services.mysql.replication.serverId = 3;
-	services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
-	services.mysql.replication.masterUser = replicateUser;
-	services.mysql.replication.masterPassword = replicatePassword;
+        services.mysql.replication.role = "slave";
+        services.mysql.replication.serverId = 3;
+        services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
+        services.mysql.replication.masterUser = replicateUser;
+        services.mysql.replication.masterPassword = replicatePassword;
       };
   };
 
