@@ -26,6 +26,7 @@ in
 
       {
         services.mysql.enable = true;
+        services.mysql.package = pkgs.mysql;
         services.mysql.replication.role = "slave";
         services.mysql.replication.serverId = 2;
         services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
@@ -38,6 +39,7 @@ in
 
       {
         services.mysql.enable = true;
+        services.mysql.package = pkgs.mysql;
         services.mysql.replication.role = "slave";
         services.mysql.replication.serverId = 3;
         services.mysql.replication.masterHost = nodes.master.config.networking.hostName;
