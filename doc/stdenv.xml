@@ -1158,7 +1158,7 @@ echo @foo@
 
   <varlistentry>
     <term>gdk-pixbuf</term>
-    <listitem><para>Exports <envvar>GDK_PIXBUF_MODULE_FILE</envvar>
+    <listitem><para>Exports <envar>GDK_PIXBUF_MODULE_FILE</envar>
     environment variable the the builder. Add librsvg package
     to <varname>buildInputs</varname> to get svg support.</para></listitem>
   </varlistentry>
@@ -1174,7 +1174,7 @@ echo @foo@
     <listitem><para>Adds the
     GStreamer plugins subdirectory of
     each build input to the <envar>GST_PLUGIN_SYSTEM_PATH_1_0</envar> or
-    <envar>GST_PLUGIN_SYSTEM_PATH</envar> environment variable.</para>
+    <envar>GST_PLUGIN_SYSTEM_PATH</envar> environment variable.</para></listitem>
   </varlistentry>
 
 </variablelist>
