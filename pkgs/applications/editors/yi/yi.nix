@@ -1,25 +1,24 @@
 { cabal, alex, binary, Cabal, cautiousFile, concreteTyperep
 , dataAccessor, dataAccessorMtl, dataAccessorTemplate, derive, Diff
-, dlist, dyre, filepath, fingertree, ghcPaths, glib, gtk, hashable
-, hint, HUnit, mtl, pango, parsec, pointedlist, pureMD5, QuickCheck
-, random, regexBase, regexTdfa, split, testFramework
-, testFrameworkHunit, time, uniplate, unixCompat
-, unorderedContainers, utf8String, vty, xdgBasedir
+, dlist, dyre, filepath, fingertree, glib, gtk, hashable, hint
+, HUnit, mtl, pango, parsec, pointedlist, QuickCheck, random
+, regexBase, regexTdfa, split, testFramework, testFrameworkHunit
+, time, uniplate, unixCompat, unorderedContainers, utf8String, vty
+, xdgBasedir
 }:
 
 cabal.mkDerivation (self: {
   pname = "yi";
-  version = "0.7.0";
-  sha256 = "0mzcjgp12k5mxb37r6chxsk726b1qxds49ch656bpgrg7n22w2j1";
+  version = "0.7.1";
+  sha256 = "111xg7qpjhsqf6pfr136wh8km3lrgpzghd9h5rlypafr61w59vly";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     binary Cabal cautiousFile concreteTyperep dataAccessor
     dataAccessorMtl dataAccessorTemplate derive Diff dlist dyre
-    filepath fingertree ghcPaths glib gtk hashable hint mtl pango
-    parsec pointedlist pureMD5 QuickCheck random regexBase regexTdfa
-    split time uniplate unixCompat unorderedContainers utf8String vty
-    xdgBasedir
+    filepath fingertree glib gtk hashable hint mtl pango parsec
+    pointedlist QuickCheck random regexBase regexTdfa split time
+    uniplate unixCompat unorderedContainers utf8String vty xdgBasedir
   ];
   testDepends = [
     filepath HUnit QuickCheck testFramework testFrameworkHunit
