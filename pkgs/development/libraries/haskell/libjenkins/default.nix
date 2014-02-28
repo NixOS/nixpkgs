@@ -16,11 +16,10 @@ cabal.mkDerivation (self: {
     httpClient httpConduit httpTypes lens monadControl network text
     transformers xmlConduit
   ];
+  doCheck = false;
   meta = {
     description = "Jenkins API interface";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
-  # Test wants access to /etc/ssl
-  doCheck = false;
 })
