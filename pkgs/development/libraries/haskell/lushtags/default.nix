@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0325c064nsczypapvwdchx7x5n69jxjbyjs90ah7q5ydxbjl6w9c";
   isLibrary = false;
   isExecutable = true;
+  jailbreak = true;
   buildDepends = [ haskellSrcExts text vector ];
   meta = {
     homepage = "https://github.com/bitc/lushtags";
