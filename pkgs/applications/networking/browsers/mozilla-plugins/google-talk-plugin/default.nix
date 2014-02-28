@@ -45,20 +45,22 @@ in
 
 stdenv.mkDerivation rec {
   name = "google-talk-plugin-${version}";
-  # Use the following to determine the current upstream version:
-  # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-amd64/Packages | sed -nr 's/^Version: *([^ ]+)-1$/\1/p'
-  version = "5.1.4.0";
+
+  # You can get the upstream version and SHA-1 hash from the following URLs:
+  # http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-amd64/Package
+  # http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-i386/Packages
+  version = "5.1.5.0";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "${baseURL}/google-talkplugin_${version}-1_amd64.deb";
-        sha256 = "19x1ss6kx7w8833f40pg1mwqr6sygz4ij4a7r7h3flmk67zywj4c";
+        sha1 = "fc830f4c7f5816f4578ec73e6d4aef059ad4a0b1";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "${baseURL}/google-talkplugin_${version}-1_i386.deb";
-        sha256 = "1jxcridpqx46sdy4bw381rvffn1z93s280vhihwbgmiwjq5h4g41";
+        sha1 = "9b7043c3585b3479ba11aabb7b8af755a61df963";
       }
     else throw "Google Talk does not support your platform.";
 
