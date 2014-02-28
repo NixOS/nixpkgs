@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.9.3";
   sha256 = "0m90k3ygm04c0gjfiaw5rmajyn2yz0ldcqm2xmm39d10270skpb4";
   buildDepends = [ mtl syb thDesugar ];
+  noHaddock = true;
   meta = {
     homepage = "http://www.cis.upenn.edu/~eir/packages/singletons";
     description = "A framework for generating singleton types";
@@ -12,5 +13,4 @@ cabal.mkDerivation (self: {
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
-  noHaddock = true;
 })
