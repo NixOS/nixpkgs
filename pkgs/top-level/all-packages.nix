@@ -7355,6 +7355,8 @@ let
 
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
+  symbola = callPackage ../data/fonts/symbola { };
+
   iana_etc = callPackage ../data/misc/iana-etc { };
 
   poppler_data = callPackage ../data/misc/poppler-data { };
