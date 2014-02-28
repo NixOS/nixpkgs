@@ -27,12 +27,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ vala intltool libgit2 pkgconfig gtk3 glib json_glib webkitgtk libgee libpeas
                   libgit2-glib gtkspell3 gnome3.gsettings_desktop_schemas gnome3.gtksourceview
-                  gobjectIntrospection makeWrapper ];
+                  gobjectIntrospection makeWrapper gnome3.gnome_icon_theme_symbolic gnome3.gnome_icon_theme ];
 
   postInstall = ''
     wrapProgram "$out/bin/gitg" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share"
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share"
   '';
 
   preFixup = ''

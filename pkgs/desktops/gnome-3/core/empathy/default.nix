@@ -42,11 +42,9 @@ stdenv.mkDerivation rec {
   installFlags = "gsettingsschemadir=\${out}/share/empathy/glib-2.0/schemas/";
 
   postInstall = ''
-    mkdir -p $out/lib/empathy/gdk-pixbuf-2.0/2.10.0
-    cat ${gdk_pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache ${librsvg}/lib/gdk-pixbuf/loaders.cache > $out/lib/empathy/gdk-pixbuf-2.0/2.10.0/loaders.cache
     wrapProgram "$out/bin/empathy" \
-      --set GDK_PIXBUF_MODULE_FILE `readlink -e $out/lib/empathy/gdk-pixbuf-2.0/2.10.0/loaders.cache` \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/:${gnome3.gnome_themes_standard}/share:${gnome3.gnome_icon_theme_symbolic}/share:${gnome3.gnome_icon_theme}/share:${hicolor_icon_theme}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/empathy:${telepathy_logger}/share/telepathy/logger:${folks}/share/folks:${evolution_data_server}/share/evolution-data-server"
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${gnome3.gnome_themes_standard}/:${gnome3.gnome_themes_standard}/share:${hicolor_icon_theme}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/empathy:${telepathy_logger}/share/telepathy/logger:${folks}/share/folks:${evolution_data_server}/share/evolution-data-server"
   '';
 
   meta = with stdenv.lib; {

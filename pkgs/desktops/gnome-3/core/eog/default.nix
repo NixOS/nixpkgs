@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram "$out/bin/eog" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix XDG_DATA_DIRS : "${shared_mime_info}/share:${gnome3.gnome_icon_theme}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share"
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${shared_mime_info}/share:${gnome3.gnome_icon_theme}/share:${gnome3.gsettings_desktop_schemas}/share:${gnome3.gtk}/share:$out/share"
   '';
 
   meta = with stdenv.lib; {

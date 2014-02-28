@@ -28,10 +28,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
       set -x
-      find "${librsvg}" "${gdk_pixbuf}" -name loaders.cache -print0 | xargs -0 cat > "$out/gdk-pixbuf.loaders"
       wrapProgram "$out/bin/solfege" \
           --prefix PYTHONPATH ':' "$PYTHONPATH" \
-          --set GDK_PIXBUF_MODULE_FILE "$out/gdk-pixbuf.loaders"
+          --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
   meta = with stdenv.lib; {

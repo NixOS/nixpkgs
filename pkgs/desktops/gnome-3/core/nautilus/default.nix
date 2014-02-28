@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libxml2, dbus_glib, shared_mime_info, libexif
 , gtk, gnome3, libunique, intltool, gobjectIntrospection
-, libnotify, makeWrapper, exempi }:
+, libnotify, makeWrapper, exempi, librsvg }:
 
 stdenv.mkDerivation rec {
   name = "nautilus-3.10.1";
@@ -12,13 +12,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-tracker=no" ];
 
-  buildInputs = [ pkgconfig libxml2 dbus_glib shared_mime_info libexif gtk libunique intltool exempi 
-                  gnome3.gnome_desktop gnome3.gsettings_desktop_schemas libnotify makeWrapper ];
+  buildInputs = [ pkgconfig libxml2 dbus_glib shared_mime_info libexif gtk libunique intltool exempi librsvg
+                  gnome3.gnome_desktop gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic gnome3.gsettings_desktop_schemas libnotify makeWrapper ];
 
   postInstall = ''
     wrapProgram "$out/bin/nautilus" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix XDG_DATA_DIRS : "${gtk}/share:${gnome3.gnome_icon_theme}:${gnome3.gsettings_desktop_schemas}/share:$out/share"
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk}/share:${gnome3.gnome_icon_theme}:${gnome3.gsettings_desktop_schemas}/share:$out/share"
   '';
 
   meta = with stdenv.lib; {
