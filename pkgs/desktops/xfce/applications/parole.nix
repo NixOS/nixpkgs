@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     makeWrapper 
     gtk dbus_glib libxfce4ui libxfce4util xfconf
     taglib libnotify
-  ] ++ with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav];
+  ] ++ (with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav]);
 
   configureFlags = [ "--with-gstreamer=1.0" ];
 
