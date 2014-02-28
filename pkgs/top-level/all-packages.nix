@@ -1232,7 +1232,7 @@ let
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
   jwhois = callPackage ../tools/networking/jwhois { };
- 
+
   kazam = callPackage ../applications/video/kazam { };
 
   kexectools = callPackage ../os-specific/linux/kexectools { };
@@ -7923,7 +7923,7 @@ let
   gtimelog = pythonPackages.gtimelog;
 
   inherit (gnome3) gucharmap;
-  
+
   guitarix = callPackage ../applications/audio/guitarix {
     fftw = fftwSinglePrec;
   };
@@ -8189,7 +8189,7 @@ let
     inherit (xorg) libxkbfile;
     cairo = cairo.override { xcbSupport = true; };
   };
-  
+
   i3minator = callPackage ../tools/misc/i3minator { };
 
   i3status = callPackage ../applications/window-managers/i3/status.nix { };
