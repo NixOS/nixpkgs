@@ -1,17 +1,12 @@
-{ stdenv, requireFile, p7zip, jre, libusb1, androidsdk, gtk2, glib, libXtst }:
+{ stdenv, requireFile, p7zip, jre, libusb1, platformTools, gtk2, glib, libXtst }:
+
+assert stdenv.system == "i686-linux";
 
 # TODO:
 #
 #   The FlashTool and FlashToolConsole scripts are messy and should probably we
 #   replaced entirely. All these scripts do is try to guess the environment in
 #   which to run the Java binary (and they guess wrong on NixOS).
-#
-#   The release contains a freaky mixture of 32 and 64 bit binaries.
-#   Personally, I run these things (as 'root') in 32 bit Linux by way of:
-#
-#      setarch i686 ./FlashTool
-#
-#   It should be possible to run them in 64 bit mode, too.
 #
 #   The FlashTool scripts run 'chmod' on the binaries installed in the Nix
 #   store. These commands fail, naturally, because the Nix story is (hopefully)
@@ -36,23 +31,21 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    for n in x10flasher_lib/adb.linux.*; do
-      ln -sfv ${androidsdk}/bin/adb $n
-    done
-    for n in x10flasher_lib/fastboot.linux.*; do
-      ln -sfv ${androidsdk}/bin/fastboot $n
-    done
-    for n in "x10flasher_lib/linux/lib"*"/"*"/libus"*".so"* ; do
-      ln -sfv ${libusb1}/lib/libusb-1.0.so.0 $n
-    done
+    ln -s ${platformTools}/platform-tools/adb x10flasher_lib/adb.linux
+    ln -s ${platformTools}/platform-tools/fastboot x10flasher_lib/fastboot.linux
+    ln -s ${libusb1}/lib/libusb-1.0.so.0 ./x10flasher_lib/linux/lib32/libusbx-1.0.so
+
+    chmod +x x10flasher_lib/unyaffs.linux.x86 x10flasher_lib/bin2elf x10flasher_lib/bin2sin
+    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" x10flasher_lib/unyaffs.linux.x86
+    ln -sf unyaffs.linux.x86 x10flasher_lib/unyaffs.linux
+
+    ln -s swt32.jar x10flasher_lib/swtlin/swt.jar
+
     sed -i \
-      -e 's|ln -sf libusbx-1.0.so.0.1.0|ln -sf ${libusb1}/lib/libusb-1.0.so.0|' \
+      -e 's|$(uname -m)|i686|' \
       -e 's|export JAVA_HOME=.*|export JAVA_HOME=${jre}|' \
       -e 's|export LD_LIBRARY_PATH=.*|export LD_LIBRARY_PATH=${libXtst}/lib:${glib}/lib:${gtk2}/lib:./x10flasher_lib/linux/lib32|' \
       FlashTool FlashToolConsole
-    chmod +x x10flasher_lib/unyaffs.linux.x86
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" x10flasher_lib/unyaffs.linux.x86
-    ln -sf unyaffs.linux.x86 x10flasher_lib/unyaffs.linux.x64
   '';
 
   installPhase = ''
