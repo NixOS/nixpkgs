@@ -33,6 +33,7 @@ stdenv.mkDerivation rec
     homepage = "https://github.com/haiwen/seafile-clients";
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
     license = stdenv.lib.licenses.asl20;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.calrama ];
   };
 }
