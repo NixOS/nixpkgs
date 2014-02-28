@@ -1,15 +1,17 @@
-{ cabal, HUnit, QuickCheck, testFramework, testFrameworkHunit
-, testFrameworkQuickcheck2
+{ cabal, binary, HUnit, QuickCheck, testFramework
+, testFrameworkHunit, testFrameworkQuickcheck2
 }:
 
 cabal.mkDerivation (self: {
   pname = "largeword";
-  version = "1.0.5";
-  sha256 = "0icwqwpn59xd0qfpaihvwz1waax617qqcl05jv9f26sjdr8688dl";
+  version = "1.1.0";
+  sha256 = "1xpyzgwhjz625jkr8ax21g8cdkrk89jknrx4nxscwfaw67rla8ja";
+  buildDepends = [ binary ];
   testDepends = [
-    HUnit QuickCheck testFramework testFrameworkHunit
+    binary HUnit QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/idontgetoutmuch/largeword";
     description = "Provides Word128, Word192 and Word256 and a way of producing other large words if required";
