@@ -4714,6 +4714,8 @@ let
 
   libelf = callPackage ../development/libraries/libelf { };
 
+  libfm = callPackage ../development/libraries/libfm { };
+
   libgadu = callPackage ../development/libraries/libgadu { };
 
   libgdata = gnome3.libgdata;
@@ -5181,6 +5183,8 @@ let
 
   # failed to build
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
+
+  menu-cache = callPackage ../development/libraries/menu-cache { };
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
@@ -8514,6 +8518,8 @@ let
   };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
+
+  pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
   ruby_gpgme = callPackage ../development/libraries/ruby_gpgme {
     ruby = ruby19;
