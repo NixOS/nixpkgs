@@ -7396,8 +7396,6 @@ let
 
   a2jmidid = callPackage ../applications/audio/a2jmidid { };
 
-  aangifte2005 = callPackage_i686 ../applications/taxes/aangifte-2005 { };
-
   aangifte2006 = callPackage_i686 ../applications/taxes/aangifte-2006 { };
 
   aangifte2007 = callPackage_i686 ../applications/taxes/aangifte-2007 { };
@@ -7411,6 +7409,8 @@ let
   aangifte2011 = callPackage_i686 ../applications/taxes/aangifte-2011 { };
 
   aangifte2012 = callPackage_i686 ../applications/taxes/aangifte-2012 { };
+
+  aangifte2013 = callPackage_i686 ../applications/taxes/aangifte-2013 { };
 
   abcde = callPackage ../applications/audio/abcde {
     inherit (perlPackages) DigestSHA MusicBrainz MusicBrainzDiscID;
