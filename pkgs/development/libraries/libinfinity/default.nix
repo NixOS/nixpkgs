@@ -11,10 +11,10 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "libinfinity-0.5.4";
+  name = "libinfinity-0.5.5";
   src = fetchurl {
     url = "http://releases.0x539.de/libinfinity/${name}.tar.gz";
-    sha256 = "1i7nj8qjay6amg455mwhhfqjvxnfyyql9y40a6a4a3ky170ly004";
+    sha256 = "1i4cnwbvfv56m7zyyf9wki2bj000r8md414yv3cf1jdz4jbyxij7";
   };
 
   buildInputs = [ pkgconfig glib libxml2 gsasl libidn gss ]
