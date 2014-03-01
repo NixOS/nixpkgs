@@ -10327,6 +10327,8 @@ let
 
   streamripper = callPackage ../applications/audio/streamripper { };
 
+  sqliteman = callPackage ../applications/misc/sqliteman { };
+
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tex4ht = callPackage ../tools/typesetting/tex/tex4ht { };
