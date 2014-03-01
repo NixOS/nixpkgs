@@ -2441,12 +2441,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   traverseWithClass = callPackage ../development/libraries/haskell/traverse-with-class {};
 
-  trifecta_1_1 = callPackage ../development/libraries/haskell/trifecta/1.1.nix {
-    parsers = self.parsers_0_9;
-  };
-  trifecta_1_2 = callPackage ../development/libraries/haskell/trifecta/1.2.nix {};
-  trifecta_1_4 = callPackage ../development/libraries/haskell/trifecta/1.4.nix {};
-  trifecta = self.trifecta_1_4;
+  trifecta = callPackage ../development/libraries/haskell/trifecta {};
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
 
