@@ -2800,8 +2800,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   darcs = callPackage ../applications/version-management/darcs {};
 
   idris_plain = callPackage ../development/compilers/idris {
-    parsers = self.parsers_0_9;
-    trifecta = self.trifecta_1_1;
     llvmGeneral = self.llvmGeneral_3_3_8_2;
     llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;
   };
