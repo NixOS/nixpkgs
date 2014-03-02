@@ -270,7 +270,7 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit sandbox binPath;
+    inherit sandbox binPath channel;
   };
 
   meta = {

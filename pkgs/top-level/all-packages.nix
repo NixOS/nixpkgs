@@ -9214,6 +9214,7 @@ let
   wordnet = callPackage ../applications/misc/wordnet { };
 
   wrapChromium = browser: let
+    channel = browser.channel;
     cfg = stdenv.lib.attrByPath [ browser.packageName ] {} config;
     pepperPlugins = [];
     pepperFlags = toString (map (x: x.pepperFlags) pepperPlugins);
