@@ -1,5 +1,8 @@
-{ stdenv, fetchgit, kernel }:
+{ stdenv, fetchgit, kernel, useFFI ? false }:
 
+let
+  ffiArgs = stdenv.lib.optionalString useFFI "FFI=1";
+in
 stdenv.mkDerivation rec {
   name = "ktap-${version}";
   version = "0.5-e7a38ef0";
@@ -10,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    make FFI=1 KERNEL_SRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
+    make ${ffiArgs} KERNEL_SRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
   '';
 
   installPhase = ''
