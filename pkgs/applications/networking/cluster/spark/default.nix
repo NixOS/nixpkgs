@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
 
   phases = "unpackPhase installPhase";
 
-  meta    = {
+  meta = {
     description = "Spark cluster computing";
     homepage    = "http://spark.incubator.apache.org";
     platforms   = stdenv.lib.platforms.all;
