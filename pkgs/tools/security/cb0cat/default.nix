@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "cryptographic tool based on the CBEAMr0 sponge function";
     homepage    = "https://www.cblnk.com";
+    platforms   = stdenv.lib.platforms.unix;
     license     = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
