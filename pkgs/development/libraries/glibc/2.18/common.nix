@@ -119,10 +119,10 @@ stdenv.mkDerivation ({
     ++ stdenv.lib.optional (mig != null) mig
     ++ stdenv.lib.optionals withGd [ gd libpng ];
 
-  # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
-  # prevent a retained dependency on the bootstrap tools in the stdenv-linux
+  # Needed to install share/zoneinfo/zone.tab.  Set to impure "/usr/bin/env bash"
+  # to prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
-  BASH_SHELL = "/bin/sh";
+  BASH_SHELL = "/usr/bin/env bash";
 
   # Workaround for this bug:
   #   http://sourceware.org/bugzilla/show_bug.cgi?id=411
