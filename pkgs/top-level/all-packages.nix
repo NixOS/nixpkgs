@@ -3243,8 +3243,9 @@ let
   };
 
   python3 = hiPrio (callPackage ../development/interpreters/python/3.3 { });
-  python33 = callPackage ../development/interpreters/python/3.3 { };
   python32 = callPackage ../development/interpreters/python/3.2 { };
+  python33 = callPackage ../development/interpreters/python/3.3 { };
+  python34 = callPackage ../development/interpreters/python/3.4 { };
 
   python = python27;
   python26 = callPackage ../development/interpreters/python/2.6 {
@@ -6060,6 +6061,12 @@ let
     inherit (lib) lowPrio;
     python = python33;
   });
+
+  python34Packages = import ./python-packages.nix {
+    inherit pkgs;
+    inherit (lib) lowPrio;
+    python = python34;
+  };
 
   python32Packages = import ./python-packages.nix {
     inherit pkgs;
