@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     configureFlags = configureFlagsFun {
       alsaSupport = stdenv.cross.libc != "msvcrt";
       alsaLib = alsaLib.crossDrv;
-    } + "--disable-directx";
+    };
   };
 
   passthru = {inherit openglSupport;};
