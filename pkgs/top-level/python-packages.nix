@@ -4550,6 +4550,22 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  paypalrestsdk = buildPythonPackage rec {
+    name = "paypalrestsdk-0.7.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/paypalrestsdk/${name}.tar.gz";
+      sha256 = "117kfipzfahf9ysv414bh1mmm5cc9ck5zb6rhpslx1f8gk3frvd6";
+    };
+
+    propagatedBuildInputs = [ httplib2 ];
+
+    meta = {
+      homepage = https://developer.paypal.com/;
+      description = "Python APIs to create, process and manage payment";
+      license = "PayPal SDK License";
+    };
+  };
 
   pep8 = buildPythonPackage rec {
     name = "pep8-${version}";
@@ -6591,6 +6607,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  sorl_thumbnail = buildPythonPackage rec {
+    name = "sorl-thumbnail-11.12";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sorl-thumbnail/${name}.tar.gz";
+      sha256 = "050b9kzbx7jvs3qwfxxshhis090hk128maasy8pi5wss6nx5kyw4";
+    };
+
+    # Disabled due to an improper configuration error when tested against django. This looks like something broken in the test cases for sorl.
+    doCheck = false;
+
+    meta = {
+      homepage = http://sorl-thumbnail.readthedocs.org/en/latest/;
+      description = "Thumbnails for Django";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
 
   supervisor = buildPythonPackage rec {
     name = "supervisor-3.0";
