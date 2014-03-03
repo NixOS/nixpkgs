@@ -6601,6 +6601,22 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  sorl_thumbnail = buildPythonPackage rec {
+    name = "sorl-thumbnail-11.12";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sorl-thumbnail/${name}.tar.gz";
+      sha256 = "050b9kzbx7jvs3qwfxxshhis090hk128maasy8pi5wss6nx5kyw4";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://sorl-thumbnail.readthedocs.org/en/latest/;
+      description = "Thumbnails for Django";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
 
   supervisor = buildPythonPackage rec {
     name = "supervisor-3.0";
