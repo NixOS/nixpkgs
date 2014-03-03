@@ -4544,6 +4544,22 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  paypalrestsdk = buildPythonPackage rec {
+    name = "paypalrestsdk-0.7.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/paypalrestsdk/${name}.tar.gz";
+      sha256 = "117kfipzfahf9ysv414bh1mmm5cc9ck5zb6rhpslx1f8gk3frvd6";
+    };
+
+    propagatedBuildInputs = [ httplib2 ];
+
+    meta = {
+      homepage = https://developer.paypal.com/;
+      description = "Python APIs to create, process and manage payment";
+      license = "PayPal SDK License";
+    };
+  };
 
   pep8 = buildPythonPackage rec {
     name = "pep8-${version}";
