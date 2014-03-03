@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation {
-  name = "gtypist-2.9.3";
+  name = "gtypist-2.9.4";
 
   src = fetchurl {
-    url = "mirror://gnu/gtypist/gtypist-2.9.3.tar.xz";
-    sha256 = "0srwa841caci69hzqb47xfbxxf7fvz3640qka083p72vm8z9hsxw";
+    url = "mirror://gnu/gtypist/gtypist-2.9.4.tar.xz";
+    sha256 = "18f54lh7ihhfvgwk3xd9d087kmganrgi2jd7avhvwn5gcc31vrqq";
   };
 
   buildInputs = [ncurses];
