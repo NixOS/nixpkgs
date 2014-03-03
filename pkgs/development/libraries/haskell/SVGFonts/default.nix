@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "SVGFonts";
-  version = "1.4.0.1";
-  sha256 = "0f878xg6qngl8ahk8zz03f1kyn2jq1dz05zw8av7s91x2ms8q3rg";
+  version = "1.4.0.2";
+  sha256 = "1a1f0jdz36zpj1196zv5qwg35rm4ra0b4z5spr1m3696292nj8ph";
   buildDepends = [
     attoparsec blazeMarkup blazeSvg dataDefaultClass diagramsLib parsec
     split text tuple vector vectorSpace xml
