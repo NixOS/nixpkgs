@@ -14,11 +14,13 @@ in
 
 rec {
 
+  makeCoverageReport = true;
+
   client =
     { config, pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
-      services.xserver.driSupport = true;
+      hardware.opengl.driSupport = true;
       services.xserver.defaultDepth = pkgs.lib.mkOverride 0 16;
       environment.systemPackages = [ pkgs.quake3demo ];
       nixpkgs.config.packageOverrides = overrides;

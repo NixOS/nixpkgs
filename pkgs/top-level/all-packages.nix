@@ -396,10 +396,12 @@ let
 
   fixDarwinDylibNames = makeSetupHook { } ../build-support/setup-hooks/fix-darwin-dylib-names.sh;
 
-  enableCoverageInstrumentation = makeSetupHook { } ../build-support/setup-hooks/enable-coverage-instrumentation.sh;
+  keepBuildTree = makeSetupHook { } ../build-support/setup-hooks/keep-build-tree.sh;
 
-  makeCoverageAnalysisReport = makeSetupHook
-    { deps = [ pkgs.lcov pkgs.enableCoverageInstrumentation ]; }
+  enableGCOVInstrumentation = makeSetupHook { } ../build-support/setup-hooks/enable-coverage-instrumentation.sh;
+
+  makeGCOVReport = makeSetupHook
+    { deps = [ pkgs.lcov pkgs.enableGCOVInstrumentation ]; }
     ../build-support/setup-hooks/make-coverage-analysis-report.sh;
 
 

@@ -79,7 +79,7 @@ stdenv.mkDerivation (
 
     prePhases = ["initPhase"] ++ prePhases;
 
-    buildInputs = buildInputs ++ stdenv.lib.optional doCoverageAnalysis args.makeCoverageAnalysisReport;
+    buildInputs = buildInputs ++ stdenv.lib.optional doCoverageAnalysis args.makeGCOVReport;
 
     lcovFilter = ["/nix/store/*"] ++ lcovFilter;
 
