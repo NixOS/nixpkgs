@@ -2304,6 +2304,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   stringbuilder = callPackage ../development/libraries/haskell/stringbuilder {};
 
+  stripe = callPackage ../development/libraries/haskell/stripe {
+    aeson = self.aeson_0_6_2_1;
+  };
+
   svgcairo = callPackage ../development/libraries/haskell/svgcairo {
     libc = pkgs.stdenv.gcc.libc;
   };
