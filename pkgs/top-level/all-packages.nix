@@ -7170,6 +7170,8 @@ let
   };
 
   windows = rec {
+    cygwinSetup = callPackage ../os-specific/windows/cygwin-setup { };
+
     jom = callPackage ../os-specific/windows/jom { };
 
     w32api = callPackage ../os-specific/windows/w32api {
