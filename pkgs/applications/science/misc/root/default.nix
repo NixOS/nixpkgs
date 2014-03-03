@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
-  version = "5.34.14";
+  version = "5.34.15";
 
   src = fetchurl {
     url = "ftp://root.cern.ch/root/root_v${version}.source.tar.gz";
-    sha256 = "d5347ba1b614eb083cf08050b784d66a93c125ed89938708da1adb33323dee2b";
+    sha256 = "1bkiggcyya39a794d3d2rzzmmkbdymf86hbqhh0l1pl4f38xvp6i";
   };
 
   buildInputs = [ cmake gfortran mesa libX11 libXpm libXft libXext zlib ];
