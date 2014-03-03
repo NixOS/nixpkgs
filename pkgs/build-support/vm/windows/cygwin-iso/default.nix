@@ -14,6 +14,21 @@ let
     sha256 = "1v596lln2iip5h7wxjnig5rflzvqa21zzd2iyhx07zs28q5h76i9";
   };
 
+  cygwinCross = (import ../../../../top-level/all-packages.nix {
+    inherit (stdenv) system;
+    crossSystem = {
+      libc = "msvcrt";
+      platform = {};
+      openssl.system = "mingw64";
+    } // (if stdenv.is64bit then {
+      config = "x86_64-w64-mingw32";
+      arch = "x86_64";
+    } else {
+      config = "i686-w64-mingw32";
+      arch = "i686";
+    });
+  }).windows.cygwinSetup.crossDrv;
+
   makeCygwinClosure = { packages, packageList }: let
     expr = import (runCommand "cygwin.nix" { buildInputs = [ python ]; } ''
       python ${./mkclosure.py} "${packages}" ${toString packageList} > "$out"
@@ -30,10 +45,7 @@ let
 in import <nixpkgs/nixos/lib/make-iso9660-image.nix> {
   inherit stdenv perl cdrkit pathsFromGraph;
   contents = [
-    { source = fetchurl {
-        url = "http://cygwin.com/setup-x86_64.exe";
-        sha256 = "1bjmq9h1p6mmiqp6f1kvmg94jbsdi1pxfa07a5l497zzv9dsfivm";
-      };
+    { source = "${cygwinCross}/bin/setup.exe";
       target = "setup.exe";
     }
     { source = cygPkgList;
