@@ -42,6 +42,5 @@ stdenv.mkDerivation rec {
     homepage = https://sourceware.org/cygwin-apps/setup.html;
     description = "A tool for installing Cygwin";
     license = licenses.gpl2Plus;
-    platforms = platforms.cygwin;
   };
 }
