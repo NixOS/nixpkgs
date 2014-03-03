@@ -28,7 +28,7 @@ let
   in map gen expr;
 
 in import <nixpkgs/nixos/lib/make-iso9660-image.nix> {
-  inherit (import <nixpkgs> {}) stdenv perl cdrkit pathsFromGraph;
+  inherit stdenv perl cdrkit pathsFromGraph;
   contents = [
     { source = fetchurl {
         url = "http://cygwin.com/setup-x86_64.exe";
