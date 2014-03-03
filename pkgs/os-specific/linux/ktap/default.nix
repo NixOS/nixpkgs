@@ -1,16 +1,19 @@
-{ stdenv, fetchgit, kernel }:
+{ stdenv, fetchgit, kernel, useFFI ? false }:
 
+let
+  ffiArgs = stdenv.lib.optionalString useFFI "FFI=1";
+in
 stdenv.mkDerivation rec {
   name = "ktap-${version}";
-  version = "0.5-7ee59b19";
+  version = "0.5-e7a38ef0";
   src = fetchgit {
     url    = "https://github.com/ktap/ktap.git";
-    rev    = "7ee59b19d536fd3d3164ff0a0623faff827e5d97";
-    sha256 = "0a46836469d0afb088e72fd6310406a86c487d17bac40e390cec8bc869e7379c";
+    rev    = "e7a38ef06bec9a651c9e8bdb3ad66a104210d475";
+    sha256 = "07acf20e1926d3afd89b13855154b8cc792c57261e7d3cae2da70cb08844f9c8";
   };
 
   buildPhase = ''
-    make FFI=1 KERNEL_SRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
+    make ${ffiArgs} KERNEL_SRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
   '';
 
   installPhase = ''
