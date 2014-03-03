@@ -1782,6 +1782,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  pew = buildPythonPackage rec {
+    name = "pew-0.1.9";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pew/${name}.tar.gz";
+      md5 = "90a82400074b50a9e73c3045ed9ac217";
+    };
+
+    buildInputs = [ virtualenv virtualenv-clone ];
+
+    meta = with stdenv.lib; {
+      description = "Tools to manage multiple virtualenvs written in pure python, a virtualenvwrapper rewrite";
+      license = licenses.mit;
+      platforms = platforms.all;
+    };
+  };
+
 
   pudb = buildPythonPackage rec {
     name = "pudb-2013.3.6";
@@ -7226,6 +7243,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = http://www.virtualenv.org;
       license = licenses.mit;
       maintainers = [ maintainers.goibhniu ];
+    };
+  };
+
+  virtualenv-clone = buildPythonPackage rec {
+    name = "virtualenv-clone-0.2.4";
+    
+    src = fetchgit {
+      url = "https://github.com/berdario/virtualenv-clone.git";
+      rev = ''c302ca84e524cb22f88c834cccb23dd410cced97'';
+    };
+
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Script to clone virtualenvs";
+      license = licenses.mit;
+      platforms = platforms.all;
     };
   };
 
