@@ -1227,6 +1227,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   gnuidn = callPackage ../development/libraries/haskell/gnuidn {};
 
+  gnuplot = callPackage ../development/libraries/haskell/gnuplot {};
+
   gnutls = callPackage ../development/libraries/haskell/gnutls { inherit (pkgs) gnutls; };
 
   gsasl = callPackage ../development/libraries/haskell/gsasl { inherit (pkgs) gsasl; };
