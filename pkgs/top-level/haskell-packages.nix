@@ -818,6 +818,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   constraints = callPackage ../development/libraries/haskell/constraints {};
 
+  controlMonadFree = callPackage ../development/libraries/haskell/control-monad-free {};
+
   controlMonadLoop = callPackage ../development/libraries/haskell/control-monad-loop {};
 
   convertible = callPackage ../development/libraries/haskell/convertible {};
