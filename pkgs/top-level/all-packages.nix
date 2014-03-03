@@ -7778,6 +7778,10 @@ let
 
     ocamlMode = callPackage ../applications/editors/emacs-modes/ocaml { };
 
+    structuredHaskellMode = callPackage ../applications/editors/emacs-modes/structured-haskell-mode {
+      inherit (haskellPackages) cabal haskellSrcExts;
+    };
+
     tuaregMode = callPackage ../applications/editors/emacs-modes/tuareg { };
 
     hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
