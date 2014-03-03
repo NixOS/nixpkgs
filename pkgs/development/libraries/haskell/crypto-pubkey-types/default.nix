@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "crypto-pubkey-types";
-  version = "0.4.2.1";
-  sha256 = "01jxvx4bjk4qj024ydwskp942gsgy15i9jfh3diq9la8yqnidwj2";
+  version = "0.4.2.2";
+  sha256 = "18z1fnh2xjq600ya8m175m64nwr6bwscr2q47zjy7k38zlm9c8h5";
   buildDepends = [ asn1Types ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-crypto-pubkey-types";
