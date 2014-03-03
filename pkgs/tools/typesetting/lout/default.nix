@@ -1,7 +1,7 @@
 {stdenv, fetchurl, ghostscript}:
 
 stdenv.mkDerivation rec {
-  name = "lout-3.39";
+  name = "lout-3.40";
 
   src = fetchurl {
     urls = [
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
       # XXX: We could add the CTAN mirrors
       # (see http://www.ctan.org/tex-archive/support/lout/).
     ];
-    sha256 = "12gkyqrn0kaa8xq7sc7v3wm407pz2fxg9ngc75aybhi5z825b9vq";
+    sha256 = "1gb8vb1wl7ikn269dd1c7ihqhkyrwk19jwx5kd0rdvbk6g7g25ix";
   };
 
   buildInputs = [ ghostscript ];
