@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gitflow-${version}";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://github.com/petervanderdoes/gitflow/archive/${version}.tar.gz";
-    sha256 = "1f4879ahi8diddn7qvhr0dkj96gh527xnfihbf1ha83fn9cvvcls";
+    sha256 = "0rppgyqgk0drip6852bdm2479zks16cb3mj1jdw6jq80givrqnjx";
   };
 
   preBuild = ''
