@@ -2419,9 +2419,7 @@ let
 
   gccCrossStageStatic = let
       isMingw = (stdenv.cross.libc == "msvcrt");
-      isMingw64 = isMingw && stdenv.cross.config == "x86_64-w64-mingw32";
-      libcCross1 = if isMingw64 then windows.mingw_w64_headers else
-                   if isMingw then windows.mingw_headers1 else null;
+      libcCross1 = if isMingw then windows.mingw_w64_headers else null;
     in
       wrapGCCCross {
       gcc = forceNativeDrv (lib.addMetaAttrs { hydraPlatforms = []; } (
@@ -4235,9 +4233,7 @@ let
   # We can choose:
   libcCrossChooser = name : if name == "glibc" then glibcCross
     else if name == "uclibc" then uclibcCross
-    else if name == "msvcrt" && stdenv.cross.config == "x86_64-w64-mingw32" then
-      windows.mingw_w64
-    else if name == "msvcrt" then windows.mingw_headers3
+    else if name == "msvcrt" then windows.mingw_w64
     else throw "Unknown libc";
 
   libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;

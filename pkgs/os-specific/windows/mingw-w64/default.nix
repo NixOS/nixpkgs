@@ -19,7 +19,7 @@ stdenv.mkDerivation (rec {
   preConfigure = ''
     cd mingw-w64-headers
   '';
-  configureFlags = "--without-crt --host=x86_64-w64-mingw32";
+  configureFlags = "--without-crt";
 } else if onlyPthreads then {
   name = name + "-pthreads";
   preConfigure = ''

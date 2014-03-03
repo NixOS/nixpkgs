@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = let
-    isMingwW64 = stdenv.cross.config == "x86_64-w64-mingw32";
+    isMingw = stdenv.cross.libc == "msvcrt";
   in {
     configurePhase = ''
       makeFlagsArray=(
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
         RANLIB=${stdenv.cross.config}-ranlib
         V=${majorVersion}
         R=${version}
-        ${stdenv.lib.optionals isMingwW64 "mingw"}
+        ${stdenv.lib.optionals isMingw "mingw"}
       )
-    '' + stdenv.lib.optionalString isMingwW64 ''
+    '' + stdenv.lib.optionalString isMingw ''
       installFlagsArray=(
         TO_BIN="lua.exe luac.exe"
         TO_LIB="liblua.a lua52.dll"

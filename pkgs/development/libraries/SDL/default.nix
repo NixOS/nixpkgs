@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     configureFlags = configureFlagsFun {
-      alsaSupport = stdenv.cross.config != "x86_64-w64-mingw32";
+      alsaSupport = stdenv.cross.libc != "msvcrt";
       alsaLib = alsaLib.crossDrv;
     } + "--disable-directx";
   };
