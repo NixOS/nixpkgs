@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "assert-failure";
-  version = "0.1";
-  sha256 = "1xwd6rhka9gzmldkaw3d7262h51wxw9dwgip39q8pjkvvfs5kwkr";
+  version = "0.1.1.0";
+  sha256 = "09djlhhyn9w822a5r41y7gk4cqk74a2fy7skzml2bah2an166gm1";
   buildDepends = [ prettyShow text ];
   jailbreak = true;
   meta = {
