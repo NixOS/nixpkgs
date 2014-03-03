@@ -3844,12 +3844,18 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   mrbob = buildPythonPackage rec {
     name = "mrbob-${version}";
-    version = "0.1a9";
+    version = "0.1.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/m/mr.bob/mr.bob-${version}.zip";
-      md5 = "2d27d9bd1fc6269a3ecfd1a1ae47cd8a";
+      md5 = "84a117c9a75b86842b0fa5f5c9c767f3";
     };
+
+    # some files in tests dir include unicode names
+    preBuild = ''
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LC_ALL="en_US.UTF-8"
+    '';
 
     buildInputs = [ pkgs.unzip ];
 
