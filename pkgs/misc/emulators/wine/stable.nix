@@ -62,6 +62,9 @@ in stdenv.mkDerivation rec {
     install -D ${gecko} $out/share/wine/gecko/${gecko64.name}
   '' + ''
     install -D ${mono} $out/share/wine/mono/${mono.name}
+
+    paxmark psmr $out/bin/wine{,-preloader}
+
     wrapProgram $out/bin/wine --prefix LD_LIBRARY_PATH : ${stdenv.gcc.gcc}/lib
   '';
 
