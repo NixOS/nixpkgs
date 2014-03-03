@@ -6609,6 +6609,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "050b9kzbx7jvs3qwfxxshhis090hk128maasy8pi5wss6nx5kyw4";
     };
 
+    # Disabled due to an improper configuration error when tested against django. This looks like something broken in the test cases for sorl.
     doCheck = false;
 
     meta = {
