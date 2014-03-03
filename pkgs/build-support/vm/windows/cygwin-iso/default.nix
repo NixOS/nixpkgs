@@ -8,10 +8,10 @@
 let
   cygPkgList = if stdenv.is64bit then fetchurl {
     url = "${mirror}/x86_64/setup.ini";
-    sha256 = "142f8zyfwgi6s2djxv3z5wn0ysl94pxwa79z8rjfqz4kvnpgz120";
+    sha256 = "0ljsxdkx9s916wp28kcvql3bjx80zzzidan6jicby7i9s3sm96n9";
   } else fetchurl {
     url = "${mirror}/x86/setup.ini";
-    sha256 = "1v596lln2iip5h7wxjnig5rflzvqa21zzd2iyhx07zs28q5h76i9";
+    sha256 = "1slyj4qha7x649ggwdski9spmyrbs04z2d46vgk8krllg0kppnjv";
   };
 
   cygwinCross = (import ../../../../top-level/all-packages.nix {
