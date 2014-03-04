@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, ncurses, readline }:
+{ stdenv, fetchurl, zlib, ncurses, readline, less }:
 
 let version = "8.4.20"; in
 
@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib ncurses readline ];
+
+  prePatch = ''
+    sed -e 's|#define DEFAULT_PAGER.*|#define DEFAULT_PAGER "${less}/bin/less"|' \
+        -i src/bin/psql/print.h
+  '';
 
   LC_ALL = "C";
 
