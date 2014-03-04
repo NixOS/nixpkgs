@@ -4366,7 +4366,7 @@ let
     guileBindings = config.gnutls.guile or false;
   };
 
-  gnutls31 = callPackage ../development/libraries/gnutls {
+  gnutls31 = callPackage ../development/libraries/gnutls/3.1.nix {
     guileBindings = config.gnutls.guile or false;
   };
 
