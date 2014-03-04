@@ -1431,6 +1431,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   HSH = callPackage ../development/libraries/haskell/HSH {};
 
+  hsini = callPackage ../development/libraries/haskell/hsini {};
+
   HsSyck = callPackage ../development/libraries/haskell/HsSyck {};
 
   HsOpenSSL = callPackage ../development/libraries/haskell/HsOpenSSL {};
