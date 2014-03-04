@@ -1755,6 +1755,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
 
+  mysql = callPackage ../development/libraries/haskell/mysql {
+    mysqlConfig = pkgs.mysql;
+    inherit (pkgs) zlib;
+  };
+
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
 
   nanospec = callPackage ../development/libraries/haskell/nanospec {};
