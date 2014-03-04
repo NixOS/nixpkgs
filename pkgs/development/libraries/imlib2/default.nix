@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
+  preConfigure = ''
+    substituteInPlace imlib2-config.in \
+      --replace "@my_libs@" ""
+  '';
+
   meta = {
     hydraPlatforms = stdenv.lib.platforms.linux;
   };
