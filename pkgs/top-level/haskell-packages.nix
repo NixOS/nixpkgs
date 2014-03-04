@@ -1927,6 +1927,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   pipesAttoparsec = callPackage ../development/libraries/haskell/pipes-attoparsec {};
 
+  pipesBinary = callPackage ../development/libraries/haskell/pipes-binary {};
+
   pipesBytestring = callPackage ../development/libraries/haskell/pipes-bytestring {};
 
   pipesConcurrency = callPackage ../development/libraries/haskell/pipes-concurrency {};
