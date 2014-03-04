@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, runCommand, python, perl, cdrkit, pathsFromGraph }:
+{ stdenv, fetchurl, runCommand, python, perl, cdrkit, pathsFromGraph
+, arch ? "x86_64"
+}:
 
 { packages ? []
 , mirror ? "http://ftp.gwdg.de/pub/linux/sources.redhat.com/cygwin"
@@ -6,7 +8,7 @@
 }:
 
 let
-  cygPkgList = if stdenv.is64bit then fetchurl {
+  cygPkgList = if arch == "x86_64" then fetchurl {
     url = "${mirror}/x86_64/setup.ini";
     sha256 = "0ljsxdkx9s916wp28kcvql3bjx80zzzidan6jicby7i9s3sm96n9";
   } else fetchurl {
@@ -20,13 +22,9 @@ let
       libc = "msvcrt";
       platform = {};
       openssl.system = "mingw64";
-    } // (if stdenv.is64bit then {
-      config = "x86_64-w64-mingw32";
-      arch = "x86_64";
-    } else {
-      config = "i686-w64-mingw32";
-      arch = "i686";
-    });
+      inherit arch;
+      config = "${arch}-w64-mingw32";
+    };
   }).windows.cygwinSetup.crossDrv;
 
   makeCygwinClosure = { packages, packageList }: let

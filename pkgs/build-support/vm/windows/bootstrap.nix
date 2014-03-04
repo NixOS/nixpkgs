@@ -3,7 +3,7 @@
 , samba, socat, vde2, cdrkit, pathsFromGraph
 }:
 
-{ isoFile, productKey }:
+{ isoFile, productKey, arch ? null }:
 
 with stdenv.lib;
 
@@ -15,6 +15,9 @@ let
 
   mkCygwinImage = import ./cygwin-iso {
     inherit stdenv fetchurl runCommand python perl cdrkit pathsFromGraph;
+    arch = let
+      defaultArch = if stdenv.is64bit then "x86_64" else "i686";
+    in if arch == null then defaultArch else arch;
   };
 
   installer = import ./install {
