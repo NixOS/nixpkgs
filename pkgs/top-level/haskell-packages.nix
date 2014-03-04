@@ -1507,6 +1507,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   interlude = callPackage ../development/libraries/haskell/interlude {};
 
+  interpolate = callPackage ../development/libraries/haskell/interpolate {};
+
   interpolatedstringPerl6 = callPackage ../development/libraries/haskell/interpolatedstring-perl6 {};
 
   intervals = callPackage ../development/libraries/haskell/intervals {};
