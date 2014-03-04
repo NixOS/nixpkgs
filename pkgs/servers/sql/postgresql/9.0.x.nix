@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   LC_ALL = "C";
 
+  patches = [ ./less-is-more.patch ];
+
   passthru = {
     inherit readline;
     psqlSchema = "9.0";

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "world" ];
 
-  patches = [ ./disable-resolve_symlinks.patch ];
+  patches = [ ./disable-resolve_symlinks.patch ./less-is-more.patch ];
 
   installTargets = [ "install-world" ];
 

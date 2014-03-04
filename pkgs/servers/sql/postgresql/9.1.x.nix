@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   LC_ALL = "C";
 
+  patches = [ ./less-is-more.patch ];
+
   postInstall =
     ''
       mkdir -p $out/share/man
