@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
       + "debian/patches/21_sanitycheck.diff?revision=1777&view=co";
     sha256 = "0k18a7q6irmgjzp647bd18zccjpsr82n2s9arpamnkakgnny4ks9";
     name = "CVE-2013-2116.patch";
-  })];
+  })
+  ./v2.12_CVE-2014-0092.patch];
 
   configurePhase = ''
     patchShebangs .
