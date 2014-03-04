@@ -7,9 +7,9 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager;
 
-  # Whether desktop manager `d' is capable of setting a background.
-  # If it isn't, the `feh' program is used as a fallback.
-  needBGCond = d: ! (d ? bgSupport && d.bgSupport);
+  # If desktop manager `d' isn't capable of setting a background and
+  # the xserver is enabled, the `feh' program is used as a fallback.
+  needBGCond = d: ! (d ? bgSupport && d.bgSupport) && xcfg.enable;
 
 in
 
