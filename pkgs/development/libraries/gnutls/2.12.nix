@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     license = "LGPLv2.1+";
 
     maintainers = [ ];
+    broken = true; # CVE-2014-0092
   };
 }
