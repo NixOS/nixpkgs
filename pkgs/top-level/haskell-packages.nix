@@ -1760,6 +1760,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     inherit (pkgs) zlib;
   };
 
+  mysqlSimple = callPackage ../development/libraries/haskell/mysql-simple {};
+
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
 
   nanospec = callPackage ../development/libraries/haskell/nanospec {};
