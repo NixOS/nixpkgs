@@ -4361,20 +4361,21 @@ let
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
   gnutls = gnutls32;
-  gnutls31 = callPackage ../development/libraries/gnutls {
-    guileBindings = config.gnutls.guile or true;
-  };
 
   gnutls2 = callPackage ../development/libraries/gnutls/2.12.nix {
-    guileBindings = config.gnutls.guile or true;
+    guileBindings = config.gnutls.guile or false;
+  };
+
+  gnutls31 = callPackage ../development/libraries/gnutls {
+    guileBindings = config.gnutls.guile or false;
   };
 
   gnutls32 = callPackage ../development/libraries/gnutls/3.2.nix {
-    guileBindings = config.gnutls.guile or true;
+    guileBindings = config.gnutls.guile or false;
   };
 
-  gnutls_without_guile = lowPrio (gnutls.override { guileBindings = false; });
-  gnutls2_without_guile = lowPrio (gnutls2.override { guileBindings = false; });
+  gnutls_with_guile = lowPrio (gnutls.override { guileBindings = true; });
+  gnutls2_with_guile = lowPrio (gnutls2.override { guileBindings = true; });
 
   gpac = callPackage ../applications/video/gpac { };
 
