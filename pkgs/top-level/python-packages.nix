@@ -5854,6 +5854,21 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = http://docs.python-requests.org/en/latest/;
     };
   };
+  
+  
+  requests2 = buildPythonPackage rec {
+    name = "requests-2.2.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
+      md5 = "ac27081135f58d1a43e4fb38258d6f4e";
+    };
+
+    meta = {
+      description = "Requests is an Apache2 Licensed HTTP library, written in Python, for human beings..";
+      homepage = http://docs.python-requests.org/en/latest/;
+    };
+  };
 
 
   requests_oauthlib = buildPythonPackage rec {
