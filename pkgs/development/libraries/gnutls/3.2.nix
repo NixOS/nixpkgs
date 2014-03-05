@@ -14,10 +14,7 @@ stdenv.mkDerivation rec {
   patches =
     # FreeBSD doesn't have <alloca.h>, and Gnulib's `alloca' module isn't used.
     stdenv.lib.optional stdenv.isFreeBSD ./guile-gnulib-includes.patch
-    # multiple definitions of '_gnutls_x86_cpuid_s' cause linker to fail.
-    # the patch is: https://www.gitorious.org/gnutls/gnutls/commit/54768ca1cd9049bbd1c695696ef3c8595c6052db
-    # discussion: http://osdir.com/ml/gnutls-devel-gnu/2014-02/msg00012.html
-    ++ stdenv.lib.optional stdenv.isDarwin ./fix_gnutls_x86_cpuid_s_multi_definitions.patch;
+    ;
 
   # Note: GMP is a dependency of Nettle, whose public headers include
   # GMP headers, hence the hack.
