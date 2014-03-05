@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     HUnit mtl parsec QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2 testFrameworkTh
   ];
+  doCheck = false;
   meta = {
     description = "Package for user configuration files (INI)";
     license = self.stdenv.lib.licenses.bsd3;
