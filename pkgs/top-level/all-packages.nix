@@ -7515,8 +7515,6 @@ let
   bitcoin = callPackage ../applications/misc/bitcoin { };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
-    # For some reason, TLS support is broken when using GnuTLS 3.0 (can't
-    # connect to jabber.org, for instance.)
     gnutls = gnutls;
     libotr = libotr_3_2;
   };
