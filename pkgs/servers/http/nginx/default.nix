@@ -5,10 +5,10 @@
 , moreheaders ? false}:
 
 let
-  version = "1.4.5";
+  version = "1.4.6";
   mainSrc = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
-    sha256 = "0zh7w1bz8rcxrs5bwp39m91nzm454mxlf3m5krkv1wm8ar1h5sdd";
+    sha256 = "1ihjb3dqw4icc5pvgaqbp740cyr4m8zxjfvj3v3bkd88swamp2vs";
   };
 
   rtmp-ext = fetchgit {
