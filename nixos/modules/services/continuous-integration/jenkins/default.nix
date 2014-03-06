@@ -2,7 +2,6 @@
 with pkgs.lib;
 let
   cfg = config.services.jenkins;
-  userCfg = config.users.jenkins;
 in {
   options = {
     services.jenkins = {
@@ -18,15 +17,24 @@ in {
         default = "jenkins";
         type = with types; string;
         description = ''
-          User the jenkins server should execute under. Defaults to the "jenkins" user.
+          User the jenkins server should execute under.
+        '';
+      };
+
+      group = mkOption {
+        default = "jenkins";
+        type = with types; string;
+        description = ''
+          User the jenkins server should execute under.
         '';
       };
 
       home = mkOption {
-        default = userCfg.home;
+        default = "/var/lib/jenkins";
         type = with types; string;
         description = ''
-          The path to use as JENKINS_HOME. Defaults to the home of the "jenkins" user.
+          The path to use as JENKINS_HOME. If the default user "jenkins" is configured then
+          this is the home of the "jenkins" user.
         '';
       };
 
@@ -58,7 +66,20 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.jenkins.enable = true;
+    users.extraGroups = optional (cfg.group == "jenkins") {
+      name = "jenkins";
+      gid = config.ids.gids.jenkins;
+    };
+
+    users.extraUsers = optional (cfg.user == "jenkins") {
+      name = "jenkins";
+      description = "jenkins user";
+      createHome = true;
+      home = cfg.home;
+      group = cfg.group;
+      useDefaultShell = true;
+      uid = config.ids.uids.jenkins;
+    };
 
     systemd.services.jenkins = {
       description = "Jenkins Continuous Integration Server";
