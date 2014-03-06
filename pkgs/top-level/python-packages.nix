@@ -1790,7 +1790,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "90a82400074b50a9e73c3045ed9ac217";
     };
 
-    buildInputs = [ virtualenv virtualenv-clone ];
+    propagatedBuildInputs = [ virtualenv virtualenv-clone ];
 
     meta = with stdenv.lib; {
       description = "Tools to manage multiple virtualenvs written in pure python, a virtualenvwrapper rewrite";
@@ -4861,11 +4861,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   py = buildPythonPackage rec {
-    name = "py-1.4.19";
+    name = "py-1.4.20";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
-      md5 = "3857dc8309d5f284669b81184253c2bb";
+      md5 = "5f1708be5482f3ff6711dfd6cafd45e0";
     };
   };
 
@@ -6997,16 +6997,18 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   # TODO
-  # py.error.EACCES: [Permission denied]: mkdir('/homeless-shelter',)
-  # builder for `/nix/store/0czwg0n3pfkmpjphqv1jxfjlgkbziwsx-python-tox-1.4.3.drv' failed with exit code 1
-  # tox = buildPythonPackage rec {
-  #   name = "tox-1.4.3";
+  # Installs correctly but fails tests that involve simple things like:
+  # cmd.run("tox", "-h")
+  # also, buildPythonPackage needs to supply the tox.ini correctly for projects that use tox for their tests
   #
-  #   buildInputs = [ py virtualenv ];
+  # tox = buildPythonPackage rec {
+  #   name = "tox-1.7.0";
+  #
+  #   propagatedBuildInputs = [ py virtualenv ];
   #
   #   src = fetchurl {
-  #     url = "https://pypi.python.org/packages/source/t/tox/tox-1.4.3.tar.gz";
-  #     md5 = "3727d5b0600d92edf2229a7ce6a0f752";
+  #     url = "https://pypi.python.org/packages/source/t/tox/${name}.tar.gz";
+  #     md5 = "5314ceca2b179ad4a9c79f4d817b8a99";
   #   };
   # };
 
@@ -7221,10 +7223,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-1.10";
+    name = "virtualenv-1.11.4";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
-      md5 = "9745c28256c70c76d36adb3767a00212";
+      md5 = "9accc2d3f0ec1da479ce2c3d1fdff06e";
     };
 
     inherit recursivePthLoader;
@@ -7248,12 +7250,16 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   virtualenv-clone = buildPythonPackage rec {
     name = "virtualenv-clone-0.2.4";
-    
-    src = fetchgit {
-      url = "https://github.com/berdario/virtualenv-clone.git";
-      rev = ''c302ca84e524cb22f88c834cccb23dd410cced97'';
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/v/virtualenv-clone/${name}.tar.gz";
+      md5 = "71168b975eaaa91e65559bcc79290b3b";
     };
 
+    buildInputs = [pytest];
+    propagatedBuildInputs = [virtualenv];
+
+    # needs tox to run the tests
     doCheck = false;
 
     meta = with stdenv.lib; {
