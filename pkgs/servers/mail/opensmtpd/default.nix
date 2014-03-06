@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "opensmtpd-${version}";
-  version = "201402281146p1";
+  version = "5.4.2p1";
 
   buildInputs = [ libevent zlib openssl db bison pam ];
 
   src = fetchurl {
     url = "http://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "0q287lx6pcz1bz6b334fb977dpbcg4rpyli3zrxj27wql4x0dg6b";
+    sha256 = "18nrzfjhv9znb5dbhc5k3fi31a3vr1r8j36q3fzghkh47n6z9yjg";
   };  
 
   configureFlags = [ 
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     "--with-sock-dir=/run"
     "--with-privsep-user=smtpd"
     "--with-queue-user=smtpq"
+    "--with-ca-file=/etc/ssl/certs/ca-bundle.crt"
   ];  
 
   meta = {
