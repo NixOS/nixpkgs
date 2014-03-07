@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     cp resources/install/generic/run.sh $out/bin/jitsi
     chmod +x $out/bin/jitsi
+    sed -i 's| java | ${jdk}/bin/java |' $out/bin/jitsi
     patchShebangs $out
   '';
 
