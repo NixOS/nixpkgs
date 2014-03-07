@@ -9,9 +9,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ glib pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://blog.lxde.org/?tag=menu-cache";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     description = "Library to read freedesktop.org menu files";
+    maintainers = [ maintainers.ttuegel ];
+    platforms = platforms.linux;
   };
 }

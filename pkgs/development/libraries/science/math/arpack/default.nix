@@ -25,5 +25,6 @@ stdenv.mkDerivation {
     description = "A collection of Fortran77 subroutines to solve large scale eigenvalue problems";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.bsd3;
+    maintainers = [ stdenv.lib.maintainers.ttuegel ];
   };
 }

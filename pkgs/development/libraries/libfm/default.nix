@@ -9,9 +9,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ glib gtk intltool menu-cache pango pkgconfig vala ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://blog.lxde.org/?cat=28/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     description = "A glib-based library for file management";
+    maintainers = [ maintainers.ttuegel ];
+    platforms = platforms.linux;
   };
 }
