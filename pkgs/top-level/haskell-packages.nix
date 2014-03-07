@@ -1592,6 +1592,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   lensDatetime = callPackage ../development/libraries/haskell/lens-datetime {};
 
+  lensFamilyCore = callPackage ../development/libraries/haskell/lens-family-core {};
+
   lenses = callPackage ../development/libraries/haskell/lenses {};
 
   libffi = callPackage ../development/libraries/haskell/libffi {
@@ -1926,6 +1928,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   pipesAeson = callPackage ../development/libraries/haskell/pipes-aeson {};
 
   pipesAttoparsec = callPackage ../development/libraries/haskell/pipes-attoparsec {};
+
+  pipesBinary = callPackage ../development/libraries/haskell/pipes-binary {
+    binary = self.binary_0_7_1_0;
+  };
 
   pipesBytestring = callPackage ../development/libraries/haskell/pipes-bytestring {};
 
