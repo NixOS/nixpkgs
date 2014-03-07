@@ -1,0 +1,121 @@
+diff -r -u a/app/Makefile.am b/app/Makefile.am
+--- a/app/Makefile.am	2014-01-10 11:38:46.000000000 +0100
++++ b/app/Makefile.am	2014-01-16 14:22:24.584094619 +0100
+@@ -21,7 +21,7 @@
+ seafile_LDADD =  @CCNET_LIBS@ \
+ 	$(top_builddir)/lib/libseafile.la \
+ 	$(top_builddir)/lib/libseafile_common.la \
+-	@SEARPC_LIBS@ \
++	@SEARPC_LIBS@ @JANSSON_LIBS@ \
+ 	@GLIB2_LIBS@  @GOBJECT_LIBS@ -lssl @LIB_RT@ @LIB_UUID@ -lsqlite3
+ 
+ seafile_LDFALGS = @STATIC_COMPILE@ @CONSOLE@
+@@ -29,7 +29,7 @@
+ if COMPILE_SERVER
+ seafserv_tool_SOURCES = seafserv-tool.c
+ seafserv_tool_LDADD =  @CCNET_LIBS@ \
+-	$(top_builddir)/lib/libseafile.la @SEARPC_LIBS@ \
++	$(top_builddir)/lib/libseafile.la @SEARPC_LIBS@ @JANSSON_LIBS@ \
+ 	@GLIB2_LIBS@  @GOBJECT_LIBS@ -lssl @LIB_RT@ @LIB_UUID@ -lsqlite3
+ 
+ seafserv_tool_LDFLAGS = @STATIC_COMPILE@ @CONSOLE@ @SERVER_PKG_RPATH@
+diff -r -u a/configure.ac b/configure.ac
+--- a/configure.ac	2014-01-10 11:38:46.000000000 +0100
++++ b/configure.ac	2014-01-16 14:22:24.584094619 +0100
+@@ -233,6 +233,7 @@
+ GLIB_REQUIRED=2.16.0
+ CCNET_REQUIRED=0.9.3
+ SEARPC_REQUIRED=1.0
++JANSSON_REQUIRED=2.2.1
+ ZDB_REQUIRED=2.10
+ #LIBNAUTILUS_EXTENSION_REQUIRED=2.30.1
+ CURL_REQUIRED=7.17
+@@ -254,6 +255,11 @@
+ AC_SUBST(SEARPC_CFLAGS)
+ AC_SUBST(SEARPC_LIBS)
+ 
++PKG_CHECK_MODULES(JANSSON, [jansson >= $JANSSON_REQUIRED])
++AC_SUBST(JANSSON_CFLAGS)
++AC_SUBST(JANSSON_LIBS)
++
++
+ PKG_CHECK_MODULES(LIBEVENT, [libevent >= $LIBEVENT_REQUIRED])
+ AC_SUBST(LIBEVENT_CFLAGS)
+ AC_SUBST(LIBEVENT_LIBS)
+diff -r -u a/daemon/Makefile.am b/daemon/Makefile.am
+--- a/daemon/Makefile.am	2014-01-10 11:38:46.000000000 +0100
++++ b/daemon/Makefile.am	2014-01-16 14:22:24.587427993 +0100
+@@ -139,7 +139,7 @@
+ 	@GLIB2_LIBS@  @GOBJECT_LIBS@ -lssl @LIB_RT@ @LIB_UUID@ -lsqlite3 -levent \
+ 	$(top_builddir)/common/cdc/libcdc.la \
+ 	$(top_builddir)/common/index/libindex.la ${LIB_WS32} \
+-	@SEARPC_LIBS@ @CCNET_LIBS@ @GNOME_KEYRING_LIBS@
++	@SEARPC_LIBS@ @CCNET_LIBS@ @GNOME_KEYRING_LIBS@ @JANSSON_LIBS@
+ 
+ seaf_daemon_LDFLAGS = @STATIC_COMPILE@ @CONSOLE@
+ 
+diff -r -u a/server/gc/Makefile.am b/server/gc/Makefile.am
+--- a/server/gc/Makefile.am	2014-01-10 11:38:46.000000000 +0100
++++ b/server/gc/Makefile.am	2014-01-16 14:23:20.991449822 +0100
+@@ -50,7 +50,7 @@
+ 	$(top_builddir)/common/cdc/libcdc.la \
+ 	$(top_builddir)/lib/libseafile_common.la \
+ 	@GLIB2_LIBS@ @GOBJECT_LIBS@ -lssl @LIB_RT@ @LIB_UUID@ -lsqlite3 -levent \
+-	@SEARPC_LIBS@ @ZDB_LIBS@ @CURL_LIBS@ ${LIB_WS32}
++	@SEARPC_LIBS@ @JANSSON_LIBS@ @ZDB_LIBS@ @CURL_LIBS@ ${LIB_WS32}
+ 
+ seafserv_gc_LDFLAGS = @STATIC_COMPILE@ @SERVER_PKG_RPATH@
+ 
+@@ -63,6 +63,6 @@
+ 	$(top_builddir)/common/cdc/libcdc.la \
+ 	$(top_builddir)/lib/libseafile_common.la \
+ 	@GLIB2_LIBS@ @GOBJECT_LIBS@ -lssl @LIB_RT@ @LIB_UUID@ -lsqlite3 -levent \
+-	@SEARPC_LIBS@ @ZDB_LIBS@ @CURL_LIBS@ ${LIB_WS32}
++	@SEARPC_LIBS@ @JANSSON_LIBS@ @ZDB_LIBS@ @CURL_LIBS@ ${LIB_WS32}
+ 
+ seaf_fsck_LDFLAGS = @STATIC_COMPILE@ @SERVER_PKG_RPATH@
+diff -r -u a/server/Makefile.am b/server/Makefile.am
+--- a/server/Makefile.am	2014-01-10 11:38:46.000000000 +0100
++++ b/server/Makefile.am	2014-01-16 14:23:40.498354610 +0100
+@@ -99,6 +99,6 @@
+ 	$(top_builddir)/common/index/libindex.la \
+ 	@GLIB2_LIBS@ @GOBJECT_LIBS@ -lssl @LIB_RT@ @LIB_UUID@ -lsqlite3 -levent \
+ 	$(top_builddir)/common/cdc/libcdc.la \
+-	@SEARPC_LIBS@ @ZDB_LIBS@ @CURL_LIBS@ ${LIB_WS32}
++	@SEARPC_LIBS@ @JANSSON_LIBS@ @ZDB_LIBS@ @CURL_LIBS@ ${LIB_WS32}
+ 
+ seaf_server_LDFLAGS = @STATIC_COMPILE@ @SERVER_PKG_RPATH@
+diff -r -u a/httpserver/Makefile.am b/httpserver/Makefile.am
+--- a/httpserver/Makefile.am	2014-01-10 11:38:46.000000000 +0100
++++ b/httpserver/Makefile.am	2014-01-16 14:26:48.673985279 +0100
+@@ -50,7 +50,7 @@
+ 	@CCNET_LIBS@ \
+ 	$(top_builddir)/lib/libseafile.la \
+ 	$(top_builddir)/common/cdc/libcdc.la \
+-	@SEARPC_LIBS@ @ZDB_LIBS@ @CURL_LIBS@ \
++	@SEARPC_LIBS@ @JANSSON_LIBS@ @ZDB_LIBS@ @CURL_LIBS@ \
+ 	@LIBARCHIVE_LIBS@ ${LIB_WS32}
+ 
+ httpserver_LDFLAGS = @STATIC_COMPILE@
+diff -r -u a/controller/Makefile.am b/controller/Makefile.am
+--- a/controller/Makefile.am	2014-01-10 11:38:46.000000000 +0100
++++ b/controller/Makefile.am	2014-01-16 14:29:42.076102675 +0100
+@@ -18,6 +18,6 @@
+ seafile_controller_LDADD = @CCNET_LIBS@ \
+ 	$(top_builddir)/lib/libseafile_common.la \
+ 	@GLIB2_LIBS@  @GOBJECT_LIBS@ -lssl @LIB_RT@ @LIB_UUID@ -levent \
+-	@SEARPC_LIBS@
++	@SEARPC_LIBS@ @JANSSON_LIBS@
+ 
+ seafile_controller_LDFLAGS = @STATIC_COMPILE@ @SERVER_PKG_RPATH@
+diff -r -u a/fuse/Makefile.am b/fuse/Makefile.am
+--- a/fuse/Makefile.am	2014-01-10 11:38:46.000000000 +0100
++++ b/fuse/Makefile.am	2014-01-16 14:31:44.764267711 +0100
+@@ -43,6 +43,6 @@
+ 				  @GLIB2_LIBS@ @GOBJECT_LIBS@ -lssl @LIB_RT@ @LIB_UUID@ \
+                   -lsqlite3 -levent \
+ 				  $(top_builddir)/common/cdc/libcdc.la \
+-				  @SEARPC_LIBS@ @ZDB_LIBS@ @FUSE_LIBS@
++				  @SEARPC_LIBS@ @JANSSON_LIBS@ @ZDB_LIBS@ @FUSE_LIBS@
+ 
+ seaf_fuse_LDFLAGS = @STATIC_COMPILE@ @SERVER_PKG_RPATH@
