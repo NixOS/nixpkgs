@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     # Licensing is a mess: http://www.swig.org/Release/LICENSE .
     license = "BSD-style";
 
+    platforms = stdenv.lib.platforms.linux;
+
     maintainers = with stdenv.lib.maintainers; [ urkud ];
   };
 }
