@@ -4,14 +4,14 @@
 , dnsmasq
 }:
 
-let version = "1.2.0"; in
+let version = "1.2.1"; in
 
 stdenv.mkDerivation {
   name = "libvirt-${version}";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/libvirt-${version}.tar.gz";
-    sha256 = "1p9dn96j8qqp20lr0kvc7zyjjcpgsa9k41slyk2jmnv1g2p7ird8";
+    sha256 = "165qmgsgb43f8b9qcxajv7rpvc67f1gbgnrggv0m6rzk3dsvaadw";
   };
 
   buildInputs =
@@ -41,10 +41,10 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://libvirt.org/;
     description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux (and other OSes)";
-    license = "LGPLv2+";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
   };
 }
