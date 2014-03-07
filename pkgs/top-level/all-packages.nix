@@ -8204,6 +8204,8 @@ let
 
   herbstluftwm = callPackage ../applications/window-managers/herbstluftwm { };
 
+  hexchat = callPackage ../applications/networking/irc/hexchat { };
+
   hexedit = callPackage ../applications/editors/hexedit { };
 
   hipchat = callPackage_i686 ../applications/networking/instant-messengers/hipchat { };
