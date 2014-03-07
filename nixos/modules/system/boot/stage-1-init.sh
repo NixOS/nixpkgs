@@ -14,7 +14,7 @@ fail() {
     # in an interactive shell.
     cat <<EOF
 
-An error occured in stage 1 of the boot process, which must mount the
+An error occurred in stage 1 of the boot process, which must mount the
 root filesystem on \`$targetRoot' and then start stage 2.  Press one
 of the following keys:
 

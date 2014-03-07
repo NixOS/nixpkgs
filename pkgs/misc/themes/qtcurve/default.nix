@@ -28,10 +28,11 @@ stdenv.mkDerivation {
     -DQTC_QT4_ENABLE_KWIN=ON
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/QtCurve/qtcurve;
     description = "Widget styles for Qt4/KDE4 and gtk2";
-    platforms = stdenv.lib.platforms.linux;
-    license = "LGPLv2.1+";
+    platforms = platforms.linux;
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.ttuegel ];
   };
 }

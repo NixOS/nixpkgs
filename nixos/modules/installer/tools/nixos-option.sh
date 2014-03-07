@@ -228,7 +228,7 @@ else
     escapeQuotes () { eval echo "$1"; }
     nixMap escapeQuotes "$names"
   else
-    echo 1>&2 "An error occured while looking for attribute names."
+    echo 1>&2 "An error occurred while looking for attribute names."
     echo $result
   fi
 fi

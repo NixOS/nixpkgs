@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "time";
-  version = "1.4.1";
-  sha256 = "04ndcp7m1a7mia4by15dqrwl5k0d2477x20s6xcrdb7in8w9ccvp";
+  version = "1.4.2";
+  sha256 = "1kpsak2wka23c8591ry6i1d7hmd54s7iw5n6hpx48jhcxf1w199h";
   buildDepends = [ deepseq ];
   testDepends = [
     Cabal deepseq QuickCheck testFramework testFrameworkQuickcheck2
