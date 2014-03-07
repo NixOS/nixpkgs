@@ -32,6 +32,9 @@ in
           backup service. This installs a <literal>systemd</literal>
           service called <literal>tarsnap-backup</literal> which is
           periodically run by cron, or you may run it on-demand.
+
+          See <link xlink:href='http://www.tarsnap.com/gettingstarted.html'>Getting Started</link> 
+          Tarsnap page.
         '';
       };
 
