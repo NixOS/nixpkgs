@@ -59,6 +59,7 @@
   rob = "Rob Vermaas <rob.vermaas@gmail.com>";
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";
   roelof = "Roelof Wobben <rwobben@hotmail.com>";
+  romildo = "José Romildo Malaquias <malaquias@gmail.com>";
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   shlevy = "Shea Levy <shea@shealevy.com>";
