@@ -8321,6 +8321,8 @@ let
 
   jigdo = callPackage ../applications/misc/jigdo { };
 
+  jitsi = callPackage ../applications/networking/instant-messengers/jitsi { };
+
   joe = callPackage ../applications/editors/joe { };
 
   jbrout = callPackage ../applications/graphics/jbrout {
