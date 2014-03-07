@@ -28,7 +28,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   wrapPython = pkgs.makeSetupHook
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
-      substitutions.executable_name = python.executable;
       substitutions.executable = "${python}/bin/${python.executable}";
     }
    ../development/python-modules/generic/wrap.sh;
