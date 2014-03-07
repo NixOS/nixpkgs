@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   patches = ./lein_2.3.0.patch;
 
-  inherit rlwrap clojure gnupg findutils coreutils;
+  inherit rlwrap clojure gnupg findutils coreutils jdk;
 
   builder = ./builder.sh;
 
