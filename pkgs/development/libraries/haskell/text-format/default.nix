@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "text-format";
-  version = "0.3.1.0";
-  sha256 = "13k5a1kfmapd4yckm2vcrwz4vrrf32c2dpisdw0hyvzvmdib3n60";
+  version = "0.3.1.1";
+  sha256 = "02zfgzfjvkaxbma1h2gr95h10c8q9gyaadag41q579j68iv15qbd";
   buildDepends = [ doubleConversion text time transformers ];
   meta = {
     homepage = "https://github.com/bos/text-format";
