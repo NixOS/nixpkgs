@@ -44,5 +44,6 @@ stdenv.mkDerivation {
     description = "A multiplatform music player";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    maintainers = [ maintainers.ttuegel ];
   };
 }

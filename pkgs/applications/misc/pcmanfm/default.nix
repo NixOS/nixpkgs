@@ -9,9 +9,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ glib gtk intltool libfm libX11 pango pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://blog.lxde.org/?cat=28/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     description = "File manager with GTK+ interface";
+    maintainers = [ maintainers.ttuegel ];
+    platforms = platforms.linux;
   };
 }
