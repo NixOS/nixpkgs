@@ -189,6 +189,7 @@
   ./services/networking/rdnssd.nix
   ./services/networking/rpcbind.nix
   ./services/networking/sabnzbd.nix
+  ./services/networking/searx.nix
   ./services/networking/supybot.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
