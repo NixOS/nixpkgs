@@ -5,7 +5,7 @@ wrapPythonPrograms() {
 wrapPythonProgramsIn() {
     local dir="$1"
     local pythonPath="$2"
-    local python="$(type -p python)"
+    local python="@executable@"
     local i
 
     declare -A pythonPathsSeen=()
@@ -22,7 +22,7 @@ wrapPythonProgramsIn() {
             sed -i "$i" -e "1 s^.*/env[ ]*python^#! $python^"
         fi
         
-        if head -n1 "$i" | grep -q /python; then
+        if head -n1 "$i" | grep -q /@executable_name@; then
             # dont wrap EGG-INFO scripts since they are called from python
             if echo "$i" | grep -v EGG-INFO/scripts; then
                 echo "wrapping \`$i'..."
