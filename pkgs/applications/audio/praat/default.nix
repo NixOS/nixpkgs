@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     description = "Doing phonetics by computer";
     homepage = http://www.fon.hum.uva.nl/praat/;
     license = "GPLv2+"; # Has some 3rd-party code in it though
+    platforms = stdenv.lib.platforms.linux;
   };
 }
