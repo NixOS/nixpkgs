@@ -9058,6 +9058,11 @@ let
       else stdenv;
   };
 
+  vimwrapper = callPackage ../applications/editors/vim/wrapper.nix {
+    inherit vim;
+    vimrc = config.vim.vimrc or null;
+  };
+
   vimHugeX = vim_configurable;
 
   vim_configurable = callPackage ../applications/editors/vim/configurable.nix {
