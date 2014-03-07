@@ -3397,6 +3397,8 @@ let
 
   guile_ncurses = callPackage ../development/guile-modules/guile-ncurses { };
 
+  guile-xcb = callPackage ../development/guile-modules/guile-xcb { };
+
   srecord = callPackage ../development/tools/misc/srecord { };
 
   windowssdk = (
