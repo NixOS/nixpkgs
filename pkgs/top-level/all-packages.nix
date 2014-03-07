@@ -6880,6 +6880,8 @@ let
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
+    nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
+
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
     nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
