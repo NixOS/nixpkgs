@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monoid-extras";
-  version = "0.3.2.4";
-  sha256 = "1qrgwnczznjp1visspqf3dk224nvqf5icv3646j96acl5srn84qc";
+  version = "0.3.3";
+  sha256 = "1a203fccwfmyqdv9mdzwd6gq5g9v3k9mial8n0hykdhmlny7dd56";
   buildDepends = [ groupoids groups semigroupoids semigroups ];
   jailbreak = true;
   meta = {
