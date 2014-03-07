@@ -3547,6 +3547,8 @@ let
     inherit (gnome3) gnome_icon_theme;
   };
 
+  dfu-programmer = callPackage ../development/tools/misc/dfu-programmer { };
+
   ddd = callPackage ../development/tools/misc/ddd { };
 
   distcc = callPackage ../development/tools/misc/distcc { };
