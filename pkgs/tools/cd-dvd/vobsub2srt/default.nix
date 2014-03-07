@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://github.com/ruediger/VobSub2SRT;
     description = "Converts VobSub subtitles into SRT subtitles";
-    license = stdenv.lib.libraries.gpl3Plus;
+    license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.ttuegel ];
   };
