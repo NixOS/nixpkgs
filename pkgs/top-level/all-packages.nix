@@ -4383,10 +4383,6 @@ let
 
   gnutls = gnutls32;
 
-  gnutls2 = callPackage ../development/libraries/gnutls/2.12.nix {
-    guileBindings = config.gnutls.guile or false;
-  };
-
   gnutls31 = callPackage ../development/libraries/gnutls/3.1.nix {
     guileBindings = config.gnutls.guile or false;
   };
@@ -4396,7 +4392,6 @@ let
   };
 
   gnutls_with_guile = lowPrio (gnutls.override { guileBindings = true; });
-  gnutls2_with_guile = lowPrio (gnutls2.override { guileBindings = true; });
 
   gpac = callPackage ../applications/video/gpac { };
 
