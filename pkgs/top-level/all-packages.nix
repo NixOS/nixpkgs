@@ -8804,6 +8804,8 @@ let
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
   };
 
+  rtl-sdr = callPackage ../applications/misc/rtl-sdr { };
+
   rubyripper = callPackage ../applications/audio/rubyripper {};
 
   rxvt = callPackage ../applications/misc/rxvt { };
