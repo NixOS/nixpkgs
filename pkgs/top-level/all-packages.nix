@@ -5437,13 +5437,6 @@ let
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
   popplerQt4 = poppler.poppler_qt4;
 
-  poppler_0_18 = callPackage ../development/libraries/poppler/0.18.nix {
-    lcms = lcms2;
-    glibSupport = true;
-    gtk3Support = false;
-    qt4Support  = false;
-  };
-
   popt = callPackage ../development/libraries/popt { };
 
   portaudio = callPackage ../development/libraries/portaudio {
@@ -8390,7 +8383,6 @@ let
         freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
       ];
     };
-    poppler = poppler_0_18;
     clucene_core = clucene_core_2;
     lcms = lcms2;
     mdds = mdds_0_7_1;
