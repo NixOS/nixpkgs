@@ -120,8 +120,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Spark cluster computing";
     homepage    = "http://spark.incubator.apache.org";
-    platforms   = stdenv.lib.platforms.all;
     license     = stdenv.lib.licenses.asl20;
+    platforms   = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }
