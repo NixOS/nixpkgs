@@ -8,17 +8,10 @@ let
 
   etc' = filter (f: f.enable) (attrValues config.environment.etc);
 
-  etc = pkgs.stdenv.mkDerivation {
+  etc = pkgs.makeSymlinks {
     name = "etc";
-
-    builder = ./make-etc.sh;
-
-    preferLocalBuild = true;
-
-    /* !!! Use toXML. */
-    sources = map (x: x.source) etc';
-    targets = map (x: x.target) etc';
-    modes = map (x: x.mode) etc';
+    path = "etc";
+    files = etc';
   };
 
 in

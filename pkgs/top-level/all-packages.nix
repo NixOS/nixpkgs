@@ -364,6 +364,8 @@ let
       inherit stdenv kmod kernel nukeReferences rootModules allowMissing;
     };
 
+  makeSymlinks = args: (import ../build-support/make-symlinks) ({ inherit stdenv pkgs; } // args);
+
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
   srcOnly = args: (import ../build-support/src-only) ({inherit stdenv; } // args);
