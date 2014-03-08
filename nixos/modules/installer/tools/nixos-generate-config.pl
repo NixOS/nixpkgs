@@ -429,6 +429,12 @@ $bootLoaderConfig
   #   defaultLocale = "en_US.UTF-8";
   # };
 
+  # List packages installed in system profile. To search by name, run:
+  # $ nix-env -qaP | grep wget
+  # environment.systemPackages = with pkgs; [
+  #   wget
+  # ];
+
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
@@ -445,6 +451,17 @@ $bootLoaderConfig
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.kdm.enable = true;
   # services.xserver.desktopManager.kde4.enable = true;
+
+  # Define your user and don't forget to set password with passwd
+  # users.extraUsers.guest = {
+  #   name = "guest";
+  #   group = "users";
+  #   uid = 1000;
+  #   createHome = true;
+  #   home = "/home/guest";
+  #   shell = "/run/current-system/sw/bin/bash";
+  # };
+
 }
 EOF
     } else {
