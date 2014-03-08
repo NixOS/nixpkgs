@@ -49,6 +49,7 @@ in
 
       package = mkOption {
         default = pkgs.firebirdSuper;
+        type = types.package;
         /*
           Example: <code>package = pkgs.firebirdSuper.override { icu =
             pkgs.icu; };</code> which is not recommended for compatibility

@@ -67,62 +67,16 @@ rec {
     };
 
 
-  # Generate a coverage report from the coverage data produced by
-  # runTests.
-  makeReport = x: runCommand "report" { buildInputs = [rsync]; }
-    ''
-      mkdir -p $TMPDIR/gcov/
-
-      for d in ${x}/coverage-data/*; do
-          echo "doing $d"
-          [ -n "$(ls -A "$d")" ] || continue
-
-          for i in $(cd $d/nix/store && ls); do
-              if ! test -e $TMPDIR/gcov/nix/store/$i; then
-                  echo "copying $i"
-                  mkdir -p $TMPDIR/gcov/$(echo $i | cut -c34-)
-                  rsync -rv /nix/store/$i/.build/* $TMPDIR/gcov/
-              fi
-          done
-
-          chmod -R u+w $TMPDIR/gcov
-
-          find $TMPDIR/gcov -name "*.gcda" -exec rm {} \;
-
-          for i in $(cd $d/nix/store && ls); do
-              rsync -rv $d/nix/store/$i/.build/* $TMPDIR/gcov/
-          done
-
-          find $TMPDIR/gcov -name "*.gcda" -exec chmod 644 {} \;
-
-          echo "producing info..."
-          ${pkgs.lcov}/bin/geninfo --ignore-errors source,gcov $TMPDIR/gcov --output-file $TMPDIR/app.info
-          cat $TMPDIR/app.info >> $TMPDIR/full.info
-      done
-
-      echo "making report..."
-      mkdir -p $out/coverage
-      ${pkgs.lcov}/bin/genhtml --show-details $TMPDIR/full.info -o $out/coverage
-      cp $TMPDIR/full.info $out/coverage/
-
-      mkdir -p $out/nix-support
-      cat ${x}/nix-support/hydra-build-products >> $out/nix-support/hydra-build-products
-      echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products
-      [ ! -e ${x}/nix-support/failed ] || touch $out/nix-support/failed
-    ''; # */
-
-
   makeTest = testFun: complete (call testFun);
   makeTests = testsFun: lib.mapAttrs (name: complete) (call testsFun);
 
   apply = makeTest; # compatibility
   call = f: f { inherit pkgs system; };
 
-  complete = t: t // rec {
+  complete = { testScript, ... } @ t: t // rec {
+
     nodes = buildVirtualNetwork (
-      if t ? nodes then t.nodes else
-      if t ? machine then { machine = t.machine; }
-      else { } );
+      t.nodes or (if t ? machine then { machine = t.machine; } else { }));
 
     testScript =
       # Call the test script with the computed nodes.
@@ -162,7 +116,7 @@ rec {
 
     test = runTests driver;
 
-    report = makeReport test;
+    report = releaseTools.gcovReport { coverageRuns = [ test ]; };
   };
 
 

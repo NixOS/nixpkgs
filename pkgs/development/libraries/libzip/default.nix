@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "libzip-0.11.1";
+  name = "libzip-0.11.2";
   
   src = fetchurl {
     url = "http://www.nih.at/libzip/${name}.tar.gz";
-    sha256 = "15fwscng2lk0ypg45awk4y2grjqm987frnjcsnbxznfgpckrq7yy";
+    sha256 = "1mcqrz37vjrfr4gnss37z1m7xih9x9miq3mms78zf7wn7as1znw3";
   };
   
   propagatedBuildInputs = [ zlib ];

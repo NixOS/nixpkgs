@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     aeson blazeBuilder caseInsensitive conduit dataDefault httpTypes
     mtl regexCompat text transformers wai waiExtra warp
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/scotty-web/scotty";
     description = "Haskell web framework inspired by Ruby's Sinatra, using WAI and Warp";

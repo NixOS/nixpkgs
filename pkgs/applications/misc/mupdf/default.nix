@@ -8,6 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "0y247nka5gkr1ajn47jrlp5rcnf6h4ff7dfsprma3h4wxqdv7a5b";
   };
 
+  patches = [(fetchurl {
+    name = "CVE-2014-2013.patch";
+    url = "http://git.ghostscript.com/?p=mupdf.git;a=commitdiff_plain;"
+      + "h=60dabde18d7fe12b19da8b509bdfee9cc886aafc";
+    sha256 = "1walj3wir9x50i6lph33bx14c8593r9xrn08gkd3v7r6d15lmjps";
+  })];
+
   buildInputs = [ pkgconfig zlib freetype libjpeg jbig2dec openjpeg libX11 libXext ];
 
   enableParallelBuilding = true;

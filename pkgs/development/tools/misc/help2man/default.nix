@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, gettext, LocaleGettext, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "help2man-1.43.3";
+  name = "help2man-1.44.1";
 
   src = fetchurl {
-    url = "mirror://gnu/help2man/${name}.tar.gz";
-    sha256 = "00yk86rvvaavg7y6i5bvk5xhm417jl9dpr8bqvqdksw0i48qv5v7";
+    url = "mirror://gnu/help2man/${name}.tar.xz";
+    sha256 = "1yyyfw9zrfdvslnv91bnhyqmazwx243wmkc9wdaz888rfx36ipi2";
   };
 
   buildInputs = [ makeWrapper perl gettext LocaleGettext ];

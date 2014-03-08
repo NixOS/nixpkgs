@@ -167,6 +167,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         configureFlags = ["--enable-ftp"];
       };
 
+      fpm = {
+        configureFlags = ["--enable-fpm"];
+      };
+
       /*
          php is build within this derivation in order to add the xdebug lines to the php.ini.
          So both Apache and command line php both use xdebug without having to configure anything.
@@ -208,6 +212,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     bz2Support = config.php.bz2 or false;
     zipSupport = config.php.zip or true;
     ftpSupport = config.php.ftp or true;
+    fpmSupport = config.php.fpm or true;
   };
 
   configurePhase = ''

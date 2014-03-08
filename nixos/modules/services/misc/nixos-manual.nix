@@ -63,7 +63,7 @@ in
 
     services.nixosManual.showManual = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = ''
         Whether to show the NixOS manual on one of the virtual
         consoles.

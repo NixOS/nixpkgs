@@ -213,7 +213,8 @@ in rec {
     with lib;
     let
       testsFor = system:
-        mapAttrsRecursiveCond (x: !x ? test) (n: v: listToAttrs [(nameValuePair system v.test)])
+        mapAttrsRecursiveCond (x: !x ? test)
+          (n: v: listToAttrs [(nameValuePair system (if v.makeCoverageReport or false then v.report else v.test))])
           (import ./tests { inherit nixpkgs system; });
     in fold recursiveUpdate {} (map testsFor systems);
 }

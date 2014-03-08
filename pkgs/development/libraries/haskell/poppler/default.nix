@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "poppler";
-  version = "0.12.2.2";
-  sha256 = "1ln5akiarv1ng5gjrzf8bnkm556xzl50m209qvi5nk98g7fyhqs7";
+  version = "0.12.3";
+  sha256 = "1ny2r1cpsshpg00w6bd0f5mw26xsy99l7dgx2xq8f01zcwdy4nrp";
   buildDepends = [ cairo glib gtk mtl ];
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ libc ];

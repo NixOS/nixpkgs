@@ -187,51 +187,13 @@ rec {
     { mkDerivation = args: stdenv.mkDerivation (args // extraAttrs); };
 
 
-  /* Return a modified stdenv that performs the build under $out/.build
-     instead of in $TMPDIR.  Thus, the sources are kept available.
-     This is useful for things like debugging or generation of
-     dynamic analysis reports. */
-  keepBuildTree = stdenv:
-    addAttrsToDerivation
-      { prePhases = "moveBuildDir";
-
-        moveBuildDir =
-          ''
-            mkdir -p $out/.build
-            cd $out/.build
-          '';
-      } stdenv;
-
-
-  cleanupBuildTree = stdenv:
-    addAttrsToDerivation
-      { postPhases = "cleanupBuildDir";
-
-        # Get rid of everything that isn't a gcno file or a C source
-        # file.  This also includes the gcda files; we're not
-        # interested in coverage resulting from the package's own test
-        # suite.  Also strip the `.tmp_' prefix from gcno files.  (The
-        # Linux kernel creates these.)
-        cleanupBuildDir =
-          ''
-            find $out/.build/ -type f -a ! \
-              \( -name "*.c" -o -name "*.h" -o -name "*.gcno" \) \
-              | xargs rm -f --
-
-            for i in $(find $out/.build/ -name ".tmp_*.gcno"); do
-                mv "$i" "$(echo $i | sed s/.tmp_//)"
-            done
-          '';
-      } stdenv;
-
-
   /* Return a modified stdenv that builds packages with GCC's coverage
      instrumentation.  The coverage note files (*.gcno) are stored in
      $out/.build, along with the source code of the package, to enable
      programs like lcov to produce pretty-printed reports.
   */
   addCoverageInstrumentation = stdenv:
-    cleanupBuildTree (keepBuildTree (overrideInStdenv stdenv [ pkgs.enableCoverageInstrumentation ]));
+    overrideInStdenv stdenv [ pkgs.enableGCOVInstrumentation pkgs.keepBuildTree ];
 
 
   /* Replace the meta.maintainers field of a derivation.  This is useful

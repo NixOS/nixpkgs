@@ -14,7 +14,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ gtk pygobject pycairo ];
 
-  installCommand = "make install";
+  configurePhase = "configurePhase";
+
+  buildPhase = "buildPhase";
+
+  installPhase = "installPhase";
+
   checkPhase = stdenv.lib.optionalString (libglade == null)
     ''
       sed -i -e "s/glade = importModule('gtk.glade', buildDir)//" \

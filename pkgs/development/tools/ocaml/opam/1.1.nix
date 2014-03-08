@@ -30,13 +30,13 @@ let
       sha256 = "5421559aa12b4debffef947f7e1039c22e9dffd87a4aa68445a687a20764ae81";
     };
     opam = fetchurl {
-      url = "https://github.com/ocaml/opam/archive/1.1.0.zip";
-      sha256 = "38a5edc1428f9e8e0d13e7017c97e1614dd651b75b4c234c80ff22f103d38bf7";
+      url = "https://github.com/ocaml/opam/archive/1.1.1.zip";
+      sha256 = "9c69eeb448af5a38950b2664446401ce240b9f028e0b4d26b6ac1a96938a5f03";
     };
   };
 in
 stdenv.mkDerivation rec {
-  name = "opam-1.1.0";
+  name = "opam-1.1.1";
 
   buildInputs = [unzip curl ncurses ocaml];
 

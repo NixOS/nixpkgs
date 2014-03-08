@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
 , udev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
 , libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll
-, gobjectIntrospection, modemmanager }:
+, gobjectIntrospection, modemmanager, openresolv }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     "--with-dhcpcd=no"
     "--with-iptables=${iptables}/sbin/iptables"
     "--with-udev-dir=\${out}/lib/udev"
-    "--without-resolvconf"
+    "--with-resolvconf=${openresolv}/sbin/resolvconf"
     "--sysconfdir=/etc" "--localstatedir=/var"
     "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
     "--with-crypto=gnutls" "--disable-more-warnings"

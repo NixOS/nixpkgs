@@ -25,6 +25,7 @@ in
 
       package = mkOption {
         default = pkgs.nginx;
+        type = types.package;
         description = "
           Nginx package to use.
         ";

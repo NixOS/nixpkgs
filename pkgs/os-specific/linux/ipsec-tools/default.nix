@@ -7,11 +7,11 @@
 # the time being.
 
 stdenv.mkDerivation rec {
-  name = "ipsec-tools-0.8.1";
+  name = "ipsec-tools-0.8.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/ipsec-tools/${name}.tar.bz2";
-    sha256 = "1m1x2planqqxi0587g7d8xhy0gkyfaxs3ry4hhdh0bw46sxrajps";
+    sha256 = "0b9gfbz78k2nj0k7jdlm5kajig628ja9qm0z5yksiwz22s3v7dlf";
   };
 
   buildInputs = [ readline openssl flex krb5 pam ];

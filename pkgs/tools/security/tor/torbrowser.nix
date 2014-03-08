@@ -15,6 +15,9 @@ let
     ];
   };
 
+  ldLibraryPath = if bits == "64" then torEnv+"/lib:"+torEnv+"/lib64"
+        else torEnv+"/lib";
+
 in stdenv.mkDerivation rec {
   name = "tor-browser-${version}";
   version = "3.5";
@@ -36,7 +39,7 @@ in stdenv.mkDerivation rec {
     # Just do a simple test if all libraries get loaded by running help on
     # firefox and tor
     echo "Checking firefox..."
-    LD_LIBRARY_PATH=${torEnv}/lib Browser/firefox --help 1> /dev/null
+    LD_LIBRARY_PATH=${ldLibraryPath} Browser/firefox --help 1> /dev/null
     echo "Checking tor..."
     LD_LIBRARY_PATH=${torEnv}/lib:Tor Tor/tor --help 1> /dev/null
   '';
@@ -53,7 +56,7 @@ in stdenv.mkDerivation rec {
         echo "pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/Data/Tor/\");" >> \
           ~/Data/Browser/profile.default/preferences/extension-overrides.js
       fi
-      export LD_LIBRARY_PATH=${torEnv}/lib:$out/share/tor-browser/Tor
+      export LD_LIBRARY_PATH=${ldLibraryPath}:$out/share/tor-browser/Tor
       $out/share/tor-browser/Browser/firefox -no-remote -profile ~/Data/Browser/profile.default "$@"
     EOF
     chmod +x $out/bin/tor-browser
@@ -65,6 +68,6 @@ in stdenv.mkDerivation rec {
     description = "Tor Browser Bundle for GNU/Linux, everything you need to safely browse the Internet";
     homepage = https://www.torproject.org/;
     platforms = ["i686-linux" "x86_64-linux"];
-    maintainers = [ maintainers.offline ];
+    maintainers = [ maintainers.offline maintainers.matejc ];
   };
 }

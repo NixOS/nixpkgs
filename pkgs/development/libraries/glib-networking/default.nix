@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, libtool, intltool, gnutls2, libproxy
+{stdenv, fetchurl, pkgconfig, glib, libtool, intltool, gnutls, libproxy
 , gsettings_desktop_schemas, libgcrypt, libtasn1 }:
 
 stdenv.mkDerivation {
@@ -17,5 +17,5 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig intltool ];
   propagatedBuildInputs =
-    [ glib libtool gnutls2 libproxy libgcrypt libtasn1 gsettings_desktop_schemas ];
+    [ glib libtool gnutls libproxy libgcrypt libtasn1 gsettings_desktop_schemas ];
 }

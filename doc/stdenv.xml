@@ -1157,9 +1157,24 @@ echo @foo@
   </varlistentry>
 
   <varlistentry>
+    <term>gdk-pixbuf</term>
+    <listitem><para>Exports <envar>GDK_PIXBUF_MODULE_FILE</envar>
+    environment variable the the builder. Add librsvg package
+    to <varname>buildInputs</varname> to get svg support.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term>GHC</term>
     <listitem><para>Creates a temporary package database and registers
     every Haskell build input in it (TODO: how?).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>GStreamer</term>
+    <listitem><para>Adds the
+    GStreamer plugins subdirectory of
+    each build input to the <envar>GST_PLUGIN_SYSTEM_PATH_1_0</envar> or
+    <envar>GST_PLUGIN_SYSTEM_PATH</envar> environment variable.</para></listitem>
   </varlistentry>
 
 </variablelist>

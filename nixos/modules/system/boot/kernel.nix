@@ -159,7 +159,7 @@ in
 
     boot.kernel.sysctl."kernel.printk" = config.boot.consoleLogLevel;
 
-    boot.kernelModules = [ "loop" ];
+    boot.kernelModules = [ "loop" "configs" ];
 
     boot.initrd.availableKernelModules =
       [ # Note: most of these (especially the SATA/PATA modules)

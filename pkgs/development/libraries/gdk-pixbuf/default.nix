@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ldhpdalbyi6q5k1dz498i9hqcsd51yxq0f91ck9p0h4v38blfx1";
   };
 
+  setupHook = ./setup-hook.sh;
+
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
   buildInputs = [ libX11 libintlOrEmpty ];
 

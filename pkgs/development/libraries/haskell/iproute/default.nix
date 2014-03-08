@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "iproute";
-  version = "1.2.11";
-  sha256 = "14f96sb41f5m14186900rz84vwv7idjiylp8m5nsm6gganvh4sh4";
+  version = "1.2.12";
+  sha256 = "19pr6my4nw7qq9lsp6xvz55lm9svwzqka5qcqy79sfdkxg459rg5";
   buildDepends = [ appar byteorder network ];
   testDepends = [
     appar byteorder doctest hspec network QuickCheck safe

@@ -45,6 +45,7 @@ in
       package = mkOption {
         default = pkgs.redis;
         description = "Which Redis derivation to use.";
+        type = types.package;
       };
 
       user = mkOption {

@@ -43,10 +43,12 @@ with pkgs.lib;
         group = "dictd";
         description = "DICT.org dictd server";
         home = "${dictdb}/share/dictd";
+        uid = config.ids.uids.dictd;
       };
 
     users.extraGroups = singleton
       { name = "dictd";
+        gid = config.ids.gids.dictd;
       };
 
     jobs.dictd =

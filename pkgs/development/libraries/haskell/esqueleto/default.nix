@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "esqueleto";
-  version = "1.3.4.5";
-  sha256 = "0fw57dn67gx5v7drd4g7xbj1z614sr3lxw7gcciypnjc7qkqjgv7";
+  version = "1.3.4.6";
+  sha256 = "1mqjgc1glnfivrmw77mk6mqr02gp6l3jlvpz5ysiii42c1bp55n0";
   buildDepends = [
     conduit monadLogger persistent resourcet tagged text transformers
     unorderedContainers

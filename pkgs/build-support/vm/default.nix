@@ -1714,5 +1714,4 @@ rec {
       };
 
     };
-
-}
+} // import ./windows pkgs

@@ -5,8 +5,8 @@ assert zlibSupport -> zlib != null;
 
 let
 
-  majorVersion = "2.2.1";
-  version = "${majorVersion}";
+  majorVersion = "2.2";
+  version = "${majorVersion}.1";
   pythonVersion = "2.7";
   libPrefix = "pypy${majorVersion}";
 

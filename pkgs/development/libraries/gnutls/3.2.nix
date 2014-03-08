@@ -3,14 +3,18 @@
 
 assert guileBindings -> guile != null;
 
-stdenv.mkDerivation (rec {
-
-  name = "gnutls-3.2.10";
+stdenv.mkDerivation rec {
+  name = "gnutls-3.2.12";
 
   src = fetchurl {
     url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2/${name}.tar.lz";
-    sha256 = "1g1w93d66sz51977zbqd56641r501a1djcwhykbjm8alhyz1564h";
+    sha256 = "1zwk9qkxn3190nssyamd7jsb3ag6mnnln3jwbgmjs1w306dzwafi";
   };
+
+  patches =
+    # FreeBSD doesn't have <alloca.h>, and Gnulib's `alloca' module isn't used.
+    stdenv.lib.optional stdenv.isFreeBSD ./guile-gnulib-includes.patch
+    ;
 
   # Note: GMP is a dependency of Nettle, whose public headers include
   # GMP headers, hence the hack.
@@ -21,15 +25,14 @@ stdenv.mkDerivation (rec {
       --with-lzo --with-libtasn1-prefix="${libtasn1}"           \
       --with-libnettle-prefix="${nettle}"                       \
       CPPFLAGS="-I${gmp}/include"                               \
-      ${if guileBindings
-        then "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""
-        else ""}
+      ${stdenv.lib.optionalString guileBindings
+          "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""}
   '';
 
   # Build of the Guile bindings is not parallel-safe.  See
   # <http://git.savannah.gnu.org/cgit/gnutls.git/commit/?id=330995a920037b6030ec0282b51dde3f8b493cad>
   # for the actual fix.
-  enableParallelBuilding = false;
+  enableParallelBuilding = !guileBindings;
 
   buildInputs = [ zlib lzo lzip ]
     ++ stdenv.lib.optional guileBindings guile;
@@ -42,7 +45,7 @@ stdenv.mkDerivation (rec {
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "The GNU Transport Layer Security Library";
 
     longDescription = ''
@@ -61,25 +64,8 @@ stdenv.mkDerivation (rec {
 
     homepage = http://www.gnu.org/software/gnutls/;
     license = "LGPLv2.1+";
-    maintainers = [ ];
-    platforms = platforms.all;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
 
-//
-
-(stdenv.lib.optionalAttrs stdenv.isFreeBSD {
-  # FreeBSD doesn't have <alloca.h>, and Gnulib's `alloca' module isn't used.
-  patches = [ ./guile-gnulib-includes.patch ];
-})
-
-//
-
-(stdenv.lib.optionalAttrs stdenv.isDarwin {
-  # multiple definitions of '_gnutls_x86_cpuid_s' cause linker to fail.
-  # the patch is: https://www.gitorious.org/gnutls/gnutls/commit/54768ca1cd9049bbd1c695696ef3c8595c6052db
-  # discussion: http://osdir.com/ml/gnutls-devel-gnu/2014-02/msg00012.html
-  patches = [ ./fix_gnutls_x86_cpuid_s_multi_definitions.patch ];
-})
-
-)

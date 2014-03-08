@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dbus, gnutls2, wxGTK28, libidn, tinyxml, gettext
+{ stdenv, fetchurl, dbus, gnutls, wxGTK28, libidn, tinyxml, gettext
 , pkgconfig, xdg_utils, gtk2, sqlite }:
 
 let version = "3.7.3"; in
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    dbus gnutls2 wxGTK28 libidn tinyxml gettext pkgconfig xdg_utils gtk2 sqlite
+    dbus gnutls wxGTK28 libidn tinyxml gettext pkgconfig xdg_utils gtk2 sqlite
   ];
 
   meta = with stdenv.lib; {

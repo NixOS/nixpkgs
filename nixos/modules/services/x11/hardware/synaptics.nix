@@ -2,9 +2,23 @@
 
 with pkgs.lib;
 
-let cfg = config.services.xserver.synaptics; in
-
-{
+let cfg = config.services.xserver.synaptics;
+    tapConfig = if cfg.tapButtons then enabledTapConfig else disabledTapConfig;
+    enabledTapConfig = ''
+      Option "MaxTapTime" "180"
+      Option "MaxTapMove" "220"
+      Option "TapButton1" "${builtins.elemAt cfg.buttonsMap 0}"
+      Option "TapButton2" "${builtins.elemAt cfg.buttonsMap 1}"
+      Option "TapButton3" "${builtins.elemAt cfg.buttonsMap 2}"
+    '';
+    disabledTapConfig = ''
+      Option "MaxTapTime" "0"
+      Option "MaxTapMove" "0"
+      Option "TapButton1" "0"
+      Option "TapButton2" "0"
+      Option "TapButton3" "0"
+    '';
+in {
 
   options = {
 
@@ -106,15 +120,10 @@ let cfg = config.services.xserver.synaptics; in
           MatchIsTouchpad "on"
           ${optionalString (cfg.dev != null) ''MatchDevicePath "${cfg.dev}"''}
           Driver "synaptics"
-          Option "MaxTapTime" "180"
-          Option "MaxTapMove" "220"
           Option "MinSpeed" "${cfg.minSpeed}"
           Option "MaxSpeed" "${cfg.maxSpeed}"
           Option "AccelFactor" "${cfg.accelFactor}"
-          ${if cfg.tapButtons then "" else ''Option "MaxTapTime" "0"''}
-          Option "TapButton1" "${builtins.elemAt cfg.buttonsMap 0}"
-          Option "TapButton2" "${builtins.elemAt cfg.buttonsMap 1}"
-          Option "TapButton3" "${builtins.elemAt cfg.buttonsMap 2}"
+          ${optionalString cfg.tapButtons tapConfig}
           Option "ClickFinger1" "${builtins.elemAt cfg.buttonsMap 0}"
           Option "ClickFinger2" "${builtins.elemAt cfg.buttonsMap 1}"
           Option "ClickFinger3" "${builtins.elemAt cfg.buttonsMap 2}"

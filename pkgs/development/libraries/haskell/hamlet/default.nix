@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hamlet";
-  version = "1.1.8";
-  sha256 = "093igcaycg2d29ncj9l8qbzi21drynjk8kvqfl70zqvgsm8nai7x";
+  version = "1.1.9.2";
+  sha256 = "122wfkk23a2bvz29hrgxj24k6cf315fwdbz70ih3nclawh0bhani";
   buildDepends = [
     blazeBuilder blazeHtml blazeMarkup failure parsec shakespeare
     systemFileio systemFilepath text time

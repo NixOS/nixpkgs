@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "text-stream-decode";
-  version = "0.1.0.3";
-  sha256 = "0gz5w7n7yb6z5mfzlg3yg9s89wsqnmmk4j94invj2da0rw7d03xv";
+  version = "0.1.0.4";
+  sha256 = "041winxbqkz1y6vx6sgbhl925n5qxii2q7ijcwa85sj4dkrqpafr";
   buildDepends = [ text ];
   testDepends = [ deepseq hspec text ];
   meta = {

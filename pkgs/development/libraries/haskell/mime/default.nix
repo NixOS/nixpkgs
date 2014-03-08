@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "mime";
-  version = "0.4.0";
-  sha256 = "159jp7dcyx26slda2743zdr2prnm707mnglcb9p66hr1wjh98kx4";
+  version = "0.4.0.1";
+  sha256 = "1m987sqnns54qbsg68332mnrjkh71z6s83cma2kwavf0y305mrp0";
   buildDepends = [ text ];
   meta = {
     homepage = "https://github.com/GaloisInc/mime";

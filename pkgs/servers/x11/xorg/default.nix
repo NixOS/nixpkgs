@@ -79,6 +79,16 @@ let
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
 
+  dri3proto = (stdenv.mkDerivation ((if overrides ? dri3proto then overrides.dri3proto else x: x) {
+    name = "dri3proto-1.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/proto/dri3proto-1.0.tar.bz2;
+      sha256 = "0x609xvnl8jky5m8jdklw4nymx3irkv32w99dfd8nl800bblkgh1";
+    };
+    buildInputs = [pkgconfig ];
+  })) // {inherit ;};
+
   encodings = (stdenv.mkDerivation ((if overrides ? encodings then overrides.encodings else x: x) {
     name = "encodings-1.0.4";
     builder = ./builder.sh;
@@ -909,6 +919,16 @@ let
     buildInputs = [pkgconfig kbproto libX11 ];
   })) // {inherit kbproto libX11 ;};
 
+  libxshmfence = (stdenv.mkDerivation ((if overrides ? libxshmfence then overrides.libxshmfence else x: x) {
+    name = "libxshmfence-1.1";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/lib/libxshmfence-1.1.tar.bz2;
+      sha256 = "1gnfb1z8sbbdc3xpz1zmm94lv7yvfh4kvip9s5pj37ya4llxphnv";
+    };
+    buildInputs = [pkgconfig xproto ];
+  })) // {inherit xproto ;};
+
   lndir = (stdenv.mkDerivation ((if overrides ? lndir then overrides.lndir else x: x) {
     name = "lndir-1.0.3";
     builder = ./builder.sh;
@@ -958,6 +978,16 @@ let
     };
     buildInputs = [pkgconfig libfontenc freetype xproto zlib ];
   })) // {inherit libfontenc freetype xproto zlib ;};
+
+  presentproto = (stdenv.mkDerivation ((if overrides ? presentproto then overrides.presentproto else x: x) {
+    name = "presentproto-1.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/proto/presentproto-1.0.tar.bz2;
+      sha256 = "1kir51aqg9cwazs14ivcldcn3mzadqgykc9cg87rm40zf947sb41";
+    };
+    buildInputs = [pkgconfig ];
+  })) // {inherit ;};
 
   printproto = (stdenv.mkDerivation ((if overrides ? printproto then overrides.printproto else x: x) {
     name = "printproto-1.0.5";
@@ -1180,11 +1210,11 @@ let
   })) // {inherit gperf m4 libxcb xproto ;};
 
   xcbutilwm = (stdenv.mkDerivation ((if overrides ? xcbutilwm then overrides.xcbutilwm else x: x) {
-    name = "xcb-util-wm-0.4.0";
+    name = "xcb-util-wm-0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-util-wm-0.4.0.tar.bz2;
-      sha256 = "07zmlaaqkasihmkfwcac4wclb8zws915inz57y3kr3frywc7ryb6";
+      url = http://xcb.freedesktop.org/dist/xcb-util-wm-0.4.1.tar.bz2;
+      sha256 = "0gra7hfyxajic4mjd63cpqvd20si53j1q3rbdlkqkahfciwq3gr8";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
   })) // {inherit gperf m4 libxcb xproto ;};

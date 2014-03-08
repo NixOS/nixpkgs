@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     make -C src install
   '';
 
-  buildInputs = [ pkgconfig iconnamingutils gtk];
+  buildInputs = [ pkgconfig iconnamingutils gtk gnome3.gnome_icon_theme ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

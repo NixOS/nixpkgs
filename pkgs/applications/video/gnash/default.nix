@@ -97,9 +97,7 @@ stdenv.mkDerivation rec {
     # (e.g., gst-ffmpeg is needed to watch movies such as YouTube's).
     for prog in "$out/bin/"*
     do
-      wrapProgram "$prog" --prefix                                            \
-        GST_PLUGIN_PATH ":"                                                     \
-        "${gst_plugins_base}/lib/gstreamer-0.10:${gst_plugins_good}/lib/gstreamer-0.10:${gst_ffmpeg}/lib/gstreamer-0.10"
+      wrapProgram "$prog" --prefix GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"
     done
   '';
 

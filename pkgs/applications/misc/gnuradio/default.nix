@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnuradio-${version}";
-  version = "3.7.1";
+  version = "3.7.2.1";
 
   src = fetchurl {
     url = "http://gnuradio.org/releases/gnuradio/${name}.tar.gz";
-    sha256 = "1kfni8vpgr6v9rdiz3zsmwc07qj6zka9x22z2y0y4rak2xnzdxz9";
+    sha256 = "101wr19nxfc5x7i4s10vgrypaa0vj2pkg8b2vn5j5s9iv8gpwswc";
   };
 
   buildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     printf "backend : Qt4Agg\n" > "$out/share/gnuradio/matplotlibrc"
 
-    for file in "$out"/bin/*; do
+    for file in "$out"/bin/* "$out"/share/gnuradio/examples/*/*.py; do
         wrapProgram "$file" \
             --set PYTHONPATH $PYTHONPATH:$(toPythonPath "$out") \
             --set MATPLOTLIBRC "$out/share/gnuradio"

@@ -55,7 +55,7 @@ in
       };
 
       package = mkOption {
-        type = types.path;
+        type = types.package;
         example = literalExample "pkgs.postgresql92";
         description = ''
           PostgreSQL package to use.

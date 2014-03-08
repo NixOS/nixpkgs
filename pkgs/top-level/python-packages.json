@@ -134,6 +134,8 @@
   { "name": "psycopg2",
     "buildInputs": [ "pkgs.postgresql" ],
     "doCheck": false
+  },
+  { "name": "xlrd",
+    "doCheck": false
   }
-
 ]

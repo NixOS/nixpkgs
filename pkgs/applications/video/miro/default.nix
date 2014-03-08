@@ -40,15 +40,17 @@ buildPythonPackage rec {
            plat/resources.py
   '';
 
-  installCommand = ''
-    python setup.py install --prefix= --root="$out"
-  '';
-
   # Disabled for now, because it requires networking and even if we skip those
   # tests, the whole test run takes around 10-20 minutes.
   doCheck = false;
   checkPhase = ''
     HOME="$TEMPDIR" LANG=en_US.UTF-8 python miro.real --unittest
+  '';
+
+  preInstall = ''
+    # see https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix
+    ${python}/bin/${python.executable} setup.py install_data --root=$out
+    sed -i '/data_files=data_files/d' setup.py
   '';
 
   postInstall = ''

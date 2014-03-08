@@ -649,6 +649,7 @@ in
 
     systemd.targets.keys =
       { description = "Security Keys";
+        unitConfig.X-StopOnReconfiguration = true;
       };
 
     systemd.units =

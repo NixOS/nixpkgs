@@ -2,7 +2,7 @@
 
 let
   name = "scons";
-  version = "2.3.0";
+  version = "2.3.1";
 in
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/scons/${name}-${version}.tar.gz";
-    sha256 = "0jrv8v5dpdp231n1gsfmirqy27f7qas6m255jjm2qjygk6chchll";
+    sha256 = "00822ax62cfi2fvz9zhw80hl1273524d97xfycq4q276z1lb86h9";
   };
 
   buildInputs = [python makeWrapper];

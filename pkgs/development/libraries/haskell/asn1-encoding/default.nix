@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "asn1-encoding";
-  version = "0.8.1.2";
-  sha256 = "01i7zga9nfvccgjixnxza9mi7jj4k6308g8asnljr44s1k8rikwm";
+  version = "0.8.1.3";
+  sha256 = "000rajx9gdxfyx521yg2mvp1z8h61sr96w1lzwawiw7n5ng6v8ni";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ asn1Types mtl text time ];

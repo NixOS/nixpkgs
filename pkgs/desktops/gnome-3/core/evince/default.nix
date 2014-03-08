@@ -15,18 +15,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig intltool perl perlXMLParser libxml2
     glib gtk3 pango atk gdk_pixbuf
-    itstool gnome3.gnome_icon_theme gnome3.libgnome_keyring gnome3.gsettings_desktop_schemas
+    itstool gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic
+    gnome3.libgnome_keyring gnome3.gsettings_desktop_schemas
     poppler ghostscriptX djvulibre libspectre
-    makeWrapper libsecret
+    makeWrapper libsecret librsvg
   ];
-
 
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
   configureFlags = [
     "--disable-nautilus" # Do not use nautilus
-    "--disable-dbus" # strange compilation error
   ];
+
+  NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
 
   preConfigure = with stdenv.lib;
     optionalString doCheck ''
@@ -43,8 +44,8 @@ stdenv.mkDerivation rec {
     # Tell Glib/GIO about the MIME info directory, which is used
     # by `g_file_info_get_content_type ()'.
     wrapProgram "$out/bin/evince" \
-      --set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf/loaders.cache \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_icon_theme}/share:${gnome3.gsettings_desktop_schemas}/share:${gtk3}/share:${shared_mime_info}/share:$out/share"
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gsettings_desktop_schemas}/share:${gtk3}/share:${shared_mime_info}/share:$out/share"
   '';
 
   doCheck = false; # would need pythonPackages.dogTail, which is missing
