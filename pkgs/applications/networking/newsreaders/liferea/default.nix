@@ -28,14 +28,10 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  configureFlags = [ "--disable-schemas-compile" ];
-
   preFixup = ''
     rm $out/share/icons/hicolor/icon-theme.cache'';
 
   postInstall  = ''
-    ${glib}/bin/glib-compile-schemas $out/share/glib-2.0/schemas/
-
     for f in "$out"/bin/*; do
       wrapProgram "$f" \
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
