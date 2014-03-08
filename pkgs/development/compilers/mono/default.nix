@@ -1,10 +1,11 @@
 {stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11}:
 
 stdenv.mkDerivation rec {
-  name = "mono-2.11.4";
+  name = "mono-${version}";
+  version = "3.2.8";
   src = fetchurl {
     url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
-    sha256 = "0wv8pnj02mq012sihx2scx0avyw51b5wb976wn7x86zda0vfcsnr";
+    sha256 = "0h0s42pmgrhwqaym0b1401h70dcpr179ngcsp7f8i4hl4snqrd7x";
   };
 
   buildInputs = [bison pkgconfig glib gettext perl libgdiplus libX11];
