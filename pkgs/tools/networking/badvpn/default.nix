@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="badvpn";
-    version="1.999.128";
+    version="http://badvpn.googlecode.com/files/badvpn-openwrt.tar.bz2";
     name="${baseName}-${version}";
-    hash="1z4v1jydv8zkkszsq7scc17rw5dqz9zlpcc40ldxsw34arfqvcnn";
-    url="http://badvpn.googlecode.com/files/badvpn-1.999.128.tar.bz2";
-    sha256="1z4v1jydv8zkkszsq7scc17rw5dqz9zlpcc40ldxsw34arfqvcnn";
+    hash="1sr7i52msdjy8g7mrgwgqn3fqfvfjs48nz3waxf8r7wg1livvl2b";
+    url="http://badvpn.googlecode.com/files/badvpn-openwrt.tar.bz2";
+    sha256="1sr7i52msdjy8g7mrgwgqn3fqfvfjs48nz3waxf8r7wg1livvl2b";
   };
   buildInputs = [
     cmake openssl nss pkgconfig nspr
