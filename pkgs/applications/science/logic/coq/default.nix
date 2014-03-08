@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://coq.inria.fr";
     license = "LGPL";
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    maintainers = with stdenv.lib.maintainers; [ roconnor thoughtpolice ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
