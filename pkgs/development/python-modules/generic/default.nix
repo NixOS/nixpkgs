@@ -3,7 +3,7 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, wrapPython, lib, recursivePthLoader, distutils-cfg }:
+{ python, setuptools, unzip, wrapPython, lib, recursivePthLoader, distutils-cfg }:
 
 { name
 
@@ -46,7 +46,11 @@ python.stdenv.mkDerivation (attrs // {
 
   name = namePrefix + name;
 
-  buildInputs = [ python wrapPython setuptools (distutils-cfg.override { extraCfg = distutilsExtraCfg; }) ] ++ buildInputs ++ pythonPath;
+  buildInputs = [
+    python wrapPython setuptools
+    (distutils-cfg.override { extraCfg = distutilsExtraCfg; })
+  ] ++ buildInputs ++ pythonPath
+    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name) unzip);
 
   propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader ];
 

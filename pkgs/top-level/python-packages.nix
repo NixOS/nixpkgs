@@ -14,7 +14,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 } // rec {
 
   inherit python;
-  inherit (pkgs) fetchurl fetchsvn fetchgit stdenv;
+  inherit (pkgs) fetchurl fetchsvn fetchgit stdenv unzip;
 
   # helpers
 
@@ -256,7 +256,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     buildInputs = [
       pkgs.which
-      pkgs.unzip
       pythonPackages.coverage
       pythonPackages.mock
       pythonPackages.tissue
@@ -376,7 +375,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha1 = "fa4aec08e59fa5964197f59ba42408d64031675b";
     };
 
-    buildInputs = [ pkgs.unzip pkgs.sqlite ];
+    buildInputs = [ pkgs.sqlite ];
 
     # python: double free or corruption (fasttop): 0x0000000002fd4660 ***
     doCheck = false;
@@ -425,8 +424,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://argparse.googlecode.com/files/${name}.tar.gz";
       sha256 = "192174mys40m0bwk6l5jlfnzps0xi81sxm34cqms6dc3c454pbyx";
     };
-
-    buildInputs = [ pkgs.unzip ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -590,8 +587,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "https://python-bitstring.googlecode.com/files/${name}.zip";
       sha256 = "1i1p3rkj4ad108f23xyib34r4rcy571gy65paml6fk77knh0k66p";
     };
-
-    buildInputs = [ pkgs.unzip ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -1284,7 +1279,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "9c0b8efe9d43b460f8cf049fa46ce14d";
     };
 
-    buildInputs = [ pkgs.unzip pytest ];
+    buildInputs = [ pytest ];
     propagatedBuildInputs = [ execnet ];
 
     meta = {
@@ -1311,7 +1306,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "139yfm9yz9k33kgqw4khsljs10rkhhxyywbq9i82bh2r31cil1pp";
     };
 
-    buildInputs = [ pkgs.unzip pythonPackages.mock ];
+    buildInputs = [ pythonPackages.mock ];
 
     # couple of failing tests
     doCheck = false;
@@ -1563,8 +1558,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "https://pypi.python.org/packages/source/e/execnet/${name}.zip";
       md5 = "be885ccd9612966bb81839670d2da099";
     };
-
-    buildInputs = [ pkgs.unzip ];
 
     meta = {
       description = "rapid multi-Python deployment";
@@ -1933,7 +1926,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "a6728117cad24749ddb39d2827cd9033";
     };
 
-    buildInputs = [ pkgs.unzip webtest ];
+    buildInputs = [ webtest ];
     propagatedBuildInputs = [ jinja2 pyramid ];
 
     meta = {
@@ -2068,7 +2061,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "36aa2c96dec4cfeea57f54da2b733eb9";
     };
 
-    buildInputs = [ pkgs.unzip zope_interface zope_location zope_schema ];
+    buildInputs = [ zope_interface zope_location zope_schema ];
 
     meta = {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
@@ -3381,7 +3374,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
 
     buildInputs =
-      [ pkgs.unzip fs gdata python_keyczar mock pyasn1 pycrypto pytest ];
+      [ fs gdata python_keyczar mock pyasn1 pycrypto pytest ];
   };
 
   kitchen = buildPythonPackage (rec {
@@ -3875,8 +3868,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       export LC_ALL="en_US.UTF-8"
     '';
 
-    buildInputs = [ pkgs.unzip ];
-
     propagatedBuildInputs = [ argparse jinja2 six modules.readline ] ++
                             (optionals isPy26 [ importlib ordereddict ]);
 
@@ -4165,7 +4156,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "0lgrfgp3sq8xi8d9grrg0z8jsyk0wl8a3rxw31hb7vdncin5b7n5";
     };
 
-    buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ nose ];
 
     meta = {
@@ -4660,8 +4650,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "0kdc4rg47k1qkq22inghd50xlxjdkfcilym8mxff8wy4h091xykw";
     };
 
-    buildInputs = [ pkgs.unzip ];
-
     propagatedBuildInputs = [ pytz ];
 
     meta = {
@@ -4704,7 +4692,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "56b6614499aacb7d6b5983c4914daea7";
     };
 
-    buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.unzip pkgs.zlib pkgs.libtiff pkgs.libwebp ];
+    buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp ];
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
     preConfigure = ''
@@ -5268,7 +5256,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "0ldkm8xws91j7zbvpqb413hvdz8r66bslr451q3qc0xi8cnmydfq";
     };
 
-    buildInputs = [ pkgs.unzip pkgs.libiodbc ];
+    buildInputs = [ pkgs.libiodbc ];
 
     meta = with stdenv.lib; {
       description = "Python ODBC module to connect to almost any database";
@@ -5606,7 +5594,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "c57cba33626ac4b1e3d1974923d59232";
     };
 
-    buildInputs = [ pkgs.unzip ];
     meta = {
       homepage    = "https://code.google.com/p/pysphere/";
       license     = "BSD";
@@ -5811,7 +5798,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "1r127fa354ppb667f4acxlzwxixap1jgzjrr790bw8mcpxv2hqaa";
     };
 
-    buildInputs = [ pkgs.unzip pkgs.pyrex ];
+    buildInputs = [ pkgs.pyrex ];
     propagatedBuildInputs = [ pkgs.libyaml ];
 
     meta = {
@@ -6044,7 +6031,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     # error: invalid command 'test'
     #doCheck = false;
 
-    buildInputs = [ unittest2 pkgs.unzip ];
+    buildInputs = [ unittest2 ];
     propagatedBuildInputs = [ robotframework lxml ];
 
     meta = with stdenv.lib; {
@@ -7457,7 +7444,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     # XXX: skipping two tests fails in python2.6
     doCheck = ! isPy26;
 
-    buildInputs = [ pkgs.unzip ] ++ optionals isPy26 [ pythonPackages.ordereddict unittest2 ];
+    buildInputs = optionals isPy26 [ pythonPackages.ordereddict unittest2 ];
 
     propagatedBuildInputs = [
       nose
@@ -7721,7 +7708,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "eff24d7918099a3e899ee63a9c31bee6";
     };
 
-    buildInputs = [ pkgs.unzip zope_interface ];
+    buildInputs = [ zope_interface ];
 
     meta = {
         maintainers = [ stdenv.lib.maintainers.goibhniu ];
@@ -7736,8 +7723,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/z/zope.browser/${name}.zip";
       md5 = "4ff0ddbf64c45bfcc3189e35f4214ded";
     };
-
-    buildInputs = [ pkgs.unzip ];
 
     propagatedBuildInputs = [ zope_interface ];
 
@@ -7812,8 +7797,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/z/zope.contenttype/${name}.zip";
       md5 = "c6ac80e6887de4108a383f349fbdf332";
     };
-
-    buildInputs = [ pkgs.unzip ];
 
     meta = {
         maintainers = [ stdenv.lib.maintainers.goibhniu ];
@@ -8050,7 +8033,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "8b317b41244fc2e67f2f286890ba59a0";
     };
 
-    buildInputs = [ pkgs.unzip sqlalchemy zope_testing zope_interface setuptools ];
+    buildInputs = [ sqlalchemy zope_testing zope_interface setuptools ];
     propagatedBuildInputs = [ sqlalchemy transaction ];
 
     meta = {
@@ -8072,7 +8055,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "01c30c342c6a18002a762bd5d320a6e9";
     };
 
-    buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ zope_interface zope_exceptions zope_location ];
 
     meta = {
@@ -8092,8 +8074,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/z/zope.testrunner/${name}.zip";
       md5 = "1d689abad000419891494b30dd7d8190";
     };
-
-    buildInputs = [ pkgs.unzip ];
 
     propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ] ++ optional (!python.is_py3k or false) subunit;
 
@@ -8116,8 +8096,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/z/zope.traversing/${name}.zip";
       md5 = "eaad8fc7bbef126f9f8616b074ec00aa";
     };
-
-    buildInputs = [ pkgs.unzip ];
 
     propagatedBuildInputs = [ zope_location zope_security zope_publisher ];
 
@@ -8207,7 +8185,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "0ri6gj883k042xaxa2d5ymmhbw2bfcxdzhh4bz7700ibxwxxj62h";
     };
 
-    buildInputs = [ pkgs.unzip unittest2 nose mock ];
+    buildInputs = [ unittest2 nose mock ];
     propagatedBuildInputs = [ modules.curses libarchive ];
 
     # tests are still failing
@@ -8234,7 +8212,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/p/pyzmq/pyzmq-13.0.0.zip";
       md5 = "fa2199022e54a393052d380c6e1a0934";
     };
-    buildInputs = [ pkgs.unzip pkgs.zeromq3 ];
+    buildInputs = [ pkgs.zeromq3 ];
     propagatedBuildInputs = [  ];
     doCheck = false;
   };
