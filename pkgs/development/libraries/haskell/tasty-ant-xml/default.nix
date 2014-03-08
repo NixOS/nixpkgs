@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty-ant-xml";
-  version = "1.0.0.5";
-  sha256 = "00nlp627r5rgahs8zqjxjm68ijf4yvxd18fq67z2fr68alg4rl4j";
+  version = "1.0.0.6";
+  sha256 = "06ll7mj60iiskla2x53yncs0931b7dw4l0shxkhz88558gjzy7cj";
   buildDepends = [
     genericDeriving mtl reducers stm tagged tasty transformers xml
   ];

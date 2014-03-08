@@ -848,7 +848,7 @@ let
   dtach = callPackage ../tools/misc/dtach { };
 
   duplicity = callPackage ../tools/backup/duplicity {
-    inherit (pythonPackages) boto;
+    inherit (pythonPackages) boto lockfile;
     gnupg = gnupg1;
   };
 

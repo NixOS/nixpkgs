@@ -10,14 +10,14 @@
 , QuickCheck, random, regexTdfa, rsync, SafeSemaphore, SHA, stm
 , tasty, tastyHunit, tastyQuickcheck, tastyRerun, text, time
 , transformers, unixCompat, utf8String, uuid, wai, waiLogger, warp
-, which, xmlTypes, yesod, yesodCore, yesodDefault, yesodForm
-, yesodStatic
+, warpTls, which, xmlTypes, yesod, yesodCore, yesodDefault
+, yesodForm, yesodStatic
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20140227";
-  sha256 = "0zdaryvfpbmc454798z3z3sshf0br8v3sw0vnksqng3zm3w73dah";
+  version = "5.20140306";
+  sha256 = "1kjgqrz0wnccylrbdiwj1yndg7v2k09f5h2vkk06bnx02xmwvjl9";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -30,7 +30,8 @@ cabal.mkDerivation (self: {
     networkProtocolXmpp optparseApplicative QuickCheck random regexTdfa
     SafeSemaphore SHA stm tasty tastyHunit tastyQuickcheck tastyRerun
     text time transformers unixCompat utf8String uuid wai waiLogger
-    warp xmlTypes yesod yesodCore yesodDefault yesodForm yesodStatic
+    warp warpTls xmlTypes yesod yesodCore yesodDefault yesodForm
+    yesodStatic
   ];
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
   configureFlags = "-fS3

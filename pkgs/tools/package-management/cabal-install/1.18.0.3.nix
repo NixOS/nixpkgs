@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal-install";
-  version = "1.18.0.2";
-  sha256 = "0ah9yzp486p3cvs9b7nid0jmf0a56fg65s3jx2r8lb84pi50d92c";
+  version = "1.18.0.3";
+  sha256 = "0h01mz6p4fwl8h6k2ybrlp598f0j3n2zasrr63fy0vjbjibmgf41";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -19,9 +19,6 @@ cabal.mkDerivation (self: {
   postInstall = ''
     mkdir $out/etc
     mv bash-completion $out/etc/bash_completion.d
-  '';
-  patchPhase = ''
-    sed -i -e 's|array .*,|array,|' cabal-install.cabal
   '';
   meta = {
     homepage = "http://www.haskell.org/cabal/";

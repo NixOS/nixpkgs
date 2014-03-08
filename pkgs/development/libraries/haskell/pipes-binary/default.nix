@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-binary";
-  version = "0.4.0";
-  sha256 = "021shl5czrr82b06awy7biy93qf6nh0wwiadhr7qsawzdnzqz2vc";
+  version = "0.4.0.1";
+  sha256 = "1vwsr446b3ysjm86bmpmq8pg2badx9xn0iyr17r4mby0bxvvld33";
   buildDepends = [
     binary pipes pipesBytestring pipesParse transformers
   ];
@@ -13,7 +13,6 @@ cabal.mkDerivation (self: {
     binary lensFamilyCore pipes pipesParse smallcheck tasty tastyHunit
     tastySmallcheck transformers
   ];
-  # Depends on an out-of-date version of smallcheck
   doCheck = false;
   meta = {
     homepage = "https://github.com/k0001/pipes-binary";

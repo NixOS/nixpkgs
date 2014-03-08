@@ -53,7 +53,11 @@ in
       };
 
       consoleKeyMap = mkOption {
-        type = types.str;
+        type = mkOptionType {
+          name = "string or path";
+          check = t: (isString t || types.path.check t);
+        };
+
         default = "us";
         example = "fr";
         description = ''
