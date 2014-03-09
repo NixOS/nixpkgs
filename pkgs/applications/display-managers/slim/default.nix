@@ -2,18 +2,7 @@
 , fontconfig, freetype, pam, dbus_libs, makeWrapper, pkgs, theme ? null }:
 
 let 
-  slimThemesDir =
-      let
-        unpackedTheme = pkgs.stdenv.mkDerivation {
-          name = "slim-theme";
-          buildCommand = ''
-            ensureDir $out
-            cd $out
-            unpackFile ${theme}
-            ln -s * default
-          '';
-        };
-    in if theme == null then "$out/share/slim/themes" else unpackedTheme;
+  slimThemesDir = if theme == null then "$out/share/slim/themes" else theme;
 in
 
 stdenv.mkDerivation rec {

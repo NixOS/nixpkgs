@@ -85,7 +85,9 @@ in
       
       package = mkOption {
         type = types.package;
-        default = pkgs.slim;
+        default = pkgs.slim.override { 
+          theme = slimThemesDir; 
+          };
         description = ''
           Configure slim package.
         '';
