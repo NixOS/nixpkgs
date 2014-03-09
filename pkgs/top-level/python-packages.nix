@@ -6753,45 +6753,43 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
-
-  sqlalchemy = buildPythonPackage rec {
-    name = "sqlalchemy-${version}";
-    version = "0.7.10";
-
+  sqlalchemy = pkgs.lib.overrideDerivation sqlalchemy9 (args: rec {
+    name = "SQLAlchemy-0.7.10";
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/S/SQLAlchemy/SQLAlchemy-${version}.tar.gz";
+      url = "http://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       sha256 = "0rhxgr85xdhjn467qfs0dkyj8x46zxcv6ad3dfx3w14xbkb3kakp";
     };
-
     patches = [
       # see https://groups.google.com/forum/#!searchin/sqlalchemy/module$20logging$20handlers/sqlalchemy/ukuGhmQ2p6g/2_dOpBEYdDYJ
       # waiting for 0.7.11 release
       ../development/python-modules/sqlalchemy-0.7.10-test-failures.patch
     ];
+  });
 
-    buildInputs = [ nose ];
 
-    propagatedBuildInputs = [ modules.sqlite3 ];
-
-    meta = {
-      homepage = http://www.sqlalchemy.org/;
-      description = "A Python SQL toolkit and Object Relational Mapper";
+  sqlalchemy8 = pkgs.lib.overrideDerivation sqlalchemy9 (args: rec {
+    name = "SQLAlchemy-0.8.5";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
+      md5 = "ecf0738eaf1229bae27ad2be0f9978a8";
     };
-  };
-
-
-  sqlalchemy8 = buildPythonPackage rec {
-    name = "SQLAlchemy-${version}";
-    version = "0.8.2";
+  });
+   
+  sqlalchemy9 = buildPythonPackage rec {
+    name = "SQLAlchemy-0.9.3";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
-      md5 = "5a33fb43dea93468dbb2a6562ee80b54";
+      md5 = "a27989b9d4b3f14ea0b1600aa45559c4";
     };
 
     buildInputs = [ nose mock ];
 
     propagatedBuildInputs = [ modules.sqlite3 ];
+
+    checkPhase = ''
+      ${python.executable} sqla_nose.py 
+    '';
 
     meta = {
       homepage = http://www.sqlalchemy.org/;
