@@ -5,9 +5,9 @@ let
     baseName="cl-launch";
     version="4.0.2.2";
     name="${baseName}-${version}";
-    hash="068bq66az3qhwgaxi9mx7f80396jilmd3zf4d3qamsyd81aq323c";
-    url="http://common-lisp.net/project/xcvb/cl-launch/cl-launch-4.0.2.2.tar.gz.asc";
-    sha256="068bq66az3qhwgaxi9mx7f80396jilmd3zf4d3qamsyd81aq323c";
+    hash="1a7nwm1gkvpypfbhl29gj4gba50r5b069g3c87cfvrk2n4plm65b";
+    url="http://common-lisp.net/project/xcvb/cl-launch/cl-launch-4.0.2.2.tar.gz";
+    sha256="1a7nwm1gkvpypfbhl29gj4gba50r5b069g3c87cfvrk2n4plm65b";
   };
   buildInputs = [
   ];
