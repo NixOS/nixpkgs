@@ -661,6 +661,8 @@ let
 
   cabextract = callPackage ../tools/archivers/cabextract { };
 
+  can-utils = callPackage ../os-specific/linux/can-utils { };
+
   ccid = callPackage ../tools/security/ccid { };
 
   ccrypt = callPackage ../tools/security/ccrypt { };
