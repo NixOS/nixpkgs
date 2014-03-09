@@ -21,7 +21,7 @@ in
       enable = mkOption {
         default = false;
         description = "
-          Whether to enable the Searx server.
+          Whether to enable the Searx server. See https://github.com/asciimoo/searx
         ";
       };
 
@@ -59,15 +59,14 @@ in
         description = "Searx server, the meta search engine.";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.User = "searx";
-        script = ''
-            if [ -z "${configFile}" ]; then
-              exec ${pkgs.pythonPackages.searx}/bin/searx-run
-            else
-              SEARX_SETTINGS_PATH="${configFile}" exec ${pkgs.pythonPackages.searx}/bin/searx-run
-            fi
-        '';
-      };
+        serviceConfig = {
+          User = "searx";
+          ExecStart = "${pkgs.pythonPackages.searx}/bin/searx-run";
+        };
+      } // (optionalAttrs (configFile != "") {
+        environment.SEARX_SETTINGS_PATH = configFile;
+      });
+        
 
     environment.systemPackages = [ pkgs.pythonPackages.searx ];
 
