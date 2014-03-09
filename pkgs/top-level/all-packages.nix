@@ -9223,12 +9223,18 @@ let
   wrapFirefox =
     { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? ""
     , icon ? "${browser}/lib/${browser.name}/icons/mozicon128.png" }:
+    wrapBrowser {
+      inherit browser browserName desktopName nameSuffix icon;
+    };
+
+  wrapBrowser =
+    { browser, browserName, desktopName, icon, nameSuffix ? "" }:
     let
       cfg = stdenv.lib.attrByPath [ browserName ] {} config;
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       enableGnash = cfg.enableGnash or false;
     in
-    import ../applications/networking/browsers/firefox/wrapper.nix {
+    import ../applications/networking/browsers/browser-wrapper/wrapper.nix {
       inherit stdenv lib makeWrapper makeDesktopItem browser browserName desktopName nameSuffix icon;
       plugins =
          assert !(enableGnash && enableAdobeFlash);
