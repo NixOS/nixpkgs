@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, boost, gtk, pkgconfig, python }:
+{ stdenv, fetchsvn, boost, gtk, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
-  name = "raul-${version}";
-  version = "0.8.0";
+  name = "raul-svn-${rev}";
+  rev = "5205";
 
-  src = fetchurl {
-    url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "09ms40xc1x6qli6lxkwn5ibqh62nl9w7dq0b6jh1q2zvnrxwsd8b";
+  src = fetchsvn {
+    url = "http://svn.drobilla.net/lad/trunk/raul";
+    rev = rev;
+    sha256 = "1rkl7vxhwf6d0qfl2ymfd1qwmh9cl1xv6kkz893xg0blpvzcdmp3";
   };
 
   buildInputs = [ boost gtk pkgconfig python ];
