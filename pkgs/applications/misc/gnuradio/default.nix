@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
     for file in "$out"/bin/* "$out"/share/gnuradio/examples/*/*.py; do
         wrapProgram "$file" \
-            --set PYTHONPATH $PYTHONPATH:$(toPythonPath "$out") \
+            --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out") \
             --set MATPLOTLIBRC "$out/share/gnuradio"
     done
   '';
