@@ -1,10 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, intltool, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, intltool
+, glib, gtk3, gobjectIntrospection, python, pygobject3
+}:
 
 stdenv.mkDerivation rec {
   name = "libpeas-${version}";
   version = "1.9.0";
 
-  buildInputs = with gnome3; [ intltool pkgconfig glib gobjectIntrospection gtk3 ];
+  buildInputs =  [
+   intltool pkgconfig
+   glib gtk3 gobjectIntrospection python pygobject3
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/libpeas/1.9/${name}.tar.xz";
@@ -15,8 +20,10 @@ stdenv.mkDerivation rec {
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
-  meta = with stdenv.lib; {
-    platforms = platforms.linux;
+  meta = {
+    description = "A GObject-based plugins engine";
+    homepage = "http://ftp.acc.umu.se/pub/GNOME/sources/libpeas/";
+    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
-
 }
