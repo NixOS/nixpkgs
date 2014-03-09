@@ -4161,6 +4161,8 @@ let
 
   gamin = callPackage ../development/libraries/gamin { };
 
+  ganv = callPackage ../development/libraries/ganv { };
+
   gav = callPackage ../games/gav { };
 
   gsb = callPackage ../games/gsb { };
