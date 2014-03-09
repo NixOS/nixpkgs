@@ -1,5 +1,5 @@
 { stdenv, lib, browser, makeDesktopItem, makeWrapper, plugins, libs, gtk_modules
-, browserName, desktopName, nameSuffix, icon
+, browserName, desktopName, nameSuffix, icon, binPath
 }:
 
 let p = builtins.parseDrvName browser.name; in
@@ -20,13 +20,13 @@ stdenv.mkDerivation {
   buildInputs = [makeWrapper];
 
   buildCommand = ''
-    if [ ! -x "${browser}/bin/${browserName}" ]
+    if [ ! -x "${binPath}" ]
     then
-        echo "cannot find executable file \`${browser}/bin/${browserName}'"
+        echo "cannot find executable file \`${binPath}'"
         exit 1
     fi
 
-    makeWrapper "${browser}/bin/${browserName}" \
+    makeWrapper "${binPath}" \
         "$out/bin/${browserName}${nameSuffix}" \
         --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
         --suffix-each LD_LIBRARY_PATH ':' "$libs" \

@@ -9213,11 +9213,12 @@ let
 
   wordnet = callPackage ../applications/misc/wordnet { };
 
-  wrapChromium = browser: wrapFirefox {
+  wrapChromium = browser: wrapBrowser {
     inherit browser;
     browserName = browser.packageName;
     desktopName = "Chromium";
     icon = "${browser}/share/icons/hicolor/48x48/apps/${browser.packageName}.png";
+    binPath = "${browser}/${browser.binPath}";
   };
 
   wrapFirefox =
@@ -9228,14 +9229,15 @@ let
     };
 
   wrapBrowser =
-    { browser, browserName, desktopName, icon, nameSuffix ? "" }:
+    { browser, browserName, desktopName, icon, nameSuffix ? "", binPath ? "${browser}/bin/${browserName}" }:
     let
       cfg = stdenv.lib.attrByPath [ browserName ] {} config;
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       enableGnash = cfg.enableGnash or false;
     in
     import ../applications/networking/browsers/browser-wrapper/wrapper.nix {
-      inherit stdenv lib makeWrapper makeDesktopItem browser browserName desktopName nameSuffix icon;
+      inherit stdenv lib makeWrapper makeDesktopItem browser browserName;
+      inherit desktopName nameSuffix icon binPath;
       plugins =
          assert !(enableGnash && enableAdobeFlash);
          ([ ]
