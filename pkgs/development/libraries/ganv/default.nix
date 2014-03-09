@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     homepage = http://drobilla.net;
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }
