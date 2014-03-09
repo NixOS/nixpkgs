@@ -7470,6 +7470,8 @@ let
 
   alchemy = callPackage ../applications/graphics/alchemy { };
 
+  ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
+
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
   antiword = callPackage ../applications/office/antiword {};
