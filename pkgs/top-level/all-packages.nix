@@ -4184,6 +4184,8 @@ let
 
   gamin = callPackage ../development/libraries/gamin { };
 
+  ganv = callPackage ../development/libraries/ganv { };
+
   gav = callPackage ../games/gav { };
 
   gsb = callPackage ../games/gsb { };
@@ -5540,6 +5542,8 @@ let
   qwt = callPackage ../development/libraries/qwt {};
 
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
+
+  raul = callPackage ../development/libraries/audio/raul { };
 
   readline = readline6;
 
@@ -9481,6 +9485,8 @@ let
   hexen = callPackage ../games/hexen { };
 
   icbm3d = callPackage ../games/icbm3d { };
+
+  ingen = callPackage ../applications/audio/ingen { };
 
   instead = callPackage ../games/instead {
     lua = lua5;
