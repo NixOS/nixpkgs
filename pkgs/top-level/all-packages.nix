@@ -5521,6 +5521,8 @@ let
 
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
 
+  raul = callPackage ../development/libraries/audio/raul { };
+
   readline = readline6;
 
   readline4 = callPackage ../development/libraries/readline/readline4.nix { };
