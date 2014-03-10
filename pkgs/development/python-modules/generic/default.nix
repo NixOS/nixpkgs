@@ -38,6 +38,12 @@
 
 , meta ? {}
 
+# Execute before shell hook
+, preShellHook ? ""
+
+# Execute after shell hook
+, postShellHook ? ""
+
 , ... } @ attrs:
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
@@ -149,6 +155,16 @@ python.stdenv.mkDerivation (attrs // {
         fi
       done
     '';
+
+  shellHook = attrs.shellHook or ''
+    mkdir -p /tmp/$name/lib/${python.libPrefix}/site-packages
+    ${preShellHook}
+    export PATH="/tmp/$name/bin:$PATH"
+    export PYTHONPATH="/tmp/$name/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    python setup.py develop --prefix /tmp/$name
+    ${postShellHook}
+    return
+  '';
 
   meta = with lib.maintainers; {
     # default to python's platforms
