@@ -6551,10 +6551,14 @@ let
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
-  darwin = {
+  darwin = rec {
     cctools = forceNativeDrv (callPackage ../os-specific/darwin/cctools-port {
       cross = assert crossSystem != null; crossSystem;
     });
+
+    maloader = callPackage ../os-specific/darwin/maloader {
+      inherit opencflite;
+    };
 
     opencflite = callPackage ../os-specific/darwin/opencflite {};
 
