@@ -8475,7 +8475,7 @@ let
 
   midori = callPackage ../applications/networking/browsers/midori { };
 
-  midoriWrapper = wrapFirefox
+  midoriWrapper = wrapBrowser
     { browser = midori; browserName = "midori"; desktopName = "Midori";
       icon = "${midori}/share/icons/hicolor/22x22/apps/midori.png";
     };
