@@ -1,5 +1,6 @@
 { stdenv, cross, fetchurl, autoconf, automake, libtool
 , libcxx, llvm, clang, openssl, libuuid
+, maloader, makeWrapper, xctoolchain
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    autoconf automake libtool libcxx llvm clang openssl libuuid
+    autoconf automake libtool libcxx llvm clang openssl libuuid makeWrapper
   ];
 
   patches = [ ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch ];
@@ -46,6 +47,14 @@ stdenv.mkDerivation rec {
     "CXXFLAGS=-I${libcxx}/include/c++/v1"
     "--target=${cross.config}"
   ];
+
+  postInstall = ''
+    for tool in dyldinfo dwarfdump dsymutil; do
+      makeWrapper "${maloader}/bin/ld-mac" "$out/bin/${cross.config}-$tool" \
+        --add-flags "${xctoolchain}/bin/$tool"
+      ln -s "$out/bin/${cross.config}-$tool" "$out/bin/$tool"
+    done
+  '';
 
   meta = {
     homepage = "http://www.opensource.apple.com/source/cctools/";

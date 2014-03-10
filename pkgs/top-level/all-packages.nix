@@ -6554,6 +6554,8 @@ let
   darwin = rec {
     cctools = forceNativeDrv (callPackage ../os-specific/darwin/cctools-port {
       cross = assert crossSystem != null; crossSystem;
+      inherit maloader;
+      xctoolchain = xcode.toolchain;
     });
 
     maloader = callPackage ../os-specific/darwin/maloader {
