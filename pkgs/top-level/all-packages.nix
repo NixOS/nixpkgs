@@ -6546,6 +6546,8 @@ let
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
+  darwin.xcode = callPackage ../os-specific/darwin/xcode { };
+
   devicemapper = lvm2;
 
   dmidecode = callPackage ../os-specific/linux/dmidecode { };
