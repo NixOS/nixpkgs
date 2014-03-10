@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  outputs = [ "out" "toolchain" ];
 
   unpackCmd = let
     basePath = "Xcode.app/Contents/Developer/Platforms/MacOSX.platform";
@@ -25,8 +26,15 @@ stdenv.mkDerivation rec {
   installPhase = ''
     ensureDir "$out/share/sysroot"
     cp -a * "$out/share/sysroot/"
-    ln -s "$out/usr/lib" "$out/lib"
-    ln -s "$out/usr/include" "$out/include"
+    ln -s "$out/share/sysroot/usr/lib" "$out/lib"
+    ln -s "$out/share/sysroot/usr/include" "$out/include"
+
+    ensureDir "$toolchain"
+    pushd "$toolchain"
+    ${xpwn}/bin/hfsplus "$(dirs +1)/../main.hfs" extractall \
+      Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr \
+      > /dev/null
+    popd
   '';
 
   meta = {
