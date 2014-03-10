@@ -49,6 +49,30 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+  crossAttrs = let
+    isDarwin = stdenv.cross.libc == "libSystem";
+  in {
+    configurePhase = ''
+      makeFlagsArray=(
+        INSTALL_TOP=$out
+        INSTALL_MAN=$out/share/man/man1
+        CC=${stdenv.cross.config}-gcc
+        STRIP=:
+        RANLIB=${stdenv.cross.config}-ranlib
+        V=${majorVersion}
+        R=${version}
+        ${stdenv.lib.optionalString isDarwin ''
+        AR="${stdenv.cross.config}-ar rcu"
+        macosx
+        ''}
+      )
+    '';
+  } // stdenv.lib.optionalAttrs isDarwin {
+    postPatch = ''
+      sed -i -e 's/-Wl,-soname[^ ]* *//' src/Makefile
+    '';
+  };
+
   meta = {
     homepage = "http://www.lua.org";
     description = "Powerful, fast, lightweight, embeddable scripting language";
