@@ -6556,6 +6556,8 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
+    opencflite = callPackage ../os-specific/darwin/opencflite {};
+
     xcode = callPackage ../os-specific/darwin/xcode {};
   };
 
