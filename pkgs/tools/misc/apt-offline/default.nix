@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "offline APT package manager";
     license = licenses.gpl3;
     maintainers = [ maintainers.falsifian ];
+    platforms = platforms.all;
   };
 }
