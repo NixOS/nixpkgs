@@ -56,7 +56,7 @@ python.stdenv.mkDerivation (attrs // {
     python wrapPython setuptools
     (distutils-cfg.override { extraCfg = distutilsExtraCfg; })
   ] ++ buildInputs ++ pythonPath
-    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name) unzip);
+    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
 
   propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader ];
 

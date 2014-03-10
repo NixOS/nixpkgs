@@ -18,7 +18,7 @@ buildPythonPackage {
   # XXX, tests fail
   doCheck = false;
 
-  src = [
+  srcs = [
     (fetchurl {
       url = "https://bitbucket.org/lazka/quodlibet-files/raw/default/releases/quodlibet-${version}.tar.gz";
       sha256 = "0ilasi4b0ay8r6v6ba209wsm80fq2nmzigzc5kvphrk71jwypx6z";
@@ -27,7 +27,7 @@ buildPythonPackage {
       url = "https://bitbucket.org/lazka/quodlibet-files/raw/default/releases/quodlibet-plugins-${version}.tar.gz";
       sha256 = "1rv08rhdjad8sjhplqsspcf4vkazgkxyshsqmbfbrrk5kvv57ybc";
      })
-  ];       
+  ];
 
   preConfigure = ''
     # TODO: for now don't a apply gdist overrides, will be needed for shipping icons, gtk, etc
@@ -35,11 +35,13 @@ buildPythonPackage {
   '';
 
   sourceRoot = "quodlibet-${version}";
+
   postUnpack = ''
     # the patch searches for plugins in directory ../plugins
     # so link the appropriate directory there
     ln -sf quodlibet-plugins-${version} plugins
   '';
+
   patches = [ ./quodlibet-package-plugins.patch ];
 
   buildInputs = stdenv.lib.optionals withGstPlugins [
