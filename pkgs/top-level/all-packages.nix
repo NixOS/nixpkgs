@@ -1004,7 +1004,8 @@ let
 
   g500-control = callPackage ../tools/misc/g500-control { };
 
-  gawk = lowPrio (callPackage ../tools/text/gawk { });
+  gawk = callPackage ../tools/text/gawk { };
+
   gawkInteractive = appendToName "interactive"
     (gawk.override { readlineSupport = true; });
 
@@ -1583,9 +1584,9 @@ let
       pam = if stdenv.isLinux then pam else null;
     };
 
-  openssh_hpn = lowPrio (pkgs.appendToName "hpn" (openssh.override { hpnSupport = true; }));
+  openssh_hpn = pkgs.appendToName "with-hpn" (openssh.override { hpnSupport = true; });
 
-  openssh_with_kerberos = lowPrio (pkgs.appendToName "with-kerberos" (openssh.override { withKerberos = true; }));
+  openssh_with_kerberos = pkgs.appendToName "with-kerberos" (openssh.override { withKerberos = true; });
 
   opensp = callPackage ../tools/text/sgml/opensp { };
 
@@ -2802,12 +2803,12 @@ let
 
   jdkdistro = installjdk: pluginSupport:
     assert supportsJDK;
-    (if pluginSupport then appendToName "plugin" else x: x)
+    (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/jdk/jdk6-linux.nix { });
 
   oraclejdk7distro = installjdk: pluginSupport:
     assert supportsJDK;
-    (if pluginSupport then appendToName "plugin" else x: x)
+    (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/jdk/jdk7-linux.nix { inherit installjdk; });
 
   jikes = callPackage ../development/compilers/jikes { };
@@ -8447,7 +8448,7 @@ let
     guiSupport = false; # use mercurialFull to get hgk GUI
   };
 
-  mercurialFull = lowPrio (appendToName "full" (pkgs.mercurial.override { guiSupport = true; }));
+  mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
 
   merkaartor = callPackage ../applications/misc/merkaartor { };
 
@@ -8931,11 +8932,11 @@ let
     sasl = cyrus_sasl;
   };
 
-  subversionClient = lowPrio (appendToName "client" (subversion.override {
+  subversionClient = appendToName "client" (subversion.override {
     bdbSupport = false;
     perlBindings = true;
     pythonBindings = true;
-  }));
+  });
 
   surf = callPackage ../applications/misc/surf {
     libsoup = gnome.libsoup;
