@@ -1521,6 +1521,8 @@ let
     inherit (pythonPackages) pysqlite;
   };
 
+  notbit = callPackage ../applications/networking/notbit { };
+
   nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd {};
 
   ntfs3g = callPackage ../tools/filesystems/ntfs-3g { };
