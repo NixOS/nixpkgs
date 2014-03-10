@@ -91,6 +91,8 @@ stdenv.mkDerivation {
       rm $out/bin/c_rehash $out/ssl/misc/CA.pl $out/ssl/misc/tsget
     '';
     configureScript = "./Configure";
+  } // stdenv.lib.optionalAttrs (opensslCrossSystem == "darwin64-x86_64-cc") {
+    CC = "gcc";
   };
 
   meta = {
