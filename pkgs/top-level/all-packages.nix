@@ -3825,6 +3825,8 @@ let
 
   xmlindent = callPackage ../development/web/xmlindent {};
 
+  xpwn = callPackage ../development/mobile/xpwn {};
+
   xxdiff = callPackage ../development/tools/misc/xxdiff {
     bison = bison2;
   };
