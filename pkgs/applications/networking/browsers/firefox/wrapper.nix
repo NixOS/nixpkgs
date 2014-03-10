@@ -2,8 +2,10 @@
 , browserName, desktopName, nameSuffix, icon
 }:
 
+let p = builtins.parseDrvName browser.name; in
+
 stdenv.mkDerivation {
-  name = browser.name + "-with-plugins";
+  name = "${p.name}-with-plugins-${p.version}";
 
   desktopItem = makeDesktopItem {
     name = browserName;

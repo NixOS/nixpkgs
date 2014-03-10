@@ -7633,6 +7633,7 @@ let
   comical = callPackage ../applications/graphics/comical { };
 
   conkeror = callPackage ../applications/networking/browsers/conkeror { };
+
   conkerorWrapper = wrapFirefox {
     browser = conkeror;
     browserName = "conkeror";
@@ -7993,7 +7994,7 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox13Wrapper = lowPrio (wrapFirefox { browser = firefox13Pkgs.firefox; });
+  firefox13Wrapper = wrapFirefox { browser = firefox13Pkgs.firefox; };
 
   firefoxPkgs = callPackage ../applications/networking/browsers/firefox {
     inherit (gnome) libIDL;
