@@ -6546,7 +6546,13 @@ let
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
-  darwin.xcode = callPackage ../os-specific/darwin/xcode { };
+  darwin = {
+    cctools = forceNativeDrv (callPackage ../os-specific/darwin/cctools-port {
+      cross = assert crossSystem != null; crossSystem;
+    });
+
+    xcode = callPackage ../os-specific/darwin/xcode {};
+  };
 
   devicemapper = lvm2;
 
