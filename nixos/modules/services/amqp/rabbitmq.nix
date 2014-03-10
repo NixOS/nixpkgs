@@ -3,20 +3,11 @@
 with pkgs.lib;
 
 let
-
   cfg = config.services.rabbitmq;
 
-  run = cmd: "${pkgs.sudo}/bin/sudo -E -u rabbitmq ${cmd}";
-
-in
-
-{
-
-
+in {
   ###### interface
-
   options = {
-
     services.rabbitmq = {
 
       enable = mkOption {
@@ -40,54 +31,58 @@ in
         '';
       };
 
-    };
 
+      dataDir = mkOption {
+        type = types.path;
+        default = "/var/lib/rabbitmq";
+        description = ''
+          Data directory for rabbitmq.
+        '';
+      };
+
+    };
   };
 
 
   ###### implementation
-
   config = mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.rabbitmq_server ];
 
     users.extraUsers.rabbitmq = {
       description = "RabbitMQ server user";
-      home = "/var/empty";
+      home = "${cfg.dataDir}";
       group = "rabbitmq";
       uid = config.ids.uids.rabbitmq;
     };
 
     users.extraGroups.rabbitmq.gid = config.ids.gids.rabbitmq;
 
-    jobs.rabbitmq = {
-        description = "RabbitMQ server";
+    systemd.services.rabbitmq = {
+      description = "RabbitMQ Server";
 
-        startOn = "started network-interfaces";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-interfaces.target" ];
 
-        preStart =
-          ''
-            mkdir -m 0700 -p /var/lib/rabbitmq
-            chown rabbitmq /var/lib/rabbitmq
-
-            mkdir -m 0700 -p /var/log/rabbitmq
-            chown rabbitmq /var/log/rabbitmq
-          '';
-
-        environment.HOME = "/var/lib/rabbitmq";
-        environment.RABBITMQ_NODE_IP_ADDRESS = cfg.listenAddress;
-        environment.SYS_PREFIX = "";
-
-        exec =
-          ''
-            ${run "${pkgs.rabbitmq_server}/sbin/rabbitmq-server"}
-          '';
-
-        preStop =
-          ''
-            ${run "${pkgs.rabbitmq_server}/sbin/rabbitmqctl stop"}
-          '';
+      environment = {
+        RABBITMQ_MNESIA_BASE = "${cfg.dataDir}/mnesia";
+        RABBITMQ_NODE_IP_ADDRESS = cfg.listenAddress;
+        RABBITMQ_SERVER_START_ARGS = "-rabbit error_logger tty -rabbit sasl_error_logger false";
+        SYS_PREFIX = "";
       };
+
+      serviceConfig = {
+        ExecStart = "${pkgs.rabbitmq_server}/sbin/rabbitmq-server";
+        User = "rabbitmq";
+        Group = "rabbitmq";
+        PermissionsStartOnly = true;
+      };
+
+      preStart = ''
+        mkdir -p ${cfg.dataDir} && chmod 0700 ${cfg.dataDir}
+        if [ "$(id -u)" = 0 ]; then chown rabbitmq:rabbitmq ${cfg.dataDir}; fi
+      '';
+    };
 
   };
 
