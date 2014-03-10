@@ -4138,12 +4138,12 @@ rec {
   });
 
   nose = buildPythonPackage rec {
-    version = "1.3.0";
+    version = "1.3.1";
     name = "nose-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/n/nose/${name}.tar.gz";
-      sha256 = "0q2j9zz39h3liwbp6lb94kl3sxb9z9rbwh5dzyccyxfy4lrwqqsf";
+      sha256 = "1fmn5b7v183ym793ghrbh76b27aww9qv0lhl7dz31f9xmf3kn9w5";
     };
 
     buildInputs = [ coverage ];
