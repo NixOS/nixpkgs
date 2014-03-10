@@ -2430,8 +2430,10 @@ let
   gccCrossStageStatic = let
       isMingw = (stdenv.cross.libc == "msvcrt");
       isMingw64 = isMingw && stdenv.cross.config == "x86_64-w64-mingw32";
+      isDarwin = stdenv.cross.libc == "libSystem";
       libcCross1 = if isMingw64 then windows.mingw_w64_headers else
-                   if isMingw then windows.mingw_headers1 else null;
+                   if isMingw then windows.mingw_headers1 else
+                   if isDarwin then darwin.xcode else null;
     in
       wrapGCCCross {
       gcc = forceNativeDrv (lib.addMetaAttrs { hydraPlatforms = []; } (
@@ -3452,11 +3454,13 @@ let
     gold = false;
   });
 
-  binutilsCross = lowPrio (forceNativeDrv (import ../development/tools/misc/binutils {
-    inherit stdenv fetchurl zlib;
-    noSysDirs = true;
-    cross = assert crossSystem != null; crossSystem;
-  }));
+  binutilsCross =
+    if crossSystem != null && crossSystem.libc == "libSystem" then darwin.cctools
+    else lowPrio (forceNativeDrv (import ../development/tools/misc/binutils {
+      inherit stdenv fetchurl zlib;
+      noSysDirs = true;
+      cross = assert crossSystem != null; crossSystem;
+    }));
 
   bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
   bison3 = callPackage ../development/tools/parsing/bison/3.x.nix { };
@@ -4249,6 +4253,7 @@ let
     else if name == "msvcrt" && stdenv.cross.config == "x86_64-w64-mingw32" then
       windows.mingw_w64
     else if name == "msvcrt" then windows.mingw_headers3
+    else if name == "libSystem" then darwin.xcode
     else throw "Unknown libc";
 
   libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;

@@ -117,7 +117,8 @@ let version = "4.8.2";
         withMode;
 
     /* Cross-gcc settings */
-    crossMingw = (cross != null && cross.libc == "msvcrt");
+    crossMingw = cross != null && cross.libc == "msvcrt";
+    crossDarwin = cross != null && cross.libc == "libSystem";
     crossConfigureFlags = let
         gccArch = stdenv.cross.gcc.arch or null;
         gccCpu = stdenv.cross.gcc.cpu or null;
@@ -161,7 +162,12 @@ let version = "4.8.2";
           " --disable-shared" +
           " --disable-decimal-float" # libdecnumber requires libc
           else
-          " --with-headers=${libcCross}/include" +
+          (if crossDarwin then
+            " --with-sysroot=${libcCross}/share/sysroot" +
+            " --with-as=${binutilsCross}/bin/${cross.config}-as" +
+            " --with-ld=${binutilsCross}/bin/${cross.config}-ld"
+            else
+            " --with-headers=${libcCross}/include") +
           " --enable-__cxa_atexit" +
           " --enable-long-long" +
           (if crossMingw then
