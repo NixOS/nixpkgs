@@ -9229,7 +9229,8 @@ let
     };
 
   wrapBrowser =
-    { browser, browserName, desktopName, icon, nameSuffix ? "", binPath ? "${browser}/bin/${browserName}" }:
+    { browser, browserName, desktopName, icon, nameSuffix ? ""
+    , binPath ? "${browser}/bin/${browserName}", extraFlags ? "" }:
     let
       cfg = stdenv.lib.attrByPath [ browserName ] {} config;
       enableAdobeFlash = cfg.enableAdobeFlash or false;
@@ -9237,7 +9238,7 @@ let
     in
     import ../applications/networking/browsers/browser-wrapper/wrapper.nix {
       inherit stdenv lib makeWrapper makeDesktopItem browser browserName;
-      inherit desktopName nameSuffix icon binPath;
+      inherit desktopName nameSuffix icon binPath extraFlags;
       plugins =
          assert !(enableGnash && enableAdobeFlash);
          ([ ]
