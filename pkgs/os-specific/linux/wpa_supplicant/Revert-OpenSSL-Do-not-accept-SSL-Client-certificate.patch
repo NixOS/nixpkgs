@@ -1,0 +1,74 @@
+From b62d5b5450101676a0c05691b4bcd94e11426397 Mon Sep 17 00:00:00 2001
+From: Jouni Malinen <j@w1.fi>
+Date: Wed, 19 Feb 2014 11:56:02 +0200
+Subject: [PATCH] Revert "OpenSSL: Do not accept SSL Client certificate for
+ server"
+
+This reverts commit 51e3eafb68e15e78e98ca955704be8a6c3a7b304. There are
+too many deployed AAA servers that include both id-kp-clientAuth and
+id-kp-serverAuth EKUs for this change to be acceptable as a generic rule
+for AAA authentication server validation. OpenSSL enforces the policy of
+not connecting if only id-kp-clientAuth is included. If a valid EKU is
+listed with it, the connection needs to be accepted.
+
+Signed-off-by: Jouni Malinen <j@w1.fi>
+---
+ src/crypto/tls.h         |  3 +--
+ src/crypto/tls_openssl.c | 13 -------------
+ 2 files changed, 1 insertion(+), 15 deletions(-)
+
+diff --git a/src/crypto/tls.h b/src/crypto/tls.h
+index 287fd33..feba13f 100644
+--- a/src/crypto/tls.h
++++ b/src/crypto/tls.h
+@@ -41,8 +41,7 @@ enum tls_fail_reason {
+ 	TLS_FAIL_ALTSUBJECT_MISMATCH = 6,
+ 	TLS_FAIL_BAD_CERTIFICATE = 7,
+ 	TLS_FAIL_SERVER_CHAIN_PROBE = 8,
+-	TLS_FAIL_DOMAIN_SUFFIX_MISMATCH = 9,
+-	TLS_FAIL_SERVER_USED_CLIENT_CERT = 10
++	TLS_FAIL_DOMAIN_SUFFIX_MISMATCH = 9
+ };
+ 
+ union tls_event_data {
+diff --git a/src/crypto/tls_openssl.c b/src/crypto/tls_openssl.c
+index a13fa38..8cf1de8 100644
+--- a/src/crypto/tls_openssl.c
++++ b/src/crypto/tls_openssl.c
+@@ -105,7 +105,6 @@ struct tls_connection {
+ 	unsigned int ca_cert_verify:1;
+ 	unsigned int cert_probe:1;
+ 	unsigned int server_cert_only:1;
+-	unsigned int server:1;
+ 
+ 	u8 srv_cert_hash[32];
+ 
+@@ -1480,16 +1479,6 @@ static int tls_verify_cb(int preverify_ok, X509_STORE_CTX *x509_ctx)
+ 				       TLS_FAIL_SERVER_CHAIN_PROBE);
+ 	}
+ 
+-	if (!conn->server && err_cert && preverify_ok && depth == 0 &&
+-	    (err_cert->ex_flags & EXFLAG_XKUSAGE) &&
+-	    (err_cert->ex_xkusage & XKU_SSL_CLIENT)) {
+-		wpa_printf(MSG_WARNING, "TLS: Server used client certificate");
+-		openssl_tls_fail_event(conn, err_cert, err, depth, buf,
+-				       "Server used client certificate",
+-				       TLS_FAIL_SERVER_USED_CLIENT_CERT);
+-		preverify_ok = 0;
+-	}
+-
+ 	if (preverify_ok && context->event_cb != NULL)
+ 		context->event_cb(context->cb_ctx,
+ 				  TLS_CERT_CHAIN_SUCCESS, NULL);
+@@ -2541,8 +2530,6 @@ openssl_handshake(struct tls_connection *conn, const struct wpabuf *in_data,
+ 	int res;
+ 	struct wpabuf *out_data;
+ 
+-	conn->server = !!server;
+-
+ 	/*
+ 	 * Give TLS handshake data from the server (if available) to OpenSSL
+ 	 * for processing.
+-- 
+1.9.0
+

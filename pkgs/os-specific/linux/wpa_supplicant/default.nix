@@ -38,7 +38,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  patches = [ ./libnl.patch ];
+  patches = [
+    ./libnl.patch
+    ./Revert-OpenSSL-Do-not-accept-SSL-Client-certificate.patch # Remove this after version 2.1
+  ];
 
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8
