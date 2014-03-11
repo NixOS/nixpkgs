@@ -228,6 +228,7 @@
   ./services/web-servers/lighttpd/cgit.nix
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/nginx/default.nix
+  ./services/web-servers/phpfpm.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/varnish/default.nix
   ./services/web-servers/zope2.nix
