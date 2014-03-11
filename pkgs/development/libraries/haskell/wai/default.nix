@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai";
-  version = "2.0.0";
-  sha256 = "11s60v9pw8jl9w950z81gkxci7djrdibi8hxrw6j1v8az40qqiwk";
+  version = "2.1.0";
+  sha256 = "0n3dgm1pwv9baxrx0qh0iq1mh9i7ihhki3h4ks5k74d37w7bwcjy";
   buildDepends = [
     blazeBuilder conduit httpTypes network text transformers vault
   ];
