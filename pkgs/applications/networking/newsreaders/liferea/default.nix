@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, python, pygobject3
-, glib, gnome3, pango, libxml2, libxslt, sqlite, libsoup
+, glib, gnome3, pango, libxml2, libxslt, sqlite, libsoup, glib_networking
 , webkitgtk, json_glib, gobjectIntrospection, gst_all_1
 , libnotify
 , makeWrapper
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
         --prefix LD_LIBRARY_PATH : "${gnome3.libgnome_keyring}/lib" \
         --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules" \
+        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules:${glib_networking}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gnome_icon_theme}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share"
     done
   '';
