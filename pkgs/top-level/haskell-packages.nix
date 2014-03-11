@@ -941,24 +941,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   dice = callPackage ../development/libraries/haskell/dice {};
 
   diagrams = callPackage ../development/libraries/haskell/diagrams/diagrams.nix {};
-  diagramsCairo = callPackage ../development/libraries/haskell/diagrams/cairo.nix {
-    lens = self.lens_3_10_2;
-  };
-  diagramsCore = callPackage ../development/libraries/haskell/diagrams/core.nix {
-    lens = self.lens_3_10_2;
-  };
-  diagramsContrib = callPackage ../development/libraries/haskell/diagrams/contrib.nix {
-    lens = self.lens_3_10_2;
-  };
-  diagramsLib = callPackage ../development/libraries/haskell/diagrams/lib.nix {
-    lens = self.lens_3_10_2;
-  };
-  diagramsPostscript = callPackage ../development/libraries/haskell/diagrams/postscript.nix {
-     lens = self.lens_3_10_2;
-  };
-  diagramsSvg = callPackage ../development/libraries/haskell/diagrams/svg.nix {
-    lens = self.lens_3_10_2;
-  };
+  diagramsCairo = callPackage ../development/libraries/haskell/diagrams/cairo.nix {};
+  diagramsCore = callPackage ../development/libraries/haskell/diagrams/core.nix {};
+  diagramsContrib = callPackage ../development/libraries/haskell/diagrams/contrib.nix {};
+  diagramsLib = callPackage ../development/libraries/haskell/diagrams/lib.nix {};
+  diagramsPostscript = callPackage ../development/libraries/haskell/diagrams/postscript.nix {};
+  diagramsSvg = callPackage ../development/libraries/haskell/diagrams/svg.nix {};
 
   Diff = callPackage ../development/libraries/haskell/Diff {};
 
@@ -1125,9 +1113,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   foldl = callPackage ../development/libraries/haskell/foldl {};
 
-  forceLayout = callPackage ../development/libraries/haskell/force-layout {
-    lens = self.lens_3_10_2;
-  };
+  forceLayout = callPackage ../development/libraries/haskell/force-layout {};
 
   free = callPackage ../development/libraries/haskell/free {};
 
@@ -1584,9 +1570,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
-  lens_3_10_2 = callPackage ../development/libraries/haskell/lens/3.10.2.nix {};
-  lens_4_0_5 = callPackage ../development/libraries/haskell/lens/4.0.5.nix {};
-  lens = self.lens_4_0_5;
+  lens = callPackage ../development/libraries/haskell/lens {};
 
   lensAeson = callPackage ../development/libraries/haskell/lens-aeson {};
 
