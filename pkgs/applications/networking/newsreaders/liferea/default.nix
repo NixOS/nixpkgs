@@ -1,7 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, python, pygobject3
 , glib, gnome3, pango, libxml2, libxslt, sqlite, libsoup
-, webkitgtk, json_glib, gobjectIntrospection, gsettings_desktop_schemas
-, gst_all_1
+, webkitgtk, json_glib, gobjectIntrospection, gst_all_1
 , libnotify
 , makeWrapper
 }:
@@ -20,10 +19,10 @@ stdenv.mkDerivation rec {
   buildInputs = with gst_all_1; [
     pkgconfig intltool python
     glib gnome3.gtk pango libxml2 libxslt sqlite libsoup
-    webkitgtk json_glib gobjectIntrospection gsettings_desktop_schemas
-    gnome3.libpeas
+    webkitgtk json_glib gobjectIntrospection gnome3.gsettings_desktop_schemas
+    gnome3.libpeas gnome3.dconf
     gst-plugins-base gst-plugins-good gst-plugins-bad
-    gnome3.gnome_keyring
+    gnome3.libgnome_keyring
     libnotify
     makeWrapper
   ];
@@ -35,9 +34,10 @@ stdenv.mkDerivation rec {
     for f in "$out"/bin/*; do
       wrapProgram "$f" \
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
+        --prefix LD_LIBRARY_PATH : "${gnome3.libgnome_keyring}/lib" \
         --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gnome_icon_theme}/share:${gsettings_desktop_schemas}/share:${gnome3.gtk}/share:$out/share"
+        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules" \
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gnome_icon_theme}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share"
     done
   '';
 
@@ -47,5 +47,12 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ vcunat romildo ];
     platforms = stdenv.lib.platforms.linux;
+
+    longDescription = ''
+      Liferea (Linux Feed Reader) is an RSS/RDF feed reader.
+      It's intended to be a clone of the Windows-only FeedReader.
+      It can be used to maintain a list of subscribed feeds,
+      browse through their items, and show their contents.
+    '';
   };
 }
