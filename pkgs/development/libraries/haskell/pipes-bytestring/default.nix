@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-bytestring";
-  version = "2.0.0";
-  sha256 = "17l74g7xfl1i32jj9qa9ivbb3ndi68hkc1b6jchwnn19rmg51j9i";
+  version = "2.0.1";
+  sha256 = "1vsfqqkr5danb0n30av4vk8d4by9f50y5l8ywm1xjrmwrx999gvf";
   buildDepends = [
     pipes pipesGroup pipesParse profunctors transformers
   ];
