@@ -2508,6 +2508,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   vault = callPackage ../development/libraries/haskell/vault {};
 
+  vcsgui = callPackage ../development/libraries/haskell/vcsgui {};
+
   vcsRevision = callPackage ../development/libraries/haskell/vcs-revision {};
 
   vcswrapper = callPackage ../development/libraries/haskell/vcswrapper {};
