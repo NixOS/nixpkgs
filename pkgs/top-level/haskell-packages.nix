@@ -1141,6 +1141,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     cabal = self.cabal.override { enableLibraryProfiling = false; }; # pkg cannot be built with profiling enabled
   };
 
+  ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
+
   ghcMod = callPackage ../development/libraries/haskell/ghc-mod {
     inherit (pkgs) emacs;
   };
