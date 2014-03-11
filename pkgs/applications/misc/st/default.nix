@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText, libX11, ncurses, libXext, libXft, fontconfig
+{ stdenv, fetchurl, pkgconfig, writeText, libX11, ncurses, libXext, libXft, fontconfig
 , conf? null}:
 
 with stdenv.lib;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
   preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
   
-  buildInputs = [ libX11 ncurses libXext libXft fontconfig ];
+  buildInputs = [ pkgconfig libX11 ncurses libXext libXft fontconfig ];
 
   NIX_LDFLAGS = "-lfontconfig";
 
