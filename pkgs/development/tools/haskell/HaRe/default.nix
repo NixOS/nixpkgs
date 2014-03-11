@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HaRe";
-  version = "0.7.1.3";
-  sha256 = "1x900mywsl5rmn4rv2ss1nnrb6y5zs422ivn0iqb4ijd8a2j4lq5";
+  version = "0.7.1.4";
+  sha256 = "000vdvm38a3d3jpjg3cgsfl11w8jzvl0haqz78fy3zblqlndxy1m";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -24,7 +24,7 @@ cabal.mkDerivation (self: {
   ];
   jailbreak = true;
   meta = {
-    homepage = "http://www.cs.kent.ac.uk/projects/refactor-fp";
+    homepage = "https://github.com/RefactoringTools/HaRe/wiki";
     description = "the Haskell Refactorer";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
