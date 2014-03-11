@@ -3044,7 +3044,7 @@ rec {
 
     src = fetchurl {
       url = "https://github.com/nicolargo/glances/archive/v${meta.version}.tar.gz";
-      sha256 = "0g2yg9qf7qgjwv13x0rx51rzhn99pcmjpb3vk0g3gmmdsqyqi0d6";
+      sha256 = "19pin04whc1z4gmwv2rqa7mh08d6007r8dyrhihnxj0v35ghp5i0";
     };
 
     buildInputs = [ pkgs.hddtemp ];
@@ -3058,7 +3058,7 @@ rec {
     '';
 
     meta = {
-      version = "1.7.1";
+      version = "1.7.4";
       homepage = "http://nicolargo.github.io/glances/";
       description = "Cross-platform curses-based monitoring tool";
     };
