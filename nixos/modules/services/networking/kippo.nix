@@ -76,8 +76,9 @@ rec {
     users.extraUsers = singleton {
       name = "kippo";
       description = "kippo web server privilege separation user";
+      uid = 108; # why does config.ids.uids.kippo give an error?
     };
-    users.extraGroups = singleton { name = "kippo"; };
+    users.extraGroups = singleton { name = "kippo";gid=108; };
 
     systemd.services.kippo = with pkgs; {
       description = "Kippo Web Server";
