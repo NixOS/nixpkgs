@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty-rerun";
-  version = "1.1.1";
-  sha256 = "1xgjf47bvahankyic18l5fcda4dlfbd4j2lxqv3v5hhwk7zgvcp8";
+  version = "1.1.2";
+  sha256 = "0vgx6l9yd21aiwivd6zp67rgjly1j2wwqdmx99p17prr430rm4id";
   buildDepends = [
     mtl optparseApplicative reducers split stm tagged tasty
     transformers
