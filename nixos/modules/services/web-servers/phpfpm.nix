@@ -24,7 +24,7 @@ in {
   options = {
     services.phpfpm = {
       extraConfig = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration that should be put in the global section of
@@ -36,7 +36,7 @@ in {
       };
 
       poolConfigs = mkOption {
-        type = types.attrsOf types.str;
+        type = types.attrsOf types.lines;
         default = {};
         example = {
           mypool = ''
