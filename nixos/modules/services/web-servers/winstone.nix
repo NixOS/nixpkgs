@@ -13,6 +13,14 @@ let
         internal = true;
       };
 
+      serviceName = mkOption {
+        type = types.str;
+        description = ''
+          The name of the systemd service. By default, it is
+          derived from the winstone instance name.
+        '';
+      };
+
       warFile = mkOption {
         type = types.str;
         description = ''
@@ -72,6 +80,7 @@ let
 
     config = {
       workDir = mkDefault "/run/winstone/${name}";
+      serviceName = mkDefault "winstone-${name}";
     };
   };
 
@@ -113,7 +122,7 @@ in {
 
   config = mkIf (cfg != {}) {
 
-    systemd.services = mapAttrs' (n: c: nameValuePair "winstone-${n}" (mkService c)) cfg;
+    systemd.services = mapAttrs' (n: c: nameValuePair c.serviceName (mkService c)) cfg;
 
   };
 
