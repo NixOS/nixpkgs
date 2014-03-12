@@ -29,7 +29,7 @@ rec {
   
   titaniumsdk = let
     titaniumSdkFile = if tiVersion == "3.1.4.GA" then ./titaniumsdk-3.1.nix
-      else if tiVersion == "3.2.1.GA" then ./titaniumsdk-3.2.nix
+      else if tiVersion == "3.2.2.GA" then ./titaniumsdk-3.2.nix
       else throw "Titanium version not supported: "+tiVersion;
     in
     import titaniumSdkFile {

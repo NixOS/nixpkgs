@@ -1,7 +1,7 @@
 { nixpkgs ? <nixpkgs>
 , systems ? [ "x86_64-linux" "x86_64-darwin" ]
 , xcodeVersion ? "5.0"
-, tiVersion ? "3.2.1.GA"
+, tiVersion ? "3.2.2.GA"
 , rename ? false
 , newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? ""
 }:
