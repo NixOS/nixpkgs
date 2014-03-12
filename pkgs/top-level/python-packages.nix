@@ -3025,7 +3025,32 @@ rec {
       maintainers = [ maintainers.bjornfor ];
     };
   };
+  
+  
+  gevent-socketio = buildPythonPackage rec {
+    name = "gevent-socketio-0.3.6";
 
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gevent-socketio/${name}.tar.gz";
+      sha256 = "1zra86hg2l1jcpl9nsnqagy3nl3akws8bvrbpgdxk15x7ywllfak";
+    };
+
+    buildInputs = [ versiontools gevent-websocket mock pytest ];
+    propagatedBuildInputs = [ gevent ];
+
+  };
+  
+  gevent-websocket = buildPythonPackage rec {
+    name = "gevent-websocket-0.9.3";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gevent-websocket/${name}.tar.gz";
+      sha256 = "07rqwfpbv13mk6gg8mf0bmvcf6siyffjpgai1xd8ky7r801j4xb4";
+    };
+
+    propagatedBuildInputs = [ gevent ];
+
+  };
 
   genzshcomp = buildPythonPackage {
     name = "genzshcomp-0.5.1";
@@ -8471,6 +8496,16 @@ rec {
       description = "Library for communicating with AMQP peers and brokers using Twisted";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
     };
+  };
+  
+  versiontools = buildPythonPackage rec {
+    name = "versiontools-1.9.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/v/versiontools/${name}.tar.gz";
+      sha256 = "1xhl6kl7f4srgnw6zw4lr8j2z5vmrbaa83nzn2c9r2m1hwl36sd9";
+    };
+
   };
 
   graphite_web = buildPythonPackage rec {
