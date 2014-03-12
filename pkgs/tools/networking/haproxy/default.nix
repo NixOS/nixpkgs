@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
     homepage = http://haproxy.1wt.eu;
     maintainers = [ stdenv.lib.maintainers.garbas ];
     platforms = stdenv.lib.platforms.linux;
-    license = [
+    /* TODO license = [
        stdenv.lib.licenses.gpl2
        stdenv.lib.licenses.lgpl21
-    ];
+    ];*/
   };
 }

@@ -23,9 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Linux kernel modules for LTTng tracing";
     homepage = http://lttng.org/;
-    # TODO: Add "mit" to the license list once the license attr set vs string
-    # decision has been made. (Having "mit" there breaks hydra evaluation.)
-    license = with licenses; [ lgpl21 gpl2 ];
+    # TODO license = with licenses; [ lgpl21 gpl2 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };
