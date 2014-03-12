@@ -8612,11 +8612,11 @@ rec {
 
   libvirt = pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
-    version = "1.2.0";
+    version = "1.2.2";
 
     src = fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "0azml1yv9iqnpj4sdg1wwsa70q7kb06lv85p63qwyd8vrd0y7rrg";
+      sha256 = "0fccpyppz79kbbnzwdgsiza3cxq7jlnnp1dqi33gc4305dk9vmwl";
     };
 
     buildInputs = [ python pkgs.pkgconfig pkgs.libvirt lxml ];
@@ -8628,7 +8628,7 @@ rec {
     meta = {
       homepage = http://www.libvirt.org/;
       description = "libvirt Python bindings";
-      license = "LGPLv2";
+      license = pkgs.lib.license.lgpl2;
     };
   };
 
