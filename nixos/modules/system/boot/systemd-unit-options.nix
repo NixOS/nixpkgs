@@ -41,6 +41,12 @@ in rec {
       '';
     };
 
+    baseUnit = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = "Path to an upstream unit file on which the NixOS unit configuration will be based.";
+    };
+
     description = mkOption {
       default = "";
       type = types.str;
