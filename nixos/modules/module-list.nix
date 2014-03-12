@@ -231,6 +231,7 @@
   ./services/web-servers/phpfpm.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/varnish/default.nix
+  ./services/web-servers/winstone.nix
   ./services/web-servers/zope2.nix
   ./services/x11/desktop-managers/default.nix
   ./services/x11/display-managers/auto.nix
