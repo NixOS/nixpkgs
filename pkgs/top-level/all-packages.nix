@@ -1906,6 +1906,8 @@ let
     inherit (pkgsi686Linux.xlibs) libX11;
   };
 
+  solr = callPackage ../servers/search/solr { };
+
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
   stardict = callPackage ../applications/misc/stardict/stardict.nix {
