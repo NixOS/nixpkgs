@@ -1,6 +1,10 @@
 { stdenv, requireFile, xpwn }:
 
-stdenv.mkDerivation rec {
+with stdenv.lib;
+
+let
+  osxVersion = "10.9";
+in stdenv.mkDerivation rec {
   name = "xcode-${version}";
   version = "5.0.2";
 
@@ -10,8 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "0mrligqkfqwx8cy883pxm4w5w7a17nfh227zdspfll23r9agf32k";
   };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
   outputs = [ "out" "toolchain" ];
+
 
   unpackCmd = let
     basePath = "Xcode.app/Contents/Developer/Platforms/MacOSX.platform";
@@ -21,7 +26,9 @@ stdenv.mkDerivation rec {
     ${xpwn}/bin/hfsplus main.hfs extractall "${sdkPath}" > /dev/null
   '';
 
-  setSourceRoot = "sourceRoot=MacOSX10.9.sdk";
+  setSourceRoot = "sourceRoot=MacOSX${osxVersion}.sdk";
+
+  patches = optional (osxVersion == "10.9") ./gcc-fix-enum-attributes.patch;
 
   installPhase = ''
     ensureDir "$out/share/sysroot"
