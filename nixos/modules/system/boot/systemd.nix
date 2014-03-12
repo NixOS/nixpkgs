@@ -11,14 +11,18 @@ let
   systemd = cfg.package;
 
   makeUnit = name: unit:
-    pkgs.runCommand "unit" { preferLocalBuild = true; inherit (unit) text; }
-      (if !unit.enable then  ''
-        mkdir -p $out
-        ln -s /dev/null $out/${name}
-      '' else ''
-        mkdir -p $out
-        echo -n "$text" > $out/${name}
-      '');
+    if unit.enable then
+      pkgs.runCommand "unit" { preferLocalBuild = true; inherit (unit) text; }
+        ''
+          mkdir -p $out
+          echo -n "$text" > $out/${name}
+        ''
+    else
+      pkgs.runCommand "unit" { preferLocalBuild = true; }
+        ''
+          mkdir -p $out
+          ln -s /dev/null $out/${name}
+        '';
 
   upstreamUnits =
     [ # Targets.
