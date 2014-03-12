@@ -62,7 +62,7 @@ in {
       X-RestartIfChanged=false
     '';
 
-    systemd.units."autovt@.service".linkTarget = "${config.systemd.units."kmsconvt@.service".unit}/kmsconvt@.service";
+    systemd.units."autovt@.service".baseUnit = "${config.systemd.units."kmsconvt@.service".unit}/kmsconvt@.service";
 
     systemd.services."systemd-vconsole-setup".restartIfChanged = false;
 

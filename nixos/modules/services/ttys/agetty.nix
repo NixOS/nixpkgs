@@ -48,82 +48,25 @@ with pkgs.lib;
 
   config = {
 
-    # FIXME: these are mostly copy/pasted from the systemd sources,
-    # which some small modifications, which is annoying.
+    systemd.services."getty@" =
+      { baseUnit = pkgs.runCommand "getty.service" {}
+          ''
+            sed '/ExecStart/ d' < ${config.systemd.package}/example/systemd/system/getty@.service > $out
+          '';
+        serviceConfig.ExecStart = "@${pkgs.utillinux}/sbin/agetty agetty --noclear --login-program ${pkgs.shadow}/bin/login %I 38400";
+        restartIfChanged = false;
+      };
 
-    # Generate a separate job for each tty.
-    systemd.units."getty@.service".text =
-      ''
-        [Unit]
-        Description=Getty on %I
-        Documentation=man:agetty(8)
-        After=systemd-user-sessions.service plymouth-quit-wait.service
-
-        # If additional gettys are spawned during boot then we should make
-        # sure that this is synchronized before getty.target, even though
-        # getty.target didn't actually pull it in.
-        Before=getty.target
-        IgnoreOnIsolate=yes
-
-        ConditionPathExists=/dev/tty0
-
-        [Service]
-        Environment=TERM=linux
-        Environment=LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive
-        ExecStart=@${pkgs.utillinux}/sbin/agetty agetty --noclear --login-program ${pkgs.shadow}/bin/login %I 38400
-        Type=idle
-        Restart=always
-        RestartSec=0
-        UtmpIdentifier=%I
-        TTYPath=/dev/%I
-        TTYReset=yes
-        TTYVHangup=yes
-        TTYVTDisallocate=yes # set to no to prevent clearing the screen
-        KillMode=process
-        IgnoreSIGPIPE=no
-
-        # Some login implementations ignore SIGTERM, so we send SIGHUP
-        # instead, to ensure that login terminates cleanly.
-        KillSignal=SIGHUP
-
-        X-RestartIfChanged=false
-      '';
-    
-    systemd.units."serial-getty@.service".text = let
-        speeds = with pkgs.lib; concatStringsSep "," (map toString config.services.mingetty.serialSpeed);
-      in ''
-        [Unit]
-        Description=Serial Getty on %I
-        Documentation=man:agetty(8) man:systemd-getty-generator(8)
-        BindsTo=dev-%i.device
-        After=dev-%i.device systemd-user-sessions.service plymouth-quit-wait.service
-
-        # If additional gettys are spawned during boot then we should make
-        # sure that this is synchronized before getty.target, even though
-        # getty.target didn't actually pull it in.
-        Before=getty.target
-        IgnoreOnIsolate=yes
-
-        [Service]
-        Environment=TERM=linux
-        Environment=LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive
-        ExecStart=@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login %I ${speeds}
-        Type=idle
-        Restart=always
-        RestartSec=0
-        UtmpIdentifier=%I
-        TTYPath=/dev/%I
-        TTYReset=yes
-        TTYVHangup=yes
-        KillMode=process
-        IgnoreSIGPIPE=no
-
-        # Some login implementations ignore SIGTERM, so we send SIGHUP
-        # instead, to ensure that login terminates cleanly.
-        KillSignal=SIGHUP
-        
-        X-RestartIfChanged=false
-      '';
+    systemd.services."serial-getty@" =
+      { baseUnit = pkgs.runCommand "serial-getty.service" {}
+          ''
+            sed '/ExecStart/ d' < ${config.systemd.package}/example/systemd/system/serial-getty@.service > $out
+          '';
+        serviceConfig.ExecStart =
+          let speeds = concatStringsSep "," (map toString config.services.mingetty.serialSpeed);
+          in "@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login %I ${speeds}";
+        restartIfChanged = false;
+      };
 
     environment.etc = singleton
       { # Friendly greeting on the virtual consoles.
