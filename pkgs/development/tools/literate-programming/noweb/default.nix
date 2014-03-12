@@ -9,13 +9,15 @@ stdenv.mkDerivation {
     sha256 = "10hdd6mrk26kyh4bnng4ah5h1pnanhsrhqa7qwqy6dyv3rng44y9";
   };
   preBuild = ''
+    ensureDir $out/lib/noweb
     cd src
-    makeFlags="BIN=$out/bin LIB=$out/lib MAN=$out/share/man TEXINPUTS=$out/share/texmf/tex/latex"
+    makeFlags="BIN=$out/bin LIB=$out/lib/noweb MAN=$out/share/man TEXINPUTS=$out/share/texmf/tex/latex"
   '';
   preInstall=''mkdir -p $out/share/texmf/tex/latex'';
   postInstall= ''
     substituteInPlace $out/bin/cpif --replace "PATH=/bin:/usr/bin" ""
-    for f in $out/bin/{noweb,nountangle,noroots,noroff,noindex} $out/lib/*; do
+    for f in $out/bin/{noweb,nountangle,noroots,noroff,noindex} \
+             $out/lib/noweb/{toroff,btdefn,totex,pipedoc,noidx,unmarkup,toascii,tohtml,emptydefn}; do
       substituteInPlace $f --replace "nawk" "${gawk}/bin/awk"
     done
   '';
