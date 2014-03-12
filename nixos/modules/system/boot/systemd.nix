@@ -424,7 +424,7 @@ in
             };
           };
           config = {
-            unit = makeUnit name config;
+            unit = mkDefault (makeUnit name config);
           };
         };
     };
