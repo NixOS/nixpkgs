@@ -6,12 +6,12 @@ let
   osxVersion = "10.9";
 in stdenv.mkDerivation rec {
   name = "xcode-${version}";
-  version = "5.0.2";
+  version = "5.1";
 
   src = requireFile {
     name = "xcode_${version}.dmg";
     url = meta.homepage;
-    sha256 = "0mrligqkfqwx8cy883pxm4w5w7a17nfh227zdspfll23r9agf32k";
+    sha256 = "0zkggbmsfc5w53j1ncbpayvnn1vzpyzyjjjzhawq1jjfq465bfvh";
   };
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
