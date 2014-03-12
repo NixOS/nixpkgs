@@ -8628,7 +8628,7 @@ rec {
     meta = {
       homepage = http://www.libvirt.org/;
       description = "libvirt Python bindings";
-      license = pkgs.lib.license.lgpl2;
+      license = pkgs.lib.licenses.lgpl2;
     };
   };
 
