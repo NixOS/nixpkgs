@@ -6,8 +6,6 @@
 , useInfinality ? true
 }:
 
-assert !(useEncumberedCode && useInfinality); # probably wouldn't make sense
-
 let
 
   version = "2.4.12";
