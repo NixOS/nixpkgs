@@ -4,6 +4,7 @@
   ./config/fonts/fontdir.nix
   ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
+  ./config/fonts/infinality.nix
   ./config/gnu.nix
   ./config/i18n.nix
   ./config/krb5.nix
