@@ -128,7 +128,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
     $baseName =~ s/\.[a-z]*$//;
 
     if (-e $prevUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
-        if (! -e $newUnitFile) {
+        if (! -e $newUnitFile || abs_path($newUnitFile) eq "/dev/null") {
             push @unitsToStop, $unit;
         }
 
