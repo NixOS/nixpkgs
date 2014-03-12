@@ -63,7 +63,11 @@ in {
       X-RestartIfChanged=false
     '';
 
-    systemd.services."autovt@".baseUnit = "${config.systemd.units."kmsconvt@.service".unit}/kmsconvt@.service";
+    systemd.units."autovt@.service".unit = pkgs.runCommand "unit" { }
+        ''
+          mkdir -p $out
+          ln -s ${config.systemd.units."kmsconvt@.service".unit}/kmsconvt@.service $out/autovt@.service
+        '';
 
     systemd.services.systemd-vconsole-setup.restartIfChanged = false;
 
