@@ -1504,6 +1504,49 @@ rec {
       platforms = stdenv.lib.platforms.all;
     };
   };
+  
+  urllib3 = buildPythonPackage rec {
+    name = "urllib3-1.8";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/u/urllib3/${name}.tar.gz";
+      sha256 = "0pdigfxkq8mhzxxsn6isx8c4h9azqywr1k18yanwyxyj8cdzm28s";
+    };
+    
+    preConfigure = ''
+      substituteInPlace test-requirements.txt --replace 'nose==1.3' 'nose'
+    '';
+    
+    checkPhase = ''
+      nosetests --cover-min-percentage 70
+    '';
+
+    buildInputs = [ coverage tornado mock nose ];
+
+    meta = with stdenv.lib; {
+      description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
+      homepage = https://www.dropbox.com/developers/core/docs;
+      license = licenses.mit;
+    };
+  };
+
+  
+  dropbox = buildPythonPackage rec {
+    name = "dropbox-2.0.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dropbox/${name}.zip";
+      sha256 = "1bi2z1lql6ryylfflmizhqn98ab55777vn7n5krhqz40pdcjilkx";
+    };
+
+    propagatedBuildInputs = [ urllib3 mock setuptools ];
+
+    meta = with stdenv.lib; {
+      description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
+      homepage = https://www.dropbox.com/developers/core/docs;
+      license = licenses.mit;
+    };
+  };
 
 
   evdev = buildPythonPackage rec {
