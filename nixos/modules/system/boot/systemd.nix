@@ -12,18 +12,12 @@ let
 
   makeUnit = name: unit:
     pkgs.runCommand "unit" { preferLocalBuild = true; inherit (unit) text; }
-      ((if !unit.enable then  ''
+      (if !unit.enable then  ''
         mkdir -p $out
         ln -s /dev/null $out/${name}
-      '' else if unit.linkTarget != null then ''
-        mkdir -p $out
-        ln -s ${unit.linkTarget} $out/${name}
-      '' else if unit.text != null then ''
+      '' else ''
         mkdir -p $out
         echo -n "$text" > $out/${name}
-      '' else "") + optionalString (unit.extraConfig != {}) ''
-        mkdir -p $out/${name}.d
-        ${concatStringsSep "\n" (mapAttrsToList (n: v: "echo -n \"${v}\" > $out/${name}.d/${n}") unit.extraConfig)}
       '');
 
   upstreamUnits =
@@ -158,7 +152,7 @@ let
           BindsTo = concatStringsSep " " config.bindsTo;
           PartOf = concatStringsSep " " config.partOf;
           Conflicts = concatStringsSep " " config.conflicts;
-          "X-Restart-Triggers" = toString config.restartTriggers;
+          X-Restart-Triggers = toString config.restartTriggers;
         } // optionalAttrs (config.description != "") {
           Description = config.description;
         };
@@ -244,6 +238,14 @@ let
         (if isList value then value else [value]))
         as));
 
+  commonUnitText = def:
+    optionalString (def.baseUnit != null) ''
+      .include ${def.baseUnit}
+    '' + ''
+      [Unit]
+      ${attrsToSection def.unitConfig}
+    '';
+
   targetToUnit = name: def:
     { inherit (def) wantedBy requiredBy enable;
       text =
@@ -255,11 +257,8 @@ let
 
   serviceToUnit = name: def:
     { inherit (def) wantedBy requiredBy enable;
-      text =
+      text = commonUnitText def +
         ''
-          [Unit]
-          ${attrsToSection def.unitConfig}
-
           [Service]
           ${let env = cfg.globalEnvironment // def.environment;
             in concatMapStrings (n: "Environment=\"${n}=${getAttr n env}\"\n") (attrNames env)}
@@ -271,11 +270,8 @@ let
 
   socketToUnit = name: def:
     { inherit (def) wantedBy requiredBy enable;
-      text =
+      text = commonUnitText def +
         ''
-          [Unit]
-          ${attrsToSection def.unitConfig}
-
           [Socket]
           ${attrsToSection def.socketConfig}
           ${concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
@@ -284,11 +280,8 @@ let
 
   timerToUnit = name: def:
     { inherit (def) wantedBy requiredBy enable;
-      text =
+      text = commonUnitText def +
         ''
-          [Unit]
-          ${attrsToSection def.unitConfig}
-
           [Timer]
           ${attrsToSection def.timerConfig}
         '';
@@ -296,11 +289,8 @@ let
 
   mountToUnit = name: def:
     { inherit (def) wantedBy requiredBy enable;
-      text =
+      text = commonUnitText def +
         ''
-          [Unit]
-          ${attrsToSection def.unitConfig}
-
           [Mount]
           ${attrsToSection def.mountConfig}
         '';
@@ -308,11 +298,8 @@ let
 
   automountToUnit = name: def:
     { inherit (def) wantedBy requiredBy enable;
-      text =
+      text = commonUnitText def +
         ''
-          [Unit]
-          ${attrsToSection def.unitConfig}
-
           [Automount]
           ${attrsToSection def.automountConfig}
         '';
@@ -422,22 +409,6 @@ in
             unit = mkOption {
               internal = true;
               description = "The generated unit.";
-            };
-            linkTarget = mkOption {
-              default = null;
-              description = "The file to symlink this target to.";
-              type = types.nullOr types.path;
-            };
-            extraConfig = mkOption {
-              default = {};
-              example = { "foo@1.conf" = "X-RestartIfChanged=false"; };
-              type = types.attrsOf types.lines;
-              description = ''
-                Extra files to be appended to the configuration for the unit.
-                This can be used to override configuration for a unit provided
-                by systemd or another package, or to override only a single instance
-                of a template unit.
-              '';
             };
           };
           config = {
