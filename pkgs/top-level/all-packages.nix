@@ -5008,7 +5008,11 @@ let
 
   libpaper = callPackage ../development/libraries/libpaper { };
 
-  libproxy = callPackage ../development/libraries/libproxy { };
+  libproxy = callPackage ../development/libraries/libproxy {
+    stdenv = if stdenv.isDarwin
+      then overrideGCC stdenv gcc
+      else stdenv;
+  };
 
   libpseudo = callPackage ../development/libraries/libpseudo { };
 
