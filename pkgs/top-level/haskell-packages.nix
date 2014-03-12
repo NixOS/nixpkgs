@@ -699,6 +699,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   bytestringMmap = callPackage ../development/libraries/haskell/bytestring-mmap {};
 
+  bytestringShow = callPackage ../development/libraries/haskell/bytestring-show {};
+
   bytestringTrie = callPackage ../development/libraries/haskell/bytestring-trie {};
 
   bytestringProgress = callPackage ../development/libraries/haskell/bytestring-progress {};
@@ -1380,6 +1382,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
 
   hoauth = callPackage ../development/libraries/haskell/hoauth {};
+
+  hoauth2 = callPackage ../development/libraries/haskell/hoauth2 {};
 
   hoodle = callPackage ../applications/graphics/hoodle {};
 
