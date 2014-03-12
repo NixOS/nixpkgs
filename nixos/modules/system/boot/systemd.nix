@@ -145,15 +145,23 @@ let
   unitConfig = { name, config, ... }: {
     config = {
       unitConfig =
-        { Requires = concatStringsSep " " config.requires;
-          Wants = concatStringsSep " " config.wants;
-          After = concatStringsSep " " config.after;
-          Before = concatStringsSep " " config.before;
-          BindsTo = concatStringsSep " " config.bindsTo;
-          PartOf = concatStringsSep " " config.partOf;
-          Conflicts = concatStringsSep " " config.conflicts;
-          X-Restart-Triggers = toString config.restartTriggers;
-        } // optionalAttrs (config.description != "") {
+        optionalAttrs (config.requires != [])
+          { Requires = toString config.requires; }
+        // optionalAttrs (config.wants != [])
+          { Wants = toString config.wants; }
+        // optionalAttrs (config.after != [])
+          { After = toString config.after; }
+        // optionalAttrs (config.before != [])
+          { Before = toString config.before; }
+        // optionalAttrs (config.bindsTo != [])
+          { BindsTo = toString config.bindsTo; }
+        // optionalAttrs (config.partOf != [])
+          { PartOf = toString config.partOf; }
+        // optionalAttrs (config.conflicts != [])
+          { Conflicts = toString config.conflicts; }
+        // optionalAttrs (config.restartTriggers != [])
+          { X-Restart-Triggers = toString config.restartTriggers; }
+        // optionalAttrs (config.description != "") {
           Description = config.description;
         };
     };
