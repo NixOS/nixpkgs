@@ -206,6 +206,7 @@
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
   ./services/search/elasticsearch.nix
+  ./services/search/solr.nix
   ./services/security/clamav.nix
   ./services/security/haveged.nix
   ./services/security/fprot.nix
