@@ -44,6 +44,7 @@ in {
       After=systemd-user-sessions.service
       After=plymouth-quit-wait.service
       After=systemd-logind.service
+      After=systemd-vconsole-setup.service
       Requires=systemd-logind.service
       Before=getty.target
       Conflicts=getty@%i.service
@@ -62,11 +63,9 @@ in {
       X-RestartIfChanged=false
     '';
 
-    systemd.units."autovt@.service".baseUnit = "${config.systemd.units."kmsconvt@.service".unit}/kmsconvt@.service";
+    systemd.services."autovt@".baseUnit = "${config.systemd.units."kmsconvt@.service".unit}/kmsconvt@.service";
 
-    systemd.services."systemd-vconsole-setup".restartIfChanged = false;
-
-    systemd.units."kmsconvt@tty1.service".extraConfig.wait-for-vconsole-setup = "After=systemd-vconsole-setup.service";
+    systemd.services.systemd-vconsole-setup.restartIfChanged = false;
 
     services.kmscon.extraConfig = mkIf cfg.hwRender ''
       drm
