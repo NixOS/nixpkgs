@@ -148,8 +148,7 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = let
-    isMingw = stdenv.cross.config == "i686-pc-mingw32" ||
-      stdenv.cross.config == "x86_64-w64-mingw32";
+    isMingw = stdenv.cross.libc == "msvcrt";
   in {
     # I've not tried any case other than i686-pc-mingw32.
     # -nomake tools:   it fails linking some asian language symbols

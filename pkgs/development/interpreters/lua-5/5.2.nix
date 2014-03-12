@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "004zyh9p3lpvbwhyhlmrw6wwcia5abx84q4h2brkn4zdypipvmiz";
   };
 
-  buildInputs = [ readline ];
+  nativeBuildInputs = [ readline ];
 
   patches = [ dsoPatch ];
 
@@ -48,6 +48,29 @@ stdenv.mkDerivation rec {
     Cflags: -I$out/include
     EOF
   '';
+
+  crossAttrs = let
+    isMingw = stdenv.cross.libc == "msvcrt";
+  in {
+    configurePhase = ''
+      makeFlagsArray=(
+        INSTALL_TOP=$out
+        INSTALL_MAN=$out/share/man/man1
+        CC=${stdenv.cross.config}-gcc
+        STRIP=:
+        RANLIB=${stdenv.cross.config}-ranlib
+        V=${majorVersion}
+        R=${version}
+        ${stdenv.lib.optionals isMingw "mingw"}
+      )
+    '' + stdenv.lib.optionalString isMingw ''
+      installFlagsArray=(
+        TO_BIN="lua.exe luac.exe"
+        TO_LIB="liblua.a lua52.dll"
+        INSTALL_DATA="cp -d"
+      )
+    '';
+  };
 
   meta = {
     homepage = "http://www.lua.org";
