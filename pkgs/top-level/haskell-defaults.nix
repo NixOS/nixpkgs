@@ -27,8 +27,8 @@
     self : self.haskellPlatformArgs_future self // {
       haskellPlatform = null;
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
-      cabalInstall_1_18_0_2 = self.cabalInstall_1_18_0_2.override { Cabal = null; };
-      cabalInstall = self.cabalInstall_1_18_0_2.override { Cabal = null; };
+      cabalInstall_1_18_0_3 = self.cabalInstall_1_18_0_3.override { Cabal = null; };
+      cabalInstall = self.cabalInstall_1_18_0_3.override { Cabal = null; };
       binary_0_7_1_0 = null;
     };
 
