@@ -162,12 +162,13 @@ let version = "4.8.2";
           " --disable-shared" +
           " --disable-decimal-float" # libdecnumber requires libc
           else
-          (if crossDarwin then
-            " --with-sysroot=${libcCross}/share/sysroot" +
+          (if crossDarwin then " --with-sysroot=${libcCross}/share/sysroot"
+           else                " --with-headers=${libcCross}/include") +
+          # Ensure that -print-prog-name is able to find the correct programs.
+          (stdenv.lib.optionalString (crossMingw || crossDarwin) (
             " --with-as=${binutilsCross}/bin/${cross.config}-as" +
             " --with-ld=${binutilsCross}/bin/${cross.config}-ld"
-            else
-            " --with-headers=${libcCross}/include") +
+          )) +
           " --enable-__cxa_atexit" +
           " --enable-long-long" +
           (if crossMingw then
