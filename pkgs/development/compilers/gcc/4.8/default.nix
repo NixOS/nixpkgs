@@ -117,7 +117,8 @@ let version = "4.8.2";
         withMode;
 
     /* Cross-gcc settings */
-    crossMingw = (cross != null && cross.libc == "msvcrt");
+    crossMingw = cross != null && cross.libc == "msvcrt";
+    crossDarwin = cross != null && cross.libc == "libSystem";
     crossConfigureFlags = let
         gccArch = stdenv.cross.gcc.arch or null;
         gccCpu = stdenv.cross.gcc.cpu or null;
@@ -161,7 +162,12 @@ let version = "4.8.2";
           " --disable-shared" +
           " --disable-decimal-float" # libdecnumber requires libc
           else
-          " --with-headers=${libcCross}/include" +
+          (if crossDarwin then
+            " --with-sysroot=${libcCross}/share/sysroot" +
+            " --with-as=${binutilsCross}/bin/${cross.config}-as" +
+            " --with-ld=${binutilsCross}/bin/${cross.config}-ld"
+            else
+            " --with-headers=${libcCross}/include") +
           " --enable-__cxa_atexit" +
           " --enable-long-long" +
           (if crossMingw then
@@ -175,10 +181,8 @@ let version = "4.8.2";
             # In any case, mingw32 g++ linking is broken by default with shared libs,
             # unless adding "-lsupc++" to any linking command. I don't know why.
             " --disable-shared" +
-            (if cross.config == "x86_64-w64-mingw32" then
-              # To keep ABI compatibility with upstream mingw-w64
-              " --enable-fully-dynamic-string"
-              else "")
+            # To keep ABI compatibility with upstream mingw-w64
+            " --enable-fully-dynamic-string"
             else (if cross.libc == "uclibc" then
               # In uclibc cases, libgomp needs an additional '-ldl'
               # and as I don't know how to pass it, I disable libgomp.
@@ -346,6 +350,7 @@ stdenv.mkDerivation ({
         ++ optional langAda      "ada"
         ++ optional langVhdl     "vhdl"
         ++ optional langGo       "go"
+        ++ optionals crossDarwin [ "objc" "obj-c++" ]
         )
       )
     }

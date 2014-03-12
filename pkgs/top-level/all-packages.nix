@@ -2448,10 +2448,10 @@ let
   gcc_realCross = gcc48_realCross;
 
   gccCrossStageStatic = let
-      isMingw = (stdenv.cross.libc == "msvcrt");
-      isMingw64 = isMingw && stdenv.cross.config == "x86_64-w64-mingw32";
-      libcCross1 = if isMingw64 then windows.mingw_w64_headers else
-                   if isMingw then windows.mingw_headers1 else null;
+      libcCross1 =
+        if stdenv.cross.libc == "msvcrt" then windows.mingw_w64_headers
+        else if stdenv.cross.libc == "libSystem" then darwin.xcode
+        else null;
     in
       wrapGCCCross {
       gcc = forceNativeDrv (lib.addMetaAttrs { hydraPlatforms = []; } (
@@ -3474,11 +3474,13 @@ let
     gold = false;
   });
 
-  binutilsCross = lowPrio (forceNativeDrv (import ../development/tools/misc/binutils {
-    inherit stdenv fetchurl zlib;
-    noSysDirs = true;
-    cross = assert crossSystem != null; crossSystem;
-  }));
+  binutilsCross =
+    if crossSystem != null && crossSystem.libc == "libSystem" then darwin.cctools
+    else lowPrio (forceNativeDrv (import ../development/tools/misc/binutils {
+      inherit stdenv fetchurl zlib;
+      noSysDirs = true;
+      cross = assert crossSystem != null; crossSystem;
+    }));
 
   bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
   bison3 = callPackage ../development/tools/parsing/bison/3.x.nix { };
@@ -3850,6 +3852,8 @@ let
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
   xmlindent = callPackage ../development/web/xmlindent {};
+
+  xpwn = callPackage ../development/mobile/xpwn {};
 
   xxdiff = callPackage ../development/tools/misc/xxdiff {
     bison = bison2;
@@ -4272,9 +4276,8 @@ let
   # We can choose:
   libcCrossChooser = name : if name == "glibc" then glibcCross
     else if name == "uclibc" then uclibcCross
-    else if name == "msvcrt" && stdenv.cross.config == "x86_64-w64-mingw32" then
-      windows.mingw_w64
-    else if name == "msvcrt" then windows.mingw_headers3
+    else if name == "msvcrt" then windows.mingw_w64
+    else if name == "libSystem" then darwin.xcode
     else throw "Unknown libc";
 
   libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
@@ -6571,6 +6574,22 @@ let
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
+  darwin = rec {
+    cctools = forceNativeDrv (callPackage ../os-specific/darwin/cctools-port {
+      cross = assert crossSystem != null; crossSystem;
+      inherit maloader;
+      xctoolchain = xcode.toolchain;
+    });
+
+    maloader = callPackage ../os-specific/darwin/maloader {
+      inherit opencflite;
+    };
+
+    opencflite = callPackage ../os-specific/darwin/opencflite {};
+
+    xcode = callPackage ../os-specific/darwin/xcode {};
+  };
+
   devicemapper = lvm2;
 
   dmidecode = callPackage ../os-specific/linux/dmidecode { };
@@ -7243,6 +7262,10 @@ let
 
     mingw_w64_headers = callPackage ../os-specific/windows/mingw-w64 {
       onlyHeaders = true;
+    };
+
+    mingw_w64_pthreads = callPackage ../os-specific/windows/mingw-w64 {
+      onlyPthreads = true;
     };
 
     pthreads = callPackage ../os-specific/windows/pthread-w32 {

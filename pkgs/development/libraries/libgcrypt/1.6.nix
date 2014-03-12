@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
     make check
   '';
 
+  crossAttrs = let
+    isCross64 = stdenv.cross.config == "x86_64-w64-mingw32";
+  in stdenv.lib.optionalAttrs isCross64 {
+    configureFlags = [ "--disable-asm" "--disable-padlock-support" ];
+  };
+
   meta = {
     description = "GNU Libgcrypt, a general-pupose cryptographic library";
 
