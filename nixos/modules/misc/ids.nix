@@ -116,6 +116,7 @@
       dictd = 105;
       couchdb = 106;
       searx = 107;
+      kippo = 108;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -210,6 +211,7 @@
       dictd = 105;
       couchdb = 106;
       searx = 107;
+      kippo = 108;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 
