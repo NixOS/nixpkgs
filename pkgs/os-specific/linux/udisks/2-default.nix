@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--localstatedir=/var"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/systemd"
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
   ];
 

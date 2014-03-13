@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       "--without-powerman" # Until we have it ...
       "--without-cgi"
       "--without-hal"
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/systemd"
+      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
       "--with-udev-dir=$(out)/etc/udev"
     ];
 

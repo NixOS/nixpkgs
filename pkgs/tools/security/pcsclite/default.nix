@@ -12,12 +12,9 @@ stdenv.mkDerivation rec {
   # The OS should care on preparing the drivers into this location
   configureFlags = [
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    "--with-systemdsystemunitdir=$out/lib/systemd/system" # probably
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--enable-confdir=$(out)/etc"
   ];
-
-  preConfigure = ''
-    configureFlags="$configureFlags --enable-confdir=$out/etc"
-  '';
 
   buildInputs = [ udev dbus_libs perl ];
 
