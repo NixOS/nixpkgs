@@ -156,11 +156,19 @@ python.stdenv.mkDerivation (attrs // {
       done
     '';
 
-  shellHook = attrs.shellHook or ''
+  shellHook = let
+    # Globablly override prefix, so development of other packages is possible
+    _distutils-cfg = distutils-cfg.override {
+      overrideCfg = ''
+        [easy_install]
+        prefix = /tmp/${namePrefix + name}
+      '' + distutilsExtraCfg;
+    };
+  in attrs.shellHook or ''
     mkdir -p /tmp/$name/lib/${python.libPrefix}/site-packages
     ${preShellHook}
     export PATH="/tmp/$name/bin:$PATH"
-    export PYTHONPATH="/tmp/$name/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    export PYTHONPATH="${_distutils-cfg}/lib/${python.libPrefix}/site-packages:/tmp/$name/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
     python setup.py develop --prefix /tmp/$name
     ${postShellHook}
     return
