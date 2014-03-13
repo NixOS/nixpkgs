@@ -173,7 +173,7 @@ let
 
   serviceConfig = { name, config, ... }: {
     config = mkMerge
-      [ { # Default path for systemd services.  Should be quite minimal.
+      [ (mkIf (config.baseUnit == null) { # Default path for systemd services.  Should be quite minimal.
           path =
             [ pkgs.coreutils
               pkgs.findutils
@@ -182,7 +182,7 @@ let
               systemd
             ];
           environment.PATH = config.path;
-        }
+        })
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
               #! ${pkgs.stdenv.shell} -e
