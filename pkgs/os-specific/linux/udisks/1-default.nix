@@ -3,11 +3,11 @@
 , libxslt, docbook_xsl, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "udisks-1.0.4";
+  name = "udisks-1.0.5";
 
   src = fetchurl {
     url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "1xgqifddwaavmjc8c30i0mdffyirsld7c6qhfyjw7f9khwv8jjw5";
+    sha256 = "0wbg3jrv8limdgvcygf4dqin3y6d30y9pcmmk711vq571vmq5v7j";
   };
 
   patches = [ ./purity.patch ./no-pci-db.patch ];
@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  configureFlags = "--localstatedir=/var --enable-lvm2";
+  configureFlags = [
+    "--localstatedir=/var"
+    "--enable-lvm2"
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+  ];
 
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/udisks;
