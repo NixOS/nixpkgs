@@ -1144,6 +1144,8 @@ let
     inherit openssl gmp nettools iproute;
   };
 
+  gvolicon = callPackage ../tools/audio/gvolicon {};
+
   gzip = callPackage ../tools/compression/gzip { };
 
   gzrt = callPackage ../tools/compression/gzrt { };
