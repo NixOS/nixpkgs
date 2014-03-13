@@ -119,6 +119,7 @@
       kippo = 108;
       jenkins = 109;
       systemd-journal-gateway = 110;
+      notbit = 111;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -216,6 +217,7 @@
       kippo = 108;
       jenkins = 109;
       systemd-journal-gateway = 110;
+      notbit = 111;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 

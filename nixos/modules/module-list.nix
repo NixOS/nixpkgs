@@ -179,6 +179,7 @@
   ./services/networking/minidlna.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
+  ./services/networking/notbit.nix
   ./services/networking/ntopng.nix
   ./services/networking/ntpd.nix
   ./services/networking/oidentd.nix
