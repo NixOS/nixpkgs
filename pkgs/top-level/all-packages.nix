@@ -8614,6 +8614,8 @@ let
     rake         = rake_10_1_0;
   };
 
+  synfigstudio = callPackage ../applications/graphics/synfigstudio { };
+
   msmtp = callPackage ../applications/networking/msmtp { };
 
   imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
