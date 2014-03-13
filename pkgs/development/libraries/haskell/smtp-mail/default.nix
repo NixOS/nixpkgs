@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "smtp-mail";
-  version = "0.1.4.4";
-  sha256 = "055b736sr9w4dxf1p5xjfsisqxk49kz4d3hyqwgdvi8zzvi31vp6";
+  version = "0.1.4.5";
+  sha256 = "010fbrcbypajwd9fjjc35br9p5axl1pqd0n1v51585ncrlv2icyw";
   buildDepends = [
     base16Bytestring base64Bytestring cryptohash filepath mimeMail
     network text
