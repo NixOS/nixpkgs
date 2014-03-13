@@ -1895,6 +1895,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   pathtype = callPackage ../development/libraries/haskell/pathtype {};
 
+  pbkdf = callPackage ../development/libraries/haskell/pbkdf {};
+
   pcap = callPackage ../development/libraries/haskell/pcap {};
 
   pcapEnumerator = callPackage ../development/libraries/haskell/pcap-enumerator {};
