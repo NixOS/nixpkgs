@@ -56,7 +56,7 @@ let
       "--localstatedir=/var"
       "--sysconfdir=/etc"
       "--with-session-socket-dir=/tmp"
-      "--with-systemdsystemunitdir=$(out)/lib/systemd"
+      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     ];
 
     enableParallelBuilding = true;
