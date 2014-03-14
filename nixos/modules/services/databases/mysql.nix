@@ -15,7 +15,7 @@ let
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
   mysqldOptions =
-    "--user=${cfg.user} --datadir=${cfg.dataDir} " +
+    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql} " +
     "--pid-file=${pidFile}";
 
   myCnf = pkgs.writeText "my.cnf"
