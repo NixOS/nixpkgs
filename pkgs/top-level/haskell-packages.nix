@@ -2195,6 +2195,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
 
+  snowball = callPackage ../development/libraries/haskell/snowball {};
+
   socks = callPackage ../development/libraries/haskell/socks {};
 
   sparse = callPackage ../development/libraries/haskell/sparse {};
