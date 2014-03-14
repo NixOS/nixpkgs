@@ -4660,6 +4660,10 @@ let
 
   libbs2b = callPackage ../development/libraries/audio/libbs2b { };
 
+  libbitcoin = callPackage ../development/libraries/libbitcoin {
+    stdenv = overrideGCC stdenv gcc47;
+  };
+
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcanberra = callPackage ../development/libraries/libcanberra { };
