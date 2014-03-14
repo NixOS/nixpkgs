@@ -195,7 +195,7 @@ rec {
     meta = {
       description = "Mozilla Firefox - the browser, reloaded";
       homepage = http://www.mozilla.com/en-US/firefox/;
-      maintainers = [ stdenv.lib.maintainers.eelco ];
+      maintainers = with stdenv.lib.maintainers; [ eelco wizeman ];
     };
 
     passthru = {

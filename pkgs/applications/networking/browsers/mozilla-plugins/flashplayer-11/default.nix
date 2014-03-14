@@ -88,6 +88,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Adobe Flash Player browser plugin";
     homepage = http://www.adobe.com/products/flashplayer/;
+    maintainer = with stdenv.lib.maintainers; [ wizeman ];
     license = "unfree";
   };
 }
