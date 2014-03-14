@@ -4596,7 +4596,6 @@ let
   judy = callPackage ../development/libraries/judy { };
 
   keybinder = callPackage ../development/libraries/keybinder {
-    inherit (gnome2) gnome_common;
     automake = automake111x;
     lua = lua5_1;
   };
