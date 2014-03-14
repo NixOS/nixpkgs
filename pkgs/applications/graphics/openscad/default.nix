@@ -1,17 +1,19 @@
 { stdenv, fetchurl, qt4, bison, flex, eigen, boost, mesa, glew, opencsg, cgal
-, mpfr, gmp
+, mpfr, gmp, glib, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
-  version = "2013.06";
+  version = "2014.03";
   name = "openscad-${version}";
 
   src = fetchurl {
-    url = "https://openscad.googlecode.com/files/${name}.src.tar.gz";
-    sha256 = "01r013l8zyfkgmqn05axh3rlfsjwd6j403w5ffl7nby4i2spiw1f";
+    url = "http://files.openscad.org/${name}.src.tar.gz";
+    sha256 = "1hv1lmq1ayhlvrz5sqipg650xryq25a9k22ysdw0dsrwg9ixqpw6";
   };
 
-  buildInputs = [ qt4 bison flex eigen boost mesa glew opencsg cgal gmp mpfr ];
+  buildInputs = [
+    qt4 bison flex eigen boost mesa glew opencsg cgal mpfr gmp glib pkgconfig
+  ];
 
   configurePhase = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${eigen}/include/eigen*) "
