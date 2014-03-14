@@ -526,6 +526,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   adjunctions = callPackage ../development/libraries/haskell/adjunctions {};
 
+  aes = callPackage ../development/libraries/haskell/aes {};
+
   aeson = callPackage ../development/libraries/haskell/aeson {
     blazeBuilder = if (pkgs.stdenv.lib.versionOlder ghc.version "7.6") then self.blazeBuilder else null;
   };
@@ -1894,6 +1896,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   Pathfinder = callPackage ../development/libraries/haskell/Pathfinder {};
 
   pathtype = callPackage ../development/libraries/haskell/pathtype {};
+
+  pbkdf = callPackage ../development/libraries/haskell/pbkdf {};
 
   pcap = callPackage ../development/libraries/haskell/pcap {};
 
