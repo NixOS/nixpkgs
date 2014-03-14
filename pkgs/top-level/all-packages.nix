@@ -4567,6 +4567,8 @@ let
 
   itk = callPackage ../development/libraries/itk { };
 
+  itkShared = itk.override { sharedLibs = true; };
+
   jamp = builderDefsPackage ../games/jamp {
     inherit mesa SDL SDL_image SDL_mixer;
   };
