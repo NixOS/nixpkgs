@@ -2570,6 +2570,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   waiTest = callPackage ../development/libraries/haskell/wai-test {};
 
+  waiWebsockets = callPackage ../development/libraries/haskell/wai-websockets {};
+
   warp = callPackage ../development/libraries/haskell/warp {};
 
   warpTls = callPackage ../development/libraries/haskell/warp-tls {};
