@@ -85,19 +85,20 @@ in
         inherit gid;
       };
 
-    jobs.gpsd =
-      { description = "GPSD daemon";
-
-        startOn = "ip-up";
-
-        exec =
-          ''
-            ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
-              -S "${toString cfg.port}"                             \
-              ${if cfg.readonly then "-b" else ""}                  \
-              "${cfg.device}"
-          '';
+    systemd.services.gpsd = {
+      description = "GPSD daemon";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        Type = "forking";
+        ExecStart = ''
+          ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
+            -S "${toString cfg.port}"                             \
+            ${if cfg.readonly then "-b" else ""}                  \
+            "${cfg.device}"
+        '';
       };
+    };
 
   };
 
