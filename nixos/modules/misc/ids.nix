@@ -117,6 +117,7 @@
       couchdb = 106;
       searx = 107;
       kippo = 108;
+      jenkins = 109;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -212,6 +213,7 @@
       couchdb = 106;
       searx = 107;
       kippo = 108;
+      jenkins = 109;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 
