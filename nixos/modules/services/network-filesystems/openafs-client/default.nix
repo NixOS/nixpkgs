@@ -46,6 +46,16 @@ in
         description = "Cache directory.";
       };
 
+      crypt = mkOption {
+        default = false;
+        description = "Whether to enable (weak) protocol encryption.";
+      };
+
+      sparse = mkOption {
+        default = false;
+        description = "Minimal cell list in /afs.";
+      };
+
     };
   };
 
@@ -70,18 +80,23 @@ in
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
-	preStart = ''
-	  mkdir -m 0755 /afs || true
-	  mkdir -m 0755 -p ${cfg.cacheDirectory} || true
+        preStart = ''
+          mkdir -p -m 0755 /afs
+          mkdir -m 0700 -p ${cfg.cacheDirectory}
           ${pkgs.module_init_tools}/sbin/insmod ${openafsPkgs}/lib/openafs/libafs-*.ko || true
-          ${openafsPkgs}/sbin/afsd -confdir ${afsConfig} -cachedir ${cfg.cacheDirectory} -dynroot -fakestat
-	'';
+          ${openafsPkgs}/sbin/afsd -confdir ${afsConfig} -cachedir ${cfg.cacheDirectory} ${if cfg.sparse then "-dynroot-sparse" else "-dynroot"} -fakestat -afsdb
+          ${openafsPkgs}/bin/fs setcrypt ${if cfg.crypt then "on" else "off"}
+        '';
 
-	postStop = ''
-	  umount /afs
+        # Doing this in preStop, because after these commands AFS is basically
+        # stopped, so systemd has nothing to do, just noticing it.  If done in
+        # postStop, then we get a hang + kernel oops, because AFS can't be
+        # stopped simply by sending signals to processes.
+        preStop = ''
+          ${pkgs.utillinux}/bin/umount /afs
           ${openafsPkgs}/sbin/afsd -shutdown
-	  rmmod libafs
-	'';
+          ${pkgs.module_init_tools}/sbin/rmmod libafs
+        '';
 
       };
 
