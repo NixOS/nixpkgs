@@ -9681,7 +9681,16 @@ let
 
   cinnamon = recurseIntoAttrs rec {
     callPackage = newScope pkgs.cinnamon;
-    inherit (gnome3) gnome_common;
+    inherit (gnome3) gnome_common gnome-menus;
+    inherit (gnome) GConf ;
+    
+    cinnamon-control-center = callPackage ../desktops/cinnamon/cinnamon-control-center.nix  { } ; 
+       
+    dconf = callPackage ../desktops/cinnamon/dconf.nix { } ;
+    
+    ibus = callPackage ../desktops/cinnamon/ibus.nix { } ; 
+
+    cinnamon-settings-daemon = callPackage ../desktops/cinnamon/cinnamon-settings-daemon.nix { } ;
 
     cinnamon-session = callPackage ../desktops/cinnamon/cinnamon-session.nix{ } ;
 
