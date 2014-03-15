@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   #   'chrpath' is used to be able to run the tests from the source tree, but
   #   we use $LD_LIBRARY_PATH instead.
   buildPhase = ''
+    patchShebangs .
     mkdir -p "$out"
     sed -e "s|python_lib_dir = .*|python_lib_dir = \"$out/lib/${pythonFull.python.libPrefix}/site-packages\"|" -i SConstruct
     scons prefix="$out" leapfetch=no gpsd_user=${gpsdUser} gpsd_group=${gpsdGroup} \
