@@ -31,10 +31,18 @@ let
       builder = shell;
 
       args = ["-e" ./builder.sh];
+      /* TODO: special-cased @var@ substitutions are ugly.
+          However, using substituteAll* from setup.sh seems difficult,
+          as setup.sh can't be directly sourced.
+          Suggestion: split similar utility functions into a separate script.
+      */
 
       setup = setupScript;
 
       inherit preHook initialPath gcc shell;
+
+      # Whether we should run paxctl to pax-mark binaries
+      needsPax = result.isLinux && !skipPaxMarking;
 
       propagatedUserEnvPkgs = [gcc] ++
         lib.filter lib.isDerivation initialPath;
@@ -158,9 +166,6 @@ let
       isArm = system == "armv5tel-linux"
            || system == "armv6l-linux"
            || system == "armv7l-linux";
-
-      # Whether we should run paxctl to pax-mark binaries
-      needsPax = isLinux && !skipPaxMarking;
 
       # For convenience, bring in the library functions in lib/ so
       # packages don't have to do that themselves.
