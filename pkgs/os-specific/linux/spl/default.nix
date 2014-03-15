@@ -40,6 +40,6 @@ stdenv.mkDerivation {
     homepage = http://zfsonlinux.org/;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    maintainers = with stdenv.lib.maintainers; [ jcumming wizeman ];
   };
 }
