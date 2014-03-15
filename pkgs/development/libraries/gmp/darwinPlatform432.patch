@@ -1,0 +1,19 @@
+diff -rupN a/configure b/configure
+--- a/configure	2010-01-07 21:09:40.000000000 +0100
++++ b/configure	2014-01-09 22:19:37.000000000 +0100
+@@ -2140,6 +2140,7 @@ echo "$as_me: error: $SHELL $ac_aux_dir/
+ fi
+ { echo "$as_me:$LINENO: result: $ac_cv_build" >&5
+ echo "${ECHO_T}$ac_cv_build" >&6; }
++ac_cv_build = @patchPlatformBuild@
+ case $ac_cv_build in
+ *-*-*) ;;
+ *) { { echo "$as_me:$LINENO: error: invalid value of canonical build" >&5
+@@ -2177,6 +2178,7 @@ fi
+ fi
+ { echo "$as_me:$LINENO: result: $ac_cv_host" >&5
+ echo "${ECHO_T}$ac_cv_host" >&6; }
++ac_cv_host=@patchPlatformHost@
+ case $ac_cv_host in
+ *-*-*) ;;
+ *) { { echo "$as_me:$LINENO: error: invalid value of canonical host" >&5
