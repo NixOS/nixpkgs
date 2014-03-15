@@ -1590,6 +1590,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   lenses = callPackage ../development/libraries/haskell/lenses {};
 
+  leveldbHaskell = callPackage ../development/libraries/haskell/leveldb-haskell {};
+
   libffi = callPackage ../development/libraries/haskell/libffi {
     libffi = pkgs.libffi;
   };
@@ -2569,6 +2571,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   waiMiddlewareStatic = callPackage ../development/libraries/haskell/wai-middleware-static {};
 
   waiTest = callPackage ../development/libraries/haskell/wai-test {};
+
+  waiWebsockets = callPackage ../development/libraries/haskell/wai-websockets {};
 
   warp = callPackage ../development/libraries/haskell/warp {};
 
