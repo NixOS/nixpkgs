@@ -586,6 +586,10 @@ let
 
   enca = callPackage ../tools/text/enca { };
 
+  fasd = callPackage ../tools/misc/fasd {
+    inherit (haskellPackages) pandoc;
+  };
+
   fop = callPackage ../tools/typesetting/fop { };
 
   mcrl = callPackage ../tools/misc/mcrl { };
