@@ -760,6 +760,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   chell = callPackage ../development/libraries/haskell/chell {};
 
+  chellQuickcheck = callPackage ../development/libraries/haskell/chell-quickcheck {};
+
   chunkedData = callPackage ../development/libraries/haskell/chunked-data {};
 
   citeprocHs = callPackage ../development/libraries/haskell/citeproc-hs {};
