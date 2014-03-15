@@ -4,15 +4,45 @@
     version = "35.0.1883.0";
     url = "http://commondatastorage.googleapis.com/chromium-browser-official/chromium-35.0.1883.0.tar.xz";
     sha256 = "0qbv6prxl18y5824pfd13ng9798g561gzb6nypwp502hqr45jvb6";
+
+    deb_amd64 = {
+      url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-unstable/google-chrome-unstable_35.0.1883.0-1_amd64.deb";
+      sha1 = "f768c4a5872f619ac9af9c8e695fdf9b35bba363";
+    };
+
+    deb_i386 = {
+      url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-unstable/google-chrome-unstable_35.0.1883.0-1_i386.deb";
+      sha1 = "dc68dcebdc43b50f433e0e583f96a92681df9e5d";
+    };
   };
   beta = {
     version = "34.0.1847.45";
     url = "http://commondatastorage.googleapis.com/chromium-browser-official/chromium-34.0.1847.45.tar.xz";
     sha256 = "0ypz6cclddiasmy8z5p97ndpl9xb7p5ncn9dxm6zkffxyagnx531";
+
+    deb_amd64 = {
+      url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-beta/google-chrome-beta_34.0.1847.45-1_amd64.deb";
+      sha1 = "9a3482445a7f99d23964f36e27ec20bf981a8a04";
+    };
+
+    deb_i386 = {
+      url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-beta/google-chrome-beta_34.0.1847.45-1_i386.deb";
+      sha1 = "443a1eb8d61ab96cb701909b601ad0ff87569617";
+    };
   };
   stable = {
     version = "33.0.1750.149";
     url = "http://commondatastorage.googleapis.com/chromium-browser-official/chromium-33.0.1750.149.tar.xz";
     sha256 = "111hml6kjfzps9addvhcjygjb2k65spknx2zc6pnz4ygshynspqn";
+
+    deb_amd64 = {
+      url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_33.0.1750.149-1_amd64.deb";
+      sha1 = "892fa77b6c3c6ba1f7d66779c6add7688067880e";
+    };
+
+    deb_i386 = {
+      url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_33.0.1750.149-1_i386.deb";
+      sha1 = "fde97310947166ee65e8de07104d6929f4a3916c";
+    };
   };
 }

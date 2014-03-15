@@ -153,6 +153,7 @@ let
   buildType = "Release";
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
+  binPath = "libexec/${packageName}/${packageName}";
   sandboxPath = "${sandbox}/bin/${packageName}_sandbox";
 
 in stdenv.mkDerivation rec {
@@ -249,10 +250,10 @@ in stdenv.mkDerivation rec {
     cp -vR "${buildPath}/locales" "${buildPath}/resources" "${libExecPath}/"
     cp -v ${buildPath}/libffmpegsumo.so "${libExecPath}/"
 
-    cp -v "${buildPath}/chrome" "${libExecPath}/${packageName}"
+    cp -v "${buildPath}/chrome" "$out/${binPath}"
 
     mkdir -vp "$out/bin"
-    makeWrapper "${libExecPath}/${packageName}" "$out/bin/${packageName}"
+    makeWrapper "$out/${binPath}" "$out/bin/${packageName}"
 
     mkdir -vp "$out/share/man/man1"
     cp -v "${buildPath}/chrome.1" "$out/share/man/man1/${packageName}.1"
@@ -269,7 +270,7 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit sandbox;
+    inherit sandbox binPath channel;
   };
 
   meta = {

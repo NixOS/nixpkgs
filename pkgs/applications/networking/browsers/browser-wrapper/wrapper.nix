@@ -1,5 +1,5 @@
 { stdenv, lib, browser, makeDesktopItem, makeWrapper, plugins, libs, gtk_modules
-, browserName, desktopName, nameSuffix, icon
+, browserName, desktopName, nameSuffix, icon, binPath, extraFlags
 }:
 
 let p = builtins.parseDrvName browser.name; in
@@ -20,19 +20,20 @@ stdenv.mkDerivation {
   buildInputs = [makeWrapper];
 
   buildCommand = ''
-    if [ ! -x "${browser}/bin/${browserName}" ]
+    if [ ! -x "${binPath}" ]
     then
-        echo "cannot find executable file \`${browser}/bin/${browserName}'"
+        echo "cannot find executable file \`${binPath}'"
         exit 1
     fi
 
-    makeWrapper "${browser}/bin/${browserName}" \
+    makeWrapper "${binPath}" \
         "$out/bin/${browserName}${nameSuffix}" \
         --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
         --suffix-each LD_LIBRARY_PATH ':' "$libs" \
         --suffix-each GTK_PATH ':' "$gtk_modules" \
         --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
-        --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))"
+        --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
+        --add-flags "${extraFlags}"
 
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications/* $out/share/applications
