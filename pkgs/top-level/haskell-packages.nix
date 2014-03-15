@@ -1646,6 +1646,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   lushtags = callPackage ../development/libraries/haskell/lushtags {};
 
+  lzmaEnumerator = callPackage ../development/libraries/haskell/lzma-enumerator {};
+
   maccatcher = callPackage ../development/libraries/haskell/maccatcher {};
 
   markdownUnlit = callPackage ../development/libraries/haskell/markdown-unlit {};
