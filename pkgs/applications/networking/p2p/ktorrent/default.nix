@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "KDE integrated BtTorrent client";
-    homepage = http://ktorrent.org;
+    homepage = http://ktorrent.pwsp.net;
     maintainers = with stdenv.lib.maintainers; [ sander urkud ];
     inherit (libktorrent.meta) platforms;
   };

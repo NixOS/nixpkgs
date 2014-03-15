@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   pname = "libktorrent";
 
   src = fetchurl {
-    url = "http://ktorrent.pwsp.net//downloads/${version4}/${name}.tar.bz2";
+    url = "${meta.homepage}/downloads/${version4}/${name}.tar.bz2";
     sha256 = "2fe11ccb4bf2028c3da11e52cde890f1b3a90560e548eac89a4f8e1558b09725";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A BiTtorrent library used by KTorrent";
-    homepage = http://ktorrent.org;
+    homepage = http://ktorrent.pwsp.net;
     inherit (kdelibs.meta) platforms;
   };
 }
