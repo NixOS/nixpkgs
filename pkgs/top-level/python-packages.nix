@@ -5652,11 +5652,11 @@ rec {
 
 
   pyserial = buildPythonPackage rec {
-    name = "pyserial-2.6";
+    name = "pyserial-2.7";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyserial/${name}.tar.gz";
-      md5 = "cde799970b7c1ce1f7d6e9ceebe64c98";
+      sha256 = "3542ec0838793e61d6224e27ff05e8ce4ba5a5c5cc4ec5c6a3e8d49247985477";
     };
 
     doCheck = false;
