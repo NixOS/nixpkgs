@@ -116,8 +116,9 @@ in
         # This file is read for all shells.
 
         # Only execute this file once per shell.
+        # But don't clobber the environment of interactive non-login children!
         if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
-        __ETC_ZSHENV_SOURCED=1
+        export __ETC_ZSHENV_SOURCED=1
 
         ${cfg.shellInit}
 
