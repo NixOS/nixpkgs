@@ -143,7 +143,7 @@ let
       "sockets.target.wants"
       "local-fs.target.wants"
       "multi-user.target.wants"
-      "shutdown.target.wants"
+      #"shutdown.target.wants"
       "timers.target.wants"
     ];
 
