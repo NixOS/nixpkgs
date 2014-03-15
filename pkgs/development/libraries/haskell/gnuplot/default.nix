@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gnuplot";
-  version = "0.5.2";
-  sha256 = "11gma33bikx97jra04vgnhikylw9wm1l37hdrsknl7mgk2qbrs74";
+  version = "0.5.2.1";
+  sha256 = "1bzj7z803mxyxfv2123swvdv78gh5dbrf8ldc6iziry3fz5q8nb1";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
