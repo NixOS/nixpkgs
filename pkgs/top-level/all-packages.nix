@@ -2874,7 +2874,7 @@ let
 
   mozart = callPackage ../development/compilers/mozart { };
 
-  neko = callPackage ../development/compilers/neko { };
+  neko = callPackage ../development/compilers/neko { apache = apacheHttpd; };
 
   nasm = callPackage ../development/compilers/nasm { };
 
