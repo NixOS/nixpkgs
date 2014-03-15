@@ -33,8 +33,9 @@ in
           service called <literal>tarsnap-backup</literal> which is
           periodically run by cron, or you may run it on-demand.
 
-          See <link xlink:href='http://www.tarsnap.com/gettingstarted.html'>Getting Started</link> 
-          Tarsnap page.
+          See the Tarsnap <link
+          xlink:href='http://www.tarsnap.com/gettingstarted.html'>Getting
+          Started</link> page.
         '';
       };
 
@@ -46,7 +47,7 @@ in
           full name will be
           <literal>label-$(date+"%Y%m%d%H%M%S")</literal>. For
           example, by default your backups will look similar to
-          <literal>nixos-20140301021501</literal>.
+          <literal>nixos-20140301011501</literal>.
         '';
       };
 
@@ -110,8 +111,8 @@ in
         default = "15 01 * * *";
         description = ''
           This option defines (in the format used by cron) when
-          tarsnap is run for backups.  The default is to update at
-          01:15 at night every day.
+          tarsnap is run for backups. The default is to backup the
+          specified paths at 01:15 at night every day.
         '';
       };
 

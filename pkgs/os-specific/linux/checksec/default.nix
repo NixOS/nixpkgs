@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A tool for checking security bits on executables";
     homepage    = "http://www.trapkit.de/tools/checksec.html";
-    platforms   = stdenv.lib.platforms.linux;
     license     = stdenv.lib.licenses.bsd3;
+    platforms   = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }
