@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [(fetchurl {
-    url = "https://github.com/libarchive/libarchive/commit/22531545514043e04633e1c015c7540b9de9dbe4.patch";
-    sha256 = "1y649pvilwx4jpjhyq5pfs2jb0ay01ylrn1y8098v785z0j82wml";
+    url = "https://github.com/libarchive/libarchive/commit/22531545514043e04633e1c015c7540b9de9dbe4.diff";
+    sha256 = "1466ddrkdh2r8idmj3v7fk2gwnhc1kdxvyczdpnqms0qlmas6fj5";
     name = "CVE-2013-0211.patch";
   })];
 
