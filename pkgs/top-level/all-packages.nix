@@ -2961,11 +2961,11 @@ let
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
-    ocaml_batteries = callPackage ../development/ocaml-modules/batteries {
-      camomile = camomile_0_8_2;
-    };
+    ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
 
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
+
+    ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
 
     ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
@@ -2973,11 +2973,17 @@ let
 
     ocaml_http = callPackage ../development/ocaml-modules/http { };
 
+    ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
+
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
+
+    ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
     ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
 
     ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
+
+    ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
 
     ocaml_pcre = callPackage ../development/ocaml-modules/pcre {
       inherit pcre;
@@ -3000,6 +3006,8 @@ let
     };
 
     ocaml_typeconv = callPackage ../development/ocaml-modules/typeconv { };
+
+    ocaml_typeconv_3_0_5 = callPackage ../development/ocaml-modules/typeconv/3.0.5.nix { };
 
     ocaml_sexplib = callPackage ../development/ocaml-modules/sexplib { };
 
