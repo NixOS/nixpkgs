@@ -58,30 +58,29 @@ stdenv.mkDerivation rec {
 
   postInstall = "wrapPythonPrograms";
 
-  meta = {
-    description = "`gpsd', a GPS service daemon";
-
+  meta = with stdenv.lib; {
+    description = "GPS service daemon";
     longDescription = ''
-      gpsd is a service daemon that monitors one or more GPSes
-      attached to a host computer through serial or USB ports, making
-      all data on the location/course/velocity of the sensors
-      available to be queried on TCP port 2947 of the host computer.
-      With gpsd, multiple GPS client applications (such as
-      navigational and wardriving software) can share access to GPSes
-      without contention or loss of data.  Also, gpsd responds to
-      queries with a format that is substantially easier to parse than
-      the NMEA 0183 emitted by most GPSes.  The gpsd distribution
-      includes a linkable C service library, a C++ wrapper class, and
-      a Python module that developers of gpsd-aware applications can
-      use to encapsulate all communication with gpsd.
+      gpsd is a service daemon that monitors one or more GPSes or AIS
+      receivers attached to a host computer through serial or USB ports,
+      making all data on the location/course/velocity of the sensors
+      available to be queried on TCP port 2947 of the host computer. With
+      gpsd, multiple location-aware client applications (such as navigational
+      and wardriving software) can share access to receivers without
+      contention or loss of data. Also, gpsd responds to queries with a
+      format that is substantially easier to parse than the NMEA 0183 emitted
+      by most GPSes. The gpsd distribution includes a linkable C service
+      library, a C++ wrapper class, and a Python module that developers of
+      gpsd-aware applications can use to encapsulate all communication with
+      gpsd. Third-party client bindings for Java and Perl also exist.
 
       Besides gpsd itself, the project provides auxiliary tools for
-      diagnostic monitoring and profiling of GPSes and feeding
-      GPS-aware applications GPS logs for diagnostic purposes.
+      diagnostic monitoring and profiling of receivers and feeding
+      location-aware applications GPS/AIS logs for diagnostic purposes.
     '';
-
-    homepage = http://gpsd.berlios.de/;
-
+    homepage = http://catb.org/gpsd/;
     license = "BSD-style";
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
   };
 }
