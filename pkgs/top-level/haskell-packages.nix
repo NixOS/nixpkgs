@@ -1863,6 +1863,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   operational = callPackage ../development/libraries/haskell/operational {};
 
+  options = callPackage ../development/libraries/haskell/options {};
+
   optparseApplicative = callPackage ../development/libraries/haskell/optparse-applicative {};
 
   pathPieces = callPackage ../development/libraries/haskell/path-pieces {};
