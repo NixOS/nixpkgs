@@ -2395,7 +2395,7 @@ rec {
     };
 
     propagatedBuildInputs = with pkgs; [
-      pyGtkGlade libtorrentRasterbar twisted Mako chardet pyxdg pyopenssl
+      pyGtkGlade libtorrentRasterbar twisted Mako chardet pyxdg pyopenssl modules.curses
     ];
 
     postInstall = ''
