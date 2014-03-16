@@ -1460,14 +1460,14 @@ let
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videoati = (stdenv.mkDerivation ((if overrides ? xf86videoati then overrides.xf86videoati else x: x) {
-    name = "xf86-video-ati-7.2.0";
+    name = "xf86-video-ati-7.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-ati-7.2.0.tar.bz2;
-      sha256 = "1i5fknbbhynl5hv2dzznzcf0yadpm28jzvx7xl38vlfpr3ymw3zk";
+      url = mirror://xorg/individual/driver/xf86-video-ati-7.3.0.tar.bz2;
+      sha256 = "107c072c4919a996e04f47afdb53d5946a3ad574f270b8c560ef8b3a032046fe";
     };
-    buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
-  })) // {inherit fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
+    buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto glamor ];
+  })) // {inherit fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto glamor ;};
 
   xf86videocirrus = (stdenv.mkDerivation ((if overrides ? xf86videocirrus then overrides.xf86videocirrus else x: x) {
     name = "xf86-video-cirrus-1.5.2";
@@ -2088,5 +2088,19 @@ let
     };
     buildInputs = [pkgconfig libX11 xproto ];
   })) // {inherit libX11 xproto ;};
+
+  glamor = (stdenv.mkDerivation ((if overrides ? glamor then overrides.glamor else x: x) {
+    name = "glamor-0.6.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://xorg.freedesktop.org/archive/individual/driver/glamor-egl-0.6.0.tar.bz2;
+      sha256 = "66531b56e6054eb53daa7bd57eb6358a7ead1b84f63419606e69d1092365e5c9";
+    };
+    buildInputs = [pkgconfig xorgserver mesa pixman ];
+    configureFlags = "--with-xorg-conf-dir=$(out)/etc/X11";
+    patchPhase = ''
+      sed -i 's,sdkdir=`$PKG_CONFIG --variable=sdkdir xorg-server`,sdkdir=$out/include/xorg,' configure
+    '';
+  })) // {inherit xorgserver mesa pixman ;};
 
 }; in xorg
