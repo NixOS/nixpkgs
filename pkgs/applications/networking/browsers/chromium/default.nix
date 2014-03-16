@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, ninja, which
+{ stdenv, fetchurl, makeWrapper, ninja, which, makeDesktopItem
 
 # default dependencies
 , bzip2, flac, speex
@@ -155,6 +155,17 @@ let
   libExecPath = "$out/libexec/${packageName}";
   sandboxPath = "${sandbox}/bin/${packageName}_sandbox";
 
+  desktopItem = makeDesktopItem {
+    name = "Chromium";
+    exec = "chromium";
+    icon = "chromium";
+    comment = "An open source web browser from Google";
+    desktopName = "Chromium";
+    genericName = "Web browser";
+    mimeType = "text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;x-scheme-handler/mailto;x-scheme-handler/webcal";
+    categories = "Network;WebBrowser";
+  };
+
 in stdenv.mkDerivation rec {
   name = "${packageName}-${src.version}";
   inherit packageName src;
@@ -266,6 +277,9 @@ in stdenv.mkDerivation rec {
       mkdir -vp "$logo_output_path"
       cp -v "$icon_file" "$logo_output_path/${packageName}.png"
     done
+
+    mkdir -vp "$out/share/applications"
+    cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
   passthru = {
