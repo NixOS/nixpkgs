@@ -6090,6 +6090,8 @@ let
   ack = perlPackages.ack;
 
   perlcritic = perlPackages.PerlCritic;
+  
+  planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
 
   ### DEVELOPMENT / PYTHON MODULES
