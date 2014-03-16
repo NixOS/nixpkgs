@@ -19,6 +19,8 @@ let
     sources = map (x: x.source) etc';
     targets = map (x: x.target) etc';
     modes = map (x: x.mode) etc';
+    uids  = map (x: x.uid) etc';
+    gids  = map (x: x.gid) etc';
   };
 
 in
@@ -84,6 +86,24 @@ in
                 If set to something else than <literal>symlink</literal>,
                 the file is copied instead of symlinked, with the given
                 file mode.
+              '';
+            };
+
+            uid = mkOption {
+              default = 0;
+              type = types.int;
+              description = ''
+                UID of created file. Only takes affect when the file is
+                copied (that is, the mode is not 'symlink').
+                '';
+            };
+
+            gid = mkOption {
+              default = 0;
+              type = types.int;
+              description = ''
+                GID of created file. Only takes affect when the file is
+                copied (that is, the mode is not 'symlink').
               '';
             };
 
