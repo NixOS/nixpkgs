@@ -6804,19 +6804,23 @@ let
   # Note: grsec is not enabled automatically, you need to specify which kernel
   # config options you need (e.g. by overriding extraConfig). See list of options here:
   # https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options
-  linux_3_2_grsecurity = lowPrio (lib.overrideDerivation (linux_3_2.override (args: {
+  linux_3_2_grsecurity = lowPrio (lib.addMetaAttrs {
+    maintainers = with lib.maintainers; [ wizeman ];
+  } (lib.overrideDerivation (linux_3_2.override (args: {
     kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_2_55 kernelPatches.grsec_path ];
     argsOverride = {
       modDirVersion = "${linux_3_2.modDirVersion}-grsec";
     };
-  })) (args: grsecurityOverrider args));
+  })) (args: grsecurityOverrider args)));
 
-  linux_3_13_grsecurity = lowPrio (lib.overrideDerivation (linux_3_13.override (args: {
+  linux_3_13_grsecurity = lowPrio (lib.addMetaAttrs {
+    maintainers = with lib.maintainers; [ wizeman ];
+  } (lib.overrideDerivation (linux_3_13.override (args: {
     kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_13_7 kernelPatches.grsec_path ];
     argsOverride = {
       modDirVersion = "${linux_3_13.modDirVersion}-grsec";
     };
-  })) (args: grsecurityOverrider args));
+  })) (args: grsecurityOverrider args)));
 
   linux_3_2_apparmor = lowPrio (linux_3_2.override {
     kernelPatches = [ kernelPatches.apparmor_3_2 ];
