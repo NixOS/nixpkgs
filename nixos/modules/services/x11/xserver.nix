@@ -20,6 +20,7 @@ let
     nvidiaLegacy304 = { modules = [ kernelPackages.nvidia_x11_legacy304 ]; driverName = "nvidia"; };
     unichrome    = { modules = [ pkgs.xorgVideoUnichrome ]; };
     virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
+    ati = { modules = [ pkgs.xorg.xf86videoati pkgs.xorg.glamoregl ]; };
   };
 
   driverNames = config.hardware.opengl.videoDrivers;
@@ -372,6 +373,14 @@ in
         '';
       };
 
+      useGlamor = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to use the Glamor module for 2D acceleration,
+          if possible.
+        '';
+      };
     };
 
   };
@@ -523,6 +532,13 @@ in
           '')}
         EndSection
 
+        ${if cfg.useGlamor then ''
+          Section "Module"
+            Load "dri2"
+            Load "glamoregl"
+          EndSection
+        '' else ""}
+
         # For each supported driver, add a "Device" and "Screen"
         # section.
         ${flip concatMapStrings drivers (driver: ''
@@ -530,6 +546,7 @@ in
           Section "Device"
             Identifier "Device-${driver.name}[0]"
             Driver "${driver.driverName}"
+            ${if cfg.useGlamor then ''Option "AccelMethod" "glamor"'' else ""}
             ${cfg.deviceSection}
             ${xrandrDeviceSection}
           EndSection
