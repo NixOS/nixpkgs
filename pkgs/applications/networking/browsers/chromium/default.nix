@@ -24,7 +24,7 @@
 , enableNaCl ? false
 , useOpenSSL ? false, nss ? null, openssl ? null
 , gnomeSupport ? false, gconf ? null
-, gnomeKeyringSupport ? false, libgnome_keyring ? null
+, gnomeKeyringSupport ? false, libgnome_keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? false
 , pulseSupport ? false, pulseaudio ? null
@@ -171,7 +171,7 @@ in stdenv.mkDerivation rec {
     libXScrnSaver libXcursor libXtst mesa
     pciutils protobuf speechd libXdamage
     pythonPackages.gyp
-  ] ++ optional gnomeKeyringSupport libgnome_keyring
+  ] ++ optional gnomeKeyringSupport libgnome_keyring3
     ++ optionals gnomeSupport [ gconf libgcrypt ]
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
