@@ -132,6 +132,14 @@ with pkgs.lib;
               done
             fi
           '';
+
+        reloadIfChanged = true;
+
+        serviceConfig.ExecReload =
+          "${pkgs.bash}/bin/bash -c '"
+          + "echo ${container.path}/bin/switch-to-configuration test "
+          + "| ${pkgs.socat}/bin/socat unix:${container.root}/var/lib/root-shell.socket -'";
+
       }) config.systemd.containers;
 
   };
