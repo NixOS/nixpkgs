@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     KERNEL=="grsec",          MODE="0622"
     LABEL="permissions_end"
     EOF
+
+    echo "inherit-learn /nix/store" >> $out/etc/grsec/learn_config
   '';
 
   makeFlags =
