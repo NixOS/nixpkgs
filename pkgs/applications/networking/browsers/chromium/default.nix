@@ -4,7 +4,7 @@
 , bzip2, flac, speex, icu, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libxml2, libxslt, v8
-, xdg_utils, yasm, zlib
+, xdg_utils, yasm, zlib, libwebp
 , libusb1, libexif, pciutils
 
 , python, pythonPackages, perl, pkgconfig
@@ -117,6 +117,7 @@ let
     use_system_libexif = true;
     use_system_libjpeg = true;
     use_system_libpng = false; # PNG dlopen() version conflict
+    use_system_libwebp = true;
     use_system_libxml = true;
     use_system_opus = true;
     use_system_snappy = true;
@@ -131,7 +132,6 @@ let
     use_system_harfbuzz = false;
     use_system_icu = false; # Doesn't support ICU 52 yet.
     use_system_libusb = false; # http://crbug.com/266149
-    use_system_libwebp = false; # http://crbug.com/133161
     use_system_skia = false;
     use_system_sqlite = false; # http://crbug.com/22208
     use_system_v8 = !versionOlder src.version "34.0.0.0";
@@ -141,7 +141,7 @@ let
     bzip2 flac speex icu libopus
     libevent expat libjpeg snappy
     libpng libxml2 libxslt v8
-    xdg_utils yasm zlib
+    xdg_utils yasm zlib libwebp
     libusb1 libexif
   ];
 
