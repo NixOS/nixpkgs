@@ -4,7 +4,7 @@
 , bzip2, flac, speex, icu, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libxml2, libxslt, v8
-, xdg_utils, yasm, zlib, libwebp
+, xdg_utils, yasm, minizip, libwebp
 , libusb1, libexif, pciutils
 
 , python, pythonPackages, perl, pkgconfig
@@ -126,7 +126,7 @@ let
     use_system_stlport = true;
     use_system_xdg_utils = true;
     use_system_yasm = true;
-    use_system_zlib = false; # http://crbug.com/143623
+    use_system_zlib = true;
     use_system_protobuf = true;
 
     use_system_harfbuzz = false;
@@ -141,7 +141,7 @@ let
     bzip2 flac speex icu libopus
     libevent expat libjpeg snappy
     libpng libxml2 libxslt v8
-    xdg_utils yasm zlib libwebp
+    xdg_utils yasm minizip libwebp
     libusb1 libexif
   ];
 
