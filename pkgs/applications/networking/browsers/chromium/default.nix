@@ -3,7 +3,7 @@
 # default dependencies
 , bzip2, flac, speex, icu, libopus
 , libevent, expat, libjpeg, snappy
-, libpng, libxml2, libxslt
+, libpng, libxml2, libxslt, v8
 , xdg_utils, yasm, zlib
 , libusb1, libexif, pciutils
 
@@ -134,13 +134,13 @@ let
     use_system_libwebp = false; # http://crbug.com/133161
     use_system_skia = false;
     use_system_sqlite = false; # http://crbug.com/22208
-    use_system_v8 = false;
+    use_system_v8 = !versionOlder src.version "34.0.0.0";
   };
 
   defaultDependencies = [
     bzip2 flac speex icu libopus
     libevent expat libjpeg snappy
-    libpng libxml2 libxslt
+    libpng libxml2 libxslt v8
     xdg_utils yasm zlib
     libusb1 libexif
   ];
