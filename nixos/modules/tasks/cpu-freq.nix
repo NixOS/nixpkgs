@@ -2,6 +2,11 @@
 
 with lib;
 
+let
+  cpupower = config.boot.kernelPackages.cpupower;
+  cfg = config.powerManagement;
+in
+
 {
   ###### interface
 
@@ -25,29 +30,25 @@ with lib;
 
   config = mkIf (config.powerManagement.cpuFreqGovernor != null) {
 
-    environment.systemPackages = [ pkgs.cpufrequtils ];
+    boot.kernelModules = [ "acpi-cpufreq" "speedstep-lib" "pcc-cpufreq"
+      "cpufreq_${cfg.cpuFreqGovernor}"
+    ];
 
-    jobs.cpufreq =
-      { description = "CPU Frequency Governor Setup";
+    environment.systemPackages = [ cpupower ];
 
-        after = [ "systemd-modules-load.service" ];
-        wantedBy = [ "multi-user.target" ];
-
-        unitConfig.ConditionPathIsReadWrite = "/sys/devices/";
-
-        path = [ pkgs.cpufrequtils ];
-
-        preStart = ''
-          for i in $(seq 0 $(($(nproc) - 1))); do
-            for gov in $(cpufreq-info -c $i -g); do
-              if [ "$gov" = ${config.powerManagement.cpuFreqGovernor} ]; then
-                echo "<6>setting governor on CPU $i to ‘$gov’"
-                cpufreq-set -c $i -g $gov
-              fi
-            done
-          done
-        '';
+    systemd.services.cpufreq = {
+      description = "CPU Frequency Governor Setup";
+      after = [ "systemd-modules-load.service" ];
+      wantedBy = [ "multi-user.target" ];
+      path = [ cpupower ];
+      script = ''
+        cpupower frequency-set -g ${cfg.cpuFreqGovernor}
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = "yes";
       };
-  };
+    };
 
+  };
 }
