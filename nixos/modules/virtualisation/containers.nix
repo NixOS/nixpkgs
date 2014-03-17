@@ -57,6 +57,7 @@ with pkgs.lib;
                       { boot.isContainer = true;
                         security.initialRootPassword = mkDefault "!";
                         networking.hostName = mkDefault name;
+                        imports = [ ./container-login.nix ];
                       };
                     in [ extraConfig config.config ];
                   prefix = [ "systemd" "containers" name ];
