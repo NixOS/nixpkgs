@@ -1000,6 +1000,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   DSH = callPackage ../development/libraries/haskell/DSH {};
 
+  dsp = callPackage ../development/libraries/haskell/dsp {};
+
   dstring = callPackage ../development/libraries/haskell/dstring {};
 
   dualTree = callPackage ../development/libraries/haskell/dual-tree {};
