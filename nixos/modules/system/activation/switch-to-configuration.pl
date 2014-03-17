@@ -26,7 +26,10 @@ EOF
     exit 1;
 }
 
-die "This is not a NixOS installation (/etc/NIXOS is missing)!\n" unless -f "/etc/NIXOS";
+# This is a NixOS installation if it has /etc/NIXOS or a proper
+# /etc/os-release.
+die "This is not a NixOS installation!\n" unless
+    -f "/etc/NIXOS" || (read_file("/etc/os-release", err_mode => 'quiet') // "") =~ /ID=nixos/s;
 
 openlog("nixos", "", LOG_USER);
 
