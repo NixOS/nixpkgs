@@ -44,6 +44,9 @@
 # Execute after shell hook
 , postShellHook ? ""
 
+# Don't pass --old-and-unmanageable to install
+, noOldAndUnmanageable ? false
+
 , ... } @ attrs:
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
@@ -104,7 +107,7 @@ python.stdenv.mkDerivation (attrs // {
 
     ${python}/bin/${python.executable} setup.py install \
       --install-lib=$out/lib/${python.libPrefix}/site-packages \
-      --old-and-unmanageable \
+      ${if noOldAndUnmanageable then "" else "--old-and-unmanageable"} \
       --prefix="$out" ${lib.concatStringsSep " " setupPyInstallFlags}
 
     # --install-lib:
