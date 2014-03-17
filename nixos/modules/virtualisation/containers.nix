@@ -110,10 +110,19 @@ with pkgs.lib;
             if ! [ -e ${container.root}/etc/os-release ]; then
               touch ${container.root}/etc/os-release
             fi
+
+            mkdir -p -m 0755 \
+              /nix/var/nix/profiles/per-container/${name} \
+              /nix/var/nix/gcroots/per-container/${name}
           '';
 
         serviceConfig.ExecStart =
-          "${config.systemd.package}/bin/systemd-nspawn -M ${name} -D ${container.root} --bind-ro=/nix ${container.path}/init";
+          "${config.systemd.package}/bin/systemd-nspawn"
+          + " -M ${name} -D ${container.root}"
+          + " --bind-ro=/nix/store --bind-ro=/nix/var/nix/db --bind-ro=/nix/var/nix/daemon-socket"
+          + " --bind=/nix/var/nix/profiles/per-container/${name}:/nix/var/nix/profiles"
+          + " --bind=/nix/var/nix/gcroots/per-container/${name}:/nix/var/nix/gcroots"
+          + " ${container.path}/init";
 
         preStop =
           ''
