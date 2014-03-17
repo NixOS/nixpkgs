@@ -321,7 +321,7 @@ if (scalar @restart > 0) {
 # that are symlinks to other units.  We shouldn't start both at the
 # same time because we'll get a "Failed to add path to set" error from
 # systemd.
-my @start = unique("default.target", "timers.target", split('\n', read_file($startListFile, err_mode => 'quiet') // ""));
+my @start = unique("default.target", "timers.target", "sockets.target", split('\n', read_file($startListFile, err_mode => 'quiet') // ""));
 print STDERR "starting the following units: ", join(", ", sort(@start)), "\n";
 system("@systemd@/bin/systemctl", "start", "--", @start) == 0 or $res = 4;
 unlink($startListFile);
