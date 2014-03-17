@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     QuickCheck random text transformers vector xmlTypes
   ];
   jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "https://john-millikin.com/software/haskell-dbus/";
     description = "A client library for the D-Bus IPC system";
