@@ -116,7 +116,7 @@ let
     use_system_libexpat = true;
     use_system_libexif = true;
     use_system_libjpeg = true;
-    use_system_libpng = false; # PNG dlopen() version conflict
+    use_system_libpng = true;
     use_system_libwebp = true;
     use_system_libxml = true;
     use_system_opus = true;
