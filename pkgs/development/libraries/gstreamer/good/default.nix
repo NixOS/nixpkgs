@@ -9,11 +9,17 @@
 stdenv.mkDerivation rec {
   name = "gst-plugins-good-1.2.3";
 
-  meta = {
-    homepage = "http://gstreamer.freedesktop.org";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
+  meta = with stdenv.lib; {
+    description = "Gstreamer Good Plugins";
+    homepage    = "http://gstreamer.freedesktop.org";
+    longDescription = ''
+      a set of plug-ins that we consider to have good quality code,
+      correct functionality, our preferred license (LGPL for the plug-in
+      code, LGPL or LGPL-compatible for the supporting library).
+    '';
+    license     = licenses.lgpl2Plus;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ iyzsong ];
   };
 
   src = fetchurl {
