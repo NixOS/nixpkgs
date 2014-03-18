@@ -3,7 +3,7 @@
 , gettext, iconv, locale, text, highline, rmail_sup, unicode, gnupg, which }:
 
 stdenv.mkDerivation rec {
-  version = "20131130";
+  version = "20140312";
   name    = "sup-${version}";
   
   meta = {
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = git://github.com/sup-heliotrope/sup.git;
-    rev = "a5a1e39034204ac4b05c9171a71164712690b010";
-    sha256 = "0w2w7dcif1ri1qq81csz7gj45rqd9z7hjd6x29awibybyyqyvj5s";
+    rev = "0cad7b308237c07b8a46149908b2ad4806ac3d1d";
+    sha256 = "83534b6ad9fb6aa883d630c927e3a71bd09a646e3254b4eb0cc7a09f69a525bc";
   };
 
   buildInputs =
