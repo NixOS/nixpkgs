@@ -74,6 +74,9 @@ let
       "systemd-journal-flush.service"
       "syslog.socket"
 
+      # Network daemon
+      "systemd-networkd.service"
+
       # SysV init compatibility.
       "systemd-initctl.socket"
       "systemd-initctl.service"
