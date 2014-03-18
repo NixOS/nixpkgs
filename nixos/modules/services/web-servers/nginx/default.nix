@@ -9,6 +9,11 @@ let
     user ${cfg.user} ${cfg.group};
     daemon off;
     ${cfg.config}
+    ${optionalString (cfg.httpConfig != "") ''
+    http {
+      ${cfg.httpConfig}
+    }
+    ''}
     ${cfg.appendConfig}
   '';
 in
@@ -49,6 +54,12 @@ in
           concatenated (contrary to <option>config</option> which
           can be set only once).
         '';
+      };
+
+      httpConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Configuration lines to be appended inside of the http {} block.";
       };
 
       stateDir = mkOption {
