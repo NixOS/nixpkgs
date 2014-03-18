@@ -10481,6 +10481,11 @@ let
     import ../desktops/e17 { inherit callPackage pkgs; }
   );
 
+  e18 = recurseIntoAttrs (
+    let callPackage = newScope pkgs.e18; in
+    import ../desktops/e18 { inherit callPackage pkgs; }
+  );
+
   gnome2 = callPackage ../desktops/gnome-2 {
     callPackage = pkgs.newScope pkgs.gnome2;
     self = pkgs.gnome2;
