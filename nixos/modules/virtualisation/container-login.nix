@@ -12,7 +12,7 @@
         wantedBy = [ "sockets.target" ];
         socketConfig =
           { ListenStream = "/var/lib/login.socket";
-            SocketMode = "0600"; # only root can connect, obviously
+            SocketMode = "0666";
             Accept = true;
           };
       };
@@ -36,7 +36,7 @@
         wantedBy = [ "sockets.target" ];
         socketConfig =
           { ListenStream = "/var/lib/root-shell.socket";
-            SocketMode = "0666";
+            SocketMode = "0600"; # only root can connect, obviously
             Accept = true;
           };
       };
