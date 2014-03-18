@@ -52,6 +52,7 @@ sub createMachine {
     my ($args) = @_;
     my $vm = Machine->new({%{$args}, log => $log, redirectSerial => ($ENV{USE_SERIAL} // "0") ne "1"});
     $vms{$vm->name} = $vm;
+    $vm->execute("date -s @" . time);
     return $vm;
 }
 
