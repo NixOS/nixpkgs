@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng libjpeg giflib libtiff ];
 
+  configureFlags = [
+    "--enable-libwebpmux"
+    "--enable-libwebpdemux"
+    "--enable-libwebpdecoder"
+  ];
+
   meta = {
     homepage = http://code.google.com/p/webp/;
     description = "Tools and library for the WebP image format";
