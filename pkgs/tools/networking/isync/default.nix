@@ -1,14 +1,13 @@
 { fetchurl, stdenv, openssl, pkgconfig, db }:
 
 stdenv.mkDerivation rec {
-  name = "isync-1.0.6";
+  name = "isync-1.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/isync/${name}.tar.gz";
-    sha256 = "0bv3hw6mc9xi55q6lpyz1w3dyrk6rlxa8ny2x1b44mrnbrx7chz5";
+    sha256 = "51f5618c239013fb770f98ae269f24ee417214efaaf7e22821b4a27cf9a9213c";
   };
 
-  patches = [ ./isync-recursice-imap.patch ]; # usefull patch to enable subfolders listing
   buildInputs = [ openssl pkgconfig db ];
 
   meta = {
