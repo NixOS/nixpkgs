@@ -80,7 +80,7 @@ in
       '';
     };
 
-    systemd.containers = mkOption {
+    containers = mkOption {
       type = types.attrsOf (types.submodule (
         { config, options, name, ... }:
         {
@@ -160,7 +160,7 @@ in
                         imports = [ ./container-login.nix ];
                       };
                     in [ extraConfig config.config ];
-                  prefix = [ "systemd" "containers" name ];
+                  prefix = [ "containers" name ];
                 }).config.system.build.toplevel;
               })
             ];
@@ -291,15 +291,15 @@ in
           + "echo ${cfg.path}/bin/switch-to-configuration test "
           + "| ${pkgs.socat}/bin/socat unix:${cfg.root}/var/lib/root-shell.socket -'";
 
-      }) config.systemd.containers;
+      }) config.containers;
 
     # Generate /etc/hosts entries for the containers.
     networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
       ''
         ${cfg.localAddress} ${name}.containers
-      '') config.systemd.containers);
+      '') config.containers);
 
-    environment.systemPackages = optional (config.systemd.containers != {}) nixos-container-shell;
+    environment.systemPackages = optional (config.containers != {}) nixos-container-shell;
 
   };
 }
