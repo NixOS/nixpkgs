@@ -6115,10 +6115,10 @@ let
     python = python33;
   });
 
-  python34Packages = import ./python-packages.nix {
+  python34Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
     python = python34;
-  };
+  });
 
   python32Packages = import ./python-packages.nix {
     inherit pkgs;
