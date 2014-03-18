@@ -203,6 +203,9 @@ in
 
         # To wait for SCSI devices to appear.
         "scsi_wait_scan"
+
+        # Needed by the stage 2 init script.
+        "rtc_cmos"
       ];
 
     boot.initrd.kernelModules =
