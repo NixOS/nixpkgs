@@ -172,6 +172,10 @@ in
               /nix/var/nix/gcroots/per-container/${name}
           ''
 
+          + optionalString (cfg.root != "/var/lib/containers/${name}") ''
+            ln -sfn "${cfg.root}" "/var/lib/containers/${name}"
+          ''
+
           + optionalString cfg.privateNetwork ''
             # Cleanup from last time.
             ip netns del ${ns} 2> /dev/null || true
