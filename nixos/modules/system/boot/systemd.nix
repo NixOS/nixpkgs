@@ -29,6 +29,7 @@ let
       "basic.target"
       "sysinit.target"
       "sockets.target"
+      "slices.target"
       "graphical.target"
       "multi-user.target"
       "getty.target"
