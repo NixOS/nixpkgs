@@ -10592,6 +10592,8 @@ let
     '';
   };
 
+  xsettingsd = callPackage ../applications/misc/xsettingsd { };
+
   patoline = PatolineEnv ocamlPackages_4_00_1;
 
   znc = callPackage ../applications/networking/znc { };
