@@ -2,6 +2,20 @@
 
 with pkgs.lib;
 
+let
+
+  runInNetns = pkgs.stdenv.mkDerivation {
+    name = "run-in-netns";
+    unpackPhase = "true";
+    buildPhase = ''
+      mkdir -p $out/bin
+      gcc ${./run-in-netns.c} -o $out/bin/run-in-netns
+    '';
+    installPhase = "true";
+  };
+
+in
+
 {
   options = {
 
@@ -42,6 +56,39 @@ with pkgs.lib;
                 <option>config</option>, you can specify the path to
                 the evaluated NixOS system configuration, typically a
                 symlink to a system profile.
+              '';
+            };
+
+            privateNetwork = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Whether to give the container its own private virtual
+                Ethernet interface.  The interface is called
+                <literal>eth0</literal>, and is hooked up to the interface
+                <literal>c-<replaceable>container-name</replaceable></literal>
+                on the host.  If this option is not set, then the
+                container shares the network interfaces of the host,
+                and can bind to any port on any interface.
+              '';
+            };
+
+            hostAddress = mkOption {
+              type = types.nullOr types.string;
+              default = null;
+              example = "10.231.136.1";
+              description = ''
+                The IPv4 address assigned to the host interface.
+              '';
+            };
+
+            localAddress = mkOption {
+              type = types.nullOr types.string;
+              default = null;
+              example = "10.231.136.2";
+              description = ''
+                The IPv4 address assigned to <literal>eth0</literal>
+                in the container.
               '';
             };
 
@@ -97,32 +144,70 @@ with pkgs.lib;
 
   config = {
 
-    systemd.services = mapAttrs' (name: container: nameValuePair "container-${name}"
-      { description = "Container '${name}'";
+    systemd.services = mapAttrs' (name: cfg:
+      let
+        # FIXME: interface names have a maximum length.
+        ifaceHost = "c-${name}";
+        ifaceCont = "ctmp-${name}";
+        ns = "net-${name}";
+      in
+      nameValuePair "container-${name}" {
+        description = "Container '${name}'";
 
         wantedBy = [ "multi-user.target" ];
 
-        unitConfig.RequiresMountsFor = [ container.root ];
+        unitConfig.RequiresMountsFor = [ cfg.root ];
+
+        path = [ pkgs.iproute ];
 
         preStart =
           ''
-            mkdir -p -m 0755 ${container.root}/etc
-            if ! [ -e ${container.root}/etc/os-release ]; then
-              touch ${container.root}/etc/os-release
+            mkdir -p -m 0755 ${cfg.root}/etc
+            if ! [ -e ${cfg.root}/etc/os-release ]; then
+              touch ${cfg.root}/etc/os-release
             fi
 
             mkdir -p -m 0755 \
               /nix/var/nix/profiles/per-container/${name} \
               /nix/var/nix/gcroots/per-container/${name}
+          ''
+
+          + optionalString cfg.privateNetwork ''
+            # Cleanup from last time.
+            ip netns del ${ns} 2> /dev/null || true
+            ip link del ${ifaceHost} 2> /dev/null || true
+            ip link del ${ifaceCont} 2> /dev/null || true
+
+            # Create a pair of virtual ethernet devices.  On the host,
+            # we get ‘c-<container-name’, and on the guest, we get
+            # ‘eth0’.
+            set -x
+            ip link add ${ifaceHost} type veth peer name ${ifaceCont}
+            ip netns add ${ns}
+            ip link set ${ifaceCont} netns ${ns}
+            ip netns exec ${ns} ip link set ${ifaceCont} name eth0
+            ip netns exec ${ns} ip link set dev eth0 up
+            ip link set dev ${ifaceHost} up
+            ${optionalString (cfg.hostAddress != null) ''
+              ip addr add ${cfg.hostAddress} dev ${ifaceHost}
+              ip netns exec ${ns} ip route add ${cfg.hostAddress} dev eth0
+              ip netns exec ${ns} ip route add default via ${cfg.hostAddress}
+            ''}
+            ${optionalString (cfg.localAddress != null) ''
+              ip netns exec ${ns} ip addr add ${cfg.localAddress} dev eth0
+              ip route add ${cfg.localAddress} dev ${ifaceHost}
+            ''}
           '';
 
         serviceConfig.ExecStart =
-          "${config.systemd.package}/bin/systemd-nspawn"
-          + " -M ${name} -D ${container.root}"
+          (optionalString cfg.privateNetwork "${runInNetns}/bin/run-in-netns ${ns} ")
+          + "${config.systemd.package}/bin/systemd-nspawn"
+          + (optionalString cfg.privateNetwork " --capability=CAP_NET_ADMIN")
+          + " -M ${name} -D ${cfg.root}"
           + " --bind-ro=/nix/store --bind-ro=/nix/var/nix/db --bind-ro=/nix/var/nix/daemon-socket"
           + " --bind=/nix/var/nix/profiles/per-container/${name}:/nix/var/nix/profiles"
           + " --bind=/nix/var/nix/gcroots/per-container/${name}:/nix/var/nix/gcroots"
-          + " ${container.path}/init";
+          + " ${cfg.path}/init";
 
         preStop =
           ''
@@ -146,10 +231,16 @@ with pkgs.lib;
 
         serviceConfig.ExecReload =
           "${pkgs.bash}/bin/bash -c '"
-          + "echo ${container.path}/bin/switch-to-configuration test "
-          + "| ${pkgs.socat}/bin/socat unix:${container.root}/var/lib/root-shell.socket -'";
+          + "echo ${cfg.path}/bin/switch-to-configuration test "
+          + "| ${pkgs.socat}/bin/socat unix:${cfg.root}/var/lib/root-shell.socket -'";
 
       }) config.systemd.containers;
+
+    # Generate /etc/hosts entries for the containers.
+    networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
+      ''
+        ${cfg.localAddress} ${name}.containers
+      '') config.systemd.containers);
 
   };
 }

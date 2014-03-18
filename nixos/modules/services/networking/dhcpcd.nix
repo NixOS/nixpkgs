@@ -34,8 +34,9 @@ let
 
       # Ignore peth* devices; on Xen, they're renamed physical
       # Ethernet cards used for bridging.  Likewise for vif* and tap*
-      # (Xen) and virbr* and vnet* (libvirt).
-      denyinterfaces ${toString ignoredInterfaces} peth* vif* tap* tun* virbr* vnet* vboxnet*
+      # (Xen) and virbr* and vnet* (libvirt) and c-* and ctmp-* (NixOS
+      # containers).
+      denyinterfaces ${toString ignoredInterfaces} peth* vif* tap* tun* virbr* vnet* vboxnet* c-* ctmp-*
 
       ${config.networking.dhcpcd.extraConfig}
     '';
