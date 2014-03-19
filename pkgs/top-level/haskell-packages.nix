@@ -2357,6 +2357,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   tagged = callPackage ../development/libraries/haskell/tagged {};
 
+  tagshare = callPackage ../development/libraries/haskell/tagshare {};
+
   tagsoup = callPackage ../development/libraries/haskell/tagsoup {};
 
   tagstreamConduit = callPackage ../development/libraries/haskell/tagstream-conduit {};
