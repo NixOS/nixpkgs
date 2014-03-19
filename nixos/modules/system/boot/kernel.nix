@@ -242,6 +242,7 @@ in
           { Type = "oneshot";
             RemainAfterExit = true;
             ExecStart = "${config.systemd.package}/lib/systemd/systemd-modules-load";
+            Environment = "MODULE_DIR=/run/current-system/kernel-modules/lib/modules";
             # Ignore failed module loads.  Typically some of the
             # modules in ‘boot.kernelModules’ are "nice to have but
             # not required" (e.g. acpi-cpufreq), so we don't want to
