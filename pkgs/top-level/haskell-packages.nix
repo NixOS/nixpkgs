@@ -2407,6 +2407,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   testFrameworkThPrime = callPackage ../development/libraries/haskell/test-framework-th-prime {};
 
+  testingFeat = callPackage ../development/libraries/haskell/testing-feat {};
+
   texmath = callPackage ../development/libraries/haskell/texmath {};
 
   text_0_11_0_5 = callPackage ../development/libraries/haskell/text/0.11.0.5.nix {};
