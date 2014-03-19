@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
                        --prefix PYTHONPATH : "$(toPythonPath ${pygobject3})" \
                        --prefix LD_LIBRARY_PATH : "${gnome3.gtk3}/lib:${atk}/lib:$out/lib" \
                        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0" \
-                       --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
+                       --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules" \
+                       --prefix IBUS_COMPONENT_PATH : "/run/current-system/sw/share/ibus/component"
     done
   '';
 

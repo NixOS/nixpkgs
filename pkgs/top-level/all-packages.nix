@@ -1197,6 +1197,11 @@ let
 
   iasl = callPackage ../development/compilers/iasl { };
 
+  ibus_chewing = callPackage ../development/libraries/ibus-chewing {
+    inherit (xlibs);
+    gconf = gnome3.gconf;
+  };
+
   icecast = callPackage ../servers/icecast { };
 
   icoutils = callPackage ../tools/graphics/icoutils { };
@@ -4698,6 +4703,8 @@ let
   };
 
   libchamplain_0_6 = callPackage ../development/libraries/libchamplain/0.6.nix {};
+
+  libchewing = callPackage ../development/libraries/libchewing {};
 
   libchop = callPackage ../development/libraries/libchop {
     gnutls = gnutls31;
