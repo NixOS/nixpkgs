@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Popular photo organizer for the GNOME desktop";
     homepage = http://www.yorba.org/projects/shotwell/;
-    license = licenses.lgpl;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [iElectric];
     platforms = platforms.linux;
   };
