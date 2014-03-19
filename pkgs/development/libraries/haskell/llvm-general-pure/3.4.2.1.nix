@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "llvm-general-pure";
-  version = "3.4.1.0";
-  sha256 = "0cjzqw9k6x8akbgx4rdigvhjhfv9zlq40p789invdc514qmxhr6q";
+  version = "3.4.2.1";
+  sha256 = "0wdx8zk1r7s3chryvwpm8hc73xvhklbmxd998zpvimv4ywil2f67";
   buildDepends = [ mtl parsec setenv transformers ];
   testDepends = [
     HUnit mtl QuickCheck testFramework testFrameworkHunit
