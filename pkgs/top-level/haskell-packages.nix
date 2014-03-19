@@ -990,6 +990,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   dlist = callPackage ../development/libraries/haskell/dlist {};
 
+  dlistInstances = callPackage ../development/libraries/haskell/dlist-instances {};
+
   dns = callPackage ../development/libraries/haskell/dns {};
 
   doctest = callPackage ../development/libraries/haskell/doctest {};
