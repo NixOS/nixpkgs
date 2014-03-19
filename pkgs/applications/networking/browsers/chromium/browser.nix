@@ -19,7 +19,6 @@
 , libgcrypt ? null # gnomeSupport || cupsSupport
 
 # package customization
-, channel ? "stable"
 , enableSELinux ? false, libselinux ? null
 , enableNaCl ? false
 , useOpenSSL ? false, nss ? null, openssl ? null
@@ -30,77 +29,13 @@
 , enablePepperPDF ? false
 , cupsSupport ? false
 , pulseSupport ? false, pulseaudio ? null
+
+, source
 }:
 
 with stdenv.lib;
 
 let
-  src = with getAttr channel (import ./sources.nix); stdenv.mkDerivation {
-    name = "chromium-source-${version}";
-
-    src = fetchurl {
-      inherit url sha256;
-    };
-
-    buildInputs = [ python ]; # cannot patch shebangs otherwise
-
-    phases = [ "unpackPhase" "patchPhase" "installPhase" ];
-
-    opensslPatches = optional useOpenSSL openssl.patches;
-
-    prePatch = "patchShebangs .";
-
-    patches = singleton ./sandbox_userns_31.patch;
-
-    postPatch = ''
-      sed -i -r \
-        -e 's/-f(stack-protector)(-all)?/-fno-\1/' \
-        -e 's|/bin/echo|echo|' \
-        -e "/python_arch/s/: *'[^']*'/: '""'/" \
-        build/common.gypi chrome/chrome_tests.gypi
-      sed -i '/not RunGN/,+1d' build/gyp_chromium
-      sed -i -e 's|/usr/bin/gcc|gcc|' \
-        third_party/WebKit/Source/build/scripts/scripts.gypi \
-        third_party/WebKit/Source/build/scripts/preprocessor.pm
-    '' + optionalString useOpenSSL ''
-      cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
-    '' + optionalString (!versionOlder version "34.0.0.0") ''
-      sed -i '/import.*depot/d' build/gyp_chromium
-    '';
-
-    outputs = [ "out" "sandbox" "bundled" "main" ];
-    installPhase = ''
-      ensureDir "$out" "$sandbox" "$bundled" "$main"
-
-      header "copying browser main sources to $main"
-      find . -mindepth 1 -maxdepth 1 \
-        \! -path ./sandbox \
-        \! -path ./third_party \
-        \! -path ./build \
-        \! -path ./tools \
-        \! -name '.*' \
-        -print | xargs cp -rt "$main"
-      stopNest
-
-      header "copying sandbox components to $sandbox"
-      cp -rt "$sandbox" sandbox/*
-      stopNest
-
-      header "copying third party sources to $bundled"
-      cp -rt "$bundled" third_party/*
-      stopNest
-
-      header "copying build requisites to $out"
-      cp -rt "$out" build tools
-      stopNest
-
-      rm -rf "$out/tools/gyp" # XXX: Don't even copy it in the first place.
-    '';
-
-    passthru = {
-      inherit version;
-    };
-  };
 
   mkGypFlags =
     let
@@ -136,7 +71,7 @@ let
     use_system_libusb = false; # http://crbug.com/266149
     use_system_skia = false;
     use_system_sqlite = false; # http://crbug.com/22208
-    use_system_v8 = !versionOlder src.version "34.0.0.0";
+    use_system_v8 = !versionOlder source.version "34.0.0.0";
   };
 
   defaultDependencies = [
@@ -149,7 +84,7 @@ let
 
   sandbox = import ./sandbox.nix {
     inherit stdenv;
-    src = src.sandbox;
+    src = source.sandbox;
     binary = "${packageName}_sandbox";
   };
 
@@ -223,8 +158,9 @@ let
   sandboxPath = "${sandbox}/bin/${packageName}_sandbox";
 
 in stdenv.mkDerivation rec {
-  name = "${packageName}-${src.version}";
-  inherit packageName src;
+  name = "${packageName}-${source.version}";
+  inherit packageName;
+  src = source;
 
   buildInputs = defaultDependencies ++ [
     which makeWrapper
@@ -248,9 +184,9 @@ in stdenv.mkDerivation rec {
     # XXX: Figure out a way how to split these properly.
     #cpflags="-dsr --no-preserve=mode"
     cpflags="-dr"
-    cp $cpflags "${src.main}"/* .
-    cp $cpflags "${src.bundled}" third_party
-    cp $cpflags "${src.sandbox}" sandbox
+    cp $cpflags "${source.main}"/* .
+    cp $cpflags "${source.bundled}" third_party
+    cp $cpflags "${source.sandbox}" sandbox
     chmod -R u+w . # XXX!
   '';
 
@@ -321,7 +257,7 @@ in stdenv.mkDerivation rec {
   in ''
     ensureDir "${libExecPath}"
     cp -v "${buildPath}/"*.pak "${libExecPath}/"
-    ${optionalString (!versionOlder src.version "34.0.0.0") ''
+    ${optionalString (!versionOlder source.version "34.0.0.0") ''
     cp -v "${buildPath}/icudtl.dat" "${libExecPath}/"
     ''}
     cp -vR "${buildPath}/locales" "${buildPath}/resources" "${libExecPath}/"

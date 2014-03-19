@@ -18,8 +18,14 @@ let
   callPackage = newScope chromium;
 
   chromium = {
+    source = callPackage ./source.nix {
+      inherit channel;
+      # XXX: common config
+      inherit useOpenSSL;
+    };
+
     browser = callPackage ./browser.nix {
-      inherit channel enableSELinux enableNaCl useOpenSSL gnomeSupport
+      inherit enableSELinux enableNaCl useOpenSSL gnomeSupport
               gnomeKeyringSupport proprietaryCodecs enablePepperFlash
               enablePepperPDF cupsSupport pulseSupport;
     };
