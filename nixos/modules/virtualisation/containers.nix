@@ -14,57 +14,13 @@ let
     installPhase = "true";
   };
 
-  nixos-container-shell = pkgs.writeScriptBin "nixos-container-shell"
-    ''
-      #! ${pkgs.bash}/bin/sh -e
-
-      usage() {
-        echo "Usage: $0 <container-name>" >&2
-        echo "       $0 (-r|--root-shell) <container-name>" >&2
-      }
-
-      args="`getopt --options 'r' -l help -- "$@"`"
-      eval "set -- $args"
-      rootShell=
-      while [ $# -gt 0 ]; do
-        case "$1" in
-          (--help) usage; exit 0;;
-          (-r|--root-shell) rootShell=1;;
-          (--) shift; break;;
-          (*) break;;
-        esac
-        shift
-      done
-
-      container="$1"
-      if [ -z "$container" ]; then
-        usage
-        exit 1
-      fi
-      shift
-
-      root="/var/lib/containers/$container"
-      if ! [ -d "$root" ]; then
-        echo "$0: container ‘$container’ does not exist" >&2
-        exit 1
-      fi
-
-      if [ -n "$rootShell" ]; then
-        socket="$root/var/lib/root-shell.socket"
-      else
-        socket="$root/var/lib/login.socket"
-      fi
-      if ! [ -S "$socket" ]; then
-        echo "$0: socket ‘$socket’ does not exist" >&2
-        exit 1
-      fi
-
-      if [ -n "$rootShell" ]; then
-        exec ${pkgs.socat}/bin/socat "unix:$socket" -
-      else
-        exec ${pkgs.socat}/bin/socat "unix:$socket" -,echo=0,raw
-      fi
-    '';
+  nixos-container = pkgs.substituteAll {
+    name = "nixos-container";
+    dir = "bin";
+    isExecutable = true;
+    src = ./nixos-container.sh;
+    inherit (pkgs) bash socat;
+  };
 
 in
 
@@ -299,7 +255,7 @@ in
         ${cfg.localAddress} ${name}.containers
       '') config.containers);
 
-    environment.systemPackages = optional (config.containers != {}) nixos-container-shell;
+    environment.systemPackages = optional (config.containers != {}) nixos-container;
 
   };
 }
