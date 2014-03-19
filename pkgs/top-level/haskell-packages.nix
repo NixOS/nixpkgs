@@ -860,6 +860,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
 
+  cryptohashConduit = callPackage ../development/libraries/haskell/cryptohash-conduit {};
+
   cryptohashCryptoapi = callPackage ../development/libraries/haskell/cryptohash-cryptoapi {};
 
   cryptoNumbers = callPackage ../development/libraries/haskell/crypto-numbers {};
