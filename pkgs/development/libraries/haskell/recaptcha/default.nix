@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "recaptcha";
-  version = "0.1";
-  sha256 = "de00e6e3aadd99a1cd036ce4b413ebe02d59c1b9cfd3032f122735cca1f25144";
+  version = "0.1.0.1";
+  sha256 = "0mk2vdvm5jz8jh8xc4alsly8c9msfis0drbgg89rck1y387z2njz";
   buildDepends = [ HTTP network xhtml ];
   meta = {
     homepage = "http://github.com/jgm/recaptcha/tree/master";
