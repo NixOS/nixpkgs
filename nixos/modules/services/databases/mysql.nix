@@ -250,9 +250,6 @@ in
               rm /tmp/mysql_init
             fi
           ''; # */
-
-        serviceConfig.ExecStop =
-          "${mysql}/bin/mysqladmin ${optionalString (cfg.rootPassword != null) "--user=root --password=\"$(cat ${cfg.rootPassword})\""} shutdown";
       };
 
   };
