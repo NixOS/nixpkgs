@@ -2,10 +2,12 @@
 
 let
 
-  vimrcfile = writeText "vimrc" (if vimrc == null then "" else vimrc);
+  vimrcfile = writeText "vimrc" vimrc;
+
+  p = builtins.parseDrvName vim.name;
 
 in stdenv.mkDerivation rec {
-  name = "vimwrapper-${vim.version}";
+  name = "${p.name}-with-vimrc-${p.version}";
 
   buildInputs = [ makeWrapper vim vimrcfile ];
 
