@@ -560,11 +560,11 @@ let
   })) // {inherit applewmproto libX11 libXext xextproto ;};
 
   libFS = (stdenv.mkDerivation ((if overrides ? libFS then overrides.libFS else x: x) {
-    name = "libFS-1.0.5";
+    name = "libFS-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libFS-1.0.5.tar.bz2;
-      sha256 = "01v1z6hy702pcxz89kqb84w9gjjrvnjqsxc2zzvswlw0vl2k1sr2";
+      url = mirror://xorg/individual/lib/libFS-1.0.6.tar.bz2;
+      sha256 = "1mxfsvj9m3pn8cdkcn4kg190zp665mf4pv0083g6xykvsgxzq1wh";
     };
     buildInputs = [pkgconfig fontsproto xproto xtrans ];
   })) // {inherit fontsproto xproto xtrans ;};
