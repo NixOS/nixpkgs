@@ -26,8 +26,12 @@ let
 
     browser = callPackage ./browser.nix {
       inherit enableSELinux enableNaCl useOpenSSL gnomeSupport
-              gnomeKeyringSupport proprietaryCodecs enablePepperFlash
-              enablePepperPDF cupsSupport pulseSupport;
+              gnomeKeyringSupport proprietaryCodecs cupsSupport
+              pulseSupport;
+    };
+
+    plugins = callPackage ./plugins.nix {
+      inherit enablePepperFlash enablePepperPDF;
     };
   };
 
