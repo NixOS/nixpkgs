@@ -42,13 +42,6 @@ in
         {
           options = {
 
-            root = mkOption {
-              type = types.path;
-              description = ''
-                The root directory of the container.
-              '';
-            };
-
             config = mkOption {
               description = ''
                 A specification of the desired configuration of this
@@ -103,9 +96,7 @@ in
           };
 
           config = mkMerge
-            [ { root = mkDefault "/var/lib/containers/${name}";
-              }
-              (mkIf options.config.isDefined {
+            [ (mkIf options.config.isDefined {
                 path = (import ../../lib/eval-config.nix {
                   modules =
                     let extraConfig =
@@ -126,12 +117,10 @@ in
       example = literalExample
         ''
           { webserver =
-              { root = "/containers/webserver";
-                path = "/nix/var/nix/profiles/webserver";
+              { path = "/nix/var/nix/profiles/webserver";
               };
             database =
-              { root = "/containers/database";
-                config =
+              { config =
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
                     services.postgresql.package = pkgs.postgresql92;
@@ -153,78 +142,76 @@ in
 
   config = {
 
-    systemd.services = mapAttrs' (name: cfg:
-      let
-        # FIXME: interface names have a maximum length.
-        ifaceHost = "c-${name}";
-        ifaceCont = "ctmp-${name}";
-        ns = "net-${name}";
-      in
-      nameValuePair "container-${name}" {
-        description = "Container '${name}'";
+    systemd.services."container@" =
+      { description = "Container '%I'";
 
-        wantedBy = [ "multi-user.target" ];
-
-        unitConfig.RequiresMountsFor = [ cfg.root ];
+        unitConfig.RequiresMountsFor = [ "/var/lib/containers/%I" ];
 
         path = [ pkgs.iproute ];
 
-        preStart =
+        environment.INSTANCE = "%I";
+
+        script =
           ''
-            mkdir -p -m 0755 ${cfg.root}/etc
-            if ! [ -e ${cfg.root}/etc/os-release ]; then
-              touch ${cfg.root}/etc/os-release
+            root="/var/lib/containers/$INSTANCE"
+            mkdir -p -m 0755 "$root/etc"
+            if ! [ -e "$root/etc/os-release" ]; then
+              touch "$root/etc/os-release"
             fi
 
             mkdir -p -m 0755 \
-              /nix/var/nix/profiles/per-container/${name} \
-              /nix/var/nix/gcroots/per-container/${name}
-          ''
+              "/nix/var/nix/profiles/per-container/$INSTANCE" \
+              "/nix/var/nix/gcroots/per-container/$INSTANCE"
 
-          + optionalString (cfg.root != "/var/lib/containers/${name}") ''
-            ln -sfn "${cfg.root}" "/var/lib/containers/${name}"
-          ''
+            SYSTEM_PATH=/nix/var/nix/profiles/system
+            if [ -f "/etc/containers/$INSTANCE.conf" ]; then
+              . "/etc/containers/$INSTANCE.conf"
+            fi
 
-          + optionalString cfg.privateNetwork ''
             # Cleanup from last time.
-            ip netns del ${ns} 2> /dev/null || true
-            ip link del ${ifaceHost} 2> /dev/null || true
-            ip link del ${ifaceCont} 2> /dev/null || true
+            ifaceHost=c-$INSTANCE
+            ifaceCont=ctmp-$INSTANCE
+            ns=net-$INSTANCE
+            ip netns del $ns 2> /dev/null || true
+            ip link del $ifaceHost 2> /dev/null || true
+            ip link del $ifaceCont 2> /dev/null || true
 
-            # Create a pair of virtual ethernet devices.  On the host,
-            # we get ‘c-<container-name’, and on the guest, we get
-            # ‘eth0’.
-            set -x
-            ip link add ${ifaceHost} type veth peer name ${ifaceCont}
-            ip netns add ${ns}
-            ip link set ${ifaceCont} netns ${ns}
-            ip netns exec ${ns} ip link set ${ifaceCont} name eth0
-            ip netns exec ${ns} ip link set dev eth0 up
-            ip link set dev ${ifaceHost} up
-            ${optionalString (cfg.hostAddress != null) ''
-              ip addr add ${cfg.hostAddress} dev ${ifaceHost}
-              ip netns exec ${ns} ip route add ${cfg.hostAddress} dev eth0
-              ip netns exec ${ns} ip route add default via ${cfg.hostAddress}
-            ''}
-            ${optionalString (cfg.localAddress != null) ''
-              ip netns exec ${ns} ip addr add ${cfg.localAddress} dev eth0
-              ip route add ${cfg.localAddress} dev ${ifaceHost}
-            ''}
+            if [ "$PRIVATE_NETWORK" = 1 ]; then
+              # Create a pair of virtual ethernet devices.  On the host,
+              # we get ‘c-<container-name’, and on the guest, we get
+              # ‘eth0’.
+              ip link add $ifaceHost type veth peer name $ifaceCont
+              ip netns add $ns
+              ip link set $ifaceCont netns $ns
+              ip netns exec $ns ip link set $ifaceCont name eth0
+              ip netns exec $ns ip link set dev eth0 up
+              ip link set dev $ifaceHost up
+              if [ -n "$HOST_ADDRESS" ]; then
+                ip addr add $HOST_ADDRESS dev $ifaceHost
+                ip netns exec $ns ip route add $HOST_ADDRESS dev eth0
+                ip netns exec $ns ip route add default via $HOST_ADDRESS
+              fi
+              if [ -n "$LOCAL_ADDRESS" ]; then
+                ip netns exec $ns ip addr add $LOCAL_ADDRESS dev eth0
+                ip route add $LOCAL_ADDRESS dev $ifaceHost
+              fi
+              runInNetNs="${runInNetns}/bin/run-in-netns $ns"
+              extraFlags="--capability=CAP_NET_ADMIN"
+            fi
+
+            exec $runInNetNs ${config.systemd.package}/bin/systemd-nspawn \
+              -M "$INSTANCE" -D "/var/lib/containers/$INSTANCE" $extraFlags \
+              --bind-ro=/nix/store \
+              --bind-ro=/nix/var/nix/db \
+              --bind-ro=/nix/var/nix/daemon-socket \
+              --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
+              --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
+              "$SYSTEM_PATH/init"
           '';
-
-        serviceConfig.ExecStart =
-          (optionalString cfg.privateNetwork "${runInNetns}/bin/run-in-netns ${ns} ")
-          + "${config.systemd.package}/bin/systemd-nspawn"
-          + (optionalString cfg.privateNetwork " --capability=CAP_NET_ADMIN")
-          + " -M ${name} -D ${cfg.root}"
-          + " --bind-ro=/nix/store --bind-ro=/nix/var/nix/db --bind-ro=/nix/var/nix/daemon-socket"
-          + " --bind=/nix/var/nix/profiles/per-container/${name}:/nix/var/nix/profiles"
-          + " --bind=/nix/var/nix/gcroots/per-container/${name}:/nix/var/nix/gcroots"
-          + " ${cfg.path}/init";
 
         preStop =
           ''
-            pid="$(cat /sys/fs/cgroup/systemd/machine/${name}.nspawn/system/tasks 2> /dev/null)"
+            pid="$(cat /sys/fs/cgroup/systemd/machine/$INSTANCE.nspawn/system/tasks 2> /dev/null)"
             if [ -n "$pid" ]; then
               # Send the RTMIN+3 signal, which causes the container
               # systemd to start halt.target.
@@ -240,13 +227,38 @@ in
             fi
           '';
 
-        reloadIfChanged = true;
+        restartIfChanged = false;
+        #reloadIfChanged = true; # FIXME
 
-        serviceConfig.ExecReload =
-          "${pkgs.bash}/bin/bash -c '"
-          + "echo ${cfg.path}/bin/switch-to-configuration test "
-          + "| ${pkgs.socat}/bin/socat unix:${cfg.root}/var/lib/root-shell.socket -'";
+        serviceConfig.ExecReload = pkgs.writeScript "reload-container"
+          ''
+            #! ${pkgs.stdenv.shell} -e
+            SYSTEM_PATH=/nix/var/nix/profiles/system
+            if [ -f "/etc/containers/$INSTANCE.conf" ]; then
+              . "/etc/containers/$INSTANCE.conf"
+            fi
+            echo $SYSTEM_PATH/bin/switch-to-configuration test | \
+              ${pkgs.socat}/bin/socat unix:/var/lib/containers/$INSTANCE/var/lib/root-shell.socket -
+          '';
+      };
 
+    # Generate a configuration file in /etc/containers for each
+    # container so that container@.target can get the container
+    # configuration.
+    environment.etc = mapAttrs' (name: cfg: nameValuePair "containers/${name}.conf"
+      { text =
+          ''
+            SYSTEM_PATH=${cfg.path}
+            ${optionalString cfg.privateNetwork ''
+              PRIVATE_NETWORK=1
+              ${optionalString (cfg.hostAddress != null) ''
+                HOST_ADDRESS=${cfg.hostAddress}
+              ''}
+              ${optionalString (cfg.localAddress != null) ''
+                LOCAL_ADDRESS=${cfg.localAddress}
+              ''}
+            ''}
+          '';
       }) config.containers;
 
     # Generate /etc/hosts entries for the containers.
@@ -256,6 +268,8 @@ in
       '') config.containers);
 
     environment.systemPackages = optional (config.containers != {}) nixos-container;
+
+    system.build.foo = nixos-container;
 
   };
 }
