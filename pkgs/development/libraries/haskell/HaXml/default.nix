@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HaXml";
-  version = "1.24";
-  sha256 = "18kvavqa84k2121ppxngn39fjz4w63chngb3255w1fhdz13v3ydn";
+  version = "1.24.1";
+  sha256 = "1pvqgczksxasayvdb6d4g7ya7g7w1v9hsa35kaxm9bcic9y8q9az";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath polyparse random ];
