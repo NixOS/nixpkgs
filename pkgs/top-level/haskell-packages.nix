@@ -1635,10 +1635,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     llvmConfig = pkgs.llvm_33;
     llvmGeneralPure = self.llvmGeneralPure_3_3_8_2;
   };
-  llvmGeneral_3_4_1_0 = callPackage ../development/libraries/haskell/llvm-general/3.4.1.0.nix {
+  llvmGeneral_3_4_2_1 = callPackage ../development/libraries/haskell/llvm-general/3.4.2.1.nix {
     llvmConfig = pkgs.llvm;
   };
-  llvmGeneral = self.llvmGeneral_3_4_1_0;
+  llvmGeneral = self.llvmGeneral_3_4_2_1;
 
   llvmGeneralPure_3_3_8_2 = callPackage ../development/libraries/haskell/llvm-general-pure/3.3.8.2.nix { };
   llvmGeneralPure_3_4_2_1 = callPackage ../development/libraries/haskell/llvm-general-pure/3.4.2.1.nix {};
