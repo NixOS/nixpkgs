@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.torproject.org/;
+    repositories.git = https://git.torproject.org/git/tor;
     description = "Tor, an anonymous network router to improve privacy on the Internet";
 
     longDescription=''
@@ -30,10 +31,7 @@ stdenv.mkDerivation rec {
 
     license="mBSD";
 
-    maintainers =
-      [ # Russell O’Connor <roconnor@theorem.ca> ?
-        stdenv.lib.maintainers.ludo
-      ];
+    maintainers = with stdenv.lib.maintainers; [ phreedom ludo ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }
