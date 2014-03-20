@@ -1,16 +1,16 @@
 { cabal, basicPrelude, chunkedData, conduit, hspec, monoTraversable
 , mwcRandom, primitive, silently, systemFileio, systemFilepath
-, text, transformers, transformersBase, vector, void
+, text, transformers, transformersBase, unixCompat, vector, void
 }:
 
 cabal.mkDerivation (self: {
   pname = "conduit-combinators";
-  version = "0.2.1";
-  sha256 = "0v3b9wiziyynk00fk07nwrk3c032wyr0adrwlkjl89ma1ix220sv";
+  version = "0.2.2";
+  sha256 = "0b196srw2vbs46zz2m3mb1cbw7pza8q429r5b280bw6vby9h6jbr";
   buildDepends = [
     chunkedData conduit monoTraversable mwcRandom primitive
     systemFileio systemFilepath text transformers transformersBase
-    vector void
+    unixCompat vector void
   ];
   testDepends = [
     basicPrelude chunkedData hspec monoTraversable mwcRandom silently
