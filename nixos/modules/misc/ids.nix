@@ -121,6 +121,7 @@
       systemd-journal-gateway = 110;
       notbit = 111;
       ngircd = 112;
+      btsync = 113;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
