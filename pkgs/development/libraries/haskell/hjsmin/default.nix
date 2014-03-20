@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     blazeBuilder Cabal HUnit languageJavascript QuickCheck
     testFramework testFrameworkHunit text
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/alanz/hjsmin";
     description = "Haskell implementation of a javascript minifier";
