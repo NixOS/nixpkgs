@@ -6335,6 +6335,8 @@ let
 
   nginx = callPackage ../servers/http/nginx { };
 
+  ngircd = callPackage ../servers/irc/ngircd { };
+
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
 
   petidomo = callPackage ../servers/mail/petidomo { };
