@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/etc/logrotate.d
-    make install PREFIX=$out LIBDIR=$out/lib
+    make install PREFIX=$out LIBDIR=$out/lib ASCIIDOC=${asciidoc}/bin/asciidoc XMLTO=${xmlto}/bin/xmlto
   '';
 
   meta = {
