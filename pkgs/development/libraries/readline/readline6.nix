@@ -1,11 +1,11 @@
 { fetchurl, stdenv, ncurses }:
 
 stdenv.mkDerivation (rec {
-  name = "readline-6.2";
+  name = "readline-6.3";
 
   src = fetchurl {
     url = "mirror://gnu/readline/${name}.tar.gz";
-    sha256 = "10ckm2bd2rkxhvdmj7nmbsylmihw0abwcsnxf8y27305183rd9kr";
+    sha256 = "0hzxr9jxqqx5sxsv9vmlxdnvlr9vi4ih1avjb869hbs6p5qn1fjn";
   };
 
   propagatedBuildInputs = [ncurses];
@@ -17,11 +17,11 @@ stdenv.mkDerivation (rec {
     (let
        patch = nr: sha256:
          fetchurl {
-           url = "mirror://gnu/readline/${name}-patches/readline62-${nr}";
+           url = "mirror://gnu/readline/${name}-patches/readline63-${nr}";
            inherit sha256;
          };
      in
-       import ./readline-6.2-patches.nix patch);
+       import ./readline-6.3-patches.nix patch);
 
   meta = {
     description = "GNU Readline, a library for interactive line editing";
