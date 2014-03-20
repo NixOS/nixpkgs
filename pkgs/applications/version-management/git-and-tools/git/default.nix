@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.9.0";
+  version = "1.9.1";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
   name = "git-${version}";
 
   src = fetchurl {
-    url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
-    sha256 = "10lq71vrg1zbqm923wb0p36ily6y5x057f2bryk4wqkdqgyrfc6y";
+    url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
+    sha256 = "0yx7qf9hqgfvrliqvk775pw3zh982nx5r16iw7n997q4ik7gnqpr";
   };
 
   patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ];
