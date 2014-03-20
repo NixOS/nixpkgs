@@ -120,6 +120,7 @@
       jenkins = 109;
       systemd-journal-gateway = 110;
       notbit = 111;
+      ngircd = 112;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
