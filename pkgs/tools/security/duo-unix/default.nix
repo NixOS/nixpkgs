@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
       "--prefix=$(out)"
       "--sysconfdir=$(out)/etc/duo"
       "--with-openssl=${openssl}"
+      "--enable-lib64=no"
     ];
 
   meta = {
