@@ -143,13 +143,13 @@ in
   config = {
 
     systemd.services."container@" =
-      { description = "Container '%I'";
+      { description = "Container '%i'";
 
-        unitConfig.RequiresMountsFor = [ "/var/lib/containers/%I" ];
+        unitConfig.RequiresMountsFor = [ "/var/lib/containers/%i" ];
 
         path = [ pkgs.iproute ];
 
-        environment.INSTANCE = "%I";
+        environment.INSTANCE = "%i";
 
         script =
           ''
