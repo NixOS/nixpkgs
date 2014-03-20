@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     sha256 = "08vcb97j1b7vxwq6088wb6s3g3bm8iwikd922y0xsgbbxv3d2104";
   };
 
+  patches = [ ./edit-signals.patch ];
+
   # I think python is not a native input, but I leave it
   # here while I will not need it cross building
   nativeBuildInputs = [ texinfo python ]
