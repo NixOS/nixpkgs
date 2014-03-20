@@ -1,22 +1,23 @@
 { cabal, aeson, bifunctors, comonad, contravariant, deepseq
-, distributive, doctest, exceptions, filepath, genericDeriving
-, hashable, hlint, HUnit, mtl, nats, parallel, primitive
-, profunctors, QuickCheck, reflection, scientific, semigroupoids
-, semigroups, simpleReflect, split, tagged, testFramework
-, testFrameworkHunit, testFrameworkQuickcheck2, testFrameworkTh
-, text, transformers, transformersCompat, unorderedContainers
-, utf8String, vector, void, zlib
+, distributive, doctest, exceptions, filepath, free
+, genericDeriving, hashable, hlint, HUnit, mtl, nats, parallel
+, primitive, profunctors, QuickCheck, reflection, scientific
+, semigroupoids, semigroups, simpleReflect, split, tagged
+, testFramework, testFrameworkHunit, testFrameworkQuickcheck2
+, testFrameworkTh, text, transformers, transformersCompat
+, unorderedContainers, utf8String, vector, void, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "4.0.7";
-  sha256 = "0n4xw182yamgaplyshbhyjw9i7n6rvaszr4011mdbd6yvprl5v29";
+  version = "4.1";
+  sha256 = "0fsl2cydmkj2k49z3cgv6hfgrlkmx7zsy0ikp4k5jn2kp3hs77dw";
   buildDepends = [
     aeson bifunctors comonad contravariant distributive exceptions
-    filepath hashable mtl parallel primitive profunctors reflection
-    scientific semigroupoids semigroups split tagged text transformers
-    transformersCompat unorderedContainers utf8String vector void zlib
+    filepath free hashable mtl parallel primitive profunctors
+    reflection scientific semigroupoids semigroups split tagged text
+    transformers transformersCompat unorderedContainers utf8String
+    vector void zlib
   ];
   testDepends = [
     deepseq doctest filepath genericDeriving hlint HUnit mtl nats
