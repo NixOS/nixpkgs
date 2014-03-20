@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     [ "--with-pam=$(out)/lib/security"
       "--prefix=$(out)"
       "--sysconfdir=$(out)/etc/duo"
+      "--with-openssl=${openssl}"
+      "--enable-lib64=no"
     ];
 
   meta = {

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, protobuf, protobufc, asciidoc, xmlto, utillinux }:
 
+assert stdenv.system == "x86_64-linux";
 stdenv.mkDerivation rec {
   name    = "criu-${version}";
   version = "1.2";
@@ -24,14 +25,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/etc/logrotate.d
-    make install PREFIX=$out LIBDIR=$out/lib
+    make install PREFIX=$out LIBDIR=$out/lib ASCIIDOC=${asciidoc}/bin/asciidoc XMLTO=${xmlto}/bin/xmlto
   '';
 
   meta = {
     description = "userspace checkpoint/restore for Linux";
     homepage    = "http://criu.org";
     license     = stdenv.lib.licenses.gpl2;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = [ "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }
