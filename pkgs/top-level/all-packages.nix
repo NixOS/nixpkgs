@@ -1953,6 +1953,8 @@ let
 
   super = callPackage ../tools/security/super { };
 
+  ssdeep = callPackage ../tools/security/ssdeep { };
+
   ssmtp = callPackage ../tools/networking/ssmtp {
     tlsSupport = true;
   };
