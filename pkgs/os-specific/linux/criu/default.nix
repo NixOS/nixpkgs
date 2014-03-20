@@ -1,5 +1,6 @@
 { stdenv, fetchurl, protobuf, protobufc, asciidoc, xmlto, utillinux }:
 
+assert stdenv.system == "x86_64-linux";
 stdenv.mkDerivation rec {
   name    = "criu-${version}";
   version = "1.2";
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "userspace checkpoint/restore for Linux";
     homepage    = "http://criu.org";
     license     = stdenv.lib.licenses.gpl2;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = [ "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }
