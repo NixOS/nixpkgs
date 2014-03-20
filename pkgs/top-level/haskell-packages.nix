@@ -2433,6 +2433,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   textStreamDecode = callPackage ../development/libraries/haskell/text-stream-decode {};
 
+  tfRandom = callPackage ../development/libraries/haskell/tf-random {};
+
   thespian = callPackage ../development/libraries/haskell/thespian {};
 
   thDesugar = callPackage ../development/libraries/haskell/th-desugar {};
