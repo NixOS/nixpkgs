@@ -2323,6 +2323,7 @@ let
 
   bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
     interactive = true;
+    readline = readline63; # Includes many vi mode fixes
   });
 
   bashCompletion = callPackage ../shells/bash-completion { };
@@ -5574,7 +5575,7 @@ let
 
   raul = callPackage ../development/libraries/audio/raul { };
 
-  readline = readline6;
+  readline = readline6; # 6.2 works, 6.3 breaks python, parted
 
   readline4 = callPackage ../development/libraries/readline/readline4.nix { };
 
@@ -5588,6 +5589,8 @@ let
       then overrideGCC stdenv gccApple
       else stdenv;
   };
+
+  readline63 = callPackage ../development/libraries/readline/readline6.3.nix { };
 
   librdf_raptor = callPackage ../development/libraries/librdf/raptor.nix { };
 
