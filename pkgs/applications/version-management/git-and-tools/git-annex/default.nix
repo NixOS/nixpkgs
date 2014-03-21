@@ -1,4 +1,4 @@
-{ cabal, aeson, async, blazeBuilder, bloomfilter, bup
+{ cabal, aeson, async, blazeBuilder, bloomfilter, bup, byteable
 , caseInsensitive, clientsession, cryptoApi, cryptohash, curl
 , dataDefault, dataenc, DAV, dbus, dlist, dns, editDistance
 , extensibleExceptions, feed, filepath, git, gnupg1, gnutls, hamlet
@@ -7,31 +7,31 @@
 , MonadCatchIOTransformers, monadControl, mtl, network
 , networkConduit, networkInfo, networkMulticast
 , networkProtocolXmpp, openssh, optparseApplicative, perl
-, QuickCheck, random, regexTdfa, rsync, SafeSemaphore, SHA, stm
-, tasty, tastyHunit, tastyQuickcheck, tastyRerun, text, time
-, transformers, unixCompat, utf8String, uuid, wai, waiLogger, warp
-, warpTls, which, xmlTypes, yesod, yesodCore, yesodDefault
+, QuickCheck, random, regexTdfa, rsync, SafeSemaphore, securemem
+, SHA, stm, tasty, tastyHunit, tastyQuickcheck, tastyRerun, text
+, time, transformers, unixCompat, utf8String, uuid, wai, waiLogger
+, warp, warpTls, which, xmlTypes, yesod, yesodCore, yesodDefault
 , yesodForm, yesodStatic
 }:
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20140306";
-  sha256 = "1kjgqrz0wnccylrbdiwj1yndg7v2k09f5h2vkk06bnx02xmwvjl9";
+  version = "5.20140320";
+  sha256 = "0jhg5nbvdsiaprpj4h57fpfskhx0nqva4yx6krfd90i9gwgkm8l5";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    aeson async blazeBuilder bloomfilter caseInsensitive clientsession
-    cryptoApi cryptohash dataDefault dataenc DAV dbus dlist dns
-    editDistance extensibleExceptions feed filepath gnutls hamlet
-    hinotify hS3 hslogger HTTP httpClient httpConduit httpTypes IfElse
-    json liftedBase MissingH MonadCatchIOTransformers monadControl mtl
-    network networkConduit networkInfo networkMulticast
-    networkProtocolXmpp optparseApplicative QuickCheck random regexTdfa
-    SafeSemaphore SHA stm tasty tastyHunit tastyQuickcheck tastyRerun
-    text time transformers unixCompat utf8String uuid wai waiLogger
-    warp warpTls xmlTypes yesod yesodCore yesodDefault yesodForm
-    yesodStatic
+    aeson async blazeBuilder bloomfilter byteable caseInsensitive
+    clientsession cryptoApi cryptohash dataDefault dataenc DAV dbus
+    dlist dns editDistance extensibleExceptions feed filepath gnutls
+    hamlet hinotify hS3 hslogger HTTP httpClient httpConduit httpTypes
+    IfElse json liftedBase MissingH MonadCatchIOTransformers
+    monadControl mtl network networkConduit networkInfo
+    networkMulticast networkProtocolXmpp optparseApplicative QuickCheck
+    random regexTdfa SafeSemaphore securemem SHA stm tasty tastyHunit
+    tastyQuickcheck tastyRerun text time transformers unixCompat
+    utf8String uuid wai waiLogger warp warpTls xmlTypes yesod yesodCore
+    yesodDefault yesodForm yesodStatic
   ];
   buildTools = [ bup curl git gnupg1 lsof openssh perl rsync which ];
   configureFlags = "-fS3
