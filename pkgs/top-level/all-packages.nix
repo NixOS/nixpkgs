@@ -6769,6 +6769,7 @@ let
 
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
     inherit fetchurl stdenv perl buildLinux;
+    kernelPatches = [];
   };
 
   grsecurityOverrider = args: {
