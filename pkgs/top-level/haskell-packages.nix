@@ -1451,7 +1451,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hsloggerTemplate = callPackage ../development/libraries/haskell/hslogger-template {};
 
-  hspec = callPackage ../development/libraries/haskell/hspec {};
+  hspec = callPackage ../development/libraries/haskell/hspec {
+    QuickCheck = self.QuickCheck_2_7;
+    quickcheckIo = self.quickcheckIo.override { QuickCheck = self.QuickCheck_2_7; };
+  };
 
   hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
 
