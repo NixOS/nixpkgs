@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gmp }:
 
-let version = "0.0.5"; in stdenv.mkDerivation {
+let version = "0.0.6"; in stdenv.mkDerivation {
   name = "ats2-postiats-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-${version}.tgz";
-    sha256 = "1rzcqc7fwqf0y4cc14lr282r25s66jygf6cxrnf5l8p5p550l0dl";
+    sha256 = "110a4drzf656j9s5yfvxj1cwgh5g9ysnh40cv8y9qfjjkki8vd5b";
   };
   # this is necessary because atxt files usually include some .hats files
   patches = [ ./install-atsdoc-hats-files.patch ];
@@ -36,4 +36,6 @@ let version = "0.0.5"; in stdenv.mkDerivation {
 	and the lexer atslex.
       '';
   };
+
+  platforms = stdenv.lib.platforms.all;
 }

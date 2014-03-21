@@ -2356,6 +2356,7 @@ let
 
   aspectj = callPackage ../development/compilers/aspectj { };
 
+  ats = callPackage ../development/compilers/ats { };
   ats2 = callPackage ../development/compilers/ats2 { };
 
   avra = callPackage ../development/compilers/avra { };
