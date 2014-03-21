@@ -2,7 +2,7 @@
 
 with pkgs.lib;
 let
-  diskSize = "200G";
+  diskSize = "100G";
 in
 {
   imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ];
