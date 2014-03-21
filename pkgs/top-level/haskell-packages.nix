@@ -1460,7 +1460,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hspecExpectationsLens = callPackage ../development/libraries/haskell/hspec-expectations-lens {};
 
-  hspecMeta = callPackage ../development/libraries/haskell/hspec-meta {};
+  hspecMeta = callPackage ../development/libraries/haskell/hspec-meta {
+    QuickCheck = self.QuickCheck_2_7;
+    quickcheckIo = self.quickcheckIo.override { QuickCheck = self.QuickCheck_2_7; };
+  };
 
   hstatsd = callPackage ../development/libraries/haskell/hstatsd {};
 
