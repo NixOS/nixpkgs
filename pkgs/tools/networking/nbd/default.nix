@@ -1,14 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib }:
 
-let
-  name = "nbd-3.7";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "nbd-3.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/nbd/${name}.tar.xz";
-    sha256 = "1k4bvg5rg4q6b58y4kd9qwj07sznsfbknlpc6y1bk6c48rgr3d0b";
+    sha256 = "1qnkzrnc9m4n814ciqh95q9j8l7d6yd7sn36q8yn0dmi1rvj78j8";
   };
 
   buildInputs = [ pkgconfig glib ] ++ stdenv.lib.optional (stdenv ? glibc) stdenv.glibc.kernelHeaders;

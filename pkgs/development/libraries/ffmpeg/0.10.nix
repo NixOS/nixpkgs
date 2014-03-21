@@ -21,11 +21,11 @@ assert vdpauSupport -> libvdpau != null;
 assert faacSupport -> faac != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-0.10.10";
+  name = "ffmpeg-0.10.12";
 
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "14fbjhiwv5zg9yh0zk3k9h6id815xrikyz6l2cdl7z4vazbmhq4k";
+    sha256 = "00nvm3iysn8zincpvv1abqrxqj1ky0322dh2j9csjw983358538i";
   };
 
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that

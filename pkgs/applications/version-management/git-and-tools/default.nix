@@ -4,10 +4,8 @@
 args: with args; with pkgs;
 let
   inherit (pkgs) stdenv fetchgit fetchurl subversion;
-in
-rec {
 
-  git = lib.makeOverridable (import ./git) {
+  gitBase = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
       asciidoc xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt cpio tcl
       tk makeWrapper subversionClient gzip;
@@ -24,6 +22,9 @@ rec {
     ];
   };
 
+in
+rec {
+
   # support for bugzilla
   gitBz = import ./git-bz {
     inherit fetchgit stdenv makeWrapper python asciidoc xmlto # docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
@@ -31,17 +32,19 @@ rec {
     inherit (pythonPackages) pysqlite;
   };
 
+  git = appendToName "minimal" gitBase;
+
   # Git with SVN support, but without GUI.
-  gitSVN = lowPrio (appendToName "with-svn" (git.override {
+  gitSVN = lowPrio (appendToName "with-svn" (gitBase.override {
     svnSupport = true;
   }));
 
   # The full-featured Git.
-  gitFull = appendToName "full" (git.override {
+  gitFull = gitBase.override {
     svnSupport = true;
     guiSupport = true;
     sendEmailSupport = !stdenv.isDarwin;
-  });
+  };
 
   gitAnnex = pkgs.haskellPackages.gitAnnex;
 

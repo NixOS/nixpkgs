@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "graphical frontend to LinuxSampler";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

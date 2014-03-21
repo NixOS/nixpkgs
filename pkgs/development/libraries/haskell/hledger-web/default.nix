@@ -20,6 +20,7 @@ cabal.mkDerivation (self: {
     yesodCore yesodStatic
   ];
   testDepends = [ hspec yesod yesodTest ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "http://hledger.org";

@@ -38,18 +38,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  patches = [ ./libnl.patch ];
+  patches = [ ./libnl.patch
+    # remove this patch after wpa_supplicant 2.1
+    (fetchurl {
+      url ="http://projects.archlinux.org/svntogit/packages.git/plain/trunk/0001-Revert-OpenSSL-Do-not-accept-SSL-Client-certificate-.patch?h=packages/wpa_supplicant";
+      sha256 = "0x1wl2nbl7v9kv80qvysfjhhg5a7lmgygv1y723flps6y8ngm19w";
+    })
+  ];
 
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8
-    cp -v doc/docbook/*.5 $out/share/man/man5/
-    cp -v doc/docbook/*.8 $out/share/man/man8/
+    cp -v "doc/docbook/"*.5 $out/share/man/man5/
+    cp -v "doc/docbook/"*.8 $out/share/man/man8/
     mkdir -p $out/etc/dbus-1/system.d $out/share/dbus-1/system-services $out/etc/systemd/system
-    cp -v dbus/*service $out/share/dbus-1/system-services
-    sed -e "s@/sbin/wpa_supplicant@$out&@" -i $out/share/dbus-1/system-services/*
+    cp -v "dbus/"*service $out/share/dbus-1/system-services
+    sed -e "s@/sbin/wpa_supplicant@$out&@" -i "$out/share/dbus-1/system-services/"*
     cp -v dbus/dbus-wpa_supplicant.conf $out/etc/dbus-1/system.d
-    cp -v systemd/*.service $out/etc/systemd/system
-  ''; # */
+    cp -v "systemd/"*.service $out/etc/systemd/system
+  '';
 
   meta = {
     homepage = http://hostap.epitest.fi/wpa_supplicant/;

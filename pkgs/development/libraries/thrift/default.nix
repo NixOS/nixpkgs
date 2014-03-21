@@ -1,5 +1,6 @@
-{ stdenv, fetchgit, boost, zlib, libevent, openssl, python, automake, autoconf,
-libtool, pkgconfig, bison, flex }:
+{ stdenv, fetchgit, boost, zlib, libevent, openssl, python, automake, autoconf
+, libtool, pkgconfig, bison, flex
+}:
 
 stdenv.mkDerivation {
   name = "thrift-0.9.1";
@@ -13,14 +14,23 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ boost zlib libevent openssl python automake autoconf libtool
-      pkgconfig bison flex ];
+
+  # Workaround to make the python wrapper not drop this package:
+  # pythonFull.override { extraLibs = [ thrift ]; }
+  pythonPath = [];
+
+  buildInputs = [
+    boost zlib libevent openssl python automake autoconf libtool pkgconfig
+    bison flex
+  ];
 
   preConfigure = "sh bootstrap.sh; export PY_PREFIX=$out";
 
-  meta = {
-    homepage = http://thrift.apache.org/;
-    license = "ASL2.0";
+  meta = with stdenv.lib; {
     description = "Library for scalable cross-language services";
+    homepage = http://thrift.apache.org/;
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
   };
 }

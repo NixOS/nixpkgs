@@ -31,11 +31,10 @@ rec {
   updateName = updater: drv: drv // {name = updater (drv.name);};
 
 
-  /* Append a suffix to the name of a package.  !!! the suffix should
-     really be appended *before* the version, at least most of the
-     time.
-  */
-  appendToName = suffix: updateName (name: "${name}-${suffix}");
+  /* Append a suffix to the name of a package (before the version
+     part). */
+  appendToName = suffix: updateName (name:
+    let x = builtins.parseDrvName name; in "${x.name}-${suffix}-${x.version}");
 
 
   /* Apply a function to each derivation and only to derivations in an attrset

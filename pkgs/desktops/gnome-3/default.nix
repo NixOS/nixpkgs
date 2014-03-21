@@ -128,5 +128,6 @@ rec {
   gitg = callPackage ./misc/gitg { };
 
   libgit2-glib = callPackage ./misc/libgit2-glib { };
-
+  
+  gexiv2 = callPackage ./misc/gexiv2 { };
 }

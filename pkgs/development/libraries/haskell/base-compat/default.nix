@@ -2,9 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "base-compat";
-  version = "0.4.0";
-  sha256 = "0ps26w4mjp465a3mh3hpzkdkc97yvfhzh86fcnlqszy9wgj13w65";
-  buildDepends = [ errorcallEqInstance ];
+  version = "0.4.2";
+  sha256 = "0rcra6bgx955c2yd52y6v7lmlm5r86sdmii3qapx6yghqhdslzry";
+  buildDepends = [ errorcallEqInstance setenv ];
   testDepends = [ hspec setenv ];
   meta = {
     description = "A compatibility layer for base";

@@ -497,7 +497,7 @@ sub waitForX {
         retry sub {
             my ($status, $out) = $self->execute("journalctl -bu systemd-logind | grep Linked");
             return 0 if $status != 0;
-            my ($status, $out) = $self->execute("xwininfo -root > /dev/null 2>&1");
+            ($status, $out) = $self->execute("xwininfo -root > /dev/null 2>&1");
             return 1 if $status == 0;
         }
     });

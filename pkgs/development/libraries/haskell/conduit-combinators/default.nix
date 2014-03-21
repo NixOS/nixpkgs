@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "conduit-combinators";
-  version = "0.1.0.0";
-  sha256 = "0m4qfcm66likasvsvfriw8xiz5ibqhq5sk1wiwx0gk2d1qcnb3wx";
+  version = "0.2.0.1";
+  sha256 = "0hmy398kk37n5l4pacb2a0z9h9f1kl6vva9gsph1kiqnnz7sbr4r";
   buildDepends = [
     chunkedData conduit monoTraversable primitive systemFileio
     systemFilepath text transformers transformersBase vector

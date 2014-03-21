@@ -12,12 +12,6 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , extraBuildInputs ? []
 }:
 
-if ! builtins ? langVersion then
-
-  abort "This version of Nixpkgs requires Nix >= 1.2, please upgrade!"
-
-else
-
 let
 
   allowUnfree = config.allowUnfree or true && builtins.getEnv "HYDRA_DISALLOW_UNFREE" != "1";

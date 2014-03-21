@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, gnome_common
-, gtk_doc, gtk2, python, pygtk, pygobject, lua
+{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, gnome3, pygobject3, pygtk
+, gtk_doc, gtk2, python, pygobject, lua, libX11, libXext, libXrender, gobjectIntrospection
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    autoconf automake libtool pkgconfig gnome_common gtk_doc gtk2
-    python pygtk pygobject lua
+    autoconf automake libtool pkgconfig gnome3.gnome_common gtk_doc gnome3.gtk3
+    python pygobject3 pygtk lua libX11 libXext libXrender gobjectIntrospection gtk2
   ];
 
   preConfigure = ''

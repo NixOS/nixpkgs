@@ -81,7 +81,7 @@ in
     environment.pathsToLink =
       [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" "/share/gtksourceview-2.0" ];
 
-    environment.variables.GIO_EXTRA_MODULES = "${pkgs.xfce.gvfs}/lib/gio/modules";
+    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;

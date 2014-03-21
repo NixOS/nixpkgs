@@ -1,26 +1,26 @@
 { cabal, attoparsec, base64Bytestring, blazeBuilder, Cabal, conduit
-, dataDefaultClass, fileEmbed, filepath, fsnotify, ghcPaths
-, httpConduit, httpReverseProxy, httpTypes, liftedBase, network
-, networkConduit, optparseApplicative, parsec, projectTemplate
-, resourcet, shakespeare, shakespeareCss, shakespeareJs
-, shakespeareText, split, systemFileio, systemFilepath, tar, text
-, time, transformers, unixCompat, unorderedContainers, wai, warp
-, yaml, zlib
+, dataDefaultClass, fileEmbed, filepath, filesystemConduit
+, fsnotify, ghcPaths, httpConduit, httpReverseProxy, httpTypes
+, liftedBase, network, networkConduit, optparseApplicative, parsec
+, projectTemplate, resourcet, shakespeare, shakespeareCss
+, shakespeareJs, shakespeareText, split, systemFileio
+, systemFilepath, tar, text, time, transformers, unixCompat
+, unorderedContainers, wai, warp, yaml, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-bin";
-  version = "1.2.6.1";
-  sha256 = "0w3qar315w96139j16fq4py4qs83bhm6pab9pzjbx8h451sqjarh";
+  version = "1.2.7.1";
+  sha256 = "1lbnn7lzgpw0xsbnlax41q5hqb1bv9irmncgjvv18y8mpf5zcncs";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     attoparsec base64Bytestring blazeBuilder Cabal conduit
-    dataDefaultClass fileEmbed filepath fsnotify ghcPaths httpConduit
-    httpReverseProxy httpTypes liftedBase network networkConduit
-    optparseApplicative parsec projectTemplate resourcet shakespeare
-    shakespeareCss shakespeareJs shakespeareText split systemFileio
-    systemFilepath tar text time transformers unixCompat
+    dataDefaultClass fileEmbed filepath filesystemConduit fsnotify
+    ghcPaths httpConduit httpReverseProxy httpTypes liftedBase network
+    networkConduit optparseApplicative parsec projectTemplate resourcet
+    shakespeare shakespeareCss shakespeareJs shakespeareText split
+    systemFileio systemFilepath tar text time transformers unixCompat
     unorderedContainers wai warp yaml zlib
   ];
   meta = {

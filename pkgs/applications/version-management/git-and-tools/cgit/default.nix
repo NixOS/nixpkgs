@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cgit-0.10";
+  name = "cgit-0.10.1";
 
   src = fetchurl {
     url = "http://git.zx2c4.com/cgit/snapshot/${name}.tar.xz";
-    sha256 = "0ynywva0lrsasdm3nlk3dmd8k5bnrd9qlvmk4n42dfw9g1xj5i4h";
+    sha256 = "0bci1p9spf79wirc4lk36cndcx2b9wj0fq1l58rlp6r563is77l3";
   };
 
   # cgit is is tightly coupled with git and needs a git source tree to build.
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://git.zx2c4.com/cgit/about/;
+    repositories.git = git://git.zx2c4.com/cgit;
     description = "Web frontend for git repositories";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

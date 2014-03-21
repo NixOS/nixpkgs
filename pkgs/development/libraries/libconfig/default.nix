@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
     description = "a simple library for processing structured configuration files";
     license = licenses.lgpl3;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

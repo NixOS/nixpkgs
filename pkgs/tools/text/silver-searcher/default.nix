@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "b6993e077f650eb0976cbc924640665fa9b2499a899ecba5a6cad5cf9addfdff";
   };
 
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   buildInputs = [ autoreconfHook pkgconfig pcre zlib lzma ];
 

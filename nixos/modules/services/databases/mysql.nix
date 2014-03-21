@@ -15,7 +15,7 @@ let
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
   mysqldOptions =
-    "--user=${cfg.user} --datadir=${cfg.dataDir} " +
+    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql} " +
     "--pid-file=${pidFile}";
 
   myCnf = pkgs.writeText "my.cnf"
@@ -250,9 +250,6 @@ in
               rm /tmp/mysql_init
             fi
           ''; # */
-
-        serviceConfig.ExecStop =
-          "${mysql}/bin/mysqladmin ${optionalString (cfg.rootPassword != null) "--user=root --password=\"$(cat ${cfg.rootPassword})\""} shutdown";
       };
 
   };

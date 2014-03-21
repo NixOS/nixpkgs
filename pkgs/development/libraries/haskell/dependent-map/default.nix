@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dependent-map";
-  version = "0.1.1.1";
-  sha256 = "1p5a5qahw7i6cvb0g0g1bv9gzy6jlxr5vb3hp8gahm210zw8g990";
+  version = "0.1.1.2";
+  sha256 = "1g8mq8189c6wr1rik70019gqrnk84c613x9cn5383p7hhfyc0rnn";
   buildDepends = [ dependentSum ];
   meta = {
     homepage = "https://github.com/mokus0/dependent-map";

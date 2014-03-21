@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network-conduit";
-  version = "1.0.2.2";
-  sha256 = "1l7r40raqbhfgwgp5knkqfg2b7pqm4h23c9slbx55r829if8c54h";
+  version = "1.0.4";
+  sha256 = "1a7p3gs0rczx0rhz27410rr6fzy3l0nsj6kk5wi0nqvqfyh7jb9c";
   buildDepends = [
     conduit liftedBase monadControl network transformers
   ];

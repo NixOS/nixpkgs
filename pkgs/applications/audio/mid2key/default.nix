@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "A simple tool which maps midi notes to simulated keystrokes";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

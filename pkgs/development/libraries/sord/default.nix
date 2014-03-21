@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "A lightweight C library for storing RDF data in memory";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];
-
+    platforms = platforms.linux;
   };
 }

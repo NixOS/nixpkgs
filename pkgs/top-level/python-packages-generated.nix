@@ -5370,5 +5370,27 @@ in
     };
   };
 
+
+  "suds" = self."suds-0.4";
+
+  "suds-0.4" = self.buildPythonPackage {
+    name = "suds-0.4";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/s/suds/suds-0.4.tar.gz";
+        md5 = "b7502de662341ed7275b673e6bd73191";
+    };
+    doCheck = false;
+    buildInputs = [  ];
+    propagatedBuildInputs = [  ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
+    meta = {
+      description = ''
+        Lightweight SOAP client
+        '';
+      homepage = "https://fedorahosted.org/suds";
+      license = "UNKNOWN";
+    };
+  };
+
 }
 

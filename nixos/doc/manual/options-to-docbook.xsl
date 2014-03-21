@@ -18,15 +18,14 @@
       <variablelist>
 
         <xsl:for-each select="attrs">
-
           <varlistentry>
-             <term>
-               <option>
+            <term xml:id="{generate-id(attr[@name = 'name']/string/@value)}" xlink:href="#{generate-id(attr[@name = 'name']/string/@value)}">
+              <option>
                  <xsl:for-each select="attr[@name = 'name']/string">
                    <xsl:value-of select="@value" />
                    <xsl:if test="position() != last()">.</xsl:if>
                  </xsl:for-each>
-               </option>
+              </option>
              </term>
 
              <listitem>

@@ -1,13 +1,11 @@
 {stdenv, fetchurl, ocaml, findlib}:
 
-# note: works only with ocaml >3.12
-
 stdenv.mkDerivation {
-  name = "ocaml-typeconv-3.0.5";
+  name = "ocaml-typeconv-109.60.01";
 
   src = fetchurl {
-    url = "http://forge.ocamlcore.org/frs/download.php/821/type_conv-3.0.5.tar.gz";
-    sha256 = "90ac6c401a600a23012a3f513def6f67d4979b11bd551f4d0af78f0f0b479198";
+    url = https://github.com/janestreet/type_conv/archive/109.60.01.tar.gz;
+    sha256 = "0lpxri68glgq1z2pp02rp45cb909xywbff8d4idljrf6fzzil2zx";
   };
 
   buildInputs = [ocaml findlib ]; 
@@ -17,7 +15,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://forge.ocamlcore.org/projects/type-conv/";
     description = "Support library for OCaml preprocessor type conversions";
-    license = "LGPL";
+    license = stdenv.lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms;
+    maintainers = with stdenv.lib.maintainers; [ z77z ];
   };
 }

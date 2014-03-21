@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     description = "A WebDriver server for running Selenium tests on Chrome";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

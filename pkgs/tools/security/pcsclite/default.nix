@@ -5,19 +5,16 @@ stdenv.mkDerivation rec {
   name = "pcsclite-${version}";
 
   src = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/p/pcsc-lite/pcsc-lite_${version}.orig.tar.bz2";
+    url = "https://alioth.debian.org/frs/download.php/file/3963/pcsc-lite-${version}.tar.bz2";
     sha256 = "04i63zi9ayg38z3cahp6gf3rgx23w17bmcpdccm2hvaj63blnz30";
   };
 
   # The OS should care on preparing the drivers into this location
   configureFlags = [
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
-    "--with-systemdsystemunitdir=$out/lib/systemd/system" # probably
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--enable-confdir=$(out)/etc"
   ];
-
-  preConfigure = ''
-    configureFlags="$configureFlags --enable-confdir=$out/etc"
-  '';
 
   buildInputs = [ udev dbus_libs perl ];
 

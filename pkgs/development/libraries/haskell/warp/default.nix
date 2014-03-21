@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "warp";
-  version = "2.0.3.3";
-  sha256 = "02wh8jf8pcjb03xxdim9q92vr4jk9jibqqzl8kvccqlqfi5giq0f";
+  version = "2.1.1";
+  sha256 = "1nldm0pq1q5m91mhss4h23dxdqwqmvfdmcpq5grc1rqjb88mgm25";
   buildDepends = [
     blazeBuilder blazeBuilderConduit caseInsensitive conduit hashable
     httpDate httpTypes liftedBase network networkConduit simpleSendfile

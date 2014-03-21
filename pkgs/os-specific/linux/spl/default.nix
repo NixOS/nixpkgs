@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "196scl8q0bkkak6m0p1l1fz254cgsizqm73bf9wk3iynamq7qmrw";
   };
 
-  patches = [ ./install_prefix.patch ];
+  patches = [ ./install_prefix.patch ./3_12-compat.patch ./3_13-compat-1.patch ./3_13-compat-2.patch ];
 
   buildInputs = [ perl autoconf automake libtool ];
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     ./autogen.sh
 
     substituteInPlace ./module/spl/spl-generic.c --replace /usr/bin/hostid hostid
-    substituteInPlace ./module/spl/spl-module.c  --replace /bin/mknod mknod 
+    substituteInPlace ./module/spl/spl-module.c  --replace /bin/mknod mknod
 
     substituteInPlace ./module/spl/spl-generic.c --replace "PATH=/sbin:/usr/sbin:/bin:/usr/bin" "PATH=${coreutils}:${gawk}:/bin"
     substituteInPlace ./module/splat/splat-vnode.c --replace "PATH=/sbin:/usr/sbin:/bin:/usr/bin" "PATH=${coreutils}:/bin"
@@ -40,6 +40,6 @@ stdenv.mkDerivation {
     homepage = http://zfsonlinux.org/;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    maintainers = with stdenv.lib.maintainers; [ jcumming wizeman ];
   };
 }

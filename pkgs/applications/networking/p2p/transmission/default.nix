@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.transmissionbt.com/;
     license = licenses.gpl2; # parts are under MIT
-    maintainers = with maintainers; [ astsmtl vcunat ];
+    maintainers = with maintainers; [ astsmtl vcunat wizeman ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, librsync, ncftp, gnupg, boto, makeWrapper }:
+{ stdenv, fetchurl, python, librsync, ncftp, gnupg, boto, makeWrapper, lockfile }:
 
 let
   version = "0.6.23";
@@ -14,10 +14,10 @@ stdenv.mkDerivation {
   installPhase = ''
     python setup.py install --prefix=$out
     wrapProgram $out/bin/duplicity \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto})" \
+      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})" \
       --prefix PATH : "${gnupg}/bin:${ncftp}/bin"
     wrapProgram $out/bin/rdiffdir \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto})" \
+      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${boto}):$(toPythonPath ${lockfile})" \
   '';
 
   buildInputs = [ python librsync makeWrapper ];

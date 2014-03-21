@@ -2,12 +2,12 @@
 , pkgconfig, libxslt, python, gstreamer, gst_python, pygobject }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-0.6.0";
+  name = "${pname}-0.6.1";
   pname = "telepathy-farstream";
 
   src = fetchurl {
     url = "http://telepathy.freedesktop.org/releases/${pname}/${name}.tar.gz";
-    sha256 = "04v414jij2ba71krk7vh4avsz07sfp5w38dmvjwig5isdygy0905";
+    sha256 = "0ia8nldxxan1cvplr62aicjhfcrm27s3qyk0x46c8q0fmqvnzlm3";
   };
 
   buildInputs = [ gst_plugins_base gst_python pygobject ];

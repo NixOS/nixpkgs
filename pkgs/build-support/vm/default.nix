@@ -2,7 +2,7 @@
 , kernel ? pkgs.linux_3_10
 , img ? "bzImage"
 , rootModules ?
-    [ "virtio_pci" "virtio_blk" "virtio_balloon" "ext4" "unix" "9p" "9pnet_virtio" ]
+    [ "virtio_pci" "virtio_blk" "virtio_balloon" "ext4" "unix" "9p" "9pnet_virtio" "rtc_cmos" ]
 }:
 
 with pkgs;
@@ -57,6 +57,7 @@ rec {
       mknod ${dev}/random  c 1 8
       mknod ${dev}/urandom c 1 9
       mknod ${dev}/tty     c 5 0
+      mknod ${dev}/rtc     c 254 0
       . /sys/class/block/${hd}/uevent
       mknod ${dev}/${hd} b $MAJOR $MINOR
     '';
@@ -158,6 +159,10 @@ rec {
   stage2Init = writeScript "vm-run-stage2" ''
     #! ${bash}/bin/sh
     source /tmp/xchg/saved-env
+
+    # Set the system time from the hardware clock.  Works around an
+    # apparent KVM > 1.5.2 bug.
+    ${pkgs.utillinux}/sbin/hwclock -s
 
     export NIX_STORE=/nix/store
     export NIX_BUILD_TOP=/tmp

@@ -1,14 +1,14 @@
 {stdenv, fetchurl, unzip, makeWrapper, python, jdk}:
 
 stdenv.mkDerivation {
-  name = "mobilesdk-3.2.1.v20140206170116";
+  name = "mobilesdk-3.2.2.v20140305122111";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
-    url = http://builds.appcelerator.com.s3.amazonaws.com/mobile/3_2_X/mobilesdk-3.2.1.v20140206170116-linux.zip;
-    sha1 = "89955d31d48875aca64dd0131baac5ed82abcfc9";
+    url = http://builds.appcelerator.com.s3.amazonaws.com/mobile/3_2_X/mobilesdk-3.2.2.v20140305122111-linux.zip;
+    sha1 = "12dc1bfe8dd73db0650a235492f5f50c7b816d69";
   }
   else if stdenv.system == "x86_64-darwin" then fetchurl {
-    url = http://builds.appcelerator.com.s3.amazonaws.com/mobile/3_2_X/mobilesdk-3.2.1.v20140206170116-osx.zip;
-    sha1 = "06d9338c619b787be83baf3c0d93748b0e430182";
+    url = http://builds.appcelerator.com.s3.amazonaws.com/mobile/3_2_X/mobilesdk-3.2.2.v20140305122111-osx.zip;
+    sha1 = "9875b59faf0ab92e8996b58476466405ed60f6e2";
   }
   else throw "Platform: ${stdenv.system} not supported!";
   
@@ -28,8 +28,8 @@ stdenv.mkDerivation {
    
     # Rename ugly version number
     cd mobilesdk/*
-    mv 3.2.1.v20140206170116 3.2.1.GA
-    cd 3.2.1.GA
+    mv 3.2.2.v20140305122111 3.2.2.GA
+    cd 3.2.2.GA
     
     # Zip files do not support timestamps lower than 1980. We have to apply a few work-arounds to cope with that
     # Yes, I know it's nasty :-)

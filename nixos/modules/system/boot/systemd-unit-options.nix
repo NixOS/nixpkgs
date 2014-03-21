@@ -41,6 +41,12 @@ in rec {
       '';
     };
 
+    baseUnit = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = "Path to an upstream unit file on which the NixOS unit configuration will be based.";
+    };
+
     description = mkOption {
       default = "";
       type = types.str;
@@ -135,6 +141,7 @@ in rec {
 
     restartTriggers = mkOption {
       default = [];
+      type = types.listOf types.unspecified;
       description = ''
         An arbitrary list of items such as derivations.  If any item
         in the list changes between reconfigurations, the service will

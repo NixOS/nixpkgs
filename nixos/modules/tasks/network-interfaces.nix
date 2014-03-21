@@ -50,6 +50,26 @@ let
         '';
       };
 
+      ipv6Address = mkOption {
+        default = null;
+        example = "2001:1470:fffd:2098::e006";
+        type = types.nullOr types.string;
+        description = ''
+          IPv6 address of the interface.  Leave empty to configure the
+          interface using NDP.
+        '';
+      };
+
+      ipv6prefixLength = mkOption {
+        default = 64;
+        example = 64;
+        type = types.int;
+        description = ''
+          Subnet mask of the interface, specified as the number of
+          bits in the prefix (<literal>64</literal>).
+        '';
+      };
+
       macAddress = mkOption {
         default = null;
         example = "00:11:22:33:44:55";
@@ -401,9 +421,11 @@ in
                 EOF
 
                 # Disable or enable IPv6.
-                if [ -e /proc/sys/net/ipv6/conf/all/disable_ipv6 ]; then
-                  echo ${if cfg.enableIPv6 then "0" else "1"} > /proc/sys/net/ipv6/conf/all/disable_ipv6
-                fi
+                ${optionalString (!config.boot.isContainer) ''
+                  if [ -e /proc/sys/net/ipv6/conf/all/disable_ipv6 ]; then
+                    echo ${if cfg.enableIPv6 then "0" else "1"} > /proc/sys/net/ipv6/conf/all/disable_ipv6
+                  fi
+                ''}
 
                 # Set the default gateway.
                 ${optionalString (cfg.defaultGateway != "") ''
@@ -435,6 +457,7 @@ in
           (let mask =
                 if i.prefixLength != null then toString i.prefixLength else
                 if i.subnetMask != "" then i.subnetMask else "32";
+               staticIPv6 = cfg.enableIPv6 && i.ipv6Address != null;
           in
           { description = "Configuration of ${i.name}";
             wantedBy = [ "network-interfaces.target" ];
@@ -468,11 +491,31 @@ in
                     echo "configuring interface..."
                     ip -4 addr flush dev "${i.name}"
                     ip -4 addr add "${i.ipAddress}/${mask}" dev "${i.name}"
+                    restart_network_setup=true
+                  else
+                    echo "skipping configuring interface"
+                  fi
+                ''
+              + optionalString (staticIPv6)
+                ''
+                  # Only do a flush/add if it's necessary.  This is
+                  # useful when the Nix store is accessed via this
+                  # interface (e.g. in a QEMU VM test).
+                  if ! ip -6 -o a show dev "${i.name}" | grep "${i.ipv6Address}/${toString i.ipv6prefixLength}"; then
+                    echo "configuring interface..."
+                    ip -6 addr flush dev "${i.name}"
+                    ip -6 addr add "${i.ipv6Address}/${toString i.ipv6prefixLength}" dev "${i.name}"
+                    restart_network_setup=true
+                  else
+                    echo "skipping configuring interface"
+                  fi
+                ''
+              + optionalString (i.ipAddress != null || staticIPv6)
+                ''
+                  if [ restart_network_setup = true ]; then
                     # Ensure that the default gateway remains set.
                     # (Flushing this interface may have removed it.)
                     ${config.systemd.package}/bin/systemctl try-restart --no-block network-setup.service
-                  else
-                    echo "skipping configuring interface"
                   fi
                   ${config.systemd.package}/bin/systemctl start ip-up.target
                 ''

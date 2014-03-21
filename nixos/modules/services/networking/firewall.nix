@@ -171,6 +171,17 @@ in
         '';
     };
 
+    networking.firewall.pingLimit = mkOption {
+      default = null;
+      type = types.nullOr (types.separatedString " ");
+      description =
+        ''
+          If pings are allowed, this allows setting rate limits
+          on them. If non-null, this option should be in the form
+          of flags like "-limit 1/minute -limit-burst 5"
+        '';
+    };
+
     networking.firewall.checkReversePath = mkOption {
       default = kernelHasRPFilter;
       type = types.bool;
@@ -375,7 +386,9 @@ in
 
             # Optionally respond to ICMPv4 pings.
             ${optionalString cfg.allowPing ''
-              iptables -A nixos-fw -p icmp --icmp-type echo-request -j nixos-fw-accept
+              iptables -A nixos-fw -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
+                "-m limit ${cfg.pingLimit} "
+              }-j nixos-fw-accept
             ''}
 
             # Accept all ICMPv6 messages except redirects and node

@@ -19,6 +19,7 @@ in
     services.gpsd = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable `gpsd', a GPS service daemon.
@@ -26,6 +27,7 @@ in
       };
 
       device = mkOption {
+        type = types.str;
         default = "/dev/ttyUSB0";
         description = ''
           A device may be a local serial device for GPS input, or a URL of the form:
@@ -35,6 +37,7 @@ in
       };
 
       readonly = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to enable the broken-device-safety, otherwise
@@ -51,6 +54,7 @@ in
       };
 
       port = mkOption {
+        type = types.uniq types.int;
         default = 2947;
         description = ''
           The port where to listen for TCP connections.
@@ -58,6 +62,7 @@ in
       };
 
       debugLevel = mkOption {
+        type = types.uniq types.int;
         default = 0;
         description = ''
           The debugging level.
@@ -85,19 +90,20 @@ in
         inherit gid;
       };
 
-    jobs.gpsd =
-      { description = "GPSD daemon";
-
-        startOn = "ip-up";
-
-        exec =
-          ''
-            ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
-              -S "${toString cfg.port}"                             \
-              ${if cfg.readonly then "-b" else ""}                  \
-              "${cfg.device}"
-          '';
+    systemd.services.gpsd = {
+      description = "GPSD daemon";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        Type = "forking";
+        ExecStart = ''
+          ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
+            -S "${toString cfg.port}"                             \
+            ${if cfg.readonly then "-b" else ""}                  \
+            "${cfg.device}"
+        '';
       };
+    };
 
   };
 

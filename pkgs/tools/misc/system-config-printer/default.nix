@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-udev-rules"
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/systemd"
+      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     ];
 
   postInstall =

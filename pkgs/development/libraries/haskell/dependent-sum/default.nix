@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dependent-sum";
-  version = "0.2.0.1";
-  sha256 = "07zv8rj574vf7wl3pms4q8d9m7zsfppac5vla9d9b7q11s81lldf";
+  version = "0.2.0.2";
+  sha256 = "06amnc50j246f2za0ri49j6vyq6admx03w3xxjhhfnfx9lp6zmhm";
   meta = {
     homepage = "https://github.com/mokus0/dependent-sum";
     description = "Dependent sum type";

@@ -19,8 +19,17 @@
     self : self.haskellPlatformArgs_future self // {
       haskellPlatform = null;
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
-      cabalInstall_1_18_0_2 = self.cabalInstall_1_18_0_2.override { Cabal = null; };
-      cabalInstall = self.cabalInstall_1_18_0_2.override { Cabal = null; };
+      cabalInstall_1_18_0_3 = self.cabalInstall_1_18_0_3.override { Cabal = null; };
+      cabalInstall = self.cabalInstall_1_18_0_3.override { Cabal = null; };
+    };
+
+  ghc781Prefs =
+    self : self.haskellPlatformArgs_future self // {
+      haskellPlatform = null;
+      extensibleExceptions = self.extensibleExceptions_0_1_1_4;
+      cabalInstall_1_18_0_3 = self.cabalInstall_1_18_0_3.override { Cabal = null; };
+      cabalInstall = self.cabalInstall_1_18_0_3.override { Cabal = null; };
+      binary_0_7_1_0 = null;
     };
 
   ghc763Prefs =
@@ -393,6 +402,12 @@
     packages { ghcPath = ../development/compilers/ghc/7.6.3.nix;
                ghcBinary = ghc704Binary;
                prefFun = ghc763Prefs;
+             };
+
+  packages_ghc781 =
+    packages { ghcPath = ../development/compilers/ghc/7.8.1.nix;
+               ghcBinary = ghc742Binary;
+               prefFun = ghc781Prefs;
              };
 
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.

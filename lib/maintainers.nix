@@ -25,6 +25,7 @@
   edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
   eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
   ertes = "Ertugrul Söylemez <es@ertes.de>";
+  falsifian = "James Cook <james.cook@utoronto.ca>";
   garbas = "Rok Garbas <rok@garbas.si>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   guibert = "David Guibert <david.guibert@gmail.com>";
@@ -52,6 +53,7 @@
   phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
   piotr = "Piotr Pietraszkiewicz <ppietrasa@gmail.com>";
+  pkmx = "Chih-Mao Chen <pkmx.tw@gmail.com>";
   pSub = "Pascal Wittmann <mail@pascal-wittmann.de>";
   qknight = "Joachim Schiele <js@lastlog.de>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";

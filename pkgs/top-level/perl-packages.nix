@@ -9415,6 +9415,17 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  X11Protocol = buildPerlPackage rec {
+    name = "X11-Protocol-0.56";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SM/SMCCAM/${name}.tar.gz";
+      sha256 = "1dq89bh6fqv7l5mbffqcismcljpq5f869bx7g8lg698zgindv5ny";
+    };
+    buildInputs = [pkgs.x11];
+    NIX_CFLAGS_LINK = "-lX11";
+    doCheck = false; # requires an X server
+  };
+
   X11GUITest = buildPerlPackage rec {
     name = "X11-GUITest-0.21";
     src = fetchurl {

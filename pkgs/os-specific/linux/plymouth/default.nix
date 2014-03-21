@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     description = "A graphical boot animation";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

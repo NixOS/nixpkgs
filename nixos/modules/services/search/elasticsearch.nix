@@ -5,15 +5,21 @@ with pkgs.lib;
 let
   cfg = config.services.elasticsearch;
 
-  es_home = "/var/lib/elasticsearch";
-
-  configFile = pkgs.writeText "elasticsearch.yml" ''
+  esConfig = ''
     network.host: ${cfg.host}
-    network.port: ${cfg.port}
-    network.tcp.port: ${cfg.tcp_port}
+    network.port: ${toString cfg.port}
+    network.tcp.port: ${toString cfg.tcp_port}
     cluster.name: ${cfg.cluster_name}
     ${cfg.extraConf}
   '';
+
+  configDir = pkgs.buildEnv {
+    name = "elasticsearch-config";
+    paths = [
+      (pkgs.writeTextDir "elasticsearch.yml" esConfig)
+      (pkgs.writeTextDir "logging.yml" cfg.logging)
+    ];
+  };
 
 in {
 
@@ -34,14 +40,14 @@ in {
 
     port = mkOption {
       description = "Elasticsearch port to listen for HTTP traffic";
-      default = "9200";
-      type = types.str;
+      default = 9200;
+      type = types.int;
     };
 
     tcp_port = mkOption {
       description = "Elasticsearch port for the node to node communication";
-      default = "9300";
-      type = types.str;
+      default = 9300;
+      type = types.int;
     };
 
     cluster_name = mkOption {
@@ -79,27 +85,32 @@ in {
       '';
       type = types.str;
     };
+
+    dataDir = mkOption {
+      type = types.path;
+      default = "/var/lib/elasticsearch";
+      description = ''
+        Data directory for elasticsearch.
+      '';
+    };
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.etc = [
-      { source = configFile;
-        target = "elasticsearch/elasticsearch.yml"; }
-      { source = pkgs.writeText "logging.yml" cfg.logging;
-        target = "elasticsearch/logging.yml"; }
-    ];
-
     systemd.services.elasticsearch = {
       description = "Elasticsearch daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
-      environment = { ES_HOME = es_home; };
+      environment = { ES_HOME = cfg.dataDir; };
       serviceConfig = {
-        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -f -Des.path.conf=/etc/elasticsearch";
+        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -f -Des.path.conf=${configDir}";
         User = "elasticsearch";
       };
+      preStart = ''
+        mkdir -m 0700 -p ${cfg.dataDir}
+        if [ "$(id -u)" = 0 ]; then chown -R elasticsearch ${cfg.dataDir}; fi
+      '';
     };
 
     environment.systemPackages = [ pkgs.elasticsearch ];
@@ -108,8 +119,7 @@ in {
       name = "elasticsearch";
       uid = config.ids.uids.elasticsearch;
       description = "Elasticsearch daemon user";
-      home = es_home;
-      createHome = true;
+      home = cfg.dataDir;
     };
   };
 }

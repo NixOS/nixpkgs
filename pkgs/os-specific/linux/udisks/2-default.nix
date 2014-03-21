@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "udisks-2.1.1";
+  name = "udisks-2.1.3";
 
   src = fetchurl {
     url = "http://udisks.freedesktop.org/releases/${name}.tar.bz2";
-    sha256 = "1yw6h3l13y796adwgj6m4j3hijv58lgpf98mq24nn9da73zhjfq1";
+    sha256 = "0bb3403pa23j317b7z9ikdigr6ll5cl93l4hiy4afjgfa7b2zjaw";
   };
 
   patches = [ ./force-path.patch ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--localstatedir=/var"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/systemd"
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
   ];
 

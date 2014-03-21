@@ -3,7 +3,7 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, wrapPython, lib, recursivePthLoader, distutils-cfg }:
+{ python, setuptools, unzip, wrapPython, lib, recursivePthLoader, distutils-cfg }:
 
 { name
 
@@ -38,6 +38,12 @@
 
 , meta ? {}
 
+# Execute before shell hook
+, preShellHook ? ""
+
+# Execute after shell hook
+, postShellHook ? ""
+
 , ... } @ attrs:
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
@@ -46,7 +52,11 @@ python.stdenv.mkDerivation (attrs // {
 
   name = namePrefix + name;
 
-  buildInputs = [ python wrapPython setuptools (distutils-cfg.override { extraCfg = distutilsExtraCfg; }) ] ++ buildInputs ++ pythonPath;
+  buildInputs = [
+    python wrapPython setuptools
+    (distutils-cfg.override { extraCfg = distutilsExtraCfg; })
+  ] ++ buildInputs ++ pythonPath
+    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
 
   propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader ];
 
@@ -145,6 +155,16 @@ python.stdenv.mkDerivation (attrs // {
         fi
       done
     '';
+
+  shellHook = attrs.shellHook or ''
+    mkdir -p /tmp/$name/lib/${python.libPrefix}/site-packages
+    ${preShellHook}
+    export PATH="/tmp/$name/bin:$PATH"
+    export PYTHONPATH="/tmp/$name/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    python setup.py develop --prefix /tmp/$name
+    ${postShellHook}
+    return
+  '';
 
   meta = with lib.maintainers; {
     # default to python's platforms

@@ -1,12 +1,12 @@
 {stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate}:
 
 stdenv.mkDerivation rec {
-  name = "alsa-utils-1.0.27";
+  name = "alsa-utils-1.0.27.2";
 
   src = fetchurl {
     # url = "ftp://ftp.alsa-project.org/pub/utils/${name}.tar.bz2";
     url = "http://alsa.cybermirror.org/utils/${name}.tar.bz2";
-    sha256 = "1vssljbdzf0psqhhd7w9m9mzb0sl2kgx9fagkja25sqw6ivwsxkg";
+    sha256 = "1sjjngnq50jv5ilwsb4zys6smifni3bd6fn28gbnhfrg14wsrgq2";
   };
 
   buildInputs = [ alsaLib ncurses libsamplerate ];
@@ -15,12 +15,6 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
 
   installFlags = "ASOUND_STATE_DIR=$(TMPDIR)/dummy";
-
-  preConfigure =
-    ''
-      # Ensure that ‘90-alsa-restore.rules.in’ gets rebuilt.
-      rm alsactl/90-alsa-restore.rules
-    '';
 
   meta = {
     homepage = http://www.alsa-project.org/;
