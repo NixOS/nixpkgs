@@ -1,6 +1,6 @@
 { fetchurl, stdenv, m4, glibc, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite, webkit
 , pkgconfig, gnome3, gst_all_1, which, udev, libraw, glib, json_glib, gettext, desktop_file_utils
-, lcms2, gdk_pixbuf, librsvg, makeWrapper }:
+, lcms2, gdk_pixbuf, librsvg, makeWrapper, gnome_doc_utils }:
 
 # for dependencies see http://www.yorba.org/projects/shotwell/install/
 
@@ -18,12 +18,12 @@ let
     buildInputs = [ pkgconfig glib libsoup ];
   };
 in stdenv.mkDerivation rec {
-  version = "0.15.1";
+  version = "0.18.0";
   name = "shotwell-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/shotwell/0.15/${name}.tar.xz";
-    sha256 = "12qbqba226q9wb0m31xx8w0m968sr1n18qa4mbz75wblhwws0j7b";
+    url = "mirror://gnome/sources/shotwell/0.18/${name}.tar.xz";
+    sha256 = "0cq0zs13f3f4xyz46yvj4qfpm5nh4ypds7r53pkqm4a3n8ybf5v7";
   };
 
   NIX_CFLAGS_COMPILE = "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
@@ -37,14 +37,14 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram "$out/bin/shotwell" \
      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-     --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:$out/share"
+     --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gsettings_desktop_schemas}/share:${gtk3}/share:$out/share"
   '';
 
 
   buildInputs = [ m4 glibc gtk3 libexif libgphoto2 libsoup libxml2 vala sqlite webkit pkgconfig
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee which udev gnome3.gexiv2
                   libraw rest json_glib gettext desktop_file_utils glib lcms2 gdk_pixbuf librsvg
-                  makeWrapper ];
+                  makeWrapper gnome_doc_utils ];
 
   meta = with stdenv.lib; {
     description = "Popular photo organizer for the GNOME desktop";
