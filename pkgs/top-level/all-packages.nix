@@ -6767,9 +6767,6 @@ let
 
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches =
-      [ kernelPatches.sec_perm_2_6_24
-      ];
   };
 
   grsecurityOverrider = args: {
@@ -6817,9 +6814,7 @@ let
 
   linux_3_4 = makeOverridable (import ../os-specific/linux/kernel/linux-3.4.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches =
-      [ kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
+    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
       ];
@@ -6839,10 +6834,7 @@ let
 
   linux_3_10 = makeOverridable (import ../os-specific/linux/kernel/linux-3.10.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches =
-      [
-        kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
+    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -6860,10 +6852,7 @@ let
 
   linux_3_11 = makeOverridable (import ../os-specific/linux/kernel/linux-3.11.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches =
-      [
-        kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
+    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -6872,10 +6861,7 @@ let
 
   linux_3_12 = makeOverridable (import ../os-specific/linux/kernel/linux-3.12.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches =
-      [
-        kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
+    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -6884,10 +6870,7 @@ let
 
   linux_3_13 = makeOverridable (import ../os-specific/linux/kernel/linux-3.13.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches =
-      [
-        kernelPatches.sec_perm_2_6_24
-      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
+    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32

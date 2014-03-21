@@ -44,12 +44,6 @@ rec {
     features.apparmor = true;
   };
 
-  sec_perm_2_6_24 =
-    { name = "sec_perm-2.6.24";
-      patch = ./sec_perm-2.6.24.patch;
-      features.secPermPatch = true;
-    };
-
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
