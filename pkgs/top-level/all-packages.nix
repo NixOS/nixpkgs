@@ -9215,10 +9215,7 @@ let
     graphicsSupport = false;
   };
 
-  weechat = callPackage ../applications/networking/irc/weechat {
-    # weechat doesn't exit with gnutls32. Use 3.1 for now.
-    gnutls = gnutls31;
-  };
+  weechat = callPackage ../applications/networking/irc/weechat { };
 
   weston = callPackage ../applications/window-managers/weston { };
 
