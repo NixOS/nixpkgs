@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   name = "rabbitmq-server-${version}";
 
-  version = "3.2.1";
+  version = "3.2.4";
 
   src = fetchurl {
     url = "http://www.rabbitmq.com/releases/rabbitmq-server/v${version}/${name}.tar.gz";
-    sha256 = "0j9yx64sdgkv0h20zjs65aa2ag6wwv50i6hd3x69m0cc6shzcc0f";
+    sha256 = "17rvqhzcb7rscp228vmgixk0rsqi42m820jzxj9g5wid6qmzjc59";
   };
 
   buildInputs =

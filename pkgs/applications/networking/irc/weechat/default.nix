@@ -17,6 +17,13 @@ stdenv.mkDerivation rec {
       cacert cmake
     ];
 
+  # This patch is based on
+  # weechat/c324610226cef15ecfb1235113c8243b068084c8. It fixes
+  # freeze/crash on /exit when using nixpkgs' gnutls 3.2. The next
+  # weechat release (0.4.4) will include this, so it's safe to remove
+  # then.
+  patches = [ ./fix-gnutls-32.diff ];
+
   postInstall = ''
        wrapProgram "$out/bin/weechat" \
          --prefix PYTHONPATH : "$PYTHONPATH" \

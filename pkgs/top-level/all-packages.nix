@@ -3237,6 +3237,7 @@ let
     suitesparse = null;
     openjdk = null;
     gnuplot = null;
+    readline = readline63;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     fltk = fltk13;
@@ -3857,6 +3858,7 @@ let
 
   gdb = callPackage ../development/tools/misc/gdb {
     hurd = gnu.hurdCross;
+    readline = readline63;
     inherit (gnu) mig;
   };
 
@@ -6767,6 +6769,7 @@ let
 
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
     inherit fetchurl stdenv perl buildLinux;
+    kernelPatches = [];
   };
 
   grsecurityOverrider = args: {
@@ -9213,10 +9216,7 @@ let
     graphicsSupport = false;
   };
 
-  weechat = callPackage ../applications/networking/irc/weechat {
-    # weechat doesn't exit with gnutls32. Use 3.1 for now.
-    gnutls = gnutls31;
-  };
+  weechat = callPackage ../applications/networking/irc/weechat { };
 
   weston = callPackage ../applications/window-managers/weston { };
 
