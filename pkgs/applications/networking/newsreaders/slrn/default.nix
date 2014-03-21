@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgs
-, slang
+{ stdenv, fetchurl, pkgs,
+slang, ncurses
 }:
 
 let version = "1.0.1"; in
@@ -12,7 +12,16 @@ stdenv.mkDerivation {
     sha256 = "1rmaprfwvshzkv0c5vi43839cz3laqjpl306b9z0ghwyjdha1d06";
   };
 
-  nativeBuildInputs = [ slang ];
+  preConfigure = ''
+    sed -i -e "s|-ltermcap|-lncurses|" configure
+    sed -i autoconf/Makefile.in src/Makefile.in \
+      -e "s|/bin/cp|cp|"  \
+      -e "s|/bin/rm|rm|"
+  '';
+
+  configureFlags = "--with-slang=${slang}";
+
+  buildInputs = [ slang ncurses ];
 
   meta = {
     description = "The slrn (S-Lang read news) newsreader";
