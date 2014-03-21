@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     hspec mtl QuickCheck resourcet text transformers void
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Streaming data processing library";
