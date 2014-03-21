@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "chunked-data";
-  version = "0.1.0.0";
-  sha256 = "1wdgvhf170rv557dwsiqy6nhys965xhs6w24ays273fv8hn3yk9l";
+  version = "0.1.0.1";
+  sha256 = "0kdq79mxi9nhy3dqw283f5ffx4rxwfrdq9cfw46ql5wmqrg2qw7r";
   buildDepends = [
     blazeBuilder monoTraversable semigroups systemFilepath text
     transformers vector
