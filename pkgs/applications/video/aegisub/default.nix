@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
               # The Aegisub sources are itself BSD/ISC, 
               # but they are linked against GPL'd softwares
               # - so the resulting program will be GPL
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
     platforms = stdenv.lib.platforms.linux;
 
   };

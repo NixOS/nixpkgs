@@ -32,7 +32,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.megalith.co.uk/8086tiny/index.html;
     license = stdenv.lib.licenses.mit;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
+
+# TODO: add support for a locally made BIOS

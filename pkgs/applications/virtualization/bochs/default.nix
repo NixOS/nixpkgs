@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://bochs.sourceforge.net/;
     license = stdenv.lib.licenses.lgpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

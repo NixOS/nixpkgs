@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://mpv.io";
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
