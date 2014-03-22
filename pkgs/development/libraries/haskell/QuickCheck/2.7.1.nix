@@ -6,6 +6,9 @@ cabal.mkDerivation (self: {
   sha256 = "1hk19q7lfvja7g626hbbq0xs30zsgjpqfalgmdr24fy8sgdchm21";
   buildDepends = [ random tfRandom ];
   testDepends = [ testFramework ];
+  patchPhase = ''
+    sed -i -e 's|QuickCheck == .*,|QuickCheck,|' QuickCheck.cabal
+  '';
   meta = {
     homepage = "http://code.haskell.org/QuickCheck";
     description = "Automatic testing of Haskell programs";
