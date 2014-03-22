@@ -10512,7 +10512,7 @@ let
     desktopName = "Vimb";
   };
 
-  # VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
+  VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
 
   # Wine cannot be built in 64-bit; use a 32-bit build instead.
   wineStable = callPackage_i686 ../misc/emulators/wine/stable.nix {
