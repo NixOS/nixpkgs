@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
   noHaddock = true;
+  preConfigure = "find . -type f -exec touch {} +";
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell C++ wrapper";
