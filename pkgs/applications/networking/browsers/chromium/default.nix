@@ -1,4 +1,4 @@
-{ newScope
+{ newScope, stdenv, makeWrapper
 
 # package customization
 , channel ? "stable"
@@ -30,9 +30,26 @@ let
               pulseSupport;
     };
 
+    sandbox = callPackage ./sandbox.nix { };
+
     plugins = callPackage ./plugins.nix {
       inherit enablePepperFlash enablePepperPDF;
     };
   };
 
-in chromium.browser
+in stdenv.mkDerivation {
+  name = "chromium-${channel}-${chromium.source.version}";
+
+  buildInputs = [ makeWrapper ];
+
+  buildCommand = let
+    browserBinary = "${chromium.browser}/libexec/chromium/chromium";
+    sandboxBinary = "${chromium.sandbox}/bin/chromium-sandbox";
+  in ''
+    ensureDir "$out/bin"
+    ln -s "${chromium.browser}/share" "$out/share"
+    makeWrapper "${browserBinary}" "$out/bin/chromium" \
+      --set CHROMIUM_SANDBOX_BINARY_PATH "${sandboxBinary}" \
+      --add-flags "${chromium.plugins.flagsEnabled}"
+  '';
+}

@@ -1,8 +1,8 @@
-{ stdenv, src, binary }:
+{ stdenv, source }:
 
 stdenv.mkDerivation {
-  name = "chromium-sandbox-${src.version}";
-  inherit src;
+  name = "chromium-sandbox-${source.version}";
+  src = source.sandbox;
 
   patchPhase = ''
     sed -i -e '/#include.*base_export/c \
@@ -15,6 +15,6 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    install -svD sandbox "$out/bin/${binary}"
+    install -svD sandbox "$out/bin/chromium-sandbox"
   '';
 }

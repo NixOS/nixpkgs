@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, ninja, which
+{ stdenv, fetchurl, ninja, which
 
 # default dependencies
 , bzip2, flac, speex, icu, libopus
@@ -81,26 +81,19 @@ let
     libusb1 libexif
   ];
 
-  sandbox = import ./sandbox.nix {
-    inherit stdenv;
-    src = source.sandbox;
-    binary = "${packageName}_sandbox";
-  };
-
   # build paths and release info
   packageName = "chromium";
   buildType = "Release";
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
-  sandboxPath = "${sandbox}/bin/${packageName}_sandbox";
 
 in stdenv.mkDerivation rec {
-  name = "${packageName}-${source.version}";
+  name = "${packageName}-browser-${source.version}";
   inherit packageName;
   src = source;
 
   buildInputs = defaultDependencies ++ [
-    which makeWrapper
+    which
     python perl pkgconfig
     nspr udev
     (if useOpenSSL then openssl else nss)
@@ -228,8 +221,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i -e '/base::FilePath exe_dir/,/^ *} *$/c \
-      sandbox_binary = \
-        base::FilePath("'"${sandboxPath}"'");
+      sandbox_binary = base::FilePath(getenv("CHROMIUM_SANDBOX_BINARY_PATH"));
     ' content/browser/browser_main_loop.cc
   '';
 
@@ -245,7 +237,6 @@ in stdenv.mkDerivation rec {
     use_openssl = useOpenSSL;
     selinux = enableSELinux;
     use_cups = cupsSupport;
-    linux_sandbox_path="${sandboxPath}";
     linux_sandbox_chrome_path="${libExecPath}/${packageName}";
     werror = "";
 
@@ -281,7 +272,7 @@ in stdenv.mkDerivation rec {
     LINK_host="${CXX}"             \
       "${ninja}/bin/ninja" -C "${buildPath}"  \
         -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
-        chrome ${optionalString (!enableSELinux) "chrome_sandbox"}
+        chrome
   '';
 
   installPhase = ''
@@ -294,10 +285,6 @@ in stdenv.mkDerivation rec {
     cp -v ${buildPath}/libffmpegsumo.so "${libExecPath}/"
 
     cp -v "${buildPath}/chrome" "${libExecPath}/${packageName}"
-
-    mkdir -vp "$out/bin"
-    makeWrapper "${libExecPath}/${packageName}" "$out/bin/${packageName}" \
-      --add-flags "${plugins.flagsEnabled}"
 
     mkdir -vp "$out/share/man/man1"
     cp -v "${buildPath}/chrome.1" "$out/share/man/man1/${packageName}.1"
@@ -312,10 +299,6 @@ in stdenv.mkDerivation rec {
       cp -v "$icon_file" "$logo_output_path/${packageName}.png"
     done
   '';
-
-  passthru = {
-    inherit sandbox;
-  };
 
   meta = {
     description = "An open source web browser from Google";
