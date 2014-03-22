@@ -117,14 +117,113 @@ in stdenv.mkDerivation rec {
     ++ optional cupsSupport libgcrypt
     ++ optional pulseSupport pulseaudio;
 
-  prePatch = ''
-    # XXX: Figure out a way how to split these properly.
-    #cpflags="-dsr --no-preserve=mode"
-    cpflags="-dr"
-    cp $cpflags "${source.main}"/* .
-    cp $cpflags "${source.bundled}" third_party
-    cp $cpflags "${source.sandbox}" sandbox
-    chmod -R u+w . # XXX!
+  prePatch = let
+    lntree = [ "cp" "-dsr" "--no-preserve=mode" ];
+    lntreeList = concatStringsSep ", " (map (arg: "'${arg}'") lntree);
+    lntreeSh = concatStringsSep " " lntree;
+  in ''
+    ${lntreeSh} "${source.main}"/* .
+    ${lntreeSh} "${source.sandbox}" sandbox
+
+    ensureDir third_party
+
+    # ONLY the dependencies we can't use from nixpkgs!
+    for bundled in ${concatStringsSep " " [
+      # This is in preparation of splitting up the bundled sources into separate
+      # derivations so we some day can tremendously reduce build time.
+      "adobe"
+      "angle"
+      "cacheinvalidation"
+      "cld_2"
+      "codesighs"
+      "cros_dbus_cplusplus"
+      "cros_system_api"
+      "flot"
+      "freetype2"
+      "hunspell"
+      "iccjpeg"
+      "jinja2"
+      "JSON"
+      "jstemplate"
+      "khronos"
+      "leveldatabase"
+      "libaddressinput"
+      "libjingle"
+      "libmtp"
+      "libphonenumber"
+      "libsrtp"
+      "libXNVCtrl"
+      "libyuv"
+      "lss"
+      "lzma_sdk"
+      "markupsafe"
+      "mesa"
+      "modp_b64"
+      "mt19937ar"
+      "mtpd"
+      "npapi"
+      "ots"
+      "ply"
+      "protobuf"
+      "qcms"
+      "readability"
+      "safe_browsing"
+      "sfntly"
+      "skia"
+      "smhasher"
+      "speech-dispatcher"
+      "tcmalloc"
+      "trace-viewer"
+      "undoview"
+      "usb_ids"
+      "usrsctp"
+      "WebKit"
+      "webrtc"
+      "widevine"
+      "x86inc"
+      "yasm"
+    ]}; do
+      echo -n "Linking ${source.bundled}/$bundled to third_party/..." >&2
+      ${lntreeSh} "${source.bundled}/$bundled" third_party/
+      echo " done." >&2
+    done
+
+    # Everything else is decided based on gypFlags.
+    PYTHONPATH="build/linux/unbundle:$PYTHONPATH" python <<PYTHON
+    import os, sys, subprocess
+    from replace_gyp_files import REPLACEMENTS
+    for flag, path in REPLACEMENTS.items():
+      if path.startswith("v8/"):
+        continue
+      if "-D{0}=1".format(flag) in os.environ.get('gypFlags'):
+        target = os.path.join("build/linux/unbundle", os.path.basename(path))
+        dest = path
+      else:
+        target_base = os.path.basename(os.path.dirname(path))
+        target = os.path.join("${source.bundled}", target_base)
+        dest = os.path.join("third_party", target_base)
+      try:
+        os.makedirs(os.path.dirname(dest))
+      except:
+        pass
+      sys.stderr.write("Linking {0} to {1}...".format(target, dest))
+      subprocess.check_call([${lntreeList}, os.path.abspath(target), dest])
+      sys.stderr.write(" done.\n")
+    PYTHON
+
+    # Auxilliary files needed in unbundled trees
+    ${lntreeSh} "${source.bundled}/libxml/chromium" third_party/libxml/chromium
+    ${lntreeSh} "${source.bundled}/zlib/google" third_party/zlib/google
+
+    find -iname '*.gyp*' \( -type f -o -type l \) \
+      -exec sed -i -e 's|<(DEPTH)|'"$(pwd)"'|g' {} +
+
+    # XXX: Really ugly workaround to fix improper symlink dereference.
+    sed -i -e '/args\['"'"'name'"'"'\] *= *parts\[0\]$/ {
+      s|$|.split("-bundled/WebKit/Source/", 1)[1] |;
+      s|$|if parts[0].startswith("../") else parts[0]|;
+    }' third_party/WebKit/Source/build/scripts/in_file.py \
+       third_party/WebKit/Source/build/scripts/make_event_factory.py
   '';
 
   postPatch = ''
@@ -170,7 +269,6 @@ in stdenv.mkDerivation rec {
   });
 
   configurePhase = ''
-    python build/linux/unbundle/replace_gyp_files.py ${gypFlags}
     python build/gyp_chromium -f ninja --depth "$(pwd)" ${gypFlags}
   '';
 
