@@ -56,7 +56,8 @@ stdenv.mkDerivation rec {
     Bochs is an open-source (LGPL), highly portable IA-32 PC emulator, written in C++, that runs on most popular platforms. It includes emulation of the Intel x86 CPU, common I/O devices, and a custom BIOS.
     '';
     homepage = http://bochs.sourceforge.net/;
-    license = "LGPL";
+    license = stdenv.lib.licenses.lgpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

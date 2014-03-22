@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
     8086tiny is based on an IOCCC 2013 winning entry. In fact that is the "unobfuscated" version :)
     '';
     homepage = http://www.megalith.co.uk/8086tiny/index.html;
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
+    maintainers = [ maintainers.AndersonTorres ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

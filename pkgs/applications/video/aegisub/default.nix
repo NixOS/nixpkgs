@@ -53,7 +53,12 @@ stdenv.mkDerivation rec {
       built-in real-time video preview.
     '';
     homepage = http://www.aegisub.org/;
-    license = "BSD"; # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd softwares
+    license = stdenv.lib.licenses.bsd3; 
+              # The Aegisub sources are itself BSD/ISC, 
+              # but they are linked against GPL'd softwares
+              # - so the resulting program will be GPL
+    maintainers = [ maintainers.AndersonTorres ];
     platforms = stdenv.lib.platforms.linux;
+
   };
 }
