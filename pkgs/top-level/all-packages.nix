@@ -1633,6 +1633,7 @@ let
   pitivi = callPackage ../applications/video/pitivi {
     gst = gst_all_1;
     clutter-gtk = clutter_gtk;
+    inherit (gnome3) gnome_icon_theme gnome_icon_theme_symbolic;
   };
 
   hurdPartedCross =

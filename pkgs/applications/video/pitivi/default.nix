@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, makeWrapper
 , pythonPackages, gst, clutter-gst, clutter-gtk
 , gobjectIntrospection, clutter, gtk3, librsvg
+, gnome_icon_theme, gnome_icon_theme_symbolic
 }:
 
 let
@@ -43,10 +44,15 @@ in stdenv.mkDerivation rec {
       gstreamer gst-editing-services
       clutter-gst clutter-gtk clutter gtk3
     ];
+
+    xdgDataDirs = makeSearchPath "share" [
+      gtk3 gnome_icon_theme gnome_icon_theme_symbolic
+    ];
   in ''
     wrapProgram "$out/bin/pitivi" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix LD_LIBRARY_PATH : "${libraryPath}" \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
+      --prefix XDG_DATA_DIRS : "\$XDG_ICON_DIRS:${xdgDataDirs}:$out/share"
   '';
 }
