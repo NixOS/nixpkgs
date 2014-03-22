@@ -1620,6 +1620,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
 
+  libsystemdJournal = callPackage ../development/libraries/haskell/libsystemd-journal {
+    systemd-journal = pkgs.systemd;
+  };
+
   libxmlSax = callPackage ../development/libraries/haskell/libxml-sax {};
 
   liftedAsync = callPackage ../development/libraries/haskell/lifted-async {};
