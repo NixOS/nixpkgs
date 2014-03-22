@@ -2,11 +2,12 @@
 , gettext, libiconvOrEmpty, makeWrapper, perl }:
 
 stdenv.mkDerivation rec {
-  name = "newsbeuter-dev-20131118";
+  name = "newsbeuter-dev-20140309";
 
   src = fetchgit {
     url = "https://github.com/akrennmair/newsbeuter.git";
-    rev = "18b73f7d44a99a698d4878fe7d226f55842132c2";
+    rev = "1427bdb0705806368db39576a9b803df82fa0415";
+    sha256 = "b29a304a46bf56b439d0d35ea586f7fd0fbf1a5565dca95de76e774885d8b64b";
   };
 
   buildInputs
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
       ++ stdenv.lib.optional stdenv.isDarwin makeWrapper;
 
   preBuild = ''
-    sed -i -e 104,108d config.sh
+    sed -i -e 110,114d config.sh
     sed -i "1 s%^.*$%#!${perl}/bin/perl%" txt2h.pl
     export LDFLAGS=-lncursesw
   '';
