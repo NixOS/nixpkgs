@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs,
+{ stdenv, fetchurl,
 slang, ncurses
 }:
 
@@ -26,6 +26,6 @@ stdenv.mkDerivation {
   meta = {
     description = "The slrn (S-Lang read news) newsreader";
     homepage = http://slrn.sourceforge.net/index.html;
-    license = pkgs.lib.licenses.gpl2;
+    license = stdenv.lib.licenses.gpl2;
   };
 }
