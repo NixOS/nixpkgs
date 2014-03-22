@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "QuickCheck";
-  version = "2.7";
-  sha256 = "0l7qijcwbf81wdizsv7qzmm73dsjbldm2sx305cqs6bmnynbl508";
+  version = "2.7.1";
+  sha256 = "1hk19q7lfvja7g626hbbq0xs30zsgjpqfalgmdr24fy8sgdchm21";
   buildDepends = [ random tfRandom ];
   testDepends = [ testFramework ];
   meta = {
