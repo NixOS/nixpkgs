@@ -121,7 +121,7 @@ in stdenv.mkDerivation rec {
     ensureDir third_party
 
     # ONLY the dependencies we can't use from nixpkgs!
-    for bundled in ${concatStringsSep " " [
+    for bundled in ${concatStringsSep " " ([
       # This is in preparation of splitting up the bundled sources into separate
       # derivations so we some day can tremendously reduce build time.
       "adobe"
@@ -175,7 +175,12 @@ in stdenv.mkDerivation rec {
       "widevine"
       "x86inc"
       "yasm"
-    ]}; do
+    ] ++ optionals (!versionOlder source.version "34.0.0.0") [
+      "brotli"
+      "libwebm"
+      "nss.isolate"
+      "polymer"
+    ])}; do
       echo -n "Linking ${source.bundled}/$bundled to third_party/..." >&2
       ${lntreeSh} "${source.bundled}/$bundled" third_party/
       echo " done." >&2
