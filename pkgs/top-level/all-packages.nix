@@ -7078,7 +7078,8 @@ let
 
     psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
 
-    spl = callPackage ../os-specific/linux/spl/default.nix { };
+    spl = callPackage ../os-specific/linux/spl { };
+    spl_git = callPackage ../os-specific/linux/spl/git.nix { };
 
     sysdig = callPackage ../os-specific/linux/sysdig {};
 
@@ -7094,7 +7095,8 @@ let
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
-    zfs = callPackage ../os-specific/linux/zfs/default.nix { };
+    zfs = callPackage ../os-specific/linux/zfs { };
+    zfs_git = callPackage ../os-specific/linux/zfs/git.nix { };
   };
 
   # Build the kernel modules for the some of the kernels.
