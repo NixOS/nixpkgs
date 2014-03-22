@@ -2906,7 +2906,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   };
   cabalInstall = self.cabalInstall_1_18_0_3;
 
-  gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {};
+  gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {
+    hS3 = self.hS3.override { Crypto = self.Crypto.override { QuickCheck = self.QuickCheck_2_7; }; };
+  };
 
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
 
