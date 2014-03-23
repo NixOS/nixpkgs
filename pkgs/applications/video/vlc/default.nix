@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     [ "--enable-alsa"
       "--with-kde-solid=$out/share/apps/solid/actions"
       "--enable-dc1394"
+      "--enable-ncurses"
     ];
 
   preConfigure = ''sed -e "s@/bin/echo@echo@g" -i configure'';
