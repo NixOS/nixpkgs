@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/psmisc/${name}.tar.gz";
-    sha256 = "1p13s2323mi2868y4fzy3q2kkmv4fn1ggabqnjf202x4030vjj1q";
+    sha256 = "0nhlm1vrrwn4a845p6y4nnnb4liq70n74zbdd5dq844jc6nkqclp";
   };
 
   buildInputs = [ncurses];
