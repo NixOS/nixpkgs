@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, json_glib, curl }:
+{ stdenv, makeWrapper, fetchurl, pkgconfig, intltool, gtk3, json_glib, curl }:
 
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "1jbh2pm4i740cmzqd2r7zxnqqipvv2v2ndmnmk53nqrxcbgc4nlz";
   };
 
-  buildInputs = [ pkgconfig intltool gtk3 json_glib curl ];
+  buildInputs = [ makeWrapper pkgconfig intltool gtk3 json_glib curl ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/transmission-remote-gtk" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share"
+  '';
 
   meta = {
    description = "GTK remote control for the Transmission BitTorrent client";
