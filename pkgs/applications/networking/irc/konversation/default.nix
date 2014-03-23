@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Integrated IRC client for KDE";
+    repositories.git = git://anongit.kde.org/konversation;
     license = "GPL";
     inherit (kdelibs.meta) maintainers platforms;
   };

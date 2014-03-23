@@ -6,6 +6,26 @@ let
 
   cfg = config.services.solr;
 
+  # Assemble all jars needed for solr
+  solrJars = pkgs.stdenv.mkDerivation {
+    name = "solr-jars";
+
+    src = pkgs.fetchurl {
+      url = http://archive.apache.org/dist/tomcat/tomcat-5/v5.5.36/bin/apache-tomcat-5.5.36.tar.gz;
+      sha256 = "01mzvh53wrs1p2ym765jwd00gl6kn8f9k3nhdrnhdqr8dhimfb2p";
+    };
+
+    buildPhases = [ "unpackPhase" "installPhase" ];
+
+    installPhase = ''
+      mkdir -p $out/lib
+      cp common/lib/*.jar $out/lib/
+      ln -s ${pkgs.ant}/lib/ant/lib/ant.jar $out/lib/
+      ln -s ${cfg.solrPackage}/lib/ext/* $out/lib/
+      ln -s ${pkgs.openjdk}/lib/openjdk/lib/tools.jar $out/lib/
+    '';
+  };
+
 in {
 
   options = {
@@ -101,7 +121,8 @@ in {
       inherit (cfg) user group javaPackage;
       warFile = "${cfg.solrPackage}/lib/solr.war";
       extraOptions = [
-        "--commonLibFolder=${cfg.solrPackage}/lib/ext"
+        "--commonLibFolder=${solrJars}/lib"
+        "--useJasper"
       ] ++ cfg.extraWinstoneOptions;
       extraJavaOptions = [
         "-Dsolr.solr.home=${cfg.solrHome}"

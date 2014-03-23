@@ -1,9 +1,10 @@
-{ cabal, Cabal, QuickCheck }:
+{ cabal, Cabal, deepseq, QuickCheck }:
 
 cabal.mkDerivation (self: {
   pname = "dlist";
-  version = "0.6.0.1";
-  sha256 = "08q8dsczh59a0ii3nqk6yqz70msd0pndjjcg9dzq8iyknbbqbi45";
+  version = "0.7";
+  sha256 = "1abbym3afm77xkgcrv3d9nl4wn69m7m3gxahdcvkg1ir1sm2pkyi";
+  buildDepends = [ deepseq ];
   testDepends = [ Cabal QuickCheck ];
   meta = {
     homepage = "https://github.com/spl/dlist";

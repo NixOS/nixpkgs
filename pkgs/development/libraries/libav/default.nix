@@ -26,8 +26,8 @@ with { inherit (stdenv.lib) optional optionals; };
 
 let
   result = {
-    libav_9   = libavFun  "9.11"  "1ad7vyxp0w8dw6ngc16fz0ngsjlgk6h8bpphghqia5sqkbl10ca3";
-    libav_0_8 = libavFun "0.8.10" "0sxmj4qsd3ljygvdjz7ly46nf7sqmaqka4hx65b1jdji12al1djc";
+    libav_9   = libavFun  "9.12"  "1wm0nf12c1p138y54jh71mvbpikrpk43zc9m2qhpjm9pgnagizk0";
+    libav_0_8 = libavFun "0.8.11" "0nhm0mzz2aj78sgmw9xf20a1mlgig78cv1nyhx4zrq7nvgqf8d2r";
   };
 
   libavFun = version : sha256 : stdenv.mkDerivation rec {

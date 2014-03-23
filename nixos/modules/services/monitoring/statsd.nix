@@ -64,13 +64,13 @@ in
 
     graphiteHost = mkOption {
       description = "Hostname or IP of Graphite server";
-      default = "127.0.0.1";
+      default = config.services.graphite.web.host;
       type = types.str;
     };
 
     graphitePort = mkOption {
       description = "Port of Graphite server";
-      default = 2003;
+      default = config.services.graphite.web.port;
       type = types.uniq types.int;
     };
 

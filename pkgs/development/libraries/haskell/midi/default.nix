@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "midi";
-  version = "0.2.1";
-  sha256 = "0i767y0835979s9i3wm8qwzh2awhhmfvhc5zvq2lkn8xlsp3wa6y";
+  version = "0.2.1.1";
+  sha256 = "11h4kr9a1jia1ghcyzgavcznw4771l00z736iibjpagw0b8fpip5";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

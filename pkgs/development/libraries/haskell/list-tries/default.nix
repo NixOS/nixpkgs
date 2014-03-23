@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "list-tries";
-  version = "0.5.1";
-  sha256 = "15lbq41rikj5vm9gfgjxz98pamnib4dcs48fr2vm9r3s3fikd2kz";
+  version = "0.5.2";
+  sha256 = "0lfl35i1k3nnv8q6bhwq4sr197fylin2hmxa4b96kfcc22xfzwy6";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ binary dlist ];

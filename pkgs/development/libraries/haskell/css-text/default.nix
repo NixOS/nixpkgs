@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "css-text";
-  version = "0.1.2.0.1";
-  sha256 = "0j8d9kfs9j01gqlapaahyziphkx0f55g9bbz2wwix1si7954xxhp";
+  version = "0.1.2.1";
+  sha256 = "1xi1n2f0g8y43p95lynhcg50wxbq7hqfzbfzm7fy8mn7gvd920nw";
   buildDepends = [ attoparsec text ];
   testDepends = [ attoparsec hspec QuickCheck text ];
   meta = {

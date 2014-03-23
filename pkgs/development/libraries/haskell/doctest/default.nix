@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "doctest";
-  version = "0.9.10.1";
-  sha256 = "1kl6bihhyj08ifij7ddpy6067s1lv2lnnp4an9wany3fzwlifbyi";
+  version = "0.9.10.2";
+  sha256 = "1vrhfbw59vfypylkr2ica2wx1vm62r40s4165syy76r8cyy0i554";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ deepseq filepath ghcPaths syb transformers ];

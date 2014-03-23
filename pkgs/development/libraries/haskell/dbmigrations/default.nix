@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     configurator fgl filepath HDBC HDBCPostgresql HDBCSqlite3 HUnit mtl
     random text time yamlLight
   ];
+  jailbreak = true;
   meta = {
     description = "An implementation of relational database \"migrations\"";
     license = self.stdenv.lib.licenses.bsd3;

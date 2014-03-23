@@ -5,6 +5,7 @@
 python3Packages.buildPythonPackage rec {
   name = "kazam-${version}";
   version = "1.4.3";
+  namePrefix = "";
 
   src = fetchurl {
     url = "https://launchpad.net/kazam/stable/${version}/+download/kazam-${version}.tar.gz";

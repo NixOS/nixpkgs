@@ -1,15 +1,13 @@
-{ cabal, parsec, strict, time }:
+{ cabal, filepath, parsec, strict, time }:
 
 cabal.mkDerivation (self: {
   pname = "wxdirect";
-  version = "0.90.0.1";
-  sha256 = "04jslgxw601g6wh8f2wrdnipzh6x0487kfxb89fkgfgjhxrkfyr3";
+  version = "0.90.1.0";
+  sha256 = "06r8z4css7md35rcbi805407dcabcrb1knif9f7445aphwzgadr0";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ parsec strict time ];
-  patchPhase = ''
-    sed -i -e 's|containers >=.*|containers|' wxdirect.cabal
-  '';
+  buildDepends = [ filepath parsec strict time ];
+  preConfigure = "find . -type f -exec touch {} +";
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "helper tool for building wxHaskell";

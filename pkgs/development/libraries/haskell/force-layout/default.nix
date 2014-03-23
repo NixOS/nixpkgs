@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "force-layout";
-  version = "0.3.0.2";
-  sha256 = "0zrvsrqwl0wjv38l6zl1pa09572njdbcfbvimhpp930629zk4yb7";
+  version = "0.3.0.3";
+  sha256 = "0xix9syfiya5wx0iwzs7sp3ksqyp15vjlpir71x8md8v0hkrnh5a";
   buildDepends = [
     dataDefaultClass lens vectorSpace vectorSpacePoints
   ];

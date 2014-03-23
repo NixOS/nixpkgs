@@ -137,5 +137,8 @@
   },
   { "name": "xlrd",
     "doCheck": false
+  },
+  { "name": "suds",
+    "doCheck": false
   }
 ]

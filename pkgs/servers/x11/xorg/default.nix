@@ -1569,6 +1569,16 @@ let
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
+  xf86videomodesetting = (stdenv.mkDerivation ((if overrides ? xf86videomodesetting then overrides.xf86videomodesetting else x: x) {
+    name = "xf86-video-modesetting-0.8.1";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-modesetting-0.8.1.tar.bz2;
+      sha256 = "1jhjhgji6169sj7489qahcnmi8cf7y22wvj8qsmrg537rgbxia1v";
+    };
+    buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto libX11 xextproto xorgserver xproto ];
+  })) // {inherit fontsproto libdrm udev libpciaccess randrproto libX11 xextproto xorgserver xproto ;};
+
   xf86videoneomagic = (stdenv.mkDerivation ((if overrides ? xf86videoneomagic then overrides.xf86videoneomagic else x: x) {
     name = "xf86-video-neomagic-1.2.8";
     builder = ./builder.sh;

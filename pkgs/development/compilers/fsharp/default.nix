@@ -1,18 +1,30 @@
-{ stdenv, fetchurl, mono, unzip, pkgconfig
- } :
-stdenv.mkDerivation rec {
-  pname = "fsharp";
-  date = "2011-08-10";
-  name = "${pname}-${date}";
+{ stdenv, fetchgit, mono, pkgconfig, autoconf, automake, which }:
 
-  src = fetchurl {
-    url = "http://download.mono-project.com/sources/fsharp/fsharp-cc126f2.zip";
-    sha256 = "03j2ypnfddl2zpvg8ivhafjy8dlz49b38rdy89l8c3irxdsb7k6i";
+stdenv.mkDerivation rec {
+  name = "fsharp-${version}";
+  version = "3.1";
+
+  src = fetchgit {
+    url = "https://github.com/fsharp/fsharp";
+    rev = "refs/heads/fsharp_31";
+    sha256 = "0d41ae31c57ec9ac8a4ea149b615ae085f3774b8877d8e53ddbf68856c32eda0";
   };
 
-  buildInputs = [mono unzip pkgconfig];
+  buildInputs = [ mono pkgconfig autoconf automake which ];
+  configurePhase = ''
+    substituteInPlace ./autogen.sh "/usr/bin/env sh" "/bin/sh"
+    ./autogen.sh --prefix $out
+  '';
 
-  sourceRoot = "fsharp";
+  # Make sure the executables use the right mono binary,
+  # and set up some symlinks for backwards compatibility.
+  postInstall = ''
+    substituteInPlace $out/bin/fsharpc --replace " mono " " ${mono}/bin/mono "
+    substituteInPlace $out/bin/fsharpi --replace " mono " " ${mono}/bin/mono "
+    substituteInPlace $out/bin/fsharpiAnyCpu --replace " mono " " ${mono}/bin/mono "
+    ln -s $out/bin/fsharpc $out/bin/fsc
+    ln -s $out/bin/fsharpi $out/bin/fsi
+  '';
 
   # To fix this error when running:
   # The file "/nix/store/path/whatever.exe" is an not a valid CIL image
@@ -20,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A functional CLI language";
-    homepage = "http://tryfsharp.org/";
+    homepage = "http://fsharp.org/";
     license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.raskin ];
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

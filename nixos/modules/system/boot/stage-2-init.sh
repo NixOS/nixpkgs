@@ -131,13 +131,12 @@ if ! mountpoint -q /run; then
     mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
 fi
 
-# Create a ramfs on /run/keys to hold secrets that shouldn't
-# be written to disk (generally used for nixops, harmless
-# elsehwere)
+# Create a ramfs on /run/keys to hold secrets that shouldn't be
+# written to disk (generally used for NixOps, harmless elsewhere).
 if ! mountpoint -q /run/keys; then
     rm -rf /run/keys
     mkdir -m 0750 /run/keys
-    chown root:keys /run/keys
+    chown 0:96 /run/keys
     mount -t ramfs none /run/keys
 fi
 
@@ -160,6 +159,12 @@ fi
 # not have to be done at boot time.
 echo "running activation script..."
 $systemConfig/activate
+
+
+# Restore the system time from the hardware clock.  We do this after
+# running the activation script to be sure that /etc/localtime points
+# at the current time zone.
+hwclock --hctosys
 
 
 # Record the boot configuration.

@@ -1,10 +1,10 @@
-{ cabal, primitive, text, vector }:
+{ cabal, primitive, text, transformers, vector }:
 
 cabal.mkDerivation (self: {
   pname = "foldl";
-  version = "1.0.2";
-  sha256 = "11cqmw102m2bskaknl8qr7hwyn94hfv2ind5fgvjw4hwgllr8v84";
-  buildDepends = [ primitive text vector ];
+  version = "1.0.3";
+  sha256 = "0jl50bh7k8wp0nz0s0sb2zwh92yrgsm2l6szib41g7zq34mwamn9";
+  buildDepends = [ primitive text transformers vector ];
   meta = {
     description = "Composable, streaming, and efficient left folds";
     license = self.stdenv.lib.licenses.bsd3;

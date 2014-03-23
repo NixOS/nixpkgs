@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation {
-  name = "procps-ng-3.3.9";
+  name = "procps-3.3.9";
 
   src = fetchurl {
     url = mirror://sourceforge/procps-ng/procps-ng-3.3.9.tar.xz;

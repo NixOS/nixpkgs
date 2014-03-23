@@ -1,0 +1,25 @@
+Patch adapted from
+https://www.sourceware.org/ml/gdb-patches/2012-08/msg00439.html
+
+Without it, spawning a terminal 'vim' from gdb 'edit' cmd, makes
+all gdb grazy.
+
+diff --git a/gdb/tui/tui-win.c b/gdb/tui/tui-win.c
+index 7ea0fec..be5455c 100644
+--- a/gdb/tui/tui-win.c
++++ b/gdb/tui/tui-win.c
+@@ -831,11 +831,12 @@ void
+ tui_initialize_win (void)
+ {
+ #ifdef SIGWINCH
+-#ifdef HAVE_SIGACTION
++#if defined (HAVE_SIGACTION) && defined (SA_RESTART)
+   struct sigaction old_winch;
+ 
+-  memset (&old_winch, 0, sizeof (old_winch));
++  sigemptyset (&old_winch.sa_mask);
+   old_winch.sa_handler = &tui_sigwinch_handler;
++  old_winch.sa_flags = SA_RESTART;
+   sigaction (SIGWINCH, &old_winch, NULL);
+ #else
+   signal (SIGWINCH, &tui_sigwinch_handler);

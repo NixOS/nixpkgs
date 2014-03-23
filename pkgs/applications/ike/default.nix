@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install
     for file in "$out"/bin/* "$out"/sbin/*; do
-        wrapProgram $file --prefix LD_LIBRARY_PATH ":" "$out/lib:${openssl}/lib:${gcc.gcc}/lib:${libedit}/lib:${qt4}/lib"
+        wrapProgram $file --prefix LD_LIBRARY_PATH ":" "$out/lib:${openssl}/lib:${gcc.gcc}/lib:${stdenv.glibc}/lib::${gcc.gcc}/lib64:${stdenv.glibc}/lib64:${libedit}/lib:${qt4}/lib"
     done
   '';
 

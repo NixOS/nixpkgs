@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     homepage = https://projects.kde.org/projects/playground/artwork/oxygen-gtk;
     license = licenses.lgpl2;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

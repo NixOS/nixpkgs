@@ -1,10 +1,13 @@
-{ cabal, mtl, syb, thDesugar }:
+{ cabal, Cabal, constraints, filepath, mtl, tasty, tastyGolden
+, thDesugar
+}:
 
 cabal.mkDerivation (self: {
   pname = "singletons";
-  version = "0.9.3";
-  sha256 = "0m90k3ygm04c0gjfiaw5rmajyn2yz0ldcqm2xmm39d10270skpb4";
-  buildDepends = [ mtl syb thDesugar ];
+  version = "0.10.0";
+  sha256 = "14vnkw9ihrs3xg3lhb3wkyfz59lsaz4c3iqh3hqy7x9gmifgggwr";
+  buildDepends = [ mtl thDesugar ];
+  testDepends = [ Cabal constraints filepath tasty tastyGolden ];
   noHaddock = true;
   meta = {
     homepage = "http://www.cis.upenn.edu/~eir/packages/singletons";

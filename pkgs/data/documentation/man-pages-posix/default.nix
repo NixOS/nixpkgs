@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "man-pages-posix-2003a";
+  name = "man-pages-posix-2013-a";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/docs/man-pages/man-pages-posix/man-pages-posix-2003-a.tar.bz2";
-    sha256 = "1sj97lbj27w935f9ia91ih1mwlz4j3qcr3d3nkvcxm6cpfvv2mg3";
+    url = "mirror://kernel/linux/docs/man-pages/man-pages-posix/${name}.tar.xz";
+    sha256 = "0258j05zdrxpgdj8nndbyi7bvrs8fxdksb0xbfrylzgzfmf3lqqr";
   };
 
   preBuild =

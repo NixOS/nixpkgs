@@ -4,7 +4,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nmap-6.40";
+  name = "nmap-${version}";
+  version = "6.40";
 
   src = fetchurl {
     url = "http://nmap.org/dist/${name}.tar.bz2";
@@ -21,8 +22,11 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libpcap libX11 gtk pkgconfig openssl python pygtk makeWrapper pysqlite ];
 
-  meta = with stdenv.lib; {
-    platforms = platforms.linux;
-    maintainers = maintainers.mornfall;
+  meta = {
+    description = "A free and open source utility for network discovery and security auditing.";
+    homepage    = "http://www.nmap.org";
+    license     = stdenv.lib.licenses.gpl2;
+    platforms   = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ mornfall thoughtpolice ];
   };
 }

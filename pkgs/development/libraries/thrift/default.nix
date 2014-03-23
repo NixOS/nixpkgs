@@ -15,6 +15,10 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  # Workaround to make the python wrapper not drop this package:
+  # pythonFull.override { extraLibs = [ thrift ]; }
+  pythonPath = [];
+
   buildInputs = [
     boost zlib libevent openssl python automake autoconf libtool pkgconfig
     bison flex

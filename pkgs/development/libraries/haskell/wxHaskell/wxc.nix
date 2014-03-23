@@ -2,15 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "wxc";
-  version = "0.90.0.4";
-  sha256 = "1bh20i1rb8ng0ni1v98nm8qv5wni19dvxwf5i3ijxhrxqdq4i7p6";
+  version = "0.90.1.0";
+  sha256 = "1j318pxn6wqjwhz5rinb8az1bkhasgm9rhb3l36dlbzwcc4p0a2a";
   buildDepends = [ wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
-  postInstall = ''
-    cp -v dist/build/libwxc.so.${self.version} $out/lib/libwxc.so
-  '';
-  patches = [ ./fix-bogus-pointer-assignment.patch ];
   noHaddock = true;
+  preConfigure = "find . -type f -exec touch {} +";
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell C++ wrapper";

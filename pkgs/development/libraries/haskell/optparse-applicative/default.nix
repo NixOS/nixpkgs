@@ -1,14 +1,16 @@
-{ cabal, HUnit, testFramework, testFrameworkHunit
+{ cabal, ansiWlPprint, HUnit, QuickCheck, testFramework
+, testFrameworkHunit, testFrameworkQuickcheck2
 , testFrameworkThPrime, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "optparse-applicative";
-  version = "0.7.0.2";
-  sha256 = "1pq620236x8fch9nkq4g4vganbzksnwj8z1bb80c2mwvf6sbg5ci";
-  buildDepends = [ transformers ];
+  version = "0.8.0.1";
+  sha256 = "19k7jw9hrns5i8dr67jxadaqnj0cmn991hl00fwymg4awv34p1w3";
+  buildDepends = [ ansiWlPprint transformers ];
   testDepends = [
-    HUnit testFramework testFrameworkHunit testFrameworkThPrime
+    HUnit QuickCheck testFramework testFrameworkHunit
+    testFrameworkQuickcheck2 testFrameworkThPrime
   ];
   jailbreak = true;
   meta = {

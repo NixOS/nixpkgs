@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ln -s ${networkmanager_openconnect}/libexec/* $out/libexec/
     wrapProgram "$out/bin/nm-applet" \
       --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:$out/share" \
+      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:${gnome3.gtk}/share:$out/share" \
       --set GCONF_CONFIG_SOURCE "xml::~/.gconf" \
       --prefix PATH ":" "${gnome3.gconf}/bin"
   '';

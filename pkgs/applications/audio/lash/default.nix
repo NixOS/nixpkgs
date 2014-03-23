@@ -25,7 +25,7 @@ stdenv.mkDerivation  rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "LASH Audio Session Handler";
+    description = "A Linux Audio Session Handler";
     longDescription = ''
       Session management system for GNU/Linux audio applications.
     '';
