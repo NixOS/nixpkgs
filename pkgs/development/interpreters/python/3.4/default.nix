@@ -54,6 +54,8 @@ stdenv.mkDerivation {
   postInstall = ''
     rm -rf "$out/lib/python${majorVersion}/test"
     ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
+
+    paxmark E $out/bin/python${majorVersion}
   '';
 
   passthru = {
