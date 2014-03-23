@@ -248,6 +248,8 @@ in stdenv.mkDerivation rec {
     cp -v "${buildPath}/"*.pak "${libExecPath}/"
     cp -vR "${buildPath}/locales" "${buildPath}/resources" "${libExecPath}/"
     cp -v ${buildPath}/libffmpegsumo.so "${libExecPath}/"
+    [ -f "${buildPath}/icudtl.dat" ] && \
+        cp -v "${buildPath}/icudtl.dat" "${libExecPath}/"
 
     cp -v "${buildPath}/chrome" "${libExecPath}/${packageName}"
 
