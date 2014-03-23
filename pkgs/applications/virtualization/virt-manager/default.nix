@@ -1,74 +1,67 @@
 { stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl, python
 , makeWrapper, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte
-, spiceSupport ? true, spice_gtk
+, gtk3, gobjectIntrospection, libvirt-glib, gsettings_desktop_schemas, glib
+, avahi, dconf, spiceSupport ? true, spice_gtk
 }:
 
 with stdenv.lib;
+with pythonPackages;
 
-let version = "0.9.5"; in
-
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   name = "virt-manager-${version}";
+  version = "1.0.1";
+  namePrefix = "";
 
   src = fetchurl {
-    url = "http://virt-manager.et.redhat.com/download/sources/virt-manager/virt-manager-${version}.tar.gz";
-    sha256 = "0gc06cdbq6c2a06l939516lvjii7lr0wng90kqgl1i5q5wlgnajx";
+    url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
+    sha256 = "1n248kack1fni8y17ysgq5xhvffcgy4l62hnd0zvr4kjw0579qq8";
   };
 
-  pythonPath = with pythonPackages;
-    [ setuptools eventlet greenlet gflags netaddr sqlalchemy carrot routes
+  propagatedBuildInputs =
+    [ eventlet greenlet gflags netaddr sqlalchemy carrot routes
       paste_deploy m2crypto ipy boto_1_9 twisted sqlalchemy_migrate
       distutils_extra simplejson readline glance cheetah lockfile httplib2
-      # !!! should libvirt be a build-time dependency?  Note that
-      # libxml2Python is a dependency of libvirt.py.
-      libvirt libxml2Python urlgrabber virtinst pyGtkGlade pythonDBus gnome_python
-      gtkvnc vte
+      urlgrabber virtinst pyGtkGlade pythonDBus gnome_python pygobject3
+      libvirt libxml2Python ipaddr vte
     ] ++ optional spiceSupport spice_gtk;
 
   buildInputs =
-    [ pythonPackages.python
-      pythonPackages.wrapPython
-      pythonPackages.mox
-      pythonPackages.urlgrabber
+    [ mox
       intltool
-      pyGtkGlade
-      pythonDBus
-      gnome_python
       gtkvnc
-    ] ++ pythonPath;
+      gtk3
+      libvirt-glib
+      avahi
+      glib
+      gobjectIntrospection
+    ];
 
-  buildPhase = "make";
-
-  nativeBuildInputs = [ makeWrapper pythonPackages.wrapPython ];
-
-  # TODO
-  # virt-manager     -> import gtk.glade -> No module named glade --> fixed by removing 'pygtk' and by only using pyGtkGlade
-  #                  -> import gconf     -> ImportError: No module named gconf
-  #                        -> pfad um gtk-2.0 erweitern in virt-manger runner -> /nix/store/hnyxc9i4yz2mc42n44ms13mn8n486s5h-gnome-python-2.28.1/lib/python2.7/site-packages/gtk-2.0
-  #                  -> Error starting Virtual Machine Manager: Failed to contact configuration server; the most common cause is a missing or misconfigured D-Bus session bus daemon. See http://projects.gnome.org/gconf/ for information. (Details -  1: GetIOR failed: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.gnome.GConf was not provided by any .service files)
-
-#Traceback (most recent call last):
-#  File "/nix/store/y9rcdiv6686sqcv4r39p575s37jzc2cz-virt-manager-0.9.1/share/virt-manager/virt-manager.py", line 383, in <module>
-#    main()
-#  File "/nix/store/y9rcdiv6686sqcv4r39p575s37jzc2cz-virt-manager-0.9.1/share/virt-manager/virt-manager.py", line 315, in main
-#    config = virtManager.config.vmmConfig(appname, appversion, glade_dir)
-#  File "/nix/store/y9rcdiv6686sqcv4r39p575s37jzc2cz-virt-manager-0.9.1/share/virt-manager/virtManager/config.py", line 98, in __init__
-#    self.conf.add_dir(self.conf_dir, gconf.CLIENT_PRELOAD_NONE)
-#GError: Failed to contact configuration server; the most common cause is a missing or misconfigured D-Bus session bus daemon. See http://projects.gnome.org/gconf/ for information. (Details -  1: GetIOR failed: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.gnome.GConf was not provided by any .service files)
-# -> fixed by http://nixos.org/wiki/Solve_GConf_errors_when_running_GNOME_applications & a restart
-  # virt-manager-tui -> ImportError: No module named newt_syrup.dialogscreen
-
-  installPhase = ''
-    make install
-
-    # A hack, but the most reliable method so far
-    echo "#!/usr/bin/env python" | cat - src/virt-manager.py > $out/bin/virt-manager
-    echo "#!/usr/bin/env python" | cat - src/virt-manager-tui.py > $out/bin/virt-manager-tui
-
-    wrapPythonPrograms
+  configurePhase = ''
+    sed -i 's/from distutils.core/from setuptools/g' setup.py
+    sed -i 's/from distutils.command.install/from setuptools.command.install/g' setup.py
+    python setup.py configure --prefix=$out
   '';
 
-  meta = {
+  buildPhase = "true";
+
+  postInstall = ''
+    # GI_TYPELIB_PATH is needed at runtime for GObject stuff to work
+    for file in "$out"/bin/*; do
+        wrapProgram "$file" \
+            --prefix GI_TYPELIB_PATH : $GI_TYPELIB_PATH \
+            --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules" \
+            --prefix GSETTINGS_SCHEMA_DIR : $out/share/glib-2.0/schemas \
+            --prefix LD_LIBRARY_PATH : ${gtk3}/lib/:${libvirt-glib}/lib/:${vte}/lib:${gtkvnc}/lib${optionalString spiceSupport ":${spice_gtk}/lib"} \
+            --prefix XDG_DATA_DIRS : "$out/share:${gsettings_desktop_schemas}/share:${gtk3}/share:\$XDG_DATA_DIRS"
+    done
+
+    ${glib}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
+  '';
+
+  # Failed tests
+  doCheck = false;
+
+  meta = with stdenv.lib; {
     homepage = http://virt-manager.org;
     description = "Desktop user interface for managing virtual machines";
     longDescription = ''
@@ -76,7 +69,7 @@ stdenv.mkDerivation rec {
       virtual machines through libvirt. It primarily targets KVM VMs, but also
       manages Xen and LXC (linux containers).
     '';
-    license = "GPLv2";
-    maintainers = with stdenv.lib.maintainers; [qknight];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [qknight offline];
   };
 }
