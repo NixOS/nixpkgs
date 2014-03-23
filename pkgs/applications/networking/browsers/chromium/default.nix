@@ -52,4 +52,6 @@ in stdenv.mkDerivation {
       --set CHROMIUM_SANDBOX_BINARY_PATH "${sandboxBinary}" \
       --add-flags "${chromium.plugins.flagsEnabled}"
   '';
+
+  inherit (chromium.browser) meta;
 }
