@@ -2893,6 +2893,25 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   cabal2nix = callPackage ../development/tools/haskell/cabal2nix {};
 
+  # Build a cabal package given a local .cabal file
+  buildLocalCabal = src: name: let
+    cabalExpr = pkgs.stdenv.mkDerivation {
+      name = "${name}.nix";
+
+      LANG = "en_US.UTF-8";
+
+      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+
+      buildCommand = ''
+      ${self.cabal2nix}/bin/cabal2nix ${src + "/${name}.cabal"} --sha256=FILTERME \
+          | grep -v FILTERME | sed \
+            -e 's/licenses.proprietary/licenses.unfree/' \
+            -e 's/{ cabal/{ cabal, src/' \
+            -e 's/pname = \([^\n]*\)/pname = \1\n  inherit src;/'  > $out
+      '';
+    };
+  in callPackage cabalExpr { inherit src; };
+
   cabalDev = callPackage ../development/tools/haskell/cabal-dev {};
 
   cabal2Ghci = callPackage ../development/tools/haskell/cabal2ghci {};
