@@ -21,6 +21,7 @@ let
     unichrome    = { modules = [ pkgs.xorgVideoUnichrome ]; };
     virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
     ati = { modules = [ pkgs.xorg.xf86videoati pkgs.xorg.glamoregl ]; };
+    intel-testing = { modules = with pkgs.xorg; [ xf86videointel-testing glamoregl ]; driverName = "intel"; };
   };
 
   driverNames = config.hardware.opengl.videoDrivers;
