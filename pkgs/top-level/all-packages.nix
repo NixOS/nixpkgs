@@ -8676,6 +8676,8 @@ let
 
   ncdu = callPackage ../tools/misc/ncdu { };
 
+  ncdc = callPackage ../applications/networking/p2p/ncdc { };
+
   nedit = callPackage ../applications/editors/nedit {
     motif = lesstif;
   };
