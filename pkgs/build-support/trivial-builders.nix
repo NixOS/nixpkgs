@@ -33,6 +33,7 @@ rec {
     
   # Shorthands for `writeTextFile'.
   writeText = name: text: writeTextFile {inherit name text;};
+  writeTextDir = name: text: writeTextFile {inherit name text; destination = "/${name}";};
   writeScript = name: text: writeTextFile {inherit name text; executable = true;};
   writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
 
