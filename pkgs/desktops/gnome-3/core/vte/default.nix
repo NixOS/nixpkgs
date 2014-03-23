@@ -1,32 +1,21 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gnome3, ncurses
-, pythonSupport ? false, python, pygtk}:
+{ stdenv, fetchurl, intltool, pkgconfig, gnome3, ncurses, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
 
-  versionMajor = "0.34";
-  versionMinor = "9";
+  versionMajor = "0.35";
+  versionMinor = "90";
   moduleName   = "vte";
   
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "1q93dsxg56f57mxblmh8kn4v9kyc643j2pjf1j3mn2kxypnwaf3g";
+    sha256 = "c47182d1724db479095b918898ce62297ec71988f24cd575506151c59f7b98cf";
   };
 
-  buildInputs = [ intltool pkgconfig gnome3.glib gnome3.gtk ncurses ] ++
-                stdenv.lib.optionals pythonSupport [python pygtk];
+  buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib gnome3.gtk3 ncurses ];
 
-  configureFlags = ''
-    ${if pythonSupport then "--enable-python" else "--disable-python"}
-  '';
-
-  postInstall = stdenv.lib.optionalString pythonSupport ''
-    cd $(toPythonPath $out)/gtk-2.0
-    for n in *; do
-      ln -s "gtk-2.0/$n" "../$n"
-    done
-  '';
+  configureFlags = ''--enable-introspection'';
 
   meta = {
     homepage = http://www.gnome.org/;

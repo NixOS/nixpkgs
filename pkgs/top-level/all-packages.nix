@@ -5211,6 +5211,8 @@ let
 
   libvirt = callPackage ../development/libraries/libvirt { };
 
+  libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
+
   libvisio = callPackage ../development/libraries/libvisio { };
 
   libvisual = callPackage ../development/libraries/libvisual { };
@@ -5898,6 +5900,10 @@ let
   urt = callPackage ../development/libraries/urt { };
 
   ustr = callPackage ../development/libraries/ustr { };
+
+  usbredir = callPackage ../development/libraries/usbredir {
+    libusb = libusb1;
+  };
 
   ucommon = callPackage ../development/libraries/ucommon { };
 
@@ -9282,7 +9288,9 @@ let
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
   virtmanager = callPackage ../applications/virtualization/virt-manager {
     inherit (gnome) gnome_python;
-    vte = gnome.vte.override { pythonSupport = true; };
+    vte = gnome3.vte;
+    gtkvnc = gtkvnc.override { enableGTK3 = true; };
+    spice_gtk = spice_gtk.override { enableGTK3 = true; };
   };
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
