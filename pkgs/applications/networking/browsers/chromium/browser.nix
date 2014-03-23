@@ -222,6 +222,14 @@ in stdenv.mkDerivation rec {
       s|$|if parts[0].startswith("../") else parts[0]|;
     }' third_party/WebKit/Source/build/scripts/in_file.py \
        third_party/WebKit/Source/build/scripts/make_event_factory.py
+  '' + optionalString (!versionOlder source.version "35.0.0.0") ''
+    # Transform symlinks into plain files
+    sed -i -e "" third_party/jinja2/__init__.py \
+                 third_party/jinja2/environment.py \
+                 third_party/WebKit/Source/bindings/scripts/idl_compiler.py
+
+    sed -i -e '/tools_dir *=/s|=.*|= "'"$(pwd)"'/tools"|' \
+      third_party/WebKit/Source/bindings/scripts/blink_idl_parser.py
   '';
 
   postPatch = ''
