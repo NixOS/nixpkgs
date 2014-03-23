@@ -920,6 +920,8 @@ let
 
   expect = callPackage ../tools/misc/expect { };
 
+  f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
+
   fabric = pythonPackages.fabric;
 
   fail2ban = callPackage ../tools/security/fail2ban { };
