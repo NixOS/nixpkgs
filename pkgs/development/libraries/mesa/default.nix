@@ -152,6 +152,11 @@ stdenv.mkDerivation {
     substituteInPlace "$out/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
   '' + /* move vdpau drivers to $drivers/lib, so they are found */ ''
     mv "$drivers"/lib/vdpau/* "$drivers"/lib/ && rmdir "$drivers"/lib/vdpau
+  '' + /* add libGL* links from /run/opengl-driver */ ''
+    (
+      cd "$drivers/lib"
+      cp -s "$out"/lib/*.so .
+    )
   '';
   #ToDo: @vcunat isn't sure if drirc will be found when in $out/etc/, but it doesn't seem important ATM
 
