@@ -3,6 +3,7 @@
 , db
 , gdbm
 , libX11, xproto
+, lzma
 , ncurses
 , openssl
 , readline
@@ -20,7 +21,7 @@ let
   version = "${majorVersion}.5";
 
   buildInputs = filter (p: p != null) [
-    zlib bzip2 gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
+    zlib bzip2 lzma gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
   ];
 in
 stdenv.mkDerivation {
