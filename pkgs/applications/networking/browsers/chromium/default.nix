@@ -38,7 +38,7 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "chromium-${channel}-${chromium.source.version}";
+  name = "chromium-${channel}-${chromium.browser.version}";
 
   buildInputs = [ makeWrapper ];
 
@@ -53,5 +53,5 @@ in stdenv.mkDerivation {
       --add-flags "${chromium.plugins.flagsEnabled}"
   '';
 
-  inherit (chromium.browser) meta;
+  inherit (chromium.browser) meta packageName;
 }

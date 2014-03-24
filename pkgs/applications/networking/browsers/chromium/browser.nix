@@ -88,7 +88,8 @@ let
   libExecPath = "$out/libexec/${packageName}";
 
 in stdenv.mkDerivation rec {
-  name = "${packageName}-browser-${source.version}";
+  name = "${packageName}-browser-${version}";
+  inherit (source) version;
   inherit packageName;
   src = source;
 
@@ -185,7 +186,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     ensureDir "${libExecPath}"
     cp -v "${buildPath}/"*.pak "${libExecPath}/"
-    ${optionalString (!versionOlder source.version "34.0.0.0") ''
+    ${optionalString (!versionOlder version "34.0.0.0") ''
     cp -v "${buildPath}/icudtl.dat" "${libExecPath}/"
     ''}
     cp -vR "${buildPath}/locales" "${buildPath}/resources" "${libExecPath}/"
