@@ -3,10 +3,14 @@
   # Microsoft, so it is disabled by default.  This option allows it to
   # be enabled.  See http://www.freetype.org/patents.html.
 , useEncumberedCode ? false
-, useInfinality ? true
+, useInfinality ? false
 }:
 
-assert !(useEncumberedCode && useInfinality); # probably wouldn't make sense
+# The Infinality patches enable patent-encumbered code in freetype. This
+# assertion requires the user to acknowledge that they are enabling
+# unredistributable patent-encumbered code. Of course, it is still possible to
+# enable the encumbered code without using Infinality.
+assert (!useInfinality || useEncumberedCode);
 
 let
 
