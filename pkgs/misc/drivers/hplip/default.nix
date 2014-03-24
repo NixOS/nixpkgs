@@ -1,13 +1,13 @@
-{stdenv, fetchurl, cups, zlib, libjpeg, libusb, pythonPackages, saneBackends, dbus
-, pkgconfig, polkit, qtSupport ? true, qt4, pythonDBus, pyqt4, net_snmp
+{stdenv, fetchurl, cups, zlib, libjpeg, libusb1, pythonPackages, saneBackends, dbus
+, pkgconfig, polkit, qtSupport ? true, qt4, pythonDBus, pyqt4, net_snmp, automake
 }:
 
 stdenv.mkDerivation rec {
-  name = "hplip-3.11.1";
+  name = "hplip-3.14.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0y68s4xm5d0kv7p5j41qq0xglp4vdbjwbrjs89b4a21wwn69hp9g";
+    sha256 = "1j8h44f8igl95wqypj4rk9awcw513hlps980jmcnkx60xghc4l6f";
   };
 
   #preBuild=''
@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
   prePatch = ''
     sed -i s,/etc/sane.d,$out/etc/sane.d/, Makefile.in
     sed -i s,/etc/hp/,$out/etc/hp/, base/g.py
+    substituteInPlace Makefile.in \
+      --replace "/usr/include/libusb-1.0" "${libusb1}/include/libusb-1.0" \
+      --replace "/usr/lib/systemd/system" "$out/lib/systemd/system"
   '';
 
   # --disable-network-build Until we have snmp
@@ -49,7 +52,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
       libjpeg
       cups
-      libusb
+      libusb1
       pythonPackages.python
       pythonPackages.wrapPython
       saneBackends
