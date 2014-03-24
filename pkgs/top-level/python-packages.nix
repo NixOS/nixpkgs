@@ -2264,11 +2264,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   docutils = buildPythonPackage rec {
-    name = "docutils-0.8.1";
+    name = "docutils-0.11";
 
     src = fetchurl {
       url = "mirror://sourceforge/docutils/${name}.tar.gz";
-      sha256 = "0wfz4nxl95jcr2f2mc5gijgighavcghg33plzbz5jyi531jpffss";
+      sha256 = "1jbybs5a396nrjy9m13pgvsxdwaj7jw7nsawkhl4fi1nvxm1dx4s";
     };
 
     # error: invalid command 'test'
