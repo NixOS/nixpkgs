@@ -16,7 +16,7 @@ in pythonPackages.buildPythonPackage rec {
   ];
   preConfigure = ''
     substituteInPlace setup.py --replace /usr $out
-    substituteInPlace setup.py --replace sys.exec_prefix \"$out\"
+    find . -type f -exec grep -H sys.exec_prefix {} ';' | cut -d: -f1 | xargs sed -i s,sys.exec_prefix,\"$out\",
   '';
   installCommand = "python setup.py install --prefix=$out";
   meta = {
