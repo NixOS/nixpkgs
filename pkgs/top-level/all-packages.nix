@@ -6147,7 +6147,13 @@ let
     inherit (gnome) libsoup;
   };
 
-  v8 = callPackage ../development/libraries/v8 { inherit (pythonPackages) gyp; };
+  v8 = callPackage ../development/libraries/v8 {
+    inherit (pythonPackages) gyp;
+  };
+
+  v8_3_14 = callPackage ../development/libraries/v8/3.14.nix {
+    inherit (pythonPackages) gyp;
+  };
 
   xmlsec = callPackage ../development/libraries/xmlsec { };
 

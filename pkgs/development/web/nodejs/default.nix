@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand }:
+{ stdenv, fetchurl, openssl, python, zlib, v8_3_14, utillinux, http-parser, c-ares, pkgconfig, runCommand }:
 
 let
   dtrace = runCommand "dtrace-native" {} ''
@@ -10,7 +10,7 @@ let
 
   # !!! Should we also do shared libuv?
   deps = {
-    inherit v8 openssl zlib http-parser;
+    inherit v8_3_14 openssl zlib http-parser;
     cares = c-ares;
   };
 
