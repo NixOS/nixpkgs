@@ -2795,6 +2795,10 @@ let
     { description = "Free Java runtime environment based on OpenJDK 7.0 and the IcedTea project"; }
     pkgs.icedtea7_jdk.jre)) // { outputs = [ "jre" ]; };
 
+  icedtea7_web = callPackage ../development/compilers/icedtea-web {
+    jdk = "${icedtea7_jdk}/lib/icedtea";
+  };
+
   ikarus = callPackage ../development/compilers/ikarus { };
 
   hugs = callPackage ../development/compilers/hugs { };
