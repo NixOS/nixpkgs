@@ -9576,6 +9576,8 @@ let
   mars = callPackage ../games/mars { };
 
   micropolis = callPackage ../games/micropolis { };
+  
+  mnemosyne = callPackage ../games/mnemosyne { };
 
   naev = callPackage ../games/naev { };
 
