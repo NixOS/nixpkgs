@@ -5532,6 +5532,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  rsa = buildPythonPackage rec {
+    name = "rsa-3.1.2";
+
+    src = fetchurl {
+      url = "https://bitbucket.org/sybren/python-rsa/get/version-3.1.2.tar.bz2";
+      sha256 = "0ag2q4gaapi74x47q74xhcjzs4b7r2bb6zrj2an4sz5d3yd06cgf";
+    };
+
+    buildInputs = [ pythonPackages.pyasn1 ];
+
+    meta = {
+      homepage = http://stuvel.eu/rsa;
+      license = "Apache License 2.0";
+      description = "A pure-Python RSA implementation";
+    };
+  };
+
+
   seqdiag = buildPythonPackage rec {
     name = "seqdiag-0.8.2";
 
