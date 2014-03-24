@@ -3267,6 +3267,10 @@ let
 
   php = php54;
 
+  phpPackages = import ./php-packages.nix {
+    inherit php pkgs;
+  };
+
   php53 = callPackage ../development/interpreters/php/5.3.nix { };
 
   php54 = callPackage ../development/interpreters/php/5.4.nix { };
