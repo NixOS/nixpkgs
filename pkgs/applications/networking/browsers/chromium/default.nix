@@ -18,7 +18,7 @@ let
   callPackage = newScope chromium;
 
   chromium = {
-    source = callPackage ./source.nix {
+    source = callPackage ./source {
       inherit channel;
       # XXX: common config
       inherit useOpenSSL;
