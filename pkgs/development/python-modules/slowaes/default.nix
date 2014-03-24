@@ -11,6 +11,6 @@ buildPythonPackage rec {
   meta = {
     homepage = "http://code.google.com/p/slowaes/";
     description = "AES implemented in pure python";
-    license = stdenv.lib.licenses.apache;
+    license = stdenv.lib.licenses.asl20;
   };
 }
