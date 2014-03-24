@@ -16,4 +16,20 @@ let self = with self; {
 
     configureFlags = "--with-zlib-dir=${pkgs.zlib}";
   };
+
+  memcached = buildPecl {
+    name = "memcached-2.1.0";
+
+    src = pkgs.fetchurl {
+      url = http://pecl.php.net/get/memcached-2.1.0.tgz;
+      sha256 = "1by4zhkq4mbk9ja6s0vlavv5ng8aw5apn3a1in84fkz7bc0l0jdw";
+    };
+
+    configureFlags = [
+      "--with-zlib-dir=${pkgs.zlib}"
+      "--with-libmemcached-dir=${pkgs.libmemcached}"
+    ];
+
+    buildInputs = [ pkgs.cyrus_sasl ];
+  };
 }; in self
