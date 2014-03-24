@@ -36,3 +36,5 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
   };
 }
+
+# TODO: add support for a locally made BIOS
