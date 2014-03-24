@@ -110,126 +110,19 @@ in stdenv.mkDerivation rec {
     ++ optional cupsSupport libgcrypt
     ++ optional pulseSupport pulseaudio;
 
-  prePatch = let
-    lntree = [ "cp" "-dsr" "--no-preserve=mode" ];
-    lntreeList = concatStringsSep ", " (map (arg: "'${arg}'") lntree);
-    lntreeSh = concatStringsSep " " lntree;
-  in ''
-    ${lntreeSh} "${source.main}"/* .
-    ${lntreeSh} "${source.sandbox}" sandbox
+  # XXX: Wait for https://crbug.com/239107 and https://crbug.com/239181 to
+  #      be fixed, then try again to unbundle everything into separate
+  #      derivations.
+  prePatch = ''
+    cp -dsr --no-preserve=mode "${source.main}"/* .
+    cp -dsr --no-preserve=mode "${source.sandbox}" sandbox
+    cp -dr "${source.bundled}" third_party
+    chmod -R u+w third_party
 
-    ensureDir third_party
-
-    # ONLY the dependencies we can't use from nixpkgs!
-    for bundled in ${concatStringsSep " " ([
-      # This is in preparation of splitting up the bundled sources into separate
-      # derivations so we some day can tremendously reduce build time.
-      "adobe"
-      "angle"
-      "cacheinvalidation"
-      "cld_2"
-      "codesighs"
-      "cros_dbus_cplusplus"
-      "cros_system_api"
-      "flot"
-      "freetype2"
-      "hunspell"
-      "iccjpeg"
-      "jinja2"
-      "JSON"
-      "jstemplate"
-      "khronos"
-      "leveldatabase"
-      "libaddressinput"
-      "libjingle"
-      "libmtp"
-      "libphonenumber"
-      "libsrtp"
-      "libXNVCtrl"
-      "libyuv"
-      "lss"
-      "lzma_sdk"
-      "markupsafe"
-      "mesa"
-      "modp_b64"
-      "mt19937ar"
-      "mtpd"
-      "npapi"
-      "ots"
-      "ply"
-      "protobuf"
-      "qcms"
-      "readability"
-      "safe_browsing"
-      "sfntly"
-      "skia"
-      "smhasher"
-      "speech-dispatcher"
-      "tcmalloc"
-      "trace-viewer"
-      "undoview"
-      "usb_ids"
-      "usrsctp"
-      "WebKit"
-      "webrtc"
-      "widevine"
-      "x86inc"
-      "yasm"
-    ] ++ optionals (!versionOlder source.version "34.0.0.0") [
-      "brotli"
-      "libwebm"
-      "nss.isolate"
-      "polymer"
-    ])}; do
-      echo -n "Linking ${source.bundled}/$bundled to third_party/..." >&2
-      ${lntreeSh} "${source.bundled}/$bundled" third_party/
-      echo " done." >&2
-    done
-
-    # Everything else is decided based on gypFlags.
-    PYTHONPATH="build/linux/unbundle:$PYTHONPATH" python <<PYTHON
-    import os, sys, subprocess
-    from replace_gyp_files import REPLACEMENTS
-    for flag, path in REPLACEMENTS.items():
-      if path.startswith("v8/"):
-        continue
-      if "-D{0}=1".format(flag) in os.environ.get('gypFlags'):
-        target = os.path.join("build/linux/unbundle", os.path.basename(path))
-        dest = path
-      else:
-        target_base = os.path.basename(os.path.dirname(path))
-        target = os.path.join("${source.bundled}", target_base)
-        dest = os.path.join("third_party", target_base)
-      try:
-        os.makedirs(os.path.dirname(dest))
-      except:
-        pass
-      sys.stderr.write("Linking {0} to {1}...".format(target, dest))
-      subprocess.check_call([${lntreeList}, os.path.abspath(target), dest])
-      sys.stderr.write(" done.\n")
-    PYTHON
-
-    # Auxilliary files needed in unbundled trees
-    ${lntreeSh} "${source.bundled}/libxml/chromium" third_party/libxml/chromium
-    ${lntreeSh} "${source.bundled}/zlib/google" third_party/zlib/google
-
+    # Hardcode source tree root in all gyp files
     find -iname '*.gyp*' \( -type f -o -type l \) \
-      -exec sed -i -e 's|<(DEPTH)|'"$(pwd)"'|g' {} +
-
-    # XXX: Really ugly workaround to fix improper symlink dereference.
-    sed -i -e '/args\['"'"'name'"'"'\] *= *parts\[0\]$/ {
-      s|$|.split("-bundled/WebKit/Source/", 1)[1] |;
-      s|$|if parts[0].startswith("../") else parts[0]|;
-    }' third_party/WebKit/Source/build/scripts/in_file.py \
-       third_party/WebKit/Source/build/scripts/make_event_factory.py
-  '' + optionalString (!versionOlder source.version "35.0.0.0") ''
-    # Transform symlinks into plain files
-    sed -i -e "" third_party/jinja2/__init__.py \
-                 third_party/jinja2/environment.py \
-                 third_party/WebKit/Source/bindings/scripts/idl_compiler.py
-
-    sed -i -e '/tools_dir *=/s|=.*|= "'"$(pwd)"'/tools"|' \
-      third_party/WebKit/Source/bindings/scripts/blink_idl_parser.py
+      -exec sed -i -e 's|<(DEPTH)|'"$(pwd)"'|g' {} + \
+      -exec chmod u+w {} +
   '';
 
   postPatch = ''
@@ -273,6 +166,7 @@ in stdenv.mkDerivation rec {
   });
 
   configurePhase = ''
+    python build/linux/unbundle/replace_gyp_files.py ${gypFlags}
     python build/gyp_chromium -f ninja --depth "$(pwd)" ${gypFlags}
   '';
 
