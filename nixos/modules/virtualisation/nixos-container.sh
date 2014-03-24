@@ -2,7 +2,7 @@
 
 usage() {
     echo "Usage: $0 list" >&2
-    echo "       $0 create <container-name> [--config <filename>] [--ensure-unique-name]" >&2
+    echo "       $0 create <container-name> [--config <string>] [--ensure-unique-name]" >&2
     echo "       $0 update <container-name>" >&2
     echo "       $0 destroy <container-name>" >&2
     echo "       $0 login <container-name>" >&2
@@ -13,12 +13,12 @@ usage() {
 
 args="`getopt --options '' -l help -l config: -l ensure-unique-name -- "$@"`"
 eval "set -- $args"
-extraConfigFile=
+extraConfig=
 ensureUniqueName=
 while [ $# -gt 0 ]; do
     case "$1" in
         (--help) usage; exit 0;;
-        (--config) shift; extraConfigFile=$1;;
+        (--config) shift; extraConfig=$1;;
         (--ensure-unique-name) ensureUniqueName=1;;
         (--) shift; break;;
         (*) break;;
@@ -80,13 +80,8 @@ with pkgs.lib;
   security.initialRootPassword = mkDefault \"!\";
   networking.hostName = mkDefault \"$container\";
   networking.useDHCP = false;
-  imports = [ <nixpkgs/nixos/modules/virtualisation/container-login.nix> $extraConfigFile ];
-  services.openssh.enable = true;
-  services.openssh.extraConfig =
-    ''
-      UseDNS no
-    '';
-  users.extraUsers.root.openssh.authorizedKeys.keys = [ \"ssh-dss AAAAB3NzaC1kc3MAAACBAOo3foMFsYvc+LEVVTAeXpaxdOFG6O2NE9coxZYN6UtwE477GwkvZ4uKymAekq3TB8I6dDg4QFfE27fIip/rQHJ/Rus+KsxwnTbwPzE0WcZVpkKQsepsoqLkfwMpiPfn5/oxcnJsimwRY/E95aJmmOHdGaYWrc0t4ARa+6teUgdFAAAAFQCSQq2Wil0/X4hDypGGUKlKvYyaWQAAAIAy/0fSDnz1tZOQBGq7q78y406HfWghErrVlrW9g+foJQG5pgXXcdJs9JCIrlaKivUKITDsYnQaCjrZaK8eHnc4ksbkSLfDOxFnR5814ulCftrgEDOv9K1UU3pYketjFMvQCA2U48lR6jG/99CPNXPH55QEFs8H97cIsdLQw9wM4gAAAIEAmzWZlXLzIf3eiHQggXqvw3+C19QvxQITcYHYVTx/XYqZi1VZ/fkY8bNmdcJsWFyOHgEhpEca+xM/SNvH/14rXDmt0wtclLEx/4GVLi59hQCnnKqv7HzJg8RF4v6XTiROBAEEdb4TaFuFn+JCvqPzilTzXTexvZKJECOvfYcY+10= eelco.dolstra@logicblox.com\" ];
+  imports = [ <nixpkgs/nixos/modules/virtualisation/container-login.nix> ];
+  $extraConfig
 }"
     configFile="$root/etc/nixos/configuration.nix"
     echo "$config" > "$configFile"
