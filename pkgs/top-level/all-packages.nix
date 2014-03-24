@@ -6458,6 +6458,8 @@ let
 
   serfdom = callPackage ../servers/serfdom { };
 
+  seyren = callPackage ../servers/monitoring/seyren { };
+
   shishi = callPackage ../servers/shishi { };
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
