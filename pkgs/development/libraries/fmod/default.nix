@@ -1,28 +1,32 @@
-{stdenv, fetchurl }:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "fmod-42204";
-  src = if stdenv.system == "i686-linux" then
-    fetchurl {
-      url = http://www.fmod.org/index.php/release/version/fmodapi42204linux.tar.gz;
-      sha256 = "64eedc5b37c597eb925de446106d75cab0b5a79697d5ec048d34702812c08563";
-    } else if stdenv.system == "x86_64-linux" then
-    fetchurl {
-      url = http://www.fmod.org/index.php/release/version/fmodapi42204linux64.tar.gz;
-      sha256 = "3f2eec8265838a1005febe07c4971660e85010e4622911890642dc438746edf3";
-    } else throw "unsupported platform ${stdenv.system} (only i686-linux and x86_64 linux supported yet)";
+assert (stdenv.system == "x86_64-linux") || (stdenv.system == "i686-linux");
+let
+  bits = stdenv.lib.optionalString (stdenv.system == "x86_64-linux") "64";
+in
+stdenv.mkDerivation rec {
+  name    = "fmod-${version}";
+  version = "4.44.32";
 
-  preInstall = ''
-    sed -e /ldconfig/d -i Makefile
-    sed -e s@/usr/local@$out@ -i Makefile
-    sed -e s@/include/fmodex@/include@ -i Makefile
-    mkdir -p $out/lib
-    mkdir -p $out/include
+  src = fetchurl {
+    url = "http://www.fmod.org/download/fmodex/api/Linux/fmodapi44432linux.tar.gz";
+    sha256 = "071m2snzz5vc5ca7dvsf6w31nrgk5k9xb6mp7yzqdj4bkjad2hyd";
+  };
+
+  buildPhase = "true";
+  installPhase = ''
+    mkdir -p $out/lib $out/include/fmodex
+
+    cd api/inc && cp * $out/include/fmodex && cd ../lib
+    cp libfmodex${bits}-${version}.so  $out/lib/libfmodex.so
+    cp libfmodexL${bits}-${version}.so $out/lib/libfmodexL.so
   '';
 
   meta = {
-    homepage = http://www.fmod.org/;
     description = "Programming library and toolkit for the creation and playback of interactive audio";
-    license = "unfree";
+    homepage    = "http://www.fmod.org/";
+    license     = stdenv.lib.licenses.unfreeRedistributable;
+    platforms   = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }
