@@ -7170,6 +7170,8 @@ let
 
   multipath_tools = callPackage ../os-specific/linux/multipath-tools { };
 
+  musl = callPackage ../os-specific/linux/musl { };
+
   nettools = callPackage ../os-specific/linux/net-tools { };
 
   neverball = callPackage ../games/neverball {
