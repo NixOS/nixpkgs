@@ -5591,17 +5591,24 @@ rec {
 
 
   pyopengl =
-    let version = "3.0.0b5";
+    let version = "3.0.2";
     in
       buildPythonPackage {
         name = "pyopengl-${version}";
 
         src = fetchurl {
-          url = "mirror://sourceforge/pyopengl/PyOpenGL-${version}.tar.gz";
-          sha256 = "1rjpl2qdcqn4wamkik840mywdycd39q8dn3wqfaiv35jdsbifxx3";
+          url = "http://pypi.python.org/packages/source/P/PyOpenGL/PyOpenGL-${version}.tar.gz";
+          sha256 = "9ef93bbea2c193898341f574e281c3ca0dfe87c53aa25fbec4b03581f6d1ba03";
         };
 
         propagatedBuildInputs = with pkgs; [ mesa freeglut pil ];
+
+        patchPhase = ''
+          sed -i "s|util.find_library( name )|name|" OpenGL/platform/ctypesloader.py
+          sed -i "s|'GL',|'libGL.so',|" OpenGL/platform/glx.py
+          sed -i "s|'GLU',|'${pkgs.mesa}/lib/libGLU.so',|" OpenGL/platform/glx.py
+          sed -i "s|'glut',|'${pkgs.freeglut}/lib/libglut.so',|" OpenGL/platform/glx.py
+        '';
 
         meta = {
           homepage = http://pyopengl.sourceforge.net/;
