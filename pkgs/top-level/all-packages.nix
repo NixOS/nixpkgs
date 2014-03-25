@@ -1525,6 +1525,8 @@ let
 
   nlopt = callPackage ../development/libraries/nlopt {};
 
+  npapi_sdk = callPackage ../development/libraries/npapi-sdk {};
+
   npth = callPackage ../development/libraries/npth {};
 
   nmap = callPackage ../tools/security/nmap {
