@@ -8939,6 +8939,10 @@ let
     perl = perl514;
   };
 
+  curaengine = callPackage ../applications/misc/curaengine { };
+
+  cura = callPackage ../applications/misc/cura { };
+
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
   };
