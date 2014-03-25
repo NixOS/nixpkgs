@@ -5304,6 +5304,8 @@ let
 
   mlt = callPackage ../development/libraries/mlt { };
 
+  mps = callPackage ../development/libraries/mps { };
+
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
 
   mpeg2dec = libmpeg2;
