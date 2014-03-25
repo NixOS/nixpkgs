@@ -4,6 +4,7 @@
   /* Add your name and email address here.  Keep the list
      alphabetically sorted.  */
 
+  _1126 = "Christian Lask <mail@elfsechsundzwanzig.de>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
   akc = "Anders Claesson <akc@akc.is>";
   algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
