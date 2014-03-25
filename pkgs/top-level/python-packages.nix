@@ -8781,6 +8781,21 @@ rec {
     };
   };
 
+  power = buildPythonPackage rec {
+    name = "power-1.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/power/${name}.tar.gz";
+      sha256 = "09a00af8357f63dbb1a1eb13b82e39ccc0a14d6d2e44e5b235afe60ce8ee8195";
+    };
+
+    meta = {
+      description = "Cross-platform system power status information";
+      homepage = https://github.com/Kentzo/Power;
+      license = "mit";
+    };
+  };
+
 # python2.7 specific packages
 } // optionalAttrs isPy27 (
   with pythonPackages;
