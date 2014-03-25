@@ -4,6 +4,7 @@
   /* Add your name and email address here.  Keep the list
      alphabetically sorted.  */
 
+  1126 = "Christian Lask <mail@elfsechsundzwanzig.de>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
   algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
