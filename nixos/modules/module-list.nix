@@ -306,6 +306,7 @@
   ./tasks/filesystems.nix
   ./tasks/filesystems/btrfs.nix
   ./tasks/filesystems/ext.nix
+  ./tasks/filesystems/f2fs.nix
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/reiserfs.nix
   ./tasks/filesystems/unionfs-fuse.nix

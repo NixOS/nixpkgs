@@ -204,7 +204,7 @@ checkFS() {
     # does (minutes versus seconds).
     if test -z "@checkJournalingFS@" -a \
         \( "$fsType" = ext3 -o "$fsType" = ext4 -o "$fsType" = reiserfs \
-        -o "$fsType" = xfs -o "$fsType" = jfs \)
+        -o "$fsType" = xfs -o "$fsType" = jfs -o "$fsType" = f2fs \)
     then
         return 0
     fi
