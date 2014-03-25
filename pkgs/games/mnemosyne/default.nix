@@ -1,7 +1,13 @@
-{stdenv, fetchurl, pkgs}:
+{ stdenv
+, fetchurl
+, buildPythonPackage
+, pyqt4
+, matplotlib
+, cherrypy
+, sqlite3
+}:
 let 
   version = "2.2.1";
-  inherit (pkgs.pythonPackages) buildPythonPackage pyqt4 matplotlib cherrypy sqlite3;
 in buildPythonPackage rec {
   name = "mnemosyne-${version}";
   src = fetchurl {

@@ -9577,7 +9577,9 @@ let
 
   micropolis = callPackage ../games/micropolis { };
   
-  mnemosyne = callPackage ../games/mnemosyne { };
+  mnemosyne = callPackage ../games/mnemosyne { 
+    inherit (pythonPackages) matplotlib cherrypy sqlite3;
+  };
 
   naev = callPackage ../games/naev { };
 
