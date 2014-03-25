@@ -119,6 +119,10 @@ with srcInfo; stdenv.mkDerivation {
     mkdir $out/lib/icedtea/jre
     lndir $jre/lib/icedtea/jre $out/lib/icedtea/jre
 
+    # The following files cannot be symlinked, as it seems to violate Java security policies
+    rm $out/lib/icedtea/jre/lib/ext/*
+    cp $jre/lib/icedtea/jre/lib/ext/* $out/lib/icedtea/jre/lib/ext/
+
     rm -rf $out/lib/icedtea/jre/bin
     ln -s $out/lib/icedtea/bin $out/lib/icedtea/jre/bin
 
