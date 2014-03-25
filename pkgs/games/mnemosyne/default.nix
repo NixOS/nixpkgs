@@ -1,8 +1,8 @@
-{stdenv, fetchurl, pythonPackages}:
+{stdenv, fetchurl, pkgs}:
 let 
   version = "2.2.1";
-  inherit (pythonPackages) pyqt4 matplotlib cherrypy sqlite3;
-in pythonPackages.buildPythonPackage rec {
+  inherit (pkgs.pythonPackages) buildPythonPackage pyqt4 matplotlib cherrypy sqlite3;
+in buildPythonPackage rec {
   name = "mnemosyne-${version}";
   src = fetchurl {
     url    = "http://sourceforge.net/projects/mnemosyne-proj/files/mnemosyne/${name}/Mnemosyne-${version}.tar.gz";
