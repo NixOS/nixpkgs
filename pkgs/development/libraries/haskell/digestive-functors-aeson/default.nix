@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "digestive-functors-aeson";
-  version = "1.1.5";
-  sha256 = "1mxi8zbv3hxy2crj6h6p1a885k8rd0fqhmwq7l7w7d7d73h8bmm3";
+  version = "1.1.6";
+  sha256 = "1zhw0zksl48q9y699phadf6ixsyll52clr3yyhqghki6l820xwci";
   buildDepends = [ aeson digestiveFunctors lens safe text vector ];
   testDepends = [
     aeson digestiveFunctors HUnit mtl tasty tastyHunit text
