@@ -7610,6 +7610,12 @@ rec {
     wxGTK = pkgs.wxGTK28;
   };
 
+  wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig;
+    inherit pythonPackages;
+    wxGTK = pkgs.wxGTK30;
+  };
+
   xe = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/xe-0.7.4.tar.gz";
     name = stdenv.lib.nameFromURL url ".tar";
