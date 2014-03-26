@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, autoreconfHook, file, openssl, perl }:
+{ stdenv, fetchurl, autoreconfHook, file, openssl, perl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "net-snmp-5.7.2";
+  name = "net-snmp-5.7.2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/net-snmp/${name}.tar.gz";
-    sha256 = "05mqrv22c65405d6v91cqf4hvczkkvvyy5lsxw8h8g0zrjs33v89";
+    url = "mirror://sourceforge/net-snmp/${name}.zip";
+    sha256 = "1nj3b2x4fhsh82nra99128vqp2lfw5wx91ka8nqwzxvik59hb4dc";
   };
 
   preConfigure =
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       "--with-persistent-directory=/var/lib/net-snmp"
     ];
 
-  buildInputs = [ autoreconfHook file openssl perl ];
+  buildInputs = [ autoreconfHook file openssl perl unzip ];
 
   enableParallelBuilding = true;
 
