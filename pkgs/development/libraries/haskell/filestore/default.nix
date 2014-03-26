@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "1la30bimcjngcv5dyx1a9x8lr8c4zs0dp4kzh8y5mjf8snky1avf";
   buildDepends = [ Diff filepath parsec split time utf8String xml ];
   testDepends = [ Diff filepath HUnit mtl time ];
-  doCheck = false;
+  jailbreak = true;
   meta = {
     description = "Interface for versioning file stores";
     license = self.stdenv.lib.licenses.bsd3;
