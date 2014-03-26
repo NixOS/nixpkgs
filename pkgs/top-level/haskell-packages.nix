@@ -2877,6 +2877,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   nc-indicators = callPackage ../applications/misc/nc-indicators {};
 
+  sloane = callPackage ../applications/science/math/sloane {};
+
   taffybar = callPackage ../applications/misc/taffybar {};
 
   yi = callPackage ../applications/editors/yi/yi.nix {};
