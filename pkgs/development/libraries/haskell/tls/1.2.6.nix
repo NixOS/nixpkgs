@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tls";
-  version = "1.2.3";
-  sha256 = "0vv81z5m223b90zzfp5dk376fh8yngyd8h9anrxjrqb4f3bycaxg";
+  version = "1.2.6";
+  sha256 = "16r60acz9q84dv91jms9qaqvc53r98761ap9ijj3pifizzxcyswi";
   buildDepends = [
     asn1Encoding asn1Types byteable cereal cipherAes cipherRc4
     cryptohash cryptoNumbers cryptoPubkey cryptoPubkeyTypes
