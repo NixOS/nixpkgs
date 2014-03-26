@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     find . -name 'config' -type f | while read i; do
         sed -i "s@libMonoPosixHelper.so@$out/lib/libMonoPosixHelper.so@g" $i
         sed -i "s@libX11.so.6@${libX11}/lib/libX11.so.6@g" $i
-        sed -i '2 i\<dllmap dll="gdiplus.dll" target="${libgdiplus}/lib/libgdiplus.so" os="!windows"/>' $i
+        sed -i "s@/.*libgdiplus.so@${libgdiplus}/lib/libgdiplus.so@g" $i
     done
   '';
 
