@@ -2,13 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "QuickCheck";
-  version = "2.7.1";
-  sha256 = "1hk19q7lfvja7g626hbbq0xs30zsgjpqfalgmdr24fy8sgdchm21";
+  version = "2.7.3";
+  sha256 = "196pz0b32m84ydwm4wk7m8512bmsxw7nsqpxbyfxsyi3ykq220yh";
   buildDepends = [ random tfRandom ];
   testDepends = [ testFramework ];
-  patchPhase = ''
-    sed -i -e 's|QuickCheck == .*,|QuickCheck,|' QuickCheck.cabal
-  '';
   meta = {
     homepage = "http://code.haskell.org/QuickCheck";
     description = "Automatic testing of Haskell programs";

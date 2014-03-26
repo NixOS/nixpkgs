@@ -1452,8 +1452,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   hsloggerTemplate = callPackage ../development/libraries/haskell/hslogger-template {};
 
   hspec = callPackage ../development/libraries/haskell/hspec {
-    QuickCheck = self.QuickCheck_2_7_1;
-    quickcheckIo = self.quickcheckIo.override { QuickCheck = self.QuickCheck_2_7_1; };
+    QuickCheck = self.QuickCheck_2_7_3;
+    quickcheckIo = self.quickcheckIo.override { QuickCheck = self.QuickCheck_2_7_3; };
   };
 
   hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
@@ -1461,8 +1461,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   hspecExpectationsLens = callPackage ../development/libraries/haskell/hspec-expectations-lens {};
 
   hspecMeta = callPackage ../development/libraries/haskell/hspec-meta {
-    QuickCheck = self.QuickCheck_2_7_1;
-    quickcheckIo = self.quickcheckIo.override { QuickCheck = self.QuickCheck_2_7_1; };
+    QuickCheck = self.QuickCheck_2_7_3;
+    quickcheckIo = self.quickcheckIo.override { QuickCheck = self.QuickCheck_2_7_3; };
   };
 
   hstatsd = callPackage ../development/libraries/haskell/hstatsd {};
@@ -2058,7 +2058,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   QuickCheck_2_4_2 = callPackage ../development/libraries/haskell/QuickCheck/2.4.2.nix {};
   QuickCheck_2_5_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.5.1.1.nix {};
   QuickCheck_2_6 = callPackage ../development/libraries/haskell/QuickCheck/2.6.nix {};
-  QuickCheck_2_7_1 = callPackage ../development/libraries/haskell/QuickCheck/2.7.1.nix {};
+  QuickCheck_2_7_3 = callPackage ../development/libraries/haskell/QuickCheck/2.7.3.nix {};
   QuickCheck1 = self.QuickCheck_1_2_0_1;
   QuickCheck2 = self.QuickCheck_2_6;
   QuickCheck  = self.QuickCheck2;
@@ -2066,7 +2066,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   quickcheckAssertions = callPackage ../development/libraries/haskell/quickcheck-assertions {};
 
   quickcheckInstances = callPackage ../development/libraries/haskell/quickcheck-instances {
-    QuickCheck = self.QuickCheck_2_7_1;
+    QuickCheck = self.QuickCheck_2_7_3;
   };
 
   quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {};
@@ -2391,7 +2391,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   tastyHunit = callPackage ../development/libraries/haskell/tasty-hunit {};
 
   tastyQuickcheck = callPackage ../development/libraries/haskell/tasty-quickcheck {
-    QuickCheck = self.QuickCheck_2_7_1;
+    QuickCheck = self.QuickCheck_2_7_3;
   };
 
   tastyRerun = callPackage ../development/libraries/haskell/tasty-rerun {};
@@ -2934,7 +2934,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cabalInstall = self.cabalInstall_1_18_0_3;
 
   gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {
-    hS3 = self.hS3.override { Crypto = self.Crypto.override { QuickCheck = self.QuickCheck_2_7_1; }; };
+    hS3 = self.hS3.override { Crypto = self.Crypto.override { QuickCheck = self.QuickCheck_2_7_3; }; };
   };
 
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
