@@ -9453,6 +9453,8 @@ let
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
+  zotero = callPackage ../applications/office/zotero { };
+
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
 
 
