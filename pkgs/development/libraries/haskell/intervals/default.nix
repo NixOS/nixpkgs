@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "intervals";
-  version = "0.4.1";
-  sha256 = "09pgy400r47lsa9w5g5dxydshw7lv9i4yv65ld1arssx3n59wyvl";
+  version = "0.4.2";
+  sha256 = "08l7q22rlhyigls1qksf7lnb7g1yrkmdh9clq68xxaf6wzm26aaz";
   buildDepends = [ distributive ];
   testDepends = [ doctest filepath ];
   meta = {
