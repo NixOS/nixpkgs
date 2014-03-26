@@ -1897,6 +1897,8 @@ let
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
 
+  simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
+
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   slimrat = callPackage ../tools/networking/slimrat {
