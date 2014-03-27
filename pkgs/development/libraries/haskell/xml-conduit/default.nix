@@ -1,17 +1,17 @@
 { cabal, attoparsec, attoparsecConduit, blazeBuilder
 , blazeBuilderConduit, blazeHtml, blazeMarkup, conduit, dataDefault
-, deepseq, failure, hspec, HUnit, monadControl, resourcet
-, systemFilepath, text, transformers, xmlTypes
+, deepseq, hspec, HUnit, monadControl, resourcet, systemFilepath
+, text, transformers, xmlTypes
 }:
 
 cabal.mkDerivation (self: {
   pname = "xml-conduit";
-  version = "1.1.0.9";
-  sha256 = "01sx8yblknv0dyi7z6k6icfvwjvl4dyhrka1d6y1793xcp1mkxs6";
+  version = "1.2.0";
+  sha256 = "0sh4f645ysj2dzd58a1b1y2pqqcg6khav27lgy2j3fqgm6mryxhj";
   buildDepends = [
     attoparsec attoparsecConduit blazeBuilder blazeBuilderConduit
-    blazeHtml blazeMarkup conduit dataDefault deepseq failure
-    monadControl resourcet systemFilepath text transformers xmlTypes
+    blazeHtml blazeMarkup conduit dataDefault deepseq monadControl
+    resourcet systemFilepath text transformers xmlTypes
   ];
   testDepends = [
     blazeMarkup conduit hspec HUnit text transformers xmlTypes
