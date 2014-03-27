@@ -4,7 +4,10 @@
 }:
 
 with stdenv.lib;
-with getAttr channel (import ./sources.nix);
+
+with (import ./update.nix {
+  inherit (stdenv) system;
+}).getChannel channel;
 
 stdenv.mkDerivation {
   name = "chromium-source-${version}";
