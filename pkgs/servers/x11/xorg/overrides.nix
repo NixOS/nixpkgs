@@ -186,10 +186,6 @@ in
 
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
-    patches = [( args.fetchurl {
-      url = https://projects.archlinux.org/svntogit/packages.git/plain/trunk/xatracker-v2-fixes.patch?h=packages/xf86-video-vmware;
-      sha256 = "1k5a3zf2bzmw84di31b8zfy51n2mqrr01xjfy5nw7395qv5r5cvs";
-    })];
   };
 
   xdriinfo = attrs: attrs // {
