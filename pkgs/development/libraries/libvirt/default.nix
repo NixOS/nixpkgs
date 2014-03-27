@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://libvirt.org/;
+    repositories.git = git://libvirt.org/libvirt.git;
     description = ''
       A toolkit to interact with the virtualization capabilities of recent
       versions of Linux (and other OSes)
