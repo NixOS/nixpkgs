@@ -9,8 +9,8 @@ assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 let
-  ver_maj = "3.10";
-  ver_min = "7";
+  ver_maj = "3.12";
+  ver_min = "0";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -18,10 +18,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "09wlsim4immrws0fyvpk03sspsljcsgybrwp73scycah70axxsdp";
+    sha256 = "0jvf9dawq82x1xsr2f56fw3y7yfwapgdj16gr4d5m6q2shf78sgb";
   };
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
@@ -32,6 +30,11 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin x11
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
+
+  # demos fail to install, no idea where's the problem
+  preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
+
+  enableParallelBuilding = true;
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
