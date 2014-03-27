@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-hamlet";
-  version = "0.4.0.6";
-  sha256 = "05izdqpxw0gq2wgs4ckr55xvzfk5ay7xpbcvihj66myiah5azqwy";
+  version = "0.4.0.7";
+  sha256 = "05rygs3ja3zc87az151mkbm4llrnshzrqf1mfpbwx4ysfgjkvq7b";
   buildDepends = [ parsec shakespeare text xmlConduit ];
   testDepends = [ hspec HUnit parsec shakespeare text xmlConduit ];
   meta = {
