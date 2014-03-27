@@ -92,9 +92,19 @@ get_channel_exprs()
 
         sha_insert "$version" "$sha256";
 
+        main="${sha256%%.*}";
+        deb="${sha256#*.}";
+        deb32="${deb%.*}";
+        deb64="${deb#*.}";
+
         echo "  $channel = {";
         echo "    version = \"$version\";";
-        echo "    sha256 = \"$sha256\";";
+        echo "    sha256 = \"$main\";";
+        if [ "x${deb#*[a-z0-9].[a-z0-9]}" != "x$deb" ];
+        then
+            echo "    sha256bin32 = \"$deb32\";";
+            echo "    sha256bin64 = \"$deb64\";";
+        fi;
         echo "  };";
     done;
 }
