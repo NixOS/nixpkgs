@@ -7,6 +7,7 @@ stdenv.mkDerivation {
   patchPhase = ''
     sed -i -e '/#include.*base_export/c \
       #define BASE_EXPORT __attribute__((visibility("default")))
+    /#include/s|sandbox/linux|'"$(pwd)"'/linux|
     ' linux/suid/*.[hc]
   '';
 

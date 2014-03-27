@@ -22,7 +22,9 @@ stdenv.mkDerivation {
 
   prePatch = "patchShebangs .";
 
-  patches = singleton ./sandbox_userns_31.patch;
+  patches = if (versionOlder version "36.0.0.0")
+            then singleton ./sandbox_userns_31.patch
+            else singleton ./sandbox_userns_36.patch;
 
   postPatch = ''
     sed -i -r \

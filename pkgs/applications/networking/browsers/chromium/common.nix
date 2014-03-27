@@ -67,7 +67,7 @@ let
     use_system_stlport = true;
     use_system_xdg_utils = true;
     use_system_yasm = true;
-    use_system_zlib = true;
+    use_system_zlib = false;
     use_system_protobuf = true;
 
     use_system_harfbuzz = false;
@@ -112,7 +112,7 @@ let
       glib gtk dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
-      pythonPackages.gyp
+      pythonPackages.gyp pythonPackages.ply pythonPackages.jinja2
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux
