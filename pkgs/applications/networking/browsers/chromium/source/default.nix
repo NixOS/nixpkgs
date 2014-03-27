@@ -12,9 +12,7 @@ with (import ./update.nix {
 stdenv.mkDerivation {
   name = "chromium-source-${version}";
 
-  src = fetchurl {
-    inherit url sha256;
-  };
+  src = fetchurl main;
 
   buildInputs = [ python ]; # cannot patch shebangs otherwise
 
@@ -72,6 +70,7 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit version;
+    inherit version channel;
+    plugins = fetchurl binary;
   };
 }

@@ -1,7 +1,8 @@
 { stdenv
 , enablePepperFlash ? false
 , enablePepperPDF ? false
-, fetchurl # XXX
+
+, source
 }:
 
 with stdenv.lib;
@@ -11,21 +12,20 @@ let
     name = "chromium-binary-plugins";
 
     # XXX: Only temporary and has to be version-specific
-    src = fetchurl {
-      url = "https://dl.google.com/linux/chrome/deb/pool/main/g/"
-          + "google-chrome-unstable/google-chrome-unstable_"
-          + "35.0.1897.2-1_amd64.deb";
-      sha1 = "b68683fc5321d10536e4135c266b14894b7668ed";
-    };
+    src = source.plugins;
 
     phases = [ "unpackPhase" "patchPhase" "checkPhase" "installPhase" ];
     outputs = [ "pdf" "flash" ];
 
-    unpackCmd = ''
+    unpackCmd = let
+      chan = if source.channel == "dev"    then "chrome-unstable"
+        else if source.channel == "stable" then "chrome"
+        else "chrome-${source.channel}";
+    in ''
       ensureDir plugins
       ar p "$src" data.tar.lzma | tar xJ -C plugins --strip-components=4 \
-        ./opt/google/chrome-unstable/PepperFlash \
-        ./opt/google/chrome-unstable/libpdf.so
+        ./opt/google/${chan}/PepperFlash \
+        ./opt/google/${chan}/libpdf.so
     '';
 
     doCheck = true;

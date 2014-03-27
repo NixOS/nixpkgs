@@ -48,9 +48,11 @@ in rec {
   getChannel = channel: let
     chanAttrs = builtins.getAttr channel sources;
   in {
+    inherit (chanAttrs) version;
+
     main = {
       url = "${bucketURL}/chromium-${chanAttrs.version}.tar.xz";
-      inherit (chanAttrs) version sha256;
+      inherit (chanAttrs) sha256;
     };
 
     binary = let
@@ -64,7 +66,6 @@ in rec {
       sha256 = if stdenv.is64bit
                then chanAttrs.sha256bin64
                else chanAttrs.sha256bin32;
-      inherit (chanAttrs) version;
     };
   };
 
