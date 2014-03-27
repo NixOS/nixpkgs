@@ -3,6 +3,8 @@
 , gtk2, gtk3, wayland, libwebp, enchant
 , libxml2, libsoup, libsecret, libxslt, harfbuzz
 , gst-plugins-base
+, withGtk2 ? false
+, enableIntrospection ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -31,9 +33,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = [
+  configureFlags = with stdenv.lib; [
     "--disable-geolocation"
-    "--enable-introspection"
+    (optionalString enableIntrospection "--enable-introspection")
+  ] ++ stdenv.lib.optional withGtk2 [
+    "--with-gtk=2.0"
+    "--disable-webkit2"
   ];
 
   dontAddDisableDepTrack = true;
@@ -49,7 +54,10 @@ stdenv.mkDerivation rec {
     gst-plugins-base
   ];
 
-  propagatedBuildInputs = [ gtk3 libsoup ];
+  propagatedBuildInputs = [
+    libsoup
+    (if withGtk2 then gtk2 else gtk3)
+  ];
 
   #enableParallelBuilding = true; # build problems on Hydra
 }

@@ -5909,6 +5909,11 @@ let
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
 
+  webkitgtk2 = webkitgtk.override {
+    withGtk2 = true;
+    enableIntrospection = false;
+  };
+
   wildmidi = callPackage ../development/libraries/wildmidi { };
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
