@@ -11,7 +11,8 @@ stdenv.mkDerivation {
   buildInputs = [ openssl curl ];
 
   # Add support for CURL_CA_BUNDLE variable.
-  patches = [ ./find-ca-bundle.patch ];
+  # Fix <http://sourceforge.net/p/esniper/bugs/648/>.
+  patches = [ ./find-ca-bundle.patch ./fix-ebay-login.patch ];
 
   postInstall = ''
     sed <"frontends/snipe" >"$out/bin/snipe" \

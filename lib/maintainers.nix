@@ -4,16 +4,20 @@
   /* Add your name and email address here.  Keep the list
      alphabetically sorted.  */
 
+  _1126 = "Christian Lask <mail@elfsechsundzwanzig.de>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
+  akc = "Anders Claesson <akc@akc.is>";
   algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
   amiddelk = "Arie Middelkoop <amiddelk@gmail.com>";
   amorsillo = "Andrew Morsillo <andrew.morsillo@gmail.com>";
+  AndersonTorres = "Anderson Torres <torres.anderson.85@gmail.com>";
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   antono = "Antono Vasiljev <self@antono.info>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
   bbenoist = "Baptist BENOIST <return_0@live.com>";
+  bennofs = "Benno Fünfstück <benno.fuenfstueck@gmail.com>";
   bjg = "Brian Gough <bjg@gnu.org>";
   bjornfor = "Bjørn Forsman <bjorn.forsman@gmail.com>";
   bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hybrid-vectors";
-  version = "0.1";
-  sha256 = "0a5ry6xmkr0zjz0kp7qbm7kdz5yr9842gy116902djppmdn5dq05";
+  version = "0.1.2";
+  sha256 = "1scx1xr9rqdpxc1kj5zgf8w1ld1mj68hxr3nl1p352wspvpgd3qf";
   buildDepends = [ deepseq primitive vector ];
   meta = {
     homepage = "http://github.com/ekmett/hybrid-vectors";

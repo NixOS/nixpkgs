@@ -5,7 +5,7 @@
 , libass, fftw, ffms
 , ffmpeg, pkgconfig, zlib # Undocumented (?) dependencies
 , spellChecking ? true, hunspell ? null
-, automationSupport ? true, lua ? null 
+, automationSupport ? true, lua ? null
 , openalSupport ? false, openal ? null
 , alsaSupport ? true, alsaLib ? null
 , pulseaudioSupport ? true, pulseaudio ? null
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
   ;
 
   NIX_LDFLAGS = "-liconv -lavutil -lavformat -lavcodec -lswscale -lz -lm";
-  
-  preConfigure = "cd aegisub"; 
-  
+
+  preConfigure = "cd aegisub";
+
   postInstall = "ln -s $out/bin/aegisub-3.0 $out/bin/aegisub";
-  
+
   meta = {
     description = "An advanced subtitle editor";
     longDescription = ''
@@ -53,7 +53,12 @@ stdenv.mkDerivation rec {
       built-in real-time video preview.
     '';
     homepage = http://www.aegisub.org/;
-    license = "BSD"; # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd softwares
+    license = stdenv.lib.licenses.bsd3;
+              # The Aegisub sources are itself BSD/ISC,
+              # but they are linked against GPL'd softwares
+              # - so the resulting program will be GPL
+    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
     platforms = stdenv.lib.platforms.linux;
+
   };
 }

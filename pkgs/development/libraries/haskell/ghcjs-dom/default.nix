@@ -1,10 +1,10 @@
-{ cabal, glib, gtk3, mtl, transformers, webkitgtk3 }:
+{ cabal, ghcjsBase, mtl }:
 
 cabal.mkDerivation (self: {
   pname = "ghcjs-dom";
-  version = "0.0.4";
-  sha256 = "1a3dv2l3s3aifcpivmnv308k2a1kb7r4x0z9gi83wc4xr9a8f08w";
-  buildDepends = [ glib gtk3 mtl transformers webkitgtk3 ];
+  version = "0.0.7";
+  sha256 = "1yg2c0slndg3y9bk95xkbgl8zp4lmcgw9wk3jkk1sdizn3y3yggq";
+  buildDepends = [ ghcjsBase mtl ];
   meta = {
     description = "DOM library that supports both GHCJS and WebKitGTK";
     license = self.stdenv.lib.licenses.mit;

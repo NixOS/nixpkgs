@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     hashable QuickCheck text time unorderedContainers
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/aslatter/qc-instances";
     description = "Common quickcheck instances";

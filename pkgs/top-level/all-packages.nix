@@ -920,6 +920,8 @@ let
 
   expect = callPackage ../tools/misc/expect { };
 
+  f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
+
   fabric = pythonPackages.fabric;
 
   fail2ban = callPackage ../tools/security/fail2ban { };
@@ -1149,6 +1151,8 @@ let
   gvpe = builderDefsPackage ../tools/networking/gvpe {
     inherit openssl gmp nettools iproute;
   };
+
+  gvolicon = callPackage ../tools/audio/gvolicon {};
 
   gzip = callPackage ../tools/compression/gzip { };
 
@@ -1893,6 +1897,8 @@ let
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
 
+  simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
+
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   slimrat = callPackage ../tools/networking/slimrat {
@@ -2356,6 +2362,7 @@ let
 
   aspectj = callPackage ../development/compilers/aspectj { };
 
+  ats = callPackage ../development/compilers/ats { };
   ats2 = callPackage ../development/compilers/ats2 { };
 
   avra = callPackage ../development/compilers/avra { };
@@ -2717,7 +2724,13 @@ let
   # NOTE (recurseIntoAttrs): After discussion, we originally decided to
   # enable it for all GHC versions. However, this is getting too much,
   # particularly in connection with Hydra builds for all these packages.
-  # So we enable it for selected versions only.
+  # So we enable it for selected versions only. We build all ghcs, though
+
+  ghc = recurseIntoAttrs (lib.mapAttrs' (name: value:
+    lib.nameValuePair (builtins.substring (builtins.stringLength "packages_") (builtins.stringLength name) name) value.ghc
+  ) (lib.filterAttrs (name: value:
+    builtins.substring 0 (builtins.stringLength "packages_") name == "packages_"
+  ) haskell));
 
   # Current default version: 7.6.3.
   haskellPackages = haskellPackages_ghc763;
@@ -3262,6 +3275,10 @@ let
   perl = if system != "i686-cygwin" then perl516 else sysPerl;
 
   php = php54;
+
+  phpPackages = import ./php-packages.nix {
+    inherit php pkgs;
+  };
 
   php53 = callPackage ../development/interpreters/php/5.3.nix { };
 
@@ -6153,6 +6170,8 @@ let
 
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
 
+  ecdsa = callPackage ../development/python-modules/ecdsa { };
+
   numeric = callPackage ../development/python-modules/numeric { };
 
   pil = pythonPackages.pil;
@@ -6210,6 +6229,8 @@ let
   rbtools = callPackage ../development/python-modules/rbtools { };
 
   setuptools = pythonPackages.setuptools;
+
+  slowaes = callPackage ../development/python-modules/slowaes { };
 
   wxPython = pythonPackages.wxPython;
   wxPython28 = pythonPackages.wxPython28;
@@ -6473,6 +6494,8 @@ let
   });
 
   serfdom = callPackage ../servers/serfdom { };
+
+  seyren = callPackage ../servers/monitoring/seyren { };
 
   shishi = callPackage ../servers/shishi { };
 
@@ -6789,19 +6812,23 @@ let
   # Note: grsec is not enabled automatically, you need to specify which kernel
   # config options you need (e.g. by overriding extraConfig). See list of options here:
   # https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options
-  linux_3_2_grsecurity = lowPrio (lib.overrideDerivation (linux_3_2.override (args: {
+  linux_3_2_grsecurity = lowPrio (lib.addMetaAttrs {
+    maintainers = with lib.maintainers; [ wizeman ];
+  } (lib.overrideDerivation (linux_3_2.override (args: {
     kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_2_55 kernelPatches.grsec_path ];
     argsOverride = {
       modDirVersion = "${linux_3_2.modDirVersion}-grsec";
     };
-  })) (args: grsecurityOverrider args));
+  })) (args: grsecurityOverrider args)));
 
-  linux_3_13_grsecurity = lowPrio (lib.overrideDerivation (linux_3_13.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_13_6 kernelPatches.grsec_path ];
+  linux_3_13_grsecurity = lowPrio (lib.addMetaAttrs {
+    maintainers = with lib.maintainers; [ wizeman ];
+  } (lib.overrideDerivation (linux_3_13.override (args: {
+    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_13_7 kernelPatches.grsec_path ];
     argsOverride = {
       modDirVersion = "${linux_3_13.modDirVersion}-grsec";
     };
-  })) (args: grsecurityOverrider args));
+  })) (args: grsecurityOverrider args)));
 
   linux_3_2_apparmor = lowPrio (linux_3_2.override {
     kernelPatches = [ kernelPatches.apparmor_3_2 ];
@@ -7763,6 +7790,8 @@ let
 
   ekho = callPackage ../applications/audio/ekho { };
 
+  electrum = callPackage ../applications/misc/electrum { };
+
   elinks = callPackage ../applications/networking/browsers/elinks { };
 
   elvis = callPackage ../applications/editors/elvis { };
@@ -8577,12 +8606,15 @@ let
 
   mpc_cli = callPackage ../applications/audio/mpc { };
 
+  ncmpc = callPackage ../applications/audio/ncmpc { };
+
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
   normalize = callPackage ../applications/audio/normalize { };
 
   mplayer = callPackage ../applications/video/mplayer {
     pulseSupport = config.pulseaudio or false;
+    vdpauSupport = config.mplayer.vdpauSupport or false;
   };
 
   mplayer2 = callPackage ../applications/video/mplayer2 { };
@@ -8677,6 +8709,8 @@ let
   netbeans = callPackage ../applications/editors/netbeans { };
 
   ncdu = callPackage ../tools/misc/ncdu { };
+
+  ncdc = callPackage ../applications/networking/p2p/ncdc { };
 
   nedit = callPackage ../applications/editors/nedit {
     motif = lesstif;
@@ -8907,6 +8941,8 @@ let
 
   skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
 
+  slrn = callPackage ../applications/networking/newsreaders/slrn { };
+
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
 
   st = callPackage ../applications/misc/st {
@@ -8932,6 +8968,10 @@ let
             MathPlanePath Moo IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus;
     perl = perl514;
   };
+
+  curaengine = callPackage ../applications/misc/curaengine { };
+
+  cura = callPackage ../applications/misc/cura { };
 
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;

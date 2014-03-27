@@ -5,10 +5,10 @@
 , moreheaders ? false}:
 
 let
-  version = "1.4.6";
+  version = "1.4.7";
   mainSrc = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
-    sha256 = "1ihjb3dqw4icc5pvgaqbp740cyr4m8zxjfvj3v3bkd88swamp2vs";
+    sha256 = "09mnw4f1yk64f21xq4k65x4r76pmrszyzc4iixkr0w41fr5gzf13";
   };
 
   rtmp-ext = fetchgit {
@@ -71,7 +71,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A reverse proxy and lightweight webserver";
-    maintainers = [ stdenv.lib.maintainers.raskin];
+    homepage = http://nginx.org;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.all;
     inherit version;
   };

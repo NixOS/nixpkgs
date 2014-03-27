@@ -3,19 +3,17 @@
 stdenv.mkDerivation rec {
 
   name = "springlobby-${version}";
-  version = "0.180";
+  version = "0.186";
 
   src = fetchurl {
     url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
-    sha256 = "0v2pwrwiwiggyl95rcyfj3pdlwsss5vcmnyzd40r9swb9gyi55na";
+    sha256 = "0pj7v85gl76hxvfhcypxsayk8lnnhgjn2irawgx49p80wsivl64k";
   };
 
   buildInputs = [
     cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar boost libpng libX11
     libnotify gtk doxygen makeWrapper
   ];
-
-  patches = [ ./unitsync_path_find.patch ];
 
   prePatch = ''
     substituteInPlace tools/regen_config_header.sh --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
@@ -31,14 +29,15 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/springlobby \
       --prefix PATH : "${spring}/bin" \
-      --set SPRING_LIB_DIRS "${spring}/lib"
+      --set SPRING_BUNDLE_DIR "${spring}/lib"
   '';
 
   meta = with stdenv.lib; {
     homepage = http://springlobby.info/;
+    repositories.git = git://github.com/springlobby/springlobby.git;
     description = "Cross-platform lobby client for the Spring RTS project";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom maintainers.qknight maintainers.iElectric ];
+    maintainers = with maintainers; [ phreedom qknight iElectric ];
     platforms = platforms.linux;
   };
 }

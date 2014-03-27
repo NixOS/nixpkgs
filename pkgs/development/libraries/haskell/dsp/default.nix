@@ -2,8 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "dsp";
-  version = "0.2.2";
-  sha256 = "0vb71z8iky3xl40b9d79z7krq960ykcgn3y8lks3wzgiabbh2d89";
+  version = "0.2.3";
+  sha256 = "1h7y3b2gwbkq97lv6f9a4zssyqs422g5zj2bi9mq1a5fzy5i4v4v";
+  isLibrary = true;
+  isExecutable = true;
   buildDepends = [ random ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/DSP";

@@ -1,0 +1,13 @@
+--- esniper-orig/auction.c	2014-03-23 22:28:46.684289574 +0100
++++ esniper/auction.c	2014-03-23 22:24:00.540568653 +0100
+@@ -424,7 +424,9 @@
+ 		if ((pp->srcId && !strcmp(pp->srcId, "SignInAlertSupressor"))||
+ 		    (pp->pageName &&
+ 			(!strncasecmp(pp->pageName, "MyeBay", 6) ||
+-			 !strncasecmp(pp->pageName, "My eBay", 7))
++                        !strncasecmp(pp->pageName, "My eBay", 7) ||
++                        !strncasecmp(pp->pageName, "Watch list", 10) ||
++                        !strncasecmp(pp->pageName, "User Agreement", 10))
+ 		    ))
+ 			loginTime = time(NULL);
+ 		else if (pp->pageName &&

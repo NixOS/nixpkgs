@@ -46,7 +46,7 @@ assert cacaSupport -> libcaca != null;
 # but by purity reasons it should be avoided; thanks the-kenny to point it out!
 # Now, it will just download and package Waf, mimetizing bootstrap.py behaviour
 
-let 
+let
   waf = fetchurl {
     url = https://waf.googlecode.com/files/waf-1.7.13;
     sha256 = "03cc750049350ee01cdbc584b70924e333fcc17ba4a2d04648dab1535538a873";
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     python3 ${waf} install
     # Maybe not needed, but it doesn't hurt anyway: a standard font
     mkdir -p $out/share/mpv
-    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf  $out/share/mpv/subfont.ttf 
+    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf  $out/share/mpv/subfont.ttf
     '';
 
   meta = {
@@ -118,7 +118,8 @@ stdenv.mkDerivation rec {
     mpv is a free and open-source general-purpose video player, based on the MPlayer and mplayer2 projects, with great improvements above both.
     '';
     homepage = "http://mpv.io";
-    license = "GPLv2+";
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

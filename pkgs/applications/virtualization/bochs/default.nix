@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     url = "http://downloads.sourceforge.net/project/bochs/bochs/${version}/${name}.tar.gz";
     sha256 = "042blm1xb9ig4fh2bv8nrrfpgkcxy4hq8yrkx7mrdpm5g4mvfwyr";
   };
-  
+
   buildInputs = with stdenv.lib;
   [ libX11 mesa ]
   ++ optionals sdlSupport [ SDL ]
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ++ optionals curlSupport [ curl ];
 
   configureFlags = ''
-    --with-x11 
+    --with-x11
     --with-term=${if termSupport then "yes" else "no"}
     --with-sdl=${if sdlSupport then "yes" else "no"}
     --with-svga=no
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     --enable-plugins=no
     --enable-disasm
     --enable-debugger
-    --enable-ne2000 
-    --enable-e1000 
-    --enable-sb16 
-    --enable-voodoo 
-    --enable-usb 
+    --enable-ne2000
+    --enable-e1000
+    --enable-sb16
+    --enable-voodoo
+    --enable-usb
     --enable-pnic
 '';
 
@@ -56,7 +56,8 @@ stdenv.mkDerivation rec {
     Bochs is an open-source (LGPL), highly portable IA-32 PC emulator, written in C++, that runs on most popular platforms. It includes emulation of the Intel x86 CPU, common I/O devices, and a custom BIOS.
     '';
     homepage = http://bochs.sourceforge.net/;
-    license = "LGPL";
+    license = stdenv.lib.licenses.lgpl2Plus;
+    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
