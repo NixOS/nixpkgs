@@ -674,7 +674,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
 
-  bmp = callPackage ../development/libraries/haskell/bmp {};
+  bmp = callPackage ../development/libraries/haskell/bmp {
+    binary = self.binary_0_7_1_0;
+  };
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
