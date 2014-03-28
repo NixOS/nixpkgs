@@ -3371,6 +3371,14 @@ let
 
   rake = rubyLibs.rake;
 
+  rakudo = callPackage ../development/compilers/rakudo {
+    star = false;
+  };
+
+  rakudo-star = callPackage ../development/compilers/rakudo {
+    star = true;
+  };
+
   rubySqlite3 = callPackage ../development/ruby-modules/sqlite3 { };
 
   rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {
