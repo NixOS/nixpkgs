@@ -2911,7 +2911,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
           | grep -v FILTERME | sed \
             -e 's/licenses.proprietary/licenses.unfree/' \
             -e 's/{ cabal/{ cabal, src/' \
-            -e 's/pname = \([^\n]*\)/pname = \1\n  inherit src;/'  > $out
+            -e 's/pname = \([^\n]*\)/pname = \1\n  inherit src;\n  jailbreak = true;/'  > $out
       '';
     };
   in callPackage cabalExpr { inherit src; };
