@@ -14,6 +14,7 @@
   AndersonTorres = "Anderson Torres <torres.anderson.85@gmail.com>";
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   antono = "Antono Vasiljev <self@antono.info>";
+  arobyn = "Alexei Robyn <shados@shados.net>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
   bbenoist = "Baptist BENOIST <return_0@live.com>";
