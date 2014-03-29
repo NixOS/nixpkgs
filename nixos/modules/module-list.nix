@@ -96,6 +96,7 @@
   ./services/databases/postgresql.nix
   ./services/databases/virtuoso.nix
   ./services/games/ghost-one.nix
+  ./services/games/minecraft-server.nix
   ./services/hardware/acpid.nix
   ./services/hardware/amd-hybrid-graphics.nix
   ./services/hardware/bluetooth.nix
