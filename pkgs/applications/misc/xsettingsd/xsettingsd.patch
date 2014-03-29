@@ -1,0 +1,10 @@
+--- git-export/SConstruct	2014-03-03 09:27:19.336456012 +0000
++++ patched/SConstruct	2014-03-03 09:27:36.532422766 +0000
+@@ -37,6 +37,7 @@ run_tests_builder = Builder(action=run_t
+ 
+ 
+ env = Environment(
++    ENV=os.environ,
+     BUILDERS = {
+       'RunTests': run_tests_builder,
+     })
