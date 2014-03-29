@@ -210,7 +210,7 @@ in
           { ExecStart = "@${postgresql}/bin/postgres postgres ${toString flags}";
             User = "postgres";
             Group = "postgres";
-            PermissionsStartOnly = true;
+            PermissionsStartOnly = false;
 
             # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
             # http://www.postgresql.org/docs/current/static/server-shutdown.html
