@@ -10168,6 +10168,7 @@ let
 
   tptp = callPackage ../applications/science/logic/tptp {};
 
+  z3 = callPackage ../applications/science/logic/z3 {};
 
   ### SCIENCE / ELECTRONICS
 
