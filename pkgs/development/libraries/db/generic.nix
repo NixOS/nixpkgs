@@ -5,7 +5,7 @@
 # Options from inherited versions
 , version, sha256
 , extraPatches ? [ ]
-, license ? "Berkeley Database License"
+, license ? stdenv.lib.licenses.sleepycat
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     url = "http://download.oracle.com/berkeley-db/${name}.tar.gz";
     sha256 = sha256;
   };
-  
+
   patches = extraPatches;
 
   configureFlags = [

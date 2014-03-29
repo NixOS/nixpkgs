@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "IPsec Client for FreeBSD, NetBSD and many Linux based operating systems";
     platforms = platforms.unix;
     maintainers = [ maintainers.iElectric ];
-    license = "sleepycat";
+    license = licenses.sleepycat;
   };
 }
