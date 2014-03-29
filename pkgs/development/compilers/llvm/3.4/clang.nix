@@ -28,7 +28,11 @@ stdenv.mkDerivation {
   (stdenv.lib.optional (stdenv.gcc.gcc != null) "-DGCC_INSTALL_PREFIX=${stdenv.gcc.gcc}");
 
   # Clang expects to find LLVMgold in its own prefix
-  postInstall = "ln -sv ${llvm}/lib/LLVMgold.so $out/lib";
+  # Clang expects to find sanitizer libraries in its own prefix
+  postInstall = ''
+    ln -sv ${llvm}/lib/LLVMgold.so $out/lib
+    ln -sv ${llvm}/lib/clang/3.4/lib $out/lib/clang/3.4/
+  '';
 
   passthru.gcc = stdenv.gcc.gcc;
 
