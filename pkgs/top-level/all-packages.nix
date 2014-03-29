@@ -9793,7 +9793,7 @@ let
   warzone2100 = callPackage ../games/warzone2100 { };
 
   widelands = callPackage ../games/widelands {
-    libpng = libpng12;
+    lua = lua5_1;
   };
 
   worldofgoo_demo = callPackage ../games/worldofgoo {
