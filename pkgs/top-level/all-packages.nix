@@ -2869,10 +2869,15 @@ let
 
   jikes = callPackage ../development/compilers/jikes { };
 
-  julia = callPackage ../development/compilers/julia {
+  juliaGit = callPackage ../development/compilers/julia/git-20131013.nix {
     liblapack = liblapack.override {shared = true;};
     llvm = llvm_33;
   };
+  julia021 = callPackage ../development/compilers/julia/0.2.1.nix {
+    liblapack = liblapack.override {shared = true;};
+    llvm = llvm_33;
+  };
+  julia = julia021;
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
     inherit makeWrapper gtk glib pango atk gdk_pixbuf;
