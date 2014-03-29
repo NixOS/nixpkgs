@@ -118,6 +118,7 @@
       searx = 107;
       kippo = 108;
       jenkins = 109;
+      yandexdisk=110;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
