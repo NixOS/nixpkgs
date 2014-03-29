@@ -62,7 +62,7 @@ stdenv.mkDerivation {
   meta = { 
     description = "TeamSpeak voice communication server";
     homepage = http://teamspeak.com/;
-    license = "http://www.teamspeak.com/?page=downloads";
+    license = "unfree";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.arobyn ];
   };
