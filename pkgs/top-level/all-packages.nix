@@ -9601,6 +9601,10 @@ let
   mars = callPackage ../games/mars { };
 
   micropolis = callPackage ../games/micropolis { };
+  
+  mnemosyne = callPackage ../games/mnemosyne { 
+    inherit (pythonPackages) matplotlib cherrypy sqlite3;
+  };
 
   naev = callPackage ../games/naev { };
 
