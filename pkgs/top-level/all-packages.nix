@@ -9024,6 +9024,8 @@ let
 
   cura = callPackage ../applications/misc/cura { };
 
+  printrun = callPackage ../applications/misc/printrun { };
+
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
   };
