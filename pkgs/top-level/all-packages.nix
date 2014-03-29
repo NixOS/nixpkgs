@@ -1638,6 +1638,12 @@ let
 
   parted = callPackage ../tools/misc/parted { hurd = null; };
 
+  pitivi = callPackage ../applications/video/pitivi {
+    gst = gst_all_1;
+    clutter-gtk = clutter_gtk;
+    inherit (gnome3) gnome_icon_theme gnome_icon_theme_symbolic;
+  };
+
   hurdPartedCross =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
     then (makeOverridable

@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "09c6yls8ipbmwimdjr7xi3hvf2xa1xn1pv07855r7wfyzas1xbl1";
   };
 
+  patches = [ ./different-path-with-pygobject.patch ];
+
   buildInputs =
     [ pkgconfig gst-plugins-base pygtk pygobject3 ]
     ;
