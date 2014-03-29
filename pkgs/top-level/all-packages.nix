@@ -1394,6 +1394,8 @@ let
 
   minecraft = callPackage ../games/minecraft { };
 
+  minecraft-server = callPackage ../games/minecraft-server { };
+
   minetest = callPackage ../games/minetest {
     libpng = libpng12;
   };
