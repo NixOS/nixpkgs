@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     [ # These are all changes between upstream and
       # https://github.com/edolstra/systemd/tree/nixos-v203.
       ./fixes.patch
+      ./fix_console_in_containers.patch
     ]
     ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
