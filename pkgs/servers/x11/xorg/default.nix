@@ -1100,11 +1100,11 @@ let
   })) // {inherit libICE libSM libX11 libXext libXmu xproto libXt ;};
 
   utilmacros = (stdenv.mkDerivation ((if overrides ? utilmacros then overrides.utilmacros else x: x) {
-    name = "util-macros-1.18.0";
+    name = "util-macros-1.19.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/util-macros-1.18.0.tar.bz2;
-      sha256 = "0nwlg1d4r23byncb3kar1a0mhjn52fc1m0ygl9p5gw2jm0rd3qz5";
+      url = mirror://xorg/individual/util/util-macros-1.19.0.tar.bz2;
+      sha256 = "1fnhpryf55l0yqajxn0cxan3kvsjzi67nlanz8clwqzf54cb2d98";
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
@@ -2010,11 +2010,11 @@ let
   })) // {inherit ;};
 
   xrandr = (stdenv.mkDerivation ((if overrides ? xrandr then overrides.xrandr else x: x) {
-    name = "xrandr-1.4.1";
+    name = "xrandr-1.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xrandr-1.4.1.tar.bz2;
-      sha256 = "0l0y4ifaqg90ibci276jvyawpj7ynzd8czsqxy5pfljnjymm9db7";
+      url = mirror://xorg/individual/app/xrandr-1.4.2.tar.bz2;
+      sha256 = "1g4hnj53wknsjwiqivyy3jl4qw7jwrpncz7d5p2z29zq5zlnxrxj";
     };
     buildInputs = [pkgconfig libX11 xproto libXrandr libXrender ];
   })) // {inherit libX11 xproto libXrandr libXrender ;};
