@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python
+{ stdenv, fetchurl, pkgconfig, python, gobjectIntrospection
 , gnonlin, libxml2
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n7nw8rqvwna9af55lggah44gdvfgld1igvgaya8glc37wpq89b0";
   };
 
-  nativeBuildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig python gobjectIntrospection ];
 
   propagatedBuildInputs = [ gnonlin libxml2 ];
 }
