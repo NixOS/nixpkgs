@@ -38,6 +38,8 @@ optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
 
     boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
 
+    boot.kernelModules = [ "vboxsf" ];
+
     users.extraGroups.vboxsf.gid = config.ids.gids.vboxsf;
 
     systemd.services.virtualbox =
@@ -52,7 +54,7 @@ optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
         serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/sbin/VBoxService VBoxService --foreground";
       };
 
-    hardware.opengl.videoDrivers = mkOverride 50 [ "virtualbox" ];
+    services.mesa.videoDrivers = mkOverride 50 [ "virtualbox" ];
 
     services.xserver.config =
       ''

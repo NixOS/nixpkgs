@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
 , libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
-, which, alsaLib, curl, gawk
+, which, alsaLib, curl, libvpx, gawk
 , xorriso, makeself, perl, pkgconfig
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
@@ -11,7 +11,7 @@ with stdenv.lib;
 
 let
 
-  version = "4.2.22"; # changes ./guest-additions as well
+  version = "4.3.8"; # changes ./guest-additions as well
 
   forEachModule = action: ''
     for mod in \
@@ -31,13 +31,13 @@ let
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extpackRevision = "91556";
+  extpackRevision = "92456";
   extensionPack = requireFile rec {
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
     # IMPORTANT: Hash must be base16 encoded because it's used as an input to
     # VBoxExtPackHelperApp!
-    # Tip: see http://dlc.sun.com.edgesuite.net/virtualbox/4.2.22/SHA256SUMS
-    sha256 = "79c0da87451cab3868f64d48bf9a7fdd710786c05ed4b3070b008c3aa1ce4f7a";
+    # Tip: see http://dlc.sun.com.edgesuite.net/virtualbox/4.3.8/SHA256SUMS
+    sha256 = "eb364239fc399416af6c985b3082bfbdd206d42a60e7af98ffba13d60912b864";
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
       and Evaluation License (PUEL) by downloading the related binaries from:
@@ -56,12 +56,12 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "4a017ec5fa0e0cfa830ae6c2b9d680c9b108e5fb96348e1397a7d0ea051f8bc1";
+    sha256 = "ffabd8735bdc80753cec29d01b499769f41e083f37a3f58b3055f19d3b1b9641";
   };
 
   buildInputs =
     [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL
-      libcap glib lvm2 python alsaLib curl pam xorriso makeself perl
+      libcap glib lvm2 python alsaLib curl libvpx pam xorriso makeself perl
       pkgconfig which libXmu ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python;
