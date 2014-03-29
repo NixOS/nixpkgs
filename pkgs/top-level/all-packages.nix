@@ -4584,7 +4584,7 @@ let
 
   gts = callPackage ../development/libraries/gts { };
 
-  gvfs = callPackage ../development/libraries/gvfs { };
+  gvfs = callPackage ../development/libraries/gvfs { gconf = gnome.GConf; };
 
   gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
 
