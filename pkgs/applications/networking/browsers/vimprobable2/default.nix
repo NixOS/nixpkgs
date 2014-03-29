@@ -2,11 +2,11 @@
   pkgconfig, webkit, gsettings_desktop_schemas }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
+  version = "1.4.2";
   name = "vimprobable2-${version}";
   src = fetchurl {
     url = "mirror://sourceforge/vimprobable/vimprobable2_${version}.tar.bz2";
-    sha256 = "19zx1k3s2gnhzzd2wpyqsk151w9p52ifl64xaz9a6qkgvrxlli8p";
+    sha256 = "13jdximksh9r3cgd2f8vms0pbsn3x0gxvyqdqiw16xp5fmdx5kzr";
   };
 
   # Nixos default ca bundle
