@@ -122,6 +122,7 @@
       notbit = 111;
       ngircd = 112;
       btsync = 113;
+      teamspeak = 114;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -220,6 +221,7 @@
       jenkins = 109;
       systemd-journal-gateway = 110;
       notbit = 111;
+      teamspeak = 114;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 
