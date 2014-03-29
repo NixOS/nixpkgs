@@ -170,6 +170,8 @@ in
 
   config = mkIf config.services.cjdns.enable {
 
+    boot.kernelModules = [ "tun" ];
+
     /*
     networking.firewall.allowedUDPPorts = mkIf (cfg.udp.bind.port != null) [
       cfg.udp.bind.port
