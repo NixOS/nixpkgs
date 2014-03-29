@@ -285,7 +285,7 @@ in
     networking.firewall.allowedTCPPorts = cfg.ports;
 
     security.pam.services.sshd =
-      { startSession = true;
+      { startSession = !config.boot.isContainer;
         showMotd = true;
         unixAuth = cfg.passwordAuthentication;
       };

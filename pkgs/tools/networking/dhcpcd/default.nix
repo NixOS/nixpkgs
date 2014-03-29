@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   installFlags = "DBDIR=\${TMPDIR}/db SYSCONFDIR=$(out)/etc";
 
   # Check that the udev plugin got built.
-  postInstall = "[ -e $out/lib/dhcpcd/dev/udev.so ]";
+  postInstall = stdenv.lib.optional (udev != null) "[ -e $out/lib/dhcpcd/dev/udev.so ]";
 
   meta = {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";
