@@ -2120,6 +2120,8 @@ let
 
   vtun = callPackage ../tools/networking/vtun { };
 
+  wal_e = callPackage ../tools/backup/wal-e { };
+
   wbox = callPackage ../tools/networking/wbox {};
 
   welkin = callPackage ../tools/graphics/welkin {};
