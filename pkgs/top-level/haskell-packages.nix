@@ -1720,6 +1720,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   monadcryptorandom = callPackage ../development/libraries/haskell/monadcryptorandom {};
 
+  monadloc = callPackage ../development/libraries/haskell/monadloc {};
+
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
 
   monadLogger = callPackage ../development/libraries/haskell/monad-logger {};
