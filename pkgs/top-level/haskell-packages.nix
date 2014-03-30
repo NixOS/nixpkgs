@@ -153,7 +153,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     html         = self.html_1_0_1_2;
     HTTP         = self.HTTP_4000_2_11;
     HUnit        = self.HUnit_1_2_5_2;
-    mtl          = self.mtl_2_1_2;
+    mtl          = self.mtl_2_1_3_1;
     network      = self.network_2_4_2_2;
     OpenGL       = self.OpenGL_2_9_1_0;
     OpenGLRaw    = self.OpenGLRaw_1_4_0_0;
@@ -1761,7 +1761,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   mtl_2_1_2 = callPackage ../development/libraries/haskell/mtl/2.1.2.nix {
     transformers = self.transformers_0_3_0_0;
   };
-  mtl = self.mtl_2_1_2;
+  mtl_2_1_3_1 = callPackage ../development/libraries/haskell/mtl/2.1.3.1.nix {
+    transformers = self.transformers_0_3_0_0;
+  };
+  mtl = self.mtl_2_1_3_1;
 
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
 
