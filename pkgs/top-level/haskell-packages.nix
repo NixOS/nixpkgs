@@ -1177,6 +1177,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   gio = callPackage ../development/libraries/haskell/gio {};
 
+  gitDate = callPackage ../development/libraries/haskell/git-date {};
+
   github = callPackage ../development/libraries/haskell/github {};
 
   gitit = callPackage ../development/libraries/haskell/gitit {};
