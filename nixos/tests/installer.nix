@@ -39,7 +39,8 @@ let
 
       { imports =
           [ ./hardware-configuration.nix
-            "''${modulesPath}/testing/test-instrumentation.nix"
+            <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
+            <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
         boot.loader.grub.version = ${toString grubVersion};
@@ -48,7 +49,6 @@ let
         ''}
         boot.loader.grub.device = "${grubDevice}";
         boot.loader.grub.extraConfig = "serial; terminal_output.serial";
-        boot.initrd.kernelModules = [ "virtio_console" ];
 
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
       }
