@@ -816,6 +816,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   conduitCombinators = callPackage ../development/libraries/haskell/conduit-combinators {};
 
+  conduitExtra = callPackage ../development/libraries/haskell/conduit-extra {};
+
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
 
   configurator = callPackage ../development/libraries/haskell/configurator {};
