@@ -443,8 +443,20 @@ Note that both <filename>configuration.nix</filename> and
 define an option, NixOS will try to <emphasis>merge</emphasis> the
 definitions.  In the case of
 <option>environment.systemPackages</option>, that’s easy: the lists of
-packages can simply be concatenated.  For other types of options, a
-merge may not be possible: for instance, if two modules define
+packages can simply be concatenated.  The value in
+<filename>configuration.nix</filename> is merged last, so for
+list-type options, it will appear at the end of the merged list. If
+you want it to appear first, you can use <varname>mkBefore</varname>:
+
+<programlisting>
+boot.kernelModules = mkBefore [ "kvm-intel" ];
+</programlisting>
+
+This causes the <literal>kvm-intel</literal> kernel module to be
+loaded before any other kernel modules.</para>
+
+<para>For other types of options, a merge may not be possible. For
+instance, if two modules define
 <option>services.httpd.adminAddr</option>,
 <command>nixos-rebuild</command> will give an error:
 
