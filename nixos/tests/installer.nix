@@ -39,7 +39,6 @@ let
 
       { imports =
           [ ./hardware-configuration.nix
-            <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 

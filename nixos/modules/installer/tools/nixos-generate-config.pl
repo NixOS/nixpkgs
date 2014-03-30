@@ -216,11 +216,19 @@ foreach my $path (glob "/sys/class/block/*") {
 }
 
 
+my $dmi = `@dmidecode@/sbin/dmidecode`;
+
+
 # Check if we're a VirtualBox guest.  If so, enable the guest
 # additions.
-my $dmi = `@dmidecode@/sbin/dmidecode`;
 if ($dmi =~ /Manufacturer: innotek/) {
     push @attrs, "services.virtualbox.enable = true;"
+}
+
+
+# Likewise for QEMU.
+if ($dmi =~ /Manufacturer: Bochs/) {
+    push @imports, "<nixpkgs/nixos/modules/profiles/qemu-guest.nix>";
 }
 
 
