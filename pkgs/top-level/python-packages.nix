@@ -5848,7 +5848,7 @@ rec {
     };
 
     buildInputs = with pkgs; [
-      pkgconfig python gtk2 pygtk libxml2 libxslt libsoup webkit_gtk2 icu
+      pkgconfig python gtk2 pygtk libxml2 libxslt libsoup webkitgtk2 icu
     ];
 
     meta = {
