@@ -1177,6 +1177,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   gio = callPackage ../development/libraries/haskell/gio {};
 
+  gitDate = callPackage ../development/libraries/haskell/git-date {};
+
   github = callPackage ../development/libraries/haskell/github {};
 
   gitit = callPackage ../development/libraries/haskell/gitit {};
@@ -1938,6 +1940,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   permutation = callPackage ../development/libraries/haskell/permutation {};
 
   persistent = callPackage ../development/libraries/haskell/persistent {};
+
+  persistentMysql = callPackage ../development/libraries/haskell/persistent-mysql {};
 
   persistentPostgresql = callPackage ../development/libraries/haskell/persistent-postgresql {};
 
@@ -2899,12 +2903,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   # Build a cabal package given a local .cabal file
   buildLocalCabal = src: name: let
-    cabalExpr = pkgs.stdenv.mkDerivation {
+    cabalExpr = pkgs.stdenv.mkDerivation ({
       name = "${name}.nix";
-
-      LANG = "en_US.UTF-8";
-
-      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
 
       buildCommand = ''
       ${self.cabal2nix}/bin/cabal2nix ${src + "/${name}.cabal"} --sha256=FILTERME \
@@ -2913,7 +2913,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
             -e 's/{ cabal/{ cabal, src/' \
             -e 's/pname = \([^\n]*\)/pname = \1\n  inherit src;\n  jailbreak = true;/'  > $out
       '';
-    };
+
+    } // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
+      LANG = "en_US.UTF-8";
+      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+    });
   in callPackage cabalExpr { inherit src; };
 
   cabalDev = callPackage ../development/tools/haskell/cabal-dev {};
