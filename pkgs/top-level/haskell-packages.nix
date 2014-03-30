@@ -2258,6 +2258,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   StrafunskiStrategyLib = callPackage ../development/libraries/haskell/Strafunski-StrategyLib {};
 
+  streamingCommons = callPackage ../development/libraries/haskell/streaming-commons {};
+
   streamproc = callPackage ../development/libraries/haskell/streamproc {};
 
   strict = callPackage ../development/libraries/haskell/strict {};
