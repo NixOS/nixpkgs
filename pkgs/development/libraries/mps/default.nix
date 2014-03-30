@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "A flexible memory management and garbage collection library";
     homepage    = "http://www.ravenbrook.com/project/mps";
     license     = stdenv.lib.licenses.sleepycat;
-    platforms   = stdenv.lib.platforms.unix;
+    platforms   = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }
