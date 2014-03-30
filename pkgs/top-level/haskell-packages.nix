@@ -165,7 +165,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     regexCompat  = self.regexCompat_0_95_1;
     regexPosix   = self.regexPosix_0_95_2;
     split        = self.split_0_2_2;
-    stm          = self.stm_2_4_2;
+    stm          = self.stm_2_4_3;
     syb          = self.syb_0_4_1;
     text         = self.text_1_1_0_1;
     transformers = self.transformers_0_3_0_0;   # this has become a core package in GHC 7.7
@@ -2349,7 +2349,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   stm_2_3 = callPackage ../development/libraries/haskell/stm/2.3.nix {};
   stm_2_4 = callPackage ../development/libraries/haskell/stm/2.4.nix {};
   stm_2_4_2 = callPackage ../development/libraries/haskell/stm/2.4.2.nix {};
-  stm = self.stm_2_4_2;
+  stm_2_4_3 = callPackage ../development/libraries/haskell/stm/2.4.3.nix {};
+  stm = self.stm_2_4_3;
 
   stmChans = callPackage ../development/libraries/haskell/stm-chans {};
 
