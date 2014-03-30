@@ -21,8 +21,6 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
 
-  patches = optional (kernel ? version && versionAtLeast kernel.version "3.13") ./kernel-3.13.patch;
-
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
