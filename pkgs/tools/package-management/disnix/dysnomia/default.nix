@@ -9,6 +9,7 @@
 , enableTomcatWebApplication ? false
 , enableMongoDatabase ? false
 , catalinaBaseDir ? "/var/tomcat"
+, getopt
 }:
 
 assert enableMySQLDatabase -> mysql != null;
@@ -20,8 +21,8 @@ assert enableMongoDatabase -> mongodb != null;
 stdenv.mkDerivation {
   name = "dysnomia-0.3pred677260f77bb202c7490f7db08dbd8442c9db484";
   src = fetchurl {
-    url = http://hydra.nixos.org/build/6763096/download/1/dysnomia-0.3pred677260f77bb202c7490f7db08dbd8442c9db484.tar.gz;
-    sha256 = "0k7qpqa9inzxjdryd7zfzxid8k1icsxxw995chzw4wrlgxns16xy";
+    url = http://hydra.nixos.org/build/9146265/download/1/dysnomia-0.3pre313a5f99a166fee2e0245dfd25f41ec9ed958075.tar.gz;
+    sha256 = "0fgbqybr9rfr95fkmv1hpq7al0p1kxa385k6sjc7iwwcxs4cmxf5";
   };
   
   preConfigure = if enableEjabberdDump then "export PATH=$PATH:${ejabberd}/sbin" else "";
@@ -37,7 +38,7 @@ stdenv.mkDerivation {
      ${if enableMongoDatabase then "--with-mongodb" else "--without-mongodb"}
    '';
   
-  buildInputs = []
+  buildInputs = [ getopt ]
     ++ stdenv.lib.optional enableEjabberdDump ejabberd
     ++ stdenv.lib.optional enableMySQLDatabase mysql
     ++ stdenv.lib.optional enablePostgreSQLDatabase postgresql
