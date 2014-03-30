@@ -1941,6 +1941,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   persistent = callPackage ../development/libraries/haskell/persistent {};
 
+  persistentMysql = callPackage ../development/libraries/haskell/persistent-mysql {};
+
   persistentPostgresql = callPackage ../development/libraries/haskell/persistent-postgresql {};
 
   persistentSqlite = callPackage ../development/libraries/haskell/persistent-sqlite {};
