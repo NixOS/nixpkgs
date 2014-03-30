@@ -426,7 +426,7 @@ let
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
 
-  cb0cat = callPackage ../tools/security/cb0cat { };
+  cb1cat = callPackage ../tools/security/cb1cat { };
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
