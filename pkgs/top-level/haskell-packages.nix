@@ -2816,6 +2816,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   BNFCMeta = callPackage ../development/tools/haskell/BNFC-meta {};
 
+  cake3 = callPackage ../development/tools/haskell/cake3 {};
+
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
   Ebnf2ps = callPackage ../development/tools/parsing/Ebnf2ps {};
