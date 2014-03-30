@@ -1,20 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, xorg, libjpeg, libpng
-, fontconfig, freetype, pam, dbus_libs, makeWrapper, pkgs, theme ? null }:
-
-let 
-  slimThemesDir =
-      let
-        unpackedTheme = pkgs.stdenv.mkDerivation {
-          name = "slim-theme";
-          buildCommand = ''
-            ensureDir $out
-            cd $out
-            unpackFile ${theme}
-            ln -s * default
-          '';
-        };
-    in if theme == null then "$out/share/slim/themes" else unpackedTheme;
-in
+, fontconfig, freetype, pam, dbus_libs, makeWrapper, pkgs }:
 
 stdenv.mkDerivation rec {
   name = "slim-1.3.6";
@@ -35,7 +20,7 @@ stdenv.mkDerivation rec {
       ./run-once.patch
     ];
 
-  preConfigure = "substituteInPlace CMakeLists.txt --replace /etc $out/etc --replace /lib $out/lib";
+  preConfigure = "substituteInPlace CMakeLists.txt --replace /lib $out/lib";
 
   cmakeFlags = [ "-DUSE_PAM=1" ];
 
@@ -46,10 +31,6 @@ stdenv.mkDerivation rec {
       pam dbus_libs
       xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXmu xorg.libXft makeWrapper
     ];
-
-  postInstall = ''
-    wrapProgram $out/bin/slimlock --set SLIM_THEMESDIR "${slimThemesDir}" --set SLIM_CFGFILE "$out/etc/slim.cfg"
-  '';
 
   NIX_CFLAGS_LINK = "-lXmu";
 
