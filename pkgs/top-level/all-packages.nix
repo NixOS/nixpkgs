@@ -1596,7 +1596,9 @@ let
 
   openvpn = callPackage ../tools/networking/openvpn { };
 
-  optipng = callPackage ../tools/graphics/optipng { };
+  optipng = callPackage ../tools/graphics/optipng {
+    libpng = libpng12;
+  };
 
   oslrd = callPackage ../tools/networking/oslrd { };
 
