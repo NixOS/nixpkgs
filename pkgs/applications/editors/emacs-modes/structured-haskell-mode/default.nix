@@ -11,7 +11,7 @@ cabal.mkDerivation (self: {
   postInstall = ''
     emacs -L elisp --batch -f batch-byte-compile "elisp/"*.el
     install -d $out/share/emacs/site-lisp
-    install "elisp/"*.elc $out/share/emacs/site-lisp
+    install "elisp/"*.el"elisp/"*.elc $out/share/emacs/site-lisp
   '';
   meta = {
     homepage = "https://github.com/chrisdone/structured-haskell-mode";
