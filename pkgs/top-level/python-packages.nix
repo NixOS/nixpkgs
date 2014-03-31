@@ -1837,7 +1837,6 @@ rec {
     propagatedBuildInputs = [ pythonPackages.pycurl ];
 
   });
-  # */
 
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.3";
