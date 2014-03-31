@@ -1172,6 +1172,8 @@ let
 
   hardlink = callPackage ../tools/system/hardlink { };
 
+  hashcat = callPackage ../tools/security/hashcat { };
+
   halibut = callPackage ../tools/typesetting/halibut { };
 
   hddtemp = callPackage ../tools/misc/hddtemp { };
