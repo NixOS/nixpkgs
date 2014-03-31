@@ -18,8 +18,9 @@ let
     name = "nixos-container";
     dir = "bin";
     isExecutable = true;
-    src = ./nixos-container.sh;
-    inherit (pkgs) bash socat;
+    src = ./nixos-container.pl;
+    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
+    inherit (pkgs) socat;
   };
 
 in
