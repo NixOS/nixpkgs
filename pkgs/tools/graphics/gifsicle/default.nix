@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, xproto, libXt, libX11 }:
+{ stdenv, fetchurl, xproto, libXt, libX11, gifview ? false, static ? false }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation {
   name = "gifsicle-1.78";
@@ -8,7 +10,9 @@ stdenv.mkDerivation {
     sha256 = "0dzp5sg82klji4lbj1m4cyg9fb3l837gkipdx657clib97klyv53";
   };
 
-  buildInputs = [ xproto libXt libX11 ];
+  buildInputs = optional gifview [ xproto libXt libX11 ];
+
+  LDFLAGS = optional static "-static";
 
   meta = { 
     description = "Command-line tool for creating, editing, and getting information about GIF images and animations";
