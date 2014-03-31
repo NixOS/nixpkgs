@@ -321,6 +321,23 @@ in rec {
   };
 
 
+  pathOptions = unitOptions // {
+
+    pathConfig = mkOption {
+      default = {};
+      example = { PathChanged = "/some/path"; Unit = "changedpath.service"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Path]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.path</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
+
   mountOptions = unitOptions // {
 
     what = mkOption {
