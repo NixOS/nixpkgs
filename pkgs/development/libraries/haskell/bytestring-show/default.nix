@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bytestring-show";
-  version = "0.3.5.5";
-  sha256 = "0vd8f3jrzi2s119rcn20k6srk6l7ypiars1mxw1n1jrjx8ill2y4";
+  version = "0.3.5.6";
+  sha256 = "04h81a0bh2fvnkby1qafnydb29gzk6d4d311i2lbn7lm2vyjw919";
   buildDepends = [ binary ];
   meta = {
     homepage = "http://code.haskell.org/~dolio/";
