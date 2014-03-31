@@ -1650,6 +1650,8 @@ let
     inherit (gnome3) gnome_icon_theme gnome_icon_theme_symbolic;
   };
 
+  p0f = callPackage ../tools/security/p0f { };
+
   hurdPartedCross =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
     then (makeOverridable
