@@ -1172,6 +1172,8 @@ let
 
   hardlink = callPackage ../tools/system/hardlink { };
 
+  hashcat = callPackage ../tools/security/hashcat { };
+
   halibut = callPackage ../tools/typesetting/halibut { };
 
   hddtemp = callPackage ../tools/misc/hddtemp { };
@@ -1647,6 +1649,8 @@ let
     clutter-gtk = clutter_gtk;
     inherit (gnome3) gnome_icon_theme gnome_icon_theme_symbolic;
   };
+
+  p0f = callPackage ../tools/security/p0f { };
 
   hurdPartedCross =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
