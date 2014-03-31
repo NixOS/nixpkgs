@@ -267,9 +267,7 @@ in
         ${cfg.localAddress} ${name}.containers
       '') config.containers);
 
-    environment.systemPackages = optional (config.containers != {}) nixos-container;
-
-    system.build.foo = nixos-container;
+    environment.systemPackages = [ nixos-container ];
 
   };
 }
