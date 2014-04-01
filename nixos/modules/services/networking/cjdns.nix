@@ -8,8 +8,6 @@
 # (without too much shell hackery), a skeleton of the
 # configuration building lies commented out.
 
- shell hackery), 
-
 { config, pkgs, ... }:
 
 with pkgs.lib;
