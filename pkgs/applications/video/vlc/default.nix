@@ -6,6 +6,7 @@
 , mpeg2dec, udev, gnutls, avahi, libcddb, jackaudio, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
+, libvdpau
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
       udev gnutls avahi libcddb jackaudio SDL SDL_image libmtp unzip taglib
       libkate libtiger libv4l samba liboggz libass libdvbpsi libva
       xlibs.xlibs xlibs.libXv xlibs.libXvMC xlibs.libXpm xlibs.xcbutilkeysyms
-      libdc1394 libraw1394 libopus libebml libmatroska
+      libdc1394 libraw1394 libopus libebml libmatroska libvdpau
     ];
 
   nativeBuildInputs = [ pkgconfig ];
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
       "--with-kde-solid=$out/share/apps/solid/actions"
       "--enable-dc1394"
       "--enable-ncurses"
+      "--enable-vdpau"
     ];
 
   preConfigure = ''sed -e "s@/bin/echo@echo@g" -i configure'';
