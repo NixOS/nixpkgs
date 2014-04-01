@@ -8,7 +8,7 @@
 , libusb1, libexif, pciutils
 
 , python, pythonPackages, perl, pkgconfig
-, nspr, udev, krb5, file
+, nspr, udev, krb5
 , utillinux, alsaLib
 , gcc, bison, gperf
 , glib, gtk, dbus_glib
@@ -54,6 +54,7 @@ let
       sed -i -r \
         -e 's/-f(stack-protector)(-all)?/-fno-\1/' \
         -e 's|/bin/echo|echo|' \
+        -e "/python_arch/s/: *'[^']*'/: '""'/" \
         build/common.gypi
       sed -i '/not RunGN/,+1d' build/gyp_chromium
       sed -i -e 's|/usr/bin/gcc|gcc|' \
@@ -165,8 +166,7 @@ in stdenv.mkDerivation rec {
     nspr udev
     (if useOpenSSL then openssl else nss)
     utillinux alsaLib
-    gcc bison gperf
-    krb5 file
+    gcc bison gperf krb5
     glib gtk dbus_glib
     libXScrnSaver libXcursor libXtst mesa
     pciutils protobuf speechd libXdamage
@@ -223,8 +223,10 @@ in stdenv.mkDerivation rec {
     ffmpeg_branding = "Chrome";
   } // optionalAttrs (stdenv.system == "x86_64-linux") {
     target_arch = "x64";
+    python_arch = "x86-64";
   } // optionalAttrs (stdenv.system == "i686-linux") {
     target_arch = "ia32";
+    python_arch = "ia32";
   });
 
   configurePhase = ''
