@@ -2060,11 +2060,11 @@ let
   })) // {inherit libX11 xbitmaps libXcursor libXmu ;};
 
   xtrans = (stdenv.mkDerivation ((if overrides ? xtrans then overrides.xtrans else x: x) {
-    name = "xtrans-1.3.3";
+    name = "xtrans-1.3.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/xtrans-1.3.3.tar.bz2;
-      sha256 = "1gq9i9p1q7wgaj1vm1n5mrw0rp0bpcdk4hdy9yj82i92rsnv8bb2";
+      url = mirror://xorg/individual/lib/xtrans-1.3.4.tar.bz2;
+      sha256 = "0fjq9xa37k1czkidj3c5sads51gibrjvrxz9ag3hh9fmxzilwk85";
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
