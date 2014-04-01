@@ -16,8 +16,7 @@ stdenv.mkDerivation rec {
   version = "1.3.77";
 
   src  = fetchurl {
-    url  = "http://download-lb.utorrent.com/endpoint/btsync/os/linux-${arch}/track/stable";
-    name = "btsync-${arch}-${version}.tar.gz";
+    url  = "http://syncapp.bittorrent.com/${version}/btsync_${arch}-${version}.tar.gz";
     inherit sha256;
   };
 
