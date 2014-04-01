@@ -18,18 +18,6 @@ let
     /var/log/rippled/debug.log
 
   ''
-  /*
-  + optionalString (cfg.ips != null) ''
-    [ips]
-    ${concatStringsSep "\n" cfg.ips}
-
-  ''
-  + optionalString (cfg.ipsFixed != null) ''
-    [ips_fixed]
-    ${concatStringsSep "\n" cfg.ipsFixed}
-
-  ''
-  */
   + optionalString (cfg.peerIp != null) ''
     [peer_ip]
     ${cfg.peerIp}
@@ -56,6 +44,16 @@ in
         default = false;
 	description = "Whether to enable rippled";
       };
+
+      #
+      # Rippled has a simple configuration file layout that is easy to 
+      # build with nix. Many of the options are defined here but are 
+      # commented out until the code to append them to the config above
+      # is written and they are tested.
+      #
+      # If you find a yourself implementing more options, please submit a 
+      # pull request.
+      #
 
       /*
       ips = mkOption {
@@ -285,16 +283,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    environment = {
-      etc = singleton
-        { source = rippledStateCfgFile;
-	  target = "rippled";
-	};
-	
-	# users can attempt to send RPC commands to the server.
-	systemPackages = [ pkgs.rippled ];
-    };
 
     users.extraUsers = singleton
       { name = "rippled";
