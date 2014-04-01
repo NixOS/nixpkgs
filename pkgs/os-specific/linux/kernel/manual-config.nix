@@ -198,6 +198,7 @@ let
         repositories.git = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;
         maintainers = [
           maintainers.shlevy
+          maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
       };
