@@ -180,6 +180,7 @@
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/kippo.nix
   ./services/networking/minidlna.nix
+  ./services/networking/murmur.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
   ./services/networking/ngircd.nix
