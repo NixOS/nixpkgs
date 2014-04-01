@@ -105,7 +105,6 @@ in
                         security.initialRootPassword = mkDefault "!";
                         networking.hostName = mkDefault name;
                         networking.useDHCP = false;
-                        imports = [ ./container-login.nix ];
                       };
                     in [ extraConfig config.config ];
                   prefix = [ "containers" name ];

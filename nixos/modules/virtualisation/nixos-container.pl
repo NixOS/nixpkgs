@@ -116,7 +116,6 @@ with pkgs.lib;
   security.initialRootPassword = mkDefault "!";
   networking.hostName = mkDefault "$containerName";
   networking.useDHCP = false;
-  imports = [ <nixpkgs/nixos/modules/virtualisation/container-login.nix> ];
   $extraConfig
 }
 EOF

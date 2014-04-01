@@ -294,6 +294,7 @@
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
   ./testing/service-runner.nix
+  ./virtualisation/container-login.nix
   ./virtualisation/containers.nix
   ./virtualisation/libvirtd.nix
   #./virtualisation/nova.nix

@@ -1,8 +1,10 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
+
+with lib;
 
 {
 
-  config = {
+  config = mkIf config.boot.isContainer {
 
     # Provide a login prompt on /var/lib/login.socket.  On the host,
     # you can connect to it by running ‘socat
