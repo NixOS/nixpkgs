@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, xorg, libjpeg, libpng
-, fontconfig, freetype, pam, dbus_libs }:
+, fontconfig, freetype, pam, dbus_libs, makeWrapper, pkgs }:
 
 stdenv.mkDerivation rec {
   name = "slim-1.3.6";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       ./run-once.patch
     ];
 
-  preConfigure = "substituteInPlace CMakeLists.txt --replace /etc $out/etc --replace /lib $out/lib";
+  preConfigure = "substituteInPlace CMakeLists.txt --replace /lib $out/lib";
 
   cmakeFlags = [ "-DUSE_PAM=1" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cmake pkgconfig libjpeg libpng fontconfig freetype
       pam dbus_libs
-      xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXmu xorg.libXft
+      xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXmu xorg.libXft makeWrapper
     ];
 
   NIX_CFLAGS_LINK = "-lXmu";

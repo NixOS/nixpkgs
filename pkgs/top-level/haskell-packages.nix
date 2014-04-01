@@ -143,7 +143,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     inherit (self) cabal ghc;
     async        = self.async_2_0_1_5;
     attoparsec   = self.attoparsec_0_11_2_1;
-    caseInsensitive = self.caseInsensitive_1_1_0_3;
+    caseInsensitive = self.caseInsensitive_1_2_0_0;
     cgi          = self.cgi_3001_1_8_5;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_5_1_0;
@@ -153,7 +153,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     html         = self.html_1_0_1_2;
     HTTP         = self.HTTP_4000_2_11;
     HUnit        = self.HUnit_1_2_5_2;
-    mtl          = self.mtl_2_1_2;
+    mtl          = self.mtl_2_1_3_1;
     network      = self.network_2_4_2_2;
     OpenGL       = self.OpenGL_2_9_1_0;
     OpenGLRaw    = self.OpenGLRaw_1_4_0_0;
@@ -165,7 +165,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     regexCompat  = self.regexCompat_0_95_1;
     regexPosix   = self.regexPosix_0_95_2;
     split        = self.split_0_2_2;
-    stm          = self.stm_2_4_2;
+    stm          = self.stm_2_4_3;
     syb          = self.syb_0_4_1;
     text         = self.text_1_1_0_1;
     transformers = self.transformers_0_3_0_0;   # this has become a core package in GHC 7.7
@@ -175,7 +175,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     zlib         = self.zlib_0_5_4_1;
     cabalInstall = self.cabalInstall_1_18_0_3;
     alex         = self.alex_3_1_3;
-    haddock      = self.haddock_2_13_2_1;
+    haddock      = self.haddock_2_14_1;
     happy        = self.happy_1_19_3;
     primitive    = self.primitive_0_5_2_1;      # semi-official, but specified
   };
@@ -729,7 +729,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   caseInsensitive_1_0_0_1 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.1.nix {};
   caseInsensitive_1_1_0_3 = callPackage ../development/libraries/haskell/case-insensitive/1.1.0.3.nix {};
-  caseInsensitive = self.caseInsensitive_1_1_0_3;
+  caseInsensitive_1_2_0_0 = callPackage ../development/libraries/haskell/case-insensitive/1.2.0.0.nix {};
+  caseInsensitive = self.caseInsensitive_1_2_0_0;
 
   cautiousFile = callPackage ../development/libraries/haskell/cautious-file {};
 
@@ -815,6 +816,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   conduit = callPackage ../development/libraries/haskell/conduit {};
 
   conduitCombinators = callPackage ../development/libraries/haskell/conduit-combinators {};
+
+  conduitExtra = callPackage ../development/libraries/haskell/conduit-extra {};
 
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
 
@@ -1176,6 +1179,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   };
 
   gio = callPackage ../development/libraries/haskell/gio {};
+
+  gitDate = callPackage ../development/libraries/haskell/git-date {};
 
   github = callPackage ../development/libraries/haskell/github {};
 
@@ -1718,6 +1723,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   monadcryptorandom = callPackage ../development/libraries/haskell/monadcryptorandom {};
 
+  monadloc = callPackage ../development/libraries/haskell/monadloc {};
+
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
 
   monadLogger = callPackage ../development/libraries/haskell/monad-logger {};
@@ -1757,7 +1764,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   mtl_2_1_2 = callPackage ../development/libraries/haskell/mtl/2.1.2.nix {
     transformers = self.transformers_0_3_0_0;
   };
-  mtl = self.mtl_2_1_2;
+  mtl_2_1_3_1 = callPackage ../development/libraries/haskell/mtl/2.1.3.1.nix {
+    transformers = self.transformers_0_3_0_0;
+  };
+  mtl = self.mtl_2_1_3_1;
 
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
 
@@ -1938,6 +1948,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   permutation = callPackage ../development/libraries/haskell/permutation {};
 
   persistent = callPackage ../development/libraries/haskell/persistent {};
+
+  persistentMysql = callPackage ../development/libraries/haskell/persistent-mysql {};
 
   persistentPostgresql = callPackage ../development/libraries/haskell/persistent-postgresql {};
 
@@ -2249,6 +2261,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   StrafunskiStrategyLib = callPackage ../development/libraries/haskell/Strafunski-StrategyLib {};
 
+  streamingCommons = callPackage ../development/libraries/haskell/streaming-commons {};
+
   streamproc = callPackage ../development/libraries/haskell/streamproc {};
 
   strict = callPackage ../development/libraries/haskell/strict {};
@@ -2336,7 +2350,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   stm_2_3 = callPackage ../development/libraries/haskell/stm/2.3.nix {};
   stm_2_4 = callPackage ../development/libraries/haskell/stm/2.4.nix {};
   stm_2_4_2 = callPackage ../development/libraries/haskell/stm/2.4.2.nix {};
-  stm = self.stm_2_4_2;
+  stm_2_4_3 = callPackage ../development/libraries/haskell/stm/2.4.3.nix {};
+  stm = self.stm_2_4_3;
 
   stmChans = callPackage ../development/libraries/haskell/stm-chans {};
 
@@ -2810,6 +2825,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   BNFCMeta = callPackage ../development/tools/haskell/BNFC-meta {};
 
+  cake3 = callPackage ../development/tools/haskell/cake3 {};
+
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
   Ebnf2ps = callPackage ../development/tools/parsing/Ebnf2ps {};
@@ -2822,8 +2839,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   haddock_2_11_0 = callPackage ../development/tools/documentation/haddock/2.11.0.nix {};
   haddock_2_12_0 = callPackage ../development/tools/documentation/haddock/2.12.0.nix {};
   haddock_2_13_2 = callPackage ../development/tools/documentation/haddock/2.13.2.nix {};
-  haddock_2_13_2_1 = callPackage ../development/tools/documentation/haddock/2.13.2.1.nix {};
-  haddock = self.haddock_2_13_2_1;
+  haddock_2_14_1 = callPackage ../development/tools/documentation/haddock/2.14.1.nix {};
+  haddock = self.haddock_2_14_1;
 
   happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
   happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};
@@ -2899,21 +2916,21 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   # Build a cabal package given a local .cabal file
   buildLocalCabal = src: name: let
-    cabalExpr = pkgs.stdenv.mkDerivation {
+    cabalExpr = pkgs.stdenv.mkDerivation ({
       name = "${name}.nix";
-
-      LANG = "en_US.UTF-8";
-
-      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
 
       buildCommand = ''
       ${self.cabal2nix}/bin/cabal2nix ${src + "/${name}.cabal"} --sha256=FILTERME \
           | grep -v FILTERME | sed \
             -e 's/licenses.proprietary/licenses.unfree/' \
             -e 's/{ cabal/{ cabal, src/' \
-            -e 's/pname = \([^\n]*\)/pname = \1\n  inherit src;/'  > $out
+            -e 's/pname = \([^\n]*\)/pname = \1\n  inherit src;\n  jailbreak = true;/'  > $out
       '';
-    };
+
+    } // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
+      LANG = "en_US.UTF-8";
+      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+    });
   in callPackage cabalExpr { inherit src; };
 
   cabalDev = callPackage ../development/tools/haskell/cabal-dev {};

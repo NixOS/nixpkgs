@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "mono-traversable";
-  version = "0.4.0.3";
-  sha256 = "04g2ihk4n71zrz09si2k8j46y53i5vllps9xizgs0bmikmrgh29f";
+  version = "0.4.0.4";
+  sha256 = "1ikrdhr4f3755xim6j9db60a9y0mpdnljmck84qh47yk2axfp0n9";
   buildDepends = [
     comonad dlist dlistInstances hashable semigroupoids semigroups text
     transformers unorderedContainers vector vectorAlgorithms

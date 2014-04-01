@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "02l1lhl2ajbm5f7zq363nlb21dpdg1m0qsy330arccmds7z9g7a2";
   buildDepends = [ blazeBuilder caseInsensitive text ];
   testDepends = [ blazeBuilder hspec QuickCheck text ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/aristidb/http-types";
     description = "Generic HTTP types for Haskell (for both client and server code)";

@@ -92,7 +92,7 @@ with pkgs.lib;
         --audiocontroller ac97 --audio alsa \
         --rtcuseutc on \
         --usb on --mouse usbtablet
-      VBoxManage storagectl "$vmName" --name SATA --add sata --sataportcount 4 --bootable on --hostiocache on
+      VBoxManage storagectl "$vmName" --name SATA --add sata --portcount 4 --bootable on --hostiocache on
       VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
         --medium ${config.system.build.virtualBoxImage}/disk.vdi
 

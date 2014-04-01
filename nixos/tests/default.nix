@@ -33,6 +33,7 @@ with import ../lib/testing.nix { inherit system minimal; };
   printing = makeTest (import ./printing.nix);
   proxy = makeTest (import ./proxy.nix);
   quake3 = makeTest (import ./quake3.nix);
+  rabbitmq = makeTest (import ./rabbitmq.nix);
   simple = makeTest (import ./simple.nix);
   #subversion = makeTest (import ./subversion.nix);
   tomcat = makeTest (import ./tomcat.nix);

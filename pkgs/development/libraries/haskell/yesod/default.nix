@@ -1,19 +1,20 @@
-{ cabal, aeson, blazeHtml, blazeMarkup, dataDefault, fastLogger
-, hamlet, monadControl, monadLogger, networkConduit, safe
-, shakespeareCss, shakespeareJs, text, transformers
-, unorderedContainers, wai, waiExtra, warp, yaml, yesodAuth
-, yesodCore, yesodForm, yesodPersistent
+{ cabal, aeson, blazeHtml, blazeMarkup, conduitExtra, dataDefault
+, fastLogger, hamlet, monadControl, monadLogger, networkConduit
+, safe, shakespeare, shakespeareCss, shakespeareJs, text
+, transformers, unorderedContainers, wai, waiExtra, warp, yaml
+, yesodAuth, yesodCore, yesodForm, yesodPersistent
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod";
-  version = "1.2.5";
-  sha256 = "0vcszhd8vasfpm754bz1vyarhlkffj3kbrfcq9q5gqmm389jfpk2";
+  version = "1.2.5.2";
+  sha256 = "0vvpzyfwzgnnd8h60pqz5z1474isp487p43vx7cyzhj423c50p6r";
   buildDepends = [
-    aeson blazeHtml blazeMarkup dataDefault fastLogger hamlet
-    monadControl monadLogger networkConduit safe shakespeareCss
-    shakespeareJs text transformers unorderedContainers wai waiExtra
-    warp yaml yesodAuth yesodCore yesodForm yesodPersistent
+    aeson blazeHtml blazeMarkup conduitExtra dataDefault fastLogger
+    hamlet monadControl monadLogger networkConduit safe shakespeare
+    shakespeareCss shakespeareJs text transformers unorderedContainers
+    wai waiExtra warp yaml yesodAuth yesodCore yesodForm
+    yesodPersistent
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";

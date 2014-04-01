@@ -122,6 +122,7 @@
       notbit = 111;
       ngircd = 112;
       btsync = 113;
+      minecraft = 114;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 

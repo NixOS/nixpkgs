@@ -1,5 +1,5 @@
 { cabal, blazeBuilder, Cabal, happy, HUnit, mtl, QuickCheck
-, testFramework, testFrameworkHunit, utf8Light, utf8String
+, testFramework, testFrameworkHunit, utf8Light, utf8String, alex
 }:
 
 cabal.mkDerivation (self: {
@@ -11,7 +11,8 @@ cabal.mkDerivation (self: {
     blazeBuilder Cabal HUnit mtl QuickCheck testFramework
     testFrameworkHunit utf8Light utf8String
   ];
-  buildTools = [ happy ];
+  buildTools = [ happy alex ];
+  preConfigure = "rm -rv dist; $SHELL runalex.sh";
   meta = {
     homepage = "http://github.com/alanz/language-javascript";
     description = "Parser for JavaScript";

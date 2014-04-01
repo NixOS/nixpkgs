@@ -10,8 +10,9 @@ cabal.mkDerivation (self: {
     extensibleExceptions filepath mtl utf8String X11
   ];
   postInstall = ''
+    shopt -s globstar
     mkdir -p $out/share/man/man1
-    mv $out/share/xmonad-*/man/*.1 $out/share/man/man1/
+    mv "$out/"**"/man/"*.1 $out/share/man/man1/
   '';
 
   patches = [

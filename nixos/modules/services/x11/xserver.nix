@@ -26,6 +26,11 @@ let
 
   driverNames = config.hardware.opengl.videoDrivers;
 
+  needsAcpid =
+     (elem "nvidia" driverNames) ||
+     (elem "nvidiaLegacy173" driverNames) ||
+     (elem "nvidiaLegacy304" driverNames);
+
   drivers = flip map driverNames
     (name: { inherit name; driverName = name; } //
       attrByPath [name] (if (hasAttr ("xf86video" + name) xorg) then { modules = [(getAttr ("xf86video" + name) xorg) ]; } else throw "unknown video driver `${name}'") knownVideoDrivers);
@@ -438,6 +443,8 @@ in
       ++ optional (elem "virtualbox" driverNames) xorg.xrefresh
       ++ optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
 
+    services.acpid.enable = mkIf needsAcpid true;
+
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
 
@@ -446,7 +453,8 @@ in
     systemd.services."display-manager" =
       { description = "X11 Server";
 
-        after = [ "systemd-udev-settle.service" "local-fs.target" ];
+        after = [ "systemd-udev-settle.service" "local-fs.target" ]
+                ++ optional needsAcpid "acpid.service";
 
         restartIfChanged = false;
 

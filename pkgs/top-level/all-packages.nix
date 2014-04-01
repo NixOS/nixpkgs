@@ -426,7 +426,7 @@ let
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
 
-  cb0cat = callPackage ../tools/security/cb0cat { };
+  cb1cat = callPackage ../tools/security/cb1cat { };
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
@@ -711,6 +711,8 @@ let
 
   colordiff = callPackage ../tools/text/colordiff { };
 
+  concurrencykit = callPackage ../development/libraries/concurrencykit { };
+
   connect = callPackage ../tools/networking/connect { };
 
   conspy = callPackage ../os-specific/linux/conspy {};
@@ -822,6 +824,8 @@ let
   dhcp = callPackage ../tools/networking/dhcp { };
 
   dhcpcd = callPackage ../tools/networking/dhcpcd { };
+
+  dhcpcd_without_udev = callPackage ../tools/networking/dhcpcd { udev = null; };
 
   diffstat = callPackage ../tools/text/diffstat { };
 
@@ -1170,6 +1174,8 @@ let
 
   hardlink = callPackage ../tools/system/hardlink { };
 
+  hashcat = callPackage ../tools/security/hashcat { };
+
   halibut = callPackage ../tools/typesetting/halibut { };
 
   hddtemp = callPackage ../tools/misc/hddtemp { };
@@ -1392,6 +1398,8 @@ let
 
   minecraft = callPackage ../games/minecraft { };
 
+  minecraft-server = callPackage ../games/minecraft-server { };
+
   minetest = callPackage ../games/minetest {
     libpng = libpng12;
   };
@@ -1467,6 +1475,8 @@ let
 
   nbd = callPackage ../tools/networking/nbd { };
 
+  ndjbdns = callPackage ../tools/networking/ndjbdns { };
+
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
   netcdf = callPackage ../development/libraries/netcdf { };
@@ -1524,6 +1534,8 @@ let
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
 
   nlopt = callPackage ../development/libraries/nlopt {};
+
+  npapi_sdk = callPackage ../development/libraries/npapi-sdk {};
 
   npth = callPackage ../development/libraries/npth {};
 
@@ -1633,6 +1645,14 @@ let
   patchutils = callPackage ../tools/text/patchutils { };
 
   parted = callPackage ../tools/misc/parted { hurd = null; };
+
+  pitivi = callPackage ../applications/video/pitivi {
+    gst = gst_all_1;
+    clutter-gtk = clutter_gtk;
+    inherit (gnome3) gnome_icon_theme gnome_icon_theme_symbolic;
+  };
+
+  p0f = callPackage ../tools/security/p0f { };
 
   hurdPartedCross =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
@@ -2105,6 +2125,8 @@ let
   openconnect = callPackage ../tools/networking/openconnect.nix { };
 
   vtun = callPackage ../tools/networking/vtun { };
+
+  wal_e = callPackage ../tools/backup/wal-e { };
 
   wbox = callPackage ../tools/networking/wbox {};
 
@@ -2710,6 +2732,18 @@ let
       regexCompat HsSyck random;
   };
 
+  gcc-arm-embedded-4_7 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
+    version = "4.7-2013q3-20130916";
+    releaseType = "update";
+    sha256 = "1bd9bi9q80xn2rpy0rn1vvj70rh15kb7dmah0qs4q2rv78fqj40d";
+  };
+  gcc-arm-embedded-4_8 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
+    version = "4.8-2014q1-20140314";
+    releaseType = "update";
+    sha256 = "ce92859550819d4a3d1a6e2672ea64882b30afa2c08cf67fa8e1d93788c2c577";
+  };
+  gcc-arm-embedded = gcc-arm-embedded-4_8;
+
   # Haskell and GHC
 
   # Import Haskell infrastructure.
@@ -2792,6 +2826,19 @@ let
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
+  icedtea7_jdk = callPackage ../development/compilers/icedtea rec {
+    jdk = openjdk;
+    jdkPath = "${openjdk}/lib/openjdk";
+  } // { outputs = [ "out" ]; };
+
+  icedtea7_jre = (lib.setName "icedtea7-${lib.getVersion pkgs.icedtea7_jdk.jre}" (lib.addMetaAttrs
+    { description = "Free Java runtime environment based on OpenJDK 7.0 and the IcedTea project"; }
+    pkgs.icedtea7_jdk.jre)) // { outputs = [ "jre" ]; };
+
+  icedtea7_web = callPackage ../development/compilers/icedtea-web {
+    jdk = "${icedtea7_jdk}/lib/icedtea";
+  };
+
   ikarus = callPackage ../development/compilers/ikarus { };
 
   hugs = callPackage ../development/compilers/hugs { };
@@ -2846,10 +2893,15 @@ let
 
   jikes = callPackage ../development/compilers/jikes { };
 
-  julia = callPackage ../development/compilers/julia {
+  juliaGit = callPackage ../development/compilers/julia/git-20131013.nix {
     liblapack = liblapack.override {shared = true;};
     llvm = llvm_33;
   };
+  julia021 = callPackage ../development/compilers/julia/0.2.1.nix {
+    liblapack = liblapack.override {shared = true;};
+    llvm = llvm_33;
+  };
+  julia = julia021;
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
     inherit makeWrapper gtk glib pango atk gdk_pixbuf;
@@ -4540,7 +4592,7 @@ let
 
   gts = callPackage ../development/libraries/gts { };
 
-  gvfs = callPackage ../development/libraries/gvfs { };
+  gvfs = callPackage ../development/libraries/gvfs { gconf = gnome.GConf; };
 
   gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
 
@@ -4884,6 +4936,8 @@ let
   libmhash = callPackage ../development/libraries/libmhash {};
 
   libmtp = callPackage ../development/libraries/libmtp { };
+
+  libmsgpack = callPackage ../development/libraries/libmsgpack { };
 
   libnatspec = callPackage ../development/libraries/libnatspec { };
 
@@ -5312,6 +5366,8 @@ let
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
   mlt = callPackage ../development/libraries/mlt { };
+
+  mps = callPackage ../development/libraries/mps { };
 
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
 
@@ -5907,6 +5963,11 @@ let
       withIcu = true;
     };
     gst-plugins-base = gst_all_1.gst-plugins-base;
+  };
+
+  webkitgtk2 = webkitgtk.override {
+    withGtk2 = true;
+    enableIntrospection = false;
   };
 
   wildmidi = callPackage ../development/libraries/wildmidi { };
@@ -6909,6 +6970,15 @@ let
       ];
   };
 
+  linux_3_14 = makeOverridable (import ../os-specific/linux/kernel/linux-3.14.nix) {
+    inherit fetchurl stdenv perl buildLinux;
+    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
@@ -6932,6 +7002,8 @@ let
     cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
+    
+    v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { }; 
 
     frandom = callPackage ../os-specific/linux/frandom { };
 
@@ -7003,8 +7075,9 @@ let
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   linuxPackages_3_13_grsecurity = linuxPackagesFor pkgs.linux_3_13_grsecurity linuxPackages_3_13_grsecurity;
   linuxPackages_3_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_13 linuxPackages_3_13);
+  linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   # Update this when adding a new version!
-  linuxPackages_latest = pkgs.linuxPackages_3_13;
+  linuxPackages_latest = pkgs.linuxPackages_3_14;
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
@@ -8973,6 +9046,8 @@ let
 
   cura = callPackage ../applications/misc/cura { };
 
+  printrun = callPackage ../applications/misc/printrun { };
+
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
   };
@@ -9455,6 +9530,8 @@ let
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
+  zotero = callPackage ../applications/office/zotero { };
+
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
 
 
@@ -9599,6 +9676,10 @@ let
   mars = callPackage ../games/mars { };
 
   micropolis = callPackage ../games/micropolis { };
+  
+  mnemosyne = callPackage ../games/mnemosyne { 
+    inherit (pythonPackages) matplotlib cherrypy sqlite3;
+  };
 
   naev = callPackage ../games/naev { };
 
@@ -9754,7 +9835,7 @@ let
   warzone2100 = callPackage ../games/warzone2100 { };
 
   widelands = callPackage ../games/widelands {
-    libpng = libpng12;
+    lua = lua5_1;
   };
 
   worldofgoo_demo = callPackage ../games/worldofgoo {
@@ -10168,6 +10249,7 @@ let
 
   tptp = callPackage ../applications/science/logic/tptp {};
 
+  z3 = callPackage ../applications/science/logic/z3 {};
 
   ### SCIENCE / ELECTRONICS
 

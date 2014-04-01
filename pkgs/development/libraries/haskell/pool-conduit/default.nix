@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pool-conduit";
-  version = "0.1.2.1";
-  sha256 = "1mcx66xv1irxd66cfv23h4n7fplg5a0hyldlgk8km0k395mjw8k8";
+  version = "0.1.2.2";
+  sha256 = "1jg7kymr1v82xl9122q9fly385jhm1hr2406g35ydl9wnh4aaiw8";
   buildDepends = [
     monadControl resourcePool resourcet transformers
   ];

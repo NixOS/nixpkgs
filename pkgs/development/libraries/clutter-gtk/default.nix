@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, clutter, gtk3 }:
+{ fetchurl, stdenv, pkgconfig, gobjectIntrospection, clutter, gtk3 }:
 
 stdenv.mkDerivation rec {
   name = "clutter-gtk-1.4.4";
@@ -9,9 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ clutter gtk3 ];
-  nativeBuildInputs = [ pkgconfig ];
-
-  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
+  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
 
   postBuild = "rm -rf $out/share/gtk-doc";
 

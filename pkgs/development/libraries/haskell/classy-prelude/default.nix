@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "classy-prelude";
-  version = "0.8.1.1";
-  sha256 = "14iq0zdmw4f2i3c282hs89c4a763wcm7vn5n0f6kcvcpjgjyahgi";
+  version = "0.8.2";
+  sha256 = "1kvab1vns1mp0i0nyn0flg2m6f2sl8w1yr2c0x54172f20rdm5lv";
   buildDepends = [
     basicPrelude chunkedData enclosedExceptions hashable liftedBase
     monoTraversable semigroups systemFilepath text time transformers

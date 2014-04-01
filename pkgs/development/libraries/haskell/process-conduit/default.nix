@@ -1,13 +1,13 @@
-{ cabal, conduit, controlMonadLoop, hspec, mtl, shakespeareText
-, text
+{ cabal, conduit, controlMonadLoop, hspec, mtl, shakespeare
+, shakespeareText, text
 }:
 
 cabal.mkDerivation (self: {
   pname = "process-conduit";
-  version = "1.0.0.1";
-  sha256 = "1b1bya316gxj3rgn7qpjmmcllgy9aac69rqw664sw1rnypnic780";
+  version = "1.0.0.2";
+  sha256 = "0rz18x7gy8w1h2xq0il49k515n0y3gpxnl7mfgkczc86965w7fzj";
   buildDepends = [
-    conduit controlMonadLoop mtl shakespeareText text
+    conduit controlMonadLoop mtl shakespeare shakespeareText text
   ];
   testDepends = [ conduit hspec ];
   meta = {

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
         systemd=yes udevdir="$out/lib/udev" chrpath=no
   '';
 
-  doCheck = true;
+  doCheck = false;
 
   checkPhase = ''
     export LD_LIBRARY_PATH="$PWD"

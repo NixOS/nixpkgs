@@ -4069,10 +4069,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLTiny = buildPerlPackage rec {
-    name = "HTML-Tiny-1.03";
+    name = "HTML-Tiny-1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDYA/${name}.tar.gz";
-      sha256 = "1nc9vr0z699jwv8jaxxpkfhspiv7glhdp500hqyzdm2jxfw8azrg";
+      sha256 = "18zxg7z51f5daidnwl9vxsrs3lz0y6n5ddqhpb748bjyk3awkkfp";
     };
   };
 
