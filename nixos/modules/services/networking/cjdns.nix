@@ -1,3 +1,15 @@
+# You may notice the commented out sections in this file,
+# it would be great to configure cjdns from nix, but cjdns 
+# reads its configuration from stdin, including the private
+# key and admin password, all nested in a JSON structure.
+#
+# Until a good method of storing the keys outside the nix 
+# store and mixing them back into a string is devised
+# (without too much shell hackery), a skeleton of the
+# configuration building lies commented out.
+
+ shell hackery), 
+
 { config, pkgs, ... }:
 
 with pkgs.lib;
