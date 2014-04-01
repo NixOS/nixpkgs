@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "3.4.82";
+  version = "3.4.82"; # don't update until solving https://lkml.org/lkml/2014/3/12/420
   extraMeta.branch = "3.4";
 
   src = fetchurl {
