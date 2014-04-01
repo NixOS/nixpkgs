@@ -24,12 +24,13 @@ let
       inherit useOpenSSL;
     };
 
-    browser = callPackage ./browser.nix {
+    mkChromiumDerivation = callPackage ./common.nix {
       inherit enableSELinux enableNaCl useOpenSSL gnomeSupport
               gnomeKeyringSupport proprietaryCodecs cupsSupport
               pulseSupport;
     };
 
+    browser = callPackage ./browser.nix { };
     sandbox = callPackage ./sandbox.nix { };
 
     plugins = callPackage ./plugins.nix {
@@ -54,4 +55,8 @@ in stdenv.mkDerivation {
   '';
 
   inherit (chromium.browser) meta packageName;
+
+  passthru = {
+    mkDerivation = chromium.mkChromiumDerivation;
+  };
 }
