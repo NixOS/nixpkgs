@@ -64,6 +64,8 @@ rec {
 
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
+  gnome-screenshot = callPackage ./core/gnome-screenshot { };
+
   gnome_themes_standard = callPackage ./core/gnome-themes-standard { };
 
   gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };
