@@ -1,13 +1,13 @@
 { stdenv, fetchurl }:
 let
-  version = "0.1.5";
+  version = "0.1.6";
 in
 stdenv.mkDerivation {
   name = "libyaml-${version}";
 
   src = fetchurl {
     url = "http://pyyaml.org/download/libyaml/yaml-${version}.tar.gz";
-    sha256 = "1vrv5ly58bkmcyc049ad180f2m8iav6l9h3v8l2fqdmrny7yx1zs";
+    sha256 = "0j9731s5zjb8mjx7wzf6vh7bsqi38ay564x6s9nri2nh9cdrg9kx";
   };
 
   meta = with stdenv.lib; {
