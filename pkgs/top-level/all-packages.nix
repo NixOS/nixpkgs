@@ -7031,6 +7031,8 @@ let
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
+    lockdep = callPackage ../os-specific/linux/kernel/lockdep.nix { };
+
     psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
 
     spl = callPackage ../os-specific/linux/spl/default.nix { };
