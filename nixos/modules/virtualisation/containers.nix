@@ -150,11 +150,21 @@ in
         path = [ pkgs.iproute ];
 
         environment.INSTANCE = "%i";
+        environment.root = "/var/lib/containers/%i";
+
+        preStart =
+          ''
+            mkdir -p -m 0755 $root/var/lib
+
+            # Create a named pipe to get a signal when the container
+            # has finished booting.
+            rm -f $root/var/lib/startup-done
+            mkfifo $root/var/lib/startup-done
+         '';
 
         script =
           ''
-            root="/var/lib/containers/$INSTANCE"
-            mkdir -p -m 0755 "$root/etc"
+            mkdir -p -m 0755 "$root/etc" "$root/var/lib"
             if ! [ -e "$root/etc/os-release" ]; then
               touch "$root/etc/os-release"
             fi
@@ -209,6 +219,13 @@ in
               "$SYSTEM_PATH/init"
           '';
 
+        postStart =
+          ''
+            # This blocks until the container-startup-done service
+            # writes something to this pipe.
+            read x < $root/var/lib/startup-done
+          '';
+
         preStop =
           ''
             pid="$(cat /sys/fs/cgroup/systemd/machine/$INSTANCE.nspawn/system/tasks 2> /dev/null)"
@@ -238,8 +255,10 @@ in
               . "/etc/containers/$INSTANCE.conf"
             fi
             echo $SYSTEM_PATH/bin/switch-to-configuration test | \
-              ${pkgs.socat}/bin/socat unix:/var/lib/containers/$INSTANCE/var/lib/root-shell.socket -
+              ${pkgs.socat}/bin/socat unix:$root/var/lib/root-shell.socket -
           '';
+
+        serviceConfig.SyslogIdentifier = "container %i";
       };
 
     # Generate a configuration file in /etc/containers for each

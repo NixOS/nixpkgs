@@ -53,6 +53,20 @@ with lib;
           };
       };
 
+    systemd.services.container-startup-done =
+      { description = "Container Startup Notification";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "multi-user.target" ];
+        script =
+          ''
+            if [ -p /var/lib/startup-done ]; then
+              echo done > /var/lib/startup-done
+            fi
+          '';
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+      };
+
   };
 
 }
