@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     cairo Chart colour dataDefaultClass lens mtl operational time
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/timbod7/haskell-chart/wiki";
     description = "Cairo backend for Charts";
