@@ -12,6 +12,8 @@ cabal.mkDerivation (self: {
     HUnit ieee754 QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2 vector
   ];
+  # fails on i686 at version 0.1.5.2
+  doCheck = false;
   meta = {
     homepage = "https://github.com/bos/math-functions";
     description = "Special functions and Chebyshev polynomials";
