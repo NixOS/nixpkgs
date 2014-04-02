@@ -3,14 +3,14 @@
 
 let
   ver_maj = "2.30";
-  ver_min = "4";
+  ver_min = "6";
 in
 stdenv.mkDerivation rec {
   name = "gdk-pixbuf-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/${ver_maj}/${name}.tar.xz";
-    sha256 = "0ldhpdalbyi6q5k1dz498i9hqcsd51yxq0f91ck9p0h4v38blfx1";
+    sha256 = "0nkz19xlh60bf9bqylh98n8rynpjyx1nzp1gcr6zljgvmnj4yfa3";
   };
 
   setupHook = ./setup-hook.sh;

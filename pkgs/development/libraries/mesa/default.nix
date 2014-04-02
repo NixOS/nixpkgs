@@ -23,8 +23,8 @@ else
 */
 
 let
-  version = "9.2.5";
-  # this is the default search path for DRI drivers (note: X server no longer introduces an overriding env var)
+  version = "10.0.4";
+  # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
 with { inherit (stdenv.lib) optional optionals optionalString; };
@@ -34,21 +34,23 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "1w3bxclgwl2hwyxk3za7dbdakb8jsya7afck35cz0v8pxppvjsml";
+    sha256 = "0h2sq8h0l7415vsqfkb7mn1rxm62m2anpi9swlca69fbpr9bavpz";
   };
 
   prePatch = "patchShebangs .";
 
   patches = [
     ./static-gallium.patch
-    ./dricore-gallium.patch
-    ./werror-wundef.patch
+   # TODO: revive ./dricore-gallium.patch when it gets ported (from Ubuntu),
+   #  as it saved ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   ];
 
   # Change the search path for EGL drivers from $drivers/* to driverLink
   postPatch = ''
     sed '/D_EGL_DRIVER_SEARCH_DIR=/s,EGL_DRIVER_INSTALL_DIR,${driverLink}/lib/egl,' \
       -i src/egl/main/Makefile.am
+  '' + /* work around RTTI LLVM problems */ ''
+    patch -R -p1 < ${./rtti.patch}
   '';
 
   outputs = ["out" "drivers" "osmesa"];
@@ -70,7 +72,7 @@ stdenv.mkDerivation {
 
     "--with-dri-drivers=i965,r200,radeon"
     "--with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast,radeonsi"
-    "--with-egl-platforms=x11,wayland,drm" "--enable-gbm" "--enable-shared-glapi"
+    "--with-egl-platforms=x11,wayland,drm" "--enable-gbm"
   ]
     ++ optional enableTextureFloats "--enable-texture-float"
     ++ optionals enableExtraFeatures [
@@ -94,7 +96,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
   #doCheck = true; # https://bugs.freedesktop.org/show_bug.cgi?id=67672,
-    # also, 10.* links bad due to some RTTI problem
+    #tests for 10.* fail to link due to some RTTI problem
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM;
   #   also move libOSMesa to $osmesa, as it's relatively big
@@ -150,6 +152,11 @@ stdenv.mkDerivation {
     substituteInPlace "$out/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
   '' + /* move vdpau drivers to $drivers/lib, so they are found */ ''
     mv "$drivers"/lib/vdpau/* "$drivers"/lib/ && rmdir "$drivers"/lib/vdpau
+  '' + /* add libGL* links from /run/opengl-driver */ ''
+    (
+      cd "$drivers/lib"
+      cp -s "$out"/lib/*.so .
+    )
   '';
   #ToDo: @vcunat isn't sure if drirc will be found when in $out/etc/, but it doesn't seem important ATM
 

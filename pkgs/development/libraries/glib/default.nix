@@ -35,8 +35,8 @@ let
     ln -sr -t "$out/include/" "$out"/lib/*/include/* 2>/dev/null || true
   '';
 
-  ver_maj = "2.38";
-  ver_min = "2";
+  ver_maj = "2.40";
+  ver_min = "0";
 in
 with { inherit (stdenv.lib) optional optionals optionalString; };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "0d2px8m77603s5pm3md4bcm5d0ksbcsb6ik1w52hjslnq1a9hsh5";
+    sha256 = "1d98mbqjmc34s8095lkw1j1bwvnnkw9581yfvjaikjvfjsaz29qd";
   };
 
   buildInputs = [ libelf ]
