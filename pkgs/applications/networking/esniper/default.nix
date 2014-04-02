@@ -1,18 +1,18 @@
 { stdenv, fetchurl, openssl, curl, coreutils, gawk, bash, which }:
 
 stdenv.mkDerivation {
-  name = "esniper-2.28.0";
+  name = "esniper-2.29.0";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/esniper/esniper-2-28-0.tgz";
-    sha256 = "c2b0ccb757616b32f2d6cf54a4a5e367405fa7bcd6e6ed11835fe4f8a06a016b";
+    url    = "mirror://sourceforge/esniper/esniper-2-29-0.tgz";
+    sha256 = "052jfbzm0a88h3hss2vg1vfdrhibjwhbcdnwsbkk5i1z0jj16xxc";
   };
 
   buildInputs = [ openssl curl ];
 
   # Add support for CURL_CA_BUNDLE variable.
   # Fix <http://sourceforge.net/p/esniper/bugs/648/>.
-  patches = [ ./find-ca-bundle.patch ./fix-ebay-login.patch ];
+  patches = [ ./find-ca-bundle.patch ];
 
   postInstall = ''
     sed <"frontends/snipe" >"$out/bin/snipe" \
