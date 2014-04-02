@@ -40,6 +40,8 @@ rec {
 
   gnome_control_center = callPackage ./core/gnome-control-center { };
 
+  gnome-calculator = callPackage ./core/gnome-calculator { };
+
   gnome_common = callPackage ./core/gnome-common { };
 
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };
