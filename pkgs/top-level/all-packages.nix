@@ -6883,7 +6883,7 @@ let
   linux_3_13_grsecurity = lowPrio (lib.addMetaAttrs {
     maintainers = with lib.maintainers; [ wizeman ];
   } (lib.overrideDerivation (linux_3_13.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_13_7 kernelPatches.grsec_path ];
+    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_13_8 kernelPatches.grsec_path ];
     argsOverride = {
       modDirVersion = "${linux_3_13.modDirVersion}-grsec";
     };
