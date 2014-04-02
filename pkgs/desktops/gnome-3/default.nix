@@ -60,11 +60,13 @@ rec {
 
   gnome_shell = callPackage ./core/gnome-shell { };
 
+  gnome-screenshot = callPackage ./core/gnome-screenshot { };
+
   gnome_settings_daemon = callPackage ./core/gnome-settings-daemon { };
 
-  gnome_terminal = callPackage ./core/gnome-terminal { };
+  gnome-system-log = callPackage ./core/gnome-system-log { };
 
-  gnome-screenshot = callPackage ./core/gnome-screenshot { };
+  gnome_terminal = callPackage ./core/gnome-terminal { };
 
   gnome_themes_standard = callPackage ./core/gnome-themes-standard { };
 
