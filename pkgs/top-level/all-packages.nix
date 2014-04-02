@@ -6874,7 +6874,7 @@ let
   # config options you need (e.g. by overriding extraConfig). See list of options here:
   # https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options
   linux_3_2_grsecurity = lowPrio (lib.addMetaAttrs {
-    maintainers = with lib.maintainers; [ wizeman ];
+    maintainers = with lib.maintainers; [ wizeman thoughtpolice ];
   } (lib.overrideDerivation (linux_3_2.override (args: {
     kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_2_56 kernelPatches.grsec_path ];
     argsOverride = {
@@ -6883,7 +6883,7 @@ let
   })) (args: grsecurityOverrider args)));
 
   linux_3_13_grsecurity = lowPrio (lib.addMetaAttrs {
-    maintainers = with lib.maintainers; [ wizeman ];
+    maintainers = with lib.maintainers; [ wizeman thoughtpolice ];
   } (lib.overrideDerivation (linux_3_13.override (args: {
     kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_13_8 kernelPatches.grsec_path ];
     argsOverride = {
@@ -6942,15 +6942,6 @@ let
       TOI_CORE y
     '';
   });
-
-  linux_3_11 = makeOverridable (import ../os-specific/linux/kernel/linux-3.11.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
 
   linux_3_12 = makeOverridable (import ../os-specific/linux/kernel/linux-3.12.nix) {
     inherit fetchurl stdenv perl buildLinux;
@@ -7042,6 +7033,8 @@ let
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
+    lockdep = callPackage ../os-specific/linux/kernel/lockdep.nix { };
+
     psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
 
     spl = callPackage ../os-specific/linux/spl/default.nix { };
@@ -7071,7 +7064,6 @@ let
   linuxPackages_3_6_rpi = linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi;
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
-  linuxPackages_3_11 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_11 linuxPackages_3_11);
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   linuxPackages_3_13_grsecurity = linuxPackagesFor pkgs.linux_3_13_grsecurity linuxPackages_3_13_grsecurity;
   linuxPackages_3_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_13 linuxPackages_3_13);
