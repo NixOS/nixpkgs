@@ -13,7 +13,7 @@ cross:
 
 let
 
-  version = "2.18";
+  version = "2.19";
 
 in
 
@@ -44,31 +44,20 @@ stdenv.mkDerivation ({
       /* Don't use /etc/ld.so.cache, for non-NixOS systems.  */
       ./dont-use-system-ld-so-cache.patch
 
+      /* Don't use /etc/ld.so.preload, but /etc/ld-nix.so.preload.  */
+      ./dont-use-system-ld-so-preload.patch
+
       /* Add blowfish password hashing support.  This is needed for
          compatibility with old NixOS installations (since NixOS used
          to default to blowfish). */
       ./glibc-crypt-blowfish.patch
-
-      /* Fix for random "./sysdeps/posix/getaddrinfo.c:1467:
-         rfc3484_sort: Assertion `src->results[i].native == -1 ||
-         src->results[i].native == a2_native' failed." crashes. */
-      ./glibc-rh739743.patch
-
-      ./scanf.patch
 
       /* The command "getconf CS_PATH" returns the default search path
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
 
-
-      ./cve-2012-4412+4424.patch
-      ./cve-2013-4237.patch
-      ./cve-2013-4332.patch
-      ./cve-2013-4458.patch
-      ./cve-2013-4788.patch
-
-      ./strstr-sse42-hack.patch
+      ./fix-math.patch
     ];
 
   postPatch = ''
@@ -152,7 +141,7 @@ stdenv.mkDerivation ({
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.gz";
-      sha256 = "0d3pnh6kg5r48ga5rg4lhwlc1062brr6fiqs4j23327gzssjgry8";
+      sha256 = "15n7x9mmzhd7w6s5hd9srx0h23b32gwb306x98k9ss940yvnvb8q";
     };
 
   # Remove absolute paths from `configure' & co.; build out-of-tree.

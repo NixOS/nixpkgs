@@ -58,7 +58,9 @@ let
     # and {Open,Free}BSD.
     doCheck = stdenv ? glibc;
 
-    enableParallelBuilding = true;
+    # Saw random failures like ‘help2man: can't get '--help' info from
+    # man/sha512sum.td/sha512sum’.
+    enableParallelBuilding = false;
 
     NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
 

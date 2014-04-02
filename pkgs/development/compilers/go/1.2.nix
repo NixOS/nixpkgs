@@ -60,6 +60,7 @@ stdenv.mkDerivation {
           else if stdenv.system == "armv5tel-linux" then "arm"
           else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
+  GO386 = 387; # from Arch: don't assume sse2 on i686
 
   installPhase = ''
     mkdir -p "$out/bin"
