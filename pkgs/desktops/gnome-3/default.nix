@@ -44,6 +44,8 @@ rec {
 
   gnome_common = callPackage ./core/gnome-common { };
 
+  gnome-font-viewer = callPackage ./core/gnome-font-viewer { };
+
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };
 
   gnome_icon_theme_symbolic = callPackage ./core/gnome-icon-theme-symbolic { };
