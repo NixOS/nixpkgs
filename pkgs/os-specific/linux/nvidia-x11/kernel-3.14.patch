@@ -1,0 +1,12 @@
+--- a/kernel/nv-linux.h         2014-01-09 04:49:25.000000000 +0200
++++ b/kernel/nv-linux.h         2014-02-05 16:46:55.552408568 +0200
+@@ -273,8 +273,7 @@
+ #endif
+ 
+ #if !defined(NV_VMWARE) && defined(CONFIG_ACPI)
+-#include <acpi/acpi.h>
+-#include <acpi/acpi_drivers.h>
++#include <linux/acpi.h>
+ #if defined(NV_ACPI_DEVICE_OPS_HAS_MATCH) || defined(ACPI_VIDEO_HID)
+ #define NV_LINUX_ACPI_EVENTS_SUPPORTED 1
+ #endif
