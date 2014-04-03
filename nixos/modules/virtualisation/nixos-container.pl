@@ -1,6 +1,7 @@
 #! @perl@
 
 use strict;
+use POSIX;
 use File::Path;
 use File::Slurp;
 use Fcntl ':flock';
@@ -148,6 +149,9 @@ sub stopContainer {
 }
 
 if ($action eq "destroy") {
+    die "$0: cannot destroy declarative container (remove it from your configuration.nix instead)\n"
+        unless POSIX::access($confFile, &POSIX::W_OK);
+
     my $root = "/var/lib/containers/$containerName";
     my $profileDir = "/nix/var/nix/profiles/per-container/$containerName";
 
