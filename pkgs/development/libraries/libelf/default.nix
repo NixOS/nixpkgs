@@ -15,6 +15,8 @@ stdenv.mkDerivation (rec {
     nativeBuildInputs = [ glibc ];
   };
 
+  buildInputs = [ gettext ];
+
   meta = {
     description = "ELF object file access library";
 
