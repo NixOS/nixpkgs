@@ -588,6 +588,15 @@ configurePhase() {
         fi
     fi
 
+    # Patch /bin/sh to guarantee that Bash is used.
+    if [ -x "$configureScript" ]; then
+       sed -i -e "s|#! /bin/sh|#! $SHELL|g" -e "s|#!/bin/sh|#!$SHELL|g" "$configureScript"
+    fi
+
+    if [ -x libtool ]; then
+       sed -i -e "s|#! /bin/sh|#! $SHELL|g" -e "s|#!/bin/sh|#!$SHELL|g" libtool*
+    fi
+
     if [ -z "$dontFixLibtool" ]; then
         find . -iname "ltmain.sh" | while read i; do
             echo "fixing libtool script $i"
@@ -685,12 +694,12 @@ patchShebangs() {
     local newInterpreterLine
 
     find "$dir" -type f -perm +0100 | while read f; do
-        if [ "$(head -1 "$f" | head -c +2)" != '#!' ]; then
+        if [ "$(head -1 "$f" | head -c+2)" != '#!' ]; then
             # missing shebang => not a script
             continue
         fi
 
-        oldInterpreterLine=$(head -1 "$f" | tail -c +3)
+        oldInterpreterLine=$(head -1 "$f" | tail -c+3)
         read -r oldPath arg0 args <<< "$oldInterpreterLine"
 
         if $(echo "$oldPath" | grep -q "/bin/env$"); then
