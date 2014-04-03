@@ -8,6 +8,7 @@ with import ../lib/testing.nix { inherit system minimal; };
 {
   avahi = makeTest (import ./avahi.nix);
   bittorrent = makeTest (import ./bittorrent.nix);
+  containers = makeTest (import ./containers.nix);
   firefox = makeTest (import ./firefox.nix);
   firewall = makeTest (import ./firewall.nix);
   installer = makeTests (import ./installer.nix);
