@@ -8055,10 +8055,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TermReadLineGnu = buildPerlPackage rec {
-    name = "Term-ReadLine-Gnu-1.20";
+    name = "Term-ReadLine-Gnu-1.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAYASHI/${name}.tar.gz";
-      sha256 = "00fvkqbnpmyld59jv2vbfw1szr5d0xxmbgl59gr7qijp9c497ni5";
+      sha256 = "0dp18pgn8vl4dh6rgzcp1kzk4j6wjrrxd6sfcrrywy7jg4b7ikfc";
     };
     buildInputs = [ pkgs.readline pkgs.ncurses ];
     NIX_CFLAGS_LINK = "-lreadline";
