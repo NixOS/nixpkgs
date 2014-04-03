@@ -588,14 +588,8 @@ configurePhase() {
         fi
     fi
 
-    # Patch /bin/sh to guarantee that Bash is used.
-    if [ -x "$configureScript" ]; then
-       sed -i -e "s|#! /bin/sh|#! $SHELL|g" -e "s|#!/bin/sh|#!$SHELL|g" "$configureScript"
-    fi
-
-    if [ -x libtool ]; then
-       sed -i -e "s|#! /bin/sh|#! $SHELL|g" -e "s|#!/bin/sh|#!$SHELL|g" libtool*
-    fi
+    # Patch all configure and libtool* scripts to guarantee that Bash is used.
+    find . -perm -u+x -type f \( -iname libtool\* -or -iname configure \) |xargs sed -i -e "s|#! /bin/sh|#! $SHELL|g" -e "s|#!/bin/sh|#!$SHELL|g"
 
     if [ -z "$dontFixLibtool" ]; then
         find . -iname "ltmain.sh" | while read i; do
