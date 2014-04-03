@@ -25,7 +25,14 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ mono makeWrapper ];
 
-  preConfigure = ''makeFlags="prefix=$out"'';
+  patchPhase = ''
+    sed -i 's/^VERSION.*/VERSION = release-${version}/g' Makefile
+  '';
+
+  preConfigure = ''
+    makeFlags="prefix=$out"
+    make version
+  '';
 
   postInstall = with stdenv.lib; let
     runtime = makeLibraryPath (
