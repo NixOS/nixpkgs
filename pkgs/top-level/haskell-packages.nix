@@ -2522,6 +2522,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
 
+  twitterConduit = callPackage ../development/libraries/haskell/twitter-conduit {};
+
+  twitterTypes = callPackage ../development/libraries/haskell/twitter-types {};
+
   TypeCompose = callPackage ../development/libraries/haskell/TypeCompose {};
 
   typeEq = callPackage ../development/libraries/haskell/type-eq {};
