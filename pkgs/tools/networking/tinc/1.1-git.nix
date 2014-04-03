@@ -5,15 +5,14 @@ stdenv.mkDerivation rec {
   name = "tinc-${version}";
 
   src = fetchgit {
-  	url = "https://github.com/gsliepen/tinc.git";
-  	rev = "ef8efdfff1de2b18092f9d4f383e3f2898bf86cd";
+    url = "https://github.com/gsliepen/tinc.git";
+    rev = "09e000ba54fd4a4ffe3e5c15ee7aeadac35d6996";
+    sha256 = "7f56b7a026776966ca9e7ebabde3659168fde305ad3af5b8605adc4e066000f6";
   };
 
   buildInputs = [ ncurses zlib libtool lzo readline openssl autoconf automake gcc gettext texinfo];
 
   preConfigure = ''
-    sed -i -e "s/AM_PATH_LIBGCRYPT/#AM_PATH_LIBGCRYPT/g" configure.ac
-    sed -i -e "s/@LIBGCRYPT_LIBS@/#/g" src/Makefile.am
     autoreconf -fsi
   '';
 
