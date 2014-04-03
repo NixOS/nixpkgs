@@ -10,6 +10,8 @@ stdenv.mkDerivation (rec {
 
   doCheck = true;
 
+  buildInputs = [ gettext ];
+
   meta = {
     description = "Libelf, an ELF object file access library";
 
