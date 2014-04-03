@@ -7,9 +7,10 @@ rec {
   freebsd = ["i686-freebsd" "x86_64-freebsd"];
   openbsd = ["i686-openbsd" "x86_64-openbsd"];
   netbsd = ["i686-netbsd" "x86_64-netbsd"];
+  illumos = ["x86_64-solaris"];
   cygwin = ["i686-cygwin"];
-  unix = linux ++ darwin ++ freebsd ++ openbsd;
-  all = linux ++ darwin ++ cygwin ++ freebsd ++ openbsd;
+  unix = linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos;
+  all = linux ++ darwin ++ cygwin ++ freebsd ++ openbsd ++ netbsd ++ illumos;
   none = [];
   allBut = platform: lists.filter (x: platform != x) all;
   mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux"];
