@@ -1,12 +1,12 @@
 { stdenv, pkgs, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "1.5-dev21";
+  version = "1.5-dev22";
   name = "haproxy-${version}";
 
   src = fetchurl {
     url = "http://haproxy.1wt.eu/download/1.5/src/devel/${name}.tar.gz";
-    md5 = "c784f55537c8718ed024b2b725cd3770";
+    md5 = "980332c79ab0ffa908c77fafdf61b8cc";
   };
 
   buildInputs = [ openssl ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://haproxy.1wt.eu;
     maintainers = [ stdenv.lib.maintainers.garbas ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     license = [
        stdenv.lib.licenses.gpl2
        stdenv.lib.licenses.lgpl21
