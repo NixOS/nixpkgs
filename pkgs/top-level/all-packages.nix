@@ -9111,6 +9111,8 @@ let
     gpgSupport = true;
   };
 
+  syncthing = callPackage ../applications/networking/syncthing { };
+
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
 
