@@ -52,7 +52,7 @@ let
     sha256 = "03cc750049350ee01cdbc584b70924e333fcc17ba4a2d04648dab1535538a873";
   };
 
-  version = "0.3.2";
+  version = "0.3.7";
 
 in
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
-    sha256 = "1vzdhzry2adyp2yh2dmy1qznqhnzar7g24rhi0vv624jgd20qax2";
+    sha256 = "1qmwmjvgdwh88l2caw2xy1d2h1cdg2w1hl4q5iwx2c0q7a99h41m";
   };
 
   buildInputs = with stdenv.lib;
