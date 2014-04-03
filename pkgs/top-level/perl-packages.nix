@@ -8634,10 +8634,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestWarn = buildPerlPackage {
-    name = "Test-Warn-0.24";
+    name = "Test-Warn-0.30";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHORNY/Test-Warn-0.24.tar.gz;
-      sha256 = "12r1mcwrm6cgc3ppgawwv265vmrighj4bl6xc5c41f4c2l6bdxml";
+      url = mirror://cpan/authors/id/C/CH/CHORNY/Test-Warn-0.30.tar.gz;
+      sha256 = "0haf2ii7br5z0psmkvlvmx2z2q9qz1c70gx0969r378qjidmb5w1";
     };
     propagatedBuildInputs = [ SubUplevel TreeDAGNode ];
     meta = {
