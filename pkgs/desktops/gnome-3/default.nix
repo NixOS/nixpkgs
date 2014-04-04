@@ -44,6 +44,8 @@ rec {
 
   gnome_common = callPackage ./core/gnome-common { };
 
+  gnome-disk-utility = callPackage ./core/gnome-disk-utility { };
+
   gnome-font-viewer = callPackage ./core/gnome-font-viewer { };
 
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };

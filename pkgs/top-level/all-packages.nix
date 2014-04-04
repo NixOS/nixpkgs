@@ -5112,6 +5112,8 @@ let
 
   libpseudo = callPackage ../development/libraries/libpseudo { };
 
+  libpwquality = callPackage ../development/libraries/libpwquality { };
+  
   libqalculate = callPackage ../development/libraries/libqalculate { };
 
   librsvg = callPackage ../development/libraries/librsvg {
