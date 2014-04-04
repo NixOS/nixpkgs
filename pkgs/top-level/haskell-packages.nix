@@ -2584,6 +2584,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   vacuumCairo = callPackage ../development/libraries/haskell/vacuum-cairo {};
 
+  vacuumGraphviz = callPackage ../development/libraries/haskell/vacuum-graphviz {};
+
   vado = callPackage ../development/libraries/haskell/vado {};
 
   vault = callPackage ../development/libraries/haskell/vault {};
