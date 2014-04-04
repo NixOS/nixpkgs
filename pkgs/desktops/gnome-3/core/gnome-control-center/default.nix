@@ -1,24 +1,13 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, libcanberra, accountservice
-, libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk, pulseaudio, fontconfig
-, cracklib, python, krb5, networkmanagerapplet, libwacom, samba, libnotify, libxkbfile
-, shared_mime_info, tzdata, icu, libtool, docbook_xsl, docbook_xsl_ns, makeWrapper }:
+{ fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, makeWrapper
+, libcanberra, accountservice, libpwquality, pulseaudio, fontconfig
+, libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk, libxkbfile
+, cracklib, python, krb5, networkmanagerapplet, libwacom, samba, libnotify
+, shared_mime_info, tzdata, icu, libtool, docbook_xsl, docbook_xsl_ns }:
 
 # http://ftp.gnome.org/pub/GNOME/teams/releng/3.10.2/gnome-suites-core-3.10.2.modules
 # TODO: bluetooth, networkmanager, wacom, smbclient, printers
 
-let
-  libpwquality = stdenv.mkDerivation rec {
-    name = "libpwquality-1.2.3";
-
-    src = fetchurl {
-      url = "https://fedorahosted.org/releases/l/i/libpwquality/${name}.tar.bz2";
-      sha256 = "0sjiabvl5277nfxyy96jdz65a0a3pmkkwrfbziwgik83gg77j75i";
-    };
-
-    buildInputs = [ cracklib python ];
-  };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "gnome-control-center-3.10.2";
 
   src = fetchurl {
