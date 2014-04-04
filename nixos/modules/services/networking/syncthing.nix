@@ -49,7 +49,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.syncthing.enable {
+  config = mkIf cfg.enable {
 
     systemd.services.syncthing =
       {
@@ -57,12 +57,17 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         environment.STNORESTART = "placeholder";  # do not self-restart
-        environment.HOME = "${config.services.syncthing.dataDir}";
+        environment.HOME = "${cfg.dataDir}";
         serviceConfig = {
-          User = "${config.services.syncthing.user}";
-          ExecStart = "${pkgs.syncthing}/bin/syncthing -home=${config.services.syncthing.dataDir}/.syncthing";
+          User = "${cfg.user}";
+          PermissionsStartOnly = true;
           Restart = "always";
+          ExecStart = "${pkgs.syncthing}/bin/syncthing -home=${cfg.dataDir}/.syncthing";
         };
+        preStart = ''
+          mkdir -p ${cfg.dataDir}
+          chown ${cfg.user} ${cfg.dataDir}
+        '';
 
       };
 
