@@ -25,6 +25,7 @@ with import ../lib/testing.nix { inherit system minimal; };
   mysql = makeTest (import ./mysql.nix);
   mysql_replication = makeTest (import ./mysql-replication.nix);
   munin = makeTest (import ./munin.nix);
+  mumble = makeTest (import ./mumble.nix);
   nat = makeTest (import ./nat.nix);
   nfs3 = makeTest (import ./nfs.nix { version = 3; });
   #nfs4 = makeTest (import ./nfs.nix { version = 4; });
