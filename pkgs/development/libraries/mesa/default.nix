@@ -95,8 +95,7 @@ stdenv.mkDerivation {
     ;
 
   enableParallelBuilding = true;
-  #doCheck = true; # https://bugs.freedesktop.org/show_bug.cgi?id=67672,
-    #tests for 10.* fail to link due to some RTTI problem
+  #doCheck = true; # https://bugs.freedesktop.org/show_bug.cgi?id=67672
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM;
   #   also move libOSMesa to $osmesa, as it's relatively big

@@ -154,6 +154,8 @@ then
     ln -sv g++ $out/bin/c++
 fi
 
+mkGccWrapper $out/bin/cpp $gccPath/cpp || true
+
 if mkGccWrapper $out/bin/gfortran $gccPath/gfortran
 then
     ln -sv gfortran $out/bin/g77
