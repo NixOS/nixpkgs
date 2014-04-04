@@ -123,6 +123,7 @@
       ngircd = 112;
       btsync = 113;
       minecraft = 114;
+      rippled = 115;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
