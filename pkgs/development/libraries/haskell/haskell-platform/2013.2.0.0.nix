@@ -30,6 +30,7 @@ cabal.mkDerivation (self : {
     cp ${self.cabalFile} $sourceRoot/${self.pname}.cabal
     cp ${self.setupFile} $sourceRoot/Setup.hs
     touch $sourceRoot/LICENSE
+    sed -i -e 's|hashable  *==1.1.2.5,|hashable,|' $sourceRoot/${self.pname}.cabal
   '';
   noHaddock = true;
   meta = {
