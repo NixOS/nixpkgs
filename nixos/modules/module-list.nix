@@ -198,6 +198,7 @@
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
   ./services/networking/supybot.nix
+  ./services/networking/syncthing.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/tftpd.nix
