@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "language-ecmascript";
-  version = "0.16";
-  sha256 = "1gz0089llxfmq9v2j5hp85h7w2vw50sgbl6dcd7i0s8m5zd3dmqg";
+  version = "0.16.1";
+  sha256 = "0pqb1r60jjmiwk9giaxnrp9a07h4a97kp6g0nznwpdy32x849gx3";
   buildDepends = [
     dataDefaultClass Diff mtl parsec QuickCheck testingFeat uniplate
     wlPprint
