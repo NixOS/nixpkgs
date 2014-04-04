@@ -191,6 +191,12 @@ if $ldPath/ld -V 2>&1 |grep Solaris; then
   # Use Solaris specific linker wrapper
   sed -e "s^@ld@^$ldPath/ld^g" < "$ldSolarisWrapper" > "$out/bin/ld-solaris"
   chmod +x "$out/bin/ld-solaris"
+
+  # Allow impure linking to libc objects from /usr/lib/  (required at least by gccgo-wrapper)
+  sed -e 's~@extraPathTests@~    if [[ "$p" == *crt*.o || "$p" == *values-X*.o ]]; then return 1; fi~' \
+    < $utils > $out/nix-support/utils.sh
+else
+  sed -e 's~@extraPathTests@~~' < $utils > $out/nix-support/utils.sh
 fi
 
 
@@ -202,8 +208,6 @@ test -n "$libc" && echo $libc > $out/nix-support/orig-libc
 doSubstitute "$addFlags" "$out/nix-support/add-flags.sh"
 
 doSubstitute "$setupHook" "$out/nix-support/setup-hook"
-
-cp -p $utils $out/nix-support/utils.sh
 
 
 # Propagate the wrapped gcc so that if you install the wrapper, you get

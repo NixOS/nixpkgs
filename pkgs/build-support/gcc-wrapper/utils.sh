@@ -14,6 +14,8 @@ badPath() {
     # the temporary build directory).
     if test "${p:0:1}" != "/"; then return 1; fi
     
+    @extraPathTests@
+
     # Otherwise, the path should refer to the store or some temporary
     # directory (including the build directory).
     test \
