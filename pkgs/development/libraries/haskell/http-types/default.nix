@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-types";
-  version = "0.8.3";
-  sha256 = "02l1lhl2ajbm5f7zq363nlb21dpdg1m0qsy330arccmds7z9g7a2";
+  version = "0.8.4";
+  sha256 = "0bz7g537if863vk29z72hndf1x019dj7shj1aa77pssrxma3a685";
   buildDepends = [ blazeBuilder caseInsensitive text ];
   testDepends = [ blazeBuilder hspec QuickCheck text ];
   jailbreak = true;
