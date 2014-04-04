@@ -589,7 +589,8 @@ configurePhase() {
     fi
 
     # Patch all configure and libtool* scripts to guarantee that Bash is used.
-    find . -perm -u+x -type f \( -iname libtool\* -or -iname configure \) |xargs sed -i -e "s|#! /bin/sh|#! $SHELL|g" -e "s|#!/bin/sh|#!$SHELL|g"
+    find $NIX_BUILD_TOP -perm -u+x -type f \( -iname libtool\* -or -iname configure \) \
+      |xargs sed -i -e "s|#! /bin/sh|#! $SHELL|g" -e "s|#!/bin/sh|#!$SHELL|g" || true
 
     if [ -z "$dontFixLibtool" ]; then
         find . -iname "ltmain.sh" | while read i; do
