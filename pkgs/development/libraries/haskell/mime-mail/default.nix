@@ -1,5 +1,5 @@
 { cabal, base64Bytestring, blazeBuilder, filepath, hspec, random
-, text, sendmail ? "sendmail"
+, sendmail ? "sendmail", text
 }:
 
 cabal.mkDerivation (self: {
@@ -10,7 +10,7 @@ cabal.mkDerivation (self: {
     base64Bytestring blazeBuilder filepath random text
   ];
   testDepends = [ blazeBuilder hspec text ];
-  configureFlags = [ "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"${sendmail}\"" ];
+  configureFlags = "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"${sendmail}\"";
   meta = {
     homepage = "http://github.com/snoyberg/mime-mail";
     description = "Compose MIME email messages";

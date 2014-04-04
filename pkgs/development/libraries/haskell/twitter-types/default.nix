@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     aeson attoparsec httpTypes HUnit shakespeareText testFramework
     testFrameworkHunit testFrameworkThPrime text unorderedContainers
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/himura/twitter-types";
     description = "Twitter JSON parser and types";
@@ -19,5 +20,4 @@ cabal.mkDerivation (self: {
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
-  doCheck = false;
 })
