@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
+{ stdenv, fetchgit, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
 , glib, kbd, libxslt, coreutils, libgcrypt, docbook_xsl
-, kexectools, libmicrohttpd, bash, glibc, autoreconfHook
+, kexectools, libmicrohttpd, bash, glibc, autoconf, automake, libtool
+, linuxHeaders, docbook_xml_dtd_45, docbook_xml_dtd_42
 , python ? null, pythonSupport ? false
 }:
 
@@ -10,30 +11,25 @@ assert stdenv.isLinux;
 assert pythonSupport -> python != null;
 
 stdenv.mkDerivation rec {
-  version = "211";
+  version = "212";
   name = "systemd-${version}";
 
-  src = fetchurl {
-    url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "0j36a4z6gqa0laxf3admd1w1mb8fdbnh3zvz1zgzl3hgdzzw2y7j";
+  src = fetchgit {
+    url = "git://github.com/wkennington/systemd";
+    rev = "563623d6a1088afccb966d82f09731e7e6b07ce4";
+    sha256 = "0gmi96yj9rbqg48frgxsgjlqrs3nh1aqhl24066bz721xj77rp5j";
   };
 
-  patches = [ ./fix_console_in_containers.patch ]
-    ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
+  patches = stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus.libs kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt docbook_xsl
-      libmicrohttpd autoreconfHook
+      libmicrohttpd autoconf automake libtool linuxHeaders
+      docbook_xml_dtd_45 docbook_xml_dtd_42
     ] ++ stdenv.lib.optional pythonSupport python;
 
   propagatedBuildInputs = [ bash coreutils utillinux kbd glibc ];
-
-  # Systemd attempts to use the gold linker instead of plain ld
-  # This does not work with nix as gold is not properly patched to handle
-  # all link time dependencies in the nix store
-  # FIXME: When gold can be used with nix
-  preAutoreconf = "sed -i 's/-Wl,-fuse-ld=gold//' configure.ac";
 
   configureFlags =
     [ "--localstatedir=/var"
@@ -53,6 +49,14 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      # Systemd attempts to use the gold linker instead of plain ld
+      # This does not work with nix as gold is not properly patched to handle
+      # all link time dependencies in the nix store
+      # FIXME: When gold can be used with nix
+      sed -i 's/-Wl,-fuse-ld=gold//' configure.ac
+
+      sh ./autogen.sh
+
       # FIXME: patch this in systemd properly (and send upstream).
       for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/systemd-readahead-drop.service units/rescue.service.m4.in src/journal/cat.c src/core/shutdown.c src/dbus1-generator/dbus1-generator.c src/hostname/org.freedesktop.hostname1.service src/kernel-install/* src/locale/*.service src/nspawn/nspawn.c; do
         test -e $i
