@@ -1539,8 +1539,11 @@ let
 
   npth = callPackage ../development/libraries/npth {};
 
-  nmap = callPackage ../tools/security/nmap {
+  nmap = callPackage ../tools/security/nmap { };
+
+  nmap_graphical = callPackage ../tools/security/nmap {
     inherit (pythonPackages) pysqlite;
+    graphicalSupport = true;
   };
 
   notbit = callPackage ../applications/networking/notbit { };
