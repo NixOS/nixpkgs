@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (ncurses != null) ncurses
     ++ stdenv.lib.optional (perl != null) perl;
 
+  postInstall = ''
+    rm $out/bin/su # su should be supplied by the su package (shadow)
+  '';
+
   enableParallelBuilding = true;
 
   meta = {
