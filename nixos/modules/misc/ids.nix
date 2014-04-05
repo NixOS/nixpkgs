@@ -125,6 +125,7 @@
       minecraft = 114;
       monetdb = 115;
       rippled = 116;
+      murmur = 117;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
