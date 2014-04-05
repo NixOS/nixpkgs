@@ -46,6 +46,7 @@ let
       pkgs.rsync
       pkgs.strace
       pkgs.sysvtools
+      pkgs.su
       pkgs.time
       pkgs.usbutils
       pkgs.utillinux
