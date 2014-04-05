@@ -4940,6 +4940,7 @@ let
 
   libmtp = callPackage ../development/libraries/libmtp { };
 
+
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
 
   libnatspec = callPackage ../development/libraries/libnatspec { };
@@ -5391,6 +5392,8 @@ let
   mpich2 = callPackage ../development/libraries/mpich2 { };
 
   mtdev = callPackage ../development/libraries/mtdev { };
+
+  mtpfs = callPackage ../tools/filesystems/mtpfs { };
 
   mu = callPackage ../tools/networking/mu {
     texinfo = texinfo4;
