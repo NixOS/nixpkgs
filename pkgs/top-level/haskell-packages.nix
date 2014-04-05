@@ -847,7 +847,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   cprngAes = callPackage ../development/libraries/haskell/cprng-aes {};
 
-  criterion = callPackage ../development/libraries/haskell/criterion {};
+  criterion = callPackage ../development/libraries/haskell/criterion { hastache = self.hastache_0_5; };
 
   Crypto = callPackage ../development/libraries/haskell/Crypto {};
 
@@ -1317,6 +1317,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   haskore = callPackage ../development/libraries/haskell/haskore {};
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
+  hastache_0_5 = callPackage ../development/libraries/haskell/hastache/0.5.nix {};
 
   heredoc = callPackage ../development/libraries/haskell/heredoc {};
 
