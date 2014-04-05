@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installFlags = "gsettingsschemadir=\${out}/share/empathy/glib-2.0/schemas/";
-
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/empathy" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${gnome3.gnome_themes_standard}/:${gnome3.gnome_themes_standard}/share:${hicolor_icon_theme}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/empathy:${telepathy_logger}/share/telepathy/logger:${folks}/share/folks:${evolution_data_server}/share/evolution-data-server"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${gnome3.gnome_themes_standard}/:${gnome3.gnome_themes_standard}/share:${hicolor_icon_theme}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {

@@ -20,12 +20,10 @@ stdenv.mkDerivation rec {
                   libxml2 gnome3.gtksourceview
                   gnome3.gsettings_desktop_schemas makeWrapper ];
 
-  installFlags = "gsettingsschemadir=\${out}/share/gnome-calculator/glib-2.0/schemas/";
-
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/gnome-calculator" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/gnome-calculator:$XDG_ICON_DIRS"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

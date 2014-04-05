@@ -25,12 +25,10 @@ stdenv.mkDerivation rec {
                   libnotify libdvdread libcanberra_gtk3 docbook_xsl
                   gnome3.gsettings_desktop_schemas makeWrapper libxml2 ];
 
-  installFlags = "gsettingsschemadir=\${out}/share/gnome-disk-utility/glib-2.0/schemas/";
-
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/gnome-disks" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/gnome-disk-utility:$XDG_ICON_DIRS"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   preFixup = ''

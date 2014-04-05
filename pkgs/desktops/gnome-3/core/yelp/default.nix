@@ -20,12 +20,10 @@ stdenv.mkDerivation rec {
                   libxml2 libxslt icu file makeWrapper gnome3.yelp_xsl
                   gnome3.gsettings_desktop_schemas ];
 
-  installFlags = "gsettingsschemadir=\${out}/share/yelp/glib-2.0/schemas/";
-
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/yelp" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/:${gnome3.gnome_themes_standard}/share:${gnome3.yelp_xsl}/share/yelp-xsl:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/yelp:$XDG_ICON_DIRS"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/:${gnome3.gnome_themes_standard}/share:${gnome3.yelp_xsl}/share/yelp-xsl:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/yelp:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

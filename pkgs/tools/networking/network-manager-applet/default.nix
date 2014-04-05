@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gnome3.gtk libglade networkmanager libnotify libsecret dbus_glib
+    gnome3.gtk libglade networkmanager libnotify libsecret dbus_glib gsettings_desktop_schemas
     polkit isocodes makeWrapper udev gnome3.gconf gnome3.libgnome_keyring
   ];
 
@@ -44,9 +44,12 @@ stdenv.mkDerivation rec {
     ln -s ${networkmanager_openvpn}/libexec/* $out/libexec/
     ln -s ${networkmanager_vpnc}/libexec/* $out/libexec/
     ln -s ${networkmanager_openconnect}/libexec/* $out/libexec/
+  '';
+
+  preFixup = ''
     wrapProgram "$out/bin/nm-applet" \
       --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:${gnome3.gtk}/share:$out/share" \
+      --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --set GCONF_CONFIG_SOURCE "xml::~/.gconf" \
       --prefix PATH ":" "${gnome3.gconf}/bin"
   '';
@@ -57,9 +60,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom urkud rickynils ];
     platforms = platforms.linux;
-
-    # resolve collision between evince and nm-applet for
-    # gschemas.compiled
-    priority = 6;
   };
 }
