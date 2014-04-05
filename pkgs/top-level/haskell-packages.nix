@@ -2304,6 +2304,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   sybWithClassInstancesText = callPackage ../development/libraries/haskell/syb/syb-with-class-instances-text.nix {};
 
+  syntactic = callPackage ../development/libraries/haskell/syntactic {};
+
   syz = callPackage ../development/libraries/haskell/syz {};
 
   SDLImage = callPackage ../development/libraries/haskell/SDL-image {};
