@@ -4940,7 +4940,6 @@ let
 
   libmtp = callPackage ../development/libraries/libmtp { };
 
-
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
 
   libnatspec = callPackage ../development/libraries/libnatspec { };
