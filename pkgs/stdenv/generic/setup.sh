@@ -304,11 +304,7 @@ substitute() {
 
     local -a params=("$@")
 
-    local n p pattern replacement varName content
-
-    # a slightly hacky way to keep newline at the end
-    content="$(cat $input; echo -n X)"
-    content="${content%X}"
+    local n p pattern replacement varName args
 
     for ((n = 2; n < ${#params[*]}; n += 1)); do
         p=${params[$n]}
@@ -332,13 +328,10 @@ substitute() {
             n=$((n + 2))
         fi
 
-        content="${content//"$pattern"/$replacement}"
+        args="$args -r $pattern $replacement"
     done
 
-    # !!! This doesn't work properly if $content is "-n".
-    echo -n "$content" > "$output".tmp
-    if [ -x "$output" ]; then chmod +x "$output".tmp; fi
-    mv -f "$output".tmp "$output"
+    command substitute $args "$input" "$output"
 }
 
 
