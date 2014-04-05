@@ -913,6 +913,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
+  dataHash = callPackage ../development/libraries/haskell/data-hash {};
+
   dataInttrie = callPackage ../development/libraries/haskell/data-inttrie {};
 
   dataLens = callPackage ../development/libraries/haskell/data-lens {};
