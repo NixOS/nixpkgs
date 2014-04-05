@@ -38,6 +38,9 @@ stdenv.mkDerivation {
 
   kernel = if libsOnly then null else kernel.dev;
 
+  # Remove after linux 3.14 compatibility is added
+  patches = optional (versionAtLeast kernel.version "3.14") ./nvidia-3.14.patch;
+
   dontStrip = true;
 
   glPath = stdenv.lib.makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr];
