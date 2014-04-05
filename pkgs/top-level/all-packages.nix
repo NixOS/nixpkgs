@@ -4955,6 +4955,8 @@ let
   libre = callPackage ../development/libraries/libre {};
   librem = callPackage ../development/libraries/librem {};
 
+  libresample = callPackage ../development/libraries/libresample {};
+
   libsamplerate = callPackage ../development/libraries/libsamplerate {
     stdenv = if stdenv.isDarwin
       then overrideGCC stdenv gccApple
