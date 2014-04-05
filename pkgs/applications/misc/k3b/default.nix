@@ -1,12 +1,8 @@
 { stdenv, fetchurl, cmake, qt4, perl, shared_mime_info, libvorbis, taglib
 , flac, libsamplerate, libdvdread, lame, libsndfile, libmad, gettext
 , kdelibs, kdemultimedia, automoc4, phonon, libkcddb ? null
-, makeWrapper, cdrkit, cdrdao, dvdplusrwtools
 }:
 
-let
-  runtimeDeps = [ cdrkit cdrdao dvdplusrwtools ];
-in
 stdenv.mkDerivation rec {
   name = "k3b-2.0.2";
   
@@ -20,22 +16,10 @@ stdenv.mkDerivation rec {
       flac libsamplerate libdvdread lame libsndfile
       libmad gettext stdenv.gcc.libc
       kdelibs kdemultimedia automoc4 phonon
-      libkcddb makeWrapper
-    ]
-    # Runtime dependencies are *not* propagated so they are easy to override.
-    ++ runtimeDeps;
+      libkcddb
+    ];
 
   enableParallelBuilding = true;
-
-  postInstall =
-    # Wrap k3b with PATH to required tools, so they can be found without being
-    # installed in a profile. The PATH is suffixed so that profile-installed
-    # tools take preference.
-    let extraPath = stdenv.lib.makeSearchPath "bin" runtimeDeps;
-    in ''
-      wrapProgram "$out/bin/k3b" --suffix PATH : ${extraPath}
-      wrapProgram "$out/bin/k3bsetup" --suffix PATH : ${extraPath}
-    '';
                   
   meta = with stdenv.lib; {
     description = "CD/DVD Burning Application for KDE";
