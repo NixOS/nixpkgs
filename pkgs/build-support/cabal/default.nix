@@ -158,6 +158,17 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             inherit enableSharedExecutables;
 
             extraConfigureFlags = [
+              # SSE2 is not enabled by default on GHC, so we enable it
+              # here.  SSE2 is not supported below Pentium4, so we
+              # theoretically risk losing some systems with this, but
+              # the hashable cabal package (which is very widespread and
+              # has a lot of dependency) enforces sse2, so most of the
+              # haskell libraries in nixpkgs are not usable on old
+              # processors anyways.  On the other hand, by using SSE2 we
+              # fix the "excess precision" issues that caused imprecise
+              # binaries and test failures on i686 (e.g. for the
+              # math-functions).
+              (if stdenv.isi686 then "--ghc-options=-msse2" else [])
               (enableFeature self.enableSplitObjs "split-objs")
               (enableFeature enableLibraryProfiling "library-profiling")
               (enableFeature self.enableSharedLibraries "shared")
