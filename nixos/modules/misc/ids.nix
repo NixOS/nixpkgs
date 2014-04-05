@@ -124,6 +124,7 @@
       btsync = 113;
       minecraft = 114;
       monetdb = 115;
+      rippled = 116;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
