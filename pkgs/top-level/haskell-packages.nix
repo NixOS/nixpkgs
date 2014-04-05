@@ -757,6 +757,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
 
+  cheapskate = callPackage ../development/libraries/haskell/cheapskate {};
+
   checkers = callPackage ../development/libraries/haskell/checkers {};
 
   chell = callPackage ../development/libraries/haskell/chell {};
