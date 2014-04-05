@@ -17,6 +17,10 @@ stdenv.mkDerivation {
     geoip libnl c-ares gtk python
   ];
 
+  preConfigure = ''
+    sed -re 's/g_memmove/memmove/' -i $(grep -rl g_memmove .)
+  '';
+
   configureFlags = "--disable-usr-local --disable-silent-rules --with-gtk2 --without-gtk3 --without-qt --with-ssl";
 
   desktopItem = makeDesktopItem {
