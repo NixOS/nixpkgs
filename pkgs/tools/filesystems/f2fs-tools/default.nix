@@ -21,5 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "http://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/";
     description = "Userland tools for the f2fs filesystem";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.emery ];
   };
 }
