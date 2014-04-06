@@ -22,6 +22,7 @@ in {
     # Enable helpful DBus services.
     security.polkit.enable = true;
     services.udisks2.enable = true;
+    services.accounts-daemon.enable = true;
     networking.networkmanager.enable = true;
     services.upower.enable = config.powerManagement.enable;
 

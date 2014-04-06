@@ -96,6 +96,7 @@
   ./services/databases/postgresql.nix
   ./services/databases/virtuoso.nix
   ./services/databases/monetdb.nix
+  ./services/desktops/accountservice.nix
   ./services/games/ghost-one.nix
   ./services/games/minecraft-server.nix
   ./services/hardware/acpid.nix
