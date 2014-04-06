@@ -108,6 +108,8 @@ rec {
 
   rest = callPackage ./core/rest { };
 
+  totem-pl-parser = callPackage ./core/totem-pl-parser { };
+
   vte = callPackage ./core/vte { };
 
   vino = callPackage ./core/vino { };
