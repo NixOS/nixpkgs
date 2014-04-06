@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "1.1.0";
   sha256 = "18xn3nzxfghcd88cana1jw85ijv0ysw3bp36fb6r5wsf6m79z01y";
   buildDepends = [ conduit ];
+  noHaddock = true;
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Consume attoparsec parsers via conduit. (deprecated)";
