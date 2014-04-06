@@ -126,6 +126,9 @@
       monetdb = 115;
       rippled = 116;
       murmur = 117;
+      foundationdb = 118;
+      newrelic = 119;
+      starbound = 120;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -225,6 +228,9 @@
       systemd-journal-gateway = 110;
       notbit = 111;
       monetdb = 115;
+      foundationdb = 118;
+      newrelic = 119;
+      starbound = 120;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 
