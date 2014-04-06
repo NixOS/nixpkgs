@@ -1766,6 +1766,8 @@ let
 
   cntlm = callPackage ../tools/networking/cntlm { };
 
+  pastebinit = callPackage ../tools/misc/pastebinit { };
+  
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
