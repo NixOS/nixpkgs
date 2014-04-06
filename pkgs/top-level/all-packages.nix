@@ -1951,6 +1951,8 @@ let
 
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
+  sproxy = haskellPackages.callPackage ../tools/networking/sproxy { };
+
   stardict = callPackage ../applications/misc/stardict/stardict.nix {
     inherit (gnome) libgnomeui scrollkeeper;
   };
