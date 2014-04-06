@@ -226,7 +226,7 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            while ! su -s ${pkgs.stdenv.shell} postgres -c 'psql postgres -c ""' 2> /dev/null; do
+            while ! ${pkgs.postgresql93}/bin/pg_isready > /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi
                 sleep 0.1
             done
