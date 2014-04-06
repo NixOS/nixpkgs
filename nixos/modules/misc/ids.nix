@@ -231,6 +231,7 @@
       foundationdb = 118;
       newrelic = 119;
       starbound = 120;
+      grsecurity = 121;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 
