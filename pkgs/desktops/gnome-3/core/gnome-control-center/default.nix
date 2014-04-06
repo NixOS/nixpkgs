@@ -36,13 +36,15 @@ stdenv.mkDerivation rec {
     substituteInPlace panels/datetime/test-endianess.c --replace "/usr/share/locale/" "$out/share/locale/"
   '';
 
-  postInstall = with gnome3; ''
+  preFixup = with gnome3; ''
     wrapProgram $out/bin/gnome-control-center \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:${gsettings_desktop_schemas}/share:${gnome_settings_daemon}/share:${glib}/share:${gtk}/share:${colord}/share:$out/share:$out/share/gnome-control-center:$XDG_ICON_DIRS"
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:${gnome_settings_daemon}/share:${glib}/share:${gtk}/share:${colord}/share:$out/share:$out/share/gnome-control-center:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
     for i in $out/share/applications/*; do
       substituteInPlace $i --replace "gnome-control-center" "$out/bin/gnome-control-center"
     done
+
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {

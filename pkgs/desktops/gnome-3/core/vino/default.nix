@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 intltool glib libsoup pkgconfig libnotify file makeWrapper ];
 
-  postInstall = ''
+  preFixup = ''
     for f in "$out/bin/vino-passwd" "$out/libexec/vino-server"; do
-      wrapProgram $f --prefix XDG_DATA_DIRS : "${gtk3}/share:$out/share"
+      wrapProgram $f --prefix XDG_DATA_DIRS : "${gtk3}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
     done
   '';
 

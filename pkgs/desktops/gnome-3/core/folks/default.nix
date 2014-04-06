@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
 
   postBuild = "rm -rf $out/share/gtk-doc";
 
-  installFlags = "gsettingsschemadir=\${out}/share/folks/glib-2.0/schemas/";
-
   meta = {
     description = "Folks";
 

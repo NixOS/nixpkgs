@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
     makeWrapper libsecret librsvg
   ];
 
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
-
   configureFlags = [
     "--disable-nautilus" # Do not use nautilus
   ];
@@ -40,12 +38,14 @@ stdenv.mkDerivation rec {
       sed -i 's/\(if (++n_items == \)5\(.*\)/\1${builtins.toString recentListSize}\2/' shell/ev-window.c
     '';
 
-  postInstall = ''
+  preFixup = ''
     # Tell Glib/GIO about the MIME info directory, which is used
     # by `g_file_info_get_content_type ()'.
     wrapProgram "$out/bin/evince" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gsettings_desktop_schemas}/share:${gtk3}/share:${shared_mime_info}/share:$out/share"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${shared_mime_info}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   doCheck = false; # would need pythonPackages.dogTail, which is missing

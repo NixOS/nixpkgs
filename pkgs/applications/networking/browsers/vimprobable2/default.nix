@@ -14,13 +14,16 @@ stdenv.mkDerivation rec {
     sed -i s,/etc/ssl/certs/ca-certificates.crt,/etc/ssl/certs/ca-bundle.crt, config.h
   '';
 
-  buildInputs = [ makeWrapper gtk libsoup libX11 perl pkgconfig webkit ];
+  buildInputs = [ makeWrapper gtk libsoup libX11 perl pkgconfig webkit gsettings_desktop_schemas ];
 
   installPhase = ''
     make PREFIX=/ DESTDIR=$out install
+  '';
+
+  preFixup = ''
     wrapProgram "$out/bin/vimprobable2" \
       --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = {

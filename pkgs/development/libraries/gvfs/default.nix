@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # ToDo: one probably should specify schemas for samba and others here
-  fixupPhase = ''
-    wrapProgram $out/libexec/gvfsd --set GSETTINGS_SCHEMA_DIR "$out/share/glib-2.0/schemas"
+  preFixup = ''
+    wrapProgram $out/libexec/gvfsd --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = {
