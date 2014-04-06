@@ -1953,6 +1953,8 @@ let
 
   sproxy = haskellPackages.callPackage ../tools/networking/sproxy { };
 
+  sproxy-web = haskellPackages.callPackage ../tools/networking/sproxy-web { };
+
   stardict = callPackage ../applications/misc/stardict/stardict.nix {
     inherit (gnome) libgnomeui scrollkeeper;
   };
