@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     rm $out/share/icons/hicolor/icon-theme.cache
 
     for f in "$out"/bin/*; do
-      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas:$GSETTINGS_SCHEMAS_PATH"
+      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
     done
   '';
 
