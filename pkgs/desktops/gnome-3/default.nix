@@ -38,11 +38,15 @@ rec {
 
   gjs = callPackage ./core/gjs { };
 
+  gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
+
   gnome_control_center = callPackage ./core/gnome-control-center { };
 
   gnome-calculator = callPackage ./core/gnome-calculator { };
 
   gnome_common = callPackage ./core/gnome-common { };
+
+  gnome-dictionary = callPackage ./core/gnome-dictionary { };
 
   gnome-disk-utility = callPackage ./core/gnome-disk-utility { };
 
@@ -76,6 +80,8 @@ rec {
 
   gnome_themes_standard = callPackage ./core/gnome-themes-standard { };
 
+  grilo = callPackage ./core/grilo { };
+
   gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };
 
   gucharmap = callPackage ./core/gucharmap { };
@@ -103,6 +109,10 @@ rec {
   nautilus = callPackage ./core/nautilus { };
 
   rest = callPackage ./core/rest { };
+
+  totem = callPackage ./core/totem { };
+
+  totem-pl-parser = callPackage ./core/totem-pl-parser { };
 
   vte = callPackage ./core/vte { };
 
