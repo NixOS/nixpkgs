@@ -6907,39 +6907,6 @@ let
     kernelPatches = [];
   };
 
-  grsecurityOverrider = args: {
-    # Apparently as of gcc 4.6, gcc-plugin headers (which are needed by PaX plugins)
-    # include libgmp headers, so we need these extra tweaks
-    buildInputs = args.buildInputs ++ [ gmp ];
-    preConfigure = ''
-      ${args.preConfigure or ""}
-      sed -i 's|-I|-I${gmp}/include -I|' scripts/gcc-plugin.sh
-      sed -i 's|HOST_EXTRACFLAGS +=|HOST_EXTRACFLAGS += -I${gmp}/include|' tools/gcc/Makefile
-      sed -i 's|HOST_EXTRACXXFLAGS +=|HOST_EXTRACXXFLAGS += -I${gmp}/include|' tools/gcc/Makefile
-    '';
-  };
-
-  # Note: grsec is not enabled automatically, you need to specify which kernel
-  # config options you need (e.g. by overriding extraConfig). See list of options here:
-  # https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options
-  linux_3_2_grsecurity = lowPrio (lib.addMetaAttrs {
-    maintainers = with lib.maintainers; [ wizeman thoughtpolice ];
-  } (lib.overrideDerivation (linux_3_2.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_2_57 kernelPatches.grsec_path ];
-    argsOverride = {
-      modDirVersion = "${linux_3_2.modDirVersion}-grsec";
-    };
-  })) (args: grsecurityOverrider args)));
-
-  linux_3_13_grsecurity = lowPrio (lib.addMetaAttrs {
-    maintainers = with lib.maintainers; [ wizeman thoughtpolice ];
-  } (lib.overrideDerivation (linux_3_13.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_13_9 kernelPatches.grsec_path ];
-    argsOverride = {
-      modDirVersion = "${linux_3_13.modDirVersion}-grsec";
-    };
-  })) (args: grsecurityOverrider args)));
-
   linux_3_2_apparmor = lowPrio (linux_3_2.override {
     kernelPatches = [ kernelPatches.apparmor_3_2 ];
     extraConfig = ''
@@ -7104,7 +7071,6 @@ let
   # Build the kernel modules for the some of the kernels.
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
   linuxPackages_3_2_apparmor = linuxPackagesFor pkgs.linux_3_2_apparmor linuxPackages_3_2_apparmor;
-  linuxPackages_3_2_grsecurity = linuxPackagesFor pkgs.linux_3_2_grsecurity linuxPackages_3_2_grsecurity;
   linuxPackages_3_2_xen = linuxPackagesFor pkgs.linux_3_2_xen linuxPackages_3_2_xen;
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 linuxPackages_3_4);
   linuxPackages_3_4_apparmor = linuxPackagesFor pkgs.linux_3_4_apparmor linuxPackages_3_4_apparmor;
@@ -7112,7 +7078,6 @@ let
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
-  linuxPackages_3_13_grsecurity = linuxPackagesFor pkgs.linux_3_13_grsecurity linuxPackages_3_13_grsecurity;
   linuxPackages_3_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_13 linuxPackages_3_13);
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   # Update this when adding a new version!
