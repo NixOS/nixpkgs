@@ -1951,6 +1951,8 @@ let
 
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
+  spiped = callPackage ../tools/networking/spiped { };
+
   sproxy = haskellPackages.callPackage ../tools/networking/sproxy { };
 
   sproxy-web = haskellPackages.callPackage ../tools/networking/sproxy-web { };
