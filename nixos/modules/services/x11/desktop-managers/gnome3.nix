@@ -57,6 +57,7 @@ in {
         gnome3.yelp
         pkgs.glib_networking
         pkgs.ibus
+        gnome3.gnome-backgrounds
         gnome3.gnome_shell
         gnome3.gnome_settings_daemon
         gnome3.gnome_terminal

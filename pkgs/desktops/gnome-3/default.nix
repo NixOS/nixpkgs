@@ -38,6 +38,8 @@ rec {
 
   gjs = callPackage ./core/gjs { };
 
+  gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
+
   gnome_control_center = callPackage ./core/gnome-control-center { };
 
   gnome-calculator = callPackage ./core/gnome-calculator { };
