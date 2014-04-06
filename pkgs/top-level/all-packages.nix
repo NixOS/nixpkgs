@@ -10278,6 +10278,12 @@ let
 
   z3 = callPackage ../applications/science/logic/z3 {};
 
+  boolector   = boolector15;
+  boolector15 = callPackage ../applications/science/logic/boolector {};
+  boolector16 = lowPrio (callPackage ../applications/science/logic/boolector {
+    useV16 = true;
+  });
+
   ### SCIENCE / ELECTRONICS
 
   eagle = callPackage_i686 ../applications/science/electronics/eagle { };
