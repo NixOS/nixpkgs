@@ -7257,10 +7257,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SetScalar = buildPerlPackage {
-    name = "Set-Scalar-1.26";
+    name = "Set-Scalar-1.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JH/JHI/Set-Scalar-1.26.tar.gz;
-      sha256 = "121r9n8lqk081vjzn9ppm4zklz1l0c0v0ab94c05y5vrsn5l0zl8";
+      url = mirror://cpan/authors/id/D/DA/DAVIDO/Set-Scalar-1.29.tar.gz;
+      sha256 = "07aiqkyi1p22drpcyrrmv7f8qq6fhrxh007achy2vryxyck1bp53";
     };
     meta = {
       license = "perl";
