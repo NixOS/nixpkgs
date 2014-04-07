@@ -5574,10 +5574,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXConfigFromFile = buildPerlPackage {
-    name = "MooseX-ConfigFromFile-0.11";
+    name = "MooseX-ConfigFromFile-0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-ConfigFromFile-0.11.tar.gz;
-      sha256 = "963e7dbb2bc7ca18995db903c64b0841c4e8d3877009bff5475125673c3b02b4";
+      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-ConfigFromFile-0.13.tar.gz;
+      sha256 = "0pf5f05hs2i765cnw9sw1hdxf7vz480iyyngjawr4yqjkv4r5nz7";
     };
     buildInputs = [ Moose TestCheckDeps TestDeep TestFatal TestNoWarnings TestRequires TestWithoutModule ];
     propagatedBuildInputs = [ Moose MooseXTypes MooseXTypesPathTiny TryTiny namespaceautoclean ];
