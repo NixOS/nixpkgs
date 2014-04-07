@@ -5065,6 +5065,8 @@ let
 
   libmusicbrainz3 = callPackage ../development/libraries/libmusicbrainz { };
 
+  libmusicbrainz5 = callPackage ../development/libraries/libmusicbrainz/5.x.nix { };
+
   libmusicbrainz = libmusicbrainz3;
 
   libnet = callPackage ../development/libraries/libnet { };
