@@ -1691,10 +1691,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptPasswdMD5 = buildPerlPackage {
-    name = "Crypt-PasswdMD5-1.3";
+    name = "Crypt-PasswdMD5-1.40";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LU/LUISMUNOZ/Crypt-PasswdMD5-1.3.tar.gz;
-      sha256 = "13j0v6ihgx80q8jhyas4k48b64gnzf202qajyn097vj8v48khk54";
+      url = mirror://cpan/authors/id/R/RS/RSAVAGE/Crypt-PasswdMD5-1.40.tgz;
+      sha256 = "0j0r74f18nk63phddzqbf7wqma2ci4p4bxvrwrxsy0aklbp6lzdp";
     };
   };
 
