@@ -9560,8 +9560,6 @@ let
 
   alienarena = callPackage ../games/alienarena { };
 
-  andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
-
   anki = callPackage ../games/anki { };
 
   asc = callPackage ../games/asc {

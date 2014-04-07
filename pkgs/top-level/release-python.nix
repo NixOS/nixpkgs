@@ -54,7 +54,6 @@ let
   amuleDaemon = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   amuleGui = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   androidsdk_4_1 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  andyetitmoves = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ant = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   antlr = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   antlr3 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
