@@ -4198,10 +4198,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTTPLite = buildPerlPackage rec {
-    name = "HTTP-Lite-2.4";
+    name = "HTTP-Lite-2.43";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
-      sha256 = "66f4fc0f93eeb42c09737f83b21de1944212ae9b2acb784d5103e8208491477b";
+      sha256 = "10svyy8r5ca86spz21r0k2mdy8g2slzssin4qbg101zc9kr5r65a";
     };
   };
 
