@@ -6824,10 +6824,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PSGI = buildPerlPackage rec {
-    name = "PSGI-1.03";
+    name = "PSGI-1.102";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
-      sha256 = "0b1k7smg50xfdhrjifa2gkkm52vna41alvbw8vb2pk99jmgnngh6";
+      sha256 = "0iqzxs8fv63510knm3zr3jr3ky4x7diwd7y24mlshzci81kl8v55";
     };
   };
 
