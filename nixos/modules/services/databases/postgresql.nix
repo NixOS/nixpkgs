@@ -72,7 +72,7 @@ in
 
       dataDir = mkOption {
         type = types.path;
-        default = "/var/db/postgresql";
+        default = "${config.dataPrefix}/db/postgresql";
         description = ''
           Data directory for PostgreSQL.
         '';

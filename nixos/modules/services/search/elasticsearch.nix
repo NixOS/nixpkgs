@@ -88,7 +88,7 @@ in {
 
     dataDir = mkOption {
       type = types.path;
-      default = "/var/lib/elasticsearch";
+      default = "${config.dataPrefix}/lib/elasticsearch";
       description = ''
         Data directory for elasticsearch.
       '';
