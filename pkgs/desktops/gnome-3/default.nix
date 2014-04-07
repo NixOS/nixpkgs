@@ -62,6 +62,8 @@ rec {
 
   libgnome_keyring = callPackage ./core/libgnome-keyring { };
 
+  libgnomekbd = callPackage ./core/libgnomekbd { };
+
   folks = callPackage ./core/folks { };
 
   gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
