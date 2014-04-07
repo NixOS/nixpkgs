@@ -6003,10 +6003,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXTypesStructured = buildPerlPackage {
-    name = "MooseX-Types-Structured-0.28";
+    name = "MooseX-Types-Structured-0.30";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/MooseX-Types-Structured-0.28.tar.gz;
-      sha256 = "12snpf65bh3jyx9w1h1sark83l0w51s3jdcr4ygw57cxvq39yl43";
+      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-Structured-0.30.tar.gz;
+      sha256 = "0svfgbyzwdipywh7bfp954hncm8ihfr8xpppcyy59wr1inx2f55c";
     };
     buildInputs = [ DateTime MooseXTypesDateTime TestFatal ];
     propagatedBuildInputs = [ DevelPartialDump Moose MooseXTypes SubExporter ];
