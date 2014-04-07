@@ -3208,6 +3208,24 @@ rec {
     propagatedBuildInputs = [ gdata hcs_utils keyring simplejson ];
   };
 
+  google_api_python_client = buildPythonPackage rec {
+    name = "google-api-python-client-1.2";
+
+    src = fetchurl {
+      url = "https://google-api-python-client.googlecode.com/files/google-api-python-client-1.2.tar.gz";
+      sha256 = "0xd619w71xk4ldmikxqhaaqn985rc2hy4ljgwfp50jb39afg7crw";
+    };
+
+    propagatedBuildInputs = [ httplib2 ];
+
+    meta = with stdenv.lib; {
+      description = "The core Python library for accessing Google APIs";
+      homepage = "https://code.google.com/p/google-api-python-client/";
+      license = licenses.asl20;
+      platforms = platforms.unix;
+    };
+  };
+
   greenlet = buildPythonPackage rec {
     name = "greenlet-0.3.1";
 
