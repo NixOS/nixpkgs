@@ -4069,10 +4069,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLTemplate = buildPerlPackage rec {
-    name = "HTML-Template-2.9";
+    name = "HTML-Template-2.95";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SA/SAMTREGAR/${name}.tar.gz";
-      sha256 = "0is026jn1731lvfjglv4003dsr8drshvw25zlbjrywk59kx7nsb2";
+      url = "mirror://cpan/authors/id/W/WO/WONKO/${name}.tar.gz";
+      sha256 = "07ahpfgidxsw2yb7y8i7bbr8s64aq6qgq832h9jswmksxbd0l43q";
     };
   };
 
