@@ -1383,10 +1383,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CompressRawBzip2 = buildPerlPackage {
-    name = "Compress-Raw-Bzip2-2.063";
+    name = "Compress-Raw-Bzip2-2.064";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.063.tar.gz;
-      sha256 = "0qi2jg76pgx1qkh4897g746cxqjr2njzzbyv2k9pq4m1m2v3jr6s";
+      url = mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.064.tar.gz;
+      sha256 = "0aqbggr9yf4hn21a9fra111rlmva3w8f3mqvbchl5l86knkbkwy3";
     };
 
     # Don't build a private copy of bzip2.
