@@ -1671,10 +1671,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptDHGMP = buildPerlPackage rec {
-    name = "Crypt-DH-GMP-0.00011";
+    name = "Crypt-DH-GMP-0.00012";
     src = fetchurl {
-      url = "mirror://cpan/authors/id//D/DM/DMAKI/${name}.tar.gz";
-      sha256 = "0c9sz67lh2d2pn9z82hngzns4sqqnawdc8a1yl7p7pc0l4r0q3hz";
+      url = "mirror://cpan/authors/id/D/DM/DMAKI/${name}.tar.gz";
+      sha256 = "0f5gdprcql4kwzgxl2s6ngcfg1jl45lzcqh7dkv5bkwlwmxa9rsi";
     };
     buildInputs = [ DevelChecklib TestRequires pkgs.gmp ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.gmp}/include";
