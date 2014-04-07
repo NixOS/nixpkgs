@@ -3914,10 +3914,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   HashUtilFieldHashCompat = buildPerlPackage {
-    name = "Hash-Util-FieldHash-Compat-0.03";
+    name = "Hash-Util-FieldHash-Compat-0.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NU/NUFFIN/Hash-Util-FieldHash-Compat-0.03.tar.gz;
-      sha256 = "0pmai98a89j82fjksfax87brmpimjn74kr7bl874lc1k40dfhx47";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Hash-Util-FieldHash-Compat-0.07.tar.gz;
+      sha256 = "1fbqcjvp5slkfyf63g8scrbdpkpw3g9z9557xvfaxn09aki7g1bn";
     };
     propagatedBuildInputs = [ Testuseok ];
     meta = {
