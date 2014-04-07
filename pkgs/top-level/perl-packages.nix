@@ -1301,10 +1301,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassThrowable = buildPerlPackage {
-    name = "Class-Throwable-0.10";
+    name = "Class-Throwable-0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/ST/STEVAN/Class-Throwable-0.10.tar.gz;
-      sha256 = "01hjrfb951c9j83ncg5drnam8vsfdgkjjv0kjshxhkl93sgnlvdl";
+      url = mirror://cpan/authors/id/K/KM/KMX/Class-Throwable-0.11.tar.gz;
+      sha256 = "1vjadr0kqmfi9s3wfxjbqqgc7fqrk87n6b1a5979sbxxk5yh8hyk";
     };
   };
 
