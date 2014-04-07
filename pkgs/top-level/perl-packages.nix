@@ -6688,10 +6688,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PerlOSType = buildPerlPackage rec {
-    name = "Perl-OSType-1.002";
+    name = "Perl-OSType-1.007";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Perl/${name}.tar.gz";
-      sha256 = "0clbfgq0800dip3821ibh29vrwcc159qnakidbiqrmhcisd95xbs";
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
+      sha256 = "0aryn8dracfjfnks07b5rvsza4csinlsj6cn92jv3sv8sg3rmdxk";
     };
   };
 
