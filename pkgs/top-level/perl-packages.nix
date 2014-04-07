@@ -7152,10 +7152,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   RoleIdentifiable = buildPerlPackage {
-    name = "Role-Identifiable-0.005";
+    name = "Role-Identifiable-0.007";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Role-Identifiable-0.005.tar.gz;
-      sha256 = "86910b6052d50bc64d1613bc1274f2ae17d553bfc3f0247a3fe3f7bb2cdd3aee";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Role-Identifiable-0.007.tar.gz;
+      sha256 = "1bbkj2wqpbfdw1cbm99vg9d94rvzba19m18xhnylaym0l78lc4sn";
     };
     buildInputs = [ Moose ];
     propagatedBuildInputs = [ Moose ];
