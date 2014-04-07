@@ -928,10 +928,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystPluginStackTrace = buildPerlPackage {
-    name = "Catalyst-Plugin-StackTrace-0.11";
+    name = "Catalyst-Plugin-StackTrace-0.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSTROUT/Catalyst-Plugin-StackTrace-0.11.tar.gz;
-      sha256 = "1ingivnga1yb4dqsj6icc4a58i9wdalzpn2qflsn8n2skgm223qb";
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-StackTrace-0.12.tar.gz;
+      sha256 = "1b2ksz74cpigxqzf63rddar3vfmnbpwpdcbs11v0ml89pb8ar79j";
     };
     propagatedBuildInputs = [ CatalystRuntime DevelStackTrace MROCompat ];
     meta = {
