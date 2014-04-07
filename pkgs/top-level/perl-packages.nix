@@ -6378,10 +6378,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetSSLeay = buildPerlPackage rec {
-    name = "Net-SSLeay-1.52";
+    name = "Net-SSLeay-1.58";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Net/${name}.tar.gz";
-      sha256 = "1fkpdlpg99rdq2vlm6bgmqc8iazhcrfzvbpwxnn20k0viwpy7v28";
+      url = "mirror://cpan/authors/id/M/MI/MIKEM/${name}.tar.gz";
+      sha256 = "0mizg2g07fa4c13zpnhmjc87psal5gp5hi23kqpynigmkp0m1p0b";
     };
     buildInputs = [ pkgs.openssl ];
     OPENSSL_PREFIX = pkgs.openssl;
