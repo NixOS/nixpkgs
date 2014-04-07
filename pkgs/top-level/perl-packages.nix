@@ -6590,10 +6590,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PathClass = buildPerlPackage {
-    name = "Path-Class-0.29";
+    name = "Path-Class-0.33";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KW/KWILLIAMS/Path-Class-0.29.tar.gz;
-      sha256 = "1z3wvci2qcb1m9qrkxphbnfnr4jqgxbxnxrmdb25ks8gap98hk4z";
+      url = mirror://cpan/authors/id/K/KW/KWILLIAMS/Path-Class-0.33.tar.gz;
+      sha256 = "0xy6s04xpslpzbb90x67yvfv0pjqnj1szxlx16vfx690iskcd36d";
     };
     meta = {
       description = "Cross-platform path specification manipulation";
