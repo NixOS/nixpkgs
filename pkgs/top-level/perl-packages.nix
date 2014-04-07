@@ -3418,10 +3418,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileChangeNotify = buildPerlModule rec {
-    name = "File-ChangeNotify-0.23";
+    name = "File-ChangeNotify-0.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "18aq6lcldniciw189ihmcji98y6zqa1gdl3mjqdg8f37i9amn4i3";
+      sha256 = "090i265f73jlcl5rv250791vw32j9vvl4nd5abc7myg0klb8109w";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs =
