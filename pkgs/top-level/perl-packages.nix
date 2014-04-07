@@ -7138,10 +7138,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   RoleHasMessage = buildPerlPackage {
-    name = "Role-HasMessage-0.005";
+    name = "Role-HasMessage-0.006";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Role-HasMessage-0.005.tar.gz;
-      sha256 = "bc6cecf3022159dc415fb931e38291425d6aa8a9542d980b14ea692141337ca9";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Role-HasMessage-0.006.tar.gz;
+      sha256 = "1lylfvarjfy6wy34dfny3032pc6r33mjby5yzzhmxybg8zhdp9pn";
     };
     buildInputs = [ Moose ];
     propagatedBuildInputs = [ Moose MooseXRoleParameterized StringErrf TryTiny namespaceclean ];
