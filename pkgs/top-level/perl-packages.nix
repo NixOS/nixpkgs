@@ -5240,10 +5240,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleFind = buildPerlPackage {
-    name = "Module-Find-0.11";
+    name = "Module-Find-0.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CR/CRENZ/Module-Find-0.11.tar.gz;
-      sha256 = "15ykcwplbqh5hc0fw4cx6g0f22zr0hrfkdkv1s34n9yg574dq3b5";
+      url = mirror://cpan/authors/id/C/CR/CRENZ/Module-Find-0.12.tar.gz;
+      sha256 = "1lc33jdv4pgmm7nkr9bff0lhwjhhw91kaf6iiy2n7i7mw8dfv47l";
     };
     meta = {
       description = "Find and use installed modules in a (sub)category";
