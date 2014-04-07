@@ -8379,10 +8379,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestMojibake = buildPerlPackage {
-    name = "Test-Mojibake-0.8";
+    name = "Test-Mojibake-0.9";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SY/SYP/Test-Mojibake-0.8.tar.gz;
-      sha256 = "66d82ca4fe539bb69ee8179d96370e50777a9547176428baf4dbe190ef78b4cb";
+      url = mirror://cpan/authors/id/S/SY/SYP/Test-Mojibake-0.9.tar.gz;
+      sha256 = "0b7jamkmws6k3cvzwrz3r5vcpjrdhr8wndf82i5nx2z19xsy33ym";
     };
     meta = {
       homepage = https://github.com/creaktive/Test-Mojibake;
