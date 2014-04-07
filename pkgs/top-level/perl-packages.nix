@@ -8167,10 +8167,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestDeep = buildPerlPackage {
-    name = "Test-Deep-0.110";
+    name = "Test-Deep-0.112";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Deep-0.110.tar.gz;
-      sha256 = "12rd9fknm778685ypyc599lcmzbqvbqnjhcrkybgpq2siai9q4h5";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Deep-0.112.tar.gz;
+      sha256 = "1vg1bb1lpqpj0pxk738ykip4kw3agbi88g90wxb3pc11l84nlsan";
     };
     propagatedBuildInputs = [ TestNoWarnings TestTester ];
     meta = {
