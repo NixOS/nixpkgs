@@ -6193,10 +6193,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetAmazonS3Policy = buildPerlPackage {
-    name = "Net-Amazon-S3-Policy-0.1.2";
+    name = "Net-Amazon-S3-Policy-0.1.6";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PO/POLETTIX/Net-Amazon-S3-Policy-0.1.2.tar.gz;
-      sha256 = "1kkzimvxwxx0mypf75dalksxmvwsb8b575yx2nzmvjkvjg3j9na0";
+      url = mirror://cpan/authors/id/P/PO/POLETTIX/Net-Amazon-S3-Policy-0.1.6.tar.gz;
+      sha256 = "056rhq6vsdpwi2grbmxj8341qjrz0258civpnhs78j37129nxcfj";
     };
     propagatedBuildInputs = [ JSON ];
     meta = {
