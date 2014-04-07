@@ -4459,10 +4459,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IPCRun3 = buildPerlPackage rec {
-    name = "IPC-Run3-0.046";
+    name = "IPC-Run3-0.048";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "033miv4z6g50q71blj8l1g846frngm1v5l3mcv38dslkjqimxxp4";
+      sha256 = "0r9m8q78bg7yycpixd7738jm40yz71p2q7inm766kzsw3g6c709x";
     };
   };
 
