@@ -1910,10 +1910,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataSerializer = buildPerlPackage {
-    name = "Data-Serializer-0.59";
+    name = "Data-Serializer-0.60";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEELY/Data-Serializer-0.59.tar.gz;
-      sha256 = "1mydpbacrkirafcjxcg1c0gnls1kxiv0qvdd4q2yd6vsyay0ayqr";
+      url = mirror://cpan/authors/id/N/NE/NEELY/Data-Serializer-0.60.tar.gz;
+      sha256 = "0ca4s811l7f2bqkx7vnyxbpp4f0qska89g2pvsfb3k0bhhbk0jdk";
     };
     meta = {
       description = "Modules that serialize data structures";
