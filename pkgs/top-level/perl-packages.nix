@@ -7679,10 +7679,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubExporterGlobExporter = buildPerlPackage {
-    name = "Sub-Exporter-GlobExporter-0.003";
+    name = "Sub-Exporter-GlobExporter-0.004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-GlobExporter-0.003.tar.gz;
-      sha256 = "4cb082331151360756f3b2f8122fdd44597a207d62bd3f2ecb13578005116ab1";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-GlobExporter-0.004.tar.gz;
+      sha256 = "025wgjavrbzh52jb4v0w2fxqh7r5181k935h9cyy2rm1qk49fg8p";
     };
     propagatedBuildInputs = [ SubExporter ];
     meta = {
