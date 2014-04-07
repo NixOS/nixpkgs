@@ -676,10 +676,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystDevel = buildPerlPackage {
-    name = "Catalyst-Devel-1.37";
+    name = "Catalyst-Devel-1.39";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Devel-1.37.tar.gz;
-      sha256 = "0yk526py65iy40z10d6w0fspb8fam5rf1hzsxnfyy4lpy91lp7s9";
+      url = mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Devel-1.39.tar.gz;
+      sha256 = "12m50bbkggjmpxihv3wnvr0g2qng0zwhlzi5ygppjz8wh2x73qxw";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ CatalystRuntime CatalystActionRenderView CatalystPluginConfigLoader CatalystPluginStaticSimple ConfigGeneral FileChangeNotify FileCopyRecursive FileShareDir ModuleInstall Moose MooseXDaemonize MooseXEmulateClassAccessorFast namespaceautoclean namespaceclean PathClass Starman TemplateToolkit ];
