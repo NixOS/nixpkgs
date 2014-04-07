@@ -1348,10 +1348,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassXSAccessor = buildPerlPackage {
-    name = "Class-XSAccessor-1.16";
+    name = "Class-XSAccessor-1.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SM/SMUELLER/Class-XSAccessor-1.16.tar.gz;
-      sha256 = "1yjpw9kssy4m52407k45hxjnqz02494z7x8j44pjzkyi8msafvg5";
+      url = mirror://cpan/authors/id/S/SM/SMUELLER/Class-XSAccessor-1.19.tar.gz;
+      sha256 = "1wm6013il899jnm0vn50a7iv9v6r4nqywbqzj0csyf8jbwwnpicr";
     };
     meta = {
       description = "Generate fast XS accessors without runtime compilation";
