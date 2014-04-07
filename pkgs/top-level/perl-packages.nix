@@ -6257,10 +6257,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetDNS = buildPerlPackage {
-    name = "Net-DNS-0.63";
+    name = "Net-DNS-0.74";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OL/OLAF/Net-DNS-0.63.tar.gz;
-      sha256 = "1pswrwhkav051xahm3k4cbyhi8kqpfmaz85lw44kwi2wc7mz4prk";
+      url = mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-0.74.tar.gz;
+      sha256 = "0clwl4nqzg23d6l9d9gc8ijl1lbghhfrbavjlvhd1wll5r8ayr7g";
     };
     propagatedBuildInputs = [NetIP DigestHMAC];
     doCheck = false;
