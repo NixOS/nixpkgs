@@ -2315,10 +2315,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DBIxClassCandy = buildPerlPackage {
-    name = "DBIx-Class-Candy-0.002103";
+    name = "DBIx-Class-Candy-0.002104";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FR/FREW/DBIx-Class-Candy-0.002103.tar.gz;
-      sha256 = "1vcaigvzxq9jjkhw2bkayrnsa76sakr3wrv7009f1dxyfa0iyrsk";
+      url = mirror://cpan/authors/id/F/FR/FREW/DBIx-Class-Candy-0.002104.tar.gz;
+      sha256 = "0b0fsm3waqm43qmhcynb2s6p8hi9yr41p9c4c5aq6l58x3xwvp34";
     };
     propagatedBuildInputs = [ TestDeep TestFatal DBIxClass LinguaENInflect StringCamelCase ];
     meta = {
