@@ -8371,10 +8371,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestMockTime = buildPerlPackage rec {
-    name = "Test-MockTime-0.09";
+    name = "Test-MockTime-0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DD/DDICK/${name}.tar.gz";
-      sha256 = "1j2riyikzyfkxsgkfdqirs7xa8q5d06b9klpk7l9sgydwqdvxdv3";
+      sha256 = "104p9qsqcchfbxh6b6w7q9jhkwb4hc424js0cyivyanjm6bcqvj9";
     };
   };
 
