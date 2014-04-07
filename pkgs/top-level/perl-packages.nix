@@ -7567,10 +7567,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   StringMkPasswd = buildPerlPackage {
-    name = "String-MkPasswd-0.02";
+    name = "String-MkPasswd-0.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CG/CGRAU/String-MkPasswd-0.02.tar.gz;
-      sha256 = "0si4xfgf8c2pfag1cqbr9jbyvg3hak6wkmny56kn2qwa4ljp9bk6";
+      url = mirror://cpan/authors/id/C/CG/CGRAU/String-MkPasswd-0.05.tar.gz;
+      sha256 = "15lvcc8c9hp6mg3jx02wd3b85aphn8yl5db62q3pam04c0sgh42k";
     };
   };
 
