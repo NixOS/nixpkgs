@@ -4966,10 +4966,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LWPxParanoidAgent = buildPerlPackage rec {
-    name = "LWPx-ParanoidAgent-1.07";
+    name = "LWPx-ParanoidAgent-1.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BR/BRADFITZ/${name}.tar.gz";
-      sha256 = "bd7ccbe6ed6b64195a967e9b2b04c185b7b97e8ec5a8835bb45dbcd42a18e76a";
+      url = "mirror://cpan/authors/id/S/SA/SAXJAZMAN/lwp/${name}.tar.gz";
+      sha256 = "0i306p7mdqx09qfsf6b3rnn5xw9v9r3md4swlbk9z0mskjl0l4w4";
     };
     doCheck = false; # 3 tests fail, probably because they try to connect to the network
     propagatedBuildInputs = [ LWP NetDNS ];
