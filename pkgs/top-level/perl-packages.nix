@@ -4292,10 +4292,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOAll = buildPerlPackage {
-    name = "IO-All-0.50";
+    name = "IO-All-0.60";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IN/INGY/IO-All-0.50.tar.gz;
-      sha256 = "13mc913jqqfkaily48cd886x0n6x6zw59c00fmkhqc97xh1kdckc";
+      url = mirror://cpan/authors/id/F/FR/FREW/IO-All-0.60.tar.gz;
+      sha256 = "1bwsd2f5rlivcqyd7rb0ap5vrzv8s8fappi3b1v553yr5vl5pyq9";
     };
     propagatedBuildInputs = [ IOString ];
     meta = {
