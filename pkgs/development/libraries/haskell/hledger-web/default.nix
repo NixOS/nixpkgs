@@ -22,6 +22,7 @@ cabal.mkDerivation (self: {
   testDepends = [ hspec yesod yesodTest ];
   jailbreak = true;
   doCheck = false;
+  patches = [ ./build-fix.patch ];
   meta = {
     homepage = "http://hledger.org";
     description = "A web interface for the hledger accounting tool";

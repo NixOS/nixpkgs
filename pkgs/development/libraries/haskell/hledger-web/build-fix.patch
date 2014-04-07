@@ -1,0 +1,47 @@
+Only in hledger-web-0.22.4: dist
+diff -urw hledger-web-0.22.4-orig/Hledger/Web/Main.hs hledger-web-0.22.4/Hledger/Web/Main.hs
+--- hledger-web-0.22.4-orig/Hledger/Web/Main.hs	2014-04-07 13:00:41.168884350 +0200
++++ hledger-web-0.22.4/Hledger/Web/Main.hs	2014-04-07 13:14:46.584599468 +0200
+@@ -15,7 +15,8 @@
+ -- import Yesod.Default.Main   (defaultMain)
+ import Settings            --  (parseExtra)
+ import Application          (makeApplication)
+-import Data.Conduit.Network (HostPreference(HostIPv4))
++import Data.String
++import Data.Conduit.Network
+ import Network.Wai.Handler.Warp (runSettings, defaultSettings, settingsPort)
+ import Network.Wai.Handler.Launch (runUrlPort)
+ --
+@@ -65,7 +66,7 @@
+   app <- makeApplication opts j' AppConfig{appEnv = Development
+                                           ,appPort = p
+                                           ,appRoot = pack u
+-                                          ,appHost = HostIPv4
++                                          ,appHost = fromString "*4"
+                                           ,appExtra = Extra "" Nothing staticRoot
+                                           }
+   if server_ opts
+diff -urw hledger-web-0.22.4-orig/hledger-web.cabal hledger-web-0.22.4/hledger-web.cabal
+--- hledger-web-0.22.4-orig/hledger-web.cabal	2014-04-07 13:00:41.168884350 +0200
++++ hledger-web-0.22.4/hledger-web.cabal	2014-04-07 13:16:26.376772344 +0200
+@@ -128,7 +128,7 @@
+                    , http-conduit
+                    , http-client          >= 0.2 && < 0.3
+                    , HUnit
+-                   , network-conduit
++                   , network-conduit, conduit-extra
+                    , old-locale
+                    , parsec
+                    , regexpr              >= 0.5.1
+@@ -220,7 +220,7 @@
+                    , http-conduit
+                    , http-client          >= 0.2 && < 0.3
+                    , HUnit
+-                   , network-conduit
++                   , network-conduit, conduit-extra
+                    , old-locale
+                    , parsec
+                    , regexpr              >= 0.5.1
+Only in hledger-web-0.22.4: Setup
+Only in hledger-web-0.22.4: Setup.hi
+Only in hledger-web-0.22.4: Setup.o
