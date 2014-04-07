@@ -5252,10 +5252,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleImplementation = buildPerlPackage {
-    name = "Module-Implementation-0.06";
+    name = "Module-Implementation-0.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/Module-Implementation-0.06.tar.gz;
-      sha256 = "0v8qajzkpkwb9mfj2p46j352bwiszkg1zk778b008axqb817hfys";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/Module-Implementation-0.07.tar.gz;
+      sha256 = "15r93l8danysfhb7wn2zww1s02hajki4k3xjfxbpz7ckadqq6jbk";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ModuleRuntime TryTiny ];
