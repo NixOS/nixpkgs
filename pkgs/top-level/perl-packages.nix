@@ -992,10 +992,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystXComponentTraits = buildPerlPackage rec {
-    name = "CatalystX-Component-Traits-0.16";
+    name = "CatalystX-Component-Traits-0.19";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/CatalystX/${name}.tar.gz";
-      sha256 = "0a2mhfgv0kqmaxf2crs8mqk44lyhd9qcwlpzhrc0b0dh4z503mr4";
+      url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
+      sha256 = "0iq4ci8m6g2c4g01fvdl568y7pjz28f3widk986v3pyhr7ll8j88";
     };
     propagatedBuildInputs =
       [ CatalystRuntime MooseXTraitsPluggable namespaceautoclean ListMoreUtils ];
