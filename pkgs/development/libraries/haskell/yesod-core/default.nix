@@ -1,23 +1,23 @@
 { cabal, aeson, async, attoparsecConduit, blazeBuilder, blazeHtml
 , blazeMarkup, caseInsensitive, cereal, clientsession, conduit
 , conduitExtra, cookie, dataDefault, fastLogger, hamlet, hspec
-, httpTypes, HUnit, liftedBase, monadControl, monadLogger, network
-, networkConduit, parsec, pathPieces, QuickCheck, random, resourcet
-, safe, shakespeare, shakespeareCss, shakespeareI18n, shakespeareJs
-, streamingCommons, text, time, transformers, transformersBase
-, unixCompat, vector, wai, waiExtra, waiLogger, waiTest, warp
-, yesodRoutes
+, httpTypes, HUnit, liftedBase, monadControl, monadLogger, mtl
+, network, networkConduit, parsec, pathPieces, QuickCheck, random
+, resourcet, safe, shakespeare, shakespeareCss, shakespeareI18n
+, shakespeareJs, streamingCommons, text, time, transformers
+, transformersBase, unixCompat, vector, wai, waiExtra, waiLogger
+, waiTest, warp, yesodRoutes
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-core";
-  version = "1.2.9.2";
-  sha256 = "1ip5rra426agqv5v2hmxcp1g3xjvi9wnixrpdnxvifflhr7gchfl";
+  version = "1.2.11";
+  sha256 = "0vg07g5735qsr01wpgxpjzjc7w9nrqvkhfnd90jzdvg3kg33dgih";
   buildDepends = [
     aeson attoparsecConduit blazeBuilder blazeHtml blazeMarkup
     caseInsensitive cereal clientsession conduit conduitExtra cookie
     dataDefault fastLogger hamlet httpTypes liftedBase monadControl
-    monadLogger parsec pathPieces random resourcet safe shakespeare
+    monadLogger mtl parsec pathPieces random resourcet safe shakespeare
     shakespeareCss shakespeareI18n shakespeareJs text time transformers
     transformersBase unixCompat vector wai waiExtra waiLogger warp
     yesodRoutes
