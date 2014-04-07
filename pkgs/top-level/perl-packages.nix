@@ -2570,10 +2570,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DigestMD4 = buildPerlPackage rec {
-    name = "Digest-MD4-1.5";
+    name = "Digest-MD4-1.9";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKEM/DigestMD4/${name}.tar.gz";
-      sha256 = "c7d7a32f5c2710c929b5688a7b057ec8ddbc51cf278f623e771fc02dcabd6a1f";
+      sha256 = "19ma1hmvgiznq95ngzvm6v4dfxc9zmi69k8iyfcg6w14lfxi0lb6";
     };
   };
 
