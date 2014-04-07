@@ -6788,10 +6788,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PPIxRegexp = buildPerlPackage {
-    name = "PPIx-Regexp-0.034";
+    name = "PPIx-Regexp-0.036";
     src = fetchurl {
-      url = mirror://cpan/authors/id/W/WY/WYANT/PPIx-Regexp-0.034.tar.gz;
-      sha256 = "512a358f4bd6196df0601ff36f7831e0ba142fb8ef2bc3995e19bceabd0b5ae7";
+      url = mirror://cpan/authors/id/W/WY/WYANT/PPIx-Regexp-0.036.tar.gz;
+      sha256 = "1nnaxf1dmywacdgh8f1s2ki8jkrf2vi6bfhk70p1r9k1001idlfk";
     };
     propagatedBuildInputs = [ ListMoreUtils PPI TaskWeaken ];
     meta = {
