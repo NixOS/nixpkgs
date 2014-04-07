@@ -7666,10 +7666,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubExporterForMethods = buildPerlPackage {
-    name = "Sub-Exporter-ForMethods-0.100050";
+    name = "Sub-Exporter-ForMethods-0.100051";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-ForMethods-0.100050.tar.gz;
-      sha256 = "67dfaa39c58995ed1d341d7f2e785a68b7ba4ade72608f491459b8d2dee6df33";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-ForMethods-0.100051.tar.gz;
+      sha256 = "127wniw53p7pp7r2vazicply3v1gmnhw4w7jl6p74i0grnsixipm";
     };
     propagatedBuildInputs = [ SubExporter SubName ];
     meta = {
