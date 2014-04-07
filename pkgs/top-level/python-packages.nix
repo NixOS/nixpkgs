@@ -3370,7 +3370,7 @@ rec {
       url = "http://pypi.python.org/packages/source/i/ipdb/ipdb-0.7.tar.gz";
       md5 = "d879f9b2b0f26e0e999809585dcaec61";
     };
-    propagatedBuildInputs = [ pythonPackages.ipython ];
+    propagatedBuildInputs = [ pythonPackages.ipythonLight ];
   };
 
   ipdbplugin = buildPythonPackage {
@@ -3379,7 +3379,7 @@ rec {
       url = "https://pypi.python.org/packages/source/i/ipdbplugin/ipdbplugin-1.4.tar.gz";
       md5 = "f9a41512e5d901ea0fa199c3f648bba7";
     };
-    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipython ];
+    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipythonLight ];
   };
 
 
