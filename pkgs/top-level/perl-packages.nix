@@ -8751,10 +8751,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextAligner = buildPerlPackage {
-    name = "Text-Aligner-0.07";
+    name = "Text-Aligner-0.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AN/ANNO/Text-Aligner-0.07.tar.gz;
-      sha256 = "1vpb87binmmysr4sxfjinxg4bh3rb4rmrx48yyczgmyddmda9rik";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Aligner-0.10.tar.gz;
+      sha256 = "0d80x5jrv5j9yi234rdnjvnsnmhm4jsssqv7bpkl1fhjd1kfc7v0";
     };
     meta = {
       description = "Align text in columns";
