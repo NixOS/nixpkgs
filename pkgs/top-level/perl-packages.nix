@@ -5478,10 +5478,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseAutobox = buildPerlPackage {
-    name = "Moose-Autobox-0.13";
+    name = "Moose-Autobox-0.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Moose-Autobox-0.13.tar.gz;
-      sha256 = "3474b3e6dfe099fcca34089375ace6612cca35d4d8f9a0b8b4e48fbf88541b21";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Moose-Autobox-0.15.tar.gz;
+      sha256 = "0xcayrfm08dqas1mq8lnf8nxkvzdgcmv6xs5lqah17bxqxgznrl9";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ Moose SyntaxKeywordJunction autobox ];
