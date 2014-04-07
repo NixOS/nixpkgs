@@ -8855,10 +8855,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextMicroTemplate = buildPerlPackage {
-    name = "Text-MicroTemplate-0.19";
+    name = "Text-MicroTemplate-0.20";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KA/KAZUHO/Text-MicroTemplate-0.19.tar.gz;
-      sha256 = "0hli95kn67slr6ixffcx6qvv36hlr03hij28029k3f8d7b7f32za";
+      url = mirror://cpan/authors/id/K/KA/KAZUHO/Text-MicroTemplate-0.20.tar.gz;
+      sha256 = "0da44kd3z4n23wivy99583cscmiay2xv0wq9dzx6mg8vq874kx74";
     };
     meta = {
       description = "Micro template engine with Perl5 language";
