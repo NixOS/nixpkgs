@@ -2512,10 +2512,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelStackTraceAsHTML = buildPerlPackage {
-    name = "Devel-StackTrace-AsHTML-0.11";
+    name = "Devel-StackTrace-AsHTML-0.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Devel-StackTrace-AsHTML-0.11.tar.gz;
-      sha256 = "0y0r42gszp3bxbs9j2nn3xgs8ij1cnadrywwwdc6r0y8m0siyapg";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Devel-StackTrace-AsHTML-0.14.tar.gz;
+      sha256 = "0yl296y0qfwybwjgqjzd4j2w2bj5a2nz342qqgxchnf5bqynl1c9";
     };
     propagatedBuildInputs = [ DevelStackTrace ];
     meta = {
