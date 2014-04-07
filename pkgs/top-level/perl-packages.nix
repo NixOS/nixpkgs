@@ -9577,10 +9577,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLWriter = buildPerlPackage rec {
-    name = "XML-Writer-0.612";
+    name = "XML-Writer-0.624";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JO/JOSEPHW/${name}.tar.gz";
-      sha256 = "1prvgbjxynxg6061qxzfbbimjvil04513hf3hsilv0hdg58nb9jk";
+      sha256 = "0yyz0dh9b4clailbxyi90dfrqpyc6py77rmmz6qmkx7ynlpyxk46";
     };
   };
 
