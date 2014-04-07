@@ -941,10 +941,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystPluginStaticSimple = buildPerlPackage {
-    name = "Catalyst-Plugin-Static-Simple-0.30";
+    name = "Catalyst-Plugin-Static-Simple-0.31";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AB/ABRAXXA/Catalyst-Plugin-Static-Simple-0.30.tar.gz;
-      sha256 = "18zar1n4imgnv7b4dr5sxyikry4668ngqgc6f0dr210bqafvwv7w";
+      url = mirror://cpan/authors/id/A/AB/ABRAXXA/Catalyst-Plugin-Static-Simple-0.31.tar.gz;
+      sha256 = "1mcns9qdpnja153prbyypwjicgpm1sn7rw75k7hm28g3vf59z733";
     };
     patches = [ ../development/perl-modules/catalyst-plugin-static-simple-etag.patch ];
     propagatedBuildInputs = [ CatalystRuntime MIMETypes Moose MooseXTypes namespaceautoclean ];
