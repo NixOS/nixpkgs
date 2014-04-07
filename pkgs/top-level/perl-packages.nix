@@ -5218,10 +5218,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleBuildWithXSpp = buildPerlModule rec {
-    name = "Module-Build-WithXSpp-0.13";
+    name = "Module-Build-WithXSpp-0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SM/SMUELLER/${name}.tar.gz";
-      sha256 = "05c5dssgl7ykj64nkzy4nwfrs0hd1lvfidhflrs3f1c7hc0z9g46";
+      sha256 = "0d39fjg9c0n820bk3fb50vvlwhdny4hdl69xmlyzql5xzp4cicsk";
     };
     propagatedBuildInputs = [ ExtUtilsXSpp ExtUtilsCppGuess ];
   };
