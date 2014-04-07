@@ -3156,10 +3156,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExceptionBase = buildPerlPackage {
-    name = "Exception-Base-0.25";
+    name = "Exception-Base-0.2401";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DE/DEXTER/Exception-Base-0.25.tar.gz;
-      sha256 = "1s2is862xba2yy633wn2nklrya36yrlwxlbpqjrv8m31xj2c8khw";
+      url = mirror://cpan/authors/id/D/DE/DEXTER/Exception-Base-0.2401.tar.gz;
+      sha256 = "0z4pckv3iwzz5s4xrv96kg9620s96kim57nfrxbqhh6pyd5jfazv";
     };
     buildInputs = [ TestUnitLite ];
     meta = {
