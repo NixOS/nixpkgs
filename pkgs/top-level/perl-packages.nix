@@ -955,10 +955,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystViewDownload = buildPerlPackage rec {
-    name = "Catalyst-View-Download-0.07";
+    name = "Catalyst-View-Download-0.09";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
-      sha256 = "1c6k4x6az0fkany16zlyaqhlp7bcx922vl4qzd3z707vs6pc06rz";
+      url = "mirror://cpan/authors/id/G/GA/GAUDEON/${name}.tar.gz";
+      sha256 = "1qgq6y9iwfbhbkbgpw9czang2ami6z8jk1zlagrzdisy4igqzkvs";
     };
     buildInputs = [  TestWWWMechanizeCatalyst Testuseok ];
     propagatedBuildInputs = [ CatalystRuntime TextCSV XMLSimple ];
