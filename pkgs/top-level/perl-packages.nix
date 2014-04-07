@@ -8568,10 +8568,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestSynopsis = buildPerlPackage {
-    name = "Test-Synopsis-0.06";
+    name = "Test-Synopsis-0.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Test-Synopsis-0.06.tar.gz;
-      sha256 = "fb3eed184eaf8a3c2338ec14b7235fa75fc43cf5f3774d927a4c947a5141db1b";
+      url = mirror://cpan/authors/id/Z/ZO/ZOFFIX/Test-Synopsis-0.10.tar.gz;
+      sha256 = "0gbk4d2vwlldsj5shmbdar3a29vgrw84ldsvm26mflkr5ji34adv";
     };
     meta = {
       description = "Test your SYNOPSIS code";
