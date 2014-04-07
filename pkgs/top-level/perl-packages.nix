@@ -9455,10 +9455,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLLibXML = buildPerlPackage rec {
-    name = "XML-LibXML-2.0014";
+    name = "XML-LibXML-2.0115";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/XML/${name}.tar.gz";
-      sha256 = "0r2mw6pnygj2bpng9f4q5jfn4iawhkj47ys3sbnvqymyp1afihf6";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "0d6l6idl2920x9xi097fvzfdn9i0s8qa9ksw4bz2w1wh3zsn07zm";
     };
     SKIP_SAX_INSTALL = 1;
     buildInputs = [ pkgs.libxml2 ];
