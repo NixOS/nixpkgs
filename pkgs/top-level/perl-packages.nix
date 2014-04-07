@@ -4754,10 +4754,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LocaleMaketext = buildPerlPackage {
-    name = "Locale-Maketext-1.13";
+    name = "Locale-Maketext-1.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FE/FERREIRA/Locale-Maketext-1.13.tar.gz;
-      sha256 = "0qvrhcs1f28ix3v8hcd5xr4z9s7plz4g5a4q1cjp7bs0c3w2yl6z";
+      url = mirror://cpan/authors/id/T/TO/TODDR/Locale-Maketext-1.23.tar.gz;
+      sha256 = "1r1sq7djafvk5abzc4l068p39dz44hlpgdldj3igvn2bjz78cli1";
     };
     propagatedBuildInputs = [I18NLangTags];
   };
