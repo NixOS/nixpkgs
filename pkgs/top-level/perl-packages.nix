@@ -4795,10 +4795,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LockFileSimple = buildPerlPackage rec {
-    name = "LockFile-Simple-0.207";
+    name = "LockFile-Simple-0.208";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/LockFile-Simple-0.207.tar.gz";
-      sha256 = "171vi9y6jlkny0d4jaavz48d1vbxljknnmbq8h22fi8lnc5kvipa";
+      url = "mirror://cpan/authors/id/S/SC/SCHWIGON/lockfile-simple/LockFile-Simple-0.208.tar.gz";
+      sha256 = "18pk5a030dsg1h6wd8c47wl8pzrpyh9zi9h2c9gs9855nab7iis5";
     };
   };
 
