@@ -6635,10 +6635,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PerlCritic = buildPerlPackage {
-    name = "Perl-Critic-1.118";
+    name = "Perl-Critic-1.121";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TH/THALJEF/Perl-Critic-1.118.tar.gz;
-      sha256 = "666d2bef3ac924598c06a05277680da5910e10d94c5ec161336f6509c11155e8";
+      url = mirror://cpan/authors/id/T/TH/THALJEF/Perl-Critic-1.121.tar.gz;
+      sha256 = "1y2bxjwzlp6ix51h36a5g3dqpaviaajij1rn22hpvcqxh4hh6car";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ BKeywords ConfigTiny EmailAddress ExceptionClass IOString ListMoreUtils PPI PPIxRegexp PPIxUtilities PerlTidy PodSpell Readonly StringFormat TaskWeaken ];
