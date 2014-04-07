@@ -7494,10 +7494,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   StringCRC32 = buildPerlPackage rec {
-      name = "String-CRC32-1.4";
+      name = "String-CRC32-1.5";
       src = fetchurl {
-        url = mirror://cpan/authors/id/S/SO/SOENKE/String-CRC32-1.4.tar.gz;
-        sha256 = "0lc3d4szxagwzcw6pxq3mmkvdlrz2zkw4i13crf42nvivv7gda8l";
+        url = mirror://cpan/authors/id/S/SO/SOENKE/String-CRC32-1.5.tar.gz;
+        sha256 = "0m3hjk292hnxyi8nkfy8hlr1khnbf2clgkb4kzj0ycq8gcd2z0as";
       };
       meta = {
         maintainers = with maintainers; [ ocharles ];
