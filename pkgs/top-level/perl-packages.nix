@@ -7506,10 +7506,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   StringErrf = buildPerlPackage {
-    name = "String-Errf-0.006";
+    name = "String-Errf-0.007";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Errf-0.006.tar.gz;
-      sha256 = "2c09631fbece8e85a94785abede882f5d29e0f21f72239d01332b3bafd9c53ac";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Errf-0.007.tar.gz;
+      sha256 = "1apnmxdsqwrvn1kkbba4sw6yh6hdfxxar545p6m9dkid7xsiqjfj";
     };
     buildInputs = [ JSON TimeDate ];
     propagatedBuildInputs = [ ParamsUtil StringFormatter SubExporter ];
