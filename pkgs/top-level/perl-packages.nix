@@ -7333,10 +7333,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SpreadsheetParseExcel = buildPerlPackage rec {
-    name = "Spreadsheet-ParseExcel-0.58";
+    name = "Spreadsheet-ParseExcel-0.2603";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/${name}.tar.gz";
-      sha256 = "1ha32kfgf0b9mk00dvsx0jq72xsx0qskmgrnixcdfh044lcxzk17";
+      url = "mirror://cpan/authors/id/K/KW/KWITKNR/${name}.tar.gz";
+      sha256 = "0q5qq982528cdpqdj2wszrnf5g2rfphx0b413lczx7nvkkyy9xqz";
     };
 
     propagatedBuildInputs = [ IOStringy OLEStorageLight ];
