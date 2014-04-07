@@ -9017,10 +9017,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextWikiFormat = buildPerlPackage {
-    name = "Text-WikiFormat-0.80";
+    name = "Text-WikiFormat-0.81";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CY/CYCLES/Text-WikiFormat-0.80.tar.gz;
-      sha256 = "0i1mg3ivxhx09x0w06k15izc92bknwqwh0ghpmhlq9s9iw12mmry";
+      url = mirror://cpan/authors/id/C/CY/CYCLES/Text-WikiFormat-0.81.tar.gz;
+      sha256 = "0cxbgx879bsskmnhjzamgsa5862ddixyx4yr77lafmwimnaxjg74";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
