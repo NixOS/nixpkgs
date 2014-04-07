@@ -3590,10 +3590,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileShare = buildPerlPackage {
-    name = "File-Share-0.02";
+    name = "File-Share-0.03";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IN/INGY/File-Share-0.02.tar.gz;
-      sha256 = "1vdgyf3m08s4pwj70bgbb31jsj8hixdl940m15phyx2hpy8dkabw";
+      url = mirror://cpan/authors/id/J/JO/JOENIO/File-Share-0.03.tar.gz;
+      sha256 = "0siy9p6b7zbln5yq6g8z1nwm76ia23kkdj1k5pywsh3n6dn2lxa2";
     };
     propagatedBuildInputs = [ FileShareDir ];
     meta = {
