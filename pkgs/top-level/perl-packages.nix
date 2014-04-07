@@ -1995,10 +1995,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateManip = buildPerlPackage {
-    name = "Date-Manip-6.42";
+    name = "Date-Manip-6.43";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.42.tar.gz;
-      sha256 = "18zkdvam3qddv810hgzszk2zxra14whl0fs03ba79babqhbpbzna";
+      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.43.tar.gz;
+      sha256 = "0jwg87j31gw2fn8csm1zyfqxd0dxh8sbv940ma9idg6g7856zfrz";
     };
     propagatedBuildInputs = [ TestInter ];
     meta = {
