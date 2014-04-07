@@ -540,10 +540,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CaptureTiny = buildPerlPackage {
-    name = "Capture-Tiny-0.21";
+    name = "Capture-Tiny-0.24";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Capture-Tiny-0.21.tar.gz;
-      sha256 = "1lvz2639zsjpr3001b2xyidnsd4kcgll5fvaa0pm928wzldb49wg";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Capture-Tiny-0.24.tar.gz;
+      sha256 = "0rg0m9irhx8jwamxdi2ms4vhhxy7q050gjrn2m051spqfa26zkwv";
     };
     meta = {
       homepage = https://metacpan.org/release/Capture-Tiny;
