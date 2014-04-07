@@ -1255,10 +1255,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassMethodMaker = buildPerlPackage {
-    name = "Class-MethodMaker-2.18";
+    name = "Class-MethodMaker-2.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SC/SCHWIGON/Class-MethodMaker-2.18.tar.gz;
-      sha256 = "223b7a79025e9bff984d755f9744182505e110680b13eedbac2831d45ddbeeba";
+      url = mirror://cpan/authors/id/S/SC/SCHWIGON/class-methodmaker/Class-MethodMaker-2.21.tar.gz;
+      sha256 = "0gca1cjy2k0mrpfnbyzm5islzfayqfvg3zzlrlm7n60p0cb48y7w";
     };
     preConfigure = "patchShebangs .";
     meta = {
