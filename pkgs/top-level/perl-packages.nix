@@ -6424,10 +6424,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ObjectInsideOut = buildPerlPackage {
-    name = "Object-InsideOut-3.97";
+    name = "Object-InsideOut-3.98";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/Object-InsideOut-3.97.tar.gz;
-      sha256 = "19yr15w361lxxx2djy0ciwjpyd5bcs0skm3yw97w3xidw6r0wf0v";
+      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/Object-InsideOut-3.98.tar.gz;
+      sha256 = "1zxfm2797p8b9dsvnbgd6aa4mgpxqxjqzbpfbla1g7f9alxm9f1z";
     };
     propagatedBuildInputs = [ ExceptionClass ];
     meta = {
