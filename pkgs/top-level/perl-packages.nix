@@ -2798,10 +2798,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginTestEOL = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-Test-EOL-0.07";
+    name = "Dist-Zilla-Plugin-Test-EOL-0.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XE/XENO/Dist-Zilla-Plugin-Test-EOL-0.07.tar.gz;
-      sha256 = "c010ef618478e82fbc601abfc241c74fed1fdafe954d8b3ebcb7abe0e09967a8";
+      url = mirror://cpan/authors/id/X/XE/XENO/Dist-Zilla-Plugin-Test-EOL-0.10.tar.gz;
+      sha256 = "1sl7zvjzpwf7wl188a3j13k1qcb63hawx82iy6r3dx2gns8nc0nw";
     };
     buildInputs = [ DistZilla TestScript ];
     propagatedBuildInputs = [ DistZilla Moose TestEOL namespaceautoclean ];
