@@ -7052,7 +7052,6 @@ let
     virtualbox = callPackage ../applications/virtualization/virtualbox {
       stdenv = stdenv_32bit;
       inherit (gnome) libIDL;
-      enableExtensionPack = config.virtualbox.enableExtensionPack or false;
     };
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
