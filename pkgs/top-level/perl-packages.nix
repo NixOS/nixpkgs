@@ -8179,10 +8179,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestDifferences = buildPerlPackage {
-    name = "Test-Differences-0.61";
+    name = "Test-Differences-0.4801";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OV/OVID/Test-Differences-0.61.tar.gz;
-      sha256 = "044wg7nqmhvh5ms8z305f9bzldhigr020l1a7iqycxqv05h6b6vm";
+      url = mirror://cpan/authors/id/O/OV/OVID/Test-Differences-0.4801.tar.gz;
+      sha256 = "1p5bqyq3gxfb1q4wajd28498fsbqk7f2y7pk9c3rnh0x36cqbvyw";
     };
     propagatedBuildInputs = [ TextDiff ];
     meta = {
