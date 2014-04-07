@@ -61,7 +61,6 @@ in rec {
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
         (all nixos.tests.xfce)
-        (all nixos.tests.gnome3)
 
         nixpkgs.tarball
         (all nixpkgs.emacs)
