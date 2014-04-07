@@ -7050,10 +7050,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Redis = buildPerlPackage {
-    name = "Redis-1.961";
+    name = "Redis-1.2001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ME/MELO/Redis-1.961.tar.gz;
-      sha256 = "029g4s1ima354yv1j26nlq4f0yahkllkibicml6p3mj5gg2ywbbq";
+      url = mirror://cpan/authors/id/D/DP/DPAVLIN/Redis-1.2001.tar.gz;
+      sha256 = "1d16dr2qjmb3vswghrk5ygggcmz2rzw7qnw3g87prwi08z5ryih0";
     };
     buildInputs = [ IOString TestDeep TestFatal ];
     propagatedBuildInputs = [ TryTiny ];
