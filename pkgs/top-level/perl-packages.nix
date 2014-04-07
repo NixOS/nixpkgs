@@ -9598,10 +9598,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   YAMLSyck = buildPerlPackage {
-    name = "YAML-Syck-1.22";
+    name = "YAML-Syck-1.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.22.tar.gz;
-      sha256 = "0n3k71i0b8mhdrl5kp1cwyvjbkqahyqkhp81wl3qnkfhyi39f55y";
+      url = mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.27.tar.gz;
+      sha256 = "1y9dw18fz3s8v4n80wf858cjq4jlaza25wvsgv60a6z2l0sfax6y";
     };
     meta = {
       homepage = http://search.cpan.org/dist/YAML-Syck;
