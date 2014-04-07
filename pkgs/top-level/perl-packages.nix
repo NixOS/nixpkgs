@@ -6503,10 +6503,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PackageStashXS = buildPerlPackage {
-    name = "Package-Stash-XS-0.26";
+    name = "Package-Stash-XS-0.28";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOY/Package-Stash-XS-0.26.tar.gz;
-      sha256 = "1pfdpb3x40f5ldp5kp0d9xvrz4wk2fc3ww53wrq4dp326s08h7r9";
+      url = mirror://cpan/authors/id/D/DO/DOY/Package-Stash-XS-0.28.tar.gz;
+      sha256 = "11nl69n8i56p91pd0ia44ip0vpv2cxwpbfakrv01vvv8az1cbn13";
     };
     buildInputs = [ TestRequires TestFatal ];
     meta = {
