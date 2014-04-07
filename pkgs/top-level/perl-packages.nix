@@ -516,10 +516,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   cam_pdf = buildPerlPackage rec {
-    name = "CAM-PDF-1.52";
+    name = "CAM-PDF-1.60";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CD/CDOLAN/${name}.tar.gz";
-      sha256 = "1lamnx0vcqzzcxdmj5038gvyn6z5xcy9756jhndgpggjfkzilwkh";
+      sha256 = "12dv5ssf3y7yjz9mrrqnfzx8nf4ydk1qijf5fx59495671zzqsp7";
     };
     propagatedBuildInputs = [ CryptRC4 TextPDF ];
     buildInputs = [ TestMore ];
