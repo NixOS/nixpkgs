@@ -3133,10 +3133,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Error = buildPerlPackage rec {
-    name = "Error-0.17019";
+    name = "Error-0.17022";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "0m09jwjs2x8j50bh3cg3m2mbxa7qh9i2krgq7z8h1pgl5dscyg2i";
+      sha256 = "1vzpz6syb82ir8svp2wjh95x6lpf01lgkxn2xy60ixrszc24zdya";
     };
   };
 
