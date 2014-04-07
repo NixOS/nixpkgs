@@ -8698,10 +8698,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestWWWMechanizeCatalyst = buildPerlPackage {
-    name = "Test-WWW-Mechanize-Catalyst-0.58";
+    name = "Test-WWW-Mechanize-Catalyst-0.59";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Test-WWW-Mechanize-Catalyst-0.58.tar.gz;
-      sha256 = "1pa2m064skxfwsm93hffxcyky4kcn2q418vnw2fn79ich6wrcijd";
+      url = mirror://cpan/authors/id/I/IL/ILMARI/Test-WWW-Mechanize-Catalyst-0.59.tar.gz;
+      sha256 = "1hr1p8m3sv16ws8qb90nshza28qlmllnb6qxriwdvwddp2y517jv";
     };
     doCheck = false; # listens on an external port
     propagatedBuildInputs = [ CatalystRuntime LWP Moose namespaceclean TestWWWMechanize WWWMechanize ];
