@@ -2886,16 +2886,6 @@ let
     system == "i686-linux" ||
     system == "x86_64-linux";
 
-  jdkdistro = installjdk: pluginSupport:
-    assert supportsJDK;
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk6-linux.nix { });
-
-  oraclejdk7distro = installjdk: pluginSupport:
-    assert supportsJDK;
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk7-linux.nix { inherit installjdk; });
-
   jikes = callPackage ../development/compilers/jikes { };
 
   juliaGit = callPackage ../development/compilers/julia/git-20131013.nix {
