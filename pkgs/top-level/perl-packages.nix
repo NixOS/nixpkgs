@@ -4865,10 +4865,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LogDispatchouli = buildPerlPackage {
-    name = "Log-Dispatchouli-2.006";
+    name = "Log-Dispatchouli-2.009";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Log-Dispatchouli-2.006.tar.gz;
-      sha256 = "bd33b4fcf88ccfb694593ea6d7b330f053e6afee40f27acdf690c24547365354";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Log-Dispatchouli-2.009.tar.gz;
+      sha256 = "09iw27r36gmljlm6gjfczn2sf4s1js697q8na8xw4wlnz7x4bv59";
     };
     buildInputs = [ TestDeep TestFatal ];
     propagatedBuildInputs = [ LogDispatch LogDispatchArray ParamsUtil StringFlogger SubExporter SubExporterGlobExporter TryTiny ];
