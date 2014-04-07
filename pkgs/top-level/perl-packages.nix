@@ -7741,10 +7741,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubName = buildPerlPackage {
-    name = "Sub-Name-0.05";
+    name = "Sub-Name-0.0502";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FL/FLORA/Sub-Name-0.05.tar.gz;
-      sha256 = "1w9sf51ai2r3i0kv5wnq7h9g3hcd6zb6i51ivvykb3hzx82vilf9";
+      url = mirror://cpan/authors/id/C/CH/CHIPS/Sub-Name-0.0502.tar.gz;
+      sha256 = "1r197binpdy4xfh65qkxxvi9c39pmvvcny4rl8a7zrk1jcws6fac";
     };
     meta = {
       description = "(Re)name a sub";
