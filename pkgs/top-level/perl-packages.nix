@@ -2018,10 +2018,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateTime = buildPerlModule {
-    name = "DateTime-1.07";
+    name = "DateTime-1.08";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.07.tar.gz;
-      sha256 = "1cm4zsgzz4phigak0nb48l661vkqhz93kfbb9jd83d1hq74myq31";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.08.tar.gz;
+      sha256 = "0ijhb1mqrfp1pbj4r3wkpp0hdj3zg355skxdn6dsiv439fp65asf";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ParamsValidate TryTiny ];
