@@ -7611,10 +7611,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   StringTruncate = buildPerlPackage {
-    name = "String-Truncate-1.100601";
+    name = "String-Truncate-1.100602";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Truncate-1.100601.tar.gz;
-      sha256 = "1mas04qa6sj6x34mid8i6swddcnb3c9zfkgkd72kvz5zip2f4f24";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/String-Truncate-1.100602.tar.gz;
+      sha256 = "0vjz4fd4cvcy12gk5bdha7z73ifmfpmk748khha94dhiq3pd98xa";
     };
     propagatedBuildInputs = [ SubExporter SubInstall ];
     meta = {
