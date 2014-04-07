@@ -8394,10 +8394,10 @@ let self = _self // overrides; _self = with self; {
   TestMore = TestSimple;
 
   TestMost = buildPerlPackage {
-    name = "Test-Most-0.31";
+    name = "Test-Most-0.33";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OV/OVID/Test-Most-0.31.tar.gz;
-      sha256 = "0ddc6034dc7cde3631dde41ecb558ed823fc07804bfd051b8ec9a70131862ab7";
+      url = mirror://cpan/authors/id/O/OV/OVID/Test-Most-0.33.tar.gz;
+      sha256 = "0jp4jcwk97bgf85wwyjpxfsx4165s6w1v4ymn9gnv03yn77inyij";
     };
     propagatedBuildInputs = [ ExceptionClass TestDeep TestDifferences TestException TestWarn ];
     meta = {
