@@ -6017,8 +6017,6 @@ let
       else stdenv;
   };
 
-  wtk = callPackage ../development/libraries/wtk { };
-
   x264 = callPackage ../development/libraries/x264 { };
 
   xapian = callPackage ../development/libraries/xapian { };
