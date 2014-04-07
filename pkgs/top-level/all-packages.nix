@@ -499,11 +499,6 @@ let
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
-  titaniumenv = callPackage ../development/mobile/titaniumenv {
-    inherit pkgs;
-    pkgs_i686 = pkgsi686Linux;
-  };
-
   inherit (androidenv) androidsdk_4_1;
 
   aria = builderDefsPackage (import ../tools/networking/aria) { };
@@ -2865,22 +2860,8 @@ let
     { description = "The open-source Java Runtime Environment"; }
     pkgs.openjdk.jre)) // { outputs = [ "jre" ]; };
 
-  jdk = if stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-    then pkgs.openjdk
-    else pkgs.oraclejdk;
-  jre = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-    then pkgs.openjre
-    else pkgs.oraclejre;
-
-  oraclejdk = pkgs.jdkdistro true false;
-
-  oraclejdk7 = pkgs.oraclejdk7distro true false;
-
-  oraclejre = lowPrio (pkgs.jdkdistro false false);
-
-  oraclejre7 = lowPrio (pkgs.oraclejdk7distro false false);
-
-  jrePlugin = lowPrio (pkgs.jdkdistro false true);
+  jdk = pkgs.openjdk;
+  jre = pkgs.openjre;
 
   supportsJDK =
     system == "i686-linux" ||
@@ -9322,7 +9303,6 @@ let
   vorbisTools = callPackage ../applications/audio/vorbis-tools { };
 
   vue = callPackage ../applications/misc/vue {
-    jre = oraclejre;
   };
 
   vwm = callPackage ../applications/window-managers/vwm { };

@@ -1350,8 +1350,6 @@ let
   opera = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   opkg = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   opusTools = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  oraclejdk = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  oraclejre = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   OVMF = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   oxygen_gtk = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   pal = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
