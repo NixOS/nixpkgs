@@ -1144,10 +1144,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassBase = buildPerlPackage rec {
-    name = "Class-Base-0.03";
+    name = "Class-Base-0.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AB/ABW/${name}.tar.gz";
-      sha256 = "149875qzfyayvkb6dm8frg0kmkzyjswwrjz7gyvwi7l8b19kiyk4";
+      url = "mirror://cpan/authors/id/S/SZ/SZABGAB/${name}.tar.gz";
+      sha256 = "0vryy6b64f2wbfc2zzzvh6ravkp5i4kjdxhjbj3s08g9pwyc67y6";
     };
   };
 
