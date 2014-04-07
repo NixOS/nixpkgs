@@ -3711,10 +3711,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FreezeThaw = buildPerlPackage {
-    name = "FreezeThaw-0.43";
+    name = "FreezeThaw-0.5001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IL/ILYAZ/modules/FreezeThaw-0.43.tar.gz;
-      sha256 = "1qamc5aggp35xk590a4hy660f2rhc2l7j65hbyxdya9yvg7z437l";
+      url = mirror://cpan/authors/id/I/IL/ILYAZ/modules/FreezeThaw-0.5001.tar.gz;
+      sha256 = "0h8gakd6b9770n2xhld1hhqghdar3hrq2js4mgiwxy86j4r0hpiw";
     };
     doCheck = false;
   };
