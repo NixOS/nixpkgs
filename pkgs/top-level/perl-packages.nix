@@ -8905,10 +8905,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextTable = buildPerlPackage {
-    name = "Text-Table-1.128";
+    name = "Text-Table-1.129";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Table-1.128.tar.gz;
-      sha256 = "0j9y38y9x9ljjpnvp5clwkfvhnja6vjlnhb8yshv2mmz2h6by70c";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Table-1.129.tar.gz;
+      sha256 = "1b8l86yvvsncnx0w45w095n1h7lff6nxjy87dzk7zgvkmr0ary7c";
     };
     buildInputs = [ TestPod TestPodCoverage ];
     propagatedBuildInputs = [ TextAligner ];
