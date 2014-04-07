@@ -3048,10 +3048,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailSimple = buildPerlPackage {
-    name = "Email-Simple-2.102";
+    name = "Email-Simple-2.203";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Simple-2.102.tar.gz;
-      sha256 = "19da1a06vnixhqfl41mfjrihvvxjgdgkq9bczp8k9mpr29xlbnq4";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Simple-2.203.tar.gz;
+      sha256 = "0hzbp8ay62d6jwrn4q7hqmhkaigf8lc0plz0g46yhwzp3x9xfa55";
     };
     propagatedBuildInputs = [ EmailDateFormat ];
     meta = {
