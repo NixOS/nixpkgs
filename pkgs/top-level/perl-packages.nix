@@ -2218,10 +2218,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DebugShowStuff = buildPerlPackage {
-    name = "Debug-ShowStuff-1.14";
+    name = "Debug-ShowStuff-1.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIKO/Debug-ShowStuff-1.14.tar.gz;
-      sha256 = "023c6f7y93k9qxxfa2fsvc5jkbv3rh6i3nw6zvxa5cg57xfypd7h";
+      url = mirror://cpan/authors/id/M/MI/MIKO/Debug-ShowStuff-1.16.tar.gz;
+      sha256 = "1drcrnji3yrd0s3xb69bxnqa51s19c13w68vhvjad3nvswn5vpd4";
     };
     propagatedBuildInputs = [ ClassISA DevelStackTrace StringUtil TermReadKey TextTabularDisplay TieIxHash ];
     meta = {
