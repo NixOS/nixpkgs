@@ -147,7 +147,7 @@ sub runTests {
     $log->nest("syncing", sub {
         foreach my $vm (values %vms) {
             next unless $vm->isUp();
-            $vm->execute("sync /tmp/xchg");
+            $vm->execute("sync");
         }
     });
 
