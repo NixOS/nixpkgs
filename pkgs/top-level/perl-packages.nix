@@ -3223,10 +3223,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExporterLite = buildPerlPackage {
-    name = "Exporter-Lite-0.02";
+    name = "Exporter-Lite-0.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSCHWERN/Exporter-Lite-0.02.tar.gz;
-      sha256 = "20c1e9b7ddc017b788feb34c032fc585e2c5b46a484e93f519373fd18830ce0e";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Exporter-Lite-0.04.tar.gz;
+      sha256 = "01g6a2ixgdi825v0l4ny3vx4chzsfxirka741x0i057cf6y5ciir";
     };
     meta = {
       license = "perl";
