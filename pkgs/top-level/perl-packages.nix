@@ -2499,10 +2499,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelStackTrace = buildPerlPackage {
-    name = "Devel-StackTrace-1.30";
+    name = "Devel-StackTrace-1.31";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/Devel-StackTrace-1.30.tar.gz;
-      sha256 = "1m13wzg4pmbc0f1w2rn9ybqwkqg66zw9zv34ayk7gr3349v7kbzl";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/Devel-StackTrace-1.31.tar.gz;
+      sha256 = "0djvqfbq9ag1bpw0bcksidfy13n91xbl53py3d7w0y2323hjc957";
     };
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
