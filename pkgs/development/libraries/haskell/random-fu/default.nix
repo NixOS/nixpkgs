@@ -1,14 +1,14 @@
-{ cabal, erf, gamma, monadLoops, mtl, randomShuffle, randomSource
-, rvar, syb, transformers, vector
+{ cabal, erf, mathFunctions, monadLoops, mtl, randomShuffle
+, randomSource, rvar, syb, transformers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "random-fu";
-  version = "0.2.4.0";
-  sha256 = "1wiwh52qfs699mcj3ylwc97pyabczn6dr8j92qczs89g8vvi91wd";
+  version = "0.2.5.0";
+  sha256 = "1yfq7mvplzdk64i7z5ip8vjynn48a65z28xrhcv91qi0yjxsxdm0";
   buildDepends = [
-    erf gamma monadLoops mtl randomShuffle randomSource rvar syb
-    transformers vector
+    erf mathFunctions monadLoops mtl randomShuffle randomSource rvar
+    syb transformers vector
   ];
   meta = {
     homepage = "https://github.com/mokus0/random-fu";
