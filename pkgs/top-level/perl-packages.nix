@@ -3876,10 +3876,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   HashMerge = buildPerlPackage rec {
-    name = "Hash-Merge-0.12";
+    name = "Hash-Merge-0.200";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Hash/${name}.tar.gz";
-      sha256 = "07h7dyldxwqhq3x4fp9hacnc4vgipp0jk50b5cbvib975nfxx98z";
+      url = "mirror://cpan/authors/id/R/RE/REHSACK/${name}.tar.gz";
+      sha256 = "0r1a2axz85wn6573zrl9rk8mkfl2cvf1gp9vwya5qndp60rz1ya7";
     };
     propagatedBuildInputs = [ Clone ];
     meta = {
