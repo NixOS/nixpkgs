@@ -9847,8 +9847,6 @@ let
 
   vectoroids = callPackage ../games/vectoroids { };
 
-  vessel = callPackage_i686 ../games/vessel { };
-
   warmux = callPackage ../games/warmux { };
 
   warsow = callPackage ../games/warsow {
