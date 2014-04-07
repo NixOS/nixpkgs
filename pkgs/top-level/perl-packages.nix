@@ -9353,10 +9353,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   WWWCurl = buildPerlPackage rec {
-    name = "WWW-Curl-4.15";
+    name = "WWW-Curl-4.17";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/WWW/${name}.tar.gz";
-      sha256 = "18az7k0jsr642lp6dfy0b2s7vx0cd7sj9dgk93wff73safa09x1y";
+      url = "mirror://cpan/authors/id/S/SZ/SZBALINT/${name}.tar.gz";
+      sha256 = "1fmp9aib1kaps9vhs4dwxn7b15kgnlz9f714bxvqsd1j1q8spzsj";
     };
     buildInputs = [ pkgs.curl ];
     preConfigure =
