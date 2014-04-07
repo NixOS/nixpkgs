@@ -83,6 +83,7 @@ rec {
     (stdenv.lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
 
   # Require file
+  # Do not use in derivations as part of nixpkgs
   requireFile = {name, sha256, url ? null, message ? null} :
     assert (message != null) || (url != null);
     let msg =
