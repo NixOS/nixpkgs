@@ -5724,10 +5724,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXOneArgNew = buildPerlPackage {
-    name = "MooseX-OneArgNew-0.003";
+    name = "MooseX-OneArgNew-0.004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/MooseX-OneArgNew-0.003.tar.gz;
-      sha256 = "bd1879192f542dbc0741dbd1ba71f29bd22a0fce372d7a6ae04dbded51d71123";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/MooseX-OneArgNew-0.004.tar.gz;
+      sha256 = "1frfrqaj283z1x95cqbbj3cvmb6rj50ngs47jq8myz6d1bg4zwff";
     };
     buildInputs = [ Moose ];
     propagatedBuildInputs = [ Moose MooseXRoleParameterized namespaceautoclean ];
