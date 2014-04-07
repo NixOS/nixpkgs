@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
   patches =
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch
+      ./no-impure-config-time.patch
+      ./fixed-man-page-date.patch
+      ./no-date-in-perl-binary.patch
     ]
     ++ optional stdenv.isSunOS  ./ld-shared.patch
     ++ stdenv.lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ./no-libutil.patch ] ;
@@ -63,6 +66,32 @@ stdenv.mkDerivation rec {
     '';
 
   setupHook = ./setup-hook.sh;
+
+  doCheck = !stdenv.isDarwin;
+
+  # some network-related tests don't work, mostly probably due to our sandboxing
+  # man-heading.t is skipped due to output determinism (no dates)
+  testsToSkip = ''
+    lib/Net/hostent.t \
+    dist/IO/t/{io_multihomed.t,io_sock.t} \
+    dist/Net-Ping/t/*.t \
+    cpan/autodie/t/truncate.t \
+    t/porting/{maintainers.t,regen.t} \
+    cpan/Socket/t/get{name,addr}info.t \
+    cpan/podlators/t/man-heading.t \
+  '' + optionalString stdenv.isFreeBSD ''
+    cpan/CPANPLUS/t/04_CPANPLUS-Module.t \
+    cpan/CPANPLUS/t/20_CPANPLUS-Dist-MM.t \
+  '' + " ";
+
+  postPatch = optionalString (!stdenv.isDarwin) /* this failed on Darwin, no idea why */ ''
+    for test in ${testsToSkip}; do
+      echo "Removing test" $test
+      rm "$test"
+      pat=`echo "$test" | sed 's,/,\\\\/,g'` # just escape slashes
+      sed "/^$pat/d" -i MANIFEST
+    done
+  '';
 
   passthru.libPrefix = "lib/perl5/site_perl";
 }
