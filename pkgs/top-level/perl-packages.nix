@@ -8222,10 +8222,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestException = buildPerlPackage rec {
-    name = "Test-Exception-0.31";
+    name = "Test-Exception-0.32";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Test/${name}.tar.gz";
-      sha256 = "1lyd6mcg00348xsn9fl59spx68a69ybli7h7gd2k0p4y21q8p0ks";
+      url = "mirror://cpan/authors/id/A/AD/ADIE/${name}.tar.gz";
+      sha256 = "0issbjh5yl62lpaff5zhn28zhbf8sv8n2g79vklfr5s703k2fi5s";
     };
     propagatedBuildInputs = [ SubUplevel ];
   };
