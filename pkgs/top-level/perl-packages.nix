@@ -5763,10 +5763,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXRoleParameterized = buildPerlPackage {
-    name = "MooseX-Role-Parameterized-1.00";
+    name = "MooseX-Role-Parameterized-1.02";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SARTAK/MooseX-Role-Parameterized-1.00.tar.gz;
-      sha256 = "0642h71j90i0jrqxz1snizkw9pch8v1s1w0zndrcl5bb85lx3z7y";
+      url = mirror://cpan/authors/id/S/SA/SARTAK/MooseX-Role-Parameterized-1.02.tar.gz;
+      sha256 = "089czh2pipvdajjy4rxlix0y20ilp3ldbzi0vs68b7k6k9q3mqdk";
     };
     buildInputs = [ TestFatal TestMoose ];
     propagatedBuildInputs = [ Moose ];
