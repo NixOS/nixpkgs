@@ -3902,10 +3902,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   HashMultiValue = buildPerlPackage {
-    name = "Hash-MultiValue-0.13";
+    name = "Hash-MultiValue-0.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Hash-MultiValue-0.13.tar.gz;
-      sha256 = "0flflmk2kxq9sjmhxr1547lidgigibhck912j4ambdwg21sbxjjd";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Hash-MultiValue-0.15.tar.gz;
+      sha256 = "1jc37kwpa1fl88va8bd1p95h0vjv1gsvmn7pc2pxj62ga6x0wpc0";
     };
     meta = {
       description = "Store multiple values per key";
