@@ -4001,10 +4001,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLFormHandler = buildPerlPackage {
-    name = "HTML-FormHandler-0.40055";
+    name = "HTML-FormHandler-0.40056";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GS/GSHANK/HTML-FormHandler-0.40055.tar.gz;
-      sha256 = "47e3cf69e2475cba86356eda340e6622df0525e2d0aa2343aef9f924f13d86cd";
+      url = mirror://cpan/authors/id/G/GS/GSHANK/HTML-FormHandler-0.40056.tar.gz;
+      sha256 = "012wijl69qjazghq2ywikk0jdxjbd9rfsxmwwq7lbpfjy2fiymqx";
     };
     buildInputs = [ FileShareDirInstall PadWalker TestDifferences TestException TestMemoryCycle ];
     propagatedBuildInputs = [ ClassLoad DataClone DateTime DateTimeFormatStrptime EmailValid FileShareDir HTMLTree JSON ListAllUtils Moose MooseXGetopt MooseXTypes MooseXTypesCommon MooseXTypesLoadableClass SubExporter SubName TryTiny aliased namespaceautoclean ];
