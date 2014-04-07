@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
   patches =
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch
+      ./no-impure-config-time.patch
+      ./fixed-man-page-date.patch
+      ./no-date-in-perl-binary.patch
     ]
     ++ optional stdenv.isSunOS  ./ld-shared.patch
     ++ stdenv.lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ./no-libutil.patch ] ;
@@ -67,6 +70,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   # some network-related tests don't work, mostly probably due to our sandboxing
+  # man-heading.t is skipped due to output determinism (no dates)
   testsToSkip = ''
     lib/Net/hostent.t \
     dist/IO/t/{io_multihomed.t,io_sock.t} \
@@ -74,6 +78,7 @@ stdenv.mkDerivation rec {
     cpan/autodie/t/truncate.t \
     t/porting/{maintainers.t,regen.t} \
     cpan/Socket/t/get{name,addr}info.t \
+    cpan/podlators/t/man-heading.t \
   '' + optionalString stdenv.isFreeBSD ''
     cpan/CPANPLUS/t/04_CPANPLUS-Module.t \
     cpan/CPANPLUS/t/20_CPANPLUS-Dist-MM.t \
