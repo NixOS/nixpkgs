@@ -5376,10 +5376,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModulePluggableFast = buildPerlPackage {
-    name = "Module-Pluggable-Fast-0.18";
+    name = "Module-Pluggable-Fast-0.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SR/SRI/Module-Pluggable-Fast-0.18.tar.gz;
-      sha256 = "140c311x2darrc2p1drbkafv7qwhzdcff4ad300n6whsx4dfp6wr";
+      url = mirror://cpan/authors/id/M/MR/MRAMBERG/Module-Pluggable-Fast-0.19.tar.gz;
+      sha256 = "0pq758wlasmh77xyd2xh75m5b2x14s8pnsv63g5356gib1q5gj08";
     };
     propagatedBuildInputs = [UNIVERSALrequire];
   };
