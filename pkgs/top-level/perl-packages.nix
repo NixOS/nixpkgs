@@ -5347,10 +5347,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModulePath = buildPerlPackage {
-    name = "Module-Path-0.09";
+    name = "Module-Path-0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/Module-Path-0.09.tar.gz;
-      sha256 = "5330a76ff56800778d825548b4d631510a1a6b4f04725dddca95e68c4ed3ac18";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Module-Path-0.13.tar.gz;
+      sha256 = "1kzsi0z142gcspyyp81za29bq0y74l57a8i2q7gz4zcchf2xm23g";
     };
     buildInputs = [ DevelFindPerl ];
     meta = {
