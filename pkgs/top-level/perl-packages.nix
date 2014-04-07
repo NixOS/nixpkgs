@@ -1309,10 +1309,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassLoad = buildPerlPackage {
-    name = "Class-Load-0.20";
+    name = "Class-Load-0.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/Class-Load-0.20.tar.gz;
-      sha256 = "084cxrm0hcpyz3ly1iqkcjpl4bs03n42na37d3pzwa8xbs44ag42";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Class-Load-0.21.tar.gz;
+      sha256 = "0z04r0jdk8l3qd96f75q3042p76hr4i747dg87s7xrpp0bjbmn8h";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ DataOptList ModuleImplementation ModuleRuntime PackageStash TryTiny ];
