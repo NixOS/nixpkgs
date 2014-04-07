@@ -1268,10 +1268,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassMethodModifiers = buildPerlPackage {
-    name = "Class-Method-Modifiers-2.00";
+    name = "Class-Method-Modifiers-2.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SARTAK/Class-Method-Modifiers-2.00.tar.gz;
-      sha256 = "0lvj38ahqqyhv9dpi7ks1cq35f19nfw8ygxw22x2mcmagl8mnkhs";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Class-Method-Modifiers-2.10.tar.gz;
+      sha256 = "1dp757rzv6a9k7q0bpmjxv69g4r893vb143qq7fyqlwzg0zva3s2";
     };
     buildInputs = [ TestFatal ];
     meta = {
