@@ -8841,10 +8841,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestMinimumVersion = buildPerlPackage {
-    name = "Test-MinimumVersion-0.101080";
+    name = "Test-MinimumVersion-0.101081";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-MinimumVersion-0.101080.tar.gz;
-      sha256 = "51fc0bd73ece9d41887f8d0a57ee27fbc205c271c5b5246111efe7d3247ddfb0";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-MinimumVersion-0.101081.tar.gz;
+      sha256 = "1javb92s0bl7gj2m3fsvzd0mn5r76clmayq8878mq12g4smdvpi2";
     };
     buildInputs = [ TestTester ];
     propagatedBuildInputs = [ FileFindRule FileFindRulePerl PerlMinimumVersion YAMLTiny ];
