@@ -4850,10 +4850,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LogDispatchArray = buildPerlPackage {
-    name = "Log-Dispatch-Array-1.002";
+    name = "Log-Dispatch-Array-1.003";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Log-Dispatch-Array-1.002.tar.gz;
-      sha256 = "268ec720eec3651d3dadcad7d16f033b47f883c72d6f2547c4ccbe7fb22a4940";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Log-Dispatch-Array-1.003.tar.gz;
+      sha256 = "0dvzp0gsh17jqg02460ndchyapr1haahndq1p9v6mwkv5wf9680c";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ LogDispatch ];
