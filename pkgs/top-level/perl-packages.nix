@@ -398,10 +398,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   BoostGeometryUtils = buildPerlModule rec {
-    name = "Boost-Geometry-Utils-0.12";
+    name = "Boost-Geometry-Utils-0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AA/AAR/${name}.tar.gz";
-      sha256 = "1pywbxjf05qpcixshblhd2cham601zwa9w7c3k5waz4cdild6g1m";
+      sha256 = "1jnihz3029x51a455nxa0jx2z125x38q3vkkggsgdlrvawzxsm00";
     };
     propagatedBuildInputs = [ ModuleBuildWithXSpp ExtUtilsTypemapsDefault ];
   };
