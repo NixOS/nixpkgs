@@ -7575,10 +7575,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   StringRewritePrefix = buildPerlPackage {
-    name = "String-RewritePrefix-0.006";
+    name = "String-RewritePrefix-0.007";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/String-RewritePrefix-0.006.tar.gz;
-      sha256 = "1b9fg805g0agsyij28w8hhmnf485bii8zl03i092mv1p2hqrpxll";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/String-RewritePrefix-0.007.tar.gz;
+      sha256 = "18nxl1vgkcx0r7ifkmbl9fp73f8ihiqhqqf3vq6sj5b3cgawrfsw";
     };
     propagatedBuildInputs = [ SubExporter ];
     meta = {
