@@ -5986,10 +5986,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXTypesStringlike = buildPerlPackage {
-    name = "MooseX-Types-Stringlike-0.001";
+    name = "MooseX-Types-Stringlike-0.002";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/MooseX-Types-Stringlike-0.001.tar.gz;
-      sha256 = "2ba71fff105d851ea6aee85bef5d6629726138a2b005b77a163a8bfb403cea03";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/MooseX-Types-Stringlike-0.002.tar.gz;
+      sha256 = "18g07bvhcrhirb1yhcz55y7nsvkw1wq285d1hyb0jxrzgr0ga94k";
     };
     buildInputs = [ Moose ];
     propagatedBuildInputs = [ MooseXTypes ];
