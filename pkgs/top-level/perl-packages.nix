@@ -2465,10 +2465,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelGlobalDestruction = buildPerlPackage {
-    name = "Devel-GlobalDestruction-0.09";
+    name = "Devel-GlobalDestruction-0.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/Devel-GlobalDestruction-0.09.tar.gz;
-      sha256 = "1hvrv88167rc2chqgxpd6q0ir5fki1q6r3w11v3lxfs118fdi65m";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Devel-GlobalDestruction-0.12.tar.gz;
+      sha256 = "0w4a4y9w4yldxlhks95nx8qaivpbzc40b1p8xg3y8467ixkbg9cq";
     };
     propagatedBuildInputs = [ SubExporterProgressive ];
     meta = {
