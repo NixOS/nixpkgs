@@ -6290,11 +6290,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetLDAP = buildPerlPackage {
-    name = "Net-LDAP-0.43";
+    name = "Net-LDAP-0.4001";
     propagatedBuildInputs = [ ConvertASN1 ];
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GB/GBARR/perl-ldap-0.43.tar.gz;
-      sha256 = "0ak7393zs8ps6r6in5ilr9l1mzxxh529jr768sjzx4273p7li3m0";
+      url = mirror://cpan/authors/id/G/GB/GBARR/perl-ldap-0.4001.tar.gz;
+      sha256 = "0spwid70yxkh5zbad3ldw8yb2m5shkm59a7f0kllw8bb7ccczqps";
     };
   };
 
