@@ -6945,10 +6945,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodEscapes = buildPerlPackage {
-    name = "Pod-Escapes-1.04";
+    name = "Pod-Escapes-1.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBURKE/Pod-Escapes-1.04.tar.gz;
-      sha256 = "1wrg5dnsl785ygga7bp6qmakhjgh9n4g3jp2l85ab02r502cagig";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Pod-Escapes-1.06.tar.gz;
+      sha256 = "15dpzlgc2ywyxk2svc810nmyx6pm1nj8cji7a0rqr9x6m0v11xdm";
     };
   };
 
