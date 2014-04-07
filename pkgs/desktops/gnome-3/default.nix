@@ -114,6 +114,8 @@ rec {
 
   rest = callPackage ./core/rest { };
 
+  sushi = callPackage ./core/sushi { };
+
   totem = callPackage ./core/totem { };
 
   totem-pl-parser = callPackage ./core/totem-pl-parser { };
