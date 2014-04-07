@@ -6892,10 +6892,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodCoverage = buildPerlPackage rec {
-    name = "Pod-Coverage-0.19";
+    name = "Pod-Coverage-0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/${name}.tar.gz";
-      sha256 = "1krsz4zwmnmq3z29p5vmyr5fdzrn8v0sg6rf3qxk7xpxw4z5np84";
+      sha256 = "01xifj83dv492lxixijmg6va02rf3ydlxly0a9slmx22r6qa1drh";
     };
     propagatedBuildInputs = [DevelSymdump];
   };
