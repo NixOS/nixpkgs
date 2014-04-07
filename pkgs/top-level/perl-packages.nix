@@ -2932,10 +2932,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailAbstract = buildPerlPackage {
-    name = "Email-Abstract-3.004";
+    name = "Email-Abstract-3.007";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Abstract-3.004.tar.gz;
-      sha256 = "0fiaagxc2hy5g3qiipv4cspkwbaggdmsxbll1f4jx2qnq5hm668d";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Abstract-3.007.tar.gz;
+      sha256 = "1a7aynf5jd5lr77x4k51hphnbmxf6p0s2gm1a6fbmxjqlnimm48h";
     };
     propagatedBuildInputs = [ EmailSimple MROCompat ];
     meta = {
