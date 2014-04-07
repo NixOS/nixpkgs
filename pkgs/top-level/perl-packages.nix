@@ -8055,10 +8055,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TermReadKey = buildPerlPackage {
-    name = "TermReadKey-2.30";
+    name = "TermReadKey-2.31";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JS/JSTOWE/TermReadKey-2.30.tar.gz;
-      md5 = "f0ef2cea8acfbcc58d865c05b0c7e1ff";
+      url = mirror://cpan/authors/id/J/JS/JSTOWE/TermReadKey-2.31.tar.gz;
+      sha256 = "1czarrdxgnxmmbaasjnq3sj14nf1cvzhm37padq6xvl7h7r2acb2";
     };
   };
 
