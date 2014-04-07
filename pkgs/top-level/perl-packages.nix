@@ -6408,10 +6408,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NumberCompare = buildPerlPackage rec {
-    name = "Number-Compare-0.01";
+    name = "Number-Compare-0.03";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Number/${name}.tar.gz";
-      sha256 = "1vs95lbax3f63jg98jwkiahlvg1jhmd0xyyzmbxxifsl7fkv1d9j";
+      url = "mirror://cpan/authors/id/R/RC/RCLAMP/${name}.tar.gz";
+      sha256 = "09q8i0mxvr7q9vajwlgawsi0hlpc119gnhq4hc933d03x0vkfac3";
     };
   };
 
