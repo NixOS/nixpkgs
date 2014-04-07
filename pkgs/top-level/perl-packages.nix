@@ -156,10 +156,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   AppCLI = buildPerlPackage {
-    name = "App-CLI-0.07";
+    name = "App-CLI-0.313";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CL/CLKAO/App-CLI-0.07.tar.gz;
-      sha256 = "000866qsm7jck3ini69b02sgbjwp6s297lsds002r7xk2wb6fqcz";
+      url = mirror://cpan/authors/id/C/CO/CORNELIUS/App-CLI-0.313.tar.gz;
+      sha256 = "0ni1z14xis1b634qjc3zra9c9pl2icfr6sp5qxs0xy8nvib65037";
     };
     propagatedBuildInputs = [LocaleMaketextSimple];
   };
