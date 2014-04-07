@@ -6864,10 +6864,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PerlPrereqScanner = buildPerlPackage {
-    name = "Perl-PrereqScanner-1.018";
+    name = "Perl-PrereqScanner-1.019";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Perl-PrereqScanner-1.018.tar.gz;
-      sha256 = "11zkam8svpgcjhjda0ap3afd797a69ndcc64fy3xw0j8v8kxa6hc";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Perl-PrereqScanner-1.019.tar.gz;
+      sha256 = "1ndgq2c7s1042c3zxjsmjfpf4lnwfg6w36hmvhh3yk9qihcprbgj";
     };
     buildInputs = [ PPI TryTiny ];
     propagatedBuildInputs = [ GetoptLongDescriptive ListMoreUtils ModulePath Moose PPI ParamsUtil StringRewritePrefix namespaceautoclean ];
