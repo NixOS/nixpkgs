@@ -9080,10 +9080,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TimeDuration = buildPerlPackage {
-    name = "Time-Duration-1.1";
+    name = "Time-Duration-1.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AV/AVIF/Time-Duration-1.1.tar.gz;
-      sha256 = "a69c419c4892f21eba10002e2ab8c55b657b6691cf6873544ef99ef5fd188f4e";
+      url = mirror://cpan/authors/id/A/AV/AVIF/Time-Duration-1.06.tar.gz;
+      sha256 = "0krzgxifghwir1ibxg147sfpqyyv8xpvipx0nwlwgyay46x4gdpp";
     };
     buildInputs = [ TestPod TestPodCoverage ];
     meta = {
