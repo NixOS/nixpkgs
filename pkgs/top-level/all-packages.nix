@@ -954,10 +954,6 @@ let
 
   fio = callPackage ../tools/system/fio { };
 
-  flashtool = callPackage_i686 ../development/mobile/flashtool {
-    platformTools = androidenv.platformTools;
-  };
-
   flpsed = callPackage ../applications/editors/flpsed { };
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
