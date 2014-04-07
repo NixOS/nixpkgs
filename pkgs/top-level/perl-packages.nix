@@ -9528,10 +9528,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLRegExp = buildPerlPackage {
-    name = "XML-RegExp-0.03";
+    name = "XML-RegExp-0.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TJ/TJMATHER/XML-RegExp-0.03.tar.gz;
-      sha256 = "1gkarylvdk3mddmchcwvzq09gpvx5z26nybp38dg7mjixm5bs226";
+      url = mirror://cpan/authors/id/T/TJ/TJMATHER/XML-RegExp-0.04.tar.gz;
+      sha256 = "0m7wj00a2kik7wj0azhs1zagwazqh3hlz4255n75q21nc04r06fz";
     };
   };
 
