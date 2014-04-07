@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-bin";
-  version = "1.2.7.4";
-  sha256 = "1nhpn8855jhvjmh5fdvjic20lyx6k054kfp8j0lwvdcd79c7bl77";
+  version = "1.2.8";
+  sha256 = "0hic32k1ii1j2hrwxj7pc7vv26dmq8rv7h7as1fw0bwlysrnw8nm";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
