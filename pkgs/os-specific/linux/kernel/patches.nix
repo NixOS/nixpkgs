@@ -75,22 +75,22 @@ rec {
   grsecurity_3_0_3_2_56 =
     { name = "grsecurity-3.0-3.2.56";
       patch = fetchurl {
-        url = http://grsecurity.net/stable/grsecurity-3.0-3.2.56-201404012135.patch;
-        sha256 = "1l7c1l5cxv1j9iw12rxf7nsvbmg6jna96y1bxc8i4yi0jwiwn2nc";
+        url = http://grsecurity.net/stable/grsecurity-3.0-3.2.56-201404062126.patch;
+        sha256 = "0pm8a6h5dky1frg7bi6ldq849w8xz8isnlw5jpbzix46m3myy3x0";
       };
       features.grsecurity = true;
       # The grsec kernel patch seems to include the apparmor patches as of 3.0-3.2.56
       features.apparmor = true;
     };
 
-  grsecurity_3_0_3_13_8 =
-    { name = "grsecurity-3.0-3.13.8";
+  grsecurity_3_0_3_13_9 =
+    { name = "grsecurity-3.0-3.13.9";
       patch = fetchurl {
-        url = http://grsecurity.net/test/grsecurity-3.0-3.13.8-201404011912.patch;
-        sha256 = "1fwb41l7gjkdyl08b6a9mg4ahnw55yk0a7kd69ca8zrqd0j668ci";
+        url = http://grsecurity.net/test/grsecurity-3.0-3.13.9-201404062127.patch;
+        sha256 = "0kwqgw2a44wqhwjwws63ww15apb8jki372iccq7h1w5vi551sl0m";
       };
       features.grsecurity = true;
-      # The grsec kernel patch seems to include the apparmor patches as of 3.0-3.13.8
+      # The grsec kernel patch seems to include the apparmor patches as of 3.0-3.13.9
       features.apparmor = true;
     };
 
