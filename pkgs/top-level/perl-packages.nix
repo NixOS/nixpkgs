@@ -1971,10 +1971,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataVisitor = buildPerlPackage rec {
-    name = "Data-Visitor-0.28";
+    name = "Data-Visitor-0.30";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Data/${name}.tar.gz";
-      sha256 = "1998syyprmqnhpgznmk7ia3zd8saw34q7pbaprxarcz7a3bncyjc";
+      url = "mirror://cpan/authors/id/D/DO/DOY/${name}.tar.gz";
+      sha256 = "0m7d1505af9z2hj5aw020grcmjjlvnkjpvjam457d7k5qfy4m8lf";
     };
     buildInputs = [ TestRequires ];
     propagatedBuildInputs =
