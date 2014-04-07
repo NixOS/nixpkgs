@@ -692,10 +692,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystDispatchTypeRegex = buildPerlModule {
-    name = "Catalyst-DispatchType-Regex-5.90032";
+    name = "Catalyst-DispatchType-Regex-5.90033";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MG/MGRIMES/Catalyst-DispatchType-Regex-5.90032.tar.gz;
-      sha256 = "003e31fe0c1d6dfc6be4d9cd47cb058a9b53a73bb6a9f74a132a43dbfbbb5e3c";
+      url = mirror://cpan/authors/id/M/MG/MGRIMES/Catalyst-DispatchType-Regex-5.90033.tar.gz;
+      sha256 = "0rdi8jxj9fz81l9pxl7q190v69vkgxgixcpals555xyiafnqk4vy";
     };
     propagatedBuildInputs = [ Moose TextSimpleTable ];
     meta = {
