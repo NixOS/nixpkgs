@@ -7693,10 +7693,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubExporterProgressive = buildPerlPackage {
-    name = "Sub-Exporter-Progressive-0.001006";
+    name = "Sub-Exporter-Progressive-0.001011";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/Sub-Exporter-Progressive-0.001006.tar.gz;
-      sha256 = "0s13fz86c8slhgban10sywp2skjdxnl3nvkqqy7pbwg81g3v9rr2";
+      url = mirror://cpan/authors/id/F/FR/FREW/Sub-Exporter-Progressive-0.001011.tar.gz;
+      sha256 = "01kwzbqwdhvadpphnczid03nlyj0h4cxaq3m3v2401bckkkcc606";
     };
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
