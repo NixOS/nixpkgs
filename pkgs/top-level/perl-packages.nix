@@ -2637,10 +2637,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginBundleTestingMania = buildPerlPackage {
-    name = "Dist-Zilla-PluginBundle-TestingMania-0.20";
+    name = "Dist-Zilla-PluginBundle-TestingMania-0.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-PluginBundle-TestingMania-0.20.tar.gz;
-      sha256 = "073e17a98b0f88a1b60ce45a325d7447a19db394fcc6f01472bacb1956106da8";
+      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-PluginBundle-TestingMania-0.21.tar.gz;
+      sha256 = "1cbq7v799bf93iqp19v1ln6bcf6gvmc0qw3gf4bq445wsm7w62wy";
     };
     buildInputs = [ CaptureTiny DistZilla MooseAutobox perl ];
     propagatedBuildInputs = [ DistZilla DistZillaPluginMojibakeTests DistZillaPluginNoTabsTests DistZillaPluginTestCPANChanges DistZillaPluginTestCPANMetaJSON DistZillaPluginTestCompile DistZillaPluginTestDistManifest DistZillaPluginTestEOL DistZillaPluginTestKwalitee DistZillaPluginTestMinimumVersion DistZillaPluginTestPerlCritic DistZillaPluginTestPodLinkCheck DistZillaPluginTestPortability DistZillaPluginTestSynopsis DistZillaPluginTestUnusedVars DistZillaPluginTestVersion JSONPP ListMoreUtils Moose PodCoverageTrustPod TestCPANMeta TestPerlCritic TestVersion namespaceautoclean ];
