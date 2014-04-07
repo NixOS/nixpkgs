@@ -9837,8 +9837,6 @@ let
 
   unvanquished = callPackage ../games/unvanquished { };
 
-  uqm = callPackage ../games/uqm { };
-
   urbanterror = callPackage ../games/urbanterror { };
 
   ut2004demo = callPackage ../games/ut2004demo { };

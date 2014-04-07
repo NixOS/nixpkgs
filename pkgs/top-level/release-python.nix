@@ -1681,7 +1681,6 @@ let
   unetbootin = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   unison = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   upower = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  uqm = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   urbanterror = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   usbmuxd = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   uzbl = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
