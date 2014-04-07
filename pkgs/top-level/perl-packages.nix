@@ -4331,10 +4331,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IODigest = buildPerlPackage {
-    name = "IO-Digest-0.10";
+    name = "IO-Digest-0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CL/CLKAO/IO-Digest-0.10.tar.gz;
-      sha256 = "1g6ilxqv2a7spf273v7k0721c6am7pwpjrin3h5zaqxfmd312nav";
+      url = mirror://cpan/authors/id/C/CL/CLKAO/IO-Digest-0.11.tar.gz;
+      sha256 = "14kz7z4xw179aya3116wxac29l4y2wmwrba087lya4v2gxdgiz4g";
     };
     propagatedBuildInputs = [PerlIOviadynamic];
   };
