@@ -78,6 +78,8 @@ rec {
 
   gnome-system-log = callPackage ./core/gnome-system-log { };
 
+  gnome-system-monitor = callPackage ./core/gnome-system-monitor { };
+
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
   gnome_themes_standard = callPackage ./core/gnome-themes-standard { };
