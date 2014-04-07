@@ -4282,10 +4282,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   "if" = buildPerlPackage {
-    name = "if-0.0601";
+    name = "if-0.01000001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IL/ILYAZ/modules/if-0.0601.tar.gz;
-      sha256 = "fb2b7329aa111a673cd22dc2889167e52058aead0de2fe0855b32dd658d5c1b7";
+      url = mirror://cpan/authors/id/I/IL/ILYAZ/modules/if-0.01000001.tar.gz;
+      sha256 = "0vb40cb20b22layp5v9xa30hmcnhxidwjkfwcrxwhrvwypy2cmgw";
     };
     meta = {
     };
