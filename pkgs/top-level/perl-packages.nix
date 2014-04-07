@@ -4999,10 +4999,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MailTools = buildPerlPackage {
-    name = "MailTools-2.04";
+    name = "MailTools-2.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MARKOV/MailTools-2.04.tar.gz;
-      sha256 = "0w91rcrz4v0pjdnnv2mvlbrm9ww32f7ajhr7xkjdhhr3455p7adx";
+      url = mirror://cpan/authors/id/M/MA/MARKOV/MailTools-2.13.tar.gz;
+      sha256 = "1djjl05ndn8dmwri4vw5wfky5sqy7sf63qaijvhf9g5yh53405kj";
     };
     propagatedBuildInputs = [TimeDate TestPod];
   };
