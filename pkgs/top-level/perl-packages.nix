@@ -7192,10 +7192,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SafeIsa = buildPerlPackage {
-    name = "Safe-Isa-1.000002";
+    name = "Safe-Isa-1.000004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSTROUT/Safe-Isa-1.000002.tar.gz;
-      sha256 = "07jr4fy6zbw9zwpalxzxlkn4nym6fd0304fsrb5ag0v156ygpwvl";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Safe-Isa-1.000004.tar.gz;
+      sha256 = "0sqwma0xqxrgnsm0jfy17szq87bskzq67cdh7p934qdifh5nfwn9";
     };
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
