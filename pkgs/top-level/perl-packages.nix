@@ -3264,10 +3264,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsDepends = buildPerlPackage {
-    name = "ExtUtils-Depends-0.304";
+    name = "ExtUtils-Depends-0.306";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FL/FLORA/ExtUtils-Depends-0.304.tar.gz;
-      sha256 = "0fjlkcz1i1j02hhwi1wjgd79qlppjkbasrj44h5ry1f238g6a1q3";
+      url = mirror://cpan/authors/id/X/XA/XAOC/ExtUtils-Depends-0.306.tar.gz;
+      sha256 = "0s935hmxjl6md47i80abcfaghqwhnv0ikzzqln80w4ydhg5qn9a5";
     };
     meta = {
       license = "perl";
