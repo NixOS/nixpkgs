@@ -1045,10 +1045,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CGIExpand = buildPerlPackage {
-    name = "CGI-Expand-2.03";
+    name = "CGI-Expand-2.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOWMANBS/CGI-Expand-2.03.tar.gz;
-      sha256 = "0p59is2mynybii8r1cpci2i17xzwhrrs4741hndhkcp4spggr0z1";
+      url = mirror://cpan/authors/id/B/BO/BOWMANBS/CGI-Expand-2.04.tar.gz;
+      sha256 = "0jk2vvk4mlz7phq3h3wpryix46adi7fkkzvkv0ssn5xkqy3pqlny";
     };
     propagatedBuildInputs = [ TestException ];
     meta = {
