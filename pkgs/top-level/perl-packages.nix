@@ -894,10 +894,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystPluginSession = buildPerlPackage {
-    name = "Catalyst-Plugin-Session-0.36";
+    name = "Catalyst-Plugin-Session-0.39";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Session-0.36.tar.gz;
-      sha256 = "14wgkrg3w69gwg6zg991k5f611xqsnyx0i0xzhw9rx2j5nf9rj4b";
+      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Plugin-Session-0.39.tar.gz;
+      sha256 = "0m4a003qgz7848iyckwbigg2vw3kmfxggh1razrnzxrbz3n6x5gi";
     };
     buildInputs = [ TestDeep TestException TestWWWMechanizePSGI ];
     propagatedBuildInputs = [ CatalystRuntime Moose MooseXEmulateClassAccessorFast MROCompat namespaceclean ObjectSignature ];
