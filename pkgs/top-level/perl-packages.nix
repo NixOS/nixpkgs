@@ -9277,10 +9277,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   URIFromHash = buildPerlPackage {
-    name = "URI-FromHash-0.03";
+    name = "URI-FromHash-0.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/URI-FromHash-0.03.tar.gz;
-      sha256 = "0yzk69mdf8rmkx1wxm5mn1a1zzd0zq4x1w83vyj9ja40v73q0k4i";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/URI-FromHash-0.04.tar.gz;
+      sha256 = "03yckli4fj8cgsyh1l1lmyxj56q9qc04a3r8kv0whbnb37zz1j23";
     };
     propagatedBuildInputs = [ ParamsValidate URI ];
     meta = {
