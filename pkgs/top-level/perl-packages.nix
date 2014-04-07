@@ -9051,10 +9051,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TieIxHash = buildPerlPackage {
-    name = "Tie-IxHash-1.22";
+    name = "Tie-IxHash-1.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHORNY/Tie-IxHash-1.22.tar.gz;
-      sha256 = "0f0m0x8nkidxd0pxnls1i8kc8d7bd89dqgihz29wj3ggk43qffr7";
+      url = mirror://cpan/authors/id/C/CH/CHORNY/Tie-IxHash-1.23.tar.gz;
+      sha256 = "0mmg9iyh42syal3z1p2pn9airq65yrkfs66cnqs9nz76jy60pfzs";
     };
     meta = {
       description = "Ordered associative arrays for Perl";
