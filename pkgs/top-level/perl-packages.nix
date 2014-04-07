@@ -6455,10 +6455,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetOpenIDCommon = buildPerlPackage rec {
-    name = "Net-OpenID-Common-1.14";
+    name = "Net-OpenID-Common-1.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WR/WROG/${name}.tar.gz";
-      sha256 = "24ac83539b188d85bd2c7bd67e355aab0ede3f98170b23cb50bd30b11b4387ff";
+      sha256 = "13hy5j6hcggb4l2r4pnwdh30p20wwja0chpmqm8y6wnnsp1km07f";
     };
     propagatedBuildInputs = [ CryptDHGMP URI HTMLParser HTTPMessage XMLSimple ];
   };
