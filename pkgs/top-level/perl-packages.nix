@@ -105,10 +105,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   AnyEvent = buildPerlPackage {
-    name = "AnyEvent-7.05";
+    name = "AnyEvent-7.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-7.05.tar.gz;
-      sha256 = "0022y5xbn3dn5x0q1kzvx15icf3g1cqqljrfhyriy794a42fply6";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-7.07.tar.gz;
+      sha256 = "01iilh11xc2gw6fxxr6il3r6n1k4cf6swaddgbhi525wfzlchk2c";
     };
     meta = {
       maintainers = with maintainers; [ ocharles ];
