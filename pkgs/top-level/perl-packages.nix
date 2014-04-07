@@ -6658,10 +6658,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PerlIOviadynamic = buildPerlPackage {
-    name = "PerlIO-via-dynamic-0.12";
+    name = "PerlIO-via-dynamic-0.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CL/CLKAO/PerlIO-via-dynamic-0.12.tar.gz;
-      sha256 = "140hay9q8q9sz1fa2s57ijp5l2448fkcg7indgn6k4vc7yshmqz2";
+      url = mirror://cpan/authors/id/A/AL/ALEXMV/PerlIO-via-dynamic-0.14.tar.gz;
+      sha256 = "0jbb3xpbqzmr625blvnjszd69l3cwxzi7bhmkj5x48dgv3s7mkca";
     };
   };
 
