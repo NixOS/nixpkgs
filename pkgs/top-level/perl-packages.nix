@@ -3380,10 +3380,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FatalException = buildPerlPackage {
-    name = "Fatal-Exception-0.05";
+    name = "Fatal-Exception-0.0204";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DE/DEXTER/Fatal-Exception-0.05.tar.gz;
-      sha256 = "0kzfwc44vpxla3j637kfmnwmv57g6x4899ijqb4ljamk7whms298";
+      url = mirror://cpan/authors/id/D/DE/DEXTER/Fatal-Exception-0.0204.tar.gz;
+      sha256 = "10a9j0fa83s3apv0xgi01l2h6s43my031097hg72wa80n07rgs2c";
     };
     buildInputs = [ ExceptionWarning TestAssert TestUnitLite ];
     propagatedBuildInputs = [ ExceptionBase ExceptionDied ];
