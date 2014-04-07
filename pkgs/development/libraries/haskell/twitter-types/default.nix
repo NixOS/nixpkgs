@@ -1,15 +1,15 @@
-{ cabal, aeson, attoparsec, httpTypes, HUnit, shakespeareText
+{ cabal, aeson, attoparsec, httpTypes, HUnit, shakespeare
 , testFramework, testFrameworkHunit, testFrameworkThPrime, text
 , unorderedContainers
 }:
 
 cabal.mkDerivation (self: {
   pname = "twitter-types";
-  version = "0.2.20130101";
-  sha256 = "0y7pymwcv8i5f8hqh4h018xp5bd998l8fx9f2a8x6d53c7l34wmd";
+  version = "0.2.20140406";
+  sha256 = "0zzdnmcx57w2j2bypwnxkrmaa2zw945g8717lm0c2wzk31kjbvi8";
   buildDepends = [ aeson httpTypes text unorderedContainers ];
   testDepends = [
-    aeson attoparsec httpTypes HUnit shakespeareText testFramework
+    aeson attoparsec httpTypes HUnit shakespeare testFramework
     testFrameworkHunit testFrameworkThPrime text unorderedContainers
   ];
   doCheck = false;
