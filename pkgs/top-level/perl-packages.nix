@@ -5710,10 +5710,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXNonMoose = buildPerlPackage {
-    name = "MooseX-NonMoose-0.22";
+    name = "MooseX-NonMoose-0.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOY/MooseX-NonMoose-0.22.tar.gz;
-      sha256 = "0mhyabg5f6kngkm1w7hfglkdzjdn5pbgm7vgia0aqy9mwwclbpdp";
+      url = mirror://cpan/authors/id/D/DO/DOY/MooseX-NonMoose-0.26.tar.gz;
+      sha256 = "0zdaiphc45s5xj0ax5mkijf5d8v6w6yccb3zplgj6f30y7n55gnb";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ListMoreUtils Moose ];
