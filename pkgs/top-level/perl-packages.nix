@@ -7130,10 +7130,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ReturnValue = buildPerlPackage {
-    name = "Return-Value-1.302";
+    name = "Return-Value-1.666004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Return-Value-1.302.tar.gz;
-      sha256 = "0hf5rmfap49jh8dnggdpvapy5r4awgx5hdc3acc9ff0vfqav8azm";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Return-Value-1.666004.tar.gz;
+      sha256 = "0xr7ic212p36arzdpph2l2yy1y88c7qaf4nng3gqb29zc9kzy3bc";
     };
   };
 
