@@ -7120,10 +7120,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   RpcXML = buildPerlPackage {
-    name = "RPC-XML-0.73";
+    name = "RPC-XML-0.78";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJRAY/RPC-XML-0.73.tar.gz;
-      sha256 = "a023649603240e7a19fc52a8316a41c854639c0600058ea4d1e436fe1b1b7734";
+      url = mirror://cpan/authors/id/R/RJ/RJRAY/RPC-XML-0.78.tar.gz;
+      sha256 = "0spci3sj2hq9k916sk9k2gchqrbnz9lwmlcnwf1k33wzl8j2gh52";
     };
     propagatedBuildInputs = [LWP XMLLibXML XMLParser];
     doCheck = false;
