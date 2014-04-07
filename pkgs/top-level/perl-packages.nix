@@ -6980,10 +6980,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodMarkdown = buildPerlPackage {
-    name = "Pod-Markdown-1.322";
+    name = "Pod-Markdown-2.000";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RW/RWSTAUNER/Pod-Markdown-1.322.tar.gz;
-      sha256 = "375091d89d9662b0c41bedad391927d6904d05f740e1bb689b494b4b35e979f7";
+      url = mirror://cpan/authors/id/R/RW/RWSTAUNER/Pod-Markdown-2.000.tar.gz;
+      sha256 = "0qix7gmrc2ypm5dl1w5ajnjy32xlmy73wb3zycc1pxl5lipigsx8";
     };
     buildInputs = [ TestDifferences ];
     meta = {
