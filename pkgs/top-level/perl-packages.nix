@@ -1339,10 +1339,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassUnload = buildPerlPackage rec {
-    name = "Class-Unload-0.07";
+    name = "Class-Unload-0.08";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Class//${name}.tar.gz";
-      sha256 = "1alvn94j0wgfyyym092g9cq0mbhzin0zf7lfja6578jk5cc788rr";
+      url = "mirror://cpan/authors/id/I/IL/ILMARI/${name}.tar.gz";
+      sha256 = "097gr3r2jgnm1175m4lpg4a97hv2mxrn9r0b2c6bn1x9xdhkywgh";
     };
     propagatedBuildInputs = [ ClassInspector ];
   };
