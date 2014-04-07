@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ac34kqkf174w0qc12p927dfhcm69xnv7fqzmbhjab56rn49wypn";
   };
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard gnome3.libgnomekbd ];
   propagatedBuildInputs = [ gdk_pixbuf gnome3.gnome_icon_theme librsvg
                             hicolor_icon_theme gnome3.gnome_icon_theme_symbolic ];
 
