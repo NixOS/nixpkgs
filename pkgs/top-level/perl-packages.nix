@@ -2969,10 +2969,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailMessageID = buildPerlPackage {
-    name = "Email-MessageID-1.402";
+    name = "Email-MessageID-1.404";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-MessageID-1.402.tar.gz;
-      sha256 = "1zzbxdygh992dn9k9jlxjzcmaniy83dqlc8lkas9w9wlhngvwni1";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-MessageID-1.404.tar.gz;
+      sha256 = "0lyq9r3x7cs7cncf0yiazbi7aq4c5d4m3wxwgqdd4r5p9gxdjj4n";
     };
     propagatedBuildInputs = [ EmailAddress ];
     meta = {
