@@ -6439,10 +6439,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ObjectSignature = buildPerlPackage {
-    name = "Object-Signature-1.05";
+    name = "Object-Signature-1.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AD/ADAMK/Object-Signature-1.05.tar.gz;
-      sha256 = "10k9j18jpb16brv0hs7592r7hx877290pafb8gnk6ydy7hcq9r2j";
+      url = mirror://cpan/authors/id/A/AD/ADAMK/Object-Signature-1.07.tar.gz;
+      sha256 = "0c8l7195bjvx0v6zmkgdnxvwg7yj2zq8hi7xd25a3iikd12dc4f6";
     };
   };
 
