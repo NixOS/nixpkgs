@@ -4803,10 +4803,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LogContextual = buildPerlPackage {
-    name = "Log-Contextual-0.005003";
+    name = "Log-Contextual-0.006003";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FR/FREW/Log-Contextual-0.005003.tar.gz;
-      sha256 = "8519ae92bd8685d003460f99151996e94f38c3c8f12b90634857558605d13719";
+      url = mirror://cpan/authors/id/F/FR/FREW/Log-Contextual-0.006003.tar.gz;
+      sha256 = "0940s910n67arqvz7aji4z6vgzzl52aq3l3jg8vq4ygnkn7c9k21";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ DataDumperConcise ExporterDeclare Moo ];
