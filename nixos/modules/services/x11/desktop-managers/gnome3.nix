@@ -43,7 +43,8 @@ in {
         '';
       };
 
-    environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules" ];
+    environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules"
+                                                "${pkgs.glib_networking}/lib/gio/modules" ];
     environment.systemPackages =
       [ gnome3.evince
         gnome3.eog
@@ -54,7 +55,9 @@ in {
         gnome3.gucharmap
         gnome3.nautilus
         gnome3.yelp
+        pkgs.glib_networking
         pkgs.ibus
+        gnome3.gnome-backgrounds
         gnome3.gnome_shell
         gnome3.gnome_settings_daemon
         gnome3.gnome_terminal

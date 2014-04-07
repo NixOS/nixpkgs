@@ -460,6 +460,43 @@ rec {
     };
   });
 
+  autopep8 = buildPythonPackage (rec {
+    name = "autopep8-1.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/autopep8/${name}.tar.gz";
+      md5 = "41782e66efcbaf9d761bb45a2d2929bb";
+    };
+
+    propagatedBuildInputs = [ pep8 ];
+
+    # One test fails:
+    # FAIL: test_recursive_should_not_crash_on_unicode_filename (test.test_autopep8.CommandLineTests)
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
+      homepage = https://pypi.python.org/pypi/autopep8/;
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  });
+
+  backports_ssl_match_hostname_3_4_0_2 = pythonPackages.buildPythonPackage rec {
+    name = "backports.ssl_match_hostname-3.4.0.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/backports.ssl_match_hostname/backports.ssl_match_hostname-3.4.0.2.tar.gz";
+      md5 = "788214f20214c64631f0859dc79f23c6";
+    };
+
+    meta = {
+      description = "The Secure Sockets layer is only actually *secure*";
+      homepage = http://bitbucket.org/brandon/backports.ssl_match_hostname;
+    };
+  };
+
   bcdoc = buildPythonPackage rec {
     name = "bcdoc-0.12.1";
 
@@ -1484,6 +1521,22 @@ rec {
     };
   };
 
+  derpconf = pythonPackages.buildPythonPackage rec {
+    name = "derpconf-0.4.9";
+
+    propagatedBuildInputs = [ six ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/derpconf/${name}.tar.gz";
+      md5 = "a164807d7bf0c4adf1de781305f29b82";
+    };
+
+    meta = {
+      description = "derpconf abstracts loading configuration files for your app";
+      homepage = https://github.com/globocom/derpconf;
+      license = licenses.mit;
+    };
+  };
 
   dpkt = buildPythonPackage rec {
     name = "dpkt-1.8";
@@ -3189,6 +3242,22 @@ rec {
       homepage = http://code.google.com/p/gyp;
       license = stdenv.lib.licenses.bsd3;
       description = "Generate Your Projects";
+    };
+  };
+
+  gunicorn = buildPythonPackage rec {
+    name = "gunicorn-18.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/gunicorn/${name}.tar.gz";
+      md5 = "c7138b9ac7515a42066922d2b6120fbe";
+    };
+    
+    buildInputs = [ pytest ];
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/gunicorn;
+      description = "WSGI HTTP Server for UNIX";
     };
   };
 
@@ -5591,17 +5660,24 @@ rec {
 
 
   pyopengl =
-    let version = "3.0.0b5";
+    let version = "3.0.2";
     in
       buildPythonPackage {
         name = "pyopengl-${version}";
 
         src = fetchurl {
-          url = "mirror://sourceforge/pyopengl/PyOpenGL-${version}.tar.gz";
-          sha256 = "1rjpl2qdcqn4wamkik840mywdycd39q8dn3wqfaiv35jdsbifxx3";
+          url = "http://pypi.python.org/packages/source/P/PyOpenGL/PyOpenGL-${version}.tar.gz";
+          sha256 = "9ef93bbea2c193898341f574e281c3ca0dfe87c53aa25fbec4b03581f6d1ba03";
         };
 
         propagatedBuildInputs = with pkgs; [ mesa freeglut pil ];
+
+        patchPhase = ''
+          sed -i "s|util.find_library( name )|name|" OpenGL/platform/ctypesloader.py
+          sed -i "s|'GL',|'libGL.so',|" OpenGL/platform/glx.py
+          sed -i "s|'GLU',|'${pkgs.mesa}/lib/libGLU.so',|" OpenGL/platform/glx.py
+          sed -i "s|'glut',|'${pkgs.freeglut}/lib/libglut.so',|" OpenGL/platform/glx.py
+        '';
 
         meta = {
           homepage = http://pyopengl.sourceforge.net/;
@@ -7610,6 +7686,12 @@ rec {
     wxGTK = pkgs.wxGTK28;
   };
 
+  wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig;
+    inherit pythonPackages;
+    wxGTK = pkgs.wxGTK30;
+  };
+
   xe = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/xe-0.7.4.tar.gz";
     name = stdenv.lib.nameFromURL url ".tar";
@@ -8245,11 +8327,13 @@ rec {
 
 
   tornado = buildPythonPackage rec {
-    name = "tornado-3.1.1";
+    name = "tornado-3.2";
+
+    propagatedBuildInputs = [ backports_ssl_match_hostname_3_4_0_2 ];
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
-      sha256 = "1ipx23ix8hyd88rywmwr7bfdgkvkdac87xq3f9l5vkm0wjzh8n9l";
+      url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
+      md5 = "bd83cee5f1a5c5e139e87996d00b251b";
     };
 
     doCheck = false;
@@ -8818,6 +8902,53 @@ rec {
       homepage = https://github.com/garbas/pypi2nix;
       description = "";
       maintainers = [ pkgs.stdenv.lib.maintainers.garbas ];
+    };
+  };
+
+
+  thumbor = pythonPackages.buildPythonPackage rec {
+    name = "thumbor-4.0.4";
+
+    propagatedBuildInputs = [
+                    tornado
+                    pycrypto
+                    pycurl
+                    pillow
+                    derpconf
+                    python_magic
+                    thumborPexif
+                    (pkgs.opencv.override {
+                        gtk = null;
+                        glib = null;
+                        xineLib = null;
+                        gstreamer = null;
+                        ffmpeg = null;
+                    }) ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/thumbor/${name}.tar.gz";
+      md5 = "cf639a1cc57ee287b299ace450444408";
+    };
+
+    meta = {
+      description = "Thumbor is a smart imaging service. It enables on-demand crop, resizing and flipping of images.";
+      homepage = https://github.com/globocom/thumbor/wiki;
+      license = licenses.mit;
+    };
+  };
+
+  thumborPexif = pythonPackages.buildPythonPackage rec {
+    name = "thumbor-pexif-0.14";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/thumbor-pexif/${name}.tar.gz";
+      md5 = "fb4cdb60f4a0bead5193fb483ccd3430";
+    };
+
+    meta = {
+      description = "Module to parse and edit the EXIF data tags in a JPEG image";
+      homepage = http://www.benno.id.au/code/pexif/;
+      license = licenses.mit;
     };
   };
 

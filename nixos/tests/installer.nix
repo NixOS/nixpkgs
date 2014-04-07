@@ -39,7 +39,7 @@ let
 
       { imports =
           [ ./hardware-configuration.nix
-            "''${modulesPath}/testing/test-instrumentation.nix"
+            <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
         boot.loader.grub.version = ${toString grubVersion};
@@ -48,7 +48,6 @@ let
         ''}
         boot.loader.grub.device = "${grubDevice}";
         boot.loader.grub.extraConfig = "serial; terminal_output.serial";
-        boot.initrd.kernelModules = [ "virtio_console" ];
 
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
       }
@@ -177,7 +176,7 @@ let
       # Test nixos-option.
       $machine->succeed("nixos-option boot.initrd.kernelModules | grep virtio_console");
       $machine->succeed("nixos-option -d boot.initrd.kernelModules | grep 'List of modules'");
-      $machine->succeed("nixos-option -l boot.initrd.kernelModules | grep /etc/nixos/configuration.nix");
+      $machine->succeed("nixos-option -l boot.initrd.kernelModules | grep qemu-guest.nix");
 
       $machine->shutdown;
 

@@ -23,6 +23,10 @@ let
       ln -s ${pkgs.ant}/lib/ant/lib/ant.jar $out/lib/
       ln -s ${cfg.solrPackage}/lib/ext/* $out/lib/
       ln -s ${pkgs.openjdk}/lib/openjdk/lib/tools.jar $out/lib/
+    '' + optionalString (cfg.extraJars != []) ''
+      for f in ${concatStringsSep " " cfg.extraJars}; do
+         cp $f $out/lib
+      done
     '';
   };
 
@@ -51,6 +55,14 @@ in {
         default = pkgs.solr;
         description = ''
           Which solr derivation to use for running solr.
+        '';
+      };
+
+      extraJars = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        description = ''
+          List of paths pointing to jars. Jars are copied to commonLibFolder to be available to java/solr.
         '';
       };
 

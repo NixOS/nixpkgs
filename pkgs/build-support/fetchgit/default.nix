@@ -1,5 +1,5 @@
 {stdenv, git, cacert}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false }:
+{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false, fetchSubmodules ? true}:
 
 /* NOTE:
    fetchgit has one problem: git fetch only works for refs.
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if sha256 == "" then md5 else sha256;
 
-  inherit url rev leaveDotGit;
+  inherit url rev leaveDotGit fetchSubmodules;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ca-bundle.crt";
 

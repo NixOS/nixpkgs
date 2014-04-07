@@ -1,7 +1,7 @@
 { stdenv, intltool, fetchurl, vala, libgtop
 , pkgconfig, gtk3, glib, hicolor_icon_theme
 , bash, makeWrapper, itstool, libxml2
-, gnome3, librsvg, gdk_pixbuf }:
+, gnome3, librsvg, gdk_pixbuf, file }:
 
 stdenv.mkDerivation rec {
   name = "baobab-3.10.1";
@@ -22,19 +22,14 @@ stdenv.mkDerivation rec {
                             hicolor_icon_theme gnome3.gnome_icon_theme_symbolic ];
 
   buildInputs = [ vala pkgconfig gtk3 glib libgtop intltool itstool libxml2
-                  gnome3.gsettings_desktop_schemas makeWrapper ];
-
-  installFlags = "gsettingsschemadir=\${out}/share/baobab/glib-2.0/schemas/";
-
-  postInstall = ''
-    wrapProgram "$out/bin/baobab" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/baobab:$XDG_ICON_DIRS"
-  '';
+                  gnome3.gsettings_desktop_schemas makeWrapper file ];
 
   preFixup = ''
     rm $out/share/icons/hicolor/icon-theme.cache
     rm $out/share/icons/HighContrast/icon-theme.cache
+    wrapProgram "$out/bin/baobab" \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

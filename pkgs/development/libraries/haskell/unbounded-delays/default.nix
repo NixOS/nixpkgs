@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "unbounded-delays";
-  version = "0.1.0.6";
-  sha256 = "0yykb9jqxhvbngvp2gbzb0ch2cmzdxx8km62dclyvr3xbv6hk1h7";
+  version = "0.1.0.7";
+  sha256 = "1nv50i90hgvcl51w7s8x1c1ylpzyrbvs2mz5zfn68lr1ix2lk879";
   meta = {
     homepage = "https://github.com/basvandijk/unbounded-delays";
     description = "Unbounded thread delays and timeouts";

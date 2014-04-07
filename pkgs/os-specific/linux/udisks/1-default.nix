@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
       substituteInPlace src/main.c --replace \
         "/sbin:/bin:/usr/sbin:/usr/bin" \
         "${utillinux}/bin:${mdadm}/sbin:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin"
+
+      # For some reason @libexec@ is set to 'lib/' when building.
+      # Passing --libexecdir in configureFlags didn't help.
+      substituteInPlace data/systemd/udisks.service.in \
+        --replace "@libexecdir@" "$out/libexec"
     '';
 
   buildInputs =

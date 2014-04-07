@@ -95,7 +95,9 @@
   ./services/databases/openldap.nix
   ./services/databases/postgresql.nix
   ./services/databases/virtuoso.nix
+  ./services/databases/monetdb.nix
   ./services/games/ghost-one.nix
+  ./services/games/minecraft-server.nix
   ./services/hardware/acpid.nix
   ./services/hardware/amd-hybrid-graphics.nix
   ./services/hardware/bluetooth.nix
@@ -131,6 +133,7 @@
   ./services/misc/nix-gc.nix
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/nixos-manual.nix
+  ./services/misc/rippled.nix
   ./services/misc/rogue.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
@@ -179,6 +182,7 @@
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/kippo.nix
   ./services/networking/minidlna.nix
+  ./services/networking/murmur.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
   ./services/networking/ngircd.nix
@@ -197,6 +201,7 @@
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
   ./services/networking/supybot.nix
+  ./services/networking/syncthing.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/tftpd.nix

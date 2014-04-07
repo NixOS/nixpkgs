@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
-, dnsmasq
+, dnsmasq, libnl
 }:
 
 let version = "1.2.2"; in
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig libxml2 gnutls devicemapper perl python readline lvm2
     utillinux udev libpciaccess gettext libtasn1 libgcrypt yajl makeWrapper
-    libcap_ng
+    libcap_ng libnl
   ];
 
   preConfigure = ''
@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-init-script=redhat"
-    "--without-macvtap"
+    "--with-macvtap"
+    "--with-virtualport"
   ];
 
   installFlags = [
@@ -50,11 +51,13 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://libvirt.org/;
+    repositories.git = git://libvirt.org/libvirt.git;
     description = ''
       A toolkit to interact with the virtualization capabilities of recent
       versions of Linux (and other OSes)
     '';
     license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ wizeman ];
     platforms = platforms.linux;
   };
 }

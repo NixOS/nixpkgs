@@ -163,7 +163,6 @@ python.stdenv.mkDerivation (attrs // {
     export PYTHONPATH="/tmp/$name/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
     python setup.py develop --prefix /tmp/$name
     ${postShellHook}
-    return
   '';
 
   meta = with lib.maintainers; {

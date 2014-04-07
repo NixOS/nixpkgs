@@ -7,11 +7,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "go-1.2";
+  name = "go-1.2.1";
 
   src = fetchurl {
-    url = http://go.googlecode.com/files/go1.2.src.tar.gz;
-    sha1 = "7dd2408d40471aeb30a9e0b502c6717b5bf383a5";
+    url = http://go.googlecode.com/files/go1.2.1.src.tar.gz;
+    sha1 = "6a4b9991eddd8039438438d6aa25126ab7e07f2f";
   };
 
   buildInputs = [ bison glibc bash makeWrapper ];
@@ -60,6 +60,7 @@ stdenv.mkDerivation {
           else if stdenv.system == "armv5tel-linux" then "arm"
           else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
+  GO386 = 387; # from Arch: don't assume sse2 on i686
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -79,7 +80,7 @@ stdenv.mkDerivation {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [ pierron viric ];
+    maintainers = with stdenv.lib.maintainers; [ pierron viric wizeman ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

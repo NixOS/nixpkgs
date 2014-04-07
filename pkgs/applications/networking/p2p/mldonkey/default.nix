@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ocaml, zlib, bzip2, ncurses, file, gd, libpng }:
 
 stdenv.mkDerivation (rec {
-  name = "mldonkey-3.1.3";
+  name = "mldonkey-3.1.5";
   
   src = fetchurl {
     url = "mirror://sourceforge/mldonkey/${name}.tar.bz2";
-    sha256 = "1qnr0qzliw4aynf2zhmm5hmrc9bd5vhdq3bi8n88j4nc86gry9bw";
+    sha256 = "1jqik6b09p27ckssppfiqpph7alxbgpnf9w1s0lalmi3qyyd9ybl";
   };
   
   meta = {

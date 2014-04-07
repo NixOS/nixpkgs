@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
     substituteInPlace ./Makefile --replace "/usr/include/security/pam_" "${pam}/include/security/pam_"
     substituteInPlace ./gradm_defs.h --replace "/sbin/grlearn"   "$out/sbin/grlearn"
     substituteInPlace ./gradm_defs.h --replace "/sbin/gradm"     "$out/sbin/gradm"
-    substituteInPlace ./gradm_defs.h --replace "/sbin/gradm_pam" "$out/sbin/gradm_pam"
   '';
 
   postInstall = ''
@@ -25,6 +24,8 @@ stdenv.mkDerivation rec {
     KERNEL=="grsec",          MODE="0622"
     LABEL="permissions_end"
     EOF
+
+    echo "inherit-learn /nix/store" >> $out/etc/grsec/learn_config
   '';
 
   makeFlags =

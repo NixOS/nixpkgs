@@ -4,11 +4,10 @@
 
 cabal.mkDerivation (self: {
   pname = "wxcore";
-  version = "0.90.1.0";
-  sha256 = "0pyh5xc8f3rlyn66dawlijwym8nwac12qwh96hfkna0pbqg0995c";
+  version = "0.90.1.1";
+  sha256 = "1ma6vjf87b493vz3sj6hxzifqixk62n6b5gvixpfzfig1lysddgp";
   buildDepends = [ filepath parsec stm time wxc wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
-  preConfigure = "find . -type f -exec touch {} +";
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell core";

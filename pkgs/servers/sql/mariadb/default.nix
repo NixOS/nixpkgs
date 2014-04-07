@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, ncurses, openssl, bison, boost, libxml2, libaio, judy, libevent, groff }:
 
 stdenv.mkDerivation rec {
-  name = "mariadb-10.0.8";
+  name = "mariadb-10.0.10";
 
   src = fetchurl {
-    url = "http://tweedo.com/mirror/mariadb/${name}/kvm-tarbake-jaunty-x86/${name}.tar.gz";
-    md5 = "2b925d0beae8101f1f3f98102da91bf7";
+    url = "https://fossies.org/linux/misc/${name}.tar.gz";
+    md5 = "14ce22b8197d4eae88d237776d47220f";
   };
 
   buildInputs = [ cmake ncurses openssl bison boost libxml2 libaio judy libevent groff ];

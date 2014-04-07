@@ -299,6 +299,13 @@ executed and in what order:
   </varlistentry>
 
   <varlistentry>
+    <term><varname>preFixupPhases</varname></term>
+    <listitem>
+      <para>Additional phases executed just before the fixup phase.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>preDistPhases</varname></term>
     <listitem>
       <para>Additional phases executed just before the distribution phase.</para>

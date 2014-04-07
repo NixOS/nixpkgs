@@ -1,11 +1,4 @@
-commit 2c910b6f186616cac8134e2a2cbe239c8351ed99
-Author: Vladimír Čunát <vcunat@gmail.com>
-Date:   Mon May 13 11:34:34 2013 +0200
-
-    117-static-gallium.patch
-    
-    Conflicts (moving of VISIBILITY_ confused the merge):
-    	src/gallium/auxiliary/Makefile.am
+117-static-gallium.patch from Ubuntu Trusty
 
 diff --git a/configure.ac b/configure.ac
 index b9fcb0b..be89843 100644

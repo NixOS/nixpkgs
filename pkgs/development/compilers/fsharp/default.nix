@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mono pkgconfig autoconf automake which ];
   configurePhase = ''
-    substituteInPlace ./autogen.sh "/usr/bin/env sh" "/bin/sh"
+    substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "/bin/sh"
     ./autogen.sh --prefix $out
   '';
 

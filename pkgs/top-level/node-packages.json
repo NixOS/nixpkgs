@@ -118,4 +118,7 @@
 , "fetch-bower"
 , { "titanium": "3.2.1" }
 , "gh"
+, "deepmerge"
+, "slasp"
+, "react"
 ]

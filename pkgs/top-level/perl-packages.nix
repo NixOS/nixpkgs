@@ -200,6 +200,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ArchiveCpio = buildPerlPackage {
+    name = "Archive-Cpio-0.09";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PI/PIXEL/Archive-Cpio-0.09.tar.gz;
+      sha256 = "1cf8k5zjykdbc1mn8lixlkij6jklwn6divzyq2grycj3rpd36g5c";
+    };
+  };
+
   ArchiveZip = buildPerlPackage {
     name = "Archive-Zip-1.16";
     src = fetchurl {
@@ -3712,10 +3720,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   GD = buildPerlPackage rec {
-    name = "GD-2.50";
+    name = "GD-2.53";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LD/LDS/${name}.tar.gz";
-      sha256 = "1qm8l0z2568byw4zmaqf954y3rm8nzx1nnz6cxnxd3d4cz894lvd";
+      sha256 = "1ampz82kf0ixybncfgpvq2bp9nq5sjsmmw4c8srsv0g5jpz02pfh";
     };
 
     buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype
@@ -4069,10 +4077,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTMLTiny = buildPerlPackage rec {
-    name = "HTML-Tiny-1.03";
+    name = "HTML-Tiny-1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDYA/${name}.tar.gz";
-      sha256 = "1nc9vr0z699jwv8jaxxpkfhspiv7glhdp500hqyzdm2jxfw8azrg";
+      sha256 = "18zxg7z51f5daidnwl9vxsrs3lz0y6n5ddqhpb748bjyk3awkkfp";
     };
   };
 
@@ -4373,10 +4381,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOSocketInet6 = buildPerlPackage rec {
-    name = "IO-Socket-INET6-2.71";
+    name = "IO-Socket-INET6-2.72";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "041iv3fdskvk7in73bf7253ah9aiqwxzi4zxfiwkn0jlb7mnqjrl";
+      sha256 = "1fqypz6qa5rw2d5y2zq7f49frwra0aln13nhq5gi514j2zx21q45";
     };
     propagatedBuildInputs = [Socket6];
     doCheck = false;
@@ -8055,10 +8063,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TermReadLineGnu = buildPerlPackage rec {
-    name = "Term-ReadLine-Gnu-1.20";
+    name = "Term-ReadLine-Gnu-1.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAYASHI/${name}.tar.gz";
-      sha256 = "00fvkqbnpmyld59jv2vbfw1szr5d0xxmbgl59gr7qijp9c497ni5";
+      sha256 = "0dp18pgn8vl4dh6rgzcp1kzk4j6wjrrxd6sfcrrywy7jg4b7ikfc";
     };
     buildInputs = [ pkgs.readline pkgs.ncurses ];
     NIX_CFLAGS_LINK = "-lreadline";
@@ -8634,10 +8642,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestWarn = buildPerlPackage {
-    name = "Test-Warn-0.24";
+    name = "Test-Warn-0.30";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHORNY/Test-Warn-0.24.tar.gz;
-      sha256 = "12r1mcwrm6cgc3ppgawwv265vmrighj4bl6xc5c41f4c2l6bdxml";
+      url = mirror://cpan/authors/id/C/CH/CHORNY/Test-Warn-0.30.tar.gz;
+      sha256 = "0haf2ii7br5z0psmkvlvmx2z2q9qz1c70gx0969r378qjidmb5w1";
     };
     propagatedBuildInputs = [ SubUplevel TreeDAGNode ];
     meta = {

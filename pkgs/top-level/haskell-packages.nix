@@ -143,7 +143,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     inherit (self) cabal ghc;
     async        = self.async_2_0_1_5;
     attoparsec   = self.attoparsec_0_11_2_1;
-    caseInsensitive = self.caseInsensitive_1_1_0_3;
+    caseInsensitive = self.caseInsensitive_1_2_0_0;
     cgi          = self.cgi_3001_1_8_5;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_5_1_0;
@@ -153,7 +153,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     html         = self.html_1_0_1_2;
     HTTP         = self.HTTP_4000_2_11;
     HUnit        = self.HUnit_1_2_5_2;
-    mtl          = self.mtl_2_1_2;
+    mtl          = self.mtl_2_1_3_1;
     network      = self.network_2_4_2_2;
     OpenGL       = self.OpenGL_2_9_1_0;
     OpenGLRaw    = self.OpenGLRaw_1_4_0_0;
@@ -165,7 +165,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     regexCompat  = self.regexCompat_0_95_1;
     regexPosix   = self.regexPosix_0_95_2;
     split        = self.split_0_2_2;
-    stm          = self.stm_2_4_2;
+    stm          = self.stm_2_4_3;
     syb          = self.syb_0_4_1;
     text         = self.text_1_1_0_1;
     transformers = self.transformers_0_3_0_0;   # this has become a core package in GHC 7.7
@@ -175,7 +175,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     zlib         = self.zlib_0_5_4_1;
     cabalInstall = self.cabalInstall_1_18_0_3;
     alex         = self.alex_3_1_3;
-    haddock      = self.haddock_2_13_2_1;
+    haddock      = self.haddock_2_14_1;
     happy        = self.happy_1_19_3;
     primitive    = self.primitive_0_5_2_1;      # semi-official, but specified
   };
@@ -190,7 +190,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     GLUT         = self.GLUT_2_4_0_0;
     GLURaw       = self.GLURaw_1_3_0_0;
     haskellSrc   = self.haskellSrc_1_0_1_5;
-    hashable     = self.hashable_1_1_2_5;
+    hashable     = self.hashable_1_2_1_0;       # not HP (1.1.2.5), but fixes many builds
     html         = self.html_1_0_1_2;
     HTTP         = self.HTTP_4000_2_8;
     HUnit        = self.HUnit_1_2_5_2;
@@ -674,9 +674,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
 
-  bmp_1_2_2_1 = callPackage ../development/libraries/haskell/bmp/1.2.2.1.nix {};
-  bmp_1_2_5_2 = callPackage ../development/libraries/haskell/bmp/1.2.5.2.nix {};
-  bmp = self.bmp_1_2_2_1;       # the latest version needs a very recent 'binary' library
+  bmp = callPackage ../development/libraries/haskell/bmp {
+    binary = self.binary_0_7_1_0;
+  };
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
@@ -729,7 +729,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   caseInsensitive_1_0_0_1 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.1.nix {};
   caseInsensitive_1_1_0_3 = callPackage ../development/libraries/haskell/case-insensitive/1.1.0.3.nix {};
-  caseInsensitive = self.caseInsensitive_1_1_0_3;
+  caseInsensitive_1_2_0_0 = callPackage ../development/libraries/haskell/case-insensitive/1.2.0.0.nix {};
+  caseInsensitive = self.caseInsensitive_1_2_0_0;
 
   cautiousFile = callPackage ../development/libraries/haskell/cautious-file {};
 
@@ -755,6 +756,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   ChartGtk = callPackage ../development/libraries/haskell/Chart-gtk {};
 
   ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
+
+  cheapskate = callPackage ../development/libraries/haskell/cheapskate {};
 
   checkers = callPackage ../development/libraries/haskell/checkers {};
 
@@ -815,6 +818,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   conduit = callPackage ../development/libraries/haskell/conduit {};
 
   conduitCombinators = callPackage ../development/libraries/haskell/conduit-combinators {};
+
+  conduitExtra = callPackage ../development/libraries/haskell/conduit-extra {};
 
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
 
@@ -907,6 +912,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   dataDefaultInstancesOldLocale = callPackage ../development/libraries/haskell/data-default-instances-old-locale {};
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
+
+  dataHash = callPackage ../development/libraries/haskell/data-hash {};
 
   dataInttrie = callPackage ../development/libraries/haskell/data-inttrie {};
 
@@ -1073,12 +1080,17 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   executablePath = callPackage ../development/libraries/haskell/executable-path {};
 
   fay = callPackage ../development/libraries/haskell/fay {};
+
   fayBase = callPackage ../development/libraries/haskell/fay-base {};
+
+  fdoNotify = callPackage ../development/libraries/haskell/fdo-notify {};
 
   filepath_1_3_0_0 = callPackage ../development/libraries/haskell/filepath {};
   filepath = null; # a core package in recent GHCs
 
   fileLocation = callPackage ../development/libraries/haskell/file-location {};
+
+  ftphs = callPackage ../development/libraries/haskell/ftphs {};
 
   extensibleEffects = callPackage ../development/libraries/haskell/extensible-effects {};
 
@@ -1176,6 +1188,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   };
 
   gio = callPackage ../development/libraries/haskell/gio {};
+
+  gitDate = callPackage ../development/libraries/haskell/git-date {};
 
   github = callPackage ../development/libraries/haskell/github {};
 
@@ -1452,8 +1466,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   hsloggerTemplate = callPackage ../development/libraries/haskell/hslogger-template {};
 
   hspec = callPackage ../development/libraries/haskell/hspec {
-    QuickCheck = self.QuickCheck_2_7_1;
-    quickcheckIo = self.quickcheckIo.override { QuickCheck = self.QuickCheck_2_7_1; };
+    QuickCheck = self.QuickCheck_2_7_3;
+    quickcheckIo = self.quickcheckIo.override { QuickCheck = self.QuickCheck_2_7_3; };
   };
 
   hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
@@ -1461,8 +1475,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   hspecExpectationsLens = callPackage ../development/libraries/haskell/hspec-expectations-lens {};
 
   hspecMeta = callPackage ../development/libraries/haskell/hspec-meta {
-    QuickCheck = self.QuickCheck_2_7_1;
-    quickcheckIo = self.quickcheckIo.override { QuickCheck = self.QuickCheck_2_7_1; };
+    QuickCheck = self.QuickCheck_2_7_3;
+    quickcheckIo = self.quickcheckIo.override { QuickCheck = self.QuickCheck_2_7_3; };
   };
 
   hstatsd = callPackage ../development/libraries/haskell/hstatsd {};
@@ -1718,6 +1732,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   monadcryptorandom = callPackage ../development/libraries/haskell/monadcryptorandom {};
 
+  monadloc = callPackage ../development/libraries/haskell/monadloc {};
+
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
 
   monadLogger = callPackage ../development/libraries/haskell/monad-logger {};
@@ -1757,7 +1773,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   mtl_2_1_2 = callPackage ../development/libraries/haskell/mtl/2.1.2.nix {
     transformers = self.transformers_0_3_0_0;
   };
-  mtl = self.mtl_2_1_2;
+  mtl_2_1_3_1 = callPackage ../development/libraries/haskell/mtl/2.1.3.1.nix {
+    transformers = self.transformers_0_3_0_0;
+  };
+  mtl = self.mtl_2_1_3_1;
 
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
 
@@ -1939,6 +1958,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   persistent = callPackage ../development/libraries/haskell/persistent {};
 
+  persistentMysql = callPackage ../development/libraries/haskell/persistent-mysql {};
+
   persistentPostgresql = callPackage ../development/libraries/haskell/persistent-postgresql {};
 
   persistentSqlite = callPackage ../development/libraries/haskell/persistent-sqlite {};
@@ -2058,7 +2079,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   QuickCheck_2_4_2 = callPackage ../development/libraries/haskell/QuickCheck/2.4.2.nix {};
   QuickCheck_2_5_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.5.1.1.nix {};
   QuickCheck_2_6 = callPackage ../development/libraries/haskell/QuickCheck/2.6.nix {};
-  QuickCheck_2_7_1 = callPackage ../development/libraries/haskell/QuickCheck/2.7.1.nix {};
+  QuickCheck_2_7_3 = callPackage ../development/libraries/haskell/QuickCheck/2.7.3.nix {};
   QuickCheck1 = self.QuickCheck_1_2_0_1;
   QuickCheck2 = self.QuickCheck_2_6;
   QuickCheck  = self.QuickCheck2;
@@ -2066,7 +2087,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   quickcheckAssertions = callPackage ../development/libraries/haskell/quickcheck-assertions {};
 
   quickcheckInstances = callPackage ../development/libraries/haskell/quickcheck-instances {
-    QuickCheck = self.QuickCheck_2_7_1;
+    QuickCheck = self.QuickCheck_2_7_3;
   };
 
   quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {};
@@ -2249,6 +2270,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   StrafunskiStrategyLib = callPackage ../development/libraries/haskell/Strafunski-StrategyLib {};
 
+  streamingCommons = callPackage ../development/libraries/haskell/streaming-commons {};
+
   streamproc = callPackage ../development/libraries/haskell/streamproc {};
 
   strict = callPackage ../development/libraries/haskell/strict {};
@@ -2283,6 +2306,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   sybWithClass = callPackage ../development/libraries/haskell/syb/syb-with-class.nix {};
 
   sybWithClassInstancesText = callPackage ../development/libraries/haskell/syb/syb-with-class-instances-text.nix {};
+
+  syntactic = callPackage ../development/libraries/haskell/syntactic {};
 
   syz = callPackage ../development/libraries/haskell/syz {};
 
@@ -2336,7 +2361,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   stm_2_3 = callPackage ../development/libraries/haskell/stm/2.3.nix {};
   stm_2_4 = callPackage ../development/libraries/haskell/stm/2.4.nix {};
   stm_2_4_2 = callPackage ../development/libraries/haskell/stm/2.4.2.nix {};
-  stm = self.stm_2_4_2;
+  stm_2_4_3 = callPackage ../development/libraries/haskell/stm/2.4.3.nix {};
+  stm = self.stm_2_4_3;
 
   stmChans = callPackage ../development/libraries/haskell/stm-chans {};
 
@@ -2391,7 +2417,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   tastyHunit = callPackage ../development/libraries/haskell/tasty-hunit {};
 
   tastyQuickcheck = callPackage ../development/libraries/haskell/tasty-quickcheck {
-    QuickCheck = self.QuickCheck_2_7_1;
+    QuickCheck = self.QuickCheck_2_7_3;
   };
 
   tastyRerun = callPackage ../development/libraries/haskell/tasty-rerun {};
@@ -2481,8 +2507,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   timeCompat = callPackage ../development/libraries/haskell/time-compat {};
 
   tls_1_1_5 = callPackage ../development/libraries/haskell/tls/1.1.5.nix {};
-  tls_1_2_3 = callPackage ../development/libraries/haskell/tls/1.2.3.nix {};
-  tls = self.tls_1_2_3;
+  tls_1_2_6 = callPackage ../development/libraries/haskell/tls/1.2.6.nix {};
+  tls = self.tls_1_2_6;
 
   tlsExtra = callPackage ../development/libraries/haskell/tls-extra {
     tls = self.tls_1_1_5;
@@ -2501,9 +2527,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   traverseWithClass = callPackage ../development/libraries/haskell/traverse-with-class {};
 
+  treeView = callPackage ../development/libraries/haskell/tree-view {};
+
   trifecta = callPackage ../development/libraries/haskell/trifecta {};
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
+
+  twitterConduit = callPackage ../development/libraries/haskell/twitter-conduit {};
+
+  twitterTypes = callPackage ../development/libraries/haskell/twitter-types {};
 
   TypeCompose = callPackage ../development/libraries/haskell/TypeCompose {};
 
@@ -2562,6 +2594,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   vacuum = callPackage ../development/libraries/haskell/vacuum {};
 
   vacuumCairo = callPackage ../development/libraries/haskell/vacuum-cairo {};
+
+  vacuumGraphviz = callPackage ../development/libraries/haskell/vacuum-graphviz {};
 
   vado = callPackage ../development/libraries/haskell/vado {};
 
@@ -2810,6 +2844,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   BNFCMeta = callPackage ../development/tools/haskell/BNFC-meta {};
 
+  cake3 = callPackage ../development/tools/haskell/cake3 {};
+
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
   Ebnf2ps = callPackage ../development/tools/parsing/Ebnf2ps {};
@@ -2822,8 +2858,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   haddock_2_11_0 = callPackage ../development/tools/documentation/haddock/2.11.0.nix {};
   haddock_2_12_0 = callPackage ../development/tools/documentation/haddock/2.12.0.nix {};
   haddock_2_13_2 = callPackage ../development/tools/documentation/haddock/2.13.2.nix {};
-  haddock_2_13_2_1 = callPackage ../development/tools/documentation/haddock/2.13.2.1.nix {};
-  haddock = self.haddock_2_13_2_1;
+  haddock_2_14_1 = callPackage ../development/tools/documentation/haddock/2.14.1.nix {};
+  haddock = self.haddock_2_14_1;
 
   happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
   happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};
@@ -2877,6 +2913,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   nc-indicators = callPackage ../applications/misc/nc-indicators {};
 
+  sloane = callPackage ../applications/science/math/sloane {};
+
   taffybar = callPackage ../applications/misc/taffybar {};
 
   yi = callPackage ../applications/editors/yi/yi.nix {};
@@ -2897,21 +2935,21 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   # Build a cabal package given a local .cabal file
   buildLocalCabal = src: name: let
-    cabalExpr = pkgs.stdenv.mkDerivation {
+    cabalExpr = pkgs.stdenv.mkDerivation ({
       name = "${name}.nix";
-
-      LANG = "en_US.UTF-8";
-
-      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
 
       buildCommand = ''
       ${self.cabal2nix}/bin/cabal2nix ${src + "/${name}.cabal"} --sha256=FILTERME \
           | grep -v FILTERME | sed \
             -e 's/licenses.proprietary/licenses.unfree/' \
             -e 's/{ cabal/{ cabal, src/' \
-            -e 's/pname = \([^\n]*\)/pname = \1\n  inherit src;/'  > $out
+            -e 's/pname = \([^\n]*\)/pname = \1\n  inherit src;\n  jailbreak = true;/'  > $out
       '';
-    };
+
+    } // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
+      LANG = "en_US.UTF-8";
+      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+    });
   in callPackage cabalExpr { inherit src; };
 
   cabalDev = callPackage ../development/tools/haskell/cabal-dev {};
@@ -2932,7 +2970,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cabalInstall = self.cabalInstall_1_18_0_3;
 
   gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {
-    hS3 = self.hS3.override { Crypto = self.Crypto.override { QuickCheck = self.QuickCheck_2_7_1; }; };
+    hS3 = self.hS3.override { Crypto = self.Crypto.override { QuickCheck = self.QuickCheck_2_7_3; }; };
   };
 
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};

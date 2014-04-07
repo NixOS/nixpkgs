@@ -4,7 +4,9 @@
   /* Add your name and email address here.  Keep the list
      alphabetically sorted.  */
 
+  _1126 = "Christian Lask <mail@elfsechsundzwanzig.de>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
+  akc = "Anders Claesson <akc@akc.is>";
   algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
   amiddelk = "Arie Middelkoop <amiddelk@gmail.com>";
@@ -26,6 +28,7 @@
   coroa = "Jonas Hörsch <jonas@chaoflow.net>";
   edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
   eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
+  emery = "Emery Hemingawy <emery@vfemail.net>";
   ertes = "Ertugrul Söylemez <es@ertes.de>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
   garbas = "Rok Garbas <rok@garbas.si>";
@@ -59,6 +62,7 @@
   pSub = "Pascal Wittmann <mail@pascal-wittmann.de>";
   qknight = "Joachim Schiele <js@lastlog.de>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
+  redbaron = "Maxim Ivanov <ivanov.maxim@gmail.com>";
   rickynils = "Rickard Nilsson <rickynils@gmail.com>";
   rob = "Rob Vermaas <rob.vermaas@gmail.com>";
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "data-lens-template";
-  version = "2.1.7";
-  sha256 = "108xvk5glsw016vdvjb1p3a9zh7rgbkjv5xashs1hj25f8k4cw49";
+  version = "2.1.8";
+  sha256 = "0w8x5zn3d98z0q74bqfgkb9s0ca9hd1xc53gjl759s77wm4iwa0q";
   buildDepends = [ dataLens ];
   meta = {
     homepage = "http://github.com/roconnor/data-lens-template/";

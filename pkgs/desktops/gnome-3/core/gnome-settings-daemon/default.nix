@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
       polkit geocode_glib geoclue2 librsvg xf86_input_wacom udev libwacom libxslt
       libtool docbook_xsl docbook_xsl_ns makeWrapper gnome_themes_standard ];
 
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/libexec/gnome-settings-daemon-localeexec" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix PATH : "${glib}/bin" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share"
+      --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

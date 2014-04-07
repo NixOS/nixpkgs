@@ -6,14 +6,14 @@
 }:
 
 let pname = "liferea";
-    version = "1.10.7";
+    version = "1.10.8";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "17kvg44brdz99firr5h5qx8icvadlr7p1cz3xr3437sf5rhj25wh";
+    sha256 = "1d3icma90mj0nai20pfhxp4k4l33iwkkkcddb9vg5hi4yq4wpmwx";
   };
 
   buildInputs = with gst_all_1; [
@@ -28,16 +28,15 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    rm $out/share/icons/hicolor/icon-theme.cache'';
+    rm $out/share/icons/hicolor/icon-theme.cache
 
-  postInstall  = ''
     for f in "$out"/bin/*; do
       wrapProgram "$f" \
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
         --prefix LD_LIBRARY_PATH : "${gnome3.libgnome_keyring}/lib" \
         --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
         --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules:${glib_networking}/lib/gio/modules" \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gnome_icon_theme}/share:${gnome3.gsettings_desktop_schemas}/share:${gnome3.gtk}/share:$out/share"
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gnome_icon_theme}/share:${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
     done
   '';
 

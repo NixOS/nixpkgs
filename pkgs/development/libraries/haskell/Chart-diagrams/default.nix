@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     diagramsPostscript diagramsSvg lens mtl operational SVGFonts text
     time
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/timbod7/haskell-chart/wiki";
     description = "Diagrams backend for Charts";

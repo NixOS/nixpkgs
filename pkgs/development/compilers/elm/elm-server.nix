@@ -1,21 +1,20 @@
-{ cabal, blazeHtml, deepseq, Elm, filepath, happstackServer, HTTP
-, mtl, parsec, transformers
+{ cabal, cmdargs, Elm, filepath, mtl, snapCore, snapServer
+, unorderedContainers
 }:
 
 cabal.mkDerivation (self: {
   pname = "elm-server";
-  version = "0.10.1";
-  sha256 = "0rh01jm9h9zbslnzy6xg7bin76gdmypannh3ly40azplw9xmf2dn";
+  version = "0.11";
+  sha256 = "1977fa03n2m2apxhbzpcn6b5y5gf7ksnpigibi8djlpp76rliaz2";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    blazeHtml deepseq Elm filepath happstackServer HTTP mtl parsec
-    transformers
+    cmdargs Elm filepath mtl snapCore snapServer unorderedContainers
   ];
   jailbreak = true;
   meta = {
     homepage = "http://elm-lang.org";
-    description = "The Elm language server";
+    description = "Server for developing Elm projects";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };

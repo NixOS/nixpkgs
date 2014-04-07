@@ -167,7 +167,11 @@ with stdenv.lib;
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   DEVKMEM n # Disable /dev/kmem
-  CC_STACKPROTECTOR y # Detect buffer overflows on the stack
+  ${if versionOlder version "3.14" then ''
+    CC_STACKPROTECTOR y # Detect buffer overflows on the stack
+  '' else ''
+    CC_STACKPROTECTOR_REGULAR y
+  ''}
   ${optionalString (versionAtLeast version "3.12") ''
     USER_NS y # Support for user namespaces
   ''}

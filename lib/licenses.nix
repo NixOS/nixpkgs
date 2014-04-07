@@ -248,4 +248,10 @@
     fullName = "Zope Public License 2.1";
     url = "http://old.zope.org/Resources/License/ZPL-2.1";
   };
+
+  sleepycat = {
+    shortName = "Sleepycat";
+    fullName  = "Sleepycat Public License";
+    url       = "https://en.wikipedia.org/wiki/Sleepycat_License";
+  };
 }

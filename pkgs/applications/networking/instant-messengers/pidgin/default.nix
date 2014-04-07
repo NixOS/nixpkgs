@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     homepage = http://pidgin.im;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    maintainers = [ maintainers.vcunat ];
   };
 }

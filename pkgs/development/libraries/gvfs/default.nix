@@ -2,7 +2,7 @@
 , glib, dbus, udev, udisks2, libgcrypt
 , libgphoto2, avahi, libarchive, fuse, libcdio
 , libxml2, libxslt, docbook_xsl
-, lightWeight ? true, gnome, samba, makeWrapper }:
+, lightWeight ? true, gnome, samba, libgnome_keyring, gconf, makeWrapper }:
 
 let
   ver_maj = "1.18";
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # ToDo: one probably should specify schemas for samba and others here
-  fixupPhase = ''
-    wrapProgram $out/libexec/gvfsd --set GSETTINGS_SCHEMA_DIR "$out/share/glib-2.0/schemas"
+  preFixup = ''
+    wrapProgram $out/libexec/gvfsd --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = {

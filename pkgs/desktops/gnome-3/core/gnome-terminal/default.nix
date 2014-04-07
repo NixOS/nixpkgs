@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which libuuid libxml2 desktop_file_utils ];
 
-  postInstall = ''
-    wrapProgram "$out/libexec/gnome-terminal-server" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gsettings_desktop_schemas}/share:$out/share"
+  preFixup = ''
+    for f in "$out/libexec/gnome-terminal-migration" "$out/libexec/gnome-terminal-server"; do
+      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
+    done
   '';
-
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
