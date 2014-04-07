@@ -723,10 +723,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystManual = buildPerlPackage {
-    name = "Catalyst-Manual-5.9006";
+    name = "Catalyst-Manual-5.9007";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HK/HKCLARK/Catalyst-Manual-5.9006.tar.gz;
-      sha256 = "0cl9nqg5jrqcf2h3pgk6q8408czf5s0k0xh3ra884c9cnx84mr95";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Catalyst-Manual-5.9007.tar.gz;
+      sha256 = "140526pzzqc1vyxkk9fxvp9ds3kk2rncf8nf7iz0adlr219pkg3j";
     };
     meta = {
       description = "The Catalyst developer's manual";
