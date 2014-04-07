@@ -331,10 +331,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   BHooksEndOfScope = buildPerlPackage {
-    name = "B-Hooks-EndOfScope-0.12";
+    name = "B-Hooks-EndOfScope-0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/B-Hooks-EndOfScope-0.12.tar.gz;
-      sha256 = "1gagn8b9zhbwk4f4cllrvir1mspvq0ladsy0pfkwl9w85q1843lj";
+      url = mirror://cpan/authors/id/E/ET/ETHER/B-Hooks-EndOfScope-0.13.tar.gz;
+      sha256 = "1f5d0lbkwf23dfjn60g6fynmjhy5rxdyxcpdfb07srm73qpg2zpi";
     };
     propagatedBuildInputs = [ ModuleImplementation ModuleRuntime SubExporterProgressive ];
     meta = {
