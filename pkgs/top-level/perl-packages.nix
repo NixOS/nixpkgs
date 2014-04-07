@@ -4772,10 +4772,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LocaleMaketextSimple = buildPerlPackage {
-    name = "Locale-Maketext-Simple-0.18";
+    name = "Locale-Maketext-Simple-0.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AU/AUDREYT/Locale-Maketext-Simple-0.18.tar.gz;
-      sha256 = "14kx7vkxyfqndy90rzavrjp2346aidyc7x5dzzdj293qf8s4q6ig";
+      url = mirror://cpan/authors/id/J/JE/JESSE/Locale-Maketext-Simple-0.21.tar.gz;
+      sha256 = "1ad9vh45j8c32nzkbjipinawyg1pnjckwlhsjqcqs47vyi8zy2dh";
     };
   };
 
