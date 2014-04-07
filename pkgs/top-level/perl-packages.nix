@@ -1749,10 +1749,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptUnixCryptXS = buildPerlPackage rec {
-    name = "Crypt-UnixCrypt_XS-0.09";
+    name = "Crypt-UnixCrypt_XS-0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BORISZ/${name}.tar.gz";
-      sha256 = "527c32b8b6eb50d52b081ceae4be2d748e718e40ea85940da59a3adeb3a33156";
+      sha256 = "1d3xamq2mm3v2bfb1ay66crljm0bigfbhay1fqglcsrb75b7ls7r";
     };
   };
 
