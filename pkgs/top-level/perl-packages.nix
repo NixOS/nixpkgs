@@ -9558,10 +9558,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLSimple = buildPerlPackage {
-    name = "XML-Simple-2.18";
+    name = "XML-Simple-2.20";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-Simple-2.18.tar.gz;
-      sha256 = "09k8fvc9m5nd5rqq00rwm3m0wx7iwd6vx0vc947y58ydi30nfjd5";
+      url = mirror://cpan/authors/id/G/GR/GRANTM/XML-Simple-2.20.tar.gz;
+      sha256 = "0jj3jiray1l4pi9wkjcpxjc3v431whdwx5aqnhgdm4i7h3817zsw";
     };
     propagatedBuildInputs = [XMLParser];
   };
