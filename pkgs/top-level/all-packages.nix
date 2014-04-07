@@ -4302,8 +4302,6 @@ let
 
   gav = callPackage ../games/gav { };
 
-  gsb = callPackage ../games/gsb { };
-
   gdome2 = callPackage ../development/libraries/gdome2 {
     inherit (gnome) gtkdoc;
   };
