@@ -5509,10 +5509,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXAliases = buildPerlPackage rec {
-    name = "MooseX-Aliases-0.10";
+    name = "MooseX-Aliases-0.11";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
-      sha256 = "1n3z06x6d7sl2can7gn1q4qpclg6sjl6i8fd9y3yipmaxbk97clz";
+      url = "mirror://cpan/authors/id/D/DO/DOY/${name}.tar.gz";
+      sha256 = "0j07zqczjfmng3md6nkha7560i786d0cp3gdmrx49hr64jbhz1f4";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ Moose ];
