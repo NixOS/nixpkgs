@@ -4232,10 +4232,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTTPParserXS = buildPerlPackage rec {
-    name = "HTTP-Parser-XS-0.14";
+    name = "HTTP-Parser-XS-0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZUHO/${name}.tar.gz";
-      sha256 = "06srbjc380kvvj76r8n5c2y282j5zfgn0s0zmb9h3shwrynfqj05";
+      sha256 = "1sp9vllf012paslmn11b7z7fbk3hhkcp7gj59yp6qzh11xzpxlai";
     };
     buildInputs = [ TestMore ];
   };
