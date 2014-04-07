@@ -5360,10 +5360,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModulePluggable = buildPerlPackage {
-    name = "Module-Pluggable-4.8";
+    name = "Module-Pluggable-5.1";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SI/SIMONW/Module-Pluggable-4.8.tar.gz;
-      sha256 = "0gc2sanga3207l3dnmb05isc7m87l1j94v9ll3z4sbb3vs49gdd2";
+      url = mirror://cpan/authors/id/S/SI/SIMONW/Module-Pluggable-5.1.tar.gz;
+      sha256 = "0vwi433pk7n1ia5wy67j3545jvmjf1hb4jwcvzrz25mv8d03bp72";
     };
     patches = [
       # !!! merge this patch into Perl itself (which contains Module::Pluggable as well)
