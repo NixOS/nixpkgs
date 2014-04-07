@@ -7026,10 +7026,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ProbePerl = buildPerlPackage rec {
-    name = "Probe-Perl-0.01";
+    name = "Probe-Perl-0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KW/KWILLIAMS/${name}.tar.gz";
-      sha256 = "9b7d211139e42b2a2952c9a4b9f55ac12705e256f4a0acd4ac6ff665aeaddd87";
+      sha256 = "0c9wiaz0mqqknafr4jdr0g2gdzxnn539182z0icqaqvp5qgd5r6r";
     };
   };
 
