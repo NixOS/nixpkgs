@@ -38,6 +38,7 @@ with import ../lib/testing.nix { inherit system minimal; };
   simple = makeTest (import ./simple.nix);
   #subversion = makeTest (import ./subversion.nix);
   tomcat = makeTest (import ./tomcat.nix);
+  udisks = makeTest (import ./udisks.nix);
   #trac = makeTest (import ./trac.nix);
   xfce = makeTest (import ./xfce.nix);
   runInMachine.test = import ./run-in-machine.nix { inherit system; };

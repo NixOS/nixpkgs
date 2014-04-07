@@ -60,6 +60,7 @@ in rec {
         (all nixos.tests.openssh)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
+        (all nixos.tests.udisks)
         (all nixos.tests.xfce)
 
         nixpkgs.tarball
