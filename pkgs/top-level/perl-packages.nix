@@ -2944,10 +2944,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EmailAddress = buildPerlPackage {
-    name = "Email-Address-1.897";
+    name = "Email-Address-1.901";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Address-1.897.tar.gz;
-      sha256 = "17v5jvwhkd5clyihwsldnh4k7vpmaisn064s3mkxlr9dnz7nd10r";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Address-1.901.tar.gz;
+      sha256 = "00svsmv2hk35ybpd7jxcsn7k54i0q9ph5lf8ksv9nkh1abraprkz";
     };
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
