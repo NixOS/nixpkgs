@@ -5863,10 +5863,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXTraitsPluggable = buildPerlPackage rec {
-    name = "MooseX-Traits-Pluggable-0.10";
+    name = "MooseX-Traits-Pluggable-0.12";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
-      sha256 = "0gv79bsnacrzwpac3dll64zj40qcsbp4kdk8yr9z5bwim7nkvnv3";
+      url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
+      sha256 = "1jjqmcidy4kdgp5yffqqwxrsab62mbhbpvnzdy1rpwnb1savg5mb";
     };
     buildInputs =[ TestException ];
     propagatedBuildInputs =
