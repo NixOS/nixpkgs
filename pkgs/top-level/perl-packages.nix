@@ -3818,10 +3818,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Graph = buildPerlPackage rec {
-    name = "Graph-0.94";
+    name = "Graph-0.96";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHI/${name}.tar.gz";
-      sha256 = "1lyfl9s4mkhahnpxk2z5v6j750jqb4sls56b9rnkl5lni9ms7xgn";
+      sha256 = "09wpiz7v0gv07zb7h8gwgjrwj16cdycs60d08cjlyj1s926zlbl3";
     };
 
     buildInputs = [ TestPod TestPodCoverage ];
