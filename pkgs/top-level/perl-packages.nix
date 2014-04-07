@@ -1810,10 +1810,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataCompare = buildPerlPackage rec {
-    name = "Data-Compare-1.22";
+    name = "Data-Compare-1.2102";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Data/${name}.tar.gz";
-      sha256 = "1bz8qasp3ndiprxq2l0llbc0xbnjq11lz0l1lfzxiap7v1y2r3yf";
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/${name}.tar.gz";
+      sha256 = "0v1997gnq3gpcr7f64jmyay2l60s5z6gsiy5hbpn1p2l2hrfnwlj";
     };
     propagatedBuildInputs = [ FileFindRule ];
   };
