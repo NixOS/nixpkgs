@@ -7812,10 +7812,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Switch = buildPerlPackage rec {
-    name = "Switch-2.16";
+    name = "Switch-2.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RG/RGARCIA/Switch-2.16.tar.gz";
-      sha256 = "1n7rgp1q3zwglv1pka3bnhq5g41334lwc53g31w6g44my8kqz31h";
+      url = "mirror://cpan/authors/id/C/CH/CHORNY/Switch-2.17.tar.gz";
+      sha256 = "0xbdjdgzfj9zwa4j3ipr8bfk7bcici4hk89hq5d27rhg2isljd9i";
     };
     doCheck = false;                             # FIXME: 2/293 test failures
   };
