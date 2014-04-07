@@ -3141,10 +3141,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   EvalClosure = buildPerlPackage {
-    name = "Eval-Closure-0.08";
+    name = "Eval-Closure-0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOY/Eval-Closure-0.08.tar.gz;
-      sha256 = "01x449ljj8mhr3jgfvnhzn0zz3xc81krslxiq29srqccsqjf933k";
+      url = mirror://cpan/authors/id/D/DO/DOY/Eval-Closure-0.11.tar.gz;
+      sha256 = "1b3rc9smdyyi0janckfiyg1kwph893sqwx7dr5n4mky0x8x3v4m1";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ SubExporter TryTiny ];
