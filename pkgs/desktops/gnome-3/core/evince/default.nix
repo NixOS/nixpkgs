@@ -2,6 +2,7 @@
 , glib, gtk3, pango, atk, gdk_pixbuf, shared_mime_info, itstool, gnome3
 , poppler, ghostscriptX, djvulibre, libspectre, libsecret , makeWrapper
 , librsvg, recentListSize ? null # 5 is not enough, allow passing a different number
+, gobjectIntrospection
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig intltool perl perlXMLParser libxml2
-    glib gtk3 pango atk gdk_pixbuf
+    glib gtk3 pango atk gdk_pixbuf gobjectIntrospection
     itstool gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic
     gnome3.libgnome_keyring gnome3.gsettings_desktop_schemas
     poppler ghostscriptX djvulibre libspectre
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-nautilus" # Do not use nautilus
+    "--enable-introspection"
   ];
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
