@@ -6582,10 +6582,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ParseRecDescent = buildPerlPackage rec {
-    name = "Parse-RecDescent-1.965001";
+    name = "Parse-RecDescent-1.967009";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCONWAY/${name}.tar.gz";
-      sha256 = "0r4dnrjgxv5irkyx1kgkg8vj6wqx67q5hbkifpb54906kc1n7yh0";
+      url = "mirror://cpan/authors/id/J/JT/JTBRAUN/${name}.tar.gz";
+      sha256 = "11y6fpz4j6kdimyaz2a6ig0jz0x7csqslhxaipxnjqi5h85hy071";
     };
   };
 
