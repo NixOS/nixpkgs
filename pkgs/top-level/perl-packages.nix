@@ -9367,10 +9367,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   WWWMechanize = buildPerlPackage {
-    name = "WWW-Mechanize-1.72";
+    name = "WWW-Mechanize-1.73";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JE/JESSE/WWW-Mechanize-1.72.tar.gz;
-      sha256 = "0vs3p2697675bswjayfmm37lg3xsxm94z1mif18s732kwvnpg6m6";
+      url = mirror://cpan/authors/id/E/ET/ETHER/WWW-Mechanize-1.73.tar.gz;
+      sha256 = "1zrw8aadhwy48q51x2z2rqlkwf17bya4j4h3hy89mw783j96rmg9";
     };
     propagatedBuildInputs = [ HTMLForm HTMLParser HTMLTree HTTPDaemon HTTPMessage HTTPServerSimple LWP LWPUserAgent TestWarn URI ];
     doCheck = false;
