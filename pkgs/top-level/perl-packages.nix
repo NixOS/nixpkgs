@@ -3690,10 +3690,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FontTTF = buildPerlPackage {
-    name = "Font-TTF-0.43";
+    name = "Font-TTF-0.48";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MH/MHOSKEN/Font-TTF-0.43.tar.gz;
-      sha256 = "0782mj5n5a2qbghvvr20x51llizly6q5smak98kzhgq9a7q3fg89";
+      url = mirror://cpan/authors/id/M/MH/MHOSKEN/Font-TTF-0.48.tar.gz;
+      sha256 = "0lhz7v8ihaj35y6kr7jb971hgc4iqh1nz3qbfkignb9i8b1dw97r";
     };
   };
 
