@@ -3619,10 +3619,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileShareDirInstall = buildPerlPackage {
-    name = "File-ShareDir-Install-0.04";
+    name = "File-ShareDir-Install-0.08";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GW/GWYN/File-ShareDir-Install-0.04.tar.gz;
-      sha256 = "14gyl1l1crnsb7ihz6czaw7k0v2dnan0380pbxz8kmk66nnhaxzc";
+      url = mirror://cpan/authors/id/G/GW/GWYN/File-ShareDir-Install-0.08.tar.gz;
+      sha256 = "188pgn43wa6hgpcrv997lp3bad50030p4wmrcdzvfrqxj0bx2amf";
     };
     meta = {
       description = "Install shared files";
