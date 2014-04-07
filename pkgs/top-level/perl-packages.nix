@@ -385,10 +385,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   boolean = buildPerlPackage {
-    name = "boolean-0.30";
+    name = "boolean-0.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IN/INGY/boolean-0.30.tar.gz;
-      sha256 = "f46e7a6121d5728ef2ce285a82d1dde94f6dfa0b846a612db75b1dcd37b9fc7f";
+      url = mirror://cpan/authors/id/I/IN/INGY/boolean-0.32.tar.gz;
+      sha256 = "1icihm1cib90klfjrk069s7031n1c7xk3fmkr2bfxrwqda4di7jg";
     };
     meta = {
       homepage = https://github.com/ingydotnet/boolean-pm/tree;
