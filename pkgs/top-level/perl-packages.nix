@@ -8019,10 +8019,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TermProgressBar = buildPerlPackage {
-    name = "Term-ProgressBar-2.13";
+    name = "Term-ProgressBar-2.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SZ/SZABGAB/Term-ProgressBar-2.13.tar.gz;
-      sha256 = "95a56e1529928b7a0d7adf5bc2f54b9b9ae9da58c43b519af74a1e6596209b3c";
+      url = mirror://cpan/authors/id/S/SZ/SZABGAB/Term-ProgressBar-2.14.tar.gz;
+      sha256 = "18cj7mzbis9xk0v32g2700vq9b4p9v5msk02mglf244cj77bflf6";
     };
     buildInputs = [ CaptureTiny TestException ];
     propagatedBuildInputs = [ ClassMethodMaker TermReadKey ];
