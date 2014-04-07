@@ -10146,8 +10146,6 @@ let
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
 
-  mathematica = callPackage ../applications/science/math/mathematica { };
-
   ### SCIENCE/MOLECULAR-DYNAMICS
 
   gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
