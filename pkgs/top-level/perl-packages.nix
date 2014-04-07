@@ -1037,10 +1037,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CGICookieXS = buildPerlPackage rec {
-    name = "CGI-Cookie-XS-0.16";
+    name = "CGI-Cookie-XS-0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AG/AGENT/${name}.tar.gz";
-      sha256 = "1jrd3f11sz17117nvssrrf6r80fr412615n5ffspbsap4n816bnn";
+      sha256 = "1iixvnm0l1q24vdlnayb4vd8fns2bdlhm6zb7fpi884ppm5cp6a6";
     };
   };
 
