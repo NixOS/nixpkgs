@@ -4842,10 +4842,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Log4Perl = buildPerlPackage rec {
-    name = "Log-Log4perl-1.41";
+    name = "Log-Log4perl-1.43";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Log/${name}.tar.gz";
-      sha256 = "0dajkgvlwsb4zdw6x3fil2n5phypq829dmqf8l9s88g9smms2a2i";
+      url = "mirror://cpan/authors/id/M/MS/MSCHILLI/${name}.tar.gz";
+      sha256 = "19rmm1nlcradfj74rrvkjwmfighmjj9fiisml2j23i248vyz4cay";
     };
   };
 
