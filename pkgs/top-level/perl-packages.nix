@@ -3234,10 +3234,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsCBuilder = buildPerlPackage rec {
-    name = "ExtUtils-CBuilder-0.280212";
+    name = "ExtUtils-CBuilder-0.280216";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "0zc4hkcb8wk7nm0b2b6pb1lpih52blx6x2w6x99bcr0d581807xg";
+      url = "mirror://cpan/authors/id/A/AM/AMBS/ExtUtils/${name}.tar.gz";
+      sha256 = "09d5sq9mgcnmjf2yp8rwd0cc1fa8kq7nbwjqxiqdykwmavmgm5ml";
     };
     buildInputs = [ PerlOSType ];
   };
