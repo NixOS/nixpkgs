@@ -1559,10 +1559,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Coro = buildPerlPackage {
-    name = "Coro-6.33";
+    name = "Coro-6.37";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ML/MLEHMANN/Coro-6.33.tar.gz;
-      sha256 = "1497wd9df10y65rb0w5h4h6wiy3smw9maw7z0gbz6dir774znfb5";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/Coro-6.37.tar.gz;
+      sha256 = "08qkwv7rpyb7zcp128crjakflc027sjkx9d2s1gzc21grsq9a456";
     };
     propagatedBuildInputs = [ AnyEvent Guard CommonSense ];
     meta = {
