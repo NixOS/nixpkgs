@@ -1600,7 +1600,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   languageJava = callPackage ../development/libraries/haskell/language-java {};
 
-  languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
+  languageJavascript = callPackage ../development/libraries/haskell/language-javascript {
+    alex = self.alex_3_1_3;
+  };
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
 
