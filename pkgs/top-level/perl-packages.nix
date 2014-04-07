@@ -1509,10 +1509,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   constant = buildPerlPackage {
-    name = "constant-1.15";
+    name = "constant-1.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SAPER/constant-1.15.tar.gz;
-      sha256 = "1ygz0hd1fd3q88r6dlw14kpyh06zjprksdci7qva6skxz3261636";
+      url = mirror://cpan/authors/id/S/SA/SAPER/constant-1.27.tar.gz;
+      sha256 = "0ari0jggiifz3q7vxb8nlcsc3g6bj8c0c0drsrphv0079c956i3l";
     };
   };
 
