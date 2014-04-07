@@ -7546,10 +7546,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   StringFormat = buildPerlPackage rec {
-    name = "String-Format-1.16";
+    name = "String-Format-1.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DARREN/${name}.tar.gz";
-      sha256 = "edb27dd055ad71012a439f262f9394517adb585a5c27ba72c1819bae2c23729a";
+      sha256 = "0sxfavcsb349rfafxflq2f9h3xpxabrw0q7vhmh9n3hjij8fa1jk";
     };
   };
 
