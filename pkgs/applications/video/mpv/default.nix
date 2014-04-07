@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, freetype, pkgconfig, freefont_ttf, ffmpeg, libass
-, lua5, perl, libpthreadstubs
+, lua5, lua5_sockets, perl, libpthreadstubs
 , python3, docutils, which
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null, libXxf86vm ? null
 , xineramaSupport ? true, libXinerama ? null
@@ -42,17 +42,18 @@ assert libpngSupport -> libpng != null;
 assert quviSupport -> libquvi != null;
 assert cacaSupport -> libcaca != null;
 
-# Purity problem: Waf needed to be is downloaded by bootstrap.py
+# Purity problem: Waf needed to be is downloaded by bootstrap.py,
 # but by purity reasons it should be avoided; thanks the-kenny to point it out!
-# Now, it will just download and package Waf, mimetizing bootstrap.py behaviour
+# Now, it will just download and package Waf, mimetizing bootstrap.py behaviour;
+# An obvious problem is to update that stuff everytime mpv is updated
 
 let
   waf = fetchurl {
-    url = https://waf.googlecode.com/files/waf-1.7.13;
-    sha256 = "03cc750049350ee01cdbc584b70924e333fcc17ba4a2d04648dab1535538a873";
+    url = https://waf.googlecode.com/files/waf-1.7.15;
+    sha256 = "e5ae7028f9b2d8ce1acb9fe1092e8010a90ba764d3ac065ea4e846743290b1d6";
   };
 
-  version = "0.3.2";
+  version = "0.3.7";
 
 in
 
@@ -61,11 +62,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
-    sha256 = "1vzdhzry2adyp2yh2dmy1qznqhnzar7g24rhi0vv624jgd20qax2";
+    sha256 = "1qmwmjvgdwh88l2caw2xy1d2h1cdg2w1hl4q5iwx2c0q7a99h41m";
   };
 
   buildInputs = with stdenv.lib;
-    [ waf freetype pkgconfig ffmpeg libass docutils which libpthreadstubs ]
+    [ waf freetype pkgconfig ffmpeg libass docutils which libpthreadstubs lua5_sockets ]
     ++ optionals x11Support [ libX11 libXext mesa libXxf86vm ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
@@ -81,7 +82,7 @@ stdenv.mkDerivation rec {
     ++ optional speexSupport speex
     ++ optional bs2bSupport libbs2b
     ++ optional libpngSupport libpng
-    ++ optional quviSupport libquvi
+    ++ optionals quviSupport [ libquvi ]
     ++ optional sdl2Support SDL2
     ++ optional cacaSupport libcaca
     ;
@@ -128,5 +129,7 @@ stdenv.mkDerivation rec {
 
 # TODO: Wayland support
 # TODO: investigate libquvi support: it isn't detected by Waf script!
+# TODO: investigate lua sockets problem
 # TODO: investigate caca support: it isn't detected by Waf script!
 # TODO: a more systematic way to test this package
+
