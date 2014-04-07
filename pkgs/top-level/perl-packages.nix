@@ -88,10 +88,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   aliased = buildPerlPackage rec {
-    name = "aliased-0.30";
+    name = "aliased-0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OV/OVID/${name}.tar.gz";
-      sha256 = "1iqcbfv600m31rfvl7r9ckr0hh0vny63q7a6yyhfrh4ppcgj4ig4";
+      sha256 = "0gxfqdddlq5g1b2zs99b251hz52z9ys4yni7j2p8gyk5zij3wm1s";
     };
   };
 
