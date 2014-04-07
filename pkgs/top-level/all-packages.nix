@@ -9861,12 +9861,6 @@ let
     lua = lua5_1;
   };
 
-  worldofgoo_demo = callPackage ../games/worldofgoo {
-    demo = true;
-  };
-
-  worldofgoo = callPackage ../games/worldofgoo { };
-
   xboard =  callPackage ../games/xboard { };
 
   xconq = callPackage ../games/xconq {};
