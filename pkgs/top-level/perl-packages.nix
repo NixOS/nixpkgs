@@ -639,10 +639,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystAuthenticationStoreDBIxClass = buildPerlPackage {
-    name = "Catalyst-Authentication-Store-DBIx-Class-0.1503";
+    name = "Catalyst-Authentication-Store-DBIx-Class-0.1506";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Authentication-Store-DBIx-Class-0.1503.tar.gz;
-      sha256 = "1l11if91gjfrga7i7bjxwa0zybhkkrpgg6ps3nxm30vmg7xqaf4d";
+      url = mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Authentication-Store-DBIx-Class-0.1506.tar.gz;
+      sha256 = "0i5ja7690fs9nhxcij6lw51j804sm8s06m5mvk1n8pi8jljrymvw";
     };
     propagatedBuildInputs = [ CatalystModelDBICSchema CatalystPluginAuthentication CatalystRuntime DBIxClass ListMoreUtils Moose namespaceautoclean TryTiny ];
     meta = {
