@@ -3803,10 +3803,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   GoogleProtocolBuffers = buildPerlPackage rec {
-    name = "Google-ProtocolBuffers-0.08";
+    name = "Google-ProtocolBuffers-0.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GARIEV/${name}.tar.gz";
-      sha256 = "0pxfphg671wh56h59pf0zrj7m1cr0yga95hf3w54563pzcw2vqv3";
+      url = "mirror://cpan/authors/id/S/SA/SAXJAZMAN/protobuf/${name}.tar.gz";
+      sha256 = "0k2skcbfzn2aw1f218l47h4kgq5rj9qsam3sd6zw4qq3zyp0amb1";
     };
     propagatedBuildInputs = [ ClassAccessor ParseRecDescent ];
     patches =
