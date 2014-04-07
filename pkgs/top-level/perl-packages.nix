@@ -2693,10 +2693,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DistZillaPluginPodWeaver = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-PodWeaver-3.101642";
+    name = "Dist-Zilla-Plugin-PodWeaver-3.102000";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-Plugin-PodWeaver-3.101642.tar.gz;
-      sha256 = "66066a236be7bd0a3e0ae764a4b9ac10408d40693a1c800c5fdd7e03c3542e00";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-Plugin-PodWeaver-3.102000.tar.gz;
+      sha256 = "0xayy50fgfc7wlsnygz28ka2ax9pmr0rn845i8d6p40amrkzzlml";
     };
     buildInputs = [ FileFindRule ];
     propagatedBuildInputs = [ DistZilla ListMoreUtils Moose PPI PodElementalPerlMunger PodWeaver namespaceautoclean ];
