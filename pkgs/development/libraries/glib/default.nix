@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
        sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
     '';
 
-  postInstall = ''rm -rvf $out/share/gtk-doc'';
+  DETERMINISTIC_BUILD = 1;
 
   passthru = {
      gioModuleDir = "lib/gio/modules";
