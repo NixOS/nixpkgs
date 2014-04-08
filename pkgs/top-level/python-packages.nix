@@ -8795,19 +8795,21 @@ rec {
   };
 
   searx = buildPythonPackage rec {
-    name = "searx-${version}";
-    version = "0.2.0";
+    name = "searx-${rev}";
+    rev = "44d3af9fb2482cd0df1a8ababbe2fdf27ab33172";
 
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/source/s/searx/${name}.tar.gz";
-      sha256 = "19hxjg3vhq7fygcvfhsr3i40c8kbi7i76ym9cv2s03b3zijd38w0";
+    src = fetchgit {
+      url = "git://github.com/asciimoo/searx";
+      inherit rev;
+      sha256 = "1w505pzdkkcglq782wg7f5fxrw9i5jzp7px20c2xz18pps2m3rsm";
     };
 
-    propagatedBuildInputs = [ pyyaml lxml grequests flaskbabel flask requests gevent speaklater Babel pytz ];
+    propagatedBuildInputs = [ pyyaml lxml grequests flaskbabel flask requests
+      gevent speaklater Babel pytz dateutil ];
 
     meta = {
       homepage = https://github.com/asciimoo/searx;
-      description = "A privacy-respecting, hackable metasearch engine.";
+      description = "A privacy-respecting, hackable metasearch engine";
       license = stdenv.lib.licenses.agpl3Plus;
       maintainers = [ stdenv.lib.maintainers.matejc ];
     };
