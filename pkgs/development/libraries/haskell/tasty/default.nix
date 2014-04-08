@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty";
-  version = "0.8.0.2";
-  sha256 = "0xn0qc1d7bq8s7988x58snq5ipvmi7g87rg89r1l21yxl6a85zw5";
+  version = "0.8.0.4";
+  sha256 = "016niwympxbxpg3yq7samgh92l20wxm2h6cwhqal4zdj8n9262j0";
   buildDepends = [
     ansiTerminal async deepseq mtl optparseApplicative regexTdfa stm
     tagged unboundedDelays
