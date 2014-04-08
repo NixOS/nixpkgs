@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
     '';
 
   enableParallelBuilding = true;
+  DETERMINISTIC_BUILD = 1;
 
   inherit doCheck;
   preCheck = optionalString doCheck

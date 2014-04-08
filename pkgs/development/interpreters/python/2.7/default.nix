@@ -72,6 +72,7 @@ let
       '';
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
+    DETERMINISTIC_BUILD = 1;
 
     setupHook = ./setup-hook.sh;
 
