@@ -139,8 +139,6 @@ rec {
 
   file-roller = callPackage ./desktop/file-roller { };
 
-  gnome_dictionary = callPackage ./desktop/gnome-dictionary { };
-
   gnome_desktop = callPackage ./desktop/gnome-desktop { };
 
   gtksourceview = callPackage ./desktop/gtksourceview { };
