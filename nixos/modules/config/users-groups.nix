@@ -7,7 +7,7 @@ let
   ids = config.ids;
   cfg = config.users;
 
-  nonUidUsers = filterAttrs (n: u: u.uid == null) cfg.extraUsers;
+  nonUidUsers = filterAttrs (n: u: u.createUser && u.uid == null) cfg.extraUsers;
   nonGidGroups = filterAttrs (n: g: g.gid == null) cfg.extraGroups;
 
   passwordDescription = ''
