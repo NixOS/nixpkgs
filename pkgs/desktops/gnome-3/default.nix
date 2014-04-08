@@ -40,6 +40,8 @@ rec {
 
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
 
+  gnome-contacts = callPackage ./core/gnome-contacts { };
+
   gnome_control_center = callPackage ./core/gnome-control-center { };
 
   gnome-calculator = callPackage ./core/gnome-calculator { };
