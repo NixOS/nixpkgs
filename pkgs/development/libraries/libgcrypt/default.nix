@@ -18,6 +18,8 @@ stdenv.mkDerivation (rec {
     make check
   '';
 
+  patches = [ ./no-build-timestamp.patch ];
+
   meta = {
     description = "General-pupose cryptographic library";
 
