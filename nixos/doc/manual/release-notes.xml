@@ -7,7 +7,7 @@
 
 <section xml:id="sec-release-14.02">
 
-<title>Release 14.02 (“Baboon”, 2014/02/??)</title>
+<title>Release 14.04 (“Baboon”, 2014/04/??)</title>
 
 <para>This is the second stable release branch of NixOS.  The main
 enhancements are the following:
@@ -18,7 +18,7 @@ enhancements are the following:
   <xref linkend="sec-uefi-installation"/> for
   details.</para></listitem>
 
-  <listitem><para>NixOS is now based on Glibc 2.18 and GCC
+  <listitem><para>NixOS is now based on Glibc 2.19 and GCC
   4.8.</para></listitem>
 
 </itemizedlist>
@@ -29,6 +29,23 @@ enhancements are the following:
 following incompatible changes:
 
 <itemizedlist>
+
+  <listitem><para>Nixpkgs no longer exposes unfree packages by
+  default. If your NixOS configuration requires unfree packages from
+  Nixpkgs, you need to enable support for them explicitly by setting:
+
+<programlisting>
+nixpkgs.config.allowUnfree = true;
+</programlisting>
+
+  Otherwise, you get an error message such as:
+
+<screen>
+error: package ‘nvidia-x11-331.49-3.12.17’ in ‘…/nvidia-x11/default.nix:56’
+  has an unfree license, refusing to evaluate
+</screen>
+
+  </para></listitem>
 
   <listitem><para>The firewall is now enabled by default. If you don’t
   want this, you need to disable it explicitly:

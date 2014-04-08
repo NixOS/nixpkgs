@@ -14,7 +14,7 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 let
 
-  allowUnfree = config.allowUnfree or true && builtins.getEnv "HYDRA_DISALLOW_UNFREE" != "1";
+  allowUnfree = config.allowUnfree or false && builtins.getEnv "HYDRA_DISALLOW_UNFREE" != "1";
 
   allowBroken = builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 

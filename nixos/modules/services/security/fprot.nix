@@ -18,7 +18,6 @@ in {
 	};
 
 	productData = mkOption {
-	  default = "${pkgs.fprot}/opt/f-prot/product.data";
 	  description = ''
 	    product.data file. Defaults to the one supplied with installation package.
 	  '';
@@ -32,7 +31,6 @@ in {
 	};
 
 	licenseKeyfile = mkOption {
-	  default = "${pkgs.fprot}/opt/f-prot/license.key";
 	  description = ''
 	    License keyfile. Defaults to the one supplied with installation package.
 	  '';
@@ -45,6 +43,10 @@ in {
   ###### implementation
 
   config = mkIf cfg.updater.enable {
+
+    services.fprot.updater.productData = "${pkgs.fprot}/opt/f-prot/product.data";
+    services.fprot.updater.licenseKeyfile = "${pkgs.fprot}/opt/f-prot/license.key";
+
     environment.systemPackages = [ pkgs.fprot ];
     environment.etc = singleton {
       source = "${pkgs.fprot}/opt/f-prot/f-prot.conf";
