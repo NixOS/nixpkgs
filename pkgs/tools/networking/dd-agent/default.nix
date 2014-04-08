@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, python, sysstat, unzip }:
+{ stdenv, fetchurl, python, sysstat, unzip, tornado, makeWrapper }:
 
 stdenv.mkDerivation rec {
-    version = "3.8.0";
+    version = "4.2.0";
     name = "dd-agent-${version}";
 
     src = fetchurl {
       url = "https://github.com/DataDog/dd-agent/archive/${version}.zip";
-      sha256 = "1mh22rbja07gc7ydn357hlij0dl2rygkqsya9ckynsvmkkzn2gyx";
+      sha256 = "0lp3h3flb50i64kgkj9kyyf3p1xm0nipxi22w5pmhb71l678d216";
     };
 
-    buildInputs = [ python unzip ];
-    propagatedBuildInputs = [ python ];
+    buildInputs = [ python unzip makeWrapper ];
+    propagatedBuildInputs = [ python tornado ];
 
     postUnpack = "export sourceRoot=$sourceRoot/packaging";
 
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     postInstall = ''
       mv $out/usr/* $out
       rmdir $out/usr
+      wrapProgram $out/bin/dd-forwarder --prefix PYTHONPATH : $PYTHONPATH
     '';
 
     meta = {
