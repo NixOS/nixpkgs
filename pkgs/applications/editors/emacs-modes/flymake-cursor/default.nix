@@ -26,7 +26,5 @@ stdenv.mkDerivation rec {
     description = "Displays flymake error msg in minibuffer after delay";
     homepage = http://www.emacswiki.org/emacs/flymake-cursor.el;
     license = stdenv.lib.licenses.publicDomain;
-
-    platforms = stdenv.lib.platforms.all;
   };
 }
