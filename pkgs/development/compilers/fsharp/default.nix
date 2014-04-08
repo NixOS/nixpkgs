@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "fsharp-${version}";
-  version = "3.1";
+  version = "3.1.0";
 
   src = fetchgit {
     url = "https://github.com/fsharp/fsharp";
