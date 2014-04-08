@@ -7105,7 +7105,7 @@ let
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
-  linuxPackages = linuxPackages_3_10;
+  linuxPackages = linuxPackages_3_12;
 
   # A function to build a manually-configured kernel
   linuxManualConfig = pkgs.buildLinux;
