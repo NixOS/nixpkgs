@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, gtk2, xulrunner, zip, pkgconfig, perl, npapi_sdk }:
+{ stdenv, fetchurl, jdk, gtk2, xulrunner, zip, pkgconfig, perl, npapi_sdk, bash }:
 
 stdenv.mkDerivation rec {
   name = "icedtea-web-${version}";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace javac.in --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
+
+    configureFlags="BIN_BASH=${bash}/bin/bash $configureFlags"
   '';
 
   configureFlags = [
