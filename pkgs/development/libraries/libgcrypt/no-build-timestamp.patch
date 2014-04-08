@@ -1,0 +1,12 @@
+diff -ur libgcrypt-1.5.3.orig/configure libgcrypt-1.5.3/configure
+--- libgcrypt-1.5.3.orig/configure	2013-07-25 11:22:47.000000000 +0200
++++ libgcrypt-1.5.3/configure	2014-04-09 00:17:58.659147199 +0200
+@@ -16520,6 +16520,7 @@
+ 
+ 
+ BUILD_TIMESTAMP=`date -u +%Y-%m-%dT%H:%M+0000 2>/dev/null || date`
++BUILD_TIMESTAMP=1970-01-01T00:00+0000
+ 
+ 
+ cat >>confdefs.h <<_ACEOF
+Only in libgcrypt-1.5.3: out
