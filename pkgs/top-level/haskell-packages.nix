@@ -532,8 +532,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     blazeBuilder = if (pkgs.stdenv.lib.versionOlder ghc.version "7.6") then self.blazeBuilder else null;
   };
 
-  aesonLens = callPackage ../development/libraries/haskell/aeson-lens {};
-
   aesonPretty = callPackage ../development/libraries/haskell/aeson-pretty {};
 
   alternativeIo = callPackage ../development/libraries/haskell/alternative-io {};
