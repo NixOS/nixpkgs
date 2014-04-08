@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
        export XDG_DATA_DIRS="${desktop_file_utils}/share:${shared_mime_info}/share"
     '';
 
-  postInstall = ''rm -rvf $out/share/gtk-doc'';
+  DETERMINISTIC_BUILD = 1;
 
   passthru = {
      gioModuleDir = "lib/gio/modules";
