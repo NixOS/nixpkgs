@@ -69,20 +69,29 @@ rec {
   # This function builds the various standard environments used during
   # the bootstrap.
   stdenvBootFun =
-    {gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraPath ? [], fetchurl}:
+    {gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraPath ? [], fetchurl,
+     deterministic ? false, bootnum ? "", binutils}:
 
     import ../generic {
       inherit system config;
-      name = "stdenv-linux-boot";
+      name = "stdenv-linux-boot" + bootnum;
       preHook =
         ''
           # Don't patch #!/interpreter because it leads to retained
           # dependencies on the bootstrapTools in the final stdenv.
           dontPatchShebangs=1
           ${commonPreHook}
+        '' +
+	lib.optionalString deterministic ''
+          # Make "strip" produce deterministic output, by setting
+          # timestamps etc. to a fixed value.
+          commonStripFlags="--enable-deterministic-archives"
         '';
+
       shell = "${bootstrapTools}/bin/sh";
-      initialPath = [bootstrapTools] ++ extraPath;
+      # We put binutils before bootstrapTools so that we gradually use less from bootstrapTools.
+      # Also, deterministic builds require a fresh binutils (strip).
+      initialPath = [binutils] ++ [bootstrapTools] ++ extraPath;
       fetchurlBoot = fetchurl;
       inherit gcc;
       # Having the proper 'platform' in all the stdenvs allows getting proper
@@ -97,7 +106,9 @@ rec {
   # because we need a stdenv to build the GCC wrapper and fetchurl.
   stdenvLinuxBoot0 = stdenvBootFun {
     gcc = "/no-such-path";
+    bootnum = "0";
     fetchurl = null;
+    binutils = null;
   };
 
 
@@ -142,6 +153,10 @@ rec {
       binutils = bootstrapTools;
       coreutils = bootstrapTools;
     };
+    bootnum = "1";
+    # The bootstrap tools might not support a deterministic strip
+    deterministic = false;
+    binutils = bootstrapTools;
     inherit fetchurl;
   };
 
@@ -168,6 +183,9 @@ rec {
     overrides = pkgs: {
       inherit (stdenvLinuxBoot1Pkgs) perl;
     };
+    bootnum = "2";
+    deterministic = true;
+    binutils = binutils1;
     inherit fetchurl;
   };
 
@@ -211,6 +229,9 @@ rec {
       glibc = stdenvLinuxGlibc;   # Required by gcc47 build
     };
     extraPath = [ stdenvLinuxBoot1Pkgs.paxctl ];
+    bootnum = "3";
+    deterministic = true;
+    binutils = binutils1;
     inherit fetchurl;
   };
 
@@ -238,6 +259,9 @@ rec {
       inherit (stdenvLinuxBoot1Pkgs) perl;
       inherit (stdenvLinuxBoot3Pkgs) gettext gnum4 gmp;
     };
+    bootnum = "4";
+    deterministic = true;
+    binutils = binutils1;
     inherit fetchurl;
   };
 
