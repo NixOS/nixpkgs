@@ -576,6 +576,8 @@ let
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
+  capstone = callPackage ../development/libraries/capstone { };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   direnv = callPackage ../tools/misc/direnv { };
