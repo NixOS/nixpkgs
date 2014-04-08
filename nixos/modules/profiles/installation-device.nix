@@ -45,7 +45,6 @@ with pkgs.lib;
 
     # Enable wpa_supplicant, but don't start it by default.
     networking.wireless.enable = true;
-    networking.wireless.userControlled.enable = true;
     jobs.wpa_supplicant.startOn = pkgs.lib.mkOverride 50 "";
 
     # Tell the Nix evaluator to garbage collect more aggressively.
