@@ -11,4 +11,6 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
   };
+  # This library now contains now modules as it is deprecated.
+  noHaddock = true;
 })
