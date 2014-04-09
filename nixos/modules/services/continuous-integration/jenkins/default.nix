@@ -25,7 +25,8 @@ in {
         default = "jenkins";
         type = with types; string;
         description = ''
-          User the jenkins server should execute under.
+          If the default user "jenkins" is configured then this is the primary
+          group of that user.
         '';
       };
 
