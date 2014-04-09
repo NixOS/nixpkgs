@@ -40,6 +40,8 @@ rec {
 
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
 
+  gnome-contacts = callPackage ./core/gnome-contacts { };
+
   gnome_control_center = callPackage ./core/gnome-control-center { };
 
   gnome-calculator = callPackage ./core/gnome-calculator { };
@@ -62,6 +64,8 @@ rec {
 
   libgnome_keyring = callPackage ./core/libgnome-keyring { };
 
+  libgnomekbd = callPackage ./core/libgnomekbd { };
+
   folks = callPackage ./core/folks { };
 
   gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
@@ -75,6 +79,8 @@ rec {
   gnome_settings_daemon = callPackage ./core/gnome-settings-daemon { };
 
   gnome-system-log = callPackage ./core/gnome-system-log { };
+
+  gnome-system-monitor = callPackage ./core/gnome-system-monitor { };
 
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
@@ -110,6 +116,8 @@ rec {
 
   rest = callPackage ./core/rest { };
 
+  sushi = callPackage ./core/sushi { };
+
   totem = callPackage ./core/totem { };
 
   totem-pl-parser = callPackage ./core/totem-pl-parser { };
@@ -130,8 +138,6 @@ rec {
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
   file-roller = callPackage ./desktop/file-roller { };
-
-  gnome_dictionary = callPackage ./desktop/gnome-dictionary { };
 
   gnome_desktop = callPackage ./desktop/gnome-desktop { };
 
