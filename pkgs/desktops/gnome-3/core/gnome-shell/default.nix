@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       clutter networkmanager libstartup_notification telepathy_glib docbook_xsl docbook_xsl_ns
       libXtst p11_kit networkmanagerapplet gjs mutter pulseaudio caribou evolution_data_server
       libical libtool nss gobjectIntrospection gtk gstreamer makeWrapper gdm gnome_control_center
-      at_spi2_core upower ibus gnome_session gnome_desktop telepathy_logger ];
+      at_spi2_core upower ibus gnome_session gnome_desktop telepathy_logger gnome3.gnome_settings_daemon ];
 
   preBuild = ''
     patchShebangs src/data-to-c.pl
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix LD_LIBRARY_PATH : "${accountservice}/lib:${ibus}/lib:${gdm}/lib" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome-menus}:/share:${ibus}/share:${gnome_settings_daemon}/share:${gnome_control_center}/share:${gdm}/share:${glib}/share:${gnome_themes_standard}/share:${mutter}/share:${gtk}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "${gnome_themes_standard}/share:${gtk}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
 
     wrapProgram "$out/libexec/gnome-shell-calendar-server" \
       --prefix XDG_DATA_DIRS : "${evolution_data_server}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"

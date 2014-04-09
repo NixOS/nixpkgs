@@ -3,14 +3,14 @@
 , libxslt, docbook_xsl, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "udisks-1.0.5";
+  name = "udisks-1.0.4";
 
   src = fetchurl {
     url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "0wbg3jrv8limdgvcygf4dqin3y6d30y9pcmmk711vq571vmq5v7j";
+    sha256 = "1xgqifddwaavmjc8c30i0mdffyirsld7c6qhfyjw7f9khwv8jjw5";
   };
 
-  patches = [ ./purity.patch ./no-pci-db.patch ];
+  patches = [ ./purity.patch ./no-pci-db.patch ./cve-2014-0004.patch ];
 
   postPatch =
     ''
@@ -19,11 +19,6 @@ stdenv.mkDerivation rec {
       substituteInPlace src/main.c --replace \
         "/sbin:/bin:/usr/sbin:/usr/bin" \
         "${utillinux}/bin:${mdadm}/sbin:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin"
-
-      # For some reason @libexec@ is set to 'lib/' when building.
-      # Passing --libexecdir in configureFlags didn't help.
-      substituteInPlace data/systemd/udisks.service.in \
-        --replace "@libexecdir@" "$out/libexec"
     '';
 
   buildInputs =
@@ -33,11 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--enable-lvm2"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-  ];
+  configureFlags = "--localstatedir=/var --enable-lvm2";
 
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/udisks;

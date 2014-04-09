@@ -226,4 +226,7 @@ in rec {
   deepSeqList = xs: y: if any (x: deepSeq x false) xs then y else y;
 
   crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [f];
+
+  # List difference, xs - ys. Removes elements of ys from xs.
+  difference = xs: ys: filter (y: !(builtins.elem y ys)) xs;
 }

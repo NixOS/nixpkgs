@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl ];
+  patches = [ ./no-dev-stderr.patch ];
+
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
     make install BINDIR=$out/bin MAN1DIR=$out/share/man/man1
