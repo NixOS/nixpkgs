@@ -7,7 +7,7 @@ let
   cfg = config.boot.loader.grub;
 
   realGrub = if cfg.version == 1 then pkgs.grub
-    else pkgs.grub2.override { zfsSupport = cfg.zfsSupport };
+    else pkgs.grub2.override { zfsSupport = cfg.zfsSupport; };
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
