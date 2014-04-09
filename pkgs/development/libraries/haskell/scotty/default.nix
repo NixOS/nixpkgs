@@ -1,16 +1,15 @@
-{ cabal, aeson, blazeBuilder, caseInsensitive, conduit, dataDefault
-, httpTypes, mtl, regexCompat, text, transformers, wai, waiExtra
-, warp, conduitExtra
+{ cabal, aeson, blazeBuilder, caseInsensitive, conduit
+, conduitExtra, dataDefault, httpTypes, mtl, regexCompat, text
+, transformers, wai, waiExtra, warp
 }:
 
 cabal.mkDerivation (self: {
   pname = "scotty";
-  version = "0.7.1";
-  sha256 = "07aj74jq0hh86ik4x5p5q65b47q44rrnd6mkp039wj9l6dmyrv3c";
-  patches = [ ./new-conduit.patch ];
+  version = "0.7.2";
+  sha256 = "1y14af3qciwycgaxzx6rjan2jgfchjzs4zbxzh8p8s1d0l4gsqlb";
   buildDepends = [
-    aeson blazeBuilder caseInsensitive conduit dataDefault httpTypes
-    mtl regexCompat text transformers wai waiExtra warp conduitExtra
+    aeson blazeBuilder caseInsensitive conduit conduitExtra dataDefault
+    httpTypes mtl regexCompat text transformers wai waiExtra warp
   ];
   jailbreak = true;
   meta = {
