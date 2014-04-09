@@ -1222,6 +1222,8 @@ let
 
   grub2_efi = grub2.override { EFIsupport = true; };
 
+  grub2_zfs = grub2.override { zfsSupport = true; };
+
   gssdp = callPackage ../development/libraries/gssdp {
     inherit (gnome) libsoup;
   };

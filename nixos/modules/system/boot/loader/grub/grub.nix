@@ -6,7 +6,8 @@ let
 
   cfg = config.boot.loader.grub;
 
-  realGrub = if cfg.version == 1 then pkgs.grub else pkgs.grub2;
+  realGrub = if cfg.version == 1 then pkgs.grub
+    else pkgs.grub2.override { zfsSupport = cfg.zfsSupport };
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -209,6 +210,14 @@ in
         '';
       };
 
+      zfsSupport = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether grub should be build against libzfs.
+        '';
+      };
+
     };
 
   };
@@ -250,6 +259,9 @@ in
         concatStrings (mapAttrsToList (n: v: ''
           ${pkgs.coreutils}/bin/cp -pf "${v}" "/boot/${n}"
         '') config.boot.loader.grub.extraFiles);
+
+    assertions = [{ assertion = !cfg.zfsSupport || cfg.version == 2;
+                    message = "Only grub version 2 provides zfs support";}];
 
     })
 
