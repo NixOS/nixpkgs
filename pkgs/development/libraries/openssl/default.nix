@@ -19,6 +19,8 @@ let
       # cannot be overriden per-process.  For security, the
       # environment variable is ignored for setuid binaries.
       ./cert-file.patch
+      # Remove the compilation time from the library
+      ./no-date-in-library.patch
     ]
 
     ++ stdenv.lib.optionals (isCross && opensslCrossSystem == "hurd-x86")
