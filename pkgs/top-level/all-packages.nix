@@ -5203,6 +5203,8 @@ let
 
   libtxc_dxtn = callPackage ../development/libraries/libtxc_dxtn { };
 
+  libtxc_dxtn_s2tc = callPackage ../development/libraries/libtxc_dxtn_s2tc { };
+
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
 
   libunistring = callPackage ../development/libraries/libunistring { };
