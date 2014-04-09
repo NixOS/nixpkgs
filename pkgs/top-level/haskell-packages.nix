@@ -1519,9 +1519,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hxtCharproperties = callPackage ../development/libraries/haskell/hxt-charproperties {};
 
+  hxtHttp = callPackage ../development/libraries/haskell/hxt-http {};
+
   hxtRegexXmlschema = callPackage ../development/libraries/haskell/hxt-regex-xmlschema {};
 
   hxtUnicode = callPackage ../development/libraries/haskell/hxt-unicode {};
+
+  hxtXpath = callPackage ../development/libraries/haskell/hxt-xpath {};
 
   hybridVectors = callPackage ../development/libraries/haskell/hybrid-vectors {};
 
@@ -2874,6 +2878,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   haddock_2_13_2 = callPackage ../development/tools/documentation/haddock/2.13.2.nix {};
   haddock_2_14_1 = callPackage ../development/tools/documentation/haddock/2.14.1.nix {};
   haddock = self.haddock_2_14_1;
+
+  HandsomeSoup = callPackage ../development/libraries/haskell/HandsomeSoup {};
 
   happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
   happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};
