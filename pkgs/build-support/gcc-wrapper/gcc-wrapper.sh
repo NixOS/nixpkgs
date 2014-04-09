@@ -84,6 +84,16 @@ fi
 extraAfter=($NIX_CFLAGS_COMPILE)
 extraBefore=()
 
+# When enforcing purity, pretend gcc can't find the current date and
+# time
+if test "$NIX_ENFORCE_PURITY" = "1"; then
+    extraAfter=(-D__DATE__=\"???-??-????\"
+	-D__TIME__=\"??:??:??\"
+        -Wno-builtin-macro-redefined
+	"${extraAfter[@]}")
+fi
+
+
 if test "$dontLink" != "1"; then
 
     # Add the flags that should only be passed to the compiler when
