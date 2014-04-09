@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ elfutils ];
 
-  preBuild =
+  preConfigure =
     ''
+      configureFlags="--disable-werror"
       makeFlagsArray=(INSTALL="install -c")
     '';
 
