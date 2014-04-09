@@ -1,9 +1,13 @@
-{ stdenv, kernel }:
+{ stdenv, fetchurl }:
 
-assert stdenv.lib.versionAtLeast kernel.version "3.14";
-stdenv.mkDerivation {
-  name = "lockdep-linux-${kernel.version}";
-  inherit (kernel) src patches;
+stdenv.mkDerivation rec {
+  name    = "lockdep-${version}";
+  version = "3.14";
+
+  src = fetchurl {
+    url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
+    sha256 = "61558aa490855f42b6340d1a1596be47454909629327c49a5e4e10268065dffa";
+  };
 
   preConfigure = "cd tools/lib/lockdep";
   installPhase = ''
@@ -16,7 +20,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "User-space locking validation via the kernel";
+    description = "userspace locking validation tool built on the Linux kernel";
     homepage    = "https://kernel.org/";
     license     = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.linux;
