@@ -122,6 +122,8 @@ rec {
 
   totem-pl-parser = callPackage ./core/totem-pl-parser { };
 
+  tracker = callPackage ./core/tracker { };
+
   vte = callPackage ./core/vte { };
 
   vino = callPackage ./core/vino { };
