@@ -1189,6 +1189,8 @@ let
 
   logstash = callPackage ../tools/misc/logstash { };
 
+  logstash-forwarder = callPackage ../tools/misc/logstash-forwarder { };
+
   klavaro = callPackage ../games/klavaro {};
 
   minidlna = callPackage ../tools/networking/minidlna { };
