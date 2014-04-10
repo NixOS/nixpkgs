@@ -104,8 +104,7 @@ fi
 # The following example sets the time to 1 for gcc and date
 # FAKETIME="1970-01-01\ 00:00:01"
 # FAKETIME_ONLY_CMDS="gcc,date"
-if [ "$NIX_ENFORCE_PURITY" = "1" -a -n "@libfaketime@" -a
-     -n "$useFakeTime" ]; then
+if [ "$NIX_ENFORCE_PURITY" = "1" -a -n "@libfaketime@" -a -n "$useFakeTime" ]; then
     makePreloads=(${makePreloads[@]} LD_PRELOAD=@libfaketime@/lib/libfaketime.so.1)
 fi
 
