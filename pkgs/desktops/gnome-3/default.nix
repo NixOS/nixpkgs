@@ -86,6 +86,8 @@ rec {
 
   gnome_themes_standard = callPackage ./core/gnome-themes-standard { };
 
+  gnome-user-docs = callPackage ./core/gnome-user-docs { };
+
   grilo = callPackage ./core/grilo { };
 
   gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };

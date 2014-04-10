@@ -85,6 +85,7 @@ in {
         gnome3.gnome-system-log
         gnome3.gnome-system-monitor
         gnome3.gnome_terminal
+        gnome3.gnome-user-docs
 
         gnome3.file-roller
       ] config.environment.gnome3.excludePackages);
