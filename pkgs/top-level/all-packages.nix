@@ -2424,7 +2424,7 @@ let
   clangUnwrapped = llvm: pkg: callPackage pkg {
       stdenv = if stdenv.isDarwin
          then stdenvAdapters.overrideGCC stdenv gccApple
-         else stdenvAdapters.overrideGCC stdenv gcc48;
+         else stdenv;
       llvm = llvm;
   };
 
@@ -2926,10 +2926,9 @@ let
 
   lessc = callPackage ../development/compilers/lessc { };
 
-  llvm = if stdenv.isDarwin then llvm_33 # until someone solves build problems with _34
-    else llvmPackages.llvm;
+  llvm = llvmPackages.llvm;
 
-  llvm_34 = llvmPackages.llvm;
+  llvm_34 = llvmPackages_34.llvm;
   llvm_33 = llvm_v ../development/compilers/llvm/3.3/llvm.nix;
   llvm_32 = llvm_v ../development/compilers/llvm/3.2;
   llvm_31 = llvm_v ../development/compilers/llvm/3.1;
@@ -2940,12 +2939,14 @@ let
       else stdenv;
   };
 
-  llvmPackages = recurseIntoAttrs (import ../development/compilers/llvm/3.4 {
-    inherit newScope fetchurl;
+  llvmPackages = if !stdenv.isDarwin then llvmPackages_34 else {
+    # until someone solves build problems with _34
+    llvm = llvm_33;
+    clang = clang_33;
+  };
+  llvmPackages_34 = recurseIntoAttrs (import ../development/compilers/llvm/3.4 {
+    inherit stdenv newScope fetchurl;
     isl = isl_0_12;
-    stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideGCC stdenv gcc48
-      else stdenv;
   });
   llvmPackagesSelf = import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; };
 
