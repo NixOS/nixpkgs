@@ -159,7 +159,7 @@ in
             # Create a named pipe to get a signal when the container
             # has finished booting.
             rm -f $root/var/lib/startup-done
-            mkfifo $root/var/lib/startup-done
+            mkfifo -m 0600 $root/var/lib/startup-done
          '';
 
         script =
