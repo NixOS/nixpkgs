@@ -1,0 +1,52 @@
+diff -ur linux-3.10.35.orig/drivers/mtd/nand/denali_pci.c linux-3.10.35/drivers/mtd/nand/denali_pci.c
+--- linux-3.10.35.orig/drivers/mtd/nand/denali_pci.c	2014-03-31 18:58:38.000000000 +0200
++++ linux-3.10.35/drivers/mtd/nand/denali_pci.c	2014-04-09 13:11:10.424424289 +0200
+@@ -132,7 +132,7 @@
+ 
+ static int denali_init_pci(void)
+ {
+-	pr_info("Spectra MTD driver built on %s @ %s\n", __DATE__, __TIME__);
++	pr_info("Spectra MTD driver\n");
+ 	return pci_register_driver(&denali_pci_driver);
+ }
+ module_init(denali_init_pci);
+diff -ur linux-3.10.35.orig/drivers/staging/csr/drv.c linux-3.10.35/drivers/staging/csr/drv.c
+--- linux-3.10.35.orig/drivers/staging/csr/drv.c	2014-03-31 18:58:38.000000000 +0200
++++ linux-3.10.35/drivers/staging/csr/drv.c	2014-04-09 13:15:25.923936184 +0200
+@@ -2104,9 +2104,8 @@
+ {
+     int r;
+ 
+-    printk("UniFi SDIO Driver: %s %s %s\n",
+-            CSR_WIFI_VERSION,
+-           __DATE__, __TIME__);
++    printk("UniFi SDIO Driver: %s\n",
++            CSR_WIFI_VERSION);
+ 
+ #ifdef CSR_SME_USERSPACE
+ #ifdef CSR_SUPPORT_WEXT
+diff -ur linux-3.10.35.orig/drivers/staging/csr/io.c linux-3.10.35/drivers/staging/csr/io.c
+--- linux-3.10.35.orig/drivers/staging/csr/io.c	2014-03-31 18:58:38.000000000 +0200
++++ linux-3.10.35/drivers/staging/csr/io.c	2014-04-09 13:15:45.603976856 +0200
+@@ -878,8 +878,8 @@
+ 	if (!priv)
+ 		return 0;
+ 
+-	seq_printf(m, "UniFi SDIO Driver: %s %s %s\n",
+-		   CSR_WIFI_VERSION, __DATE__, __TIME__);
++	seq_printf(m, "UniFi SDIO Driver: %s\n",
++		   CSR_WIFI_VERSION);
+ #ifdef CSR_SME_USERSPACE
+ 	seq_puts(m, "SME: CSR userspace ");
+ #ifdef CSR_SUPPORT_WEXT
+diff -ur linux-3.10.35.orig/drivers/staging/rts5139/rts51x_scsi.c linux-3.10.35/drivers/staging/rts5139/rts51x_scsi.c
+--- linux-3.10.35.orig/drivers/staging/rts5139/rts51x_scsi.c	2014-03-31 18:58:38.000000000 +0200
++++ linux-3.10.35/drivers/staging/rts5139/rts51x_scsi.c	2014-04-09 13:14:21.906550886 +0200
+@@ -1985,7 +1985,6 @@
+ 	SPRINTF("       Vendor: Realtek Corp.\n");
+ 	SPRINTF("      Product: RTS51xx USB Card Reader\n");
+ 	SPRINTF("      Version: %s\n", DRIVER_VERSION);
+-	SPRINTF("        Build: %s\n", __TIME__);
+ 	return 0;
+ }
+ 
