@@ -54,6 +54,25 @@ if ($action eq "list") {
 my $containerName = $ARGV[1] or die "$0: no container name specified\n";
 $containerName =~ /^[a-zA-Z0-9\-]+$/ or die "$0: invalid container name\n";
 
+sub writeNixOSConfig {
+    my ($nixosConfigFile) = @_;
+
+    my $nixosConfig = <<EOF;
+{ config, pkgs, ... }:
+
+with pkgs.lib;
+
+{ boot.isContainer = true;
+  security.initialRootPassword = mkDefault "!";
+  networking.hostName = mkDefault "$containerName";
+  networking.useDHCP = false;
+  $extraConfig
+}
+EOF
+
+    write_file($nixosConfigFile, $nixosConfig);
+}
+
 if ($action eq "create") {
     # Acquire an exclusive lock to prevent races with other
     # invocations of ‘nixos-container create’.
@@ -108,20 +127,8 @@ if ($action eq "create") {
 
     mkpath("$root/etc/nixos", 0, 0755);
 
-    my $nixosConfig = <<EOF;
-{ config, pkgs, ... }:
-
-with pkgs.lib;
-
-{ boot.isContainer = true;
-  security.initialRootPassword = mkDefault "!";
-  networking.hostName = mkDefault "$containerName";
-  networking.useDHCP = false;
-  $extraConfig
-}
-EOF
     my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
-    write_file($nixosConfigFile, $nixosConfig);
+    writeNixOSConfig $nixosConfigFile;
 
     # The per-container directory is restricted to prevent users on
     # the host from messing with guest users who happen to have the
@@ -140,8 +147,15 @@ EOF
     exit 0;
 }
 
+my $root = "/var/lib/containers/$containerName";
+my $profileDir = "/nix/var/nix/profiles/per-container/$containerName";
 my $confFile = "/etc/containers/$containerName.conf";
 die "$0: container ‘$containerName’ does not exist\n" if !-e $confFile;
+
+sub isContainerRunning {
+    my $status = `systemctl show 'container\@$containerName'`;
+    return $status =~ /ActiveState=active/;
+}
 
 sub stopContainer {
     system("systemctl", "stop", "container\@$containerName") == 0
@@ -152,11 +166,7 @@ if ($action eq "destroy") {
     die "$0: cannot destroy declarative container (remove it from your configuration.nix instead)\n"
         unless POSIX::access($confFile, &POSIX::W_OK);
 
-    my $root = "/var/lib/containers/$containerName";
-    my $profileDir = "/nix/var/nix/profiles/per-container/$containerName";
-
-    my $status = `systemctl show 'container\@$containerName'`;
-    stopContainer if $status =~ /ActiveState=active/;
+    stopContainer if isContainerRunning;
 
     rmtree($profileDir) if -e $profileDir;
     rmtree($root) if -e $root;
@@ -172,18 +182,37 @@ elsif ($action eq "stop") {
     stopContainer;
 }
 
+elsif ($action eq "update") {
+    my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
+
+    # FIXME: may want to be more careful about clobbering the existing
+    # configuration.nix.
+    writeNixOSConfig $nixosConfigFile if defined $extraConfig;
+
+    system("nix-env", "-p", "$profileDir/system",
+           "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",
+           "--set", "-A", "system") == 0
+        or die "$0: failed to build container configuration\n";
+
+    if (isContainerRunning) {
+        print STDERR "reloading container...\n";
+        system("systemctl", "reload", "container\@$containerName") == 0
+            or die "$0: failed to reload container\n";
+    }
+}
+
 elsif ($action eq "login") {
-    exec($socat, "unix:/var/lib/containers/$containerName/var/lib/login.socket", "-,echo=0,raw");
+    exec($socat, "unix:$root/var/lib/login.socket", "-,echo=0,raw");
 }
 
 elsif ($action eq "root-shell") {
-    exec($socat, "unix:/var/lib/containers/$containerName/var/lib/root-shell.socket", "-");
+    exec($socat, "unix:$root/var/lib/root-shell.socket", "-");
 }
 
 elsif ($action eq "set-root-password") {
     # FIXME: don't get password from the command line.
     my $password = $ARGV[2] or die "$0: no password given\n";
-    open(SOCAT, "|-", $socat, "unix:/var/lib/containers/$containerName/var/lib/root-shell.socket", "-");
+    open(SOCAT, "|-", $socat, "unix:$root/var/lib/root-shell.socket", "-");
     print SOCAT "passwd\n";
     print SOCAT "$password\n";
     print SOCAT "$password\n";
