@@ -30,27 +30,58 @@ with lib;
           };
       };
 
-    # Provide a non-interactive login root shell on
-    # /var/lib/root-shell.socket.  On the host, you can connect to it
-    # by running ‘socat unix:<path-to-container>/var/lib/root-shell.socket -’.
-    systemd.sockets.root-shell =
-      { description = "Root Shell Socket";
+    # Also provide a root login prompt on /var/lib/root-login.socket
+    # that doesn't ask for a password. This socket can only be used by
+    # root on the host.
+    systemd.sockets.root-login =
+      { description = "Root Login Socket";
         wantedBy = [ "sockets.target" ];
         socketConfig =
-          { ListenStream = "/var/lib/root-shell.socket";
-            SocketMode = "0600"; # only root can connect, obviously
+          { ListenStream = "/var/lib/root-login.socket";
+            SocketMode = "0600";
             Accept = true;
           };
       };
 
-    systemd.services."root-shell@" =
-      { description = "Root Shell %i";
+    systemd.services."root-login@" =
+      { description = "Root Login %i";
+        environment.TERM = "linux";
         serviceConfig =
           { Type = "simple";
             StandardInput = "socket";
-            ExecStart = "${pkgs.bash}/bin/bash --login";
+            ExecStart = "${pkgs.socat}/bin/socat -t0 - \"exec:${pkgs.shadow}/bin/login -f root,pty,setsid,setpgid,stderr,ctty\"";
             TimeoutStopSec = 1; # FIXME
           };
+      };
+
+    # Provide a daemon on /var/lib/run-command.socket that reads a
+    # command from stdin and executes it.
+    systemd.sockets.run-command =
+      { description = "Run Command Socket";
+        wantedBy = [ "sockets.target" ];
+        socketConfig =
+          { ListenStream = "/var/lib/run-command.socket";
+            SocketMode = "0600";  # only root can connect
+            Accept = true;
+          };
+      };
+
+    systemd.services."run-command@" =
+      { description = "Run Command %i";
+        environment.TERM = "linux";
+        serviceConfig =
+          { Type = "simple";
+            StandardInput = "socket";
+            TimeoutStopSec = 1; # FIXME
+          };
+        script =
+          ''
+            #! ${pkgs.stdenv.shell} -e
+            source /etc/bashrc
+            read c
+            eval "command=($c)"
+            exec "''${command[@]}"
+          '';
       };
 
     systemd.services.container-startup-done =

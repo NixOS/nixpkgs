@@ -256,7 +256,7 @@ in
               . "/etc/containers/$INSTANCE.conf"
             fi
             echo $SYSTEM_PATH/bin/switch-to-configuration test | \
-              ${pkgs.socat}/bin/socat unix:$root/var/lib/root-shell.socket -
+              ${pkgs.socat}/bin/socat unix:$root/var/lib/run-command.socket -
           '';
 
         serviceConfig.SyslogIdentifier = "container %i";

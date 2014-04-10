@@ -19,7 +19,8 @@ Usage: nixos-container list
        nixos-container start <container-name>
        nixos-container stop <container-name>
        nixos-container login <container-name>
-       nixos-container root-shell <container-name>
+       nixos-container root-login <container-name>
+       nixos-container run <container-name> -- args...
        nixos-container set-root-password <container-name> <password>
        nixos-container show-ip <container-name>
 EOF
@@ -205,14 +206,21 @@ elsif ($action eq "login") {
     exec($socat, "unix:$root/var/lib/login.socket", "-,echo=0,raw");
 }
 
-elsif ($action eq "root-shell") {
-    exec($socat, "unix:$root/var/lib/root-shell.socket", "-");
+elsif ($action eq "root-login") {
+    exec($socat, "unix:$root/var/lib/root-login.socket", "-,echo=0,raw");
+}
+
+elsif ($action eq "run") {
+    shift @ARGV; shift @ARGV;
+    open(SOCAT, "|-", $socat, "unix:$root/var/lib/run-command.socket", "-");
+    print SOCAT join(' ', map { "'$_'" } @ARGV), "\n";
+    close(SOCAT);
 }
 
 elsif ($action eq "set-root-password") {
     # FIXME: don't get password from the command line.
     my $password = $ARGV[2] or die "$0: no password given\n";
-    open(SOCAT, "|-", $socat, "unix:$root/var/lib/root-shell.socket", "-");
+    open(SOCAT, "|-", $socat, "unix:$root/var/lib/run-command.socket", "-");
     print SOCAT "passwd\n";
     print SOCAT "$password\n";
     print SOCAT "$password\n";
