@@ -87,6 +87,8 @@ mkGccWrapper $out/bin/$crossConfig-gcc $gccPath/$crossConfig-gcc
 mkGccWrapper $out/bin/$crossConfig-g++ $gccPath/$crossConfig-g++
 ln -s $crossConfig-g++ $out/bin/$crossConfig-c++
 
+mkGccWrapper $out/bin/$crossConfig-cpp $gccPath/$crossConfig-cpp
+
 mkGccWrapper $out/bin/$crossConfig-g77 $gccPath/$crossConfig-g77
 ln -s $crossConfig-g77 $out/bin/$crossConfig-f77
 

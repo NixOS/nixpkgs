@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cake3";
-  version = "0.3.0.1";
-  sha256 = "0s91kgfh6y14m60na7bsr41gzd573vra5c0mgp1a3pzngsj0cvhm";
+  version = "0.4.0.0";
+  sha256 = "15v50m60fr2mgfm2irxfaw4pi2s3bx187p0y0ns20rqfy0dasxyx";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

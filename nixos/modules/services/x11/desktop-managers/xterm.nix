@@ -19,7 +19,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (config.services.xserver.enable && cfg.enable) {
 
     services.xserver.desktopManager.session = singleton
       { name = "xterm";

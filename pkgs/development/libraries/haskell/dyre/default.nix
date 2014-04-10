@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dyre";
-  version = "0.8.11";
-  sha256 = "0sg5csshznbbyvq72s4sps7bkjlkfxiwcy4i3ip83lrxjw1msvr8";
+  version = "0.8.12";
+  sha256 = "10hnlysy4bjvvznk8v902mlk4jx95qf972clyi1l32xkqrf30972";
   buildDepends = [
     binary executablePath filepath ghcPaths ioStorage time xdgBasedir
   ];

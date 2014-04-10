@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pcsclite, pkgconfig, libusb1, perl }:
 stdenv.mkDerivation rec {
-  version = "1.4.15";
+  version = "1.4.16";
   name = "ccid-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/c/ccid/ccid_${version}.orig.tar.bz2";
-    sha256 = "02lrdmqlw2ilbmgcpi2h7w741p025c10frxdn5w3wnzi8qi1hdjl";
+    sha256 = "0a0e6aa38863c79e38673c085254fa94fd0aa040b9622304a8d6d4222b7e7ea0";
   };
 
   patchPhase = ''

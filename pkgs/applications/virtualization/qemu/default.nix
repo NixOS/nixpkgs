@@ -3,7 +3,7 @@
 , makeWrapper
 , sdlSupport ? true, SDL
 , vncSupport ? true, libjpeg, libpng
-, spiceSupport ? true, spice, spice_protocol
+, spiceSupport ? true, spice, spice_protocol, usbredir
 , x86Only ? false
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ]
     ++ stdenv.lib.optionals sdlSupport [ SDL ]
     ++ stdenv.lib.optionals vncSupport [ libjpeg libpng ]
-    ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice ];
+    ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice usbredir ];
 
   enableParallelBuilding = true;
 

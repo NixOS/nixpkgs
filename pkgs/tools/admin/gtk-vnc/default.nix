@@ -1,8 +1,8 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, gobjectIntrospection
 , python, gtk, pygtk, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
 , libffi, cyrus_sasl, intltool, perl, perlPackages, firefoxPkgs, pulseaudio
-, kbproto, libX11, libXext, xextproto, pygobject, libgcrypt }:
-
+, kbproto, libX11, libXext, xextproto, pygobject, libgcrypt, gtk3, vala
+, pygobject3, enableGTK3 ? false }:
 
 stdenv.mkDerivation rec {
   name = "gtk-vnc-${version}";
@@ -14,21 +14,24 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    python gtk pygtk gnutls cairo libtool pkgconfig glib libffi libgcrypt
-    intltool cyrus_sasl pulseaudio pygobject perl perlPackages.TextCSV
-  ];
+    python gnutls cairo libtool pkgconfig glib libffi libgcrypt
+    intltool cyrus_sasl pulseaudio perl perlPackages.TextCSV
+    gobjectIntrospection
+  ] ++ (if enableGTK3 then [ gtk3 vala pygobject3 ] else [ gtk pygtk pygobject ]);
 
   NIX_CFLAGS_COMPILE = "-fstack-protector-all";
   configureFlags = [
     "--with-python"
     "--with-examples"
+    (if enableGTK3 then "--with-gtk=3.0" else "--with-gtk=2.0")
   ];
 
-  makeFlags = "CODEGENDIR=${pygobject}/share/pygobject/2.0/codegen/ DEFSDIR=${pygtk}/share/pygtk/2.0/defs/";
+  makeFlags = stdenv.lib.optionalString (!enableGTK3)
+    "CODEGENDIR=${pygobject}/share/pygobject/2.0/codegen/ DEFSDIR=${pygtk}/share/pygtk/2.0/defs/";
 
   meta = with stdenv.lib; {
     description = "A GTK VNC widget";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin offline ];
     platforms = platforms.linux;
     license = licenses.lgpl21;
   };

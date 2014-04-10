@@ -40,8 +40,6 @@ with pkgs.lib;
       '';
 
     services.udev.packages = [ pkgs.udisks ];
-
-    systemd.packages = [ pkgs.udisks ];
   };
 
 }

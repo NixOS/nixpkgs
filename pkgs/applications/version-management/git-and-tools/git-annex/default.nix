@@ -1,9 +1,9 @@
 { cabal, aeson, async, blazeBuilder, bloomfilter, bup, byteable
 , caseInsensitive, clientsession, cryptoApi, cryptohash, curl
 , dataDefault, dataenc, DAV, dbus, dlist, dns, editDistance
-, extensibleExceptions, feed, filepath, git, gnupg1, gnutls, hamlet
-, hinotify, hS3, hslogger, HTTP, httpClient, httpConduit, httpTypes
-, IfElse, json, liftedBase, lsof, MissingH
+, extensibleExceptions, fdoNotify, feed, filepath, git, gnupg1
+, gnutls, hamlet, hinotify, hS3, hslogger, HTTP, httpClient
+, httpConduit, httpTypes, IfElse, json, liftedBase, lsof, MissingH
 , MonadCatchIOTransformers, monadControl, mtl, network
 , networkConduit, networkInfo, networkMulticast
 , networkProtocolXmpp, openssh, optparseApplicative, perl
@@ -16,16 +16,16 @@
 
 cabal.mkDerivation (self: {
   pname = "git-annex";
-  version = "5.20140320";
-  sha256 = "0jhg5nbvdsiaprpj4h57fpfskhx0nqva4yx6krfd90i9gwgkm8l5";
+  version = "5.20140405";
+  sha256 = "0nbfnv9z2jhx2jr2nma0y1znvbaa09rv1drl6wk27j6xsbiq3p3k";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     aeson async blazeBuilder bloomfilter byteable caseInsensitive
     clientsession cryptoApi cryptohash dataDefault dataenc DAV dbus
-    dlist dns editDistance extensibleExceptions feed filepath gnutls
-    hamlet hinotify hS3 hslogger HTTP httpClient httpConduit httpTypes
-    IfElse json liftedBase MissingH MonadCatchIOTransformers
+    dlist dns editDistance extensibleExceptions fdoNotify feed filepath
+    gnutls hamlet hinotify hS3 hslogger HTTP httpClient httpConduit
+    httpTypes IfElse json liftedBase MissingH MonadCatchIOTransformers
     monadControl mtl network networkConduit networkInfo
     networkMulticast networkProtocolXmpp optparseApplicative QuickCheck
     random regexTdfa SafeSemaphore securemem SHA stm tasty tastyHunit

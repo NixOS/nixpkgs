@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gtk, spice_protocol, intltool, celt_0_5_1
 , openssl, pulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
-, cyrus_sasl, python, pygtk, autoconf, automake, libtool }:
+, cyrus_sasl, python, pygtk, autoconf, automake, libtool, usbredir
+, gtk3, enableGTK3 ? false }:
 
 with stdenv.lib;
 
@@ -13,9 +14,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gtk spice_protocol celt_0_5_1 openssl pulseaudio pixman gobjectIntrospection
-    libjpeg_turbo zlib cyrus_sasl python pygtk
-  ];
+    spice_protocol celt_0_5_1 openssl pulseaudio pixman gobjectIntrospection
+    libjpeg_turbo zlib cyrus_sasl python pygtk usbredir
+  ] ++ (if enableGTK3 then [ gtk3 ] else [ gtk ]);
 
   nativeBuildInputs = [ pkgconfig intltool libtool autoconf automake ];
 
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-maintainer-mode"
-    "--with-gtk=2.0"
+    (if enableGTK3 then "--with-gtk3" else "--with-gtk=2.0")
   ];
 
   dontDisableStatic = true; # Needed by the coroutine test

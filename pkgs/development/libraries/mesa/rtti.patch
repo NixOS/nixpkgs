@@ -1,0 +1,72 @@
+http://lists.freedesktop.org/archives/mesa-dev/2013-October/046311.html
+
+* As discussed on the mailing list,
+  forced no-rtti breaks C++ public
+  API's such as the Haiku C++ libGL.so
+* -fno-rtti *can* be still set however
+  instead of blindly forcing -fno-rtti,
+  we can rely on the llvm-config
+  --cppflags output.
+  If the system llvm is built without
+  rtti (default), the no-rtti flag will be
+  present in llvm-config --cppflags
+  (which we pick up on)
+  If llvm is built with rtti
+  (REQUIRES_RTTI=1), then -fno-rtti is
+  removed from llvm-config --cppflags.
+* We could selectively add / remove rtti
+  from various components, however mixing
+  rtti and non-rtti code is tricky and
+  could introduce bugs.
+* This needs impact tested.
+---
+ configure.ac                      | 1 -
+ scons/llvm.py                     | 3 ---
+ src/gallium/auxiliary/Makefile.am | 6 ------
+ 3 files changed, 10 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 0d082d2..3335575 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1943,7 +1943,6 @@ AM_CONDITIONAL(HAVE_LOADER_GALLIUM, test x$enable_gallium_loader = xyes)
+ AM_CONDITIONAL(HAVE_DRM_LOADER_GALLIUM, test x$enable_gallium_drm_loader = xyes)
+ AM_CONDITIONAL(HAVE_GALLIUM_COMPUTE, test x$enable_opencl = xyes)
+ AM_CONDITIONAL(HAVE_MESA_LLVM, test x$MESA_LLVM = x1)
+-AM_CONDITIONAL(LLVM_NEEDS_FNORTTI, test $LLVM_VERSION_INT -ge 302)
+ 
+ AC_SUBST([ELF_LIB])
+ 
+diff --git a/scons/llvm.py b/scons/llvm.py
+index 7cd609c..c1c3736 100644
+--- a/scons/llvm.py
++++ b/scons/llvm.py
+@@ -195,9 +195,6 @@ def generate(env):
+             if llvm_version >= distutils.version.LooseVersion('3.1'):
+                 components.append('mcjit')
+ 
+-            if llvm_version >= distutils.version.LooseVersion('3.2'):
+-                env.Append(CXXFLAGS = ('-fno-rtti',))
+-
+             env.ParseConfig('llvm-config --libs ' + ' '.join(components))
+             env.ParseConfig('llvm-config --ldflags')
+         except OSError:
+diff --git a/src/gallium/auxiliary/Makefile.am b/src/gallium/auxiliary/Makefile.am
+index 670e124..2d2d8d4 100644
+--- a/src/gallium/auxiliary/Makefile.am
++++ b/src/gallium/auxiliary/Makefile.am
+@@ -25,12 +25,6 @@ AM_CXXFLAGS += \
+ 	$(GALLIUM_CFLAGS) \
+ 	$(LLVM_CXXFLAGS)
+ 
+-if LLVM_NEEDS_FNORTTI
+-
+-AM_CXXFLAGS += -fno-rtti
+-
+-endif
+-
+ libgallium_la_SOURCES += \
+ 	$(GALLIVM_SOURCES) \
+ 	$(GALLIVM_CPP_SOURCES)
+-- 
+1.8.4

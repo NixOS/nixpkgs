@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "cb1cat-${version}";
-  version = "20140328100000";
+  version = "20140403153000";
 
   src = fetchurl {
     url    = "https://www.cblnk.com/cb1cat/dist/${name}.tgz";
-    sha256 = "0fbly4fg2qsb4kx9wgv357bsa3mmmy8xmy0yszw80k50ixphjswv";
+    sha256 = "1zi0rxbgmp6vkcarg493gfgn7pnfdpz0iplcgslbc45n2bxkv70q";
   };
 
   installPhase = ''

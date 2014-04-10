@@ -460,6 +460,43 @@ rec {
     };
   });
 
+  autopep8 = buildPythonPackage (rec {
+    name = "autopep8-1.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/autopep8/${name}.tar.gz";
+      md5 = "41782e66efcbaf9d761bb45a2d2929bb";
+    };
+
+    propagatedBuildInputs = [ pep8 ];
+
+    # One test fails:
+    # FAIL: test_recursive_should_not_crash_on_unicode_filename (test.test_autopep8.CommandLineTests)
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
+      homepage = https://pypi.python.org/pypi/autopep8/;
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  });
+
+  backports_ssl_match_hostname_3_4_0_2 = pythonPackages.buildPythonPackage rec {
+    name = "backports.ssl_match_hostname-3.4.0.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/backports.ssl_match_hostname/backports.ssl_match_hostname-3.4.0.2.tar.gz";
+      md5 = "788214f20214c64631f0859dc79f23c6";
+    };
+
+    meta = {
+      description = "The Secure Sockets layer is only actually *secure*";
+      homepage = http://bitbucket.org/brandon/backports.ssl_match_hostname;
+    };
+  };
+
   bcdoc = buildPythonPackage rec {
     name = "bcdoc-0.12.1";
 
@@ -1484,6 +1521,22 @@ rec {
     };
   };
 
+  derpconf = pythonPackages.buildPythonPackage rec {
+    name = "derpconf-0.4.9";
+
+    propagatedBuildInputs = [ six ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/derpconf/${name}.tar.gz";
+      md5 = "a164807d7bf0c4adf1de781305f29b82";
+    };
+
+    meta = {
+      description = "derpconf abstracts loading configuration files for your app";
+      homepage = https://github.com/globocom/derpconf;
+      license = licenses.mit;
+    };
+  };
 
   dpkt = buildPythonPackage rec {
     name = "dpkt-1.8";
@@ -3192,6 +3245,22 @@ rec {
     };
   };
 
+  gunicorn = buildPythonPackage rec {
+    name = "gunicorn-18.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/gunicorn/${name}.tar.gz";
+      md5 = "c7138b9ac7515a42066922d2b6120fbe";
+    };
+    
+    buildInputs = [ pytest ];
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/gunicorn;
+      description = "WSGI HTTP Server for UNIX";
+    };
+  };
+
   hcs_utils = buildPythonPackage rec {
     name = "hcs_utils-1.3";
 
@@ -3370,7 +3439,7 @@ rec {
       url = "http://pypi.python.org/packages/source/i/ipdb/ipdb-0.7.tar.gz";
       md5 = "d879f9b2b0f26e0e999809585dcaec61";
     };
-    propagatedBuildInputs = [ pythonPackages.ipython ];
+    propagatedBuildInputs = [ pythonPackages.ipythonLight ];
   };
 
   ipdbplugin = buildPythonPackage {
@@ -3379,7 +3448,7 @@ rec {
       url = "https://pypi.python.org/packages/source/i/ipdbplugin/ipdbplugin-1.4.tar.gz";
       md5 = "f9a41512e5d901ea0fa199c3f648bba7";
     };
-    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipython ];
+    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipythonLight ];
   };
 
 
@@ -8258,11 +8327,13 @@ rec {
 
 
   tornado = buildPythonPackage rec {
-    name = "tornado-3.1.1";
+    name = "tornado-3.2";
+
+    propagatedBuildInputs = [ backports_ssl_match_hostname_3_4_0_2 ];
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
-      sha256 = "1ipx23ix8hyd88rywmwr7bfdgkvkdac87xq3f9l5vkm0wjzh8n9l";
+      url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
+      md5 = "bd83cee5f1a5c5e139e87996d00b251b";
     };
 
     doCheck = false;
@@ -8724,19 +8795,21 @@ rec {
   };
 
   searx = buildPythonPackage rec {
-    name = "searx-${version}";
-    version = "0.2.0";
+    name = "searx-${rev}";
+    rev = "44d3af9fb2482cd0df1a8ababbe2fdf27ab33172";
 
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/source/s/searx/${name}.tar.gz";
-      sha256 = "19hxjg3vhq7fygcvfhsr3i40c8kbi7i76ym9cv2s03b3zijd38w0";
+    src = fetchgit {
+      url = "git://github.com/asciimoo/searx";
+      inherit rev;
+      sha256 = "1w505pzdkkcglq782wg7f5fxrw9i5jzp7px20c2xz18pps2m3rsm";
     };
 
-    propagatedBuildInputs = [ pyyaml lxml grequests flaskbabel flask requests gevent speaklater Babel pytz ];
+    propagatedBuildInputs = [ pyyaml lxml grequests flaskbabel flask requests
+      gevent speaklater Babel pytz dateutil ];
 
     meta = {
       homepage = https://github.com/asciimoo/searx;
-      description = "A privacy-respecting, hackable metasearch engine.";
+      description = "A privacy-respecting, hackable metasearch engine";
       license = stdenv.lib.licenses.agpl3Plus;
       maintainers = [ stdenv.lib.maintainers.matejc ];
     };
@@ -8831,6 +8904,53 @@ rec {
       homepage = https://github.com/garbas/pypi2nix;
       description = "";
       maintainers = [ pkgs.stdenv.lib.maintainers.garbas ];
+    };
+  };
+
+
+  thumbor = pythonPackages.buildPythonPackage rec {
+    name = "thumbor-4.0.4";
+
+    propagatedBuildInputs = [
+                    tornado
+                    pycrypto
+                    pycurl
+                    pillow
+                    derpconf
+                    python_magic
+                    thumborPexif
+                    (pkgs.opencv.override {
+                        gtk = null;
+                        glib = null;
+                        xineLib = null;
+                        gstreamer = null;
+                        ffmpeg = null;
+                    }) ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/thumbor/${name}.tar.gz";
+      md5 = "cf639a1cc57ee287b299ace450444408";
+    };
+
+    meta = {
+      description = "Thumbor is a smart imaging service. It enables on-demand crop, resizing and flipping of images.";
+      homepage = https://github.com/globocom/thumbor/wiki;
+      license = licenses.mit;
+    };
+  };
+
+  thumborPexif = pythonPackages.buildPythonPackage rec {
+    name = "thumbor-pexif-0.14";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/thumbor-pexif/${name}.tar.gz";
+      md5 = "fb4cdb60f4a0bead5193fb483ccd3430";
+    };
+
+    meta = {
+      description = "Module to parse and edit the EXIF data tags in a JPEG image";
+      homepage = http://www.benno.id.au/code/pexif/;
+      license = licenses.mit;
     };
   };
 

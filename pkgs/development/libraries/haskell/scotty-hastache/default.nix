@@ -1,14 +1,13 @@
-{ cabal, blazeHtml, blazeMarkup, filepath, hastache, httpTypes, mtl
-, scotty, text, wai, warp
+{ cabal, filepath, hastache, httpTypes, mtl, scotty, text, wai
+, warp
 }:
 
 cabal.mkDerivation (self: {
   pname = "scotty-hastache";
-  version = "0.2.0";
-  sha256 = "105cxlasj4sl4ddzg8ms6k95078q10zcm2c86jcn76s0jmv95669";
+  version = "0.2.1";
+  sha256 = "1yyip8iq1n71iidmpbfs7rifxvpphyrcaf4z394rx36hq72ka8dn";
   buildDepends = [
-    blazeHtml blazeMarkup filepath hastache httpTypes mtl scotty text
-    wai warp
+    filepath hastache httpTypes mtl scotty text wai warp
   ];
   meta = {
     homepage = "https://github.com/scotty-web/scotty-hastache";

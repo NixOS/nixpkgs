@@ -1,22 +1,22 @@
-{ cabal, blazeBuilder, caseInsensitive, conduit, connection, cookie
-, dataDefaultClass, hspec, httpClient, httpClientConduit
-, httpClientMultipart, httpClientTls, httpTypes, HUnit, liftedBase
-, network, networkConduit, resourcet, text, time, transformers
-, utf8String, wai, warp, warpTls
+{ cabal, blazeBuilder, caseInsensitive, conduit, conduitExtra
+, connection, cookie, dataDefaultClass, hspec, httpClient
+, httpClientTls, httpTypes, HUnit, liftedBase, monadControl, mtl
+, network, networkConduit, resourcet, streamingCommons, text, time
+, transformers, utf8String, wai, warp, warpTls
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "2.0.0.8";
-  sha256 = "1yralv1nalvdpgamnbjl8xm4lrx22m3v6jancrzisq38a680q96b";
+  version = "2.1.0";
+  sha256 = "1qlqhrrc130c8wvgbbbkb7qrm8gp48gkv5xanqgb26amvny98gsv";
   buildDepends = [
-    conduit httpClient httpClientConduit httpClientTls httpTypes
-    liftedBase resourcet transformers
+    conduit httpClient httpClientTls httpTypes liftedBase monadControl
+    mtl resourcet transformers
   ];
   testDepends = [
-    blazeBuilder caseInsensitive conduit connection cookie
-    dataDefaultClass hspec httpClient httpClientMultipart httpTypes
-    HUnit liftedBase network networkConduit text time transformers
+    blazeBuilder caseInsensitive conduit conduitExtra connection cookie
+    dataDefaultClass hspec httpClient httpTypes HUnit liftedBase
+    network networkConduit streamingCommons text time transformers
     utf8String wai warp warpTls
   ];
   doCheck = false;

@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     "--with-pkcs11-modules=$$out/lib/pkcs11/"
   ];
 
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/gnome-keyring" \
-      --prefix XDG_DATA_DIRS : "${glib}/share:$out/share"
+      --prefix XDG_DATA_DIRS : "${glib}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
     wrapProgram "$out/bin/gnome-keyring-daemon" \
-      --prefix XDG_DATA_DIRS : "${glib}/share:$out/share"
+      --prefix XDG_DATA_DIRS : "${glib}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

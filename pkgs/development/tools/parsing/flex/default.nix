@@ -1,11 +1,11 @@
 { stdenv, fetchurl, bison, m4 }:
 
 stdenv.mkDerivation {
-  name = "flex-2.5.35";
+  name = "flex-2.5.39";
 
   src = fetchurl {
-    url = mirror://sourceforge/flex/flex-2.5.35.tar.bz2;
-    sha256 = "0ysff249mwhq0053bw3hxh58djc0gy7vjan2z1krrf9n5d5vvv0b";
+    url = mirror://sourceforge/flex/flex-2.5.39.tar.bz2;
+    sha256 = "0zv15giw3gma03y2bzw78hjfy49vyir7vbcgnh9bb3637dgvblmd";
   };
 
   buildInputs = [ bison ];

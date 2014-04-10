@@ -1,14 +1,15 @@
-{ cabal, conduit, cprngAes, dataDefaultClass, network
-, networkConduit, tls, transformers, wai, warp
+{ cabal, conduit, conduitExtra, cprngAes, dataDefaultClass, network
+, networkConduit, resourcet, streamingCommons, tls, transformers
+, wai, warp
 }:
 
 cabal.mkDerivation (self: {
   pname = "warp-tls";
-  version = "2.0.3.1";
-  sha256 = "1cyf4syblisi5hana7h2g72yyrjln40v3b6jq2253nglqip79l5w";
+  version = "2.0.3.3";
+  sha256 = "03fjghsa9zvrvg7ickph577zzr62n91gsb99v9k47s4nd2xri2rj";
   buildDepends = [
-    conduit cprngAes dataDefaultClass network networkConduit tls
-    transformers wai warp
+    conduit conduitExtra cprngAes dataDefaultClass network
+    networkConduit resourcet streamingCommons tls transformers wai warp
   ];
   meta = {
     homepage = "http://github.com/yesodweb/wai";

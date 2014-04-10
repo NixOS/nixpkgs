@@ -1,11 +1,11 @@
 {stdenv, fetchurl, libdvdcss}:
 
 stdenv.mkDerivation {
-  name = "libdvdread-4.1.3";
+  name = "libdvdread-4.2.1";
   
   src = fetchurl {
-    url = http://www.mplayerhq.hu/MPlayer/releases/dvdnav/libdvdread-4.1.3.tar.bz2;
-    sha1 = "fc4c7ba3e49929191e057b435bc4f867583ea8d5";
+    url = http://dvdnav.mplayerhq.hu/releases/libdvdread-4.2.1.tar.xz;
+    sha256 = "af9b98f049580a6521d56c978b736d3d609562dd12955e11d50e26d97542dcd4";
   };
 
   buildInputs = [libdvdcss];

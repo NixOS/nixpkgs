@@ -37,6 +37,10 @@ in
       '';
   };
 
+  glamoregl = attrs: attrs // {
+    installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
+  };
+
   imake = attrs: attrs // {
     inherit (xorg) xorgcffiles;
     x11BuildHook = ./imake.sh;
@@ -158,7 +162,7 @@ in
 
   xf86inputsynaptics = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [args.mtdev];
-    installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/include/xorg";
+    installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
   };
 
   xf86inputvmmouse = attrs: attrs // {
@@ -167,6 +171,10 @@ in
       "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d"
       "--with-udev-rules-dir=$(out)/lib/udev/rules.d"
     ];
+  };
+
+  xf86videoati = attrs: attrs // {
+    NIX_CFLAGS_COMPILE = "-I${xorg.glamoregl}/include/xorg";
   };
 
   xf86videonv = attrs: attrs // {
@@ -178,10 +186,6 @@ in
 
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
-    patches = [( args.fetchurl {
-      url = https://projects.archlinux.org/svntogit/packages.git/plain/trunk/xatracker-v2-fixes.patch?h=packages/xf86-video-vmware;
-      sha256 = "1k5a3zf2bzmw84di31b8zfy51n2mqrr01xjfy5nw7395qv5r5cvs";
-    })];
   };
 
   xdriinfo = attrs: attrs // {
@@ -211,13 +215,6 @@ in
     '';
   };
 
-  xmodmap = attrs: attrs // {
-    patches = [(args.fetchurl {
-      url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-apps/xmodmap/files/xmodmap-1.0.7-_GNU_SOURCE.patch;
-      sha256 = "0q3zhy0wy1kkbpagzav8869fais4lw5q5vybgjj7wkmak06c5648";
-      name = "new-gcc.patch";
-    })];
-  };
   xorgserver = with xorg; attrs: attrs // {
     configureFlags = [
       "--enable-xcsecurity" # enable SECURITY extension
@@ -279,6 +276,6 @@ in
   };
 
   xwd = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [xorg.libXt];
+    buildInputs = with xorg; attrs.buildInputs ++ [libXt libxkbfile];
   };
 }

@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-websockets";
-  version = "2.1.0";
-  sha256 = "094imqhkn4ghifgp2qhs4hnby3zzdd84fhmyvvy7igcpz1rmll7a";
+  version = "2.1.0.1";
+  sha256 = "1ic1wgfp16j6lhypn1psmicafjavbhq5rvm32xqwkb65abhpg571";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

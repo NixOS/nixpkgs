@@ -54,7 +54,7 @@ in
 
     networking.firewall.enable = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description =
         ''
           Whether to enable the firewall.  This is a simple stateful

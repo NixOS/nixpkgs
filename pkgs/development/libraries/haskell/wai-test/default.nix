@@ -1,15 +1,15 @@
 { cabal, blazeBuilder, blazeBuilderConduit, caseInsensitive
-, conduit, cookie, deepseq, hspec, httpTypes, network, text
-, transformers, wai
+, conduit, conduitExtra, cookie, deepseq, hspec, httpTypes, network
+, text, transformers, wai
 }:
 
 cabal.mkDerivation (self: {
   pname = "wai-test";
-  version = "2.0.1";
-  sha256 = "0c803l3cz5bjf60l97sy1isxhnmbpzr5x39yhnck28r0vykycnrj";
+  version = "2.0.1.1";
+  sha256 = "08mkn6v8kxlcn2qb5rz9m5mqzl9wy43mxs2jzl1gavkf9bhwc93s";
   buildDepends = [
-    blazeBuilder blazeBuilderConduit caseInsensitive conduit cookie
-    deepseq httpTypes network text transformers wai
+    blazeBuilder blazeBuilderConduit caseInsensitive conduit
+    conduitExtra cookie deepseq httpTypes network text transformers wai
   ];
   testDepends = [ hspec wai ];
   meta = {

@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
     sed -i s,/etc/ssl/certs/ca-certificates.crt,/etc/ssl/certs/ca-bundle.crt, src/default.h
   '';
 
-  buildInputs = [ makeWrapper gtk libsoup pkgconfig webkit ];
+  buildInputs = [ makeWrapper gtk libsoup pkgconfig webkit gsettings_desktop_schemas ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/vimb" \
       --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = {
