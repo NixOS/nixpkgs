@@ -1,23 +1,22 @@
-{ cabal, aeson, attempt, attoparsecConduit, base16Bytestring
-, base64Bytestring, blazeBuilder, caseInsensitive, cereal, conduit
-, cryptoApi, cryptohash, cryptohashCryptoapi, dataDefault, failure
-, filepath, httpConduit, httpTypes, liftedBase, monadControl, mtl
-, resourcet, text, time, transformers, unorderedContainers
-, utf8String, vector, xmlConduit
+{ cabal, aeson, base16Bytestring, base64Bytestring, blazeBuilder
+, byteable, caseInsensitive, cereal, conduit, conduitExtra
+, cryptohash, dataDefault, filepath, httpConduit, httpTypes
+, liftedBase, monadControl, mtl, resourcet, text, time
+, transformers, unorderedContainers, utf8String, vector, xmlConduit
 }:
 
 cabal.mkDerivation (self: {
   pname = "aws";
-  version = "0.8.6";
-  sha256 = "19hjwj15zmhmf33n2d2dkwan59ylwkaslh85sh04v05hsm8y5y1a";
+  version = "0.9";
+  sha256 = "07sdz179vqfdcnm6rrdg068xdyqw8m2565bdba5a1s987vdvps21";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    aeson attempt attoparsecConduit base16Bytestring base64Bytestring
-    blazeBuilder caseInsensitive cereal conduit cryptoApi cryptohash
-    cryptohashCryptoapi dataDefault failure filepath httpConduit
-    httpTypes liftedBase monadControl mtl resourcet text time
-    transformers unorderedContainers utf8String vector xmlConduit
+    aeson base16Bytestring base64Bytestring blazeBuilder byteable
+    caseInsensitive cereal conduit conduitExtra cryptohash dataDefault
+    filepath httpConduit httpTypes liftedBase monadControl mtl
+    resourcet text time transformers unorderedContainers utf8String
+    vector xmlConduit
   ];
   meta = {
     homepage = "http://github.com/aristidb/aws";
