@@ -93,6 +93,7 @@ rec {
       # Also, deterministic builds require a fresh binutils (strip).
       initialPath = [binutils] ++ [bootstrapTools] ++ extraPath;
       fetchurlBoot = fetchurl;
+      libfaketime = null;
       inherit gcc;
       # Having the proper 'platform' in all the stdenvs allows getting proper
       # linuxHeaders for example.
@@ -313,13 +314,15 @@ rec {
       shellPackage = stdenvLinuxBoot4Pkgs.bash;
     };
 
+    inherit (stdenvLinuxBoot4Pkgs) libfaketime;
+
     overrides = pkgs: {
       inherit gcc;
       inherit (stdenvLinuxBoot3Pkgs) glibc;
       inherit (stdenvLinuxBoot4Pkgs) binutils;
       inherit (stdenvLinuxBoot4Pkgs)
         gzip bzip2 xz bash coreutils diffutils findutils gawk
-        gnumake gnused gnutar gnugrep gnupatch patchelf
+        gnumake gnused gnutar gnugrep gnupatch libfaketime patchelf
         attr acl paxctl;
     };
   };
