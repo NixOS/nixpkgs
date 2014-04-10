@@ -14,10 +14,14 @@ stdenv.mkDerivation rec {
 
   patches = [ ./install-localstatedir-in-store.patch ./support-db2x.patch ];
 
-  preConfigure = "export XML_CATALOG_FILES=${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
+  preConfigure = ''
+    export XML_CATALOG_FILES=${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml
+    substituteInPlace doc/rootfs/Makefile.am --replace '@LXCROOTFSMOUNT@' '$out/lib/lxc/rootfs'
+  '';
 
   configureFlags = [
     "--localstatedir=/var"
+    "--with-rootfs-path=/var/lib/lxc/rootfs"
     "--enable-doc"
     "--enable-tests"
     "--enable-apparmor"
