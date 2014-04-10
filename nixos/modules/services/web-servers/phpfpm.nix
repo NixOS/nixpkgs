@@ -35,6 +35,13 @@ in {
         '';
       };
 
+      phpPackage = mkOption {
+        default = pkgs.php54;
+        description = ''
+          The PHP package to use for running the FPM service.
+        '';
+      };
+
       poolConfigs = mkOption {
         type = types.attrsOf types.lines;
         default = {};
@@ -68,7 +75,7 @@ in {
         mkdir -p "${stateDir}"
       '';
       serviceConfig = {
-        ExecStart = "${pkgs.php54}/sbin/php-fpm -y ${cfgFile}";
+        ExecStart = "${cfg.phpPackage}/sbin/php-fpm -y ${cfgFile}";
         PIDFile = pidFile;
       };
     };
