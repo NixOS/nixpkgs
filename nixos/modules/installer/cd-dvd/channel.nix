@@ -28,7 +28,7 @@ in
 {
   # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
   # for nixos-install.
-  boot.postBootCommands =
+  boot.postBootCommands = mkAfter
     ''
       if ! [ -e /var/lib/nixos/did-channel-init ]; then
         echo "unpacking the NixOS/Nixpkgs sources..."

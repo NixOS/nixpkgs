@@ -26,7 +26,10 @@ EOF
     exit 1;
 }
 
-die "This is not a NixOS installation (/etc/NIXOS is missing)!\n" unless -f "/etc/NIXOS";
+# This is a NixOS installation if it has /etc/NIXOS or a proper
+# /etc/os-release.
+die "This is not a NixOS installation!\n" unless
+    -f "/etc/NIXOS" || (read_file("/etc/os-release", err_mode => 'quiet') // "") =~ /ID=nixos/s;
 
 openlog("nixos", "", LOG_USER);
 
@@ -173,7 +176,10 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
-                if (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes")) {
+                if (boolIsTrue($unitInfo->{'X-ReloadIfChanged'} // "no")) {
+                    write_file($reloadListFile, { append => 1 }, "$unit\n");
+                }
+                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes")) {
                     push @unitsToSkip, $unit;
                 } else {
                     # If this unit is socket-activated, then stop the
@@ -321,7 +327,7 @@ if (scalar @restart > 0) {
 # that are symlinks to other units.  We shouldn't start both at the
 # same time because we'll get a "Failed to add path to set" error from
 # systemd.
-my @start = unique("default.target", "timers.target", split('\n', read_file($startListFile, err_mode => 'quiet') // ""));
+my @start = unique("default.target", "timers.target", "sockets.target", split('\n', read_file($startListFile, err_mode => 'quiet') // ""));
 print STDERR "starting the following units: ", join(", ", sort(@start)), "\n";
 system("@systemd@/bin/systemctl", "start", "--", @start) == 0 or $res = 4;
 unlink($startListFile);
