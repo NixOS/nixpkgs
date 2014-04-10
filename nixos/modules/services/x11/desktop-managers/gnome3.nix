@@ -5,6 +5,16 @@ with pkgs.lib;
 let
   cfg = config.services.xserver.desktopManager.gnome3;
   gnome3 = pkgs.gnome3;
+
+  # Remove packages of ys from xs, based on their names
+  removePackagesByName = xs: ys:
+    let
+      pkgName = drv: (builtins.parseDrvName drv.name).name;
+	  ysNames = map pkgName ys;
+      res = (filter (x: !(builtins.elem (pkgName x) ysNames)) xs);
+    in
+      filter (x: !(builtins.elem (pkgName x) ysNames)) xs;
+
 in {
 
   options = {
@@ -68,7 +78,7 @@ in {
         gnome3.gnome_settings_daemon
         gnome3.gnome_shell
         gnome3.gnome_themes_standard
-      ] ++ (lists.difference [
+      ] ++ (removePackagesByName [
         gnome3.baobab
         gnome3.eog
         gnome3.epiphany
