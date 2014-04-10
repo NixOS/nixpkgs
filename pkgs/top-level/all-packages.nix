@@ -1282,6 +1282,8 @@ let
 
   logstash = callPackage ../tools/misc/logstash { };
 
+  logstash-forwarder = callPackage ../tools/misc/logstash-forwarder { };
+
   kippo = callPackage ../servers/kippo { };
 
   klavaro = callPackage ../games/klavaro {};
