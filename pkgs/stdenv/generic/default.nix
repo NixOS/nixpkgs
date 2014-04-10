@@ -1,7 +1,7 @@
 let lib = import ../../../lib; in lib.makeOverridable (
 
 { system, name ? "stdenv", preHook ? "", initialPath, gcc, shell
-, extraAttrs ? {}, overrides ? (pkgs: {}), config
+, libfaketime, extraAttrs ? {}, overrides ? (pkgs: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -32,9 +32,10 @@ let
 
       setup = setupScript;
 
-      inherit preHook initialPath gcc shell;
+      inherit preHook initialPath gcc shell libfaketime;
 
       propagatedUserEnvPkgs = [gcc] ++
+        lib.optionals (libfaketime != null) [libfaketime] ++
         lib.filter lib.isDerivation initialPath;
 
       __ignoreNulls = true;
@@ -81,12 +82,14 @@ let
               userHook = config.stdenv.userHook or null;
 
               # Inputs built by the cross compiler.
-              buildInputs = lib.optionals (crossConfig != null) (buildInputs ++ extraBuildInputs);
+              buildInputs = lib.optionals (crossConfig != null) (buildInputs ++ extraBuildInputs) ++
+                lib.optionals (libfaketime != null) [libfaketime];
               propagatedBuildInputs = lib.optionals (crossConfig != null) propagatedBuildInputs;
               # Inputs built by the usual native compiler.
-              nativeBuildInputs = nativeBuildInputs ++ lib.optionals (crossConfig == null) (buildInputs ++ extraBuildInputs);
+              nativeBuildInputs = nativeBuildInputs ++ lib.optionals (crossConfig == null) (buildInputs ++ extraBuildInputs) ++ lib.optionals (libfaketime != null) [libfaketime];
               propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
-                lib.optionals (crossConfig == null) propagatedBuildInputs;
+                lib.optionals (crossConfig == null) propagatedBuildInputs ++
+                lib.optionals (libfaketime != null) [libfaketime];
           }))) (
           {
             # The meta attribute is passed in the resulting attribute set,
