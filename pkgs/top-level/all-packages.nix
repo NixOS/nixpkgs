@@ -4564,7 +4564,9 @@ let
   };
   cairomm = callPackage ../development/libraries/cairomm { };
 
-  pango = callPackage ../development/libraries/pango { };
+  pango = callPackage ../development/libraries/pango (
+    lib.optionalAttrs stdenv.isDarwin { flex = flex_2_5_35; } # flex fails to build
+  );
   pangomm = callPackage ../development/libraries/pangomm { };
 
   pangox_compat = callPackage ../development/libraries/pangox-compat { };
