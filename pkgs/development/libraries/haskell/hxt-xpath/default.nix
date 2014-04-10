@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   meta = {
     homepage = "http://www.fh-wedel.de/~si/HXmlToolbox/index.html";
     description = "The XPath modules for HXT";
-    license = self.stdenv.lib.licenses.mit;
+    license = "unknown";
     platforms = self.ghc.meta.platforms;
   };
 })
