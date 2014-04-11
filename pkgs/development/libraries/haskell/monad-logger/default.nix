@@ -1,16 +1,16 @@
-{ cabal, blazeBuilder, conduit, exceptions, fastLogger, liftedBase
-, monadControl, monadLoops, mtl, resourcet, stm, stmChans, text
-, transformers, transformersBase
+{ cabal, blazeBuilder, conduit, conduitExtra, exceptions
+, fastLogger, liftedBase, monadControl, monadLoops, mtl, resourcet
+, stm, stmChans, text, transformers, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "monad-logger";
-  version = "0.3.5.1";
-  sha256 = "0kc23y1l3ja2ym0pr19kcm8aiv8g8skh24p9i3vm74chadsn81pv";
+  version = "0.3.6";
+  sha256 = "0a3dbk3c1jv8zbxrb5vzf5ypwwzkamxd35rm8pjn13aqcnnznniq";
   buildDepends = [
-    blazeBuilder conduit exceptions fastLogger liftedBase monadControl
-    monadLoops mtl resourcet stm stmChans text transformers
-    transformersBase
+    blazeBuilder conduit conduitExtra exceptions fastLogger liftedBase
+    monadControl monadLoops mtl resourcet stm stmChans text
+    transformers transformersBase
   ];
   meta = {
     homepage = "https://github.com/kazu-yamamoto/logger";
