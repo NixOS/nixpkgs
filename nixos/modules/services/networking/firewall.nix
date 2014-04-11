@@ -32,9 +32,9 @@ let
     ''
       # Helper command to manipulate both the IPv4 and IPv6 tables.
       ip46tables() {
-        iptables "$@"
+        iptables -w "$@"
         ${optionalString config.networking.enableIPv6 ''
-          ip6tables "$@"
+          ip6tables -w "$@"
         ''}
       }
     '';
@@ -386,7 +386,7 @@ in
 
             # Optionally respond to ICMPv4 pings.
             ${optionalString cfg.allowPing ''
-              iptables -A nixos-fw -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
+              iptables -w -A nixos-fw -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
                 "-m limit ${cfg.pingLimit} "
               }-j nixos-fw-accept
             ''}

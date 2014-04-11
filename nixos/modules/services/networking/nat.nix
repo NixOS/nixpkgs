@@ -95,26 +95,26 @@ in
 
         preStart =
           ''
-            iptables -t nat -F PREROUTING
-            iptables -t nat -F POSTROUTING
-            iptables -t nat -X
+            iptables -w -t nat -F PREROUTING
+            iptables -w -t nat -F POSTROUTING
+            iptables -w -t nat -X
 
             # We can't match on incoming interface in POSTROUTING, so
             # mark packets coming from the external interfaces.
             ${concatMapStrings (iface: ''
-              iptables -t nat -A PREROUTING \
+              iptables -w -t nat -A PREROUTING \
                 -i '${iface}' -j MARK --set-mark 1
             '') cfg.internalInterfaces}
 
             # NAT the marked packets.
             ${optionalString (cfg.internalInterfaces != []) ''
-              iptables -t nat -A POSTROUTING -m mark --mark 1 \
+              iptables -w -t nat -A POSTROUTING -m mark --mark 1 \
                 -o ${cfg.externalInterface} ${dest}
             ''}
 
             # NAT packets coming from the internal IPs.
             ${concatMapStrings (range: ''
-              iptables -t nat -A POSTROUTING \
+              iptables -w -t nat -A POSTROUTING \
                 -s '${range}' -o ${cfg.externalInterface} ${dest}
             '') cfg.internalIPs}
 
@@ -123,9 +123,9 @@ in
 
         postStop =
           ''
-            iptables -t nat -F PREROUTING
-            iptables -t nat -F POSTROUTING
-            iptables -t nat -X
+            iptables -w -t nat -F PREROUTING
+            iptables -w -t nat -F POSTROUTING
+            iptables -w -t nat -X
           '';
       };
   };
