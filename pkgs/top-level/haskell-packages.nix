@@ -2260,6 +2260,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
 
+  snapCORS = callPackage ../development/libraries/haskell/snap-cors {};
+
   snapLoaderDynamic = callPackage ../development/libraries/haskell/snap/loader-dynamic.nix {};
 
   snapLoaderStatic = callPackage ../development/libraries/haskell/snap/loader-static.nix {};
