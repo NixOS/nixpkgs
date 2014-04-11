@@ -1,6 +1,7 @@
  
 { stdenv, fetchurl, pkgconfig, autoreconfHook, glib, gettext, gnome_common, cinnamon-desktop, intltool, gtk3, 
-libnotify, lcms2, libxklavier, gnome3}:
+libnotify, lcms2, libxklavier, libgnomekbd, libcanberra, pulseaudio, upower, libcanberra_gtk3, colord,
+systemd, libxslt, docbook_xsl}:
 
 let
   version = "2.0.10";
@@ -13,7 +14,8 @@ stdenv.mkDerivation {
     sha256 = "10r75xsngb7ipv9fy07dyfb256bqybzcxbwny60sgjhrksk3v9mg";
   };
 
-
+  NIX_CFLAGS_COMPILE = "-I${glib}/include/gio-unix-2.0";
+  
   configureFlags = "--enable-systemd" ;
 
   patches = [ ./systemd-support.patch ./automount-plugin.patch ./dpms.patch];
@@ -22,21 +24,14 @@ stdenv.mkDerivation {
     pkgconfig autoreconfHook
     glib gettext gnome_common
     intltool gtk3 libnotify lcms2
-    gnome3.libgnomekbd libxklavier
-    cinnamon-desktop/*gschemas*/
-   
+    libgnomekbd libxklavier colord
+    libcanberra pulseaudio upower
+    libcanberra_gtk3 cinnamon-desktop
+    systemd libxslt docbook_xsl
    ];
 
   preBuild = "patchShebangs ./scripts";
 
-
-  postFixup  = ''
-    rm $out/share/icons/hicolor/icon-theme.cache
-
-    for f in "$out"/bin/*; do
-      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-    done
-  '';
 
   meta = {
     homepage = "http://cinnamon.linuxmint.com";
