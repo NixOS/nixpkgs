@@ -4,6 +4,7 @@
 , langAda ? false
 , langVhdl ? false
 , langGo ? false
+, langObjC ? false
 , profiledCompiler ? false
 , staticCompiler ? false
 , enableShared ? true
@@ -346,6 +347,7 @@ stdenv.mkDerivation ({
         ++ optional langAda      "ada"
         ++ optional langVhdl     "vhdl"
         ++ optional langGo       "go"
+        ++ optional langObjC     "objc"
         )
       )
     }
@@ -416,6 +418,7 @@ stdenv.mkDerivation ({
           ++ optional langAda      "ada"
           ++ optional langVhdl     "vhdl"
           ++ optional langGo       "go"
+          ++ optional langObjC     "objc"
           )
         )
       }
@@ -483,7 +486,7 @@ stdenv.mkDerivation ({
     else null;
 
   passthru =
-    { inherit langC langCC langAda langFortran langVhdl langGo enableMultilib version; };
+    { inherit langC langCC langAda langFortran langVhdl langGo langObjC enableMultilib version; };
 
   inherit enableParallelBuilding;
 
