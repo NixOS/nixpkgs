@@ -57,6 +57,7 @@ let
     autoModules = stdenv.platform.kernelAutoModules;
     arch = stdenv.platform.kernelArch;
 
+    useFakeTime = 1;
     crossAttrs = let
         cp = stdenv.cross.platform;
       in {

@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
+  useFakeTime = 1;
   postInstall = ''
       # Remove example output with (random?) colors to 
       # avoid non-determinism in the output
