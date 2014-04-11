@@ -5,14 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.6.1";
+  name = "nix-1.7";
 
   src = fetchurl {
     url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-    sha256 = "31d15f99b2405924a4be278334cc973a71999303631e6798c1d294db9be4bf84";
+    sha256 = "349163654f2ae3e1a17fb3da7ed164a4cac153728bbe9a26764e17556d3dcc92";
   };
-
-  patches = [ ./hash-check.patch ];
 
   nativeBuildInputs = [ perl pkgconfig ];
 
