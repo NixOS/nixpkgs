@@ -8,7 +8,6 @@ use Archive::Cpio;
 
 my $cpio = Archive::Cpio->new;
 my $IN = \*STDIN;
-my $ino = 1;
 $cpio->read_with_handler($IN, sub {
         my ($e) = @_;
         $e->{mtime} = 1;
