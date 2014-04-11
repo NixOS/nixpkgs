@@ -3309,6 +3309,7 @@ let
 
   maude = callPackage ../development/interpreters/maude {
     bison = bison2;
+    flex = flex_2_5_35;
   };
 
   octave = callPackage ../development/interpreters/octave {
