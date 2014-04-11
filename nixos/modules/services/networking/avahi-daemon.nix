@@ -142,6 +142,10 @@ in
     services.dbus.enable = true;
     services.dbus.packages = [avahi];
 
+    # Enabling Avahi without exposing it in the firewall doesn't make
+    # sense.
+    networking.firewall.allowedUDPPorts = [ 5353 ];
+
   };
 
 }

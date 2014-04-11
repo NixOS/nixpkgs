@@ -15,10 +15,11 @@ in
         services.mysql.replication.role = "master";
         services.mysql.initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
         services.mysql.initialScript = pkgs.writeText "initmysql"
-        ''
-          create user '${replicateUser}'@'%' identified by '${replicatePassword}';
-          grant replication slave on *.* to '${replicateUser}'@'%';
-        '';
+          ''
+            create user '${replicateUser}'@'%' identified by '${replicatePassword}';
+            grant replication slave on *.* to '${replicateUser}'@'%';
+          '';
+        networking.firewall.allowedTCPPorts = [ 3306 ];
       };
 
     slave1 =

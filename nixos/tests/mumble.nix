@@ -11,6 +11,7 @@ in
     server = { config, pkgs, ... }: {
       services.murmur.enable       = true;
       services.murmur.registerName = "NixOS tests";
+      networking.firewall.allowedTCPPorts = [ config.services.murmur.port ];
     };
 
     client1 = client;

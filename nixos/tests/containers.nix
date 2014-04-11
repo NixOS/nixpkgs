@@ -17,6 +17,8 @@
           config =
             { services.httpd.enable = true;
               services.httpd.adminAddr = "foo@example.org";
+              networking.firewall.allowedTCPPorts = [ 80 ];
+              networking.firewall.allowPing = true;
             };
         };
 
@@ -65,7 +67,7 @@
       $machine->succeed("nixos-container start $id1");
 
       # Execute commands via the root shell.
-      $machine->succeed("echo uname | nixos-container root-shell $id1") =~ /Linux/;
+      $machine->succeed("nixos-container run $id1 -- uname") =~ /Linux/;
       $machine->succeed("nixos-container set-root-password $id1 foobar");
 
       # Destroy the containers.

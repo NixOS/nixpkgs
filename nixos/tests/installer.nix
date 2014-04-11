@@ -79,6 +79,8 @@ let
       virtualisation.writableStore = true;
       virtualisation.pathsInNixDB = channelContents ++ [ pkgs.hello.src ];
       virtualisation.memorySize = 768;
+
+      networking.firewall.allowedTCPPorts = [ 80 ];
     };
 
   channelContents = [ pkgs.rlwrap ];
