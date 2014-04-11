@@ -175,7 +175,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     zlib         = self.zlib_0_5_4_1;
     cabalInstall = self.cabalInstall_1_18_0_3;
     alex         = self.alex_3_1_3;
-    haddock      = self.haddock_2_14_1;
+    haddock      = self.haddock_2_14_2;
     happy        = self.happy_1_19_3;
     primitive    = self.primitive_0_5_2_1;      # semi-official, but specified
   };
@@ -2882,8 +2882,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   haddock_2_11_0 = callPackage ../development/tools/documentation/haddock/2.11.0.nix {};
   haddock_2_12_0 = callPackage ../development/tools/documentation/haddock/2.12.0.nix {};
   haddock_2_13_2 = callPackage ../development/tools/documentation/haddock/2.13.2.nix {};
-  haddock_2_14_1 = callPackage ../development/tools/documentation/haddock/2.14.1.nix {};
-  haddock = self.haddock_2_14_1;
+  haddock_2_14_2 = callPackage ../development/tools/documentation/haddock/2.14.2.nix {};
+  haddock = self.haddock_2_14_2;
 
   HandsomeSoup = callPackage ../development/libraries/haskell/HandsomeSoup {};
 
