@@ -2945,6 +2945,7 @@ let
     # until someone solves build problems with _34
     llvm = llvm_33;
     clang = clang_33;
+    dragonegg = null;
   };
   llvmPackages_34 = recurseIntoAttrs (import ../development/compilers/llvm/3.4 {
     inherit stdenv newScope fetchurl;
