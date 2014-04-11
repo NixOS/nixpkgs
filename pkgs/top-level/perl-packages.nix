@@ -6488,10 +6488,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PackageStash = buildPerlPackage {
-    name = "Package-Stash-0.36";
+    name = "Package-Stash-0.34";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOY/Package-Stash-0.36.tar.gz;
-      sha256 = "1wbkdkm5gp5cpp84kr9cbbsrg0v908kxrcg4k86mx8ypgj6g8750";
+      url = mirror://cpan/authors/id/D/DO/DOY/Package-Stash-0.34.tar.gz;
+      sha256 = "1674zs96ndq3czs6v8xkdqqz4fnka0i2835nnns9zbw2q01yirj6";
     };
     buildInputs = [ DistCheckConflicts TestFatal TestRequires ];
     propagatedBuildInputs = [ DistCheckConflicts ModuleImplementation PackageDeprecationManager ];
