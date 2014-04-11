@@ -1,5 +1,7 @@
 { stdenv, fetchurl, zlib, readline, libossp_uuid }:
 
+with stdenv.lib;
+
 let version = "9.3.3"; in
 
 stdenv.mkDerivation rec {
@@ -10,13 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "e925d8abe7157bd8bece6b7c0dd0c343d87a2b4336f85f4681ce596af99c3879";
   };
 
-  buildInputs = [ zlib readline libossp_uuid ];
+  buildInputs = [ zlib readline ] ++ optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
   enableParallelBuilding = true;
 
   makeFlags = [ "world" ];
 
-  configureFlags =
+  configureFlags = optional (!stdenv.isDarwin)
     ''
       --with-ossp-uuid
     '';
