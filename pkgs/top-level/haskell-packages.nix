@@ -1597,6 +1597,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   knob = callPackage ../development/libraries/haskell/knob {};
 
   languageC = callPackage ../development/libraries/haskell/language-c {};
+  
+  languageCInline = callPackage ../development/libraries/haskell/language-c-inline {};
 
   languageCQuote = callPackage ../development/libraries/haskell/language-c-quote {};
 
