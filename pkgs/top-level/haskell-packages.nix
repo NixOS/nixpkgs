@@ -148,7 +148,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_5_1_0;
     GLURaw       = self.GLURaw_1_4_0_0;
-    haskellSrc   = self.haskellSrc_1_0_1_5;
+    haskellSrc   = self.haskellSrc_1_0_1_6;
     hashable     = self.hashable_1_2_1_0;
     html         = self.html_1_0_1_2;
     HTTP         = self.HTTP_4000_2_12;
@@ -1321,7 +1321,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   haskellSrc_1_0_1_3 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.3.nix {};
   haskellSrc_1_0_1_4 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.4.nix {};
   haskellSrc_1_0_1_5 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.5.nix {};
-  haskellSrc = self.haskellSrc_1_0_1_5;
+  haskellSrc_1_0_1_6 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.6.nix {};
+  haskellSrc = self.haskellSrc_1_0_1_6;
 
   haskellSrcExts = callPackage ../development/libraries/haskell/haskell-src-exts {};
 
