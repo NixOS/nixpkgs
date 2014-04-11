@@ -88,10 +88,10 @@ extraBefore=()
 # When enforcing purity, pretend gcc can't find the current date and
 # time
 if test "$NIX_ENFORCE_PURITY" = "1"; then
-    extraAfter=(-D__DATE__=\"???-??-????\"
-	-D__TIME__=\"??:??:??\"
+    extraBefore=(-D__DATE__=\"Jan\ \ 1\ 1970\"
+	-D__TIME__=\"00:00:01\"
         -Wno-builtin-macro-redefined
-	"${extraAfter[@]}")
+	"${extraBefore[@]}")
 fi
 
 
@@ -99,18 +99,18 @@ if test "$dontLink" != "1"; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extraAfter=(${extraAfter[@]} $NIX_CFLAGS_LINK)
+    extraAfter=("${extraAfter[@]}" $NIX_CFLAGS_LINK)
 
     # Add the flags that should be passed to the linker (and prevent
     # `ld-wrapper' from adding NIX_LDFLAGS again).
     for i in $NIX_LDFLAGS_BEFORE; do
-        extraBefore=(${extraBefore[@]} "-Wl,$i")
+        extraBefore=("${extraBefore[@]}" "-Wl,$i")
     done
     for i in $NIX_LDFLAGS; do
 	if test "${i:0:3}" = "-L/"; then
-	    extraAfter=(${extraAfter[@]} "$i")
+	    extraAfter=("${extraAfter[@]}" "$i")
 	else
-	    extraAfter=(${extraAfter[@]} "-Wl,$i")
+	    extraAfter=("${extraAfter[@]}" "-Wl,$i")
 	fi
     done
     export NIX_LDFLAGS_SET=1
@@ -132,11 +132,11 @@ if test "$NIX_DEBUG" = "1"; then
       echo "  $i" >&2
   done
   echo "extraBefore flags to @gccProg@:" >&2
-  for i in ${extraBefore[@]}; do
+  for i in "${extraBefore[@]}"; do
       echo "  $i" >&2
   done
   echo "extraAfter flags to @gccProg@:" >&2
-  for i in ${extraAfter[@]}; do
+  for i in "${extraAfter[@]}"; do
       echo "  $i" >&2
   done
 fi
@@ -150,9 +150,9 @@ fi
 # `-B' flags, since they confuse some programs.  Deep bash magic to
 # apply grep to stderr (by swapping stdin/stderr twice).
 if test -z "$NIX_GCC_NEEDS_GREP"; then
-    @gccProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}
+    @gccProg@ "${extraBefore[@]}" "${params[@]}" "${extraAfter[@]}"
 else
-    (@gccProg@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]} 3>&2 2>&1 1>&3- \
+    (@gccProg@ "${extraBefore[@]}" "${params[@]}" "${extraAfter[@]}" 3>&2 2>&1 1>&3- \
         | (grep -v 'file path prefix' || true); exit ${PIPESTATUS[0]}) 3>&2 2>&1 1>&3-
     exit $?
 fi    
