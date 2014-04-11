@@ -1771,7 +1771,7 @@ let
   cntlm = callPackage ../tools/networking/cntlm { };
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
-  
+
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
@@ -1911,7 +1911,7 @@ let
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
   sharutils = callPackage ../tools/archivers/sharutils { };
-  
+
   shotwell = callPackage ../applications/graphics/shotwell { };
 
   shebangfix = callPackage ../tools/misc/shebangfix { };
@@ -2035,7 +2035,7 @@ let
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
   tcpdump = callPackage ../tools/networking/tcpdump { };
-  
+
   tcpflow = callPackage ../tools/networking/tcpflow { };
 
   teamviewer = callPackage_i686 ../applications/networking/remote/teamviewer { };
@@ -5144,7 +5144,7 @@ let
   libpseudo = callPackage ../development/libraries/libpseudo { };
 
   libpwquality = callPackage ../development/libraries/libpwquality { };
-  
+
   libqalculate = callPackage ../development/libraries/libqalculate { };
 
   librsvg = callPackage ../development/libraries/librsvg {
@@ -6225,7 +6225,7 @@ let
   perlArchiveCpio = perlPackages.ArchiveCpio;
 
   perlcritic = perlPackages.PerlCritic;
-  
+
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
 
@@ -7040,8 +7040,8 @@ let
     cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
-    
-    v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { }; 
+
+    v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
     frandom = callPackage ../os-specific/linux/frandom { };
 
@@ -9722,8 +9722,8 @@ let
   mars = callPackage ../games/mars { };
 
   micropolis = callPackage ../games/micropolis { };
-  
-  mnemosyne = callPackage ../games/mnemosyne { 
+
+  mnemosyne = callPackage ../games/mnemosyne {
     inherit (pythonPackages) matplotlib cherrypy sqlite3;
   };
 
