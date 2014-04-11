@@ -1679,7 +1679,7 @@ let
            { hurd = gnu.hurdCrossIntermediate; })
     else null;
 
-  ipsecTools = callPackage ../os-specific/linux/ipsec-tools { };
+  ipsecTools = callPackage ../os-specific/linux/ipsec-tools { flex = flex_2_5_35; };
 
   patch = gnupatch;
 
