@@ -707,6 +707,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   c2hs = callPackage ../development/libraries/haskell/c2hs {};
 
+  c2hsc = callPackage ../development/libraries/haskell/c2hsc {};
+
   Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal_1_18_1_3 = callPackage ../development/libraries/haskell/Cabal/1.18.1.3.nix { cabal = self.cabal.override { Cabal = null; }; };
