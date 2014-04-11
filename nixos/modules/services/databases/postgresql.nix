@@ -190,14 +190,13 @@ in
                 mkdir -m 0700 -p ${cfg.dataDir}
                 if [ "$(id -u)" = 0 ]; then
                   chown -R postgres ${cfg.dataDir}
-                  su -s ${pkgs.stdenv.shell} postgres -c initdb
+                  su -s ${pkgs.stdenv.shell} postgres -c 'initdb -U root'
                 else
                   # For non-root operation.
                   initdb
                 fi
                 rm -f ${cfg.dataDir}/*.conf
                 touch "${cfg.dataDir}/.first_startup"
-                touch "${cfg.dataDir}/postgresql-user-created"
             fi
 
             ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"
@@ -226,19 +225,14 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            while ! ${pkgs.postgresql93}/bin/pg_isready > /dev/null; do
+            while ! psql postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi
                 sleep 0.1
             done
 
-            if ! [ -e ${cfg.dataDir}/postgresql-user-created ]; then
-              createuser --superuser postgres
-              touch ${cfg.dataDir}/postgresql-user-created
-            fi
-
             if test -e "${cfg.dataDir}/.first_startup"; then
               ${optionalString (cfg.initialScript != null) ''
-                cat "${cfg.initialScript}" | su -s ${pkgs.stdenv.shell} postgres -c 'psql postgres'
+                cat "${cfg.initialScript}" | psql postgres
               ''}
               rm -f "${cfg.dataDir}/.first_startup"
             fi
