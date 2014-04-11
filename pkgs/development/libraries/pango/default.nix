@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-    optional (!stdenv.isDarwin) gobjectIntrospection # build problems
+    optional (!stdenv.isDarwin) gobjectIntrospection # build problems of itself and flex
     ++ optionals stdenv.isDarwin [ gettext fontconfig ];
 
   nativeBuildInputs = [ pkgconfig ];
