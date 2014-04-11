@@ -28,6 +28,10 @@ let
       # patch python to put zero timestamp into pyc
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
+
+      # See http://bugs.python.org/issue20246
+      # This will be fixed in 2.7.7.
+      ./CVE-2014-1912.patch
     ];
 
   postPatch = stdenv.lib.optionalString (stdenv.gcc.libc != null) ''
