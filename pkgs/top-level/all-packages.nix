@@ -2035,6 +2035,8 @@ let
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
   tcpdump = callPackage ../tools/networking/tcpdump { };
+  
+  tcpflow = callPackage ../tools/networking/tcpflow { };
 
   teamviewer = callPackage_i686 ../applications/networking/remote/teamviewer { };
 
