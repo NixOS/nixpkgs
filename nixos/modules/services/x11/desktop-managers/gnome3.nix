@@ -62,6 +62,9 @@ in {
 
           export XDG_MENU_PREFIX=gnome
 
+          # Don't let epiphany depend upon gnome-shell
+          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${pkgs.gnome3.gnome_shell}/share/gsettings-schemas/${pkgs.gnome3.gnome_shell.name}
+
           ${gnome3.gnome_session}/bin/gnome-session&
           waitPID=$!
         '';
