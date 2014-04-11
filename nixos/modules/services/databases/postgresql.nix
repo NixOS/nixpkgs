@@ -197,7 +197,6 @@ in
                 fi
                 rm -f ${cfg.dataDir}/*.conf
                 touch "${cfg.dataDir}/.first_startup"
-                touch "${cfg.dataDir}/postgresql-user-created"
             fi
 
             ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"
@@ -230,11 +229,6 @@ in
                 if ! kill -0 "$MAINPID"; then exit 1; fi
                 sleep 0.1
             done
-
-            if ! [ -e ${cfg.dataDir}/postgresql-user-created ]; then
-              createuser --superuser postgres
-              touch ${cfg.dataDir}/postgresql-user-created
-            fi
 
             if test -e "${cfg.dataDir}/.first_startup"; then
               ${optionalString (cfg.initialScript != null) ''
