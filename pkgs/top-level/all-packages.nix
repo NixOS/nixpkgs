@@ -2418,7 +2418,7 @@ let
 
   clang = wrapClang llvmPackages.clang;
 
-  clang_34 = wrapClang llvmPackages.clang;
+  clang_34 = wrapClang llvmPackages_34.clang;
   clang_33 = wrapClang (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
   clang_32 = wrapClang (clangUnwrapped llvm_32 ../development/compilers/llvm/3.2/clang.nix);
   clang_31 = wrapClang (clangUnwrapped llvm_31 ../development/compilers/llvm/3.1/clang.nix);
