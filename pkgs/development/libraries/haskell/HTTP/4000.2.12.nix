@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HTTP";
-  version = "4000.2.11";
-  sha256 = "17jlmh3v6k0mhd9nh1y5pf2br17lkx4wp9sa7q81wvprw998nw97";
+  version = "4000.2.12";
+  sha256 = "0zaynz8s70xzqxxrr8yjxwc7qspd4q2ig1vqjz1p4qqm72rs3jwl";
   buildDepends = [ mtl network parsec ];
   testDepends = [
     caseInsensitive conduit deepseq httpdShed httpTypes HUnit mtl

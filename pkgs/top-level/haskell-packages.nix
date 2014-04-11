@@ -151,7 +151,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     haskellSrc   = self.haskellSrc_1_0_1_5;
     hashable     = self.hashable_1_2_1_0;
     html         = self.html_1_0_1_2;
-    HTTP         = self.HTTP_4000_2_11;
+    HTTP         = self.HTTP_4000_2_12;
     HUnit        = self.HUnit_1_2_5_2;
     mtl          = self.mtl_2_1_3_1;
     network      = self.network_2_4_2_2;
@@ -1350,8 +1350,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   HTTP_4000_2_3 = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
   HTTP_4000_2_5 = callPackage ../development/libraries/haskell/HTTP/4000.2.5.nix {};
   HTTP_4000_2_8 = callPackage ../development/libraries/haskell/HTTP/4000.2.8.nix {};
-  HTTP_4000_2_11 = callPackage ../development/libraries/haskell/HTTP/4000.2.11.nix {};
-  HTTP = self.HTTP_4000_2_11;
+  HTTP_4000_2_12 = callPackage ../development/libraries/haskell/HTTP/4000.2.12.nix {};
+  HTTP = self.HTTP_4000_2_12;
 
   httpAttoparsec = callPackage ../development/libraries/haskell/http-attoparsec {};
 
