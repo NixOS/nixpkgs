@@ -115,7 +115,7 @@ in
             # NAT packets coming from the internal IPs.
             ${concatMapStrings (range: ''
               iptables -t nat -A POSTROUTING \
-                -s '${range}' -o ${cfg.externalInterface} ${dest}}
+                -s '${range}' -o ${cfg.externalInterface} ${dest}
             '') cfg.internalIPs}
 
             echo 1 > /proc/sys/net/ipv4/ip_forward
