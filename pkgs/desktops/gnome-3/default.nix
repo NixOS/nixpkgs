@@ -88,6 +88,8 @@ rec {
 
   gnome-user-docs = callPackage ./core/gnome-user-docs { };
 
+  gnome-user-share = callPackage ./core/gnome-user-share { };
+
   grilo = callPackage ./core/grilo { };
 
   gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };
