@@ -9183,6 +9183,14 @@ let
     inherit (gnome) libIDL;
   };
 
+  thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
+    gconf = pkgs.gnome.GConf;
+    inherit (pkgs.gnome3) at_spi2_atk;
+    inherit (pkgs.gnome) libgnome libgnomeui;
+    inherit (pkgs.xlibs) libX11 libXScrnSaver libXext
+      libXinerama libXrender libXt;
+  };
+
   tig = gitAndTools.tig;
 
   timidity = callPackage ../tools/misc/timidity { };
