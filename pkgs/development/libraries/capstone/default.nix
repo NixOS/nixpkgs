@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, bash }:
 
 stdenv.mkDerivation rec {
   name    = "capstone-${version}";
@@ -10,13 +10,18 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = false;
+
+  patchPhase = ''
+    substituteInPlace make.sh --replace "/usr/bin/env bash" "${bash}/bin/bash"
+  '';
+
   installPhase = "PREFIX=$out ./make.sh install";
 
   meta = {
     description = "advanced disassembly library";
     homepage    = "http://www.capstone-engine.org";
     license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.unix;
+    platforms   = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }
