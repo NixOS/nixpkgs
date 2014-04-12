@@ -94,7 +94,8 @@ in
         groupmod = { rootOK = true; };
         groupmems = { rootOK = true; };
         groupdel = { rootOK = true; };
-        login = { startSession = true; allowNullPassword = true; showMotd = true; updateWtmp = true; };
+        # Note: setLoginUid should work again in linux containers in systemd 209, remove when systemd gets updated
+        login = { startSession = true; setLoginUid = !config.boot.isContainer; allowNullPassword = true; showMotd = true; updateWtmp = true; };
         chpasswd = { rootOK = true; };
         chgpasswd = { rootOK = true; };
       };
