@@ -6976,7 +6976,7 @@ rec {
 
     checkPhase = ''
       cd tests
-      export LD_LIBRARY_PATH=${pkgs.imagemagick}/lib
+      export MAGICK_HOME="${pkgs.imagemagick}"
       export PYTHONPATH=$PYTHONPATH:../
       py.test
       cd ..
