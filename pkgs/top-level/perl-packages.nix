@@ -3667,11 +3667,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ TestScript ];
   };
 
-  FinanceQuote = buildPerlPackage {
-    name = "Finance-Quote-1.19";
+  FinanceQuote = buildPerlPackage rec {
+    name = "Finance-Quote-1.29";
     src = fetchurl {
-      url = mirror://sourceforge/finance-quote/1.19/Finance-Quote-1.19.tar.gz;
-      sha256 = "0z1dqxw4by7rkwm113qp2mlhl5r0znr22kzinvr1p82svn0zvm2d";
+      url = "mirror://cpan/authors/id/E/EC/ECOCODE/${name}.tar.gz";
+      sha256 = "0rx8whixbhwq2imd3ffx3vcqdgfbjj6y1s01m38b52x3bjn9hw0f";
     };
     propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP DateCalc JSON ];
     meta = {
