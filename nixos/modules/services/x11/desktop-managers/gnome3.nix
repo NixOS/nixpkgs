@@ -75,6 +75,7 @@ in {
                                                 "${pkgs.glib_networking}/lib/gio/modules" ];
     environment.systemPackages =
       [ gnome3.dconf
+        pkgs.desktop_file_utils
         pkgs.glib_networking
         pkgs.ibus
         gnome3.gnome-backgrounds
