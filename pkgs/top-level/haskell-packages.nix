@@ -923,6 +923,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   dataMemocombinators = callPackage ../development/libraries/haskell/data-memocombinators {};
 
+  dataOrdlist = callPackage ../development/libraries/haskell/data-ordlist {};
+
   dataPprint = callPackage ../development/libraries/haskell/data-pprint {};
 
   dataReify = callPackage ../development/libraries/haskell/data-reify {};
@@ -1689,6 +1691,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
 
+  logging = callPackage ../development/libraries/haskell/logging {};
+
   logict = callPackage ../development/libraries/haskell/logict {};
 
   lushtags = callPackage ../development/libraries/haskell/lushtags {};
@@ -1728,6 +1732,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   mimeTypes = callPackage ../development/libraries/haskell/mime-types {};
 
   misfortune = callPackage ../development/libraries/haskell/misfortune {};
+
+  missingForeign = callPackage ../development/libraries/haskell/missing-foreign {};
 
   MissingH = callPackage ../development/libraries/haskell/MissingH {
     testpack = null;
@@ -2525,6 +2531,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   # time is in the core package set. It should only be necessary to
   # pass it explicitly in rare circumstances.
   time = null;
+
+  timeparsers = callPackage ../development/libraries/haskell/timeparsers {};
+
+  timeRecurrence = callPackage ../development/libraries/haskell/time-recurrence {};
 
   timezoneOlson = callPackage ../development/libraries/haskell/timezone-olson {};
 
