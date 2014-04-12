@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gdk_pixbuf gnome3.gnome_icon_theme librsvg
                             hicolor_icon_theme gnome3.gnome_icon_theme_symbolic ];
 
+  enableParallelBuilding = true;
+
   buildInputs = with gnome3;
     [ pkgconfig intltool ibus gtk glib upower libcanberra gsettings_desktop_schemas
       libxml2 gnome_desktop gnome_settings_daemon polkit libxslt libgtop gnome-menus
@@ -48,6 +50,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    description = "Single sign-on framework for GNOME";
+    maintainers = with maintainers; [ lethalman ];
     platforms = platforms.linux;
   };
 

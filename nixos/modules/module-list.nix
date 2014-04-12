@@ -101,6 +101,7 @@
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/evolution-data-server.nix
   ./services/desktops/gnome3/gnome-keyring.nix
+  ./services/desktops/gnome3/gnome-online-accounts.nix
   ./services/desktops/gnome3/gnome-user-share.nix
   ./services/desktops/gnome3/sushi.nix
   ./services/desktops/gnome3/tracker.nix
