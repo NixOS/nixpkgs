@@ -16,10 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "0nq6jvfh8nqwfrvp6fb6qs2rdydi3i9xgpi7p7vb83xvg42ncvs8";
   };
 
-  patchPhase = ''
+  prePatch = ''
     : cp ${driverdb} drivedb.h
     sed -i -e 's@which which >/dev/null || exit 1@alias which="type -p"@' update-smart-drivedb.in
   '';
+
+  patches = [ ./no-dates-in-binary.patch ];
+
+  useFakeTime = 1;
 
   meta = {
     description = "Tools for monitoring the health of hard drivers";

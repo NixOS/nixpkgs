@@ -1,0 +1,12 @@
+diff -ur smartmontools-6.2.orig/configure smartmontools-6.2/configure
+--- smartmontools-6.2.orig/configure	2013-07-26 19:39:04.000000000 +0200
++++ smartmontools-6.2/configure	2014-04-12 17:30:57.023293078 +0200
+@@ -2390,6 +2390,8 @@
+ 
+ 
+ smartmontools_configure_date=`date -u +'%Y-%m-%d %T %Z'`
++smartmontools_configure_date="1970-01-01 00:00:01 UTC"
++
+ smartmontools_cvs_tag=`echo '$Id: configure.ac 3841 2013-07-26 17:38:57Z chrfranke $'`
+ smartmontools_release_date=2013-07-26
+ smartmontools_release_time="17:38:20 UTC"
