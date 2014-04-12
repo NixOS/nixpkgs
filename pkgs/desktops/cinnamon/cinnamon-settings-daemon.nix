@@ -1,7 +1,7 @@
  
 { stdenv, fetchurl, pkgconfig, autoreconfHook, glib, gettext, gnome_common, cinnamon-desktop, intltool, gtk3, 
 libnotify, lcms2, libxklavier, libgnomekbd, libcanberra, pulseaudio, upower, libcanberra_gtk3, colord,
-systemd, libxslt, docbook_xsl}:
+systemd, libxslt, docbook_xsl, makeWrapper, gsettings_desktop_schemas}:
 
 let
   version = "2.0.10";
@@ -27,10 +27,18 @@ stdenv.mkDerivation {
     libgnomekbd libxklavier colord
     libcanberra pulseaudio upower
     libcanberra_gtk3 cinnamon-desktop
-    systemd libxslt docbook_xsl
+    systemd libxslt docbook_xsl makeWrapper
+    gsettings_desktop_schemas
    ];
 
   preBuild = "patchShebangs ./scripts";
+  
+  postFixup  = ''
+    
+    for f in "$out"/libexec/*; do
+      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    done
+  '';
 
 
   meta = {
