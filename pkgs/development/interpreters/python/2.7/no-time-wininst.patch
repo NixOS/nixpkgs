@@ -1,0 +1,12 @@
+diff -ur Python-2.7.6.orig/Lib/distutils/command/bdist_wininst.py Python-2.7.6/Lib/distutils/command/bdist_wininst.py
+--- Python-2.7.6.orig/Lib/distutils/command/bdist_wininst.py	2013-11-10 08:36:40.000000000 +0100
++++ Python-2.7.6/Lib/distutils/command/bdist_wininst.py	2014-04-11 14:49:49.789235982 +0200
+@@ -245,7 +245,7 @@
+         import time
+         import distutils
+         build_info = "Built %s with distutils-%s" % \
+-                     (time.ctime(time.time()), distutils.__version__)
++                     (time.ctime(0), distutils.__version__)
+         lines.append("build_info=%s" % build_info)
+         return string.join(lines, "\n")
+ 

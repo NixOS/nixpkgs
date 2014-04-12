@@ -19,6 +19,9 @@ let
     [ # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
       ./search-path.patch
 
+      # No time in the bdist wininst
+      ./no-time-wininst.patch
+
       # Python recompiles a Python if the mtime stored *in* the
       # pyc/pyo file differs from the mtime of the source file.  This
       # doesn't work in Nix because Nix changes the mtime of files in
@@ -84,6 +87,11 @@ let
         ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
 
         paxmark E $out/bin/python${majorVersion}
+        # !!! This is a stopgap measure for getting deterministic builds.
+        # It disables creation of windows installers and the lib2to3 which
+        # can rewrite python2-programs to python3.
+        rm $out/lib/python${majorVersion}/distutils/command/wininst-*.exe
+        rm $out/lib/python${majorVersion}/lib2to3/Grammar2.7.6.final.0.pickle
       '';
 
     passthru = rec {
