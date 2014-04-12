@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "http://sourceforge.net/projects/iperf/"; 
     description = "Tool to measure IP bandwidth using UDP or TCP";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = "as-is";
   };
 }
