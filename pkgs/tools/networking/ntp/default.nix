@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = stdenv.lib.optional stdenv.isLinux libcap;
+  # Do not useFakeTime here, as this can create indeterminism
+  # in the version string, because ntp records how many times a
+  # certain file is regenerated, and with libfaketime it can
+  # happen more than once.
+  patches = [ ./fixed-date-in-version-string.patch ];
 
   meta = {
     homepage = http://www.ntp.org/;

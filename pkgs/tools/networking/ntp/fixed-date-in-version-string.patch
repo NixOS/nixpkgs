@@ -1,0 +1,12 @@
+diff -ur ntp-4.2.6p5.orig/scripts/mkver.in ntp-4.2.6p5/scripts/mkver.in
+--- ntp-4.2.6p5.orig/scripts/mkver.in	2010-01-24 11:01:47.000000000 +0100
++++ ntp-4.2.6p5/scripts/mkver.in	2014-04-13 00:01:02.262030824 +0200
+@@ -17,7 +17,7 @@
+  *) ConfStr="${ConfStr}-?" ;;
+ esac
+ 
+-ConfStr="$ConfStr `LC_TIME=C TZ=UTC date`"
++ConfStr="${ConfStr}Thu Jan  1 00:00:01 UTC 1970"
+ 
+ if [ ! -f .version ]; then
+   echo 0 > .version
