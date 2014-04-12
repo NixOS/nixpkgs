@@ -21,15 +21,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ bash pkgconfig gtk3 glib intltool itstool
                   gnome3.gsettings_desktop_schemas makeWrapper libxml2 ];
 
-  installFlags = "gsettingsschemadir=\${out}/share/gnome-system-log/glib-2.0/schemas/";
-
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/gnome-system-log" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/gnome-system-log:$XDG_ICON_DIRS"
-  '';
-
-  preFixup = ''
+      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
 

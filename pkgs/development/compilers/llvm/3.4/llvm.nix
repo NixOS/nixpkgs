@@ -54,5 +54,6 @@ in stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ shlevy lovek323 raskin viric ];
     platforms   = stdenv.lib.platforms.all;
+    broken      = stdenv.isDarwin;
   };
 }

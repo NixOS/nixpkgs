@@ -102,7 +102,11 @@ let
         runHook postConfigure
       '';
 
-      buildFlags = [ "KBUILD_BUILD_VERSION=1-NixOS" platform.kernelTarget ] ++ optional isModular "modules";
+      buildFlags = [
+        "KBUILD_BUILD_VERSION=1-NixOS"
+        "KBUILD_BUILD_TIMESTAMP=Thu_Jan__1_00:00:01_UTC_1970"
+	platform.kernelTarget
+      ] ++ optional isModular "modules";
 
       installFlags = [
         "INSTALLKERNEL=${installkernel}"

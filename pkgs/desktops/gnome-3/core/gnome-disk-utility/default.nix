@@ -4,11 +4,11 @@
 , libcanberra_gtk3, libxslt, libtool, docbook_xsl, libpwquality }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-disk-utility-3.12.0";
+  name = "gnome-disk-utility-3.10.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-disk-utility/3.12/${name}.tar.xz";
-    sha256 = "46e0698c4a7baa8719a79935066e103447011fb47528a28dbb49e35eeec409d8";
+    url = "mirror://gnome/sources/gnome-disk-utility/3.10/${name}.tar.xz";
+    sha256 = "1amqi2bribxn8r8k8mvxh3710rmdll9963smf0v59v0iwxi3mqil";
   };
 
   doCheck = true;
@@ -25,15 +25,10 @@ stdenv.mkDerivation rec {
                   libnotify libdvdread libcanberra_gtk3 docbook_xsl
                   gnome3.gsettings_desktop_schemas makeWrapper libxml2 ];
 
-  installFlags = "gsettingsschemadir=\${out}/share/gnome-disk-utility/glib-2.0/schemas/";
-
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/gnome-disks" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/gnome-disk-utility:$XDG_ICON_DIRS"
-  '';
-
-  preFixup = ''
+      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
 

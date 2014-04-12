@@ -1,17 +1,17 @@
 { cabal, basicPrelude, chunkedData, enclosedExceptions, hashable
-, hspec, liftedBase, monoTraversable, QuickCheck, semigroups
+, hspec, liftedBase, monoTraversable, QuickCheck, semigroups, stm
 , systemFilepath, text, time, transformers, unorderedContainers
 , vector, vectorInstances
 }:
 
 cabal.mkDerivation (self: {
   pname = "classy-prelude";
-  version = "0.8.2";
-  sha256 = "1kvab1vns1mp0i0nyn0flg2m6f2sl8w1yr2c0x54172f20rdm5lv";
+  version = "0.9.0";
+  sha256 = "1y4440jy7x9ns4kyb638f5lfa1h3vq3wwcwzkpswr8rf8f7z1bj6";
   buildDepends = [
     basicPrelude chunkedData enclosedExceptions hashable liftedBase
-    monoTraversable semigroups systemFilepath text time transformers
-    unorderedContainers vector vectorInstances
+    monoTraversable semigroups stm systemFilepath text time
+    transformers unorderedContainers vector vectorInstances
   ];
   testDepends = [
     hspec QuickCheck transformers unorderedContainers

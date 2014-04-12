@@ -33,6 +33,8 @@ in
           services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           services.httpd.documentRoot = "/tmp";
+
+          networking.firewall.enable = false; # FIXME: figure out what ports we actually need
         };
 
       router =
@@ -50,11 +52,13 @@ in
           virtualisation.vlans = [ 2 ];
           networking.defaultGateway =
             nodes.router.config.networking.interfaces.eth2.ipAddress;
+          networking.firewall.enable = false;
         };
 
       client2 =
         { config, pkgs, ... }:
         { environment.systemPackages = [ pkgs.transmission ];
+          networking.firewall.enable = false;
         };
     };
 
@@ -66,8 +70,8 @@ in
       # Enable NAT on the router and start miniupnpd.
       $router->waitForUnit("nat");
       $router->succeed(
-          "iptables -t nat -N MINIUPNPD",
-          "iptables -t nat -A PREROUTING -i eth1 -j MINIUPNPD",
+          "iptables -w -t nat -N MINIUPNPD",
+          "iptables -w -t nat -A PREROUTING -i eth1 -j MINIUPNPD",
           "echo 1 > /proc/sys/net/ipv4/ip_forward",
           "miniupnpd -f ${miniupnpdConf nodes}"
       );

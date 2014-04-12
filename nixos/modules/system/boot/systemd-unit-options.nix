@@ -243,6 +243,17 @@ in rec {
       '';
     };
 
+    reloadIfChanged = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether the service should be reloaded during a NixOS
+        configuration switch if its definition has changed.  If
+        enabled, the value of <option>restartIfChanged</option> is
+        ignored.
+      '';
+    };
+
     stopIfChanged = mkOption {
       type = types.bool;
       default = true;

@@ -13,6 +13,9 @@ cabal.mkDerivation (self: {
     unorderedContainers vector
   ];
   jailbreak = true;
+  patchPhase = ''
+    sed -i -e '/^import Data.Conduit (ResourceT)/d' Github/Private.hs
+  '';
   meta = {
     homepage = "https://github.com/fpco/github";
     description = "Access to the Github API, v3";

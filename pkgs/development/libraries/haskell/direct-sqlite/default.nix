@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "direct-sqlite";
-  version = "2.3.11";
-  sha256 = "0pd5qv8aq47d5n2sd99yblxiq70zvmy2rc71ys73a3d846k0ncs0";
+  version = "2.3.12";
+  sha256 = "14dcgmn3mfx69qx412dc8cxa4ia3adsf8gm5q4yscpp8rf78m178";
   buildDepends = [ text ];
   testDepends = [ base16Bytestring HUnit text ];
   meta = {

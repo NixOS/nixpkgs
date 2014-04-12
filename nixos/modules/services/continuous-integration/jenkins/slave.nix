@@ -33,7 +33,8 @@ in {
         default = "jenkins";
         type = with types; string;
         description = ''
-          User the jenkins slave agent should execute under.
+          If the default slave agent user "jenkins" is configured then this is
+          the primary group of that user.
         '';
       };
 

@@ -3,11 +3,11 @@
 , itstool, gnome3, librsvg, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-screenshot-3.12.0";
+  name = "gnome-screenshot-3.10.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-screenshot/3.12/${name}.tar.xz";
-    sha256 = "ae4bf706652ae9b28c7930d22c2c37469a78d7f6656d312960b3c75ee5c36eb1";
+    url = "mirror://gnome/sources/gnome-screenshot/3.10/${name}.tar.xz";
+    sha256 = "1nb56kzcj5z4hmrmxap5r53smi52ki3pc8qmhi4rymkgqswyk7bh";
   };
 
   doCheck = true;
@@ -21,12 +21,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ bash pkgconfig gtk3 glib intltool itstool libcanberra_gtk3
                   gnome3.gsettings_desktop_schemas makeWrapper ];
 
-  installFlags = "gsettingsschemadir=\${out}/share/gnome-screenshot/glib-2.0/schemas/";
-
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/gnome-screenshot" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/gnome-screenshot:$XDG_ICON_DIRS"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

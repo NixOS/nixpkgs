@@ -33,11 +33,17 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs .
   '';
-  
+
   postInstall = ''
+    mkdir -p $out/share/gsettings-schemas/$name
+    mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name/
+  '';
+
+  preFixup = ''
     wrapProgram "$out/bin/shotwell" \
      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-     --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gsettings_desktop_schemas}/share:${gtk3}/share:$out/share"
+     --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
 

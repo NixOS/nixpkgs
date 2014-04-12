@@ -1,13 +1,14 @@
-{ cabal, hspec, liftedBase, mmorph, monadControl, mtl, transformers
-, transformersBase
+{ cabal, exceptions, hspec, liftedBase, mmorph, monadControl, mtl
+, transformers, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "resourcet";
-  version = "0.4.10.2";
-  sha256 = "0k0l4909b30hc2apxgzjz1rxbqqkhqnqchz53wi6zyhvbh46ffh6";
+  version = "1.1.1";
+  sha256 = "0v80wlxpcikr41p8wxa2kr184ghp94bgb5fwym9c27k8djig2awy";
   buildDepends = [
-    liftedBase mmorph monadControl mtl transformers transformersBase
+    exceptions liftedBase mmorph monadControl mtl transformers
+    transformersBase
   ];
   testDepends = [ hspec liftedBase transformers ];
   meta = {

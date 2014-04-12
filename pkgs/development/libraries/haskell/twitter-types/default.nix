@@ -1,17 +1,18 @@
-{ cabal, aeson, attoparsec, httpTypes, HUnit, shakespeareText
+{ cabal, aeson, attoparsec, httpTypes, HUnit, shakespeare
 , testFramework, testFrameworkHunit, testFrameworkThPrime, text
 , unorderedContainers
 }:
 
 cabal.mkDerivation (self: {
   pname = "twitter-types";
-  version = "0.2.20130101";
-  sha256 = "0y7pymwcv8i5f8hqh4h018xp5bd998l8fx9f2a8x6d53c7l34wmd";
+  version = "0.2.20140407";
+  sha256 = "171m7fqq82g630r1x5advq04qfkdljvc8d8ygyafr2x44ss2a996";
   buildDepends = [ aeson httpTypes text unorderedContainers ];
   testDepends = [
-    aeson attoparsec httpTypes HUnit shakespeareText testFramework
+    aeson attoparsec httpTypes HUnit shakespeare testFramework
     testFrameworkHunit testFrameworkThPrime text unorderedContainers
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/himura/twitter-types";
     description = "Twitter JSON parser and types";
@@ -19,5 +20,4 @@ cabal.mkDerivation (self: {
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.ocharles ];
   };
-  doCheck = false;
 })
