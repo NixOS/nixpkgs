@@ -1394,7 +1394,9 @@ let
 
   mdbtools = callPackage ../tools/misc/mdbtools { };
 
-  mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix { };
+  mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix { 
+    inherit (gnome) scrollkeeper;
+  };
 
   megacli = callPackage ../tools/misc/megacli { };
 
