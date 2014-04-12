@@ -32,6 +32,12 @@ stdenv.mkDerivation {
     sha256 = "0pxs234g08v3lar09lvzxw4vqdpwkbqmvkv894j2w7aklskcjd6v";
   };
 
+  patches =
+    [
+      # See http://bugs.python.org/issue20246
+      ./CVE-2014-1912.patch
+    ];
+
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   preConfigure = ''
