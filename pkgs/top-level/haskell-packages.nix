@@ -2492,6 +2492,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   unorderedContainers_0_2_3_3 = callPackage ../development/libraries/haskell/unordered-containers/0.2.3.3.nix {};
   unorderedContainers = self.unorderedContainers_0_2_3_3;
 
+  uri = callPackage ../development/libraries/haskell/uri {};
+
   url = callPackage ../development/libraries/haskell/url {};
 
   urlencoded = callPackage ../development/libraries/haskell/urlencoded {};
