@@ -50,7 +50,12 @@ done
 
 mkdir -p $out/tarball
 
-tar cvJf $out/tarball/$fileName.tar.xz * $extraArgs
+
+rm ./env-vars
+
+find * ! -type d -print0 | sort -z |
+  tar -cv --mtime='1970-01-01' -T- --null -f- $extraArgs |
+  xz -c > $out/tarball/$fileName.tar.xz
 
 mkdir -p $out/nix-support
 echo $system > $out/nix-support/system
