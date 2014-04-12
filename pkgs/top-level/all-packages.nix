@@ -6451,6 +6451,8 @@ let
 
   memcached = callPackage ../servers/memcached {};
 
+  mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd/default.nix { };
+
   mod_evasive = callPackage ../servers/http/apache-modules/mod_evasive { };
 
   mod_python = callPackage ../servers/http/apache-modules/mod_python { };
