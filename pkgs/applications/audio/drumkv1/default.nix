@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "drumkv1-${version}";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumkv1/${name}.tar.gz";
-    sha256 = "0bhj4liv6c0rw0gsh1zygj4a9vmwl3jdz2j6zzdxbqdk21xq4zpz";
+    sha256 = "0wxbn5qm3dn9spwbm618flgrwvls7bipg0nhgn0lv4za2g823g56";
   };
 
   buildInputs = [ jackaudio libsndfile lv2 qt4 ];
