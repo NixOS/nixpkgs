@@ -78,9 +78,14 @@ let
       GRKERNSEC y
       ${grsecMainConfig}
 
-      GRKERNSEC_PROC_USER ${boolToKernOpt cfg.config.restrictProc}
-      ${if !cfg.config.restrictProc then ""
-        else "GRKERNSEC_PROC_GID "+(toString cfg.config.unrestrictProcGid)}
+      ${if cfg.config.restrictProc then
+          "GRKERNSEC_PROC_USER y"
+        else
+          optionalString cfg.config.restrictProcWithGroup ''
+            GRKERNSEC_PROC_USERGROUP y
+            GRKERNSEC_PROC_GID ${toString cfg.config.unrestrictProcGid}
+          ''
+      }
 
       GRKERNSEC_SYSCTL ${boolToKernOpt cfg.config.sysctl}
       GRKERNSEC_CHROOT_CHMOD ${boolToKernOpt cfg.config.denyChrootChmod}
@@ -278,12 +283,25 @@ in
 
         restrictProc = mkOption {
           type = types.bool;
-          default = true;
+          default = false;
           description = ''
             If true, then set <literal>GRKERN_PROC_USER
             y</literal>. This restricts non-root users to only viewing
             their own processes and restricts network-related
             information, kernel symbols, and module information.
+          '';
+        };
+
+        restrictProcWithGroup = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            If true, then set <literal>GRKERN_PROC_USERGROUP
+            y</literal>. This is similar to
+            <literal>restrictProc</literal> except it allows a special
+            group (specified by <literal>unrestrictProcGid</literal>)
+            to still access otherwise classified information in
+            <literal>/proc</literal>.
           '';
         };
 
@@ -293,12 +311,12 @@ in
           description = ''
             If set, specifies a GID which is exempt from
             <literal>/proc</literal> restrictions (set by
-            <literal>GRKERN_PROC_USER</literal>). By default, this is
-            set to the GID for <literal>grsecurity</literal>, a
-            predefined NixOS group, which the <literal>root</literal>
-            account is a member of. You may conveniently add other
-            users to this group if you need access to
-            <literal>/proc</literal>
+            <literal>GRKERN_PROC_USERGROUP</literal>). By default,
+            this is set to the GID for <literal>grsecurity</literal>,
+            a predefined NixOS group, which the
+            <literal>root</literal> account is a member of. You may
+            conveniently add other users to this group if you need
+            access to <literal>/proc</literal>
           '';
         };
 
@@ -345,6 +363,10 @@ in
         }
         { assertion = (cfg.testing -> !cfg.vserver);
           message   = "The vserver patches are only supported in the stable kernel.";
+        }
+        { assertion = (cfg.config.restrictProc -> !cfg.config.restrictProcWithGroup) ||
+                      (cfg.config.restrictProcWithGroup -> !cfg.config.restrictProc);
+          message   = "You cannot enable both restrictProc and restrictProcWithGroup";
         }
         { assertion = config.boot.kernelPackages.kernel.features ? grsecurity
                    && config.boot.kernelPackages.kernel.features.grsecurity;
