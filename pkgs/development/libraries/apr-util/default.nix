@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
 
   # Give apr1 access to sed for runtime invocations
   postInstall = ''
+    # Determinism changes
+    sed -i -e 's/APU_SOURCE_DIR=".*"/APU_SOURCE_DIR="unknown"/g' \
+           -e 's/APU_BUILD_DIR=".*"/APU_BUILD_DIR="unknown"/g' \
+           $out/bin/apu-1-config
+
     wrapProgram $out/bin/apu-1-config --prefix PATH : "${gnused}/bin"
   '';
 
