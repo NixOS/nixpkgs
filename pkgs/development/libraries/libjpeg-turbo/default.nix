@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
+  useFakeTime = 1;
+
   meta = {
     homepage = http://libjpeg-turbo.virtualgl.org/;
     description = "A faster (using SIMD) libjpeg implementation";

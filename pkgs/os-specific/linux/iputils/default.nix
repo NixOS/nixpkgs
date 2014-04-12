@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   # Stdenv doesn't handle symlinks well for that
   dontGzipMan = true;
 
+  useFakeTime = 1;
+
   installPhase =
     ''
       mkdir -p $out/sbin $out/bin

@@ -20,6 +20,7 @@ stdenv.mkDerivation {
     '';
 
   enableParallelBuilding = true;
+  useFakeTime = 1;
 
   meta = {
     homepage = http://www.mozilla.org/projects/nspr/;

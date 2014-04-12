@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
       -i Makefile
   '';
 
+  useFakeTime = 1;
   buildInputs = [ stdenv.gcc.libc.kernelHeaders libtool gettext ];
 
   meta = {

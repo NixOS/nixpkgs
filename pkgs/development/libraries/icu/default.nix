@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     stdenv.lib.optionalString stdenv.isDarwin " --enable-rpath";
 
   enableParallelBuilding = true;
+  useFakeTime = 1;
 
   meta = {
     description = "Unicode and globalization support library";

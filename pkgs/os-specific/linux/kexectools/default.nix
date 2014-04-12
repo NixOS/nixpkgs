@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
+  useFakeTime = 1;
+
   meta = {
     homepage = http://horms.net/projects/kexec/kexec-tools;
     description = "Tools related to the kexec Linux feature";
