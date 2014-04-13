@@ -191,6 +191,7 @@ in
         "ehci_hcd"
         "ehci_pci"
         "ohci_hcd"
+        "ohci_pci"
         "xhci_hcd"
         "usbhid"
         "hid_generic"
