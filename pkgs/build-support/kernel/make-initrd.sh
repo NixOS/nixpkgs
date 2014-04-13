@@ -36,7 +36,11 @@ storePaths=$(perl $pathsFromGraph closure-*)
 
 # Put the closure in a gzipped cpio archive.
 mkdir -p $out
-(cd root && find * -print0 | cpio -o -H newc --null | perl $cpioClean | $compressor > $out/initrd)
+(cd root && find * ! -type d -print0 |
+ sort -z |
+ cpio -o -H newc -R 0.0 --null |
+ perl $cpioClean |
+ $compressor > $out/initrd)
 
 if [ -n "$makeUInitrd" ]; then
     mv $out/initrd $out/initrd.gz
