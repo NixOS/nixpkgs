@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnutls pkgconfig readline zlib ];
 
-  meta = {
-    homepage = http://lftp.yar.ru/;
+  meta = with stdenv.lib; {
     description = "A file transfer program supporting a number of network protocols";
-    license = "GPL";
+    homepage = http://lftp.yar.ru/;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
   };
 }
