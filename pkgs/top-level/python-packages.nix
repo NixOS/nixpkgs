@@ -1312,6 +1312,7 @@ rec {
     '';
 
     propagatedBuildInputs = [ py ]
+      ++ (optional isPy26 argparse)
       ++ stdenv.lib.optional
         pkgs.config.pythonPackages.pytest.selenium or false
         pythonPackages.selenium;
