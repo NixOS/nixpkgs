@@ -154,7 +154,7 @@ stdenv.mkDerivation {
   '' + /* add libGL* links from /run/opengl-driver */ ''
     (
       cd "$drivers/lib"
-      cp -s "$out"/lib/*.so .
+      cp -s "$out"/lib/*.so* .
     )
   '';
   #ToDo: @vcunat isn't sure if drirc will be found when in $out/etc/, but it doesn't seem important ATM
