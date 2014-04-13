@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-dates-in-binary.patch ];
 
-  useFakeTime = 1;
+  # This package does not handle useFakeTime well
+  # useFakeTime = 1;
 
   meta = {
     description = "Tools for monitoring the health of hard drivers";
