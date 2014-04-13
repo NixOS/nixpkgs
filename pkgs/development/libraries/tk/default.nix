@@ -21,6 +21,8 @@ stdenv.mkDerivation {
   buildInputs = [ pkgconfig tcl libXft ]
     ++ stdenv.lib.optional stdenv.isDarwin fontconfig;
 
+  NIX_CFLAGS_LINK = if stdenv.isDarwin then "-lfontconfig" else null;
+
   inherit tcl;
 
   passthru = {
