@@ -6374,6 +6374,8 @@ let
 
   bind = callPackage ../servers/dns/bind { };
 
+  nsd = callPackage ../servers/dns/nsd { };
+
   bird = callPackage ../servers/bird { };
 
   couchdb = callPackage ../servers/http/couchdb {
