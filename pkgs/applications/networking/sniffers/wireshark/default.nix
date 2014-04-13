@@ -18,6 +18,8 @@ stdenv.mkDerivation {
     geoip libnl c-ares gtk python libcap
   ];
 
+  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
+
   preConfigure = ''
     sed -re 's/g_memmove/memmove/' -i $(grep -rl g_memmove .)
   '';
