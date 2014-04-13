@@ -162,4 +162,6 @@ rec {
   libgit2-glib = callPackage ./misc/libgit2-glib { };
   
   gexiv2 = callPackage ./misc/gexiv2 { };
+
+  gnome-tweak-tool = callPackage ./misc/gnome-tweak-tool { };
 }
