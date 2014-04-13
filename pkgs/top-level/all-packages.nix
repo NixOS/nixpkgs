@@ -3153,9 +3153,7 @@ let
   scala_2_10 = callPackage ../development/compilers/scala { };
   scala = scala_2_10;
 
-  sdcc = callPackage ../development/compilers/sdcc {
-    boost = boost149; # sdcc 3.2.0 fails to build with boost 1.53
-  };
+  sdcc = callPackage ../development/compilers/sdcc { };
 
   smlnj = callPackage_i686 ../development/compilers/smlnj { };
 
