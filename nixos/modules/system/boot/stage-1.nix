@@ -326,7 +326,7 @@ in
 
     boot.initrd.compressor = mkOption {
       internal = true;
-      default = "gzip -9";
+      default = "gzip -9n";
       type = types.str;
       description = "The compressor to use on the initrd image.";
       example = "xz";
