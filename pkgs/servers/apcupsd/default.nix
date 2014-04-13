@@ -2,6 +2,8 @@
 , enableCgiScripts ? true, gd
 }:
 
+assert enableCgiScripts -> gd != null;
+
 stdenv.mkDerivation rec {
   pname = "apcupsd";
   name = "${pname}-3.14.12";
