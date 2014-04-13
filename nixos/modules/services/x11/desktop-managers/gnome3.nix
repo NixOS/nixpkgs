@@ -99,6 +99,7 @@ in {
         gnome3.gnome-contacts
         gnome3.gnome-font-viewer
         gnome3.gnome-screenshot
+        gnome3.gnome-shell-extensions
         gnome3.gnome-system-log
         gnome3.gnome-system-monitor
         gnome3.gnome_terminal

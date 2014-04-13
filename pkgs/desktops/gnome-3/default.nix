@@ -74,6 +74,8 @@ rec {
 
   gnome_shell = callPackage ./core/gnome-shell { };
 
+  gnome-shell-extensions = callPackage ./core/gnome-shell-extensions { };
+
   gnome-screenshot = callPackage ./core/gnome-screenshot { };
 
   gnome_settings_daemon = callPackage ./core/gnome-settings-daemon { };
