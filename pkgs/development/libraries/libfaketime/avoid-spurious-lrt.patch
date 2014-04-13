@@ -1,0 +1,12 @@
+diff -ur libfaketime-0.9.5.orig/src/Makefile libfaketime-0.9.5/src/Makefile
+--- libfaketime-0.9.5.orig/src/Makefile	2013-10-13 11:19:30.000000000 +0200
++++ libfaketime-0.9.5/src/Makefile	2014-04-11 21:58:06.285435083 +0200
+@@ -69,7 +69,7 @@
+ 
+ CFLAGS += -std=gnu99 -Wall -Wextra -Werror -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
+ LIB_LDFLAGS += -shared
+-LDFLAGS += -Wl,--version-script=libfaketime.map -lrt
++LDFLAGS += -Wl,--version-script=libfaketime.map 
+ LDADD += -ldl -lm -lpthread -lrt
+ 
+ SRC = libfaketime.c
