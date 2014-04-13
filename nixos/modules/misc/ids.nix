@@ -129,6 +129,7 @@
       foundationdb = 118;
       newrelic = 119;
       starbound = 120;
+      hydra     = 121;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
