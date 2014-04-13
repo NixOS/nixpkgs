@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ppl }:
+{ fetchurl, stdenv, ppl, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   name = "cloog-ppl-0.15.11";
@@ -10,7 +10,20 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ ppl ];
 
+  buildInputs = [ automake autoconf libtool ];
+
+  patches = [ ./fix-ppl-version.patch ];
+
   configureFlags = "--with-ppl=${ppl}";
+
+  preConfigure = ''
+    touch NEWS ChangeLog AUTHORS
+    ${libtool}/bin/libtoolize -c --force
+    ${automake}/bin/aclocal
+    ${automake}/bin/automake --add-missing
+    ${automake}/bin/automake -a -c --foreign
+    ${autoconf}/bin/autoreconf
+  '';
 
   crossAttrs = {
     configureFlags = "--with-ppl=${ppl.crossDrv}";
