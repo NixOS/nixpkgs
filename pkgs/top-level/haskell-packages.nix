@@ -1087,6 +1087,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   executablePath = callPackage ../development/libraries/haskell/executable-path {};
 
+  Extra = callPackage ../development/libraries/haskell/Extra {};
+
   fay = callPackage ../development/libraries/haskell/fay {};
 
   fayBase = callPackage ../development/libraries/haskell/fay-base {};
