@@ -1142,6 +1142,15 @@ rec {
   };
 
 
+  contextlib2 = buildPythonPackage rec {
+    name = "contextlib2-0.4.0";
+
+    src = fetchurl rec {
+      url = "https://pypi.python.org/packages/source/c/contextlib2/${name}.tar.gz";
+      md5 = "ea687207db25f65552061db4a2c6727d";
+    };
+  };
+
   coverage = buildPythonPackage rec {
     name = "coverage-3.6";
 
