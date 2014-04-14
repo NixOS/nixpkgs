@@ -14,7 +14,7 @@ let
 
   forAllSystems = pkgs.lib.genAttrs systems;
 
-  callTest = fn: args: forAllSystems (system: (import fn ({ inherit system; } // args)).result);
+  callTest = fn: args: forAllSystems (system: import fn ({ inherit system; } // args));
 
   pkgs = import nixpkgs { system = "x86_64-linux"; };
 
