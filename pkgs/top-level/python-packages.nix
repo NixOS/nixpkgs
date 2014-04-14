@@ -581,6 +581,34 @@ rec {
   };
 
 
+  bedup = buildPythonPackage rec {
+    name = "bedup-20140206";
+
+    src = fetchgit {
+      url = "git@github.com:g2p/bedup.git";
+      rev = "80cb217d4819a03e159e42850a9a3f14e2b278a3";
+      sha256 = "c6ab696a767efc20f25faecbb74833e6e396d89ea70a3a7e97e4dbd9b58e90f4";
+    };
+
+    buildInputs = [ pkgs.btrfsProgs ];
+    propagatedBuildInputs = with pkgs; [ contextlib2 sqlalchemy pyxdg pycparser cffi alembic ];
+
+    meta = {
+      description = "Deduplication for Btrfs";
+      longDescription = ''
+        Deduplication for Btrfs. bedup looks for new and changed files, making sure that multiple
+        copies of identical files share space on disk. It integrates deeply with btrfs so that scans
+        are incremental and low-impact.
+      '';
+      homepage = https://github.com/g2p/bedup;
+      license = stdenv.lib.licenses.gpl2;
+
+      platforms = stdenv.lib.platforms.linux;
+
+      maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
+    };
+  };
+
   beets = buildPythonPackage rec {
     name = "beets-1.0.0";
 
