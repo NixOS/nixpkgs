@@ -23,10 +23,7 @@
             <term xlink:href="#{$id}">
               <xsl:attribute name="xml:id"><xsl:value-of select="$id"/></xsl:attribute>
               <option>
-                 <xsl:for-each select="attr[@name = 'name']/string">
-                   <xsl:value-of select="@value" />
-                   <xsl:if test="position() != last()">.</xsl:if>
-                 </xsl:for-each>
+                <xsl:value-of select="attr[@name = 'name']/string/@value" />
               </option>
              </term>
 
