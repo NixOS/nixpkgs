@@ -1,0 +1,9 @@
+diff -ur syslinux-4.07.orig/gen-id.sh syslinux-4.07/gen-id.sh
+--- syslinux-4.07.orig/gen-id.sh	2013-07-25 11:28:59.000000000 +0200
++++ syslinux-4.07/gen-id.sh	2014-04-14 16:00:37.000006164 +0200
+@@ -30,4 +30,5 @@
+ if test -z "$id"; then
+   id="$tim"
+ fi
++id="unknown"
+ echo "$id"

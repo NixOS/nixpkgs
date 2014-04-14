@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0y2ld2s64s6vc5pf8rj36w71rq2cfax3c1iafp0w1qbjpxy1p8xg";
   };
 
-  patches = [ ./perl-deps.patch ];
+  patches = [ ./perl-deps.patch ./no-date-in-banner.patch ];
 
   buildInputs = [ nasm perl libuuid ];
 
