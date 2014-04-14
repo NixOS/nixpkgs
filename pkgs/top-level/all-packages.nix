@@ -7934,6 +7934,8 @@ let
 
     colorTheme = callPackage ../applications/editors/emacs-modes/color-theme { };
 
+    cryptol = callPackage ../applications/editors/emacs-modes/cryptol { };
+
     cua = callPackage ../applications/editors/emacs-modes/cua { };
 
     darcsum = callPackage ../applications/editors/emacs-modes/darcsum { };
