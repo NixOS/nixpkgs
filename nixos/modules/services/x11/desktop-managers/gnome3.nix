@@ -87,6 +87,7 @@ in {
         gnome3.gnome_themes_standard
       ] ++ (removePackagesByName [
         gnome3.baobab
+        gnome3.empathy
         gnome3.eog
         gnome3.epiphany
         gnome3.evince
