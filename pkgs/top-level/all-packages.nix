@@ -9926,17 +9926,7 @@ let
 
   kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde412 );
 
-  kde4_prev = recurseIntoAttrs pkgs.kde410;
-
-  kde410 = kdePackagesFor (pkgs.kde410 // {
-      boost = boost149;
-      eigen = eigen2;
-      libotr = libotr_3_2;
-      libusb = libusb1;
-      libcanberra = libcanberra_kde;
-    }) ../desktops/kde-4.10;
-
- kde411 = kdePackagesFor (pkgs.kde411 // {
+  kde411 = kdePackagesFor (pkgs.kde411 // {
       boost = boost149;
       eigen = eigen2;
       libotr = libotr_3_2;
@@ -9944,7 +9934,7 @@ let
       libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.11;
 
- kde412 = kdePackagesFor (pkgs.kde412 // {
+  kde412 = kdePackagesFor (pkgs.kde412 // {
       eigen = eigen2;
       libusb = libusb1;
       libcanberra = libcanberra_kde;
