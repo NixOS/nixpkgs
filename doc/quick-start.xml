@@ -71,7 +71,7 @@ $ git add pkgs/development/libraries/libfoo/default.nix</screen>
 
         <listitem>
           <para>GNU Multiple Precision arithmetic library (GMP): <link
-          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/gmp/5.1.1.nix"><filename>pkgs/development/libraries/gmp/5.1.1.nix</filename></link>.
+          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/gmp/5.1.x.nix"><filename>pkgs/development/libraries/gmp/5.1.x.nix</filename></link>.
           Also done by the generic builder, but has a dependency on
           <varname>m4</varname>.</para>
         </listitem>
