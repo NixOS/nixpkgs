@@ -2607,6 +2607,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   unixTime = callPackage ../development/libraries/haskell/unix-time {};
 
+  Unixutils = callPackage ../development/libraries/haskell/Unixutils {};
+
   unlambda = callPackage ../development/libraries/haskell/unlambda {};
 
   unorderedContainers_0_2_3_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.3.0.nix {};
