@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+import ./make-test.nix (
 
 let
 
@@ -90,4 +90,4 @@ in
       $client->succeed("curl --fail http://proxy/");
     '';
 
-}
+})

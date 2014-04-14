@@ -1,9 +1,10 @@
-{ pkgs, ... }:
+import ./make-test.nix (
 
 let
   replicateUser = "replicate";
   replicatePassword = "secret";
 in
+
 {
   nodes = {
     master =
@@ -58,4 +59,4 @@ in
     $slave2->sleep(100); # Hopefully this is long enough!!
     $slave2->succeed("echo 'use testdb; select * from tests' | mysql -u root -N | grep 4");
   '';
-}
+})

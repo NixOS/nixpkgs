@@ -73,7 +73,7 @@ rec {
   apply = makeTest; # compatibility
   call = f: f { inherit pkgs system; };
 
-  complete = { testScript, ... } @ t: t // rec {
+  complete = { testScript, makeCoverageReport ? false, ... } @ t: t // rec {
 
     nodes = buildVirtualNetwork (
       t.nodes or (if t ? machine then { machine = t.machine; } else { }));
@@ -117,6 +117,8 @@ rec {
     test = runTests driver;
 
     report = releaseTools.gcovReport { coverageRuns = [ test ]; };
+
+    result = if makeCoverageReport then report else test;
   };
 
 

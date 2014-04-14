@@ -1,9 +1,7 @@
 # Test of IPv6 functionality in NixOS, including whether router
 # solicication/advertisement using radvd works.
 
-{ pkgs, ... }:
-
-{
+import ./make-test.nix {
 
   nodes =
     { client = { config, pkgs, ... }: { };
