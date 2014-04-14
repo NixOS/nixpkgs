@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
 
   postInstall = "make install-libs";
 
+  # Remove references to the build directory
+  preFixup = ''
+    sed -i -e 's/ET_DIR=".*"/""/' $out/bin/compile_et
+    sed -i -e 's/SS_DIR=".*"/""/' $out/bin/mk_cmds
+  '';
+
   meta = {
     homepage = http://e2fsprogs.sourceforge.net/;
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
