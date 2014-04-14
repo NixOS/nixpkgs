@@ -5308,6 +5308,8 @@ let
     inherit fetchurl stdenv;
   });
 
+  libuv01119 = callPackage ../development/libraries/libuv/0.11.19.nix { };
+
   libyaml = callPackage ../development/libraries/libyaml { };
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
