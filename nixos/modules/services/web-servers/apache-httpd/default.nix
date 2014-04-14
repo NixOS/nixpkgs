@@ -621,7 +621,7 @@ in
       { description = "Apache HTTPD";
 
         wantedBy = [ "multi-user.target" ];
-        requires = [ "keys.target" ];
+        wants = [ "keys.target" ];
         after = [ "network.target" "fs.target" "postgresql.service" "keys.target" ];
 
         path =

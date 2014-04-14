@@ -5,13 +5,12 @@
     server =
       { pkgs, config, ... }:
 
-      {
-        services.tomcat.enable = true;
+      { services.tomcat.enable = true;
         services.httpd.enable = true;
         services.httpd.adminAddr = "foo@bar.com";
-        services.httpd.extraSubservices = [
-          { serviceType = "tomcat-connector"; }
-        ];
+        services.httpd.extraSubservices =
+          [ { serviceType = "tomcat-connector"; } ];
+        networking.firewall.allowedTCPPorts = [ 80 ];
       };
 
     client = { };

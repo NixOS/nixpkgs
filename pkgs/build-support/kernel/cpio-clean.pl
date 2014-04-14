@@ -11,9 +11,6 @@ my $IN = \*STDIN;
 my $ino = 1;
 $cpio->read_with_handler($IN, sub {
         my ($e) = @_;
-        $e->{inode} = $ino;
-        $ino++;
-        $e->{nlink} = 1;
         $e->{mtime} = 1;
 	$cpio->write_one(\*STDOUT, $e);
     });

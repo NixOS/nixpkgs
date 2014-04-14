@@ -46,6 +46,7 @@ in
             group = "postdrop";
             setuid = false;
             setgid = true;
+            permissions = "u+rx,g+x,o+x";
           }
         ];
       description = ''

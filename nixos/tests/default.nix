@@ -8,6 +8,7 @@ with import ../lib/testing.nix { inherit system minimal; };
 {
   avahi = makeTest (import ./avahi.nix);
   bittorrent = makeTest (import ./bittorrent.nix);
+  containers = makeTest (import ./containers.nix);
   firefox = makeTest (import ./firefox.nix);
   firewall = makeTest (import ./firewall.nix);
   installer = makeTests (import ./installer.nix);
@@ -38,6 +39,7 @@ with import ../lib/testing.nix { inherit system minimal; };
   simple = makeTest (import ./simple.nix);
   #subversion = makeTest (import ./subversion.nix);
   tomcat = makeTest (import ./tomcat.nix);
+  udisks = makeTest (import ./udisks.nix);
   #trac = makeTest (import ./trac.nix);
   xfce = makeTest (import ./xfce.nix);
   runInMachine.test = import ./run-in-machine.nix { inherit system; };

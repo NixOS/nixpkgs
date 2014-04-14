@@ -576,6 +576,8 @@ let
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
+  capstone = callPackage ../development/libraries/capstone { };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   direnv = callPackage ../tools/misc/direnv { };
@@ -1120,7 +1122,7 @@ let
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
   };
 
-  grub2 = callPackage ../tools/misc/grub/2.0x.nix { libusb = libusb1; };
+  grub2 = callPackage ../tools/misc/grub/2.0x.nix { libusb = libusb1; flex = flex_2_5_35; };
 
   grub2_efi = grub2.override { EFIsupport = true; };
 
@@ -1280,6 +1282,8 @@ let
 
   logstash = callPackage ../tools/misc/logstash { };
 
+  logstash-forwarder = callPackage ../tools/misc/logstash-forwarder { };
+
   kippo = callPackage ../servers/kippo { };
 
   klavaro = callPackage ../games/klavaro {};
@@ -1390,7 +1394,9 @@ let
 
   mdbtools = callPackage ../tools/misc/mdbtools { };
 
-  mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix { };
+  mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix { 
+    inherit (gnome) scrollkeeper;
+  };
 
   megacli = callPackage ../tools/misc/megacli { };
 
@@ -1675,7 +1681,7 @@ let
            { hurd = gnu.hurdCrossIntermediate; })
     else null;
 
-  ipsecTools = callPackage ../os-specific/linux/ipsec-tools { };
+  ipsecTools = callPackage ../os-specific/linux/ipsec-tools { flex = flex_2_5_35; };
 
   patch = gnupatch;
 
@@ -1767,7 +1773,7 @@ let
   cntlm = callPackage ../tools/networking/cntlm { };
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
-  
+
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
@@ -1907,7 +1913,7 @@ let
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
   sharutils = callPackage ../tools/archivers/sharutils { };
-  
+
   shotwell = callPackage ../applications/graphics/shotwell { };
 
   shebangfix = callPackage ../tools/misc/shebangfix { };
@@ -2031,6 +2037,8 @@ let
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
   tcpdump = callPackage ../tools/networking/tcpdump { };
+
+  tcpflow = callPackage ../tools/networking/tcpflow { };
 
   teamviewer = callPackage_i686 ../applications/networking/remote/teamviewer { };
 
@@ -2412,7 +2420,7 @@ let
 
   clang = wrapClang llvmPackages.clang;
 
-  clang_34 = wrapClang llvmPackages.clang;
+  clang_34 = wrapClang llvmPackages_34.clang;
   clang_33 = wrapClang (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
   clang_32 = wrapClang (clangUnwrapped llvm_32 ../development/compilers/llvm/3.2/clang.nix);
   clang_31 = wrapClang (clangUnwrapped llvm_31 ../development/compilers/llvm/3.1/clang.nix);
@@ -2420,7 +2428,7 @@ let
   clangUnwrapped = llvm: pkg: callPackage pkg {
       stdenv = if stdenv.isDarwin
          then stdenvAdapters.overrideGCC stdenv gccApple
-         else stdenvAdapters.overrideGCC stdenv gcc48;
+         else stdenv;
       llvm = llvm;
   };
 
@@ -2804,7 +2812,7 @@ let
   haskellPackages_ghc763_profiling    = recurseIntoAttrs (haskell.packages_ghc763.profiling);
   haskellPackages_ghc763              = recurseIntoAttrs (haskell.packages_ghc763.highPrio);
   # Reasonably current HEAD snapshot.
-  haskellPackages_ghc781 = haskell.packages_ghc781;
+  haskellPackages_ghc782 = haskell.packages_ghc782;
   haskellPackages_ghcHEAD = haskell.packages_ghcHEAD;
 
   haxe = callPackage ../development/compilers/haxe { };
@@ -2922,10 +2930,9 @@ let
 
   lessc = callPackage ../development/compilers/lessc { };
 
-  llvm = if stdenv.isDarwin then llvm_33 # until someone solves build problems with _34
-    else llvmPackages.llvm;
+  llvm = llvmPackages.llvm;
 
-  llvm_34 = llvmPackages.llvm;
+  llvm_34 = llvmPackages_34.llvm;
   llvm_33 = llvm_v ../development/compilers/llvm/3.3/llvm.nix;
   llvm_32 = llvm_v ../development/compilers/llvm/3.2;
   llvm_31 = llvm_v ../development/compilers/llvm/3.1;
@@ -2936,12 +2943,15 @@ let
       else stdenv;
   };
 
-  llvmPackages = recurseIntoAttrs (import ../development/compilers/llvm/3.4 {
-    inherit newScope fetchurl;
+  llvmPackages = if !stdenv.isDarwin then llvmPackages_34 else llvmPackages_34 // {
+    # until someone solves build problems with _34
+    llvm = llvm_33;
+    clang = clang_33;
+  };
+
+  llvmPackages_34 = recurseIntoAttrs (import ../development/compilers/llvm/3.4 {
+    inherit stdenv newScope fetchurl;
     isl = isl_0_12;
-    stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideGCC stdenv gcc48
-      else stdenv;
   });
   llvmPackagesSelf = import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; };
 
@@ -3143,9 +3153,7 @@ let
   scala_2_10 = callPackage ../development/compilers/scala { };
   scala = scala_2_10;
 
-  sdcc = callPackage ../development/compilers/sdcc {
-    boost = boost149; # sdcc 3.2.0 fails to build with boost 1.53
-  };
+  sdcc = callPackage ../development/compilers/sdcc { };
 
   smlnj = callPackage_i686 ../development/compilers/smlnj { };
 
@@ -3301,6 +3309,7 @@ let
 
   maude = callPackage ../development/interpreters/maude {
     bison = bison2;
+    flex = flex_2_5_35;
   };
 
   octave = callPackage ../development/interpreters/octave {
@@ -3730,7 +3739,9 @@ let
 
   checkstyle = callPackage ../development/tools/analysis/checkstyle { };
 
-  flex = callPackage ../development/tools/parsing/flex { };
+  flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
+  flex_2_5_39 = callPackage ../development/tools/parsing/flex/2.5.39.nix { };
+  flex = flex_2_5_39;
 
   m4 = gnum4;
 
@@ -4866,6 +4877,8 @@ let
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
   libgnome_keyring3 = gnome3.libgnome_keyring;
 
+  libseccomp = callPackage ../development/libraries/libseccomp { };
+
   libsecret = callPackage ../development/libraries/libsecret { };
 
   libgtop = callPackage ../development/libraries/libgtop {};
@@ -5065,6 +5078,8 @@ let
 
   libmusicbrainz3 = callPackage ../development/libraries/libmusicbrainz { };
 
+  libmusicbrainz5 = callPackage ../development/libraries/libmusicbrainz/5.x.nix { };
+
   libmusicbrainz = libmusicbrainz3;
 
   libnet = callPackage ../development/libraries/libnet { };
@@ -5129,7 +5144,7 @@ let
   libpseudo = callPackage ../development/libraries/libpseudo { };
 
   libpwquality = callPackage ../development/libraries/libpwquality { };
-  
+
   libqalculate = callPackage ../development/libraries/libqalculate { };
 
   librsvg = callPackage ../development/libraries/librsvg {
@@ -5193,6 +5208,8 @@ let
   libtunepimp = callPackage ../development/libraries/libtunepimp { };
 
   libtxc_dxtn = callPackage ../development/libraries/libtxc_dxtn { };
+
+  libtxc_dxtn_s2tc = callPackage ../development/libraries/libtxc_dxtn_s2tc { };
 
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
 
@@ -6208,7 +6225,7 @@ let
   perlArchiveCpio = perlPackages.ArchiveCpio;
 
   perlcritic = perlPackages.PerlCritic;
-  
+
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
 
@@ -6800,7 +6817,9 @@ let
 
   gpm = callPackage ../servers/gpm { };
 
-  gradm = callPackage ../os-specific/linux/gradm { };
+  gradm = callPackage ../os-specific/linux/gradm {
+    flex = flex_2_5_35;
+  };
 
   hdparm = callPackage ../os-specific/linux/hdparm { };
 
@@ -6887,39 +6906,6 @@ let
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = [];
   };
-
-  grsecurityOverrider = args: {
-    # Apparently as of gcc 4.6, gcc-plugin headers (which are needed by PaX plugins)
-    # include libgmp headers, so we need these extra tweaks
-    buildInputs = args.buildInputs ++ [ gmp ];
-    preConfigure = ''
-      ${args.preConfigure or ""}
-      sed -i 's|-I|-I${gmp}/include -I|' scripts/gcc-plugin.sh
-      sed -i 's|HOST_EXTRACFLAGS +=|HOST_EXTRACFLAGS += -I${gmp}/include|' tools/gcc/Makefile
-      sed -i 's|HOST_EXTRACXXFLAGS +=|HOST_EXTRACXXFLAGS += -I${gmp}/include|' tools/gcc/Makefile
-    '';
-  };
-
-  # Note: grsec is not enabled automatically, you need to specify which kernel
-  # config options you need (e.g. by overriding extraConfig). See list of options here:
-  # https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options
-  linux_3_2_grsecurity = lowPrio (lib.addMetaAttrs {
-    maintainers = with lib.maintainers; [ wizeman thoughtpolice ];
-  } (lib.overrideDerivation (linux_3_2.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_2_56 kernelPatches.grsec_path ];
-    argsOverride = {
-      modDirVersion = "${linux_3_2.modDirVersion}-grsec";
-    };
-  })) (args: grsecurityOverrider args)));
-
-  linux_3_13_grsecurity = lowPrio (lib.addMetaAttrs {
-    maintainers = with lib.maintainers; [ wizeman thoughtpolice ];
-  } (lib.overrideDerivation (linux_3_13.override (args: {
-    kernelPatches = args.kernelPatches ++ [ kernelPatches.grsecurity_3_0_3_13_8 kernelPatches.grsec_path ];
-    argsOverride = {
-      modDirVersion = "${linux_3_13.modDirVersion}-grsec";
-    };
-  })) (args: grsecurityOverrider args)));
 
   linux_3_2_apparmor = lowPrio (linux_3_2.override {
     kernelPatches = [ kernelPatches.apparmor_3_2 ];
@@ -7023,8 +7009,8 @@ let
     cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
-    
-    v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { }; 
+
+    v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
     frandom = callPackage ../os-specific/linux/frandom { };
 
@@ -7063,11 +7049,11 @@ let
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
-    lockdep = callPackage ../os-specific/linux/kernel/lockdep.nix { };
-
     psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
 
     spl = callPackage ../os-specific/linux/spl/default.nix { };
+
+    sysdig = callPackage ../os-specific/linux/sysdig {};
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
@@ -7087,7 +7073,6 @@ let
   # Build the kernel modules for the some of the kernels.
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
   linuxPackages_3_2_apparmor = linuxPackagesFor pkgs.linux_3_2_apparmor linuxPackages_3_2_apparmor;
-  linuxPackages_3_2_grsecurity = linuxPackagesFor pkgs.linux_3_2_grsecurity linuxPackages_3_2_grsecurity;
   linuxPackages_3_2_xen = linuxPackagesFor pkgs.linux_3_2_xen linuxPackages_3_2_xen;
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 linuxPackages_3_4);
   linuxPackages_3_4_apparmor = linuxPackagesFor pkgs.linux_3_4_apparmor linuxPackages_3_4_apparmor;
@@ -7095,7 +7080,6 @@ let
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
-  linuxPackages_3_13_grsecurity = linuxPackagesFor pkgs.linux_3_13_grsecurity linuxPackages_3_13_grsecurity;
   linuxPackages_3_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_13 linuxPackages_3_13);
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   # Update this when adding a new version!
@@ -7103,7 +7087,7 @@ let
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
-  linuxPackages = linuxPackages_3_10;
+  linuxPackages = linuxPackages_3_12;
 
   # A function to build a manually-configured kernel
   linuxManualConfig = pkgs.buildLinux;
@@ -7128,6 +7112,8 @@ let
   libsmbios = callPackage ../os-specific/linux/libsmbios { };
 
   lm_sensors = callPackage ../os-specific/linux/lm-sensors { };
+
+  lockdep = callPackage ../os-specific/linux/lockdep { };
 
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
 
@@ -7169,6 +7155,8 @@ let
     };
 
   multipath_tools = callPackage ../os-specific/linux/multipath-tools { };
+
+  musl = callPackage ../os-specific/linux/musl { };
 
   nettools = callPackage ../os-specific/linux/net-tools { };
 
@@ -7833,7 +7821,7 @@ let
     inherit (gnome) GConf libglade;
   };
 
-  "dd-agent" = callPackage ../tools/networking/dd-agent { };
+  "dd-agent" = callPackage ../tools/networking/dd-agent { inherit (pythonPackages) tornado; };
 
   dia = callPackage ../applications/graphics/dia {
     inherit (pkgs.gnome) libart_lgpl libgnomeui;
@@ -9703,8 +9691,8 @@ let
   mars = callPackage ../games/mars { };
 
   micropolis = callPackage ../games/micropolis { };
-  
-  mnemosyne = callPackage ../games/mnemosyne { 
+
+  mnemosyne = callPackage ../games/mnemosyne {
     inherit (pythonPackages) matplotlib cherrypy sqlite3;
   };
 
@@ -9897,7 +9885,9 @@ let
 
   cinnamon = recurseIntoAttrs rec {
     callPackage = newScope pkgs.cinnamon;
-    inherit (gnome3) gnome_common;
+    inherit (gnome3) gnome_common libgnomekbd;
+
+    cinnamon-settings-daemon = callPackage ../desktops/cinnamon/cinnamon-settings-daemon.nix{ };
 
     cinnamon-session = callPackage ../desktops/cinnamon/cinnamon-session.nix{ } ;
 
@@ -10278,6 +10268,12 @@ let
 
   z3 = callPackage ../applications/science/logic/z3 {};
 
+  boolector   = boolector15;
+  boolector15 = callPackage ../applications/science/logic/boolector {};
+  boolector16 = lowPrio (callPackage ../applications/science/logic/boolector {
+    useV16 = true;
+  });
+
   ### SCIENCE / ELECTRONICS
 
   eagle = callPackage_i686 ../applications/science/electronics/eagle { };
@@ -10485,10 +10481,13 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
+  nixUnstable = nixStable;
+  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
+  */
 
   nixops = callPackage ../tools/package-management/nixops { };
 

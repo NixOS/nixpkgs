@@ -18,6 +18,18 @@ let
       };
     };
 
+  grsecPatch = { grversion ? "3.0", kversion, revision, branch, sha256 }:
+    { name = "grsecurity-${grversion}-${kversion}";
+      inherit grversion kversion revision;
+      patch = fetchurl {
+        url = "http://grsecurity.net/${branch}/grsecurity-${grversion}-${kversion}-${revision}.patch";
+        inherit sha256;
+      };
+      features.grsecurity = true;
+      # The grsec kernel patchset includes AppArmor patches
+      features.apparmor = true;
+    };
+
   makeAppArmorPatch = {apparmor, version}:
     stdenv.mkDerivation {
       name = "apparmor-${version}.patch";
@@ -26,6 +38,7 @@ let
         cat ${apparmor}/kernel-patches/${version}/* > $out
       '';
     };
+
 in
 
 rec {
@@ -71,31 +84,29 @@ rec {
     sha256 = "00b1rqgd4yr206dxp4mcymr56ymbjcjfa4m82pxw73khj032qw3j";
   };
 
-
-  grsecurity_3_0_3_2_56 =
-    { name = "grsecurity-3.0-3.2.56";
-      patch = fetchurl {
-        url = http://grsecurity.net/stable/grsecurity-3.0-3.2.56-201404012135.patch;
-        sha256 = "1l7c1l5cxv1j9iw12rxf7nsvbmg6jna96y1bxc8i4yi0jwiwn2nc";
-      };
-      features.grsecurity = true;
-      # The grsec kernel patch seems to include the apparmor patches as of 3.0-3.2.56
-      features.apparmor = true;
+  grsecurity_stable = grsecPatch
+    { kversion  = "3.2.57";
+      revision  = "201404131252";
+      branch    = "stable";
+      sha256    = "1yic257h2vy3175c34i54873lc93y0m57rw1d059wz1wxy9waiwl";
     };
 
-  grsecurity_3_0_3_13_8 =
-    { name = "grsecurity-3.0-3.13.8";
-      patch = fetchurl {
-        url = http://grsecurity.net/test/grsecurity-3.0-3.13.8-201404011912.patch;
-        sha256 = "1fwb41l7gjkdyl08b6a9mg4ahnw55yk0a7kd69ca8zrqd0j668ci";
-      };
-      features.grsecurity = true;
-      # The grsec kernel patch seems to include the apparmor patches as of 3.0-3.13.8
-      features.apparmor = true;
+  grsecurity_vserver = grsecPatch
+    { kversion  = "3.2.57";
+      revision  = "vs2.3.2.16-201404131253";
+      branch    = "vserver";
+      sha256    = "0grhd9hbk952dwr91syi5pda1iccmcd8s0l3ki13689z8ns35f7k";
     };
 
-  grsec_path =
-    { name = "grsec-path";
+  grsecurity_unstable = grsecPatch
+    { kversion  = "3.13.9";
+      revision  = "201404131254";
+      branch    = "test";
+      sha256    = "1qslkmqz25rlag0dvv481ka7yylfhmpx7mhzbv9qdaynx5s59l3v";
+    };
+
+  grsec_fix_path =
+    { name = "grsec-fix-path";
       patch = ./grsec-path.patch;
     };
 }

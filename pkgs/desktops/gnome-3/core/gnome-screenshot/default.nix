@@ -3,11 +3,11 @@
 , itstool, gnome3, librsvg, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-screenshot-3.12.0";
+  name = "gnome-screenshot-3.10.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-screenshot/3.12/${name}.tar.xz";
-    sha256 = "ae4bf706652ae9b28c7930d22c2c37469a78d7f6656d312960b3c75ee5c36eb1";
+    url = "mirror://gnome/sources/gnome-screenshot/3.10/${name}.tar.xz";
+    sha256 = "1nb56kzcj5z4hmrmxap5r53smi52ki3pc8qmhi4rymkgqswyk7bh";
   };
 
   doCheck = true;

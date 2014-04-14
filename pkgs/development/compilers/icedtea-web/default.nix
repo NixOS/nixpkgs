@@ -1,20 +1,22 @@
-{ stdenv, fetchurl, jdk, gtk2, xulrunner, zip, pkgconfig, perl, npapi_sdk }:
+{ stdenv, fetchurl, jdk, gtk2, xulrunner, zip, pkgconfig, perl, npapi_sdk, bash }:
 
 stdenv.mkDerivation rec {
   name = "icedtea-web-${version}";
 
-  version = "1.4.2";
+  version = "1.5";
 
   src = fetchurl {
     url = "http://icedtea.wildebeest.org/download/source/${name}.tar.gz";
 
-    sha256 = "0bfw4icxjfkdxqmiqgp9lfs1ca9rydl57g3yhlxrif0fpzyyb3fl";
+    sha256 = "0bbwa944kaam0r8ldlqrrj9z9zj54v6zdc3q663ck59shw5z828w";
   };
 
   buildInputs = [ gtk2 xulrunner zip pkgconfig npapi_sdk ];
 
   preConfigure = ''
     substituteInPlace javac.in --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
+
+    configureFlags="BIN_BASH=${bash}/bin/bash $configureFlags"
   '';
 
   configureFlags = [

@@ -6,7 +6,7 @@ let
 
   sysctlOption = mkOptionType {
     name = "sysctl option value";
-    check = x: isBool x || isString x || isInt x;
+    check = x: isBool x || isString x || isInt x || isNull x;
     merge = args: defs: (last defs).value; # FIXME: hacky way to allow overriding in configuration.nix.
   };
 
@@ -29,8 +29,9 @@ in
         <manvolnum>8</manvolnum></citerefentry>.  Note that sysctl
         parameters names must be enclosed in quotes
         (e.g. <literal>"vm.swappiness"</literal> instead of
-        <literal>vm.swappiness</literal>).  The value of each parameter
-        may be a string, integer or Boolean.
+        <literal>vm.swappiness</literal>).  The value of each
+        parameter may be a string, integer, boolean, or null
+        (signifying the option will not appear at all).
       '';
     };
 
@@ -39,7 +40,9 @@ in
   config = {
 
     environment.etc."sysctl.d/nixos.conf".text =
-      concatStrings (mapAttrsToList (n: v: "${n}=${if v == false then "0" else toString v}\n") config.boot.kernel.sysctl);
+      concatStrings (mapAttrsToList (n: v:
+        optionalString (v != null) "${n}=${if v == false then "0" else toString v}\n"
+      ) config.boot.kernel.sysctl);
 
     systemd.services.systemd-sysctl =
       { description = "Apply Kernel Variables";
@@ -65,8 +68,9 @@ in
 
     # Hide kernel pointers (e.g. in /proc/modules) for unprivileged
     # users as these make it easier to exploit kernel vulnerabilities.
-    boot.kernel.sysctl."kernel.kptr_restrict" = 1;
-
+    #
+    # Removed under grsecurity.
+    boot.kernel.sysctl."kernel.kptr_restrict" =
+      if config.security.grsecurity.enable then null else 1;
   };
-
 }

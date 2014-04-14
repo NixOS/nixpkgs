@@ -96,9 +96,9 @@ my $videoDriver;
 
 sub pciCheck {
     my $path = shift;
-    my $vendor = read_file "$path/vendor";
-    my $device = read_file "$path/device";
-    my $class = read_file "$path/class";
+    my $vendor = read_file "$path/vendor"; chomp $vendor;
+    my $device = read_file "$path/device"; chomp $device;
+    my $class = read_file "$path/class"; chomp $class;
 
     my $module;
     if (-e "$path/driver/module") {
@@ -130,6 +130,7 @@ sub pciCheck {
 
     # broadcom STA driver (wl.ko)
     # list taken from http://www.broadcom.com/docs/linux_sta/README.txt
+    # FIXME: still needed?
     if ($vendor eq "0x14e4" &&
         ($device eq "0x4311" || $device eq "0x4312" || $device eq "0x4313" ||
          $device eq "0x4315" || $device eq "0x4327" || $device eq "0x4328" ||
@@ -156,6 +157,7 @@ sub pciCheck {
 
     # Assume that all NVIDIA cards are supported by the NVIDIA driver.
     # There may be exceptions (e.g. old cards).
+    # FIXME: do we want to enable an unfree driver here?
     $videoDriver = "nvidia" if $vendor eq "0x10de" && $class =~ /^0x03/;
 }
 
@@ -170,9 +172,9 @@ push @attrs, "hardware.opengl.videoDrivers = [ \"$videoDriver\" ];" if $videoDri
 
 sub usbCheck {
     my $path = shift;
-    my $class = read_file "$path/bInterfaceClass";
-    my $subclass = read_file "$path/bInterfaceSubClass";
-    my $protocol = read_file "$path/bInterfaceProtocol";
+    my $class = read_file "$path/bInterfaceClass"; chomp $class;
+    my $subclass = read_file "$path/bInterfaceSubClass"; chomp $subclass;
+    my $protocol = read_file "$path/bInterfaceProtocol"; chomp $protocol;
 
     my $module;
     if (-e "$path/driver/module") {

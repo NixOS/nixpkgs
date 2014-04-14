@@ -1,17 +1,18 @@
 { stdenv, fetchurl, elfutils }:
 
 stdenv.mkDerivation rec {
-  name = "ltrace-0.5.3";
+  name = "ltrace-0.7.3";
 
   src = fetchurl {
-    url = ftp://ftp.debian.org/debian/pool/main/l/ltrace/ltrace_0.5.3.orig.tar.gz;
-    sha256 = "0cmyw8zyw8b1gszrwizcm53cr0mig1iw3kv18v5952m9spb2frjw";
+    url = ftp://ftp.debian.org/debian/pool/main/l/ltrace/ltrace_0.7.3.orig.tar.bz2;
+    sha256 = "00wmbdghqbz6x95m1mcdd3wd46l6hgcr4wggdp049dbifh3qqvqf";
   };
 
   buildInputs = [ elfutils ];
 
-  preBuild =
+  preConfigure =
     ''
+      configureFlags="--disable-werror"
       makeFlagsArray=(INSTALL="install -c")
     '';
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus, glib, libusb, alsaLib, python,
+{ stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib, python,
   pythonPackages, pythonDBus, readline, libsndfile, udev, libical,
   systemd }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     [ pythonDBus pygobject pygobject3 recursivePthLoader ];
 
   buildInputs =
-    [ pkgconfig dbus.libs glib libusb alsaLib python pythonPackages.wrapPython
+    [ pkgconfig dbus.libs glib alsaLib python pythonPackages.wrapPython
       readline libsndfile udev libical
       # Disables GStreamer; not clear what it gains us other than a
       # zillion extra dependencies.

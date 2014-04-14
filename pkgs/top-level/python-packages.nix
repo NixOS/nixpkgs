@@ -1312,6 +1312,7 @@ rec {
     '';
 
     propagatedBuildInputs = [ py ]
+      ++ (optional isPy26 argparse)
       ++ stdenv.lib.optional
         pkgs.config.pythonPackages.pytest.selenium or false
         pythonPackages.selenium;
@@ -3208,6 +3209,24 @@ rec {
     propagatedBuildInputs = [ gdata hcs_utils keyring simplejson ];
   };
 
+  google_api_python_client = buildPythonPackage rec {
+    name = "google-api-python-client-1.2";
+
+    src = fetchurl {
+      url = "https://google-api-python-client.googlecode.com/files/google-api-python-client-1.2.tar.gz";
+      sha256 = "0xd619w71xk4ldmikxqhaaqn985rc2hy4ljgwfp50jb39afg7crw";
+    };
+
+    propagatedBuildInputs = [ httplib2 ];
+
+    meta = with stdenv.lib; {
+      description = "The core Python library for accessing Google APIs";
+      homepage = "https://code.google.com/p/google-api-python-client/";
+      license = licenses.asl20;
+      platforms = platforms.unix;
+    };
+  };
+
   greenlet = buildPythonPackage rec {
     name = "greenlet-0.3.1";
 
@@ -3439,7 +3458,7 @@ rec {
       url = "http://pypi.python.org/packages/source/i/ipdb/ipdb-0.7.tar.gz";
       md5 = "d879f9b2b0f26e0e999809585dcaec61";
     };
-    propagatedBuildInputs = [ pythonPackages.ipython ];
+    propagatedBuildInputs = [ pythonPackages.ipythonLight ];
   };
 
   ipdbplugin = buildPythonPackage {
@@ -3448,7 +3467,7 @@ rec {
       url = "https://pypi.python.org/packages/source/i/ipdbplugin/ipdbplugin-1.4.tar.gz";
       md5 = "f9a41512e5d901ea0fa199c3f648bba7";
     };
-    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipython ];
+    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipythonLight ];
   };
 
 
@@ -6958,7 +6977,7 @@ rec {
 
     checkPhase = ''
       cd tests
-      export LD_LIBRARY_PATH=${pkgs.imagemagick}/lib
+      export MAGICK_HOME="${pkgs.imagemagick}"
       export PYTHONPATH=$PYTHONPATH:../
       py.test
       cd ..
@@ -8795,19 +8814,21 @@ rec {
   };
 
   searx = buildPythonPackage rec {
-    name = "searx-${version}";
-    version = "0.2.0";
+    name = "searx-${rev}";
+    rev = "44d3af9fb2482cd0df1a8ababbe2fdf27ab33172";
 
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/source/s/searx/${name}.tar.gz";
-      sha256 = "19hxjg3vhq7fygcvfhsr3i40c8kbi7i76ym9cv2s03b3zijd38w0";
+    src = fetchgit {
+      url = "git://github.com/asciimoo/searx";
+      inherit rev;
+      sha256 = "1w505pzdkkcglq782wg7f5fxrw9i5jzp7px20c2xz18pps2m3rsm";
     };
 
-    propagatedBuildInputs = [ pyyaml lxml grequests flaskbabel flask requests gevent speaklater Babel pytz ];
+    propagatedBuildInputs = [ pyyaml lxml grequests flaskbabel flask requests
+      gevent speaklater Babel pytz dateutil ];
 
     meta = {
       homepage = https://github.com/asciimoo/searx;
-      description = "A privacy-respecting, hackable metasearch engine.";
+      description = "A privacy-respecting, hackable metasearch engine";
       license = stdenv.lib.licenses.agpl3Plus;
       maintainers = [ stdenv.lib.maintainers.matejc ];
     };

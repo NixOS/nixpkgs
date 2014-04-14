@@ -62,6 +62,7 @@
   ./security/apparmor-suid.nix
   ./security/ca.nix
   ./security/duosec.nix
+  ./security/grsecurity.nix
   ./security/pam.nix
   ./security/pam_usb.nix
   ./security/polkit.nix
@@ -96,6 +97,11 @@
   ./services/databases/postgresql.nix
   ./services/databases/virtuoso.nix
   ./services/databases/monetdb.nix
+  ./services/desktops/accountservice.nix
+  ./services/desktops/gnome3/at-spi2-core.nix
+  ./services/desktops/gnome3/evolution-data-server.nix
+  ./services/desktops/gnome3/sushi.nix
+  ./services/desktops/telepathy.nix
   ./services/games/ghost-one.nix
   ./services/games/minecraft-server.nix
   ./services/hardware/acpid.nix
@@ -159,6 +165,7 @@
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
   ./services/networking/btsync.nix
+  ./services/networking/cjdns.nix
   ./services/networking/connman.nix
   ./services/networking/cntlm.nix
   ./services/networking/chrony.nix
@@ -301,6 +308,7 @@
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
   ./testing/service-runner.nix
+  ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
   ./virtualisation/libvirtd.nix
   #./virtualisation/nova.nix

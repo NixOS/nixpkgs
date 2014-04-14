@@ -1,14 +1,14 @@
 { cabal, binary, conduit, hspec, QuickCheck, quickcheckAssertions
-, vector
+, resourcet, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "binary-conduit";
-  version = "1.2";
-  sha256 = "1m58zgmivapn51gs5983vpsivzkki94kkac014mwvnp90q46nkvx";
-  buildDepends = [ binary conduit vector ];
+  version = "1.2.1.1";
+  sha256 = "0f6ki793fbgxpsqadfj796b4rbv6zhn4v4rrd48r48zzw9hmxmzd";
+  buildDepends = [ binary conduit resourcet vector ];
   testDepends = [
-    binary conduit hspec QuickCheck quickcheckAssertions
+    binary conduit hspec QuickCheck quickcheckAssertions resourcet
   ];
   meta = {
     homepage = "http://github.com/qnikst/binary-conduit";

@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "4.5.0.1";
-  sha256 = "0zl8zjwkyrh5c0l190q6qw1w6mwhw7jsjk3l7qjpgxbmv730q7nz";
+  version = "4.5.1.0";
+  sha256 = "0p78wscz9gwg1as49wjl49ydzbv972w6wmbmvhw1rfb9d5xana1i";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

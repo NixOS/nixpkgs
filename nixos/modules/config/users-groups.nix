@@ -7,7 +7,7 @@ let
   ids = config.ids;
   cfg = config.users;
 
-  nonUidUsers = filterAttrs (n: u: u.uid == null) cfg.extraUsers;
+  nonUidUsers = filterAttrs (n: u: u.createUser && u.uid == null) cfg.extraUsers;
   nonGidGroups = filterAttrs (n: g: g.gid == null) cfg.extraGroups;
 
   passwordDescription = ''
@@ -392,6 +392,7 @@ in {
         home = "/root";
         shell = cfg.defaultUserShell;
         group = "root";
+        extraGroups = [ "grsecurity" ];
         hashedPassword = mkDefault config.security.initialRootPassword;
       };
       nobody = {
@@ -420,6 +421,7 @@ in {
       nixbld.gid = ids.gids.nixbld;
       utmp.gid = ids.gids.utmp;
       adm.gid = ids.gids.adm;
+      grsecurity.gid = ids.gids.grsecurity;
     };
 
     system.activationScripts.users =
