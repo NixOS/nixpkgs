@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${evolution_data_server}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
 
+  patches = [ ./fix_background_corruption.patch ];
+
   meta = with stdenv.lib; {
     platforms = platforms.linux;
   };
