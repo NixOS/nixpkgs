@@ -62,7 +62,7 @@ let
                  You can set
                     { nixpkgs.config.allowUnfree = true; }
                  in configuration.nix to override this.
-                 If you use nix standalnd, you can add
+                 If you use nix standalne, you can add
                     { config.allowUnfree = true; }
                  to ~/.nixpkgs/config.nix or pass
                     --arg config '{ allowUnfree = true; }'
