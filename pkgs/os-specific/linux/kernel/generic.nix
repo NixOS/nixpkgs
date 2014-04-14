@@ -58,6 +58,7 @@ let
     arch = stdenv.platform.kernelArch;
 
     useFakeTime = 1;
+    KBUILD_BUILD_TIMESTAMP = 0;
     crossAttrs = let
         cp = stdenv.cross.platform;
       in {
