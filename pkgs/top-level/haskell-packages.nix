@@ -705,6 +705,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   bytestringProgress = callPackage ../development/libraries/haskell/bytestring-progress {};
 
+  bzlib = callPackage ../development/libraries/haskell/bzlib {};
+
   c2hs = callPackage ../development/libraries/haskell/c2hs {};
 
   c2hsc = callPackage ../development/libraries/haskell/c2hsc {};
