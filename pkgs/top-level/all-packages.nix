@@ -7221,6 +7221,8 @@ let
 
   procps-ng = callPackage ../os-specific/linux/procps-ng { };
 
+  watch = callPackage ../os-specific/linux/procps/watch.nix { };
+
   qemu_kvm = lowPrio (qemu.override { x86Only = true; });
 
   firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
