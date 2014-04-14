@@ -3725,6 +3725,7 @@ let
   peg = callPackage ../development/tools/parsing/peg { };
 
   phantomjs = callPackage ../development/tools/phantomjs { };
+  phantomjs_192 = callPackage ../development/tools/phantomjs/1.9.2.nix { };
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
