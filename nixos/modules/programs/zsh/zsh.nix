@@ -1,8 +1,8 @@
 # This module defines global configuration for the zshell.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

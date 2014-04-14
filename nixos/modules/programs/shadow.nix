@@ -1,8 +1,8 @@
 # Configuration for the pwdutils suite of tools: passwd, useradd, etc.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

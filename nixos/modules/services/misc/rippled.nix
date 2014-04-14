@@ -1,8 +1,8 @@
 # configuration building is commented out until better tested.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.services.rippled;

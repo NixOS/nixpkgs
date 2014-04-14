@@ -1,6 +1,6 @@
-{ config, pkgs, options, ... }:
+{ config, lib, options, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

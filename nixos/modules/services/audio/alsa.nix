@@ -1,7 +1,7 @@
 # ALSA sound support.
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

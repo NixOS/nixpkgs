@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 # TODO: support munin-async
 # TODO: LWP/Pg perl libs aren't recognized
@@ -11,7 +11,7 @@
 # nginx http://munin.readthedocs.org/en/latest/example/webserver/nginx.html
 
 
-with pkgs.lib;
+with lib;
 
 let
   nodeCfg = config.services.munin-node;

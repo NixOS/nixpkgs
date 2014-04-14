@@ -2,9 +2,9 @@
 
 # Most of the stuff here should probably be moved elsewhere sometime.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

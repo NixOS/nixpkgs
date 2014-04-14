@@ -2,9 +2,9 @@
 # configuration.  The derivation for the ISO image will be placed in
 # config.system.build.tarball.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

@@ -1,5 +1,6 @@
-{ config, pkgs, ... }:
-  with pkgs.lib;
+{ config, lib, pkgs, ... }:
+
+with lib;
 
 let
   cfg = config.services.couchdb;

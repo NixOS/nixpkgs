@@ -6,8 +6,8 @@
 #      iptables -t nat -A PREROUTING -i IN_IFACE -p tcp --dport 22 -j REDIRECT --to-port 2222'';
 #
 # Lastly: use this service at your own risk. I am working on a way to run this inside a VM.
-{ pkgs, config, ... }:
-with pkgs.lib;
+{ config, lib, pkgs, ... }:
+with lib;
 let
   cfg = config.services.kippo;
 in

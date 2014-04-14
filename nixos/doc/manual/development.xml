@@ -188,9 +188,9 @@ commands to be executed periodically by <command>cron</command>).</para>
 
 <example xml:id='locate-example'><title>NixOS module for the “locate” service</title>
 <programlisting>
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let locatedb = "/var/cache/locatedb"; in
 

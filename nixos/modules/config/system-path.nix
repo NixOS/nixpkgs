@@ -1,9 +1,9 @@
 # This module defines the packages that appear in
 # /run/current-system/sw.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

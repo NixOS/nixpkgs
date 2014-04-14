@@ -1,9 +1,9 @@
 # This module contains the basic configuration for building a NixOS
 # tarball for the sheevaplug.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

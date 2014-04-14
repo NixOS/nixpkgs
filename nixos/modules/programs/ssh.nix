@@ -1,8 +1,8 @@
 # Global configuration for the SSH client.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let cfg  = config.programs.ssh;
     cfgd = config.services.openssh;

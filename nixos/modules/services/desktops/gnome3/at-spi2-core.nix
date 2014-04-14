@@ -1,8 +1,8 @@
 # at-spi2-core daemon.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
 
