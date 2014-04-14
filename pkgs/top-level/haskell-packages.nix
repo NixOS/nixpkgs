@@ -1566,6 +1566,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   ioStreams = callPackage ../development/libraries/haskell/io-streams {};
 
+  ipprint = callPackage ../development/libraries/haskell/ipprint {};
+
   iproute = callPackage ../development/libraries/haskell/iproute {};
 
   irc = callPackage ../development/libraries/haskell/irc {};
