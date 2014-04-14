@@ -75,10 +75,11 @@ in {
     environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules"
                                                 "${pkgs.glib_networking}/lib/gio/modules" ];
     environment.systemPackages =
-      [ gnome3.dconf
-        pkgs.desktop_file_utils
+      [ pkgs.desktop_file_utils
         pkgs.glib_networking
+        pkgs.gtk3 # for gtk-update-icon-cache
         pkgs.ibus
+        gnome3.dconf
         gnome3.gnome-backgrounds
         gnome3.gnome_control_center
         gnome3.gnome_icon_theme
