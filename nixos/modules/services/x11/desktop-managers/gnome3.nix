@@ -79,10 +79,12 @@ in {
         pkgs.glib_networking
         pkgs.gtk3 # for gtk-update-icon-cache
         pkgs.ibus
+        pkgs.shared_mime_info # for update-mime-database
         gnome3.dconf
         gnome3.gnome-backgrounds
         gnome3.gnome_control_center
         gnome3.gnome_icon_theme
+        gnome3.gnome-menus
         gnome3.gnome_settings_daemon
         gnome3.gnome_shell
         gnome3.gnome_themes_standard
@@ -110,6 +112,10 @@ in {
         gnome3.file-roller
         gnome3.gnome-tweak-tool
       ] config.environment.gnome3.excludePackages);
+
+    # Needed for themes and backgrounds
+    environment.pathsToLink = [ "/share" ];
+
   };
 
 
