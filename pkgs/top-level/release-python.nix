@@ -54,7 +54,6 @@ let
   amuleDaemon = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   amuleGui = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   androidsdk_4_1 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  andyetitmoves = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ant = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   antlr = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   antlr3 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1351,8 +1350,6 @@ let
   opera = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   opkg = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   opusTools = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  oraclejdk = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  oraclejre = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   OVMF = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   oxygen_gtk = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   pal = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1681,7 +1678,6 @@ let
   unetbootin = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   unison = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   upower = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  uqm = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   urbanterror = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   usbmuxd = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   uzbl = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

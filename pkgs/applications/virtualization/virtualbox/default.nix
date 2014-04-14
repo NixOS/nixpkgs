@@ -4,7 +4,7 @@
 , xorriso, makeself, perl, pkgconfig
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
-, enableExtensionPack ? false, requireFile ? null, patchelf ? null
+, patchelf ? null
 }:
 
 with stdenv.lib;
@@ -29,27 +29,6 @@ let
       make -C "$MODULES_BUILD_DIR" "M=$mod" DEPMOD=/do_not_use_depmod ${action}
     done
   '';
-
-  # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extpackRevision = "93012";
-  extensionPack = requireFile rec {
-    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
-    # IMPORTANT: Hash must be base16 encoded because it's used as an input to
-    # VBoxExtPackHelperApp!
-    # Tip: see http://dlc.sun.com.edgesuite.net/virtualbox/4.3.10/SHA256SUMS
-    sha256 = "ec3f2a98373d5e228acb4756ac07f44212c4d53f6b83deee81b791abb0d2608a";
-    message = ''
-      In order to use the extension pack, you need to comply with the VirtualBox Personal Use
-      and Evaluation License (PUEL) by downloading the related binaries from:
-
-      https://www.virtualbox.org/wiki/Downloads
-
-      Once you have downloaded the file, please use the following command and re-run the
-      installation:
-
-      nix-prefetch-url file://${name}
-    '';
-  };
 
 in stdenv.mkDerivation {
   name = "virtualbox-${version}-${kernel.version}";
@@ -127,15 +106,6 @@ in stdenv.mkDerivation {
     for file in VirtualBox VBoxManage VBoxSDL VBoxBalloonCtrl VBoxBFE VBoxHeadless; do
         ln -s "$libexec/$file" $out/bin/$file
     done
-
-    ${optionalString enableExtensionPack ''
-      "$libexec/VBoxExtPackHelperApp" install \
-        --base-dir "$libexec/ExtensionPacks" \
-        --cert-dir "$libexec/ExtPackCertificates" \
-        --name "Oracle VM VirtualBox Extension Pack" \
-        --tarball "${extensionPack}" \
-        --sha-256 "${extensionPack.outputHash}"
-    ''}
 
     # Create and fix desktop item
     mkdir -p $out/share/applications

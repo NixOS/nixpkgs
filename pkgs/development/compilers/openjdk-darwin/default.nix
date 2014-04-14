@@ -31,6 +31,7 @@ let
     '';
 
     passthru.jre = jdk;
+    passthru.architecture = "darwin";
 
   };
 in jdk

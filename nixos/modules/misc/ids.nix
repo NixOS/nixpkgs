@@ -109,7 +109,6 @@
       mongodb = 98;
       openldap = 99;
       memcached = 100;
-      cgminer = 101;
       munin = 102;
       logcheck = 103;
       nix-ssh = 104;

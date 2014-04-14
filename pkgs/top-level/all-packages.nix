@@ -499,11 +499,6 @@ let
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
-  titaniumenv = callPackage ../development/mobile/titaniumenv {
-    inherit pkgs;
-    pkgs_i686 = pkgsi686Linux;
-  };
-
   inherit (androidenv) androidsdk_4_1;
 
   aria = builderDefsPackage (import ../tools/networking/aria) { };
@@ -956,10 +951,6 @@ let
 
   fio = callPackage ../tools/system/fio { };
 
-  flashtool = callPackage_i686 ../development/mobile/flashtool {
-    platformTools = androidenv.platformTools;
-  };
-
   flpsed = callPackage ../applications/editors/flpsed { };
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
@@ -1397,8 +1388,6 @@ let
   mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix { 
     inherit (gnome) scrollkeeper;
   };
-
-  megacli = callPackage ../tools/misc/megacli { };
 
   megatools = callPackage ../tools/networking/megatools { };
 
@@ -2879,36 +2868,12 @@ let
     { description = "The open-source Java Runtime Environment"; }
     pkgs.openjdk.jre)) // { outputs = [ "jre" ]; };
 
-  jdk = if stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-    then pkgs.openjdk
-    else pkgs.oraclejdk;
-  jre = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-    then pkgs.openjre
-    else pkgs.oraclejre;
-
-  oraclejdk = pkgs.jdkdistro true false;
-
-  oraclejdk7 = pkgs.oraclejdk7distro true false;
-
-  oraclejre = lowPrio (pkgs.jdkdistro false false);
-
-  oraclejre7 = lowPrio (pkgs.oraclejdk7distro false false);
-
-  jrePlugin = lowPrio (pkgs.jdkdistro false true);
+  jdk = pkgs.openjdk;
+  jre = pkgs.openjre;
 
   supportsJDK =
     system == "i686-linux" ||
     system == "x86_64-linux";
-
-  jdkdistro = installjdk: pluginSupport:
-    assert supportsJDK;
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk6-linux.nix { });
-
-  oraclejdk7distro = installjdk: pluginSupport:
-    assert supportsJDK;
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/jdk/jdk7-linux.nix { inherit installjdk; });
 
   jikes = callPackage ../development/compilers/jikes { };
 
@@ -3481,8 +3446,6 @@ let
 
 
   ### DEVELOPMENT / MISC
-
-  amdadlsdk = callPackage ../development/misc/amdadl-sdk { };
 
   amdappsdk26 = callPackage ../development/misc/amdapp-sdk {
     version = "2.6";
@@ -4314,8 +4277,6 @@ let
   ganv = callPackage ../development/libraries/ganv { };
 
   gav = callPackage ../games/gav { };
-
-  gsb = callPackage ../games/gsb { };
 
   gdome2 = callPackage ../development/libraries/gdome2 {
     inherit (gnome) gtkdoc;
@@ -6044,8 +6005,6 @@ let
       else stdenv;
   };
 
-  wtk = callPackage ../development/libraries/wtk { };
-
   x264 = callPackage ../development/libraries/x264 { };
 
   xapian = callPackage ../development/libraries/xapian { };
@@ -6533,8 +6492,6 @@ let
   oidentd = callPackage ../servers/identd/oidentd { };
 
   openfire = callPackage ../servers/xmpp/openfire { };
-
-  oracleXE = callPackage ../servers/sql/oracle-xe { };
 
   OVMF = callPackage ../applications/virtualization/OVMF { };
 
@@ -7062,7 +7019,6 @@ let
     virtualbox = callPackage ../applications/virtualization/virtualbox {
       stdenv = stdenv_32bit;
       inherit (gnome) libIDL;
-      enableExtensionPack = config.virtualbox.enableExtensionPack or false;
     };
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
@@ -7737,10 +7693,6 @@ let
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
 
   cgit = callPackage ../applications/version-management/git-and-tools/cgit { };
-
-  cgminer = callPackage ../applications/misc/cgminer {
-    amdappsdk = amdappsdk28;
-  };
 
   chatzilla = callPackage ../applications/networking/irc/chatzilla {
     xulrunner = firefox36Pkgs.xulrunner;
@@ -9339,7 +9291,6 @@ let
   vorbisTools = callPackage ../applications/audio/vorbis-tools { };
 
   vue = callPackage ../applications/misc/vue {
-    jre = oraclejre;
   };
 
   vwm = callPackage ../applications/window-managers/vwm { };
@@ -9553,8 +9504,6 @@ let
   ### GAMES
 
   alienarena = callPackage ../games/alienarena { };
-
-  andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
 
   anki = callPackage ../games/anki { };
 
@@ -9829,8 +9778,6 @@ let
 
   unvanquished = callPackage ../games/unvanquished { };
 
-  uqm = callPackage ../games/uqm { };
-
   urbanterror = callPackage ../games/urbanterror { };
 
   ut2004demo = callPackage ../games/ut2004demo { };
@@ -9838,8 +9785,6 @@ let
   vdrift = callPackage ../games/vdrift { };
 
   vectoroids = callPackage ../games/vectoroids { };
-
-  vessel = callPackage_i686 ../games/vessel { };
 
   warmux = callPackage ../games/warmux { };
 
@@ -9852,12 +9797,6 @@ let
   widelands = callPackage ../games/widelands {
     lua = lua5_1;
   };
-
-  worldofgoo_demo = callPackage ../games/worldofgoo {
-    demo = true;
-  };
-
-  worldofgoo = callPackage ../games/worldofgoo { };
 
   xboard =  callPackage ../games/xboard { };
 
@@ -10172,8 +10111,6 @@ let
   liblapack = callPackage ../development/libraries/science/math/liblapack { };
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
-
-  mathematica = callPackage ../applications/science/math/mathematica { };
 
   ### SCIENCE/MOLECULAR-DYNAMICS
 
