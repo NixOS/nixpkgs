@@ -193,13 +193,13 @@ let
 
   makeInstallerTest =
     { createPartitions, fileSystems, testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda" }:
-    makeTest ({ ... }: {
+    makeTest {
       inherit iso;
       nodes = if testChannel then { inherit webserver; } else { };
       testScript = testScriptFun {
         inherit createPartitions fileSystems testChannel grubVersion grubDevice;
       };
-    });
+    };
 
 
 in {
@@ -329,7 +329,7 @@ in {
     };
 
   # Rebuild the CD configuration with a little modification.
-  rebuildCD = makeTest ({ ... }:
+  rebuildCD = makeTest
     { inherit iso;
       nodes = { };
       testScript =
@@ -353,5 +353,5 @@ in {
 
           $machine->shutdown;
         '';
-    });
+    };
 }
