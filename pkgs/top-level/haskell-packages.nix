@@ -705,6 +705,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   bytestringProgress = callPackage ../development/libraries/haskell/bytestring-progress {};
 
+  bzlib = callPackage ../development/libraries/haskell/bzlib {};
+
   c2hs = callPackage ../development/libraries/haskell/c2hs {};
 
   c2hsc = callPackage ../development/libraries/haskell/c2hsc {};
@@ -1086,6 +1088,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   explicitException = callPackage ../development/libraries/haskell/explicit-exception {};
 
   executablePath = callPackage ../development/libraries/haskell/executable-path {};
+
+  Extra = callPackage ../development/libraries/haskell/Extra {};
 
   fay = callPackage ../development/libraries/haskell/fay {};
 
@@ -1565,6 +1569,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   ioStorage = callPackage ../development/libraries/haskell/io-storage {};
 
   ioStreams = callPackage ../development/libraries/haskell/io-streams {};
+
+  ipprint = callPackage ../development/libraries/haskell/ipprint {};
 
   iproute = callPackage ../development/libraries/haskell/iproute {};
 
@@ -2600,6 +2606,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   unixProcessConduit = callPackage ../development/libraries/haskell/unix-process-conduit {};
 
   unixTime = callPackage ../development/libraries/haskell/unix-time {};
+
+  Unixutils = callPackage ../development/libraries/haskell/Unixutils {};
 
   unlambda = callPackage ../development/libraries/haskell/unlambda {};
 
