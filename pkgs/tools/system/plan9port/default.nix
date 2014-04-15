@@ -2,7 +2,9 @@
 
 stdenv.mkDerivation rec {
   name = "plan9port-20140228";
-  
+
+  patches = [ ./fontsrv.patch ];
+
   builder = ./builder.sh;
 
   src = fetchurl {
