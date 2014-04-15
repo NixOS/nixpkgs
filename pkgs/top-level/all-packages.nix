@@ -6443,6 +6443,8 @@ let
 
   joseki = callPackage ../servers/http/joseki {};
 
+  leafnode = callPackage ../servers/news/leafnode { };
+
   lighttpd = callPackage ../servers/http/lighttpd { };
 
   mailman = callPackage ../servers/mail/mailman { };
