@@ -3004,6 +3004,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   cabalDev = callPackage ../development/tools/haskell/cabal-dev {};
 
+  cabalMeta = callPackage ../development/tools/haskell/cabal-meta {};
+
   cabal2Ghci = callPackage ../development/tools/haskell/cabal2ghci {};
 
   cabalGhci = callPackage ../development/tools/haskell/cabal-ghci {};
@@ -3033,11 +3035,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   packunused = callPackage ../development/tools/haskell/packunused {};
 
+  rehoo = callPackage ../development/tools/haskell/rehoo {};
+
   sizes = callPackage ../tools/system/sizes {};
 
   splot = callPackage ../development/tools/haskell/splot {};
 
   timeplot = callPackage ../development/tools/haskell/timeplot {};
+
+  una = callPackage ../development/tools/haskell/una {};
 
   # Games.
 
