@@ -206,6 +206,10 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/P/PI/PIXEL/Archive-Cpio-0.09.tar.gz;
       sha256 = "1cf8k5zjykdbc1mn8lixlkij6jklwn6divzyq2grycj3rpd36g5c";
     };
+    meta = {
+      description = "Module for manipulations of cpio archives";
+      platforms = stdenv.lib.platforms.linux;
+    };
   };
 
   ArchiveZip = buildPerlPackage {
