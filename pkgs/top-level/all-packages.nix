@@ -10352,6 +10352,8 @@ let
 
   golly = callPackage ../applications/science/misc/golly { };
 
+  megam = callPackage ../applications/science/misc/megam { };
+
   root = callPackage ../applications/science/misc/root { };
 
   simgrid = callPackage ../applications/science/misc/simgrid { };
