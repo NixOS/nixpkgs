@@ -23,6 +23,8 @@ let
     inherit (pkgs) socat;
   };
 
+  system = config.nixpkgs.system;
+
 in
 
 {
@@ -99,6 +101,7 @@ in
           config = mkMerge
             [ (mkIf options.config.isDefined {
                 path = (import ../../lib/eval-config.nix {
+                  inherit system;
                   modules =
                     let extraConfig =
                       { boot.isContainer = true;
