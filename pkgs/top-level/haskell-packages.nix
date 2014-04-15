@@ -3025,6 +3025,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   packunused = callPackage ../development/tools/haskell/packunused {};
 
+  sizes = callPackage ../tools/system/sizes {};
+
   splot = callPackage ../development/tools/haskell/splot {};
 
   timeplot = callPackage ../development/tools/haskell/timeplot {};
