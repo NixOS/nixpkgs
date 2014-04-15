@@ -28,7 +28,7 @@ in
 
   ###### implementation
 
-  config = mkIf (config.powerManagement.cpuFreqGovernor != null) {
+  config = mkIf (!config.boot.isContainer && config.powerManagement.cpuFreqGovernor != null) {
 
     boot.kernelModules = [ "acpi-cpufreq" "speedstep-lib" "pcc-cpufreq"
       "cpufreq_${cfg.cpuFreqGovernor}"
