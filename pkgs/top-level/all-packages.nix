@@ -9060,6 +9060,8 @@ let
 
   printrun = callPackage ../applications/misc/printrun { };
 
+  sizes = callPackage ../tools/system/sizes {};
+
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
   };
