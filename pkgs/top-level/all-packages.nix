@@ -6874,23 +6874,21 @@ let
   libnl = callPackage ../os-specific/linux/libnl { };
   libnl_3_2_19 = callPackage ../os-specific/linux/libnl/3.2.19.nix { };
 
-  linuxHeaders = linuxHeaders37;
-
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
-  linuxHeaders26 = callPackage ../os-specific/linux/kernel-headers/2.6.32.nix { };
+  linuxHeaders = linuxHeaders37;
 
-  linuxHeaders37 = callPackage ../os-specific/linux/kernel-headers/3.7.nix { };
+  linuxHeaders24Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.4.nix {
+    inherit stdenv fetchurl perl;
+    cross = assert crossSystem != null; crossSystem;
+  });
 
   linuxHeaders26Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
     cross = assert crossSystem != null; crossSystem;
   });
 
-  linuxHeaders24Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.4.nix {
-    inherit stdenv fetchurl perl;
-    cross = assert crossSystem != null; crossSystem;
-  });
+  linuxHeaders37 = callPackage ../os-specific/linux/kernel-headers/3.7.nix { };
 
   # We can choose:
   linuxHeadersCrossChooser = ver : if ver == "2.4" then linuxHeaders24Cross
@@ -6899,8 +6897,6 @@ let
 
   linuxHeadersCross = assert crossSystem != null;
     linuxHeadersCrossChooser crossSystem.platform.kernelMajor;
-
-  linuxHeaders_2_6_28 = callPackage ../os-specific/linux/kernel-headers/2.6.28.nix { };
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
