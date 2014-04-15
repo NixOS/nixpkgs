@@ -1,4 +1,8 @@
-{stdenv, fetchurl, libX11, xproto, libXt, xextproto, libXext}:
+{stdenv, fetchurl, libX11
+, xproto ? null
+, libXt ? null
+, xextproto ? null
+, libXext ? null }:
 
 stdenv.mkDerivation rec {
   name = "plan9port-20140228";
@@ -12,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l7nsjfrrcq0l43kw0f1437jz3nyl9qw7i2vn0sbmcsv5vmsj0cr";
   };
 
-  buildInputs = [ libX11 xproto libXt xextproto libXext ];
+  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 xproto libXt xextproto libXext ];
 
   meta = {
     homepage = "http://swtch.com/plan9port/";
