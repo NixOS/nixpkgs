@@ -124,8 +124,7 @@ fi
 
 
 # First build Nix, since NixOS may require a newer version than the
-# current one.  Of course, the same goes for Nixpkgs, but Nixpkgs is
-# more conservative.
+# current one.
 if [ -n "$rollback" -o "$action" = dry-run ]; then
     buildNix=
 fi
@@ -134,7 +133,23 @@ if [ -n "$buildNix" ]; then
     echo "building Nix..." >&2
     if ! nix-build '<nixpkgs/nixos>' -A config.nix.package -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
         if ! nix-build '<nixpkgs/nixos>' -A nixFallback -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
-            nix-build '<nixpkgs>' -A nixUnstable -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null
+            if ! nix-build '<nixpkgs>' -A nix -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
+                machine="$(uname -m)"
+                if [ "$machine" = x86_64 ]; then
+                    nixStorePath=/nix/store/d34q3q2zj9nriq4ifhn3dnnngqvinjb3-nix-1.7
+                elif [[ "$machine" =~ i.86 ]]; then
+                    nixStorePath=/nix/store/qlah0darpcn6sf3lr2226rl04l1gn4xz-nix-1.7
+                else
+                    echo "$0: unsupported platform"
+                    exit 1
+                fi
+                if ! nix-store -r $nixStorePath --add-root $tmpDir/nix --indirect \
+                    --option extra-binary-caches http://cache.nixos.org/; then
+                    echo "warning: don't know how to get latest Nix" >&2
+                fi
+                # Older version of nix-store -r don't support --add-root.
+                [ -e $tmpDir/nix ] || ln -sf $nixStorePath $tmpDir/nix
+            fi
         fi
     fi
     PATH=$tmpDir/nix/bin:$PATH
