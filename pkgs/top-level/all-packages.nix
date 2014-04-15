@@ -606,6 +606,8 @@ let
 
   mcelog = callPackage ../os-specific/linux/mcelog { };
 
+  apparix = callPackage ../tools/misc/apparix { };
+
   asciidoc = callPackage ../tools/typesetting/asciidoc {
     inherit (pythonPackages) matplotlib numpy aafigure recursivePthLoader;
     enableStandardFeatures = false;
