@@ -42,8 +42,9 @@ in
         { environment.systemPackages = [ pkgs.miniupnpd ];
           virtualisation.vlans = [ 1 2 ];
           networking.nat.enable = true;
-          networking.nat.internalIPs = [ "192.168.2.0/24" ];
+          networking.nat.internalInterfaces = [ "eth2" ];
           networking.nat.externalInterface = "eth1";
+          networking.firewall.enable = false;
         };
 
       client1 =
@@ -79,7 +80,7 @@ in
       # Create the torrent.
       $tracker->succeed("mkdir /tmp/data");
       $tracker->succeed("cp ${file} /tmp/data/test.tar.bz2");
-      $tracker->succeed("transmission-create /tmp/data/test.tar.bz2 -t http://tracker:6969/announce -o /tmp/test.torrent");
+      $tracker->succeed("transmission-create /tmp/data/test.tar.bz2 -t http://${nodes.tracker.config.networking.interfaces.eth1.ipAddress}:6969/announce -o /tmp/test.torrent");
       $tracker->succeed("chmod 644 /tmp/test.torrent");
 
       # Start the tracker.  !!! use a less crappy tracker
