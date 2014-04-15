@@ -1,4 +1,4 @@
-{ cabal, deepseq, HUnit, icu, QuickCheck, random, testFramework
+{ stdenv, cabal, deepseq, HUnit, icu, QuickCheck, random, testFramework
 , testFrameworkHunit, testFrameworkQuickcheck2, text
 }:
 
@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.6.3.7";
   sha256 = "0mzzjamcxfrld9xwgdww3890zzkgmi1qb83v5z9zrixmdgwkvhf4";
   buildDepends = [ text ];
+  doCheck = !stdenv.isDarwin;
   testDepends = [
     deepseq HUnit QuickCheck random testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text
