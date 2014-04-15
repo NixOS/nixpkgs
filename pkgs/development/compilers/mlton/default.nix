@@ -4,7 +4,12 @@ let
   version = "20130715";
 
   usr_prefix = if stdenv.isDarwin then "usr/local" else "usr";
+
+  dynamic_linker =
+    if stdenv.isx86_64 then "${stdenv.glibc}/lib/ld-linux-x86-64.so.2"
+                       else "${stdenv.glibc}/lib/ld-linux.so.2";
 in
+
 stdenv.mkDerivation rec {
   name = "mlton-${version}";
 
@@ -66,9 +71,9 @@ stdenv.mkDerivation rec {
 
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     # Patch ELF interpreter.
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
+    patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
     for e in mllex mlyacc ; do
-      patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $(pwd)/../${usr_prefix}/bin/$e
+      patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/bin/$e
     done
   '';
 
