@@ -207,6 +207,7 @@
   ./services/networking/rpcbind.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
+  ./services/networking/spiped.nix
   ./services/networking/supybot.nix
   ./services/networking/syncthing.nix
   ./services/networking/ssh/lshd.nix
