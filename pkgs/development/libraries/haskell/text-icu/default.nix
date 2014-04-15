@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     testFrameworkQuickcheck2 text
   ];
   extraLibraries = [ icu ];
+  doCheck = !self.stdenv.isDarwin;
   meta = {
     homepage = "https://github.com/bos/text-icu";
     description = "Bindings to the ICU library";
