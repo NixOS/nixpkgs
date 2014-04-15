@@ -41,6 +41,7 @@ let
       "sigpwr.target"
       "timers.target"
       "paths.target"
+      "rpcbind.target"
 
       # Rescue mode.
       "rescue.target"
@@ -91,9 +92,13 @@ let
       "swap.target"
       "dev-hugepages.mount"
       "dev-mqueue.mount"
+      "proc-sys-fs-binfmt_misc.mount"
       "sys-fs-fuse-connections.mount"
       "sys-kernel-config.mount"
       "sys-kernel-debug.mount"
+
+      # Maintaining state across reboots.
+      "systemd-random-seed.service"
 
       # Hibernate / suspend.
       "hibernate.target"
@@ -119,12 +124,21 @@ let
       "final.target"
       "kexec.target"
       "systemd-kexec.service"
+      "systemd-update-utmp.service"
 
       # Password entry.
       "systemd-ask-password-console.path"
       "systemd-ask-password-console.service"
       "systemd-ask-password-wall.path"
       "systemd-ask-password-wall.service"
+
+      # Slices / containers.
+      "slices.target"
+      "-.slice"
+      "system.slice"
+      "user.slice"
+      "machine.slice"
+      "systemd-machined.service"
     ]
 
     ++ optionals cfg.enableEmergencyMode [
@@ -143,7 +157,6 @@ let
       "sockets.target.wants"
       "local-fs.target.wants"
       "multi-user.target.wants"
-      "shutdown.target.wants"
       "timers.target.wants"
     ];
 
@@ -707,44 +720,6 @@ in
           timerConfig.OnCalendar = service.startAt;
         })
         (filterAttrs (name: service: service.startAt != "") cfg.services);
-
-    # FIXME: These are borrowed from upstream systemd.
-    systemd.services."systemd-update-utmp" =
-      { description = "Update UTMP about System Reboot/Shutdown";
-        wantedBy = [ "sysinit.target" ];
-        after = [ "systemd-remount-fs.service" ];
-        before = [ "sysinit.target" "shutdown.target" ];
-        conflicts = [ "shutdown.target" ];
-        unitConfig = {
-          DefaultDependencies = false;
-          RequiresMountsFor = "/var/log";
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${systemd}/lib/systemd/systemd-update-utmp reboot";
-          ExecStop = "${systemd}/lib/systemd/systemd-update-utmp shutdown";
-        };
-        restartIfChanged = false;
-      };
-
-    systemd.services."systemd-random-seed" =
-      { description = "Load/Save Random Seed";
-        wantedBy = [ "sysinit.target" "multi-user.target" ];
-        after = [ "systemd-remount-fs.service" ];
-        before = [ "sysinit.target" "shutdown.target" ];
-        conflicts = [ "shutdown.target" ];
-        unitConfig = {
-          DefaultDependencies = false;
-          RequiresMountsFor = "/var/lib";
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${systemd}/lib/systemd/systemd-random-seed load";
-          ExecStop = "${systemd}/lib/systemd/systemd-random-seed save";
-        };
-      };
 
   };
 }

@@ -67,14 +67,12 @@ let
 
   } merge ]);
 
-  libs = dbus_drv "libs" "dbus" ({
+  libs = dbus_drv "libs" "dbus" {
     # Enable X11 autolaunch support in libdbus. This doesn't actually depend on X11
     # (it just execs dbus-launch in dbus.tools), contrary to what the configure script demands.
     NIX_CFLAGS_COMPILE = "-DDBUS_ENABLE_X11_AUTOLAUNCH=1";
-  } // stdenv.lib.optionalAttrs (systemdOrEmpty != []) {
-    buildInputs = [ systemd.headers ];
-    patches = [ ./systemd.patch ]; # bypass systemd detection
-  });
+    buildInputs = [ systemdOrEmpty ];
+  };
 
 
   attrs = rec {
@@ -83,14 +81,13 @@ let
   # This package has been split because most applications only need dbus.lib
   # which serves as an interface to a *system-wide* daemon,
   # see e.g. http://en.wikipedia.org/wiki/D-Bus#Architecture .
-  # Also some circular dependencies get split by this (like with systemd).
 
   inherit libs;
 
   tools = dbus_drv "tools" "tools" {
     configureFlags = [ "--with-dbus-daemondir=${daemon}/bin" ];
-    buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs daemon dbus_glib ];
-    NIX_CFLAGS_LINK = 
+    buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs daemon ];
+    NIX_CFLAGS_LINK =
       stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
       + "-ldbus-1";
 
@@ -100,16 +97,6 @@ let
   daemon = dbus_drv "daemon" "bus" {
     preBuild = makeInternalLib;
     buildInputs = systemdOrEmpty;
-  };
-
-  # Some of the tests don't work yet; in fact, @vcunat tried several packages
-  # containing dbus testing, and all of them have some test failure.
-  tests = dbus_drv "tests" "test" {
-    preBuild = makeInternalLib;
-    buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs tools daemon dbus_glib python ];
-    NIX_CFLAGS_LINK = 
-      stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
-      + "-ldbus-1";
   };
 
   docs = dbus_drv "docs" "doc" {
