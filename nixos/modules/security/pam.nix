@@ -126,6 +126,16 @@ let
         description = "Whether to show the message of the day.";
       };
 
+      makeHomeDir = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to try to create home directories for users
+          with <literal>$HOME</literal>s pointing to nonexistent
+          locations on session login.
+        '';
+      };
+
       updateWtmp = mkOption {
         default = false;
         type = types.bool;
@@ -192,6 +202,8 @@ let
               "session ${
                 if config.boot.isContainer then "optional" else "required"
               } pam_loginuid.so"}
+          ${optionalString cfg.makeHomeDir
+              "session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=/etc/skel umask=0022"}
           ${optionalString cfg.updateWtmp
               "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
           ${optionalString config.users.ldap.enable
