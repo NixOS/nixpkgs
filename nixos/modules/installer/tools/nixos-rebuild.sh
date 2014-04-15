@@ -1,4 +1,6 @@
-#! @shell@ -e
+#! @shell@
+
+set -e
 
 showSyntax() {
     exec man nixos-rebuild
@@ -7,6 +9,7 @@ showSyntax() {
 
 
 # Parse the command line.
+origArgs=("$@")
 extraBuildFlags=()
 action=
 buildNix=1
@@ -76,8 +79,30 @@ done
 
 if [ -z "$action" ]; then showSyntax; fi
 
-if [ -n "$rollback" ]; then
-    buildNix=
+# Only run shell scripts from the Nixpkgs tree if the action is
+# "switch", "boot", or "test". With other actions (such as "build"),
+# the user may reasonably expect that no code from the Nixpkgs tree is
+# executed, so it's safe to run nixos-rebuild against a potentially
+# untrusted tree.
+canRun=
+if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
+    canRun=1
+fi
+
+
+# If ‘--upgrade’ is given, run ‘nix-channel --update nixos’.
+if [ -n "$upgrade" -a -z "$_NIXOS_REBUILD_REEXEC" ]; then
+    nix-channel --update nixos
+fi
+
+
+# Re-execute nixos-rebuild from the Nixpkgs tree.
+if [ -z "$_NIXOS_REBUILD_REEXEC" -a -n "$canRun" ]; then
+    if p=$(nix-instantiate --find-file nixpkgs/nixos/modules/installer/tools/nixos-rebuild.sh "${extraBuildFlags[@]}"); then
+        export _NIXOS_REBUILD_REEXEC=1
+        exec $SHELL -e $p "${origArgs[@]}"
+        exit 1
+    fi
 fi
 
 
@@ -98,16 +123,14 @@ if [ -z "$repair" ] && systemctl show nix-daemon.socket nix-daemon.service | gre
 fi
 
 
-# If ‘--upgrade’ is given, run ‘nix-channel --update nixos’.
-if [ -n "$upgrade" ]; then
-    nix-channel --update nixos
-fi
-
-
 # First build Nix, since NixOS may require a newer version than the
 # current one.  Of course, the same goes for Nixpkgs, but Nixpkgs is
 # more conservative.
-if [ "$action" != dry-run -a -n "$buildNix" ]; then
+if [ -n "$rollback" -o "$action" = dry-run ]; then
+    buildNix=
+fi
+
+if [ -n "$buildNix" ]; then
     echo "building Nix..." >&2
     if ! nix-build '<nixpkgs/nixos>' -A config.nix.package -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
         if ! nix-build '<nixpkgs/nixos>' -A nixFallback -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
@@ -120,10 +143,12 @@ fi
 
 # Update the version suffix if we're building from Git (so that
 # nixos-version shows something useful).
-if nixpkgs=$(nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
-    suffix=$(@shell@ $nixpkgs/nixos/modules/installer/tools/get-version-suffix "${extraBuildFlags[@]}" || true)
-    if [ -n "$suffix" ]; then
-        echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
+if [ -n "$canRun" ]; then
+    if nixpkgs=$(nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
+        suffix=$($SHELL $nixpkgs/nixos/modules/installer/tools/get-version-suffix "${extraBuildFlags[@]}" || true)
+        if [ -n "$suffix" ]; then
+            echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
+        fi
     fi
 fi
 
