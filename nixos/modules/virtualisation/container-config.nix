@@ -28,6 +28,7 @@ with lib;
             ExecStart = "${pkgs.socat}/bin/socat -t0 - exec:${pkgs.shadow}/bin/login,pty,setsid,setpgid,stderr,ctty";
             TimeoutStopSec = 1; # FIXME
           };
+        restartIfChanged = false;
       };
 
     # Also provide a root login prompt on /var/lib/root-login.socket
@@ -52,6 +53,7 @@ with lib;
             ExecStart = "${pkgs.socat}/bin/socat -t0 - \"exec:${pkgs.shadow}/bin/login -f root,pty,setsid,setpgid,stderr,ctty\"";
             TimeoutStopSec = 1; # FIXME
           };
+        restartIfChanged = false;
       };
 
     # Provide a daemon on /var/lib/run-command.socket that reads a
@@ -82,6 +84,7 @@ with lib;
             eval "command=($c)"
             exec "''${command[@]}"
           '';
+        restartIfChanged = false;
       };
 
     systemd.services.container-startup-done =
