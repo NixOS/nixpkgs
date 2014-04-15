@@ -225,6 +225,7 @@ in
             # writes something to this pipe.  FIXME: it also hangs
             # until the start timeout expires if systemd-nspawn exits.
             read x < $root/var/lib/startup-done
+            rm -f $root/var/lib/startup-done
           '';
 
         preStop =

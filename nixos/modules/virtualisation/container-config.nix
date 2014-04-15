@@ -99,6 +99,7 @@ with lib;
           '';
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
+        restartIfChanged = false;
       };
 
   };
