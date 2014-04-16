@@ -10440,7 +10440,7 @@ let
 
   ghostscript = callPackage ../misc/ghostscript {
     x11Support = false;
-    cupsSupport = config.ghostscript.cups or true;
+    cupsSupport = config.ghostscript.cups or (!stdenv.isDarwin);
     gnuFork = config.ghostscript.gnu or false;
   };
 
