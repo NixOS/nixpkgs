@@ -1398,6 +1398,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hflags = callPackage ../development/libraries/haskell/hflags {};
 
+  hfsevents = callPackage ../development/libraries/haskell/hfsevents {};
+
   HFuse = callPackage ../development/libraries/haskell/HFuse {};
 
   highlightingKate = callPackage ../development/libraries/haskell/highlighting-kate {};
