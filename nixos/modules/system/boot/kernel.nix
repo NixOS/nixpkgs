@@ -249,6 +249,7 @@ in
             SuccessExitStatus = "0 1";
           };
         restartTriggers = [ kernelModulesConf ];
+        environment.MODULE_DIR = "/run/booted-system/kernel-modules/lib/modules";
       };
 
     lib.kernelConfig = {
