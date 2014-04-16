@@ -29,6 +29,7 @@ let
       "basic.target"
       "sysinit.target"
       "sockets.target"
+      "slices.target"
       "graphical.target"
       "multi-user.target"
       "getty.target"
@@ -72,6 +73,9 @@ let
       "systemd-journald.service"
       "systemd-journal-flush.service"
       "syslog.socket"
+
+      # Network daemon
+      "systemd-networkd.service"
 
       # SysV init compatibility.
       "systemd-initctl.socket"
@@ -143,7 +147,7 @@ let
       "sockets.target.wants"
       "local-fs.target.wants"
       "multi-user.target.wants"
-      "shutdown.target.wants"
+      #"shutdown.target.wants"
       "timers.target.wants"
     ];
 
@@ -616,6 +620,12 @@ in
   ###### implementation
 
   config = {
+
+    assertions = mapAttrsToList (name: service: {
+      assertion = !hasAttr "Type" service.serviceConfig || service.serviceConfig.Type != "oneshot"
+        || !hasAttr "Restart" service.serviceConfig || service.serviceConfig.Restart == "no";
+      message = "${name}: Type=oneshot services must have Restart=no";
+    }) cfg.services;
 
     system.build.units = units;
 

@@ -6885,6 +6885,8 @@ let
   linuxHeaders26 = callPackage ../os-specific/linux/kernel-headers/2.6.32.nix { };
 
   linuxHeaders37 = callPackage ../os-specific/linux/kernel-headers/3.7.nix { };
+  
+  linuxHeaders312 = callPackage ../os-specific/linux/kernel-headers/3.12.nix { };
 
   linuxHeaders26Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
@@ -7013,6 +7015,8 @@ let
     blcr = callPackage ../os-specific/linux/blcr { };
 
     cryptodev = callPackage ../os-specific/linux/cryptodev { };
+
+    cpupower = callPackage ../os-specific/linux/cpupower { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
@@ -7271,7 +7275,7 @@ let
 
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
-  systemd = callPackage ../os-specific/linux/systemd { };
+  systemd = callPackage ../os-specific/linux/systemd { linuxHeaders = linuxHeaders312; };
 
   systemtap = callPackage ../development/tools/profiling/systemtap {
     inherit (gnome) libglademm;

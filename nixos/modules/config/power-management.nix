@@ -65,11 +65,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.kernelModules =
-      [ "acpi_cpufreq" "powernow-k8" "cpufreq_performance" "cpufreq_powersave" "cpufreq_ondemand"
-        "cpufreq_conservative"
-      ];
-
+    # FIXME: Implement powersave governor for sandy bridge or later Intel CPUs
     powerManagement.cpuFreqGovernor = mkDefault "ondemand";
     powerManagement.scsiLinkPolicy = mkDefault "min_power";
 
