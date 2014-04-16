@@ -585,7 +585,7 @@ rec {
     name = "bedup-20140206";
 
     src = fetchgit {
-      url = "git@github.com:g2p/bedup.git";
+      url = "https://github.com/g2p/bedup.git";
       rev = "80cb217d4819a03e159e42850a9a3f14e2b278a3";
       sha256 = "c6ab696a767efc20f25faecbb74833e6e396d89ea70a3a7e97e4dbd9b58e90f4";
     };
