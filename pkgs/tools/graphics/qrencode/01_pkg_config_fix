@@ -1,0 +1,14 @@
+Description: Fix generated libqrencode.pc include correct LIBS (-lpthread).
+Author: NIIBE Yutaka <gniibe@fsij.org>
+
+Index: qrencode-3.2.0/libqrencode.pc.in
+===================================================================
+--- qrencode-3.2.0.orig/libqrencode.pc.in	2011-10-23 20:21:17.000000000 +0000
++++ qrencode-3.2.0/libqrencode.pc.in	2012-03-30 02:54:06.130468748 +0000
+@@ -6,5 +6,5 @@
+ Name: libqrencode
+ Description: A QR Code encoding library
+ Version: @VERSION@
+-Libs: -L${libdir} -lqrencode @LIBPTHREAD@
++Libs: -L${libdir} -lqrencode @LIBS@
+ Cflags: -I${includedir}

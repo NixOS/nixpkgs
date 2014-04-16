@@ -1,0 +1,16 @@
+Description: Fix configure.ac to enable HAVE_LIBPTHREAD (shell) variable.
+Author: NIIBE Yutaka <gniibe@fsij.org>
+
+Index: qrencode-3.2.0/configure.ac
+===================================================================
+--- qrencode-3.2.0.orig/configure.ac	2011-10-23 20:21:17.000000000 +0000
++++ qrencode-3.2.0/configure.ac	2012-03-30 02:39:37.000000000 +0000
+@@ -41,7 +41,7 @@
+ if test x$enable_thread_safety = xyes; then
+ 	AC_CHECK_LIB([pthread], [pthread_mutex_init])
+ fi
+-AM_CONDITIONAL([HAVE_LIBPTHREAD], [test "x$HAVE_LIBPTHREAD" = "xyes" ])
++AM_CONDITIONAL([HAVE_LIBPTHREAD], [test "x$ac_cv_lib_pthread_pthread_mutex_init" = "xyes" ])
+ 
+ 
+ dnl --with-tools
