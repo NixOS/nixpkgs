@@ -67,6 +67,9 @@ in {
           # Don't let epiphany depend upon gnome-shell
           export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${pkgs.gnome3.gnome_shell}/share/gsettings-schemas/${pkgs.gnome3.gnome_shell.name}
 
+          # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+          ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
+
           ${gnome3.gnome_session}/bin/gnome-session&
           waitPID=$!
         '';

@@ -9455,6 +9455,8 @@ let
 
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
 
+  xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
+
   xdg_utils = callPackage ../tools/X11/xdg-utils { };
 
   xdotool = callPackage ../tools/X11/xdotool { };
