@@ -104,7 +104,7 @@ let
         buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=Thu Jan 1 00:00:01 UTC 1970")
       '';
 
-      KBUILD_BUILD_TIMESTAMP=0;
+      KBUILD_BUILD_TIMESTAMP=1; # (time_t)1
       KBUILD_BUILD_VERSION="1-NixOS";
       buildFlags = [ platform.kernelTarget ] ++ optional isModular "modules";
 
