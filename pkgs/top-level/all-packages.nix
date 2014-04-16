@@ -2732,6 +2732,8 @@ let
     enableMultilib = false;
   });
 
+  ghdl_mcode = callPackage ../development/compilers/ghdl { };
+
   gcl = builderDefsPackage ../development/compilers/gcl {
     inherit mpfr m4 binutils fetchcvs emacs zlib which
       texinfo;
