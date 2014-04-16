@@ -12,6 +12,10 @@ stdenv.mkDerivation {
 
   propagatedNativeBuildInputs = [ m4 ];
 
+  postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i Makefile -e 's/-no-undefined//;'
+  '';
+
   crossAttrs = {
     preConfigure = ''
       export ac_cv_func_malloc_0_nonnull=yes
