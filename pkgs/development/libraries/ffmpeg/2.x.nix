@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-2.1.4";
+  name = "ffmpeg-2.2.1";
 
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "00c1k84amgkc7vk5xkrg7z99q7jbfhbz3qk854cxnc38d2ynrd3z";
+    sha256 = "153kfk8rzrfxx930rrk417b2m695dvy47v4hci3nd49iggx9jzz1";
   };
 
   mp3Support = config.ffmpeg.mp3 or true;
