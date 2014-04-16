@@ -311,6 +311,11 @@ with stdenv.lib;
   9P_FSCACHE y
   9P_FS_POSIX_ACL y
 
+  # Enable transparent support for huge pages.
+  TRANSPARENT_HUGEPAGE? y
+  TRANSPARENT_HUGEPAGE_ALWAYS? n
+  TRANSPARENT_HUGEPAGE_MADVISE? y
+
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}
 ''
