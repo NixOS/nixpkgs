@@ -66,6 +66,7 @@ let
       #"systemd-vconsole-setup.service"
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.login1.service"
+      "dbus-org.freedesktop.machine1.service"
       "user@.service"
 
       # Journal.
