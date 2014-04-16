@@ -12,6 +12,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  preConfigure = ''
+    configureFlagsArray=(
+      --enable-pkglibdir=$out/lib/aspell
+      --enable-pkgdatadir=$out/lib/aspell
+    );
+  '';
+
   # Note: Users should define the `ASPELL_CONF' environment variable to
   # `dict-dir $HOME/.nix-profile/lib/aspell/' so that they can access
   # dictionaries installed in their profile.
