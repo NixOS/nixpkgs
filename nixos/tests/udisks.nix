@@ -40,7 +40,7 @@ in
       # Mount the stick as a non-root user and do some stuff with it.
       $machine->succeed("su - alice -c 'udisks --enumerate | grep /org/freedesktop/UDisks/devices/sda1'");
       $machine->succeed("su - alice -c 'udisks --mount /dev/sda1'");
-      $machine->succeed("su - alice -c 'cat /media/USBSTICK/test.txt'") =~ /Hello World/;
+      $machine->succeed("su - alice -c 'cat /media/USBSTICK/test.txt'") =~ /Hello World/ or die;
       $machine->succeed("su - alice -c 'echo foo > /media/USBSTICK/bar.txt'");
 
       # Unmounting the stick should make the mountpoint disappear.
