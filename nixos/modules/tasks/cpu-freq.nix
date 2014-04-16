@@ -44,6 +44,7 @@ in
       script = ''
         cpupower frequency-set -g ${cfg.cpuFreqGovernor}
       '';
+      unitConfig.ConditionVirtualization = false;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = "yes";
