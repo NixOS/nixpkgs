@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "alsa-mixer";
-  version = "0.2.0.1";
-  sha256 = "1306kw4w85d3pkdqjw8cwx77a2mbhw2hlmxcjczym1nsyp4rhyhr";
+  version = "0.2.0.2";
+  sha256 = "11sc2n879a8rb9yz54cb8vg8rplgapbymzy785p7n7638xx877hk";
   buildDepends = [ alsaCore ];
   buildTools = [ c2hs ];
   extraLibraries = [ alsaLib ];
