@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     sha256 = "1x4rb06vw4ckdflmn01r5l9spvn7cng4i5mm3sbd0n8cz0n6xz13";
   };
 
-  patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ];
+  patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ./cert-path.patch ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
