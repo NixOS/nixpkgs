@@ -87,6 +87,30 @@ index 0887bc3..6b502ce 100644
                          return log_oom();
          }
  
+diff --git a/units/console-getty.service.m4.in b/units/console-getty.service.m4.in
+index 8ac51a4..cae9fb5 100644
+--- a/units/console-getty.service.m4.in
++++ b/units/console-getty.service.m4.in
+@@ -15,7 +15,6 @@ After=rc-local.service
+ Before=getty.target
+ 
+ [Service]
+-ExecStart=-/sbin/agetty --noclear --keep-baud console 115200,38400,9600 $TERM
+ Type=idle
+ Restart=always
+ RestartSec=0
+diff --git a/units/container-getty@.service.m4.in b/units/container-getty@.service.m4.in
+index 4f7794b..bad2a9a 100644
+--- a/units/container-getty@.service.m4.in
++++ b/units/container-getty@.service.m4.in
+@@ -16,7 +16,6 @@ Before=getty.target
+ IgnoreOnIsolate=yes
+ 
+ [Service]
+-ExecStart=-/sbin/agetty --noclear --keep-baud pts/%I 115200,38400,9600 $TERM
+ Type=idle
+ Restart=always
+ RestartSec=0
 diff --git a/units/emergency.service.in b/units/emergency.service.in
 index 94c090f..0d20640 100644
 --- a/units/emergency.service.in
@@ -100,10 +124,10 @@ index 94c090f..0d20640 100644
  ExecStart=-/sbin/sulogin
  ExecStopPost=@SYSTEMCTL@ --fail --no-block default
 diff --git a/units/getty@.service.m4 b/units/getty@.service.m4
-index aa853b8..f76cde0 100644
+index aa853b8..8bcc647 100644
 --- a/units/getty@.service.m4
 +++ b/units/getty@.service.m4
-@@ -23,7 +23,9 @@ IgnoreOnIsolate=yes
+@@ -23,11 +23,12 @@ IgnoreOnIsolate=yes
  # On systems without virtual consoles, don't start any getty. Note
  # that serial gettys are covered by serial-getty@.service, not this
  # unit.
@@ -114,6 +138,10 @@ index aa853b8..f76cde0 100644
  
  [Service]
  # the VT is cleared by TTYVTDisallocate
+-ExecStart=-/sbin/agetty --noclear %I $TERM
+ Type=idle
+ Restart=always
+ RestartSec=0
 diff --git a/units/local-fs.target b/units/local-fs.target
 index ae3cedc..0e36840 100644
 --- a/units/local-fs.target
@@ -148,6 +176,18 @@ index 552ef89..af3915f 100644
  ExecStartPre=-/bin/echo -e 'Welcome to rescue mode! Type "systemctl default" or ^D to enter default mode.\\nType "journalctl -xb" to view system logs. Type "systemctl reboot" to reboot.'
  ExecStart=-/sbin/sulogin
  ExecStopPost=-@SYSTEMCTL@ --fail --no-block default
+diff --git a/units/serial-getty@.service.m4 b/units/serial-getty@.service.m4
+index 4ac51e7..86a3b59 100644
+--- a/units/serial-getty@.service.m4
++++ b/units/serial-getty@.service.m4
+@@ -22,7 +22,6 @@ Before=getty.target
+ IgnoreOnIsolate=yes
+ 
+ [Service]
+-ExecStart=-/sbin/agetty --keep-baud 115200,38400,9600 %I $TERM
+ Type=idle
+ Restart=always
+ RestartSec=0
 diff --git a/units/sysinit.target b/units/sysinit.target
 index 8f4fb8f..e0f0147 100644
 --- a/units/sysinit.target
