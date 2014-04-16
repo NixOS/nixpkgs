@@ -4182,10 +4182,11 @@ let
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
   dbus_python     = callPackage ../development/python-modules/dbus { };
+
   # Should we deprecate these? Currently there are many references.
-  dbus_tools = dbus.tools;
-  dbus_libs = dbus.libs;
-  dbus_daemon = dbus.daemon;
+  dbus_tools = pkgs.dbus.tools;
+  dbus_libs = pkgs.dbus.libs;
+  dbus_daemon = pkgs.dbus.daemon;
 
   dhex = callPackage ../applications/editors/dhex { };
 
