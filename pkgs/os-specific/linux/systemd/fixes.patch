@@ -39,6 +39,26 @@ index d1258f0..0311812 100644
  #ifndef HAVE_SPLIT_USR
                      || path_equal(m->path, "/usr")
  #endif
+diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
+index 9a9ed9d..9e46e18 100644
+--- a/src/nspawn/nspawn.c
++++ b/src/nspawn/nspawn.c
+@@ -2667,6 +2667,7 @@ int main(int argc, char *argv[]) {
+                                 goto finish;
+                         }
+                 } else {
++#if 0
+                         const char *p;
+ 
+                         p = strappenda(arg_directory,
+@@ -2676,6 +2677,7 @@ int main(int argc, char *argv[]) {
+                                 goto finish;
+ 
+                         }
++#endif
+                 }
+         } else {
+                 char template[] = "/tmp/nspawn-root-XXXXXX";
 diff --git a/src/nss-myhostname/netlink.c b/src/nss-myhostname/netlink.c
 index d61ecdf..228a3a4 100644
 --- a/src/nss-myhostname/netlink.c
