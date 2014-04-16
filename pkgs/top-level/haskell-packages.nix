@@ -3002,6 +3002,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     });
   in callPackage cabalExpr { inherit src; };
 
+  cabalDelete = callPackage ../development/tools/haskell/cabal-delete {};
+
   cabalDev = callPackage ../development/tools/haskell/cabal-dev {};
 
   cabalMeta = callPackage ../development/tools/haskell/cabal-meta {};
