@@ -47,6 +47,7 @@ in {
     services.gnome3.gnome-user-share.enable = mkDefault true;
     services.gnome3.sushi.enable = mkDefault true;
     services.gnome3.tracker.enable = mkDefault true;
+    hardware.pulseaudio.enable = mkDefault true;
     services.telepathy.enable = mkDefault true;
     networking.networkmanager.enable = true;
     services.upower.enable = config.powerManagement.enable;
