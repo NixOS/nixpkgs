@@ -6455,6 +6455,8 @@ let
 
   memcached = callPackage ../servers/memcached {};
 
+  mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd/default.nix { };
+
   mod_evasive = callPackage ../servers/http/apache-modules/mod_evasive { };
 
   mod_python = callPackage ../servers/http/apache-modules/mod_python { };
@@ -9460,6 +9462,8 @@ let
   compton = callPackage ../applications/window-managers/compton { };
 
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
+
+  xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 
   xdg_utils = callPackage ../tools/X11/xdg-utils { };
 

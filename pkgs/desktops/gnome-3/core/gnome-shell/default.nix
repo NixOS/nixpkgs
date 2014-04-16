@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, gnome3, json_glib, libcroco, intltool, libsecret
 , python, libsoup, polkit, clutter, networkmanager, docbook_xsl, docbook_xsl_ns
-, libstartup_notification, telepathy_glib, telepathy_logger, libXtst, p11_kit
+, libstartup_notification, telepathy_glib, telepathy_logger, libXtst, p11_kit, unzip
 , pulseaudio, libical, libtool, nss, gobjectIntrospection, gstreamer, makeWrapper
 , accountservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet, librsvg }:
 
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   preFixup = with gnome3; ''
     wrapProgram "$out/bin/gnome-shell" \
+      --prefix PATH : "${unzip}/bin" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix LD_LIBRARY_PATH : "${accountservice}/lib:${ibus}/lib:${gdm}/lib" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/libexec/gnome-shell-calendar-server" \
       --prefix XDG_DATA_DIRS : "${evolution_data_server}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';
+
+  patches = [ ./fix_background_corruption.patch ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

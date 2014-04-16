@@ -74,6 +74,8 @@ rec {
 
   gnome_shell = callPackage ./core/gnome-shell { };
 
+  gnome-shell-extensions = callPackage ./core/gnome-shell-extensions { };
+
   gnome-screenshot = callPackage ./core/gnome-screenshot { };
 
   gnome_settings_daemon = callPackage ./core/gnome-settings-daemon { };
@@ -85,6 +87,10 @@ rec {
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
   gnome_themes_standard = callPackage ./core/gnome-themes-standard { };
+
+  gnome-user-docs = callPackage ./core/gnome-user-docs { };
+
+  gnome-user-share = callPackage ./core/gnome-user-share { };
 
   grilo = callPackage ./core/grilo { };
 
@@ -122,6 +128,8 @@ rec {
 
   totem-pl-parser = callPackage ./core/totem-pl-parser { };
 
+  tracker = callPackage ./core/tracker { };
+
   vte = callPackage ./core/vte { };
 
   vino = callPackage ./core/vino { };
@@ -156,4 +164,6 @@ rec {
   libgit2-glib = callPackage ./misc/libgit2-glib { };
   
   gexiv2 = callPackage ./misc/gexiv2 { };
+
+  gnome-tweak-tool = callPackage ./misc/gnome-tweak-tool { };
 }

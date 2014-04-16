@@ -4,11 +4,11 @@
 , gdk_pixbuf, librsvg, hicolor_icon_theme }:
 
 stdenv.mkDerivation rec {
-  name = "sushi-3.8.1";
+  name = "sushi-3.10.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/sushi/3.8/${name}.tar.xz";
-    sha256 = "c4f24d0961ce8fc5ef3a4fe9af178e368c7117459df2c0be12c8f953646c82dd";
+    url = "mirror://gnome/sources/sushi/3.10/${name}.tar.xz";
+    sha256 = "cffcf28b170f5825e84983a979972d4d901a453b61cbe3e560d362e8dd4b4bc8";
   };
 
   propagatedUserEnvPkgs = [ gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ];
