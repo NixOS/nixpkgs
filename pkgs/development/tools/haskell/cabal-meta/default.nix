@@ -6,9 +6,9 @@ cabal.mkDerivation (self: {
   sha256 = "17ln9j0n9rb0kbnp37fi9yaf932dacrdmf3jrp301r886kh2a7kk";
   isLibrary = true;
   isExecutable = true;
-  doCheck = false;
   buildDepends = [ shelly systemFileio systemFilepath text ];
   testDepends = [ hspec shelly systemFilepath text ];
+  doCheck = false;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "build multiple packages at once";
