@@ -63,6 +63,12 @@ import ./make-test.nix {
           $machine->succeed('[ "`hostname`" = machine ]');
           $machine->succeed('[ "`hostname -s`" = machine ]');
       };
+
+      # Test whether systemd-udevd automatically loads modules for our hardware.
+      subtest "udev-auto-load", sub {
+          $machine->waitForUnit('systemd-udev-settle.service');
+          $machine->succeed('lsmod | grep psmouse');
+      };
     '';
 
 }

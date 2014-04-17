@@ -243,5 +243,10 @@ in
         fi
       '';
 
+    systemd.services.systemd-udevd =
+      { baseUnit = "${config.systemd.package}/example/systemd/system/systemd-udevd.service";
+        environment.MODULE_DIR = "/run/booted-system/kernel-modules/lib/modules";
+      };
+
   };
 }
