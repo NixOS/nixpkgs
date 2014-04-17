@@ -195,10 +195,6 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                 done
               done
 
-              ${optionalString self.enableSharedExecutables ''
-                configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}";
-              ''}
-
               echo "configure flags: $extraConfigureFlags $configureFlags"
               ./Setup configure --verbose --prefix="$out" --libdir='$prefix/lib/$compiler' \
                 --libsubdir='$pkgid' $extraConfigureFlags $configureFlags 2>&1 \
