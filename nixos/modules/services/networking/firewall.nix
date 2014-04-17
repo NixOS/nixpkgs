@@ -273,6 +273,8 @@ in
 
         path = [ pkgs.iptables ];
 
+        after = [ "systemd-modules-load.service" ];
+
         preStart =
           ''
             ${helpers}
