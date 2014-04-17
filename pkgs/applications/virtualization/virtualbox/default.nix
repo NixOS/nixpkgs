@@ -5,6 +5,7 @@
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null
+, pulseSupport ? false, pulseaudio ? null
 }:
 
 with stdenv.lib;
@@ -64,7 +65,8 @@ in stdenv.mkDerivation {
       libcap glib lvm2 python alsaLib curl libvpx pam xorriso makeself perl
       pkgconfig which libXmu ]
     ++ optional javaBindings jdk
-    ++ optional pythonBindings python;
+    ++ optional pythonBindings python
+    ++ optional pulseSupport pulseaudio;
 
   prePatch = ''
     set -x
@@ -86,7 +88,8 @@ in stdenv.mkDerivation {
     ./configure --with-qt4-dir=${qt4} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
-      --disable-pulse --disable-hardening --disable-kmods \
+      ${optionalString (!pulseSupport) "--disable-pulse"} \
+      --disable-hardening --disable-kmods \
       --with-mkisofs=${xorriso}/bin/xorrisofs
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
