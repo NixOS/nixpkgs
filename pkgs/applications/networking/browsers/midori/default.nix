@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
     -DUSE_ZEITGEIST=OFF
   '';
 
-  postInstall = ''
+  preFixup = ''
     wrapProgram $out/bin/midori \
       --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gsettings_desktop_schemas}/share"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 }
