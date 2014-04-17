@@ -194,7 +194,8 @@ in {
         cfg.carbon.rewriteRules
       ];
       preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}/whisper
+        mkdir -p ${cfg.dataDir}/whisper
+        chmod 0700 ${cfg.dataDir}/whisper
         chown -R graphite:graphite ${cfg.dataDir}
       '';
     };
@@ -254,7 +255,8 @@ in {
       };
       preStart = ''
         if ! test -e ${dataDir}/db-created; then
-          mkdir -m 0700 -p ${dataDir}/{whisper/,log/webapp/}
+          mkdir -p ${dataDir}/{whisper/,log/webapp/}
+          chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
           # populate database
           ${pkgs.python27Packages.graphite_web}/bin/manage-graphite.py syncdb --noinput
