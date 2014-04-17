@@ -587,7 +587,7 @@ rec {
     src = fetchgit {
       url = "https://github.com/g2p/bedup.git";
       rev = "80cb217d4819a03e159e42850a9a3f14e2b278a3";
-      sha256 = "c6ab696a767efc20f25faecbb74833e6e396d89ea70a3a7e97e4dbd9b58e90f4";
+      sha256 = "1rik7a62v708ivfcy0pawhfnrb84b7gm3qr54x6jsxl0iqz078h6";
     };
 
     buildInputs = [ pkgs.btrfsProgs ];
