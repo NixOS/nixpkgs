@@ -727,5 +727,17 @@ in
         })
         (filterAttrs (name: service: service.startAt != "") cfg.services);
 
+    # Provide the systemd-user PAM service, required to run systemd
+    # user instances.
+    security.pam.services.systemd-user =
+      { # Ensure that pam_systemd gets included. This is special-cased
+        # in systemd to provide XDG_RUNTIME_DIR.
+        startSession = true;
+      };
+
+    # Provide systemd user units. FIXME: Should make this definable,
+    # just like the system units.
+    environment.etc."systemd/user".source = "${systemd}/example/systemd/user";
+
   };
 }
