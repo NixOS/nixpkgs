@@ -1,12 +1,12 @@
-{ cabal, baseUnicodeSymbols, HUnit, testFramework
+{ cabal, baseUnicodeSymbols, HUnit, stm, stmChans, testFramework
 , testFrameworkHunit
 }:
 
 cabal.mkDerivation (self: {
   pname = "terminal-progress-bar";
-  version = "0.0.1.3";
-  sha256 = "04glnz72ivnaqfhyxb5sc175yxiq7lf7xi1jhbk9gi95md00f1js";
-  buildDepends = [ baseUnicodeSymbols ];
+  version = "0.0.1.4";
+  sha256 = "0ldvii23ks446xrd27aklh8s8pn1yi3dzhhzl05gipjqbhq3lsx3";
+  buildDepends = [ baseUnicodeSymbols stm stmChans ];
   testDepends = [
     baseUnicodeSymbols HUnit testFramework testFrameworkHunit
   ];
