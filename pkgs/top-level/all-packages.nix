@@ -9360,6 +9360,8 @@ let
 
   weechat = callPackage ../applications/networking/irc/weechat { };
 
+  weechatDevel = callPackage ../applications/networking/irc/weechat/devel.nix { };
+
   weston = callPackage ../applications/window-managers/weston { };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
