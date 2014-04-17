@@ -147,6 +147,12 @@ in
 
   config = mkIf (!config.boot.isContainer) {
 
+    systemd.services.kmod-static-nodes =
+      { wantedBy = [ "sysinit.target" ];
+        baseUnit = "${config.systemd.package}/example/systemd/system/kmod-static-nodes.service";
+        environment.MODULE_DIR = "/run/booted-system/kernel-modules/lib/modules";
+      };
+
     system.build = { inherit kernel; };
 
     system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;

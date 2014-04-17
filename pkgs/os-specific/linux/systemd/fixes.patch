@@ -181,6 +181,18 @@ index aa853b8..8bcc647 100644
  Type=idle
  Restart=always
  RestartSec=0
+diff --git a/units/kmod-static-nodes.service.in b/units/kmod-static-nodes.service.in
+index 368f980..d0c1bd2 100644
+--- a/units/kmod-static-nodes.service.in
++++ b/units/kmod-static-nodes.service.in
+@@ -10,7 +10,6 @@ Description=Create list of required static device nodes for the current kernel
+ DefaultDependencies=no
+ Before=sysinit.target systemd-tmpfiles-setup-dev.service
+ ConditionCapability=CAP_MKNOD
+-ConditionPathExists=/lib/modules/%v/modules.devname
+ 
+ [Service]
+ Type=oneshot
 diff --git a/units/local-fs.target b/units/local-fs.target
 index ae3cedc..0e36840 100644
 --- a/units/local-fs.target
