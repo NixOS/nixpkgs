@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "chell-quickcheck";
-  version = "0.2.2";
-  sha256 = "05qshv9vcl05khxsxyks2z7dqd8dqafjsg3awkkdhviviv5p2fp8";
+  version = "0.2.3";
+  sha256 = "15j1wzhfyr9v8hy9d5lnr6jkrfr1zfb7dwgiy3ni90mvpf8x54yc";
   buildDepends = [ chell QuickCheck random ];
   meta = {
     homepage = "https://john-millikin.com/software/chell/";
