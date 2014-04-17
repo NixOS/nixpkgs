@@ -104,13 +104,7 @@ if test -n "@cleanTmpDir@"; then
     echo -n "cleaning \`/tmp'..."
     find /tmp -maxdepth 1 -mindepth 1 -print0 | xargs -0r rm -rf --one-file-system
     echo " done"
-else
-    # Get rid of ICE locks...
-    rm -rf /tmp/.ICE-unix
 fi
-
-# ... and ensure that it's owned by root.
-mkdir -m 1777 /tmp/.ICE-unix
 
 # This is a good time to clean up /nix/var/nix/chroots.  Doing an `rm
 # -rf' on it isn't safe in general because it can contain bind mounts
