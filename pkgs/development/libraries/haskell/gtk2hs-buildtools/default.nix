@@ -1,12 +1,12 @@
-{ cabal, alex, filepath, happy, random }:
+{ cabal, alex, filepath, happy, hashtables, random }:
 
 cabal.mkDerivation (self: {
   pname = "gtk2hs-buildtools";
-  version = "0.12.5.1";
-  sha256 = "1zjm7y38089b57q3csgq7ydfm104ffhvsycszddkj0cgfgafshfm";
+  version = "0.12.5.2";
+  sha256 = "1w4mfwkiqil9xd1xl4himb6vnl66hxb7a4vch6wh3bfad880qyiw";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ filepath random ];
+  buildDepends = [ filepath hashtables random ];
   buildTools = [ alex happy ];
   meta = {
     homepage = "http://projects.haskell.org/gtk2hs/";
