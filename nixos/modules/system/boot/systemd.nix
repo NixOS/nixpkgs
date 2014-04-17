@@ -24,7 +24,7 @@ let
           ln -s /dev/null $out/${name}
         '';
 
-  upstreamUnits =
+  upstreamSystemUnits =
     [ # Targets.
       "basic.target"
       "sysinit.target"
@@ -165,13 +165,24 @@ let
       "emergency.service"
     ];
 
-  upstreamWants =
+  upstreamSystemWants =
     [ #"basic.target.wants"
       "sysinit.target.wants"
       "sockets.target.wants"
       "local-fs.target.wants"
       "multi-user.target.wants"
       "timers.target.wants"
+    ];
+
+  upstreamUserUnits =
+    [ "basic.target"
+      "default.target"
+      "exit.target"
+      "paths.target"
+      "shutdown.target"
+      "sockets.target"
+      "systemd-exit.service"
+      "timers.target"
     ];
 
   makeJobScript = name: text:
@@ -359,13 +370,13 @@ let
         '';
     };
 
-  units = pkgs.runCommand "units" { preferLocalBuild = true; }
-    ''
+  generateUnits = type: units: upstreamUnits: upstreamWants:
+    pkgs.runCommand "${type}-units" { preferLocalBuild = true; } ''
       mkdir -p $out
 
       # Copy the upstream systemd units we're interested in.
       for i in ${toString upstreamUnits}; do
-        fn=${systemd}/example/systemd/system/$i
+        fn=${systemd}/example/systemd/${type}/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         if [ -L $fn ]; then
           cp -pd $fn $out/
@@ -377,7 +388,7 @@ let
       # Copy .wants links, but only those that point to units that
       # we're interested in.
       for i in ${toString upstreamWants}; do
-        fn=${systemd}/example/systemd/system/$i
+        fn=${systemd}/example/systemd/${type}/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         x=$out/$(basename $fn)
         mkdir $x
@@ -390,14 +401,16 @@ let
 
       # Symlink all units provided listed in systemd.packages.
       for i in ${toString cfg.packages}; do
-        ln -s $i/etc/systemd/system/* $i/lib/systemd/system/* $out/
+        if [ -n "$(echo $i/etc/systemd/${type}/*)" ]; then
+          ln -s $i/etc/systemd/${type}/* $i/lib/systemd/${type}/* $out/
+        fi
       done
 
       # Symlink all units defined by systemd.units. If these are also
       # provided by systemd or systemd.packages, then add them as
       # <unit-name>.d/overrides.conf, which makes them extend the
       # upstream unit.
-      for i in ${toString (mapAttrsToList (n: v: v.unit) cfg.units)}; do
+      for i in ${toString (mapAttrsToList (n: v: v.unit) units)}; do
         fn=$(basename $i/*)
         if [ -e $out/$fn ]; then
           if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
@@ -417,24 +430,26 @@ let
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.wants'
             ln -sfn '../${name}' $out/'${name2}.wants'/
-          '') unit.wantedBy) cfg.units)}
+          '') unit.wantedBy) units)}
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.requires'
             ln -sfn '../${name}' $out/'${name2}.requires'/
-          '') unit.requiredBy) cfg.units)}
+          '') unit.requiredBy) units)}
 
-      # Stupid misc. symlinks.
-      ln -s ${cfg.defaultUnit} $out/default.target
+      ${optionalString (type == "system") ''
+        # Stupid misc. symlinks.
+        ln -s ${cfg.defaultUnit} $out/default.target
 
-      ln -s rescue.target $out/kbrequest.target
+        ln -s rescue.target $out/kbrequest.target
 
-      mkdir -p $out/getty.target.wants/
-      ln -s ../autovt@tty1.service $out/getty.target.wants/
+        mkdir -p $out/getty.target.wants/
+        ln -s ../autovt@tty1.service $out/getty.target.wants/
 
-      ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
-            ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
+        ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
+              ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
+      ''}
     ''; # */
 
 in
@@ -638,6 +653,25 @@ in
       '';
     };
 
+    systemd.user.units = mkOption {
+      description = "Definition of systemd per-user units.";
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = { name, config, ... }:
+        { options = concreteUnitOptions;
+          config = {
+            unit = mkDefault (makeUnit name config);
+          };
+        };
+    };
+
+    systemd.user.services = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ serviceOptions unitConfig serviceConfig ];
+      description = "Definition of systemd per-user service units.";
+    };
+
   };
 
 
@@ -651,11 +685,15 @@ in
       message = "${name}: Type=oneshot services must have Restart=no";
     }) cfg.services;
 
-    system.build.units = units;
+    system.build.units = cfg.units;
 
     environment.systemPackages = [ systemd ];
 
-    environment.etc."systemd/system".source = units;
+    environment.etc."systemd/system".source =
+      generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
+
+    environment.etc."systemd/user".source =
+      generateUnits "user" cfg.user.units upstreamUserUnits [];
 
     environment.etc."systemd/system.conf".text =
       ''
@@ -719,6 +757,9 @@ in
                    (v: let n = escapeSystemdPath v.where;
                        in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
+    systemd.user.units =
+      mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services;
+
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
       "CGROUPS" "AUTOFS4_FS" "DEVTMPFS"
     ];
@@ -752,10 +793,6 @@ in
         # in systemd to provide XDG_RUNTIME_DIR.
         startSession = true;
       };
-
-    # Provide systemd user units. FIXME: Should make this definable,
-    # just like the system units.
-    environment.etc."systemd/user".source = "${systemd}/example/systemd/user";
 
     environment.etc."tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
 
