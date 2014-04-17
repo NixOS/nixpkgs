@@ -36,7 +36,7 @@ with lib;
     # GNU lsh.
     services.openssh.enable = false;
     services.lshd.enable = true;
-    services.xserver.startOpenSSHAgent = false;
+    programs.ssh.startAgent = false;
     services.xserver.startGnuPGAgent = true;
 
     # TODO: GNU dico.
