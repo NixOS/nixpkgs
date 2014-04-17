@@ -79,6 +79,8 @@ let
       "systemd-journald.socket"
       "systemd-journald.service"
       "systemd-journal-flush.service"
+      "systemd-journal-gatewayd.socket"
+      "systemd-journal-gatewayd.service"
       "syslog.socket"
 
       # SysV init compatibility.
@@ -161,11 +163,6 @@ let
     ++ optionals cfg.enableEmergencyMode [
       "emergency.target"
       "emergency.service"
-    ]
-
-    ++ optionals config.services.journald.enableHttpGateway [
-      "systemd-journal-gatewayd.socket"
-      "systemd-journal-gatewayd.service"
     ];
 
   upstreamWants =
@@ -438,10 +435,6 @@ let
 
       ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
             ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
-
-      ${ optionalString config.services.journald.enableHttpGateway ''
-        ln -s ../systemd-journal-gatewayd.service $out/multi-user-target.wants/
-      ''}
     ''; # */
 
 in
@@ -632,7 +625,7 @@ in
       default = false;
       type = types.bool;
       description = ''
-        Enable journal http gateway
+        Whether to enable the HTTP gateway to the journal.
       '';
     };
 
@@ -778,6 +771,9 @@ in
           timerConfig.OnCalendar = service.startAt;
         })
         (filterAttrs (name: service: service.startAt != "") cfg.services);
+
+    systemd.sockets.systemd-journal-gatewayd.wantedBy =
+      optional config.services.journald.enableHttpGateway "sockets.target";
 
     # Provide the systemd-user PAM service, required to run systemd
     # user instances.
