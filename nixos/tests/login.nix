@@ -9,7 +9,8 @@ import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
 
   testScript =
     ''
-      $machine->waitForUnit("default.target");
+      $machine->waitForUnit('multi-user.target');
+      $machine->waitUntilSucceeds("pgrep -f 'agetty.*tty1'");
       $machine->screenshot("postboot");
 
       subtest "create user", sub {
@@ -19,9 +20,11 @@ import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
 
       # Check whether switching VTs works.
       subtest "virtual console switching", sub {
+          $machine->fail("pgrep -f 'agetty.*tty2'");
           $machine->sendKeys("alt-f2");
           $machine->waitUntilSucceeds("[ \$(fgconsole) = 2 ]");
           $machine->waitForUnit('getty@tty2.service');
+          $machine->waitUntilSucceeds("pgrep -f 'agetty.*tty2'");
       };
 
       # Log in as alice on a virtual console.
