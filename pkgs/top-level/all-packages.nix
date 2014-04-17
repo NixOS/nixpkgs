@@ -4199,6 +4199,10 @@ let
 
   dclib = callPackage ../development/libraries/dclib { };
 
+  dillo = callPackage ../applications/networking/browsers/dillo {
+    fltk = fltk13;  
+  };
+
   directfb = callPackage ../development/libraries/directfb { };
 
   dotconf = callPackage ../development/libraries/dotconf { };
