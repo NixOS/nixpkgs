@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dns";
-  version = "1.2.1";
-  sha256 = "0xv8mj2x8ijqgi7gnh2shr7ns9qghiczm3lw9n37mxk02zbvw8h0";
+  version = "1.2.2";
+  sha256 = "0xba8bwxn5n3bh1qfbrmnrfsnf20iwa10acx1z4017jbnx0s025v";
   buildDepends = [
     attoparsec attoparsecConduit binary blazeBuilder conduit
     conduitExtra iproute mtl network random resourcet
