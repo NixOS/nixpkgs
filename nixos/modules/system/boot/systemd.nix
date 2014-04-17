@@ -31,7 +31,6 @@ let
       "sockets.target"
       "graphical.target"
       "multi-user.target"
-      "getty.target"
       "network.target"
       "network-online.target"
       "nss-lookup.target"
@@ -50,9 +49,16 @@ let
       # Udev.
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
-      #"systemd-udevd.service"
+      "systemd-udevd.service"
       "systemd-udev-settle.service"
       "systemd-udev-trigger.service"
+
+      # Consoles.
+      "getty.target"
+      "getty@.service"
+      "serial-getty@.service"
+      "container-getty@.service"
+      "systemd-vconsole-setup.service"
 
       # Hardware (started by udev when a relevant device is plugged in).
       "sound.target"
@@ -80,7 +86,8 @@ let
       "systemd-initctl.service"
 
       # Kernel module loading.
-      #"systemd-modules-load.service"
+      "systemd-modules-load.service"
+      "kmod-static-nodes.service"
 
       # Filesystems.
       "systemd-fsck@.service"
@@ -146,6 +153,9 @@ let
       "systemd-tmpfiles-clean.timer"
       "systemd-tmpfiles-setup.service"
       "systemd-tmpfiles-setup-dev.service"
+
+      # Misc.
+      "systemd-sysctl.service"
     ]
 
     ++ optionals cfg.enableEmergencyMode [
@@ -198,7 +208,7 @@ let
 
   serviceConfig = { name, config, ... }: {
     config = mkMerge
-      [ (mkIf (config.baseUnit == null) { # Default path for systemd services.  Should be quite minimal.
+      [ { # Default path for systemd services.  Should be quite minimal.
           path =
             [ pkgs.coreutils
               pkgs.findutils
@@ -207,7 +217,7 @@ let
               systemd
             ];
           environment.PATH = config.path;
-        })
+        }
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
               #! ${pkgs.stdenv.shell} -e
@@ -275,10 +285,7 @@ let
         (if isList value then value else [value]))
         as));
 
-  commonUnitText = def:
-    optionalString (def.baseUnit != null) ''
-      .include ${def.baseUnit}
-    '' + ''
+  commonUnitText = def: ''
       [Unit]
       ${attrsToSection def.unitConfig}
     '';
@@ -358,6 +365,8 @@ let
   units = pkgs.runCommand "units" { preferLocalBuild = true; }
     ''
       mkdir -p $out
+
+      # Copy the upstream systemd units we're interested in.
       for i in ${toString upstreamUnits}; do
         fn=${systemd}/example/systemd/system/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
@@ -368,6 +377,8 @@ let
         fi
       done
 
+      # Copy .wants links, but only those that point to units that
+      # we're interested in.
       for i in ${toString upstreamWants}; do
         fn=${systemd}/example/systemd/system/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
@@ -376,18 +387,35 @@ let
         for i in $fn/*; do
           y=$x/$(basename $i)
           cp -pd $i $y
-          if ! [ -e $y ]; then rm -v $y; fi
+          if ! [ -e $y ]; then rm $y; fi
         done
       done
 
-      for i in ${toString (mapAttrsToList (n: v: v.unit) cfg.units)}; do
-        ln -fs $i/* $out/
-      done
-
+      # Symlink all units provided listed in systemd.packages.
       for i in ${toString cfg.packages}; do
-        ln -s $i/etc/systemd/system/* $out/
+        ln -s $i/etc/systemd/system/* $i/lib/systemd/system/* $out/
       done
 
+      # Symlink all units defined by systemd.units. If these are also
+      # provided by systemd or systemd.packages, then add them as
+      # <unit-name>.d/overrides.conf, which makes them extend the
+      # upstream unit.
+      for i in ${toString (mapAttrsToList (n: v: v.unit) cfg.units)}; do
+        fn=$(basename $i/*)
+        if [ -e $out/$fn ]; then
+          if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
+            ln -sfn /dev/null $out/$fn
+          else
+            mkdir $out/$fn.d
+            ln -s $i/$fn $out/$fn.d/overrides.conf
+          fi
+       else
+          ln -fs $i/$fn $out/
+        fi
+      done
+
+      # Created .wants and .requires symlinks from the wantedBy and
+      # requiredBy options.
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.wants'
@@ -400,6 +428,7 @@ let
             ln -sfn '../${name}' $out/'${name2}.requires'/
           '') unit.requiredBy) cfg.units)}
 
+      # Stupid misc. symlinks.
       ln -s ${cfg.defaultUnit} $out/default.target
 
       ln -s rescue.target $out/kbrequest.target
@@ -411,7 +440,7 @@ let
             ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
 
       ${ optionalString config.services.journald.enableHttpGateway ''
-      ln -s ../systemd-journal-gatewayd.service $out/multi-user-target.wants/
+        ln -s ../systemd-journal-gatewayd.service $out/multi-user-target.wants/
       ''}
     ''; # */
 

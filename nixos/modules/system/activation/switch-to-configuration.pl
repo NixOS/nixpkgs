@@ -115,6 +115,14 @@ sub boolIsTrue {
     return $s eq "yes" || $s eq "true";
 }
 
+# As a fingerprint for determining whether a unit has changed, we use
+# its absolute path. If it has an override file, we append *its*
+# absolute path as well.
+sub fingerprintUnit {
+    my ($s) = @_;
+    return abs_path($s) . (-f "${s}.d/overrides.conf" ? " " . abs_path "${s}.d/overrides.conf" : "");
+}
+
 # Stop all services that no longer exist or have changed in the new
 # configuration.
 my (@unitsToStop, @unitsToSkip);
@@ -166,7 +174,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             }
         }
 
-        elsif (abs_path($prevUnitFile) ne abs_path($newUnitFile)) {
+        elsif (fingerprintUnit($prevUnitFile) ne fingerprintUnit($newUnitFile)) {
             if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target") {
                 # Do nothing.  These cannot be restarted directly.
             } elsif ($unit =~ /\.mount$/) {

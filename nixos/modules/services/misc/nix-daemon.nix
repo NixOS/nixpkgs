@@ -275,28 +275,16 @@ in
           ) cfg.buildMachines;
       };
 
-    systemd.sockets."nix-daemon" =
-      { description = "Nix Daemon Socket";
-        wantedBy = [ "sockets.target" ];
-        before = [ "multi-user.target" ];
-        unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket/";
-        socketConfig.ListenStream = "/nix/var/nix/daemon-socket/socket";
-      };
+    systemd.packages = [ nix ];
 
-    systemd.services."nix-daemon" =
-      { description = "Nix Daemon";
-
-        path = [ nix pkgs.openssl pkgs.utillinux pkgs.openssh ]
+    systemd.services.nix-daemon =
+      { path = [ nix pkgs.openssl pkgs.utillinux pkgs.openssh ]
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
         environment = cfg.envVars // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; };
 
-        unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket/";
-
         serviceConfig =
-          { ExecStart = "@${nix}/bin/nix-daemon nix-daemon --daemon";
-            KillMode = "process";
-            Nice = cfg.daemonNiceLevel;
+          { Nice = cfg.daemonNiceLevel;
             IOSchedulingPriority = cfg.daemonIONiceLevel;
             LimitNOFILE = 4096;
           };
