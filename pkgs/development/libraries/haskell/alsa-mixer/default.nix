@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Bindings to the ALSA simple mixer API";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.stdenv.lib.platforms.linux;
-    maintainers = with self.stdenv.lib.maintainers; [ ttuegel ];
   };
 })
