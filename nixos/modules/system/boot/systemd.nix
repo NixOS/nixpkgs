@@ -140,6 +140,11 @@ let
       "user.slice"
       "machine.slice"
       "systemd-machined.service"
+
+      # Temporary file creation / cleanup.
+      "systemd-tmpfiles-clean.service"
+      "systemd-tmpfiles-setup.service"
+      "systemd-tmpfiles-setup-dev.service"
     ]
 
     ++ optionals cfg.enableEmergencyMode [
@@ -738,6 +743,8 @@ in
     # Provide systemd user units. FIXME: Should make this definable,
     # just like the system units.
     environment.etc."systemd/user".source = "${systemd}/example/systemd/user";
+
+    environment.etc."tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
 
   };
 }
