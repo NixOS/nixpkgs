@@ -143,6 +143,7 @@ let
 
       # Temporary file creation / cleanup.
       "systemd-tmpfiles-clean.service"
+      "systemd-tmpfiles-clean.timer"
       "systemd-tmpfiles-setup.service"
       "systemd-tmpfiles-setup-dev.service"
     ]
@@ -629,6 +630,22 @@ in
       '';
     };
 
+    systemd.tmpfiles.rules = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "d /tmp 1777 root root 10d" ];
+      description = ''
+        Rules for creating and cleaning up temporary files
+        automatically. See
+        <citerefentry><refentrytitle>tmpfiles.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        for the exact format. You should not use this option to create
+        files required by systemd services, since there is no
+        guarantee that <command>systemd-tmpfiles</command> runs when
+        the system is reconfigured using
+        <command>nixos-rebuild</command>.
+      '';
+    };
+
   };
 
 
@@ -746,6 +763,13 @@ in
     environment.etc."systemd/user".source = "${systemd}/example/systemd/user";
 
     environment.etc."tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
+
+    environment.etc."tmpfiles.d/nixos.conf".text =
+      ''
+        # This file is created automatically and should not be modified.
+        # Please change the option ‘systemd.tmpfiles.rules’ instead.
+        ${concatStringsSep "\n" cfg.tmpfiles.rules}
+      '';
 
   };
 }

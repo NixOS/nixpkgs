@@ -79,6 +79,7 @@ in
         '';
       };
 
+      # FIXME: should replace this with something that uses systemd-tmpfiles.
       cleanTmpDir = mkOption {
         type = types.bool;
         default = false;
