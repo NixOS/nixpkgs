@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng ];
   nativeBuildInputs = [ pkgconfig ];
 
+  patches = [ ./00_configure_fix ./01_pkg_config_fix ./03_libpthread_handling_fix ];
+
   meta = {
     homepage = http://fukuchi.org/works/qrencode/;
     description = "QR code encoder";
