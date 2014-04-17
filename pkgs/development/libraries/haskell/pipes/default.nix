@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes";
-  version = "4.1.0";
-  sha256 = "1n10plmrjvmkyv502195mkms48y3lfp5gy08lhyhqqr7kn1gzkf0";
+  version = "4.1.1";
+  sha256 = "1ib7vs4x8ckajlg3nz9lx2snnwj75by90fbv4znwhwgrhj4h13dn";
   buildDepends = [ mmorph mtl transformers ];
   testDepends = [
     mtl QuickCheck testFramework testFrameworkQuickcheck2 transformers
