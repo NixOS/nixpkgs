@@ -456,37 +456,7 @@ in
       default = {};
       type = types.attrsOf types.optionSet;
       options = { name, config, ... }:
-        { options = {
-            text = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = "Text of this systemd unit.";
-            };
-            enable = mkOption {
-              default = true;
-              type = types.bool;
-              description = ''
-                If set to false, this unit will be a symlink to
-                /dev/null. This is primarily useful to prevent specific
-                template instances (e.g. <literal>serial-getty@ttyS0</literal>)
-                from being started.
-              '';
-            };
-            requiredBy = mkOption {
-              default = [];
-              type = types.listOf types.string;
-              description = "Units that require (i.e. depend on and need to go down with) this unit.";
-            };
-            wantedBy = mkOption {
-              default = [];
-              type = types.listOf types.string;
-              description = "Units that want (i.e. depend on) this unit.";
-            };
-            unit = mkOption {
-              internal = true;
-              description = "The generated unit.";
-            };
-          };
+        { options = concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
@@ -502,7 +472,7 @@ in
     systemd.targets = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
-      options = [ unitOptions unitConfig ];
+      options = [ targetOptions unitConfig ];
       description = "Definition of systemd target units.";
     };
 
