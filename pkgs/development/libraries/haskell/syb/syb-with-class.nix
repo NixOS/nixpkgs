@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "syb-with-class";
-  version = "0.6.1.4";
-  sha256 = "0fi6m1a4017422kdmj1vvvzbks79jkcldp20h2nb7jsf8zvimfkc";
+  version = "0.6.1.5";
+  sha256 = "1gn4p92jabgvbk7bg1nzjimyfzznl800bi9hw4ssvc7jqqnyw5zn";
   meta = {
     description = "Scrap Your Boilerplate With Class";
     license = self.stdenv.lib.licenses.bsd3;
