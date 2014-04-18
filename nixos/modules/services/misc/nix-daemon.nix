@@ -277,6 +277,8 @@ in
 
     systemd.packages = [ nix ];
 
+    systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
+
     systemd.services.nix-daemon =
       { path = [ nix pkgs.openssl pkgs.utillinux pkgs.openssh ]
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
