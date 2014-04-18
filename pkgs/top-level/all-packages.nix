@@ -8853,6 +8853,8 @@ let
 
   opusTools = callPackage ../applications/audio/opus-tools { };
 
+  pamixer = callPackage ../applications/audio/pamixer { };
+
   pan = callPackage ../applications/networking/newsreaders/pan {
     spellChecking = false;
   };
