@@ -147,6 +147,8 @@ rec {
 
   file-roller = callPackage ./desktop/file-roller { };
 
+  gedit = callPackage ./apps/gedit { };
+
   gnome_desktop = callPackage ./desktop/gnome-desktop { };
 
   gtksourceview = callPackage ./desktop/gtksourceview { };

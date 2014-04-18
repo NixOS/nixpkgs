@@ -117,6 +117,7 @@ in {
         gnome3.gnome-user-docs
 
         gnome3.file-roller
+        gnome3.gedit
         gnome3.gnome-tweak-tool
       ] config.environment.gnome3.excludePackages);
 
