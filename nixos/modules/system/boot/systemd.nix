@@ -379,7 +379,12 @@ let
         fn=${systemd}/example/systemd/${type}/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         if [ -L $fn ]; then
-          cp -pd $fn $out/
+          target="$(readlink "$fn")"
+          if [ ''${target:0:3} = ../ ]; then
+            ln -s "$(readlink -f "$fn")" $out/
+          else
+            cp -pd $fn $out/
+          fi
         else
           ln -s $fn $out/
         fi
