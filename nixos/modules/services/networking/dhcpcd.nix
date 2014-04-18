@@ -80,6 +80,7 @@ in
   options = {
 
     networking.dhcpcd.denyInterfaces = mkOption {
+      type = types.listOf types.str;
       default = [];
       description = ''
          Disable the DHCP client for any interface whose name matches
@@ -90,6 +91,7 @@ in
     };
 
     networking.dhcpcd.extraConfig = mkOption {
+      type = types.lines;
       default = "";
       description = ''
          Literal string to append to the config file generated for dhcpcd.
