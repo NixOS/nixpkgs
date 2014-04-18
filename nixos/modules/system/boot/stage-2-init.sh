@@ -106,7 +106,7 @@ fi
 
 
 # Also get rid of temporary GC roots.
-rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots /nix/var/nix/userpool
+rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
 
 
 # Create a tmpfs on /run to hold runtime state for programs such as

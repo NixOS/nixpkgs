@@ -336,13 +336,13 @@ in
         # Nix initialisation.
         mkdir -m 0755 -p \
           /nix/var/nix/gcroots \
+          /nix/var/nix/temproots \
           /nix/var/nix/manifests \
+          /nix/var/nix/userpool \
           /nix/var/nix/profiles \
           /nix/var/nix/db \
           /nix/var/log/nix/drvs \
-          /nix/var/nix/channel-cache \
-          /run/nix/temproots \
-          /run/nix/userpool
+          /nix/var/nix/channel-cache
         mkdir -m 1777 -p \
           /nix/var/nix/gcroots/per-user \
           /nix/var/nix/profiles/per-user \
@@ -350,9 +350,6 @@ in
 
         ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
         ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/
-
-        [ -d /nix/var/nix/temproots ] || ln -sfn /run/nix/temproots /nix/var/nix/temproots
-        [ -d /nix/var/nix/userpool ] || ln -sfn /run/nix/userpool /nix/var/nix/userpool
       '';
 
   };
