@@ -688,8 +688,7 @@ in
   config = {
 
     assertions = mapAttrsToList (name: service: {
-      assertion = service.serviceConfig.Type or "" == "oneshot" ->
-                    builtins.elem (service.serviceConfig.Restart or "no") ["no" "on-failure" "on-abort"];
+      assertion = service.serviceConfig.Type or "" == "oneshot" -> service.serviceConfig.Restart or "no" == "no";
       message = "${name}: Type=oneshot services must have Restart=no";
     }) cfg.services;
 
