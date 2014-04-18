@@ -402,7 +402,6 @@ let
       # Symlink all units provided listed in systemd.packages.
       for i in ${toString cfg.packages}; do
         files=$(echo $i/etc/systemd/${type}/* $i/lib/systemd/${type}/*)
-        echo $i: $files
         if [ -n "$files" ]; then
           ln -s $files $out/
         fi
