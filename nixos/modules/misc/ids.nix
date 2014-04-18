@@ -130,7 +130,7 @@
       newrelic = 119;
       starbound = 120;
       hydra     = 121;
-      nsd       = 122;
+      nsd       = 124;
 
       # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -234,7 +234,7 @@
       newrelic = 119;
       starbound = 120;
       grsecurity = 121;
-      nsd = 122;
+      nsd = 124;
 
       # When adding a gid, make sure it doesn't match an existing uid.
 

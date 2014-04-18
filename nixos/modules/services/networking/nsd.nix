@@ -18,7 +18,7 @@ let
             cat > "$out/${zoneName}" <<_EOF_
             ${zoneOptions.data}
             _EOF_
-          '') cfg.zones))
+          '') zoneConfigs))
         ];
   };
 
@@ -55,7 +55,7 @@ let
       tcp-timeout:         ${toString cfg.tcpTimeout}
       ipv4-edns-size:      ${toString cfg.ipv4EDNSSize}
       ipv6-edns-size:      ${toString cfg.ipv6EDNSSize}
-      statistics:          ${toString cfg.statistics}
+      ${if cfg.statistics == null then "" else "statistics:          ${toString cfg.statistics}"}
       xfrd-reload-timeout: ${toString cfg.xfrdReloadTimeout}
       zonefiles-check:     ${yesOrNo  cfg.zonefilesCheck}
 
@@ -99,8 +99,8 @@ let
     secret=$(cat "${keyOptions.keyFile}")
     dest="${stateDir}/private/${keyName}"
     echo "  secret: \"$secret\"" > "$dest"
-    chown ${username}:${username} "$dest"
-    chmod 0400 "$dest"
+    ${pkgs.coreutils}/bin/chown ${username}:${username} "$dest"
+    ${pkgs.coreutils}/bin/chmod 0400 "$dest"
   '') cfg.keys);
 
 
@@ -422,10 +422,11 @@ in
       };
 
       statistics = mkOption {
-        type        = types.int;
-        default     = 3600;
+        type        = types.nullOr types.int;
+        default     = null;
         description = ''
           Statistics are produced every number of seconds. Prints to log.
+          If null no statistics are logged.
         '';
       };
 
@@ -726,21 +727,21 @@ in
       };
 
       preStart = ''
-        mkdir -m 0700 -p "${stateDir}/private"
-        mkdir -m 0700 -p "${stateDir}/tmp"
-        mkdir -m 0700 -p "${stateDir}/var"
+        ${pkgs.coreutils}/bin/mkdir -m 0700 -p "${stateDir}/private"
+        ${pkgs.coreutils}/bin/mkdir -m 0700 -p "${stateDir}/tmp"
+        ${pkgs.coreutils}/bin/mkdir -m 0700 -p "${stateDir}/var"
 
-        touch "${stateDir}/don't touch anything in here"
+        ${pkgs.coreutils}/bin/touch "${stateDir}/don't touch anything in here"
 
-        rm -f "${stateDir}/private/"*
-        rm -f "${stateDir}/tmp/"*
+        ${pkgs.coreutils}/bin/rm -f "${stateDir}/private/"*
+        ${pkgs.coreutils}/bin/rm -f "${stateDir}/tmp/"*
 
-        chown nsd:nsd -R "${stateDir}/private"
-        chown nsd:nsd -R "${stateDir}/tmp"
-        chown nsd:nsd -R "${stateDir}/var"
+        ${pkgs.coreutils}/bin/chown nsd:nsd -R "${stateDir}/private"
+        ${pkgs.coreutils}/bin/chown nsd:nsd -R "${stateDir}/tmp"
+        ${pkgs.coreutils}/bin/chown nsd:nsd -R "${stateDir}/var"
 
-        rm -f "${stateDir}/zones"
-        ln -s "${zoneFiles}" "${stateDir}/zones"
+        ${pkgs.coreutils}/bin/rm -rf "${stateDir}/zones"
+        ${pkgs.coreutils}/bin/cp -r  "${zoneFiles}" "${stateDir}/zones"
 
         ${copyKeys}
       '';
