@@ -114,6 +114,7 @@ with stdenv.lib;
   VGA_SWITCHEROO y
 
   # Sound.
+  SND_DYNAMIC_MINORS y
   SND_AC97_POWER_SAVE y # AC97 Power-Saving Mode
   SND_HDA_INPUT_BEEP y # Support digital beep via input layer
   SND_USB_CAIAQ_INPUT y
