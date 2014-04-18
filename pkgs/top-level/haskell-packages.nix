@@ -2790,6 +2790,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   xmlhtml = callPackage ../development/libraries/haskell/xmlhtml {};
 
+  xmlLens = callPackage ../development/libraries/haskell/xml-lens {};
+
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
 
   xournalParser = callPackage ../development/libraries/haskell/xournal-parser {};
