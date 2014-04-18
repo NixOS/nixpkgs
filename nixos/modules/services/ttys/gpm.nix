@@ -44,7 +44,7 @@ in
       { description = "Console Mouse Daemon";
 
         wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-udev-settle.service" ];
+        requires = [ "getty.target" ];
 
         serviceConfig.ExecStart = "@${pkgs.gpm}/sbin/gpm gpm -m /dev/input/mice -t ${cfg.protocol}";
         serviceConfig.Type = "forking";
