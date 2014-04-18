@@ -109,6 +109,8 @@ let
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"
+      "systemd-backlight@.service"
+      "systemd-rfkill@.service"
 
       # Hibernate / suspend.
       "hibernate.target"
