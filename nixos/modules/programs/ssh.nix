@@ -91,9 +91,12 @@ in
         description = "SSH Agent";
         wantedBy = [ "default.target" ];
         serviceConfig =
-          { ExecStart = "${pkgs.openssh}/bin/ssh-agent -a %t/ssh-agent";
+          { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
+            ExecStart = "${pkgs.openssh}/bin/ssh-agent -a %t/ssh-agent";
+            StandardOutput = "null";
             Type = "forking";
             Restart = "on-failure";
+            SuccessExitStatus = "0 2";
           };
       };
 
