@@ -39,6 +39,7 @@
   iElectric = "Domen Kozar <domen@dev.si>";
   iyzsong = "Song Wenwu <iyzsong@gmail.com>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
+  jwiegley = "John Wiegley <johnw@newartisans.com>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   ktosiek = "Tomasz Kontusz <tomasz.kontusz@gmail.com>";
   lethalman = "Luca Bruno <lucabru@src.gnome.org>";
