@@ -233,20 +233,7 @@ in
 
         preStop =
           ''
-            pid="$(cat /sys/fs/cgroup/systemd/machine/$INSTANCE.nspawn/system/tasks 2> /dev/null)"
-            if [ -n "$pid" ]; then
-              # Send the RTMIN+3 signal, which causes the container
-              # systemd to start halt.target.
-              echo "killing container systemd, PID = $pid"
-              kill -RTMIN+3 $pid
-              # Wait for the container to exit.  We can't let systemd
-              # do this because it will send a signal to the entire
-              # cgroup.
-              for ((n = 0; n < 180; n++)); do
-                if ! kill -0 $pid 2> /dev/null; then break; fi
-                sleep 1
-              done
-            fi
+            machinectl poweroff "$INSTANCE"
           '';
 
         restartIfChanged = false;
