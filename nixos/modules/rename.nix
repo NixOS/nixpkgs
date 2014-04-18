@@ -17,7 +17,7 @@ let
     inherit from to;
     name = "Obsolete name";
     use = x: builtins.trace "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'." x;
-    define = x: builtins.trace "Obsolete option `${showOption from}' is used. It was renamed to  `${showOption to}'." x;
+    define = x: builtins.trace "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'." x;
   };
 
   # abort if deprecated option is used
@@ -25,7 +25,7 @@ let
     inherit from to;
     name = "Deprecated name";
     use = x: abort "Deprecated option `${showOption from}' is used. It was renamed to `${showOption to}'.";
-    define = x: abort "Deprecated option `${showOption from}' is used. It was renamed to  `${showOption to}'.";
+    define = x: abort "Deprecated option `${showOption from}' is used. It was renamed to `${showOption to}'.";
   };
 
   showOption = concatStringsSep ".";
