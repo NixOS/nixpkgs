@@ -96,8 +96,6 @@ mkdir -m 0755 -p /etc/nixos
 
 # Miscellaneous boot time cleanup.
 rm -rf /var/run /var/lock
-rm -f /etc/resolv.conf
-touch /etc/resolv.conf
 rm -f /etc/{group,passwd,shadow}.lock
 
 if test -n "@cleanTmpDir@"; then
@@ -146,6 +144,12 @@ ln -s /run/lock /var/lock
 # Clear the resume device.
 if test -n "$resumeDevice"; then
     mkswap "$resumeDevice" || echo 'Failed to clear saved image.'
+fi
+
+
+# Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
+if [ -n "@useHostResolvConf@" -a -e /etc/resolv.conf ]; then
+    cat /etc/resolv.conf | resolvconf -m 1000 -a host
 fi
 
 
