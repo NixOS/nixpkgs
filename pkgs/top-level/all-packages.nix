@@ -5980,28 +5980,7 @@ let
 
   wayland = callPackage ../development/libraries/wayland { };
 
-  webkit =
-    builderDefsPackage ../development/libraries/webkit {
-      inherit gtk2; # for plugins etc. even with gtk3, see Gentoo ebuild
-      inherit gtk3 glib atk cairo pango fontconfig freetype;
-      inherit (gnome) gtkdoc libsoup;
-      inherit pkgconfig libtool intltool autoconf automake gperf flex
-        libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
-        which libproxy geoclue enchant python ruby perl mesa xlibs;
-      inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
-      bison = bison2;
-    };
-
-  webkit_gtk2 =
-    builderDefsPackage ../development/libraries/webkit/gtk2.nix {
-      inherit gtk2 glib atk cairo pango fontconfig freetype;
-      inherit (gnome) gtkdoc libsoup;
-      inherit pkgconfig libtool intltool autoconf automake gperf flex
-        libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
-        which libproxy geoclue enchant python ruby perl mesa xlibs;
-      inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
-      bison = bison2;
-    };
+  webkit = webkitgtk;
 
   webkitgtk = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzz.override {
@@ -9126,8 +9105,7 @@ let
   });
 
   surf = callPackage ../applications/misc/surf {
-    libsoup = gnome.libsoup;
-    webkit = webkit_gtk2;
+    webkit = webkitgtk2;
   };
 
   svk = perlPackages.SVK;
@@ -9248,12 +9226,8 @@ let
 
   uwimap = callPackage ../tools/networking/uwimap { };
 
-  uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
-    inherit pkgconfig webkit makeWrapper glib_networking python3;
-    inherit glib pango cairo gdk_pixbuf atk;
-    inherit (xlibs) libX11 kbproto;
-    inherit (gnome) libsoup;
-    gtk = gtk3;
+  uzbl = callPackage ../applications/networking/browsers/uzbl {
+    webkit = webkitgtk2;
   };
 
   vanitygen = callPackage ../applications/misc/vanitygen { };
@@ -10686,8 +10660,7 @@ let
   vimPlugins = callPackage ../misc/vim-plugins { };
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
-    inherit (gnome) libsoup;
-    webkit = webkit_gtk2;
+    webkit = webkitgtk2;
   };
 
   vimprobable2Wrapper = wrapFirefox
@@ -10695,8 +10668,7 @@ let
     };
 
   vimb = callPackage ../applications/networking/browsers/vimb {
-    inherit (gnome) libsoup;
-    webkit = webkit_gtk2;
+    webkit = webkitgtk2;
   };
 
   vimbWrapper = wrapFirefox {
