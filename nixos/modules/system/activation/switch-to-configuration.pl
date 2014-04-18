@@ -65,12 +65,12 @@ $SIG{PIPE} = "IGNORE";
 sub getActiveUnits {
     # FIXME: use D-Bus or whatever to query this, since parsing the
     # output of list-units is likely to break.
-    my $lines = `@systemd@/bin/systemctl list-units --full`;
+    my $lines = `LANG= @systemd@/bin/systemctl list-units --full`;
     my $res = {};
     foreach my $line (split '\n', $lines) {
         chomp $line;
         last if $line eq "";
-        $line =~ /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s/ or next;
+        $line =~ /^\*?\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s/ or next;
         next if $1 eq "UNIT";
         $res->{$1} = { load => $2, state => $3, substate => $4 };
     }
