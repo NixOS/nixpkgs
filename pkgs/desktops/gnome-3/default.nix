@@ -96,6 +96,8 @@ rec {
 
   gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };
 
+  gtksourceview = callPackage ./core/gtksourceview { };
+
   gucharmap = callPackage ./core/gucharmap { };
 
   gvfs = pkgs.gvfs.override { gnome = pkgs.gnome3; };
@@ -151,7 +153,6 @@ rec {
 
   gnome_desktop = callPackage ./desktop/gnome-desktop { };
 
-  gtksourceview = callPackage ./desktop/gtksourceview { };
 
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
