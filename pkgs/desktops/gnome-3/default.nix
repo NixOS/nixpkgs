@@ -48,6 +48,8 @@ rec {
 
   gnome_common = callPackage ./core/gnome-common { };
 
+  gnome_desktop = callPackage ./core/gnome-desktop { };
+
   gnome-dictionary = callPackage ./core/gnome-dictionary { };
 
   gnome-disk-utility = callPackage ./core/gnome-disk-utility { };
@@ -150,9 +152,6 @@ rec {
   file-roller = callPackage ./apps/file-roller { };
 
   gedit = callPackage ./apps/gedit { };
-
-  gnome_desktop = callPackage ./desktop/gnome-desktop { };
-
 
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
