@@ -10,6 +10,9 @@ with lib;
 
     networking.useHostResolvConf = true;
 
+    # Shut up warnings about not having a boot loader.
+    system.build.installBootLoader = "${pkgs.coreutils}/bin/true";
+
     # Provide a login prompt on /var/lib/login.socket.  On the host,
     # you can connect to it by running ‘socat
     # unix:<path-to-container>/var/lib/login.socket -,echo=0,raw’.
