@@ -342,8 +342,7 @@ in
           /nix/var/nix/profiles \
           /nix/var/nix/db \
           /nix/var/log/nix/drvs \
-          /nix/var/nix/channel-cache \
-          /nix/var/nix/chroots
+          /nix/var/nix/channel-cache
         mkdir -m 1777 -p \
           /nix/var/nix/gcroots/per-user \
           /nix/var/nix/profiles/per-user \
