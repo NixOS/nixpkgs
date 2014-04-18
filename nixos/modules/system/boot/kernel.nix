@@ -237,8 +237,7 @@ in
       };
 
     systemd.services.kmod-static-nodes =
-      { wantedBy = [ "sysinit.target" ];
-        environment.MODULE_DIR = "/run/booted-system/kernel-modules/lib/modules";
+      { environment.MODULE_DIR = "/run/booted-system/kernel-modules/lib/modules";
       };
 
     lib.kernelConfig = {
