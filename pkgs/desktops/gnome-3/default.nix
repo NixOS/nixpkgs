@@ -164,6 +164,8 @@ rec {
   gitg = callPackage ./misc/gitg { };
 
   libgit2-glib = callPackage ./misc/libgit2-glib { };
+
+  libmediaart = callPackage ./misc/libmediaart { };
   
   gexiv2 = callPackage ./misc/gexiv2 { };
 
