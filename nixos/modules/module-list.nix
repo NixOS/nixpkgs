@@ -163,6 +163,7 @@
   ./services/network-filesystems/drbd.nix
   ./services/network-filesystems/nfsd.nix
   ./services/network-filesystems/openafs-client/default.nix
+  ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
   ./services/networking/amuled.nix
   ./services/networking/avahi-daemon.nix
