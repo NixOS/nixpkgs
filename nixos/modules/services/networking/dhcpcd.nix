@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  dhcpcd =  if !config.boot.isContainer then pkgs.dhcpcd else pkgs.dhcpcd_without_udev;
+  dhcpcd = if !config.boot.isContainer then pkgs.dhcpcd else pkgs.dhcpcd.override { udev = null; };
 
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge.

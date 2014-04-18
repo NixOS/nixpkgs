@@ -827,8 +827,6 @@ let
 
   dhcpcd = callPackage ../tools/networking/dhcpcd { };
 
-  dhcpcd_without_udev = callPackage ../tools/networking/dhcpcd { udev = null; };
-
   diffstat = callPackage ../tools/text/diffstat { };
 
   diffutils = callPackage ../tools/text/diffutils { };
