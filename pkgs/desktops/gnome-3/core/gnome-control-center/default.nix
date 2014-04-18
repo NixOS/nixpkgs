@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
+  patches = [ ./search_providers_dir.patch ];
+
   meta = with stdenv.lib; {
     description = "Single sign-on framework for GNOME";
     maintainers = with maintainers; [ lethalman ];

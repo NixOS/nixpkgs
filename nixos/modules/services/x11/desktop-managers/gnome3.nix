@@ -68,6 +68,9 @@ in {
           # Don't let epiphany depend upon gnome-shell
           export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${pkgs.gnome3.gnome_shell}/share/gsettings-schemas/${pkgs.gnome3.gnome_shell.name}
 
+          # Let gnome-control-center find gnome-shell search providers
+          export GNOME_SEARCH_PROVIDERS_DIR=${config.system.path}/share/gnome-shell/search-providers/
+
           # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
           ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
 
