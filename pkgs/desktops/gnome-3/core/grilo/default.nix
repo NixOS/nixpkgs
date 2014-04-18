@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, file, intltool, glib, libxml2, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, file, intltool, glib, libxml2, gnome3, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "grilo-0.2.10";
@@ -10,7 +10,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-grl-pls" ];
 
-  buildInputs = [ pkgconfig file intltool glib libxml2 gnome3.totem-pl-parser ];
+  preConfigure = ''
+    for f in src/Makefile.in libs/pls/Makefile.in; do
+       substituteInPlace $f --replace @INTROSPECTION_GIRDIR@ "$out/share/gir-1.0/"
+       substituteInPlace $f --replace @INTROSPECTION_TYPELIBDIR@ "$out/lib/girepository-1.0"
+    done
+  '';
+
+  buildInputs = [ pkgconfig file intltool glib libxml2 gnome3.totem-pl-parser gobjectIntrospection ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Projects/Grilo;
