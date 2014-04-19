@@ -1,9 +1,9 @@
 # This module contains the basic configuration for building a NixOS
 # tarball, that can directly boot, maybe using PXE or unpacking on a fs.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

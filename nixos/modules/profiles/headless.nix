@@ -1,9 +1,9 @@
 # Common configuration for headless machines (e.g., Amazon EC2
 # instances).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
   sound.enable = false;

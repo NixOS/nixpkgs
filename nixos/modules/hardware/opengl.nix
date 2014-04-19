@@ -39,8 +39,7 @@ in {
       default = false;
       description = ''
         Make S3TC(S3 Texture Compression) via libtxc_dxtn available
-        to OpenGL drivers. It is essential for many games to work
-        with FOSS GPU drivers.
+        to OpenGL drivers instead of the patent-free S2TC replacement.
 
         Using this library may require a patent license depending on your location.
       '';
@@ -89,17 +88,25 @@ in {
         else if elem "ati_unfree" cfg.videoDrivers then
           "ln -sf ${kernelPackages.ati_drivers_x11} /run/opengl-driver"
         else
+          let
+            lib_fun = p: p.buildEnv {
+              name = "mesa-drivers+txc-${p.mesa_drivers.version}";
+              paths = [
+                p.mesa_drivers
+                p.mesa_noglu # mainly for libGL
+                (if cfg.s3tcSupport then p.libtxc_dxtn else p.libtxc_dxtn_s2tc)
+              ];
+            };
+          in
           ''
-            ${optionalString cfg.driSupport "ln -sf ${pkgs.mesa_drivers} /run/opengl-driver"}
+            ${optionalString cfg.driSupport "ln -sf ${lib_fun pkgs} /run/opengl-driver"}
             ${optionalString cfg.driSupport32Bit
-              "ln -sf ${pkgs_i686.mesa_drivers} /run/opengl-driver-32"}
+              "ln -sf ${lib_fun pkgs_i686} /run/opengl-driver-32"}
           ''
       );
 
     environment.variables.LD_LIBRARY_PATH =
-      [ "/run/opengl-driver/lib" "/run/opengl-driver-32/lib" ]
-      ++ optional cfg.s3tcSupport "${pkgs.libtxc_dxtn}/lib"
-      ++ optional (cfg.s3tcSupport && cfg.driSupport32Bit) "${pkgs_i686.libtxc_dxtn}/lib";
+      [ "/run/opengl-driver/lib" "/run/opengl-driver-32/lib" ];
 
     boot.extraModulePackages =
       optional (elem "nvidia" cfg.videoDrivers) kernelPackages.nvidia_x11 ++

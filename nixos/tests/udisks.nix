@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+import ./make-test.nix ({ pkgs, ... }:
 
 let
 
@@ -53,4 +53,4 @@ in
       $machine->fail("[ -e /dev/sda ]");
     '';
 
-}
+})

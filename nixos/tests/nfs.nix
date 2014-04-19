@@ -1,6 +1,4 @@
-{ version }:
-
-{ pkgs, ... }:
+import ./make-test.nix ({ version, ... }:
 
 let
 
@@ -84,4 +82,4 @@ in
       die "shutdown took too long ($duration seconds)" if $duration > 30;
     '';
 
-}
+})

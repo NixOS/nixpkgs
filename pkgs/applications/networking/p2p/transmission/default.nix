@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-systemd-daemon" ]
     ++ optional enableGTK3 "--with-gtk";
 
-  postInstall = optionalString enableGTK3 /* gsettings schemas for file dialogues */ ''
+  preFixup = optionalString enableGTK3 /* gsettings schemas for file dialogues */ ''
     rm "$out/share/icons/hicolor/icon-theme.cache"
     wrapProgram "$out/bin/transmission-gtk" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

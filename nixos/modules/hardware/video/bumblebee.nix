@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let kernel = config.boot.kernelPackages; in
-with pkgs.lib;
+with lib;
 
 {
 

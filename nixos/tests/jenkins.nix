@@ -2,9 +2,9 @@
 #   1. jenkins service starts on master node
 #   2. jenkins user can be extended on both master and slave
 #   3. jenkins service not started on slave node
-{ pkgs, ... }:
 
-{
+import ./make-test.nix {
+
   nodes = {
 
     master =

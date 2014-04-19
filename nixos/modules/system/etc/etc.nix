@@ -1,8 +1,8 @@
 # Management of static files in /etc.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

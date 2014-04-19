@@ -1,8 +1,6 @@
 # Test the firewall module.
 
-{ pkgs, ... }:
-
-{
+import ./make-test.nix {
 
   nodes =
     { walled =

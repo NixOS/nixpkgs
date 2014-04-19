@@ -2,11 +2,12 @@
 , libcanberra, accountservice, libpwquality, pulseaudio, fontconfig
 , gdk_pixbuf, hicolor_icon_theme, librsvg, libxkbfile, libnotify
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
-, cracklib, python, krb5, networkmanagerapplet, libwacom, samba
-, shared_mime_info, tzdata, icu, libtool, docbook_xsl, docbook_xsl_ns }:
+, cracklib, python, krb5, networkmanagerapplet, networkmanager
+, libwacom, samba, shared_mime_info, tzdata, icu, libtool
+, docbook_xsl, docbook_xsl_ns, modemmanager }:
 
 # http://ftp.gnome.org/pub/GNOME/teams/releng/3.10.2/gnome-suites-core-3.10.2.modules
-# TODO: bluetooth, networkmanager, wacom, smbclient, printers
+# TODO: bluetooth, wacom, smbclient, printers
 
 stdenv.mkDerivation rec {
   name = "gnome-control-center-3.10.2";
@@ -20,12 +21,15 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gdk_pixbuf gnome3.gnome_icon_theme librsvg
                             hicolor_icon_theme gnome3.gnome_icon_theme_symbolic ];
 
+  enableParallelBuilding = true;
+
   buildInputs = with gnome3;
     [ pkgconfig intltool ibus gtk glib upower libcanberra gsettings_desktop_schemas
       libxml2 gnome_desktop gnome_settings_daemon polkit libxslt libgtop gnome-menus
       gnome_online_accounts libsoup colord pulseaudio fontconfig colord-gtk libpwquality
       accountservice krb5 networkmanagerapplet libwacom samba libnotify libxkbfile
-      shared_mime_info icu libtool docbook_xsl docbook_xsl_ns makeWrapper ];
+      shared_mime_info icu libtool docbook_xsl docbook_xsl_ns 
+      networkmanager modemmanager makeWrapper  ];
 
   preBuild = ''
     substituteInPlace tz.h --replace "/usr/share/zoneinfo/zone.tab" "${tzdata}/share/zoneinfo/zone.tab"
@@ -47,7 +51,11 @@ stdenv.mkDerivation rec {
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
+  patches = [ ./search_providers_dir.patch ];
+
   meta = with stdenv.lib; {
+    description = "Single sign-on framework for GNOME";
+    maintainers = with maintainers; [ lethalman ];
     platforms = platforms.linux;
   };
 

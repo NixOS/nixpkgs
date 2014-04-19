@@ -49,7 +49,7 @@ stdenv.mkDerivation {
         source $stdenv/setup
         # gsettings schemas for file dialogues
         for file in "$out/bin/"*; do
-          wrapProgram "$file" --prefix XDG_DATA_DIRS : "$XDG_ADD"
+          wrapProgram "$file" --prefix XDG_DATA_DIRS : "$XDG_ADD:$GSETTINGS_SCHEMAS_PATH"
         done
       )
     '';

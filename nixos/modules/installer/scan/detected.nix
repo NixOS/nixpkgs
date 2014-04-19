@@ -1,8 +1,8 @@
 # List all devices which are detected by nixos-hardware-scan.
 # Common devices are enabled by default.
-{config, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
   config = mkDefault {

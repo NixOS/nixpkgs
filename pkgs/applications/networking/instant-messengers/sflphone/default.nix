@@ -75,8 +75,10 @@ rec {
     '';
 
     # gtk3 programs have the runtime dependency on XDG_DATA_DIRS
-    postInstall = ''
-      wrapProgram $out/bin/sflphone* --prefix XDG_DATA_DIRS ":" ${gtk}/share
+    preFixup = ''
+      for f in "$out/bin/sflphone" "$out/bin/sflphone-client-gnome"; do
+        wrapProgram $f --prefix XDG_DATA_DIRS ":" "${gtk}/share:$GSETTINGS_SCHEMAS_PATH"
+      done
     '';
 
     buildInputs = [ daemon pkgconfig gtk glib dbus_glib libnotify intltool makeWrapper ];

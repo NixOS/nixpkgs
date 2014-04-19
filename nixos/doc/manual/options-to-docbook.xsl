@@ -18,13 +18,12 @@
       <variablelist>
 
         <xsl:for-each select="attrs">
+          <xsl:variable name="id" select="concat('opt-', str:replace(str:replace(str:replace(str:replace(attr[@name = 'name']/string/@value, '*', '_'), '&lt;', '_'), '>', '_'), '?', '_'))" />
           <varlistentry>
-            <term xml:id="{generate-id(attr[@name = 'name']/string/@value)}" xlink:href="#{generate-id(attr[@name = 'name']/string/@value)}">
+            <term xlink:href="#{$id}">
+              <xsl:attribute name="xml:id"><xsl:value-of select="$id"/></xsl:attribute>
               <option>
-                 <xsl:for-each select="attr[@name = 'name']/string">
-                   <xsl:value-of select="@value" />
-                   <xsl:if test="position() != last()">.</xsl:if>
-                 </xsl:for-each>
+                <xsl:value-of select="attr[@name = 'name']/string/@value" />
               </option>
              </term>
 

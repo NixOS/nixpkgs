@@ -59,9 +59,9 @@ sub writeNixOSConfig {
     my ($nixosConfigFile) = @_;
 
     my $nixosConfig = <<EOF;
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 { boot.isContainer = true;
   security.initialRootPassword = mkDefault "!";

@@ -1,8 +1,6 @@
 # Test printing via CUPS.
 
-{ pkgs, ... }:
-
-{
+import ./make-test.nix ({pkgs, ... }: {
 
   nodes = {
 
@@ -88,4 +86,4 @@
       }
     '';
 
-}
+})

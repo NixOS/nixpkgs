@@ -1,6 +1,5 @@
-{ pkgs, ... }:
+import ./make-test.nix {
 
-{
   nodes = {
     master =
       { pkgs, config, ... }:

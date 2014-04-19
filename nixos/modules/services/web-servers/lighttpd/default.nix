@@ -1,8 +1,8 @@
 # NixOS module for lighttpd web server
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

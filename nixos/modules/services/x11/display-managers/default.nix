@@ -7,9 +7,9 @@
 # (e.g., KDE, Gnome or a plain xterm), and optionally the *window
 # manager* (e.g. kwin or twm).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     sha256 = "1x4rb06vw4ckdflmn01r5l9spvn7cng4i5mm3sbd0n8cz0n6xz13";
   };
 
-  patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ];
+  patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ./cert-path.patch ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
@@ -36,7 +36,9 @@ stdenv.mkDerivation {
 
   makeFlags = "prefix=\${out} sysconfdir=/etc/ PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
       + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
-      + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "");
+      + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
+      + (if stdenv.isDarwin then " NO_APPLE_COMMON_CRYPTO=1" else "");
+
 
   # FIXME: "make check" requires Sparse; the Makefile must be tweaked
   # so that `SPARSE_FLAGS' corresponds to the current architecture...

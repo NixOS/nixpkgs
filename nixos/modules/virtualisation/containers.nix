@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -22,6 +22,8 @@ let
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
     inherit (pkgs) socat;
   };
+
+  system = config.nixpkgs.system;
 
 in
 
@@ -99,6 +101,7 @@ in
           config = mkMerge
             [ (mkIf options.config.isDefined {
                 path = (import ../../lib/eval-config.nix {
+                  inherit system;
                   modules =
                     let extraConfig =
                       { boot.isContainer = true;
@@ -225,6 +228,7 @@ in
             # writes something to this pipe.  FIXME: it also hangs
             # until the start timeout expires if systemd-nspawn exits.
             read x < $root/var/lib/startup-done
+            rm -f $root/var/lib/startup-done
           '';
 
         preStop =

@@ -1,13 +1,13 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
-         xml:id="installing-nixos">
+         xml:id="ch-installation">
 
 <title>Installing NixOS</title>
 
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-obtaining">
 
 <title>Obtaining NixOS</title>
 
@@ -51,7 +51,7 @@ running NixOS system through several other means:
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-installation">
 
 <title>Installation</title>
 
@@ -339,7 +339,7 @@ changes:
 
 <section>
 
-<title>Booting from a USB stick</title>
+<title xml:id="sec-booting-from-usb">Booting from a USB stick</title>
 
 <para>For systems withoua CD drive, the NixOS livecd can be booted from
 a usb stick. For non-UEFI installations,

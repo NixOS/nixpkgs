@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 #
 # todo:
 #   - crontab for scrubs, etc
@@ -6,7 +6,7 @@
 #   - /etc/zfs/zpool.cache handling
 
 
-with pkgs.lib;
+with lib;
 
 let
 

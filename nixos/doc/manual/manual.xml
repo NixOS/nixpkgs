@@ -60,7 +60,7 @@
   <xi:include href="release-notes.xml" />
 
   <appendix xml:id="ch-options">
-    <title>List of options</title>
+    <title>Configuration options</title>
     <xi:include href="options-db.xml" />
   </appendix>
 

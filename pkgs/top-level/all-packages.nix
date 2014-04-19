@@ -270,7 +270,7 @@ let
   buildFHSChrootEnv = import ../build-support/build-fhs-chrootenv {
     inherit stdenv glibc glibcLocales gcc coreutils diffutils findutils;
     inherit gnused gnugrep gnutar gzip bzip2 bashInteractive xz shadow gawk;
-    inherit less buildEnv;
+    inherit less su buildEnv;
   };
 
   dotnetenv = import ../build-support/dotnetenv {
@@ -605,6 +605,8 @@ let
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
   mcelog = callPackage ../os-specific/linux/mcelog { };
+
+  apparix = callPackage ../tools/misc/apparix { };
 
   asciidoc = callPackage ../tools/typesetting/asciidoc {
     inherit (pythonPackages) matplotlib numpy aafigure recursivePthLoader;
@@ -2732,6 +2734,8 @@ let
     enableMultilib = false;
   });
 
+  ghdl_mcode = callPackage ../development/compilers/ghdl { };
+
   gcl = builderDefsPackage ../development/compilers/gcl {
     inherit mpfr m4 binutils fetchcvs emacs zlib which
       texinfo;
@@ -3829,6 +3833,10 @@ let
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
+  node_webkit = callPackage ../development/tools/node-webkit {
+    gconf = pkgs.gnome.GConf;
+  };
+
   noweb = callPackage ../development/tools/literate-programming/noweb { };
 
   omake = callPackage ../development/tools/ocaml/omake { };
@@ -4190,6 +4198,10 @@ let
   dhex = callPackage ../applications/editors/dhex { };
 
   dclib = callPackage ../development/libraries/dclib { };
+
+  dillo = callPackage ../applications/networking/browsers/dillo {
+    fltk = fltk13;  
+  };
 
   directfb = callPackage ../development/libraries/directfb { };
 
@@ -5978,28 +5990,7 @@ let
 
   wayland = callPackage ../development/libraries/wayland { };
 
-  webkit =
-    builderDefsPackage ../development/libraries/webkit {
-      inherit gtk2; # for plugins etc. even with gtk3, see Gentoo ebuild
-      inherit gtk3 glib atk cairo pango fontconfig freetype;
-      inherit (gnome) gtkdoc libsoup;
-      inherit pkgconfig libtool intltool autoconf automake gperf flex
-        libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
-        which libproxy geoclue enchant python ruby perl mesa xlibs;
-      inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
-      bison = bison2;
-    };
-
-  webkit_gtk2 =
-    builderDefsPackage ../development/libraries/webkit/gtk2.nix {
-      inherit gtk2 glib atk cairo pango fontconfig freetype;
-      inherit (gnome) gtkdoc libsoup;
-      inherit pkgconfig libtool intltool autoconf automake gperf flex
-        libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
-        which libproxy geoclue enchant python ruby perl mesa xlibs;
-      inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
-      bison = bison2;
-    };
+  webkit = webkitgtk;
 
   webkitgtk = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzz.override {
@@ -6443,6 +6434,8 @@ let
 
   joseki = callPackage ../servers/http/joseki {};
 
+  leafnode = callPackage ../servers/news/leafnode { };
+
   lighttpd = callPackage ../servers/http/lighttpd { };
 
   mailman = callPackage ../servers/mail/mailman { };
@@ -6450,6 +6443,8 @@ let
   mediatomb = callPackage ../servers/mediatomb { };
 
   memcached = callPackage ../servers/memcached {};
+
+  mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd/default.nix { };
 
   mod_evasive = callPackage ../servers/http/apache-modules/mod_evasive { };
 
@@ -7221,6 +7216,8 @@ let
 
   procps-ng = callPackage ../os-specific/linux/procps-ng { };
 
+  watch = callPackage ../os-specific/linux/procps/watch.nix { };
+
   qemu_kvm = lowPrio (qemu.override { x86Only = true; });
 
   firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
@@ -7933,6 +7930,8 @@ let
     coffee = callPackage ../applications/editors/emacs-modes/coffee { };
 
     colorTheme = callPackage ../applications/editors/emacs-modes/color-theme { };
+
+    cryptol = callPackage ../applications/editors/emacs-modes/cryptol { };
 
     cua = callPackage ../applications/editors/emacs-modes/cua { };
 
@@ -8843,6 +8842,8 @@ let
 
   opusTools = callPackage ../applications/audio/opus-tools { };
 
+  pamixer = callPackage ../applications/audio/pamixer { };
+
   pan = callPackage ../applications/networking/newsreaders/pan {
     spellChecking = false;
   };
@@ -9116,8 +9117,7 @@ let
   });
 
   surf = callPackage ../applications/misc/surf {
-    libsoup = gnome.libsoup;
-    webkit = webkit_gtk2;
+    webkit = webkitgtk2;
   };
 
   svk = perlPackages.SVK;
@@ -9185,6 +9185,14 @@ let
     inherit (gnome) libIDL;
   };
 
+  thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
+    gconf = pkgs.gnome.GConf;
+    inherit (pkgs.gnome3) at_spi2_atk;
+    inherit (pkgs.gnome) libgnome libgnomeui;
+    inherit (pkgs.xlibs) libX11 libXScrnSaver libXext
+      libXinerama libXrender libXt;
+  };
+
   tig = gitAndTools.tig;
 
   timidity = callPackage ../tools/misc/timidity { };
@@ -9238,12 +9246,8 @@ let
 
   uwimap = callPackage ../tools/networking/uwimap { };
 
-  uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
-    inherit pkgconfig webkit makeWrapper glib_networking python3;
-    inherit glib pango cairo gdk_pixbuf atk;
-    inherit (xlibs) libX11 kbproto;
-    inherit (gnome) libsoup;
-    gtk = gtk3;
+  uzbl = callPackage ../applications/networking/browsers/uzbl {
+    webkit = webkitgtk2;
   };
 
   vanitygen = callPackage ../applications/misc/vanitygen { };
@@ -9339,7 +9343,7 @@ let
   vorbisTools = callPackage ../applications/audio/vorbis-tools { };
 
   vue = callPackage ../applications/misc/vue {
-    jre = oraclejre;
+    jre = icedtea7_jre;
   };
 
   vwm = callPackage ../applications/window-managers/vwm { };
@@ -9349,6 +9353,8 @@ let
   };
 
   weechat = callPackage ../applications/networking/irc/weechat { };
+
+  weechatDevel = callPackage ../applications/networking/irc/weechat/devel.nix { };
 
   weston = callPackage ../applications/window-managers/weston { };
 
@@ -9452,6 +9458,8 @@ let
   compton = callPackage ../applications/window-managers/compton { };
 
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
+
+  xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 
   xdg_utils = callPackage ../tools/X11/xdg-utils { };
 
@@ -9885,8 +9893,12 @@ let
 
   cinnamon = recurseIntoAttrs rec {
     callPackage = newScope pkgs.cinnamon;
-    inherit (gnome3) gnome_common libgnomekbd;
-
+    inherit (gnome3) gnome_common libgnomekbd gnome-menus zenity;
+    
+    muffin = callPackage ../desktops/cinnamon/muffin.nix { } ;
+    
+    cinnamon-control-center = callPackage ../desktops/cinnamon/cinnamon-control-center.nix{ };
+    
     cinnamon-settings-daemon = callPackage ../desktops/cinnamon/cinnamon-settings-daemon.nix{ };
 
     cinnamon-session = callPackage ../desktops/cinnamon/cinnamon-session.nix{ } ;
@@ -9922,21 +9934,13 @@ let
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
 
+  kakasi = callPackage ../tools/text/kakasi { };
+
   kde4 = recurseIntoAttrs pkgs.kde411;
 
   kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde412 );
 
-  kde4_prev = recurseIntoAttrs pkgs.kde410;
-
-  kde410 = kdePackagesFor (pkgs.kde410 // {
-      boost = boost149;
-      eigen = eigen2;
-      libotr = libotr_3_2;
-      libusb = libusb1;
-      libcanberra = libcanberra_kde;
-    }) ../desktops/kde-4.10;
-
- kde411 = kdePackagesFor (pkgs.kde411 // {
+  kde411 = kdePackagesFor (pkgs.kde411 // {
       boost = boost149;
       eigen = eigen2;
       libotr = libotr_3_2;
@@ -9944,7 +9948,7 @@ let
       libcanberra = libcanberra_kde;
     }) ../desktops/kde-4.11;
 
- kde412 = kdePackagesFor (pkgs.kde412 // {
+  kde412 = kdePackagesFor (pkgs.kde412 // {
       eigen = eigen2;
       libusb = libusb1;
       libcanberra = libcanberra_kde;
@@ -10358,6 +10362,8 @@ let
 
   golly = callPackage ../applications/science/misc/golly { };
 
+  megam = callPackage ../applications/science/misc/megam { };
+
   root = callPackage ../applications/science/misc/root { };
 
   simgrid = callPackage ../applications/science/misc/simgrid { };
@@ -10434,7 +10440,7 @@ let
 
   ghostscript = callPackage ../misc/ghostscript {
     x11Support = false;
-    cupsSupport = config.ghostscript.cups or true;
+    cupsSupport = config.ghostscript.cups or (!stdenv.isDarwin);
     gnuFork = config.ghostscript.gnu or false;
   };
 
@@ -10680,8 +10686,7 @@ let
   vimPlugins = callPackage ../misc/vim-plugins { };
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
-    inherit (gnome) libsoup;
-    webkit = webkit_gtk2;
+    webkit = webkitgtk2;
   };
 
   vimprobable2Wrapper = wrapFirefox
@@ -10689,8 +10694,7 @@ let
     };
 
   vimb = callPackage ../applications/networking/browsers/vimb {
-    inherit (gnome) libsoup;
-    webkit = webkit_gtk2;
+    webkit = webkitgtk2;
   };
 
   vimbWrapper = wrapFirefox {

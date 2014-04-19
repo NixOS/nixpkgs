@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 # TODO:
 #
@@ -9,7 +9,7 @@
 #   wpa_supplicant and hostapd on the same wireless interface doesn't make any sense
 #   perhaps an assertion that there is a dhcp server and a dns server on the IP address serviced by the hostapd?
 
-with pkgs.lib;
+with lib;
 
 let
 

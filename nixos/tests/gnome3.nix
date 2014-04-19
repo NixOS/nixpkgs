@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+import ./make-test.nix {
 
   machine =
     { config, pkgs, ... }:

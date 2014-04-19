@@ -1,6 +1,6 @@
-{ config, pkgs, modules, baseModules, ... }:
+{ config, lib, pkgs, modules, baseModules, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -11,7 +11,7 @@ let
   # you can provide an easy way to boot the same configuration
   # as you use, but with another kernel
   # !!! fix this
-  cloner = inheritParent: list: with pkgs.lib;
+  cloner = inheritParent: list:
     map (childConfig:
       (import ../../../lib/eval-config.nix {
         inherit baseModules;
