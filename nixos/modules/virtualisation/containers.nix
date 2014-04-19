@@ -176,7 +176,6 @@ in
               "/nix/var/nix/profiles/per-container/$INSTANCE" \
               "/nix/var/nix/gcroots/per-container/$INSTANCE"
 
-            SYSTEM_PATH=/nix/var/nix/profiles/system
             if [ -f "/etc/containers/$INSTANCE.conf" ]; then
               . "/etc/containers/$INSTANCE.conf"
             fi
@@ -212,14 +211,22 @@ in
               extraFlags="--capability=CAP_NET_ADMIN"
             fi
 
+            # If the host is 64-bit and the container is 32-bit, add a
+            # --personality flag.
+            ${optionalString (config.nixpkgs.system == "x86_64-linux") ''
+              if [ "$(< ''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system)" = i686-linux ]; then
+                extraFlags+=" --personality=x86"
+              fi
+            ''}
+
             exec $runInNetNs ${config.systemd.package}/bin/systemd-nspawn \
-              -M "$INSTANCE" -D "/var/lib/containers/$INSTANCE" $extraFlags \
+              -M "$INSTANCE" -D "$root" $extraFlags \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
               --bind-ro=/nix/var/nix/daemon-socket \
               --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
               --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
-              "$SYSTEM_PATH/init"
+              "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
           '';
 
         postStart =

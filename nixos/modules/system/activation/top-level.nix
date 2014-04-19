@@ -68,6 +68,7 @@ let
       echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosVersion" > $out/nixos-version
+      echo -n "$system" > $out/system
 
       mkdir $out/fine-tune
       childCount=0
