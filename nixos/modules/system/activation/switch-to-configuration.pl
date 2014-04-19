@@ -96,18 +96,19 @@ sub parseFstab {
 
 sub parseUnit {
     my ($filename) = @_;
-    parseKeyValues(read_file($filename));
+    my $info = {};
+    parseKeyValues($info, read_file($filename));
+    parseKeyValues($info, read_file("${filename}.d/overrides.conf")) if -f "${filename}.d/overrides.conf";
+    return $info;
 }
 
 sub parseKeyValues {
-    my @lines = @_;
-    my $info = {};
+    my $info = shift;
     foreach my $line (@_) {
         # FIXME: not quite correct.
         $line =~ /^([^=]+)=(.*)$/ or next;
         $info->{$1} = $2;
     }
-    return $info;
 }
 
 sub boolIsTrue {
@@ -362,7 +363,8 @@ while (my ($unit, $state) = each %{$activeNew}) {
     elsif ($state->{state} eq "auto-restart") {
         # A unit in auto-restart state is a failure *if* it previously failed to start
         my $lines = `@systemd@/bin/systemctl show '$unit'`;
-        my $info = parseKeyValues(split "\n", $lines);
+        my $info = {};
+        parseKeyValues($info, split("\n", $lines));
 
         if ($info->{ExecMainStatus} ne '0') {
             push @failed, $unit;
