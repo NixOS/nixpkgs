@@ -86,6 +86,8 @@ let kernel = config.boot.kernelPackages.kernel; in
       (isEnabled "VIRTIO_CONSOLE")
     ];
 
+    networking.usePredictableInterfaceNames = false;
+
   };
 
 }
