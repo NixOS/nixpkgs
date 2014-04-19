@@ -40,19 +40,6 @@ rec {
   # of coreutils, GCC, etc.
 
 
-  # This function downloads a file.
-  download = {url, sha256}: derivation {
-    name = baseNameOf (toString url);
-    builder = bootstrapFiles.sh;
-    inherit system url;
-    inherit (bootstrapFiles) bzip2 mkdir curl cpio ln;
-    args = [ ./scripts/download.sh ];
-    outputHashAlgo = "sha256";
-    outputHash = sha256;
-    impureEnvVars = [ "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy" ];
-  };
-
-
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
   bootstrapTools = derivation {
     name = "bootstrap-tools";
@@ -67,7 +54,7 @@ rec {
 
     inherit (bootstrapFiles) bzip2 mkdir curl cpio;
 
-    tarball = download {
+    tarball = import <nix/fetchurl.nix> {
       inherit (bootstrapFiles.bootstrapTools) url sha256;
     };
 
