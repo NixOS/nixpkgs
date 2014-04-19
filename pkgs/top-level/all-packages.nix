@@ -9927,7 +9927,7 @@ let
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
 
-  kde4 = recurseIntoAttrs pkgs.kde411;
+  kde4 = recurseIntoAttrs pkgs.kde412;
 
   kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde412 );
 
