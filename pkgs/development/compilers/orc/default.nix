@@ -1,12 +1,14 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "orc-0.4.18";
+  name = "orc-0.4.19";
 
   src = fetchurl {
-    url = "http://code.entropywave.com/download/orc/${name}.tar.gz";
-    sha256 = "093a7a495bsy3j6i4wxaxqbqxk6hwg2hdhgvvkabwhlz4nkwilrl";
+    url = "http://gstreamer.freedesktop.org/src/orc/${name}.tar.gz";
+    sha256 = "17mmgwll2waz44m908lcxc5fd6n44yysh7p4pdw33hr138r507z2";
   };
+
+  doCheck = true;
 
   meta = {
     description = "The Oil Runtime Compiler";
