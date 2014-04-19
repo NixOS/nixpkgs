@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     passthru = {};
   };
 
+  configureFlags = "--enable-static";
+
   meta = {
     description = "The official reference implementation for the PNG file format";
     homepage = http://www.libpng.org/pub/png/libpng.html;

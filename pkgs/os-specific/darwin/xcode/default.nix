@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = requireFile {
     name = "xcode_${version}.dmg";
     url = meta.homepage;
-    sha256 = "0zkggbmsfc5w53j1ncbpayvnn1vzpyzyjjjzhawq1jjfq465bfvh";
+    sha256 = "70bb550cc14eca80b9825f4ae9bfbf7f076bb75777311be428bc30a7eb7a6f7e";
   };
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
