@@ -3,7 +3,7 @@
 # default dependencies
 , bzip2, flac, speex, icu, libopus
 , libevent, expat, libjpeg, snappy
-, libpng, libxml2, libxslt, v8
+, libpng, libxml2, libxslt
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, libexif, pciutils
 
@@ -75,7 +75,7 @@ let
     use_system_libusb = false; # http://crbug.com/266149
     use_system_skia = false;
     use_system_sqlite = false; # http://crbug.com/22208
-    use_system_v8 = !versionOlder source.version "34.0.0.0";
+    use_system_v8 = false;
   };
 
   opusWithCustomModes = libopus.override {
@@ -85,7 +85,7 @@ let
   defaultDependencies = [
     bzip2 flac speex icu opusWithCustomModes
     libevent expat libjpeg snappy
-    libpng libxml2 libxslt v8
+    libpng libxml2 libxslt
     xdg_utils yasm minizip libwebp
     libusb1 libexif
   ];
