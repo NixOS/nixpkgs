@@ -935,7 +935,7 @@ environment.systemPackages = [ (import ./my-hello.nix) ];
 </programlisting>
 where <filename>my-hello.nix</filename> contains:
 <programlisting>
-with &lt;nixpkgs> {}; # bring all of Nixpkgs into scope
+with import &lt;nixpkgs> {}; # bring all of Nixpkgs into scope
 
 stdenv.mkDerivation rec {
   name = "hello-2.8";
