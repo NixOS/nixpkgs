@@ -402,6 +402,8 @@ in
     # Speed up booting by not waiting for ARP.
     networking.dhcpcd.extraConfig = "noarp";
 
+    networking.usePredictableInterfaceNames = false;
+
     system.requiredKernelConfig = with config.lib.kernelConfig;
       [ (isEnabled "VIRTIO_BLK")
         (isEnabled "VIRTIO_PCI")
