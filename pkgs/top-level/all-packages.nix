@@ -8713,6 +8713,7 @@ let
     };
 
   mpv = callPackage ../applications/video/mpv {
+    lua = lua5_1;
     bs2bSupport = true;
     quviSupport = true;
     cacaSupport = true;

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchgit, freetype, pkgconfig, freefont_ttf, ffmpeg, libass
-, lua5, lua5_sockets, perl, libpthreadstubs
+, lua, perl, libpthreadstubs
+, lua5_sockets
 , python3, docutils, which
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null, libXxf86vm ? null
 , xineramaSupport ? true, libXinerama ? null
@@ -42,10 +43,9 @@ assert libpngSupport -> libpng != null;
 assert quviSupport -> libquvi != null;
 assert cacaSupport -> libcaca != null;
 
-# Purity problem: Waf needed to be is downloaded by bootstrap.py,
+# Purity problem: Waf needed to be is downloaded by bootstrap.py
 # but by purity reasons it should be avoided; thanks the-kenny to point it out!
-# Now, it will just download and package Waf, mimetizing bootstrap.py behaviour;
-# An obvious problem is to update that stuff everytime mpv is updated
+# Now, it will just download and package Waf, mimetizing bootstrap.py behaviour
 
 let
   waf = fetchurl {
@@ -53,12 +53,11 @@ let
     sha256 = "e5ae7028f9b2d8ce1acb9fe1092e8010a90ba764d3ac065ea4e846743290b1d6";
   };
 
-  version = "0.3.7";
-
 in
 
 stdenv.mkDerivation rec {
   name = "mpv-${version}";
+  version = "0.3.7";
 
   src = fetchurl {
     url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
@@ -87,7 +86,7 @@ stdenv.mkDerivation rec {
     ++ optional cacaSupport libcaca
     ;
 
-  nativeBuildInputs = [ python3 lua5 perl ];
+  nativeBuildInputs = [ python3 lua perl ];
 
 
 # There are almost no need of "configure flags", but some libraries
@@ -110,7 +109,7 @@ stdenv.mkDerivation rec {
     python3 ${waf} install
     # Maybe not needed, but it doesn't hurt anyway: a standard font
     mkdir -p $out/share/mpv
-    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf  $out/share/mpv/subfont.ttf
+    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
     '';
 
   meta = {
@@ -128,7 +127,6 @@ stdenv.mkDerivation rec {
 # Heavily based on mplayer2 expression
 
 # TODO: Wayland support
-# TODO: investigate libquvi support: it isn't detected by Waf script!
-# TODO: investigate lua sockets problem
-# TODO: investigate caca support: it isn't detected by Waf script!
-# TODO: a more systematic way to test this package
+# TODO: investigate libquvi support
+# TODO: investigate caca support
+# TODO: investigate lua5_sockets bug
