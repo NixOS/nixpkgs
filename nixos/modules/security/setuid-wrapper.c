@@ -30,7 +30,7 @@ int main(int argc, char * * argv)
        creating hard link `X' from some other location, along with a
        false `X.real' file, to allow arbitrary programs from being
        executed setuid.  */
-    assert ((strncmp(self, wrapperDir, sizeof(wrapperDir)) == 0) &&
+    assert ((strncmp(self, wrapperDir, strlen(wrapperDir)) == 0) &&
             (self[strlen(wrapperDir)] == '/'));
 
     /* Make *really* *really* sure that we were executed as `self',
