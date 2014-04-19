@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
 
-  configureFlags = "--disable-schemas-compile --enable-systemd --disable-gconf" ;
+  configureFlags = "--enable-systemd --disable-gconf" ;
 
   patches = [ ./remove-sessionmigration.patch ./timeout.patch];
 
@@ -23,17 +23,17 @@ stdenv.mkDerivation {
     gtk3 dbus_glib upower json_glib
     intltool systemd xorg.xtrans
     makeWrapper
+    cinnamon-desktop/*gschemas*/
    ];
 
   preBuild = "patchShebangs ./scripts";
 
 
-  postInstall  = ''
-    ${glib}/bin/glib-compile-schemas $out/share/glib-2.0/schemas/
+  postFixup  = ''
     rm $out/share/icons/hicolor/icon-theme.cache
 
     for f in "$out"/bin/*; do
-      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$out/share:${cinnamon-desktop}/share"
+      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
     done
   '';
 

@@ -237,7 +237,7 @@ postgresql.package = pkgs.postgresql90;
 </section>
 
 
-<section><title>Abstractions</title>
+<section xml:id="sec-module-abstractions"><title>Abstractions</title>
 
 <para>If you find yourself repeating yourself over and over, it’s time
 to abstract.  Take, for instance, this Apache HTTP Server configuration:
@@ -399,7 +399,7 @@ of an expression to be spliced into a string.</para>
 </section>
 
 
-<section><title>Modularity</title>
+<section xml:id="sec-modularity"><title>Modularity</title>
 
 <para>The NixOS configuration mechanism is modular.  If your
 <filename>configuration.nix</filename> becomes too big, you can split
@@ -538,7 +538,7 @@ nix-repl> map (x: x.hostName) config.services.httpd.virtualHosts
 </section>
 
 
-<section><title>Syntax summary</title>
+<section xml:id="sec-nix-syntax-summary"><title>Syntax summary</title>
 
 <para>Below is a summary of the most important syntactic constructs in
 the Nix expression language.  It’s not complete.  In particular, there
@@ -730,7 +730,7 @@ manual</link> for the rest.</para>
 
 <!--===============================================================-->
 
-<section><title>Package management</title>
+<section xml:id="sec-package-management"><title>Package management</title>
 
 <para>This section describes how to add additional packages to your
 system.  NixOS has two distinct styles of package management:
@@ -1183,7 +1183,7 @@ fileSystems."/".device = "/dev/mapper/crypted";
 
 <!--===============================================================-->
 
-<section><title>X Window System</title>
+<section xml:id="sec-x11"><title>X Window System</title>
 
 <para>The X Window System (X11) provides the basis of NixOS’ graphical
 user interface.  It can be enabled as follows:
@@ -1275,9 +1275,9 @@ services.xserver.synaptics.twoFingerScroll = true;
 
 <!--===============================================================-->
 
-<section><title>Networking</title>
+<section xml:id="sec-networking"><title>Networking</title>
 
-<section><title>Secure shell access</title>
+<section xml:id="sec-ssh"><title>Secure shell access</title>
 
 <para>Secure shell (SSH) access to your machine can be enabled by
 setting:
@@ -1305,7 +1305,7 @@ users.extraUsers.alice.openssh.authorizedKeys.keys =
 </section>
 
 
-<section><title>IPv4 configuration</title>
+<section xml:id="sec-ipv4"><title>IPv4 configuration</title>
 
 <para>By default, NixOS uses DHCP (specifically,
 <command>dhcpcd</command>) to automatically configure network
@@ -1348,7 +1348,7 @@ provide the host name.</para>
 </section>
 
 
-<section><title>IPv6 configuration</title>
+<section xml:id="sec-ipv6"><title>IPv6 configuration</title>
 
 <para>IPv6 is enabled by default.  Stateless address autoconfiguration
 is used to automatically assign IPv6 addresses to all interfaces.  You
@@ -1363,17 +1363,19 @@ networking.enableIPv6 = false;
 </section>
 
 
-<section><title>Firewall</title>
+<section xml:id="sec-firewall"><title>Firewall</title>
 
 <para>NixOS has a simple stateful firewall that blocks incoming
 connections and other unexpected packets.  The firewall applies to
-both IPv4 and IPv6 traffic.  It can be enabled as follows:
+both IPv4 and IPv6 traffic. It is enabled by default. It can be
+disabled as follows:
 
 <programlisting>
-networking.firewall.enable = true;
+networking.firewall.enable = false;
 </programlisting>
 
-You can open specific TCP ports to the outside world:
+If the firewall is enabled, you can open specific TCP ports to the
+outside world:
 
 <programlisting>
 networking.firewall.allowedTCPPorts = [ 80 443 ];
@@ -1395,7 +1397,7 @@ always allowed.)</para>
 </section>
 
 
-<section><title>Wireless networks</title>
+<section xml:id="sec-wireless"><title>Wireless networks</title>
 
 <para>
 NixOS will start wpa_supplicant for you if you enable this setting:
@@ -1456,7 +1458,7 @@ networking.localCommands =
 
 <!--===============================================================-->
 
-<section><title>Linux kernel</title>
+<section xml:id="sec-kernel-config"><title>Linux kernel</title>
 
 <para>You can override the Linux kernel and associated packages using
 the option <option>boot.kernelPackages</option>.  For instance, this

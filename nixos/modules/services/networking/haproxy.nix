@@ -1,9 +1,9 @@
-{ config, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.haproxy;
   haproxyCfg = pkgs.writeText "haproxy.conf" cfg.config;
 in
-with pkgs.lib;
+with lib;
 {
   options = {
     services.haproxy = {

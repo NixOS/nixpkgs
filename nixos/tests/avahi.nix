@@ -1,8 +1,7 @@
-{ pkgs, ... }:
+# Test whether `avahi-daemon' and `libnss-mdns' work as expected.
 
-with pkgs;
+import ./make-test.nix {
 
-{
   nodes = {
     one =
       { config, pkgs, ... }: {
@@ -17,7 +16,6 @@ with pkgs;
       };
   };
 
-  # Test whether `avahi-daemon' and `libnss-mdns' work as expected.
   testScript =
     '' startAll;
 

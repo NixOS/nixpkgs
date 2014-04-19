@@ -55,7 +55,7 @@ let
         -e 's/-f(stack-protector)(-all)?/-fno-\1/' \
         -e 's|/bin/echo|echo|' \
         -e "/python_arch/s/: *'[^']*'/: '""'/" \
-        build/common.gypi
+        build/common.gypi chrome/chrome_tests.gypi
       sed -i '/not RunGN/,+1d' build/gyp_chromium
       sed -i -e 's|/usr/bin/gcc|gcc|' \
         third_party/WebKit/Source/build/scripts/scripts.gypi \

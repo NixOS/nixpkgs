@@ -10,7 +10,7 @@ assert cupsSupport -> cups != null;
 
 let
   ver_maj = "3.12";
-  ver_min = "0";
+  ver_min = "1";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "0jvf9dawq82x1xsr2f56fw3y7yfwapgdj16gr4d5m6q2shf78sgb";
+    sha256 = "1kbp0bmyzh7lbxv9y349vrj3d0n0hn68r5kyvg5683snvdgsx6ki";
   };
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];

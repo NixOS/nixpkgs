@@ -1,10 +1,10 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.fourStoreEndpoint;
   endpointUser = "fourstorehttp";
   run = "${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} ${endpointUser} -c";
 in
-with pkgs.lib;
+with lib;
 {
 
   ###### interface

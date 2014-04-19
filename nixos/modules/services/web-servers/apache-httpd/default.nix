@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -65,7 +65,7 @@ let
           options = {};
           documentRoot = null;
         };
-        res = defaults // svcFunction { inherit config pkgs serverInfo php; };
+        res = defaults // svcFunction { inherit config lib pkgs serverInfo php; };
       in res;
     in map f defs;
 
@@ -510,7 +510,7 @@ in
       virtualHosts = mkOption {
         type = types.listOf (types.submodule (
           { options = import ./per-server-options.nix {
-              inherit pkgs;
+              inherit lib;
               forMainServer = false;
             };
           }));
@@ -577,7 +577,7 @@ in
 
     # Include the options shared between the main server and virtual hosts.
     // (import ./per-server-options.nix {
-      inherit pkgs;
+      inherit lib;
       forMainServer = true;
     });
 
@@ -621,7 +621,7 @@ in
       { description = "Apache HTTPD";
 
         wantedBy = [ "multi-user.target" ];
-        requires = [ "keys.target" ];
+        wants = [ "keys.target" ];
         after = [ "network.target" "fs.target" "postgresql.service" "keys.target" ];
 
         path =

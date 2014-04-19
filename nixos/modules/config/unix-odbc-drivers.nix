@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 # unixODBC drivers (this solution is not perfect.. Because the user has to
 # ask the admin to add a driver.. but it's simple and works

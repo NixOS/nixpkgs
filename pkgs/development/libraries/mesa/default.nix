@@ -95,8 +95,7 @@ stdenv.mkDerivation {
     ;
 
   enableParallelBuilding = true;
-  #doCheck = true; # https://bugs.freedesktop.org/show_bug.cgi?id=67672,
-    #tests for 10.* fail to link due to some RTTI problem
+  #doCheck = true; # https://bugs.freedesktop.org/show_bug.cgi?id=67672
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM;
   #   also move libOSMesa to $osmesa, as it's relatively big
@@ -152,11 +151,6 @@ stdenv.mkDerivation {
     substituteInPlace "$out/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
   '' + /* move vdpau drivers to $drivers/lib, so they are found */ ''
     mv "$drivers"/lib/vdpau/* "$drivers"/lib/ && rmdir "$drivers"/lib/vdpau
-  '' + /* add libGL* links from /run/opengl-driver */ ''
-    (
-      cd "$drivers/lib"
-      cp -s "$out"/lib/*.so .
-    )
   '';
   #ToDo: @vcunat isn't sure if drirc will be found when in $out/etc/, but it doesn't seem important ATM
 

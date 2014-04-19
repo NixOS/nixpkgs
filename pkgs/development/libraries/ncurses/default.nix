@@ -21,7 +21,7 @@ stdenv.mkDerivation (rec {
   patches = [ ./patch-ac ];
 
   configureFlags = ''
-    --with-shared --without-debug --enable-pc-files
+    --with-shared --without-debug --enable-pc-files --enable-symlinks
     ${if unicode then "--enable-widec" else ""}${if cxx then "" else "--without-cxx-binding"}
   '';
 

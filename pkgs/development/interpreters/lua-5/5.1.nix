@@ -18,9 +18,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline ];
 
-  patches = [ dsoPatch ];
+  patches = if stdenv.isDarwin then [ ./5.1.darwin.patch ] else [ dsoPatch ];
 
-  configurePhase = ''
+  configurePhase = 
+    if stdenv.isDarwin
+    then ''
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=macosx CFLAGS="-DLUA_USE_LINUX -fno-common -O2" LDLAGS="" )
+    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.5.1.5.dylib" INSTALL_DATA='cp -d' )
+  '' else ''
     makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-DLUA_USE_LINUX -O2 -fPIC" LDLAGS="-fPIC" )
     installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.5.1 liblua.so.5.1.5" INSTALL_DATA='cp -d' )
   '';

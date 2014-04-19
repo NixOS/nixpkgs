@@ -1,9 +1,9 @@
 # This module provides configuration for the PAM (Pluggable
 # Authentication Modules) system.
 
-{config, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

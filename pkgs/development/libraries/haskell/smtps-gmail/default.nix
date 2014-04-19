@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "smtps-gmail";
-  version = "1.1.0";
-  sha256 = "0zr2ndpwfnb9pkv69vx94p0vpghl0khd0wbmccjpk6hlrp6fsj66";
+  version = "1.1.1";
+  sha256 = "1ccj9rmbplh0c7h6rpg3ry213nb1lrhf7hm2vl7kq9lv0nb7cy97";
   buildDepends = [
     base64Bytestring cprngAes dataDefault filepath mimeMail network
     stringsearch text tls
@@ -16,8 +16,4 @@ cabal.mkDerivation (self: {
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
-  # adding a Setup script as it's needed by nix
-  preConfigure = ''
-    printf "import Distribution.Simple\nmain = defaultMain\n" > Setup.hs
-  '';
 })

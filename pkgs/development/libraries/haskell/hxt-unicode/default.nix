@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hxt-unicode";
-  version = "9.0.2.1";
-  sha256 = "1ng3qaiwkaav1kmf0yxkm44887xphbx6slva3fskzx0sgkd1v0vp";
+  version = "9.0.2.2";
+  sha256 = "1iljbk7f7d4wkl592bp0vw807683sqdxfnigindkrvr9p1xvwg8r";
   buildDepends = [ hxtCharproperties ];
   meta = {
     homepage = "http://www.fh-wedel.de/~si/HXmlToolbox/index.html";

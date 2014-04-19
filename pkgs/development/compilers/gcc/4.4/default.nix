@@ -246,7 +246,8 @@ stdenv.mkDerivation ({
       enableMultilib version; };
 
   # ghdl does not build fine with parallel building
-  enableParallelBuilding = !langVhdl && !langAda;
+  # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=46173
+  #enableParallelBuilding = !langVhdl && !langAda;
 
   meta = {
     homepage = http://gcc.gnu.org/;

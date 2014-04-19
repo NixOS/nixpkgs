@@ -1,9 +1,10 @@
-{ pkgs, ... }:
+import ./make-test.nix (
 
 let
   replicateUser = "replicate";
   replicatePassword = "secret";
 in
+
 {
   nodes = {
     master =
@@ -15,10 +16,11 @@ in
         services.mysql.replication.role = "master";
         services.mysql.initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
         services.mysql.initialScript = pkgs.writeText "initmysql"
-        ''
-          create user '${replicateUser}'@'%' identified by '${replicatePassword}';
-          grant replication slave on *.* to '${replicateUser}'@'%';
-        '';
+          ''
+            create user '${replicateUser}'@'%' identified by '${replicatePassword}';
+            grant replication slave on *.* to '${replicateUser}'@'%';
+          '';
+        networking.firewall.allowedTCPPorts = [ 3306 ];
       };
 
     slave1 =
@@ -57,4 +59,4 @@ in
     $slave2->sleep(100); # Hopefully this is long enough!!
     $slave2->succeed("echo 'use testdb; select * from tests' | mysql -u root -N | grep 4");
   '';
-}
+})

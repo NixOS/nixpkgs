@@ -1,9 +1,9 @@
 # This module defines the packages that appear in
 # /run/current-system/sw.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -46,6 +46,7 @@ let
       pkgs.rsync
       pkgs.strace
       pkgs.sysvtools
+      pkgs.su
       pkgs.time
       pkgs.usbutils
       pkgs.utillinux
@@ -133,6 +134,10 @@ in
 
           if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+          fi
+
+          if [ -x $out/bin/update-desktop-database -a -w $out/share/applications ]; then
+              $out/bin/update-desktop-database $out/share/applications
           fi
         '';
     };

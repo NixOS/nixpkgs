@@ -1,8 +1,8 @@
 # Support for DRBD, the Distributed Replicated Block Device.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let cfg = config.services.drbd; in
 

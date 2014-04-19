@@ -20,9 +20,12 @@ stdenv.mkDerivation rec {
     goffice gtk3 makeWrapper
   ];
 
-  postInstall = ''
-    wrapProgram "$out"/bin/gnumeric-* \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome_icon_theme}/share"
+  preFixup = ''
+    for f in "$out"/bin/gnumeric-*; do
+      wrapProgram $f \
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+    done
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {

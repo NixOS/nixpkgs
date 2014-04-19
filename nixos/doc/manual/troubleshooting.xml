@@ -1,12 +1,13 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink">
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="ch-troubleshooting">
 
 <title>Troubleshooting</title>
 
 
 <!--===============================================================-->
 
-<section><title>Boot problems</title>
+<section xml:id="sec-boot-problems"><title>Boot problems</title>
 
 <para>If NixOS fails to boot, there are a number of kernel command
 line parameters that may help you to identify or fix the issue.  You
@@ -69,7 +70,7 @@ unless something is very wrong.)</para>
 
 <!--===============================================================-->
 
-<section><title>Maintenance mode</title>
+<section xml:id="sec-maintenance-mode"><title>Maintenance mode</title>
 
 <para>You can enter rescue mode by running:
 
@@ -85,7 +86,7 @@ just exit from the rescue shell.</para>
 
 <!--===============================================================-->
 
-<section><title>Rolling back configuration changes</title>
+<section xml:id="sec-rollback"><title>Rolling back configuration changes</title>
 
 <para>After running <command>nixos-rebuild</command> to switch to a
 new configuration, you may find that the new configuration doesn’t
@@ -131,7 +132,7 @@ lrwxrwxrwx 1 root root 78 Aug 12 13:54 /nix/var/nix/profiles/system-268-link -> 
 
 <!--===============================================================-->
 
-<section><title>Nix store corruption</title>
+<section xml:id="sec-nix-store-corruption"><title>Nix store corruption</title>
 
 <para>After a system crash, it’s possible for files in the Nix store
 to become corrupted.  (For instance, the Ext4 file system has the
@@ -166,7 +167,7 @@ binary cache; otherwise, they cannot be repaired.</para>
 
 <!--===============================================================-->
 
-<section><title>Nix network issues</title>
+<section xml:id="sec-nix-network-issues"><title>Nix network issues</title>
 
 <para>Nix uses a so-called <emphasis>binary cache</emphasis> to
 optimise building a package from source into downloading it as a

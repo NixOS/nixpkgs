@@ -9,12 +9,12 @@
 assert enableDebugClient -> pygobject != null && pyGtkGlade != null;
 
 buildPythonPackage (rec {
-  name = "buildbot-0.8.7p1";
+  name = "buildbot-0.8.8";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://buildbot.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0xjpk8510fhryl1g4mczz319h62il8hw9rh1rzvsfmffgf43zvld";
+    sha256 = "1l1rsy82zv8582wypw00ac0k0wsr82ky74f3np4clbrxv3ry64sh";
   };
 
   patchPhase =

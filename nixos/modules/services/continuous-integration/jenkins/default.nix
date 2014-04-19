@@ -1,5 +1,5 @@
-{ config, pkgs, ... }:
-with pkgs.lib;
+{ config, lib, pkgs, ... }:
+with lib;
 let
   cfg = config.services.jenkins;
 in {
@@ -25,7 +25,8 @@ in {
         default = "jenkins";
         type = with types; string;
         description = ''
-          User the jenkins server should execute under.
+          If the default user "jenkins" is configured then this is the primary
+          group of that user.
         '';
       };
 
@@ -42,7 +43,7 @@ in {
         default = 8080;
         type = types.uniq types.int;
         description = ''
-          Specifies port number on which the jenkins HTTP interface listens. The default is 8080
+          Specifies port number on which the jenkins HTTP interface listens. The default is 8080.
         '';
       };
 

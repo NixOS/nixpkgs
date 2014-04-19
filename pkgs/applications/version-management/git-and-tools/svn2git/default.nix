@@ -1,14 +1,14 @@
 { stdenv, fetchurl, ruby, makeWrapper, git }:
 
 let
-  version = "2.2.2";
+  version = "2.2.5";
 in
 stdenv.mkDerivation {
   name = "svn2git-${version}";
 
   src = fetchurl {
     url = "https://github.com/nirvdrum/svn2git/archive/v${version}.tar.gz";
-    sha256 = "14zinkpgybz15jvbfw0sb432w6f5w4sa5pdqycjwva8v8lxqn9mh";
+    sha256 = "1afmrr80357pg3kawyghhc55z1pszaq8fyrrjmxa6nr9dcrqjwwh";
   };
 
   buildInputs = [ ruby makeWrapper ];

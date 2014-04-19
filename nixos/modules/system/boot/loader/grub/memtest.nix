@@ -1,8 +1,8 @@
 # This module adds Memtest86+ to the GRUB boot menu.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   memtest86 = pkgs.memtest86plus;

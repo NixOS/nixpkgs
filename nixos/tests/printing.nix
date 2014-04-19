@@ -1,8 +1,6 @@
 # Test printing via CUPS.
 
-{ pkgs, ... }:
-
-{
+import ./make-test.nix ({pkgs, ... }: {
 
   nodes = {
 
@@ -17,6 +15,7 @@
               Allow from all
             </Location>
           '';
+        networking.firewall.allowedTCPPorts = [ 631 ];
       };
 
     client =
@@ -37,7 +36,7 @@
       $client->succeed("lpstat -H") =~ "/var/run/cups/cups.sock" or die;
       $client->succeed("curl --fail http://localhost:631/");
       $client->succeed("curl --fail http://server:631/");
-      $server->fail("curl --fail http://client:631/");
+      $server->fail("curl --fail --connect-timeout 2  http://client:631/");
 
       # Add a HP Deskjet printer connected via USB to the server.
       $server->succeed("lpadmin -p DeskjetLocal -v usb://HP/Deskjet%205400%20series?serial=TH93I152S123XY -m 'drv:///sample.drv/deskjet.ppd' -E");
@@ -87,4 +86,4 @@
       }
     '';
 
-}
+})

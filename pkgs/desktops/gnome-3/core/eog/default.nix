@@ -14,11 +14,13 @@ stdenv.mkDerivation rec {
     [ intltool pkgconfig itstool libxml2 libjpeg gtk glib libpeas makeWrapper librsvg
       gsettings_desktop_schemas shared_mime_info gnome_icon_theme gnome_desktop libexif ];
 
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/eog" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${shared_mime_info}/share:${gnome3.gnome_icon_theme}/share:${gnome3.gsettings_desktop_schemas}/share:${gnome3.gtk}/share:$out/share"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${shared_mime_info}/share:${gnome3.gnome_icon_theme}/share:${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {

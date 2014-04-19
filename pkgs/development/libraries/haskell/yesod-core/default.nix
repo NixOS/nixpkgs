@@ -1,26 +1,26 @@
 { cabal, aeson, async, attoparsecConduit, blazeBuilder, blazeHtml
 , blazeMarkup, caseInsensitive, cereal, clientsession, conduit
-, conduitExtra, cookie, dataDefault, fastLogger, hamlet, hspec
-, httpTypes, HUnit, liftedBase, monadControl, monadLogger, network
-, networkConduit, parsec, pathPieces, QuickCheck, random, resourcet
-, safe, shakespeare, shakespeareCss, shakespeareI18n, shakespeareJs
-, streamingCommons, text, time, transformers, transformersBase
-, unixCompat, vector, wai, waiExtra, waiLogger, waiTest, warp
-, yesodRoutes
+, conduitExtra, cookie, dataDefault, exceptions, fastLogger, hamlet
+, hspec, httpTypes, HUnit, liftedBase, monadControl, monadLogger
+, mtl, network, networkConduit, parsec, pathPieces, QuickCheck
+, random, resourcet, safe, shakespeare, shakespeareCss
+, shakespeareI18n, shakespeareJs, streamingCommons, text, time
+, transformers, transformersBase, unixCompat, vector, wai, waiExtra
+, waiLogger, waiTest, warp, yesodRoutes
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-core";
-  version = "1.2.9.2";
-  sha256 = "1ip5rra426agqv5v2hmxcp1g3xjvi9wnixrpdnxvifflhr7gchfl";
+  version = "1.2.12";
+  sha256 = "0bgi140v2z25cfvcydzaif7id8mv341r8iclkiz0lbqxs7d29zxz";
   buildDepends = [
     aeson attoparsecConduit blazeBuilder blazeHtml blazeMarkup
     caseInsensitive cereal clientsession conduit conduitExtra cookie
-    dataDefault fastLogger hamlet httpTypes liftedBase monadControl
-    monadLogger parsec pathPieces random resourcet safe shakespeare
-    shakespeareCss shakespeareI18n shakespeareJs text time transformers
-    transformersBase unixCompat vector wai waiExtra waiLogger warp
-    yesodRoutes
+    dataDefault exceptions fastLogger hamlet httpTypes liftedBase
+    monadControl monadLogger mtl parsec pathPieces random resourcet
+    safe shakespeare shakespeareCss shakespeareI18n shakespeareJs text
+    time transformers transformersBase unixCompat vector wai waiExtra
+    waiLogger warp yesodRoutes
   ];
   testDepends = [
     async blazeBuilder conduit conduitExtra hamlet hspec httpTypes

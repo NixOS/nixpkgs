@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${dbus_glib}/include/dbus-1.0 -I${dbus_libs}/include/dbus-1.0";
 
+  enableParallelBuilding = true;
+
   buildInputs = [ pkgconfig glib libxslt gtk webkitgtk json_glib rest libsecret dbus_glib telepathy_glib intltool icu libsoup docbook_xsl_ns docbook_xsl];
 
   meta = with stdenv.lib; {

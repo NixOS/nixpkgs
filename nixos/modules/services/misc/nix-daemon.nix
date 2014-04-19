@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -253,7 +253,7 @@ in
 
   config = {
 
-    nix.chrootDirs = [ "/dev" "/dev/pts" "/proc" "/bin" ];
+    nix.chrootDirs = [ "/bin" ];
 
     environment.etc."nix/nix.conf".source = nixConf;
 

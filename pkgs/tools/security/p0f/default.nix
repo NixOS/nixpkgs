@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap }:
+{ stdenv, fetchurl, libpcap, bash }:
 
 stdenv.mkDerivation rec {
   name    = "p0f-${version}";
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     substituteInPlace config.h --replace "p0f.fp" "$out/etc/p0f.fp"
+    substituteInPlace build.sh --replace "/bin/bash" "${bash}/bin/bash"
     ./build.sh
     cd tools && make && cd ..
   '';

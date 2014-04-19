@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libX11, libXi, xkeyboard_config, libxml2
-, libICE, glib, libxkbfile, isocodes }:
+, libICE, glib, libxkbfile, isocodes, gobjectIntrospection }:
 
 let
   version = "5.3";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libX11 libXi xkeyboard_config libxml2 libICE glib libxkbfile isocodes ];
 
   nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ gobjectIntrospection ];
 
   configureFlags = ''
     --with-xkb-base=${xkeyboard_config}/etc/X11/xkb

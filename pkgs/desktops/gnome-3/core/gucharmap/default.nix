@@ -25,11 +25,9 @@ stdenv.mkDerivation rec {
                   gnome3.yelp_tools libxml2 file desktop_file_utils
                   gnome3.gsettings_desktop_schemas makeWrapper ];
 
-  installFlags = "gsettingsschemadir=\${out}/share/${name}/glib-2.0/schemas/";
-
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/gucharmap" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/${name}"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

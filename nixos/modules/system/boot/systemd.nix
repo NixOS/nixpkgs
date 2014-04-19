@@ -1,8 +1,8 @@
-{ config, pkgs, utils, ... }:
+{ config, lib, pkgs, utils, ... }:
 
-with pkgs.lib;
+with lib;
 with utils;
-with import ./systemd-unit-options.nix { inherit config pkgs; };
+with import ./systemd-unit-options.nix { inherit config lib; };
 
 let
 
@@ -279,7 +279,11 @@ let
           [Service]
           ${let env = cfg.globalEnvironment // def.environment;
             in concatMapStrings (n: "Environment=\"${n}=${getAttr n env}\"\n") (attrNames env)}
-          ${optionalString (!def.restartIfChanged) "X-RestartIfChanged=false"}
+          ${if def.reloadIfChanged then ''
+            X-ReloadIfChanged=true
+          '' else if !def.restartIfChanged then ''
+            X-RestartIfChanged=false
+          '' else ""}
           ${optionalString (!def.stopIfChanged) "X-StopIfChanged=false"}
           ${attrsToSection def.serviceConfig}
         '';

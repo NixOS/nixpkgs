@@ -1,13 +1,14 @@
 {stdenv, fetchurl}:
 stdenv.mkDerivation {
-  name = "units-2.02";
+  name = "units-2.10";
 
   src = fetchurl {
-    url = mirror://gnu/units/units-2.02.tar.gz;
-    sha256 = "16jfji9g1zc99agd5dcinajinhcxr4dgq2lrbc9md69ir5qgld1b";
+    url = mirror://gnu/units/units-2.10.tar.gz;
+    sha256 = "0fa4bk5aqyis5zisz6l8mqqk76njj6zgx3pbrjp5kvraz1dz78lc";
   };
 
   meta = {
     description = "Unit conversion tool";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

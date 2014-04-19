@@ -8,7 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1rci64cxvcfr8xcjpqc4inpfq7aw4snnsbf5xz7d30nhvv8n40ii";
   };
 
-  buildInputs = [ gss libidn ];
+  buildInputs = [ libidn ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) gss;
+
+  configureFlags = stdenv.lib.optionalString stdenv.isDarwin "--with-gssapi-impl=mit";
 
   doCheck = true;
 

@@ -1,8 +1,6 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
-{ pkgs, ... }:
-
-{
+import ./make-test.nix {
 
   machine =
     { config, pkgs, ... }:

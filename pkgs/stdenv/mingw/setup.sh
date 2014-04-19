@@ -725,7 +725,7 @@ genericBuild() {
     if test -z "$phases"; then
         phases="$prePhases unpackPhase patchPhase $preConfigurePhases \
             configurePhase $preBuildPhases buildPhase checkPhase \
-            $preInstallPhases installPhase fixupPhase \
+            $preInstallPhases installPhase $preFixupPhases fixupPhase \
             $preDistPhases distPhase $postPhases";
     fi
 

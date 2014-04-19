@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+import ./make-test.nix ({ pkgs, ... }: {
 
   machine =
     { config, pkgs, ... }:
@@ -18,4 +16,4 @@
       $machine->screenshot("screen");
     '';
 
-}
+})

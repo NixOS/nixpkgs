@@ -167,8 +167,10 @@ with stdenv.lib;
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   DEVKMEM n # Disable /dev/kmem
-  ${optionalString (versionOlder version "3.14") ''
+  ${if versionOlder version "3.14" then ''
     CC_STACKPROTECTOR y # Detect buffer overflows on the stack
+  '' else ''
+    CC_STACKPROTECTOR_REGULAR y
   ''}
   ${optionalString (versionAtLeast version "3.12") ''
     USER_NS y # Support for user namespaces
@@ -308,6 +310,11 @@ with stdenv.lib;
   # Enable the 9P cache to speed up NixOS VM tests.
   9P_FSCACHE y
   9P_FS_POSIX_ACL y
+
+  # Enable transparent support for huge pages.
+  TRANSPARENT_HUGEPAGE? y
+  TRANSPARENT_HUGEPAGE_ALWAYS? n
+  TRANSPARENT_HUGEPAGE_MADVISE? y
 
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}

@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Text-mode interface for git";
     maintainers = with maintainers; [ garbas bjornfor iElectric ];
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

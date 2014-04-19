@@ -460,6 +460,29 @@ rec {
     };
   });
 
+  autopep8 = buildPythonPackage (rec {
+    name = "autopep8-1.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/autopep8/${name}.tar.gz";
+      md5 = "41782e66efcbaf9d761bb45a2d2929bb";
+    };
+
+    propagatedBuildInputs = [ pep8 ];
+
+    # One test fails:
+    # FAIL: test_recursive_should_not_crash_on_unicode_filename (test.test_autopep8.CommandLineTests)
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
+      homepage = https://pypi.python.org/pypi/autopep8/;
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  });
+
   backports_ssl_match_hostname_3_4_0_2 = pythonPackages.buildPythonPackage rec {
     name = "backports.ssl_match_hostname-3.4.0.2";
 
@@ -557,6 +580,34 @@ rec {
     };
   };
 
+
+  bedup = buildPythonPackage rec {
+    name = "bedup-20140206";
+
+    src = fetchgit {
+      url = "https://github.com/g2p/bedup.git";
+      rev = "80cb217d4819a03e159e42850a9a3f14e2b278a3";
+      sha256 = "1rik7a62v708ivfcy0pawhfnrb84b7gm3qr54x6jsxl0iqz078h6";
+    };
+
+    buildInputs = [ pkgs.btrfsProgs ];
+    propagatedBuildInputs = with pkgs; [ contextlib2 sqlalchemy pyxdg pycparser cffi alembic ];
+
+    meta = {
+      description = "Deduplication for Btrfs";
+      longDescription = ''
+        Deduplication for Btrfs. bedup looks for new and changed files, making sure that multiple
+        copies of identical files share space on disk. It integrates deeply with btrfs so that scans
+        are incremental and low-impact.
+      '';
+      homepage = https://github.com/g2p/bedup;
+      license = stdenv.lib.licenses.gpl2;
+
+      platforms = stdenv.lib.platforms.linux;
+
+      maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
+    };
+  };
 
   beets = buildPythonPackage rec {
     name = "beets-1.0.0";
@@ -1119,6 +1170,15 @@ rec {
   };
 
 
+  contextlib2 = buildPythonPackage rec {
+    name = "contextlib2-0.4.0";
+
+    src = fetchurl rec {
+      url = "https://pypi.python.org/packages/source/c/contextlib2/${name}.tar.gz";
+      md5 = "ea687207db25f65552061db4a2c6727d";
+    };
+  };
+
   coverage = buildPythonPackage rec {
     name = "coverage-3.6";
 
@@ -1289,6 +1349,7 @@ rec {
     '';
 
     propagatedBuildInputs = [ py ]
+      ++ (optional isPy26 argparse)
       ++ stdenv.lib.optional
         pkgs.config.pythonPackages.pytest.selenium or false
         pythonPackages.selenium;
@@ -3185,6 +3246,24 @@ rec {
     propagatedBuildInputs = [ gdata hcs_utils keyring simplejson ];
   };
 
+  google_api_python_client = buildPythonPackage rec {
+    name = "google-api-python-client-1.2";
+
+    src = fetchurl {
+      url = "https://google-api-python-client.googlecode.com/files/google-api-python-client-1.2.tar.gz";
+      sha256 = "0xd619w71xk4ldmikxqhaaqn985rc2hy4ljgwfp50jb39afg7crw";
+    };
+
+    propagatedBuildInputs = [ httplib2 ];
+
+    meta = with stdenv.lib; {
+      description = "The core Python library for accessing Google APIs";
+      homepage = "https://code.google.com/p/google-api-python-client/";
+      license = licenses.asl20;
+      platforms = platforms.unix;
+    };
+  };
+
   greenlet = buildPythonPackage rec {
     name = "greenlet-0.3.1";
 
@@ -3219,6 +3298,22 @@ rec {
       homepage = http://code.google.com/p/gyp;
       license = stdenv.lib.licenses.bsd3;
       description = "Generate Your Projects";
+    };
+  };
+
+  gunicorn = buildPythonPackage rec {
+    name = "gunicorn-18.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/gunicorn/${name}.tar.gz";
+      md5 = "c7138b9ac7515a42066922d2b6120fbe";
+    };
+    
+    buildInputs = [ pytest ];
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/gunicorn;
+      description = "WSGI HTTP Server for UNIX";
     };
   };
 
@@ -3400,7 +3495,7 @@ rec {
       url = "http://pypi.python.org/packages/source/i/ipdb/ipdb-0.7.tar.gz";
       md5 = "d879f9b2b0f26e0e999809585dcaec61";
     };
-    propagatedBuildInputs = [ pythonPackages.ipython ];
+    propagatedBuildInputs = [ pythonPackages.ipythonLight ];
   };
 
   ipdbplugin = buildPythonPackage {
@@ -3409,7 +3504,7 @@ rec {
       url = "https://pypi.python.org/packages/source/i/ipdbplugin/ipdbplugin-1.4.tar.gz";
       md5 = "f9a41512e5d901ea0fa199c3f648bba7";
     };
-    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipython ];
+    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipythonLight ];
   };
 
 
@@ -5878,7 +5973,7 @@ rec {
     };
 
     buildInputs = with pkgs; [
-      pkgconfig python gtk2 pygtk libxml2 libxslt libsoup webkit_gtk2 icu
+      pkgconfig python gtk2 pygtk libxml2 libxslt libsoup webkitgtk2 icu
     ];
 
     meta = {
@@ -6919,7 +7014,7 @@ rec {
 
     checkPhase = ''
       cd tests
-      export LD_LIBRARY_PATH=${pkgs.imagemagick}/lib
+      export MAGICK_HOME="${pkgs.imagemagick}"
       export PYTHONPATH=$PYTHONPATH:../
       py.test
       cd ..
@@ -8756,19 +8851,21 @@ rec {
   };
 
   searx = buildPythonPackage rec {
-    name = "searx-${version}";
-    version = "0.2.0";
+    name = "searx-${rev}";
+    rev = "44d3af9fb2482cd0df1a8ababbe2fdf27ab33172";
 
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/source/s/searx/${name}.tar.gz";
-      sha256 = "19hxjg3vhq7fygcvfhsr3i40c8kbi7i76ym9cv2s03b3zijd38w0";
+    src = fetchgit {
+      url = "git://github.com/asciimoo/searx";
+      inherit rev;
+      sha256 = "1w505pzdkkcglq782wg7f5fxrw9i5jzp7px20c2xz18pps2m3rsm";
     };
 
-    propagatedBuildInputs = [ pyyaml lxml grequests flaskbabel flask requests gevent speaklater Babel pytz ];
+    propagatedBuildInputs = [ pyyaml lxml grequests flaskbabel flask requests
+      gevent speaklater Babel pytz dateutil ];
 
     meta = {
       homepage = https://github.com/asciimoo/searx;
-      description = "A privacy-respecting, hackable metasearch engine.";
+      description = "A privacy-respecting, hackable metasearch engine";
       license = stdenv.lib.licenses.agpl3Plus;
       maintainers = [ stdenv.lib.maintainers.matejc ];
     };

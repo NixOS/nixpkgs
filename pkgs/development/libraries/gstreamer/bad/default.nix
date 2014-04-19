@@ -1,10 +1,13 @@
 { stdenv, fetchurl, pkgconfig, python, gst-plugins-base, orc
-, faac, faad2, libass, libkate, libmms
+, faacSupport ? false, faac ? null
+, faad2, libass, libkate, libmms
 , libmodplug, mpeg2dec, mpg123 
 , openjpeg, libopus, librsvg
 , timidity, libvdpau, wayland
 , libwebp, xvidcore, gnutls
 }:
+
+assert faacSupport -> faac != null;
 
 stdenv.mkDerivation rec {
   name = "gst-plugins-bad-1.2.3";
@@ -32,10 +35,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gst-plugins-base orc
-    faac faad2 libass libkate libmms
+    faad2 libass libkate libmms
     libmodplug mpeg2dec mpg123 
     openjpeg libopus librsvg
     timidity libvdpau wayland
     libwebp xvidcore gnutls
-  ];
+  ] ++ stdenv.lib.optional faacSupport faac;
 }

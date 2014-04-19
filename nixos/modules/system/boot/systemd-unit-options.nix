@@ -1,6 +1,6 @@
-{ config, pkgs }:
+{ config, lib }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -240,6 +240,17 @@ in rec {
       description = ''
         Whether the service should be restarted during a NixOS
         configuration switch if its definition has changed.
+      '';
+    };
+
+    reloadIfChanged = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether the service should be reloaded during a NixOS
+        configuration switch if its definition has changed.  If
+        enabled, the value of <option>restartIfChanged</option> is
+        ignored.
       '';
     };
 

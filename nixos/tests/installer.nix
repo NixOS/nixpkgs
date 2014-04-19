@@ -1,7 +1,8 @@
-{ pkgs, system, ... }:
+{ system ? builtins.currentSystem }:
 
-with pkgs.lib;
+with import ../lib/testing.nix { inherit system; };
 with import ../lib/qemu-flags.nix;
+with pkgs.lib;
 
 let
 
@@ -79,6 +80,8 @@ let
       virtualisation.writableStore = true;
       virtualisation.pathsInNixDB = channelContents ++ [ pkgs.hello.src ];
       virtualisation.memorySize = 768;
+
+      networking.firewall.allowedTCPPorts = [ 80 ];
     };
 
   channelContents = [ pkgs.rlwrap ];
@@ -97,7 +100,7 @@ let
       my $machine = createMachine({ hda => "harddisk",
         hdaInterface => "${iface}",
         cdrom => glob("${iso}/iso/*.iso"),
-        qemuFlags => '${optionalString testChannel (toString (qemuNICFlags 1 1 2))} ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"}'});
+        qemuFlags => '${optionalString testChannel (toString (qemuNICFlags 1 1 2))} ${optionalString (iso.system == "x86_64-linux") "-cpu kvm64"}'});
       $machine->start;
 
       ${optionalString testChannel ''
@@ -188,8 +191,10 @@ let
     '';
 
 
-  makeTest = { createPartitions, fileSystems, testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda" }:
-    { inherit iso;
+  makeInstallerTest =
+    { createPartitions, fileSystems, testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda" }:
+    makeTest {
+      inherit iso;
       nodes = if testChannel then { inherit webserver; } else { };
       testScript = testScriptFun {
         inherit createPartitions fileSystems testChannel grubVersion grubDevice;
@@ -204,7 +209,7 @@ in {
 
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
-  simple = makeTest
+  simple = makeInstallerTest
     { createPartitions =
         ''
           $machine->succeed(
@@ -223,7 +228,7 @@ in {
     };
 
   # Same as the previous, but now with a separate /boot partition.
-  separateBoot = makeTest
+  separateBoot = makeInstallerTest
     { createPartitions =
         ''
           $machine->succeed(
@@ -246,7 +251,7 @@ in {
 
   # Create two physical LVM partitions combined into one volume group
   # that contains the logical swap and root partitions.
-  lvm = makeTest
+  lvm = makeInstallerTest
     { createPartitions =
         ''
           $machine->succeed(
@@ -269,8 +274,7 @@ in {
       fileSystems = rootFS;
     };
 
-  /*
-  swraid = makeTest
+  swraid = makeInstallerTest
     { createPartitions =
         ''
           $machine->succeed(
@@ -302,10 +306,9 @@ in {
         '';
       fileSystems = rootFS + bootFS;
     };
-  */
 
   # Test a basic install using GRUB 1.
-  grub1 = makeTest
+  grub1 = makeInstallerTest
     { createPartitions =
         ''
           $machine->succeed(
@@ -326,7 +329,7 @@ in {
     };
 
   # Rebuild the CD configuration with a little modification.
-  rebuildCD =
+  rebuildCD = makeTest
     { inherit iso;
       nodes = { };
       testScript =

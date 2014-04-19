@@ -1,10 +1,10 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfgFile = pkgs.writeText "reader.conf" "";
 in
 
-with pkgs.lib;
+with lib;
 
 {
 

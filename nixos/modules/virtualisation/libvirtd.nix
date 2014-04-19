@@ -1,8 +1,8 @@
 # Systemd services for libvirtd.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -24,6 +24,7 @@ in
 
     virtualisation.libvirtd.enable =
       mkOption {
+        type = types.bool;
         default = false;
         description =
           ''
@@ -36,6 +37,7 @@ in
 
     virtualisation.libvirtd.enableKVM =
       mkOption {
+        type = types.bool;
         default = true;
         description =
           ''
@@ -45,6 +47,7 @@ in
 
     virtualisation.libvirtd.extraConfig =
       mkOption {
+        type = types.lines;
         default = "";
         description =
           ''

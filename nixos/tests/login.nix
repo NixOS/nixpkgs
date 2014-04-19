@@ -1,8 +1,11 @@
-config: { pkgs, ... }:
+import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
 
 {
 
-  machine = config;
+  machine =
+    { config, pkgs, lib, ... }:
+    { boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
+    };
 
   testScript =
     ''
@@ -58,4 +61,4 @@ config: { pkgs, ... }:
       };
     '';
 
-}
+})

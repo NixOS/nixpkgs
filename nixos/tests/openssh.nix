@@ -1,6 +1,5 @@
-{ pkgs, ... }:
+import ./make-test.nix ({ pkgs, ... }: {
 
-{
   nodes = {
 
     server =
@@ -35,4 +34,4 @@
     $client->succeed("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2");
     $client->succeed("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'ulimit -l' | grep 1024");
   '';
-}
+})

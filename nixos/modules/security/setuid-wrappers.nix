@@ -1,6 +1,6 @@
-{pkgs, config, ...}:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -46,6 +46,7 @@ in
             group = "postdrop";
             setuid = false;
             setgid = true;
+            permissions = "u+rx,g+x,o+x";
           }
         ];
       description = ''

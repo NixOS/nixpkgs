@@ -51,5 +51,8 @@ stdenv.mkDerivation rec {
 
     # Some of the dependencies fail to build on {cyg,dar}win.
     platforms = stdenv.lib.platforms.gnu;
+
+    # Tests fail since gcc 4.8
+    broken = true;
   };
 }

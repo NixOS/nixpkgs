@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.services.btsync;
@@ -24,7 +24,7 @@ let
     optionalString (e ? "knownHosts")
       (concatStringsSep "," (map (v: "\"${v}\"") e."knownHosts"));
 
-  sharedFoldersRecord = with pkgs.lib;
+  sharedFoldersRecord =
     concatStringsSep "," (map (entry:
       let helper = attr: v:
         if (entry ? attr) then boolStr entry.attr else boolStr v;

@@ -73,6 +73,8 @@ stdenv.mkDerivation {
        abort "don't know the name of the dynamic linker for this platform");
   };
 
+  preferLocalBuild = true;
+
   meta =
     let gcc_ = if gcc != null then gcc else {}; in
     (if gcc_ ? meta then removeAttrs gcc.meta ["priority"] else {}) //

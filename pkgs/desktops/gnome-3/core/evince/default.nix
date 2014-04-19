@@ -2,6 +2,7 @@
 , glib, gtk3, pango, atk, gdk_pixbuf, shared_mime_info, itstool, gnome3
 , poppler, ghostscriptX, djvulibre, libspectre, libsecret , makeWrapper
 , librsvg, recentListSize ? null # 5 is not enough, allow passing a different number
+, gobjectIntrospection
 }:
 
 stdenv.mkDerivation rec {
@@ -14,17 +15,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig intltool perl perlXMLParser libxml2
-    glib gtk3 pango atk gdk_pixbuf
+    glib gtk3 pango atk gdk_pixbuf gobjectIntrospection
     itstool gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic
     gnome3.libgnome_keyring gnome3.gsettings_desktop_schemas
     poppler ghostscriptX djvulibre libspectre
     makeWrapper libsecret librsvg
   ];
 
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
-
   configureFlags = [
     "--disable-nautilus" # Do not use nautilus
+    "--enable-introspection"
   ];
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
@@ -40,12 +40,14 @@ stdenv.mkDerivation rec {
       sed -i 's/\(if (++n_items == \)5\(.*\)/\1${builtins.toString recentListSize}\2/' shell/ev-window.c
     '';
 
-  postInstall = ''
+  preFixup = ''
     # Tell Glib/GIO about the MIME info directory, which is used
     # by `g_file_info_get_content_type ()'.
     wrapProgram "$out/bin/evince" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gsettings_desktop_schemas}/share:${gtk3}/share:${shared_mime_info}/share:$out/share"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${shared_mime_info}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   doCheck = false; # would need pythonPackages.dogTail, which is missing

@@ -38,9 +38,21 @@ rec {
 
   gjs = callPackage ./core/gjs { };
 
+  gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
+
+  gnome-contacts = callPackage ./core/gnome-contacts { };
+
   gnome_control_center = callPackage ./core/gnome-control-center { };
 
+  gnome-calculator = callPackage ./core/gnome-calculator { };
+
   gnome_common = callPackage ./core/gnome-common { };
+
+  gnome-dictionary = callPackage ./core/gnome-dictionary { };
+
+  gnome-disk-utility = callPackage ./core/gnome-disk-utility { };
+
+  gnome-font-viewer = callPackage ./core/gnome-font-viewer { };
 
   gnome_icon_theme = callPackage ./core/gnome-icon-theme { };
 
@@ -52,6 +64,8 @@ rec {
 
   libgnome_keyring = callPackage ./core/libgnome-keyring { };
 
+  libgnomekbd = callPackage ./core/libgnomekbd { };
+
   folks = callPackage ./core/folks { };
 
   gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
@@ -60,11 +74,25 @@ rec {
 
   gnome_shell = callPackage ./core/gnome-shell { };
 
+  gnome-shell-extensions = callPackage ./core/gnome-shell-extensions { };
+
+  gnome-screenshot = callPackage ./core/gnome-screenshot { };
+
   gnome_settings_daemon = callPackage ./core/gnome-settings-daemon { };
+
+  gnome-system-log = callPackage ./core/gnome-system-log { };
+
+  gnome-system-monitor = callPackage ./core/gnome-system-monitor { };
 
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
   gnome_themes_standard = callPackage ./core/gnome-themes-standard { };
+
+  gnome-user-docs = callPackage ./core/gnome-user-docs { };
+
+  gnome-user-share = callPackage ./core/gnome-user-share { };
+
+  grilo = callPackage ./core/grilo { };
 
   gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };
 
@@ -94,6 +122,14 @@ rec {
 
   rest = callPackage ./core/rest { };
 
+  sushi = callPackage ./core/sushi { };
+
+  totem = callPackage ./core/totem { };
+
+  totem-pl-parser = callPackage ./core/totem-pl-parser { };
+
+  tracker = callPackage ./core/tracker { };
+
   vte = callPackage ./core/vte { };
 
   vino = callPackage ./core/vino { };
@@ -110,8 +146,6 @@ rec {
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
   file-roller = callPackage ./desktop/file-roller { };
-
-  gnome_dictionary = callPackage ./desktop/gnome-dictionary { };
 
   gnome_desktop = callPackage ./desktop/gnome-desktop { };
 
@@ -130,4 +164,6 @@ rec {
   libgit2-glib = callPackage ./misc/libgit2-glib { };
   
   gexiv2 = callPackage ./misc/gexiv2 { };
+
+  gnome-tweak-tool = callPackage ./misc/gnome-tweak-tool { };
 }

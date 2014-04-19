@@ -1,10 +1,10 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.virtuoso;
   virtuosoUser = "virtuoso";
   stateDir = "/var/lib/virtuoso";
 in
-with pkgs.lib;
+with lib;
 {
 
   ###### interface

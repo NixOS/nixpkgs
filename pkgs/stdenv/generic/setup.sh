@@ -304,9 +304,11 @@ substitute() {
 
     local -a params=("$@")
 
-    local n p pattern replacement varName
+    local n p pattern replacement varName content
 
-    local content="$(cat $input)"
+    # a slightly hacky way to keep newline at the end
+    content="$(cat $input; echo -n X)"
+    content="${content%X}"
 
     for ((n = 2; n < ${#params[*]}; n += 1)); do
         p=${params[$n]}
@@ -877,7 +879,7 @@ genericBuild() {
     if [ -z "$phases" ]; then
         phases="$prePhases unpackPhase patchPhase $preConfigurePhases \
             configurePhase $preBuildPhases buildPhase checkPhase \
-            $preInstallPhases installPhase fixupPhase installCheckPhase \
+            $preInstallPhases installPhase $preFixupPhases fixupPhase installCheckPhase \
             $preDistPhases distPhase $postPhases";
     fi
 

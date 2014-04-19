@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal2nix";
-  version = "1.60";
-  sha256 = "1jp4rq8gfdz5knm9cbralhjyw2a391cck49422bskl7c23p94y3l";
+  version = "1.61";
+  sha256 = "058bwswkhsj3rbxl42n23ri79smmhkaj6wid4c6x02yl3m8l7xsy";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ Cabal filepath hackageDb HTTP mtl regexPosix ];

@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
     sha256 = "1d98mbqjmc34s8095lkw1j1bwvnnkw9581yfvjaikjvfjsaz29qd";
   };
 
+  setupHook = ./setup-hook.sh;
+
   buildInputs = [ libelf ]
     ++ optionals doCheck [ tzdata libxml2 desktop_file_utils shared_mime_info ];
 

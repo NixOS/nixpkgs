@@ -1,8 +1,8 @@
 # Udisks daemon.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
 
@@ -40,8 +40,6 @@ with pkgs.lib;
       '';
 
     services.udev.packages = [ pkgs.udisks ];
-
-    systemd.packages = [ pkgs.udisks ];
   };
 
 }

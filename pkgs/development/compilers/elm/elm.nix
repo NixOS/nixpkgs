@@ -23,6 +23,10 @@ cabal.mkDerivation (self: {
     transformers unionFind unorderedContainers
   ];
   doCheck = false;
+  preConfigure = ''
+    rm -f Setup.hs
+    echo -e "import Distribution.Simple\nmain=defaultMain\n" > Setup.hs
+  '';
   meta = {
     homepage = "http://elm-lang.org";
     description = "The Elm language module";

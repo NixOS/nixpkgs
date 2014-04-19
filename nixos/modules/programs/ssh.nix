@@ -1,8 +1,8 @@
 # Global configuration for the SSH client.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let cfg  = config.programs.ssh;
     cfgd = config.services.openssh;
@@ -31,7 +31,7 @@ in
 
       setXAuthLocation = mkOption {
         type = types.bool;
-        default = true;
+        default = config.services.xserver.enable;
         description = ''
           Whether to set the path to <command>xauth</command> for X11-forwarded connections.
           This causes a dependency on X11 packages.

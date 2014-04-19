@@ -64,6 +64,12 @@
     url = https://fedoraproject.org/wiki/Licensing/BSD;
   };
 
+  cc-by-30 = {
+    shortName = "CC BY 3.0";
+    fullName = "Creative Commons Attribution 3.0";
+    url = http://creativecommons.org/licenses/by/3.0;
+  };
+
   cddl = {
     shortName = "CDDL";
     fullName = "Common Development Distribution License ";

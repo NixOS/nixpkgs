@@ -1,6 +1,6 @@
-{ config, pkgs, utils, ... }:
+{ config, lib, pkgs, utils, ... }:
 
-with pkgs.lib;
+with lib;
 with utils;
 
 let
@@ -148,7 +148,7 @@ in
     system.fsPackages = [ pkgs.dosfstools ];
 
     environment.systemPackages =
-      [ pkgs.ntfs3g pkgs.cifs_utils ]
+      [ pkgs.ntfs3g pkgs.cifs_utils pkgs.fuse ]
       ++ config.system.fsPackages;
 
     environment.etc.fstab.text =

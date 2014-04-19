@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.9.1";
+  version = "1.9.2";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -21,10 +21,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0yx7qf9hqgfvrliqvk775pw3zh982nx5r16iw7n997q4ik7gnqpr";
+    sha256 = "1x4rb06vw4ckdflmn01r5l9spvn7cng4i5mm3sbd0n8cz0n6xz13";
   };
 
-  patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ];
+  patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ./cert-path.patch ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
@@ -36,7 +36,9 @@ stdenv.mkDerivation {
 
   makeFlags = "prefix=\${out} sysconfdir=/etc/ PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
       + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
-      + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "");
+      + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
+      + (if stdenv.isDarwin then " NO_APPLE_COMMON_CRYPTO=1" else "");
+
 
   # FIXME: "make check" requires Sparse; the Makefile must be tweaked
   # so that `SPARSE_FLAGS' corresponds to the current architecture...
@@ -47,8 +49,7 @@ stdenv.mkDerivation {
   postInstall =
     ''
       notSupported() {
-        echo -e "#\!/bin/sh\necho '`basename $1` not supported, $2'\nexit 1" > "$1"
-        chmod +x $1
+        unlink $1 || true
       }
 
       # Install git-subtree.
@@ -94,7 +95,7 @@ stdenv.mkDerivation {
                      --set GITPERLLIB "$gitperllib"   \
                      --prefix PATH : "${svn}/bin" ''
        else '' # replace git-svn by notification script
-        notSupported $out/libexec/git-core/git-svn "reinstall with config git = { svnSupport = true } set"
+        notSupported $out/libexec/git-core/git-svn
        '')
 
    + (if sendEmailSupport then
@@ -106,7 +107,7 @@ stdenv.mkDerivation {
         wrapProgram $out/libexec/git-core/git-send-email \
                      --set GITPERLLIB "$gitperllib" ''
        else '' # replace git-send-email by notification script
-        notSupported $out/libexec/git-core/git-send-email "reinstall with config git = { sendEmailSupport = true } set"
+        notSupported $out/libexec/git-core/git-send-email
        '')
 
    + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
@@ -123,8 +124,7 @@ stdenv.mkDerivation {
      '' else ''
        # Don't wrap Tcl/Tk, replace them by notification scripts
        for prog in bin/gitk libexec/git-core/git-gui; do
-         notSupported "$out/$prog" \
-                      "reinstall with config git = { guiSupport = true; } set"
+         notSupported "$out/$prog"
        done
      '');
 
