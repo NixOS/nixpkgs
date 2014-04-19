@@ -1,35 +1,11 @@
-let fetch = { file, sha256 }:
-    let
-      nixFetchurl = import <nix/fetchurl.nix>;
-      args = {
-        url = "file://${builtins.toString ./.}/${file}";
-        inherit sha256;
-        executable = true;
-      };
-    in if (builtins.functionArgs nixFetchurl) ? executable
-      then nixFetchurl args
-      else derivation {
-        name = file;
-        builder = "/bin/sh";
+let
 
-        system = builtins.currentSystem;
+  fetch = { file, sha256 }: import <nix/fetchurl.nix> {
+    url = "http://tarballs.nixos.org/stdenv-linux/armv5tel/r18744/${file}";
+    inherit sha256;
+    executable = true;
+  };
 
-        args = [ "-c" "echo $message; exit 1" ];
-
-        message = ''
-          Sorry, this version of nix cannot download all of the bootstrap tools.
-          Please download ${args.url}, make it executable, add it to the store
-          with `nix-store --add', and try again.
-        '';
-
-        outputHashAlgo = "sha256";
-
-        outputHash = args.sha256;
-
-        outputHashMode = "recursive";
-
-        preferLocalBuild = true;
-      };
 in {
   sh = fetch {
     file = "sh";

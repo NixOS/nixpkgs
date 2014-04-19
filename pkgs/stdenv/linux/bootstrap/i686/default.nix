@@ -1,36 +1,11 @@
 let
-  fetch = { file, sha256 }:
-    let
-      nixFetchurl = import <nix/fetchurl.nix>;
-      args = {
-        url = "file://${builtins.toString ./.}/${file}";
-        inherit sha256;
-        executable = true;
-      };
-    in if (builtins.functionArgs nixFetchurl) ? executable
-      then nixFetchurl args
-      else derivation {
-        name = file;
-        builder = "/bin/sh";
 
-        system = builtins.currentSystem;
+  fetch = { file, sha256 }: import <nix/fetchurl.nix> {
+    url = "http://tarballs.nixos.org/stdenv-linux/i686/r24519/${file}";
+    inherit sha256;
+    executable = true;
+  };
 
-        args = [ "-c" "echo $message; exit 1" ];
-
-        message = ''
-          Sorry, this version of nix cannot download all of the bootstrap tools.
-          Please download ${args.url}, make it executable, add it to the store
-          with `nix-store --add', and try again.
-        '';
-
-        outputHashAlgo = "sha256";
-
-        outputHash = args.sha256;
-
-        outputHashMode = "recursive";
-
-        preferLocalBuild = true;
-      };
 in {
   sh = fetch {
     file = "sh";
@@ -50,11 +25,6 @@ in {
   cpio = fetch {
     file = "cpio";
     sha256 = "046if3aqqramyhrn2yxrjf4bfkl8x1bcqxhvi7ml9nrv9smx8irg";
-  };
-
-  ln = fetch {
-    file = "ln";
-    sha256 = "06vr474i3x55p0rnqa87yx7dzf4qdfpfg201mks39id43cjm9f8j";
   };
 
   curl = fetch {

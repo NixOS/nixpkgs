@@ -16,7 +16,6 @@ rec {
   bootstrapFiles =
     if system == "i686-linux" then import ./bootstrap/i686
     else if system == "x86_64-linux" then import ./bootstrap/x86_64
-    else if system == "powerpc-linux" then import ./bootstrap/powerpc
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel
     else if system == "armv6l-linux" then import ./bootstrap/armv6l
     else if system == "armv7l-linux" then import ./bootstrap/armv6l
@@ -52,6 +51,7 @@ rec {
       then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
       else [ ./scripts/unpack-bootstrap-tools.sh ];
 
+    # FIXME: get rid of curl.
     inherit (bootstrapFiles) bzip2 mkdir curl cpio;
 
     tarball = import <nix/fetchurl.nix> {
