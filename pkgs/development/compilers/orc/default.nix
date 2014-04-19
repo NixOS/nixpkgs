@@ -17,6 +17,5 @@ stdenv.mkDerivation rec {
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
     license = stdenv.lib.licenses.bsd3;
     platform = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.iyzsong ];
   };
 }
