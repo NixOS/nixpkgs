@@ -156,6 +156,8 @@ rec {
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
 
+  seahorse = callPackage ./apps/seahorse { };
+
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 

@@ -55,6 +55,7 @@ in {
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
+    services.gnome3.seahorse.enable = mkDefault true;
     services.gnome3.sushi.enable = mkDefault true;
     services.gnome3.tracker.enable = mkDefault true;
     hardware.pulseaudio.enable = mkDefault true;
