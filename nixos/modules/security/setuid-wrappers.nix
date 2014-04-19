@@ -117,8 +117,7 @@ in
           # programs to be wrapped.
           SETUID_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
-          if test -d ${wrapperDir}; then rm -f ${wrapperDir}/*; fi # */
-          mkdir -p ${wrapperDir}
+          rm -f ${wrapperDir}/* # */
 
           ${concatMapStrings makeSetuidWrapper setuidPrograms}
         '';

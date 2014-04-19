@@ -82,7 +82,7 @@ done
 
 # More special file systems, initialise required directories.
 mkdir -m 0755 /dev/shm
-mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" tmpfs /dev/shm
+mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" none /dev/shm
 mkdir -m 0755 -p /dev/pts
 [ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # UML doesn't have USB by default
 mkdir -m 01777 -p /tmp
@@ -147,6 +147,12 @@ if [ -n "@useHostResolvConf@" -a -e /etc/resolv.conf ]; then
 else
     touch /etc/resolv.conf
 fi
+
+
+# Create /var/setuid-wrappers as a tmpfs.
+rm -rf /var/setuid-wrappers
+mkdir -m 0755 -p /var/setuid-wrappers
+mount -t tmpfs -o "mode=0755" none /var/setuid-wrappers
 
 
 # Run the script that performs all configuration activation that does
