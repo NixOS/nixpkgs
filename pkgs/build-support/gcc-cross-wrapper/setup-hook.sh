@@ -75,6 +75,9 @@ fi
 # native compilations.
 doCheck=""
 
+# Don't strip foreign binaries with native "strip" tool.
+dontStrip=1
+
 # Add the output as an rpath.
 if test "$NIX_NO_SELF_RPATH" != "1"; then
     export NIX_CROSS_LDFLAGS="-rpath $out/lib -rpath-link $out/lib $NIX_CROSS_LDFLAGS"

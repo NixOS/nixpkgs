@@ -12,7 +12,7 @@ diff -ru -x '*~' openssl-1.0.0e-orig/crypto/x509/x509_def.c openssl-1.0.0e/crypt
  #include "cryptlib.h"
  #include <openssl/crypto.h>
  #include <openssl/x509.h>
-@@ -71,7 +75,19 @@
+@@ -71,7 +75,25 @@
  	{ return(X509_CERT_DIR); }
  
  const char *X509_get_default_cert_file(void)
@@ -23,9 +23,15 @@ diff -ru -x '*~' openssl-1.0.0e-orig/crypto/x509/x509_def.c openssl-1.0.0e/crypt
 +	if (!init) {
 +	    init = 1;
 +	    char * s = getenv("OPENSSL_X509_CERT_FILE");
-+	    if (s && getuid() == geteuid()) {
-+		strncpy(buf, s, sizeof(buf));
-+		buf[sizeof(buf) - 1] = 0;
++	    if (s) {
++#ifndef OPENSSL_SYS_WINDOWS
++	        if (getuid() == geteuid()) {
++#endif
++		        strncpy(buf, s, sizeof(buf));
++		        buf[sizeof(buf) - 1] = 0;
++#ifndef OPENSSL_SYS_WINDOWS
++	        }
++#endif
 +	    }
 +	}
 +	return buf;

@@ -8,7 +8,9 @@ let
     (throw "openssl needs its platform name cross building" null)
     stdenv.cross;
 
-  patchesCross = isCross:
+  patchesCross = isCross: let
+    isDarwin = stdenv.isDarwin || (isCross && stdenv.cross.libc == "libSystem");
+  in
     [ # Allow the location of the X509 certificate file (the CA
       # bundle) to be set through the environment variable
       # ‘OPENSSL_X509_CERT_FILE’.  This is necessary because the
@@ -29,7 +31,7 @@ let
           ./kfreebsd-gnu.patch
         ]
 
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
+    ++ stdenv.lib.optional isDarwin ./darwin-arch.patch;
 
 in
 
@@ -91,6 +93,8 @@ stdenv.mkDerivation {
       rm $out/bin/c_rehash $out/ssl/misc/CA.pl $out/ssl/misc/tsget
     '';
     configureScript = "./Configure";
+  } // stdenv.lib.optionalAttrs (opensslCrossSystem == "darwin64-x86_64-cc") {
+    CC = "gcc";
   };
 
   meta = {

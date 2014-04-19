@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "004zyh9p3lpvbwhyhlmrw6wwcia5abx84q4h2brkn4zdypipvmiz";
   };
 
-  buildInputs = [ readline ];
+  nativeBuildInputs = [ readline ];
 
   patches = if stdenv.isDarwin then [ ./5.2.darwin.patch ] else [ dsoPatch ];
 
@@ -53,6 +53,37 @@ stdenv.mkDerivation rec {
     Cflags: -I$out/include
     EOF
   '';
+
+  crossAttrs = let
+    isMingw = stdenv.cross.libc == "msvcrt";
+    isDarwin = stdenv.cross.libc == "libSystem";
+  in {
+    configurePhase = ''
+      makeFlagsArray=(
+        INSTALL_TOP=$out
+        INSTALL_MAN=$out/share/man/man1
+        CC=${stdenv.cross.config}-gcc
+        STRIP=:
+        RANLIB=${stdenv.cross.config}-ranlib
+        V=${majorVersion}
+        R=${version}
+        ${if isMingw then "mingw" else stdenv.lib.optionalString isDarwin ''
+        AR="${stdenv.cross.config}-ar rcu"
+        macosx
+        ''}
+      )
+    '' + stdenv.lib.optionalString isMingw ''
+      installFlagsArray=(
+        TO_BIN="lua.exe luac.exe"
+        TO_LIB="liblua.a lua52.dll"
+        INSTALL_DATA="cp -d"
+      )
+    '';
+  } // stdenv.lib.optionalAttrs isDarwin {
+    postPatch = ''
+      sed -i -e 's/-Wl,-soname[^ ]* *//' src/Makefile
+    '';
+  };
 
   meta = {
     homepage = "http://www.lua.org";

@@ -14,6 +14,7 @@ stdenv.mkDerivation {
 
   crossAttrs = {
     patchPhase = ''
+      sed -i -e '/<sys\\stat\.h>/s|\\|/|' bzip2.c
       sed -i -e 's/CC=gcc/CC=${stdenv.cross.config}-gcc/' \
         -e 's/AR=ar/AR=${stdenv.cross.config}-ar/' \
         -e 's/RANLIB=ranlib/RANLIB=${stdenv.cross.config}-ranlib/' \

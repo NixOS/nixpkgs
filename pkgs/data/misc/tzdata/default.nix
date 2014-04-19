@@ -17,13 +17,17 @@ stdenv.mkDerivation rec {
     ];
 
   sourceRoot = ".";
+  outputs = [ "out" "lib" ];
 
-  makeFlags = "TOPDIR=$(out) TZDIR=$(out)/share/zoneinfo ETCDIR=$(TMPDIR)/etc LIBDIR=$(TMPDIR)/lib MANDIR=$(TMPDIR)/man AWK=awk";
+  makeFlags = "TOPDIR=$(out) TZDIR=$(out)/share/zoneinfo ETCDIR=$(TMPDIR)/etc LIBDIR=$(lib)/lib MANDIR=$(TMPDIR)/man AWK=awk";
 
   postInstall =
     ''
       mv $out/share/zoneinfo-posix $out/share/zoneinfo/posix
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right
+
+      ensureDir "$lib/include"
+      cp tzfile.h "$lib/include/tzfile.h"
     '';
 
   meta = {

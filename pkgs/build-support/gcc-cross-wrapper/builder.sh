@@ -26,6 +26,10 @@ if test -z "$nativeLibc"; then
       fi
     fi
 
+    if [ -n "$osxMinVersion" ]; then
+        cflagsCompile="$cflagsCompile -mmacosx-version-min=$osxMinVersion"
+    fi
+
     echo "$cflagsCompile -B$libc/lib/ -idirafter $libc/include -idirafter $gcc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
 
     echo "-L$libc/lib -rpath $libc/lib -rpath-link $libc/lib" > $out/nix-support/libc-ldflags
