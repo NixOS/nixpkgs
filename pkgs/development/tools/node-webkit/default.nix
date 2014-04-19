@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
     url = "https://s3.amazonaws.com/node-webkit/v${version}/node-webkit-v${version}-linux-${bits}.tar.gz";
     sha256 = if bits == "x64" then
       "91229edfb03349306c5ce101fdab2de55f7473cc7c36367e9611a0527d2ef591" else
-      "b0b29b4e75cd4b1aaecf7f4716216edcfc5947516744e2eaeae38bec1d03cea1";
+      "12axppynangh0q72swzqcmz2blncgm2dw9n489313ybnp2p42hnp";
   };
 
   patchPhase = ''
