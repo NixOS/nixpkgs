@@ -3930,6 +3930,8 @@ let
 
   swig2 = callPackage ../development/tools/misc/swig/2.x.nix { };
 
+  swig3 = callPackage ../development/tools/misc/swig/3.x.nix { };
+
   swigWithJava = swig;
 
   swfmill = callPackage ../tools/video/swfmill { };
