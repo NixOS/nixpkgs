@@ -15,6 +15,16 @@ let
     in
       filter (x: !(builtins.elem (pkgName x) ysNames)) xs;
 
+  # Prioritize nautilus by default when opening directories
+  mimeAppsList = pkgs.writeTextFile {
+    name = "gnome-mimeapps";
+    destination = "/share/applications/mimeapps.list";
+    text = ''
+      [Default Applications]
+      inode/directory=nautilus.desktop
+    '';
+  };
+
 in {
 
   options = {
@@ -66,7 +76,8 @@ in {
           export XDG_MENU_PREFIX=gnome
 
           # Don't let epiphany depend upon gnome-shell
-          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${pkgs.gnome3.gnome_shell}/share/gsettings-schemas/${pkgs.gnome3.gnome_shell.name}
+          # Override default mimeapps
+          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${pkgs.gnome3.gnome_shell}/share/gsettings-schemas/${pkgs.gnome3.gnome_shell.name}:${mimeAppsList}/share
 
           # Let gnome-control-center find gnome-shell search providers
           export GNOME_SEARCH_PROVIDERS_DIR=${config.system.path}/share/gnome-shell/search-providers/
