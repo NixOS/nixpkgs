@@ -9889,7 +9889,9 @@ let
 
   cinnamon = recurseIntoAttrs rec {
     callPackage = newScope pkgs.cinnamon;
-    inherit (gnome3) gnome_common libgnomekbd gnome-menus;
+    inherit (gnome3) gnome_common libgnomekbd gnome-menus zenity;
+    
+    muffin = callPackage ../desktops/cinnamon/muffin.nix { } ;
     
     cinnamon-control-center = callPackage ../desktops/cinnamon/cinnamon-control-center.nix{ };
     
