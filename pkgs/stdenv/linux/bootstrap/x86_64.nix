@@ -1,6 +1,6 @@
 # Use the static tools for i686-linux.  They work on x86_64-linux
 # machines as well.
-(import ../i686) //
+(import ./i686.nix) //
 
 {
   bootstrapTools = {

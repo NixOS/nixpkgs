@@ -1,5 +1,5 @@
 # Use the static tools for armv5tel-linux.
-(import ../armv5tel) //
+(import ./armv5tel.nix) //
 
 {
   bootstrapTools = {
