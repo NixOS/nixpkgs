@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python, makeWrapper
+{ stdenv, fetchurl, pkgconfig, python, makeWrapper, pygtk
 , webkit, glib_networking, gsettings_desktop_schemas
 }:
 
@@ -24,13 +24,16 @@ stdenv.mkDerivation rec {
     makeFlags="$makeFlags PYINSTALL_EXTRA=--prefix=$out"
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/uzbl-core \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:$out/share"
+  preFixup = ''
+    for f in $out/bin/*; do
+      wrapProgram $f \
+        --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+        --prefix PYTHONPATH : "$PYTHONPATH" \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
+    done
   '';
 
   nativeBuildInputs = [ pkgconfig python makeWrapper ];
 
-  buildInputs = [ webkit ];
+  buildInputs = [ webkit pygtk ];
 }
