@@ -4,6 +4,7 @@ with stdenv.lib;
 
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
+  packageName = "chromium";
   buildTargets = [ "chrome" ];
 
   installPhase = ''

@@ -91,7 +91,7 @@ let
   ];
 
   # build paths and release info
-  packageName = extraAttrs.name;
+  packageName = extraAttrs.packageName or extraAttrs.name;
   buildType = "Release";
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
