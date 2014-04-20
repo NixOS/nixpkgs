@@ -1,4 +1,4 @@
-{ newScope, stdenv, makeWrapper
+{ newScope, stdenv, makeWrapper, makeDesktopItem
 
 # package customization
 , channel ? "stable"
@@ -38,6 +38,26 @@ let
     };
   };
 
+  desktopItem = makeDesktopItem {
+    name = "Chromium";
+    exec = "chromium";
+    icon = "chromium";
+    comment = "An open source web browser from Google";
+    desktopName = "Chromium";
+    genericName = "Web browser";
+    mimeType = stdenv.lib.concatStringsSep ";" [
+      "text/html"
+      "text/xml"
+      "application/xhtml+xml"
+      "x-scheme-handler/http"
+      "x-scheme-handler/https"
+      "x-scheme-handler/ftp"
+      "x-scheme-handler/mailto"
+      "x-scheme-handler/webcal"
+    ];
+    categories = "Network;WebBrowser";
+  };
+
 in stdenv.mkDerivation {
   name = "chromium-${channel}-${chromium.browser.version}";
 
@@ -47,11 +67,14 @@ in stdenv.mkDerivation {
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
     sandboxBinary = "${chromium.sandbox}/bin/chromium-sandbox";
   in ''
-    ensureDir "$out/bin"
+    ensureDir "$out/bin" "$out/share/applications"
+
     ln -s "${chromium.browser}/share" "$out/share"
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
       --set CHROMIUM_SANDBOX_BINARY_PATH "${sandboxBinary}" \
       --add-flags "${chromium.plugins.flagsEnabled}"
+
+    cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
   inherit (chromium.browser) meta packageName;
