@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
   # buildPhase gets removed from the 'meshlab' binary
   dontPatchELF = true;
 
+  patchPhase = ''
+    patch -Np0 -i "${./qt-4.8.patch}"
+    patch -Np1 -i "${./gcc-4.7.patch}"
+  '';
+
   buildPhase = ''
     mkdir -p "$out/include"
     cp -r vcglib "$out/include"

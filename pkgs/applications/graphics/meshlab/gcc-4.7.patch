@@ -1,0 +1,38 @@
+diff --git a/meshlab/src/meshlabplugins/decorate_base/colorhistogram.h b/meshlab/src/meshlabplugins/decorate_base/colorhistogram.h
+index 2351b2a..90c6d76 100644
+--- a/meshlab/src/meshlabplugins/decorate_base/colorhistogram.h
++++ b/meshlab/src/meshlabplugins/decorate_base/colorhistogram.h
+@@ -40,7 +40,7 @@ public:
+ 
+   //! Reset histogram data.
+   void Clear() {
+-    this->::Clear();
++    Histogram<ScalarType>::Clear();
+     CV.clear();
+   }
+   /*
+diff --git a/vcglib/wrap/gl/trimesh.h b/vcglib/wrap/gl/trimesh.h
+index 5d40404..ab9d0aa 100644
+--- a/vcglib/wrap/gl/trimesh.h
++++ b/vcglib/wrap/gl/trimesh.h
+@@ -1003,7 +1003,7 @@ void Crease(MESH_TYPE &m, typename MESH_TYPE::scalar_type angleRad)
+ 			}
+ 		}
+ 
+-	m.vert.math::Swap(newvert);
++	m.vert.math.Swap(newvert);
+ 	m.vn=m.vert.size();
+ }
+ 
+diff --git a/vcglib/wrap/ply/plystuff.h b/vcglib/wrap/ply/plystuff.h
+index 3e41e63..4af9508 100644
+--- a/vcglib/wrap/ply/plystuff.h
++++ b/vcglib/wrap/ply/plystuff.h
+@@ -75,6 +75,7 @@ using namespace vcg;
+ #define pb_close  _close
+ #define DIR_SEP "\\"
+ #else
++#include <unistd.h>
+ #define pb_mkdir(n)  mkdir(n,0755)
+ #define pb_access access
+ #define pb_stat   stat
