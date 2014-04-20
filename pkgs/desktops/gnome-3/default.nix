@@ -96,6 +96,8 @@ rec {
 
   grilo = callPackage ./core/grilo { };
 
+  grilo-plugins = callPackage ./core/grilo-plugins { };
+
   gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };
 
   gtksourceview = callPackage ./core/gtksourceview { };
