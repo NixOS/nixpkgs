@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, perl, flex, bison, libpcap, libnl, c-ares
 , gnutls, libgcrypt, geoip, heimdal, lua5, gtk, makeDesktopItem, python
+, libcap
 }:
 
 let version = "1.11.2"; in
@@ -14,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     bison flex perl pkgconfig libpcap lua5 heimdal libgcrypt gnutls
-    geoip libnl c-ares gtk python
+    geoip libnl c-ares gtk python libcap
   ];
 
   preConfigure = ''
