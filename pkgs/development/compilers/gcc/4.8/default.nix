@@ -62,7 +62,7 @@ let version = "4.8.2";
   */
     enableParallelBuilding = !profiledCompiler;
 
-    patches = [ ./bug58800.patch ]
+    patches = []
       ++ optional enableParallelBuilding ./parallel-bconfig.patch
       ++ optional (cross != null) ./libstdc++-target.patch
       # ++ optional noSysDirs ./no-sys-dirs.patch
