@@ -8,11 +8,11 @@
 , libpng, libexif, libgsf, libuuid, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "tracker-1.0.0";
+  name = "tracker-0.16.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/tracker/1.0/${name}.tar.xz";
-    sha256 = "a1d033faf2c78f0e239f3c2c961b96623c9a7dabd938c08e3f5660bd70f54ba2";
+    url = "mirror://gnome/sources/tracker/0.16/${name}.tar.xz";
+    sha256 = "9c2f50839c2b8b352ab9a022597ef985c1900e6286c0c3bcb7a64da39dbb3580";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
