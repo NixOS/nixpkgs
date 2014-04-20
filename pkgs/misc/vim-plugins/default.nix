@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit }:
+{ fetchurl, stdenv, python, cmake, vim, perl, ruby, unzip, which, fetchgit, clang }:
 
 /*
 About Vim and plugins
@@ -111,12 +111,12 @@ in rec
   YouCompleteMe = stdenv.mkDerivation {
     src = fetchgit {
       url = "https://github.com/Valloric/YouCompleteMe.git";
-      rev = "ee12530df0574e18289d6daf25ff72bd3c6e94f5";
-      sha256 = "1z93l2v0s078h632jrlhxzs9pg8phnx60qlrrhb3l2nbfk047rgx";
-    };
-
-    name = "youcompleteme-git-ee12530df0";
-    buildInputs = [ python cmake ];
+      rev = "abfc3ee36adab11c0c0b9d086a164a69006fec79";
+      sha256 = "1d25dp5kgqickl06hqvx4j3z51zblhsn3q3by2hayyj3g2zps4gm";
+     };
+ 
+    name = "youcompleteme-git-abfc3ee";
+    buildInputs = [ python cmake clang.clang ];
 
     configurePhase = ":";
 
@@ -127,7 +127,7 @@ in rec
 
       mkdir $target/build
       cd $target/build
-      cmake -G "Unix Makefiles" . $target/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7
+      cmake -G "Unix Makefiles" . $target/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7 -DUSE_CLANG_COMPLETER=ON -DUSE_SYSTEM_LIBCLANG=ON
       make -j -j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
 
       ${vimHelpTags}
@@ -148,12 +148,12 @@ in rec
   };
 
   syntastic = simpleDerivation rec {
-    version = "3.1.0";
+    version = "3.4.0";
     name    = "vim-syntastic-${version}";
 
     src = fetchurl {
       url    = "https://github.com/scrooloose/syntastic/archive/${version}.tar.gz";
-      sha256 = "155zfb5z0gmd1xrpna4varqf502lq0cr41gmxq5v71r6kmb7ql82";
+      sha256 = "0h8vfs6icpfwc41qx6n6rc1m35haxp2gaswg9fhcki2w2ikp6knb";
     };
 
     path = "syntastic";
@@ -168,11 +168,12 @@ in rec
     path = "vim-coffee-script";
   };
 
-  command_T = simpleDerivation {
-    name = "vim-command-t-1.4";
+  command_T = simpleDerivation rec {
+    version = "1.8";
+    name = "vim-command-t-${version}";
     src = fetchurl {
-      url    = "https://github.com/wincent/Command-T/archive/1.4.tar.gz";
-      sha256 = "1ka9hwx9n0vj1dd5qsd2l1wq0kriwl76jmmdjzh7zaf0p547v98s";
+      url    = "https://github.com/wincent/Command-T/archive/${version}.tar.gz";
+      sha256 = "ad8664292e6eee40fbe195d856d20d93a8630e8c0149317ad72cc39423630800";
     };
     path = "Command-T";
     buildInputs = [ perl ruby ];
@@ -184,10 +185,11 @@ in rec
     '';
   };
 
-  eighties = simpleDerivation {
-    name = "vim-eighties-1.0.4";
+  eighties = simpleDerivation rec {
+    version = "1.0.4";
+    name = "vim-eighties-${version}";
     src = fetchurl {
-      url    = "https://github.com/justincampbell/vim-eighties/archive/1.0.4.tar.gz";
+      url    = "https://github.com/justincampbell/vim-eighties/archive/${version}.tar.gz";
       sha256 = "0cjd9hbg2qd7jjkvyi15f9ysp7m3aa2sg8nvbf80yb890rfkwaqr";
     };
     path = "eighties";
@@ -258,7 +260,7 @@ in rec
   };
 
   tagbar = simpleDerivation rec {
-    version = "2.5";
+    version = "2.6.1";
     name    = "vim-tagbar-${version}";
 
     meta = with stdenv.lib; {
@@ -271,7 +273,7 @@ in rec
 
     src = fetchurl {
       url    = "https://github.com/majutsushi/tagbar/archive/v${version}.tar.gz";
-      sha256 = "1s4aic3qbk2ra2cif06g16d0avlmpxhrm96dksrw9qnv4hcjqqxr";
+      sha256 = "c061a7e0a45a166f4558b31e6c47b9fd701f5fa1319527b65a268ea054dea5fb";
     };
 
     path = "tagbar";
@@ -317,7 +319,7 @@ in rec
   };
 
   vimproc = simpleDerivation rec {
-    version = "5cf4c6bfe9bf0649159b5648d736d54c96e99b3e";
+    version = "7788b5f934bc7460c1e9134b51fe5690b21de83c";
     name    = "vimproc-${version}";
 
     meta = with stdenv.lib; {
@@ -329,10 +331,11 @@ in rec
       platforms   = platforms.unix;
     };
 
-    src = fetchurl {
-      url    = "${meta.homepage}/archive/${version}.tar.gz";
-      sha256 = "0f76mc7v3656sf9syaq1rxzk3dqz6i5w190wgj15sjjnapzd956p";
-    };
+    src = fetchgit {
+      url = "https://github.com/Shougo/vimproc.vim.git";
+      rev = "${version}";
+      sha256 = "0ahmnzccf5rv8rwg7b6pfgxh8pcmq955aznjv64slyh0mjqmh6jl";
+     };
 
     buildInputs = [ which ];
 
