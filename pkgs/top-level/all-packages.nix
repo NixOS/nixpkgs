@@ -1832,6 +1832,8 @@ let
     inherit (gnome) gnome_vfs GConf;
   };
 
+  remarkjs = callPackage ../development/web/remarkjs { };
+
   remind = callPackage ../tools/misc/remind { };
 
   remmina = callPackage ../applications/networking/remote/remmina {};
