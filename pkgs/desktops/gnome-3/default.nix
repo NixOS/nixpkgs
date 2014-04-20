@@ -167,6 +167,8 @@ rec {
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
+  gfbgraph = callPackage ./misc/gfbgraph { };
+
   goffice = callPackage ./misc/goffice { };
 
   gitg = callPackage ./misc/gitg { };
