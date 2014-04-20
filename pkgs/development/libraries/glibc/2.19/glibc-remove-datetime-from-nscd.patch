@@ -1,0 +1,11 @@
+--- a/nscd/nscd_stat.c	2014-04-08 20:35:24.253715420 +0200
++++ b/nscd/nscd_stat.c	2014-04-08 20:38:32.526634400 +0200
+@@ -37,7 +37,7 @@
+ 
+ 
+ /* We use this to make sure the receiver is the same.  */
+-static const char compilation[21] = __DATE__ " " __TIME__;
++static const char compilation[21] = "Thu  1 1970 00:00:01"; /* __DATE__ " " __TIME__; */
+ 
+ /* Statistic data for one database.  */
+ struct dbstat

@@ -58,6 +58,14 @@ stdenv.mkDerivation ({
       ./fix_path_attribute_in_getconf.patch
 
       ./fix-math.patch
+
+      /* Remove references to the compilation date.  */
+      ./glibc-remove-date-from-compilation-banner.patch
+
+      /* Remove the date and time from nscd.  It is used as a protocol
+         compatibility check, but we assume nix takes care of that for
+         us. */
+      ./glibc-remove-datetime-from-nscd.patch
     ];
 
   postPatch = ''
