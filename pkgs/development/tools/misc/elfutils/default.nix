@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./CVE-2014-0172.patch
     (fetchurl {
       url = "http://fedorahosted.org/releases/e/l/elfutils/${version}/elfutils-portability.patch";
       sha256 = "0w8i94x9hqirgs2lwcd1g36s77r5svh4j1fgcrd6lx5w18vch0di";
