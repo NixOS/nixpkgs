@@ -159,6 +159,8 @@ rec {
 
   glade = callPackage ./apps/glade { };
 
+  gnome-documents = callPackage ./apps/gnome-documents { };
+
   gnome-music = callPackage ./apps/gnome-music { };
 
   # scrollkeeper replacement
