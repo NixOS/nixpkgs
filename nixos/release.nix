@@ -245,6 +245,7 @@ in rec {
   tests.simple = callTest tests/simple.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks = callTest tests/udisks.nix {};
+  tests.udisks2 = callTest tests/udisks2.nix {};
   tests.xfce = callTest tests/xfce.nix {};
 
 }

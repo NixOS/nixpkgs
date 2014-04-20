@@ -1,10 +1,12 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+
+with lib;
 
 {
 
   ###### implementation
 
-  config = {
+  config = mkIf (!config.boot.isContainer) {
 
     environment.systemPackages = [ pkgs.lvm2 ];
 

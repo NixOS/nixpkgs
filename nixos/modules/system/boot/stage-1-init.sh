@@ -139,8 +139,6 @@ mkdir -p /dev/.mdadm
 systemd-udevd --daemon
 udevadm trigger --action=add
 udevadm settle || true
-modprobe scsi_wait_scan || true
-udevadm settle || true
 
 
 # Load boot-time keymap before any LVM/LUKS initialization

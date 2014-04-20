@@ -9,10 +9,11 @@ let
   setuidWrapper = pkgs.stdenv.mkDerivation {
     name = "setuid-wrapper";
     buildCommand = ''
-      ensureDir $out/bin
+      mkdir -p $out/bin
+      cp ${./setuid-wrapper.c} setuid-wrapper.c
       gcc -Wall -O2 -DWRAPPER_DIR=\"${wrapperDir}\" \
-          ${./setuid-wrapper.c} -o $out/bin/setuid-wrapper
-      strip -s $out/bin/setuid-wrapper
+          setuid-wrapper.c -o $out/bin/setuid-wrapper
+      strip -S $out/bin/setuid-wrapper
     '';
   };
 
@@ -116,8 +117,7 @@ in
           # programs to be wrapped.
           SETUID_PATH=${config.system.path}/bin:${config.system.path}/sbin
 
-          if test -d ${wrapperDir}; then rm -f ${wrapperDir}/*; fi # */
-          mkdir -p ${wrapperDir}
+          rm -f ${wrapperDir}/* # */
 
           ${concatMapStrings makeSetuidWrapper setuidPrograms}
         '';

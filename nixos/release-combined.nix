@@ -61,6 +61,7 @@ in rec {
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
         (all nixos.tests.udisks)
+        (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
 
         nixpkgs.tarball

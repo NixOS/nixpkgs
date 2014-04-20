@@ -19,11 +19,13 @@ let
     isExecutable = true;
     inherit (config.boot) devShmSize runSize cleanTmpDir;
     inherit (config.nix) readOnlyStore;
+    inherit (config.networking) useHostResolvConf;
     ttyGid = config.ids.gids.tty;
     path =
       [ pkgs.coreutils
         pkgs.utillinux
         pkgs.sysvtools
+        pkgs.openresolv
       ] ++ (optional config.boot.cleanTmpDir pkgs.findutils)
       ++ optional config.nix.readOnlyStore readonlyMountpoint;
     postBootCommands = pkgs.writeText "local-cmds"
@@ -79,6 +81,7 @@ in
         '';
       };
 
+      # FIXME: should replace this with something that uses systemd-tmpfiles.
       cleanTmpDir = mkOption {
         type = types.bool;
         default = false;

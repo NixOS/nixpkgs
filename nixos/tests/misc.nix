@@ -8,6 +8,7 @@ import ./make-test.nix {
         [ { device = "/root/swapfile"; size = 128; } ];
       environment.variables.EDITOR = pkgs.lib.mkOverride 0 "emacs";
       services.nixosManual.enable = pkgs.lib.mkOverride 0 true;
+      systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
     };
 
   testScript =
@@ -62,6 +63,22 @@ import ./make-test.nix {
       subtest "hostname", sub {
           $machine->succeed('[ "`hostname`" = machine ]');
           $machine->succeed('[ "`hostname -s`" = machine ]');
+      };
+
+      # Test whether systemd-udevd automatically loads modules for our hardware.
+      subtest "udev-auto-load", sub {
+          $machine->waitForUnit('systemd-udev-settle.service');
+          $machine->succeed('lsmod | grep psmouse');
+      };
+
+      # Test whether systemd-tmpfiles-clean works.
+      subtest "tmpfiles", sub {
+          $machine->succeed('touch /tmp/foo');
+          $machine->succeed('systemctl start systemd-tmpfiles-clean');
+          $machine->succeed('[ -e /tmp/foo ]');
+          $machine->succeed('date -s "@$(($(date +%s) + 1000000))"'); # move into the future
+          $machine->succeed('systemctl start systemd-tmpfiles-clean');
+          $machine->fail('[ -e /tmp/foo ]');
       };
     '';
 

@@ -829,8 +829,6 @@ let
 
   dhcpcd = callPackage ../tools/networking/dhcpcd { };
 
-  dhcpcd_without_udev = callPackage ../tools/networking/dhcpcd { udev = null; };
-
   diffstat = callPackage ../tools/text/diffstat { };
 
   diffutils = callPackage ../tools/text/diffutils { };
@@ -4192,10 +4190,11 @@ let
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
   dbus_python     = callPackage ../development/python-modules/dbus { };
+
   # Should we deprecate these? Currently there are many references.
-  dbus_tools = dbus.tools;
-  dbus_libs = dbus.libs;
-  dbus_daemon = dbus.daemon;
+  dbus_tools = pkgs.dbus.tools;
+  dbus_libs = pkgs.dbus.libs;
+  dbus_daemon = pkgs.dbus.daemon;
 
   dhex = callPackage ../applications/editors/dhex { };
 
@@ -6869,23 +6868,23 @@ let
   libnl = callPackage ../os-specific/linux/libnl { };
   libnl_3_2_19 = callPackage ../os-specific/linux/libnl/3.2.19.nix { };
 
-  linuxHeaders = linuxHeaders37;
-
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
-  linuxHeaders26 = callPackage ../os-specific/linux/kernel-headers/2.6.32.nix { };
+  linuxHeaders = linuxHeaders_3_7;
 
-  linuxHeaders37 = callPackage ../os-specific/linux/kernel-headers/3.7.nix { };
+  linuxHeaders24Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.4.nix {
+    inherit stdenv fetchurl perl;
+    cross = assert crossSystem != null; crossSystem;
+  });
 
   linuxHeaders26Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
     cross = assert crossSystem != null; crossSystem;
   });
 
-  linuxHeaders24Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.4.nix {
-    inherit stdenv fetchurl perl;
-    cross = assert crossSystem != null; crossSystem;
-  });
+  linuxHeaders_3_7 = callPackage ../os-specific/linux/kernel-headers/3.7.nix { };
+
+  linuxHeaders_3_14 = callPackage ../os-specific/linux/kernel-headers/3.14.nix { };
 
   # We can choose:
   linuxHeadersCrossChooser = ver : if ver == "2.4" then linuxHeaders24Cross
@@ -6894,8 +6893,6 @@ let
 
   linuxHeadersCross = assert crossSystem != null;
     linuxHeadersCrossChooser crossSystem.platform.kernelMajor;
-
-  linuxHeaders_2_6_28 = callPackage ../os-specific/linux/kernel-headers/2.6.28.nix { };
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
@@ -7004,6 +7001,8 @@ let
     blcr = callPackage ../os-specific/linux/blcr { };
 
     cryptodev = callPackage ../os-specific/linux/cryptodev { };
+
+    cpupower = callPackage ../os-specific/linux/cpupower { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
@@ -7262,7 +7261,9 @@ let
 
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
-  systemd = callPackage ../os-specific/linux/systemd { };
+  systemd = callPackage ../os-specific/linux/systemd {
+    linuxHeaders = linuxHeaders_3_14;
+  };
 
   systemtap = callPackage ../development/tools/profiling/systemtap {
     inherit (gnome) libglademm;

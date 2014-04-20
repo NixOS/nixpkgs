@@ -82,7 +82,7 @@ done
 
 # More special file systems, initialise required directories.
 mkdir -m 0755 /dev/shm
-mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" tmpfs /dev/shm
+mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" none /dev/shm
 mkdir -m 0755 -p /dev/pts
 [ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # UML doesn't have USB by default
 mkdir -m 01777 -p /tmp
@@ -96,27 +96,13 @@ mkdir -m 0755 -p /etc/nixos
 
 # Miscellaneous boot time cleanup.
 rm -rf /var/run /var/lock
-rm -f /etc/resolv.conf
-touch /etc/resolv.conf
 rm -f /etc/{group,passwd,shadow}.lock
 
 if test -n "@cleanTmpDir@"; then
     echo -n "cleaning \`/tmp'..."
     find /tmp -maxdepth 1 -mindepth 1 -print0 | xargs -0r rm -rf --one-file-system
     echo " done"
-else
-    # Get rid of ICE locks...
-    rm -rf /tmp/.ICE-unix
 fi
-
-# ... and ensure that it's owned by root.
-mkdir -m 1777 /tmp/.ICE-unix
-
-# This is a good time to clean up /nix/var/nix/chroots.  Doing an `rm
-# -rf' on it isn't safe in general because it can contain bind mounts
-# to /nix/store and other places.  But after rebooting these are all
-# gone, of course.
-rm -rf /nix/var/nix/chroots # recreated in activate-configuration.sh
 
 
 # Also get rid of temporary GC roots.
@@ -153,6 +139,20 @@ ln -s /run/lock /var/lock
 if test -n "$resumeDevice"; then
     mkswap "$resumeDevice" || echo 'Failed to clear saved image.'
 fi
+
+
+# Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
+if [ -n "@useHostResolvConf@" -a -e /etc/resolv.conf ]; then
+    cat /etc/resolv.conf | resolvconf -m 1000 -a host
+else
+    touch /etc/resolv.conf
+fi
+
+
+# Create /var/setuid-wrappers as a tmpfs.
+rm -rf /var/setuid-wrappers
+mkdir -m 0755 -p /var/setuid-wrappers
+mount -t tmpfs -o "mode=0755" none /var/setuid-wrappers
 
 
 # Run the script that performs all configuration activation that does

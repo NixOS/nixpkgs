@@ -24,14 +24,13 @@ let
           ln -s /dev/null $out/${name}
         '';
 
-  upstreamUnits =
+  upstreamSystemUnits =
     [ # Targets.
       "basic.target"
       "sysinit.target"
       "sockets.target"
       "graphical.target"
       "multi-user.target"
-      "getty.target"
       "network.target"
       "network-online.target"
       "nss-lookup.target"
@@ -41,6 +40,7 @@ let
       "sigpwr.target"
       "timers.target"
       "paths.target"
+      "rpcbind.target"
 
       # Rescue mode.
       "rescue.target"
@@ -52,6 +52,13 @@ let
       "systemd-udevd.service"
       "systemd-udev-settle.service"
       "systemd-udev-trigger.service"
+
+      # Consoles.
+      "getty.target"
+      "getty@.service"
+      "serial-getty@.service"
+      "container-getty@.service"
+      "systemd-vconsole-setup.service"
 
       # Hardware (started by udev when a relevant device is plugged in).
       "sound.target"
@@ -65,12 +72,15 @@ let
       #"systemd-vconsole-setup.service"
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.login1.service"
+      "dbus-org.freedesktop.machine1.service"
       "user@.service"
 
       # Journal.
       "systemd-journald.socket"
       "systemd-journald.service"
       "systemd-journal-flush.service"
+      "systemd-journal-gatewayd.socket"
+      "systemd-journal-gatewayd.service"
       "syslog.socket"
 
       # SysV init compatibility.
@@ -78,7 +88,8 @@ let
       "systemd-initctl.service"
 
       # Kernel module loading.
-      #"systemd-modules-load.service"
+      "systemd-modules-load.service"
+      "kmod-static-nodes.service"
 
       # Filesystems.
       "systemd-fsck@.service"
@@ -91,9 +102,15 @@ let
       "swap.target"
       "dev-hugepages.mount"
       "dev-mqueue.mount"
+      "proc-sys-fs-binfmt_misc.mount"
       "sys-fs-fuse-connections.mount"
       "sys-kernel-config.mount"
       "sys-kernel-debug.mount"
+
+      # Maintaining state across reboots.
+      "systemd-random-seed.service"
+      "systemd-backlight@.service"
+      "systemd-rfkill@.service"
 
       # Hibernate / suspend.
       "hibernate.target"
@@ -119,32 +136,55 @@ let
       "final.target"
       "kexec.target"
       "systemd-kexec.service"
+      "systemd-update-utmp.service"
 
       # Password entry.
       "systemd-ask-password-console.path"
       "systemd-ask-password-console.service"
       "systemd-ask-password-wall.path"
       "systemd-ask-password-wall.service"
+
+      # Slices / containers.
+      "slices.target"
+      "-.slice"
+      "system.slice"
+      "user.slice"
+      "machine.slice"
+      "systemd-machined.service"
+
+      # Temporary file creation / cleanup.
+      "systemd-tmpfiles-clean.service"
+      "systemd-tmpfiles-clean.timer"
+      "systemd-tmpfiles-setup.service"
+      "systemd-tmpfiles-setup-dev.service"
+
+      # Misc.
+      "systemd-sysctl.service"
     ]
 
     ++ optionals cfg.enableEmergencyMode [
       "emergency.target"
       "emergency.service"
-    ]
-
-    ++ optionals config.services.journald.enableHttpGateway [
-      "systemd-journal-gatewayd.socket"
-      "systemd-journal-gatewayd.service"
     ];
 
-  upstreamWants =
+  upstreamSystemWants =
     [ #"basic.target.wants"
       "sysinit.target.wants"
       "sockets.target.wants"
       "local-fs.target.wants"
       "multi-user.target.wants"
-      "shutdown.target.wants"
       "timers.target.wants"
+    ];
+
+  upstreamUserUnits =
+    [ "basic.target"
+      "default.target"
+      "exit.target"
+      "paths.target"
+      "shutdown.target"
+      "sockets.target"
+      "systemd-exit.service"
+      "timers.target"
     ];
 
   makeJobScript = name: text:
@@ -178,7 +218,7 @@ let
 
   serviceConfig = { name, config, ... }: {
     config = mkMerge
-      [ (mkIf (config.baseUnit == null) { # Default path for systemd services.  Should be quite minimal.
+      [ { # Default path for systemd services.  Should be quite minimal.
           path =
             [ pkgs.coreutils
               pkgs.findutils
@@ -187,7 +227,7 @@ let
               systemd
             ];
           environment.PATH = config.path;
-        })
+        }
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre = makeJobScript "${name}-pre-start" ''
               #! ${pkgs.stdenv.shell} -e
@@ -255,10 +295,7 @@ let
         (if isList value then value else [value]))
         as));
 
-  commonUnitText = def:
-    optionalString (def.baseUnit != null) ''
-      .include ${def.baseUnit}
-    '' + ''
+  commonUnitText = def: ''
       [Unit]
       ${attrsToSection def.unitConfig}
     '';
@@ -335,63 +372,91 @@ let
         '';
     };
 
-  units = pkgs.runCommand "units" { preferLocalBuild = true; }
-    ''
+  generateUnits = type: units: upstreamUnits: upstreamWants:
+    pkgs.runCommand "${type}-units" { preferLocalBuild = true; } ''
       mkdir -p $out
+
+      # Copy the upstream systemd units we're interested in.
       for i in ${toString upstreamUnits}; do
-        fn=${systemd}/example/systemd/system/$i
+        fn=${systemd}/example/systemd/${type}/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         if [ -L $fn ]; then
-          cp -pd $fn $out/
+          target="$(readlink "$fn")"
+          if [ ''${target:0:3} = ../ ]; then
+            ln -s "$(readlink -f "$fn")" $out/
+          else
+            cp -pd $fn $out/
+          fi
         else
           ln -s $fn $out/
         fi
       done
 
+      # Copy .wants links, but only those that point to units that
+      # we're interested in.
       for i in ${toString upstreamWants}; do
-        fn=${systemd}/example/systemd/system/$i
+        fn=${systemd}/example/systemd/${type}/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         x=$out/$(basename $fn)
         mkdir $x
         for i in $fn/*; do
           y=$x/$(basename $i)
           cp -pd $i $y
-          if ! [ -e $y ]; then rm -v $y; fi
+          if ! [ -e $y ]; then rm $y; fi
         done
       done
 
-      for i in ${toString (mapAttrsToList (n: v: v.unit) cfg.units)}; do
-        ln -fs $i/* $out/
-      done
-
+      # Symlink all units provided listed in systemd.packages.
       for i in ${toString cfg.packages}; do
-        ln -s $i/etc/systemd/system/* $out/
+        files=$(echo $i/etc/systemd/${type}/* $i/lib/systemd/${type}/*)
+        if [ -n "$files" ]; then
+          ln -s $files $out/
+        fi
       done
 
+      # Symlink all units defined by systemd.units. If these are also
+      # provided by systemd or systemd.packages, then add them as
+      # <unit-name>.d/overrides.conf, which makes them extend the
+      # upstream unit.
+      for i in ${toString (mapAttrsToList (n: v: v.unit) units)}; do
+        fn=$(basename $i/*)
+        if [ -e $out/$fn ]; then
+          if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
+            ln -sfn /dev/null $out/$fn
+          else
+            mkdir $out/$fn.d
+            ln -s $i/$fn $out/$fn.d/overrides.conf
+          fi
+       else
+          ln -fs $i/$fn $out/
+        fi
+      done
+
+      # Created .wants and .requires symlinks from the wantedBy and
+      # requiredBy options.
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.wants'
             ln -sfn '../${name}' $out/'${name2}.wants'/
-          '') unit.wantedBy) cfg.units)}
+          '') unit.wantedBy) units)}
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.requires'
             ln -sfn '../${name}' $out/'${name2}.requires'/
-          '') unit.requiredBy) cfg.units)}
+          '') unit.requiredBy) units)}
 
-      ln -s ${cfg.defaultUnit} $out/default.target
+      ${optionalString (type == "system") ''
+        # Stupid misc. symlinks.
+        ln -s ${cfg.defaultUnit} $out/default.target
 
-      ln -s rescue.target $out/kbrequest.target
+        ln -s rescue.target $out/kbrequest.target
 
-      mkdir -p $out/getty.target.wants/
-      ln -s ../autovt@tty1.service $out/getty.target.wants/
+        mkdir -p $out/getty.target.wants/
+        ln -s ../autovt@tty1.service $out/getty.target.wants/
 
-      ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
-            ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
-
-      ${ optionalString config.services.journald.enableHttpGateway ''
-      ln -s ../systemd-journal-gatewayd.service $out/multi-user-target.wants/
+        ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
+              ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
       ''}
     ''; # */
 
@@ -414,37 +479,7 @@ in
       default = {};
       type = types.attrsOf types.optionSet;
       options = { name, config, ... }:
-        { options = {
-            text = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = "Text of this systemd unit.";
-            };
-            enable = mkOption {
-              default = true;
-              type = types.bool;
-              description = ''
-                If set to false, this unit will be a symlink to
-                /dev/null. This is primarily useful to prevent specific
-                template instances (e.g. <literal>serial-getty@ttyS0</literal>)
-                from being started.
-              '';
-            };
-            requiredBy = mkOption {
-              default = [];
-              type = types.listOf types.string;
-              description = "Units that require (i.e. depend on and need to go down with) this unit.";
-            };
-            wantedBy = mkOption {
-              default = [];
-              type = types.listOf types.string;
-              description = "Units that want (i.e. depend on) this unit.";
-            };
-            unit = mkOption {
-              internal = true;
-              description = "The generated unit.";
-            };
-          };
+        { options = concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
@@ -460,7 +495,7 @@ in
     systemd.targets = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
-      options = [ unitOptions unitConfig ];
+      options = [ targetOptions unitConfig ];
       description = "Definition of systemd target units.";
     };
 
@@ -583,7 +618,7 @@ in
       default = false;
       type = types.bool;
       description = ''
-        Enable journal http gateway
+        Whether to enable the HTTP gateway to the journal.
       '';
     };
 
@@ -610,6 +645,41 @@ in
       '';
     };
 
+    systemd.tmpfiles.rules = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "d /tmp 1777 root root 10d" ];
+      description = ''
+        Rules for creating and cleaning up temporary files
+        automatically. See
+        <citerefentry><refentrytitle>tmpfiles.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        for the exact format. You should not use this option to create
+        files required by systemd services, since there is no
+        guarantee that <command>systemd-tmpfiles</command> runs when
+        the system is reconfigured using
+        <command>nixos-rebuild</command>.
+      '';
+    };
+
+    systemd.user.units = mkOption {
+      description = "Definition of systemd per-user units.";
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = { name, config, ... }:
+        { options = concreteUnitOptions;
+          config = {
+            unit = mkDefault (makeUnit name config);
+          };
+        };
+    };
+
+    systemd.user.services = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ serviceOptions unitConfig serviceConfig ];
+      description = "Definition of systemd per-user service units.";
+    };
+
   };
 
 
@@ -617,11 +687,20 @@ in
 
   config = {
 
-    system.build.units = units;
+    assertions = mapAttrsToList (name: service: {
+      assertion = service.serviceConfig.Type or "" == "oneshot" -> service.serviceConfig.Restart or "no" == "no";
+      message = "${name}: Type=oneshot services must have Restart=no";
+    }) cfg.services;
+
+    system.build.units = cfg.units;
 
     environment.systemPackages = [ systemd ];
 
-    environment.etc."systemd/system".source = units;
+    environment.etc."systemd/system".source =
+      generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
+
+    environment.etc."systemd/user".source =
+      generateUnits "user" cfg.user.units upstreamUserUnits [];
 
     environment.etc."systemd/system.conf".text =
       ''
@@ -685,6 +764,9 @@ in
                    (v: let n = escapeSystemdPath v.where;
                        in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
+    systemd.user.units =
+      mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services;
+
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
       "CGROUPS" "AUTOFS4_FS" "DEVTMPFS"
     ];
@@ -708,43 +790,25 @@ in
         })
         (filterAttrs (name: service: service.startAt != "") cfg.services);
 
-    # FIXME: These are borrowed from upstream systemd.
-    systemd.services."systemd-update-utmp" =
-      { description = "Update UTMP about System Reboot/Shutdown";
-        wantedBy = [ "sysinit.target" ];
-        after = [ "systemd-remount-fs.service" ];
-        before = [ "sysinit.target" "shutdown.target" ];
-        conflicts = [ "shutdown.target" ];
-        unitConfig = {
-          DefaultDependencies = false;
-          RequiresMountsFor = "/var/log";
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${systemd}/lib/systemd/systemd-update-utmp reboot";
-          ExecStop = "${systemd}/lib/systemd/systemd-update-utmp shutdown";
-        };
-        restartIfChanged = false;
+    systemd.sockets.systemd-journal-gatewayd.wantedBy =
+      optional config.services.journald.enableHttpGateway "sockets.target";
+
+    # Provide the systemd-user PAM service, required to run systemd
+    # user instances.
+    security.pam.services.systemd-user =
+      { # Ensure that pam_systemd gets included. This is special-cased
+        # in systemd to provide XDG_RUNTIME_DIR.
+        startSession = true;
       };
 
-    systemd.services."systemd-random-seed" =
-      { description = "Load/Save Random Seed";
-        wantedBy = [ "sysinit.target" "multi-user.target" ];
-        after = [ "systemd-remount-fs.service" ];
-        before = [ "sysinit.target" "shutdown.target" ];
-        conflicts = [ "shutdown.target" ];
-        unitConfig = {
-          DefaultDependencies = false;
-          RequiresMountsFor = "/var/lib";
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${systemd}/lib/systemd/systemd-random-seed load";
-          ExecStop = "${systemd}/lib/systemd/systemd-random-seed save";
-        };
-      };
+    environment.etc."tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
+
+    environment.etc."tmpfiles.d/nixos.conf".text =
+      ''
+        # This file is created automatically and should not be modified.
+        # Please change the option ‘systemd.tmpfiles.rules’ instead.
+        ${concatStringsSep "\n" cfg.tmpfiles.rules}
+      '';
 
   };
 }

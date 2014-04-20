@@ -30,8 +30,8 @@ int main(int argc, char * * argv)
        creating hard link `X' from some other location, along with a
        false `X.real' file, to allow arbitrary programs from being
        executed setuid.  */
-    assert ((strncmp(self, wrapperDir, sizeof(wrapperDir)) == 0) &&
-	    (self[strlen(wrapperDir)] == '/'));
+    assert ((strncmp(self, wrapperDir, strlen(wrapperDir)) == 0) &&
+            (self[strlen(wrapperDir)] == '/'));
 
     /* Make *really* *really* sure that we were executed as `self',
        and not, say, as some other setuid program.  That is, our
@@ -42,12 +42,12 @@ int main(int argc, char * * argv)
     assert (lstat(self, &st) != -1);
 
     //printf("%d %d\n", st.st_uid, st.st_gid);
-    
+
     assert ((st.st_mode & S_ISUID) == 0 ||
-	    (st.st_uid == geteuid()));
+            (st.st_uid == geteuid()));
 
     assert ((st.st_mode & S_ISGID) == 0 ||
-	    st.st_gid == getegid());
+            st.st_gid == getegid());
 
     /* And, of course, we shouldn't be writable. */
     assert (!(st.st_mode & (S_IWGRP | S_IWOTH)));
@@ -69,13 +69,13 @@ int main(int argc, char * * argv)
     real[len] = 0;
 
     close(fdSelf);
-    
+
     //printf("real = %s, len = %d\n", real, len);
 
     execve(real, argv, environ);
 
     fprintf(stderr, "%s: cannot run `%s': %s\n",
         argv[0], real, strerror(errno));
-    
+
     exit(1);
 }

@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  dhcpcd =  if !config.boot.isContainer then pkgs.dhcpcd else pkgs.dhcpcd_without_udev;
+  dhcpcd = if !config.boot.isContainer then pkgs.dhcpcd else pkgs.dhcpcd.override { udev = null; };
 
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge.
@@ -80,6 +80,7 @@ in
   options = {
 
     networking.dhcpcd.denyInterfaces = mkOption {
+      type = types.listOf types.str;
       default = [];
       description = ''
          Disable the DHCP client for any interface whose name matches
@@ -90,6 +91,7 @@ in
     };
 
     networking.dhcpcd.extraConfig = mkOption {
+      type = types.lines;
       default = "";
       description = ''
          Literal string to append to the config file generated for dhcpcd.
@@ -107,6 +109,7 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "network.target" ];
+        after = [ "systemd-udev-settle.service" ]; # FIXME
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by

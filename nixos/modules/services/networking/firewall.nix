@@ -18,8 +18,6 @@
 
 */
 
-
-
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -266,14 +264,23 @@ in
                      message = "This kernel does not support disabling conntrack helpers"; }
                  ];
 
-    jobs.firewall =
+    systemd.services.firewall =
       { description = "Firewall";
 
-        startOn = "started network-interfaces";
+        wantedBy = [ "network.target" ];
+        after = [ "network-interfaces.target" "systemd-modules-load.service" ];
 
         path = [ pkgs.iptables ];
 
-        preStart =
+        # FIXME: this module may also try to load kernel modules, but
+        # containers don't have CAP_SYS_MODULE. So the host system had
+        # better have all necessary modules already loaded.
+        unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+
+        script =
           ''
             ${helpers}
 

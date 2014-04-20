@@ -49,22 +49,20 @@ with lib;
   config = {
 
     systemd.services."getty@" =
-      { baseUnit = pkgs.runCommand "getty.service" {}
-          ''
-            sed '/ExecStart/ d' < ${config.systemd.package}/example/systemd/system/getty@.service > $out
-          '';
-        serviceConfig.ExecStart = "@${pkgs.utillinux}/sbin/agetty agetty --noclear --login-program ${pkgs.shadow}/bin/login %I 38400";
+      { serviceConfig.ExecStart = "@${pkgs.utillinux}/sbin/agetty agetty --noclear --login-program ${pkgs.shadow}/bin/login --keep-baud %I 115200,38400,9600 $TERM";
         restartIfChanged = false;
       };
 
     systemd.services."serial-getty@" =
-      { baseUnit = pkgs.runCommand "serial-getty.service" {}
-          ''
-            sed '/ExecStart/ d' < ${config.systemd.package}/example/systemd/system/serial-getty@.service > $out
-          '';
-        serviceConfig.ExecStart =
+      { serviceConfig.ExecStart =
           let speeds = concatStringsSep "," (map toString config.services.mingetty.serialSpeed);
-          in "@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login %I ${speeds}";
+          in "@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login %I ${speeds} $TERM";
+        restartIfChanged = false;
+      };
+
+    systemd.services."container-getty@" =
+      { unitConfig.ConditionPathExists = "/dev/pts/%I"; # Work around being respawned when "machinectl login" exits.
+        serviceConfig.ExecStart = "@${pkgs.utillinux}/sbin/agetty agetty --noclear --login-program ${pkgs.shadow}/bin/login --keep-baud pts/%I 115200,38400,9600 $TERM";
         restartIfChanged = false;
       };
 

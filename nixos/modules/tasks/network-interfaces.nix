@@ -191,6 +191,15 @@ in
       '';
     };
 
+    networking.useHostResolvConf = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        In containers, whether to use the
+        <filename>resolv.conf</filename> supplied by the host.
+      '';
+    };
+
     networking.localCommands = mkOption {
       default = "";
       example = "text=anything; echo You can put $text here.";

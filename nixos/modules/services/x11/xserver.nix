@@ -201,17 +201,6 @@ in
         '';
       };
 
-      startOpenSSHAgent = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to start the OpenSSH agent when you log in.  The OpenSSH agent
-          remembers private keys for you so that you don't have to type in
-          passphrases every time you make an SSH connection.  Use
-          <command>ssh-add</command> to add a key to the agent.
-        '';
-      };
-
       startGnuPGAgent = mkOption {
         type = types.bool;
         default = false;
@@ -400,11 +389,11 @@ in
     hardware.opengl.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 
     assertions =
-      [ { assertion = !(cfg.startOpenSSHAgent && cfg.startGnuPGAgent);
+      [ { assertion = !(config.programs.ssh.startAgent && cfg.startGnuPGAgent);
           message =
             ''
-              The OpenSSH agent and GnuPG agent cannot be started both.
-              Choose between `startOpenSSHAgent' and `startGnuPGAgent'.
+              The OpenSSH agent and GnuPG agent cannot be started both. Please
+              choose between ‘programs.ssh.startAgent’ and ‘services.xserver.startGnuPGAgent’.
             '';
         }
         { assertion = config.security.polkit.enable;

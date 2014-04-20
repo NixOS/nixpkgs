@@ -159,7 +159,7 @@ in
 
     # Enable helpful DBus services.
     services.udisks.enable = ! wantsUdisks2;
-    services.udisks2.enable = wantsUdisks2;
+    services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
     security.pam.services.kde = { allowNullPassword = true; };

@@ -45,19 +45,8 @@ in
       ) config.boot.kernel.sysctl);
 
     systemd.services.systemd-sysctl =
-      { description = "Apply Kernel Variables";
-        before = [ "sysinit.target" "shutdown.target" ];
-        wantedBy = [ "sysinit.target" "multi-user.target" ];
+      { wantedBy = [ "multi-user.target" ];
         restartTriggers = [ config.environment.etc."sysctl.d/nixos.conf".source ];
-        unitConfig = {
-          DefaultDependencies = false; # needed to prevent a cycle
-          ConditionPathIsReadWrite = "/proc/sys/"; # prevent systemd-sysctl in containers
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${config.systemd.package}/lib/systemd/systemd-sysctl";
-        };
       };
 
     # Enable hardlink and symlink restrictions.  See

@@ -1,5 +1,7 @@
 #! @shell@
 
+if [ -x "@shell@" ]; then export SHELL="@shell@"; fi;
+
 set -e
 
 showSyntax() {
