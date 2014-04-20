@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     -DKDE4_LIBEXEC_INSTALL_DIR=lib/kde4/libexec
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://projects.kde.org/projects/extragear/base/kde-gtk-config;
     description = "GTK configuration module for KDE System Settings";
     longDescription = ''
@@ -43,7 +43,8 @@ stdenv.mkDerivation {
       - Select GTK applications default fonts.
       - Easily browse and install new GTK2 and GTK3 themes.
     '';
-    platforms = stdenv.lib.platforms.linux;
-    license = "GPLv3";
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.ttuegel ];
   };
 }

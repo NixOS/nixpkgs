@@ -1,15 +1,15 @@
 { cabal, aeson, binary, deepseq, filepath, Glob, hastache, mtl
-, mwcRandom, parsec, statistics, time, transformers, vector
+, mwcRandom, parsec, statistics, text, time, transformers, vector
 , vectorAlgorithms
 }:
 
 cabal.mkDerivation (self: {
   pname = "criterion";
-  version = "0.8.0.0";
-  sha256 = "05v4glwvidsd4gm2jcvmlcpfaxg2x0fb69w051rbwg9scanrm7bf";
+  version = "0.8.0.2";
+  sha256 = "126c3i9i88wqs5ihif4kpsc1gdqas57acd8h5jbyfqhgbwi1s7gz";
   buildDepends = [
     aeson binary deepseq filepath Glob hastache mtl mwcRandom parsec
-    statistics time transformers vector vectorAlgorithms
+    statistics text time transformers vector vectorAlgorithms
   ];
   meta = {
     homepage = "https://github.com/bos/criterion";

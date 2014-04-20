@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A browser plugin to manage Swedish BankID:s";
     homepage = http://fribid.se;
-    licenses = [ "GPLv2" "MPLv1" ];
+    license = [ "GPLv2" "MPLv1" ];
     maintainers = [ stdenv.lib.maintainers.edwtjo ];
     platforms = with stdenv.lib.platforms; linux;
   };

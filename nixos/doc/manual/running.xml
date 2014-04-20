@@ -11,7 +11,7 @@ service manager.</para>
 
 <!--===============================================================-->
 
-<section><title>Service management</title>
+<section xml:id="sec-systemctl"><title>Service management</title>
 
 <para>In NixOS, all system services are started and monitored using
 the systemd program.  Systemd is the “init” process of the system
@@ -92,7 +92,7 @@ necessary).</para>
 
 <!--===============================================================-->
 
-<section><title>Rebooting and shutting down</title>
+<section xml:id="sec-rebooting"><title>Rebooting and shutting down</title>
 
 <para>The system can be shut down (and automatically powered off) by
 doing:
@@ -134,7 +134,7 @@ authentication.</para>
 
 <!--===============================================================-->
 
-<section><title>User sessions</title>
+<section xml:id="sec-user-sessions"><title>User sessions</title>
 
 <para>Systemd keeps track of all users who are logged into the system
 (e.g. on a virtual console or remotely via SSH).  The command
@@ -185,7 +185,7 @@ $ loginctl terminate-session c3
 
 <!--===============================================================-->
 
-<section><title>Control groups</title>
+<section xml:id="sec-cgroups"><title>Control groups</title>
 
 <para>To keep track of the processes in a running system, systemd uses
 <emphasis>control groups</emphasis> (cgroups).  A control group is a
@@ -258,7 +258,7 @@ usage.</para>
 
 <!--===============================================================-->
 
-<section><title>Logging</title>
+<section xml:id="sec-logging"><title>Logging</title>
 
 <para>System-wide logging is provided by systemd’s
 <emphasis>journal</emphasis>, which subsumes traditional logging
@@ -308,7 +308,7 @@ groups.  All users have a private journal that can be read using
 
 <!--===============================================================-->
 
-<section><title>Cleaning up the Nix store</title>
+<section xml:id="sec-nix-gc"><title>Cleaning up the Nix store</title>
 
 <para>Nix has a purely functional model, meaning that packages are
 never upgraded in place.  Instead new versions of packages end up in a

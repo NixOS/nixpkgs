@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [pkgconfig libxslt];
   buildInputs = [ libxml2 dbus_glib sqlite libsoup libnice telepathy_glib gnutls ];
 
-  configureFlags = "--with-ca-certificates=/etc/ca-bundle.crt";
+  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-bundle.crt";
 
   meta = {
     homepage = http://telepathy.freedesktop.org;

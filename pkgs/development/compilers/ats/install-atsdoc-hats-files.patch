@@ -1,0 +1,38 @@
+--- ats-lang-anairiats-0.2.11/Makefile	2013-12-10 00:43:52.000000000 +0100
++++ ats-lang-anairiats-0.2.11/Makefile	2014-03-02 07:49:06.985837425 +0100
+@@ -97,7 +97,7 @@
+ 	cd $(abs_top_srcdir)
+ 	[ -d $(bindir2) ] || $(MKDIR_P) $(bindir2)
+ 	$(MKDIR_P) $(ATSLIBHOME2)/bin
+-	find ccomp contrib doc libats libc prelude -type d \
++	find ccomp contrib doc libats libatsdoc libc prelude -type d \
+ 	  -exec $(MKDIR_P) $(ATSLIBHOME2)/\{} \; \
+ 	  -print
+ 
+@@ -105,7 +105,7 @@
+ #
+ # recursively install all files in the list except .svn control files.
+ #
+-	for d in ccomp/runtime contrib doc libats libc prelude; do \
++	for d in ccomp/runtime contrib doc libats libatsdoc libc prelude; do \
+ 	  cd $(abs_top_srcdir) && \
+ 	  $(INSTALL) -d $(ATSLIBHOME2)/"$$d" && \
+ 	  find "$$d" -name .svn -prune -o -type f \
+@@ -143,6 +143,17 @@
+ 	  $(INSTALL) -m 755 ats_env.sh $(bindir2)/"$$b" && \
+ 	  echo [ats_env.sh] is installed into $(bindir2)/"$$b"; \
+ 	done
++#
++# install atsdoc headers
++#
++	for f in \
++	    utils/atsdoc/SATS/*.sats utils/atsdoc/DATS/*.dats utils/atsdoc/HATS/*.hats; \
++	do \
++	  [ -f "$$f" ] || continue; \
++	  cd $(abs_top_srcdir) && \
++	  $(INSTALL) -m 644 -D "$$f" $(ATSLIBHOME2)/"$$f" && \
++	  echo "$$f"; \
++	done
+ 
+ install:: install_files
+ 

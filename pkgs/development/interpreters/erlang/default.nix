@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-ssl=${openssl}";
 
+  postInstall = ''
+    ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
+  '';
+
   # Some erlang bin/ scripts run sed and awk
   postFixup = ''
     wrapProgram $out/lib/erlang/bin/erl --prefix PATH ":" "${gnused}/bin/"

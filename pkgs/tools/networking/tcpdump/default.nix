@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "tcpdump, a famous network sniffer";
     homepage = http://www.tcpdump.org/;
     license = "BSD-style";
+    maintainers = stdenv.lib.maintainers.mornfall;
   };
 }

@@ -1,10 +1,10 @@
-{config, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.services.fuppesd;
 in
 
-with pkgs.lib;
+with lib;
 
 {
   options = {

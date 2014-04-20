@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -58,7 +58,7 @@ in
     nix = {
 
       package = mkOption {
-        type = types.path;
+        type = types.package;
         default = pkgs.nix;
         description = ''
           This option specifies the Nix package instance to use throughout the system.
@@ -253,7 +253,7 @@ in
 
   config = {
 
-    nix.chrootDirs = [ "/dev" "/dev/pts" "/proc" "/bin" ];
+    nix.chrootDirs = [ "/bin" ];
 
     environment.etc."nix/nix.conf".source = nixConf;
 
@@ -275,28 +275,18 @@ in
           ) cfg.buildMachines;
       };
 
-    systemd.sockets."nix-daemon" =
-      { description = "Nix Daemon Socket";
-        wantedBy = [ "sockets.target" ];
-        before = [ "multi-user.target" ];
-        unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket/";
-        socketConfig.ListenStream = "/nix/var/nix/daemon-socket/socket";
-      };
+    systemd.packages = [ nix ];
 
-    systemd.services."nix-daemon" =
-      { description = "Nix Daemon";
+    systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
-        path = [ nix pkgs.openssl pkgs.utillinux ]
-          ++ optionals cfg.distributedBuilds [ pkgs.openssh pkgs.gzip ];
+    systemd.services.nix-daemon =
+      { path = [ nix pkgs.openssl pkgs.utillinux pkgs.openssh ]
+          ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
         environment = cfg.envVars // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; };
 
-        unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket/";
-
         serviceConfig =
-          { ExecStart = "@${nix}/bin/nix-daemon nix-daemon --daemon";
-            KillMode = "process";
-            Nice = cfg.daemonNiceLevel;
+          { Nice = cfg.daemonNiceLevel;
             IOSchedulingPriority = cfg.daemonIONiceLevel;
             LimitNOFILE = 4096;
           };
@@ -352,8 +342,7 @@ in
           /nix/var/nix/profiles \
           /nix/var/nix/db \
           /nix/var/log/nix/drvs \
-          /nix/var/nix/channel-cache \
-          /nix/var/nix/chroots
+          /nix/var/nix/channel-cache
         mkdir -m 1777 -p \
           /nix/var/nix/gcroots/per-user \
           /nix/var/nix/profiles/per-user \

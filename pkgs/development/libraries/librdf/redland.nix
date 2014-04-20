@@ -3,7 +3,7 @@
 , mysql, withMysql ? false
 , postgresql, withPostgresql ? false
 , sqlite, withSqlite ? true
-, db4, withBdb ? false
+, db, withBdb ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional withMysql mysql
     ++ stdenv.lib.optional withSqlite sqlite
     ++ stdenv.lib.optional withPostgresql postgresql
-    ++ stdenv.lib.optional withBdb db4;
+    ++ stdenv.lib.optional withBdb db;
 
   propagatedBuildInputs = [ librdf_rasqal ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-threads" ]
-    ++ stdenv.lib.optional withBdb "--with-bdb=${db4}";
+    ++ stdenv.lib.optional withBdb "--with-bdb=${db}";
 
   meta = {
     homepage = http://librdf.org/;

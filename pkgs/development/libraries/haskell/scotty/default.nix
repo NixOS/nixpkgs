@@ -1,16 +1,17 @@
-{ cabal, aeson, blazeBuilder, caseInsensitive, conduit, dataDefault
-, httpTypes, mtl, regexCompat, text, transformers, wai, waiExtra
-, warp
+{ cabal, aeson, blazeBuilder, caseInsensitive, conduit
+, conduitExtra, dataDefault, httpTypes, mtl, regexCompat, text
+, transformers, wai, waiExtra, warp
 }:
 
 cabal.mkDerivation (self: {
   pname = "scotty";
-  version = "0.6.2";
-  sha256 = "0szki6wcmhj20kxhmgidgf930xwhiq03qrk8m0x8aklcjzkhvy69";
+  version = "0.7.2";
+  sha256 = "1y14af3qciwycgaxzx6rjan2jgfchjzs4zbxzh8p8s1d0l4gsqlb";
   buildDepends = [
-    aeson blazeBuilder caseInsensitive conduit dataDefault httpTypes
-    mtl regexCompat text transformers wai waiExtra warp
+    aeson blazeBuilder caseInsensitive conduit conduitExtra dataDefault
+    httpTypes mtl regexCompat text transformers wai waiExtra warp
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/scotty-web/scotty";
     description = "Haskell web framework inspired by Ruby's Sinatra, using WAI and Warp";

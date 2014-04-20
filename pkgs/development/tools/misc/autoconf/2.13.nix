@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.gnu.org/software/autoconf/;
     description = "Part of the GNU Build System";
+    branch = "2.13";
 
     longDescription = ''
       GNU Autoconf is an extensible package of M4 macros that produce

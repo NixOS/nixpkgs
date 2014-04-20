@@ -1,17 +1,14 @@
-{ cabal, conduit, liftedBase, monadControl, network, transformers
-}:
+{ cabal, conduit }:
 
 cabal.mkDerivation (self: {
   pname = "network-conduit";
-  version = "1.0.1";
-  sha256 = "1argxj87a5rzza061lvvfmix2vrlz62dskj4pwlsq0d22dg8y332";
-  buildDepends = [
-    conduit liftedBase monadControl network transformers
-  ];
-  testDepends = [ conduit ];
+  version = "1.1.0";
+  sha256 = "06amxl8rg4zfnmgc1iyq5mxy9qihcqddqgqkbfvaf25mwr43992p";
+  buildDepends = [ conduit ];
+  noHaddock = true;
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
-    description = "Stream socket data using conduits";
+    description = "Stream socket data using conduits. (deprecated)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];

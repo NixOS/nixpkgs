@@ -1,7 +1,8 @@
-{ pkgs, system, ... }:
+{ system ? builtins.currentSystem }:
 
-with pkgs.lib;
+with import ../lib/testing.nix { inherit system; };
 with import ../lib/qemu-flags.nix;
+with pkgs.lib;
 
 let
 
@@ -39,7 +40,7 @@ let
 
       { imports =
           [ ./hardware-configuration.nix
-            "''${modulesPath}/testing/test-instrumentation.nix"
+            <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
         boot.loader.grub.version = ${toString grubVersion};
@@ -48,7 +49,6 @@ let
         ''}
         boot.loader.grub.device = "${grubDevice}";
         boot.loader.grub.extraConfig = "serial; terminal_output.serial";
-        boot.initrd.kernelModules = [ "virtio_console" ];
 
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
       }
@@ -80,6 +80,8 @@ let
       virtualisation.writableStore = true;
       virtualisation.pathsInNixDB = channelContents ++ [ pkgs.hello.src ];
       virtualisation.memorySize = 768;
+
+      networking.firewall.allowedTCPPorts = [ 80 ];
     };
 
   channelContents = [ pkgs.rlwrap ];
@@ -98,7 +100,7 @@ let
       my $machine = createMachine({ hda => "harddisk",
         hdaInterface => "${iface}",
         cdrom => glob("${iso}/iso/*.iso"),
-        qemuFlags => '${optionalString testChannel (toString (qemuNICFlags 1 1 2))} ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"}'});
+        qemuFlags => '${optionalString testChannel (toString (qemuNICFlags 1 1 2))} ${optionalString (iso.system == "x86_64-linux") "-cpu kvm64"}'});
       $machine->start;
 
       ${optionalString testChannel ''
@@ -177,7 +179,7 @@ let
       # Test nixos-option.
       $machine->succeed("nixos-option boot.initrd.kernelModules | grep virtio_console");
       $machine->succeed("nixos-option -d boot.initrd.kernelModules | grep 'List of modules'");
-      $machine->succeed("nixos-option -l boot.initrd.kernelModules | grep /etc/nixos/configuration.nix");
+      $machine->succeed("nixos-option -l boot.initrd.kernelModules | grep qemu-guest.nix");
 
       $machine->shutdown;
 
@@ -189,8 +191,10 @@ let
     '';
 
 
-  makeTest = { createPartitions, fileSystems, testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda" }:
-    { inherit iso;
+  makeInstallerTest =
+    { createPartitions, fileSystems, testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda" }:
+    makeTest {
+      inherit iso;
       nodes = if testChannel then { inherit webserver; } else { };
       testScript = testScriptFun {
         inherit createPartitions fileSystems testChannel grubVersion grubDevice;
@@ -205,7 +209,7 @@ in {
 
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
-  simple = makeTest
+  simple = makeInstallerTest
     { createPartitions =
         ''
           $machine->succeed(
@@ -224,7 +228,7 @@ in {
     };
 
   # Same as the previous, but now with a separate /boot partition.
-  separateBoot = makeTest
+  separateBoot = makeInstallerTest
     { createPartitions =
         ''
           $machine->succeed(
@@ -238,7 +242,7 @@ in {
               "mkfs.ext3 -L nixos /dev/vda3",
               "mount LABEL=nixos /mnt",
               "mkfs.ext3 -L boot /dev/vda1",
-              "mkdir /mnt/boot",
+              "mkdir -p /mnt/boot",
               "mount LABEL=boot /mnt/boot",
           );
         '';
@@ -247,14 +251,14 @@ in {
 
   # Create two physical LVM partitions combined into one volume group
   # that contains the logical swap and root partitions.
-  lvm = makeTest
+  lvm = makeInstallerTest
     { createPartitions =
         ''
           $machine->succeed(
               "parted /dev/vda mklabel msdos",
-              "parted /dev/vda -- mkpart primary 1M 2048M", # first PV
+              "parted /dev/vda -- mkpart primary 1M 2048M", # PV1
               "parted /dev/vda -- set 1 lvm on",
-              "parted /dev/vda -- mkpart primary 2048M -1s", # second PV
+              "parted /dev/vda -- mkpart primary 2048M -1s", # PV2
               "parted /dev/vda -- set 2 lvm on",
               "udevadm settle",
               "pvcreate /dev/vda1 /dev/vda2",
@@ -270,8 +274,7 @@ in {
       fileSystems = rootFS;
     };
 
-  /*
-  swraid = makeTest
+  swraid = makeInstallerTest
     { createPartitions =
         ''
           $machine->succeed(
@@ -303,10 +306,9 @@ in {
         '';
       fileSystems = rootFS + bootFS;
     };
-  */
 
   # Test a basic install using GRUB 1.
-  grub1 = makeTest
+  grub1 = makeInstallerTest
     { createPartitions =
         ''
           $machine->succeed(
@@ -327,7 +329,7 @@ in {
     };
 
   # Rebuild the CD configuration with a little modification.
-  rebuildCD =
+  rebuildCD = makeTest
     { inherit iso;
       nodes = { };
       testScript =

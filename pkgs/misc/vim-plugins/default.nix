@@ -109,10 +109,13 @@ in rec
   };
 
   YouCompleteMe = stdenv.mkDerivation {
-    # REGION AUTO UPDATE: { name="youcompleteme"; type="git"; url="git://github.com/Valloric/YouCompleteMe"; }
-    src = (fetchurl { url = "http://mawercer.de/~nix/repos/youcompleteme-git-97306.tar.bz2"; sha256 = "b9b892f5a723370c2034491dc72a4ca722c6cf1e5de4d60501141bba151bc719"; });
-    name = "youcompleteme-git-97306";
-    # END
+    src = fetchgit {
+      url = "https://github.com/Valloric/YouCompleteMe.git";
+      rev = "ee12530df0574e18289d6daf25ff72bd3c6e94f5";
+      sha256 = "1z93l2v0s078h632jrlhxzs9pg8phnx60qlrrhb3l2nbfk047rgx";
+    };
+
+    name = "youcompleteme-git-ee12530df0";
     buildInputs = [ python cmake ];
 
     configurePhase = ":";

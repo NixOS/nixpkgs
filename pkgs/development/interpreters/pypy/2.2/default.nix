@@ -5,8 +5,8 @@ assert zlibSupport -> zlib != null;
 
 let
 
-  majorVersion = "2.2.1";
-  version = "${majorVersion}";
+  majorVersion = "2.2";
+  version = "${majorVersion}.1";
   pythonVersion = "2.7";
   libPrefix = "pypy${majorVersion}";
 
@@ -58,7 +58,8 @@ let
        # disable shutils because it assumes gid 0 exists
        # disable socket because it has two actual network tests that fail
        # disable test_mhlib because it fails for unknown reason
-      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k '-test_socket -test_shutil -test_mhlib' lib-python
+       # disable test_multiprocessing due to transient errors
+      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k '-test_socket -test_shutil -test_mhlib -test_multiprocessing' lib-python
     '';
 
     installPhase = ''
@@ -86,7 +87,7 @@ let
       homepage = "http://pypy.org/";
       description = "PyPy is a fast, compliant alternative implementation of the Python language (2.7.3)";
       license = licenses.mit;
-      platforms = platforms.all;
+      platforms = platforms.linux;
       maintainers = with maintainers; [ iElectric ];
     };
   };

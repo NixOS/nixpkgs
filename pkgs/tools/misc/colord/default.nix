@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = "--with-udevrulesdir=$out/lib/udev/rules.d --with-systemdsystemunitdir=$out/lib/udev/rules.d --disable-bash-completion";
+  configureFlags = [
+    "--with-udevrulesdir=$out/lib/udev/rules.d"
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--disable-bash-completion"
+  ];
 
   buildInputs = [ glib polkit pkgconfig intltool gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
                   bashCompletion ];

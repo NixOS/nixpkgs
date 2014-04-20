@@ -434,7 +434,7 @@ stdenv.mkDerivation ({
   passthru = { inherit langC langCC langAda langFortran langVhdl
       langGo version; };
 
-  enableParallelBuilding = !langAda;
+  enableParallelBuilding = false;
 
   inherit (stdenv) is64bit;
 
@@ -456,7 +456,6 @@ stdenv.mkDerivation ({
     maintainers = [
       stdenv.lib.maintainers.ludo
       stdenv.lib.maintainers.viric
-      stdenv.lib.maintainers.shlevy
     ];
 
     # Volunteers needed for the {Cyg,Dar}win ports of *PPL.

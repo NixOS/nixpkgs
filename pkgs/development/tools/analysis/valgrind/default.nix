@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1w6n5qvxy2ssbczcl1c2yd2ggjn3ipay2hvpn10laly2dfh73bz6";
   };
 
+  patches = [ ./glibc-2.19.patch ];
+
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
   nativeBuildInputs = [ perl ];
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patchPhase =
+  postPatch =
     # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).
     ''
       echo "getting rid of the \`-arch' GCC option..."

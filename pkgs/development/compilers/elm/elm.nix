@@ -1,12 +1,14 @@
 { cabal, aeson, aesonPretty, binary, blazeHtml, blazeMarkup
-, cmdargs, filepath, HTF, indents, languageEcmascript, mtl, pandoc
-, parsec, text, transformers, unionFind, unorderedContainers
+, cmdargs, filemanip, filepath, HUnit, indents, languageEcmascript
+, mtl, pandoc, parsec, QuickCheck, testFramework
+, testFrameworkHunit, testFrameworkQuickcheck2, text, transformers
+, unionFind, unorderedContainers
 }:
 
 cabal.mkDerivation (self: {
   pname = "Elm";
-  version = "0.10.1";
-  sha256 = "1y533vanhrxc14x304ig6q8ch6zih8yqgpfgw4h5vk5fpdmn09a2";
+  version = "0.12";
+  sha256 = "1gmhnpcfv49bdifvz70fif71947q482pd1dbs5c84m8sn7c5n3ss";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -14,8 +16,17 @@ cabal.mkDerivation (self: {
     indents languageEcmascript mtl pandoc parsec text transformers
     unionFind unorderedContainers
   ];
-  testDepends = [ HTF ];
+  testDepends = [
+    aeson binary blazeHtml blazeMarkup cmdargs filemanip filepath HUnit
+    indents languageEcmascript mtl pandoc parsec QuickCheck
+    testFramework testFrameworkHunit testFrameworkQuickcheck2 text
+    transformers unionFind unorderedContainers
+  ];
   doCheck = false;
+  preConfigure = ''
+    rm -f Setup.hs
+    echo -e "import Distribution.Simple\nmain=defaultMain\n" > Setup.hs
+  '';
   meta = {
     homepage = "http://elm-lang.org";
     description = "The Elm language module";

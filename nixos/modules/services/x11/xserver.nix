@@ -1,6 +1,6 @@
-{ config, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, pkgs_i686, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -20,9 +20,16 @@ let
     nvidiaLegacy304 = { modules = [ kernelPackages.nvidia_x11_legacy304 ]; driverName = "nvidia"; };
     unichrome    = { modules = [ pkgs.xorgVideoUnichrome ]; };
     virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
+    ati = { modules = [ pkgs.xorg.xf86videoati pkgs.xorg.glamoregl ]; };
+    intel-testing = { modules = with pkgs.xorg; [ xf86videointel-testing glamoregl ]; driverName = "intel"; };
   };
 
-  driverNames = config.services.mesa.videoDrivers;
+  driverNames = config.hardware.opengl.videoDrivers;
+
+  needsAcpid =
+     (elem "nvidia" driverNames) ||
+     (elem "nvidiaLegacy173" driverNames) ||
+     (elem "nvidiaLegacy304" driverNames);
 
   drivers = flip map driverNames
     (name: { inherit name; driverName = name; } //
@@ -181,7 +188,7 @@ in
         description = ''
           The name of the video driver for your graphics card.  This
           option is obsolete; please set the
-          <option>services.mesa.videoDrivers</option> instead.
+          <option>hardware.opengl.videoDrivers</option> instead.
         '';
       };
 
@@ -191,17 +198,6 @@ in
         example = "[ pkgs.vaapiIntel pkgs.vaapiVdpau ]";
         description = ''
           Packages providing libva acceleration drivers.
-        '';
-      };
-
-      startOpenSSHAgent = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to start the OpenSSH agent when you log in.  The OpenSSH agent
-          remembers private keys for you so that you don't have to type in
-          passphrases every time you make an SSH connection.  Use
-          <command>ssh-add</command> to add a key to the agent.
         '';
       };
 
@@ -372,6 +368,14 @@ in
         '';
       };
 
+      useGlamor = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to use the Glamor module for 2D acceleration,
+          if possible.
+        '';
+      };
     };
 
   };
@@ -381,15 +385,15 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    services.mesa.enable = true;
-    services.mesa.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
+    hardware.opengl.enable = true;
+    hardware.opengl.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 
     assertions =
-      [ { assertion = !(cfg.startOpenSSHAgent && cfg.startGnuPGAgent);
+      [ { assertion = !(config.programs.ssh.startAgent && cfg.startGnuPGAgent);
           message =
             ''
-              The OpenSSH agent and GnuPG agent cannot be started both.
-              Choose between `startOpenSSHAgent' and `startGnuPGAgent'.
+              The OpenSSH agent and GnuPG agent cannot be started both. Please
+              choose between ‘programs.ssh.startAgent’ and ‘services.xserver.startGnuPGAgent’.
             '';
         }
         { assertion = config.security.polkit.enable;
@@ -428,6 +432,8 @@ in
       ++ optional (elem "virtualbox" driverNames) xorg.xrefresh
       ++ optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
 
+    services.acpid.enable = mkIf needsAcpid true;
+
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
 
@@ -436,7 +442,8 @@ in
     systemd.services."display-manager" =
       { description = "X11 Server";
 
-        after = [ "systemd-udev-settle.service" "local-fs.target" ];
+        after = [ "systemd-udev-settle.service" "local-fs.target" ]
+                ++ optional needsAcpid "acpid.service";
 
         restartIfChanged = false;
 
@@ -523,6 +530,13 @@ in
           '')}
         EndSection
 
+        ${if cfg.useGlamor then ''
+          Section "Module"
+            Load "dri2"
+            Load "glamoregl"
+          EndSection
+        '' else ""}
+
         # For each supported driver, add a "Device" and "Screen"
         # section.
         ${flip concatMapStrings drivers (driver: ''
@@ -530,6 +544,7 @@ in
           Section "Device"
             Identifier "Device-${driver.name}[0]"
             Driver "${driver.driverName}"
+            ${if cfg.useGlamor then ''Option "AccelMethod" "glamor"'' else ""}
             ${cfg.deviceSection}
             ${xrandrDeviceSection}
           EndSection

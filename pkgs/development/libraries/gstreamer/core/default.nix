@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-1.2.2";
+  name = "gstreamer-1.2.3";
 
   meta = {
     description = "Open source multimedia framework";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer/${name}.tar.xz";
-    sha256 = "b9f12137ab663edc6c37429b38ca7911074b9c2a829267fe855d4e57d916a0b6";
+    sha256 = "1syqn0kki5disx01q3y0z6p5qhr2a5g388wc6s649cw4lcbri6hg";
   };
 
   nativeBuildInputs = [
@@ -23,4 +23,6 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [ glib ];
+
+  setupHook = ./setup-hook.sh;
 }

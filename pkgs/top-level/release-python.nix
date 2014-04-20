@@ -366,7 +366,6 @@ let
   gajim = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gav = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gcj = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  gcj46 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gcl = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gdb = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gdbCross = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1725,7 +1724,6 @@ let
   wavesurfer = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   wdfs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   webkit = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  webkit_gtk2 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   weechat = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   welkin = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   wesnoth = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

@@ -38,7 +38,7 @@ in {
 
 let
   inherit (stdenv.lib)
-    hasAttr getAttr optional optionalString maintainers platforms;
+    hasAttr getAttr optional optionalString optionalAttrs maintainers platforms;
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
@@ -73,9 +73,7 @@ let
 
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
-    in {
-      outputs = if isModular then [ "out" "dev" ] else null;
-
+    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
         inherit version modDirVersion config kernelPatches;
       };
@@ -102,9 +100,14 @@ let
         ln -sv ${configfile} $buildRoot/.config
         make $makeFlags "''${makeFlagsArray[@]}" oldconfig
         runHook postConfigure
+
+        buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=Thu Jan 1 00:00:01 UTC 1970")
       '';
 
-      buildFlags = [ "KBUILD_BUILD_VERSION=1-NixOS" platform.kernelTarget ] ++ optional isModular "modules";
+      buildFlags = [
+        "KBUILD_BUILD_VERSION=1-NixOS"
+        platform.kernelTarget
+      ] ++ optional isModular "modules";
 
       installFlags = [
         "INSTALLKERNEL=${installkernel}"
@@ -197,8 +200,10 @@ let
             + ")");
         license = "GPLv2";
         homepage = http://www.kernel.org/;
+        repositories.git = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;
         maintainers = [
           maintainers.shlevy
+          maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
       };

@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -62,6 +62,9 @@ in
     environment.systemPackages = [ pkgs.polkit ];
 
     systemd.packages = [ pkgs.polkit ];
+
+    systemd.services.polkit.restartTriggers = [ config.system.path ];
+    systemd.services.polkit.unitConfig.X-StopIfChanged = false;
 
     # The polkit daemon reads action/rule files
     environment.pathsToLink = [ "/share/polkit-1" ];

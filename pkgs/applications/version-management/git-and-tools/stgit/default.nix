@@ -1,14 +1,14 @@
 { stdenv, fetchurl, python, git }:
 
 let
-  name = "stgit-0.16";
+  name = "stgit-0.17.1";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "http://download.gna.org/stgit/${name}.tar.gz";
-    sha256 = "0hla6401g2kicaakz4awk67yf8fhqbw1shn1p9ma5x6ca29s3w82";
+    sha256 = "1pka0ns9x0kabn036zsf0mwmwiynckhnva51kgxsch9fqah6acyl";
   };
 
   buildInputs = [ python git ];

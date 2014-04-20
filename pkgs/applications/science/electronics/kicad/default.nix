@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's,/usr/local/kicad,'$out,g common/gestfich.cpp
   '';
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true; # often fails on Hydra: fatal error: pcb_plot_params_lexer.h: No such file or directory
 
   buildInputs = [ cmake mesa wxGTK zlib libX11 gettext ];
 

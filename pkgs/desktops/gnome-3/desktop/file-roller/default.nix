@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib pkgconfig gnome3.gtk intltool itstool libxml2 libarchive
                   attr bzip2 acl makeWrapper ];
 
-  postInstall = ''
+  preFixup = ''
     wrapProgram "$out/bin/file-roller" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:$out/share"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

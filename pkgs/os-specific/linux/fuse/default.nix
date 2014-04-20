@@ -16,8 +16,10 @@ stdenv.mkDerivation rec {
   
   inherit utillinux;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://fuse.sourceforge.net/;
     description = "Kernel module and library that allows filesystems to be implemented in user space";
+    platforms = platforms.linux;
+    maintainers = maintainers.mornfall;
   };
 }

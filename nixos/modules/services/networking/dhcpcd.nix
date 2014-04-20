@@ -1,10 +1,10 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
-  inherit (pkgs) dhcpcd;
+  dhcpcd = if !config.boot.isContainer then pkgs.dhcpcd else pkgs.dhcpcd.override { udev = null; };
 
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge.
@@ -34,8 +34,9 @@ let
 
       # Ignore peth* devices; on Xen, they're renamed physical
       # Ethernet cards used for bridging.  Likewise for vif* and tap*
-      # (Xen) and virbr* and vnet* (libvirt).
-      denyinterfaces ${toString ignoredInterfaces} peth* vif* tap* tun* virbr* vnet* vboxnet*
+      # (Xen) and virbr* and vnet* (libvirt) and c-* and ctmp-* (NixOS
+      # containers).
+      denyinterfaces ${toString ignoredInterfaces} peth* vif* tap* tun* virbr* vnet* vboxnet* c-* ctmp-*
 
       ${config.networking.dhcpcd.extraConfig}
     '';
@@ -79,6 +80,7 @@ in
   options = {
 
     networking.dhcpcd.denyInterfaces = mkOption {
+      type = types.listOf types.str;
       default = [];
       description = ''
          Disable the DHCP client for any interface whose name matches
@@ -89,6 +91,7 @@ in
     };
 
     networking.dhcpcd.extraConfig = mkOption {
+      type = types.lines;
       default = "";
       description = ''
          Literal string to append to the config file generated for dhcpcd.
@@ -106,7 +109,7 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "network.target" ];
-        after = [ "systemd-udev-settle.service" ];
+        after = [ "systemd-udev-settle.service" ]; # FIXME
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by

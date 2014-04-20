@@ -1,0 +1,80 @@
+diff -aur zsnes_1_51//src/Makefile.in zsnes_1_51_new//src/Makefile.in
+--- zsnes_1_51//src/Makefile.in	2007-01-24 21:54:12.000000000 +0100
++++ zsnes_1_51_new//src/Makefile.in	2010-09-06 00:03:04.715810431 +0200
+@@ -95,7 +95,7 @@
+ %.o: %.cpp
+ 	@CXX@ @CXXFLAGS@ -o $@ -c $<
+ %.o %.h: %.psr $(PSR)
+-	./$(PSR) @PSRFLAGS@ -gcc @CC@ -compile -flags "@CFLAGS@ -O1" -cheader $*.h -fname $* $*.o $<
++	./$(PSR) @PSRFLAGS@ -gcc "@CC@" -compile -flags "@CFLAGS@ -O1 -D_FORTIFY_SOURCE=0" -cheader $*.h -fname $* $*.o $<
+ 
+ default: main
+ all: main tools
+@@ -133,7 +133,7 @@
+ 
+ include makefile.dep
+ makefile.dep: $(TOOL_D)/depbuild Makefile
+-	$(TOOL_D)/depbuild @CC@ "@CFLAGS@" @NASMPATH@ "@NFLAGS@" $(Z_OBJS) > makefile.dep
++	$(TOOL_D)/depbuild "@CC@" "@CFLAGS@" "@NASMPATH@" "@NFLAGS@" $(Z_OBJS) > makefile.dep
+ 
+ Makefile: Makefile.in config.status
+ 	./config.status
+diff -aur zsnes_1_51//src/parsegen.cpp zsnes_1_51_new//src/parsegen.cpp
+--- zsnes_1_51//src/parsegen.cpp	2007-10-31 05:30:26.000000000 +0100
++++ zsnes_1_51_new//src/parsegen.cpp	2010-09-05 15:48:36.903333444 +0200
+@@ -19,6 +19,9 @@
+ Config file handler creator by Nach (C) 2005-2007
+ */
+ 
++#include <cstring>
++#include <cstdlib>
++
+ #if !defined(__GNUC__) && !defined(_MSC_VER)
+ #error You are using an unsupported compiler
+ #endif
+@@ -1822,7 +1825,7 @@
+   }
+ }
+ 
+-int main(size_t argc, const char *const *const argv)
++int main(int argc, const char *const *const argv)
+ {
+   const char *cheader_file = 0;
+   bool compile = false;
+diff -aur zsnes_1_51//src/tools/depbuild.cpp zsnes_1_51_new//src/tools/depbuild.cpp
+--- zsnes_1_51//src/tools/depbuild.cpp	2006-12-27 12:04:05.000000000 +0100
++++ zsnes_1_51_new//src/tools/depbuild.cpp	2010-09-05 15:48:36.903333444 +0200
+@@ -183,7 +183,7 @@
+   }
+ }
+ 
+-int main(size_t argc, const char *const *const argv)
++int main(int argc, const char *const *const argv)
+ {
+   if (argc < 5)
+   {
+diff -aur zsnes_1_51//src/tools/strutil.h zsnes_1_51_new//src/tools/strutil.h
+--- zsnes_1_51//src/tools/strutil.h	2006-12-27 12:04:05.000000000 +0100
++++ zsnes_1_51_new//src/tools/strutil.h	2010-09-05 15:48:36.903333444 +0200
+@@ -15,6 +15,9 @@
+ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+ 
++#include <cstring>
++#include <cstdlib>
++
+ /*
+ This is part of a toolkit used to assist in ZSNES development
+ */
+diff -u -r zsnes_1_51/src/tools/depbuild.cpp zsnes_1_51-fix/src/tools/depbuild.cpp
+--- zsnes_1_51/src/tools/depbuild.cpp	2006-12-27 12:04:05.000000000 +0100
++++ zsnes_1_51-fix/src/tools/depbuild.cpp	2012-07-14 16:20:17.759886250 +0200
+@@ -26,6 +26,8 @@
+ #include <cstdio>
+ using namespace std;
+ 
++#include <unistd.h>
++
+ #include "fileutil.h"
+ #include "strutil.h"
+ 

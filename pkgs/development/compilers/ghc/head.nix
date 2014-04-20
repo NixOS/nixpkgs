@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ghc, perl, gmp, ncurses, happy, alex }:
 
 stdenv.mkDerivation rec {
-  version = "7.7.20131202";
+  version = "7.9.20140313";
   name = "ghc-${version}";
 
   src = fetchurl {
     url = "http://cryp.to/${name}.tar.xz";
-    sha256 = "1gnp5c3x7dbaz7s2yvkw2fmvqh5by2gpp0zlcyj8p2gv13gxi2cb";
+    sha256 = "03i9ajgzlp2y0qq7qnmyji6vdcgx2xnsyrc2zbqbziinf86igwhi";
   };
 
   buildInputs = [ ghc perl gmp ncurses happy alex ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     echo "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '';
 

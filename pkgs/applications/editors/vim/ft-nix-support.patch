@@ -23,7 +23,7 @@ new file mode 100644
 index 0000000..a2f9918
 --- /dev/null
 +++ b/runtime/syntax/nix.vim
-@@ -0,0 +1,40 @@
+@@ -0,0 +1,47 @@
 +" Vim syntax file
 +" Language:	nix
 +" Maintainer:	Marc Weber <marco-oweber@gmx.de>
@@ -46,8 +46,8 @@ index 0000000..a2f9918
 +  \ __readFile __toXML __toFile __filterSource __attrNames __getAttr __hasAttr __isAttrs __listToAttrs __isList 
 +  \ __head __tail __add __sub __lessThan __substring __stringLength
 +
-+syn match nixAttr "\w\+\ze\s*="
-+syn match nixFuncArg "\zs\w\+\ze\s*:"
++syn match nixAttr "[a-zA-Z0-9-_]\+\ze\s*="
++syn match nixFuncArg "\zs[a-zA-Z0-9-_]\+\ze\s*:"
 +syn region nixStringParam start=+\${+ end=+}+
 +syn region nixMultiLineComment start=+/\*+ skip=+\\"+ end=+\*/+
 +syn match  nixEndOfLineComment "#.*$"
@@ -66,3 +66,10 @@ index 0000000..a2f9918
 +hi def link nixEndOfLineComment Comment
 +hi def link nixAttr        Identifier
 +hi def link nixFuncArg     Identifier
++
++let b:current_syntax = "nix"
++
++" scan backwards to find begining of multiline statements
++syn sync ccomment nixMultiLineComment minlines=10 maxlines=500
++syn sync ccomment nixStringIndented minlines=10 maxlines=500
++syn sync ccomment nixString maxlines=10

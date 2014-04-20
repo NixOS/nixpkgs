@@ -18,21 +18,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool ];
 
   buildInputs = [
-    makeWrapper gst_all_1.gst-plugins-base
+    makeWrapper 
     gtk dbus_glib libxfce4ui libxfce4util xfconf
     taglib libnotify
-  ];
+  ] ++ (with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav]);
 
   configureFlags = [ "--with-gstreamer=1.0" ];
 
   postInstall = stdenv.lib.optionalString withGstPlugins ''
     wrapProgram "$out/bin/parole" --prefix \
-      GST_PLUGIN_PATH ":" ${stdenv.lib.concatStringsSep ":"
-        (map (s: s+"/lib/gstreamer-1.0") (with gst_all_1; [
-          gst-plugins-base gst-plugins-good
-          gst-plugins-bad gst-plugins-ugly
-          gst-libav
-        ])) }
+      GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
   meta = {

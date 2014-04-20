@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http_parser, c-ares, pkgconfig, runCommand }:
+{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand }:
 
 let
   dtrace = runCommand "dtrace-native" {} ''
@@ -6,13 +6,12 @@ let
     ln -sv /usr/sbin/dtrace $out/bin
   '';
 
-  version = "0.10.24";
+  version = "0.10.26";
 
   # !!! Should we also do shared libuv?
   deps = {
-    inherit v8 openssl zlib;
+    inherit v8 openssl zlib http-parser;
     cares = c-ares;
-    http-parser = http_parser;
   };
 
   sharedConfigureFlags = name: [
@@ -27,7 +26,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "0yip81va8nd3kzj64385avcx7ck13a2xcdj3amzwnhk830rxf331";
+    sha256 = "1ahx9cf2irp8injh826sk417wd528awi4l1mh7vxg7k8yak4wppg";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);

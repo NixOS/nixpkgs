@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -258,7 +258,6 @@ in
         path = [ pkgs.openssh pkgs.gawk ];
 
         environment.LD_LIBRARY_PATH = nssModulesPath;
-        environment.LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
 
         preStart =
           ''
@@ -285,7 +284,7 @@ in
     networking.firewall.allowedTCPPorts = cfg.ports;
 
     security.pam.services.sshd =
-      { startSession = true;
+      { startSession = !config.boot.isContainer;
         showMotd = true;
         unixAuth = cfg.passwordAuthentication;
       };

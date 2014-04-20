@@ -1,18 +1,19 @@
-{ cabal, assertFailure, binary, ConfigFile, deepseq, enummapsetTh
-, filepath, gtk, hashable, keys, miniutter, mtl, prettyShow, random
-, stm, text, transformers, unorderedContainers, zlib
+{ cabal, assertFailure, binary, deepseq, enummapsetTh, filepath
+, gtk, hashable, hsini, keys, miniutter, mtl, prettyShow, random
+, stm, text, transformers, unorderedContainers, vector
+, vectorBinaryInstances, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "LambdaHack";
-  version = "0.2.10.6";
-  sha256 = "19ak0ygw38b51wkm4p10xgdk3h9mh5vvb8c60qhs7cmgzjcph38n";
+  version = "0.2.12";
+  sha256 = "0ics1z376qyagkzg58mqqw7cbkjpkik57l8570qmk589nkhck86n";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    assertFailure binary ConfigFile deepseq enummapsetTh filepath gtk
-    hashable keys miniutter mtl prettyShow random stm text transformers
-    unorderedContainers zlib
+    assertFailure binary deepseq enummapsetTh filepath gtk hashable
+    hsini keys miniutter mtl prettyShow random stm text transformers
+    unorderedContainers vector vectorBinaryInstances zlib
   ];
   jailbreak = true;
   meta = {

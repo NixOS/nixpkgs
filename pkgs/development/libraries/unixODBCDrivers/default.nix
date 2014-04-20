@@ -30,8 +30,8 @@ args : with args;
   };
 # official postgres connector
  psql = rec {
-   deriv = stdenv.mkDerivation {
-    name = "psql-odbc-08.03.0200";
+   deriv = stdenv.mkDerivation rec {
+    name = "psqlodbc-09.03.0100";
     buildInputs = [ unixODBC libtool postgresql openssl ];
     preConfigure="
       export CPPFLAGS=-I${unixODBC}/include
@@ -39,9 +39,8 @@ args : with args;
     ";
     # added -ltdl to resolve missing references `dlsym' `dlerror' `dlopen' `dlclose' 
     src = fetchurl {
-      url = http://wwwmaster.postgresql.org/redir?setmir=53&typ=h&url=http://ftp.de.postgresql.org/mirror/postgresql//odbc/versions/src/psqlodbc-08.03.0200.tar.gz;
-      name = "psqlodbc-08.03.0200.tar.gz";
-      sha256 = "1401hgzvs3m2yr2nbbf9gfy2wwijrk4ihwz972arbn0krsiwxya1";
+      url = "http://ftp.postgresql.org/pub/odbc/versions/src/${name}.tar.gz";
+      sha256 = "0mh10chkmlppidnmvgbp47v5jnphsrls28zwbvyk2crcn8gdx9q1";
     };
     meta = {
         description = "unix odbc driver for postgresql";
@@ -91,8 +90,11 @@ args : with args;
 
       configureFlags = "--with-sqlite3=${sqlite} --with-odbc=${unixODBC}";
 
+      # move libraries to $out/lib where they're expected to be
       postInstall = ''
-        mkdir -p  $out/lib
+        mkdir -p "$out/lib"
+        mv "$out"/*.so "$out/lib"
+        mv "$out"/*.la "$out/lib"
       '';
 
       meta = { 

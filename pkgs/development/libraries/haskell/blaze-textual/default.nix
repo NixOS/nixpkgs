@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "blaze-textual";
-  version = "0.2.0.8";
-  sha256 = "0zzqh53ywzz8ss58glp3i8is8gry5yqzvdjw4xh95fbbzcz4cgc7";
+  version = "0.2.0.9";
+  sha256 = "1gwy1pjnc2ikxfxn9c751rnydry1hmlfk13k29xnns9vwglf81f0";
   buildDepends = [ blazeBuilder text time vector ];
   testDepends = [
     blazeBuilder doubleConversion QuickCheck testFramework

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     homepage = http://lttng.org/;
     # liblttvtraceread (ltt/ directory) is distributed under the GNU LGPL v2.1.
     # The rest of the LTTV package is distributed under the GNU GPL v2.
-    license = with licenses; [ gpl2 lgpl21 ];
+    # TODO license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

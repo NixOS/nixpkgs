@@ -1,11 +1,11 @@
 { stdenv, fetchurl, buildPerlPackage, DBI, postgresql }:
 
 buildPerlPackage rec {
-  name = "DBD-Pg-2.19.3";
+  name = "DBD-Pg-3.0.0";
 
   src = fetchurl {
-    url = "mirror://cpan/modules/by-module/DBD/${name}.tar.gz";
-    sha256 = "0ai6p2094hrh6kjlwfjvpw2z8wqa3scr4ba3p6rqza3z9c9hsd9p";
+    url = "mirror://cpan/authors/id/T/TU/TURNSTEP/${name}.tar.gz";
+    sha256 = "10s1dhpxxqfl421388l6gzfdm1gzxf5iah42i1w6yji9mgkz8hf8";
   };
 
   buildInputs = [ postgresql ];

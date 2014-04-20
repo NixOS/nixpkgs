@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, flex, bison, db4, iptables, pkgconfig }:
+{ fetchurl, stdenv, flex, bison, db, iptables, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "iproute2-3.12.0";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     + " CONFDIR=$(out)/etc DOCDIR=$(out)/share/doc/${name}"
     + " MANDIR=$(out)/share/man";
 
-  buildInputs = [ db4 iptables ];
+  buildInputs = [ db iptables ];
   nativeBuildInputs = [ bison flex pkgconfig ];
 
   enableParallelBuilding = true;

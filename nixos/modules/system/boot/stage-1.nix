@@ -3,9 +3,9 @@
 # the modules necessary to mount the root file system, then calls the
 # init in the root file system to start the second boot stage.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -74,7 +74,7 @@ let
       cp -v ${pkgs.lvm2}/sbin/dmsetup $out/bin/dmsetup
       cp -v ${pkgs.lvm2}/sbin/lvm $out/bin/lvm
       cp -v ${pkgs.lvm2}/lib/libdevmapper.so.*.* $out/lib
-      cp -v ${pkgs.systemd}/lib/libsystemd-daemon.so.* $out/lib
+      cp -v ${pkgs.systemd}/lib/libsystemd.so.* $out/lib
 
       # Add RAID mdadm tool.
       cp -v ${pkgs.mdadm}/sbin/mdadm $out/bin/mdadm

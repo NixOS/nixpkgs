@@ -1,14 +1,14 @@
-{ cabal, async, binary, binaryConduit, conduit, mtl, network
-, networkConduit, parsec, smallcheck, tasty, tastyHunit
-, tastySmallcheck, time, void
+{ cabal, async, binary, binaryConduit, conduit, conduitExtra, mtl
+, network, parsec, smallcheck, tasty, tastyHunit, tastySmallcheck
+, time, void
 }:
 
 cabal.mkDerivation (self: {
   pname = "bert";
-  version = "1.2.2";
-  sha256 = "1dlq9fl5d2adprcybs4d4cyhj9q2c1l4kcc6vnnyhbyn201gxgpn";
+  version = "1.2.2.2";
+  sha256 = "0bjrqgm0dpsrk1nivxmw2wvx33v7z7swgy3p5fb51vg7y81776cz";
   buildDepends = [
-    binary binaryConduit conduit mtl network networkConduit parsec time
+    binary binaryConduit conduit conduitExtra mtl network parsec time
     void
   ];
   testDepends = [

@@ -67,7 +67,7 @@ buildPythonPackage {
 
     homepage = http://allmydata.org/;
 
-    license = [ lib.licenses.gpl2Plus /* or */ "TGPPLv1+" ];
+    # TODO license = [ lib.licenses.gpl2Plus /* or */ "TGPPLv1+" ];
 
     maintainers = [ lib.maintainers.simons  ];
     platforms = lib.platforms.gnu;  # arbitrary choice

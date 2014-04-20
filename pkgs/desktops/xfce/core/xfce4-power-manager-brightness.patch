@@ -1,0 +1,307 @@
+From 05d12e12596512f7a31d3cdb4845a69dc2d4c611 Mon Sep 17 00:00:00 2001
+From: Martin Matuska <martin@matuska.org>
+Date: Tue, 23 Jul 2013 11:27:41 +0200
+Subject: Change brightness level from glong to gint32
+
+The "Backlight" RandR property is a 32-bit integer. This means that the int32 (gint32) type should be used to represent brightness levels. The attached patch does nothing else than changing the brightness level representation from glong to gint32. This fixes the screen auto-dimming issue and brightness panel plugin issue.
+
+diff --git a/common/xfpm-brightness.c b/common/xfpm-brightness.c
+index aa1ef33..f1524cb 100644
+--- a/common/xfpm-brightness.c
++++ b/common/xfpm-brightness.c
+@@ -92,11 +92,11 @@ out:
+ }
+ 
+ static gboolean
+-xfpm_brightness_xrandr_get_level (XfpmBrightness *brightness, RROutput output, long *current)
++xfpm_brightness_xrandr_get_level (XfpmBrightness *brightness, RROutput output, gint32 *current)
+ {
+     unsigned long nitems;
+     unsigned long bytes_after;
+-    long *prop;
++    gint32 *prop;
+     Atom actual_type;
+     int actual_format;
+     gboolean ret = FALSE;
+@@ -124,7 +124,7 @@ xfpm_brightness_xrandr_get_level (XfpmBrightness *brightness, RROutput output, l
+ }
+ 
+ static gboolean
+-xfpm_brightness_xrandr_set_level (XfpmBrightness *brightness, RROutput output, long level)
++xfpm_brightness_xrandr_set_level (XfpmBrightness *brightness, RROutput output, gint32 level)
+ {
+     gboolean ret = TRUE;
+ 
+@@ -137,7 +137,7 @@ xfpm_brightness_xrandr_set_level (XfpmBrightness *brightness, RROutput output, l
+     
+     if ( gdk_error_trap_pop () ) 
+     {
+-	    g_warning ("failed to XRRChangeOutputProperty for brightness %li", level);
++	    g_warning ("failed to XRRChangeOutputProperty for brightness %d", level);
+ 	    ret = FALSE;
+     }
+     
+@@ -225,11 +225,11 @@ xfpm_brightness_setup_xrandr (XfpmBrightness *brightness)
+ }
+ 
+ static gboolean
+-xfpm_brightness_xrand_up (XfpmBrightness *brightness, glong *new_level)
++xfpm_brightness_xrand_up (XfpmBrightness *brightness, gint32 *new_level)
+ {
+-    long hw_level;
++    gint32 hw_level;
+     gboolean ret = FALSE;
+-    long set_level;
++    gint32 set_level;
+     
+     ret = xfpm_brightness_xrandr_get_level (brightness, brightness->priv->output, &hw_level);
+     
+@@ -250,14 +250,14 @@ xfpm_brightness_xrand_up (XfpmBrightness *brightness, glong *new_level)
+     
+     if ( !ret )
+     {
+-	g_warning ("xfpm_brightness_xrand_up failed for %li", set_level);
++	g_warning ("xfpm_brightness_xrand_up failed for %d", set_level);
+ 	return FALSE;
+     }
+ 	
+     /* Nothing changed in the hardware*/
+     if ( *new_level == hw_level )
+     {
+-	g_warning ("xfpm_brightness_xrand_up did not change the hw level to %li", set_level);
++	g_warning ("xfpm_brightness_xrand_up did not change the hw level to %d", set_level);
+ 	return FALSE;
+     }
+     
+@@ -265,11 +265,11 @@ xfpm_brightness_xrand_up (XfpmBrightness *brightness, glong *new_level)
+ }
+ 
+ static gboolean
+-xfpm_brightness_xrand_down (XfpmBrightness *brightness, long *new_level)
++xfpm_brightness_xrand_down (XfpmBrightness *brightness, gint32 *new_level)
+ {
+-    long hw_level;
++    gint32 hw_level;
+     gboolean ret;
+-    long set_level;
++    gint32 set_level;
+     
+     ret = xfpm_brightness_xrandr_get_level (brightness, brightness->priv->output, &hw_level);
+     
+@@ -290,14 +290,14 @@ xfpm_brightness_xrand_down (XfpmBrightness *brightness, long *new_level)
+     
+     if ( !ret )
+     {
+-	g_warning ("xfpm_brightness_xrand_down failed for %li", set_level);
++	g_warning ("xfpm_brightness_xrand_down failed for %d", set_level);
+ 	return FALSE;
+     }
+     
+     /* Nothing changed in the hardware*/
+     if ( *new_level == hw_level )
+     {
+-	g_warning ("xfpm_brightness_xrand_down did not change the hw level to %li", set_level);
++	g_warning ("xfpm_brightness_xrand_down did not change the hw level to %d", set_level);
+ 	return FALSE;
+     }
+     
+@@ -361,7 +361,7 @@ xfpm_brightness_setup_helper (XfpmBrightness *brightness)
+ }
+ 
+ static gboolean
+-xfpm_brightness_helper_get_level (XfpmBrightness *brg, glong *level)
++xfpm_brightness_helper_get_level (XfpmBrightness *brg, gint32 *level)
+ {
+     int ret;
+ 
+@@ -406,11 +406,11 @@ out:
+ }
+ 
+ static gboolean
+-xfpm_brightness_helper_up (XfpmBrightness *brightness, glong *new_level)
++xfpm_brightness_helper_up (XfpmBrightness *brightness, gint32 *new_level)
+ {
+-    glong hw_level;
++    gint32 hw_level;
+     gboolean ret = FALSE;
+-    gint set_level;
++    gint32 set_level;
+     
+     ret = xfpm_brightness_helper_get_level (brightness, &hw_level);
+     
+@@ -446,11 +446,11 @@ xfpm_brightness_helper_up (XfpmBrightness *brightness, glong *new_level)
+ }
+ 
+ static gboolean
+-xfpm_brightness_helper_down (XfpmBrightness *brightness, glong *new_level)
++xfpm_brightness_helper_down (XfpmBrightness *brightness, gint32 *new_level)
+ {
+-    glong hw_level;
++    gint32 hw_level;
+     gboolean ret;
+-    gint set_level;
++    gint32 set_level;
+     
+     ret = xfpm_brightness_helper_get_level (brightness, &hw_level);
+     
+@@ -572,7 +572,7 @@ xfpm_brightness_setup (XfpmBrightness *brightness)
+     return FALSE;
+ }
+ 
+-gboolean xfpm_brightness_up (XfpmBrightness *brightness, glong *new_level)
++gboolean xfpm_brightness_up (XfpmBrightness *brightness, gint32 *new_level)
+ {
+     gboolean ret = FALSE;
+     
+@@ -589,7 +589,7 @@ gboolean xfpm_brightness_up (XfpmBrightness *brightness, glong *new_level)
+     return ret;
+ }
+ 
+-gboolean xfpm_brightness_down (XfpmBrightness *brightness, glong *new_level)
++gboolean xfpm_brightness_down (XfpmBrightness *brightness, gint32 *new_level)
+ {
+     gboolean ret = FALSE;
+     
+@@ -618,7 +618,7 @@ gint xfpm_brightness_get_max_level (XfpmBrightness *brightness)
+     return brightness->priv->max_level;
+ }
+ 
+-gboolean xfpm_brightness_get_level	(XfpmBrightness *brightness, glong *level)
++gboolean xfpm_brightness_get_level	(XfpmBrightness *brightness, gint32 *level)
+ {
+     gboolean ret = FALSE;
+     
+@@ -632,7 +632,7 @@ gboolean xfpm_brightness_get_level	(XfpmBrightness *brightness, glong *level)
+     return ret;
+ }
+ 
+-gboolean xfpm_brightness_set_level (XfpmBrightness *brightness, glong level)
++gboolean xfpm_brightness_set_level (XfpmBrightness *brightness, gint32 level)
+ {
+     gboolean ret = FALSE;
+     
+diff --git a/common/xfpm-brightness.h b/common/xfpm-brightness.h
+index 0c4e3ed..26b3dbe 100644
+--- a/common/xfpm-brightness.h
++++ b/common/xfpm-brightness.h
+@@ -51,20 +51,20 @@ XfpmBrightness       	       *xfpm_brightness_new             (void);
+ gboolean			xfpm_brightness_setup 		(XfpmBrightness *brightness);
+ 
+ gboolean			xfpm_brightness_up		(XfpmBrightness *brightness,
+-								 glong *new_level);
++								 gint32 *new_level);
+ 
+ gboolean			xfpm_brightness_down		(XfpmBrightness *brightness,
+-								 glong *new_level);
++								 gint32 *new_level);
+ 
+ gboolean			xfpm_brightness_has_hw 		(XfpmBrightness *brightness);
+ 
+ gint 				xfpm_brightness_get_max_level   (XfpmBrightness *brightness);
+ 
+ gboolean			xfpm_brightness_get_level	(XfpmBrightness *brightness,
+-								 glong *level);
++								 gint32 *level);
+ 
+ gboolean			xfpm_brightness_set_level	(XfpmBrightness *brightness,
+-								 glong level);
++								 gint32 level);
+ 
+ gboolean			xfpm_brightness_dim_down	(XfpmBrightness *brightness);
+ 
+diff --git a/panel-plugins/brightness/brightness-button.c b/panel-plugins/brightness/brightness-button.c
+index 6e60c29..bd466c9 100644
+--- a/panel-plugins/brightness/brightness-button.c
++++ b/panel-plugins/brightness/brightness-button.c
+@@ -186,7 +186,7 @@ static gboolean
+ brightness_button_popup_win (GtkWidget *widget, GdkEvent *ev, guint32 ev_time)
+ {
+     gint x, y;
+-    glong current_level = 0;
++    gint32 current_level = 0;
+     GdkDisplay *display;
+     GdkScreen *screen;
+     BrightnessButton *button;
+@@ -342,7 +342,7 @@ plus_clicked (GtkWidget *widget, BrightnessButton *button)
+ static void
+ range_value_changed (GtkWidget *widget, BrightnessButton *button)
+ {
+-    glong range_level, hw_level;
++    gint32 range_level, hw_level;
+     
+     range_level = (gint) gtk_range_get_value (GTK_RANGE (button->priv->range));
+     
+@@ -428,8 +428,8 @@ brightness_button_create_popup (BrightnessButton *button)
+ static void
+ brightness_button_up (BrightnessButton *button)
+ {
+-    glong level;
+-    glong max_level;
++    gint32 level;
++    gint32 max_level;
+     
+     xfpm_brightness_get_level (button->priv->brightness, &level);
+     max_level = xfpm_brightness_get_max_level (button->priv->brightness);
+@@ -443,7 +443,7 @@ brightness_button_up (BrightnessButton *button)
+ static void
+ brightness_button_down (BrightnessButton *button)
+ {
+-    glong level;
++    gint32 level;
+     xfpm_brightness_get_level (button->priv->brightness, &level);
+     
+     if ( level != 0 )
+diff --git a/src/xfpm-backlight.c b/src/xfpm-backlight.c
+index baeeb43..45c990f 100644
+--- a/src/xfpm-backlight.c
++++ b/src/xfpm-backlight.c
+@@ -63,8 +63,8 @@ struct XfpmBacklightPrivate
+     gboolean	    has_hw;
+     gboolean	    on_battery;
+     
+-    glong            last_level;
+-    glong 	    max_level;
++    gint32          last_level;
++    gint32 	    max_level;
+     
+     gboolean        dimmed;
+     gboolean	    block;
+@@ -79,7 +79,7 @@ xfpm_backlight_dim_brightness (XfpmBacklight *backlight)
+     
+     if (xfpm_power_get_mode (backlight->priv->power) == XFPM_POWER_MODE_NORMAL )
+     {
+-	glong dim_level;
++	gint32 dim_level;
+ 	
+ 	g_object_get (G_OBJECT (backlight->priv->conf),
+ 		      backlight->priv->on_battery ? BRIGHTNESS_LEVEL_ON_BATTERY : BRIGHTNESS_LEVEL_ON_AC, &dim_level,
+@@ -101,7 +101,7 @@ xfpm_backlight_dim_brightness (XfpmBacklight *backlight)
+ 	 **/
+ 	if (backlight->priv->last_level > dim_level)
+ 	{
+-	    XFPM_DEBUG ("Current brightness level before dimming : %li, new %li", backlight->priv->last_level, dim_level);
++	    XFPM_DEBUG ("Current brightness level before dimming : %d, new %d", backlight->priv->last_level, dim_level);
+ 	    backlight->priv->dimmed = xfpm_brightness_set_level (backlight->priv->brightness, dim_level);
+ 	}
+     }
+@@ -182,7 +182,7 @@ xfpm_backlight_reset_cb (EggIdletime *idle, XfpmBacklight *backlight)
+     {
+ 	if ( !backlight->priv->block)
+ 	{
+-	    XFPM_DEBUG ("Alarm reset, setting level to %li", backlight->priv->last_level);
++	    XFPM_DEBUG ("Alarm reset, setting level to %d", backlight->priv->last_level);
+ 	    xfpm_brightness_set_level (backlight->priv->brightness, backlight->priv->last_level);
+ 	}
+ 	backlight->priv->dimmed = FALSE;
+@@ -192,7 +192,7 @@ xfpm_backlight_reset_cb (EggIdletime *idle, XfpmBacklight *backlight)
+ static void
+ xfpm_backlight_button_pressed_cb (XfpmButton *button, XfpmButtonKey type, XfpmBacklight *backlight)
+ {
+-    glong level;
++    gint32 level;
+     gboolean ret = TRUE;
+     
+     gboolean enable_brightness, show_popup;
+-- 
+cgit v0.10.1
+

@@ -9,28 +9,32 @@ assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 let
-  ver_maj = "3.10";
-  ver_min = "5"; # .6 needs currently unreleased wayland for introspection (wl_proxy_marshal_constructor)
+  ver_maj = "3.12";
+  ver_min = "1";
+  version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
-  name = "gtk+-${ver_maj}.${ver_min}";
+  name = "gtk+3-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/${ver_maj}/${name}.tar.xz";
-    sha256 = "1iyc566r61d3jfdiq5knwbssq5bsqsn8hqzdm30vmw6dx3cgd49i";
+    url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
+    sha256 = "1kbp0bmyzh7lbxv9y349vrj3d0n0hn68r5kyvg5683snvdgsx6ki";
   };
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
-  buildInputs = [ wayland libxkbcommon ];
+  buildInputs = [ libxkbcommon ];
   propagatedBuildInputs = with xlibs; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk ]
-    ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor ]
+    ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor wayland ]
     ++ optional stdenv.isDarwin x11
-    ++ stdenv.lib.optional xineramaSupport libXinerama
-    ++ stdenv.lib.optionals cupsSupport [ cups ];
+    ++ optional xineramaSupport libXinerama
+    ++ optional cupsSupport cups;
+
+  # demos fail to install, no idea where's the problem
+  preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
+
+  enableParallelBuilding = true;
 
   postInstall = "rm -rf $out/share/gtk-doc";
 

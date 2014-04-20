@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-safe";
-  version = "2.0.1";
-  sha256 = "11516rixqdym5rf5z5f5gwbfk689dl3ka3dj44c7a2qy7xl4sqzr";
+  version = "2.1.0";
+  sha256 = "0qm02hwmrqlncnlxix7mdgzbf0mzally4k7ydwg06nqi35bb7s3j";
   buildDepends = [ exceptions pipes transformers ];
   meta = {
     description = "Safety for the pipes ecosystem";

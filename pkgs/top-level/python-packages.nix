@@ -1,42 +1,52 @@
-{ pkgs, python, lowPrio }:
+{ pkgs, python }:
+  with pkgs.lib;
 
 let
-isPy26 = python.majorVersion == "2.6";
-isPy27 = python.majorVersion == "2.7";
-optional = pkgs.lib.optional;
-optionals = pkgs.lib.optionals;
-modules = python.modules or { readline = null; sqlite3 = null; curses = null; curses_panel = null; ssl = null; crypt = null; };
+  isPy26 = python.majorVersion == "2.6";
+  isPy27 = python.majorVersion == "2.7";
+  isPy33 = python.majorVersion == "3.3";
+  isPy34 = python.majorVersion == "3.4";
+  isPyPy = python.executable == "pypy";
+
+  # Unique python version identifier
+  pythonName =
+    if isPy26 then "python26" else
+    if isPy27 then "python27" else
+    if isPy33 then "python33" else
+    if isPy34 then "python34" else
+    if isPyPy then "pypy" else "";
+
+  modules = python.modules or { readline = null; sqlite3 = null; curses = null; curses_panel = null; ssl = null; crypt = null; };
 
 pythonPackages = modules // import ./python-packages-generated.nix {
   inherit pkgs python;
   inherit (pkgs) stdenv fetchurl;
   self = pythonPackages;
-} // rec {
+} //
 
-  inherit python;
-  inherit (pkgs) fetchurl fetchsvn fetchgit stdenv;
+# Python packages for all python versions
+rec {
+
+  inherit python isPy26 isPy27 isPy33 isPy34 isPyPy pythonName;
+  inherit (pkgs) fetchurl fetchsvn fetchgit stdenv unzip;
 
   # helpers
 
-  callPackage = pkgs.lib.callPackageWith (pkgs // pythonPackages);
+  callPackage = callPackageWith (pkgs // pythonPackages);
 
-  buildPythonPackage = import ../development/python-modules/generic {
-    inherit (pkgs) lib;
-    inherit python wrapPython setuptools recursivePthLoader offlineDistutils;
-  };
+  # global distutils config used by buildPythonPackage
+  distutils-cfg = callPackage ../development/python-modules/distutils-cfg { };
+
+  buildPythonPackage = callPackage ../development/python-modules/generic { };
 
   wrapPython = pkgs.makeSetupHook
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
+      substitutions.executable = "${python}/bin/${python.executable}";
     }
    ../development/python-modules/generic/wrap.sh;
 
   # specials
-
-  offlineDistutils = import ../development/python-modules/offline-distutils {
-    inherit (pkgs) stdenv;
-    inherit python;
-  };
 
   recursivePthLoader = import ../development/python-modules/recursive-pth-loader {
     inherit (pkgs) stdenv;
@@ -45,12 +55,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   setuptools = import ../development/python-modules/setuptools {
     inherit (pkgs) stdenv fetchurl;
-    inherit python wrapPython;
-  };
-
-  setuptoolsSite = import ../development/python-modules/setuptools/site.nix {
-    inherit (pkgs) stdenv;
-    inherit python setuptools;
+    inherit python wrapPython distutils-cfg;
   };
 
   # packages defined elsewhere
@@ -65,6 +70,9 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
+    qtconsoleSupport = !pkgs.stdenv.isDarwin; # qt is not supported on darwin
+    pylabQtSupport = !pkgs.stdenv.isDarwin;
+    pylabSupport = !pkgs.stdenv.isDarwin; # cups is not supported on darwin
   };
 
   ipythonLight = lowPrio (import ../shells/ipython {
@@ -262,7 +270,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     buildInputs = [
       pkgs.which
-      pkgs.unzip
       pythonPackages.coverage
       pythonPackages.mock
       pythonPackages.tissue
@@ -294,10 +301,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     ];
 
     postInstall = ''
-      ln -s ${pyramid}/bin/pserve $out/bin
       ln -s ${pkgs.bacula}/bin/bconsole $out/bin
-      wrapProgram "$out/bin/pserve" \
-        --suffix PYTHONPATH : "$out/lib/python2.7/site-packages"
     '';
 
     meta = {
@@ -385,7 +389,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha1 = "fa4aec08e59fa5964197f59ba42408d64031675b";
     };
 
-    buildInputs = [ pkgs.unzip pkgs.sqlite ];
+    buildInputs = [ pkgs.sqlite ];
 
     # python: double free or corruption (fasttop): 0x0000000002fd4660 ***
     doCheck = false;
@@ -414,6 +418,19 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
 
+  async = buildPythonPackage rec {
+    name = "async-0.6.1";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    buildInputs = [ pkgs.zlib ];
+    doCheck = false;
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/async/${name}.tar.gz";
+      sha256 = "1lfmjm8apy9qpnpbq8g641fd01qxh9jlya5g2d6z60vf8p04rla1";
+    };
+  };
+
   argparse = buildPythonPackage (rec {
     name = "argparse-1.2.1";
 
@@ -421,8 +438,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://argparse.googlecode.com/files/${name}.tar.gz";
       sha256 = "192174mys40m0bwk6l5jlfnzps0xi81sxm34cqms6dc3c454pbyx";
     };
-
-    buildInputs = [ pkgs.unzip ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -444,6 +459,60 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       '';
     };
   });
+
+  autopep8 = buildPythonPackage (rec {
+    name = "autopep8-1.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/a/autopep8/${name}.tar.gz";
+      md5 = "41782e66efcbaf9d761bb45a2d2929bb";
+    };
+
+    propagatedBuildInputs = [ pep8 ];
+
+    # One test fails:
+    # FAIL: test_recursive_should_not_crash_on_unicode_filename (test.test_autopep8.CommandLineTests)
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
+      homepage = https://pypi.python.org/pypi/autopep8/;
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  });
+
+  backports_ssl_match_hostname_3_4_0_2 = pythonPackages.buildPythonPackage rec {
+    name = "backports.ssl_match_hostname-3.4.0.2";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/backports.ssl_match_hostname/backports.ssl_match_hostname-3.4.0.2.tar.gz";
+      md5 = "788214f20214c64631f0859dc79f23c6";
+    };
+
+    meta = {
+      description = "The Secure Sockets layer is only actually *secure*";
+      homepage = http://bitbucket.org/brandon/backports.ssl_match_hostname;
+    };
+  };
+
+  bcdoc = buildPythonPackage rec {
+    name = "bcdoc-0.12.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/bcdoc/bcdoc-0.12.1.tar.gz";
+      md5 = "7c8617347c294ea4d36ec73fb5b2c26e";
+    };
+
+    buildInputs = [ pythonPackages.docutils pythonPackages.six ];
+
+    meta = {
+      homepage = https://github.com/botocore/bcdoc;
+      license = "Apache License 2.0";
+      description = "ReST document generation tools for botocore";
+    };
+  };
 
   beautifulsoup = buildPythonPackage (rec {
     name = "beautifulsoup-3.2.1";
@@ -512,6 +581,34 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  bedup = buildPythonPackage rec {
+    name = "bedup-20140206";
+
+    src = fetchgit {
+      url = "https://github.com/g2p/bedup.git";
+      rev = "80cb217d4819a03e159e42850a9a3f14e2b278a3";
+      sha256 = "1rik7a62v708ivfcy0pawhfnrb84b7gm3qr54x6jsxl0iqz078h6";
+    };
+
+    buildInputs = [ pkgs.btrfsProgs ];
+    propagatedBuildInputs = with pkgs; [ contextlib2 sqlalchemy pyxdg pycparser cffi alembic ];
+
+    meta = {
+      description = "Deduplication for Btrfs";
+      longDescription = ''
+        Deduplication for Btrfs. bedup looks for new and changed files, making sure that multiple
+        copies of identical files share space on disk. It integrates deeply with btrfs so that scans
+        are incremental and low-impact.
+      '';
+      homepage = https://github.com/g2p/bedup;
+      license = stdenv.lib.licenses.gpl2;
+
+      platforms = stdenv.lib.platforms.linux;
+
+      maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
+    };
+  };
+
   beets = buildPythonPackage rec {
     name = "beets-1.0.0";
 
@@ -521,7 +618,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
 
     # tests depend on $HOME setting
-    configurePhase = "export HOME=$TMPDIR";
+    preConfigure = "export HOME=$TMPDIR";
 
     propagatedBuildInputs =
       [ pythonPackages.pyyaml
@@ -536,7 +633,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = http://beets.radbox.org;
       description = "Music tagger and library organizer";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
@@ -557,7 +654,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = https://github.com/Sheeprider/BitBucket-api;
       description = "Python library to interact with BitBucket REST API";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
     };
   };
 
@@ -569,8 +666,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "https://python-bitstring.googlecode.com/files/${name}.zip";
       sha256 = "1i1p3rkj4ad108f23xyib34r4rcy571gy65paml6fk77knh0k66p";
     };
-
-    buildInputs = [ pkgs.unzip ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -688,12 +783,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   botocore = buildPythonPackage rec {
-    version = "0.13.1";
+    version = "0.33.0";
     name = "botocore-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "192kxgw76b22zmk5mxjkij5rskibb9jfaggvpznzy3ggsgja7yy8";
+      md5 = "6743c73a2e148abaa9c487a6e2ee53a3";
     };
 
     propagatedBuildInputs =
@@ -751,7 +846,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
    meta = {
       homepage = "http://www.buildout.org";
       description = "A software build and configuration system";
-      license = pkgs.lib.licenses.zpt21;
+      license = licenses.zpt21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
@@ -766,7 +861,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
    meta = {
       homepage = "http://www.buildout.org";
       description = "A software build and configuration system";
-      license = pkgs.lib.licenses.zpt21;
+      license = licenses.zpt21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
@@ -787,10 +882,21 @@ pythonPackages = modules // import ./python-packages-generated.nix {
    meta = {
       homepage = "http://www.buildout.org";
       description = "A software build and configuration system";
-      license = pkgs.lib.licenses.zpt21;
+      license = licenses.zpt21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
+
+  bunch = buildPythonPackage (rec {
+    name = "bunch-1.0.1";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/b/bunch/${name}.tar.gz";
+      sha256 = "1akalx2pd1fjlvrq69plvcx783ppslvikqdm93z2sdybq07pmish";
+    };
+    doCheck = false;
+  });
 
 
   carrot = buildPythonPackage rec {
@@ -954,7 +1060,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "Simple, lightweight, and easily extensible STOMP message broker";
       homepage = http://code.google.com/p/coilmq/;
-      license = pkgs.lib.licenses.asl20;
+      license = licenses.asl20;
     };
   });
 
@@ -996,7 +1102,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "Autogenerate Colander schemas based on SQLAlchemy models.";
       homepage = https://github.com/stefanofontanelli/ColanderAlchemy;
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
     };
   };
 
@@ -1015,7 +1121,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "Config file reading, writing and validation.";
       homepage = http://pypi.python.org/pypi/configobj;
-      license = pkgs.lib.licenses.bsd3;
+      license = licenses.bsd3;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   });
@@ -1029,7 +1135,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "https://github.com/agrover/configshell-fb/archive/v${version}.tar.gz";
       sha256 = "1dd87xvm98nk3jzybb041gjdahi2z9b53pwqhyxcfj4a91y82ndy";
     };
-    
+
     propagatedBuildInputs = [
       pyparsing
       modules.readline
@@ -1064,6 +1170,15 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  contextlib2 = buildPythonPackage rec {
+    name = "contextlib2-0.4.0";
+
+    src = fetchurl rec {
+      url = "https://pypi.python.org/packages/source/c/contextlib2/${name}.tar.gz";
+      md5 = "ea687207db25f65552061db4a2c6727d";
+    };
+  };
+
   coverage = buildPythonPackage rec {
     name = "coverage-3.6";
 
@@ -1075,8 +1190,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "Code coverage measurement for python";
       homepage = http://nedbatchelder.com/code/coverage/;
-      license = pkgs.lib.licenses.bsd3;
-      maintainers = [ stdenv.lib.maintainers.shlevy ];
+      license = licenses.bsd3;
     };
   };
 
@@ -1090,6 +1204,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
     };
     propagatedBuildInputs = [ pythonPackages.coverage ];
+  };
+
+  cython = buildPythonPackage rec {
+    name = "Cython-0.20.1";
+  
+    src = fetchurl {
+      url = "http://www.cython.org/release/${name}.tar.gz";
+      sha256 = "0v3nc9z5ynnnjdgcgkyy5g9wazmkjv53nnpjal1v3mr199s6799i";
+    };
+  
+    setupPyBuildFlags = ["--build-base=$out"];
+  
+    buildInputs = [ pkgs.pkgconfig ];
+  
+    meta = {
+      description = "An interpreter to help writing C extensions for Python 2";
+      platforms = stdenv.lib.platforms.all;
+    };
   };
 
   cryptacular = buildPythonPackage rec {
@@ -1198,21 +1330,33 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   pytest = buildPythonPackage rec {
-    name = "pytest-2.3.5";
+    name = "pytest-2.5.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytest/${name}.tar.gz";
-      md5 = "18f150e7be96b5fe3c388b0e817b8087";
+      md5 = "4e155a0134e6757b37cc6698c20f3e9f";
     };
 
-    propagatedBuildInputs = [ pythonPackages.py ]
+    preCheck = ''
+      # broken on python3, fixed in master, remove in next release
+      rm doc/en/plugins_index/test_plugins_index.py
+
+      # don't test bash builtins
+      rm testing/test_argcomplete.py
+
+      # yaml test are failing
+      rm doc/en/example/nonpython/test_simple.yml
+    '';
+
+    propagatedBuildInputs = [ py ]
+      ++ (optional isPy26 argparse)
       ++ stdenv.lib.optional
         pkgs.config.pythonPackages.pytest.selenium or false
         pythonPackages.selenium;
 
     meta = with stdenv.lib; {
       maintainers = with maintainers; [ iElectric lovek323 ];
-      platforms   = platforms.unix;
+      platforms = platforms.unix;
     };
   };
 
@@ -1224,7 +1368,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "9c0b8efe9d43b460f8cf049fa46ce14d";
     };
 
-    buildInputs = [ pkgs.unzip pytest ];
+    buildInputs = [ pytest ];
     propagatedBuildInputs = [ execnet ];
 
     meta = {
@@ -1251,7 +1395,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "139yfm9yz9k33kgqw4khsljs10rkhhxyywbq9i82bh2r31cil1pp";
     };
 
-    buildInputs = [ pkgs.unzip pythonPackages.mock ];
+    buildInputs = [ pythonPackages.mock ];
 
     # couple of failing tests
     doCheck = false;
@@ -1415,6 +1559,86 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  derpconf = pythonPackages.buildPythonPackage rec {
+    name = "derpconf-0.4.9";
+
+    propagatedBuildInputs = [ six ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/derpconf/${name}.tar.gz";
+      md5 = "a164807d7bf0c4adf1de781305f29b82";
+    };
+
+    meta = {
+      description = "derpconf abstracts loading configuration files for your app";
+      homepage = https://github.com/globocom/derpconf;
+      license = licenses.mit;
+    };
+  };
+
+  dpkt = buildPythonPackage rec {
+    name = "dpkt-1.8";
+
+    src = fetchurl {
+      url = "https://dpkt.googlecode.com/files/${name}.tar.gz";
+      sha256 = "01q5prynymaqyfsfi2296xncicdpid2hs3yyasim8iigvkwy4vf5";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Fast, simple packet creation / parsing, with definitions for the basic TCP/IP protocols";
+      homepage = https://code.google.com/p/dpkt/;
+      license = licenses.bsd3;
+      maintainers = [ maintainers.bjornfor ];
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+  
+  urllib3 = buildPythonPackage rec {
+    name = "urllib3-1.8";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/u/urllib3/${name}.tar.gz";
+      sha256 = "0pdigfxkq8mhzxxsn6isx8c4h9azqywr1k18yanwyxyj8cdzm28s";
+    };
+    
+    preConfigure = ''
+      substituteInPlace test-requirements.txt --replace 'nose==1.3' 'nose'
+    '';
+    
+    checkPhase = ''
+      nosetests --cover-min-percentage 70
+    '';
+
+    buildInputs = [ coverage tornado mock nose ];
+
+    meta = with stdenv.lib; {
+      description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
+      homepage = https://www.dropbox.com/developers/core/docs;
+      license = licenses.mit;
+    };
+  };
+
+  
+  dropbox = buildPythonPackage rec {
+    name = "dropbox-2.0.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dropbox/${name}.zip";
+      sha256 = "1bi2z1lql6ryylfflmizhqn98ab55777vn7n5krhqz40pdcjilkx";
+    };
+
+    propagatedBuildInputs = [ urllib3 mock setuptools ];
+
+    meta = with stdenv.lib; {
+      description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
+      homepage = https://www.dropbox.com/developers/core/docs;
+      license = licenses.mit;
+    };
+  };
+
 
   evdev = buildPythonPackage rec {
     version = "0.3.2";
@@ -1483,8 +1707,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "be885ccd9612966bb81839670d2da099";
     };
 
-    buildInputs = [ pkgs.unzip ];
-
     meta = {
       description = "rapid multi-Python deployment";
       license = stdenv.lib.licenses.gpl2;
@@ -1532,6 +1754,35 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     buildInputs = [ fudge nose ];
   };
 
+  fedora_cert = stdenv.mkDerivation (rec {
+    name = "fedora-cert-0.5.9.2";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://fedorahosted.org/releases/f/e/fedora-packager/fedora-packager-0.5.9.2.tar.bz2";
+      sha256 = "105swvzshgn3g6bjwk67xd8pslnhpxwa63mdsw6cl4c7cjp2blx9";
+    };
+
+    propagatedBuildInputs = [ python python_fedora wrapPython ];
+    postInstall = "mv $out/bin/fedpkg $out/bin/fedora-cert-fedpkg";
+    doCheck = false;
+
+    postFixup = "wrapPythonPrograms";
+  });
+
+  fedpkg = buildPythonPackage (rec {
+    name = "fedpkg-1.14";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://fedorahosted.org/releases/f/e/fedpkg/fedpkg-1.14.tar.bz2";
+      sha256 = "0rj60525f2sv34g5llafnkmpvbwrfbmfajxjc14ldwzymp8clc02";
+    };
+
+    patches = [ ../development/python-modules/fedpkg-buildfix.diff ];
+    propagatedBuildInputs = [ rpkg offtrac urlgrabber fedora_cert ];
+  });
+
   fudge = buildPythonPackage rec {
     name = "fudge-0.9.4";
     src = fetchurl {
@@ -1559,6 +1810,31 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  gitdb = buildPythonPackage rec {
+    name = "gitdb-0.5.4";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+    doCheck = false;
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gitdb/${name}.tar.gz";
+      sha256 = "10rpmmlln59aq44cd5vkb77hslak5pa1rbmigg6ski5f1nn2spfy";
+    };
+
+    propagatedBuildInputs = [ smmap async ];
+  };
+
+  GitPython = buildPythonPackage rec {
+    name = "GitPython-0.3.2";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/G/GitPython/GitPython-0.3.2.RC1.tar.gz";
+      sha256 = "1q4lc2ps12l517mmrxc8iq6gxyhj6d77bnk1p7mxf38d99l8crzx";
+    };
+
+    buildInputs = [ nose ];
+    propagatedBuildInputs = [ gitdb ];
+  };
 
   googlecl = buildPythonPackage rec {
     version = "0.9.14";
@@ -1581,14 +1857,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   gtimelog = buildPythonPackage rec {
-    name = "gtimelog-0.8.1";
+    name = "gtimelog-${version}";
+    version = "0.8.1";
+
     src = fetchurl {
-      url = https://launchpad.net/gtimelog/devel/0.8.1/+download/gtimelog-0.8.1.tar.gz;
-      sha256 = "010sbw4rmslf5ifg9bgicn0f6mgsy76v8218xi0jndi9z6pva7y6";
+      url = "https://github.com/gtimelog/gtimelog/archive/${version}.tar.gz";
+      sha256 = "0nwpfv284b26q97mfpagqkqb4n2ilw46cx777qsyi3plnywk1xa0";
     };
+
     propagatedBuildInputs = [ pygtk ];
+
+    checkPhase = ''
+      patchShebangs ./runtests
+      ./runtests
+    '';
+
     meta = with stdenv.lib; {
-      description = "A small Gtk+ app for keeping track of your time. It's main goal is to be as unintrusive as possible.";
+      description = "A small Gtk+ app for keeping track of your time. It's main goal is to be as unintrusive as possible";
       homepage = http://mg.pov.lt/gtimelog/;
       license = licenses.gpl2Plus;
       maintainers = [ maintainers.ocharles ];
@@ -1596,12 +1881,30 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  # TODO: this shouldn't use a buildPythonPackage
+  koji = buildPythonPackage (rec {
+    name = "koji-1.8";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://fedorahosted.org/released/koji/koji-1.8.0.tar.bz2";
+      sha256 = "10dph209h4jgajb5jmbjhqy4z4hd22i7s2d93vm3ikdf01i8iwf1";
+    };
+
+    configurePhase = ":";
+    buildPhase = ":";
+    installPhase = "make install DESTDIR=$out/ && cp -R $out/nix/store/*/* $out/ && rm -rf $out/nix";
+    doCheck = false;
+    propagatedBuildInputs = [ pythonPackages.pycurl ];
+
+  });
+
   logilab_astng = buildPythonPackage rec {
-    name = "logilab-astng-0.24.1";
+    name = "logilab-astng-0.24.3";
 
     src = fetchurl {
       url = "http://download.logilab.org/pub/astng/${name}.tar.gz";
-      sha256 = "00qxaxsax80sknwv25xl1r49lc4gbhkxs1kjywji4ad8y1npax0s";
+      sha256 = "0np4wpxyha7013vkkrdy54dvnil67gzi871lg60z8lap0l5h67wn";
     };
 
     propagatedBuildInputs = [ logilab_common ];
@@ -1609,12 +1912,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   paver = buildPythonPackage rec {
-    version = "1.2.1";
+    version = "1.2.2";
     name    = "Paver-${version}";
 
     src = fetchurl {
       url    = "https://pypi.python.org/packages/source/P/Paver/Paver-${version}.tar.gz";
-      sha256 = "1b1023jks1gi1rwphdy3y2zx7dh4bvwk2050kclp95j7xym1ya0y";
+      sha256 = "0lix9d33ndb3yk56sm1zlj80fbmxp0w60yk0d9pr2xqxiwi88sqy";
     };
 
     buildInputs = [ cogapp mock virtualenv ];
@@ -1647,6 +1950,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
         stdenv.lib.maintainers.iElectric
       ];
       platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+  pew = buildPythonPackage rec {
+    name = "pew-0.1.9";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pew/${name}.tar.gz";
+      md5 = "90a82400074b50a9e73c3045ed9ac217";
+    };
+
+    propagatedBuildInputs = [ virtualenv virtualenv-clone ];
+
+    meta = with stdenv.lib; {
+      description = "Tools to manage multiple virtualenvs written in pure python, a virtualenvwrapper rewrite";
+      license = licenses.mit;
+      platforms = platforms.all;
     };
   };
 
@@ -1725,6 +2045,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
 
+  pyramid_chameleon = buildPythonPackage rec {
+    name = "pyramid_chameleon-0.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyramid_chameleon/${name}.tar.gz";
+      md5 = "39b1327a9890f382200bbfde943833d7";
+    };
+
+    propagatedBuildInputs = [
+      chameleon
+      pyramid
+      zope_interface
+      setuptools
+    ];
+
+    meta = with stdenv.lib; {
+      maintainers = [ maintainers.iElectric ];
+    };
+  };
+
+
   pyramid_jinja2 = buildPythonPackage rec {
     name = "pyramid_jinja2-1.9";
 
@@ -1733,7 +2074,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "a6728117cad24749ddb39d2827cd9033";
     };
 
-    buildInputs = [ pkgs.unzip webtest ];
+    buildInputs = [ webtest ];
     propagatedBuildInputs = [ jinja2 pyramid ];
 
     meta = {
@@ -1851,7 +2192,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/h/hypatia/${name}.tar.gz";
       md5 = "3a67683c578754cd8f23317db6d28ffd";
     };
- 
+
     buildInputs = [ zope_interface zodb3 ];
 
     meta = {
@@ -1867,8 +2208,8 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/z/zope.copy/${name}.zip";
       md5 = "36aa2c96dec4cfeea57f54da2b733eb9";
     };
- 
-    buildInputs = [ pkgs.unzip zope_interface zope_location zope_schema ];
+
+    buildInputs = [ zope_interface zope_location zope_schema ];
 
     meta = {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
@@ -1883,7 +2224,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/s/statsd/${name}.tar.gz";
       md5 = "476ef5b9004f6e2cb25c7da440bb53d0";
     };
- 
+
     buildInputs = [ ];
 
     meta = {
@@ -1899,7 +2240,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/p/pyramid_zodbconn/${name}.tar.gz";
       md5 = "22e88cc82cafbbe00274e7378434e5fe";
     };
- 
+
     buildInputs = [ pyramid mock ];
     propagatedBuildInputs = [ zodb3 zodburi ];
 
@@ -1916,7 +2257,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/p/pyramid_mailer/${name}.tar.gz";
       md5 = "43800c7c894097a23140da58e3638c93";
     };
- 
+
     buildInputs = [ pyramid transaction ];
     propagatedBuildInputs = [ repoze_sendmail ];
 
@@ -1933,7 +2274,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/r/repoze.sendmail/${name}.tar.gz";
       md5 = "81d15f1f03cc67d6f56f2091c594ef57";
     };
- 
+
     buildInputs = [ transaction ];
 
     meta = {
@@ -1949,7 +2290,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/z/zodburi/${name}.tar.gz";
       md5 = "52cc13c32ffe4ee7b5f5abc79f70f3c2";
     };
- 
+
     buildInputs = [ zodb3 mock ];
 
     meta = {
@@ -2041,6 +2382,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://chrisarndt.de/projects/python-rtmidi/download/python-${name}.tar.bz2";
       sha256 = "0d2if633m3kbiricd5hgn1csccd8xab6lnab1bq9prdr9ks9i8h6";
     };
+
+    preConfigure = ''
+      sed -i "/use_setuptools/d" setup.py
+    '';
 
     buildInputs = [ pkgs.alsaLib pkgs.jackaudio ];
 
@@ -2141,7 +2486,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
 
     propagatedBuildInputs = with pkgs; [
-      pyGtkGlade libtorrentRasterbar twisted Mako chardet pyxdg pyopenssl
+      pyGtkGlade libtorrentRasterbar twisted Mako chardet pyxdg pyopenssl modules.curses
     ];
 
     postInstall = ''
@@ -2195,7 +2540,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   django = django_1_6;
-  
+
   django_1_6 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.6";
@@ -2323,17 +2668,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   dulwich = buildPythonPackage rec {
-    name = "dulwich-0.8.1";
+    name = "dulwich-0.8.7";
 
     src = fetchurl {
       url = "http://samba.org/~jelmer/dulwich/${name}.tar.gz";
-      sha256 = "1a1619e9c7e63fe9bdc93356ee893be1016b7ea12ad953f4e1f1f5c0c5056ee8";
+      sha256 = "041qp5v2x8fbwkmws6hwwiny74lavkz723dj8gwbm40b2383d8vv";
     };
 
     buildPhase = "make build";
-    installCommand = ''
-      ${python}/bin/${python.executable} setup.py install --prefix="$out" --root=/ --record="$out/lib/${python.libPrefix}/site-packages/dulwich/list.txt" --single-version-externally-managed
-    '';
 
     # For some reason "python setup.py test" doesn't work with Python 2.6.
     # pretty sure that is about import behaviour.
@@ -2544,7 +2886,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "code checking using pep8 and pyflakes.";
       homepage = http://pypi.python.org/pypi/flake8;
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   });
@@ -2774,7 +3116,32 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       maintainers = [ maintainers.bjornfor ];
     };
   };
+  
+  
+  gevent-socketio = buildPythonPackage rec {
+    name = "gevent-socketio-0.3.6";
 
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gevent-socketio/${name}.tar.gz";
+      sha256 = "1zra86hg2l1jcpl9nsnqagy3nl3akws8bvrbpgdxk15x7ywllfak";
+    };
+
+    buildInputs = [ versiontools gevent-websocket mock pytest ];
+    propagatedBuildInputs = [ gevent ];
+
+  };
+  
+  gevent-websocket = buildPythonPackage rec {
+    name = "gevent-websocket-0.9.3";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gevent-websocket/${name}.tar.gz";
+      sha256 = "07rqwfpbv13mk6gg8mf0bmvcf6siyffjpgai1xd8ky7r801j4xb4";
+    };
+
+    propagatedBuildInputs = [ gevent ];
+
+  };
 
   genzshcomp = buildPythonPackage {
     name = "genzshcomp-0.5.1";
@@ -2836,7 +3203,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     src = fetchurl {
       url = "https://github.com/nicolargo/glances/archive/v${meta.version}.tar.gz";
-      sha256 = "0g2yg9qf7qgjwv13x0rx51rzhn99pcmjpb3vk0g3gmmdsqyqi0d6";
+      sha256 = "19pin04whc1z4gmwv2rqa7mh08d6007r8dyrhihnxj0v35ghp5i0";
     };
 
     buildInputs = [ pkgs.hddtemp ];
@@ -2850,7 +3217,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     '';
 
     meta = {
-      version = "1.7.1";
+      version = "1.7.4";
       homepage = "http://nicolargo.github.io/glances/";
       description = "Cross-platform curses-based monitoring tool";
     };
@@ -2877,6 +3244,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
 
     propagatedBuildInputs = [ gdata hcs_utils keyring simplejson ];
+  };
+
+  google_api_python_client = buildPythonPackage rec {
+    name = "google-api-python-client-1.2";
+
+    src = fetchurl {
+      url = "https://google-api-python-client.googlecode.com/files/google-api-python-client-1.2.tar.gz";
+      sha256 = "0xd619w71xk4ldmikxqhaaqn985rc2hy4ljgwfp50jb39afg7crw";
+    };
+
+    propagatedBuildInputs = [ httplib2 ];
+
+    meta = with stdenv.lib; {
+      description = "The core Python library for accessing Google APIs";
+      homepage = "https://code.google.com/p/google-api-python-client/";
+      license = licenses.asl20;
+      platforms = platforms.unix;
+    };
   };
 
   greenlet = buildPythonPackage rec {
@@ -2916,6 +3301,22 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  gunicorn = buildPythonPackage rec {
+    name = "gunicorn-18.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/gunicorn/${name}.tar.gz";
+      md5 = "c7138b9ac7515a42066922d2b6120fbe";
+    };
+    
+    buildInputs = [ pytest ];
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/gunicorn;
+      description = "WSGI HTTP Server for UNIX";
+    };
+  };
+
   hcs_utils = buildPythonPackage rec {
     name = "hcs_utils-1.3";
 
@@ -2936,12 +3337,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.6.0";
+    version = "0.7.0";
 
     src = fetchurl {
       url = "https://github.com/RedMoonStudios/hetzner/archive/"
           + "v${version}.tar.gz";
-      sha256 = "1cgi77f453ahw3ad6hvqwbyp6fwnh90rlzfgl9cp79wg58wyar4w";
+      sha256 = "1ldbhwy6yk18frv6n9znvdsrqfnpch4mfvc70jrpq3f9fw236src";
     };
 
     # not there yet, but coming soon.
@@ -3022,7 +3423,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = http://code.google.com/p/httplib2;
       description = "A comprehensive HTTP client library";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
@@ -3084,7 +3485,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "Google's IP address manipulation library";
       homepage = http://code.google.com/p/ipaddr-py/;
-      license = pkgs.lib.licenses.asl20;
+      license = licenses.asl20;
     };
   };
 
@@ -3094,7 +3495,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/i/ipdb/ipdb-0.7.tar.gz";
       md5 = "d879f9b2b0f26e0e999809585dcaec61";
     };
-    propagatedBuildInputs = [ pythonPackages.ipython ];
+    propagatedBuildInputs = [ pythonPackages.ipythonLight ];
   };
 
   ipdbplugin = buildPythonPackage {
@@ -3103,7 +3504,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "https://pypi.python.org/packages/source/i/ipdbplugin/ipdbplugin-1.4.tar.gz";
       md5 = "f9a41512e5d901ea0fa199c3f648bba7";
     };
-    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipython ];
+    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipythonLight ];
   };
 
 
@@ -3118,7 +3519,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = "https://github.com/davidhalter/jedi";
       description = "An autocompletion tool for Python that can be used for text editors.";
-      license = pkgs.lib.licenses.lgpl3Plus;
+      license = licenses.lgpl3Plus;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   });
@@ -3147,11 +3548,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.0.2";
+    name = "jmespath-0.2.1";
 
     src = fetchurl {
-      url = "https://github.com/boto/jmespath/archive/0.0.2.tar.gz";
-      sha256 = "0wr1gq3gdyn3n21pvj62csdm095512zxd10gkg5ai1vvxh0mbn3r";
+      url = "https://pypi.python.org/packages/source/j/jmespath/jmespath-0.2.1.tar.gz";
+      md5 = "7800775aa12c6303f9ad597b6a8fa03c";
     };
 
     propagatedBuildInputs = [ ply ];
@@ -3180,8 +3581,18 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
 
     buildInputs =
-      [ pkgs.unzip fs gdata python_keyczar mock pyasn1 pycrypto pytest ];
+      [ fs gdata python_keyczar mock pyasn1 pycrypto pytest ];
   };
+
+  kitchen = buildPythonPackage (rec {
+    name = "kitchen-1.1.1";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/k/kitchen/kitchen-1.1.1.tar.gz";
+      sha256 = "0ki840hjk1q19w6icv0dj2jxb00966nwy9b1jib0dgdspj00yrr5";
+    };
+  });
 
   pylast = buildPythonPackage rec {
     name = "pylast-${version}";
@@ -3198,7 +3609,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = http://code.google.com/p/pylast/;
       description = "A python interface to last.fm (and compatibles)";
-      license = pkgs.lib.licenses.asl20;
+      license = licenses.asl20;
     };
   };
 
@@ -3266,11 +3677,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   logilab_common = buildPythonPackage rec {
-    name = "logilab-common-0.58.2";
+    name = "logilab-common-0.61.0";
 
     src = fetchurl {
       url = "http://download.logilab.org/pub/common/${name}.tar.gz";
-      sha256 = "0qfdyj2is0scpnkgpnqm12lh4yl27617l0irlilhk25cpgbbfbf9";
+      sha256 = "09apsrcvjliawbxmfrmi1l8hlbaj87mb7n4lrlivy5maxs6yg4hd";
     };
 
     propagatedBuildInputs = [ unittest2 ];
@@ -3285,9 +3696,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [  ];
     doCheck = false;
-    installCommand = ''
-      easy_install --always-unzip --no-deps --prefix="$out" .
-    '';
 
     meta = {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
@@ -3339,21 +3747,15 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
-  magic = pkgs.stdenv.mkDerivation rec {
-    name = "python-${pkgs.file.name}";
+  magic = buildPythonPackage rec {
+    name = "${pkgs.file.name}";
 
     src = pkgs.file.src;
 
     patches = [ ../tools/misc/file/python.patch ];
     buildInputs = [ python pkgs.file ];
 
-    configurePhase = "cd python";
-
-    buildPhase = "${python}/bin/${python.executable} setup.py build";
-
-    installPhase = ''
-      ${python}/bin/${python.executable} setup.py install --prefix=$out
-    '';
+    preConfigure = "cd python";
 
     meta = {
       description = "A Python wrapper around libmagic";
@@ -3373,7 +3775,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     buildInputs = [ pkgs.swig pkgs.openssl ];
 
-    buildPhase = "${python}/bin/${python.executable} setup.py build_ext --openssl=${pkgs.openssl}";
+    preBuild = "${python}/bin/${python.executable} setup.py build_ext --openssl=${pkgs.openssl}";
 
     doCheck = false; # another test that depends on the network.
 
@@ -3492,7 +3894,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "McCabe checker, plugin for flake8";
       homepage = "https://github.com/flintwork/mccabe";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   });
@@ -3595,7 +3997,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       version = "0.9";
       description = ''Man-in-the-middle proxy'';
       homepage = "http://mitmproxy.org/";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
     };
   };
 
@@ -3660,14 +4062,18 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   mrbob = buildPythonPackage rec {
     name = "mrbob-${version}";
-    version = "0.1a9";
+    version = "0.1.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/m/mr.bob/mr.bob-${version}.zip";
-      md5 = "2d27d9bd1fc6269a3ecfd1a1ae47cd8a";
+      md5 = "84a117c9a75b86842b0fa5f5c9c767f3";
     };
 
-    buildInputs = [ pkgs.unzip ];
+    # some files in tests dir include unicode names
+    preBuild = ''
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
+      export LC_ALL="en_US.UTF-8"
+    '';
 
     propagatedBuildInputs = [ argparse jinja2 six modules.readline ] ++
                             (optionals isPy26 [ importlib ordereddict ]);
@@ -3693,7 +4099,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = http://bmc.github.com/munkres/;
       description = "Munkres algorithm for the Assignment Problem";
-      license = pkgs.lib.licenses.bsd3;
+      license = licenses.bsd3;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
@@ -3710,7 +4116,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = http://alastair/python-musicbrainz-ngs;
       description = "Python bindings for musicbrainz NGS webservice";
-      license = pkgs.lib.licenses.bsd2;
+      license = licenses.bsd2;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
@@ -3879,7 +4285,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       version = "0.9";
       description = ''Man-in-the-middle proxy'';
       homepage = "https://github.com/cortesi/netlib";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
     };
   };
 
@@ -3925,12 +4331,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   });
 
   nose = buildPythonPackage rec {
-    version = "1.3.0";
+    version = "1.3.1";
     name = "nose-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/n/nose/${name}.tar.gz";
-      sha256 = "0q2j9zz39h3liwbp6lb94kl3sxb9z9rbwh5dzyccyxfy4lrwqqsf";
+      sha256 = "1fmn5b7v183ym793ghrbh76b27aww9qv0lhl7dz31f9xmf3kn9w5";
     };
 
     buildInputs = [ coverage ];
@@ -3939,7 +4345,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     checkPhase = if python.is_py3k or false then ''
       ${python}/bin/${python.executable} setup.py build_tests
     '' else "" + ''
-      rm functional_tests/test_multiprocessing/test_concurrent_shared.py # see https://github.com/nose-devs/nose/commit/226bc671c73643887b36b8467b34ad485c2df062
+      rm functional_tests/test_multiprocessing/test_concurrent_shared.py* # see https://github.com/nose-devs/nose/commit/226bc671c73643887b36b8467b34ad485c2df062
       ${python}/bin/${python.executable} selftest.py
     '';
 
@@ -3957,7 +4363,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "0lgrfgp3sq8xi8d9grrg0z8jsyk0wl8a3rxw31hb7vdncin5b7n5";
     };
 
-    buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ nose ];
 
     meta = {
@@ -4025,7 +4430,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "1kh4spwgqxm534qlzzf2ijchckvs0pwjxl1irhicjmlg7mybnfvx";
     };
 
-    patches = pkgs.lib.singleton (fetchurl {
+    patches = singleton (fetchurl {
       name = "libnotify07.patch";
       url = "http://pkgs.fedoraproject.org/cgit/notify-python.git/plain/"
           + "libnotify07.patch?id2=289573d50ae4838a1658d573d2c9f4c75e86db0c";
@@ -4047,19 +4452,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
-  notmuch = pkgs.stdenv.mkDerivation rec {
+  notmuch = buildPythonPackage rec {
     name = "python-${pkgs.notmuch.name}";
 
     src = pkgs.notmuch.src;
 
+    sourceRoot = "${pkgs.notmuch.name}/bindings/python";
+
     buildInputs = [ python pkgs.notmuch ];
-    #propagatedBuildInputs = [ python pkgs.notmuch ];
-
-    configurePhase = "cd bindings/python";
-
-    buildPhase = "python setup.py build";
-
-    installPhase = "python setup.py install --prefix=$out";
 
     meta = {
       description = "A Python wrapper around notmuch";
@@ -4078,14 +4478,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     preConfigure = ''
       sed -i 's/-faltivec//' numpy/distutils/system_info.py
+      sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     '';
 
-    # TODO: add ATLAS=${pkgs.atlas}
-    installCommand = ''
+    preBuild = ''
       export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
-      ${python}/bin/${python.executable} setup.py build --fcompiler="gnu95"
-      ${python}/bin/${python.executable} setup.py install --prefix=$out
     '';
+
+    setupPyBuildFlags = ["--fcompiler='gnu95'"];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -4143,7 +4543,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = "https://github.com/simplegeo/python-oauth2";
       description = "library for OAuth version 1.0";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
       platforms = stdenv.lib.platforms.linux;
     };
@@ -4184,6 +4584,17 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = https://www.torproject.org/projects/obfsproxy;
     };
   });
+
+  offtrac = buildPythonPackage rec {
+    name = "offtrac-0.1.0";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/o/offtrac/${name}.tar.gz";
+      sha256 = "06vd010pa1z7lyfj1na30iqzffr4kzj2k2sba09spik7drlvvl56";
+    };
+    doCheck = false;
+  };
 
   # optfunc = buildPythonPackage ( rec {
   #   name = "optfunc-git";
@@ -4249,6 +4660,23 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
+  osc = buildPythonPackage (rec {
+    name = "osc-0.133+git";
+
+    src = fetchgit {
+      url = git://gitorious.org/opensuse/osc.git;
+      rev = "6cd541967ee2fca0b89e81470f18b97a3ffc23ce";
+      sha256 = "a39ce0e321e40e9758bf7b9128d316c71b35b80eabc84f13df492083bb6f1cc6";
+    };
+
+    buildPhase = "python setup.py build";
+    doCheck = false;
+    postInstall = "ln -s $out/bin/osc-wrapper.py $out/bin/osc";
+
+    propagatedBuildInputs = [ pythonPackages.m2crypto ];
+
+  });
+
   pandas = buildPythonPackage rec {
     name = "pandas-0.12.0";
 
@@ -4273,11 +4701,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.12.0";
+    name = "paramiko-1.12.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/paramiko/${name}.tar.gz";
-      md5 = "4187f77b1a5a313c899993930e30c321";
+      md5 = "ae4544dc0a1419b141342af89fcf0dd9";
     };
 
     propagatedBuildInputs = [ pycrypto ecdsa ];
@@ -4337,6 +4765,22 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  paypalrestsdk = buildPythonPackage rec {
+    name = "paypalrestsdk-0.7.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/paypalrestsdk/${name}.tar.gz";
+      sha256 = "117kfipzfahf9ysv414bh1mmm5cc9ck5zb6rhpslx1f8gk3frvd6";
+    };
+
+    propagatedBuildInputs = [ httplib2 ];
+
+    meta = {
+      homepage = https://developer.paypal.com/;
+      description = "Python APIs to create, process and manage payment";
+      license = "PayPal SDK License";
+    };
+  };
 
   pep8 = buildPythonPackage rec {
     name = "pep8-${version}";
@@ -4364,7 +4808,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = "http://pep8.readthedocs.org/";
       description = "Python style guide checker";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
@@ -4413,8 +4857,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "0kdc4rg47k1qkq22inghd50xlxjdkfcilym8mxff8wy4h091xykw";
     };
 
-    buildInputs = [ pkgs.unzip ];
-
     propagatedBuildInputs = [ pytz ];
 
     meta = {
@@ -4427,16 +4869,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   };
 
   pip = buildPythonPackage rec {
-    version = "1.4.1";
+    version = "1.5";
     name = "pip-${version}";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pip/pip-${version}.tar.gz";
-      sha256 = "0knhj3c1nqqzxgqin8l0gzy6nzsbcxinyr0cbp1j99hi8xahcyjf";
+      sha256 = "0j700f70mj0brdlvs2cz4a7h4jwmzgymgp8qk1qb3lsm1qd1vy15";
     };
-    buildInputs = [ mock scripttest virtualenv nose ];
-    # ValueError: Working directory tests not found, or not a directory
-    # see https://github.com/pypa/pip/issues/92
-    doCheck = false;
+    buildInputs = [ mock scripttest virtualenv pytest ];
   };
 
 
@@ -4453,17 +4892,17 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-2.2.1";
+    name = "Pillow-2.3.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pillow/${name}.zip";
-      md5 = "d1d20d3db5d1ab312da0951ff061e6bf";
+      md5 = "56b6614499aacb7d6b5983c4914daea7";
     };
 
-    buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.unzip pkgs.zlib pkgs.libtiff pkgs.libwebp ];
+    buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp ];
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
-    configurePhase = ''
+    preConfigure = ''
       sed -i "setup.py" \
           -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
               s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
@@ -4472,7 +4911,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
               s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;'
     '';
 
-    doCheck = true;
+
 
     meta = {
       homepage = http://python-imaging.github.com/Pillow;
@@ -4519,7 +4958,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "A library to manipulate gettext files (po and mo files)";
       homepage = "http://bitbucket.org/izi/polib/";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
     };
   };
 
@@ -4583,10 +5022,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   protobuf = buildPythonPackage rec {
     inherit (pkgs.protobuf) name src;
 
-    buildPhase = ''
-      python setup.py build
-    '';
-
     propagatedBuildInputs = [pkgs.protobuf];
     sourceRoot = "${name}/python";
 
@@ -4616,14 +5051,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   psycopg2 = buildPythonPackage rec {
-    name = "psycopg2-2.5.1";
+    name = "psycopg2-2.5.2";
 
     # error: invalid command 'test'
     doCheck = false;
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/p/psycopg2/psycopg2-2.5.1.tar.gz";
-      sha256 = "1v7glzzzykbaqj7dhpr0qds9cf4maxmn7f5aazpqnbg0ly40r9v5";
+      url = "https://pypi.python.org/packages/source/p/psycopg2/${name}.tar.gz";
+      sha256 = "0bmxlmi9k995n6pz16awjaap0y02y1v2d31jbxhkqv510f3jsf2h";
     };
 
     propagatedBuildInputs = [ pkgs.postgresql ];
@@ -4647,17 +5082,17 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "Allows to get the public suffix of a domain name";
       homepage = "http://pypi.python.org/pypi/publicsuffix/";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
     };
   };
 
 
   py = buildPythonPackage rec {
-    name = "py-1.4.19";
+    name = "py-1.4.20";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
-      md5 = "3857dc8309d5f284669b81184253c2bb";
+      md5 = "5f1708be5482f3ff6711dfd6cafd45e0";
     };
   };
 
@@ -4733,14 +5168,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   Babel = buildPythonPackage (rec {
-    name = "Babel-0.9.6";
+    name = "Babel-1.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/B/Babel/${name}.tar.gz";
-      sha256 = "4a3a085ecf1fcd2736573538ffa114f1f4331b3bbbdd69381e6e172c49c9750f";
+      sha256 = "0bnin777lc53nxd1hp3apq410jj5wx92n08h7h4izpl4f4sx00lz";
     };
 
-    buildInputs = [ pytz ];
+    propagatedBuildInputs = [ pytz ];
 
     meta = {
       homepage = http://babel.edgewall.org;
@@ -4900,7 +5335,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = "https://launchpad.net/pyflakes";
       description = "A simple program which checks Python source files for errors.";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
@@ -4915,7 +5350,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
     patchPhase = let
       libs = [ pkgs.mesa pkgs.xlibs.libX11 pkgs.freetype pkgs.fontconfig ];
-      paths = pkgs.lib.concatStringsSep "," (map (l: "\"${l}/lib\"") libs);
+      paths = concatStringsSep "," (map (l: "\"${l}/lib\"") libs);
     in "sed -i -e 's|directories\.extend.*lib[^]]*|&,${paths}|' pyglet/lib.py";
 
     doCheck = false;
@@ -4960,7 +5395,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = "https://launchpad.net/pygpgme";
       description = "A Python wrapper for the GPGME library.";
-      license = pkgs.lib.licenses.lgpl21;
+      license = licenses.lgpl21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
@@ -4985,7 +5420,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = https://github.com/seb-m/pyinotify/wiki;
       description = "Monitor filesystems events on Linux platforms with inotify";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
     };
   };
 
@@ -5008,13 +5443,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     propagatedBuildInputs = [ urlgrabber ];
 
     checkPhase = ''
+      export PYTHONPATH="$PYTHONPATH:."
       ${python}/bin/${python.executable} tests/baseclass.py -vv
     '';
 
     meta = {
       homepage = "http://fedoraproject.org/wiki/Pykickstart";
       description = "Read and write Fedora kickstart files";
-      license = pkgs.lib.licenses.gpl2Plus;
+      license = licenses.gpl2Plus;
     };
   };
 
@@ -5027,7 +5463,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "0ldkm8xws91j7zbvpqb413hvdz8r66bslr451q3qc0xi8cnmydfq";
     };
 
-    buildInputs = [ pkgs.unzip pkgs.libiodbc ];
+    buildInputs = [ pkgs.libiodbc ];
 
     meta = with stdenv.lib; {
       description = "Python ODBC module to connect to almost any database";
@@ -5071,7 +5507,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sed -i -e '
         s|e\.path\.startswith("/tmp/temp-device-")|"temp-device-" in e.path|
       ' tests/test__ped_ped.py
-    '' + pkgs.lib.optionalString stdenv.isi686 ''
+    '' + optionalString stdenv.isi686 ''
       # remove some integers in this test case which overflow on 32bit systems
       sed -i -r -e '/class *UnitGetSizeTestCase/,/^$/{/[0-9]{11}/d}' \
         tests/test__ped_ped.py
@@ -5086,7 +5522,8 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     propagatedBuildInputs = [ pkgs.parted ];
 
     checkPhase = ''
-      ${python}/bin/${python.executable} -m unittest discover -v
+      patchShebangs Makefile
+      make test PYTHON=${python.executable}
     '';
 
     meta = {
@@ -5125,6 +5562,18 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       license = stdenv.lib.licenses.bsd2;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
+  });
+
+  python_fedora = buildPythonPackage (rec {
+    name = "python-fedora-0.3.33";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://fedorahosted.org/releases/p/y/python-fedora/${name}.tar.gz";
+      sha256 = "1g05bh7d5d0gzrlnhpnca7jpqbgs2rgnlzzbvzzxmdbmlkqi3mws";
+    };
+    propagatedBuildInputs = [ kitchen requests bunch paver ];
+    doCheck = false;
   });
 
   python_keyczar = buildPythonPackage rec {
@@ -5267,17 +5716,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pyopengl =
-    let version = "3.0.0b5";
+    let version = "3.0.2";
     in
       buildPythonPackage {
         name = "pyopengl-${version}";
 
         src = fetchurl {
-          url = "mirror://sourceforge/pyopengl/PyOpenGL-${version}.tar.gz";
-          sha256 = "1rjpl2qdcqn4wamkik840mywdycd39q8dn3wqfaiv35jdsbifxx3";
+          url = "http://pypi.python.org/packages/source/P/PyOpenGL/PyOpenGL-${version}.tar.gz";
+          sha256 = "9ef93bbea2c193898341f574e281c3ca0dfe87c53aa25fbec4b03581f6d1ba03";
         };
 
         propagatedBuildInputs = with pkgs; [ mesa freeglut pil ];
+
+        patchPhase = ''
+          sed -i "s|util.find_library( name )|name|" OpenGL/platform/ctypesloader.py
+          sed -i "s|'GL',|'libGL.so',|" OpenGL/platform/glx.py
+          sed -i "s|'GLU',|'${pkgs.mesa}/lib/libGLU.so',|" OpenGL/platform/glx.py
+          sed -i "s|'glut',|'${pkgs.freeglut}/lib/libglut.so',|" OpenGL/platform/glx.py
+        '';
 
         meta = {
           homepage = http://pyopengl.sourceforge.net/;
@@ -5328,11 +5784,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pyserial = buildPythonPackage rec {
-    name = "pyserial-2.6";
+    name = "pyserial-2.7";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyserial/${name}.tar.gz";
-      md5 = "cde799970b7c1ce1f7d6e9ceebe64c98";
+      sha256 = "3542ec0838793e61d6224e27ff05e8ce4ba5a5c5cc4ec5c6a3e8d49247985477";
     };
 
     doCheck = false;
@@ -5344,6 +5800,20 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  pysphere = buildPythonPackage rec {
+    name = "pysphere-0.1.8";
+
+    src = fetchurl {
+      url = "http://pysphere.googlecode.com/files/${name}.zip";
+      md5 = "c57cba33626ac4b1e3d1974923d59232";
+    };
+
+    meta = {
+      homepage    = "https://code.google.com/p/pysphere/";
+      license     = "BSD";
+      description = "Python API for interaction with the VMWare vSphere";
+    };
+  };
 
   pysqlite = buildPythonPackage (rec {
     name = "pysqlite-2.6.3";
@@ -5413,7 +5883,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     # There seems to be no way to pass that path to configure.
     NIX_CFLAGS_COMPILE="-I${pkgs.aprutil}/include/apr-1";
 
-    configurePhase = ''
+    preConfigure = ''
       cd Source
       python setup.py backport
       python setup.py configure \
@@ -5445,11 +5915,11 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pytz = buildPythonPackage rec {
-    name = "pytz-2012c";
+    name = "pytz-2013.9";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytz/${name}.tar.bz2";
-      md5 = "660e0cee7f6c419ca2665db460f65131";
+      md5 = "ec7076947a46a8a3cb33cbf2983a562c";
     };
 
     meta = {
@@ -5503,7 +5973,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
 
     buildInputs = with pkgs; [
-      pkgconfig python gtk2 pygtk libxml2 libxslt libsoup webkit_gtk2 icu
+      pkgconfig python gtk2 pygtk libxml2 libxslt libsoup webkitgtk2 icu
     ];
 
     meta = {
@@ -5535,14 +6005,14 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   pyyaml = buildPythonPackage (rec {
-    name = "PyYAML-3.09";
+    name = "PyYAML-3.10";
 
     src = fetchurl {
-      url = "http://pyyaml.org/download/pyyaml/PyYAML-3.09.zip";
-      sha256 = "204aca8b42dbe90e460794d743dd16182011da85507bfd4f092f9f76e0688040";
+      url = "http://pyyaml.org/download/pyyaml/${name}.zip";
+      sha256 = "1r127fa354ppb667f4acxlzwxixap1jgzjrr790bw8mcpxv2hqaa";
     };
 
-    buildInputs = [ pkgs.unzip pkgs.pyrex ];
+    buildInputs = [ pkgs.pyrex ];
     propagatedBuildInputs = [ pkgs.libyaml ];
 
     meta = {
@@ -5569,7 +6039,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   reportlab =
-   let freetype = pkgs.lib.overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
+   let freetype = overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
    in buildPythonPackage rec {
     name = "reportlab-2.5";
 
@@ -5596,6 +6066,21 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
       md5 = "22af2682233770e5468a986f451c51c0";
+    };
+
+    meta = {
+      description = "Requests is an Apache2 Licensed HTTP library, written in Python, for human beings..";
+      homepage = http://docs.python-requests.org/en/latest/;
+    };
+  };
+  
+  
+  requests2 = buildPythonPackage rec {
+    name = "requests-2.2.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
+      md5 = "ac27081135f58d1a43e4fb38258d6f4e";
     };
 
     meta = {
@@ -5705,12 +6190,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   robotframework = buildPythonPackage rec {
-    version = "2.8.1";
+    version = "2.8.4";
     name = "robotframework-${version}";
 
     src = fetchurl {
-      url = "https://robotframework.googlecode.com/files/${name}.tar.gz";
-      sha256 = "04zwjri1j5py3fpbhy1xlc18bhbmdm2gbd58fwa2jnhmrha5dgnw";
+      url = "https://pypi.python.org/packages/source/r/robotframework/${name}.tar.gz";
+      sha256 = "0rxk135c1051cwv45219ib3faqvi5rl50l98ncb83c7qxy92jg2n";
     };
 
     # error: invalid command 'test'
@@ -5727,12 +6212,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   robotframework-selenium2library = buildPythonPackage rec {
-    version = "1.4.0";
+    version = "1.5.0";
     name = "robotframework-selenium2library-${version}";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/r/robotframework-selenium2library/${name}.tar.gz";
-      sha256 = "1rgzjxrciy74lp9mvdqxiixkma569mc0l0kizpi7lg1zkbr2k1q2";
+      sha256 = "0hjmar9766jqfpbckac8zncyal546vm059wnkbn33f68djdcnwz1";
     };
 
     # error: invalid command 'test'
@@ -5760,7 +6245,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     # error: invalid command 'test'
     #doCheck = false;
 
-    buildInputs = [ unittest2 pkgs.unzip ];
+    buildInputs = [ unittest2 ];
     propagatedBuildInputs = [ robotframework lxml ];
 
     meta = with stdenv.lib; {
@@ -5772,22 +6257,15 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   robotframework-ride = buildPythonPackage rec {
-    version = "1.2.2";
+    version = "1.2.3";
     name = "robotframework-ride-${version}";
 
     src = fetchurl {
       url = "https://robotframework-ride.googlecode.com/files/${name}.tar.gz";
-      sha256 = "1yfvl0hdjjkwk90w3f3i23dxxk3yiyv4pbvnp4l7yd6cmxsia8f3";
+      sha256 = "1lf5f4x80f7d983bmkx12sxcizzii21kghs8kf63a1mj022a5x5j";
     };
 
     propagatedBuildInputs = [ pygments wxPython modules.sqlite3 ];
-
-    # Stop copying (read-only) permission bits from the nix store into $HOME,
-    # because that leads to this:
-    #   IOError: [Errno 13] Permission denied: '/home/bfo/.robotframework/ride/settings.cfg'
-    postPatch = ''
-      sed -i "s|shutil\.copy(|shutil.copyfile(|" src/robotide/preferences/settings.py
-    '';
 
     # ride_postinstall.py checks that needed deps are installed and creates a
     # desktop shortcut. We don't really need it and it clutters up bin/ so
@@ -5882,6 +6360,41 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  rpkg = buildPythonPackage (rec {
+    name = "rpkg-1.14";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://fedorahosted.org/releases/r/p/rpkg/rpkg-1.14.tar.gz";
+      sha256 = "0d053hdjz87aym1sfm6c4cxmzmy5g0gkrmrczly86skj957r77a7";
+    };
+
+    patches = [ ../development/python-modules/rpkg-buildfix.diff ];
+
+    # buildPhase = "python setup.py build";
+    # doCheck = false;
+    propagatedBuildInputs = [ pycurl koji GitPython pkgs.git
+                              pkgs.rpm pkgs.pyopenssl ];
+
+  });
+
+  rsa = buildPythonPackage rec {
+    name = "rsa-3.1.2";
+
+    src = fetchurl {
+      url = "https://bitbucket.org/sybren/python-rsa/get/version-3.1.2.tar.bz2";
+      sha256 = "0ag2q4gaapi74x47q74xhcjzs4b7r2bb6zrj2an4sz5d3yd06cgf";
+    };
+
+    buildInputs = [ pythonPackages.pyasn1 ];
+
+    meta = {
+      homepage = http://stuvel.eu/rsa;
+      license = "Apache License 2.0";
+      description = "A pure-Python RSA implementation";
+    };
+  };
+
   rtslib_fb = buildPythonPackage rec {
     version = "2.1.fb43";
     name = "rtslib-fb-${version}";
@@ -5936,15 +6449,16 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     buildInputs = [pkgs.gfortran];
     propagatedBuildInputs = [ numpy ];
 
+    # TODO: add ATLAS=${pkgs.atlas}
+    preConfigure = ''
+      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
+      sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
+    '';
+
+    setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
+
     # error: invalid command 'test'
     doCheck = false;
-
-    # TODO: add ATLAS=${pkgs.atlas}
-    installCommand = ''
-      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
-      ${python}/bin/${python.executable} setup.py build --fcompiler="gnu95"
-      ${python}/bin/${python.executable} setup.py install --prefix=$out
-    '';
 
     meta = {
       description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
@@ -5954,15 +6468,15 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   scripttest = buildPythonPackage rec {
-    version = "1.1.1";
+    version = "1.3";
     name = "scripttest-${version}";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/S/ScriptTest/ScriptTest-${version}.tar.gz";
-      md5 = "592ce890764c3f546d35b4d7c40c32ef";
+      url = "http://pypi.python.org/packages/source/s/scripttest/scripttest-${version}.tar.gz";
+      md5 = "1d1c5117ccfc7b5961cae6c1020c0848";
     };
 
-    buildInputs = [ nose ];
+    buildInputs = [ nose pytest ];
 
     meta = {
       description = "A library for testing interactive command-line applications";
@@ -6076,13 +6590,43 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "93c93725674c0702583a638f5a09c9e4";
     };
 
-    propagatedBuildInputs = [ jinja2 markdown pillow pilkit clint argh ];
+    propagatedBuildInputs = [ jinja2 markdown pillow pilkit clint argh pytest ];
 
     meta = with stdenv.lib; {
       description = "Yet another simple static gallery generator";
       homepage = http://sigal.saimon.org/en/latest/index.html;
       license = licenses.mit;
       maintainers = [ maintainers.iElectric ];
+    };
+  };
+
+  spambayes = buildPythonPackage rec {
+    name = "spambayes-1.1a6";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/spambayes/${name}.tar.gz";
+      sha256 = "0lqhn2v0avgwxmk4dq9lkwr2g39ls2p6x8hqk5w07wd462cjsx8l";
+    };
+
+    propagatedBuildInputs = [ pydns lockfile ];
+
+    meta = with stdenv.lib; {
+      description = "Statistical anti-spam filter, initially based on the work of Paul Graham";
+      homepage = http://spambayes.sourceforge.net/;
+    };
+  };
+
+  pydns = buildPythonPackage rec {
+    name = "pydns-2.3.6";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pydns/${name}.tar.gz";
+      sha256 = "0qnv7i9824nb5h9psj0rwzjyprwgfiwh5s5raa9avbqazy5hv5pi";
+    };
+
+    doCheck = false;
+
+    meta = with stdenv.lib; {
     };
   };
 
@@ -6189,7 +6733,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
 
     # 4 failing tests
-    doCheck = false; 
+    doCheck = false;
 
     buildInputs = [ nose modules.curses ];
 
@@ -6293,10 +6837,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "Joyent SmartDataCenter CloudAPI connector using http-signature authentication via Requests";
       homepage = https://github.com/atl/py-smartdc;
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
     };
   };
 
+  sorl_thumbnail = buildPythonPackage rec {
+    name = "sorl-thumbnail-11.12";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sorl-thumbnail/${name}.tar.gz";
+      sha256 = "050b9kzbx7jvs3qwfxxshhis090hk128maasy8pi5wss6nx5kyw4";
+    };
+
+    # Disabled due to an improper configuration error when tested against django. This looks like something broken in the test cases for sorl.
+    doCheck = false;
+
+    meta = {
+      homepage = http://sorl-thumbnail.readthedocs.org/en/latest/;
+      description = "Thumbnails for Django";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
 
   supervisor = buildPythonPackage rec {
     name = "supervisor-3.0";
@@ -6307,7 +6868,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
 
     buildInputs = [ mock ];
-    propagatedBuildInputs = [ meld3  ];
+    propagatedBuildInputs = [ meld3 ];
+
+    # failing tests when building under chroot as root user doesn't exist
+    doCheck = false;
 
     meta = {
       description = "A system for controlling process state under UNIX";
@@ -6390,45 +6954,43 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   });
 
-
-  sqlalchemy = buildPythonPackage rec {
-    name = "sqlalchemy-${version}";
-    version = "0.7.10";
-
+  sqlalchemy = pkgs.lib.overrideDerivation sqlalchemy9 (args: rec {
+    name = "SQLAlchemy-0.7.10";
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/S/SQLAlchemy/SQLAlchemy-${version}.tar.gz";
+      url = "http://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       sha256 = "0rhxgr85xdhjn467qfs0dkyj8x46zxcv6ad3dfx3w14xbkb3kakp";
     };
-
     patches = [
       # see https://groups.google.com/forum/#!searchin/sqlalchemy/module$20logging$20handlers/sqlalchemy/ukuGhmQ2p6g/2_dOpBEYdDYJ
       # waiting for 0.7.11 release
       ../development/python-modules/sqlalchemy-0.7.10-test-failures.patch
     ];
+  });
 
-    buildInputs = [ nose ];
 
-    propagatedBuildInputs = [ modules.sqlite3 ];
-
-    meta = {
-      homepage = http://www.sqlalchemy.org/;
-      description = "A Python SQL toolkit and Object Relational Mapper";
+  sqlalchemy8 = pkgs.lib.overrideDerivation sqlalchemy9 (args: rec {
+    name = "SQLAlchemy-0.8.5";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
+      md5 = "ecf0738eaf1229bae27ad2be0f9978a8";
     };
-  };
-
-
-  sqlalchemy8 = buildPythonPackage rec {
-    name = "SQLAlchemy-${version}";
-    version = "0.8.2";
+  });
+   
+  sqlalchemy9 = buildPythonPackage rec {
+    name = "SQLAlchemy-0.9.3";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
-      md5 = "5a33fb43dea93468dbb2a6562ee80b54";
+      md5 = "a27989b9d4b3f14ea0b1600aa45559c4";
     };
 
     buildInputs = [ nose mock ];
 
     propagatedBuildInputs = [ modules.sqlite3 ];
+
+    checkPhase = ''
+      ${python.executable} sqla_nose.py 
+    '';
 
     meta = {
       homepage = http://www.sqlalchemy.org/;
@@ -6447,15 +7009,21 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "051dd9de0757714d33c3ecd5ab37b97d";
     };
 
-    buildInputs = [ pytest webob pkgs.imagemagick ];
+    buildInputs = [ pytest webob pkgs.imagemagick nose ];
     propagatedBuildInputs = [ sqlalchemy8 wand ];
 
-    checkPhase = "cd tests && LD_LIBRARY_PATH=${pkgs.imagemagick}/lib py.test";
+    checkPhase = ''
+      cd tests
+      export MAGICK_HOME="${pkgs.imagemagick}"
+      export PYTHONPATH=$PYTHONPATH:../
+      py.test
+      cd ..
+    '';
 
     meta = {
       homepage = https://github.com/crosspop/sqlalchemy-imageattach;
       description = "SQLAlchemy extension for attaching images to entity objects";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
     };
   };
 
@@ -6501,7 +7069,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "A client for Etsy's node-js statsd server";
       homepage = https://github.com/WoLpH/python-statsd;
-      license = pkgs.lib.licenses.bsd3;
+      license = licenses.bsd3;
     };
   };
 
@@ -6521,7 +7089,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "Lightweight and extensible STOMP messaging client";
       homepage = http://bitbucket.org/hozn/stompclient;
-      license = pkgs.lib.licenses.asl20;
+      license = licenses.asl20;
     };
   });
 
@@ -6540,7 +7108,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "A streaming protocol for test results";
       homepage = https://launchpad.net/subunit;
-      license = pkgs.lib.licenses.asl20;
+      license = licenses.asl20;
     };
   };
 
@@ -6567,7 +7135,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "https://github.com/agrover/targetcli-fb/archive/v${version}.tar.gz";
       sha256 = "1zcm0agdpf866020b43fl8zyyyzz6r74mn1sz4xpaa0pinpwjk42";
     };
-    
+
     propagatedBuildInputs = [
       configshell_fb
       rtslib_fb
@@ -6578,6 +7146,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = "https://github.com/agrover/targetcli-fb";
       platforms = stdenv.lib.platforms.linux;
     };
+  };
+
+  tarsnapper = buildPythonPackage rec {
+    name = "tarsnapper-0.2.1";
+
+    src = fetchgit {
+      url = https://github.com/miracle2k/tarsnapper.git;
+      rev = "620439bca68892f2ffaba1079a34b18496cc6596";
+    };
+
+    propagatedBuildInputs = [ argparse pyyaml ];
+
+    patches = [ ../development/python-modules/tarsnapper-path.patch ];
+
+    preConfigure = ''
+      substituteInPlace src/tarsnapper/script.py \
+        --replace '@NIXTARSNAPPATH@' '${pkgs.tarsnap}/bin/tarsnap'
+    '';
   };
 
   taskcoach = buildPythonPackage rec {
@@ -6640,7 +7226,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "A set of extensions to the Python standard library's unit testing framework";
       homepage = http://pypi.python.org/pypi/testtools;
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
     };
   };
 
@@ -6660,7 +7246,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "A module provides basic functions for parsing mime-type names and matching them against a list of media-ranges.";
       homepage = https://code.google.com/p/mimeparse/;
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
     };
   };
 
@@ -6680,25 +7266,36 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "A module provides basic functions for parsing mime-type names and matching them against a list of media-ranges.";
       homepage = https://code.google.com/p/mimeparse/;
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
     };
   };
 
 
   # TODO
-  # py.error.EACCES: [Permission denied]: mkdir('/homeless-shelter',)
-  # builder for `/nix/store/0czwg0n3pfkmpjphqv1jxfjlgkbziwsx-python-tox-1.4.3.drv' failed with exit code 1
-  # tox = buildPythonPackage rec {
-  #   name = "tox-1.4.3";
+  # Installs correctly but fails tests that involve simple things like:
+  # cmd.run("tox", "-h")
+  # also, buildPythonPackage needs to supply the tox.ini correctly for projects that use tox for their tests
   #
-  #   buildInputs = [ py virtualenv ];
+  # tox = buildPythonPackage rec {
+  #   name = "tox-1.7.0";
+  #
+  #   propagatedBuildInputs = [ py virtualenv ];
   #
   #   src = fetchurl {
-  #     url = "https://pypi.python.org/packages/source/t/tox/tox-1.4.3.tar.gz";
-  #     md5 = "3727d5b0600d92edf2229a7ce6a0f752";
+  #     url = "https://pypi.python.org/packages/source/t/tox/${name}.tar.gz";
+  #     md5 = "5314ceca2b179ad4a9c79f4d817b8a99";
   #   };
   # };
 
+  smmap = buildPythonPackage rec {
+    name = "smmap-0.8.2";
+    meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/s/smmap/${name}.tar.gz";
+      sha256 = "0vrdgr6npmajrv658fv8bij7zgm5jmz2yxkbv8kmbv25q1f9b8ny";
+    };
+  };
 
   trac = buildPythonPackage {
     name = "trac-1.0.1";
@@ -6751,6 +7348,9 @@ pythonPackages = modules // import ./python-packages-generated.nix {
        md5 = "2472204a2abd0d8cd4d11ff0fbf36ae7";
      };
 
+     # tests fail, see http://hydra.nixos.org/build/4316603/log/raw
+     doCheck = false;
+
      propagatedBuildInputs = [ zope_interface zope_testing ];
      meta = {
        description = "A tool which computes a dependency graph between active Python eggs";
@@ -6777,7 +7377,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = "https://github.com/alejandrogomez/turses";
       description = "A Twitter client for the console.";
-      license = pkgs.lib.licenses.gpl3;
+      license = licenses.gpl3;
       maintainers = [ stdenv.lib.maintainers.garbas ];
       platforms = stdenv.lib.platforms.linux;
     };
@@ -6794,18 +7394,20 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = "https://github.com/tweepy/tweepy";
       description = "Twitter library for python";
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
       platforms = stdenv.lib.platforms.linux;
     };
   });
 
   twisted = buildPythonPackage rec {
-    name = "twisted-13.2.0";
+    # NOTE: When updating please check if new versions still cause issues
+    # to packages like carbon (http://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
 
+    name = "Twisted-11.1.0";
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/T/Twisted/Twisted-13.2.0.tar.bz2";
-      sha256 = "1wrcqv5lvgwk2aq83qb2s2ng2vx14hbjjk2gc30cg6h1iiipal89";
+      url = "https://pypi.python.org/packages/source/T/Twisted/${name}.tar.bz2";
+      sha256 = "05agfp17cndhv2w0p559lvknl7nv0xqkg10apc47fm53m8llbfvz";
     };
 
     propagatedBuildInputs = [ zope_interface ];
@@ -6826,7 +7428,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
         and licensed under the MIT license.
       '';
 
-      license = pkgs.lib.licenses.mit;
+      license = licenses.mit;
 
       maintainers = [ ];
     };
@@ -6894,16 +7496,17 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       description = "A full-featured console (xterm et al.) user interface library";
       homepage = http://excess.org/urwid;
-      license = pkgs.lib.licenses.lgpl21;
+      repositories.git = git://github.com/wardi/urwid.git;
+      license = licenses.lgpl21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   });
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-1.10";
+    name = "virtualenv-1.11.4";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
-      md5 = "9745c28256c70c76d36adb3767a00212";
+      md5 = "9accc2d3f0ec1da479ce2c3d1fdff06e";
     };
 
     inherit recursivePthLoader;
@@ -6922,6 +7525,27 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       homepage = http://www.virtualenv.org;
       license = licenses.mit;
       maintainers = [ maintainers.goibhniu ];
+    };
+  };
+
+  virtualenv-clone = buildPythonPackage rec {
+    name = "virtualenv-clone-0.2.4";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/v/virtualenv-clone/${name}.tar.gz";
+      md5 = "71168b975eaaa91e65559bcc79290b3b";
+    };
+
+    buildInputs = [pytest];
+    propagatedBuildInputs = [virtualenv];
+
+    # needs tox to run the tests
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Script to clone virtualenvs";
+      license = licenses.mit;
+      platforms = platforms.all;
     };
   };
 
@@ -7023,7 +7647,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
   webtest = buildPythonPackage rec {
     version = "2.0.11";
     name = "webtest-${version}";
-  
+
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.zip";
       md5 = "e51da21da8815cef07f543d8688effea";
@@ -7032,7 +7656,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     # XXX: skipping two tests fails in python2.6
     doCheck = ! isPy26;
 
-    buildInputs = [ pkgs.unzip ] ++ optionals isPy26 [ pythonPackages.ordereddict unittest2 ];
+    buildInputs = optionals isPy26 [ pythonPackages.ordereddict unittest2 ];
 
     propagatedBuildInputs = [
       nose
@@ -7073,7 +7697,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   wokkel = buildPythonPackage (rec {
     url = "http://wokkel.ik.nu/releases/0.7.0/wokkel-0.7.0.tar.gz";
-    name = pkgs.lib.nameFromURL url ".tar";
+    name = nameFromURL url ".tar";
     src = fetchurl {
       inherit url;
       sha256 = "0rnshrzw8605x05mpd8ndrx3ri8h6cx713mp8sl4f04f4gcrz8ml";
@@ -7116,6 +7740,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     inherit (pkgs) stdenv fetchurl pkgconfig;
     inherit pythonPackages;
     wxGTK = pkgs.wxGTK28;
+  };
+
+  wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig;
+    inherit pythonPackages;
+    wxGTK = pkgs.wxGTK30;
   };
 
   xe = buildPythonPackage rec {
@@ -7296,7 +7926,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "eff24d7918099a3e899ee63a9c31bee6";
     };
 
-    buildInputs = [ pkgs.unzip zope_interface ];
+    buildInputs = [ zope_interface ];
 
     meta = {
         maintainers = [ stdenv.lib.maintainers.goibhniu ];
@@ -7311,8 +7941,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/z/zope.browser/${name}.zip";
       md5 = "4ff0ddbf64c45bfcc3189e35f4214ded";
     };
-
-    buildInputs = [ pkgs.unzip ];
 
     propagatedBuildInputs = [ zope_interface ];
 
@@ -7387,8 +8015,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/z/zope.contenttype/${name}.zip";
       md5 = "c6ac80e6887de4108a383f349fbdf332";
     };
-
-    buildInputs = [ pkgs.unzip ];
 
     meta = {
         maintainers = [ stdenv.lib.maintainers.goibhniu ];
@@ -7520,8 +8146,8 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     propagatedBuildInputs = [ zope_proxy ];
 
     # ignore circular dependency on zope_schema
-    installCommand = ''
-      easy_install --always-unzip --no-deps --prefix="$out" .
+    preBuild = ''
+      sed -i '/zope.schema/d' setup.py
     '';
 
     doCheck = false;
@@ -7574,12 +8200,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "e7e581af8193551831560a736a53cf58";
     };
 
-    propagatedBuildInputs = [ zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
-
-    # ignore circular dependency on zope_location
-    installCommand = ''
-      easy_install  --no-deps --prefix="$out" .
-    '';
+    propagatedBuildInputs = [ zope_location zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
 
     meta = {
         maintainers = [ stdenv.lib.maintainers.goibhniu ];
@@ -7630,7 +8251,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "8b317b41244fc2e67f2f286890ba59a0";
     };
 
-    buildInputs = [ pkgs.unzip sqlalchemy zope_testing zope_interface setuptools ];
+    buildInputs = [ sqlalchemy zope_testing zope_interface setuptools ];
     propagatedBuildInputs = [ sqlalchemy transaction ];
 
     meta = {
@@ -7652,7 +8273,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "01c30c342c6a18002a762bd5d320a6e9";
     };
 
-    buildInputs = [ pkgs.unzip ];
     propagatedBuildInputs = [ zope_interface zope_exceptions zope_location ];
 
     meta = {
@@ -7673,9 +8293,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       md5 = "1d689abad000419891494b30dd7d8190";
     };
 
-    buildInputs = [ pkgs.unzip ];
-
     propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ] ++ optional (!python.is_py3k or false) subunit;
+
+    # a test is failing
+    doCheck = false;
 
     meta = {
       description = "A flexible test runner with layer support";
@@ -7693,8 +8314,6 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/z/zope.traversing/${name}.zip";
       md5 = "eaad8fc7bbef126f9f8616b074ec00aa";
     };
-
-    buildInputs = [ pkgs.unzip ];
 
     propagatedBuildInputs = [ zope_location zope_security zope_publisher ];
 
@@ -7764,11 +8383,13 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   tornado = buildPythonPackage rec {
-    name = "tornado-3.1.1";
+    name = "tornado-3.2";
+
+    propagatedBuildInputs = [ backports_ssl_match_hostname_3_4_0_2 ];
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
-      sha256 = "1ipx23ix8hyd88rywmwr7bfdgkvkdac87xq3f9l5vkm0wjzh8n9l";
+      url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
+      md5 = "bd83cee5f1a5c5e139e87996d00b251b";
     };
 
     doCheck = false;
@@ -7784,7 +8405,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       sha256 = "0ri6gj883k042xaxa2d5ymmhbw2bfcxdzhh4bz7700ibxwxxj62h";
     };
 
-    buildInputs = [ pkgs.unzip unittest2 nose mock ];
+    buildInputs = [ unittest2 nose mock ];
     propagatedBuildInputs = [ modules.curses libarchive ];
 
     # tests are still failing
@@ -7793,12 +8414,12 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
 
   libarchive = buildPythonPackage rec {
-    version = "3.0.4-5";
+    version = "3.1.2-1";
     name = "libarchive-${version}";
 
     src = fetchurl {
       url = "http://python-libarchive.googlecode.com/files/python-libarchive-${version}.tar.gz";
-      sha256 = "141yx9ym8gvybn67mw0lmgafzsd79rmd9l77lk0k6m2fzclqx1j5";
+      sha256 = "0j4ibc4mvq64ljya9max8832jafi04jciff9ia9qy0xhhlwkcx8x";
     };
 
     propagatedBuildInputs = [ pkgs.libarchive ];
@@ -7811,7 +8432,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       url = "http://pypi.python.org/packages/source/p/pyzmq/pyzmq-13.0.0.zip";
       md5 = "fa2199022e54a393052d380c6e1a0934";
     };
-    buildInputs = [ pkgs.unzip pkgs.zeromq3 ];
+    buildInputs = [ pkgs.zeromq3 ];
     propagatedBuildInputs = [  ];
     doCheck = false;
   };
@@ -7944,30 +8565,30 @@ pythonPackages = modules // import ./python-packages-generated.nix {
 
   whisper = buildPythonPackage rec {
     name = "whisper-${version}";
-    version = "0.9.10";
+    version = "0.9.12";
 
-    src = fetchurl rec {
-      url = "https://launchpad.net/graphite/0.9/${version}/+download/${name}.tar.gz";
-      sha256 = "1zy4z4hrbiqj4ipcv2m9197hf03d4xphllqav9w4c8i6fn8zmd9n";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/w/whisper/${name}.tar.gz";
+      md5 = "5fac757cc4822ab0678dbe0d781d904e";
     };
 
     # error: invalid command 'test'
     doCheck = false;
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://graphite.wikidot.com/;
       description = "Fixed size round-robin style database";
-      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      maintainers = with maintainers; [ rickynils offline ];
     };
   };
 
   carbon = buildPythonPackage rec {
     name = "carbon-${version}";
-    version = "0.9.10";
+    version = "0.9.12";
 
-    src = fetchurl rec {
-      url = "https://launchpad.net/graphite/0.9/${version}/+download/${name}.tar.gz";
-      sha256 = "0wjhd87pvpcpvaj3wql2d92g8lpp33iwmxdkp7npic5mjl2y0dsg";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/carbon/${name}.tar.gz";
+      md5 = "66967d5a622fd29973838fcd10eb34f3";
     };
 
     propagatedBuildInputs = [ whisper txamqp zope_interface twisted ];
@@ -7975,10 +8596,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     # error: invalid command 'test'
     doCheck = false;
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://graphite.wikidot.com/;
       description = "Backend data caching and persistence daemon for Graphite";
-      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      maintainers = with maintainers; [ rickynils offline ];
     };
   };
 
@@ -7994,7 +8615,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = http://pypi.python.org/pypi/Unidecode/;
       description = "ASCII transliterations of Unicode text";
-      license = pkgs.lib.licenses.gpl2;
+      license = licenses.gpl2;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
@@ -8016,14 +8637,24 @@ pythonPackages = modules // import ./python-packages-generated.nix {
       maintainers = [ stdenv.lib.maintainers.rickynils ];
     };
   };
+  
+  versiontools = buildPythonPackage rec {
+    name = "versiontools-1.9.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/v/versiontools/${name}.tar.gz";
+      sha256 = "1xhl6kl7f4srgnw6zw4lr8j2z5vmrbaa83nzn2c9r2m1hwl36sd9";
+    };
+
+  };
 
   graphite_web = buildPythonPackage rec {
     name = "graphite-web-${version}";
-    version = "0.9.11";
+    version = "0.9.12";
 
     src = fetchurl rec {
       url = "https://pypi.python.org/packages/source/g/graphite-web/${name}.tar.gz";
-      md5 = "1499b5dded3d1054d598760fd450a6f9";
+      md5 = "8edbb61f1ffe11c181bd2cb9ec977c72";
     };
 
     propagatedBuildInputs = [ django_1_3 django_tagging modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
@@ -8043,10 +8674,10 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     # error: invalid command 'test'
     doCheck = false;
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://graphite.wikidot.com/;
       description = "Enterprise scalable realtime graphing";
-      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      maintainers = with maintainers; [ rickynils offline ];
     };
   };
 
@@ -8156,7 +8787,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = https://code.google.com/p/gdata-python-client/;
       description = "Python client library for Google data APIs";
-      license = pkgs.lib.licenses.asl20;
+      license = licenses.asl20;
     };
   };
 
@@ -8176,7 +8807,7 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = http://imapclient.freshfoo.com/;
       description = "Easy-to-use, Pythonic and complete IMAP client library";
-      license = pkgs.lib.licenses.bsd3;
+      license = licenses.bsd3;
     };
   };
 
@@ -8193,17 +8824,17 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = http://pythonhosted.org/Logbook/;
       description = "A logging replacement for Python";
-      license = pkgs.lib.licenses.bsd3;
+      license = licenses.bsd3;
     };
   };
 
   libvirt = pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
-    version = "1.2.0";
+    version = "1.2.2";
 
     src = fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "0azml1yv9iqnpj4sdg1wwsa70q7kb06lv85p63qwyd8vrd0y7rrg";
+      sha256 = "0fccpyppz79kbbnzwdgsiza3cxq7jlnnp1dqi33gc4305dk9vmwl";
     };
 
     buildInputs = [ python pkgs.pkgconfig pkgs.libvirt lxml ];
@@ -8215,12 +8846,103 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     meta = {
       homepage = http://www.libvirt.org/;
       description = "libvirt Python bindings";
-      license = "LGPLv2";
+      license = pkgs.lib.licenses.lgpl2;
     };
   };
 
-# python2.7 specific eggs
-} // pkgs.lib.optionalAttrs (python.majorVersion == "2.7") {
+  searx = buildPythonPackage rec {
+    name = "searx-${rev}";
+    rev = "44d3af9fb2482cd0df1a8ababbe2fdf27ab33172";
+
+    src = fetchgit {
+      url = "git://github.com/asciimoo/searx";
+      inherit rev;
+      sha256 = "1w505pzdkkcglq782wg7f5fxrw9i5jzp7px20c2xz18pps2m3rsm";
+    };
+
+    propagatedBuildInputs = [ pyyaml lxml grequests flaskbabel flask requests
+      gevent speaklater Babel pytz dateutil ];
+
+    meta = {
+      homepage = https://github.com/asciimoo/searx;
+      description = "A privacy-respecting, hackable metasearch engine";
+      license = stdenv.lib.licenses.agpl3Plus;
+      maintainers = [ stdenv.lib.maintainers.matejc ];
+    };
+  };
+
+  grequests = buildPythonPackage rec {
+    name = "grequests-0.2.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/grequests/${name}.tar.gz";
+      sha256 = "0lafzax5igbh8y4x0krizr573wjsxz7bhvwygiah6qwrzv83kv5c";
+    };
+
+    buildInputs = [ requests gevent ];
+
+    meta = {
+      description = "GRequests allows you to use Requests with Gevent to make asyncronous HTTP Requests easily.";
+      homepage = https://github.com/kennethreitz/grequests;
+      license = "bsd";
+      maintainers = [ stdenv.lib.maintainers.matejc ];
+    };
+  };
+
+  flaskbabel = buildPythonPackage rec {
+    name = "Flask-Babel-0.9";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/F/Flask-Babel/${name}.tar.gz";
+      sha256 = "0k7vk4k54y55ma0nx2k5s0phfqbriwslhy5shh3b0d046q7ibzaa";
+    };
+
+    buildInputs = [ flask jinja2 speaklater Babel pytz ];
+
+    meta = {
+      description = "Adds i18n/l10n support to Flask applications";
+      homepage = https://github.com/mitsuhiko/flask-babel;
+      license = "bsd";
+      maintainers = [ stdenv.lib.maintainers.matejc ];
+    };
+  };
+
+  speaklater = buildPythonPackage rec {
+    name = "speaklater-1.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/speaklater/${name}.tar.gz";
+      sha256 = "1ab5dbfzzgz6cnz4xlwx79gz83id4bhiw67k1cgqrlzfs0va7zjr";
+    };
+
+    meta = {
+      description = "implements a lazy string for python useful for use with gettext";
+      homepage = https://github.com/mitsuhiko/speaklater;
+      license = "bsd";
+      maintainers = [ stdenv.lib.maintainers.matejc ];
+    };
+  };
+
+  power = buildPythonPackage rec {
+    name = "power-1.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/power/${name}.tar.gz";
+      sha256 = "09a00af8357f63dbb1a1eb13b82e39ccc0a14d6d2e44e5b235afe60ce8ee8195";
+    };
+
+    meta = {
+      description = "Cross-platform system power status information";
+      homepage = https://github.com/Kentzo/Power;
+      license = "mit";
+    };
+  };
+
+# python2.7 specific packages
+} // optionalAttrs isPy27 (
+  with pythonPackages;
+
+{
 
   pypi2nix = pythonPackages.buildPythonPackage rec {
     rev = "04a68d8577acbceb88bdf51b1231a9dbdead7003";
@@ -8241,4 +8963,51 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
-}; in pythonPackages
+
+  thumbor = pythonPackages.buildPythonPackage rec {
+    name = "thumbor-4.0.4";
+
+    propagatedBuildInputs = [
+                    tornado
+                    pycrypto
+                    pycurl
+                    pillow
+                    derpconf
+                    python_magic
+                    thumborPexif
+                    (pkgs.opencv.override {
+                        gtk = null;
+                        glib = null;
+                        xineLib = null;
+                        gstreamer = null;
+                        ffmpeg = null;
+                    }) ];
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/thumbor/${name}.tar.gz";
+      md5 = "cf639a1cc57ee287b299ace450444408";
+    };
+
+    meta = {
+      description = "Thumbor is a smart imaging service. It enables on-demand crop, resizing and flipping of images.";
+      homepage = https://github.com/globocom/thumbor/wiki;
+      license = licenses.mit;
+    };
+  };
+
+  thumborPexif = pythonPackages.buildPythonPackage rec {
+    name = "thumbor-pexif-0.14";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/t/thumbor-pexif/${name}.tar.gz";
+      md5 = "fb4cdb60f4a0bead5193fb483ccd3430";
+    };
+
+    meta = {
+      description = "Module to parse and edit the EXIF data tags in a JPEG image";
+      homepage = http://www.benno.id.au/code/pexif/;
+      license = licenses.mit;
+    };
+  };
+
+}); in pythonPackages

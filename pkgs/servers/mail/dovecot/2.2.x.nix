@@ -2,13 +2,13 @@
 , inotifyTools }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.2.6";
+  name = "dovecot-2.2.12";
 
   buildInputs = [perl systemd openssl pam bzip2 zlib openldap inotifyTools];
 
   src = fetchurl {
     url = "http://dovecot.org/releases/2.2/${name}.tar.gz";
-    sha256 = "1rfnsg0a57cv02pl68h3jhbd5v3071a75bvf9gs95fd41g72n9v2";
+    sha256 = "0mlcwgrxfwy1fqfk3wwbh1h9f0jddg4rnj612ckj1zv5asp1rppk";
   };
 
   preConfigure = ''

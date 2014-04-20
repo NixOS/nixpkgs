@@ -1,12 +1,12 @@
 {stdenv, fetchurl, emacs, texinfo, ctags}:
 
-stdenv.mkDerivation {
-  name = "bbdb-2.35";
+stdenv.mkDerivation rec {
+  name = "bbdb-2.36";
 
   src = fetchurl {
     # not using mirror:// because it produces a different file
-    url = http://bbdb.sourceforge.net/bbdb-2.35.tar.gz;
-    sha256 = "3fb1316e2ed74d47ca61187fada550e58797467bd9e8ad67343ed16da769f916";
+    url = "http://bbdb.sourceforge.net/${name}.tar.gz";
+    sha256 = "1rmw94l71ahfbynyy0bijfy488q9bl5ksl4zpvg7j9dbmgbh296r";
   };
 
   patches = [ ./install-infodir.patch ];
@@ -28,8 +28,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    homepage = "http://bbdb.sourceforge.net/";
     description = "The Insidious Big Brother Database (BBDB), a contact management utility for Emacs";
-    homepage = http://bbdb.sourceforge.net/;
     license = "GPL";
   };
 }

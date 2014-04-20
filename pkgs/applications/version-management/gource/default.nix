@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-boost-libdir=${boost}/lib";
 
+  NIX_CFLAGS_COMPILE = "-fpermissive"; # fix build with newer gcc versions
+
   meta = {
     homepage = "http://code.google.com/p/gource/";
     description = "software version control visualization tool";

@@ -60,7 +60,15 @@ sub link {
         if ($mode eq "direct-symlink") {
             atomicSymlink readlink("$static/$fn"), $target or warn;
         } else {
+            open UID, "<$_.uid";
+            my $uid = <UID>; chomp $uid;
+            close UID;
+            open GID, "<$_.gid";
+            my $gid = <GID>; chomp $gid;
+            close GID;
+
             copy "$static/$fn", "$target.tmp" or warn;
+            chown int($uid), int($gid), "$target.tmp" or warn;
             chmod oct($mode), "$target.tmp" or warn;
             rename "$target.tmp", $target or warn;
         }

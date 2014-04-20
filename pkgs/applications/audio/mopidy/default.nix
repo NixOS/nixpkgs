@@ -13,7 +13,7 @@ pythonPackages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [
-   gst_python pygobject pykka pyspotify pylast cherrypy ws4py
+   gst_python pygobject pykka pyspotify pylast cherrypy ws4py gst_plugins_base gst_plugins_good
   ];
 
   # python zip complains about old timestamps
@@ -27,8 +27,7 @@ pythonPackages.buildPythonPackage rec {
   postInstall = ''
     for p in $out/bin/mopidy $out/bin/mopidy-scan; do
       wrapProgram $p \
-        --prefix GST_PLUGIN_PATH : ${gst_plugins_good}/lib/gstreamer-0.10 \
-        --prefix GST_PLUGIN_PATH : ${gst_plugins_base}/lib/gstreamer-0.10
+        --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
     done
   '';
 

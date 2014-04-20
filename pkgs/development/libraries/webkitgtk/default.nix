@@ -2,10 +2,13 @@
 , pkgconfig, which, gettext, gobjectIntrospection
 , gtk2, gtk3, wayland, libwebp, enchant
 , libxml2, libsoup, libsecret, libxslt, harfbuzz
+, gst-plugins-base
+, withGtk2 ? false
+, enableIntrospection ? true
 }:
 
 stdenv.mkDerivation rec {
-  name = "webkitgtk-2.2.3";
+  name = "webkitgtk-2.4.0";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -17,23 +20,23 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "01a69v0aw3bv2zkx6jzk71r3pjlf2xfhxavjnma89kmd78qb7g4l";
+    sha256 = "1fyz6ysw7npy5wa7m1zg05zrj0gi0wdlpjbqix03iq4ym36pflnw";
   };
 
   patches = [ ./webcore-svg-libxml-cflags.patch ];
 
+  CC = "cc";
+
   prePatch = ''
     patchShebangs Tools/gtk
-
-    for i in $(find . -name '*.p[l|m]'); do
-      sed -e 's@/usr/bin/gcc@gcc@' -i $i
-    done
   '';
 
-  configureFlags = [
+  configureFlags = with stdenv.lib; [
     "--disable-geolocation"
-    "--disable-video"              # TODO: gsteramer-1.0
-    "--enable-introspection"
+    (optionalString enableIntrospection "--enable-introspection")
+  ] ++ stdenv.lib.optional withGtk2 [
+    "--with-gtk=2.0"
+    "--disable-webkit2"
   ];
 
   dontAddDisableDepTrack = true;
@@ -46,9 +49,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk2 wayland libwebp enchant
     libxml2 libsecret libxslt harfbuzz
+    gst-plugins-base
   ];
 
-  propagatedBuildInputs = [ gtk3 libsoup ];
+  propagatedBuildInputs = [
+    libsoup
+    (if withGtk2 then gtk2 else gtk3)
+  ];
 
   #enableParallelBuilding = true; # build problems on Hydra
 }

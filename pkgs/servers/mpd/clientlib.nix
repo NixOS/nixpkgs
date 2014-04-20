@@ -5,15 +5,15 @@ stdenv.mkDerivation rec {
   name = "libmpdclient-${version}";
 
   src = fetchurl {
-    url = "http://www.musicpd.org/download/libmpdclient/2/${name}.tar.bz2";
-    sha256 = "1qwjkb56rsbk0hwhg7fl15d6sf580a19gh778zcdg374j4yym3hh";
+    url = "http://www.musicpd.org/download/libmpdclient/2/${name}.tar.xz";
+    sha256 = "1jlrfqxqq3gscwrppr2h0xqxd5abl1ypwpwpwnpxs6p9c2jppjbw";
   };
 
   buildInputs = [ doxygen ];
 
   passthru = {
     majorVersion = "2";
-    minorVersion = "8";
+    minorVersion = "9";
   };
 
   meta = {

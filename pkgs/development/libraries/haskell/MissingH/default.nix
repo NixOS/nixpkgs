@@ -1,17 +1,17 @@
-{ cabal, filepath, hslogger, HUnit, mtl, network, parsec
-, QuickCheck, random, regexCompat, testpack, time
+{ cabal, errorcallEqInstance, filepath, hslogger, HUnit, mtl
+, network, parsec, QuickCheck, random, regexCompat, testpack, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "MissingH";
-  version = "1.2.0.2";
-  sha256 = "1wrrfa8dy0h0c53f1zjzwdkj8wkwsbi6qhv35wwlaz39dk32c4nn";
+  version = "1.2.1.0";
+  sha256 = "08zpzfhl31w35x13vapimwd508j4nydi8v3vid668r4fkqnymbss";
   buildDepends = [
     filepath hslogger HUnit mtl network parsec random regexCompat time
   ];
   testDepends = [
-    filepath hslogger HUnit mtl network parsec QuickCheck random
-    regexCompat testpack time
+    errorcallEqInstance filepath hslogger HUnit mtl network parsec
+    QuickCheck random regexCompat testpack time
   ];
   doCheck = false;
   meta = {

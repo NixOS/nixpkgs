@@ -1,7 +1,7 @@
-diff -Naur pakcs-1.11.2-upstream/Makefile pakcs-1.11.2/Makefile
---- pakcs-1.11.2-upstream/Makefile	2013-03-21 04:58:38.000000000 -0430
-+++ pakcs-1.11.2/Makefile	2013-05-09 15:04:48.035646127 -0430
-@@ -55,7 +55,6 @@
+diff -Naur pakcs-1.11.3-upstream/Makefile pakcs-1.11.3/Makefile
+--- pakcs-1.11.3-upstream/Makefile	2014-01-31 09:10:03.000000000 -0430
++++ pakcs-1.11.3/Makefile	2014-02-03 20:27:41.558334480 -0430
+@@ -66,7 +66,6 @@
  #
  .PHONY: install
  install: installscripts
@@ -9,21 +9,20 @@ diff -Naur pakcs-1.11.2-upstream/Makefile pakcs-1.11.2/Makefile
  	# pre-compile all libraries:
  	@cd lib && $(MAKE) fcy
  	# install the Curry2Prolog compiler as a saved system:
-@@ -66,11 +65,6 @@
- 	@cd lib && $(MAKE) acy
- 	# prepare for separate compilation by compiling all librariers to Prolog code:
- 	@if [ -r bin/pakcs ] ; then cd lib && $(MAKE) pl ; fi
+@@ -105,10 +104,6 @@
+ # compile the tools:
+ .PHONY: tools
+ tools:
 -	# compile the Curry Port Name Server demon:
--	@if [ -r bin/pakcs ] ; then cd cpns && $(MAKE) ; fi
+-	@if [ -r bin/pakcs ] ; then cd cpns       && $(MAKE) ; fi
 -	# compile the event handler demon for dynamic web pages:
--	@if [ -r bin/pakcs ] ; then cd www && $(MAKE) ; fi
--	$(MAKE) tools
- 	$(MAKE) docs
- 	chmod -R go+rX .
+-	@if [ -r bin/pakcs ] ; then cd www        && $(MAKE) ; fi
+ 	@if [ -r bin/pakcs ] ; then cd currytools && $(MAKE) ; fi
+ 	@if [ -r bin/pakcs ] ; then cd tools      && $(MAKE) ; fi
  
-diff -Naur pakcs-1.11.2-upstream/scripts/pakcs.sh pakcs-1.11.2/scripts/pakcs.sh
---- pakcs-1.11.2-upstream/scripts/pakcs.sh	2013-03-21 04:52:59.000000000 -0430
-+++ pakcs-1.11.2/scripts/pakcs.sh	2013-05-09 03:14:23.500876628 -0430
+diff -Naur pakcs-1.11.3-upstream/scripts/pakcs.sh pakcs-1.11.3/scripts/pakcs.sh
+--- pakcs-1.11.3-upstream/scripts/pakcs.sh	2014-01-31 09:04:19.000000000 -0430
++++ pakcs-1.11.3/scripts/pakcs.sh	2014-02-03 20:20:40.775350116 -0430
 @@ -16,7 +16,7 @@
  # use readline wrapper rlwrap if it is installed and we have tty as stdin:
  USERLWRAP=no

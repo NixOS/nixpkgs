@@ -4,11 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "Chart-cairo";
-  version = "1.1";
-  sha256 = "0pm8iwd83pn5ba0g3231zs7f39cdjr7n7k76cm642n4b0hf93fmb";
+  version = "1.2.2";
+  sha256 = "1bbi5bvrh8wmgzv5am5ndgdr68gd68ipparkkk9ld4majwf4vm6w";
   buildDepends = [
     cairo Chart colour dataDefaultClass lens mtl operational time
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/timbod7/haskell-chart/wiki";
     description = "Cairo backend for Charts";

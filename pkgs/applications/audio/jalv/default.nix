@@ -25,5 +25,6 @@ stdenv.mkDerivation  rec {
     homepage = http://drobilla.net/software/jalv;
     license = licenses.isc;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

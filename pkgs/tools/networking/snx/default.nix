@@ -33,8 +33,5 @@ stdenv.mkDerivation rec {
     homepage = "https://www.checkpoint.com/";
     description = "Check Point SSL Network Extender";
     license = "unknown";
-
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

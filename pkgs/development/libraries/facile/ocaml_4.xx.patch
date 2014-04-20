@@ -1,0 +1,12 @@
+diff -rupN facile-1.1/src/fcl_data.ml facile-1.1-patched//src/fcl_data.ml
+--- facile-1.1/src/fcl_data.ml	2004-09-08 11:51:02.000000000 +0200
++++ facile-1.1-patched//src/fcl_data.ml	2012-12-16 13:49:36.286722670 +0100
+@@ -16,7 +16,7 @@ end
+ 
+ module Hashtbl = struct
+   type ('a, 'b) t = ('a, 'b) Hashtbl.t
+-  let create = Hashtbl.create
++  let create x = Hashtbl.create x
+   let get h = h
+ 
+   let add h k d =

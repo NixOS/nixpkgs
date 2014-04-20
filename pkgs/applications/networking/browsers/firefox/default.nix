@@ -17,9 +17,9 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "26.0";
+  firefoxVersion = "27.0.1";
 
-  xulVersion = "26.0"; # this attribute is used by other packages
+  xulVersion = "27.0.1"; # this attribute is used by other packages
 
 
   src = fetchurl {
@@ -29,7 +29,7 @@ rec {
         # Fall back to this url for versions not available at releases.mozilla.org.
         "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
     ];
-    sha1 = "f7c6642d6f62aea8d4eced48dd27aba0634edcd5";
+    sha256 = "13qd53yf8dn9m03p4x5ml9h3mys60nba5nz82lcvaq7ycp1pl1bn";
   };
 
   commonConfigureFlags =
@@ -82,7 +82,7 @@ rec {
         "--disable-javaxpcom"
       ] ++ commonConfigureFlags;
 
-    enableParallelBuilding = true;
+    #enableParallelBuilding = true; # cf. https://github.com/NixOS/nixpkgs/pull/1699#issuecomment-35196282
 
     preConfigure =
       ''
@@ -116,6 +116,7 @@ rec {
       for i in $out/lib/$libDir/{plugin-container,xulrunner,xulrunner-stub}; do
           wrapProgram $i --prefix LD_LIBRARY_PATH ':' "$out/lib/$libDir"
       done
+
       rm -f $out/bin/run-mozilla.sh
     ''; # */
 
@@ -162,13 +163,20 @@ rec {
       "SYSTEM_LIBXUL=1"
     ];
 
-    # Hack to work around make's idea of -lbz2 dependency
+    # Because preConfigure runs configure from a subdirectory.
+    configureScript = "../configure";
+
     preConfigure =
       ''
+        # Hack to work around make's idea of -lbz2 dependency
         find . -name Makefile.in -execdir sed -i '{}' -e '1ivpath %.so ${
           stdenv.lib.concatStringsSep ":"
             (map (s : s + "/lib") (buildInputs ++ [stdenv.gcc.libc]))
         }' ';'
+
+        # Building directly in the main source directory is not allowed.
+        mkdir obj_dir
+        cd obj_dir
       '';
 
     postInstall =
@@ -187,7 +195,7 @@ rec {
     meta = {
       description = "Mozilla Firefox - the browser, reloaded";
       homepage = http://www.mozilla.com/en-US/firefox/;
-      maintainers = [ stdenv.lib.maintainers.eelco ];
+      maintainers = with stdenv.lib.maintainers; [ eelco wizeman ];
     };
 
     passthru = {

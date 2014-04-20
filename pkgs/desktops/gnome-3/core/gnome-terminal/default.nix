@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, cairo, libxml2, gnome3, pango
 , gnome_doc_utils, intltool, libX11, which, gconf, libuuid
-, desktop_file_utils, itstool, ncurses }:
+, desktop_file_utils, itstool, ncurses, makeWrapper }:
 
 stdenv.mkDerivation rec {
 
@@ -15,9 +15,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gnome3.gtk gnome3.gsettings_desktop_schemas gnome3.vte
-                  gnome3.dconf gnome3.gconf itstool ncurses ];
+                  gnome3.dconf gnome3.gconf itstool ncurses makeWrapper ];
 
   nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which libuuid libxml2 desktop_file_utils ];
+
+  preFixup = ''
+    for f in "$out/libexec/gnome-terminal-migration" "$out/libexec/gnome-terminal-server"; do
+      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
+    done
+  '';
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

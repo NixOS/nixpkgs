@@ -1,7 +1,7 @@
 a @ {
   freeglut,ghostscriptX,imagemagick,fftw,
   boehmgc,mesa,ncurses,readline,gsl,libsigsegv,
-  python,zlib, perl, texLive, texinfo, lzma,
+  python,zlib, perl, texLive, texinfo, xz,
 
   noDepEntry, fullDepEntry, fetchUrlFromSrcInfo,
   lib,
@@ -20,7 +20,7 @@ let
   buildInputs = with a; [
     freeglut ghostscriptX imagemagick fftw boehmgc
     mesa ncurses readline gsl libsigsegv python zlib
-    perl texLive texinfo lzma
+    perl texLive texinfo xz
   ];
 in
 rec {
@@ -54,7 +54,7 @@ rec {
   '';
 
   extractTexinfoTex = a.fullDepEntry ''
-    lzma -d < ${a.texinfo.src} | tar --wildcards -x texinfo-'*'/doc/texinfo.tex
+    xz -d < ${a.texinfo.src} | tar --wildcards -x texinfo-'*'/doc/texinfo.tex
     cp texinfo-*/doc/texinfo.tex doc/
   '' ["minInit" "addInputs" "doUnpack"];
 

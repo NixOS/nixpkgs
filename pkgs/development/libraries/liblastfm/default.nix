@@ -1,30 +1,26 @@
-{ stdenv, fetchurl, ruby, qt4, pkgconfig, libsamplerate, fftwSinglePrec, which }:
+{ stdenv, fetchurl, qt4, pkgconfig, libsamplerate, fftwSinglePrec, which, cmake }:
 
-let version = "0.3.3"; in
+let version = "1.0.8"; in
 
 stdenv.mkDerivation rec {
   name = "liblastfm-${version}";
 
   # Upstream does not package git tags as tarballs. Get tarball from github.
   src = fetchurl {
-    url = "https://github.com/mxcl/liblastfm/tarball/${version}";
+    url = "https://github.com/lastfm/liblastfm/tarball/${version}";
     name = "${name}.tar.gz";
-    sha256 = "0v33vzj89mgx2pc5fmiywlz51i553ckydw9xz70fiflm2inbl1r6";
+    sha256 = "17jjhsgbwrzh09i0wcqsnmxzyrqy1png5ixpnx6rbqmhp54a3jn3";
   };
 
   prefixKey = "--prefix ";
   propagatedBuildInputs = [ qt4 libsamplerate fftwSinglePrec ];
-  nativeBuildInputs = [ ruby pkgconfig which ];
-
-  configureFlags = "--release";
-
-  patches = [ ./ruby-1.9.patch ];
-  postPatch = "patchShebangs .";
+  nativeBuildInputs = [ pkgconfig which cmake ];
 
   meta = {
-    homepage = http://github.com/mxcl/liblastfm;
+    homepage = http://github.com/lastfm/liblastfm;
+    repositories.git = git://github.com/lastfm/liblastfm.git;
     description = "Official LastFM library";
     inherit (qt4.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = with stdenv.lib.maintainers; [ urkud phreedom ];
   };
 }

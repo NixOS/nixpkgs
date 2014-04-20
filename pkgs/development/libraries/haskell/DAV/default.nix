@@ -1,19 +1,21 @@
-{ cabal, caseInsensitive, httpClient, httpClientTls, httpTypes
-, lens, liftedBase, monadControl, mtl, network, optparseApplicative
-, transformers, transformersBase, xmlConduit, xmlHamlet
+{ cabal, caseInsensitive, either, errors, httpClient, httpClientTls
+, httpTypes, lens, liftedBase, monadControl, mtl, network
+, optparseApplicative, transformers, transformersBase, xmlConduit
+, xmlHamlet
 }:
 
 cabal.mkDerivation (self: {
   pname = "DAV";
-  version = "0.6";
-  sha256 = "1lqc1w40mzj5gvpd3gc4qwgz3zrivwkz6ssa5592dsnwz81k1dxk";
+  version = "0.6.2";
+  sha256 = "1alnjm0rfr7kwj6jax10bg8rcs8523n5dxyvw0mm65qykf78cprl";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    caseInsensitive httpClient httpClientTls httpTypes lens liftedBase
-    monadControl mtl network optparseApplicative transformers
-    transformersBase xmlConduit xmlHamlet
+    caseInsensitive either errors httpClient httpClientTls httpTypes
+    lens liftedBase monadControl mtl network optparseApplicative
+    transformers transformersBase xmlConduit xmlHamlet
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://floss.scru.org/hDAV";
     description = "RFC 4918 WebDAV support";

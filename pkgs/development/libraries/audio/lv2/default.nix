@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "A plugin standard for audio systems";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];
-
+    platforms = platforms.linux;
   };
 }

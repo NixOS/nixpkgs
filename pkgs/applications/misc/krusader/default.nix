@@ -7,6 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "1q1m4cjzz2m41pdpxnwrsiczc7990785b700lv64midjjgjnr7j6";
   };
   buildInputs = [ gettext kdelibs kde_baseapps ];
+  NIX_CFLAGS_COMPILE = "-fpermissive"; # fix build with newer gcc versions
   meta = {
     description = "Norton/Total Commander clone for KDE";
     license = "GPL";

@@ -17,15 +17,13 @@ stdenv.mkDerivation rec {
   };
 
   # libuuid, libblkid, uuidd and fsck are in util-linux-ng (the "libuuid" dependency).
-  configureFlags = "--enable-elf-shlibs --disable-libuuid --disable-libblkid --disable-uuidd --disable-fsck";
+  configureFlags = "--enable-elf-shlibs --disable-libuuid --disable-libblkid --disable-uuidd --disable-fsck --enable-symlink-install";
 
   enableParallelBuilding = true;
 
   preInstall = "installFlagsArray=('LN=ln -s')";
 
   postInstall = "make install-libs";
-
-  dontGzipMan = true; # See issue #523
 
   meta = {
     homepage = http://e2fsprogs.sourceforge.net/;

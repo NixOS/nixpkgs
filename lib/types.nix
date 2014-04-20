@@ -10,7 +10,6 @@ with import ./strings.nix;
 rec {
 
   isType = type: x: (x._type or "") == type;
-  typeOf = x: x._type or "";
 
   setType = typeName: value: value // {
     _type = typeName;
@@ -132,7 +131,7 @@ rec {
             { inherit (def) file;
               value = listToAttrs (
                 imap (elemIdx: elem:
-                  { name = "unnamed-${toString defIdx}.${toString elemIdx}";
+                  { name = elem.name or "unnamed-${toString defIdx}.${toString elemIdx}";
                     value = elem;
                   }) def.value);
             }

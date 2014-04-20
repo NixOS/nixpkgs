@@ -10,7 +10,13 @@
 
 assert stdenv ? glibc;
 
-let version = "0.8.10"; in
+let version = "0.8.10";
+    patch_CVE = fetchurl {
+      url = "http://git.savannah.gnu.org/cgit/gnash.git/patch/?id=bb4dc77eecb6ed1b967e3ecbce3dac6c5e6f1527";
+      sha256 = "1g7ymbq9vxi0mwcgs2dpyd2sf30gaam7blza0ywiwj32f5wk62v1";
+      name = "CVE-2012-1175.patch";
+    };
+in
 
 stdenv.mkDerivation rec {
   name = "gnash-${version}";
@@ -21,6 +27,8 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
+    patch -p1 < ${patch_CVE}
+
     # Add all libs to `macros/libslist', a list of library search paths.
     for lib in ${lib.concatStringsSep " "
                                       (map (lib: "\"${lib}\"/lib")
@@ -73,6 +81,8 @@ stdenv.mkDerivation rec {
        echo "\$GST_PLUGIN_PATH set to \`$GST_PLUGIN_PATH'"
     '';
 
+  postConfigure = "echo '#define nullptr NULL' >> gnashconfig.h";
+
   # Make sure `gtk-gnash' gets `libXext' in its `RPATH'.
   NIX_LDFLAGS="-lX11 -lXext";
 
@@ -87,9 +97,7 @@ stdenv.mkDerivation rec {
     # (e.g., gst-ffmpeg is needed to watch movies such as YouTube's).
     for prog in "$out/bin/"*
     do
-      wrapProgram "$prog" --prefix                                            \
-        GST_PLUGIN_PATH ":"                                                     \
-        "${gst_plugins_base}/lib/gstreamer-0.10:${gst_plugins_good}/lib/gstreamer-0.10:${gst_ffmpeg}/lib/gstreamer-0.10"
+      wrapProgram "$prog" --prefix GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"
     done
   '';
 

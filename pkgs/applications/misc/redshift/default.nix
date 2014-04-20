@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license = "GPLv3+";
     homepage = "http://jonls.dk/redshift";
     platforms = platforms.linux;
+    maintainers = maintainers.mornfall;
   }; 
 }

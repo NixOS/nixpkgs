@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xgqifddwaavmjc8c30i0mdffyirsld7c6qhfyjw7f9khwv8jjw5";
   };
 
-  patches = [ ./purity.patch ./no-pci-db.patch ];
+  patches = [ ./purity.patch ./no-pci-db.patch ./cve-2014-0004.patch ];
 
   postPatch =
     ''

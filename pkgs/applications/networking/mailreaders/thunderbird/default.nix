@@ -12,14 +12,14 @@
   enableOfficialBranding ? false
 }:
 
-let version = "17.0.8"; in
+let version = "17.0.11esr"; in
 
 stdenv.mkDerivation {
   name = "thunderbird-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.mozilla.org/pub/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.bz2";
-    sha1 = "4bcbb33f0b3ea050e805723680b5669d80438812";
+    sha256 = "1m2lph8x82kgxqzlyaxr1l1x7s4qnqfzfnqck4b777914mrv1mdp";
   };
 
   #enableParallelBuilding = true;

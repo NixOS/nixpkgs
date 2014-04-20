@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hastache";
-  version = "0.5.1";
-  sha256 = "05lm7mjzc1hamxcj8akq06081bhp907hrjdkhas3wzm6ran6rwn3";
+  version = "0.6.0";
+  sha256 = "1z609mhsc875ba3k6mlmlqpmqlwgxpav2asnf83yzq1q7bfs0cxh";
   buildDepends = [
     blazeBuilder filepath ieee754 mtl syb text transformers utf8String
   ];

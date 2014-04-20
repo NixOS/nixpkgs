@@ -1,12 +1,14 @@
-{ cabal, connection, dataDefault, hspec, httpClient, httpTypes
+{ cabal, connection, dataDefaultClass, hspec, httpClient, httpTypes
 , network, tls
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-client-tls";
-  version = "0.2.0.2";
-  sha256 = "0v5730rssddc28f1q6ndkcjrfz8r5a1wmxk1azpmdxlq6nh4i9q9";
-  buildDepends = [ connection dataDefault httpClient network tls ];
+  version = "0.2.1.1";
+  sha256 = "07kwcamc100y48gghmlfvj5ycf6y3cynqqg5kx0ymgjk85k7vim7";
+  buildDepends = [
+    connection dataDefaultClass httpClient network tls
+  ];
   testDepends = [ hspec httpClient httpTypes ];
   doCheck = false;
   meta = {

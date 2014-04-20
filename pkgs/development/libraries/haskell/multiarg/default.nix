@@ -1,10 +1,10 @@
-{ cabal, utf8String }:
+{ cabal, bifunctors, utf8String }:
 
 cabal.mkDerivation (self: {
   pname = "multiarg";
-  version = "0.24.0.0";
-  sha256 = "0vdhrsqwa2wq9cvf96x3hqml2vbjcvik9mpz1kbbhb61f9lbhas6";
-  buildDepends = [ utf8String ];
+  version = "0.26.0.0";
+  sha256 = "0fjzjr66yan62911kfndnr7xmy3waidh4cqazabk6yr1cznpsx8m";
+  buildDepends = [ bifunctors utf8String ];
   meta = {
     homepage = "https://github.com/massysett/multiarg";
     description = "Combinators to build command line parsers";

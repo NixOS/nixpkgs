@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgconfig, vpnc, openssl, libxml2 } :
 
 stdenv.mkDerivation rec {
-  name = "openconnect-5.01";
+  name = "openconnect-5.02";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.infradead.org/pub/openconnect/${name}.tar.gz"
     ];
-    sha256 = "1l90ks87iwmy7jprav11lhjr4n18ycy0d9fndspg50p9qd3jlvwi";
+    sha256 = "1y7dn42gd3763sgwv2j72xy9hsikd6y9x142g84kwdbn0y0psgi4";
   };
 
   preConfigure = ''

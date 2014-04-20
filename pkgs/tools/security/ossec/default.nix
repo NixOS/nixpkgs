@@ -34,7 +34,6 @@ yes
     description = "Open soruce host-based instrusion detection system";
     homepage = http://www.ossec.net;
     license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }
 

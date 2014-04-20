@@ -1,10 +1,10 @@
-{ cabal, QuickCheck, random, tagged, tasty }:
+{ cabal, QuickCheck, tagged, tasty }:
 
 cabal.mkDerivation (self: {
   pname = "tasty-quickcheck";
-  version = "0.3.1";
-  sha256 = "1rajvcq2a1yxdbb4kykvab1p9rnmsd2lgmlk61nd4fxvsvfj5gzn";
-  buildDepends = [ QuickCheck random tagged tasty ];
+  version = "0.8.0.3";
+  sha256 = "0dng415dsdg86rliwmz5hpn2111cn0x494c0vmdmzv5qgvx5naf6";
+  buildDepends = [ QuickCheck tagged tasty ];
   meta = {
     description = "QuickCheck support for the Tasty test framework";
     license = self.stdenv.lib.licenses.mit;

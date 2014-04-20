@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "digestive-functors";
-  version = "0.6.2.0";
-  sha256 = "1d07ws5s34x9sviq7mfkl6fh1rl28r5x1rmgbkcxil5h6gxn5mi7";
+  version = "0.7.1.0";
+  sha256 = "0ry0ircxs6ml4wdz6hrn3jnyhniwdnn1dn21imq3kv68jlhfn3by";
   buildDepends = [ mtl text time ];
   testDepends = [
     HUnit mtl QuickCheck testFramework testFrameworkHunit

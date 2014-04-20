@@ -18,6 +18,18 @@ let
       };
     };
 
+  grsecPatch = { grversion ? "3.0", kversion, revision, branch, sha256 }:
+    { name = "grsecurity-${grversion}-${kversion}";
+      inherit grversion kversion revision;
+      patch = fetchurl {
+        url = "http://grsecurity.net/${branch}/grsecurity-${grversion}-${kversion}-${revision}.patch";
+        inherit sha256;
+      };
+      features.grsecurity = true;
+      # The grsec kernel patchset includes AppArmor patches
+      features.apparmor = true;
+    };
+
   makeAppArmorPatch = {apparmor, version}:
     stdenv.mkDerivation {
       name = "apparmor-${version}.patch";
@@ -26,6 +38,7 @@ let
         cat ${apparmor}/kernel-patches/${version}/* > $out
       '';
     };
+
 in
 
 rec {
@@ -43,12 +56,6 @@ rec {
     patch = makeAppArmorPatch { inherit apparmor version; };
     features.apparmor = true;
   };
-
-  sec_perm_2_6_24 =
-    { name = "sec_perm-2.6.24";
-      patch = ./sec_perm-2.6.24.patch;
-      features.secPermPatch = true;
-    };
 
   no_xsave =
     { name = "no-xsave";
@@ -77,31 +84,29 @@ rec {
     sha256 = "00b1rqgd4yr206dxp4mcymr56ymbjcjfa4m82pxw73khj032qw3j";
   };
 
-
-  grsecurity_3_0_3_2_53 =
-    { name = "grsecurity-3.0-3.2.53";
-      patch = fetchurl {
-        url = https://grsecurity.net/stable/grsecurity-3.0-3.2.53-201312021727.patch;
-        sha256 = "1ifndcbpz552d0n2dgb38di8lhqd4x2msshdbdx33jlfdl7mk6x4";
-      };
-      features.grsecurity = true;
-      # The grsec kernel patch seems to include the apparmor patches as of 3.0-3.2.53
-      features.apparmor = true;
+  grsecurity_stable = grsecPatch
+    { kversion  = "3.2.57";
+      revision  = "201404131252";
+      branch    = "stable";
+      sha256    = "1yic257h2vy3175c34i54873lc93y0m57rw1d059wz1wxy9waiwl";
     };
 
-  grsecurity_3_0_3_12_2 =
-    { name = "grsecurity-3.0-3.12.2";
-      patch = fetchurl {
-        url = https://grsecurity.net/test/grsecurity-3.0-3.12.2-201312021733.patch;
-        sha256 = "0xcsq6778rk9afg3078d772iflz7p4ahvr6wdq5c4s3jyssam783";
-      };
-      features.grsecurity = true;
-      # The grsec kernel patch seems to include the apparmor patches as of 3.0-3.12.2
-      features.apparmor = true;
+  grsecurity_vserver = grsecPatch
+    { kversion  = "3.2.57";
+      revision  = "vs2.3.2.16-201404131253";
+      branch    = "vserver";
+      sha256    = "0grhd9hbk952dwr91syi5pda1iccmcd8s0l3ki13689z8ns35f7k";
     };
 
-  grsec_path =
-    { name = "grsec-path";
+  grsecurity_unstable = grsecPatch
+    { kversion  = "3.13.10";
+      revision  = "201404141717";
+      branch    = "test";
+      sha256    = "1vraf9g7za0syx5c1x1ks7kgaxc9mjspy6pvgrs0vi326v12sqnx";
+    };
+
+  grsec_fix_path =
+    { name = "grsec-fix-path";
       patch = ./grsec-path.patch;
     };
 }

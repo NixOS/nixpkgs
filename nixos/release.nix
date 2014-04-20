@@ -14,6 +14,8 @@ let
 
   forAllSystems = pkgs.lib.genAttrs systems;
 
+  callTest = fn: args: forAllSystems (system: import fn ({ inherit system; } // args));
+
   pkgs = import nixpkgs { system = "x86_64-linux"; };
 
   lib = pkgs.lib;
@@ -207,13 +209,43 @@ in rec {
   */
 
 
-  # Run the tests in ./tests/default.nix for each platform.  You can
-  # run a test by doing e.g. "nix-build -A tests.login.x86_64-linux".
-  tests =
-    with lib;
-    let
-      testsFor = system:
-        mapAttrsRecursiveCond (x: !x ? test) (n: v: listToAttrs [(nameValuePair system v.test)])
-          (import ./tests { inherit nixpkgs system; });
-    in fold recursiveUpdate {} (map testsFor systems);
+  # Run the tests for each platform.  You can run a test by doing
+  # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
+  # ‘nix-build tests/login.nix -A result’.
+  tests.avahi = callTest tests/avahi.nix {};
+  tests.bittorrent = callTest tests/bittorrent.nix {};
+  tests.containers = callTest tests/containers.nix {};
+  tests.firefox = callTest tests/firefox.nix {};
+  tests.firewall = callTest tests/firewall.nix {};
+  tests.gnome3 = callTest tests/gnome3.nix {};
+  tests.installer.grub1 = forAllSystems (system: (import tests/installer.nix { inherit system; }).grub1.test);
+  tests.installer.lvm = forAllSystems (system: (import tests/installer.nix { inherit system; }).lvm.test);
+  tests.installer.rebuildCD = forAllSystems (system: (import tests/installer.nix { inherit system; }).rebuildCD.test);
+  tests.installer.separateBoot = forAllSystems (system: (import tests/installer.nix { inherit system; }).separateBoot.test);
+  tests.installer.simple = forAllSystems (system: (import tests/installer.nix { inherit system; }).simple.test);
+  tests.ipv6 = callTest tests/ipv6.nix {};
+  tests.jenkins = callTest tests/jenkins.nix {};
+  tests.kde4 = callTest tests/kde4.nix {};
+  tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
+  tests.login = callTest tests/login.nix {};
+  tests.logstash = callTest tests/logstash.nix {};
+  tests.misc = callTest tests/misc.nix {};
+  tests.mumble = callTest tests/mumble.nix {};
+  tests.munin = callTest tests/munin.nix {};
+  tests.mysql = callTest tests/mysql.nix {};
+  tests.mysqlReplication = callTest tests/mysql-replication.nix {};
+  tests.nat = callTest tests/nat.nix {};
+  tests.nfs3 = callTest tests/nfs.nix { version = 3; };
+  tests.openssh = callTest tests/openssh.nix {};
+  tests.printing = callTest tests/printing.nix {};
+  tests.proxy = callTest tests/proxy.nix {};
+  tests.quake3 = callTest tests/quake3.nix {};
+  tests.rabbitmq = callTest tests/rabbitmq.nix {};
+  tests.runInMachine = callTest tests/run-in-machine.nix {};
+  tests.simple = callTest tests/simple.nix {};
+  tests.tomcat = callTest tests/tomcat.nix {};
+  tests.udisks = callTest tests/udisks.nix {};
+  tests.udisks2 = callTest tests/udisks2.nix {};
+  tests.xfce = callTest tests/xfce.nix {};
+
 }

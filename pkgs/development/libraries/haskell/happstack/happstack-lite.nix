@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "happstack-lite";
-  version = "7.3.1";
-  sha256 = "0y8d0xv26szfjmkfqzak19zqjgv0w6rkc1rzrd2jkvsbchnwacjy";
+  version = "7.3.3";
+  sha256 = "0iv60cch0fiy9kh21wcpk3s4nvd4j2p50pqr3y56bsqwxk53hhv8";
   buildDepends = [ happstackServer mtl text ];
   meta = {
     homepage = "http://www.happstack.com/";

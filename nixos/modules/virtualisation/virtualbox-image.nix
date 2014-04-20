@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
   system.build.virtualBoxImage =
@@ -92,7 +92,7 @@ with pkgs.lib;
         --audiocontroller ac97 --audio alsa \
         --rtcuseutc on \
         --usb on --mouse usbtablet
-      VBoxManage storagectl "$vmName" --name SATA --add sata --sataportcount 4 --bootable on --hostiocache on
+      VBoxManage storagectl "$vmName" --name SATA --add sata --portcount 4 --bootable on --hostiocache on
       VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
         --medium ${config.system.build.virtualBoxImage}/disk.vdi
 
@@ -111,5 +111,5 @@ with pkgs.lib;
   # Prevent logging in as root without a password.  For NixOps, we
   # don't need this because the user can login via SSH, and for the
   # demo images, there is a demo user account that can sudo to root.
-  security.initialRootPassword = "!";
+  security.initialRootPassword = mkDefault "!";
 }

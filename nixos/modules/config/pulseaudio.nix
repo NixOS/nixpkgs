@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 with pkgs;
 
 let
@@ -77,7 +77,7 @@ in {
       };
 
       package = mkOption {
-        type = types.path;
+        type = types.package;
         default = pulseaudio;
         example = literalExample "pulseaudio.override { jackaudioSupport = true; }";
         description = ''

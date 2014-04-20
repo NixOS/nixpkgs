@@ -61,7 +61,7 @@ my @attrs = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
 my @modulePackages = ();
-my @imports = ("<nixos/modules/installer/scan/not-detected.nix>");
+my @imports = ("<nixpkgs/nixos/modules/installer/scan/not-detected.nix>");
 
 
 sub debug {
@@ -96,9 +96,9 @@ my $videoDriver;
 
 sub pciCheck {
     my $path = shift;
-    my $vendor = read_file "$path/vendor";
-    my $device = read_file "$path/device";
-    my $class = read_file "$path/class";
+    my $vendor = read_file "$path/vendor"; chomp $vendor;
+    my $device = read_file "$path/device"; chomp $device;
+    my $class = read_file "$path/class"; chomp $class;
 
     my $module;
     if (-e "$path/driver/module") {
@@ -130,6 +130,7 @@ sub pciCheck {
 
     # broadcom STA driver (wl.ko)
     # list taken from http://www.broadcom.com/docs/linux_sta/README.txt
+    # FIXME: still needed?
     if ($vendor eq "0x14e4" &&
         ($device eq "0x4311" || $device eq "0x4312" || $device eq "0x4313" ||
          $device eq "0x4315" || $device eq "0x4327" || $device eq "0x4328" ||
@@ -156,6 +157,7 @@ sub pciCheck {
 
     # Assume that all NVIDIA cards are supported by the NVIDIA driver.
     # There may be exceptions (e.g. old cards).
+    # FIXME: do we want to enable an unfree driver here?
     $videoDriver = "nvidia" if $vendor eq "0x10de" && $class =~ /^0x03/;
 }
 
@@ -163,16 +165,16 @@ foreach my $path (glob "/sys/bus/pci/devices/*") {
     pciCheck $path;
 }
 
-push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
+push @attrs, "hardware.opengl.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
 
 
 # Idem for USB devices.
 
 sub usbCheck {
     my $path = shift;
-    my $class = read_file "$path/bInterfaceClass";
-    my $subclass = read_file "$path/bInterfaceSubClass";
-    my $protocol = read_file "$path/bInterfaceProtocol";
+    my $class = read_file "$path/bInterfaceClass"; chomp $class;
+    my $subclass = read_file "$path/bInterfaceSubClass"; chomp $subclass;
+    my $protocol = read_file "$path/bInterfaceProtocol"; chomp $protocol;
 
     my $module;
     if (-e "$path/driver/module") {
@@ -216,11 +218,19 @@ foreach my $path (glob "/sys/class/block/*") {
 }
 
 
+my $dmi = `@dmidecode@/sbin/dmidecode`;
+
+
 # Check if we're a VirtualBox guest.  If so, enable the guest
 # additions.
-my $dmi = `@dmidecode@/sbin/dmidecode`;
 if ($dmi =~ /Manufacturer: innotek/) {
     push @attrs, "services.virtualbox.enable = true;"
+}
+
+
+# Likewise for QEMU.
+if ($dmi =~ /Manufacturer: Bochs/) {
+    push @imports, "<nixpkgs/nixos/modules/profiles/qemu-guest.nix>";
 }
 
 
@@ -256,7 +266,7 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     $mountPoint = "/" if $mountPoint eq "";
 
     # Skip special filesystems.
-    next if in($mountPoint, "/proc") || in($mountPoint, "/dev") || in($mountPoint, "/sys") || in($mountPoint, "/run");
+    next if in($mountPoint, "/proc") || in($mountPoint, "/dev") || in($mountPoint, "/sys") || in($mountPoint, "/run") || $mountPoint eq "/var/lib/nfs/rpc_pipefs";
 
     # Skip the optional fields.
     my $n = 6; $n++ while $fields[$n] ne "-"; $n++;
@@ -305,7 +315,15 @@ EOF
   fileSystems.\"$mountPoint\" =
     { device = \"$device\";
       fsType = \"$fsType\";
-      options = \"${\join ",", uniq(@extraOptions, @superOptions, @mountOptions)}\";
+EOF
+
+    if (scalar @extraOptions > 0) {
+      $fileSystems .= <<EOF;
+      options = \"${\join ",", uniq(@extraOptions)}\";
+EOF
+    }
+
+    $fileSystems .= <<EOF;
     };
 
 EOF

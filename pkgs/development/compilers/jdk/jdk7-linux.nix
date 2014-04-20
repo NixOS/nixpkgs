@@ -6,6 +6,19 @@
 , installjdk ? true
 , pluginSupport ? true
 , installjce ? false
+, glib
+, libxml2
+, libav_0_8
+, ffmpeg
+, libxslt
+, mesa_noglu
+, freetype
+, fontconfig
+, gnome
+, cairo
+, alsaLib
+, atk
+, gdk_pixbuf
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -35,22 +48,25 @@ let
       "";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+  patchversion = "51";
+
   name =
-    if installjdk then "jdk-1.7.0_45" else "jre-1.7.0_45";
+    if installjdk then "jdk-1.7.0_${patchversion}" else "jre-1.7.0_${patchversion}";
 
   src =
     if stdenv.system == "i686-linux" then
       requireFile {
-        name = "jdk-7u45-linux-i586.tar.gz";
+        name = "jdk-7u${patchversion}-linux-i586.tar.gz";
         url = http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html;
-        sha256 = "1q0nw2rwmavcrssyigq76p1h00hm8kd3rhb5bdv7rbdcs0jxrjsa";
+        sha256 = "1ks2zyx88bxdjcbdgg40mh1i9a83ll9ymxr79rplfvj48ig9d8mk";
       }
     else if stdenv.system == "x86_64-linux" then
+
       requireFile {
-        name = "jdk-7u45-linux-x64.tar.gz";
+        name = "jdk-7u${patchversion}-linux-x64.tar.gz";
         url = http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html;
-        sha256 = "06jbz536zycqkdpc7zriay0jidmj9nriqva60afsgpv93kcf9spj";
+        sha256 = "0p7mfjj8fxlghvhcqhwgrifzb32b9y143yw962zk02bfycz7qdkp";
       }
     else
       abort "jdk requires i686-linux or x86_64 linux";
@@ -84,7 +100,7 @@ stdenv.mkDerivation {
     # construct the rpath
     rpath=
     for i in $libraries; do
-        rpath=$rpath''${rpath:+:}$i/lib
+        rpath=$rpath''${rpath:+:}$i/lib''${rpath:+:}$i/lib64
     done
 
     if test -z "$installjdk"; then
@@ -99,6 +115,8 @@ stdenv.mkDerivation {
     fi
 
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/jli
+    rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/server
+    rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/xawt
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}
 
     # set all the dynamic linkers
@@ -107,6 +125,12 @@ stdenv.mkDerivation {
         --set-rpath "$rpath" {} \;
 
     find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
+
+    # HACK: For some reason, appending atk to the global patchelf rpath paths causes:
+    #   java: relocation error: java: symbol , version GLIBC_2.2.5 not defined in file libc.so.6 with link time reference
+    # Because only libglass.so needs atk, we put it only in it's rpath.
+    # This seems to work fine.
+    patchelf --set-rpath "$rpath:${atk}/lib" $out/jre/lib/${architecture}/libglass.so
 
     if test -z "$pluginSupport"; then
       rm -f $out/bin/javaws
@@ -125,8 +149,8 @@ stdenv.mkDerivation {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.gcc.libc] ++
-    (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt] else []);
+    [stdenv.gcc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xlibs.libXxf86vm alsaLib fontconfig freetype gnome.pango gnome.gtk cairo gdk_pixbuf] ++
+    (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt xlibs.libXrender stdenv.gcc.gcc] else []);
 
   passthru.mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
 

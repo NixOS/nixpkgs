@@ -1,7 +1,9 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
-
+with lib;
+let
+  diskSize = "100G";
+in
 {
   imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ];
 
@@ -12,7 +14,7 @@ with pkgs.lib;
             ''
               mkdir $out
               diskImage=$out/$diskImageBase
-              truncate $diskImage --size 10G
+              truncate $diskImage --size ${diskSize}
               mv closure xchg/
             '';
 
@@ -20,8 +22,9 @@ with pkgs.lib;
             ''
               PATH=$PATH:${pkgs.gnutar}/bin:${pkgs.gzip}/bin
               pushd $out
-              tar -Szcf $diskImageBase.tar.gz $diskImageBase
-              rm $out/$diskImageBase
+              mv $diskImageBase disk.raw
+              tar -Szcf $diskImageBase.tar.gz disk.raw
+              rm $out/disk.raw
               popd
             '';
           diskImageBase = "nixos-${config.system.nixosVersion}-${pkgs.stdenv.system}.raw";
@@ -32,7 +35,7 @@ with pkgs.lib;
         ''
           # Create partition table
           ${pkgs.parted}/sbin/parted /dev/vda mklabel msdos
-          ${pkgs.parted}/sbin/parted /dev/vda mkpart primary ext4 1 10G
+          ${pkgs.parted}/sbin/parted /dev/vda mkpart primary ext4 1 ${diskSize}
           ${pkgs.parted}/sbin/parted /dev/vda print
           . /sys/class/block/vda1/uevent
           mknod /dev/vda1 b $MAJOR $MINOR
@@ -114,7 +117,7 @@ with pkgs.lib;
   # Prevent logging in as root without a password.  This doesn't really matter,
   # since the only PAM services that allow logging in with a null
   # password are local ones that are inaccessible on Google Compute machines.
-  security.initialRootPassword = "!";
+  security.initialRootPassword = mkDefault "!";
 
   # Configure default metadata hostnames
   networking.extraHosts = ''

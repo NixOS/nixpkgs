@@ -1,17 +1,20 @@
-{ cabal, extensibleExceptions, filepath, ghcMtl, ghcPaths
-, haskellSrc, MonadCatchIOMtl, mtl, random, utf8String
+{ cabal, exceptions, extensibleExceptions, filepath, ghcMtl
+, ghcPaths, HUnit, mtl, random, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "hint";
-  version = "0.3.3.7";
-  sha256 = "1aba9dfkxlpmvbvllw4qnlrd300vnr0ismkn3kva1pv1cay5pifk";
+  version = "0.4.1.0";
+  sha256 = "1hc66yfzg9jrm5h3hd52rm4ca8ha0j93rhjpjh6hhzr4a40jv0pl";
   buildDepends = [
-    extensibleExceptions filepath ghcMtl ghcPaths haskellSrc
-    MonadCatchIOMtl mtl random utf8String
+    exceptions extensibleExceptions filepath ghcMtl ghcPaths mtl random
+    utf8String
+  ];
+  testDepends = [
+    exceptions extensibleExceptions filepath HUnit mtl
   ];
   meta = {
-    homepage = "http://darcsden.com/jcpetruzza/hint";
+    homepage = "http://hub.darcs.net/jcpetruzza/hint";
     description = "Runtime Haskell interpreter (GHC API wrapper)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0a9g0iblfyqppcy1ni3ac8f3yv5km95bfblhwqlsk6khydi5ka98";
   buildDepends = [ HTTP json mtl network utf8String ];
   testDepends = [ HTTP HUnit json mtl network utf8String ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/arjunguha/haskell-couchdb/";
     description = "CouchDB interface";

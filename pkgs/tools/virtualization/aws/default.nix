@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchurl, perl, curl }:
 
 stdenv.mkDerivation {
   name = "aws-1.75";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   installPhase =
     ''
       mkdir -p $out/bin
-      cp $src $out/bin/aws
+      sed 's|\[curl|[${curl}/bin/curl|g' $src > $out/bin/aws
       chmod +x $out/bin/aws
     '';
 

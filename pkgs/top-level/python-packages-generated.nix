@@ -5349,5 +5349,48 @@ in
   };
 
 
+  "xlrd" = self."xlrd-0.9.2";
+
+  "xlrd-0.9.2" = self.buildPythonPackage {
+    name = "xlrd-0.9.2";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/x/xlrd/xlrd-0.9.2.tar.gz";
+        md5 = "91a81ee76233e9f3115acaaa1b251b0e";
+    };
+    doCheck = false;
+    buildInputs = [  ];
+    propagatedBuildInputs = [  ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
+    meta = {
+      description = ''
+        Library for developers to extract data from Microsoft Excel (tm) spreadsheet files
+        '';
+      homepage = "http://www.python-excel.org/";
+      license = "BSD";
+    };
+  };
+
+
+  "suds" = self."suds-0.4";
+
+  "suds-0.4" = self.buildPythonPackage {
+    name = "suds-0.4";
+    src = fetchurl {
+        url = "https://pypi.python.org/packages/source/s/suds/suds-0.4.tar.gz";
+        md5 = "b7502de662341ed7275b673e6bd73191";
+    };
+    doCheck = false;
+    buildInputs = [  ];
+    propagatedBuildInputs = [  ];
+    installCommand = ''easy_install --always-unzip --prefix="$out" .'';
+    meta = {
+      description = ''
+        Lightweight SOAP client
+        '';
+      homepage = "https://fedorahosted.org/suds";
+      license = "UNKNOWN";
+    };
+  };
+
 }
 

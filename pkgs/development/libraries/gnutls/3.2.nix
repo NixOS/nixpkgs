@@ -3,14 +3,18 @@
 
 assert guileBindings -> guile != null;
 
-stdenv.mkDerivation (rec {
-
-  name = "gnutls-3.2.4";
+stdenv.mkDerivation rec {
+  name = "gnutls-3.2.12.1";
 
   src = fetchurl {
     url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2/${name}.tar.lz";
-    sha256 = "0zl4h37g51xyaalv3qp2hvn1m6z7xzfw4yvpvi6mby4x5sqrrp8i";
+    sha256 = "1787n4iard3ad0p44xbl4aj3r3f5ir3sz0b2s27qpaaia2w4774g";
   };
+
+  patches =
+    # FreeBSD doesn't have <alloca.h>, and Gnulib's `alloca' module isn't used.
+    stdenv.lib.optional stdenv.isFreeBSD ./guile-gnulib-includes.patch
+    ;
 
   # Note: GMP is a dependency of Nettle, whose public headers include
   # GMP headers, hence the hack.
@@ -21,15 +25,14 @@ stdenv.mkDerivation (rec {
       --with-lzo --with-libtasn1-prefix="${libtasn1}"           \
       --with-libnettle-prefix="${nettle}"                       \
       CPPFLAGS="-I${gmp}/include"                               \
-      ${if guileBindings
-        then "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""
-        else ""}
+      ${stdenv.lib.optionalString guileBindings
+          "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""}
   '';
 
   # Build of the Guile bindings is not parallel-safe.  See
   # <http://git.savannah.gnu.org/cgit/gnutls.git/commit/?id=330995a920037b6030ec0282b51dde3f8b493cad>
   # for the actual fix.
-  enableParallelBuilding = false;
+  enableParallelBuilding = !guileBindings;
 
   buildInputs = [ zlib lzo lzip ]
     ++ stdenv.lib.optional guileBindings guile;
@@ -42,7 +45,7 @@ stdenv.mkDerivation (rec {
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "The GNU Transport Layer Security Library";
 
     longDescription = ''
@@ -61,13 +64,8 @@ stdenv.mkDerivation (rec {
 
     homepage = http://www.gnu.org/software/gnutls/;
     license = "LGPLv2.1+";
-    maintainers = [ ];
+    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
 
-//
-
-(stdenv.lib.optionalAttrs stdenv.isFreeBSD {
-  # FreeBSD doesn't have <alloca.h>, and Gnulib's `alloca' module isn't used.
-  patches = [ ./guile-gnulib-includes.patch ];
-}))

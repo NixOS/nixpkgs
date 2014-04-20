@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dosfstools-3.0.24";
+  name = "dosfstools-3.0.26";
 
   src = fetchurl {
     url = "http://daniel-baumann.ch/files/software/dosfstools/${name}.tar.xz";
-    sha256 = "1hblhb98wm9gm60y32psdqm5jprs4a6dqzrapzgb6bw7r3kvf88y";
+    sha256 = "0x9yi6s1419k678pr9h3a5bjccbrcxxpzmjwgl262ffrikz45126";
   };
 
   makeFlags = "PREFIX=$(out)";

@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   name = "mkpasswd-${version}";
 
-  version = "5.0.26";
+  version = "5.1.1";
 
   src = fetchurl {
     url = "http://ftp.debian.org/debian/pool/main/w/whois/whois_${version}.tar.xz";
-    sha256 = "729625ef81425f4771e06492bb4f3e9f24bff75b8176044ce8d2f605f7ad6af5";
+    sha256 = "0i06a9mb9qcq272782mg6dffv3k7bqkw4cdr31yrc0s6jqylryv9";
   };
 
   preConfigure = ''

@@ -4,13 +4,10 @@
 
 cabal.mkDerivation (self: {
   pname = "wxcore";
-  version = "0.90.0.3";
-  sha256 = "0d79hr6cz9zj3w57h6630nfnsmfq1w73gz04jjmlhwh8ih557imw";
+  version = "0.90.1.1";
+  sha256 = "1ma6vjf87b493vz3sj6hxzifqixk62n6b5gvixpfzfig1lysddgp";
   buildDepends = [ filepath parsec stm time wxc wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
-  patchPhase = ''
-    sed -i -e 's|containers >=.*|containers|' wxcore.cabal
-  '';
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell core";

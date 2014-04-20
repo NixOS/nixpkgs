@@ -1,0 +1,45 @@
+commit b893fcdb7ddfc8c59fd29a29b7265a713c3dbab1
+Author: Alex Fiestas <afiestas@kde.org>
+Date:   Thu Mar 29 10:09:22 2012 +0200
+
+    Build fix: Add unistd.h include since sleep is defined there
+
+diff --git a/src/platform/infofetchers/lastfminfofetcher.cpp b/src/platform/infofetchers/lastfminfofetcher.cpp
+index 0c49d69..fcc4cd3 100644
+--- a/src/platform/infofetchers/lastfminfofetcher.cpp
++++ b/src/platform/infofetchers/lastfminfofetcher.cpp
+@@ -32,6 +32,8 @@
+ #include <QFile>
+ #include <QTextEdit>
+ 
++#include <unistd.h>
++
+ LastfmInfoFetcher::LastfmInfoFetcher(QObject *parent) :
+         InfoFetcher(parent)
+ {
+diff --git a/src/platform/infofetchers/tmdbinfofetcher.cpp b/src/platform/infofetchers/tmdbinfofetcher.cpp
+index 7801644..3c01960 100644
+--- a/src/platform/infofetchers/tmdbinfofetcher.cpp
++++ b/src/platform/infofetchers/tmdbinfofetcher.cpp
+@@ -30,6 +30,8 @@
+ #include <QDomDocument>
+ #include <QFile>
+ 
++#include <unistd.h>
++
+ TMDBInfoFetcher::TMDBInfoFetcher(QObject *parent) :
+         InfoFetcher(parent)
+ {
+diff --git a/src/platform/infofetchers/tvdbinfofetcher.cpp b/src/platform/infofetchers/tvdbinfofetcher.cpp
+index ff351b0..670ed18 100644
+--- a/src/platform/infofetchers/tvdbinfofetcher.cpp
++++ b/src/platform/infofetchers/tvdbinfofetcher.cpp
+@@ -30,6 +30,8 @@
+ #include <QDomDocument>
+ #include <QFile>
+ 
++#include <unistd.h>
++
+ TVDBInfoFetcher::TVDBInfoFetcher(QObject *parent) :
+         InfoFetcher(parent)
+ {

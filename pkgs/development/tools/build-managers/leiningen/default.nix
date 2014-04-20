@@ -1,23 +1,24 @@
-{ stdenv, fetchurl, makeWrapper, jdk, rlwrap, clojure, gnupg }:
+{ stdenv, fetchurl, makeWrapper
+, coreutils, findutils, jdk, rlwrap, clojure, gnupg }:
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
-  version = "2.3.3";
+  version = "2.3.4";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
-    sha256 = "0lc5ivgknkflk6k4a4q1r8bm3kq63p4cazfs1rdb02cfhdip52hc";
+    sha256 = "1v83hpvp349pgqqiy4babc5m5b9lcwk0fif80fpv4jqvp0a8v6r7";
   };
 
   jarsrc = fetchurl {
     url = "https://leiningen.s3.amazonaws.com/downloads/${pname}-${version}-standalone.jar";
-    sha256 = "1a8i0940ww7xqhwlaaavsgw8s9rjqdnv46hfsla41ns789bappxf";
+    sha256 = "1pqc99p4vz4q3qcs90cqql6m7kc27ihx4hbqs5alxkzk7jv8s2bk";
   };
 
   patches = ./lein_2.3.0.patch;
 
-  inherit rlwrap clojure gnupg;
+  inherit rlwrap clojure gnupg findutils coreutils jdk;
 
   builder = ./builder.sh;
 

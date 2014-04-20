@@ -1,14 +1,14 @@
 { stdenv, fetchurl, python, zip }:
 
 let
-  version = "2014.01.08";
+  version = "2014.04.02";
 in
 stdenv.mkDerivation rec {
   name = "youtube-dl-${version}";
 
   src = fetchurl {
     url = "http://youtube-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "0a83j62w2k5fdxp3fvs0zr6r81w7jkzzzr8r8wim1yyi6k8cjcwv";
+    sha256 = "1c9d5wjl0aaqfvz868wbkr3dwby9vjkx0hkbnwx0wnpg48nlnwpm";
   };
 
   buildInputs = [ python ];
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "Command-line tool to download videos from YouTube.com and other sites";
 
     platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ bluescreen303 simons ];
+    maintainers = with stdenv.lib.maintainers; [ bluescreen303 simons phreedom ];
   };
 }

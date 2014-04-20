@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, perl, flex, bison, qt4 }:
+{ stdenv, fetchurl, perl, python, flex, bison, qt4 }:
 
 let
-  name = "doxygen-1.8.5";
+  name = "doxygen-1.8.6";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "ftp://ftp.stack.nl/pub/users/dimitri/${name}.src.tar.gz";
-    sha256 = "09fcsz1rd4a9njsz3as7z8s3mk621pvcclavxbb6ib8jvdkqnfi4";
+    sha256 = "0pskjlkbj76m9ka7zi66yj8ffjcv821izv3qxqyyphf0y0jqcwba";
   };
 
   patches = [ ./tmake.patch ];
 
   buildInputs =
-    [ perl flex bison ]
+    [ perl python flex bison ]
     ++ stdenv.lib.optional (qt4 != null) qt4;
 
   prefixKey = "--prefix ";
@@ -23,7 +23,10 @@ stdenv.mkDerivation {
     [ "--dot dot" ]
     ++ stdenv.lib.optional (qt4 != null) "--with-doxywizard";
 
-  preConfigure = stdenv.lib.optionalString (qt4 != null)
+  preConfigure =
+    ''
+      patchShebangs .
+    '' + stdenv.lib.optionalString (qt4 != null)
     ''
       echo "using QTDIR=${qt4}..."
       export QTDIR=${qt4}

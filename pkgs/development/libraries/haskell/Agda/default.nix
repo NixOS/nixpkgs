@@ -1,4 +1,4 @@
-{ cabal, alex, binary, deepseq, filepath, geniplate, happy
+{ cabal, alex, binary, deepseq, emacs, filepath, geniplate, happy
 , hashable, hashtables, haskeline, haskellSrcExts, mtl, parallel
 , QuickCheck, text, time, unorderedContainers, xhtml, zlib
 }:
@@ -14,8 +14,11 @@ cabal.mkDerivation (self: {
     haskellSrcExts mtl parallel QuickCheck text time
     unorderedContainers xhtml zlib
   ];
-  buildTools = [ alex happy ];
+  buildTools = [ alex emacs happy ];
   jailbreak = true;
+  postInstall = ''
+    $out/bin/agda-mode compile
+  '';
   meta = {
     homepage = "http://wiki.portal.chalmers.se/agda/";
     description = "A dependently typed functional programming language and proof assistant";

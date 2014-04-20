@@ -1,7 +1,7 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
-with import ../boot/systemd-unit-options.nix { inherit config pkgs; };
+with lib;
+with import ../boot/systemd-unit-options.nix { inherit config lib; };
 
 let
 
@@ -93,7 +93,7 @@ let
             if job.daemonType == "fork" || job.daemonType == "daemon" then { Type = "forking"; GuessMainPID = true; } else
             if job.daemonType == "none" then { } else
             throw "invalid daemon type `${job.daemonType}'")
-        // optionalAttrs (!job.task && job.respawn)
+        // optionalAttrs (!job.task && !(job.script == "" && job.exec == "") && job.respawn)
           { Restart = "always"; }
         // optionalAttrs job.task
           { Type = "oneshot"; RemainAfterExit = false; };

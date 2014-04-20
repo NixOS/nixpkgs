@@ -1,15 +1,15 @@
-{ cabal, conduit, filesystemConduit, hspec, HUnit, resourcet
+{ cabal, conduit, conduitExtra, hspec, HUnit, resourcet
 , systemFilepath, tagstreamConduit, text, transformers, xmlConduit
 , xmlTypes
 }:
 
 cabal.mkDerivation (self: {
   pname = "html-conduit";
-  version = "1.1.0.1";
-  sha256 = "0v3zlassakc34i7kzajx63s1rxn516xv7lrib0a4kn4cdlqn7kxs";
+  version = "1.1.0.4";
+  sha256 = "1bl6h38fvhiidzxly49l7jickcg0s4fy59m4cizfjarxll9cspwb";
   buildDepends = [
-    conduit filesystemConduit resourcet systemFilepath tagstreamConduit
-    text transformers xmlConduit xmlTypes
+    conduit conduitExtra resourcet systemFilepath tagstreamConduit text
+    transformers xmlConduit xmlTypes
   ];
   testDepends = [ hspec HUnit xmlConduit ];
   meta = {

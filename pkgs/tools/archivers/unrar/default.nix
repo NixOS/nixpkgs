@@ -1,28 +1,32 @@
 {stdenv, fetchurl}:
+
+let
+  version = "5.1.2";
+in
 stdenv.mkDerivation {
-  name = "unrar-3.9.10";
+  name = "unrar-${version}";
 
   src = fetchurl {
-    url = http://www.rarlab.com/rar/unrarsrc-3.9.10.tar.gz;
-    sha256 = "0yi0i2j4srca8cag96ajc80m5xb5328ydzjab6y8h1bhypc2fiiv";
+    url = "http://www.rarlab.com/rar/unrarsrc-${version}.tar.gz";
+    sha256 = "0344cn4w3lw2111m3g431khiyndx9ibbp952bli1inx2fixps9cq";
   };
 
-  # Add a missing objects to the library
-  #patchPhase = ''
-  #  sed -i 's/^\(LIB_OBJ=.*\)/\1 recvol.o rs.o/' makefile.unix
-  #'';
-
-  buildPhase = ''
-    make -f makefile.unix unrar
-    rm *.o
-    make -f makefile.unix lib CXXFLAGS="-fPIC -O2 -DSILENT";
+  patchPhase = ''
+    sed -i \
+      -e "/CXX=/d" \
+      -e "/CXXFLAGS=/d" \
+      makefile
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib
+    mkdir -p $out/bin
     cp unrar $out/bin
-    cp libunrar.so $out/lib
   '';
 
-  buildInputs = [];
+  meta = {
+    description = "Utility for RAR archives";
+    license = "freeware";
+    maintainers = [ stdenv.lib.maintainers.emery ];
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin; # arbitrary
+  };
 }

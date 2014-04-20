@@ -5,15 +5,16 @@
 
 cabal.mkDerivation (self: {
   pname = "esqueleto";
-  version = "1.3.4.3";
-  sha256 = "1p35nzaqmpcc7slr10ihlc54kz5zv5ak0ql848m3xpbjfzq6f6vc";
+  version = "1.3.10";
+  sha256 = "0q333m7xaanxb1vzgf2yn6d7y3pgkbj9mjw5gnywms36v5zsfik7";
   buildDepends = [
     conduit monadLogger persistent resourcet tagged text transformers
     unorderedContainers
   ];
   testDepends = [
     conduit hspec HUnit monadControl monadLogger persistent
-    persistentSqlite persistentTemplate QuickCheck text transformers
+    persistentSqlite persistentTemplate QuickCheck resourcet text
+    transformers
   ];
   meta = {
     homepage = "https://github.com/meteficha/esqueleto";

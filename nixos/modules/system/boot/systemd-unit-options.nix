@@ -1,6 +1,6 @@
-{ config, pkgs }:
+{ config, lib }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -28,7 +28,7 @@ let
 
 in rec {
 
-  unitOptions = {
+  sharedOptions = {
 
     enable = mkOption {
       default = true;
@@ -40,6 +40,37 @@ in rec {
         from being started.
       '';
     };
+
+    requiredBy = mkOption {
+      default = [];
+      type = types.listOf types.string;
+      description = "Units that require (i.e. depend on and need to go down with) this unit.";
+    };
+
+    wantedBy = mkOption {
+      default = [];
+      type = types.listOf types.string;
+      description = "Units that want (i.e. depend on) this unit.";
+    };
+
+  };
+
+  concreteUnitOptions = sharedOptions // {
+
+    text = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Text of this systemd unit.";
+    };
+
+    unit = mkOption {
+      internal = true;
+      description = "The generated unit.";
+    };
+
+  };
+
+  commonUnitOptions = sharedOptions // {
 
     description = mkOption {
       default = "";
@@ -109,18 +140,6 @@ in rec {
       '';
     };
 
-    requiredBy = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      description = "Units that require (i.e. depend on and need to go down with) this unit.";
-    };
-
-    wantedBy = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      description = "Units that want (i.e. depend on) this unit.";
-    };
-
     unitConfig = mkOption {
       default = {};
       example = { RequiresMountsFor = "/data"; };
@@ -135,6 +154,7 @@ in rec {
 
     restartTriggers = mkOption {
       default = [];
+      type = types.listOf types.unspecified;
       description = ''
         An arbitrary list of items such as derivations.  If any item
         in the list changes between reconfigurations, the service will
@@ -145,7 +165,7 @@ in rec {
   };
 
 
-  serviceOptions = unitOptions // {
+  serviceOptions = commonUnitOptions // {
 
     environment = mkOption {
       default = {};
@@ -236,6 +256,17 @@ in rec {
       '';
     };
 
+    reloadIfChanged = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether the service should be reloaded during a NixOS
+        configuration switch if its definition has changed.  If
+        enabled, the value of <option>restartIfChanged</option> is
+        ignored.
+      '';
+    };
+
     stopIfChanged = mkOption {
       type = types.bool;
       default = true;
@@ -268,7 +299,7 @@ in rec {
   };
 
 
-  socketOptions = unitOptions // {
+  socketOptions = commonUnitOptions // {
 
     listenStreams = mkOption {
       default = [];
@@ -295,7 +326,7 @@ in rec {
   };
 
 
-  timerOptions = unitOptions // {
+  timerOptions = commonUnitOptions // {
 
     timerConfig = mkOption {
       default = {};
@@ -314,7 +345,24 @@ in rec {
   };
 
 
-  mountOptions = unitOptions // {
+  pathOptions = commonUnitOptions // {
+
+    pathConfig = mkOption {
+      default = {};
+      example = { PathChanged = "/some/path"; Unit = "changedpath.service"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Path]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.path</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
+
+  mountOptions = commonUnitOptions // {
 
     what = mkOption {
       example = "/dev/sda1";
@@ -358,7 +406,7 @@ in rec {
     };
   };
 
-  automountOptions = unitOptions // {
+  automountOptions = commonUnitOptions // {
 
     where = mkOption {
       example = "/mnt";
@@ -381,5 +429,7 @@ in rec {
       '';
     };
   };
+
+  targetOptions = commonUnitOptions;
 
 }

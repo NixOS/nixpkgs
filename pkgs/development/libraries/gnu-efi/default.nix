@@ -19,8 +19,8 @@ let version = "3.0u"; in stdenv.mkDerivation {
     platforms = ["x86_64-linux" "i686-linux"];
   };
 
-  buildFlags = [
-    "CC=cc"
+  makeFlags = [
+    "CC=gcc"
     "AS=as"
     "LD=ld"
     "AR=ar"
@@ -29,12 +29,12 @@ let version = "3.0u"; in stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    make $buildFlags
-    make $buildFlags -C apps clean all
+    make $makeFlags
+    make $makeFlags -C apps clean all
   '';
 
   installPhase = ''
-    make PREFIX="$out" install
+    make PREFIX="$out" $makeFlags install
     mkdir -pv $out/share/gnu-efi
     install -D -m644 apps/*.efi $out/share/gnu-efi
   '';

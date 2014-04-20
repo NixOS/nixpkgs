@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL mesa SDL_image freealut openal libvorbis pkgconfig ];
 
+  postPatch = ''
+    sed -e '1i#include <unistd.h>' -i $(find . -name '*.c' -o -name '*.cpp')
+  '';
+
   meta = {
     homepage = http://www.ultimatestunts.nl/;
     description = "Remake of the popular racing DOS-game Stunts";

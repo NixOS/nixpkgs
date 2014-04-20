@@ -1,34 +1,25 @@
-{stdenv, fetchurl, ocaml}:
-
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "0.9.2";
-in
+{stdenv, fetchurl, ocaml, findlib, ocaml_oasis}:
 
 stdenv.mkDerivation {
-  name = "ocaml-react-${version}";
+  name = "ocaml-react-0.9.4";
 
   src = fetchurl {
-    url = "http://erratique.ch/software/react/releases/react-${version}.tbz";
-    sha256 = "0fiaxzfxv8pc82d31jz85zryz06k84is0l3sn5g0di5mpc5falxr";
+    url = http://github.com/dbuenzli/react/archive/v0.9.4.tar.gz;
+    sha256 = "16k0kx93kd45s7pigkzvirfsbr22xhby0y88y86p473qxzc6ngrm";
   };
 
-  buildInputs = [ocaml];
+  buildInputs = [ocaml findlib ocaml_oasis];
 
-  buildCommand = ''
-    export INSTALLDIR=$out/lib/ocaml/${ocaml_version}/site-lib/react
-    tar xjf $src
-    cd react-*
-    substituteInPlace src/META --replace '+react' $INSTALLDIR
-    chmod +x build
-    ./build 
-    ./build install
-  '';
+  createFindlibDestdir = true;
+
+  configurePhase = "oasis setup && ocaml setup.ml -configure --prefix $out";
+  buildPhase     = "ocaml setup.ml -build";
+  installPhase   = "ocaml setup.ml -install";
 
   meta = {
     homepage = http://erratique.ch/software/react;
     description = "Applicative events and signals for OCaml";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     platforms = ocaml.meta.platforms;
     maintainers = [
       stdenv.lib.maintainers.z77z

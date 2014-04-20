@@ -24,6 +24,8 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "terminfo" ];
 
+  patches = [ ./rxvt-unicode-9.06-font-width.patch ];
+
   preConfigure =
     ''
       mkdir -p $terminfo/share/terminfo
@@ -41,5 +43,6 @@ stdenv.mkDerivation (rec {
   meta = {
     description = "A clone of the well-known terminal emulator rxvt";
     homepage = "http://software.schmorp.de/pkg/rxvt-unicode.html";
+    maintainers = stdenv.lib.maintainers.mornfall;
   };
 })

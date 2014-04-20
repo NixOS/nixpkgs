@@ -6,6 +6,7 @@ expHash=
 hashType=$NIX_HASH_ALGO
 deepClone=$NIX_PREFETCH_GIT_DEEP_CLONE
 leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
+fetchSubmodules=
 builder=
 
 if test -n "$deepClone"; then
@@ -33,6 +34,7 @@ for arg; do
       --deepClone) deepClone=true;;
       --no-deepClone) deepClone=false;;
       --leave-dotGit) leaveDotGit=true;;
+      --fetch-submodules) fetchSubmodules=true;;
       --builder) builder=true;;
       *)
           argi=$(($argi + 1))
@@ -66,6 +68,7 @@ Options:
       --deepClone     Clone submodules recursively.
       --no-deepClone  Do not clone submodules.
       --leave-dotGit  Keep the .git directories.
+      --fetch-submodules Fetch submodules.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
 "
     exit 1
@@ -178,7 +181,9 @@ clone(){
     )
 
     # Checkout linked sources.
-    init_submodules;
+    if test -n "$fetchSubmodules"; then
+        init_submodules;
+    fi
 
     if [ -z "$builder" -a -f .topdeps ]; then
 	if tg help 2>&1 > /dev/null

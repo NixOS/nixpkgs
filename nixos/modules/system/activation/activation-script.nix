@@ -1,7 +1,7 @@
 # generate the script used to activate the configuration.
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

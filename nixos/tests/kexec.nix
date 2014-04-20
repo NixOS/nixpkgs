@@ -1,8 +1,6 @@
 # Test whether fast reboots via kexec work.
 
-{ pkgs, ... }:
-
-{
+import ./make-test.nix  {
 
   machine = { config, pkgs, ... }:
     { virtualisation.vlans = [ ]; };

@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ mtl ];
   buildTools = [ perl ];
+  patches = [ ./adapt-crazy-perl-regex-for-cpp-4.8.0.patch ];
   meta = {
     homepage = "http://www.haskell.org/happy/";
     description = "Happy is a parser generator for Haskell";

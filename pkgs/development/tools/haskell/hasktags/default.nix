@@ -1,13 +1,12 @@
-{ cabal, filepath, HUnit, json }:
+{ cabal, filepath, json, utf8String }:
 
 cabal.mkDerivation (self: {
   pname = "hasktags";
-  version = "0.68.6";
-  sha256 = "1r5vnn9n2jva1ccjv8vnp3j0z3bh3xsi7yjv9llnvj0jw308aq9r";
+  version = "0.68.7";
+  sha256 = "0z98ha2xjc6npcyn15arp6h6ad87bs4acdhd1rnqrsy4lc0lny04";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ filepath json ];
-  testDepends = [ filepath HUnit json ];
+  buildDepends = [ filepath json utf8String ];
   meta = {
     homepage = "http://github.com/MarcWeber/hasktags";
     description = "Produces ctags \"tags\" and etags \"TAGS\" files for Haskell programs";

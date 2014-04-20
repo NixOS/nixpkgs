@@ -17,13 +17,13 @@ assert javahlBindings -> jdk != null && perl != null;
 
 stdenv.mkDerivation rec {
 
-  version = "1.8.5";
+  version = "1.8.8";
 
   name = "subversion-${version}";
 
   src = fetchurl {
     url = "mirror://apache/subversion/${name}.tar.bz2";
-    sha256 = "0r3mxrrlr1l9s2nh829bf0qmrfaafkq3di6ndr10j76sxkqjnlpx";
+    sha256 = "1cqxwydjidyf59y4lgkxl7bra1sy28abqm2mi5971qjsv0f96s8m";
   };
 
   buildInputs = [ zlib apr aprutil sqlite ]
@@ -77,6 +77,6 @@ stdenv.mkDerivation rec {
     description = "A version control system intended to be a compelling replacement for CVS in the open source community";
     homepage = http://subversion.apache.org/;
     maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

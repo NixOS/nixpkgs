@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -29,7 +29,7 @@ in
         start =
           ''
             # Set GTK_PATH so that GTK+ can find the theme engines.
-            export GTK_PATH=${config.system.path}/lib/gtk-2.0
+            export GTK_PATH="${config.system.path}/lib/gtk-2.0:${config.system.path}/lib/gtk-3.0"
 
             # Set GTK_DATA_PREFIX so that GTK+ can find the Xfce themes.
             export GTK_DATA_PREFIX=${config.system.path}
@@ -81,7 +81,7 @@ in
     environment.pathsToLink =
       [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" "/share/gtksourceview-2.0" ];
 
-    environment.variables.GIO_EXTRA_MODULES = "${pkgs.xfce.gvfs}/lib/gio/modules";
+    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;

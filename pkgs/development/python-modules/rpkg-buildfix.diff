@@ -1,0 +1,11 @@
+--- a/setup.py	2012-03-12 23:26:16.000000000 +0100
++++ b/setup.py	2014-02-04 14:52:02.335856975 +0100
+@@ -14,6 +14,6 @@
+     package_dir = {'': 'src'},
+     packages = ['pyrpkg'],
+     scripts = ['src/rpkg'],
+-    data_files = [('/etc/bash_completion.d', ['src/rpkg.bash']),
+-                  ('/etc/rpkg', ['src/rpkg.conf'])],
++    data_files = [('etc/bash_completion.d', ['src/rpkg.bash']),
++                  ('etc/rpkg', ['src/rpkg.conf'])],
+ )

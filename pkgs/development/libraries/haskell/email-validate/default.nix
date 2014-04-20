@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "email-validate";
-  version = "1.0.0";
-  sha256 = "0sj1cvn9ap0m8d4cg4cqavvmkd74vp86lyyra9g6f17815sxdbsg";
+  version = "2.0.1";
+  sha256 = "1qxvcm8xiyz50ganzic8cm8nxswq361i80yi939y3n89dk067lzj";
   buildDepends = [ attoparsec ];
   testDepends = [
     HUnit QuickCheck testFramework testFrameworkHunit

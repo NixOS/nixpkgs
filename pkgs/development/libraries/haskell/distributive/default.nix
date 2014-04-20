@@ -4,13 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "distributive";
-  version = "0.4";
-  sha256 = "11zln3h7pflv1f6jfma5b505p4wnr9xrs711mhh3a8xi20n4r318";
+  version = "0.4.3.1";
+  sha256 = "17ny7nlxg6x08f88dyl15wsdhgi0cgafxdsl5wdw5vv6y0jsrx27";
   buildDepends = [ tagged transformers transformersCompat ];
   testDepends = [ doctest filepath ];
   meta = {
     homepage = "http://github.com/ekmett/distributive/";
-    description = "Haskell 98 Distributive functors -- Dual to Traversable";
+    description = "Distributive functors -- Dual to Traversable";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonPackage, mutagen, pygtk, pygobject
+{ stdenv, fetchurl, python, buildPythonPackage, mutagen, pygtk, pygobject, intltool
 , pythonDBus, gst_python, withGstPlugins ? false, gst_plugins_base ? null
 , gst_plugins_good ? null, gst_plugins_ugly ? null, gst_plugins_bad ? null }:
 
@@ -18,7 +18,7 @@ buildPythonPackage {
   # XXX, tests fail
   doCheck = false;
 
-  src = [
+  srcs = [
     (fetchurl {
       url = "https://bitbucket.org/lazka/quodlibet-files/raw/default/releases/quodlibet-${version}.tar.gz";
       sha256 = "0ilasi4b0ay8r6v6ba209wsm80fq2nmzigzc5kvphrk71jwypx6z";
@@ -27,14 +27,21 @@ buildPythonPackage {
       url = "https://bitbucket.org/lazka/quodlibet-files/raw/default/releases/quodlibet-plugins-${version}.tar.gz";
       sha256 = "1rv08rhdjad8sjhplqsspcf4vkazgkxyshsqmbfbrrk5kvv57ybc";
      })
-  ];       
+  ];
+
+  preConfigure = ''
+    # TODO: for now don't a apply gdist overrides, will be needed for shipping icons, gtk, etc
+    sed -i /distclass/d setup.py
+  '';
 
   sourceRoot = "quodlibet-${version}";
+
   postUnpack = ''
     # the patch searches for plugins in directory ../plugins
     # so link the appropriate directory there
     ln -sf quodlibet-plugins-${version} plugins
   '';
+
   patches = [ ./quodlibet-package-plugins.patch ];
 
   buildInputs = stdenv.lib.optionals withGstPlugins [
@@ -42,18 +49,13 @@ buildPythonPackage {
   ];
 
   propagatedBuildInputs = [
-    mutagen pygtk pygobject pythonDBus gst_python
+    mutagen pygtk pygobject pythonDBus gst_python intltool
   ];
 
   postInstall = stdenv.lib.optionalString withGstPlugins ''
     # Wrap quodlibet so it finds the GStreamer plug-ins
-    wrapProgram "$out/bin/quodlibet" --prefix                                 \
-      GST_PLUGIN_PATH ":"                                                     \
-      ${ stdenv.lib.concatStringsSep ":"
-         (map (s: s+"/lib/gstreamer-0.10")
-           (stdenv.lib.filter (s: s != null) [
-             gst_plugins_base gst_plugins_good gst_plugins_ugly gst_plugins_bad
-           ])) }
+    wrapProgram "$out/bin/quodlibet" --prefix \
+      GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"                                                     \
   '';
 
   meta = {

@@ -3,6 +3,8 @@
 # Suggested udev rules to be able to access the Logic device without being root:
 #   SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0925", ATTR{idProduct}=="3881", MODE="0666"
 #   SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="21a9", ATTR{idProduct}=="1001", MODE="0666"
+#
+# In NixOS, simply add this package to services.udev.packages.
 
 { stdenv, fetchurl, unzip, glib, libSM, libICE, gtk, libXext, libXft
 , fontconfig, libXrender, libXfixes, libX11, libXi, libXrandr, libXcursor
@@ -79,6 +81,10 @@ stdenv.mkDerivation rec {
     # Copy the generated .desktop file
     mkdir -p "$out/share/applications"
     cp "$desktopItem"/share/applications/* "$out/share/applications/"
+
+    # Install provided udev rules
+    mkdir -p "$out/etc/udev/rules.d"
+    cp Drivers/99-SaleaeLogic.rules "$out/etc/udev/rules.d/"
   '';
 
   meta = with stdenv.lib; {

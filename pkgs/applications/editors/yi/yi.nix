@@ -1,32 +1,30 @@
 { cabal, alex, binary, Cabal, cautiousFile, concreteTyperep
-, dataAccessor, dataAccessorMtl, dataAccessorTemplate, derive, Diff
-, dlist, dyre, filepath, fingertree, ghcPaths, glib, gtk, hashable
-, hint, HUnit, mtl, pango, parsec, pointedlist, pureMD5, QuickCheck
-, random, regexBase, regexTdfa, split, testFramework
-, testFrameworkHunit, time, uniplate, unixCompat
-, unorderedContainers, utf8String, vty, xdgBasedir
+, dataDefault, derive, Diff, dlist, dyre, filepath, fingertree
+, glib, gtk, hashable, hint, HUnit, lens, mtl, pango, parsec
+, pointedlist, QuickCheck, random, regexBase, regexTdfa, safe
+, split, tasty, tastyHunit, tastyQuickcheck, time, transformersBase
+, uniplate, unixCompat, unorderedContainers, utf8String, vty
+, xdgBasedir
 }:
 
 cabal.mkDerivation (self: {
   pname = "yi";
-  version = "0.7.0";
-  sha256 = "0mzcjgp12k5mxb37r6chxsk726b1qxds49ch656bpgrg7n22w2j1";
+  version = "0.8.1";
+  sha256 = "1hyqlydc0na9pkb3fkbp13c6vnp4f80z8237bvrv12wkk5syyn23";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    binary Cabal cautiousFile concreteTyperep dataAccessor
-    dataAccessorMtl dataAccessorTemplate derive Diff dlist dyre
-    filepath fingertree ghcPaths glib gtk hashable hint mtl pango
-    parsec pointedlist pureMD5 QuickCheck random regexBase regexTdfa
-    split time uniplate unixCompat unorderedContainers utf8String vty
-    xdgBasedir
+    binary Cabal cautiousFile concreteTyperep dataDefault derive Diff
+    dlist dyre filepath fingertree glib gtk hashable hint lens mtl
+    pango parsec pointedlist QuickCheck random regexBase regexTdfa safe
+    split time transformersBase uniplate unixCompat unorderedContainers
+    utf8String vty xdgBasedir
   ];
   testDepends = [
-    filepath HUnit QuickCheck testFramework testFrameworkHunit
+    filepath HUnit QuickCheck tasty tastyHunit tastyQuickcheck
   ];
   buildTools = [ alex ];
   configureFlags = "-fpango";
-  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "http://haskell.org/haskellwiki/Yi";

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, mesa_noglu, glib, gdk_pixbuf, xorg, libintlOrEmpty
-, pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland }:
+, pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland
+, gstreamerSupport ? true, gst_all_1 }:
 
 let
   ver_maj = "1.16";
@@ -22,13 +23,15 @@ stdenv.mkDerivation rec {
     "--enable-kms-egl-platform"
     "--enable-wayland-egl-platform"
     "--enable-wayland-egl-server"
-  ];
+  ] ++ stdenv.lib.optional gstreamerSupport "--enable-cogl-gst";
 
   propagatedBuildInputs = with xorg; [
       glib gdk_pixbuf gobjectIntrospection
       mesa_noglu libXrandr libXfixes libXcomposite libXdamage wayland
     ]
-    ++ libintlOrEmpty;
+    ++ libintlOrEmpty
+    ++ stdenv.lib.optionals gstreamerSupport [ gst_all_1.gstreamer
+                                               gst_all_1.gst-plugins-base ];
 
   buildInputs = stdenv.lib.optionals pangoSupport [ pango cairo ];
 

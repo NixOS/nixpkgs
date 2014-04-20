@@ -1,5 +1,5 @@
 { stdenv, python, buildEnv, makeWrapper, recursivePthLoader, extraLibs ? [], postBuild ? ""
-, stdLibs ? stdenv.lib.attrValues python.modules
+, stdLibs ? stdenv.lib.attrValues python.modules, ignoreCollisions ? false
 }:
 
 # Create a python executable that knows about additional packages.
@@ -7,7 +7,8 @@
 (buildEnv {
   name = "python-${python.version}-wrapper";
   paths = stdenv.lib.filter (x : x ? pythonPath) (stdenv.lib.closePropagation extraLibs) ++ stdLibs ++ [ python recursivePthLoader ];
-  ignoreCollisions = false;
+
+  inherit ignoreCollisions;
 
   postBuild = ''
     . "${makeWrapper}/nix-support/setup-hook"

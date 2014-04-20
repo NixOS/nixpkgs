@@ -30,11 +30,11 @@ stdenv.mkDerivation {
       url = "mirror://gnu/gcc/gcc-${version}/gcc-fortran-${version}.tar.bz2";
       sha256 = "013yqiqhdavgxzjryvylgf3lcnknmw89fx41jf2v4899srn0bhkg";
     });
-    
+
   patches =
-    [./pass-cxxcpp.patch]
+    [./pass-cxxcpp.patch ./siginfo_t.patch]
     ++ optional noSysDirs [./no-sys-dirs.patch];
-    
+
   inherit noSysDirs profiledCompiler staticCompiler;
 
   buildInputs = [gmp mpfr texinfo];

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "reactive-banana-wx";
-  version = "0.7.1.0";
-  sha256 = "06hkb8v6rjpw95vf16xh547igxxzddr6wpjiwhqwpwhz2alavk2v";
+  version = "0.8.0.0";
+  sha256 = "0qfd839nm2ppjhhhnn6s1hbx1mnrzjqx450p4jadsrs1y2403c9n";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ cabalMacosx reactiveBanana wx wxcore ];

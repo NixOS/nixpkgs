@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "happstack-server";
-  version = "7.3.2";
-  sha256 = "11wnnadxy1j786p81nkvd28vgpjjhm1amy34k5r0ynz0nkanfp3z";
+  version = "7.3.4";
+  sha256 = "1k9614f0x5ravblb00xiy8z2nqi4k9jhp2vzm1vdpx9q8sg47h1p";
   buildDepends = [
     base64Bytestring blazeHtml extensibleExceptions filepath hslogger
     html monadControl mtl network parsec sendfile syb systemFilepath
@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     utf8String xhtml zlib
   ];
   testDepends = [ HUnit parsec zlib ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "http://happstack.com";

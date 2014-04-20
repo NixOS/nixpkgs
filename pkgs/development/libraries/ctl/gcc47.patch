@@ -1,0 +1,15 @@
+ https://bugs.gentoo.org/426368
+ 
+ IlmCtl/CtlInterpreter.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/IlmCtl/CtlInterpreter.cpp
++++ b/IlmCtl/CtlInterpreter.cpp
+@@ -64,6 +64,7 @@
+ #include <fstream>
+ #include <algorithm>
+ #include <cassert>
++#include <unistd.h>
+ 
+ #ifdef WIN32
+     #include <io.h>

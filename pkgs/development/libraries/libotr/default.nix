@@ -1,26 +1,22 @@
-{stdenv, fetchurl, libgcrypt}:
+{stdenv, fetchgit, libgcrypt, autoconf, automake, libtool}:
 
 stdenv.mkDerivation rec {
-  name = "libotr-4.0.0";
-  src = fetchurl {
-    urls = [
-      "http://www.cypherpunks.ca/otr/${name}.tar.gz"
-      # The site is down at the time of updating to 4.0.0, so I add this url
-      http://ftp.de.debian.org/debian/pool/main/libo/libotr/libotr_4.0.0.orig.tar.gz
-    ];
-    sha256 = "3f911994409898e74527730745ef35ed75c352c695a1822a677a34b2cf0293b4";
+  name = "libotr-20130821-git-f0f8a2";
+  src = fetchgit {
+    url = "http://git.code.sf.net/p/otr/libotr";
+    rev = "f0f8a2";
+    sha256 = "08019r8bnk8f4yx6574jdz217p283ry7dmpqcad2d87yhkdmc3mm";
   };
-
-  # Crashes without it, still not accepted upstream.
-  # Discussed in https://github.com/cryptodotis/irssi-otr/issues/21
-  patches = [ ./0001-Fix-pass-opdata-when-sending-message-fragment.patch ];
 
   NIX_LDFLAGS = "-lssp";
 
-  propagatedBuildInputs = [ libgcrypt ];
+  propagatedBuildInputs = [ libgcrypt autoconf automake libtool ];
+
+  preConfigure = "autoreconf -vfi";
 
   meta = {
     homepage = "http://www.cypherpunks.ca/otr/";
+    repositories.git = git://git.code.sf.net/p/otr/libotr;
     license = "LGPLv2.1";
     description = "Library for Off-The-Record Messaging";
   };

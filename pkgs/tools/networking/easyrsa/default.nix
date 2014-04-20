@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
 
   # Make sane defaults and patch default config vars
   postInstall = ''
-    for prog in $(find "$out/share/easy-rsa" -executable); do
+    cp $out/share/easy-rsa/openssl-1.0.0.cnf $out/share/easy-rsa/openssl.cnf
+    for prog in $(find "$out/share/easy-rsa" -executable -type f); do
       makeWrapper "$prog" "$out/bin/$(basename $prog)" \
         --set EASY_RSA "$out/share/easy-rsa" \
         --set OPENSSL "${openssl}/bin/openssl" \

@@ -1,11 +1,11 @@
 { fetchurl, stdenv, pth, libgpgerror }:
 
 stdenv.mkDerivation rec {
-  name = "libassuan-2.0.3";
+  name = "libassuan-2.1.1";
 
   src = fetchurl {
     url = "mirror://gnupg/libassuan/${name}.tar.bz2";
-    sha256 = "06xckkvxxlx7cj77803m8x58gxksap4k8yhspc5cqsy7fhinimds";
+    sha256 = "1783nb0b6nr9yjhb5wfh8ykc5w89f4anppz1kz9913mqg5vxdqi3";
   };
 
   propagatedBuildInputs = [ libgpgerror pth ];

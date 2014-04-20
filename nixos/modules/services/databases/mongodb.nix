@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -39,6 +39,7 @@ in
 
       package = mkOption {
         default = pkgs.mongodb;
+        type = types.package;
         description = "
           Which MongoDB derivation to use.
         ";

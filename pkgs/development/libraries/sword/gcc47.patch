@@ -1,0 +1,35 @@
+https://bugs.gentoo.org/419505
+
+
+--- a/include/multimapwdef.h
++++ b/include/multimapwdef.h
+@@ -12,21 +12,21 @@ class multimapwithdefault : public std::multimap<Key, T, Compare> {
+ public:
+ 	typedef std::pair<const Key, T> value_type;
+ 	T& getWithDefault(const Key& k, const T& defaultValue) {
+-		if (find(k) == this->end()) {
+-			insert(value_type(k, defaultValue));
++		if (this->find(k) == this->end()) {
++			this->insert(value_type(k, defaultValue));
+ 		}
+-		return (*(find(k))).second;
++		return (*(this->find(k))).second;
+ 	}
+ 
+ 	T& operator[](const Key& k) {
+-		if (find(k) == this->end()) {
+-			insert(value_type(k, T()));
++		if (this->find(k) == this->end()) {
++			this->insert(value_type(k, T()));
+ 		}
+-		return (*(find(k))).second;
++		return (*(this->find(k))).second;
+ 	}
+ 	bool has(const Key& k, const T &val) const {
+-		typename std::multimap<Key, T, Compare>::const_iterator start = lower_bound(k);
+-		typename std::multimap<Key, T, Compare>::const_iterator end = upper_bound(k);
++		typename std::multimap<Key, T, Compare>::const_iterator start = this->lower_bound(k);
++		typename std::multimap<Key, T, Compare>::const_iterator end = this->upper_bound(k);
+ 		for (; start!=end; start++) {
+ 			if (start->second == val)
+ 				return true;

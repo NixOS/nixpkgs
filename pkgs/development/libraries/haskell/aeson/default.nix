@@ -1,21 +1,21 @@
-{ cabal, attoparsec, blazeBuilder, deepseq, dlist, hashable, mtl
-, QuickCheck, syb, testFramework, testFrameworkQuickcheck2, text
-, time, unorderedContainers, vector
+{ cabal, attoparsec, blazeBuilder, deepseq, dlist, hashable, HUnit
+, mtl, QuickCheck, scientific, syb, testFramework
+, testFrameworkHunit, testFrameworkQuickcheck2, text, time
+, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "aeson";
-  version = "0.6.2.1";
-  sha256 = "00fa13qr38s4c0fwfvpks3x3sb21kh71cv1v0x2zqg0adnaydknb";
+  version = "0.7.0.2";
+  sha256 = "0li89xs4dlwc3ijs6w5gabjibj09x12qgxhzp7mch6gxjxwd3ihj";
   buildDepends = [
-    attoparsec blazeBuilder deepseq dlist hashable mtl syb text time
-    unorderedContainers vector
+    attoparsec blazeBuilder deepseq dlist hashable mtl scientific syb
+    text time unorderedContainers vector
   ];
   testDepends = [
-    attoparsec QuickCheck testFramework testFrameworkQuickcheck2 text
-    time unorderedContainers vector
+    attoparsec HUnit QuickCheck testFramework testFrameworkHunit
+    testFrameworkQuickcheck2 text time unorderedContainers vector
   ];
-  doCheck = false;
   meta = {
     homepage = "https://github.com/bos/aeson";
     description = "Fast JSON parsing and encoding";

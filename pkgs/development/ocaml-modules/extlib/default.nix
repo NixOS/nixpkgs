@@ -1,21 +1,21 @@
 {stdenv, fetchurl, ocaml, findlib}:
 
 stdenv.mkDerivation {
-  name = "ocaml-extlib-1.5.3";
+  name = "ocaml-extlib-1.6.1";
 
   src = fetchurl {
-    url = http://ocaml-extlib.googlecode.com/files/extlib-1.5.3.tar.gz;
-    sha256 = "c095eef4202a8614ff1474d4c08c50c32d6ca82d1015387785cf03d5913ec021";
+    url = http://ocaml-extlib.googlecode.com/files/extlib-1.6.1.tar.gz;
+    sha256 = "1jmfj2w0f3ap0swz8k3qqmrl6x2y4gkmg88vv024xnmliiiv7m48";
   };
 
   buildInputs = [ocaml findlib];
 
   createFindlibDestdir = true;
 
-  buildPhase = ''
-    make all
-    make opt
-  '';
+  configurePhase = "true";      # Skip configure
+  # De facto, option minimal=1 seems to be the default.  See the README.
+  buildPhase     = "make minimal=1 build";
+  installPhase   = "make minimal=1 install";
 
   meta = {
     homepage = http://code.google.com/p/ocaml-extlib/;

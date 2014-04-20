@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, gtk, glib, libxml2
+{ stdenv, fetchurl, pkgconfig, dbus_glib, gnome3, glib, libxml2
 , intltool, polkit, orbit }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0k3q9nh53yhc9qxf1zaicz4sk8p3kzq4ndjdsgpaa2db0ccbj4hr";
   };
 
-  buildInputs = [ libxml2 polkit gtk orbit ];
+  buildInputs = [ libxml2 polkit gnome3.gtk orbit ];
   propagatedBuildInputs = [ glib dbus_glib  ];
   nativeBuildInputs = [ pkgconfig intltool ];
 

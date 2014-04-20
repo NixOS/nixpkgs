@@ -5,18 +5,18 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-2.1.1";
+  name = "ffmpeg-2.2.1";
 
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "1qnspbpwa6cflsb6mkm84ay4nfx60ism6d7lgvnasidck9dmxydy";
+    sha256 = "153kfk8rzrfxx930rrk417b2m695dvy47v4hci3nd49iggx9jzz1";
   };
 
   mp3Support = config.ffmpeg.mp3 or true;
   speexSupport = config.ffmpeg.speex or true;
   theoraSupport = config.ffmpeg.theora or true;
   vorbisSupport = config.ffmpeg.vorbis or true;
-  vpxSupport = config.ffmpeg.vpx or false;
+  vpxSupport = config.ffmpeg.vpx or true;
   x264Support = config.ffmpeg.x264 or true;
   xvidSupport = config.ffmpeg.xvid or true;
   opusSupport = config.ffmpeg.opus or true;

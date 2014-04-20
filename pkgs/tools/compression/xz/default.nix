@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "xz-5.0.4";
+  name = "xz-5.0.5";
 
   src = fetchurl {
     url = "http://tukaani.org/xz/${name}.tar.bz2";
-    sha256 = "14nf55b47335aakswqk0kqv1qsh4269rnb757dmkkbd1sdhb1naw";
+    sha256 = "1404i59bp6rzxya0br1q9njdv32z4sggyfrkjr7vq695hk94hv0n";
   };
 
   doCheck = true;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
          bzip2.
       '';
 
-    licenses = [ "GPLv2+" "LGPLv2.1+" ];
+    license = [ "GPLv2+" "LGPLv2.1+" ];
     maintainers = with stdenv.lib.maintainers; [ sander ];
     platforms = stdenv.lib.platforms.all;
   };

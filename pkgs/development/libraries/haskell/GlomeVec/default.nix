@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "GlomeVec";
-  version = "0.1.2";
-  sha256 = "6023c11977bf16baf487235087e94f5a2f465e8403b8e40ab513e7879dd52639";
+  version = "0.2";
+  sha256 = "08hyiadkbkmcsd1g51xvxqzp6l94hnqqbz4r6yk0zk29iawq8610";
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Glome";
     description = "Simple 3D vector library";

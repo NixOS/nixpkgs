@@ -1,18 +1,20 @@
-{ cabal, hspec, liftedBase, mmorph, monadControl, mtl, QuickCheck
-, resourcet, text, transformers, transformersBase, void
+{ cabal, exceptions, hspec, liftedBase, mmorph, monadControl, mtl
+, QuickCheck, resourcet, text, textStreamDecode, transformers
+, transformersBase, void
 }:
 
 cabal.mkDerivation (self: {
   pname = "conduit";
-  version = "1.0.10";
-  sha256 = "12vqh747rdldw3n42cxzd77rzb66129dc690n23q5xy7pbhzilfp";
+  version = "1.1.0";
+  sha256 = "17y8fnvl9s3676sslhc04abs4zqh90l2rdcazxglv0sfrfsdgwnq";
   buildDepends = [
-    liftedBase mmorph monadControl mtl resourcet text transformers
-    transformersBase void
+    exceptions liftedBase mmorph monadControl mtl resourcet text
+    textStreamDecode transformers transformersBase void
   ];
   testDepends = [
     hspec mtl QuickCheck resourcet text transformers void
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Streaming data processing library";

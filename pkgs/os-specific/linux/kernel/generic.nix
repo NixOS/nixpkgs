@@ -1,4 +1,4 @@
-{ stdenv, perl, linuxManualConfig
+{ stdenv, perl, buildLinux
 
 , # The kernel source tarball.
   src
@@ -97,7 +97,7 @@ let
     installPhase = "mv .config $out";
   };
 
-  kernel = linuxManualConfig {
+  kernel = buildLinux {
     inherit version modDirVersion src kernelPatches;
 
     configfile = configfile.nativeDrv or configfile;
@@ -120,6 +120,8 @@ let
     features = lib.fold (x: y: (x.features or {}) // y) features kernelPatches;
 
     meta = kernel.meta // extraMeta;
+
+    passthru = kernel.passthru // (removeAttrs passthru [ "passthru" "meta" ]);
   };
 
   nativeDrv = lib.addPassthru kernel.nativeDrv passthru;

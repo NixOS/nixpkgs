@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, gtk3, glibmm, cairomm, pangomm, atkmm }:
 
 let
-  ver_maj = "3.10";
-  ver_min = "1";
+  ver_maj = "3.11"; # unstable version, but ATM no stable builds with gtk-3.12 and this is the version used in GNOME-3.12 "stable"
+  ver_min = "9";
 in
 stdenv.mkDerivation rec {
   name = "gtkmm-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtkmm/${ver_maj}/${name}.tar.xz";
-    sha256 = "0f1587pc6x8hn268vqj5zr4dvyisj5zd9zpsfxyfm1pkbjmcv9bg";
+    sha256 = "04yji82prijlwpd3blx0am1ikjy7y7ih7jd628dywdjbbfq42920";
   };
 
   nativeBuildInputs = [ pkgconfig ];

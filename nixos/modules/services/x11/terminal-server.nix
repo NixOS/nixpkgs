@@ -5,9 +5,9 @@
 # not, a X server (Xvfb) is started for that user.  The Xvfb instances
 # persist across VNC sessions.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -27,7 +27,7 @@ in
   config = {
 
     services.xserver.enable = true;
-    services.xserver.videoDrivers = [];
+    hardware.opengl.videoDrivers = [];
 
     # Enable KDM.  Any display manager will do as long as it supports XDMCP.
     services.xserver.displayManager.kdm.enable = true;

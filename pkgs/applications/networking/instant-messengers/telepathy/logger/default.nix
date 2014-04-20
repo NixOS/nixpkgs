@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dbus_glib, libxml2, sqlite, telepathy_glib, pkgconfig
-, intltool, libxslt }:
+, intltool, libxslt, gobjectIntrospection, dbus_libs }:
 
 stdenv.mkDerivation rec {
   project = "telepathy-logger";
@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "18i00l8lnp5dghqmgmpxnn0is2a20pkisxy0sb78hnd2dz0z6xnl";
   };
 
-  buildInputs = [ dbus_glib libxml2 sqlite telepathy_glib pkgconfig intltool ];
+  NIX_CFLAGS_COMPILE = "-I${dbus_glib}/include/dbus-1.0 -I${dbus_libs}/include/dbus-1.0";
+
+  buildInputs = [ dbus_glib libxml2 sqlite telepathy_glib pkgconfig intltool
+                  gobjectIntrospection dbus_libs ];
 
   nativeBuildInputs = [ libxslt ];
 

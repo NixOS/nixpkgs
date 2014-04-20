@@ -7,9 +7,9 @@
 # the VM in the host.  On the other hand, the root filesystem is a
 # read/writable disk image persistent across VM reboots.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -386,8 +386,7 @@ in
 
     # When building a regular system configuration, override whatever
     # video driver the host uses.
-    services.xserver.videoDriver = mkVMOverride null;
-    services.xserver.videoDrivers = mkVMOverride [ "vesa" ];
+    hardware.opengl.videoDrivers = mkVMOverride [ "vesa" ];
     services.xserver.defaultDepth = mkVMOverride 0;
     services.xserver.resolutions = mkVMOverride [ { x = 1024; y = 768; } ];
     services.xserver.monitorSection =
@@ -399,6 +398,11 @@ in
 
     # Wireless won't work in the VM.
     networking.wireless.enable = mkVMOverride false;
+
+    # Speed up booting by not waiting for ARP.
+    networking.dhcpcd.extraConfig = "noarp";
+
+    networking.usePredictableInterfaceNames = false;
 
     system.requiredKernelConfig = with config.lib.kernelConfig;
       [ (isEnabled "VIRTIO_BLK")

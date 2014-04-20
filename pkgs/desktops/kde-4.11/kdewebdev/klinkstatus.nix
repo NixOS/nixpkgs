@@ -1,8 +1,8 @@
-{ kde, kdelibs, libxml2, libxslt, kdepimlibs, htmlTidy, boost, ruby18 }:
+{ kde, kdelibs, libxml2, libxslt, kdepimlibs, htmlTidy, boost }:
 
 kde {
 
-  buildInputs = [ kdelibs kdepimlibs ruby18 htmlTidy boost ];
+  buildInputs = [ kdelibs kdepimlibs htmlTidy boost ];
 
   meta = {
     description = "A KDE link checker";

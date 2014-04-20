@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
 
@@ -9,11 +9,6 @@ with pkgs.lib;
     environment.etc =
       [ { source = "${pkgs.cacert}/etc/ca-bundle.crt";
           target = "ssl/certs/ca-bundle.crt";
-        }
-
-        # Backward compatibility; may remove at some point.
-        { source = "${pkgs.cacert}/etc/ca-bundle.crt";
-          target = "ca-bundle.crt";
         }
       ];
 

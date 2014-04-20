@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ binary mtl ];
   testDepends = [ binary mtl ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     description = "Library and tool for parsing .eventlog files from GHC";

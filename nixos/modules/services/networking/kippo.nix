@@ -6,8 +6,8 @@
 #      iptables -t nat -A PREROUTING -i IN_IFACE -p tcp --dport 22 -j REDIRECT --to-port 2222'';
 #
 # Lastly: use this service at your own risk. I am working on a way to run this inside a VM.
-{ pkgs, config, ... }:
-with pkgs.lib;
+{ config, lib, pkgs, ... }:
+with lib;
 let
   cfg = config.services.kippo;
 in
@@ -76,8 +76,9 @@ rec {
     users.extraUsers = singleton {
       name = "kippo";
       description = "kippo web server privilege separation user";
+      uid = 108; # why does config.ids.uids.kippo give an error?
     };
-    users.extraGroups = singleton { name = "kippo"; };
+    users.extraGroups = singleton { name = "kippo";gid=108; };
 
     systemd.services.kippo = with pkgs; {
       description = "Kippo Web Server";

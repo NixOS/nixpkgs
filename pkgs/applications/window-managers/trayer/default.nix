@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
 
     description = "A lightweight GTK2-based systray for UNIX desktop";
 
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
-
     platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     tar xf $src -C $out/include --strip-components=1 ${pkgid}/boost
   '';
 
+  preferLocalBuild = true;
+
   meta = {
     homepage = "http://boost.org/";
     description = "Boost C++ Library Collection";

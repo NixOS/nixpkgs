@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig icu clucene_core curl ];
 
   # because curl/types.h disappeared since at least curl 7.21.7
-  patches = [ ./dont_include_curl_types_h.patch ];
+  patches = [ ./dont_include_curl_types_h.patch ./gcc47.patch ];
 
   prePatch = ''
     patchShebangs .;

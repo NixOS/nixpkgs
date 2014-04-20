@@ -14,7 +14,7 @@ fail() {
     # in an interactive shell.
     cat <<EOF
 
-An error occured in stage 1 of the boot process, which must mount the
+An error occurred in stage 1 of the boot process, which must mount the
 root filesystem on \`$targetRoot' and then start stage 2.  Press one
 of the following keys:
 
@@ -138,8 +138,6 @@ ln -sfn @udevRules@ /etc/udev/rules.d
 mkdir -p /dev/.mdadm
 systemd-udevd --daemon
 udevadm trigger --action=add
-udevadm settle || true
-modprobe scsi_wait_scan || true
 udevadm settle || true
 
 
@@ -320,6 +318,10 @@ while read -u 3 mountPoint; do
         echo -n "waiting for device $device to appear..."
         for try in $(seq 1 20); do
             sleep 1
+            # also re-try lvm activation now that new block devices might have appeared
+            lvm vgchange -ay
+            # and tell udev to create nodes for the new LVs
+            udevadm trigger --action=add
             if test -e $device; then break; fi
             echo -n "."
         done

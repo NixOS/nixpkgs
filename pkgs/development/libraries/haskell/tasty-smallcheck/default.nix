@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tasty-smallcheck";
-  version = "0.2";
-  sha256 = "1xw0l1bikwavyq7s8q71a92x87mg7z65mk32nn5qx0zxwqsfb5l4";
+  version = "0.8";
+  sha256 = "0c4ccmhql118j4dlvy5cmrnma454b0rdv1wq2ds6xhpdhx20h1br";
   buildDepends = [ async smallcheck tagged tasty ];
   meta = {
     homepage = "https://github.com/feuerbach/tasty";

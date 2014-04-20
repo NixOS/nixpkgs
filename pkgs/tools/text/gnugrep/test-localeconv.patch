@@ -1,0 +1,18 @@
+--- grep-2.14/gnulib-tests/test-localeconv.c.orig	2013-02-15 18:41:50.213433059 +0000
++++ grep-2.14/gnulib-tests/test-localeconv.c	2013-02-15 18:50:33.964751303 +0000
+@@ -37,13 +37,13 @@
+ 
+     ASSERT (STREQ (l->decimal_point, "."));
+     ASSERT (STREQ (l->thousands_sep, ""));
+-#if !defined __FreeBSD__
++#if !(defined __FreeBSD__ || defined __sun)
+     ASSERT (STREQ (l->grouping, ""));
+ #endif
+ 
+     ASSERT (STREQ (l->mon_decimal_point, ""));
+     ASSERT (STREQ (l->mon_thousands_sep, ""));
+-#if !defined __FreeBSD__
++#if !(defined __FreeBSD__ || defined __sun)
+     ASSERT (STREQ (l->mon_grouping, ""));
+ #endif
+     ASSERT (STREQ (l->positive_sign, ""));

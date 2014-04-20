@@ -3,8 +3,11 @@
 rec {
   inherit (pkgs) stdenv;
 
+  icon = ./icon.xpm;
+
   zathura_core = callPackage ./core {
     gtk = pkgs.gtk3;
+    zathura_icon = icon;
   };
 
   zathura_pdf_poppler = callPackage ./pdf-poppler { };
@@ -19,7 +22,7 @@ rec {
 
   zathuraWrapper = stdenv.mkDerivation {
 
-    inherit zathura_core;
+    inherit zathura_core icon;
 
     name = "zathura-${zathura_core.version}";
 
@@ -29,9 +32,9 @@ rec {
       zathura_ps
     ];
 
-    icon = ./icon.xpm;
-
     builder = ./builder.sh;
+
+    preferLocalBuild = true;
 
     meta = {
       homepage = http://pwmt.org/projects/zathura/;

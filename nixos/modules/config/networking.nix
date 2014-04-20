@@ -1,8 +1,8 @@
 # /etc files related to networking, such as /etc/services.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 

@@ -1,17 +1,17 @@
-{ cabal, blazeBuilder, Cabal, happy, HUnit, mtl, QuickCheck
+{ cabal, alex, blazeBuilder, Cabal, happy, HUnit, mtl, QuickCheck
 , testFramework, testFrameworkHunit, utf8Light, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "language-javascript";
-  version = "0.5.8";
-  sha256 = "0slwj2bi9v7qjr6ai5dwql7fqgsh8k9k2bzlsq407iacsv0w3b9h";
-  buildDepends = [ blazeBuilder mtl utf8Light utf8String ];
+  version = "0.5.12";
+  sha256 = "1zzgjxqgfl6k2z4cwh0961ipfc5fminfdg2162g45h2nrv63mq05";
+  buildDepends = [ blazeBuilder mtl utf8String ];
   testDepends = [
     blazeBuilder Cabal HUnit mtl QuickCheck testFramework
     testFrameworkHunit utf8Light utf8String
   ];
-  buildTools = [ happy ];
+  buildTools = [ alex happy ];
   meta = {
     homepage = "http://github.com/alanz/language-javascript";
     description = "Parser for JavaScript";

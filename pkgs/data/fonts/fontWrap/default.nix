@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 	name = "wrapped-font-dir";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [ doInstall doForceShare doPropagate]);
+  preferLocalBuild = true;
 	meta = {
 		description = "
 		Just a wrapper to create fonts.dir and fonts.scale .

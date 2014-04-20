@@ -10,10 +10,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="mtr";
-    version="0.82";
+    version="0.85";
     name="${baseName}-${version}";
     url="ftp://ftp.bitwizard.nl/${baseName}/${name}.tar.gz";
-    hash="185nx4y6xn7vv6l3pbyc0ljmwfl4si4zszwad1jkbq1scb4mgd7k";
+    hash="1jqrz8mil3lraaqgc87dyvx8d4bf3vq232pfx9mksxnkbphp4qvd";
   };
 in
 rec {
@@ -25,9 +25,11 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
+  patches = [ ./edd425.patch ];
+
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
+  phaseNames = ["doConfigure" "doPatch" "doMakeInstall"];
+
   meta = {
     description = "A network diagnostics tool";
     maintainers = with a.lib.maintainers;
@@ -35,7 +37,7 @@ rec {
       raskin
     ];
     platforms = with a.lib.platforms;
-      linux;
+      unix;
     license = a.lib.licenses.gpl2;
   };
   passthru = {

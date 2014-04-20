@@ -26,15 +26,15 @@ with { inherit (stdenv.lib) optional optionals; };
 
 let
   result = {
-    libav_9   = libavFun  "9.10" "039hx7z8lmsiljy4wj87hk8lkxspbxbrjv43v3lc38cxfx0fdnw3";
-    libav_0_8 = libavFun "0.8.9" "0zzphhkpwsdp2k3ijqr8miqsp4vk7dgcrcrv06qda1s09qb82lag";
+    libav_9   = libavFun  "9.12"  "1wm0nf12c1p138y54jh71mvbpikrpk43zc9m2qhpjm9pgnagizk0";
+    libav_0_8 = libavFun "0.8.11" "0nhm0mzz2aj78sgmw9xf20a1mlgig78cv1nyhx4zrq7nvgqf8d2r";
   };
 
   libavFun = version : sha256 : stdenv.mkDerivation rec {
     name = "libav-${version}";
 
     src = fetchurl {
-      url = "http://libav.org/releases/${name}.tar.xz";
+      url = "${meta.homepage}/releases/${name}.tar.xz";
       inherit sha256;
     };
     configureFlags =
@@ -105,6 +105,7 @@ let
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;
       platforms = platforms.all;
+      maintainers = [ maintainers.vcunat ];
     };
   }; # libavFun
 

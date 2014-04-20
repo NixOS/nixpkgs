@@ -1,18 +1,20 @@
-{ cabal, binary, clock, dataBinaryIeee754, hspec, hspecExpectations
-, network, split, text, xml
+{ cabal, binary, clock, connection, dataBinaryIeee754, hspec
+, hspecExpectations, monadControl, network, split, text, xml
 }:
 
 cabal.mkDerivation (self: {
   pname = "amqp";
-  version = "0.7.0";
-  sha256 = "09zazmbdw8nphbjkmixn2dpwdgkjqjfbn6jv522ykvrcnsn35kc4";
+  version = "0.8.2";
+  sha256 = "0hl9x6kbxdv32014k1w34d84wl4ivpiyg1ikpjr0nr9bsg3wr0gf";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    binary clock dataBinaryIeee754 network split text xml
+    binary clock connection dataBinaryIeee754 monadControl network
+    split text xml
   ];
   testDepends = [
-    binary dataBinaryIeee754 hspec hspecExpectations network split text
+    binary clock connection dataBinaryIeee754 hspec hspecExpectations
+    network split text
   ];
   meta = {
     homepage = "https://github.com/hreinhardt/amqp";

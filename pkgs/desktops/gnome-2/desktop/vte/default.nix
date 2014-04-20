@@ -9,7 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "00zrip28issgmz2cqk5k824cbqpbixi5x7k88zxksdqpnq1f414d";
   };
 
-  patches = [ ./alt.patch ];
+  patches = [
+    ./alt.patch
+    ( fetchurl { # CVE-2012-2738
+      url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-libs/"
+        + "vte/files/vte-0.28.2-limit-arguments.patch?revision=1.1";
+      sha256 = "1s8agx74wa7wlv9ybd5h3dp4hzf4ddg7piyan37g2ab3fnvg4jhn";
+    } )
+  ];
 
   buildInputs = [ intltool pkgconfig glib gtk ncurses ] ++
                 stdenv.lib.optionals pythonSupport [python pygtk];

@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ghc perl gmp ncurses ];
 
-  enableParallelBuilding = true;
 
   buildMK = ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
@@ -22,6 +21,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     echo "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '';
 

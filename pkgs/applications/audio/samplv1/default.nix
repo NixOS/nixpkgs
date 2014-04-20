@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "samplv1-${version}";
-  version = "0.3.6";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/samplv1/${name}.tar.gz";
-    sha256 = "1fgy9w3mp0p8i1v41a7gmpzzk268k7bp75d4sgzfprikjihc6ary";
+    sha256 = "1cx3qs9vrdwmym2qsghqq53bshnjqgpqypsilr1m2i1cpfnfrr6x";
   };
 
   buildInputs = [ jackaudio libsndfile lv2 qt4 ];

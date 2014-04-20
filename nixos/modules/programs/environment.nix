@@ -2,9 +2,9 @@
 
 # Most of the stuff here should probably be moved elsewhere sometime.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -17,8 +17,7 @@ in
   config = {
 
     environment.variables =
-      { LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
-        LOCATE_PATH = "/var/cache/locatedb";
+      { LOCATE_PATH = "/var/cache/locatedb";
         NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
         NIX_PATH =
           [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
@@ -45,7 +44,7 @@ in
         TERMINFO_DIRS = [ "${i}/share/terminfo" ];
         PERL5LIB = [ "${i}/lib/perl5/site_perl" ];
         ALSA_PLUGIN_DIRS = [ "${i}/lib/alsa-lib" ];
-        GST_PLUGIN_PATH = [ "${i}/lib/gstreamer-0.10" ];
+        GST_PLUGIN_SYSTEM_PATH = [ "${i}/lib/gstreamer-0.10" ];
         KDEDIRS = [ "${i}" ];
         STRIGI_PLUGIN_PATH = [ "${i}/lib/strigi/" ];
         QT_PLUGIN_PATH = [ "${i}/lib/qt4/plugins" "${i}/lib/kde4/plugins" ];

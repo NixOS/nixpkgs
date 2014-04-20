@@ -7,18 +7,24 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-good-1.2.2";
+  name = "gst-plugins-good-1.2.3";
 
-  meta = {
-    homepage = "http://gstreamer.freedesktop.org";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
+  meta = with stdenv.lib; {
+    description = "Gstreamer Good Plugins";
+    homepage    = "http://gstreamer.freedesktop.org";
+    longDescription = ''
+      a set of plug-ins that we consider to have good quality code,
+      correct functionality, our preferred license (LGPL for the plug-in
+      code, LGPL or LGPL-compatible for the supporting library).
+    '';
+    license     = licenses.lgpl2Plus;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ iyzsong ];
   };
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-good/${name}.tar.xz";
-    sha256 = "6c090f00e8e4588f12807bd9fbb06a03b84a512c93e84d928123ee4a42228a81";
+    sha256 = "0w74hms2zg0rnhilj9cbhx9wfiryrkcvhr1g90scrg8mllv3bcxz";
   };
 
   nativeBuildInputs = [ pkgconfig python ];

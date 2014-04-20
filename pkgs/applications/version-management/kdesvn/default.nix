@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, apr, aprutil, subversion, db4, kdelibs, expat }:
+{ stdenv, fetchurl, gettext, apr, aprutil, subversion, db, kdelibs, expat }:
 
 # the homepage mentions this is the final release.
 # from now on, kdesvn will be part of the official kde software distribution
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s|/usr|${subversion}|g" src/svnqt/cmakemodules/FindSubversion.cmake
   '';
 
-  buildInputs = [ apr aprutil subversion db4 kdelibs expat ];
+  buildInputs = [ apr aprutil subversion db kdelibs expat ];
 
   nativeBuildInputs = [ gettext ];
 

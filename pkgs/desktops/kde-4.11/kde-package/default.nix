@@ -1,5 +1,5 @@
 { callPackage, runCommand, stdenv, fetchurl, qt4, cmake, automoc4
-, release, ignoreList, extraSubpkgs
+, release, branch, ignoreList, extraSubpkgs
 }:
 
 let
@@ -19,6 +19,7 @@ rec {
   # Default meta attribute
   defMeta = {
     homepage = http://www.kde.org;
+    inherit branch;
     platforms = stdenv.lib.platforms.linux;
     inherit (qt4.meta) maintainers;
   };

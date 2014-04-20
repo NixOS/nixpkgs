@@ -3,17 +3,18 @@
 assert mountPath != "";
 
 let
-  name = "ldm-0.4.2";
+  version = "v0.4.2";
+  git = https://github.com/LemonBoy/ldm.git;
 in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "ldm-${version}";
 
   # There is a stable release, but we'll use the lvm branch, which
   # contains important fixes for LVM setups.
   src = fetchgit {
-    url = "https://github.com/LemonBoy/ldm.git";
-    rev = "26633ce07b";
-    sha256 = "bb733d3b9b3bd5843b9cf1507a04a063c5aa45b398480411709fc727ae10b8b1";
+    url = meta.repositories.git;
+    rev = "refs/tags/${version}";
+    sha256 = "1fdm3l00csjyvz40py6wlsh8s441rbp4az3sc2i14ag7srh2yim8";
   };
 
   buildInputs = [ udev utillinux ];
@@ -34,5 +35,6 @@ stdenv.mkDerivation {
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.the-kenny ];
+    repositories.git = git;
   };
 }

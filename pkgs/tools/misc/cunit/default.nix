@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://cunit.sourceforge.net/;
 
     license = "lgpl";
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }
 

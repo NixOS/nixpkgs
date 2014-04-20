@@ -7,5 +7,6 @@
       createHome = true;
       useDefaultShell = true;
       password = "foobar";
+      uid = 1000;
     };
 }

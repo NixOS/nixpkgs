@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskell-names";
-  version = "0.3.2.4";
-  sha256 = "1m3p64kkm8zv2diwila0zdincykavf2fvxpqzpsmfndwb24f5b3p";
+  version = "0.3.3";
+  sha256 = "1f40dyrdb9c5iysmclql75l86zg3iisnyyiq5fkgixdafzsq31ir";
   buildDepends = [
     aeson Cabal dataLens dataLensTemplate filepath haskellPackages
     haskellSrcExts hseCpp mtl tagged transformers traverseWithClass
@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     hseCpp mtl prettyShow tagged tasty tastyGolden traverseWithClass
     uniplate utf8String
   ];
+  doCheck = false;
   meta = {
     homepage = "http://documentup.com/haskell-suite/haskell-names";
     description = "Name resolution library for Haskell";

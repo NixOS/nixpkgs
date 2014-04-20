@@ -1,0 +1,12 @@
+Use existing png_set_IHDR() and stop accessing PNG structure members directly
+
+--- src/zip/zpng.c
++++ src/zip/zpng.c
+@@ -129,7 +129,6 @@
+         png_set_IHDR(png_ptr, info_ptr, width, height, 8,
+                      PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
+                      PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+-        info_ptr->color_type = PNG_COLOR_TYPE_RGB;
+ 
+         //Allocate an array of scanline pointers
+         row_pointers = (png_bytep*)malloc(height*sizeof(png_bytep));

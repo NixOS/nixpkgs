@@ -11,8 +11,6 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  installCommand = "python setup.py install --prefix=\"\$prefix\"";
-  
   meta = {
     description = "A program for retrieving mail";
     maintainers = [ stdenv.lib.maintainers.raskin stdenv.lib.maintainers.iElectric ];

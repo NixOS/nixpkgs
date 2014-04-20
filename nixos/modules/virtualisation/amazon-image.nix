@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 {
   imports = [ ../profiles/headless.nix ./ec2-data.nix ];
@@ -164,5 +164,5 @@ with pkgs.lib;
   # Prevent logging in as root without a password.  This doesn't really matter,
   # since the only PAM services that allow logging in with a null
   # password are local ones that are inaccessible on EC2 machines.
-  security.initialRootPassword = "!";
+  security.initialRootPassword = mkDefault "!";
 }

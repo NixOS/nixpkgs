@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+import ./make-test.nix (
 
 let
 
@@ -14,11 +14,13 @@ in
 
 rec {
 
+  makeCoverageReport = true;
+
   client =
     { config, pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
-      services.xserver.driSupport = true;
+      hardware.opengl.driSupport = true;
       services.xserver.defaultDepth = pkgs.lib.mkOverride 0 16;
       environment.systemPackages = [ pkgs.quake3demo ];
       nixpkgs.config.packageOverrides = overrides;
@@ -35,6 +37,7 @@ rec {
                 "'+map q3dm7' '+addbot grunt' '+addbot daemia' 2> /tmp/log";
             };
           nixpkgs.config.packageOverrides = overrides;
+          networking.firewall.allowedUDPPorts = [ 27960 ];
         };
 
       client1 = client;
@@ -76,4 +79,4 @@ rec {
       $server->stopJob("quake3-server");
     '';
 
-}
+})

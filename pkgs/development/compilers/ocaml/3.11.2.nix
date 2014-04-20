@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://caml.inria.fr/ocaml;
-    licenses = [ "QPL" /* compiler */ "LGPLv2" /* library */ ];
+    license = [ "QPL" /* compiler */ "LGPLv2" /* library */ ];
     description = "Objective Caml, the most popular variant of the Caml language";
 
     longDescription =

@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+import ./make-test.nix {
 
   machine =
     { config, pkgs, ... }:
@@ -17,6 +15,7 @@
 
   testScript =
     ''
+      $machine->waitForX;
       $machine->waitForWindow(qr/xfce4-panel/);
       $machine->sleep(10);
 

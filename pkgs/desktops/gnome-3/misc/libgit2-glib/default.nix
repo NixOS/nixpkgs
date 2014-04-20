@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, gnome3, autoconf, automake, libtool, pkgconfig
+{ stdenv, fetchurl, gnome3, libtool, pkgconfig
 , gtk_doc, gobjectIntrospection, libgit2, glib }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   configureScript = "sh ./autogen.sh";
 
-  buildInputs = [ which gnome3.gnome_common autoconf automake libtool
-                  pkgconfig gtk_doc gobjectIntrospection libgit2 glib ];
+  buildInputs = [ gnome3.gnome_common libtool pkgconfig
+                  gtk_doc gobjectIntrospection libgit2 glib ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

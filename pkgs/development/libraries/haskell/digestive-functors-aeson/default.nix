@@ -1,16 +1,14 @@
-{ cabal, aeson, aesonLens, digestiveFunctors, HUnit, lens, mtl
-, safe, tasty, tastyHunit, text, vector
+{ cabal, aeson, digestiveFunctors, HUnit, lens, mtl, safe
+, scientific, tasty, tastyHunit, text, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "digestive-functors-aeson";
-  version = "1.1.3";
-  sha256 = "0194yd2b9irm1gmk3d8awrsrmsr4lml63wr4vm8a92s7w3hdy0db";
-  buildDepends = [
-    aeson aesonLens digestiveFunctors lens safe text vector
-  ];
+  version = "1.1.7";
+  sha256 = "07dnwmbcyb64yp51ijwsc84r6gf4rxxc4bi3wkzwxq1ijm1qhpni";
+  buildDepends = [ aeson digestiveFunctors lens safe text vector ];
   testDepends = [
-    aeson digestiveFunctors HUnit mtl tasty tastyHunit text
+    aeson digestiveFunctors HUnit mtl scientific tasty tastyHunit text
   ];
   meta = {
     homepage = "http://github.com/ocharles/digestive-functors-aeson";

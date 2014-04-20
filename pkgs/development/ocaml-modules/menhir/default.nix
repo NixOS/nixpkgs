@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       to OCaml code.  Menhir was designed and implemented by François Pottier
       and Yann Régis-Gianas.
     '';
-    licenses = [ "QPL" /* generator */ "LGPLv2" /* library */ ];
+    license = [ "QPL" /* generator */ "LGPLv2" /* library */ ];
     platforms = ocaml.meta.platforms;
     maintainers = [
       stdenv.lib.maintainers.z77z

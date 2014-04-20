@@ -17,13 +17,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -pv $out/bin $out/share/man/man1
+    mkdir -pv $out/bin $out/share/man/man1 $out/share/mr
     cp -v mr $out/bin
     cp -v webcheckout $out/bin
     cp -v mr.1 $out/share/man/man1
     cp -v webcheckout.1 $out/share/man/man1
+    cp -v lib/* $out/share/mr
   '';
-      
+
   meta = {
     description = "Multiple Repository management tool";
     longDescription = ''The mr(1) command can checkout, update, or perform other actions on a
@@ -53,4 +54,3 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.antono ];
   };
 }
- 

@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xmlgen";
-  version = "0.6.2.0";
-  sha256 = "0b6fyg6mlm068f2jjmil52az4hk144pryf1c0wr1gx6ddx9yzjy4";
+  version = "0.6.2.1";
+  sha256 = "1rmsg9wxs0bsj0xpagxrm3fmlqd63b0dfyc21rx9jj76g9za29wh";
   buildDepends = [ blazeBuilder mtl text ];
   testDepends = [ filepath HUnit hxt QuickCheck text ];
   meta = {

@@ -31,7 +31,7 @@ assert langVhdl     -> gnat != null;
 
 with stdenv.lib;
 
-let version = "4.4.6";
+let version = "4.4.7";
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
       # `configure' time.
@@ -246,7 +246,8 @@ stdenv.mkDerivation ({
       enableMultilib version; };
 
   # ghdl does not build fine with parallel building
-  enableParallelBuilding = !langVhdl && !langAda;
+  # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=46173
+  #enableParallelBuilding = !langVhdl && !langAda;
 
   meta = {
     homepage = http://gcc.gnu.org/;

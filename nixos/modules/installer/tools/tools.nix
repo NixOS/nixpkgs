@@ -80,9 +80,9 @@ in
   /*
   options = {
 
-    installer.enableGraphicalTools = pkgs.lib.mkOption {
+    installer.enableGraphicalTools = mkOption {
       default = false;
-      type = with pkgs.lib.types; bool;
+      type = types.bool;
       example = true;
       description = ''
         Enable the installation of graphical tools.

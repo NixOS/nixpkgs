@@ -5,14 +5,16 @@ rec {
     sha256 = "1idgyim6r4bi3id245k616qrdarfh65xv3gi2psarqqmsw504yhd";
   };
 
+  texmfVersion = "2013.20140314";
   texmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2013.20131219.orig.tar.xz;
-    sha256 = "1kcfw6n9rv3wznyqkvkad60p1zljbn1cw2jhajzcrn8m39y0ad3x";
+    url = "mirror://debian/pool/main/t/texlive-base/texlive-base_${texmfVersion}.orig.tar.xz";
+    sha256 = "0f2dxm0ac4j04w1rgjpdranpprjghw8slvijknykpvph1jn0lmzm";
   };
 
+  langTexmfVersion = "2013.20140314";
   langTexmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-lang/texlive-lang_2013.20131219.orig.tar.xz;
-    sha256 = "139hb91ks62q56dnnrzhcxmm2wpz0b40ka7smaqgw86r002albb0";
+    url = "mirror://debian/pool/main/t/texlive-lang/texlive-lang_${langTexmfVersion}.orig.tar.xz";
+    sha256 = "154g300nbg4fhxprvi9fwr7wmpws4cg89m9nwsfpyf0m2k8n9ibx";
   };
 
   passthru = { inherit texmfSrc langTexmfSrc; };
@@ -43,7 +45,7 @@ rec {
 
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${icu}/include/layout";
 
-    ./Build --prefix="$out" --datadir="$out/share" --mandir "$out/share/man" --infodir "$out/share/info" \
+    ./Build --prefix="$out" --datadir="$out/share" --mandir="$out/share/man" --infodir="$out/share/info" \
       ${args.lib.concatStringsSep " " configureFlags}
     cd Work
   '' ) [ "minInit" "doUnpack" "addInputs" "defEnsureDir" ];
@@ -114,14 +116,22 @@ rec {
 
   configureFlags = [ "--with-x11" "--enable-ipc" "--with-mktexfmt"
     "--enable-shared" "--disable-native-texlive-build" "--with-system-zziplib"
-    "--with-system-libgs" "--with-system-t1lib" "--with-system-freetype2"
-    "--with-system-freetype=no" "--disable-ttf2pk" "--enable-ttf2pk2"
-    ]
-    ++ ( if stdenv.isDarwin
-         # ironically, couldn't get xetex compiling on darwin
-         then [ "--disable-xetex" "--disable-xdv2pdf" "--disable-xdvipdfmx" ]
-         # couldn't seem to get system icu working on darwin
-         else [ "--with-system-icu" ] );
+    "--with-system-libgs" "--with-system-t1lib" "--with-system-freetype2" 
+    "--with-system-freetype=no" "--disable-ttf2pk" "--enable-ttf2pk2" ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [
+      # Complains about a missing ICU directory
+      "--disable-bibtex-x"
+
+      # TODO: We should be able to fix these tests
+      "--disable-devnag"
+      "--disable-dvisvgm"
+      "--disable-xdv2pdf"
+      "--disable-xdvipdfmx"
+      "--disable-xetex"
+
+      "--with-system-harfbuzz=no"
+      "--with-system-icu=no"
+    ];
 
   phaseNames = [ "addInputs" "doMainBuild" "doMakeInstall" "doPostInstall" ];
 

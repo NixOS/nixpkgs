@@ -2,25 +2,25 @@
   m4, glib_networking, gsettings_desktop_schemas }:
 
 stdenv.mkDerivation {
-  name = "dwb-0.1";
+  name = "dwb-2014-04-20";
 
   src = fetchgit {
     url = "https://bitbucket.org/portix/dwb.git";
-    rev = "84a8621787baded72e84afdd5cdda278cb81e007";
-    sha256 = "5a32f3c21ad59b43935a16108244f84d260fafaea9b93d41e8de9ba9089ee7b0";
+    rev = "117a6a8cdb84b30b0c084dee531b650664d09ba2";
+    sha256 = "1k1nax3ij64b2hbn9paqj128yyzy41b61xd2m1ayq9y17k9als0b";
   };
 
-  buildInputs = [ pkgconfig makeWrapper libsoup webkit gtk3 gnutls json_c m4  ];
+  buildInputs = [ pkgconfig makeWrapper gsettings_desktop_schemas libsoup webkit gtk3 gnutls json_c m4 ];
 
   # There are Xlib and gtk warnings therefore I have set Wno-error
   preBuild=''
     makeFlagsArray=(CPPFLAGS="-Wno-error" GTK=3 PREFIX=$out);
   '';
 
-  postInstall=''
+  preFixup=''
     wrapProgram "$out/bin/dwb" \
      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
-     --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:$out/share"
+     --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
     wrapProgram "$out/bin/dwbem" \
      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules"
   '';

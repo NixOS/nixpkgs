@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python, db4}:
+{stdenv, fetchurl, python, db}:
 
 stdenv.mkDerivation rec {
   name = "bsddb3-6.0.1";
@@ -8,5 +8,5 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [python];
   buildPhase = "true";
-  installPhase = "python ./setup.py install --prefix=$out --berkeley-db=${db4}";
+  installPhase = "python ./setup.py install --prefix=$out --berkeley-db=${db}";
 }

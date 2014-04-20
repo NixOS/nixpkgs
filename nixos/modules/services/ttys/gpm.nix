@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -40,12 +40,15 @@ in
 
   config = mkIf cfg.enable {
 
-    jobs.gpm =
-      { description = "General purpose mouse";
+    systemd.services.gpm =
+      { description = "Console Mouse Daemon";
 
-        startOn = "started udev";
+        wantedBy = [ "multi-user.target" ];
+        requires = [ "getty.target" ];
 
-        exec = "${pkgs.gpm}/sbin/gpm -m /dev/input/mice -t ${cfg.protocol} -D &>/dev/null";
+        serviceConfig.ExecStart = "@${pkgs.gpm}/sbin/gpm gpm -m /dev/input/mice -t ${cfg.protocol}";
+        serviceConfig.Type = "forking";
+        serviceConfig.PIDFile = "/run/gpm.pid";
       };
 
   };

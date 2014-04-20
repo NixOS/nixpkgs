@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.services.nginx;
@@ -9,6 +9,12 @@ let
     user ${cfg.user} ${cfg.group};
     daemon off;
     ${cfg.config}
+    ${optionalString (cfg.httpConfig != "") ''
+    http {
+      ${cfg.httpConfig}
+    }
+    ''}
+    ${cfg.appendConfig}
   '';
 in
 
@@ -24,6 +30,7 @@ in
 
       package = mkOption {
         default = pkgs.nginx;
+        type = types.package;
         description = "
           Nginx package to use.
         ";
@@ -34,6 +41,25 @@ in
         description = "
           Verbatim nginx.conf configuration.
         ";
+      };
+
+      appendConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Configuration lines appended to the generated Nginx
+          configuration file. Commonly used by different modules
+          providing http snippets. <option>appendConfig</option>
+          can be specified more than once and it's value will be
+          concatenated (contrary to <option>config</option> which
+          can be set only once).
+        '';
+      };
+
+      httpConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Configuration lines to be appended inside of the http {} block.";
       };
 
       stateDir = mkOption {

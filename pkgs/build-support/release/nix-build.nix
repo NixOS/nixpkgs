@@ -15,6 +15,7 @@
 , failureHook ? null
 , prePhases ? []
 , postPhases ? []
+, buildInputs ? []
 , ... } @ args:
 
 stdenv.mkDerivation (
@@ -61,13 +62,6 @@ stdenv.mkDerivation (
       . ${./functions.sh}
       origSrc=$src
       src=$(findTarballs $src | head -1)
-
-      # Set GCC flags for coverage analysis, if desired.
-      if test -n "${toString doCoverageAnalysis}"; then
-          export NIX_CFLAGS_COMPILE="-O0 --coverage $NIX_CFLAGS_COMPILE"
-          export CFLAGS="-O0"
-          export CXXFLAGS="-O0"
-      fi
     '';
 
     initPhase = ''
@@ -85,30 +79,13 @@ stdenv.mkDerivation (
 
     prePhases = ["initPhase"] ++ prePhases;
 
-    # In the report phase, create a coverage analysis report.
-    coverageReportPhase = if doCoverageAnalysis then ''
-      ${args.lcov}/bin/lcov --directory . --capture --output-file app.info
-      set -o noglob
-      ${args.lcov}/bin/lcov --remove app.info $lcovFilter > app2.info
-      set +o noglob
-      mv app2.info app.info
-
-      mkdir $out/coverage
-      ${args.lcov}/bin/genhtml app.info $lcovExtraTraceFiles -o $out/coverage > log
-
-      # Grab the overall coverage percentage for use in release overviews.
-      grep "Overall coverage rate" log | sed 's/^.*(\(.*\)%).*$/\1/' > $out/nix-support/coverage-rate
-
-      echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products
-    '' else "";
-
+    buildInputs = buildInputs ++ stdenv.lib.optional doCoverageAnalysis args.makeGCOVReport;
 
     lcovFilter = ["/nix/store/*"] ++ lcovFilter;
 
     inherit lcovExtraTraceFiles;
 
-    postPhases = postPhases ++
-      (stdenv.lib.optional doCoverageAnalysis "coverageReportPhase") ++ ["finalPhase"];
+    postPhases = postPhases ++ ["finalPhase"];
 
     meta = (if args ? meta then args.meta else {}) // {
       description = if doCoverageAnalysis then "Coverage analysis" else "Nix package for ${stdenv.system}";

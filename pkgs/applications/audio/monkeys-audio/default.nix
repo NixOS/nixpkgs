@@ -11,4 +11,9 @@ stdenv.mkDerivation rec {
     url = "http://deb-multimedia.org/pool/main/m/${pname}/${pname}_${version}.orig.tar.gz";
     sha256 = "0kjfwzfxfx7f958b2b1kf8yj655lp0ppmn0sh57gbkjvj8lml7nz";
   };
+
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+    maintainers = maintainers.mornfall;
+  };
 }

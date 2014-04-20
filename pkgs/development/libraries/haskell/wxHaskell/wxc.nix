@@ -2,15 +2,14 @@
 
 cabal.mkDerivation (self: {
   pname = "wxc";
-  version = "0.90.0.4";
-  sha256 = "1bh20i1rb8ng0ni1v98nm8qv5wni19dvxwf5i3ijxhrxqdq4i7p6";
+  version = "0.90.1.1";
+  sha256 = "0cvfphskvsq3lsl24h6jh8r6yw5jg8qa9wdc883yasfvmzmxwwgc";
   buildDepends = [ wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
+  noHaddock = true;
   postInstall = ''
     cp -v dist/build/libwxc.so.${self.version} $out/lib/libwxc.so
   '';
-  patches = [ ./fix-bogus-pointer-assignment.patch ];
-  noHaddock = true;
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell C++ wrapper";

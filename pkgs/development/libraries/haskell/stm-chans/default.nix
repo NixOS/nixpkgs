@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "stm-chans";
-  version = "3.0.0";
-  sha256 = "1nnl5h88dshcmk0ydhkf84kkf6989igxry9r0z7lwlxfgf7q9nim";
+  version = "3.0.0.2";
+  sha256 = "1zsa092yjxsdq8nm2yqagdfpip3i3ff3xdwvys99ns7ridxbyynh";
   buildDepends = [ stm ];
   meta = {
     homepage = "http://code.haskell.org/~wren/";

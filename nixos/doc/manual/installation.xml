@@ -1,12 +1,13 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink">
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="ch-installation">
 
 <title>Installing NixOS</title>
 
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-obtaining">
 
 <title>Obtaining NixOS</title>
 
@@ -50,7 +51,7 @@ running NixOS system through several other means:
 
 <!--===============================================================-->
 
-<section>
+<section xml:id="sec-installation">
 
 <title>Installation</title>
 
@@ -295,8 +296,74 @@ $ reboot</screen>
 }</screen>
 </example>
 
+<section xml:id="sec-uefi-installation">
+
+<title>UEFI Installation</title>
+
+<para>NixOS can also be installed on UEFI systems.  The procedure
+is by and large the same as a BIOS installation, with the following
+changes:
+
+<itemizedlist>
+  <listitem>
+    <para>You should boot the live CD in UEFI mode (consult your
+    specific hardware's documentation for instructions).</para>
+  </listitem>
+  <listitem>
+    <para>Instead of <command>fdisk</command>, you should use
+    <command>gdisk</command> to partition your disks. You will need to
+    have a separate partition for <filename>/boot</filename> with
+    partition code EF00, and it should be formatted as a
+    <literal>vfat</literal> filesystem.</para>
+  </listitem>
+  <listitem>
+    <para>You must set <option>boot.loader.gummiboot.enable</option> to
+    <literal>true</literal>, and <option>boot.loader.grub.enable</option>
+    to <literal>false</literal>. <command>nixos-generate-config</command>
+    should do this automatically for new configurations when booted in
+    UEFI mode.</para>
+  </listitem>
+  <listitem>
+    <para>You may want to look at the options starting with
+    <option>boot.loader.efi</option> and <option>boot.loader.gummiboot</option>
+    as well.</para>
+  </listitem>
+  <listitem>
+    <para>To see console messages during early boot, add <literal>"fbcon"</literal>
+    to your <option>boot.initrd.kernelModules</option>.</para>
+  </listitem>
+</itemizedlist>
+</para>
+
 </section>
 
+<section>
+
+<title xml:id="sec-booting-from-usb">Booting from a USB stick</title>
+
+<para>For systems withoua CD drive, the NixOS livecd can be booted from
+a usb stick. For non-UEFI installations,
+<link xlink:href="http://unetbootin.sourceforge.net/">unetbootin</link>
+will work. For UEFI installations, you should mount the ISO, copy its contents
+verbatim to your drive, then either:
+
+<itemizedlist>
+  <listitem>
+    <para>Change the label of the disk partition to the label of the ISO
+    (visible with the blkid command), or</para>
+  </listitem>
+  <listitem>
+    <para>Edit <filename>loader/entries/nixos-livecd.conf</filename> on the drive
+    and change the <literal>root=</literal> field in the <literal>options</literal>
+    line to point to your drive (see the documentation on <literal>root=</literal>
+    in <link xlink:href="https://www.kernel.org/doc/Documentation/kernel-parameters.txt">
+    the kernel documentation</link> for more details).</para>
+  </listitem>
+</itemizedlist>
+</para>
+</section>
+
+</section>
 
 
 <!--===============================================================-->

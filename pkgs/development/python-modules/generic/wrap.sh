@@ -5,7 +5,7 @@ wrapPythonPrograms() {
 wrapPythonProgramsIn() {
     local dir="$1"
     local pythonPath="$2"
-    local python="$(type -p python)"
+    local python="@executable@"
     local i
 
     declare -A pythonPathsSeen=()
@@ -18,11 +18,11 @@ wrapPythonProgramsIn() {
     for i in $(find "$dir" -type f -perm +0100); do
 
         # Rewrite "#! .../env python" to "#! /nix/store/.../python".
-        if head -n1 "$i" | grep -q '#!.*/env.*python'; then
-            sed -i "$i" -e "1 s^.*/env[ ]*python^#! $python^"
+        if head -n1 "$i" | grep -q '#!.*/env.*\(python\|pypy\)'; then
+            sed -i "$i" -e "1 s^.*/env[ ]*\(python\|pypy\)^#! $python^"
         fi
         
-        if head -n1 "$i" | grep -q /python; then
+        if head -n1 "$i" | grep -q '/python\|/pypy'; then
             # dont wrap EGG-INFO scripts since they are called from python
             if echo "$i" | grep -v EGG-INFO/scripts; then
                 echo "wrapping \`$i'..."

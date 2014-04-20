@@ -1,14 +1,15 @@
 { cabal, dataDefaultClass, Diff, filepath, HUnit, mtl, parsec
 , QuickCheck, testFramework, testFrameworkHunit
-, testFrameworkQuickcheck2, uniplate, wlPprint
+, testFrameworkQuickcheck2, testingFeat, uniplate, wlPprint
 }:
 
 cabal.mkDerivation (self: {
   pname = "language-ecmascript";
-  version = "0.15.4";
-  sha256 = "1drivy75lvrwjx7irdbnnqp7y6mbzbm2pbxy7zzc1nfln6g3k9x7";
+  version = "0.16.1";
+  sha256 = "0pqb1r60jjmiwk9giaxnrp9a07h4a97kp6g0nznwpdy32x849gx3";
   buildDepends = [
-    dataDefaultClass Diff mtl parsec QuickCheck uniplate wlPprint
+    dataDefaultClass Diff mtl parsec QuickCheck testingFeat uniplate
+    wlPprint
   ];
   testDepends = [
     dataDefaultClass Diff filepath HUnit mtl parsec QuickCheck

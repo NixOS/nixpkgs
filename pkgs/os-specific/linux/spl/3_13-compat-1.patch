@@ -1,0 +1,61 @@
+From 3e96de17d723d6f6c9e2fd04b059b50d4e0bbef0 Mon Sep 17 00:00:00 2001
+From: Richard Yao <ryao@gentoo.org>
+Date: Thu, 8 Aug 2013 04:30:55 -0400
+Subject: [PATCH] Linux 3.13 compat: Remove unused flags variable from
+ __cv_init()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+GCC 4.8.1 complained about an unused flags variable when building
+against Linux 2.6.26.8:
+
+/var/tmp/portage/sys-kernel/spl-9999/work/spl-9999/module/spl/../../module/spl/spl-condvar.c:
+In function ‘__cv_init’:
+/var/tmp/portage/sys-kernel/spl-9999/work/spl-9999/module/spl/../../module/spl/spl-condvar.c:39:6:
+error: variable ‘flags’ set but not used
+[-Werror=unused-but-set-variable]
+  int flags = KM_SLEEP;
+        ^
+	cc1: all warnings being treated as errors
+
+Additionally, the superfluous code uses a preempt_count variable that is
+no longer available on Linux 3.13. Deleting the unnecessary code fixes a
+Linux 3.13 compatibility issue.
+
+Signed-off-by: Richard Yao <ryao@gentoo.org>
+Signed-off-by: Brian Behlendorf <behlendorf1@llnl.gov>
+Closes #312
+---
+ module/spl/spl-condvar.c | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/module/spl/spl-condvar.c b/module/spl/spl-condvar.c
+index 283648a..8236412 100644
+--- a/module/spl/spl-condvar.c
++++ b/module/spl/spl-condvar.c
+@@ -36,8 +36,6 @@
+ void
+ __cv_init(kcondvar_t *cvp, char *name, kcv_type_t type, void *arg)
+ {
+-	int flags = KM_SLEEP;
+-
+ 	SENTRY;
+ 	ASSERT(cvp);
+ 	ASSERT(name == NULL);
+@@ -51,12 +49,6 @@
+ 	atomic_set(&cvp->cv_refs, 1);
+ 	cvp->cv_mutex = NULL;
+ 
+-        /* We may be called when there is a non-zero preempt_count or
+-	 * interrupts are disabled is which case we must not sleep.
+-	 */
+-        if (current_thread_info()->preempt_count || irqs_disabled())
+-		flags = KM_NOSLEEP;
+-
+ 	SEXIT;
+ }
+ EXPORT_SYMBOL(__cv_init);
+-- 
+1.8.5.5
+

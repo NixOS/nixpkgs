@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "sample-frame";
-  version = "0.0.2";
-  sha256 = "1k1fyslgw5vvn9a38mhp7c9j1xxf75ys010rcn2vr3pm6aj868sx";
+  version = "0.0.3";
+  sha256 = "0ivj0bcnqqc805np62bdpvh8v4ykmw86ph5rp7k54bbv9wd31bsv";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ QuickCheck storableRecord ];

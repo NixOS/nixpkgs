@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
     '';
 
     license = "MIT/X11";
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }
 

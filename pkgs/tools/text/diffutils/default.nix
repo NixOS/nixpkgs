@@ -1,14 +1,12 @@
 { stdenv, fetchurl, coreutils ? null }:
 
-stdenv.mkDerivation {
-  name = "diffutils-3.2";
+stdenv.mkDerivation rec {
+  name = "diffutils-3.3";
 
   src = fetchurl {
-    url = mirror://gnu/diffutils/diffutils-3.2.tar.gz;
-    sha256 = "1lsf0ln0h3mnm2y0mwgrfk0lyfi7bnm4r886acvdrrsvc7pypaia";
+    url = "mirror://gnu/diffutils/${name}.tar.xz";
+    sha256 = "1761vymxbp4wb5rzjvabhdkskk95pghnn67464byvzb5mfl8jpm2";
   };
-
-  patches = [ ./gets-undeclared.patch ];
 
   /* If no explicit coreutils is given, use the one from stdenv. */
   nativeBuildInputs = [ coreutils ];

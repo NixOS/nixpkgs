@@ -45,8 +45,6 @@ stdenv.mkDerivation {
     description = "An Xorg driver for multitouch trackpads";
 
     license = "gplv2";
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }
 

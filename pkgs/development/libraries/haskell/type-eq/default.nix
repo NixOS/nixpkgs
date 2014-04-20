@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "type-eq";
-  version = "0.4.1";
-  sha256 = "0l8nkrdn1hs8ddhh85qm176f9v42fdck9iscn4swd92vj7bfci7k";
+  version = "0.4.2";
+  sha256 = "0nyx3lqgrnlz0l3p615ln2dglqd39jwlk91ybz7blzhq1gpgayar";
   buildTools = [ cpphs ];
   meta = {
     homepage = "http://github.com/glaebhoerl/type-eq";

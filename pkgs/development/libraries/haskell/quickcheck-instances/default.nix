@@ -2,11 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "quickcheck-instances";
-  version = "0.3.6";
-  sha256 = "1vaqwsdgi2mirplzg66zysc1ivjjr0qxyiibsh6j771hxs9qk2pr";
+  version = "0.3.8";
+  sha256 = "0132a37zi1haz1aaggxa1hr421bcmxlbaa4m2l53m2rmr4z5mgkg";
   buildDepends = [
     hashable QuickCheck text time unorderedContainers
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/aslatter/qc-instances";
     description = "Common quickcheck instances";

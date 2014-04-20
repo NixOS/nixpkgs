@@ -1,12 +1,12 @@
 { stdenv, fetchurl, mpd_clientlib }:
 
 stdenv.mkDerivation rec {
-  version = "0.23";
+  version = "0.25";
   name = "mpc-${version}";
 
   src = fetchurl {
-    url = "http://www.musicpd.org/download/mpc/0/${name}.tar.bz2";
-    sha256 = "1ir96wfgq5qfdd2s06zfycv38g3bhn3bpndwx9hwf1w507rvifi9";
+    url = "http://www.musicpd.org/download/mpc/0/${name}.tar.xz";
+    sha256 = "095gmik5vrnab5a1g92qiznn48w7499fr0gldp3s6xd26kvs9kvh";
   };
 	
   buildInputs = [ mpd_clientlib ]; 

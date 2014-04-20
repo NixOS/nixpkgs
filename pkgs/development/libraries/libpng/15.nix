@@ -3,11 +3,11 @@
 assert zlib != null;
 
 stdenv.mkDerivation rec {
-  name = "libpng-1.5.15";
+  name = "libpng-1.5.18";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/${name}.tar.xz";
-    sha256 = "1iaplghmv5qhd4dgwfymhp42sh27vz6s2107jk698xm57z2v9hwm";
+    sha256 = "119m71p60iq3yn2n8ckl4j4cxvbpddj6sgdpa6g05jzyg7vw54y0";
   };
 
   propagatedBuildInputs = [ zlib ];

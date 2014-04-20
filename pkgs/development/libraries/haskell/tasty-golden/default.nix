@@ -1,13 +1,13 @@
-{ cabal, filepath, mtl, optparseApplicative, tagged, tasty
+{ cabal, deepseq, filepath, mtl, optparseApplicative, tagged, tasty
 , temporary
 }:
 
 cabal.mkDerivation (self: {
   pname = "tasty-golden";
-  version = "2.2.0.2";
-  sha256 = "0wy29ybb31g34gjyx95an3azh111crvrrdhbbihjj064xvf6ddmy";
+  version = "2.2.1";
+  sha256 = "1q3x3vmck1yq7bf96f3ah5nadahfxjd4wr3dfh3ls549yz40x668";
   buildDepends = [
-    filepath mtl optparseApplicative tagged tasty temporary
+    deepseq filepath mtl optparseApplicative tagged tasty temporary
   ];
   meta = {
     homepage = "https://github.com/feuerbach/tasty-golden";

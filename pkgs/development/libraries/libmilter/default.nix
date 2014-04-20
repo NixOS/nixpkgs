@@ -1,11 +1,11 @@
 {stdenv, fetchurl, m4}:
 
 stdenv.mkDerivation rec {
-  name = "libmilter-8.14.4";
+  name = "libmilter-8.14.8";
   
   src = fetchurl {
-    url = "ftp://ftp.sendmail.org/pub/sendmail/sendmail.8.14.4.tar.gz";
-    sha256 = "1cbwz5ynl8snrdkl7ay1qhqknbyv0qsvdvcri7mb662hgi1hj0dw";
+    url = "ftp://ftp.sendmail.org/pub/sendmail/sendmail.8.14.8.tar.gz";
+    sha256 = "1zmhzkj3gzx8022hsrysr3nzlcmv1qisb5i4jbx91661bw96ksq2";
   };
 
   buildPhase = '' 

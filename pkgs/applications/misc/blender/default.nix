@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "blender-2.67";
+  name = "blender-2.70";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "066lwrm85455gs187bxr3jhqidc2f6f0791b4216jkagbszd9a8l";
+    sha256 = "0j73yfpavcrzg5v54kcha7sig6179g5ykrlhih8d288pnb5c7596";
   };
 
   buildInputs = [
@@ -35,11 +35,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "3D Creation/Animation/Publishing System";
     homepage = http://www.blender.org;
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
-    license = "GPLv2+";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.goibhniu ];
+
   };
 }

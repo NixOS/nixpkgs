@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-postgresql-simple";
-  version = "0.1.1.2";
-  sha256 = "0m9p3ddrv73c24yh0a2q14zkr4iibfysy2q9bwp6m100z3qk1bgy";
+  version = "0.1.2.0";
+  sha256 = "12ij2msdwjzzc93mlvvizh6amam5ld9j1a0b9xsa2awdjd21mwc1";
   buildDepends = [
     async exceptions mtl pipes pipesConcurrency pipesSafe
     postgresqlSimple stm text transformers

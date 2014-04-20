@@ -1,0 +1,43 @@
+From 729210564a5325e190fc4fba22bf17bacf957ace Mon Sep 17 00:00:00 2001
+From: Richard Yao <ryao@gentoo.org>
+Date: Mon, 25 Nov 2013 12:21:21 -0500
+Subject: [PATCH] Properly ignore bdi_setup_and_register return value
+
+This broke compilation against Linux 3.13 and GCC 4.7.3.
+
+Signed-off-by: Richard Yao <ryao@gentoo.org>
+Signed-off-by: Brian Behlendorf <behlendorf1@llnl.gov>
+Closes #1906
+---
+ config/kernel-bdi-setup-and-register.m4 | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/config/kernel-bdi-setup-and-register.m4 b/config/kernel-bdi-setup-and-register.m4
+index 4196091..cb8ed67 100644
+--- a/config/kernel-bdi-setup-and-register.m4
++++ b/config/kernel-bdi-setup-and-register.m4
+@@ -1,12 +1,14 @@
+ dnl #
+ dnl # 2.6.34 API change
+-dnl # The bdi_setup_and_register() helper function is avilable and
++dnl # The bdi_setup_and_register() helper function is available and
+ dnl # exported by the kernel.  This is a trivial helper function but
+ dnl # using it significantly simplifies the code surrounding setting
+ dnl # up and tearing down the bdi structure.
+ dnl #
+ AC_DEFUN([ZFS_AC_KERNEL_BDI_SETUP_AND_REGISTER],
+ 	[AC_MSG_CHECKING([whether bdi_setup_and_register() is available])
++	tmp_flags="$EXTRA_KCFLAGS"
++	EXTRA_KCFLAGS="-Wno-unused-result"
+ 	ZFS_LINUX_TRY_COMPILE_SYMBOL([
+ 		#include <linux/backing-dev.h>
+ 	], [
+@@ -18,4 +20,5 @@ AC_DEFUN([ZFS_AC_KERNEL_BDI_SETUP_AND_REGISTER],
+ 	], [
+ 		AC_MSG_RESULT(no)
+ 	])
++	EXTRA_KCFLAGS="$tmp_flags"
+ ])
+-- 
+1.8.5.5
+

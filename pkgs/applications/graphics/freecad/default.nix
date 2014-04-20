@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       --set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1
   '';
 
-  patches = [ ./pythonpath.patch ];
+  patches = [ ./pythonpath.patch ./cmake.patch ];
 
   meta = {
     homepage = http://free-cad.sourceforge.net/;

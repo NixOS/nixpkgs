@@ -1,20 +1,16 @@
-{ stdenv, fetchurl, iptables, libnfnetlink, libnetfilter_conntrack }:
+{ stdenv, fetchurl, iptables, libnfnetlink }:
 
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "miniupnpd-1.7.20121005";
+  name = "miniupnpd-1.8.20140401";
 
   src = fetchurl {
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "03kaxj808hgj1zf2528pzilgywgh70mh0qivjb5nm3spziiq32sv";
+    sha256 = "1gfdbfqcw6ih830si51yzqbyymgcbwkiv9vk5dwnxs78b7xgyv88";
   };
 
-  buildInputs = [ iptables libnfnetlink libnetfilter_conntrack ];
-
-  patchPhase = ''
-    sed -i -e 's/upnputils\.o -lnfnetlink/upnputils.o/' Makefile.linux
-  '';
+  buildInputs = [ iptables libnfnetlink ];
 
   NIX_CFLAGS_COMPILE = "-DIPTABLES_143";
 
@@ -24,12 +20,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = "LIBS=";
 
-  installFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
+  buildFlags = "miniupnpd genuuid";
 
-  preInstall =
-    ''
-      mkdir -p $out/share/man/man8
-    '';
+  installFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
 
   meta = {
     homepage = http://miniupnp.free.fr/;

@@ -1,0 +1,168 @@
+From 50a0749eba31e821a7edf286f1e3b149f7d13c59 Mon Sep 17 00:00:00 2001
+From: Richard Yao <ryao@gentoo.org>
+Date: Mon, 25 Nov 2013 11:22:33 -0500
+Subject: [PATCH] Linux 3.13 compat: Pass NULL for new delegated inode argument
+
+This check was originally added for SLES10, a093c6a, to check for
+a 'struct vfsmount *' argument which they added.  However, since
+SLES10 is based on a 2.6.16 kernel which is no longer supported
+this functionality was dropped.  The checks were refactored to
+support Linux 3.13 without concern for historical versions.
+
+Signed-off-by: Richard Yao <ryao@gentoo.org>
+Signed-off-by: Brian Behlendorf <behlendorf1@llnl.gov>
+Closes #312
+---
+ config/spl-build.m4    | 52 ++++++++++++++++++++++++++++++++++++++++----------
+ module/spl/spl-vnode.c | 22 ++++++++++++---------
+ 2 files changed, 55 insertions(+), 19 deletions(-)
+
+diff --git a/config/spl-build.m4 b/config/spl-build.m4
+index 7d744db..8426780 100644
+--- a/config/spl-build.m4
++++ b/config/spl-build.m4
+@@ -1842,41 +1842,73 @@ AC_DEFUN([SPL_AC_SET_FS_PWD_WITH_CONST],
+ 	EXTRA_KCFLAGS="$tmp_flags"
+ ])
+ 
+-dnl #
+-dnl # SLES API change, never adopted in mainline,
+-dnl # Third 'struct vfsmount *' argument removed.
+-dnl #
+ AC_DEFUN([SPL_AC_2ARGS_VFS_UNLINK],
+ 	[AC_MSG_CHECKING([whether vfs_unlink() wants 2 args])
+ 	SPL_LINUX_TRY_COMPILE([
+ 		#include <linux/fs.h>
+ 	],[
+-		vfs_unlink(NULL, NULL);
++		vfs_unlink((struct inode *) NULL, (struct dentry *) NULL);
+ 	],[
+ 		AC_MSG_RESULT(yes)
+ 		AC_DEFINE(HAVE_2ARGS_VFS_UNLINK, 1,
+ 		          [vfs_unlink() wants 2 args])
+ 	],[
+ 		AC_MSG_RESULT(no)
++		dnl #
++		dnl # Linux 3.13 API change
++		dnl # Added delegated inode
++		dnl #
++		AC_MSG_CHECKING([whether vfs_unlink() wants 3 args])
++		SPL_LINUX_TRY_COMPILE([
++			#include <linux/fs.h>
++		],[
++			vfs_unlink((struct inode *) NULL,
++				(struct dentry *) NULL,
++				(struct inode **) NULL);
++		],[
++			AC_MSG_RESULT(yes)
++			AC_DEFINE(HAVE_3ARGS_VFS_UNLINK, 1,
++				  [vfs_unlink() wants 3 args])
++		],[
++			AC_MSG_ERROR(no)
++		])
++
+ 	])
+ ])
+ 
+-dnl #
+-dnl # SLES API change, never adopted in mainline,
+-dnl # Third and sixth 'struct vfsmount *' argument removed.
+-dnl #
+ AC_DEFUN([SPL_AC_4ARGS_VFS_RENAME],
+ 	[AC_MSG_CHECKING([whether vfs_rename() wants 4 args])
+ 	SPL_LINUX_TRY_COMPILE([
+ 		#include <linux/fs.h>
+ 	],[
+-		vfs_rename(NULL, NULL, NULL, NULL);
++		vfs_rename((struct inode *) NULL, (struct dentry *) NULL,
++			(struct inode *) NULL, (struct dentry *) NULL);
+ 	],[
+ 		AC_MSG_RESULT(yes)
+ 		AC_DEFINE(HAVE_4ARGS_VFS_RENAME, 1,
+ 		          [vfs_rename() wants 4 args])
+ 	],[
+ 		AC_MSG_RESULT(no)
++		dnl #
++		dnl # Linux 3.13 API change
++		dnl # Added delegated inode
++		dnl #
++		AC_MSG_CHECKING([whether vfs_rename() wants 5 args])
++		SPL_LINUX_TRY_COMPILE([
++			#include <linux/fs.h>
++		],[
++			vfs_rename((struct inode *) NULL,
++				(struct dentry *) NULL,
++				(struct inode *) NULL,
++				(struct dentry *) NULL,
++				(struct inode **) NULL);
++		],[
++			AC_MSG_RESULT(yes)
++			AC_DEFINE(HAVE_5ARGS_VFS_RENAME, 1,
++				  [vfs_rename() wants 5 args])
++		],[
++			AC_MSG_ERROR(no)
++		])
+ 	])
+ ])
+ 
+diff --git a/module/spl/spl-vnode.c b/module/spl/spl-vnode.c
+index 0784ff2..5496067 100644
+--- a/module/spl/spl-vnode.c
++++ b/module/spl/spl-vnode.c
+@@ -334,7 +334,11 @@
+ 		if (inode)
+ 			ihold(inode);
+ 
++#ifdef HAVE_2ARGS_VFS_UNLINK
+ 		rc = vfs_unlink(parent.dentry->d_inode, dentry);
++#else
++		rc = vfs_unlink(parent.dentry->d_inode, dentry, NULL);
++#endif /* HAVE_2ARGS_VFS_UNLINK */
+ exit1:
+ 		dput(dentry);
+ 	} else {
+@@ -412,10 +416,10 @@
+ 
+ #ifdef HAVE_4ARGS_VFS_RENAME
+ 	rc = vfs_rename(old_dir->d_inode, old_dentry,
+-			new_dir->d_inode, new_dentry);
++	    new_dir->d_inode, new_dentry);
+ #else
+-	rc = vfs_rename(old_dir->d_inode, old_dentry, oldnd.nd_mnt,
+-			new_dir->d_inode, new_dentry, newnd.nd_mnt);
++	rc = vfs_rename(old_dir->d_inode, old_dentry,
++	    new_dir->d_inode, new_dentry, NULL);
+ #endif /* HAVE_4ARGS_VFS_RENAME */
+ exit4:
+ 	unlock_rename(new_dir, old_dir);
+@@ -478,9 +482,9 @@
+                 if (inode)
+                         atomic_inc(&inode->i_count);
+ #ifdef HAVE_2ARGS_VFS_UNLINK
+-                rc = vfs_unlink(nd.nd_dentry->d_inode, dentry);
++		rc = vfs_unlink(nd.nd_dentry->d_inode, dentry);
+ #else
+-                rc = vfs_unlink(nd.nd_dentry->d_inode, dentry, nd.nd_mnt);
++		rc = vfs_unlink(nd.nd_dentry->d_inode, dentry, NULL);
+ #endif /* HAVE_2ARGS_VFS_UNLINK */
+ exit2:
+                 dput(dentry);
+@@ -571,11 +575,11 @@
+                 SGOTO(exit5, rc);
+ 
+ #ifdef HAVE_4ARGS_VFS_RENAME
+-        rc = vfs_rename(old_dir->d_inode, old_dentry,
+-                        new_dir->d_inode, new_dentry);
++	rc = vfs_rename(old_dir->d_inode, old_dentry,
++	    new_dir->d_inode, new_dentry);
+ #else
+-        rc = vfs_rename(old_dir->d_inode, old_dentry, oldnd.nd_mnt,
+-                        new_dir->d_inode, new_dentry, newnd.nd_mnt);
++	rc = vfs_rename(old_dir->d_inode, old_dentry,
++	    new_dir->d_inode, new_dentry, NULL);
+ #endif /* HAVE_4ARGS_VFS_RENAME */
+ exit5:
+         dput(new_dentry);
+-- 
+1.8.5.5
+

@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hledger-web";
-  version = "0.22.1";
-  sha256 = "0nqw7scnhcip2bg832p9v0rqk01gn4xwj9bqsvsvmh31fh9ldchw";
+  version = "0.22.4";
+  sha256 = "07xz6ijg3nzzjair5gdjjryv5hs2rxws4maz22rrqnpf8wwjjc54";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -20,7 +20,9 @@ cabal.mkDerivation (self: {
     yesodCore yesodStatic
   ];
   testDepends = [ hspec yesod yesodTest ];
+  jailbreak = true;
   doCheck = false;
+  patches = [ ./build-fix.patch ];
   meta = {
     homepage = "http://hledger.org";
     description = "A web interface for the hledger accounting tool";

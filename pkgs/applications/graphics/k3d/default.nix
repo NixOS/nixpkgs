@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/build/lib"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${gtkglext}/include/gtkglext-*) -I$(echo ${gtkglext}/lib/gtkglext-*/include)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fpermissive -I$(echo ${gtkglext}/include/gtkglext-*) -I$(echo ${gtkglext}/lib/gtkglext-*/include)"
   '';
 
   buildInputs = [

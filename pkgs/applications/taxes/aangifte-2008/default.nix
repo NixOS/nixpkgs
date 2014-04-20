@@ -18,5 +18,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Elektronische aangifte IB 2008 (Dutch Tax Return Program)";
     url = http://www.belastingdienst.nl/particulier/aangifte2008/aangifte_2008/aangifte_2008.html;
+    license = stdenv.lib.licenses.unfree;
+    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
   };
 }

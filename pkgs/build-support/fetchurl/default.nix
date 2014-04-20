@@ -66,6 +66,7 @@ in
   showURLs ? false
 }:
 
+assert builtins.isList urls;
 assert urls != [] -> url == "";
 assert url != "" -> urls == [];
 

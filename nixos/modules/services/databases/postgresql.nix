@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -55,7 +55,7 @@ in
       };
 
       package = mkOption {
-        type = types.path;
+        type = types.package;
         example = literalExample "pkgs.postgresql92";
         description = ''
           PostgreSQL package to use.
@@ -215,7 +215,7 @@ in
             # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
             # http://www.postgresql.org/docs/current/static/server-shutdown.html
             KillSignal = "SIGINT";
-            KillMode = "process"; # FIXME: this may cause processes to be left behind in the cgroup even after the final SIGKILL
+            KillMode = "mixed";
 
             # Give Postgres a decent amount of time to clean up after
             # receiving systemd's SIGINT.

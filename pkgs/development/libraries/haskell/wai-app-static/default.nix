@@ -1,19 +1,22 @@
 { cabal, base64Bytestring, blazeBuilder, blazeHtml, blazeMarkup
-, cereal, cryptoApi, cryptoConduit, cryptohashCryptoapi, fileEmbed
-, filepath, hspec, httpDate, httpTypes, mimeTypes, network
-, systemFileio, systemFilepath, text, time, transformers
-, unixCompat, unorderedContainers, wai, waiTest, zlib
+, byteable, cryptohash, cryptohashConduit, fileEmbed, filepath
+, hspec, httpDate, httpTypes, mimeTypes, network
+, optparseApplicative, systemFileio, systemFilepath, text, time
+, transformers, unixCompat, unorderedContainers, wai, waiExtra
+, waiTest, warp, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "wai-app-static";
-  version = "2.0.0.2";
-  sha256 = "0d9afs50r08k9zgz7vvh7fvamcvhm8hf4qxca4w0xi7pcj1vql0r";
+  version = "2.0.1";
+  sha256 = "1mygyp70rmhnkc0s8626cxrkvcbil92v4gnx70iz26gfb5q9lc7d";
+  isLibrary = true;
+  isExecutable = true;
   buildDepends = [
-    base64Bytestring blazeBuilder blazeHtml blazeMarkup cereal
-    cryptoApi cryptoConduit cryptohashCryptoapi fileEmbed filepath
-    httpDate httpTypes mimeTypes systemFileio systemFilepath text time
-    transformers unixCompat unorderedContainers wai zlib
+    base64Bytestring blazeBuilder blazeHtml blazeMarkup byteable
+    cryptohash cryptohashConduit fileEmbed filepath httpDate httpTypes
+    mimeTypes optparseApplicative systemFileio systemFilepath text time
+    transformers unixCompat unorderedContainers wai waiExtra warp zlib
   ];
   testDepends = [
     hspec httpDate httpTypes mimeTypes network text time transformers

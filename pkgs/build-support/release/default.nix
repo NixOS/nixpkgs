@@ -27,8 +27,12 @@ rec {
     } // args);
 
   coverageAnalysis = args: nixBuild (
-    { inherit lcov;
+    { inherit lcov enableGCOVInstrumentation makeGCOVReport;
       doCoverageAnalysis = true;
+    } // args);
+
+  gcovReport = args: import ./gcov-report.nix (
+    { inherit runCommand lcov rsync;
     } // args);
 
   rpmBuild = args: import ./rpm-build.nix (

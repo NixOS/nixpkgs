@@ -2,11 +2,11 @@
 , pkgconfig, gtkmm, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "gparted-0.15.0";
+  name = "gparted-0.18.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gparted/${name}.tar.bz2";
-    sha256 = "03s9dp2q281lkkfjgk9ahc8i6dk4d2a03z4bh2d19a7r3b2mmdww";
+    sha256 = "0slyf0sbv7a7xvdcpn9ibnixpy0w4s6zwpz6sklkxcyfybw1j7xz";
   };
 
   configureFlags = "--disable-doc";

@@ -1,18 +1,22 @@
-{ stdenv, fetchurl, x11, imlib2, libjpeg, libpng, giblib
+{ stdenv, makeWrapper, fetchurl, x11, imlib2, libjpeg, libpng, giblib
 , libXinerama, curl }:
 
 stdenv.mkDerivation rec {
-  name = "feh-2.8";
+  name = "feh-2.10";
 
   src = fetchurl {
     url = "http://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "0zmslchnzvi9ydxj2mgci4x8zpv5mdfkf7kyny3nibbpajibqmrx";
+    sha256 = "10ya8j0mxlni08qli3gdkyjhy54g4d2q2kc0hhragmzd9s42ly5w";
   };
 
-  buildInputs = [x11 imlib2 giblib libjpeg libpng libXinerama curl ];
+  buildInputs = [makeWrapper x11 imlib2 giblib libjpeg libpng libXinerama curl ];
 
   preBuild = ''
     makeFlags="PREFIX=$out"
+  '';
+
+  postInstall = ''
+    wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg}/bin"
   '';
 
   meta = {

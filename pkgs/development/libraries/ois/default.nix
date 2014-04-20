@@ -1,4 +1,4 @@
-x@{builderDefsPackage
+x@{builderDefsPackage, fetchurl
   , autoconf, automake, libtool, m4
   , libX11, xproto, libXi, inputproto
   , libXaw, libXmu, libXt
@@ -30,10 +30,17 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  phaseNames = ["doPatch" "doConfigure" "doMakeInstall"];
+
+  patches = [(fetchurl {
+    url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-games/ois/files/ois-1.3-gcc47.patch;
+    sha256 = "026jw06n42bcrmg0sbdhzc4cqxsnf7fw30a2z9cigd9x282zhii8";
+    name = "gcc47.patch";
+  })];
+  patchFlags = "-p0";
 
   configureCommand = ''sh bootstrap; sh configure'';
-      
+
   meta = {
     description = "Object-oriented C++ input system";
     maintainers = with a.lib.maintainers;

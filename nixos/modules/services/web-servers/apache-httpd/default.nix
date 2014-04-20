@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -63,8 +63,9 @@ let
           enablePHP = false;
           phpOptions = "";
           options = {};
+          documentRoot = null;
         };
-        res = defaults // svcFunction { inherit config pkgs serverInfo php; };
+        res = defaults // svcFunction { inherit config lib pkgs serverInfo php; };
       in res;
     in map f defs;
 
@@ -188,7 +189,11 @@ let
 
     subservices = callSubservices serverInfo cfg.extraSubservices;
 
-    documentRoot = if cfg.documentRoot != null then cfg.documentRoot else
+    maybeDocumentRoot = fold (svc: acc:
+      if acc == null then svc.documentRoot else assert svc.documentRoot == null; acc
+    ) null ([ cfg ] ++ subservices);
+
+    documentRoot = if maybeDocumentRoot != null then maybeDocumentRoot else
       pkgs.runCommand "empty" {} "ensureDir $out";
 
     documentRootConf = ''
@@ -240,7 +245,7 @@ let
 
     ${robotsConf}
 
-    ${if isMainServer || cfg.documentRoot != null then documentRootConf else ""}
+    ${if isMainServer || maybeDocumentRoot != null then documentRootConf else ""}
 
     ${if cfg.enableUserDir then ''
 
@@ -260,7 +265,7 @@ let
 
     '' else ""}
 
-    ${if cfg.globalRedirect != null then ''
+    ${if cfg.globalRedirect != null && cfg.globalRedirect != "" then ''
       RedirectPermanent / ${cfg.globalRedirect}
     '' else ""}
 
@@ -414,7 +419,7 @@ in
       };
 
       package = mkOption {
-        type = types.path;
+        type = types.package;
         default = pkgs.apacheHttpd.override { mpm = mainCfg.multiProcessingModule; };
         example = "pkgs.apacheHttpd_2_4";
         description = ''
@@ -445,7 +450,7 @@ in
       extraModules = mkOption {
         type = types.listOf types.unspecified;
         default = [];
-        example = literalExample ''[ "proxy_connect" { name = "php5"; path = "''${php}/modules/libphp5.so"; } ]'';
+        example = literalExample ''[ "proxy_connect" { name = "php5"; path = "''${pkgs.php}/modules/libphp5.so"; } ]'';
         description = ''
           Additional Apache modules to be used.  These can be
           specified as a string in the case of modules distributed
@@ -505,7 +510,7 @@ in
       virtualHosts = mkOption {
         type = types.listOf (types.submodule (
           { options = import ./per-server-options.nix {
-              inherit pkgs;
+              inherit lib;
               forMainServer = false;
             };
           }));
@@ -572,7 +577,7 @@ in
 
     # Include the options shared between the main server and virtual hosts.
     // (import ./per-server-options.nix {
-      inherit pkgs;
+      inherit lib;
       forMainServer = true;
     });
 
@@ -582,6 +587,12 @@ in
   ###### implementation
 
   config = mkIf config.services.httpd.enable {
+  
+    assertions = [ { assertion = mainCfg.enableSSL == true
+                               -> mainCfg.sslServerCert != null
+                                    && mainCfg.sslServerKey != null;
+                     message = "SSL is enabled for HTTPD, but sslServerCert and/or sslServerKey haven't been specified."; }
+                 ];
 
     users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") singleton
       { name = "wwwrun";
@@ -610,7 +621,7 @@ in
       { description = "Apache HTTPD";
 
         wantedBy = [ "multi-user.target" ];
-        requires = [ "keys.target" ];
+        wants = [ "keys.target" ];
         after = [ "network.target" "fs.target" "postgresql.service" "keys.target" ];
 
         path =
@@ -622,8 +633,8 @@ in
           ++ concatMap (svc: svc.extraServerPath) allSubservices;
 
         environment =
-          { PHPRC = if enablePHP then phpIni else "";
-          } // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
+          optionalAttrs enablePHP { PHPRC = phpIni; }
+          // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
 
         preStart =
           ''

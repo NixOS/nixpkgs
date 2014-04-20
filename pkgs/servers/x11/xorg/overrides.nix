@@ -37,6 +37,10 @@ in
       '';
   };
 
+  glamoregl = attrs: attrs // {
+    installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
+  };
+
   imake = attrs: attrs // {
     inherit (xorg) xorgcffiles;
     x11BuildHook = ./imake.sh;
@@ -86,6 +90,12 @@ in
     propagatedBuildInputs = [ xorg.libSM ];
   };
 
+  # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
+  # Once the bug is fixed upstream, this can be removed.
+  luit = attrs: attrs // {
+    configureFlags = "--disable-selective-werror";
+  };
+
   compositeproto = attrs: attrs // {
     propagatedBuildInputs = [ xorg.fixesproto ];
   };
@@ -125,7 +135,7 @@ in
     postInstall =
       ''
         mkdir -p $out/share
-        ln -sfn ${args.xkeyboard_config}/etc/X11 $out/share/X11
+        ln -sfn ${xorg.xkeyboardconfig}/etc/X11 $out/share/X11
       '';
   };
 
@@ -142,13 +152,17 @@ in
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
+  xf86inputmouse = attrs: attrs // {
+    installFlags = "sdkdir=\${out}/include/xorg";
+  };
+
   xf86inputjoystick = attrs: attrs // {
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
   xf86inputsynaptics = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [args.mtdev];
-    installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/include/xorg";
+    installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
   };
 
   xf86inputvmmouse = attrs: attrs // {
@@ -157,6 +171,10 @@ in
       "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d"
       "--with-udev-rules-dir=$(out)/lib/udev/rules.d"
     ];
+  };
+
+  xf86videoati = attrs: attrs // {
+    NIX_CFLAGS_COMPILE = "-I${xorg.glamoregl}/include/xorg";
   };
 
   xf86videonv = attrs: attrs // {
@@ -183,7 +201,18 @@ in
   };
 
   xkeyboardconfig = attrs: attrs // {
+
     buildInputs = attrs.buildInputs ++ [args.intltool];
+
+    #TODO: resurrect patches for US_intl?
+    patches = [ ./xkeyboard-config-eo.patch ];
+
+    # 1: compatibility for X11/xkb location
+    # 2: I think pkgconfig/ is supposed to be in /lib/
+    postInstall = ''
+      ln -s share "$out/etc"
+      mkdir "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
+    '';
   };
 
   xorgserver = with xorg; attrs: attrs // {
@@ -247,6 +276,6 @@ in
   };
 
   xwd = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [xorg.libXt];
+    buildInputs = with xorg; attrs.buildInputs ++ [libXt libxkbfile];
   };
 }

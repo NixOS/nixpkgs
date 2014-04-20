@@ -1,6 +1,6 @@
-{ cabal, base64Bytestring, cereal, conduit, cryptoConduit
-, cryptohashCryptoapi, dataDefault, fileEmbed, filepath, hjsmin
-, hspec, httpTypes, HUnit, mimeTypes, processConduit, resourcet
+{ cabal, async, base64Bytestring, byteable, conduit, conduitExtra
+, cryptohash, cryptohashConduit, dataDefault, fileEmbed, filepath
+, hjsmin, hspec, httpTypes, HUnit, mimeTypes, resourcet
 , shakespeareCss, systemFileio, systemFilepath, text, transformers
 , unixCompat, unorderedContainers, wai, waiAppStatic, waiTest
 , yesodCore, yesodTest
@@ -8,19 +8,19 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-static";
-  version = "1.2.2.1";
-  sha256 = "1dsr3gv6hf42islw2018y4yajvkd9j627fkdlz45309cyjns55jg";
+  version = "1.2.2.4";
+  sha256 = "1dpd175kd1yda2fs8zzs00j8nhdvzsgqywkkh934qz7zr7p1rawl";
   buildDepends = [
-    base64Bytestring cereal conduit cryptoConduit cryptohashCryptoapi
-    dataDefault fileEmbed filepath hjsmin httpTypes mimeTypes
-    processConduit resourcet shakespeareCss systemFileio systemFilepath
-    text transformers unixCompat unorderedContainers wai waiAppStatic
+    async base64Bytestring byteable conduit conduitExtra cryptohash
+    cryptohashConduit dataDefault fileEmbed filepath hjsmin httpTypes
+    mimeTypes resourcet shakespeareCss systemFileio systemFilepath text
+    transformers unixCompat unorderedContainers wai waiAppStatic
     yesodCore
   ];
   testDepends = [
-    base64Bytestring cereal conduit cryptoConduit cryptohashCryptoapi
-    dataDefault fileEmbed filepath hjsmin hspec httpTypes HUnit
-    mimeTypes processConduit resourcet shakespeareCss systemFileio
+    async base64Bytestring byteable conduit conduitExtra cryptohash
+    cryptohashConduit dataDefault fileEmbed filepath hjsmin hspec
+    httpTypes HUnit mimeTypes resourcet shakespeareCss systemFileio
     systemFilepath text transformers unixCompat unorderedContainers wai
     waiAppStatic waiTest yesodCore yesodTest
   ];

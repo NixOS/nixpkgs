@@ -2,16 +2,16 @@
 , libintlOrEmpty, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  name = "pango-1.32.5"; #.6 and higher need a not-yet-stable fontconfig (!)
+  name = "pango-1.32.5"; #.6 and higher need fontconfig-2.11.* which is troublesome
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/1.32/${name}.tar.xz";
     sha256 = "08aqis6j8nd1lb4f2h4h9d9kjvp54iwf8zvqzss0qn4v7nfcjyvx";
   };
 
-  buildInputs = [ gobjectIntrospection ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ gettext fontconfig ];
-
+  buildInputs = with stdenv.lib;
+    optional (!stdenv.isDarwin) gobjectIntrospection # build problems of itself and flex
+    ++ optionals stdenv.isDarwin [ gettext fontconfig ];
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
   postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {

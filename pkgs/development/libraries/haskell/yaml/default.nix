@@ -1,20 +1,20 @@
-{ cabal, aeson, attoparsec, conduit, hspec, HUnit, resourcet, text
-, transformers, unorderedContainers, vector
+{ cabal, aeson, attoparsec, conduit, hspec, HUnit, resourcet
+, scientific, text, transformers, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "yaml";
-  version = "0.8.5.3";
-  sha256 = "028wxp3jcvdy63707jhxm9mmkbxz9ni1c63rb7wvzjswijp3p95b";
+  version = "0.8.8.1";
+  sha256 = "1lkw05rx88jckzlkslb945zswn6g7i3vxsgxpj9pkcxvh3y9zagv";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    aeson attoparsec conduit resourcet text transformers
+    aeson attoparsec conduit resourcet scientific text transformers
     unorderedContainers vector
   ];
   testDepends = [
-    aeson conduit hspec HUnit text transformers unorderedContainers
-    vector
+    aeson conduit hspec HUnit resourcet text transformers
+    unorderedContainers vector
   ];
   meta = {
     homepage = "http://github.com/snoyberg/yaml/";

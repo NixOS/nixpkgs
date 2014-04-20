@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Glob";
-  version = "0.7.3";
-  sha256 = "0yl0wxbd03dv0hfr2aqwm9f3xnhjkdicymqv3nmhjjslqq3a59zd";
+  version = "0.7.4";
+  sha256 = "00f6xznqh27vbr8rggsrdphqsq1cvv931pa06b1grs7w01dcmw8s";
   buildDepends = [ dlist filepath transformers ];
   meta = {
     homepage = "http://iki.fi/matti.niemenmaa/glob/";

@@ -1,6 +1,6 @@
 args : with args; 
 
-if (! python ? db4Support) || (! python.db4Support) then 
+if (! python ? dbSupport) || (! python.dbSupport) then 
   throw ''Python DB4 support is required for codeville.'' 
 else
 

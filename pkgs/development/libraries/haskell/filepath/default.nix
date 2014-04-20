@@ -1,9 +1,10 @@
-{ cabal }:
+{ cabal, QuickCheck, random }:
 
 cabal.mkDerivation (self: {
   pname = "filepath";
-  version = "1.3.0.1";
-  sha256 = "1ny8dz8rv883vg6hkzg3zank771cr2z9sfhii7aw4rfb71k29g5p";
+  version = "1.3.0.2";
+  sha256 = "0wvvz6cs5fh4f04a87b9s7xrnzypmnzzkn149p6xk8xi7gcvcpy2";
+  testDepends = [ QuickCheck random ];
   meta = {
     homepage = "http://www-users.cs.york.ac.uk/~ndm/filepath/";
     description = "Library for manipulating FilePaths in a cross platform way";

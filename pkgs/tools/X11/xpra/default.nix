@@ -5,6 +5,7 @@
 
 buildPythonPackage rec {
   name = "xpra-0.9.5";
+  namePrefix = "";
 
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.bz2";
@@ -12,7 +13,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    python cython pkgconfig
+    cython pkgconfig
 
     xorg.libX11 xorg.renderproto xorg.libXrender xorg.libXi xorg.inputproto xorg.kbproto
     xorg.randrproto xorg.damageproto xorg.compositeproto xorg.xextproto xorg.recordproto
@@ -32,9 +33,15 @@ buildPythonPackage rec {
   # they don't have automated testing out of the box? http://xpra.org/trac/ticket/177
   doCheck = false;
 
-  buildPhase = ''
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0) $(pkg-config --cflags pygtk-2.0) $(pkg-config --cflags xtst)"
-    python ./setup.py build --enable-Xdummy
+  preBuild = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0) $(pkg-config --cflags pygtk-2.0) $(pkg-config --cflags xtst)"
+  '';
+  setupPyBuildFlags = ["--enable-Xdummy"];
+
+  preInstall = ''
+    # see https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix
+    ${python}/bin/${python.executable} setup.py install_data --install-dir=$out --root=$out
+    sed -i '/ = data_files/d' setup.py
   '';
 
   meta = {

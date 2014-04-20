@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     description = "FireWire audio drivers";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

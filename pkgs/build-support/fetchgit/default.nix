@@ -1,5 +1,5 @@
 {stdenv, git, cacert}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false }:
+{url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false, fetchSubmodules ? true}:
 
 /* NOTE:
    fetchgit has one problem: git fetch only works for refs.
@@ -23,6 +23,8 @@
    server admins start using the new version?
 */
 
+assert md5 != "" || sha256 != "";
+
 stdenv.mkDerivation {
   name = "git-export";
   builder = ./builder.sh;
@@ -33,7 +35,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if sha256 == "" then md5 else sha256;
 
-  inherit url rev leaveDotGit;
+  inherit url rev leaveDotGit fetchSubmodules;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ca-bundle.crt";
 
@@ -44,5 +46,7 @@ stdenv.mkDerivation {
     # by definition pure.
     "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
     ];
+
+  preferLocalBuild = true;
 }
 

@@ -1,0 +1,27 @@
+From 6503848d9e0eb009e5f462116a963beacb208930 Mon Sep 17 00:00:00 2001
+From: Austin Seipp <aseipp@pobox.com>
+Date: Thu, 20 Feb 2014 00:11:44 -0600
+Subject: [PATCH] attempt to 'modprobe config' before checking kernel
+
+Signed-off-by: Austin Seipp <aseipp@pobox.com>
+---
+ checksec.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/checksec.sh b/checksec.sh
+index dd1f72e..63acc29 100644
+--- a/checksec.sh
++++ b/checksec.sh
+@@ -337,7 +337,8 @@ kernelcheck() {
+   printf "  userspace processes, this option lists the status of kernel configuration\n"
+   printf "  options that harden the kernel itself against attack.\n\n"
+   printf "  Kernel config: "
+- 
++
++  modprobe configs 2> /dev/null
+   if [ -f /proc/config.gz ] ; then
+     kconfig="zcat /proc/config.gz"
+     printf "\033[32m/proc/config.gz\033[m\n\n"
+-- 
+1.8.3.2
+

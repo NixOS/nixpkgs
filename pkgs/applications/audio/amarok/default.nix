@@ -22,12 +22,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = "-DKDE4_BUILD_TESTS=OFF";
 
-  postInstall = ''
-    mkdir -p $out/nix-support
-    echo ${qtscriptgenerator} > $out/nix-support/propagated-user-env-packages
-  '';
+  propagatedUserEnvPkgs = [ qtscriptgenerator ];
 
   meta = {
+    repositories.git = git://anongit.kde.org/amarok.git;
     description = "Popular music player for KDE";
     license = "GPL";
     homepage = http://amarok.kde.org;

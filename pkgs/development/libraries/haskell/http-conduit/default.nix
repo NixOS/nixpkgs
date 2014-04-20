@@ -1,30 +1,23 @@
-{ cabal, asn1Data, base64Bytestring, blazeBuilder
-, blazeBuilderConduit, caseInsensitive, certificate, conduit
-, connection, cookie, cprngAes, dataDefault, deepseq, failure
-, filepath, hspec, httpClient, httpClientConduit
-, httpClientMultipart, httpClientTls, httpTypes, HUnit, liftedBase
-, mimeTypes, monadControl, mtl, network, networkConduit
-, publicsuffixlist, random, regexCompat, resourcet, socks, text
-, time, tls, tlsExtra, transformers, transformersBase, utf8String
-, void, wai, warp, warpTls, zlibConduit
+{ cabal, blazeBuilder, caseInsensitive, conduit, conduitExtra
+, connection, cookie, dataDefaultClass, hspec, httpClient
+, httpClientTls, httpTypes, HUnit, liftedBase, monadControl, mtl
+, network, networkConduit, resourcet, streamingCommons, text, time
+, transformers, utf8String, wai, warp, warpTls
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "2.0.0.3";
-  sha256 = "1s3nyc3wwpqildhmkv5fps2a0552yrnwcqjv4bxcvg581k5sj42i";
+  version = "2.1.0";
+  sha256 = "1qlqhrrc130c8wvgbbbkb7qrm8gp48gkv5xanqgb26amvny98gsv";
   buildDepends = [
-    conduit httpClient httpClientConduit httpClientTls httpTypes
-    liftedBase resourcet transformers
+    conduit httpClient httpClientTls httpTypes liftedBase monadControl
+    mtl resourcet transformers
   ];
   testDepends = [
-    asn1Data base64Bytestring blazeBuilder blazeBuilderConduit
-    caseInsensitive certificate conduit connection cookie cprngAes
-    dataDefault deepseq failure filepath hspec httpClient
-    httpClientMultipart httpTypes HUnit liftedBase mimeTypes
-    monadControl mtl network networkConduit publicsuffixlist random
-    regexCompat resourcet socks text time tls tlsExtra transformers
-    transformersBase utf8String void wai warp warpTls zlibConduit
+    blazeBuilder caseInsensitive conduit conduitExtra connection cookie
+    dataDefaultClass hspec httpClient httpTypes HUnit liftedBase
+    network networkConduit streamingCommons text time transformers
+    utf8String wai warp warpTls
   ];
   doCheck = false;
   meta = {

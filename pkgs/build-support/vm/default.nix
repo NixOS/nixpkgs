@@ -2,7 +2,7 @@
 , kernel ? pkgs.linux_3_10
 , img ? "bzImage"
 , rootModules ?
-    [ "virtio_pci" "virtio_blk" "virtio_balloon" "ext4" "unix" "9p" "9pnet_virtio" ]
+    [ "virtio_pci" "virtio_blk" "virtio_balloon" "ext4" "unix" "9p" "9pnet_virtio" "rtc_cmos" ]
 }:
 
 with pkgs;
@@ -57,6 +57,7 @@ rec {
       mknod ${dev}/random  c 1 8
       mknod ${dev}/urandom c 1 9
       mknod ${dev}/tty     c 5 0
+      mknod ${dev}/rtc     c 254 0
       . /sys/class/block/${hd}/uevent
       mknod ${dev}/${hd} b $MAJOR $MINOR
     '';
@@ -158,6 +159,10 @@ rec {
   stage2Init = writeScript "vm-run-stage2" ''
     #! ${bash}/bin/sh
     source /tmp/xchg/saved-env
+
+    # Set the system time from the hardware clock.  Works around an
+    # apparent KVM > 1.5.2 bug.
+    ${pkgs.utillinux}/sbin/hwclock -s
 
     export NIX_STORE=/nix/store
     export NIX_BUILD_TOP=/tmp
@@ -924,6 +929,32 @@ rec {
       packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
     };
 
+    fedora17i386 = {
+      name = "fedora-17-i386";
+      fullName = "Fedora 17 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/17/Everything/i386/os/repodata/82dc1ea6d26e53a367dc6e7472113c4454c9a8ac7c98d4bfb11fd0b6f311450f-primary.xml.gz;
+        sha256 = "03s527rvdl0zn6zx963wmjlcjm247h8p4x3fviks6lvfsak1xp42";
+      };
+      urlPrefix = mirror://fedora/linux/releases/17/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora17x86_64 = {
+      name = "fedora-17-x86_64";
+      fullName = "Fedora 17 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/17/Everything/x86_64/os/repodata/7009de56f1a1c399930fa72094a310a40d38153c96d0b5af443914d3d6a7d811-primary.xml.gz;
+        sha256 = "04fqlzbd651r8jpvbl4n7hakh3d422ir88571y9rkhx1y5bdw2bh";
+      };
+      urlPrefix = mirror://fedora/linux/releases/17/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
     fedora18i386 = {
       name = "fedora-18-i386";
       fullName = "Fedora 18 (i386)";
@@ -1505,22 +1536,22 @@ rec {
     debian70x86_64 = debian7x86_64;
 
     debian7i386 = {
-      name = "debian-7.3-wheezy-i386";
-      fullName = "Debian 7.3 Wheezy (i386)";
+      name = "debian-7.4-wheezy-i386";
+      fullName = "Debian 7.4 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "037637520ce371a50beb5446fd27a731f30b51bc362c2f4a5dcfce9c7e30ffb6";
+        sha256 = "9f19822c82e25cd149f82b0d16fdbc00d1080db7f34e41de456498dc7c54f2b4";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian7x86_64 = {
-      name = "debian-7.3-wheezy-amd64";
-      fullName = "Debian 7.3 Wheezy (amd64)";
+      name = "debian-7.4-wheezy-amd64";
+      fullName = "Debian 7.4 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "c2ed55a2a263d482826c934b97ad910984fa5695ab1c480841741b828d0590a5";
+        sha256 = "160ee0917693bc2e8f69b233c220857f35a70d906540d99d2779def576daf5f7";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1688,5 +1719,4 @@ rec {
       };
 
     };
-
-}
+} // import ./windows pkgs

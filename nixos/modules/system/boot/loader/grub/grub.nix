@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
@@ -133,11 +133,8 @@ in
             chainloader (hd0,1)+1
 
           # GRUB 2 example
-          menuentry "Windows7" {
-            title Windows7
-            insmod ntfs
-            set root='(hd1,1)'
-            chainloader +1
+          menuentry "Windows 7" {
+            chainloader (hd0,4)+1
           }
         '';
         description = ''

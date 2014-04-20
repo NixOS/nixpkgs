@@ -1,15 +1,15 @@
 { stdenv, fetchurl, cmake, curl }:
 
 let
-  name = "libjson-rpc-cpp";
+  basename = "libjson-rpc-cpp";
   version = "0.2.1";
 in
 
 stdenv.mkDerivation {
-  name = "${name}-${version}";
+  name = "${basename}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/cinemast/${name}/archive/${version}.tar.gz";
+    url = "https://github.com/cinemast/${basename}/archive/${version}.tar.gz";
     sha256 = "1pc9nn4968qkda8vr4f9dijn2fcldm8i0ymwmql29h4cl5ghdnpw";
   };
 
@@ -23,6 +23,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "C++ framework for json-rpc (json remote procedure call)";
+    homepage = https://github.com/cinemast/libjson-rpc-cpp;
+    license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
   };
 }

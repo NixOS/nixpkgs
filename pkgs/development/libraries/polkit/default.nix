@@ -53,13 +53,10 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-polkitd-user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
     "--with-os-type=NixOS" # not recognized but prevents impurities on non-NixOS
+    "--enable-introspection"
   ];
 
-  makeFlags =
-    ''
-      INTROSPECTION_GIRDIR=$(out)/share/gir-1.0
-      INTROSPECTION_TYPELIBDIR=$(out)lib/girepository-1.0
-    '';
+  makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0 INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
 
   #doCheck = true; # some /bin/bash problem that isn't auto-solved by patchShebangs
 

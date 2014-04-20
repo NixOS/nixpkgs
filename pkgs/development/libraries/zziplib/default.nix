@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       zip/unzip tools.
     '';
 
-    licenses = [ "LGPLv2+" "MPLv1.1" ];
+    license = [ "LGPLv2+" "MPLv1.1" ];
 
     homepage = http://zziplib.sourceforge.net/;
 

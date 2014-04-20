@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libftdi libusb1 ];
 
+  postInstall = ''
+    mkdir -p "$out/etc/udev/rules.d"
+    ln -s "$out/share/openocd/contrib/openocd.udev" "$out/etc/udev/rules.d/99-openocd.rules"
+  '';
+
   meta = {
     homepage = http://openocd.sourceforge.net/;
     description = "OpenOCD, an on-chip debugger";

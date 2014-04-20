@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Object file displaying tool";
     homepage    = https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/otool.1.html;
-    license     = with licenses; [ apsl20 gpl2Plus ];
+    # TODO license     = with licenses; [ apsl20 gpl2Plus ];
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.darwin;
 

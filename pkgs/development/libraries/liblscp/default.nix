@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     description = "LinuxSampler Control Protocol (LSCP) wrapper library";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

@@ -12,7 +12,7 @@ let
 in
 
 stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
-  name = "OVMF-2012-10-09";
+  name = "OVMF-2014-02-01";
 
   unpackPhase = ''
     for file in \

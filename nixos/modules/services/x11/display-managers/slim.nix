@@ -1,10 +1,11 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
 
   dmcfg = config.services.xserver.displayManager;
+
   cfg = dmcfg.slim;
 
   slimConfig = pkgs.writeText "slim.cfg"
@@ -108,6 +109,12 @@ in
           };
         execCmd = "exec ${pkgs.slim}/bin/slim";
       };
+
+    services.xserver.displayManager.sessionCommands =
+      ''
+        # Export the config/themes for slimlock.
+        export SLIM_THEMESDIR=${slimThemesDir}
+      '';
 
     # Allow null passwords so that the user can login as root on the
     # installation CD.

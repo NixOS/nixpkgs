@@ -10,10 +10,29 @@ let
     find "$1" -type f -name "*.rb" | xargs sed -i "s@/usr/bin/env@$(type -p env)@g"
     find "$1" -type f -name "*.mk" | xargs sed -i "s@/usr/bin/env@$(type -p env)@g"
   '';
-  
+
 in
 
 {
+  buildr = {
+    # Many Buildfiles rely on RUBYLIB containing the current directory
+    # (as was the default in Ruby < 1.9.2).
+    extraWrapperFlags = "--prefix RUBYLIB : .";
+  };
+
+  fakes3 = {
+    postInstall = ''
+      cd $out/${ruby.gemPath}/gems/*
+      patch -Np1 -i ${../../ruby-modules/fake-s3-list-bucket.patch}
+    '';
+  };
+
+  ffi = {
+    postUnpack = "onetuh";
+    buildFlags = ["--with-ffi-dir=${libffi}"];
+    NIX_POST_EXTRACT_FILES_HOOK = patchUsrBinEnv;
+  };
+
   iconv = { buildInputs = [ libiconvOrEmpty ]; };
 
   libv8 = {
@@ -26,16 +45,16 @@ in
     #
     # Finally, we must set CC and AR explicitly to allow scons to find the
     # compiler and archiver
-    
+
     preBuild = ''
       cat > $TMPDIR/g++ <<EOF
       #! ${stdenv.shell}
       $(export)
-      
+
       g++ \$(echo \$@ | sed 's/-Werror//g')
       EOF
       chmod +x $TMPDIR/g++
-      
+
       export CXX=$TMPDIR/g++
       export AR=$(type -p ar)
     '';
@@ -48,12 +67,10 @@ in
       done
     '';
   };
-  
-  sqlite3 = { propagatedBuildInputs = [ sqlite ]; };
-  
-  rails = { gemFlags = "--no-ri --no-rdoc"; };
-  
+
   ncurses = { propagatedBuildInputs = [ ncurses ]; };
+
+  ncursesw = { propagatedBuildInputs = [ ncurses ]; };
 
   nix = {
     postInstall = ''
@@ -61,9 +78,7 @@ in
       patch -Np1 -i ${./fix-gem-nix-versions.patch}
     '';
   };
-  
-  ncursesw = { propagatedBuildInputs = [ ncurses ]; };
-  
+
   nokogiri = {
     buildFlags =
       [ "--with-xml2-dir=${libxml2} --with-xml2-include=${libxml2}/include/libxml2"
@@ -71,16 +86,34 @@ in
       ];
   };
 
-  ffi = {
-    postUnpack = "onetuh";
-    buildFlags = ["--with-ffi-dir=${libffi}"];
-    NIX_POST_EXTRACT_FILES_HOOK = patchUsrBinEnv;
+  pry = { gemFlags = "--no-ri --no-rdoc"; };
+
+  rails = { gemFlags = "--no-ri --no-rdoc"; };
+
+  rjb = {
+    buildInputs = [ jdk ];
+    JAVA_HOME = jdk;
   };
 
   rmagick = {
     buildInputs = [ imagemagick pkgconfig ];
 
     NIX_CFLAGS_COMPILE = "-I${imagemagick}/include/ImageMagick-6";
+  };
+
+  sqlite3 = { propagatedBuildInputs = [ sqlite ]; };
+
+  xapian_full = {
+    buildInputs = [ gems.rake zlib libuuid ];
+    gemFlags = "--no-rdoc --no-ri";
+  };
+
+  xapian_full_alaveteli = {
+    buildInputs = [ zlib libuuid ];
+  };
+
+  xapian_ruby = {
+    buildInputs = [ zlib libuuid ];
   };
 
   xrefresh_server =
@@ -98,37 +131,4 @@ in
         zcat ${patch} | patch -p 1
       ''; # */
     };
-
-  xapian_full = {
-    buildInputs = [ gems.rake zlib libuuid ];
-    gemFlags = "--no-rdoc --no-ri";
-  };
-
-  xapian_full_alaveteli = {
-    buildInputs = [ zlib libuuid ];
-  };
-
-  xapian_ruby = {
-    buildInputs = [ zlib libuuid ];
-  };
-
-  rjb = {
-    buildInputs = [ jdk ];
-    JAVA_HOME = jdk;
-  };
-
-  buildr = {
-    # Many Buildfiles rely on RUBYLIB containing the current directory
-    # (as was the default in Ruby < 1.9.2).
-    extraWrapperFlags = "--prefix RUBYLIB : .";
-  };
-  
-  pry = { gemFlags = "--no-ri --no-rdoc"; };
-
-  fakes3 = {
-    postInstall = ''
-      cd $out/${ruby.gemPath}/gems/*
-      patch -Np1 -i ${../../ruby-modules/fake-s3-list-bucket.patch}
-    '';
-  };
 }

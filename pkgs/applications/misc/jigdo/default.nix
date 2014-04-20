@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, db4, gtk, bzip2 }:
+{ stdenv, fetchurl, db, gtk, bzip2 }:
 
 stdenv.mkDerivation {
   name = "jigdo-0.7.3";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "0jnlzm9m2hjlnw0zs2fv456ml5r2jj2q1lncqbrgg52lq18f6fa3";
   };
 
-  buildInputs = [ db4 gtk bzip2 ];
+  buildInputs = [ db gtk bzip2 ];
 
   configureFlags = "--without-libdb";
 

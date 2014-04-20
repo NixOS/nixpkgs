@@ -1,6 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.services.cgminer;
@@ -42,6 +42,7 @@ in
       package = mkOption {
         default = pkgs.cgminer;
         description = "Which cgminer derivation to use.";
+        type = types.package;
       };
 
       user = mkOption {
