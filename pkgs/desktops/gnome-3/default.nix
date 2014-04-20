@@ -155,6 +155,8 @@ rec {
 
   gedit = callPackage ./apps/gedit { };
 
+  gnome-music = callPackage ./apps/gnome-music { };
+
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
 
