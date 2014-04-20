@@ -8828,7 +8828,9 @@ let
 
   openjump = callPackage ../applications/misc/openjump { };
 
-  openscad = callPackage ../applications/graphics/openscad {};
+  openscad = callPackage ../applications/graphics/openscad {
+    stdenv = overrideGCC stdenv gcc46;
+  };
 
   opera = callPackage ../applications/networking/browsers/opera {
     inherit (pkgs.kde4) kdelibs;
