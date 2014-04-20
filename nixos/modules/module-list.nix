@@ -102,6 +102,7 @@
   ./services/desktops/gnome3/evolution-data-server.nix
   ./services/desktops/gnome3/gnome-keyring.nix
   ./services/desktops/gnome3/gnome-online-accounts.nix
+  ./services/desktops/gnome3/gnome-online-miners.nix
   ./services/desktops/gnome3/gnome-user-share.nix
   ./services/desktops/gnome3/seahorse.nix
   ./services/desktops/gnome3/sushi.nix

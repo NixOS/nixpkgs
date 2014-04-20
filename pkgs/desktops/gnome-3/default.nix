@@ -72,6 +72,8 @@ rec {
 
   gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
 
+  gnome-online-miners = callPackage ./core/gnome-online-miners { };
+
   gnome_session = callPackage ./core/gnome-session { };
 
   gnome_shell = callPackage ./core/gnome-shell { };
