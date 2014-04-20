@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost }:
+{ stdenv, fetchurl, boost, tcl }:
 
 stdenv.mkDerivation rec {
   name = "swig-1.3.40";
@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "02dc8g8wy75nd2is1974rl24c6mdl0ai1vszs1xpg9nd7dlv6i8r";
   };
 
-  #buildInputs = [ boost ]; # needed for `make check'
-
   /* The test suite fails this way:
 
       building python_cpp
@@ -18,8 +16,13 @@ stdenv.mkDerivation rec {
       make[1]: *** [li_boost_shared_ptr.cpptest] Error 134
 
      This may be an uninitialized mutex or mutexattr or something.
+
+     UPDATE: On Darwin this runs fine with doCheck = true
    */
   doCheck = false;
+  # 'make check' uses boost and tcl
+  buildInputs = if doCheck then [ boost tcl ] else [];
+
 
   meta = {
     description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";
@@ -39,7 +42,7 @@ stdenv.mkDerivation rec {
     # Licensing is a mess: http://www.swig.org/Release/LICENSE .
     license = "BSD-style";
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
 
     maintainers = [ ];
   };
