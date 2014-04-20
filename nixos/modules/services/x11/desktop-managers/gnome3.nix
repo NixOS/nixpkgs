@@ -52,6 +52,7 @@ in {
     services.accounts-daemon.enable = true;
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.evolution-data-server.enable = true;
+    services.gnome3.gnome-documents.enable = mkDefault true;
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
