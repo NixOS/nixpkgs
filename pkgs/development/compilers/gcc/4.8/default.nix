@@ -62,7 +62,7 @@ let version = "4.8.2";
   */
     enableParallelBuilding = !profiledCompiler;
 
-    patches = []
+    patches = [ ./bug-58800.patch ] # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58800
       ++ optional enableParallelBuilding ./parallel-bconfig.patch
       ++ optional (cross != null) ./libstdc++-target.patch
       # ++ optional noSysDirs ./no-sys-dirs.patch
