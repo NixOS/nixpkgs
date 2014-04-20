@@ -130,6 +130,7 @@ in {
 
         gnome3.file-roller
         gnome3.gedit
+        gnome3.gnome-music
         gnome3.gnome-tweak-tool
       ] config.environment.gnome3.excludePackages);
 
