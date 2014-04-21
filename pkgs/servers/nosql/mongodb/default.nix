@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, scons, boost, v8, gperftools, pcre, snappy }:
+{ stdenv, fetchurl, scons, boost, v8_3_14, gperftools, pcre, snappy }:
 
 let version = "2.4.8"; in stdenv.mkDerivation rec {
   name = "mongodb-${version}";
@@ -8,7 +8,7 @@ let version = "2.4.8"; in stdenv.mkDerivation rec {
     sha256 = "1p6gnharypglfp39halp72fig96fqjhakyy7m76a1prxwpjkqw7x";
   };
 
-  nativeBuildInputs = [ scons boost v8 gperftools pcre snappy ];
+  nativeBuildInputs = [ scons boost v8_3_14 gperftools pcre snappy ];
 
   postPatch = ''
     substituteInPlace SConstruct \

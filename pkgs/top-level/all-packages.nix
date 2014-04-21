@@ -5409,6 +5409,8 @@ let
 
   ming = callPackage ../development/libraries/ming { };
 
+  minizip = callPackage ../development/libraries/minizip { };
+
   minmay = callPackage ../development/libraries/minmay { };
 
   miro = callPackage ../applications/video/miro {
@@ -6156,7 +6158,13 @@ let
     inherit (gnome) libsoup;
   };
 
-  v8 = callPackage ../development/libraries/v8 { inherit (pythonPackages) gyp; };
+  v8 = callPackage ../development/libraries/v8 {
+    inherit (pythonPackages) gyp;
+  };
+
+  v8_3_14 = callPackage ../development/libraries/v8/3.14.nix {
+    inherit (pythonPackages) gyp;
+  };
 
   xmlsec = callPackage ../development/libraries/xmlsec { };
 
@@ -7750,7 +7758,6 @@ let
 
   chromium = lowPrio (callPackage ../applications/networking/browsers/chromium {
     channel = "stable";
-    gconf = gnome.GConf;
     pulseSupport = config.pulseaudio or true;
   });
 

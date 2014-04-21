@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, protobuf, v8, ncurses, gperftools, boost, m4 }:
+{ stdenv, fetchurl, which, protobuf, v8_3_14, ncurses, gperftools, boost, m4 }:
 
 stdenv.mkDerivation rec {
   name = "rethinkdb-1.11.2";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--lib-path ${gperftools}/lib";
 
-  buildInputs = [ protobuf v8 ncurses boost ];
+  buildInputs = [ protobuf v8_3_14 ncurses boost ];
 
   nativeBuildInputs = [ which m4 ];
 

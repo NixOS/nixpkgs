@@ -40,4 +40,6 @@ stdenv.mkDerivation rec {
 
   # zlib doesn't like the automatic --disable-shared from the Cygwin stdenv.
   cygwinConfigureEnableShared = true;
+
+  passthru.version = version;
 }
