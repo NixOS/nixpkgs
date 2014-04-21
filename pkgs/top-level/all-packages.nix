@@ -9974,7 +9974,7 @@ let
 
   kakasi = callPackage ../tools/text/kakasi { };
 
-  kde4 = recurseIntoAttrs pkgs.kde411;
+  kde4 = recurseIntoAttrs pkgs.kde412;
 
   kde4_next = recurseIntoAttrs( lib.lowPrioSet pkgs.kde412 );
 
