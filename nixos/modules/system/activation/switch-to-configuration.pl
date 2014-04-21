@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use File::Basename;
 use File::Slurp;
-use Net::DBus;
 use Sys::Syslog qw(:standard :macros);
 use Cwd 'abs_path';
 
@@ -63,18 +62,17 @@ syslog(LOG_NOTICE, "switching to system configuration $out");
 # virtual console 1 and we restart the "tty1" unit.
 $SIG{PIPE} = "IGNORE";
 
-my $dbus = Net::DBus->find;
-my $systemdService = $dbus->get_service('org.freedesktop.systemd1');
-my $systemdManager = $systemdService->get_object('/org/freedesktop/systemd1');
-
 sub getActiveUnits {
+    # FIXME: use D-Bus or whatever to query this, since parsing the
+    # output of list-units is likely to break.
+    my $lines = `LANG= @systemd@/bin/systemctl list-units --full`;
     my $res = {};
-    foreach my $unit (@{ $systemdManager->ListUnits() }) {
-        $res->{$unit->[0]} = {
-            load => $unit->[2],
-            state => $unit->[3],
-            substate => $unit->[4]
-        };
+    foreach my $line (split '\n', $lines) {
+        chomp $line;
+        last if $line eq "";
+        $line =~ /^\*?\s*(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s/ or next;
+        next if $1 eq "UNIT";
+        $res->{$1} = { load => $2, state => $3, substate => $4 };
     }
     return $res;
 }
@@ -299,7 +297,7 @@ foreach my $device (keys %$prevSwaps) {
 if (scalar @unitsToStop > 0) {
     @unitsToStop = unique(@unitsToStop);
     print STDERR "stopping the following units: ", join(", ", sort(@unitsToStop)), "\n";
-    $systemdManager->StopUnit($_, "replace") for @unitsToStop;
+    system("@systemd@/bin/systemctl", "stop", "--", @unitsToStop); # FIXME: ignore errors?
 }
 
 print STDERR "NOT restarting the following units: ", join(", ", sort(@unitsToSkip)), "\n"
@@ -314,22 +312,21 @@ system("$out/activate", "$out") == 0 or $res = 2;
 # Restart systemd if necessary.
 if (abs_path("/proc/1/exe") ne abs_path("@systemd@/lib/systemd/systemd")) {
     print STDERR "restarting systemd...\n";
-
-    $systemdManager->Reexecute();
+    system("@systemd@/bin/systemctl", "daemon-reexec") == 0 or $res = 2;
 }
 
 # Forget about previously failed services.
-$systemdManager->ResetFailed();
+system("@systemd@/bin/systemctl", "reset-failed");
 
-# Make systemd reload its units
-$systemdManager->Reload();
+# Make systemd reload its units.
+system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
 # Restart changed services (those that have to be restarted rather
 # than stopped and started).
 my @restart = unique(split('\n', read_file($restartListFile, err_mode => 'quiet') // ""));
 if (scalar @restart > 0) {
     print STDERR "restarting the following units: ", join(", ", sort(@restart)), "\n";
-    $systemdManager->Restart($_, "replace") for @restart;
+    system("@systemd@/bin/systemctl", "restart", "--", @restart) == 0 or $res = 4;
     unlink($restartListFile);
 }
 
@@ -341,7 +338,7 @@ if (scalar @restart > 0) {
 # systemd.
 my @start = unique("default.target", "timers.target", "sockets.target", split('\n', read_file($startListFile, err_mode => 'quiet') // ""));
 print STDERR "starting the following units: ", join(", ", sort(@start)), "\n";
-$systemdManager->StartUnit($_, "replace") for @start;
+system("@systemd@/bin/systemctl", "start", "--", @start) == 0 or $res = 4;
 unlink($startListFile);
 
 # Reload units that need it.  This includes remounting changed mount
@@ -349,12 +346,12 @@ unlink($startListFile);
 my @reload = unique(split '\n', read_file($reloadListFile, err_mode => 'quiet') // "");
 if (scalar @reload > 0) {
     print STDERR "reloading the following units: ", join(", ", sort(@reload)), "\n";
-    $systemdManager->ReloadUnit($_, "replace") for @reload;
+    system("@systemd@/bin/systemctl", "reload", "--", @reload) == 0 or $res = 4;
     unlink($reloadListFile);
 }
 
 # Signal dbus to reload its configuration.
-$systemdManager->ReloadUnit("dbus.service", "replace");
+system("@systemd@/bin/systemctl", "reload", "dbus.service");
 
 # Print failed and new units.
 my (@failed, @new, @restarting);
@@ -365,9 +362,11 @@ while (my ($unit, $state) = each %{$activeNew}) {
     }
     elsif ($state->{state} eq "auto-restart") {
         # A unit in auto-restart state is a failure *if* it previously failed to start
-        my $unit = $systemdManager->GetUnit($unit);
+        my $lines = `@systemd@/bin/systemctl show '$unit'`;
+        my $info = {};
+        parseKeyValues($info, split("\n", $lines));
 
-        if ($unit->ExecMainStatus ne '0') {
+        if ($info->{ExecMainStatus} ne '0') {
             push @failed, $unit;
         }
     }
