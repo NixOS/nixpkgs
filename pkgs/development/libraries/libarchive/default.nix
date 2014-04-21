@@ -12,11 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0pixqnrcf35dnqgv0lp7qlcw7k13620qkhgxr288v7p4iz6ym1zb";
   };
 
-  patches = [(fetchurl {
-    url = "https://github.com/libarchive/libarchive/commit/22531545514043e04633e1c015c7540b9de9dbe4.diff";
-    sha256 = "1466ddrkdh2r8idmj3v7fk2gwnhc1kdxvyczdpnqms0qlmas6fj5";
-    name = "CVE-2013-0211.patch";
-  })];
+  patches = [
+    ./CVE-2013-0211.patch # https://github.com/libarchive/libarchive/commit/22531545
+  ];
 
   buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz ] ++
     stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ];
