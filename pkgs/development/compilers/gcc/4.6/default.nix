@@ -159,10 +159,8 @@ let version = "4.6.3";
             # In any case, mingw32 g++ linking is broken by default with shared libs,
             # unless adding "-lsupc++" to any linking command. I don't know why.
             " --disable-shared" +
-            (if cross.config == "x86_64-w64-mingw32" then
-              # To keep ABI compatibility with upstream mingw-w64
-              " --enable-fully-dynamic-string"
-              else "")
+            # To keep ABI compatibility with upstream mingw-w64
+            " --enable-fully-dynamic-string"
             else (if cross.libc == "uclibc" then
               # In uclibc cases, libgomp needs an additional '-ldl'
               # and as I don't know how to pass it, I disable libgomp.
