@@ -14,7 +14,7 @@ let
   stable-patch = with pkgs.kernelPatches;
     if cfg.vserver then grsecurity_vserver else grsecurity_stable;
   stableKernel = mkKernel pkgs.linux_3_2  stable-patch;
-  testKernel   = mkKernel pkgs.linux_3_13 pkgs.kernelPatches.grsecurity_unstable;
+  testKernel   = mkKernel pkgs.linux_3_14 pkgs.kernelPatches.grsecurity_unstable;
 
   ## -- grsecurity configuration -----------------------------------------------
 
