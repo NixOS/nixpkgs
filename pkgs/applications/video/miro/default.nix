@@ -22,6 +22,8 @@ buildPythonPackage rec {
   patches = [ ./gconf.patch ];
 
   postPatch = ''
+    patch -p1 -d .. < "${./youtube-feeds.patch}"
+
     sed -i -e 's/\$(shell which python)/python/' Makefile
     sed -i -e 's|/usr/bin/||' -e 's|/usr||' \
            -e 's/BUILD_TIME[^,]*/BUILD_TIME=0/' setup.py
