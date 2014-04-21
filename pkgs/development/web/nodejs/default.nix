@@ -10,7 +10,8 @@ let
 
   # !!! Should we also do shared libuv?
   deps = {
-    inherit v8_3_14 openssl zlib http-parser;
+    v8 = v8_3_14;
+    inherit openssl zlib http-parser;
     cares = c-ares;
   };
 
