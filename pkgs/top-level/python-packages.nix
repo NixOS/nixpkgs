@@ -1089,6 +1089,21 @@ pythonPackages = modules // import ./python-packages-generated.nix {
     };
   };
 
+  contextlib2 = buildPythonPackage rec {
+    name = "contextlib2-0.4.0";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/contextlib2/${name}.tar.gz";
+      md5 = "ea687207db25f65552061db4a2c6727d";
+    };
+    doCheck = false;
+
+    buildInputs = [ ];
+
+    meta = {
+    };
+  };
+
   cffi = buildPythonPackage rec {
     name = "cffi-0.7.2";
 
