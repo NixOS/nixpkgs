@@ -1,6 +1,7 @@
 { nixpkgs ? { outPath = ./..; revCount = 5678; shortRev = "gfedcba"; }
 , officialRelease ? false
 , stableBranch ? false
+, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
 }:
 
 let
@@ -23,10 +24,8 @@ in rec {
   });
 
   nixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
-    inherit officialRelease;
+    inherit officialRelease supportedSystems;
     nixpkgs = nixpkgsSrc;
-    # Only do Linux builds.
-    supportedSystems = [ "x86_64-linux" "i686-linux" ];
   })) [ "unstable" ];
 
   tested = pkgs.releaseTools.aggregate {

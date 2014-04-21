@@ -1,6 +1,7 @@
 { nixpkgs ? { outPath = ./..; revCount = 5678; shortRev = "gfedcba"; }
 , officialRelease ? false
 , stableBranch ? false
+, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
 }:
 
 let
@@ -10,9 +11,7 @@ let
     if officialRelease then ""
     else (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
-  systems = [ "x86_64-linux" "i686-linux" ];
-
-  forAllSystems = pkgs.lib.genAttrs systems;
+  forAllSystems = pkgs.lib.genAttrs supportedSystems;
 
   callTest = fn: args: forAllSystems (system: import fn ({ inherit system; } // args));
 
