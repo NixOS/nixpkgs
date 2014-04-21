@@ -84,33 +84,39 @@ let
       ${config.system.extraSystemBuilderCmds}
     '';
 
+  # Handle assertions
+
+  failed = map (x: x.message) (filter (x: !x.assertion) config.assertions);
+
+  showWarnings = res: fold (w: x: builtins.trace "^[[1;31mwarning: ${w}^[[0m" x) res config.warnings;
 
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
-  system = pkgs.stdenv.mkDerivation {
-    name = "nixos-${config.system.nixosVersion}";
-    preferLocalBuild = true;
-    buildCommand = systemBuilder;
+  system = showWarnings (
+    if [] == failed then pkgs.stdenv.mkDerivation {
+      name = "nixos-${config.system.nixosVersion}";
+      preferLocalBuild = true;
+      buildCommand = systemBuilder;
 
-    inherit (pkgs) utillinux coreutils;
-    systemd = config.systemd.package;
+      inherit (pkgs) utillinux coreutils;
+      systemd = config.systemd.package;
 
-    inherit children;
-    kernelParams = config.boot.kernelParams;
-    installBootLoader =
-      config.system.build.installBootLoader
-      or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
-    activationScript = config.system.activationScripts.script;
-    nixosVersion = config.system.nixosVersion;
+      inherit children;
+      kernelParams = config.boot.kernelParams;
+      installBootLoader =
+        config.system.build.installBootLoader
+        or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+      activationScript = config.system.activationScripts.script;
+      nixosVersion = config.system.nixosVersion;
 
-    configurationName = config.boot.loader.grub.configurationName;
+      configurationName = config.boot.loader.grub.configurationName;
 
-    # Needed by switch-to-configuration.
-    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
-  };
+      # Needed by switch-to-configuration.
+      perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
+  } else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}");
 
 
 in
