@@ -7,18 +7,20 @@ let
 
   cfg = config.hardware.pulseaudio;
 
+  systemWide = cfg.enable && cfg.systemWide;
+  nonSystemWide = cfg.enable && !cfg.systemWide;
+
   uid = config.ids.uids.pulseaudio;
   gid = config.ids.gids.pulseaudio;
 
-  pulseRuntimePath = "/var/run/pulse";
+  stateDir = "/run/pulse";
 
   # Create pulse/client.conf even if PulseAudio is disabled so
   # that we can disable the autospawn feature in programs that
   # are built with PulseAudio support (like KDE).
   clientConf = writeText "client.conf" ''
-    autospawn=${if (cfg.enable && !cfg.systemWide) then "yes" else "no"}
-    ${optionalString (cfg.enable && !cfg.systemWide)
-      "daemon-binary=${cfg.package}/bin/pulseaudio"}
+    autospawn=${if nonSystemWide then "yes" else "no"}
+    ${optionalString nonSystemWide "daemon-binary=${cfg.package}/bin/pulseaudio"}
   '';
 
   # Write an /etc/asound.conf that causes all ALSA applications to
@@ -68,7 +70,7 @@ in {
 
       configFile = mkOption {
         type = types.uniq types.path;
-        default = "${pulseaudio}/etc/pulse/default.pa";
+        default = "${cfg.package}/etc/pulse/default.pa";
         description = ''
           The path to the configuration the PulseAudio server
           should use. By default, the "default.pa" configuration
@@ -85,6 +87,17 @@ in {
           features (such as JACK support) that are not enabled in the
           default PulseAudio in Nixpkgs.
         '';
+      };
+
+      daemon = {
+        logLevel = mkOption {
+          type = types.str;
+          default = "notice";
+          description = ''
+            The log level that the system-wide pulseaudio daemon should use,
+            if activated.
+          '';
+        };
       };
     };
 
@@ -111,21 +124,20 @@ in {
       security.rtkit.enable = true;
     })
 
-    (mkIf (cfg.enable && !cfg.systemWide) {
+    (mkIf nonSystemWide {
       environment.etc = singleton {
         target = "pulse/default.pa";
         source = cfg.configFile;
       };
     })
 
-    (mkIf (cfg.enable && cfg.systemWide) {
+    (mkIf systemWide {
       users.extraUsers.pulse = {
         # For some reason, PulseAudio wants UID == GID.
         uid = assert uid == gid; uid;
         group = "pulse";
         extraGroups = [ "audio" ];
         description = "PulseAudio system service user";
-        home = pulseRuntimePath;
       };
 
       users.extraGroups.pulse.gid = gid;
@@ -134,15 +146,15 @@ in {
         description = "PulseAudio System-Wide Server";
         wantedBy = [ "sound.target" ];
         before = [ "sound.target" ];
-        path = [ cfg.package ];
-        environment.PULSE_RUNTIME_PATH = pulseRuntimePath;
+        environment.PULSE_RUNTIME_PATH = stateDir;
         preStart = ''
-          mkdir -p --mode 755 ${pulseRuntimePath}
-          chown -R pulse:pulse ${pulseRuntimePath}
+          mkdir -p --mode 755 ${stateDir}
+          chown -R pulse:pulse ${stateDir}
         '';
-        script = ''
-          exec pulseaudio --system -n --file="${cfg.configFile}"
-        '';
+        serviceConfig = {
+          ExecStart = "${cfg.package}/bin/pulseaudio -D --log-level=${cfg.daemon.logLevel} --system --use-pid-file -n --file=${cfg.configFile}";
+          PIDFile = "${stateDir}/pid";
+        };
       };
     })
   ];
