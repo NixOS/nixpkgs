@@ -2992,7 +2992,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cabal2nix = callPackage ../development/tools/haskell/cabal2nix {};
 
   # Build a cabal package given a local .cabal file
-  buildLocalCabal = src: name: let
+  buildLocalCabalWithArgs = { src, name, args ? {} }: let
     cabalExpr = pkgs.stdenv.mkDerivation ({
       name = "${name}.nix";
 
@@ -3008,7 +3008,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     });
-  in callPackage cabalExpr { inherit src; };
+  in callPackage cabalExpr ({ inherit src; } // args);
+
+  buildLocalCabal = src: name: self.buildLocalCabalWithArgs { inherit src name; };
 
   cabalDelete = callPackage ../development/tools/haskell/cabal-delete {};
 
