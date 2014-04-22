@@ -2309,6 +2309,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.08250.tar.gz;
       sha256 = "0nsqvj34klc9pf4l5kj3nqkq7agbsn11ys4115100awf7gxjbad6";
     };
+    patches = [ ../development/perl-modules/dbix-class-fix-tests.patch ];
     buildInputs = [ DBDSQLite PackageStash TestException TestWarn TestDeep ];
     propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ClassInspector ClassMethodModifiers ConfigAny ContextPreserve DataCompare DataDumperConcise DataPage DBI DevelGlobalDestruction HashMerge ModuleFind Moo MROCompat namespaceclean PathClass ScopeGuard SQLAbstract strictures SubName TryTiny ];
     meta = {
