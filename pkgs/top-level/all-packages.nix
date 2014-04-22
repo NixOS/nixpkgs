@@ -262,9 +262,14 @@ let
   };
 
   buildFHSChrootEnv = import ../build-support/build-fhs-chrootenv {
-    inherit stdenv glibc glibcLocales gcc coreutils diffutils findutils;
-    inherit gnused gnugrep gnutar gzip bzip2 bashInteractive xz shadow gawk;
-    inherit less buildEnv;
+    inherit buildEnv system;
+    inherit stdenv glibc glibc_multi glibcLocales;
+    inherit bashInteractive coreutils less shadow su;
+    inherit gawk gcc diffutils findutils gnused gnugrep;
+    inherit gnutar gzip bzip2 xz;
+
+    nixpkgs      = pkgs;
+    nixpkgs_i686 = pkgsi686Linux;
   };
 
   dotnetenv = import ../build-support/dotnetenv {
@@ -10653,11 +10658,9 @@ let
 
   stardust = callPackage ../games/stardust {};
 
-  steam = callPackage_i686 ../games/steam {};
+  steam = callPackage ../games/steam {};
 
-  steamChrootEnv = callPackage_i686 ../games/steam/chrootenv.nix {
-    zenity = gnome2.zenity;
-  };
+  steamChrootEnv = callPackage ../games/steam/chrootenv.nix { };
 
   stuntrally = callPackage ../games/stuntrally { };
 
