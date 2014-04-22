@@ -4445,6 +4445,15 @@ let
         ln -s $glibc32/lib $out/lib/32
         ln -s lib $out/lib64
 
+        # fixing ldd RLTLIST
+        rm $out/bin
+        cp -rs $glibc64/bin $out
+        chmod u+w $out/bin
+        rm $out/bin/ldd
+        sed -e "s|^RTLDLIST=.*$|RTLDLIST=\"$out/lib/ld-2.19.so $out/lib/32/ld-linux.so.2\"|g" \
+            $glibc64/bin/ldd > $out/bin/ldd
+        chmod 555 $out/bin/ldd
+
         rm $out/include
         cp -rs $glibc32/include $out
         chmod -R u+w $out/include
