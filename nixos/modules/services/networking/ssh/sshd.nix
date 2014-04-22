@@ -86,6 +86,16 @@ in
         '';
       };
 
+      startWhenNeeded = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, <command>sshd</command> is socket-activated; that
+          is, instead of having it permanently running as a daemon,
+          systemd will start an instance for each incoming connection.
+        '';
+      };
+
       forwardX11 = mkOption {
         type = types.bool;
         default = cfgc.setXAuthLocation;
@@ -248,37 +258,60 @@ in
       }
     ];
 
-    systemd.services.sshd =
-      { description = "SSH Daemon";
+    systemd =
+      let
+        service =
+          { description = "SSH Daemon";
 
-        wantedBy = [ "multi-user.target" ];
+            wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
 
-        stopIfChanged = false;
+            stopIfChanged = false;
 
-        path = [ pkgs.openssh pkgs.gawk ];
+            path = [ pkgs.openssh pkgs.gawk ];
 
-        environment.LD_LIBRARY_PATH = nssModulesPath;
+            environment.LD_LIBRARY_PATH = nssModulesPath;
 
-        preStart =
-          ''
-            mkdir -m 0755 -p /etc/ssh
+            preStart =
+              ''
+                mkdir -m 0755 -p /etc/ssh
 
-            ${flip concatMapStrings cfg.hostKeys (k: ''
-              if ! [ -f "${k.path}" ]; then
-                  ssh-keygen -t "${k.type}" -b "${toString k.bits}" -f "${k.path}" -N ""
-              fi
-            '')}
-          '';
+                ${flip concatMapStrings cfg.hostKeys (k: ''
+                  if ! [ -f "${k.path}" ]; then
+                      ssh-keygen -t "${k.type}" -b "${toString k.bits}" -f "${k.path}" -N ""
+                  fi
+                '')}
+              '';
 
-        serviceConfig =
-          { ExecStart =
-              "${pkgs.openssh}/sbin/sshd " +
-              "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
-            Restart = "always";
-            Type = "forking";
-            KillMode = "process";
-            PIDFile = "/run/sshd.pid";
+            serviceConfig =
+              { ExecStart =
+                  "${pkgs.openssh}/sbin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
+                  "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
+                KillMode = "process";
+              } // (if cfg.startWhenNeeded then {
+                StandardInput = "socket";
+              } else {
+                Restart = "always";
+                Type = "forking";
+                PIDFile = "/run/sshd.pid";
+              });
           };
+      in
+
+      if cfg.startWhenNeeded then {
+
+        sockets.sshd =
+          { description = "SSH Socket";
+            wantedBy = [ "sockets.target" ];
+            socketConfig.ListenStream = cfg.ports;
+            socketConfig.Accept = true;
+          };
+
+        services."sshd@" = service;
+
+      } else {
+
+        services.sshd = service;
+
       };
 
     networking.firewall.allowedTCPPorts = cfg.ports;
