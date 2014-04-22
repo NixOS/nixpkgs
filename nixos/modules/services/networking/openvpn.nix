@@ -56,6 +56,7 @@ let
 
       serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --config ${configFile}";
       serviceConfig.Restart = "always";
+      serviceConfig.Type = "notify";
     };
 
 in
