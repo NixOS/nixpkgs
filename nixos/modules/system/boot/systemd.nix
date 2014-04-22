@@ -688,10 +688,9 @@ in
 
   config = {
 
-    assertions = mapAttrsToList (name: service: {
-      assertion = service.serviceConfig.Type or "" == "oneshot" -> service.serviceConfig.Restart or "no" == "no";
-      message = "${name}: Type=oneshot services must have Restart=no";
-    }) cfg.services;
+    warnings = concatLists (mapAttrsToList (name: service:
+      optional (service.serviceConfig.Type or "" == "oneshot" && service.serviceConfig.Restart or "no" != "no")
+        "Service ‘${name}.service’ with ‘Type=oneshot’ must have ‘Restart=no’") cfg.services);
 
     system.build.units = cfg.units;
 
