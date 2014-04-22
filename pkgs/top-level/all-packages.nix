@@ -10209,6 +10209,8 @@ let
 
   mathematica = callPackage ../applications/science/math/mathematica { };
 
+  sage = callPackage ../applications/science/math/sage { };
+
   ### SCIENCE/MOLECULAR-DYNAMICS
 
   gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
