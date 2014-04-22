@@ -386,6 +386,10 @@ let
         ghc = ghcSupported;
       };
 
+      haskellPackages_ghc782 = {
+        ghc = ghcSupported;
+      };
+
       strategoPackages = {
         sdf = linux;
         strategoxt = linux;
