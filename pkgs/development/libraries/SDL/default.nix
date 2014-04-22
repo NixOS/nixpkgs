@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
   propagatedNativeBuildInputs =
     stdenv.lib.optionals x11Support [ x11 libXrandr ] ++
+    stdenv.lib.optional alsaSupport alsaLib ++
     stdenv.lib.optional pulseaudioSupport pulseaudio;
 
   buildInputs = let
@@ -33,8 +34,7 @@ stdenv.mkDerivation rec {
   in stdenv.lib.optional notMingw audiofile;
 
   nativeBuildInputs = [ pkgconfig ] ++
-    stdenv.lib.optional openglSupport [ mesa ] ++
-    stdenv.lib.optional alsaSupport alsaLib;
+    stdenv.lib.optional openglSupport [ mesa ];
 
   # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
   # we must arrange to add it to its RPATH; however, `patchelf' seems
