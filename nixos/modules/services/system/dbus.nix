@@ -16,7 +16,7 @@ let
     buildCommand = ''
       ensureDir $out
 
-      cp -v ${pkgs.dbus_daemon}/etc/dbus-1/system.conf $out/system.conf
+      cp -v ${pkgs.dbus.daemon}/etc/dbus-1/system.conf $out/system.conf
 
       # !!! Hm, these `sed' calls are rather error-prone...
 
@@ -31,7 +31,7 @@ let
           -e 's|<standard_system_servicedirs/>|${systemServiceDirs}|' \
           -e 's|<includedir>system.d</includedir>|${systemIncludeDirs}|'
 
-      cp ${pkgs.dbus_daemon}/etc/dbus-1/session.conf $out/session.conf
+      cp ${pkgs.dbus.daemon}/etc/dbus-1/session.conf $out/session.conf
 
       # Add the services and session.d directories to the session bus
       # search path.
@@ -97,7 +97,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.dbus_daemon pkgs.dbus_tools ];
+    environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus_tools ];
 
     environment.etc = singleton
       { source = configDir;
@@ -113,30 +113,7 @@ in
 
     users.extraGroups.messagebus.gid = config.ids.gids.messagebus;
 
-    # FIXME: these are copied verbatim from the dbus source tree.  We
-    # should install and use the originals.
-    systemd.units."dbus.socket".text =
-      ''
-        [Unit]
-        Description=D-Bus System Message Bus Socket
-
-        [Socket]
-        ListenStream=/var/run/dbus/system_bus_socket
-      '';
-
-    systemd.units."dbus.service".text =
-      ''
-        [Unit]
-        Description=D-Bus System Message Bus
-        Requires=dbus.socket
-
-        [Service]
-        ExecStartPre=${pkgs.dbus_tools}/bin/dbus-uuidgen --ensure
-        ExecStartPre=-${pkgs.coreutils}/bin/rm -f /var/run/dbus/pid
-        ExecStart=${pkgs.dbus_daemon}/bin/dbus-daemon --system --address=systemd: --nofork --systemd-activation
-        ExecReload=${pkgs.dbus_tools}/bin/dbus-send --print-reply --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig
-        OOMScoreAdjust=-900
-      '';
+    systemd.packages = [ pkgs.dbus.daemon ];
 
     security.setuidOwners = singleton
       { program = "dbus-daemon-launch-helper";
