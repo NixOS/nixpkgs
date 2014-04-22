@@ -2059,6 +2059,8 @@ let
 
   texmaker = callPackage ../applications/editors/texmaker { };
 
+  texstudio = callPackage ../applications/editors/texstudio { qt = qt4; };
+
   tiled-qt = callPackage ../applications/editors/tiled-qt { qt = qt4; };
 
   tinc = callPackage ../tools/networking/tinc { };
