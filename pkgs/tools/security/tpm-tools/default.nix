@@ -9,4 +9,14 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ trousers openssl ];
+
+  meta = with stdenv.lib; {
+    description = ''tpm-tools is an open-source package designed to enable user and application
+                    enablement of Trusted Computing using a Trusted Platform Module (TPM),
+                    similar to a smart card environment.'';
+    homepage    = http://sourceforge.net/projects/trousers/files/tpm-tools/;
+    license     = licenses.cpl10;
+    maintainers = [ maintainers.ak ];
+    platforms   = platforms.unix;
+  };
 }

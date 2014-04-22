@@ -9,4 +9,14 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ trousers openssl ];
+
+  meta = with stdenv.lib; {
+    description = ''The TPM Quote Tools is a collection of programs that provide support
+                    for TPM based attestation using the TPM quote mechanism.  The manual
+                    page for tpm_quote_tools provides a usage overview.'';
+    homepage    = http://tpmquotetools.sourceforge.net/;
+    license     = licenses.bsd3;
+    maintainers = [ maintainers.ak ];
+    platforms   = platforms.linux;
+  };
 }

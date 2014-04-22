@@ -19,4 +19,14 @@ stdenv.mkDerivation {
     substituteInPlace docs/Makefile --replace /usr/share /share
   '';
   installFlags = "DESTDIR=$(out)";
+
+  meta = with stdenv.lib; {
+    description = ''Trusted Boot (tboot) is an open source, pre-kernel/VMM module that uses
+                    Intel(R) Trusted Execution Technology (Intel(R) TXT) to perform a measured
+                    and verified launch of an OS kernel/VMM.'';
+    homepage    = http://sourceforge.net/projects/tboot/;
+    license     = licenses.bsd3;
+    maintainers = [ maintainers.ak ];
+    platforms   = platforms.linux;
+  };
 }

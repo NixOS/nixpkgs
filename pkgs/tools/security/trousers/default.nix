@@ -22,6 +22,7 @@ stdenv.mkDerivation {
     description = "TrouSerS is an CPL (Common Public License) licensed Trusted Computing Software Stack.";
     homepage    = http://trousers.sourceforge.net/;
     license     = licenses.cpl;
+    maintainers = [ maintainers.ak ];
     platforms   = platforms.unix;
   };
 }
