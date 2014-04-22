@@ -2616,6 +2616,8 @@ let
   gcc48 = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.8 {
     inherit noSysDirs;
 
+    ppl = if stdenv.isDarwin then null else pkgs.ppl;
+
     # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
     profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
 
