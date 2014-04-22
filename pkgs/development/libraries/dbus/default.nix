@@ -84,9 +84,9 @@ let
 
   inherit libs;
 
-  tools = dbus_drv "tools" "tools" {
-    configureFlags = [ "--with-dbus-daemondir=${daemon}/bin" ];
-    buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs daemon ];
+  tools = dbus_drv "tools" "tools bus" {
+    preBuild = makeInternalLib;
+    buildInputs = buildInputsX ++ systemdOrEmpty ++ [ libs ];
     NIX_CFLAGS_LINK =
       stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
       + "-ldbus-1";
@@ -94,10 +94,7 @@ let
     meta.platforms = stdenv.lib.platforms.all;
   };
 
-  daemon = dbus_drv "daemon" "bus" {
-    preBuild = makeInternalLib;
-    buildInputs = systemdOrEmpty;
-  };
+  daemon = tools;
 
   docs = dbus_drv "docs" "doc" {
     postInstall = ''rm -r "$out/lib"'';
