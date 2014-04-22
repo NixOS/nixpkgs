@@ -408,10 +408,11 @@ let
 
       # Symlink all units provided listed in systemd.packages.
       for i in ${toString cfg.packages}; do
-        files=$(echo $i/etc/systemd/${type}/* $i/lib/systemd/${type}/*)
-        if [ -n "$files" ]; then
-          ln -s $files $out/
-        fi
+        for fn in $i/etc/systemd/${type}/* $i/lib/systemd/${type}/*; do
+          if ! [[ "$fn" =~ .wants$ ]]; then
+            ln -s $fn $out/
+          fi
+        done
       done
 
       # Symlink all units defined by systemd.units. If these are also
