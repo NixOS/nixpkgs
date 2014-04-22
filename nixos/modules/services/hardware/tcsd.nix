@@ -38,6 +38,7 @@ in
 
       enable = mkOption {
         default = false;
+        type = types.bool;
         description = ''
           Whether to enable tcsd, a Trusted Computing management service
           that provides TCG Software Stack (TSS).  The tcsd daemon is
@@ -48,16 +49,19 @@ in
 
       user = mkOption {
         default = "tss";
+        type = types.string;
         description = "User account under which tcsd runs.";
       };
 
       group = mkOption {
         default = "tss";
+        type = types.string;
         description = "Group account under which tcsd runs.";
       };
 
       stateDir = mkOption {
 	default = "/var/lib/tpm";
+        type = types.path;
 	description = ''
           The location of the system persistent storage file.
           The system persistent storage file holds keys and data across
@@ -67,6 +71,7 @@ in
 
       platformCred = mkOption {
         default = "${cfg.stateDir}/platform.cert";
+        type = types.path;
         description = ''
 	  Path to the platform credential for your TPM. Your TPM
           manufacturer may have provided you with a set of credentials
@@ -79,6 +84,7 @@ in
 
       conformanceCred = mkOption {
         default = "${cfg.stateDir}/conformance.cert";
+        type = types.path;
         description = ''
           Path to the conformance credential for your TPM.
           See also the platformCred option'';
@@ -86,6 +92,7 @@ in
 
       endorsementCred = mkOption {
         default = "${cfg.stateDir}/endorsement.cert";
+        type = types.path;
         description = ''
           Path to the endorsement credential for your TPM.
           See also the platformCred option'';
