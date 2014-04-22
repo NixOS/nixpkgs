@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8_3_14, utillinux, http-parser, c-ares, pkgconfig, runCommand }:
+{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares, pkgconfig, runCommand }:
 
 let
   dtrace = runCommand "dtrace-native" {} ''
@@ -10,9 +10,12 @@ let
 
   # !!! Should we also do shared libuv?
   deps = {
-    v8 = v8_3_14;
     inherit openssl zlib http-parser;
     cares = c-ares;
+
+    # disabled system v8 because v8 3.14 no longer receives security fixes
+    # we fall back to nodejs' internal v8 copy which receives backports for now
+    # inherit v8
   };
 
   sharedConfigureFlags = name: [
