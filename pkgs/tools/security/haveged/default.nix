@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "haveged-${version}";
-  version = "1.7c";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "http://www.issihosts.com/haveged/haveged-${version}.tar.gz";
-    sha256 = "08gi3d9lbrllk5lyxw8l65py88xhia48w758lqjddh3gv7g7wfa0";
+    sha256 = "059pxlfd4l5dqhd6r3lynzfz4wby2f17294fy17pi9j2jpnn68ww";
   };
 
   meta = {
