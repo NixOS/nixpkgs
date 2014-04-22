@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
        done
     '';
 
-  doCheck = true;
+  # Disabled because the tests can time-out.
+  doCheck = false;
 
   meta = {
     description = "GNU libmicrohttpd, an embeddable HTTP server library";
