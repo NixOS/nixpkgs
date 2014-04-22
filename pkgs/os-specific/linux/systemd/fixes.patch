@@ -26,6 +26,22 @@ index 41605ee..8517369 100644
                          if (switch_root_dir)
                                  args[i++] = "--switched-root";
                          args[i++] = arg_running_as == SYSTEMD_SYSTEM ? "--system" : "--user";
+diff --git a/src/core/service.c b/src/core/service.c
+index ae3695a..6b3aa45 100644
+--- a/src/core/service.c
++++ b/src/core/service.c
+@@ -1096,11 +1096,6 @@ static int service_verify(Service *s) {
+                 return -EINVAL;
+         }
+ 
+-        if (s->type == SERVICE_ONESHOT && s->restart != SERVICE_RESTART_NO) {
+-                log_error_unit(UNIT(s)->id, "%s has Restart setting other than no, which isn't allowed for Type=oneshot services. Refusing.", UNIT(s)->id);
+-                return -EINVAL;
+-        }
+-
+         if (s->type == SERVICE_DBUS && !s->bus_name) {
+                 log_error_unit(UNIT(s)->id, "%s is of type D-Bus but no D-Bus service name has been specified. Refusing.", UNIT(s)->id);
+                 return -EINVAL;
 diff --git a/src/core/socket.c b/src/core/socket.c
 index 7c18a2b..eba67d5 100644
 --- a/src/core/socket.c
