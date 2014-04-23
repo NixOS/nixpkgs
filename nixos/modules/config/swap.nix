@@ -106,6 +106,7 @@ with utils;
                 if [ ! -e "${sw.device}" ]; then
                   fallocate -l ${toString sw.size}M "${sw.device}" ||
                     dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
+                  chmod 0600 ${sw.device}
                   mkswap ${sw.device}
                 fi
               '';
