@@ -24,6 +24,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.info-zip.org;
     platforms = stdenv.lib.platforms.all;
-    maintainer = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }

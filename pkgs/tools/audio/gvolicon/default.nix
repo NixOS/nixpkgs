@@ -22,6 +22,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Unia/gvolicon";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainer = stdenv.lib.maintainers.bennofs;
+    maintainers = stdenv.lib.maintainers.bennofs;
   };
 }

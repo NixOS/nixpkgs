@@ -36,6 +36,6 @@ in
     meta = {
       description = "Automatic display configuration selector based on connected devices";
       homepage = https://github.com/wertarbyte/autorandr;
-      maintainer = [ stdenv.lib.maintainers.coroa ];
+      maintainers = [ stdenv.lib.maintainers.coroa ];
     };
   }
