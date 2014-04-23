@@ -1795,6 +1795,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   mpppc = callPackage ../development/libraries/haskell/mpppc {};
 
+  msgpack = callPackage ../development/libraries/haskell/msgpack {};
+
   mtl_1_1_0_2 = callPackage ../development/libraries/haskell/mtl/1.1.0.2.nix {};
   mtl_1_1_1_1 = callPackage ../development/libraries/haskell/mtl/1.1.1.1.nix {};
   mtl_2_0_1_0 = callPackage ../development/libraries/haskell/mtl/2.0.1.0.nix {};
