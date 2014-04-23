@@ -1503,6 +1503,8 @@ let
 
   netcat-openbsd = callPackage ../tools/networking/netcat-openbsd { };
 
+  nethogs = callPackage ../tools/networking/nethogs { };
+
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
 
   netpbm = callPackage ../tools/graphics/netpbm { };
