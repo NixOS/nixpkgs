@@ -1,6 +1,6 @@
 { buildEnv, nixpkgs, nixpkgs_i686, system
 , stdenv, glibc, glibc_multi, glibcLocales
-, bashInteractive, coreutils, less, shadow su
+, bashInteractive, coreutils, less, shadow, su
 , gawk, gcc, diffutils, findutils, gnused, gnugrep
 , gnutar, gzip, bzip2, xz
 } :
