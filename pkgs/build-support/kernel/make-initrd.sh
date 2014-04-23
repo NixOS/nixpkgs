@@ -36,7 +36,7 @@ storePaths=$(perl $pathsFromGraph closure-*)
 
 # Put the closure in a gzipped cpio archive.
 mkdir -p $out
-(cd root && find * ! -type d -print0 |
+(cd root && find * -print0 | 
  sort -z |
  cpio -o -H newc -R 0.0 --null |
  perl $cpioClean |
