@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "http://texstudio.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ cfouche ];
   };
 }
