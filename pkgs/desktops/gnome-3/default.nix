@@ -48,6 +48,8 @@ rec {
 
   gnome_common = callPackage ./core/gnome-common { };
 
+  gnome_desktop = callPackage ./core/gnome-desktop { };
+
   gnome-dictionary = callPackage ./core/gnome-dictionary { };
 
   gnome-disk-utility = callPackage ./core/gnome-disk-utility { };
@@ -69,6 +71,8 @@ rec {
   folks = callPackage ./core/folks { };
 
   gnome_online_accounts = callPackage ./core/gnome-online-accounts { };
+
+  gnome-online-miners = callPackage ./core/gnome-online-miners { };
 
   gnome_session = callPackage ./core/gnome-session { };
 
@@ -94,7 +98,11 @@ rec {
 
   grilo = callPackage ./core/grilo { };
 
+  grilo-plugins = callPackage ./core/grilo-plugins { };
+
   gsettings_desktop_schemas = callPackage ./core/gsettings-desktop-schemas { };
+
+  gtksourceview = callPackage ./core/gtksourceview { };
 
   gucharmap = callPackage ./core/gucharmap { };
 
@@ -145,23 +153,33 @@ rec {
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
-  file-roller = callPackage ./desktop/file-roller { };
+  file-roller = callPackage ./apps/file-roller { };
 
-  gnome_desktop = callPackage ./desktop/gnome-desktop { };
+  gedit = callPackage ./apps/gedit { };
 
-  gtksourceview = callPackage ./desktop/gtksourceview { };
+  glade = callPackage ./apps/glade { };
+
+  gnome-documents = callPackage ./apps/gnome-documents { };
+
+  gnome-music = callPackage ./apps/gnome-music { };
 
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
 
+  seahorse = callPackage ./apps/seahorse { };
+
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
+
+  gfbgraph = callPackage ./misc/gfbgraph { };
 
   goffice = callPackage ./misc/goffice { };
 
   gitg = callPackage ./misc/gitg { };
 
   libgit2-glib = callPackage ./misc/libgit2-glib { };
+
+  libmediaart = callPackage ./misc/libmediaart { };
   
   gexiv2 = callPackage ./misc/gexiv2 { };
 

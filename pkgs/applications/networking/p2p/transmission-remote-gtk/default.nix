@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/transmission-remote-gtk" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = {

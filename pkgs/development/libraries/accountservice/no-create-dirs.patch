@@ -1,0 +1,13 @@
+--- src/Makefile.in.orig	2014-04-23 22:30:00.276005326 +0200
++++ src/Makefile.in	2014-04-23 22:30:16.809409113 +0200
+@@ -881,8 +881,8 @@
+ 	gdbus-codegen --generate-c-code accounts-user-generated --c-namespace Accounts --interface-prefix=org.freedesktop.Accounts. $(top_srcdir)/data/org.freedesktop.Accounts.User.xml
+ 
+ install-data-hook:
+-	$(MKDIR_P) "$(DESTDIR)$(localstatedir)/lib/AccountsService/users"
+-	$(MKDIR_P) "$(DESTDIR)$(localstatedir)/lib/AccountsService/icons"
++#	$(MKDIR_P) "$(DESTDIR)$(localstatedir)/lib/AccountsService/users"
++#	$(MKDIR_P) "$(DESTDIR)$(localstatedir)/lib/AccountsService/icons"
+ 
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.

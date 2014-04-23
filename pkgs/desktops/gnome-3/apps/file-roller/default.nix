@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/file-roller" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {
