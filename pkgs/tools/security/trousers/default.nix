@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "TrouSerS is an CPL (Common Public License) licensed Trusted Computing Software Stack.";
     homepage    = http://trousers.sourceforge.net/;
-    license     = licenses.cpl;
+    license     = licenses.cpl10;
     maintainers = [ maintainers.ak ];
     platforms   = platforms.unix;
   };
