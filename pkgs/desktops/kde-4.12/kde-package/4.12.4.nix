@@ -241,7 +241,7 @@ modules=[
     { name="kgpg";  }
     { name="kremotecontrol";  }
     { name="ktimer";  }
-    { name="kwallet";  }
+    { name="kwalletmanager";  }
     { name="print-manager"; sane="print_manager"; }
     { name="superkaramba";  }
     { name="sweeper";  }
