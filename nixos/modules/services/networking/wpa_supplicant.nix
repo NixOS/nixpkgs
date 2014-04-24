@@ -46,9 +46,7 @@ in
         example = [ "wlan0" "wlan1" ];
         description = ''
           The interfaces <command>wpa_supplicant</command> will use.  If empty, it will
-          automatically use all wireless interfaces. (Note that auto-detection is currently
-          broken on Linux 3.4.x kernels. See http://github.com/NixOS/nixos/issues/10 for
-          further details.)
+          automatically use all wireless interfaces.
         '';
       };
 
