@@ -45,5 +45,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.ttuegel ];
+    hydraPlatforms = []; # libspotify is unfree
   };
 }
