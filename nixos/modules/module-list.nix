@@ -99,6 +99,7 @@
   ./services/databases/virtuoso.nix
   ./services/databases/monetdb.nix
   ./services/desktops/accountservice.nix
+  ./services/desktops/geoclue2.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/evolution-data-server.nix
   ./services/desktops/gnome3/gnome-documents.nix
