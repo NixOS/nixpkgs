@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gtk, intltool, libsoup, gconf
-, pango, gdk_pixbuf, atk }:
+, pango, gdk_pixbuf, atk, tzdata }:
 
 stdenv.mkDerivation rec {
   name = "libgweather-3.10.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/ INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
 
-  configureFlags = if stdenv ? glibc then "--with-zoneinfo-dir=${stdenv.glibc}/share/zoneinfo" else "";
+  configureFlags = [ "--with-zoneinfo-dir=${tzdata}/share/zoneinfo" ];
   propagatedBuildInputs = [ libxml2 gtk libsoup gconf pango gdk_pixbuf atk ];
   nativeBuildInputs = [ pkgconfig intltool ];
 
