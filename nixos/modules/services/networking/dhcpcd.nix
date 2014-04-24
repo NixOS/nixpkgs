@@ -44,17 +44,6 @@ let
   # Hook for emitting ip-up/ip-down events.
   exitHook = pkgs.writeText "dhcpcd.exit-hook"
     ''
-      #exec >> /var/log/dhcpcd 2>&1
-      #set -x
-
-      params="IFACE=$interface REASON=$reason"
-
-      # only works when interface is wireless and wpa_supplicant has a control socket
-      # but we allow it to fail silently
-      ${optionalString config.networking.wireless.enable ''
-        params+=" $(${pkgs.wpa_supplicant}/sbin/wpa_cli -i$interface status 2>/dev/null | grep ssid | sed 's|^b|B|;s|ssid|SSID|' | xargs)"
-      ''}
-
       if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
           # Restart ntpd.  We need to restart it to make sure that it
           # will actually do something: if ntpd cannot resolve the
