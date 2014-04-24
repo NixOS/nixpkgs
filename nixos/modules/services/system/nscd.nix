@@ -9,6 +9,8 @@ let
 
   inherit (pkgs.lib) singleton;
 
+  cfgFile = pkgs.writeText "nscd.conf" cfg.config;
+
 in
 
 {
@@ -63,7 +65,7 @@ in
         restartTriggers = [ config.environment.etc.hosts.source ];
 
         serviceConfig =
-          { ExecStart = "@${pkgs.glibc}/sbin/nscd nscd -f ${pkgs.writeText "nscd.conf" cfg.config}";
+          { ExecStart = "@${pkgs.glibc}/sbin/nscd nscd -f ${cfgFile}";
             Type = "forking";
             PIDFile = "/run/nscd/nscd.pid";
             Restart = "always";
@@ -73,6 +75,15 @@ in
                 "${pkgs.glibc}/sbin/nscd --invalidate hosts"
               ];
           };
+
+        # Urgggggh... Nscd forks before opening its socket and writing
+        # its pid. So wait until it's ready.
+        postStart =
+          ''
+            while ! ${pkgs.glibc}/sbin/nscd -g -f ${cfgFile} > /dev/null; do
+              sleep 0.2
+            done
+          '';
       };
 
   };
