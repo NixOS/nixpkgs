@@ -184,4 +184,6 @@ rec {
   gexiv2 = callPackage ./misc/gexiv2 { };
 
   gnome-tweak-tool = callPackage ./misc/gnome-tweak-tool { };
+
+  gtkhtml = callPackage ./misc/gtkhtml { };
 }
