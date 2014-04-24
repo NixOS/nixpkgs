@@ -311,7 +311,6 @@ let
       vice = linux;
       vim = linux;
       vimHugeX = linux;
-      VisualBoyAdvance = linux;
       vncrec = linux;
       vorbisTools = linux;
       vpnc = linux;
@@ -333,7 +332,6 @@ let
       xineUI = linux;
       xkeyboard_config = linux;
       xlockmore = linux;
-      xmltv = linux;
       xpdf = linux;
       xscreensaver = linux;
       xsel = linux;
