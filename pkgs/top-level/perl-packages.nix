@@ -5197,6 +5197,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ModernPerl = buildPerlPackage {
+    name = "Modern-Perl-1.20140107";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20140107.tar.gz;
+      sha256 = "9cf66b2f93340dfe1cd7162262a47e7c4ba82475a52dc2a036c2fdc8a65298b8";
+    };
+    propagatedBuildInputs = [ perl ];
+    meta = {
+      homepage = https://github.com/chromatic/Modern-Perl;
+      description = "Enable all of the features of Modern Perl with one import";
+      license = "perl";
+    };
+  };
+
   ModuleBuild = buildPerlPackage {
     name = "Module-Build-0.4005";
     src = fetchurl {
@@ -9053,6 +9067,18 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Cycle through a list of values via a scalar";
+      license = "perl";
+    };
+  };
+
+  TieHashIndexed = buildPerlPackage {
+    name = "Tie-Hash-Indexed-0.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MH/MHX/Tie-Hash-Indexed-0.05.tar.gz;
+      sha256 = "a8862a4763d58a8c785e34b8b18e5db4ce5c3e36b9b5cf565a3088584eab361e";
+    };
+    meta = {
+      description = "Ordered hashes for Perl";
       license = "perl";
     };
   };
