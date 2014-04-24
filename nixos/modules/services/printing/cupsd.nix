@@ -126,7 +126,8 @@ in
       { description = "CUPS Printing Daemon";
 
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
+        wants = [ "network.target" ];
+        after = [ "network.target" ];
 
         path = [ cups ];
 
@@ -145,7 +146,7 @@ in
     services.printing.drivers =
       [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends
         pkgs.perl pkgs.coreutils pkgs.gnused pkgs.bc pkgs.gawk pkgs.gnugrep
-	];
+      ];
 
     services.printing.cupsdConf =
       ''
