@@ -62,8 +62,7 @@ in
       type = types.str;
       description = ''
         Specifies the Nix platform type for which NixOS should be built.
-        If unset, it defaults to the platform type of your host system
-        (<literal>${builtins.currentSystem}</literal>).
+        If unset, it defaults to the platform type of your host system.
         Specifying this option is useful when doing distributed
         multi-platform deployment, or when building virtual machines.
       '';
