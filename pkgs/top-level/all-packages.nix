@@ -6530,6 +6530,8 @@ let
 
   postfix = callPackage ../servers/mail/postfix { };
 
+  postfix211 = callPackage ../servers/mail/postfix/2.11.nix { };
+
   pulseaudio = callPackage ../servers/pulseaudio {
     gconf = gnome.GConf;
     # The following are disabled in the default build, because if this
