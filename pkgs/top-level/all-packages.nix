@@ -2055,6 +2055,8 @@ let
     guile = guile_1_8;
   };
 
+  texmaker = callPackage ../applications/editors/texmaker { };
+
   tiled-qt = callPackage ../applications/editors/tiled-qt { qt = qt4; };
 
   tinc = callPackage ../tools/networking/tinc { };
