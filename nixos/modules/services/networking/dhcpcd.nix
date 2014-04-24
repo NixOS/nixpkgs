@@ -36,7 +36,7 @@ let
       # Ethernet cards used for bridging.  Likewise for vif* and tap*
       # (Xen) and virbr* and vnet* (libvirt) and c-* and ctmp-* (NixOS
       # containers).
-      denyinterfaces ${toString ignoredInterfaces} peth* vif* tap* tun* virbr* vnet* vboxnet* c-* ctmp-*
+      denyinterfaces ${toString ignoredInterfaces} lo peth* vif* tap* tun* virbr* vnet* vboxnet* c-* ctmp-*
 
       ${config.networking.dhcpcd.extraConfig}
     '';
@@ -98,7 +98,6 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "network.target" ];
-        after = [ "systemd-udev-settle.service" ]; # FIXME
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
@@ -112,9 +111,8 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd.pid";
-            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --config ${dhcpcdConf}";
+            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
-            StandardError = "null";
             Restart = "always";
           };
       };
