@@ -165,6 +165,8 @@ rec {
 
   gnome-music = callPackage ./apps/gnome-music { };
 
+  gnome-photos = callPackage ./apps/gnome-photos { };
+
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
 
