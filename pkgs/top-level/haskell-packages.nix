@@ -1374,6 +1374,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   httpCommon = callPackage ../development/libraries/haskell/http-common {};
 
+  httpKit = callPackage ../development/libraries/haskell/http-kit {};
+
   httpReverseProxy = callPackage ../development/libraries/haskell/http-reverse-proxy {};
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
