@@ -61,6 +61,7 @@ import ./make-test.nix {
 
       # Test whether hostname (and by extension nss_myhostname) works.
       subtest "hostname", sub {
+          $machine->waitForUnit("dhcpcd.service");
           $machine->succeed('[ "`hostname`" = machine ]');
           $machine->succeed('[ "`hostname -s`" = machine ]');
       };
