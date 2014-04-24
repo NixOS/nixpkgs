@@ -161,6 +161,8 @@ rec {
 
   glade = callPackage ./apps/glade { };
 
+  gnome-clocks = callPackage ./apps/gnome-clocks { };
+
   gnome-documents = callPackage ./apps/gnome-documents { };
 
   gnome-music = callPackage ./apps/gnome-music { };

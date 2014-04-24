@@ -133,6 +133,7 @@ in {
         gnome3.evolution
         gnome3.file-roller
         gnome3.gedit
+        gnome3.gnome-clocks
         gnome3.gnome-music
         gnome3.gnome-tweak-tool
         gnome3.gnome-photos
