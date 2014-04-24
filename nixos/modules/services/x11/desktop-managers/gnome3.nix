@@ -15,6 +15,16 @@ let
     in
       filter (x: !(builtins.elem (pkgName x) ysNames)) xs;
 
+  # Prioritize nautilus by default when opening directories
+  mimeAppsList = pkgs.writeTextFile {
+    name = "gnome-mimeapps";
+    destination = "/share/applications/mimeapps.list";
+    text = ''
+      [Default Applications]
+      inode/directory=nautilus.desktop
+    '';
+  };
+
 in {
 
   options = {
@@ -42,9 +52,11 @@ in {
     services.accounts-daemon.enable = true;
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.evolution-data-server.enable = true;
+    services.gnome3.gnome-documents.enable = mkDefault true;
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
+    services.gnome3.seahorse.enable = mkDefault true;
     services.gnome3.sushi.enable = mkDefault true;
     services.gnome3.tracker.enable = mkDefault true;
     hardware.pulseaudio.enable = mkDefault true;
@@ -66,7 +78,8 @@ in {
           export XDG_MENU_PREFIX=gnome
 
           # Don't let epiphany depend upon gnome-shell
-          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${pkgs.gnome3.gnome_shell}/share/gsettings-schemas/${pkgs.gnome3.gnome_shell.name}
+          # Override default mimeapps
+          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${pkgs.gnome3.gnome_shell}/share/gsettings-schemas/${pkgs.gnome3.gnome_shell.name}:${mimeAppsList}/share
 
           # Let gnome-control-center find gnome-shell search providers
           export GNOME_SEARCH_PROVIDERS_DIR=${config.system.path}/share/gnome-shell/search-providers/
@@ -117,6 +130,8 @@ in {
         gnome3.gnome-user-docs
 
         gnome3.file-roller
+        gnome3.gedit
+        gnome3.gnome-music
         gnome3.gnome-tweak-tool
       ] config.environment.gnome3.excludePackages);
 

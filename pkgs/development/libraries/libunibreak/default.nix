@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
     description = "A library implementing a line breaking algorithm as described in Unicode 6.0.0 Standard";
     license = licenses.zlib;
     platforms = platforms.unix;
-    maintainer = [ maintainers.coroa ];
+    maintainers = [ maintainers.coroa ];
   };
 }

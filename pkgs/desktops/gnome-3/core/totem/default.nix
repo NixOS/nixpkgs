@@ -19,21 +19,22 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
-  propagatedBuildInputs = [ gdk_pixbuf gnome3.gnome_icon_theme librsvg
-                            hicolor_icon_theme gnome3.gnome_icon_theme_symbolic ];
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2 gnome3.grilo
-                  clutter_gtk clutter-gst gnome3.totem-pl-parser
+                  clutter_gtk clutter-gst gnome3.totem-pl-parser gnome3.grilo-plugins
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
                   gnome3.libpeas pygobject3 shared_mime_info dbus_glib
+                  gdk_pixbuf gnome3.gnome_icon_theme librsvg
+                  hicolor_icon_theme gnome3.gnome_icon_theme_symbolic
                   gnome3.gsettings_desktop_schemas makeWrapper file ];
 
   preFixup = ''
     wrapProgram "$out/bin/totem" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+      --prefix GRL_PLUGIN_PATH : "${gnome3.grilo-plugins}/lib/grilo-0.2" \
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
 
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
