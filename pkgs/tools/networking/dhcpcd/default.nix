@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v2m5wdr6x5cz6i0n1y63am9dhj5j7ylrk717scjgwwjdbq1x75n";
   };
 
-  patches = [ ./lxc_ro_promote_secondaries.patch ];
+  patches = [ ./lxc_ro_promote_secondaries.patch ./reload.patch ./check-interface.patch ];
 
   buildInputs = [ pkgconfig udev ];
 
