@@ -196,6 +196,6 @@ rec {
       } // args);
 
 
-  simpleTest = as: (makeTest ({ ... }: as)).test;
+  simpleTest = as: (makeTest as).test;
 
 }
