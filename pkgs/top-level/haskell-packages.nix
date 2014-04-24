@@ -1673,6 +1673,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   List = callPackage ../development/libraries/haskell/List {};
 
+  lists = callPackage ../development/libraries/haskell/lists {};
+
+  listExtras = callPackage ../development/libraries/haskell/listExtras {};
+
   listTries = callPackage ../development/libraries/haskell/list-tries {};
 
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
