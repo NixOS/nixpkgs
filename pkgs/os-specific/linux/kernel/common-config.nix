@@ -317,6 +317,12 @@ with stdenv.lib;
   TRANSPARENT_HUGEPAGE_ALWAYS? n
   TRANSPARENT_HUGEPAGE_MADVISE? y
 
+  # zram support (e.g for in-memory compressed swap)
+  ${optionalString (versionAtLeast version "3.4") ''
+    ZSMALLOC y
+  ''}
+  ZRAM m
+
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}
 ''
