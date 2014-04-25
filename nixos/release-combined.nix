@@ -45,6 +45,7 @@ in rec {
         (all nixos.ova)
 
         # (all nixos.tests.efi-installer.simple)
+        (all nixos.tests.containers)
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.installer.grub1)
@@ -60,6 +61,7 @@ in rec {
         (all nixos.tests.openssh)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
+        (all nixos.tests.simple)
         (all nixos.tests.udisks)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
