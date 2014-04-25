@@ -4132,6 +4132,8 @@ let
 
   caelum = callPackage ../development/libraries/caelum { };
 
+  capnproto = callPackage ../development/libraries/capnproto { };
+
   scmccid = callPackage ../development/libraries/scmccid { };
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
