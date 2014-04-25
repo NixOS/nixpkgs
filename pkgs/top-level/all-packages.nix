@@ -2461,6 +2461,8 @@ let
 
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
 
+  cryptol2 = haskellPackages.cryptol;
+
   cython = pythonPackages.cython;
   cython3 = python3Packages.cython;
 
