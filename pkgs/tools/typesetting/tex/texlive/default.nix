@@ -5,16 +5,16 @@ rec {
     sha256 = "1idgyim6r4bi3id245k616qrdarfh65xv3gi2psarqqmsw504yhd";
   };
 
-  texmfVersion = "2013.20140314";
+  texmfVersion = "2013.20140408";
   texmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-base/texlive-base_${texmfVersion}.orig.tar.xz";
-    sha256 = "0f2dxm0ac4j04w1rgjpdranpprjghw8slvijknykpvph1jn0lmzm";
+    sha256 = "1pdbbp4sy6kypiqss9zfvr3m0agqzghagfr609pfjh9ka3ihv0kh";
   };
 
-  langTexmfVersion = "2013.20140314";
+  langTexmfVersion = "2013.20140408";
   langTexmfSrc = fetchurl {
     url = "mirror://debian/pool/main/t/texlive-lang/texlive-lang_${langTexmfVersion}.orig.tar.xz";
-    sha256 = "154g300nbg4fhxprvi9fwr7wmpws4cg89m9nwsfpyf0m2k8n9ibx";
+    sha256 = "05qyhcfdbrrc8mnps5sv3fggjbxdj3bp9jd12ldzkjxxdbzhp475";
   };
 
   passthru = { inherit texmfSrc langTexmfSrc; };
