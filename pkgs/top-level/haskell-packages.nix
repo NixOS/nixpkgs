@@ -1061,6 +1061,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   enummapsetTh = callPackage ../development/libraries/haskell/enummapset-th {};
 
+  enumset = callPackage ../development/libraries/haskell/enumset {};
+
   entropy = callPackage ../development/libraries/haskell/entropy {};
 
   erf = callPackage ../development/libraries/haskell/erf {};
@@ -1591,6 +1593,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   };
 
   ixShapable = callPackage ../development/libraries/haskell/ix-shapable {};
+
+  jack = callPackage ../development/libraries/haskell/jack {};
 
   JuicyPixels = callPackage ../development/libraries/haskell/JuicyPixels {};
 
