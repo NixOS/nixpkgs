@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = "GPLv2+";
     maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }
