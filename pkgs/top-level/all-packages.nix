@@ -5150,6 +5150,8 @@ let
 
   libmusicbrainz = libmusicbrainz3;
 
+  libmx = callPackage ../development/libraries/libmx { };
+
   libnet = callPackage ../development/libraries/libnet { };
 
   libnetfilter_conntrack = callPackage ../development/libraries/libnetfilter_conntrack { };
