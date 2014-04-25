@@ -62,7 +62,7 @@ $SIG{PIPE} = "IGNORE";
 sub getActiveUnits {
     # FIXME: use D-Bus or whatever to query this, since parsing the
     # output of list-units is likely to break.
-    my $lines = `@systemd@/bin/systemctl list-units --full`;
+    my $lines = `LANG= @systemd@/bin/systemctl list-units --full --no-legend`;
     my $res = {};
     foreach my $line (split '\n', $lines) {
         chomp $line;
