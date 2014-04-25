@@ -1283,6 +1283,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
+  graphSCC = callPackage ../development/libraries/haskell/graphscc {};
+
   graphWrapper = callPackage ../development/libraries/haskell/graph-wrapper {};
 
   groups = callPackage ../development/libraries/haskell/groups {};
@@ -1770,6 +1772,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   monadExtras = callPackage ../development/libraries/haskell/monad-extras {};
 
+  monadLib = callPackage ../development/libraries/haskell/monadlib {};
+
   monadloc = callPackage ../development/libraries/haskell/monadloc {};
 
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
@@ -2061,11 +2065,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   pqueue = callPackage ../development/libraries/haskell/pqueue {};
 
+  process = callPackage ../development/libraries/haskell/process {};
+
   preprocessorTools_0_1_3 = callPackage ../development/libraries/haskell/preprocessor-tools/0.1.3.nix {};
 
   preprocessorTools_1_0_1 = callPackage ../development/libraries/haskell/preprocessor-tools/1.0.1.nix {};
 
   preprocessorTools = self.preprocessorTools_1_0_1;
+
+  presburger = callPackage ../development/libraries/haskell/presburger {};
 
   prettyclass = callPackage ../development/libraries/haskell/prettyclass {};
 
@@ -2274,6 +2282,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   skein = callPackage ../development/libraries/haskell/skein {};
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
+
+  smtLib = callPackage ../development/libraries/haskell/smtLib {};
 
   smtpMail = callPackage ../development/libraries/haskell/smtp-mail {};
 
@@ -2972,6 +2982,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   # Applications.
 
   arbtt = callPackage ../applications/misc/arbtt {};
+
+  cryptol = callPackage ../development/compilers/cryptol {
+    QuickCheck   = self.QuickCheck_2_7_3;
+    text         = self.text_1_1_0_1;
+    cabalInstall = self.cabalInstall_1_18_0_3;
+    Cabal        = self.Cabal_1_18_1_3;
+  };
 
   darcs = callPackage ../applications/version-management/darcs {};
 
