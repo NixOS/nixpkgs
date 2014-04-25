@@ -24,7 +24,10 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "terminfo" ];
 
-  patches = [ ./rxvt-unicode-9.06-font-width.patch ];
+  patches = [
+    ./rxvt-unicode-9.06-font-width.patch
+    ./rxvt-unicode-256-color-resources.patch
+  ];
 
   preConfigure =
     ''
