@@ -172,6 +172,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       ftp = {
         configureFlags = ["--enable-ftp"];
       };
+
+      fpm = {
+        configureFlags = ["--enable-fpm"];
+      };
     };
 
   cfg = {
@@ -181,6 +185,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     curlSupport = config.php.curl or true;
     exifSupport = config.php.exif or true;
     ftpSupport = config.php.ftp or true;
+    fpmSupport = config.php.fpm or false;
     gdSupport = config.php.gd or true;
     gettextSupport = config.php.gettext or true;
     imapSupport = config.php.imap or false;

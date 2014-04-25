@@ -3397,6 +3397,15 @@ let
 
   php53 = callPackage ../development/interpreters/php/5.3.nix { };
 
+  php_fpm53 = callPackage ../development/interpreters/php/5.3.nix {
+    config = config // {
+      php = (config.php or {}) // {
+        fpm = true;
+        apxs2 = false;
+      };
+    };
+  };
+
   php54 = callPackage ../development/interpreters/php/5.4.nix { };
 
   php_apc = callPackage ../development/libraries/php-apc { };
