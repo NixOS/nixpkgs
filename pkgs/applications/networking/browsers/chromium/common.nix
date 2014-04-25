@@ -30,6 +30,7 @@
 
 , source
 , plugins
+, archInfo
 }:
 
 buildFun:
@@ -172,13 +173,7 @@ let
       # enable support for the H.264 codec
       proprietary_codecs = true;
       ffmpeg_branding = "Chrome";
-    } // optionalAttrs (stdenv.system == "x86_64-linux") {
-      target_arch = "x64";
-      python_arch = "x86-64";
-    } // optionalAttrs (stdenv.system == "i686-linux") {
-      target_arch = "ia32";
-      python_arch = "ia32";
-    } // (extraAttrs.gypFlags or {}));
+    } // archInfo // (extraAttrs.gypFlags or {}));
 
     configurePhase = ''
       # This is to ensure expansion of $out.
@@ -190,14 +185,21 @@ let
     buildPhase = let
       CC = "${gcc}/bin/gcc";
       CXX = "${gcc}/bin/g++";
-    in ''
-      CC="${CC}" CC_host="${CC}"     \
-      CXX="${CXX}" CXX_host="${CXX}" \
-      LINK_host="${CXX}"             \
-        "${ninja}/bin/ninja" -C "${buildPath}"  \
-          -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
-          ${concatStringsSep " " (extraAttrs.buildTargets or [])}
-    '';
+      buildCommand = target: ''
+        CC="${CC}" CC_host="${CC}"     \
+        CXX="${CXX}" CXX_host="${CXX}" \
+        LINK_host="${CXX}"             \
+          "${ninja}/bin/ninja" -C "${buildPath}"  \
+            -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
+            ${target}
+
+        if [[ "${target}" == mksnapshot.* || "${target}" == "chrome" ]]; then
+          paxmark m "${buildPath}/${target}"
+        fi
+      '';
+      targets = extraAttrs.buildTargets or [];
+      commands = map buildCommand targets;
+    in concatStringsSep "\n" commands;
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.
