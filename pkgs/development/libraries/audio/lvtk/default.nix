@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://lvtoolkit.org/code/browse/lvtk/snapshot/${name}.tar.gz";
-    sha256 = "161l4n3a2kar2r5mn3zz6dbj1p2s6361ainrka3s74518z7yf42w";
+    sha256 = "1dr3rq4ycds455m4qbfajvgg12gmvv11whk80wdsi40dr6i3g86w";
   };
 
   buildInputs = [ boost gtkmm lv2 pkgconfig python ];
