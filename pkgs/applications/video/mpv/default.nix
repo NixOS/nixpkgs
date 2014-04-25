@@ -57,11 +57,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.3.7";
+  version = "0.3.8";
 
   src = fetchurl {
     url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
-    sha256 = "1qmwmjvgdwh88l2caw2xy1d2h1cdg2w1hl4q5iwx2c0q7a99h41m";
+    sha256 = "0k77rq17mslpvvgr4mvkj9bd5s1yhsigwvzym8blr1brxkj9pk3b";
   };
 
   buildInputs = with stdenv.lib;
