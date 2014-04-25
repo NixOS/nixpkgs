@@ -212,18 +212,22 @@ elsif ($action eq "root-login") {
 
 elsif ($action eq "run") {
     shift @ARGV; shift @ARGV;
-    open(SOCAT, "|-", $socat, "unix:$root/var/lib/run-command.socket", "-");
+    my $pid = open(SOCAT, "|-", $socat, "-t0", "-", "unix:$root/var/lib/run-command.socket") or die "$0: cannot start $socat: $!\n";
     print SOCAT join(' ', map { "'$_'" } @ARGV), "\n";
+    flush SOCAT;
+    waitpid($pid, 0);
     close(SOCAT);
 }
 
 elsif ($action eq "set-root-password") {
     # FIXME: don't get password from the command line.
     my $password = $ARGV[2] or die "$0: no password given\n";
-    open(SOCAT, "|-", $socat, "unix:$root/var/lib/run-command.socket", "-");
+    my $pid = open(SOCAT, "|-", $socat, "-t0", "-", "unix:$root/var/lib/run-command.socket") or die "$0: cannot start $socat: $!\n";
     print SOCAT "passwd\n";
     print SOCAT "$password\n";
     print SOCAT "$password\n";
+    flush SOCAT;
+    waitpid($pid, 0);
     close(SOCAT);
 }
 
