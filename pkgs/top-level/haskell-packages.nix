@@ -1614,7 +1614,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   knob = callPackage ../development/libraries/haskell/knob {};
 
   languageC = callPackage ../development/libraries/haskell/language-c {};
-  
+
   languageCInline = callPackage ../development/libraries/haskell/language-c-inline {};
 
   languageCQuote = callPackage ../development/libraries/haskell/language-c-quote {};
@@ -2755,6 +2755,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   wizards = callPackage ../development/libraries/haskell/wizards {};
 
   word8 = callPackage ../development/libraries/haskell/word8 {};
+
+  wreq = callPackage ../development/libraries/haskell/wreq {
+    aeson = self.aeson.override { attoparsec = self.attoparsec_0_11_2_1; };
+    attoparsec = self.attoparsec_0_11_2_1;
+    lens = self.lens.override {
+      aeson = self.aeson.override { attoparsec = self.attoparsec_0_11_2_1; };
+    };
+  };
 
   wx = callPackage ../development/libraries/haskell/wxHaskell/wx.nix {};
 
