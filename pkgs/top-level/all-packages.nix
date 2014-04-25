@@ -4975,6 +4975,11 @@ let
     lua = lua5_1;
   };
 
+  keybinder3 = callPackage ../development/libraries/keybinder3 {
+    automake = automake111x;
+    lua = lua5_1;
+  };
+
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
 
   lcms = lcms1;
