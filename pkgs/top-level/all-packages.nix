@@ -4445,7 +4445,7 @@ let
         ln -s $glibc32/lib $out/lib/32
         ln -s lib $out/lib64
 
-        # fixing ldd RLTLIST
+        # fixing ldd RLTDLIST
         rm $out/bin
         cp -rs $glibc64/bin $out
         chmod u+w $out/bin
