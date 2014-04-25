@@ -2620,6 +2620,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   typeLevelNaturalNumber = callPackage ../development/libraries/haskell/type-level-natural-number {};
 
+  tzdata = callPackage ../development/libraries/haskell/tzdata {};
+
   unbound = callPackage ../development/libraries/haskell/unbound {};
 
   unboundedDelays = callPackage ../development/libraries/haskell/unbounded-delays {};
