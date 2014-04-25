@@ -32,6 +32,7 @@
   emery = "Emery Hemingawy <emery@vfemail.net>";
   ertes = "Ertugrul Söylemez <ertesx@gmx.de>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
+  fuuzetsu = "Mateusz Kowalczyk <fuuzetsu@fuuzetsu.co.uk>";
   garbas = "Rok Garbas <rok@garbas.si>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   guibert = "David Guibert <david.guibert@gmail.com>";
