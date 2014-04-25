@@ -5215,6 +5215,29 @@ rec {
     };
   };
 
+  pycapnp = buildPythonPackage rec {
+    name = "pycapnp-0.4.4";
+    homepage = "http://jparyani.github.io/pycapnp/index.html";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pycapnp/${name}.tar.gz";
+      sha256 = "33b2b79438bb9bf37097966e1c90403c34ab49be1eb647ee251b62f362ee3537";
+    };
+
+    buildInputs = with pkgs; [ capnproto cython ];
+
+    # import setuptools as soon as possible, to minimize monkeypatching mayhem.
+    postConfigure = ''
+      sed -i '2iimport setuptools' setup.py
+    '';
+
+    meta = with stdenv.lib; {
+      maintainers = with maintainers; [ cstrahan ];
+      license = stdenv.lib.licenses.bsd2;
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
 
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.6.0.1206569328141510525648634803928199668821045408958";

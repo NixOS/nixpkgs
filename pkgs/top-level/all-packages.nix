@@ -6341,6 +6341,8 @@ let
 
   pycairo = pythonPackages.pycairo;
 
+  pycapnp = pythonPackages.pycapnp;
+
   pycrypto = pythonPackages.pycrypto;
 
   pycups = callPackage ../development/python-modules/pycups { };
