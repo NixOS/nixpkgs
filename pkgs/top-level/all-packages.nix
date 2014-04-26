@@ -10067,6 +10067,8 @@ let
 
   xterm = callPackage ../applications/misc/xterm { };
 
+  finalterm = callPackage ../applications/misc/finalterm { };
+
   xtrace = callPackage ../tools/X11/xtrace { };
 
   xlaunch = callPackage ../tools/X11/xlaunch { };
