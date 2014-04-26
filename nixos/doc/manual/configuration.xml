@@ -1235,7 +1235,7 @@ with other kernel modules.</para>
 <para>On 64-bit systems, if you want full acceleration for 32-bit
 programs such as Wine, you should also set the following:
 <programlisting>
-service.xserver.driSupport32Bit = true;
+services.xserver.driSupport32Bit = true;
 </programlisting>
 </para>
 
