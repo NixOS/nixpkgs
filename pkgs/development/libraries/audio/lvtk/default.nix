@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "lvtk-${version}";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchurl {
-    url = "http://lvtoolkit.org/code/browse/lvtk/snapshot/${name}.tar.gz";
-    sha256 = "161l4n3a2kar2r5mn3zz6dbj1p2s6361ainrka3s74518z7yf42w";
+    url = "https://github.com/lvtk/lvtk/archive/${version}.tar.gz";
+    sha256 = "03nbj2cqcklqwh50zj2gwm07crh5iwqbpxbpzwbg5hvgl4k4rnjd";
   };
 
   buildInputs = [ boost gtkmm lv2 pkgconfig python ];
