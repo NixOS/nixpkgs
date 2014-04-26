@@ -9623,6 +9623,8 @@ let
 
   qgis = callPackage ../applications/misc/qgis {};
 
+  qtbitcointrader = callPackage ../applications/misc/qtbitcointrader { };
+
   ykpers = callPackage ../applications/misc/ykpers {};
 
   yoshimi = callPackage ../applications/audio/yoshimi {
