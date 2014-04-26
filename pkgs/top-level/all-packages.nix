@@ -265,7 +265,7 @@ let
     inherit buildEnv system;
     inherit stdenv glibc glibc_multi glibcLocales;
     inherit bashInteractive coreutils less shadow su;
-    inherit gawk gcc diffutils findutils gnused gnugrep;
+    inherit gawk gcc gcc_multi diffutils findutils gnused gnugrep;
     inherit gnutar gzip bzip2 xz;
 
     nixpkgs      = pkgs;
@@ -2737,7 +2737,8 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc48;
+  gcc       = gcc48;
+  gcc_multi = gcc48_multi;
 
   gcc33 = wrapGCC (import ../development/compilers/gcc/3.3 {
     inherit fetchurl stdenv noSysDirs;

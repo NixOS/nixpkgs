@@ -1,7 +1,7 @@
 { buildEnv, nixpkgs, nixpkgs_i686, system
 , stdenv, glibc, glibc_multi, glibcLocales
 , bashInteractive, coreutils, less, shadow, su
-, gawk, gcc, diffutils, findutils, gnused, gnugrep
+, gawk, gcc, gcc_multi, diffutils, findutils, gnused, gnugrep
 , gnutar, gzip, bzip2, xz
 } :
 { name, pkgs ? [], profile ? ""
@@ -33,12 +33,14 @@ let
                   else [];
 
   # base packages of the chroot
-  # these match the hosts architecture, glibc_multi will be choosen
+  # these match the hosts architecture, gcc/glibc_multi will be choosen
   # on multi builds
+  choosenGcc = if isMultiBuild then gcc_multi else gcc;
   basePkgs =
     [ (if isMultiBuild then glibc_multi else glibc)
+      choosenGcc
       bashInteractive coreutils less shadow su
-      gawk gcc diffutils findutils gnused gnugrep
+      gawk diffutils findutils gnused gnugrep
       gnutar gzip bzip2 xz
     ];
 
@@ -101,23 +103,36 @@ let
     ${linkProfile staticUsrProfileMulti}
     cd ..
 
-    ${setupLibDirs}
+    ${setupMultiLibDirs}
 
     cd usr
-    ${setupLibDirs}
+    ${setupMultiLibDirs}
     cd ..
   '';
 
-  setupLibDirs = ''
+  setupMultiLibDirs = ''
     rm -f lib lib32 lib64
     mkdir -m0755 lib
-    # copy glibc stuff
-    cp -rs  ${staticUsrProfileTarget}/lib/32/* lib/
-    # copy contents of multiPaths
-    cp -rsf ${staticUsrProfileMulti}/lib/*     lib/
-
+    mkdir -m0755 lib64
     ln -s lib lib32
-    ln -s ${staticUsrProfileTarget}/lib lib64
+
+    # copy glibc stuff
+    cp -rsf ${staticUsrProfileTarget}/lib/32/* lib/
+
+    # copy content of multiPaths (32bit libs)
+    cp -rsf ${staticUsrProfileMulti}/lib/*  lib/
+
+    # copy content of targetPaths (64bit libs)
+    cp -rsf ${staticUsrProfileTarget}/lib/*   lib64/
+    # most 64bit only libs put their stuff into /lib
+    # some pkgs (like gcc_multi) put 32bit libs into /lib 64bit libs into /lib64
+    # by overwriting these we will hopefully catch all these cases
+    # in the end /lib should only contain 32bit and /lib64 only 64bit libs
+    cp -rsf ${staticUsrProfileTarget}/lib64/* lib64/
+
+    # copy gcc libs (and may overwrite exitsting wrongly placed libs)
+    cp -rsf ${choosenGcc.gcc}/lib/*   lib/
+    cp -rsf ${choosenGcc.gcc}/lib64/* lib64/
   '';
 
 in stdenv.mkDerivation {
