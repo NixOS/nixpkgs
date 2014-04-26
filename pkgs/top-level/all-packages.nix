@@ -6239,10 +6239,6 @@ let
     inherit (pythonPackages) gyp;
   };
 
-  v8_3_14 = callPackage ../development/libraries/v8/3.14.nix {
-    inherit (pythonPackages) gyp;
-  };
-
   xmlsec = callPackage ../development/libraries/xmlsec { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
