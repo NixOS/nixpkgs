@@ -7831,9 +7831,7 @@ let
     amdappsdk = amdappsdk28;
   };
 
-  chatzilla = callPackage ../applications/networking/irc/chatzilla {
-    xulrunner = firefox36Pkgs.xulrunner;
-  };
+  chatzilla = callPackage ../applications/networking/irc/chatzilla { };
 
   chromium = lowPrio (callPackage ../applications/networking/browsers/chromium {
     channel = "stable";
