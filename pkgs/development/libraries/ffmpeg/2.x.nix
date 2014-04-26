@@ -1,5 +1,5 @@
 { stdenv, fetchurl, config, pkgconfig, yasm, zlib, bzip2, alsaLib, texinfo, perl
-, lame, speex, libtheora, libvorbis, libvpx, x264, xvidcore, libopus
+, lame, speex, libass, libtheora, libvorbis, libvpx, x264, xvidcore, libopus
 , libvdpau, libva, faac, libdc1394, libXext, libXfixes, SDL
 , freetype, fontconfig, fdk_aac, gnutls
 }:
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "153kfk8rzrfxx930rrk417b2m695dvy47v4hci3nd49iggx9jzz1";
   };
 
+  subtitleSupport = config.ffmpeg.subtitle or true;
   mp3Support = config.ffmpeg.mp3 or true;
   speexSupport = config.ffmpeg.speex or true;
   theoraSupport = config.ffmpeg.theora or true;
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     "--enable-avresample"
     "--enable-runtime-cpudetect"
   ]
+    ++ stdenv.lib.optional subtitleSupport "--enable-libass"
     ++ stdenv.lib.optional mp3Support "--enable-libmp3lame"
     ++ stdenv.lib.optional speexSupport "--enable-libspeex"
     ++ stdenv.lib.optional theoraSupport "--enable-libtheora"
@@ -59,6 +61,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional gnutlsSupport "--enable-gnutls";
 
   buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib texinfo perl ]
+    ++ stdenv.lib.optional subtitleSupport libass
     ++ stdenv.lib.optional mp3Support lame
     ++ stdenv.lib.optional speexSupport speex
     ++ stdenv.lib.optional theoraSupport libtheora
