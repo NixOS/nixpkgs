@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.tkgate.org/";
     license = "GPLv2+";
     maintainers = [ stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = stdenv.lib.platforms.linux;
   };
 }

@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
     description = "Event driven digital circuit simulator with a TCL/TK-based graphical editor";
     homepage = "http://www.tkgate.org/";
     license = "GPLv2+";
-    maintainers = [ stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux;
     broken = true;
   };
 }
