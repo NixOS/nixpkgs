@@ -1990,11 +1990,11 @@ rec {
 
 
   pyramid = buildPythonPackage rec {
-    name = "pyramid-1.4.5";
+    name = "pyramid-1.5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyramid/${name}.tar.gz";
-      md5 = "321731aad69e9788b7819e257a50be1a";
+      md5 = "8747658dcbab709a9c491e43d3b0d58b";
     };
 
     buildInputs = [
@@ -2006,8 +2006,6 @@ rec {
     ] ++ optional isPy26 unittest2;
 
     propagatedBuildInputs = [
-      chameleon
-      Mako
       paste_deploy
       repoze_lru
       repoze_sphinx_autointerface
