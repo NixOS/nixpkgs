@@ -1437,6 +1437,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
 
+  hmatrix-special = callPackage ../development/libraries/haskell/hmatrix-special {};
+
   hoauth = callPackage ../development/libraries/haskell/hoauth {};
 
   hoauth2 = callPackage ../development/libraries/haskell/hoauth2 {};
