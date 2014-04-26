@@ -8997,6 +8997,8 @@ let
     inherit (xorg) libXpm;
   };
 
+  potrace = callPackage ../applications/graphics/potrace {};
+
   pqiv = callPackage ../applications/graphics/pqiv { };
 
   qiv = callPackage ../applications/graphics/qiv { };
