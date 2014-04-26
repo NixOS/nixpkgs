@@ -5,10 +5,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "love-0.9.0";
+  name = "love-0.9.1";
   src = fetchurl {
     url = "https://bitbucket.org/rude/love/downloads/${name}-linux-src.tar.gz";
-    sha256 = "048n94584cnmdaf2rshakdzbj1lz2yd7k08aiykkpz13aaa283ag";
+    sha256 = "1pikd0bzb44r4bf0jbgn78whz1yswpq1n5jc8nf87v42pm30kp84";
   };
 
   buildInputs = [
