@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       requireFile {
         name = "jdk-7u${patchversion}-linux-x64.tar.gz";
         url = http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html;
-	sha256 = "15sncxhjasv5i6p7hfrr92xq5ph9g6g12i4m52vp45l031bw5y46";
+        sha256 = "15sncxhjasv5i6p7hfrr92xq5ph9g6g12i4m52vp45l031bw5y46";
       }
     else
       abort "jdk requires i686-linux or x86_64 linux";
