@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "Emacs minor mode that aids in finding common writing problems";
     homepage = https://github.com/bnbeckwith/writegood-mode;
-    platforms = stdenv.lib.platforms.all;
+    hydraPlatforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.pSub ];
     license = "GPL3";
   };
