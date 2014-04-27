@@ -10356,6 +10356,8 @@ let
 
   tptp = callPackage ../applications/science/logic/tptp {};
 
+  yices = callPackage ../applications/science/logic/yices {};
+
   z3 = callPackage ../applications/science/logic/z3 {};
 
   boolector   = boolector15;
