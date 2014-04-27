@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://portix.bitbucket.org/dwb/;
     description = "A lightweight web browser based on the webkit web browser engine and the gtk toolkit";
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    hydraPlatforms = stdenv.lib.platforms.mesaPlatforms;
     maintainers = [ stdenv.lib.maintainers.pSub ];
     license = "GPL";
   };
