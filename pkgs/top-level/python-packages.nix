@@ -2440,11 +2440,11 @@ rec {
 
 
   chameleon = buildPythonPackage rec {
-    name = "Chameleon-2.11";
+    name = "Chameleon-2.15";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/C/Chameleon/${name}.tar.gz";
-      md5 = "df72458bf3dd26a744dcff5ad555c34b";
+      md5 = "0214647152fcfcb9ce357624f8f9f203";
     };
 
     buildInputs = [] ++ optionals isPy26 [ ordereddict unittest2 ];
