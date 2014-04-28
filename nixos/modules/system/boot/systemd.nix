@@ -103,8 +103,8 @@ let
       "dev-hugepages.mount"
       "dev-mqueue.mount"
       "proc-sys-fs-binfmt_misc.mount"
-      "sys-fs-fuse-connections.mount"
-      "sys-kernel-config.mount"
+      #"sys-fs-fuse-connections.mount"
+      #"sys-kernel-config.mount"
       "sys-kernel-debug.mount"
 
       # Maintaining state across reboots.
