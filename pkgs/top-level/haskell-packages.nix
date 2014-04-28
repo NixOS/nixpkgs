@@ -2077,6 +2077,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   process = callPackage ../development/libraries/haskell/process {};
 
+  preludeExtras = callPackage ../development/libraries/haskell/prelude-extras {};
+
   preprocessorTools_0_1_3 = callPackage ../development/libraries/haskell/preprocessor-tools/0.1.3.nix {};
 
   preprocessorTools_1_0_1 = callPackage ../development/libraries/haskell/preprocessor-tools/1.0.1.nix {};
