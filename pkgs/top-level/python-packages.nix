@@ -4522,6 +4522,30 @@ rec {
     };
   };
 
+  livestreamer = if isPy34 then null else (buildPythonPackage {
+    #version = "1.8.0";
+    name = "livestreamer-1.8.0";
+
+    src = fetchurl {
+      url = "https://github.com/chrippa/livestreamer/archive/v1.8.0.tar.gz";
+      sha256 = "0fzpznbnhzrqawxdljvyml5251wbr3nifdrvnmh2b8vz356js4l8";
+    };
+
+    buildInputs = [ pkgs.makeWrapper ];
+    propagatedBuildInputs = [ requests ];
+    postInstall = ''
+      wrapProgram $out/bin/livestreamer --prefix PATH : ${pkgs.rtmpdump}/bin
+    '';
+
+    meta = {
+      homepage = http://livestreamer.tanuki.se;
+      description = ''
+        Livestreamer is CLI program that extracts streams from various
+        services and pipes them into a video player of choice.
+      '';
+      license = "bsd";
+    };
+  });
 
   oauth2 = buildPythonPackage (rec {
     name = "oauth2-1.5.211";
