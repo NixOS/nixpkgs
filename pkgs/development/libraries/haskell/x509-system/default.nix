@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "x509-system";
-  version = "1.4.2";
-  sha256 = "1r22ignmwkv1z26bmnwh7prqy69cln26pfyyaf5r2vw8s66rgl39";
+  version = "1.4.5";
+  sha256 = "0pwn624n6fagg9rw2p09x2k212rc8167jhqz6z5wf6m7y56ql28x";
   buildDepends = [ filepath mtl pem time x509 x509Store ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-certificate";
