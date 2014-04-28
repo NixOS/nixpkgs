@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-test";
-  version = "2.0.1.1";
-  sha256 = "08mkn6v8kxlcn2qb5rz9m5mqzl9wy43mxs2jzl1gavkf9bhwc93s";
+  version = "2.0.1.2";
+  sha256 = "11mkzh5wlfhdrwzqhsbcl3qnbawmks4vxr1vv0s2ny50q5na41ln";
   buildDepends = [
     blazeBuilder blazeBuilderConduit caseInsensitive conduit
     conduitExtra cookie deepseq httpTypes network text transformers wai
