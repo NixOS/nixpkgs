@@ -4,11 +4,11 @@ with import <nixpkgs> {};
 
 stdenv.mkDerivation rec {
   name    = "minecraft-server-${version}";
-  version = "1.7.5";
+  version = "1.7.9";
 
   src  = fetchurl {
     url    = "http://s3.amazonaws.com/Minecraft.Download/versions/${version}/minecraft_server.${version}.jar";
-    sha256 = "0f3sh3fws02yl4xqa8qrvn0cchfp0hymqrf30c5syzzcz9w4l8pq";
+    sha256 = "088aqqifgzz8g6aars3kvsdvvrjp0lqxw9qmai48rky20l6ibfgp";
   };
 
   installPhase = ''
