@@ -4,6 +4,8 @@
 
 assert wxSupport -> mesa != null && wxGTK != null && xlibs != null;
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "erlang-" + version;
   version = "R16B02";
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ perl gnum4 ncurses openssl makeWrapper
-    ] ++ stdenv.lib.optional wxSupport [ mesa wxGTK xlibs.libX11 ];
+    ] ++ optional wxSupport [ mesa wxGTK xlibs.libX11 ];
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
 
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
     sed -e s@/bin/pwd@pwd@g -i otp_build
   '';
 
-  configureFlags = "--with-ssl=${openssl}";
+  configureFlags= "--with-ssl=${openssl} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
 
   postInstall = ''
     ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
@@ -49,9 +51,9 @@ stdenv.mkDerivation rec {
       tolerance.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.unix;
     # Note: Maintainer of prev. erlang version was simons. If he wants
     # to continue maintaining erlang I'm totally ok with that.
-    maintainers = [ stdenv.lib.maintainers.the-kenny ];
+    maintainers = [ maintainers.the-kenny ];
   };
 }
