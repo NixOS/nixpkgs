@@ -9013,8 +9013,6 @@ let
 
   qemu = callPackage ../applications/virtualization/qemu { };
 
-  qemuImage = callPackage ../applications/virtualization/qemu/linux-img { };
-
   qmmp = callPackage ../applications/audio/qmmp { };
 
   qsampler = callPackage ../applications/audio/qsampler { };
