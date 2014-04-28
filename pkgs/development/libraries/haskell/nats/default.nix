@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "nats";
-  version = "0.1.2";
-  sha256 = "1r4083p8sbnqs74l8faqfs1i97k8bql762l55pbmapy0p1xrkzka";
+  version = "0.1.3";
+  sha256 = "1kh7wvgjqq39f0dp2pnbazvr1zp6anb1ksgx3q1m1x0qgxkj0xxz";
   meta = {
     homepage = "http://github.com/ekmett/nats/";
-    description = "Haskell 98 natural numbers";
+    description = "Natural numbers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };
