@@ -1,12 +1,18 @@
-{ cabal, hspec, parsec, systemFileio, systemFilepath, text, time }:
+{ cabal, aeson, blazeHtml, blazeMarkup, exceptions, hspec, HUnit
+, parsec, systemFileio, systemFilepath, text, time, transformers
+}:
 
 cabal.mkDerivation (self: {
   pname = "shakespeare";
-  version = "1.2.1.1";
-  sha256 = "1if3mfkcdfls17pcfgn8grxykq8ia91i7qr4q6m1gy6q4gqs6fkg";
-  buildDepends = [ parsec systemFileio systemFilepath text time ];
+  version = "2.0.0.3";
+  sha256 = "12dmhcv404bh7kn04d175bj2b0fadz4sjypwsq151mlhakr13x85";
+  buildDepends = [
+    aeson blazeHtml blazeMarkup exceptions parsec systemFileio
+    systemFilepath text time transformers
+  ];
   testDepends = [
-    hspec parsec systemFileio systemFilepath text time
+    aeson blazeHtml blazeMarkup exceptions hspec HUnit parsec
+    systemFileio systemFilepath text time transformers
   ];
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
