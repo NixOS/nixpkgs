@@ -173,7 +173,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     vector       = self.vector_0_10_9_1;
     xhtml        = self.xhtml_3000_2_1;
     zlib         = self.zlib_0_5_4_1;
-    cabalInstall = self.cabalInstall_1_18_0_3;
+    cabalInstall = self.cabalInstall_1_20_0_0;
     alex         = self.alex_3_1_3;
     haddock      = self.haddock_2_14_2;
     happy        = self.happy_1_19_3;
@@ -3086,7 +3086,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cabalInstall_1_20_0_0 = callPackage ../tools/package-management/cabal-install/1.20.0.0.nix {
     Cabal = self.Cabal_1_20_0_0;
   };
-  cabalInstall = self.cabalInstall_1_18_0_3;
+  cabalInstall = self.cabalInstall_1_20_0_0;
 
   gitAnnex = callPackage ../applications/version-management/git-and-tools/git-annex {
     hS3 = self.hS3.override { Crypto = self.Crypto.override { QuickCheck = self.QuickCheck_2_7_3; }; };
