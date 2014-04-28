@@ -3,11 +3,11 @@
 with stdenv.lib;
 assert stdenv.isi686;
 stdenv.mkDerivation {
-  name = "tibia-10.38";
+  name = "tibia-10.39";
 
   src = fetchurl {
-    url = http://static.tibia.com/download/tibia1038.tgz;
-    sha256 = "13mxsdh0p0bhdiv5p0hbfdx4a5ha2fv9p2yvn6250z9plfi9xq2h";
+    url = http://static.tibia.com/download/tibia1039.tgz;
+    sha256 = "0401sdg2b4jb6350z841f9xjipi37z4z82bc72rs0chgdp363n79";
   };
 
   shell = stdenv.shell;
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
     patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 \
              --set-rpath ${stdenv.gcc.gcc}/lib:${libX11}/lib:${mesa}/lib \
-             "$out/res/Tibia" || true
+             "$out/res/Tibia"
 
     # We've patchelf'd the files. The main ‘Tibia’ binary is a bit
     # dumb so it looks for ‘./Tibia.dat’. This requires us to be in
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Top-down MMORPG set in a fantasy setting";
+    description = "Top-down MMORPG set in a fantasy world";
     homepage = "http://tibia.com";
     license = "unfree";
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
