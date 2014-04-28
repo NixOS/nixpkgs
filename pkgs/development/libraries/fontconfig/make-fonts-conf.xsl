@@ -32,6 +32,9 @@
         <dir><xsl:value-of select="." /></dir>
         <xsl:text>&#0010;</xsl:text>
       </xsl:for-each>
+      <dir prefix="xdg">fonts</dir>
+      <!-- the following element will be removed in the future -->
+      <dir>~/.fonts</dir>
 
     </fontconfig>
 
