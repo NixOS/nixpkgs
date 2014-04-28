@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "1.3.0";
   sha256 = "0hihcrgvzf4nsrgw6vqpkzbgskq01yc1mnvp7g2wy7vq0dv4pjp4";
   buildDepends = [ shakespeare ];
+  noHaddock = true;
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "Stick your haskell variables into javascript/coffeescript at compile time. (deprecated)";

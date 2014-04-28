@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "1.1.0";
   sha256 = "0ahhg9r7d8kdxn0x33bp5p8wmwkh1yvdqhw05yjwif0ky5y9h625";
   buildDepends = [ shakespeare ];
+  noHaddock = true;
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "A type-based approach to internationalization. (deprecated)";

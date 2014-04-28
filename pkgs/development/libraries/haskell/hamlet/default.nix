@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "1.2.0";
   sha256 = "0rla3ap3malk8j6mh07fr2aqvbscpy743wrfq3skgjv3j4jlpjfi";
   buildDepends = [ shakespeare ];
+  noHaddock = true;
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "Haml-like template files that are compile-time checked (deprecated)";
