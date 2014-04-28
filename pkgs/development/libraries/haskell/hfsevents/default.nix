@@ -1,4 +1,4 @@
-{ cabal, cereal, mtl, text, gccApple }:
+{ cabal, cereal, gccApple, mtl, text }:
 
 cabal.mkDerivation (self: {
   pname = "hfsevents";
