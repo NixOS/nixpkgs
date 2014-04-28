@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1x5y06zhp0gc97g1sb98vf7dkawg63xywv0mbnpfnbi20jh452fn";
   };
 
+  patches = [ ./cve-2014-0150.patch ./cve-2014-2894.patch ];
+
   buildInputs =
     [ python zlib pkgconfig glib ncurses perl pixman attr libcap
       vde2 alsaLib texinfo libuuid flex bison makeWrapper
