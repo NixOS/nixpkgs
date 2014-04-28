@@ -2,8 +2,8 @@
 , libtoxcore, pkgconfig }:
 
 let
-  version = "b308e19e6b";
-  date = "20140224";
+  version = "328e7f8d57";
+  date = "20140611";
 in
 stdenv.mkDerivation rec {
   name = "toxic-${date}-${version}";
@@ -11,30 +11,18 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/Tox/toxic/tarball/${version}";
     name = "${name}.tar.gz";
-    sha256 = "0fgkvnpy3dl2h378h796z9md0zg05b3174fgx17b919av6j9x4ma";
+    sha256 = "0kwry6855cwpjb7knfc4a01z1i6q4shmi3zh1aw45vd4ardrc91i";
   };
 
-  preConfigure = ''
-    autoreconf -i
-  '';
-
-  NIX_LDFLAGS = "-lsodium";
-
-  configureFlags = [
-    "--with-libtoxcore-headers=${libtoxcore}/include"
-    "--with-libtoxcore-libs=${libtoxcore}/lib" 
-    "--with-libsodium-headers=${libtoxcore}/include"
-    "--with-libsodium-libs=${libtoxcore}/lib" 
-  ];
+  preConfigure = "autoreconf -i";
 
   buildInputs = [ autoconf libtool automake libtoxcore libsodium ncurses pkgconfig ];
 
-  doCheck = true;
-
   meta = {
     description = "Reference CLI for Tox";
-    license = "GPLv3+";
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    homepage = https://github.com/Tox/toxic;
+    license = stdenv.lib.licenses.gpl3Plus;
+    maintainers = with stdenv.lib.maintainers; [ viric emery ];
     platforms = stdenv.lib.platforms.all;
   };
 }

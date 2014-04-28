@@ -1,9 +1,8 @@
-{ stdenv, fetchurl, autoconf, libtool, automake, libsodium, ncurses
-, libconfig, pkgconfig }:
+{ stdenv, fetchurl, autoconf, automake, libtool, libsodium }:
 
 let
-  version = "388b1229b";
-  date = "20140220";
+  version = "63f25f86d";
+  date = "20140611";
 in
 stdenv.mkDerivation rec {
   name = "tox-core-${date}-${version}";
@@ -11,26 +10,18 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/irungentoo/ProjectTox-Core/tarball/${version}";
     name = "${name}.tar.gz";
-    sha256 = "12vggiv0gyv8a2rd5qrv04b7yhfhxb7r0yh75gg5n4jdpcbhvgsd";
+    sha256 = "194fddqpv40w4yk0sqh5wlpgrm06jmxvgk5530ziahjpf1m5gcw6";
   };
 
-  preConfigure = ''
-    autoreconf -i
-  '';
+  preConfigure = "./autogen.sh";
 
-  configureFlags = [ "--with-libsodium-headers=${libsodium}/include"
-    "--with-libsodium-libs=${libsodium}/lib" 
-    "--enable-ntox" ];
-
-  buildInputs = [ autoconf libtool automake libsodium ncurses libconfig
-    pkgconfig ];
-
-  doCheck = true;
+  buildInputs = [ autoconf automake libtool libsodium ];
 
   meta = {
-    description = "P2P FOSS instant messaging application aimed to replace Skype with crypto";
-    license = "GPLv3+";
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    description = "P2P FOSS instant messaging library aimed to replace Skype with crypto";
+    homepage = http://tox.im;
+    license = stdenv.lib.licenses.gpl3;
+    maintainers = with stdenv.lib.maintainers; [ viric emery ];
     platforms = stdenv.lib.platforms.all;
   };
 }
