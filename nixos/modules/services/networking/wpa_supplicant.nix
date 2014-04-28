@@ -90,11 +90,11 @@ in
 
     services.dbus.packages = [ pkgs.wpa_supplicant ];
 
+    # FIXME: start a separate wpa_supplicant instance per interface.
     jobs.wpa_supplicant =
       { description = "WPA Supplicant";
 
         wantedBy = [ "network.target" ];
-        after = [ "systemd-udev-settle.service" ];
 
         path = [ pkgs.wpa_supplicant ];
 
@@ -132,6 +132,12 @@ in
 
     assertions = [{ assertion = !cfg.userControlled.enable || cfg.interfaces != [];
                     message = "user controlled wpa_supplicant needs explicit networking.wireless.interfaces";}];
+
+    # Restart wpa_supplicant when a wlan device appears or disappears.
+    services.udev.extraRules =
+      ''
+        ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="${config.systemd.package}/bin/systemctl try-restart wpa_supplicant.service"
+      '';
 
   };
 
