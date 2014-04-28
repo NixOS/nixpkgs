@@ -23,7 +23,7 @@ else
 */
 
 let
-  version = "10.0.4";
+  version = "10.1.1";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "0h2sq8h0l7415vsqfkb7mn1rxm62m2anpi9swlca69fbpr9bavpz";
+    sha256 = "1c4qcz7zi3qvdcxa56yxl6kps5amk4zq2xlhqlgcpzqzv0777bpk";
   };
 
   prePatch = "patchShebangs .";
@@ -88,7 +88,8 @@ stdenv.mkDerivation {
     ;
   buildInputs = with xorg; [
     autoreconfHook intltool expat libxml2Python llvm
-    libXfixes glproto dri2proto libX11 libXext libxcb libXt
+    glproto dri2proto dri3proto presentproto
+    libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland libvdpau libelf
   ] ++ optionals enableExtraFeatures [ /*libXvMC*/ ]
     ++ optional stdenv.isLinux udev
