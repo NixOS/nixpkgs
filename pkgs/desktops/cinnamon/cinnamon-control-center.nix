@@ -1,4 +1,4 @@
- 
+
 { stdenv, fetchurl, pkgconfig, autoreconfHook, glib, gettext, gnome_common, cinnamon-desktop, intltool, libxslt, gtk3, libnotify,
 gnome-menus, libxml2, systemd, upower, cinnamon-settings-daemon, colord, polkit, ibus, libcanberra_gtk3, pulseaudio, isocodes, krb5,
 libxkbfile}:
@@ -24,17 +24,18 @@ stdenv.mkDerivation {
     intltool libxslt gtk3 cinnamon-desktop
     libnotify gnome-menus libxml2 systemd
     upower cinnamon-settings-daemon colord
-    polkit ibus libcanberra_gtk3 pulseaudio 
+    polkit ibus libcanberra_gtk3 pulseaudio
     isocodes krb5 libxkbfile ];
 
   preBuild = "patchShebangs ./scripts";
-  
+
   meta = {
     homepage = "http://cinnamon.linuxmint.com";
     description = "The cinnamon session files" ;
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.roelof ];
+
+    broken = true;
   };
 }
-

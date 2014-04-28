@@ -1,5 +1,5 @@
 
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, glib, gettext, gnome_common, cinnamon-desktop, intltool, gtk3, 
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, glib, gettext, gnome_common, cinnamon-desktop, intltool, gtk3,
 libnotify, lcms2, libxklavier, libgnomekbd, libcanberra, pulseaudio, upower, libcanberra_gtk3, colord,
 systemd, libxslt, docbook_xsl, makeWrapper, gsettings_desktop_schemas}:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   #ToDo: missing org.cinnamon.gschema.xml, probably not packaged yet
   postFixup  = ''
-    for f in "$out"/libexec/*; do
+    for f in "$out/libexec/"*; do
       wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
     done
   '';
@@ -47,6 +47,7 @@ stdenv.mkDerivation {
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.roelof ];
+
+    broken = true;
   };
 }
-
