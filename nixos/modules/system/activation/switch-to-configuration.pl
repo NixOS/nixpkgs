@@ -65,7 +65,7 @@ $SIG{PIPE} = "IGNORE";
 sub getActiveUnits {
     # FIXME: use D-Bus or whatever to query this, since parsing the
     # output of list-units is likely to break.
-    my $lines = `LANG= @systemd@/bin/systemctl list-units --full --no-legend`;
+    my $lines = `LANG= systemctl list-units --full --no-legend`;
     my $res = {};
     foreach my $line (split '\n', $lines) {
         chomp $line;
@@ -297,7 +297,7 @@ foreach my $device (keys %$prevSwaps) {
 if (scalar @unitsToStop > 0) {
     @unitsToStop = unique(@unitsToStop);
     print STDERR "stopping the following units: ", join(", ", sort(@unitsToStop)), "\n";
-    system("@systemd@/bin/systemctl", "stop", "--", @unitsToStop); # FIXME: ignore errors?
+    system("systemctl", "stop", "--", @unitsToStop); # FIXME: ignore errors?
 }
 
 print STDERR "NOT restarting the following units: ", join(", ", sort(@unitsToSkip)), "\n"
