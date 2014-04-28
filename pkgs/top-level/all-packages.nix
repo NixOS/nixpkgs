@@ -10352,6 +10352,8 @@ let
 
   tptp = callPackage ../applications/science/logic/tptp {};
 
+  verifast = callPackage_i686 ../applications/science/logic/verifast {};
+
   yices = callPackage ../applications/science/logic/yices {};
 
   z3 = callPackage ../applications/science/logic/z3 {};
