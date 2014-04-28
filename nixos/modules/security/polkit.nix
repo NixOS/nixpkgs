@@ -101,7 +101,7 @@ in
 
         # Force polkitd to be restarted so that it reloads its
         # configuration.
-        ${pkgs.procps}/bin/pkill -INT -u root -x polkitd
+        ${config.systemd.package}/bin/systemctl try-restart polkit.service
       '';
 
     users.extraUsers.polkituser = {
