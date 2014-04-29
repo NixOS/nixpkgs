@@ -55,10 +55,24 @@ let
         type = with types; nullOr int;
         default = null;
         description = ''
-          The account UID. If the <literal>mutableUsers</literal> option
+          The account UID. If the <option>mutableUsers</option> option
           is false, the UID cannot be null. Otherwise, the UID might be
           null, in which case a free UID is picked on activation (by the
           useradd command).
+        '';
+      };
+
+      isSystemUser = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Indicates if the user is a system user or not. This option
+          only has an effect if <option>mutableUsers</option> is
+          <literal>true</literal> and <option>uid</option> is
+          <option>null</option>, in which case it determines whether
+          the user's UID is allocated in the range for system users
+          (below 500) or in the range for normal users (starting at
+          1000).
         '';
       };
 
@@ -459,17 +473,16 @@ in {
         '';
         groupadd = n: g: ''
           if [ -z "$(getent group "${g.name}")" ]; then
-            echo "Adding group ${g.name}"
             ${pkgs.shadow}/sbin/groupadd "${g.name}"
           fi
         '';
         useradd = n: u: ''
           if ! id "${u.name}" &>/dev/null; then
-            echo "Adding user ${u.name}"
             ${pkgs.shadow}/sbin/useradd \
               -g "${u.group}" \
               -s "${u.shell}" \
               -d "${u.home}" \
+              ${optionalString u.isSystemUser "--system"} \
               "${u.name}"
             echo "${u.name}:x" | ${pkgs.shadow}/sbin/chpasswd -e
           fi
