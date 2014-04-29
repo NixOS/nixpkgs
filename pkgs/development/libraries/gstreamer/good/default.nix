@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-good-1.2.3";
+  name = "gst-plugins-good-1.2.4";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Good Plugins";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-good/${name}.tar.xz";
-    sha256 = "0w74hms2zg0rnhilj9cbhx9wfiryrkcvhr1g90scrg8mllv3bcxz";
+    sha256 = "1lr0yk352jrcgxadi9mvjgkli7xiwwnc15by71w5wbiw75l07jf9";
   };
 
   nativeBuildInputs = [ pkgconfig python ];
