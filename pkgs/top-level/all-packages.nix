@@ -6872,6 +6872,11 @@ let
 
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
 
+  tevent = callPackage ../development/libraries/tevent {
+    libgcrypt = libgcrypt_1_6;
+    sasl = cyrus_sasl;
+  };
+
   thrift = callPackage ../development/libraries/thrift { };
 
   tinyxml = tinyxml2;
