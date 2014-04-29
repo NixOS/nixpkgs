@@ -11,8 +11,6 @@ with lib;
       # TODO: find another name for it.
       fonts = mkOption {
         default = [
-          # - the user's .fonts directory
-          "~/.fonts"
           # - the user's current profile
           "~/.nix-profile/lib/X11/fonts"
           "~/.nix-profile/share/fonts"
