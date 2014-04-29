@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "renpy-6.17.3";
+  name = "renpy-6.17.4";
 
   meta = {
     description = "Ren'Py Visual Novel Engine";
@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = "http://www.renpy.org/dl/6.17.3/renpy-6.17.3-source.tar.bz2";
-    sha256 = "1707xrjmnr4a209jqm4zkda0jyjd76f679g7d51g7vd5cs46s6ph";
+    url = "http://www.renpy.org/dl/6.17.4/renpy-6.17.4-source.tar.bz2";
+    sha256 = "1n0ki944vawl1i3z9g5h65spdjvb8p0gj6rckv36fb2yq2adxclp";
   };
 
   buildInputs = [
