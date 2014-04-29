@@ -3,12 +3,23 @@
 import ./make-test.nix {
 
   machine =
-    { config, pkgs, ... }:
-    { swapDevices = pkgs.lib.mkOverride 0
+    { config, lib, pkgs, ... }:
+    with lib;
+    { swapDevices = mkOverride 0
         [ { device = "/root/swapfile"; size = 128; } ];
-      environment.variables.EDITOR = pkgs.lib.mkOverride 0 "emacs";
-      services.nixosManual.enable = pkgs.lib.mkOverride 0 true;
+      environment.variables.EDITOR = mkOverride 0 "emacs";
+      services.nixosManual.enable = mkOverride 0 true;
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
+      fileSystems = mkVMOverride { "/tmp2" =
+        { device = "none";
+          fsType = "tmpfs";
+          options = "mode=1777,noauto";
+        };
+      };
+      systemd.automounts = singleton
+        { wantedBy = [ "multi-user.target" ];
+          where = "/tmp2";
+        };
     };
 
   testScript =
@@ -79,6 +90,13 @@ import ./make-test.nix {
           $machine->succeed('date -s "@$(($(date +%s) + 1000000))"'); # move into the future
           $machine->succeed('systemctl start systemd-tmpfiles-clean');
           $machine->fail('[ -e /tmp/foo ]');
+      };
+
+      # Test whether automounting works.
+      subtest "automount", sub {
+          $machine->fail("grep '/tmp2 tmpfs' /proc/mounts");
+          $machine->succeed("touch /tmp2/x");
+          $machine->succeed("grep '/tmp2 tmpfs' /proc/mounts");
       };
     '';
 
