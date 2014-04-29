@@ -121,7 +121,7 @@ in zipModules ([]
 ++ obsolete [ "services" "xserver" "driSupport" ] [ "hardware" "opengl" "driSupport" ]
 ++ obsolete [ "services" "xserver" "driSupport32Bit" ] [ "hardware" "opengl" "driSupport32Bit" ]
 ++ obsolete [ "services" "xserver" "s3tcSupport" ] [ "hardware" "opengl" "s3tcSupport" ]
-++ obsolete [ "services" "xserver" "videoDrivers" ] [ "hardware" "opengl" "videoDrivers" ]
+++ obsolete [ "hardware" "opengl" "videoDrivers" ] [ "services" "xserver" "videoDrivers" ]
 
 ++ obsolete [ "services" "mysql55" ] [ "services" "mysql" ]
 

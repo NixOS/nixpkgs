@@ -1,14 +1,21 @@
-{ config, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, pkgs_i686, ... }:
+
+with lib;
+
 let
-  inherit (pkgs.lib) mkOption types mkIf optional optionals elem optionalString optionalAttrs;
 
   cfg = config.hardware.opengl;
 
   kernelPackages = config.boot.kernelPackages;
-in {
+
+  videoDrivers = config.services.xserver.videoDrivers;
+
+in
+
+{
   options = {
     hardware.opengl.enable = mkOption {
-      description = "Whether this configuration requires opengl.";
+      description = "Whether this configuration requires OpenGL.";
       type = types.bool;
       default = false;
       internal = true;
@@ -45,18 +52,6 @@ in {
       '';
     };
 
-
-    hardware.opengl.videoDrivers = mkOption {
-      type = types.listOf types.str;
-      # !!! We'd like "nv" here, but it segfaults the X server.
-      default = [ "ati" "cirrus" "intel" "vesa" "vmware" ];
-      example = [ "vesa" ];
-      description = ''
-        The names of the opengl video drivers the configuration
-        supports. They will be tried in order until one that
-        supports your card is found.
-      '';
-    };
   };
 
   config = mkIf cfg.enable {
@@ -71,21 +66,21 @@ in {
       ${optionalString (pkgs.stdenv.isi686) "ln -sf opengl-driver /run/opengl-driver-32"}
     ''
       #TODO:  The OpenGL driver should depend on what's detected at runtime.
-     +( if elem "nvidia" cfg.videoDrivers then
+     +( if elem "nvidia" videoDrivers then
           ''
             ln -sf ${kernelPackages.nvidia_x11} /run/opengl-driver
             ${optionalString cfg.driSupport32Bit
               "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11.override { libsOnly = true; kernel = null; } } /run/opengl-driver-32"}
           ''
-        else if elem "nvidiaLegacy173" cfg.videoDrivers then
+        else if elem "nvidiaLegacy173" videoDrivers then
           "ln -sf ${kernelPackages.nvidia_x11_legacy173} /run/opengl-driver"
-        else if elem "nvidiaLegacy304" cfg.videoDrivers then
+        else if elem "nvidiaLegacy304" videoDrivers then
           ''
             ln -sf ${kernelPackages.nvidia_x11_legacy304} /run/opengl-driver
             ${optionalString cfg.driSupport32Bit
               "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11_legacy304.override { libsOnly = true; kernel = null; } } /run/opengl-driver-32"}
           ''
-        else if elem "ati_unfree" cfg.videoDrivers then
+        else if elem "ati_unfree" videoDrivers then
           "ln -sf ${kernelPackages.ati_drivers_x11} /run/opengl-driver"
         else
           let
@@ -109,19 +104,20 @@ in {
       [ "/run/opengl-driver/lib" "/run/opengl-driver-32/lib" ];
 
     boot.extraModulePackages =
-      optional (elem "nvidia" cfg.videoDrivers) kernelPackages.nvidia_x11 ++
-      optional (elem "nvidiaLegacy173" cfg.videoDrivers) kernelPackages.nvidia_x11_legacy173 ++
-      optional (elem "nvidiaLegacy304" cfg.videoDrivers) kernelPackages.nvidia_x11_legacy304 ++
-      optional (elem "virtualbox" cfg.videoDrivers) kernelPackages.virtualboxGuestAdditions ++
-      optional (elem "ati_unfree" cfg.videoDrivers) kernelPackages.ati_drivers_x11;
+      optional (elem "nvidia" videoDrivers) kernelPackages.nvidia_x11 ++
+      optional (elem "nvidiaLegacy173" videoDrivers) kernelPackages.nvidia_x11_legacy173 ++
+      optional (elem "nvidiaLegacy304" videoDrivers) kernelPackages.nvidia_x11_legacy304 ++
+      optional (elem "virtualbox" videoDrivers) kernelPackages.virtualboxGuestAdditions ++
+      optional (elem "ati_unfree" videoDrivers) kernelPackages.ati_drivers_x11;
 
     boot.blacklistedKernelModules =
-      optionals (elem "nvidia" cfg.videoDrivers) [ "nouveau" "nvidiafb" ];
+      optionals (elem "nvidia" videoDrivers) [ "nouveau" "nvidiafb" ];
 
-    environment.etc =  (optionalAttrs (elem "ati_unfree" cfg.videoDrivers) {
+    environment.etc =
+      (optionalAttrs (elem "ati_unfree" videoDrivers) {
         "ati".source = "${kernelPackages.ati_drivers_x11}/etc/ati";
       })
-      // (optionalAttrs (elem "nvidia" cfg.videoDrivers) {
+      // (optionalAttrs (elem "nvidia" videoDrivers) {
         "OpenCL/vendors/nvidia.icd".source = "${kernelPackages.nvidia_x11}/lib/vendors/nvidia.icd";
       });
   };
