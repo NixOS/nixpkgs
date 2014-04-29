@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, nodejs, which, python27 }:
+{ stdenv, fetchgit, nodejs, which, python27, pkgconfig, libuv01119 }:
 
 let
   date = "20140303";
@@ -13,9 +13,16 @@ stdenv.mkDerivation {
     sha256 = "1bxhf9f1v0slf9mz3ll6jf45mkwvwxlf3yqxx9k23kjyr1nsc8s8";
   };
 
-  buildInputs = [ which python27 nodejs];
+  buildInputs = [ which python27 nodejs pkgconfig libuv01119 ];
 
-  builder = ./builder.sh;
+  patches = ./system-libuv.patch;
+
+  buildPhase = "bash do";
+
+  installPhase = ''
+    mkdir -p $out/sbin
+    cp cjdroute $out/sbin
+  '';
 
   meta = {
     homepage = https://github.com/cjdelisle/cjdns;

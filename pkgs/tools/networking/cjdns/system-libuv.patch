@@ -1,0 +1,88 @@
+diff --git a/node_build/make.js b/node_build/make.js
+index 5b15c1b..3509781 100644
+--- a/node_build/make.js
++++ b/node_build/make.js
+@@ -189,10 +189,7 @@ Builder.configure({
+         }));
+ 
+     }).nThen(function (waitFor) {
+-        builder.config.libs.push(
+-            BUILDDIR+'/dependencies/libuv/out/Release/libuv.a',
+-            '-lpthread'
+-        );
++        builder.config.libs.push('-lpthread');
+         if (builder.config.systemName === 'win32') {
+             builder.config.libs.push(
+                 '-lws2_32',
+@@ -208,32 +205,46 @@ Builder.configure({
+                 '-framework', 'CoreServices'
+             );
+         }
+-        builder.config.includeDirs.push(
+-            BUILDDIR+'/dependencies/libuv/include/'
+-        );
+-        Fs.exists(BUILDDIR+'/dependencies/libuv/out/Release/libuv.a', waitFor(function (exists) {
+-            if (exists) { return; }
+-            console.log("Build Libuv");
+-            var cwd = process.cwd();
+-            process.chdir(BUILDDIR+'/dependencies/libuv/');
+-
+-            var args = ['./gyp_uv.py'];
+-            var gyp = Spawn(PYTHON, args);
+-            gyp.stdout.on('data', function(dat) { process.stdout.write(dat.toString()); });
+-            gyp.stderr.on('data', function(dat) { process.stderr.write(dat.toString()); });
+-            gyp.on('close', waitFor(function () {
+-                var args = ['-j', WORKERS, '-C', 'out', 'BUILDTYPE=Release', 'CC='+builder.config.gcc];
+-                if (builder.config.systemName === 'win32') { args.push('PLATFORM=mingw32'); }
+-                if (builder.config.systemName !== 'darwin') { args.push('CFLAGS=-fPIC'); }
+-                var make = Spawn('make', args);
+-                make.stdout.on('data', function(dat) { process.stdout.write(dat.toString()); });
+-                make.stderr.on('data', function(dat) { process.stderr.write(dat.toString()); });
+-                make.on('close', waitFor(function () {
+-                    process.chdir(cwd);
+-                }));
+-            }));
+-        }));
+ 
++	// check for libuv with pkg-config
++	var uvVersion;
++	var pc = Spawn('pkg-config', ['--modversion', 'libuv']);
++	pc.stdout.on('data', function(dat) { uvVersion = dat.toString().trim(); });
++	pc.on('close', waitFor(function() {
++	    if (uvVersion != '0.11.19') {
++		throw 'libuv-0.11.19 not found with pkg-config';
++	    };
++
++	    console.log('Found libuv-' + uvVersion + ' with pkg-config.');
++	    var uvInclude;
++	    var uvLibDir;
++
++	    pc = Spawn('pkg-config', ['--variable=includedir', 'libuv']);
++	    pc.stdout.on('data', function(dat) { uvInclude = dat.toString().trim(); });
++	    pc.on('close', waitFor(function() {
++		if (uvInclude == '') throw 'pkg-config did not report an include dir for libuv';
++
++		var pc = Spawn('pkg-config', ['--variable=libdir', 'libuv']);
++		pc.stdout.on('data', function(dat) { uvLibDir = dat.toString().trim(); });
++		pc.on('close', waitFor(function() {
++		    var uvStaticLib = uvLibDir+'/libuv.a';
++		    Fs.exists(uvStaticLib, waitFor(function (exists) {
++			if (!exists) {
++			    throw 'Did not find a static copy of libuv.';
++			};
++
++			builder.config.libs.push(uvStaticLib);
++
++			builder.config.includeDirs.push(
++			    uvInclude,
++			    // need red black tree stuff from libuv's tree.h,
++			    // but its not part of the public API. -EH
++			    BUILDDIR+'/dependencies/libuv/include/'
++			);
++		    }));
++		}));
++	    }));
++	}))
+     }).nThen(waitFor());
+ 
+ }).build(function (builder, waitFor) {
