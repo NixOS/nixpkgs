@@ -128,5 +128,6 @@ in zipModules ([]
 # Options that are obsolete and have no replacement.
 ++ obsolete' [ "boot" "loader" "grub" "bootDevice" ]
 ++ obsolete' [ "boot" "initrd" "luks" "enable" ]
+++ obsolete' [ "programs" "bash" "enable" ]
 
 )
