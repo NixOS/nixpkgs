@@ -64,7 +64,7 @@ in {
     networking.networkmanager.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
-    fonts.extraFonts = [ pkgs.dejavu_fonts ];
+    fonts.fonts = [ pkgs.dejavu_fonts ];
 
     services.xserver.desktopManager.session = singleton
       { name = "gnome3";
