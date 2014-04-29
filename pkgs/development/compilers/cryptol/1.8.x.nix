@@ -18,12 +18,12 @@ let
   cryptol-bin =
     if stdenv.system == "i686-linux"
     then requireFile {
-      url    = "https://www.galois.com/cryptol";
+      url    = "http://cryptol.net";
       name   = "${name}-i386-centos6-linux.tar.gz";
       sha256 = "131jkj3nh29rwwq5w5sfdf5jrb3c7ayjp4709v1zh84q4d6b35nf";
     }
     else requireFile {
-      url    = "https://www.galois.com/cryptol";
+      url    = "http://cryptol.net";
       name   = "${name}-x86_64-centos6-linux.tar.gz";
       sha256 = "1dmkns8s6r2d6pvh176w8k3891frik6hmcr2ibghk4l6qr6gwarx";
     };
@@ -31,12 +31,12 @@ let
   lss-bin =
     if stdenv.system == "i686-linux"
     then requireFile {
-      url    = "https://www.galois.com/cryptol";
+      url    = "http://cryptol.net";
       name   = "${lss-ver}-centos6-32.tar.gz";
       sha256 = "015ssw3v523wwzkma0qbpj3jnyzckab5q00ypdz0gr3kjcxn5rxg";
     }
     else requireFile {
-      url    = "https://www.galois.com/cryptol";
+      url    = "http://cryptol.net";
       name   = "${lss-ver}-centos6-64.tar.gz";
       sha256 = "1zjy4xi8v3m6g8ydm9q6dgzg5xn0xc3a4zsll5plbhngprgwxcxm";
     };
@@ -44,12 +44,12 @@ let
   jss-bin =
     if stdenv.system == "i686-linux"
     then requireFile {
-      url    = "https://www.galois.com/cryptol";
+      url    = "http://cryptol.net";
       name   = "${jss-ver}-centos5-32.tar.gz";
       sha256 = "1rlj14fbh9k3yvals8jsarczwl51fh6zjaic0pnhpc9s4p0pnjbr";
     }
     else requireFile {
-      url    = "https://www.galois.com/cryptol";
+      url    = "http://cryptol.net";
       name   = "${jss-ver}-centos5-64.tar.gz";
       sha256 = "0smarm2pi3jz4c8jas9gwcbghc6vc375vrwxbdj1mqx4awlhnz1n";
     };
