@@ -45,7 +45,7 @@ with lib;
 
     users.extraUsers = singleton
       { name = fourStoreUser;
-        uid = config.ids.uids.fourStore;
+        uid = config.ids.uids.fourstore;
         description = "4Store database user";
         home = stateDir;
       };
