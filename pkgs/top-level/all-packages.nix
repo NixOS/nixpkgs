@@ -6847,7 +6847,9 @@ let
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
-  talloc = callPackage ../development/libraries/talloc { };
+  talloc = callPackage ../development/libraries/talloc {
+    libgcrypt = libgcrypt_1_6;
+  };
 
   tclap = callPackage ../development/libraries/tclap {};
 

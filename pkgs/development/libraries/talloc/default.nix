@@ -1,24 +1,37 @@
-{ fetchurl, stdenv }:
+{ stdenv, fetchurl, python27, pkgconfig, readline, gettext, libxslt, docbook_xsl
+, docbook_xml_dtd_42
+, acl ? null, heimdal ? null, libaio ? null, pam ? null, zlib ? null
+, libgcrypt ? null, libcap ? null
+}:
 
 stdenv.mkDerivation rec {
-  name = "talloc-2.0.1";
+  name = "talloc-2.1.1";
 
   src = fetchurl {
     url = "http://samba.org/ftp/talloc/${name}.tar.gz";
-    sha256 = "1d694zyi451a5zr03l5yv0n8yccyr3r8pmzga17xaaaz80khb0av";
+    sha256 = "0x31id42b425dbxv5whrqlc6dj14ph7wzs3wsp1ggi537dncwa9y";
   };
 
-  configureFlags = "--enable-talloc-compat1 --enable-largefile";
-  
-  # https://bugzilla.samba.org/show_bug.cgi?id=7000
-  postConfigure = if stdenv.isDarwin then ''
-    substituteInPlace "Makefile" --replace "SONAMEFLAG = #" "SONAMEFLAG = -Wl,-install_name,"
-  '' else "";
+  buildInputs = [
+    python27 pkgconfig readline gettext libxslt docbook_xsl docbook_xml_dtd_42
+    acl heimdal libaio pam zlib libgcrypt libcap
+  ];
 
-  meta = {
+  preConfigure = ''
+    sed -i 's,#!/usr/bin/env python,#!${python27}/bin/python,g' buildtools/bin/waf
+  '';
+
+  configureFlags = [
+    "--enable-talloc-compat1"
+    "--bundled-libraries=NONE"
+    "--builtin-libraries=replace"
+  ];
+
+  meta = with stdenv.lib; {
     description = "Hierarchical pool based memory allocator with destructors";
     homepage = http://tdb.samba.org/;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ wkennington ];
+    platforms = platforms.all;
   };
 }
