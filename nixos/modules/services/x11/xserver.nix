@@ -24,7 +24,7 @@ let
     intel-testing = { modules = with pkgs.xorg; [ xf86videointel-testing glamoregl ]; driverName = "intel"; };
   };
 
-  driverNames = config.hardware.opengl.videoDrivers;
+  driverNames = cfg.videoDrivers;
 
   needsAcpid =
      (elem "nvidia" driverNames) ||
@@ -181,6 +181,18 @@ in
         '';
       };
 
+      videoDrivers = mkOption {
+        type = types.listOf types.str;
+        # !!! We'd like "nv" here, but it segfaults the X server.
+        default = [ "ati" "cirrus" "intel" "vesa" "vmware" ];
+        example = [ "vesa" ];
+        description = ''
+          The names of the video drivers the configuration
+          supports. They will be tried in order until one that
+          supports your card is found.
+        '';
+      };
+
       videoDriver = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -188,7 +200,7 @@ in
         description = ''
           The name of the video driver for your graphics card.  This
           option is obsolete; please set the
-          <option>hardware.opengl.videoDrivers</option> instead.
+          <option>services.xserver.videoDrivers</option> instead.
         '';
       };
 
@@ -386,7 +398,7 @@ in
 
   config = mkIf cfg.enable {
     hardware.opengl.enable = true;
-    hardware.opengl.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
+    services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 
     assertions =
       [ { assertion = !(config.programs.ssh.startAgent && cfg.startGnuPGAgent);

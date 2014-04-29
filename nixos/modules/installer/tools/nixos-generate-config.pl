@@ -165,7 +165,7 @@ foreach my $path (glob "/sys/bus/pci/devices/*") {
     pciCheck $path;
 }
 
-push @attrs, "hardware.opengl.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
+push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
 
 
 # Idem for USB devices.
