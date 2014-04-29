@@ -25,7 +25,7 @@ with lib;
 
   config = mkIf config.fonts.enableCoreFonts {
 
-    fonts.extraFonts = [ pkgs.corefonts ];
+    fonts.fonts = [ pkgs.corefonts ];
 
   };
 
