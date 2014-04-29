@@ -3,7 +3,7 @@
 , faad2, libass, libkate, libmms
 , libmodplug, mpeg2dec, mpg123 
 , openjpeg, libopus, librsvg
-, timidity, libvdpau, wayland
+, wildmidi, fluidsynth, libvdpau, wayland
 , libwebp, xvidcore, gnutls
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     faad2 libass libkate libmms
     libmodplug mpeg2dec mpg123 
     openjpeg libopus librsvg
-    timidity libvdpau wayland
+    wildmidi fluidsynth libvdpau wayland
     libwebp xvidcore gnutls
   ] ++ stdenv.lib.optional faacSupport faac;
 }
