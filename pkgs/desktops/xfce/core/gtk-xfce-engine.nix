@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   #TODO: gtk3
-  buildInputs = [ pkgconfig intltool gtk ] ++ stdenv.lib.optional enableGtk3Support gtk;
+  buildInputs = [ pkgconfig intltool gtk ] ++ stdenv.lib.optional enableGtk3Support gtk3;
 
   meta = {
     homepage = http://www.xfce.org/;
