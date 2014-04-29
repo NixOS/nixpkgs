@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export SAGE_NUM_THREADS=$NIX_BUILD_CORES
     sed -i 's/if ! [ -d "$HOME" ]/if [ -d "$HOME" ]/' src/bin/sage-env
-  '' ++ stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i "s/ld_version = try_run('ld  -v')/ld_version = 'Apple'/" \
       build/pkgs/atlas/configuration.py
   '';
