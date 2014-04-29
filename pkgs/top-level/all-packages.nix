@@ -2461,6 +2461,7 @@ let
 
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
 
+  cryptol1 = lowPrio (callPackage ../development/compilers/cryptol/1.8.x.nix {});
   cryptol2 = haskellPackages.cryptol;
 
   cython = pythonPackages.cython;

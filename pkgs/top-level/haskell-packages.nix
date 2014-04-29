@@ -3001,7 +3001,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   arbtt = callPackage ../applications/misc/arbtt {};
 
-  cryptol = callPackage ../development/compilers/cryptol {
+  cryptol = callPackage ../development/compilers/cryptol/2.0.x.nix {
     QuickCheck   = self.QuickCheck_2_7_3;
     text         = self.text_1_1_0_1;
     cabalInstall = self.cabalInstall_1_18_0_3;
