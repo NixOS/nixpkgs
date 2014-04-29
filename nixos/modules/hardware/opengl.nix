@@ -10,6 +10,15 @@ let
 
   videoDrivers = config.services.xserver.videoDrivers;
 
+  makePackage = p: p.buildEnv {
+    name = "mesa-drivers+txc-${p.mesa_drivers.version}";
+    paths =
+      [ p.mesa_drivers
+        p.mesa_noglu # mainly for libGL
+        (if cfg.s3tcSupport then p.libtxc_dxtn else p.libtxc_dxtn_s2tc)
+      ];
+  };
+
 in
 
 {
@@ -52,73 +61,64 @@ in
       '';
     };
 
+    hardware.opengl.package = mkOption {
+      type = types.package;
+      internal = true;
+      description = ''
+        The package that provides the OpenGL implementation.
+      '';
+    };
+
+    hardware.opengl.package32 = mkOption {
+      type = types.package;
+      internal = true;
+      description = ''
+        The package that provides the 32-bit OpenGL implementation on
+        64-bit systems.  Used when <option>driSupport32Bit</option> is
+        set.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
+
     assertions = pkgs.lib.singleton {
       assertion = cfg.driSupport32Bit -> pkgs.stdenv.isx86_64;
-      message = "Option driSupport32Bit only makes sens on a 64-bit system.";
+      message = "Option driSupport32Bit only makes sense on a 64-bit system.";
     };
 
-    system.activationScripts.setup-opengl.deps = [];
-    system.activationScripts.setup-opengl.text = ''
-      rm -f /run/opengl-driver{,-32}
-      ${optionalString (pkgs.stdenv.isi686) "ln -sf opengl-driver /run/opengl-driver-32"}
-    ''
-      #TODO:  The OpenGL driver should depend on what's detected at runtime.
-     +( if elem "nvidia" videoDrivers then
-          ''
-            ln -sf ${kernelPackages.nvidia_x11} /run/opengl-driver
-            ${optionalString cfg.driSupport32Bit
-              "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11.override { libsOnly = true; kernel = null; } } /run/opengl-driver-32"}
-          ''
-        else if elem "nvidiaLegacy173" videoDrivers then
-          "ln -sf ${kernelPackages.nvidia_x11_legacy173} /run/opengl-driver"
-        else if elem "nvidiaLegacy304" videoDrivers then
-          ''
-            ln -sf ${kernelPackages.nvidia_x11_legacy304} /run/opengl-driver
-            ${optionalString cfg.driSupport32Bit
-              "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11_legacy304.override { libsOnly = true; kernel = null; } } /run/opengl-driver-32"}
-          ''
-        else if elem "ati_unfree" videoDrivers then
-          "ln -sf ${kernelPackages.ati_drivers_x11} /run/opengl-driver"
-        else
-          let
-            lib_fun = p: p.buildEnv {
-              name = "mesa-drivers+txc-${p.mesa_drivers.version}";
-              paths = [
-                p.mesa_drivers
-                p.mesa_noglu # mainly for libGL
-                (if cfg.s3tcSupport then p.libtxc_dxtn else p.libtxc_dxtn_s2tc)
-              ];
-            };
-          in
-          ''
-            ${optionalString cfg.driSupport "ln -sf ${lib_fun pkgs} /run/opengl-driver"}
-            ${optionalString cfg.driSupport32Bit
-              "ln -sf ${lib_fun pkgs_i686} /run/opengl-driver-32"}
-          ''
-      );
+    system.activationScripts.setup-opengl =
+      ''
+        ln -sfn ${cfg.package} /run/opengl-driver
+        ${if pkgs.stdenv.isi686 then ''
+          ln -sfn opengl-driver /run/opengl-driver-32
+        '' else if cfg.driSupport32Bit then ''
+          ln -sfn ${cfg.package32} /run/opengl-driver-32
+        '' else ''
+          rm -f /run/opengl-driver-32
+        ''}
+      '';
 
     environment.variables.LD_LIBRARY_PATH =
       [ "/run/opengl-driver/lib" "/run/opengl-driver-32/lib" ];
 
+    # FIXME: move this into card-specific modules.
+    hardware.opengl.package = mkDefault
+      (if elem "ati_unfree" videoDrivers then
+        kernelPackages.ati_drivers_x11
+      else
+        makePackage pkgs);
+
+    hardware.opengl.package32 = mkDefault (makePackage pkgs_i686);
+
     boot.extraModulePackages =
-      optional (elem "nvidia" videoDrivers) kernelPackages.nvidia_x11 ++
-      optional (elem "nvidiaLegacy173" videoDrivers) kernelPackages.nvidia_x11_legacy173 ++
-      optional (elem "nvidiaLegacy304" videoDrivers) kernelPackages.nvidia_x11_legacy304 ++
       optional (elem "virtualbox" videoDrivers) kernelPackages.virtualboxGuestAdditions ++
       optional (elem "ati_unfree" videoDrivers) kernelPackages.ati_drivers_x11;
 
-    boot.blacklistedKernelModules =
-      optionals (elem "nvidia" videoDrivers) [ "nouveau" "nvidiafb" ];
-
     environment.etc =
-      (optionalAttrs (elem "ati_unfree" videoDrivers) {
+      optionalAttrs (elem "ati_unfree" videoDrivers) {
         "ati".source = "${kernelPackages.ati_drivers_x11}/etc/ati";
-      })
-      // (optionalAttrs (elem "nvidia" videoDrivers) {
-        "OpenCL/vendors/nvidia.icd".source = "${kernelPackages.nvidia_x11}/lib/vendors/nvidia.icd";
-      });
+      };
   };
 }

@@ -32,6 +32,7 @@
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
   ./hardware/video/bumblebee.nix
+  ./hardware/video/nvidia.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
