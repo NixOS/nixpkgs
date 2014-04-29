@@ -3723,6 +3723,8 @@ let
 
   cflow = callPackage ../development/tools/misc/cflow { };
 
+  cov-build = callPackage ../development/tools/analysis/cov-build {};
+
   cppcheck = callPackage ../development/tools/analysis/cppcheck { };
 
   cscope = callPackage ../development/tools/misc/cscope { };
