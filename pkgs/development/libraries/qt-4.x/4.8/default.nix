@@ -16,7 +16,7 @@ with stdenv.lib;
 
 let
   v_maj = "4.8";
-  v_min = "5";
+  v_min = "6";
   vers = "${v_maj}.${v_min}";
 in
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qt/"
       + "${v_maj}/${vers}/qt-everywhere-opensource-src-${vers}.tar.gz";
-    sha256 = "0f51dbgn1dcck8pqimls2qyf1pfmsmyknh767cvw87c3d218ywpb";
+    sha256 = "0b036iqgmbbv37dgwwfihw3mihjbnw3kb5kaisdy0qi8nn8xs54b";
   };
 
   # The version property must be kept because it will be included into the QtSDK package name
@@ -49,16 +49,6 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./glib-2.32.patch
-      (fetchurl {
-        name = "CVE-2013-4549.patch";
-        url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/CVE-2013-4549.patch?h=packages/qt4";
-        sha256 = "0xz60fmspzvsyhd0f013pvh2bbm87976128fphbckfcwiqr1hanw";
-      })
-      (fetchurl {
-        name = "libmng2.patch";
-        url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/libmng2.patch?h=packages/qt4";
-        sha256 = "1sgnrl3qzr370ad5bqc66f7sp0gk046jnsy1811x24f16cs04xzh";
-      })
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         inherit cups icu libXfixes;
@@ -183,7 +173,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage    = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
-    license     = "GPL/LGPL";
+    license     = licenses.lgpl21Plus; # or gpl3
     maintainers = with maintainers; [ lovek323 phreedom sander urkud ];
     platforms   = platforms.linux;
   };
