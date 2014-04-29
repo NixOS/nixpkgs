@@ -168,7 +168,7 @@ in
 
     environment.systemPackages = [ pkgs.zsh ];
 
-    users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
+    #users.defaultUserShell = mkDefault "/run/current-system/sw/bin/zsh";
 
     environment.shells =
       [ "/run/current-system/sw/bin/zsh"
