@@ -54,7 +54,7 @@ with lib;
 
     users.extraUsers = singleton
       { name = endpointUser;
-        uid = config.ids.uids.fourStoreEndpoint;
+        uid = config.ids.uids.fourstorehttp;
         description = "4Store SPARQL endpoint user";
 #        home = stateDir;
       };

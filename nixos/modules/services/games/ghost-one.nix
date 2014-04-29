@@ -57,14 +57,14 @@ in
 
     users.extraUsers = singleton
       { name = ghostUser;
-        uid = config.ids.uids.ghostOne;
+        uid = config.ids.uids.ghostone;
         description = "Ghost One game server user";
         home = stateDir;
       };
 
     users.extraGroups = singleton
       { name = ghostUser;
-        gid = config.ids.gids.ghostOne;
+        gid = config.ids.gids.ghostone;
       };
 
     services.ghostOne.config = ''
