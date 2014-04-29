@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
 
   postInstall =
     ''
-      mv $out/share/zoneinfo-posix $out/share/zoneinfo/posix
+      rm $out/share/zoneinfo-posix
+      ln -s . $out/share/zoneinfo/posix
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right
 
       ensureDir "$lib/include"
