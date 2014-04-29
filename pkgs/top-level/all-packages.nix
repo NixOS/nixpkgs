@@ -6859,7 +6859,10 @@ let
 
   tcltls = callPackage ../development/libraries/tcltls { };
 
-  tdb = callPackage ../development/libraries/tdb { };
+  tdb = callPackage ../development/libraries/tdb {
+    sasl = cyrus_sasl;
+    libgcrypt = libgcrypt_1_6;
+  };
 
   tecla = callPackage ../development/libraries/tecla { };
 
