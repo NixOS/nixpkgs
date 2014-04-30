@@ -45,7 +45,6 @@ let
           ];
 
         ${if useEFI then ''
-          boot.loader.grub.enable = false;
           boot.loader.efi.canTouchEfiVariables = true;
           boot.loader.gummiboot.enable = true;
         '' else ''

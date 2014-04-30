@@ -318,8 +318,7 @@ changes:
   </listitem>
   <listitem>
     <para>You must set <option>boot.loader.gummiboot.enable</option> to
-    <literal>true</literal>, and <option>boot.loader.grub.enable</option>
-    to <literal>false</literal>. <command>nixos-generate-config</command>
+    <literal>true</literal>. <command>nixos-generate-config</command>
     should do this automatically for new configurations when booted in
     UEFI mode.</para>
   </listitem>

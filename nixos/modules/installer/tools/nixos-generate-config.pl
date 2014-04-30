@@ -402,7 +402,6 @@ if ($showHardwareConfig) {
         if (-e "/sys/firmware/efi/efivars") {
             $bootLoaderConfig = <<EOF;
   # Use the gummiboot efi boot loader.
-  boot.loader.grub.enable = false;
   boot.loader.gummiboot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 EOF
