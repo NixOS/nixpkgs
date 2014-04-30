@@ -8,6 +8,7 @@ use File::stat;
 use File::Copy;
 use POSIX;
 use Cwd;
+use Switch;
 
 my $defaultConfig = $ARGV[1] or die;
 
@@ -40,6 +41,7 @@ my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
 my $defaultEntry = int(get("default"));
+my $fsIdentifier = get("fsIdentifier");
 $ENV{'PATH'} = get("path");
 
 die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
@@ -87,13 +89,27 @@ sub GrubFs {
                 $path = "/" . substr($fs->device, $sid) . "/@" . $path;
             }
         } else {
-            my $lbl = "/dev/disk/by-label/";
-            if (index($fs->device, $lbl) == 0) {
-                $search = "--label " . substr($fs->device, length($lbl));
-            }
-            my $uuid = "/dev/disk/by-uuid/";
-            if (index($fs->device, $uuid) == 0) {
-                $search = "--fs-uuid " . substr($fs->device, length($uuid));
+            my $idCmd = "\$(blkid -o export $fs->device) 2>/dev/null; echo"
+            switch ($fsIdentifier) {
+                case "uuid" {
+                    $search = "--fs-uuid " . `$idCmd \$UUID`;
+                }
+                case "label" {
+                    $search = "--label " . `$idCmd \$LABEL`;
+                }
+                case "provided" {
+                    my $lbl = "/dev/disk/by-label/";
+                    if (index($fs->device, $lbl) == 0) {
+                        $search = "--label " . substr($fs->device, length($lbl));
+                    }
+                    my $uuid = "/dev/disk/by-uuid/";
+                    if (index($fs->device, $uuid) == 0) {
+                        $search = "--fs-uuid " . substr($fs->device, length($uuid));
+                    }
+                }
+                else {
+                    die "invalid fs identifier type\n";
+                }
             }
         }
         if (not $search eq "") {

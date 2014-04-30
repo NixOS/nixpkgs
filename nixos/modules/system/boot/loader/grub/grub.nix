@@ -26,11 +26,11 @@ let
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
-        default devices;
+        default devices fsIdentifier;
       path = (makeSearchPath "bin" [
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils
       ]) + ":" + (makeSearchPath "sbin" [
-        pkgs.mdadm
+        pkgs.mdadm pkgs.utillinux
       ]);
     });
 
@@ -207,6 +207,21 @@ in
         type = types.int;
         description = ''
           Index of the default menu item to be booted.
+        '';
+      };
+
+      fsIdentifier = mkOption {
+        default = "uuid";
+        type = types.addCheck types.string
+          (type: type == "uuid" || type == "label" || type = "provided");
+        description = ''
+          Determines how grub will identify devices when generating the
+          configuration file. A value of uuid / label signifies that grub
+          will always resolve the uuid or label of the device before using
+          it in the configuration. A value of provided means that grub will
+          use the device name as show in <command>df</command> or
+          <command>mount</command>. Note, zfs zpools / datasets are ignored
+          and will always be mounted using their labels.
         '';
       };
 
