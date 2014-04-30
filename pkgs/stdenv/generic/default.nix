@@ -84,9 +84,19 @@ let
               { allowUnfree = true; }
             to ~/.nixpkgs/config.nix.''
         else if !allowBroken && attrs.meta.broken or false then
-          throw "you can't use package ‘${attrs.name}’ in ${pos'} because it has been marked as broken"
+          throw ''
+            Package ‘${attrs.name}’ in ${pos'} is marked as broken, refusing to evaluate. You can set
+              { nixpkgs.config.allowBroken = true; }
+            in configuration.nix to override this. If you use Nix standalone, you can add
+              { allowBroken = true; }
+            to ~/.nixpkgs/config.nix.''
         else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
-          throw "the package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’"
+          throw ''
+            Package ‘${attrs.name}’ in ${pos'} is not supported on ‘${result.system}’, refusing to evaluate. You can set
+              { nixpkgs.config.allowBroken = true; }
+            in configuration.nix to override this. If you use Nix standalone, you can add
+              { allowBroken = true; }
+            to ~/.nixpkgs/config.nix.''
         else
           lib.addPassthru (derivation (
             (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
