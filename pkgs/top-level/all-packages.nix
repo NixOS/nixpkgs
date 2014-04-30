@@ -5542,6 +5542,11 @@ let
 
   lcms2 = callPackage ../development/libraries/lcms2 { };
 
+  ldb = callPackage ../development/libraries/ldb {
+    sasl = cyrus_sasl;
+    libgcrypt = libgcrypt_1_6;
+  };
+
   lensfun = callPackage ../development/libraries/lensfun { };
 
   lesstif = callPackage ../development/libraries/lesstif { };
