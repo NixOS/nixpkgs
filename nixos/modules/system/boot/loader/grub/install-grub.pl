@@ -89,7 +89,7 @@ sub GrubFs {
                 $path = "/" . substr($fs->device, $sid) . "/@" . $path;
             }
         } else {
-            my $idCmd = "\$(blkid -o export $fs->device) 2>/dev/null; echo"
+            my $idCmd = "\$(blkid -o export " . $fs->device . ") 2>/dev/null; echo"
             switch ($fsIdentifier) {
                 case "uuid" {
                     $search = "--fs-uuid " . `$idCmd \$UUID`;
@@ -112,9 +112,9 @@ sub GrubFs {
                 }
             }
             if ($fs->type eq "btrfs") {
-                $subvol = `mount | sed -n 's,^$fs->device on .*subvol=\([^,)]*\).*$,\1,p'`
+                $subvol = `mount | sed -n 's,^@{[$fs->device]} on .*subvol=\([^,)]*\).*\$,\1,p'`
                 if ($subvol eq "") {
-                    $subvol = `btrfs subvol get-default $fs->mount | sed -n 's,^.*path \([^ ]*\) .*$,\1,p'`
+                    $subvol = `btrfs subvol get-default @{[$fs->mount]} | sed -n 's,^.*path \([^ ]*\) .*\$,\1,p'`
                 }
                 $path = "/$subvol";
             }
