@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "syncthing-${version}";
-  version = "0.7.1";
+  version = "0.8.2";
 
   src = fetchgit {
     url = "git://github.com/calmh/syncthing.git";
     rev = "refs/tags/v${version}";
-    sha256 = "1rja837kimiq15km8cridbm5yxvkm6mkvkwywdi76qf9rm0pcjl1";
+    sha256 = "1yhl0mk6f2cyib82jyzwz20iw1l5pxppmlgw5xn9pkmqm53wp4z4";
   };
 
   buildInputs = [ go ];
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     cp -r "./scanner" "./dependencies/src/github.com/calmh/syncthing"
     cp -r "./mc" "./dependencies/src/github.com/calmh/syncthing"
     cp -r "./xdr" "./dependencies/src/github.com/calmh/syncthing"
+    cp -r "./upnp" "./dependencies/src/github.com/calmh/syncthing"
 
     export GOPATH="`pwd`/Godeps/_workspace:`pwd`/dependencies"
 
