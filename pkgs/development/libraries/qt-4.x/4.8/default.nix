@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll, libXrender, libXinerama, libXcursor, libXmu, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
-, libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
+, libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi, config
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst_plugins_base
 , buildWebkit ? stdenv.isLinux
 , flashplayerFix ? false, gdk_pixbuf
@@ -10,6 +10,7 @@
 , docs ? false
 , examples ? false
 , demos ? false
+, extraImModules ? []
 }:
 
 with stdenv.lib;
@@ -160,10 +161,17 @@ stdenv.mkDerivation rec {
         mkspecs/win32-g++/qmake.conf
     '';
 
+    immodules = extraImModules;
+
     # I don't know why it does not install qmake
     postInstall = ''
       cp bin/qmake* $out/bin
-    '';
+    '' + (
+      if immodules != []
+      then "cp $immodules $out/lib/qt4/plugins/inputmethods/\n"
+      else ""
+    );
+
     dontSetConfigureCross = true;
     dontStrip = true;
   } // optionalAttrs isMingw {

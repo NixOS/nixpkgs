@@ -1,7 +1,8 @@
 { stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xlibs
-, gdk_pixbuf, libintlOrEmpty, x11
+, gdk_pixbuf, libintlOrEmpty, x11, config
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
+, extraImModules ? []
 }:
 
 assert xineramaSupport -> xlibs.libXinerama != null;
@@ -32,7 +33,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-xinput=yes";
 
-  postInstall = "rm -rf $out/share/gtk-doc";
+  immodules = [ "$out/lib/gtk-2.0/2.10.0/immodules/*.so" ] ++ extraImModules;
+  
+  postInstall =
+    ''
+      rm -rf $out/share/gtk-doc
+      $out/bin/gtk-query-immodules-2.0 --update-cache ${stdenv.lib.concatStringsSep " " immodules}
+    '';
 
   meta = with stdenv.lib; {
     description = "A multi-platform toolkit for creating graphical user interfaces";
