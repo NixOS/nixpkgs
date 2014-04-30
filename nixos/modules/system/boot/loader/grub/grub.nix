@@ -28,7 +28,7 @@ let
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
         default devices fsIdentifier;
       path = (makeSearchPath "bin" [
-        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils
+        pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
       ]) + ":" + (makeSearchPath "sbin" [
         pkgs.mdadm pkgs.utillinux
       ]);

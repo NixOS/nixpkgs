@@ -111,6 +111,13 @@ sub GrubFs {
                     die "invalid fs identifier type\n";
                 }
             }
+            if ($fs->type eq "btrfs") {
+                $subvol = `mount | sed -n 's,^$fs->device on .*subvol=\([^,)]*\).*$,\1,p'`
+                if ($subvol eq "") {
+                    $subvol = `btrfs subvol get-default $fs->mount | sed -n 's,^.*path \([^ ]*\) .*$,\1,p'`
+                }
+                $path = "/$subvol";
+            }
         }
         if (not $search eq "") {
             $search = "search --set=drive$driveid " . $search;
