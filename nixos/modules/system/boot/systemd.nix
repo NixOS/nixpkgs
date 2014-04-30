@@ -767,9 +767,11 @@ in
     systemd.user.units =
       mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services;
 
-    system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
-      "CGROUPS" "AUTOFS4_FS" "DEVTMPFS"
-    ];
+    system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
+      [ "DEVTMPFS" "CGROUPS" "INOTIFY_USER" "SIGNALFD" "TIMERFD" "EPOLL" "NET"
+        "SYSFS" "PROC_FS" "FHANDLE" "DMIID" "AUTOFS4_FS" "TMPFS_POSIX_ACL"
+        "TMPFS_XATTR" "SECCOMP"
+      ];
 
     environment.shellAliases =
       { start = "systemctl start";
