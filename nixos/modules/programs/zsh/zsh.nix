@@ -26,11 +26,6 @@ in
         default = false;
         description = ''
           Whenever to configure Zsh as an interactive shell.
-          Note that this tries to make Zsh the default
-          <option>users.defaultUserShell</option>,
-          which in turn means that you might need to explicitly
-          set this variable if you have another shell configured
-          with NixOS.
         '';
         type = types.bool;
       };
