@@ -108,7 +108,7 @@ let
 
       my $machine = createMachine({ ${hdFlags}
         cdrom => glob("${iso}/iso/*.iso"),
-        qemuFlags => "${qemuFlags} ${optionalString testChannel (toString (qemuNICFlags 1 1 2))}" });
+        qemuFlags => "${qemuFlags} " . '${optionalString testChannel (toString (qemuNICFlags 1 1 2))}' });
       $machine->start;
 
       ${optionalString testChannel ''
