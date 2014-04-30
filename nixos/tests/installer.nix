@@ -165,6 +165,10 @@ let
       # Do it again to make sure it's idempotent.
       $machine->succeed("nixos-install >&2");
 
+      $machine->succeed("umount /mnt/boot || true");
+      $machine->succeed("umount /mnt");
+      $machine->succeed("sync");
+
       $machine->shutdown;
 
       # Now see if we can boot the installation.
