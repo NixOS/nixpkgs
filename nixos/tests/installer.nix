@@ -34,7 +34,7 @@ let
 
 
   # The configuration to install.
-  config = { fileSystems, testChannel, grubVersion, grubDevice }: pkgs.writeText "configuration.nix"
+  config = { testChannel, grubVersion, grubDevice }: pkgs.writeText "configuration.nix"
     ''
       { config, pkgs, modulesPath, ... }:
 
@@ -52,16 +52,6 @@ let
 
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
       }
-    '';
-
-  rootFS =
-    ''
-      fileSystems."/".device = "/dev/disk/by-label/nixos";
-    '';
-
-  bootFS =
-    ''
-      fileSystems."/boot".device = "/dev/disk/by-label/boot";
     '';
 
 
@@ -90,9 +80,8 @@ let
   # The test script boots the CD, installs NixOS on an empty hard
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
-  # partitions and filesystems, and a configuration.nix fragment
-  # `fileSystems'.
-  testScriptFun = { createPartitions, fileSystems, testChannel, grubVersion, grubDevice }:
+  # partitions and filesystems.
+  testScriptFun = { createPartitions, testChannel, grubVersion, grubDevice }:
     let iface = if grubVersion == 1 then "scsi" else "virtio"; in
     ''
       createDisk("harddisk", 4 * 1024);
@@ -148,7 +137,7 @@ let
       $machine->succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2");
 
       $machine->copyFileFromHost(
-          "${ config { inherit fileSystems testChannel grubVersion grubDevice; } }",
+          "${ config { inherit testChannel grubVersion grubDevice; } }",
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
@@ -192,12 +181,12 @@ let
 
 
   makeInstallerTest =
-    { createPartitions, fileSystems, testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda" }:
+    { createPartitions, testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda" }:
     makeTest {
       inherit iso;
       nodes = if testChannel then { inherit webserver; } else { };
       testScript = testScriptFun {
-        inherit createPartitions fileSystems testChannel grubVersion grubDevice;
+        inherit createPartitions testChannel grubVersion grubDevice;
       };
     };
 
@@ -223,7 +212,6 @@ in {
               "mount LABEL=nixos /mnt",
           );
         '';
-      fileSystems = rootFS;
       testChannel = true;
     };
 
@@ -246,7 +234,6 @@ in {
               "mount LABEL=boot /mnt/boot",
           );
         '';
-      fileSystems = rootFS + bootFS;
     };
 
   # Create two physical LVM partitions combined into one volume group
@@ -271,7 +258,6 @@ in {
               "mount LABEL=nixos /mnt",
           );
         '';
-      fileSystems = rootFS;
     };
 
   swraid = makeInstallerTest
@@ -304,7 +290,6 @@ in {
               "mdadm -W /dev/md1",
           );
         '';
-      fileSystems = rootFS + bootFS;
     };
 
   # Test a basic install using GRUB 1.
@@ -323,7 +308,6 @@ in {
           );
 
         '';
-      fileSystems = rootFS;
       grubVersion = 1;
       grubDevice = "/dev/sda";
     };
