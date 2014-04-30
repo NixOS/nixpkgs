@@ -67,11 +67,11 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
+    users.extraUsers = mkIf (!config.services.zabbixServer.enable) (singleton
       { name = "zabbix";
         uid = config.ids.uids.zabbix;
         description = "Zabbix daemon user";
-      };
+      });
 
     systemd.services."zabbix-agent" =
       { description = "Zabbix Agent";
