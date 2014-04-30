@@ -462,7 +462,7 @@ $bootLoaderConfig
   # services.xserver.displayManager.kdm.enable = true;
   # services.xserver.desktopManager.kde4.enable = true;
 
-  # Define your user and don't forget to set password with passwd
+  # Define a user account. Don't forget to set a password with ‘passwd’.
   # users.extraUsers.guest = {
   #   name = "guest";
   #   group = "users";
