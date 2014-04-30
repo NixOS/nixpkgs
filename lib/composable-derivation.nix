@@ -1,15 +1,74 @@
 {lib, pkgs} :
 let inherit (lib) nv nvs; in
 {
-  # see for example:
-  # - development/interpreters/php_configurable/default.nix
-  # - .. search composableDerivation in all-packages.nix ..
+
+  # composableDerivation basically mixes these features:
+  # - fix function
+  # - mergeAttrBy
+  # - provides shortcuts for "options" such as "--enable-foo" and adding
+  #   buildInputs, see php example
   #
-  # You should be able to override anything you like easily
-  # grep the mailinglist by title "python proposal" (dec 08)
-  # -> http://mail.cs.uu.nl/pipermail/nix-dev/2008-December/001571.html
-  # to see why this got complicated when using all its features
-  # TODO add newer example using new syntax (kernel derivation proposal -> mailinglist)
+  # It predates styles which are common today, such as
+  #  * the config attr
+  #  * mkDerivation.override feature
+  #  * overrideDerivation (lib/customization.nix)
+  #
+  # Some of the most more important usage examples (which could be rewritten if it was important):
+  # * php
+  # * postgis
+  # * vim_configurable
+  #
+  # A minimal example illustrating most features would look like this:
+  # let base = composableDerivation { (fixed : let inherit (fixed.fixed) name in {
+  #    src = fetchurl {
+  #    }
+  #    buildInputs = [A];
+  #    preConfigre = "echo ${name}";
+  #    # attention, "name" attr is missing, thus you cannot instantiate "base".
+  # }
+  # in {
+  #  # These all add name attribute, thus you can instantiate those:
+  #  v1 = base.merge   ({ name = "foo-add-B"; buildInputs = [B]; });       // B gets merged into buildInputs
+  #  v2 = base.merge   ({ name = "mix-in-pre-configure-lines" preConfigre = ""; });
+  #  v3 = base.replace ({ name = "foo-no-A-only-B;" buildInputs = [B]; });
+  # }
+  #
+  # So yes, you can think about it being something like nixos modules, and
+  # you'd be merging "features" in one at a time using .merge or .replace
+  # Thanks Shea for telling me that I rethink the documentation ..
+  #
+  # issues:
+  # * its complicated to understand
+  # * some "features" such as exact merge behaviour are burried in mergeAttrBy
+  #   and defaultOverridableDelayableArgs assuming the default behaviour does
+  #   the right thing in the common case
+  # * Eelco once said using such fix style functions are slow to evaluate
+  # * Too quick & dirty. Hard to understand for others. The benefit was that
+  #   you were able to create a kernel builder like base derivation and replace
+  #   / add patches the way you want without having to declare function arguments
+  #
+  # nice features:
+  # declaring "optional featuers" is modular. For instance:
+  #   flags.curl = {
+  #     configureFlags = ["--with-curl=${curl}" "--with-curlwrappers"];
+  #     buildInputs = [curl openssl];
+  #   };
+  #   flags.other = { .. }
+  # (Example taken from PHP)
+  #
+  # alternative styles / related features:
+  #  * Eg see function supporting building the kernel
+  #  * versionedDerivation (discussion about this is still going on - or ended)
+  #  * composedArgsAndFun
+  #  * mkDerivation.override
+  #  * overrideDerivation
+  #  * using { .., *Support ? false }: like configurable options.
+  # To find those examples use grep
+  #
+  # To sum up: It exists for historical reasons - and for most commonly used
+  # tasks the alternatives should be used
+  #
+  # If you have questions about this code ping Marc Weber.
   composableDerivation = {
         mkDerivation ? pkgs.stdenv.mkDerivation,
 
