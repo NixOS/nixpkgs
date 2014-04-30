@@ -8,7 +8,7 @@
 
 <section xml:id="sec-release-14.04">
 
-<title>Release 14.04 (“Baboon”, 2014/04/??)</title>
+<title>Release 14.04 (“Baboon”, 2014/04/30)</title>
 
 <para>This is the second stable release branch of NixOS.  In addition
 to numerous new and upgraded packages and modules, this release has
