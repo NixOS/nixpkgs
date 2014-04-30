@@ -54,6 +54,8 @@ in {
       }
     ];
 
+    boot.loader.grub.enable = mkDefault false;
+
     system = {
       build.installBootLoader = gummibootBuilder;
 
