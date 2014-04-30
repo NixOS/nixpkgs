@@ -3,11 +3,11 @@
 with pkgs.lib;
 
 let
-  cfg = config.uim;
+  cfg = config.programs.uim;
 in
 {
   options = {
-    uim = {
+    programs.uim = {
       enable = mkOption {
         type = types.bool;
         default = false;
