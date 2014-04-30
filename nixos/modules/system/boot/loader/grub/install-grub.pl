@@ -8,7 +8,6 @@ use File::stat;
 use File::Copy;
 use POSIX;
 use Cwd;
-use Switch;
 
 my $defaultConfig = $ARGV[1] or die;
 
@@ -78,9 +77,13 @@ sub GrubFs {
     my $fs = GetFs($dir);
     my $path = "/" . substr($dir, length($fs->mount));
     my $search = "";
+
     if ($grubVersion > 1) {
+        # ZFS is completely separate logic as zpools are always identified by a label
+        # or custom UUID
         if ($fs->type eq "zfs") {
             my $sid = index($fs->device, "/");
+
             if ($sid < 0) {
                 $search = "--label " . $fs->device;
                 $path = "/@" . $path;
@@ -89,32 +92,33 @@ sub GrubFs {
                 $path = "/" . substr($fs->device, $sid) . "/@" . $path;
             }
         } else {
-            my $idCmd = "\$(blkid -o export " . $fs->device . ") 2>/dev/null; echo"
-            switch ($fsIdentifier) {
-                case "uuid" {
-                    $search = "--fs-uuid " . `$idCmd \$UUID`;
+            my $idCmd = "\$(blkid -o export " . $fs->device . ") 2>/dev/null; echo";
+
+            if ($fsIdentifier eq "uuid") {
+                $search = "--fs-uuid " . `$idCmd \$UUID`;
+            } elsif ($fsIdentifier eq "label") {
+                $search = "--label " . `$idCmd \$LABEL`;
+            } elsif ($fsIdentifier eq "provided") {
+                my $lbl = "/dev/disk/by-label/";
+
+                # If the provided dev is identifying the partition using a label or uuid,
+                # we should get the label / uuid and do a proper search
+                if (index($fs->device, $lbl) == 0) {
+                    $search = "--label " . substr($fs->device, length($lbl));
                 }
-                case "label" {
-                    $search = "--label " . `$idCmd \$LABEL`;
+                my $uuid = "/dev/disk/by-uuid/";
+                if (index($fs->device, $uuid) == 0) {
+                    $search = "--fs-uuid " . substr($fs->device, length($uuid));
                 }
-                case "provided" {
-                    my $lbl = "/dev/disk/by-label/";
-                    if (index($fs->device, $lbl) == 0) {
-                        $search = "--label " . substr($fs->device, length($lbl));
-                    }
-                    my $uuid = "/dev/disk/by-uuid/";
-                    if (index($fs->device, $uuid) == 0) {
-                        $search = "--fs-uuid " . substr($fs->device, length($uuid));
-                    }
-                }
-                else {
-                    die "invalid fs identifier type\n";
-                }
+            } else {
+                die "invalid fs identifier type\n";
             }
+
+            # BTRFS is a special case in that we need to fix the referrenced path based on subvolumes
             if ($fs->type eq "btrfs") {
-                $subvol = `mount | sed -n 's,^@{[$fs->device]} on .*subvol=\([^,)]*\).*\$,\1,p'`
+                my $subvol = `mount | sed -n 's,^@{[$fs->device]} on .*subvol=\([^,)]*\).*\$,\1,p'`;
                 if ($subvol eq "") {
-                    $subvol = `btrfs subvol get-default @{[$fs->mount]} | sed -n 's,^.*path \([^ ]*\) .*\$,\1,p'`
+                    $subvol = `btrfs subvol get-default @{[$fs->mount]} | sed -n 's,^.*path \([^ ]*\) .*\$,\1,p'`;
                 }
                 $path = "/$subvol";
             }
