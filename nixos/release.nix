@@ -240,7 +240,6 @@ in rec {
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
-  tests.rabbitmq = callTest tests/rabbitmq.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
   tests.simple = callTest tests/simple.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
