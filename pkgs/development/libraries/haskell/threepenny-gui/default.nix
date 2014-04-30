@@ -1,4 +1,4 @@
-{ cabal, aeson, attoparsecEnumerator, dataDefault, deepseq
+{ cabal, aeson_0_6_2_1, attoparsecEnumerator, dataDefault, deepseq
 , filepath, hashable, MonadCatchIOTransformers, network, safe
 , snapCore, snapServer, stm, text, time, transformers
 , unorderedContainers, utf8String, vault, websockets
@@ -12,7 +12,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    aeson attoparsecEnumerator dataDefault deepseq filepath hashable
+    aeson_0_6_2_1 attoparsecEnumerator dataDefault deepseq filepath hashable
     MonadCatchIOTransformers network safe snapCore snapServer stm text
     time transformers unorderedContainers utf8String vault websockets
     websocketsSnap
