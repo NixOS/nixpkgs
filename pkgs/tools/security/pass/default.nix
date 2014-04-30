@@ -3,12 +3,12 @@
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.2";
+  version = "1.6.1";
   name    = "password-store-${version}";
 
   src = fetchurl {
     url    = "http://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
-    sha256 = "00m3q6dihrhw8cxsrham3bdqg5841an8ch4s3a4k5fynlcb802m1";
+    sha256 = "108856223w225xnqmcps6r5dn7sgqc4c3kfa1hd6piskdials59w";
   };
 
   buildInputs = [ makeWrapper ];
@@ -30,21 +30,16 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    # link zsh and fish completions
-    sed -ie '22s/^#//' Makefile
-    sed -ie '25s/^#//' Makefile
-    sed -i 's/find /find -L /' contrib/pass.zsh-completion
     mkdir -p "$out/share/zsh/site-functions"
     mkdir -p "$out/share/fish/completions"
 
-    # use gnused
-    sed -i 's/sed -i ""/sed -i /' Makefile
+    # Install Emacs Mode. NOTE: We can't install the necessary
+    # dependencies (s.el and f.el) here. The user has to do this
+    # himself.
+    mkdir -p "$out/share/emacs/site-lisp"
+    cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
 
-    SYSCONFDIR="$out/etc" PREFIX="$out" make install
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    # use nix-supplied getopt
-    sed -ie '34c GETOPT="${getopt}/bin/getopt"' \
-      "$out/lib/password-store.platform.sh"
+    PREFIX="$out" make install
   '';
 
   postFixup = ''
