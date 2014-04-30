@@ -218,18 +218,19 @@ foreach my $path (glob "/sys/class/block/*") {
 }
 
 
-my $dmi = `@dmidecode@/sbin/dmidecode`;
+my $virt = `systemd-detect-virt`;
+chomp $virt;
 
 
 # Check if we're a VirtualBox guest.  If so, enable the guest
 # additions.
-if ($dmi =~ /Manufacturer: innotek/) {
+if ($virt eq "oracle") {
     push @attrs, "services.virtualbox.enable = true;"
 }
 
 
 # Likewise for QEMU.
-if ($dmi =~ /Manufacturer: Bochs/) {
+if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
     push @imports, "<nixpkgs/nixos/modules/profiles/qemu-guest.nix>";
 }
 

@@ -38,7 +38,6 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
-    inherit (pkgs) dmidecode;
   };
 
   nixos-option = makeProg {
