@@ -3067,7 +3067,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cabalDelete = callPackage ../development/tools/haskell/cabal-delete {};
 
   cabalBounds = callPackage ../development/tools/haskell/cabal-bounds {
-    Cabal = self.Cabal_1_18_1_3;
+    Cabal = if pkgs.stdenv.lib.versionAtLeast "7.8" ghc.version
+              then null
+              else self.Cabal_1_18_1_3;
   };
 
   cabalDev = callPackage ../development/tools/haskell/cabal-dev {};
