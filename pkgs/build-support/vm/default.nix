@@ -1117,6 +1117,18 @@ rec {
       packages = commonCentOSPackages;
     };
 
+    rhel7x86_64 = {
+      name = "rhel-7rc-x86_64";
+      fullName = "RHEL 7 rc (x86_64)";
+      packagesList = fetchurl {
+        url = http://ftp.redhat.com/redhat/rhel/rc/7/Server/x86_64/os/repodata/81f41fc6206a8477235dc7b5099ffe0867f71802415d66d6c0a213a41cae27c3-primary.xml.gz;
+        sha256 = "1hr7mqfa84x2q3b6cpa108cgfrq8zsghkdf7blipg13a4331zx41";
+      };
+      urlPrefix = http://ftp.redhat.com/redhat/rhel/rc/7/Server/x86_64/os ;
+      archs = ["noarch" "x86_64"];
+      packages = commonRHELPackages;
+    };
+
   };
 
 
@@ -1600,6 +1612,28 @@ rec {
     "perl"
     "pkgconfig"
     "procps"
+    "rpm"
+    "rpm-build"
+    "tar"
+    "unzip"
+  ];
+
+  commonRHELPackages = [
+    "autoconf"
+    "automake"
+    "basesystem"
+    "bzip2"
+    "curl"
+    "diffutils"
+    "findutils"
+    "gawk"
+    "gcc-c++"
+    "gzip"
+    "make"
+    "patch"
+    "perl"
+    "pkgconfig"
+    "procps-ng"
     "rpm"
     "rpm-build"
     "tar"
