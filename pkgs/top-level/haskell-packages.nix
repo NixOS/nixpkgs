@@ -2321,6 +2321,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   sparse = callPackage ../development/libraries/haskell/sparse {};
 
+  spoon = callPackage ../development/libraries/haskell/spoon {};
+
   srcloc = callPackage ../development/libraries/haskell/srcloc {};
 
   stateref = callPackage ../development/libraries/haskell/stateref {};
