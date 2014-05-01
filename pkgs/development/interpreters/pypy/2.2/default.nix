@@ -59,7 +59,8 @@ let
        # disable socket because it has two actual network tests that fail
        # disable test_mhlib because it fails for unknown reason
        # disable test_multiprocessing due to transient errors
-      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k '-test_socket -test_shutil -test_mhlib -test_multiprocessing' lib-python
+       # disable sqlite3 due to https://bugs.pypy.org/issue1740
+      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k '-test_sqlite -test_socket -test_shutil -test_mhlib -test_multiprocessing' lib-python
     '';
 
     installPhase = ''
