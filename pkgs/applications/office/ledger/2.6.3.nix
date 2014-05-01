@@ -1,7 +1,7 @@
 { stdenv, fetchurl, emacs, gmp, pcre, expat }:
 
 stdenv.mkDerivation rec {
-  name = "ledger-2.6.3";
+  name = "ledger2-2.6.3";
 
   src = fetchurl {
     url = "https://github.com/downloads/ledger/ledger/${name}.tar.gz";
