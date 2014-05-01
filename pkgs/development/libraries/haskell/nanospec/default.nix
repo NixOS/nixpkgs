@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "nanospec";
-  version = "0.1.0";
-  sha256 = "16qpn199p8nrllg800zryhb8795jgk78znng5fjq1raj8l3snjk0";
+  version = "0.2.0";
+  sha256 = "0g10l86cv33r58zxn2bprqlm80i7g86bwzhn9jqg9s81xc0aw2qv";
   testDepends = [ hspec silently ];
   doCheck = false;
   meta = {
