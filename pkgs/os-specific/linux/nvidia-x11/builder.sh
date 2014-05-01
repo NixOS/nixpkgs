@@ -20,6 +20,9 @@ buildPhase() {
         sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile
         make SYSSRC=$sysSrc SYSOUT=$sysOut module
+        cd uvm
+        make SYSSRC=$sysSrc SYSOUT=$sysOut module
+        cd ..
         cd ..
     fi
 }
@@ -56,6 +59,7 @@ installPhase() {
         # Install the kernel module.
         mkdir -p $out/lib/modules/$kernelVersion/misc
         cp kernel/nvidia.ko $out/lib/modules/$kernelVersion/misc
+        cp kernel/uvm/nvidia-uvm.ko $out/lib/modules/$kernelVersion/misc
 
         # Install the X driver.
         mkdir -p $out/lib/xorg/modules
