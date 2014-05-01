@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir $out $sdk
     perl ./install-linux.pl --prefix="$out"
+    rm $out/tools/CUDA_Occupancy_Calculator.xls
     perl ./install-sdk-linux.pl --prefix="$sdk" --cudaprefix="$out"
   '';
 
