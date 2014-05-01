@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   # broken in ledger...
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
-    cp -v $src/lisp/*.el $out/share/emacs/site-lisp/
+    cp -v "$src/lisp/"*.el $out/share/emacs/site-lisp/
   '';
 
   meta = {
