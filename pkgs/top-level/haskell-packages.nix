@@ -1293,6 +1293,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   graphWrapper = callPackage ../development/libraries/haskell/graph-wrapper {};
 
+  groom = callPackage ../development/libraries/haskell/groom {};
+
   groups = callPackage ../development/libraries/haskell/groups {};
 
   groupoids = callPackage ../development/libraries/haskell/groupoids {};
