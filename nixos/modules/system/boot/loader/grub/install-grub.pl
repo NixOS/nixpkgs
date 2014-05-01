@@ -39,6 +39,7 @@ my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
 my $defaultEntry = int(get("default"));
+my $explicitBootRoot = get("explicitBootRoot");
 $ENV{'PATH'} = get("path");
 
 die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
@@ -59,6 +60,10 @@ if (stat("/")->dev != stat("/boot")->dev) {
     $copyKernels = 1;
 } elsif (stat("/boot")->dev != stat("/nix/store")->dev) {
     $copyKernels = 1;
+}
+
+if ($explicitBootRoot ne "") {
+    $bootRoot = $explicitBootRoot;
 }
 
 
