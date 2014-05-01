@@ -3168,6 +3168,8 @@ let
     opam_1_0_0 = callPackage ../development/tools/ocaml/opam/1.0.0.nix { };
     opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix { };
     opam = opam_1_1;
+
+    zarith = callPackage ../development/ocaml-modules/zarith { };
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_4_01_0;
