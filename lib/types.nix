@@ -126,12 +126,16 @@ in rec {
 
     attrsOf = elemType: mkOptionType {
       name = "attribute set of ${elemType.name}s";
-      check = x: isAttrs x && all elemType.check (attrValues x);
+      check = isAttrs;
       merge = loc: defs:
-        zipAttrsWith (name: elemType.merge (loc ++ [name]))
+        mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
+          let
+            inherit (mergeDefinitions (loc ++ [name]) elemType defs)
+              defsFinal mergedValue;
+          in if defsFinal == [] then {} else { value = mergedValue; })
           # Push down position info.
           (map (def: listToAttrs (mapAttrsToList (n: def':
-            { name = n; value = { inherit (def) file; value = def'; }; }) def.value)) defs);
+            { name = n; value = { inherit (def) file; value = def'; }; }) def.value)) defs)));
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsOf (elemType.substSubModules m);
