@@ -33,6 +33,7 @@ cabal.mkDerivation (self: {
     EOF
     chmod +x $out/bin/ghc-mod
   '';
+  doCheck = false;
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/ghc-mod/";
     description = "Happy Haskell Programming";
