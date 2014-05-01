@@ -9,6 +9,9 @@ cabal.mkDerivation (self: {
   buildDepends = [
     extensibleExceptions mtl random utf8String X11 X11Xft xmonad
   ];
+  patchPhase = self.stdenv.lib.optional (self.stdenv.lib.versionOlder "7.8" self.ghc.version) ''
+    sed -i -e 's|ForeignFunctionInterface|AllowAmbiguousTypes, ForeignFunctionInterface|' xmonad-contrib.cabal
+  '';
   meta = {
     homepage = "http://xmonad.org/";
     description = "Third party extensions for xmonad";
