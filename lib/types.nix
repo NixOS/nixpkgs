@@ -195,7 +195,7 @@ rec {
       };
 
     enum = values: mkOptionType {
-      name = "one of ${concatStringsSep ", " values}.";
+      name = "one of ${concatStringsSep ", " values}";
       check = flip elem values;
       merge = mergeOneOption;
     };
