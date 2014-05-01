@@ -94,6 +94,28 @@ index d1258f0..0311812 100644
  #ifndef HAVE_SPLIT_USR
                      || path_equal(m->path, "/usr")
  #endif
+diff --git a/src/fsck/fsck.c b/src/fsck/fsck.c
+index 18f2aca..2a2b1ea 100644
+--- a/src/fsck/fsck.c
++++ b/src/fsck/fsck.c
+@@ -285,7 +285,7 @@ int main(int argc, char *argv[]) {
+ 
+         type = udev_device_get_property_value(udev_device, "ID_FS_TYPE");
+         if (type) {
+-                const char *checker = strappenda("/sbin/fsck.", type);
++                const char *checker = strappenda("/run/current-system/sw/sbin/fsck.", type);
+                 r = access(checker, X_OK);
+                 if (r < 0) {
+                         if (errno == ENOENT) {
+@@ -302,7 +302,7 @@ int main(int argc, char *argv[]) {
+                         return EXIT_FAILURE;
+                 }
+ 
+-        cmdline[i++] = "/sbin/fsck";
++        cmdline[i++] = "/run/current-system/sw/sbin/fsck";
+         cmdline[i++] = "-a";
+         cmdline[i++] = "-T";
+         cmdline[i++] = "-l";
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
 index 9a9ed9d..9e46e18 100644
 --- a/src/nspawn/nspawn.c
@@ -129,6 +151,19 @@ index d61ecdf..228a3a4 100644
                  if (ifaddrmsg->ifa_flags & IFA_F_DEPRECATED)
                          continue;
  
+diff --git a/src/shared/generator.c b/src/shared/generator.c
+index 6110303..e679cb1 100644
+--- a/src/shared/generator.c
++++ b/src/shared/generator.c
+@@ -48,7 +48,7 @@ int generator_write_fsck_deps(
+                 const char *checker;
+                 int r;
+ 
+-                checker = strappenda("/sbin/fsck.", fstype);
++                checker = strappenda("/run/current-system/sw/sbin/fsck.", fstype);
+                 r = access(checker, X_OK);
+                 if (r < 0) {
+                         log_warning("Checking was requested for %s, but %s cannot be used: %m", what, checker);
 diff --git a/src/systemctl/systemctl.c b/src/systemctl/systemctl.c
 index 0887bc3..6b502ce 100644
 --- a/src/systemctl/systemctl.c
