@@ -394,4 +394,49 @@ in {
           $machine->shutdown;
         '';
     };
+
+  # Simple btrfs grub testing
+  btrfsSimple = makeInstallerTest {
+    createPartitions = ''
+      $machine->succeed(
+        "sgdisk -Z /dev/vda",
+        "sgdisk -n 1:0:+1M -N 2 -t 1:ef02 -t 2:8300 -c 2:root /dev/vda",
+        "mkfs.btrfs -L root /dev/vda2",
+        "mount LABEL=root /mnt",
+      );
+    '';
+  };
+
+  # Test to see if we can detect /boot and /nix on subvolumes
+  btrfsSubvols = makeInstallerTest {
+    createPartitions = ''
+      $machine->succeed(
+        "sgdisk -Z /dev/vda",
+        "sgdisk -n 1:0:+1M -N 2 -t 1:ef02 -t 2:8300 -c 2:root /dev/vda",
+        "mkfs.btrfs -L root /dev/vda2",
+        "btrfs device scan",
+        "mount LABEL=root /mnt",
+        "btrfs subvol create /mnt/boot",
+        "btrfs subvol create /mnt/nixos",
+        "umount /mnt",
+        "mount -o defaults,subvol=mnt LABEL=root /mnt",
+        "mkdir /mnt/boot",
+        "mount -o defaults,subvol=boot LABEL=root /mnt/boot",
+      );
+    '';
+  };
+
+  # Test to see if we can detect subvols by their id's
+  btrfsSubvolId = makeInstallerTest {
+    createPartitions = ''
+      $machine->succeed("false");
+    '';
+  };
+
+  # Test to see if we can detect a default subvolume on /
+  btrfsDefaultSubvol = makeInstallerTest {
+    createPartitions = ''
+      $machine->succeed("false");
+    '';
+  };
 }
