@@ -2868,6 +2868,8 @@ let
   haskellPackages_ghc763              = recurseIntoAttrs (haskell.packages_ghc763.highPrio);
   # Reasonably current HEAD snapshot.
   haskellPackages_ghc782 = haskell.packages_ghc782;
+  haskellPackages_ghc782_no_profiling = recurseIntoAttrs (haskell.packages_ghc782.noProfiling);
+  haskellPackages_ghc782_profiling    = recurseIntoAttrs (haskell.packages_ghc782.profiling);
   haskellPackages_ghcHEAD = haskell.packages_ghcHEAD;
 
   haxe = callPackage ../development/compilers/haxe { };
