@@ -529,9 +529,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   aes = callPackage ../development/libraries/haskell/aes {};
 
   aeson_0_6_2_1 = callPackage ../development/libraries/haskell/aeson/0.6.2.1.nix {};
-  aeson = callPackage ../development/libraries/haskell/aeson {
+  aeson_0_7_0_3 = callPackage ../development/libraries/haskell/aeson/0.7.0.3.nix {
     blazeBuilder = if (pkgs.stdenv.lib.versionOlder ghc.version "7.6") then self.blazeBuilder else null;
   };
+  aeson = self.aeson_0_7_0_3;
 
   aesonPretty = callPackage ../development/libraries/haskell/aeson-pretty {};
 
