@@ -34,6 +34,8 @@ the following highlights:
 
   <listitem><para>KDE has been updated to 4.12.</para></listitem>
 
+  <listitem><para>GNOME 3.10 experimental support has been added.</para></listitem>
+
   <listitem><para>Nix has been updated to 1.7 (<link
   xlink:href="http://nixos.org/nix/manual/#ssec-relnotes-1.7">details</link>).</para></listitem>
 
