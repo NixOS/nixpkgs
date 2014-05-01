@@ -17,6 +17,7 @@ cabal.mkDerivation (self: {
     ioChoice syb time transformers
   ];
   buildTools = [ emacs ];
+  configureFlags = "--datasubdir=${self.pname}-${self.version}";
   postInstall = ''
     cd $out/share/$pname-$version
     make
