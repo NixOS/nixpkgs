@@ -81,46 +81,62 @@ sub GrubFs {
     if ($grubVersion > 1) {
         # ZFS is completely separate logic as zpools are always identified by a label
         # or custom UUID
-        if ($fs->type eq "zfs") {
-            my $sid = index($fs->device, "/");
+        if ($fs->type eq 'zfs') {
+            my $sid = index($fs->device, '/');
 
             if ($sid < 0) {
-                $search = "--label " . $fs->device;
-                $path = "/@" . $path;
+                $search = '--label ' . $fs->device;
+                $path = '/@' . $path;
             } else {
-                $search = "--label " . substr($fs->device, 0, $sid);
-                $path = "/" . substr($fs->device, $sid) . "/@" . $path;
+                $search = '--label ' . substr($fs->device, 0, $sid);
+                $path = '/' . substr($fs->device, $sid) . '/@' . $path;
             }
         } else {
-            my $idCmd = "\$(blkid -o export " . $fs->device . ") 2>/dev/null; echo";
-
-            if ($fsIdentifier eq "uuid") {
-                $search = "--fs-uuid " . `$idCmd \$UUID`;
-            } elsif ($fsIdentifier eq "label") {
-                $search = "--label " . `$idCmd \$LABEL`;
-            } elsif ($fsIdentifier eq "provided") {
-                my $lbl = "/dev/disk/by-label/";
-
+            if ($fsIdentifier eq 'provided') {
                 # If the provided dev is identifying the partition using a label or uuid,
                 # we should get the label / uuid and do a proper search
+                my $lbl = '/dev/disk/by-label/';
                 if (index($fs->device, $lbl) == 0) {
-                    $search = "--label " . substr($fs->device, length($lbl));
+                    $search = '--label ' . substr($fs->device, length($lbl));
                 }
-                my $uuid = "/dev/disk/by-uuid/";
+
+                my $uuid = '/dev/disk/by-uuid/';
                 if (index($fs->device, $uuid) == 0) {
-                    $search = "--fs-uuid " . substr($fs->device, length($uuid));
+                    $search = '--fs-uuid ' . substr($fs->device, length($uuid));
                 }
             } else {
-                die "invalid fs identifier type\n";
+                # Determine the identifying type
+                my %types = ('uuid' => '--fs-uuid', 'label' => '--label');
+                $search = $types{$fsIdentifier} . ' ';
+
+                # Based on the type pull in the identifier from the system
+                my $devInfo = `blkid -o export @{[$fs->device]}`;
+                my @matches = $devInfo =~ m/@{[uc $fsIdentifier]}=([^\n]*)/;
+                if ($#matches != 0) {
+                    die "Couldn't find a $types{$fsIdentifier} for @{[$fs->device]}\n"
+                }
+                $search .= $matches[0];
             }
 
             # BTRFS is a special case in that we need to fix the referrenced path based on subvolumes
-            if ($fs->type eq "btrfs") {
-                my $subvol = `mount | sed -n 's,^@{[$fs->device]} on .*subvol=\([^,)]*\).*\$,\1,p'`;
-                if ($subvol eq "") {
-                    $subvol = `btrfs subvol get-default @{[$fs->mount]} | sed -n 's,^.*path \([^ ]*\) .*\$,\1,p'`;
+            if ($fs->type eq 'btrfs') {
+                my $subvol = "";
+
+                my @subvols = `mount` =~ m/@{[$fs->device]} on [^\n]*subvol=([^,)]*)/;
+                if ($#subvols > 0) {
+                    die "Btrfs device @{[$fs->device]} listed multiple times in mount\n"
+                } elsif ($#subvols == 0) {
+                    $subvol = $subvols[0];
+                } else {
+                    my $btrfsDefault = `btrfs subvol get-default @{[$fs->mount]}`;
+                    my @results = $btrfsDefault =~ m/path ([^ ]*)/;
+                    if ($#results > 0) {
+                        die "Btrfs device @{[$fs->device]} has multiple default subvolumes\n";
+                    } elsif ($#results == 1) {
+                        $subvol = $results[0];
+                    }
                 }
-                $path = "/$subvol";
+                $path = "/$subvol" . $path;
             }
         }
         if (not $search eq "") {
