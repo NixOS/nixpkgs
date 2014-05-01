@@ -12,9 +12,8 @@ cabal.mkDerivation (self: {
     Cabal cmdargs either lens strict transformers unorderedContainers
   ];
   testDepends = [ filepath tasty tastyGolden ];
-  doCheck = false;
   jailbreak = true;
-
+  doCheck = false;
   meta = {
     description = "A command line program for managing the bounds/versions of the dependencies in a cabal file";
     license = self.stdenv.lib.licenses.bsd3;
