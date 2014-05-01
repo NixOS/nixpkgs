@@ -17,6 +17,7 @@ cabal.mkDerivation (self: {
     ioChoice syb time transformers
   ];
   buildTools = [ emacs ];
+  doCheck = false;
   configureFlags = "--datasubdir=${self.pname}-${self.version}";
   postInstall = ''
     cd $out/share/$pname-$version
@@ -34,7 +35,6 @@ cabal.mkDerivation (self: {
     EOF
     chmod +x $out/bin/ghc-mod
   '';
-  doCheck = false;
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/ghc-mod/";
     description = "Happy Haskell Programming";
