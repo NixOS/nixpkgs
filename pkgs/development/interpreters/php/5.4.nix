@@ -9,7 +9,7 @@ in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.4.23";
+  version = "5.4.27";
 
   name = "php-${version}";
 
@@ -240,7 +240,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       "http://nl1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
       "http://se1.php.net/get/php-${version}.tar.bz2/from/this/mirror"
     ];
-    sha256 = "1k4iplqqcaqkmyq10h6a5qcpkfpkd05r2kclxw9n9qdrm47hfz5f";
+    md5 = "1c6e99187d25023411b663ea09f145ee";
     name = "php-${version}.tar.bz2";
   };
 
