@@ -106,12 +106,9 @@ rec {
               else []
             ) configs);
           nrOptions = count (m: isOption m.options) decls;
-          # Process mkMerge and mkIf properties.
-          defns' = concatMap (m:
-            if m.config ? ${name}
-              then map (m': { inherit (m) file; value = m'; }) (dischargeProperties m.config.${name})
-              else []
-            ) configs;
+          # Extract the definitions for this loc
+          defns' = map (m: { inherit (m) file; value = m.config.${name}; })
+            (filter (m: m.config ? ${name}) configs);
         in
           if nrOptions == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
@@ -177,27 +174,17 @@ rec {
      config value. */
   evalOptionValue = loc: opt: defs:
     let
-      # Process mkOverride properties, adding in the default
-      # value specified in the option declaration (if any).
-      defsFinal' = filterOverrides
-        ((if opt ? default then [{ file = head opt.declarations; value = mkOptionDefault opt.default; }] else []) ++ defs);
-      # Sort mkOrder properties.
-      defsFinal =
-        # Avoid sorting if we don't have to.
-        if any (def: def.value._type or "" == "order") defsFinal'
-        then sortProperties defsFinal'
-        else defsFinal';
+      # Add in the default value for this option, if any.
+      defs' = (optional (opt ? default)
+        { file = head opt.declarations; value = mkOptionDefault opt.default; }) ++ defs;
+      # Handle properties, check types, and merge everything together
+      inherit (mergeDefinitions loc opt.type defs') defsFinal mergedValue;
       files = map (def: def.file) defsFinal;
-      # Type-check the remaining definitions, and merge them if
-      # possible.
       merged =
         if defsFinal == [] then
           throw "The option `${showOption loc}' is used but not defined."
         else
-          fold (def: res:
-            if opt.type.check def.value then res
-            else throw "The option value `${showOption loc}' in `${def.file}' is not a ${opt.type.name}.")
-            (opt.type.merge loc defsFinal) defsFinal;
+          mergedValue;
       # Finally, apply the ‘apply’ function to the merged
       # value.  This allows options to yield a value computed
       # from the definitions.
@@ -208,6 +195,33 @@ rec {
         isDefined = defsFinal != [];
         inherit files;
       };
+
+    # Merge definitions of a value of a given type
+    mergeDefinitions = loc: type: defs: rec {
+      defsFinal =
+        let
+          # Process mkMerge and mkIf properties
+          discharged = concatMap (m:
+            map (value: { inherit (m) file; inherit value; }) (dischargeProperties m.value)
+          ) defs;
+
+          # Process mkOverride properties
+          overridden = filterOverrides discharged;
+
+          # Sort mkOrder properties
+          sorted =
+            # Avoid sorting if we don't have to.
+            if any (def: def.value._type or "" == "order") overridden
+            then sortProperties overridden
+            else overridden;
+        in sorted;
+
+        # Type-check the remaining definitions, and merge them
+        mergedValue = fold (def: res:
+          if type.check def.value then res
+          else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.name}.")
+          (type.merge loc defsFinal) defsFinal;
+    };
 
   /* Given a config set, expand mkMerge properties, and push down the
      other properties into the children.  The result is a list of
