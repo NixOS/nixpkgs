@@ -1,5 +1,4 @@
-{ nixpkgs ? { outPath = ./..; revCount = 5678; shortRev = "gfedcba"; }
-, officialRelease ? false
+{ nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "i686-linux" ]
 }:
@@ -8,8 +7,7 @@ let
 
   version = builtins.readFile ../.version;
   versionSuffix =
-    if officialRelease then ""
-    else (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
+    (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
   forAllSystems = pkgs.lib.genAttrs supportedSystems;
 
