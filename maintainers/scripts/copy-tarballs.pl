@@ -75,7 +75,6 @@ foreach my $file (@{$data->{list}->{attrs}}) {
     waitpid($pid, 0) or die;
     if ($? != 0) {
         print STDERR "failed to fetch $url: $?\n";
-        last if $? >> 8 == 255;
         next;
     }
     <$fh>; my $storePath = <$fh>; chomp $storePath;
