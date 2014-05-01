@@ -1,5 +1,4 @@
-{ nixpkgs ? { outPath = ./..; revCount = 5678; shortRev = "gfedcba"; }
-, officialRelease ? false
+{ nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "i686-linux" ]
 }:
@@ -19,12 +18,12 @@ let
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
-    inherit officialRelease stableBranch;
+    inherit stableBranch;
     nixpkgs = nixpkgsSrc;
   });
 
   nixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
-    inherit officialRelease supportedSystems;
+    inherit supportedSystems;
     nixpkgs = nixpkgsSrc;
   })) [ "unstable" ];
 
