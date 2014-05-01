@@ -7,7 +7,9 @@ with import ./options.nix;
 with import ./trivial.nix;
 with import ./strings.nix;
 
-rec {
+let
+  inherit (import ./modules.nix) mergeDefinitions;
+in rec {
 
   isType = type: x: (x._type or "") == type;
 
@@ -109,11 +111,14 @@ rec {
 
     listOf = elemType: mkOptionType {
       name = "list of ${elemType.name}s";
-      check = value: isList value && all elemType.check value;
+      check = isList;
       merge = loc: defs:
-        concatLists (imap (n: def: imap (m: def':
-          elemType.merge (loc ++ ["[${toString n}-${toString m}]"])
-            [{ inherit (def) file; value = def'; }]) def.value) defs);
+        map (x: x.value) (filter (x: x ? value) (concatLists (imap (n: def: imap (m: def':
+          let
+            inherit (mergeDefinitions (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
+              elemType [{ inherit (def) file; value = def'; }]
+            ) defsFinal mergedValue;
+          in if defsFinal == [] then {} else { value = mergedValue; }) def.value) defs)));
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
