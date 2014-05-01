@@ -260,4 +260,10 @@
     fullName  = "Sleepycat Public License";
     url       = "https://en.wikipedia.org/wiki/Sleepycat_License";
   };
+
+  cecill-c = {
+    shortName = "CeCILL-C";
+    fullName  = "CEA CNRS INRIA Logiciel Libre";
+    url       = "http://www.cecill.info/licences.en.html";
+  };
 }
