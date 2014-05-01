@@ -10372,6 +10372,8 @@ let
 
   verifast = callPackage_i686 ../applications/science/logic/verifast {};
 
+  why3 = callPackage ../applications/science/logic/why3 {};
+
   yices = callPackage ../applications/science/logic/yices {};
 
   z3 = callPackage ../applications/science/logic/z3 {};
