@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib pkgconfig gmp perl ];
 
+  patchPhase = ''
+    substituteInPlace ./z_pp.pl --replace '/usr/bin/perl' '${perl}/bin/perl'
+  '';
   configurePhase = ''
     ./configure -installdir $out/lib/ocaml/${ocaml_version}/site-lib
   '';
