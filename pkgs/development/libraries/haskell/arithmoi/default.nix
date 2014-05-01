@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "arithmoi";
-  version = "0.4.0.4";
-  sha256 = "1v8qn0gjvlds6ljm9sfzzi5w3gsf7x63z0r7hcs1rvn0n3acwz6y";
+  version = "0.4.1.0";
+  sha256 = "1xmwxmvl9l1fa2sgr4ff7al8b5d5136h4fq9r05abj3nfnx1a0iq";
   buildDepends = [ mtl random ];
   meta = {
     homepage = "https://bitbucket.org/dafis/arithmoi";
