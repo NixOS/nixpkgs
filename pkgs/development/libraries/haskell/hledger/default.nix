@@ -1,23 +1,24 @@
 { cabal, cmdargs, csv, filepath, haskeline, hledgerLib, HUnit, mtl
-, parsec, prettyShow, regexpr, safe, shakespeareText, split
-, tabular, testFramework, testFrameworkHunit, text, time
-, transformers, utf8String
+, parsec, prettyShow, regexpr, safe, shakespeare, shakespeareText
+, split, tabular, testFramework, testFrameworkHunit, text, time
+, transformers, utf8String, wizards
 }:
 
 cabal.mkDerivation (self: {
   pname = "hledger";
-  version = "0.22.2";
-  sha256 = "08lk3gd332k5bhvr6db4z66f2rggzbdbhcb03sc5m0dbinawmib8";
+  version = "0.23";
+  sha256 = "1cylviyz3n6kcsdcr1vx699v6fn1878n4z8y8cnxawq2daz4xhpk";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     cmdargs filepath haskeline hledgerLib HUnit mtl parsec prettyShow
-    regexpr safe shakespeareText split tabular text time utf8String
+    regexpr safe shakespeare shakespeareText split tabular text time
+    utf8String wizards
   ];
   testDepends = [
     cmdargs csv filepath haskeline hledgerLib HUnit mtl parsec
-    prettyShow regexpr safe shakespeareText split tabular testFramework
-    testFrameworkHunit text time transformers
+    prettyShow regexpr safe shakespeare shakespeareText split tabular
+    testFramework testFrameworkHunit text time transformers wizards
   ];
   meta = {
     homepage = "http://hledger.org";
