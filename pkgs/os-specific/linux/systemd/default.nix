@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
       "--with-tty-gid=3" # tty in NixOS has gid 3
       "--disable-networkd" # enable/use eventually
       "--enable-compat-libs" # get rid of this eventually
+      "--disable-tests"
     ];
 
   preConfigure =
@@ -59,7 +60,6 @@ stdenv.mkDerivation rec {
           --replace /bin/umount ${utillinux}/bin/umount \
           --replace /sbin/swapon ${utillinux}/sbin/swapon \
           --replace /sbin/swapoff ${utillinux}/sbin/swapoff \
-          --replace /sbin/fsck ${utillinux}/sbin/fsck \
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
           --replace /sbin/sulogin ${sysvtools}/sbin/sulogin \
