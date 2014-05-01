@@ -257,6 +257,7 @@ stdenv.mkDerivation rec {
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
       python3 sablotron saneBackends tcsh unzip vigra which zip zlib
       mdds bluez5 glibc libmspub libixion liborcus liblangtag
+      libxshmfence
     ];
 
   meta = with stdenv.lib; {
