@@ -237,12 +237,6 @@ in
         { assertion = cfg.apiKey != "" -> cfg.enableWebUI;
           message   = "If you're using an API key, you must enable the web server.";
         }
-        # TODO FIXME: the README says not specifying the login/pass means it
-        # should disable authentication, but apparently it doesn't?
-        { assertion = cfg.enableWebUI -> cfg.httpLogin != "" && cfg.httpPass != "";
-          message   = "If using the web UI, you must configure a login/password.";
-        }
-        # TODO FIXME: assert the existence of sharedFolder directories?
       ];
 
     users.extraUsers.btsync = {
