@@ -25,7 +25,7 @@ let
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
-        default devices explicitBootRoot;
+        default devices;
       path = (makeSearchPath "bin" [
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils
       ]) + ":" + (makeSearchPath "sbin" [
@@ -206,15 +206,6 @@ in
         type = types.int;
         description = ''
           Index of the default menu item to be booted.
-        '';
-      };
-
-      explicitBootRoot = mkOption {
-        default = "";
-        type = types.str;
-        description = ''
-          The relative path of /boot within the parent volume. Leave empty
-          if /boot is not a btrfs subvolume.
         '';
       };
 
