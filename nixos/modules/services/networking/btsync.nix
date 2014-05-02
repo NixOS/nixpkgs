@@ -164,6 +164,7 @@ in
       httpLogin = mkOption {
         type = types.str;
         example = "allyourbase";
+        default = "";
         description = ''
           HTTP web login username.
         '';
@@ -172,6 +173,7 @@ in
       httpPass = mkOption {
         type = types.str;
         example = "arebelongtous";
+        default = "";
         description = ''
           HTTP web login password.
         '';
