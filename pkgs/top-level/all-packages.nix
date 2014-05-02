@@ -3315,7 +3315,9 @@ let
 
   erlangR14B04 = callPackage ../development/interpreters/erlang/R14B04.nix { };
   erlangR15B03 = callPackage ../development/interpreters/erlang/R15B03.nix { };
-  erlang = callPackage ../development/interpreters/erlang/default.nix { };
+  erlangR16B02 = callPackage ../development/interpreters/erlang/R16B02.nix { };
+  erlangR17 = callPackage ../development/interpreters/erlang/R17.nix { };
+  erlang = erlangR17;
 
   rebar = callPackage ../development/tools/build-managers/rebar { };
 
@@ -6486,7 +6488,9 @@ let
 
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot-pigeonhole { };
 
-  ejabberd = callPackage ../servers/xmpp/ejabberd { };
+  ejabberd = callPackage ../servers/xmpp/ejabberd { 
+    erlang = erlangR16B02;
+  };
 
   elasticmq = callPackage ../servers/elasticmq { };
 
