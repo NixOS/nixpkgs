@@ -153,6 +153,8 @@ rec {
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
+  bijiben = callPackage ./apps/bijiben { };
+
   evolution = callPackage ./apps/evolution { };
 
   file-roller = callPackage ./apps/file-roller { };

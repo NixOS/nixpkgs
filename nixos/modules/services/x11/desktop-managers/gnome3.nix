@@ -130,6 +130,7 @@ in {
         gnome3.gnome_terminal
         gnome3.gnome-user-docs
 
+        gnome3.bijiben
         gnome3.evolution
         gnome3.file-roller
         gnome3.gedit
