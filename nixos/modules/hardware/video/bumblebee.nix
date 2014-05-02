@@ -17,6 +17,12 @@ with lib;
         Only nvidia driver is supported so far.
       '';
     };
+    hardware.bumblebee.group = mkOption {
+      default = "wheel";
+      example = "video";
+      type = types.uniq types.str;
+      description = ''Group for bumblebee socket'';
+    };
   };
 
   config = mkIf config.hardware.bumblebee.enable {
@@ -29,13 +35,15 @@ with lib;
     systemd.services.bumblebeed = {
       description = "Bumblebee Hybrid Graphics Switcher";
       wantedBy = [ "display-manager.service" ];
-      script = "bumblebeed --use-syslog";
+      script = "bumblebeed --use-syslog -g ${config.hardware.bumblebee.group}";
       path = [ kernel.bbswitch pkgs.bumblebee ];
       serviceConfig = {
         Restart = "always";
         RestartSec = 60;
         CPUSchedulingPolicy = "idle";
       };
+      environment.LD_LIBRARY_PATH="/run/opengl-driver/lib/";
+      environment.MODULE_DIR="/run/current-system/kernel-modules/lib/modules/";
     };
   };
 }
