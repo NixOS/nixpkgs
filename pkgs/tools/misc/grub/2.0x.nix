@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
+{ stdenv, fetchurl, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper
 , linuxPackages ? null
 , EFIsupport ? false
@@ -23,10 +23,10 @@ in
 stdenv.mkDerivation rec {
   name = "${prefix}-${version}";
 
-  src = fetchgit {
-    url = "git://git.sv.gnu.org/grub.git";
-    rev = "refs/tags/grub-2.02-beta2";
-    sha256 = "157bknkcxibmvq19pagphlwfxd9xny7002gcanfzhjzcjpfz4scy";
+  src = fetchurl {
+    name = "grub-2.02-beta2.tar.xz";
+    url = "http://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.xz";
+    sha256 = "13a13fhc0wf473dn73zhga15mjvkg6vqp4h25dxg4n7am2r05izn";
   };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
