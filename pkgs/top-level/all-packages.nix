@@ -3729,7 +3729,7 @@ let
 
   coccinelle = callPackage ../development/tools/misc/coccinelle { };
 
-  framac = callPackage ../development/tools/misc/frama-c { };
+  framac = callPackage ../development/tools/analysis/frama-c { };
 
   cppi = callPackage ../development/tools/misc/cppi { };
 
