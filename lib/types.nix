@@ -159,10 +159,7 @@ in rec {
         attrOnly = attrsOf elemType;
       in mkOptionType {
         name = "list or attribute set of ${elemType.name}s";
-        check = x:
-          if isList x       then listOnly.check x
-          else if isAttrs x then attrOnly.check x
-          else false;
+        check = x: isList x || isAttrs x;
         merge = loc: defs: attrOnly.merge loc (imap convertIfList defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
         getSubModules = elemType.getSubModules;
