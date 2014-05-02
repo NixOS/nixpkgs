@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     "--with-http_dav_module"
     "--with-http_gzip_static_module"
     "--with-http_secure_link_module"
+    "--with-http_stub_status_module"
     "--with-ipv6"
     # Install destination problems
     # "--with-http_perl_module"
