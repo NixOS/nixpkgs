@@ -29,6 +29,7 @@ let
         default devices fsIdentifier;
       path = (makeSearchPath "bin" [
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
+        pkgs.utillinux
       ]) + ":" + (makeSearchPath "sbin" [
         pkgs.mdadm pkgs.utillinux
       ]);
