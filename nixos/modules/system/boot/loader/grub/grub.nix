@@ -212,7 +212,7 @@ in
 
       fsIdentifier = mkOption {
         default = "uuid";
-        type = types.addCheck types.string
+        type = types.addCheck types.str
           (type: type == "uuid" || type == "label" || type == "provided");
         description = ''
           Determines how grub will identify devices when generating the
