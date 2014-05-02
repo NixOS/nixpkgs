@@ -401,7 +401,7 @@ in {
     createPartitions = ''
       $machine->succeed(
         "sgdisk -Z /dev/vda",
-        "sgdisk -n 1:0:+1M -n 2:0:+100M -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
+        "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
         "mkswap /dev/vda2 -L swap",
         "swapon -L swap",
         "mkfs.ext4 -L root /dev/vda3",
@@ -416,7 +416,7 @@ in {
     createPartitions = ''
       $machine->succeed(
         "sgdisk -Z /dev/vda",
-        "sgdisk -n 1:0:+1M -n 2:0:+100M -n 3:0:+100M -N 4 -t 1:ef02 -t 2:8300 -t 3:8200 -t 4:8300 -c 2:boot -c 4:root /dev/vda",
+        "sgdisk -n 1:0:+1M -n 2:0:+1G -n 3:0:+100M -N 4 -t 1:ef02 -t 2:8300 -t 3:8200 -t 4:8300 -c 2:boot -c 4:root /dev/vda",
         "mkswap /dev/vda3 -L swap",
         "swapon -L swap",
         "mkfs.ext4 -L boot /dev/vda2",
@@ -434,7 +434,7 @@ in {
     createPartitions = ''
       $machine->succeed(
         "sgdisk -Z /dev/vda",
-        "sgdisk -n 1:0:+1M -n 2:0:+100M -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
+        "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
         "mkswap /dev/vda2 -L swap",
         "swapon -L swap",
         "mkfs.btrfs -L root /dev/vda3",
@@ -448,7 +448,7 @@ in {
     createPartitions = ''
       $machine->succeed(
         "sgdisk -Z /dev/vda",
-        "sgdisk -n 1:0:+1M -n 2:0:+100M -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
+        "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
         "mkswap /dev/vda2 -L swap",
         "swapon -L swap",
         "mkfs.btrfs -L root /dev/vda3",
