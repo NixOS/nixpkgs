@@ -150,10 +150,7 @@ in rec {
         attrOnly = attrsOf elemType;
       in mkOptionType {
         name = "list or attribute set of ${elemType.name}s";
-        check = x:
-          if isList x       then listOnly.check x
-          else if isAttrs x then attrOnly.check x
-          else false;
+        check = x: isList x || isAttrs x;
         merge = loc: defs: attrOnly.merge loc (imap convertIfList defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
       };
@@ -180,7 +177,14 @@ in rec {
       name = "function that evaluates to a(n) ${elemType.name}";
       check = isFunction;
       merge = loc: defs:
-        fnArgs: elemType.merge loc (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs);
+        fnArgs: let
+          inherit (mergeDefinitions loc elemType
+            (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)
+          ) defsFinal mergedValue;
+        in if defsFinal == [] then
+          throw "The option `${showOption loc}' is defined as a function that doesn't return any value (using mkIf or mkMerge), in ${showFiles (getFiles defs)}"
+        else
+          mergedValue;
       getSubOptions = elemType.getSubOptions;
     };
 
