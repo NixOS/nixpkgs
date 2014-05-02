@@ -463,18 +463,4 @@ in {
       );
     '';
   };
-
-  # Test to see if we can detect subvols by their id's
-  btrfsSubvolId = makeInstallerTest {
-    createPartitions = ''
-      $machine->succeed("false");
-    '';
-  };
-
-  # Test to see if we can detect a default subvolume on /
-  btrfsDefaultSubvol = makeInstallerTest {
-    createPartitions = ''
-      $machine->succeed("false");
-    '';
-  };
 }
