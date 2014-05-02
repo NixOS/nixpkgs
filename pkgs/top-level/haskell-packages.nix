@@ -2551,6 +2551,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   tfRandom = callPackage ../development/libraries/haskell/tf-random {};
 
+  these = callPackage ../development/libraries/haskell/these {};
+
   thespian = callPackage ../development/libraries/haskell/thespian {};
 
   thDesugar = callPackage ../development/libraries/haskell/th-desugar {};
