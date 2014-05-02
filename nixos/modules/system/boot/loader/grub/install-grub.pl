@@ -135,35 +135,21 @@ sub GrubFs {
 
             # BTRFS is a special case in that we need to fix the referrenced path based on subvolumes
             if ($fs->type eq 'btrfs') {
-                my $subvol = "";
-
-                my ($status, @mounts) = runCommand('mount');
+                my ($status, @info) = runCommand("btrfs subvol show @{[$fs->device]}");
                 if ($status != 0) {
-                    die "Failed to retreive mount info";
+                    die "Failed to retreive subvolume info for @{[$fs->device]}";
                 }
-                my @subvols = join("", @mounts) =~ m/@{[$fs->device]} on [^\n]*subvol=([^,)]*)/;
+                my @subvols = join("", @info) =~ m/Name:[ \t\n]([^ \t\n]*)/;
                 if ($#subvols > 0) {
-                    die "Btrfs device @{[$fs->device]} listed multiple times in mount\n"
+                    die "Btrfs subvol name for @{[$fs->device]} listed multiple times in mount\n"
                 } elsif ($#subvols == 0) {
-                    $subvol = $subvols[0];
-                } else {
-                    my ($status, @btrfsOut) = runCommand("btrfs subvol get-default @{[$fs->mount]}");
-                    if ($status != 0) {
-                        die "Failed to retrieve btrfs default subvolume"
-                    }
-                    my @results = join("", @btrfsOut) =~ m/path ([^ ]*)/;
-                    if ($#results > 0) {
-                        die "Btrfs device @{[$fs->device]} has multiple default subvolumes\n";
-                    } elsif ($#results == 1) {
-                        $subvol = $results[0];
-                    }
-                }
-                $path = "/$subvol" . $path;
+	                $path = "/$subvols[0]$path";
+				}
             }
         }
         if (not $search eq "") {
             $search = "search --set=drive$driveid " . $search;
-            $path = "(\$drive$driveid)" . $path;
+            $path = "(\$drive$driveid)$path";
             $driveid += 1;
         }
     }
