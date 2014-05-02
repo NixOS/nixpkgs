@@ -72,10 +72,10 @@ struct(Fs => {
 });
 sub GetFs {
     my ($dir) = @_;
-	my ($status, @dfOut) = runCommand("df -T $dir");
-	if ($status != 0 || $#dfOut != 1) {
-		die "Failed to retrieve output about $dir from `df`";
-	}
+    my ($status, @dfOut) = runCommand("df -T $dir");
+    if ($status != 0 || $#dfOut != 1) {
+        die "Failed to retrieve output about $dir from `df`";
+    }
     my @boot = split(/[ \n\t]+/, $dfOut[1]);
     return Fs->new(device => $boot[0], type => $boot[1], mount => $boot[6]);
 }
@@ -133,16 +133,16 @@ sub GrubFs {
 
             # BTRFS is a special case in that we need to fix the referrenced path based on subvolumes
             if ($fs->type eq 'btrfs') {
-                my ($status, @info) = runCommand("btrfs subvol show @{[$fs->device]}");
+                my ($status, @info) = runCommand("btrfs subvol show @{[$fs->mount]}");
                 if ($status != 0) {
-                    die "Failed to retreive subvolume info for @{[$fs->device]}";
+                    die "Failed to retreive subvolume info for @{[$fs->mount]}";
                 }
                 my @subvols = join("", @info) =~ m/Name:[ \t\n]*([^ \t\n]*)/;
                 if ($#subvols > 0) {
                     die "Btrfs subvol name for @{[$fs->device]} listed multiple times in mount\n"
                 } elsif ($#subvols == 0) {
-	                $path = "/$subvols[0]$path";
-				}
+                    $path = "/$subvols[0]$path";
+                }
             }
         }
         if (not $search eq "") {
