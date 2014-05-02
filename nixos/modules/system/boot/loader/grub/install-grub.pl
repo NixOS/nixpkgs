@@ -104,28 +104,26 @@ sub GrubFs {
                 $path = '/' . substr($fs->device, $sid) . '/@' . $path;
             }
         } else {
+            my %types = ('uuid' => '--fs-uuid', 'label' => '--label');
+
             if ($fsIdentifier eq 'provided') {
                 # If the provided dev is identifying the partition using a label or uuid,
                 # we should get the label / uuid and do a proper search
-                my $lbl = '/dev/disk/by-label/';
-                if (index($fs->device, $lbl) == 0) {
-                    $search = '--label ' . substr($fs->device, length($lbl));
-                }
-
-                my $uuid = '/dev/disk/by-uuid/';
-                if (index($fs->device, $uuid) == 0) {
-                    $search = '--fs-uuid ' . substr($fs->device, length($uuid));
+                my @matches = $fs->device =~ m/\/dev\/disk\/by-(label|uuid)\/(.*)/;
+                if ($#matches > 1) {
+                    die "Too many matched devices"
+                } elsif ($#matches == 1) {
+                    $search = "$types{$matches[0]} $matches[1]"
                 }
             } else {
                 # Determine the identifying type
-                my %types = ('uuid' => '--fs-uuid', 'label' => '--label');
                 $search = $types{$fsIdentifier} . ' ';
 
                 # Based on the type pull in the identifier from the system
                 my ($status, @devInfo) = runCommand("blkid -o export @{[$fs->device]}");
-				if ($status != 0) {
-					die "Failed to get blkid info for @{[$fs->device]}";
-				}
+                if ($status != 0) {
+                    die "Failed to get blkid info for @{[$fs->device]}";
+                }
                 my @matches = join("", @devInfo) =~ m/@{[uc $fsIdentifier]}=([^\n]*)/;
                 if ($#matches != 0) {
                     die "Couldn't find a $types{$fsIdentifier} for @{[$fs->device]}\n"
