@@ -35,8 +35,8 @@ let
 
 
   # The configuration to install.
-  makeConfig = { testChannel, useEFI, grubVersion, grubDevice }: pkgs.writeText "configuration.nix"
-    ''
+  makeConfig = { testChannel, useEFI, grubVersion, grubDevice, grubIdentifier }:
+    pkgs.writeText "configuration.nix" ''
       { config, pkgs, modulesPath, ... }:
 
       { imports =
@@ -54,6 +54,7 @@ let
           ''}
           boot.loader.grub.device = "${grubDevice}";
           boot.loader.grub.extraConfig = "serial; terminal_output.serial";
+          boot.loader.grub.fsIdentifier = "${grubIdentifier}";
         ''}
 
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
@@ -93,7 +94,7 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { createPartitions, testChannel, useEFI, grubVersion, grubDevice }:
+  testScriptFun = { createPartitions, testChannel, useEFI, grubVersion, grubDevice, grubIdentifier }:
     let
       # FIXME: OVMF doesn't boot from virtio http://www.mail-archive.com/edk2-devel@lists.sourceforge.net/msg01501.html
       iface = if useEFI || grubVersion == 1 then "scsi" else "virtio";
@@ -161,7 +162,7 @@ let
       $machine->succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2");
 
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel useEFI grubVersion grubDevice; } }",
+          "${ makeConfig { inherit testChannel useEFI grubVersion grubDevice grubIdentifier; } }",
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
@@ -216,13 +217,13 @@ let
 
 
   makeInstallerTest = name:
-    { createPartitions, testChannel ? false, useEFI ? false, grubVersion ? 2, grubDevice ? "/dev/vda" }:
+    { createPartitions, testChannel ? false, useEFI ? false, grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid" }:
     makeTest {
       inherit iso;
       name = "installer-" + name;
       nodes = if testChannel then { inherit webserver; } else { };
       testScript = testScriptFun {
-        inherit createPartitions testChannel useEFI grubVersion grubDevice;
+        inherit createPartitions testChannel useEFI grubVersion grubDevice grubIdentifier;
       };
     };
 
@@ -394,6 +395,35 @@ in {
           $machine->shutdown;
         '';
     };
+
+  # Test using labels to identify volumes in grub
+  simpleLabels = makeInstallerTest {
+    createPartitions = ''
+      $machine->succeed(
+        "sgdisk -Z /dev/vda",
+        "sgdisk -n 1:0:+1M -N 2 -t 1:ef02 -t 2:8300 -c 2:root /dev/vda",
+        "mkfs.ext4 -L root /dev/vda2",
+        "mount LABEL=root /mnt",
+      );
+    '';
+    grubIdentifier = "label";
+  };
+
+  # Test using the provided disk name within grub
+  simpleProvided = makeInstallerTest {
+    createPartitions = ''
+      $machine->succeed(
+        "sgdisk -Z /dev/vda",
+        "sgdisk -n 1:0:+1M -n 2:0:+100M -N 3 -t 1:ef02 -t 2:8300 -t 3:8300 -c 2:boot -c 3:root /dev/vda",
+        "mkfs.ext4 -L boot /dev/vda2",
+        "mkfs.ext4 -L root /dev/vda3",
+        "mount LABEL=root /mnt",
+        "mkdir /mnt/boot",
+        "$(blkid -o export /dev/vda2); mount /dev/disk/by-uuid/$UUID /mnt/boot"
+      );
+    '';
+    grubIdentifier = "provided";
+  };
 
   # Simple btrfs grub testing
   btrfsSimple = makeInstallerTest {
