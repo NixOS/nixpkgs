@@ -412,8 +412,10 @@ in {
   };
 
   # Test using the provided disk name within grub
+  # TODO: Fix udev so the symlinks are unneeded in /dev/disks
   simpleProvided = makeInstallerTest {
     createPartitions = ''
+      my $UUID = "\$(blkid -s UUID -o value /dev/vda2)";
       $machine->succeed(
         "sgdisk -Z /dev/vda",
         "sgdisk -n 1:0:+1M -n 2:0:+100M -n 3:0:+1G -N 4 -t 1:ef02 -t 2:8300 -t 3:8200 -t 4:8300 -c 2:boot -c 4:root /dev/vda",
@@ -421,9 +423,13 @@ in {
         "swapon -L swap",
         "mkfs.ext4 -L boot /dev/vda2",
         "mkfs.ext4 -L root /dev/vda4",
+      );
+      $machine->execute("ln -s ../../vda2 /dev/disk/by-uuid/$UUID");
+      $machine->execute("ln -s ../../vda4 /dev/disk/by-label/root");
+      $machine->succeed(
         "mount /dev/disk/by-label/root /mnt",
         "mkdir /mnt/boot",
-        "mount /dev/disk/by-uuid/\$(blkid -s UUID -o value /dev/vda2) /mnt/boot"
+        "mount /dev/disk/by-uuid/$UUID /mnt/boot"
       );
     '';
     grubIdentifier = "provided";
