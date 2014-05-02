@@ -28,6 +28,14 @@ sub writeFile {
     close FILE or die;
 }
 
+sub runCommand {
+    my ($cmd) = @_;
+    open FILE, "$cmd 2>/dev/null |" or die "Failed to execute: $cmd\n";
+    my @ret = <FILE>;
+    close FILE;
+    return ($?, @ret);
+}
+
 my $grub = get("grub");
 my $grubVersion = int(get("version"));
 my $extraConfig = get("extraConfig");
@@ -64,7 +72,11 @@ struct(Fs => {
 });
 sub GetFs {
     my ($dir) = @_;
-    my @boot = split(/[ \n\t]+/, `df -T "$dir" | tail -n 1`);
+	my ($status, @dfOut) = runCommand("df -T $dir");
+	if ($status != 0 || $#dfOut != 1) {
+		die "Failed to retrieve output about $dir from `df`";
+	}
+    my @boot = split(/[ \n\t]+/, $dfOut[1]);
     return Fs->new(device => $boot[0], type => $boot[1], mount => $boot[6]);
 }
 struct (Grub => {
@@ -110,8 +122,11 @@ sub GrubFs {
                 $search = $types{$fsIdentifier} . ' ';
 
                 # Based on the type pull in the identifier from the system
-                my $devInfo = `blkid -o export @{[$fs->device]}`;
-                my @matches = $devInfo =~ m/@{[uc $fsIdentifier]}=([^\n]*)/;
+                my ($status, @devInfo) = runCommand("blkid -o export @{[$fs->device]}");
+				if ($status != 0) {
+					die "Failed to get blkid info for @{[$fs->device]}";
+				}
+                my @matches = join("", @devInfo) =~ m/@{[uc $fsIdentifier]}=([^\n]*)/;
                 if ($#matches != 0) {
                     die "Couldn't find a $types{$fsIdentifier} for @{[$fs->device]}\n"
                 }
@@ -122,14 +137,21 @@ sub GrubFs {
             if ($fs->type eq 'btrfs') {
                 my $subvol = "";
 
-                my @subvols = `mount` =~ m/@{[$fs->device]} on [^\n]*subvol=([^,)]*)/;
+                my ($status, @mounts) = runCommand('mount');
+                if ($status != 0) {
+                    die "Failed to retreive mount info";
+                }
+                my @subvols = join("", @mounts) =~ m/@{[$fs->device]} on [^\n]*subvol=([^,)]*)/;
                 if ($#subvols > 0) {
                     die "Btrfs device @{[$fs->device]} listed multiple times in mount\n"
                 } elsif ($#subvols == 0) {
                     $subvol = $subvols[0];
                 } else {
-                    my $btrfsDefault = `btrfs subvol get-default @{[$fs->mount]}`;
-                    my @results = $btrfsDefault =~ m/path ([^ ]*)/;
+                    my ($status, @btrfsOut) = runCommand("btrfs subvol get-default @{[$fs->mount]}");
+                    if ($status != 0) {
+                        die "Failed to retrieve btrfs default subvolume"
+                    }
+                    my @results = join("", @btrfsOut) =~ m/path ([^ ]*)/;
                     if ($#results > 0) {
                         die "Btrfs device @{[$fs->device]} has multiple default subvolumes\n";
                     } elsif ($#results == 1) {
