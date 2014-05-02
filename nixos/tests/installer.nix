@@ -421,9 +421,9 @@ in {
         "swapon -L swap",
         "mkfs.ext4 -L boot /dev/vda2",
         "mkfs.ext4 -L root /dev/vda4",
-        "mount LABEL=root /mnt",
+        "mount /dev/disk/by-label/root /mnt",
         "mkdir /mnt/boot",
-        "$(blkid -o export /dev/vda2); mount /dev/disk/by-uuid/\$UUID /mnt/boot"
+        "mount /dev/disk/by-uuid/\$(blkid -s UUID -o value /dev/vda2) /mnt/boot"
       );
     '';
     grubIdentifier = "provided";
