@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "06rb4j1ifbznl3gfhl98s7ilj0ns01p7y7zap4p7ynmqnc6pia92";
   };
 
+  patches = [ ./0001-Fix-scan-build-to-use-NIX_CFLAGS_COMPILE.patch ];
   buildInputs = [ clang llvmPackages.clang perl makeWrapper ];
   buildPhase = "true";
 
@@ -18,7 +19,10 @@ stdenv.mkDerivation rec {
     cp -R tools/scan-build $out/libexec
 
     makeWrapper $out/libexec/scan-view/scan-view $out/bin/scan-view
-    makeWrapper $out/libexec/scan-build/scan-build $out/bin/scan-build --add-flags "--use-cc=${clang}/bin/clang" --add-flags "--use-c++=${clang}/bin/clang++" --add-flags "--use-analyzer=${llvmPackages.clang}/bin/clang"
+    makeWrapper $out/libexec/scan-build/scan-build $out/bin/scan-build \
+      --add-flags "--use-cc=${clang}/bin/clang" \
+      --add-flags "--use-c++=${clang}/bin/clang++" \
+      --add-flags "--use-analyzer='${llvmPackages.clang}/bin/clang'"
   '';
 
   meta = {
