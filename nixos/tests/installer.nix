@@ -419,7 +419,7 @@ in {
         "mkfs.ext4 -L root /dev/vda3",
         "mount LABEL=root /mnt",
         "mkdir /mnt/boot",
-        "$(blkid -o export /dev/vda2); mount /dev/disk/by-uuid/$UUID /mnt/boot"
+        "$(blkid -o export /dev/vda2); mount /dev/disk/by-uuid/\\$UUID /mnt/boot"
       );
     '';
     grubIdentifier = "provided";
