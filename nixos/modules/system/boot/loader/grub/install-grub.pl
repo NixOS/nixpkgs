@@ -139,7 +139,7 @@ sub GrubFs {
                 if ($status != 0) {
                     die "Failed to retreive subvolume info for @{[$fs->device]}";
                 }
-                my @subvols = join("", @info) =~ m/Name:[ \t\n]([^ \t\n]*)/;
+                my @subvols = join("", @info) =~ m/Name:[ \t\n]*([^ \t\n]*)/;
                 if ($#subvols > 0) {
                     die "Btrfs subvol name for @{[$fs->device]} listed multiple times in mount\n"
                 } elsif ($#subvols == 0) {
