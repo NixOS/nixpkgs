@@ -449,7 +449,7 @@ in {
         "btrfs subvol create /mnt/boot",
         "btrfs subvol create /mnt/nixos",
         "umount /mnt",
-        "mount -o defaults,subvol=mnt LABEL=root /mnt",
+        "mount -o defaults,subvol=nixos LABEL=root /mnt",
         "mkdir /mnt/boot",
         "mount -o defaults,subvol=boot LABEL=root /mnt/boot",
       );
