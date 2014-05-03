@@ -91,8 +91,8 @@ stdenv.mkDerivation rec {
       provides the cli HandbrakeCLI and the GTK+ version ghb.
       The faac library is disabled if you're compiling free-only.
     '';
-    license = "GPLv2";
-    maintainers = [ "Wout Mertens <Wout.Mertens@gmail.com>" ];
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.wmertens ];
     # Not tested on anything else
     platforms = stdenv.lib.platforms.linux;
   };

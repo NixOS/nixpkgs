@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://github.com/saintdev/libmkv;
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.wmertens ];
   };
 }
