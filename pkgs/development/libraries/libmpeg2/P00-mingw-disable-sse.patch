@@ -1,0 +1,30 @@
+Index: libmpeg2/cpu_accel.c
+===================================================================
+--- mpeg2dec/libmpeg2/cpu_accel.c	(revision 1205)
++++ mpeg2dec/libmpeg2/cpu_accel.c	(working copy)
+@@ -111,7 +111,13 @@
+ 
+ 	cpuid (0x80000000, eax, ebx, ecx, edx);
+ 	if (eax < 0x80000001)		/* no extended capabilities */
+-	    return accel;
++    {
++#if defined(__x86_64__)
++        // SSE code is broken on mingw64, so disable it.
++	    accel &= ~(MPEG2_ACCEL_X86_SSE2|MPEG2_ACCEL_X86_SSE3);
++#endif
++        return accel;
++    }
+ 
+ 	cpuid (0x80000001, eax, ebx, ecx, edx);
+ 
+@@ -120,6 +126,10 @@
+ 
+ 	if (AMD && (edx & 0x00400000))	/* AMD MMX extensions */
+ 	    accel |= MPEG2_ACCEL_X86_MMXEXT;
++#if defined(__x86_64__)
++    // SSE code is broken on mingw64, so disable it.
++	accel &= ~(MPEG2_ACCEL_X86_SSE2|MPEG2_ACCEL_X86_SSE3);
++#endif
+     }
+ #endif /* ACCEL_DETECT */
+ 

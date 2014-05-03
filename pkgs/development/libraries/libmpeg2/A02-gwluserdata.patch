@@ -1,0 +1,39 @@
+diff -ru mpeg2dec.orig/libvo/video_out_dx.c mpeg2dec/libvo/video_out_dx.c
+--- mpeg2dec.orig/libvo/video_out_dx.c	2008-07-09 11:28:24.000000000 -0700
++++ mpeg2dec/libvo/video_out_dx.c	2012-09-08 05:31:39.304849824 -0700
+@@ -92,9 +92,9 @@
+     switch (message) {
+ 
+     case WM_WINDOWPOSCHANGED:
+-	instance = (dx_instance_t *) GetWindowLong (hwnd, GWL_USERDATA);
++	/*instance = (dx_instance_t *) GetWindowLong (hwnd, GWL_USERDATA);
+ 
+-	/* update the window position and size */
++	// update the window position and size
+ 	point_window.x = 0;
+ 	point_window.y = 0;
+ 	ClientToScreen (hwnd, &point_window);
+@@ -104,9 +104,9 @@
+ 	instance->window_coords.right = rect_window.right + point_window.x;
+ 	instance->window_coords.bottom = rect_window.bottom + point_window.y;
+ 
+-	/* update the overlay */
++	// update the overlay 
+ 	if (instance->overlay && instance->display)
+-	    update_overlay (instance);
++	    update_overlay (instance);*/
+ 
+ 	return 0;
+ 
+@@ -173,7 +173,10 @@
+     /* store a directx_instance pointer into the window local storage
+      * (for later use in event_handler).
+      * We need to use SetWindowLongPtr when it is available in mingw */
+-    SetWindowLong (instance->window, GWL_USERDATA, (LONG) instance);
++
++    // Current version of MINGW-W64 does not have this!
++    // Since we are not outputting to a display, this is not a problem.
++    //SetWindowLong (instance->window, GWL_USERDATA, (LONG) instance);
+ 
+     ShowWindow (instance->window, SW_SHOW);
+ 
