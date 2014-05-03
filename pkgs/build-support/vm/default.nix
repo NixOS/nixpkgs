@@ -1477,6 +1477,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1404i386 = {
+      name = "ubuntu-14.04-trusty-i386";
+      fullName = "Ubuntu 14.04 Trusty (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/trusty/main/binary-i386/Packages.bz2;
+            sha256 = "1bld2z47cc8adlqgfib1hypj5zwdqalhizzgpmkr3rmmb095lbma";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/trusty/universe/binary-i386/Packages.bz2;
+            sha256 = "03xqi9vd653hdf31a2l6p3zqfmywwvwlsc54dymxji8ppj7mcgkz";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1404x86_64 = {
+      name = "ubuntu-14.04-trusty-amd64";
+      fullName = "Ubuntu 14.04 Trusty (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/trusty/main/binary-amd64/Packages.bz2;
+            sha256 = "11cw9flmnq3wappmwk87h19jzyrsan15h6p0mmb30ypnrqaz7g9j";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/trusty/universe/binary-amd64/Packages.bz2;
+            sha256 = "06nn3ci8s7zgwharxm76bcbqmnqknpds67zffylyii5hgmbjcnxm";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
