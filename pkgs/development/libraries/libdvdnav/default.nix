@@ -1,13 +1,14 @@
-{stdenv, fetchurl, libdvdread}:
+{stdenv, fetchurl, pkgconfig, libdvdread}:
 
 stdenv.mkDerivation {
-  name = "libdvdnav-4.1.3p10";
+  name = "libdvdnav-4.2.1";
   
   src = fetchurl {
-    url = http://www2.mplayerhq.hu/MPlayer/releases/dvdnav/libdvdnav-4.1.3.tar.bz2;
-    sha1 = "d1b95eb8a7caee1fa7580a1abad84d6cb3cad046";
+    url = http://dvdnav.mplayerhq.hu/releases/libdvdnav-4.2.1.tar.xz;
+    sha256 = "7fca272ecc3241b6de41bbbf7ac9a303ba25cb9e0c82aa23901d3104887f2372";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [libdvdread];
 
   configureScript = "./configure2"; # wtf?
@@ -17,16 +18,13 @@ stdenv.mkDerivation {
   '';
 
   # From Handbrake
-  patches = [
-    ./A00-log-stderr.patch ./A01-program-info.patch ./A02-mult-pgc.patch
-    ./A03-quiet.patch ./A04-m4-uid0.patch ./A05-forward-seek.patch
-    ./A06-reset-mutex.patch ./A07-missing-menu.patch ./A08-dvdnav-dup.patch
-    ./P00-mingw-no-examples.patch
-  ];
+  patches = [ ./A08-dvdnav-dup.patch ./P00-mingw-no-examples.patch ];
 
   meta = {
-    homepage = http://www.mplayerhq.hu/;
+    homepage = http://dvdnav.mplayerhq.hu/;
     description = "A library that implements DVD navigation features such as DVD menus";
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.wmertens ];
   };
 
   passthru = { inherit libdvdread; };
