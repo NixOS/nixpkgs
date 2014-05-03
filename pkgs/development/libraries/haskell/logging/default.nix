@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "logging";
-  version = "1.4.0";
-  sha256 = "0xkk6j9wa5n0qg0wp7a9bwaz328hrjk1fwanpa515hh3gvz62g94";
+  version = "1.4.1";
+  sha256 = "15mhpafv797f8aifjyjb5nc0fkd7if7bvx5hx9mzxycdzlk28gfp";
   buildDepends = [
     binary fastLogger liftedBase monadControl monadLogger pcreLight
     text time transformers vectorSpace
