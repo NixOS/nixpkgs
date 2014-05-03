@@ -1112,7 +1112,9 @@ let
    */
   graphviz_2_0 = callPackage ../tools/graphics/graphviz/2.0.nix { };
 
-  grive = callPackage ../tools/filesystems/grive { };
+  grive = callPackage ../tools/filesystems/grive {
+    json_c = json-c-0-11; # won't configure with 0.12; others are vulnerable
+  };
 
   groff = callPackage ../tools/text/groff {
     ghostscript = null;
@@ -4788,9 +4790,8 @@ let
 
   json_glib = callPackage ../development/libraries/json-glib { };
 
-  json-c-0-9 = callPackage ../development/libraries/json-c { };
-  json-c-0-11 = callPackage ../development/libraries/json-c/0.11.nix { };
-  json_c = json-c-0-9;
+  json-c-0-11 = callPackage ../development/libraries/json-c/0.11.nix { }; # vulnerable
+  json_c = callPackage ../development/libraries/json-c { };
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
 
