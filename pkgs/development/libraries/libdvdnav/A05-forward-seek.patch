@@ -1,0 +1,100 @@
+diff -Naur libdvdnav.orig/src/searching.c libdvdnav/src/searching.c
+--- libdvdnav.orig/src/searching.c	2009-01-08 14:57:11.000000000 -0800
++++ libdvdnav/src/searching.c	2009-09-12 15:36:14.403299590 -0700
+@@ -47,7 +47,7 @@
+ /* Return placed in vobu. */
+ /* Returns error status */
+ /* FIXME: Maybe need to handle seeking outside current cell. */
+-static dvdnav_status_t dvdnav_scan_admap(dvdnav_t *this, int32_t domain, uint32_t seekto_block, uint32_t *vobu) {
++static dvdnav_status_t dvdnav_scan_admap(dvdnav_t *this, int32_t domain, uint32_t seekto_block, int next, uint32_t *vobu) {
+   vobu_admap_t *admap = NULL;
+ 
+ #ifdef LOG_DEBUG
+@@ -89,7 +89,7 @@
+       vobu_start = next_vobu;
+       address++;
+     }
+-    *vobu = vobu_start;
++    *vobu = next ? next_vobu : vobu_start;
+     return DVDNAV_STATUS_OK;
+   }
+   fprintf(MSG_OUT, "libdvdnav: admap not located\n");
+@@ -160,7 +160,7 @@
+     fprintf(MSG_OUT, "libdvdnav: Seeking to cell %i from choice of %i to %i\n",
+ 	    cell_nr, first_cell_nr, last_cell_nr);
+ #endif
+-    if (dvdnav_scan_admap(this, state->domain, target, &vobu) == DVDNAV_STATUS_OK) {
++    if (dvdnav_scan_admap(this, state->domain, target, 0, &vobu) == DVDNAV_STATUS_OK) {
+       uint32_t start = state->pgc->cell_playback[cell_nr-1].first_sector;
+ 
+       if (vm_jump_cell_block(this->vm, cell_nr, vobu - start)) {
+@@ -184,9 +184,13 @@
+ dvdnav_status_t dvdnav_sector_search(dvdnav_t *this,
+ 				     uint64_t offset, int32_t origin) {
+   uint32_t target = 0;
++  uint32_t current_pos;
++  uint32_t cur_sector;
++  uint32_t cur_cell_nr;
+   uint32_t length = 0;
+   uint32_t first_cell_nr, last_cell_nr, cell_nr;
+   int32_t found;
++  int forward = 0;
+   cell_playback_t *cell;
+   dvd_state_t *state;
+   dvdnav_status_t result;
+@@ -213,6 +217,10 @@
+   fprintf(MSG_OUT, "libdvdnav: Before cellN=%u blockN=%u\n", state->cellN, state->blockN);
+ #endif
+ 
++  current_pos = target;
++  cur_sector = this->vobu.vobu_start + this->vobu.blockN;
++  cur_cell_nr = state->cellN;
++
+   switch(origin) {
+    case SEEK_SET:
+     if(offset >= length) {
+@@ -244,6 +252,7 @@
+     pthread_mutex_unlock(&this->vm_lock);
+     return DVDNAV_STATUS_ERR;
+   }
++  forward = target > current_pos;
+ 
+   this->cur_cell_time = 0;
+   if (this->pgc_based) {
+@@ -270,6 +279,27 @@
+     } else {
+       /* convert the target sector from Cell-relative to absolute physical sector */
+       target += cell->first_sector;
++      if (forward && (cell_nr == cur_cell_nr)) {
++        uint32_t vobu;
++        /* if we are seeking forward from the current position, make sure
++         * we move to a new position that is after our current position.
++         * simply truncating to the vobu will go backwards */
++        if (dvdnav_scan_admap(this, state->domain, target, 0, &vobu) != DVDNAV_STATUS_OK)
++          break;
++        if (vobu <= cur_sector) {
++          if (dvdnav_scan_admap(this, state->domain, target, 1, &vobu) != DVDNAV_STATUS_OK)
++            break;
++          if (vobu > cell->last_sector) {
++            if (cell_nr == last_cell_nr)
++              break;
++            cell_nr++;
++            cell =  &(state->pgc->cell_playback[cell_nr-1]);
++            target = cell->first_sector;
++          } else {
++            target = vobu;
++          }
++        }
++      }
+       found = 1;
+       break;
+     }
+@@ -281,7 +311,7 @@
+     fprintf(MSG_OUT, "libdvdnav: Seeking to cell %i from choice of %i to %i\n",
+ 	    cell_nr, first_cell_nr, last_cell_nr);
+ #endif
+-    if (dvdnav_scan_admap(this, state->domain, target, &vobu) == DVDNAV_STATUS_OK) {
++    if (dvdnav_scan_admap(this, state->domain, target, 0, &vobu) == DVDNAV_STATUS_OK) {
+       int32_t start = state->pgc->cell_playback[cell_nr-1].first_sector;
+ 
+       if (vm_jump_cell_block(this->vm, cell_nr, vobu - start)) {

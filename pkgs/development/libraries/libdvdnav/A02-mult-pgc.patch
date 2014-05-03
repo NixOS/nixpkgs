@@ -1,0 +1,22 @@
+# the bit tested here does not indicate 'random or shuffle' - it only says
+# that the title uses multiple PGCs. Since libdvdnav mostly deals correctly
+# with mult PGC titles (modulo some weirdness when seeking) we need the
+# state to get set correctly.
+--- libdvdnav/src/vm/vm.c.orig	2009-05-13 20:44:12.000000000 -0700
++++ libdvdnav/src/vm/vm.c	2009-05-13 20:46:02.000000000 -0700
+@@ -1758,14 +1758,10 @@
+     if((vm->state).TTN_REG > vm->vmgi->tt_srpt->nr_of_srpts)
+       return 0; /* ?? */
+     pb_ty = &vm->vmgi->tt_srpt->title[(vm->state).TTN_REG - 1].pb_ty;
+-    if(pb_ty->multi_or_random_pgc_title == /* One_Sequential_PGC_Title */ 0) {
++
+       int dummy, part;
+       vm_get_current_title_part(vm, &dummy, &part);
+       (vm->state).PTTN_REG = part;
+-    } else {
+-      /* FIXME: Handle RANDOM or SHUFFLE titles. */
+-      fprintf(MSG_OUT, "libdvdnav: RANDOM or SHUFFLE titles are NOT handled yet.\n");
+-    }
+   }
+   return 1;
+ }

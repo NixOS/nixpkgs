@@ -1,0 +1,21 @@
+diff -Naur libdvdnav.orig/src/vm/vm.c libdvdnav/src/vm/vm.c
+--- libdvdnav.orig/src/vm/vm.c	2009-03-13 18:28:22.000000000 -0700
++++ libdvdnav/src/vm/vm.c	2009-06-02 13:50:06.000000000 -0700
+@@ -354,8 +354,6 @@
+       fprintf(MSG_OUT, "libdvdnav: vm: failed to open/read the DVD\n");
+       return 0;
+     }
+-    dvd_read_name(vm->dvd_name, dvdroot);
+-    vm->map  = remap_loadmap(vm->dvd_name);
+     vm->vmgi = ifoOpenVMGI(vm->dvd);
+     if(!vm->vmgi) {
+       fprintf(MSG_OUT, "libdvdnav: vm: failed to read VIDEO_TS.IFO\n");
+@@ -386,6 +384,8 @@
+       /* return 0; Not really used for now.. */
+     }
+     /* ifoRead_TXTDT_MGI(vmgi); Not implemented yet */
++    dvd_read_name(vm->dvd_name, dvdroot);
++    vm->map  = remap_loadmap(vm->dvd_name);
+   }
+   if (vm->vmgi) {
+     int i, mask;

@@ -1,0 +1,25 @@
+Index: src/dvdnav.c
+===================================================================
+--- libdvdnav.orig/src/dvdnav.c	(revision 1168)
++++ libdvdnav/src/dvdnav.c	(working copy)
+@@ -178,9 +178,9 @@
+ #ifdef LOG_DEBUG
+   fprintf(MSG_OUT, "libdvdnav: clearing dvdnav\n");
+ #endif
++  pthread_mutex_unlock(&this->vm_lock);
+   result = dvdnav_clear(this);
+ 
+-  pthread_mutex_unlock(&this->vm_lock);
+   return result;
+ }
+ 
+@@ -519,7 +519,8 @@
+   }
+ 
+   /* Check to see if we need to change the currently opened VOB */
+-  if((this->position_current.vts != this->position_next.vts) ||
++  if((this->file == NULL) ||
++     (this->position_current.vts != this->position_next.vts) ||
+      (this->position_current.domain != this->position_next.domain)) {
+     dvd_read_domain_t domain;
+     int32_t vtsN;

@@ -1,0 +1,28 @@
+diff -Naur libdvdnav.orig/configure.ac libdvdnav/configure.ac
+--- libdvdnav.orig/configure.ac	2009-01-08 14:57:11.000000000 -0800
++++ libdvdnav/configure.ac	2009-08-24 10:20:16.560743586 -0700
+@@ -206,24 +206,6 @@
+ 
+ AC_SUBST(DEBUG_CFLAGS)
+ 
+-dnl ---------------------------------------------
+-dnl Get where .m4 should be installed.
+-dnl ---------------------------------------------
+-case "`id`" in
+-  uid=0\(* )
+-    AC_MSG_CHECKING(for aclocal directory)
+-    if (aclocal --version) < /dev/null > /dev/null 2>&1; then
+-      ACLOCAL_DIR="`eval $ACLOCAL --print-ac-dir`"
+-      AC_MSG_RESULT($ACLOCAL_DIR)
+-    else
+-      ACLOCAL_DIR="/usr/local/share/aclocal"
+-      AC_MSG_RESULT(none - will be installed in $ACLOCAL_DIR)
+-    fi
+-    escapedprefix="`echo $prefix | sed -e 's/\\//\\\\\//g'`"
+-    ACLOCAL_DIR="`echo $ACLOCAL_DIR|sed -e 's/^'$escapedprefix/'\${prefix}'/`"
+-    AC_SUBST(ACLOCAL_DIR)
+-    ;;
+-esac
+ AM_CONDITIONAL(INSTALL_M4, test x"$ACLOCAL_DIR" != "x")
+ 
+ dnl ---------------------------------------------

@@ -1,0 +1,12 @@
+diff -Naur libdvdnav.orig/src/dvdnav_internal.h libdvdnav/src/dvdnav_internal.h
+--- libdvdnav.orig/src/dvdnav_internal.h	2008-10-03 13:11:43.000000000 -0700
++++ libdvdnav/src/dvdnav_internal.h	2009-04-24 14:23:04.000000000 -0700
+@@ -60,7 +60,7 @@
+ #endif /* WIN32 */
+ 
+ /* where should libdvdnav write its messages (stdout/stderr) */
+-#define MSG_OUT stdout
++#define MSG_OUT stderr
+ 
+ /* Maximum length of an error string */
+ #define MAX_ERR_LEN 255
