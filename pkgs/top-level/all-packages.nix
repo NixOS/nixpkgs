@@ -8704,6 +8704,8 @@ let
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
+  handbrake = callPackage ../applications/video/handbrake { };
+
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
   lyx = callPackage ../applications/misc/lyx { };
