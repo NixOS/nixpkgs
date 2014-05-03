@@ -5776,6 +5776,8 @@ let
 
   qwt = callPackage ../development/libraries/qwt {};
 
+  qwt6 = callPackage ../development/libraries/qwt/6.nix { };
+
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
 
   raul = callPackage ../development/libraries/audio/raul { };
