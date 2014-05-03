@@ -62,7 +62,7 @@ let
             Package ‘${attrs.name}’ in ${pos'} has an unfree license, refusing to evaluate. You can set
               { nixpkgs.config.allowUnfree = true; }
             in configuration.nix to override this. If you use Nix standalone, you can add
-              { config.allowUnfree = true; }
+              { allowUnfree = true; }
             to ~/.nixpkgs/config.nix or pass
               --arg config '{ allowUnfree = true; }'
             on the command line.''
