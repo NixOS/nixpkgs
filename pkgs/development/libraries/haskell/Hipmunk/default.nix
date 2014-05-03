@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Hipmunk";
-  version = "5.2.0.13";
-  sha256 = "0ddf7cbwaswyszq9rs5jq353npbry8l2cc7p5wq9wq97yplz10bc";
+  version = "5.2.0.14";
+  sha256 = "1jzsalib2y6r4aw7d10v3pgapmnj1knvq3fyad3w5d11qmvx9zwc";
   buildDepends = [ StateVar transformers ];
   meta = {
     homepage = "https://github.com/meteficha/Hipmunk";
