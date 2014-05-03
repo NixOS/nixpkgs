@@ -2919,6 +2919,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   AgdaExecutable = callPackage ../development/compilers/Agda-executable {};
 
+  AgdaStdLib = callPackage ../development/compilers/Agda-stdlib {};
+
   uhc = callPackage ../development/compilers/uhc {};
 
   epic = callPackage ../development/compilers/epic {};
