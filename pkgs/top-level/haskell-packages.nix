@@ -1039,6 +1039,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   editline = self.editline_0_2_1_1;
 
   ekg = callPackage ../development/libraries/haskell/ekg {};
+  ekgCore = callPackage ../development/libraries/haskell/ekg-core {};
 
   elerea = callPackage ../development/libraries/haskell/elerea {};
 
