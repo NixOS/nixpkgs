@@ -145,7 +145,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     attoparsec   = self.attoparsec_0_11_3_0;
     caseInsensitive = self.caseInsensitive_1_2_0_0;
     cgi          = self.cgi_3001_1_8_5;
-    fgl          = self.fgl_5_4_2_4;
+    fgl          = self.fgl_5_5_0_1;
     GLUT         = self.GLUT_2_5_1_0;
     GLURaw       = self.GLURaw_1_4_0_0;
     haskellSrc   = self.haskellSrc_1_0_1_6;
@@ -1151,7 +1151,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   fgl_5_4_2_2 = callPackage ../development/libraries/haskell/fgl/5.4.2.2.nix {};
   fgl_5_4_2_3 = callPackage ../development/libraries/haskell/fgl/5.4.2.3.nix {};
   fgl_5_4_2_4 = callPackage ../development/libraries/haskell/fgl/5.4.2.4.nix {};
-  fgl = self.fgl_5_4_2_4;
+  fgl_5_5_0_1 = callPackage ../development/libraries/haskell/fgl/5.5.0.1.nix {};
+  fgl = self.fgl_5_5_0_1;
 
   fglVisualize = callPackage ../development/libraries/haskell/fgl-visualize {};
 
