@@ -1,0 +1,80 @@
+diff --git a/src/libbluray/bdnav/navigation.c b/src/libbluray/bdnav/navigation.c
+index c8dc307..26d0000 100644
+--- a/src/libbluray/bdnav/navigation.c
++++ b/src/libbluray/bdnav/navigation.c
+@@ -32,9 +32,25 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++static int _stream_cmp(MPLS_STREAM *a, MPLS_STREAM *b)
++{
++    if (a->stream_type == b->stream_type &&
++        a->coding_type == b->coding_type &&
++        a->pid         == b->pid         &&
++        a->subpath_id  == b->subpath_id  &&
++        a->subclip_id  == b->subclip_id  &&
++        a->format      == b->format      &&
++        a->rate        == b->rate        &&
++        a->char_code   == b->char_code   &&
++        memcmp(a->lang, b->lang, 4) == 0) {
++        return 1;
++    }
++    return 0;
++}
++
+ static int _filter_dup(MPLS_PL *pl_list[], unsigned count, MPLS_PL *pl)
+ {
+-    unsigned ii, jj;
++    unsigned ii, jj, kk;
+ 
+     for (ii = 0; ii < count; ii++) {
+         if (pl->list_count != pl_list[ii]->list_count) {
+@@ -54,7 +70,48 @@ static int _filter_dup(MPLS_PL *pl_list[], unsigned count, MPLS_PL *pl)
+                 pi1->out_time != pi2->out_time) {
+                 break;
+             }
++            if (pi1->stn.num_video           != pi2->stn.num_video           ||
++                pi1->stn.num_audio           != pi2->stn.num_audio           ||
++                pi1->stn.num_pg              != pi2->stn.num_pg              || 
++                pi1->stn.num_ig              != pi2->stn.num_ig              ||
++                pi1->stn.num_secondary_audio != pi2->stn.num_secondary_audio ||
++                pi1->stn.num_secondary_video != pi2->stn.num_secondary_video) {
++                break;
++            }
++            for (kk = 0; kk < pi1->stn.num_video; kk++) {
++                if (!_stream_cmp(&pi1->stn.video[kk], &pi2->stn.video[kk])) {
++                    goto next;
++                }
++            }
++            for (kk = 0; kk < pi1->stn.num_audio; kk++) {
++                if (!_stream_cmp(&pi1->stn.audio[kk], &pi2->stn.audio[kk])) {
++                    goto next;
++                }
++            }
++            for (kk = 0; kk < pi1->stn.num_pg; kk++) {
++                if (!_stream_cmp(&pi1->stn.pg[kk], &pi2->stn.pg[kk])) {
++                    goto next;
++                }
++            }
++            for (kk = 0; kk < pi1->stn.num_ig; kk++) {
++                if (!_stream_cmp(&pi1->stn.ig[kk], &pi2->stn.ig[kk])) {
++                    goto next;
++                }
++            }
++            for (kk = 0; kk < pi1->stn.num_secondary_audio; kk++) {
++                if (!_stream_cmp(&pi1->stn.secondary_audio[kk],
++                                 &pi2->stn.secondary_audio[kk])) {
++                    goto next;
++                }
++            }
++            for (kk = 0; kk < pi1->stn.num_secondary_video; kk++) {
++                if (!_stream_cmp(&pi1->stn.secondary_video[kk],
++                                 &pi2->stn.secondary_video[kk])) {
++                    goto next;
++                }
++            }
+         }
++next:
+         if (jj != pl->list_count) {
+             continue;
+         }
