@@ -49,7 +49,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  patchversion = "51";
+  patchversion = "55";
 
   name =
     if installjdk then "jdk-1.7.0_${patchversion}" else "jre-1.7.0_${patchversion}";
@@ -59,14 +59,14 @@ stdenv.mkDerivation rec {
       requireFile {
         name = "jdk-7u${patchversion}-linux-i586.tar.gz";
         url = http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html;
-        sha256 = "1ks2zyx88bxdjcbdgg40mh1i9a83ll9ymxr79rplfvj48ig9d8mk";
+        sha256 = "0y0v5ilbkdmf14jrvwa23x91rfdw90jji4y7hq0l494iy4wjnyc1";
       }
     else if stdenv.system == "x86_64-linux" then
 
       requireFile {
         name = "jdk-7u${patchversion}-linux-x64.tar.gz";
         url = http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html;
-        sha256 = "0p7mfjj8fxlghvhcqhwgrifzb32b9y143yw962zk02bfycz7qdkp";
+        sha256 = "15sncxhjasv5i6p7hfrr92xq5ph9g6g12i4m52vp45l031bw5y46";
       }
     else
       abort "jdk requires i686-linux or x86_64 linux";
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
     #   java: relocation error: java: symbol , version GLIBC_2.2.5 not defined in file libc.so.6 with link time reference
     # Because only libglass.so needs atk, we put it only in it's rpath.
     # This seems to work fine.
-    patchelf --set-rpath "$rpath:${atk}/lib" $out/jre/lib/${architecture}/libglass.so
+    test -f $out/jre/lib/${architecture}/libglass.so && patchelf --set-rpath "$rpath:${atk}/lib" $out/jre/lib/${architecture}/libglass.so
 
     if test -z "$pluginSupport"; then
       rm -f $out/bin/javaws
