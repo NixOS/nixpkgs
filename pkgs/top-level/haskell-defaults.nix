@@ -413,7 +413,8 @@
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   packages_ghcHEAD =
     packages { ghcPath = ../development/compilers/ghc/head.nix;
-               ghcBinary = ghc742Binary;
+               # Use the 7.8.2 package to bootstrap.
+               ghcBinary = pkgs.haskellPackages_ghc782.ghc;
                prefFun = ghcHEADPrefs;
                extraArgs = {
                  happy = pkgs.haskellPackages.happy_1_19_2;
