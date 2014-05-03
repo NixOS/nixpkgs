@@ -10,6 +10,9 @@ cabal.mkDerivation (self: {
   testDepends = [
     async blazeBuilder deepseq hspec network QuickCheck text zlib
   ];
+
+  doCheck = false;
+
   meta = {
     homepage = "https://github.com/fpco/streaming-commons";
     description = "Common lower-level functions needed by various streaming data libraries";
