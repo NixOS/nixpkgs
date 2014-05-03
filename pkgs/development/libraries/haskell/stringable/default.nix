@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "stringable";
-  version = "0.1.2";
-  sha256 = "17lhry3x90s88lplbv2kvzyak8wrc9r80czng5s3dirmyp9rn5gs";
+  version = "0.1.3";
+  sha256 = "10jsvbiqbmnbipv1566k5mqkpgfyrzbk8m7b18rqjb5m3qg9dbz7";
   buildDepends = [ systemFilepath text ];
   meta = {
     description = "A Stringable type class, in the spirit of Foldable and Traversable";
