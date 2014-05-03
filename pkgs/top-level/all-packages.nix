@@ -9523,6 +9523,13 @@ let
   virtualgl = callPackage ../tools/X11/virtualgl { };
 
   primus = callPackage ../tools/X11/primus {
+    inherit writeScript;
+    primusLib_x64 = callPackage ../tools/X11/primus/lib.nix {
+      nvidia = linuxPackages.nvidia_x11;
+    };
+    primusLib_i686 = callPackage_i686 ../tools/X11/primus/lib.nix {
+      nvidia = callPackage_i686 ../os-specific/linux/nvidia-x11 { libsOnly = true; };
+    };
   };
 
   bumblebee = callPackage ../tools/X11/bumblebee {
