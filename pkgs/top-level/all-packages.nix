@@ -5142,6 +5142,8 @@ let
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
+  libmkv = callPackage ../development/libraries/libmkv { };
+
   libmms = callPackage ../development/libraries/libmms { };
 
   libmowgli = callPackage ../development/libraries/libmowgli { };
