@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monad-extras";
-  version = "0.5.7";
-  sha256 = "0dqj3n3ki679b6z5y7qw084chbahlqmj2vgj7yx0v552bl0ylzyj";
+  version = "0.5.8";
+  sha256 = "1h7gjdmbdjw2k49xlflca88bxiid7gxl8l9gzmywybllff376npl";
   buildDepends = [
     mmorph monadControl stm transformers transformersBase
   ];
