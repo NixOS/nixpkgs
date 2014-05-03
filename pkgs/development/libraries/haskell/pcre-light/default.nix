@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pcre-light";
-  version = "0.4.0.1";
-  sha256 = "07r863fcxhxnlvld732r1d3kd797ki71wyizfklbz0ccdxqq8cqj";
+  version = "0.4.0.2";
+  sha256 = "0baq46d3k376mhh98gkfi6phndk8ba25c2kll9zms1y07mn3bnnx";
   extraLibraries = [ pcre ];
   meta = {
     homepage = "https://github.com/Daniel-Diaz/pcre-light";
