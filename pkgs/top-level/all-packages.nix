@@ -682,6 +682,8 @@ let
 
   cabextract = callPackage ../tools/archivers/cabextract { };
 
+  cantata = callPackage ../applications/audio/cantata { };
+
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
   ccid = callPackage ../tools/security/ccid { };
