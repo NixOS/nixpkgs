@@ -1,15 +1,20 @@
 { stdenv, fetchurl, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper
 , linuxPackages ? null
-, EFIsupport ? false
+, efiSupport ? false
 , zfsSupport ? false
 }:
 
-assert zfsSupport -> linuxPackages != null && linuxPackages.zfs != null;
-
+with stdenv.lib;
 let
+  efiSystems = {
+    "i686-linux".target = "i386";
+    "x86_64-linux".target = "x86_64";
+  };
 
-  prefix = "grub${if EFIsupport then "-efi" else ""}";
+  canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystems);
+
+  prefix = "grub${if efiSupport then "-efi" else ""}";
 
   version = "2.02-beta2";
 
@@ -17,8 +22,10 @@ let
     url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
     sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
   };
+in (
 
-in
+assert efiSupport -> canEfi;
+assert zfsSupport -> linuxPackages != null && linuxPackages.zfs != null;
 
 stdenv.mkDerivation rec {
   name = "${prefix}-${version}";
@@ -31,8 +38,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
   buildInputs = [ ncurses libusb freetype gettext devicemapper ]
-    ++ stdenv.lib.optional doCheck qemu
-    ++ stdenv.lib.optional zfsSupport linuxPackages.zfs;
+    ++ optional doCheck qemu
+    ++ optional zfsSupport linuxPackages.zfs;
 
   preConfigure =
     '' for i in "tests/util/"*.in
@@ -62,13 +69,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-bash-completion.patch ];
 
-  configureFlags =
-    let arch = if stdenv.system == "i686-linux" then "i386"
-               else if stdenv.system == "x86_64-linux" then "x86_64"
-               else throw "unsupported EFI firmware architecture";
-    in stdenv.lib.optional zfsSupport "--enable-libzfs"
-      ++ stdenv.lib.optionals EFIsupport
-        [ "--with-platform=efi" "--target=${arch}" "--program-prefix=" ];
+  configureFlags = optional zfsSupport "--enable-libzfs"
+    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystems.${stdenv.system}.target}" "--program-prefix=" ];
 
   doCheck = false;
   enableParallelBuilding = true;
@@ -96,9 +98,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    platforms = if EFIsupport then
-      [ "i686-linux" "x86_64-linux" ]
-    else
-      platforms.gnu;
+    platforms = platforms.gnu;
   };
-}
+})

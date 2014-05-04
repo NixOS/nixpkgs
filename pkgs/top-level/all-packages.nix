@@ -1220,7 +1220,7 @@ let
 
   grub2 = callPackage ../tools/misc/grub/2.0x.nix { };
 
-  grub2_efi = grub2.override { EFIsupport = true; };
+  grub2_efi = grub2.override { efiSupport = true; };
 
   grub2_zfs = grub2.override { zfsSupport = true; };
 
