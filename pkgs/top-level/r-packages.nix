@@ -8,7 +8,7 @@ let self = _self // overrides; _self = with self; {
 
   inherit (stdenv.lib) maintainers;
 
-  abind = buildRPackage rec {
+  abind = buildRPackage {
     name = "abind-1.4-0";
     src = fetchurl {
       url = "mirror://cran/src/contrib/abind_1.4-0.tar.gz";
@@ -16,7 +16,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  chron = buildRPackage rec {
+  chron = buildRPackage {
     name = "chron-2.3-44";
     src = fetchurl {
       url = "mirror://cran/src/contrib/chron_2.3-44.tar.gz";
@@ -24,7 +24,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  colorspace = buildRPackage rec {
+  codetools = buildRPackage {
+    name = "codetools-0.2-8";
+    src = fetchurl {
+      url = "mirror://cran/src/contrib/codetools_0.2-8.tar.gz";
+      sha256 = "0m326kfxihm5ayfn5b4k8awdf34002iy094gazbc3h0y42r4g86b";
+    };
+  };
+
+  colorspace = buildRPackage {
     name = "colorspace-1.2-2";
     src = fetchurl {
       url = "mirror://cran/src/contrib/colorspace_1.2-2.tar.gz";
@@ -32,7 +40,24 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DBI = buildRPackage rec {
+  dataTable = buildRPackage {
+    name = "data.table-1.9.2";
+    src = fetchurl {
+      url = "mirror://cran/src/contrib/data.table_1.9.2.tar.gz";
+      sha256 = "1fchjg939av89m0zsv85w2xcc8qriwkskk0mcsqy8ip6pcfnlg66";
+    };
+    propagatedBuildInputs = [ reshape2 ];
+  };
+
+  Defaults = buildRPackage {
+    name = "Defaults-1.1-1";
+    src = fetchurl {
+      url = "mirror://cran/src/contrib/Defaults_1.1-1.tar.gz";
+      sha256 = "0ikgd5mswlky327pzp09cz93bn3mq7qnybq1r64y19c2brbax00d";
+    };
+  };
+
+  DBI = buildRPackage {
     name = "DBI-0.2-7";
     src = fetchurl {
       url = "mirror://cran/src/contrib/DBI_0.2-7.tar.gz";
@@ -40,7 +65,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  dichromat = buildRPackage rec {
+  dichromat = buildRPackage {
     name = "dichromat-2.0-0";
     src = fetchurl {
       url = "mirror://cran/src/contrib/dichromat_2.0-0.tar.gz";
@@ -48,7 +73,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  digest = buildRPackage rec {
+  digest = buildRPackage {
     name = "digest-0.6.3";
     src = fetchurl {
       url = "mirror://cran/src/contrib/digest_0.6.3.tar.gz";
@@ -56,7 +81,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ggplot2 = buildRPackage rec {
+  foreach = buildRPackage {
+    name = "foreach-1.4.2";
+    src = fetchurl {
+      url = "mirror://cran/src/contrib/foreach_1.4.2.tar.gz";
+      sha256 = "097zk7cwyjxgw2i8i547y437y0gg2fmyc5g4i8bbkn99004qzzfl";
+    };
+    propagatedBuildInputs = [ codetools iterators ];
+  };
+
+  ggplot2 = buildRPackage {
     name = "ggplot2-0.9.3.1";
     src = fetchurl {
       url = "mirror://cran/src/contrib/ggplot2_0.9.3.1.tar.gz";
@@ -65,7 +99,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ digest plyr gtable reshape2 scales proto ];
   };
 
-  gtable = buildRPackage rec {
+  gtable = buildRPackage {
     name = "gtable-0.1.2";
     src = fetchurl {
       url = "mirror://cran/src/contrib/gtable_0.1.2.tar.gz";
@@ -73,7 +107,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  gtools = buildRPackage rec {
+  gtools = buildRPackage {
     name = "gtools-3.0.0";
     src = fetchurl {
       url = "mirror://cran/src/contrib/gtools_3.0.0.tar.gz";
@@ -81,7 +115,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  gsubfn = buildRPackage rec {
+  gsubfn = buildRPackage {
     name = "gsubfn-0.6-5";
     src = fetchurl {
       url = "mirror://cran/src/contrib/gsubfn_0.6-5.tar.gz";
@@ -90,7 +124,15 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ proto ];
   };
 
-  labeling = buildRPackage rec {
+  iterators = buildRPackage {
+    name = "iterators-1.0.7";
+    src = fetchurl {
+      url = "mirror://cran/src/contrib/iterators_1.0.7.tar.gz";
+      sha256 = "1zwqawhcpi95fx4qqj4cy31v5qln2z503f7cvv9v5ch3ard4xxqv";
+    };
+  };
+
+  labeling = buildRPackage {
     name = "labeling-0.2";
     src = fetchurl {
       url = "mirror://cran/src/contrib/labeling_0.2.tar.gz";
@@ -98,7 +140,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  lars = buildRPackage rec {
+  lars = buildRPackage {
     name = "lars-1.2";
     src = fetchurl {
       url = "mirror://cran/src/contrib/lars_1.2.tar.gz";
@@ -106,7 +148,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LiblineaR = buildRPackage rec {
+  LiblineaR = buildRPackage {
     name = "LiblineaR-1.80-7";
     src = fetchurl {
       url = "mirror://cran/src/contrib/LiblineaR_1.80-7.tar.gz";
@@ -114,7 +156,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  linprog = buildRPackage rec {
+  linprog = buildRPackage {
     name = "linprog-0.9-2";
     src = fetchurl {
       url = "mirror://cran/src/contrib/linprog_0.9-2.tar.gz";
@@ -123,7 +165,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ lpSolve ];
   };
 
-  lpSolve = buildRPackage rec {
+  lpSolve = buildRPackage {
     name = "lpSolve-5.6.7";
     src = fetchurl {
       url = "mirror://cran/src/contrib/lpSolve_5.6.7.tar.gz";
@@ -131,7 +173,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  munsell = buildRPackage rec {
+  munsell = buildRPackage {
     name = "munsell-0.4.2";
     src = fetchurl {
       url = "mirror://cran/src/contrib/munsell_0.4.2.tar.gz";
@@ -140,7 +182,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ colorspace ];
   };
 
-  pamr = buildRPackage rec {
+  pamr = buildRPackage {
     name = "pamr-1.54.1";
     src = fetchurl {
       url = "mirror://cran/src/contrib/pamr_1.54.1.tar.gz";
@@ -148,7 +190,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  penalized = buildRPackage rec {
+  penalized = buildRPackage {
     name = "penalized-0.9-42";
     src = fetchurl {
       url = "mirror://cran/src/contrib/penalized_0.9-42.tar.gz";
@@ -156,15 +198,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  plyr = buildRPackage rec {
-    name = "plyr-1.8";
+  plyr = buildRPackage {
+    name = "plyr-1.8.1";
     src = fetchurl {
-      url = "mirror://cran/src/contrib/plyr_1.8.tar.gz";
-      sha256 = "0bd6861af241e6c5ce777ef3f1b0eb72b31cc026669a68f6250b8ecfadf71a66";
+      url = "mirror://cran/src/contrib/plyr_1.8.1.tar.gz";
+      sha256 = "0f2an3pr7flpng9y9mmrmyh08g3nivi6gdkfnw54arn0wxhkqfcm";
     };
+    propagatedBuildInputs = [ Rcpp ];
   };
 
-  proto = buildRPackage rec {
+  proto = buildRPackage {
     name = "proto-0.3-10";
     src = fetchurl {
       url = "mirror://cran/src/contrib/proto_0.3-10.tar.gz";
@@ -172,7 +215,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  randomForest = buildRPackage rec {
+  randomForest = buildRPackage {
     name = "randomForest-4.6-7";
     src = fetchurl {
       url = "mirror://cran/src/contrib/randomForest_4.6-7.tar.gz";
@@ -181,16 +224,24 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ plyr stringr ];
   };
 
-  reshape2 = buildRPackage rec {
-    name = "reshape2-1.2.2";
+  Rcpp = buildRPackage {
+    name = "Rcpp-0.11.1";
     src = fetchurl {
-      url = "mirror://cran/src/contrib/reshape2_1.2.2.tar.gz";
-      sha256 = "9131025b8f684e1629ab3e2748d4cf2b907b7c89cfbff667c925bc0fb5dfc103";
+      url = "mirror://cran/src/contrib/Rcpp_0.11.1.tar.gz";
+      sha256 = "1ccsvdij6yym9dziqsjf5gr37968imz8i81334vi2fc69z5xzf30";
     };
-    propagatedBuildInputs = [ plyr stringr ];
   };
 
-  RColorBrewer = buildRPackage rec {
+  reshape2 = buildRPackage {
+    name = "reshape2-1.4";
+    src = fetchurl {
+      url = "mirror://cran/src/contrib/reshape2_1.4.tar.gz";
+      sha256 = "0i3bim4clwyfdwwrmszsn9ga5gm4a2sh1i0jmpji3afbxc151yjp";
+    };
+    propagatedBuildInputs = [ plyr stringr Rcpp ];
+  };
+
+  RColorBrewer = buildRPackage {
     name = "RColorBrewer-1.0-5";
     src = fetchurl {
       url = "mirror://cran/src/contrib/RColorBrewer_1.0-5.tar.gz";
@@ -198,7 +249,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  RSQLite = buildRPackage rec {
+  RSQLite = buildRPackage {
     name = "RSQlite-0.11.4";
     src = fetchurl {
       url = "mirror://cran/src/contrib/RSQLite_0.11.4.tar.gz";
@@ -207,7 +258,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DBI ];
   };
 
-  RSQLiteExtfuns = buildRPackage rec {
+  RSQLiteExtfuns = buildRPackage {
     name = "RSQlite.extfuns-0.0.1";
     src = fetchurl {
       url = "mirror://cran/src/contrib/RSQLite.extfuns_0.0.1.tar.gz";
@@ -216,7 +267,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ RSQLite ];
   };
 
-  scales = buildRPackage rec {
+  scales = buildRPackage {
     name = "scales-0.2.3";
     src = fetchurl {
       url = "mirror://cran/src/contrib/scales_0.2.3.tar.gz";
@@ -225,7 +276,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ RColorBrewer stringr dichromat munsell plyr labeling ];
   };
 
-  stringr = buildRPackage rec {
+  stringr = buildRPackage {
     name = "stringr-0.6.2";
     src = fetchurl {
       url = "mirror://cran/src/contrib/stringr_0.6.2.tar.gz";
@@ -233,12 +284,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  sqldf = buildRPackage rec {
+  sqldf = buildRPackage {
     name = "sqldf-0.4-6.4";
     src = fetchurl {
       url = "mirror://cran/src/contrib/sqldf_0.4-6.4.tar.gz";
       sha256 = "6c51e4e48b93310f765c661a1756fe068629da775248d38a98c38f5b6f7511c4";
     };
     propagatedBuildInputs = [ DBI gsubfn proto chron RSQLite RSQLiteExtfuns ];
+  };
+
+  xtable = buildRPackage {
+    name = "xtable-1.7-3";
+    src = fetchurl {
+      url = "mirror://cran/src/contrib/xtable_1.7-3.tar.gz";
+      sha256 = "1rsfq0acf1pvpci3jq9fbhsv6ws4d46yap8m2xjk1cr463m9gdcc";
+    };
   };
 }; in self
