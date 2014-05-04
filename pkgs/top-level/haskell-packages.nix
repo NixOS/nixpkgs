@@ -2092,6 +2092,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   pqueue = callPackage ../development/libraries/haskell/pqueue {};
 
   process = callPackage ../development/libraries/haskell/process {};
+  
+  profiteur = callPackage ../development/tools/haskell/profiteur {};
 
   preludeExtras = callPackage ../development/libraries/haskell/prelude-extras {};
 
