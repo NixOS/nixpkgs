@@ -173,7 +173,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
     vector       = self.vector_0_10_9_1;
     xhtml        = self.xhtml_3000_2_1;
     zlib         = self.zlib_0_5_4_1;
-    cabalInstall = self.cabalInstall_1_20_0_0;
+    cabalInstall = self.cabalInstall_1_20_0_1;
     alex         = self.alex_3_1_3;
     haddock      = self.haddock_2_14_2;
     happy        = self.happy_1_19_3;
@@ -3130,7 +3130,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   cabalInstall_1_18_0_3 = callPackage ../tools/package-management/cabal-install/1.18.0.3.nix {
     Cabal = self.Cabal_1_18_1_3;
   };
-  cabalInstall_1_20_0_0 = callPackage ../tools/package-management/cabal-install/1.20.0.0.nix {
+  cabalInstall_1_20_0_1 = callPackage ../tools/package-management/cabal-install/1.20.0.1.nix {
     Cabal = self.Cabal_1_20_0_0;
   };
   cabalInstall = self.cabalInstall_1_20_0_0;
