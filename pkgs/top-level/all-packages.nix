@@ -1396,7 +1396,7 @@ let
 
   mdbtools = callPackage ../tools/misc/mdbtools { };
 
-  mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix { 
+  mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix {
     inherit (gnome) scrollkeeper;
   };
 
@@ -4279,7 +4279,7 @@ let
   dclib = callPackage ../development/libraries/dclib { };
 
   dillo = callPackage ../applications/networking/browsers/dillo {
-    fltk = fltk13;  
+    fltk = fltk13;
   };
 
   directfb = callPackage ../development/libraries/directfb { };
@@ -6491,7 +6491,7 @@ let
 
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot-pigeonhole { };
 
-  ejabberd = callPackage ../servers/xmpp/ejabberd { 
+  ejabberd = callPackage ../servers/xmpp/ejabberd {
     erlang = erlangR16B02;
   };
 
@@ -10017,11 +10017,11 @@ let
   cinnamon = recurseIntoAttrs rec {
     callPackage = newScope pkgs.cinnamon;
     inherit (gnome3) gnome_common libgnomekbd gnome-menus zenity;
-    
+
     muffin = callPackage ../desktops/cinnamon/muffin.nix { } ;
-    
+
     cinnamon-control-center = callPackage ../desktops/cinnamon/cinnamon-control-center.nix{ };
-    
+
     cinnamon-settings-daemon = callPackage ../desktops/cinnamon/cinnamon-settings-daemon.nix{ };
 
     cinnamon-session = callPackage ../desktops/cinnamon/cinnamon-session.nix{ } ;
