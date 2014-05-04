@@ -1,15 +1,16 @@
-{ cabal, Cabal, cmdargs, either, filepath, lens, strict, tasty
-, tastyGolden, transformers, unorderedContainers
+{ cabal, Cabal, cabalLenses, cmdargs, either, filepath, lens
+, strict, tasty, tastyGolden, transformers, unorderedContainers
 }:
 
 cabal.mkDerivation (self: {
   pname = "cabal-bounds";
-  version = "0.4.1";
-  sha256 = "09l9ii26li178sw0rm49w4dhfkf46g4sjjdy4frmc74isvnzkpwj";
+  version = "0.5";
+  sha256 = "0sx6vyf3p62khg7qv7nwgd8fns6dsfpw34gpl7zmb6n0c1kjj60b";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    Cabal cmdargs either lens strict transformers unorderedContainers
+    Cabal cabalLenses cmdargs either lens strict transformers
+    unorderedContainers
   ];
   testDepends = [ filepath tasty tastyGolden ];
   jailbreak = true;
