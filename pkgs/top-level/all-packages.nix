@@ -6428,16 +6428,19 @@ let
 
   ### DEVELOPMENT / R MODULES
 
-  buildRPackage = import ../development/r-modules/generic R;
+  R = callPackage ../applications/science/math/R {
+    inherit (xlibs) libX11 libXt;
+    texLive = texLiveAggregationFun { paths = [ texLive texLiveExtra ]; };
+  };
+
+  rWrapper = callPackage ../development/r-modules/generic/wrapper.nix {
+    packages = [];
+  };
 
   rPackages = recurseIntoAttrs (import ./r-packages.nix {
     inherit pkgs;
     overrides = (config.rPackageOverrides or (p: {})) pkgs;
   });
-
-  rWrapper = callPackage ../development/r-modules/generic/wrapper.nix {
-    packages = [];
-  };
 
   ### SERVERS
 
@@ -10448,11 +10451,6 @@ let
 
   pspp = callPackage ../applications/science/math/pssp {
     inherit (gnome) libglade gtksourceview;
-  };
-
-  R = callPackage ../applications/science/math/R {
-    inherit (xlibs) libX11 libXt;
-    texLive = texLiveAggregationFun { paths = [ texLive texLiveExtra ]; };
   };
 
   singular = callPackage ../applications/science/math/singular {};
