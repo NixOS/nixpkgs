@@ -39,7 +39,7 @@ let
 
   inherit (pkgs) R fetchurl stdenv;
 
-  buildRPackage = import ../development/r-modules/generic R;
+  buildRPackage = import ./generic R;
 
   derive = { name, version, sha256, depends ? [] }: buildRPackage {
     name = "${name}-${version}";

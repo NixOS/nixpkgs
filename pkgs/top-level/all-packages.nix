@@ -6437,7 +6437,7 @@ let
     packages = [];
   };
 
-  rPackages = recurseIntoAttrs (import ./r-packages.nix {
+  rPackages = recurseIntoAttrs (import ../development/r-modules/cran-packages.nix {
     inherit pkgs;
     overrides = (config.rPackageOverrides or (p: {})) pkgs;
   });
