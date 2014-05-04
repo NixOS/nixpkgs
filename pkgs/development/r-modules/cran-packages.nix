@@ -39,7 +39,7 @@ let
 
   inherit (pkgs) R fetchurl stdenv;
 
-  buildRPackage = import ./generic R;
+  buildRPackage = import ./generic-builder.nix R;
 
   derive = { name, version, sha256, depends ? [] }: buildRPackage {
     name = "${name}-${version}";
@@ -5510,7 +5510,7 @@ let self = _self // overrides; _self = with self; {
   XLConnect = derive { name="XLConnect"; version="0.2-7"; sha256="15vqjlcdh51y3riqaifvj1gk8sfl657dyicbwagnwqq4vsniqihi"; depends=[rJava]; };
   xlsx = derive { name="xlsx"; version="0.5.5"; sha256="0dl0j0rk9m0chv9yxx92gbbfv9mf5igvk75jrpm2105l2cq5j8jc"; depends=[rJava xlsxjars]; };
   xlsxjars = derive { name="xlsxjars"; version="0.6.0"; sha256="0mjfvd433iz742gn3avaq48172yi5hhd0ajc3v22y1j4k9w82pr7"; depends=[rJava]; };
-  XML = derive { name="XML"; version="3.98-1.1"; sha256="0n9i6746211wihglbpsgalj2cyvggn4rv6a4fbavqwnjw3h1hwwl"; depends=[]; };
+  XML = derive { name="XML"; version="3.98-1.1"; sha256="0n9i6746211wihglbpsgalj2cyvggn4rv6a4fbavqwnjw3h1hwwl"; depends=[ pkgs.libxml2 ]; };
   XML2R = derive { name="XML2R"; version="0.0.6"; sha256="0azfh950r2b7ck3n1vzk3mdll7zy844nx3mbk676jxnj8gg7nxk5"; depends=[XML RCurl plyr]; };
   XNomial = derive { name="XNomial"; version="1.0.1"; sha256="134bwglqhgah7v3w6ir65dch2dwp5h4vldw521ba74l5v9b2j2h4"; depends=[]; };
   xoi = derive { name="xoi"; version="0.61-1"; sha256="0ypy0rb0f0bns41vjzyln04k3hypgr3wysqbdi0b0r14ip5rb47k"; depends=[qtl]; };

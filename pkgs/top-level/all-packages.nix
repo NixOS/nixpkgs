@@ -6434,7 +6434,7 @@ let
     withRecommendedPackages = false;
   };
 
-  rWrapper = callPackage ../development/r-modules/wrapper {
+  rWrapper = callPackage ../development/r-modules/wrapper.nix {
     # Those packages are usually installed as part of the R build.
     recommendedPackages = with rPackages; [ MASS lattice Matrix nlme
       survival boot cluster codetools foreign KernSmooth rpart class
