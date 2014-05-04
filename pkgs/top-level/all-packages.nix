@@ -6435,6 +6435,10 @@ let
     overrides = (config.rPackageOverrides or (p: {})) pkgs;
   });
 
+  rWrapper = callPackage ../development/r-modules/generic/wrapper.nix {
+    packages = [];
+  };
+
   ### SERVERS
 
   rdf4store = callPackage ../servers/http/4store { };
