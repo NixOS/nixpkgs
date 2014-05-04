@@ -502,8 +502,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   acidState = callPackage ../development/libraries/haskell/acid-state {};
 
-  Agda = callPackage ../development/libraries/haskell/Agda {};
-
   accelerate = callPackage ../development/libraries/haskell/accelerate {};
 
   accelerateCuda = callPackage ../development/libraries/haskell/accelerate-cuda {};
@@ -2923,8 +2921,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   # Compilers.
 
-  AgdaExecutable = callPackage ../development/compilers/agda/agda-executable.nix {};
-  AgdaStdlib = callPackage ../development/compilers/agda/agda-stdlib.nix {};
+  Agda = callPackage ../development/compilers/agda/agda.nix {};
+  AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {};
 
   uhc = callPackage ../development/compilers/uhc {};
 
