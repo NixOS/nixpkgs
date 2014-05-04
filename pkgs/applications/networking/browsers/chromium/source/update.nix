@@ -1,7 +1,9 @@
 { system ? builtins.currentSystem }:
 
 let
-  inherit (import <nixpkgs> {}) lib writeText stdenv;
+  inherit (import <nixpkgs> {
+    inherit system;
+  }) lib writeText stdenv;
 
   sources = if builtins.pathExists ./sources.nix
             then import ./sources.nix
