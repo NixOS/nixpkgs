@@ -134,10 +134,14 @@ let
         -exec chmod u+w {} +
     '';
 
-    postPatch = ''
+    postPatch = let
+      toPatch = if versionOlder source.version "36.0.0.0"
+                then "content/browser/browser_main_loop.cc"
+                else "sandbox/linux/suid/client/setuid_sandbox_client.cc";
+    in ''
       sed -i -e '/base::FilePath exe_dir/,/^ *} *$/c \
         sandbox_binary = base::FilePath(getenv("CHROMIUM_SANDBOX_BINARY_PATH"));
-      ' content/browser/browser_main_loop.cc
+      ' ${toPatch}
     '';
 
     gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {

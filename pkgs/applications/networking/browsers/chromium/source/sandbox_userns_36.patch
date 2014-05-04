@@ -1,4 +1,4 @@
-commit 3c80951744293441c2e66345ef7d82c199f4600e
+commit c66c07a2ebcd1b68f412a5a2945fef15b3ba567c
 Author: aszlig <aszlig@redmoonstudios.org>
 Date:   Thu May 16 14:17:56 2013 +0200
 
@@ -153,52 +153,28 @@ index fe4da1a..7f118b8 100644
        // While this isn't strictly disk IO, waiting for another process to
        // finish is the sort of thing ThreadRestrictions is trying to prevent.
 diff --git a/content/browser/zygote_host/zygote_host_impl_linux.cc b/content/browser/zygote_host/zygote_host_impl_linux.cc
-index 0106a7a..a0465af 100644
+index 94bdc16..3398615 100644
 --- a/content/browser/zygote_host/zygote_host_impl_linux.cc
 +++ b/content/browser/zygote_host/zygote_host_impl_linux.cc
-@@ -124,25 +124,31 @@ void ZygoteHostImpl::Init(const std::string& sandbox_cmd) {
+@@ -143,6 +143,9 @@ void ZygoteHostImpl::Init(const std::string& sandbox_cmd) {
+   // A non empty sandbox_cmd means we want a SUID sandbox.
+   using_suid_sandbox_ = !sandbox_cmd.empty();
  
-   sandbox_binary_ = sandbox_cmd.c_str();
- 
--  // A non empty sandbox_cmd means we want a SUID sandbox.
--  using_suid_sandbox_ = !sandbox_cmd.empty();
 +  bool userns_sandbox = false;
 +  const std::vector<std::string> cmd_line_unwrapped(cmd_line.argv());
- 
--  if (using_suid_sandbox_) {
-+  if (!sandbox_cmd.empty()) {
-     struct stat st;
-     if (stat(sandbox_binary_.c_str(), &st) != 0) {
-       LOG(FATAL) << "The SUID sandbox helper binary is missing: "
-                  << sandbox_binary_ << " Aborting now.";
-     }
- 
--    if (access(sandbox_binary_.c_str(), X_OK) == 0 &&
--        (st.st_uid == 0) &&
--        (st.st_mode & S_ISUID) &&
--        (st.st_mode & S_IXOTH)) {
-+    if (access(sandbox_binary_.c_str(), X_OK) == 0) {
-+      using_suid_sandbox_ = true;
 +
-       cmd_line.PrependWrapper(sandbox_binary_);
+   // Start up the sandbox host process and get the file descriptor for the
+   // renderers to talk to it.
+   const int sfd = RenderSandboxHostLinux::GetInstance()->GetRendererSocket();
+@@ -162,11 +165,24 @@ void ZygoteHostImpl::Init(const std::string& sandbox_cmd) {
+     dummy_fd.reset(socket(AF_UNIX, SOCK_DGRAM, 0));
+     CHECK_GE(dummy_fd.get(), 0);
+     fds_to_map.push_back(std::make_pair(dummy_fd.get(), kZygoteIdFd));
++    userns_sandbox = sandbox_client->IsNoSuid();
+   }
  
-       scoped_ptr<sandbox::SetuidSandboxClient>
-           sandbox_client(sandbox::SetuidSandboxClient::Create());
-       sandbox_client->SetupLaunchEnvironment();
-+
-+      if (!((st.st_uid == 0) &&
-+            (st.st_mode & S_ISUID) &&
-+            (st.st_mode & S_IXOTH))) {
-+        userns_sandbox = true;
-+        sandbox_client->SetNoSuid();
-+      }
-     } else {
-       LOG(FATAL) << "The SUID sandbox helper binary was found, but is not "
-                     "configured correctly. Rather than run without sandboxing "
-@@ -167,7 +173,19 @@ void ZygoteHostImpl::Init(const std::string& sandbox_cmd) {
-   base::LaunchOptions options;
+   base::ProcessHandle process = -1;
    options.fds_to_remap = &fds_to_map;
-   options.allow_new_privs = using_suid_sandbox_;  // Don't PR_SET_NO_NEW_PRIVS.
 +  if (userns_sandbox)
 +    options.new_user_namespace = true;
    base::LaunchProcess(cmd_line.argv(), options, &process);
@@ -213,13 +189,13 @@ index 0106a7a..a0465af 100644
 +  }
 +
    CHECK(process != -1) << "Failed to launch zygote process";
+   dummy_fd.reset();
  
-   if (using_suid_sandbox_) {
 diff --git a/content/zygote/zygote_main_linux.cc b/content/zygote/zygote_main_linux.cc
-index 5dc09fa..4e09bc4 100644
+index cc28a6f..e8f665a 100644
 --- a/content/zygote/zygote_main_linux.cc
 +++ b/content/zygote/zygote_main_linux.cc
-@@ -397,6 +397,13 @@ static bool EnterSuidSandbox(sandbox::SetuidSandboxClient* setuid_sandbox) {
+@@ -389,6 +389,13 @@ static bool EnterSuidSandbox(sandbox::SetuidSandboxClient* setuid_sandbox) {
      CHECK(CreateInitProcessReaper());
    }
  
@@ -234,10 +210,10 @@ index 5dc09fa..4e09bc4 100644
    // Previously, we required that the binary be non-readable. This causes the
    // kernel to mark the process as non-dumpable at startup. The thinking was
 diff --git a/sandbox/linux/suid/client/setuid_sandbox_client.cc b/sandbox/linux/suid/client/setuid_sandbox_client.cc
-index 8ed1a97..cbdfadc 100644
+index 3300cb4..4bfa516 100644
 --- a/sandbox/linux/suid/client/setuid_sandbox_client.cc
 +++ b/sandbox/linux/suid/client/setuid_sandbox_client.cc
-@@ -173,6 +173,10 @@ bool SetuidSandboxClient::IsInNewNETNamespace() const {
+@@ -212,6 +212,10 @@ bool SetuidSandboxClient::IsInNewNETNamespace() const {
    return env_->HasVar(kSandboxNETNSEnvironmentVarName);
  }
  
@@ -248,20 +224,34 @@ index 8ed1a97..cbdfadc 100644
  bool SetuidSandboxClient::IsSandboxed() const {
    return sandboxed_;
  }
-@@ -182,4 +186,8 @@ void SetuidSandboxClient::SetupLaunchEnvironment() {
-   SetSandboxAPIEnvironmentVariable(env_);
+@@ -267,8 +271,7 @@ void SetuidSandboxClient::PrependWrapper(base::CommandLine* cmd_line,
+                                     "LinuxSUIDSandboxDevelopment.";
+   }
+ 
+-  if (access(sandbox_binary.c_str(), X_OK) != 0 || (st.st_uid != 0) ||
+-      ((st.st_mode & S_ISUID) == 0) || ((st.st_mode & S_IXOTH)) == 0) {
++  if (access(sandbox_binary.c_str(), X_OK) != 0) {
+     LOG(FATAL) << "The SUID sandbox helper binary was found, but is not "
+                   "configured correctly. Rather than run without sandboxing "
+                   "I'm aborting now. You need to make sure that "
+@@ -284,6 +287,12 @@ void SetuidSandboxClient::PrependWrapper(base::CommandLine* cmd_line,
+     options->allow_new_privs = true;
+     UnsetExpectedEnvironmentVariables(&options->environ);
+   }
++
++  if (!((st.st_uid == 0) &&
++        (st.st_mode & S_ISUID) &&
++        (st.st_mode & S_IXOTH))) {
++    env_->SetVar(kSandboxNoSuidVarName, "1");
++  }
  }
  
-+void SetuidSandboxClient::SetNoSuid() {
-+  env_->SetVar(kSandboxNoSuidVarName, "1");
-+}
-+
- }  // namespace sandbox
+ void SetuidSandboxClient::SetupLaunchEnvironment() {
 diff --git a/sandbox/linux/suid/client/setuid_sandbox_client.h b/sandbox/linux/suid/client/setuid_sandbox_client.h
-index 0f6db7a..c629391 100644
+index 332c63b..4f603f8 100644
 --- a/sandbox/linux/suid/client/setuid_sandbox_client.h
 +++ b/sandbox/linux/suid/client/setuid_sandbox_client.h
-@@ -46,6 +46,8 @@ class SANDBOX_EXPORT SetuidSandboxClient {
+@@ -70,6 +70,8 @@ class SANDBOX_EXPORT SetuidSandboxClient {
    bool IsInNewPIDNamespace() const;
    // Did the setuid helper create a new network namespace ?
    bool IsInNewNETNamespace() const;
@@ -270,15 +260,6 @@ index 0f6db7a..c629391 100644
    // Are we done and fully sandboxed ?
    bool IsSandboxed() const;
  
-@@ -53,6 +55,8 @@ class SANDBOX_EXPORT SetuidSandboxClient {
-   // helper.
-   void SetupLaunchEnvironment();
- 
-+  void SetNoSuid();
-+
-  private:
-   // Holds the environment. Will never be NULL.
-   base::Environment* env_;
 diff --git a/sandbox/linux/suid/common/sandbox.h b/sandbox/linux/suid/common/sandbox.h
 index 9345287..2db659e 100644
 --- a/sandbox/linux/suid/common/sandbox.h
