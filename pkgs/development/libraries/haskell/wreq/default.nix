@@ -17,6 +17,7 @@ cabal.mkDerivation (self: {
     aeson doctest filepath httpClient httpTypes HUnit lens temporary
     testFramework testFrameworkHunit text
   ];
+  doCheck = false;
   meta = {
     homepage = "http://www.serpentine.com/wreq";
     description = "An easy-to-use HTTP client library";
