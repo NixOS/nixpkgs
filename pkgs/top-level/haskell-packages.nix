@@ -2720,6 +2720,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   vectorThUnbox = callPackage ../development/libraries/haskell/vector-th-unbox {};
 
+  vinyl = callPackage ../development/libraries/haskell/vinyl {};
+
   void = callPackage ../development/libraries/haskell/void {};
 
   vty = callPackage ../development/libraries/haskell/vty {};
