@@ -739,6 +739,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   cautiousFile = callPackage ../development/libraries/haskell/cautious-file {};
 
+  CCdelcont = callPackage ../development/libraries/haskell/CC-delcont {};
+
   cereal = callPackage ../development/libraries/haskell/cereal {};
 
   cerealConduit = callPackage ../development/libraries/haskell/cereal-conduit {};
@@ -816,9 +818,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
 
+  composition = callPackage ../development/libraries/haskell/composition {};
+
   concatenative = callPackage ../development/libraries/haskell/concatenative {};
 
   concreteTyperep = callPackage ../development/libraries/haskell/concreteTyperep {};
+
+  cond = callPackage ../development/libraries/haskell/cond {};
 
   conduit = callPackage ../development/libraries/haskell/conduit {};
 
@@ -1011,6 +1017,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   dns = callPackage ../development/libraries/haskell/dns {};
 
   doctest = callPackage ../development/libraries/haskell/doctest {};
+
+  doctestProp = callPackage ../development/libraries/haskell/doctest-prop {};
 
   dotgen = callPackage ../development/libraries/haskell/dotgen {};
 
@@ -1616,6 +1624,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
+  kanExtensions = callPackage ../development/libraries/haskell/kan-extensions {};
+
   kansasLava = callPackage ../development/libraries/haskell/kansas-lava {};
 
   keys = callPackage ../development/libraries/haskell/keys {};
@@ -1774,6 +1784,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   monadControl = callPackage ../development/libraries/haskell/monad-control {};
 
+  monadCoroutine = callPackage ../development/libraries/haskell/monad-coroutine {};
+
   monadcryptorandom = callPackage ../development/libraries/haskell/monadcryptorandom {};
 
   monadExtras = callPackage ../development/libraries/haskell/monad-extras {};
@@ -1790,6 +1802,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   monadPar_0_3_4_6 = callPackage ../development/libraries/haskell/monad-par/0.3.4.6.nix {};
   monadPar = self.monadPar_0_3_4_6;
 
+  monadParallel = callPackage ../development/libraries/haskell/monad-parallel {};
+
   monadParExtras = callPackage ../development/libraries/haskell/monad-par-extras {};
 
   monadPeel = callPackage ../development/libraries/haskell/monad-peel {};
@@ -1797,6 +1811,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   MonadPrompt = callPackage ../development/libraries/haskell/MonadPrompt {};
 
   MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
+
+  monadStm = callPackage ../development/libraries/haskell/monad-stm {};
 
   monadsTf = callPackage ../development/libraries/haskell/monads-tf {};
 
@@ -1833,6 +1849,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   mueval = callPackage ../development/libraries/haskell/mueval {};
 
   multiarg = callPackage ../development/libraries/haskell/multiarg {};
+
+  multimap = callPackage ../development/libraries/haskell/multimap {};
 
   multiplate = callPackage ../development/libraries/haskell/multiplate {};
 
@@ -2189,6 +2207,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   reflection = callPackage ../development/libraries/haskell/reflection {};
 
+  regexApplicative = callPackage ../development/libraries/haskell/regex-applicative {};
+
   regexBase_0_72_0_2 = callPackage ../development/libraries/haskell/regex-base/0.72.0.2.nix {};
   regexBase_0_93_1   = callPackage ../development/libraries/haskell/regex-base/0.93.1.nix {};
   regexBase_0_93_2   = callPackage ../development/libraries/haskell/regex-base/0.93.2.nix {};
@@ -2240,6 +2260,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   retry = callPackage ../development/libraries/haskell/retry {};
 
   rethinkdb = callPackage ../development/libraries/haskell/rethinkdb {};
+
+  rex = callPackage ../development/libraries/haskell/rex {};
 
   rfc5051 = callPackage ../development/libraries/haskell/rfc5051 {};
 
@@ -2320,6 +2342,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   socks = callPackage ../development/libraries/haskell/socks {};
 
   sparse = callPackage ../development/libraries/haskell/sparse {};
+
+  speculation = callPackage ../development/libraries/haskell/speculation {};
 
   spoon = callPackage ../development/libraries/haskell/spoon {};
 
@@ -2443,6 +2467,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   stmConduit = callPackage ../development/libraries/haskell/stm-conduit {};
 
+  stmStats = callPackage ../development/libraries/haskell/stm-stats {};
+
   storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
 
   storableRecord = callPackage ../development/libraries/haskell/storable-record {};
@@ -2554,6 +2580,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   thespian = callPackage ../development/libraries/haskell/thespian {};
 
   thDesugar = callPackage ../development/libraries/haskell/th-desugar {};
+
+  thExpandSyns = callPackage ../development/libraries/haskell/th-expand-syns {};
 
   thExtras = callPackage ../development/libraries/haskell/th-extras {};
 
