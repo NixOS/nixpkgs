@@ -15,14 +15,14 @@ assert sslSupport -> openssl != null;
 assert saslSupport -> cyrus_sasl != null;
 
 let
-  version = "1.5.22";
+  version = "1.5.23";
 in
 stdenv.mkDerivation rec {
   name = "mutt-${version}";
   
   src = fetchurl {
-    url = "ftp://ftp.mutt.org/mutt/devel/${name}.tar.gz";
-    sha256 = "19zk81spnb0gc8y5mwmcfn33g77wv1xz5bmgic8aan07xn8fislg";
+    url = "mirror://sourceforge/mutt/${name}.tar.gz";
+    sha256 = "0dzx4qk50pjfsb6cs5jahng96a52k12f7pm0sc78iqdrawg71w1s";
   };
 
   buildInputs = [
