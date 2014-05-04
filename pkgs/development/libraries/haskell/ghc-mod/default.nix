@@ -31,6 +31,7 @@ cabal.mkDerivation (self: {
     #! ${self.stdenv.shell}
     COMMAND=\$1
     shift
+    export LD_LIBRARY_PATH=$out/lib/ghc-${self.ghc.version}/${self.pname}-${self.version}
     eval exec $out/bin/.ghc-mod-wrapped \$COMMAND \$( ${self.ghc.GHCGetPackages} ${self.ghc.version} | tr " " "\n" | tail -n +2 | paste -d " " - - | sed 's/.*/-g "&"/' | tr "\n" " ") "\$@"
     EOF
     chmod +x $out/bin/ghc-mod

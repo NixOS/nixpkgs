@@ -5,6 +5,9 @@ cabal.mkDerivation (self: {
   version = "0.1.4";
   sha256 = "1wf3pf2k4i6jvpfsjlxdj6v53qd33jj1z1ipaf3p47glgx4xw3lm";
   buildDepends = [ curl feed tagsoup xml ];
+  preConfigure = ''
+    sed -i -e 's/0\.13/0.14/' download-curl.cabal
+  '';
   meta = {
     homepage = "http://code.haskell.org/~dons/code/download-curl";
     description = "High-level file download based on URLs";
