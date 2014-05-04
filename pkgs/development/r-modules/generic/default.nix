@@ -1,17 +1,9 @@
 R:
 
-{ buildInputs ? [], ... } @ attrs:
+{ name, buildInputs ? [], ... } @ attrs:
 
-R.stdenv.mkDerivation (
-  {
-  }
-  //
-  attrs
-  //
-  {
-    name = "r-" + attrs.name;
-    builder = ./builder.sh;
-    buildInputs = buildInputs ++ [ R ];
-    phases = [ "installPhase" "fixupPhase" ];
-  }
-)
+R.stdenv.mkDerivation (attrs // {
+  name = "r-" + name;
+  builder = ./builder.sh;
+  buildInputs = buildInputs ++ [ R ];
+})
