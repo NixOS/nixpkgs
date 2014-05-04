@@ -1363,6 +1363,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   hexpat = callPackage ../development/libraries/haskell/hexpat {};
 
+  hourglass = callPackage ../development/libraries/haskell/hourglass {};
+
   hseCpp = callPackage ../development/libraries/haskell/hse-cpp {};
 
   hsimport = callPackage ../development/libraries/haskell/hsimport {};
