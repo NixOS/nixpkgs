@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ network ];
+  jailbreak = true;
   meta = {
     description = "A simple web-server with an interact style API";
     license = self.stdenv.lib.licenses.bsd3;
