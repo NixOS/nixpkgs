@@ -62,6 +62,7 @@ in
         Defaults:root,%wheel env_keep+=NIX_CONF_DIR
         Defaults:root,%wheel env_keep+=NIX_PATH
         Defaults:root,%wheel env_keep+=TERMINFO_DIRS
+        Defaults:root,%wheel env_keep+=TERMINFO
 
         # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
         Defaults env_keep+=SSH_AUTH_SOCK
