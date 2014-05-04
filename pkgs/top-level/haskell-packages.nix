@@ -719,6 +719,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   cabalFileTh = callPackage ../development/libraries/haskell/cabal-file-th {};
 
+  cabalLenses = callPackage ../development/libraries/haskell/cabal-lenses {};
+
   cabalMacosx = callPackage ../development/libraries/haskell/cabal-macosx {};
 
   cairo = callPackage ../development/libraries/haskell/cairo {
