@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "SafeSemaphore";
-  version = "0.10.0";
-  sha256 = "0zjm99jqkbn99p5d3mdggij4b4jfpz4fk1rwpd48ld4vmzzqh92c";
+  version = "0.10.1";
+  sha256 = "0rpg9j6fy70i0b9dkrip9d6wim0nac0snp7qzbhykjkqlcvvgr91";
   buildDepends = [ stm ];
   testDepends = [ HUnit ];
   meta = {
