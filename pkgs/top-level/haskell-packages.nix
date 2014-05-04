@@ -2818,10 +2818,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
   word8 = callPackage ../development/libraries/haskell/word8 {};
 
   wreq = callPackage ../development/libraries/haskell/wreq {
-    aeson = self.aeson.override { attoparsec = self.attoparsec_0_11_2_1; };
-    attoparsec = self.attoparsec_0_11_2_1;
+    aeson = self.aeson.override { attoparsec = self.attoparsec_0_11_3_0; };
+    attoparsec = self.attoparsec_0_11_3_0;
     lens = self.lens.override {
-      aeson = self.aeson.override { attoparsec = self.attoparsec_0_11_2_1; };
+      aeson = self.aeson.override { attoparsec = self.attoparsec_0_11_3_0; };
     };
   };
 
