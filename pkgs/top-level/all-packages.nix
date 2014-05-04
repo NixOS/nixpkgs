@@ -6431,9 +6431,15 @@ let
   R = callPackage ../applications/science/math/R {
     inherit (xlibs) libX11 libXt;
     texLive = texLiveAggregationFun { paths = [ texLive texLiveExtra ]; };
+    withRecommendedPackages = false;
   };
 
-  rWrapper = callPackage ../development/r-modules/generic/wrapper.nix {
+  rWrapper = callPackage ../development/r-modules/wrapper {
+    # Those packages are usually installed as part of the R build.
+    recommendedPackages = with rPackages; [ MASS lattice Matrix nlme
+      survival boot cluster codetools foreign KernSmooth rpart class
+      nnet spatial mgcv ];
+    # Override this attribute to register additional libraries.
     packages = [];
   };
 

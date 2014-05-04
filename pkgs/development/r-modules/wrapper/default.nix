@@ -1,9 +1,9 @@
-{ stdenv, R, packages, makeWrapper }:
+{ stdenv, R, makeWrapper, recommendedPackages, packages }:
 
 stdenv.mkDerivation {
   name = R.name + "-wrapper";
 
-  buildInputs = [makeWrapper R] ++ packages;
+  buildInputs = [makeWrapper R] ++ recommendedPackages ++ packages;
 
   unpackPhase = ":";
 
