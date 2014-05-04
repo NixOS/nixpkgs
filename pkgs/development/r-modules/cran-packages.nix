@@ -48,6 +48,7 @@ let
       inherit sha256;
     };
     propagatedBuildInputs = depends;
+    meta.homepage = "http://cran.r-project.org/web/packages/${name}/";
   };
 
 in
