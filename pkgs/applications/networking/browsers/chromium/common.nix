@@ -148,6 +148,7 @@ let
       use_gconf = gnomeSupport;
       use_gio = gnomeSupport;
       use_pulseaudio = pulseSupport;
+      linux_link_pulseaudio = pulseSupport;
       disable_nacl = !enableNaCl;
       use_openssl = useOpenSSL;
       selinux = enableSELinux;
