@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "1yp8895qvxcmai0hvxdq77qss9cia2f9fyn6rm0hln3rcx8n53xm";
   buildDepends = [ deepseq hashable text ];
   testDepends = [ HUnit testFramework testFrameworkHunit text ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/basvandijk/case-insensitive";
     description = "Case insensitive string comparison";
