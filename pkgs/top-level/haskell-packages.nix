@@ -2681,6 +2681,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
 
+  unixMemory = callPackage ../development/libraries/haskell/unix-memory {};
+
   unixProcessConduit = callPackage ../development/libraries/haskell/unix-process-conduit {};
 
   unixTime = callPackage ../development/libraries/haskell/unix-time {};
