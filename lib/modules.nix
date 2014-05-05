@@ -12,8 +12,26 @@ rec {
      and ‘config’: the nested set of all option values. */
   evalModules = { modules, prefix ? [], args ? {}, check ? true }:
     let
-      args' = args // { lib = import ./.; } // result;
-      closed = closeModules modules args';
+      internalModule = {
+        _file = ./modules.nix;
+
+        key = ./modules.nix;
+
+        options = {
+          __internal.args = mkOption {
+            description = "Arguments passed to each module.";
+
+            type = types.attrsOf types.unspecified;
+
+            internal = true;
+          };
+        };
+
+        config = {
+          __internal.args = args;
+        };
+      };
+      closed = closeModules (modules ++ [ internalModule ]) { inherit config options; lib = import ./.; };
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
       # the most sensible policy.
@@ -74,7 +92,16 @@ rec {
         config = removeAttrs m ["key" "_file" "require" "imports"];
       };
 
-  applyIfFunction = f: arg: if isFunction f then f arg else f;
+  applyIfFunction = f: arg@{ config, options, lib }: if isFunction f then
+    let
+      requiredArgs = builtins.attrNames (builtins.functionArgs f);
+      extraArgs = builtins.listToAttrs (map (name: {
+        inherit name;
+        value = config.__internal.args.${name};
+      }) requiredArgs);
+    in f (extraArgs // arg)
+  else
+    f;
 
   /* Merge a list of modules.  This will recurse over the option
      declarations in all modules, combining them into a single set.
