@@ -13,7 +13,7 @@ with lib;
 
       unitConfig = {
         DefaultDependencies = false;
-        ConditionVirtualization = "!systemd-nspawn";
+        ConditionPathExists = "/dev/rtc";
       };
 
       serviceConfig = {
