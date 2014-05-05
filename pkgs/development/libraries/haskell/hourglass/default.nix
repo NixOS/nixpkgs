@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hourglass";
-  version = "0.1.1";
-  sha256 = "1mxi98l9nsnddkkd35r70l1y04wq0lh6xsapjbkz411q5045wfk7";
+  version = "0.1.2";
+  sha256 = "18jvl4f8vfabvd9vlhxjjlswc80x8w4h6gdflvzdkjrknnyk118j";
   buildDepends = [ deepseq ];
   testDepends = [
     deepseq HUnit mtl QuickCheck testFramework testFrameworkHunit
