@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     installTargets="install install-tex";
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     homepage = "http://www.gnu.org/software/texinfo/";
