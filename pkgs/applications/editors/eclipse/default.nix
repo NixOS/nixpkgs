@@ -176,6 +176,22 @@ in {
         };
   };
 
+  eclipse_cpp_43 = buildEclipse {
+    name = "eclipse-cpp-4.3.2";
+    description = "Eclipse IDE for C/C++ Developers";
+    src =
+      if stdenv.system == "x86_64-linux" then
+        fetchurl {
+          url = http://www.mirrorservice.org/sites/download.eclipse.org/eclipseMirror/technology/epp/downloads/release/kepler/SR2/eclipse-cpp-kepler-SR2-linux-gtk-x86_64.tar.gz;
+          sha256 = "16zhjm6bx78263b1clg75kfiliahkhwg0k116vp9fj039nlpc30l";
+        }
+      else
+        fetchurl {
+          url = http://www.mirrorservice.org/sites/download.eclipse.org/eclipseMirror/technology/epp/downloads/release/kepler/SR2/eclipse-cpp-kepler-SR2-linux-gtk.tar.gz;
+          sha256 = "0d6jlj7hwz8blx6csrlyi2h2prql0wckbh7ihwjmgclwpcpj84g6";
+        };
+  };
+
   eclipse_sdk_421 = buildEclipse {
     name = "eclipse-sdk-4.2.1";
     description = "Eclipse Classic";
