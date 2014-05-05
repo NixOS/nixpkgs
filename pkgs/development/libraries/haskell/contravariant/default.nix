@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "contravariant";
-  version = "0.5";
-  sha256 = "0jw66irh3mjpbd25jh4pzy73jxfaghvlqkngqa1vd0v2i99j6sap";
+  version = "0.5.2";
+  sha256 = "05lnipshhjh8ld0c24h675rgljr54203vv9a4fsivw4asaj24q7y";
   buildDepends = [ tagged transformers transformersCompat ];
   meta = {
     homepage = "http://github.com/ekmett/contravariant/";
