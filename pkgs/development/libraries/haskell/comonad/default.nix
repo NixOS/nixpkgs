@@ -1,13 +1,13 @@
-{ cabal, contravariant, distributive, doctest, filepath, mtl
-, semigroups, tagged, transformers
+{ cabal, contravariant, distributive, doctest, filepath, semigroups
+, tagged, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "comonad";
-  version = "4.0.1";
-  sha256 = "1ib3spgyjbdsnpbz4alaqb1m13v48l5dpv7s68c0mi2nyjkli7lx";
+  version = "4.2";
+  sha256 = "161dgmjfff85sj6yijzgzyb4dvnn1zsm3q5q96qwypynj0am5sr7";
   buildDepends = [
-    contravariant distributive mtl semigroups tagged transformers
+    contravariant distributive semigroups tagged transformers
   ];
   testDepends = [ doctest filepath ];
   meta = {
