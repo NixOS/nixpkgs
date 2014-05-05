@@ -9139,6 +9139,8 @@ let
 
   seq24 = callPackage ../applications/audio/seq24 { };
 
+  setbfree = callPackage ../applications/audio/setbfree { };
+
   sflphone = callPackage ../applications/networking/instant-messengers/sflphone {
     gtk = gtk3;
   };
