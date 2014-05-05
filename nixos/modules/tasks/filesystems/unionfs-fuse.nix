@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  config = pkgs.lib.mkMerge [
-    (pkgs.lib.mkIf (pkgs.lib.any (fs: fs == "unionfs-fuse") config.boot.initrd.supportedFilesystems) {
+  config = lib.mkMerge [
+    (lib.mkIf (lib.any (fs: fs == "unionfs-fuse") config.boot.initrd.supportedFilesystems) {
       boot.initrd.kernelModules = [ "fuse" ];
   
       boot.initrd.extraUtilsCommands = ''
@@ -17,7 +17,7 @@
           ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
         '';
     })
-    (pkgs.lib.mkIf (pkgs.lib.any (fs: fs == "unionfs-fuse") config.boot.supportedFilesystems) {
+    (lib.mkIf (lib.any (fs: fs == "unionfs-fuse") config.boot.supportedFilesystems) {
       system.fsPackages = [ pkgs.unionfs-fuse ];
     })
   ];
