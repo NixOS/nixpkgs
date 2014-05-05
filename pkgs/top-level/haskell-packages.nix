@@ -2500,6 +2500,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   systemPosixRedirect = callPackage ../development/libraries/haskell/system-posix-redirect {};
 
+  systemTimeMonotonic = callPackage ../development/libraries/haskell/system-time-monotonic {};
+
   TableAlgebra = callPackage ../development/libraries/haskell/TableAlgebra {};
 
   tabular = callPackage ../development/libraries/haskell/tabular {};
