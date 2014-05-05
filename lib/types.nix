@@ -200,7 +200,12 @@ in rec {
           let
             coerce = def: if isFunction def then def else { config = def; };
             modules = opts' ++ map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
-          in (evalModules { inherit modules; args.name = last loc; prefix = loc; }).config;
+          in (evalModules {
+            inherit modules;
+            # !!! See comment about args in lib/modules.nix
+            args.name = last loc;
+            prefix = loc;
+          }).config;
         getSubOptions = prefix: (evalModules
           { modules = opts'; inherit prefix;
             # FIXME: hack to get shit to evaluate.

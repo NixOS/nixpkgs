@@ -9,8 +9,19 @@ rec {
 
   /* Evaluate a set of modules.  The result is a set of two
      attributes: ‘options’: the nested set of all option declarations,
-     and ‘config’: the nested set of all option values. */
-  evalModules = { modules, prefix ? [], args ? {}, check ? true }:
+     and ‘config’: the nested set of all option values.
+     !!! Please think twice before adding to this argument list! The more
+     that is specified here instead of in the modules themselves the harder
+     it is to transparently move a set of modules to be a submodule of another
+     config (as the proper arguments need to be replicated at each call to
+     evalModules) and the less declarative the module set is. */
+  evalModules = { modules
+                , prefix ? []
+                , # !!! This can be specified modularly now, can we remove it?
+                  args ? {}
+                , # !!! This can be specified modularly now, can we remove it?
+                  check ? true
+                }:
     let
       internalModule = rec {
         _file = ./modules.nix;
@@ -21,6 +32,7 @@ rec {
           __internal.args = mkOption {
             description = "Arguments passed to each module.";
 
+            # !!! Should this be types.uniq types.unspecified?
             type = types.attrsOf types.unspecified;
 
             internal = true;
