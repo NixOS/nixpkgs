@@ -25,6 +25,16 @@ rec {
 
             internal = true;
           };
+
+          __internal.check = mkOption {
+            description = "Whether to check whether all option definitions have matching declarations.";
+
+            type = types.uniq types.bool;
+
+            internal = true;
+
+            default = check;
+          };
         };
 
         config = {
@@ -45,7 +55,7 @@ rec {
           if isOption v then v.value
           else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
         in
-        if check && set ? _definedNames then
+        if options.__internal.check.value && set ? _definedNames then
           fold (m: res:
             fold (name: res:
               if set ? ${name} then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")

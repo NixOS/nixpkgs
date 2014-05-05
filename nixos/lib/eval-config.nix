@@ -31,10 +31,9 @@ in rec {
   # Merge the option definitions in all modules, forming the full
   # system configuration.
   inherit (lib.evalModules {
-    inherit prefix;
+    inherit prefix check;
     modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
     args = extraArgs;
-    check = check && options.environment.checkConfigurationOptions.value;
   }) config options;
 
   # These are the extra arguments passed to every module.  In
