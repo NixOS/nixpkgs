@@ -1339,6 +1339,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   haskelineClass = callPackage ../development/libraries/haskell/haskeline-class {};
 
+  haskellGenerate = callPackage ../development/libraries/haskell/haskell-generate {};
+
   haskellLexer = callPackage ../development/libraries/haskell/haskell-lexer {};
 
   haskellMpi = callPackage ../development/libraries/haskell/haskell-mpi {
