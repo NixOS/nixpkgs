@@ -38,7 +38,6 @@
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
-  ./misc/check-config.nix
   ./misc/crashdump.nix
   ./misc/ids.nix
   ./misc/lib.nix
