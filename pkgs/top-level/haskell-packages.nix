@@ -2602,6 +2602,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   thLift = callPackage ../development/libraries/haskell/th-lift {};
 
+  thLiftInstances = callPackage ../development/libraries/haskell/th-lift-instances {};
+
   thOrphans = callPackage ../development/libraries/haskell/th-orphans {};
 
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
