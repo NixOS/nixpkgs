@@ -326,6 +326,21 @@ index e945d87..77728f2 100644
  ExecStart=@rootlibexecdir@/systemd-backlight load %i
  ExecStop=@rootlibexecdir@/systemd-backlight save %i
 +X-RestartIfChanged=false
+diff --git a/units/systemd-journal-flush.service.in b/units/systemd-journal-flush.service.in
+index 503e8a6..fe23b8b 100644
+--- a/units/systemd-journal-flush.service.in
++++ b/units/systemd-journal-flush.service.in
+@@ -10,8 +10,9 @@ Description=Trigger Flushing of Journal to Persistent Storage
+ Documentation=man:systemd-journald.service(8) man:journald.conf(5)
+ DefaultDependencies=no
+ Requires=systemd-journald.service
+-After=systemd-journald.service local-fs.target remote-fs.target
++After=systemd-journald.service
+ Before=systemd-user-sessions.service
++RequiresMountsFor=/var/log/journal
+ 
+ [Service]
+ ExecStart=@rootbindir@/systemctl kill --kill-who=main --signal=SIGUSR1 systemd-journald.service
 diff --git a/units/systemd-journald.service.in b/units/systemd-journald.service.in
 index de93879..c9a49f3 100644
 --- a/units/systemd-journald.service.in
