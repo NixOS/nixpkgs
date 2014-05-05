@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.optional enableACLs acl;
   nativeBuildInputs = [perl];
 
+  configureFlags = "--with-nobody-group=nogroup";
+
   meta = {
     homepage = http://samba.anu.edu.au/rsync/;
     description = "A fast incremental file transfer utility";
