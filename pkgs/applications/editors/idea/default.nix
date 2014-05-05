@@ -64,27 +64,27 @@ let
 
 in {
 
-  idea_community_1311 = buildIdea rec {
+  idea_community_1312 = buildIdea rec {
     name = "idea-community-${version}";
-    version = "13.1.1";
-    build = "IC-135.480";
+    version = "13.1.2";
+    build = "IC-135.690";
     description = "IntelliJ IDEA 13 Community Edition";
     license = stdenv.lib.licenses.asl20.shortName;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "9e28d3e5682b037c9d6190622ab2a47112fa792539083cc7a4cb24f3f7bf7d22";
+      sha256 = "59fde67bf23e4638edd4b5ada133ac1c61c3132dea936eb7de7ee5ea259cc102";
     };
   };
 
-  idea_ultimate_1311 = buildIdea rec {
+  idea_ultimate_1312 = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "13.1.1";
-    build = "IU-135.480";
+    version = "13.1.2";
+    build = "IU-135.690";
     description = "IntelliJ IDEA 13 Ultimate Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "d699abcdcace387105a465049e015c1367dedf42f7a5f5a1f7b3d840e98b2658";
+      sha256 = "ccbaed495e2f099c92d1f747a59d7af9f9d41d75cf10e8a299d11825d78685ad";
     };
   };
 
