@@ -1,7 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 
-with lib;
 with utils;
+with lib;
 with import ./systemd-unit-options.nix { inherit config lib; };
 
 let
