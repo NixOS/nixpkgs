@@ -19,6 +19,7 @@
     self : self.haskellPlatformArgs_future self // {
       haskellPlatform = null;
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
+      binary_0_7_1_0 = null;
     };
 
   ghc763Prefs =
