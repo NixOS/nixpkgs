@@ -188,7 +188,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 if (boolIsTrue($unitInfo->{'X-ReloadIfChanged'} // "no")) {
                     write_file($reloadListFile, { append => 1 }, "$unit\n");
                 }
-                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes")) {
+                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") ) {
                     push @unitsToSkip, $unit;
                 } else {
                     # If this unit is socket-activated, then stop the
