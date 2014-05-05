@@ -1,3 +1,18 @@
+diff --git a/Makefile.am b/Makefile.am
+index 3d9e5c1..4d43cb4 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1707,7 +1707,9 @@ dist_tmpfiles_DATA += \
+ endif
+ 
+ SYSINIT_TARGET_WANTS += \
+-	systemd-tmpfiles-setup-dev.service \
++	systemd-tmpfiles-setup-dev.service
++
++MULTI_USER_TARGET_WANTS += \
+ 	systemd-tmpfiles-setup.service
+ 
+ dist_zshcompletion_DATA += \
 diff --git a/rules/99-systemd.rules.in b/rules/99-systemd.rules.in
 index db72373..2fc12ca 100644
 --- a/rules/99-systemd.rules.in
@@ -342,10 +357,32 @@ index 9d264a2..c505535 100644
  ExecStart=@rootlibexecdir@/systemd-rfkill load %I
  ExecStop=@rootlibexecdir@/systemd-rfkill save %I
 +X-RestartIfChanged=false
+diff --git a/units/systemd-tmpfiles-setup.service.in b/units/systemd-tmpfiles-setup.service.in
+index 01043b7..507f820 100644
+--- a/units/systemd-tmpfiles-setup.service.in
++++ b/units/systemd-tmpfiles-setup.service.in
+@@ -12,7 +12,7 @@ DefaultDependencies=no
+ Wants=local-fs.target
+ Conflicts=shutdown.target
+ After=systemd-readahead-collect.service systemd-readahead-replay.service local-fs.target
+-Before=sysinit.target shutdown.target
++Before=shutdown.target
+ ConditionDirectoryNotEmpty=|/usr/lib/tmpfiles.d
+ ConditionDirectoryNotEmpty=|/lib/tmpfiles.d
+ ConditionDirectoryNotEmpty=|/usr/local/lib/tmpfiles.d
 diff --git a/units/systemd-update-utmp.service.in b/units/systemd-update-utmp.service.in
-index da7dda7..4cc550d 100644
+index da7dda7..e638145 100644
 --- a/units/systemd-update-utmp.service.in
 +++ b/units/systemd-update-utmp.service.in
+@@ -11,7 +11,7 @@ Documentation=man:systemd-update-utmp.service(8) man:utmp(5)
+ DefaultDependencies=no
+ RequiresMountsFor=/var/log/wtmp
+ Conflicts=shutdown.target
+-After=systemd-readahead-collect.service systemd-readahead-replay.service systemd-remount-fs.service systemd-tmpfiles-setup.service auditd.service
++After=systemd-readahead-collect.service systemd-readahead-replay.service systemd-remount-fs.service auditd.service
+ Before=sysinit.target shutdown.target
+ 
+ [Service]
 @@ -19,3 +19,4 @@ Type=oneshot
  RemainAfterExit=yes
  ExecStart=@rootlibexecdir@/systemd-update-utmp reboot

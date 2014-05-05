@@ -3,6 +3,7 @@
 , glib, kbd, libxslt, coreutils, libgcrypt, sysvtools, docbook_xsl
 , kexectools, libmicrohttpd, linuxHeaders
 , python ? null, pythonSupport ? false
+, autoreconfHook
 }:
 
 assert stdenv.isLinux;
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     [ pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt docbook_xsl
       libmicrohttpd linuxHeaders
+      autoreconfHook
     ] ++ stdenv.lib.optional pythonSupport python;
 
   configureFlags =
