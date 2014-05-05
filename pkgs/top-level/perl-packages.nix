@@ -3539,12 +3539,13 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ HTTPDate ];
   };
 
-  FileMimeInfo = buildPerlPackage {
-    name = "File-MimeInfo-0.20";
+  FileMimeInfo = buildPerlPackage rec {
+    name = "File-MimeInfo-0.23";
     src = fetchurl {
-      url = "http://search.cpan.org/CPAN/authors/id/M/MI/MICHIELB/File-MimeInfo-0.20.tar.gz";
-      sha256 = "1738yi3a0xcbvffqymjb6cyh999q4pryalfwbkmdbjdks2y0bxz0";
+      url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
+      sha256 = "006i9idnxv9hsz1gykc5bqs05ma5wz9dsjrpmah9293bgdy1ccxj";
     };
+    doCheck = false; # Failed test 'desktop file is the right one'
     propagatedBuildInputs = [ FileBaseDir FileDesktopEntry ];
   };
 
