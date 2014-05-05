@@ -12,10 +12,10 @@ rec {
      and ‘config’: the nested set of all option values. */
   evalModules = { modules, prefix ? [], args ? {}, check ? true }:
     let
-      internalModule = {
+      internalModule = rec {
         _file = ./modules.nix;
 
-        key = ./modules.nix;
+        key = _file;
 
         options = {
           __internal.args = mkOption {
