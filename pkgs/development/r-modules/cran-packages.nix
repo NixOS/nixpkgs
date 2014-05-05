@@ -4008,7 +4008,7 @@ let self = _self // overrides; _self = with self; {
   rcqp = derive { name="rcqp"; version="0.3"; sha256="0vxcgchnxdsdamclcshjbkn00ysmfmqp586a36wsyv3zqrd6rg7p"; depends=[plyr]; };
   Rcsdp = derive { name="Rcsdp"; version="0.1.53"; sha256="0x91hyx6z9f4zd7djxlq7dnznmr9skyzwbbcbjyid9hxbcfyvhcp"; depends=[]; };
   rCUR = derive { name="rCUR"; version="1.3"; sha256="1f38xbc5n91k2y88cg0sv1z2p4g5vl7v2k1024f42f7526g2p2lx"; depends=[MASS Matrix lattice]; };
-  RCurl = derive { name="RCurl"; version="1.95-4.1"; sha256="1bphxniirak797rb2hjnv83i1sskdzcf3bl15lym171f79kx80w3"; depends=[bitops]; };
+  RCurl = derive { name="RCurl"; version="1.95-4.1"; sha256="1bphxniirak797rb2hjnv83i1sskdzcf3bl15lym171f79kx80w3"; depends=[bitops pkgs.curl]; };
   Rd2roxygen = derive { name="Rd2roxygen"; version="1.4"; sha256="09dxgp65zac5b9mxbjrvy3ihdwski98xva5afq659b8yfvkviq4g"; depends=[roxygen2 formatR]; };
   rda = derive { name="rda"; version="1.0.2-2"; sha256="1g2q7c0y138i9r7jgjrlpqznvwpqsj6f7vljqqfzh2l6kcj43vjj"; depends=[]; };
   rdatamarket = derive { name="rdatamarket"; version="0.6.4"; sha256="16a1yxvf841505a8gh7jf09fx6ipysymrpvsd4b07xdg5hvbzx25"; depends=[zoo RCurl RJSONIO]; };
