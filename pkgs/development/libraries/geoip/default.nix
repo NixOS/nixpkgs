@@ -14,6 +14,6 @@ stdenv.mkDerivation {
     description = "Geolocation API";
     maintainers = [ stdenv.lib.maintainers.raskin ];
     license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
