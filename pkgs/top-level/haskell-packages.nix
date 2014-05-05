@@ -1040,6 +1040,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   dualTree = callPackage ../development/libraries/haskell/dual-tree {};
 
+  dynamicCabal = callPackage ../development/libraries/haskell/dynamic-cabal {};
+
   dyre = callPackage ../development/libraries/haskell/dyre {};
 
   editDistance = callPackage ../development/libraries/haskell/edit-distance {};
