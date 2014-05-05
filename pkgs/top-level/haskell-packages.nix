@@ -2182,6 +2182,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {};
 
+  quickcheckPropertyMonad = callPackage ../development/libraries/haskell/quickcheck-property-monad {};
+
   qrencode = callPackage ../development/libraries/haskell/qrencode {
     inherit (pkgs) qrencode;
   };
