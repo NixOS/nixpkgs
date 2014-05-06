@@ -1008,6 +1008,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
 
+  djinn = callPackage ../development/libraries/haskell/djinn {};
+
   dlist = callPackage ../development/libraries/haskell/dlist {};
 
   dlistInstances = callPackage ../development/libraries/haskell/dlist-instances {};
