@@ -1535,6 +1535,8 @@ let
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
+  nifskope = callPackage ../tools/graphics/nifskope { };
+
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
 
   nlopt = callPackage ../development/libraries/nlopt {};
