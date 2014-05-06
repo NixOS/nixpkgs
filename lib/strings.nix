@@ -56,12 +56,14 @@ rec {
   optionalString = cond: string: if cond then string else "";
 
 
-  # Determine whether a filename ends in the given suffix.
-  hasSuffix = ext: fileName:
-    let lenFileName = stringLength fileName;
-        lenExt = stringLength ext;
-    in !(lessThan lenFileName lenExt) &&
-       substring (sub lenFileName lenExt) lenFileName fileName == ext;
+  # Determine whether a string has given prefix/suffix.
+  hasPrefix = pref: str:
+     substring 0 (stringLength pref) str == pref;
+  hasSuffix = suff: str:
+    let lenStr = stringLength str;
+        lenSuff = stringLength suff;
+    in lenStr >= lenSuff &&
+       substring (lenStr - lenSuff) lenStr str == suff;
 
 
   # Convert a string to a list of characters (i.e. singleton strings).
