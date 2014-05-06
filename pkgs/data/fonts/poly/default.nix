@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     and languages that use the Latin script and its variants.
     '';
     homepage = http://www.fontsquirrel.com/fonts/poly;
-    license = [ "OFL" ];
+    license = stdenv.lib.licenses.ofl;
     maintainers = with stdenv.lib.maintainers; [ relrod ];
     platforms = with stdenv.lib.platforms; linux;
   };
