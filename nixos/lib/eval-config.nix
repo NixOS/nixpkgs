@@ -35,6 +35,7 @@ let
     key = _file;
     config = {
       nixpkgs.system = lib.mkDefault system_;
+      __internal.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
     };
   };
 
@@ -56,23 +57,8 @@ in rec {
   # the 64-bit package anyway. However, it would be cleaner to respect
   # nixpkgs.config here.
   extraArgs = extraArgs_ // {
-    inherit pkgs modules baseModules;
-    modulesPath = ../modules;
-    pkgs_i686 = import ./nixpkgs.nix { system = "i686-linux"; config.allowUnfree = true; };
-    utils = import ./utils.nix pkgs;
+    inherit modules baseModules;
   };
 
-  pkgs =
-    if pkgs_ != null
-    then pkgs_
-    else import ./nixpkgs.nix (
-      let
-        system = if nixpkgsOptions.system != "" then nixpkgsOptions.system else system_;
-        nixpkgsOptions = config.nixpkgs;
-      in
-      {
-        inherit system;
-        inherit (nixpkgsOptions) config;
-      });
-
+  inherit (config.__internal.args) pkgs;
 }
