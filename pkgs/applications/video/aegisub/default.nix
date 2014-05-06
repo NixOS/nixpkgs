@@ -4,6 +4,7 @@
 , mesa
 , libass, fftw, ffms
 , ffmpeg, pkgconfig, zlib # Undocumented (?) dependencies
+, icu, boost, intltool # New dependencies
 , spellChecking ? true, hunspell ? null
 , automationSupport ? true, lua ? null
 , openalSupport ? false, openal ? null
@@ -27,9 +28,11 @@ stdenv.mkDerivation rec {
     url = "http://ftp.aegisub.org/pub/releases/${name}.tar.xz";
     sha256 = "0n2y5cggayr8246p2cvrz0ajlhhvmzcgsp7nljnm21jypk15pspg";
   };
+  
+  nativeBuildInputs = [ intltool ];
 
   buildInputs = with stdenv.lib;
-  [ libX11 gettext wxGTK libiconv fontconfig freetype mesa libass fftw ffms ffmpeg pkgconfig zlib ]
+  [ libX11 gettext wxGTK libiconv fontconfig freetype mesa libass fftw ffms ffmpeg pkgconfig zlib icu boost ]
   ++ optional spellChecking hunspell
   ++ optional automationSupport lua
   ++ optional openalSupport openal
@@ -38,11 +41,11 @@ stdenv.mkDerivation rec {
   ++ optional portaudioSupport portaudio
   ;
 
-  NIX_LDFLAGS = "-liconv -lavutil -lavformat -lavcodec -lswscale -lz -lm";
+  NIX_LDFLAGS = "-liconv -lavutil -lavformat -lavcodec -lswscale -lz -lm -lGL";
+  
+  configureFlags = "--with-boost-libdir=${boost}/lib/";
 
-  preConfigure = "cd aegisub";
-
-  postInstall = "ln -s $out/bin/aegisub-3.0 $out/bin/aegisub";
+  postInstall = "ln -s $out/bin/aegisub-3.1 $out/bin/aegisub";
 
   meta = {
     description = "An advanced subtitle editor";
