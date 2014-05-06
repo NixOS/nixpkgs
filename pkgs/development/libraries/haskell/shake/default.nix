@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   sha256 = "1xb4w8zzikzqlx2jzbzclfpv49p85rhf17lz3c8hgdkrm6vr9diy";
   isLibrary = true;
   isExecutable = true;
+  doCheck = !self.stdenv.isDarwin;
   buildDepends = [
     binary deepseq filepath hashable random time transformers
     unorderedContainers utf8String
