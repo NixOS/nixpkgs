@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, ruby }:
+{ stdenv, fetchurl, autoconf, automake, libtool, ruby, scatterOutputHook }:
 
 stdenv.mkDerivation rec {
   version = "0.5.8";
@@ -9,16 +9,17 @@ stdenv.mkDerivation rec {
     sha256 = "1h6k9kdbfavmw3by5kk3raszwa64hn9k8yw9rdhvl5m8g2lks89k";
   };
 
+  nativeBuildInputs = [ scatterOutputHook ];
   buildInputs = [ autoconf automake libtool ruby ];
 
-  outputs = [ "out" "lib" ];
+  outputs = [ "out" "bin" ];
 
-  preConfigure = "./bootstrap";
-
-  postInstall = ''
-    mkdir -p $lib/lib
-    mv $out/lib/*.so.* $lib/lib/
+  preConfigure = ''
+    sed -i s,glibtoolize,libtoolize, ./bootstrap
+    ./bootstrap
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "MessagePack implementation for C and C++";
