@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = with stdenv.lib;
     " -fno-strict-aliasing" # from Gentoo, see https://bugzilla.redhat.com/show_bug.cgi?id=506840
+    + " -DTT_CONFIG_OPTION_SUBPIXEL_HINTING=1"
     + optionalString useEncumberedCode " -DFT_CONFIG_OPTION_SUBPIXEL_RENDERING=1";
 
   patches = [ ./enable-validation.patch ]; # from Gentoo
