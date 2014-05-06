@@ -9069,6 +9069,10 @@ let
 
   potrace = callPackage ../applications/graphics/potrace {};
 
+  posterazor = callPackage ../applications/misc/posterazor {
+    stdenv = overrideGCC stdenv gcc46;
+  };
+
   pqiv = callPackage ../applications/graphics/pqiv { };
 
   qiv = callPackage ../applications/graphics/qiv { };
