@@ -1,16 +1,14 @@
-{stdenv, fetchurl, cmake, luajit, kernel}:
+{stdenv, fetchurl, cmake, luajit, kernel, zlib}:
 let
-  s = # Generated upstream information
-  rec {
+  s = rec {
     baseName="sysdig";
-    version="0.1.79";
+    version="0.1.81";
     name="${baseName}-${version}";
-    hash="04ng4q859xxlpsnavx6rcgmq7frzgbzxm0p5zmdsmhz8m6hfvz7l";
-    url="https://github.com/draios/sysdig/archive/0.1.79.tar.gz";
-    sha256="04ng4q859xxlpsnavx6rcgmq7frzgbzxm0p5zmdsmhz8m6hfvz7l";
+    url="https://github.com/draios/sysdig/archive/${version}.tar.gz";
+    sha256="0p9j1fy7lr027nsvr5bq0416nlsbvk02irzazmigsbr03fg0x1wv";
   };
   buildInputs = [
-    cmake luajit kernel
+    cmake luajit kernel zlib
   ];
 in
 stdenv.mkDerivation {
@@ -22,13 +20,14 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DUSE_BUNDLED_LUAJIT=OFF"
+    "-DUSE_BUNDLED_ZLIB=OFF"
   ];
-  makeFlags = [
-    "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
+  preConfigure = ''
+    export INSTALL_MOD_PATH="$out"
+    export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  '';
   postInstall = ''
-    mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc/sysdig
-    cp driver/*.ko $out/lib/modules/${kernel.modDirVersion}/misc/sysdig
+    make install_driver
   '';
 
   meta = {
