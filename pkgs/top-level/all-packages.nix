@@ -2032,6 +2032,10 @@ let
 
   sysbench = callPackage ../development/tools/misc/sysbench {};
 
+  sysdig = callPackage ../development/tools/analysis/sysdig/default.nix {
+    kernel = linux;
+  };
+
   system_config_printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
    };
