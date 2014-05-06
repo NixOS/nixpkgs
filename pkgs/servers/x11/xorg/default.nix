@@ -1370,11 +1370,11 @@ let
   })) // {inherit ;};
 
   xf86inputevdev = (stdenv.mkDerivation ((if overrides ? xf86inputevdev then overrides.xf86inputevdev else x: x) {
-    name = "xf86-input-evdev-2.8.2";
+    name = "xf86-input-evdev-2.8.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-evdev-2.8.2.tar.bz2;
-      sha256 = "1cvyg425px92hr5ql1s7v0c7n9jyvg0aaajrf5vyxgc3k9s6213m";
+      url = mirror://xorg/individual/driver/xf86-input-evdev-2.8.3.tar.bz2;
+      sha256 = "1c067h0452728s39rb1csw4r26ihdhzs4nr722z6gg9mhvb7zv02";
     };
     buildInputs = [pkgconfig inputproto udev xorgserver xproto ];
   })) // {inherit inputproto udev xorgserver xproto ;};
@@ -1410,11 +1410,11 @@ let
   })) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputsynaptics = (stdenv.mkDerivation ((if overrides ? xf86inputsynaptics then overrides.xf86inputsynaptics else x: x) {
-    name = "xf86-input-synaptics-1.7.4";
+    name = "xf86-input-synaptics-1.7.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.7.4.tar.bz2;
-      sha256 = "1xssjj0qxarzsc4m69ay5ydkwgq27qajzih2c7sjk7nkgggx58jn";
+      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.7.5.tar.bz2;
+      sha256 = "1iwiihwbqiq2lxd12ca7j3ajggjbmlk33wsfv2lyyizp3x92710z";
     };
     buildInputs = [pkgconfig inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ];
   })) // {inherit inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ;};
