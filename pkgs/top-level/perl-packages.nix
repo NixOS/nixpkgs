@@ -5142,6 +5142,23 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MHonArc = buildPerlPackage rec {
+    name = "MHonArc-2.6.18";
+
+    src = fetchurl {
+      url    = "http://dcssrv1.oit.uci.edu/indiv/ehood/release/MHonArc/tar/${name}.tar.gz";
+      sha256 = "1xmf26dfwr8achprc3n1pxgl0mkiyr6pf25wq3dqgzqkghrrsxa2";
+    };
+    propagatedBuildInputs = [ ];
+    meta = with stdenv.lib; {
+      homepage    = http://dcssrv1.oit.uci.edu/indiv/ehood/mhonarch.html;
+      description = "A mail-to-HTML converter";
+      maintainers = with maintainers; [ lovek323 ];
+      license     = licenses.gpl2;
+      platforms   = platforms.unix;
+    };
+  };
+
   MIMEBase64 = buildPerlPackage rec {
     name = "MIME-Base64-3.14";
     src = fetchurl {
