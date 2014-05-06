@@ -1,5 +1,6 @@
 source $stdenv/setup
 
+
 source $mirrorsFile
 
 
@@ -31,6 +32,9 @@ tryDownload() {
 
 finish() {
     stopNest
+
+    eval "$maybeCleanPatch"
+
     exit 0
 }
 
