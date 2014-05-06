@@ -9092,6 +9092,8 @@ let
 
   potrace = callPackage ../applications/graphics/potrace {};
 
+  posterazor = callPackage ../applications/misc/posterazor { };
+
   pqiv = callPackage ../applications/graphics/pqiv { };
 
   qiv = callPackage ../applications/graphics/qiv { };
