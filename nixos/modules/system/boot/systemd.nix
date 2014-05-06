@@ -606,7 +606,7 @@ in
     };
 
     services.journald.extraConfig = mkOption {
-      default = "";
+      default = "SystemMaxUse=256M";
       type = types.lines;
       example = "Storage=volatile";
       description = ''
