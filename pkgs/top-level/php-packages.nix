@@ -32,4 +32,12 @@ let self = with self; {
 
     buildInputs = [ pkgs.cyrus_sasl ];
   };
+
+  xdebug = buildPecl rec {
+    name = "xdebug-2.2.5";
+    src = pkgs.fetchurl {
+      url = "http://pecl.php.net/get/${name}.tgz";
+      sha256 = "0vss35da615709kdvqji8pblckfvmabmj2njjjz6h8zzvj9gximd";
+    };
+  };
 }; in self
