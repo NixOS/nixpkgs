@@ -3438,14 +3438,6 @@ let
 
   php_xcache = callPackage ../development/libraries/php-xcache { };
 
-  phpXdebug_5_3 = lowPrio (callPackage ../development/interpreters/php-xdebug {
-    php = php53;
-  });
-
-  phpXdebug_5_4 = callPackage ../development/interpreters/php-xdebug { };
-
-  phpXdebug = phpXdebug_5_4;
-
   picolisp = callPackage ../development/interpreters/picolisp {};
 
   pltScheme = racket; # just to be sure
