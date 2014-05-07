@@ -5759,7 +5759,6 @@ rec {
     };
   };
 
-
   pyopengl =
     let version = "3.0.2";
     in
@@ -5806,6 +5805,23 @@ rec {
     };
 
     propagatedBuildInputs = [ cssselect lxml ];
+  };
+
+  pyrax = buildPythonPackage rec {
+    name = "pyrax-1.7.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyrax/${name}.tar.gz";
+      sha256 = "1br2kspw0sn7xgkk7z93h72s2v3qm88jvi4213zgz90jhzjj42bv";
+    };
+
+    meta = {
+      homepage    = "https://github.com/rackspace/pyrax";
+      license     = "MIT";
+      description = "Python API to interface with Rackspace";
+    };
+
+    doCheck = false;
   };
 
 
