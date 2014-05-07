@@ -1245,10 +1245,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
 
-  gloss = callPackage ../development/libraries/haskell/gloss {
-    OpenGL = self.OpenGL_2_9_1_0;
-    GLUT = self.GLUT_2_5_1_0;
-  };
+  gloss = callPackage ../development/libraries/haskell/gloss {};
 
   glossAccelerate = callPackage ../development/libraries/haskell/gloss-accelerate {};
 
