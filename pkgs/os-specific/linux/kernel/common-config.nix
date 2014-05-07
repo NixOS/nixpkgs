@@ -1,4 +1,4 @@
-{ stdenv, version, kernelPlatform, extraConfig }:
+{ stdenv, version, kernelPlatform, extraConfig, features }:
 
 with stdenv.lib;
 
