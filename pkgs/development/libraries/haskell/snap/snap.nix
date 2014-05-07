@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "snap";
-  version = "0.13.2.4";
-  sha256 = "1806nd6gzih66c9gg2iz3dxr4qcd4jkgamz8pv9x3zkk7n5jqga0";
+  version = "0.13.2.5";
+  sha256 = "1xvwx4zg2b78fdyb2yvqd5i5g195di7rzzpn3va43vkq2lk5vcqj";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
