@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "streaming-commons";
-  version = "0.1.2.2";
-  sha256 = "0hk01cq39f6rwnj1qpikfyfbq8vayjmvl211b97rvv8ris5y90r4";
+  version = "0.1.2.3";
+  sha256 = "1f8lngnxx0ml7bph8lfx3azv6fh6gwm86yhb8i5v9ghnflblaxxs";
   buildDepends = [ blazeBuilder network text transformers zlib ];
   testDepends = [
     async blazeBuilder deepseq hspec network QuickCheck text zlib
