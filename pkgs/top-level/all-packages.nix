@@ -9486,7 +9486,7 @@ let
 
   weechat = callPackage ../applications/networking/irc/weechat { };
 
-  weechatDevel = callPackage ../applications/networking/irc/weechat/devel.nix { };
+  weechatDevel = lowPrio (callPackage ../applications/networking/irc/weechat/devel.nix { });
 
   weston = callPackage ../applications/window-managers/weston { };
 
