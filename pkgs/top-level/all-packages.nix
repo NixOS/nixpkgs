@@ -10311,6 +10311,8 @@ let
 
   liblapack = callPackage ../development/libraries/science/math/liblapack { };
 
+  liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
+
   openblas = callPackage ../development/libraries/science/math/openblas { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
