@@ -19,7 +19,7 @@ R.stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
     mkdir -p $out/library
-    R CMD INSTALL -l $out/library $src
+    R CMD INSTALL -l $out/library .
     runHook postInstall
   '';
 
