@@ -133,9 +133,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             jailbreak = false;
 
             # pass the '--enable-split-objs' flag to cabal in the configure stage
-            enableSplitObjs = !(  stdenv.isDarwin                       # http://hackage.haskell.org/trac/ghc/ticket/4013
-                               || versionOlder "7.6.99" ghc.version     # -fsplit-ojbs is broken in 7.7 snapshot
-                               );
+            enableSplitObjs = !stdenv.isDarwin;         # http://hackage.haskell.org/trac/ghc/ticket/4013
 
             # pass the '--enable-tests' flag to cabal in the configure stage
             # and run any regression test suites the package might have
