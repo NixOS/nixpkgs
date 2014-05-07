@@ -29,23 +29,44 @@ rec {
         key = _file;
 
         options = {
-          __internal.args = mkOption {
-            description = "Arguments passed to each module.";
+          __internal = {
+            args = mkOption {
+              description = "Arguments passed to each module.";
 
-            # !!! Should this be types.uniq types.unspecified?
-            type = types.attrsOf types.unspecified;
+              type = types.attrsOf types.unspecified;
 
-            internal = true;
-          };
+              internal = true;
+            };
 
-          __internal.check = mkOption {
-            description = "Whether to check whether all option definitions have matching declarations.";
+            check = mkOption {
+              description = "Whether to check whether all option definitions have matching declarations.";
 
-            type = types.uniq types.bool;
+              type = types.uniq types.bool;
 
-            internal = true;
+              internal = true;
 
-            default = check;
+              default = check;
+            };
+
+            extraScope = mkOption {
+              description = "Extra variables to have in scope when importing modules.";
+
+              type = types.attrsOf types.unspecified;
+
+              internal = true;
+
+              default = {};
+            };
+
+            libPath = mkOption {
+              description = "The path of the lib to use for evaluation.";
+
+              type = types.path;
+
+              default = ./.;
+
+              internal = true;
+            };
           };
         };
 
@@ -84,9 +105,32 @@ rec {
         };
       result = {
         inherit options;
-        config = if ! config.value.__internal.check || config.checks then config.value else abort;
+        config = if ! config.value.__internal.check || config.checks then config.value else abort "Internal error!";
       };
-    in result;
+      needsReimport =
+        let
+          newLib = toString config.value.__internal.libPath;
+      in (newLib != toString ./. || (builtins ? scopedImport && config.value.__internal.extraScope != {})) &&
+        !(builtins.libReimported or false);
+      reimport =
+        let
+          scopedImport = builtins.scopedImport or (ignored: import);
+
+          newScope = {
+            libReimported = true;
+
+            import = scopedImport newScope;
+
+            scopedImport = attrs: scopedImport (newScope // attrs);
+
+            oldBuiltins = builtins;
+
+            builtins = builtins // (removeAttrs newScope [ "builtins" ]);
+          } // config.value.__internal.extraScope;
+        in (scopedImport newScope config.value.__internal.libPath).evalModules {
+          inherit modules prefix check args;
+        };
+    in if needsReimport then reimport else result;
 
   /* Close a set of modules under the ‘imports’ relation. */
   closeModules = modules: args:
