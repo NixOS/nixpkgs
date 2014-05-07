@@ -1,6 +1,6 @@
 { stdenv, fetchurl, vmTools, writeScript, writeText, runCommand, makeInitrd
 , python, perl, coreutils, dosfstools, gzip, mtools, netcat, openssh, qemu
-, samba, socat, vde2, cdrkit, pathsFromGraph
+, samba, socat, vde2, cdrkit, pathsFromGraph, gnugrep
 }:
 
 { isoFile, productKey, arch ? null }:
@@ -10,7 +10,7 @@ with stdenv.lib;
 let
   controller = import ./controller {
     inherit stdenv writeScript vmTools makeInitrd;
-    inherit samba vde2 openssh socat netcat coreutils gzip;
+    inherit samba vde2 openssh socat netcat coreutils gzip gnugrep;
   };
 
   mkCygwinImage = import ./cygwin-iso {
