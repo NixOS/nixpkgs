@@ -189,15 +189,21 @@ let
   bgBoth = optionalString (suspendTo != null) " &";
 
   vmExec = if installMode then ''
-    ${vmTools.qemuProg} ${controllerQemuArgs} &
+    ${vmTools.qemuProg} ${controllerQemuArgs} & vmpid=$!
     ${vmTools.qemuProg} ${cygwinQemuArgs}${bgBoth}
   '' else ''
-    ${vmTools.qemuProg} ${cygwinQemuArgs} &
+    ${vmTools.qemuProg} ${cygwinQemuArgs} & vmpid=$!
     ${vmTools.qemuProg} ${controllerQemuArgs}${bgBoth}
   '';
 
   postVM = if suspendTo != null then ''
-    while ! test -e "$XCHG_DIR/suspend_now"; do sleep 1; done
+    while ! test -e "$XCHG_DIR/suspend_now"; do
+      if ! kill -0 $vmpid; then
+        echo " VM not running anymore, bailing out!"
+        exit 1
+      fi
+      sleep 1
+    done
     ${socat}/bin/socat - UNIX-CONNECT:$MONITOR_SOCKET <<CMD
     stop
     migrate_set_speed 4095m
