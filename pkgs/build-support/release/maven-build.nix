@@ -70,7 +70,7 @@ stdenv.mkDerivation ( rec {
   '';  
 
   mvnAssembly = ''
-    mvn assembly:assembly -Dmaven.test.skip.exec=true ${mvnFlags}
+    mvn assembly:assembly -Dmaven.test.skip=true ${mvnFlags}
   '';
 
   mvnRelease = ''
