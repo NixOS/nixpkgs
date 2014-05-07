@@ -60,24 +60,24 @@ rec {
   };
 
   grsecurity_stable = grsecPatch
-    { kversion  = "3.2.57";
-      revision  = "201404241714";
+    { kversion  = "3.2.58";
+      revision  = "201405112002";
       branch    = "stable";
-      sha256    = "0lrmmqllxas0dnaqswwbznh8cj5w9jw9df5dwzp16j71q8iqnv0c";
+      sha256    = "107jbgl1lz6blrk5rxm10jjhbywav9s56bs7zfs3m1618bff7p7v";
     };
 
   grsecurity_vserver = grsecPatch
-    { kversion  = "3.2.57";
-      revision  = "vs2.3.2.16-201404241715";
+    { kversion  = "3.2.58";
+      revision  = "vs2.3.2.16-201405112004";
       branch    = "vserver";
-      sha256    = "1839hnpxvg2hnkaslb5qbfdq4n5vcsndnkpw9mv0j6snc1wfx76s";
+      sha256    = "0xi7c1q0qsvdvs9vw3iclfz8ykjf56cc9wds6419z1lcgcaykb9w";
     };
 
   grsecurity_unstable = grsecPatch
-    { kversion  = "3.14.2";
-      revision  = "201404270907";
+    { kversion  = "3.14.4";
+      revision  = "201405141623";
       branch    = "test";
-      sha256    = "18hb6k873smhh65cxnmnd3qg9ysw5qlj7yb6m18aam6p77d6krsc";
+      sha256    = "0k9f3n1hxxqa2l10mjk7hy7w9p0mmiqv6s6cbiji2hyvakm5s7p4";
     };
 
   grsec_fix_path =
