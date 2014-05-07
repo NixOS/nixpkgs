@@ -1814,9 +1814,7 @@ let
 
   privateer = callPackage ../games/privateer { };
 
-  rtmpdump = callPackage ../tools/video/rtmpdump {
-    gnutls = gnutls31; # gnutls32: undefined reference to gnutls_calc_dh_{key,secret}
-  };
+  rtmpdump = callPackage ../tools/video/rtmpdump { };
 
   reaverwps = callPackage ../tools/networking/reaver-wps {};
 
