@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libelf libconfig libevent which unzip perl python bison flex ];
 
+  patchPhase = ''
+    for x in src/libocl/gen_oclcall_hook.pl tools/cltrace/gen_interceptor.pl src/libocl/gen_oclcall.pl src/scripts/gen_ocl_call_vector.pl src/libstdcl/gen_clarg_setn.pl; do
+      substituteInPlace $x --replace "/usr/bin/perl" ${perl}/bin/perl
+    done
+  '';
+
   configureFlags =
     [ "--with-libelf=${libelf}"
       "--with-libevent=${libevent}"
