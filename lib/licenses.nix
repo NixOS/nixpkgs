@@ -208,6 +208,12 @@
     url = https://www.mozilla.org/MPL/2.0;
   };
 
+  ofl = {
+    shortName = "OFL";
+    fullName = "SIL Open Font License";
+    url = "http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web";
+  };
+
   openssl = {
     shortName = "openssl";
     fullName = "OpenSSL license";

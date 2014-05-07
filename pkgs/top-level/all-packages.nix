@@ -7659,6 +7659,8 @@ let
 
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
+  poly = callPackage ../data/fonts/poly { };
+
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
 
   pthreadmanpages = callPackage ../data/documentation/pthread-man-pages { };
