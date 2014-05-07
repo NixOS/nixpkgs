@@ -5,11 +5,11 @@
 stdenv.mkDerivation rec {
 
   name = "apparmor-${version}";
-  version = "2.8.2";
+  version = "2.8.3";
 
   src = fetchurl {
     url = "http://launchpad.net/apparmor/2.8/${version}/+download/${name}.tar.gz";
-    sha256 = "1fyjvfkvl0fc7agmz64ck8c965940xvcljrczq1z66sydivkybvl";
+    sha256 = "0zjwhkq9wh76m59zmrzfp68sjy4fnz4h23r7asxyaw6inrzwmhl4";
   };
 
   buildInputs = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     homepage = http://apparmor.net/;
     description = "Linux application security system";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ maintainers.phreedom maintainers.thoughtpolice ];
     platforms = platforms.linux;
   };
 }
