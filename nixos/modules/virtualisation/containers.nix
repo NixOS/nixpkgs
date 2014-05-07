@@ -220,6 +220,7 @@ in
             ''}
 
             exec $runInNetNs ${config.systemd.package}/bin/systemd-nspawn \
+              --keep-unit \
               -M "$INSTANCE" -D "$root" $extraFlags \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
