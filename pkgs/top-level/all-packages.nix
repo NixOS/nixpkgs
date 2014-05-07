@@ -7638,6 +7638,8 @@ let
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
 
+  eb-garamond = callPackage ../data/fonts/eb-garamond { };
+
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
   freepats = callPackage ../data/misc/freepats { };
