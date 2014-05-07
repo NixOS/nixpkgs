@@ -2368,15 +2368,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   StateVar = callPackage ../development/libraries/haskell/StateVar {};
 
-  statistics_0_10_5_2 = callPackage ../development/libraries/haskell/statistics/0.10.5.2.nix {
+  statistics = callPackage ../development/libraries/haskell/statistics {
     binary = self.binary_0_7_1_0;
     vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_1_0; };
   };
-  statistics_0_11_0_0 = callPackage ../development/libraries/haskell/statistics/0.11.0.0.nix {
-    binary = self.binary_0_7_1_0;
-    vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_1_0; };
-  };
-  statistics = self.statistics_0_10_5_2;
 
   statvfs = callPackage ../development/libraries/haskell/statvfs {};
 
