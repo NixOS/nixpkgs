@@ -4,7 +4,7 @@
 , ffmpeg, x264, libvpx, pil, libwebp }:
 
 buildPythonPackage rec {
-  name = "xpra-0.9.5";
+  name = "xpra-0.12.5";
   namePrefix = "";
 
   src = fetchurl {
