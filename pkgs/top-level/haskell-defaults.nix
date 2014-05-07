@@ -8,7 +8,7 @@
 # The actual Haskell packages are composed in haskell-packages.nix. There is
 # more documentation in there.
 
-{ makeOverridable, lowPrio, stdenv, pkgs, newScope, config, callPackage } : rec {
+{ makeOverridable, lowPrio, hiPrio, stdenv, pkgs, newScope, config, callPackage } : rec {
 
   # Preferences functions.
   #
@@ -243,7 +243,7 @@
 
   packages = args : let r = packagesFun args;
                     in  r // { lowPrio     = r.override { modifyPrio   = lowPrio; };
-                               highPrio    = r.override { modifyPrio   = x : x; };
+                               highPrio    = r.override { modifyPrio   = hiPrio; };
                                noProfiling = r.override { profDefault  = false;
                                                           profExplicit = true;
                                                           modifyPrio   = defaultVersionPrioFun false; };
