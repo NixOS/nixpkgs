@@ -2334,6 +2334,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.finalReturn x
 
   snapletAcidState = callPackage ../development/libraries/haskell/snaplet-acid-state {};
 
+  snapletStripe = callPackage ../development/libraries/haskell/snaplet-stripe {};
+
   snapBlaze = callPackage ../development/libraries/haskell/snap-blaze/default.nix {};
 
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
