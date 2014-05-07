@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "196pz0b32m84ydwm4wk7m8512bmsxw7nsqpxbyfxsyi3ykq220yh";
   buildDepends = [ random tfRandom ];
   testDepends = [ testFramework ];
+  noHaddock = self.stdenv.lib.versionOlder self.ghc.version "6.11";
   meta = {
     homepage = "http://code.haskell.org/QuickCheck";
     description = "Automatic testing of Haskell programs";

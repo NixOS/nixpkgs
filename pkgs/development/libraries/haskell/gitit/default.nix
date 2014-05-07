@@ -23,6 +23,9 @@ cabal.mkDerivation (self: {
                           sha256 = "0xdg9frr8lany8ry6vj4vpskmhkpww8jswnb05pzl8a4xfqxh9gd";
                         })
             ];
+  preConfigure = ''
+    sed -i -e 's|network .*< 2.5|network|' gitit.cabal
+  '';
   meta = {
     homepage = "http://gitit.net";
     description = "Wiki using happstack, git or darcs, and pandoc";
