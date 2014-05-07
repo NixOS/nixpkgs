@@ -189,8 +189,12 @@ in
               "/nix/var/nix/gcroots/per-container/$INSTANCE"
 
             if [ "$PRIVATE_NETWORK" = 1 ]; then
-              extraFlags="--network-veth"
+              extraFlags+=" --network-veth"
             fi
+
+            for iface in $MACVLANS; do
+              extraFlags+=" --network-macvlan=$iface"
+            done
 
             # If the host is 64-bit and the container is 32-bit, add a
             # --personality flag.
