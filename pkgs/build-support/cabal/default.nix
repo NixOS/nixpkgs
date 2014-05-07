@@ -7,6 +7,7 @@
 , enableSharedExecutables ? false
 , enableStaticLibraries ? true
 , enableCheckPhase ? stdenv.lib.versionOlder "7.4" ghc.version
+, extension ? (self : super : {})
 }:
 
 let
@@ -262,5 +263,8 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             # in Cabal derivations.
             inherit stdenv ghc;
           };
-    in  stdenv.mkDerivation (postprocess ((rec { f = defaults f // args f; }).f)) ;
+    in
+    stdenv.mkDerivation (postprocess (let super = defaults self // args self;
+                                          self  = super // extension self super;
+                                      in self));
 }

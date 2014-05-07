@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath parsec strict time ];
+  jailbreak = true;
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "helper tool for building wxHaskell";

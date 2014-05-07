@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0xw53czvcw8k49aqxmchc1rcd6pyxp4icwgp64625fnm3l4yjiq7";
   buildDepends = [ parsec ];
   testDepends = [ HUnit testFramework testFrameworkHunit ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/haskell/network";
     description = "Low-level networking interface";

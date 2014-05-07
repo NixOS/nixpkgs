@@ -1,7 +1,7 @@
 {cabal, fetchurl, GLUT, HTTP, HUnit, OpenGL, QuickCheck, cgi, fgl,
  haskellSrc, html, network, parallel, parsec, regexBase, regexCompat, regexPosix,
  stm, syb, deepseq, text, transformers, mtl, xhtml, zlib,
- cabalInstall, alex, happy, haddock, ghc}:
+ cabalInstall, alex, happy, ghc}:
 
 # This is just a meta-package. Because upstream fails to provide proper versioned
 # release tarballs that can be used for the purpose of verifying this package, we
@@ -14,11 +14,12 @@ cabal.mkDerivation (self : {
   cabalFile = ./haskell-platform-2011.2.0.1.cabal;
   setupFile = ./Setup.hs;
   src = null;
+  isLibrary = false;
   propagatedBuildInputs = [
     GLUT HTTP HUnit OpenGL QuickCheck cgi fgl
     haskellSrc html network parallel parsec regexBase regexCompat regexPosix
     stm syb deepseq text transformers mtl xhtml zlib
-    cabalInstall alex happy ghc haddock
+    cabalInstall alex happy ghc
   ];
   unpackPhase = ''
     sourceRoot=haskell-platform
@@ -30,7 +31,8 @@ cabal.mkDerivation (self : {
   noHaddock = true;
   meta = {
     description = "Haskell Platform meta package";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [andres simons];
   };
 })
-

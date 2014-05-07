@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
   ];
   jailbreak = true;
   doCheck = false;
+  noHaddock = self.stdenv.lib.versionOlder self.ghc.version "6.11";
   meta = {
     homepage = "https://github.com/haskell/HTTP";
     description = "A library for client-side HTTP";
