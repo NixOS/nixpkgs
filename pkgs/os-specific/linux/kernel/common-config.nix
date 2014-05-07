@@ -177,6 +177,10 @@ with stdenv.lib;
     USER_NS y # Support for user namespaces
   ''}
 
+  # AppArmor support
+  SECURITY_APPARMOR y
+  DEFAULT_SECURITY_APPARMOR y
+
   # Misc. options.
   8139TOO_8129 y
   8139TOO_PIO n # PIO is slower

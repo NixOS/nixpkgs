@@ -73,8 +73,6 @@ let
         restrictLinks = optionalString cfg.testing
           "GRKERNSEC_LINK n";
     in ''
-      SECURITY_APPARMOR y
-      DEFAULT_SECURITY_APPARMOR y
       GRKERNSEC y
       ${grsecMainConfig}
 
@@ -434,7 +432,7 @@ in
         chmod -R 0600 /etc/grsec
       '';
 
-    # Enable apparmor support, gradm udev rules, and utilities
+    # Enable AppArmor, gradm udev rules, and utilities
     security.apparmor.enable   = true;
     boot.kernelPackages        = grsecPackage;
     services.udev.packages     = [ pkgs.gradm ];

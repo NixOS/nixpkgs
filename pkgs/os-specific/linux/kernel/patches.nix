@@ -26,36 +26,11 @@ let
         inherit sha256;
       };
       features.grsecurity = true;
-      # The grsec kernel patchset includes AppArmor patches
-      features.apparmor = true;
-    };
-
-  makeAppArmorPatch = {apparmor, version}:
-    stdenv.mkDerivation {
-      name = "apparmor-${version}.patch";
-      phases = ["installPhase"];
-      installPhase = ''
-        cat ${apparmor}/kernel-patches/${version}/* > $out
-      '';
     };
 
 in
 
 rec {
-
-  apparmor_3_2 = rec {
-    version = "3.2";
-    name = "apparmor-${version}";
-    patch = makeAppArmorPatch { inherit apparmor version; };
-    features.apparmor = true;
-  };
-
-  apparmor_3_4 = rec {
-    version = "3.4";
-    name = "apparmor-${version}";
-    patch = makeAppArmorPatch { inherit apparmor version; };
-    features.apparmor = true;
-  };
 
   no_xsave =
     { name = "no-xsave";

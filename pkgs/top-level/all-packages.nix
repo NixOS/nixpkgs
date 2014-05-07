@@ -7064,14 +7064,6 @@ let
     kernelPatches = [];
   };
 
-  linux_3_2_apparmor = lowPrio (linux_3_2.override {
-    kernelPatches = [ kernelPatches.apparmor_3_2 ];
-    extraConfig = ''
-      SECURITY_APPARMOR y
-      DEFAULT_SECURITY_APPARMOR y
-    '';
-  });
-
   linux_3_2_xen = lowPrio (linux_3_2.override {
     extraConfig = ''
       XEN_DOM0 y
@@ -7085,14 +7077,6 @@ let
         kernelPatches.mips_fpu_sigill
       ];
   };
-
-  linux_3_4_apparmor = lowPrio (linux_3_4.override {
-    kernelPatches = [ kernelPatches.apparmor_3_4 ];
-    extraConfig = ''
-      SECURITY_APPARMOR y
-      DEFAULT_SECURITY_APPARMOR y
-    '';
-  });
 
   linux_3_6_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi-3.6.nix) {
     inherit fetchurl stdenv perl buildLinux;
@@ -7233,10 +7217,8 @@ let
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
-  linuxPackages_3_2_apparmor = linuxPackagesFor pkgs.linux_3_2_apparmor linuxPackages_3_2_apparmor;
   linuxPackages_3_2_xen = linuxPackagesFor pkgs.linux_3_2_xen linuxPackages_3_2_xen;
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 linuxPackages_3_4);
-  linuxPackages_3_4_apparmor = linuxPackagesFor pkgs.linux_3_4_apparmor linuxPackages_3_4_apparmor;
   linuxPackages_3_6_rpi = linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi;
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;

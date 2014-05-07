@@ -23,13 +23,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      [ { assertion = config.boot.kernelPackages.kernel.features ? apparmor
-                   && config.boot.kernelPackages.kernel.features.apparmor;
-          message = "Your selected kernel does not have AppArmor support";
-        }
-      ];
-
     environment.systemPackages = [ pkgs.apparmor ];
     systemd.services.apparmor = {
       wantedBy = [ "local-fs.target" ];
