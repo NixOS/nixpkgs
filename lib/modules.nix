@@ -53,7 +53,11 @@ rec {
           __internal.args = args;
         };
       };
-      closed = closeModules (modules ++ [ internalModule ]) { inherit config options; lib = import ./.; };
+      closed = closeModules (modules ++ [ internalModule ]) {
+        inherit options;
+        config = config.value;
+        lib = import ./.;
+      };
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
       # the most sensible policy.
@@ -61,25 +65,27 @@ rec {
       # Traverse options and extract the option values into the final
       # config set.  At the same time, check whether all option
       # definitions have matching declarations.
-      # !!! __internal.check's value can't depend on any other config values
-      # without an infinite recursion. One way around this is to make the
-      # 'config' passed around to the modules be unconditionally unchecked,
-      # and only do the check in 'result'.
       config = yieldConfig prefix options;
       yieldConfig = prefix: set:
-        let res = removeAttrs (mapAttrs (n: v:
-          if isOption v then v.value
-          else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
-        in
-        if options.__internal.check.value && set ? _definedNames then
-          fold (m: res:
+        let
+          maybeRecurse = removeAttrs (mapAttrs (n: v:
+            if isOption v then { inherit (v) value; checks = true; }
+            else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
+
+          thisChecks = ! (set ? _definedNames) || (fold (m: res:
             fold (name: res:
-              if hasAttr name set then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
-              res m.names)
-            res set._definedNames
-        else
-          res;
-      result = { inherit options config; };
+              (set ? ${name} || throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.") && res
+            ) res m.names)
+          true set._definedNames);
+        in {
+          value = mapAttrs (n: v: v.value) maybeRecurse;
+
+          checks = thisChecks && fold (n: res: maybeRecurse.${n}.checks && res) true (builtins.attrNames maybeRecurse);
+        };
+      result = {
+        inherit options;
+        config = if ! config.value.__internal.check || config.checks then config.value else abort;
+      };
     in result;
 
   /* Close a set of modules under the ‘imports’ relation. */
