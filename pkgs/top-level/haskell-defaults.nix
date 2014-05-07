@@ -52,6 +52,7 @@
       deepseq = self.deepseq_1_3_0_2;
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
+      cabalInstall_1_20_0_1 = self.cabalInstall_1_20_0_1.override { HTTP = self.HTTP_4000_2_14; };
       cabalInstall = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       binary = self.binary_0_6_0_0;
