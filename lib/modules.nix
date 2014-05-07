@@ -61,6 +61,10 @@ rec {
       # Traverse options and extract the option values into the final
       # config set.  At the same time, check whether all option
       # definitions have matching declarations.
+      # !!! __internal.check's value can't depend on any other config values
+      # without an infinite recursion. One way around this is to make the
+      # 'config' passed around to the modules be unconditionally unchecked,
+      # and only do the check in 'result'.
       config = yieldConfig prefix options;
       yieldConfig = prefix: set:
         let res = removeAttrs (mapAttrs (n: v:
