@@ -1,5 +1,5 @@
 { stdenv, writeScript, vmTools, makeInitrd
-, samba, vde2, openssh, socat, netcat, coreutils, gzip
+, samba, vde2, openssh, socat, netcat, coreutils, gnugrep, gzip
 }:
 
 { sshKey
@@ -217,17 +217,26 @@ let
     fi
   '';
 
+  toMonitor = "${socat}/bin/socat - UNIX-CONNECT:$MONITOR_SOCKET";
+
   postVM = if suspendTo != null then ''
     while ! test -e "$XCHG_DIR/suspend_now"; do
       ${checkDropOut}
       ${coreutils}/bin/sleep 1
     done
-    ${socat}/bin/socat - UNIX-CONNECT:$MONITOR_SOCKET <<CMD
+    ${toMonitor} <<CMD
     stop
     migrate_set_speed 4095m
     migrate "exec:${gzip}/bin/gzip -c > '${suspendTo}'"
-    quit
     CMD
+    echo -n "Waiting for memory dump to finish..."
+    while ! echo info migrate | ${toMonitor} | \
+          ${gnugrep}/bin/grep -qi '^migration *status: *complete'; do
+      ${coreutils}/bin/sleep 1
+      echo -n .
+    done
+    echo " done."
+    echo quit | ${toMonitor}
     wait $(< "$WINVM_PIDFILE")
     eval "$postVM"
     exit 0
