@@ -578,6 +578,10 @@ let
 
   capstone = callPackage ../development/libraries/capstone { };
 
+  coprthr = callPackage ../development/libraries/coprthr {
+    flex = flex_2_5_35;
+  };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   direnv = callPackage ../tools/misc/direnv { };
