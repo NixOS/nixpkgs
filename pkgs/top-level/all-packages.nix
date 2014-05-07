@@ -6437,10 +6437,10 @@ let
     packages = [];
   };
 
-  rPackages = recurseIntoAttrs (import ../development/r-modules/cran-packages.nix {
+  rPackages = import ../development/r-modules/cran-packages.nix {
     inherit pkgs;
     overrides = (config.rPackageOverrides or (p: {})) pkgs;
-  });
+  };
 
   ### SERVERS
 
